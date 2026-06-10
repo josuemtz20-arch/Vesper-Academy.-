@@ -10,7 +10,7 @@
 <link rel="icon" href="assets/images/vesper_logo.png" type="image/png">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@700&display=swap');
 *,*::before,*::after{box-sizing:border-box;}
 :root{--navy:#1a2b42;--navy2:#243654;--gold:#c5a059;--gold2:#a8843d;--cream:#f5f2eb;--border:#e4e0d8;--muted:#6b7a8d;--err:#b03a3a;}
 body{margin:0;font-family:'Inter',sans-serif;background:var(--cream);color:var(--navy);}
@@ -27,25 +27,52 @@ header a.back:hover{color:var(--gold);}
 .intro p{color:var(--muted);max-width:680px;margin:0 0 6px;}
 .warn{background:#fbf3df;border:1px solid #e7d8a8;border-left:4px solid var(--gold2);border-radius:8px;padding:12px 16px;margin:18px 0 4px;font-size:.86rem;color:#5a4d2e;line-height:1.5;}
 .warn i{color:var(--gold2);margin-right:6px;}
-h2.sec{display:flex;align-items:center;gap:10px;font-size:.78rem;font-weight:700;letter-spacing:1.8px;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--border);padding-bottom:10px;margin:42px 0 18px;}
-h2.sec i{color:var(--gold2);}
+
+/* Leyenda de niveles */
+.legend{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0 4px;align-items:center;}
+.legend span.t{font-size:.72rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-right:4px;}
+.legend .lvl{cursor:default;}
+
+/* Secciones por familia, cada una con su color de acento */
+.grp{--accent:var(--gold2);}
+.grp.tools{--accent:#243654;}
+.grp.basics{--accent:#2d7a4f;}
+.grp.practice{--accent:#c96b1a;}
+.grp.grammar{--accent:#1e5fa8;}
+.grp.daily{--accent:#0f8a7e;}
+.grp.special{--accent:#6b3fa0;}
+.grp.exam{--accent:#b0444a;}
+h2.sec{display:flex;align-items:center;gap:10px;font-size:.82rem;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:var(--navy);border-bottom:2px solid var(--accent);padding-bottom:10px;margin:40px 0 18px;}
+h2.sec i{color:var(--accent);}
+
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(248px,1fr));gap:16px;}
-.card{background:#fff;border:1px solid var(--border);border-top:3px solid var(--gold2);border-radius:10px;padding:18px 18px 14px;display:flex;flex-direction:column;gap:6px;box-shadow:0 1px 4px rgba(0,0,0,.06);}
-.card .lvl{align-self:flex-start;font-size:.64rem;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--gold2);background:var(--cream);padding:4px 10px;border-radius:20px;}
-.card h3{margin:2px 0 0;font-size:.98rem;line-height:1.3;}
+.card{background:#fff;border:1px solid var(--border);border-top:4px solid var(--accent);border-radius:10px;padding:16px 18px 14px;display:flex;flex-direction:column;gap:6px;box-shadow:0 1px 4px rgba(0,0,0,.06);transition:transform .16s,box-shadow .16s;}
+.card:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(26,43,66,.13);}
+.card h3{margin:4px 0 0;font-size:.98rem;line-height:1.3;}
 .card p{margin:0;color:var(--muted);font-size:.8rem;line-height:1.5;flex:1;}
+
+/* Insignia de nivel — color por nivel MCER */
+.lvl{align-self:flex-start;font-size:.66rem;font-weight:800;letter-spacing:.6px;text-transform:uppercase;padding:4px 11px;border-radius:20px;border:1px solid transparent;}
+.lvl.a0,.lvl.a1{background:#e7f4ec;color:#226b43;border-color:#cfe9da;}
+.lvl.a2{background:#e0f2f1;color:#0c7a6e;border-color:#c5e8e4;}
+.lvl.b1{background:#e6f0fb;color:#1a5594;border-color:#cbe0f6;}
+.lvl.b2{background:#efe7f7;color:#5e3792;border-color:#dccef0;}
+.lvl.c1,.lvl.c2{background:#fbeee0;color:#b15e16;border-color:#f2dcc2;}
+.lvl.special{background:#f3e8f7;color:#5e3792;border-color:#e6d4f0;}
+.lvl.free{background:#e7f4ec;color:#226b43;border-color:#cfe9da;}
+.lvl.admin{background:#e9edf3;color:#243654;border-color:#d4dbe6;}
+
 .card .links{margin-top:10px;border-top:1px solid var(--border);padding-top:10px;display:flex;flex-direction:column;gap:8px;}
-.card a.go{font-size:.78rem;font-weight:600;letter-spacing:.4px;text-decoration:none;display:flex;align-items:center;gap:6px;}
-.card a.primary{color:var(--navy);}
-.card a.primary:hover{color:var(--gold2);}
-.card a.primary i{color:var(--gold2);}
+.card a.go{font-size:.78rem;font-weight:700;letter-spacing:.3px;text-decoration:none;display:flex;align-items:center;gap:6px;}
+.card a.primary{color:var(--accent);}
+.card a.primary:hover{opacity:.78;}
 .card a.alt{color:var(--muted);font-weight:500;font-size:.74rem;}
 .card a.alt:hover{color:var(--navy);}
-.tools .card{border-top-color:var(--navy2);}
+
 footer{background:var(--navy);color:rgba(255,255,255,.5);text-align:center;padding:24px;font-size:.78rem;border-top:3px solid var(--gold);}
 footer a{color:var(--gold);text-decoration:none;}
 
-/* ── Puerta de contraseña (segunda capa, sobre el candado de Firebase) ── */
+/* ── Puerta de acceso (correo + contraseña, sobre el candado de Firebase) ── */
 #gate{position:fixed;inset:0;z-index:9999;background:var(--navy);background-image:radial-gradient(ellipse at 30% 20%,#243654 0%,#10243e 70%);display:flex;align-items:center;justify-content:center;padding:20px;}
 #gate.hidden{display:none;}
 .gate-card{background:var(--cream);width:100%;max-width:400px;border-radius:14px;box-shadow:0 18px 50px rgba(0,0,0,.45);overflow:hidden;font-family:Arial,sans-serif;}
@@ -65,7 +92,7 @@ footer a{color:var(--gold);text-decoration:none;}
 </head>
 <body>
 
-<!-- Puerta de contraseña de profesor -->
+<!-- Puerta de acceso de profesor (correo + contraseña) -->
 <div id="gate">
   <div class="gate-card">
     <div class="gh">
@@ -98,7 +125,7 @@ footer a{color:var(--gold);text-decoration:none;}
 <div class="wrap">
   <div class="intro">
     <h1>Manuales del profesor</h1>
-    <p>Índice de los manuales principales (versión del profesor con notas, soluciones y guías) y su versión del alumno correspondiente. Organizados por curso, igual que el portal del alumno.</p>
+    <p>Índice de los manuales principales (versión del profesor con notas, soluciones y guías) y su versión del alumno. Organizados por curso y con color por nivel para diferenciarlos de un vistazo.</p>
   </div>
 
   <div class="warn">
@@ -107,95 +134,116 @@ footer a{color:var(--gold);text-decoration:none;}
     en el sitio publicado únicamente funcionan los enlaces de la versión del alumno.
   </div>
 
-  <h2 class="sec"><i class="fas fa-compass"></i> Herramientas</h2>
-  <div class="grid tools">
-    <div class="card">
-      <span class="lvl">Gratis · 10 min</span>
-      <h3>Prueba de ubicación</h3>
-      <p>Test de nivel (A0–B2+) con retroalimentación inmediata.</p>
-      <div class="links"><a class="go primary" href="book_placement.html">Abrir <i class="fas fa-arrow-right"></i></a></div>
+  <div class="legend">
+    <span class="t">Niveles:</span>
+    <span class="lvl a0">A0–A1</span>
+    <span class="lvl a2">A2</span>
+    <span class="lvl b1">B1</span>
+    <span class="lvl b2">B2</span>
+    <span class="lvl c1">C1–C2</span>
+    <span class="lvl special">Especial</span>
+  </div>
+
+  <!-- HERRAMIENTAS DEL PROFESOR -->
+  <section class="grp tools">
+    <h2 class="sec"><i class="fas fa-toolbox"></i> Herramientas del profesor</h2>
+    <div class="grid">
+      <div class="card"><span class="lvl free">Todos los niveles</span><h3>Biblioteca de audio</h3><p>Diálogos y lecturas con voz nativa de todos los cursos, con transcripción y vocabulario — para usar en clase.</p>
+        <div class="links"><a class="go primary" href="audio_library.html"><i class="fas fa-headphones"></i> Abrir biblioteca</a></div></div>
+      <div class="card"><span class="lvl b2">B2–C2</span><h3>Entrevista de diagnóstico</h3><p>Evaluación integral avanzada que el profesor realiza con el alumno para confirmar su nivel.</p>
+        <div class="links"><a class="go primary" href="book_diagnostic_advanced_teacher.html"><i class="fas fa-clipboard-check"></i> Guía del profesor</a><a class="go alt" href="book_diagnostic_advanced_student.html">Versión del alumno</a></div></div>
+      <div class="card"><span class="lvl free">Gratis · 10 min</span><h3>Prueba de ubicación</h3><p>Test de nivel (A0–B2+) con retroalimentación inmediata para nuevos alumnos.</p>
+        <div class="links"><a class="go primary" href="book_placement.html"><i class="fas fa-compass"></i> Abrir prueba</a></div></div>
+      <div class="card"><span class="lvl admin">Admin</span><h3>Administrar accesos</h3><p>Autoriza cuentas de alumnos y profesores y cambia la contraseña del portal.</p>
+        <div class="links"><a class="go primary" href="access_admin.html"><i class="fas fa-user-shield"></i> Abrir panel</a></div></div>
     </div>
-    <div class="card">
-      <span class="lvl">Todos los niveles</span>
-      <h3>Biblioteca de audio</h3>
-      <p>Diálogos y lecturas con voz nativa, transcripción y vocabulario.</p>
-      <div class="links"><a class="go primary" href="audio_library.html">Abrir <i class="fas fa-arrow-right"></i></a></div>
+  </section>
+
+  <!-- CORE BASICS -->
+  <section class="grp basics">
+    <h2 class="sec"><i class="fas fa-cubes"></i> Core Basics — Fundamentos</h2>
+    <div class="grid">
+      <div class="card"><span class="lvl a0">A0</span><h3>Core Basics · Nivel 1</h3><p>To Be or Not To Be. Identidad, presentaciones y lo esencial.</p>
+        <div class="links"><a class="go primary" href="book_core_basics_lvl1_teacher.html"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="book_core_basics_lvl1_student.html">Versión del alumno</a></div></div>
+      <div class="card"><span class="lvl a1">A1</span><h3>Core Basics · Nivel 2</h3><p>Do I Know? Rutinas, preguntas y presente simple.</p>
+        <div class="links"><a class="go primary" href="book_core_basics_lvl2_teacher.html"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="book_core_basics_lvl2_student.html">Versión del alumno</a></div></div>
+      <div class="card"><span class="lvl a2">A2</span><h3>Core Basics · Nivel 3</h3><p>Have I Been? Pasado, experiencias e historias.</p>
+        <div class="links"><a class="go primary" href="book_core_basics_lvl3_teacher.html"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="book_core_basics_lvl3_student.html">Versión del alumno</a></div></div>
+      <div class="card"><span class="lvl a2">A2+</span><h3>Core Basics · Nivel 4</h3><p>Let's Write. Primeros textos y redacción guiada.</p>
+        <div class="links"><a class="go primary" href="book_core_basics_lvl4_teacher.html"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="book_core_basics_lvl4_student.html">Versión del alumno</a></div></div>
     </div>
-    <div class="card">
-      <span class="lvl">Admin</span>
-      <h3>Administrar accesos</h3>
-      <p>Autoriza cuentas y cambia la contraseña de profesor.</p>
-      <div class="links"><a class="go primary" href="access_admin.html">Abrir <i class="fas fa-arrow-right"></i></a></div>
+  </section>
+
+  <!-- CORE PRACTICE -->
+  <section class="grp practice">
+    <h2 class="sec"><i class="fas fa-tools"></i> Core Practice — Talleres</h2>
+    <div class="grid">
+      <div class="card"><span class="lvl a1">A1–A2</span><h3>Practice · Nivel 1</h3><p>Listening y speaking con audio nativo en cada lección.</p>
+        <div class="links"><a class="go primary" href="book_core_practice_lvl1_teacher.html"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="book_core_practice_lvl1_student.html">Versión del alumno</a></div></div>
+      <div class="card"><span class="lvl b1">B1</span><h3>Practice · Nivel 2</h3><p>Lectura y escritura: leyendas, mitos y misterios.</p>
+        <div class="links"><a class="go primary" href="book_core_practice_lvl2_teacher.html"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="book_core_practice_lvl2_student.html">Versión del alumno</a></div></div>
+      <div class="card"><span class="lvl b1">B1–B2</span><h3>Practice · Nivel 3</h3><p>Las 4 destrezas: debate y descubrimiento.</p>
+        <div class="links"><a class="go primary" href="book_core_practice_lvl3_teacher.html"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="book_core_practice_lvl3_student.html">Versión del alumno</a></div></div>
+      <div class="card"><span class="lvl a2">A2–B1</span><h3>Practice · Nivel 4</h3><p>Arte y literatura: talleres orales.</p>
+        <div class="links"><a class="go primary" href="book_core_practice_lvl4_teacher.html"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="book_core_practice_lvl4_student.html">Versión del alumno</a></div></div>
+      <div class="card"><span class="lvl b2">B2–C1</span><h3>Practice · Nivel 5</h3><p>Futuro y tecnología: lectura y escritura.</p>
+        <div class="links"><a class="go primary" href="book_core_practice_lvl5_teacher.html"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="book_core_practice_lvl5_student.html">Versión del alumno</a></div></div>
+      <div class="card"><span class="lvl c2">C2</span><h3>Practice · Nivel 6</h3><p>Cultura pop y sociedad: dominio de las 4 destrezas.</p>
+        <div class="links"><a class="go primary" href="book_core_practice_lvl6_teacher.html"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="book_core_practice_lvl6_student.html">Versión del alumno</a></div></div>
     </div>
-  </div>
+  </section>
 
-  <h2 class="sec"><i class="fas fa-cubes"></i> Core Basics — Fundamentos</h2>
-  <div class="grid">
-    <div class="card"><span class="lvl">A0</span><h3>Core Basics · Nivel 1</h3><p>To Be or Not To Be. Identidad, presentaciones y lo esencial.</p>
-      <div class="links"><a class="go primary" href="book_core_basics_lvl1_teacher.html"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="book_core_basics_lvl1_student.html">Versión del alumno</a></div></div>
-    <div class="card"><span class="lvl">A1</span><h3>Core Basics · Nivel 2</h3><p>Do I Know? Rutinas, preguntas y presente simple.</p>
-      <div class="links"><a class="go primary" href="book_core_basics_lvl2_teacher.html"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="book_core_basics_lvl2_student.html">Versión del alumno</a></div></div>
-    <div class="card"><span class="lvl">A2</span><h3>Core Basics · Nivel 3</h3><p>Have I Been? Pasado, experiencias e historias.</p>
-      <div class="links"><a class="go primary" href="book_core_basics_lvl3_teacher.html"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="book_core_basics_lvl3_student.html">Versión del alumno</a></div></div>
-    <div class="card"><span class="lvl">A2+</span><h3>Core Basics · Nivel 4</h3><p>Let's Write. Primeros textos y redacción guiada.</p>
-      <div class="links"><a class="go primary" href="book_core_basics_lvl4_teacher.html"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="book_core_basics_lvl4_student.html">Versión del alumno</a></div></div>
-  </div>
+  <!-- CORE GRAMMAR -->
+  <section class="grp grammar">
+    <h2 class="sec"><i class="fas fa-book"></i> Core Grammar — Gramática</h2>
+    <div class="grid">
+      <div class="card"><span class="lvl b1">B1</span><h3>Grammar Foundations</h3><p>Drills fundamentales para consolidar la base.</p>
+        <div class="links"><a class="go primary" href="book_core_grammar_lvl1_teacher.html"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="book_core_grammar_lvl1_student.html">Versión del alumno</a></div></div>
+      <div class="card"><span class="lvl b2">B2</span><h3>Grammar in Context</h3><p>Estructuras complejas aplicadas en contexto.</p>
+        <div class="links"><a class="go primary" href="book_core_grammar_lvl2_teacher.html"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="book_core_grammar_lvl2_student.html">Versión del alumno</a></div></div>
+      <div class="card"><span class="lvl c1">C1+</span><h3>Grammar Mastery</h3><p>Estilo, matices y excepciones del inglés avanzado.</p>
+        <div class="links"><a class="go primary" href="book_core_grammar_lvl3_teacher.html"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="book_core_grammar_lvl3_student.html">Versión del alumno</a></div></div>
+    </div>
+  </section>
 
-  <h2 class="sec"><i class="fas fa-tools"></i> Core Practice — Talleres</h2>
-  <div class="grid">
-    <div class="card"><span class="lvl">A1–A2</span><h3>Practice · Nivel 1</h3><p>Listening y speaking con audio nativo en cada lección.</p>
-      <div class="links"><a class="go primary" href="book_core_practice_lvl1_teacher.html"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="book_core_practice_lvl1_student.html">Versión del alumno</a></div></div>
-    <div class="card"><span class="lvl">B1</span><h3>Practice · Nivel 2</h3><p>Lectura y escritura: leyendas, mitos y misterios.</p>
-      <div class="links"><a class="go primary" href="book_core_practice_lvl2_teacher.html"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="book_core_practice_lvl2_student.html">Versión del alumno</a></div></div>
-    <div class="card"><span class="lvl">B1–B2</span><h3>Practice · Nivel 3</h3><p>Las 4 destrezas: debate y descubrimiento.</p>
-      <div class="links"><a class="go primary" href="book_core_practice_lvl3_teacher.html"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="book_core_practice_lvl3_student.html">Versión del alumno</a></div></div>
-    <div class="card"><span class="lvl">A2–B1</span><h3>Practice · Nivel 4</h3><p>Arte y literatura: talleres orales.</p>
-      <div class="links"><a class="go primary" href="book_core_practice_lvl4_teacher.html"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="book_core_practice_lvl4_student.html">Versión del alumno</a></div></div>
-    <div class="card"><span class="lvl">B2–C1</span><h3>Practice · Nivel 5</h3><p>Futuro y tecnología: lectura y escritura.</p>
-      <div class="links"><a class="go primary" href="book_core_practice_lvl5_teacher.html"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="book_core_practice_lvl5_student.html">Versión del alumno</a></div></div>
-    <div class="card"><span class="lvl">C2</span><h3>Practice · Nivel 6</h3><p>Cultura pop y sociedad: dominio de las 4 destrezas.</p>
-      <div class="links"><a class="go primary" href="book_core_practice_lvl6_teacher.html"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="book_core_practice_lvl6_student.html">Versión del alumno</a></div></div>
-  </div>
+  <!-- DAILY LIFE -->
+  <section class="grp daily">
+    <h2 class="sec"><i class="fas fa-coffee"></i> Daily Life — Inglés cotidiano</h2>
+    <div class="grid">
+      <div class="card"><span class="lvl a0">A0</span><h3>Daily Life · Vol. 0</h3><p>Fundamentos de supervivencia para principiante absoluto.</p>
+        <div class="links"><a class="go primary" href="book_daily_life_vol0_teacher.html"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="book_daily_life_vol0_student.html">Versión del alumno</a></div></div>
+      <div class="card"><span class="lvl a1">A1–A2</span><h3>Daily Life · Vol. 1</h3><p>Compras, viajes y salud en el mundo real.</p>
+        <div class="links"><a class="go primary" href="book_daily_life_vol1_teacher.html"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="book_daily_life_vol1_student.html">Versión del alumno</a></div></div>
+      <div class="card"><span class="lvl b1">B1–B2</span><h3>Daily Life · Vol. 2</h3><p>Cultura, relaciones y psicología.</p>
+        <div class="links"><a class="go primary" href="book_daily_life_vol2_teacher.html"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="book_daily_life_vol2_student.html">Versión del alumno</a></div></div>
+    </div>
+  </section>
 
-  <h2 class="sec"><i class="fas fa-book"></i> Core Grammar — Gramática</h2>
-  <div class="grid">
-    <div class="card"><span class="lvl">B1</span><h3>Grammar Foundations</h3><p>Drills fundamentales para consolidar la base.</p>
-      <div class="links"><a class="go primary" href="book_core_grammar_lvl1_teacher.html"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="book_core_grammar_lvl1_student.html">Versión del alumno</a></div></div>
-    <div class="card"><span class="lvl">B2</span><h3>Grammar in Context</h3><p>Estructuras complejas aplicadas en contexto.</p>
-      <div class="links"><a class="go primary" href="book_core_grammar_lvl2_teacher.html"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="book_core_grammar_lvl2_student.html">Versión del alumno</a></div></div>
-    <div class="card"><span class="lvl">C1+</span><h3>Grammar Mastery</h3><p>Estilo, matices y excepciones del inglés avanzado.</p>
-      <div class="links"><a class="go primary" href="book_core_grammar_lvl3_teacher.html"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="book_core_grammar_lvl3_student.html">Versión del alumno</a></div></div>
-  </div>
+  <!-- ESPECIALIZADOS -->
+  <section class="grp special">
+    <h2 class="sec"><i class="fas fa-briefcase"></i> Cursos especializados</h2>
+    <div class="grid">
+      <div class="card"><span class="lvl special">Aviación</span><h3>Aviation English</h3><p>Inglés para tripulación de cabina: seguridad, servicio y protocolo.</p>
+        <div class="links"><a class="go primary" href="book_cabin_crew_teacher.html"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="book_cabin_crew_student.html">Versión del alumno</a></div></div>
+      <div class="card"><span class="lvl b2">B2–C1</span><h3>Political English</h3><p>Diplomacia, asuntos globales y discurso público.</p>
+        <div class="links"><a class="go primary" href="book_political_english_teacher.html"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="book_political_english_student.html">Versión del alumno</a></div></div>
+      <div class="card"><span class="lvl special">Intensivo</span><h3>Curso Intensivo (CCI 1)</h3><p>Bootcamp de fluidez rápida — primer mes.</p>
+        <div class="links"><a class="go primary" href="book_cci1_teacher.html"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="book_cci1_student.html">Versión del alumno</a></div></div>
+    </div>
+  </section>
 
-  <h2 class="sec"><i class="fas fa-coffee"></i> Daily Life — Inglés cotidiano</h2>
-  <div class="grid">
-    <div class="card"><span class="lvl">A0</span><h3>Daily Life · Vol. 0</h3><p>Fundamentos de supervivencia para principiante absoluto.</p>
-      <div class="links"><a class="go primary" href="book_daily_life_vol0_teacher.html"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="book_daily_life_vol0_student.html">Versión del alumno</a></div></div>
-    <div class="card"><span class="lvl">A1–A2</span><h3>Daily Life · Vol. 1</h3><p>Compras, viajes y salud en el mundo real.</p>
-      <div class="links"><a class="go primary" href="book_daily_life_vol1_teacher.html"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="book_daily_life_vol1_student.html">Versión del alumno</a></div></div>
-    <div class="card"><span class="lvl">B1–B2</span><h3>Daily Life · Vol. 2</h3><p>Cultura, relaciones y psicología.</p>
-      <div class="links"><a class="go primary" href="book_daily_life_vol2_teacher.html"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="book_daily_life_vol2_student.html">Versión del alumno</a></div></div>
-  </div>
-
-  <h2 class="sec"><i class="fas fa-briefcase"></i> Cursos especializados</h2>
-  <div class="grid">
-    <div class="card"><span class="lvl">Aviación</span><h3>Aviation English</h3><p>Inglés para tripulación de cabina: seguridad, servicio y protocolo.</p>
-      <div class="links"><a class="go primary" href="book_cabin_crew_teacher.html"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="book_cabin_crew_student.html">Versión del alumno</a></div></div>
-    <div class="card"><span class="lvl">B2–C1</span><h3>Political English</h3><p>Diplomacia, asuntos globales y discurso público.</p>
-      <div class="links"><a class="go primary" href="book_political_english_teacher.html"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="book_political_english_student.html">Versión del alumno</a></div></div>
-    <div class="card"><span class="lvl">Intensivo</span><h3>Curso Intensivo (CCI 1)</h3><p>Bootcamp de fluidez rápida — primer mes.</p>
-      <div class="links"><a class="go primary" href="book_cci1_teacher.html"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="book_cci1_student.html">Versión del alumno</a></div></div>
-  </div>
-
-  <h2 class="sec"><i class="fas fa-graduation-cap"></i> Preparación de exámenes</h2>
-  <div class="grid">
-    <div class="card"><span class="lvl">B2–C1</span><h3>Exam Prep · Vol. 1</h3><p>Sintaxis avanzada y estrategia de examen.</p>
-      <div class="links"><a class="go primary" href="book_exam_prep_teacher.html"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="book_exam_prep_student.html">Versión del alumno</a></div></div>
-    <div class="card"><span class="lvl">B2–C1</span><h3>Exam Prep · Vol. 2</h3><p>Vocabulario temático y práctica aplicada.</p>
-      <div class="links"><a class="go primary" href="book_exam_prep_teacher_vol2.html"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="book_exam_prep_student_vol2.html">Versión del alumno</a></div></div>
-    <div class="card"><span class="lvl">B2–C2</span><h3>Diagnóstico Avanzado</h3><p>Evaluación integral — se realiza con tu profesor.</p>
-      <div class="links"><a class="go primary" href="book_diagnostic_advanced_teacher.html"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="book_diagnostic_advanced_student.html">Versión del alumno</a></div></div>
-  </div>
+  <!-- EXAM PREP -->
+  <section class="grp exam">
+    <h2 class="sec"><i class="fas fa-graduation-cap"></i> Preparación de exámenes</h2>
+    <div class="grid">
+      <div class="card"><span class="lvl b2">B2–C1</span><h3>Exam Prep · Vol. 1</h3><p>Sintaxis avanzada y estrategia de examen.</p>
+        <div class="links"><a class="go primary" href="book_exam_prep_teacher.html"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="book_exam_prep_student.html">Versión del alumno</a></div></div>
+      <div class="card"><span class="lvl b2">B2–C1</span><h3>Exam Prep · Vol. 2</h3><p>Vocabulario temático y práctica aplicada.</p>
+        <div class="links"><a class="go primary" href="book_exam_prep_teacher_vol2.html"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="book_exam_prep_student_vol2.html">Versión del alumno</a></div></div>
+      <div class="card"><span class="lvl b2">B2–C2</span><h3>Diagnóstico Avanzado</h3><p>Evaluación integral — se realiza con tu profesor.</p>
+        <div class="links"><a class="go primary" href="book_diagnostic_advanced_teacher.html"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="book_diagnostic_advanced_student.html">Versión del alumno</a></div></div>
+    </div>
+  </section>
 </div>
 
 <footer>
