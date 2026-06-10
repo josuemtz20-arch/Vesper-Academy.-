@@ -19,10 +19,12 @@
 
   var CONFIG = {
     firebase: {
-      apiKey: "PEGAR_API_KEY",
-      authDomain: "PEGAR_PROYECTO.firebaseapp.com",
-      projectId: "PEGAR_PROYECTO",
-      appId: "PEGAR_APP_ID"
+      apiKey: "AIzaSyAsCJW97LyNpmvey1Mo0wiGMufQIV7uxio",
+      authDomain: "vesper-academy.firebaseapp.com",
+      projectId: "vesper-academy",
+      storageBucket: "vesper-academy.firebasestorage.app",
+      messagingSenderId: "22637551941",
+      appId: "1:22637551941:web:7c0be59428b5087cd35e2c"
     },
     publicPages: [
       "index.html",
