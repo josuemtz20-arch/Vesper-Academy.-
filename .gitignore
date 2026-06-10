@@ -26,9 +26,11 @@
 !/lesson.html
 
 # teacher portal (index ONLY — password-gated).
-# The teacher manuals it links to (book_*_teacher.html) are NOT whitelisted,
-# so they stay local-only and are never published.
+# The teacher manuals stay local-only and are never published: the portal
+# opens them via manual.html, which downloads them from Firestore where
+# server-side rules only allow approved teacher accounts to read.
 !/portal_profesores.html
+!/manual.html
 
 # lesson data consumed by the public pages
 !/vesper_audio_data.js
