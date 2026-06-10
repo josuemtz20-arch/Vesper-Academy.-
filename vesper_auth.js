@@ -50,7 +50,7 @@
        SHA-256 de "vesper-academy-v1|" + correo en minúsculas). El acceso al portal exige
        correo de esta lista + la contraseña de profesor. Genera hashes en access_admin.html. */
     teacherEmailHashes: [
-      "1181f429e6707d5b37cec24a77203cf30374fa337062d3f5d8c0abfe50b99dc9"  /* admin */
+      "1181f429e6707d5b37cec24a77203cf30374fa337062d3f5d8c0abfe50b99dc9"  /* josuemtz20@gmail.com (admin) */
     ],
     loginPage: "login.html"
   };
