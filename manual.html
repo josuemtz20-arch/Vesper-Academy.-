@@ -71,13 +71,9 @@ body{margin:0;font-family:'Segoe UI',Arial,sans-serif;display:flex;align-items:c
     return;
   }
 
-  function loadScript(src) {
-    return new Promise(function (res, rej) {
-      var s = document.createElement("script");
-      s.src = src; s.onload = res; s.onerror = rej;
-      document.head.appendChild(s);
-    });
-  }
+  /* Base de Firestore donde viven los manuales (debe coincidir con
+     DB_ID en _scripts/upload_manuals.py) */
+  var DB_ID = "teachermanuals";
 
   /* ── 2. Sesión de Firebase (el candado de vesper_auth.js ya redirige
          en el sitio publicado; esto cubre ademas localhost/file://) ── */
@@ -101,60 +97,72 @@ body{margin:0;font-family:'Segoe UI',Arial,sans-serif;display:flex;align-items:c
       }
 
       note("Descargando manual…");
-      loadScript("https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js")
-        .then(function () { return fetchManual(user); })
-        .catch(function (e) { showFirestoreError(e, user); });
+      fetchManual(user);
     });
   }).catch(function () {
     fail('<div class="err">Sin conexi&oacute;n con el servicio de acceso.</div>' +
          '<div class="muted">Revisa tu conexi&oacute;n e int&eacute;ntalo de nuevo.</div>');
   });
 
-  /* ── 3. Descargar el manual desde Firestore (las reglas del servidor
-         solo lo permiten a profesores autorizados) ── */
+  /* ── 3. Descargar el manual desde Firestore vía REST (las reglas del
+         servidor solo lo permiten a profesores autorizados). Se usa REST
+         y no el SDK porque la base tiene id propio ("teachermanuals"). ── */
   function fetchManual(user) {
-    var db = firebase.firestore();
-    var ref = db.collection("manuals").doc(id);
-    return ref.get().then(function (meta) {
-      if (!meta.exists) {
-        fail('<div class="err">Este manual a&uacute;n no est&aacute; disponible en l&iacute;nea.</div>' +
-             '<div class="muted">El administrador todav&iacute;a no lo ha subido al servidor.</div>');
-        return;
+    var base = "https://firestore.googleapis.com/v1/projects/" +
+               VesperAuth.config.firebase.projectId + "/databases/" + DB_ID +
+               "/documents/manuals/" + id;
+
+    user.getIdToken().then(function (token) {
+      function getDoc(url) {
+        return fetch(url, { headers: { "Authorization": "Bearer " + token } })
+          .then(function (r) {
+            return r.json().then(function (j) { return { status: r.status, body: j }; });
+          });
       }
-      var data = meta.data();
-      var count = Number(data.chunkCount) || 1;
-      note("Abriendo: " + (data.title || id));
-      var jobs = [];
-      for (var i = 0; i < count; i++) {
-        jobs.push(ref.collection("chunks").doc(String(i)).get());
-      }
-      return Promise.all(jobs).then(function (snaps) {
-        var html = snaps.map(function (s) {
-          return (s.exists && s.data().html) || "";
-        }).join("");
-        if (html.length < 100) {
-          fail('<div class="err">El manual se descarg&oacute; vac&iacute;o.</div>' +
-               '<div class="muted">Avisa al administrador para que lo vuelva a subir.</div>');
+
+      getDoc(base).then(function (meta) {
+        if (meta.status === 403) {
+          fail('<div class="err">Tu cuenta no tiene acceso de profesor.</div>' +
+               '<div class="muted">Sesi&oacute;n: ' + (user.email || "") +
+               '<br>Pide al administrador que autorice tu correo como profesor.</div>');
           return;
         }
-        render(html);
-      });
-    }).catch(function (e) { showFirestoreError(e, user); });
-  }
+        if (meta.status === 404) {
+          fail('<div class="err">Este manual a&uacute;n no est&aacute; disponible en l&iacute;nea.</div>' +
+               '<div class="muted">El administrador todav&iacute;a no lo ha subido al servidor.</div>');
+          return;
+        }
+        if (meta.status !== 200) {
+          fail('<div class="err">No se pudo cargar el manual (HTTP ' + meta.status + ').</div>' +
+               '<div class="muted">Int&eacute;ntalo de nuevo en unos minutos.</div>');
+          return;
+        }
 
-  function showFirestoreError(e, user) {
-    var code = (e && e.code) || "";
-    if (code === "permission-denied") {
-      fail('<div class="err">Tu cuenta no tiene acceso de profesor.</div>' +
-           '<div class="muted">Sesi&oacute;n: ' + (user.email || "") +
-           '<br>Pide al administrador que autorice tu correo como profesor.</div>');
-    } else if (code === "unavailable") {
-      fail('<div class="err">No hay conexi&oacute;n con el servidor de manuales.</div>' +
-           '<div class="muted">Revisa tu conexi&oacute;n e int&eacute;ntalo de nuevo.</div>');
-    } else {
-      fail('<div class="err">No se pudo cargar el manual.</div>' +
-           '<div class="muted">' + String((e && e.message) || e).slice(0, 220) + '</div>');
-    }
+        var f = meta.body.fields || {};
+        var count = parseInt((f.chunkCount || {}).integerValue || "1", 10);
+        note("Abriendo: " + ((f.title || {}).stringValue || id));
+
+        var jobs = [];
+        for (var i = 0; i < count; i++) { jobs.push(getDoc(base + "/chunks/" + i)); }
+        Promise.all(jobs).then(function (parts) {
+          var html = parts.map(function (p) {
+            return (p.status === 200 && ((p.body.fields || {}).html || {}).stringValue) || "";
+          }).join("");
+          if (html.length < 100) {
+            fail('<div class="err">El manual se descarg&oacute; incompleto.</div>' +
+                 '<div class="muted">Avisa al administrador para que lo vuelva a subir.</div>');
+            return;
+          }
+          render(html);
+        });
+      }).catch(function () {
+        fail('<div class="err">No hay conexi&oacute;n con el servidor de manuales.</div>' +
+             '<div class="muted">Revisa tu conexi&oacute;n e int&eacute;ntalo de nuevo.</div>');
+      });
+    }).catch(function () {
+      fail('<div class="err">No se pudo validar tu sesi&oacute;n.</div>' +
+           '<div class="muted">Cierra sesi&oacute;n y vuelve a entrar.</div>');
+    });
   }
 
   /* ── 4. Renderizar: el manual sustituye a esta página por completo,
