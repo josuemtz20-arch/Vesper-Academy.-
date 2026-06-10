@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<script src="vesper_auth.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vesper Academy | Lesson</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap');
+        *, *::before, *::after { box-sizing: border-box; }
+        :root {
+            --navy:#1a2b42; --navy2:#243654; --navy3:#14223a;
+            --gold:#c5a059; --gold-lt:#d9bd84; --gold2:#a8843d;
+            --cream:#f5f2eb; --white:#fff; --border:#e4e0d8;
+            --text:#1a2b42; --muted:#6b7a8d;
+        }
+        body { font-family:'Inter',sans-serif; background:var(--cream); color:var(--text); margin:0; min-height:100vh; }
+
+        /* HEADER */
+        header {
+            background:var(--navy); padding:0 32px; height:64px;
+            display:flex; align-items:center; justify-content:space-between;
+            border-bottom:3px solid var(--gold); position:sticky; top:0; z-index:50;
+        }
+        .brand { display:flex; align-items:center; gap:12px; }
+        .brand img { height:42px; width:42px; object-fit:contain; }
+        .brand h1 { margin:0; font-family:'Playfair Display',serif; font-size:1.1rem; color:#fff; letter-spacing:0.5px; }
+        .brand p { margin:1px 0 0; font-size:0.62rem; color:var(--gold); letter-spacing:2px; text-transform:uppercase; }
+        .crumb { color:rgba(255,255,255,0.6); font-size:0.72rem; letter-spacing:1px; text-transform:uppercase; }
+        .crumb b { color:var(--gold-lt); }
+        .head-right { display:flex; align-items:center; gap:18px; }
+        .catalog-btn {
+            display:inline-flex; align-items:center; gap:8px; text-decoration:none;
+            background:var(--gold); color:var(--navy); font-weight:700; font-size:0.74rem;
+            letter-spacing:0.8px; text-transform:uppercase; padding:9px 16px; border-radius:9px;
+            transition:background .18s, transform .12s; white-space:nowrap;
+        }
+        .catalog-btn:hover { background:var(--gold-lt); transform:translateY(-1px); }
+
+        /* BANNER */
+        .banner {
+            position:relative; height:230px; overflow:hidden;
+            display:flex; align-items:flex-end;
+            background:linear-gradient(135deg,var(--navy2),var(--navy3));
+            border-bottom:3px solid var(--gold);
+        }
+        .banner .bg-icon {
+            position:absolute; right:24px; top:50%; transform:translateY(-50%);
+            font-size:9rem; color:rgba(197,160,89,0.18);
+        }
+        .banner::before {
+            content:""; position:absolute; inset:0;
+            background:radial-gradient(700px 240px at 15% 120%, rgba(197,160,89,0.22), transparent 60%);
+        }
+        .banner img.photo { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+        .banner .overlay { position:absolute; inset:0; background:linear-gradient(0deg, rgba(20,34,58,0.92) 0%, rgba(20,34,58,0.25) 70%, transparent 100%); }
+        .banner-inner { position:relative; z-index:2; max-width:1080px; width:100%; margin:0 auto; padding:0 32px 24px; }
+        .banner .tag {
+            display:inline-flex; align-items:center; gap:7px;
+            font-size:0.66rem; font-weight:700; letter-spacing:1.5px; text-transform:uppercase;
+            color:var(--navy); background:var(--gold); padding:5px 12px; border-radius:20px; margin-bottom:12px;
+        }
+        .banner h2 { margin:0; font-family:'Playfair Display',serif; font-weight:800; font-size:2.5rem; color:#fff; line-height:1.05; }
+
+        /* LAYOUT */
+        .wrap { max-width:1080px; margin:0 auto; padding:26px 32px 70px; }
+
+        /* TABS */
+        .tabs { display:flex; gap:8px; margin-bottom:24px; flex-wrap:wrap; }
+        .tab {
+            display:inline-flex; align-items:center; gap:9px; cursor:pointer;
+            border:1px solid var(--border); background:var(--white); color:var(--muted);
+            padding:11px 20px; border-radius:10px; font-family:'Inter',sans-serif;
+            font-size:0.85rem; font-weight:600; transition:all 0.18s ease;
+        }
+        .tab:hover { border-color:var(--gold); color:var(--navy); }
+        .tab.active { background:var(--navy); color:#fff; border-color:var(--navy); box-shadow:0 5px 16px rgba(26,43,66,0.25); }
+        .tab.active i { color:var(--gold); }
+
+        .panel { display:none; animation:fade 0.3s ease both; }
+        .panel.active { display:block; }
+        @keyframes fade { from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:translateY(0);} }
+
+        .card-box { background:var(--white); border:1px solid var(--border); border-radius:14px; box-shadow:0 2px 10px rgba(0,0,0,0.05); padding:26px; }
+
+        /* AUDIO PLAYER */
+        .audio-card { text-align:center; padding:34px 26px; }
+        .audio-card .big-play {
+            width:84px; height:84px; border-radius:50%; border:none; cursor:pointer;
+            background:var(--gold); color:var(--navy); font-size:1.7rem; margin:0 auto 22px;
+            display:flex; align-items:center; justify-content:center;
+            box-shadow:0 8px 24px rgba(197,160,89,0.45); transition:transform 0.12s, background 0.18s;
+        }
+        .audio-card .big-play:hover { background:var(--gold-lt); }
+        .audio-card .big-play:active { transform:scale(0.93); }
+        .audio-card .a-title { font-family:'Playfair Display',serif; font-size:1.3rem; color:var(--navy); margin:0 0 4px; }
+        .audio-card .a-sub { color:var(--muted); font-size:0.82rem; margin-bottom:22px; }
+        .a-progress { display:flex; align-items:center; gap:12px; max-width:520px; margin:0 auto; }
+        .a-time { font-size:0.74rem; color:var(--muted); font-variant-numeric:tabular-nums; width:40px; }
+        .a-time.dur { text-align:right; }
+        .a-bar { flex:1; height:7px; border-radius:5px; background:var(--border); cursor:pointer; position:relative; }
+        .a-fill { position:absolute; left:0; top:0; bottom:0; width:0%; background:var(--gold); border-radius:5px; }
+        .a-fill::after { content:''; position:absolute; right:-6px; top:50%; transform:translateY(-50%); width:14px; height:14px; border-radius:50%; background:var(--navy); opacity:0; transition:opacity .15s; }
+        .a-bar:hover .a-fill::after { opacity:1; }
+        .a-error { color:#b02a2a; font-size:0.82rem; margin-top:16px; display:none; }
+        .speed-row { margin-top:22px; display:flex; gap:8px; justify-content:center; align-items:center; }
+        .speed-row span { font-size:0.72rem; color:var(--muted); text-transform:uppercase; letter-spacing:1px; }
+        .speed-btn { border:1px solid var(--border); background:var(--cream); border-radius:18px; padding:5px 13px; font-size:0.76rem; font-weight:600; color:var(--navy); cursor:pointer; transition:all .15s; }
+        .speed-btn.active { background:var(--navy); color:#fff; border-color:var(--navy); }
+
+        /* READING (presentation view for screen-sharing) */
+        .reading-card { padding:0; overflow:hidden; display:flex; flex-direction:column; flex:1; min-height:0; }
+        .reading-toolbar { display:flex; align-items:center; justify-content:space-between; gap:14px;
+            padding:14px 22px; background:var(--navy); color:#fff; flex-wrap:wrap; flex-shrink:0; }
+        .reading-toolbar .rt-label { font-size:0.75rem; font-weight:600; letter-spacing:1px; text-transform:uppercase; color:var(--gold); display:flex; align-items:center; gap:8px; }
+        .rt-controls { display:flex; align-items:center; gap:8px; font-size:0.7rem; color:rgba(255,255,255,0.6); text-transform:uppercase; letter-spacing:1px; }
+        .rt-size { width:36px; height:32px; border-radius:8px; border:1px solid rgba(255,255,255,0.2); background:var(--navy2); color:#fff; cursor:pointer; font-weight:700; font-size:0.85rem; transition:background .15s; }
+        .rt-size:hover { background:var(--gold); color:var(--navy); border-color:var(--gold); }
+        .reading-body {
+            font-family:'Playfair Display', Georgia, serif;
+            font-size:var(--read-size, 1.3rem); line-height:1.9; color:#2c3a4d;
+            padding:34px 36px; text-align:left; overflow:hidden; flex:1; min-height:0;
+        }
+        .reading-body > * { max-width:64ch; margin-left:auto; margin-right:auto; }
+        .reading-body p { margin:0 0 0.9em; }
+        .reading-nav { flex-shrink:0; display:flex; align-items:center; justify-content:space-between;
+            gap:14px; padding:12px 22px; border-top:1px solid var(--border); background:var(--cream); }
+        .rn-btn { display:inline-flex; align-items:center; gap:8px; border:1px solid var(--border);
+            background:#fff; color:var(--navy); border-radius:9px; padding:9px 18px; font-family:'Inter',sans-serif;
+            font-size:0.82rem; font-weight:600; cursor:pointer; transition:all .15s; }
+        .rn-btn:hover:not(:disabled) { border-color:var(--gold); color:var(--gold2); }
+        .rn-btn:disabled { opacity:0.35; cursor:default; }
+        .rn-ind { font-family:'Inter',sans-serif; font-size:0.78rem; font-weight:600; color:var(--muted); letter-spacing:0.5px; }
+        body.reading-mode .banner { display:none; }
+        body.reading-mode footer { display:none; }
+        /* reading-mode fills the viewport natively so the text fits without page scroll */
+        body.reading-mode .wrap { height:calc(100vh - 64px); display:flex; flex-direction:column; overflow:hidden; padding-bottom:10px; }
+        body.reading-mode .tabs { flex-shrink:0; }
+        body.reading-mode #panel-reading.active { display:flex; flex:1; min-height:0; }
+        .reading-body strong { font-family:'Inter', sans-serif; font-weight:700; color:var(--navy);
+            display:inline-block; font-size:0.74em; letter-spacing:1px; text-transform:uppercase;
+            margin:1.4em 0 0.3em; padding-bottom:4px; border-bottom:2px solid var(--gold); }
+        .reading-body em { color:var(--gold2); font-style:italic; }
+        .reading-body .sp { font-weight:700; color:var(--navy); font-family:'Inter',sans-serif; }
+        .reading-body .r-section + .r-section { margin-top:2.2em; padding-top:1.6em; border-top:1px dashed var(--border); }
+        .reading-empty { text-align:center; color:var(--muted); padding:60px 20px; font-family:'Inter',sans-serif; }
+        .reading-empty i { font-size:2rem; color:var(--border); }
+
+        /* WHITEBOARD */
+        .wb-toolbar {
+            display:flex; flex-wrap:wrap; align-items:center; gap:8px;
+            padding:12px 14px; background:var(--navy); border-radius:12px 12px 0 0;
+        }
+        .wb-group { display:flex; align-items:center; gap:6px; padding:0 8px; border-right:1px solid rgba(255,255,255,0.12); }
+        .wb-group:last-child { border-right:none; }
+        .tool-btn {
+            width:40px; height:40px; border-radius:9px; border:1px solid rgba(255,255,255,0.15);
+            background:var(--navy2); color:#fff; cursor:pointer; font-size:0.95rem;
+            display:flex; align-items:center; justify-content:center; transition:all .15s;
+        }
+        .tool-btn:hover { background:#2e466a; }
+        .tool-btn.active { background:var(--gold); color:var(--navy); border-color:var(--gold); }
+        .swatch { width:26px; height:26px; border-radius:50%; cursor:pointer; border:2px solid transparent; transition:transform .12s; }
+        .swatch:hover { transform:scale(1.15); }
+        .swatch.active { border-color:#fff; box-shadow:0 0 0 2px var(--gold); }
+        .sticker-pick { font-size:1.2rem; cursor:pointer; line-height:1; padding:3px; border-radius:7px; transition:transform .12s, background .12s; }
+        .sticker-pick:hover { transform:scale(1.2); }
+        .sticker-pick.active { background:var(--gold); }
+        input[type=color].pick { width:34px; height:34px; border:none; background:none; cursor:pointer; padding:0; }
+        .size-slider { width:90px; accent-color:var(--gold); cursor:pointer; }
+        .wb-label { color:rgba(255,255,255,0.6); font-size:0.66rem; text-transform:uppercase; letter-spacing:1px; margin-right:2px; }
+        .wb-stage { position:relative; border:1px solid var(--border); border-top:none; border-radius:0 0 12px 12px; overflow:hidden; background:#fff; }
+        #board { display:block; width:100%; height:520px; touch-action:none; cursor:crosshair; background:#fff; }
+        #wb-text-input {
+            position:absolute; display:none; z-index:5; border:1px dashed var(--gold2); outline:none;
+            font-family:'Inter',sans-serif; background:rgba(255,255,255,0.9); padding:2px 4px; color:#000;
+        }
+        .wb-hint { font-size:0.74rem; color:var(--muted); margin-top:10px; text-align:center; }
+
+        /* VOCAB */
+        .vocab-head { display:flex; align-items:center; justify-content:space-between; gap:14px; margin-bottom:18px; flex-wrap:wrap; }
+        .vocab-head h3 { font-family:'Playfair Display',serif; font-size:1.4rem; color:var(--navy); margin:0; }
+        .vocab-search { position:relative; }
+        .vocab-search i { position:absolute; left:12px; top:50%; transform:translateY(-50%); color:var(--muted); font-size:0.8rem; }
+        .vocab-search input { padding:9px 12px 9px 32px; border:1px solid var(--border); border-radius:8px; font-family:'Inter',sans-serif; font-size:0.85rem; background:var(--white); }
+        .vocab-search input:focus { outline:none; border-color:var(--gold); box-shadow:0 0 0 3px rgba(197,160,89,0.2); }
+        .vocab-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(260px,1fr)); gap:14px; }
+        .vcard {
+            background:var(--white); border:1px solid var(--border); border-left:4px solid var(--gold);
+            border-radius:12px; padding:15px 18px; box-shadow:0 1px 4px rgba(0,0,0,0.05);
+            transition:transform .15s, box-shadow .15s, border-color .15s; cursor:pointer; align-self:start;
+        }
+        .vcard:hover { transform:translateY(-3px); box-shadow:0 8px 22px rgba(26,43,66,0.12); border-color:var(--gold); }
+        .vcard.open { border-left-width:6px; box-shadow:0 12px 30px rgba(26,43,66,0.16); }
+        .vhead { display:flex; align-items:flex-start; justify-content:space-between; gap:10px; }
+        .vcard .term { font-size:1.05rem; font-weight:700; color:var(--navy); margin:0 0 3px; transition:font-size .2s, color .2s; }
+        .vcard.open .term { font-size:1.32rem; color:var(--gold2); }
+        .vcard .ipa { font-family:'Inter',sans-serif; font-size:0.85rem; color:var(--gold2); margin:0; min-height:1.1em; letter-spacing:0.3px; }
+        .vcard.open .ipa { font-size:1rem; color:var(--navy); }
+        .vcard .ipa.loading { color:var(--muted); font-style:italic; }
+        .vchev { color:var(--muted); font-size:0.8rem; margin-top:5px; transition:transform .28s ease, color .2s; flex-shrink:0; }
+        .vcard.open .vchev { transform:rotate(180deg); color:var(--gold2); }
+        .vbody { max-height:0; overflow:hidden; transition:max-height .3s ease; }
+        .vcard.open .vbody { max-height:260px; }
+        .vcard .def { font-size:0.92rem; color:var(--text); line-height:1.6; margin:12px 0 2px; padding-top:12px; border-top:1px solid var(--border); }
+        .vcard .def .deflabel { display:block; font-size:0.62rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; color:var(--muted); margin-bottom:5px; }
+        .vocab-empty { text-align:center; color:var(--muted); padding:40px 20px; }
+        .vocab-empty i { font-size:2rem; color:var(--border); }
+        .vocab-note { font-size:0.72rem; color:var(--muted); margin-top:16px; text-align:center; }
+
+        footer { background:var(--navy); color:rgba(255,255,255,0.4); text-align:center; padding:22px; font-size:0.74rem; border-top:3px solid var(--gold); }
+        footer img { height:34px; width:34px; object-fit:contain; vertical-align:middle; margin-right:8px; }
+
+        @media (max-width:680px){
+            header,.banner-inner,.wrap{ padding-left:16px; padding-right:16px; }
+            .banner h2{ font-size:1.7rem; } .banner{ height:180px; }
+            .brand p{ display:none; }
+            .crumb{ display:none; }
+            #board{ height:380px; }
+        }
+    </style>
+    <link rel="icon" href="assets/images/vesper_logo.png" type="image/png">
+</head>
+
+<body>
+    <header>
+        <div class="brand">
+            <img src="assets/images/vesper_logo_inverted.png" alt="Vesper">
+            <div><h1>Vesper Academy</h1><p>Lesson</p></div>
+        </div>
+        <div class="head-right">
+            <span class="crumb" id="crumb">—</span>
+            <a class="catalog-btn" id="catalog-btn" href="audio_library.html"><i class="fas fa-table-cells-large"></i> <span>Catalog</span></a>
+        </div>
+    </header>
+
+    <!-- BANNER -->
+    <div class="banner" id="banner">
+        <i class="fas fa-headphones bg-icon" id="banner-icon"></i>
+        <img class="photo" id="banner-photo" alt="" style="display:none">
+        <div class="overlay"></div>
+        <div class="banner-inner">
+            <span class="tag" id="banner-tag"><i class="fas fa-layer-group"></i> Level</span>
+            <h2 id="banner-title">Lesson</h2>
+        </div>
+    </div>
+
+    <div class="wrap">
+        <div class="tabs">
+            <button class="tab active" data-panel="audio"><i class="fas fa-headphones"></i> Audio</button>
+            <button class="tab" data-panel="reading"><i class="fas fa-book-open-reader"></i> Reading</button>
+            <button class="tab" data-panel="board"><i class="fas fa-chalkboard"></i> Whiteboard</button>
+            <button class="tab" data-panel="vocab"><i class="fas fa-book-open"></i> Vocabulary</button>
+        </div>
+
+        <!-- AUDIO PANEL -->
+        <div class="panel active" id="panel-audio">
+            <div class="card-box audio-card">
+                <button class="big-play" id="big-play" aria-label="Play"><i class="fas fa-play"></i></button>
+                <h3 class="a-title" id="a-title">Lesson Audio</h3>
+                <p class="a-sub" id="a-sub">Full listening track</p>
+                <div class="a-progress">
+                    <span class="a-time" id="a-cur">0:00</span>
+                    <div class="a-bar" id="a-bar"><div class="a-fill" id="a-fill"></div></div>
+                    <span class="a-time dur" id="a-dur">0:00</span>
+                </div>
+                <div class="speed-row">
+                    <span>Speed</span>
+                    <button class="speed-btn" data-rate="0.75">0.75×</button>
+                    <button class="speed-btn active" data-rate="1">1×</button>
+                    <button class="speed-btn" data-rate="1.25">1.25×</button>
+                    <button class="speed-btn" data-rate="1.5">1.5×</button>
+                </div>
+                <div class="a-error" id="a-error"><i class="fas fa-triangle-exclamation"></i> Audio file not found for this lesson.</div>
+            </div>
+        </div>
+
+        <!-- READING PANEL -->
+        <div class="panel" id="panel-reading">
+            <div class="card-box reading-card">
+                <div class="reading-toolbar">
+                    <span class="rt-label"><i class="fas fa-book-open-reader"></i> Reading &mdash; presentation view</span>
+                    <div class="rt-controls">
+                        <span>Text size</span>
+                        <button class="rt-size" id="r-smaller" aria-label="Smaller text">A&minus;</button>
+                        <button class="rt-size" id="r-bigger" aria-label="Larger text">A+</button>
+                    </div>
+                </div>
+                <div class="reading-body" id="reading-body"></div>
+                <div class="reading-nav" id="reading-nav">
+                    <button class="rn-btn" id="r-prev"><i class="fas fa-chevron-left"></i> Prev</button>
+                    <span class="rn-ind" id="r-page">Page 1 / 1</span>
+                    <button class="rn-btn" id="r-next">Next <i class="fas fa-chevron-right"></i></button>
+                </div>
+            </div>
+        </div>
+
+        <!-- WHITEBOARD PANEL -->
+        <div class="panel" id="panel-board">
+            <div class="wb-toolbar">
+                <div class="wb-group">
+                    <button class="tool-btn" id="t-select" title="Select & move"><i class="fas fa-arrow-pointer"></i></button>
+                    <button class="tool-btn active" id="t-pen" title="Pen"><i class="fas fa-pen"></i></button>
+                    <button class="tool-btn" id="t-marker" title="Highlighter"><i class="fas fa-highlighter"></i></button>
+                    <button class="tool-btn" id="t-eraser" title="Eraser (delete shapes)"><i class="fas fa-eraser"></i></button>
+                    <button class="tool-btn" id="t-text" title="Text (type with keyboard)"><i class="fas fa-font"></i></button>
+                </div>
+                <div class="wb-group">
+                    <button class="tool-btn" id="t-line" title="Line"><i class="fas fa-minus"></i></button>
+                    <button class="tool-btn" id="t-rect" title="Box / rectangle"><i class="far fa-square"></i></button>
+                    <button class="tool-btn" id="t-ellipse" title="Ellipse"><i class="far fa-circle"></i></button>
+                </div>
+                <div class="wb-group">
+                    <span class="wb-label">Sticker</span>
+                    <span class="sticker-pick" data-st="✅">✅</span>
+                    <span class="sticker-pick" data-st="❌">❌</span>
+                    <span class="sticker-pick" data-st="⭐">⭐</span>
+                    <span class="sticker-pick" data-st="💡">💡</span>
+                    <span class="sticker-pick" data-st="❓">❓</span>
+                    <span class="sticker-pick" data-st="📌">📌</span>
+                    <span class="sticker-pick" data-st="👍">👍</span>
+                    <span class="sticker-pick" data-st="🔑">🔑</span>
+                </div>
+                <div class="wb-group">
+                    <span class="wb-label">Color</span>
+                    <span class="swatch active" style="background:#1a2b42" data-color="#1a2b42"></span>
+                    <span class="swatch" style="background:#c5a059" data-color="#c5a059"></span>
+                    <span class="swatch" style="background:#b02a2a" data-color="#b02a2a"></span>
+                    <span class="swatch" style="background:#2d7a4f" data-color="#2d7a4f"></span>
+                    <span class="swatch" style="background:#1e5fa8" data-color="#1e5fa8"></span>
+                    <input type="color" class="pick" id="color-pick" value="#1a2b42" title="Custom color">
+                </div>
+                <div class="wb-group">
+                    <span class="wb-label">Size</span>
+                    <input type="range" class="size-slider" id="size" min="1" max="40" value="4">
+                </div>
+                <div class="wb-group" style="margin-left:auto">
+                    <button class="tool-btn" id="t-delete" title="Delete selected (Del)"><i class="fas fa-delete-left"></i></button>
+                    <button class="tool-btn" id="t-undo" title="Undo (Ctrl+Z)"><i class="fas fa-rotate-left"></i></button>
+                    <button class="tool-btn" id="t-clear" title="Clear all"><i class="fas fa-trash"></i></button>
+                    <button class="tool-btn" id="t-save" title="Download PNG"><i class="fas fa-download"></i></button>
+                </div>
+            </div>
+            <div class="wb-stage">
+                <canvas id="board"></canvas>
+                <input id="wb-text-input" type="text" placeholder="Type…">
+            </div>
+            <p class="wb-hint"><b>Select</b> tool moves anything you drew · <b>Box / Circle / Line</b> draw shapes · click a <b>sticker</b> then click the board · <b>Del</b> removes the selected item · <b>Ctrl+Z</b> undo</p>
+        </div>
+
+        <!-- VOCAB PANEL -->
+        <div class="panel" id="panel-vocab">
+            <div class="card-box">
+                <div class="vocab-head">
+                    <h3><i class="fas fa-book-open" style="color:var(--gold);margin-right:8px"></i>Vocabulary</h3>
+                    <div class="vocab-search"><i class="fas fa-search"></i><input id="vocab-search" placeholder="Filter words…"></div>
+                </div>
+                <div class="vocab-grid" id="vocab-grid"></div>
+                <div class="vocab-empty" id="vocab-empty" style="display:none">
+                    <i class="fas fa-book"></i><br><br>No vocabulary list is available for this lesson yet.
+                </div>
+                <p class="vocab-note">Definitions are from the Vesper curriculum · IPA pronunciation is fetched live from an open dictionary (needs internet).</p>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <img src="assets/images/vesper_logo_inverted.png" alt="">Vesper Academy — Core Practice
+    </footer>
+
+    <script src="vesper_audio_data.js"></script>
+    <script src="vesper_reading_data.js"></script>
+    <script src="vesper_basics_lesson_data.js"></script>
+    <script src="vesper_custom_transcripts.js"></script>
+    <script>
+        // ── PARAMS ────────────────────────────────────────────────────
+        const params = new URLSearchParams(location.search);
+        const isDiag = params.get("diag") !== null;
+        const lvl = parseInt(params.get("level") || "1", 10);
+        const les = parseInt(params.get("lesson") || "1", 10);
+        const DATA = window.VESPER_DATA || {};
+
+        const isBasics = params.get("basics") !== null;  // Core Basics dialogue lessons
+        const isCustom = !isBasics && params.get("audio") !== null;   // generic audio (e.g. Business English)
+        let title, bannerTag, icon, vocab, audioSrc, crumbText, aSub, showPhoto = false;
+        let basicsLesson = null;
+        if (isBasics) {
+            const bl = parseInt(params.get("basics") || "1", 10);
+            const bn = parseInt(params.get("lesson") || "1", 10);
+            const BD = window.BASICS_LESSONS || {};
+            const blv = BD[bl] || BD[String(bl)];
+            basicsLesson = blv ? (blv.lessons[bn] || blv.lessons[String(bn)]) : null;
+            title = basicsLesson ? basicsLesson.title : `Lesson ${bn}`;
+            bannerTag = `Core Basics ${bl} · ${blv ? blv.tag : ""}`;
+            icon = blv ? blv.icon : "fa-seedling";
+            vocab = basicsLesson ? (basicsLesson.vocab || []) : [];
+            audioSrc = `assets/audio/core_basics_level_${bl}_lesson_${bn}.mp3`;
+            crumbText = `Basics ${bl} · Lesson ${bn}`;
+            aSub = `${blv ? blv.tag : "Core Basics"} · Lesson ${bn} — dialogue (~1 min)`;
+        } else if (isCustom) {
+            const f = params.get("audio");
+            title = params.get("title") || "Audio";
+            bannerTag = params.get("sub") || "Vesper Audio";
+            icon = params.get("icon") || "fa-headphones";
+            vocab = [];
+            audioSrc = f.includes("/") ? f : `assets/audio/${f}`;
+            crumbText = params.get("crumb") || bannerTag;
+            aSub = bannerTag;
+        } else if (isDiag) {
+            const k = parseInt(params.get("diag") || "1", 10);
+            title = `Diagnostic Track ${k}`; bannerTag = "Diagnostics"; icon = "fa-stethoscope";
+            vocab = []; audioSrc = `assets/audio/exam/diagnostic_track${k}.mp3`;
+            crumbText = `Diagnostics · Track ${k}`; aSub = "Diagnostic audio";
+        } else {
+            const lv = DATA[lvl] || DATA[String(lvl)];
+            const lesson = lv ? lv.lessons[les - 1] : null;
+            title = lesson ? lesson.title : `Lesson ${les}`;
+            const tag = lv ? lv.tag : "";
+            icon = lesson ? lesson.icon : "fa-headphones";
+            vocab = lesson ? (lesson.vocab || []) : [];
+            audioSrc = `assets/audio/core_practice_level_${lvl}_lesson_${les}.mp3`;
+            crumbText = `Level ${lvl} · ${tag} · Lesson ${les}`;
+            bannerTag = `Level ${lvl} · ${tag}`;
+            aSub = `Level ${lvl} · Lesson ${les} — full listening track`;
+            showPhoto = true;
+        }
+
+        // ── BANNER ────────────────────────────────────────────────────
+        // URL params are untrusted: escape text and whitelist icon names before touching the DOM
+        const esc = s => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+        if (!/^fa-[a-z0-9-]+$/.test(icon)) icon = "fa-headphones";
+        document.title = `Vesper Academy | ${title}`;
+        document.getElementById("crumb").innerHTML = esc(crumbText).replace(/(Level \d+)/, "<b>$1</b>");
+        document.getElementById("banner-title").textContent = title;
+        const bannerTagIcon = isDiag ? "fa-stethoscope" : (isCustom ? icon : "fa-layer-group");
+        document.getElementById("banner-tag").innerHTML = `<i class="fas ${bannerTagIcon}"></i> ${esc(bannerTag)}`;
+        document.getElementById("banner-icon").className = `fas ${icon} bg-icon`;
+        // optional real photo: assets/images/lessons/L{lvl}_lesson{les}.jpg — shows if present
+        if (showPhoto) {
+            const photo = document.getElementById("banner-photo");
+            const url = `assets/images/lessons/L${lvl}_lesson${les}.jpg`;
+            photo.onload = () => { photo.style.display = "block"; };
+            photo.onerror = () => { photo.remove(); };
+            photo.src = url;
+        }
+
+        // ── TABS ──────────────────────────────────────────────────────
+        function gotoTab(name){
+            document.querySelectorAll(".tab").forEach(t => t.classList.toggle("active", t.dataset.panel === name));
+            document.querySelectorAll(".panel").forEach(p => p.classList.toggle("active", p.id === "panel-" + name));
+            document.body.classList.toggle("reading-mode", name === "reading");
+            if (name === "board") fitBoard();
+            if (name === "reading") layoutReading();
+        }
+        document.querySelectorAll(".tab").forEach(tab =>
+            tab.addEventListener("click", () => gotoTab(tab.dataset.panel)));
+        // hide the Vocabulary tab when this audio has no vocabulary list (diagnostics / business)
+        if (!vocab.length) {
+            const vt = document.querySelector('.tab[data-panel="vocab"]');
+            if (vt) vt.style.display = "none";
+        }
+
+        // ── READING (paginated presentation view) ─────────────────────
+        const readingTab = document.querySelector('.tab[data-panel="reading"]');
+        const readingBody = document.getElementById("reading-body");
+        const readingNav = document.getElementById("reading-nav");
+        const pageInd = document.getElementById("r-page");
+        let hasReading = false, chunks = [], pages = [], curPage = 0, readSize = 1.3;
+
+        function buildChunks(html, label){
+            const out = [];
+            if (label) out.push({ type: "h", html: `<strong>${label}</strong>` });
+            const lines = (html || "").split(/<br\s*\/?>/i);
+            let para = [];
+            const flush = () => { if (para.length){ out.push({ type: "p", html: para.join(" ") }); para = []; } };
+            lines.forEach(ln => {
+                const t = ln.trim();
+                if (!t) { flush(); return; }
+                if (/^<strong>[\s\S]*<\/strong>$/i.test(t)) { flush(); out.push({ type: "h", html: t }); }
+                else para.push(t);
+            });
+            flush();
+            return out;
+        }
+        (function setupReading(){
+            if (isBasics) {
+                if (basicsLesson && basicsLesson.transcript)
+                    chunks = chunks.concat(buildChunks(basicsLesson.transcript, null));
+            } else if (isCustom) {
+                // Business / Certification tracks: transcript keyed by mp3 filename
+                const CT = window.CUSTOM_TRANSCRIPTS || {};
+                const key = (params.get("audio") || "").split("/").pop();
+                if (CT[key]) chunks = chunks.concat(buildChunks(CT[key], null));
+            } else {
+                const RD = window.VESPER_READING || {};
+                const entry = (!isDiag) ? ((RD[lvl] || RD[String(lvl)] || {})[les] || (RD[lvl] || {})[String(les)]) : null;
+                if (entry && entry.reading)    chunks = chunks.concat(buildChunks(entry.reading, null));
+                if (entry && entry.transcript) chunks = chunks.concat(buildChunks(entry.transcript, "Audio Transcript"));
+            }
+            hasReading = chunks.length > 0;
+            if (!hasReading) readingTab.style.display = "none";
+        })();
+
+        const renderChunk = c => c.type === "h" ? c.html : `<p>${c.html}</p>`;
+        function paginate(){
+            pages = []; if (!hasReading) { pages = [[]]; return; }
+            let pc = [];
+            for (const ch of chunks){
+                pc.push(ch);
+                readingBody.innerHTML = pc.map(renderChunk).join("");
+                if (readingBody.scrollHeight > readingBody.clientHeight && pc.length > 1){
+                    pc.pop(); pages.push(pc); pc = [ch];
+                    readingBody.innerHTML = renderChunk(ch);
+                }
+            }
+            if (pc.length) pages.push(pc);
+            if (!pages.length) pages = [[]];
+        }
+        function renderPage(i){
+            curPage = Math.max(0, Math.min(i, pages.length - 1));
+            readingBody.innerHTML = pages[curPage].map(renderChunk).join("");
+            pageInd.textContent = `Page ${curPage + 1} / ${pages.length}`;
+            document.getElementById("r-prev").disabled = curPage === 0;
+            document.getElementById("r-next").disabled = curPage === pages.length - 1;
+            readingNav.style.display = pages.length > 1 ? "flex" : "none";
+        }
+        function layoutReading(){
+            if (!hasReading) return;
+            readingBody.style.setProperty("--read-size", readSize.toFixed(2) + "rem");
+            const keep = curPage;
+            // force reflow so clientHeight reflects the flex layout, then paginate
+            void readingBody.offsetHeight;
+            paginate();
+            renderPage(Math.min(keep, pages.length - 1));
+        }
+        document.getElementById("r-prev").addEventListener("click", () => renderPage(curPage - 1));
+        document.getElementById("r-next").addEventListener("click", () => renderPage(curPage + 1));
+        document.getElementById("r-bigger").addEventListener("click", () => { readSize = Math.min(2.4, readSize + 0.15); curPage = 0; layoutReading(); });
+        document.getElementById("r-smaller").addEventListener("click", () => { readSize = Math.max(0.9, readSize - 0.15); curPage = 0; layoutReading(); });
+        document.addEventListener("keydown", e => {
+            if (!document.getElementById("panel-reading").classList.contains("active")) return;
+            if (e.key === "ArrowRight" || e.key === "PageDown") { e.preventDefault(); renderPage(curPage + 1); }
+            if (e.key === "ArrowLeft"  || e.key === "PageUp")   { e.preventDefault(); renderPage(curPage - 1); }
+        });
+        let rzTimer; window.addEventListener("resize", () => {
+            if (!document.getElementById("panel-reading").classList.contains("active")) return;
+            clearTimeout(rzTimer); rzTimer = setTimeout(layoutReading, 150);
+        });
+
+        // ── AUDIO PLAYER ──────────────────────────────────────────────
+        const audio = new Audio(); audio.src = audioSrc;
+        document.getElementById("a-title").textContent = title;
+        document.getElementById("a-sub").textContent = aSub;
+        const bigPlay = document.getElementById("big-play"), bpIc = bigPlay.querySelector("i");
+        const aCur = document.getElementById("a-cur"), aDur = document.getElementById("a-dur");
+        const aBar = document.getElementById("a-bar"), aFill = document.getElementById("a-fill");
+        const fmt = s => { if(!isFinite(s)) return "0:00"; const m=Math.floor(s/60),x=Math.floor(s%60); return `${m}:${x.toString().padStart(2,"0")}`; };
+        bigPlay.addEventListener("click", () => { if (audio.paused) audio.play().catch(()=>{}); else audio.pause(); });
+        audio.addEventListener("play",  () => bpIc.className = "fas fa-pause");
+        audio.addEventListener("pause", () => bpIc.className = "fas fa-play");
+        audio.addEventListener("ended", () => bpIc.className = "fas fa-play");
+        audio.addEventListener("loadedmetadata", () => aDur.textContent = fmt(audio.duration));
+        audio.addEventListener("timeupdate", () => {
+            aCur.textContent = fmt(audio.currentTime);
+            aFill.style.width = (audio.duration ? audio.currentTime/audio.duration*100 : 0) + "%";
+        });
+        audio.addEventListener("error", () => {
+            document.getElementById("a-error").style.display = "block";
+            // no audio for this lesson — fall back to the Reading view automatically
+            if (hasReading) {
+                document.querySelector('.tab[data-panel="audio"]').style.display = "none";
+                gotoTab("reading");
+            }
+        });
+        aBar.addEventListener("click", e => { const r=aBar.getBoundingClientRect(); if(audio.duration) audio.currentTime=((e.clientX-r.left)/r.width)*audio.duration; });
+        document.querySelectorAll(".speed-btn").forEach(b => b.addEventListener("click", () => {
+            document.querySelectorAll(".speed-btn").forEach(x => x.classList.remove("active"));
+            b.classList.add("active"); audio.playbackRate = parseFloat(b.dataset.rate);
+        }));
+
+        // ── WHITEBOARD (object model: movable shapes, text, stickers) ──
+        const canvas = document.getElementById("board");
+        const ctx = canvas.getContext("2d");
+        const textInput = document.getElementById("wb-text-input");
+        const boardPanel = document.getElementById("panel-board");
+
+        let tool = "pen";              // select|pen|marker|eraser|text|line|rect|ellipse|sticker
+        let color = "#1a2b42", size = 4, pendingSticker = null;
+        let dpr = 1, cssW = 0, cssH = 0;
+        let objects = [];              // every drawn item, in z-order
+        let selected = null;
+        const undoStack = []; const MAX_UNDO = 50;
+
+        function clone(arr){ return arr.map(o => JSON.parse(JSON.stringify(o))); }
+        function pushUndo(){ undoStack.push(clone(objects)); if (undoStack.length > MAX_UNDO) undoStack.shift(); }
+        function pos(e){ const r = canvas.getBoundingClientRect(); return { x:e.clientX-r.left, y:e.clientY-r.top }; }
+
+        function fitBoard(){
+            const rect = canvas.getBoundingClientRect();
+            if (!rect.width || !rect.height) return;
+            dpr = window.devicePixelRatio || 1; cssW = rect.width; cssH = rect.height;
+            canvas.width = Math.round(cssW * dpr); canvas.height = Math.round(cssH * dpr);
+            redraw();
+        }
+
+        function redraw(){
+            ctx.setTransform(dpr,0,0,dpr,0,0);
+            ctx.clearRect(0,0,cssW,cssH);
+            ctx.fillStyle = "#fff"; ctx.fillRect(0,0,cssW,cssH);
+            ctx.lineCap = "round"; ctx.lineJoin = "round";
+            for (const o of objects) drawObj(o);
+            if (selected) drawSelection(selected);
+        }
+
+        function drawObj(o){
+            ctx.globalAlpha = (o.alpha != null) ? o.alpha : 1;
+            ctx.strokeStyle = o.color || "#1a2b42"; ctx.fillStyle = o.color || "#1a2b42";
+            ctx.lineWidth = o.width || 2;
+            if (o.type === "path"){
+                ctx.beginPath();
+                o.pts.forEach((p,i) => i ? ctx.lineTo(p.x,p.y) : ctx.moveTo(p.x,p.y));
+                if (o.pts.length === 1) ctx.lineTo(o.pts[0].x+0.01, o.pts[0].y+0.01);
+                ctx.stroke();
+            } else if (o.type === "line"){
+                ctx.beginPath(); ctx.moveTo(o.x1,o.y1); ctx.lineTo(o.x2,o.y2); ctx.stroke();
+            } else if (o.type === "rect"){
+                ctx.strokeRect(o.x,o.y,o.w,o.h);
+            } else if (o.type === "ellipse"){
+                ctx.beginPath(); ctx.ellipse(o.x+o.w/2, o.y+o.h/2, Math.abs(o.w/2), Math.abs(o.h/2), 0, 0, Math.PI*2); ctx.stroke();
+            } else if (o.type === "text"){
+                ctx.font = `600 ${o.fs}px Inter, sans-serif`; ctx.textBaseline = "top"; ctx.fillText(o.text, o.x, o.y);
+            } else if (o.type === "sticker"){
+                ctx.font = `${o.fs}px serif`; ctx.textBaseline = "top"; ctx.fillText(o.char, o.x, o.y);
+            }
+            ctx.globalAlpha = 1;
+        }
+
+        function bbox(o){
+            if (o.type === "path"){
+                const xs = o.pts.map(p=>p.x), ys = o.pts.map(p=>p.y);
+                const x = Math.min(...xs), y = Math.min(...ys);
+                return { x, y, w: Math.max(...xs)-x, h: Math.max(...ys)-y };
+            } else if (o.type === "line"){
+                return { x:Math.min(o.x1,o.x2), y:Math.min(o.y1,o.y2), w:Math.abs(o.x2-o.x1), h:Math.abs(o.y2-o.y1) };
+            } else if (o.type === "rect" || o.type === "ellipse"){
+                return { x:Math.min(o.x,o.x+o.w), y:Math.min(o.y,o.y+o.h), w:Math.abs(o.w), h:Math.abs(o.h) };
+            } else if (o.type === "text"){
+                ctx.font = `600 ${o.fs}px Inter, sans-serif`;
+                return { x:o.x, y:o.y, w:ctx.measureText(o.text).width, h:o.fs*1.2 };
+            } else if (o.type === "sticker"){
+                return { x:o.x, y:o.y, w:o.fs, h:o.fs };
+            }
+            return { x:0, y:0, w:0, h:0 };
+        }
+
+        function drawSelection(o){
+            const b = bbox(o), pad = 6;
+            ctx.save(); ctx.strokeStyle = "#c5a059"; ctx.lineWidth = 1.5; ctx.setLineDash([6,4]);
+            ctx.strokeRect(b.x-pad, b.y-pad, b.w+pad*2, b.h+pad*2);
+            ctx.setLineDash([]); ctx.restore();
+        }
+
+        function hitTest(p){
+            for (let i = objects.length-1; i >= 0; i--){
+                const b = bbox(objects[i]), pad = 8;
+                if (p.x >= b.x-pad && p.x <= b.x+b.w+pad && p.y >= b.y-pad && p.y <= b.y+b.h+pad) return objects[i];
+            }
+            return null;
+        }
+
+        function moveObj(o, nx, ny){
+            const b = bbox(o), dx = nx - b.x, dy = ny - b.y;
+            if (o.type === "path") o.pts.forEach(pt => { pt.x += dx; pt.y += dy; });
+            else if (o.type === "line"){ o.x1+=dx; o.y1+=dy; o.x2+=dx; o.y2+=dy; }
+            else { o.x += dx; o.y += dy; if (o._sx != null){ o._sx += dx; o._sy += dy; } }
+        }
+
+        // ── interaction ──
+        let action = null, current = null, moveOff = null;
+        canvas.addEventListener("pointerdown", e => {
+            const p = pos(e);
+            if (tool === "text"){ placeText(p); return; }
+            if (tool === "sticker" && pendingSticker){
+                pushUndo(); const fs = Math.max(30, size*7);
+                objects.push({ type:"sticker", x:p.x-fs/2, y:p.y-fs/2, char:pendingSticker, fs });
+                redraw(); return;
+            }
+            if (tool === "select"){
+                const hit = hitTest(p); selected = hit; redraw();
+                if (hit){ pushUndo(); action = "move"; const b = bbox(hit); moveOff = { dx:p.x-b.x, dy:p.y-b.y }; try { canvas.setPointerCapture(e.pointerId); } catch(_){} }
+                return;
+            }
+            if (tool === "eraser"){
+                const hit = hitTest(p);
+                if (hit){ pushUndo(); objects = objects.filter(o => o !== hit); selected = null; redraw(); }
+                action = "erase"; try { canvas.setPointerCapture(e.pointerId); } catch(_){} return;
+            }
+            // drawing / shape tools
+            pushUndo(); try { canvas.setPointerCapture(e.pointerId); } catch(_){} selected = null;
+            if (tool === "pen" || tool === "marker"){
+                action = "draw";
+                current = { type:"path", pts:[{x:p.x,y:p.y}], color, width: tool==="marker"? size*3 : size, alpha: tool==="marker"? 0.4 : 1 };
+            } else if (tool === "line"){
+                action = "shape"; current = { type:"line", x1:p.x, y1:p.y, x2:p.x, y2:p.y, color, width:size };
+            } else if (tool === "rect"){
+                action = "shape"; current = { type:"rect", x:p.x, y:p.y, w:0, h:0, color, width:size, _sx:p.x, _sy:p.y };
+            } else if (tool === "ellipse"){
+                action = "shape"; current = { type:"ellipse", x:p.x, y:p.y, w:0, h:0, color, width:size, _sx:p.x, _sy:p.y };
+            }
+            if (current){ objects.push(current); redraw(); }
+        });
+        canvas.addEventListener("pointermove", e => {
+            const p = pos(e);
+            if (action === "draw" && current){ current.pts.push({x:p.x,y:p.y}); redraw(); }
+            else if (action === "shape" && current){
+                if (current.type === "line"){ current.x2 = p.x; current.y2 = p.y; }
+                else { current.x = Math.min(current._sx,p.x); current.y = Math.min(current._sy,p.y); current.w = Math.abs(p.x-current._sx); current.h = Math.abs(p.y-current._sy); }
+                redraw();
+            } else if (action === "move" && selected){ moveObj(selected, p.x-moveOff.dx, p.y-moveOff.dy); redraw(); }
+            else if (action === "erase"){ const hit = hitTest(p); if (hit){ objects = objects.filter(o => o !== hit); redraw(); } }
+        });
+        function endAction(){ action = null; current = null; moveOff = null; }
+        canvas.addEventListener("pointerup", endAction);
+        canvas.addEventListener("pointercancel", endAction);
+
+        // ── text tool ──
+        let textPos = null;
+        function placeText(p){
+            textPos = p; const fs = Math.max(16, size*5);
+            textInput.style.left = p.x + "px"; textInput.style.top = p.y + "px";
+            textInput.style.display = "block"; textInput.style.color = color;
+            textInput.style.fontSize = fs + "px"; textInput.value = "";
+            setTimeout(() => textInput.focus(), 10);
+        }
+        function commitText(){
+            const val = textInput.value.trim();
+            if (val && textPos){ pushUndo(); objects.push({ type:"text", x:textPos.x, y:textPos.y, text:val, color, fs:Math.max(16,size*5) }); redraw(); }
+            textInput.style.display = "none"; textInput.value = ""; textPos = null;
+        }
+        textInput.addEventListener("keydown", e => { e.stopPropagation(); if (e.key==="Enter"){ e.preventDefault(); commitText(); } if (e.key==="Escape"){ textInput.style.display="none"; textPos=null; } });
+        textInput.addEventListener("blur", commitText);
+
+        // ── tools ──
+        const TOOL_BTNS = { "t-select":"select","t-pen":"pen","t-marker":"marker","t-eraser":"eraser","t-text":"text","t-line":"line","t-rect":"rect","t-ellipse":"ellipse" };
+        function setTool(t){
+            tool = t; pendingSticker = null;
+            document.querySelectorAll(".wb-toolbar .tool-btn").forEach(b => b.classList.remove("active"));
+            document.querySelectorAll(".sticker-pick").forEach(s => s.classList.remove("active"));
+            const id = Object.keys(TOOL_BTNS).find(k => TOOL_BTNS[k] === t);
+            if (id) document.getElementById(id).classList.add("active");
+            canvas.style.cursor = t==="text" ? "text" : t==="select" ? "move" : t==="eraser" ? "cell" : "crosshair";
+            if (t !== "select") { selected = null; redraw(); }
+        }
+        Object.keys(TOOL_BTNS).forEach(id => document.getElementById(id).addEventListener("click", () => setTool(TOOL_BTNS[id])));
+
+        document.querySelectorAll(".sticker-pick").forEach(s => s.addEventListener("click", () => {
+            setTool("sticker"); pendingSticker = s.dataset.st;
+            s.classList.add("active"); canvas.style.cursor = "copy";
+        }));
+
+        document.querySelectorAll(".swatch").forEach(s => s.addEventListener("click", () => {
+            document.querySelectorAll(".swatch").forEach(x => x.classList.remove("active"));
+            s.classList.add("active"); color = s.dataset.color; document.getElementById("color-pick").value = color;
+            if (selected){ pushUndo(); selected.color = color; redraw(); }
+        }));
+        document.getElementById("color-pick").addEventListener("input", e => {
+            color = e.target.value; document.querySelectorAll(".swatch").forEach(x => x.classList.remove("active"));
+            if (selected){ pushUndo(); selected.color = color; redraw(); }
+        });
+        document.getElementById("size").addEventListener("input", e => size = parseInt(e.target.value,10));
+
+        function undo(){ if (!undoStack.length) return; objects = undoStack.pop(); selected = null; redraw(); }
+        function deleteSelected(){ if (selected){ pushUndo(); objects = objects.filter(o => o !== selected); selected = null; redraw(); } }
+        document.getElementById("t-undo").addEventListener("click", undo);
+        document.getElementById("t-delete").addEventListener("click", deleteSelected);
+        document.getElementById("t-clear").addEventListener("click", () => { pushUndo(); objects = []; selected = null; redraw(); });
+        document.getElementById("t-save").addEventListener("click", () => {
+            selected = null; redraw();
+            const a = document.createElement("a");
+            a.download = `vesper_whiteboard_L${lvl}_lesson${les}.png`;
+            a.href = canvas.toDataURL("image/png"); a.click();
+        });
+        document.addEventListener("keydown", e => {
+            if (!boardPanel.classList.contains("active")) return;
+            if (textPos) return; // typing text
+            if ((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==="z"){ e.preventDefault(); undo(); }
+            else if ((e.key === "Delete" || e.key === "Backspace") && selected){ e.preventDefault(); deleteSelected(); }
+        });
+        window.addEventListener("resize", () => { if (boardPanel.classList.contains("active")) fitBoard(); });
+
+        // ── VOCABULARY ────────────────────────────────────────────────
+        const vgrid = document.getElementById("vocab-grid");
+        const vempty = document.getElementById("vocab-empty");
+        if (!vocab.length) {
+            vgrid.style.display = "none"; vempty.style.display = "block";
+        } else {
+            vocab.forEach(v => {
+                const card = document.createElement("div");
+                card.className = "vcard"; card.dataset.term = v.term.toLowerCase();
+                card.innerHTML = `
+                    <div class="vhead">
+                        <div class="vhead-main">
+                            <p class="term">${v.term}</p>
+                            <p class="ipa loading" data-term="${v.term}">/…/</p>
+                        </div>
+                        <i class="fas fa-chevron-down vchev"></i>
+                    </div>
+                    <div class="vbody"><p class="def"><span class="deflabel">Definition</span>${v.def || "—"}</p></div>`;
+                card.addEventListener("click", () => card.classList.toggle("open"));
+                vgrid.appendChild(card);
+            });
+            loadIPA();
+        }
+        // fetch IPA lazily from the open dictionary API
+        async function loadIPA() {
+            const ipaEls = document.querySelectorAll(".vcard .ipa");
+            for (const el of ipaEls) {
+                const term = el.dataset.term;
+                const word = term.split(/\s+/)[0].replace(/[^a-zA-Z'-]/g, "");
+                try {
+                    const res = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(word)}`);
+                    if (!res.ok) throw 0;
+                    const json = await res.json();
+                    let ph = "";
+                    if (Array.isArray(json)) {
+                        ph = json[0].phonetic || (json[0].phonetics || []).map(p => p.text).find(Boolean) || "";
+                    }
+                    el.textContent = ph ? ph : "—";
+                } catch(e) { el.textContent = "—"; }
+                el.classList.remove("loading");
+            }
+        }
+        document.getElementById("vocab-search").addEventListener("input", e => {
+            const q = e.target.value.trim().toLowerCase();
+            document.querySelectorAll(".vcard").forEach(c => c.style.display = (!q || c.dataset.term.includes(q)) ? "" : "none");
+        });
+
+        // initial board sizing if board tab opened later handled; size now in case
+        fitBoard();
+    </script>
+</body>
+</html>

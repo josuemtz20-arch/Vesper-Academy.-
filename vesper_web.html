@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vesper Academy | Inglés para profesionales del mundo real</title>
+<meta name="description" content="Academia de inglés en línea con metodología comunicativa: del nivel A0 a la certificación internacional (IELTS, Cambridge, TOEFL). Clases en vivo, audio nativo y seguimiento real del progreso.">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link rel="icon" href="assets/images/vesper_logo.png" type="image/png">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap');
+*,*::before,*::after{box-sizing:border-box;}
+:root{
+  --navy:#1a2b42; --navy2:#243654; --navy3:#14223a;
+  --gold:#c5a059; --gold-lt:#d9bd84; --gold2:#a8843d;
+  --cream:#f5f2eb; --white:#fff; --border:#e4e0d8; --text:#1a2b42; --muted:#6b7a8d;
+}
+html{scroll-behavior:smooth;}
+body{font-family:'Inter',sans-serif;color:var(--text);margin:0;background:var(--white);line-height:1.6;}
+a{text-decoration:none;color:inherit;}
+.container{max-width:1140px;margin:0 auto;padding:0 24px;}
+.btn{display:inline-flex;align-items:center;gap:9px;font-weight:600;font-size:.92rem;padding:13px 26px;border-radius:10px;cursor:pointer;border:none;transition:transform .16s,box-shadow .16s,background .16s;font-family:inherit;}
+.btn-gold{background:var(--gold);color:var(--navy);}
+.btn-gold:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(197,160,89,.4);}
+.btn-ghost{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.4);}
+.btn-ghost:hover{border-color:var(--gold);color:var(--gold-lt);}
+.eyebrow{font-size:.72rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold2);font-weight:700;}
+.sec-title{font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:800;margin:10px 0 14px;line-height:1.15;}
+.sec-lead{color:var(--muted);font-size:1.02rem;max-width:640px;}
+
+/* NAV */
+header{position:sticky;top:0;z-index:200;background:rgba(26,43,66,.96);backdrop-filter:blur(8px);border-bottom:1px solid rgba(197,160,89,.25);}
+nav{display:flex;align-items:center;justify-content:space-between;height:70px;}
+.brand{display:flex;align-items:center;gap:12px;}
+.brand img{height:42px;width:42px;object-fit:contain;}
+.brand b{font-family:'Playfair Display',serif;color:#fff;font-size:1.15rem;font-weight:700;letter-spacing:.5px;}
+.brand small{display:block;color:var(--gold);font-size:.6rem;letter-spacing:2px;text-transform:uppercase;}
+.nav-links{display:flex;gap:30px;align-items:center;}
+.nav-links a{color:rgba(255,255,255,.82);font-size:.86rem;font-weight:500;transition:color .16s;}
+.nav-links a:hover{color:var(--gold-lt);}
+.nav-toggle{display:none;background:none;border:none;color:#fff;font-size:1.4rem;cursor:pointer;}
+
+/* HERO */
+.hero{position:relative;overflow:hidden;color:#fff;
+  background:radial-gradient(900px 400px at 80% -10%,rgba(197,160,89,.22),transparent 60%),linear-gradient(160deg,var(--navy2),var(--navy) 55%,var(--navy3));}
+.hero::before{content:"";position:absolute;right:-80px;top:50%;transform:translateY(-50%);width:480px;height:480px;
+  background:url('assets/images/vesper_logo_inverted.png') center/contain no-repeat;opacity:.06;}
+.hero-inner{position:relative;z-index:1;padding:90px 0 96px;max-width:680px;}
+.hero h1{font-family:'Playfair Display',serif;font-size:3.2rem;font-weight:800;line-height:1.08;margin:16px 0 18px;}
+.hero h1 span{color:var(--gold-lt);}
+.hero p{font-size:1.12rem;color:rgba(255,255,255,.8);margin-bottom:30px;max-width:560px;}
+.hero-cta{display:flex;gap:14px;flex-wrap:wrap;}
+.hero-stats{display:flex;gap:40px;margin-top:54px;flex-wrap:wrap;}
+.hero-stats div b{font-family:'Playfair Display',serif;font-size:2rem;color:var(--gold-lt);display:block;}
+.hero-stats div small{color:rgba(255,255,255,.65);font-size:.8rem;text-transform:uppercase;letter-spacing:1px;}
+
+/* TRUST BAR */
+.trust{background:var(--cream);border-bottom:1px solid var(--border);}
+.trust-inner{display:flex;align-items:center;justify-content:center;gap:38px;padding:22px 0;flex-wrap:wrap;color:var(--muted);font-weight:600;font-size:.86rem;}
+.trust-inner i{color:var(--gold2);margin-right:8px;}
+
+/* SECTIONS */
+section{padding:82px 0;}
+.center{text-align:center;}
+.center .sec-lead{margin:0 auto;}
+
+/* METHOD CARDS */
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px;margin-top:46px;}
+.mcard{background:var(--white);border:1px solid var(--border);border-radius:16px;padding:30px 26px;transition:transform .2s,box-shadow .2s,border-color .2s;}
+.mcard:hover{transform:translateY(-6px);box-shadow:0 18px 40px rgba(26,43,66,.12);border-color:var(--gold);}
+.mcard .ic{width:54px;height:54px;border-radius:13px;background:linear-gradient(135deg,var(--navy2),var(--navy3));color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin-bottom:18px;}
+.mcard h3{font-size:1.16rem;margin:0 0 8px;}
+.mcard p{color:var(--muted);font-size:.92rem;margin:0;}
+
+/* PATH / LEVELS */
+.path{background:var(--navy);color:#fff;}
+.path .sec-title{color:#fff;}
+.path .sec-lead{color:rgba(255,255,255,.7);}
+.levels{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-top:46px;}
+.lvl{background:linear-gradient(160deg,var(--navy2),var(--navy3));border:1px solid rgba(197,160,89,.25);border-radius:14px;padding:24px 20px;position:relative;overflow:hidden;}
+.lvl .cefr{font-family:'Playfair Display',serif;font-size:1.7rem;color:var(--gold-lt);font-weight:800;}
+.lvl h4{margin:6px 0 6px;font-size:1rem;}
+.lvl p{color:rgba(255,255,255,.62);font-size:.82rem;margin:0;}
+.lvl .bar{position:absolute;left:0;bottom:0;height:4px;background:var(--gold);}
+
+/* COURSES */
+.cgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:22px;margin-top:46px;}
+.course{border:1px solid var(--border);border-radius:16px;overflow:hidden;background:#fff;transition:transform .2s,box-shadow .2s;display:flex;flex-direction:column;}
+.course:hover{transform:translateY(-5px);box-shadow:0 16px 36px rgba(26,43,66,.13);}
+.course .top{height:74px;display:flex;align-items:center;gap:14px;padding:0 22px;color:#fff;font-size:1.5rem;}
+.course .body{padding:20px 22px 22px;flex:1;display:flex;flex-direction:column;}
+.course h3{margin:0 0 6px;font-size:1.08rem;}
+.course p{color:var(--muted);font-size:.88rem;margin:0 0 14px;flex:1;}
+.course .tag{align-self:flex-start;font-size:.68rem;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--gold2);background:var(--cream);padding:5px 12px;border-radius:20px;}
+.c-green{background:linear-gradient(135deg,#2d7a4f,#1d5235);}
+.c-orange{background:linear-gradient(135deg,#c96b1a,#9a4f12);}
+.c-blue{background:linear-gradient(135deg,#1e5fa8,#15436f);}
+.c-purple{background:linear-gradient(135deg,#6b3fa0,#4a2a70);}
+
+/* CERTIFICATION band */
+.cert{background:linear-gradient(135deg,var(--cream),#efe9da);}
+.cert-inner{display:grid;grid-template-columns:1.1fr 1fr;gap:50px;align-items:center;}
+.cert ul{list-style:none;padding:0;margin:24px 0 0;}
+.cert li{display:flex;gap:12px;align-items:flex-start;margin-bottom:14px;font-size:.95rem;}
+.cert li i{color:var(--gold2);margin-top:3px;}
+.cert-badges{display:flex;gap:14px;flex-wrap:wrap;}
+.cert-badge{background:#fff;border:1px solid var(--border);border-radius:14px;padding:22px;text-align:center;flex:1;min-width:120px;}
+.cert-badge b{display:block;font-family:'Playfair Display',serif;font-size:1.4rem;color:var(--navy);}
+.cert-badge small{color:var(--muted);font-size:.78rem;}
+
+/* TESTIMONIALS */
+.tgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:22px;margin-top:46px;}
+.tcard{background:#fff;border:1px solid var(--border);border-left:4px solid var(--gold);border-radius:12px;padding:26px;}
+.tcard p{font-style:italic;color:var(--text);margin:0 0 16px;}
+.tcard .who{display:flex;align-items:center;gap:12px;}
+.tcard .who .av{width:42px;height:42px;border-radius:50%;background:var(--navy);color:var(--gold);display:flex;align-items:center;justify-content:center;font-weight:700;}
+.tcard .who b{font-size:.9rem;}.tcard .who small{color:var(--muted);font-size:.78rem;display:block;}
+.stars{color:var(--gold);font-size:.82rem;margin-bottom:10px;}
+
+/* PRICING */
+.pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px;margin-top:46px;align-items:stretch;}
+.plan{background:#fff;border:1px solid var(--border);border-radius:18px;padding:32px 28px;display:flex;flex-direction:column;position:relative;}
+.plan.feat{border:2px solid var(--gold);box-shadow:0 18px 44px rgba(197,160,89,.22);}
+.plan.feat .ribbon{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:var(--gold);color:var(--navy);font-size:.68rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:5px 16px;border-radius:20px;}
+.plan h3{font-size:1.15rem;margin:0 0 4px;}
+.plan .price{font-family:'Playfair Display',serif;font-size:2.6rem;font-weight:800;color:var(--navy);margin:10px 0 2px;}
+.plan .price small{font-size:.9rem;color:var(--muted);font-weight:400;font-family:'Inter';}
+.plan ul{list-style:none;padding:0;margin:20px 0 26px;flex:1;}
+.plan li{font-size:.9rem;padding:8px 0;border-bottom:1px dashed var(--border);display:flex;gap:10px;align-items:flex-start;}
+.plan li i{color:var(--gold2);margin-top:4px;}
+
+/* FAQ */
+.faq{max-width:780px;margin:46px auto 0;}
+.qitem{border:1px solid var(--border);border-radius:12px;margin-bottom:14px;overflow:hidden;background:#fff;}
+.qitem button{width:100%;text-align:left;background:none;border:none;padding:20px 24px;font-family:inherit;font-size:1rem;font-weight:600;color:var(--navy);cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px;}
+.qitem .ans{max-height:0;overflow:hidden;transition:max-height .28s ease;padding:0 24px;color:var(--muted);font-size:.92rem;}
+.qitem.open .ans{max-height:240px;padding-bottom:20px;}
+.qitem button i{transition:transform .24s;color:var(--gold2);}
+.qitem.open button i{transform:rotate(180deg);}
+
+/* CTA */
+.cta{background:linear-gradient(160deg,var(--navy2),var(--navy3));color:#fff;text-align:center;}
+.cta .sec-title{color:#fff;}
+.cta p{color:rgba(255,255,255,.78);max-width:540px;margin:0 auto 30px;}
+.cta form{display:flex;gap:12px;max-width:480px;margin:0 auto;flex-wrap:wrap;}
+.cta input{flex:1;min-width:200px;padding:14px 18px;border-radius:10px;border:1px solid rgba(255,255,255,.25);background:rgba(255,255,255,.08);color:#fff;font-family:inherit;font-size:.92rem;}
+.cta input::placeholder{color:rgba(255,255,255,.55);}
+.form-msg{margin-top:16px;color:var(--gold-lt);font-size:.9rem;min-height:20px;}
+
+/* FOOTER */
+footer{background:var(--navy3);color:rgba(255,255,255,.6);padding:54px 0 30px;}
+.fgrid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:34px;margin-bottom:36px;}
+.fgrid h5{color:#fff;font-size:.82rem;letter-spacing:1px;text-transform:uppercase;margin:0 0 16px;}
+.fgrid a{display:block;color:rgba(255,255,255,.6);font-size:.86rem;margin-bottom:10px;transition:color .16s;}
+.fgrid a:hover{color:var(--gold-lt);}
+.fbrand img{height:46px;margin-bottom:14px;}
+.fbrand p{font-size:.86rem;max-width:280px;}
+.fbottom{border-top:1px solid rgba(255,255,255,.12);padding-top:22px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;font-size:.8rem;}
+.fbottom .social a{margin-left:16px;color:rgba(255,255,255,.6);font-size:1rem;}
+
+@media(max-width:860px){
+  .nav-links{display:none;position:absolute;top:70px;left:0;right:0;background:var(--navy);flex-direction:column;padding:18px 24px;gap:18px;border-bottom:1px solid rgba(197,160,89,.25);}
+  .nav-links.show{display:flex;}
+  .nav-toggle{display:block;}
+  .hero h1{font-size:2.3rem;}
+  .cert-inner{grid-template-columns:1fr;gap:34px;}
+  .fgrid{grid-template-columns:1fr 1fr;}
+  .sec-title{font-size:1.7rem;}
+}
+@media(max-width:520px){.fgrid{grid-template-columns:1fr;}.hero-stats{gap:26px;}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="container">
+    <nav>
+      <a class="brand" href="#top">
+        <img src="assets/images/vesper_logo_inverted.png" alt="Vesper Academy">
+        <span><b>Vesper Academy</b><small>English Excellence</small></span>
+      </a>
+      <div class="nav-links" id="navlinks">
+        <a href="#metodo">Metodología</a>
+        <a href="#ruta">Tu ruta</a>
+        <a href="#cursos">Cursos</a>
+        <a href="#certificacion">Certificación</a>
+        <a href="#precios">Precios</a>
+        <a href="#contacto" class="btn btn-gold" style="padding:9px 20px;">Clase de prueba</a>
+      </div>
+      <button class="nav-toggle" onclick="document.getElementById('navlinks').classList.toggle('show')"><i class="fas fa-bars"></i></button>
+    </nav>
+  </div>
+</header>
+
+<a id="top"></a>
+<section class="hero" style="padding:0;">
+  <div class="container">
+    <div class="hero-inner">
+      <span class="eyebrow">Inglés en línea · Clases en vivo</span>
+      <h1>Habla inglés con <span>confianza real</span>, no solo en teoría.</h1>
+      <p>Desde el primer "hello" hasta tu certificación internacional. Método comunicativo, profesores reales y un plan que se adapta a tu nivel y a tu meta profesional.</p>
+      <div class="hero-cta">
+        <a href="#contacto" class="btn btn-gold"><i class="fas fa-graduation-cap"></i> Reserva tu clase de prueba</a>
+        <a href="#ruta" class="btn btn-ghost">Ver los niveles</a>
+      </div>
+      <div class="hero-stats">
+        <div><b>A0–C2</b><small>Todos los niveles</small></div>
+        <div><b>4</b><small>Destrezas integradas</small></div>
+        <div><b>1:1</b><small>o grupos reducidos</small></div>
+        <div><b>100%</b><small>En vivo, no grabado</small></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="trust">
+  <div class="container">
+    <div class="trust-inner">
+      <span><i class="fas fa-certificate"></i>Alineado al MCER</span>
+      <span><i class="fas fa-headset"></i>Profesores con experiencia nativa</span>
+      <span><i class="fas fa-bullseye"></i>Preparación IELTS · Cambridge · TOEFL</span>
+      <span><i class="fas fa-chart-line"></i>Seguimiento medible del progreso</span>
+    </div>
+  </div>
+</div>
+
+<!-- METODOLOGÍA -->
+<section id="metodo">
+  <div class="container center">
+    <span class="eyebrow">Por qué Vesper funciona</span>
+    <h2 class="sec-title">Aprendes hablando, desde el día uno</h2>
+    <p class="sec-lead">Nada de listas de gramática que se olvidan. Cada clase está diseñada para que produzcas inglés real: el 80% del tiempo hablas tú.</p>
+    <div class="grid3">
+      <div class="mcard">
+        <div class="ic"><i class="fas fa-comments"></i></div>
+        <h3>Método comunicativo</h3>
+        <p>Roleplays, simulaciones y debates basados en situaciones reales. La gramática se activa al usarla, no memorizándola.</p>
+      </div>
+      <div class="mcard">
+        <div class="ic"><i class="fas fa-headphones"></i></div>
+        <h3>Audio nativo en cada lección</h3>
+        <p>Diálogos grabados con voces nativas y comprensión en tres niveles: literal, inferencia y opinión. Entrenas el oído de verdad.</p>
+      </div>
+      <div class="mcard">
+        <div class="ic"><i class="fas fa-layer-group"></i></div>
+        <h3>Cuatro destrezas integradas</h3>
+        <p>Listening, speaking, reading y writing en el mismo plan. No solo apruebas un examen: te comunicas en el mundo real.</p>
+      </div>
+      <div class="mcard">
+        <div class="ic"><i class="fas fa-user-check"></i></div>
+        <h3>Nivel confirmado, no adivinado</h3>
+        <p>Prueba de ubicación + entrevista oral para empezar exactamente donde estás. Sin perder el tiempo en lo que ya sabes.</p>
+      </div>
+      <div class="mcard">
+        <div class="ic"><i class="fas fa-chart-line"></i></div>
+        <h3>Progreso que se ve</h3>
+        <p>Evaluación continua por fluidez, precisión y profesionalismo. Sabes en todo momento cuánto has avanzado.</p>
+      </div>
+      <div class="mcard">
+        <div class="ic"><i class="fas fa-briefcase"></i></div>
+        <h3>Enfoque profesional</h3>
+        <p>Inglés corporativo, de aviación, atención al cliente y más. Aprendes el inglés que tu carrera necesita.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RUTA / NIVELES -->
+<section id="ruta" class="path">
+  <div class="container center">
+    <span class="eyebrow">Tu ruta de aprendizaje</span>
+    <h2 class="sec-title">De principiante absoluto a dominio total</h2>
+    <p class="sec-lead">Una progresión clara alineada al Marco Común Europeo (MCER). Cada nivel tiene una meta concreta.</p>
+    <div class="levels">
+      <div class="lvl"><div class="cefr">A0–A1</div><h4>Fundamentos</h4><p>Sobrevivir y presentarte: identidad, rutinas, lo esencial.</p><div class="bar" style="width:16%"></div></div>
+      <div class="lvl"><div class="cefr">A2</div><h4>Confianza</h4><p>Conversación cotidiana, pasado y futuro, primeras historias.</p><div class="bar" style="width:34%"></div></div>
+      <div class="lvl"><div class="cefr">B1</div><h4>Independencia</h4><p>Opinar, narrar y manejar situaciones imprevistas.</p><div class="bar" style="width:52%"></div></div>
+      <div class="lvl"><div class="cefr">B2</div><h4>Fluidez</h4><p>Debate, negociación y entornos corporativos globales.</p><div class="bar" style="width:72%"></div></div>
+      <div class="lvl"><div class="cefr">C1–C2</div><h4>Dominio</h4><p>Matiz, retórica y certificación internacional.</p><div class="bar" style="width:100%"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CURSOS -->
+<section id="cursos">
+  <div class="container center">
+    <span class="eyebrow">Nuestros programas</span>
+    <h2 class="sec-title">Un curso para cada meta</h2>
+    <p class="sec-lead">Programas generales y especializados, todos con la misma metodología comunicativa.</p>
+    <div class="cgrid" style="text-align:left;">
+      <div class="course"><div class="top c-green"><i class="fas fa-seedling"></i></div>
+        <div class="body"><h3>Inglés General</h3><p>De A0 a C2 en una progresión completa de práctica, gramática y conversación. La base para todo.</p><span class="tag">A0 – C2</span></div></div>
+      <div class="course"><div class="top c-orange"><i class="fas fa-comments"></i></div>
+        <div class="body"><h3>Club de Conversación</h3><p>Más de 150 temas para soltar la lengua: cultura, tecnología, sociedad y debates que enganchan.</p><span class="tag">B1 – C2</span></div></div>
+      <div class="course"><div class="top c-blue"><i class="fas fa-user-tie"></i></div>
+        <div class="body"><h3>Inglés Corporativo</h3><p>Reuniones, presentaciones, negociación y correos. El inglés que mueve tu carrera profesional.</p><span class="tag">B2 – C1</span></div></div>
+      <div class="course"><div class="top c-blue"><i class="fas fa-plane-departure"></i></div>
+        <div class="body"><h3>Inglés de Aviación</h3><p>Para tripulación de cabina y atención a pasajeros: seguridad, servicio y protocolo en inglés.</p><span class="tag">Especializado</span></div></div>
+      <div class="course"><div class="top c-purple"><i class="fas fa-landmark"></i></div>
+        <div class="body"><h3>Inglés Político y Global</h3><p>Diplomacia, economía y asuntos internacionales para profesionales del sector público.</p><span class="tag">B2 – C1</span></div></div>
+      <div class="course"><div class="top c-purple"><i class="fas fa-stopwatch"></i></div>
+        <div class="body"><h3>Preparación de Certificación</h3><p>IELTS, Cambridge y TOEFL con simulacros cronometrados y estrategias de examinador.</p><span class="tag">B2 – C1</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CERTIFICACIÓN -->
+<section id="certificacion" class="cert">
+  <div class="container">
+    <div class="cert-inner">
+      <div>
+        <span class="eyebrow">Certificación internacional</span>
+        <h2 class="sec-title">Tu título de inglés, con estrategia real</h2>
+        <p class="sec-lead">No solo practicamos: entrenamos para la banda que necesitas, con la técnica que los examinadores premian.</p>
+        <ul>
+          <li><i class="fas fa-circle-check"></i> Simulacros cronometrados en condiciones reales de examen.</li>
+          <li><i class="fas fa-circle-check"></i> Respuestas modelo Banda 6 vs Banda 8, para que veas la diferencia exacta.</li>
+          <li><i class="fas fa-circle-check"></i> Listening con distractores, como en el examen real.</li>
+          <li><i class="fas fa-circle-check"></i> Meta clara: subir entre +0.5 y +1.0 banda por curso.</li>
+        </ul>
+      </div>
+      <div class="cert-badges">
+        <div class="cert-badge"><b>IELTS</b><small>Academic & General</small></div>
+        <div class="cert-badge"><b>Cambridge</b><small>B2 First · C1 Advanced</small></div>
+        <div class="cert-badge"><b>TOEFL</b><small>iBT</small></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIOS -->
+<section id="testimonios">
+  <div class="container center">
+    <span class="eyebrow">Lo que dicen nuestros alumnos</span>
+    <h2 class="sec-title">Resultados que se hablan</h2>
+    <div class="tgrid" style="text-align:left;">
+      <div class="tcard"><div class="stars">★★★★★</div>
+        <p>"Llegué sin poder pedir un café en inglés. En seis meses presenté en una reunión con clientes en Londres. El método de hablar desde el principio funciona."</p>
+        <div class="who"><div class="av">DM</div><div><b>Daniela M.</b><small>Gerente de proyecto</small></div></div></div>
+      <div class="tcard"><div class="stars">★★★★★</div>
+        <p>"Necesitaba un 7.0 en IELTS para mi maestría. Los simulacros cronometrados y las respuestas modelo me llevaron a 7.5. Sabía exactamente qué mejorar."</p>
+        <div class="who"><div class="av">JR</div><div><b>Javier R.</b><small>Estudiante de posgrado</small></div></div></div>
+      <div class="tcard"><div class="stars">★★★★★</div>
+        <p>"Las clases 1 a 1 son oro. El profesor se adapta a mi ritmo y siempre salgo habiendo hablado muchísimo. Nada de clases pasivas."</p>
+        <div class="who"><div class="av">LK</div><div><b>Liliana K.</b><small>Tripulante de cabina</small></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- PRECIOS -->
+<section id="precios" style="background:var(--cream);">
+  <div class="container center">
+    <span class="eyebrow">Planes flexibles</span>
+    <h2 class="sec-title">Invierte en tu inglés</h2>
+    <p class="sec-lead">Elige el ritmo que se ajusta a tu vida. Todos los planes incluyen material, audio y seguimiento de progreso.</p>
+    <div class="pgrid" style="text-align:left;">
+      <div class="plan">
+        <h3>Grupal</h3>
+        <div class="price">$<span data-price>89</span><small>/mes</small></div>
+        <p style="color:var(--muted);font-size:.86rem;margin:0;">Grupos reducidos de hasta 6 alumnos.</p>
+        <ul>
+          <li><i class="fas fa-check"></i> 2 clases en vivo por semana</li>
+          <li><i class="fas fa-check"></i> Acceso al material y audios</li>
+          <li><i class="fas fa-check"></i> Club de conversación mensual</li>
+          <li><i class="fas fa-check"></i> Evaluación de progreso</li>
+        </ul>
+        <a href="#contacto" class="btn btn-gold" style="justify-content:center;">Empezar</a>
+      </div>
+      <div class="plan feat">
+        <div class="ribbon">Más popular</div>
+        <h3>1 a 1 Profesional</h3>
+        <div class="price">$<span data-price>199</span><small>/mes</small></div>
+        <p style="color:var(--muted);font-size:.86rem;margin:0;">Clases individuales a tu medida.</p>
+        <ul>
+          <li><i class="fas fa-check"></i> 2 clases privadas por semana</li>
+          <li><i class="fas fa-check"></i> Plan personalizado a tu meta</li>
+          <li><i class="fas fa-check"></i> Inglés corporativo o de examen</li>
+          <li><i class="fas fa-check"></i> Entrevista oral de nivel incluida</li>
+          <li><i class="fas fa-check"></i> Seguimiento 1 a 1 del progreso</li>
+        </ul>
+        <a href="#contacto" class="btn btn-gold" style="justify-content:center;">Reservar prueba</a>
+      </div>
+      <div class="plan">
+        <h3>Certificación</h3>
+        <div class="price">$<span data-price>249</span><small>/mes</small></div>
+        <p style="color:var(--muted);font-size:.86rem;margin:0;">Preparación intensiva IELTS / Cambridge.</p>
+        <ul>
+          <li><i class="fas fa-check"></i> 3 sesiones intensivas por semana</li>
+          <li><i class="fas fa-check"></i> Simulacros cronometrados completos</li>
+          <li><i class="fas fa-check"></i> Corrección con rúbrica de banda</li>
+          <li><i class="fas fa-check"></i> Meta de banda garantizada por plan</li>
+        </ul>
+        <a href="#contacto" class="btn btn-gold" style="justify-content:center;">Quiero certificarme</a>
+      </div>
+    </div>
+    <p style="color:var(--muted);font-size:.8rem;margin-top:22px;">Precios de referencia. Escríbenos para un plan a tu medida.</p>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="container center">
+    <span class="eyebrow">Preguntas frecuentes</span>
+    <h2 class="sec-title">Todo lo que necesitas saber</h2>
+    <div class="faq" style="text-align:left;">
+      <div class="qitem"><button onclick="this.parentNode.classList.toggle('open')">¿Necesito saber algo de inglés para empezar? <i class="fas fa-chevron-down"></i></button>
+        <div class="ans">Para nada. Tenemos niveles desde A0 (principiante absoluto). Hacemos una prueba de ubicación y una entrevista oral para empezar exactamente donde estás.</div></div>
+      <div class="qitem"><button onclick="this.parentNode.classList.toggle('open')">¿Las clases son en vivo o grabadas? <i class="fas fa-chevron-down"></i></button>
+        <div class="ans">100% en vivo con un profesor real. La interacción y la corrección inmediata son el corazón del método. Hablas tú la mayor parte del tiempo.</div></div>
+      <div class="qitem"><button onclick="this.parentNode.classList.toggle('open')">¿Cómo sé que estoy progresando? <i class="fas fa-chevron-down"></i></button>
+        <div class="ans">Cada clase se evalúa por fluidez, precisión y profesionalismo. Recibes seguimiento continuo de tu nivel y, en los planes de certificación, simulacros de entrada, mitad y salida para medir tu avance en bandas.</div></div>
+      <div class="qitem"><button onclick="this.parentNode.classList.toggle('open')">¿Preparan para IELTS, Cambridge o TOEFL? <i class="fas fa-chevron-down"></i></button>
+        <div class="ans">Sí. Nuestro programa de certificación cubre los tres, con drills cronometrados, respuestas modelo por banda y técnicas específicas que los examinadores premian.</div></div>
+      <div class="qitem"><button onclick="this.parentNode.classList.toggle('open')">¿Puedo tomar clases individuales? <i class="fas fa-chevron-down"></i></button>
+        <div class="ans">Por supuesto. Ofrecemos clases 1 a 1 totalmente personalizadas, además de grupos reducidos. En las clases privadas el profesor adapta cada actividad a tu meta.</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA / CONTACTO -->
+<section id="contacto" class="cta">
+  <div class="container">
+    <span class="eyebrow" style="color:var(--gold-lt);">Empieza hoy</span>
+    <h2 class="sec-title">Reserva tu clase de prueba gratuita</h2>
+    <p>Déjanos tu correo y te contactamos para agendar tu prueba de nivel y tu primera clase, sin compromiso.</p>
+    <form onsubmit="return handleSignup(event)">
+      <input type="email" id="email" placeholder="tu@correo.com" required aria-label="Correo electrónico">
+      <button type="submit" class="btn btn-gold"><i class="fas fa-paper-plane"></i> Reservar</button>
+    </form>
+    <div class="form-msg" id="formMsg"></div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="fgrid">
+      <div class="fbrand">
+        <img src="assets/images/vesper_logo_inverted.png" alt="Vesper Academy">
+        <p>Inglés en línea para profesionales del mundo real. Del primer "hello" a tu certificación internacional.</p>
+      </div>
+      <div><h5>Programas</h5>
+        <a href="#cursos">Inglés General</a><a href="#cursos">Corporativo</a><a href="#cursos">Conversación</a><a href="#certificacion">Certificación</a></div>
+      <div><h5>Academia</h5>
+        <a href="#metodo">Metodología</a><a href="#ruta">Niveles</a><a href="#precios">Precios</a><a href="#faq">Preguntas</a></div>
+      <div><h5>Contacto</h5>
+        <a href="#contacto">Clase de prueba</a><a href="mailto:hola@vesper.academy">hola@vesper.academy</a></div>
+    </div>
+    <div class="fbottom">
+      <span>© <span id="year"></span> Vesper Academy. Todos los derechos reservados.</span>
+      <span class="social">
+        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+        <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+      </span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+  // close mobile menu on link click
+  document.querySelectorAll('#navlinks a').forEach(a => a.addEventListener('click', () => document.getElementById('navlinks').classList.remove('show')));
+  function handleSignup(e){
+    e.preventDefault();
+    const email = document.getElementById('email').value.trim();
+    const msg = document.getElementById('formMsg');
+    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ msg.textContent = 'Por favor escribe un correo válido.'; return false; }
+    // Demo only: no backend. Replace with real endpoint when available.
+    msg.textContent = '¡Gracias! Te contactaremos muy pronto para agendar tu clase de prueba.';
+    document.getElementById('email').value = '';
+    return false;
+  }
+</script>
+</body>
+</html>

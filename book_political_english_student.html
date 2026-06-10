@@ -1,0 +1,829 @@
+<!DOCTYPE html><html lang="en"><head>
+<script src="vesper_auth.js"></script><meta charset="UTF-8"><title>Political & Global Affairs | Student Workbook</title><link rel="stylesheet" href="assets/css/vesper_style.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700&family=Open+Sans:wght@400;600;700&display=swap');
+    body { background-color: #525659; margin: 0; padding: 40px 0; display: flex; flex-direction: column; align-items: center; font-family: 'Merriweather', serif; color: #1a2b42; }
+    .page { background-color: white; width: 210mm; min-height: 297mm; padding: 20mm; box-sizing: border-box; box-shadow: 0 0 20px rgba(0,0,0,0.3); margin-bottom: 40px; position: relative; page-break-after: always; }
+    @media print { body { background: none; margin: 0; padding: 0; display: block; } .page { box-shadow: none; margin: 0; width: 100%; height: 100%; page-break-after: always; border: none; } .no-print { display: none; } }
+    @media screen and (max-width: 768px) {
+        body { padding: 10px; }
+        .page { width: 100%; padding: 10mm; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); min-height: auto; }
+        .module-header { margin: -10mm -10mm 10mm -10mm; padding: 15px 10mm; font-size: 1.2em; }
+        .lesson-title h2 { font-size: 1.8em; }
+        .vocab-grid { grid-template-columns: 1fr; }
+        .no-print { top: 10px; left: 10px; opacity: 0.8; }
+        .cover-title { font-size: 2em !important; }
+        .cover-subtitle { font-size: 1.2em !important; }
+    }
+    h1, h2, h3 { font-family: 'Open Sans', sans-serif; }
+    .module-header { background-color: #1a2b42; color: #d4af37; padding: 15px 20mm; margin: -20mm -20mm 10mm -20mm; font-family: 'Merriweather', serif; font-size: 1.4em; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
+    .lesson-title { border-bottom: 2px solid #34495e; padding-bottom: 15px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; }
+    .lesson-title h2 { margin: 0; font-size: 2.2em; color: #1a2b42; }
+    .lesson-block { margin-bottom: 25px; padding: 20px 25px; background: #fff; border-left: 5px solid #ccc; border-radius: 0 5px 5px 0; }
+    .lb-blue { border-color: #3498db; background: #ebf5fb; }
+    .lb-navy { border-color: #1a2b42; background: #fff; border: 1px solid #eee; border-left: 6px solid #1a2b42; }
+    .lb-green { border-color: #27ae60; background: #eafaf1; }
+    .lb-red { border-color: #c0392b; background: #fdedec; }
+    .lb-header { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; font-weight: bold; font-family: 'Open Sans'; text-transform: uppercase; font-size: 1em; letter-spacing: 0.5px; }
+    .lb-blue .lb-header { color: #2980b9; } 
+    .lb-navy .lb-header { color: #1a2b42; }
+    .lb-green .lb-header { color: #27ae60; }
+    .lb-red .lb-header { color: #c0392b; }
+    .content-text { line-height: 1.8; font-size: 0.95em; color: #2c3e50; text-align: justify; }
+    ul.deep-list { padding-left: 20px; list-style-type: square; } ul.deep-list li { margin-bottom: 12px; }
+    .vocab-box { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
+    .vocab-item { background: #eee; padding: 5px 10px; border-radius: 3px; font-size: 0.9em; font-family: 'Open Sans'; }
+    .page-num { position: absolute; bottom: 20mm; right: 20mm; color: #999; font-size: 0.8em; }
+    p { margin-bottom: 15px; }
+    .intro-box { background-color: #f8f9fa; border: 1px solid #dee2e6; padding: 30px; border-radius: 8px; margin-top: 50px; }
+</style>
+</head><body><div class="no-print" style="position: fixed; top: 20px; left: 20px; z-index: 1000;"><a href="index.html" style="background: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: bold; color: #1a2b42; box-shadow: 0 2px 5px rgba(0,0,0,0.2);"><i class="fas fa-arrow-left"></i> Dashboard</a></div><div class="page cover-page"><img src="assets/images/vesper_logo.jpg" alt="Vesper Academy" class="cover-logo" style="width:200px; margin-bottom:20px;"><div class="cover-title" style="font-size:3em; font-weight:bold; color:#1a2b42;">Political & Global Affairs</div><div class="cover-subtitle" style="font-size:1.5em; color:#34495e;">Strategic Curriculum (A1-C2)</div><div style="margin-top: auto;"><strong>Vesper Academy</strong><br>Student Workbook</div></div><div class="page">
+    <h1>Political & Global Affairs (A1-C2)</h1>
+    <div class="intro-box">
+        <p><strong>To the Teacher:</strong></p>
+        <p>This course prepares students for international relations, diplomacy, and governance. The activities are designed for <strong>Online Simulation</strong> using tools like Screen Annotation, Breakout Rooms, and Chat.</p>
+        <p><strong>Virtual Tools:</strong></p>
+        <ul class="deep-list">
+            <li><strong>The Chat Box:</strong> Use for drafting treaties, press releases, and secret diplomatic cables.</li>
+            <li><strong>Screen Share:</strong> Display maps for border disputes and photos for conflict analysis.</li>
+            <li><strong>Mute Button:</strong> Use selectively to simulate 'Censorship' or 'Filibustering'.</li>
+        </ul>
+    </div>
+</div><div class="page"><div class="toc"><h1>Syllabus</h1><div><a href="#l1">Group 1: Government: Leaders & Roles</a></div><div><a href="#l2">Group 1: Government: Government Buildings</a></div><div><a href="#l3">Group 1: Government: Signs & Laws</a></div><div><a href="#l4">Group 1: Government: Branches of Power</a></div><div><a href="#l5">Group 1: Government: Tax & Spend</a></div><div><a href="#l6">Group 2: Skill: Breaking News</a></div><div><a href="#l7">Group 2: Skill: Protests & Rights</a></div><div><a href="#l8">Group 2: Skill: Globalization & Trade</a></div><div><a href="#l9">Group 2: Skill: Soft Power</a></div><div><a href="#l10">Group 2: Skill: Treaties & Law</a></div><div><a href="#l11">Group 2: Skill: Crisis Management</a></div><div><a href="#l12">Group 3: Campaign: Election Day</a></div><div><a href="#l13">Group 3: Campaign: Political Parties</a></div><div><a href="#l14">Group 3: Campaign: The Campaign Trail</a></div><div><a href="#l15">Group 3: Campaign: Public Opinion, Surveys, Census & Rankings</a></div><div><a href="#l16">Group 3: Campaign: Scandals & Ethics</a></div><div><a href="#l17">Group 4: State's Theory: Nations & Borders</a></div><div><a href="#l18">Group 4: State's Theory: Environmental Policy</a></div><div><a href="#l19">Group 4: State's Theory: Immigration & Borders</a></div><div><a href="#l20">Group 4: State's Theory: The Social Contract</a></div><div><a href="#l21">Group 4: State's Theory: Geopolitics (The Silicon Shield)</a></div></div></div>
+        <div class="page" id="l1">
+            <div class="module-header">Group 1: Government</div>
+            <div class="lesson-title"><h2>Leaders & Roles</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context / Warm Up</div>
+                <div class="content-text"><strong>Famous Face-Off (Screen Share):</strong><br>Show cropped photos of leaders (eyes only). 'Who is this?' 'It is Macron.'</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory / Concept</div>
+                <div class="content-text">
+                    <strong>1. Core Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">President</span><span class="vocab-item">Prime Minister</span><span class="vocab-item">King</span><span class="vocab-item">Queen</span><span class="vocab-item">Leader</span><span class="vocab-item">Boss</span><span class="vocab-item">Country</span><span class="vocab-item">Flag</span><span class="vocab-item">Vote</span><span class="vocab-item">People</span><span class="vocab-item">Power</span><span class="vocab-item">Name</span><span class="vocab-item">Title</span><span class="vocab-item">Government</span><span class="vocab-item">Law</span></div>
+                    <br>
+                    <strong>2. Concept:</strong>
+                    <strong>To Be + Titles:</strong><br>He is <strong>the</strong> President.<br>She is Queen Elizabeth (No 'The').<br>I am a voter.
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises / Drills</div>
+                <div class="content-text"><strong>Role Reveal:</strong><br>Assign roles in private chat (King, Spy, Soldier). Students ask 'Are you the King?'</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Application / Project</div>
+                <div class="content-text"><strong>The Gala Line-Up:</strong><br>Virtual Reception. Students introduce themselves. 'Hello, I am [Name], the [Role] of [Country].'</div>
+            </div>
+            
+            <div class="page-num">Political & Global Affairs &bull; Page 4</div>
+        </div>
+        
+        <div class="page" id="l2">
+            <div class="module-header">Group 1: Government</div>
+            <div class="lesson-title"><h2>Government Buildings</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context / Warm Up</div>
+                <div class="content-text"><strong>Silhouette Quiz:</strong><br>Show shadows of buildings (Capitol, Taj Mahal). 'Is it a house?' 'No, it is a palace.'</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory / Concept</div>
+                <div class="content-text">
+                    <strong>1. Core Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Parliament</span><span class="vocab-item">White House</span><span class="vocab-item">Palace</span><span class="vocab-item">Court</span><span class="vocab-item">Office</span><span class="vocab-item">Building</span><span class="vocab-item">Door</span><span class="vocab-item">Gate</span><span class="vocab-item">Flag</span><span class="vocab-item">Guard</span><span class="vocab-item">Steps</span><span class="vocab-item">Room</span><span class="vocab-item">Hall</span><span class="vocab-item">Enter</span><span class="vocab-item">Exit</span></div>
+                    <br>
+                    <strong>2. Concept:</strong>
+                    <strong>There is / There are:</strong><br>There is a flag.<br>There are 5 guards.<br>Is there a gate?
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises / Drills</div>
+                <div class="content-text"><strong>Architect Draw:</strong><br>Teacher dictates: 'Draw a big square. Draw a dome on top.' Show drawings to camera.</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Application / Project</div>
+                <div class="content-text"><strong>Security Checkpoint:</strong><br>'Open your bag.' 'There is a phone.' 'Phone is okay. There is a knife.' 'No!'</div>
+            </div>
+            
+            <div class="page-num">Political & Global Affairs &bull; Page 5</div>
+        </div>
+        
+        <div class="page" id="l3">
+            <div class="module-header">Group 1: Government</div>
+            <div class="lesson-title"><h2>Signs & Laws</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context / Warm Up</div>
+                <div class="content-text"><strong>Symbol Hunt:</strong><br>Show road signs. 'What does this mean?' 'You can't turn left.'</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory / Concept</div>
+                <div class="content-text">
+                    <strong>1. Core Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Law</span><span class="vocab-item">Rule</span><span class="vocab-item">Sign</span><span class="vocab-item">Stop</span><span class="vocab-item">Go</span><span class="vocab-item">Allowed</span><span class="vocab-item">Banned</span><span class="vocab-item">Must</span><span class="vocab-item">Must not</span><span class="vocab-item">Can</span><span class="vocab-item">Cannot</span><span class="vocab-item">Fine</span><span class="vocab-item">Police</span><span class="vocab-item">Prison</span><span class="vocab-item">Obey</span></div>
+                    <br>
+                    <strong>2. Concept:</strong>
+                    <strong>Modals of Obligation:</strong><br>You <strong>must</strong> stop.<br>You <strong>must not</strong> smoke.<br>You <strong>can</strong> park here.
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises / Drills</div>
+                <div class="content-text"><strong>The Crazy Dictator:</strong><br>Teacher gives orders. 'You MUST touch your nose.' 'You CAN smile.'</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Application / Project</div>
+                <div class="content-text"><strong>Island Survival Rules:</strong><br>Stranded on island. Agree on 3 laws. 'We must share food.' 'We must not kill.'</div>
+            </div>
+            
+            <div class="page-num">Political & Global Affairs &bull; Page 6</div>
+        </div>
+        
+        <div class="page" id="l4">
+            <div class="module-header">Group 1: Government</div>
+            <div class="lesson-title"><h2>Branches of Power</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context / Warm Up</div>
+                <div class="content-text"><strong>Category Drag:</strong><br>Three boxes on screen. Drag words (Judge, Senator, General) to correct branch.</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory / Concept</div>
+                <div class="content-text">
+                    <strong>1. Core Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Legislative</span><span class="vocab-item">Executive</span><span class="vocab-item">Judicial</span><span class="vocab-item">Law</span><span class="vocab-item">Judge</span><span class="vocab-item">Court</span><span class="vocab-item">Congress</span><span class="vocab-item">Parliament</span><span class="vocab-item">Sign</span><span class="vocab-item">Veto</span><span class="vocab-item">Pass</span><span class="vocab-item">Reject</span><span class="vocab-item">Check</span><span class="vocab-item">Balance</span><span class="vocab-item">System</span></div>
+                    <br>
+                    <strong>2. Concept:</strong>
+                    <strong>Passive Voice (Process):</strong><br>The law <strong>was passed</strong>.<br>It <strong>is signed</strong> by the President.<br>Focus on the action.
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises / Drills</div>
+                <div class="content-text"><strong>Passive Transformation:</strong><br>'The Senate rejected the bill.' -> 'The bill WAS REJECTED by the Senate.'</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Application / Project</div>
+                <div class="content-text"><strong>Constitution Draft:</strong><br>Write a constitution for the class. 'Homework CAN BE delayed.' 'Coffee IS ALLOWED.'</div>
+            </div>
+            
+            <div class="page-num">Political & Global Affairs &bull; Page 7</div>
+        </div>
+        
+        <div class="page" id="l5">
+            <div class="module-header">Group 1: Government</div>
+            <div class="lesson-title"><h2>Tax & Spend</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context / Warm Up</div>
+                <div class="content-text"><strong>The Price is Right:</strong><br>'How much is a tank?' Guess in chat. Closest wins.</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory / Concept</div>
+                <div class="content-text">
+                    <strong>1. Core Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Tax</span><span class="vocab-item">Budget</span><span class="vocab-item">Spend</span><span class="vocab-item">Cost</span><span class="vocab-item">Money</span><span class="vocab-item">Debt</span><span class="vocab-item">Deficit</span><span class="vocab-item">Pay</span><span class="vocab-item">Fund</span><span class="vocab-item">School</span><span class="vocab-item">Road</span><span class="vocab-item">Military</span><span class="vocab-item">Cut</span><span class="vocab-item">Increase</span><span class="vocab-item">Decrease</span></div>
+                    <br>
+                    <strong>2. Concept:</strong>
+                    <strong>Money & Numbers:</strong><br>Billions / Millions.<br>Increase <strong>by</strong> 10%.<br>Decrease <strong>to</strong> $500.
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises / Drills</div>
+                <div class="content-text"><strong>Budget Crisis:</strong><br>You have $100. Schools need $50. Army needs $60. What do you cut?</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Application / Project</div>
+                <div class="content-text"><strong>Town Hall Meeting:</strong><br>'Why are taxes high?' 'To build the new road.' 'We don't want a road!'</div>
+            </div>
+            
+            <div class="page-num">Political & Global Affairs &bull; Page 8</div>
+        </div>
+        
+        <div class="page" id="l6">
+            <div class="module-header">Group 2: Skill</div>
+            <div class="lesson-title"><h2>Breaking News</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context / Warm Up</div>
+                <div class="content-text"><strong>Chinese Whispers (Chat):</strong><br>Send private message to student 1. They pass it on. Compare first and last.</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory / Concept</div>
+                <div class="content-text">
+                    <strong>1. Core Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">News</span><span class="vocab-item">Headline</span><span class="vocab-item">Story</span><span class="vocab-item">Happened</span><span class="vocab-item">Yesterday</span><span class="vocab-item">Last night</span><span class="vocab-item">Attack</span><span class="vocab-item">Crash</span><span class="vocab-item">Visit</span><span class="vocab-item">Change</span><span class="vocab-item">Report</span><span class="vocab-item">Journalist</span><span class="vocab-item">Channel</span><span class="vocab-item">Live</span><span class="vocab-item">Update</span></div>
+                    <br>
+                    <strong>2. Concept:</strong>
+                    <strong>Past Simple (Events):</strong><br>The President <strong>visited</strong> China.<br>The market <strong>crashed</strong>.<br>He <strong>said</strong> hello.
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises / Drills</div>
+                <div class="content-text"><strong>Headline Fix:</strong><br>'Man Bites Dog.' -> 'A man bit a dog yesterday.' Expand headlines into sentences.</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Application / Project</div>
+                <div class="content-text"><strong>TV Anchor:</strong><br>Read a breaking news script. 'Good evening. Today, the bill passed. People are happy.'</div>
+            </div>
+            
+            <div class="page-num">Political & Global Affairs &bull; Page 9</div>
+        </div>
+        
+        <div class="page" id="l7">
+            <div class="module-header">Group 2: Skill</div>
+            <div class="lesson-title"><h2>Protests & Rights</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context / Warm Up</div>
+                <div class="content-text"><strong>Sign Reader:</strong><br>Show real protest signs. 'What do they want?' 'They want higher wages.'</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory / Concept</div>
+                <div class="content-text">
+                    <strong>1. Core Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Protest</span><span class="vocab-item">March</span><span class="vocab-item">Strike</span><span class="vocab-item">Right</span><span class="vocab-item">Freedom</span><span class="vocab-item">Speech</span><span class="vocab-item">Demand</span><span class="vocab-item">Join</span><span class="vocab-item">Boycott</span><span class="vocab-item">Sign</span><span class="vocab-item">Crowd</span><span class="vocab-item">Police</span><span class="vocab-item">Violence</span><span class="vocab-item">Peace</span><span class="vocab-item">Justice</span></div>
+                    <br>
+                    <strong>2. Concept:</strong>
+                    <strong>Imperatives for Chants:</strong><br>Stop the war!<br>Free the prisoners!<br>Short, punchy phrases.
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises / Drills</div>
+                <div class="content-text"><strong>Chant Writer:</strong><br>Write a rhyme. 'Hey Hey, Ho Ho, [Bad Thing] has got to go!'</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Application / Project</div>
+                <div class="content-text"><strong>Negotiation:</strong><br>Union Leader vs Boss. 'We won't work until you pay us more.' 'I can offer 5%.'</div>
+            </div>
+            
+            <div class="page-num">Political & Global Affairs &bull; Page 10</div>
+        </div>
+        
+        <div class="page" id="l8">
+            <div class="module-header">Group 2: Skill</div>
+            <div class="lesson-title"><h2>Globalization & Trade</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context / Warm Up</div>
+                <div class="content-text"><strong>Breakfast Map:</strong><br>Where is your coffee from? Your phone? Trace the supply chain.</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory / Concept</div>
+                <div class="content-text">
+                    <strong>1. Core Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Trade</span><span class="vocab-item">De-risking</span><span class="vocab-item">Friend-shoring</span><span class="vocab-item">Resilience</span><span class="vocab-item">Supply Chain</span><span class="vocab-item">Tariff</span><span class="vocab-item">Tax</span><span class="vocab-item">Sanction</span><span class="vocab-item">Embargo</span><span class="vocab-item">Agreement</span><span class="vocab-item">Market</span><span class="vocab-item">Price</span><span class="vocab-item">Demand</span><span class="vocab-item">Supply</span><span class="vocab-item">Globalism</span></div>
+                    <br>
+                    <strong>2. Concept:</strong>
+                    <strong>Graph Language:</strong><br>Skyrocket (Go up fast).<br>Plunge (Go down fast).<br>Fluctuate (Up and down).
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises / Drills</div>
+                <div class="content-text"><strong>Stock Market Shout:</strong><br>Teacher draws line. Class shouts 'Buy!' or 'Sell!'.</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Application / Project</div>
+                <div class="content-text"><strong>Supply Chain Collapse:</strong><br>A major choke point (e.g., Suez Canal or semiconductor hub) is blocked. Students must choose: Diversify suppliers (expensive) or wait it out (risky). Negotiate 'Friend-shoring' deals.</div>
+            </div>
+            
+            <div class="page-num">Political & Global Affairs &bull; Page 11</div>
+        </div>
+        
+        <div class="page" id="l9">
+            <div class="module-header">Group 2: Skill</div>
+            <div class="lesson-title"><h2>Soft Power</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context / Warm Up</div>
+                <div class="content-text"><strong>Cool Ranking:</strong><br>Rank countries by 'Coolness'. Why is K-Pop soft power?</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory / Concept</div>
+                <div class="content-text">
+                    <strong>1. Core Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Soft Power</span><span class="vocab-item">Influence</span><span class="vocab-item">Culture</span><span class="vocab-item">Diplomacy</span><span class="vocab-item">Relationship</span><span class="vocab-item">Ally</span><span class="vocab-item">Enemy</span><span class="vocab-item">Partner</span><span class="vocab-item">Attraction</span><span class="vocab-item">Image</span><span class="vocab-item">Brand</span><span class="vocab-item">Movie</span><span class="vocab-item">Music</span><span class="vocab-item">Food</span><span class="vocab-item">Export</span></div>
+                    <br>
+                    <strong>2. Concept:</strong>
+                    <strong>Diplomatic Hedging:</strong><br>Don't say 'No'.<br>Say: 'That might be difficult.'<br>Say: 'We will consider it.'
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises / Drills</div>
+                <div class="content-text"><strong>Translate the Rude:</strong><br>'Give me money.' -> 'We request financial assistance.'</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Application / Project</div>
+                <div class="content-text"><strong>State Dinner Seating:</strong><br>Seat enemies (Iran, Israel, USA, Russia) at a round table. Explain choices.</div>
+            </div>
+            
+            <div class="page-num">Political & Global Affairs &bull; Page 12</div>
+        </div>
+        
+        <div class="page" id="l10">
+            <div class="module-header">Group 2: Skill</div>
+            <div class="lesson-title"><h2>Treaties & Law</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context / Warm Up</div>
+                <div class="content-text"><strong>Loophole Hunter:</strong><br>Rule: 'No vehicles in park.' Is a drone a vehicle? Is a wheelchair?</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory / Concept</div>
+                <div class="content-text">
+                    <strong>1. Core Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Treaty</span><span class="vocab-item">Law</span><span class="vocab-item">Clause</span><span class="vocab-item">Sign</span><span class="vocab-item">Ratify</span><span class="vocab-item">Binding</span><span class="vocab-item">Optional</span><span class="vocab-item">Agree</span><span class="vocab-item">Term</span><span class="vocab-item">Condition</span><span class="vocab-item">Breach</span><span class="vocab-item">Violate</span><span class="vocab-item">Court</span><span class="vocab-item">Sanction</span><span class="vocab-item">Dispute</span></div>
+                    <br>
+                    <strong>2. Concept:</strong>
+                    <strong>Legalese (Shall/May):</strong><br>Nations <strong>shall</strong> (Must).<br>Parties <strong>may</strong> (Optional).<br>Null and Void (Cancelled).
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises / Drills</div>
+                <div class="content-text"><strong>Clause Drafting:</strong><br>Write a Space Treaty. 'No nation SHALL own the moon.'</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Application / Project</div>
+                <div class="content-text"><strong>Ratification Vote:</strong><br>Global Tax Treaty. Rich nations vs Poor nations. Lobby for votes.</div>
+            </div>
+            
+            <div class="page-num">Political & Global Affairs &bull; Page 13</div>
+        </div>
+        
+        <div class="page" id="l11">
+            <div class="module-header">Group 2: Skill</div>
+            <div class="lesson-title"><h2>Crisis Management</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context / Warm Up</div>
+                <div class="content-text"><strong>Triage List:</strong><br>Earthquake, Scandal, Stock Crash. What do you fix first?</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory / Concept</div>
+                <div class="content-text">
+                    <strong>1. Core Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Crisis</span><span class="vocab-item">Emergency</span><span class="vocab-item">Disaster</span><span class="vocab-item">Manage</span><span class="vocab-item">Control</span><span class="vocab-item">Response</span><span class="vocab-item">Plan</span><span class="vocab-item">Action</span><span class="vocab-item">Press</span><span class="vocab-item">Statement</span><span class="vocab-item">Panic</span><span class="vocab-item">Calm</span><span class="vocab-item">Solve</span><span class="vocab-item">Team</span><span class="vocab-item">Leader</span></div>
+                    <br>
+                    <strong>2. Concept:</strong>
+                    <strong>Leadership Styles:</strong><br>Hawk (Aggressive).<br>Dove (Peaceful).<br>Lame Duck (Powerless).
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises / Drills</div>
+                <div class="content-text"><strong>The 3AM Tweet:</strong><br>Crisis hits. Write a 280-char statement. Clear, Calm, Strong.</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Application / Project</div>
+                <div class="content-text"><strong>War Room:</strong><br>Missile incoming. 60 seconds to decide. Launch counter-attack or wait?</div>
+            </div>
+            
+            <div class="page-num">Political & Global Affairs &bull; Page 14</div>
+        </div>
+        
+        <div class="page" id="l12">
+            <div class="module-header">Group 3: Campaign</div>
+            <div class="lesson-title"><h2>Election Day</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context / Warm Up</div>
+                <div class="content-text"><strong>Calendar Game:</strong><br>Share Calendar. 'When is the election?' 'It is ON Tuesday.' 'It is IN November.'</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory / Concept</div>
+                <div class="content-text">
+                    <strong>1. Core Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Election</span><span class="vocab-item">Vote</span><span class="vocab-item">Ballot</span><span class="vocab-item">Box</span><span class="vocab-item">Candidate</span><span class="vocab-item">Winner</span><span class="vocab-item">Loser</span><span class="vocab-item">Choose</span><span class="vocab-item">Speech</span><span class="vocab-item">Campaign</span><span class="vocab-item">Date</span><span class="vocab-item">November</span><span class="vocab-item">Tuesday</span><span class="vocab-item">Count</span><span class="vocab-item">Result</span></div>
+                    <br>
+                    <strong>2. Concept:</strong>
+                    <strong>Process Verbs:</strong><br>First, we register.<br>Then, we vote.<br>Finally, they count.
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises / Drills</div>
+                <div class="content-text"><strong>Poster Design:</strong><br>Create a campaign poster on paper/Canva. 'Vote for Me!' Show to class.</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Application / Project</div>
+                <div class="content-text"><strong>Exit Poll Interview:</strong><br>Breakout pairs. 'Who did you vote for?' 'I voted for Smith.' 'Why?' 'He is good.'</div>
+            </div>
+            
+            <div class="page-num">Political & Global Affairs &bull; Page 15</div>
+        </div>
+        
+        <div class="page" id="l13">
+            <div class="module-header">Group 3: Campaign</div>
+            <div class="lesson-title"><h2>Political Parties</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context / Warm Up</div>
+                <div class="content-text"><strong>Spectrum Walk (Chat):</strong><br>Type [L] for Left, [R] for Right. Statement: 'Taxes should be high.'</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory / Concept</div>
+                <div class="content-text">
+                    <strong>1. Core Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Party</span><span class="vocab-item">Left</span><span class="vocab-item">Right</span><span class="vocab-item">Blue</span><span class="vocab-item">Red</span><span class="vocab-item">Green</span><span class="vocab-item">Support</span><span class="vocab-item">Agree</span><span class="vocab-item">Disagree</span><span class="vocab-item">Liberal</span><span class="vocab-item">Conservative</span><span class="vocab-item">Leader</span><span class="vocab-item">Member</span><span class="vocab-item">Join</span><span class="vocab-item">Team</span></div>
+                    <br>
+                    <strong>2. Concept:</strong>
+                    <strong>Opinions:</strong><br>I support the [Red] party.<br>I agree <strong>with</strong> him.<br>I don't like them.
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises / Drills</div>
+                <div class="content-text"><strong>Slogan Match:</strong><br>Match Slogan to Party. 'Save the Trees' -> Green Party. 'Jobs First' -> Blue Party.</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Application / Project</div>
+                <div class="content-text"><strong>Party Launch:</strong><br>Invent a silly party (e.g., Pizza Party). 'Our color is Yellow. We promise free cheese.' Vote.</div>
+            </div>
+            
+            <div class="page-num">Political & Global Affairs &bull; Page 16</div>
+        </div>
+        
+        <div class="page" id="l14">
+            <div class="module-header">Group 3: Campaign</div>
+            <div class="lesson-title"><h2>The Campaign Trail</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context / Warm Up</div>
+                <div class="content-text"><strong>Handshake Analysis:</strong><br>Video of Trump/Macron. Analyze dominance/submission in body language.</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory / Concept</div>
+                <div class="content-text">
+                    <strong>1. Core Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Campaign</span><span class="vocab-item">Rhetoric</span><span class="vocab-item">Speech</span><span class="vocab-item">Audience</span><span class="vocab-item">Convince</span><span class="vocab-item">Persuade</span><span class="vocab-item">Promise</span><span class="vocab-item">Lie</span><span class="vocab-item">Truth</span><span class="vocab-item">Trust</span><span class="vocab-item">Support</span><span class="vocab-item">Poll</span><span class="vocab-item">Debate</span><span class="vocab-item">Win</span><span class="vocab-item">Lose</span></div>
+                    <br>
+                    <strong>2. Concept:</strong>
+                    <strong>Rule of Three:</strong><br>Friends, Romans, Countrymen.<br>Education, Education, Education.<br>Make it memorable.
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises / Drills</div>
+                <div class="content-text"><strong>Spice Up The Speech:</strong><br>Bland: 'We need jobs.' Spicy: 'We need jobs for our fathers, our mothers, and our children!'</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Application / Project</div>
+                <div class="content-text"><strong>The Heckler:</strong><br>Student gives speech. Teacher interrupts 'Liar!'. Student must handle it gracefully.</div>
+            </div>
+            
+            <div class="page-num">Political & Global Affairs &bull; Page 17</div>
+        </div>
+        
+        <div class="page" id="l15">
+            <div class="module-header">Group 3: Campaign</div>
+            <div class="lesson-title"><h2>Public Opinion, Surveys, Census & Rankings</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context / Warm Up</div>
+                <div class="content-text"><strong>Live Class Poll:</strong><br>Quick poll on a light topic (Coffee vs Tea). '80% of students prefer coffee. Is this a representative sample?'</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory / Concept</div>
+                <div class="content-text">
+                    <strong>1. Core Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Survey</span><span class="vocab-item">Poll</span><span class="vocab-item">Census</span><span class="vocab-item">Ranking</span><span class="vocab-item">Demographics</span><span class="vocab-item">Sample Size</span><span class="vocab-item">Margin of Error</span><span class="vocab-item">Approval Rating</span><span class="vocab-item">Bias</span><span class="vocab-item">Data Analytics</span><span class="vocab-item">Public Opinion</span><span class="vocab-item">Trend</span><span class="vocab-item">Indicator</span><span class="vocab-item">Statistic</span><span class="vocab-item">Reliability</span></div>
+                    <br>
+                    <strong>2. Concept:</strong>
+                    <strong>Interpreting Data:</strong><br>The majority <strong>favors</strong>...<br>A small fraction <strong>opposes</strong>...<br>The margin of error <strong>is</strong> +/- 3%.
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises / Drills</div>
+                <div class="content-text"><strong>Bias Spotter:</strong><br>Read two survey questions. 'Do you like the great leader?' vs 'How do you rate the leader's performance?'. Identify the bias.</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Application / Project</div>
+                <div class="content-text"><strong>The Strategic Pivot:</strong><br>Mid-campaign census data shows a drop in youth support. Analyze the rankings and decide: Change policies? Target a new demographic? Shift the narrative?</div>
+            </div>
+            
+            <div class="page-num">Political & Global Affairs &bull; Page 18</div>
+        </div>
+        
+        <div class="page" id="l16">
+            <div class="module-header">Group 3: Campaign</div>
+            <div class="lesson-title"><h2>Scandals & Ethics</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context / Warm Up</div>
+                <div class="content-text"><strong>Headline Spin:</strong><br>Bad news: 'Senator steals.' Spin it: 'Senator manages funds creatively.'</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory / Concept</div>
+                <div class="content-text">
+                    <strong>1. Core Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Scandal</span><span class="vocab-item">Ethics</span><span class="vocab-item">Corruption</span><span class="vocab-item">Bribe</span><span class="vocab-item">Deepfake</span><span class="vocab-item">Misinformation</span><span class="vocab-item">Disinformation</span><span class="vocab-item">Digital Forensic</span><span class="vocab-item">Resign</span><span class="vocab-item">Leak</span><span class="vocab-item">Whistleblower</span><span class="vocab-item">Investigation</span><span class="vocab-item">Evidence</span><span class="vocab-item">Public Trust</span><span class="vocab-item">Accountability</span></div>
+                    <br>
+                    <strong>2. Concept:</strong>
+                    <strong>Euphemisms:</strong><br>Bribe -> Lobbying fee.<br>Lie -> Misspoke.<br>Fired -> Let go.
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises / Drills</div>
+                <div class="content-text"><strong>Redaction Game:</strong><br>Text on screen. Black out words to change the meaning / hide the crime.</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Application / Project</div>
+                <div class="content-text"><strong>Synthetic Crisis (Simulation):</strong><br>A deepfake video of a leader 'accepting a bribe' goes viral 2 hours before an election. Students must decide: Admit it's fake? Attack the source? Call for a delay?</div>
+            </div>
+            
+            <div class="page-num">Political & Global Affairs &bull; Page 19</div>
+        </div>
+        
+        <div class="page" id="l17">
+            <div class="module-header">Group 4: State's Theory</div>
+            <div class="lesson-title"><h2>Nations & Borders</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context / Warm Up</div>
+                <div class="content-text"><strong>Google Earth Drop:</strong><br>Show a random border on screen. 'Where are we?' 'It is China.'</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory / Concept</div>
+                <div class="content-text">
+                    <strong>1. Core Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">North</span><span class="vocab-item">South</span><span class="vocab-item">East</span><span class="vocab-item">West</span><span class="vocab-item">Border</span><span class="vocab-item">Map</span><span class="vocab-item">Next to</span><span class="vocab-item">Between</span><span class="vocab-item">Near</span><span class="vocab-item">Far</span><span class="vocab-item">Capital</span><span class="vocab-item">City</span><span class="vocab-item">Population</span><span class="vocab-item">Land</span><span class="vocab-item">Sea</span></div>
+                    <br>
+                    <strong>2. Concept:</strong>
+                    <strong>Prepositions of Place:</strong><br>France is <strong>next to</strong> Germany.<br>Canada is <strong>North of</strong> USA.
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises / Drills</div>
+                <div class="content-text"><strong>Map Annotate:</strong><br>Share a blank map. 'Draw a line between Spain and Portugal.' 'Draw a star on Paris.'</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Application / Project</div>
+                <div class="content-text"><strong>Border Control:</strong><br>Student A (Guard): 'Stop.' Student B (Traveller): 'I want to go to France.' 'Passport please.'</div>
+            </div>
+            
+            <div class="page-num">Political & Global Affairs &bull; Page 20</div>
+        </div>
+        
+        <div class="page" id="l18">
+            <div class="module-header">Group 4: State's Theory</div>
+            <div class="lesson-title"><h2>Environmental Policy</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context / Warm Up</div>
+                <div class="content-text"><strong>Soundscapes:</strong><br>Play bird sounds vs traffic noise. 'Which policy do you prefer?'</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory / Concept</div>
+                <div class="content-text">
+                    <strong>1. Core Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Environment</span><span class="vocab-item">Climate Change</span><span class="vocab-item">Pollution</span><span class="vocab-item">Green</span><span class="vocab-item">Energy</span><span class="vocab-item">Oil</span><span class="vocab-item">Solar</span><span class="vocab-item">Carbon</span><span class="vocab-item">Protect</span><span class="vocab-item">Damage</span><span class="vocab-item">Future</span><span class="vocab-item">Planet</span><span class="vocab-item">Clean</span><span class="vocab-item">Dirty</span><span class="vocab-item">Global Warming</span></div>
+                    <br>
+                    <strong>2. Concept:</strong>
+                    <strong>First Conditional (Warnings):</strong><br>If we burn oil, the earth <strong>will</strong> warm.<br>Unless we act, we <strong>will</strong> lose.
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises / Drills</div>
+                <div class="content-text"><strong>Chain Reaction:</strong><br>Student A: 'If ice melts...' B: '...oceans will rise.' C: '...cities will flood.'</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Application / Project</div>
+                <div class="content-text"><strong>Green Summit:</strong><br>Propose a ban on plastic. Industry Rep: 'It is too expensive.' Environmentalist: 'It is necessary.'</div>
+            </div>
+            
+            <div class="page-num">Political & Global Affairs &bull; Page 21</div>
+        </div>
+        
+        <div class="page" id="l19">
+            <div class="module-header">Group 4: State's Theory</div>
+            <div class="lesson-title"><h2>Immigration & Borders</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context / Warm Up</div>
+                <div class="content-text"><strong>Visa Queue Roleplay:</strong><br>Teacher is grumpy official. 'Next!' 'Form is wrong.' 'Go back.'</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory / Concept</div>
+                <div class="content-text">
+                    <strong>1. Core Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Immigrant</span><span class="vocab-item">Refugee</span><span class="vocab-item">Visa</span><span class="vocab-item">Passport</span><span class="vocab-item">Border</span><span class="vocab-item">Control</span><span class="vocab-item">Citizen</span><span class="vocab-item">Foreigner</span><span class="vocab-item">Apply</span><span class="vocab-item">Reject</span><span class="vocab-item">Accept</span><span class="vocab-item">System</span><span class="vocab-item">Security</span><span class="vocab-item">Work</span><span class="vocab-item">Family</span></div>
+                    <br>
+                    <strong>2. Concept:</strong>
+                    <strong>Connectors of Contrast:</strong><br><strong>Although</strong> it is hard, I will go.<br><strong>Despite</strong> the risk.<br><strong>However</strong>, we are full.
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises / Drills</div>
+                <div class="content-text"><strong>Pros & Cons:</strong><br>Topic: Open Borders. Use connectors. 'On the one hand... On the other hand...'</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Application / Project</div>
+                <div class="content-text"><strong>The Application:</strong><br>'Why do you want to enter?' 'I am an engineer.' 'We need doctors.' Convince me.</div>
+            </div>
+            
+            <div class="page-num">Political & Global Affairs &bull; Page 22</div>
+        </div>
+        
+        <div class="page" id="l20">
+            <div class="module-header">Group 4: State's Theory</div>
+            <div class="lesson-title"><h2>The Social Contract</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context / Warm Up</div>
+                <div class="content-text"><strong>T&C Speed Read:</strong><br>Look at Instagram Terms. Do they own your soul? Discuss.</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory / Concept</div>
+                <div class="content-text">
+                    <strong>1. Core Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Philosophy</span><span class="vocab-item">Society</span><span class="vocab-item">Contract</span><span class="vocab-item">Freedom</span><span class="vocab-item">Security</span><span class="vocab-item">Privacy</span><span class="vocab-item">Data</span><span class="vocab-item">Tech</span><span class="vocab-item">Control</span><span class="vocab-item">Rights</span><span class="vocab-item">Individual</span><span class="vocab-item">State</span><span class="vocab-item">Duty</span><span class="vocab-item">Moral</span><span class="vocab-item">Ethics</span></div>
+                    <br>
+                    <strong>2. Concept:</strong>
+                    <strong>Metaphors:</strong><br>The Panopticon (Surveillance).<br>The Echo Chamber (Algorithm).<br>Big Brother.
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises / Drills</div>
+                <div class="content-text"><strong>Devil's Advocate:</strong><br>Argue that Privacy is bad. 'If you have nothing to hide...'</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Application / Project</div>
+                <div class="content-text"><strong>AI Ethics Board:</strong><br>Self-driving car dilemma. Hit the child or the wall? Code the moral choice.</div>
+            </div>
+            
+            <div class="page-num">Political & Global Affairs &bull; Page 23</div>
+        </div>
+        
+        <div class="page" id="l21">
+            <div class="module-header">Group 4: State's Theory</div>
+            <div class="lesson-title"><h2>Geopolitics (The Silicon Shield)</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context / Warm Up</div>
+                <div class="content-text"><strong>Resource Map:</strong><br>Overlay map of Lithium vs Map of Conflicts. Coincidence?</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory / Concept</div>
+                <div class="content-text">
+                    <strong>1. Core Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Geopolitics</span><span class="vocab-item">Semiconductor</span><span class="vocab-item">Rare Earth</span><span class="vocab-item">Sovereignty</span><span class="vocab-item">Hegemony</span><span class="vocab-item">Lithium</span><span class="vocab-item">Supply Monopolies</span><span class="vocab-item">Dependency</span><span class="vocab-item">Critical Infrastructure</span><span class="vocab-item">Strategic Autonomy</span><span class="vocab-item">Alliance</span><span class="vocab-item">Containment</span><span class="vocab-item">Flashpoint</span><span class="vocab-item">Sphere of Influence</span><span class="vocab-item">Leverage</span></div>
+                    <br>
+                    <strong>2. Concept:</strong>
+                    <strong>Logical Fallacies:</strong><br>Ad Hominem (Attack person).<br>Straw Man (Weak argument).<br>Slippery Slope.
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises / Drills</div>
+                <div class="content-text"><strong>Fallacy Spotter:</strong><br>Read a debate. Highlight the bad logic.</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Application / Project</div>
+                <div class="content-text"><strong>The Silicon Shield:</strong><br>Year 2026. A global chip shortage threatens defense systems. Negotiate access to lithography machines and rare earth refineries. Yield or weaponize dependencies?</div>
+            </div>
+            
+            <div class="page-num">Political & Global Affairs &bull; Page 24</div>
+        </div>
+        </body></html>

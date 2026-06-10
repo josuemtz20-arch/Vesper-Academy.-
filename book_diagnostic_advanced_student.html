@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<script src="vesper_auth.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Diagnostic Exam</title>
+    <link rel="stylesheet" href="assets/css/vesper_style.css">
+    <style>
+        .exam-instructions {
+            font-size: 0.9em;
+            color: #7f8c8d;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+        .text-passage {
+            font-size: 1.05em;
+            line-height: 1.6;
+            margin-bottom: 25px;
+            padding: 15px;
+            background-color: #fcfcfc;
+            border-left: 4px solid #34495e;
+            text-align: justify;
+        }
+        .question-block {
+            margin-bottom: 25px;
+        }
+        .question-text {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .options-list {
+            list-style-type: lower-alpha;
+            margin-left: 20px;
+        }
+        .options-list li {
+            margin-bottom: 8px;
+        }
+        .writing-box {
+            width: 100%;
+            height: 200px;
+            border: 1px solid #ccc;
+            margin-top: 15px;
+            padding: 10px;
+            resize: vertical;
+        }
+        .teacher-section {
+            margin-top: 50px;
+            padding-top: 30px;
+            border-top: 2px dashed #bdc3c7;
+            page-break-before: always;
+        }
+        .rubric-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 0.9em;
+        }
+        .rubric-table th, .rubric-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        .rubric-table th {
+            background-color: #ecf0f1;
+            font-weight: bold;
+            width: 20%;
+        }
+        .audio-script-box {
+            background-color: #fdfdfd;
+            border: 1px solid #e0e0e0;
+            padding: 15px;
+            margin-top: 20px;
+            font-family: monospace;
+            white-space: pre-wrap;
+        }
+        .inline-answer {
+            color: #c0392b;
+            font-weight: bold;
+        }
+    </style>
+    <link rel="icon" href="assets/images/vesper_logo.png" type="image/png">
+</head>
+
+<body>
+    <div class="book-container">
+        <!-- Cover -->
+        <div class="cover-page">
+            <img src="assets/images/vesper_logo.jpg" alt="Vesper Academy" class="cover-logo" onerror="this.src='https://via.placeholder.com/150';">
+            <div class="cover-title">Comprehensive Advanced Diagnostic Exam</div>
+            <div class="cover-subtitle">Level: B2 / C1 / C2</div>
+            <div style="margin-top: auto;"><strong>Vesper Academy</strong><br>Time Limit: 90 minutes</div>
+        </div>
+
+        <!-- Student Exam Section -->
+        <div id="exam-paper" class="lesson-block">
+            <h2>Part 1: Use of English</h2>
+            
+            <h3>Section A: Open Cloze</h3>
+            <div class="exam-instructions">
+                Read the text below and think of the word which best fits each gap. Use only ONE word in each gap. 
+            </div>
+            <div class="text-passage">
+                <strong>The Digital Revolution</strong><br><br>
+                The integration of technology into our daily routines has reached unprecedented levels. Not only (1) ______________ it completely transformed how we communicate, but it has also redefined our workspaces. Looking back at the early 2000s, few people (2) ______________ have predicted the sheer scale of this digital expansion; they must (3) ______________ thought the idea of miniature, pocket-sized supercomputers was pure science fiction. (4) ______________ to say, the rapid pace of innovation often leaves older generations struggling to catch (5) ______________ with the latest trends. In the professional realm, staying on the ball is crucial. If a company fails to adapt, it may soon find itself out of its (6) ______________. (7) ______________ we to simply disregard these technological advancements, we would risk total obsolescence. Ultimately, whether we thrive or flounder (8) ______________ down to our ability to embrace continuous learning.
+            </div>
+
+            <h3>Section B: Word Formation</h3>
+            <div class="exam-instructions">
+                Use the word given in capitals at the end of some of the lines to form a word that fits in the gap in the same line.
+            </div>
+            <div class="text-passage">
+                <strong>The Psychology of Persuasion</strong><br><br>
+                There is a common (9) ______________ (CONCEIVE) that being persuasive is merely about having a charismatic personality. In reality, it involves a deep (10) ______________ (UNDERSTAND) of human psychology. Successful negotiators employ a variety of (11) ______________ (STRATEGY) techniques designed to bypass an individual's conscious defenses. For example, demonstrating genuine empathy can be highly (12) ______________ (EFFECT) in building rapport. However, one must be cautious; if an attempt at persuasion comes across as (13) ______________ (MANIPULATE), it can immediately backfire, leading to irreversible (14) ______________ (RESENT). Trust is a fragile commodity in business, and once broken, it is (15) ______________ (NOTORIETY) difficult to rebuild. Therefore, the absolute (16) ______________ (NECESSARY) of maintaining ethical boundaries cannot be overstated.
+            </div>
+
+            <h3>Section C: Key Word Transformations</h3>
+            <div class="exam-instructions">
+                Complete the second sentence so that it has a similar meaning to the first sentence, using the word given. Do not change the word given. You must use between three and six words, including the word given.
+            </div>
+            <div class="question-block">
+                <div class="question-text">17. They believe the hackers stole the data over the weekend. <br><strong>THOUGHT</strong></div>
+                <p>The data __________________________________________________ over the weekend by the hackers.</p>
+                
+                <div class="question-text">18. "I wouldn't accept that job offer if I were you," said Sarah.<br><strong>ADVISED</strong></div>
+                <p>Sarah __________________________________________________ that job offer.</p>
+                
+                <div class="question-text">19. I didn't realize how late it was until I looked at my watch.<br><strong>DID</strong></div>
+                <p>Not until I looked at my watch __________________________________________________ it was.</p>
+                
+                <div class="question-text">20. By the time we arrive, the concert will have already started.<br><strong>WILL</strong></div>
+                <p>The concert __________________________________________________ we get there.</p>
+                
+                <div class="question-text">21. It's totally impossible for her to have finished that report already.<br><strong>HAVE</strong></div>
+                <p>She __________________________________________________ that report already.</p>
+            </div>
+
+            <h2>Part 2: Reading Comprehension</h2>
+            
+            <h3>Text 1: The Data-Driven Illusion</h3>
+            <div class="text-passage">
+                In contemporary corporate environments, there exists an increasing veneration of data-driven decision making. Executives proudly tout their reliance on analytics frameworks to steer company strategy, implicitly suggesting that numbers afford an unassailable objectivity. However, this unwavering faith in quantification frequently obscures a more nuanced reality. The underlying algorithms dictating data collection and interpretation are intrinsically bound to human biases, rendering the supposedly neutral output susceptible to the very prejudices it purports to eliminate.<br><br>
+                Furthermore, the obsession with measurable outcomes engenders a pervasive myopia. Intangible assets—such as employee morale, creative synergy, and long-term brand equity—are often sidelined simply because they defy easy categorization within a spreadsheet. When leadership prioritizes immediate, quantifiable wins over sustainable, albeit unmeasurable, qualitative growth, the institutional fabric begins to fray. It is not that data is inherently flawed, but rather that its elevation to unquestioned dogma stifles intuitive leadership and visionary foresight.<br><br>
+                Ultimately, navigating the modern business landscape requires a symbiotic approach. True innovation seldom emerges from a sterile analysis of past metrics; it requires the courage to synthesize empirical evidence with abstract, creative intuition. Leaders must paradoxically embrace data to inform their perspective while simultaneously retaining the audacity to look beyond the numbers when charting unprecedented territory.
+            </div>
+
+            <div class="question-block">
+                <div class="question-text">22. What is the author's primary attitude towards "data-driven decision making" as practiced by modern executives?</div>
+                <ol class="options-list">
+                    <li>Unreservedly supportive of its objective nature.</li>
+                    <li>Skeptical of its claim to absolute neutrality.</li>
+                    <li>Indifferent to its implementation in corporate strategy.</li>
+                    <li>Hostile towards any use of analytics frameworks.</li>
+                </ol>
+            </div>
+            <div class="question-block">
+                <div class="question-text">23. The word "myopia" in the second paragraph is used by the author to imply that companies:</div>
+                <ol class="options-list">
+                    <li>Suffer from literal visual impairments in the workplace.</li>
+                    <li>Focus too heavily on short-term, measurable targets at the expense of broader vision.</li>
+                    <li>Lack the necessary software to properly analyze complex datasets.</li>
+                    <li>Are incapable of sustaining financial growth over long periods.</li>
+                </ol>
+            </div>
+            <div class="question-block">
+                <div class="question-text">24. According to the text, what is a significant consequence of prioritizing quantifiable wins?</div>
+                <ol class="options-list">
+                    <li>It eliminates human bias from the decision-making process.</li>
+                    <li>It enhances creative synergy among employees.</li>
+                    <li>It can damage the unmeasurable, qualitative aspects of a company's culture.</li>
+                    <li>It provides a guaranteed roadmap for long-term brand equity.</li>
+                </ol>
+            </div>
+            <div class="question-block">
+                <div class="question-text">25. The phrase "elevation to unquestioned dogma" suggests that the author believes data is:</div>
+                <ol class="options-list">
+                    <li>Often treated with an inappropriate level of absolute reverence.</li>
+                    <li>The only reliable truth in a chaotic business world.</li>
+                    <li>Too complex for the average leader to understand fully.</li>
+                    <li>Currently undervalued by most corporate boards.</li>
+                </ol>
+            </div>
+            <div class="question-block">
+                <div class="question-text">26. Which of the following best captures the implicit message of the final paragraph?</div>
+                <ol class="options-list">
+                    <li>Data analysis should be completely replaced by intuition and creativity.</li>
+                    <li>Successful leadership relies on balancing analytical data with perceptive insight.</li>
+                    <li>Empirical evidence is only useful when analyzing past failures.</li>
+                    <li>Future business success depends entirely on developing more advanced algorithms.</li>
+                </ol>
+            </div>
+
+            <h3>Text 2: The Echo Chamber Effect</h3>
+            <div class="text-passage">
+                Social media platforms originally promised a democratised internet, where diverse voices could intermingle freely, fostering a global village of ideas. Paradoxically, the algorithms empowering these platforms have frequently achieved the inverse. By prioritising engagement metrics—clicks, shares, and watch time—platforms inherently favour content that validates a user's pre-existing beliefs, a phenomenon colloquially termed the "echo chamber." Over time, this algorithmic curation restricts cognitive diversity, isolating users in digital silos where dissenting opinions are either absent or framed antagonistically.<br><br>
+                This self-reinforcing loop has profound sociological implications. When individuals are insulated from counterarguments, their convictions harden, making compromise increasingly arduous. The friction necessary for robust intellectual debate is seemingly smoothed over by an endless feed of concurring voices. Some sociologists argue that to dismantle these chambers, platforms must fundamentally overhaul their engagement-driven models, perhaps injecting randomized or opposing viewpoints into user feeds. Yet, given that engagement drives ad revenue, tech conglomerates remain heavily disincentivized to alter the status quo.
+            </div>
+
+            <div class="question-block">
+                <div class="question-text">27. What is the central paradox mentioned in the first paragraph?</div>
+                <ol class="options-list">
+                    <li>Tools meant to connect diverse ideas have ended up isolating them.</li>
+                    <li>Users want diverse opinions but only click on things they agree with.</li>
+                    <li>Algorithms are smarter than humans but fail at basic curation.</li>
+                    <li>Social media was meant to be free but relies on ad revenue.</li>
+                </ol>
+            </div>
+            <div class="question-block">
+                <div class="question-text">28. According to the text, why are tech companies reluctant to fix the echo chamber problem?</div>
+                <ol class="options-list">
+                    <li>They lack the technical ability to inject randomized viewpoints.</li>
+                    <li>Solving the problem could negatively impact their profitability.</li>
+                    <li>They believe the echo chamber effect is a myth created by sociologists.</li>
+                    <li>Users have actively protested against seeing opposing viewpoints.</li>
+                </ol>
+            </div>
+
+            <h2>Part 3: Listening Comprehension</h2>
+            
+            <h3>Track 1: Remote Work Debate</h3>
+            <audio controls style="width: 100%; margin-bottom: 20px;">
+                <source src="assets/audio/exam/diagnostic_track1.mp3" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+            <div class="question-block">
+                <div class="question-text">29. What is Mark's underlying assumption about the concept of "company culture"?</div>
+                <ol class="options-list">
+                    <li>It is essential for high productivity.</li>
+                    <li>It is sometimes used as an excuse to monitor employees closely.</li>
+                    <li>It can only be built through virtual meetings.</li>
+                    <li>It is entirely driven by cross-departmental silos.</li>
+                </ol>
+            </div>
+            <div class="question-block">
+                <div class="question-text">30. Based on the conclusion of the debate, what do Mark and Sarah ultimately agree upon?</div>
+                <ol class="options-list">
+                    <li>That hybrid work is logistically flawless.</li>
+                    <li>That a strict return-to-office policy would lead to losing valuable employees.</li>
+                    <li>That leadership has already found the perfect balance.</li>
+                    <li>That productivity should no longer be measured by output.</li>
+                </ol>
+            </div>
+
+            <h3>Track 2: AI in the realm of Art (Debate)</h3>
+            <audio controls style="width: 100%; margin-bottom: 20px;">
+                <source src="assets/audio/exam/diagnostic_track2.mp3" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+            <div class="question-block">
+                <div class="question-text">31. Elena mentions photography primarily to...</div>
+                <ol class="options-list">
+                    <li>Propose that AI art will eventually replace human painters entirely.</li>
+                    <li>Draw a historical parallel to another technology that disrupted but ultimately expanded art.</li>
+                    <li>Demonstrate that modern cameras are inherently more artistic than AI generators.</li>
+                    <li>Argue that painters in the 19th century were unjustified in their panic.</li>
+                </ol>
+            </div>
+            <div class="question-block">
+                <div class="question-text">32. What is David's primary criticism of AI image generators?</div>
+                <ol class="options-list">
+                    <li>They are built upon the uncredited labor of actual human artists.</li>
+                    <li>They produce images that are too conceptually abstract for the mainstream.</li>
+                    <li>They lack the technical perfection found in traditional painting.</li>
+                    <li>They will eventually gain sentience and replace all forms of human employment.</li>
+                </ol>
+            </div>
+
+            <h2>Part 4: Writing Production</h2>
+            <div class="exam-instructions">
+                Choose ONE of the following prompts and write between 200 - 250 words.
+            </div>
+            <div class="question-block">
+                <p><strong>Option 1: Essay</strong><br>
+                <em>"The integration of Artificial Intelligence in education is inevitable. Evaluate the main advantages and disadvantages of this trend. Does AI ultimately empower students or hinder their critical thinking skills?"</em></p>
+                <br>
+                <p><strong>Option 2: Formal Proposal</strong><br>
+                <em>Your company is considering shifting to a fully 4-day work week. Your manager has asked you to write a proposal outlining the potential benefits for employee wellbeing and productivity, addressing any potential logistical drawbacks, and recommending a trial strategy.</em></p>
+
+                <textarea class="writing-box" placeholder="Write your response here..."></textarea>
+            </div>
+
+        </div> <!-- End Student Exam Section -->
+
+        <!-- Removed Teacher's Section for Student Copy -->
+    </div>
+</body>
+
+</html>

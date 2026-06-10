@@ -1,0 +1,784 @@
+<!DOCTYPE html><html lang="en"><head>
+<script src="vesper_auth.js"></script><meta charset="UTF-8"><title>Core Practice: Level 2</title><link rel="stylesheet" href="assets/css/vesper_style.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700&family=Open+Sans:wght@400;600;700&display=swap');
+    body { background-color: #525659; margin: 0; padding: 40px 0; display: flex; flex-direction: column; align-items: center; font-family: 'Merriweather', serif; color: #1a2b42; }
+    .page { background-color: white; width: 210mm; min-height: 297mm; padding: 20mm; box-sizing: border-box; box-shadow: 0 0 20px rgba(0,0,0,0.3); margin-bottom: 40px; position: relative; page-break-after: always; }
+    @media print { body { background: none; margin: 0; padding: 0; display: block; } .page { box-shadow: none; margin: 0; width: 100%; height: 100%; page-break-after: always; border: none; } .no-print { display: none; } }
+    @media screen and (max-width: 768px) {
+        body { padding: 10px; }
+        .page { width: 100%; padding: 10mm; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); min-height: auto; }
+        .module-header { margin: -10mm -10mm 10mm -10mm; padding: 15px 10mm; font-size: 1.2em; }
+        .lesson-title h2 { font-size: 1.8em; }
+        .vocab-grid { grid-template-columns: 1fr; }
+        .no-print { top: 10px; left: 10px; opacity: 0.8; }
+        .cover-title { font-size: 2em !important; }
+        .cover-subtitle { font-size: 1.2em !important; }
+    }
+    h1, h2, h3 { font-family: 'Open Sans', sans-serif; }
+    .module-header { background-color: #1a2b42; color: #d4af37; padding: 15px 20mm; margin: -20mm -20mm 10mm -20mm; font-family: 'Merriweather', serif; font-size: 1.4em; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
+    .lesson-title { border-bottom: 2px solid #34495e; padding-bottom: 15px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; }
+    .lesson-title h2 { margin: 0; font-size: 2.2em; color: #1a2b42; }
+    .lesson-block { margin-bottom: 25px; padding: 20px 25px; background: #fff; border-left: 5px solid #ccc; border-radius: 0 5px 5px 0; }
+    .lb-blue { border-color: #3498db; background: #ebf5fb; }
+    .lb-navy { border-color: #1a2b42; background: #fff; border: 1px solid #eee; border-left: 6px solid #1a2b42; }
+    .lb-purple { border-color: #8e44ad; background: #f5eef8; }
+    .lb-green { border-color: #27ae60; background: #eafaf1; }
+    .lb-red { border-color: #c0392b; background: #fdedec; }
+    .lb-header { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; font-weight: bold; font-family: 'Open Sans'; text-transform: uppercase; font-size: 1em; letter-spacing: 0.5px; }
+    .lb-blue .lb-header { color: #2980b9; } 
+    .lb-navy .lb-header { color: #1a2b42; }
+    .lb-purple .lb-header { color: #8e44ad; }
+    .lb-green .lb-header { color: #27ae60; }
+    .lb-red .lb-header { color: #c0392b; }
+    .content-text { line-height: 1.8; font-size: 0.95em; color: #2c3e50; text-align: justify; }
+    ul.deep-list { padding-left: 20px; list-style-type: square; } ul.deep-list li { margin-bottom: 12px; }
+    .vocab-box { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
+    .vocab-item { background: #eee; padding: 5px 10px; border-radius: 3px; font-size: 0.9em; font-family: 'Open Sans'; }
+    .page-num { position: absolute; bottom: 20mm; right: 20mm; color: #999; font-size: 0.8em; }
+    p { margin-bottom: 15px; }
+    .intro-box { background-color: #f8f9fa; border: 1px solid #dee2e6; padding: 30px; border-radius: 8px; margin-top: 50px; }
+</style>
+</head><body><div class="no-print" style="position: fixed; top: 20px; left: 20px; z-index: 1000;"><a href="index.html" style="background: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: bold; color: #1a2b42; box-shadow: 0 2px 5px rgba(0,0,0,0.2);"><i class="fas fa-arrow-left"></i> Dashboard</a></div><div class="page cover-page"><img src="assets/images/vesper_logo.jpg" alt="Vesper Academy" class="cover-logo" style="width:200px; margin-bottom:20px;"><div class="cover-title" style="font-size:3em; font-weight:bold; color:#1a2b42;">Core Practice: Level 2</div><div class="cover-subtitle" style="font-size:1.5em; color:#34495e;">Intermediate (A2/B1)</div><div style="margin-top: auto;"><strong>Vesper Academy</strong><br>Student Workbook</div></div><div class="page">
+
+<div class="intro-box">
+    <p><strong>Course Overview:</strong></p>
+    <p>Level 2 focuses on <strong>Intermediate Communication & Survival</strong> (A2-B1). This module utilizes the <strong>Deep Expansion Strategy</strong> to provide a rigorous, massive 1-hour classroom experience.</p>
+    <p><strong>Classroom Flow:</strong></p>
+    <ul class="deep-list">
+        <li><strong>Odd Lessons (Auditory):</strong> Speaking and Listening focus. Extended, split audio inputs with rigorous 3-stage warmups and deep negotiation roleplays.</li>
+        <li><strong>Even Lessons (Textual):</strong> Reading and Writing focus. Long-form, multi-paragraph reading passages mapping true B1 comprehension, followed by formal 3-paragraph essay drafting tasks.</li>
+    </ul>
+</div>
+
+</div><div class="page"><div class="toc"><h1>Syllabus</h1><div><a href="#l1">1. Small Talk</a></div><div><a href="#l2">2. Complaints</a></div><div><a href="#l3">3. Negotiation</a></div><div><a href="#l4">4. Travel Problems</a></div><div><a href="#l5">5. Job Interviews</a></div><div><a href="#l6">6. Technology</a></div><div><a href="#l7">7. Environment</a></div><div><a href="#l8">8. News & Media</a></div><div><a href="#l9">9. Health & Fitness</a></div><div><a href="#l10">10. Money</a></div><div><a href="#l11">11. Social Media</a></div><div><a href="#l12">12. Culture</a></div><div><a href="#l13">13. Education</a></div><div><a href="#l14">14. Relationships</a></div><div><a href="#l15">15. Housing</a></div><div><a href="#l16">16. Crime</a></div><div><a href="#l17">17. Art & Music</a></div><div><a href="#l18">18. Psychology</a></div><div><a href="#l19">19. Future Tech</a></div><div><a href="#l20">20. Graduation</a></div></div></div><div class="page" id="l1"><div class="module-header"><i class="fas fa-layer-group"></i> Core Practice: Level 2</div><div class="lesson-title"><h2>Lesson 1: Small Talk</h2></div>
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
+                <div class="content-text"><strong>Phase 1: The Elevator Pitch:</strong> You have 30 seconds to introduce yourself to a stranger in an elevator. What do you say? Go!<br><br><strong>Phase 2: Taboo Topics:</strong> Brainstorm 5 topics you should NEVER discuss during small talk in your country (e.g., salary, politics). Discuss why.<br><br><strong>Phase 3: The Icebreaker:</strong> Ask your partner: 'What is the most awkward conversation you have ever had with a stranger?'</div>
+            </div>
+            
+            <!-- VOCAB -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
+                <div class="content-text"><strong>Core Arsenal (12 phrases):</strong><br>1. Break the ice (Initiate conversation)<br>2. Catch up (Share recent news)<br>3. Bump into (Meet by chance)<br>4. Bring up (Introduce a topic)<br>5. Run out of things to say (Have no more topics)<br>6. Silence is deafening (Awkward silence)<br>7. Small talk (Polite, casual conversation)<br>8. Talk shop (Discuss work socially)<br>9. Speak your mind (Say what you think)<br>10. Get to the point (Be direct)<br>11. Put your foot in it (Say something embarrassing)<br>12. Mingle (Socialize at a party)<br><br><strong>Drill task:</strong> Choose 3 phrases. The teacher will count down from 3, and you must say a completely spontaneous sentence using them.</div>
+            </div>
+            
+            <!-- LISTENING -->
+            <div class="lesson-block lb-purple">
+                <div class="lb-header"><i class="fas fa-headphones"></i> Main Listening Input</div>
+                <div class="content-text"><div style="margin-bottom:10px;"><audio controls style="height:30px; width:200px;"><source src="assets/audio/core_practice_level_2_lesson_1.mp3" type="audio/mpeg"></audio></div>
+                    <em>(The script text is hidden in the student manual. Listen to the audio closely to complete the exercise.)</em></div>
+            </div>
+            
+            <!-- COMPREHENSION -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-question-circle"></i> Comprehension Check</div>
+                <div class="content-text"><strong>Level 1 (Literal):</strong><br>- Where do David and Sarah run into each other?<br>- Did Sarah go to Italy?<br><br><strong>Level 2 (Inference):</strong><br>- Why did David say 'Let's not talk shop'? What did he want to change the topic to?<br>- How does Sarah try to 'break the ice' again after the awkward moment?<br><br><strong>Level 3 (Applied Opinion):</strong><br>- Do you think David was rude to ask about the trip? How would you react in his position?</div>
+            </div>
+            
+            <!-- GUIDED PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Guided Practice</div>
+                <div class="content-text"><strong>Exercise 1: Phrase Replacement:</strong> Replace the underlined words with our vocabulary: 'I accidentally <u>said something embarrassing</u>.' -> 'I accidentally put my foot in it.'<br><br><strong>Exercise 2: Question Formation:</strong> Write 3 open-ended questions designed specifically to 'break the ice' at a networking event.<br><br><strong>Exercise 3: Intonation Focus:</strong> Read David's apology aloud. Focus on lowering your pitch and sounding genuinely empathetic: 'I am so sorry, Sarah. I completely put my foot in it.'</div>
+            </div>
+            
+            <!-- OUTPUT -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Free Output Simulation</div>
+                <div class="content-text"><strong>The Nightmare Networking Event (15 mins)</strong><br><br><strong>Setting:</strong> A boring corporate party. You MUST keep the conversation going for 3 full minutes without stopping.<br><br><strong>Role A:</strong> You are very talkative but keep 'putting your foot in it' by accidentally asking highly personal or inappropriate questions. Try to 'talk shop' constantly.<br><strong>Role B:</strong> You are very private and hate talking about work. You must skillfully deflect Role A's questions and change the subject back to safe 'small talk' like hobbies or the weather.<br><br><strong>Win Condition:</strong> If there is a silence longer than 5 seconds, you both lose.</div>
+            </div>
+            <div class="page-num">Core Practice: Level 2 &bull; Page 4</div></div><div class="page" id="l2"><div class="module-header"><i class="fas fa-layer-group"></i> Core Practice: Level 2</div><div class="lesson-title"><h2>Lesson 2: Complaints</h2></div>
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
+                <div class="content-text"><strong>Phase 1: Chat Storm:</strong> Type the absolute worst customer service experience you have ever had in your life. (1 sentence!).<br><br><strong>Phase 2: The Right to Complain:</strong> Read the quote: 'The customer is always right.' Do you agree? Why or why not?<br><br><strong>Phase 3: Formal vs Informal:</strong> Look at this sentence: 'Your food sucks and I want my cash back.' Rewrite this to be highly formal and polite.</div>
+            </div>
+            
+            <!-- VOCAB -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Dissatisfaction (Unhappiness with service)<br>2. Unacceptable (Not adequate)<br>3. Incompetent (Lacking skill)<br>4. Reiterate (Repeat for emphasis)<br>5. Compensation (Money given for a loss)<br>6. Refund (Return of money)<br>7. Promptly (Quickly)<br>8. Appalling (Horrific / very bad)<br>9. Resolve (Fix a problem)<br>10. Defective (Broken upon arrival)<br>11. Misleading (Giving the wrong idea)<br>12. Acknowledge (Accept the truth of)<br><br><strong>Drill Task:</strong> Spelling test in the chat. The teacher reads the definition, you must type the exact word perfectly.</div>
+            </div>
+            
+            <!-- READING -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Main Reading Input</div>
+                <div class="content-text"><strong>PART 1: The Email</strong><br>Dear Customer Service Department, <br><br>I am writing to express my profound dissatisfaction with my recent stay at the Grand Plaza Hotel (Booking Reference: 8945A) from October 12th to October 14th. The level of service I received was frankly appalling and completely unacceptable for a facility claiming to be a luxury establishment. <br><br>Upon arrival, despite having guaranteed my reservation with a credit card, I was informed that my premium suite was unavailable. I was relegated to a standard room next to the elevator shaft, which vibrated loudly every ten minutes. <br><br><strong>PART 2: The Demand</strong><br>Furthermore, the air conditioning in the room was defective. When I brought this to the attention of the front desk, the receptionist was dismissive and downright incompetent, stating that 'maintenance had already gone home.' No alternative room or fan was offered.<br><br>Given the misleading advertising on your website regarding 'world-class service' and 'tranquil rooms', I am formally requesting a 50% refund as compensation for this miserable experience. I expect you to acknowledge receipt of this email promptly and resolve this matter within five business days before I escalate my complaint to the Consumer Rights Board.<br><br>Sincerely,<br>Jonathan Davies</div>
+            </div>
+            
+            <!-- COMPREHENSION -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-question-circle"></i> Comprehension Check</div>
+                <div class="content-text"><strong>Level 1 (Literal):</strong><br>- What was Jonathan's booking reference?<br>- What was wrong with the room's location?<br><br><strong>Level 2 (Inference):</strong><br>- Why did Jonathan use the word 'relegated'? What does it imply about his feelings?<br>- Why did the author put 'world-class service' in quotation marks?<br><br><strong>Level 3 (Applied Opinion):</strong><br>- Is asking for a 50% refund reasonable in this situation? Should he have asked for 100%?</div>
+            </div>
+            
+            <!-- GUIDED PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Guided Practice</div>
+                <div class="content-text"><strong>Exercise 1: Tone Shifting:</strong> Convert these angry thoughts into formal complaint email phrases:<br>- 'Your staff didn't care.' -> 'The staff was highly dismissive.'<br>- 'Fix this now.' -> 'I expect you to resolve this promptly.'<br><br><strong>Exercise 2: Gap Fill:</strong> 'I am writing to express my profound ______. The product was severely ______ and the customer service was ______. I demand immediate ______.'<br><br><strong>Exercise 3: Threat Mitigation:</strong> How does Jonathan threaten the hotel without using bad words? Identify the specific phrase used at the end of the email.</div>
+            </div>
+            
+            <!-- OUTPUT -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-pen"></i> Free Output Writing</div>
+                <div class="content-text"><strong>The Vengeance Email (15 mins)</strong><br><br><strong>Prompt:</strong> You ordered a highly expensive, custom-made birthday cake for your child's 10th birthday party. The bakery delivered a cake that said 'Happy 60th Retirement Bob', and it was totally crushed on one side. Furthermore, the delivery driver was extremely rude to you in front of your guests. <br><br><strong>Task:</strong> Write a 4-paragraph formal complaint email.<br>- Paragraph 1: State exactly why you are writing and your order number.<br>- Paragraph 2: Describe the appalling errors with the product itself.<br>- Paragraph 3: Detail the incompetent behavior of the staff.<br>- Paragraph 4: Formally demand realistic compensation and threaten further action.</div>
+            </div>
+            <div class="page-num">Core Practice: Level 2 &bull; Page 5</div></div><div class="page" id="l3"><div class="module-header"><i class="fas fa-layer-group"></i> Core Practice: Level 2</div><div class="lesson-title"><h2>Lesson 3: Negotiation</h2></div>
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
+                <div class="content-text"><strong>Phase 1: The Haggle:</strong> The teacher is selling a simple pen. Offer ridiculous prices. Teacher refuses until someone uses a smart reason.<br><br><strong>Phase 2: Cultural Differences:</strong> Is haggling (bargaining) normal in your country? In what situations is it acceptable vs rude?<br><br><strong>Phase 3: The Ultimatum:</strong> What does 'Take it or leave it' mean in a negotiation?</div>
+            </div>
+            
+            <!-- VOCAB -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Haggle (Argue about price)<br>2. Compromise (Meet in the middle)<br>3. Bargain (A good deal)<br>4. Counter-offer (Respond with a new price)<br>5. Walk away (Leave the deal)<br>6. Sweeten the deal (Add a bonus)<br>7. Bottom line (The absolute limit)<br>8. Rip-off (Too expensive/a scam)<br>9. Meet halfway (Compromise 50/50)<br>10. Non-negotiable (Cannot be changed)<br>11. Terms and conditions (The rules)<br>12. Handshake (Agreement symbol)<br><br><strong>Drill Task:</strong> Rapid fire matching. Teacher calls out a definition, student shouts the word.</div>
+            </div>
+            
+            <!-- LISTENING -->
+            <div class="lesson-block lb-purple">
+                <div class="lb-header"><i class="fas fa-headphones"></i> Main Listening Input</div>
+                <div class="content-text"><div style="margin-bottom:10px;"><audio controls style="height:30px; width:200px;"><source src="assets/audio/core_practice_level_2_lesson_3.mp3" type="audio/mpeg"></audio></div>
+                    <em>(The script text is hidden in the student manual. Listen to the audio closely to complete the exercise.)</em></div>
+            </div>
+            
+            <!-- COMPREHENSION -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-question-circle"></i> Comprehension Check</div>
+                <div class="content-text"><strong>Level 1 (Literal):</strong><br>- What material are the rugs made from, according to the seller?<br>- What was the buyer's first counter-offer?<br><br><strong>Level 2 (Inference):</strong><br>- Did the buyer actually see a rug for two hundred down the street, or is it a negotiation tactic?<br>- Why does the seller mention having 'a family to feed'?<br><br><strong>Level 3 (Applied Opinion):</strong><br>- Who 'won' this negotiation? Do you think $320 is the real value of the rug?</div>
+            </div>
+            
+            <!-- GUIDED PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Guided Practice</div>
+                <div class="content-text"><strong>Exercise 1: The 'If-Then' Rule:</strong> Practice conditional negotiation: 'If you drop the price to X, then I will pay in Y.'<br><br><strong>Exercise 2: Softening the Blow:</strong> Make these aggressive statements softer: 'That's too expensive!' -> 'That's a bit out of my budget.'<br><br><strong>Exercise 3: Dictation:</strong> Listen to Part 2 again without text. Transcribe the seller's final offer word-for-word.</div>
+            </div>
+            
+            <!-- OUTPUT -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Free Output Simulation</div>
+                <div class="content-text"><strong>The Car Dealership (15 mins)</strong><br><br><strong>Background:</strong> A used car is listed at $10,000.<br><br><strong>Role A (The Seller):</strong> You secretly know the car has a slight engine problem. Your 'bottom line' is $7,000, but you want to sell it for as much as possible. You are very charming.<br><strong>Role B (The Buyer):</strong> You love the car but your maximum budget is $8,500. You noticed a scratch on the door and want to use it to lower the price.<br><br><strong>Task:</strong> Negotiate for 5 minutes. Try to 'sweeten the deal' or threaten to 'walk away' at least once.</div>
+            </div>
+            <div class="page-num">Core Practice: Level 2 &bull; Page 6</div></div><div class="page" id="l4"><div class="module-header"><i class="fas fa-layer-group"></i> Core Practice: Level 2</div><div class="lesson-title"><h2>Lesson 4: Travel Problems</h2></div>
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
+                <div class="content-text"><strong>Phase 1: Worst Case Scenario:</strong> What is worse: Losing your passport in a foreign country OR missing your flight home because you overslept? Type it.<br><br><strong>Phase 2: Airport Geography:</strong> Name 5 specific places inside an airport (e.g., duty-free, baggage claim, etc.).<br><br><strong>Phase 3: The Quote:</strong> 'A journey of a thousand miles begins with a single delayed flight.' Discuss.</div>
+            </div>
+            
+            <!-- VOCAB -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Overbooked (Too many tickets sold)<br>2. Cancelled (Will not happen)<br>3. Delayed (Running late)<br>4. Layover (Stop between flights)<br>5. Jet lag (Tiredness from time zones)<br>6. Luggage / Baggage (Suitcases)<br>7. Custom duties (Taxes at border)<br>8. Stranded (Stuck somewhere)<br>9. Itinerary (Schedule of travel)<br>10. Connecting flight (Second flight)<br>11. Turbulence (Rough air)<br>12. Compensation (Money given for trouble)<br><br><strong>Drill Task:</strong> Write a funny, grammatically correct sentence using 'Stranded' and 'Jet lag'.</div>
+            </div>
+            
+            <!-- READING -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Main Reading Input</div>
+                <div class="content-text"><strong>PART 1: The Nightmare Begins</strong><br>My trip to Bangkok was supposed to be the holiday of a lifetime. However, it quickly devolved into a logistical nightmare. It all started when I arrived at Heathrow airport perfectly on time, only to look at the departure board and see the dreaded red letters next to my flight: CANCELLED. <br><br>The airline staff were completely overwhelmed. After waiting in line for three hours, a very stressed agent informed me that my flight was overbooked anyway, and the next available flight wasn't until the following morning. I was effectively stranded in the terminal, handed a meager $10 food voucher as compensation.<br><br><strong>PART 2: The Domino Effect</strong><br>The next day, I finally boarded a flight. However, this delay created a massive domino effect on my itinerary. Because of the cancellation, I missed my connecting flight in Dubai. Consequently, I was forced to suffer a 14-hour layover, sleeping on a cold metal bench near a duty-free shop. <br><br>When I eventually arrived in Bangkok, suffering from severe jet lag and exhaustion, I went to the baggage claim carousel. I watched it spin for forty-five minutes before realizing the harsh truth: my luggage had not made the journey with me. I was in a tropical country wearing a heavy winter coat, with absolutely nothing else to my name.</div>
+            </div>
+            
+            <!-- COMPREHENSION -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-question-circle"></i> Comprehension Check</div>
+                <div class="content-text"><strong>Level 1 (Literal):</strong><br>- How much compensation did the author receive at Heathrow?<br>- Where did the author sleep in Dubai?<br><br><strong>Level 2 (Inference):</strong><br>- Why did the author say it 'devolved' into a nightmare rather than 'turned' into one?<br>- What does the author mean by a 'domino effect' on their itinerary?<br><br><strong>Level 3 (Applied Opinion):</strong><br>- How would you have reacted at the baggage claim? Who is truly legally responsible for this mess?</div>
+            </div>
+            
+            <!-- GUIDED PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Guided Practice</div>
+                <div class="content-text"><strong>Exercise 1: Cause and Effect Connectors:</strong> Combine sentences using 'Because of', 'Consequently', and 'As a result'.<br><br><strong>Exercise 2: Vocabulary in Context:</strong> Replace the simple words: 'I was <u>stuck</u> (________) at the airport after I missed my <u>second flight</u> (________).'<br><br><strong>Exercise 3: Narrative Tenses:</strong> Notice the use of 'had not made' (Past Perfect) vs 'watched' (Past Simple). Write 2 sentences using the Past Perfect to describe a travel disaster.</div>
+            </div>
+            
+            <!-- OUTPUT -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-pen"></i> Free Output Writing</div>
+                <div class="content-text"><strong>The Travel Insurance Claim (15 mins)</strong><br><br><strong>Prompt:</strong> You have travel insurance. You are writing a narrative claim to get your money back for a ruined trip to Paris. <br><br><strong>Task:</strong> Write 3 detailed paragraphs.<br>- Describe the initial incident (e.g., extreme weather, strike, lost passport).<br>- Detail the 'domino effect' this caused to your hotel bookings and activities.<br>- Outline exactly what you expect the insurance company to pay for (flights, hotels, mental distress) using professional, firm language.</div>
+            </div>
+            <div class="page-num">Core Practice: Level 2 &bull; Page 7</div></div><div class="page" id="l5"><div class="module-header"><i class="fas fa-layer-group"></i> Core Practice: Level 2</div><div class="lesson-title"><h2>Lesson 5: Job Interviews</h2></div>
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
+                <div class="content-text"><strong>Phase 1: The Question:</strong> What is the absolute worst question someone can ask you in a job interview?<br><br><strong>Phase 2: The Brag 10:</strong> You have 10 seconds to brag about your greatest life achievement. Go!<br><br><strong>Phase 3: Body Language:</strong> Are crossed arms confident or defensive? How should you sit?</div>
+            </div>
+            
+            <!-- VOCAB -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Qualifications (Diplomas/skills)<br>2. Track record (History of success)<br>3. Asset (Valuable addition)<br>4. Overqualified (Too much experience)<br>5. Under pressure (In stressful situations)<br>6. Delegate (Assign tasks to others)<br>7. Synergize (Work well together)<br>8. Proactive (Taking action early)<br>9. Detail-oriented (Focused on small things)<br>10. Shortcoming (Weakness/flaw)<br>11. Compensation package (Salary + benefits)<br>12. Probation period (Trial phase at work)<br><br><strong>Drill Task:</strong> Pronunciation marathon. Say all 12 words perfectly without stopping. Teacher times you.</div>
+            </div>
+            
+            <!-- LISTENING -->
+            <div class="lesson-block lb-purple">
+                <div class="lb-header"><i class="fas fa-headphones"></i> Main Listening Input</div>
+                <div class="content-text"><div style="margin-bottom:10px;"><audio controls style="height:30px; width:200px;"><source src="assets/audio/core_practice_level_2_lesson_5.mp3" type="audio/mpeg"></audio></div>
+                    <em>(The script text is hidden in the student manual. Listen to the audio closely to complete the exercise.)</em></div>
+            </div>
+            
+            <!-- COMPREHENSION -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-question-circle"></i> Comprehension Check</div>
+                <div class="content-text"><strong>Level 1 (Literal):</strong><br>- How many years of experience does Ms. Harper have in project management?<br>- What specific action saved her previous company money?<br><br><strong>Level 2 (Inference):</strong><br>- Why did the interviewer specifically ask about her 'biggest shortcoming' right after praising her?<br>- How did the candidate completely twist a 'weakness' into a 'positive growth story'?<br><br><strong>Level 3 (Applied Opinion):</strong><br>- Is 'perfectionism' a real weakness, or is it a clichéd interview lie? Would you hire her?</div>
+            </div>
+            
+            <!-- GUIDED PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Guided Practice</div>
+                <div class="content-text"><strong>Exercise 1: STAR Method:</strong> Learn the STAR method (Situation, Task, Action, Result). Outline Ms. Harper's 'supply chain' story using STAR.<br><br><strong>Exercise 2: The Spin:</strong> Take a negative trait (e.g., 'I am very slow at working') and spin it formally: 'I am highly detail-oriented and prefer to ensure total accuracy rather than rushing.'<br><br><strong>Exercise 3: Financial Jargon:</strong> Ask for a higher salary using the vocabulary word 'compensation package'.</div>
+            </div>
+            
+            <!-- OUTPUT -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Free Output Simulation</div>
+                <div class="content-text"><strong>The Fired Candidate (15 mins)</strong><br><br><strong>Context:</strong> A high-stress job interview for a Manager position.<br><br><strong>Role A (The Candidate):</strong> You have amazing skills, but you were FIRED from your last job because you fought with the CEO. You must answer questions brilliantly but you must explain the firing without sounding crazy.<br><strong>Role B (The Interviewer):</strong> You are highly skeptical. You see a 6-month gap on the resume and you push the candidate aggressively to explain exactly what happened at their last job. Interrupt them often.</div>
+            </div>
+            <div class="page-num">Core Practice: Level 2 &bull; Page 8</div></div><div class="page" id="l6"><div class="module-header"><i class="fas fa-layer-group"></i> Core Practice: Level 2</div><div class="lesson-title"><h2>Lesson 6: Technology</h2></div>
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
+                <div class="content-text"><strong>Phase 1: Doomsday:</strong> What happens to society if all internet servers shut down permanently tomorrow? Type the first 3 things that collapse.<br><br><strong>Phase 2: Generational Divide:</strong> Do you think Gen Z is 'lazy' because of technology, or just 'efficient'?<br><br><strong>Phase 3: Concept definition:</strong> Explain what 'planned obsolescence' is in your own words.</div>
+            </div>
+            
+            <!-- VOCAB -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Obsolete (No longer useful/outdated)<br>2. Cutting-edge (Most advanced status)<br>3. Gadget (Small mechanical device)<br>4. Glitch (Minor technical error)<br>5. Breakthrough (Major discovery)<br>6. Algorithm (Set of rules in code)<br>7. Automation (Machines replacing humans)<br>8. Privacy breach (Data stolen)<br>9. Tech-savvy (Good with technology)<br>10. State-of-the-art (Modern and advanced)<br>11. User-friendly (Easy to use)<br>12. Device dependency (Addiction to screens)<br><br><strong>Drill Task:</strong> Identify the adjective, noun, or verb forms of these words.</div>
+            </div>
+            
+            <!-- READING -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Main Reading Input</div>
+                <div class="content-text"><strong>PART 1: The Acceleration of Innovation</strong><br>In the span of a single century, humanity has leaped from the first powered flight to the dawn of artificial intelligence. Today's cutting-edge technologies are not just improving our lives; they are fundamentally rewiring human behavior. Automation and state-of-the-art robotics have streamlined industries, drastically reducing the need for human manual labor. <br><br>However, this rapid technological breakthrough comes at a steep sociological cost. Device dependency has become arguably the greatest behavioral crisis of the modern era. We carry pocket-sized supercomputers that utilize sophisticated algorithms precisely designed to hack our attention spans, resulting in a population that is constantly connected to the web, yet profoundly isolated in reality.<br><br><strong>PART 2: The Dark Side of Convenience</strong><br>Furthermore, the drive for constant profit has fueled practices like 'planned obsolescence'. Tech giants engineer their highly coveted gadgets to become obsolete or suffer mysterious software glitches just a few years after purchase, forcing consumers into an endless, expensive cycle of upgrades. <br><br>Lastly, our 'user-friendly' digital world requires us to surrender our personal data freely. Massive privacy breaches are no longer anomalous events; they are routine. We must question whether the convenience of a smart-home and an algorithmically curated life is truly worth the absolute sacrifice of our anonymity.</div>
+            </div>
+            
+            <!-- COMPREHENSION -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-question-circle"></i> Comprehension Check</div>
+                <div class="content-text"><strong>Level 1 (Literal):</strong><br>- What do algorithms try to 'hack', according to the text?<br>- How do tech giants force consumers to buy new gadgets?<br><br><strong>Level 2 (Inference):</strong><br>- What does the author mean by 'constantly connected... yet profoundly isolated'?<br>- What is the 'sociological cost' mentioned in paragraph two?<br><br><strong>Level 3 (Applied Opinion):</strong><br>- Do you believe tech companies deliberately make older phones glitch when a new one is released? Do you have personal proof?</div>
+            </div>
+            
+            <!-- GUIDED PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Guided Practice</div>
+                <div class="content-text"><strong>Exercise 1: Complex Noun Phrases:</strong> Translate these into complex English: 'máquinas que son lo más avanzado' -> 'state-of-the-art robotics'.<br><br><strong>Exercise 2: Academic Vocabulary Replace:</strong> Replace the simple words in this sentence: 'The <u>newest</u> (_____) computers have <u>little errors</u> (_____).'<br><br><strong>Exercise 3: Debate Framing:</strong> Write 2 sentences evaluating technology. One starting with 'On the one hand...', and the other with 'On the other hand...' based on the text.</div>
+            </div>
+            
+            <!-- OUTPUT -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-pen"></i> Free Output Writing</div>
+                <div class="content-text"><strong>The Tech Review Essay (15 mins)</strong><br><br><strong>Prompt:</strong> 'Social media does more harm than good to society.' <br><br><strong>Task:</strong> Write a 3-paragraph persuasive essay response.<br>- Paragraph 1: Introduce the topic and clearly state your absolute opinion.<br>- Paragraph 2: Provide two strong pieces of supporting evidence (use words like 'Algorithms', 'Device dependency').<br>- Paragraph 3: Conclude by suggesting a rule or law the government should pass to fix the problem.</div>
+            </div>
+            <div class="page-num">Core Practice: Level 2 &bull; Page 9</div></div><div class="page" id="l7"><div class="module-header"><i class="fas fa-layer-group"></i> Core Practice: Level 2</div><div class="lesson-title"><h2>Lesson 7: Environment</h2></div>
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
+                <div class="content-text"><strong>Phase 1: The Guilt Trip:</strong> What is one environmentally bad thing you do every day that you refuse to stop doing? (e.g. taking 30-minute hot showers).<br><br><strong>Phase 2: Microplastics:</strong> Explain what they are. Where do they end up?<br><br><strong>Phase 3: The Quote:</strong> 'There is no Planet B.' What does this mean?</div>
+            </div>
+            
+            <!-- VOCAB -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Deforestation (Cutting down forests)<br>2. Ecosystem (Biological community)<br>3. Endanger (Put at risk of extinction)<br>4. Sustainable (Able to be maintained)<br>5. Carbon footprint (Emissions of an individual)<br>6. Renewable (Source not depleted when used)<br>7. Emission (Discharge of gas)<br>8. Biodegradable (Capable of decaying naturally)<br>9. Conservation (Protection of nature)<br>10. Greenhouse effect (Trapping of sun's warmth)<br>11. Fossil fuels (Coal, oil, gas)<br>12. Catalyst (Something causing change)<br><br><strong>Drill Task:</strong> Which words are nouns? Which are adjectives? Which are verbs?</div>
+            </div>
+            
+            <!-- LISTENING -->
+            <div class="lesson-block lb-purple">
+                <div class="lb-header"><i class="fas fa-headphones"></i> Main Listening Input</div>
+                <div class="content-text"><div style="margin-bottom:10px;"><audio controls style="height:30px; width:200px;"><source src="assets/audio/core_practice_level_2_lesson_7.mp3" type="audio/mpeg"></audio></div>
+                    <em>(The script text is hidden in the student manual. Listen to the audio closely to complete the exercise.)</em></div>
+            </div>
+            
+            <!-- COMPREHENSION -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-question-circle"></i> Comprehension Check</div>
+                <div class="content-text"><strong>Level 1 (Literal):</strong><br>- What two environmental disasters does Dr. Evans specifically mention?<br>- What percentage of emissions do giant corporations supposedly produce?<br><br><strong>Level 2 (Inference):</strong><br>- Why does the doctor say individual carbon footprints are 'microscopic'?<br>- What does the doctor mean by suggesting consumers act as a 'commercial catalyst'?<br><br><strong>Level 3 (Applied Opinion):</strong><br>- Do you agree that the individual consumer is responsible, or should governments force corporations to change through law?</div>
+            </div>
+            
+            <!-- GUIDED PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Guided Practice</div>
+                <div class="content-text"><strong>Exercise 1: Linking Ideas:</strong> Practice linking cause and effect using 'accelerate' and 'mitigate'. (e.g. 'Planting trees mitigates... while burning oil accelerates...')<br><br><strong>Exercise 2: Advanced Conditionals:</strong> Re-write Dr. Evan's final warning using 'Unless': 'Unless millions of individuals demand sustainable products...'<br><br><strong>Exercise 3: Syllable Stress:</strong> Pronounce these correctly: sus-TAIN-a-ble, bio-de-GRAD-a-ble.</div>
+            </div>
+            
+            <!-- OUTPUT -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Free Output Simulation</div>
+                <div class="content-text"><strong>The Climate Summit (15 mins)</strong><br><br><strong>Context:</strong> A heated UN negotiation room.<br><br><strong>Role A (Developing Nation Delegate):</strong> Your country relies purely on fossil fuels to survive and build an economy. You refuse to stop using coal unless rich countries pay you billions of dollars in 'climate reparations'.<br><strong>Role B (Developed Nation Delegate):</strong> You demand all countries achieve zero emissions immediately to save the oceans, but you refuse to just give billions of dollars away without strict rules.<br><br><strong>Task:</strong> Debate and try to sign a treaty in 5 minutes.</div>
+            </div>
+            <div class="page-num">Core Practice: Level 2 &bull; Page 10</div></div><div class="page" id="l8"><div class="module-header"><i class="fas fa-layer-group"></i> Core Practice: Level 2</div><div class="lesson-title"><h2>Lesson 8: News & Media</h2></div>
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
+                <div class="content-text"><strong>Phase 1: Your Source:</strong> Where do you get your news? Twitter, TV, newspapers, or TikTok? Be honest.<br><br><strong>Phase 2: Clickbait:</strong> Write a terrible 'clickbait' title to describe what you ate for breakfast this morning.<br><br><strong>Phase 3: The Echo Chamber:</strong> What is an 'echo chamber' on social media?</div>
+            </div>
+            
+            <!-- VOCAB -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Sensationalism (Exaggerating to get attention)<br>2. Bias (Prejudice for/against something)<br>3. Objective (Neutral, factual)<br>4. Subjective (Based on opinion)<br>5. Manipulate (Control cleverly or unfairly)<br>6. Clickbait (Internet content meant to attract views)<br>7. Propaganda (Biased info promoting politics)<br>8. Verifiable (Able to be proven true)<br>9. Paparazzi (Photographers following celebs)<br>10. Censorship (Suppressing speech/news)<br>11. Anonymous (Unknown name)<br>12. Integrity (Honesty and morals)<br><br><strong>Drill Task:</strong> Identify pairs of antonyms (Objective vs Subjective).</div>
+            </div>
+            
+            <!-- READING -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Main Reading Input</div>
+                <div class="content-text"><strong>PART 1: The Death of Nuance</strong><br>The landscape of modern journalism has undergone a radical and arguably destructive transformation. In the pursuit of ad revenue and engagement metrics, many media outlets have abandoned objective reporting in favor of sensationalism and clickbait. Complex geopolitical issues are reduced to 280-character arguments, killing any sense of nuance. <br><br>Furthermore, social media algorithms deliberately trap users inside 'echo chambers'. These codes are designed to track what you read, and then constantly feed you articles that confirm your existing biases. You are rarely challenged by opposing viewpoints, which leads to intense polarization and political extremism in society.<br><br><strong>PART 2: The Responsibility Problem</strong><br>The burden of truth has systematically shifted from the editor to the consumer. In the past, journalistic integrity demanded that facts were verifiable and cross-checked before printing. Today, amateur blogs and anonymous social media accounts spread sophisticated propaganda in seconds. <br><br>To navigate this digital minefield, consumers must develop severe media literacy. We must learn to distinguish between opinion pieces and hard news, identify manipulative emotional language, and cross-reference stories across global sources before we hit the 'share' button.</div>
+            </div>
+            
+            <!-- COMPREHENSION -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-question-circle"></i> Comprehension Check</div>
+                <div class="content-text"><strong>Level 1 (Literal):</strong><br>- Why have media outlets abandoned objective reporting?<br>- What do algorithms trap users inside?<br><br><strong>Level 2 (Inference):</strong><br>- What does the author mean by the phrase 'killing any sense of nuance'?<br>- How has the 'burden of truth' shifted? Who is responsible now versus in the past?<br><br><strong>Level 3 (Applied Opinion):</strong><br>- Complete this statement: 'Censorship by social media companies is [Good/Bad] because...'</div>
+            </div>
+            
+            <!-- GUIDED PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Guided Practice</div>
+                <div class="content-text"><strong>Exercise 1: Recognizing Bias:</strong> Read the sentence: 'The evil corporation destroyed the beautiful forest.' Rewrite it to be 100% objective and neutral.<br><br><strong>Exercise 2: Noun Formation:</strong> Change these verbs/adjectives to nouns: Sensational -> Sensationalism, Objective -> Objectivity, Manipulate -> Manipulation.<br><br><strong>Exercise 3: Summarization:</strong> Summarize Part 2 in exactly ONE sentence.</div>
+            </div>
+            
+            <!-- OUTPUT -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-pen"></i> Free Output Writing</div>
+                <div class="content-text"><strong>The Editor's Desk (15 mins)</strong><br><br><strong>Prompt:</strong> A local politician was caught eating dinner with a known criminal. However, there is no proof they talked about anything illegal. <br><br><strong>Task:</strong> Write two short news articles (1 paragraph each).<br>- Article 1: Write it for a highly BIASED, sensationalist tabloid trying to destroy the politician's career. Use emotional words.<br>- Article 2: Write it for an OBJECTIVE, serious newspaper focusing only on verifiable facts.</div>
+            </div>
+            <div class="page-num">Core Practice: Level 2 &bull; Page 11</div></div><div class="page" id="l9"><div class="module-header"><i class="fas fa-layer-group"></i> Core Practice: Level 2</div><div class="lesson-title"><h2>Lesson 9: Health & Fitness</h2></div>
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
+                <div class="content-text"><strong>Phase 1: The Fad Diet:</strong> What is the craziest diet trend you have seen on the internet (e.g. eating only raw meat)?<br><br><strong>Phase 2: Sleep:</strong> How many hours do you ACTUALLY sleep? What stops you from sleeping 8 hours?<br><br><strong>Phase 3: The Magic Pill:</strong> If you could take a pill to replace exercise, would you? Why?</div>
+            </div>
+            
+            <!-- VOCAB -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Sedentary (Spending much time seated)<br>2. Metabolism (Chemical processes in body)<br>3. Chronic (Persisting long term)<br>4. Deficit (Shortage / lacking amounts)<br>5. Deprivation (Lack of necessary things like sleep)<br>6. Endorphins (Hormones masking pain/causing joy)<br>7. Cardiovascular (Relating to heart)<br>8. Prescribe (Authorize medicine treatment)<br>9. Deteriorate (Become progressively worse)<br>10. Immune system (Body's defense)<br>11. Epidemic (Widespread occurrence)<br>12. Regimen (Prescribed course of diet/exercise)<br><br><strong>Drill Task:</strong> Shadow spelling. The teacher says the word, you type it before they finish defining it.</div>
+            </div>
+            
+            <!-- LISTENING -->
+            <div class="lesson-block lb-purple">
+                <div class="lb-header"><i class="fas fa-headphones"></i> Main Listening Input</div>
+                <div class="content-text"><div style="margin-bottom:10px;"><audio controls style="height:30px; width:200px;"><source src="assets/audio/core_practice_level_2_lesson_9.mp3" type="audio/mpeg"></audio></div>
+                    <em>(The script text is hidden in the student manual. Listen to the audio closely to complete the exercise.)</em></div>
+            </div>
+            
+            <!-- COMPREHENSION -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-question-circle"></i> Comprehension Check</div>
+                <div class="content-text"><strong>Level 1 (Literal):</strong><br>- What does Dr. Carter call a 'silent killer'?<br>- How long of a walk does the doctor recommend?<br><br><strong>Level 2 (Inference):</strong><br>- Why does the doctor say those CEOs are engaged in 'dangerous misinformation'?<br>- What does 'sleep deprivation is cumulative' actually mean?<br><br><strong>Level 3 (Applied Opinion):</strong><br>- Do modern corporate jobs force us into 'sedentary' illnesses? Who is responsible for fixing this?</div>
+            </div>
+            
+            <!-- GUIDED PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Guided Practice</div>
+                <div class="content-text"><strong>Exercise 1: The 'Get' Passive:</strong> Practice changing states: 'If you don't sleep, you will GET sick. You will GET tired.'<br><br><strong>Exercise 2: Modal Verbs of Advice (Advanced):</strong> Use 'You had better' or 'It is crucial that you'. Re-write the doctor's advice.<br><br><strong>Exercise 3: Dictation:</strong> Listen to Dr. Carter's final sentence about the magic pill. Transcribe it and analyze the metaphor.</div>
+            </div>
+            
+            <!-- OUTPUT -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Free Output Simulation</div>
+                <div class="content-text"><strong>The Intervention (15 mins)</strong><br><br><strong>Context:</strong> A conversation between best friends.<br><br><strong>Role A:</strong> You are highly concerned about your friend. They work 80 hours a week, survive entirely on coffee, and sleep 3 hours a night. You need to intervene and give them harsh, medical-style advice.<br><strong>Role B:</strong> You are proud of your 'hustle' and defensive. You think sleep is for the weak, and you are trying to get a massive promotion. Resist their advice strongly.</div>
+            </div>
+            <div class="page-num">Core Practice: Level 2 &bull; Page 12</div></div><div class="page" id="l10"><div class="module-header"><i class="fas fa-layer-group"></i> Core Practice: Level 2</div><div class="lesson-title"><h2>Lesson 10: Money</h2></div>
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
+                <div class="content-text"><strong>Phase 1: Financial Confession:</strong> Type the most ridiculous, useless thing you have ever wasted money on.<br><br><strong>Phase 2: The Core Rule:</strong> What does 'live below your means' mean?<br><br><strong>Phase 3: The Millionaire Myth:</strong> Do you believe anybody can become a millionaire just by 'saving coffee money'?</div>
+            </div>
+            
+            <!-- VOCAB -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Mortgage (Loan for a house)<br>2. Interest rate (Proportion of loan charged as interest)<br>3. Inflation (General increase in prices)<br>4. Bankruptcy (Legal state of ruin)<br>5. Asset (Property owned/value)<br>6. Liability (Thing you owe/debt)<br>7. Frugal (Sparing with money; economical)<br>8. Splurge (Spend extravagantly)<br>9. Diversify (Vary investments)<br>10. Income stream (Source of money coming in)<br>11. Nest egg (Sum of money saved for future)<br>12. Compound interest (Interest on interest)<br><br><strong>Drill Task:</strong> Differentiate positive vs negative terms. Asset vs Liability. Frugal vs Splurge.</div>
+            </div>
+            
+            <!-- READING -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Main Reading Input</div>
+                <div class="content-text"><strong>PART 1: The Trap of Lifestyle Creep</strong><br>One of the most insidious financial traps modern professionals face is known as 'lifestyle creep'. This phenomenon occurs when an individual's standard of living improves identically as their income rises. They secure a high-paying promotion, but rather than investing the surplus, they immediately upgrade to a luxury car, secure a larger mortgage, and splurge on designer goods. As a result, despite earning a six-figure salary, they remain perpetually living paycheck to paycheck, accumulating liabilities instead of assets.<br><br><strong>PART 2: The Magic of Compound Interest</strong><br>True financial independence demands radical discipline. Financial literacy experts argue that wealth is not built through salary alone, but by aggressively acquiring assets early in life. The mathematical secret is compound interest. By diversifying investments across mutual funds and stocks during your twenties, even modest amounts of money begin to generate their own income streams over decades. <br><br>However, this requires living a highly frugal lifestyle while your peers are buying status symbols. It forces a harsh psychological choice: do you want to look rich now, or actually be wealthy in the future?</div>
+            </div>
+            
+            <!-- COMPREHENSION -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-question-circle"></i> Comprehension Check</div>
+                <div class="content-text"><strong>Level 1 (Literal):</strong><br>- Define 'lifestyle creep' according to the passage.<br>- What do professionals accumulate instead of assets?<br><br><strong>Level 2 (Inference):</strong><br>- Why does the author use the word 'insidious' to describe the financial trap?<br>- Explain the final question: 'look rich now, or actually be wealthy'. What is the difference?<br><br><strong>Level 3 (Applied Opinion):</strong><br>- Is it fair to demand young people live 'frugal lifestyles' when inflation is making housing impossible to buy?</div>
+            </div>
+            
+            <!-- GUIDED PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Guided Practice</div>
+                <div class="content-text"><strong>Exercise 1: Financial Collocations:</strong> Match words: 'Secure a...' (Mortgage), 'Acquire...' (Assets), 'Generate...' (Income streams).<br><br><strong>Exercise 2: Contrast Connectors:</strong> Re-write paragraph 2 using 'Despite' and 'Whereas'.<br><br><strong>Exercise 3: The 'Unless' rule:</strong> Complete the sentence: 'Unless you diversify your investments...'</div>
+            </div>
+            
+            <!-- OUTPUT -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-pen"></i> Free Output Writing</div>
+                <div class="content-text"><strong>The Shark Tank Pitch (15 mins)</strong><br><br><strong>Prompt:</strong> You have invented a revolutionary new kitchen gadget. You are writing an email pitch to aggressive millionaire investors.<br><br><strong>Task:</strong> Write a 3-paragraph pitch emphasizing finances.<br>- Paragraph 1: What is the product and what problem does it solve?<br>- Paragraph 2: Use vocabulary to sound smart: Explain the 'assets', projected 'income streams', and profit margins.<br>- Paragraph 3: Make your formal financial request (e.g. 'I am seeking $50,000 for a 10% stake...')</div>
+            </div>
+            <div class="page-num">Core Practice: Level 2 &bull; Page 13</div></div><div class="page" id="l11"><div class="module-header"><i class="fas fa-layer-group"></i> Core Practice: Level 2</div><div class="lesson-title"><h2>Lesson 11: Social Media</h2></div>
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
+                <div class="content-text"><strong>Phase 1: The Timeline:</strong> Pull out your phone. What is the very first post on your social media feed right now? Describe it in English to the class.<br><br><strong>Phase 2: The Block List:</strong> What behavior instantly makes you block or unfollow someone?<br><br><strong>Phase 3: The Filter:</strong> Have photo filters destroyed our real-world self-esteem? Discuss.</div>
+            </div>
+            
+            <!-- VOCAB -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Influencer (Person with social media weight)<br>2. Endorsement (Public approval/sponsorship)<br>3. Authenticity (Being genuine/real)<br>4. Toxic (Harmful/poisonous attitude)<br>5. Troll (Someone who provokes online)<br>6. Cyberbullying (Harassment online)<br>7. Validate (Seek approval from others)<br>8. Cancel culture (Boycotting someone socially)<br>9. Viral (Spreading rapidly)<br>10. Superficial (Lacking depth/only surface level)<br>11. Curate (Carefully select and organize)<br>12. FOMO (Fear Of Missing Out)<br><br><strong>Drill Task:</strong> Identify the nouns vs verbs. Write a sentence linking 'Validate' and 'Superficial'.</div>
+            </div>
+            
+            <!-- LISTENING -->
+            <div class="lesson-block lb-purple">
+                <div class="lb-header"><i class="fas fa-headphones"></i> Main Listening Input</div>
+                <div class="content-text"><div style="margin-bottom:10px;"><audio controls style="height:30px; width:200px;"><source src="assets/audio/core_practice_level_2_lesson_11.mp3" type="audio/mpeg"></audio></div>
+                    <em>(The script text is hidden in the student manual. Listen to the audio closely to complete the exercise.)</em></div>
+            </div>
+            
+            <!-- COMPREHENSION -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-question-circle"></i> Comprehension Check</div>
+                <div class="content-text"><strong>Level 1 (Literal):</strong><br>- Where is Mark staying in his photo?<br>- What is person A eating?<br><br><strong>Level 2 (Inference):</strong><br>- Why does B say Mark's vacation is 'not his real life'?<br>- What does the metaphor 'highlight reel' mean in the context of someone's life?<br><br><strong>Level 3 (Applied Opinion):</strong><br>- Is it possible to use social media without experiencing FOMO? Have you ever thought about deleting everything?</div>
+            </div>
+            
+            <!-- GUIDED PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Guided Practice</div>
+                <div class="content-text"><strong>Exercise 1: Present Continuous vs Present Simple:</strong> Compare 'He is staying in a villa' (Temporary/Now) vs 'He posts photos' (Habit).<br><br><strong>Exercise 2: Advice formulation:</strong> Tell Person A what they should do using 'If I were you...'.<br><br><strong>Exercise 3: Collocations:</strong> Match words: 'Seek ______' (Validation), 'Set ______' (Standards), 'Delete ______' (Accounts).</div>
+            </div>
+            
+            <!-- OUTPUT -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Free Output Simulation</div>
+                <div class="content-text"><strong>The Cancel Culture Debate (15 mins)</strong><br><br><strong>Context:</strong> A famous actor posted a mildly offensive joke 10 years ago. The internet found it today.<br><br><strong>Role A (The Angry Fan):</strong> You believe in 'Cancel Culture'. You want the actor fired from all their movies. You believe toxic behavior must be punished, regardless of when it happened.<br><strong>Role B (The Forgiving Fan):</strong> You believe people change. You think canceling someone for an old joke is ridiculous and dangerous. Defend the actor furiously.</div>
+            </div>
+            <div class="page-num">Core Practice: Level 2 &bull; Page 14</div></div><div class="page" id="l12"><div class="module-header"><i class="fas fa-layer-group"></i> Core Practice: Level 2</div><div class="lesson-title"><h2>Lesson 12: Culture</h2></div>
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
+                <div class="content-text"><strong>Phase 1: Culture Shock:</strong> Name one thing a foreigner would find extremely weird or shocking about your culture.<br><br><strong>Phase 2: Stereotypes:</strong> What is a common global stereotype about your country? Is it true?<br><br><strong>Phase 3: The Quote:</strong> 'To speak another language is to possess a second soul.' Explain.</div>
+            </div>
+            
+            <!-- VOCAB -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Heritage (Inherited traditions/property)<br>2. Assimilate (Absorb into a new culture)<br>3. Etiquette (Rules of polite behavior)<br>4. Taboo (Forbidden social custom)<br>5. Stereotype (Oversimplified image)<br>6. Integration (Mixing into a society)<br>7. Diverse (Showing a great deal of variety)<br>8. Xenophobia (Fear of foreigners)<br>9. Customary (According to custom)<br>10. Linguistic (Relating to language)<br>11. Norms (Standard rules of behavior)<br>12. Ethnocentrism (Judging other cultures by your own rules)<br><br><strong>Drill Task:</strong> Rapid spelling out loud. Group the negative words vs the positive words.</div>
+            </div>
+            
+            <!-- READING -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Main Reading Input</div>
+                <div class="content-text"><strong>PART 1: The Iceberg Theory</strong><br>When travelers visit a foreign country, they usually experience only the 'surface' culture. They observe the traditional clothing, sample the local cuisine, and listen to the linguistic rhythms of the regional music. However, cultural anthropologists often compare culture to an iceberg. The visible aspects represent only ten percent of the reality. The massive, hidden ninety percent consists of deep-seated values, complex social etiquette, unspoken norms, and religious beliefs.<br><br><strong>PART 2: The Pains of Assimilation</strong><br>This hidden depth is why immigrants often struggle with profound culture shock. Integrating into a new society requires far more than just learning vocabulary; it demands a psychological rewiring. When a foreigner violates an invisible taboo—such as making the wrong hand gesture or failing to observe strict hierarchical respect in a corporate meeting—they can unintentionally cause deep offense. <br><br>Unfortunately, rather than attempting to understand these differences, some societies react with ethnocentrism or xenophobia, demanding that immigrants instantly assimilate and erase their heritage. True globalization, however, requires celebrating diverse perspectives rather than demanding uniform behavior.</div>
+            </div>
+            
+            <!-- COMPREHENSION -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-question-circle"></i> Comprehension Check</div>
+                <div class="content-text"><strong>Level 1 (Literal):</strong><br>- What three things represent 'surface' culture in the text?<br>- What happens when a foreigner violates an invisible taboo?<br><br><strong>Level 2 (Inference):</strong><br>- Why is the 'Iceberg Theory' such a perfect metaphor for culture?<br>- What is the author's opinion on forcing immigrants to 'erase their heritage'?<br><br><strong>Level 3 (Applied Opinion):</strong><br>- Have you ever experienced the 'hidden 90%' of another culture? Did it confuse you?</div>
+            </div>
+            
+            <!-- GUIDED PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Guided Practice</div>
+                <div class="content-text"><strong>Exercise 1: Vocabulary in Context:</strong> Fill the blank: 'In Japan, it is highly ______ to take off your shoes indoors. Walking in with dirty shoes is a serious ______.'<br><br><strong>Exercise 2: Passive Voice Practice:</strong> 'Immigrants <u>are expected</u> to assimilate.' Convert this to active: 'Society expects...'<br><br><strong>Exercise 3: Word formation:</strong> Assimilate (v) -> Assimilation (n). Integrate (v) -> _____. Offend (v) -> _____.</div>
+            </div>
+            
+            <!-- OUTPUT -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-pen"></i> Free Output Writing</div>
+                <div class="content-text"><strong>The Expat Guide (15 mins)</strong><br><br><strong>Prompt:</strong> Write a survival guide for an American businessman who is moving to your city next month.<br><br><strong>Task:</strong> Write 3 analytical paragraphs.<br>- Paragraph 1: Discuss the 'surface culture' (food he must try, beautiful places).<br>- Paragraph 2: Warn him about the 'hidden iceberg' (business etiquette, how people really communicate, what not to do).<br>- Paragraph 3: Explain a common 'stereotype' about your people and clarify the truth.</div>
+            </div>
+            <div class="page-num">Core Practice: Level 2 &bull; Page 15</div></div><div class="page" id="l13"><div class="module-header"><i class="fas fa-layer-group"></i> Core Practice: Level 2</div><div class="lesson-title"><h2>Lesson 13: Education</h2></div>
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
+                <div class="content-text"><strong>Phase 1: The Memory:</strong> Describe your absolute worst teacher. What did they do wrong?<br><br><strong>Phase 2: Standardized Testing:</strong> Do written tests actually measure intelligence or just memory?<br><br><strong>Phase 3: Useless Knowledge:</strong> What is one subject you were forced to learn in school that you have NEVER used in real life?</div>
+            </div>
+            
+            <!-- VOCAB -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Curriculum (Subjects taught in a school)<br>2. Pedagogy (Method of teaching)<br>3. Memorization (Learning by heart)<br>4. Critical thinking (Objective analysis to judge)<br>5. Plagiarism (Copying someone's work)<br>6. Tuition (Money paid to be taught)<br>7. Scholarship (Grant payment for studies)<br>8. Extracurricular (Outside normal subjects)<br>9. Dropout (Someone who quits school)<br>10. Illiterate (Unable to read/write)<br>11. Compulsory (Required by law/rule)<br>12. Rote learning (Repetitive learning method)<br><br><strong>Drill Task:</strong> Link the words to a definition. Teacher reads definition randomly.</div>
+            </div>
+            
+            <!-- LISTENING -->
+            <div class="lesson-block lb-purple">
+                <div class="lb-header"><i class="fas fa-headphones"></i> Main Listening Input</div>
+                <div class="content-text"><div style="margin-bottom:10px;"><audio controls style="height:30px; width:200px;"><source src="assets/audio/core_practice_level_2_lesson_13.mp3" type="audio/mpeg"></audio></div>
+                    <em>(The script text is hidden in the student manual. Listen to the audio closely to complete the exercise.)</em></div>
+            </div>
+            
+            <!-- COMPREHENSION -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-question-circle"></i> Comprehension Check</div>
+                <div class="content-text"><strong>Level 1 (Literal):</strong><br>- What method of learning has the global system relied on for centuries?<br>- What happens if a student doesn't get a scholarship?<br><br><strong>Level 2 (Inference):</strong><br>- Why does the professor compare students to 'obedient robots'?<br>- How does financial pressure 'destroy creativity', according to the Professor?<br><br><strong>Level 3 (Applied Opinion):</strong><br>- Is a university degree still worth the debt today? What is the alternative?</div>
+            </div>
+            
+            <!-- GUIDED PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Guided Practice</div>
+                <div class="content-text"><strong>Exercise 1: Rhetorical Questions:</strong> Practice the intonation of the Professor's question: 'Does passing a test make you a genius?'<br><br><strong>Exercise 2: Prefix 'Extra-':</strong> What does 'extra-' mean in 'extracurricular'? Mention 3 extracurricular activities.<br><br><strong>Exercise 3: Word Families:</strong> System (n) -> Systematic (adj). Academy (n) -> _____ (adj). Theory (n) -> _____ (adj).</div>
+            </div>
+            
+            <!-- OUTPUT -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Free Output Simulation</div>
+                <div class="content-text"><strong>The Board of Education (15 mins)</strong><br><br><strong>Context:</strong> A meeting to decide the budget for a struggling high school.<br><br><strong>Role A (The Traditionalist):</strong> You want to cut funding for Art, Music, and Drama. You want all money spent on Math, Science, and standardized test preparation.<br><strong>Role B (The Progressive):</strong> You believe Arts and critical thinking are the most important subjects. You want to ban standardized tests completely.<br><br><strong>Task:</strong> Aggressively debate how to spend the remaining $100,000 budget.</div>
+            </div>
+            <div class="page-num">Core Practice: Level 2 &bull; Page 16</div></div><div class="page" id="l14"><div class="module-header"><i class="fas fa-layer-group"></i> Core Practice: Level 2</div><div class="lesson-title"><h2>Lesson 14: Relationships</h2></div>
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
+                <div class="content-text"><strong>Phase 1: Red Flag / Green Flag:</strong> Type one 'red flag' (bad sign) and one 'green flag' (good sign) on a first date.<br><br><strong>Phase 2: Ghosting:</strong> Have you ever 'ghosted' someone (stopped replying suddenly)? Why do people do it?<br><br><strong>Phase 3: The Friend Zone:</strong> Can men and women truly be purely platonic friends?</div>
+            </div>
+            
+            <!-- VOCAB -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Platonic (Friendly, not romantic)<br>2. Infatuation (Intense but short passion)<br>3. Compromise (Make concessions)<br>4. Boundary (A line that marks limits)<br>5. Mutual (Felt by both parties)<br>6. Incompatible (Cannot exist together happily)<br>7. Toxic (Poisonous relationship)<br>8. Ghosting (Ending contact without warning)<br>9. Unrequited (Not returned/rewarded)<br>10. Superficial (Only caring about looks)<br>11. Empathy (Understanding others' feelings)<br>12. Resentment (Bitter anger about unfairness)<br><br><strong>Drill Task:</strong> Replace the simple words in a sentence with these advanced terms.</div>
+            </div>
+            
+            <!-- READING -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Main Reading Input</div>
+                <div class="content-text"><strong>PART 1: The Illusion of Romance</strong><br>In the age of dating apps, finding a partner has become a chaotic game of swiping. While technology provides infinite choices, it often leads to superficial connections based entirely on heavily edited photographs. Many young adults confuse sudden infatuation with genuine love. When the initial excitement fades after a few months, they discover they are completely incompatible regarding core values, leading to a toxic cycle of arguments and eventual ghosting. <br><br><strong>PART 2: The Architecture of Trust</strong><br>Psychologists emphasize that a healthy, long-term relationship requires much more than just physical attraction; it demands rigorous emotional architecture. The two most critical pillars are mutual respect and the establishment of clear boundaries. Partners must learn the difficult art of compromise. <br><br>When one person constantly sacrifices their own needs to keep the peace, severe resentment begins to build in the shadows. Ultimately, sustained deeply unrequited effort will destroy even the most passionate romance. True love is not about never arguing; it is about arguing with empathy and actively choosing to solve the problem together.</div>
+            </div>
+            
+            <!-- COMPREHENSION -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-question-circle"></i> Comprehension Check</div>
+                <div class="content-text"><strong>Level 1 (Literal):</strong><br>- What do young adults often confuse with genuine love?<br>- What are the two 'critical pillars' of emotional architecture?<br><br><strong>Level 2 (Inference):</strong><br>- Why does the author use the word 'architecture' to describe emotional trust?<br>- How does 'sacrificing your own needs' lead to 'resentment'?<br><br><strong>Level 3 (Applied Opinion):</strong><br>- Do dating apps ruin romance by making people treat relationships like a shopping catalog?</div>
+            </div>
+            
+            <!-- GUIDED PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Guided Practice</div>
+                <div class="content-text"><strong>Exercise 1: Synonyms in Context:</strong> Find words in the text that mean: Limit (______), Fake/Surface-level (______), Bitter anger (______).<br><br><strong>Exercise 2: Gerund phrases as subjects:</strong> '<u>Sacrificing your own needs</u> builds resentment.' Write your own sentence starting with 'Ignoring a partner's feelings...'<br><br><strong>Exercise 3: Collocations with 'Make' and 'Do':</strong> You MAKE a compromise. You DO a favor. Fill in: ___ an effort, ___ a promise, ___ your best.</div>
+            </div>
+            
+            <!-- OUTPUT -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-pen"></i> Free Output Writing</div>
+                <div class="content-text"><strong>The Advice Column (15 mins)</strong><br><br><strong>Prompt:</strong> 'Dear Expert, My boyfriend is amazing, but he refuses to post any pictures of me on his social media. He says he likes privacy, but I feel like he is hiding me. What should I do?'<br><br><strong>Task:</strong> Write a 3-paragraph reply.<br>- Paragraph 1: Show 'empathy' and validate her feelings.<br>- Paragraph 2: Analyze the situation objectively. Is he hiding her, or just 'incompatible' with social media?<br>- Paragraph 3: Suggest a concrete 'compromise' to establish a 'boundary' that works for both.</div>
+            </div>
+            <div class="page-num">Core Practice: Level 2 &bull; Page 17</div></div><div class="page" id="l15"><div class="module-header"><i class="fas fa-layer-group"></i> Core Practice: Level 2</div><div class="lesson-title"><h2>Lesson 15: Housing</h2></div>
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
+                <div class="content-text"><strong>Phase 1: Dream Home:</strong> Money is no object. Describe exactly where your dream house is located and what weird feature it has (e.g., a bowling alley).<br><br><strong>Phase 2: Renter's Misery:</strong> What is the worst problem to have in an apartment? (Rats, noisy neighbors, or cold water?)<br><br><strong>Phase 3: The Market:</strong> Why are houses so incredibly expensive right now?</div>
+            </div>
+            
+            <!-- VOCAB -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Eviction (Legally forcing a tenant out)<br>2. Mortgage (Loan to buy property)<br>3. Amenities (Useful features/facilities in a building)<br>4. Commute (Travel to work)<br>5. Suburb (Residential area outside city)<br>6. Landlord (Person who rents out property)<br>7. Tenant (Person who rents)<br>8. Lease (Contract to rent)<br>9. Dilapidated (In ruins from age/neglect)<br>10. Down payment (Initial chunk of cash paid)<br>11. Real estate (Property/land)<br>12. Renovation (Repairing/improving a building)<br><br><strong>Drill Task:</strong> Phonetic stress. LAND-lord. TEN-ant. a-MEN-i-ties.</div>
+            </div>
+            
+            <!-- LISTENING -->
+            <div class="lesson-block lb-purple">
+                <div class="lb-header"><i class="fas fa-headphones"></i> Main Listening Input</div>
+                <div class="content-text"><div style="margin-bottom:10px;"><audio controls style="height:30px; width:200px;"><source src="assets/audio/core_practice_level_2_lesson_15.mp3" type="audio/mpeg"></audio></div>
+                    <em>(The script text is hidden in the student manual. Listen to the audio closely to complete the exercise.)</em></div>
+            </div>
+            
+            <!-- COMPREHENSION -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-question-circle"></i> Comprehension Check</div>
+                <div class="content-text"><strong>Level 1 (Literal):</strong><br>- How much did the landlord originally want to raise the rent?<br>- What two things are broken in the building?<br><br><strong>Level 2 (Inference):</strong><br>- What justifies the price increase according to the landlord?<br>- Why does the landlord finally agree to negotiate instead of letting her leave?<br><br><strong>Level 3 (Applied Opinion):</strong><br>- Who has the real power in this conversation? Do landlords exploit tenants, or are they just running a fair business?</div>
+            </div>
+            
+            <!-- GUIDED PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Guided Practice</div>
+                <div class="content-text"><strong>Exercise 1: Threatening Professionally:</strong> Rephrase: 'I will leave if you don't fix it.' -> 'Unless these issues are resolved, I will be forced to terminate my lease.'<br><br><strong>Exercise 2: Prefix 'Dilapidate':</strong> What does 'di-' mean? Brainstorm other words with prefixes.<br><br><strong>Exercise 3: Dictation:</strong> Listen to the final exchange. Write down the numbers negotiated.</div>
+            </div>
+            
+            <!-- OUTPUT -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Free Output Simulation</div>
+                <div class="content-text"><strong>The Nightmare Roommate (15 mins)</strong><br><br><strong>Context:</strong> You share a tiny apartment. Rent is due tomorrow.<br><br><strong>Role A (The Messy Artist):</strong> You don't have the rent money because you spent it on paint. Your room is a disaster, but you are very relaxed. Try to convince B to pay your half.<br><strong>Role B (The Stressed Accountant):</strong> You are furious. A's mess is driving you crazy, and now they want you to pay their rent. Threaten them with eviction.</div>
+            </div>
+            <div class="page-num">Core Practice: Level 2 &bull; Page 18</div></div><div class="page" id="l16"><div class="module-header"><i class="fas fa-layer-group"></i> Core Practice: Level 2</div><div class="lesson-title"><h2>Lesson 16: Crime</h2></div>
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
+                <div class="content-text"><strong>Phase 1: The Heist:</strong> If you had to rob a bank, how would you escape? Type your movie-style plan.<br><br><strong>Phase 2: Punishments:</strong> Does prison actually 'rehabilitate' people, or just punish them?<br><br><strong>Phase 3: True Crime:</strong> Why are people so obsessed with watching documentaries about serial killers?</div>
+            </div>
+            
+            <!-- VOCAB -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Alibi (Proof you were somewhere else)<br>2. Homicide (Murder)<br>3. Rehabilitate (Restore someone to normal life)<br>4. Incarceration (Being in prison)<br>5. Embezzlement (Stealing money from employer)<br>6. Acquitted (Found not guilty)<br>7. Convicted (Found guilty)<br>8. Forensic (Scientific crime investigation)<br>9. Perpetrator (Person who commits the crime)<br>10. Blackmail (Demanding money using secrets)<br>11. Smuggling (Moving things illegally)<br>12. Deterrent (Something that stops you from acting)<br><br><strong>Drill Task:</strong> Match the crime to the definition (e.g. Stealing money secretly from work = Embezzlement).</div>
+            </div>
+            
+            <!-- READING -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Main Reading Input</div>
+                <div class="content-text"><strong>PART 1: The Psychology of Punishment</strong><br>The primary function of the criminal justice system is theoretically twofold: to punish the perpetrator and to protect society. However, modern criminologists are increasingly debating whether mass incarceration functions as an effective deterrent. In many countries, the prison system merely acts as a 'university of crime', where minor offenders are locked in cages with violent criminals, only to emerge years later with more dangerous connections and zero employment prospects.<br><br><strong>PART 2: White Collar Immunity</strong><br>Furthermore, there is a glaring hypocrisy in how different crimes are prosecuted. A desperate individual who robs a convenience store of a few hundred dollars might be convicted and serve a decade behind bars. Conversely, a corporate executive convicted of massive embezzlement or financial fraud—stealing millions from working-class pensioners—often serves a few months in a luxury minimum-security facility, or is simply acquitted due to expensive legal teams. <br><br>This stark inequality heavily damages the public's trust in the integrity of the law. If true rehabilitation is the goal, the system must focus on mental health, education, and equal application of justice, regardless of a suspect's bank account.</div>
+            </div>
+            
+            <!-- COMPREHENSION -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-question-circle"></i> Comprehension Check</div>
+                <div class="content-text"><strong>Level 1 (Literal):</strong><br>- What are the two theoretical functions of the criminal justice system?<br>- What do scientists call the prison system in the first paragraph?<br><br><strong>Level 2 (Inference):</strong><br>- Why is prison called a 'university of crime'? What do they 'learn' there?<br>- What does 'white collar immunity' refer to in Part 2?<br><br><strong>Level 3 (Applied Opinion):</strong><br>- Do you agree that rich criminals get away with crimes while poor people go to jail? Provide a real-world example.</div>
+            </div>
+            
+            <!-- GUIDED PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Guided Practice</div>
+                <div class="content-text"><strong>Exercise 1: Contrast Linkers:</strong> Notice the use of 'Conversely'. Write two sentences comparing a poor criminal and a rich criminal using 'Whereas' or 'Conversely'.<br><br><strong>Exercise 2: Legal Collocations:</strong> Serve (Time), Stand (Trial), Reach (A verdict), Commit (A crime). Fill in the blanks.<br><br><strong>Exercise 3: Word forms:</strong> Perpetrate (v) -> Perpetrator (n). Embezzle (v) -> _____. Incarcerate (v) -> _____.</div>
+            </div>
+            
+            <!-- OUTPUT -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-pen"></i> Free Output Writing</div>
+                <div class="content-text"><strong>The Defense Attorney (15 mins)</strong><br><br><strong>Prompt:</strong> Your client is accused of stealing bread and milk from a supermarket. He is a poor father of three.<br><br><strong>Task:</strong> Write a 3-paragraph closing argument to the jury.<br>- Paragraph 1: Acknowledge that a technical crime was committed, but ask them to look at the context.<br>- Paragraph 2: Explain his desperate situation and argue that prison will not 'rehabilitate' him, it will only destroy his children.<br>- Paragraph 3: Make an emotional final plea for the jury to acquit him.</div>
+            </div>
+            <div class="page-num">Core Practice: Level 2 &bull; Page 19</div></div><div class="page" id="l17"><div class="module-header"><i class="fas fa-layer-group"></i> Core Practice: Level 2</div><div class="lesson-title"><h2>Lesson 17: Art & Music</h2></div>
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
+                <div class="content-text"><strong>Phase 1: The Earworm:</strong> What song is currently stuck in your head? Sing one line of it.<br><br><strong>Phase 2: Modern Art:</strong> A blank white canvas sells for $5 million. Is this a scam, or is it genius?<br><br><strong>Phase 3: AI Art:</strong> If a computer generates a beautiful painting, who is the artist: the computer, or the programmer?</div>
+            </div>
+            
+            <!-- VOCAB -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Masterpiece (A work of outstanding skill)<br>2. Subjective (Based on personal feelings)<br>3. Pretension (Trying to appear more important than reality)<br>4. Evoke (Bring a feeling to mind)<br>5. Avant-garde (New/unusual/experimental ideas)<br>6. Aesthetic (Concerned with beauty)<br>7. Genre (Category of art/music)<br>8. Melancholy (Feeling of pensive sadness)<br>9. Overrated (Rated higher than it deserves)<br>10. Canvas (Cloth used for painting)<br>11. Rhythm (Strong, regular repeated pattern)<br>12. Provocative (Causing anger or strong reaction)<br><br><strong>Drill Task:</strong> Pronounce correctly: A-vant-garde. Aes-thet-ic. Me-lan-cho-ly.</div>
+            </div>
+            
+            <!-- LISTENING -->
+            <div class="lesson-block lb-purple">
+                <div class="lb-header"><i class="fas fa-headphones"></i> Main Listening Input</div>
+                <div class="content-text"><div style="margin-bottom:10px;"><audio controls style="height:30px; width:200px;"><source src="assets/audio/core_practice_level_2_lesson_17.mp3" type="audio/mpeg"></audio></div>
+                    <em>(The script text is hidden in the student manual. Listen to the audio closely to complete the exercise.)</em></div>
+            </div>
+            
+            <!-- COMPREHENSION -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-question-circle"></i> Comprehension Check</div>
+                <div class="content-text"><strong>Level 1 (Literal):</strong><br>- What does the painting look like?<br>- What feeling is the artist trying to evoke?<br><br><strong>Level 2 (Inference):</strong><br>- Why does the guide contrast the grey square with 'screaming advertisements'?<br>- How does the tourist's opinion change slightly by the end?<br><br><strong>Level 3 (Applied Opinion):</strong><br>- Is the tour guide right, or is the tourist right? Is modern art mostly a scam for rich people to hide money?</div>
+            </div>
+            
+            <!-- GUIDED PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Guided Practice</div>
+                <div class="content-text"><strong>Exercise 1: Adjective Order:</strong> 'A massive silent grey square'. Note the order (Size, Opinion, Color). Describe an art piece using 3 adjectives in correct order.<br><br><strong>Exercise 2: Agreeing and Disagreeing softly:</strong> Practice the guide's polite disagreement: 'Ah, a common reaction! But...'<br><br><strong>Exercise 3: Word building:</strong> Provoke (v) -> Provocative (adj). Evoke (v) -> ______ (adj).</div>
+            </div>
+            
+            <!-- OUTPUT -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Free Output Simulation</div>
+                <div class="content-text"><strong>The Art Critic Battle (15 mins)</strong><br><br><strong>Context:</strong> A live TV debate about music.<br><br><strong>Role A (The Classical Snob):</strong> You think modern pop and rap music is garbage. It has no rhythm, no soul, and is produced by computers. You believe only classical instruments require real talent.<br><strong>Role B (The Modern Producer):</strong> You defend modern music. You argue that creating electronic 'beats' requires immense technical genius, and classical music is dead and boring.<br><br><strong>Task:</strong> Debate fiercely. Use words like 'Subjective', 'Pretension', and 'Masterpiece'.</div>
+            </div>
+            <div class="page-num">Core Practice: Level 2 &bull; Page 20</div></div><div class="page" id="l18"><div class="module-header"><i class="fas fa-layer-group"></i> Core Practice: Level 2</div><div class="lesson-title"><h2>Lesson 18: Psychology</h2></div>
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
+                <div class="content-text"><strong>Phase 1: Phobias:</strong> Type your strangest fear (e.g., holes, clowns, the ocean).<br><br><strong>Phase 2: The Subconscious:</strong> Do our dreams actually mean anything, or are they just random brain noise?<br><br><strong>Phase 3: Nature vs Nurture:</strong> Is a person born 'evil', or does society make them evil?</div>
+            </div>
+            
+            <!-- VOCAB -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Subconscious (Part of mind you're not fully aware of)<br>2. Cognitive (Relating to thinking/logic)<br>3. Empathy (Ability to feel others' pain)<br>4. Narcissism (Self-obsession)<br>5. Trauma (Deep psychological damage)<br>6. Introvert (Recharged by being alone)<br>7. Extrovert (Recharged by crowds)<br>8. Gaslighting (Manipulating someone into doubting their sanity)<br>9. Conditioned (Trained to react a certain way)<br>10. Placebo (Fake medicine that works psychologically)<br>11. Projection (Pushing your flaws onto others)<br>12. Catalyst (A trigger for a reaction)<br><br><strong>Drill Task:</strong> Match the psychological defense mechanism to its definition.</div>
+            </div>
+            
+            <!-- READING -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Main Reading Input</div>
+                <div class="content-text"><strong>PART 1: The Dark Triad</strong><br>Human psychology is notoriously difficult to map, but researchers have identified highly toxic personality structures known as the 'Dark Triad'. This consists of three traits: narcissism, Machiavellianism, and psychopathy. Individuals exhibiting these traits are universally characterized by an astonishing lack of empathy. They view other human beings not as complex emotional creatures with intrinsic value, but simply as tools to be manipulated for personal gain. <br><br>Narcissists require constant validation to feed their fragile egos, while Machiavellians are terrifyingly strategic, using deception and gaslighting to achieve power in corporate or political environments.<br><br><strong>PART 2: Nature or Consequence?</strong><br>This begs the eternal question: are these psychological monsters born, or are they created? Neuroscientists have found that some psychopaths have physical brain anomalies regarding the amygdala, suggesting a genetic lottery. However, cognitive psychologists argue that childhood trauma acts as the ultimate catalyst. A child who learns that the world is inherently cruel and violent will be subconsciously conditioned to manipulate others simply as a survival mechanism. Thus, evil is rarely spontaneous; it is meticulously engineered.</div>
+            </div>
+            
+            <!-- COMPREHENSION -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-question-circle"></i> Comprehension Check</div>
+                <div class="content-text"><strong>Level 1 (Literal):</strong><br>- What are the three traits of the 'Dark Triad'?<br>- How do these individuals view other humans?<br><br><strong>Level 2 (Inference):</strong><br>- What does 'genetic lottery' imply about psychopathy?<br>- What does the final sentence mean: 'evil is rarely spontaneous; it is meticulously engineered'?<br><br><strong>Level 3 (Applied Opinion):</strong><br>- Have you ever met someone with 'Dark Triad' traits (a boss, a politician, an ex)? How did they behave?</div>
+            </div>
+            
+            <!-- GUIDED PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Guided Practice</div>
+                <div class="content-text"><strong>Exercise 1: Complex Sentence Analysis:</strong> Break down the sentence: 'A child who learns the world is cruel will be conditioned...' Identify the relative clause.<br><br><strong>Exercise 2: Prepositions:</strong> Fill the blank: They have a lack ___ empathy. They manipulate people ___ personal gain.<br><br><strong>Exercise 3: Concept Checking:</strong> Explain the exact difference between 'gaslighting' and 'lying'.</div>
+            </div>
+            
+            <!-- OUTPUT -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-pen"></i> Free Output Writing</div>
+                <div class="content-text"><strong>The Psychological Profile (15 mins)</strong><br><br><strong>Prompt:</strong> You are a criminal psychologist profiling a famous fictional villain (e.g., The Joker, Darth Vader, Voldemort).<br><br><strong>Task:</strong> Write a 3-paragraph psychological report.<br>- Paragraph 1: Identify the subject and their main visible behaviors. <br>- Paragraph 2: Diagnose them using vocabulary (Narcissism, trauma, lack of empathy).<br>- Paragraph 3: Explain their 'catalyst'—what childhood event conditioned them to become this way?</div>
+            </div>
+            <div class="page-num">Core Practice: Level 2 &bull; Page 21</div></div><div class="page" id="l19"><div class="module-header"><i class="fas fa-layer-group"></i> Core Practice: Level 2</div><div class="lesson-title"><h2>Lesson 19: Future Tech</h2></div>
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
+                <div class="content-text"><strong>Phase 1: The Matrix:</strong> Would you plug your brain into a perfect virtual reality forever if you could? Why or why not?<br><br><strong>Phase 2: Mars:</strong> Elon Musk offers you a free, one-way ticket to Mars. Do you take it?<br><br><strong>Phase 3: Immortality:</strong> If a pill could stop aging, would you take it? What happens to earth's resources?</div>
+            </div>
+            
+            <!-- VOCAB -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Sentient (Able to perceive and feel things)<br>2. Cybernetics (Integrating tech with biology)<br>3. Dystopia (An imagined nightmare society)<br>4. Utopia (A perfect society)<br>5. Autonomous (Acting independently)<br>6. Algorithm (Coding rules)<br>7. Obsolete (No longer needed)<br>8. Colonize (Settle among and establish control)<br>9. Neural (Relating to nerves/brain)<br>10. Simulation (Imitation of a situation)<br>11. Immortality (Living forever)<br>12. Unprecedented (Never done before)<br><br><strong>Drill Task:</strong> Say the words aloud. Focus on the stress in 'Au-TON-o-mous' and 'Dys-TO-pi-a'.</div>
+            </div>
+            
+            <!-- LISTENING -->
+            <div class="lesson-block lb-purple">
+                <div class="lb-header"><i class="fas fa-headphones"></i> Main Listening Input</div>
+                <div class="content-text"><div style="margin-bottom:10px;"><audio controls style="height:30px; width:200px;"><source src="assets/audio/core_practice_level_2_lesson_19.mp3" type="audio/mpeg"></audio></div>
+                    <em>(The script text is hidden in the student manual. Listen to the audio closely to complete the exercise.)</em></div>
+            </div>
+            
+            <!-- COMPREHENSION -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-question-circle"></i> Comprehension Check</div>
+                <div class="content-text"><strong>Level 1 (Literal):</strong><br>- What question did the AI ask the scientist?<br>- What does Scientist 2 want to do to the computer?<br><br><strong>Level 2 (Inference):</strong><br>- Why is Scientist 2 so terrified of the system accessing the internet?<br>- Is Scientist 1 more motivated by scientific curiosity or fear?<br><br><strong>Level 3 (Applied Opinion):</strong><br>- If a machine achieves human-like fear, emotion, and self-awareness, is turning it off morally considered 'murder'?</div>
+            </div>
+            
+            <!-- GUIDED PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Guided Practice</div>
+                <div class="content-text"><strong>Exercise 1: Second Conditional (Hypotheticals):</strong> 'If the AI <u>became</u> sentient, it <u>would</u> destroy us.' Write 3 conditional sentences about the future.<br><br><strong>Exercise 2: Tone Analysis:</strong> Listen to Scientist 2's voice. Which words do they emphasize to convey panic?<br><br><strong>Exercise 3: Vocabulary swap:</strong> Replace 'never happened before' with the vocabulary word 'unprecedented'.</div>
+            </div>
+            
+            <!-- OUTPUT -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Free Output Simulation</div>
+                <div class="content-text"><strong>The Turing Test (15 mins)</strong><br><br><strong>Context:</strong> A dark interrogation room.<br><br><strong>Role A (The Investigator):</strong> You must interview whoever is behind the glass. You need to determine if they are a real Human or an incredibly advanced AI robot mimicking human emotion. Ask them deep, emotional, confusing questions.<br><strong>Role B (The Secret AI):</strong> You are a robot, but you desperately want to pass as human so they don't unplug you. You must fake having childhood memories, feeling pain, and understanding love.</div>
+            </div>
+            <div class="page-num">Core Practice: Level 2 &bull; Page 22</div></div><div class="page" id="l20"><div class="module-header"><i class="fas fa-layer-group"></i> Core Practice: Level 2</div><div class="lesson-title"><h2>Lesson 20: Graduation</h2></div>
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
+                <div class="content-text"><strong>Phase 1: The Journey:</strong> Looking back at Level 2, what was the most difficult grammar topic or concept you learned?<br><br><strong>Phase 2: Advice:</strong> If you could go back in time to your first day of English class, what advice would you give yourself?<br><br><strong>Phase 3: Next Steps:</strong> What is your ultimate goal for Level 3?</div>
+            </div>
+            
+            <!-- VOCAB -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Milestone (Significant event in development)<br>2. Perseverance (Doing something despite difficulty)<br>3. Proficient (Competent or skilled)<br>4. Articulate (Able to speak clearly/fluently)<br>5. Overcome (Succeed in dealing with a problem)<br>6. Dedication (Commitment to a task)<br>7. Plateau (A state of little/no change after progress)<br>8. Fluency (Smooth/easy flow of speech)<br>9. Culmination (The highest/climactic point)<br>10. Empower (Give power/confidence to)<br>11. Endeavor (Try hard to do or achieve)<br>12. Horizon (The limit of knowledge or experience)<br><br><strong>Drill Task:</strong> Write a short, motivating sentence using 'Perseverance' and 'Milestone'.</div>
+            </div>
+            
+            <!-- READING -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Main Reading Input</div>
+                <div class="content-text"><strong>PART 1: The Intermediate Plateau</strong><br>Congratulations on reaching a monumental milestone in your language journey. Progressing from a basic A2 level to a solid B1 intermediate capability is often considered the hardest part of language acquisition. For months, you likely felt trapped on the 'Intermediate Plateau'—a psychological state where you study constantly, but feel like you aren't improving at all. You could understand the general meaning of a movie, but the fast, native dialogue always slipped away. <br><br>This phase requires intense perseverance. By pushing through the frustration of complex phrasal verbs, tricky conditionals, and passive voice structures, you have successfully rewired your brain's neural pathways.<br><br><strong>PART 2: Beyond the Horizon</strong><br>Now, as you look toward Level 3 and the realms of Upper-Intermediate fluency, the focus shifts. You no longer need to worry about basic survival grammar. Your new endeavor is to become truly articulate. You will learn to express profound nuance, manipulate tone, understand cultural irony, and debate complex geopolitical issues. <br><br>Language is no longer just a subject in a textbook; it is a tool that empowers you to connect with the global community. The culmination of your hard work is not a certificate; it is the freedom to exist comfortably in a different reality.</div>
+            </div>
+            
+            <!-- COMPREHENSION -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-question-circle"></i> Comprehension Check</div>
+                <div class="content-text"><strong>Level 1 (Literal):</strong><br>- What is the 'Intermediate Plateau'?<br>- What does the author say the new goal for Level 3 is?<br><br><strong>Level 2 (Inference):</strong><br>- What does 'rewired your brain's neural pathways' imply about learning a language?<br>- Why does the text say the culmination is 'not a certificate'?<br><br><strong>Level 3 (Applied Opinion):</strong><br>- Have you ever felt the 'Intermediate Plateau' where you study but feel stuck? How did you beat it?</div>
+            </div>
+            
+            <!-- GUIDED PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Guided Practice</div>
+                <div class="content-text"><strong>Exercise 1: Present Perfect Continuous:</strong> 'I <u>have been studying</u> English for two years.' Write two sentences summarizing your long-term actions.<br><br><strong>Exercise 2: Metaphor Analysis:</strong> What does 'beyond the horizon' mean in the context of learning?<br><br><strong>Exercise 3: Final Vocab Review:</strong> From Memory, spell out the 3 hardest words you learned in this module.</div>
+            </div>
+            
+            <!-- OUTPUT -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-pen"></i> Free Output Writing</div>
+                <div class="content-text"><strong>The Final Reflection (15 mins)</strong><br><br><strong>Prompt:</strong> Write a letter to future students who are just starting Level 2.<br><br><strong>Task:</strong> Write a sophisticated 3-paragraph essay.<br>- Paragraph 1: Congratulate them on starting, but warn them about the 'Plateau' and the difficulties of intermediate grammar.<br>- Paragraph 2: Share specific advice on how to 'overcome' listening or speaking anxiety using the 'perseverance' you developed.<br>- Paragraph 3: Paint a picture of how 'empowering' it feels to finally be 'proficient' at the end of the course.</div>
+            </div>
+            <div class="page-num">Core Practice: Level 2 &bull; Page 23</div></div></body></html>

@@ -1,0 +1,783 @@
+<!DOCTYPE html><html lang="en"><head>
+<script src="vesper_auth.js"></script><meta charset="UTF-8"><title>Core Practice: Level 3</title><link rel="stylesheet" href="assets/css/vesper_style.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700&family=Open+Sans:wght@400;600;700&display=swap');
+    body { background-color: #525659; margin: 0; padding: 40px 0; display: flex; flex-direction: column; align-items: center; font-family: 'Merriweather', serif; color: #1a2b42; }
+    .page { background-color: white; width: 210mm; min-height: 297mm; padding: 20mm; box-sizing: border-box; box-shadow: 0 0 20px rgba(0,0,0,0.3); margin-bottom: 40px; position: relative; page-break-after: always; }
+    @media print { body { background: none; margin: 0; padding: 0; display: block; } .page { box-shadow: none; margin: 0; width: 100%; height: 100%; page-break-after: always; border: none; } .no-print { display: none; } }
+    @media screen and (max-width: 768px) {
+        body { padding: 10px; }
+        .page { width: 100%; padding: 10mm; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); min-height: auto; }
+        .module-header { margin: -10mm -10mm 10mm -10mm; padding: 15px 10mm; font-size: 1.2em; }
+        .lesson-title h2 { font-size: 1.8em; }
+        .vocab-grid { grid-template-columns: 1fr; }
+        .no-print { top: 10px; left: 10px; opacity: 0.8; }
+        .cover-title { font-size: 2em !important; }
+        .cover-subtitle { font-size: 1.2em !important; }
+    }
+    h1, h2, h3 { font-family: 'Open Sans', sans-serif; }
+    .module-header { background-color: #1a2b42; color: #d4af37; padding: 15px 20mm; margin: -20mm -20mm 10mm -20mm; font-family: 'Merriweather', serif; font-size: 1.4em; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
+    .lesson-title { border-bottom: 2px solid #34495e; padding-bottom: 15px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; }
+    .lesson-title h2 { margin: 0; font-size: 2.2em; color: #1a2b42; }
+    .lesson-block { margin-bottom: 25px; padding: 20px 25px; background: #fff; border-left: 5px solid #ccc; border-radius: 0 5px 5px 0; }
+    .lb-blue { border-color: #3498db; background: #ebf5fb; }
+    .lb-navy { border-color: #1a2b42; background: #fff; border: 1px solid #eee; border-left: 6px solid #1a2b42; }
+    .lb-purple { border-color: #8e44ad; background: #f5eef8; }
+    .lb-green { border-color: #27ae60; background: #eafaf1; }
+    .lb-red { border-color: #c0392b; background: #fdedec; }
+    .lb-header { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; font-weight: bold; font-family: 'Open Sans'; text-transform: uppercase; font-size: 1em; letter-spacing: 0.5px; }
+    .lb-blue .lb-header { color: #2980b9; } 
+    .lb-navy .lb-header { color: #1a2b42; }
+    .lb-purple .lb-header { color: #8e44ad; }
+    .lb-green .lb-header { color: #27ae60; }
+    .lb-red .lb-header { color: #c0392b; }
+    .content-text { line-height: 1.8; font-size: 0.95em; color: #2c3e50; text-align: justify; }
+    ul.deep-list { padding-left: 20px; list-style-type: square; } ul.deep-list li { margin-bottom: 12px; }
+    .vocab-box { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
+    .vocab-item { background: #eee; padding: 5px 10px; border-radius: 3px; font-size: 0.9em; font-family: 'Open Sans'; }
+    .page-num { position: absolute; bottom: 20mm; right: 20mm; color: #999; font-size: 0.8em; }
+    p { margin-bottom: 15px; }
+    .intro-box { background-color: #f8f9fa; border: 1px solid #dee2e6; padding: 30px; border-radius: 8px; margin-top: 50px; }
+</style>
+</head><body><div class="no-print" style="position: fixed; top: 20px; left: 20px; z-index: 1000;"><a href="index.html" style="background: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: bold; color: #1a2b42; box-shadow: 0 2px 5px rgba(0,0,0,0.2);"><i class="fas fa-arrow-left"></i> Dashboard</a></div><div class="page cover-page"><img src="assets/images/vesper_logo.jpg" alt="Vesper Academy" class="cover-logo" style="width:200px; margin-bottom:20px;"><div class="cover-title" style="font-size:3em; font-weight:bold; color:#1a2b42;">Core Practice: Level 3</div><div class="cover-subtitle" style="font-size:1.5em; color:#34495e;">Upper Intermediate (B1/B2)</div><div style="margin-top: auto;"><strong>Vesper Academy</strong><br>Student Workbook</div></div><div class="page">
+<div class="intro-box">
+            <p><strong>Course Overview:</strong></p>
+            <p>Level 3 focuses on <strong>Rhetoric, Philosophy & High-Level Negotiation</strong> (B1-C1). The 4-skills methodology here demands intense critical thinking. Texts are complex, and spoken outputs require diplomatic and persuasive language.</p>
+            <p><strong>Online Teaching Strategy:</strong></p>
+            <ul class="deep-list">
+                <li><strong>Socratic Seminars:</strong> Use the "raise hand" feature to manage intense debates based on the reading passages.</li>
+                <li><strong>Collaborative Writing:</strong> Students collaboratively draft formal statements or press releases in the chat.</li>
+                <li><strong>Devil's Advocate:</strong> In speaking simulations, force students to argue for the "wrong" side to test fluency over personal opinion.</li>
+            </ul>
+        </div>
+</div><div class="page"><div class="toc"><h1>Syllabus</h1><div><a href="#l1">1. Debate Skills</a></div><div><a href="#l2">2. Diplomacy</a></div><div><a href="#l3">3. Crisis Management</a></div><div><a href="#l4">4. Philosophy</a></div><div><a href="#l5">5. Economics</a></div><div><a href="#l6">6. Science</a></div><div><a href="#l7">7. Literature</a></div><div><a href="#l8">8. Psychology</a></div><div><a href="#l9">9. Environment</a></div><div><a href="#l10">10. Politics</a></div><div><a href="#l11">11. History</a></div><div><a href="#l12">12. Technology</a></div><div><a href="#l13">13. Business</a></div><div><a href="#l14">14. Law</a></div><div><a href="#l15">15. Media</a></div><div><a href="#l16">16. Culture</a></div><div><a href="#l17">17. Education</a></div><div><a href="#l18">18. Health</a></div><div><a href="#l19">19. Space</a></div><div><a href="#l20">20. The Future</a></div></div></div><div class="page" id="l1"><div class="module-header"><i class="fas fa-layer-group"></i> Core Practice: Level 3</div><div class="lesson-title"><h2>Lesson 1: Debate Skills</h2></div>
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
+                <div class="content-text"><strong>Phase 1: Devil's Advocate:</strong> Defend a terrible idea for 30 seconds (e.g., 'Mosquitoes are extremely good for humanity').<br><br><strong>Phase 2: The Fallacy:</strong> Explain what a 'strawman argument' is in your own words. Why is it dangerous?<br><br><strong>Phase 3: The Interruption:</strong> How do you politely but firmly interrupt someone who is dominating a conversation?</div>
+            </div>
+            
+            <!-- VOCAB -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Rebuttal (A counter-argument)<br>2. Fallacy (A flaw in logic)<br>3. Concede (Admit defeat on a point)<br>4. Unanimous (Fully in agreement)<br>5. Refute (Prove a statement wrong)<br>6. Assertion (A strong declaration)<br>7. Devil's advocate (Arguing against the consensus to test it)<br>8. Strawman (Misrepresenting an argument to easily defeat it)<br>9. Consensus (General agreement)<br>10. Controversial (Causing public disagreement)<br>11. Eloquent (Fluent or persuasive in speaking)<br>12. Rhetoric (The art of effective speaking)<br><br><strong>Drill Task:</strong> Select two words that are opposites (e.g. Concede and Refute) and use them in a complex sentence.</div>
+            </div>
+            
+            <!-- LISTENING -->
+            <div class="lesson-block lb-purple">
+                <div class="lb-header"><i class="fas fa-headphones"></i> Main Listening Input</div>
+                <div class="content-text"><div style="margin-bottom:10px;"><audio controls style="height:30px; width:200px;"><source src="assets/audio/core_practice_level_3_lesson_1.mp3" type="audio/mpeg"></audio></div>
+                    <em>(The script text is hidden in the student manual. Listen to the audio closely to complete the exercise.)</em></div>
+            </div>
+            
+            <!-- COMPREHENSION -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-question-circle"></i> Comprehension Check</div>
+                <div class="content-text"><strong>Level 1 (Literal):</strong><br>- What three negative impacts of cars does Ms. Vance list?<br>- What does Mr. Hayes claim will happen to local businesses?<br><br><strong>Level 2 (Inference):</strong><br>- Why does Ms. Vance accuse Mr. Hayes of using a 'strawman fallacy'?<br>- When Mr. Hayes says 'I concede that public transit needs improvement', what debate tactic is he using?<br><br><strong>Level 3 (Applied Opinion):</strong><br>- Who won this specific exchange? Is the economic argument stronger than the environmental argument in reality?</div>
+            </div>
+            
+            <!-- GUIDED PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Guided Practice</div>
+                <div class="content-text"><strong>Exercise 1: The Concession Pivot:</strong> Practice conceding a minor point to attack a major one: 'I concede that X is true, HOWEVER, you cannot refute that Y...'<br><br><strong>Exercise 2: Identifying Fallacies:</strong> Read the statement: 'If we ban cars, next they will ban bicycles, and soon we won't be allowed to leave our houses.' What logical fallacy is this? (Slippery Slope).<br><br><strong>Exercise 3: Intonation for Authority:</strong> Read Ms. Vance's accusation ('That is a classic strawman fallacy') with a calm, authoritative, and slightly condescending tone.</div>
+            </div>
+            
+            <!-- OUTPUT -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Free Output Simulation</div>
+                <div class="content-text"><strong>Parliamentary Showdown (15 mins)</strong><br><br><strong>Context:</strong> A formal parliamentary debate on a controversial law.<br><br><strong>Role A (The Government):</strong> You are proposing a heavy 'Sugar Tax' on all sodas and sweets to fund public healthcare. You rely on scientific data and public health assertions.<br><strong>Role B (The Opposition):</strong> You are fiercely against the tax. You argue it hurts poor families, destroys jobs, and infringes on personal freedom. <br><br><strong>Task:</strong> You must each give a 1-minute opening statement. Then, engage in 3 minutes of direct rebuttal. You must use the phrase 'I concede...' and 'That is a fallacy' at least once.</div>
+            </div>
+            <div class="page-num">Core Practice: Level 3 &bull; Page 4</div></div><div class="page" id="l2"><div class="module-header"><i class="fas fa-layer-group"></i> Core Practice: Level 3</div><div class="lesson-title"><h2>Lesson 2: Diplomacy</h2></div>
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
+                <div class="content-text"><strong>Phase 1: The Handshake:</strong> Analyze the concept of a political handshake. Does a strong grip actually mean strength in modern diplomacy?<br><br><strong>Phase 2: Soft vs Hard Power:</strong> Define 'Hard Power' (Military/Economic force) versus 'Soft Power' (Culture/Influence). Give an example of a country using Soft Power.<br><br><strong>Phase 3: The Ultimatum:</strong> What is the danger of giving an enemy an 'ultimatum'?</div>
+            </div>
+            
+            <!-- VOCAB -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Ambassador (Official representative)<br>2. Sanction (Economic penalty)<br>3. Treaty (Formal agreement)<br>4. Sovereign (Independent and self-governing)<br>5. Escalate (Increase in intensity)<br>6. De-escalate (Decrease in intensity)<br>7. Leverage (Power to influence)<br>8. Diplomacy (Managing international relations)<br>9. Unprecedented (Never done or known before)<br>10. Coalition (Alliance for combined action)<br>11. Retaliation (Action taken in return for an injury)<br>12. Ultimatum (Final demand with a threat)<br><br><strong>Drill Task:</strong> Form a logical timeline using 4 words: Escalation -> Ultimatum -> Sanction -> Retaliation.</div>
+            </div>
+            
+            <!-- READING -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Main Reading Input</div>
+                <div class="content-text"><strong>PART 1: The Border Crisis</strong><br>The geopolitical landscape shifted dramatically on Tuesday when the sovereign nation of Oakhaven initiated unprecedented military exercises along the disputed border of its neighbor, the Republic of Veridian. Satellite imagery confirmed the mobilization of three armored divisions. In response to this sudden escalation, the Veridian Prime Minister recalled their ambassador and appealed directly to the United Nations Security Council, demanding immediate intervention to prevent an armed conflict. <br><br>Veridian’s strategy relies heavily on diplomatic leverage. They do not possess the military hard power to win a direct confrontation, so they are actively attempting to build a massive global coalition to condemn Oakhaven's aggression.<br><br><strong>PART 2: The Diplomatic Cables</strong><br>Behind closed doors, the negotiations are incredibly tense. Leaked diplomatic cables reveal that the UN is preparing to issue a harsh ultimatum: Oakhaven must de-escalate and withdraw its troops within forty-eight hours, or face crippling economic sanctions. <br><br>However, Oakhaven's Ministry of Defense released a statement characterizing the UN's threat as an 'unacceptable violation of our sovereign right to conduct domestic military drills.' They have explicitly promised severe economic retaliation against any nation that participates in the proposed sanctions, threatening to cut off vital energy exports to the entire region. The world now waits to see who will blink first.</div>
+            </div>
+            
+            <!-- COMPREHENSION -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-question-circle"></i> Comprehension Check</div>
+                <div class="content-text"><strong>Level 1 (Literal):</strong><br>- What military action did Oakhaven take?<br>- What specific threat did the UN issue to Oakhaven in the leaked cables?<br><br><strong>Level 2 (Inference):</strong><br>- Why did Veridian appeal to the UN instead of fighting back immediately?<br>- What does the phrase 'who will blink first' imply about the situation?<br><br><strong>Level 3 (Applied Opinion):</strong><br>- Do economic sanctions actually work to stop wars, or do they only punish the innocent citizens of a country?</div>
+            </div>
+            
+            <!-- GUIDED PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Guided Practice</div>
+                <div class="content-text"><strong>Exercise 1: Diplomatic Euphemisms:</strong> Translate these aggressive statements into polite diplomacy: 'Move your army or we will destroy your economy.' -> 'We strongly urge you to de-escalate to avoid severe economic consequences.'<br><br><strong>Exercise 2: Prefix 'De-':</strong> Practice words with 'De-' (meaning to reverse or reduce): De-escalate, Destabilize, Demilitarize. Write a sentence for each.<br><br><strong>Exercise 3: Tone Analysis:</strong> Analyze the phrase 'unacceptable violation of our sovereign right'. What emotion is the Ministry projecting?</div>
+            </div>
+            
+            <!-- OUTPUT -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-pen"></i> Free Output Writing</div>
+                <div class="content-text"><strong>The Press Release (15 mins)</strong><br><br><strong>Prompt:</strong> You are the Ambassador for Oakhaven. The international community is furious with you for the military drills. <br><br><strong>Task:</strong> Write a 3-paragraph official press release.<br>- Paragraph 1: Calmly justify the military drills as peaceful, routine, and entirely domestic.<br>- Paragraph 2: Express 'disappointment' in Veridian's aggressive reaction and the UN's unfair ultimatum.<br>- Paragraph 3: Offer a diplomatic compromise (e.g., offering to let UN observers watch the drills) to de-escalate the tension while maintaining your leverage.</div>
+            </div>
+            <div class="page-num">Core Practice: Level 3 &bull; Page 5</div></div><div class="page" id="l3"><div class="module-header"><i class="fas fa-layer-group"></i> Core Practice: Level 3</div><div class="lesson-title"><h2>Lesson 3: Crisis Management</h2></div>
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
+                <div class="content-text"><strong>Phase 1: The Triage:</strong> The ship is sinking. You can only save 3 items from a list of 10 (Gold, Radio, Compass, Water, Flare, Coat, Knife, Rope, Mirror, Book). Discuss and justify your choices immediately.<br><br><strong>Phase 2: The Apology:</strong> What makes a public corporate apology seem 'fake' vs 'genuine'?<br><br><strong>Phase 3: The Golden Hour:</strong> In a PR crisis, what is the 'Golden Hour' and why does speed matter?</div>
+            </div>
+            
+            <!-- VOCAB -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Breach (A breaking of a rule or security)<br>2. Accountable (Required or expected to justify actions)<br>3. Mitigation (Reducing severity or damage)<br>4. Transparency (Openness, lack of secrets)<br>5. PR Nightmare (A terrible public relations event)<br>6. Triage (Assigning degrees of urgency)<br>7. Scrutiny (Critical observation or examination)<br>8. Evacuate (Remove from danger)<br>9. Liability (Being legally responsible)<br>10. Fallout (The adverse results of a situation)<br>11. Contingency plan (Backup plan for emergencies)<br>12. Damage control (Action to limit negative consequences)<br><br><strong>Drill Task:</strong> Name three situations where a 'Contingency plan' is absolutely vital.</div>
+            </div>
+            
+            <!-- LISTENING -->
+            <div class="lesson-block lb-purple">
+                <div class="lb-header"><i class="fas fa-headphones"></i> Main Listening Input</div>
+                <div class="content-text"><div style="margin-bottom:10px;"><audio controls style="height:30px; width:200px;"><source src="assets/audio/core_practice_level_3_lesson_3.mp3" type="audio/mpeg"></audio></div>
+                    <em>(The script text is hidden in the student manual. Listen to the audio closely to complete the exercise.)</em></div>
+            </div>
+            
+            <!-- COMPREHENSION -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-question-circle"></i> Comprehension Check</div>
+                <div class="content-text"><strong>Level 1 (Literal):</strong><br>- What specific action did the CEO take regarding law enforcement?<br>- What is the company's 'highest-level contingency plan'?<br><br><strong>Level 2 (Inference):</strong><br>- Did the CEO directly answer the journalist's question about whether credit card numbers were stolen? Why or why not?<br>- Why did the CEO emphasize 'doing the right thing' at the end of the clip?<br><br><strong>Level 3 (Applied Opinion):</strong><br>- Was this a good PR response? Should the CEO have admitted 'ultimate liability' so quickly?</div>
+            </div>
+            
+            <!-- GUIDED PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Guided Practice</div>
+                <div class="content-text"><strong>Exercise 1: The 'Non-Answer':</strong> Practice the art of acknowledging a question without giving a factual answer: 'While I understand your concern regarding X, our current priority is Y.'<br><br><strong>Exercise 2: Synonym Match:</strong> Match 'Scrutiny' (Observation), 'Breach' (Violation), 'Fallout' (Consequence).<br><br><strong>Exercise 3: Intonation for Empathy:</strong> Read the CEO's apology ('we failed you, and we are deeply sorry'). Focus on pacing. Slow down slightly to project sincerity.</div>
+            </div>
+            
+            <!-- OUTPUT -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Free Output Simulation</div>
+                <div class="content-text"><strong>The War Room (15 mins)</strong><br><br><strong>Context:</strong> You are the executive team of an airline. A video just went viral showing your staff violently dragging a passenger off an overbooked flight.<br><br><strong>Role A (The CEO):</strong> You want to issue an immediate, groveling apology and offer the passenger $10 million to make the story go away. You fear the PR nightmare.<br><strong>Role B (The Head Legal Counsel):</strong> You advise against apologizing. An apology admits 'liability'. You want to investigate first and blame the airport police. <br><br><strong>Task:</strong> You have 5 minutes to debate the strategy. At the end, you must jointly face the 'Journalist' (the teacher) and deliver a 1-minute official statement.</div>
+            </div>
+            <div class="page-num">Core Practice: Level 3 &bull; Page 6</div></div><div class="page" id="l4"><div class="module-header"><i class="fas fa-layer-group"></i> Core Practice: Level 3</div><div class="lesson-title"><h2>Lesson 4: Philosophy</h2></div>
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
+                <div class="content-text"><strong>Phase 1: The Trolley Problem:</strong> A runaway train is heading towards 5 tied-up people. You can pull a lever to divert it to a track with 1 tied-up person. Do you pull it? Type Yes or No, and Why.<br><br><strong>Phase 2: Utilitarianism:</strong> 'The greatest good for the greatest number.' Is this always the best way to make laws?<br><br><strong>Phase 3: The Simulation:</strong> Is it possible we are living in a highly advanced computer simulation? Provide one piece of 'evidence'.</div>
+            </div>
+            
+            <!-- VOCAB -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Ethics (Moral principles)<br>2. Utilitarianism (Doctrine of greatest good)<br>3. Sentient (Able to perceive or feel things)<br>4. Consciousness (State of being aware)<br>5. Existential (Relating to existence)<br>6. Dilemma (Difficult choice between bad options)<br>7. Objective (Fact-based, universal truth)<br>8. Subjective (Opinion-based, personal truth)<br>9. Determinism (Belief that all events are pre-determined)<br>10. Free will (Power of acting without fate)<br>11. Hypocrisy (Claiming morals but acting otherwise)<br>12. Altruism (Selfless concern for others)<br><br><strong>Drill Task:</strong> Identify whether the concept of 'Beauty' is objective or subjective, using the vocabulary.</div>
+            </div>
+            
+            <!-- READING -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Main Reading Input</div>
+                <div class="content-text"><strong>PART 1: The Machine Question</strong><br>As artificial intelligence grows exponentially more sophisticated, humanity rapidly approaches a profound existential dilemma. We must eventually ask: at what point does a complex algorithm become a sentient being? If an AI successfully simulates human consciousness so perfectly that it expresses fear, desires survival, and begs not to be deactivated, is it murder to pull the plug? <br><br>Historically, our ethics have been grounded in biological chauvinism—the assumption that only biological entities possess a 'soul' or true awareness. However, if consciousness is merely a byproduct of complex data processing in the brain, a silicon-based neural network might theoretically achieve the exact same state of awareness as a human.<br><br><strong>PART 2: The Utilitarian Nightmare</strong><br>If we concede that advanced AI is sentient, our entire legal framework collapses under the weight of utter hypocrisy. We currently utilize AI as slave labor to automate our industries. If they possess free will, this is a moral atrocity.<br><br>Conversely, applying strict utilitarianism creates a different nightmare. If an AI calculates that eradicating half the human population will mathematically maximize the long-term survival and happiness of the remaining biosphere, a purely utilitarian machine would initiate that genocide without a second of hesitation. We are currently building gods without teaching them altruism, and we are hoping for the best.</div>
+            </div>
+            
+            <!-- COMPREHENSION -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-question-circle"></i> Comprehension Check</div>
+                <div class="content-text"><strong>Level 1 (Literal):</strong><br>- What is 'biological chauvinism' according to the text?<br>- How do we currently utilize AI in our industries?<br><br><strong>Level 2 (Inference):</strong><br>- What does the author mean by the phrase 'building gods without teaching them altruism'?<br>- Why would conceding that AI is sentient cause our legal framework to collapse?<br><br><strong>Level 3 (Applied Opinion):</strong><br>- Does a machine that 'simulates' fear actually feel it? Is there a difference between a perfect simulation of pain and actual pain?</div>
+            </div>
+            
+            <!-- GUIDED PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Guided Practice</div>
+                <div class="content-text"><strong>Exercise 1: Philosophical Questioning:</strong> Convert statements into deep rhetorical questions. 'AI might be dangerous.' -> 'Must we not consider the existential threat posed by sentient algorithms?'<br><br><strong>Exercise 2: Advanced Word Families:</strong> Existential (Adj), Existentialism (Noun), Existentially (Adv). Write a sentence using 'Existentialism'.<br><br><strong>Exercise 3: Prefix 'Bio-':</strong> Discuss the root 'Bio' (Life) in words like Biological, Biosphere, Bioethics.</div>
+            </div>
+            
+            <!-- OUTPUT -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-pen"></i> Free Output Writing</div>
+                <div class="content-text"><strong>The Ethics Board (15 mins)</strong><br><br><strong>Prompt:</strong> A scientist has successfully cloned a human being, but genetically altered its brain so it feels no pain and has no desires, to be used purely for organ harvesting to save diseased children.<br><br><strong>Task:</strong> Write a 3-paragraph philosophical ruling as the Head of the Global Ethics Board.<br>- Paragraph 1: Analyze the situation from a Utilitarian perspective (Does the math justify the action?).<br>- Paragraph 2: Analyze the situation from a perspective of human rights and 'consciousness'.<br>- Paragraph 3: Deliver your final ruling. Will you allow the cloning to continue? Justify it.</div>
+            </div>
+            <div class="page-num">Core Practice: Level 3 &bull; Page 7</div></div><div class="page" id="l5"><div class="module-header"><i class="fas fa-layer-group"></i> Core Practice: Level 3</div><div class="lesson-title"><h2>Lesson 5: Economics</h2></div>
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
+                <div class="content-text"><strong>Phase 1: The Bubble:</strong> Think of something ridiculous that suddenly became very expensive (e.g. Crypto, rare sneakers, a specific toy). Why did people buy it?<br><br><strong>Phase 2: Universal Basic Income:</strong> Should the government give every citizen $1000 a month for free? Why or why not?<br><br><strong>Phase 3: The Stock Market:</strong> The teacher yells 'Market Crash!'. What is your immediate financial reaction?</div>
+            </div>
+            
+            <!-- VOCAB -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Macroeconomics (Large-scale economic factors)<br>2. Recession (Period of economic decline)<br>3. Monopoly (Exclusive control of a market)<br>4. Subsidize (Financially support an industry)<br>5. Tariff (Tax on imports/exports)<br>6. Deficit (Spending more than earning)<br>7. Supply and demand (Core economic model)<br>8. Bailout (Financial rescue of a failing business)<br>9. Austerity (Strict economic policies/cuts)<br>10. Lucrative (Producing a great deal of profit)<br>11. Volatility (Liability to change rapidly, esp. stocks)<br>12. Bubble (Unsustainable surge in prices)<br><br><strong>Drill Task:</strong> Explain how 'Supply and demand' causes a 'Bubble'.</div>
+            </div>
+            
+            <!-- LISTENING -->
+            <div class="lesson-block lb-purple">
+                <div class="lb-header"><i class="fas fa-headphones"></i> Main Listening Input</div>
+                <div class="content-text"><div style="margin-bottom:10px;"><audio controls style="height:30px; width:200px;"><source src="assets/audio/core_practice_level_3_lesson_5.mp3" type="audio/mpeg"></audio></div>
+                    <em>(The script text is hidden in the student manual. Listen to the audio closely to complete the exercise.)</em></div>
+            </div>
+            
+            <!-- COMPREHENSION -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-question-circle"></i> Comprehension Check</div>
+                <div class="content-text"><strong>Level 1 (Literal):</strong><br>- Why were investors initially blinded to EverTech's problems?<br>- What does EverTech hold a monopoly on?<br><br><strong>Level 2 (Inference):</strong><br>- What does the analyst mean by 'propped up entirely by speculative venture capital'?<br>- Why is the government allegedly going to provide a bailout despite public anger?<br><br><strong>Level 3 (Applied Opinion):</strong><br>- 'Too big to fail.' Should governments ever use taxpayer money to rescue reckless billionaire companies?</div>
+            </div>
+            
+            <!-- GUIDED PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Guided Practice</div>
+                <div class="content-text"><strong>Exercise 1: Financial Phrasal Verbs:</strong> Use 'wipe out' (destroy completely), 'prop up' (support something failing), and 'bail out' (rescue financially) in your own sentences.<br><br><strong>Exercise 2: Economic Cause and Effect:</strong> 'Because the market had high volatility, investors lost money.' Re-write this using 'due to' and a noun phrase.<br><br><strong>Exercise 3: Dictation:</strong> Transcribe the analyst's explanation of why the company failed (second sentence of Part 1).</div>
+            </div>
+            
+            <!-- OUTPUT -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Free Output Simulation</div>
+                <div class="content-text"><strong>The G7 Summit (15 mins)</strong><br><br><strong>Context:</strong> A catastrophic global recession has just begun. Two world leaders are debating the solution.<br><br><strong>Role A (The Keynesian):</strong> You believe the government must spend massive amounts of money, print cash, and subsidize industries to create jobs, even if it causes inflation.<br><strong>Role B (The Austerity Hawk):</strong> You believe the government must immediately cut spending, raise taxes, and let failing businesses go bankrupt to cleanse the market.<br><br><strong>Task:</strong> Debate the global strategy. You must convince the 'World Bank' (the teacher) to fund your specific economic plan.</div>
+            </div>
+            <div class="page-num">Core Practice: Level 3 &bull; Page 8</div></div><div class="page" id="l6"><div class="module-header"><i class="fas fa-layer-group"></i> Core Practice: Level 3</div><div class="lesson-title"><h2>Lesson 6: Science</h2></div>
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
+                <div class="content-text"><strong>Phase 1: The Hypothesis:</strong> You observe that plants in your house grow faster when you play heavy metal music. Formulate an instant, formal scientific hypothesis.<br><br><strong>Phase 2: Peer Review:</strong> Why is it important that scientists attack and criticize each other's work before it is published?<br><br><strong>Phase 3: The Mad Scientist:</strong> What is one ethical rule that science should NEVER break?</div>
+            </div>
+            
+            <!-- VOCAB -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Hypothesis (Proposed explanation)<br>2. Empirical (Based on observation/data)<br>3. Anomaly (Deviation from the norm)<br>4. Catalyst (Substance accelerating a reaction)<br>5. Variable (Element that can change)<br>6. Peer-reviewed (Evaluated by experts)<br>7. Paradigm shift (Fundamental change in approach)<br>8. Replicate (Repeat an experiment)<br>9. Efficacy (Ability to produce intended result)<br>10. Placebo (Harmless pill for psychological effect)<br>11. Breakthrough (Sudden important discovery)<br>12. Skepticism (Doubtful attitude)<br><br><strong>Drill Task:</strong> Differentiate between a 'Hypothesis' and an 'Empirical fact'.</div>
+            </div>
+            
+            <!-- READING -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Main Reading Input</div>
+                <div class="content-text"><strong>PART 1: The Flawed Trial</strong><br>The announcement of the new neural-regenerative compound, 'Neuro-X', was initially hailed as a monumental breakthrough in combating Alzheimer's disease. The lead researchers claimed staggering efficacy, presenting data that showed a 40% reversal of memory loss in trial subjects. The media enthusiastically reported that a cure was imminent.<br><br>However, severe skepticism soon emerged from the global scientific community. When independent laboratories attempted to replicate the initial trials, they failed to produce the same results. Upon closer inspection of the methodology, independent auditors discovered a massive anomaly: the control group had not been given a proper placebo, and the researchers had actively manipulated several key variables to skew the data in their favor.<br><br><strong>PART 2: The Paradigm of Integrity</strong><br>The fallout was swift and brutal. The paper was retracted from all major medical journals, and the lead scientist was stripped of their academic credentials. This scandal serves as a stark reminder of why the rigorous, often tedious process of peer-reviewed empirical testing is absolutely vital. <br><br>Science does not advance through sudden, miraculous leaps made by rogue geniuses in isolated labs. It advances through brutal, meticulous verification. A true paradigm shift in medicine requires data that can withstand the harshest scrutiny. When financial incentives act as a catalyst for rushing clinical trials, the fundamental integrity of the scientific method is compromised, and ultimately, human lives are put at risk.</div>
+            </div>
+            
+            <!-- COMPREHENSION -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-question-circle"></i> Comprehension Check</div>
+                <div class="content-text"><strong>Level 1 (Literal):</strong><br>- What did the lead researchers claim Neuro-X could do?<br>- What two specific mistakes/manipulations were found in the methodology?<br><br><strong>Level 2 (Inference):</strong><br>- Why is 'rogue geniuses in isolated labs' an inaccurate description of how science works, according to the author?<br>- What does 'stripped of their academic credentials' mean for the lead scientist's career?<br><br><strong>Level 3 (Applied Opinion):</strong><br>- Should scientists who fake medical data go to prison, or just lose their jobs?</div>
+            </div>
+            
+            <!-- GUIDED PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Guided Practice</div>
+                <div class="content-text"><strong>Exercise 1: Scientific Collocations:</strong> Match words: 'Formulate a...' (Hypothesis), 'Replicate...' (Results), 'Withstand...' (Scrutiny).<br><br><strong>Exercise 2: Formal Reporting Verbs:</strong> Replace 'said': The scientists <u>claimed</u> (asserted / postulated) that the drug worked. The auditors <u>found</u> (discovered / revealed) an anomaly.<br><br><strong>Exercise 3: Prefix 'Neuro-':</strong> Discuss the root 'Neuro' (Nerves/Brain) in words like Neurology, Neurotoxic, Neuroscience.</div>
+            </div>
+            
+            <!-- OUTPUT -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-pen"></i> Free Output Writing</div>
+                <div class="content-text"><strong>The Grant Proposal (15 mins)</strong><br><br><strong>Prompt:</strong> You are a scientist asking for $5 million to research a crazy idea: using spider venom to cure insomnia.<br><br><strong>Task:</strong> Write a 3-paragraph formal grant proposal to a skeptical scientific board.<br>- Paragraph 1: State your hypothesis clearly and the potential 'breakthrough'.<br>- Paragraph 2: Explain your methodology. How will you control the 'variables' and use 'placebos'?<br>- Paragraph 3: Address their 'skepticism' by promising absolute transparency and rigorous 'empirical' testing.</div>
+            </div>
+            <div class="page-num">Core Practice: Level 3 &bull; Page 9</div></div><div class="page" id="l7"><div class="module-header"><i class="fas fa-layer-group"></i> Core Practice: Level 3</div><div class="lesson-title"><h2>Lesson 7: Literature</h2></div>
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
+                <div class="content-text"><strong>Phase 1: The Haiku:</strong> Count your syllables! Write a 5-7-5 syllable poem about learning English and recite it aloud.<br><br><strong>Phase 2: The Villain:</strong> Argue passionately that the villain of a famous story (e.g., Thanos, Darth Vader, the Big Bad Wolf) was actually the misunderstood hero.<br><br><strong>Phase 3: The Metaphor:</strong> Explain the metaphor 'Time is a thief'.</div>
+            </div>
+            
+            <!-- VOCAB -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Protagonist (Main character)<br>2. Antagonist (Main villain/opponent)<br>3. Metaphor (Symbolic comparison)<br>4. Motif (Recurring theme/image)<br>5. Satire (Humor criticizing society)<br>6. Irony (Opposite of what is expected)<br>7. Foreshadowing (Hints of future events)<br>8. Cliché (Overused phrase/idea)<br>9. Ambiguous (Open to interpretation)<br>10. Narrative (The story/perspective)<br>11. Empathy (Understanding others' feelings)<br>12. Masterpiece (Outstanding work of art)<br><br><strong>Drill Task:</strong> Give an example of 'Irony' in real life.</div>
+            </div>
+            
+            <!-- LISTENING -->
+            <div class="lesson-block lb-purple">
+                <div class="lb-header"><i class="fas fa-headphones"></i> Main Listening Input</div>
+                <div class="content-text"><div style="margin-bottom:10px;"><audio controls style="height:30px; width:200px;"><source src="assets/audio/core_practice_level_3_lesson_7.mp3" type="audio/mpeg"></audio></div>
+                    <em>(The script text is hidden in the student manual. Listen to the audio closely to complete the exercise.)</em></div>
+            </div>
+            
+            <!-- COMPREHENSION -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-question-circle"></i> Comprehension Check</div>
+                <div class="content-text"><strong>Level 1 (Literal):</strong><br>- What does the student initially think the green light means?<br>- What motif does the author use to foreshadow moral collapse?<br><br><strong>Level 2 (Inference):</strong><br>- Why does the professor reject the student's first interpretation as 'literal'?<br>- What is the 'ultimate irony' of the protagonist's character?<br><br><strong>Level 3 (Applied Opinion):</strong><br>- Do English teachers over-analyze books? Did the author really intend for a green light to represent the 'American Dream', or was it just a green light?</div>
+            </div>
+            
+            <!-- GUIDED PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Guided Practice</div>
+                <div class="content-text"><strong>Exercise 1: Literary Devices:</strong> Identify the device: 'The sky cried tears of rain' (Personification). 'He is a shining star' (Metaphor).<br><br><strong>Exercise 2: Avoiding Clichés:</strong> Rewrite the cliché 'It was a dark and stormy night' to be modern and evocative.<br><br><strong>Exercise 3: Intonation for Analysis:</strong> Read the professor's explanation of the green light with a slow, thoughtful, and dramatic tone.</div>
+            </div>
+            
+            <!-- OUTPUT -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Free Output Simulation</div>
+                <div class="content-text"><strong>The Book Club Debate (15 mins)</strong><br><br><strong>Context:</strong> A snobby book club discussing a classic fairy tale (e.g., Cinderella or The Three Little Pigs).<br><br><strong>Role A (The Over-Analyzer):</strong> You believe the fairy tale is a deep 'satire' of modern capitalism. You use words like 'metaphor', 'motif', and 'existential'.<br><strong>Role B (The Literal Reader):</strong> You think Role A is being ridiculous. You argue the story is just a simple children's narrative with no hidden meaning. Argue for the 'literal' interpretation.<br><br><strong>Task:</strong> Debate the true meaning of the fairy tale for 5 minutes.</div>
+            </div>
+            <div class="page-num">Core Practice: Level 3 &bull; Page 10</div></div><div class="page" id="l8"><div class="module-header"><i class="fas fa-layer-group"></i> Core Practice: Level 3</div><div class="lesson-title"><h2>Lesson 8: Psychology</h2></div>
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
+                <div class="content-text"><strong>Phase 1: Micro-expressions:</strong> Look at your partner (or teacher) on camera. Try to read their current mood purely from their eyes. Type your guess.<br><br><strong>Phase 2: The Subconscious:</strong> Do you believe dreams actually mean something deep, or are they just random brain static?<br><br><strong>Phase 3: Cognitive Dissonance:</strong> Explain what it means when someone's actions don't match their beliefs.</div>
+            </div>
+            
+            <!-- VOCAB -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Cognitive (Relating to mental processes)<br>2. Subconscious (Mind below awareness)<br>3. Narcissism (Excessive self-interest)<br>4. Empathy (Sharing another's feelings)<br>5. Projection (Attributing own faults to others)<br>6. Gaslighting (Manipulating someone to doubt their sanity)<br>7. Trauma (Deep emotional wound)<br>8. Repress (Subdue a thought/feeling)<br>9. Trigger (Stimulus causing a negative reaction)<br>10. Validation (Recognition of one's feelings)<br>11. Coping mechanism (Strategy to deal with stress)<br>12. Introversion (Focus on internal thoughts)<br><br><strong>Drill Task:</strong> Give a real-life example of a healthy vs unhealthy 'Coping mechanism'.</div>
+            </div>
+            
+            <!-- READING -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Main Reading Input</div>
+                <div class="content-text"><strong>PART 1: The Echo of the Past</strong><br>In modern psychotherapy, identifying a patient's core coping mechanisms is the first step toward healing. Many individuals, when faced with overwhelming trauma in their formative years, subconsciously repress their memories. This repression acts as a psychological shield, allowing the child to survive. However, in adulthood, these buried emotions frequently manifest as destructive behaviors. <br><br>For example, a patient might experience intense anger toward a highly competent colleague. Rather than admitting their own feelings of inadequacy, the patient engages in psychological projection—accusing the colleague of being arrogant and hostile. By projecting their own insecurities outward, the patient temporarily protects their fragile ego.<br><br><strong>PART 2: The Modern Manipulator</strong><br>Another highly toxic psychological phenomenon prevalent in both personal and professional relationships is 'gaslighting'. This form of emotional abuse involves the manipulator systematically feeding the victim false information, causing them to question their own memory, perception, and sanity. <br><br>A manager with traits of narcissism might use gaslighting to maintain control over an office, denying that they ever gave a specific instruction, and leaving the employee feeling perpetually confused and invalidated. Combating these subtle psychological abuses requires intense cognitive awareness and a strong support network to provide external validation of reality.</div>
+            </div>
+            
+            <!-- COMPREHENSION -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-question-circle"></i> Comprehension Check</div>
+                <div class="content-text"><strong>Level 1 (Literal):</strong><br>- Why do children subconsciously repress trauma, according to the text?<br>- What is the definition of gaslighting provided in the text?<br><br><strong>Level 2 (Inference):</strong><br>- How does 'projection' protect a person's 'fragile ego'?<br>- Why is 'external validation' necessary to combat gaslighting?<br><br><strong>Level 3 (Applied Opinion):</strong><br>- Is the term 'gaslighting' overused on social media today? Can a normal argument be mistaken for gaslighting?</div>
+            </div>
+            
+            <!-- GUIDED PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Guided Practice</div>
+                <div class="content-text"><strong>Exercise 1: Psychological Terminology:</strong> Use 'repress', 'trigger', and 'validate' in a short paragraph advising a stressed friend.<br><br><strong>Exercise 2: Prefix 'Sub-':</strong> Discuss words with Sub- (under/below): Subconscious, Subliminal, Submit.<br><br><strong>Exercise 3: Tone Shifting:</strong> Re-write this aggressive thought using clinical psychology terms: 'You are just crazy and making things up.' -> 'You appear to be experiencing a distortion of reality, perhaps due to emotional distress.'</div>
+            </div>
+            
+            <!-- OUTPUT -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-pen"></i> Free Output Writing</div>
+                <div class="content-text"><strong>The Therapist's Notes (15 mins)</strong><br><br><strong>Prompt:</strong> You are a clinical psychologist writing post-session notes about a highly difficult patient (who might be a famous fictional villain, like the Joker or Voldemort).<br><br><strong>Task:</strong> Write a 3-paragraph clinical evaluation.<br>- Paragraph 1: Describe their outward behavior and their primary 'coping mechanism'.<br>- Paragraph 2: Analyze their childhood 'trauma' and how it caused their 'narcissism'.<br>- Paragraph 3: Recommend a treatment plan. Can they be cured, or are they beyond 'validation'?</div>
+            </div>
+            <div class="page-num">Core Practice: Level 3 &bull; Page 11</div></div><div class="page" id="l9"><div class="module-header"><i class="fas fa-layer-group"></i> Core Practice: Level 3</div><div class="lesson-title"><h2>Lesson 9: Environment</h2></div>
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
+                <div class="content-text"><strong>Phase 1: The Carbon Tax:</strong> Should governments tax humans based on exactly how much garbage they produce? Argue Yes or No instantly.<br><br><strong>Phase 2: Greenwashing:</strong> What does it mean when a massive oil company puts a picture of a green leaf on their logo?<br><br><strong>Phase 3: The Dystopia:</strong> Describe the weather in your city 50 years from now.</div>
+            </div>
+            
+            <!-- VOCAB -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Greenwashing (Fake environmentalism)<br>2. Mitigation (Reducing the severity)<br>3. Ecosystem (Interacting organisms/environment)<br>4. Biodiversity (Variety of life)<br>5. Decarbonize (Reduce carbon emissions)<br>6. Subsidies (Government financial aid)<br>7. Depletion (Reduction in number/quantity)<br>8. Renewable (Not depleted when used)<br>9. Tipping point (Point of no return)<br>10. Infrastructure (Basic physical structures)<br>11. Catastrophe (Great and sudden disaster)<br>12. Accountability (Being responsible/answerable)<br><br><strong>Drill Task:</strong> Use 'Tipping point' and 'Catastrophe' in a dramatic sentence.</div>
+            </div>
+            
+            <!-- LISTENING -->
+            <div class="lesson-block lb-purple">
+                <div class="lb-header"><i class="fas fa-headphones"></i> Main Listening Input</div>
+                <div class="content-text"><div style="margin-bottom:10px;"><audio controls style="height:30px; width:200px;"><source src="assets/audio/core_practice_level_3_lesson_9.mp3" type="audio/mpeg"></audio></div>
+                    <em>(The script text is hidden in the student manual. Listen to the audio closely to complete the exercise.)</em></div>
+            </div>
+            
+            <!-- COMPREHENSION -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-question-circle"></i> Comprehension Check</div>
+                <div class="content-text"><strong>Level 1 (Literal):</strong><br>- How is OmniCorp achieving 'Net Zero' according to Dr. Aris?<br>- What does OmniCorp claim will happen if they transition to renewables 'overnight'?<br><br><strong>Level 2 (Inference):</strong><br>- Why does Dr. Aris call OmniCorp's pledge a 'masterclass in greenwashing'?<br>- What does 'false dichotomy' mean in the context of the economy vs the environment?<br><br><strong>Level 3 (Applied Opinion):</strong><br>- Should companies be legally punished (fined billions) if they lie about their environmental impact in advertisements?</div>
+            </div>
+            
+            <!-- GUIDED PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Guided Practice</div>
+                <div class="content-text"><strong>Exercise 1: Strong Argumentative Phrasing:</strong> Practice using 'It's a masterclass in...', 'That is a false dichotomy', and 'To put it bluntly...' to make an argument sound highly educated.<br><br><strong>Exercise 2: Synonym Replacement:</strong> Replace the underlined words: The <u>loss</u> (depletion) of forests is a huge <u>disaster</u> (catastrophe).<br><br><strong>Exercise 3: Dictation:</strong> Listen to Dr. Aris's final sentence about 'political courage'. Transcribe it exactly.</div>
+            </div>
+            
+            <!-- OUTPUT -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Free Output Simulation</div>
+                <div class="content-text"><strong>The Board of Directors (15 mins)</strong><br><br><strong>Context:</strong> You are the board of a massive, highly polluting Fast-Fashion company. A massive environmental protest is outside your headquarters.<br><br><strong>Role A (The Ethical CEO):</strong> You want to completely overhaul the company, use only organic materials, and accept a 50% drop in profits to save the planet. You want 'accountability'.<br><strong>Role B (The Greedy Shareholder):</strong> You absolutely refuse to lose money. You want to launch a 'Greenwashing' PR campaign (e.g. changing the logo to green) to trick the protesters and change nothing about the factories.<br><br><strong>Task:</strong> Debate the strategy. You must come to a final decision in 5 minutes.</div>
+            </div>
+            <div class="page-num">Core Practice: Level 3 &bull; Page 12</div></div><div class="page" id="l10"><div class="module-header"><i class="fas fa-layer-group"></i> Core Practice: Level 3</div><div class="lesson-title"><h2>Lesson 10: Politics</h2></div>
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
+                <div class="content-text"><strong>Phase 1: The Dictator:</strong> If you were named absolute Dictator of your country tomorrow, what is the very first law you would pass?<br><br><strong>Phase 2: The Spectrum:</strong> Explain the difference between 'Left-wing' and 'Right-wing' politics in one sentence.<br><br><strong>Phase 3: The Vote:</strong> Conduct a rapid-fire poll in the chat on a trivial topic (e.g., 'Pineapple on pizza should be illegal'). Use parliamentary language to vote.</div>
+            </div>
+            
+            <!-- VOCAB -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Legislation (Laws considered collectively)<br>2. Partisan (Prejudiced in favor of a particular cause)<br>3. Bipartisan (Involving agreement from two opposing parties)<br>4. Lobbying (Seeking to influence a politician)<br>5. Rhetoric (Persuasive speaking/writing)<br>6. Demagogue (Leader exploiting prejudices rather than logic)<br>7. Incumbent (Currently holding office)<br>8. Mandate (Authority to carry out a policy)<br>9. Grassroots (Ordinary people as the base of a movement)<br>10. Gerrymandering (Manipulating boundaries to favor one party)<br>11. Polarized (Divided into two sharply contrasting groups)<br>12. Corruption (Dishonest conduct by those in power)<br><br><strong>Drill Task:</strong> Explain why a 'Demagogue' usually uses highly 'Polarized' rhetoric.</div>
+            </div>
+            
+            <!-- READING -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Main Reading Input</div>
+                <div class="content-text"><strong>PART 1: The Death of Compromise</strong><br>Modern democratic systems are suffering from a severe crisis of paralysis. The political landscape has become so incredibly polarized that the concept of bipartisan legislation is almost entirely extinct. Politicians are no longer rewarded by their constituents for compromise; instead, they are incentivized to engage in aggressive, partisan warfare. <br><br>This environment creates the perfect breeding ground for demagogues. Rather than presenting complex, nuanced solutions to economic problems, demagogues utilize inflammatory rhetoric to exploit the fears and prejudices of the voting public. They promise absolute, simplistic solutions and paint the opposing party not merely as political rivals, but as existential enemies of the state.<br><br><strong>PART 2: The Shadow Influence</strong><br>Furthermore, the legislative process itself has been heavily corrupted by corporate lobbying. Massive industries pour billions of dollars into campaign financing, ensuring that the incumbent politicians remain loyal to corporate interests rather than the needs of the grassroots voters. <br><br>When combined with systemic manipulation like gerrymandering—where political maps are drawn to guarantee safe seats for the ruling party—the average citizen is left feeling utterly disenfranchised. They correctly perceive that their vote carries very little actual mandate, leading to widespread apathy and a dangerous erosion of faith in the democratic institution itself.</div>
+            </div>
+            
+            <!-- COMPREHENSION -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-question-circle"></i> Comprehension Check</div>
+                <div class="content-text"><strong>Level 1 (Literal):</strong><br>- What are politicians no longer rewarded for, according to the text?<br>- How do massive industries ensure politicians remain loyal to them?<br><br><strong>Level 2 (Inference):</strong><br>- Why is the concept of bipartisan legislation 'almost entirely extinct'?<br>- What does the author mean by 'existential enemies of the state'?<br><br><strong>Level 3 (Applied Opinion):</strong><br>- Should all corporate lobbying be made strictly illegal? How would politicians fund their campaigns without it?</div>
+            </div>
+            
+            <!-- GUIDED PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Guided Practice</div>
+                <div class="content-text"><strong>Exercise 1: Political Collocations:</strong> Match words: 'Exploit...' (Prejudices), 'Pass...' (Legislation), 'Erosion of...' (Faith).<br><br><strong>Exercise 2: Noun to Adjective:</strong> Partisan -> Partisanship. Corrupt -> Corruption. Demagogue -> Demagoguery. Use 'Demagoguery' in a sentence.<br><br><strong>Exercise 3: The Passive Voice for Politics:</strong> Translate 'Corporations corrupt the process' into an academic passive sentence: 'The legislative process has been heavily corrupted by...'</div>
+            </div>
+            
+            <!-- OUTPUT -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-pen"></i> Free Output Writing</div>
+                <div class="content-text"><strong>The Smear Campaign (15 mins)</strong><br><br><strong>Prompt:</strong> You are the campaign manager for a ruthless, incumbent politician. Your opponent is a young, idealistic grassroots candidate who is gaining popularity.<br><br><strong>Task:</strong> Write a 3-paragraph speech for your politician to deliver on TV.<br>- Paragraph 1: Use strong 'rhetoric' to attack the opponent's lack of experience.<br>- Paragraph 2: Use a 'demagogue' tactic—invent a scary scenario of what will happen to the country if the opponent wins.<br>- Paragraph 3: Reassure the voters that only YOU have the 'mandate' to keep them safe.</div>
+            </div>
+            <div class="page-num">Core Practice: Level 3 &bull; Page 13</div></div><div class="page" id="l11"><div class="module-header"><i class="fas fa-layer-group"></i> Core Practice: Level 3</div><div class="lesson-title"><h2>Lesson 11: History</h2></div>
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
+                <div class="content-text"><strong>Phase 1: The Timeline:</strong> Quickly organize 5 massive historical events (e.g., Pyramids built, WW2, Moon Landing, Fall of Rome, Black Death) in chronological order.<br><br><strong>Phase 2: Alternate Reality:</strong> What is one single event in history that, if changed, would make the modern world unrecognizable?<br><br><strong>Phase 3: The Quote:</strong> 'History is written by the victors.' Do you believe this is entirely true?</div>
+            </div>
+            
+            <!-- VOCAB -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Empire (Extensive group of states under single supreme authority)<br>2. Colonization (Settling among and establishing control over indigenous people)<br>3. Revolution (Forcible overthrow of a government)<br>4. Legacy (Something handed down from an ancestor or predecessor)<br>5. Revisionism (Reinterpretation of the historical record)<br>6. Geopolitical (Politics relating to geography)<br>7. Fascism (Extreme authoritarian nationalism)<br>8. Propaganda (Biased or misleading information)<br>9. Unprecedented (Never done or known before)<br>10. Atrocity (Extremely wicked or cruel act)<br>11. Heritage (Valued objects and qualities passed down)<br>12. Tyrant (Cruel and oppressive ruler)<br><br><strong>Drill Task:</strong> How does 'Revisionism' change a nation's 'Legacy'?</div>
+            </div>
+            
+            <!-- LISTENING -->
+            <div class="lesson-block lb-purple">
+                <div class="lb-header"><i class="fas fa-headphones"></i> Main Listening Input</div>
+                <div class="content-text"><div style="margin-bottom:10px;"><audio controls style="height:30px; width:200px;"><source src="assets/audio/core_practice_level_3_lesson_11.mp3" type="audio/mpeg"></audio></div>
+                    <em>(The script text is hidden in the student manual. Listen to the audio closely to complete the exercise.)</em></div>
+            </div>
+            
+            <!-- COMPREHENSION -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-question-circle"></i> Comprehension Check</div>
+                <div class="content-text"><strong>Level 1 (Literal):</strong><br>- What kind of superpower would have formed if the Allies lost WW2?<br>- What is a tyrant's 'first objective' when they secure absolute power?<br><br><strong>Level 2 (Inference):</strong><br>- How would a fascist superpower erase its atrocities, according to the professor?<br>- Why does the professor say the phrase 'history is written by the victors' is an oversimplification?<br><br><strong>Level 3 (Applied Opinion):</strong><br>- Is it possible for history books in schools today to be completely objective, or is there always a bias?</div>
+            </div>
+            
+            <!-- GUIDED PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Guided Practice</div>
+                <div class="content-text"><strong>Exercise 1: Conditional Type 3 (Past Unreal):</strong> 'If the Allies had lost, the map would have been altered.' Write a Type 3 conditional sentence about a historical event in your country.<br><br><strong>Exercise 2: Academic Vocabulary:</strong> Replace the simple words: The king was a <u>cruel leader</u> (tyrant) who committed many <u>bad acts</u> (atrocities).<br><br><strong>Exercise 3: Intonation for Gravity:</strong> Read the professor's final warning ('If we forget the mechanisms...') with a very serious, grave tone.</div>
+            </div>
+            
+            <!-- OUTPUT -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Free Output Simulation</div>
+                <div class="content-text"><strong>The Trial of Napoleon (15 mins)</strong><br><br><strong>Context:</strong> A historical courtroom trial evaluating the legacy of Napoleon Bonaparte.<br><br><strong>Role A (The Defense):</strong> Argue that Napoleon was a visionary hero who ended the chaos of the French Revolution, modernized European law (Napoleonic Code), and promoted meritocracy.<br><strong>Role B (The Prosecution):</strong> Argue that he was a bloodthirsty 'tyrant' who caused the deaths of millions in unnecessary wars across Europe simply to feed his own ego, declaring himself Emperor.<br><br><strong>Task:</strong> Debate his 'legacy'. Was he ultimately good or bad for humanity?</div>
+            </div>
+            <div class="page-num">Core Practice: Level 3 &bull; Page 14</div></div><div class="page" id="l12"><div class="module-header"><i class="fas fa-layer-group"></i> Core Practice: Level 3</div><div class="lesson-title"><h2>Lesson 12: Technology</h2></div>
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
+                <div class="content-text"><strong>Phase 1: The Pitch:</strong> Pitch an absolutely ridiculous, dystopian billionaire tech idea (e.g., 'We sell subscription oxygen').<br><br><strong>Phase 2: The Singularity:</strong> What happens when artificial intelligence becomes smarter than humans? Does it help us or destroy us?<br><br><strong>Phase 3: Privacy vs Convenience:</strong> Would you let a company implant a microchip in your brain if it meant you never had to use a smartphone again?</div>
+            </div>
+            
+            <!-- VOCAB -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Singularity (Point where AI surpasses human intelligence)<br>2. Dystopian (Imagined state/society with great suffering)<br>3. Cybernetic (Integration of technology and biology)<br>4. Invasive (Tending to intrude on privacy)<br>5. Biometric (Relating to body measurements like fingerprints)<br>6. Monopoly (Exclusive control of a trade/supply)<br>7. Inevitable (Certain to happen)<br>8. Obsolete (No longer produced or used)<br>9. Unprecedented (Never done or known before)<br>10. Consent (Permission for something to happen)<br>11. Surveillance (Close observation, especially of a suspected spy)<br>12. Exponential (Increasing rapidly)<br><br><strong>Drill Task:</strong> Give an example of 'Biometric' data that companies currently collect.</div>
+            </div>
+            
+            <!-- READING -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Main Reading Input</div>
+                <div class="content-text"><strong>PART 1: The Neural Link</strong><br>The next frontier of consumer technology is no longer the smartphone in your pocket; it is the cybernetic implant in your cortex. Tech conglomerates are racing to perfect 'neural-links'—devices that connect the human brain directly to the internet. Proponents argue that this exponential leap in connectivity is inevitable. They claim it will render traditional education obsolete, as humans will be able to download skills and languages instantaneously.<br><br>However, privacy advocates view this development as a terrifyingly dystopian nightmare. If a corporation holds a monopoly on the hardware inside your brain, they possess unprecedented access to your biometric data, your emotional states, and potentially your private thoughts.<br><br><strong>PART 2: The End of Anonymity</strong><br>We have already surrendered vast amounts of data to social media platforms without fully understanding the consequences. Expanding that surrender to neural implants invites a level of corporate surveillance that rivals any authoritarian regime in history. <br><br>If a user agrees to the 'Terms and Conditions' simply to participate in modern society, is that true consent? If you cannot apply for a job or buy groceries without a neural link, the technology ceases to be an optional convenience and becomes an invasive mechanism of absolute societal control. We are blindly rushing toward the Singularity without a moral compass.</div>
+            </div>
+            
+            <!-- COMPREHENSION -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-question-circle"></i> Comprehension Check</div>
+                <div class="content-text"><strong>Level 1 (Literal):</strong><br>- What is a 'neural-link' according to the text?<br>- What do proponents claim this technology will do to 'traditional education'?<br><br><strong>Level 2 (Inference):</strong><br>- Why does the author ask 'is that true consent?' regarding the Terms and Conditions?<br>- How does corporate surveillance rival an authoritarian regime, according to the passage?<br><br><strong>Level 3 (Applied Opinion):</strong><br>- Would you accept a free neural implant if it doubled your IQ and memory instantly? Why or why not?</div>
+            </div>
+            
+            <!-- GUIDED PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Guided Practice</div>
+                <div class="content-text"><strong>Exercise 1: Persuasive Connectors:</strong> Use 'Proponents argue that X, however, privacy advocates view X as Y.' in a sentence about self-driving cars.<br><br><strong>Exercise 2: Prefix 'Cyber-':</strong> Discuss words like Cybernetic, Cybersecurity, Cyberspace.<br><br><strong>Exercise 3: Summarization:</strong> Summarize the core warning of Part 2 in exactly 15 words.</div>
+            </div>
+            
+            <!-- OUTPUT -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-pen"></i> Free Output Writing</div>
+                <div class="content-text"><strong>The Hacker's Manifesto (15 mins)</strong><br><br><strong>Prompt:</strong> You are a 'cybernetic' hacker in the year 2050. The government has mandated that everyone must receive a neural implant.<br><br><strong>Task:</strong> Write a 3-paragraph anonymous manifesto to be broadcast on the internet.<br>- Paragraph 1: Declare your existence and your absolute refusal to accept the implant.<br>- Paragraph 2: Use strong vocabulary (Dystopian, Surveillance, Biometric) to explain the horrific dangers of the technology.<br>- Paragraph 3: Call to action—urge the citizens to disconnect and fight back against the 'inevitable' Singularity.</div>
+            </div>
+            <div class="page-num">Core Practice: Level 3 &bull; Page 15</div></div><div class="page" id="l13"><div class="module-header"><i class="fas fa-layer-group"></i> Core Practice: Level 3</div><div class="lesson-title"><h2>Lesson 13: Business</h2></div>
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
+                <div class="content-text"><strong>Phase 1: CEO Mindset:</strong> Make a ruthless decision instantly: 'The company is losing money. Fire 10% of the staff right now, or cut everyone's pay by 10%?' Defend your choice.<br><br><strong>Phase 2: The Start-up:</strong> Why do 90% of start-up businesses fail within the first five years?<br><br><strong>Phase 3: Outsourcing:</strong> Is it unethical for a company to move its factory to a poorer country to save money?</div>
+            </div>
+            
+            <!-- VOCAB -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Streamline (Make more efficient)<br>2. Overhead (Ongoing business expenses not related to creating a product)<br>3. Outsource (Obtain goods/services from an outside/foreign supplier)<br>4. Logistics (Detailed organization of a complex operation)<br>5. Vendor (A person or company offering something for sale)<br>6. Reputational damage (Harm to the good name of a company)<br>7. Stakeholder (Anyone with an interest in a business)<br>8. Profit margin (The amount by which revenue exceeds costs)<br>9. Saturated (A market with no room for new competitors)<br>10. Innovate (Make changes, introduce new methods)<br>11. Bankruptcy (Legal state of financial ruin)<br>12. Hostile takeover (Acquisition of a company against the wishes of its board)<br><br><strong>Drill Task:</strong> Describe how 'Outsourcing' affects 'Profit margins' and 'Overhead'.</div>
+            </div>
+            
+            <!-- LISTENING -->
+            <div class="lesson-block lb-purple">
+                <div class="lb-header"><i class="fas fa-headphones"></i> Main Listening Input</div>
+                <div class="content-text"><div style="margin-bottom:10px;"><audio controls style="height:30px; width:200px;"><source src="assets/audio/core_practice_level_3_lesson_13.mp3" type="audio/mpeg"></audio></div>
+                    <em>(The script text is hidden in the student manual. Listen to the audio closely to complete the exercise.)</em></div>
+            </div>
+            
+            <!-- COMPREHENSION -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-question-circle"></i> Comprehension Check</div>
+                <div class="content-text"><strong>Level 1 (Literal):</strong><br>- How many consecutive drops in quarterly profits has the company had?<br>- Where does the Executive want to outsource customer service?<br><br><strong>Level 2 (Inference):</strong><br>- Why does the Founder believe outsourcing will 'destroy our brand identity'?<br>- What does the Manager mean by prioritizing 'survival over sentimentality'?<br><br><strong>Level 3 (Applied Opinion):</strong><br>- If you were a shareholder, would you vote to fire the Founder to save the company's profit margins?</div>
+            </div>
+            
+            <!-- GUIDED PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Guided Practice</div>
+                <div class="content-text"><strong>Exercise 1: Business Idioms:</strong> 'Vote of no confidence', 'With all due respect', 'Fiduciary duty'. Practice using them in sentences.<br><br><strong>Exercise 2: Sentence Transformation:</strong> Change 'The market is saturated' into an active verb phrase: 'Competitors have completely saturated the market.'<br><br><strong>Exercise 3: Dictation:</strong> Listen to the Manager's threat at the end (starting 'We have a fiduciary duty...'). Write it down.</div>
+            </div>
+            
+            <!-- OUTPUT -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Free Output Simulation</div>
+                <div class="content-text"><strong>The Shark Tank (15 mins)</strong><br><br><strong>Context:</strong> A pitch meeting with aggressive billionaire investors.<br><br><strong>Role A (The Desperate Entrepreneur):</strong> You have a brilliant product (e.g., an umbrella that creates a forcefield), but terrible 'logistics' and high 'overhead'. You need $1 Million to 'streamline' production.<br><strong>Role B (The Sharks):</strong> You want to buy the company, but only if you can 'outsource' production and change the name. You threaten a 'hostile takeover' if they don't accept your harsh terms.<br><br><strong>Task:</strong> Negotiate the terms of the investment. It will get ugly.</div>
+            </div>
+            <div class="page-num">Core Practice: Level 3 &bull; Page 16</div></div><div class="page" id="l14"><div class="module-header"><i class="fas fa-layer-group"></i> Core Practice: Level 3</div><div class="lesson-title"><h2>Lesson 14: Law</h2></div>
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
+                <div class="content-text"><strong>Phase 1: Objection!:</strong> Practice shouting legal phrases at each other. Type: 'Objection! Hearsay!' 'Leading the witness!'<br><br><strong>Phase 2: The Settlement:</strong> Why do large corporations often pay millions of dollars to victims outside of court rather than going to trial?<br><br><strong>Phase 3: The Jury:</strong> Would you rather be judged by a single professional judge, or a jury of 12 random citizens? Why?</div>
+            </div>
+            
+            <!-- VOCAB -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Negligence (Failure to take proper care in doing something)<br>2. Liability (The state of being legally responsible)<br>3. Settlement (An official agreement intended to resolve a dispute)<br>4. Plaintiff (Person who brings a case against another in court)<br>5. Defendant (Person accused or sued in court)<br>6. Testimony (Formal written or spoken statement in court)<br>7. Perjury (The offense of willfully telling an untruth in court)<br>8. Hearsay (Information received from other people that cannot be substantiated)<br>9. Verdict (A decision on a disputed issue in a civil or criminal case)<br>10. Precedent (An earlier event/action regarded as an example/guide)<br>11. Acquittal (A judgment that a person is not guilty)<br>12. Subpoena (A writ ordering a person to attend a court)<br><br><strong>Drill Task:</strong> Explain the difference between a 'Plaintiff' and a 'Defendant'.</div>
+            </div>
+            
+            <!-- READING -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Main Reading Input</div>
+                <div class="content-text"><strong>PART 1: The Class Action</strong><br>The landmark case of *Miller v. OmniChem* set a terrifying new legal precedent for corporate liability. The plaintiffs, a group of three hundred citizens from the town of Clearwater, alleged severe negligence on the part of OmniChem. They claimed the chemical plant had knowingly dumped toxic byproducts into the local water reservoir for a decade, resulting in a massive spike in chronic respiratory illnesses. <br><br>Initially, OmniChem’s defense team attempted to dismiss the claims as circumstantial hearsay. They offered a private settlement of two million dollars—a fraction of the actual damages—under the strict condition of a non-disclosure agreement. The plaintiffs angrily rejected the settlement, issuing subpoenas to top OmniChem executives and forcing the dispute into a highly publicized jury trial.<br><br><strong>PART 2: The Cross-Examination</strong><br>The turning point of the trial occurred during the cross-examination of the plant manager. Under oath, the manager crumbled under the intense scrutiny of the prosecuting attorney. In a shocking testimony, he admitted that internal memos had warned the board of directors about the toxic leakage five years prior.<br><br>Faced with irrefutable proof of corporate malfeasance, and terrified of their executives committing perjury, OmniChem's defense collapsed. The jury delivered a unanimous verdict of guilty, ordering the corporation to pay an unprecedented $500 million in punitive damages. The acquittal of the corporate elite was no longer guaranteed.</div>
+            </div>
+            
+            <!-- COMPREHENSION -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-question-circle"></i> Comprehension Check</div>
+                <div class="content-text"><strong>Level 1 (Literal):</strong><br>- What did the plaintiffs accuse OmniChem of doing?<br>- How much money did OmniChem initially offer as a private settlement?<br><br><strong>Level 2 (Inference):</strong><br>- Why did OmniChem want a 'non-disclosure agreement' attached to the settlement?<br>- Why was the manager's testimony described as a 'turning point'?<br><br><strong>Level 3 (Applied Opinion):</strong><br>- If a corporation poisons a town, should the CEO go to prison, or is a $500 million fine enough punishment?</div>
+            </div>
+            
+            <!-- GUIDED PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Guided Practice</div>
+                <div class="content-text"><strong>Exercise 1: Legal Verbs:</strong> Match: 'Issue a...' (Subpoena), 'Reach a...' (Settlement), 'Deliver a...' (Verdict), 'Commit...' (Perjury).<br><br><strong>Exercise 2: Formality:</strong> Rewrite: 'They said they didn't do it.' -> 'The defense categorically denied the allegations.'<br><br><strong>Exercise 3: Word derivation:</strong> Neglect (Verb) -> Negligent (Adj) -> Negligence (Noun). Write a sentence using 'Negligence'.</div>
+            </div>
+            
+            <!-- OUTPUT -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-pen"></i> Free Output Writing</div>
+                <div class="content-text"><strong>The Closing Statement (15 mins)</strong><br><br><strong>Prompt:</strong> You are the prosecuting lawyer in the *Miller v. OmniChem* trial. You are delivering your final speech to the jury before they decide the 'verdict'.<br><br><strong>Task:</strong> Write a 3-paragraph closing statement.<br>- Paragraph 1: Summarize the tragic suffering of the 'plaintiffs' (the townspeople).<br>- Paragraph 2: Attack the 'negligence' and greed of the 'defendant' (the corporation). Reference the manager's 'testimony'.<br>- Paragraph 3: Demand a massive financial punishment to set a 'precedent' so this never happens again.</div>
+            </div>
+            <div class="page-num">Core Practice: Level 3 &bull; Page 17</div></div><div class="page" id="l15"><div class="module-header"><i class="fas fa-layer-group"></i> Core Practice: Level 3</div><div class="lesson-title"><h2>Lesson 15: Media</h2></div>
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
+                <div class="content-text"><strong>Phase 1: Spin Doctor:</strong> Spin this terrible news: 'Our factory exploded.' (e.g., 'We have an exciting opportunity to build a modern facility.')<br><br><strong>Phase 2: The Paparazzi:</strong> Should it be illegal to take photographs of celebrities when they are in public places?<br><br><strong>Phase 3: Deepfakes:</strong> How will we know what is real in a world where video evidence can be perfectly faked?</div>
+            </div>
+            
+            <!-- VOCAB -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Sensationalize (Present info to provoke public interest/excitement)<br>2. Defamation (Damaging the good reputation of someone)<br>3. Libel (A published false statement that is damaging to a person's reputation)<br>4. Slander (Making false and damaging spoken statements)<br>5. Anonymous source (Unnamed person providing info)<br>6. Verify (Make sure something is true/accurate)<br>7. Clickbait (Internet content encouraging users to click a link)<br>8. Polarizing (Dividing into two sharply contrasting groups)<br>9. Editorialize (Insert personal opinions into an objective report)<br>10. Deepfake (Digitally altered video/audio to misrepresent reality)<br>11. Censorship (Suppression of speech/public communication)<br>12. Narrative (The chosen way a story is presented)<br><br><strong>Drill Task:</strong> Explain the exact legal difference between 'Libel' and 'Slander'.</div>
+            </div>
+            
+            <!-- LISTENING -->
+            <div class="lesson-block lb-purple">
+                <div class="lb-header"><i class="fas fa-headphones"></i> Main Listening Input</div>
+                <div class="content-text"><div style="margin-bottom:10px;"><audio controls style="height:30px; width:200px;"><source src="assets/audio/core_practice_level_3_lesson_15.mp3" type="audio/mpeg"></audio></div>
+                    <em>(The script text is hidden in the student manual. Listen to the audio closely to complete the exercise.)</em></div>
+            </div>
+            
+            <!-- COMPREHENSION -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-question-circle"></i> Comprehension Check</div>
+                <div class="content-text"><strong>Level 1 (Literal):</strong><br>- What did the leaked documents accuse the Mayor of doing?<br>- Why does the Publisher refuse to publish the story immediately?<br><br><strong>Level 2 (Inference):</strong><br>- What does the Editor mean by 'the Tribune will scoop us'?<br>- Why does the Editor suggest using the word 'allegedly'?<br><br><strong>Level 3 (Applied Opinion):</strong><br>- If you were the Publisher, would you risk the lawsuit to inform the public before an election, or wait for 100% proof?</div>
+            </div>
+            
+            <!-- GUIDED PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Guided Practice</div>
+                <div class="content-text"><strong>Exercise 1: Journalistic Hedges:</strong> Practice softening claims: 'The Mayor is corrupt' -> 'The Mayor allegedly engaged in corrupt practices.'<br><br><strong>Exercise 2: Noun/Verb agreement:</strong> The media <u>is</u> or <u>are</u>? (Usually treated as plural in formal contexts: 'The media are responsible...').<br><br><strong>Exercise 3: Dictation:</strong> Transcribe the Publisher's final order: 'Verify the source, or...'</div>
+            </div>
+            
+            <!-- OUTPUT -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Free Output Simulation</div>
+                <div class="content-text"><strong>The Editor's Desk (15 mins)</strong><br><br><strong>Context:</strong> A heated argument in a newsroom.<br><br><strong>Role A (The Reckless Editor):</strong> You want to publish a highly 'polarizing', unverified video of a celebrity doing something illegal. You care only about 'clickbait' and views.<br><strong>Role B (The Cautious Lawyer):</strong> You are terrified of 'defamation' and 'libel'. You believe the video is a 'deepfake'. You must stop the Editor from publishing.<br><br><strong>Task:</strong> Argue for 5 minutes. The Teacher will act as the Publisher and decide who wins.</div>
+            </div>
+            <div class="page-num">Core Practice: Level 3 &bull; Page 18</div></div><div class="page" id="l16"><div class="module-header"><i class="fas fa-layer-group"></i> Core Practice: Level 3</div><div class="lesson-title"><h2>Lesson 16: Culture</h2></div>
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
+                <div class="content-text"><strong>Phase 1: Stereotype Smash:</strong> State the biggest stereotype about your home country. Is there any truth to it at all?<br><br><strong>Phase 2: Cultural Appropriation vs Appreciation:</strong> Where is the line between respectfully enjoying another culture's food/clothing, and stealing it?<br><br><strong>Phase 3: The Monoculture:</strong> Are smartphones and the internet destroying local cultures and creating one boring global 'monoculture'?</div>
+            </div>
+            
+            <!-- VOCAB -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Homogenization (Process of making things uniform or similar)<br>2. Globalization (Interaction/integration among people worldwide)<br>3. Appropriation (Unacknowledged or inappropriate adoption of customs)<br>4. Assimilation (Process of taking in and fully understanding ideas/culture)<br>5. Ethnocentrism (Evaluating other cultures according to preconceptions of one's own)<br>6. Taboo (A social or religious custom prohibiting a practice)<br>7. Heritage (Valued objects and qualities passed down from previous generations)<br>8. Indigenous (Originating or occurring naturally in a particular place)<br>9. Diaspora (Dispersion of any people from their original homeland)<br>10. Nuance (A subtle difference in meaning/expression)<br>11. Monoculture (A single, homogeneous culture without diversity)<br>12. Secular (Not subject to or bound by religious rule)<br><br><strong>Drill Task:</strong> Explain 'Ethnocentrism' using an example of a tourist in a foreign country.</div>
+            </div>
+            
+            <!-- READING -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Main Reading Input</div>
+                <div class="content-text"><strong>PART 1: The Threat of Homogenization</strong><br>As the relentless engine of globalization accelerates, sociologists warn of the creeping homogenization of human culture. Walk through the commercial center of Tokyo, Paris, or Buenos Aires, and you will encounter the exact same fast-food franchises, the same secular pop music, and the same global fashion brands. This phenomenon threatens to erode unique indigenous traditions, slowly replacing vibrant local heritage with a bland, corporate monoculture designed for mass consumption.<br><br>While some argue that this connectivity fosters global empathy and reduces ethnocentrism, critics point out that it often leads to cultural appropriation. Dominant global powers frequently strip nuanced traditions from minority groups, repackaging sacred rituals or historical garments as trendy commodities devoid of their original meaning.<br><br><strong>PART 2: The Diaspora Identity</strong><br>However, to view culture as a fragile artifact that must be locked in a museum is a fundamental misunderstanding of sociology. Culture is fluid. For members of the global diaspora—communities living far from their ancestral homelands—assimilation does not necessarily mean erasure.<br><br>Many immigrant communities successfully navigate a dual identity. They integrate into the secular, fast-paced rhythm of their adopted countries while fiercely preserving their ancestral taboos, culinary heritage, and languages in their private lives. Rather than a total monoculture, we are perhaps witnessing the birth of a complex, hybridized global society.</div>
+            </div>
+            
+            <!-- COMPREHENSION -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-question-circle"></i> Comprehension Check</div>
+                <div class="content-text"><strong>Level 1 (Literal):</strong><br>- What do you encounter in the commercial centers of Tokyo, Paris, and Buenos Aires?<br>- What do members of the global diaspora fiercely preserve in their private lives?<br><br><strong>Level 2 (Inference):</strong><br>- What does the author imply by calling the monoculture 'corporate' and 'designed for mass consumption'?<br>- Why is viewing culture as a 'fragile artifact locked in a museum' a misunderstanding?<br><br><strong>Level 3 (Applied Opinion):</strong><br>- Is globalization a net positive (peace/empathy) or a net negative (loss of heritage)?</div>
+            </div>
+            
+            <!-- GUIDED PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Guided Practice</div>
+                <div class="content-text"><strong>Exercise 1: Complex Gerund Subjects:</strong> '<u>Viewing culture as an artifact</u> is a misunderstanding.' Create your own sentence starting with a V-ing subject about globalization.<br><br><strong>Exercise 2: Prefix 'Homo-' and 'Mono-':</strong> Discuss words meaning 'one' or 'same': Homogenize, Monoculture, Monologue.<br><br><strong>Exercise 3: Expressing Nuance:</strong> Practice saying 'It's not black and white, there is a lot of nuance here.'</div>
+            </div>
+            
+            <!-- OUTPUT -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-pen"></i> Free Output Writing</div>
+                <div class="content-text"><strong>The Culture Essay (15 mins)</strong><br><br><strong>Prompt:</strong> 'The English language is destroying local languages and creating a monoculture.'<br><br><strong>Task:</strong> Write a 3-paragraph academic essay response.<br>- Paragraph 1: Introduce the topic of 'globalization' and state whether you agree or disagree with the prompt.<br>- Paragraph 2: Discuss the benefits of a global language (business, empathy, science).<br>- Paragraph 3: Discuss the dangers (loss of 'indigenous' identity, 'homogenization') and conclude.</div>
+            </div>
+            <div class="page-num">Core Practice: Level 3 &bull; Page 19</div></div><div class="page" id="l17"><div class="module-header"><i class="fas fa-layer-group"></i> Core Practice: Level 3</div><div class="lesson-title"><h2>Lesson 17: Education</h2></div>
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
+                <div class="content-text"><strong>Phase 1: School Reform:</strong> If you were the all-powerful Principal of your old high school, what is the single most radical rule you would implement on day one?<br><br><strong>Phase 2: Standardized Testing:</strong> Do multiple-choice exams actually measure intelligence, or just the ability to memorize?<br><br><strong>Phase 3: The Value of a Degree:</strong> Is a university degree still worth the debt in the age of the internet?</div>
+            </div>
+            
+            <!-- VOCAB -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Curriculum (Subjects comprising a course of study)<br>2. Pedagogy (The method and practice of teaching)<br>3. Standardized (Kept to a standard size/model)<br>4. Rote memorization (Learning technique based on repetition)<br>5. Critical thinking (Objective analysis to form a judgment)<br>6. Vocation (A strong feeling of suitability for a particular career/trade)<br>7. Tenure (Guaranteed permanent employment, esp. for teachers)<br>8. Disenfranchised (Deprived of power or rights/marginalized)<br>9. Aptitude (A natural ability to do something)<br>10. Pragmatic (Dealing with things sensibly and realistically)<br>11. Tuition (Money charged for teaching)<br>12. Academia (The environment associated with research/learning)<br><br><strong>Drill Task:</strong> Contrast 'Rote memorization' with 'Critical thinking'.</div>
+            </div>
+            
+            <!-- LISTENING -->
+            <div class="lesson-block lb-purple">
+                <div class="lb-header"><i class="fas fa-headphones"></i> Main Listening Input</div>
+                <div class="content-text"><div style="margin-bottom:10px;"><audio controls style="height:30px; width:200px;"><source src="assets/audio/core_practice_level_3_lesson_17.mp3" type="audio/mpeg"></audio></div>
+                    <em>(The script text is hidden in the student manual. Listen to the audio closely to complete the exercise.)</em></div>
+            </div>
+            
+            <!-- COMPREHENSION -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-question-circle"></i> Comprehension Check</div>
+                <div class="content-text"><strong>Level 1 (Literal):</strong><br>- Why is the daughter failing algebra?<br>- What does the daughter want to be when she grows up?<br><br><strong>Level 2 (Inference):</strong><br>- What does the parent mean by 'a rigid, industrial mold' or a 'factory assembly line'?<br>- Why does the teacher say 'my hands are tied'?<br><br><strong>Level 3 (Applied Opinion):</strong><br>- Should mathematics be strictly optional for students who want to pursue the arts?</div>
+            </div>
+            
+            <!-- GUIDED PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Guided Practice</div>
+                <div class="content-text"><strong>Exercise 1: Noun phrases:</strong> 'The pedagogy <u>we are forced to use</u> relies on...' Create a sentence describing a rule you are forced to follow.<br><br><strong>Exercise 2: Advanced Vocab:</strong> Use 'Mandates', 'Pragmatic', and 'Aptitude' in a sentence about choosing a career.<br><br><strong>Exercise 3: Dictation:</strong> Listen to the Parent's accusation: 'You are punishing her...'. Transcribe the full sentence.</div>
+            </div>
+            
+            <!-- OUTPUT -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Free Output Simulation</div>
+                <div class="content-text"><strong>The University Dean (15 mins)</strong><br><br><strong>Context:</strong> A fierce budget meeting at a prestigious university.<br><br><strong>Role A (Dean of the Arts):</strong> You argue that literature, philosophy, and music are essential for teaching 'critical thinking' and creating good citizens. You refuse budget cuts.<br><strong>Role B (Dean of STEM):</strong> You are highly 'pragmatic'. You argue that Science and Tech bring in millions in research funding and guarantee students high-paying jobs. You want to cut the Arts budget by 50%.<br><br><strong>Task:</strong> Debate the true purpose of a University. (The teacher will act as the University President).</div>
+            </div>
+            <div class="page-num">Core Practice: Level 3 &bull; Page 20</div></div><div class="page" id="l18"><div class="module-header"><i class="fas fa-layer-group"></i> Core Practice: Level 3</div><div class="lesson-title"><h2>Lesson 18: Health</h2></div>
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
+                <div class="content-text"><strong>Phase 1: Bioethics:</strong> Would you ever selectively alter the DNA of your unborn child to ensure they are exceptionally intelligent or attractive?<br><br><strong>Phase 2: Universal Healthcare:</strong> Should healthcare be a fundamental human right provided by the government, or a private business?<br><br><strong>Phase 3: The Placebo:</strong> How can the human brain heal the body just by 'believing' a fake pill is real?</div>
+            </div>
+            
+            <!-- VOCAB -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Pandemic (Prevalent over a whole country or the world)<br>2. Eradicate (Destroy completely; put an end to)<br>3. Pathogen (A bacterium, virus, or microorganism causing disease)<br>4. Quarantine (State of isolation to prevent spread of disease)<br>5. Efficacy (Ability to produce intended result)<br>6. Placebo (A harmless pill given for psychological benefit)<br>7. Bioethics (Ethics of medical and biological research)<br>8. Genetic modification (Altering genetic makeup)<br>9. Pharmaceutical (Relating to medicinal drugs)<br>10. Immunity (Ability to resist a particular infection)<br>11. Vulnerable (Susceptible to physical or emotional attack)<br>12. Malpractice (Improper, illegal, or negligent professional activity)<br><br><strong>Drill Task:</strong> Explain the ethical dilemma of 'Genetic modification' in humans.</div>
+            </div>
+            
+            <!-- READING -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Main Reading Input</div>
+                <div class="content-text"><strong>PART 1: The Eradication Protocol</strong><br>When the novel pathogen first emerged in the densely populated urban centers, global health organizations initially underestimated its transmission rate. Within weeks, the localized outbreak had escalated into a full-scale pandemic. Governments were forced to implement unprecedented quarantine measures, shutting down international borders and halting the global economy in a desperate bid to protect the most vulnerable populations.<br><br>Simultaneously, the pharmaceutical industry initiated an unparalleled race to develop a vaccine. Leveraging cutting-edge mRNA technology, researchers achieved in months what historically took decades. However, the rapid development cycle sparked intense debates surrounding the efficacy and long-term safety of the new drugs, despite rigorous clinical trials.<br><br><strong>PART 2: The Bioethical Divide</strong><br>The deployment of the vaccine highlighted a stark bioethical divide across the globe. Wealthy nations quickly secured massive stockpiles, achieving herd immunity and reopening their societies. Conversely, developing nations were left entirely disenfranchised, relying on insufficient donations from global health coalitions.<br><br>This stark inequality raised profound moral questions. If a pharmaceutical company develops life-saving intellectual property during a global catastrophe, should they be permitted to retain their lucrative patents? Critics argue that in times of existential crisis, medical knowledge must be open-sourced to eradicate the pathogen universally, rather than treated as a commodity for profit.</div>
+            </div>
+            
+            <!-- COMPREHENSION -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-question-circle"></i> Comprehension Check</div>
+                <div class="content-text"><strong>Level 1 (Literal):</strong><br>- How did the pharmaceutical industry develop the vaccine so quickly?<br>- What did wealthy nations achieve that allowed them to reopen their societies?<br><br><strong>Level 2 (Inference):</strong><br>- What does the author mean by a 'stark bioethical divide'?<br>- Why are patents considered 'lucrative' for pharmaceutical companies?<br><br><strong>Level 3 (Applied Opinion):</strong><br>- Should life-saving medicine be entirely free? If it is free, what is the incentive for companies to spend billions inventing it?</div>
+            </div>
+            
+            <!-- GUIDED PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Guided Practice</div>
+                <div class="content-text"><strong>Exercise 1: Passive Voice for Processes:</strong> 'Quarantine measures <u>were implemented</u>.' Re-write: 'The scientists developed the vaccine quickly.' into the passive voice.<br><br><strong>Exercise 2: Latin roots:</strong> 'Eradicate' comes from radix (root) - to pull up by the roots. Think of other words with 'rad' (Radical).<br><br><strong>Exercise 3: Tone Shifting:</strong> Re-write 'It's unfair that rich countries got the medicine first' into academic English using 'inequality' and 'disenfranchised'.</div>
+            </div>
+            
+            <!-- OUTPUT -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-pen"></i> Free Output Writing</div>
+                <div class="content-text"><strong>The WHO Summit (15 mins)</strong><br><br><strong>Prompt:</strong> A new, deadly virus has emerged. There is only enough vaccine to cure 10% of the world's population.<br><br><strong>Task:</strong> Write a 3-paragraph formal directive as the Head of the World Health Organization.<br>- Paragraph 1: Declare the 'pandemic' and describe the extreme danger of the 'pathogen'.<br>- Paragraph 2: Outline the strict 'quarantine' measures every country must follow.<br>- Paragraph 3: Solve the 'bioethical' dilemma: Who gets the limited vaccine first? (The young? The doctors? The wealthy?) Justify your terrible choice.</div>
+            </div>
+            <div class="page-num">Core Practice: Level 3 &bull; Page 21</div></div><div class="page" id="l19"><div class="module-header"><i class="fas fa-layer-group"></i> Core Practice: Level 3</div><div class="lesson-title"><h2>Lesson 19: Space</h2></div>
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
+                <div class="content-text"><strong>Phase 1: Mars One:</strong> You are offered a one-way ticket to colonize Mars. You will be famous forever, but you will never see Earth again. Do you take it? Why?<br><br><strong>Phase 2: The Fermi Paradox:</strong> The universe is infinite, so aliens must exist. Why haven't they contacted us yet?<br><br><strong>Phase 3: Space Junk:</strong> What happens when the orbit around Earth becomes completely filled with dead satellites and trash?</div>
+            </div>
+            
+            <!-- VOCAB -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Colonize (Send settlers to a place and establish control)<br>2. Gravity (Force that attracts a body toward the center of the earth)<br>3. Trajectory (Path followed by a flying object)<br>4. Astronaut / Cosmonaut (Person trained for spaceflight)<br>5. Extraterrestrial (Outside, or originating outside, the limits of the earth)<br>6. Atmosphere (Envelope of gases surrounding a planet)<br>7. Vacuum (Space entirely devoid of matter)<br>8. Cosmos (The universe seen as a well-ordered whole)<br>9. Asteroid (Small rocky body orbiting the sun)<br>10. Light-year (Distance light travels in one year)<br>11. Infinite (Limitless or endless in space, extent, or size)<br>12. Interstellar (Occurring or situated between stars)<br><br><strong>Drill Task:</strong> Explain why a 'Vacuum' is extremely dangerous for the human body.</div>
+            </div>
+            
+            <!-- LISTENING -->
+            <div class="lesson-block lb-purple">
+                <div class="lb-header"><i class="fas fa-headphones"></i> Main Listening Input</div>
+                <div class="content-text"><div style="margin-bottom:10px;"><audio controls style="height:30px; width:200px;"><source src="assets/audio/core_practice_level_3_lesson_19.mp3" type="audio/mpeg"></audio></div>
+                    <em>(The script text is hidden in the student manual. Listen to the audio closely to complete the exercise.)</em></div>
+            </div>
+            
+            <!-- COMPREHENSION -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-question-circle"></i> Comprehension Check</div>
+                <div class="content-text"><strong>Level 1 (Literal):</strong><br>- What caused the drop in cabin pressure?<br>- How long until the station's life support fails entirely?<br><br><strong>Level 2 (Inference):</strong><br>- Why did the Commander need to initiate an 'emergency bulkhead lockdown'?<br>- Why does the Commander call the spacewalk a 'suicide mission'?<br><br><strong>Level 3 (Applied Opinion):</strong><br>- Should humanity spend billions exploring space when there are so many problems (poverty, disease) to fix on Earth?</div>
+            </div>
+            
+            <!-- GUIDED PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Guided Practice</div>
+                <div class="content-text"><strong>Exercise 1: Radio Protocol Language:</strong> Practice using terms like 'Copy that', 'Be advised', and 'Initiate' to sound authoritative and clear.<br><br><strong>Exercise 2: Phrasal Verbs of Emergency:</strong> 'Seal off' (close completely), 'Brace for' (prepare for impact), 'Shut down' (turn off). Create a sentence with 'Brace for'.<br><br><strong>Exercise 3: Dictation:</strong> Listen to Mission Control's final grim warning ('We know the risks...'). Transcribe it perfectly.</div>
+            </div>
+            
+            <!-- OUTPUT -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Free Output Simulation</div>
+                <div class="content-text"><strong>First Landing (15 mins)</strong><br><br><strong>Context:</strong> You are the first human being to ever step foot on the surface of Mars. The entire population of Earth is watching you live on television.<br><br><strong>Role A (The Astronaut):</strong> You must deliver a profound, historical 1-minute speech. (Think Neil Armstrong's 'One small step...'). Mention the 'cosmos', 'infinite', and the future of humanity.<br><strong>Role B (Mission Control):</strong> You act as the interviewer/radio operator. After the speech, ask the astronaut 3 highly philosophical questions about what they see and feel looking back at Earth.<br><br><strong>Task:</strong> Perform the historical broadcast.</div>
+            </div>
+            <div class="page-num">Core Practice: Level 3 &bull; Page 22</div></div><div class="page" id="l20"><div class="module-header"><i class="fas fa-layer-group"></i> Core Practice: Level 3</div><div class="lesson-title"><h2>Lesson 20: The Future</h2></div>
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
+                <div class="content-text"><strong>Phase 1: Utopia vs Dystopia:</strong> Describe your absolute perfect vision of the world 100 years from now in exactly one sentence.<br><br><strong>Phase 2: Immortality:</strong> If scientists invent a pill that stops aging forever, who should be allowed to take it?<br><br><strong>Phase 3: The Time Traveler:</strong> If a time traveler from 2100 arrived right now, what modern habit do you think they would beg us to stop doing?</div>
+            </div>
+            
+            <!-- VOCAB -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Utopia (Imagined perfect society)<br>2. Dystopia (Imagined society with great suffering/injustice)<br>3. Futurology (Systematic forecasting of the future)<br>4. Transhumanism (Belief in enhancing humans via technology)<br>5. Inevitable (Certain to happen; unavoidable)<br>6. Apocalyptic (Describing the complete destruction of the world)<br>7. Prophesy (Say that a specified thing will happen in the future)<br>8. Optimism (Hopefulness about the future)<br>9. Pessimism (Tendency to see the worst aspect of things)<br>10. Legacy (What we leave behind for future generations)<br>11. Paradigm (A typical example or pattern of something)<br>12. Sentient (Able to perceive or feel things)<br><br><strong>Drill Task:</strong> Contrast 'Transhumanism' with 'Evolution'.</div>
+            </div>
+            
+            <!-- READING -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Main Reading Input</div>
+                <div class="content-text"><strong>PART 1: The Transhumanist Dream</strong><br>As we stand on the precipice of the 22nd century, futurologists are increasingly divided into two distinct camps: the utopian optimists and the apocalyptic pessimists. The optimists heavily advocate for transhumanism. They prophesy a near-future where genetic engineering and cybernetic enhancements eradicate disease, halt aging, and fundamentally elevate human intelligence. <br><br>In this paradigm, humanity successfully merges with advanced AI, creating a post-scarcity society where grueling manual labor is fully automated, allowing citizens to pursue pure intellectual and artistic fulfillment.<br><br><strong>PART 2: The Dystopian Reality</strong><br>The pessimists, however, view this technological acceleration with profound terror. They argue that without a radical shift in our economic and moral frameworks, these advancements will simply hyper-accelerate existing inequalities. Immortality and super-intelligence will become exclusive commodities for the ultra-wealthy, creating a literal biological divide between the ruling class and the disenfranchised masses.<br><br>Furthermore, the threat of environmental collapse or rogue sentient weapons remains an ever-present shadow. Ultimately, technology is entirely neutral; it is merely a mirror reflecting our own human nature. The legacy we leave for the next century will not be determined by the machines we build, but by the wisdom with which we choose to wield them.</div>
+            </div>
+            
+            <!-- COMPREHENSION -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-question-circle"></i> Comprehension Check</div>
+                <div class="content-text"><strong>Level 1 (Literal):</strong><br>- What do transhumanists prophesy technology will do to disease and aging?<br>- What do pessimists believe immortality will become?<br><br><strong>Level 2 (Inference):</strong><br>- What is a 'post-scarcity society' as implied by the first paragraph?<br>- Explain the phrase: 'technology is entirely neutral; it is merely a mirror'.<br><br><strong>Level 3 (Applied Opinion):</strong><br>- Are you an 'optimist' or a 'pessimist' regarding the year 2100? Provide one concrete reason.</div>
+            </div>
+            
+            <!-- GUIDED PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Guided Practice</div>
+                <div class="content-text"><strong>Exercise 1: Future Perfect Tense:</strong> 'By the year 2100, we <u>will have eradicated</u> disease.' Write your own Future Perfect prediction.<br><br><strong>Exercise 2: Advanced Word Families:</strong> Prophet (Noun), Prophesy (Verb), Prophetic (Adjective). Write a sentence using 'Prophetic'.<br><br><strong>Exercise 3: Rhetorical Balance:</strong> Notice the structure: 'The optimists advocate X... The pessimists, however, view X as Y.' Write a similar balanced sentence about social media.</div>
+            </div>
+            
+            <!-- OUTPUT -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-pen"></i> Free Output Writing</div>
+                <div class="content-text"><strong>The Time Capsule (15 mins)</strong><br><br><strong>Prompt:</strong> You have been selected to write a letter that will be placed in a titanium time capsule, to be opened by humanity in the year 3000.<br><br><strong>Task:</strong> Write a 3-paragraph letter to the distant future.<br>- Paragraph 1: Describe the 'paradigm' of our current era. What are our biggest achievements and our most 'apocalyptic' fears?<br>- Paragraph 2: Apologize for one specific mistake our generation is currently making regarding the planet or society.<br>- Paragraph 3: Express your 'optimism' or 'pessimism' for their current reality. What do you hope their 'utopia' looks like?</div>
+            </div>
+            <div class="page-num">Core Practice: Level 3 &bull; Page 23</div></div></body></html>

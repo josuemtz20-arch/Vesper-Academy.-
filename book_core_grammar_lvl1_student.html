@@ -1,0 +1,993 @@
+<!DOCTYPE html><html lang="en"><head>
+<script src="vesper_auth.js"></script><meta charset="UTF-8"><title>Core Grammar: Foundations (B1)</title><link rel="stylesheet" href="assets/css/vesper_style.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700&family=Open+Sans:wght@400;600;700&display=swap');
+    body { background-color: #525659; margin: 0; padding: 40px 0; display: flex; flex-direction: column; align-items: center; font-family: 'Merriweather', serif; color: #1a2b42; }
+    .page { background-color: white; width: 210mm; min-height: 297mm; padding: 20mm; box-sizing: border-box; box-shadow: 0 0 20px rgba(0,0,0,0.3); margin-bottom: 40px; position: relative; page-break-after: always; }
+    @media print { body { background: none; margin: 0; padding: 0; display: block; } .page { box-shadow: none; margin: 0; width: 100%; height: 100%; page-break-after: always; border: none; } .no-print { display: none; } }
+    @media screen and (max-width: 768px) {
+        body { padding: 10px; }
+        .page { width: 100%; padding: 10mm; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); min-height: auto; }
+        .module-header { margin: -10mm -10mm 10mm -10mm; padding: 15px 10mm; font-size: 1.2em; }
+        .lesson-title h2 { font-size: 1.8em; }
+        .vocab-grid { grid-template-columns: 1fr; }
+        .no-print { top: 10px; left: 10px; opacity: 0.8; }
+        .cover-title { font-size: 2em !important; }
+        .cover-subtitle { font-size: 1.2em !important; }
+    }
+    h1, h2, h3 { font-family: 'Open Sans', sans-serif; }
+    .module-header { background-color: #1a2b42; color: #d4af37; padding: 15px 20mm; margin: -20mm -20mm 10mm -20mm; font-family: 'Merriweather', serif; font-size: 1.4em; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
+    .lesson-title { border-bottom: 2px solid #34495e; padding-bottom: 15px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; }
+    .lesson-title h2 { margin: 0; font-size: 2.2em; color: #1a2b42; }
+    .lesson-block { margin-bottom: 25px; padding: 20px 25px; background: #fff; border-left: 5px solid #ccc; border-radius: 0 5px 5px 0; }
+    .lb-blue { border-color: #3498db; background: #ebf5fb; }
+    .lb-navy { border-color: #1a2b42; background: #fff; border: 1px solid #eee; border-left: 6px solid #1a2b42; }
+    .lb-purple { border-color: #8e44ad; background: #f5eef8; }
+    .lb-green { border-color: #27ae60; background: #eafaf1; }
+    .lb-red { border-color: #c0392b; background: #fdedec; }
+    .lb-header { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; font-weight: bold; font-family: 'Open Sans'; text-transform: uppercase; font-size: 1em; letter-spacing: 0.5px; }
+    .lb-blue .lb-header { color: #2980b9; } 
+    .lb-navy .lb-header { color: #1a2b42; }
+    .lb-purple .lb-header { color: #8e44ad; }
+    .lb-green .lb-header { color: #27ae60; }
+    .lb-red .lb-header { color: #c0392b; }
+    .content-text { line-height: 1.8; font-size: 0.95em; color: #2c3e50; text-align: justify; }
+    ul.deep-list { padding-left: 20px; list-style-type: square; } ul.deep-list li { margin-bottom: 12px; }
+    .vocab-box { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
+    .vocab-item { background: #eee; padding: 5px 10px; border-radius: 3px; font-size: 0.9em; font-family: 'Open Sans'; }
+    .page-num { position: absolute; bottom: 20mm; right: 20mm; color: #999; font-size: 0.8em; }
+    p { margin-bottom: 15px; }
+    .intro-box { background-color: #f8f9fa; border: 1px solid #dee2e6; padding: 30px; border-radius: 8px; margin-top: 50px; }
+</style>
+</head><body><div class="no-print" style="position: fixed; top: 20px; left: 20px; z-index: 1000;"><a href="index.html" style="background: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: bold; color: #1a2b42; box-shadow: 0 2px 5px rgba(0,0,0,0.2);"><i class="fas fa-arrow-left"></i> Dashboard</a></div><div class="page cover-page"><img src="assets/images/vesper_logo.jpg" alt="Vesper Academy" class="cover-logo" style="width:200px; margin-bottom:20px;"><div class="cover-title" style="font-size:3em; font-weight:bold; color:#1a2b42;">Core Grammar: Foundations (B1)</div><div class="cover-subtitle" style="font-size:1.5em; color:#34495e;">B1+ Academic</div><div style="margin-top: auto;"><strong>Vesper Academy</strong><br>Student Workbook</div></div><div class="page">
+<h1>Core Grammar: Foundations (B1) (Student Manual)</h1>
+<div class="intro-box">
+    <p><strong>Course Overview:</strong></p>
+    <p>Welcome to <strong>Core Grammar: Foundations (B1)</strong>. This course will upgrade your English from basic conversational to clear, structured academic and professional fluency.</p>
+    <p><strong>How to use this manual:</strong></p>
+    <ul class="deep-list">
+        <li><strong>Vocabulary:</strong> Focus on the definitions and part of speech for every new word.</li>
+        <li><strong>Structure:</strong> We break down grammar into simple visual formulas.</li>
+        <li><strong>Examples:</strong> Read how the structures are used in real contexts.</li>
+    </ul>
+</div>
+</div><div class="page"><div class="toc"><h1>Syllabus</h1><div><a href="#l1">1. The Parts of Speech</a></div><div><a href="#l2">2. Simple Past vs Present Perfect</a></div><div><a href="#l3">3. Narrative Tenses (Past Continuous & Perfect)</a></div><div><a href="#l4">4. Future Forms for Predictions</a></div><div><a href="#l5">5. Review: Paragraph Workshop</a></div><div><a href="#l6">6. Stative vs Dynamic Verbs</a></div><div><a href="#l7">7. Modals of Ability & Permission</a></div><div><a href="#l8">8. Modals of Obligation & Advice</a></div><div><a href="#l9">9. First & Second Conditionals</a></div><div><a href="#l10">10. Mid-Term Review</a></div><div><a href="#l11">11. The Passive Voice</a></div><div><a href="#l12">12. Reported Speech</a></div><div><a href="#l13">13. Relative Clauses</a></div><div><a href="#l14">14. Used to / Be used to / Get used to</a></div><div><a href="#l15">15. Structure Auditing</a></div><div><a href="#l16">16. Gerunds vs Infinitives</a></div><div><a href="#l17">17. Contrast Connectors</a></div><div><a href="#l18">18. Quantifiers</a></div><div><a href="#l19">19. Prepositions of Place & Time</a></div><div><a href="#l20">20. Final Review (Structure & Cohesion)</a></div></div></div><div class="page" id="l1"><div class="module-header"><i class="fas fa-layer-group"></i> Core Grammar: Foundations (B1)</div><div class="lesson-title"><h2>Lesson 1: The Parts of Speech</h2></div>
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context</div>
+                <div class="content-text"><strong>The Suffix Game:</strong><br>Can you change the word 'Compete' into a noun, an adjective, and an adverb?</div>
+            </div>
+            
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Study</div>
+                <div class="content-text">
+                    <strong>Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Noun (n): A word used to identify any of a class of people, places, or things</span><span class="vocab-item">Pronoun (n): A substitution for a noun</span><span class="vocab-item">Adjective (adj): A word that describes a noun</span><span class="vocab-item">Verb (v): Action performed by the subject</span><span class="vocab-item">Adverb (adv): Describes a verb, adjective, or another adverb</span><span class="vocab-item">Preposition (prep): Connects nouns to another part of the sentence</span><span class="vocab-item">Conjunction (conj): Connects two similar elements and ideas</span><span class="vocab-item">Interjection (int): An expression of emotion</span></div>
+                    <div style="margin-top:10px; padding-top:10px; border-top:1px dashed #ccc;">
+                    <strong>Grammar Note:</strong><br>
+                    
+         <strong>CONCEPT</strong><br>
+         To build complex sentences, you must understand exactly how words function. A word can completely change its function depending on its suffix.<br><br>
+         <strong>1. NOMINALIZATION (Verbs to Nouns)</strong><br>
+         <em>Structure:</em> Verb + Suffix (e.g., -tion, -ment, -ance) = Noun.<br>
+         <em>Examples:</em><br>
+         - The scientists <strong>decided</strong>... &rarr; The scientists made a <strong>decision</strong>.<br>
+         - The <strong>analysis</strong> of the data was important.<br><br>
+         <strong>2. ADVANCED ADVERBS</strong><br>
+         <em>Concept:</em> Use adverbs to link ideas logically, not just to describe verbs.<br>
+         <em>Examples:</em><br>
+         - Consequently, the experiment failed.<br>
+         - Furthermore, the results were incredible.
+     
+                    </div>
+                </div>
+            </div>
+            
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises</div>
+                <div class="content-text">
+         <strong>Task 1: Change Verb to Noun</strong><br>
+         1. They decided to investigate... &rarr; They made a ________ to launch an ________.<br>
+         2. The government regulated the industry. &rarr; The ________ of the industry.<br><br>
+         <strong>Task 2: Advanced Adverbs</strong><br>
+         3. The budget was cut; (therefore / furthermore), the project was delayed.<br>
+         4. He was tired; (nevertheless / moreover), he completed the manuscript.
+     </div>
+            </div>
+            
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Your Turn</div>
+                <div class="content-text">Take a simple paragraph ('He did the test. It was good.') and elevate it using nominalizations and formal adverbs.</div>
+            </div>
+            <div class="page-num">Core Grammar: Foundations (B1) &bull; Page 4</div></div><div class="page" id="l2"><div class="module-header"><i class="fas fa-layer-group"></i> Core Grammar: Foundations (B1)</div><div class="lesson-title"><h2>Lesson 2: Simple Past vs Present Perfect</h2></div>
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context</div>
+                <div class="content-text"><strong>Interview:</strong> Ask a partner: 'When did you graduate?' (Past Simple) vs. 'How many books have you read this year?' (Present Perfect).</div>
+            </div>
+            
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Study</div>
+                <div class="content-text">
+                    <strong>Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">ever (adv): Sometime in the past</span><span class="vocab-item">ago (adv): Meaning 'in the past', counted from the present</span><span class="vocab-item">last (adv): Similar to 'previous'</span><span class="vocab-item">since (prep): To express the moment something started</span><span class="vocab-item">for (prep): To express the duration something has had</span><span class="vocab-item">yet (adv): Something hasn't been done BY that moment</span><span class="vocab-item">just (adv): Happened a very short time ago</span><span class="vocab-item">never (adv): Opposite of always</span></div>
+                    <div style="margin-top:10px; padding-top:10px; border-top:1px dashed #ccc;">
+                    <strong>Grammar Note:</strong><br>
+                    
+         <strong>1. SIMPLE PAST</strong><br>
+         <em>Concept:</em> Used for historical facts or actions that happened in the past and finished. They do not continue.<br>
+         <em>Structure:</em> <code>Subject + Verb in Simple Past + (Complement)</code><br>
+         <em>Examples:</em><br>
+         - Christopher Columbus <strong>discovered</strong> America in 1492.<br>
+         - I <strong>broke up</strong> with my ex-boyfriend three years ago.<br><br>
+         <strong>2. PRESENT PERFECT</strong><br>
+         <em>Concept:</em> Used for actions that connect the past with the present, or an action at an unspecified time.<br>
+         <em>Structure:</em> <code>Subject + have/has + Verb (Past Participle) + (Complement)</code><br>
+         <em>Examples:</em><br>
+         - I <strong>have worked</strong> for this company for 10 years.<br>
+         - My mom <strong>has told</strong> me that.<br><br>
+         <em>Note:</em> Never use a specific finished time word (ago, yesterday) with the Present Perfect.
+     
+                    </div>
+                </div>
+            </div>
+            
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises</div>
+                <div class="content-text">
+         <strong>Task 1: Verb Conjugation</strong><br>
+         1. In 1998, the company (go) ________ bankrupt.<br>
+         2. Over the last decade, technology (alter) ________ the way we communicate.<br>
+         3. Dr. Allen (not publish) ________ any new research since 2015.<br><br>
+         <strong>Task 2: Error Correction</strong><br>
+         4. Throughout history, humanity has faced many plagues in the 14th century.<br>
+         5. I have finished the report yesterday afternoon.
+     </div>
+            </div>
+            
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Your Turn</div>
+                <div class="content-text">Write a short summary of AI history. Use Past Simple for the 1950s, and Present Perfect for recent events.</div>
+            </div>
+            <div class="page-num">Core Grammar: Foundations (B1) &bull; Page 5</div></div><div class="page" id="l3"><div class="module-header"><i class="fas fa-layer-group"></i> Core Grammar: Foundations (B1)</div><div class="lesson-title"><h2>Lesson 3: Narrative Tenses (Past Continuous & Perfect)</h2></div>
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context</div>
+                <div class="content-text"><strong>Timeline Puzzle:</strong> Connect two events: 'Server crashed' / 'Updating software' using narrative tenses.</div>
+            </div>
+            
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Study</div>
+                <div class="content-text">
+                    <strong>Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">background (n): Context or surrounding details specially from the past</span><span class="vocab-item">ongoing (adj): Still happening now at the same time</span><span class="vocab-item">while (conj): At the same time</span><span class="vocab-item">when (conj): At that moment</span><span class="vocab-item">before (conj): Earlier than something happens</span><span class="vocab-item">after (conj): Later than something happens</span><span class="vocab-item">by the time (exp): Before something happens</span><span class="vocab-item">alongside (adj): Next to / together</span></div>
+                    <div style="margin-top:10px; padding-top:10px; border-top:1px dashed #ccc;">
+                    <strong>Grammar Note:</strong><br>
+                    
+         <strong>CONCEPT</strong><br>
+         Case studies require complex timelines to show depth and sequence instead of just basic Simple Past.<br><br>
+         <strong>1. PAST CONTINUOUS (The Background)</strong><br>
+         <em>Concept:</em> Sets the scene. Describes ongoing conditions interrupted by other events.<br>
+         <em>Structure:</em> <code>Subject + was/were + Verb-ing</code><br>
+         <em>Examples:</em><br>
+         - <strong>While</strong> the market <strong>was collapsing</strong>, competitors were innovating.<br>
+         - I <strong>was going</strong> to school <strong>when</strong> it started to rain.<br><br>
+         <strong>2. PAST PERFECT (The Past of the Past)</strong><br>
+         <em>Concept:</em> Shows sequence. Marks that one action happened BEFORE another past action.<br>
+         <em>Structure:</em> <code>Subject + had + Verb (Past Participle)</code><br>
+         <em>Examples:</em><br>
+         - The company <strong>had already lost</strong> millions before the CEO resigned.
+     
+                    </div>
+                </div>
+            </div>
+            
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises</div>
+                <div class="content-text">
+         <strong>Task 1: Gap Fill</strong><br>
+         1. While the engineers (test) ________ the engine, a fire (break out) ________.<br>
+         2. As they (enter) ________, the alarm (sound) ________.<br><br>
+         <strong>Task 2: Sentence Combining</strong><br>
+         3. The researchers analyzed the samples. Before that, the freezer broke. &rarr; When the researchers analyzed the samples, the freezer ________.
+     </div>
+            </div>
+            
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Your Turn</div>
+                <div class="content-text">Investigate a failure. Report what was happening leading up to the crisis, and what had already gone wrong.</div>
+            </div>
+            <div class="page-num">Core Grammar: Foundations (B1) &bull; Page 6</div></div><div class="page" id="l4"><div class="module-header"><i class="fas fa-layer-group"></i> Core Grammar: Foundations (B1)</div><div class="lesson-title"><h2>Lesson 4: Future Forms for Predictions</h2></div>
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context</div>
+                <div class="content-text">Discuss the difference between 'It will rain someday' and 'It is going to rain now (look at clouds!)'</div>
+            </div>
+            
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Study</div>
+                <div class="content-text">
+                    <strong>Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">forecast (n): A calculation or estimate of future events</span><span class="vocab-item">predict (v): Say or estimate what will happen in the future</span><span class="vocab-item">anticipate (v): Regard as probable; expect</span><span class="vocab-item">schedule (n): A plan for carrying out a process</span><span class="vocab-item">likelihood (n): The state or fact of something's being likely</span><span class="vocab-item">imminent (adj): About to happen</span><span class="vocab-item">tentative (adj): Not certain or fixed</span><span class="vocab-item">definitive (adj): Final, not able to be changed</span></div>
+                    <div style="margin-top:10px; padding-top:10px; border-top:1px dashed #ccc;">
+                    <strong>Grammar Note:</strong><br>
+                    
+         <strong>CONCEPT</strong><br>
+         In English, we don't just use "will" for everything. The degree of certainty changes the grammar.<br><br>
+         <strong>1. WILL</strong><br>
+         <em>Concept:</em> Hypotheses, opinions, or distant futures.<br>
+         <em>Structure:</em> <code>Subject + will + Base Verb</code><br>
+         <em>Examples:</em> AI <strong>will</strong> likely alter job markets in the next century.<br><br>
+         <strong>2. BE GOING TO</strong><br>
+         <em>Concept:</em> Evidence-based forecasts. It's happening soon based on visible data.<br>
+         <em>Structure:</em> <code>Subject + am/is/are + going to + Base Verb</code><br>
+         <em>Examples:</em> Look at the graph; temperatures <strong>are going to</strong> rise.<br><br>
+         <strong>3. PRESENT CONTINUOUS</strong><br>
+         <em>Concept:</em> Fixed, scheduled arrangements with a set date/time.<br>
+         <em>Structure:</em> <code>Subject + am/is/are + Verb-ing</code><br>
+         <em>Examples:</em> We <strong>are presenting</strong> our paper next Tuesday.
+     
+                    </div>
+                </div>
+            </div>
+            
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises</div>
+                <div class="content-text">
+         <strong>Task 1: Choose the Form</strong><br>
+         1. We (fly) ________ to Tokyo next Monday. (We have tickets).<br>
+         2. Look at those dark clouds; it (rain) ________.<br>
+         3. I personally believe that humanity (colonize) ________ Mars by 2050.<br><br>
+         <strong>Task 2: Rewrite for Certainty</strong><br>
+         4. We have a meeting tomorrow. &rarr; We ________ tomorrow.
+     </div>
+            </div>
+            
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Your Turn</div>
+                <div class="content-text">Present a business plan. Use Present Continuous for next month, 'going to' for 1-year data, and 'will' for a 5-year vision.</div>
+            </div>
+            <div class="page-num">Core Grammar: Foundations (B1) &bull; Page 7</div></div><div class="page" id="l5"><div class="module-header"><i class="fas fa-layer-group"></i> Core Grammar: Foundations (B1)</div><div class="lesson-title"><h2>Lesson 5: Review: Paragraph Workshop</h2></div>
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context</div>
+                <div class="content-text"><strong>The Editor's Eye:</strong> Identify structural failures in a broken text.</div>
+            </div>
+            
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Study</div>
+                <div class="content-text">
+                    <strong>Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">cohesion (n): The action or fact of forming a united whole</span><span class="vocab-item">coherence (n): The quality of being logical and consistent</span><span class="vocab-item">structure (n): The arrangement of and relations between the parts</span><span class="vocab-item">draft (n): A preliminary version of a piece of writing</span><span class="vocab-item">revision (n): The action of revising or checking</span><span class="vocab-item">concise (adj): Giving a lot of information clearly in a few words</span><span class="vocab-item">redundant (adj): Not or no longer needed or useful</span></div>
+                    <div style="margin-top:10px; padding-top:10px; border-top:1px dashed #ccc;">
+                    <strong>Grammar Note:</strong><br>
+                    
+         <strong>CONCEPT</strong><br>
+         A high-level paragraph requires the integration of:<br>
+         - Nominalization (Accurate word forms).<br>
+         - Time depth (Past Simple vs. Present Perfect).<br>
+         - Background timelines (Past Continuous).<br>
+         - Clear future hypotheses (Will vs. Going to).<br>
+         <br>
+         <strong>STRUCTURE</strong><br>
+         When editing, check exactly when the timeframe of your sentence shifts, and adjust the tense accordingly.
+     
+                    </div>
+                </div>
+            </div>
+            
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises</div>
+                <div class="content-text">
+         <strong>Task 1: Deep Editing (Find the errors)</strong><br>
+         1. In 2010, the researchers have discovered a new element.<br>
+         2. While they was testing it in the lab, they realized it is dangerous.<br>
+         3. Therefore, they decide to halt the experiment.<br>
+         4. Before this event, nobody saw such a reaction.<br>
+         5. The analyzed of the data was difficult.<br>
+         6. Next week, they will presenting the paper in Berlin.
+     </div>
+            </div>
+            
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Your Turn</div>
+                <div class="content-text">Write a cohesive, 150-word abstract that includes a nominalized subject, Present Perfect for relevance, Past Simple for method, and a future prediction.</div>
+            </div>
+            <div class="page-num">Core Grammar: Foundations (B1) &bull; Page 8</div></div><div class="page" id="l6"><div class="module-header"><i class="fas fa-layer-group"></i> Core Grammar: Foundations (B1)</div><div class="lesson-title"><h2>Lesson 6: Stative vs Dynamic Verbs</h2></div>
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context</div>
+                <div class="content-text"><strong>Mind Reader:</strong> Discuss why states of mind are permanent and cannot be 'in progress'. (E.g. can you 'do' a belief?)</div>
+            </div>
+            
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Study</div>
+                <div class="content-text">
+                    <strong>Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">stative (adj): Expressing a state or condition rather than an activity or event</span><span class="vocab-item">dynamic (adj): Characterized by constant change, activity, or progress</span><span class="vocab-item">perceive (v): Become aware or conscious of something</span><span class="vocab-item">consist of (v): Be composed or made up of</span><span class="vocab-item">resemble (v): Have qualities or features, especially those of appearance, in common with</span><span class="vocab-item">possess (v): Have as belonging to one; own</span><span class="vocab-item">tangible (adj): Perceptible by touch</span></div>
+                    <div style="margin-top:10px; padding-top:10px; border-top:1px dashed #ccc;">
+                    <strong>Grammar Note:</strong><br>
+                    
+         <strong>CONCEPT</strong><br>
+         Continuous tenses (-ing) are typically reserved for actions (Dynamic verbs). Stative verbs describe states, thoughts, ownership, and senses. They usually CANNOT take an -ing form.<br><br>
+         <strong>1. PURE STATIVE VERBS</strong><br>
+         <em>Concept:</em> Possession, knowledge, abstract thought.<br>
+         <em>Examples:</em> belong, own, possess, know, believe, understand.<br>
+         - We <strong>understand</strong> the risks. (Not: <s>We are understanding</s>)<br><br>
+         <strong>2. MIXED VERBS</strong><br>
+         <em>Concept:</em> Some verbs act differently depending on the context.<br>
+         <em>Examples:</em><br>
+         - <strong>Have:</strong> I <strong>have</strong> a car (State = possession). I <strong>am having</strong> a meeting (Action).<br>
+         - <strong>Think:</strong> I <strong>think</strong> it's true (State). I <strong>am thinking</strong> about it (Action).
+     
+                    </div>
+                </div>
+            </div>
+            
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises</div>
+                <div class="content-text">
+         <strong>Task 1: Choose the correct form</strong><br>
+         1. The committee (consists / is consisting) of five core members.<br>
+         2. Currently, the CEO (thinks / is thinking) about restructuring.<br>
+         3. I absolutely (understand / am understanding) your concern.<br><br>
+         <strong>Task 2: Meaning Shifts</strong><br>
+         4. I weigh 70kg. vs. I am weighing the chemicals.<br>
+         5. I see what you mean. vs. We are seeing changes in the data.
+     </div>
+            </div>
+            
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Your Turn</div>
+                <div class="content-text">Describe a patient's current mental state. Use 'believe', 'know', 'resemble' correctly alongside what they 'are doing'.</div>
+            </div>
+            <div class="page-num">Core Grammar: Foundations (B1) &bull; Page 9</div></div><div class="page" id="l7"><div class="module-header"><i class="fas fa-layer-group"></i> Core Grammar: Foundations (B1)</div><div class="lesson-title"><h2>Lesson 7: Modals of Ability & Permission</h2></div>
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context</div>
+                <div class="content-text"><strong>The Bouncer:</strong> What is the difference between being physically 'able' to enter a club vs. being 'authorized' to enter?</div>
+            </div>
+            
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Study</div>
+                <div class="content-text">
+                    <strong>Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">authorize (v): Give official permission for or approval to</span><span class="vocab-item">empower (v): Give (someone) the authority or power to do something</span><span class="vocab-item">prohibit (v): Formally forbid (something) by law, rule, or other authority</span><span class="vocab-item">capacity (n): The maximum amount that something can contain</span><span class="vocab-item">competence (n): The ability to do something successfully or efficiently</span><span class="vocab-item">clearance (n): Official authorization for something to proceed or take place</span></div>
+                    <div style="margin-top:10px; padding-top:10px; border-top:1px dashed #ccc;">
+                    <strong>Grammar Note:</strong><br>
+                    
+         <strong>CONCEPT</strong><br>
+         'Can' and 'Could' are too basic for formal writing. We use formal equivalents to specify exactly the type of ability or permission.<br><br>
+         <strong>1. ABILITY (Physical/Intellectual Capacity)</strong><br>
+         <em>Structure:</em> be able to / have the capacity to / be capable of + V-ing.<br>
+         <em>Examples:</em> The AI <strong>is capable of analyzing</strong> gigabytes per second.<br><br>
+         <strong>2. PERMISSION (Authority/Legal Rights)</strong><br>
+         <em>Structure:</em> be authorized to / be permitted to / may.<br>
+         <em>Examples:</em><br>
+         - Employees <strong>are prohibited from</strong> accessing the server.<br>
+         - The researcher <strong>was granted clearance to</strong> view it.<br><br>
+         <strong>3. PAST ACHIEVEMENT</strong><br>
+         <em>Structure:</em> managed to.<br>
+         <em>Examples:</em> We <strong>managed to isolate</strong> the virus. (Instead of 'could isolate').
+     
+                    </div>
+                </div>
+            </div>
+            
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises</div>
+                <div class="content-text">
+         <strong>Task 1: Upgrade the Modal</strong><br>
+         1. The students <em>can</em> use the lab after hours. &rarr; The students are ________.<br>
+         2. The system <em>can</em> process heavy loads. &rarr; The system is ________.<br>
+         3. Nobody <em>can</em> enter without an ID. &rarr; Personnel are ________.<br>
+         4. She <em>could</em> solve the equation yesterday. &rarr; She managed ________.
+     </div>
+            </div>
+            
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Your Turn</div>
+                <div class="content-text">Write a formal memo to the IT department outlining what Level 1 staff 'are authorized to do' versus what they 'lack the capacity to alter'.</div>
+            </div>
+            <div class="page-num">Core Grammar: Foundations (B1) &bull; Page 10</div></div><div class="page" id="l8"><div class="module-header"><i class="fas fa-layer-group"></i> Core Grammar: Foundations (B1)</div><div class="lesson-title"><h2>Lesson 8: Modals of Obligation & Advice</h2></div>
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context</div>
+                <div class="content-text">What do mountain climbers 'have to' do to survive, and what 'ought' they to do for comfort?</div>
+            </div>
+            
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Study</div>
+                <div class="content-text">
+                    <strong>Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">oblige (v): Make someone legally or morally bound to an action or course of action</span><span class="vocab-item">advice (n): A suggestion or recommendation</span><span class="vocab-item">mandatory (adj): Required; must be done</span><span class="vocab-item">optional (adj): Not required; you can choose</span><span class="vocab-item">advisable (adj): A good idea; recommended</span><span class="vocab-item">prudent (adj): Careful and wise</span><span class="vocab-item">prohibit (v): To completely forbid something</span></div>
+                    <div style="margin-top:10px; padding-top:10px; border-top:1px dashed #ccc;">
+                    <strong>Grammar Note:</strong><br>
+                    
+         <strong>CONCEPT</strong><br>
+         Distinguishing between what is legally required, optionally permitted, and highly recommended.<br><br>
+         <strong>1. STRONG OBLIGATION</strong><br>
+         <em>Concept:</em> Required by rule or internal force.<br>
+         <em>Structure:</em> Must / Have to / Be required to.<br>
+         <em>Examples:</em> Staff <strong>are required to</strong> wear badges.<br><br>
+         <strong>2. LACK OF OBLIGATION & PROHIBITION</strong><br>
+         <em>Concept:</em> Optional vs strictly forbidden.<br>
+         <em>Structure:</em> Don't have to (optional) vs Must not (forbidden).<br>
+         <em>Examples:</em> You <strong>don't have to</strong> attend (optional). You <strong>must not</strong> enter (forbidden).<br><br>
+         <strong>3. ADVICE / RECOMMENDATION</strong><br>
+         <em>Concept:</em> Highly formal suggestions.<br>
+         <em>Structure:</em> It is highly advisable to / strongly recommended that / ought to.<br>
+         <em>Examples:</em> It is <strong>prudent</strong> to invest early.
+     
+                    </div>
+                </div>
+            </div>
+            
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises</div>
+                <div class="content-text">
+         <strong>Task 1: Insert Obligation / Prohibition</strong><br>
+         1. This data is classified. You (must not / don't have to) ________ share it.<br>
+         2. Filing reports in triplicate is an old policy; you ________ do it anymore.<br>
+         3. All new employees ________ complete the safety orientation.<br><br>
+         <strong>Task 2: Upgrading Advice</strong><br>
+         4. You should back up your data. &rarr; It is highly advisable ________.<br>
+         5. I think you ought to read this book. &rarr; It is strongly recommended ________.
+     </div>
+            </div>
+            
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Your Turn</div>
+                <div class="content-text">Draft a remote work policy. Include 2 mandatory rules, 1 prohibition, 1 optional rule, and 1 strong recommendation.</div>
+            </div>
+            <div class="page-num">Core Grammar: Foundations (B1) &bull; Page 11</div></div><div class="page" id="l9"><div class="module-header"><i class="fas fa-layer-group"></i> Core Grammar: Foundations (B1)</div><div class="lesson-title"><h2>Lesson 9: First & Second Conditionals</h2></div>
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context</div>
+                <div class="content-text"><strong>The Dreamer vs. Realist:</strong> Realist: 'If I pass, I will graduate.' Dreamer: 'If I won the lottery, I would buy the school.'</div>
+            </div>
+            
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Study</div>
+                <div class="content-text">
+                    <strong>Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">provided that (conj): Used to say what must happen or be done to make it possible for something else to happen</span><span class="vocab-item">unless (conj): Except if; if not</span><span class="vocab-item">scenario (n): A postulated sequence or development of events</span><span class="vocab-item">feasibility (n): The state or degree of being easily or conveniently done</span><span class="vocab-item">variables (n): An element, feature, or factor that is liable to vary or change</span><span class="vocab-item">optimal (adj): Best or most favorable</span><span class="vocab-item">compromise (v): Make a deal between different parties where each gives up part of their demand</span></div>
+                    <div style="margin-top:10px; padding-top:10px; border-top:1px dashed #ccc;">
+                    <strong>Grammar Note:</strong><br>
+                    
+         <strong>CONCEPT</strong><br>
+         Conditionals form the basis of all hypotheses and contingency plans.<br><br>
+         <strong>1. FIRST CONDITIONAL (Real/Possible Future)</strong><br>
+         <em>Concept:</em> Likely outcomes based on a real condition.<br>
+         <em>Structure:</em> <code>If + Present Simple, Will + Base Verb</code><br>
+         <em>Examples:</em> <strong>If</strong> the market <strong>stabilizes</strong>, we <strong>will launch</strong>.<br>
+         - Use <em>Provided that</em> or <em>As long as</em> instead of 'If' for formal demands.<br><br>
+         <strong>2. SECOND CONDITIONAL (Unreal/Hypothetical Concept)</strong><br>
+         <em>Concept:</em> Imagining a different reality.<br>
+         <em>Structure:</em> <code>If + Past Simple, Would + Base Verb</code><br>
+         <em>Examples:</em> <strong>If</strong> we <strong>had</strong> infinite funding, we <strong>would build</strong> on Mars.<br>
+         - Always use 'were' instead of 'was' (If I <strong>were</strong> the CEO...).
+     
+                    </div>
+                </div>
+            </div>
+            
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises</div>
+                <div class="content-text">
+         <strong>Task 1: Verb Conjugation</strong><br>
+         1. If they (lower) ________ the price tomorrow, demand (increase) ________.<br>
+         2. If I (be) ________ in charge, I (restructure) ________ everything.<br>
+         3. We (hire) ________ more staff if we (have) ________ the space, but we don't.<br>
+         4. Provided that the test results (be) ________ positive, we (proceed) ________.<br><br>
+         <strong>Task 2: Rewrite using 'Unless' or 'Provided that'</strong><br>
+         5. If you don't wear gear, you cannot enter. &rarr; Unless...<br>
+         6. If you sign the NDA, you can read the file. &rarr; Provided that...
+     </div>
+            </div>
+            
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Your Turn</div>
+                <div class="content-text">Roleplay a negotiation. Use 1st conditionals for actual terms ('Provided that you give us 20%...') and 2nd conditionals for hypotheticals.</div>
+            </div>
+            <div class="page-num">Core Grammar: Foundations (B1) &bull; Page 12</div></div><div class="page" id="l10"><div class="module-header"><i class="fas fa-layer-group"></i> Core Grammar: Foundations (B1)</div><div class="lesson-title"><h2>Lesson 10: Mid-Term Review</h2></div>
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context</div>
+                <div class="content-text"><strong>Grammar Jeopardy:</strong> Rapid-fire questions covering Stative Verbs, Advice Modals, and Conditionals.</div>
+            </div>
+            
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Study</div>
+                <div class="content-text">
+                    <strong>Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">integrate (v): Combine (one thing) with another so that they become a whole</span><span class="vocab-item">evaluate (v): Form an idea of the amount, number, or value of; assess</span><span class="vocab-item">discern (v): Perceive or recognize (something)</span><span class="vocab-item">differentiate (v): Recognize or ascertain what makes (someone or something) different</span><span class="vocab-item">proficiency (n): A high degree of competence or skill; expertise</span><span class="vocab-item">rectify (v): Put (something) right; correct</span></div>
+                    <div style="margin-top:10px; padding-top:10px; border-top:1px dashed #ccc;">
+                    <strong>Grammar Note:</strong><br>
+                    
+         <strong>CONCEPT</strong><br>
+         Synthesizing nuanced verbs, modals of authority, and conditional logic.<br><br>
+         <strong>STRUCTURE REVIEW</strong><br>
+         - <strong>State vs Action:</strong> The data <em>resembles</em> (not 'is resembling') the model.<br>
+         - <strong>Permission/Capacity:</strong> We <em>are authorized to</em> proceed because the system <em>is capable of</em> handling it.<br>
+         - <strong>Obligation:</strong> We <em>are required to</em> test it, though it is <em>highly advisable to</em> double-check.<br>
+         - <strong>Conditionals:</strong> <em>Provided that</em> it passes, we <em>will</em> publish.
+     
+                    </div>
+                </div>
+            </div>
+            
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises</div>
+                <div class="content-text">
+         <strong>Task 1: The Integration Paragraph</strong> Fill the blanks correctly.<br>
+         1. The company (currently / possess) ________ a monopoly.<br>
+         2. However, they (prohibit) ________ from expanding into Europe.<br>
+         3. If the regulations (be) ________ less strict, they (expand) ________ immediately.<br>
+         4. It is (advisory) ________ that they act quickly. (Use the correct form)<br>
+         5. I (am understanding) ________ the logic behind this move. (Fix error)<br>
+         6. Unless they (act) ________ now, they (lose) ________ momentum.<br>
+         7. What would you do if you (are) ________ the CEO? (Fix error)
+     </div>
+            </div>
+            
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Your Turn</div>
+                <div class="content-text">Act as a spokesperson addressing a failure. State what you 'know' (Stative), what you 'were required to do', what you 'managed to do', and what 'will happen if' (Conditional) you secure funding.</div>
+            </div>
+            <div class="page-num">Core Grammar: Foundations (B1) &bull; Page 13</div></div><div class="page" id="l11"><div class="module-header"><i class="fas fa-layer-group"></i> Core Grammar: Foundations (B1)</div><div class="lesson-title"><h2>Lesson 11: The Passive Voice</h2></div>
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context</div>
+                <div class="content-text"><strong>Ego Eraser:</strong> Erase 'I' and 'We'. 'I analyzed the data' &rarr; 'The data was analyzed.'</div>
+            </div>
+            
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Study</div>
+                <div class="content-text">
+                    <strong>Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">undergo (v): Experience or be subjected to (something, typically something unpleasant, painful, or arduous)</span><span class="vocab-item">implement (v): Put (a decision, plan, agreement, etc.) into effect</span><span class="vocab-item">manipulate (v): Handle or control (a tool, mechanism, etc.), typically in a skillful manner</span><span class="vocab-item">objective (adj): (of a person or their judgment) not influenced by personal feelings or opinions in considering and representing facts</span><span class="vocab-item">rigorous (adj): Extremely thorough, exhaustive, or accurate</span><span class="vocab-item">via (prep): Traveling through (a place) en route to a destination</span></div>
+                    <div style="margin-top:10px; padding-top:10px; border-top:1px dashed #ccc;">
+                    <strong>Grammar Note:</strong><br>
+                    
+         <strong>CONCEPT</strong><br>
+         In scientific writing, <em>who</em> did the action is usually irrelevant. What matters is the <em>process</em> and the <em>result</em>. The Passive Voice creates an objective tone.<br><br>
+         <strong>STRUCTURE</strong><br>
+         <code>Object + BE (in tense) + Verb (Past Participle)</code><br><br>
+         <strong>EXAMPLES</strong><br>
+         - <em>Present:</em> The samples <strong>are tested</strong> daily.<br>
+         - <em>Past:</em> The experiment <strong>was conducted</strong> in 2020.<br>
+         - <em>Present Perfect:</em> The results <strong>have been verified</strong>.<br>
+         - <em>Modals:</em> Funding <strong>must be secured</strong>.<br><br>
+         <em>Note:</em> Only use 'by [Agent]' if the doer is surprising. ('The theory was proven <strong>by Einstein</strong>').
+     
+                    </div>
+                </div>
+            </div>
+            
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises</div>
+                <div class="content-text">
+         <strong>Task 1: Active to Passive Transformation</strong><br>
+         1. The technicians test the water quality every hour. &rarr; The water quality ________.<br>
+         2. They had fired the manager before the scandal broke. &rarr; The manager ________.<br>
+         3. We have gathered all the necessary materials. &rarr; All the necessary materials ________.<br>
+         4. You must submit the application by Friday. &rarr; The application ________.<br><br>
+         <strong>Task 2: Find the Error</strong><br>
+         5. The thesis was wrote by a brilliant student.<br>
+         6. The components are being manufacture in China.
+     </div>
+            </div>
+            
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Your Turn</div>
+                <div class="content-text">Write a 'Methodology' section for testing coffee on cats using exclusively passive voice.</div>
+            </div>
+            <div class="page-num">Core Grammar: Foundations (B1) &bull; Page 14</div></div><div class="page" id="l12"><div class="module-header"><i class="fas fa-layer-group"></i> Core Grammar: Foundations (B1)</div><div class="lesson-title"><h2>Lesson 12: Reported Speech</h2></div>
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context</div>
+                <div class="content-text"><strong>Telephone:</strong> Partner A: 'I ate pizza.' Partner B: 'He claimed he had eaten pizza.'</div>
+            </div>
+            
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Study</div>
+                <div class="content-text">
+                    <strong>Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">assert (v): State a fact or belief confidently and forcefully</span><span class="vocab-item">claim (v): State or assert that something is the case, typically without providing evidence</span><span class="vocab-item">clarify (v): Make (a statement or situation) less confused and more comprehensible</span><span class="vocab-item">emphasize (v): Give special importance or prominence to (something) in speaking or writing</span><span class="vocab-item">verbatim (adv): In exactly the same words as were used originally</span><span class="vocab-item">paraphrased (adj): Express the meaning of (the writer or speaker or something written or spoken) using different words</span></div>
+                    <div style="margin-top:10px; padding-top:10px; border-top:1px dashed #ccc;">
+                    <strong>Grammar Note:</strong><br>
+                    
+         <strong>CONCEPT</strong><br>
+         When discussing other people's research, we report what they said indirectly. This requires 'backshifting' (moving the tense one step back into the past).<br><br>
+         <strong>STRUCTURE (Backshifting)</strong><br>
+         - <em>Present &rarr; Past:</em> "I <strong>am</strong> right." &rarr; He stated that he <strong>was</strong> right.<br>
+         - <em>Past &rarr; Past Perfect:</em> "We <strong>found</strong> a flaw." &rarr; They claimed they <strong>had found</strong> a flaw.<br>
+         - <em>Will &rarr; Would:</em> "It <strong>will</strong> work." &rarr; She asserted that it <strong>would</strong> work.<br><br>
+         <strong>TIMESTAMP SHIFTS</strong><br>
+         - 'Tomorrow' &rarr; 'The next day' | 'Yesterday' &rarr; 'The previous day'<br><br>
+         <em>Exception:</em> Do not backshift universal truths. ("Einstein said the speed of light <strong>is</strong> constant").
+     
+                    </div>
+                </div>
+            </div>
+            
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises</div>
+                <div class="content-text">
+         <strong>Task 1: Backshifting Tenses</strong><br>
+         1. "We are analyzing the newly discovered fossils." &rarr; Dr. Grant noted that they ________.<br>
+         2. "The server crashed completely yesterday." &rarr; The IT team reported that the server ________ ________.<br>
+         3. "I will present my findings tomorrow." &rarr; She stated that she ________ ________.<br><br>
+         <strong>Task 2: Universal Truths (Backshift or not?)</strong><br>
+         4. Galileo said, "The earth revolves around the sun."<br>
+         5. The teacher said, "Water boils at 100 degrees Celsius."
+     </div>
+            </div>
+            
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Your Turn</div>
+                <div class="content-text">Take a transcript of a fiery debate. Write a summarized report stating exactly what they accused each other of, properly backshifted.</div>
+            </div>
+            <div class="page-num">Core Grammar: Foundations (B1) &bull; Page 15</div></div><div class="page" id="l13"><div class="module-header"><i class="fas fa-layer-group"></i> Core Grammar: Foundations (B1)</div><div class="lesson-title"><h2>Lesson 13: Relative Clauses</h2></div>
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context</div>
+                <div class="content-text">Compare: 'My brother who lives in NY is rich' vs 'My brother, who lives in NY, is rich.' How many brothers do I have in each?</div>
+            </div>
+            
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Study</div>
+                <div class="content-text">
+                    <strong>Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">specify (v): Identify clearly and definitely</span><span class="vocab-item">restrict (v): Put a limit on; keep under control</span><span class="vocab-item">elaborate (v): Develop or present (a theory, policy, or system) in detail</span><span class="vocab-item">superfluous (adj): Unnecessary, especially through being more than enough</span><span class="vocab-item">vital (adj): Absolutely necessary or important; essential</span><span class="vocab-item">pertaining to (prep): Belonging or relating to</span></div>
+                    <div style="margin-top:10px; padding-top:10px; border-top:1px dashed #ccc;">
+                    <strong>Grammar Note:</strong><br>
+                    
+         <strong>CONCEPT</strong><br>
+         Relative clauses use pronouns (who, which, that, where) to combine sentences. The punctuation completely changes the legal/academic meaning.<br><br>
+         <strong>1. DEFINING CLAUSES (No Commas)</strong><br>
+         <em>Concept:</em> Essential information. Identifies exactly WHO or WHAT.<br>
+         <em>Examples:</em> "The students <strong>who cheated</strong> were expelled." (Only the cheaters were expelled. You can use 'that').<br><br>
+         <strong>2. NON-DEFINING CLAUSES (With Commas)</strong><br>
+         <em>Concept:</em> Parenthetical, extra detail. The subject is already clear.<br>
+         <em>Examples:</em> "The students, <strong>who cheated</strong>, were expelled." (ALL students were expelled; oh, and by the way, they all cheated.)<br>
+         - NEVER use 'that' after a comma in these clauses.
+     
+                    </div>
+                </div>
+            </div>
+            
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises</div>
+                <div class="content-text">
+         <strong>Task 1: Pronoun Selection</strong><br>
+         1. The laboratory ________ we conduct our research is secure.<br>
+         2. The professor ________ theory won the prize is retiring.<br>
+         3. The new software, ________ cost millions, is obsolete.<br><br>
+         <strong>Task 2: Comma Insertion (Defining vs Non)</strong><br>
+         4. Oxygen which is essential for life makes up 21% of the atmosphere.<br>
+         5. The laptops that are stored in the server room are strictly for staff.<br><br>
+         <strong>Task 3: Find the Error</strong><br>
+         6. The Eiffel Tower, that is located in Paris, was built in 1889.
+     </div>
+            </div>
+            
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Your Turn</div>
+                <div class="content-text">Read a poorly punctuated contract clause. Explain how the lack of commas legally changes which exact assets are being seized by the bank.</div>
+            </div>
+            <div class="page-num">Core Grammar: Foundations (B1) &bull; Page 16</div></div><div class="page" id="l14"><div class="module-header"><i class="fas fa-layer-group"></i> Core Grammar: Foundations (B1)</div><div class="lesson-title"><h2>Lesson 14: Used to / Be used to / Get used to</h2></div>
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context</div>
+                <div class="content-text">Discuss moving to a foreign country. 'I used to eat bread, but now I'm getting used to rice. I am used to it now.'</div>
+            </div>
+            
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Study</div>
+                <div class="content-text">
+                    <strong>Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">accustom (v): Make (someone or something) accept something as normal or usual</span><span class="vocab-item">habituate (v): Make or become accustomed or used to something</span><span class="vocab-item">acclimate (v): Become accustomed to a new climate or to new conditions</span><span class="vocab-item">conventional (adj): Based on or in accordance with what is generally done or believed</span><span class="vocab-item">novel (adj): New or unusual in an interesting way</span><span class="vocab-item">status quo (n): The existing state of affairs</span></div>
+                    <div style="margin-top:10px; padding-top:10px; border-top:1px dashed #ccc;">
+                    <strong>Grammar Note:</strong><br>
+                    
+         <strong>CONCEPT</strong><br>
+         These three structures look identical but serve completely different grammatical functions regarding habituation.<br><br>
+         <strong>1. USED TO + Base Verb</strong><br>
+         <em>Concept:</em> Past Habit. True in the past, but NOT anymore.<br>
+         <em>Examples:</em> We <strong>used to code</strong> in Python, but now we use Rust.<br><br>
+         <strong>2. BE USED TO + Noun/V-ing</strong><br>
+         <em>Concept:</em> Current condition. It is normal for me.<br>
+         <em>Examples:</em> The doctors <strong>are used to working</strong> 10-hour shifts.<br><br>
+         <strong>3. GET USED TO + Noun/V-ing</strong><br>
+         <em>Concept:</em> The psychological PROCESS of adapting.<br>
+         <em>Examples:</em> The software is confusing, but you <strong>will get used to it</strong> soon.
+     
+                    </div>
+                </div>
+            </div>
+            
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises</div>
+                <div class="content-text">
+         <strong>Task 1: Selection</strong><br>
+         1. Before the promotion, I ________ have much more free time.<br>
+         2. The weather is brutal, but I will eventually ________ it.<br>
+         3. The astronaut is entirely ________ experiencing zero gravity.<br><br>
+         <strong>Task 2: Form Conjugation</strong><br>
+         4. I am used to (manage / managing) large teams.<br>
+         5. The startup used to (operate / operating) out of a garage.<br><br>
+         <strong>Task 3: Transformation</strong><br>
+         6. It was normal for him to smoke, but he stopped. &rarr; He ________ smoke.
+     </div>
+            </div>
+            
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Your Turn</div>
+                <div class="content-text">Address your team after a harsh corporate buyout. Discuss what they 'used to do', what they 'must get used to', and what they 'are already used to'.</div>
+            </div>
+            <div class="page-num">Core Grammar: Foundations (B1) &bull; Page 17</div></div><div class="page" id="l15"><div class="module-header"><i class="fas fa-layer-group"></i> Core Grammar: Foundations (B1)</div><div class="lesson-title"><h2>Lesson 15: Structure Auditing</h2></div>
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context</div>
+                <div class="content-text"><strong>The Grammar Gauntlet:</strong> Rapid rotation correcting Passive, Reporting, Clauses, and Habits.</div>
+            </div>
+            
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Study</div>
+                <div class="content-text">
+                    <strong>Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">audit (n): A systematic and independent examination of books, accounts, statutory records</span><span class="vocab-item">pinpoint (v): Find or identify with great accuracy or precision</span><span class="vocab-item">ambiguity (n): The quality of being open to more than one interpretation; inexactness</span><span class="vocab-item">anomaly (n): Something that deviates from what is standard, normal, or expected</span><span class="vocab-item">framework (n): An essential supporting structure of a building, vehicle, or object</span><span class="vocab-item">methodology (n): A system of methods used in a particular area of study or activity</span></div>
+                    <div style="margin-top:10px; padding-top:10px; border-top:1px dashed #ccc;">
+                    <strong>Grammar Note:</strong><br>
+                    
+         <strong>CONCEPT (Week 3 Review)</strong><br>
+         An elite structural review requires mastering:<br>
+         - <strong>Passive Voice:</strong> Impartiality (The data was manipulated).<br>
+         - <strong>Reported Speech:</strong> Proper historical backshifting (He claimed they had finished).<br>
+         - <strong>Relative Clauses:</strong> Knowing when a comma legally changes limits.<br>
+         - <strong>Adaptation:</strong> Expressing lost habits vs. new realities (used to vs. get used to).
+     
+                    </div>
+                </div>
+            </div>
+            
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises</div>
+                <div class="content-text">
+         <strong>Task 1: The Mega Edit (Find 5 errors)</strong><br>
+         1. The thesis was wrote by a team from MIT.<br>
+         2. Yesterday, the scientist said he will publish the code.<br>
+         3. The laboratory that is located in Boston is highly secure. (It's the only lab).<br>
+         4. Researchers are getting used to work with AI models.<br>
+         5. Before the internet, scientists use to rely on paper databases.
+     </div>
+            </div>
+            
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Your Turn</div>
+                <div class="content-text">Listen to a chaotic recording of an emergency meeting. Convert their frantic active quotes into a cold, passive, neatly reported official document.</div>
+            </div>
+            <div class="page-num">Core Grammar: Foundations (B1) &bull; Page 18</div></div><div class="page" id="l16"><div class="module-header"><i class="fas fa-layer-group"></i> Core Grammar: Foundations (B1)</div><div class="lesson-title"><h2>Lesson 16: Gerunds vs Infinitives</h2></div>
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context</div>
+                <div class="content-text">Discuss 'Stopping TO smoke' vs 'Stopping smoking'. Meaning matters.</div>
+            </div>
+            
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Study</div>
+                <div class="content-text">
+                    <strong>Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">hesitate (v): Pause before saying or doing something, especially through uncertainty</span><span class="vocab-item">neglect (v): Fail to care for properly</span><span class="vocab-item">tolerate (v): Allow the existence, occurrence, or practice of (something that one does not necessarily like)</span><span class="vocab-item">anticipate (v): Regard as probable; expect or predict</span><span class="vocab-item">strive (v): Make great efforts to achieve or obtain something</span><span class="vocab-item">reluctance (n): Unwillingness or disinclination to do something</span></div>
+                    <div style="margin-top:10px; padding-top:10px; border-top:1px dashed #ccc;">
+                    <strong>Grammar Note:</strong><br>
+                    
+         <strong>CONCEPT</strong><br>
+         When two verbs collide, the first verb dictates the form of the second. This is memory-based, with some patterns.<br><br>
+         <strong>1. VERBS + GERUND (V-ing)</strong><br>
+         <em>Concept:</em> Finished actions, enjoyment, or avoidance.<br>
+         <em>Examples:</em> suggest, avoid, risk, postpone, tolerate. ('We <strong>avoided testing</strong> it').<br><br>
+         <strong>2. VERBS + INFINITIVE (To + Base Verb)</strong><br>
+         <em>Concept:</em> Future plans, goals, or agreements.<br>
+         <em>Examples:</em> agree, refuse, plan, intend. ('We <strong>agreed to fund</strong> it').<br><br>
+         <strong>3. VERBS THAT CHANGE MEANING</strong><br>
+         <em>Examples:</em> Remember, Stop.<br>
+         - <em>Remember + V-ing:</em> Recall a past memory. ('I remember <strong>locking</strong> the door').<br>
+         - <em>Remember + To:</em> Remembering a task. ('Remember <strong>to lock</strong> the door').
+     
+                    </div>
+                </div>
+            </div>
+            
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises</div>
+                <div class="content-text">
+         <strong>Task 1: Pattern Recognition</strong><br>
+         1. The committee decided (funding / to fund) the department.<br>
+         2. We strongly suggest (reviewing / to review) the protocols.<br>
+         3. They postponed (launching / to launch) the satellite.<br><br>
+         <strong>Task 2: Meaning Shifts</strong><br>
+         4. I distinctly remember (submitting / to submit) the application yesterday.<br>
+         5. Please remember (submitting / to submit) the keys before you leave.<br>
+         6. The factory stopped (producing / to produce) the chemical.
+     </div>
+            </div>
+            
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Your Turn</div>
+                <div class="content-text">Write a project log. Describe what the team 'postponed doing', what they 'attempted to do', and what you 'suggest changing'.</div>
+            </div>
+            <div class="page-num">Core Grammar: Foundations (B1) &bull; Page 19</div></div><div class="page" id="l17"><div class="module-header"><i class="fas fa-layer-group"></i> Core Grammar: Foundations (B1)</div><div class="lesson-title"><h2>Lesson 17: Contrast Connectors</h2></div>
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context</div>
+                <div class="content-text">Turn negative to positive: 'We have no money.' &rarr; 'Despite having no money, we have a great idea.'</div>
+            </div>
+            
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Study</div>
+                <div class="content-text">
+                    <strong>Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">although (conj): In spite of the fact that; even though</span><span class="vocab-item">despite (prep): Without being affected by; in spite of</span><span class="vocab-item">nevertheless (adv): In spite of that; notwithstanding; all the same</span><span class="vocab-item">contradiction (n): A combination of statements, ideas, or features of a situation that are opposed to one another</span><span class="vocab-item">paradox (n): A seemingly absurd or self-contradictory statement or proposition</span><span class="vocab-item">caveat (n): A warning or proviso of specific stipulations, conditions, or limitations</span></div>
+                    <div style="margin-top:10px; padding-top:10px; border-top:1px dashed #ccc;">
+                    <strong>Grammar Note:</strong><br>
+                    
+         <strong>CONCEPT</strong><br>
+         Expressing contrasting ideas is core to critical thinking. The grammar depends on what follows the connector.<br><br>
+         <strong>1. FOllOWED BY A FULL CLAUSE (Subject + Verb)</strong><br>
+         <em>Structure:</em> Although / Even though.<br>
+         <em>Examples:</em> <strong>Although the prototype failed</strong>, the theory is sound.<br><br>
+         <strong>2. FOLLOWED BY A NOUN/GERUND (No Verb)</strong><br>
+         <em>Structure:</em> Despite / In spite of.<br>
+         <em>Examples:</em> <strong>Despite the failure</strong>, the theory is sound.<br>
+         - NEVER say 'Despite of'.<br><br>
+         <strong>3. INDEPENDENT SENTENCE CONNECTORS</strong><br>
+         <em>Structure:</em> However / Nevertheless. (Requires punctuation).<br>
+         <em>Examples:</em> The prototype failed. <strong>However</strong>, the theory is sound.
+     
+                    </div>
+                </div>
+            </div>
+            
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises</div>
+                <div class="content-text">
+         <strong>Task 1: Clause vs. Noun Phrase</strong><br>
+         1. (Although / Despite) the heavy rain, the event was a success.<br>
+         2. (Even though / In spite of) it rained heavily, it was a success.<br>
+         3. She got the job (even though / despite) she lacked specific experience.<br><br>
+         <strong>Task 2: Error Correction</strong><br>
+         4. Despite of the warnings, they initiated the sequence.<br>
+         5. Although the high cost, the material is essential.
+     </div>
+            </div>
+            
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Your Turn</div>
+                <div class="content-text">Write an email rejecting a job applicant. Use 'Despite', 'Although', and 'However' to praise them while delivering bad news.</div>
+            </div>
+            <div class="page-num">Core Grammar: Foundations (B1) &bull; Page 20</div></div><div class="page" id="l18"><div class="module-header"><i class="fas fa-layer-group"></i> Core Grammar: Foundations (B1)</div><div class="lesson-title"><h2>Lesson 18: Quantifiers</h2></div>
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context</div>
+                <div class="content-text">Tell me you have 'some' time, but 'not enough' money using exact grammar.</div>
+            </div>
+            
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Study</div>
+                <div class="content-text">
+                    <strong>Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">numerous (adj): Great in number; many</span><span class="vocab-item">ample (adj): Enough or more than enough; plentiful</span><span class="vocab-item">abundant (adj): Existing or available in large quantities; plentiful</span><span class="vocab-item">negligible (adj): So small or unimportant as to be not worth considering</span><span class="vocab-item">dearth (n): A scarcity or lack of something</span><span class="vocab-item">gauge (v): Estimate or determine the magnitude, amount, or volume of</span></div>
+                    <div style="margin-top:10px; padding-top:10px; border-top:1px dashed #ccc;">
+                    <strong>Grammar Note:</strong><br>
+                    
+         <strong>CONCEPT</strong><br>
+         Using the wrong quantifier signals a lack of basic accuracy, especially distinguishing between countable and uncountable variables.<br><br>
+         <strong>1. COUNTABLE NOUNS (Plurals: computers, dollars, theories)</strong><br>
+         <em>Words:</em> Many / Several / a large number of.<br>
+         - <strong>Few:</strong> Negative (Not enough). 'We have <em>few</em> options.'<br>
+         - <strong>A few:</strong> Positive (Some). 'We have <em>a few</em> options.'<br><br>
+         <strong>2. UNCOUNTABLE NOUNS (Concepts/Mass: research, money, software)</strong><br>
+         <em>Words:</em> Much / A great deal of / a large amount of.<br>
+         - <strong>Little:</strong> Negative (Not enough). 'There is <em>little</em> evidence.'<br>
+         - <strong>A little:</strong> Positive (Some). 'We have <em>a little</em> evidence.'
+     
+                    </div>
+                </div>
+            </div>
+            
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises</div>
+                <div class="content-text">
+         <strong>Task 1: Countable vs. Uncountable</strong><br>
+         1. A large (amount / number) of researchers disagree.<br>
+         2. We have devoted (much / many) time to sorting the database.<br>
+         3. There is a great (deal / number) of pressure on the team.<br><br>
+         <strong>Task 2: Positive or Negative attitude?</strong><br>
+         4. There is (little / a little) hope of recovering the files. (Negative).<br>
+         5. We still have (few / a few) backup generators functioning. (Positive).
+     </div>
+            </div>
+            
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Your Turn</div>
+                <div class="content-text">Write an urgent memo describing a 'plethora' of problems, but stating because you have 'little' money and 'few' experts, you need a 'substantial amount' of help.</div>
+            </div>
+            <div class="page-num">Core Grammar: Foundations (B1) &bull; Page 21</div></div><div class="page" id="l19"><div class="module-header"><i class="fas fa-layer-group"></i> Core Grammar: Foundations (B1)</div><div class="lesson-title"><h2>Lesson 19: Prepositions of Place & Time</h2></div>
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context</div>
+                <div class="content-text"><strong>The Crime Scene:</strong> Draw a room. Where is the knife? IN the drawer, ON the table, AT the center?</div>
+            </div>
+            
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Study</div>
+                <div class="content-text">
+                    <strong>Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">adjacent (adj): Next to or adjoining something else</span><span class="vocab-item">proximate (adj): Closest in relationship; immediate</span><span class="vocab-item">subsequent to (prep): Following or coming after</span><span class="vocab-item">simultaneous (adj): Occurring, operating, or done at the same time</span><span class="vocab-item">interval (n): An intervening time or space</span><span class="vocab-item">chronological (adj): (of a record of events) starting with the earliest and following the order in which they occurred</span></div>
+                    <div style="margin-top:10px; padding-top:10px; border-top:1px dashed #ccc;">
+                    <strong>Grammar Note:</strong><br>
+                    
+         <strong>CONCEPT</strong><br>
+         Locating exactly *when* and *where* a variable occurred is critical in research or incident reports.<br><br>
+         <strong>1. TIME</strong><br>
+         - <strong>At:</strong> Precise times (at 3:00 PM, at noon).<br>
+         - <strong>On:</strong> Specific days and dates (on Monday, on July 4th).<br>
+         - <strong>In:</strong> Months, years, seasons, long periods (in 2024, in winter).<br><br>
+         <strong>2. PLACE</strong><br>
+         - <strong>At:</strong> Specific points or locations/events (at the conference, at the door).<br>
+         - <strong>On:</strong> Surfaces or lines (on the desk, on the equator).<br>
+         - <strong>In:</strong> Enclosed spaces or large areas (in the laboratory, in Europe).
+     
+                    </div>
+                </div>
+            </div>
+            
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises</div>
+                <div class="content-text">
+         <strong>Task 1: Time & Place Insertion</strong><br>
+         1. The reaction occurred ________ precisely 14:02.<br>
+         2. The observations were recorded ________ Monday morning.<br>
+         3. The company was founded ________ 1995.<br>
+         4. The CEO is currently ________ a meeting ________ the headquarters.<br>
+         5. We found traces ________ the surface of the water.<br>
+         6. The files are locked ________ the secure server room.<br><br>
+         <strong>Task 2: Synthesis</strong><br>
+         7. The server crashed ________ midnight ________ Friday while located ________ the basement.
+     </div>
+            </div>
+            
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Your Turn</div>
+                <div class="content-text">Write a highly detailed timeline of an industrial accident specifying exactly IN what years, ON what dates, AT what times, and WHERE it occurred.</div>
+            </div>
+            <div class="page-num">Core Grammar: Foundations (B1) &bull; Page 22</div></div><div class="page" id="l20"><div class="module-header"><i class="fas fa-layer-group"></i> Core Grammar: Foundations (B1)</div><div class="lesson-title"><h2>Lesson 20: Final Review (Structure & Cohesion)</h2></div>
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context</div>
+                <div class="content-text">Team race to identify and correct one massive, error-filled abstract covering all 19 lessons.</div>
+            </div>
+            
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Study</div>
+                <div class="content-text">
+                    <strong>Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">culmination (n): The highest or climactic point of something</span><span class="vocab-item">synthesis (n): Combination or composition, in particular</span><span class="vocab-item">master (v): Acquire complete knowledge or skill in (an accomplishment, technique, or art)</span><span class="vocab-item">nuance (n): A subtle difference in or shade of meaning, expression, or sound</span><span class="vocab-item">sophistication (n): The quality of being sophisticated</span><span class="vocab-item">elocution (n): The skill of clear and expressive speech</span></div>
+                    <div style="margin-top:10px; padding-top:10px; border-top:1px dashed #ccc;">
+                    <strong>Grammar Note:</strong><br>
+                    
+         <strong>CONCEPT (B1+/B2 Synthesis)</strong><br>
+         The final assessment tests your ability to deploy the full academic grammar framework:<br>
+         - Switching seamlessly between present perfect and past simple.<br>
+         - Using formal modals for deduction and obligation.<br>
+         - Manipulating conditionals for hypotheses.<br>
+         - Deploying passive voice for objective authority.
+     
+                    </div>
+                </div>
+            </div>
+            
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises</div>
+                <div class="content-text">
+         <strong>Task 1: The Final Challenge (Correct all errors)</strong><br>
+         1. The thesis was wrote by Dr. Smith. (Passive)<br>
+         2. While he tested the acid, it exploded. (Narrative Tense)<br>
+         3. He don't have to wear goggles, but it's a rule. (Obligation)<br>
+         4. He said that he will finish it tomorrow. (Reported Speech)<br>
+         5. If he paid attention, he wouldn't be blind now. (Conditional)<br>
+         6. Despite of the danger, he continued. (Connectors)<br>
+         7. I am used to work with dangerous chemicals. (Habituation)<br>
+         8. There was many pressure on him to publish. (Quantifiers)<br>
+         9. He avoids to confront reality. (Gerunds/Infinitives)
+     </div>
+            </div>
+            
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Your Turn</div>
+                <div class="content-text">Deliver a 5-minute definitive presentation on a complex topic graded strictly on your syntactical variety and flawless grammatical accuracy.</div>
+            </div>
+            <div class="page-num">Core Grammar: Foundations (B1) &bull; Page 23</div></div></body></html>

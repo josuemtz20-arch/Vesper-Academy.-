@@ -1,0 +1,782 @@
+<!DOCTYPE html><html lang="en"><head>
+<script src="vesper_auth.js"></script><meta charset="UTF-8"><title>Core Practice: Level 1</title><link rel="stylesheet" href="assets/css/vesper_style.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700&family=Open+Sans:wght@400;600;700&display=swap');
+    body { background-color: #525659; margin: 0; padding: 40px 0; display: flex; flex-direction: column; align-items: center; font-family: 'Merriweather', serif; color: #1a2b42; }
+    .page { background-color: white; width: 210mm; min-height: 297mm; padding: 20mm; box-sizing: border-box; box-shadow: 0 0 20px rgba(0,0,0,0.3); margin-bottom: 40px; position: relative; page-break-after: always; }
+    @media print { body { background: none; margin: 0; padding: 0; display: block; } .page { box-shadow: none; margin: 0; width: 100%; height: 100%; page-break-after: always; border: none; } .no-print { display: none; } }
+    @media screen and (max-width: 768px) {
+        body { padding: 10px; }
+        .page { width: 100%; padding: 10mm; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); min-height: auto; }
+        .module-header { margin: -10mm -10mm 10mm -10mm; padding: 15px 10mm; font-size: 1.2em; }
+        .lesson-title h2 { font-size: 1.8em; }
+        .vocab-grid { grid-template-columns: 1fr; }
+        .no-print { top: 10px; left: 10px; opacity: 0.8; }
+        .cover-title { font-size: 2em !important; }
+        .cover-subtitle { font-size: 1.2em !important; }
+    }
+    h1, h2, h3 { font-family: 'Open Sans', sans-serif; }
+    .module-header { background-color: #1a2b42; color: #d4af37; padding: 15px 20mm; margin: -20mm -20mm 10mm -20mm; font-family: 'Merriweather', serif; font-size: 1.4em; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
+    .lesson-title { border-bottom: 2px solid #34495e; padding-bottom: 15px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; }
+    .lesson-title h2 { margin: 0; font-size: 2.2em; color: #1a2b42; }
+    .lesson-block { margin-bottom: 25px; padding: 20px 25px; background: #fff; border-left: 5px solid #ccc; border-radius: 0 5px 5px 0; }
+    .lb-blue { border-color: #3498db; background: #ebf5fb; }
+    .lb-navy { border-color: #1a2b42; background: #fff; border: 1px solid #eee; border-left: 6px solid #1a2b42; }
+    .lb-purple { border-color: #8e44ad; background: #f5eef8; }
+    .lb-green { border-color: #27ae60; background: #eafaf1; }
+    .lb-red { border-color: #c0392b; background: #fdedec; }
+    .lb-header { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; font-weight: bold; font-family: 'Open Sans'; text-transform: uppercase; font-size: 1em; letter-spacing: 0.5px; }
+    .lb-blue .lb-header { color: #2980b9; } 
+    .lb-navy .lb-header { color: #1a2b42; }
+    .lb-purple .lb-header { color: #8e44ad; }
+    .lb-green .lb-header { color: #27ae60; }
+    .lb-red .lb-header { color: #c0392b; }
+    .content-text { line-height: 1.8; font-size: 0.95em; color: #2c3e50; text-align: justify; }
+    ul.deep-list { padding-left: 20px; list-style-type: square; } ul.deep-list li { margin-bottom: 12px; }
+    .vocab-box { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
+    .vocab-item { background: #eee; padding: 5px 10px; border-radius: 3px; font-size: 0.9em; font-family: 'Open Sans'; }
+    .page-num { position: absolute; bottom: 20mm; right: 20mm; color: #999; font-size: 0.8em; }
+    p { margin-bottom: 15px; }
+    .intro-box { background-color: #f8f9fa; border: 1px solid #dee2e6; padding: 30px; border-radius: 8px; margin-top: 50px; }
+</style>
+</head><body><div class="no-print" style="position: fixed; top: 20px; left: 20px; z-index: 1000;"><a href="index.html" style="background: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: bold; color: #1a2b42; box-shadow: 0 2px 5px rgba(0,0,0,0.2);"><i class="fas fa-arrow-left"></i> Dashboard</a></div><div class="page cover-page"><img src="assets/images/vesper_logo.jpg" alt="Vesper Academy" class="cover-logo" style="width:200px; margin-bottom:20px;"><div class="cover-title" style="font-size:3em; font-weight:bold; color:#1a2b42;">Core Practice: Level 1</div><div class="cover-subtitle" style="font-size:1.5em; color:#34495e;">Foundations (A1/A2)</div><div style="margin-top: auto;"><strong>Vesper Academy</strong><br>Student Workbook</div></div><div class="page">
+<div class="intro-box">
+    <p><strong>Course Overview:</strong></p>
+    <p>Level 1 focuses on <strong>Survival & Social Confidence</strong> (A1-A2). It introduces the highly active <strong>Paired-Skills Methodology</strong> and the <strong>Deep Expansion</strong> format.</p>
+    <p><strong>Classroom Flow:</strong></p>
+    <ul class="deep-list">
+        <li><strong>Odd Lessons (Auditory):</strong> Speaking and Listening focus. Heavy emphasis on roleplay and dictation.</li>
+        <li><strong>Even Lessons (Textual):</strong> Reading and Writing focus. Heavy emphasis on textual comprehension and guided writing tasks.</li>
+    </ul>
+</div>
+</div><div class="page"><div class="toc"><h1>Syllabus</h1><div><a href="#l1">1. Morning Routine</a></div><div><a href="#l2">2. Weekend Activities</a></div><div><a href="#l3">3. Music & Concerts</a></div><div><a href="#l4">4. Movies & TV Shows</a></div><div><a href="#l5">5. Playing Sports</a></div><div><a href="#l6">6. Healthy Food</a></div><div><a href="#l7">7. Asking for Directions</a></div><div><a href="#l8">8. Booking a Hotel</a></div><div><a href="#l9">9. The Job Interview</a></div><div><a href="#l10">10. Office Emails</a></div><div><a href="#l11">11. The Weather Forecast</a></div><div><a href="#l12">12. Animals in the Zoo</a></div><div><a href="#l13">13. Buying a Mobile Phone</a></div><div><a href="#l14">14. Internet & Apps</a></div><div><a href="#l15">15. Family Members</a></div><div><a href="#l16">16. My Hometown</a></div><div><a href="#l17">17. Describing a Picture</a></div><div><a href="#l18">18. A Short Story</a></div><div><a href="#l19">19. Plans for Tomorrow</a></div><div><a href="#l20">20. A Party Invitation</a></div></div></div><div class="page" id="l1"><div class="module-header"><i class="fas fa-layer-group"></i> Core Practice: Level 1</div><div class="lesson-title"><h2>Lesson 1: Morning Routine</h2></div>
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
+                <div class="content-text"><strong>Phase 1: First Action:</strong> What is the very first thing you do when you wake up? (e.g., look at phone, drink water).<br><br><strong>Phase 2: The Alarm:</strong> Do you wake up with an alarm or naturally? Are you a morning person?<br><br><strong>Phase 3: Speed:</strong> How fast can you get ready in the morning if you are late?</div>
+            </div>
+            
+            <!-- VOCAB -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Wake up (Stop sleeping)<br>2. Get up (Leave the bed)<br>3. Alarm (A clock that makes a loud noise)<br>4. Shower (Wash your body)<br>5. Brush (Clean teeth or hair)<br>6. Breakfast (The first meal of the day)<br>7. Leave (Go out of the house)<br>8. Arrive (Reach a place)<br>9. Early (Before the usual time)<br>10. Late (After the usual time)<br>11. Tired (Needing sleep)<br>12. Routine (Things you do every day)<br><br><strong>Drill Task:</strong> Say a sentence using 'Wake up' and 'Early'.</div>
+            </div>
+            
+            <!-- LISTENING -->
+            <div class="lesson-block lb-purple">
+                <div class="lb-header"><i class="fas fa-headphones"></i> Main Listening Input</div>
+                <div class="content-text"><div style="margin-bottom:10px;"><audio controls style="height:30px; width:200px;"><source src="assets/audio/core_practice_level_1_lesson_1.mp3" type="audio/mpeg"></audio></div>
+                    <em>(The script text is hidden in the student manual. Listen to the audio closely to complete the exercise.)</em></div>
+            </div>
+            
+            <!-- COMPREHENSION -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-question-circle"></i> Comprehension Check</div>
+                <div class="content-text"><strong>Level 1 (Literal):</strong><br>- What time is it in the story?<br>- Does John take a shower?<br><br><strong>Level 2 (Inference):</strong><br>- Why is John tired?<br>- Why does John decide to buy a coffee instead of eating at home?<br><br><strong>Level 3 (Applied Opinion):</strong><br>- Is it bad to skip breakfast in the morning?</div>
+            </div>
+            
+            <!-- GUIDED PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Guided Practice</div>
+                <div class="content-text"><strong>Exercise 1: Verb Matching:</strong> Match the verb to the noun: Brush (Teeth), Take (Shower), Eat (Breakfast).<br><br><strong>Exercise 2: Telling Time:</strong> Practice saying 'Seven o'clock', 'Half past seven', 'Quarter to eight'.<br><br><strong>Exercise 3: Dictation:</strong> Listen to Sarah's line: 'You must take a shower...' and write it down.</div>
+            </div>
+            
+            <!-- OUTPUT -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Free Output Simulation</div>
+                <div class="content-text"><strong>The Late Worker (15 mins)</strong><br><br><strong>Context:</strong> You are very late for your job.<br><br><strong>Role A (The Boss):</strong> You are angry. Ask the worker why they are late. Ask what time they woke up.<br><strong>Role B (The Worker):</strong> You must explain your terrible morning routine. Say your alarm didn't ring and you didn't have breakfast.<br><br><strong>Task:</strong> Have a 3-minute conversation where the worker apologizes and explains their morning.</div>
+            </div>
+            <div class="page-num">Core Practice: Level 1 &bull; Page 4</div></div><div class="page" id="l2"><div class="module-header"><i class="fas fa-layer-group"></i> Core Practice: Level 1</div><div class="lesson-title"><h2>Lesson 2: Weekend Activities</h2></div>
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
+                <div class="content-text"><strong>Phase 1: The Best Day:</strong> Which day is better: Saturday or Sunday? Why?<br><br><strong>Phase 2: Indoor vs Outdoor:</strong> On the weekend, do you prefer to stay inside or go outside?<br><br><strong>Phase 3: The Chore:</strong> What is one boring thing you MUST do every weekend? (e.g., wash clothes).</div>
+            </div>
+            
+            <!-- VOCAB -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Weekend (Saturday and Sunday)<br>2. Relax (Rest and do nothing hard)<br>3. Busy (Having a lot to do)<br>4. Clean (Remove dirt)<br>5. Shop (Buy things)<br>6. Visit (Go to see a person or place)<br>7. Park (A large green place in a city)<br>8. Cinema (A place to watch movies)<br>9. Enjoy (To like doing something)<br>10. Boring (Not interesting)<br>11. Fun (Enjoyable and happy)<br>12. Together (With another person)<br><br><strong>Drill Task:</strong> Write a sentence using 'Relax' and 'Weekend'.</div>
+            </div>
+            
+            <!-- READING -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Main Reading Input</div>
+                <div class="content-text"><strong>PART 1: Saturday Chores</strong><br>For Mary, the weekend is a time to relax, but Saturday morning is always busy. First, she gets up at eight o'clock and cleans her small apartment. She washes the dishes and sweeps the floor. Then, she goes to the supermarket to shop for food. This is very boring, but she must do it.<br><br><strong>PART 2: Sunday Fun</strong><br>Sunday is a fun day. Mary visits her parents in the afternoon. They live near a big park. They walk in the park together and enjoy the fresh air. In the evening, Mary sometimes goes to the cinema with her friends. She loves to watch funny movies before she goes back to work on Monday.</div>
+            </div>
+            
+            <!-- COMPREHENSION -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-question-circle"></i> Comprehension Check</div>
+                <div class="content-text"><strong>Level 1 (Literal):</strong><br>- What does Mary do on Saturday morning?<br>- Who does Mary visit on Sunday?<br><br><strong>Level 2 (Inference):</strong><br>- Why does Mary think Saturday is 'boring'?<br>- Why does Mary like funny movies on Sunday evening?<br><br><strong>Level 3 (Applied Opinion):</strong><br>- Do you think it is better to do all your chores on Saturday or spread them out during the week?</div>
+            </div>
+            
+            <!-- GUIDED PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Guided Practice</div>
+                <div class="content-text"><strong>Exercise 1: Adjective Opposites:</strong> Busy vs Relaxed. Boring vs Fun. Big vs Small. <br><br><strong>Exercise 2: Present Simple:</strong> Change 'I clean my room' to 'She cleans her room'. Practice adding the 's'.<br><br><strong>Exercise 3: Spelling:</strong> Practice spelling 'Supermarket', 'Apartment', and 'Cinema'.</div>
+            </div>
+            
+            <!-- OUTPUT -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-pen"></i> Free Output Writing</div>
+                <div class="content-text"><strong>My Perfect Weekend (15 mins)</strong><br><br><strong>Prompt:</strong> Write about your ideal weekend.<br><br><strong>Task:</strong> Write 2 short paragraphs.<br>- Paragraph 1: Write 3 sentences about what you do on Saturday. Use the words 'Shop' or 'Clean'.<br>- Paragraph 2: Write 3 sentences about Sunday. Who do you 'Visit'? How do you 'Relax'?</div>
+            </div>
+            <div class="page-num">Core Practice: Level 1 &bull; Page 5</div></div><div class="page" id="l3"><div class="module-header"><i class="fas fa-layer-group"></i> Core Practice: Level 1</div><div class="lesson-title"><h2>Lesson 3: Music & Concerts</h2></div>
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
+                <div class="content-text"><strong>Phase 1: Favorite Singer:</strong> Who is your favorite singer or band in the world?<br><br><strong>Phase 2: The Instrument:</strong> Can you play a musical instrument? If not, what do you want to learn?<br><br><strong>Phase 3: Loud vs Quiet:</strong> Do you like listening to loud music or quiet music?</div>
+            </div>
+            
+            <!-- VOCAB -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Concert (A live music performance)<br>2. Ticket (A piece of paper that allows you to enter)<br>3. Stage (Where the singers stand)<br>4. Crowd (A large group of people)<br>5. Loud (Making a lot of noise)<br>6. Quiet (Making little or no noise)<br>7. Dance (Move to music)<br>8. Sing (Make musical sounds with the voice)<br>9. Song (A short piece of music with words)<br>10. Band (A group of musicians)<br>11. Expensive (Costing a lot of money)<br>12. Cheap (Costing little money)<br><br><strong>Drill Task:</strong> How do you feel in a 'Loud' 'Crowd'?</div>
+            </div>
+            
+            <!-- LISTENING -->
+            <div class="lesson-block lb-purple">
+                <div class="lb-header"><i class="fas fa-headphones"></i> Main Listening Input</div>
+                <div class="content-text"><div style="margin-bottom:10px;"><audio controls style="height:30px; width:200px;"><source src="assets/audio/core_practice_level_1_lesson_3.mp3" type="audio/mpeg"></audio></div>
+                    <em>(The script text is hidden in the student manual. Listen to the audio closely to complete the exercise.)</em></div>
+            </div>
+            
+            <!-- COMPREHENSION -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-question-circle"></i> Comprehension Check</div>
+                <div class="content-text"><strong>Level 1 (Literal):</strong><br>- What is the name of the band?<br>- How much are the tickets?<br><br><strong>Level 2 (Inference):</strong><br>- Why did Ben ask if the tickets were expensive?<br>- Why can't Ben hear Alex at the end?<br><br><strong>Level 3 (Applied Opinion):</strong><br>- Do you like being in a large crowd at a concert, or is it uncomfortable?</div>
+            </div>
+            
+            <!-- GUIDED PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Guided Practice</div>
+                <div class="content-text"><strong>Exercise 1: Question Words:</strong> Practice Who, What, Where, When, How much. (e.g., 'How much are the tickets?').<br><br><strong>Exercise 2: Intonation:</strong> Say 'It is so loud!' with excitement. Say 'I don't know' with doubt.<br><br><strong>Exercise 3: Dictation:</strong> Transcribe Ben's question: 'Are the tickets expensive?'</div>
+            </div>
+            
+            <!-- OUTPUT -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Free Output Simulation</div>
+                <div class="content-text"><strong>The Box Office (15 mins)</strong><br><br><strong>Context:</strong> You are trying to buy tickets for a concert tonight.<br><br><strong>Role A (The Ticket Seller):</strong> The cheap tickets are sold out. You only have very 'expensive' VIP tickets left near the 'stage'.<br><strong>Role B (The Customer):</strong> You really want to see the 'band', but you don't have a lot of money. Try to negotiate or ask for a cheaper day.<br><br><strong>Task:</strong> Roleplay the ticket purchase at the box office.</div>
+            </div>
+            <div class="page-num">Core Practice: Level 1 &bull; Page 6</div></div><div class="page" id="l4"><div class="module-header"><i class="fas fa-layer-group"></i> Core Practice: Level 1</div><div class="lesson-title"><h2>Lesson 4: Movies & TV Shows</h2></div>
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
+                <div class="content-text"><strong>Phase 1: The Screen:</strong> Do you prefer watching movies on your phone, a laptop, or a big TV?<br><br><strong>Phase 2: The Genre:</strong> What is your favorite type of movie? (Action, Comedy, Horror?)<br><br><strong>Phase 3: The Snack:</strong> What is the best snack to eat while watching a movie?</div>
+            </div>
+            
+            <!-- VOCAB -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Movie (A motion picture)<br>2. Actor (A person who performs in a movie)<br>3. Funny (Making you laugh)<br>4. Scary (Making you afraid)<br>5. Sad (Making you cry)<br>6. Screen (The flat part of a TV or cinema where the picture shows)<br>7. Watch (Look at carefully)<br>8. Story (The events in the movie)<br>9. Character (A person in a story)<br>10. Favorite (The one you like the most)<br>11. Boring (Not interesting)<br>12. Exciting (Causing great enthusiasm and eagerness)<br><br><strong>Drill Task:</strong> Describe a 'Scary' 'Movie' in one sentence.</div>
+            </div>
+            
+            <!-- READING -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Main Reading Input</div>
+                <div class="content-text"><strong>PART 1: A Night In</strong><br>Tonight, Emma is staying at home. She wants to watch a movie on her big television screen. She makes a bowl of hot popcorn. Emma loves funny movies, but her brother, Tom, wants to watch an action movie. They argue for ten minutes. Finally, they choose a comedy movie about a crazy dog.<br><br><strong>PART 2: The Review</strong><br>The movie has famous actors, but the story is very boring. The dog character is not funny, just annoying. After thirty minutes, Tom falls asleep on the sofa. Emma turns off the TV. She decides that reading a book is more exciting than watching a bad movie.</div>
+            </div>
+            
+            <!-- COMPREHENSION -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-question-circle"></i> Comprehension Check</div>
+                <div class="content-text"><strong>Level 1 (Literal):</strong><br>- What snack does Emma make?<br>- What kind of movie do they choose to watch?<br><br><strong>Level 2 (Inference):</strong><br>- Why did Tom fall asleep?<br>- Why did Emma turn off the TV?<br><br><strong>Level 3 (Applied Opinion):</strong><br>- How do you decide what to watch when your family wants different things?</div>
+            </div>
+            
+            <!-- GUIDED PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Guided Practice</div>
+                <div class="content-text"><strong>Exercise 1: Adjective Practice:</strong> Connect the adjective to the genre: Comedy -> Funny, Horror -> Scary, Action -> Exciting.<br><br><strong>Exercise 2: Present Continuous:</strong> Change 'Emma stays at home' to 'Emma is staying at home'.<br><br><strong>Exercise 3: Prefix 'Un-':</strong> Happy -> Unhappy. Interesting -> Uninteresting.</div>
+            </div>
+            
+            <!-- OUTPUT -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-pen"></i> Free Output Writing</div>
+                <div class="content-text"><strong>My Movie Review (15 mins)</strong><br><br><strong>Prompt:</strong> Write a short review of the last movie you watched.<br><br><strong>Task:</strong> Write 2 paragraphs.<br>- Paragraph 1: Name the 'movie'. Who were the 'actors'? Was the 'story' 'funny', 'scary', or 'exciting'?<br>- Paragraph 2: Did you like it? Tell your friend if they should 'watch' it or if it is 'boring'.</div>
+            </div>
+            <div class="page-num">Core Practice: Level 1 &bull; Page 7</div></div><div class="page" id="l5"><div class="module-header"><i class="fas fa-layer-group"></i> Core Practice: Level 1</div><div class="lesson-title"><h2>Lesson 5: Playing Sports</h2></div>
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
+                <div class="content-text"><strong>Phase 1: The Ball:</strong> Name 5 sports that use a ball.<br><br><strong>Phase 2: Player or Watcher:</strong> Do you prefer to play sports or watch them on TV?<br><br><strong>Phase 3: The Injury:</strong> Have you ever hurt yourself playing a sport? What happened?</div>
+            </div>
+            
+            <!-- VOCAB -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Team (A group of players)<br>2. Player (A person who plays a sport)<br>3. Win (To be the best in a game)<br>4. Lose (To fail to win)<br>5. Game (A sports match)<br>6. Score (The points in a game)<br>7. Run (Move fast with your legs)<br>8. Kick (Hit with your foot)<br>9. Throw (Send through the air with your hand)<br>10. Catch (Grab something moving in the air)<br>11. Fast (Moving quickly)<br>12. Strong (Having physical power)<br><br><strong>Drill Task:</strong> Which sport requires you to 'Kick' and 'Run'?</div>
+            </div>
+            
+            <!-- LISTENING -->
+            <div class="lesson-block lb-purple">
+                <div class="lb-header"><i class="fas fa-headphones"></i> Main Listening Input</div>
+                <div class="content-text"><div style="margin-bottom:10px;"><audio controls style="height:30px; width:200px;"><source src="assets/audio/core_practice_level_1_lesson_5.mp3" type="audio/mpeg"></audio></div>
+                    <em>(The script text is hidden in the student manual. Listen to the audio closely to complete the exercise.)</em></div>
+            </div>
+            
+            <!-- COMPREHENSION -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-question-circle"></i> Comprehension Check</div>
+                <div class="content-text"><strong>Level 1 (Literal):</strong><br>- Is David fast?<br>- What team are they playing tomorrow?<br><br><strong>Level 2 (Inference):</strong><br>- Why does the coach ask if David is strong?<br>- Why is the game tomorrow important?<br><br><strong>Level 3 (Applied Opinion):</strong><br>- Is winning the most important part of playing a sport, or is having fun more important?</div>
+            </div>
+            
+            <!-- GUIDED PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Guided Practice</div>
+                <div class="content-text"><strong>Exercise 1: Can / Cannot:</strong> Practice saying what you can do. 'I can run fast, but I cannot swim.'<br><br><strong>Exercise 2: Action Verbs:</strong> Mime the verbs: Run, Kick, Throw, Catch.<br><br><strong>Exercise 3: Dictation:</strong> Listen and write: 'If we want to win, we must run hard.'</div>
+            </div>
+            
+            <!-- OUTPUT -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Free Output Simulation</div>
+                <div class="content-text"><strong>The Team Captain (15 mins)</strong><br><br><strong>Context:</strong> Your team is losing the game at half-time.<br><br><strong>Role A (The Angry Captain):</strong> You want to 'win'. Tell your players they are slow and they need to 'run' faster and 'score'!<br><strong>Role B (The Tired Player):</strong> You are tired. You want to 'relax'. Tell the captain the other team is too 'strong'.<br><br><strong>Task:</strong> Have a motivational (or angry) conversation to try and win the game.</div>
+            </div>
+            <div class="page-num">Core Practice: Level 1 &bull; Page 8</div></div><div class="page" id="l6"><div class="module-header"><i class="fas fa-layer-group"></i> Core Practice: Level 1</div><div class="lesson-title"><h2>Lesson 6: Healthy Food</h2></div>
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
+                <div class="content-text"><strong>Phase 1: The Sweet Tooth:</strong> What is your favorite dessert or sweet food?<br><br><strong>Phase 2: The Green Stuff:</strong> Name three vegetables. Do you like eating them?<br><br><strong>Phase 3: Fast Food:</strong> How often do you eat fast food like pizza or burgers?</div>
+            </div>
+            
+            <!-- VOCAB -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Healthy (Good for your body)<br>2. Unhealthy (Bad for your body)<br>3. Fruit (Sweet food from trees, like apples)<br>4. Vegetable (A plant used for food, like carrots)<br>5. Meat (Food from animals)<br>6. Water (A clear liquid you drink)<br>7. Sugar (Sweet substance used in food)<br>8. Sweet (Tasting like sugar)<br>9. Salty (Tasting like salt)<br>10. Fresh (Recently made or picked)<br>11. Diet (The food you usually eat)<br>12. Cook (Prepare food with heat)<br><br><strong>Drill Task:</strong> Name a 'Sweet' 'Fruit'.</div>
+            </div>
+            
+            <!-- READING -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Main Reading Input</div>
+                <div class="content-text"><strong>PART 1: A Bad Diet</strong><br>Mike has a very unhealthy diet. Every morning, he eats three donuts with a lot of sugar and drinks a large soda. For lunch, he always eats salty fast food like french fries and fried meat. He never drinks pure water. Because of his diet, Mike feels very tired all the time and his stomach hurts.<br><br><strong>PART 2: The Change</strong><br>Mike visits a doctor. The doctor tells him to change his diet immediately. He must start cooking fresh food at home. He needs to eat a green vegetable with every dinner and eat a piece of fruit for dessert. If he drinks water instead of soda, he will feel much better and become healthy.</div>
+            </div>
+            
+            <!-- COMPREHENSION -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-question-circle"></i> Comprehension Check</div>
+                <div class="content-text"><strong>Level 1 (Literal):</strong><br>- What does Mike eat for lunch?<br>- What does the doctor tell Mike to drink?<br><br><strong>Level 2 (Inference):</strong><br>- Why does Mike feel tired all the time?<br>- Why does the doctor suggest cooking at home instead of eating fast food?<br><br><strong>Level 3 (Applied Opinion):</strong><br>- Why is it so hard for people to stop eating unhealthy food?</div>
+            </div>
+            
+            <!-- GUIDED PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Guided Practice</div>
+                <div class="content-text"><strong>Exercise 1: Food Categories:</strong> Sort these into Healthy or Unhealthy: Apple, Donut, Water, Soda, Carrot, Fried Chicken.<br><br><strong>Exercise 2: Because / So:</strong> Join the sentences: 'Mike eats bad food. Mike feels tired.' -> 'Mike eats bad food, so he feels tired.'<br><br><strong>Exercise 3: Spelling:</strong> Practice spelling 'Vegetable', 'Healthy', and 'Sugar'.</div>
+            </div>
+            
+            <!-- OUTPUT -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-pen"></i> Free Output Writing</div>
+                <div class="content-text"><strong>The Diet Plan (15 mins)</strong><br><br><strong>Prompt:</strong> Write a healthy menu for one day.<br><br><strong>Task:</strong> Write 2 short paragraphs.<br>- Paragraph 1: Describe what you will 'cook' for breakfast and lunch. Include 'fruit' and 'water'.<br>- Paragraph 2: Describe a 'fresh' dinner. What 'meat' and 'vegetable' will you eat? Explain why this diet is 'healthy'.</div>
+            </div>
+            <div class="page-num">Core Practice: Level 1 &bull; Page 9</div></div><div class="page" id="l7"><div class="module-header"><i class="fas fa-layer-group"></i> Core Practice: Level 1</div><div class="lesson-title"><h2>Lesson 7: Asking for Directions</h2></div>
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
+                <div class="content-text"><strong>Phase 1: Getting Lost:</strong> Have you ever been completely lost in a new city? What did you do?<br><br><strong>Phase 2: The Map:</strong> Do you use a paper map, or do you use the GPS on your phone?<br><br><strong>Phase 3: The Stranger:</strong> Are you afraid to ask strangers for help on the street?</div>
+            </div>
+            
+            <!-- VOCAB -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Map (A drawing of a city or country)<br>2. Street (A road in a city)<br>3. Corner (Where two streets meet)<br>4. Straight (In one direction without turning)<br>5. Turn (Change direction)<br>6. Left (The opposite of right)<br>7. Right (The opposite of left)<br>8. Near (Close to something)<br>9. Far (A long distance away)<br>10. Block (The distance between two city streets)<br>11. Stop (To stop moving)<br>12. Walk (Move on foot)<br><br><strong>Drill Task:</strong> Give a 2-step instruction using 'Walk', 'Straight', and 'Turn'.</div>
+            </div>
+            
+            <!-- LISTENING -->
+            <div class="lesson-block lb-purple">
+                <div class="lb-header"><i class="fas fa-headphones"></i> Main Listening Input</div>
+                <div class="content-text"><div style="margin-bottom:10px;"><audio controls style="height:30px; width:200px;"><source src="assets/audio/core_practice_level_1_lesson_7.mp3" type="audio/mpeg"></audio></div>
+                    <em>(The script text is hidden in the student manual. Listen to the audio closely to complete the exercise.)</em></div>
+            </div>
+            
+            <!-- COMPREHENSION -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-question-circle"></i> Comprehension Check</div>
+                <div class="content-text"><strong>Level 1 (Literal):</strong><br>- What is the tourist looking for?<br>- How many blocks must the tourist walk straight?<br><br><strong>Level 2 (Inference):</strong><br>- Why did the tourist ask a person instead of using their phone?<br>- Why did the local say 'Do not turn' in the first step?<br><br><strong>Level 3 (Applied Opinion):</strong><br>- In your city, are locals usually helpful to tourists who are lost?</div>
+            </div>
+            
+            <!-- GUIDED PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Guided Practice</div>
+                <div class="content-text"><strong>Exercise 1: Prepositions of Place:</strong> Next to, Across from, On the corner. Practice with items on a desk.<br><br><strong>Exercise 2: Giving Commands:</strong> Use imperative verbs: 'Walk', 'Turn', 'Stop'.<br><br><strong>Exercise 3: Dictation:</strong> Listen and write: 'Stop at the corner with the big bank.'</div>
+            </div>
+            
+            <!-- OUTPUT -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Free Output Simulation</div>
+                <div class="content-text"><strong>The Human GPS (15 mins)</strong><br><br><strong>Context:</strong> A tourist is completely lost and needs to find the hospital fast.<br><br><strong>Role A (The Tourist):</strong> You are panicked. You need to find the hospital. Keep asking 'Is it far?' and 'Left or Right?'<br><strong>Role B (The Local):</strong> Give clear instructions using 'Blocks', 'Straight', 'Turn Left/Right'. Be patient.<br><br><strong>Task:</strong> Guide the tourist from your current classroom to the nearest hospital.</div>
+            </div>
+            <div class="page-num">Core Practice: Level 1 &bull; Page 10</div></div><div class="page" id="l8"><div class="module-header"><i class="fas fa-layer-group"></i> Core Practice: Level 1</div><div class="lesson-title"><h2>Lesson 8: Booking a Hotel</h2></div>
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
+                <div class="content-text"><strong>Phase 1: The Bed:</strong> Do you prefer a hard bed or a soft bed when you travel?<br><br><strong>Phase 2: The View:</strong> In a hotel, do you want a view of the city, the pool, or the ocean?<br><br><strong>Phase 3: The Problem:</strong> What is the worst thing that can happen in a hotel room? (e.g., dirty bathroom).</div>
+            </div>
+            
+            <!-- VOCAB -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Hotel (A building where you pay to sleep)<br>2. Room (A space in a building)<br>3. Bed (Furniture for sleeping)<br>4. Bathroom (A room with a toilet and shower)<br>5. Key (A piece of metal or plastic to open a door)<br>6. Reception (The front desk of a hotel)<br>7. Book (To reserve something in advance)<br>8. Stay (To live somewhere for a short time)<br>9. Night (The dark part of the day)<br>10. Clean (Not dirty)<br>11. Dirty (Not clean)<br>12. Breakfast (The morning meal)<br><br><strong>Drill Task:</strong> Use 'Book' and 'Night' in a sentence.</div>
+            </div>
+            
+            <!-- READING -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Main Reading Input</div>
+                <div class="content-text"><strong>PART 1: The Reservation</strong><br>Last week, Paul went on a business trip to Tokyo. Before he left, he used the internet to book a room at the Grand Hotel. He reserved a small, quiet room for three nights. The price was one hundred dollars per night, and it included a free breakfast in the restaurant.<br><br><strong>PART 2: The Arrival</strong><br>When Paul arrived at the hotel, he went to the reception desk. The worker gave him a plastic key for Room 402. Paul took the elevator to the fourth floor. When he opened the door, he was very happy. The bed was large, the bathroom was completely clean, and he had a beautiful view of the city lights.</div>
+            </div>
+            
+            <!-- COMPREHENSION -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-question-circle"></i> Comprehension Check</div>
+                <div class="content-text"><strong>Level 1 (Literal):</strong><br>- How many nights did Paul book?<br>- What floor is Paul's room on?<br><br><strong>Level 2 (Inference):</strong><br>- Why did Paul use the internet before he left?<br>- Why was Paul happy when he opened the door?<br><br><strong>Level 3 (Applied Opinion):</strong><br>- Is it better to stay in an expensive hotel, or a cheap hostel so you have more money for food and activities?</div>
+            </div>
+            
+            <!-- GUIDED PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Guided Practice</div>
+                <div class="content-text"><strong>Exercise 1: Past Tense Irregulars:</strong> Go -> Went, Give -> Gave, Take -> Took. Practice these verbs.<br><br><strong>Exercise 2: Descriptive Writing:</strong> Change 'The room was nice' to 'The room was clean and the bed was large.'<br><br><strong>Exercise 3: Spelling:</strong> Practice spelling 'Reception', 'Reservation', and 'Restaurant'.</div>
+            </div>
+            
+            <!-- OUTPUT -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-pen"></i> Free Output Writing</div>
+                <div class="content-text"><strong>The Hotel Review (15 mins)</strong><br><br><strong>Prompt:</strong> You stayed in a terrible hotel. Write a bad review online.<br><br><strong>Task:</strong> Write 2 short paragraphs.<br>- Paragraph 1: State how many 'nights' you 'stayed'. Complain about the 'room' (was it 'dirty'?).<br>- Paragraph 2: Complain about the 'bathroom' and the 'reception' desk. Tell people not to 'book' this hotel.</div>
+            </div>
+            <div class="page-num">Core Practice: Level 1 &bull; Page 11</div></div><div class="page" id="l9"><div class="module-header"><i class="fas fa-layer-group"></i> Core Practice: Level 1</div><div class="lesson-title"><h2>Lesson 9: The Job Interview</h2></div>
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
+                <div class="content-text"><strong>Phase 1: The Dream Job:</strong> When you were a child, what job did you want to have?<br><br><strong>Phase 2: The Outfit:</strong> What should you wear to a job interview in your country?<br><br><strong>Phase 3: Nervousness:</strong> How do you stop your hands from shaking when you are nervous?</div>
+            </div>
+            
+            <!-- VOCAB -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Job (Work that you do for money)<br>2. Boss (The manager or leader)<br>3. Interview (A formal meeting to get a job)<br>4. Experience (Knowledge you get from doing a job before)<br>5. Skill (Something you can do well)<br>6. Salary (The money you get for working)<br>7. Hire (To give someone a job)<br>8. Office (A place where people work at desks)<br>9. Hard-working (Putting a lot of effort into work)<br>10. Punctual (Always on time)<br>11. Answer (To reply to a question)<br>12. Question (Something asked to get information)<br><br><strong>Drill Task:</strong> Name a specific 'Skill' you need for an 'Office' 'Job'.</div>
+            </div>
+            
+            <!-- LISTENING -->
+            <div class="lesson-block lb-purple">
+                <div class="lb-header"><i class="fas fa-headphones"></i> Main Listening Input</div>
+                <div class="content-text"><div style="margin-bottom:10px;"><audio controls style="height:30px; width:200px;"><source src="assets/audio/core_practice_level_1_lesson_9.mp3" type="audio/mpeg"></audio></div>
+                    <em>(The script text is hidden in the student manual. Listen to the audio closely to complete the exercise.)</em></div>
+            </div>
+            
+            <!-- COMPREHENSION -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-question-circle"></i> Comprehension Check</div>
+                <div class="content-text"><strong>Level 1 (Literal):</strong><br>- How many years of experience does Sarah have?<br>- What is the salary for the job?<br><br><strong>Level 2 (Inference):</strong><br>- Why did the boss ask if Sarah is punctual?<br>- Why did the boss decide to hire her?<br><br><strong>Level 3 (Applied Opinion):</strong><br>- What is the worst question a boss can ask in an interview?</div>
+            </div>
+            
+            <!-- GUIDED PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Guided Practice</div>
+                <div class="content-text"><strong>Exercise 1: Job Vocabulary:</strong> Match the job to the workplace: Doctor -> Hospital, Teacher -> School, Receptionist -> Office.<br><br><strong>Exercise 2: Present Perfect vs Past Simple:</strong> 'I worked there for two years' vs 'I have strong skills'.<br><br><strong>Exercise 3: Dictation:</strong> Listen and write: 'We need someone who is punctual.'</div>
+            </div>
+            
+            <!-- OUTPUT -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Free Output Simulation</div>
+                <div class="content-text"><strong>The Tough Interview (15 mins)</strong><br><br><strong>Context:</strong> You are interviewing for a job at a famous bank.<br><br><strong>Role A (The Strict Boss):</strong> Ask difficult 'questions'. Ask about their 'experience' and 'skills'. Be very serious.<br><strong>Role B (The Applicant):</strong> Try to 'answer' the questions clearly. Say you are 'hard-working' and ask about the 'salary'.<br><br><strong>Task:</strong> Perform a 3-minute job interview.</div>
+            </div>
+            <div class="page-num">Core Practice: Level 1 &bull; Page 12</div></div><div class="page" id="l10"><div class="module-header"><i class="fas fa-layer-group"></i> Core Practice: Level 1</div><div class="lesson-title"><h2>Lesson 10: Office Emails</h2></div>
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
+                <div class="content-text"><strong>Phase 1: Email Volume:</strong> How many emails do you get every day? Do you read all of them?<br><br><strong>Phase 2: Formal vs Informal:</strong> How do you start an email to your boss? How do you start an email to your brother?<br><br><strong>Phase 3: The Mistake:</strong> Have you ever sent an email to the wrong person?</div>
+            </div>
+            
+            <!-- VOCAB -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Email (An electronic message)<br>2. Send (To make a message go to someone)<br>3. Receive (To get a message)<br>4. Subject (What the email is about)<br>5. Meeting (When people gather to talk about work)<br>6. Attach (To add a file to an email)<br>7. Document (A formal text file)<br>8. Read (To look at and understand text)<br>9. Write (To make text)<br>10. Important (Having great value or impact)<br>11. Urgent (Needing immediate action)<br>12. Reply (To send an answer back)<br><br><strong>Drill Task:</strong> Why is the 'Subject' of an email 'Important'?</div>
+            </div>
+            
+            <!-- READING -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Main Reading Input</div>
+                <div class="content-text"><strong>PART 1: The Morning Inbox</strong><br>When Mark arrives at the office, he turns on his computer. He opens his email program. He received twenty new emails during the night. Most of them are not important, but one email has a red flag. The subject line says: 'URGENT: Change in Meeting Time'.<br><br><strong>PART 2: The Quick Reply</strong><br>The email is from his boss. The boss wants to change the team meeting from 10:00 AM to 2:00 PM. The boss also attached a new document to the email. Mark must read the document before the meeting. Mark clicks 'Reply' and writes a short message: 'I understand. I will read the attached file and see you at 2:00 PM.' He clicks send.</div>
+            </div>
+            
+            <!-- COMPREHENSION -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-question-circle"></i> Comprehension Check</div>
+                <div class="content-text"><strong>Level 1 (Literal):</strong><br>- How many new emails did Mark receive?<br>- What time is the new meeting?<br><br><strong>Level 2 (Inference):</strong><br>- Why did the boss put 'URGENT' in the subject line?<br>- Why did Mark write a quick reply?<br><br><strong>Level 3 (Applied Opinion):</strong><br>- Do you think emailing is the best way to communicate at work, or are chat apps (like Slack) better?</div>
+            </div>
+            
+            <!-- GUIDED PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Guided Practice</div>
+                <div class="content-text"><strong>Exercise 1: Computer Verbs:</strong> Click, Open, Turn on, Send, Attach. Practice these with hand motions.<br><br><strong>Exercise 2: Formal Endings:</strong> Learn 'Best regards', 'Sincerely', 'Thanks'.<br><br><strong>Exercise 3: Prefix 'Un-':</strong> Important -> Unimportant.</div>
+            </div>
+            
+            <!-- OUTPUT -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-pen"></i> Free Output Writing</div>
+                <div class="content-text"><strong>The Urgent Request (15 mins)</strong><br><br><strong>Prompt:</strong> Write an email to your coworker.<br><br><strong>Task:</strong> Write a 4-sentence email.<br>- Include a clear 'Subject'.<br>- Tell your coworker that you cannot attend the 'meeting' tomorrow.<br>- Ask them to 'read' the 'attached' 'document' for you.<br>- End the email politely.</div>
+            </div>
+            <div class="page-num">Core Practice: Level 1 &bull; Page 13</div></div><div class="page" id="l11"><div class="module-header"><i class="fas fa-layer-group"></i> Core Practice: Level 1</div><div class="lesson-title"><h2>Lesson 11: The Weather Forecast</h2></div>
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
+                <div class="content-text"><strong>Phase 1: Your Favorite Season:</strong> Do you prefer summer or winter? Why?<br><br><strong>Phase 2: The Rain:</strong> Do you like the sound of rain, or does it make you sad?<br><br><strong>Phase 3: The Umbrella:</strong> Have you ever been caught in the rain without an umbrella?</div>
+            </div>
+            
+            <!-- VOCAB -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Weather (The state of the air and sky)<br>2. Hot (Having a high temperature)<br>3. Cold (Having a low temperature)<br>4. Rain (Water falling from the sky)<br>5. Sun (The star that gives light and heat)<br>6. Wind (Moving air)<br>7. Cloud (A white or gray mass in the sky)<br>8. Snow (Frozen rain)<br>9. Sky (The space above the earth)<br>10. Umbrella (An object to protect from rain)<br>11. Coat (Warm clothing for the upper body)<br>12. Forecast (A prediction of future weather)<br><br><strong>Drill Task:</strong> If it is 'Cold' and there is 'Snow', what must you wear?</div>
+            </div>
+            
+            <!-- LISTENING -->
+            <div class="lesson-block lb-purple">
+                <div class="lb-header"><i class="fas fa-headphones"></i> Main Listening Input</div>
+                <div class="content-text"><div style="margin-bottom:10px;"><audio controls style="height:30px; width:200px;"><source src="assets/audio/core_practice_level_1_lesson_11.mp3" type="audio/mpeg"></audio></div>
+                    <em>(The script text is hidden in the student manual. Listen to the audio closely to complete the exercise.)</em></div>
+            </div>
+            
+            <!-- COMPREHENSION -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-question-circle"></i> Comprehension Check</div>
+                <div class="content-text"><strong>Level 1 (Literal):</strong><br>- Will it rain today or tomorrow?<br>- What is the weather like tomorrow?<br><br><strong>Level 2 (Inference):</strong><br>- Why did the meteorologist say 'Do not forget your umbrella!'?<br>- Why is the news anchor happy about tomorrow's weather?<br><br><strong>Level 3 (Applied Opinion):</strong><br>- Do you trust the weather forecast on your phone, or is it often wrong?</div>
+            </div>
+            
+            <!-- GUIDED PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Guided Practice</div>
+                <div class="content-text"><strong>Exercise 1: Noun to Adjective:</strong> Sun -> Sunny, Rain -> Rainy, Wind -> Windy, Cloud -> Cloudy.<br><br><strong>Exercise 2: Will / Going To:</strong> Practice predicting the future. 'It will rain.' 'It is going to be hot.'<br><br><strong>Exercise 3: Dictation:</strong> Listen and write: 'Today, the weather is going to be very bad.'</div>
+            </div>
+            
+            <!-- OUTPUT -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Free Output Simulation</div>
+                <div class="content-text"><strong>The Holiday Planner (15 mins)</strong><br><br><strong>Context:</strong> Two friends are planning a trip, but they are looking at two different weather forecasts.<br><br><strong>Role A (The Optimist):</strong> Your forecast says it will be 'hot' and 'sunny'. You want to pack light clothes and go swimming.<br><strong>Role B (The Pessimist):</strong> Your forecast says there will be 'rain' and strong 'wind'. Tell your friend to bring an 'umbrella' and a 'coat'.<br><br><strong>Task:</strong> Argue about what to pack for the holiday.</div>
+            </div>
+            <div class="page-num">Core Practice: Level 1 &bull; Page 14</div></div><div class="page" id="l12"><div class="module-header"><i class="fas fa-layer-group"></i> Core Practice: Level 1</div><div class="lesson-title"><h2>Lesson 12: Animals in the Zoo</h2></div>
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
+                <div class="content-text"><strong>Phase 1: The Pet:</strong> Do you have a pet at home? (Dog, cat, bird?)<br><br><strong>Phase 2: Scary Animals:</strong> Which animal are you most afraid of? (Spiders, snakes, sharks?)<br><br><strong>Phase 3: The Zoo:</strong> Do you like visiting the zoo, or do you feel bad for the animals?</div>
+            </div>
+            
+            <!-- VOCAB -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Animal (A living creature that is not a plant)<br>2. Zoo (A place where wild animals are kept)<br>3. Wild (Living in nature, not with humans)<br>4. Pet (An animal you keep at home)<br>5. Dog (A common pet that barks)<br>6. Cat (A common pet that meows)<br>7. Bird (An animal that flies)<br>8. Fish (An animal that swims)<br>9. Big (Large in size)<br>10. Small (Little in size)<br>11. Fast (Moving quickly)<br>12. Dangerous (Able to hurt you)<br><br><strong>Drill Task:</strong> Name a 'Wild' animal that is very 'Dangerous'.</div>
+            </div>
+            
+            <!-- READING -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Main Reading Input</div>
+                <div class="content-text"><strong>PART 1: The Safari Park</strong><br>Yesterday, the school children took a bus to the city zoo. They wanted to see the wild animals from Africa. First, they saw the tall giraffes eating leaves from the trees. Next, they looked at the monkeys. The monkeys were small and very fast. They jumped from tree to tree and made funny noises.<br><br><strong>PART 2: The Tiger's Cage</strong><br>Then, the teacher took the children to see the tigers. The tigers were very big and beautiful, but they looked dangerous. One tiger slept in the sun, and the other tiger walked around the cage. The children were quiet because they did not want to wake the sleeping tiger. It was an exciting day.</div>
+            </div>
+            
+            <!-- COMPREHENSION -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-question-circle"></i> Comprehension Check</div>
+                <div class="content-text"><strong>Level 1 (Literal):</strong><br>- Where did the children go?<br>- What were the monkeys doing?<br><br><strong>Level 2 (Inference):</strong><br>- Why did the children stay quiet near the tigers?<br>- Why couldn't the children touch the tigers?<br><br><strong>Level 3 (Applied Opinion):</strong><br>- Should all animals live in the wild, or are zoos good for education and saving animals?</div>
+            </div>
+            
+            <!-- GUIDED PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Guided Practice</div>
+                <div class="content-text"><strong>Exercise 1: Categorizing Animals:</strong> Sort into Pets vs Wild Animals: Dog, Tiger, Monkey, Cat, Fish, Giraffe.<br><br><strong>Exercise 2: Describing Size:</strong> Practice using 'Big', 'Tall', 'Small', 'Fast'. 'The giraffe is tall.'<br><br><strong>Exercise 3: Spelling:</strong> Practice spelling 'Dangerous', 'Monkey', and 'Children'.</div>
+            </div>
+            
+            <!-- OUTPUT -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-pen"></i> Free Output Writing</div>
+                <div class="content-text"><strong>My Favorite Animal (15 mins)</strong><br><br><strong>Prompt:</strong> Write a description of your favorite animal.<br><br><strong>Task:</strong> Write 2 short paragraphs.<br>- Paragraph 1: What is the 'animal'? Is it a 'pet' or is it 'wild'? Is it 'big' or 'small'?<br>- Paragraph 2: What does it look like? Is it 'fast'? Is it 'dangerous'? Why do you like it?</div>
+            </div>
+            <div class="page-num">Core Practice: Level 1 &bull; Page 15</div></div><div class="page" id="l13"><div class="module-header"><i class="fas fa-layer-group"></i> Core Practice: Level 1</div><div class="lesson-title"><h2>Lesson 13: Buying a Mobile Phone</h2></div>
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
+                <div class="content-text"><strong>Phase 1: Screen Time:</strong> How many hours a day do you look at your phone?<br><br><strong>Phase 2: The Broken Screen:</strong> Have you ever dropped your phone and broken it?<br><br><strong>Phase 3: Apple vs Android:</strong> Do you prefer Apple (iPhone) or Android phones? Why?</div>
+            </div>
+            
+            <!-- VOCAB -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Phone (A device to call or text)<br>2. Screen (The glass part you touch)<br>3. Battery (The power source)<br>4. Camera (Used to take photos)<br>5. Photo (A picture)<br>6. Internet (The global computer network)<br>7. New (Not old)<br>8. Old (Not new)<br>9. Buy (To give money for something)<br>10. Sell (To take money for something)<br>11. Expensive (Costing a lot)<br>12. Broken (Damaged and not working)<br><br><strong>Drill Task:</strong> What happens when your 'Battery' is empty?</div>
+            </div>
+            
+            <!-- LISTENING -->
+            <div class="lesson-block lb-purple">
+                <div class="lb-header"><i class="fas fa-headphones"></i> Main Listening Input</div>
+                <div class="content-text"><div style="margin-bottom:10px;"><audio controls style="height:30px; width:200px;"><source src="assets/audio/core_practice_level_1_lesson_13.mp3" type="audio/mpeg"></audio></div>
+                    <em>(The script text is hidden in the student manual. Listen to the audio closely to complete the exercise.)</em></div>
+            </div>
+            
+            <!-- COMPREHENSION -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-question-circle"></i> Comprehension Check</div>
+                <div class="content-text"><strong>Level 1 (Literal):</strong><br>- Why does the customer need a new phone?<br>- How much does the new phone cost?<br><br><strong>Level 2 (Inference):</strong><br>- Why did the shop assistant ask if the customer uses the internet a lot?<br>- Why is the new phone so expensive?<br><br><strong>Level 3 (Applied Opinion):</strong><br>- Is it necessary to buy a phone that costs $800, or are cheap phones just as good?</div>
+            </div>
+            
+            <!-- GUIDED PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Guided Practice</div>
+                <div class="content-text"><strong>Exercise 1: Phone Vocabulary:</strong> Point to parts of your phone and name them: Screen, Camera, Battery.<br><br><strong>Exercise 2: Question Formation:</strong> Practice 'How much is it?' 'Does it have a good camera?' 'How long does the battery last?'<br><br><strong>Exercise 3: Dictation:</strong> Listen and write: 'The screen is broken, and the battery dies.'</div>
+            </div>
+            
+            <!-- OUTPUT -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Free Output Simulation</div>
+                <div class="content-text"><strong>The Phone Shop (15 mins)</strong><br><br><strong>Context:</strong> You are buying a phone for your grandmother.<br><br><strong>Role A (The Customer):</strong> You want to 'buy' a simple, cheap 'phone'. It does not need the 'internet' or a good 'camera'. It just needs a big 'battery'.<br><strong>Role B (The Salesperson):</strong> You want to 'sell' an 'expensive', 'new' phone with a giant 'screen'. Try to convince them it is better.<br><br><strong>Task:</strong> Have a 3-minute negotiation in the electronic shop.</div>
+            </div>
+            <div class="page-num">Core Practice: Level 1 &bull; Page 16</div></div><div class="page" id="l14"><div class="module-header"><i class="fas fa-layer-group"></i> Core Practice: Level 1</div><div class="lesson-title"><h2>Lesson 14: Internet & Apps</h2></div>
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
+                <div class="content-text"><strong>Phase 1: The First Thing:</strong> What is the very first app you open when you wake up in the morning?<br><br><strong>Phase 2: Social Media:</strong> Do you post photos on social media (Instagram/Facebook) often?<br><br><strong>Phase 3: The Addiction:</strong> Could you live for one week without the internet?</div>
+            </div>
+            
+            <!-- VOCAB -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. App (A software program on a phone)<br>2. Message (A short piece of information sent to someone)<br>3. Send (To make a message go)<br>4. Receive (To get a message)<br>5. Photo (A picture)<br>6. Video (Moving pictures)<br>7. Online (Connected to the internet)<br>8. Download (To save a file from the internet)<br>9. Fast (Quick)<br>10. Slow (Not quick)<br>11. Share (To let others see or use something)<br>12. Friend (A person you like and know well)<br><br><strong>Drill Task:</strong> Write a sentence using 'Share' and 'Photo'.</div>
+            </div>
+            
+            <!-- READING -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Main Reading Input</div>
+                <div class="content-text"><strong>PART 1: The Group Chat</strong><br>David loves his smartphone. He uses a chat app to send messages to his friends every day. Yesterday, he took a funny video of his cat. He wanted to share the video with his family. He opened the app and sent the video to the family group chat. His mother received the video and sent a message back: 'That is so funny!'<br><br><strong>PART 2: Slow Internet</strong><br>Later that evening, David tried to download a new game. However, his internet connection was very slow. The download took two hours! David was annoyed because he wanted to play the game online with his friend. He decided to turn off his phone and read a book instead.</div>
+            </div>
+            
+            <!-- COMPREHENSION -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-question-circle"></i> Comprehension Check</div>
+                <div class="content-text"><strong>Level 1 (Literal):</strong><br>- What did David take a video of?<br>- Who did he send the video to?<br><br><strong>Level 2 (Inference):</strong><br>- Why was David annoyed in the evening?<br>- Why did David decide to read a book?<br><br><strong>Level 3 (Applied Opinion):</strong><br>- Do you think group chats are annoying when people send too many messages?</div>
+            </div>
+            
+            <!-- GUIDED PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Guided Practice</div>
+                <div class="content-text"><strong>Exercise 1: Verb matching:</strong> Download (a game), Send (a message), Share (a photo), Play (online).<br><br><strong>Exercise 2: Past Tense Regular Verbs:</strong> Add '-ed'. Want -> Wanted, Open -> Opened, Download -> Downloaded.<br><br><strong>Exercise 3: Spelling:</strong> Practice spelling 'Smartphone', 'Message', and 'Connection'.</div>
+            </div>
+            
+            <!-- OUTPUT -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-pen"></i> Free Output Writing</div>
+                <div class="content-text"><strong>The Chat Message (15 mins)</strong><br><br><strong>Prompt:</strong> Write a text message to a friend about a photo you took.<br><br><strong>Task:</strong> Write 4 sentences.<br>- Greet your 'friend'.<br>- Tell them you will 'send' or 'share' a 'photo' or 'video' with them.<br>- Ask them to 'download' a new 'app' so you can play a game 'online'.<br>- Say goodbye.</div>
+            </div>
+            <div class="page-num">Core Practice: Level 1 &bull; Page 17</div></div><div class="page" id="l15"><div class="module-header"><i class="fas fa-layer-group"></i> Core Practice: Level 1</div><div class="lesson-title"><h2>Lesson 15: Family Members</h2></div>
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
+                <div class="content-text"><strong>Phase 1: Big or Small:</strong> Do you have a very big family or a small family?<br><br><strong>Phase 2: Brothers and Sisters:</strong> Are you the oldest, middle, or youngest child in your family?<br><br><strong>Phase 3: Who do you look like:</strong> Do you look more like your mother or your father?</div>
+            </div>
+            
+            <!-- VOCAB -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Mother (Female parent)<br>2. Father (Male parent)<br>3. Sister (Female sibling)<br>4. Brother (Male sibling)<br>5. Grandmother (Mother's or father's mother)<br>6. Grandfather (Mother's or father's father)<br>7. Son (Male child)<br>8. Daughter (Female child)<br>9. Old (Living for a long time)<br>10. Young (Living for a short time)<br>11. Married (Having a husband or wife)<br>12. Single (Not married)<br><br><strong>Drill Task:</strong> Say the opposite of 'Old' and 'Married'.</div>
+            </div>
+            
+            <!-- LISTENING -->
+            <div class="lesson-block lb-purple">
+                <div class="lb-header"><i class="fas fa-headphones"></i> Main Listening Input</div>
+                <div class="content-text"><div style="margin-bottom:10px;"><audio controls style="height:30px; width:200px;"><source src="assets/audio/core_practice_level_1_lesson_15.mp3" type="audio/mpeg"></audio></div>
+                    <em>(The script text is hidden in the student manual. Listen to the audio closely to complete the exercise.)</em></div>
+            </div>
+            
+            <!-- COMPREHENSION -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-question-circle"></i> Comprehension Check</div>
+                <div class="content-text"><strong>Level 1 (Literal):</strong><br>- How old are Mark's parents?<br>- What is the name of Mark's sister?<br><br><strong>Level 2 (Inference):</strong><br>- Why is Mark an uncle?<br>- Who does Mark live with?<br><br><strong>Level 3 (Applied Opinion):</strong><br>- Is it better to be the oldest sibling or the youngest sibling?</div>
+            </div>
+            
+            <!-- GUIDED PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Guided Practice</div>
+                <div class="content-text"><strong>Exercise 1: Family Tree:</strong> Draw a simple family tree and label: Grandfather, Mother, Sister, Son.<br><br><strong>Exercise 2: Possessive 's:</strong> Practice saying 'Mark's sister', 'Tom's son', 'My mother's car'.<br><br><strong>Exercise 3: Dictation:</strong> Listen and write: 'He is married and he has a young son.'</div>
+            </div>
+            
+            <!-- OUTPUT -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Free Output Simulation</div>
+                <div class="content-text"><strong>The Reunion (15 mins)</strong><br><br><strong>Context:</strong> You are looking at an old family photo album with a friend.<br><br><strong>Role A (The Storyteller):</strong> Describe the people in a fake photograph. Point and say 'This is my uncle. He is very old.' Make up funny details.<br><strong>Role B (The Curious Friend):</strong> Ask many questions. 'Is she married?' 'Who is the young boy?' 'How old is your brother?'<br><br><strong>Task:</strong> Have a 3-minute conversation exploring the family tree.</div>
+            </div>
+            <div class="page-num">Core Practice: Level 1 &bull; Page 18</div></div><div class="page" id="l16"><div class="module-header"><i class="fas fa-layer-group"></i> Core Practice: Level 1</div><div class="lesson-title"><h2>Lesson 16: My Hometown</h2></div>
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
+                <div class="content-text"><strong>Phase 1: City or Village:</strong> Did you grow up in a huge city or a small quiet village?<br><br><strong>Phase 2: The Best Part:</strong> What is the most beautiful place in your hometown?<br><br><strong>Phase 3: The Changes:</strong> Has your hometown changed a lot since you were a child?</div>
+            </div>
+            
+            <!-- VOCAB -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Town (A place where people live, smaller than a city)<br>2. City (A large and important town)<br>3. Village (A very small town in the countryside)<br>4. House (A building for people to live in)<br>5. Building (A structure with walls and a roof)<br>6. Shop (A place where you buy things)<br>7. Park (A green area for recreation)<br>8. School (A place for learning)<br>9. Old (Existing for a long time)<br>10. Modern (New and using latest designs)<br>11. Quiet (With little noise)<br>12. Crowded (Full of people)<br><br><strong>Drill Task:</strong> Describe the difference between a 'Village' and a 'City'.</div>
+            </div>
+            
+            <!-- READING -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Main Reading Input</div>
+                <div class="content-text"><strong>PART 1: A Small Place</strong><br>I grew up in a small, quiet village near the mountains. When I was a child, there were only fifty houses and one small school. Everybody knew everybody. The air was fresh, and we played in the park every afternoon until the sun went down. There were no tall buildings and no traffic on the streets.<br><br><strong>PART 2: Growing Fast</strong><br>Now, twenty years later, my village is a busy town. The old shops are gone. Now, there are big modern supermarkets and crowded restaurants. Many new people moved here to work. It is not quiet anymore. I miss the old days, but I am happy that the town has more jobs for the young people.</div>
+            </div>
+            
+            <!-- COMPREHENSION -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-question-circle"></i> Comprehension Check</div>
+                <div class="content-text"><strong>Level 1 (Literal):</strong><br>- Where was the village located?<br>- How many houses were there when the author was a child?<br><br><strong>Level 2 (Inference):</strong><br>- Why is the town 'not quiet anymore'?<br>- Why is the author happy about the changes, even though they miss the old days?<br><br><strong>Level 3 (Applied Opinion):</strong><br>- Is it sad when small villages become big modern towns, or is progress always good?</div>
+            </div>
+            
+            <!-- GUIDED PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Guided Practice</div>
+                <div class="content-text"><strong>Exercise 1: Opposites:</strong> Old vs Modern. Quiet vs Crowded. Small vs Big.<br><br><strong>Exercise 2: There is / There was:</strong> 'Now there are supermarkets. In the past, there was one school.' Practice making past tense 'There was/were' sentences.<br><br><strong>Exercise 3: Spelling:</strong> Practice spelling 'Village', 'Mountain', and 'Restaurant'.</div>
+            </div>
+            
+            <!-- OUTPUT -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-pen"></i> Free Output Writing</div>
+                <div class="content-text"><strong>Then and Now (15 mins)</strong><br><br><strong>Prompt:</strong> Write about your own hometown, comparing the past to the present.<br><br><strong>Task:</strong> Write 2 short paragraphs.<br>- Paragraph 1: Use 'was' and 'were' to describe your hometown when you were a child. Was it 'quiet'? Were the 'buildings' 'old'?<br>- Paragraph 2: Use 'is' and 'are' to describe it now. Is it 'modern' and 'crowded'? Do you like it now?</div>
+            </div>
+            <div class="page-num">Core Practice: Level 1 &bull; Page 19</div></div><div class="page" id="l17"><div class="module-header"><i class="fas fa-layer-group"></i> Core Practice: Level 1</div><div class="lesson-title"><h2>Lesson 17: Describing a Picture</h2></div>
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
+                <div class="content-text"><strong>Phase 1: Memory Test:</strong> Look around the classroom for 5 seconds. Close your eyes. Name 5 objects you saw.<br><br><strong>Phase 2: Colors:</strong> What is your favorite color to wear? What is the ugliest color?<br><br><strong>Phase 3: The Museum:</strong> Do you like going to art museums to look at paintings, or is it boring?</div>
+            </div>
+            
+            <!-- VOCAB -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Picture (A painting, drawing, or photograph)<br>2. Color (Red, blue, green, etc.)<br>3. Beautiful (Very pleasing to look at)<br>4. Ugly (Not pleasing to look at)<br>5. Man (An adult male human)<br>6. Woman (An adult female human)<br>7. Child (A young human)<br>8. Wear (To have clothes on your body)<br>9. Stand (To be upright on your feet)<br>10. Sit (To rest on a chair)<br>11. Smile (A happy expression on the face)<br>12. Look (To direct your eyes at something)<br><br><strong>Drill Task:</strong> Use 'Wear' and 'Color' in a sentence about yourself.</div>
+            </div>
+            
+            <!-- LISTENING -->
+            <div class="lesson-block lb-purple">
+                <div class="lb-header"><i class="fas fa-headphones"></i> Main Listening Input</div>
+                <div class="content-text"><div style="margin-bottom:10px;"><audio controls style="height:30px; width:200px;"><source src="assets/audio/core_practice_level_1_lesson_17.mp3" type="audio/mpeg"></audio></div>
+                    <em>(The script text is hidden in the student manual. Listen to the audio closely to complete the exercise.)</em></div>
+            </div>
+            
+            <!-- COMPREHENSION -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-question-circle"></i> Comprehension Check</div>
+                <div class="content-text"><strong>Level 1 (Literal):</strong><br>- Where is the woman sitting?<br>- What color is the woman's dress?<br><br><strong>Level 2 (Inference):</strong><br>- How do we know the woman is happy?<br>- Why does the teacher ask Maria questions?<br><br><strong>Level 3 (Applied Opinion):</strong><br>- Can a picture make you feel happy or sad just by looking at the colors?</div>
+            </div>
+            
+            <!-- GUIDED PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Guided Practice</div>
+                <div class="content-text"><strong>Exercise 1: Present Continuous:</strong> She is sitting. He is standing. They are smiling. Practice describing actions happening right now.<br><br><strong>Exercise 2: Colors and Clothes:</strong> A red dress, a blue shirt, black shoes. Describe what the teacher is wearing.<br><br><strong>Exercise 3: Dictation:</strong> Listen and write: 'She is wearing a long red dress.'</div>
+            </div>
+            
+            <!-- OUTPUT -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Free Output Simulation</div>
+                <div class="content-text"><strong>Blind Drawing (15 mins)</strong><br><br><strong>Context:</strong> You are looking at a picture, but your partner cannot see it.<br><br><strong>Role A (The Describer):</strong> Look at a picture on your phone (or imagine one). Describe it exactly. 'A man is standing. He is wearing a blue hat.'<br><strong>Role B (The Artist):</strong> You must draw the picture on a piece of paper exactly as Role A describes it. Ask questions: 'Is he sitting? What color is the hat?'<br><br><strong>Task:</strong> Compare the final drawing to the real picture!</div>
+            </div>
+            <div class="page-num">Core Practice: Level 1 &bull; Page 20</div></div><div class="page" id="l18"><div class="module-header"><i class="fas fa-layer-group"></i> Core Practice: Level 1</div><div class="lesson-title"><h2>Lesson 18: A Short Story</h2></div>
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
+                <div class="content-text"><strong>Phase 1: Bedtime Stories:</strong> Did your parents read stories to you when you were a child?<br><br><strong>Phase 2: Heroes and Villains:</strong> Who is your favorite fictional character from a book or movie?<br><br><strong>Phase 3: Reading Habit:</strong> Do you read books often now, or only read things on the internet?</div>
+            </div>
+            
+            <!-- VOCAB -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Story (A description of imaginary events)<br>2. Book (Printed pages bound together)<br>3. Read (Look at and understand written words)<br>4. Write (To create written words)<br>5. Beginning (The start of something)<br>6. End (The final part of something)<br>7. King (A male ruler of a country)<br>8. Queen (A female ruler of a country)<br>9. Magic (Supernatural powers)<br>10. Help (To make something easier for someone)<br>11. Brave (Not afraid of danger)<br>12. Afraid (Feeling fear)<br><br><strong>Drill Task:</strong> What does a 'Brave' person do when they are 'Afraid'?</div>
+            </div>
+            
+            <!-- READING -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Main Reading Input</div>
+                <div class="content-text"><strong>PART 1: The Lost Ring</strong><br>At the beginning of the story, a good King lived in a tall castle. He had a beautiful magic ring. One dark night, a bad man stole the ring and ran into the deep forest. The King was very sad and he needed help. The King's soldiers were afraid of the dark forest, so they did not go.<br><br><strong>PART 2: The Brave Girl</strong><br>But there was a young girl in the village who was very brave. She took her horse and rode into the forest. She found the bad man sleeping under a tree. She took the magic ring and rode back to the castle. At the end of the story, the Queen gave the brave girl a bag of gold to say thank you.</div>
+            </div>
+            
+            <!-- COMPREHENSION -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-question-circle"></i> Comprehension Check</div>
+                <div class="content-text"><strong>Level 1 (Literal):</strong><br>- Who stole the magic ring?<br>- Why didn't the soldiers go into the forest?<br><br><strong>Level 2 (Inference):</strong><br>- Why did the Queen give the girl a bag of gold?<br>- How did the girl get the ring back from the bad man?<br><br><strong>Level 3 (Applied Opinion):</strong><br>- Why do children's stories always have a 'good' character and a 'bad' character?</div>
+            </div>
+            
+            <!-- GUIDED PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Guided Practice</div>
+                <div class="content-text"><strong>Exercise 1: Narrative sequencing words:</strong> First, Then, Next, Finally. Put the events of the story in order.<br><br><strong>Exercise 2: Past Tense Check:</strong> Find 5 past tense verbs in the story (e.g., lived, had, stole, ran, was).<br><br><strong>Exercise 3: Spelling:</strong> Practice spelling 'Beginning', 'Magic', and 'Castle'.</div>
+            </div>
+            
+            <!-- OUTPUT -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-pen"></i> Free Output Writing</div>
+                <div class="content-text"><strong>Create a Character (15 mins)</strong><br><br><strong>Prompt:</strong> Write the beginning of a new fairy tale.<br><br><strong>Task:</strong> Write 2 short paragraphs.<br>- Paragraph 1: Introduce your character. Are they a 'King', 'Queen', or a normal person? Are they 'brave' or 'afraid'? Where do they live?<br>- Paragraph 2: What is the problem? What do they need 'help' with? (e.g., they lost a 'magic' 'book').</div>
+            </div>
+            <div class="page-num">Core Practice: Level 1 &bull; Page 21</div></div><div class="page" id="l19"><div class="module-header"><i class="fas fa-layer-group"></i> Core Practice: Level 1</div><div class="lesson-title"><h2>Lesson 19: Plans for Tomorrow</h2></div>
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
+                <div class="content-text"><strong>Phase 1: The Calendar:</strong> Look at your calendar for tomorrow. Are you busy or free?<br><br><strong>Phase 2: The Dread:</strong> What is the worst thing you have to do tomorrow?<br><br><strong>Phase 3: The Wish:</strong> If you could cancel all your plans for tomorrow, what would you do instead?</div>
+            </div>
+            
+            <!-- VOCAB -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Tomorrow (The day after today)<br>2. Plan (Something you intend to do)<br>3. Busy (Having a lot to do)<br>4. Free (Not busy, having time)<br>5. Morning (The early part of the day)<br>6. Afternoon (The middle part of the day)<br>7. Evening (The late part of the day)<br>8. Meet (To see and speak to someone)<br>9. Work (To do your job)<br>10. Study (To learn something)<br>11. Go (To move to a place)<br>12. Stay (To remain in a place)<br><br><strong>Drill Task:</strong> Use 'Free' and 'Afternoon' in a sentence.</div>
+            </div>
+            
+            <!-- LISTENING -->
+            <div class="lesson-block lb-purple">
+                <div class="lb-header"><i class="fas fa-headphones"></i> Main Listening Input</div>
+                <div class="content-text"><div style="margin-bottom:10px;"><audio controls style="height:30px; width:200px;"><source src="assets/audio/core_practice_level_1_lesson_19.mp3" type="audio/mpeg"></audio></div>
+                    <em>(The script text is hidden in the student manual. Listen to the audio closely to complete the exercise.)</em></div>
+            </div>
+            
+            <!-- COMPREHENSION -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-question-circle"></i> Comprehension Check</div>
+                <div class="content-text"><strong>Level 1 (Literal):</strong><br>- Where is Sarah going in the morning?<br>- Why is Sarah going to the library?<br><br><strong>Level 2 (Inference):</strong><br>- Why did John ask about Sarah's plans?<br>- Why did Sarah agree to dinner?<br><br><strong>Level 3 (Applied Opinion):</strong><br>- Is it stressful to plan your days tightly, or does it make you more productive?</div>
+            </div>
+            
+            <!-- GUIDED PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Guided Practice</div>
+                <div class="content-text"><strong>Exercise 1: Time of Day:</strong> 'In the morning', 'In the afternoon', 'In the evening', 'At night'. Practice the prepositions.<br><br><strong>Exercise 2: 'Going to' for Plans:</strong> 'I am going to work.' 'She is going to study.' Practice making sentences about tomorrow.<br><br><strong>Exercise 3: Dictation:</strong> Listen and write: 'In the afternoon, I am going to study.'</div>
+            </div>
+            
+            <!-- OUTPUT -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Free Output Simulation</div>
+                <div class="content-text"><strong>The Calendar Clash (15 mins)</strong><br><br><strong>Context:</strong> You are trying to find a time to meet a friend, but you are both very busy.<br><br><strong>Role A:</strong> You are 'free' in the 'morning', but you must 'work' in the 'afternoon'. Try to 'meet' for coffee.<br><strong>Role B:</strong> You must 'study' in the morning, but you are 'free' in the 'evening'. Refuse the morning coffee and suggest dinner.<br><br><strong>Task:</strong> Negotiate until you find a time that works for both of you.</div>
+            </div>
+            <div class="page-num">Core Practice: Level 1 &bull; Page 22</div></div><div class="page" id="l20"><div class="module-header"><i class="fas fa-layer-group"></i> Core Practice: Level 1</div><div class="lesson-title"><h2>Lesson 20: A Party Invitation</h2></div>
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
+                <div class="content-text"><strong>Phase 1: The Host:</strong> Do you like hosting parties at your house, or do you prefer going to other people's houses?<br><br><strong>Phase 2: The Gift:</strong> When you go to a birthday party, what is the best gift to bring?<br><br><strong>Phase 3: The End:</strong> What time do you usually leave a party? Are you the first to leave or the last?</div>
+            </div>
+            
+            <!-- VOCAB -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Party (A social event to celebrate)<br>2. Invite (To ask someone to come)<br>3. Guest (A person invited to a party)<br>4. Host (The person giving the party)<br>5. Celebrate (To do something special for an event)<br>6. Birthday (The day you were born)<br>7. Gift (Something you give to someone, a present)<br>8. Bring (To take something with you to a place)<br>9. Eat (Put food in your mouth)<br>10. Drink (Put liquid in your mouth)<br>11. Music (Pleasant sounds to listen or dance to)<br>12. Fun (Enjoyable and happy)<br><br><strong>Drill Task:</strong> What does a 'Guest' 'Bring' to a 'Birthday' 'Party'?</div>
+            </div>
+            
+            <!-- READING -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Main Reading Input</div>
+                <div class="content-text"><strong>PART 1: The Email Invitation</strong><br>Subject: You are invited to my Birthday Party!<br>Hi everyone!<br>I am turning thirty years old next week! I want to celebrate my birthday with all my friends. I am hosting a big party at my house next Saturday. The party will start at 8:00 PM. Please come and celebrate with me. There will be lots of food, cold drinks, and great music for dancing.<br><br><strong>PART 2: The Rules</strong><br>You do not need to bring a gift. Your presence is the best present! However, if you want, you can bring some extra snacks or your favorite drink to share with the other guests. Please reply to this email by Wednesday so I know how much pizza to buy. I hope to see you there! <br>Best wishes, <br>Tom.</div>
+            </div>
+            
+            <!-- COMPREHENSION -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-question-circle"></i> Comprehension Check</div>
+                <div class="content-text"><strong>Level 1 (Literal):</strong><br>- How old is Tom turning?<br>- What time does the party start?<br><br><strong>Level 2 (Inference):</strong><br>- Why does Tom need people to reply by Wednesday?<br>- Is Tom making his friends buy expensive gifts?<br><br><strong>Level 3 (Applied Opinion):</strong><br>- Is it polite to go to a party without bringing any food or drinks?</div>
+            </div>
+            
+            <!-- GUIDED PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Guided Practice</div>
+                <div class="content-text"><strong>Exercise 1: Party Verbs:</strong> Invite (guests), Host (a party), Bring (a gift), Celebrate (a birthday).<br><br><strong>Exercise 2: Future 'Will':</strong> 'There will be food.' 'The party will start at 8.' Practice making promises about the party.<br><br><strong>Exercise 3: Prefix/Suffix check:</strong> Celebrate -> Celebration. Invite -> Invitation.</div>
+            </div>
+            
+            <!-- OUTPUT -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-pen"></i> Free Output Writing</div>
+                <div class="content-text"><strong>The Reply (15 mins)</strong><br><br><strong>Prompt:</strong> Write a reply to Tom's email.<br><br><strong>Task:</strong> Write 4 sentences.<br>- Thank Tom for the 'invitation'.<br>- Say 'Yes' or 'No' (can you go to the 'party'?)<br>- Say what you will 'bring' (e.g., 'I will bring a cake').<br>- Tell him you are excited to 'celebrate' and have 'fun'.</div>
+            </div>
+            <div class="page-num">Core Practice: Level 1 &bull; Page 23</div></div></body></html>

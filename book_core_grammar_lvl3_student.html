@@ -1,0 +1,1090 @@
+<!DOCTYPE html><html lang="en"><head>
+<script src="vesper_auth.js"></script><meta charset="UTF-8"><title>Core Grammar: Mastery (C1+)</title><link rel="stylesheet" href="assets/css/vesper_style.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700&family=Open+Sans:wght@400;600;700&display=swap');
+    body { background-color: #525659; margin: 0; padding: 40px 0; display: flex; flex-direction: column; align-items: center; font-family: 'Merriweather', serif; color: #1a2b42; }
+    .page { background-color: white; width: 210mm; min-height: 297mm; padding: 20mm; box-sizing: border-box; box-shadow: 0 0 20px rgba(0,0,0,0.3); margin-bottom: 40px; position: relative; page-break-after: always; }
+    @media print { body { background: none; margin: 0; padding: 0; display: block; } .page { box-shadow: none; margin: 0; width: 100%; height: 100%; page-break-after: always; border: none; } .no-print { display: none; } }
+    @media screen and (max-width: 768px) {
+        body { padding: 10px; }
+        .page { width: 100%; padding: 10mm; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); min-height: auto; }
+        .module-header { margin: -10mm -10mm 10mm -10mm; padding: 15px 10mm; font-size: 1.2em; }
+        .lesson-title h2 { font-size: 1.8em; }
+        .vocab-grid { grid-template-columns: 1fr; }
+        .no-print { top: 10px; left: 10px; opacity: 0.8; }
+        .cover-title { font-size: 2em !important; }
+        .cover-subtitle { font-size: 1.2em !important; }
+    }
+    h1, h2, h3 { font-family: 'Open Sans', sans-serif; }
+    .module-header { background-color: #1a2b42; color: #d4af37; padding: 15px 20mm; margin: -20mm -20mm 10mm -20mm; font-family: 'Merriweather', serif; font-size: 1.4em; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
+    .lesson-title { border-bottom: 2px solid #34495e; padding-bottom: 15px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; }
+    .lesson-title h2 { margin: 0; font-size: 2.2em; color: #1a2b42; }
+    .lesson-block { margin-bottom: 25px; padding: 20px 25px; background: #fff; border-left: 5px solid #ccc; border-radius: 0 5px 5px 0; }
+    .lb-blue { border-color: #3498db; background: #ebf5fb; }
+    .lb-navy { border-color: #1a2b42; background: #fff; border: 1px solid #eee; border-left: 6px solid #1a2b42; }
+    .lb-purple { border-color: #8e44ad; background: #f5eef8; }
+    .lb-green { border-color: #27ae60; background: #eafaf1; }
+    .lb-red { border-color: #c0392b; background: #fdedec; }
+    .lb-header { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; font-weight: bold; font-family: 'Open Sans'; text-transform: uppercase; font-size: 1em; letter-spacing: 0.5px; }
+    .lb-blue .lb-header { color: #2980b9; } 
+    .lb-navy .lb-header { color: #1a2b42; }
+    .lb-purple .lb-header { color: #8e44ad; }
+    .lb-green .lb-header { color: #27ae60; }
+    .lb-red .lb-header { color: #c0392b; }
+    .content-text { line-height: 1.8; font-size: 0.95em; color: #2c3e50; text-align: justify; }
+    ul.deep-list { padding-left: 20px; list-style-type: square; } ul.deep-list li { margin-bottom: 12px; }
+    .vocab-box { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
+    .vocab-item { background: #eee; padding: 5px 10px; border-radius: 3px; font-size: 0.9em; font-family: 'Open Sans'; }
+    .page-num { position: absolute; bottom: 20mm; right: 20mm; color: #999; font-size: 0.8em; }
+    p { margin-bottom: 15px; }
+    .intro-box { background-color: #f8f9fa; border: 1px solid #dee2e6; padding: 30px; border-radius: 8px; margin-top: 50px; }
+</style>
+</head><body><div class="no-print" style="position: fixed; top: 20px; left: 20px; z-index: 1000;"><a href="index.html" style="background: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: bold; color: #1a2b42; box-shadow: 0 2px 5px rgba(0,0,0,0.2);"><i class="fas fa-arrow-left"></i> Dashboard</a></div><div class="page cover-page"><img src="assets/images/vesper_logo.jpg" alt="Vesper Academy" class="cover-logo" style="width:200px; margin-bottom:20px;"><div class="cover-title" style="font-size:3em; font-weight:bold; color:#1a2b42;">Core Grammar: Mastery (C1+)</div><div class="cover-subtitle" style="font-size:1.5em; color:#34495e;">Advanced (C1-C2)</div><div style="margin-top: auto;"><strong>Vesper Academy</strong><br>Student Workbook</div></div><div class="page">
+<h1>Core Grammar: Mastery (C1+) (Proficiency & Rhetorical Excellence)</h1>
+<div class="intro-box">
+    <p><strong>Course Overview:</strong></p>
+    <p>Welcome to <strong>Core Grammar: Mastery (C1+)</strong>. This curriculum represents the absolute pinnacle of English mastery. You are transitioning from academic communication to high-stakes persuasion, diplomacy, and absolute rhetorical control.</p>
+    <p><strong>Mastery Objectives:</strong></p>
+    <ul class="deep-list">
+        <li><strong>Structural Elegance:</strong> Employing Advanced Participles, Nominalization, and Ellipsis to increase text density and speed.</li>
+        <li><strong>Diplomatic Precision:</strong> Softening claims with Nuanced Adverbs and Hedges, while enforcing rules via the Subjunctive Mood.</li>
+        <li><strong>Symmetrical Power:</strong> Utilizing Rhetorical Parallelism and advanced punctuation (em-dashes, colons) to craft mesmerizing arguments.</li>
+    </ul>
+</div>
+</div><div class="page"><div class="toc"><h1>Syllabus</h1><div><a href="#l1">1. Advanced Cleft Sentences & Fronting</a></div><div><a href="#l2">2. Negative Inversion (Full Mastery)</a></div><div><a href="#l3">3. Complex Prepositional Phrases</a></div><div><a href="#l4">4. Nominalization for Abstract Thought</a></div><div><a href="#l5">5. Evaluación de Desempeño 1: Elegant Writing Workshop</a></div><div><a href="#l6">6. Mixed Conditionals in Professional Critique</a></div><div><a href="#l7">7. Wishes, Regrets, and Unreal Past</a></div><div><a href="#l8">8. Advanced Modal Deduction (C2 Focus)</a></div><div><a href="#l9">9. The Subjunctive in Formal Agreements</a></div><div><a href="#l10">10. Evaluación de Desempeño 2: International Negotiation Simulation</a></div><div><a href="#l11">11. Advanced Participle Clauses (Reduced Syntax)</a></div><div><a href="#l12">12. Discourse Markers for High-Level Logic</a></div><div><a href="#l13">13. Substitution and Ellipsis</a></div><div><a href="#l14">14. Advanced Punctuation & Rhetorical Flow</a></div><div><a href="#l15">15. Evaluación de Desempeño 3: Rhetorical Speed & Rhythm</a></div><div><a href="#l16">16. Euphemisms and Hedges in Diplomacy</a></div><div><a href="#l17">17. Rhetorical Devices and Parallelism</a></div><div><a href="#l18">18. Mastering The Passive of Reporting</a></div><div><a href="#l19">19. Nuanced Adverbs of Attitude</a></div><div><a href="#l20">20. Capstone Project: The Grand Defense</a></div></div></div><div class="page" id="l1"><div class="module-header"><i class="fas fa-layer-group"></i> Core Grammar: Mastery (C1+)</div><div class="lesson-title"><h2>Lesson 1: Advanced Cleft Sentences & Fronting</h2></div>
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context</div>
+                <div class="content-text"><strong>The Delayed Drop:</strong><br>Take a boring sentence: 'I saw the error when I opened the file.' Reframe it to build tension. 'It was not until the file was physically opened that the catastrophic error was brought to light.'</div>
+            </div>
+            
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Study</div>
+                <div class="content-text">
+                    <strong>Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">To assert</span><span class="vocab-item">To demarcate</span><span class="vocab-item">To foreground</span><span class="vocab-item">To obfuscate</span><span class="vocab-item">To relegate</span><span class="vocab-item">Pivotal</span><span class="vocab-item">Crucial</span><span class="vocab-item">Paramount</span><span class="vocab-item">Indispensable</span><span class="vocab-item">Inconsequential</span><span class="vocab-item">Underpinning</span><span class="vocab-item">Rationale</span><span class="vocab-item">Impetus</span><span class="vocab-item">Catalyst</span><span class="vocab-item">Aftermath</span><span class="vocab-item">It is not until... that</span><span class="vocab-item">Only when...</span><span class="vocab-item">To draw a distinction</span><span class="vocab-item">To obscure the fact</span><span class="vocab-item">In stark contrast</span></div>
+                    <div style="margin-top:10px; padding-top:10px; border-top:1px dashed #ccc;">
+                    <strong>Grammar Note:</strong><br>
+                    
+         <strong>Grammar Reference: Rhetorical Foregrounding</strong><br><br>
+         At the C2 proficiency level, we use cleft sentences to orchestrate the reader’s attention, delaying crucial information for rhetorical impact.<br><br>
+         <strong>1. The "It is not until... that" Structure:</strong><br>
+         - <em>Purpose:</em> Emphasizes a delayed realization or condition.<br>
+         - <em>Formula:</em> <code>It is/was not until [Time/Event] that [Subject + Verb]</code><br>
+         - <em>Example:</em> <strong>It was not until</strong> the market collapsed <strong>that</strong> the board realized their error.<br><br>
+         <strong>2. Fronting for Dramatic Effect:</strong><br>
+         - <em>Purpose:</em> Moving the prepositional phrase or adjective to the absolute front, separating it with a comma to delay the subject.<br>
+         - <em>Example:</em> <strong>Central to the argument,</strong> however, is the notion of capital flight.<br>
+         - <em>Example:</em> <strong>Hidden beneath the rhetoric</strong> lies a fundamentally flawed premise.
+
+                    </div>
+                </div>
+            </div>
+            
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises</div>
+                <div class="content-text">
+         <strong>Grammar Exercise: Orchestrating Attention</strong><br><br>
+         <em>Task 1: The 'Not Until' Cleft.</em> Rewrite the sentences to emphasize the delay.<br>
+         1. The committee only recognized the flaw after the launch. &rarr; It was not until ________ that the committee...<br>
+         2. I didn't understand his motive until he resigned. &rarr; It was not until ________ that I...<br>
+         3. The encryption only activates when the system is breached. &rarr; It is not until ________ that the encryption...<br>
+         4. They only started caring about security after the hack. &rarr; It was not until ________ that they...<br><br>
+         <em>Task 2: Fronting for Impact.</em> Move the restrictive or descriptive phrase to the front.<br>
+         5. The assumption that inflation is temporary lies at the core of the problem. &rarr; At the core ________________.<br>
+         6. A deep-seated fear of change is buried beneath their corporate strategy. &rarr; Buried beneath ________________.<br>
+         7. His refusal to compromise was crucial to the failure of the treaty. &rarr; Crucial to ________________.<br><br>
+         <em>Task 3: Error Correction & Nuance.</em><br>
+         8. What we did not realize is that the data was corrupt. (Rewrite using 'It was not until...')<br>
+         9. Fix the error: It was not until the CEO arrived when the meeting began.<br>
+         10. Fix the error: Deep inside the hard drive is existing a malicious code.
+     </div>
+            </div>
+            
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Your Turn</div>
+                <div class="content-text"><strong>The Expose Reporter:</strong><br>Write the opening paragraph of a journalistic exposé. You must start by fronting a dramatic adjective phrase ('Buried in the documents...'), and follow it with an 'It was not until...' structure revealing a cover-up.</div>
+            </div>
+            <div class="page-num">Core Grammar: Mastery (C1+) &bull; Page 4</div></div><div class="page" id="l2"><div class="module-header"><i class="fas fa-layer-group"></i> Core Grammar: Mastery (C1+)</div><div class="lesson-title"><h2>Lesson 2: Negative Inversion (Full Mastery)</h2></div>
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context</div>
+                <div class="content-text"><strong>The Iron-Fisted Dictator:</strong><br>You are setting impossible laws. Use 'On no account will you...' and 'Under no circumstances should anybody...' to severely limit freedom in the classroom.</div>
+            </div>
+            
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Study</div>
+                <div class="content-text">
+                    <strong>Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">To mandate</span><span class="vocab-item">To prohibit</span><span class="vocab-item">To veto</span><span class="vocab-item">To stipulate</span><span class="vocab-item">To constrain</span><span class="vocab-item">Unprecedented</span><span class="vocab-item">Atypical</span><span class="vocab-item">Egregious</span><span class="vocab-item">Stringent</span><span class="vocab-item">Draconian</span><span class="vocab-item">Breach</span><span class="vocab-item">Infringement</span><span class="vocab-item">Violation</span><span class="vocab-item">Compliance</span><span class="vocab-item">Sanction</span><span class="vocab-item">Under no circumstances</span><span class="vocab-item">On no account</span><span class="vocab-item">In no way</span><span class="vocab-item">At no time</span><span class="vocab-item">Little did...</span></div>
+                    <div style="margin-top:10px; padding-top:10px; border-top:1px dashed #ccc;">
+                    <strong>Grammar Note:</strong><br>
+                    
+         <strong>Grammar Reference: Absolute Limitation and Ban</strong><br><br>
+         Mastery of Negative Inversion means deploying it naturally to establish absolute boundaries in legal, corporate, or highly dramatic discourse.<br><br>
+         <strong>1. Absolute Prohibition Phrases (Require Inversion):</strong><br>
+         - <em>Under no circumstances:</em> <strong>Under no circumstances should the media be</strong> informed.<br>
+         - <em>On no account:</em> <strong>On no account will the corporation accept</strong> liability.<br>
+         - <em>In no way:</em> <strong>In no way does this agreement constitute</strong> a partnership.<br><br>
+         <strong>2. Total Ignorance (Little + Inversion):</strong><br>
+         - <em>Concept:</em> Used to express that someone had zero knowledge of an impending disaster.<br>
+         - <em>Formula:</em> <code>Little did [Subject] [Verb Base]...</code><br>
+         - <em>Example:</em> <strong>Little did they know</strong> that the servers had already been compromised.
+
+                    </div>
+                </div>
+            </div>
+            
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises</div>
+                <div class="content-text">
+         <strong>Grammar Exercise: Draconian Boundaries</strong><br><br>
+         <em>Task 1: Absolute Prohibition.</em> Invert the subject and auxiliary verb.<br>
+         1. Employees must not share passwords under any circumstances. &rarr; Under no circumstances ________ employees ________ passwords.<br>
+         2. We will not negotiate with hostile entities on any account. &rarr; On no account ________ we ________.<br>
+         3. This minor error does not in any way invalidate the entire study. &rarr; In no way ________ this minor error ________ the study.<br>
+         4. You should not open this valve at any time. &rarr; At no time ________ you ________ this valve.<br><br>
+         <em>Task 2: Dramatic Ignorance.</em> Use 'Little did...' to show lack of knowledge.<br>
+         5. The team didn't know the microphone was recording. &rarr; Little ________ the team ________ the microphone...<br>
+         6. I had no idea that my message would cause such an uproar. &rarr; Little ________ I ________ that my message...<br>
+         7. He failed to realize the severity of his actions. &rarr; Little ________ he ________ the severity...<br><br>
+         <em>Task 3: Synthesis & Error Correction.</em><br>
+         8. Change to absolute inversion: We will never surrender the patents. &rarr; On no account...<br>
+         9. Fix the error: Under no circumstances you should press the red button.<br>
+         10. Fix the error: Little they realized that the economy was collapsing.
+     </div>
+            </div>
+            
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Your Turn</div>
+                <div class="content-text"><strong>The Non-Disclosure Agreement:</strong><br>Draft three incredibly strict clauses for an NDA. Outline absolutely what the signee cannot do using 'On no account...', 'Under no circumstances...', and 'In no way...'.</div>
+            </div>
+            <div class="page-num">Core Grammar: Mastery (C1+) &bull; Page 5</div></div><div class="page" id="l3"><div class="module-header"><i class="fas fa-layer-group"></i> Core Grammar: Mastery (C1+)</div><div class="lesson-title"><h2>Lesson 3: Complex Prepositional Phrases</h2></div>
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context</div>
+                <div class="content-text"><strong>The Corporate Lawyer:</strong><br>Replace basic words with their legal equivalents. Change 'Instead of money' to 'In lieu of compensation'. Change 'Because of my position' to 'By virtue of my office'.</div>
+            </div>
+            
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Study</div>
+                <div class="content-text">
+                    <strong>Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">To enact</span><span class="vocab-item">To repeal</span><span class="vocab-item">To supersede</span><span class="vocab-item">To uphold</span><span class="vocab-item">To ratify</span><span class="vocab-item">Statutory</span><span class="vocab-item">Binding</span><span class="vocab-item">Legitimate</span><span class="vocab-item">Null and void</span><span class="vocab-item">Pursuant</span><span class="vocab-item">Provision</span><span class="vocab-item">By virtue of</span><span class="vocab-item">In accordance with</span><span class="vocab-item">With respect to</span><span class="vocab-item">In light of</span><span class="vocab-item">Pertaining to</span><span class="vocab-item">In lieu of</span><span class="vocab-item">Notwithstanding</span><span class="vocab-item">Subject to</span><span class="vocab-item">Irrespective of</span></div>
+                    <div style="margin-top:10px; padding-top:10px; border-top:1px dashed #ccc;">
+                    <strong>Grammar Note:</strong><br>
+                    
+         <strong>Grammar Reference: Diplomatic & Legal Precision</strong><br><br>
+         Elite discourse relies on complex, multi-word prepositional phrases to define exactly how, why, and under what authority an action is taken.<br><br>
+         <strong>1. Authority and Rule Following:</strong><br>
+         - <em>In accordance with:</em> Following the rules. ('<strong>In accordance with</strong> Section 4, the contract is terminated').<br>
+         - <em>Pursuant to:</em> Legal equivalent of 'following'. ('<strong>Pursuant to</strong> your request...').<br>
+         - <em>By virtue of:</em> Because of a specific power or fact. ('He assumed control <strong>by virtue of</strong> his seniority').<br><br>
+         <strong>2. Substitution and Conditions:</strong><br>
+         - <em>In lieu of:</em> Instead of. ('They offered stock options <strong>in lieu of</strong> a bonus').<br>
+         - <em>Subject to:</em> Depending on. ('The merger is <strong>subject to</strong> regulatory approval').<br>
+         - <em>Irrespective of:</em> Regardless of. ('The law applies to everyone, <strong>irrespective of</strong> wealth').
+
+                    </div>
+                </div>
+            </div>
+            
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises</div>
+                <div class="content-text">
+         <strong>Grammar Exercise: Legal Lexical Upgrades</strong><br><br>
+         <em>Task 1: Synonym Replacement.</em> Upgrade the simple preposition to the C2 level.<br>
+         1. <strong>Following</strong> the new guidelines, all data must be encrypted. &rarr; ________ the new guidelines...<br>
+         2. She received a warning <strong>instead of</strong> a fine. &rarr; She received a warning ________ a fine.<br>
+         3. The policy will be implemented <strong>regardless of</strong> employee complaints. &rarr; The policy will be implemented ________ employee complaints.<br>
+         4. He won the case <strong>because of</strong> his airtight alibi. &rarr; He won the case ________ his airtight alibi.<br>
+         5. The exact terms are <strong>dependent on</strong> the board's approval. &rarr; The exact terms are ________ the board's approval.<br><br>
+         <em>Task 2: Contextual Fit.</em> Choose the most appropriate complex phrase.<br>
+         6. (With respect to / In lieu of) your inquiry dated May 4th, please find the documents attached.<br>
+         7. (Pursuant to / Irrespective of) Article 9, the defendant is granted bail.<br>
+         8. The company is shutting down (in light of / subject to) recent financial losses.<br><br>
+         <em>Task 3: Error Correction.</em><br>
+         9. In accordance to the law, you have the right to remain silent.<br>
+         10. By virtue for his experience, he was given the project.
+     </div>
+            </div>
+            
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Your Turn</div>
+                <div class="content-text"><strong>The Official Decree:</strong><br>Write a formal memo to the staff announcing a pay freeze. You must justify it 'in light of' recent events, state it is 'in accordance with' company bylaws, offer extra vacation days 'in lieu of' bonuses, and declare the rule applies 'irrespective of' department.</div>
+            </div>
+            <div class="page-num">Core Grammar: Mastery (C1+) &bull; Page 6</div></div><div class="page" id="l4"><div class="module-header"><i class="fas fa-layer-group"></i> Core Grammar: Mastery (C1+)</div><div class="lesson-title"><h2>Lesson 4: Nominalization for Abstract Thought</h2></div>
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context</div>
+                <div class="content-text"><strong>The Density Compressor:</strong><br>Race to nominalize. 'They decided to expand because they grew.' &rarr; 'The decision to expand stemmed from recent growth.' Make it sound like a textbook.</div>
+            </div>
+            
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Study</div>
+                <div class="content-text">
+                    <strong>Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">To condense</span><span class="vocab-item">To obscure</span><span class="vocab-item">To manifest</span><span class="vocab-item">To analyze</span><span class="vocab-item">To synthesize</span><span class="vocab-item">Abstract</span><span class="vocab-item">Concrete</span><span class="vocab-item">Dense</span><span class="vocab-item">Prolix</span><span class="vocab-item">Succinct</span><span class="vocab-item">Assessment</span><span class="vocab-item">Implementation</span><span class="vocab-item">Utilization</span><span class="vocab-item">Deterioration</span><span class="vocab-item">Fluctuation</span><span class="vocab-item">Justification</span><span class="vocab-item">Implication</span><span class="vocab-item">Eradication</span><span class="vocab-item">To lend credence to</span><span class="vocab-item">The crux of</span></div>
+                    <div style="margin-top:10px; padding-top:10px; border-top:1px dashed #ccc;">
+                    <strong>Grammar Note:</strong><br>
+                    
+         <strong>Grammar Reference: The "Economist" Style</strong><br><br>
+         To write like an expert, transform entire subject-verb-object sentences into dense noun phrases. This removes the 'people' from the narrative, focusing entirely on abstract concepts and processes.<br><br>
+         <strong>1. Verb &rarr; Noun Transformation:</strong><br>
+         - <em>Verb Focus:</em> Because the government <strong>failed</strong> to <strong>regulate</strong> the banks, the economy <strong>deteriorated</strong>.<br>
+         - <em>Noun Focus:</em> The government's <strong>failure</strong> of <strong>regulation</strong> led to economic <strong>deterioration</strong>.<br><br>
+         <strong>2. Adjective &rarr; Noun Transformation:</strong><br>
+         - <em>Adjective Focus:</em> The algorithm is highly <strong>complex</strong>, which makes it <strong>vulnerable</strong>.<br>
+         - <em>Noun Focus:</em> The extreme <strong>complexity</strong> of the algorithm increases its <strong>vulnerability</strong>.<br><br>
+         <strong>3. The Result:</strong> Reduced word count, increased formality, and total objectivity.
+
+                    </div>
+                </div>
+            </div>
+            
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises</div>
+                <div class="content-text">
+         <strong>Grammar Exercise: Abstract Nominal Compression</strong><br><br>
+         <em>Task 1: Verb to Noun.</em> Rewrite the sentence focusing on nominals.<br>
+         1. The CEO <strong>resigned unexpectedly</strong>, which caused the stock to <strong>fluctuate</strong>. &rarr; The CEO's unexpected ________ caused stock ________.<br>
+         2. They <strong>analyzed</strong> the data, which <strong>justified</strong> why they <strong>implemented</strong> the tax. &rarr; The ________ of the data provided ________ for the ________ of the tax.<br>
+         3. The doctors <strong>assessed</strong> the patient and successfully <strong>eradicated</strong> the disease. &rarr; The doctor's ________ led to the successful ________ of the disease.<br><br>
+         <em>Task 2: Adjective to Noun.</em><br>
+         4. The <strong>frequent</strong> cyber attacks made the system <strong>unstable</strong>. &rarr; The ________ of the cyber attacks caused system ________.<br>
+         5. Because the evidence was <strong>ambiguous</strong>, the jury was <strong>confused</strong>. &rarr; The ________ of the evidence led to jury ________.<br><br>
+         <em>Task 3: Full Paragraph Upgrade.</em> Nominalize these clunky sentences.<br>
+         6. Scientists investigated the ruins. They discovered something important. &rarr; The scientific ________ yielded an important ________.<br>
+         7. We need to rely less on fossil fuels. That will improve the air. &rarr; A reduction in our ________ on fossil fuels will result in the ________ of air quality.<br>
+         8. Identify the nominals: The implementation of strict protocols is crucial.<br>
+         9. Identify the nominals: Their reluctance to negotiate led to warfare.<br>
+         10. Convert to verbs (De-nominalize): The deterioration of the framework necessitated an evaluation.
+     </div>
+            </div>
+            
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Your Turn</div>
+                <div class="content-text"><strong>The Expert Executive Summary:</strong><br>Take a childish paragraph ('We decided to buy the company because they are making good software and we want to grow') and rewrite it into a single, dense, highly nominalized C2 sentence suitable for the front page of the Wall Street Journal.</div>
+            </div>
+            <div class="page-num">Core Grammar: Mastery (C1+) &bull; Page 7</div></div><div class="page" id="l5"><div class="module-header"><i class="fas fa-layer-group"></i> Core Grammar: Mastery (C1+)</div><div class="lesson-title"><h2>Lesson 5: Evaluación de Desempeño 1: Elegant Writing Workshop</h2></div>
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context</div>
+                <div class="content-text"><strong>The Editor-in-Chief:</strong><br>You receive an angry, informal email from an employee complaining about a broken coffee machine. Rewrite it entirely as a highly nominalized, legally phrased corporate grievance.</div>
+            </div>
+            
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Study</div>
+                <div class="content-text">
+                    <strong>Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">To critique</span><span class="vocab-item">To edit</span><span class="vocab-item">To refine</span><span class="vocab-item">To distill</span><span class="vocab-item">To elevate</span><span class="vocab-item">Prose</span><span class="vocab-item">Rhetoric</span><span class="vocab-item">Syntax</span><span class="vocab-item">Diction</span><span class="vocab-item">Eloquence</span><span class="vocab-item">Clunky</span><span class="vocab-item">Verbose</span><span class="vocab-item">Seamless</span><span class="vocab-item">Cohesive</span><span class="vocab-item">Persuasive</span><span class="vocab-item">In essence</span><span class="vocab-item">By and large</span><span class="vocab-item">To a great extent</span><span class="vocab-item">To strike a balance</span><span class="vocab-item">To bear in mind</span></div>
+                    <div style="margin-top:10px; padding-top:10px; border-top:1px dashed #ccc;">
+                    <strong>Grammar Note:</strong><br>
+                    
+         <strong>Grammar Reference: Week 1 Integration</strong><br><br>
+         This workshop tests the mastery of C2 structural manipulation:<br>
+         - <strong>Fronting:</strong> Moving critical adjectives or prepositional phrases to the front.<br>
+         - <strong>Inversion:</strong> Using absolute limitations (On no account).<br>
+         - <strong>Complex Prepositions:</strong> Deploying 'In lieu of' or 'Pursuant to'.<br>
+         - <strong>Nominalization:</strong> Compressing ideas into abstract noun phrases.
+     
+                    </div>
+                </div>
+            </div>
+            
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises</div>
+                <div class="content-text">
+         <strong>Grammar Exercise: The Stylistic Crucible</strong><br><br>
+         <em>Task 1: The Mega Edit.</em> Elevate and correct these 10 sentences to 'Economist' standards.<br>
+         (1) I didn't see the flaw until the program crashed. (Use 'It was not until...')<br>
+         (2) Important to our plan is how we distribute the funds. (Front the adjective phrase: 'Crucial to...')<br>
+         (3) Nobody should touch the firewall. (Use 'On no account...')<br>
+         (4) They didn't know the microphone was hot. (Use 'Little did...')<br>
+         (5) The company fired him instead of suspending him. (Use 'In lieu of')<br>
+         (6) Following the law, we must report the breach. (Use 'Pursuant to')<br>
+         (7) Because the CEO failed to manage, the company went bankrupt. (Nominalize: 'to manage' &rarr; 'management')<br>
+         (8) The algorithm is very complex, so it is vulnerable. (Nominalize: 'complexity', 'vulnerability')<br>
+         (9) Under no circumstances the data should be duplicated. (Fix the inversion error)<br>
+         (10) It was not until he signed the contract when he realized the trap. (Fix the cleft error)
+     </div>
+            </div>
+            
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Your Turn</div>
+                <div class="content-text"><strong>Taller de Escritura: The Op-Ed:</strong><br>Write a scathing 150-word opinion piece on global supply chain fragility. Use at least two nominalizations, one negative inversion, and a complex prepositional phrase to build an airtight, authoritative argument.</div>
+            </div>
+            <div class="page-num">Core Grammar: Mastery (C1+) &bull; Page 8</div></div><div class="page" id="l6"><div class="module-header"><i class="fas fa-layer-group"></i> Core Grammar: Mastery (C1+)</div><div class="lesson-title"><h2>Lesson 6: Mixed Conditionals in Professional Critique</h2></div>
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context</div>
+                <div class="content-text"><strong>The Historian:</strong><br>'If the Titanic's steel were not so brittle in the cold (permanent trait), it wouldn't have snapped (past disaster).' Analyze the Hindenburg, the burning of Rome, or a famous corporate bankruptcy.</div>
+            </div>
+            
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Study</div>
+                <div class="content-text">
+                    <strong>Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">To scrutinize</span><span class="vocab-item">To appraise</span><span class="vocab-item">To dissect</span><span class="vocab-item">To validate</span><span class="vocab-item">To invalidate</span><span class="vocab-item">Strategic</span><span class="vocab-item">Tactical</span><span class="vocab-item">Myopic</span><span class="vocab-item">Farsighted</span><span class="vocab-item">Flawed</span><span class="vocab-item">Catastrophe</span><span class="vocab-item">Blunder</span><span class="vocab-item">Oversight</span><span class="vocab-item">Miscalculation</span><span class="vocab-item">Triumph</span><span class="vocab-item">With the benefit of hindsight</span><span class="vocab-item">To turn a blind eye to</span><span class="vocab-item">To gloss over</span><span class="vocab-item">To miss the mark</span><span class="vocab-item">To backfire</span></div>
+                    <div style="margin-top:10px; padding-top:10px; border-top:1px dashed #ccc;">
+                    <strong>Grammar Note:</strong><br>
+                    
+         <strong>Grammar Reference: Hindsight and Historic Consequence</strong><br><br>
+         C2 level critiques require looking at massive historic blunders and analyzing how a different trait or past choice alters the present reality, using Type 1 and Type 2 Mixed conditions interchangeably.<br><br>
+         <strong>1. Review Mixed Type 1 (Past condition &rarr; Present Result):</strong><br>
+         - <em>Example:</em> If the general <strong>had secured</strong> the flank (past error), the army <strong>would not be</strong> surrounded today (present crisis).<br><br>
+         <strong>2. Review Mixed Type 2 (Present/Permanent Trait &rarr; Past Result):</strong><br>
+         - <em>Example:</em> If the corporation <strong>were</strong> not so inherently greedy (permanent flaw), they <strong>would have invested</strong> in safety protocols (past missed action).<br><br>
+         <strong>3. Professional Nuance:</strong><br>
+         - Use 'Had they secured...' (Inversion) instead of 'If they had secured...' for higher formality.
+
+                    </div>
+                </div>
+            </div>
+            
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises</div>
+                <div class="content-text">
+         <strong>Grammar Exercise: Strategic Miscalculations</strong><br><br>
+         <em>Task 1: Verb Conjugation (Types 1 & 2).</em><br>
+         1. If the CEO (listen) ________ to the risk analysts last year, our stock (not / be) ________ in freefall right now.<br>
+         2. If the algorithm (be) ________ truly objective by design, it (not / flag) ________ those innocent users yesterday.<br>
+         3. We (be) ________ the industry leaders today if we (patent) ________ the design a decade ago.<br>
+         4. If the metal (possess) ________ a higher melting point, the satellite (not / burn up) ________ upon re-entry.<br><br>
+         <em>Task 2: Inversion Upgrade.</em> Drop 'If' and invert the 3rd conditional clause.<br>
+         5. If they had conducted a thorough audit, they would not be facing bankruptcy today. &rarr; ________ they ________ a thorough audit, they...<br>
+         6. If the engineers had noticed the structural flaw, the bridge wouldn't be collapsing. &rarr; ________ the engineers ________ the structural flaw...<br>
+         7. If we hadn't ignored the demographic shift, our sales wouldn't be stagnant. &rarr; <strong>Had we not</strong> ________ the demographic shift...<br><br>
+         <em>Task 3: Reality vs. Hypothetical.</em><br>
+         8. Fact: The code is unstable. It crashed the servers last night. (Change to Mixed Type 2).<br>
+         9. Fact: You deleted the backups. We have no data now. (Change to Mixed Type 1).<br>
+         10. Error Correction: If he would have signed the treaty, we wouldn't be at war today.
+     </div>
+            </div>
+            
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Your Turn</div>
+                <div class="content-text"><strong>The Military Tribunal:</strong><br>You are prosecuting a general for a failed campaign. Present a formal, inverted critique explaining exactly how his permanent character flaws led to a historic blunder, and how a different past strategy would have saved the present situation.</div>
+            </div>
+            <div class="page-num">Core Grammar: Mastery (C1+) &bull; Page 9</div></div><div class="page" id="l7"><div class="module-header"><i class="fas fa-layer-group"></i> Core Grammar: Mastery (C1+)</div><div class="lesson-title"><h2>Lesson 7: Wishes, Regrets, and Unreal Past</h2></div>
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context</div>
+                <div class="content-text"><strong>The Disappointed Mentor:</strong><br>Look at a failed student. 'If only you had studied. I wish you hadn't cheated. I'd rather you had failed honestly.' Emphasize the impossibility of changing the past.</div>
+            </div>
+            
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Study</div>
+                <div class="content-text">
+                    <strong>Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">To lament</span><span class="vocab-item">To regret</span><span class="vocab-item">To repent</span><span class="vocab-item">To harbor</span><span class="vocab-item">To dwell on</span><span class="vocab-item">Irrevocable</span><span class="vocab-item">Irreversible</span><span class="vocab-item">Futile</span><span class="vocab-item">Vain</span><span class="vocab-item">Fruitless</span><span class="vocab-item">Despair</span><span class="vocab-item">Remorse</span><span class="vocab-item">Hindsight</span><span class="vocab-item">Resignation</span><span class="vocab-item">Wishful thinking</span><span class="vocab-item">If only</span><span class="vocab-item">I'd rather</span><span class="vocab-item">It's high time</span><span class="vocab-item">Suppose</span><span class="vocab-item">To cry over spilled milk</span></div>
+                    <div style="margin-top:10px; padding-top:10px; border-top:1px dashed #ccc;">
+                    <strong>Grammar Note:</strong><br>
+                    
+         <strong>Grammar Reference: Modifying the Impossible</strong><br><br>
+         Advanced English has specific structures to express deep regret about the unchangeable past, or to pose extreme hypothetical questions.<br><br>
+         <strong>1. Wish / If only + Past Perfect (Deep Regret):</strong><br>
+         - <em>Formula:</em> <code>I wish / If only + [Subject] + had/hadn't + V3</code><br>
+         - <em>Example:</em> <strong>I wish the board had approved</strong> the merger. (They didn't).<br><br>
+         <strong>2. I'd Rather + Past Perfect (Preference about the past):</strong><br>
+         - <em>Formula:</em> <code>I would rather + [Subject] + had + V3</code><br>
+         - <em>Example:</em> He told the press our secret. <strong>I'd rather he had stayed</strong> silent.<br><br>
+         <strong>3. Suppose / What if + Past Perfect (Extreme Hypothetical):</strong><br>
+         - <em>Concept:</em> Used to pose historic 'what if' scenarios.<br>
+         - <em>Example:</em> <strong>Suppose the meteor hadn't hit</strong> the Earth; what would dinosaurs look like today?
+
+                    </div>
+                </div>
+            </div>
+            
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises</div>
+                <div class="content-text">
+         <strong>Grammar Exercise: Lamentations & Hypotheticals</strong><br><br>
+         <em>Task 1: Expressing Regret.</em> Rewrite the reality into a regret.<br>
+         1. I did not backup the hard drive before the crash. &rarr; I wish I ________.<br>
+         2. The government ignored the environmental warnings. &rarr; If only the government ________.<br>
+         3. We signed the terrible contract. &rarr; I wish we ________.<br><br>
+         <em>Task 2: I'd Rather (Past Preference).</em> Rewrite what you wished someone else had done.<br>
+         4. The CEO lied to the shareholders. &rarr; I'd rather the CEO ________ the truth.<br>
+         5. The IT department deleted my files. &rarr; I'd rather they ________ my files.<br>
+         6. You sold the shares yesterday. &rarr; I'd rather you ________ them.<br><br>
+         <em>Task 3: Posing Hypotheticals.</em> Use Suppose/What if + Past Perfect.<br>
+         7. Pose a question: The allies won WWII. (Suppose...) &rarr; ________ the allies ________ WWII, what would the world be like?<br>
+         8. Pose a question: The internet wasn't invented. (What if...) &rarr; ________ the internet ________ invented?<br>
+         9. Error correction: I wish I wouldn't have eaten that.<br>
+         10. Error correction: Suppose he was caught yesterday, what would have happened? (Make it Past Perfect).
+     </div>
+            </div>
+            
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Your Turn</div>
+                <div class="content-text"><strong>The PR Disaster Response:</strong><br>You are the head of PR after a massive corporate scandal. Write a private memo to the CEO venting your absolute frustration. 'If only you had... I'd rather the legal team had... Suppose the media had discovered...'</div>
+            </div>
+            <div class="page-num">Core Grammar: Mastery (C1+) &bull; Page 10</div></div><div class="page" id="l8"><div class="module-header"><i class="fas fa-layer-group"></i> Core Grammar: Mastery (C1+)</div><div class="lesson-title"><h2>Lesson 8: Advanced Modal Deduction (C2 Focus)</h2></div>
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context</div>
+                <div class="content-text"><strong>The Spectrum of Doubt:</strong><br>Line up the phrases from 100% to 50%. 'They are bound to have failed.' -> 'They must have failed.' -> 'They may well have failed.' -> 'They might conceivably have failed.'</div>
+            </div>
+            
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Study</div>
+                <div class="content-text">
+                    <strong>Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">To surmise</span><span class="vocab-item">To infer</span><span class="vocab-item">To theorize</span><span class="vocab-item">To deduce</span><span class="vocab-item">To glean</span><span class="vocab-item">Infallible</span><span class="vocab-item">Plausible</span><span class="vocab-item">Implausible</span><span class="vocab-item">Probable</span><span class="vocab-item">Conceivable</span><span class="vocab-item">Probability</span><span class="vocab-item">Validity</span><span class="vocab-item">Conjecture</span><span class="vocab-item">Speculation</span><span class="vocab-item">Premise</span><span class="vocab-item">In all probability</span><span class="vocab-item">By all accounts</span><span class="vocab-item">To jump to conclusions</span><span class="vocab-item">To stand to reason</span><span class="vocab-item">Beyond a shadow of a doubt</span></div>
+                    <div style="margin-top:10px; padding-top:10px; border-top:1px dashed #ccc;">
+                    <strong>Grammar Note:</strong><br>
+                    
+         <strong>Grammar Reference: Absolute vs. Subtle Certainty</strong><br><br>
+         At C2 level, we don't just use 'must have'. We use specific phrases to indicate exactly *how* certain we are about a past event, ranging from absolute mathematical certainty to subtle, polite doubt.<br><br>
+         <strong>1. Absolute Certainty (100%):</strong><br>
+         - <em>Bound to have:</em> 'They are <strong>bound to have noticed</strong> the missing funds.' (It is inevitable).<br>
+         - <em>Can't possibly have:</em> 'The server <strong>can't possibly have crashed</strong> independently.'<br><br>
+         <strong>2. Strong Probability (90%):</strong><br>
+         - <em>Must have:</em> 'He <strong>must have lied</strong> on his resume.'<br>
+         - <em>In all likelihood:</em> '<strong>In all likelihood, the algorithm failed</strong>.'<br><br>
+         <strong>3. Subtle/Cautious Speculation (50%):</strong><br>
+         - <em>May well have:</em> 'The climate shift <strong>may well have caused</strong> the famine.' (A very polite, academic guess).<br>
+         - <em>Might conceivably have:</em> 'The virus <strong>might conceivably have originated</strong> elsewhere.'
+
+                    </div>
+                </div>
+            </div>
+            
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises</div>
+                <div class="content-text">
+         <strong>Grammar Exercise: Calibrating Speculation</strong><br><br>
+         <em>Task 1: Upgrading Certainty.</em> Replace basic modals with advanced phrases.<br>
+         1. I am 100% sure they saw the error. &rarr; They are <strong>b</strong>________ ________ ________ seen the error.<br>
+         2. It is impossible that he wrote this code. &rarr; He <strong>c</strong>________ ________ ________ written this code.<br>
+         3. It is highly probable that the CFO embezzled the cash. &rarr; In <strong>a</strong>________ <strong>l</strong>________, the CFO embezzled the cash.<br>
+         4. It's an academic possibility that the species died out due to disease. &rarr; The species <strong>m</strong>________ <strong>w</strong>________ ________ died out due to disease.<br><br>
+         <em>Task 2: Contextual Match.</em> Choose the right level of certainty.<br>
+         5. (Context: The vault requires 3 retina scans and a key). He (must have / can't possibly have) acted alone.<br>
+         6. (Context: We have zero data, just a wild theory). The anomaly (is bound to have / might conceivably have) been caused by a solar flare.<br>
+         7. (Context: The sun rises every day). It (may well have / is bound to have) risen yesterday.<br><br>
+         <em>Task 3: Error Correction & Transformation.</em><br>
+         8. Change to 100% negative certainty: They must not have seen us.<br>
+         9. Fix the error: He is bound to having crashed the car.<br>
+         10. Fix the error: In all likelihood, she must have steal the documents. (Don't double up modals).
+     </div>
+            </div>
+            
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Your Turn</div>
+                <div class="content-text"><strong>The Intelligence Briefing:</strong><br>Write a highly classified intelligence assessment regarding a recent foreign cyberattack. Clearly parse out what 'can't possibly have happened' (impossible), what 'in all likelihood occurred' (probable), and what 'may well have triggered' the attack (academic guess).</div>
+            </div>
+            <div class="page-num">Core Grammar: Mastery (C1+) &bull; Page 11</div></div><div class="page" id="l9"><div class="module-header"><i class="fas fa-layer-group"></i> Core Grammar: Mastery (C1+)</div><div class="lesson-title"><h2>Lesson 9: The Subjunctive in Formal Agreements</h2></div>
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context</div>
+                <div class="content-text"><strong>The Parliamentarian:</strong><br>Bang a gavel. 'I move that the sky BE painted blue.' 'The court resolves that the defendant NOT SPEAK.' Practice the sheer authoritarian power of the base verb.</div>
+            </div>
+            
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Study</div>
+                <div class="content-text">
+                    <strong>Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">To mandate</span><span class="vocab-item">To decree</span><span class="vocab-item">To stipulate</span><span class="vocab-item">To ordinance</span><span class="vocab-item">To resolve</span><span class="vocab-item">Imperative</span><span class="vocab-item">Mandatory</span><span class="vocab-item">Binding</span><span class="vocab-item">Non-negotiable</span><span class="vocab-item">Statutory</span><span class="vocab-item">Motion</span><span class="vocab-item">Clause</span><span class="vocab-item">Provision</span><span class="vocab-item">Addendum</span><span class="vocab-item">Arbitration</span><span class="vocab-item">To table a motion</span><span class="vocab-item">To pass a resolution</span><span class="vocab-item">With the stipulation that</span><span class="vocab-item">To rule in favor of</span><span class="vocab-item">To render void</span></div>
+                    <div style="margin-top:10px; padding-top:10px; border-top:1px dashed #ccc;">
+                    <strong>Grammar Note:</strong><br>
+                    
+         <strong>Grammar Reference: Legalese and Binding Demands</strong><br><br>
+         The Subjunctive mood is the backbone of all legal contracts, parliamentary motions, and strict diplomatic demands. It enforces an action upon a subject using the base verb without tense markers.<br><br>
+         <strong>1. Parliamentary Motions & Resolutions:</strong><br>
+         - <em>Formula:</em> <code>Move/Resolve that + Subject + [Base Verb]</code><br>
+         - <em>Example:</em> The committee <strong>resolved that the funds be allocated</strong> immediately.<br>
+         - <em>Example:</em> I <strong>move that the meeting be adjourned</strong>.<br><br>
+         <strong>2. Contractual Stipulations:</strong><br>
+         - <em>Formula:</em> <code>Stipulate/Mandate that + Subject + [Base Verb/Negative Base]</code><br>
+         - <em>Example:</em> Clause 4 <strong>stipulates that the tenant not alter</strong> the architecture.<br>
+         - <em>Example:</em> The NDA <strong>mandates that absolute secrecy be maintained</strong>.
+
+                    </div>
+                </div>
+            </div>
+            
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises</div>
+                <div class="content-text">
+         <strong>Grammar Exercise: Contractual Clauses</strong><br><br>
+         <em>Task 1: Subjunctive Verb Application.</em> Conjugate using the base verb.<br>
+         1. The contract clearly stipulates that the contractor (finish) ________ the work by Friday.<br>
+         2. The board resolved that the Chief Executive Officer (be) ________ terminated.<br>
+         3. International law mandates that prisoners of war (not / be) ________ tortured.<br>
+         4. I second the motion that the budgetary review (commence) ________.<br>
+         5. It is a statutory requirement that all data (remain) ________ strictly confidential.<br><br>
+         <em>Task 2: Passive Subjunctive.</em><br>
+         6. The judge demanded that the evidence (be / destroy) ________.<br>
+         7. Clause 9 dictates that the initial deposit (be / refund) ________ in full.<br>
+         8. We propose that the regulations (be / amend) ________.<br><br>
+         <em>Task 3: Error Correction.</em><br>
+         9. The treaty stipulates that the army withdraws past the border.<br>
+         10. The Senate resolved that the tax should be lowering globally. (Remove should, use subjunctive).
+     </div>
+            </div>
+            
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Your Turn</div>
+                <div class="content-text"><strong>The Diplomatic Ultimatum:</strong><br>Draft a formal resolution from the United Nations to a rogue nation. You must 'stipulate that they cease...', 'mandate that weapons be...', and 'move that sanctions not be lifted until...'</div>
+            </div>
+            <div class="page-num">Core Grammar: Mastery (C1+) &bull; Page 12</div></div><div class="page" id="l10"><div class="module-header"><i class="fas fa-layer-group"></i> Core Grammar: Mastery (C1+)</div><div class="lesson-title"><h2>Lesson 10: Evaluación de Desempeño 2: International Negotiation Simulation</h2></div>
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context</div>
+                <div class="content-text"><strong>The Hostage Negotiator:</strong><br>Rapid-fire debate. Partner A demands the impossible using the subjunctive. Partner B rejects it using mixed conditionals to blame the past.</div>
+            </div>
+            
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Study</div>
+                <div class="content-text">
+                    <strong>Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">To negotiate</span><span class="vocab-item">To compromise</span><span class="vocab-item">To leverage</span><span class="vocab-item">To concede</span><span class="vocab-item">To maneuver</span><span class="vocab-item">Unilateral</span><span class="vocab-item">Bilateral</span><span class="vocab-item">Multilateral</span><span class="vocab-item">Reciprocal</span><span class="vocab-item">Equitable</span><span class="vocab-item">Ultimatum</span><span class="vocab-item">Deadlock</span><span class="vocab-item">Stalemate</span><span class="vocab-item">Concession</span><span class="vocab-item">Framework</span><span class="vocab-item">To break the impasse</span><span class="vocab-item">To find common ground</span><span class="vocab-item">To call one's bluff</span><span class="vocab-item">To draw a line in the sand</span><span class="vocab-item">A dealbreaker</span></div>
+                    <div style="margin-top:10px; padding-top:10px; border-top:1px dashed #ccc;">
+                    <strong>Grammar Note:</strong><br>
+                    
+         <strong>Grammar Reference: Week 2 Synthesis</strong><br><br>
+         This simulation tests the rhetorical pressure structures of C2 English:<br>
+         - <strong>Mixed Conditionals & Regret:</strong> Had you honored the agreement, we would not be here. I'd rather you had consulted us.<br>
+         - <strong>Modal Deduction:</strong> You must have known the market would crash; it is bound to have affected your valuation.<br>
+         - <strong>The Subjunctive:</strong> Our fundamental demand is that the embargo be lifted.
+     
+                    </div>
+                </div>
+            </div>
+            
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises</div>
+                <div class="content-text">
+         <strong>Grammar Exercise: The Diplomatic Audit</strong><br><br>
+         <em>Task 1: The Mega Edit.</em> Correct the structural and logical errors logically.<br>
+         (1) If they would have signed the treaty, thousands wouldn't have died. (Fix mixed conditional)<br>
+         (2) If the economy was stronger inherently, they would have survived the 2008 crash. (Fix trait mixed conditional)<br>
+         (3) I wish the CEO didn't fire the lead engineer last year. (Fix past regret)<br>
+         (4) Suppose we launch the product yesterday, what would have happened? (Fix hypothetical)<br>
+         (5) They didn't show up. They might conceivably caught in traffic. (Fix past modal)<br>
+         (6) The safe algorithm is bound to failing eventually. (Fix absolute certainty modal)<br>
+         (7) I move that the negotiation is suspended immediately. (Fix parliamentary subjunctive)<br>
+         (8) The contract stipulates that the seller doesn't contact the buyer directly. (Fix legal subjunctive)<br>
+         (9) I would rather you not mentioned the lawsuit to the press. (Fix 'I'd rather' past structure)<br>
+         (10) In all likelihood, the stock market can't possibly have crashed. (Contradictory certainty - fix the logic).
+     </div>
+            </div>
+            
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Your Turn</div>
+                <div class="content-text"><strong>The Trade War Summit:</strong><br>You are representing a nation under heavy tariffs. Negotiate a peace treaty. Use subjunctive demands ('We stipulate that tariffs BE dropped'), express regret over past hostility ('I'd rather we had cooperated'), and analyze past failures logically ('Had your generals not invaded, our economy would be stable').</div>
+            </div>
+            <div class="page-num">Core Grammar: Mastery (C1+) &bull; Page 13</div></div><div class="page" id="l11"><div class="module-header"><i class="fas fa-layer-group"></i> Core Grammar: Mastery (C1+)</div><div class="lesson-title"><h2>Lesson 11: Advanced Participle Clauses (Reduced Syntax)</h2></div>
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context</div>
+                <div class="content-text"><strong>The Verbose Eraser:</strong><br>Cross out 4 words in this sentence without losing meaning: 'The engineer, who was fired by the board, sued the company because he felt betrayed.' &rarr; 'Fired by the board, the engineer sued the company, feeling betrayed.'</div>
+            </div>
+            
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Study</div>
+                <div class="content-text">
+                    <strong>Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">To streamline</span><span class="vocab-item">To condense</span><span class="vocab-item">To truncate</span><span class="vocab-item">To pare down</span><span class="vocab-item">To synthesize</span><span class="vocab-item">Pacing</span><span class="vocab-item">Rhythm</span><span class="vocab-item">Brevity</span><span class="vocab-item">Economy of words</span><span class="vocab-item">Redundancy</span><span class="vocab-item">Verbose</span><span class="vocab-item">Succinct</span><span class="vocab-item">Terse</span><span class="vocab-item">Expansive</span><span class="vocab-item">Clunky</span><span class="vocab-item">Deeming it necessary</span><span class="vocab-item">Having been compromised</span><span class="vocab-item">Stripped of its context</span><span class="vocab-item">In doing so</span><span class="vocab-item">All things considered</span></div>
+                    <div style="margin-top:10px; padding-top:10px; border-top:1px dashed #ccc;">
+                    <strong>Grammar Note:</strong><br>
+                    
+         <strong>Grammar Reference: Elite Syntactical Speed</strong><br><br>
+         At the C2 level, we ruthlessly eliminate relative pronouns (who, which, that) and basic conjunctions (because, after, since) to increase the pace and density of the text using Participle Clauses.<br><br>
+         <strong>1. Reducing Relative Clauses (The Adjectival Participle):</strong><br>
+         - <em>Verbose:</em> The policy, <strong>which was implemented</strong> last year, failed.<br>
+         - <em>Reduced:</em> The policy, <strong>implemented</strong> last year, failed.<br>
+         - <em>Verbose:</em> Companies <strong>that operate</strong> overseas face taxes.<br>
+         - <em>Reduced:</em> Companies <strong>operating</strong> overseas face taxes.<br><br>
+         <strong>2. Replacing Conjunctions (The Adverbial Participle):</strong><br>
+         - <em>Reason (Because/Since):</em> <strong>Deeming</strong> the risk too high, they pulled the funding.<br>
+         - <em>Sequence (After):</em> <strong>Having been audited</strong> multiple times, the firm finally closed.<br>
+         - <em>Condition (If):</em> <strong>Stripped</strong> of its funding, the project will collapse.
+
+                    </div>
+                </div>
+            </div>
+            
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises</div>
+                <div class="content-text">
+         <strong>Grammar Exercise: Syntactical Surgery</strong><br><br>
+         <em>Task 1: Deleting Relatives.</em> Cross out the pronoun and auxiliary, or change the verb to V-ing.<br>
+         1. The algorithm that controls the stock market is highly unstable. &rarr; The algorithm ________ the stock market...<br>
+         2. Any assets which are stored offshore are subject to seizure. &rarr; Any assets ________ offshore...<br>
+         3. The executive, who was terrified of a scandal, destroyed the files. &rarr; The executive, ________ of a scandal...<br><br>
+         <em>Task 2: Compressing Conjunctions.</em> Rewrite the cause/effect using a Participle.<br>
+         4. Because they realized the market was saturated, they pivoted. &rarr; ________ the market was saturated...<br>
+         5. Since the program was written in Python, it runs flawlessly. &rarr; ________ in Python, it runs...<br>
+         6. If it is viewed in isolation, the data looks positive. &rarr; ________ in isolation, the data...<br>
+         7. After he had forged the signatures, he fled the country. &rarr; ________ the signatures, he fled...<br><br>
+         <em>Task 3: Synthesis & Error Check.</em><br>
+         8. Combine using participles: The prototype exploded. It injured three staff members. It delayed the launch by a year.<br>
+         9. Fix the dangling error: Wandering into the lab, the alarm went off. (The alarm wasn't wandering).<br>
+         10. Fix the verb error: Having stole the cash, he bought a yacht.
+     </div>
+            </div>
+            
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Your Turn</div>
+                <div class="content-text"><strong>The Editor's Scalpel:</strong><br>Take a clunky, verbose 150-word paragraph full of 'who', 'which', 'because', and 'after'. Ruthlessly slash the word count by 30% using advanced participle clauses while retaining 100% of the academic meaning.</div>
+            </div>
+            <div class="page-num">Core Grammar: Mastery (C1+) &bull; Page 14</div></div><div class="page" id="l12"><div class="module-header"><i class="fas fa-layer-group"></i> Core Grammar: Mastery (C1+)</div><div class="lesson-title"><h2>Lesson 12: Discourse Markers for High-Level Logic</h2></div>
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context</div>
+                <div class="content-text"><strong>The Intellectual Pivot:</strong><br>Say something nice, then destroy it using 'Albeit'. 'He is a brilliant thinker, albeit deeply unethical.' Link two opposite math truths using 'Conversely'.</div>
+            </div>
+            
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Study</div>
+                <div class="content-text">
+                    <strong>Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Notwithstanding</span><span class="vocab-item">Albeit</span><span class="vocab-item">Conversely</span><span class="vocab-item">Insofar as</span><span class="vocab-item">By the same token</span><span class="vocab-item">Predicated upon</span><span class="vocab-item">To that end</span><span class="vocab-item">Be that as it may</span><span class="vocab-item">For all intents and purposes</span><span class="vocab-item">As a corollary</span><span class="vocab-item">Continuity</span><span class="vocab-item">Juxtaposition</span><span class="vocab-item">Dichotomy</span><span class="vocab-item">Paradigm</span><span class="vocab-item">Caveat</span><span class="vocab-item">To pivot</span><span class="vocab-item">To temper</span><span class="vocab-item">To contextualize</span><span class="vocab-item">To stipulate</span><span class="vocab-item">To reconcile</span></div>
+                    <div style="margin-top:10px; padding-top:10px; border-top:1px dashed #ccc;">
+                    <strong>Grammar Note:</strong><br>
+                    
+         <strong>Grammar Reference: The Architecture of an Argument</strong><br><br>
+         C2 discourse markers do more than connect two sentences; they signal complex logical pivots, mathematical correlations, and deep concessions.<br><br>
+         <strong>1. Extreme Concession (Despite / Although):</strong><br>
+         - <em>Notwithstanding:</em> Extremely formal for 'despite'. ('<strong>Notwithstanding</strong> the CEO's objections, the board voted yes').<br>
+         - <em>Albeit:</em> Used to add a concession to an adjective or adverb. ('The methodology is effective, <strong>albeit</strong> controversial').<br><br>
+         <strong>2. Logic and Limitation:</strong><br>
+         - <em>Insofar as:</em> Meaning 'to the extent that'. Used to limit a statement. ('The system works, but only <strong>insofar as</strong> users follow protocol').<br>
+         - <em>To that end:</em> Meaning 'for that reason/purpose'. ('We must stabilize the market; <strong>to that end</strong>, we are lowering interest rates').<br>
+         - <em>Conversely:</em> A strictly logical opposite. ('High demand raises prices; <strong>conversely</strong>, oversupply lowers them').
+
+                    </div>
+                </div>
+            </div>
+            
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises</div>
+                <div class="content-text">
+         <strong>Grammar Exercise: Architecting Logic</strong><br><br>
+         <em>Task 1: Marker Replacement.</em> Upgrade the simple word to the elite marker.<br>
+         1. We will buy the software <strong>even though</strong> it's expensive. &rarr; We will buy the software, ________ expensive.<br>
+         2. <strong>Despite</strong> the massive risk, we initiated the launch. &rarr; ________ the massive risk, we initiated...<br>
+         3. We need more data. <strong>For that purpose</strong>, we are hiring analysts. &rarr; We need more data; ________, we are hiring...<br>
+         4. The theory is true, but <strong>only to the limit that</strong> physics allows. &rarr; The theory is true, ________ physics allows.<br>
+         5. The rich get richer. <strong>On the direct opposite side</strong>, the poor get poorer. &rarr; The rich get richer; ________, the poor...<br><br>
+         <em>Task 2: Matching Marker to Function.</em><br>
+         6. (Notwithstanding / To that end) his lack of an alibi, the jury acquitted him.<br>
+         7. He is legally blind, (albeit / insofar as) he can see shapes and light.<br>
+         8. We must raise 5 million dollars; (by the same token / to that end), we are holding a gala.<br><br>
+         <em>Task 3: Error Correction.</em><br>
+         9. Albeit he was tired, he finished the report. (Albeit doesn't take full clauses).<br>
+         10. Notwithstanding of the cost, we must proceed.
+     </div>
+            </div>
+            
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Your Turn</div>
+                <div class="content-text"><strong>The Policy Defense:</strong><br>Defend a deeply unpopular corporate decision (e.g., mass layoffs) to the press. You must validate the anger 'insofar as' it is justified, defend the choice 'notwithstanding' the pain, and explain the financial reality using 'conversely'.</div>
+            </div>
+            <div class="page-num">Core Grammar: Mastery (C1+) &bull; Page 15</div></div><div class="page" id="l13"><div class="module-header"><i class="fas fa-layer-group"></i> Core Grammar: Mastery (C1+)</div><div class="lesson-title"><h2>Lesson 13: Substitution and Ellipsis</h2></div>
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context</div>
+                <div class="content-text"><strong>The Tautology Police:</strong><br>Identify the redundancy: 'The new system is faster than the old system was fast.' &rarr; 'The new system is faster than the old one.' Cut the fat.</div>
+            </div>
+            
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Study</div>
+                <div class="content-text">
+                    <strong>Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">To omit</span><span class="vocab-item">To imply</span><span class="vocab-item">To assume</span><span class="vocab-item">To infer</span><span class="vocab-item">To streamline</span><span class="vocab-item">Redundancy</span><span class="vocab-item">Tautology</span><span class="vocab-item">Repetition</span><span class="vocab-item">Economy</span><span class="vocab-item">Brevity</span><span class="vocab-item">Implicit</span><span class="vocab-item">Explicit</span><span class="vocab-item">Omitted</span><span class="vocab-item">Understood</span><span class="vocab-item">Redundant</span><span class="vocab-item">To speak volumes</span><span class="vocab-item">To leave unsaid</span><span class="vocab-item">To drop the subject</span><span class="vocab-item">To cut to the chase</span><span class="vocab-item">To belabor the point</span></div>
+                    <div style="margin-top:10px; padding-top:10px; border-top:1px dashed #ccc;">
+                    <strong>Grammar Note:</strong><br>
+                    
+         <strong>Grammar Reference: The Art of Leaving Things Out</strong><br><br>
+         In highly fluent C2 English, repeating words is a mark of poor style. We use Ellipsis (omitting words entirely) and Substitution (replacing whole clauses with 'so' or 'not') to maintain a fast, elegant rhythm.<br><br>
+         <strong>1. Ellipsis (Omitting repeated verbs or clauses):</strong><br>
+         - <em>Clunky:</em> Some researchers failed the test, and other researchers passed the test.<br>
+         - <em>Elegant:</em> Some researchers failed the test; others <strong>passed</strong>.<br>
+         - <em>Clunky:</em> She asked me to unlock the safe, but I didn't want to unlock the safe.<br>
+         - <em>Elegant:</em> She asked me to unlock the safe, but I didn't <strong>want to</strong>.<br><br>
+         <strong>2. Clausal Substitution (So / Not):</strong><br>
+         - <em>Clunky:</em> I believe that the market will crash.<br>
+         - <em>Elegant:</em> I believe <strong>so</strong>.<br>
+         - <em>Clunky:</em> Will the protocol fail? I hope that the protocol will not fail.<br>
+         - <em>Elegant:</em> I hope <strong>not</strong>. / Let's hope <strong>so</strong>. (Or: 'If so...', 'If not...').
+
+                    </div>
+                </div>
+            </div>
+            
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises</div>
+                <div class="content-text">
+         <strong>Grammar Exercise: Grammatical Economy</strong><br><br>
+         <em>Task 1: Ellipsis.</em> Cross out the redundant words so the sentence ends naturally.<br>
+         1. I haven't read the report yet, but I fully intend to read the report tonight.<br>
+         2. The first prototype exploded on the pad, and the second prototype exploded on the pad too.<br>
+         3. You don't have to sign the NDA if you don't wish to sign the NDA.<br>
+         4. She can code in Python better than I can code in Python.<br><br>
+         <em>Task 2: Substitution (So / Not / Do / Did).</em><br>
+         5. Are we facing a corporate buyout? The CEO thinks (we are facing one). &rarr; The CEO thinks ________.<br>
+         6. Is the algorithm fundamentally flawed? If (it is fundamentally flawed), we must rewrite it. &rarr; If ________, we must rewrite it.<br>
+         7. He claimed he didn't delete the archive, but I know he (deleted the archive). &rarr; I know he ________.<br>
+         8. The server crashed, and so (the backup crashed). &rarr; ...and so ________ the backup.<br><br>
+         <em>Task 3: Synthesis & Error.</em><br>
+         9. Error in style: I hope that we don't go bankrupt. I really hope not go bankrupt.<br>
+         10. Write the most elegant version: The lawyer said we would win. The accountant said we would win too.
+     </div>
+            </div>
+            
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Your Turn</div>
+                <div class="content-text"><strong>The Rapid-Fire Cross Examination:</strong><br>You are a lawyer questioning a hostile witness. Write a 6-line dialogue where neither of you ever repeats the core verb or noun phrase, relying entirely on 'I didn't', 'He told me to', and 'I believe so'.</div>
+            </div>
+            <div class="page-num">Core Grammar: Mastery (C1+) &bull; Page 16</div></div><div class="page" id="l14"><div class="module-header"><i class="fas fa-layer-group"></i> Core Grammar: Mastery (C1+)</div><div class="lesson-title"><h2>Lesson 14: Advanced Punctuation & Rhetorical Flow</h2></div>
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context</div>
+                <div class="content-text"><strong>The Conductor:</strong><br>Read out loud. Semicolons are a soft beat. Colons are a dramatic halt. Em-dashes are violent interruptions. Practice shaping the breath.</div>
+            </div>
+            
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Study</div>
+                <div class="content-text">
+                    <strong>Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">To delineate</span><span class="vocab-item">To punctuate</span><span class="vocab-item">To emphasize</span><span class="vocab-item">To isolate</span><span class="vocab-item">To disrupt</span><span class="vocab-item">Pacing</span><span class="vocab-item">Cadence</span><span class="vocab-item">Rhythm</span><span class="vocab-item">Juxtaposition</span><span class="vocab-item">Parenthetical</span><span class="vocab-item">Semicolon</span><span class="vocab-item">Colon</span><span class="vocab-item">Em-dash</span><span class="vocab-item">Clause</span><span class="vocab-item">Flow</span><span class="vocab-item">To strike a chord</span><span class="vocab-item">To hammer home</span><span class="vocab-item">To break the flow</span><span class="vocab-item">To tie together</span><span class="vocab-item">To branch out</span></div>
+                    <div style="margin-top:10px; padding-top:10px; border-top:1px dashed #ccc;">
+                    <strong>Grammar Note:</strong><br>
+                    
+         <strong>Grammar Reference: Visual Syntax</strong><br><br>
+         Punctuation is actually a form of grammar. At the C2 level, you must master the Semicolon, the Colon, and the Em-dash to control the <em>speed</em> and <em>impact</em> of your arguments.<br><br>
+         <strong>1. The Semicolon ( ; ):</strong><br>
+         - <em>Function:</em> Connects two independent, deeply related sentences without using 'and' or 'but'.<br>
+         - <em>Example:</em> 'The CEO resigned in disgrace<strong>;</strong> the stock plummeted immediately.'<br><br>
+         <strong>2. The Colon ( : ):</strong><br>
+         - <em>Function:</em> Announces a definition, a list, or the ultimate profound truth. (A drumroll).<br>
+         - <em>Example:</em> 'The audit revealed one inescapable truth<strong>:</strong> we were bankrupt.'<br><br>
+         <strong>3. The Em-dash ( — ):</strong><br>
+         - <em>Function:</em> Inserts an aggressive, dramatic parenthetical thought, or creates a sharp pause at the end of a sentence.<br>
+         - <em>Example:</em> 'Their strategy<strong>—</strong>if you could even call it a strategy<strong>—</strong>was an utter disaster.'
+
+                    </div>
+                </div>
+            </div>
+            
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises</div>
+                <div class="content-text">
+         <strong>Grammar Exercise: Controlling the Cadence</strong><br><br>
+         <em>Task 1: The Semicolon.</em> Replace the conjunction with a semicolon to increase academic density.<br>
+         1. The algorithm is highly efficient, but it requires massive cooling. &rarr; The algorithm...<br>
+         2. We isolated the variable, and the results were immediately clear. &rarr; We isolated...<br>
+         3. The encryption was broken, so all the data was stolen. &rarr; The encryption...<br><br>
+         <em>Task 2: The Colon.</em> Insert a colon to create the 'drumroll' effect before the punchline.<br>
+         4. We have two options left surrender or face annihilation.<br>
+         5. The flaw in his plan was obvious he forgot to account for inflation.<br>
+         6. I require three things from this team speed, accuracy, and silence.<br><br>
+         <em>Task 3: The Em-dash.</em> Insert em-dashes to create a dramatic, aggressive interruption.<br>
+         7. The entire department specifically the accounting team is under investigation.<br>
+         8. Our new firewall a multimillion dollar investment failed on day one.<br>
+         9. Error Correction: The system is flawed; because nobody updated it. (Semicolons don't take conjunctions).<br>
+         10. Synthesis: Write a sentence about a bad boss using ALL THREE marks correctly.
+     </div>
+            </div>
+            
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Your Turn</div>
+                <div class="content-text"><strong>The Keynote Reveal:</strong><br>Write the closing paragraph of a legendary product launch. Use the semicolon to list interconnected features, the em-dash to dramatically pause, and the colon to reveal the final, staggering price point.</div>
+            </div>
+            <div class="page-num">Core Grammar: Mastery (C1+) &bull; Page 17</div></div><div class="page" id="l15"><div class="module-header"><i class="fas fa-layer-group"></i> Core Grammar: Mastery (C1+)</div><div class="lesson-title"><h2>Lesson 15: Evaluación de Desempeño 3: Rhetorical Speed & Rhythm</h2></div>
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context</div>
+                <div class="content-text"><strong>The Density Race:</strong><br>Take a rambling, 3-sentence thought full of 'ands', 'buts', and repetitive verbs. Crush it into one sleek sentence using a semicolon, a participle, and an ellipsis.</div>
+            </div>
+            
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Study</div>
+                <div class="content-text">
+                    <strong>Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">To synthesize</span><span class="vocab-item">To pare down</span><span class="vocab-item">To orchestrate</span><span class="vocab-item">To punctuate</span><span class="vocab-item">To distill</span><span class="vocab-item">Cadence</span><span class="vocab-item">Pacing</span><span class="vocab-item">Density</span><span class="vocab-item">Brevity</span><span class="vocab-item">Fluency</span><span class="vocab-item">Verbose</span><span class="vocab-item">Seamless</span><span class="vocab-item">Fragmented</span><span class="vocab-item">Cohesive</span><span class="vocab-item">Impactful</span><span class="vocab-item">To hit the mark</span><span class="vocab-item">To fall flat</span><span class="vocab-item">To drag on</span><span class="vocab-item">To pack a punch</span><span class="vocab-item">In short</span></div>
+                    <div style="margin-top:10px; padding-top:10px; border-top:1px dashed #ccc;">
+                    <strong>Grammar Note:</strong><br>
+                    
+         <strong>Grammar Reference: Week 3 Synthesis</strong><br><br>
+         Testing your ability to make texts faster, denser, and more logical:<br>
+         - <strong>Participle Compression:</strong> Removing relative pronouns (The text, written hastily, failed).<br>
+         - <strong>Logic Markers:</strong> Pivoting with 'Albeit', 'Insofar as', 'Notwithstanding'.<br>
+         - <strong>Ellipsis:</strong> Dropping verbs to prevent tautology (I didn't want to).<br>
+         - <strong>Punctuation Logic:</strong> Using semicolons and colons to balance clauses.
+     
+                    </div>
+                </div>
+            </div>
+            
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises</div>
+                <div class="content-text">
+         <strong>Grammar Exercise: The Stylistic Scalpel</strong><br><br>
+         <em>Task 1: The Mega Edit.</em> Compress, correct, and elevate these clunky sentences.<br>
+         (1) The man who was leading the project resigned. (Compress with participle)<br>
+         (2) Because I realized the danger, I hit the alarm. (Compress with participle)<br>
+         (3) Despite of the cost, we bought the server. (Fix formal marker)<br>
+         (4) The theory is good, but it is only good to the limit that we test it. (Use 'insofar as')<br>
+         (5) The company failed, and so the subsidiary failed. (Fix ellipsis)<br>
+         (6) Do you think we will win? I hope that we win. (Substitute clause)<br>
+         (7) We lost the data, however we had backups. (Fix punctuation - use semicolon).<br>
+         (8) The error specifically the missing decimal destroyed the launch. (Add Em-dashes)<br>
+         (9) Albeit the sky was dark, we launched. (Fix 'albeit' usage).<br>
+         (10) Having wrote the code, he took a nap. (Fix perfect participle).
+     </div>
+            </div>
+            
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Your Turn</div>
+                <div class="content-text"><strong>Taller de Listening: Political Oratory:</strong><br>Listen to a famous political speech (e.g., Churchill, JFK). Map out their syntax. Notice where they use colons for drops, ellipsis for speed, and participle fronting ('Ask not...') to build absolute rhetorical power.</div>
+            </div>
+            <div class="page-num">Core Grammar: Mastery (C1+) &bull; Page 18</div></div><div class="page" id="l16"><div class="module-header"><i class="fas fa-layer-group"></i> Core Grammar: Mastery (C1+)</div><div class="lesson-title"><h2>Lesson 16: Euphemisms and Hedges in Diplomacy</h2></div>
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context</div>
+                <div class="content-text"><strong>The C.E.O. Translator:</strong><br>Translate 'You are fired' into C2 Corporate Euphemism. ('We are pursuing a strategic realignment that doesn't currently synergize with your role').</div>
+            </div>
+            
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Study</div>
+                <div class="content-text">
+                    <strong>Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">To mitigate</span><span class="vocab-item">To downplay</span><span class="vocab-item">To sugarcoat</span><span class="vocab-item">To cushion</span><span class="vocab-item">To intimate</span><span class="vocab-item">Diplomatic</span><span class="vocab-item">Tactful</span><span class="vocab-item">Blunt</span><span class="vocab-item">Abrasive</span><span class="vocab-item">Euphemistic</span><span class="vocab-item">Nuance</span><span class="vocab-item">Subtlety</span><span class="vocab-item">Implication</span><span class="vocab-item">Friction</span><span class="vocab-item">Diplomacy</span><span class="vocab-item">To read between the lines</span><span class="vocab-item">To beat around the bush</span><span class="vocab-item">To soften the blow</span><span class="vocab-item">Without prejudice</span><span class="vocab-item">Off the record</span></div>
+                    <div style="margin-top:10px; padding-top:10px; border-top:1px dashed #ccc;">
+                    <strong>Grammar Note:</strong><br>
+                    
+         <strong>Grammar Reference: The Art of Saying 'No' Politely</strong><br><br>
+         In elite diplomatic or high-corporate circles, bluntness is offensive. We use complex passive structures, negative questions, and specific hedging verbs to completely soften criticism or rejection.<br><br>
+         <strong>1. The 'Not Entirely' Hedge:</strong><br>
+         - <em>Blunt:</em> Your idea is terrible.<br>
+         - <em>Hedged:</em> Your proposal is <strong>not entirely without merit</strong>, but...<br><br>
+         <strong>2. The 'Seem/Appear' Distancer:</strong><br>
+         - <em>Blunt:</em> You made a mistake.<br>
+         - <em>Hedged:</em> There <strong>appears to have been</strong> an oversight.<br><br>
+         <strong>3. Negative Question Framing (For gentle suggestions):</strong><br>
+         - <em>Blunt:</em> We must change the design.<br>
+         - <em>Hedged:</em> <strong>Might it not be prudent</strong> to reconsider the design?
+
+                    </div>
+                </div>
+            </div>
+            
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises</div>
+                <div class="content-text">
+         <strong>Grammar Exercise: Diplomatic De-escalation</strong><br><br>
+         <em>Task 1: Softening the Blow.</em> Rewrite these aggressive statements to be diplomatic.<br>
+         1. This contract is completely unacceptable. &rarr; This contract is not entirely ________.<br>
+         2. You failed to secure the server. &rarr; There seems to have been a ________ regarding the server.<br>
+         3. We are rejecting your ridiculous offer. &rarr; We are unfortunately unable to ________ your proposal at this time.<br>
+         4. Your data is wrong. &rarr; The data appears to contain certain ________.<br><br>
+         <em>Task 2: Gentle Suggestions.</em> Frame the demand as a negative, polite question.<br>
+         5. We should delay the launch. &rarr; Might it not be ________ to delay the launch?<br>
+         6. You need to hire a lawyer. &rarr; Would it not be ________ to consult legal counsel?<br>
+         7. We have to cancel the project. &rarr; Is there not a case to be made for ________ the project?<br><br>
+         <em>Task 3: Decoding the Euphemism.</em> What do these actually mean?<br>
+         8. 'The timeline was perhaps somewhat ambitious.'<br>
+         9. 'We experienced a negative cash flow scenario.'<br>
+         10. 'Your feedback has been noted for future reference.'
+     </div>
+            </div>
+            
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Your Turn</div>
+                <div class="content-text"><strong>The Rejection Letter:</strong><br>Write a rejection letter to an extremely powerful, wealthy donor who submitted a terrible architectural design for the new university wing. You must reject it completely, but gracefully, using 'appears', 'might it not', and 'not entirely'.</div>
+            </div>
+            <div class="page-num">Core Grammar: Mastery (C1+) &bull; Page 19</div></div><div class="page" id="l17"><div class="module-header"><i class="fas fa-layer-group"></i> Core Grammar: Mastery (C1+)</div><div class="lesson-title"><h2>Lesson 17: Rhetorical Devices and Parallelism</h2></div>
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context</div>
+                <div class="content-text"><strong>The Balance Beam:</strong><br>Spot the broken parallel. 'I like swimming, running, and to jump.' Fix it. Build a parallel trinity: 'Our software is fast, secure, and beautiful.'</div>
+            </div>
+            
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Study</div>
+                <div class="content-text">
+                    <strong>Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">To reiterate</span><span class="vocab-item">To echo</span><span class="vocab-item">To mirror</span><span class="vocab-item">To contrast</span><span class="vocab-item">To resonate</span><span class="vocab-item">Parallel</span><span class="vocab-item">Symmetrical</span><span class="vocab-item">Asymmetrical</span><span class="vocab-item">Poetic</span><span class="vocab-item">Rhetorical</span><span class="vocab-item">Anaphora</span><span class="vocab-item">Antithesis</span><span class="vocab-item">Cadence</span><span class="vocab-item">Crescendo</span><span class="vocab-item">Prose</span><span class="vocab-item">To strike a chord</span><span class="vocab-item">To fall on deaf ears</span><span class="vocab-item">In lockstep</span><span class="vocab-item">To mirror the sentiment</span><span class="vocab-item">To bear repeating</span></div>
+                    <div style="margin-top:10px; padding-top:10px; border-top:1px dashed #ccc;">
+                    <strong>Grammar Note:</strong><br>
+                    
+         <strong>Grammar Reference: Symmetrical Power in Speech</strong><br><br>
+         The final mark of C2 mastery is Parallelism—structuring sentences so that their grammatical parts physically balance each other. This creates a mesmerizing, memorable rhythm used in all great speeches.<br><br>
+         <strong>1. Grammatical Parallelism (Matching structures):</strong><br>
+         - <em>Flawed:</em> We demand a reduction in taxes, protecting the environment, and to build schools.<br>
+         - <em>Parallel (Nouns):</em> We demand the <strong>reduction</strong> of taxes, the <strong>protection</strong> of the environment, and the <strong>construction</strong> of schools.<br><br>
+         <strong>2. Antithesis (Parallel Opposites):</strong><br>
+         - <em>Example:</em> 'To err is human; to forgive, divine.'<br>
+         - <em>Example:</em> We must focus not on <strong>the wealth of the corporation</strong>, but on <strong>the health of the nation</strong>.<br><br>
+         <strong>3. Anaphora (Repeating the initial phrase):</strong><br>
+         - <em>Example:</em> <strong>We shall fight</strong> on the beaches, <strong>we shall fight</strong> on the landing grounds...
+
+                    </div>
+                </div>
+            </div>
+            
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises</div>
+                <div class="content-text">
+         <strong>Grammar Exercise: Symmetrical Oratory</strong><br><br>
+         <em>Task 1: Fixing Broken Parallels.</em> Correct the grammar so the list balances perfectly.<br>
+         1. The CEO’s goals were expanding internationally, to cut costs, and employee satisfaction. &rarr; The CEO's goals were international ________, cost ________, and employee ________.<br>
+         2. The new policy is designed to identify risks, evaluating threats, and for neutralizing hackers. &rarr; To identify... to ________... to ________.<br>
+         3. She was known for her brilliant mind, her sharp wit, and she worked very hard. &rarr; ...her brilliant mind, her sharp wit, and her intense ________.<br><br>
+         <em>Task 2: Crafting Antithesis.</em> Balance the opposite ideas perfectly.<br>
+         4. They promised us total freedom, but they actually gave us a lot of control. &rarr; They promised us total freedom, but delivered absolute ________.<br>
+         5. The project was conceived in genius. It ended because someone was stupid. &rarr; Conceived in genius, destroyed by ________.<br><br>
+         <em>Task 3: Synthesis & Creation.</em><br>
+         6. Write an 'Anaphora' (repetition) starting with 'Let us not...' x3.<br>
+         7. Write a parallel trinity using three V-ing verbs regarding technology.<br>
+         8. Fix the error: He spoke quickly, loudly, and with great anger.<br>
+         9. Fix the error: We demand justice, equality, and to be fed.<br>
+         10. Fix the error: It's not about how you start, but the finish is important.
+     </div>
+            </div>
+            
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Your Turn</div>
+                <div class="content-text"><strong>The Keynote Crescendo:</strong><br>Write the final 4 sentences of a TED Talk. Use anaphora (repeating 'We must...'), fix a beautiful antithesis ('Not for the profit of the few, but...'), and end with a perfect, parallel 3-part noun list.</div>
+            </div>
+            <div class="page-num">Core Grammar: Mastery (C1+) &bull; Page 20</div></div><div class="page" id="l18"><div class="module-header"><i class="fas fa-layer-group"></i> Core Grammar: Mastery (C1+)</div><div class="lesson-title"><h2>Lesson 18: Mastering The Passive of Reporting</h2></div>
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context</div>
+                <div class="content-text"><strong>The Voice of God:</strong><br>Take a basic opinion: 'I think the earth is round.' Elevate it to unquestioned dogma: 'It has long been universally acknowledged that the Earth is spherical.'</div>
+            </div>
+            
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Study</div>
+                <div class="content-text">
+                    <strong>Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">To assert</span><span class="vocab-item">To contend</span><span class="vocab-item">To chronicle</span><span class="vocab-item">To document</span><span class="vocab-item">To postulate</span><span class="vocab-item">Unsubstantiated</span><span class="vocab-item">Corroborated</span><span class="vocab-item">Disputed</span><span class="vocab-item">Irrefutable</span><span class="vocab-item">Fallacious</span><span class="vocab-item">Consensus</span><span class="vocab-item">Orthodoxy</span><span class="vocab-item">Dogma</span><span class="vocab-item">Axiom</span><span class="vocab-item">Canon</span><span class="vocab-item">It has long been held that</span><span class="vocab-item">Widely regarded as</span><span class="vocab-item">To fly in the face of</span><span class="vocab-item">To stand the test of time</span><span class="vocab-item">To hold true</span></div>
+                    <div style="margin-top:10px; padding-top:10px; border-top:1px dashed #ccc;">
+                    <strong>Grammar Note:</strong><br>
+                    
+         <strong>Grammar Reference: Establishing Absolute Authority</strong><br><br>
+         To make a written document sound like the voice of history or undisputed science, we combine Present Perfect continuous states with the Impersonal Passive.<br><br>
+         <strong>1. The Historical Passive (It has long been...):</strong><br>
+         - <em>Formula:</em> <code>It has [adverb] been + V3 + that...</code><br>
+         - <em>Example:</em> <strong>It has long been asserted that</strong> dark matter comprises 80% of the universe.<br>
+         - <em>Example:</em> <strong>It is widely regarded as</strong> the most dangerous algorithm ever built.<br><br>
+         <strong>2. Raising the Object to Subject:</strong><br>
+         - <em>Example:</em> Einstein <strong>is universally acknowledged to have altered</strong> physics.<br>
+         - <em>Example:</em> The treaty <strong>was generally considered to be</strong> a failure.
+
+                    </div>
+                </div>
+            </div>
+            
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises</div>
+                <div class="content-text">
+         <strong>Grammar Exercise: Historical Dogma</strong><br><br>
+         <em>Task 1: Creating Historical Authority.</em> Use the structure 'It has [adv] been [V3] that...'.<br>
+         1. People assumed for a long time that the earth was flat. &rarr; It has long been ________ that the earth...<br>
+         2. Scientists generally accept that climate change is real. &rarr; It is generally ________ that climate change...<br>
+         3. Historians widely debate that the war was necessary. &rarr; It is widely ________ that the war...<br>
+         4. Economists constantly argue that inflation will rise. &rarr; It has constantly been ________ that inflation...<br><br>
+         <em>Task 2: Upgrading the Subject.</em> Use 'Subject + is [adv] V3 to...'<br>
+         5. People universally consider Shakespeare to be a genius. &rarr; Shakespeare is universally ________ to be a genius.<br>
+         6. The document is widely believed to have been forged. &rarr; The document is widely ________ to have been forged.<br>
+         7. The CEO is commonly known to be ruthless. &rarr; The CEO is commonly ________ to be ruthless.<br><br>
+         <em>Task 3: Error Correction.</em><br>
+         8. It has long time been believed that... (Fix the adverb).<br>
+         9. The painting is generally acknowledged to being a fake. (Fix the infinitive).<br>
+         10. It is widely regarded that the system is perfect. (Regarded takes 'as').
+     </div>
+            </div>
+            
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Your Turn</div>
+                <div class="content-text"><strong>The Encyclopedia Entry:</strong><br>Write the opening paragraph of an encyclopedia entry for a famous historical betrayal (e.g., Julius Caesar). Use 'It has long been asserted that...' and 'He is universally acknowledged to have...' to lock in the historical authority.</div>
+            </div>
+            <div class="page-num">Core Grammar: Mastery (C1+) &bull; Page 21</div></div><div class="page" id="l19"><div class="module-header"><i class="fas fa-layer-group"></i> Core Grammar: Mastery (C1+)</div><div class="lesson-title"><h2>Lesson 19: Nuanced Adverbs of Attitude</h2></div>
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context</div>
+                <div class="content-text"><strong>The Filter:</strong><br>Start with 'The CEO donated a million dollars.' Now judge it. 'Ostensibly, the CEO...' (Suspicious). 'Categorically, the CEO...' (Absolute fact). 'Paradoxically, the CEO...' (Contradictory).</div>
+            </div>
+            
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Study</div>
+                <div class="content-text">
+                    <strong>Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Manifestly</span><span class="vocab-item">Indubitably</span><span class="vocab-item">Conceivably</span><span class="vocab-item">Ostensibly</span><span class="vocab-item">Purportedly</span><span class="vocab-item">Unequivocally</span><span class="vocab-item">Categorically</span><span class="vocab-item">Paradoxically</span><span class="vocab-item">Arguably</span><span class="vocab-item">Patently</span><span class="vocab-item">Facet</span><span class="vocab-item">Stance</span><span class="vocab-item">Posture</span><span class="vocab-item">Disposition</span><span class="vocab-item">Bias</span><span class="vocab-item">To lay bare</span><span class="vocab-item">In stark reality</span><span class="vocab-item">By all outward appearances</span><span class="vocab-item">To take at face value</span><span class="vocab-item">To read into</span></div>
+                    <div style="margin-top:10px; padding-top:10px; border-top:1px dashed #ccc;">
+                    <strong>Grammar Note:</strong><br>
+                    
+         <strong>Grammar Reference: Coloring the Truth</strong><br><br>
+         At the C2 level, you can completely alter the meaning of a factual sentence by inserting a single, high-level Adverb of Attitude at the beginning. It tells the reader exactly what to think about the fact before reading it.<br><br>
+         <strong>1. Expressing Absolute Mathematical Certainty:</strong><br>
+         - <em>Unequivocally / Categorically / Indubitably / Patently:</em> ('The claim is <strong>patently</strong> false.' / 'He <strong>categorically</strong> denied it').<br><br>
+         <strong>2. Expressing Suspicion / Façade:</strong><br>
+         - <em>Ostensibly / Purportedly / Allegedly:</em> Meaning 'on the surface, but perhaps not in reality'. ('<strong>Ostensibly</strong>, the funds were for charity. <em>Actually</em>, they were pocketed').<br><br>
+         <strong>3. Expressing Contradiction:</strong><br>
+         - <em>Paradoxically / Ironically:</em> ('<strong>Paradoxically</strong>, the more we spend on security, the less safe we are').
+
+                    </div>
+                </div>
+            </div>
+            
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises</div>
+                <div class="content-text">
+         <strong>Grammar Exercise: Manipulating Truth via Adverbs</strong><br><br>
+         <em>Task 1: The Suspicious Façade.</em> Use Ostensibly, Purportedly, or Allegedly.<br>
+         1. On the surface, the meeting was about budget cuts. (But really, it was about firing him). &rarr; ________, the meeting was about budget cuts.<br>
+         2. The documents were supposedly shredded by accident. &rarr; The documents were ________ shredded by accident.<br>
+         3. The organization claims to be a charity, but it isn't. &rarr; It is ________ a charitable organization.<br><br>
+         <em>Task 2: Absolute Denial.</em> Use Categorically, Patently, or Unequivocally.<br>
+         4. The rumors of bankruptcy are completely and utterly false. &rarr; The rumors are ________ false.<br>
+         5. The President denied in every possible way that he knew the spy. &rarr; The President ________ denied knowing the spy.<br>
+         6. The science proves without any doubt that the earth is warming. &rarr; The science ________ proves...<br><br>
+         <em>Task 3: Logical Twists.</em><br>
+         7. Strangely contradicting logic, the water made the fire worse. &rarr; ________, the water made the fire worse.<br>
+         8. It can be argued that this is the best software on the market. &rarr; ________, this is the best...<br>
+         9. Error: He ostensibly denied the claims. (Ostensibly doesn't mix well with deny).<br>
+         10. Error: The claim is paradoxically false. (Patently false fits better).
+     </div>
+            </div>
+            
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Your Turn</div>
+                <div class="content-text"><strong>The Tabloid vs. The Journal:</strong><br>Write a 2-sentence report on a political scandal. First, write it using 'Purportedly' and 'Ostensibly' to show deep suspicion. Then, rewrite it using 'Categorically' and 'Unequivocally' as if you are the defending lawyer.</div>
+            </div>
+            <div class="page-num">Core Grammar: Mastery (C1+) &bull; Page 22</div></div><div class="page" id="l20"><div class="module-header"><i class="fas fa-layer-group"></i> Core Grammar: Mastery (C1+)</div><div class="lesson-title"><h2>Lesson 20: Capstone Project: The Grand Defense</h2></div>
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context</div>
+                <div class="content-text"><strong>The Orator's Warmup:</strong><br>Read an immortal piece of literature aloud (e.g., the opening of 'A Tale of Two Cities' or the Declaration of Independence). Feel the parallelism, the pacing, and the weight of the syllables.</div>
+            </div>
+            
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Study</div>
+                <div class="content-text">
+                    <strong>Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Culmination</span><span class="vocab-item">Pinnacle</span><span class="vocab-item">Integration</span><span class="vocab-item">Synthesis</span><span class="vocab-item">To command</span><span class="vocab-item">To master</span><span class="vocab-item">Nuance</span><span class="vocab-item">Rigorous</span><span class="vocab-item">Flawless</span><span class="vocab-item">Sophistication</span><span class="vocab-item">To validate</span><span class="vocab-item">To exhibit</span><span class="vocab-item">Elocution</span><span class="vocab-item">Mechanics</span><span class="vocab-item">Cohesion</span><span class="vocab-item">Coherence</span><span class="vocab-item">Accuracy</span><span class="vocab-item">Fluency</span><span class="vocab-item">To culminate</span><span class="vocab-item">Milestone</span></div>
+                    <div style="margin-top:10px; padding-top:10px; border-top:1px dashed #ccc;">
+                    <strong>Grammar Note:</strong><br>
+                    
+         <strong>Grammar Reference: C2 Global Synthesis</strong><br><br>
+         The final assessment is the true test of English Mastery. You must seamlessly deploy:<br>
+         - <strong>Fronting and Inversion</strong> for dramatic openings.<br>
+         - <strong>Advanced Passive structures</strong> to invoke historical authority.<br>
+         - <strong>Participle syntax</strong> for breathless pacing.<br>
+         - <strong>Parallelism and Rhetorical Punctuation</strong> for absolute impact and balance.<br>
+         - <strong>Adverbs of Attitude</strong> to masterfully color the facts.
+     
+                    </div>
+                </div>
+            </div>
+            
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises</div>
+                <div class="content-text">
+         <strong>Grammar Exercise: The Final C2 Written Exam</strong><br><br>
+         <em>Section 1: The Master Editor.</em> Edit the paragraph to perfection.<br>
+         (1) Because the company failed to adapt, it went bankrupt. (Nominalize)<br>
+         (2) Important to this failure was the CEO's arrogance. (Fronting)<br>
+         (3) The CEO who was fired in 2020 moved to a private island. (Participle compression)<br>
+         (4) Paradoxically, the company had a lot of money; however, it failed. (Punctuation fix / Semicolon)<br>
+         (5) Under no circumstances the board will accept the blame. (Inversion fix)<br>
+         (6) It has long been proved that monopolies destroy innovation. (Historical Passive)<br>
+         (7) I wish the government stepped in earlier. (Unreal past regret)<br>
+         (8) Had they intervened, the market would recover now. (Mixed conditional fix)<br>
+         (9) We demand honesty, integrity, and being transparent. (Parallelism fix)<br>
+         (10) Ostensibly, the CEO was sorry. But no one believed him. (Link with 'Albeit' or 'Notwithstanding').
+     </div>
+            </div>
+            
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Your Turn</div>
+                <div class="content-text"><strong>The Global Assembly Address:</strong><br>Deliver a 5-minute definitive address to the UN regarding a fictional global crisis (e.g., the awakening of a rogue AI). You must use nominalization, anaphora, semicolons, inversions, and absolute C2 hedging. You will be graded on rhetorical power, elegance, and complete grammatical flawlessness.</div>
+            </div>
+            <div class="page-num">Core Grammar: Mastery (C1+) &bull; Page 23</div></div></body></html>

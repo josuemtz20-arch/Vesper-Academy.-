@@ -1,0 +1,1532 @@
+<!DOCTYPE html><html lang="en"><head>
+<script src="vesper_auth.js"></script><meta charset="UTF-8"><title>Cabin Crew Operations | Student Workbook</title><link rel="stylesheet" href="assets/css/vesper_style.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700&family=Open+Sans:wght@400;600;700&display=swap');
+    body { background-color: #525659; margin: 0; padding: 40px 0; display: flex; flex-direction: column; align-items: center; font-family: 'Merriweather', serif; color: #1a2b42; }
+    .page { background-color: white; width: 210mm; min-height: 297mm; padding: 20mm; box-sizing: border-box; box-shadow: 0 0 20px rgba(0,0,0,0.3); margin-bottom: 40px; position: relative; page-break-after: always; }
+    @media print { body { background: none; margin: 0; padding: 0; display: block; } .page { box-shadow: none; margin: 0; width: 100%; height: 100%; page-break-after: always; border: none; } .no-print { display: none; } }
+    @media screen and (max-width: 768px) {
+        body { padding: 10px; }
+        .page { width: 100%; padding: 10mm; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); min-height: auto; }
+        .module-header { margin: -10mm -10mm 10mm -10mm; padding: 15px 10mm; font-size: 1.2em; }
+        .lesson-title h2 { font-size: 1.8em; }
+        .vocab-grid { grid-template-columns: 1fr; }
+        .no-print { top: 10px; left: 10px; opacity: 0.8; }
+        .cover-title { font-size: 2em !important; }
+        .cover-subtitle { font-size: 1.2em !important; }
+    }
+    h1, h2, h3 { font-family: 'Open Sans', sans-serif; }
+    .module-header { background-color: #1a2b42; color: #d4af37; padding: 15px 20mm; margin: -20mm -20mm 10mm -20mm; font-family: 'Merriweather', serif; font-size: 1.4em; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
+    .lesson-title { border-bottom: 2px solid #34495e; padding-bottom: 15px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; }
+    .lesson-title h2 { margin: 0; font-size: 2.2em; color: #1a2b42; }
+    .lesson-block { margin-bottom: 25px; padding: 20px 25px; background: #fff; border-left: 5px solid #ccc; border-radius: 0 5px 5px 0; }
+    .lb-blue { border-color: #3498db; background: #ebf5fb; }
+    .lb-navy { border-color: #1a2b42; background: #fff; border: 1px solid #eee; border-left: 6px solid #1a2b42; }
+    .lb-green { border-color: #27ae60; background: #eafaf1; }
+    .lb-red { border-color: #c0392b; background: #fdedec; }
+    .lb-header { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; font-weight: bold; font-family: 'Open Sans'; text-transform: uppercase; font-size: 1em; letter-spacing: 0.5px; }
+    .lb-blue .lb-header { color: #2980b9; } 
+    .lb-navy .lb-header { color: #1a2b42; }
+    .lb-green .lb-header { color: #27ae60; }
+    .lb-red .lb-header { color: #c0392b; }
+    .content-text { line-height: 1.8; font-size: 0.95em; color: #2c3e50; text-align: justify; }
+    ul.deep-list { padding-left: 20px; list-style-type: square; } ul.deep-list li { margin-bottom: 12px; }
+    .vocab-box { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
+    .vocab-item { background: #eee; padding: 5px 10px; border-radius: 3px; font-size: 0.9em; font-family: 'Open Sans'; }
+    .page-num { position: absolute; bottom: 20mm; right: 20mm; color: #999; font-size: 0.8em; }
+    p { margin-bottom: 15px; }
+    .intro-box { background-color: #f8f9fa; border: 1px solid #dee2e6; padding: 30px; border-radius: 8px; margin-top: 50px; }
+</style>
+</head><body><div class="no-print" style="position: fixed; top: 20px; left: 20px; z-index: 1000;"><a href="index.html" style="background: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: bold; color: #1a2b42; box-shadow: 0 2px 5px rgba(0,0,0,0.2);"><i class="fas fa-arrow-left"></i> Dashboard</a></div><div class="page cover-page"><img src="assets/images/vesper_logo.jpg" alt="Vesper Academy" class="cover-logo" style="width:200px; margin-bottom:20px;"><div class="cover-title" style="font-size:3em; font-weight:bold; color:#1a2b42;">Cabin Crew Operations</div><div class="cover-subtitle" style="font-size:1.5em; color:#34495e;">Safety, Medical & Service Manual</div><div style="margin-top: auto;"><strong>Vesper Academy</strong><br>Student Workbook</div></div><div class="page">
+    <h1>Cabin Crew Operations (Aviation English)</h1>
+    <div class="intro-box">
+        <p><strong>Operational Excellence:</strong></p>
+        <p>This manual covers the three pillars of Cabin Crew operations: <strong>Safety</strong>, <strong>Medical</strong>, and <strong>Service</strong>. It is designed to be encyclopedic in scope but practical in application.</p>
+        <p><strong>Online Simulation Mode:</strong></p>
+        <ul class='deep-list'>
+            <li><strong>Camera Demos:</strong> Students stand back from the camera to perform Safety Demonstrations.</li>
+            <li><strong>Audio Drills:</strong> Use the 'Mute' button to simulate Intercom announcements (PA).</li>
+            <li><strong>Breakout Cabins:</strong> Small groups simulate 'Galley' and 'Cabin' scenarios.</li>
+        </ul>
+    </div>
+</div><div class="page"><div class="toc"><h1>Operational Modules</h1><h3>— Introduction —</h3><div><a href="#l1">1. Aviation Terminology</a></div><div><a href="#l2">2. Chain of Command</a></div><div><a href="#l3">3. Aircraft Configurations</a></div><div><a href="#l4">4. Pre-Flight Briefing</a></div><div><a href="#l5">5. Grooming & Image</a></div><h3>— Safety & Emergency —</h3><div><a href="#l6">6. Pre-Flight Safety Checks</a></div><div><a href="#l7">7. Passenger Boarding</a></div><div><a href="#l8">8. Safety Demonstration</a></div><div><a href="#l9">9. Securing the Cabin</a></div><div><a href="#l10">10. Turbulence Management</a></div><div><a href="#l11">11. Decompression</a></div><div><a href="#l12">12. Fire Fighting</a></div><div><a href="#l13">13. Evacuation Commands</a></div><div><a href="#l14">14. Ditching (Water Landing)</a></div><div><a href="#l15">15. Pilot Incapacitation</a></div><div><a href="#l16">16. Bomb Threat</a></div><div><a href="#l17">17. Hijack Management</a></div><div><a href="#l18">18. Unruly Passengers</a></div><div><a href="#l19">19. Deportees & Prisoners</a></div><div><a href="#l20">20. Dangerous Goods</a></div><h3>— Medical —</h3><div><a href="#l21">21. Medical Equipment</a></div><div><a href="#l22">22. Assessing the Patient</a></div><div><a href="#l23">23. CPR & AED</a></div><div><a href="#l24">24. Heart Attack (Angina)</a></div><div><a href="#l25">25. Fainting & Shock</a></div><div><a href="#l26">26. Asthma & Choking</a></div><div><a href="#l27">27. Stroke (CVA)</a></div><div><a href="#l28">28. Childbirth</a></div><div><a href="#l29">29. Diabetes</a></div><div><a href="#l30">30. Death on Board</a></div><h3>— Service —</h3><div><a href="#l31">31. Greeting & Seating</a></div><div><a href="#l32">32. Meal Service</a></div><div><a href="#l33">33. Drinks & Bar</a></div><div><a href="#l34">34. Wine Knowledge</a></div><div><a href="#l35">35. Business Class Service</a></div><div><a href="#l36">36. Special Meals</a></div><div><a href="#l37">37. Duty Free Sales</a></div><div><a href="#l38">38. Handling Complaints</a></div><div><a href="#l39">39. Cultural Awareness</a></div><div><a href="#l40">40. Landing & Farewell</a></div></div></div>
+        <div class="page" id="l1">
+            <div class="module-header"><i class="fas fa-plane"></i> Introduction</div>
+            <div class="lesson-title"><h2>1. Aviation Terminology</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Briefing / Warm Up</div>
+                <div class="content-text"><strong>Diagram Stick (Annotate):</strong><br>Share plane diagram. 'Stick the label on the Aft Galley.' Speed race.</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory / Procedure</div>
+                <div class="content-text">
+                    <strong>1. Terminology:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Fuselage</span><span class="vocab-item">Empennage</span><span class="vocab-item">Port</span><span class="vocab-item">Starboard</span><span class="vocab-item">Aft</span><span class="vocab-item">Forward</span><span class="vocab-item">Galley</span><span class="vocab-item">Cockpit</span><span class="vocab-item">Jumpseat</span><span class="vocab-item">Bulkhead</span><span class="vocab-item">Overhead Bin</span><span class="vocab-item">Stow</span><span class="vocab-item">Secure</span><span class="vocab-item">Taxi</span><span class="vocab-item">Takeoff</span></div>
+                    <br>
+                    <strong>2. Protocol:</strong>
+                    <strong>The Language of Air:</strong><br>Precision is safety. 'Left' and 'Right' vary; <strong>Port</strong> and <strong>Starboard</strong> are absolute.<br><strong>Aft:</strong> The back of the plane.
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Drill / Practice</div>
+                <div class="content-text"><strong>The Commander:</strong><br>Teacher shouts: 'Go Forward!' 'Go Port!' Students point or move to that side of the camera frame.</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Simulation / Scenario</div>
+                <div class="content-text"><strong>Briefing Error:</strong><br>Captain gives instructions with wrong terms: 'Exit on the left.' Crew must query: 'Do you mean Port, Captain?'</div>
+            </div>
+            
+            <div class="page-num">Cabin Crew Operations &bull; Page 4</div>
+        </div>
+        
+        <div class="page" id="l2">
+            <div class="module-header"><i class="fas fa-plane"></i> Introduction</div>
+            <div class="lesson-title"><h2>2. Chain of Command</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Briefing / Warm Up</div>
+                <div class="content-text"><strong>Rank Sort:</strong><br>Drag titles into order of authority on shared whiteboard.</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory / Procedure</div>
+                <div class="content-text">
+                    <strong>1. Terminology:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Captain</span><span class="vocab-item">First Officer</span><span class="vocab-item">Purser</span><span class="vocab-item">Senior</span><span class="vocab-item">Junior</span><span class="vocab-item">Hierarchy</span><span class="vocab-item">Authority</span><span class="vocab-item">Command</span><span class="vocab-item">Report</span><span class="vocab-item">Instruct</span><span class="vocab-item">Obey</span><span class="vocab-item">Challenge</span><span class="vocab-item">CRM</span><span class="vocab-item">Safety</span><span class="vocab-item">Duty</span></div>
+                    <br>
+                    <strong>2. Protocol:</strong>
+                    <strong>Hierarchy & CRM:</strong><br>1. Captain (PIC). 2. First Officer. 3. Senior Crew. 4. Junior Crew.<br><strong>PACE:</strong> Probe, Alert, Challenge, Emergency (Speaking up).
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Drill / Practice</div>
+                <div class="content-text"><strong>PACE Drills:</strong><br>Scenario: Captain is flying too low. Junior Crew: 'Captain, altitude?' (Probe). 'Captain, pull up!' (Emergency).</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Simulation / Scenario</div>
+                <div class="content-text"><strong>The Incapacitated Captain:</strong><br>Captain faints. FO takes control. Senior must manage the cabin and calm passengers.</div>
+            </div>
+            
+            <div class="page-num">Cabin Crew Operations &bull; Page 5</div>
+        </div>
+        
+        <div class="page" id="l3">
+            <div class="module-header"><i class="fas fa-plane"></i> Introduction</div>
+            <div class="lesson-title"><h2>3. Aircraft Configurations</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Briefing / Warm Up</div>
+                <div class="content-text"><strong>Silhouette Quiz:</strong><br>Show shadow of A380 vs B737. 'Which plane is this?' 'It is the Superjumbo.'</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory / Procedure</div>
+                <div class="content-text">
+                    <strong>1. Terminology:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Narrow Body</span><span class="vocab-item">Wide Body</span><span class="vocab-item">Aisle</span><span class="vocab-item">Twin Aisle</span><span class="vocab-item">Door</span><span class="vocab-item">Exit</span><span class="vocab-item">Slide</span><span class="vocab-item">Raft</span><span class="vocab-item">Row</span><span class="vocab-item">Seat</span><span class="vocab-item">Configuration</span><span class="vocab-item">Layout</span><span class="vocab-item">Deck</span><span class="vocab-item">Upper</span><span class="vocab-item">Lower</span></div>
+                    <br>
+                    <strong>2. Protocol:</strong>
+                    <strong>Boeing vs Airbus:</strong><br><strong>Doors:</strong> Type A (Main), Type III (Overwing).<br><strong>Arming:</strong> Airbus (Pin) vs Boeing (Bar).
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Drill / Practice</div>
+                <div class="content-text"><strong>Door Arming Mime:</strong><br>Teacher: 'Arm Doors!' Students mime the specific lever action for B777 (Rotate) vs A320 (Pin down).</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Simulation / Scenario</div>
+                <div class="content-text"><strong>The Wrong Plane:</strong><br>Crew boards a new aircraft type. 'Where is the oxygen?' Find safety equipment on a diagram.</div>
+            </div>
+            
+            <div class="page-num">Cabin Crew Operations &bull; Page 6</div>
+        </div>
+        
+        <div class="page" id="l4">
+            <div class="module-header"><i class="fas fa-plane"></i> Introduction</div>
+            <div class="lesson-title"><h2>4. Pre-Flight Briefing</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Briefing / Warm Up</div>
+                <div class="content-text"><strong>Memory Test:</strong><br>Read list of 5 VIPs and 3 Wheelchairs. Hide list. 'Who is in 3A?'</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory / Procedure</div>
+                <div class="content-text">
+                    <strong>1. Terminology:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Briefing</span><span class="vocab-item">Questions</span><span class="vocab-item">Knowledge</span><span class="vocab-item">Check</span><span class="vocab-item">Weather</span><span class="vocab-item">Turbulence</span><span class="vocab-item">Flight Time</span><span class="vocab-item">Code</span><span class="vocab-item">Password</span><span class="vocab-item">Special</span><span class="vocab-item">Passenger</span><span class="vocab-item">Security</span><span class="vocab-item">Medical</span><span class="vocab-item">Attention</span><span class="vocab-item">Listen</span></div>
+                    <br>
+                    <strong>2. Protocol:</strong>
+                    <strong>The Senior's Role:</strong><br>Check passports, grooming, and safety knowledge.<br><strong>SEP Question:</strong> 'Where is the fire axe?' Answer correctly or offload.
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Drill / Practice</div>
+                <div class="content-text"><strong>The Pop Quiz:</strong><br>Teacher fires random safety questions. 'Duration of oxygen?' '15 minutes!' Fast response.</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Simulation / Scenario</div>
+                <div class="content-text"><strong>Disciplinary Briefing:</strong><br>Student A is Senior. B is late/messy. A must give a formal warning. 'You are not fit to fly.'</div>
+            </div>
+            
+            <div class="page-num">Cabin Crew Operations &bull; Page 7</div>
+        </div>
+        
+        <div class="page" id="l5">
+            <div class="module-header"><i class="fas fa-plane"></i> Introduction</div>
+            <div class="lesson-title"><h2>5. Grooming & Image</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Briefing / Warm Up</div>
+                <div class="content-text"><strong>Mirror Check:</strong><br>Look at your camera image. Fix your posture. Smile. 'Show me your hands.'</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory / Procedure</div>
+                <div class="content-text">
+                    <strong>1. Terminology:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Uniform</span><span class="vocab-item">Hair</span><span class="vocab-item">Makeup</span><span class="vocab-item">Shoes</span><span class="vocab-item">Polish</span><span class="vocab-item">Ironed</span><span class="vocab-item">Clean</span><span class="vocab-item">Tidy</span><span class="vocab-item">Standards</span><span class="vocab-item">Image</span><span class="vocab-item">Brand</span><span class="vocab-item">Representative</span><span class="vocab-item">Appearance</span><span class="vocab-item">Smile</span><span class="vocab-item">Posture</span></div>
+                    <br>
+                    <strong>2. Protocol:</strong>
+                    <strong>Psychology of Uniform:</strong><br>Passengers trust authority. A sloppy uniform = sloppy safety.<br><strong>Must:</strong> Hair up, watch with seconds hand.
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Drill / Practice</div>
+                <div class="content-text"><strong>Scarf/Tie Knot:</strong><br>Tutorial. Watch and follow. Tie the perfect knot on camera.</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Simulation / Scenario</div>
+                <div class="content-text"><strong>The Line-Up:</strong><br>Manager inspects crew on Zoom. 'Your hair is messy.' Crew must explain or fix it immediately.</div>
+            </div>
+            
+            <div class="page-num">Cabin Crew Operations &bull; Page 8</div>
+        </div>
+        
+        <div class="page" id="l6">
+            <div class="module-header"><i class="fas fa-life-ring"></i> Safety & Emergency</div>
+            <div class="lesson-title"><h2>6. Pre-Flight Safety Checks</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Briefing / Warm Up</div>
+                <div class="content-text"><strong>Equipment Hunt:</strong><br>Show busy cabin photo. 'Find the Fire Extinguisher.' Annotate screen.</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory / Procedure</div>
+                <div class="content-text">
+                    <strong>1. Terminology:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Check</span><span class="vocab-item">Equipment</span><span class="vocab-item">Location</span><span class="vocab-item">Serviceability</span><span class="vocab-item">Gauge</span><span class="vocab-item">Green</span><span class="vocab-item">Seal</span><span class="vocab-item">Intact</span><span class="vocab-item">Unit</span><span class="vocab-item">Defibrillator</span><span class="vocab-item">Extinguisher</span><span class="vocab-item">Oxygen</span><span class="vocab-item">Mask</span><span class="vocab-item">Tortch</span><span class="vocab-item">Megaphone</span></div>
+                    <br>
+                    <strong>2. Protocol:</strong>
+                    <strong>L.S.I:</strong> Location (Is it there?), Serviceability (Does it work?), Integrity (Is it broken?).<br><strong>Pressure:</strong> Needle in green zone.
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Drill / Practice</div>
+                <div class="content-text"><strong>Go / No-Go:</strong><br>Show photos of equipment (Broken seal, Empty bottle). Shout 'Go' or 'No-Go'.</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Simulation / Scenario</div>
+                <div class="content-text"><strong>Missing Item:</strong><br>Boarding in 5 mins. The Defib is missing. Call Ground Staff. 'Urgent, bring a replacement.'</div>
+            </div>
+            
+            <div class="page-num">Cabin Crew Operations &bull; Page 9</div>
+        </div>
+        
+        <div class="page" id="l7">
+            <div class="module-header"><i class="fas fa-life-ring"></i> Safety & Emergency</div>
+            <div class="lesson-title"><h2>7. Passenger Boarding</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Briefing / Warm Up</div>
+                <div class="content-text"><strong>Spot the Threat:</strong><br>Show crowd photo. 'Who is drunk?' 'Who is strong?' Circle them.</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory / Procedure</div>
+                <div class="content-text">
+                    <strong>1. Terminology:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Boarding</span><span class="vocab-item">Pass</span><span class="vocab-item">Ticket</span><span class="vocab-item">Greet</span><span class="vocab-item">Welcome</span><span class="vocab-item">Bag</span><span class="vocab-item">Overhead</span><span class="vocab-item">Heavy</span><span class="vocab-item">Assist</span><span class="vocab-item">Monitor</span><span class="vocab-item">Profile</span><span class="vocab-item">ABP</span><span class="vocab-item">Drunk</span><span class="vocab-item">Suspicious</span><span class="vocab-item">Observe</span></div>
+                    <br>
+                    <strong>2. Protocol:</strong>
+                    <strong>Profiling:</strong><br>Look for <strong>ABPs</strong> (Able Bodied Passengers) to help in emergency.<br>Look for threats (Drunks).
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Drill / Practice</div>
+                <div class="content-text"><strong>Greeting Loop:</strong><br>'Welcome aboard.' 'May I check your pass?' 'Your seat is 15A.' Repeat with smile.</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Simulation / Scenario</div>
+                <div class="content-text"><strong>The Bag Hog:</strong><br>Passenger has huge bag. 'It won't fit.' Negotiate checking it into the hold.</div>
+            </div>
+            
+            <div class="page-num">Cabin Crew Operations &bull; Page 10</div>
+        </div>
+        
+        <div class="page" id="l8">
+            <div class="module-header"><i class="fas fa-life-ring"></i> Safety & Emergency</div>
+            <div class="lesson-title"><h2>8. Safety Demonstration</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Briefing / Warm Up</div>
+                <div class="content-text"><strong>Prop Grab:</strong><br>Grab a 'Belt' (or belt-like object) and 'Mask' (cup). Preparedness.</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory / Procedure</div>
+                <div class="content-text">
+                    <strong>1. Terminology:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Demo</span><span class="vocab-item">Show</span><span class="vocab-item">Mask</span><span class="vocab-item">Vest</span><span class="vocab-item">Belt</span><span class="vocab-item">Buckle</span><span class="vocab-item">Inflate</span><span class="vocab-item">Pull</span><span class="vocab-item">Tighten</span><span class="vocab-item">Exits</span><span class="vocab-item">Light</span><span class="vocab-item">Card</span><span class="vocab-item">Information</span><span class="vocab-item">Whistle</span><span class="vocab-item">Tube</span></div>
+                    <br>
+                    <strong>2. Protocol:</strong>
+                    <strong>Synchronisation:</strong><br>Demo must match the audio EXACTLY.<br><strong>Key Action:</strong> Never inflate vest inside aircraft.
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Drill / Practice</div>
+                <div class="content-text"><strong>Silent Demo:</strong><br>Play audio. Students perform the demo actions on camera in sync. Teacher watches timing.</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Simulation / Scenario</div>
+                <div class="content-text"><strong>The Joker:</strong><br>Passenger laughs during demo. Stop. 'Sir, this is for your safety. Please listen.'</div>
+            </div>
+            
+            <div class="page-num">Cabin Crew Operations &bull; Page 11</div>
+        </div>
+        
+        <div class="page" id="l9">
+            <div class="module-header"><i class="fas fa-life-ring"></i> Safety & Emergency</div>
+            <div class="lesson-title"><h2>9. Securing the Cabin</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Briefing / Warm Up</div>
+                <div class="content-text"><strong>Hazard Spotter:</strong><br>Photo of untidy cabin. Circle 10 hazards (Bag in aisle, Table down).</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory / Procedure</div>
+                <div class="content-text">
+                    <strong>1. Terminology:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Secure</span><span class="vocab-item">Lock</span><span class="vocab-item">Stow</span><span class="vocab-item">Upright</span><span class="vocab-item">Open</span><span class="vocab-item">Blind</span><span class="vocab-item">Bag</span><span class="vocab-item">Laptop</span><span class="vocab-item">Off</span><span class="vocab-item">Checked</span><span class="vocab-item">Ready</span><span class="vocab-item">Takeoff</span><span class="vocab-item">Landing</span><span class="vocab-item">Compliance</span><span class="vocab-item">Enforce</span></div>
+                    <br>
+                    <strong>2. Protocol:</strong>
+                    <strong>TTS (Talk To Start):</strong><br>Captain says 'Cabin Crew, Takeoff Stations'.<br>Everything loose must be stowed.
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Drill / Practice</div>
+                <div class="content-text"><strong>The Walkthrough:</strong><br>Mime walking down aisle. 'Bag under seat please.' 'Table up please.' Fast pace.</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Simulation / Scenario</div>
+                <div class="content-text"><strong>The Refusal:</strong><br>Passenger refuses to turn off phone. 'We cannot take off until it is off.' Escalate.</div>
+            </div>
+            
+            <div class="page-num">Cabin Crew Operations &bull; Page 12</div>
+        </div>
+        
+        <div class="page" id="l10">
+            <div class="module-header"><i class="fas fa-life-ring"></i> Safety & Emergency</div>
+            <div class="lesson-title"><h2>10. Turbulence Management</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Briefing / Warm Up</div>
+                <div class="content-text"><strong>Shake Test:</strong><br>Camera shake! 'Severe turbulence!' Students must sit and 'buckle up' mime.</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory / Procedure</div>
+                <div class="content-text">
+                    <strong>1. Terminology:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Turbulence</span><span class="vocab-item">Bump</span><span class="vocab-item">Shake</span><span class="vocab-item">Moderate</span><span class="vocab-item">Severe</span><span class="vocab-item">Light</span><span class="vocab-item">Seatbelt</span><span class="vocab-item">Sign</span><span class="vocab-item">Cart</span><span class="vocab-item">Brake</span><span class="vocab-item">Secure</span><span class="vocab-item">Sit</span><span class="vocab-item">Floor</span><span class="vocab-item">Strap</span><span class="vocab-item">Injury</span></div>
+                    <br>
+                    <strong>2. Protocol:</strong>
+                    <strong>Levels:</strong><br>Light (Service continues).<br>Moderate (Stop hot drinks).<br>Severe (Sit down immediately, even on floor).
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Drill / Practice</div>
+                <div class="content-text"><strong>PA Announcement:</strong><br>'Ladies and gentlemen, the Captain has turned on the seatbelt sign.' clear voice.</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Simulation / Scenario</div>
+                <div class="content-text"><strong>Cart Runaway:</strong><br>Moderate turbulence. Cart brakes fail. 'Hold the cart!' 'Secure the coffee!' Panic control.</div>
+            </div>
+            
+            <div class="page-num">Cabin Crew Operations &bull; Page 13</div>
+        </div>
+        
+        <div class="page" id="l11">
+            <div class="module-header"><i class="fas fa-life-ring"></i> Safety & Emergency</div>
+            <div class="lesson-title"><h2>11. Decompression</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Briefing / Warm Up</div>
+                <div class="content-text"><strong>Hold Your Breath:</strong><br>How long constitutes 'Time of Useful Consciousness'? (15-30 secs at 40k ft).</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory / Procedure</div>
+                <div class="content-text">
+                    <strong>1. Terminology:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Decompression</span><span class="vocab-item">Oxygen</span><span class="vocab-item">Mask</span><span class="vocab-item">Drop</span><span class="vocab-item">Pull</span><span class="vocab-item">Don</span><span class="vocab-item">Wear</span><span class="vocab-item">Breathe</span><span class="vocab-item">Hypoxia</span><span class="vocab-item">Time</span><span class="vocab-item">Conscious</span><span class="vocab-item">Descent</span><span class="vocab-item">Dive</span><span class="vocab-item">Rapid</span><span class="vocab-item">Slow</span></div>
+                    <br>
+                    <strong>2. Protocol:</strong>
+                    <strong>Rapid vs Slow:</strong><br>Rapid = Fog, Bang, Ears pop.<br><strong>Drill:</strong> Mask On -> Sit Down -> Strap In. (Your mask first!).
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Drill / Practice</div>
+                <div class="content-text"><strong>The Shout:</strong><br>'MASK ON! SIT DOWN! FASTEN SEATBELT!' Shout loudly and clearly.</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Simulation / Scenario</div>
+                <div class="content-text"><strong>Post-Decompression:</strong><br>Plane levels out. Walk around with portable O2. 'Are you okay?' Wake up unconscious pax.</div>
+            </div>
+            
+            <div class="page-num">Cabin Crew Operations &bull; Page 14</div>
+        </div>
+        
+        <div class="page" id="l12">
+            <div class="module-header"><i class="fas fa-life-ring"></i> Safety & Emergency</div>
+            <div class="lesson-title"><h2>12. Fire Fighting</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Briefing / Warm Up</div>
+                <div class="content-text"><strong>Which Extinguisher?:</strong><br>Electrical fire? (Halon). Paper fire? (Water). Oil fire? (No Water!).</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory / Procedure</div>
+                <div class="content-text">
+                    <strong>1. Terminology:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Fire</span><span class="vocab-item">Smoke</span><span class="vocab-item">Flame</span><span class="vocab-item">Extinguisher</span><span class="vocab-item">Hood</span><span class="vocab-item">PBE</span><span class="vocab-item">Gloves</span><span class="vocab-item">Axe</span><span class="vocab-item">Source</span><span class="vocab-item">Electric</span><span class="vocab-item">Paper</span><span class="vocab-item">Fight</span><span class="vocab-item">Crouch</span><span class="vocab-item">Heat</span><span class="vocab-item">Check</span></div>
+                    <br>
+                    <strong>2. Protocol:</strong>
+                    <strong>Fire Triangle:</strong> Fuel, Heat, Oxygen.<br><strong>Role:</strong> Firefighter, Communicator, Assistant.<br><strong>PBE:</strong> Put on smoke hood in 15 secs.
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Drill / Practice</div>
+                <div class="content-text"><strong>Crouch and Spray:</strong><br>Stay low (avoid smoke). Mime aiming at base of fire. 'Test squeeze.'</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Simulation / Scenario</div>
+                <div class="content-text"><strong>Toilet Fire:</strong><br>Smoke from lavatory. 'Door is hot!' Communicator calls Captain. Firefighter dons PBE.</div>
+            </div>
+            
+            <div class="page-num">Cabin Crew Operations &bull; Page 15</div>
+        </div>
+        
+        <div class="page" id="l13">
+            <div class="module-header"><i class="fas fa-life-ring"></i> Safety & Emergency</div>
+            <div class="lesson-title"><h2>13. Evacuation Commands</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Briefing / Warm Up</div>
+                <div class="content-text"><strong>Voice Projection:</strong><br>Shout 'OPEN SEATBELT' at the camera. Louder! Scare the neighbors.</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory / Procedure</div>
+                <div class="content-text">
+                    <strong>1. Terminology:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Evacuate</span><span class="vocab-item">Jump</span><span class="vocab-item">Slide</span><span class="vocab-item">Leave</span><span class="vocab-item">Bag</span><span class="vocab-item">Everything</span><span class="vocab-item">High Heels</span><span class="vocab-item">Leg</span><span class="vocab-item">Arm</span><span class="vocab-item">Head</span><span class="vocab-item">Bend</span><span class="vocab-item">Low</span><span class="vocab-item">Exit</span><span class="vocab-item">Blocked</span><span class="vocab-item">Go</span></div>
+                    <br>
+                    <strong>2. Protocol:</strong>
+                    <strong>Command Rhythm:</strong><br>'JUMP AND SLIDE!'<br>'LEAVE EVERYTHING!'<br>Loud, repetitive, authoritative.
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Drill / Practice</div>
+                <div class="content-text"><strong>English vs Gesture:</strong><br>Shout command AND do hand gesture (Pushing motion). Language barrier backup.</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Simulation / Scenario</div>
+                <div class="content-text"><strong>Blocked Exit:</strong><br>Look out window. 'Fire outside!' Block command: 'STOP! GO BACK! GO ACROSS!'</div>
+            </div>
+            
+            <div class="page-num">Cabin Crew Operations &bull; Page 16</div>
+        </div>
+        
+        <div class="page" id="l14">
+            <div class="module-header"><i class="fas fa-life-ring"></i> Safety & Emergency</div>
+            <div class="lesson-title"><h2>14. Ditching (Water Landing)</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Briefing / Warm Up</div>
+                <div class="content-text"><strong>Vest Drill:</strong><br>Mime putting on vest. Tying tape. Finding whistle/light.</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory / Procedure</div>
+                <div class="content-text">
+                    <strong>1. Terminology:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Ditching</span><span class="vocab-item">Water</span><span class="vocab-item">Life Vest</span><span class="vocab-item">Inflate</span><span class="vocab-item">Raft</span><span class="vocab-item">Survival</span><span class="vocab-item">Kit</span><span class="vocab-item">Cold</span><span class="vocab-item">Swim</span><span class="vocab-item">Shark</span><span class="vocab-item">Rescue</span><span class="vocab-item">Flare</span><span class="vocab-item">Canopy</span><span class="vocab-item">Signal</span><span class="vocab-item">Whistle</span></div>
+                    <br>
+                    <strong>2. Protocol:</strong>
+                    <strong>Vest Logic:</strong><br>Inflate at door (not inside).<br>disconnect slide to use as raft.<br><strong>Survival:</strong> Huddle for warmth.
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Drill / Practice</div>
+                <div class="content-text"><strong>Raft Command:</strong><br>'Step into the raft!' 'Sit down!' 'Cut the line!' Sequence drill.</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Simulation / Scenario</div>
+                <div class="content-text"><strong>Survival Circle:</strong><br>In raft. 'We have 1 water bottle.' Negotiate rationing. Keep morale up.</div>
+            </div>
+            
+            <div class="page-num">Cabin Crew Operations &bull; Page 17</div>
+        </div>
+        
+        <div class="page" id="l15">
+            <div class="module-header"><i class="fas fa-life-ring"></i> Safety & Emergency</div>
+            <div class="lesson-title"><h2>15. Pilot Incapacitation</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Briefing / Warm Up</div>
+                <div class="content-text"><strong>Harness Lock:</strong><br>Mime finding the lock lever behind the seat headrest.</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory / Procedure</div>
+                <div class="content-text">
+                    <strong>1. Terminology:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Incapacitated</span><span class="vocab-item">Faint</span><span class="vocab-item">Heart Attack</span><span class="vocab-item">Lock</span><span class="vocab-item">Unlock</span><span class="vocab-item">Cockpit</span><span class="vocab-item">Seat</span><span class="vocab-item">Belt</span><span class="vocab-item">Pull</span><span class="vocab-item">Back</span><span class="vocab-item">Medical</span><span class="vocab-item">Control</span><span class="vocab-item">Radio</span><span class="vocab-item">Mayday</span><span class="vocab-item">Land</span></div>
+                    <br>
+                    <strong>2. Protocol:</strong>
+                    <strong>Removal:</strong><br>Pilot slump on controls -> Dangerous.<br>Lock automatic harness. Pull seat back.
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Drill / Practice</div>
+                <div class="content-text"><strong>Checklist Reading:</strong><br>Read 'Emergency Descent Checklist' clearly to the other pilot.</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Simulation / Scenario</div>
+                <div class="content-text"><strong>The Solo Pilot:</strong><br>Captain is out. FO needs coffee/food. Crew must assist inside cockpit.</div>
+            </div>
+            
+            <div class="page-num">Cabin Crew Operations &bull; Page 18</div>
+        </div>
+        
+        <div class="page" id="l16">
+            <div class="module-header"><i class="fas fa-life-ring"></i> Safety & Emergency</div>
+            <div class="lesson-title"><h2>16. Bomb Threat</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Briefing / Warm Up</div>
+                <div class="content-text"><strong>Suspicious Item:</strong><br>Photo of bag with wires. 'Is it a bomb?' Describe it.</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory / Procedure</div>
+                <div class="content-text">
+                    <strong>1. Terminology:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Bomb</span><span class="vocab-item">Threat</span><span class="vocab-item">Explosive</span><span class="vocab-item">Device</span><span class="vocab-item">Note</span><span class="vocab-item">Search</span><span class="vocab-item">Move</span><span class="vocab-item">Touch</span><span class="vocab-item">LRBL</span><span class="vocab-item">Stack</span><span class="vocab-item">Padding</span><span class="vocab-item">Wet</span><span class="vocab-item">Plastic</span><span class="vocab-item">Wire</span><span class="vocab-item">Suspicious</span></div>
+                    <br>
+                    <strong>2. Protocol:</strong>
+                    <strong>LRBL (Least Risk Bomb Location):</strong><br>By the rear door.<br><strong>Do not:</strong> Cut wire, Use radio, Tilt.<br>Build a 'Wall' of bags.
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Drill / Practice</div>
+                <div class="content-text"><strong>The Stack:</strong><br>Drag and drop items on screen to build the bomb stack (Hard bottom, Bomb, Soft top).</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Simulation / Scenario</div>
+                <div class="content-text"><strong>Note Found:</strong><br>Passenger finds note: 'Bomb on board.' Calm them. Inform Captain secretly.</div>
+            </div>
+            
+            <div class="page-num">Cabin Crew Operations &bull; Page 19</div>
+        </div>
+        
+        <div class="page" id="l17">
+            <div class="module-header"><i class="fas fa-life-ring"></i> Safety & Emergency</div>
+            <div class="lesson-title"><h2>17. Hijack Management</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Briefing / Warm Up</div>
+                <div class="content-text"><strong>Feature Recall:</strong><br>Show photo of 'Hijacker' for 5 seconds. 'What color eyes?' 'Height?'</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory / Procedure</div>
+                <div class="content-text">
+                    <strong>1. Terminology:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Hijack</span><span class="vocab-item">Terrorist</span><span class="vocab-item">Weapon</span><span class="vocab-item">Knife</span><span class="vocab-item">Gun</span><span class="vocab-item">Demand</span><span class="vocab-item">Negotiate</span><span class="vocab-item">Code</span><span class="vocab-item">Cockpit</span><span class="vocab-item">Entry</span><span class="vocab-item">Lockdown</span><span class="vocab-item">Calm</span><span class="vocab-item">Comply</span><span class="vocab-item">Slow</span><span class="vocab-item">Sudden</span></div>
+                    <br>
+                    <strong>2. Protocol:</strong>
+                    <strong>Strategy:</strong><br>Cockpit door stays CLOSED.<br>Comply with demands (slowly).<br>Memorize hijacker features.
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Drill / Practice</div>
+                <div class="content-text"><strong>Slow Compliance:</strong><br>Hijacker: 'Get me water!' Crew: 'Okay... I need to find a cup... slowly...'</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Simulation / Scenario</div>
+                <div class="content-text"><strong>Stockholm Syndrome:</strong><br>Build rapport with hijacker. 'Do you have family?' calm them down.</div>
+            </div>
+            
+            <div class="page-num">Cabin Crew Operations &bull; Page 20</div>
+        </div>
+        
+        <div class="page" id="l18">
+            <div class="module-header"><i class="fas fa-life-ring"></i> Safety & Emergency</div>
+            <div class="lesson-title"><h2>18. Unruly Passengers</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Briefing / Warm Up</div>
+                <div class="content-text"><strong>De-escalation Stance:</strong><br>Stand back. Hands open (palms up). Practice the 'Calm' face.</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory / Procedure</div>
+                <div class="content-text">
+                    <strong>1. Terminology:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Unruly</span><span class="vocab-item">Disruptive</span><span class="vocab-item">Drunk</span><span class="vocab-item">Aggressive</span><span class="vocab-item">Hit</span><span class="vocab-item">Shout</span><span class="vocab-item">Warn</span><span class="vocab-item">Card</span><span class="vocab-item">Restrain</span><span class="vocab-item">Cuffs</span><span class="vocab-item">Refuse</span><span class="vocab-item">Alcohol</span><span class="vocab-item">Captain</span><span class="vocab-item">Police</span><span class="vocab-item">Witness</span></div>
+                    <br>
+                    <strong>2. Protocol:</strong>
+                    <strong>Traffic Light System:</strong><br>Green (Okay). Yellow (Verbal Warning). Red (Restraint).<br>Never touch unless necessary.
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Drill / Practice</div>
+                <div class="content-text"><strong>Warning Card:</strong><br>Read the formal warning. 'If you continue, you will be arrested.'</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Simulation / Scenario</div>
+                <div class="content-text"><strong>The Fighter:</strong><br>Pax attacks crew. 'Team restrain!' Coordinate applying plastic cuffs.</div>
+            </div>
+            
+            <div class="page-num">Cabin Crew Operations &bull; Page 21</div>
+        </div>
+        
+        <div class="page" id="l19">
+            <div class="module-header"><i class="fas fa-life-ring"></i> Safety & Emergency</div>
+            <div class="lesson-title"><h2>19. Deportees & Prisoners</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Briefing / Warm Up</div>
+                <div class="content-text"><strong>Seating Plan:</strong><br>Where to put the prisoner? Window seat (away from aisle). Escort on aisle.</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory / Procedure</div>
+                <div class="content-text">
+                    <strong>1. Terminology:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Deportee</span><span class="vocab-item">Prisoner</span><span class="vocab-item">Escort</span><span class="vocab-item">Guard</span><span class="vocab-item">Handcuff</span><span class="vocab-item">Rear</span><span class="vocab-item">Seat</span><span class="vocab-item">Alcohol</span><span class="vocab-item">Ban</span><span class="vocab-item">Board</span><span class="vocab-item">Last</span><span class="vocab-item">Leave</span><span class="vocab-item">First</span><span class="vocab-item">Document</span><span class="vocab-item">Safety</span></div>
+                    <br>
+                    <strong>2. Protocol:</strong>
+                    <strong>Protocol:</strong><br>Board first, Leave last.<br>Sit at back.<br>No alcohol. No metal cutlery.
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Drill / Practice</div>
+                <div class="content-text"><strong>Briefing the Escort:</strong><br>'Sir, no alcohol for him. You must go to toilet with him.'</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Simulation / Scenario</div>
+                <div class="content-text"><strong>The Escape Attempt:</strong><br>Deportee tries to run to exit. Block and alert.</div>
+            </div>
+            
+            <div class="page-num">Cabin Crew Operations &bull; Page 22</div>
+        </div>
+        
+        <div class="page" id="l20">
+            <div class="module-header"><i class="fas fa-life-ring"></i> Safety & Emergency</div>
+            <div class="lesson-title"><h2>20. Dangerous Goods</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Briefing / Warm Up</div>
+                <div class="content-text"><strong>Label Quiz:</strong><br>Show diamond labels. 'Flammable Liquid' vs 'Corrosive'.</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory / Procedure</div>
+                <div class="content-text">
+                    <strong>1. Terminology:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Dangerous</span><span class="vocab-item">Goods</span><span class="vocab-item">Label</span><span class="vocab-item">Chemical</span><span class="vocab-item">Leak</span><span class="vocab-item">Smell</span><span class="vocab-item">Fumes</span><span class="vocab-item">Battery</span><span class="vocab-item">Lithium</span><span class="vocab-item">Fire</span><span class="vocab-item">Ice</span><span class="vocab-item">Dry</span><span class="vocab-item">Permitted</span><span class="vocab-item">Forbidden</span><span class="vocab-item">Report</span></div>
+                    <br>
+                    <strong>2. Protocol:</strong>
+                    <strong>Identification:</strong><br>Hazard Labels (Skull, Flame).<br><strong>Lithium Fire:</strong> Use water (cool the cells).
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Drill / Practice</div>
+                <div class="content-text"><strong>Hot Phone:</strong><br>Phone falls in seat. Begins smoking. 'Don't move seat!' 'Water on phone!'</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Simulation / Scenario</div>
+                <div class="content-text"><strong>Spill Cleanup:</strong><br>Unknown liquid leaking from bin. Don gloves. Use cleanup kit.</div>
+            </div>
+            
+            <div class="page-num">Cabin Crew Operations &bull; Page 23</div>
+        </div>
+        
+        <div class="page" id="l21">
+            <div class="module-header"><i class="fas fa-medkit"></i> Medical</div>
+            <div class="lesson-title"><h2>21. Medical Equipment</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Briefing / Warm Up</div>
+                <div class="content-text"><strong>Kit Sort:</strong><br>Items on screen: Morphine vs Plaster. Drag to 'Crew' or 'Doctor' bag.</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory / Procedure</div>
+                <div class="content-text">
+                    <strong>1. Terminology:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Kit</span><span class="vocab-item">First Aid</span><span class="vocab-item">Doctor</span><span class="vocab-item">Bag</span><span class="vocab-item">Defibrillator</span><span class="vocab-item">Gloves</span><span class="vocab-item">Mask</span><span class="vocab-item">Oxygen</span><span class="vocab-item">Pills</span><span class="vocab-item">Bandage</span><span class="vocab-item">Scissors</span><span class="vocab-item">Manual</span><span class="vocab-item">Seal</span><span class="vocab-item">Open</span><span class="vocab-item">Use</span></div>
+                    <br>
+                    <strong>2. Protocol:</strong>
+                    <strong>Types:</strong><br>First Aid Kit (Crew).<br>Doctors Kit (MD Only).<br>Defib (AED) - Talk to you.
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Drill / Practice</div>
+                <div class="content-text"><strong>AED Setup:</strong><br>Mime attaching pads. 'Clear!' Push button.</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Simulation / Scenario</div>
+                <div class="content-text"><strong>Permission Check:</strong><br>Pax asks for strong pills. 'I cannot give that. I have paracetamol.'</div>
+            </div>
+            
+            <div class="page-num">Cabin Crew Operations &bull; Page 24</div>
+        </div>
+        
+        <div class="page" id="l22">
+            <div class="module-header"><i class="fas fa-medkit"></i> Medical</div>
+            <div class="lesson-title"><h2>22. Assessing the Patient</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Briefing / Warm Up</div>
+                <div class="content-text"><strong>Dr. House:</strong><br>Patient holding chest. Sweating. 'What is it?' (Heart Attack).</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory / Procedure</div>
+                <div class="content-text">
+                    <strong>1. Terminology:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Assess</span><span class="vocab-item">Check</span><span class="vocab-item">History</span><span class="vocab-item">Symptom</span><span class="vocab-item">Sign</span><span class="vocab-item">Pain</span><span class="vocab-item">Feel</span><span class="vocab-item">Look</span><span class="vocab-item">Pulse</span><span class="vocab-item">Breathing</span><span class="vocab-item">Conscious</span><span class="vocab-item">Alert</span><span class="vocab-item">Name</span><span class="vocab-item">Age</span><span class="vocab-item">Medication</span></div>
+                    <br>
+                    <strong>2. Protocol:</strong>
+                    <strong>SAMPLE:</strong><br>Signs, Allergies, Medication, Past history, Last meal, Events.<br>Ask questions first.
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Drill / Practice</div>
+                <div class="content-text"><strong>SAMPLE Interview:</strong><br>Student A (Sick). Student B (Crew). 'Do you have allergies?'</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Simulation / Scenario</div>
+                <div class="content-text"><strong>The Faker:</strong><br>Pax says 'I need upgrade, my leg hurts.' Assess if it is real.</div>
+            </div>
+            
+            <div class="page-num">Cabin Crew Operations &bull; Page 25</div>
+        </div>
+        
+        <div class="page" id="l23">
+            <div class="module-header"><i class="fas fa-medkit"></i> Medical</div>
+            <div class="lesson-title"><h2>23. CPR & AED</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Briefing / Warm Up</div>
+                <div class="content-text"><strong>Rhythm Clap:</strong><br>Clap to 'Stayin' Alive'. That is CPR speed.</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory / Procedure</div>
+                <div class="content-text">
+                    <strong>1. Terminology:</strong>
+                    <div class="vocab-box"><span class="vocab-item">CPR</span><span class="vocab-item">Pump</span><span class="vocab-item">Chest</span><span class="vocab-item">Compression</span><span class="vocab-item">Breath</span><span class="vocab-item">Rescue</span><span class="vocab-item">Rhythm</span><span class="vocab-item">Fast</span><span class="vocab-item">Hard</span><span class="vocab-item">Stop</span><span class="vocab-item">Revive</span><span class="vocab-item">Life</span><span class="vocab-item">Death</span><span class="vocab-item">Shock</span><span class="vocab-item">Analyze</span></div>
+                    <br>
+                    <strong>2. Protocol:</strong>
+                    <strong>Algorithm:</strong><br>Dr's ABCD (Danger, Response, Airway, Breathing).<br>30 Compressions : 2 Breaths.<br>100-120 beats/min.
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Drill / Practice</div>
+                <div class="content-text"><strong>Virtual CPR:</strong><br>Push on pillow/cushion on camera. Teacher checks depth and speed.</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Simulation / Scenario</div>
+                <div class="content-text"><strong>No Shock Advised:</strong><br>AED says 'No Shock'. Continue CPR. Rotate crew every 2 mins.</div>
+            </div>
+            
+            <div class="page-num">Cabin Crew Operations &bull; Page 26</div>
+        </div>
+        
+        <div class="page" id="l24">
+            <div class="module-header"><i class="fas fa-medkit"></i> Medical</div>
+            <div class="lesson-title"><h2>24. Heart Attack (Angina)</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Briefing / Warm Up</div>
+                <div class="content-text"><strong>Symptom Act:</strong><br>Student acts out Heart Attack (Clutch chest). Class guesses.</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory / Procedure</div>
+                <div class="content-text">
+                    <strong>1. Terminology:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Heart</span><span class="vocab-item">Attack</span><span class="vocab-item">Angina</span><span class="vocab-item">Chest</span><span class="vocab-item">Pain</span><span class="vocab-item">Left Arm</span><span class="vocab-item">Jaw</span><span class="vocab-item">Pale</span><span class="vocab-item">Sweat</span><span class="vocab-item">Breath</span><span class="vocab-item">Pill</span><span class="vocab-item">Nitro</span><span class="vocab-item">Spray</span><span class="vocab-item">Calm</span><span class="vocab-item">Oxygen</span></div>
+                    <br>
+                    <strong>2. Protocol:</strong>
+                    <strong>Signs:</strong><br>Crushing pain (Elephant on chest). Pain in left arm.<br><strong>Action:</strong> Position (Semi-sitting). Oxygen. Doctor call.
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Drill / Practice</div>
+                <div class="content-text"><strong>Positioning:</strong><br>Show how to sit the passenger (W shape legs).</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Simulation / Scenario</div>
+                <div class="content-text"><strong>The Denial:</strong><br>Pax: 'It's just indigestion.' Crew: 'Sir, you look pale. Let me check pulse.'</div>
+            </div>
+            
+            <div class="page-num">Cabin Crew Operations &bull; Page 27</div>
+        </div>
+        
+        <div class="page" id="l25">
+            <div class="module-header"><i class="fas fa-medkit"></i> Medical</div>
+            <div class="lesson-title"><h2>25. Fainting & Shock</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Briefing / Warm Up</div>
+                <div class="content-text"><strong>Fall Safe:</strong><br>How to catch a fainting person without hurting your back.</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory / Procedure</div>
+                <div class="content-text">
+                    <strong>1. Terminology:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Faint</span><span class="vocab-item">Dizzy</span><span class="vocab-item">Lightheaded</span><span class="vocab-item">Fall</span><span class="vocab-item">Legs</span><span class="vocab-item">Up</span><span class="vocab-item">Blood</span><span class="vocab-item">Brain</span><span class="vocab-item">Shock</span><span class="vocab-item">Pale</span><span class="vocab-item">Cold</span><span class="vocab-item">Blanket</span><span class="vocab-item">Water</span><span class="vocab-item">Air</span><span class="vocab-item">Recover</span></div>
+                    <br>
+                    <strong>2. Protocol:</strong>
+                    <strong>Gravity:</strong><br>Blood needs to go to brain.<br><strong>Action:</strong> Lay flat. Legs UP.<br>Shock = Keep warm.
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Drill / Practice</div>
+                <div class="content-text"><strong>Leg Lift:</strong><br>Show correct leg elevation angle on screen.</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Simulation / Scenario</div>
+                <div class="content-text"><strong>Galley Faint:</strong><br>Pax faints in queue. 'Crew help!' Secure area. Lift legs.</div>
+            </div>
+            
+            <div class="page-num">Cabin Crew Operations &bull; Page 28</div>
+        </div>
+        
+        <div class="page" id="l26">
+            <div class="module-header"><i class="fas fa-medkit"></i> Medical</div>
+            <div class="lesson-title"><h2>26. Asthma & Choking</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Briefing / Warm Up</div>
+                <div class="content-text"><strong>Universal Sign:</strong><br>Hands to throat. 'I assume you are choking?'</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory / Procedure</div>
+                <div class="content-text">
+                    <strong>1. Terminology:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Asthma</span><span class="vocab-item">Inhaler</span><span class="vocab-item">Pump</span><span class="vocab-item">Wheeze</span><span class="vocab-item">Breath</span><span class="vocab-item">Choke</span><span class="vocab-item">Block</span><span class="vocab-item">Throat</span><span class="vocab-item">Cough</span><span class="vocab-item">Back</span><span class="vocab-item">Slap</span><span class="vocab-item">Thrust</span><span class="vocab-item">Heimlich</span><span class="vocab-item">Food</span><span class="vocab-item">Blue</span></div>
+                    <br>
+                    <strong>2. Protocol:</strong>
+                    <strong>Choking:</strong><br>Can they speak? Yes -> Encourage cough. No -> Back slaps / Abdominal thrusts.
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Drill / Practice</div>
+                <div class="content-text"><strong>Thrust Mime:</strong><br>Practice hand position for Heimlich (Fist + Hand, Up and In).</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Simulation / Scenario</div>
+                <div class="content-text"><strong>Child Choking:</strong><br>Baby is choking. Different technique (Heads down, back slaps).</div>
+            </div>
+            
+            <div class="page-num">Cabin Crew Operations &bull; Page 29</div>
+        </div>
+        
+        <div class="page" id="l27">
+            <div class="module-header"><i class="fas fa-medkit"></i> Medical</div>
+            <div class="lesson-title"><h2>27. Stroke (CVA)</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Briefing / Warm Up</div>
+                <div class="content-text"><strong>Face Check:</strong><br>Try to smile with only half a face. 'Show me teeth.'</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory / Procedure</div>
+                <div class="content-text">
+                    <strong>1. Terminology:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Stroke</span><span class="vocab-item">Brain</span><span class="vocab-item">Bleed</span><span class="vocab-item">Block</span><span class="vocab-item">Face</span><span class="vocab-item">Arm</span><span class="vocab-item">Speech</span><span class="vocab-item">Slur</span><span class="vocab-item">Smile</span><span class="vocab-item">Raise</span><span class="vocab-item">Time</span><span class="vocab-item">Fast</span><span class="vocab-item">Paralyzed</span><span class="vocab-item">One side</span><span class="vocab-item">Emergency</span></div>
+                    <br>
+                    <strong>2. Protocol:</strong>
+                    <strong>F.A.S.T:</strong><br>Face (Drooped?), Arms (Raise both?), Speech (Slurred?), Time (Call Captain).
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Drill / Practice</div>
+                <div class="content-text"><strong>FAST Evaluation:</strong><br>Teacher acts drunk/stroke. Student tests using FAST.</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Simulation / Scenario</div>
+                <div class="content-text"><strong>Captain Call:</strong><br>'Captain, suspected stroke. We need diversion ASAP.'</div>
+            </div>
+            
+            <div class="page-num">Cabin Crew Operations &bull; Page 30</div>
+        </div>
+        
+        <div class="page" id="l28">
+            <div class="module-header"><i class="fas fa-medkit"></i> Medical</div>
+            <div class="lesson-title"><h2>28. Childbirth</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Briefing / Warm Up</div>
+                <div class="content-text"><strong>Timing Contractions:</strong><br>Stopwatch game. 'Pain... Stop.' Frequency?</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory / Procedure</div>
+                <div class="content-text">
+                    <strong>1. Terminology:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Birth</span><span class="vocab-item">Baby</span><span class="vocab-item">Labor</span><span class="vocab-item">Pain</span><span class="vocab-item">Contraction</span><span class="vocab-item">Water</span><span class="vocab-item">Head</span><span class="vocab-item">Push</span><span class="vocab-item">Breathe</span><span class="vocab-item">Towel</span><span class="vocab-item">Clamp</span><span class="vocab-item">Cord</span><span class="vocab-item">Mother</span><span class="vocab-item">Cry</span><span class="vocab-item">Warm</span></div>
+                    <br>
+                    <strong>2. Protocol:</strong>
+                    <strong>Crowing:</strong><br>Head visible? Prepare for delivery.<br>Before that? Walk/Comfort.<br><strong>Kit:</strong> Umbilical clamp.
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Drill / Practice</div>
+                <div class="content-text"><strong>Privacy Wall:</strong><br>Build a wall using blankets and assistants to hide the mother.</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Simulation / Scenario</div>
+                <div class="content-text"><strong>It's a Boy!:</strong><br>Delivery happens. Baby doesn't cry. 'Rub back.' 'Clear airway.'</div>
+            </div>
+            
+            <div class="page-num">Cabin Crew Operations &bull; Page 31</div>
+        </div>
+        
+        <div class="page" id="l29">
+            <div class="module-header"><i class="fas fa-medkit"></i> Medical</div>
+            <div class="lesson-title"><h2>29. Diabetes</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Briefing / Warm Up</div>
+                <div class="content-text"><strong>Hypo or Drunk?:</strong><br>Symptoms are similar (Slurring, Confused). Smell breath (Sweet = Diabetes).</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory / Procedure</div>
+                <div class="content-text">
+                    <strong>1. Terminology:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Diabetes</span><span class="vocab-item">Sugar</span><span class="vocab-item">Insulin</span><span class="vocab-item">Needle</span><span class="vocab-item">Low</span><span class="vocab-item">High</span><span class="vocab-item">Coma</span><span class="vocab-item">Sweet</span><span class="vocab-item">Juice</span><span class="vocab-item">Candy</span><span class="vocab-item">Shake</span><span class="vocab-item">Confused</span><span class="vocab-item">Drunk</span><span class="vocab-item">Blood</span><span class="vocab-item">Test</span></div>
+                    <br>
+                    <strong>2. Protocol:</strong>
+                    <strong>Low Sugar (Hypo):</strong><br>Dangerous fast. Give sugar (Juice/Coke).<br><strong>High Sugar (Hyper):</strong> Slow onset. Needs insulin.
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Drill / Practice</div>
+                <div class="content-text"><strong>Sugar Load:</strong><br>Mix sugar water. 'Drink this, sir.'</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Simulation / Scenario</div>
+                <div class="content-text"><strong>Needle Phobia:</strong><br>Pax needs insulin but has passed out. 'Do we inject?' 'No! Check MD kit rules.'</div>
+            </div>
+            
+            <div class="page-num">Cabin Crew Operations &bull; Page 32</div>
+        </div>
+        
+        <div class="page" id="l30">
+            <div class="module-header"><i class="fas fa-medkit"></i> Medical</div>
+            <div class="lesson-title"><h2>30. Death on Board</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Briefing / Warm Up</div>
+                <div class="content-text"><strong>Respectful Words:</strong><br>Don't say 'The body'. Say 'He' or 'The passenger'.</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory / Procedure</div>
+                <div class="content-text">
+                    <strong>1. Terminology:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Death</span><span class="vocab-item">Die</span><span class="vocab-item">Breath</span><span class="vocab-item">Pulse</span><span class="vocab-item">CPR</span><span class="vocab-item">Stop</span><span class="vocab-item">Doctor</span><span class="vocab-item">Certify</span><span class="vocab-item">Body</span><span class="vocab-item">Move</span><span class="vocab-item">Cover</span><span class="vocab-item">Respect</span><span class="vocab-item">Bag</span><span class="vocab-item">Eyes</span><span class="vocab-item">Family</span></div>
+                    <br>
+                    <strong>2. Protocol:</strong>
+                    <strong>Protocol:</strong><br>Only Dr certifies death.<br>Move to private area / Cover (looks like asleep).<br>Treat family with care.
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Drill / Practice</div>
+                <div class="content-text"><strong>Body Pack:</strong><br>How to secure a body in a seat? Seatbelt, blanket to chin, eye mask.</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Simulation / Scenario</div>
+                <div class="content-text"><strong>Family Comfort:</strong><br>Wife is screaming. Calm her. Move her to First Class if needed.</div>
+            </div>
+            
+            <div class="page-num">Cabin Crew Operations &bull; Page 33</div>
+        </div>
+        
+        <div class="page" id="l31">
+            <div class="module-header"><i class="fas fa-glass-martini-alt"></i> Service</div>
+            <div class="lesson-title"><h2>31. Greeting & Seating</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Briefing / Warm Up</div>
+                <div class="content-text"><strong>Name Memory:</strong><br>Flash 3 names. Greet them correctly. 'Welcome Mr. Jones.'</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory / Procedure</div>
+                <div class="content-text">
+                    <strong>1. Terminology:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Welcome</span><span class="vocab-item">BoardingPass</span><span class="vocab-item">Seat</span><span class="vocab-item">Aisle</span><span class="vocab-item">Window</span><span class="vocab-item">Coat</span><span class="vocab-item">Hang</span><span class="vocab-item">Drink</span><span class="vocab-item">Menu</span><span class="vocab-item">Help</span><span class="vocab-item">Special</span><span class="vocab-item">Child</span><span class="vocab-item">Infant</span><span class="vocab-item">Belt</span><span class="vocab-item">Comfort</span></div>
+                    <br>
+                    <strong>2. Protocol:</strong>
+                    <strong>First Impressions:</strong><br>Eye contact + Smile.<br>address by Name (Mr. Smith) if Business Class.
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Drill / Practice</div>
+                <div class="content-text"><strong>Coat Taking:</strong><br>'May I hang your jacket, sir?' Mime careful handling.</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Simulation / Scenario</div>
+                <div class="content-text"><strong>Seat D:</strong><br>Pax sits in wrong seat. 'Excuse me sir, may I check your pass?' move them politely.</div>
+            </div>
+            
+            <div class="page-num">Cabin Crew Operations &bull; Page 34</div>
+        </div>
+        
+        <div class="page" id="l32">
+            <div class="module-header"><i class="fas fa-glass-martini-alt"></i> Service</div>
+            <div class="lesson-title"><h2>32. Meal Service</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Briefing / Warm Up</div>
+                <div class="content-text"><strong>Menu Speed:</strong><br>'What is the vegetarian option?' 'Pasta.'</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory / Procedure</div>
+                <div class="content-text">
+                    <strong>1. Terminology:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Meal</span><span class="vocab-item">Tray</span><span class="vocab-item">Chicken</span><span class="vocab-item">Beef</span><span class="vocab-item">Fish</span><span class="vocab-item">Vegetarian</span><span class="vocab-item">Vegan</span><span class="vocab-item">Kosher</span><span class="vocab-item">Halal</span><span class="vocab-item">Hot</span><span class="vocab-item">Careful</span><span class="vocab-item">Enjoy</span><span class="vocab-item">Clear</span><span class="vocab-item">Coffee</span><span class="vocab-item">Tea</span></div>
+                    <br>
+                    <strong>2. Protocol:</strong>
+                    <strong>Service Flow:</strong><br>Front to Back.<br>Serve from hand (not pass over pax).<br>Hot drinks = Hazard.
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Drill / Practice</div>
+                <div class="content-text"><strong>The Tray Pass:</strong><br>Hand tray to camera. 'Chicken for you, sir.' Smile.</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Simulation / Scenario</div>
+                <div class="content-text"><strong>Out of Chicken:</strong><br>'I wanted Chicken!' 'Sorry, only beef left.' apologize and offer solution.</div>
+            </div>
+            
+            <div class="page-num">Cabin Crew Operations &bull; Page 35</div>
+        </div>
+        
+        <div class="page" id="l33">
+            <div class="module-header"><i class="fas fa-glass-martini-alt"></i> Service</div>
+            <div class="lesson-title"><h2>33. Drinks & Bar</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Briefing / Warm Up</div>
+                <div class="content-text"><strong>Cocktail Mix:</strong><br>'Gin and Tonic.' Mime the steps. Ice, Gin, Tonic, Lemon.</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory / Procedure</div>
+                <div class="content-text">
+                    <strong>1. Terminology:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Drink</span><span class="vocab-item">Water</span><span class="vocab-item">Juice</span><span class="vocab-item">Soda</span><span class="vocab-item">Ice</span><span class="vocab-item">Lemon</span><span class="vocab-item">Alcohol</span><span class="vocab-item">Wine</span><span class="vocab-item">Beer</span><span class="vocab-item">Spirit</span><span class="vocab-item">Glass</span><span class="vocab-item">Cup</span><span class="vocab-item">Napkin</span><span class="vocab-item">Refill</span><span class="vocab-item">Straw</span></div>
+                    <br>
+                    <strong>2. Protocol:</strong>
+                    <strong>Bar Skills:</strong><br>Ice first. Pour mixer. Spirit last.<br>Don't touch rim of glass.
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Drill / Practice</div>
+                <div class="content-text"><strong>Pouring Angle:</strong><br>Pour beer without foam activity.</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Simulation / Scenario</div>
+                <div class="content-text"><strong>The Refill:</strong><br>'Another whiskey!' Check sobriety. 'Here is a water with it, sir.'</div>
+            </div>
+            
+            <div class="page-num">Cabin Crew Operations &bull; Page 36</div>
+        </div>
+        
+        <div class="page" id="l34">
+            <div class="module-header"><i class="fas fa-glass-martini-alt"></i> Service</div>
+            <div class="lesson-title"><h2>34. Wine Knowledge</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Briefing / Warm Up</div>
+                <div class="content-text"><strong>Label Read:</strong><br>'Chardonnay 2018.' Is it Red or White? (White).</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory / Procedure</div>
+                <div class="content-text">
+                    <strong>1. Terminology:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Wine</span><span class="vocab-item">Red</span><span class="vocab-item">White</span><span class="vocab-item">Rose</span><span class="vocab-item">Sparkling</span><span class="vocab-item">Champagne</span><span class="vocab-item">Dry</span><span class="vocab-item">Sweet</span><span class="vocab-item">Fruity</span><span class="vocab-item">Oaky</span><span class="vocab-item">Bottle</span><span class="vocab-item">Cork</span><span class="vocab-item">Pour</span><span class="vocab-item">Taste</span><span class="vocab-item">Full-bodied</span></div>
+                    <br>
+                    <strong>2. Protocol:</strong>
+                    <strong>Basics:</strong><br>Red (Warm, with meat).<br>White (Chilled, with fish).<br>Champagne (Celebration).
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Drill / Practice</div>
+                <div class="content-text"><strong>The Sommelier:</strong><br>Describe the wine. 'It is a fruity Merlot from Chile.'</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Simulation / Scenario</div>
+                <div class="content-text"><strong>Corked Wine:</strong><br>Pax tastes it. 'It tastes like vinegar!' Apologize and open new bottle.</div>
+            </div>
+            
+            <div class="page-num">Cabin Crew Operations &bull; Page 37</div>
+        </div>
+        
+        <div class="page" id="l35">
+            <div class="module-header"><i class="fas fa-glass-martini-alt"></i> Service</div>
+            <div class="lesson-title"><h2>35. Business Class Service</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Briefing / Warm Up</div>
+                <div class="content-text"><strong>The Kneel:</strong><br>Practice kneeling posture next to chair. Not too close.</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory / Procedure</div>
+                <div class="content-text">
+                    <strong>1. Terminology:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Business</span><span class="vocab-item">First</span><span class="vocab-item">Premium</span><span class="vocab-item">Silver</span><span class="vocab-item">Gold</span><span class="vocab-item">Napkin</span><span class="vocab-item">Linen</span><span class="vocab-item">China</span><span class="vocab-item">Cutlery</span><span class="vocab-item">Personal</span><span class="vocab-item">Code</span><span class="vocab-item">Name</span><span class="vocab-item">Attention</span><span class="vocab-item">Detail</span><span class="vocab-item">Exclusive</span></div>
+                    <br>
+                    <strong>2. Protocol:</strong>
+                    <strong>Silver Service:</strong><br>No carts. Hand delivered.<br>Kneel to eye level.<br>Use names.
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Drill / Practice</div>
+                <div class="content-text"><strong>Table Laying:</strong><br>Arrange fork, knife, spoon, glass correctly on tray.</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Simulation / Scenario</div>
+                <div class="content-text"><strong>The VIP:</strong><br>Famous actor on board. Wants privacy. 'No photos please.' Manage fans.</div>
+            </div>
+            
+            <div class="page-num">Cabin Crew Operations &bull; Page 38</div>
+        </div>
+        
+        <div class="page" id="l36">
+            <div class="module-header"><i class="fas fa-glass-martini-alt"></i> Service</div>
+            <div class="lesson-title"><h2>36. Special Meals</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Briefing / Warm Up</div>
+                <div class="content-text"><strong>Code Breaker:</strong><br>What is DBML? (Diabetic). What is GFML? (Gluten Free).</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory / Procedure</div>
+                <div class="content-text">
+                    <strong>1. Terminology:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Special</span><span class="vocab-item">Request</span><span class="vocab-item">Order</span><span class="vocab-item">Allergy</span><span class="vocab-item">Nut</span><span class="vocab-item">Gluten</span><span class="vocab-item">Dairy</span><span class="vocab-item">Diabetic</span><span class="vocab-item">Baby</span><span class="vocab-item">Religious</span><span class="vocab-item">Confirm</span><span class="vocab-item">Label</span><span class="vocab-item">Error</span><span class="vocab-item">Reaction</span><span class="vocab-item">Safety</span></div>
+                    <br>
+                    <strong>2. Protocol:</strong>
+                    <strong>SPML Codes:</strong><br>VGML (Vegan). HNML (Hindu).<br><strong>Allergy:</strong> Nut allergy is safety critical. No nuts in cabin.
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Drill / Practice</div>
+                <div class="content-text"><strong>Label Check:</strong><br>Check tray label vs Passenger Seat number. Must match.</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Simulation / Scenario</div>
+                <div class="content-text"><strong>The Nut Anaphylaxis:</strong><br>Pax ate a nut. Swelling up. EpiPen use immediately.</div>
+            </div>
+            
+            <div class="page-num">Cabin Crew Operations &bull; Page 39</div>
+        </div>
+        
+        <div class="page" id="l37">
+            <div class="module-header"><i class="fas fa-glass-martini-alt"></i> Service</div>
+            <div class="lesson-title"><h2>37. Duty Free Sales</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Briefing / Warm Up</div>
+                <div class="content-text"><strong>Price Guess:</strong><br>How much is Gucci perfume? Guess.</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory / Procedure</div>
+                <div class="content-text">
+                    <strong>1. Terminology:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Duty Free</span><span class="vocab-item">Shop</span><span class="vocab-item">Buy</span><span class="vocab-item">Sell</span><span class="vocab-item">Price</span><span class="vocab-item">Discount</span><span class="vocab-item">Cash</span><span class="vocab-item">Card</span><span class="vocab-item">Currency</span><span class="vocab-item">Perfume</span><span class="vocab-item">Watch</span><span class="vocab-item">Gift</span><span class="vocab-item">Catalogue</span><span class="vocab-item">Cart</span><span class="vocab-item">Receipt</span></div>
+                    <br>
+                    <strong>2. Protocol:</strong>
+                    <strong>Sales Tech:</strong><br>Push the 'Exclusives'.<br>Know the allowance (Liquor/Tobacco limits).
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Drill / Practice</div>
+                <div class="content-text"><strong>The Pitch:</strong><br>'Buy 2 get 10% off.' Upsell.</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Simulation / Scenario</div>
+                <div class="content-text"><strong>Card Decline:</strong><br>'Your card was rejected.' 'Do you have cash?' Polite handling of payment fail.</div>
+            </div>
+            
+            <div class="page-num">Cabin Crew Operations &bull; Page 40</div>
+        </div>
+        
+        <div class="page" id="l38">
+            <div class="module-header"><i class="fas fa-glass-martini-alt"></i> Service</div>
+            <div class="lesson-title"><h2>38. Handling Complaints</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Briefing / Warm Up</div>
+                <div class="content-text"><strong>The Trigger Word:</strong><br>Don't say 'Calm down'. Say 'I understand'.</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory / Procedure</div>
+                <div class="content-text">
+                    <strong>1. Terminology:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Complaint</span><span class="vocab-item">Problem</span><span class="vocab-item">Sorry</span><span class="vocab-item">Apologize</span><span class="vocab-item">Fix</span><span class="vocab-item">Solution</span><span class="vocab-item">Listen</span><span class="vocab-item">Angry</span><span class="vocab-item">Upset</span><span class="vocab-item">Compensate</span><span class="vocab-item">Report</span><span class="vocab-item">Manager</span><span class="vocab-item">Feedback</span><span class="vocab-item">Calm</span><span class="vocab-item">Empathy</span></div>
+                    <br>
+                    <strong>2. Protocol:</strong>
+                    <strong>L.E.A.P:</strong><br>Listen, Empathize, Apologize, Problem Solve.<br>Never argue.
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Drill / Practice</div>
+                <div class="content-text"><strong>Apology Drill:</strong><br>'I am so sorry about that.' 'Let me see what I can do.'</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Simulation / Scenario</div>
+                <div class="content-text"><strong>Cold Coffee:</strong><br>Pax throws coffee (verbal). 'This is slush!' LEAP technique.</div>
+            </div>
+            
+            <div class="page-num">Cabin Crew Operations &bull; Page 41</div>
+        </div>
+        
+        <div class="page" id="l39">
+            <div class="module-header"><i class="fas fa-glass-martini-alt"></i> Service</div>
+            <div class="lesson-title"><h2>39. Cultural Awareness</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Briefing / Warm Up</div>
+                <div class="content-text"><strong>Rude or Not?:</strong><br>Thumbs up in Iran? (Rude). Finishing all food in China? (Rude).</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory / Procedure</div>
+                <div class="content-text">
+                    <strong>1. Terminology:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Culture</span><span class="vocab-item">Respect</span><span class="vocab-item">Custom</span><span class="vocab-item">Religion</span><span class="vocab-item">Prayer</span><span class="vocab-item">Diet</span><span class="vocab-item">Touch</span><span class="vocab-item">Eye Contact</span><span class="vocab-item">Gesture</span><span class="vocab-item">Rude</span><span class="vocab-item">Polite</span><span class="vocab-item">International</span><span class="vocab-item">Diversity</span><span class="vocab-item">Habit</span><span class="vocab-item">Tradition</span></div>
+                    <br>
+                    <strong>2. Protocol:</strong>
+                    <strong>Global Manners:</strong><br>Middle East: No left hand. Japan: Bowing.<br>Alcohol rules.
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Drill / Practice</div>
+                <div class="content-text"><strong>The Prayer Mat:</strong><br>Pax wants to pray. Where? Find a discrete space.</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Simulation / Scenario</div>
+                <div class="content-text"><strong>Alcohol Refusal:</strong><br>Pax demands alcohol. Route restriction (Saudi). 'We are dry airspace.' Explain.</div>
+            </div>
+            
+            <div class="page-num">Cabin Crew Operations &bull; Page 42</div>
+        </div>
+        
+        <div class="page" id="l40">
+            <div class="module-header"><i class="fas fa-glass-martini-alt"></i> Service</div>
+            <div class="lesson-title"><h2>40. Landing & Farewell</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Briefing / Warm Up</div>
+                <div class="content-text"><strong>Smile Stamina:</strong><br>Smile for 60 seconds. Harder than it looks.</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory / Procedure</div>
+                <div class="content-text">
+                    <strong>1. Terminology:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Landing</span><span class="vocab-item">Arrival</span><span class="vocab-item">Goodbye</span><span class="vocab-item">Thank you</span><span class="vocab-item">Gate</span><span class="vocab-item">Transfer</span><span class="vocab-item">Bus</span><span class="vocab-item">Terminal</span><span class="vocab-item">Coat</span><span class="vocab-item">Bag</span><span class="vocab-item">Check</span><span class="vocab-item">Items</span><span class="vocab-item">Lost</span><span class="vocab-item">Found</span><span class="vocab-item">Exit</span></div>
+                    <br>
+                    <strong>2. Protocol:</strong>
+                    <strong>The Last Impression:</strong><br>Say goodbye to every single person.<br>Check for left items (Lost & Found).
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Drill / Practice</div>
+                <div class="content-text"><strong>Lost Property:</strong><br>'Is this your phone?' Search seat pockets.</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Simulation / Scenario</div>
+                <div class="content-text"><strong>The Delay:</strong><br>Plane landed but no gate. Pax want to get up. 'Please remain seated.' 20 min delay.</div>
+            </div>
+            
+            <div class="page-num">Cabin Crew Operations &bull; Page 43</div>
+        </div>
+        </body></html>

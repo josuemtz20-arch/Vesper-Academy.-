@@ -1,0 +1,1222 @@
+<!DOCTYPE html><html lang="en"><head>
+<script src="vesper_auth.js"></script><meta charset="UTF-8"><title>Core Basics: Level 1 Student</title><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<style>:root { --theme-color: #3498db; }:root { --theme-color: var(--theme-color); }
+    @import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700&family=Open+Sans:wght@400;600;700&display=swap');
+    
+    /* RESET & BASE */
+    body { background-color: #525659; margin: 0; padding: 40px 0; display: flex; flex-direction: column; align-items: center; font-family: 'Merriweather', serif; color: var(--theme-color); }
+    
+    /* STANDARD PAGE (Teacher) */
+    .page { background-color: white; width: 210mm; min-height: 297mm; padding: 20mm; box-sizing: border-box; box-shadow: 0 0 20px rgba(0,0,0,0.3); margin-bottom: 40px; position: relative; page-break-after: always; }
+    
+    /* SLIDE PAGE (Student) */
+    .slide-page { 
+        background-color: #f9f7f0;
+        width: 210mm;
+        min-height: 297mm; height: auto;
+        padding: 0;
+        box-sizing: border-box;
+        box-shadow: 0 0 20px rgba(0,0,0,0.3);
+        margin-bottom: 40px;
+        position: relative;
+        page-break-after: always;
+        overflow: visible;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* SHARED STYLES */
+    @media print { 
+        body { background: none; margin: 0; padding: 0; display: block; } 
+        .page, .slide-page { box-shadow: none; margin: 0; width: 100%; height: auto; min-height: 100%; page-break-after: always; border: none; } 
+        .no-print { display: none; } 
+    }
+    
+    .no-print { position: fixed; top: 20px; left: 20px; z-index: 1000; }
+    .nav-btn { background: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: bold; color: var(--theme-color); box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+
+    /* TEACHER SPECIFIC CSS (Old Style) */
+    .lesson-title { border-bottom: 2px solid #34495e; padding-bottom: 15px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; }
+    .lesson-title h2 { margin: 0; font-size: 2.2em; color: var(--theme-color); }
+    .lesson-block { margin-bottom: 25px; padding: 20px 25px; background: #fff; border-left: 5px solid #ccc; border-radius: 0 5px 5px 0; }
+    .lb-blue { border-color: #3498db; background: #ebf5fb; }
+    .lb-navy { border-color: var(--theme-color); background: #fff; border: 1px solid #eee; border-left: 6px solid #1a2b42; }
+    .lb-green { border-color: #27ae60; background: #eafaf1; }
+    .lb-red { border-color: #c0392b; background: #fdedec; }
+    .lb-header { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; font-weight: bold; font-family: 'Open Sans'; text-transform: uppercase; font-size: 1em; letter-spacing: 0.5px; }
+    .lb-blue .lb-header { color: #2980b9; } 
+    .lb-navy .lb-header { color: var(--theme-color); }
+    .lb-green .lb-header { color: #27ae60; }
+    .lb-red .lb-header { color: #c0392b; }
+    .content-text { line-height: 1.8; font-size: 0.95em; color: #2c3e50; text-align: justify; }
+    .vocab-box { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
+    .vocab-item { background: #eee; padding: 5px 10px; border-radius: 3px; font-size: 0.9em; font-family: 'Open Sans'; }
+    .page-num { position: absolute; bottom: 20mm; right: 20mm; color: #999; font-size: 0.8em; }
+    
+
+    /* SLIDE DESIGN CSS (New Polish) */
+    .slide-header-bar {
+        background-color: var(--theme-color);
+        color: white;
+        height: 15%;
+        min-height: 100px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 0 40px;
+        flex-shrink: 0;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    .top-row { display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 5px;}
+    .logo-container img { height: 40px; }
+    .academy-name { font-family: 'Merriweather', serif; font-weight: bold; font-size: 1.2em; letter-spacing: 2px; text-transform: uppercase; }
+    .lesson-headline { font-family: 'Merriweather', serif; font-size: 1.8em; font-weight: 300; }
+    
+    .slide-layout {
+        display: flex;
+        flex-grow: 1;
+        height: 85%;
+        position: relative;
+    }
+    
+    /* SIDEBAR */
+    .sidebar {
+        width: 25%;
+        background-color: #e8e6dc;
+        padding: 30px 20px;
+        box-sizing: border-box;
+        border-right: 1px solid #d4d4d4;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+    
+    .sidebar-section { margin-bottom: 30px; }
+    .sidebar-title { 
+        color: var(--theme-color); 
+        font-weight: bold; 
+        border-bottom: 2px solid var(--theme-color); 
+        display: inline-block; 
+        margin-bottom: 15px;
+        font-size: 1em;
+        letter-spacing: 1px;
+    }
+    
+    .sidebar-list { font-size: 0.9em; line-height: 1.6; color: #2c3e50; font-family: 'Open Sans'; }
+    .sidebar-list div { margin-bottom: 5px; }
+    
+    /* MAIN CONTENT */
+    .slide-body {
+        width: 75%;
+        position: relative;
+        padding: 30px 40px;
+        display: flex;
+        flex-direction: column;
+        box-sizing: border-box;
+    }
+    
+    .watermark {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 60%;
+        opacity: 0.05;
+        z-index: 0;
+        pointer-events: none;
+    }
+    
+    .section-title {
+        color: var(--theme-color);
+        font-family: 'Merriweather', serif;
+        font-size: 1.4em;
+        text-transform: uppercase;
+        margin-bottom: 15px;
+        border-bottom: 1px solid #1a2b42;
+        display: inline-block;
+        padding-bottom: 5px;
+    }
+    
+    .center-title { text-align: center; width: 100%; border: none; margin-bottom: 20px; text-decoration: underline; text-decoration-color: #d4af37;}
+    
+    .structure-content {
+        text-align: center;
+        font-size: 1.2em;
+        margin-bottom: 40px;
+        z-index: 1;
+        font-family: 'Open Sans', sans-serif;
+        background: rgba(255,255,255,0.5);
+        padding: 15px;
+        border-radius: 5px;
+    }
+    
+    .two-cols {
+        display: flex;
+        justify-content: space-between;
+        z-index: 1;
+        flex-grow: 1;
+    }
+    
+    .col { width: 48%; }
+    
+    .content-item { margin-bottom: 15px; font-size: 1em; font-family: 'Open Sans', sans-serif; }
+    .content-item strong { color: #c0392b; }
+    
+    /* TOC STYLES */
+    .toc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px 40px; margin-top: 20px; }
+    .toc-item { border-bottom: 1px dotted #999; display: flex; justify-content: space-between; padding-bottom: 5px; font-family: 'Open Sans'; }
+    .toc-item a { text-decoration: none; color: var(--theme-color); font-weight: bold; width: 100%; display: flex; justify-content: space-between; }
+    .toc-item a:hover { color: #c0392b; }
+
+    /* NAV BUTTONS */
+    .nav-arrow { position: absolute; top: 50%; width: 40px; height: 40px; border-radius: 50%; background: rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center; color: #999; text-decoration: none; transition: 0.2s; }
+    .nav-arrow:hover { background: var(--theme-color); color: white; }
+    .nav-prev { left: 10px; }
+    .nav-next { right: 10px; }
+    
+    /* PROGRESS BAR */
+    .progress-bar-container { position: absolute; bottom: 0; left: 0; width: 100%; height: 5px; background: #eee; }
+    .progress-bar { height: 100%; background: var(--theme-color); transition: width 0.3s; }
+    
+    /* CHECKPOINT SLIDE */
+    .checkpoint-card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); text-align: center; margin-bottom: 20px; border-top: 5px solid var(--theme-color); }
+.v-gloss{color:#8a7a55;font-size:.84em;font-style:italic;}
+</style>
+</head><body><div class="no-print"><a href="index.html" class="nav-btn"><i class="fas fa-arrow-left"></i> Dashboard</a></div>
+    <div class="slide-page" id="toc">
+        <div class="slide-header-bar" style="background-color:var(--theme-color);">
+            <div class="top-row">
+                <div class="logo-container"><img src="assets/images/vesper_logo.jpg" style="filter: brightness(0) invert(1);"></div>
+                <div class="academy-name">VESPER <span style="font-size:0.5em; display:block; letter-spacing:1px;">ACADEMY</span></div>
+            </div>
+            <div class="lesson-headline">Course Map</div>
+        </div>
+        <div class="slide-layout" style="display:block; padding:40px;">
+             <div class="toc-grid">
+    <div class="toc-item"><a href="#sl1"><span>Lesson 1</span> <span>Who Are You?</span></a></div><div class="toc-item"><a href="#sl2"><span>Lesson 2</span> <span>Where Are You From?</span></a></div><div class="toc-item"><a href="#sl3"><span>Lesson 3</span> <span>Jobs & Professions</span></a></div><div class="toc-item"><a href="#sl4"><span>Lesson 4</span> <span>Adjectives (Feelings)</span></a></div><div class="toc-item"><a href="#sl5"><span>Lesson 5</span> <span>Family Tree</span></a></div><div class="toc-item"><a href="#sl6"><span>Lesson 6</span> <span>Colors & Clothing</span></a></div><div class="toc-item"><a href="#sl7"><span>Lesson 7</span> <span>Describing People</span></a></div><div class="toc-item"><a href="#sl8"><span>Lesson 8</span> <span>The Weather</span></a></div><div class="toc-item"><a href="#sl9"><span>Lesson 9</span> <span>Numbers 1-20</span></a></div><div class="toc-item"><a href="#sl10"><span>Lesson 10</span> <span>Time & Days</span></a></div><div class="toc-item"><a href="#sl11"><span>Lesson 11</span> <span>Rooms in House</span></a></div><div class="toc-item"><a href="#sl12"><span>Lesson 12</span> <span>Prepositions of Place</span></a></div><div class="toc-item"><a href="#sl13"><span>Lesson 13</span> <span>There is / There are</span></a></div><div class="toc-item"><a href="#sl14"><span>Lesson 14</span> <span>Demonstratives (This/That)</span></a></div><div class="toc-item"><a href="#sl15"><span>Lesson 15</span> <span>Possessive Adjectives</span></a></div><div class="toc-item"><a href="#sl16"><span>Lesson 16</span> <span>Nationalities</span></a></div><div class="toc-item"><a href="#sl17"><span>Lesson 17</span> <span>Opposites</span></a></div><div class="toc-item"><a href="#sl18"><span>Lesson 18</span> <span>Question Words</span></a></div><div class="toc-item"><a href="#sl19"><span>Lesson 19</span> <span>Yes/No Questions</span></a></div><div class="toc-item"><a href="#sl20"><span>Lesson 20</span> <span>Level 1 Final Exam</span></a></div>
+            </div>
+        </div>
+        <a href="#sl1" class="nav-arrow nav-next"><i class="fas fa-chevron-right"></i></a>
+    </div>
+    
+        <div class="slide-page" id="sl1">
+            <div class="slide-header-bar" style="background-color:var(--theme-color);">
+                <div class="top-row">
+                    <div class="logo-container"><img src="assets/images/vesper_logo.jpg" style="filter: brightness(0) invert(1);"></div>
+                    <div class="academy-name">VESPER <span style="font-size:0.5em; display:block; letter-spacing:1px;">ACADEMY</span></div>
+                </div>
+                <div class="lesson-headline">Lesson 1 - Who Are You?</div>
+            </div>
+            
+            <div class="lesson-audio" style="background:#eef3f9; border:1px solid #c9d8ea; border-left:4px solid #1e5fa8; border-radius:6px; padding:12px 16px; margin:0 0 14px 0; margin:12px 24px;"><div style="font-weight:bold; color:#1a2b42; margin-bottom:6px;">&#127911; Lesson Audio &mdash; Listen before class</div><audio controls preload="none" style="width:100%;"><source src="assets/audio/core_basics_level_1_lesson_1.mp3" type="audio/mpeg">Your browser does not support audio.</audio><div style="font-size:0.85em; color:#33475e; margin-top:8px; line-height:1.6;"><strong>Listen &amp; Answer:</strong><br>1) What is the woman's name?<br>2) What is the man's name?<br>3) And you? Say: 'Hello, I am...'</div></div><div class="lesson-hw" style="background:#f7f3ea; border-left:4px solid #c5a059; border-radius:4px; padding:7px 14px; margin:6px 24px; font-size:0.78em; color:#3a3325; line-height:1.45;"><strong style="color:#a8843d;">&#9997;&#65039; Before next class (10 min):</strong> Record a 20-second voice note: 'Hello, I am... I am from...' &bull; Write your 4-line introduction in your notebook &bull; Listen to the lesson audio again before next class</div><div class="slide-layout">
+                <div class="sidebar">
+                    <div class="sidebar-section">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">VOCABULARY</div>
+                        <div class="sidebar-list"><div>• I am / I'm</div><div>• You are / You're</div><div>• He is / He's</div><div>• She is / She's</div><div>• It is / It's</div><div>• We are / We're</div><div>• They are / They're</div><div>&bull; Name <span class="v-gloss">&middot; nombre</span></div><div>&bull; Student <span class="v-gloss">&middot; estudiante</span></div><div>&bull; Teacher <span class="v-gloss">&middot; maestro/a</span></div><div>&bull; Man <span class="v-gloss">&middot; hombre</span></div><div>&bull; Woman <span class="v-gloss">&middot; mujer</span></div><div>&bull; Boy <span class="v-gloss">&middot; niño</span></div><div>&bull; Girl <span class="v-gloss">&middot; niña</span></div><div>&bull; Class <span class="v-gloss">&middot; clase</span></div></div>
+                    </div>
+                    
+                    <div class="sidebar-section" style="margin-top:auto;">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">CONTEXT</div>
+                        <div class="sidebar-list" style="font-style:italic; font-size:0.85em;"><b>Phase 1 (TPR):</b> Teacher points to self: 'I'. Points to camera: 'You'. Students mimic.<br><br><b>Phase 2 (Visual Drill):</b> Teacher shows photos (Man, Woman, Group). Students shout 'He!', 'She!', 'They!'.<br><br><b>Phase 3 (Chat Drop):</b> 'Type I AM and your name in the chat. Hit enter on 3, 2, 1!'</div>
+                    </div>
+                </div>
+            
+                <div class="slide-body">
+                    <img src="assets/images/vesper_logo.jpg" class="watermark">
+                    <div class="section-title center-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color); text-decoration-color:var(--theme-color);">STRUCTURE</div>
+                    <div class="structure-content">
+                        <span style='color:var(--theme-color); font-weight:bold;'>Formula:</span> Subject Pronoun + To Be + Noun<br><br><span style='color:var(--theme-color); font-weight:bold;'>Explanation:</span><br>We use 'To Be' to talk about identity.<br>Full Form: I am John. She is Mary.<br>Contraction: I'm John. She's Mary.<br><br><span style='color:var(--theme-color); font-weight:bold;'>🚨 Common Error:</span><br>Spanish speakers often drop the subject. <br>WRONG: <em>Is Mary.</em><br>RIGHT: <em><span style='color:var(--theme-color); font-weight:bold;'>She is</span> Mary.</em>
+                    </div>
+                    <div class="two-cols">
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXAMPLES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>The Virtual Party (10 mins)</strong><br><br><strong>Context:</strong> A Zoom networking event.<br><br><strong>Task:</strong><br>One by one, students unmute. <br>Student A: 'Hello, I am [Name]. I am a student.'<br>Teacher: 'Class, who is he/she?'<br>Class: 'He/She is [Name]!'<br><br><strong>Challenge:</strong> Introduce a family member passing in the background. 'He is my brother.'</div>
+                        </div>
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXERCISES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>Tier 1: Formula Completion</strong><br>1. ____ am a student.<br>2. She ____ a teacher.<br>3. They ____ boys.<br><br><strong>Tier 2: The Correction Game</strong><br>Teacher writes wrong sentences on screen. Students must fix them.<br>- 'He are David.' -> 'He IS David.'<br>- 'I is a woman.' -> 'I AM a woman.'</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <a href="#toc" class="nav-arrow nav-prev"><i class="fas fa-chevron-left"></i></a>
+            <a href="#sl2" class="nav-arrow nav-next"><i class="fas fa-chevron-right"></i></a>
+            
+            <div class="progress-bar-container"><div class="progress-bar" style="width:5.0%;"></div></div>
+            <div style="position:absolute; bottom:15px; right:30px; font-family:'Merriweather'; color:#999; font-size:0.8em;">Core Basics: Level 1 | 1</div>
+        </div>
+        
+        <div class="slide-page" id="sl2">
+            <div class="slide-header-bar" style="background-color:var(--theme-color);">
+                <div class="top-row">
+                    <div class="logo-container"><img src="assets/images/vesper_logo.jpg" style="filter: brightness(0) invert(1);"></div>
+                    <div class="academy-name">VESPER <span style="font-size:0.5em; display:block; letter-spacing:1px;">ACADEMY</span></div>
+                </div>
+                <div class="lesson-headline">Lesson 2 - Where Are You From?</div>
+            </div>
+            
+            <div class="lesson-audio" style="background:#eef3f9; border:1px solid #c9d8ea; border-left:4px solid #1e5fa8; border-radius:6px; padding:12px 16px; margin:0 0 14px 0; margin:12px 24px;"><div style="font-weight:bold; color:#1a2b42; margin-bottom:6px;">&#127911; Lesson Audio &mdash; Listen before class</div><audio controls preload="none" style="width:100%;"><source src="assets/audio/core_basics_level_1_lesson_2.mp3" type="audio/mpeg">Your browser does not support audio.</audio><div style="font-size:0.85em; color:#33475e; margin-top:8px; line-height:1.6;"><strong>Listen &amp; Answer:</strong><br>1) Where is Ana from?<br>2) Where is Leo from?<br>3) And you? Say: 'I am from...'</div></div><div class="lesson-hw" style="background:#f7f3ea; border-left:4px solid #c5a059; border-radius:4px; padding:7px 14px; margin:6px 24px; font-size:0.78em; color:#3a3325; line-height:1.45;"><strong style="color:#a8843d;">&#9997;&#65039; Before next class (10 min):</strong> Find 3 country names in English on your phone and write them &bull; Write where 3 family members are from &bull; Listen to the lesson audio again</div><div class="slide-layout">
+                <div class="sidebar">
+                    <div class="sidebar-section">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">VOCABULARY</div>
+                        <div class="sidebar-list"><div>&bull; Country <span class="v-gloss">&middot; país</span></div><div>&bull; City <span class="v-gloss">&middot; ciudad</span></div><div>&bull; From <span class="v-gloss">&middot; de / desde</span></div><div>&bull; Where <span class="v-gloss">&middot; dónde</span></div><div>&bull; What <span class="v-gloss">&middot; qué</span></div><div>&bull; World <span class="v-gloss">&middot; mundo</span></div><div>&bull; Flag <span class="v-gloss">&middot; bandera</span></div><div>&bull; Map <span class="v-gloss">&middot; mapa</span></div><div>&bull; Passport <span class="v-gloss">&middot; pasaporte</span></div><div>&bull; Home <span class="v-gloss">&middot; casa / hogar</span></div><div>• USA</div><div>• UK</div><div>• China</div><div>• India</div><div>• Spain</div></div>
+                    </div>
+                    
+                    <div class="sidebar-section" style="margin-top:auto;">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">CONTEXT</div>
+                        <div class="sidebar-list" style="font-style:italic; font-size:0.85em;"><b>Phase 1 (Flag Flash):</b> Teacher holds up a famous flag. First student to type the country name wins.<br><br><b>Phase 2 (Where is it?):</b> Show a famous landmark (Eiffel Tower). 'Where is it?' -> 'It is in France.'<br><br><b>Phase 3 (The Passport):</b> Everyone hold up a real or imaginary passport to the camera.</div>
+                    </div>
+                </div>
+            
+                <div class="slide-body">
+                    <img src="assets/images/vesper_logo.jpg" class="watermark">
+                    <div class="section-title center-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color); text-decoration-color:var(--theme-color);">STRUCTURE</div>
+                    <div class="structure-content">
+                        <span style='color:var(--theme-color); font-weight:bold;'>Formula:</span> I am + from + [Country/City]<br><br><span style='color:var(--theme-color); font-weight:bold;'>Question Form:</span> Where + are + you + from?<br><br><span style='color:var(--theme-color); font-weight:bold;'>Explanation:</span><br>We use 'from' to indicate origin. You can use a city or a country.<br>I am from Mexico. / I am from Madrid.<br><br><span style='color:var(--theme-color); font-weight:bold;'>🚨 Common Error:</span><br>WRONG: <em>I am of Spain.</em><br>RIGHT: <em>I am <span style='color:var(--theme-color); font-weight:bold;'>from</span> Spain.</em>
+                    </div>
+                    <div class="two-cols">
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXAMPLES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>Border Control (10 mins)</strong><br><br><strong>Roles:</strong><br>Role A: Strict Customs Officer.<br>Role B: Tired Traveler.<br><br><strong>Script:</strong><br>Officer: 'Hello. Passport, please. Where are you from?'<br>Traveler: 'I am from [Country].'<br>Officer: 'Welcome to [Different Country].'<br><br><strong>Challenge:</strong> The traveler must act nervous or the officer must act suspicious.</div>
+                        </div>
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXERCISES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>Tier 1: Match the City to Country</strong><br>1. Tokyo -> Japan<br>2. London -> UK<br>3. New York -> USA<br><br><strong>Tier 2: Q&A Drill</strong><br>Teacher assigns random cities to students in private chat. <br>Teacher: 'Where are you from, Juan?'<br>Juan: 'I am from Tokyo!'</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <a href="#sl1" class="nav-arrow nav-prev"><i class="fas fa-chevron-left"></i></a>
+            <a href="#sl3" class="nav-arrow nav-next"><i class="fas fa-chevron-right"></i></a>
+            
+            <div class="progress-bar-container"><div class="progress-bar" style="width:10.0%;"></div></div>
+            <div style="position:absolute; bottom:15px; right:30px; font-family:'Merriweather'; color:#999; font-size:0.8em;">Core Basics: Level 1 | 2</div>
+        </div>
+        
+        <div class="slide-page" id="sl3">
+            <div class="slide-header-bar" style="background-color:var(--theme-color);">
+                <div class="top-row">
+                    <div class="logo-container"><img src="assets/images/vesper_logo.jpg" style="filter: brightness(0) invert(1);"></div>
+                    <div class="academy-name">VESPER <span style="font-size:0.5em; display:block; letter-spacing:1px;">ACADEMY</span></div>
+                </div>
+                <div class="lesson-headline">Lesson 3 - Jobs & Professions</div>
+            </div>
+            
+            <div class="lesson-audio" style="background:#eef3f9; border:1px solid #c9d8ea; border-left:4px solid #1e5fa8; border-radius:6px; padding:12px 16px; margin:0 0 14px 0; margin:12px 24px;"><div style="font-weight:bold; color:#1a2b42; margin-bottom:6px;">&#127911; Lesson Audio &mdash; Listen before class</div><audio controls preload="none" style="width:100%;"><source src="assets/audio/core_basics_level_1_lesson_3.mp3" type="audio/mpeg">Your browser does not support audio.</audio><div style="font-size:0.85em; color:#33475e; margin-top:8px; line-height:1.6;"><strong>Listen &amp; Answer:</strong><br>1) What is Ana's job?<br>2) Is Leo a teacher?<br>3) And you? Say: 'I am a...' or 'I am an...'</div></div><div class="lesson-hw" style="background:#f7f3ea; border-left:4px solid #c5a059; border-radius:4px; padding:7px 14px; margin:6px 24px; font-size:0.78em; color:#3a3325; line-height:1.45;"><strong style="color:#a8843d;">&#9997;&#65039; Before next class (10 min):</strong> Write the jobs of 3 people you know: 'My father is a...' &bull; Practice: a + consonant, an + vowel with 5 jobs &bull; Listen to the lesson audio again</div><div class="slide-layout">
+                <div class="sidebar">
+                    <div class="sidebar-section">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">VOCABULARY</div>
+                        <div class="sidebar-list"><div>• A (consonant)</div><div>• An (vowel)</div><div>&bull; Doctor <span class="v-gloss">&middot; doctor/a</span></div><div>&bull; Teacher <span class="v-gloss">&middot; maestro/a</span></div><div>&bull; Nurse <span class="v-gloss">&middot; enfermero/a</span></div><div>&bull; Engineer <span class="v-gloss">&middot; ingeniero/a</span></div><div>&bull; Driver <span class="v-gloss">&middot; conductor/a</span></div><div>&bull; Chef <span class="v-gloss">&middot; chef / cocinero</span></div><div>&bull; Artist <span class="v-gloss">&middot; artista</span></div><div>&bull; Police <span class="v-gloss">&middot; policía</span></div><div>&bull; Worker <span class="v-gloss">&middot; trabajador/a</span></div><div>&bull; Boss <span class="v-gloss">&middot; jefe/a</span></div><div>&bull; Office <span class="v-gloss">&middot; oficina</span></div><div>&bull; Hospital <span class="v-gloss">&middot; hospital</span></div><div>&bull; School <span class="v-gloss">&middot; escuela</span></div></div>
+                    </div>
+                    
+                    <div class="sidebar-section" style="margin-top:auto;">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">CONTEXT</div>
+                        <div class="sidebar-list" style="font-style:italic; font-size:0.85em;"><b>Phase 1 (Charades):</b> Teacher mimes a job (driving, cooking, writing). Students guess the word.<br><br><b>Phase 2 (A or An?):</b> Teacher shouts a job. Students show 1 finger for 'A' or 2 fingers for 'AN' to the camera.<br><br><b>Phase 3 (Workplace Match):</b> 'Where does a doctor work?' -> 'Hospital.'</div>
+                    </div>
+                </div>
+            
+                <div class="slide-body">
+                    <img src="assets/images/vesper_logo.jpg" class="watermark">
+                    <div class="section-title center-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color); text-decoration-color:var(--theme-color);">STRUCTURE</div>
+                    <div class="structure-content">
+                        <span style='color:var(--theme-color); font-weight:bold;'>Formula:</span> Subject + To Be + A/An + Job<br><br><span style='color:var(--theme-color); font-weight:bold;'>Explanation:</span><br>Use 'A' before consonants (A doctor).<br>Use 'An' before vowels (An artist, An engineer).<br><br><span style='color:var(--theme-color); font-weight:bold;'>🚨 Common Error:</span><br>In Spanish, we don't use articles for jobs.<br>WRONG: <em>I am teacher.</em><br>RIGHT: <em>I am <span style='color:var(--theme-color); font-weight:bold;'>a</span> teacher.</em>
+                    </div>
+                    <div class="two-cols">
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXAMPLES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>Speed Networking (10 mins)</strong><br><br><strong>Context:</strong> A professional mixer event.<br><br><strong>Task:</strong><br>Students are assigned a fake, glamorous job (Astronaut, Rockstar, CEO).<br>They must mingle in the main room.<br>Student A: 'Hello, I am [Name]. What do you do?'<br>Student B: 'I am an Astronaut. What do you do?'<br>Student A: 'I am a Chef.'<br><em>Teacher monitors for the correct use of A/An.</em></div>
+                        </div>
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXERCISES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>Tier 1: Article Insertion</strong><br>1. She is ___ nurse.<br>2. He is ___ engineer.<br>3. I am ___ driver.<br><br><strong>Tier 2: The Job Interview</strong><br>Teacher: 'What do you do?'<br>Student: 'I am a [Job].'<br>Teacher: 'Where do you work?'<br>Student: 'I work in a [Place].'</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <a href="#sl2" class="nav-arrow nav-prev"><i class="fas fa-chevron-left"></i></a>
+            <a href="#sl4" class="nav-arrow nav-next"><i class="fas fa-chevron-right"></i></a>
+            
+            <div class="progress-bar-container"><div class="progress-bar" style="width:15.0%;"></div></div>
+            <div style="position:absolute; bottom:15px; right:30px; font-family:'Merriweather'; color:#999; font-size:0.8em;">Core Basics: Level 1 | 3</div>
+        </div>
+        
+        <div class="slide-page" id="sl4">
+            <div class="slide-header-bar" style="background-color:var(--theme-color);">
+                <div class="top-row">
+                    <div class="logo-container"><img src="assets/images/vesper_logo.jpg" style="filter: brightness(0) invert(1);"></div>
+                    <div class="academy-name">VESPER <span style="font-size:0.5em; display:block; letter-spacing:1px;">ACADEMY</span></div>
+                </div>
+                <div class="lesson-headline">Lesson 4 - Adjectives (Feelings)</div>
+            </div>
+            
+            <div class="lesson-audio" style="background:#eef3f9; border:1px solid #c9d8ea; border-left:4px solid #1e5fa8; border-radius:6px; padding:12px 16px; margin:0 0 14px 0; margin:12px 24px;"><div style="font-weight:bold; color:#1a2b42; margin-bottom:6px;">&#127911; Lesson Audio &mdash; Listen before class</div><audio controls preload="none" style="width:100%;"><source src="assets/audio/core_basics_level_1_lesson_4.mp3" type="audio/mpeg">Your browser does not support audio.</audio><div style="font-size:0.85em; color:#33475e; margin-top:8px; line-height:1.6;"><strong>Listen &amp; Answer:</strong><br>1) How is Leo today?<br>2) Why is Ana happy?<br>3) And you? Say: 'Today I am...'</div></div><div class="lesson-hw" style="background:#f7f3ea; border-left:4px solid #c5a059; border-radius:4px; padding:7px 14px; margin:6px 24px; font-size:0.78em; color:#3a3325; line-height:1.45;"><strong style="color:#a8843d;">&#9997;&#65039; Before next class (10 min):</strong> Write 3 sentences: 'Today I am... because...' &bull; Take an emoji from your phone and describe it: 'He is sad.' &bull; Listen to the lesson audio again</div><div class="slide-layout">
+                <div class="sidebar">
+                    <div class="sidebar-section">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">VOCABULARY</div>
+                        <div class="sidebar-list"><div>&bull; Happy <span class="v-gloss">&middot; feliz</span></div><div>&bull; Sad <span class="v-gloss">&middot; triste</span></div><div>&bull; Tired <span class="v-gloss">&middot; cansado/a</span></div><div>&bull; Hungry <span class="v-gloss">&middot; con hambre</span></div><div>&bull; Thirsty <span class="v-gloss">&middot; con sed</span></div><div>&bull; Hot <span class="v-gloss">&middot; caliente / calor</span></div><div>&bull; Cold <span class="v-gloss">&middot; frío</span></div><div>&bull; Angry <span class="v-gloss">&middot; enojado/a</span></div><div>&bull; Sick <span class="v-gloss">&middot; enfermo/a</span></div><div>&bull; Good <span class="v-gloss">&middot; bueno</span></div><div>&bull; Bad <span class="v-gloss">&middot; malo</span></div><div>&bull; Fine <span class="v-gloss">&middot; bien</span></div><div>&bull; Great <span class="v-gloss">&middot; genial</span></div><div>&bull; Bored <span class="v-gloss">&middot; aburrido/a</span></div><div>&bull; Excited <span class="v-gloss">&middot; emocionado/a</span></div></div>
+                    </div>
+                    
+                    <div class="sidebar-section" style="margin-top:auto;">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">CONTEXT</div>
+                        <div class="sidebar-list" style="font-style:italic; font-size:0.85em;"><b>Phase 1 (Emoji Face):</b> Teacher shows an Emoji. Everyone must make that exact face on camera.<br><br><b>Phase 2 (Opposites):</b> Teacher says 'Hot'. Class shouts 'Cold'. (Happy/Sad, Good/Bad).<br><br><b>Phase 3 (Reaction):</b> Teacher says 'Monday Morning'. Students type 'Tired'. Teacher says 'Pizza'. Type 'Hungry'.</div>
+                    </div>
+                </div>
+            
+                <div class="slide-body">
+                    <img src="assets/images/vesper_logo.jpg" class="watermark">
+                    <div class="section-title center-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color); text-decoration-color:var(--theme-color);">STRUCTURE</div>
+                    <div class="structure-content">
+                        <span style='color:var(--theme-color); font-weight:bold;'>Formula:</span> Subject + To Be + Adjective<br><br><span style='color:var(--theme-color); font-weight:bold;'>Question Form:</span> How + are + you?<br><br><span style='color:var(--theme-color); font-weight:bold;'>Explanation:</span><br>We use adjectives to describe feelings or states of being.<br>I am tired. She is hungry.<br><br><span style='color:var(--theme-color); font-weight:bold;'>🚨 Common Error:</span><br>For age, hunger, and temperature, use To Be, NOT Have.<br>WRONG: <em>I have hungry.</em><br>RIGHT: <em>I <span style='color:var(--theme-color); font-weight:bold;'>am</span> hungry.</em>
+                    </div>
+                    <div class="two-cols">
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXAMPLES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>The Doctor's Clinic (10 mins)</strong><br><br><strong>Roles:</strong><br>Role A: The Doctor.<br>Role B: The Patient.<br><br><strong>Script:</strong><br>Doctor: 'Hello. How are you today?'<br>Patient: 'I am bad, doctor. I am sick and tired.'<br>Doctor: 'Are you cold?'<br>Patient: 'Yes, I am.'<br><br><strong>Challenge:</strong> Patients must act extremely dramatic.</div>
+                        </div>
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXERCISES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>Tier 1: Choose the Feeling</strong><br>1. I want water. I am [hungry / thirsty].<br>2. It is winter. I am [hot / cold].<br>3. I have a virus. I am [great / sick].<br><br><strong>Tier 2: Empathy Drill</strong><br>Student A: 'I am hungry.'<br>Student B: 'Here is a hamburger!' (Mimes giving food).</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <a href="#sl3" class="nav-arrow nav-prev"><i class="fas fa-chevron-left"></i></a>
+            <a href="#sl5" class="nav-arrow nav-next"><i class="fas fa-chevron-right"></i></a>
+            
+            <div class="progress-bar-container"><div class="progress-bar" style="width:20.0%;"></div></div>
+            <div style="position:absolute; bottom:15px; right:30px; font-family:'Merriweather'; color:#999; font-size:0.8em;">Core Basics: Level 1 | 4</div>
+        </div>
+        
+        <div class="slide-page" id="sl5">
+            <div class="slide-header-bar" style="background-color:var(--theme-color);">
+                <div class="top-row">
+                    <div class="logo-container"><img src="assets/images/vesper_logo.jpg" style="filter: brightness(0) invert(1);"></div>
+                    <div class="academy-name">VESPER <span style="font-size:0.5em; display:block; letter-spacing:1px;">ACADEMY</span></div>
+                </div>
+                <div class="lesson-headline">Lesson 5 - Family Tree</div>
+            </div>
+            
+            <div class="lesson-audio" style="background:#eef3f9; border:1px solid #c9d8ea; border-left:4px solid #1e5fa8; border-radius:6px; padding:12px 16px; margin:0 0 14px 0; margin:12px 24px;"><div style="font-weight:bold; color:#1a2b42; margin-bottom:6px;">&#127911; Lesson Audio &mdash; Listen before class</div><audio controls preload="none" style="width:100%;"><source src="assets/audio/core_basics_level_1_lesson_5.mp3" type="audio/mpeg">Your browser does not support audio.</audio><div style="font-size:0.85em; color:#33475e; margin-top:8px; line-height:1.6;"><strong>Listen &amp; Answer:</strong><br>1) Who is Marta?<br>2) Is Leo's brother old or young?<br>3) And you? Say one sentence about your family.</div></div><div class="lesson-hw" style="background:#f7f3ea; border-left:4px solid #c5a059; border-radius:4px; padding:7px 14px; margin:6px 24px; font-size:0.78em; color:#3a3325; line-height:1.45;"><strong style="color:#a8843d;">&#9997;&#65039; Before next class (10 min):</strong> Draw a mini family tree with 5 names in English &bull; Write 3 sentences with possessive 's about your family &bull; Listen to the lesson audio again</div><div class="slide-layout">
+                <div class="sidebar">
+                    <div class="sidebar-section">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">VOCABULARY</div>
+                        <div class="sidebar-list"><div>&bull; Mother <span class="v-gloss">&middot; madre</span></div><div>&bull; Father <span class="v-gloss">&middot; padre</span></div><div>&bull; Sister <span class="v-gloss">&middot; hermana</span></div><div>&bull; Brother <span class="v-gloss">&middot; hermano</span></div><div>&bull; Son <span class="v-gloss">&middot; hijo</span></div><div>&bull; Daughter <span class="v-gloss">&middot; hija</span></div><div>&bull; Wife <span class="v-gloss">&middot; esposa</span></div><div>&bull; Husband <span class="v-gloss">&middot; esposo</span></div><div>&bull; Baby <span class="v-gloss">&middot; bebé</span></div><div>&bull; Grandmother <span class="v-gloss">&middot; abuela</span></div><div>&bull; Grandfather <span class="v-gloss">&middot; abuelo</span></div><div>&bull; Cousin <span class="v-gloss">&middot; primo/a</span></div><div>&bull; Family <span class="v-gloss">&middot; familia</span></div><div>&bull; Parents <span class="v-gloss">&middot; padres</span></div><div>&bull; Children <span class="v-gloss">&middot; hijos / niños</span></div></div>
+                    </div>
+                    
+                    <div class="sidebar-section" style="margin-top:auto;">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">CONTEXT</div>
+                        <div class="sidebar-list" style="font-style:italic; font-size:0.85em;"><b>Phase 1 (Famous Families):</b> Show the Simpsons. 'Who is Homer?' -> 'The father.'<br><br><b>Phase 2 (Draw It):</b> Students take 1 minute to draw a quick family tree on paper and hold it up.<br><br><b>Phase 3 (Who is Who):</b> 'Your mother's brother is your...?' -> 'Uncle!'</div>
+                    </div>
+                </div>
+            
+                <div class="slide-body">
+                    <img src="assets/images/vesper_logo.jpg" class="watermark">
+                    <div class="section-title center-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color); text-decoration-color:var(--theme-color);">STRUCTURE</div>
+                    <div class="structure-content">
+                        <span style='color:var(--theme-color); font-weight:bold;'>Formula:</span> Noun + 's + Possession<br><br><span style='color:var(--theme-color); font-weight:bold;'>Question Form:</span> Who + is + he/she?<br><br><span style='color:var(--theme-color); font-weight:bold;'>Explanation:</span><br>Use an apostrophe 's' to show that a family member belongs to someone.<br>John's mother. My sister's baby.<br><br><span style='color:var(--theme-color); font-weight:bold;'>🚨 Common Error:</span><br>Avoid 'the mother of John'.<br>WRONG: <em>She is the wife of Peter.</em><br>RIGHT: <em>She is <span style='color:var(--theme-color); font-weight:bold;'>Peter's</span> wife.</em>
+                    </div>
+                    <div class="two-cols">
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXAMPLES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>Show and Tell (10 mins)</strong><br><br><strong>Context:</strong> Sharing personal photos.<br><br><strong>Task:</strong><br>Students show a real photo on their phone to the camera.<br>Student: 'This is my family. This is my mother, Sarah. And this is my sister's baby.'<br>Classmates must ask 1 question: 'Is she tall?' or 'How old is the baby?'</div>
+                        </div>
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXERCISES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>Tier 1: Possessive 's Translation</strong><br>1. El hermano de Maria -> Maria's brother.<br>2. El padre de David -> David's father.<br><br><strong>Tier 2: The Mystery Relative</strong><br>Teacher describes a relationship: 'He is my father's son, but he is not me. Who is he?' -> 'Your brother!'</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <a href="#sl4" class="nav-arrow nav-prev"><i class="fas fa-chevron-left"></i></a>
+            <a href="#cp5" class="nav-arrow nav-next"><i class="fas fa-chevron-right"></i></a>
+            
+            <div class="progress-bar-container"><div class="progress-bar" style="width:25.0%;"></div></div>
+            <div style="position:absolute; bottom:15px; right:30px; font-family:'Merriweather'; color:#999; font-size:0.8em;">Core Basics: Level 1 | 5</div>
+        </div>
+        
+            <div class="slide-page" id="cp5" style="background-color: var(--theme-color); color:white;">
+                 <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; text-align:center; padding:50px;">
+                    <i class="fas fa-flag-checkered" style="font-size:5em; margin-bottom:20px; opacity:0.8;"></i>
+                    <h1 style="font-size:3em; margin:0; font-family:'Merriweather';">CHECKPOINT</h1>
+                    <h2 style="font-size:1.5em; font-weight:300; opacity:0.9;">Lessons 1 - 5 Complete</h2>
+                    <div style="background:white; color:#333; padding:30px; border-radius:10px; margin-top:40px; max-width:600px; box-shadow:0 10px 30px rgba(0,0,0,0.2);">
+                        <h3 style="color:var(--theme-color); margin-top:0;">Time to Review!</h3>
+                        <p>Great job! You have completed another block of 5 lessons.</p>
+                        <div style="margin-top:20px; font-weight:bold;">Next Up: Lesson 6</div>
+                    </div>
+                 </div>
+                 <a href="#sl5" class="nav-arrow nav-prev" style="background:white; color:var(--theme-color);"><i class="fas fa-chevron-left"></i></a>
+                 <a href="#sl6" class="nav-arrow nav-next" style="background:white; color:var(--theme-color);"><i class="fas fa-chevron-right"></i></a>
+            </div>
+            
+        <div class="slide-page" id="sl6">
+            <div class="slide-header-bar" style="background-color:var(--theme-color);">
+                <div class="top-row">
+                    <div class="logo-container"><img src="assets/images/vesper_logo.jpg" style="filter: brightness(0) invert(1);"></div>
+                    <div class="academy-name">VESPER <span style="font-size:0.5em; display:block; letter-spacing:1px;">ACADEMY</span></div>
+                </div>
+                <div class="lesson-headline">Lesson 6 - Colors & Clothing</div>
+            </div>
+            
+            <div class="lesson-audio" style="background:#eef3f9; border:1px solid #c9d8ea; border-left:4px solid #1e5fa8; border-radius:6px; padding:12px 16px; margin:0 0 14px 0; margin:12px 24px;"><div style="font-weight:bold; color:#1a2b42; margin-bottom:6px;">&#127911; Lesson Audio &mdash; Listen before class</div><audio controls preload="none" style="width:100%;"><source src="assets/audio/core_basics_level_1_lesson_6.mp3" type="audio/mpeg">Your browser does not support audio.</audio><div style="font-size:0.85em; color:#33475e; margin-top:8px; line-height:1.6;"><strong>Listen &amp; Answer:</strong><br>1) What color is Ana's new dress?<br>2) What is Leo wearing today?<br>3) And you? Say: 'Today I am wearing...'</div></div><div class="lesson-hw" style="background:#f7f3ea; border-left:4px solid #c5a059; border-radius:4px; padding:7px 14px; margin:6px 24px; font-size:0.78em; color:#3a3325; line-height:1.45;"><strong style="color:#a8843d;">&#9997;&#65039; Before next class (10 min):</strong> Open your closet and write 5 items with colors: 'a blue shirt' &bull; Describe what one family member is wearing today &bull; Listen to the lesson audio again</div><div class="slide-layout">
+                <div class="sidebar">
+                    <div class="sidebar-section">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">VOCABULARY</div>
+                        <div class="sidebar-list"><div>&bull; Red <span class="v-gloss">&middot; rojo</span></div><div>&bull; Blue <span class="v-gloss">&middot; azul</span></div><div>&bull; Green <span class="v-gloss">&middot; verde</span></div><div>&bull; Yellow <span class="v-gloss">&middot; amarillo</span></div><div>&bull; Black <span class="v-gloss">&middot; negro</span></div><div>&bull; White <span class="v-gloss">&middot; blanco</span></div><div>&bull; Shirt <span class="v-gloss">&middot; camisa</span></div><div>&bull; Dress <span class="v-gloss">&middot; vestido</span></div><div>&bull; Pants <span class="v-gloss">&middot; pantalones</span></div><div>&bull; Shoes <span class="v-gloss">&middot; zapatos</span></div><div>&bull; Hat <span class="v-gloss">&middot; sombrero / gorra</span></div><div>&bull; Coat <span class="v-gloss">&middot; abrigo</span></div><div>&bull; Wear <span class="v-gloss">&middot; llevar puesto</span></div><div>&bull; Size <span class="v-gloss">&middot; talla</span></div><div>&bull; Color <span class="v-gloss">&middot; color</span></div></div>
+                    </div>
+                    
+                    <div class="sidebar-section" style="margin-top:auto;">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">CONTEXT</div>
+                        <div class="sidebar-list" style="font-style:italic; font-size:0.85em;"><b>Phase 1 (Scavenger Hunt):</b> 'Find something BLUE!' Students run, grab an object, and show the camera.<br><br><b>Phase 2 (Wardrobe Check):</b> 'Who is wearing a white shirt today?'<br><br><b>Phase 3 (Color Mixing):</b> 'Yellow and Blue make...?' -> 'Green!'</div>
+                    </div>
+                </div>
+            
+                <div class="slide-body">
+                    <img src="assets/images/vesper_logo.jpg" class="watermark">
+                    <div class="section-title center-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color); text-decoration-color:var(--theme-color);">STRUCTURE</div>
+                    <div class="structure-content">
+                        <span style='color:var(--theme-color); font-weight:bold;'>Formula:</span> Color (Adjective) + Noun<br><br><span style='color:var(--theme-color); font-weight:bold;'>Explanation:</span><br>In English, the adjective ALWAYS goes before the noun. It never takes an 's' for plural.<br>A red shirt. Two red shirts.<br><br><span style='color:var(--theme-color); font-weight:bold;'>🚨 Common Error:</span><br>WRONG: <em>The shirt blue.</em><br>RIGHT: <em>The <span style='color:var(--theme-color); font-weight:bold;'>blue shirt</span>.</em><br>WRONG: <em>Reds shoes.</em><br>RIGHT: <em><span style='color:var(--theme-color); font-weight:bold;'>Red</span> shoes.</em>
+                    </div>
+                    <div class="two-cols">
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXAMPLES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>Fashion Police (10 mins)</strong><br><br><strong>Context:</strong> A red carpet event.<br><br><strong>Task:</strong><br>Teacher shares screen with photos of celebrities in crazy outfits.<br>Students must critique the clothes.<br>Student: 'He is wearing a yellow suit and green shoes. It is very bad.'<br><em>Bonus:</em> Use adjectives from previous lessons ('He looks angry in the yellow suit').</div>
+                        </div>
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXERCISES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>Tier 1: Order Correction</strong><br>1. I have shoes black. -> I have black shoes.<br>2. She wears a dress red. -> She wears a red dress.<br><br><strong>Tier 2: Memory Game</strong><br>Show a picture of a crowded street for 10 seconds. Hide it.<br>'What color was the man's coat?' -> 'It was brown.'</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <a href="#sl5" class="nav-arrow nav-prev"><i class="fas fa-chevron-left"></i></a>
+            <a href="#sl7" class="nav-arrow nav-next"><i class="fas fa-chevron-right"></i></a>
+            
+            <div class="progress-bar-container"><div class="progress-bar" style="width:30.0%;"></div></div>
+            <div style="position:absolute; bottom:15px; right:30px; font-family:'Merriweather'; color:#999; font-size:0.8em;">Core Basics: Level 1 | 6</div>
+        </div>
+        
+        <div class="slide-page" id="sl7">
+            <div class="slide-header-bar" style="background-color:var(--theme-color);">
+                <div class="top-row">
+                    <div class="logo-container"><img src="assets/images/vesper_logo.jpg" style="filter: brightness(0) invert(1);"></div>
+                    <div class="academy-name">VESPER <span style="font-size:0.5em; display:block; letter-spacing:1px;">ACADEMY</span></div>
+                </div>
+                <div class="lesson-headline">Lesson 7 - Describing People</div>
+            </div>
+            
+            <div class="lesson-audio" style="background:#eef3f9; border:1px solid #c9d8ea; border-left:4px solid #1e5fa8; border-radius:6px; padding:12px 16px; margin:0 0 14px 0; margin:12px 24px;"><div style="font-weight:bold; color:#1a2b42; margin-bottom:6px;">&#127911; Lesson Audio &mdash; Listen before class</div><audio controls preload="none" style="width:100%;"><source src="assets/audio/core_basics_level_1_lesson_7.mp3" type="audio/mpeg">Your browser does not support audio.</audio><div style="font-size:0.85em; color:#33475e; margin-top:8px; line-height:1.6;"><strong>Listen &amp; Answer:</strong><br>1) Is Ana's friend tall or short?<br>2) Does he have glasses?<br>3) And you? Describe a friend: 'He is... / She is...'</div></div><div class="lesson-hw" style="background:#f7f3ea; border-left:4px solid #c5a059; border-radius:4px; padding:7px 14px; margin:6px 24px; font-size:0.78em; color:#3a3325; line-height:1.45;"><strong style="color:#a8843d;">&#9997;&#65039; Before next class (10 min):</strong> Describe your best friend in 3 written sentences &bull; Find a photo of a celebrity and describe hair + height &bull; Listen to the lesson audio again</div><div class="slide-layout">
+                <div class="sidebar">
+                    <div class="sidebar-section">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">VOCABULARY</div>
+                        <div class="sidebar-list"><div>&bull; Tall <span class="v-gloss">&middot; alto/a</span></div><div>&bull; Short <span class="v-gloss">&middot; bajo/a · corto/a</span></div><div>&bull; Old <span class="v-gloss">&middot; viejo/a</span></div><div>&bull; Young <span class="v-gloss">&middot; joven</span></div><div>&bull; Fat <span class="v-gloss">&middot; gordo/a</span></div><div>&bull; Thin <span class="v-gloss">&middot; delgado/a</span></div><div>&bull; Beautiful <span class="v-gloss">&middot; hermoso/a</span></div><div>&bull; Handsome <span class="v-gloss">&middot; guapo</span></div><div>&bull; Hair <span class="v-gloss">&middot; cabello</span></div><div>&bull; Eyes <span class="v-gloss">&middot; ojos</span></div><div>&bull; Blonde <span class="v-gloss">&middot; rubio/a</span></div><div>&bull; Dark <span class="v-gloss">&middot; oscuro</span></div><div>&bull; Glasses <span class="v-gloss">&middot; lentes</span></div><div>&bull; Beard <span class="v-gloss">&middot; barba</span></div><div>&bull; Bald <span class="v-gloss">&middot; calvo</span></div></div>
+                    </div>
+                    
+                    <div class="sidebar-section" style="margin-top:auto;">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">CONTEXT</div>
+                        <div class="sidebar-list" style="font-style:italic; font-size:0.85em;"><b>Phase 1 (Point & Mime):</b> Teacher says 'Tall' (reaches up), 'Short' (crouches), 'Glasses' (makes circles with fingers).<br><br><b>Phase 2 (Celebrity Identify):</b> 'He is old. He is bald. He has glasses.' -> 'Danny DeVito!'<br><br><b>Phase 3 (Self-Description):</b> Type one feature about yourself in the chat (e.g., 'I have dark hair').</div>
+                    </div>
+                </div>
+            
+                <div class="slide-body">
+                    <img src="assets/images/vesper_logo.jpg" class="watermark">
+                    <div class="section-title center-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color); text-decoration-color:var(--theme-color);">STRUCTURE</div>
+                    <div class="structure-content">
+                        <span style='color:var(--theme-color); font-weight:bold;'>Formula:</span> To Be (Adjectives) vs To Have (Nouns)<br><br><span style='color:var(--theme-color); font-weight:bold;'>Explanation:</span><br>Use IS/ARE for general appearance: He is tall. She is young.<br>Use HAS/HAVE for physical features: He has blue eyes. She has blonde hair.<br><br><span style='color:var(--theme-color); font-weight:bold;'>🚨 Common Error:</span><br>WRONG: <em>He is blonde hair.</em><br>RIGHT: <em>He <span style='color:var(--theme-color); font-weight:bold;'>has</span> blonde hair.</em>
+                    </div>
+                    <div class="two-cols">
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXAMPLES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>Missing Person Report (10 mins)</strong><br><br><strong>Roles:</strong><br>Role A: Panicked friend.<br>Role B: Police Officer.<br><br><strong>Script:</strong><br>Friend: 'Help! I lost my brother!'<br>Police: 'OK, calm down. Is he tall or short?'<br>Friend: 'He is tall.'<br>Police: 'What color are his eyes?'<br>Friend: 'He has green eyes and brown hair.'<br>Police: 'We will find him.'</div>
+                        </div>
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXERCISES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>Tier 1: Is or Has?</strong><br>1. She ___ beautiful.<br>2. He ___ a beard.<br>3. They ___ short.<br>4. I ___ green eyes.<br><br><strong>Tier 2: The Police Sketch</strong><br>Teacher describes a criminal. Students draw the face on paper and hold it up.<br>'He has a big nose, a black beard, and glasses. He is angry.'</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <a href="#sl6" class="nav-arrow nav-prev"><i class="fas fa-chevron-left"></i></a>
+            <a href="#sl8" class="nav-arrow nav-next"><i class="fas fa-chevron-right"></i></a>
+            
+            <div class="progress-bar-container"><div class="progress-bar" style="width:35.0%;"></div></div>
+            <div style="position:absolute; bottom:15px; right:30px; font-family:'Merriweather'; color:#999; font-size:0.8em;">Core Basics: Level 1 | 7</div>
+        </div>
+        
+        <div class="slide-page" id="sl8">
+            <div class="slide-header-bar" style="background-color:var(--theme-color);">
+                <div class="top-row">
+                    <div class="logo-container"><img src="assets/images/vesper_logo.jpg" style="filter: brightness(0) invert(1);"></div>
+                    <div class="academy-name">VESPER <span style="font-size:0.5em; display:block; letter-spacing:1px;">ACADEMY</span></div>
+                </div>
+                <div class="lesson-headline">Lesson 8 - The Weather</div>
+            </div>
+            
+            <div class="lesson-audio" style="background:#eef3f9; border:1px solid #c9d8ea; border-left:4px solid #1e5fa8; border-radius:6px; padding:12px 16px; margin:0 0 14px 0; margin:12px 24px;"><div style="font-weight:bold; color:#1a2b42; margin-bottom:6px;">&#127911; Lesson Audio &mdash; Listen before class</div><audio controls preload="none" style="width:100%;"><source src="assets/audio/core_basics_level_1_lesson_8.mp3" type="audio/mpeg">Your browser does not support audio.</audio><div style="font-size:0.85em; color:#33475e; margin-top:8px; line-height:1.6;"><strong>Listen &amp; Answer:</strong><br>1) How is the weather today?<br>2) Is it cold in Leo's city?<br>3) And you? Say: 'Today it is... in my city.'</div></div><div class="lesson-hw" style="background:#f7f3ea; border-left:4px solid #c5a059; border-radius:4px; padding:7px 14px; margin:6px 24px; font-size:0.78em; color:#3a3325; line-height:1.45;"><strong style="color:#a8843d;">&#9997;&#65039; Before next class (10 min):</strong> Check tomorrow's weather and write it in English &bull; Write the weather for 3 world cities (use your phone) &bull; Listen to the lesson audio again</div><div class="slide-layout">
+                <div class="sidebar">
+                    <div class="sidebar-section">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">VOCABULARY</div>
+                        <div class="sidebar-list"><div>&bull; Sunny <span class="v-gloss">&middot; soleado</span></div><div>&bull; Rainy <span class="v-gloss">&middot; lluvioso</span></div><div>&bull; Cloudy <span class="v-gloss">&middot; nublado</span></div><div>&bull; Windy <span class="v-gloss">&middot; ventoso</span></div><div>&bull; Snowy <span class="v-gloss">&middot; nevado</span></div><div>&bull; Hot <span class="v-gloss">&middot; caliente / calor</span></div><div>&bull; Cold <span class="v-gloss">&middot; frío</span></div><div>&bull; Storm <span class="v-gloss">&middot; tormenta</span></div><div>&bull; Sun <span class="v-gloss">&middot; sol</span></div><div>&bull; Sky <span class="v-gloss">&middot; cielo</span></div><div>&bull; Temperature <span class="v-gloss">&middot; temperatura</span></div><div>&bull; Degree <span class="v-gloss">&middot; grado</span></div><div>&bull; Wet <span class="v-gloss">&middot; mojado</span></div><div>&bull; Dry <span class="v-gloss">&middot; seco</span></div><div>&bull; Weather <span class="v-gloss">&middot; clima</span></div></div>
+                    </div>
+                    
+                    <div class="sidebar-section" style="margin-top:auto;">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">CONTEXT</div>
+                        <div class="sidebar-list" style="font-style:italic; font-size:0.85em;"><b>Phase 1 (Window Check):</b> 'Look out your window right now! Type the weather in the chat.'<br><br><b>Phase 2 (Icon Match):</b> Teacher draws an icon (Sun, Cloud with rain). Students shout the word.<br><br><b>Phase 3 (Temperature Check):</b> 'Is 30 degrees hot or cold?'</div>
+                    </div>
+                </div>
+            
+                <div class="slide-body">
+                    <img src="assets/images/vesper_logo.jpg" class="watermark">
+                    <div class="section-title center-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color); text-decoration-color:var(--theme-color);">STRUCTURE</div>
+                    <div class="structure-content">
+                        <span style='color:var(--theme-color); font-weight:bold;'>Formula:</span> It is + Weather Adjective<br><br><span style='color:var(--theme-color); font-weight:bold;'>Question Form:</span> What is the weather like?<br><br><span style='color:var(--theme-color); font-weight:bold;'>Explanation:</span><br>We use 'It is' to describe the current weather condition.<br>It is sunny today. It is raining right now.<br><br><span style='color:var(--theme-color); font-weight:bold;'>🚨 Common Error:</span><br>Do not use 'The weather is' in natural speech.<br>ROBOTIC: <em>The weather is cloudy.</em><br>NATURAL: <em><span style='color:var(--theme-color); font-weight:bold;'>It is</span> cloudy.</em>
+                    </div>
+                    <div class="two-cols">
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXAMPLES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>The Travel Agent (10 mins)</strong><br><br><strong>Context:</strong> Planning a vacation.<br><br><strong>Task:</strong><br>Student A wants to go to London. Student B is the agent.<br>Agent: 'London is bad. It is rainy and cold.'<br>Student A: 'Where is it sunny?'<br>Agent: 'Go to Miami. It is hot and sunny.'<br><em>Challenge:</em> Persuade the client to buy the expensive, sunny ticket.</div>
+                        </div>
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXERCISES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>Tier 1: Sentence Building</strong><br>1. (Snow) -> It is snowy.<br>2. (Wind) -> It is windy.<br>3. (Storm) -> It is stormy.<br><br><strong>Tier 2: Global Tour</strong><br>Share a world map with weather icons.<br>Teacher: 'What is the weather like in Moscow?'<br>Student: 'It is cold and snowy.'</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <a href="#sl7" class="nav-arrow nav-prev"><i class="fas fa-chevron-left"></i></a>
+            <a href="#sl9" class="nav-arrow nav-next"><i class="fas fa-chevron-right"></i></a>
+            
+            <div class="progress-bar-container"><div class="progress-bar" style="width:40.0%;"></div></div>
+            <div style="position:absolute; bottom:15px; right:30px; font-family:'Merriweather'; color:#999; font-size:0.8em;">Core Basics: Level 1 | 8</div>
+        </div>
+        
+        <div class="slide-page" id="sl9">
+            <div class="slide-header-bar" style="background-color:var(--theme-color);">
+                <div class="top-row">
+                    <div class="logo-container"><img src="assets/images/vesper_logo.jpg" style="filter: brightness(0) invert(1);"></div>
+                    <div class="academy-name">VESPER <span style="font-size:0.5em; display:block; letter-spacing:1px;">ACADEMY</span></div>
+                </div>
+                <div class="lesson-headline">Lesson 9 - Numbers 1-20</div>
+            </div>
+            
+            <div class="lesson-audio" style="background:#eef3f9; border:1px solid #c9d8ea; border-left:4px solid #1e5fa8; border-radius:6px; padding:12px 16px; margin:0 0 14px 0; margin:12px 24px;"><div style="font-weight:bold; color:#1a2b42; margin-bottom:6px;">&#127911; Lesson Audio &mdash; Listen before class</div><audio controls preload="none" style="width:100%;"><source src="assets/audio/core_basics_level_1_lesson_9.mp3" type="audio/mpeg">Your browser does not support audio.</audio><div style="font-size:0.85em; color:#33475e; margin-top:8px; line-height:1.6;"><strong>Listen &amp; Answer:</strong><br>1) How old is Ana's sister?<br>2) What is Leo's phone number? Listen for two numbers.<br>3) And you? Count from one to ten out loud.</div></div><div class="lesson-hw" style="background:#f7f3ea; border-left:4px solid #c5a059; border-radius:4px; padding:7px 14px; margin:6px 24px; font-size:0.78em; color:#3a3325; line-height:1.45;"><strong style="color:#a8843d;">&#9997;&#65039; Before next class (10 min):</strong> Write 5 important numbers of your life in words (age, floor...) &bull; Dictate your phone number in English to a mirror &bull; Listen to the lesson audio again</div><div class="slide-layout">
+                <div class="sidebar">
+                    <div class="sidebar-section">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">VOCABULARY</div>
+                        <div class="sidebar-list"><div>&bull; One <span class="v-gloss">&middot; uno</span></div><div>&bull; Two <span class="v-gloss">&middot; dos</span></div><div>&bull; Three <span class="v-gloss">&middot; tres</span></div><div>&bull; Four <span class="v-gloss">&middot; cuatro</span></div><div>&bull; Five <span class="v-gloss">&middot; cinco</span></div><div>&bull; Six <span class="v-gloss">&middot; seis</span></div><div>&bull; Seven <span class="v-gloss">&middot; siete</span></div><div>&bull; Eight <span class="v-gloss">&middot; ocho</span></div><div>&bull; Nine <span class="v-gloss">&middot; nueve</span></div><div>&bull; Ten <span class="v-gloss">&middot; diez</span></div><div>&bull; Eleven <span class="v-gloss">&middot; once</span></div><div>&bull; Twelve <span class="v-gloss">&middot; doce</span></div><div>&bull; Twenty <span class="v-gloss">&middot; veinte</span></div><div>&bull; Zero <span class="v-gloss">&middot; cero</span></div><div>&bull; Count <span class="v-gloss">&middot; contar</span></div></div>
+                    </div>
+                    
+                    <div class="sidebar-section" style="margin-top:auto;">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">CONTEXT</div>
+                        <div class="sidebar-list" style="font-style:italic; font-size:0.85em;"><b>Phase 1 (Finger Flash):</b> Teacher holds up fingers quickly. Students shout the number.<br><br><b>Phase 2 (Math in Chat):</b> 'Ten plus Five = ?' Type it fast.<br><br><b>Phase 3 (Age Check):</b> 'How old are you?' -> 'I am [Number].'</div>
+                    </div>
+                </div>
+            
+                <div class="slide-body">
+                    <img src="assets/images/vesper_logo.jpg" class="watermark">
+                    <div class="section-title center-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color); text-decoration-color:var(--theme-color);">STRUCTURE</div>
+                    <div class="structure-content">
+                        <span style='color:var(--theme-color); font-weight:bold;'>Formula:</span> Number + Plural Noun (-s)<br><br><span style='color:var(--theme-color); font-weight:bold;'>Explanation:</span><br>When counting more than one object, add an 's' to the noun.<br>1 cat. 2 cats. 10 apples.<br><br><span style='color:var(--theme-color); font-weight:bold;'>Pronunciation Focus:</span><br>13 (Thir-TEEN) vs 30 (THIR-ty). Stress the 'N' heavily to avoid confusion.
+                    </div>
+                    <div class="two-cols">
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXAMPLES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>The Exchange (10 mins)</strong><br><br><strong>Context:</strong> A business networking event.<br><br><strong>Task:</strong><br>In pairs (or open class), exchange phone numbers and ages.<br>Student A: 'What is your phone number?'<br>Student B: 'It is 555-0192.'<br>Student A: 'Thank you. How old are you?'<br>Student B: 'I am twenty.'<br><em>Requirement:</em> Students must write down the exact numbers to verify later.</div>
+                        </div>
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXERCISES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>Tier 1: Pluralization</strong><br>1. One dog -> Two ______.<br>2. One phone -> Three ______.<br><br><strong>Tier 2: Dictation</strong><br>Teacher dictates a phone number: 'Zero, four, seven, eight, one, nine.'<br>Students type it in the chat to confirm accuracy.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <a href="#sl8" class="nav-arrow nav-prev"><i class="fas fa-chevron-left"></i></a>
+            <a href="#sl10" class="nav-arrow nav-next"><i class="fas fa-chevron-right"></i></a>
+            
+            <div class="progress-bar-container"><div class="progress-bar" style="width:45.0%;"></div></div>
+            <div style="position:absolute; bottom:15px; right:30px; font-family:'Merriweather'; color:#999; font-size:0.8em;">Core Basics: Level 1 | 9</div>
+        </div>
+        
+        <div class="slide-page" id="sl10">
+            <div class="slide-header-bar" style="background-color:var(--theme-color);">
+                <div class="top-row">
+                    <div class="logo-container"><img src="assets/images/vesper_logo.jpg" style="filter: brightness(0) invert(1);"></div>
+                    <div class="academy-name">VESPER <span style="font-size:0.5em; display:block; letter-spacing:1px;">ACADEMY</span></div>
+                </div>
+                <div class="lesson-headline">Lesson 10 - Time & Days</div>
+            </div>
+            
+            <div class="lesson-audio" style="background:#eef3f9; border:1px solid #c9d8ea; border-left:4px solid #1e5fa8; border-radius:6px; padding:12px 16px; margin:0 0 14px 0; margin:12px 24px;"><div style="font-weight:bold; color:#1a2b42; margin-bottom:6px;">&#127911; Lesson Audio &mdash; Listen before class</div><audio controls preload="none" style="width:100%;"><source src="assets/audio/core_basics_level_1_lesson_10.mp3" type="audio/mpeg">Your browser does not support audio.</audio><div style="font-size:0.85em; color:#33475e; margin-top:8px; line-height:1.6;"><strong>Listen &amp; Answer:</strong><br>1) What time is the class?<br>2) What time is it now?<br>3) And you? Say: 'My English class is at...'</div></div><div class="lesson-hw" style="background:#f7f3ea; border-left:4px solid #c5a059; border-radius:4px; padding:7px 14px; margin:6px 24px; font-size:0.78em; color:#3a3325; line-height:1.45;"><strong style="color:#a8843d;">&#9997;&#65039; Before next class (10 min):</strong> Write your daily schedule with 4 clock times in words &bull; Set 2 phone alarms and label them in English &bull; Listen to the lesson audio again</div><div class="slide-layout">
+                <div class="sidebar">
+                    <div class="sidebar-section">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">VOCABULARY</div>
+                        <div class="sidebar-list"><div>&bull; Monday <span class="v-gloss">&middot; lunes</span></div><div>&bull; Tuesday <span class="v-gloss">&middot; martes</span></div><div>&bull; Wednesday <span class="v-gloss">&middot; miércoles</span></div><div>&bull; Thursday <span class="v-gloss">&middot; jueves</span></div><div>&bull; Friday <span class="v-gloss">&middot; viernes</span></div><div>&bull; Saturday <span class="v-gloss">&middot; sábado</span></div><div>&bull; Sunday <span class="v-gloss">&middot; domingo</span></div><div>&bull; Time <span class="v-gloss">&middot; tiempo / hora</span></div><div>&bull; Clock <span class="v-gloss">&middot; reloj</span></div><div>&bull; Hour <span class="v-gloss">&middot; hora</span></div><div>&bull; Minute <span class="v-gloss">&middot; minuto</span></div><div>&bull; Morning <span class="v-gloss">&middot; mañana</span></div><div>&bull; Night <span class="v-gloss">&middot; noche</span></div><div>&bull; Week <span class="v-gloss">&middot; semana</span></div></div>
+                    </div>
+                    
+                    <div class="sidebar-section" style="margin-top:auto;">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">CONTEXT</div>
+                        <div class="sidebar-list" style="font-style:italic; font-size:0.85em;"><b>Phase 1 (Day Order):</b> Teacher says 'Monday'. Next student must say 'Tuesday', and so on. Go faster!<br><br><b>Phase 2 (Digital Clock):</b> Show a digital time (14:00). 'What time is it?' -> 'Two o'clock.'<br><br><b>Phase 3 (Favorite Day):</b> 'What is your favorite day?' -> 'Saturday!'</div>
+                    </div>
+                </div>
+            
+                <div class="slide-body">
+                    <img src="assets/images/vesper_logo.jpg" class="watermark">
+                    <div class="section-title center-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color); text-decoration-color:var(--theme-color);">STRUCTURE</div>
+                    <div class="structure-content">
+                        <span style='color:var(--theme-color); font-weight:bold;'>Formula:</span> AT (Time) vs ON (Days)<br><br><span style='color:var(--theme-color); font-weight:bold;'>Explanation:</span><br>Use AT for exact clock times: At 5:00. At 8:30.<br>Use ON for days of the week: On Monday. On Friday.<br><br><span style='color:var(--theme-color); font-weight:bold;'>🚨 Common Error:</span><br>Days of the week are ALWAYS capitalized in English.<br>WRONG: <em>See you on monday.</em><br>RIGHT: <em>See you on <span style='color:var(--theme-color); font-weight:bold;'>Monday</span>.</em>
+                    </div>
+                    <div class="two-cols">
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXAMPLES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>Booking an Appointment (10 mins)</strong><br><br><strong>Roles:</strong><br>Role A: Busy Dentist.<br>Role B: Patient with a toothache.<br><br><strong>Script:</strong><br>Patient: 'Hello, I need a doctor.'<br>Dentist: 'Are you free ON Tuesday?'<br>Patient: 'No, I am busy. Are you free ON Wednesday?'<br>Dentist: 'Yes. AT 4:00.'<br>Patient: 'Perfect. See you ON Wednesday AT 4:00.'</div>
+                        </div>
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXERCISES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>Tier 1: AT or ON?</strong><br>1. Class is ___ 7:00.<br>2. The party is ___ Friday.<br>3. I work ___ Monday.<br><br><strong>Tier 2: Schedule Fill</strong><br>Teacher shows a blank calendar on screen.<br>'I have a meeting ON Wednesday AT 10:00.' Students annotate the screen to draw a star in the correct box.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <a href="#sl9" class="nav-arrow nav-prev"><i class="fas fa-chevron-left"></i></a>
+            <a href="#cp10" class="nav-arrow nav-next"><i class="fas fa-chevron-right"></i></a>
+            
+            <div class="progress-bar-container"><div class="progress-bar" style="width:50.0%;"></div></div>
+            <div style="position:absolute; bottom:15px; right:30px; font-family:'Merriweather'; color:#999; font-size:0.8em;">Core Basics: Level 1 | 10</div>
+        </div>
+        
+            <div class="slide-page" id="cp10" style="background-color: var(--theme-color); color:white;">
+                 <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; text-align:center; padding:50px;">
+                    <i class="fas fa-flag-checkered" style="font-size:5em; margin-bottom:20px; opacity:0.8;"></i>
+                    <h1 style="font-size:3em; margin:0; font-family:'Merriweather';">CHECKPOINT</h1>
+                    <h2 style="font-size:1.5em; font-weight:300; opacity:0.9;">Lessons 6 - 10 Complete</h2>
+                    <div style="background:white; color:#333; padding:30px; border-radius:10px; margin-top:40px; max-width:600px; box-shadow:0 10px 30px rgba(0,0,0,0.2);">
+                        <h3 style="color:var(--theme-color); margin-top:0;">Time to Review!</h3>
+                        <p>Great job! You have completed another block of 5 lessons.</p>
+                        <div style="margin-top:20px; font-weight:bold;">Next Up: Lesson 11</div>
+                    </div>
+                 </div>
+                 <a href="#sl10" class="nav-arrow nav-prev" style="background:white; color:var(--theme-color);"><i class="fas fa-chevron-left"></i></a>
+                 <a href="#sl11" class="nav-arrow nav-next" style="background:white; color:var(--theme-color);"><i class="fas fa-chevron-right"></i></a>
+            </div>
+            
+        <div class="slide-page" id="sl11">
+            <div class="slide-header-bar" style="background-color:var(--theme-color);">
+                <div class="top-row">
+                    <div class="logo-container"><img src="assets/images/vesper_logo.jpg" style="filter: brightness(0) invert(1);"></div>
+                    <div class="academy-name">VESPER <span style="font-size:0.5em; display:block; letter-spacing:1px;">ACADEMY</span></div>
+                </div>
+                <div class="lesson-headline">Lesson 11 - Rooms in House</div>
+            </div>
+            
+            <div class="lesson-audio" style="background:#eef3f9; border:1px solid #c9d8ea; border-left:4px solid #1e5fa8; border-radius:6px; padding:12px 16px; margin:0 0 14px 0; margin:12px 24px;"><div style="font-weight:bold; color:#1a2b42; margin-bottom:6px;">&#127911; Lesson Audio &mdash; Listen before class</div><audio controls preload="none" style="width:100%;"><source src="assets/audio/core_basics_level_1_lesson_11.mp3" type="audio/mpeg">Your browser does not support audio.</audio><div style="font-size:0.85em; color:#33475e; margin-top:8px; line-height:1.6;"><strong>Listen &amp; Answer:</strong><br>1) How many bedrooms are in the apartment?<br>2) What room does Ana love?<br>3) And you? Say: 'My favorite room is the...'</div></div><div class="lesson-hw" style="background:#f7f3ea; border-left:4px solid #c5a059; border-radius:4px; padding:7px 14px; margin:6px 24px; font-size:0.78em; color:#3a3325; line-height:1.45;"><strong style="color:#a8843d;">&#9997;&#65039; Before next class (10 min):</strong> Write 4 rooms of your house with one adjective each &bull; Label 3 objects in your kitchen with sticky notes in English &bull; Listen to the lesson audio again</div><div class="slide-layout">
+                <div class="sidebar">
+                    <div class="sidebar-section">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">VOCABULARY</div>
+                        <div class="sidebar-list"><div>&bull; House <span class="v-gloss">&middot; casa</span></div><div>&bull; Apartment <span class="v-gloss">&middot; departamento</span></div><div>&bull; Kitchen <span class="v-gloss">&middot; cocina</span></div><div>&bull; Bedroom <span class="v-gloss">&middot; recámara</span></div><div>&bull; Bathroom <span class="v-gloss">&middot; baño</span></div><div>&bull; Living Room <span class="v-gloss">&middot; sala</span></div><div>&bull; Garden <span class="v-gloss">&middot; jardín</span></div><div>&bull; Door <span class="v-gloss">&middot; puerta</span></div><div>&bull; Window <span class="v-gloss">&middot; ventana</span></div><div>&bull; Floor <span class="v-gloss">&middot; piso</span></div><div>&bull; Wall <span class="v-gloss">&middot; pared</span></div><div>&bull; Table <span class="v-gloss">&middot; mesa</span></div><div>&bull; Chair <span class="v-gloss">&middot; silla</span></div><div>&bull; Bed <span class="v-gloss">&middot; cama</span></div><div>&bull; Sofa <span class="v-gloss">&middot; sofá</span></div></div>
+                    </div>
+                    
+                    <div class="sidebar-section" style="margin-top:auto;">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">CONTEXT</div>
+                        <div class="sidebar-list" style="font-style:italic; font-size:0.85em;"><b>Phase 1 (Virtual Background):</b> Teacher uses a background of a messy kitchen. 'Where am I?'<br><br><b>Phase 2 (Rapid Translate):</b> Teacher says 'Baño!'. Students type 'Bathroom' in chat.<br><br><b>Phase 3 (Show Me):</b> 'Show me a window!' (Students point camera at a window in their room).</div>
+                    </div>
+                </div>
+            
+                <div class="slide-body">
+                    <img src="assets/images/vesper_logo.jpg" class="watermark">
+                    <div class="section-title center-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color); text-decoration-color:var(--theme-color);">STRUCTURE</div>
+                    <div class="structure-content">
+                        <span style='color:var(--theme-color); font-weight:bold;'>Formula:</span> Where + is + Noun?<br><br><span style='color:var(--theme-color); font-weight:bold;'>Explanation:</span><br>We use 'Where' to ask for the location of rooms or furniture.<br>Where is the kitchen? Where is the bed?<br><br><span style='color:var(--theme-color); font-weight:bold;'>🚨 Common Error:</span><br>Don't forget the 'the'.<br>WRONG: <em>Where is kitchen?</em><br>RIGHT: <em>Where is <span style='color:var(--theme-color); font-weight:bold;'>the</span> kitchen?</em>
+                    </div>
+                    <div class="two-cols">
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXAMPLES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>MTV Cribs (10 mins)</strong><br><br><strong>Context:</strong> A house tour.<br><br><strong>Task:</strong><br>Student shows a photo of their dream house (or their actual room if comfortable).<br>Student: 'Welcome to my house. This is the living room. It is very big.'<br>Class asks: 'Where is the TV?' 'Is there a garden?'<br><em>Requirement:</em> Use at least 3 room words.</div>
+                        </div>
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXERCISES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>Tier 1: Vocabulary Matching</strong><br>1. Sleep -> [Bedroom / Kitchen]<br>2. Cook -> [Bathroom / Kitchen]<br>3. TV -> [Living Room / Garden]<br><br><strong>Tier 2: The Floorplan</strong><br>Teacher shares a blueprint of a house.<br>'Where is the bathroom?' -> 'It is next to the bedroom.'</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <a href="#sl10" class="nav-arrow nav-prev"><i class="fas fa-chevron-left"></i></a>
+            <a href="#sl12" class="nav-arrow nav-next"><i class="fas fa-chevron-right"></i></a>
+            
+            <div class="progress-bar-container"><div class="progress-bar" style="width:55.00000000000001%;"></div></div>
+            <div style="position:absolute; bottom:15px; right:30px; font-family:'Merriweather'; color:#999; font-size:0.8em;">Core Basics: Level 1 | 11</div>
+        </div>
+        
+        <div class="slide-page" id="sl12">
+            <div class="slide-header-bar" style="background-color:var(--theme-color);">
+                <div class="top-row">
+                    <div class="logo-container"><img src="assets/images/vesper_logo.jpg" style="filter: brightness(0) invert(1);"></div>
+                    <div class="academy-name">VESPER <span style="font-size:0.5em; display:block; letter-spacing:1px;">ACADEMY</span></div>
+                </div>
+                <div class="lesson-headline">Lesson 12 - Prepositions of Place</div>
+            </div>
+            
+            <div class="lesson-audio" style="background:#eef3f9; border:1px solid #c9d8ea; border-left:4px solid #1e5fa8; border-radius:6px; padding:12px 16px; margin:0 0 14px 0; margin:12px 24px;"><div style="font-weight:bold; color:#1a2b42; margin-bottom:6px;">&#127911; Lesson Audio &mdash; Listen before class</div><audio controls preload="none" style="width:100%;"><source src="assets/audio/core_basics_level_1_lesson_12.mp3" type="audio/mpeg">Your browser does not support audio.</audio><div style="font-size:0.85em; color:#33475e; margin-top:8px; line-height:1.6;"><strong>Listen &amp; Answer:</strong><br>1) Where are the keys?<br>2) Where is the phone?<br>3) And you? Look around. Say: 'My phone is on / in / under...'</div></div><div class="lesson-hw" style="background:#f7f3ea; border-left:4px solid #c5a059; border-radius:4px; padding:7px 14px; margin:6px 24px; font-size:0.78em; color:#3a3325; line-height:1.45;"><strong style="color:#a8843d;">&#9997;&#65039; Before next class (10 min):</strong> Write where 5 objects are in your room: in / on / under &bull; Hide one object and write 2 clues in English &bull; Listen to the lesson audio again</div><div class="slide-layout">
+                <div class="sidebar">
+                    <div class="sidebar-section">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">VOCABULARY</div>
+                        <div class="sidebar-list"><div>&bull; In <span class="v-gloss">&middot; en / dentro</span></div><div>&bull; On <span class="v-gloss">&middot; sobre / en</span></div><div>&bull; Under <span class="v-gloss">&middot; debajo de</span></div><div>&bull; Next to <span class="v-gloss">&middot; al lado de</span></div><div>&bull; Behind <span class="v-gloss">&middot; detrás de</span></div><div>&bull; In front of <span class="v-gloss">&middot; enfrente de</span></div><div>&bull; Between <span class="v-gloss">&middot; entre</span></div><div>&bull; Near <span class="v-gloss">&middot; cerca de</span></div><div>&bull; Where <span class="v-gloss">&middot; dónde</span></div><div>&bull; Here <span class="v-gloss">&middot; aquí</span></div><div>&bull; There <span class="v-gloss">&middot; allá / ahí</span></div><div>&bull; Left <span class="v-gloss">&middot; izquierda</span></div><div>&bull; Right <span class="v-gloss">&middot; correcto / derecha</span></div><div>&bull; Place <span class="v-gloss">&middot; lugar</span></div><div>&bull; Room <span class="v-gloss">&middot; cuarto</span></div></div>
+                    </div>
+                    
+                    <div class="sidebar-section" style="margin-top:auto;">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">CONTEXT</div>
+                        <div class="sidebar-list" style="font-style:italic; font-size:0.85em;"><b>Phase 1 (TPR - Simon Says):</b> 'Put your hands ON your head.' 'Put your hands UNDER your chin.'<br><br><b>Phase 2 (The Pen Trick):</b> Teacher puts a pen under a book. 'Where is the pen?'<br><br><b>Phase 3 (Room Scan):</b> 'Look at your room. What is BEHIND you?'</div>
+                    </div>
+                </div>
+            
+                <div class="slide-body">
+                    <img src="assets/images/vesper_logo.jpg" class="watermark">
+                    <div class="section-title center-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color); text-decoration-color:var(--theme-color);">STRUCTURE</div>
+                    <div class="structure-content">
+                        <span style='color:var(--theme-color); font-weight:bold;'>Formula:</span> The [Noun A] is [Preposition] the [Noun B]<br><br><span style='color:var(--theme-color); font-weight:bold;'>Explanation:</span><br>ON = touching the surface (On the table).<br>IN = inside a container (In the box).<br><br><span style='color:var(--theme-color); font-weight:bold;'>🚨 Pronunciation Focus:</span><br>'In front of'. Link the sounds: <em>In-fron-tov</em>. Do not say three separate words.
+                    </div>
+                    <div class="two-cols">
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXAMPLES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>The Lost Keys (10 mins)</strong><br><br><strong>Roles:</strong><br>Role A: Person looking for keys.<br>Role B: Helpful roommate.<br><br><strong>Script:</strong><br>A: 'I can't find my keys! Where are they?'<br>B: 'Are they ON the table?'<br>A: 'No, they are not.'<br>B: 'Look UNDER the sofa.'<br><em>Challenge:</em> Keep guessing until B finds the 'keys'.</div>
+                        </div>
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXERCISES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>Tier 1: Preposition Select</strong><br>1. The TV is [on / in] the wall.<br>2. The food is [under / in] the fridge.<br>3. The car is [next to / between] the house.<br><br><strong>Tier 2: Drawing Dictation</strong><br>Teacher says: 'Draw a table. Draw a cat UNDER the table. Draw a lamp ON the table.'<br>Students show their drawings to the camera.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <a href="#sl11" class="nav-arrow nav-prev"><i class="fas fa-chevron-left"></i></a>
+            <a href="#sl13" class="nav-arrow nav-next"><i class="fas fa-chevron-right"></i></a>
+            
+            <div class="progress-bar-container"><div class="progress-bar" style="width:60.0%;"></div></div>
+            <div style="position:absolute; bottom:15px; right:30px; font-family:'Merriweather'; color:#999; font-size:0.8em;">Core Basics: Level 1 | 12</div>
+        </div>
+        
+        <div class="slide-page" id="sl13">
+            <div class="slide-header-bar" style="background-color:var(--theme-color);">
+                <div class="top-row">
+                    <div class="logo-container"><img src="assets/images/vesper_logo.jpg" style="filter: brightness(0) invert(1);"></div>
+                    <div class="academy-name">VESPER <span style="font-size:0.5em; display:block; letter-spacing:1px;">ACADEMY</span></div>
+                </div>
+                <div class="lesson-headline">Lesson 13 - There is / There are</div>
+            </div>
+            
+            <div class="lesson-audio" style="background:#eef3f9; border:1px solid #c9d8ea; border-left:4px solid #1e5fa8; border-radius:6px; padding:12px 16px; margin:0 0 14px 0; margin:12px 24px;"><div style="font-weight:bold; color:#1a2b42; margin-bottom:6px;">&#127911; Lesson Audio &mdash; Listen before class</div><audio controls preload="none" style="width:100%;"><source src="assets/audio/core_basics_level_1_lesson_13.mp3" type="audio/mpeg">Your browser does not support audio.</audio><div style="font-size:0.85em; color:#33475e; margin-top:8px; line-height:1.6;"><strong>Listen &amp; Answer:</strong><br>1) Is there a supermarket near the apartment?<br>2) How many restaurants are there on the street?<br>3) And you? Say: 'In my neighborhood, there is... / there are...'</div></div><div class="lesson-hw" style="background:#f7f3ea; border-left:4px solid #c5a059; border-radius:4px; padding:7px 14px; margin:6px 24px; font-size:0.78em; color:#3a3325; line-height:1.45;"><strong style="color:#a8843d;">&#9997;&#65039; Before next class (10 min):</strong> Write 5 sentences about your neighborhood with there is/are &bull; Count: how many pharmacies are there near your house? &bull; Listen to the lesson audio again</div><div class="slide-layout">
+                <div class="sidebar">
+                    <div class="sidebar-section">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">VOCABULARY</div>
+                        <div class="sidebar-list"><div>• There is</div><div>• There are</div><div>• Some</div><div>• Any</div><div>&bull; Many <span class="v-gloss">&middot; muchos</span></div><div>&bull; A lot <span class="v-gloss">&middot; mucho</span></div><div>&bull; Shelf <span class="v-gloss">&middot; repisa</span></div><div>&bull; Box <span class="v-gloss">&middot; caja</span></div><div>&bull; Fridge <span class="v-gloss">&middot; refrigerador</span></div><div>&bull; Bag <span class="v-gloss">&middot; bolsa</span></div><div>&bull; Desk <span class="v-gloss">&middot; escritorio</span></div><div>&bull; Computer <span class="v-gloss">&middot; computadora</span></div><div>&bull; Pen <span class="v-gloss">&middot; pluma</span></div><div>&bull; Book <span class="v-gloss">&middot; libro</span></div><div>&bull; Lamp <span class="v-gloss">&middot; lámpara</span></div></div>
+                    </div>
+                    
+                    <div class="sidebar-section" style="margin-top:auto;">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">CONTEXT</div>
+                        <div class="sidebar-list" style="font-style:italic; font-size:0.85em;"><b>Phase 1 (Memory Tray):</b> Show a tray with 5 items for 10 seconds. Hide it. 'What is on the tray?'<br><br><b>Phase 2 (True/False):</b> 'There is an elephant in this class. T/F?'<br><br><b>Phase 3 (Fridge Check):</b> 'Is there milk in your fridge right now?' -> 'Yes, there is.'</div>
+                    </div>
+                </div>
+            
+                <div class="slide-body">
+                    <img src="assets/images/vesper_logo.jpg" class="watermark">
+                    <div class="section-title center-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color); text-decoration-color:var(--theme-color);">STRUCTURE</div>
+                    <div class="structure-content">
+                        <span style='color:var(--theme-color); font-weight:bold;'>Formula:</span> There is (1) / There are (2+)<br><br><span style='color:var(--theme-color); font-weight:bold;'>Negative:</span> There isn't... / There aren't...<br><br><span style='color:var(--theme-color); font-weight:bold;'>Explanation:</span><br>Use 'There is' to state existence.<br>There is a pen. There are two pens.<br><br><span style='color:var(--theme-color); font-weight:bold;'>🚨 Common Error:</span><br>In Spanish, 'Hay' is used for both singular and plural. In English, we MUST divide them.<br>WRONG: <em>There is two books.</em><br>RIGHT: <em>There <span style='color:var(--theme-color); font-weight:bold;'>are</span> two books.</em>
+                    </div>
+                    <div class="two-cols">
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXAMPLES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>The Hotel Complaint (10 mins)</strong><br><br><strong>Roles:</strong><br>Role A: Angry Guest.<br>Role B: Hotel Manager.<br><br><strong>Context:</strong> The room is terrible.<br>Guest: 'Hello. My room is terrible. There is a mouse under the bed!'<br>Manager: 'I am so sorry. Is there a problem with the bathroom?'<br>Guest: 'Yes! There are two spiders in the shower!'<br><em>Teacher judges the most dramatic performance.</em></div>
+                        </div>
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXERCISES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>Tier 1: Is or Are?</strong><br>1. There ___ a cat in the garden.<br>2. There ___ five apples on the table.<br>3. There ___ a computer on the desk.<br><br><strong>Tier 2: The 'Spot the Difference' Game</strong><br>Show 2 photos of a bedroom.<br>'In Photo A, there is a red bed. In Photo B, there is a blue bed.'</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <a href="#sl12" class="nav-arrow nav-prev"><i class="fas fa-chevron-left"></i></a>
+            <a href="#sl14" class="nav-arrow nav-next"><i class="fas fa-chevron-right"></i></a>
+            
+            <div class="progress-bar-container"><div class="progress-bar" style="width:65.0%;"></div></div>
+            <div style="position:absolute; bottom:15px; right:30px; font-family:'Merriweather'; color:#999; font-size:0.8em;">Core Basics: Level 1 | 13</div>
+        </div>
+        
+        <div class="slide-page" id="sl14">
+            <div class="slide-header-bar" style="background-color:var(--theme-color);">
+                <div class="top-row">
+                    <div class="logo-container"><img src="assets/images/vesper_logo.jpg" style="filter: brightness(0) invert(1);"></div>
+                    <div class="academy-name">VESPER <span style="font-size:0.5em; display:block; letter-spacing:1px;">ACADEMY</span></div>
+                </div>
+                <div class="lesson-headline">Lesson 14 - Demonstratives (This/That)</div>
+            </div>
+            
+            <div class="lesson-audio" style="background:#eef3f9; border:1px solid #c9d8ea; border-left:4px solid #1e5fa8; border-radius:6px; padding:12px 16px; margin:0 0 14px 0; margin:12px 24px;"><div style="font-weight:bold; color:#1a2b42; margin-bottom:6px;">&#127911; Lesson Audio &mdash; Listen before class</div><audio controls preload="none" style="width:100%;"><source src="assets/audio/core_basics_level_1_lesson_14.mp3" type="audio/mpeg">Your browser does not support audio.</audio><div style="font-size:0.85em; color:#33475e; margin-top:8px; line-height:1.6;"><strong>Listen &amp; Answer:</strong><br>1) Is the red wallet Ana's wallet?<br>2) Whose phone is on the chair?<br>3) And you? Point at something. Say: 'This is my... That is...'</div></div><div class="lesson-hw" style="background:#f7f3ea; border-left:4px solid #c5a059; border-radius:4px; padding:7px 14px; margin:6px 24px; font-size:0.78em; color:#3a3325; line-height:1.45;"><strong style="color:#a8843d;">&#9997;&#65039; Before next class (10 min):</strong> Write 4 sentences pointing at objects: 2 near (this/these), 2 far (that/those) &bull; Practice the 4 words aloud with objects at home &bull; Listen to the lesson audio again</div><div class="slide-layout">
+                <div class="sidebar">
+                    <div class="sidebar-section">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">VOCABULARY</div>
+                        <div class="sidebar-list"><div>• This</div><div>• That</div><div>• These</div><div>• Those</div><div>&bull; Here <span class="v-gloss">&middot; aquí</span></div><div>&bull; There <span class="v-gloss">&middot; allá / ahí</span></div><div>&bull; Look <span class="v-gloss">&middot; mirar</span></div><div>&bull; See <span class="v-gloss">&middot; ver</span></div><div>&bull; Touch <span class="v-gloss">&middot; tocar</span></div><div>&bull; Hold <span class="v-gloss">&middot; sostener</span></div><div>&bull; Point <span class="v-gloss">&middot; señalar</span></div><div>&bull; Object <span class="v-gloss">&middot; objeto</span></div><div>&bull; Thing <span class="v-gloss">&middot; cosa</span></div><div>&bull; One <span class="v-gloss">&middot; uno</span></div><div>• Ones</div></div>
+                    </div>
+                    
+                    <div class="sidebar-section" style="margin-top:auto;">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">CONTEXT</div>
+                        <div class="sidebar-list" style="font-style:italic; font-size:0.85em;"><b>Phase 1 (Camera Depth):</b> Teacher holds object close: 'THIS'. Moves it far back: 'THAT'. Students repeat.<br><br><b>Phase 2 (Point and Say):</b> Point to something near you: 'This is my pen.' Point out the window: 'That is a car.'<br><br><b>Phase 3 (Plural Check):</b> Hold up 2 pens. 'THIS or THESE?' -> 'THESE!'</div>
+                    </div>
+                </div>
+            
+                <div class="slide-body">
+                    <img src="assets/images/vesper_logo.jpg" class="watermark">
+                    <div class="section-title center-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color); text-decoration-color:var(--theme-color);">STRUCTURE</div>
+                    <div class="structure-content">
+                        <span style='color:var(--theme-color); font-weight:bold;'>Formula:</span> This/These (Near) vs That/Those (Far)<br><br><span style='color:var(--theme-color); font-weight:bold;'>Explanation:</span><br>This (1, Near). That (1, Far).<br>These (2+, Near). Those (2+, Far).<br><br><span style='color:var(--theme-color); font-weight:bold;'>🚨 Pronunciation Focus:</span><br>THIS (Short, sharp /i/ sound). THESE (Long, smiling /ee/ sound). Practice the difference!
+                    </div>
+                    <div class="two-cols">
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXAMPLES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>The Garage Sale (10 mins)</strong><br><br><strong>Roles:</strong><br>Role A: Seller holding objects.<br>Role B: Buyer.<br><br><strong>Script:</strong><br>Buyer: 'How much is THIS book?' (Points near).<br>Seller: 'That book is 5 dollars.'<br>Buyer: 'And how much are THOSE glasses?' (Points far).<br>Seller: 'These glasses are 10 dollars.'<br><em>Challenge:</em> Keep track of who is holding the object to use the right word.</div>
+                        </div>
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXERCISES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>Tier 1: Fill the Gap</strong><br>1. (Holding an apple): ___ is a good apple.<br>2. (Pointing to a plane in sky): ___ is a big plane.<br><br><strong>Tier 2: The Shopping Cart</strong><br>Teacher shares screen with a store catalog.<br>'I want THAT blue shirt.' (Teacher clicks it). 'And THESE red shoes.'</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <a href="#sl13" class="nav-arrow nav-prev"><i class="fas fa-chevron-left"></i></a>
+            <a href="#sl15" class="nav-arrow nav-next"><i class="fas fa-chevron-right"></i></a>
+            
+            <div class="progress-bar-container"><div class="progress-bar" style="width:70.0%;"></div></div>
+            <div style="position:absolute; bottom:15px; right:30px; font-family:'Merriweather'; color:#999; font-size:0.8em;">Core Basics: Level 1 | 14</div>
+        </div>
+        
+        <div class="slide-page" id="sl15">
+            <div class="slide-header-bar" style="background-color:var(--theme-color);">
+                <div class="top-row">
+                    <div class="logo-container"><img src="assets/images/vesper_logo.jpg" style="filter: brightness(0) invert(1);"></div>
+                    <div class="academy-name">VESPER <span style="font-size:0.5em; display:block; letter-spacing:1px;">ACADEMY</span></div>
+                </div>
+                <div class="lesson-headline">Lesson 15 - Possessive Adjectives</div>
+            </div>
+            
+            <div class="lesson-audio" style="background:#eef3f9; border:1px solid #c9d8ea; border-left:4px solid #1e5fa8; border-radius:6px; padding:12px 16px; margin:0 0 14px 0; margin:12px 24px;"><div style="font-weight:bold; color:#1a2b42; margin-bottom:6px;">&#127911; Lesson Audio &mdash; Listen before class</div><audio controls preload="none" style="width:100%;"><source src="assets/audio/core_basics_level_1_lesson_15.mp3" type="audio/mpeg">Your browser does not support audio.</audio><div style="font-size:0.85em; color:#33475e; margin-top:8px; line-height:1.6;"><strong>Listen &amp; Answer:</strong><br>1) What color is her car?<br>2) Whose house is big, his or hers?<br>3) And you? Say: 'My... is...' and 'His / Her... is...'</div></div><div class="lesson-hw" style="background:#f7f3ea; border-left:4px solid #c5a059; border-radius:4px; padding:7px 14px; margin:6px 24px; font-size:0.78em; color:#3a3325; line-height:1.45;"><strong style="color:#a8843d;">&#9997;&#65039; Before next class (10 min):</strong> Write 5 sentences: my, your, his, her, our + object &bull; Describe one possession of each family member &bull; Listen to the lesson audio again</div><div class="slide-layout">
+                <div class="sidebar">
+                    <div class="sidebar-section">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">VOCABULARY</div>
+                        <div class="sidebar-list"><div>• My</div><div>• Your</div><div>• His</div><div>• Her</div><div>• Its</div><div>• Our</div><div>• Their</div><div>&bull; Own <span class="v-gloss">&middot; propio</span></div><div>&bull; Belong <span class="v-gloss">&middot; pertenecer</span></div><div>&bull; Name <span class="v-gloss">&middot; nombre</span></div><div>&bull; Property <span class="v-gloss">&middot; propiedad</span></div><div>&bull; Share <span class="v-gloss">&middot; compartir</span></div><div>&bull; Give <span class="v-gloss">&middot; dar</span></div><div>&bull; Take <span class="v-gloss">&middot; tomar / llevar</span></div><div>&bull; Keep <span class="v-gloss">&middot; guardar / mantener</span></div></div>
+                    </div>
+                    
+                    <div class="sidebar-section" style="margin-top:auto;">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">CONTEXT</div>
+                        <div class="sidebar-list" style="font-style:italic; font-size:0.85em;"><b>Phase 1 (Prop Grab):</b> Everyone grab a pen. 'This is MY pen.' Point to teacher: 'That is YOUR pen.'<br><br><b>Phase 2 (Third Person Point):</b> Point to a classmate on screen. 'That is HIS/HER camera.'<br><br><b>Phase 3 (Celebrity Check):</b> Show photo of Batman. 'Is that her car?' -> 'No, it is HIS car.'</div>
+                    </div>
+                </div>
+            
+                <div class="slide-body">
+                    <img src="assets/images/vesper_logo.jpg" class="watermark">
+                    <div class="section-title center-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color); text-decoration-color:var(--theme-color);">STRUCTURE</div>
+                    <div class="structure-content">
+                        <span style='color:var(--theme-color); font-weight:bold;'>Formula:</span> Possessive Adjective + Noun<br><br><span style='color:var(--theme-color); font-weight:bold;'>Explanation:</span><br>I -> My. You -> Your. He -> His. She -> Her.<br>We use them to show ownership.<br><br><span style='color:var(--theme-color); font-weight:bold;'>🚨 Common Error:</span><br>In Spanish, 'su' means his, her, its, AND their. In English, you MUST specify gender/number.<br>WRONG: <em>Maria likes his car.</em> (If it's Maria's car).<br>RIGHT: <em>Maria likes <span style='color:var(--theme-color); font-weight:bold;'>her</span> car.</em>
+                    </div>
+                    <div class="two-cols">
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXAMPLES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>Lost and Found (10 mins)</strong><br><br><strong>Roles:</strong><br>Role A: Detective / Teacher.<br>Role B: Students.<br><br><strong>Task:</strong><br>Teacher holds up random items (a red pen, a blue notebook).<br>Teacher: 'Whose pen is this? Is it your pen, Juan?'<br>Juan: 'No, it is not my pen. It is Maria's pen. It is HER pen.'<br><em>Teacher distributes all 'lost' items correctly.</em></div>
+                        </div>
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXERCISES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>Tier 1: Translation Match</strong><br>1. Mi libro -> My book.<br>2. Su coche (de él) -> His car.<br>3. Nuestra casa -> Our house.<br><br><strong>Tier 2: The Family Photo</strong><br>Show a family picture.<br>'This is John. Mary is HIS wife. Tim is THEIR son.'</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <a href="#sl14" class="nav-arrow nav-prev"><i class="fas fa-chevron-left"></i></a>
+            <a href="#cp15" class="nav-arrow nav-next"><i class="fas fa-chevron-right"></i></a>
+            
+            <div class="progress-bar-container"><div class="progress-bar" style="width:75.0%;"></div></div>
+            <div style="position:absolute; bottom:15px; right:30px; font-family:'Merriweather'; color:#999; font-size:0.8em;">Core Basics: Level 1 | 15</div>
+        </div>
+        
+            <div class="slide-page" id="cp15" style="background-color: var(--theme-color); color:white;">
+                 <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; text-align:center; padding:50px;">
+                    <i class="fas fa-flag-checkered" style="font-size:5em; margin-bottom:20px; opacity:0.8;"></i>
+                    <h1 style="font-size:3em; margin:0; font-family:'Merriweather';">CHECKPOINT</h1>
+                    <h2 style="font-size:1.5em; font-weight:300; opacity:0.9;">Lessons 11 - 15 Complete</h2>
+                    <div style="background:white; color:#333; padding:30px; border-radius:10px; margin-top:40px; max-width:600px; box-shadow:0 10px 30px rgba(0,0,0,0.2);">
+                        <h3 style="color:var(--theme-color); margin-top:0;">Time to Review!</h3>
+                        <p>Great job! You have completed another block of 5 lessons.</p>
+                        <div style="margin-top:20px; font-weight:bold;">Next Up: Lesson 16</div>
+                    </div>
+                 </div>
+                 <a href="#sl15" class="nav-arrow nav-prev" style="background:white; color:var(--theme-color);"><i class="fas fa-chevron-left"></i></a>
+                 <a href="#sl16" class="nav-arrow nav-next" style="background:white; color:var(--theme-color);"><i class="fas fa-chevron-right"></i></a>
+            </div>
+            
+        <div class="slide-page" id="sl16">
+            <div class="slide-header-bar" style="background-color:var(--theme-color);">
+                <div class="top-row">
+                    <div class="logo-container"><img src="assets/images/vesper_logo.jpg" style="filter: brightness(0) invert(1);"></div>
+                    <div class="academy-name">VESPER <span style="font-size:0.5em; display:block; letter-spacing:1px;">ACADEMY</span></div>
+                </div>
+                <div class="lesson-headline">Lesson 16 - Nationalities</div>
+            </div>
+            
+            <div class="lesson-audio" style="background:#eef3f9; border:1px solid #c9d8ea; border-left:4px solid #1e5fa8; border-radius:6px; padding:12px 16px; margin:0 0 14px 0; margin:12px 24px;"><div style="font-weight:bold; color:#1a2b42; margin-bottom:6px;">&#127911; Lesson Audio &mdash; Listen before class</div><audio controls preload="none" style="width:100%;"><source src="assets/audio/core_basics_level_1_lesson_16.mp3" type="audio/mpeg">Your browser does not support audio.</audio><div style="font-size:0.85em; color:#33475e; margin-top:8px; line-height:1.6;"><strong>Listen &amp; Answer:</strong><br>1) What nationality is Marco?<br>2) Is the new teacher American?<br>3) And you? Say: 'I am...' with your nationality.</div></div><div class="lesson-hw" style="background:#f7f3ea; border-left:4px solid #c5a059; border-radius:4px; padding:7px 14px; margin:6px 24px; font-size:0.78em; color:#3a3325; line-height:1.45;"><strong style="color:#a8843d;">&#9997;&#65039; Before next class (10 min):</strong> Write 5 nationalities of people/brands you know &bull; Find 3 products at home and write where they are from &bull; Listen to the lesson audio again</div><div class="slide-layout">
+                <div class="sidebar">
+                    <div class="sidebar-section">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">VOCABULARY</div>
+                        <div class="sidebar-list"><div>&bull; American <span class="v-gloss">&middot; estadounidense</span></div><div>&bull; British <span class="v-gloss">&middot; británico/a</span></div><div>&bull; Canadian <span class="v-gloss">&middot; canadiense</span></div><div>&bull; Chinese <span class="v-gloss">&middot; chino/a</span></div><div>&bull; Japanese <span class="v-gloss">&middot; japonés/esa</span></div><div>&bull; French <span class="v-gloss">&middot; francés/esa</span></div><div>&bull; German <span class="v-gloss">&middot; alemán/ana</span></div><div>&bull; Italian <span class="v-gloss">&middot; italiano/a</span></div><div>&bull; Russian <span class="v-gloss">&middot; ruso/a</span></div><div>&bull; Spanish <span class="v-gloss">&middot; español/a</span></div><div>&bull; Brazilian <span class="v-gloss">&middot; brasileño/a</span></div><div>&bull; Indian <span class="v-gloss">&middot; indio/a</span></div><div>&bull; Language <span class="v-gloss">&middot; idioma</span></div><div>&bull; Speak <span class="v-gloss">&middot; hablar</span></div></div>
+                    </div>
+                    
+                    <div class="sidebar-section" style="margin-top:auto;">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">CONTEXT</div>
+                        <div class="sidebar-list" style="font-style:italic; font-size:0.85em;"><b>Phase 1 (Stereotype Quiz):</b> 'Sushi?' -> 'Japanese!' 'Tacos?' -> 'Mexican!'<br><br><b>Phase 2 (Flag to Adjective):</b> Show a flag (e.g. Italy). Students must type the NATIONALITY (Italian), not the country.<br><br><b>Phase 3 (Famous Faces):</b> Show a celeb. 'Where is Shakira from?' -> 'She is Colombian.'</div>
+                    </div>
+                </div>
+            
+                <div class="slide-body">
+                    <img src="assets/images/vesper_logo.jpg" class="watermark">
+                    <div class="section-title center-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color); text-decoration-color:var(--theme-color);">STRUCTURE</div>
+                    <div class="structure-content">
+                        <span style='color:var(--theme-color); font-weight:bold;'>Formula:</span> Subject + To Be + Nationality<br><br><span style='color:var(--theme-color); font-weight:bold;'>Explanation:</span><br>Country (Noun): I am from France.<br>Nationality (Adjective): I am French.<br><br><span style='color:var(--theme-color); font-weight:bold;'>🚨 Common Error:</span><br>Nationalities are ALWAYS capitalized in English.<br>WRONG: <em>He is spanish.</em><br>RIGHT: <em>He is <span style='color:var(--theme-color); font-weight:bold;'>Spanish</span>.</em>
+                    </div>
+                    <div class="two-cols">
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXAMPLES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>The Global Conference (10 mins)</strong><br><br><strong>Context:</strong> A UN meeting.<br><br><strong>Task:</strong><br>Assign each student a random flag.<br>Student A: 'Hello, I am Pierre. I am from Paris. I am French.'<br>Student B: 'Nice to meet you. I am Kenji. I am from Tokyo. I am Japanese.'<br><em>Challenge:</em> Students must remember everyone's nationality at the end of the mixer.</div>
+                        </div>
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXERCISES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>Tier 1: Country to Nationality</strong><br>1. Japan -> Japanese<br>2. Canada -> Canadian<br>3. Germany -> German<br><br><strong>Tier 2: The Interpol Database</strong><br>Teacher shows fake ID cards.<br>'His name is Klaus. He is from Berlin. He is German.'</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <a href="#sl15" class="nav-arrow nav-prev"><i class="fas fa-chevron-left"></i></a>
+            <a href="#sl17" class="nav-arrow nav-next"><i class="fas fa-chevron-right"></i></a>
+            
+            <div class="progress-bar-container"><div class="progress-bar" style="width:80.0%;"></div></div>
+            <div style="position:absolute; bottom:15px; right:30px; font-family:'Merriweather'; color:#999; font-size:0.8em;">Core Basics: Level 1 | 16</div>
+        </div>
+        
+        <div class="slide-page" id="sl17">
+            <div class="slide-header-bar" style="background-color:var(--theme-color);">
+                <div class="top-row">
+                    <div class="logo-container"><img src="assets/images/vesper_logo.jpg" style="filter: brightness(0) invert(1);"></div>
+                    <div class="academy-name">VESPER <span style="font-size:0.5em; display:block; letter-spacing:1px;">ACADEMY</span></div>
+                </div>
+                <div class="lesson-headline">Lesson 17 - Opposites</div>
+            </div>
+            
+            <div class="lesson-audio" style="background:#eef3f9; border:1px solid #c9d8ea; border-left:4px solid #1e5fa8; border-radius:6px; padding:12px 16px; margin:0 0 14px 0; margin:12px 24px;"><div style="font-weight:bold; color:#1a2b42; margin-bottom:6px;">&#127911; Lesson Audio &mdash; Listen before class</div><audio controls preload="none" style="width:100%;"><source src="assets/audio/core_basics_level_1_lesson_17.mp3" type="audio/mpeg">Your browser does not support audio.</audio><div style="font-size:0.85em; color:#33475e; margin-top:8px; line-height:1.6;"><strong>Listen &amp; Answer:</strong><br>1) Is the new phone cheap or expensive?<br>2) Is Leo's old phone fast?<br>3) And you? Say two opposites: 'My city is big. My street is...'</div></div><div class="lesson-hw" style="background:#f7f3ea; border-left:4px solid #c5a059; border-radius:4px; padding:7px 14px; margin:6px 24px; font-size:0.78em; color:#3a3325; line-height:1.45;"><strong style="color:#a8843d;">&#9997;&#65039; Before next class (10 min):</strong> Write 8 opposite pairs you remember &bull; Describe your home with 3 opposites &bull; Listen to the lesson audio again</div><div class="slide-layout">
+                <div class="sidebar">
+                    <div class="sidebar-section">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">VOCABULARY</div>
+                        <div class="sidebar-list"><div>&bull; Big <span class="v-gloss">&middot; grande</span></div><div>&bull; Small <span class="v-gloss">&middot; pequeño/a</span></div><div>&bull; Fast <span class="v-gloss">&middot; rápido/a</span></div><div>&bull; Slow <span class="v-gloss">&middot; lento/a</span></div><div>&bull; Hot <span class="v-gloss">&middot; caliente / calor</span></div><div>&bull; Cold <span class="v-gloss">&middot; frío</span></div><div>&bull; Good <span class="v-gloss">&middot; bueno</span></div><div>&bull; Bad <span class="v-gloss">&middot; malo</span></div><div>&bull; Old <span class="v-gloss">&middot; viejo/a</span></div><div>&bull; New <span class="v-gloss">&middot; nuevo/a</span></div><div>&bull; Clean <span class="v-gloss">&middot; limpio/a</span></div><div>&bull; Dirty <span class="v-gloss">&middot; sucio/a</span></div><div>&bull; Happy <span class="v-gloss">&middot; feliz</span></div><div>&bull; Sad <span class="v-gloss">&middot; triste</span></div><div>&bull; Rich <span class="v-gloss">&middot; rico/a</span></div><div>&bull; Poor <span class="v-gloss">&middot; pobre</span></div></div>
+                    </div>
+                    
+                    <div class="sidebar-section" style="margin-top:auto;">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">CONTEXT</div>
+                        <div class="sidebar-list" style="font-style:italic; font-size:0.85em;"><b>Phase 1 (Reverse Psychology):</b> Teacher says 'Hot'. Class shouts 'Cold'. (Big/Small, Clean/Dirty). Go faster!<br><br><b>Phase 2 (Mime the Word):</b> Teacher mimes 'Big' (arms wide). Students shout the word.<br><br><b>Phase 3 (Chat Race):</b> Teacher types 'Old'. First to type 'New' wins.</div>
+                    </div>
+                </div>
+            
+                <div class="slide-body">
+                    <img src="assets/images/vesper_logo.jpg" class="watermark">
+                    <div class="section-title center-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color); text-decoration-color:var(--theme-color);">STRUCTURE</div>
+                    <div class="structure-content">
+                        <span style='color:var(--theme-color); font-weight:bold;'>Formula:</span> It is + [Adjective]<br><br><span style='color:var(--theme-color); font-weight:bold;'>Explanation:</span><br>Opposites help you describe the world faster when you lack vocabulary.<br>Modifiers: 'Very' hot. 'A little' cold.<br><br><span style='color:var(--theme-color); font-weight:bold;'>🚨 Pronunciation Focus:</span><br>FAST vs SLOW. Emphasize the long 'O' in slow (Slooooow).
+                    </div>
+                    <div class="two-cols">
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXAMPLES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>The Angry Customer (10 mins)</strong><br><br><strong>Roles:</strong><br>Role A: Customer at a terrible restaurant.<br>Role B: Waiter.<br><br><strong>Script:</strong><br>Waiter: 'Is everything good?'<br>Customer: 'No! My soup is cold. It is not hot! And this glass is dirty!'<br>Waiter: 'I am sorry. I will get a clean glass.'<br><em>Challenge:</em> Use at least 4 opposite pairs.</div>
+                        </div>
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXERCISES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>Tier 1: Image Match</strong><br>1. (Picture of a snail) -> It is slow.<br>2. (Picture of a Ferrari) -> It is fast.<br><br><strong>Tier 2: The Complainer</strong><br>Transform positive sentences into negative complaints.<br>'The hotel is clean.' -> 'No, the hotel is DIRTY.'<br>'The food is hot.' -> 'No, the food is COLD.'</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <a href="#sl16" class="nav-arrow nav-prev"><i class="fas fa-chevron-left"></i></a>
+            <a href="#sl18" class="nav-arrow nav-next"><i class="fas fa-chevron-right"></i></a>
+            
+            <div class="progress-bar-container"><div class="progress-bar" style="width:85.0%;"></div></div>
+            <div style="position:absolute; bottom:15px; right:30px; font-family:'Merriweather'; color:#999; font-size:0.8em;">Core Basics: Level 1 | 17</div>
+        </div>
+        
+        <div class="slide-page" id="sl18">
+            <div class="slide-header-bar" style="background-color:var(--theme-color);">
+                <div class="top-row">
+                    <div class="logo-container"><img src="assets/images/vesper_logo.jpg" style="filter: brightness(0) invert(1);"></div>
+                    <div class="academy-name">VESPER <span style="font-size:0.5em; display:block; letter-spacing:1px;">ACADEMY</span></div>
+                </div>
+                <div class="lesson-headline">Lesson 18 - Question Words</div>
+            </div>
+            
+            <div class="lesson-audio" style="background:#eef3f9; border:1px solid #c9d8ea; border-left:4px solid #1e5fa8; border-radius:6px; padding:12px 16px; margin:0 0 14px 0; margin:12px 24px;"><div style="font-weight:bold; color:#1a2b42; margin-bottom:6px;">&#127911; Lesson Audio &mdash; Listen before class</div><audio controls preload="none" style="width:100%;"><source src="assets/audio/core_basics_level_1_lesson_18.mp3" type="audio/mpeg">Your browser does not support audio.</audio><div style="font-size:0.85em; color:#33475e; margin-top:8px; line-height:1.6;"><strong>Listen &amp; Answer:</strong><br>1) Where is the party?<br>2) What time is the party?<br>3) And you? Ask one question with 'Where' and one with 'What'.</div></div><div class="lesson-hw" style="background:#f7f3ea; border-left:4px solid #c5a059; border-radius:4px; padding:7px 14px; margin:6px 24px; font-size:0.78em; color:#3a3325; line-height:1.45;"><strong style="color:#a8843d;">&#9997;&#65039; Before next class (10 min):</strong> Write 5 WH-questions to ask a famous person &bull; Ask one family member 2 questions in English and write the answers &bull; Listen to the lesson audio again</div><div class="slide-layout">
+                <div class="sidebar">
+                    <div class="sidebar-section">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">VOCABULARY</div>
+                        <div class="sidebar-list"><div>• Who</div><div>&bull; What <span class="v-gloss">&middot; qué</span></div><div>&bull; Where <span class="v-gloss">&middot; dónde</span></div><div>• When</div><div>• Why</div><div>• How</div><div>• Which</div><div>&bull; Ask <span class="v-gloss">&middot; preguntar</span></div><div>&bull; Answer <span class="v-gloss">&middot; responder</span></div><div>&bull; Question <span class="v-gloss">&middot; pregunta</span></div><div>&bull; Know <span class="v-gloss">&middot; saber / conocer</span></div><div>&bull; Understand <span class="v-gloss">&middot; entender</span></div><div>&bull; Tell <span class="v-gloss">&middot; contar / decir</span></div><div>&bull; Say <span class="v-gloss">&middot; decir</span></div><div>&bull; Mean <span class="v-gloss">&middot; significar</span></div></div>
+                    </div>
+                    
+                    <div class="sidebar-section" style="margin-top:auto;">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">CONTEXT</div>
+                        <div class="sidebar-list" style="font-style:italic; font-size:0.85em;"><b>Phase 1 (The 5 Ws):</b> Hold up one hand. Thumb=Who, Index=What, Middle=Where, Ring=When, Pinky=Why. Teacher touches a finger, students shout the word.<br><br><b>Phase 2 (Rapid Answer):</b> 'WHO is the president of the USA?' 'WHERE is the Eiffel Tower?'<br><br><b>Phase 3 (Chat Drop):</b> 'Translate QUIEN to English in the chat.'</div>
+                    </div>
+                </div>
+            
+                <div class="slide-body">
+                    <img src="assets/images/vesper_logo.jpg" class="watermark">
+                    <div class="section-title center-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color); text-decoration-color:var(--theme-color);">STRUCTURE</div>
+                    <div class="structure-content">
+                        <span style='color:var(--theme-color); font-weight:bold;'>Formula:</span> Q-Word + To Be + Subject?<br><br><span style='color:var(--theme-color); font-weight:bold;'>Explanation:</span><br>Who (Person), What (Thing), Where (Place), When (Time), Why (Reason), How (Condition).<br><br><span style='color:var(--theme-color); font-weight:bold;'>🚨 Common Error:</span><br>Do not forget to invert the verb.<br>WRONG: <em>Where you are?</em><br>RIGHT: <em>Where <span style='color:var(--theme-color); font-weight:bold;'>are you</span>?</em>
+                    </div>
+                    <div class="two-cols">
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXAMPLES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>The Press Conference (10 mins)</strong><br><br><strong>Roles:</strong><br>Role A: Famous Celebrity (Teacher or brave student).<br>Role B: Journalists (The rest of the class).<br><br><strong>Task:</strong><br>Journalists must ask 5 grammatically perfect questions to get the celebrity's secrets.<br>'WHERE is your new house?' 'WHO is your new boyfriend?' 'WHEN is your next movie?'<br><em>The celebrity only answers if the question is perfect.</em></div>
+                        </div>
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXERCISES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>Tier 1: Choose the Q-Word</strong><br>1. ____ is your name? (What)<br>2. ____ are you from? (Where)<br>3. ____ is your teacher? (Who)<br><br><strong>Tier 2: The Interview Grid</strong><br>Student A has Name/Age. Student B has Job/City. They must ask questions to complete the profile.<br>'What is his job?' 'Where is he from?'</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <a href="#sl17" class="nav-arrow nav-prev"><i class="fas fa-chevron-left"></i></a>
+            <a href="#sl19" class="nav-arrow nav-next"><i class="fas fa-chevron-right"></i></a>
+            
+            <div class="progress-bar-container"><div class="progress-bar" style="width:90.0%;"></div></div>
+            <div style="position:absolute; bottom:15px; right:30px; font-family:'Merriweather'; color:#999; font-size:0.8em;">Core Basics: Level 1 | 18</div>
+        </div>
+        
+        <div class="slide-page" id="sl19">
+            <div class="slide-header-bar" style="background-color:var(--theme-color);">
+                <div class="top-row">
+                    <div class="logo-container"><img src="assets/images/vesper_logo.jpg" style="filter: brightness(0) invert(1);"></div>
+                    <div class="academy-name">VESPER <span style="font-size:0.5em; display:block; letter-spacing:1px;">ACADEMY</span></div>
+                </div>
+                <div class="lesson-headline">Lesson 19 - Yes/No Questions</div>
+            </div>
+            
+            <div class="lesson-audio" style="background:#eef3f9; border:1px solid #c9d8ea; border-left:4px solid #1e5fa8; border-radius:6px; padding:12px 16px; margin:0 0 14px 0; margin:12px 24px;"><div style="font-weight:bold; color:#1a2b42; margin-bottom:6px;">&#127911; Lesson Audio &mdash; Listen before class</div><audio controls preload="none" style="width:100%;"><source src="assets/audio/core_basics_level_1_lesson_19.mp3" type="audio/mpeg">Your browser does not support audio.</audio><div style="font-size:0.85em; color:#33475e; margin-top:8px; line-height:1.6;"><strong>Listen &amp; Answer:</strong><br>1) Is Ana free on Saturday?<br>2) Is the museum open on Sundays?<br>3) And you? Answer: 'Are you a student?' with a short answer.</div></div><div class="lesson-hw" style="background:#f7f3ea; border-left:4px solid #c5a059; border-radius:4px; padding:7px 14px; margin:6px 24px; font-size:0.78em; color:#3a3325; line-height:1.45;"><strong style="color:#a8843d;">&#9997;&#65039; Before next class (10 min):</strong> Write 3 truths + 1 lie about you for next class &bull; Practice short answers: Yes, I am / No, I don't (5 each) &bull; Listen to the lesson audio again</div><div class="slide-layout">
+                <div class="sidebar">
+                    <div class="sidebar-section">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">VOCABULARY</div>
+                        <div class="sidebar-list"><div>• Yes</div><div>• No</div><div>&bull; Maybe <span class="v-gloss">&middot; quizás</span></div><div>&bull; Sure <span class="v-gloss">&middot; seguro/a</span></div><div>&bull; Correct <span class="v-gloss">&middot; correcto</span></div><div>&bull; Wrong <span class="v-gloss">&middot; incorrecto</span></div><div>&bull; True <span class="v-gloss">&middot; verdadero</span></div><div>&bull; False <span class="v-gloss">&middot; falso</span></div><div>&bull; Agree <span class="v-gloss">&middot; estar de acuerdo</span></div><div>&bull; Disagree <span class="v-gloss">&middot; no estar de acuerdo</span></div><div>• Am</div><div>• Are</div><div>• Is</div><div>&bull; Right <span class="v-gloss">&middot; correcto / derecha</span></div><div>• OK</div></div>
+                    </div>
+                    
+                    <div class="sidebar-section" style="margin-top:auto;">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">CONTEXT</div>
+                        <div class="sidebar-list" style="font-style:italic; font-size:0.85em;"><b>Phase 1 (Speed Interrogation):</b> Teacher asks rapid questions. 'Are you a fish?' 'Are you a student?' 'Are you tired?'<br><br><b>Phase 2 (Intonation Check):</b> Teacher says 'You are cold' flatly. Students must repeat it as a question with rising pitch.<br><br><b>Phase 3 (True/False):</b> 'Is Madrid in France?' -> 'No, it is not.'</div>
+                    </div>
+                </div>
+            
+                <div class="slide-body">
+                    <img src="assets/images/vesper_logo.jpg" class="watermark">
+                    <div class="section-title center-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color); text-decoration-color:var(--theme-color);">STRUCTURE</div>
+                    <div class="structure-content">
+                        <span style='color:var(--theme-color); font-weight:bold;'>Formula:</span> To Be + Subject + Adjective/Noun?<br><br><span style='color:var(--theme-color); font-weight:bold;'>Explanation:</span><br>To make a Yes/No question, invert the subject and 'To Be'.<br>You are happy. -> Are you happy?<br><br><span style='color:var(--theme-color); font-weight:bold;'>🚨 Pronunciation Focus:</span><br>Intonation MUST go UP at the end of a Yes/No question. <em>Are you hap-PY? ↗</em>
+                    </div>
+                    <div class="two-cols">
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXAMPLES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>VIP Club Bouncer (10 mins)</strong><br><br><strong>Roles:</strong><br>Role A: Strict Bouncer.<br>Role B: Person trying to enter the club.<br><br><strong>Script:</strong><br>Bouncer: 'Stop. Are you on the list?'<br>Guest: 'Yes, I am.'<br>Bouncer: 'Are you 18 years old?'<br>Guest: 'Yes, I am 25.'<br>Bouncer: 'Is that your ID?'<br><em>Challenge:</em> Bouncer finds reasons to say NO.</div>
+                        </div>
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXERCISES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>Tier 1: Statement to Question</strong><br>1. He is tall. -> Is he tall?<br>2. They are from Spain. -> Are they from Spain?<br><br><strong>Tier 2: The 20 Questions Game</strong><br>Teacher thinks of a famous animal (e.g. Elephant).<br>Students ask: 'Is it big?' 'Is it green?' 'Is it dangerous?'</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <a href="#sl18" class="nav-arrow nav-prev"><i class="fas fa-chevron-left"></i></a>
+            <a href="#sl20" class="nav-arrow nav-next"><i class="fas fa-chevron-right"></i></a>
+            
+            <div class="progress-bar-container"><div class="progress-bar" style="width:95.0%;"></div></div>
+            <div style="position:absolute; bottom:15px; right:30px; font-family:'Merriweather'; color:#999; font-size:0.8em;">Core Basics: Level 1 | 19</div>
+        </div>
+        
+        <div class="slide-page" id="sl20">
+            <div class="slide-header-bar" style="background-color:var(--theme-color);">
+                <div class="top-row">
+                    <div class="logo-container"><img src="assets/images/vesper_logo.jpg" style="filter: brightness(0) invert(1);"></div>
+                    <div class="academy-name">VESPER <span style="font-size:0.5em; display:block; letter-spacing:1px;">ACADEMY</span></div>
+                </div>
+                <div class="lesson-headline">Lesson 20 - Level 1 Final Exam</div>
+            </div>
+            
+            <div class="slide-layout">
+                <div class="sidebar">
+                    <div class="sidebar-section">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">VOCABULARY</div>
+                        <div class="sidebar-list"><div>&bull; Review <span class="v-gloss">&middot; repaso</span></div><div>&bull; Test <span class="v-gloss">&middot; prueba</span></div><div>&bull; Exam <span class="v-gloss">&middot; examen</span></div><div>&bull; Pass <span class="v-gloss">&middot; pasar / aprobar</span></div><div>• Fail</div><div>&bull; Score <span class="v-gloss">&middot; puntuación</span></div><div>&bull; Grade <span class="v-gloss">&middot; calificación</span></div><div>&bull; Listen <span class="v-gloss">&middot; escuchar</span></div><div>&bull; Speak <span class="v-gloss">&middot; hablar</span></div><div>&bull; Read <span class="v-gloss">&middot; leer</span></div><div>&bull; Write <span class="v-gloss">&middot; escribir</span></div><div>&bull; Learn <span class="v-gloss">&middot; aprender</span></div><div>&bull; Study <span class="v-gloss">&middot; estudiar</span></div><div>&bull; Remember <span class="v-gloss">&middot; recordar</span></div></div>
+                    </div>
+                    
+                    <div class="sidebar-section" style="margin-top:auto;">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">CONTEXT</div>
+                        <div class="sidebar-list" style="font-style:italic; font-size:0.85em;"><b>Phase 1 (Vocab Waterfall):</b> Teacher says 'Category: Colors'. Everyone types as many colors as possible in 30 seconds.<br><br><b>Phase 2 (Grammar Fix):</b> 'I is a doctor.' -> 'I AM a doctor.'<br><br><b>Phase 3 (Deep Breath):</b> 'Are you ready?' -> 'Yes, we are!'</div>
+                    </div>
+                </div>
+            
+                <div class="slide-body">
+                    <img src="assets/images/vesper_logo.jpg" class="watermark">
+                    <div class="section-title center-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color); text-decoration-color:var(--theme-color);">STRUCTURE</div>
+                    <div class="structure-content">
+                        <span style='color:var(--theme-color); font-weight:bold;'>Level 1 Review:</span><br>We have mastered: To Be, Adjectives, Prepositions, Numbers, and Basic Questions.<br><br><span style='color:var(--theme-color); font-weight:bold;'>Focus:</span><br>Accuracy and confidence. Don't translate in your head; just speak!
+                    </div>
+                    <div class="two-cols">
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXAMPLES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>The 1-on-1 Interview (10 mins)</strong><br><br><strong>Context:</strong> Final Evaluation.<br><br><strong>Task:</strong><br>The teacher puts students in waiting rooms or breakout rooms.<br>Each student does the 10-point challenge privately with the teacher.<br><em>Teacher records the score using the Student Evaluation Tool.</em><br><br><strong>Reward:</strong> Digital Certificate of A0 Completion!</div>
+                        </div>
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXERCISES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>The 10-Point Oral Challenge:</strong><br>1. Introduce yourself (Name, Country, Job).<br>2. Count from 11 to 20.<br>3. Describe the teacher (Tall/Short/Hair).<br>4. What time is it now?<br>5. Where is your phone? (Use preposition).<br>6. Name 3 items in a Kitchen.<br>7. Translate: 'El carro rojo'.<br>8. Ask me a 'Where' question.<br>9. Ask me a 'Who' question.<br>10. Answer: 'Are you hungry?'</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <a href="#sl19" class="nav-arrow nav-prev"><i class="fas fa-chevron-left"></i></a>
+            <a href="#cp20" class="nav-arrow nav-next"><i class="fas fa-chevron-right"></i></a>
+            
+            <div class="progress-bar-container"><div class="progress-bar" style="width:100.0%;"></div></div>
+            <div style="position:absolute; bottom:15px; right:30px; font-family:'Merriweather'; color:#999; font-size:0.8em;">Core Basics: Level 1 | 20</div>
+        </div>
+        
+            <div class="slide-page" id="cp20" style="background-color: var(--theme-color); color:white;">
+                 <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; text-align:center; padding:50px;">
+                    <i class="fas fa-flag-checkered" style="font-size:5em; margin-bottom:20px; opacity:0.8;"></i>
+                    <h1 style="font-size:3em; margin:0; font-family:'Merriweather';">CHECKPOINT</h1>
+                    <h2 style="font-size:1.5em; font-weight:300; opacity:0.9;">Lessons 16 - 20 Complete</h2>
+                    <div style="background:white; color:#333; padding:30px; border-radius:10px; margin-top:40px; max-width:600px; box-shadow:0 10px 30px rgba(0,0,0,0.2);">
+                        <h3 style="color:var(--theme-color); margin-top:0;">Time to Review!</h3>
+                        <p>Great job! You have completed another block of 5 lessons.</p>
+                        <div style="margin-top:20px; font-weight:bold;">Next Up: Lesson 21</div>
+                    </div>
+                 </div>
+                 <a href="#sl20" class="nav-arrow nav-prev" style="background:white; color:var(--theme-color);"><i class="fas fa-chevron-left"></i></a>
+                 <a href="#" class="nav-arrow nav-next" style="background:white; color:var(--theme-color);"><i class="fas fa-chevron-right"></i></a>
+            </div>
+            </body></html>

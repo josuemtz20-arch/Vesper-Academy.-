@@ -1,0 +1,792 @@
+<!DOCTYPE html><html lang="en"><head>
+<script src="vesper_auth.js"></script><meta charset="UTF-8"><title>Daily Life English: Vol 0  | Student Workbook</title><link rel="stylesheet" href="assets/css/vesper_style.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700&family=Open+Sans:wght@400;600;700&display=swap');
+    body { background-color: #525659; margin: 0; padding: 40px 0; display: flex; flex-direction: column; align-items: center; font-family: 'Merriweather', serif; color: #1a2b42; }
+    .page { background-color: white; width: 210mm; min-height: 297mm; padding: 20mm; box-sizing: border-box; box-shadow: 0 0 20px rgba(0,0,0,0.3); margin-bottom: 40px; position: relative; page-break-after: always; }
+    @media print { body { background: none; margin: 0; padding: 0; display: block; } .page { box-shadow: none; margin: 0; width: 100%; height: 100%; page-break-after: always; border: none; } .no-print { display: none; } }
+    @media screen and (max-width: 768px) {
+        body { padding: 10px; }
+        .page { width: 100%; padding: 10mm; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); min-height: auto; }
+        .module-header { margin: -10mm -10mm 10mm -10mm; padding: 15px 10mm; font-size: 1.2em; }
+        .lesson-title h2 { font-size: 1.8em; }
+        .vocab-grid { grid-template-columns: 1fr; }
+        .no-print { top: 10px; left: 10px; opacity: 0.8; }
+        .cover-title { font-size: 2em !important; }
+        .cover-subtitle { font-size: 1.2em !important; }
+    }
+    h1, h2, h3 { font-family: 'Open Sans', sans-serif; }
+    .module-header { background-color: #1a2b42; color: #d4af37; padding: 15px 20mm; margin: -20mm -20mm 10mm -20mm; font-family: 'Merriweather', serif; font-size: 1.4em; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
+    .lesson-title { border-bottom: 2px solid #34495e; padding-bottom: 15px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; }
+    .lesson-title h2 { margin: 0; font-size: 2.2em; color: #1a2b42; }
+    .lesson-block { margin-bottom: 25px; padding: 20px 25px; background: #fff; border-left: 5px solid #ccc; border-radius: 0 5px 5px 0; }
+    .lb-blue { border-color: #3498db; background: #ebf5fb; }
+    .lb-navy { border-color: #1a2b42; background: #fff; border: 1px solid #eee; border-left: 6px solid #1a2b42; }
+    .lb-green { border-color: #27ae60; background: #eafaf1; }
+    .lb-red { border-color: #c0392b; background: #fdedec; }
+    .lb-header { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; font-weight: bold; font-family: 'Open Sans'; text-transform: uppercase; font-size: 1em; letter-spacing: 0.5px; }
+    .lb-blue .lb-header { color: #2980b9; } 
+    .lb-navy .lb-header { color: #1a2b42; }
+    .lb-green .lb-header { color: #27ae60; }
+    .lb-red .lb-header { color: #c0392b; }
+    .content-text { line-height: 1.8; font-size: 0.95em; color: #2c3e50; text-align: justify; }
+    ul.deep-list { padding-left: 20px; list-style-type: square; } ul.deep-list li { margin-bottom: 12px; }
+    .vocab-box { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
+    .vocab-item { background: #eee; padding: 5px 10px; border-radius: 3px; font-size: 0.9em; font-family: 'Open Sans'; }
+    .page-num { position: absolute; bottom: 20mm; right: 20mm; color: #999; font-size: 0.8em; }
+    p { margin-bottom: 15px; }
+    .intro-box { background-color: #f8f9fa; border: 1px solid #dee2e6; padding: 30px; border-radius: 8px; margin-top: 50px; }
+</style>
+</head><body><div class="no-print" style="position: fixed; top: 20px; left: 20px; z-index: 1000;"><a href="index.html" style="background: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: bold; color: #1a2b42; box-shadow: 0 2px 5px rgba(0,0,0,0.2);"><i class="fas fa-arrow-left"></i> Dashboard</a></div><div class="page cover-page"><img src="assets/images/vesper_logo.jpg" alt="Vesper Academy" class="cover-logo" style="width:200px; margin-bottom:20px;"><div class="cover-title" style="font-size:3em; font-weight:bold; color:#1a2b42;">Daily Life English: Vol 0 </div><div class="cover-subtitle" style="font-size:1.5em; color:#34495e;">Beginner Survival (A1)</div><div style="margin-top: auto;"><strong>Vesper Academy</strong><br>Student Workbook</div></div><div class="page">
+<h1>Daily Life English: Volume 0 (A1)</h1>
+<div class="intro-box">
+    <p><strong>Course Overview:</strong></p>
+    <p>This course is the absolute foundation of English. It is designed for <strong>True Beginners</strong>. The focus is on survival skills, basic phonics, and immediate "Can-Do" statements.</p>
+    <p><strong>Online Teaching Strategy:</strong></p>
+    <ul class="deep-list">
+        <li><strong>Total Physical Response (TPR) via Camera:</strong> "Touch your nose!" "Hold up a pen!" Use the webcam actively.</li>
+        <li><strong>Mute/Unmute Drills:</strong> Rapid-fire pronunciation checks. "Unmute and say: APPLE."</li>
+        <li><strong>Visual Anchors:</strong> Always use Screen Share for images. Do not rely on text alone for this level.</li>
+    </ul>
+</div>
+</div><div class="page"><div class="toc"><h1>Course Modules</h1><div><a href="#l1">1. The Alphabet & Phonics</a></div><div><a href="#l2">2. Greetings & Names</a></div><div><a href="#l3">3. Numbers 0-100</a></div><div><a href="#l4">4. Colors & Clothing</a></div><div><a href="#l5">5. Family Tree</a></div><div><a href="#l6">6. Days & Time</a></div><div><a href="#l7">7. Food & Drink</a></div><div><a href="#l8">8. Jobs & Work</a></div><div><a href="#l9">9. The House</a></div><div><a href="#l10">10. The City & Transport</a></div><div><a href="#l11">11. Feelings & Emotions</a></div><div><a href="#l12">12. Daily Routine</a></div><div><a href="#l13">13. Weather & Seasons</a></div><div><a href="#l14">14. Hobbies & Free Time</a></div><div><a href="#l15">15. Basic Technology</a></div><div><a href="#l16">16. Shopping & Money</a></div><div><a href="#l17">17. The Body & Health</a></div><div><a href="#l18">18. Animals & Nature</a></div><div><a href="#l19">19. Revision: My Life</a></div><div><a href="#l20">20. COURSE GRADUATION</a></div></div></div>
+        <div class="page" id="l1">
+            <div class="module-header"><i class="fas fa-font"></i> Daily Life English: Vol 0 </div>
+            <div class="lesson-title"><h2>1. The Alphabet & Phonics</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Zoom Warm Up</div>
+                <div class="content-text"><strong>Mouth Shape Challenge (Camera):</strong><br>Teacher mimes a letter (no sound). Students guess: 'Is it O?' 'Is it M?'</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory & Vocab</div>
+                <div class="content-text">
+                    <strong>1. Core Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">A (Apple)</span><span class="vocab-item">B (Ball)</span><span class="vocab-item">C (Cat)</span><span class="vocab-item">D (Dog)</span><span class="vocab-item">E (Egg)</span><span class="vocab-item">F (Fish)</span><span class="vocab-item">G (Goat)</span><span class="vocab-item">H (Hat)</span><span class="vocab-item">I (Ice)</span><span class="vocab-item">J (Jam)</span><span class="vocab-item">Vowel</span><span class="vocab-item">Consonant</span><span class="vocab-item">Sound</span><span class="vocab-item">Letter</span><span class="vocab-item">Spell</span></div>
+                    <br>
+                    <strong>2. Concept:</strong>
+                    <strong>1. The Vowels (A, E, I, O, U):</strong><br>These are the open sounds. Your mouth is open.<br><strong>2. The Consonants (B, C, D...):</strong><br>These sounds are blocked by lips or tongue.
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Controlled Practice</div>
+                <div class="content-text"><strong>The Spelling Race (Chat):</strong><br>Teacher says: 'DOG'. Students type: 'D-O-G'. Fastest typer wins.</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Online Simulation</div>
+                <div class="content-text"><strong>Hotel Check-in (Spelling):</strong><br><strong>Roleplay:</strong> Student arrives at hotel.<br>Receptionist: 'What is your name?'<br>Guest: 'Smith. S-M-I-T-H.'</div>
+            </div>
+            
+            <div class="page-num">Daily Life English: Vol 0  &bull; Page 4</div>
+        </div>
+        
+        <div class="page" id="l2">
+            <div class="module-header"><i class="fas fa-coffee"></i> Daily Life English: Vol 0 </div>
+            <div class="lesson-title"><h2>2. Greetings & Names</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Zoom Warm Up</div>
+                <div class="content-text"><strong>Wave & Say (Camera):</strong><br>All students wave at camera. Unmute one by one: 'Hi, I am [Name].'</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory & Vocab</div>
+                <div class="content-text">
+                    <strong>1. Core Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Hello</span><span class="vocab-item">Hi</span><span class="vocab-item">Goodbye</span><span class="vocab-item">Bye</span><span class="vocab-item">Name</span><span class="vocab-item">First Name</span><span class="vocab-item">Surname</span><span class="vocab-item">Mr</span><span class="vocab-item">Mrs</span><span class="vocab-item">Miss</span><span class="vocab-item">Nice</span><span class="vocab-item">Meet</span><span class="vocab-item">Morning</span><span class="vocab-item">Afternoon</span><span class="vocab-item">Evening</span></div>
+                    <br>
+                    <strong>2. Concept:</strong>
+                    <strong>1. Formal vs Informal:</strong><br><strong>Hi:</strong> Friends/Family.<br><strong>Hello:</strong> Boss/Strangers.<br><strong>2. Introductions:</strong><br>'My name is...' / 'I am...'
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Controlled Practice</div>
+                <div class="content-text"><strong>Time Travel:</strong><br>Show image of Sun (Morning) -> Say 'Good Morning'. Show Moon -> Say 'Good Evening'.</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Online Simulation</div>
+                <div class="content-text"><strong>The Cocktail Party (Breakout Rooms):</strong><br>Pairs. You have 30 seconds. 'Hello.' 'Hi.' 'I am Bond.' 'Nice to meet you.' Swap pairs.</div>
+            </div>
+            
+            <div class="page-num">Daily Life English: Vol 0  &bull; Page 5</div>
+        </div>
+        
+        <div class="page" id="l3">
+            <div class="module-header"><i class="fas fa-coffee"></i> Daily Life English: Vol 0 </div>
+            <div class="lesson-title"><h2>3. Numbers 0-100</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Zoom Warm Up</div>
+                <div class="content-text"><strong>Finger Math (Camera):</strong><br>Hold up 3 fingers. Students shout 'Three!'. Hold up 10 fingers.</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory & Vocab</div>
+                <div class="content-text">
+                    <strong>1. Core Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Zero</span><span class="vocab-item">One</span><span class="vocab-item">Two</span><span class="vocab-item">Three</span><span class="vocab-item">Four</span><span class="vocab-item">Five</span><span class="vocab-item">Six</span><span class="vocab-item">Seven</span><span class="vocab-item">Eight</span><span class="vocab-item">Nine</span><span class="vocab-item">Ten</span><span class="vocab-item">Twenty</span><span class="vocab-item">Thirty</span><span class="vocab-item">Fifty</span><span class="vocab-item">Hundred</span></div>
+                    <br>
+                    <strong>2. Concept:</strong>
+                    <strong>1. The -Teen vs -Ty Problem:</strong><br>13 (Thir-TEEN) vs 30 (Thir-TY).<br>Stress the LAST syllable for 13. Stress the FIRST for 30.
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Controlled Practice</div>
+                <div class="content-text"><strong>Bingo (Annotate):</strong><br>Screen share a grid of numbers. Teacher says '55'. Students stamp the number.</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Online Simulation</div>
+                <div class="content-text"><strong>The Phone Number:</strong><br><strong>Goal:</strong> Get a date.<br>A: 'Call me.'<br>B: 'What is your number?'<br>A: '555-0199.' Write it down.</div>
+            </div>
+            
+            <div class="page-num">Daily Life English: Vol 0  &bull; Page 6</div>
+        </div>
+        
+        <div class="page" id="l4">
+            <div class="module-header"><i class="fas fa-coffee"></i> Daily Life English: Vol 0 </div>
+            <div class="lesson-title"><h2>4. Colors & Clothing</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Zoom Warm Up</div>
+                <div class="content-text"><strong>Camera Scavenger Hunt:</strong><br>'Find me something BLUE!' Students run and show a blue object to the camera.</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory & Vocab</div>
+                <div class="content-text">
+                    <strong>1. Core Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Red</span><span class="vocab-item">Blue</span><span class="vocab-item">Green</span><span class="vocab-item">Yellow</span><span class="vocab-item">Black</span><span class="vocab-item">White</span><span class="vocab-item">Shirt</span><span class="vocab-item">Pants</span><span class="vocab-item">Shoes</span><span class="vocab-item">Dress</span><span class="vocab-item">Coat</span><span class="vocab-item">Hat</span><span class="vocab-item">Wear</span><span class="vocab-item">Size</span><span class="vocab-item">Color</span></div>
+                    <br>
+                    <strong>2. Concept:</strong>
+                    <strong>1. Adjective Order:</strong><br>The <strong>Red Shirt</strong> (Correct).<br>The Shirt Red (Wrong).<br><strong>2. To Wear:</strong><br>I am wearing a hat.
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Controlled Practice</div>
+                <div class="content-text"><strong>Fashion Police:</strong><br>Show photo of a celebrity. 'What is he wearing?' 'He is wearing a black coat.'</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Online Simulation</div>
+                <div class="content-text"><strong>The Shop Assistant:</strong><br>A: 'Do you have this shirt in Red?'<br>B: 'No, only Blue.'<br>A: 'Okay, I will take it.'</div>
+            </div>
+            
+            <div class="page-num">Daily Life English: Vol 0  &bull; Page 7</div>
+        </div>
+        
+        <div class="page" id="l5">
+            <div class="module-header"><i class="fas fa-coffee"></i> Daily Life English: Vol 0 </div>
+            <div class="lesson-title"><h2>5. Family Tree</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Zoom Warm Up</div>
+                <div class="content-text"><strong>The Famous Family:</strong><br>Show The Simpsons family tree. 'Who is Bart?' 'He is Homer's son.'</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory & Vocab</div>
+                <div class="content-text">
+                    <strong>1. Core Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Mother</span><span class="vocab-item">Father</span><span class="vocab-item">Brother</span><span class="vocab-item">Sister</span><span class="vocab-item">Son</span><span class="vocab-item">Daughter</span><span class="vocab-item">Grandmother</span><span class="vocab-item">Grandfather</span><span class="vocab-item">Uncle</span><span class="vocab-item">Aunt</span><span class="vocab-item">Cousin</span><span class="vocab-item">Family</span><span class="vocab-item">Parents</span><span class="vocab-item">Married</span><span class="vocab-item">Single</span></div>
+                    <br>
+                    <strong>2. Concept:</strong>
+                    <strong>1. Possession ('s):</strong><br>John's brother.<br>My mother's name.<br><strong>2. He vs She:</strong><br>He (Man/Boy). She (Woman/Girl).
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Controlled Practice</div>
+                <div class="content-text"><strong>Draw My Family (Screen Share):</strong><br>Student draws stick figures on whiteboard. 'This is my dad. He is tall.'</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Online Simulation</div>
+                <div class="content-text"><strong>The Wedding Guest:</strong><br><strong>Constraint:</strong> You don't know anyone.<br>'Who is she?'<br>'She is the groom's sister.'<br>'Is she single?'</div>
+            </div>
+            
+            <div class="page-num">Daily Life English: Vol 0  &bull; Page 8</div>
+        </div>
+        
+        <div class="page" id="l6">
+            <div class="module-header"><i class="fas fa-coffee"></i> Daily Life English: Vol 0 </div>
+            <div class="lesson-title"><h2>6. Days & Time</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Zoom Warm Up</div>
+                <div class="content-text"><strong>Calendar Annotation:</strong><br>Show a calendar. 'Circle your birthday.' 'Circle next Friday.'</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory & Vocab</div>
+                <div class="content-text">
+                    <strong>1. Core Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Monday</span><span class="vocab-item">Tuesday</span><span class="vocab-item">Wednesday</span><span class="vocab-item">Thursday</span><span class="vocab-item">Friday</span><span class="vocab-item">Saturday</span><span class="vocab-item">Sunday</span><span class="vocab-item">Week</span><span class="vocab-item">Weekend</span><span class="vocab-item">Today</span><span class="vocab-item">Tomorrow</span><span class="vocab-item">Yesterday</span><span class="vocab-item">O'clock</span><span class="vocab-item">Half Past</span><span class="vocab-item">Meeting</span></div>
+                    <br>
+                    <strong>2. Concept:</strong>
+                    <strong>Prepositions of Time:</strong><br><strong>ON</strong> Monday.<br><strong>AT</strong> 5 o'clock.<br><strong>IN</strong> the morning.
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Controlled Practice</div>
+                <div class="content-text"><strong>Clock Reading:</strong><br>Show clock faces. 'It is half past six.' 'It is 9 PM.'</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Online Simulation</div>
+                <div class="content-text"><strong>Let's Meet:</strong><br>A: 'Coffee on Monday?'<br>B: 'No, busy.'<br>A: 'Tuesday at 5?'<br>B: 'Yes, perfect.'</div>
+            </div>
+            
+            <div class="page-num">Daily Life English: Vol 0  &bull; Page 9</div>
+        </div>
+        
+        <div class="page" id="l7">
+            <div class="module-header"><i class="fas fa-coffee"></i> Daily Life English: Vol 0 </div>
+            <div class="lesson-title"><h2>7. Food & Drink</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Zoom Warm Up</div>
+                <div class="content-text"><strong>Yuck or Yum (Chat):</strong><br>Show picture of Snake Soup. Type 'YUM' or 'YUCK'.</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory & Vocab</div>
+                <div class="content-text">
+                    <strong>1. Core Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Water</span><span class="vocab-item">Coffee</span><span class="vocab-item">Tea</span><span class="vocab-item">Bread</span><span class="vocab-item">Rice</span><span class="vocab-item">Meat</span><span class="vocab-item">Chicken</span><span class="vocab-item">Fish</span><span class="vocab-item">Vegetable</span><span class="vocab-item">Fruit</span><span class="vocab-item">Apple</span><span class="vocab-item">Banana</span><span class="vocab-item">Hungry</span><span class="vocab-item">Thirsty</span><span class="vocab-item">Eat</span></div>
+                    <br>
+                    <strong>2. Concept:</strong>
+                    <strong>1. Likes & Dislikes:</strong><br>I like coffee.<br>I don't like tea.<br><strong>2. Countable vs Uncountable:</strong><br>1 Apple (Countable). Rice (Uncountable - No 'a rice').
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Controlled Practice</div>
+                <div class="content-text"><strong>The Menu:</strong><br>Display a restaurant menu. 'Find three things with Chicken.'</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Online Simulation</div>
+                <div class="content-text"><strong>Uber Eats Order:</strong><br>Screen share food app UI.<br>A: 'I want pizza.'<br>B: 'No, I want sushi.'<br>Negotiate and decide.</div>
+            </div>
+            
+            <div class="page-num">Daily Life English: Vol 0  &bull; Page 10</div>
+        </div>
+        
+        <div class="page" id="l8">
+            <div class="module-header"><i class="fas fa-briefcase"></i> Daily Life English: Vol 0 </div>
+            <div class="lesson-title"><h2>8. Jobs & Work</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Zoom Warm Up</div>
+                <div class="content-text"><strong>Charades (Camera):</strong><br>Student mimes a job (e.g. driving). Class guesses: 'Driver!'</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory & Vocab</div>
+                <div class="content-text">
+                    <strong>1. Core Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Doctor</span><span class="vocab-item">Teacher</span><span class="vocab-item">Student</span><span class="vocab-item">Engineer</span><span class="vocab-item">Driver</span><span class="vocab-item">Nurse</span><span class="vocab-item">Police</span><span class="vocab-item">Chef</span><span class="vocab-item">Office</span><span class="vocab-item">Work</span><span class="vocab-item">Job</span><span class="vocab-item">Boss</span><span class="vocab-item">Staff</span><span class="vocab-item">Computer</span><span class="vocab-item">Busy</span></div>
+                    <br>
+                    <strong>2. Concept:</strong>
+                    <strong>1. Articles (A/An):</strong><br>I am <strong>a</strong> Doctor.<br>I am <strong>an</strong> Engineer (Vowel sound).<br><strong>2. Place of Work:</strong><br>Doctors work in a hospital.
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Controlled Practice</div>
+                <div class="content-text"><strong>Job Interview Lite:</strong><br>'What do you do?' 'I am a student.' 'Where do you work?'</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Online Simulation</div>
+                <div class="content-text"><strong>Speed Networking:</strong><br>Breakout rooms. 60 seconds.<br>'Name?' 'Job?' 'Company?' Exchange imaginary business cards.</div>
+            </div>
+            
+            <div class="page-num">Daily Life English: Vol 0  &bull; Page 11</div>
+        </div>
+        
+        <div class="page" id="l9">
+            <div class="module-header"><i class="fas fa-coffee"></i> Daily Life English: Vol 0 </div>
+            <div class="lesson-title"><h2>9. The House</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Zoom Warm Up</div>
+                <div class="content-text"><strong>Through the Keyhole:</strong><br>Zoom background challenge. Student covers camera partially. 'Guess which room I am in.'</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory & Vocab</div>
+                <div class="content-text">
+                    <strong>1. Core Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Kitchen</span><span class="vocab-item">Bathroom</span><span class="vocab-item">Bedroom</span><span class="vocab-item">Living Room</span><span class="vocab-item">Door</span><span class="vocab-item">Window</span><span class="vocab-item">Table</span><span class="vocab-item">Chair</span><span class="vocab-item">Bed</span><span class="vocab-item">Sofa</span><span class="vocab-item">TV</span><span class="vocab-item">Fridge</span><span class="vocab-item">Shower</span><span class="vocab-item">House</span><span class="vocab-item">Apartment</span></div>
+                    <br>
+                    <strong>2. Concept:</strong>
+                    <strong>There is / There are:</strong><br>There is a sofa (1).<br>There are two chairs (2+).<br>Is there a TV?
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Controlled Practice</div>
+                <div class="content-text"><strong>Dream House (Whiteboard):</strong><br>Draw a square. 'Put a big TV in the living room.' 'Put a tree in the kitchen.'</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Online Simulation</div>
+                <div class="content-text"><strong>Real Estate Agent:</strong><br>Sell a terrible house.<br>Agent: 'Cozy bedroom!' (It is very small).<br>Buyer: 'There is no window!'</div>
+            </div>
+            
+            <div class="page-num">Daily Life English: Vol 0  &bull; Page 12</div>
+        </div>
+        
+        <div class="page" id="l10">
+            <div class="module-header"><i class="fas fa-coffee"></i> Daily Life English: Vol 0 </div>
+            <div class="lesson-title"><h2>10. The City & Transport</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Zoom Warm Up</div>
+                <div class="content-text"><strong>Sound Effects:</strong><br>Play sound (Siren). 'Police Car!' Play sound (Bell). 'Bicycle!'</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory & Vocab</div>
+                <div class="content-text">
+                    <strong>1. Core Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Car</span><span class="vocab-item">Bus</span><span class="vocab-item">Train</span><span class="vocab-item">Taxi</span><span class="vocab-item">Plane</span><span class="vocab-item">Station</span><span class="vocab-item">Airport</span><span class="vocab-item">Street</span><span class="vocab-item">Park</span><span class="vocab-item">Shop</span><span class="vocab-item">Bank</span><span class="vocab-item">Hospital</span><span class="vocab-item">School</span><span class="vocab-item">Go</span><span class="vocab-item">Stop</span></div>
+                    <br>
+                    <strong>2. Concept:</strong>
+                    <strong>1. Verbs of Movement:</strong><br>Go to...<br>Take the bus.<br>Drive a car.<br><strong>2. Prepositions:</strong><br><strong>AT</strong> the station.
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Controlled Practice</div>
+                <div class="content-text"><strong>Google Map Directions:</strong><br>Screen share map. 'Go straight. Turn left. Where are you?' 'I am at the bank.'</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Online Simulation</div>
+                <div class="content-text"><strong>Late for Work:</strong><br>A: 'Sorry I am late.'<br>B: 'Why?'<br>A: 'The bus was slow.'<br>B: 'Take a taxi next time!'</div>
+            </div>
+            
+            <div class="page-num">Daily Life English: Vol 0  &bull; Page 13</div>
+        </div>
+        
+        <div class="page" id="l11">
+            <div class="module-header"><i class="fas fa-coffee"></i> Daily Life English: Vol 0 </div>
+            <div class="lesson-title"><h2>11. Feelings & Emotions</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Zoom Warm Up</div>
+                <div class="content-text"><strong>Emoji Face (Camera):</strong><br>Teacher puts Emoji on screen. Students copy the face validly.</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory & Vocab</div>
+                <div class="content-text">
+                    <strong>1. Core Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Happy</span><span class="vocab-item">Sad</span><span class="vocab-item">Angry</span><span class="vocab-item">Tired</span><span class="vocab-item">Hungry</span><span class="vocab-item">Thirsty</span><span class="vocab-item">Hot</span><span class="vocab-item">Cold</span><span class="vocab-item">Sick</span><span class="vocab-item">Bored</span><span class="vocab-item">Excited</span><span class="vocab-item">Scared</span><span class="vocab-item">Surprised</span><span class="vocab-item">Feel</span><span class="vocab-item">Very</span></div>
+                    <br>
+                    <strong>2. Concept:</strong>
+                    <strong>To Be + Adjective:</strong><br>I am happy.<br>Are you sad?<br>He is very tired (Intensifier).
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Controlled Practice</div>
+                <div class="content-text"><strong>The Doctor Check:</strong><br>'How are you?' 'I am hot and tired.' 'Drink water.'</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Online Simulation</div>
+                <div class="content-text"><strong>The Bad Day:</strong><br>Student rants (simple phrases).<br>'I am tired. The bus is late. It is raining. I am hungry.' Partner offers sympathy.</div>
+            </div>
+            
+            <div class="page-num">Daily Life English: Vol 0  &bull; Page 14</div>
+        </div>
+        
+        <div class="page" id="l12">
+            <div class="module-header"><i class="fas fa-coffee"></i> Daily Life English: Vol 0 </div>
+            <div class="lesson-title"><h2>12. Daily Routine</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Zoom Warm Up</div>
+                <div class="content-text"><strong>Mime the Time:</strong><br>Teacher performs an action (Brushing teeth). Students guess: 'Morning!'</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory & Vocab</div>
+                <div class="content-text">
+                    <strong>1. Core Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Wake up</span><span class="vocab-item">Breakfast</span><span class="vocab-item">Shower</span><span class="vocab-item">Work</span><span class="vocab-item">Lunch</span><span class="vocab-item">Dinner</span><span class="vocab-item">Sleep</span><span class="vocab-item">Watch TV</span><span class="vocab-item">Read</span><span class="vocab-item">Play</span><span class="vocab-item">Start</span><span class="vocab-item">Finish</span><span class="vocab-item">Early</span><span class="vocab-item">Late</span><span class="vocab-item">Time</span></div>
+                    <br>
+                    <strong>2. Concept:</strong>
+                    <strong>Present Simple (Habits):</strong><br>I wake up at 7.<br>He wake<strong>s</strong> up at 7 (The 'S' rule).
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Controlled Practice</div>
+                <div class="content-text"><strong>Habit Tracker:</strong><br>Interview partner. 'Do you eat breakfast?' 'Yes, at 8.' 'Do you run?' 'No.'</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Online Simulation</div>
+                <div class="content-text"><strong>The Detective:</strong><br>Establishing an alibi.<br>'Where were you at 8 PM?'<br>'I was watching TV.'<br>'What were you eating?'</div>
+            </div>
+            
+            <div class="page-num">Daily Life English: Vol 0  &bull; Page 15</div>
+        </div>
+        
+        <div class="page" id="l13">
+            <div class="module-header"><i class="fas fa-coffee"></i> Daily Life English: Vol 0 </div>
+            <div class="lesson-title"><h2>13. Weather & Seasons</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Zoom Warm Up</div>
+                <div class="content-text"><strong>Window Reporter:</strong><br>Look out your real window. 'What is the weather?' 'It is grey.'</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory & Vocab</div>
+                <div class="content-text">
+                    <strong>1. Core Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Sun</span><span class="vocab-item">Rain</span><span class="vocab-item">Snow</span><span class="vocab-item">Wind</span><span class="vocab-item">Cloud</span><span class="vocab-item">Hot</span><span class="vocab-item">Cold</span><span class="vocab-item">Warm</span><span class="vocab-item">Summer</span><span class="vocab-item">Winter</span><span class="vocab-item">Spring</span><span class="vocab-item">Autumn</span><span class="vocab-item">Weather</span><span class="vocab-item">Umbrella</span><span class="vocab-item">Forecast</span></div>
+                    <br>
+                    <strong>2. Concept:</strong>
+                    <strong>It is + Adjective/Verb:</strong><br>It is sunny.<br>It is raining (Continuous).<br>It is hot today.
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Controlled Practice</div>
+                <div class="content-text"><strong>Pack Your Bag:</strong><br>Scenario: Going to Alaska. 'Take a coat.' Scenario: Going to Hawaii. 'Take shorts.'</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Online Simulation</div>
+                <div class="content-text"><strong>Travel Disaster:</strong><br>Tourist: 'I want to go to the beach.'<br>Local: 'No, it is raining. Go to the museum.'<br>Tourist: 'I hate museums.'</div>
+            </div>
+            
+            <div class="page-num">Daily Life English: Vol 0  &bull; Page 16</div>
+        </div>
+        
+        <div class="page" id="l14">
+            <div class="module-header"><i class="fas fa-coffee"></i> Daily Life English: Vol 0 </div>
+            <div class="lesson-title"><h2>14. Hobbies & Free Time</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Zoom Warm Up</div>
+                <div class="content-text"><strong>Talent Show (Camera):</strong><br>'Show me a talent.' (Student juggles or draws). Class claps.</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory & Vocab</div>
+                <div class="content-text">
+                    <strong>1. Core Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Football</span><span class="vocab-item">Tennis</span><span class="vocab-item">Music</span><span class="vocab-item">Reading</span><span class="vocab-item">Gaming</span><span class="vocab-item">Shopping</span><span class="vocab-item">Cooking</span><span class="vocab-item">Dancing</span><span class="vocab-item">Swimming</span><span class="vocab-item">Travel</span><span class="vocab-item">Like</span><span class="vocab-item">Love</span><span class="vocab-item">Hate</span><span class="vocab-item">Play</span><span class="vocab-item">Go</span></div>
+                    <br>
+                    <strong>2. Concept:</strong>
+                    <strong>1. Play vs Go:</strong><br>Play football (Ball games).<br>Go swimming (Verb-ing).<br><strong>2. Can:</strong><br>I can cook. I can't dance.
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Controlled Practice</div>
+                <div class="content-text"><strong>Find Your Tribe:</strong><br>Walk around (virtually). Find someone who loves the same hobby. 'Do you like K-Pop?' 'Yes!'</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Online Simulation</div>
+                <div class="content-text"><strong>Club Sign-up:</strong><br>A: 'Join the Chess Club.'<br>B: 'Is it fun?'<br>A: 'Yes, we play every Friday.'<br>B: 'Okay, I join.'</div>
+            </div>
+            
+            <div class="page-num">Daily Life English: Vol 0  &bull; Page 17</div>
+        </div>
+        
+        <div class="page" id="l15">
+            <div class="module-header"><i class="fas fa-coffee"></i> Daily Life English: Vol 0 </div>
+            <div class="lesson-title"><h2>15. Basic Technology</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Zoom Warm Up</div>
+                <div class="content-text"><strong>Tech Support Mime:</strong><br>'My phone is dead.' (Mime panic). 'My Wi-Fi is slow.' (Mime waiting).</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory & Vocab</div>
+                <div class="content-text">
+                    <strong>1. Core Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Phone</span><span class="vocab-item">Laptop</span><span class="vocab-item">Internet</span><span class="vocab-item">Wi-Fi</span><span class="vocab-item">Password</span><span class="vocab-item">Click</span><span class="vocab-item">Screen</span><span class="vocab-item">App</span><span class="vocab-item">Message</span><span class="vocab-item">Call</span><span class="vocab-item">Battery</span><span class="vocab-item">Charger</span><span class="vocab-item">Broken</span><span class="vocab-item">Slow</span><span class="vocab-item">Fast</span></div>
+                    <br>
+                    <strong>2. Concept:</strong>
+                    <strong>Imperatives (Instructions):</strong><br>Click here.<br>Don't touch that.<br>Open the app.
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Controlled Practice</div>
+                <div class="content-text"><strong>Zoom Instructions:</strong><br>Teacher gives commands: 'Turn off camera.' 'Mute microphone.' 'Type Hello.'</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Online Simulation</div>
+                <div class="content-text"><strong>Grandma & The iPad:</strong><br>Student A (Grandma): 'How do I call?'<br>Student B (Grandchild): 'Touch the green button.'<br>A: 'Where?'</div>
+            </div>
+            
+            <div class="page-num">Daily Life English: Vol 0  &bull; Page 18</div>
+        </div>
+        
+        <div class="page" id="l16">
+            <div class="module-header"><i class="fas fa-shopping-cart"></i> Daily Life English: Vol 0 </div>
+            <div class="lesson-title"><h2>16. Shopping & Money</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Zoom Warm Up</div>
+                <div class="content-text"><strong>Price is Right:</strong><br>Show luxury item (Gold Watch). Chat guess: '$5000'. Closest wins.</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory & Vocab</div>
+                <div class="content-text">
+                    <strong>1. Core Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Shop</span><span class="vocab-item">Buy</span><span class="vocab-item">Sell</span><span class="vocab-item">Pay</span><span class="vocab-item">Cash</span><span class="vocab-item">Card</span><span class="vocab-item">Price</span><span class="vocab-item">Cheap</span><span class="vocab-item">Expensive</span><span class="vocab-item">Sale</span><span class="vocab-item">Receipt</span><span class="vocab-item">Bag</span><span class="vocab-item">Customer</span><span class="vocab-item">Total</span><span class="vocab-item">Cost</span></div>
+                    <br>
+                    <strong>2. Concept:</strong>
+                    <strong>How much...?</strong><br>How much is this?<br>How much constitutes the total?<br>It is too expensive!
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Controlled Practice</div>
+                <div class="content-text"><strong>The Receipt Check:</strong><br>Read a receipt. 'You bought 3 apples.' 'No, 2 apples.' Find the mistake.</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Online Simulation</div>
+                <div class="content-text"><strong>The Market Haggle:</strong><br>A: '$10.'<br>B: '$50!'<br>A: '$20?'<br>B: '$40?'<br>A: 'Deal.' Shake hands (Camera).</div>
+            </div>
+            
+            <div class="page-num">Daily Life English: Vol 0  &bull; Page 19</div>
+        </div>
+        
+        <div class="page" id="l17">
+            <div class="module-header"><i class="fas fa-coffee"></i> Daily Life English: Vol 0 </div>
+            <div class="lesson-title"><h2>17. The Body & Health</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Zoom Warm Up</div>
+                <div class="content-text"><strong>Simon Says:</strong><br>'Simon says touch your nose.' 'Touch your ears.' (Fail if no Simon says).</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory & Vocab</div>
+                <div class="content-text">
+                    <strong>1. Core Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Head</span><span class="vocab-item">Eyes</span><span class="vocab-item">Nose</span><span class="vocab-item">Mouth</span><span class="vocab-item">Hand</span><span class="vocab-item">Foot</span><span class="vocab-item">Leg</span><span class="vocab-item">Arm</span><span class="vocab-item">Back</span><span class="vocab-item">Stomach</span><span class="vocab-item">Pain</span><span class="vocab-item">Sick</span><span class="vocab-item">Doctor</span><span class="vocab-item">Medicine</span><span class="vocab-item">Sleep</span></div>
+                    <br>
+                    <strong>2. Concept:</strong>
+                    <strong>I have...:</strong><br>I have a headache.<br>My leg hurts (Verb).<br>Take this pill (Imperative).
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Controlled Practice</div>
+                <div class="content-text"><strong>Remote Diagnose:</strong><br>Patient points to body part and groans. Doctor says: 'Stomach ache?'</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Online Simulation</div>
+                <div class="content-text"><strong>Sick Day Call:</strong><br>Call the boss.<br>'I can't work today.'<br>'Why?'<br>'I have a fever.'<br>'Okay, sleep well.'</div>
+            </div>
+            
+            <div class="page-num">Daily Life English: Vol 0  &bull; Page 20</div>
+        </div>
+        
+        <div class="page" id="l18">
+            <div class="module-header"><i class="fas fa-coffee"></i> Daily Life English: Vol 0 </div>
+            <div class="lesson-title"><h2>18. Animals & Nature</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Zoom Warm Up</div>
+                <div class="content-text"><strong>Animal Sounds:</strong><br>Teacher plays sound. 'Moo'. Students text 'COW'.</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory & Vocab</div>
+                <div class="content-text">
+                    <strong>1. Core Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Dog</span><span class="vocab-item">Cat</span><span class="vocab-item">Bird</span><span class="vocab-item">Fish</span><span class="vocab-item">Horse</span><span class="vocab-item">Cow</span><span class="vocab-item">Tree</span><span class="vocab-item">Flower</span><span class="vocab-item">River</span><span class="vocab-item">Mountain</span><span class="vocab-item">Sky</span><span class="vocab-item">Sun</span><span class="vocab-item">Moon</span><span class="vocab-item">Big</span><span class="vocab-item">Small</span></div>
+                    <br>
+                    <strong>2. Concept:</strong>
+                    <strong>Comparatives:</strong><br>The dog is <strong>bigger than</strong> the cat.<br>The mountain is <strong>high</strong>.
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Controlled Practice</div>
+                <div class="content-text"><strong>Create a Creature:</strong><br>Annotate whiteboard. 'Draw a cat with bird wings.' describe it.</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Online Simulation</div>
+                <div class="content-text"><strong>Pet Shop:</strong><br>'I want a pet.'<br>'This dog is nice.'<br>'He is too big. Do you have a small cat?'</div>
+            </div>
+            
+            <div class="page-num">Daily Life English: Vol 0  &bull; Page 21</div>
+        </div>
+        
+        <div class="page" id="l19">
+            <div class="module-header"><i class="fas fa-coffee"></i> Daily Life English: Vol 0 </div>
+            <div class="lesson-title"><h2>19. Revision: My Life</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Zoom Warm Up</div>
+                <div class="content-text"><strong>Vocabulary Tennis:</strong><br>A: 'Apple'. B: 'Banana'. A: 'Carrot'. Keep topic going.</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory & Vocab</div>
+                <div class="content-text">
+                    <strong>1. Core Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Review</span><span class="vocab-item">Remember</span><span class="vocab-item">Speak</span><span class="vocab-item">Listen</span><span class="vocab-item">Read</span><span class="vocab-item">Write</span><span class="vocab-item">Learn</span><span class="vocab-item">English</span><span class="vocab-item">Book</span><span class="vocab-item">Test</span><span class="vocab-item">Question</span><span class="vocab-item">Answer</span><span class="vocab-item">Pass</span><span class="vocab-item">Fail</span><span class="vocab-item">Good luck</span></div>
+                    <br>
+                    <strong>2. Concept:</strong>
+                    <strong>The Can-Do Statement:</strong><br>I can introduce myself.<br>I can buy food.<br>I can describe my family.
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Controlled Practice</div>
+                <div class="content-text"><strong>The Profile Card:</strong><br>Make a slide about YOU. Name, Job, Hobbies, Family. Present to class.</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Online Simulation</div>
+                <div class="content-text"><strong>The Final Test:</strong><br>3-minute conversation with Teacher covering all topics. Greeting -> Weather -> Job -> Hobbies -> Goodbye.</div>
+            </div>
+            
+            <div class="page-num">Daily Life English: Vol 0  &bull; Page 22</div>
+        </div>
+        
+        <div class="page" id="l20">
+            <div class="module-header"><i class="fas fa-coffee"></i> Daily Life English: Vol 0 </div>
+            <div class="lesson-title"><h2>20. COURSE GRADUATION</h2></div>
+            
+            <!-- WARM UP -->
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Zoom Warm Up</div>
+                <div class="content-text"><strong>Virtual Certificate:</strong><br>Screen share a certificate with student name. Everyone claps.</div>
+            </div>
+            
+            <!-- THEORY -->
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Theory & Vocab</div>
+                <div class="content-text">
+                    <strong>1. Core Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Certificate</span><span class="vocab-item">Congratulations</span><span class="vocab-item">Well done</span><span class="vocab-item">Level</span><span class="vocab-item">Up</span><span class="vocab-item">Next</span><span class="vocab-item">Goal</span><span class="vocab-item">Dream</span><span class="vocab-item">Future</span><span class="vocab-item">Study</span><span class="vocab-item">Hard</span><span class="vocab-item">Easy</span><span class="vocab-item">End</span><span class="vocab-item">Start</span><span class="vocab-item">Party</span></div>
+                    <br>
+                    <strong>2. Concept:</strong>
+                    <strong>Going to (Future Plan):</strong><br>I am <strong>going to</strong> study Level A2.<br>I am going to travel.
+                </div>
+            </div>
+            
+            <!-- PRACTICE -->
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Controlled Practice</div>
+                <div class="content-text"><strong>Feedback Loop:</strong><br>'What was your favorite lesson?' 'I liked the shopping.'</div>
+            </div>
+            
+            <!-- SIMULATION -->
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Online Simulation</div>
+                <div class="content-text"><strong>The Farewell Party:</strong><br>Toast (with water/coffee). Make a speech. 'Thank you everyone. See you in Volume 1!'</div>
+            </div>
+            
+            <div class="page-num">Daily Life English: Vol 0  &bull; Page 23</div>
+        </div>
+        </body></html>

@@ -1,0 +1,250 @@
+@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700&family=Open+Sans:wght@400;600;700&display=swap');
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css');
+
+:root {
+    /* Base Colors - Can be overridden by specific book styles */
+    --primary-color: #1a2b42;
+    --accent-color: #34495e;
+    --text-color: #1a2b42;
+    --bg-color: #f4f1ea;
+    --paper-width: 210mm;
+    /* A4 Standard */
+}
+
+body {
+    font-family: 'Merriweather', serif;
+    line-height: 1.6;
+    color: var(--text-color);
+    background-color: #dcd9d2;
+    margin: 0;
+    padding: 20px;
+}
+
+.book-container {
+    max-width: var(--paper-width);
+    margin: 0 auto;
+    background: var(--bg-color);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    padding: 20mm;
+    box-sizing: border-box;
+    /* Critical for consistent sizing */
+}
+
+/* Typography */
+h1,
+h2,
+h3,
+h4 {
+    font-family: 'Open Sans', sans-serif;
+    color: var(--primary-color);
+}
+
+h1 {
+    font-size: 2.5em;
+    border-bottom: 2px solid var(--accent-color);
+    padding-bottom: 10px;
+    margin-top: 50px;
+    page-break-before: always;
+}
+
+h2 {
+    font-size: 1.8em;
+    margin-top: 40px;
+    page-break-after: avoid;
+    color: var(--accent-color);
+    border-left: 5px solid var(--primary-color);
+    padding-left: 15px;
+}
+
+h3 {
+    font-size: 1.2em;
+    font-weight: 600;
+    margin-bottom: 5px;
+    color: #2c3e50;
+}
+
+/* Lesson Blocks */
+.lesson-block {
+    background: #fff;
+    padding: 30px;
+    margin-bottom: 30px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    page-break-inside: avoid;
+}
+
+/* Script Box */
+.script-box {
+    background-color: #f0f4f8;
+    border-left: 5px solid var(--primary-color);
+    padding: 15px;
+    margin: 15px 0;
+    font-style: italic;
+    font-family: 'Open Sans', sans-serif;
+    font-size: 0.95em;
+}
+
+.script-label {
+    font-weight: bold;
+    color: var(--primary-color);
+    font-style: normal;
+    font-size: 0.8em;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 5px;
+}
+
+/* Vocabulary Lists */
+.vocab-list,
+.idiom-list {
+    background: #fdfefe;
+    border: 1px solid #bdc3c7;
+    padding: 15px;
+    border-radius: 5px;
+    margin-top: 10px;
+}
+
+.vocab-list ul,
+.idiom-list ul {
+    padding-left: 20px;
+    margin: 0;
+}
+
+.vocab-list li,
+.idiom-list li {
+    margin-bottom: 5px;
+}
+
+.vocab-word {
+    font-weight: bold;
+    color: var(--primary-color);
+    filter: brightness(1.2);
+    /* Slightly lighter for text */
+}
+
+/* Activity Plan */
+.activity-section {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.activity-box {
+    background: #fafafa;
+    border-left: 4px solid var(--accent-color);
+    padding: 10px 15px;
+}
+
+.activity-time {
+    font-weight: bold;
+    color: var(--primary-color);
+    min-width: 60px;
+    display: inline-block;
+}
+
+.activity-title {
+    font-weight: 800;
+    color: #2980b9;
+}
+
+/* Question Box (For Spanish/Advanced) */
+.question-box {
+    background-color: #fff9db;
+    border: 1px solid #f1c40f;
+    padding: 15px;
+    border-radius: 5px;
+    margin-top: 20px;
+}
+
+.question-title {
+    font-weight: bold;
+    color: #d35400;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.question-list {
+    padding-left: 20px;
+    margin: 0;
+}
+
+.question-list li {
+    margin-bottom: 8px;
+    font-style: italic;
+}
+
+/* Media Box */
+.media-box {
+    background: #e8f6f3;
+    border: 1px solid #16a085;
+    padding: 15px;
+    border-radius: 4px;
+    margin-top: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.media-box i {
+    font-size: 1.5em;
+    color: #16a085;
+}
+
+.media-box a {
+    color: #16a085;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* Cover Page */
+.cover-page {
+    height: 80vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    page-break-after: always;
+}
+
+.cover-title {
+    font-size: 4em;
+    font-weight: 900;
+    color: var(--primary-color);
+    margin-bottom: 10px;
+}
+
+.cover-subtitle {
+    font-size: 2em;
+    color: var(--accent-color);
+    font-weight: 300;
+}
+
+/* TOC */
+.toc a {
+    display: block;
+    padding: 8px 0;
+    text-decoration: none;
+    color: var(--primary-color);
+    border-bottom: 1px dotted #ccc;
+    font-family: 'Open Sans', sans-serif;
+}
+
+/* Cover Logo - Premium Styling */
+.cover-logo {
+    max-width: 180px;
+    height: auto;
+    margin-bottom: 30px;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(26, 43, 66, 0.15);
+    border: 3px solid #c5a059;
+    /* Vesper Gold */
+    padding: 10px;
+    background: white;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.cover-logo:hover {
+    transform: scale(1.05);
+    box-shadow: 0 12px 35px rgba(26, 43, 66, 0.25);
+}

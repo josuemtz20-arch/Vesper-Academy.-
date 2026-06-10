@@ -1,0 +1,1222 @@
+<!DOCTYPE html><html lang="en"><head>
+<script src="vesper_auth.js"></script><meta charset="UTF-8"><title>Core Basics: Level 4 Student</title><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<style>:root { --theme-color: #8e44ad; }:root { --theme-color: var(--theme-color); }
+    @import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700&family=Open+Sans:wght@400;600;700&display=swap');
+    
+    /* RESET & BASE */
+    body { background-color: #525659; margin: 0; padding: 40px 0; display: flex; flex-direction: column; align-items: center; font-family: 'Merriweather', serif; color: var(--theme-color); }
+    
+    /* STANDARD PAGE (Teacher) */
+    .page { background-color: white; width: 210mm; min-height: 297mm; padding: 20mm; box-sizing: border-box; box-shadow: 0 0 20px rgba(0,0,0,0.3); margin-bottom: 40px; position: relative; page-break-after: always; }
+    
+    /* SLIDE PAGE (Student) */
+    .slide-page { 
+        background-color: #f9f7f0;
+        width: 210mm;
+        min-height: 297mm; height: auto;
+        padding: 0;
+        box-sizing: border-box;
+        box-shadow: 0 0 20px rgba(0,0,0,0.3);
+        margin-bottom: 40px;
+        position: relative;
+        page-break-after: always;
+        overflow: visible;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* SHARED STYLES */
+    @media print { 
+        body { background: none; margin: 0; padding: 0; display: block; } 
+        .page, .slide-page { box-shadow: none; margin: 0; width: 100%; height: auto; min-height: 100%; page-break-after: always; border: none; } 
+        .no-print { display: none; } 
+    }
+    
+    .no-print { position: fixed; top: 20px; left: 20px; z-index: 1000; }
+    .nav-btn { background: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: bold; color: var(--theme-color); box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+
+    /* TEACHER SPECIFIC CSS (Old Style) */
+    .lesson-title { border-bottom: 2px solid #34495e; padding-bottom: 15px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; }
+    .lesson-title h2 { margin: 0; font-size: 2.2em; color: var(--theme-color); }
+    .lesson-block { margin-bottom: 25px; padding: 20px 25px; background: #fff; border-left: 5px solid #ccc; border-radius: 0 5px 5px 0; }
+    .lb-blue { border-color: #3498db; background: #ebf5fb; }
+    .lb-navy { border-color: var(--theme-color); background: #fff; border: 1px solid #eee; border-left: 6px solid #1a2b42; }
+    .lb-green { border-color: #27ae60; background: #eafaf1; }
+    .lb-red { border-color: #c0392b; background: #fdedec; }
+    .lb-header { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; font-weight: bold; font-family: 'Open Sans'; text-transform: uppercase; font-size: 1em; letter-spacing: 0.5px; }
+    .lb-blue .lb-header { color: #2980b9; } 
+    .lb-navy .lb-header { color: var(--theme-color); }
+    .lb-green .lb-header { color: #27ae60; }
+    .lb-red .lb-header { color: #c0392b; }
+    .content-text { line-height: 1.8; font-size: 0.95em; color: #2c3e50; text-align: justify; }
+    .vocab-box { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
+    .vocab-item { background: #eee; padding: 5px 10px; border-radius: 3px; font-size: 0.9em; font-family: 'Open Sans'; }
+    .page-num { position: absolute; bottom: 20mm; right: 20mm; color: #999; font-size: 0.8em; }
+    
+
+    /* SLIDE DESIGN CSS (New Polish) */
+    .slide-header-bar {
+        background-color: var(--theme-color);
+        color: white;
+        height: 15%;
+        min-height: 100px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 0 40px;
+        flex-shrink: 0;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    .top-row { display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 5px;}
+    .logo-container img { height: 40px; }
+    .academy-name { font-family: 'Merriweather', serif; font-weight: bold; font-size: 1.2em; letter-spacing: 2px; text-transform: uppercase; }
+    .lesson-headline { font-family: 'Merriweather', serif; font-size: 1.8em; font-weight: 300; }
+    
+    .slide-layout {
+        display: flex;
+        flex-grow: 1;
+        height: 85%;
+        position: relative;
+    }
+    
+    /* SIDEBAR */
+    .sidebar {
+        width: 25%;
+        background-color: #e8e6dc;
+        padding: 30px 20px;
+        box-sizing: border-box;
+        border-right: 1px solid #d4d4d4;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+    
+    .sidebar-section { margin-bottom: 30px; }
+    .sidebar-title { 
+        color: var(--theme-color); 
+        font-weight: bold; 
+        border-bottom: 2px solid var(--theme-color); 
+        display: inline-block; 
+        margin-bottom: 15px;
+        font-size: 1em;
+        letter-spacing: 1px;
+    }
+    
+    .sidebar-list { font-size: 0.9em; line-height: 1.6; color: #2c3e50; font-family: 'Open Sans'; }
+    .sidebar-list div { margin-bottom: 5px; }
+    
+    /* MAIN CONTENT */
+    .slide-body {
+        width: 75%;
+        position: relative;
+        padding: 30px 40px;
+        display: flex;
+        flex-direction: column;
+        box-sizing: border-box;
+    }
+    
+    .watermark {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 60%;
+        opacity: 0.05;
+        z-index: 0;
+        pointer-events: none;
+    }
+    
+    .section-title {
+        color: var(--theme-color);
+        font-family: 'Merriweather', serif;
+        font-size: 1.4em;
+        text-transform: uppercase;
+        margin-bottom: 15px;
+        border-bottom: 1px solid #1a2b42;
+        display: inline-block;
+        padding-bottom: 5px;
+    }
+    
+    .center-title { text-align: center; width: 100%; border: none; margin-bottom: 20px; text-decoration: underline; text-decoration-color: #d4af37;}
+    
+    .structure-content {
+        text-align: center;
+        font-size: 1.2em;
+        margin-bottom: 40px;
+        z-index: 1;
+        font-family: 'Open Sans', sans-serif;
+        background: rgba(255,255,255,0.5);
+        padding: 15px;
+        border-radius: 5px;
+    }
+    
+    .two-cols {
+        display: flex;
+        justify-content: space-between;
+        z-index: 1;
+        flex-grow: 1;
+    }
+    
+    .col { width: 48%; }
+    
+    .content-item { margin-bottom: 15px; font-size: 1em; font-family: 'Open Sans', sans-serif; }
+    .content-item strong { color: #c0392b; }
+    
+    /* TOC STYLES */
+    .toc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px 40px; margin-top: 20px; }
+    .toc-item { border-bottom: 1px dotted #999; display: flex; justify-content: space-between; padding-bottom: 5px; font-family: 'Open Sans'; }
+    .toc-item a { text-decoration: none; color: var(--theme-color); font-weight: bold; width: 100%; display: flex; justify-content: space-between; }
+    .toc-item a:hover { color: #c0392b; }
+
+    /* NAV BUTTONS */
+    .nav-arrow { position: absolute; top: 50%; width: 40px; height: 40px; border-radius: 50%; background: rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: center; color: #999; text-decoration: none; transition: 0.2s; }
+    .nav-arrow:hover { background: var(--theme-color); color: white; }
+    .nav-prev { left: 10px; }
+    .nav-next { right: 10px; }
+    
+    /* PROGRESS BAR */
+    .progress-bar-container { position: absolute; bottom: 0; left: 0; width: 100%; height: 5px; background: #eee; }
+    .progress-bar { height: 100%; background: var(--theme-color); transition: width 0.3s; }
+    
+    /* CHECKPOINT SLIDE */
+    .checkpoint-card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); text-align: center; margin-bottom: 20px; border-top: 5px solid var(--theme-color); }
+.v-gloss{color:#8a7a55;font-size:.84em;font-style:italic;}
+</style>
+</head><body><div class="no-print"><a href="index.html" class="nav-btn"><i class="fas fa-arrow-left"></i> Dashboard</a></div>
+    <div class="slide-page" id="toc">
+        <div class="slide-header-bar" style="background-color:var(--theme-color);">
+            <div class="top-row">
+                <div class="logo-container"><img src="assets/images/vesper_logo.jpg" style="filter: brightness(0) invert(1);"></div>
+                <div class="academy-name">VESPER <span style="font-size:0.5em; display:block; letter-spacing:1px;">ACADEMY</span></div>
+            </div>
+            <div class="lesson-headline">Course Map</div>
+        </div>
+        <div class="slide-layout" style="display:block; padding:40px;">
+             <div class="toc-grid">
+    <div class="toc-item"><a href="#sl1"><span>Lesson 1</span> <span>The Mechanics (S+V) & The Pronunciation War</span></a></div><div class="toc-item"><a href="#sl2"><span>Lesson 2</span> <span>Punctuation Marks</span></a></div><div class="toc-item"><a href="#sl3"><span>Lesson 3</span> <span>Capitalization Rules</span></a></div><div class="toc-item"><a href="#sl4"><span>Lesson 4</span> <span>Linking Words (And, But, So)</span></a></div><div class="toc-item"><a href="#sl5"><span>Lesson 5</span> <span>Sequencing (First, Then)</span></a></div><div class="toc-item"><a href="#sl6"><span>Lesson 6</span> <span>Paragraph Structure</span></a></div><div class="toc-item"><a href="#sl7"><span>Lesson 7</span> <span>Writing Emails</span></a></div><div class="toc-item"><a href="#sl8"><span>Lesson 8</span> <span>Adjective Order</span></a></div><div class="toc-item"><a href="#sl9"><span>Lesson 9</span> <span>Relative Clauses (Who/Which)</span></a></div><div class="toc-item"><a href="#sl10"><span>Lesson 10</span> <span>Opinion Essays</span></a></div><div class="toc-item"><a href="#sl11"><span>Lesson 11</span> <span>Past Simple vs Continuous (Narrative)</span></a></div><div class="toc-item"><a href="#sl12"><span>Lesson 12</span> <span>Used To (Past Habits)</span></a></div><div class="toc-item"><a href="#sl13"><span>Lesson 13</span> <span>Present Perfect (For/Since)</span></a></div><div class="toc-item"><a href="#sl14"><span>Lesson 14</span> <span>Passives (Intro)</span></a></div><div class="toc-item"><a href="#sl15"><span>Lesson 15</span> <span>Second Conditional (Unreal)</span></a></div><div class="toc-item"><a href="#sl16"><span>Lesson 16</span> <span>Too / Enough</span></a></div><div class="toc-item"><a href="#sl17"><span>Lesson 17</span> <span>Indirect Questions</span></a></div><div class="toc-item"><a href="#sl18"><span>Lesson 18</span> <span>Future Forms Review</span></a></div><div class="toc-item"><a href="#sl19"><span>Lesson 19</span> <span>Prepositions of Movement</span></a></div><div class="toc-item"><a href="#sl20"><span>Lesson 20</span> <span>Level 4 Exam</span></a></div>
+            </div>
+        </div>
+        <a href="#sl1" class="nav-arrow nav-next"><i class="fas fa-chevron-right"></i></a>
+    </div>
+    
+        <div class="slide-page" id="sl1">
+            <div class="slide-header-bar" style="background-color:var(--theme-color);">
+                <div class="top-row">
+                    <div class="logo-container"><img src="assets/images/vesper_logo.jpg" style="filter: brightness(0) invert(1);"></div>
+                    <div class="academy-name">VESPER <span style="font-size:0.5em; display:block; letter-spacing:1px;">ACADEMY</span></div>
+                </div>
+                <div class="lesson-headline">Lesson 1 - The Mechanics (S+V) & The Pronunciation War</div>
+            </div>
+            
+            <div class="lesson-audio" style="background:#eef3f9; border:1px solid #c9d8ea; border-left:4px solid #1e5fa8; border-radius:6px; padding:12px 16px; margin:0 0 14px 0; margin:12px 24px;"><div style="font-weight:bold; color:#1a2b42; margin-bottom:6px;">&#127911; Lesson Audio &mdash; Listen before class</div><audio controls preload="none" style="width:100%;"><source src="assets/audio/core_basics_level_4_lesson_1.mp3" type="audio/mpeg">Your browser does not support audio.</audio><div style="font-size:0.85em; color:#33475e; margin-top:8px; line-height:1.6;"><strong>Listen &amp; Answer:</strong><br>1) What is wrong with the first sentence Marcos wrote?<br>2) What two things does every English sentence need?<br>3) And you? Say a complete sentence: subject plus verb.</div></div><div class="lesson-hw" style="background:#f7f3ea; border-left:4px solid #c5a059; border-radius:4px; padding:7px 14px; margin:6px 24px; font-size:0.78em; color:#3a3325; line-height:1.45;"><strong style="color:#a8843d;">&#9997;&#65039; Before next class (10 min):</strong> Write 5 complete sentences about your day (underline S and V) &bull; Find one Spanish sentence with no subject; translate it WITH subject &bull; Listen to the lesson audio again</div><div class="slide-layout">
+                <div class="sidebar">
+                    <div class="sidebar-section">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">VOCABULARY</div>
+                        <div class="sidebar-list"><div>&bull; Subject <span class="v-gloss">&middot; who or what does the action</span></div><div>&bull; Verb <span class="v-gloss">&middot; the action or state word</span></div><div>&bull; Minimal Pair <span class="v-gloss">&middot; two words differing in one sound (ship/sheep)</span></div><div>&bull; Spelling <span class="v-gloss">&middot; writing words with the correct letters</span></div><div>&bull; Pronunciation <span class="v-gloss">&middot; how a word sounds when spoken</span></div><div>&bull; Sentence <span class="v-gloss">&middot; a complete idea with subject + verb</span></div><div>&bull; Hero <span class="v-gloss">&middot; the main positive character</span></div><div>• Action</div><div>&bull; Goal <span class="v-gloss">&middot; what you want to achieve</span></div><div>&bull; Duel <span class="v-gloss">&middot; a fight between two people</span></div><div>&bull; War <span class="v-gloss">&middot; armed conflict between countries</span></div><div>&bull; Order <span class="v-gloss">&middot; the sequence things go in</span></div><div>&bull; Winner <span class="v-gloss">&middot; the person who wins</span></div><div>&bull; Score <span class="v-gloss">&middot; the points achieved</span></div><div>• Points</div></div>
+                    </div>
+                    
+                    <div class="sidebar-section" style="margin-top:auto;">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">CONTEXT</div>
+                        <div class="sidebar-list" style="font-style:italic; font-size:0.85em;"><b>The Spelling Duel (5-10 mins):</b><br>Teacher vs Student or Student vs Student. Teacher says a word (e.g., 'CAT', 'BED', 'RUN'). The first one to type it CORRECTLY in the chat gets a point.<br><b>Round 2:</b> Speed coding. Teacher types 'runs dog the'. First to fix it ('The dog runs') wins 2 points.</div>
+                    </div>
+                </div>
+            
+                <div class="slide-body">
+                    <img src="assets/images/vesper_logo.jpg" class="watermark">
+                    <div class="section-title center-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color); text-decoration-color:var(--theme-color);">STRUCTURE</div>
+                    <div class="structure-content">
+                        <span style='color:var(--theme-color); font-weight:bold;'>The Invisible Base (S+V):</span><br>In English, order is EVERYTHING. The Hero (Subject) must always act (Verb) before the Goal (Object).<br><span style='color:var(--theme-color); font-weight:bold;'>The Master Table:</span><div style='background:#f4f4f4; padding:10px; border-radius:5px; margin-top:10px;'><table style='width:100%; text-align:left;'><tr><th>SUBJECT (Hero)</th><th>VERBO (Action)</th></tr><tr><td>The Player</td><td>wins</td></tr><tr><td>The Team</td><td>scores</td></tr><tr><td>The Boss</td><td>commands</td></tr><tr><td>The Robot</td><td>executes</td></tr></table></div><br>If you flip the order, the game breaks!
+                    </div>
+                    <div class="two-cols">
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXAMPLES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>Robot Command Center (20 mins):</strong><br>One student is the 'Commander', another is the 'Robot'.<br>The Commander can ONLY use S+V instructions. 'Robot takes box.' 'Robot moves left.'<br>If the Commander says 'Moves robot', the Robot must 'short circuit' and stop. How many tasks can the Robot complete in 2 minutes?</div>
+                        </div>
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXERCISES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>Pronunciation War: A vs E (15 mins):</strong><br>Divide the class into 'Team A' and 'Team E'.<br>• Team A must pronounce words with A (BAD, BAT, MAT).<br>• Team E must pronounce words with E (BED, BET, MET).<br>Points are awarded for clarity and speed. Use a timer! Use the chat to 'attack' with words for the other team to pronounce.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <a href="#toc" class="nav-arrow nav-prev"><i class="fas fa-chevron-left"></i></a>
+            <a href="#sl2" class="nav-arrow nav-next"><i class="fas fa-chevron-right"></i></a>
+            
+            <div class="progress-bar-container"><div class="progress-bar" style="width:5.0%;"></div></div>
+            <div style="position:absolute; bottom:15px; right:30px; font-family:'Merriweather'; color:#999; font-size:0.8em;">Core Basics: Level 4 | 1</div>
+        </div>
+        
+        <div class="slide-page" id="sl2">
+            <div class="slide-header-bar" style="background-color:var(--theme-color);">
+                <div class="top-row">
+                    <div class="logo-container"><img src="assets/images/vesper_logo.jpg" style="filter: brightness(0) invert(1);"></div>
+                    <div class="academy-name">VESPER <span style="font-size:0.5em; display:block; letter-spacing:1px;">ACADEMY</span></div>
+                </div>
+                <div class="lesson-headline">Lesson 2 - Punctuation Marks</div>
+            </div>
+            
+            <div class="lesson-audio" style="background:#eef3f9; border:1px solid #c9d8ea; border-left:4px solid #1e5fa8; border-radius:6px; padding:12px 16px; margin:0 0 14px 0; margin:12px 24px;"><div style="font-weight:bold; color:#1a2b42; margin-bottom:6px;">&#127911; Lesson Audio &mdash; Listen before class</div><audio controls preload="none" style="width:100%;"><source src="assets/audio/core_basics_level_4_lesson_2.mp3" type="audio/mpeg">Your browser does not support audio.</audio><div style="font-size:0.85em; color:#33475e; margin-top:8px; line-height:1.6;"><strong>Listen &amp; Answer:</strong><br>1) What punctuation mistake did Dario make?<br>2) What is a comma splice?<br>3) And you? Say where the period goes: 'I went home I ate dinner.'</div></div><div class="lesson-hw" style="background:#f7f3ea; border-left:4px solid #c5a059; border-radius:4px; padding:7px 14px; margin:6px 24px; font-size:0.78em; color:#3a3325; line-height:1.45;"><strong style="color:#a8843d;">&#9997;&#65039; Before next class (10 min):</strong> Rewrite one of your old texts fixing punctuation &bull; Find a comma splice in your writing and repair it &bull; Listen to the lesson audio again</div><div class="slide-layout">
+                <div class="sidebar">
+                    <div class="sidebar-section">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">VOCABULARY</div>
+                        <div class="sidebar-list"><div>&bull; Period <span class="v-gloss">&middot; the . mark that ends a sentence</span></div><div>&bull; Comma <span class="v-gloss">&middot; the , mark — separates items, never joins two full sentences</span></div><div>&bull; Question mark <span class="v-gloss">&middot; the ? mark ending every question</span></div><div>&bull; Exclamation mark <span class="v-gloss">&middot; the ! mark for strong emotion</span></div><div>&bull; Apostrophe <span class="v-gloss">&middot; the ' mark for possession or contractions</span></div><div>&bull; Quote <span class="v-gloss">&middot; repeating someone's exact words</span></div><div>&bull; Colon <span class="v-gloss">&middot; the : mark — introduces a list or explanation</span></div><div>&bull; Dash <span class="v-gloss">&middot; the — mark, adds dramatic extra information</span></div><div>&bull; Bracket <span class="v-gloss">&middot; the ( ) marks for extra info</span></div><div>&bull; Hyphen <span class="v-gloss">&middot; the - mark joining words (well-known)</span></div><div>&bull; Slash <span class="v-gloss">&middot; the / mark meaning 'or'</span></div><div>• Dot</div><div>&bull; Space <span class="v-gloss">&middot; empty gap between words</span></div><div>&bull; Mark <span class="v-gloss">&middot; a symbol or sign; to grade</span></div><div>&bull; Sign <span class="v-gloss">&middot; to write your name to confirm</span></div></div>
+                    </div>
+                    
+                    <div class="sidebar-section" style="margin-top:auto;">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">CONTEXT</div>
+                        <div class="sidebar-list" style="font-style:italic; font-size:0.85em;"><b>Kung Fu Punctuation:</b><br>Punch (.) Chop (,) Uppercut (?). Teacher reads a text, students act out the punctuation marks physically.<br><b>Alternative:</b> 'Chaos Readings'. Teacher reads a coherent text with ZERO pauses or intonation. Students realize why punctuation matters.</div>
+                    </div>
+                </div>
+            
+                <div class="slide-body">
+                    <img src="assets/images/vesper_logo.jpg" class="watermark">
+                    <div class="section-title center-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color); text-decoration-color:var(--theme-color);">STRUCTURE</div>
+                    <div class="structure-content">
+                        <span style='color:var(--theme-color); font-weight:bold;'>The Big 4 (+1):</span><br>. (Period/Full Stop): End of thought.<br>, (Comma): Pause, list, or linking two clauses.<br>? (Question): Asking.<br>! (Exclamation): Emotion (Use sparingly!).<br>' (Apostrophe): Possession 's or Contraction (don't).
+                    </div>
+                    <div class="two-cols">
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXAMPLES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>Dictation Speed:</strong><br>Teacher reads fast. Students type. Must be 100% accurate with caps and marks.<br><strong>Scenario B:</strong> 'Text Message Translator'. Convert 'c u l8r' text speak into formal, punctuated English.</div>
+                        </div>
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXERCISES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>The Unpunctuated Text:</strong><br>Block of text on screen. Students use 'Stamp' tool to add dots and commas.<br><strong>Extension:</strong> 'Eats Shoots and Leaves'. Show how commas change meaning. 'Let's eat, Grandpa' vs 'Let's eat Grandpa'.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <a href="#sl1" class="nav-arrow nav-prev"><i class="fas fa-chevron-left"></i></a>
+            <a href="#sl3" class="nav-arrow nav-next"><i class="fas fa-chevron-right"></i></a>
+            
+            <div class="progress-bar-container"><div class="progress-bar" style="width:10.0%;"></div></div>
+            <div style="position:absolute; bottom:15px; right:30px; font-family:'Merriweather'; color:#999; font-size:0.8em;">Core Basics: Level 4 | 2</div>
+        </div>
+        
+        <div class="slide-page" id="sl3">
+            <div class="slide-header-bar" style="background-color:var(--theme-color);">
+                <div class="top-row">
+                    <div class="logo-container"><img src="assets/images/vesper_logo.jpg" style="filter: brightness(0) invert(1);"></div>
+                    <div class="academy-name">VESPER <span style="font-size:0.5em; display:block; letter-spacing:1px;">ACADEMY</span></div>
+                </div>
+                <div class="lesson-headline">Lesson 3 - Capitalization Rules</div>
+            </div>
+            
+            <div class="lesson-audio" style="background:#eef3f9; border:1px solid #c9d8ea; border-left:4px solid #1e5fa8; border-radius:6px; padding:12px 16px; margin:0 0 14px 0; margin:12px 24px;"><div style="font-weight:bold; color:#1a2b42; margin-bottom:6px;">&#127911; Lesson Audio &mdash; Listen before class</div><audio controls preload="none" style="width:100%;"><source src="assets/audio/core_basics_level_4_lesson_3.mp3" type="audio/mpeg">Your browser does not support audio.</audio><div style="font-size:0.85em; color:#33475e; margin-top:8px; line-height:1.6;"><strong>Listen &amp; Answer:</strong><br>1) Which words did Rosa forget to capitalize?<br>2) Do months need a capital letter in English?<br>3) And you? Spell your name and your city with capital letters.</div></div><div class="lesson-hw" style="background:#f7f3ea; border-left:4px solid #c5a059; border-radius:4px; padding:7px 14px; margin:6px 24px; font-size:0.78em; color:#3a3325; line-height:1.45;"><strong style="color:#a8843d;">&#9997;&#65039; Before next class (10 min):</strong> Write: your name, city, language, favorite day + month, correctly &bull; Type one phone message in English with perfect capitals &bull; Listen to the lesson audio again</div><div class="slide-layout">
+                <div class="sidebar">
+                    <div class="sidebar-section">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">VOCABULARY</div>
+                        <div class="sidebar-list"><div>&bull; Capital <span class="v-gloss">&middot; upper-case letter (A, B, C)</span></div><div>&bull; Lower case <span class="v-gloss">&middot; small letters: a, b, c</span></div><div>&bull; Upper case <span class="v-gloss">&middot; capital letters: A, B, C</span></div><div>• Name</div><div>• City</div><div>• Country</div><div>• Day</div><div>• Month</div><div>• Language</div><div>&bull; Brand <span class="v-gloss">&middot; the company name of a product (Nike, Sony)</span></div><div>&bull; Title <span class="v-gloss">&middot; the name of a text</span></div><div>• Start</div><div>&bull; Letter <span class="v-gloss">&middot; a written message; also a, b, c</span></div><div>• Proper</div><div>&bull; Noun <span class="v-gloss">&middot; a word naming a thing, person or idea</span></div></div>
+                    </div>
+                    
+                    <div class="sidebar-section" style="margin-top:auto;">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">CONTEXT</div>
+                        <div class="sidebar-list" style="font-style:italic; font-size:0.85em;"><b>Brand Spy:</b><br>Look at items in your room. 'I see Nike.' 'I see Sony.' Type correctly.<br><b>Alternative:</b> 'Correct the Chat'. Copy paste student chat history and ask them to fix the capitalization errors.</div>
+                    </div>
+                </div>
+            
+                <div class="slide-body">
+                    <img src="assets/images/vesper_logo.jpg" class="watermark">
+                    <div class="section-title center-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color); text-decoration-color:var(--theme-color);">STRUCTURE</div>
+                    <div class="structure-content">
+                        <span style='color:var(--theme-color); font-weight:bold;'>MINTS Protocol:</span><br><span style='color:var(--theme-color); font-weight:bold;'>M</span>onths/Days/Holidays.<br><span style='color:var(--theme-color); font-weight:bold;'>I</span> (The pronoun).<br><span style='color:var(--theme-color); font-weight:bold;'>N</span>ames (People, Places, Brands).<br><span style='color:var(--theme-color); font-weight:bold;'>T</span>itles (Books, Movies).<br><span style='color:var(--theme-color); font-weight:bold;'>S</span>tart of sentence.<br>Note: Seasons (summer) are usually NOT capitalized.
+                    </div>
+                    <div class="two-cols">
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXAMPLES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>Visa Form:</strong><br>Fill out an official form (PDF). Accuracy is key. Use BLOCK CAPITALS for name, Sentence Case for address.<br><strong>Scenario B:</strong> 'Book Title Creator'. Create titles for books. 'Harry Potter and the Chamber of Secrets' (Capitalize main words).</div>
+                        </div>
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXERCISES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>Profile Correction:</strong><br>'my name is john and i live in paris.' -> 'My name is John and I live in Paris.'<br><strong>Extension:</strong> 'Map Labelling'. On a blank map, write labels correctly. 'The Atlantic Ocean', 'Mount Everest'.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <a href="#sl2" class="nav-arrow nav-prev"><i class="fas fa-chevron-left"></i></a>
+            <a href="#sl4" class="nav-arrow nav-next"><i class="fas fa-chevron-right"></i></a>
+            
+            <div class="progress-bar-container"><div class="progress-bar" style="width:15.0%;"></div></div>
+            <div style="position:absolute; bottom:15px; right:30px; font-family:'Merriweather'; color:#999; font-size:0.8em;">Core Basics: Level 4 | 3</div>
+        </div>
+        
+        <div class="slide-page" id="sl4">
+            <div class="slide-header-bar" style="background-color:var(--theme-color);">
+                <div class="top-row">
+                    <div class="logo-container"><img src="assets/images/vesper_logo.jpg" style="filter: brightness(0) invert(1);"></div>
+                    <div class="academy-name">VESPER <span style="font-size:0.5em; display:block; letter-spacing:1px;">ACADEMY</span></div>
+                </div>
+                <div class="lesson-headline">Lesson 4 - Linking Words (And, But, So)</div>
+            </div>
+            
+            <div class="lesson-audio" style="background:#eef3f9; border:1px solid #c9d8ea; border-left:4px solid #1e5fa8; border-radius:6px; padding:12px 16px; margin:0 0 14px 0; margin:12px 24px;"><div style="font-weight:bold; color:#1a2b42; margin-bottom:6px;">&#127911; Lesson Audio &mdash; Listen before class</div><audio controls preload="none" style="width:100%;"><source src="assets/audio/core_basics_level_4_lesson_4.mp3" type="audio/mpeg">Your browser does not support audio.</audio><div style="font-size:0.85em; color:#33475e; margin-top:8px; line-height:1.6;"><strong>Listen &amp; Answer:</strong><br>1) Which connector shows a contrast: and, but, or so?<br>2) How does Tomas connect 'It rained' and 'we stayed home'?<br>3) And you? Make one sentence using 'so'.</div></div><div class="lesson-hw" style="background:#f7f3ea; border-left:4px solid #c5a059; border-radius:4px; padding:7px 14px; margin:6px 24px; font-size:0.78em; color:#3a3325; line-height:1.45;"><strong style="color:#a8843d;">&#9997;&#65039; Before next class (10 min):</strong> Write 4 sentences, one per connector, about your week &bull; Combine 3 short sentences from a previous homework into 1 &bull; Listen to the lesson audio again</div><div class="slide-layout">
+                <div class="sidebar">
+                    <div class="sidebar-section">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">VOCABULARY</div>
+                        <div class="sidebar-list"><div>• And</div><div>• But</div><div>• So</div><div>• Because</div><div>• Or</div><div>&bull; Also <span class="v-gloss">&middot; in addition</span></div><div>&bull; However <span class="v-gloss">&middot; but — formal contrast</span></div><div>&bull; Therefore <span class="v-gloss">&middot; so — formal result</span></div><div>&bull; Example <span class="v-gloss">&middot; a specific case that proves your point</span></div><div>&bull; Result <span class="v-gloss">&middot; what happens because of something</span></div><div>&bull; Reason <span class="v-gloss">&middot; why something happens or is true</span></div><div>&bull; Choice <span class="v-gloss">&middot; an option you can pick</span></div><div>&bull; Addition <span class="v-gloss">&middot; adding one more idea (and, also)</span></div><div>&bull; Contrast <span class="v-gloss">&middot; to show how two things are different</span></div><div>• Link</div></div>
+                    </div>
+                    
+                    <div class="sidebar-section" style="margin-top:auto;">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">CONTEXT</div>
+                        <div class="sidebar-list" style="font-style:italic; font-size:0.85em;"><b>Chain Story:</b><br>Student A: 'I went out...' B: 'BUT it rained...' C: 'SO I bought an umbrella.' D: 'BECAUSE I hate getting wet.'<br><b>Alternative:</b> 'Conjunction Tennis'. Teacher: 'But!' Student: 'I tried, but I failed.'</div>
+                    </div>
+                </div>
+            
+                <div class="slide-body">
+                    <img src="assets/images/vesper_logo.jpg" class="watermark">
+                    <div class="section-title center-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color); text-decoration-color:var(--theme-color);">STRUCTURE</div>
+                    <div class="structure-content">
+                        <span style='color:var(--theme-color); font-weight:bold;'>Connection Logic:</span><br><span style='color:var(--theme-color); font-weight:bold;'>And</span> (+): Addition.<br><span style='color:var(--theme-color); font-weight:bold;'>But</span> (-): Contrast (Comma before).<br><span style='color:var(--theme-color); font-weight:bold;'>However</span>: Contrast (Start sentence. Comma after).<br>Example: 'It is cold, but I like it.' vs 'It is cold. However, I like it.'
+                    </div>
+                    <div class="two-cols">
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXAMPLES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>Debate Opening:</strong><br>'I agree with X, BUT we must consider Y. SO, we should do Z.'<br><strong>Scenario B:</strong> 'Review Writing'. Review a movie. 'The acting was good, but the story was bad. So I give it 3 stars.'</div>
+                        </div>
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXERCISES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>Sentence Combiner:</strong><br>Join sentences. 'I like tea. I don't like coffee.' -> 'I like tea, but I don't like coffee.'<br><strong>Extension:</strong> 'The Excuse Generator'. 'I can't come BECAUSE...' 'I want to come, BUT...'</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <a href="#sl3" class="nav-arrow nav-prev"><i class="fas fa-chevron-left"></i></a>
+            <a href="#sl5" class="nav-arrow nav-next"><i class="fas fa-chevron-right"></i></a>
+            
+            <div class="progress-bar-container"><div class="progress-bar" style="width:20.0%;"></div></div>
+            <div style="position:absolute; bottom:15px; right:30px; font-family:'Merriweather'; color:#999; font-size:0.8em;">Core Basics: Level 4 | 4</div>
+        </div>
+        
+        <div class="slide-page" id="sl5">
+            <div class="slide-header-bar" style="background-color:var(--theme-color);">
+                <div class="top-row">
+                    <div class="logo-container"><img src="assets/images/vesper_logo.jpg" style="filter: brightness(0) invert(1);"></div>
+                    <div class="academy-name">VESPER <span style="font-size:0.5em; display:block; letter-spacing:1px;">ACADEMY</span></div>
+                </div>
+                <div class="lesson-headline">Lesson 5 - Sequencing (First, Then)</div>
+            </div>
+            
+            <div class="lesson-audio" style="background:#eef3f9; border:1px solid #c9d8ea; border-left:4px solid #1e5fa8; border-radius:6px; padding:12px 16px; margin:0 0 14px 0; margin:12px 24px;"><div style="font-weight:bold; color:#1a2b42; margin-bottom:6px;">&#127911; Lesson Audio &mdash; Listen before class</div><audio controls preload="none" style="width:100%;"><source src="assets/audio/core_basics_level_4_lesson_5.mp3" type="audio/mpeg">Your browser does not support audio.</audio><div style="font-size:0.85em; color:#33475e; margin-top:8px; line-height:1.6;"><strong>Listen &amp; Answer:</strong><br>1) What does Julia describe: a recipe, a trip, or a work process?<br>2) Which sequencing words does she use? Name three.<br>3) And you? Explain how to make coffee using First, Then, Finally.</div></div><div class="lesson-hw" style="background:#f7f3ea; border-left:4px solid #c5a059; border-radius:4px; padding:7px 14px; margin:6px 24px; font-size:0.78em; color:#3a3325; line-height:1.45;"><strong style="color:#a8843d;">&#9997;&#65039; Before next class (10 min):</strong> Write the steps of something you do well (5 steps, sequenced) &bull; Reorder a scrambled process the teacher sends &bull; Listen to the lesson audio again</div><div class="slide-layout">
+                <div class="sidebar">
+                    <div class="sidebar-section">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">VOCABULARY</div>
+                        <div class="sidebar-list"><div>&bull; First <span class="v-gloss">&middot; step number one</span></div><div>&bull; Second <span class="v-gloss">&middot; step number two</span></div><div>• Then</div><div>&bull; Next <span class="v-gloss">&middot; the step after</span></div><div>&bull; After that <span class="v-gloss">&middot; then</span></div><div>&bull; Finally <span class="v-gloss">&middot; as the last step</span></div><div>• Before</div><div>&bull; During <span class="v-gloss">&middot; throughout a period</span></div><div>&bull; While <span class="v-gloss">&middot; during the time that</span></div><div>• Start</div><div>&bull; End <span class="v-gloss">&middot; the final part</span></div><div>&bull; Process <span class="v-gloss">&middot; steps that lead to a result</span></div><div>&bull; Step <span class="v-gloss">&middot; one stage in a process</span></div><div>&bull; Instruction <span class="v-gloss">&middot; a step telling you what to do</span></div><div>• Guide</div></div>
+                    </div>
+                    
+                    <div class="sidebar-section" style="margin-top:auto;">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">CONTEXT</div>
+                        <div class="sidebar-list" style="font-style:italic; font-size:0.85em;"><b>Robot Chef:</b><br>Instruct teacher to make tea. 'First, put water in kettle.' If student forgets to say 'Turn kettle on', Teacher fails.<br><b>Alternative:</b> 'Life Cycle'. Describe life of a butterfly. Egg -> Caterpillar -> Butterfly.</div>
+                    </div>
+                </div>
+            
+                <div class="slide-body">
+                    <img src="assets/images/vesper_logo.jpg" class="watermark">
+                    <div class="section-title center-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color); text-decoration-color:var(--theme-color);">STRUCTURE</div>
+                    <div class="structure-content">
+                        <span style='color:var(--theme-color); font-weight:bold;'>Process Language:</span><br>1. <span style='color:var(--theme-color); font-weight:bold;'>First</span>, / To start with,...<br>2. <span style='color:var(--theme-color); font-weight:bold;'>Then</span>, / Next, / After that,...<br>3. <span style='color:var(--theme-color); font-weight:bold;'>Finally</span>, / In the end,...<br>Note the comma after these linkers.
+                    </div>
+                    <div class="two-cols">
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXAMPLES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>How-To Tutorial:</strong><br>Present your skill. 'How to tie a tie.' 'How to hard boil an egg.' Steps must be clear.<br><strong>Scenario B:</strong> 'Tech Support Walkthrough'. 'First, restart your computer. Then, open the menu.'</div>
+                        </div>
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXERCISES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>Comic Strip Order:</strong><br>Jumbled comic. Put frames 1-4 in order and write the story using sequencers.<br><strong>Extension:</strong> 'Origami Instruction'. Student reads instructions, others must fold paper. 'First, fold the paper in half.'</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <a href="#sl4" class="nav-arrow nav-prev"><i class="fas fa-chevron-left"></i></a>
+            <a href="#cp5" class="nav-arrow nav-next"><i class="fas fa-chevron-right"></i></a>
+            
+            <div class="progress-bar-container"><div class="progress-bar" style="width:25.0%;"></div></div>
+            <div style="position:absolute; bottom:15px; right:30px; font-family:'Merriweather'; color:#999; font-size:0.8em;">Core Basics: Level 4 | 5</div>
+        </div>
+        
+            <div class="slide-page" id="cp5" style="background-color: var(--theme-color); color:white;">
+                 <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; text-align:center; padding:50px;">
+                    <i class="fas fa-flag-checkered" style="font-size:5em; margin-bottom:20px; opacity:0.8;"></i>
+                    <h1 style="font-size:3em; margin:0; font-family:'Merriweather';">CHECKPOINT</h1>
+                    <h2 style="font-size:1.5em; font-weight:300; opacity:0.9;">Lessons 1 - 5 Complete</h2>
+                    <div style="background:white; color:#333; padding:30px; border-radius:10px; margin-top:40px; max-width:600px; box-shadow:0 10px 30px rgba(0,0,0,0.2);">
+                        <h3 style="color:var(--theme-color); margin-top:0;">Time to Review!</h3>
+                        <p>Great job! You have completed another block of 5 lessons.</p>
+                        <div style="margin-top:20px; font-weight:bold;">Next Up: Lesson 6</div>
+                    </div>
+                 </div>
+                 <a href="#sl5" class="nav-arrow nav-prev" style="background:white; color:var(--theme-color);"><i class="fas fa-chevron-left"></i></a>
+                 <a href="#sl6" class="nav-arrow nav-next" style="background:white; color:var(--theme-color);"><i class="fas fa-chevron-right"></i></a>
+            </div>
+            
+        <div class="slide-page" id="sl6">
+            <div class="slide-header-bar" style="background-color:var(--theme-color);">
+                <div class="top-row">
+                    <div class="logo-container"><img src="assets/images/vesper_logo.jpg" style="filter: brightness(0) invert(1);"></div>
+                    <div class="academy-name">VESPER <span style="font-size:0.5em; display:block; letter-spacing:1px;">ACADEMY</span></div>
+                </div>
+                <div class="lesson-headline">Lesson 6 - Paragraph Structure</div>
+            </div>
+            
+            <div class="lesson-audio" style="background:#eef3f9; border:1px solid #c9d8ea; border-left:4px solid #1e5fa8; border-radius:6px; padding:12px 16px; margin:0 0 14px 0; margin:12px 24px;"><div style="font-weight:bold; color:#1a2b42; margin-bottom:6px;">&#127911; Lesson Audio &mdash; Listen before class</div><audio controls preload="none" style="width:100%;"><source src="assets/audio/core_basics_level_4_lesson_6.mp3" type="audio/mpeg">Your browser does not support audio.</audio><div style="font-size:0.85em; color:#33475e; margin-top:8px; line-height:1.6;"><strong>Listen &amp; Answer:</strong><br>1) What are the three parts of a paragraph, according to Sandra?<br>2) What was wrong with Mario's paragraph?<br>3) And you? Say a topic sentence about your city.</div></div><div class="lesson-hw" style="background:#f7f3ea; border-left:4px solid #c5a059; border-radius:4px; padding:7px 14px; margin:6px 24px; font-size:0.78em; color:#3a3325; line-height:1.45;"><strong style="color:#a8843d;">&#9997;&#65039; Before next class (10 min):</strong> Write one hamburger paragraph: 'My city is a great place to live' &bull; Find the topic sentence in any English article you see &bull; Listen to the lesson audio again</div><div class="slide-layout">
+                <div class="sidebar">
+                    <div class="sidebar-section">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">VOCABULARY</div>
+                        <div class="sidebar-list"><div>&bull; Paragraph <span class="v-gloss">&middot; a group of sentences about ONE idea</span></div><div>&bull; Topic sentence <span class="v-gloss">&middot; the sentence stating what the paragraph is about</span></div><div>&bull; Body <span class="v-gloss">&middot; the middle paragraphs with reasons and details</span></div><div>&bull; Conclusion <span class="v-gloss">&middot; the final paragraph — restates your view</span></div><div>• Idea</div><div>&bull; Main <span class="v-gloss">&middot; most important</span></div><div>&bull; Detail <span class="v-gloss">&middot; a small specific piece of information</span></div><div>&bull; Support <span class="v-gloss">&middot; to give reasons that strengthen an idea</span></div><div>&bull; Indent <span class="v-gloss">&middot; space at the start of a paragraph's first line</span></div><div>&bull; Line <span class="v-gloss">&middot; a row of written text</span></div><div>• Break</div><div>&bull; Space <span class="v-gloss">&middot; empty gap between words</span></div><div>&bull; Layout <span class="v-gloss">&middot; how text is arranged on the page</span></div><div>&bull; Text <span class="v-gloss">&middot; any piece of writing</span></div><div>&bull; Essay <span class="v-gloss">&middot; a short structured text defending an idea</span></div></div>
+                    </div>
+                    
+                    <div class="sidebar-section" style="margin-top:auto;">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">CONTEXT</div>
+                        <div class="sidebar-list" style="font-style:italic; font-size:0.85em;"><b>Topic Hunt:</b><br>Read a paragraph. 'What is the topic?' Underline the topic sentence.<br><b>Alternative:</b> 'Odd Sentence Out'. Show a paragraph about Cats. Include one sentence about Cars. Students find the intruder.</div>
+                    </div>
+                </div>
+            
+                <div class="slide-body">
+                    <img src="assets/images/vesper_logo.jpg" class="watermark">
+                    <div class="section-title center-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color); text-decoration-color:var(--theme-color);">STRUCTURE</div>
+                    <div class="structure-content">
+                        <span style='color:var(--theme-color); font-weight:bold;'>The Hamburger Model:</span><br>Top Bun: <span style='color:var(--theme-color); font-weight:bold;'>Topic Sentence</span> (What is this about?).<br>Filling: <span style='color:var(--theme-color); font-weight:bold;'>Supporting Details</span> (Facts, Examples, Reasons).<br>Bottom Bun: <span style='color:var(--theme-color); font-weight:bold;'>Concluding Sentence</span> (Summary/Transition).<br>Visual: Indentation is important.
+                    </div>
+                    <div class="two-cols">
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXAMPLES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>Email Blast:</strong><br>Write a company update email. STRICT Layout: 1 topic per paragraph. <br><strong>Scenario B:</strong> 'News Brief'. Write a 5-sentence news report about a local event.</div>
+                        </div>
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXERCISES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>Scrambled Paragraph:</strong><br>Sentences are mixed. Order them to make a logical text. Identify the Topic Sentence.<br><strong>Extension:</strong> 'Expand the Point'. Teacher gives Topic: 'Smoking is bad.' Students write 3 supporting sentences.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <a href="#sl5" class="nav-arrow nav-prev"><i class="fas fa-chevron-left"></i></a>
+            <a href="#sl7" class="nav-arrow nav-next"><i class="fas fa-chevron-right"></i></a>
+            
+            <div class="progress-bar-container"><div class="progress-bar" style="width:30.0%;"></div></div>
+            <div style="position:absolute; bottom:15px; right:30px; font-family:'Merriweather'; color:#999; font-size:0.8em;">Core Basics: Level 4 | 6</div>
+        </div>
+        
+        <div class="slide-page" id="sl7">
+            <div class="slide-header-bar" style="background-color:var(--theme-color);">
+                <div class="top-row">
+                    <div class="logo-container"><img src="assets/images/vesper_logo.jpg" style="filter: brightness(0) invert(1);"></div>
+                    <div class="academy-name">VESPER <span style="font-size:0.5em; display:block; letter-spacing:1px;">ACADEMY</span></div>
+                </div>
+                <div class="lesson-headline">Lesson 7 - Writing Emails</div>
+            </div>
+            
+            <div class="lesson-audio" style="background:#eef3f9; border:1px solid #c9d8ea; border-left:4px solid #1e5fa8; border-radius:6px; padding:12px 16px; margin:0 0 14px 0; margin:12px 24px;"><div style="font-weight:bold; color:#1a2b42; margin-bottom:6px;">&#127911; Lesson Audio &mdash; Listen before class</div><audio controls preload="none" style="width:100%;"><source src="assets/audio/core_basics_level_4_lesson_7.mp3" type="audio/mpeg">Your browser does not support audio.</audio><div style="font-size:0.85em; color:#33475e; margin-top:8px; line-height:1.6;"><strong>Listen &amp; Answer:</strong><br>1) What is wrong with starting a work email with 'Hey'?<br>2) How does Clara recommend closing a formal email?<br>3) And you? Say a polite opening line for an email to your boss.</div></div><div class="lesson-hw" style="background:#f7f3ea; border-left:4px solid #c5a059; border-radius:4px; padding:7px 14px; margin:6px 24px; font-size:0.78em; color:#3a3325; line-height:1.45;"><strong style="color:#a8843d;">&#9997;&#65039; Before next class (10 min):</strong> Write a formal email requesting information (use the magic phrases) &bull; Rewrite your last informal message as a formal email &bull; Listen to the lesson audio again</div><div class="slide-layout">
+                <div class="sidebar">
+                    <div class="sidebar-section">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">VOCABULARY</div>
+                        <div class="sidebar-list"><div>&bull; Subject line <span class="v-gloss">&middot; the email's title — 3-5 clear words</span></div><div>&bull; Dear <span class="v-gloss">&middot; formal greeting: Dear Mr. Smith</span></div><div>• Hi</div><div>• Hello</div><div>&bull; Best regards <span class="v-gloss">&middot; standard professional sign-off</span></div><div>&bull; Sincerely <span class="v-gloss">&middot; very formal sign-off</span></div><div>&bull; Cheers <span class="v-gloss">&middot; informal sign-off (friends)</span></div><div>&bull; Attach <span class="v-gloss">&middot; to add a file to an email</span></div><div>&bull; Forward <span class="v-gloss">&middot; to re-send an email to someone else</span></div><div>&bull; Reply <span class="v-gloss">&middot; to answer a message</span></div><div>&bull; Cc <span class="v-gloss">&middot; copy — others see the email openly</span></div><div>&bull; Bcc <span class="v-gloss">&middot; hidden copy — others can't see this recipient</span></div><div>&bull; Sign <span class="v-gloss">&middot; to write your name to confirm</span></div><div>• Send</div><div>&bull; Receive <span class="v-gloss">&middot; to get something sent to you</span></div></div>
+                    </div>
+                    
+                    <div class="sidebar-section" style="margin-top:auto;">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">CONTEXT</div>
+                        <div class="sidebar-list" style="font-style:italic; font-size:0.85em;"><b>Subject Line Match:</b><br>Match email content to best subject line. 'Meeting' vs 'URGENT: Meeting'.<br><b>Alternative:</b> 'Tone Police'. Read email. Is it Formal or Informal? Why?</div>
+                    </div>
+                </div>
+            
+                <div class="slide-body">
+                    <img src="assets/images/vesper_logo.jpg" class="watermark">
+                    <div class="section-title center-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color); text-decoration-color:var(--theme-color);">STRUCTURE</div>
+                    <div class="structure-content">
+                        <span style='color:var(--theme-color); font-weight:bold;'>Formal vs Informal:</span><br>Greeting: Dear Mr. Smith (Formal) vs Hi Tom (Informal).<br>Opening: 'I am writing to...' vs 'Just wanted to...'<br>Sign-off: Sincerely (Formal) vs Best (Neutral) vs Cheers (Informal).
+                    </div>
+                    <div class="two-cols">
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXAMPLES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>The Out-of-Office:</strong><br>'I am away until Monday.' Write your auto-reply. Include emergency contact.<br><strong>Scenario B:</strong> 'The Complaint'. Write to Amazon about a broken package. Be polite but firm.</div>
+                        </div>
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXERCISES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>Fix the Tone:</strong><br>Convert rude email to polite. 'Give me file.' -> 'Could you please send the file?'<br><strong>Extension:</strong> 'Reply Race'. Teacher sends email. Students must reply correctly in 2 mins.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <a href="#sl6" class="nav-arrow nav-prev"><i class="fas fa-chevron-left"></i></a>
+            <a href="#sl8" class="nav-arrow nav-next"><i class="fas fa-chevron-right"></i></a>
+            
+            <div class="progress-bar-container"><div class="progress-bar" style="width:35.0%;"></div></div>
+            <div style="position:absolute; bottom:15px; right:30px; font-family:'Merriweather'; color:#999; font-size:0.8em;">Core Basics: Level 4 | 7</div>
+        </div>
+        
+        <div class="slide-page" id="sl8">
+            <div class="slide-header-bar" style="background-color:var(--theme-color);">
+                <div class="top-row">
+                    <div class="logo-container"><img src="assets/images/vesper_logo.jpg" style="filter: brightness(0) invert(1);"></div>
+                    <div class="academy-name">VESPER <span style="font-size:0.5em; display:block; letter-spacing:1px;">ACADEMY</span></div>
+                </div>
+                <div class="lesson-headline">Lesson 8 - Adjective Order</div>
+            </div>
+            
+            <div class="lesson-audio" style="background:#eef3f9; border:1px solid #c9d8ea; border-left:4px solid #1e5fa8; border-radius:6px; padding:12px 16px; margin:0 0 14px 0; margin:12px 24px;"><div style="font-weight:bold; color:#1a2b42; margin-bottom:6px;">&#127911; Lesson Audio &mdash; Listen before class</div><audio controls preload="none" style="width:100%;"><source src="assets/audio/core_basics_level_4_lesson_8.mp3" type="audio/mpeg">Your browser does not support audio.</audio><div style="font-size:0.85em; color:#33475e; margin-top:8px; line-height:1.6;"><strong>Listen &amp; Answer:</strong><br>1) Which is correct: 'a red big car' or 'a big red car'?<br>2) What order do opinion and color follow?<br>3) And you? Describe your phone with two adjectives in order.</div></div><div class="lesson-hw" style="background:#f7f3ea; border-left:4px solid #c5a059; border-radius:4px; padding:7px 14px; margin:6px 24px; font-size:0.78em; color:#3a3325; line-height:1.45;"><strong style="color:#a8843d;">&#9997;&#65039; Before next class (10 min):</strong> Describe 3 objects at home with 2-3 ordered adjectives each &bull; Write the order rule from memory: opinion-size-age-color &bull; Listen to the lesson audio again</div><div class="slide-layout">
+                <div class="sidebar">
+                    <div class="sidebar-section">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">VOCABULARY</div>
+                        <div class="sidebar-list"><div>&bull; Opinion <span class="v-gloss">&middot; what someone believes — not provable</span></div><div>&bull; Size <span class="v-gloss">&middot; how big something is</span></div><div>• Age</div><div>&bull; Shape <span class="v-gloss">&middot; the form of something (round, square)</span></div><div>• Color</div><div>&bull; Origin <span class="v-gloss">&middot; where something comes from</span></div><div>&bull; Material <span class="v-gloss">&middot; what something is made of</span></div><div>&bull; Purpose <span class="v-gloss">&middot; the reason something is done</span></div><div>• Beautiful</div><div>• Old</div><div>• Round</div><div>&bull; Wooden <span class="v-gloss">&middot; made of wood</span></div><div>• Box</div><div>• Thing</div><div>&bull; Order <span class="v-gloss">&middot; the sequence things go in</span></div></div>
+                    </div>
+                    
+                    <div class="sidebar-section" style="margin-top:auto;">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">CONTEXT</div>
+                        <div class="sidebar-list" style="font-style:italic; font-size:0.85em;"><b>The Longest Description:</b><br>Show object. Add adjectives. 'A cup.' 'A red cup.' 'A big red cup.' 'A beautiful big red cup.'<br><b>Alternative:</b> 'Unscramble'. 'bag black leather small a' -> 'A small black leather bag.'</div>
+                    </div>
+                </div>
+            
+                <div class="slide-body">
+                    <img src="assets/images/vesper_logo.jpg" class="watermark">
+                    <div class="section-title center-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color); text-decoration-color:var(--theme-color);">STRUCTURE</div>
+                    <div class="structure-content">
+                        <span style='color:var(--theme-color); font-weight:bold;'>OSASCOMP Rule:</span><br>Order: Opinion - Size - Age - Color - Origin - Material.<br><span style='color:var(--theme-color); font-weight:bold;'>Intuitive Example:</span> 'A big red bus'. (Size -> Color).<br>Don't memorize the acronym, feel the rhythm.
+                    </div>
+                    <div class="two-cols">
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXAMPLES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>Lost Luggage:</strong><br>'I lost my bag.' 'Describe it.' 'It is a large, blue, plastic suitcase.' 'It contains a small, black, leather wallet.'<br><strong>Scenario B:</strong> 'Police Sketch'. 'He has long black hair.' 'He has a big red nose.'</div>
+                        </div>
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXERCISES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>eBay Listing:</strong><br>Write title for item. 'Vintage Leather Jacket (Black, Small).' -> 'Small Black Vintage Leather Jacket'.<br><strong>Extension:</strong> 'Mystery Object'. Describe an object using 3 adjectives orders. key: 'Small metal house key'.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <a href="#sl7" class="nav-arrow nav-prev"><i class="fas fa-chevron-left"></i></a>
+            <a href="#sl9" class="nav-arrow nav-next"><i class="fas fa-chevron-right"></i></a>
+            
+            <div class="progress-bar-container"><div class="progress-bar" style="width:40.0%;"></div></div>
+            <div style="position:absolute; bottom:15px; right:30px; font-family:'Merriweather'; color:#999; font-size:0.8em;">Core Basics: Level 4 | 8</div>
+        </div>
+        
+        <div class="slide-page" id="sl9">
+            <div class="slide-header-bar" style="background-color:var(--theme-color);">
+                <div class="top-row">
+                    <div class="logo-container"><img src="assets/images/vesper_logo.jpg" style="filter: brightness(0) invert(1);"></div>
+                    <div class="academy-name">VESPER <span style="font-size:0.5em; display:block; letter-spacing:1px;">ACADEMY</span></div>
+                </div>
+                <div class="lesson-headline">Lesson 9 - Relative Clauses (Who/Which)</div>
+            </div>
+            
+            <div class="lesson-audio" style="background:#eef3f9; border:1px solid #c9d8ea; border-left:4px solid #1e5fa8; border-radius:6px; padding:12px 16px; margin:0 0 14px 0; margin:12px 24px;"><div style="font-weight:bold; color:#1a2b42; margin-bottom:6px;">&#127911; Lesson Audio &mdash; Listen before class</div><audio controls preload="none" style="width:100%;"><source src="assets/audio/core_basics_level_4_lesson_9.mp3" type="audio/mpeg">Your browser does not support audio.</audio><div style="font-size:0.85em; color:#33475e; margin-top:8px; line-height:1.6;"><strong>Listen &amp; Answer:</strong><br>1) Who is Elena? Use 'who' in your answer.<br>2) What is the report that Miguel needs?<br>3) And you? Combine: 'I have a friend. He speaks four languages.'</div></div><div class="lesson-hw" style="background:#f7f3ea; border-left:4px solid #c5a059; border-radius:4px; padding:7px 14px; margin:6px 24px; font-size:0.78em; color:#3a3325; line-height:1.45;"><strong style="color:#a8843d;">&#9997;&#65039; Before next class (10 min):</strong> Write 3 riddles with relative clauses for next class &bull; Describe your job/school with two which/who clauses &bull; Listen to the lesson audio again</div><div class="slide-layout">
+                <div class="sidebar">
+                    <div class="sidebar-section">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">VOCABULARY</div>
+                        <div class="sidebar-list"><div>• Who</div><div>• Which</div><div>• That</div><div>• Where</div><div>• Person</div><div>• Thing</div><div>• Place</div><div>&bull; Describe <span class="v-gloss">&middot; to say what something is like</span></div><div>&bull; Define <span class="v-gloss">&middot; to explain exactly what a word means</span></div><div>&bull; Identify <span class="v-gloss">&middot; to find and name something</span></div><div>&bull; Specific <span class="v-gloss">&middot; exact and clear</span></div><div>&bull; Extra <span class="v-gloss">&middot; more than needed</span></div><div>&bull; Information <span class="v-gloss">&middot; facts and details</span></div><div>&bull; Select <span class="v-gloss">&middot; to choose carefully</span></div><div>&bull; Choose <span class="v-gloss">&middot; to pick one option</span></div></div>
+                    </div>
+                    
+                    <div class="sidebar-section" style="margin-top:auto;">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">CONTEXT</div>
+                        <div class="sidebar-list" style="font-style:italic; font-size:0.85em;"><b>Taboo:</b><br>Describe word without saying it. 'It is a thing WHICH you write with.' (Pen).<br><b>Alternative:</b> 'Finish the sentence'. 'A teacher is a person who...'</div>
+                    </div>
+                </div>
+            
+                <div class="slide-body">
+                    <img src="assets/images/vesper_logo.jpg" class="watermark">
+                    <div class="section-title center-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color); text-decoration-color:var(--theme-color);">STRUCTURE</div>
+                    <div class="structure-content">
+                        <span style='color:var(--theme-color); font-weight:bold;'>Defining Words:</span><br><span style='color:var(--theme-color); font-weight:bold;'>Who</span>: People (The man WHO called).<br><span style='color:var(--theme-color); font-weight:bold;'>Which/That</span>: Things (The car WHICH crashed).<br><span style='color:var(--theme-color); font-weight:bold;'>Where</span>: Places (The cafe WHERE we met).<br>Tip: 'That' is informal replacement for Who/Which.
+                    </div>
+                    <div class="two-cols">
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXAMPLES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>Wikipedia Entry:</strong><br>Write definition of a celebrity. 'Einstein was a scientist WHO discovered relativity.'<br><strong>Scenario B:</strong> 'Product Specs'. 'This is a computer WHICH has 16GB RAM.'</div>
+                        </div>
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXERCISES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>Sentence Join:</strong><br>'I met a man. He plays golf.' -> 'I met a man who plays golf.'<br><strong>Extension:</strong> 'Definition Challenge'. Define: A Fridge, A Zombie, A Lawyer.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <a href="#sl8" class="nav-arrow nav-prev"><i class="fas fa-chevron-left"></i></a>
+            <a href="#sl10" class="nav-arrow nav-next"><i class="fas fa-chevron-right"></i></a>
+            
+            <div class="progress-bar-container"><div class="progress-bar" style="width:45.0%;"></div></div>
+            <div style="position:absolute; bottom:15px; right:30px; font-family:'Merriweather'; color:#999; font-size:0.8em;">Core Basics: Level 4 | 9</div>
+        </div>
+        
+        <div class="slide-page" id="sl10">
+            <div class="slide-header-bar" style="background-color:var(--theme-color);">
+                <div class="top-row">
+                    <div class="logo-container"><img src="assets/images/vesper_logo.jpg" style="filter: brightness(0) invert(1);"></div>
+                    <div class="academy-name">VESPER <span style="font-size:0.5em; display:block; letter-spacing:1px;">ACADEMY</span></div>
+                </div>
+                <div class="lesson-headline">Lesson 10 - Opinion Essays</div>
+            </div>
+            
+            <div class="lesson-audio" style="background:#eef3f9; border:1px solid #c9d8ea; border-left:4px solid #1e5fa8; border-radius:6px; padding:12px 16px; margin:0 0 14px 0; margin:12px 24px;"><div style="font-weight:bold; color:#1a2b42; margin-bottom:6px;">&#127911; Lesson Audio &mdash; Listen before class</div><audio controls preload="none" style="width:100%;"><source src="assets/audio/core_basics_level_4_lesson_10.mp3" type="audio/mpeg">Your browser does not support audio.</audio><div style="font-size:0.85em; color:#33475e; margin-top:8px; line-height:1.6;"><strong>Listen &amp; Answer:</strong><br>1) What is Nadia's opinion about remote work?<br>2) What three parts does an opinion essay need?<br>3) And you? Give your opinion with one reason: 'I believe... because...'</div></div><div class="lesson-hw" style="background:#f7f3ea; border-left:4px solid #c5a059; border-radius:4px; padding:7px 14px; margin:6px 24px; font-size:0.78em; color:#3a3325; line-height:1.45;"><strong style="color:#a8843d;">&#9997;&#65039; Before next class (10 min):</strong> Write the 4-line skeleton: 'Social media does more harm than good' &bull; Expand one skeleton line into a full paragraph &bull; Listen to the lesson audio again</div><div class="slide-layout">
+                <div class="sidebar">
+                    <div class="sidebar-section">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">VOCABULARY</div>
+                        <div class="sidebar-list"><div>• Think</div><div>• Believe</div><div>• Agree</div><div>• Disagree</div><div>&bull; Opinion <span class="v-gloss">&middot; what someone believes — not provable</span></div><div>&bull; View <span class="v-gloss">&middot; what you can see from a place</span></div><div>&bull; Point <span class="v-gloss">&middot; one idea in an argument</span></div><div>&bull; Argument <span class="v-gloss">&middot; a reason given to support an opinion</span></div><div>&bull; Reason <span class="v-gloss">&middot; why something happens or is true</span></div><div>• Because</div><div>&bull; Example <span class="v-gloss">&middot; a specific case that proves your point</span></div><div>&bull; Ideally <span class="v-gloss">&middot; in the perfect situation</span></div><div>&bull; Personally <span class="v-gloss">&middot; speaking for myself</span></div><div>&bull; Seem <span class="v-gloss">&middot; to appear to be</span></div><div>&bull; Clearly <span class="v-gloss">&middot; easy to see; obviously</span></div></div>
+                    </div>
+                    
+                    <div class="sidebar-section" style="margin-top:auto;">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">CONTEXT</div>
+                        <div class="sidebar-list" style="font-style:italic; font-size:0.85em;"><b>Four Corners:</b><br>Statement: 'Cats are better than dogs.' Type: AGREE or DISAGREE. Ask 'Why?'.<br><b>Alternative:</b> 'Devils Advocate'. Teacher gives opinion. Student MUST disagree, even if they like it.</div>
+                    </div>
+                </div>
+            
+                <div class="slide-body">
+                    <img src="assets/images/vesper_logo.jpg" class="watermark">
+                    <div class="section-title center-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color); text-decoration-color:var(--theme-color);">STRUCTURE</div>
+                    <div class="structure-content">
+                        <span style='color:var(--theme-color); font-weight:bold;'>Structuring Argument:</span><br>1. State Opinion (In my opinion...).<br>2. Give Reason (This is because...).<br>3. Give Example (For instance...).<br>4. Re-state (Therefore...).
+                    </div>
+                    <div class="two-cols">
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXAMPLES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>Debate Club:</strong><br>Prepare opening statement. 'Social media is bad because [Reason 1] and [Reason 2].'<br><strong>Scenario B:</strong> 'Reviewing a Policy'. 'Work from home is good because we save time.'</div>
+                        </div>
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXERCISES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>Forum Post:</strong><br>Write a reply to a news article. 'I mostly agree, but I think...' use 'On the one hand...'<br><strong>Extension:</strong> 'Persuasion'. Convince the teacher to end class early using logical arguments.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <a href="#sl9" class="nav-arrow nav-prev"><i class="fas fa-chevron-left"></i></a>
+            <a href="#cp10" class="nav-arrow nav-next"><i class="fas fa-chevron-right"></i></a>
+            
+            <div class="progress-bar-container"><div class="progress-bar" style="width:50.0%;"></div></div>
+            <div style="position:absolute; bottom:15px; right:30px; font-family:'Merriweather'; color:#999; font-size:0.8em;">Core Basics: Level 4 | 10</div>
+        </div>
+        
+            <div class="slide-page" id="cp10" style="background-color: var(--theme-color); color:white;">
+                 <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; text-align:center; padding:50px;">
+                    <i class="fas fa-flag-checkered" style="font-size:5em; margin-bottom:20px; opacity:0.8;"></i>
+                    <h1 style="font-size:3em; margin:0; font-family:'Merriweather';">CHECKPOINT</h1>
+                    <h2 style="font-size:1.5em; font-weight:300; opacity:0.9;">Lessons 6 - 10 Complete</h2>
+                    <div style="background:white; color:#333; padding:30px; border-radius:10px; margin-top:40px; max-width:600px; box-shadow:0 10px 30px rgba(0,0,0,0.2);">
+                        <h3 style="color:var(--theme-color); margin-top:0;">Time to Review!</h3>
+                        <p>Great job! You have completed another block of 5 lessons.</p>
+                        <div style="margin-top:20px; font-weight:bold;">Next Up: Lesson 11</div>
+                    </div>
+                 </div>
+                 <a href="#sl10" class="nav-arrow nav-prev" style="background:white; color:var(--theme-color);"><i class="fas fa-chevron-left"></i></a>
+                 <a href="#sl11" class="nav-arrow nav-next" style="background:white; color:var(--theme-color);"><i class="fas fa-chevron-right"></i></a>
+            </div>
+            
+        <div class="slide-page" id="sl11">
+            <div class="slide-header-bar" style="background-color:var(--theme-color);">
+                <div class="top-row">
+                    <div class="logo-container"><img src="assets/images/vesper_logo.jpg" style="filter: brightness(0) invert(1);"></div>
+                    <div class="academy-name">VESPER <span style="font-size:0.5em; display:block; letter-spacing:1px;">ACADEMY</span></div>
+                </div>
+                <div class="lesson-headline">Lesson 11 - Past Simple vs Continuous (Narrative)</div>
+            </div>
+            
+            <div class="lesson-audio" style="background:#eef3f9; border:1px solid #c9d8ea; border-left:4px solid #1e5fa8; border-radius:6px; padding:12px 16px; margin:0 0 14px 0; margin:12px 24px;"><div style="font-weight:bold; color:#1a2b42; margin-bottom:6px;">&#127911; Lesson Audio &mdash; Listen before class</div><audio controls preload="none" style="width:100%;"><source src="assets/audio/core_basics_level_4_lesson_11.mp3" type="audio/mpeg">Your browser does not support audio.</audio><div style="font-size:0.85em; color:#33475e; margin-top:8px; line-height:1.6;"><strong>Listen &amp; Answer:</strong><br>1) What was Pilar doing when the lights went out?<br>2) What did she do after that?<br>3) And you? Complete: 'I was sleeping when...'</div></div><div class="lesson-hw" style="background:#f7f3ea; border-left:4px solid #c5a059; border-radius:4px; padding:7px 14px; margin:6px 24px; font-size:0.78em; color:#3a3325; line-height:1.45;"><strong style="color:#a8843d;">&#9997;&#65039; Before next class (10 min):</strong> Write 4 interrupted-action sentences about last week &bull; Start your next anecdote with 'I was...' on purpose &bull; Listen to the lesson audio again</div><div class="slide-layout">
+                <div class="sidebar">
+                    <div class="sidebar-section">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">VOCABULARY</div>
+                        <div class="sidebar-list"><div>• Story</div><div>• Yesterday</div><div>&bull; While <span class="v-gloss">&middot; during the time that</span></div><div>• When</div><div>&bull; Suddenly <span class="v-gloss">&middot; quickly and unexpectedly</span></div><div>• Happened</div><div>&bull; Background <span class="v-gloss">&middot; the situation behind a story</span></div><div>&bull; Event <span class="v-gloss">&middot; something that happens</span></div><div>&bull; Plot <span class="v-gloss">&middot; the events of a story</span></div><div>&bull; Character <span class="v-gloss">&middot; a person in a story; also personality</span></div><div>&bull; Setting <span class="v-gloss">&middot; where and when a story happens</span></div><div>• Start</div><div>&bull; Middle <span class="v-gloss">&middot; the center part</span></div><div>&bull; End <span class="v-gloss">&middot; the final part</span></div><div>&bull; Twist <span class="v-gloss">&middot; a surprising change in a story</span></div></div>
+                    </div>
+                    
+                    <div class="sidebar-section" style="margin-top:auto;">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">CONTEXT</div>
+                        <div class="sidebar-list" style="font-style:italic; font-size:0.85em;"><b>Picture Prompt:</b><br>Show scary photo. 'What was happening?' 'The wind was blowing.' 'What happened?' 'The door opened.'<br><b>Alternative:</b> 'One Word Story'. Build a story one word at a time. Must be grammatical.</div>
+                    </div>
+                </div>
+            
+                <div class="slide-body">
+                    <img src="assets/images/vesper_logo.jpg" class="watermark">
+                    <div class="section-title center-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color); text-decoration-color:var(--theme-color);">STRUCTURE</div>
+                    <div class="structure-content">
+                        <span style='color:var(--theme-color); font-weight:bold;'>Storytelling Formulas:</span><br>Setting the Scene: Past Continuous ('It was raining, birds were singing.')<br>The Event: Past Simple ('Suddenly, a wolf appeared.')<br>Linkers: While, When, As soon as.
+                    </div>
+                    <div class="two-cols">
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXAMPLES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>Police Report:</strong><br>Witness statement. Formal tone. 'The suspect was running South. He was wearing a red hat.'<br><strong>Scenario B:</strong> 'The Novelist'. Write the first paragraph of a book.</div>
+                        </div>
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXERCISES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>Diary Entry:</strong><br>Write about a crazy day. 'I was walking when I saw a ghost.' Focus on punctuation.<br><strong>Extension:</strong> 'Alibi Writer'. Police report. 'I was eating dinner when the murder happened.'</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <a href="#sl10" class="nav-arrow nav-prev"><i class="fas fa-chevron-left"></i></a>
+            <a href="#sl12" class="nav-arrow nav-next"><i class="fas fa-chevron-right"></i></a>
+            
+            <div class="progress-bar-container"><div class="progress-bar" style="width:55.00000000000001%;"></div></div>
+            <div style="position:absolute; bottom:15px; right:30px; font-family:'Merriweather'; color:#999; font-size:0.8em;">Core Basics: Level 4 | 11</div>
+        </div>
+        
+        <div class="slide-page" id="sl12">
+            <div class="slide-header-bar" style="background-color:var(--theme-color);">
+                <div class="top-row">
+                    <div class="logo-container"><img src="assets/images/vesper_logo.jpg" style="filter: brightness(0) invert(1);"></div>
+                    <div class="academy-name">VESPER <span style="font-size:0.5em; display:block; letter-spacing:1px;">ACADEMY</span></div>
+                </div>
+                <div class="lesson-headline">Lesson 12 - Used To (Past Habits)</div>
+            </div>
+            
+            <div class="lesson-audio" style="background:#eef3f9; border:1px solid #c9d8ea; border-left:4px solid #1e5fa8; border-radius:6px; padding:12px 16px; margin:0 0 14px 0; margin:12px 24px;"><div style="font-weight:bold; color:#1a2b42; margin-bottom:6px;">&#127911; Lesson Audio &mdash; Listen before class</div><audio controls preload="none" style="width:100%;"><source src="assets/audio/core_basics_level_4_lesson_12.mp3" type="audio/mpeg">Your browser does not support audio.</audio><div style="font-size:0.85em; color:#33475e; margin-top:8px; line-height:1.6;"><strong>Listen &amp; Answer:</strong><br>1) What did Roberto use to do when he was a child?<br>2) What didn't he use to like?<br>3) And you? Say: 'When I was a child, I used to...'</div></div><div class="lesson-hw" style="background:#f7f3ea; border-left:4px solid #c5a059; border-radius:4px; padding:7px 14px; margin:6px 24px; font-size:0.78em; color:#3a3325; line-height:1.45;"><strong style="color:#a8843d;">&#9997;&#65039; Before next class (10 min):</strong> Write 5 used-to sentences about your childhood &bull; Ask an older relative what they used to do for fun; write it &bull; Listen to the lesson audio again</div><div class="slide-layout">
+                <div class="sidebar">
+                    <div class="sidebar-section">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">VOCABULARY</div>
+                        <div class="sidebar-list"><div>&bull; Used to <span class="v-gloss">&middot; past habit that is no longer true</span></div><div>• Habit</div><div>• Past</div><div>• Change</div><div>&bull; Anymore <span class="v-gloss">&middot; no longer</span></div><div>&bull; No longer <span class="v-gloss">&middot; not now (it stopped)</span></div><div>&bull; Smoke <span class="v-gloss">&middot; to use cigarettes</span></div><div>• Play</div><div>• Live</div><div>• Be</div><div>• Child</div><div>• Young</div><div>• School</div><div>• Remember</div><div>&bull; Dinosaur <span class="v-gloss">&middot; prehistoric giant reptile</span></div></div>
+                    </div>
+                    
+                    <div class="sidebar-section" style="margin-top:auto;">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">CONTEXT</div>
+                        <div class="sidebar-list" style="font-style:italic; font-size:0.85em;"><b>Granny Talk:</b><br>'In my day, we used to walk to school.' Students invent granny complaints. 'Kids used to play outside.'<br><b>Alternative:</b> 'Memory Lane'. Teacher shows photo of themselves 10 years ago. 'I used to have hair.'</div>
+                    </div>
+                </div>
+            
+                <div class="slide-body">
+                    <img src="assets/images/vesper_logo.jpg" class="watermark">
+                    <div class="section-title center-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color); text-decoration-color:var(--theme-color);">STRUCTURE</div>
+                    <div class="structure-content">
+                        <span style='color:var(--theme-color); font-weight:bold;'>Past Habits:</span><br>Structure: Used to + Infinitive.<br>Meaning: I did it in the past, but NOT now.<br>Negative: I <span style='color:var(--theme-color); font-weight:bold;'>didn't use to</span> (No 'd').<br>Question: <span style='color:var(--theme-color); font-weight:bold;'>Did</span> you <span style='color:var(--theme-color); font-weight:bold;'>use to</span>?
+                    </div>
+                    <div class="two-cols">
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXAMPLES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>Celebrity Biography:</strong><br>'He used to be poor, but now he is rich.' 'He used to work in a cafe.'<br><strong>Scenario B:</strong> 'Company History'. 'We used to sell books, now we sell everything (Amazon).'</div>
+                        </div>
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXERCISES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>Then vs Now:</strong><br>Chart: 2010 vs 2024. Write sentences. 'He used to be fat, now he is thin.'<br><strong>Extension:</strong> 'Life Changes'. 'Before I came to this country, I used to...'</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <a href="#sl11" class="nav-arrow nav-prev"><i class="fas fa-chevron-left"></i></a>
+            <a href="#sl13" class="nav-arrow nav-next"><i class="fas fa-chevron-right"></i></a>
+            
+            <div class="progress-bar-container"><div class="progress-bar" style="width:60.0%;"></div></div>
+            <div style="position:absolute; bottom:15px; right:30px; font-family:'Merriweather'; color:#999; font-size:0.8em;">Core Basics: Level 4 | 12</div>
+        </div>
+        
+        <div class="slide-page" id="sl13">
+            <div class="slide-header-bar" style="background-color:var(--theme-color);">
+                <div class="top-row">
+                    <div class="logo-container"><img src="assets/images/vesper_logo.jpg" style="filter: brightness(0) invert(1);"></div>
+                    <div class="academy-name">VESPER <span style="font-size:0.5em; display:block; letter-spacing:1px;">ACADEMY</span></div>
+                </div>
+                <div class="lesson-headline">Lesson 13 - Present Perfect (For/Since)</div>
+            </div>
+            
+            <div class="lesson-audio" style="background:#eef3f9; border:1px solid #c9d8ea; border-left:4px solid #1e5fa8; border-radius:6px; padding:12px 16px; margin:0 0 14px 0; margin:12px 24px;"><div style="font-weight:bold; color:#1a2b42; margin-bottom:6px;">&#127911; Lesson Audio &mdash; Listen before class</div><audio controls preload="none" style="width:100%;"><source src="assets/audio/core_basics_level_4_lesson_13.mp3" type="audio/mpeg">Your browser does not support audio.</audio><div style="font-size:0.85em; color:#33475e; margin-top:8px; line-height:1.6;"><strong>Listen &amp; Answer:</strong><br>1) How long has Felipe worked at the company?<br>2) How long has Carla known her best friend?<br>3) And you? Say: 'I have lived in... for / since...'</div></div><div class="lesson-hw" style="background:#f7f3ea; border-left:4px solid #c5a059; border-radius:4px; padding:7px 14px; margin:6px 24px; font-size:0.78em; color:#3a3325; line-height:1.45;"><strong style="color:#a8843d;">&#9997;&#65039; Before next class (10 min):</strong> Write 3 for + 3 since sentences about your life &bull; Calculate: how long have you studied English? Write it both ways &bull; Listen to the lesson audio again</div><div class="slide-layout">
+                <div class="sidebar">
+                    <div class="sidebar-section">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">VOCABULARY</div>
+                        <div class="sidebar-list"><div>&bull; For <span class="v-gloss">&middot; during an amount of time</span></div><div>&bull; Since <span class="v-gloss">&middot; from a point in time until now</span></div><div>&bull; Duration <span class="v-gloss">&middot; how long something lasts</span></div><div>&bull; Period <span class="v-gloss">&middot; the . mark that ends a sentence</span></div><div>• Time</div><div>• Long</div><div>• Start</div><div>• Date</div><div>• Year</div><div>• Month</div><div>• Week</div><div>• Hour</div><div>• How long</div><div>• Always</div><div>• Live</div></div>
+                    </div>
+                    
+                    <div class="sidebar-section" style="margin-top:auto;">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">CONTEXT</div>
+                        <div class="sidebar-list" style="font-style:italic; font-size:0.85em;"><b>Timeline Flash:</b><br>Teacher: '2005!' Student: 'SINCE!' Teacher: '3 days!' Student: 'FOR!'<br><b>Alternative:</b> 'The Endurance Test'. 'How long have you been awake?' 'Since 7am.'</div>
+                    </div>
+                </div>
+            
+                <div class="slide-body">
+                    <img src="assets/images/vesper_logo.jpg" class="watermark">
+                    <div class="section-title center-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color); text-decoration-color:var(--theme-color);">STRUCTURE</div>
+                    <div class="structure-content">
+                        <span style='color:var(--theme-color); font-weight:bold;'>Measuring Time:</span><br><span style='color:var(--theme-color); font-weight:bold;'>For</span> + Duration (10 years, 2 days, a long time).<br><span style='color:var(--theme-color); font-weight:bold;'>Since</span> + Starting Point (2010, Monday, I was born).<br>Question: How long...?
+                    </div>
+                    <div class="two-cols">
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXAMPLES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>Job Interview 3:</strong><br>'How long have you worked here?' 'I have worked here since 2018.'<br><strong>Scenario B:</strong> 'Doctor Visit'. 'How long have you had this pain?' 'For 3 days.'</div>
+                        </div>
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXERCISES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>Relationship Status:</strong><br>'They have been married FOR 20 years.' Fill in blanks. 'She has lived here SINCE 2012.'<br><strong>Extension:</strong> 'CV Writing'. 'I have worked as a manager for 5 years.'</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <a href="#sl12" class="nav-arrow nav-prev"><i class="fas fa-chevron-left"></i></a>
+            <a href="#sl14" class="nav-arrow nav-next"><i class="fas fa-chevron-right"></i></a>
+            
+            <div class="progress-bar-container"><div class="progress-bar" style="width:65.0%;"></div></div>
+            <div style="position:absolute; bottom:15px; right:30px; font-family:'Merriweather'; color:#999; font-size:0.8em;">Core Basics: Level 4 | 13</div>
+        </div>
+        
+        <div class="slide-page" id="sl14">
+            <div class="slide-header-bar" style="background-color:var(--theme-color);">
+                <div class="top-row">
+                    <div class="logo-container"><img src="assets/images/vesper_logo.jpg" style="filter: brightness(0) invert(1);"></div>
+                    <div class="academy-name">VESPER <span style="font-size:0.5em; display:block; letter-spacing:1px;">ACADEMY</span></div>
+                </div>
+                <div class="lesson-headline">Lesson 14 - Passives (Intro)</div>
+            </div>
+            
+            <div class="lesson-audio" style="background:#eef3f9; border:1px solid #c9d8ea; border-left:4px solid #1e5fa8; border-radius:6px; padding:12px 16px; margin:0 0 14px 0; margin:12px 24px;"><div style="font-weight:bold; color:#1a2b42; margin-bottom:6px;">&#127911; Lesson Audio &mdash; Listen before class</div><audio controls preload="none" style="width:100%;"><source src="assets/audio/core_basics_level_4_lesson_14.mp3" type="audio/mpeg">Your browser does not support audio.</audio><div style="font-size:0.85em; color:#33475e; margin-top:8px; line-height:1.6;"><strong>Listen &amp; Answer:</strong><br>1) Where was the bridge built?<br>2) When was the old theater opened?<br>3) And you? Make a passive sentence about your city: '... was built in...'</div></div><div class="lesson-hw" style="background:#f7f3ea; border-left:4px solid #c5a059; border-radius:4px; padding:7px 14px; margin:6px 24px; font-size:0.78em; color:#3a3325; line-height:1.45;"><strong style="color:#a8843d;">&#9997;&#65039; Before next class (10 min):</strong> Write the 'museum label' of 2 objects you own (passive voice) &bull; Find one 'Made in...' label at home; write the full sentence &bull; Listen to the lesson audio again</div><div class="slide-layout">
+                <div class="sidebar">
+                    <div class="sidebar-section">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">VOCABULARY</div>
+                        <div class="sidebar-list"><div>• Made</div><div>• Built</div><div>• Written</div><div>• Painted</div><div>• Invented</div><div>• Discovered</div><div>• Produced</div><div>&bull; Grown <span class="v-gloss">&middot; past participle of grow</span></div><div>• Sold</div><div>• Done</div><div>• Fixed</div><div>• Broken</div><div>• Cleaned</div><div>&bull; Agent <span class="v-gloss">&middot; a person who sells for others</span></div><div>• By</div></div>
+                    </div>
+                    
+                    <div class="sidebar-section" style="margin-top:auto;">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">CONTEXT</div>
+                        <div class="sidebar-list" style="font-style:italic; font-size:0.85em;"><b>Made In...:</b><br>Check your shirt label. 'It was made in China.' Share in chat.<br><b>Alternative:</b> 'General Knowledge Quiz'. 'Who painted the Mona Lisa?' -> 'It was painted by...'</div>
+                    </div>
+                </div>
+            
+                <div class="slide-body">
+                    <img src="assets/images/vesper_logo.jpg" class="watermark">
+                    <div class="section-title center-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color); text-decoration-color:var(--theme-color);">STRUCTURE</div>
+                    <div class="structure-content">
+                        <span style='color:var(--theme-color); font-weight:bold;'>Focus on Object:</span><br>Active: Shakespeare wrote Hamlet.<br>Passive: Hamlet <span style='color:var(--theme-color); font-weight:bold;'>was written</span> by Shakespeare.<br><span style='color:var(--theme-color); font-weight:bold;'>Usage:</span> Use when we don't know (or don't care) who did the action.
+                    </div>
+                    <div class="two-cols">
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXAMPLES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>Factory Tour:</strong><br>'Here, the cookies are baked. Then they are packed. Finally, they are sold.'<br><strong>Scenario B:</strong> 'News Report'. 'The bank was robbed. The money was stolen. The thief was caught.'</div>
+                        </div>
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXERCISES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>Quiz Maker:</strong><br>Students write questions. 'The iPhone was invented by...?' Class guesses.<br><strong>Extension:</strong> 'Process Description'. Active: 'People make cars here.' Passive: 'Cars are made here.'</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <a href="#sl13" class="nav-arrow nav-prev"><i class="fas fa-chevron-left"></i></a>
+            <a href="#sl15" class="nav-arrow nav-next"><i class="fas fa-chevron-right"></i></a>
+            
+            <div class="progress-bar-container"><div class="progress-bar" style="width:70.0%;"></div></div>
+            <div style="position:absolute; bottom:15px; right:30px; font-family:'Merriweather'; color:#999; font-size:0.8em;">Core Basics: Level 4 | 14</div>
+        </div>
+        
+        <div class="slide-page" id="sl15">
+            <div class="slide-header-bar" style="background-color:var(--theme-color);">
+                <div class="top-row">
+                    <div class="logo-container"><img src="assets/images/vesper_logo.jpg" style="filter: brightness(0) invert(1);"></div>
+                    <div class="academy-name">VESPER <span style="font-size:0.5em; display:block; letter-spacing:1px;">ACADEMY</span></div>
+                </div>
+                <div class="lesson-headline">Lesson 15 - Second Conditional (Unreal)</div>
+            </div>
+            
+            <div class="lesson-audio" style="background:#eef3f9; border:1px solid #c9d8ea; border-left:4px solid #1e5fa8; border-radius:6px; padding:12px 16px; margin:0 0 14px 0; margin:12px 24px;"><div style="font-weight:bold; color:#1a2b42; margin-bottom:6px;">&#127911; Lesson Audio &mdash; Listen before class</div><audio controls preload="none" style="width:100%;"><source src="assets/audio/core_basics_level_4_lesson_15.mp3" type="audio/mpeg">Your browser does not support audio.</audio><div style="font-size:0.85em; color:#33475e; margin-top:8px; line-height:1.6;"><strong>Listen &amp; Answer:</strong><br>1) What would Irene do if she had more free time?<br>2) What would Hector buy if money were no problem?<br>3) And you? Complete: 'If I had more time, I would...'</div></div><div class="lesson-hw" style="background:#f7f3ea; border-left:4px solid #c5a059; border-radius:4px; padding:7px 14px; margin:6px 24px; font-size:0.78em; color:#3a3325; line-height:1.45;"><strong style="color:#a8843d;">&#9997;&#65039; Before next class (10 min):</strong> Write your answers to 2 moral dilemmas (second conditional) &bull; Invent one dilemma to ask the class &bull; Listen to the lesson audio again</div><div class="slide-layout">
+                <div class="sidebar">
+                    <div class="sidebar-section">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">VOCABULARY</div>
+                        <div class="sidebar-list"><div>• If</div><div>• Would</div><div>• Rich</div><div>• Won</div><div>&bull; Lottery <span class="v-gloss">&middot; game of chance with a money prize</span></div><div>&bull; King <span class="v-gloss">&middot; male royal ruler</span></div><div>&bull; President <span class="v-gloss">&middot; elected head of a country</span></div><div>• Fly</div><div>&bull; Power <span class="v-gloss">&middot; the ability to control or influence</span></div><div>&bull; Imagine <span class="v-gloss">&middot; to picture in your mind</span></div><div>&bull; Hypothetical <span class="v-gloss">&middot; imaginary, not real</span></div><div>&bull; Unlikely <span class="v-gloss">&middot; will probably not happen</span></div><div>&bull; Dream <span class="v-gloss">&middot; what you see when sleeping; a deep wish</span></div><div>&bull; Wish <span class="v-gloss">&middot; to want something unreal or unlikely</span></div><div>• Could</div></div>
+                    </div>
+                    
+                    <div class="sidebar-section" style="margin-top:auto;">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">CONTEXT</div>
+                        <div class="sidebar-list" style="font-style:italic; font-size:0.85em;"><b>If I were you:</b><br>Problem: 'I am tired.' Advice: 'If I were you, I would sleep.'<br><b>Alternative:</b> 'Chain Dream'. 'If I won the lottery, I would buy a boat.' 'If I bought a boat...'</div>
+                    </div>
+                </div>
+            
+                <div class="slide-body">
+                    <img src="assets/images/vesper_logo.jpg" class="watermark">
+                    <div class="section-title center-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color); text-decoration-color:var(--theme-color);">STRUCTURE</div>
+                    <div class="structure-content">
+                        <span style='color:var(--theme-color); font-weight:bold;'>Hypothetical Situations:</span><br>Structure: If + Past Simple, Would + Verb.<br><span style='color:var(--theme-color); font-weight:bold;'>Subjunctive Rule:</span> If I <span style='color:var(--theme-color); font-weight:bold;'>WERE</span> (not 'was') you/rich/tall.<br>Use for: Dreams, Imaginary situations.
+                    </div>
+                    <div class="two-cols">
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXAMPLES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>Election Speech:</strong><br>'If I were President, I would give free ice cream. I would ban homework.'<br><strong>Scenario B:</strong> 'Desert Island'. 'If you could only take one book, what would it be?'</div>
+                        </div>
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXERCISES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>Lottery Winner:</strong><br>List 3 things you would buy. 'I would buy a zoo.' Discuss with partner.<br><strong>Extension:</strong> 'Moral Dilemma'. 'If you found a wallet, what would you do?'</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <a href="#sl14" class="nav-arrow nav-prev"><i class="fas fa-chevron-left"></i></a>
+            <a href="#cp15" class="nav-arrow nav-next"><i class="fas fa-chevron-right"></i></a>
+            
+            <div class="progress-bar-container"><div class="progress-bar" style="width:75.0%;"></div></div>
+            <div style="position:absolute; bottom:15px; right:30px; font-family:'Merriweather'; color:#999; font-size:0.8em;">Core Basics: Level 4 | 15</div>
+        </div>
+        
+            <div class="slide-page" id="cp15" style="background-color: var(--theme-color); color:white;">
+                 <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; text-align:center; padding:50px;">
+                    <i class="fas fa-flag-checkered" style="font-size:5em; margin-bottom:20px; opacity:0.8;"></i>
+                    <h1 style="font-size:3em; margin:0; font-family:'Merriweather';">CHECKPOINT</h1>
+                    <h2 style="font-size:1.5em; font-weight:300; opacity:0.9;">Lessons 11 - 15 Complete</h2>
+                    <div style="background:white; color:#333; padding:30px; border-radius:10px; margin-top:40px; max-width:600px; box-shadow:0 10px 30px rgba(0,0,0,0.2);">
+                        <h3 style="color:var(--theme-color); margin-top:0;">Time to Review!</h3>
+                        <p>Great job! You have completed another block of 5 lessons.</p>
+                        <div style="margin-top:20px; font-weight:bold;">Next Up: Lesson 16</div>
+                    </div>
+                 </div>
+                 <a href="#sl15" class="nav-arrow nav-prev" style="background:white; color:var(--theme-color);"><i class="fas fa-chevron-left"></i></a>
+                 <a href="#sl16" class="nav-arrow nav-next" style="background:white; color:var(--theme-color);"><i class="fas fa-chevron-right"></i></a>
+            </div>
+            
+        <div class="slide-page" id="sl16">
+            <div class="slide-header-bar" style="background-color:var(--theme-color);">
+                <div class="top-row">
+                    <div class="logo-container"><img src="assets/images/vesper_logo.jpg" style="filter: brightness(0) invert(1);"></div>
+                    <div class="academy-name">VESPER <span style="font-size:0.5em; display:block; letter-spacing:1px;">ACADEMY</span></div>
+                </div>
+                <div class="lesson-headline">Lesson 16 - Too / Enough</div>
+            </div>
+            
+            <div class="lesson-audio" style="background:#eef3f9; border:1px solid #c9d8ea; border-left:4px solid #1e5fa8; border-radius:6px; padding:12px 16px; margin:0 0 14px 0; margin:12px 24px;"><div style="font-weight:bold; color:#1a2b42; margin-bottom:6px;">&#127911; Lesson Audio &mdash; Listen before class</div><audio controls preload="none" style="width:100%;"><source src="assets/audio/core_basics_level_4_lesson_16.mp3" type="audio/mpeg">Your browser does not support audio.</audio><div style="font-size:0.85em; color:#33475e; margin-top:8px; line-height:1.6;"><strong>Listen &amp; Answer:</strong><br>1) Why can't Bruno buy the apartment? Use 'too' or 'enough'.<br>2) What is the problem with the second apartment?<br>3) And you? Make one sentence with 'too' and one with 'enough'.</div></div><div class="lesson-hw" style="background:#f7f3ea; border-left:4px solid #c5a059; border-radius:4px; padding:7px 14px; margin:6px 24px; font-size:0.78em; color:#3a3325; line-height:1.45;"><strong style="color:#a8843d;">&#9997;&#65039; Before next class (10 min):</strong> Write 3 too + 3 enough sentences about products you use &bull; Review your phone in 3 lines using both words &bull; Listen to the lesson audio again</div><div class="slide-layout">
+                <div class="sidebar">
+                    <div class="sidebar-section">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">VOCABULARY</div>
+                        <div class="sidebar-list"><div>• Too</div><div>• Enough</div><div>• Much</div><div>• Many</div><div>• Small</div><div>• Big</div><div>• Fast</div><div>• Slow</div><div>&bull; Expensive <span class="v-gloss">&middot; high price</span></div><div>&bull; Cheap <span class="v-gloss">&middot; low price</span></div><div>&bull; Fit <span class="v-gloss">&middot; the right size for you; healthy</span></div><div>• Tired</div><div>• Busy</div><div>• Loud</div><div>• Quiet</div></div>
+                    </div>
+                    
+                    <div class="sidebar-section" style="margin-top:auto;">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">CONTEXT</div>
+                        <div class="sidebar-list" style="font-style:italic; font-size:0.85em;"><b>Goldilocks:</b><br>'The soup is TOO hot. The bed is TOO hard. This one is just right.'<br><b>Alternative:</b> 'The Complainer'. Teacher shows pictures. 'This car is too old.' 'This house is too small.'</div>
+                    </div>
+                </div>
+            
+                <div class="slide-body">
+                    <img src="assets/images/vesper_logo.jpg" class="watermark">
+                    <div class="section-title center-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color); text-decoration-color:var(--theme-color);">STRUCTURE</div>
+                    <div class="structure-content">
+                        <span style='color:var(--theme-color); font-weight:bold;'>Problems & Solutions:</span><br><span style='color:var(--theme-color); font-weight:bold;'>Too</span> + Adjective (Negative/Excessive): It is too hot.<br>Adjective + <span style='color:var(--theme-color); font-weight:bold;'>Enough</span> (Sufficient): It is hot enough.<br><span style='color:var(--theme-color); font-weight:bold;'>Not Enough</span> + Noun: Not enough money.
+                    </div>
+                    <div class="two-cols">
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXAMPLES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>Clothing Store:</strong><br>'These shoes are too tight.' 'Do you have a bigger size?' 'No, we don't have enough stock.'<br><strong>Scenario B:</strong> 'House Hunting'. 'The kitchen is big enough, but the garden is too small.'</div>
+                        </div>
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXERCISES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>Complaint Email:</strong><br>'The room was too small. The bed wasn't soft enough.'<br><strong>Extension:</strong> 'Problem Solver'. Problem: 'I can't lift this.' Sol: 'You aren't strong enough.'</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <a href="#sl15" class="nav-arrow nav-prev"><i class="fas fa-chevron-left"></i></a>
+            <a href="#sl17" class="nav-arrow nav-next"><i class="fas fa-chevron-right"></i></a>
+            
+            <div class="progress-bar-container"><div class="progress-bar" style="width:80.0%;"></div></div>
+            <div style="position:absolute; bottom:15px; right:30px; font-family:'Merriweather'; color:#999; font-size:0.8em;">Core Basics: Level 4 | 16</div>
+        </div>
+        
+        <div class="slide-page" id="sl17">
+            <div class="slide-header-bar" style="background-color:var(--theme-color);">
+                <div class="top-row">
+                    <div class="logo-container"><img src="assets/images/vesper_logo.jpg" style="filter: brightness(0) invert(1);"></div>
+                    <div class="academy-name">VESPER <span style="font-size:0.5em; display:block; letter-spacing:1px;">ACADEMY</span></div>
+                </div>
+                <div class="lesson-headline">Lesson 17 - Indirect Questions</div>
+            </div>
+            
+            <div class="lesson-audio" style="background:#eef3f9; border:1px solid #c9d8ea; border-left:4px solid #1e5fa8; border-radius:6px; padding:12px 16px; margin:0 0 14px 0; margin:12px 24px;"><div style="font-weight:bold; color:#1a2b42; margin-bottom:6px;">&#127911; Lesson Audio &mdash; Listen before class</div><audio controls preload="none" style="width:100%;"><source src="assets/audio/core_basics_level_4_lesson_17.mp3" type="audio/mpeg">Your browser does not support audio.</audio><div style="font-size:0.85em; color:#33475e; margin-top:8px; line-height:1.6;"><strong>Listen &amp; Answer:</strong><br>1) What does Alba want to know about the schedule?<br>2) How does she ask politely about the salary?<br>3) And you? Make this polite: 'Where is the bathroom?'</div></div><div class="lesson-hw" style="background:#f7f3ea; border-left:4px solid #c5a059; border-radius:4px; padding:7px 14px; margin:6px 24px; font-size:0.78em; color:#3a3325; line-height:1.45;"><strong style="color:#a8843d;">&#9997;&#65039; Before next class (10 min):</strong> Rewrite 4 direct questions as indirect (for a job interview) &bull; Use one indirect question in a real situation this week &bull; Listen to the lesson audio again</div><div class="slide-layout">
+                <div class="sidebar">
+                    <div class="sidebar-section">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">VOCABULARY</div>
+                        <div class="sidebar-list"><div>• Know</div><div>• Wonder</div><div>• Tell</div><div>• Mind</div><div>• Ask</div><div>• Idea</div><div>• Where</div><div>• When</div><div>• What</div><div>• Who</div><div>&bull; Polite <span class="v-gloss">&middot; showing good manners</span></div><div>&bull; Formal <span class="v-gloss">&middot; correct, professional style</span></div><div>• Direct</div><div>• Grammar</div><div>&bull; Switch <span class="v-gloss">&middot; to change from one to another</span></div></div>
+                    </div>
+                    
+                    <div class="sidebar-section" style="margin-top:auto;">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">CONTEXT</div>
+                        <div class="sidebar-list" style="font-style:italic; font-size:0.85em;"><b>Question Surgery:</b><br>'What time is it?' -> 'Can you tell me what time it is?' Drill.<br><b>Alternative:</b> 'The Stranger'. Ask stranger for directions. Direct = Rude. Indirect = Polite.</div>
+                    </div>
+                </div>
+            
+                <div class="slide-body">
+                    <img src="assets/images/vesper_logo.jpg" class="watermark">
+                    <div class="section-title center-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color); text-decoration-color:var(--theme-color);">STRUCTURE</div>
+                    <div class="structure-content">
+                        <span style='color:var(--theme-color); font-weight:bold;'>Polite Inquiries:</span><br>Direct: Where is the bank?<br>Indirect: Could you tell me <span style='color:var(--theme-color); font-weight:bold;'>where the bank is</span>?<br><span style='color:var(--theme-color); font-weight:bold;'>Warning:</span> No double 'Do'. Say 'Do you know where he lives?' (NOT: Do you know where does he live).
+                    </div>
+                    <div class="two-cols">
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXAMPLES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>Tourist Information:</strong><br>'Could you tell me if this bus goes to the city?'<br><strong>Scenario B:</strong> 'Celebrity Interview'. Keep it polite. 'Can I ask who you are dating?'</div>
+                        </div>
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXERCISES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>Stranger Danger:</strong><br>Roleplay asking stranger for help. 'Do you know if the bus stops here?'<br><strong>Extension:</strong> 'Email Enquiry'. write to a school. 'I was wondering how much the course costs.'</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <a href="#sl16" class="nav-arrow nav-prev"><i class="fas fa-chevron-left"></i></a>
+            <a href="#sl18" class="nav-arrow nav-next"><i class="fas fa-chevron-right"></i></a>
+            
+            <div class="progress-bar-container"><div class="progress-bar" style="width:85.0%;"></div></div>
+            <div style="position:absolute; bottom:15px; right:30px; font-family:'Merriweather'; color:#999; font-size:0.8em;">Core Basics: Level 4 | 17</div>
+        </div>
+        
+        <div class="slide-page" id="sl18">
+            <div class="slide-header-bar" style="background-color:var(--theme-color);">
+                <div class="top-row">
+                    <div class="logo-container"><img src="assets/images/vesper_logo.jpg" style="filter: brightness(0) invert(1);"></div>
+                    <div class="academy-name">VESPER <span style="font-size:0.5em; display:block; letter-spacing:1px;">ACADEMY</span></div>
+                </div>
+                <div class="lesson-headline">Lesson 18 - Future Forms Review</div>
+            </div>
+            
+            <div class="lesson-audio" style="background:#eef3f9; border:1px solid #c9d8ea; border-left:4px solid #1e5fa8; border-radius:6px; padding:12px 16px; margin:0 0 14px 0; margin:12px 24px;"><div style="font-weight:bold; color:#1a2b42; margin-bottom:6px;">&#127911; Lesson Audio &mdash; Listen before class</div><audio controls preload="none" style="width:100%;"><source src="assets/audio/core_basics_level_4_lesson_18.mp3" type="audio/mpeg">Your browser does not support audio.</audio><div style="font-size:0.85em; color:#33475e; margin-top:8px; line-height:1.6;"><strong>Listen &amp; Answer:</strong><br>1) What is Saul doing on Saturday? Is it planned or spontaneous?<br>2) Which future form does he use for the train schedule?<br>3) And you? Say one plan with 'going to' and one promise with 'will'.</div></div><div class="lesson-hw" style="background:#f7f3ea; border-left:4px solid #c5a059; border-radius:4px; padding:7px 14px; margin:6px 24px; font-size:0.78em; color:#3a3325; line-height:1.45;"><strong style="color:#a8843d;">&#9997;&#65039; Before next class (10 min):</strong> Write your next week: 1 schedule, 1 arrangement, 1 plan, 1 promise &bull; Spot future forms in any series/song this week &bull; Listen to the lesson audio again</div><div class="slide-layout">
+                <div class="sidebar">
+                    <div class="sidebar-section">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">VOCABULARY</div>
+                        <div class="sidebar-list"><div>• Will</div><div>• Going to</div><div>&bull; Present Continuous <span class="v-gloss">&middot; am/is/are + -ing — happening now</span></div><div>&bull; Arrangement <span class="v-gloss">&middot; a fixed plan with another person</span></div><div>&bull; Plan <span class="v-gloss">&middot; something you have decided to do</span></div><div>&bull; Prediction <span class="v-gloss">&middot; saying what will happen</span></div><div>• Promise</div><div>&bull; Offer <span class="v-gloss">&middot; a price you propose</span></div><div>&bull; Intention <span class="v-gloss">&middot; what you plan to do</span></div><div>• Schedule</div><div>• Tomorrow</div><div>&bull; Next <span class="v-gloss">&middot; the step after</span></div><div>&bull; Definite <span class="v-gloss">&middot; fixed and sure</span></div><div>• Maybe</div><div>&bull; Certain <span class="v-gloss">&middot; 100% sure</span></div></div>
+                    </div>
+                    
+                    <div class="sidebar-section" style="margin-top:auto;">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">CONTEXT</div>
+                        <div class="sidebar-list" style="font-style:italic; font-size:0.85em;"><b>Diary Clash:</b><br>'What are you doing tonight?' 'I am meeting Tom.' (Arrangement). 'I'm going to watch TV.' (Plan).<br><b>Alternative:</b> 'The Fortune Cookie'. 'You will meet a tall stranger.' (Prediction).</div>
+                    </div>
+                </div>
+            
+                <div class="slide-body">
+                    <img src="assets/images/vesper_logo.jpg" class="watermark">
+                    <div class="section-title center-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color); text-decoration-color:var(--theme-color);">STRUCTURE</div>
+                    <div class="structure-content">
+                        <span style='color:var(--theme-color); font-weight:bold;'>Advanced Future Selection:</span><br><span style='color:var(--theme-color); font-weight:bold;'>Will</span>: Rapid decision/Offer/Prediction.<br><span style='color:var(--theme-color); font-weight:bold;'>Going to</span>: Intention/Plan.<br><span style='color:var(--theme-color); font-weight:bold;'>Pres Cont</span>: Fixed Arrangement with someone else/Time.
+                    </div>
+                    <div class="two-cols">
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXAMPLES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>Group Trip Plan:</strong><br>'I'll buy tickets.' 'I'm going to look for hotels.' 'We are leaving at 9.'<br><strong>Scenario B:</strong> 'Project Timeline'. 'We are launching in June. It is going to be big.'</div>
+                        </div>
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXERCISES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>Gap Fill Challenge:</strong><br>Choose the best form. 'The phone is ringing. I ___ (get) it.' -> 'I'll get it.'<br><strong>Extension:</strong> 'Weekend Planner'. Plan a weekend using all forms. 'We are meeting at 9. We are going to hike. It will be fun.'</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <a href="#sl17" class="nav-arrow nav-prev"><i class="fas fa-chevron-left"></i></a>
+            <a href="#sl19" class="nav-arrow nav-next"><i class="fas fa-chevron-right"></i></a>
+            
+            <div class="progress-bar-container"><div class="progress-bar" style="width:90.0%;"></div></div>
+            <div style="position:absolute; bottom:15px; right:30px; font-family:'Merriweather'; color:#999; font-size:0.8em;">Core Basics: Level 4 | 18</div>
+        </div>
+        
+        <div class="slide-page" id="sl19">
+            <div class="slide-header-bar" style="background-color:var(--theme-color);">
+                <div class="top-row">
+                    <div class="logo-container"><img src="assets/images/vesper_logo.jpg" style="filter: brightness(0) invert(1);"></div>
+                    <div class="academy-name">VESPER <span style="font-size:0.5em; display:block; letter-spacing:1px;">ACADEMY</span></div>
+                </div>
+                <div class="lesson-headline">Lesson 19 - Prepositions of Movement</div>
+            </div>
+            
+            <div class="lesson-audio" style="background:#eef3f9; border:1px solid #c9d8ea; border-left:4px solid #1e5fa8; border-radius:6px; padding:12px 16px; margin:0 0 14px 0; margin:12px 24px;"><div style="font-weight:bold; color:#1a2b42; margin-bottom:6px;">&#127911; Lesson Audio &mdash; Listen before class</div><audio controls preload="none" style="width:100%;"><source src="assets/audio/core_basics_level_4_lesson_19.mp3" type="audio/mpeg">Your browser does not support audio.</audio><div style="font-size:0.85em; color:#33475e; margin-top:8px; line-height:1.6;"><strong>Listen &amp; Answer:</strong><br>1) How does Teo get to the gym? Listen for 'through' or 'across'.<br>2) Where does the runner go: along what, over what?<br>3) And you? Describe your way home: 'I walk along... through...'</div></div><div class="lesson-hw" style="background:#f7f3ea; border-left:4px solid #c5a059; border-radius:4px; padding:7px 14px; margin:6px 24px; font-size:0.78em; color:#3a3325; line-height:1.45;"><strong style="color:#a8843d;">&#9997;&#65039; Before next class (10 min):</strong> Write your route to work/school with along/across/through/past &bull; Trace tomorrow's route mentally in English once &bull; Listen to the lesson audio again</div><div class="slide-layout">
+                <div class="sidebar">
+                    <div class="sidebar-section">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">VOCABULARY</div>
+                        <div class="sidebar-list"><div>&bull; Into <span class="v-gloss">&middot; entering</span></div><div>&bull; Out of <span class="v-gloss">&middot; exiting</span></div><div>&bull; Through <span class="v-gloss">&middot; from one side to the other, inside</span></div><div>&bull; Across <span class="v-gloss">&middot; from one side to the other, on the surface</span></div><div>&bull; Along <span class="v-gloss">&middot; following a line (street, river)</span></div><div>&bull; Up <span class="v-gloss">&middot; to a higher place</span></div><div>&bull; Down <span class="v-gloss">&middot; to a lower place</span></div><div>&bull; Over <span class="v-gloss">&middot; above; crossing on top</span></div><div>• Under</div><div>&bull; Around <span class="v-gloss">&middot; in a circle; near</span></div><div>• Past</div><div>&bull; Towards <span class="v-gloss">&middot; in the direction of</span></div><div>&bull; Away <span class="v-gloss">&middot; to another place; not here</span></div><div>• From</div><div>• To</div></div>
+                    </div>
+                    
+                    <div class="sidebar-section" style="margin-top:auto;">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">CONTEXT</div>
+                        <div class="sidebar-list" style="font-style:italic; font-size:0.85em;"><b>Finger Walk:</b><br>One hand is a person, other is a bridge. 'Go under the bridge.' 'Jump over the bridge.'<br><b>Alternative:</b> 'Maze Runner'. Draw a maze. Guide the student through it. 'Go up, turn left, go through the door.'</div>
+                    </div>
+                </div>
+            
+                <div class="slide-body">
+                    <img src="assets/images/vesper_logo.jpg" class="watermark">
+                    <div class="section-title center-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color); text-decoration-color:var(--theme-color);">STRUCTURE</div>
+                    <div class="structure-content">
+                        <span style='color:var(--theme-color); font-weight:bold;'>Dynamic Motion:</span><br>Use with verbs of motion (Go, Run, Walk).<br>Common pairs: Over/Under, Into/Out of, Up/Down.<br>Tricky ones: Along (the street), Past (the bank), Through (the tunnel/park).
+                    </div>
+                    <div class="two-cols">
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXAMPLES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>Action Movie Pitch:</strong><br>'The car jumps OVER the train and goes THROUGH the window.'<br><strong>Scenario B:</strong> 'Giving Directions'. Advanced. 'Go through the park and walk along the river.'</div>
+                        </div>
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXERCISES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>The Great Escape:</strong><br>Read story of a prison break. Draw the route on map. 'He crawled through the pipe.'<br><strong>Extension:</strong> 'Sports commentary'. 'He runs down the wing, crosses into the box...'</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <a href="#sl18" class="nav-arrow nav-prev"><i class="fas fa-chevron-left"></i></a>
+            <a href="#sl20" class="nav-arrow nav-next"><i class="fas fa-chevron-right"></i></a>
+            
+            <div class="progress-bar-container"><div class="progress-bar" style="width:95.0%;"></div></div>
+            <div style="position:absolute; bottom:15px; right:30px; font-family:'Merriweather'; color:#999; font-size:0.8em;">Core Basics: Level 4 | 19</div>
+        </div>
+        
+        <div class="slide-page" id="sl20">
+            <div class="slide-header-bar" style="background-color:var(--theme-color);">
+                <div class="top-row">
+                    <div class="logo-container"><img src="assets/images/vesper_logo.jpg" style="filter: brightness(0) invert(1);"></div>
+                    <div class="academy-name">VESPER <span style="font-size:0.5em; display:block; letter-spacing:1px;">ACADEMY</span></div>
+                </div>
+                <div class="lesson-headline">Lesson 20 - Level 4 Exam</div>
+            </div>
+            
+            <div class="slide-layout">
+                <div class="sidebar">
+                    <div class="sidebar-section">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">VOCABULARY</div>
+                        <div class="sidebar-list"><div>&bull; Essay <span class="v-gloss">&middot; a short structured text defending an idea</span></div><div>&bull; Report <span class="v-gloss">&middot; a formal text presenting facts and findings</span></div><div>&bull; Article <span class="v-gloss">&middot; a text published in a newspaper or website</span></div><div>• Review</div><div>&bull; Summary <span class="v-gloss">&middot; a short version with only the main points</span></div><div>&bull; Title <span class="v-gloss">&middot; the name of a text</span></div><div>&bull; Introduction <span class="v-gloss">&middot; the opening paragraph — presents your point</span></div><div>&bull; Body <span class="v-gloss">&middot; the middle paragraphs with reasons and details</span></div><div>&bull; Conclusion <span class="v-gloss">&middot; the final paragraph — restates your view</span></div><div>&bull; Spelling <span class="v-gloss">&middot; writing words with the correct letters</span></div><div>&bull; Punctuation <span class="v-gloss">&middot; the marks that organize writing (. , ? !)</span></div><div>• Grammar</div><div>• Check</div><div>&bull; Edit <span class="v-gloss">&middot; to correct and improve a text</span></div><div>&bull; Final <span class="v-gloss">&middot; last</span></div></div>
+                    </div>
+                    
+                    <div class="sidebar-section" style="margin-top:auto;">
+                        <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">CONTEXT</div>
+                        <div class="sidebar-list" style="font-style:italic; font-size:0.85em;"><b>Error Correction Race:</b><br>Find 10 errors in the text block. (Spelling, Grammar, Punctuation).<br><b>Alternative:</b> 'Paragraph Jumble'. Reassemble a broken essay.</div>
+                    </div>
+                </div>
+            
+                <div class="slide-body">
+                    <img src="assets/images/vesper_logo.jpg" class="watermark">
+                    <div class="section-title center-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color); text-decoration-color:var(--theme-color);">STRUCTURE</div>
+                    <div class="structure-content">
+                        <span style='color:var(--theme-color); font-weight:bold;'>Final Writing Task:</span><br>Topic: 'A Person Who Inspired Me'.<br>Criteria: 150 words. 3 Paragraphs. Perfect Punctuation. At least 2 Complex Sentences (Because/Although).
+                    </div>
+                    <div class="two-cols">
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXAMPLES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>The Final Essay:</strong><br>30 mins writing time. Strict silence. Teacher acts as invigilator.<br><strong>Scenario B:</strong> 'The Email Exam'. Write a formal complaint letter in 15 mins.</div>
+                        </div>
+                        <div class="col">
+                            <div class="section-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">EXERCISES</div>
+                            <div class="content-text" style="font-size:1.1em;"><strong>10-Point Exam Questions:</strong><br>1. Punctuate: 'i live in paris'<br>2. Word Order: 'Coffee I drink sometimes.' (Fix it).<br>3. 'I like rain, ____ (But/However) I hate wind.'<br>4. 'First, boil water. ____, add tea.' (Sequencer).<br>5. 'A ____ (Red/Big) ____ (Red/Big) car.'<br>6. 'The book ____ (write) by King.' (Passive).<br>7. 'If I ____ (be) you, I would go.'<br>8. 'Do you know where ____ (is the bank / the bank is)?'<br>9. Passive: 'Who invented the radio?'<br>10. Write 3 sentences about your hobby.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <a href="#sl19" class="nav-arrow nav-prev"><i class="fas fa-chevron-left"></i></a>
+            <a href="#cp20" class="nav-arrow nav-next"><i class="fas fa-chevron-right"></i></a>
+            
+            <div class="progress-bar-container"><div class="progress-bar" style="width:100.0%;"></div></div>
+            <div style="position:absolute; bottom:15px; right:30px; font-family:'Merriweather'; color:#999; font-size:0.8em;">Core Basics: Level 4 | 20</div>
+        </div>
+        
+            <div class="slide-page" id="cp20" style="background-color: var(--theme-color); color:white;">
+                 <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; text-align:center; padding:50px;">
+                    <i class="fas fa-flag-checkered" style="font-size:5em; margin-bottom:20px; opacity:0.8;"></i>
+                    <h1 style="font-size:3em; margin:0; font-family:'Merriweather';">CHECKPOINT</h1>
+                    <h2 style="font-size:1.5em; font-weight:300; opacity:0.9;">Lessons 16 - 20 Complete</h2>
+                    <div style="background:white; color:#333; padding:30px; border-radius:10px; margin-top:40px; max-width:600px; box-shadow:0 10px 30px rgba(0,0,0,0.2);">
+                        <h3 style="color:var(--theme-color); margin-top:0;">Time to Review!</h3>
+                        <p>Great job! You have completed another block of 5 lessons.</p>
+                        <div style="margin-top:20px; font-weight:bold;">Next Up: Lesson 21</div>
+                    </div>
+                 </div>
+                 <a href="#sl20" class="nav-arrow nav-prev" style="background:white; color:var(--theme-color);"><i class="fas fa-chevron-left"></i></a>
+                 <a href="#" class="nav-arrow nav-next" style="background:white; color:var(--theme-color);"><i class="fas fa-chevron-right"></i></a>
+            </div>
+            </body></html>

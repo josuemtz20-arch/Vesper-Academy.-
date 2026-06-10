@@ -1,0 +1,1099 @@
+<!DOCTYPE html><html lang="en"><head>
+<script src="vesper_auth.js"></script><meta charset="UTF-8"><title>Core Grammar: In Context (B2)</title><link rel="stylesheet" href="assets/css/vesper_style.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700&family=Open+Sans:wght@400;600;700&display=swap');
+    body { background-color: #525659; margin: 0; padding: 40px 0; display: flex; flex-direction: column; align-items: center; font-family: 'Merriweather', serif; color: #1a2b42; }
+    .page { background-color: white; width: 210mm; min-height: 297mm; padding: 20mm; box-sizing: border-box; box-shadow: 0 0 20px rgba(0,0,0,0.3); margin-bottom: 40px; position: relative; page-break-after: always; }
+    @media print { body { background: none; margin: 0; padding: 0; display: block; } .page { box-shadow: none; margin: 0; width: 100%; height: 100%; page-break-after: always; border: none; } .no-print { display: none; } }
+    @media screen and (max-width: 768px) {
+        body { padding: 10px; }
+        .page { width: 100%; padding: 10mm; margin-bottom: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); min-height: auto; }
+        .module-header { margin: -10mm -10mm 10mm -10mm; padding: 15px 10mm; font-size: 1.2em; }
+        .lesson-title h2 { font-size: 1.8em; }
+        .vocab-grid { grid-template-columns: 1fr; }
+        .no-print { top: 10px; left: 10px; opacity: 0.8; }
+        .cover-title { font-size: 2em !important; }
+        .cover-subtitle { font-size: 1.2em !important; }
+    }
+    h1, h2, h3 { font-family: 'Open Sans', sans-serif; }
+    .module-header { background-color: #1a2b42; color: #d4af37; padding: 15px 20mm; margin: -20mm -20mm 10mm -20mm; font-family: 'Merriweather', serif; font-size: 1.4em; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
+    .lesson-title { border-bottom: 2px solid #34495e; padding-bottom: 15px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; }
+    .lesson-title h2 { margin: 0; font-size: 2.2em; color: #1a2b42; }
+    .lesson-block { margin-bottom: 25px; padding: 20px 25px; background: #fff; border-left: 5px solid #ccc; border-radius: 0 5px 5px 0; }
+    .lb-blue { border-color: #3498db; background: #ebf5fb; }
+    .lb-navy { border-color: #1a2b42; background: #fff; border: 1px solid #eee; border-left: 6px solid #1a2b42; }
+    .lb-purple { border-color: #8e44ad; background: #f5eef8; }
+    .lb-green { border-color: #27ae60; background: #eafaf1; }
+    .lb-red { border-color: #c0392b; background: #fdedec; }
+    .lb-header { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; font-weight: bold; font-family: 'Open Sans'; text-transform: uppercase; font-size: 1em; letter-spacing: 0.5px; }
+    .lb-blue .lb-header { color: #2980b9; } 
+    .lb-navy .lb-header { color: #1a2b42; }
+    .lb-purple .lb-header { color: #8e44ad; }
+    .lb-green .lb-header { color: #27ae60; }
+    .lb-red .lb-header { color: #c0392b; }
+    .content-text { line-height: 1.8; font-size: 0.95em; color: #2c3e50; text-align: justify; }
+    ul.deep-list { padding-left: 20px; list-style-type: square; } ul.deep-list li { margin-bottom: 12px; }
+    .vocab-box { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
+    .vocab-item { background: #eee; padding: 5px 10px; border-radius: 3px; font-size: 0.9em; font-family: 'Open Sans'; }
+    .page-num { position: absolute; bottom: 20mm; right: 20mm; color: #999; font-size: 0.8em; }
+    p { margin-bottom: 15px; }
+    .intro-box { background-color: #f8f9fa; border: 1px solid #dee2e6; padding: 30px; border-radius: 8px; margin-top: 50px; }
+</style>
+</head><body><div class="no-print" style="position: fixed; top: 20px; left: 20px; z-index: 1000;"><a href="index.html" style="background: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: bold; color: #1a2b42; box-shadow: 0 2px 5px rgba(0,0,0,0.2);"><i class="fas fa-arrow-left"></i> Dashboard</a></div><div class="page cover-page"><img src="assets/images/vesper_logo.jpg" alt="Vesper Academy" class="cover-logo" style="width:200px; margin-bottom:20px;"><div class="cover-title" style="font-size:3em; font-weight:bold; color:#1a2b42;">Core Grammar: In Context (B2)</div><div class="cover-subtitle" style="font-size:1.5em; color:#34495e;">Intermediate (B1-B2)</div><div style="margin-top: auto;"><strong>Vesper Academy</strong><br>Student Workbook</div></div><div class="page">
+<h1>Core Grammar: In Context (B2) (C1/C2 Academic Mastery)</h1>
+<div class="intro-box">
+    <p><strong>Course Overview:</strong></p>
+    <p>Welcome to <strong>Core Grammar: In Context (B2)</strong>. This curriculum represents the pinnacle of grammatical control. You are no longer learning to communicate; you are learning to manipulate syntax for specific rhetorical effects—emphasis, academic distancing, absolute precision, and high-stakes negotiation.</p>
+    <p><strong>Mastery Objectives:</strong></p>
+    <ul class="deep-list">
+        <li><strong>Structural Emphasis:</strong> Using Cleft Sentences and Grammatical Inversion to control exactly what the reader pays attention to.</li>
+        <li><strong>Hypothetical Complexity:</strong> Mastering Mixed Conditionals to analyze how permanent traits or past decisions alter present and historical realities.</li>
+        <li><strong>Academic Objectivity:</strong> Deploying advanced Passive structures and Hedging language to distance yourself from unproven claims in research.</li>
+    </ul>
+</div>
+</div><div class="page"><div class="toc"><h1>Syllabus</h1><div><a href="#l1">1. Cleft Sentences & Structural Emphasis</a></div><div><a href="#l2">2. Mixed Conditionals (Type 1)</a></div><div><a href="#l3">3. Mixed Conditionals (Type 2)</a></div><div><a href="#l4">4. Advanced Future Perspectives (Perfect & Continuous)</a></div><div><a href="#l5">5. Evaluación de Desempeño 1: Critical Analysis Workshop</a></div><div><a href="#l6">6. Grammatical Inversion I (Negative Adverbs)</a></div><div><a href="#l7">7. Grammatical Inversion II (Conditional Inversion)</a></div><div><a href="#l8">8. The Subjunctive Mood</a></div><div><a href="#l9">9. Advanced Participle Clauses</a></div><div><a href="#l10">10. Evaluación de Desempeño 2: Stylistic Mastery</a></div><div><a href="#l11">11. Advanced Passive Structures</a></div><div><a href="#l12">12. Hedging & Speculative Language</a></div><div><a href="#l13">13. Past Modals of Deduction & Regret</a></div><div><a href="#l14">14. Relative Clauses with Prepositions</a></div><div><a href="#l15">15. Evaluación de Desempeño 3: Hedging & Deduction</a></div><div><a href="#l16">16. Advanced Sentence Connectors</a></div><div><a href="#l17">17. Expressing Preferences & Hypotheses (Would rather / It's time)</a></div><div><a href="#l18">18. Compound Adjectives & Noun Modification</a></div><div><a href="#l19">19. Complex Gerund & Infinitive Phrases</a></div><div><a href="#l20">20. Examen de Nivel Final: Mastery of Precision</a></div></div></div><div class="page" id="l1"><div class="module-header"><i class="fas fa-layer-group"></i> Core Grammar: In Context (B2)</div><div class="lesson-title"><h2>Lesson 1: Cleft Sentences & Structural Emphasis</h2></div>
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context</div>
+                <div class="content-text"><strong>The Prosecutor:</strong><br>A crime happened. 'John stole the data from the server on Monday.' Take turns emphasizing the person, the object, the place, and the time using 'It was... that...' sentences.</div>
+            </div>
+            
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Study</div>
+                <div class="content-text">
+                    <strong>Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">To emphasize</span><span class="vocab-item">To highlight</span><span class="vocab-item">To underscore</span><span class="vocab-item">To reiterate</span><span class="vocab-item">To isolate</span><span class="vocab-item">Crucial</span><span class="vocab-item">Paramount</span><span class="vocab-item">Fundamental</span><span class="vocab-item">Pivotal</span><span class="vocab-item">Central</span><span class="vocab-item">Oversight</span><span class="vocab-item">Breakthrough</span><span class="vocab-item">Shortcoming</span><span class="vocab-item">To orchestrate</span><span class="vocab-item">To facilitate</span><span class="vocab-item">By no means</span><span class="vocab-item">In particular</span><span class="vocab-item">Of utmost importance</span><span class="vocab-item">To draw attention to</span><span class="vocab-item">To a certain extent</span></div>
+                    <div style="margin-top:10px; padding-top:10px; border-top:1px dashed #ccc;">
+                    <strong>Grammar Note:</strong><br>
+                    
+         <strong>Grammar Reference: Academic Emphasis (Cleft Sentences)</strong><br><br>
+         In academic speech or writing, we often want to isolate a specific piece of information to emphasize it. We do this by splitting (cleaving) a simple sentence into two clauses.<br><br>
+         <strong>1. It-Clefts (Focusing on a specific noun or prepositional phrase):</strong><br>
+         - <em>Formula:</em> <code>It is/was + [Focused Element] + that/who + [Rest of sentence]</code><br>
+         - <em>Normal:</em> The CEO made the final decision yesterday.<br>
+         - <em>Emphasized Noun:</em> <strong>It was</strong> the CEO <strong>who</strong> made the final decision yesterday.<br>
+         - <em>Emphasized Time:</em> <strong>It was</strong> yesterday <strong>that</strong> the CEO made the final decision.<br><br>
+         <strong>2. Wh-Clefts (Focusing on an action or an entire clause):</strong><br>
+         - <em>Formula:</em> <code>What + [Subject + Verb] + is/was + [Focused Element/Action]</code><br>
+         - <em>Normal:</em> I hate the lack of communication.<br>
+         - <em>Emphasized:</em> <strong>What</strong> I hate <strong>is</strong> the lack of communication.<br>
+         - <em>With Actions:</em> <strong>What</strong> the team did <strong>was</strong> (to) ignore the safety protocol.
+
+                    </div>
+                </div>
+            </div>
+            
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises</div>
+                <div class="content-text">
+         <strong>Grammar Exercise: Manipulating Emphasis</strong><br><br>
+         <em>Task 1: It-Cleft Creation.</em> Rewrite the sentences to emphasize the bolded word(s).<br>
+         1. The massive power failure triggered the alarm at <strong>3:00 AM</strong>. &rarr; It was at 3:00 AM that ________.<br>
+         2. <strong>The lead researcher</strong> discovered the synthesis error in the lab. &rarr; It was the lead researcher ________.<br>
+         3. We need <strong>more funding</strong> to complete the simulation. &rarr; It is ________.<br>
+         4. They launched the prototype in <strong>Geneva</strong>. &rarr; It was ________.<br><br>
+         <em>Task 2: What-Cleft Creation.</em> Rewrite using 'What...'.<br>
+         5. I found their lack of preparation concerning. &rarr; What I found concerning was ________.<br>
+         6. The committee demanded a full structural audit. &rarr; What the committee demanded ________.<br>
+         7. He wants to renegotiate the entire contract. &rarr; What he wants ________.<br><br>
+         <em>Task 3: Error Correction & Transformation.</em><br>
+         8. Fix the error: It was the software who caused the crash.<br>
+         9. Fix the error: What we need are more time.<br>
+         10. Rewrite emphasizing the action: The machine exploded. &rarr; What the machine ________.
+     </div>
+            </div>
+            
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Your Turn</div>
+                <div class="content-text"><strong>The Post-Mortem Defense:</strong><br>Your department is being blamed for a project failure. Write an aggressive defense emphasizing that 'It was the budget that failed' and 'What we did was follow the protocol.' Use cleft sentences exclusively for your core arguments.</div>
+            </div>
+            <div class="page-num">Core Grammar: In Context (B2) &bull; Page 4</div></div><div class="page" id="l2"><div class="module-header"><i class="fas fa-layer-group"></i> Core Grammar: In Context (B2)</div><div class="lesson-title"><h2>Lesson 2: Mixed Conditionals (Type 1)</h2></div>
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context</div>
+                <div class="content-text"><strong>The Butterfly Effect:</strong><br>Think of a historical event (e.g., The invention of the internet). 'If the internet had never been invented... we would be reading books right now.' Create three more.</div>
+            </div>
+            
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Study</div>
+                <div class="content-text">
+                    <strong>Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Ramification</span><span class="vocab-item">Repercussion</span><span class="vocab-item">Consequence</span><span class="vocab-item">Implication</span><span class="vocab-item">Outcome</span><span class="vocab-item">To manifest</span><span class="vocab-item">To stem from</span><span class="vocab-item">To precipitate</span><span class="vocab-item">To trigger</span><span class="vocab-item">To culminate</span><span class="vocab-item">Hypothetical</span><span class="vocab-item">Counterfactual</span><span class="vocab-item">Retroactive</span><span class="vocab-item">Subsequent</span><span class="vocab-item">Inevitable</span><span class="vocab-item">In retrospect</span><span class="vocab-item">With hindsight</span><span class="vocab-item">To bear the brunt</span><span class="vocab-item">To cascade</span><span class="vocab-item">To unravel</span></div>
+                    <div style="margin-top:10px; padding-top:10px; border-top:1px dashed #ccc;">
+                    <strong>Grammar Note:</strong><br>
+                    
+         <strong>Grammar Reference: Past Actions, Present Consequences</strong><br><br>
+         In advanced analysis, we often evaluate how a choice made in the past is affecting the reality of the present. This requires mixing the 3rd Conditional (past) with the 2nd Conditional (present).<br><br>
+         <strong>Mixed Type 1: Past Condition &rarr; Present Result</strong><br>
+         - <em>Concept:</em> If we had done something differently in the past, our situation right now would be different.<br>
+         - <em>Formula Clause 1 (Past):</em> <code>If + Subject + Past Perfect (had V3)</code><br>
+         - <em>Formula Clause 2 (Present):</em> <code>Subject + Would/Could/Might + Base Verb</code><br>
+         - <em>Example:</em> If the company <strong>had invested</strong> in AI ten years ago (past), they <strong>would be</strong> the market leader today (present).<br><br>
+         <div style="background-color: #fce4e4; padding: 10px; border-left: 4px solid #c0392b;">
+         <strong>Common Mistake:</strong> Combining two 'woulds'. (<s>If they would have invested, they would be rich.</s> &rarr; <strong>If they had invested</strong>...)
+         </div>
+     
+                    </div>
+                </div>
+            </div>
+            
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises</div>
+                <div class="content-text">
+         <strong>Grammar Exercise: Causality and Hindsight</strong><br><br>
+         <em>Task 1: Verb Conjugation.</em> Mix the conditional (Past condition, Present result).<br>
+         1. If I (study) ________ French in high school, I (speak) ________ it fluently today.<br>
+         2. We (not / be) ________ in this financial crisis now if the CEO (listen) ________ to the auditors last year.<br>
+         3. If they (patch) ________ the server vulnerability yesterday, we (have) ________ access to the database right now.<br>
+         4. She (be) ________ the director today if she (not / resign) ________ in 2020.<br><br>
+         <em>Task 2: Situation Translation.</em> Convert the real situation into a Mixed Type 1 conditional.<br>
+         5. Real: He didn't wear a helmet. Now he is in the hospital. &rarr; If he ________ a helmet, he ________ in the hospital now.<br>
+         6. Real: They spent all the budget. Now we are broke. &rarr; If they ________ the budget, we ________ broke.<br>
+         7. Real: You didn't train the staff. Now they don't know what to do. &rarr; If you ________ the staff, they ________ what to do.<br><br>
+         <em>Task 3: Error Correction.</em><br>
+         8. If we would have checked the code, the app wouldn't crash today.<br>
+         9. If she had passed the exam, she would have a license next year.<br>
+         10. I would feel much better right now if I didn't eat that seafood yesterday.
+     </div>
+            </div>
+            
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Your Turn</div>
+                <div class="content-text"><strong>The Auditor's Hindsight:</strong><br>Review the collapse of a fictional startup. Write a paragraph detailing exactly how past failures are causing today's specific problems using Mixed Type 1 conditionals.</div>
+            </div>
+            <div class="page-num">Core Grammar: In Context (B2) &bull; Page 5</div></div><div class="page" id="l3"><div class="module-header"><i class="fas fa-layer-group"></i> Core Grammar: In Context (B2)</div><div class="lesson-title"><h2>Lesson 3: Mixed Conditionals (Type 2)</h2></div>
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context</div>
+                <div class="content-text"><strong>The DNA Test:</strong><br>'If I were taller, I would have played in the NBA.' Think of a permanent physical, mental, or geographic fact about yourself, and state how it altered an event in your past.</div>
+            </div>
+            
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Study</div>
+                <div class="content-text">
+                    <strong>Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">To inherent</span><span class="vocab-item">To predispose</span><span class="vocab-item">To characterize</span><span class="vocab-item">To underscore</span><span class="vocab-item">To govern</span><span class="vocab-item">Intrinsic</span><span class="vocab-item">Inherent</span><span class="vocab-item">Fundamental</span><span class="vocab-item">Perpetual</span><span class="vocab-item">Chronic</span><span class="vocab-item">Trait</span><span class="vocab-item">Characteristic</span><span class="vocab-item">Disposition</span><span class="vocab-item">Tendency</span><span class="vocab-item">Inclination</span><span class="vocab-item">By nature</span><span class="vocab-item">As a rule</span><span class="vocab-item">To be prone to</span><span class="vocab-item">To be subjected to</span><span class="vocab-item">In essence</span></div>
+                    <div style="margin-top:10px; padding-top:10px; border-top:1px dashed #ccc;">
+                    <strong>Grammar Note:</strong><br>
+                    
+         <strong>Grammar Reference: Present Traits, Past Results</strong><br><br>
+         Sometimes, a permanent state or an ongoing truth changes how something happened in the past. We mix the 2nd Conditional (present truth) with the 3rd Conditional (past result).<br><br>
+         <strong>Mixed Type 2: Present/Permanent Condition &rarr; Past Result</strong><br>
+         - <em>Concept:</em> If I weren't this kind of person, I would have done something differently yesterday.<br>
+         - <em>Formula Clause 1 (Present State):</em> <code>If + Subject + Past Simple</code><br>
+         - <em>Formula Clause 2 (Past Result):</em> <code>Subject + Would have + V3</code><br>
+         - <em>Example:</em> If I <strong>spoke</strong> Japanese (permanent state), I <strong>would have translated</strong> the document for you yesterday (past missed opportunity).<br><br>
+         - <em>Example 2:</em> If the element <strong>were</strong> not highly combustible, the explosion <strong>would not have occurred</strong>.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises</div>
+                <div class="content-text">
+         <strong>Grammar Exercise: Permanent Truths & Past Alterations</strong><br><br>
+         <em>Task 1: Verb Conjugation.</em> Mix the conditional (Present condition, Past result).<br>
+         1. If I (not / be) ________ afraid of heights, I (go) ________ skydiving with you last week.<br>
+         2. If the company (have) ________ a better reputation, they (win) ________ the government contract yesterday.<br>
+         3. We (hire) ________ him last month if he (possess) ________ a master's degree.<br>
+         4. If this chemical (be) ________ stable at room temperature, it (not / explode) ________ during the transport.<br><br>
+         <em>Task 2: Situation Translation.</em> Convert the reality into a Mixed Type 2 conditional.<br>
+         5. Real: I don't know Python. I didn't apply for the job. &rarr; If I ________ Python, I ________ for the job.<br>
+         6. Real: The software is unstable. It crashed during the demo. &rarr; If the software ________ stable, it ________ during the demo.<br>
+         7. Real: You are not a citizen. You didn't receive the grant. &rarr; If you ________ a citizen, you ________ the grant.<br><br>
+         <em>Task 3: Concept Checking & Error Correction.</em><br>
+         8. Identify the Type (1 or 2): If I were smarter, I wouldn't have signed the contract.<br>
+         9. Fix the error: If I am the manager, I would have fired him on Tuesday.<br>
+         10. Fix the error: If the material had been stronger, it wouldn't have shattered yesterday. (Wait, is this mixed? No, it's a pure 3rd conditional. Make it a Mixed Type 2 referencing a permanent trait).
+     </div>
+            </div>
+            
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Your Turn</div>
+                <div class="content-text"><strong>The Root Cause Analyst:</strong><br>Investigate an engineering disaster. Explain how the *permanent* properties of the materials used (e.g., melting point, conductivity) directly caused the failure *last week*.</div>
+            </div>
+            <div class="page-num">Core Grammar: In Context (B2) &bull; Page 6</div></div><div class="page" id="l4"><div class="module-header"><i class="fas fa-layer-group"></i> Core Grammar: In Context (B2)</div><div class="lesson-title"><h2>Lesson 4: Advanced Future Perspectives (Perfect & Continuous)</h2></div>
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context</div>
+                <div class="content-text"><strong>The Time Traveler:</strong><br>Close your eyes. Imagine the year 2040. What 'will we be doing' normally every day? What massive goals 'will we have achieved' by then?</div>
+            </div>
+            
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Study</div>
+                <div class="content-text">
+                    <strong>Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">To extrapolate</span><span class="vocab-item">To culminate</span><span class="vocab-item">To accrue</span><span class="vocab-item">To surpass</span><span class="vocab-item">To plateau</span><span class="vocab-item">Trajectory</span><span class="vocab-item">Projection</span><span class="vocab-item">Milestone</span><span class="vocab-item">Benchmark</span><span class="vocab-item">Deadline</span><span class="vocab-item">Inevitable</span><span class="vocab-item">Imminent</span><span class="vocab-item">Pending</span><span class="vocab-item">Forthcoming</span><span class="vocab-item">Prospective</span><span class="vocab-item">By the time</span><span class="vocab-item">On the horizon</span><span class="vocab-item">In the ensuing</span><span class="vocab-item">To hit a wall</span><span class="vocab-item">To phase in</span></div>
+                    <div style="margin-top:10px; padding-top:10px; border-top:1px dashed #ccc;">
+                    <strong>Grammar Note:</strong><br>
+                    
+         <strong>Grammar Reference: Long-term Projections</strong><br><br>
+         Academic forecasting requires looking at specific points in the future and deciding if an action will be <em>in progress</em> or already <em>completed</em> by that deadline.<br><br>
+         <strong>1. Future Continuous (In progress at a future time):</strong><br>
+         - <em>Formula:</em> <code>Will be + V-ing</code><br>
+         - <em>Concept:</em> Imagine a timeline. At 3:00 PM tomorrow, I will be in the middle of an action.<br>
+         - <em>Example:</em> This time next decade, scientists <strong>will be living</strong> on the moon.<br><br>
+         <strong>2. Future Perfect (Completed BEFORE a future time):</strong><br>
+         - <em>Formula:</em> <code>Will have + V3</code><br>
+         - <em>Concept:</em> Emphasizes completion. Uses 'by' (by deadline).<br>
+         - <em>Example:</em> By 2050, sea levels <strong>will have risen</strong> significantly.<br>
+         - <em>Example with By the time:</em> By the time we act, the market <strong>will have collapsed</strong>.
+     
+                    </div>
+                </div>
+            </div>
+            
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises</div>
+                <div class="content-text">
+         <strong>Grammar Exercise: Strategic Forecasting</strong><br><br>
+         <em>Task 1: Verb Conjugation (Continuous vs. Perfect).</em><br>
+         1. By the end of Q3, we (secure) ________ all necessary patents.<br>
+         2. Please don't call me at 2 PM tomorrow; I (present) ________ the findings to the board.<br>
+         3. By the time the government passes this law, the technology (evolve) ________ beyond it.<br>
+         4. Next Tuesday at this exact time, you (fly) ________ to Tokyo for the summit.<br>
+         5. Within exactly five years, the startup (generate) ________ over ten million in revenue.<br><br>
+         <em>Task 2: Academic Phrasing.</em> Combine the prompts into formal future projections.<br>
+         6. Prompt: 2030 / AI (replace) / many jobs. &rarr; By 2030, AI ________.<br>
+         7. Prompt: Tomorrow morning / we (monitor) / the server load. &rarr; At ______ tomorrow, we ________.<br>
+         8. Prompt: By the time the CEO arrives / we (draft) / the proposal. &rarr; By the time ________, we ________.<br><br>
+         <em>Task 3: Error Correction.</em><br>
+         9. By next year, I will graduate with my Master's degree.<br>
+         10. This time tomorrow, I will have sitting on a beach.
+     </div>
+            </div>
+            
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Your Turn</div>
+                <div class="content-text"><strong>The 10-Year Vision Plan:</strong><br>Write a formal business projection. Detail what your team 'will be developing' exactly 3 years from now, and specify four major milestones you 'will have accomplished' by year 10.</div>
+            </div>
+            <div class="page-num">Core Grammar: In Context (B2) &bull; Page 7</div></div><div class="page" id="l5"><div class="module-header"><i class="fas fa-layer-group"></i> Core Grammar: In Context (B2)</div><div class="lesson-title"><h2>Lesson 5: Evaluación de Desempeño 1: Critical Analysis Workshop</h2></div>
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context</div>
+                <div class="content-text"><strong>The Whiteboard Architect:</strong><br>Teams receive a disastrous business scenario. They must rapid-fire one Cleft Sentence, one Mixed Conditional, and one Future Perfect sentence to analyze it.</div>
+            </div>
+            
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Study</div>
+                <div class="content-text">
+                    <strong>Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">To synthesize</span><span class="vocab-item">To critique</span><span class="vocab-item">To deconstruct</span><span class="vocab-item">To reconcile</span><span class="vocab-item">To integrate</span><span class="vocab-item">Nuance</span><span class="vocab-item">Framework</span><span class="vocab-item">Paradigm</span><span class="vocab-item">Hypothesis</span><span class="vocab-item">Contingency</span><span class="vocab-item">Plausible</span><span class="vocab-item">Implausible</span><span class="vocab-item">Validity</span><span class="vocab-item">Fallacy</span><span class="vocab-item">To substantiate</span><span class="vocab-item">Conversely</span><span class="vocab-item">In retrospect</span><span class="vocab-item">To pivot</span><span class="vocab-item">To trace back</span><span class="vocab-item">Underlying</span></div>
+                    <div style="margin-top:10px; padding-top:10px; border-top:1px dashed #ccc;">
+                    <strong>Grammar Note:</strong><br>
+                    
+         <strong>Grammar Reference: Week 1 Integration</strong><br><br>
+         This workshop tests the integration of C1/C2 predictive and hypothetical structures:<br>
+         - <strong>Cleft Sentences:</strong> Isolating root causes (It was the algorithm that failed).<br>
+         - <strong>Mixed Conditionals (Type 1):</strong> Past failures causing present crises.<br>
+         - <strong>Mixed Conditionals (Type 2):</strong> Permanent traits altering past events.<br>
+         - <strong>Future Perspectives:</strong> Projecting timelines (By 2025, we will have fixed it).
+     
+                    </div>
+                </div>
+            </div>
+            
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises</div>
+                <div class="content-text">
+         <strong>Grammar Exercise: The Complexity Audit</strong><br><br>
+         <em>Task 1: Structural Transformation.</em> Complete the 10 transformations perfectly.<br>
+         1. (Cleft - Time): We noticed the breach on Monday. &rarr; It was ________.<br>
+         2. (Cleft - Action): They deleted the logs. &rarr; What they ________.<br>
+         3. (Mix Type 1): They didn't backup the data. Now we have nothing. &rarr; If they ________, we ________.<br>
+         4. (Mix Type 1): You invested in crypto. You are bankrupt today. &rarr; If you ________, you ________.<br>
+         5. (Mix Type 2): I am not good at math. I failed the test yesterday. &rarr; If I ________, I ________.<br>
+         6. (Mix Type 2): The metal is rigid. It broke under pressure. &rarr; If the metal ________, it ________.<br>
+         7. (Future Perf): We will finish the code before Friday. &rarr; By Friday, we ________.<br>
+         8. (Future Cont): I will be in the middle of a meeting at noon. &rarr; At noon, I ________.<br>
+         9. (Error Correction): What I hate are people arriving late.<br>
+         10. (Error Correction): If I would be the boss, I would have fired him.
+     </div>
+            </div>
+            
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Your Turn</div>
+                <div class="content-text"><strong>The Policy Autopsy:</strong><br>Analyze a failed city policy (e.g., banning cars downtown). Use Cleft sentences to pinpoint the blame, Mixed Conditionals to show how things could be different now, and Future Perfect to predict the recovery timeline.</div>
+            </div>
+            <div class="page-num">Core Grammar: In Context (B2) &bull; Page 8</div></div><div class="page" id="l6"><div class="module-header"><i class="fas fa-layer-group"></i> Core Grammar: In Context (B2)</div><div class="lesson-title"><h2>Lesson 6: Grammatical Inversion I (Negative Adverbs)</h2></div>
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context</div>
+                <div class="content-text"><strong>The Doomsday Prophet:</strong><br>Transform boring facts into dramatic announcements. 'I rarely eat fast food' &rarr; 'RARELY do I consume fast food!' 'I have never seen a ghost' &rarr; 'NEVER have I beheld a specter!'</div>
+            </div>
+            
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Study</div>
+                <div class="content-text">
+                    <strong>Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Hardly</span><span class="vocab-item">Rarely</span><span class="vocab-item">Seldom</span><span class="vocab-item">Scarcely</span><span class="vocab-item">Never</span><span class="vocab-item">To witness</span><span class="vocab-item">To endure</span><span class="vocab-item">To encounter</span><span class="vocab-item">To manifest</span><span class="vocab-item">To plummet</span><span class="vocab-item">Unprecedented</span><span class="vocab-item">Exceptional</span><span class="vocab-item">Atypical</span><span class="vocab-item">Anomalous</span><span class="vocab-item">Profound</span><span class="vocab-item">Under no circumstances</span><span class="vocab-item">On no account</span><span class="vocab-item">Not only</span><span class="vocab-item">No sooner</span><span class="vocab-item">By no means</span></div>
+                    <div style="margin-top:10px; padding-top:10px; border-top:1px dashed #ccc;">
+                    <strong>Grammar Note:</strong><br>
+                    
+         <strong>Grammar Reference: Dramatic Formal Fronting</strong><br><br>
+         To create a highly formal, dramatic, or literary effect in academic writing, we move negative adverbs to the front of the sentence. When we do this, the subject and auxiliary verb <strong>invert</strong> (like a question).<br><br>
+         <strong>1. The Inversion Rule:</strong><br>
+         - <em>Normal:</em> The market has <strong>never</strong> collapsed so quickly.<br>
+         - <em>Inverted:</em> <strong>Never <u>has the market</u></strong> collapsed so quickly.<br><br>
+         <strong>2. Common Negative Adverbs for Inversion:</strong><br>
+         - <em>Never, Rarely, Seldom, Hardly, Scarcely, Barely.</em><br>
+         - <em>Example:</em> <strong>Seldom <u>do we</u></strong> see such anomalous data in organic chemistry.<br><br>
+         <strong>3. Negative Prepositional Phrases:</strong><br>
+         - <em>Under no circumstances:</em> Under no circumstances <strong>should you</strong> open the valve.<br>
+         - <em>Not only... but also:</em> Not only <strong>did he</strong> steal the data, but he also deleted the backups.
+     
+                    </div>
+                </div>
+            </div>
+            
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises</div>
+                <div class="content-text">
+         <strong>Grammar Exercise: Stylistic Inversion</strong><br><br>
+         <em>Task 1: Basic Inversion.</em> Front the negative adverb and invert the subject/verb.<br>
+         1. The CEO rarely visits the laboratory. &rarr; Rarely ________ the CEO visit the laboratory.<br>
+         2. We have never witnessed such an aggressive chemical reaction. &rarr; Never ________ we witnessed...<br>
+         3. The government seldom intervenes in private sector disputes. &rarr; Seldom ________ the government intervene...<br>
+         4. She had hardly finished the report when the power went out. &rarr; Hardly ________ she finished the report...<br><br>
+         <em>Task 2: Complex Phrase Inversion.</em><br>
+         5. You must not access this file under any circumstances. &rarr; Under no circumstances ________ you access this file.<br>
+         6. He not only forged the signature, but he also embezzled the funds. &rarr; Not only ________ he forge the signature...<br>
+         7. We will on no account accept this settlement. &rarr; On no account ________ we accept this settlement.<br><br>
+         <em>Task 3: Error Correction.</em><br>
+         8. Never I have seen such incompetence.<br>
+         9. Not only she is brilliant, but she is also hardworking.<br>
+         10. Rarely the machine malfunctions during the test phase.
+     </div>
+            </div>
+            
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Your Turn</div>
+                <div class="content-text"><strong>The CEO's Resignation Speech:</strong><br>Write a dramatic, highly formal speech announcing the closure of a prestigious company. Use at least 4 inversions to dramatically emphasize that 'Never before has the market been so cruel,' and 'Under no circumstances will we surrender our patents.'</div>
+            </div>
+            <div class="page-num">Core Grammar: In Context (B2) &bull; Page 9</div></div><div class="page" id="l7"><div class="module-header"><i class="fas fa-layer-group"></i> Core Grammar: In Context (B2)</div><div class="lesson-title"><h2>Lesson 7: Grammatical Inversion II (Conditional Inversion)</h2></div>
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context</div>
+                <div class="content-text"><strong>The Elite Butler:</strong><br>Practice speaking with utmost formality. Instead of 'If you need tea...', say 'Should you require tea...' Instead of 'If I had known...', say 'Had I known...' Feel the difference in posture.</div>
+            </div>
+            
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Study</div>
+                <div class="content-text">
+                    <strong>Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">To necessitate</span><span class="vocab-item">To warrant</span><span class="vocab-item">To stipulate</span><span class="vocab-item">To mandate</span><span class="vocab-item">To oblige</span><span class="vocab-item">Contingency</span><span class="vocab-item">Precaution</span><span class="vocab-item">Protocol</span><span class="vocab-item">Directive</span><span class="vocab-item">Liability</span><span class="vocab-item">Imperative</span><span class="vocab-item">Compulsory</span><span class="vocab-item">Advisable</span><span class="vocab-item">Pursuant to</span><span class="vocab-item">Irrespective of</span><span class="vocab-item">Should you</span><span class="vocab-item">Had we</span><span class="vocab-item">Were it</span><span class="vocab-item">In the event of</span><span class="vocab-item">To trigger a clause</span></div>
+                    <div style="margin-top:10px; padding-top:10px; border-top:1px dashed #ccc;">
+                    <strong>Grammar Note:</strong><br>
+                    
+         <strong>Grammar Reference: Elite Contingency Planning</strong><br><br>
+         In highly formal legal, business, or academic contexts, we often drop the word 'If' entirely in conditionals. We replace it by inverting the auxiliary verb and the subject.<br><br>
+         <strong>1. 1st Conditional Inversion (Should):</strong><br>
+         Used in formal letters, manuals, and customer service. Replaces "If you require/need...".<br>
+         - <em>Normal:</em> If you require further assistance, contact us.<br>
+         - <em>Inverted:</em> <strong>Should you require</strong> further assistance, contact us.<br><br>
+         <strong>2. 2nd Conditional Inversion (Were):</strong><br>
+         Highly formal hypothetical situations.<br>
+         - <em>Normal:</em> If I were the manager, I would change the policy.<br>
+         - <em>Inverted:</em> <strong>Were I</strong> the manager, I would change the policy.<br><br>
+         <strong>3. 3rd Conditional Inversion (Had):</strong><br>
+         Used for analyzing formal past failures or counterfactuals.<br>
+         - <em>Normal:</em> If we had known the risks, we wouldn't have invested.         - <em>Inverted:</em> <strong>Had we known</strong> the risks, we wouldn't have invested.     
+                    </div>
+                </div>
+            </div>
+            
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises</div>
+                <div class="content-text">
+         <strong>Grammar Exercise: Legal and Formal Contingencies</strong><br><br>
+         <em>Task 1: First Conditional (Should).</em> Rewrite without 'If'.<br>
+         1. If you have any questions, please consult the manual. &rarr; ________ ________ have any questions...<br>
+         2. If the alarm sounds, evacuate immediately. &rarr; ________ the alarm ________...<br>
+         3. If anyone calls for me, tell them I am in a meeting. &rarr; ________ anyone ________ for me...<br><br>
+         <em>Task 2: Third Conditional (Had).</em> Rewrite without 'If'.<br>
+         4. If the engineers had detected the flaw, the explosion wouldn't have occurred. &rarr; ________ the engineers ________ the flaw...<br>
+         5. If I had realized the severity of the situation, I would have intervened. &rarr; ________ I ________ the severity...<br>
+         6. If we hadn't secured the funding, we would have gone bankrupt. &rarr; <strong>Had we not</strong> ________ the funding...<br><br>
+         <em>Task 3: Second Conditional (Were).</em><br>
+         7. If the software were more stable, we would deploy it. &rarr; ________ the software more stable...<br>
+         8. If the board were to reject the proposal, what would we do? &rarr; ________ the board to reject...<br>
+         9. Error Correction: Should you needed help, ask me.<br>
+         10. Error Correction: Had I know the truth, I would have spoken.
+     </div>
+            </div>
+            
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Your Turn</div>
+                <div class="content-text"><strong>The Contract Drafter:</strong><br>Write a 'Terms and Conditions' clause for a high-risk software application. Outline exactly what the user must do 'Should the software fail', and what the company waives liability for 'Had the user ignored the warnings'.</div>
+            </div>
+            <div class="page-num">Core Grammar: In Context (B2) &bull; Page 10</div></div><div class="page" id="l8"><div class="module-header"><i class="fas fa-layer-group"></i> Core Grammar: In Context (B2)</div><div class="lesson-title"><h2>Lesson 8: The Subjunctive Mood</h2></div>
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context</div>
+                <div class="content-text"><strong>The Dictator:</strong><br>Roleplay absolute authority. 'I demand that you BE silent.' 'It is imperative that the sky BE red.' 'I insist that he NOT speak.' Notice how strange the base verb feels.</div>
+            </div>
+            
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Study</div>
+                <div class="content-text">
+                    <strong>Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">To demand</span><span class="vocab-item">To insist</span><span class="vocab-item">To propose</span><span class="vocab-item">To command</span><span class="vocab-item">To recommend</span><span class="vocab-item">Crucial</span><span class="vocab-item">Imperative</span><span class="vocab-item">Essential</span><span class="vocab-item">Vital</span><span class="vocab-item">Mandatory</span><span class="vocab-item">Regulation</span><span class="vocab-item">Compliance</span><span class="vocab-item">Stipulation</span><span class="vocab-item">Decree</span><span class="vocab-item">Resolution</span><span class="vocab-item">To conform</span><span class="vocab-item">To adhere to</span><span class="vocab-item">To enact</span><span class="vocab-item">To overrule</span><span class="vocab-item">To veto</span></div>
+                    <div style="margin-top:10px; padding-top:10px; border-top:1px dashed #ccc;">
+                    <strong>Grammar Note:</strong><br>
+                    
+         <strong>Grammar Reference: Grammatical Urgency</strong><br><br>
+         The Subjunctive Mood is used in highly formal English to express demands, recommendations, or urgent necessity. Its defining feature is the use of the <strong>base verb</strong> for all subjects, completely dropping 's' or tense markers.<br><br>
+         <strong>1. The Formula:</strong><br>
+         Often triggered by phrases like 'It is crucial that...' or 'They demand that...'<br>
+         <code>[Trigger phrase] + that + Subject + Base Verb</code><br><br>
+         <strong>2. Examples of the 'Base Verb' rule:</strong><br>
+         - <em>Normal:</em> He <strong>takes</strong> the medication.<br>
+         - <em>Subjunctive:</em> It is vital that he <strong>take</strong> the medication. (Not 'takes').<br>
+         - <em>To Be:</em> The committee demands that the manager <strong>be</strong> fired. (Not 'is').<br>
+         - <em>Negative:</em> I recommended that he <strong>not resign</strong>. (Not 'doesn't resign').<br><br>
+         <strong>3. Common Subjunctive Triggers:</strong><br>
+         - <em>Verbs:</em> demand, insist, propose, recommend, request.<br>
+         - <em>Adjectives:</em> crucial, essential, imperative, vital, necessary.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises</div>
+                <div class="content-text">
+         <strong>Grammar Exercise: Formal Demands and Decrees</strong><br><br>
+         <em>Task 1: Base Verb Application.</em> Conjugate the verb in the subjunctive mood.<br>
+         1. The board insists that the CEO (resign) ________ immediately.<br>
+         2. It is absolutely crucial that the data (be) ________ encrypted before transmission.<br>
+         3. The doctor highly recommends that the patient (stop) ________ smoking.<br>
+         4. They demanded that the witness (speak) ________ the truth on the stand.<br>
+         5. It is imperative that she (not / access) ________ the server during maintenance.<br><br>
+         <em>Task 2: Sentence Transformation.</em> Rewrite using the subjunctive trigger provided.<br>
+         6. He should hire a lawyer. &rarr; I strongly suggest that he ________.<br>
+         7. The prototype needs to be destroyed. &rarr; It is necessary that the prototype ________.<br>
+         8. She must not leave the building. &rarr; The police demand that she ________.<br><br>
+         <em>Task 3: Error Correction.</em><br>
+         9. It is vital that the project is finished by Friday.<br>
+         10. The professor requested that he doesn't use Wikipedia as a source.
+     </div>
+            </div>
+            
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Your Turn</div>
+                <div class="content-text"><strong>The OSHA Inspector:</strong><br>You have inspected a highly dangerous factory. Write an official mandate outlining five things that MUST change. Use subjunctive verbs exclusively ('It is imperative that the supervisor BE...', 'I demand that the chemicals NOT BE...').</div>
+            </div>
+            <div class="page-num">Core Grammar: In Context (B2) &bull; Page 11</div></div><div class="page" id="l9"><div class="module-header"><i class="fas fa-layer-group"></i> Core Grammar: In Context (B2)</div><div class="lesson-title"><h2>Lesson 9: Advanced Participle Clauses</h2></div>
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context</div>
+                <div class="content-text"><strong>The Compressor:</strong><br>Take two ideas and compress them. 'The boy was bitten by a dog. He cried.' &rarr; 'Bitten by a dog, the boy cried.' 'I opened the door. I saw a ghost.' &rarr; 'Opening the door, I saw a ghost.'</div>
+            </div>
+            
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Study</div>
+                <div class="content-text">
+                    <strong>Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">To derive</span><span class="vocab-item">To entail</span><span class="vocab-item">To encompass</span><span class="vocab-item">To comprise</span><span class="vocab-item">To assimilate</span><span class="vocab-item">Sequential</span><span class="vocab-item">Simultaneous</span><span class="vocab-item">Consecutive</span><span class="vocab-item">Concurrently</span><span class="vocab-item">Subsequently</span><span class="vocab-item">Depleted</span><span class="vocab-item">Galvanized</span><span class="vocab-item">Ostracized</span><span class="vocab-item">Invigorated</span><span class="vocab-item">Exhausted</span><span class="vocab-item">Stemming from</span><span class="vocab-item">Arising from</span><span class="vocab-item">Bound by</span><span class="vocab-item">Driven by</span><span class="vocab-item">Characterized by</span></div>
+                    <div style="margin-top:10px; padding-top:10px; border-top:1px dashed #ccc;">
+                    <strong>Grammar Note:</strong><br>
+                    
+         <strong>Grammar Reference: Extreme Conciseness</strong><br><br>
+         Academic writing prizes efficiency. Instead of writing two full sentences connected by 'and' or 'because', we compress them using Participle Clauses (verbs acting like adjectives).<br><br>
+         <strong>1. Present Participle (V-ing) -> Active Meaning:</strong><br>
+         Used when the subject is DOING the action, or for simultaneous actions.<br>
+         - <em>Clunky:</em> Because they realized the danger, the team evacuated.<br>
+         - <em>Concise:</em> <strong>Realizing</strong> the danger, the team evacuated.<br>
+         - <em>Clunky:</em> The man who is standing there is the CEO.<br>
+         - <em>Concise:</em> The man <strong>standing</strong> there is the CEO.<br><br>
+         <strong>2. Past Participle (V3) -> Passive Meaning:</strong><br>
+         Used when the subject RECEIVES the action.<br>
+         - <em>Clunky:</em> Because the bridge was built in 1900, it is unstable.<br>
+         - <em>Concise:</em> <strong>Built</strong> in 1900, the bridge is unstable.<br><br>
+         <strong>3. Perfect Participle (Having V3) -> Sequence:</strong><br>
+         Used to show one action finished completely before the next started.<br>
+         - <em>Clunky:</em> After she had reviewed the data, she published the paper.<br>
+         - <em>Concise:</em> <strong>Having reviewed</strong> the data, she published the paper.     
+                    </div>
+                </div>
+            </div>
+            
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises</div>
+                <div class="content-text">
+         <strong>Grammar Exercise: Syntactical Compression</strong><br><br>
+         <em>Task 1: Active vs. Passive Participles (V-ing vs. V3).</em> Choose and rewrite.<br>
+         1. (Exhausting / Exhausted) by the 12-hour shift, the doctor collapsed.<br>
+         2. (Realizing / Realized) the error, the engineer shut down the reactor.<br>
+         3. The chemicals, (importing / imported) from Germany, were highly volatile.<br>
+         4. (Motivating / Motivated) by greed, the executive embezzled the funds.<br>
+         5. Anybody (wishing / wished) to enter must present credentials.<br><br>
+         <em>Task 2: Perfect Participle Sequence.</em> Compress using 'Having + V3'.<br>
+         6. After he had completed the training, he was promoted. &rarr; ________ the training, he was promoted.<br>
+         7. Because they had lost their funding, the lab closed. &rarr; ________ their funding, the lab closed.<br>
+         8. Since we had analyzed all variables, we drew a conclusion. &rarr; ________ all variables, we drew a conclusion.<br><br>
+         <em>Task 3: Error Correction.</em><br>
+         9. Walking down the street, a tree almost fell on me. (Dangling Participle - who is walking?)<br>
+         10. Having write the report, I went home.
+     </div>
+            </div>
+            
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Your Turn</div>
+                <div class="content-text"><strong>The Abstract Writer:</strong><br>Take a verbose, 200-word summary of a historical event (e.g., the sinking of the Titanic) and compress it into exactly three sentences using a Present Participle, a Past Participle, and a Perfect Participle.</div>
+            </div>
+            <div class="page-num">Core Grammar: In Context (B2) &bull; Page 12</div></div><div class="page" id="l10"><div class="module-header"><i class="fas fa-layer-group"></i> Core Grammar: In Context (B2)</div><div class="lesson-title"><h2>Lesson 10: Evaluación de Desempeño 2: Stylistic Mastery</h2></div>
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context</div>
+                <div class="content-text"><strong>The Elegance Challenge:</strong><br>Rewrite 'If you want help, ask me because I know things' using inversion, the subjunctive, and a participle clause. Make it sound like royalty.</div>
+            </div>
+            
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Study</div>
+                <div class="content-text">
+                    <strong>Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">To articulate</span><span class="vocab-item">To compress</span><span class="vocab-item">To invert</span><span class="vocab-item">To elevate</span><span class="vocab-item">To refine</span><span class="vocab-item">Aesthetics</span><span class="vocab-item">Rhetoric</span><span class="vocab-item">Prose</span><span class="vocab-item">Syntax</span><span class="vocab-item">Diction</span><span class="vocab-item">Concise</span><span class="vocab-item">Verbose</span><span class="vocab-item">Authoritative</span><span class="vocab-item">Objective</span><span class="vocab-item">Subjective</span><span class="vocab-item">To hone</span><span class="vocab-item">To scrutinize</span><span class="vocab-item">To distill</span><span class="vocab-item">To polish</span><span class="vocab-item">To synthesize</span></div>
+                    <div style="margin-top:10px; padding-top:10px; border-top:1px dashed #ccc;">
+                    <strong>Grammar Note:</strong><br>
+                    
+         <strong>Grammar Reference: Week 2 Synthesis</strong><br><br>
+         This module challenges your ability to write with extreme stylistic sophistication:<br>
+         - <strong>Inversion I & II:</strong> Never has it been so vital. Should you fail...<br>
+         - <strong>The Subjunctive:</strong> It is imperative that he read the files.<br>
+         - <strong>Participle Clauses:</strong> Driven by logic, having analyzed the metrics...<br>
+         Combine these elements to create C2-level professional prose.
+     
+                    </div>
+                </div>
+            </div>
+            
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises</div>
+                <div class="content-text">
+         <strong>Grammar Exercise: The Stylistic Overhaul</strong><br><br>
+         <em>Task 1: The Mega Edit.</em> Elevate and correct these sentences.<br>
+         (1) Rarely I see such amazing results in my lab. (Fix inversion)<br>
+         (2) If you need the key, you can just call the guard. (Use Should inversion)<br>
+         (3) The CEO demanded that the manager apologizes. (Fix subjunctive)<br>
+         (4) Because we finished the research, we went out to celebrate. (Use Perfect Participle)<br>
+         (5) The building that was constructed in 1920 is falling apart. (Use Past Participle)<br>
+         (6) If The Titanic didn't hit the iceberg, we wouldn't have the movie today. (Fix Mixed Type 1)<br>
+         (7) I am not rich, so I didn't buy the island. (Change to Mixed Type 2)<br>
+         (8) It is vital that she attends the hearing. (Fix subjunctive)<br>
+         (9) Not only they lost the money, but they lost the data. (Fix inversion)<br>
+         (10) What we did was to encrypting the drive. (Fix cleft structure)
+     </div>
+            </div>
+            
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Your Turn</div>
+                <div class="content-text"><strong>The High-Stakes Legal Warning:</strong><br>Draft a 'Cease and Desist' letter to a rival company. You must threaten them using legal conditional inversion ('Should you continue...'), employ the subjunctive for demands ('We demand that your firm cease...'), and use negative inversion for dramatic effect ('Under no circumstances will we allow...').</div>
+            </div>
+            <div class="page-num">Core Grammar: In Context (B2) &bull; Page 13</div></div><div class="page" id="l11"><div class="module-header"><i class="fas fa-layer-group"></i> Core Grammar: In Context (B2)</div><div class="lesson-title"><h2>Lesson 11: Advanced Passive Structures</h2></div>
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context</div>
+                <div class="content-text"><strong>The Gossip Columnist vs The Scientist:</strong><br>Gossip: 'People say he stole the money.' Scientist: 'It is reported that the funds were embezzled.' Scientist 2: 'He is alleged to have embezzled the funds.'</div>
+            </div>
+            
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Study</div>
+                <div class="content-text">
+                    <strong>Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">To postulate</span><span class="vocab-item">To surmise</span><span class="vocab-item">To hypothesize</span><span class="vocab-item">To theorize</span><span class="vocab-item">To stipulate</span><span class="vocab-item">Alleged</span><span class="vocab-item">Reported</span><span class="vocab-item">Presumed</span><span class="vocab-item">Purported</span><span class="vocab-item">Acknowledged</span><span class="vocab-item">Consensus</span><span class="vocab-item">Conjecture</span><span class="vocab-item">Speculation</span><span class="vocab-item">Verify</span><span class="vocab-item">Validate</span><span class="vocab-item">It is thought that</span><span class="vocab-item">To be reputed to</span><span class="vocab-item">To be alleged to</span><span class="vocab-item">In the realm of</span><span class="vocab-item">According to</span></div>
+                    <div style="margin-top:10px; padding-top:10px; border-top:1px dashed #ccc;">
+                    <strong>Grammar Note:</strong><br>
+                    
+         <strong>Grammar Reference: Distancing and Academic Hedging</strong><br><br>
+         In research, we cannot state unproven theories as facts. We use advanced passive structures to distance ourselves from the claim and show that it is the community's belief, not ours.<br><br>
+         <strong>1. The "It" Passive (Impersonal):</strong><br>
+         - <em>Formula:</em> <code>It is/was + V3 (thought/believed/said) + that...</code><br>
+         - <em>Example:</em> <strong>It is generally believed that</strong> the universe is expanding.<br><br>
+         <strong>2. The Subject-Specific Passive (Personal):</strong><br>
+         - <em>Formula (Present action):</em> <code>[Subject] + is/are + V3 + to + Base Verb</code><br>
+         - <em>Example:</em> The algorithm <strong>is thought to be</strong> highly efficient.<br>
+         - <em>Formula (Past action):</em> <code>[Subject] + is/are + V3 + to have + V3</code><br>
+         - <em>Example:</em> The hackers <strong>are alleged to have stolen</strong> millions yesterday. (Action in past, belief in present).     
+                    </div>
+                </div>
+            </div>
+            
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises</div>
+                <div class="content-text">
+         <strong>Grammar Exercise: Distancing from the Claim</strong><br><br>
+         <em>Task 1: The Impersonal Passive (It is...).</em> Rewrite the rumor.<br>
+         1. People think that the CEO is resigning. &rarr; It is ________ that the CEO is resigning.<br>
+         2. Experts believe that the economy will recover. &rarr; It is ________ that the economy...<br>
+         3. Journalists reported that the file was deleted. &rarr; It was ________ that the file...<br><br>
+         <em>Task 2: The Personal Passive (Present Action).</em> Rewrite focusing on the subject.<br>
+         4. People believe he is a genius. &rarr; He is believed ________ a genius.<br>
+         5. The media reports the company is failing. &rarr; The company is reported ________ failing.<br>
+         6. Scientists consider the virus to be dangerous. &rarr; The virus is considered ________ dangerous.<br><br>
+         <em>Task 3: The Personal Passive (Past Action - "to have").</em><br>
+         7. They say she invented the machine in 2010. &rarr; She is said ________ the machine in 2010.<br>
+         8. Police allege that the group hacked the server. &rarr; The group is alleged ________ the server.<br>
+         9. Error Correction: He is reported to stealing the money.<br>
+         10. Error Correction: It is believe that the earth is round.
+     </div>
+            </div>
+            
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Your Turn</div>
+                <div class="content-text"><strong>The Unverified Claim:</strong><br>You are a journalist reporting a chaotic breaking story before you know the facts. You must use distancing language (e.g., 'The suspect is thought to be...', 'It is estimated that...') to protect yourself from libel lawsuits.</div>
+            </div>
+            <div class="page-num">Core Grammar: In Context (B2) &bull; Page 14</div></div><div class="page" id="l12"><div class="module-header"><i class="fas fa-layer-group"></i> Core Grammar: In Context (B2)</div><div class="lesson-title"><h2>Lesson 12: Hedging & Speculative Language</h2></div>
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context</div>
+                <div class="content-text"><strong>The Over-Confident Scientist:</strong><br>Take absolute statements and soften them. 'Smoking causes cancer.' &rarr; 'The evidence strongly suggests that smoking is potentially linked to cancer.'</div>
+            </div>
+            
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Study</div>
+                <div class="content-text">
+                    <strong>Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">To suggest</span><span class="vocab-item">To imply</span><span class="vocab-item">To indicate</span><span class="vocab-item">To point to</span><span class="vocab-item">To infer</span><span class="vocab-item">Arguably</span><span class="vocab-item">Conceivably</span><span class="vocab-item">Potentially</span><span class="vocab-item">Tentatively</span><span class="vocab-item">Ostensibly</span><span class="vocab-item">Tentative</span><span class="vocab-item">Definitive</span><span class="vocab-item">Inconclusive</span><span class="vocab-item">Ambiguous</span><span class="vocab-item">Apparent</span><span class="vocab-item">To some extent</span><span class="vocab-item">It appears that</span><span class="vocab-item">The data suggests</span><span class="vocab-item">To lean towards</span><span class="vocab-item">Outlier</span></div>
+                    <div style="margin-top:10px; padding-top:10px; border-top:1px dashed #ccc;">
+                    <strong>Grammar Note:</strong><br>
+                    
+         <strong>Grammar Reference: Academic Caution</strong><br><br>
+         A fundamental principle of C2 academic writing is NEVER to be 100% certain unless proving a mathematical law. We 'hedge' our claims using specific adverbs and introductory verbs.<br><br>
+         <strong>1. Introductory Verbs (Instead of 'Prove' or 'Show'):</strong><br>
+         - <em>Use:</em> suggest, indicate, imply, appear to, tend to.<br>
+         - <em>Example:</em> The data <strong>suggests</strong> that the chemical <strong>tends to</strong> degrade over time.<br><br>
+         <strong>2. Adverbial Hedging (Softening the fact):</strong><br>
+         - <em>Use:</em> arguably, potentially, largely, somewhat, conceivably.<br>
+         - <em>Example:</em> This is <strong>arguably</strong> the most <strong>potentially</strong> devastating result.<br><br>
+         <strong>3. Modal Auxiliaries for Speculation:</strong><br>
+         - <em>Use:</em> may, might, could, would seem to.<br>
+         - <em>Example:</em> It <strong>would seem to</strong> indicate that the virus <strong>could</strong> adapt.
+     
+                    </div>
+                </div>
+            </div>
+            
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises</div>
+                <div class="content-text">
+         <strong>Grammar Exercise: Scientific Softening</strong><br><br>
+         <em>Task 1: Verb Replacement.</em> Replace absolute verbs with hedging verbs.<br>
+         1. The experiment <strong>proves</strong> our theory is correct. &rarr; The experiment ________ our theory is correct.<br>
+         2. This factor <strong>causes</strong> the failure. &rarr; This factor ________ to cause the failure.<br>
+         3. He <strong>is</strong> the best candidate for the job. &rarr; He ________ to be the best...<br>
+         4. The results <strong>mean</strong> we must stop. &rarr; The results ________ that we should stop.<br><br>
+         <em>Task 2: Adverb Insertion.</em> Make the sentences less absolute.<br>
+         5. The solution is effective. (somewhat / entirely) &rarr; The solution is ________ effective.<br>
+         6. It is the only option we have. (arguably) &rarr; It is ________ the only option we have.<br>
+         7. The team succeeded in their mission. (largely) &rarr; The team ________ succeeded in their mission.<br><br>
+         <em>Task 3: Error Correction & Toning Down.</em><br>
+         8. The test perfectly indicates that the product will definitely succeed.<br>
+         9. It is proved that inflation will destroy the market.<br>
+         10. The evidence completely shows that he is absolutely wrong.
+     </div>
+            </div>
+            
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Your Turn</div>
+                <div class="content-text"><strong>The Literature Review Caveat:</strong><br>Write a conclusion for an unfinished experiment. You cannot prove anything yet, so you must use verbs like 'suggest', adverbs like 'arguably', and phrases like 'it appears that' to summarize your preliminary hypothesis.</div>
+            </div>
+            <div class="page-num">Core Grammar: In Context (B2) &bull; Page 15</div></div><div class="page" id="l13"><div class="module-header"><i class="fas fa-layer-group"></i> Core Grammar: In Context (B2)</div><div class="lesson-title"><h2>Lesson 13: Past Modals of Deduction & Regret</h2></div>
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context</div>
+                <div class="content-text"><strong>The Cold Case:</strong><br>Look at a picture of a destroyed lab. 'The window is broken. Someone MUST HAVE thrown a rock. The computer is still on, so the hacker COULDN'T HAVE turned off the power.'</div>
+            </div>
+            
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Study</div>
+                <div class="content-text">
+                    <strong>Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">To deduce</span><span class="vocab-item">To infer</span><span class="vocab-item">To theorize</span><span class="vocab-item">To reconstruct</span><span class="vocab-item">To piece together</span><span class="vocab-item">Certainty</span><span class="vocab-item">Probability</span><span class="vocab-item">Impossibility</span><span class="vocab-item">Clue</span><span class="vocab-item">Evidence</span><span class="vocab-item">Hindsight</span><span class="vocab-item">Remorse</span><span class="vocab-item">Negligence</span><span class="vocab-item">To overlook</span><span class="vocab-item">To neglect</span><span class="vocab-item">Bound to</span><span class="vocab-item">In all likelihood</span><span class="vocab-item">A foregone conclusion</span><span class="vocab-item">To jump to conclusions</span><span class="vocab-item">To kick oneself</span></div>
+                    <div style="margin-top:10px; padding-top:10px; border-top:1px dashed #ccc;">
+                    <strong>Grammar Note:</strong><br>
+                    
+         <strong>Grammar Reference: Sherlock Holmes Grammar</strong><br><br>
+         When looking at past evidence, we use modal perfects (Modal + have + V3) to guess what happened, or to express deep regret.<br><br>
+         <strong>1. Deduction (Logical guessing based on clues):</strong><br>
+         - <em>Must have + V3:</em> I am 99% sure it happened. ('The vault is empty; he <strong>must have stolen</strong> the gold.')<br>
+         - <em>Can't have / Couldn't have + V3:</em> I am 99% sure it did NOT happen. ('He has an alibi; he <strong>couldn't have stolen</strong> it.')<br>
+         - <em>Might have / Could have + V3:</em> 50% possibility. ('The server is down; it <strong>might have crashed</strong>.')<br><br>
+         <strong>2. Regret / Criticism (Judging the past):</strong><br>
+         - <em>Should have + V3:</em> It was a good idea, but it didn't happen. ('You <strong>should have backed up</strong> the data.')<br><br>
+         <div style="background-color: #fce4e4; padding: 10px; border-left: 4px solid #c0392b;">
+         <strong>Common Mistake:</strong> Using 'must have' to mean 'should have'. ('Must have' is<em>only</em> for deduction).         </div>
+     
+                    </div>
+                </div>
+            </div>
+            
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises</div>
+                <div class="content-text">
+         <strong>Grammar Exercise: Deductive Reasoning</strong><br><br>
+         <em>Task 1: Modal Certainty.</em> Use Must have, Can't have, or Might have.<br>
+         1. The streets are completely dry. It ________ rained last night.<br>
+         2. She got a perfect score on the impossible test. She ________ studied for months.<br>
+         3. I can't find my keys. I ________ left them at the office, but I'm not sure.<br>
+         4. The lock is broken. Someone ________ forced the door open.<br>
+         5. The file was deleted at 3 AM. The manager ________ done it, he was asleep.<br><br>
+         <em>Task 2: Regret vs. Deduction.</em> Use Should have vs. Must have.<br>
+         6. I failed the audit. I ________ (hire) a better accountant.<br>
+         7. He failed the audit. The accountant he hired ________ (be) terrible.<br>
+         8. We ________ (listen) to the warnings before we launched.<br><br>
+         <em>Task 3: Error Correction.</em><br>
+         9. You must have called me yesterday! I was waiting for you! (Critique, not deduction).<br>
+         10. He hasn't arrived yet. He must have caught in traffic. (Grammar fix).
+     </div>
+            </div>
+            
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Your Turn</div>
+                <div class="content-text"><strong>The Detective Report:</strong><br>You are investigating a network breach. Based on the digital footprints, write a forensic report detailing what 'must have happened', what 'might have happened', and criticizing the IT department for what they 'should have done' to prevent it.</div>
+            </div>
+            <div class="page-num">Core Grammar: In Context (B2) &bull; Page 16</div></div><div class="page" id="l14"><div class="module-header"><i class="fas fa-layer-group"></i> Core Grammar: In Context (B2)</div><div class="lesson-title"><h2>Lesson 14: Relative Clauses with Prepositions</h2></div>
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context</div>
+                <div class="content-text"><strong>The Preposition Hunt:</strong><br>Find the dangling preposition and move it! 'The data that we relied ON' &rarr; 'The data ON WHICH we relied'. 'The student I lent my book TO' &rarr; 'The student TO WHOM I lent my book'.</div>
+            </div>
+            
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Study</div>
+                <div class="content-text">
+                    <strong>Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">To encompass</span><span class="vocab-item">To pertain to</span><span class="vocab-item">To correlate with</span><span class="vocab-item">To originate from</span><span class="vocab-item">To consist of</span><span class="vocab-item">Framework</span><span class="vocab-item">Entity</span><span class="vocab-item">Mechanism</span><span class="vocab-item">Infrastructure</span><span class="vocab-item">Domain</span><span class="vocab-item">Applicable</span><span class="vocab-item">Relevant</span><span class="vocab-item">Crucial</span><span class="vocab-item">Integral</span><span class="vocab-item">Exempt from</span><span class="vocab-item">In which</span><span class="vocab-item">To whom</span><span class="vocab-item">On whose behalf</span><span class="vocab-item">By means of which</span><span class="vocab-item">For which</span></div>
+                    <div style="margin-top:10px; padding-top:10px; border-top:1px dashed #ccc;">
+                    <strong>Grammar Note:</strong><br>
+                    
+         <strong>Grammar Reference: Formal Legal/Academic Referencing</strong><br><br>
+         In informal English, we leave prepositions at the end of relative clauses ('The company that I work <strong>for</strong>'). In high-level academic writing, we pull the preposition to the front, creating highly formal, dense structures.<br><br>
+         <strong>1. Fronting Prepositions (Things):</strong><br>
+         - <em>Informal:</em> The theory that the whole project depends <strong>on</strong>.<br>
+         - <em>Formal:</em> The theory <strong>on which</strong> the whole project depends.<br>
+         - <em>Note:</em> You must use 'which'. You cannot say 'on that'.<br><br>
+         <strong>2. Fronting Prepositions (People):</strong><br>
+         - <em>Informal:</em> The professor who I was talking <strong>to</strong>.<br>
+         - <em>Formal:</em> The professor <strong>to whom</strong> I was talking.<br>
+         - <em>Note:</em> You must use 'whom' after a preposition, never 'who'.<br><br>
+         <strong>3. 'Whose' with Nouns:</strong><br>
+         - <em>Example:</em> The corporation, <strong>the CEO of which</strong> was arrested, went bankrupt. Or: The corporation, <strong>whose CEO</strong> was arrested     
+                    </div>
+                </div>
+            </div>
+            
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises</div>
+                <div class="content-text">
+         <strong>Grammar Exercise: Formal Prepositional Fronting</strong><br><br>
+         <em>Task 1: Preposition Shifting.</em> Rewrite the sentence pulling the preposition to the front.<br>
+         1. The committee that we are reporting to is very strict. &rarr; The committee ________ ________ we are reporting...<br>
+         2. This is the hypothesis that our research is based on. &rarr; This is the hypothesis ________ ________ our research is based.<br>
+         3. The department that she works in is restructuring. &rarr; The department ________ ________ she works...<br>
+         4. The investor who I was speaking with withdrew his funding. &rarr; The investor ________ ________ I was speaking...<br>
+         5. The principles that the company stands for are written here. &rarr; The principles ________ ________ the company stands...<br><br>
+         <em>Task 2: Select the correct formal relative phrase.</em><br>
+         6. The document (to what / to which) you are referring is classified.<br>
+         7. The team leader, (with who / with whom) I disagree, resigned.<br>
+         8. The meeting (in that / in which) the decision was made lasted 3 hours.<br><br>
+         <em>Task 3: Error Correction.</em><br>
+         9. The contract on that we agreed is null and void.<br>
+         10. The manager to who I sent the report was fired.
+     </div>
+            </div>
+            
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Your Turn</div>
+                <div class="content-text"><strong>The Formal Rebuttal:</strong><br>Write a highly formal letter addressing an error in a magazine regarding your research. 'The article IN WHICH you claimed...', 'The colleagues TO WHOM you spoke...', 'The data ON WHICH we relied...'</div>
+            </div>
+            <div class="page-num">Core Grammar: In Context (B2) &bull; Page 17</div></div><div class="page" id="l15"><div class="module-header"><i class="fas fa-layer-group"></i> Core Grammar: In Context (B2)</div><div class="lesson-title"><h2>Lesson 15: Evaluación de Desempeño 3: Hedging & Deduction</h2></div>
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context</div>
+                <div class="content-text"><strong>The Scientist vs. The Lawyer:</strong><br>Explain the difference in certainty. 'The patient must have died from the poison.' vs. 'It is alleged that the patient arguably died from the compound.'</div>
+            </div>
+            
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Study</div>
+                <div class="content-text">
+                    <strong>Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">To extrapolate</span><span class="vocab-item">To moderate</span><span class="vocab-item">To gauge</span><span class="vocab-item">To evaluate</span><span class="vocab-item">To surmise</span><span class="vocab-item">Tentative</span><span class="vocab-item">Definitive</span><span class="vocab-item">Ostensibly</span><span class="vocab-item">Presumably</span><span class="vocab-item">Allegedly</span><span class="vocab-item">Assessment</span><span class="vocab-item">Critique</span><span class="vocab-item">Appraisal</span><span class="vocab-item">Deduction</span><span class="vocab-item">Audit</span><span class="vocab-item">To temper</span><span class="vocab-item">To jump to conclusions</span><span class="vocab-item">To trace back</span><span class="vocab-item">Underlying</span><span class="vocab-item">In hindsight</span></div>
+                    <div style="margin-top:10px; padding-top:10px; border-top:1px dashed #ccc;">
+                    <strong>Grammar Note:</strong><br>
+                    
+         <strong>Grammar Reference: Week 3 Synthesis</strong><br><br>
+         Testing the balance between formal passive structures, cautious hedging, and deductive certainty:<br>
+         - <strong>Impersonal Passive:</strong> It is thought that...<br>
+         - <strong>Hedging:</strong> The results strongly suggest the drug could potentially...<br>
+         - <strong>Past Modals:</strong> He must have altered the records, and we should have noticed.<br>
+         - <strong>Formal Clauses:</strong> The records to which he had access.
+     
+                    </div>
+                </div>
+            </div>
+            
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises</div>
+                <div class="content-text">
+         <strong>Grammar Exercise: The Cautious Auditor</strong><br><br>
+         <em>Task 1: The Mega Edit.</em> Correct and refine these 10 sentences for C2 academic tone.<br>
+         (1) People think that the economy will crash. (Use 'It is believed...')<br>
+         (2) The results completely prove that the water is toxic. (Use hedging: suggest/potentially)<br>
+         (3) The CEO must have knew about the leak. (Fix deduction modal)<br>
+         (4) The lawyer who I spoke to yesterday was angry. (Formal preposition fronting)<br>
+         (5) We should check the servers an hour ago! (Fix regret modal)<br>
+         (6) The hacker is allege to have stealing the data. (Fix personal passive)<br>
+         (7) What we did was investigating the anomaly. (Fix cleft structure)<br>
+         (8) The data on that we relied was corrupted. (Fix relative clause)<br>
+         (9) I didn't studied for the test, so I fail it yesterday. (Change to Mixed Type 2 conditional)<br>
+         (10) It is crucial that he signs the document. (Fix subjunctive)
+     </div>
+            </div>
+            
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Your Turn</div>
+                <div class="content-text"><strong>Taller de Reading: The Retraction Notice:</strong><br>Read an aggressive article published by a rival. Write a retraction notice that uses distancing (It is alleged), strong deductive criticism (they must have ignored X, they shouldn't have done Y), and extreme formality (The methodology ON WHICH they relied is flawed).</div>
+            </div>
+            <div class="page-num">Core Grammar: In Context (B2) &bull; Page 18</div></div><div class="page" id="l16"><div class="module-header"><i class="fas fa-layer-group"></i> Core Grammar: In Context (B2)</div><div class="lesson-title"><h2>Lesson 16: Advanced Sentence Connectors</h2></div>
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context</div>
+                <div class="content-text"><strong>The Synonym Upgrade:</strong><br>Teacher writes 'So', 'But', 'By which', 'Even though'. Students race to replace them with formal equivalents ('Thus', 'However', 'Whereby', 'Albeit').</div>
+            </div>
+            
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Study</div>
+                <div class="content-text">
+                    <strong>Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Accordingly</span><span class="vocab-item">Hence</span><span class="vocab-item">Thus</span><span class="vocab-item">Invariably</span><span class="vocab-item">Notwithstanding</span><span class="vocab-item">Albeit</span><span class="vocab-item">Whereby</span><span class="vocab-item">Thereby</span><span class="vocab-item">Lest</span><span class="vocab-item">Insofar as</span><span class="vocab-item">Conducive</span><span class="vocab-item">Detrimental</span><span class="vocab-item">Interrelated</span><span class="vocab-item">Distinct</span><span class="vocab-item">Ambiguous</span><span class="vocab-item">To serve as a premise</span><span class="vocab-item">To bridge the gap</span><span class="vocab-item">To interweave</span><span class="vocab-item">To juxtapose</span><span class="vocab-item">To align with</span></div>
+                    <div style="margin-top:10px; padding-top:10px; border-top:1px dashed #ccc;">
+                    <strong>Grammar Note:</strong><br>
+                    
+         <strong>Grammar Reference: The Glue of Academic Arguments</strong><br><br>
+         Simple connectors like 'so' or 'but' destroy the academic tone of a text. We use C2-level adverbs to map the logical flow of complex arguments.<br><br>
+         <strong>1. Result & Consequence:</strong><br>
+         - <em>Thus / Hence / Accordingly:</em> Used to show direct mathematical or logical consequence. ('The temperature dropped; <strong>hence</strong>, the ice formed').<br><br>
+         <strong>2. Contrast & Concession:</strong><br>
+         - <em>Notwithstanding:</em> Extremely formal for 'despite'. ('<strong>Notwithstanding</strong> the budget cuts, we succeeded').<br>
+         - <em>Albeit:</em> Meaning 'although it is/was'. ('The process was effective, <strong>albeit</strong> slow').<br><br>
+         <strong>3. Mechanism & Method:</strong><br>
+         - <em>Whereby / Thereby:</em> Meaning 'by which' or 'as a result of which'. ('They implemented a new policy <strong>whereby</strong> employees could work from home').<br>
+         - <em>Lest:</em> Meaning 'in case' or 'for fear that' (triggers the subjunctive). ('He wore a mask, <strong>lest</strong> he contract the virus     
+                    </div>
+                </div>
+            </div>
+            
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises</div>
+                <div class="content-text">
+         <strong>Grammar Exercise: Logical Flow Mastery</strong><br><br>
+         <em>Task 1: Synonym Replacement.</em> Upgrade the connector to the C2 level.<br>
+         1. The server broke, <strong>so</strong> we lost the data. &rarr; The server broke; ________, we lost the data.<br>
+         2. <strong>Even though</strong> it was expensive, the machine worked. &rarr; The machine worked, ________ expensive.<br>
+         3. <strong>Despite</strong> the risk, they continued. &rarr; ________ the risk, they continued.<br>
+         4. A system <strong>by which</strong> water is purified. &rarr; A system ________ water is purified.<br>
+         5. They hid the code <strong>so that they wouldn't</strong> be copied. &rarr; They hid the code ________ they be copied.<br><br>
+         <em>Task 2: Select the correct logical connection.</em><br>
+         6. The algorithm is highly advanced, (whereby / albeit) computationally heavy.<br>
+         7. He failed the exam; (hence / notwithstanding), he to retake the course.<br>
+         8. A treaty was signed (thereby / whereby) both nations agreed to disarm.<br><br>
+         <em>Task 3: Error Correction.</em><br>
+         9. We finished the project, albeit the difficulties. (Albeit is for adjectives, use 'notwithstanding').<br>
+         10. The company went bankrupt, whereby dissolving all its assets. (Use thereby).
+     </div>
+            </div>
+            
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Your Turn</div>
+                <div class="content-text"><strong>The Argument Blueprint:</strong><br>Write a 150-word defense of Universal Basic Income using 'Whereby' to explain how it works, 'Albeit' to admit a flaw, 'Notwithstanding' to dismiss the critics, and 'Thus' to summarize the result.</div>
+            </div>
+            <div class="page-num">Core Grammar: In Context (B2) &bull; Page 19</div></div><div class="page" id="l17"><div class="module-header"><i class="fas fa-layer-group"></i> Core Grammar: In Context (B2)</div><div class="lesson-title"><h2>Lesson 17: Expressing Preferences & Hypotheses (Would rather / It's time)</h2></div>
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context</div>
+                <div class="content-text"><strong>The Polite Demander:</strong><br>How do you say 'Stop doing that' politely? 'I'd rather you didn't.' How do you say 'Do this immediately before it's too late'? 'It's high time you began.' Feel the subtle urgency.</div>
+            </div>
+            
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Study</div>
+                <div class="content-text">
+                    <strong>Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">To favor</span><span class="vocab-item">To prioritize</span><span class="vocab-item">To advocate</span><span class="vocab-item">To opt for</span><span class="vocab-item">To lean towards</span><span class="vocab-item">Preferable</span><span class="vocab-item">Optimal</span><span class="vocab-item">Suboptimal</span><span class="vocab-item">Desirable</span><span class="vocab-item">Ideal</span><span class="vocab-item">Aesthetic</span><span class="vocab-item">Utilitarian</span><span class="vocab-item">Pragmatic</span><span class="vocab-item">Subjective</span><span class="vocab-item">Objective</span><span class="vocab-item">To take precedence over</span><span class="vocab-item">To weigh the options</span><span class="vocab-item">Given the choice</span><span class="vocab-item">In retrospect</span><span class="vocab-item">On second thought</span></div>
+                    <div style="margin-top:10px; padding-top:10px; border-top:1px dashed #ccc;">
+                    <strong>Grammar Note:</strong><br>
+                    
+         <strong>Grammar Reference: Social Negotiation and Urgent Recommendations</strong><br><br>
+         When negotiating, we use 'unreal past' forms to politely demand that someone else change their behavior, or to state that an action is long overdue.<br><br>
+         <strong>1. I Would Rather (Someone else did something):</strong><br>
+         - <em>Formula:</em> <code>Subject + would rather + [Target Person] + Past Simple</code><br>
+         - <em>Meaning:</em> I want you to do this now/tomorrow. (The past tense softens the demand).<br>
+         - <em>Example:</em> I <strong>would rather you didn't smoke</strong> in here. (Not: <s>I would rather you don't smoke</s>).<br><br>
+         <strong>2. It is (High) Time:</strong><br>
+         - <em>Formula:</em> <code>It is time + Subject + Past Simple</code><br>
+         - <em>Meaning:</em> This should have happened already; do it now.<br>
+         - <em>Example:</em> <strong>It's high time the government changedpolicy.
+     
+                    </div>
+                </div>
+            </div>
+            
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises</div>
+                <div class="content-text">
+         <strong>Grammar Exercise: Negotiating Reality</strong><br><br>
+         <em>Task 1: Verb Conjugation (Unreal Past).</em><br>
+         1. I would rather the IT department (fix) ________ the servers tomorrow morning.<br>
+         2. It is high time that we (invest) ________ heavily in renewable energy.<br>
+         3. The manager would rather you (not / speak) ________ to the press directly.<br>
+         4. She would prefer it if they (delay) ________ the launch until next week.<br>
+         5. Isn't it about time the CEO (resign) ________?<br><br>
+         <em>Task 2: Sentence Transformation.</em> Rewrite using the provided structure.<br>
+         6. I want you to pay me in cash. &rarr; I would rather ________ in cash.<br>
+         7. We really need to update our software immediately. &rarr; It's high time ________ our software.<br>
+         8. Please don't mention this to anyone. &rarr; I'd rather ________ to anyone.<br><br>
+         <em>Task 3: Error Correction.</em><br>
+         9. I would rather you to stay here tonight.<br>
+         10. It is time for we go home.
+     </div>
+            </div>
+            
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Your Turn</div>
+                <div class="content-text"><strong>The Boardroom Intervention:</strong><br>Your company is failing because the CEO is making bad choices. Write an intervention speech using 'I would rather you (past simple)' to dictate what he must do now, and 'It is high time we (past simple)' to demand immediate structural changes.</div>
+            </div>
+            <div class="page-num">Core Grammar: In Context (B2) &bull; Page 20</div></div><div class="page" id="l18"><div class="module-header"><i class="fas fa-layer-group"></i> Core Grammar: In Context (B2)</div><div class="lesson-title"><h2>Lesson 18: Compound Adjectives & Noun Modification</h2></div>
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context</div>
+                <div class="content-text"><strong>The Hyphen Wizard:</strong><br>Compress ideas! A building that has 12 stories &rarr; A 12-story building. A tool that saves labor &rarr; A labor-saving tool. A theory known widely &rarr; A widely-known theory.</div>
+            </div>
+            
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Study</div>
+                <div class="content-text">
+                    <strong>Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">State-of-the-art</span><span class="vocab-item">Cutting-edge</span><span class="vocab-item">Groundbreaking</span><span class="vocab-item">Deep-seated</span><span class="vocab-item">Long-standing</span><span class="vocab-item">High-yield</span><span class="vocab-item">Cost-effective</span><span class="vocab-item">Labor-intensive</span><span class="vocab-item">Time-consuming</span><span class="vocab-item">Fast-paced</span><span class="vocab-item">Hyphenation</span><span class="vocab-item">Modifier</span><span class="vocab-item">Syntactical</span><span class="vocab-item">Nuance</span><span class="vocab-item">Descriptive</span><span class="vocab-item">At a glance</span><span class="vocab-item">By design</span><span class="vocab-item">In-depth</span><span class="vocab-item">On-the-fly</span><span class="vocab-item">Well-thought-out</span></div>
+                    <div style="margin-top:10px; padding-top:10px; border-top:1px dashed #ccc;">
+                    <strong>Grammar Note:</strong><br>
+                    
+         <strong>Grammar Reference: Dense Idea Packing</strong><br><br>
+         To avoid clunky relative clauses ('A machine that consumes a lot of time'), advanced writers combine nouns, adjectives, and participles using hyphens to create custom adjectives ('A time-consuming machine').<br><br>
+         <strong>1. Noun + Present Participle (Doing the action):</strong><br>
+         - <em>Record-breaking</em> (Breaking records).<br>
+         - <em>Time-consuming</em> (Consuming time).<br><br>
+         <strong>2. Noun/Adverb + Past Participle (Receiving the action):</strong><br>
+         - <em>Government-funded</em> (Funded by the government).<br>
+         - <em>Well-documented</em> (Documented well).<br><br>
+         <strong>3. Number + Singular Noun (Never plural inside the hyphen!):</strong><br>
+         - <em>A 10-year-old</em> system. (Not <s>A 10-years-old system</s>).<br>
+         - <em>A 50-page</em> document.     
+                    </div>
+                </div>
+            </div>
+            
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises</div>
+                <div class="content-text">
+         <strong>Grammar Exercise: Compressing Data</strong><br><br>
+         <em>Task 1: Creating Compound Adjectives.</em> Use hyphens to compress the relative clause.<br>
+         1. A project that takes three years. &rarr; A ________ project.<br>
+         2. An economy that is growing rapidly. &rarr; A ________ economy.<br>
+         3. A device that is operated by a battery. &rarr; A ________ device.<br>
+         4. An audience that speaks English. &rarr; An ________ audience.<br>
+         5. A contract that legally binds you. &rarr; A ________ contract.<br><br>
+         <em>Task 2: Fill in the blank with a logical compound.</em><br>
+         6. The factory implemented a new, ________ (saving time) process.<br>
+         7. We are facing a ________ (deeply seated) cultural issue.<br>
+         8. They requested a ________ (50 pages) report by Friday.<br><br>
+         <em>Task 3: Error Correction.</em><br>
+         9. We are trapped in a slow moving traffic jam.<br>
+         10. The company signed a 5-millions-dollars deal.
+     </div>
+            </div>
+            
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Your Turn</div>
+                <div class="content-text"><strong>The Product Pitch:</strong><br>Sell a new AI software to investors. You must invent and correctly hyphenate 5 custom compound adjectives (e.g., 'This is a market-disrupting, algorithm-driven, cost-effective solution...') to maximize your word economy.</div>
+            </div>
+            <div class="page-num">Core Grammar: In Context (B2) &bull; Page 21</div></div><div class="page" id="l19"><div class="module-header"><i class="fas fa-layer-group"></i> Core Grammar: In Context (B2)</div><div class="lesson-title"><h2>Lesson 19: Complex Gerund & Infinitive Phrases</h2></div>
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context</div>
+                <div class="content-text"><strong>The Grammar Trap:</strong><br>Teacher writes 'I am committed to ______ (succeed)'. A learner naturally wants to say 'succeed'. The master knows it is 'succeeding' because 'to' is a preposition here. Find the prepositional traps.</div>
+            </div>
+            
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Study</div>
+                <div class="content-text">
+                    <strong>Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">To object to</span><span class="vocab-item">To accustom to</span><span class="vocab-item">To commit to</span><span class="vocab-item">To confess to</span><span class="vocab-item">To resort to</span><span class="vocab-item">Prerequisite</span><span class="vocab-item">Disposition</span><span class="vocab-item">Inclination</span><span class="vocab-item">Aversion</span><span class="vocab-item">Propensity</span><span class="vocab-item">Mandatory</span><span class="vocab-item">Discretionary</span><span class="vocab-item">Compulsory</span><span class="vocab-item">Arbitrary</span><span class="vocab-item">Calculated</span><span class="vocab-item">With a view to</span><span class="vocab-item">On the verge of</span><span class="vocab-item">In the habit of</span><span class="vocab-item">To have no choice but to</span><span class="vocab-item">To take pride in</span></div>
+                    <div style="margin-top:10px; padding-top:10px; border-top:1px dashed #ccc;">
+                    <strong>Grammar Note:</strong><br>
+                    
+         <strong>Grammar Reference: C2 Lexical Prepositions</strong><br><br>
+         At the highest level, many verbs and phrases end in the preposition 'to'. Because it is a preposition, it MUST be followed by a noun or a Gerund (V-ing), NOT an infinitive verb. This breaks the brain of many learners who see 'to' and want to put a base verb.<br><br>
+         <strong>1. Prepositional 'To' + V-ing (Crucial C2 structures):</strong><br>
+         - <em>Look forward to:</em> I look forward to <strong>receiving</strong> your reply.<br>
+         - <em>Object to:</em> I strongly object to <strong>cutting</strong> the budget.<br>
+         - <em>Resort to:</em> We must not resort to <strong>stealing</strong> data.<br>
+         - <em>Phrase:</em> With a view to <strong>improving</strong> relations...<br><br>
+         <strong>2. Infinitive vs. Gerund Phrase Alternation:</strong><br>
+         - <em>I have no choice but <strong>to resign</strong>.</em><br>
+         - <em>It is no use <strong>asking</strong> for help.     
+                    </div>
+                </div>
+            </div>
+            
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises</div>
+                <div class="content-text">
+         <strong>Grammar Exercise: Gerund Traps</strong><br><br>
+         <em>Task 1: Base Verb vs. V-ing.</em> Conjugate the complement correctly.<br>
+         1. We are completely committed to (finish) ________ this project by December.<br>
+         2. They had no choice but (accept) ________ the harsh terms of the deal.<br>
+         3. The manager strongly objected to (alter) ________ the original contract.<br>
+         4. With a view to (expand) ________ our market share, we bought a competitor.<br>
+         5. The CFO confessed to (manipulate) ________ the financial records.<br><br>
+         <em>Task 2: Select the correct structure.</em><br>
+         6. It is no use (to try / trying) to fix this obsolete machinery.<br>
+         7. I am not accustomed to (work / working) such long hours.<br>
+         8. They have decided (to cancel / canceling) the entire operation.<br><br>
+         <em>Task 3: Error Correction.</em><br>
+         9. We are looking forward to hear from you soon.<br>
+         10. Desperate, he resorted to lie on his resume.
+     </div>
+            </div>
+            
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Your Turn</div>
+                <div class="content-text"><strong>The Hostile Takeover Objection:</strong><br>Write a formal letter to your board of directors. State what you 'strongly object to doing', what you are 'committed to protecting', and what extreme measures you will 'resort to taking' if they ignore you.</div>
+            </div>
+            <div class="page-num">Core Grammar: In Context (B2) &bull; Page 22</div></div><div class="page" id="l20"><div class="module-header"><i class="fas fa-layer-group"></i> Core Grammar: In Context (B2)</div><div class="lesson-title"><h2>Lesson 20: Examen de Nivel Final: Mastery of Precision</h2></div>
+            <div class="lesson-block lb-blue">
+                <div class="lb-header"><i class="fas fa-bolt"></i> Context</div>
+                <div class="content-text"><strong>The Grammar Gauntlet:</strong><br>Four stations. Station A: Inversion. Station B: Clefts. Station C: Mix Conditionals. Station D: Participles. Students rotate and solve one C2 trap at each.</div>
+            </div>
+            
+            <div class="lesson-block lb-navy">
+                <div class="lb-header"><i class="fas fa-book-open"></i> Study</div>
+                <div class="content-text">
+                    <strong>Vocabulary:</strong>
+                    <div class="vocab-box"><span class="vocab-item">Culmination</span><span class="vocab-item">Pinnacle</span><span class="vocab-item">Integration</span><span class="vocab-item">Synthesis</span><span class="vocab-item">To command</span><span class="vocab-item">To master</span><span class="vocab-item">Nuance</span><span class="vocab-item">Rigorous</span><span class="vocab-item">Flawless</span><span class="vocab-item">Sophistication</span><span class="vocab-item">To validate</span><span class="vocab-item">To exhibit</span><span class="vocab-item">Elocution</span><span class="vocab-item">Mechanics</span><span class="vocab-item">Cohesion</span><span class="vocab-item">Coherence</span><span class="vocab-item">Accuracy</span><span class="vocab-item">Fluency</span><span class="vocab-item">To culminate</span><span class="vocab-item">Milestone</span></div>
+                    <div style="margin-top:10px; padding-top:10px; border-top:1px dashed #ccc;">
+                    <strong>Grammar Note:</strong><br>
+                    
+         <strong>Grammar Reference: C1/C2 Synthesis</strong><br><br>
+         The final assessment tests your ability to seamlessly intertwine the most advanced syntactical structures in the English language:<br>
+         - Dramatic pacing via Inversion (Negative & Conditional).<br>
+         - Emphasizing root causes via Cleft sentences.<br>
+         - Projecting logic via Mixed Conditionals and Future Perfect definitions.<br>
+         - Distancing via Impersonal Passives and Hedging.
+     
+                    </div>
+                </div>
+            </div>
+            
+            <div class="lesson-block lb-green">
+                <div class="lb-header"><i class="fas fa-tools"></i> Exercises</div>
+                <div class="content-text">
+         <strong>Grammar Exercise: The Final Written Exam</strong><br><br>
+         <em>Section 1: The Integration Challenge.</em> Correct the 10 errors covering the entire semester.<br>
+         (1) Never I have seen such an incompetent team. (Inversion)<br>
+         (2) It is believed that the algorithm to be extremely dangerous. (Personal Passive structure)<br>
+         (3) He demands that the security guard is fired. (Subjunctive)<br>
+         (4) Having analyzed the data, it proved our theory. (Dangling Participle - who analyzed it?)<br>
+         (5) What I need are a completely new system. (Cleft Agreement)<br>
+         (6) If the metal wasn't rusted, it wouldn't have snapped yesterday. (Mixed 2 correction)<br>
+         (7) By next month, we will launch the software. (Future Perfect needed here)<br>
+         (8) The committee to who I presented the idea was hostile. (Formal Relative Pronoun)<br>
+         (9) I would rather he pays me in cash. (Negotiation Past)<br>
+         (10) We object to change the parameters of the test. (Gerund Trap)
+     </div>
+            </div>
+            
+            <div class="lesson-block lb-red">
+                <div class="lb-header"><i class="fas fa-theater-masks"></i> Your Turn</div>
+                <div class="content-text"><strong>The Master Defense:</strong><br>Deliver a 5-minute definitive presentation defending your entire semester's fictional business/research portfolio. You must seamlessly deploy hedging, inversion, and complex gerund phrases to prove your mastery of C2 Academic English.</div>
+            </div>
+            <div class="page-num">Core Grammar: In Context (B2) &bull; Page 23</div></div></body></html>

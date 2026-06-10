@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo de Cursos | Vesper Academy</title>
+    <!-- Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;900&family=Merriweather:ital,wght@0,300;0,400;0,700;1,300&display=swap"
+        rel="stylesheet">
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        :root {
+            /* Vesper Official Palette */
+            --vesper-navy: #1a2a40;
+            --vesper-blue-grey: #34495e;
+            --vesper-beige: #f4f1ea;
+            --vesper-gold: #c5a059;
+            --vesper-white: #ffffff;
+            --text-dark: #1a2a40;
+            --text-light: #64748b;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--vesper-beige);
+            color: var(--text-dark);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        /* Nav */
+        nav {
+            background-color: var(--vesper-navy);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 4px solid var(--vesper-gold);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-logo {
+            color: var(--vesper-white);
+            font-weight: 900;
+            font-size: 1.5rem;
+            text-decoration: none;
+            letter-spacing: -0.5px;
+            text-transform: uppercase;
+        }
+
+        .nav-link {
+            color: var(--vesper-gold);
+            text-decoration: none;
+            font-weight: 700;
+            margin-left: 20px;
+            font-size: 0.9rem;
+            transition: color 0.3s;
+        }
+
+        .nav-link:hover {
+            color: var(--vesper-white);
+        }
+
+        /* Hero */
+        .hero-section {
+            background: linear-gradient(135deg, var(--vesper-navy) 0%, #2c3e50 100%);
+            color: white;
+            padding: 6rem 2rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9InJnYmEoMjU1LDI1NSwyNTUsMC4wNSkiLz48L3N2Zz4=');
+        }
+
+        .hero-title {
+            font-size: 4rem;
+            font-weight: 900;
+            margin: 0;
+            letter-spacing: -2px;
+            line-height: 1.1;
+        }
+
+        .hero-title span {
+            color: var(--vesper-gold);
+        }
+
+        .hero-subtitle {
+            font-family: 'Merriweather', serif;
+            font-size: 1.5rem;
+            font-weight: 300;
+            opacity: 0.9;
+            margin-top: 1rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Content Grid */
+        .container {
+            max-width: 1200px;
+            margin: -4rem auto 4rem auto;
+            padding: 0 2rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .series-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 2rem;
+            margin-top: 4rem;
+        }
+
+        .series-header h2 {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--vesper-navy);
+            margin: 0;
+            margin-right: 1rem;
+        }
+
+        .series-line {
+            height: 4px;
+            background: var(--vesper-gold);
+            flex-grow: 1;
+            border-radius: 2px;
+            opacity: 0.5;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        /* Card Card */
+        .course-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(26, 43, 66, 0.08);
+            transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.3s;
+            text-decoration: none;
+            color: inherit;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        .course-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 40px rgba(26, 43, 66, 0.15);
+        }
+
+        /* Series Color Strips */
+        .card-strip {
+            height: 6px;
+            width: 100%;
+        }
+
+        .strip-dl {
+            background: linear-gradient(90deg, #27ae60, #2ecc71);
+        }
+
+        /* Green */
+        .strip-cci {
+            background: linear-gradient(90deg, #2980b9, #3498db);
+        }
+
+        /* Blue */
+        .strip-ccs {
+            background: linear-gradient(90deg, #c0392b, #e74c3c);
+        }
+
+        /* Red */
+        .strip-exam {
+            background: linear-gradient(90deg, var(--vesper-navy), var(--vesper-gold));
+        }
+
+        /* Gold/Navy */
+
+        .card-body {
+            padding: 2rem;
+            flex-grow: 1;
+        }
+
+        .card-level {
+            font-size: 0.75rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 800;
+            margin: 0 0 1rem 0;
+            color: var(--vesper-navy);
+            line-height: 1.2;
+        }
+
+        .card-desc {
+            font-family: 'Merriweather', serif;
+            font-size: 0.95rem;
+            color: #555;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.85rem;
+            color: var(--text-light);
+            font-weight: 600;
+            margin-top: auto;
+            border-top: 1px solid #f0f0f0;
+            padding-top: 1rem;
+        }
+
+        .card-meta i {
+            color: var(--vesper-gold);
+            margin-right: 4px;
+        }
+
+        .badge-new {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: var(--vesper-gold);
+            color: var(--vesper-navy);
+            font-size: 0.7rem;
+            font-weight: 900;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+
+        /* Footer */
+        footer {
+            background-color: white;
+            text-align: center;
+            padding: 3rem;
+            margin-top: 4rem;
+            border-top: 1px solid #e2e8f0;
+            color: var(--text-light);
+        }
+    </style>
+    <link rel="icon" href="assets/images/vesper_logo.png" type="image/png">
+</head>
+
+<body>
+
+    <nav>
+        <a href="index.html" class="nav-logo">
+            <img src="assets/images/vesper_logo.jpg" alt="Vesper Academy Logo"
+                style="height: 45px; vertical-align: middle; margin-right: 12px; border-radius: 8px; border: 2px solid var(--vesper-gold); padding: 3px; background: white;">
+            Vesper Academy
+        </a>
+        <div>
+            <a href="#" class="nav-link">Soporte</a>
+        </div>
+    </nav>
+
+    <div class="hero-section">
+        <h1 class="hero-title">La Colección <span>Completa</span></h1>
+        <p class="hero-subtitle">Un plan de estudios meticulosamente diseñado para llevar a estudiantes ambiciosos desde
+            principiantes absolutos hasta profesionales globales.</p>
+    </div>
+
+    <div class="container">
+
+        <!-- 1. EXAM SERIES -->
+        <div class="series-header">
+            <h2>Exámenes de Élite</h2>
+            <div class="series-line"></div>
+        </div>
+        <div class="grid">
+            <div class="course-card">
+                <div class="card-strip strip-exam"></div>
+                <div class="badge-new">Insignia</div>
+                <div class="card-body">
+                    <span class="card-level">Avanzado (C1-C2)</span>
+                    <h3 class="card-title">Exam Master Class</h3>
+                    <p class="card-desc">Los "Navy SEALs" del entrenamiento en inglés. 20 lecciones de alta intensidad
+                        enfocadas en lectura académica, redacción integrada y retórica avanzada.</p>
+                    <div class="card-meta">
+                        <span><i class="fas fa-book-open"></i> 20 Lecciones</span>
+                        <span><i class="fas fa-university"></i> Académico</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. FOUNDATION SERIES -->
+        <div class="series-header">
+            <h2>Serie Fundamentos (Daily Life)</h2>
+            <div class="series-line"></div>
+        </div>
+        <div class="grid">
+            <div class="course-card">
+                <div class="card-strip strip-dl"></div>
+                <div class="card-body">
+                    <span class="card-level">Principiante (A0-A1)</span>
+                    <h3 class="card-title">Vol. 0: Primeros Pasos</h3>
+                    <p class="card-desc">Para principiantes absolutos. Construye confianza a través de la fonética,
+                        saludos básicos, números y vocabulario de supervivencia.</p>
+                    <div class="card-meta">
+                        <span><i class="fas fa-cubes"></i> Básicos</span>
+                        <span><i class="fas fa-smile"></i> Amigable</span>
+                    </div>
+                </div>
+            </div>
+            <div class="course-card">
+                <div class="card-strip strip-dl"></div>
+                <div class="card-body">
+                    <span class="card-level">Elemental (A1-A2)</span>
+                    <h3 class="card-title">Vol. 1: Vida Diaria</h3>
+                    <p class="card-desc">Lenguaje funcional esencial. Pedir comida, preguntar direcciones y describir
+                        rutinas simples. La base de la comunicación.</p>
+                    <div class="card-meta">
+                        <span><i class="fas fa-layer-group"></i> 20 Lecciones</span>
+                        <span><i class="fas fa-comment"></i> Hablar</span>
+                    </div>
+                </div>
+            </div>
+            <div class="course-card">
+                <div class="card-strip strip-dl"></div>
+                <div class="card-body">
+                    <span class="card-level">Pre-Intermedio (A2-B1)</span>
+                    <h3 class="card-title">Vol. 2: Expandiendo Horizontes</h3>
+                    <p class="card-desc">Más allá de lo básico. Contar historias, hacer planes y manejar situaciones de
+                        viaje con mayor matiz.</p>
+                    <div class="card-meta">
+                        <span><i class="fas fa-layer-group"></i> 20 Lecciones</span>
+                        <span><i class="fas fa-plane"></i> Viajes</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. BUSINESS SERIES -->
+        <div class="series-header">
+            <h2>Conversation Club in English (CCI)</h2>
+            <div class="series-line"></div>
+        </div>
+        <div class="grid">
+            <div class="course-card">
+                <div class="card-strip strip-cci"></div>
+                <div class="card-body">
+                    <span class="card-level">Intermedio (B1+)</span>
+                    <h3 class="card-title">CCI 1: Núcleo de Negocios</h3>
+                    <p class="card-desc">El kit de herramientas para el trabajo moderno. Redacción de correos,
+                        reuniones, presentaciones y etiqueta profesional para la oficina internacional.</p>
+                    <div class="card-meta">
+                        <span><i class="fas fa-briefcase"></i> Carrera</span>
+                        <span><i class="fas fa-handshake"></i> Habilidades</span>
+                    </div>
+                </div>
+            </div>
+            <div class="course-card">
+                <div class="card-strip strip-cci"></div>
+                <div class="card-body">
+                    <span class="card-level">Intermedio-Alto (B2)</span>
+                    <h3 class="card-title">CCI 2: Gestión y Liderazgo</h3>
+                    <p class="card-desc">Lenguaje de liderazgo. Negociación, resolución de conflictos, dar
+                        retroalimentación y gestión de equipos interculturales.</p>
+                    <div class="card-meta">
+                        <span><i class="fas fa-chess"></i> Liderazgo</span>
+                        <span><i class="fas fa-users"></i> Equipos</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 4. CULTURE SERIES (KEPT IN ENGLISH) -->
+        <div class="series-header">
+            <h2>Conversation Club in Spanish (CCS)</h2>
+            <div class="series-line"></div>
+        </div>
+        <div class="grid">
+            <div class="course-card">
+                <div class="card-strip strip-ccs"></div>
+                <div class="card-body">
+                    <span class="card-level">Beginner (A1-A2)</span>
+                    <h3 class="card-title">CCS 1: Spanish Conversation</h3>
+                    <p class="card-desc">Master the basics of Español. From introducing yourself and ordering tacos to
+                        describing your family and daily routine.</p>
+                    <div class="card-meta">
+                        <span><i class="fas fa-language"></i> Spanish</span>
+                        <span><i class="fas fa-comment-dots"></i> Basics</span>
+                    </div>
+                </div>
+            </div>
+            <div class="course-card">
+                <div class="card-strip strip-ccs"></div>
+                <div class="card-body">
+                    <span class="card-level">Advanced (B1-C1)</span>
+                    <h3 class="card-title">CCS 2: Advanced Debates</h3>
+                    <p class="card-desc">Defend your opinions in Spanish. Debate complex topics like AI ethics,
+                        minimalist living, and personal branding.</p>
+                    <div class="card-meta">
+                        <span><i class="fas fa-gavel"></i> Debate</span>
+                        <span><i class="fas fa-globe-americas"></i> Culture</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Vesper Academy. Diseñado para la Excelencia.</p>
+        <p style="font-size: 0.8rem; margin-top: 10px;">
+            <a href="#" style="color: var(--text-light); text-decoration: none; margin: 0 10px;">Portal de Maestros</a>
+            <a href="#" style="color: var(--text-light); text-decoration: none; margin: 0 10px;">Acceso Estudiantes</a>
+            <a href="#" style="color: var(--text-light); text-decoration: none; margin: 0 10px;">Mapa Curricular</a>
+        </p>
+    </footer>
+
+</body>
+
+</html>

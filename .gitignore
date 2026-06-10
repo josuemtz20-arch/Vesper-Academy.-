@@ -1,0 +1,47 @@
+# ============================================================
+# Vesper Academy — PUBLIC repo whitelist
+# Default: EVERYTHING at the root is ignored (private/local).
+# Only the explicitly un-ignored files below are published.
+# Teacher manuals, answer keys, generators (*.py), data banks,
+# admin tools, _scripts/ and _archive/ stay local-only.
+# ============================================================
+/*
+
+# repo plumbing
+!/.gitignore
+!/.nojekyll
+
+# public site + auth gate (must stay at root)
+!/index.html
+!/login.html
+!/access_admin.html
+!/vesper_auth.js
+!/vesper_web.html
+!/vesper_landing.html
+!/vesper_promo.html
+
+# student portal + tools
+!/materiales.html
+!/book_placement.html
+!/audio_library.html
+!/lesson.html
+!/exam.html
+
+# lesson/exam data consumed by the public pages
+!/vesper_audio_data.js
+!/vesper_reading_data.js
+!/vesper_basics_lesson_data.js
+!/vesper_custom_transcripts.js
+!/vesper_exam_data.js
+
+# student books (teacher manuals are NOT whitelisted)
+!/book_*_student.html
+!/book_exam_prep_student_vol2.html
+
+# css / images / audio used by all public pages
+!/assets/
+
+# never publish these even if they appear inside whitelisted dirs
+__pycache__/
+*.pyc
+*.lnk

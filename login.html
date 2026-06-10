@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vesper Academy | Acceso</title>
+<script src="vesper_auth.js"></script>
+<style>
+  :root { --navy:#10243e; --navy2:#1a3a5c; --gold:#c9a227; --gold2:#e3c35f; --cream:#f7f3ea; --err:#b03a3a; --ok:#2e7d4f; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:Georgia,'Times New Roman',serif; background:var(--navy); min-height:100vh;
+         display:flex; align-items:center; justify-content:center; padding:20px;
+         background-image:radial-gradient(ellipse at 30% 20%, #1a3a5c 0%, #10243e 70%); }
+  .card { background:var(--cream); width:100%; max-width:420px; border-radius:14px;
+          box-shadow:0 18px 50px rgba(0,0,0,.45); overflow:hidden; }
+  .head { background:var(--navy); color:var(--cream); padding:28px 30px 22px; text-align:center;
+          border-bottom:4px solid var(--gold); }
+  .head h1 { font-size:24px; letter-spacing:2px; font-weight:normal; }
+  .head h1 b { color:var(--gold2); }
+  .head p { font-family:Arial,sans-serif; font-size:12px; opacity:.75; margin-top:6px; letter-spacing:1px; }
+  .tabs { display:flex; font-family:Arial,sans-serif; }
+  .tab { flex:1; padding:13px; text-align:center; cursor:pointer; font-size:14px;
+         background:#ece5d4; color:#6b6151; border-bottom:2px solid transparent; }
+  .tab.active { background:var(--cream); color:var(--navy); font-weight:bold; border-bottom-color:var(--gold); }
+  form { padding:26px 30px 30px; display:none; }
+  form.active { display:block; }
+  label { display:block; font-family:Arial,sans-serif; font-size:12px; letter-spacing:1px;
+          color:#6b6151; margin:14px 0 5px; text-transform:uppercase; }
+  input { width:100%; padding:11px 12px; font-size:15px; border:1px solid #d4c9ae; border-radius:7px;
+          background:#fff; font-family:Arial,sans-serif; }
+  input:focus { outline:2px solid var(--gold2); border-color:var(--gold); }
+  button.main { width:100%; margin-top:22px; padding:13px; font-size:15px; letter-spacing:1px;
+          background:var(--navy); color:var(--cream); border:none; border-radius:7px; cursor:pointer;
+          font-family:Arial,sans-serif; }
+  button.main:hover { background:var(--navy2); }
+  button.main:disabled { opacity:.55; cursor:wait; }
+  .aux { font-family:Arial,sans-serif; font-size:13px; text-align:center; margin-top:14px; }
+  .aux a { color:var(--navy2); cursor:pointer; text-decoration:underline; }
+  .msg { font-family:Arial,sans-serif; font-size:13.5px; line-height:1.5; border-radius:8px;
+         padding:12px 14px; margin:18px 30px 0; display:none; }
+  .msg.err { display:block; background:#f6e2e2; color:var(--err); border:1px solid #e3bcbc; }
+  .msg.ok  { display:block; background:#e1efe6; color:var(--ok); border:1px solid #bcd9c7; }
+  .msg.info{ display:block; background:#eee8d8; color:#5a4d2e; border:1px solid #ddd0ad; }
+  .foot { font-family:Arial,sans-serif; font-size:11.5px; color:#8d8270; text-align:center; padding:0 30px 24px; line-height:1.6; }
+  .foot a { color:var(--navy2); }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="head">
+    <h1>VESPER <b>ACADEMY</b></h1>
+    <p>ACCESO AL CAMPUS</p>
+  </div>
+  <div class="tabs">
+    <div class="tab active" id="tab-login">Iniciar sesión</div>
+    <div class="tab" id="tab-register">Crear cuenta</div>
+  </div>
+
+  <div class="msg" id="msg"></div>
+
+  <form id="form-login" class="active" autocomplete="on">
+    <label for="l-email">Correo electrónico</label>
+    <input type="email" id="l-email" autocomplete="email" required>
+    <label for="l-pass">Contraseña</label>
+    <input type="password" id="l-pass" autocomplete="current-password" required>
+    <button class="main" type="submit">Entrar</button>
+    <div class="aux"><a id="forgot">¿Olvidaste tu contraseña?</a></div>
+  </form>
+
+  <form id="form-register">
+    <label for="r-email">Correo electrónico</label>
+    <input type="email" id="r-email" autocomplete="email" required>
+    <label for="r-pass">Contraseña (mín. 8, letras y números)</label>
+    <input type="password" id="r-pass" autocomplete="new-password" required>
+    <label for="r-pass2">Repite la contraseña</label>
+    <input type="password" id="r-pass2" autocomplete="new-password" required>
+    <button class="main" type="submit">Crear cuenta</button>
+    <div class="aux">Tras registrarte: verifica tu correo y espera la aprobación del administrador.</div>
+  </form>
+
+  <div class="foot">
+    ¿Solo quieres conocer tu nivel? Haz el
+    <a href="book_placement.html">Placement Test</a> — no necesita cuenta.
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var qs = new URLSearchParams(location.search);
+  var msg = document.getElementById("msg");
+  var tabL = document.getElementById("tab-login"), tabR = document.getElementById("tab-register");
+  var formL = document.getElementById("form-login"), formR = document.getElementById("form-register");
+
+  function show(type, text) { msg.className = "msg " + type; msg.textContent = text; }
+  function clearMsg() { msg.className = "msg"; }
+
+  function setTab(which) {
+    var login = which === "login";
+    tabL.classList.toggle("active", login); tabR.classList.toggle("active", !login);
+    formL.classList.toggle("active", login); formR.classList.toggle("active", !login);
+    clearMsg();
+  }
+  tabL.onclick = function () { setTab("login"); };
+  tabR.onclick = function () { setTab("register"); };
+
+  /* destino tras el login: solo rutas relativas dentro del sitio */
+  var next = qs.get("next") || "index.html";
+  if (!/^[A-Za-z0-9_.-]+\.html(\?[\x20-\x7E]*)?$/.test(next) || next.indexOf("//") !== -1) {
+    next = "index.html";
+  }
+
+  if (!window.VesperAuth || !VesperAuth.isConfigured) {
+    show("info", "El control de acceso aún no está activado (el desarrollador debe conectar Firebase). " +
+                 "Por ahora puedes volver al sitio.");
+    return;
+  }
+
+  if (qs.get("verify")) show("info", "Debes verificar tu correo: revisa tu bandeja de entrada (y el spam) y haz clic en el enlace. Después inicia sesión de nuevo.");
+  if (qs.get("pending")) show("info", "Tu cuenta existe pero aún no ha sido aprobada por el administrador. Recibirás acceso cuando te autorice.");
+
+  var ERRORES = {
+    "auth/invalid-credential": "Correo o contraseña incorrectos.",
+    "auth/wrong-password": "Correo o contraseña incorrectos.",
+    "auth/user-not-found": "No existe ninguna cuenta con ese correo.",
+    "auth/email-already-in-use": "Ya existe una cuenta con ese correo. Prueba a iniciar sesión.",
+    "auth/invalid-email": "El correo no es válido.",
+    "auth/weak-password": "La contraseña es demasiado débil.",
+    "auth/too-many-requests": "Demasiados intentos. Espera unos minutos e inténtalo de nuevo.",
+    "auth/network-request-failed": "Sin conexión con el servidor. Comprueba tu internet."
+  };
+  function authError(e) { show("err", ERRORES[e.code] || ("Error: " + (e.message || e.code))); }
+
+  VesperAuth.initFirebase().then(function (auth) {
+
+    formL.addEventListener("submit", function (ev) {
+      ev.preventDefault(); clearMsg();
+      var btn = formL.querySelector("button"); btn.disabled = true;
+      var email = document.getElementById("l-email").value.trim();
+      var pass = document.getElementById("l-pass").value;
+      auth.signInWithEmailAndPassword(email, pass).then(function (cred) {
+        if (!cred.user.emailVerified) {
+          cred.user.sendEmailVerification();
+          show("info", "Tu correo aún no está verificado. Te hemos reenviado el enlace de verificación — revisa tu bandeja (y el spam).");
+          btn.disabled = false;
+          return;
+        }
+        return VesperAuth.isApproved(email).then(function (ok) {
+          if (ok) { location.href = next; }
+          else {
+            show("info", "Sesión correcta, pero tu cuenta aún no ha sido aprobada por el administrador.");
+            btn.disabled = false;
+          }
+        });
+      }).catch(function (e) { authError(e); btn.disabled = false; });
+    });
+
+    formR.addEventListener("submit", function (ev) {
+      ev.preventDefault(); clearMsg();
+      var btn = formR.querySelector("button");
+      var email = document.getElementById("r-email").value.trim();
+      var p1 = document.getElementById("r-pass").value, p2 = document.getElementById("r-pass2").value;
+      if (p1 !== p2) { show("err", "Las contraseñas no coinciden."); return; }
+      if (p1.length < 8 || !/[A-Za-z]/.test(p1) || !/[0-9]/.test(p1)) {
+        show("err", "La contraseña debe tener al menos 8 caracteres e incluir letras y números."); return;
+      }
+      btn.disabled = true;
+      auth.createUserWithEmailAndPassword(email, p1).then(function (cred) {
+        return cred.user.sendEmailVerification().then(function () {
+          show("ok", "Cuenta creada. Te hemos enviado un correo de verificación — haz clic en el enlace. " +
+                     "Cuando el administrador apruebe tu cuenta tendrás acceso al campus.");
+          btn.disabled = false;
+        });
+      }).catch(function (e) { authError(e); btn.disabled = false; });
+    });
+
+    document.getElementById("forgot").onclick = function () {
+      clearMsg();
+      var email = document.getElementById("l-email").value.trim();
+      if (!email) { show("err", "Escribe tu correo en el campo de arriba y vuelve a pulsar."); return; }
+      auth.sendPasswordResetEmail(email)
+        .then(function () { show("ok", "Te hemos enviado un correo para restablecer la contraseña."); })
+        .catch(authError);
+    };
+
+  }).catch(function () {
+    show("err", "No se pudo cargar el servicio de autenticación. Inténtalo más tarde.");
+  });
+})();
+</script>
+</body>
+</html>
