@@ -73,8 +73,10 @@ footer a{color:var(--gold);text-decoration:none;}
       <p>ÁREA DE PROFESORES</p>
     </div>
     <form id="gate-form">
-      <label for="gate-pass">Contraseña de profesor</label>
-      <input type="password" id="gate-pass" autocomplete="off" required autofocus>
+      <label for="gate-email">Correo electrónico</label>
+      <input type="email" id="gate-email" autocomplete="email" required autofocus>
+      <label for="gate-pass" style="margin-top:14px">Contraseña de profesor</label>
+      <input type="password" id="gate-pass" autocomplete="off" required>
       <button type="submit">Entrar</button>
       <div class="gerr" id="gate-err"></div>
     </form>
@@ -207,6 +209,7 @@ footer a{color:var(--gold);text-decoration:none;}
 
   var gate = document.getElementById("gate");
   var form = document.getElementById("gate-form");
+  var emailEl = document.getElementById("gate-email");
   var pass = document.getElementById("gate-pass");
   var err = document.getElementById("gate-err");
   var KEY = "vesper_teacher_ok";
@@ -216,20 +219,24 @@ footer a{color:var(--gold);text-decoration:none;}
     try { sessionStorage.setItem(KEY, "1"); } catch (e) {}
   }
 
-  /* Si ya se desbloqueó en esta sesión, no volver a pedir la contraseña */
+  /* Si ya se desbloqueó en esta sesión, no volver a pedir el acceso */
   try { if (sessionStorage.getItem(KEY) === "1") gate.classList.add("hidden"); } catch (e) {}
 
   form.addEventListener("submit", function (ev) {
     ev.preventDefault();
     err.textContent = "";
+    var email = emailEl.value.trim();
     var value = pass.value;
-    if (!window.VesperAuth || !VesperAuth.verifyTeacher) {
+    if (!window.VesperAuth || !VesperAuth.verifyTeacherLogin) {
       err.textContent = "No se pudo cargar el control de acceso. Recarga la página.";
       return;
     }
-    VesperAuth.verifyTeacher(value).then(function (ok) {
+    if (!email || email.indexOf("@") === -1) {
+      err.textContent = "Escribe un correo válido."; emailEl.focus(); return;
+    }
+    VesperAuth.verifyTeacherLogin(email, value).then(function (ok) {
       if (ok) { unlock(); }
-      else { err.textContent = "Contraseña incorrecta."; pass.select(); }
+      else { err.textContent = "Correo o contraseña incorrectos."; pass.select(); }
     });
   });
 })();

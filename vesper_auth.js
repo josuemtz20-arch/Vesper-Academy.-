@@ -46,6 +46,12 @@
        Genera un hash nuevo en access_admin.html para cambiar la contraseña.
        Contraseña inicial: vesper-profes-2026  (cámbiala). */
     teacherPassHash: "5b68def981b072a1d2787e14b881f79bbd0d40fa5694ac2697de7dfe46950b66",
+    /* Correos autorizados para el portal de profesores (mismo hash que approvedEmailHashes:
+       SHA-256 de "vesper-academy-v1|" + correo en minúsculas). El acceso al portal exige
+       correo de esta lista + la contraseña de profesor. Genera hashes en access_admin.html. */
+    teacherEmailHashes: [
+      "1181f429e6707d5b37cec24a77203cf30374fa337062d3f5d8c0abfe50b99dc9"  /* admin */
+    ],
     loginPage: "login.html"
   };
 
@@ -75,6 +81,18 @@
   function verifyTeacher(password) {
     return teacherHash(password).then(function (h) {
       return h === CONFIG.teacherPassHash;
+    });
+  }
+
+  /* Acceso al portal de profesores: exige correo autorizado + contraseña correcta. */
+  function verifyTeacherLogin(email, password) {
+    return Promise.all([
+      emailHash(email),
+      teacherHash(password)
+    ]).then(function (r) {
+      var emailOk = (CONFIG.teacherEmailHashes || []).indexOf(r[0]) !== -1;
+      var passOk = r[1] === CONFIG.teacherPassHash;
+      return emailOk && passOk;
     });
   }
 
@@ -154,7 +172,8 @@
     emailHash: emailHash,
     isApproved: isApproved,
     teacherHash: teacherHash,
-    verifyTeacher: verifyTeacher
+    verifyTeacher: verifyTeacher,
+    verifyTeacherLogin: verifyTeacherLogin
   };
 
   /* ── Puerta de acceso ── */

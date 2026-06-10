@@ -55,9 +55,11 @@
     <li>Para <b>revocar</b> un acceso, borra su línea de la lista y vuelve a subir.</li>
   </ol>
 
-  <h2>Contraseña del portal de profesores</h2>
-  <p>El <a href="portal_profesores.html">Portal del Profesor</a> pide una contraseña adicional
-     (además del inicio de sesión). Cámbiala generando aquí su código:</p>
+  <h2>Acceso al portal de profesores</h2>
+  <p>El <a href="portal_profesores.html">Portal del Profesor</a> exige <b>correo autorizado + contraseña</b>.
+     Para autorizar a un profesor: genera el código de su <b>correo</b> con la herramienta de arriba y
+     pégalo también en la lista <code>teacherEmailHashes</code> de <code>vesper_auth.js</code>.
+     Para cambiar la <b>contraseña</b> compartida del portal, genera su código aquí:</p>
   <div class="tool">
     <label for="tpass" style="font-size:13px;color:#6b6151">Nueva contraseña de profesor</label>
     <input type="text" id="tpass" placeholder="escribe la contraseña nueva" style="margin-top:6px">
