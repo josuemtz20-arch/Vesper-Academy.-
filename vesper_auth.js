@@ -38,6 +38,7 @@
     /* SHA-256 de ("vesper-academy-v1|" + correo en minúsculas).
        Añade una línea por persona autorizada. */
     approvedEmailHashes: [
+      "1181f429e6707d5b37cec24a77203cf30374fa337062d3f5d8c0abfe50b99dc9"  /* admin */
     ],
     salt: "vesper-academy-v1|",
     loginPage: "login.html"
