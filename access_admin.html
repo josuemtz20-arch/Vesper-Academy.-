@@ -55,24 +55,27 @@
     <li>Para <b>revocar</b> un acceso, borra su línea de la lista y vuelve a subir.</li>
   </ol>
 
-  <h2>Acceso al portal de profesores</h2>
-  <p>El <a href="portal_profesores.html">Portal del Profesor</a> exige <b>correo autorizado + contraseña</b>.
-     Para autorizar a un profesor: genera el código de su <b>correo</b> con la herramienta de arriba y
-     pégalo también en la lista <code>teacherEmailHashes</code> de <code>vesper_auth.js</code>.
-     Para cambiar la <b>contraseña</b> compartida del portal, genera su código aquí:</p>
+  <h2>Añadir / editar maestro en el portal</h2>
+  <p>El <a href="portal_profesores.html">Portal del Profesor</a> exige <b>correo + contraseña individual</b>.
+     Cada maestro tiene su propia contraseña. Genera aquí la línea que debes pegar en el objeto
+     <code>teachers</code> de <code>vesper_auth.js</code>:</p>
   <div class="tool">
-    <label for="tpass" style="font-size:13px;color:#6b6151">Nueva contraseña de profesor</label>
-    <input type="text" id="tpass" placeholder="escribe la contraseña nueva" style="margin-top:6px">
-    <button id="tgo">Generar código de contraseña</button>
+    <label for="temail" style="font-size:13px;color:#6b6151">Correo del maestro</label>
+    <input type="email" id="temail" placeholder="maestro@ejemplo.com" style="margin-top:6px">
+    <label for="tpass" style="font-size:13px;color:#6b6151;display:block;margin-top:12px">Contraseña del maestro</label>
+    <input type="text" id="tpass" placeholder="contraseña individual" style="margin-top:6px">
+    <button id="tgo">Generar línea para vesper_auth.js</button>
     <div class="out" id="tout">
       <div class="hash" id="thash"></div>
       <button id="tcopy" style="background:#2e7d4f">Copiar</button><span class="copied" id="tcopied">¡Copiado!</span>
     </div>
   </div>
   <ol>
-    <li>Escribe la contraseña nueva y genera su código (arriba).</li>
-    <li>Abre <code>vesper_auth.js</code> y reemplaza el valor de <code>teacherPassHash</code> por el código generado.</li>
-    <li>Sube el cambio (<code>git push</code>). La contraseña anterior dejará de funcionar.</li>
+    <li>Escribe el correo y la contraseña del maestro y genera la línea.</li>
+    <li>Abre <code>vesper_auth.js</code> y pega la línea dentro del objeto <code>teachers</code>.</li>
+    <li>Sube el cambio (<code>git push</code>). El maestro ya podrá entrar con ese correo y contraseña.</li>
+    <li>Para <b>cambiar la contraseña</b> de un maestro: genera una línea nueva con su correo y la nueva contraseña, y reemplaza la línea antigua.</li>
+    <li>Para <b>revocar</b> a un maestro: borra su línea del objeto <code>teachers</code> y sube el cambio.</li>
   </ol>
 
   <div class="note">
@@ -102,10 +105,15 @@
 
   var tout = document.getElementById("tout"), thashEl = document.getElementById("thash");
   document.getElementById("tgo").onclick = function () {
+    var email = document.getElementById("temail").value.trim();
     var pw = document.getElementById("tpass").value;
+    if (!email || email.indexOf("@") === -1) { alert("Escribe un correo válido."); return; }
     if (!pw) { alert("Escribe una contraseña."); return; }
-    VesperAuth.teacherHash(pw).then(function (h) {
-      thashEl.textContent = '"' + h + '",';
+    Promise.all([
+      VesperAuth.emailHash(email),
+      VesperAuth.teacherHash(pw)
+    ]).then(function (r) {
+      thashEl.textContent = '"' + r[0] + '": "' + r[1] + '"  /* ' + email + ' */';
       tout.classList.add("show");
       document.getElementById("tcopied").style.display = "none";
     });

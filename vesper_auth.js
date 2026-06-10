@@ -41,17 +41,14 @@
       "1181f429e6707d5b37cec24a77203cf30374fa337062d3f5d8c0abfe50b99dc9"  /* admin */
     ],
     salt: "vesper-academy-v1|",
-    /* SHA-256 de ("vesper-academy-v1|teacher|" + contraseña).
-       Capa extra para el portal de profesores (portal_profesores.html).
-       Genera un hash nuevo en access_admin.html para cambiar la contraseña.
-       Contraseña inicial: vesper-profes-2026  (cámbiala). */
-    teacherPassHash: "5b68def981b072a1d2787e14b881f79bbd0d40fa5694ac2697de7dfe46950b66",
-    /* Correos autorizados para el portal de profesores (mismo hash que approvedEmailHashes:
-       SHA-256 de "vesper-academy-v1|" + correo en minúsculas). El acceso al portal exige
-       correo de esta lista + la contraseña de profesor. Genera hashes en access_admin.html. */
-    teacherEmailHashes: [
-      "1181f429e6707d5b37cec24a77203cf30374fa337062d3f5d8c0abfe50b99dc9"  /* josuemtz20@gmail.com (admin) */
-    ],
+    /* Mapa de accesos al portal de profesores: contraseña INDIVIDUAL por maestro.
+       Clave  = SHA-256("vesper-academy-v1|" + correo en minúsculas).
+       Valor  = SHA-256("vesper-academy-v1|teacher|" + contraseña del maestro).
+       Genera ambos hashes en access_admin.html → "Añadir / editar maestro".
+       Para revocar a un maestro: borra su línea. */
+    teachers: {
+      "1181f429e6707d5b37cec24a77203cf30374fa337062d3f5d8c0abfe50b99dc9": "2c4227a42e5c7f6131a34e68e31cd6f9b78b2140ad789c7485e5d1ff76145ab1"  /* admin */
+    },
     loginPage: "login.html"
   };
 
@@ -78,21 +75,14 @@
     return sha256Hex(CONFIG.salt + "teacher|" + String(password));
   }
 
-  function verifyTeacher(password) {
-    return teacherHash(password).then(function (h) {
-      return h === CONFIG.teacherPassHash;
-    });
-  }
-
-  /* Acceso al portal de profesores: exige correo autorizado + contraseña correcta. */
+  /* Acceso al portal de profesores: correo + contraseña individual. */
   function verifyTeacherLogin(email, password) {
     return Promise.all([
       emailHash(email),
       teacherHash(password)
     ]).then(function (r) {
-      var emailOk = (CONFIG.teacherEmailHashes || []).indexOf(r[0]) !== -1;
-      var passOk = r[1] === CONFIG.teacherPassHash;
-      return emailOk && passOk;
+      var stored = CONFIG.teachers[r[0]];
+      return !!stored && stored === r[1];
     });
   }
 
@@ -172,7 +162,6 @@
     emailHash: emailHash,
     isApproved: isApproved,
     teacherHash: teacherHash,
-    verifyTeacher: verifyTeacher,
     verifyTeacherLogin: verifyTeacherLogin
   };
 
