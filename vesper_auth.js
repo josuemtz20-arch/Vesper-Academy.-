@@ -41,6 +41,11 @@
       "1181f429e6707d5b37cec24a77203cf30374fa337062d3f5d8c0abfe50b99dc9"  /* admin */
     ],
     salt: "vesper-academy-v1|",
+    /* SHA-256 de ("vesper-academy-v1|teacher|" + contraseña).
+       Capa extra para el portal de profesores (portal_profesores.html).
+       Genera un hash nuevo en access_admin.html para cambiar la contraseña.
+       Contraseña inicial: vesper-profes-2026  (cámbiala). */
+    teacherPassHash: "5b68def981b072a1d2787e14b881f79bbd0d40fa5694ac2697de7dfe46950b66",
     loginPage: "login.html"
   };
 
@@ -61,6 +66,16 @@
 
   function emailHash(email) {
     return sha256Hex(CONFIG.salt + String(email).trim().toLowerCase());
+  }
+
+  function teacherHash(password) {
+    return sha256Hex(CONFIG.salt + "teacher|" + String(password));
+  }
+
+  function verifyTeacher(password) {
+    return teacherHash(password).then(function (h) {
+      return h === CONFIG.teacherPassHash;
+    });
   }
 
   function loadScript(src) {
@@ -137,7 +152,9 @@
     isConfigured: isConfigured,
     initFirebase: initFirebase,
     emailHash: emailHash,
-    isApproved: isApproved
+    isApproved: isApproved,
+    teacherHash: teacherHash,
+    verifyTeacher: verifyTeacher
   };
 
   /* ── Puerta de acceso ── */

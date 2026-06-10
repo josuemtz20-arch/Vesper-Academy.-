@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<script src="vesper_auth.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portal del Profesor | Vesper Academy</title>
+<meta name="description" content="Índice de manuales del profesor de Vesper Academy. Acceso restringido.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="assets/images/vesper_logo.png" type="image/png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@700&display=swap');
+*,*::before,*::after{box-sizing:border-box;}
+:root{--navy:#1a2b42;--navy2:#243654;--gold:#c5a059;--gold2:#a8843d;--cream:#f5f2eb;--border:#e4e0d8;--muted:#6b7a8d;--err:#b03a3a;}
+body{margin:0;font-family:'Inter',sans-serif;background:var(--cream);color:var(--navy);}
+header{background:var(--navy);border-bottom:3px solid var(--gold);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:14px;position:sticky;top:0;z-index:50;}
+.brand{display:flex;align-items:center;gap:12px;color:#fff;text-decoration:none;}
+.brand img{height:42px;width:42px;object-fit:contain;}
+.brand b{font-family:'Playfair Display',serif;font-size:1.1rem;}
+.brand small{display:block;color:var(--gold);font-size:.6rem;letter-spacing:2px;text-transform:uppercase;}
+header .right{display:flex;align-items:center;gap:18px;}
+header a.back{color:rgba(255,255,255,.75);font-size:.78rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;text-decoration:none;}
+header a.back:hover{color:var(--gold);}
+.wrap{max-width:1100px;margin:0 auto;padding:36px 20px 70px;}
+.intro h1{font-family:'Playfair Display',serif;font-size:1.9rem;margin:0 0 8px;}
+.intro p{color:var(--muted);max-width:680px;margin:0 0 6px;}
+.warn{background:#fbf3df;border:1px solid #e7d8a8;border-left:4px solid var(--gold2);border-radius:8px;padding:12px 16px;margin:18px 0 4px;font-size:.86rem;color:#5a4d2e;line-height:1.5;}
+.warn i{color:var(--gold2);margin-right:6px;}
+h2.sec{display:flex;align-items:center;gap:10px;font-size:.78rem;font-weight:700;letter-spacing:1.8px;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--border);padding-bottom:10px;margin:42px 0 18px;}
+h2.sec i{color:var(--gold2);}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(248px,1fr));gap:16px;}
+.card{background:#fff;border:1px solid var(--border);border-top:3px solid var(--gold2);border-radius:10px;padding:18px 18px 14px;display:flex;flex-direction:column;gap:6px;box-shadow:0 1px 4px rgba(0,0,0,.06);}
+.card .lvl{align-self:flex-start;font-size:.64rem;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--gold2);background:var(--cream);padding:4px 10px;border-radius:20px;}
+.card h3{margin:2px 0 0;font-size:.98rem;line-height:1.3;}
+.card p{margin:0;color:var(--muted);font-size:.8rem;line-height:1.5;flex:1;}
+.card .links{margin-top:10px;border-top:1px solid var(--border);padding-top:10px;display:flex;flex-direction:column;gap:8px;}
+.card a.go{font-size:.78rem;font-weight:600;letter-spacing:.4px;text-decoration:none;display:flex;align-items:center;gap:6px;}
+.card a.primary{color:var(--navy);}
+.card a.primary:hover{color:var(--gold2);}
+.card a.primary i{color:var(--gold2);}
+.card a.alt{color:var(--muted);font-weight:500;font-size:.74rem;}
+.card a.alt:hover{color:var(--navy);}
+.tools .card{border-top-color:var(--navy2);}
+footer{background:var(--navy);color:rgba(255,255,255,.5);text-align:center;padding:24px;font-size:.78rem;border-top:3px solid var(--gold);}
+footer a{color:var(--gold);text-decoration:none;}
+
+/* ── Puerta de contraseña (segunda capa, sobre el candado de Firebase) ── */
+#gate{position:fixed;inset:0;z-index:9999;background:var(--navy);background-image:radial-gradient(ellipse at 30% 20%,#243654 0%,#10243e 70%);display:flex;align-items:center;justify-content:center;padding:20px;}
+#gate.hidden{display:none;}
+.gate-card{background:var(--cream);width:100%;max-width:400px;border-radius:14px;box-shadow:0 18px 50px rgba(0,0,0,.45);overflow:hidden;font-family:Arial,sans-serif;}
+.gate-card .gh{background:var(--navy);color:var(--cream);padding:26px 30px 20px;text-align:center;border-bottom:4px solid var(--gold);}
+.gate-card .gh h2{font-family:Georgia,serif;font-size:21px;letter-spacing:1.5px;font-weight:normal;margin:0;}
+.gate-card .gh h2 b{color:#e3c35f;}
+.gate-card .gh p{font-size:11.5px;opacity:.8;margin-top:6px;letter-spacing:1px;}
+.gate-card form{padding:24px 30px 28px;}
+.gate-card label{display:block;font-size:12px;letter-spacing:1px;color:#6b6151;margin:0 0 6px;text-transform:uppercase;}
+.gate-card input{width:100%;padding:11px 12px;font-size:15px;border:1px solid #d4c9ae;border-radius:7px;background:#fff;}
+.gate-card input:focus{outline:2px solid #e3c35f;border-color:var(--gold);}
+.gate-card button{width:100%;margin-top:18px;padding:13px;font-size:15px;letter-spacing:1px;background:var(--navy);color:var(--cream);border:none;border-radius:7px;cursor:pointer;}
+.gate-card button:hover{background:var(--navy2);}
+.gate-card .gerr{color:var(--err);font-size:13px;margin-top:12px;min-height:18px;}
+.gate-card .gnote{font-size:11.5px;color:#8d8270;text-align:center;padding:0 30px 22px;line-height:1.6;}
+</style>
+</head>
+<body>
+
+<!-- Puerta de contraseña de profesor -->
+<div id="gate">
+  <div class="gate-card">
+    <div class="gh">
+      <h2>VESPER <b>ACADEMY</b></h2>
+      <p>ÁREA DE PROFESORES</p>
+    </div>
+    <form id="gate-form">
+      <label for="gate-pass">Contraseña de profesor</label>
+      <input type="password" id="gate-pass" autocomplete="off" required autofocus>
+      <button type="submit">Entrar</button>
+      <div class="gerr" id="gate-err"></div>
+    </form>
+    <div class="gnote">Acceso restringido al profesorado de Vesper Academy.</div>
+  </div>
+</div>
+
+<header>
+  <a class="brand" href="index.html">
+    <img src="assets/images/vesper_logo_inverted.png" alt="Vesper Academy">
+    <span><b>Vesper Academy</b><small>Portal del Profesor</small></span>
+  </a>
+  <div class="right">
+    <a class="back" href="materiales.html"><i class="fas fa-user-graduate"></i> Portal alumno</a>
+    <a class="back" href="index.html"><i class="fas fa-arrow-left"></i> Sitio principal</a>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="intro">
+    <h1>Manuales del profesor</h1>
+    <p>Índice de los manuales principales (versión del profesor con notas, soluciones y guías) y su versión del alumno correspondiente. Organizados por curso, igual que el portal del alumno.</p>
+  </div>
+
+  <div class="warn">
+    <i class="fas fa-lock"></i><b>Privado:</b> los manuales del profesor no se publican en el sitio público.
+    Los enlaces "Manual del profesor" solo abren cuando ejecutas tu copia local completa del sitio;
+    en el sitio publicado únicamente funcionan los enlaces de la versión del alumno.
+  </div>
+
+  <h2 class="sec"><i class="fas fa-compass"></i> Herramientas</h2>
+  <div class="grid tools">
+    <div class="card">
+      <span class="lvl">Gratis · 10 min</span>
+      <h3>Prueba de ubicación</h3>
+      <p>Test de nivel (A0–B2+) con retroalimentación inmediata.</p>
+      <div class="links"><a class="go primary" href="book_placement.html">Abrir <i class="fas fa-arrow-right"></i></a></div>
+    </div>
+    <div class="card">
+      <span class="lvl">Todos los niveles</span>
+      <h3>Biblioteca de audio</h3>
+      <p>Diálogos y lecturas con voz nativa, transcripción y vocabulario.</p>
+      <div class="links"><a class="go primary" href="audio_library.html">Abrir <i class="fas fa-arrow-right"></i></a></div>
+    </div>
+    <div class="card">
+      <span class="lvl">Admin</span>
+      <h3>Administrar accesos</h3>
+      <p>Autoriza cuentas y cambia la contraseña de profesor.</p>
+      <div class="links"><a class="go primary" href="access_admin.html">Abrir <i class="fas fa-arrow-right"></i></a></div>
+    </div>
+  </div>
+
+  <h2 class="sec"><i class="fas fa-cubes"></i> Core Basics — Fundamentos</h2>
+  <div class="grid">
+    <div class="card"><span class="lvl">A0</span><h3>Core Basics · Nivel 1</h3><p>To Be or Not To Be. Identidad, presentaciones y lo esencial.</p>
+      <div class="links"><a class="go primary" href="book_core_basics_lvl1_teacher.html"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="book_core_basics_lvl1_student.html">Versión del alumno</a></div></div>
+    <div class="card"><span class="lvl">A1</span><h3>Core Basics · Nivel 2</h3><p>Do I Know? Rutinas, preguntas y presente simple.</p>
+      <div class="links"><a class="go primary" href="book_core_basics_lvl2_teacher.html"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="book_core_basics_lvl2_student.html">Versión del alumno</a></div></div>
+    <div class="card"><span class="lvl">A2</span><h3>Core Basics · Nivel 3</h3><p>Have I Been? Pasado, experiencias e historias.</p>
+      <div class="links"><a class="go primary" href="book_core_basics_lvl3_teacher.html"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="book_core_basics_lvl3_student.html">Versión del alumno</a></div></div>
+    <div class="card"><span class="lvl">A2+</span><h3>Core Basics · Nivel 4</h3><p>Let's Write. Primeros textos y redacción guiada.</p>
+      <div class="links"><a class="go primary" href="book_core_basics_lvl4_teacher.html"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="book_core_basics_lvl4_student.html">Versión del alumno</a></div></div>
+  </div>
+
+  <h2 class="sec"><i class="fas fa-tools"></i> Core Practice — Talleres</h2>
+  <div class="grid">
+    <div class="card"><span class="lvl">A1–A2</span><h3>Practice · Nivel 1</h3><p>Listening y speaking con audio nativo en cada lección.</p>
+      <div class="links"><a class="go primary" href="book_core_practice_lvl1_teacher.html"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="book_core_practice_lvl1_student.html">Versión del alumno</a></div></div>
+    <div class="card"><span class="lvl">B1</span><h3>Practice · Nivel 2</h3><p>Lectura y escritura: leyendas, mitos y misterios.</p>
+      <div class="links"><a class="go primary" href="book_core_practice_lvl2_teacher.html"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="book_core_practice_lvl2_student.html">Versión del alumno</a></div></div>
+    <div class="card"><span class="lvl">B1–B2</span><h3>Practice · Nivel 3</h3><p>Las 4 destrezas: debate y descubrimiento.</p>
+      <div class="links"><a class="go primary" href="book_core_practice_lvl3_teacher.html"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="book_core_practice_lvl3_student.html">Versión del alumno</a></div></div>
+    <div class="card"><span class="lvl">A2–B1</span><h3>Practice · Nivel 4</h3><p>Arte y literatura: talleres orales.</p>
+      <div class="links"><a class="go primary" href="book_core_practice_lvl4_teacher.html"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="book_core_practice_lvl4_student.html">Versión del alumno</a></div></div>
+    <div class="card"><span class="lvl">B2–C1</span><h3>Practice · Nivel 5</h3><p>Futuro y tecnología: lectura y escritura.</p>
+      <div class="links"><a class="go primary" href="book_core_practice_lvl5_teacher.html"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="book_core_practice_lvl5_student.html">Versión del alumno</a></div></div>
+    <div class="card"><span class="lvl">C2</span><h3>Practice · Nivel 6</h3><p>Cultura pop y sociedad: dominio de las 4 destrezas.</p>
+      <div class="links"><a class="go primary" href="book_core_practice_lvl6_teacher.html"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="book_core_practice_lvl6_student.html">Versión del alumno</a></div></div>
+  </div>
+
+  <h2 class="sec"><i class="fas fa-book"></i> Core Grammar — Gramática</h2>
+  <div class="grid">
+    <div class="card"><span class="lvl">B1</span><h3>Grammar Foundations</h3><p>Drills fundamentales para consolidar la base.</p>
+      <div class="links"><a class="go primary" href="book_core_grammar_lvl1_teacher.html"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="book_core_grammar_lvl1_student.html">Versión del alumno</a></div></div>
+    <div class="card"><span class="lvl">B2</span><h3>Grammar in Context</h3><p>Estructuras complejas aplicadas en contexto.</p>
+      <div class="links"><a class="go primary" href="book_core_grammar_lvl2_teacher.html"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="book_core_grammar_lvl2_student.html">Versión del alumno</a></div></div>
+    <div class="card"><span class="lvl">C1+</span><h3>Grammar Mastery</h3><p>Estilo, matices y excepciones del inglés avanzado.</p>
+      <div class="links"><a class="go primary" href="book_core_grammar_lvl3_teacher.html"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="book_core_grammar_lvl3_student.html">Versión del alumno</a></div></div>
+  </div>
+
+  <h2 class="sec"><i class="fas fa-coffee"></i> Daily Life — Inglés cotidiano</h2>
+  <div class="grid">
+    <div class="card"><span class="lvl">A0</span><h3>Daily Life · Vol. 0</h3><p>Fundamentos de supervivencia para principiante absoluto.</p>
+      <div class="links"><a class="go primary" href="book_daily_life_vol0_teacher.html"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="book_daily_life_vol0_student.html">Versión del alumno</a></div></div>
+    <div class="card"><span class="lvl">A1–A2</span><h3>Daily Life · Vol. 1</h3><p>Compras, viajes y salud en el mundo real.</p>
+      <div class="links"><a class="go primary" href="book_daily_life_vol1_teacher.html"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="book_daily_life_vol1_student.html">Versión del alumno</a></div></div>
+    <div class="card"><span class="lvl">B1–B2</span><h3>Daily Life · Vol. 2</h3><p>Cultura, relaciones y psicología.</p>
+      <div class="links"><a class="go primary" href="book_daily_life_vol2_teacher.html"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="book_daily_life_vol2_student.html">Versión del alumno</a></div></div>
+  </div>
+
+  <h2 class="sec"><i class="fas fa-briefcase"></i> Cursos especializados</h2>
+  <div class="grid">
+    <div class="card"><span class="lvl">Aviación</span><h3>Aviation English</h3><p>Inglés para tripulación de cabina: seguridad, servicio y protocolo.</p>
+      <div class="links"><a class="go primary" href="book_cabin_crew_teacher.html"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="book_cabin_crew_student.html">Versión del alumno</a></div></div>
+    <div class="card"><span class="lvl">B2–C1</span><h3>Political English</h3><p>Diplomacia, asuntos globales y discurso público.</p>
+      <div class="links"><a class="go primary" href="book_political_english_teacher.html"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="book_political_english_student.html">Versión del alumno</a></div></div>
+    <div class="card"><span class="lvl">Intensivo</span><h3>Curso Intensivo (CCI 1)</h3><p>Bootcamp de fluidez rápida — primer mes.</p>
+      <div class="links"><a class="go primary" href="book_cci1_teacher.html"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="book_cci1_student.html">Versión del alumno</a></div></div>
+  </div>
+
+  <h2 class="sec"><i class="fas fa-graduation-cap"></i> Preparación de exámenes</h2>
+  <div class="grid">
+    <div class="card"><span class="lvl">B2–C1</span><h3>Exam Prep · Vol. 1</h3><p>Sintaxis avanzada y estrategia de examen.</p>
+      <div class="links"><a class="go primary" href="book_exam_prep_teacher.html"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="book_exam_prep_student.html">Versión del alumno</a></div></div>
+    <div class="card"><span class="lvl">B2–C1</span><h3>Exam Prep · Vol. 2</h3><p>Vocabulario temático y práctica aplicada.</p>
+      <div class="links"><a class="go primary" href="book_exam_prep_teacher_vol2.html"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="book_exam_prep_student_vol2.html">Versión del alumno</a></div></div>
+    <div class="card"><span class="lvl">B2–C2</span><h3>Diagnóstico Avanzado</h3><p>Evaluación integral — se realiza con tu profesor.</p>
+      <div class="links"><a class="go primary" href="book_diagnostic_advanced_teacher.html"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="book_diagnostic_advanced_student.html">Versión del alumno</a></div></div>
+  </div>
+</div>
+
+<footer>
+  © <span id="y"></span> Vesper Academy · <a href="index.html">vesper.academy</a> · Área de profesores
+</footer>
+
+<script>
+(function () {
+  "use strict";
+  document.getElementById("y").textContent = new Date().getFullYear();
+
+  var gate = document.getElementById("gate");
+  var form = document.getElementById("gate-form");
+  var pass = document.getElementById("gate-pass");
+  var err = document.getElementById("gate-err");
+  var KEY = "vesper_teacher_ok";
+
+  function unlock() {
+    gate.classList.add("hidden");
+    try { sessionStorage.setItem(KEY, "1"); } catch (e) {}
+  }
+
+  /* Si ya se desbloqueó en esta sesión, no volver a pedir la contraseña */
+  try { if (sessionStorage.getItem(KEY) === "1") gate.classList.add("hidden"); } catch (e) {}
+
+  form.addEventListener("submit", function (ev) {
+    ev.preventDefault();
+    err.textContent = "";
+    var value = pass.value;
+    if (!window.VesperAuth || !VesperAuth.verifyTeacher) {
+      err.textContent = "No se pudo cargar el control de acceso. Recarga la página.";
+      return;
+    }
+    VesperAuth.verifyTeacher(value).then(function (ok) {
+      if (ok) { unlock(); }
+      else { err.textContent = "Contraseña incorrecta."; pass.select(); }
+    });
+  });
+})();
+</script>
+</body>
+</html>

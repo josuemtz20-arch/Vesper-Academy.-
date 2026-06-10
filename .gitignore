@@ -25,6 +25,11 @@
 !/audio_library.html
 !/lesson.html
 
+# teacher portal (index ONLY — password-gated).
+# The teacher manuals it links to (book_*_teacher.html) are NOT whitelisted,
+# so they stay local-only and are never published.
+!/portal_profesores.html
+
 # lesson data consumed by the public pages
 !/vesper_audio_data.js
 !/vesper_reading_data.js

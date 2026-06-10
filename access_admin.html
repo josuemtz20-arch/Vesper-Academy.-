@@ -55,6 +55,24 @@
     <li>Para <b>revocar</b> un acceso, borra su línea de la lista y vuelve a subir.</li>
   </ol>
 
+  <h2>Contraseña del portal de profesores</h2>
+  <p>El <a href="portal_profesores.html">Portal del Profesor</a> pide una contraseña adicional
+     (además del inicio de sesión). Cámbiala generando aquí su código:</p>
+  <div class="tool">
+    <label for="tpass" style="font-size:13px;color:#6b6151">Nueva contraseña de profesor</label>
+    <input type="text" id="tpass" placeholder="escribe la contraseña nueva" style="margin-top:6px">
+    <button id="tgo">Generar código de contraseña</button>
+    <div class="out" id="tout">
+      <div class="hash" id="thash"></div>
+      <button id="tcopy" style="background:#2e7d4f">Copiar</button><span class="copied" id="tcopied">¡Copiado!</span>
+    </div>
+  </div>
+  <ol>
+    <li>Escribe la contraseña nueva y genera su código (arriba).</li>
+    <li>Abre <code>vesper_auth.js</code> y reemplaza el valor de <code>teacherPassHash</code> por el código generado.</li>
+    <li>Sube el cambio (<code>git push</code>). La contraseña anterior dejará de funcionar.</li>
+  </ol>
+
   <div class="note">
     <b>Privacidad:</b> en el sitio solo se publica el código (hash SHA-256), nunca el correo.
     Nadie puede deducir el correo a partir del código.
@@ -77,6 +95,22 @@
   document.getElementById("copy").onclick = function () {
     navigator.clipboard.writeText(hashEl.textContent).then(function () {
       document.getElementById("copied").style.display = "inline";
+    });
+  };
+
+  var tout = document.getElementById("tout"), thashEl = document.getElementById("thash");
+  document.getElementById("tgo").onclick = function () {
+    var pw = document.getElementById("tpass").value;
+    if (!pw) { alert("Escribe una contraseña."); return; }
+    VesperAuth.teacherHash(pw).then(function (h) {
+      thashEl.textContent = '"' + h + '",';
+      tout.classList.add("show");
+      document.getElementById("tcopied").style.display = "none";
+    });
+  };
+  document.getElementById("tcopy").onclick = function () {
+    navigator.clipboard.writeText(thashEl.textContent).then(function () {
+      document.getElementById("tcopied").style.display = "inline";
     });
   };
 })();
