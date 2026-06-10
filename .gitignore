@@ -12,27 +12,25 @@
 !/.nojekyll
 
 # public site + auth gate (must stay at root)
+# (vesper_web/landing/promo stay local: index.html is the one canonical landing)
 !/index.html
 !/login.html
 !/access_admin.html
 !/vesper_auth.js
-!/vesper_web.html
-!/vesper_landing.html
-!/vesper_promo.html
 
 # student portal + tools
+# (exam.html + vesper_exam_data.js stay local: the data file carries answer keys)
 !/materiales.html
 !/book_placement.html
 !/audio_library.html
 !/lesson.html
-!/exam.html
 
-# lesson/exam data consumed by the public pages
+# lesson data consumed by the public pages
 !/vesper_audio_data.js
 !/vesper_reading_data.js
+!/vesper_basics_audio_data.js
 !/vesper_basics_lesson_data.js
 !/vesper_custom_transcripts.js
-!/vesper_exam_data.js
 
 # student books (teacher manuals are NOT whitelisted)
 !/book_*_student.html

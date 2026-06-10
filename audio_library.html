@@ -216,6 +216,10 @@
             { title:"Storm News Report (Practice Lab 2)",      lesson:"Listening Drill 3", file:"cert_prep_listening_3.mp3", icon:"fa-cloud-bolt" }
         ];
 
+        // exam.html is teacher-local (it carries answer keys); hide the exam button where it isn't deployed
+        let EXAM_AVAILABLE = true;
+        fetch("exam.html", { method: "HEAD" }).then(r => { EXAM_AVAILABLE = r.ok; }).catch(() => { EXAM_AVAILABLE = false; });
+
         const levelGrid = document.getElementById("level-grid");
         const lessonGrid = document.getElementById("lesson-grid");
         const viewLevels = document.getElementById("view-levels");
@@ -327,7 +331,8 @@
             lessonsTitle.textContent = `Level ${n} — ${lv.tag}`;
             setCrumbsLevel(`Level ${n} · ${lv.tag}`);
             const eb = document.getElementById("exam-btn");
-            eb.href = `exam.html?level=${n}`; eb.classList.remove("hidden");
+            eb.href = `exam.html?level=${n}`;
+            eb.classList.toggle("hidden", !EXAM_AVAILABLE);
             lessonGrid.innerHTML = "";
             lv.lessons.forEach((les, i) => {
                 const a = document.createElement("a");
