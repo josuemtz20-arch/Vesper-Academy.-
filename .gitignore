@@ -32,6 +32,11 @@
 !/portal_profesores.html
 !/manual.html
 
+# Vesper Engine v2.0 — personalized course prompt builder (teacher-gated).
+# The syllabus data comes from the already-public student books.
+!/vesper_engine.html
+!/vesper_engine_data.js
+
 # lesson data consumed by the public pages
 !/vesper_audio_data.js
 !/vesper_reading_data.js

@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<script src="vesper_auth.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vesper Engine v2.0 — Curso Personalizado | Vesper Academy</title>
+<meta name="description" content="Personalized Course Engine v2.0: genera el prompt maestro del tutor Vesper anclado al syllabus oficial de los manuales. Acceso restringido.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="assets/images/vesper_logo.png" type="image/png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inria+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@300;400;500;600;700&display=swap');
+*,*::before,*::after{box-sizing:border-box;}
+:root{--navy:#141c2a;--navy2:#243654;--gold:#c5a059;--gold2:#a8843d;--cream:#f5f2eb;--border:#e4e0d8;--muted:#6b7a8d;--err:#b03a3a;--ok:#2d7a4f;}
+body{margin:0;font-family:'Inter',sans-serif;background:var(--cream);color:var(--navy);}
+header{background:var(--navy);border-bottom:3px solid var(--gold);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:14px;position:sticky;top:0;z-index:50;}
+.brand{display:flex;align-items:center;gap:12px;color:#fff;text-decoration:none;}
+.brand img{height:42px;width:42px;object-fit:contain;}
+.brand b{font-family:'Inria Serif',serif;font-size:1.1rem;}
+.brand small{display:block;color:var(--gold);font-size:.6rem;letter-spacing:2px;text-transform:uppercase;}
+header .right{display:flex;align-items:center;gap:18px;}
+header a.back{color:rgba(255,255,255,.75);font-size:.78rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;text-decoration:none;}
+header a.back:hover{color:var(--gold);}
+.wrap{max-width:1100px;margin:0 auto;padding:36px 20px 70px;}
+.intro h1{font-family:'Inria Serif',serif;font-size:1.9rem;margin:0 0 8px;}
+.intro h1 .v{color:var(--gold2);font-size:1.1rem;vertical-align:super;}
+.intro p{color:var(--muted);max-width:740px;margin:0 0 6px;line-height:1.6;}
+.warn{background:#fbf3df;border:1px solid #e7d8a8;border-left:4px solid var(--gold2);border-radius:8px;padding:12px 16px;margin:18px 0 4px;font-size:.86rem;color:#5a4d2e;line-height:1.5;}
+.warn i{color:var(--gold2);margin-right:6px;}
+
+h2.sec{display:flex;align-items:center;gap:10px;font-size:.82rem;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:var(--navy);border-bottom:2px solid var(--gold2);padding-bottom:10px;margin:40px 0 18px;}
+h2.sec i{color:var(--gold2);}
+
+/* Pasos de uso */
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;}
+.step{background:#fff;border:1px solid var(--border);border-top:4px solid var(--gold2);border-radius:10px;padding:18px;box-shadow:0 1px 4px rgba(0,0,0,.06);}
+.step .n{display:inline-flex;align-items:center;justify-content:center;width:30px;height:30px;border-radius:50%;background:var(--navy);color:var(--gold);font-family:'Inria Serif',serif;font-weight:700;margin-bottom:10px;}
+.step h3{margin:0 0 6px;font-size:.95rem;}
+.step p{margin:0;color:var(--muted);font-size:.8rem;line-height:1.55;}
+
+/* Panel de configuración */
+.panel{background:#fff;border:1px solid var(--border);border-radius:12px;padding:22px 24px;box-shadow:0 1px 4px rgba(0,0,0,.06);}
+.panel + .panel{margin-top:16px;}
+.panel h3{margin:0 0 4px;font-size:1rem;font-family:'Inria Serif',serif;}
+.panel p.hint{margin:0 0 14px;color:var(--muted);font-size:.8rem;line-height:1.5;}
+.trackbox{margin:12px 0 0;}
+.trackbox .tname{font-size:.74rem;font-weight:800;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin:0 0 8px;}
+.bookchecks{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:6px 18px;}
+.bookchecks label{display:flex;align-items:center;gap:9px;font-size:.84rem;cursor:pointer;padding:4px 2px;border-radius:6px;}
+.bookchecks label:hover{background:var(--cream);}
+.bookchecks input{accent-color:var(--gold2);width:15px;height:15px;}
+.bookchecks .cefr{font-size:.64rem;font-weight:800;letter-spacing:.5px;color:var(--gold2);background:#f7efdd;border:1px solid #ecdcb4;border-radius:14px;padding:2px 8px;white-space:nowrap;}
+.selbtns{margin-top:14px;display:flex;gap:10px;flex-wrap:wrap;}
+.selbtns button{background:none;border:1px solid var(--border);border-radius:18px;padding:5px 14px;font-size:.74rem;font-weight:600;color:var(--muted);cursor:pointer;font-family:'Inter',sans-serif;}
+.selbtns button:hover{border-color:var(--gold2);color:var(--gold2);}
+
+.fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;}
+.fields label{display:block;font-size:.72rem;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);margin-bottom:5px;}
+.fields input{width:100%;padding:10px 12px;font-size:.9rem;border:1px solid var(--border);border-radius:7px;background:#fdfcf9;font-family:'Inter',sans-serif;}
+.fields input:focus{outline:2px solid #e3c35f;border-color:var(--gold);}
+
+/* Salida del prompt */
+.outbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:18px 0 12px;}
+.outbar .stat{font-size:.78rem;color:var(--muted);}
+.outbar .stat b{color:var(--navy);}
+.btn{display:inline-flex;align-items:center;gap:8px;border:none;border-radius:8px;padding:12px 22px;font-size:.86rem;font-weight:700;letter-spacing:.4px;cursor:pointer;font-family:'Inter',sans-serif;transition:opacity .15s;}
+.btn.primary{background:var(--navy);color:var(--gold);}
+.btn.primary:hover{background:var(--navy2);}
+.btn.ghost{background:#fff;border:1px solid var(--border);color:var(--navy);}
+.btn.ghost:hover{border-color:var(--gold2);color:var(--gold2);}
+.btn.copied{background:var(--ok);color:#fff;}
+#preview{width:100%;height:420px;border:1px solid var(--border);border-radius:10px;background:#fdfcf9;color:#2a3344;font:12.5px/1.6 'SFMono-Regular',Consolas,'Liberation Mono',Menlo,monospace;padding:18px;resize:vertical;white-space:pre;overflow:auto;}
+#preview:focus{outline:2px solid #e3c35f;}
+
+/* Explorador del syllabus */
+details.book{background:#fff;border:1px solid var(--border);border-radius:10px;margin-bottom:10px;overflow:hidden;}
+details.book summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:12px;padding:14px 18px;font-weight:600;font-size:.92rem;}
+details.book summary::-webkit-details-marker{display:none;}
+details.book summary .cefr{font-size:.64rem;font-weight:800;letter-spacing:.5px;color:var(--gold2);background:#f7efdd;border:1px solid #ecdcb4;border-radius:14px;padding:3px 10px;white-space:nowrap;}
+details.book summary .d{color:var(--muted);font-weight:400;font-size:.78rem;flex:1;}
+details.book summary i.chev{color:var(--muted);transition:transform .18s;}
+details.book[open] summary i.chev{transform:rotate(90deg);}
+details.book ol{margin:0;padding:6px 22px 16px 52px;columns:2;column-gap:40px;font-size:.83rem;color:#3a4658;}
+details.book ol li{margin:3px 0;break-inside:avoid;}
+@media(max-width:680px){details.book ol{columns:1;}}
+
+footer{background:var(--navy);color:rgba(255,255,255,.5);text-align:center;padding:24px;font-size:.78rem;border-top:3px solid var(--gold);margin-top:60px;}
+footer a{color:var(--gold);text-decoration:none;}
+
+/* ── Puerta de acceso (correo + contraseña, sobre el candado de Firebase) ── */
+#gate{position:fixed;inset:0;z-index:9999;background:var(--navy);background-image:radial-gradient(ellipse at 30% 20%,#243654 0%,#10243e 70%);display:flex;align-items:center;justify-content:center;padding:20px;}
+#gate.hidden{display:none;}
+.gate-card{background:var(--cream);width:100%;max-width:400px;border-radius:14px;box-shadow:0 18px 50px rgba(0,0,0,.45);overflow:hidden;font-family:Arial,sans-serif;}
+.gate-card .gh{background:var(--navy);color:var(--cream);padding:26px 30px 20px;text-align:center;border-bottom:4px solid var(--gold);}
+.gate-card .gh h2{font-family:Georgia,serif;font-size:21px;letter-spacing:1.5px;font-weight:normal;margin:0;}
+.gate-card .gh h2 b{color:#e3c35f;}
+.gate-card .gh p{font-size:11.5px;opacity:.8;margin-top:6px;letter-spacing:1px;}
+.gate-card form{padding:24px 30px 28px;}
+.gate-card label{display:block;font-size:12px;letter-spacing:1px;color:#6b6151;margin:0 0 6px;text-transform:uppercase;}
+.gate-card input{width:100%;padding:11px 12px;font-size:15px;border:1px solid #d4c9ae;border-radius:7px;background:#fff;}
+.gate-card input:focus{outline:2px solid #e3c35f;border-color:var(--gold);}
+.gate-card button{width:100%;margin-top:18px;padding:13px;font-size:15px;letter-spacing:1px;background:var(--navy);color:var(--cream);border:none;border-radius:7px;cursor:pointer;}
+.gate-card button:hover{background:var(--navy2);}
+.gate-card .gerr{color:var(--err);font-size:13px;margin-top:12px;min-height:18px;}
+.gate-card .gnote{font-size:11.5px;color:#8d8270;text-align:center;padding:0 30px 22px;line-height:1.6;}
+</style>
+</head>
+<body>
+
+<!-- Puerta de acceso de profesor (correo + contraseña) -->
+<div id="gate">
+  <div class="gate-card">
+    <div class="gh">
+      <h2>VESPER <b>ACADEMY</b></h2>
+      <p>VESPER ENGINE · ÁREA DE PROFESORES</p>
+    </div>
+    <form id="gate-form">
+      <label for="gate-email">Correo electrónico</label>
+      <input type="email" id="gate-email" autocomplete="email" required autofocus>
+      <label for="gate-pass" style="margin-top:14px">Contraseña de profesor</label>
+      <input type="password" id="gate-pass" autocomplete="off" required>
+      <button type="submit">Entrar</button>
+      <div class="gerr" id="gate-err"></div>
+    </form>
+    <div class="gnote">Acceso restringido al profesorado de Vesper Academy.</div>
+  </div>
+</div>
+
+<header>
+  <a class="brand" href="index.html">
+    <img src="assets/images/vesper_logo_inverted.png" alt="Vesper Academy">
+    <span><b>Vesper Academy</b><small>Vesper Engine v2.0</small></span>
+  </a>
+  <div class="right">
+    <a class="back" href="portal_profesores.html"><i class="fas fa-chalkboard-teacher"></i> Portal del profesor</a>
+    <a class="back" href="index.html"><i class="fas fa-arrow-left"></i> Sitio principal</a>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="intro">
+    <h1>Personalized Course Engine <span class="v">v2.0</span></h1>
+    <p>Genera el <b>prompt maestro del tutor Vesper</b> para usarlo con cualquier LLM de alta capacidad (Claude, antigravity, etc.). A diferencia de la v1.0, el curso <b>no se inventa</b>: el motor ancla la ruta al syllabus oficial de los manuales de Vesper Academy, extraído automáticamente de los libros del alumno publicados en este sitio.</p>
+  </div>
+
+  <div class="warn">
+    <i class="fas fa-lock"></i><b>Privado:</b> este prompt es metodología interna de Vesper Academy.
+    Úsalo en tus sesiones con alumnos, pero no lo publiques ni lo compartas fuera del profesorado.
+  </div>
+
+  <h2 class="sec"><i class="fas fa-route"></i> Cómo se usa</h2>
+  <div class="steps">
+    <div class="step"><span class="n">1</span><h3>Configura y copia</h3><p>Elige los libros cuyo syllabus quieres anclar (todos, por defecto) y, si ya conoces al alumno, rellena sus datos previos. Pulsa <b>Copiar prompt</b>.</p></div>
+    <div class="step"><span class="n">2</span><h3>Pega en tu LLM</h3><p>Abre una conversación nueva en Claude, antigravity o tu motor preferido y pega el prompt completo como primer mensaje (o como instrucciones de sistema).</p></div>
+    <div class="step"><span class="n">3</span><h3>Inicia el intake</h3><p>El tutor Vesper arrancará la Fase 1 (intake conversacional), aplicará el placement test y construirá la ruta personalizada sobre el currículo oficial.</p></div>
+  </div>
+
+  <h2 class="sec"><i class="fas fa-sliders-h"></i> Configuración del prompt</h2>
+
+  <div class="panel">
+    <h3>Syllabus anclado</h3>
+    <p class="hint">Los libros marcados se incluyen como anexo del prompt con su temario real, lección por lección. Recomendado: dejar todos — el motor asigna el libro correcto tras el placement test.</p>
+    <div id="trackchecks"></div>
+    <div class="selbtns">
+      <button type="button" id="sel-all"><i class="fas fa-check-double"></i> Todos</button>
+      <button type="button" id="sel-none"><i class="fas fa-times"></i> Ninguno</button>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h3>Datos previos del alumno <span style="font-weight:400;color:var(--muted);font-size:.78rem;">(opcional)</span></h3>
+    <p class="hint">Si ya conoces al alumno, el tutor confirmará estos datos en el intake en lugar de preguntarlos desde cero. Déjalo vacío para un intake completo.</p>
+    <div class="fields">
+      <div><label for="f-nombre">Nombre</label><input id="f-nombre" placeholder="Ej. Mariana"></div>
+      <div><label for="f-meta">Meta principal</label><input id="f-meta" placeholder="Ej. entrevista de trabajo en agosto"></div>
+      <div><label for="f-nivel">Nivel estimado</label><input id="f-nivel" placeholder="Ej. B1 (placement del sitio)"></div>
+      <div><label for="f-intereses">Intereses (3 temas)</label><input id="f-intereses" placeholder="Ej. fútbol, cocina, cine"></div>
+      <div><label for="f-tiempo">Disponibilidad</label><input id="f-tiempo" placeholder="Ej. 3 días/sem, 40 min"></div>
+      <div><label for="f-debilidad">Debilidad percibida</label><input id="f-debilidad" placeholder="Ej. miedo a hablar"></div>
+    </div>
+  </div>
+
+  <h2 class="sec"><i class="fas fa-scroll"></i> Prompt maestro</h2>
+  <div class="outbar">
+    <button class="btn primary" id="btn-copy"><i class="fas fa-copy"></i> Copiar prompt</button>
+    <button class="btn ghost" id="btn-download"><i class="fas fa-download"></i> Descargar .txt</button>
+    <span class="stat" id="stat"></span>
+  </div>
+  <textarea id="preview" readonly spellcheck="false" aria-label="Prompt maestro generado"></textarea>
+
+  <h2 class="sec"><i class="fas fa-book-open"></i> Syllabus oficial de referencia</h2>
+  <p style="color:var(--muted);font-size:.85rem;margin:-6px 0 16px;">Temario real extraído de los manuales del alumno de este sitio — la única fuente de ruta del motor.</p>
+  <div id="syllabus"></div>
+</div>
+
+<footer>
+  © <span id="y"></span> Vesper Academy · <a href="index.html">vesper.academy</a> · Vesper Engine v2.0 — Área de profesores
+</footer>
+
+<script src="vesper_engine_data.js"></script>
+<script>
+(function () {
+  "use strict";
+  document.getElementById("y").textContent = new Date().getFullYear();
+
+  /* ── Puerta de profesor (misma sesión que el portal: no pide dos veces) ── */
+  var gate = document.getElementById("gate");
+  var form = document.getElementById("gate-form");
+  var emailEl = document.getElementById("gate-email");
+  var pass = document.getElementById("gate-pass");
+  var gerr = document.getElementById("gate-err");
+  var KEY = "vesper_teacher_ok";
+
+  function unlock() {
+    gate.classList.add("hidden");
+    try { sessionStorage.setItem(KEY, "1"); } catch (e) {}
+  }
+  try { if (sessionStorage.getItem(KEY) === "1") gate.classList.add("hidden"); } catch (e) {}
+
+  form.addEventListener("submit", function (ev) {
+    ev.preventDefault();
+    gerr.textContent = "";
+    var email = emailEl.value.trim();
+    var value = pass.value;
+    if (!window.VesperAuth || !VesperAuth.verifyTeacherLogin) {
+      gerr.textContent = "No se pudo cargar el control de acceso. Recarga la página.";
+      return;
+    }
+    if (!email || email.indexOf("@") === -1) {
+      gerr.textContent = "Escribe un correo válido."; emailEl.focus(); return;
+    }
+    VesperAuth.verifyTeacherLogin(email, value).then(function (ok) {
+      if (ok) { unlock(); }
+      else { gerr.textContent = "Correo o contraseña incorrectos."; pass.select(); }
+    });
+  });
+
+  /* ── Motor ── */
+  var E = window.VesperEngine;
+  if (!E) return;
+
+  /* Checkboxes de libros por track */
+  var trackWrap = document.getElementById("trackchecks");
+  E.TRACKS.forEach(function (tr) {
+    var box = document.createElement("div");
+    box.className = "trackbox";
+    var h = document.createElement("p");
+    h.className = "tname";
+    h.textContent = tr.name;
+    box.appendChild(h);
+    var grid = document.createElement("div");
+    grid.className = "bookchecks";
+    tr.books.forEach(function (bid) {
+      var b = E.SYLLABI[bid];
+      var label = document.createElement("label");
+      var cb = document.createElement("input");
+      cb.type = "checkbox"; cb.checked = true; cb.value = bid; cb.className = "bookcb";
+      var cefr = document.createElement("span");
+      cefr.className = "cefr"; cefr.textContent = b.cefr;
+      var name = document.createElement("span");
+      name.textContent = b.name;
+      label.appendChild(cb); label.appendChild(cefr); label.appendChild(name);
+      grid.appendChild(label);
+    });
+    box.appendChild(grid);
+    trackWrap.appendChild(box);
+  });
+
+  function allCbs() { return Array.prototype.slice.call(document.querySelectorAll(".bookcb")); }
+  document.getElementById("sel-all").onclick = function () { allCbs().forEach(function (c) { c.checked = true; }); rebuild(); };
+  document.getElementById("sel-none").onclick = function () { allCbs().forEach(function (c) { c.checked = false; }); rebuild(); };
+
+  /* Anexo de syllabus para el prompt */
+  function syllabusAppendix(selected) {
+    if (!selected.length) return "";
+    var out = [];
+    out.push("---");
+    out.push("");
+    out.push("## ANEXO — SYLLABUS OFICIAL DE LOS MANUALES (extraído de los libros publicados de Vesper Academy)");
+    out.push("");
+    out.push("Esta es tu fuente EXACTA de ruta. No inventes títulos ni reordenes lecciones: usa estos temarios " +
+             "tal cual para construir el roadmap (Fase 4) y entregar lecciones (Fase 5).");
+    E.TRACKS.forEach(function (tr) {
+      var books = tr.books.filter(function (bid) { return selected.indexOf(bid) !== -1; });
+      if (!books.length) return;
+      out.push("");
+      out.push("### " + tr.name);
+      books.forEach(function (bid) {
+        var b = E.SYLLABI[bid];
+        out.push("");
+        out.push("**" + b.name + " (" + b.cefr + ")** — " + b.desc + ":");
+        b.lessons.forEach(function (l) {
+          out.push(l.n + ". " + l.t);
+        });
+      });
+    });
+    return out.join("\n");
+  }
+
+  /* Bloque opcional de datos previos */
+  function prefillBlock() {
+    var f = function (id) { return document.getElementById(id).value.trim(); };
+    var rows = [
+      ["Nombre", f("f-nombre")],
+      ["Meta principal", f("f-meta")],
+      ["Nivel estimado por el profesor", f("f-nivel")],
+      ["Intereses", f("f-intereses")],
+      ["Disponibilidad", f("f-tiempo")],
+      ["Debilidad percibida", f("f-debilidad")]
+    ].filter(function (r) { return r[1]; });
+    if (!rows.length) return "";
+    var out = [];
+    out.push("---");
+    out.push("");
+    out.push("## DATOS PREVIOS DEL ALUMNO (proporcionados por su profesor)");
+    out.push("");
+    out.push("En la Fase 1, CONFIRMA estos datos en lugar de preguntarlos desde cero (pregunta solo lo que falte). " +
+             "El placement test de la Fase 2 sigue siendo OBLIGATORIO: el nivel estimado no sustituye la verificación.");
+    out.push("");
+    rows.forEach(function (r) { out.push("- " + r[0] + ": " + r[1]); });
+    return out.join("\n");
+  }
+
+  function buildPrompt() {
+    var selected = allCbs().filter(function (c) { return c.checked; }).map(function (c) { return c.value; });
+    var parts = [E.PROMPT_V2];
+    var appendix = syllabusAppendix(selected);
+    if (appendix) parts.push(appendix);
+    var prefill = prefillBlock();
+    if (prefill) parts.push(prefill);
+    return parts.join("\n\n");
+  }
+
+  var preview = document.getElementById("preview");
+  var stat = document.getElementById("stat");
+  function rebuild() {
+    var p = buildPrompt();
+    preview.value = p;
+    var nBooks = allCbs().filter(function (c) { return c.checked; }).length;
+    stat.innerHTML = "<b>" + p.length.toLocaleString("es") + "</b> caracteres · <b>" + nBooks + "</b> de 13 libros anclados";
+  }
+  document.addEventListener("change", function (ev) {
+    if (ev.target.classList && ev.target.classList.contains("bookcb")) rebuild();
+  });
+  ["f-nombre","f-meta","f-nivel","f-intereses","f-tiempo","f-debilidad"].forEach(function (id) {
+    document.getElementById(id).addEventListener("input", rebuild);
+  });
+
+  /* Copiar */
+  var btnCopy = document.getElementById("btn-copy");
+  btnCopy.onclick = function () {
+    var done = function () {
+      btnCopy.classList.add("copied");
+      btnCopy.innerHTML = '<i class="fas fa-check"></i> Copiado';
+      setTimeout(function () {
+        btnCopy.classList.remove("copied");
+        btnCopy.innerHTML = '<i class="fas fa-copy"></i> Copiar prompt';
+      }, 2200);
+    };
+    var text = buildPrompt();
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(done, function () { fallback(); });
+    } else { fallback(); }
+    function fallback() {
+      preview.focus(); preview.select();
+      try { document.execCommand("copy"); done(); } catch (e) {}
+    }
+  };
+
+  /* Descargar .txt */
+  document.getElementById("btn-download").onclick = function () {
+    var blob = new Blob([buildPrompt()], { type: "text/plain;charset=utf-8" });
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "vesper_engine_v2_prompt.txt";
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 0);
+  };
+
+  /* Explorador del syllabus */
+  var syl = document.getElementById("syllabus");
+  E.TRACKS.forEach(function (tr) {
+    tr.books.forEach(function (bid) {
+      var b = E.SYLLABI[bid];
+      var d = document.createElement("details");
+      d.className = "book";
+      var s = document.createElement("summary");
+      s.innerHTML = '<i class="fas fa-chevron-right chev"></i>';
+      var cefr = document.createElement("span");
+      cefr.className = "cefr"; cefr.textContent = b.cefr;
+      var name = document.createElement("span");
+      name.textContent = b.name;
+      var desc = document.createElement("span");
+      desc.className = "d"; desc.textContent = b.desc;
+      var count = document.createElement("span");
+      count.className = "d"; count.style.flex = "none";
+      count.textContent = b.lessons.length + " lecciones";
+      s.appendChild(cefr); s.appendChild(name); s.appendChild(desc); s.appendChild(count);
+      d.appendChild(s);
+      var ol = document.createElement("ol");
+      b.lessons.forEach(function (l) {
+        var li = document.createElement("li");
+        li.value = l.n;
+        li.textContent = l.t;
+        ol.appendChild(li);
+      });
+      d.appendChild(ol);
+      syl.appendChild(d);
+    });
+  });
+
+  rebuild();
+})();
+</script>
+</body>
+</html>
