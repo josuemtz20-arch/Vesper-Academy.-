@@ -37,6 +37,17 @@
 !/vesper_engine.html
 !/vesper_engine_data.js
 
+# Vesper app (Doc B): system prompt of the vesper-chat Edge Function.
+# ONLY the prompt doc is published; everything else under supabase/
+# (config, secrets, local dev state) stays local-only.
+!/supabase/
+/supabase/*
+!/supabase/functions/
+/supabase/functions/*
+!/supabase/functions/vesper-chat/
+/supabase/functions/vesper-chat/*
+!/supabase/functions/vesper-chat/SYSTEM_PROMPT.md
+
 # Vesper Engine PWA (installable app): manifest + service worker.
 # App icons live under assets/images/ (already whitelisted below).
 !/manifest.webmanifest
