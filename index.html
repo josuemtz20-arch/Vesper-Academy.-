@@ -424,11 +424,16 @@ footer{background:var(--navy3);color:rgba(255,255,255,.6);padding:54px 0 30px;}
     <span class="eyebrow" style="color:var(--gold-lt);">Empieza hoy</span>
     <h2 class="sec-title">Reserva tu clase de prueba gratuita</h2>
     <p>Déjanos tu correo y te contactamos para agendar tu prueba de nivel y tu primera clase, sin compromiso.</p>
-    <form onsubmit="return handleSignup(event)">
-      <input type="email" id="email" placeholder="tu@correo.com" required aria-label="Correo electrónico">
-      <button type="submit" class="btn btn-gold"><i class="fas fa-paper-plane"></i> Reservar</button>
+    <form id="contactForm" action="https://formspree.io/f/mdavlzzo" method="POST">
+      <input type="email" name="email" placeholder="Tu correo" required />
+      <input type="text" name="nombre" placeholder="Tu nombre" required />
+      <button type="submit" class="btn btn-gold"><i class="fas fa-paper-plane"></i> Reservar clase de prueba</button>
     </form>
-    <div class="form-msg" id="formMsg"></div>
+    <div class="form-msg" id="formMsg" style="display:none;">
+      <i class="fas fa-circle-check" style="color:var(--gold-lt);font-size:1.4rem;margin-bottom:8px;"></i>
+      <strong style="display:block;font-size:1.05rem;color:#fff;margin-bottom:4px;">¡Gracias por tu interés!</strong>
+      Hemos recibido tu solicitud. Un asesor de Vesper Academy te contactará en las próximas 24 horas para agendar tu clase de prueba.
+    </div>
   </div>
 </section>
 
@@ -444,14 +449,12 @@ footer{background:var(--navy3);color:rgba(255,255,255,.6);padding:54px 0 30px;}
       <div><h5>Academia</h5>
         <a href="#metodo">Metodología</a><a href="#ruta">Niveles</a><a href="#precios">Precios</a><a href="#faq">Preguntas</a></div>
       <div><h5>Contacto</h5>
-        <a href="#contacto">Clase de prueba</a><a href="mailto:hola@vesper.academy">hola@vesper.academy</a><a href="materiales.html">Portal del alumno</a><a href="portal_profesores.html">Profesores</a></div>
+        <a href="#contacto">Clase de prueba</a><a href="mailto:vesper.academy999@gmail.com">vesper.academy999@gmail.com</a><a href="materiales.html">Portal del alumno</a><a href="portal_profesores.html">Profesores</a></div>
     </div>
     <div class="fbottom">
       <span>© <span id="year"></span> Vesper Academy. Todos los derechos reservados.</span>
       <span class="social">
-        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
-        <a href="#" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+        <a href="https://www.instagram.com/vesper.academy/" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
       </span>
     </div>
   </div>
@@ -461,15 +464,34 @@ footer{background:var(--navy3);color:rgba(255,255,255,.6);padding:54px 0 30px;}
   document.getElementById('year').textContent = new Date().getFullYear();
   // close mobile menu on link click
   document.querySelectorAll('#navlinks a').forEach(a => a.addEventListener('click', () => document.getElementById('navlinks').classList.remove('show')));
-  function handleSignup(e){
-    e.preventDefault();
-    const email = document.getElementById('email').value.trim();
-    const msg = document.getElementById('formMsg');
-    if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)){ msg.textContent = 'Por favor escribe un correo válido.'; return false; }
-    // Demo only: no backend. Replace with real endpoint when available.
-    msg.textContent = '¡Gracias! Te contactaremos muy pronto para agendar tu clase de prueba.';
-    document.getElementById('email').value = '';
-    return false;
+  const contactForm = document.getElementById('contactForm');
+  if (contactForm) {
+    contactForm.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const btn = contactForm.querySelector('button[type="submit"]');
+      btn.disabled = true;
+      btn.textContent = 'Enviando…';
+      try {
+        const res = await fetch(contactForm.action, {
+          method: 'POST',
+          body: new FormData(contactForm),
+          headers: { 'Accept': 'application/json' }
+        });
+        if (res.ok) {
+          contactForm.style.display = 'none';
+          const msg = document.getElementById('formMsg');
+          msg.style.display = 'block';
+        } else {
+          btn.disabled = false;
+          btn.innerHTML = '<i class="fas fa-paper-plane"></i> Reservar clase de prueba';
+          alert('Hubo un error al enviar. Intenta de nuevo o escríbenos a vesper.academy999@gmail.com');
+        }
+      } catch {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-paper-plane"></i> Reservar clase de prueba';
+        alert('Sin conexión. Intenta de nuevo o escríbenos a vesper.academy999@gmail.com');
+      }
+    });
   }
 </script>
 </body>
