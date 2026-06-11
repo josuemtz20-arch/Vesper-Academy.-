@@ -7,7 +7,15 @@
 <title>Vesper Engine v2.0 — Curso Personalizado | Vesper Academy</title>
 <meta name="description" content="Personalized Course Engine v2.0: genera el prompt maestro del tutor Vesper anclado al syllabus oficial de los manuales. Acceso restringido.">
 <meta name="robots" content="noindex, nofollow">
-<link rel="icon" href="assets/images/vesper_logo.png" type="image/png">
+<!-- App instalable (PWA): isotipo VA como icono -->
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="theme-color" content="#141c2a">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Vesper Engine">
+<link rel="icon" href="assets/images/favicon_32.png" type="image/png" sizes="32x32">
+<link rel="icon" href="assets/images/va_isotype.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/images/apple_touch_icon.png">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inria+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@300;400;500;600;700&display=swap');
@@ -16,12 +24,16 @@
 body{margin:0;font-family:'Inter',sans-serif;background:var(--cream);color:var(--navy);}
 header{background:var(--navy);border-bottom:3px solid var(--gold);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:14px;position:sticky;top:0;z-index:50;}
 .brand{display:flex;align-items:center;gap:12px;color:#fff;text-decoration:none;}
-.brand img{height:42px;width:42px;object-fit:contain;}
+.brand .iso{height:42px;width:42px;flex:none;color:var(--cream);}  /* isotipo VA (hereda color via currentColor) */
 .brand b{font-family:'Inria Serif',serif;font-size:1.1rem;}
 .brand small{display:block;color:var(--gold);font-size:.6rem;letter-spacing:2px;text-transform:uppercase;}
 header .right{display:flex;align-items:center;gap:18px;}
 header a.back{color:rgba(255,255,255,.75);font-size:.78rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;text-decoration:none;}
 header a.back:hover{color:var(--gold);}
+/* Boton instalar app — oculto hasta que el navegador ofrezca la instalacion */
+#install-btn{display:none;align-items:center;gap:7px;background:var(--gold);color:var(--navy);border:none;border-radius:20px;padding:7px 15px;font:700 .74rem/1 'Inter',sans-serif;letter-spacing:.5px;text-transform:uppercase;cursor:pointer;}
+#install-btn:hover{background:#d8b878;}
+#install-btn.show{display:inline-flex;}
 .wrap{max-width:1100px;margin:0 auto;padding:36px 20px 70px;}
 .intro h1{font-family:'Inria Serif',serif;font-size:1.9rem;margin:0 0 8px;}
 .intro h1 .v{color:var(--gold2);font-size:1.1rem;vertical-align:super;}
@@ -128,11 +140,25 @@ footer a{color:var(--gold);text-decoration:none;}
 </div>
 
 <header>
-  <a class="brand" href="index.html">
-    <img src="assets/images/vesper_logo_inverted.png" alt="Vesper Academy">
+  <a class="brand" href="index.html" aria-label="Vesper Academy — inicio">
+    <!-- Isotipo VA (reloj de arena): la V es el triangulo superior, la A el inferior -->
+    <svg class="iso" viewBox="0 0 512 512" aria-hidden="true">
+      <g fill="none" stroke="currentColor" stroke-width="24" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="166" y1="150" x2="346" y2="150"/>
+        <line x1="166" y1="362" x2="346" y2="362"/>
+        <path d="M182 166 L256 256 L330 166"/>
+        <path d="M256 256 L184 346 L328 346 Z"/>
+        <line x1="219" y1="318" x2="293" y2="318"/>
+      </g>
+      <g fill="#e3c35f">
+        <circle cx="256" cy="286" r="7"/>
+        <circle cx="256" cy="305" r="4.5"/>
+      </g>
+    </svg>
     <span><b>Vesper Academy</b><small>Vesper Engine v2.0</small></span>
   </a>
   <div class="right">
+    <button id="install-btn" type="button"><i class="fas fa-download"></i> Instalar app</button>
     <a class="back" href="portal_profesores.html"><i class="fas fa-chalkboard-teacher"></i> Portal del profesor</a>
     <a class="back" href="index.html"><i class="fas fa-arrow-left"></i> Sitio principal</a>
   </div>
@@ -412,6 +438,47 @@ footer a{color:var(--gold);text-decoration:none;}
   });
 
   rebuild();
+})();
+</script>
+
+<!-- ── App instalable (PWA): registro del service worker + boton instalar ── -->
+<script>
+(function () {
+  "use strict";
+
+  /* Registrar el service worker (solo en http/https, no en file://) */
+  if ("serviceWorker" in navigator && location.protocol.indexOf("http") === 0) {
+    window.addEventListener("load", function () {
+      navigator.serviceWorker.register("sw.js").catch(function () { /* sin SW: la app sigue funcionando online */ });
+    });
+  }
+
+  /* Boton "Instalar app": aparece cuando el navegador ofrece la instalacion */
+  var deferred = null;
+  var btn = document.getElementById("install-btn");
+
+  window.addEventListener("beforeinstallprompt", function (e) {
+    e.preventDefault();
+    deferred = e;
+    if (btn) btn.classList.add("show");
+  });
+
+  if (btn) {
+    btn.addEventListener("click", function () {
+      if (!deferred) return;
+      deferred.prompt();
+      deferred.userChoice.then(function () {
+        deferred = null;
+        btn.classList.remove("show");
+      });
+    });
+  }
+
+  /* Ya instalada: ocultar el boton */
+  window.addEventListener("appinstalled", function () {
+    deferred = null;
+    if (btn) btn.classList.remove("show");
+  });
 })();
 </script>
 </body>

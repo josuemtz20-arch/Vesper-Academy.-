@@ -37,6 +37,11 @@
 !/vesper_engine.html
 !/vesper_engine_data.js
 
+# Vesper Engine PWA (installable app): manifest + service worker.
+# App icons live under assets/images/ (already whitelisted below).
+!/manifest.webmanifest
+!/sw.js
+
 # lesson data consumed by the public pages
 !/vesper_audio_data.js
 !/vesper_reading_data.js
