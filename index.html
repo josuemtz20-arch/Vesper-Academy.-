@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
@@ -8,12 +8,12 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 <link rel="icon" href="assets/images/vesper_logo.png" type="image/png">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inria+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@300;400;500;600;700&display=swap');
 *,*::before,*::after{box-sizing:border-box;}
 :root{
-  --navy:#1a2b42; --navy2:#243654; --navy3:#14223a;
+  --navy:#141c2a; --navy2:#243654; --navy3:#14223a;
   --gold:#c5a059; --gold-lt:#d9bd84; --gold2:#a8843d;
-  --cream:#f5f2eb; --white:#fff; --border:#e4e0d8; --text:#1a2b42; --muted:#6b7a8d;
+  --cream:#f5f2eb; --white:#fff; --border:#e4e0d8; --text:#141c2a; --muted:#6b7a8d;
 }
 html{scroll-behavior:smooth;}
 body{font-family:'Inter',sans-serif;color:var(--text);margin:0;background:var(--white);line-height:1.6;}
@@ -25,7 +25,7 @@ a{text-decoration:none;color:inherit;}
 .btn-ghost{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.4);}
 .btn-ghost:hover{border-color:var(--gold);color:var(--gold-lt);}
 .eyebrow{font-size:.72rem;letter-spacing:3px;text-transform:uppercase;color:var(--gold2);font-weight:700;}
-.sec-title{font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:800;margin:10px 0 14px;line-height:1.15;}
+.sec-title{font-family:'Inria Serif',serif;font-size:2.2rem;font-weight:800;margin:10px 0 14px;line-height:1.15;}
 .sec-lead{color:var(--muted);font-size:1.02rem;max-width:640px;}
 
 /* NAV */
@@ -33,7 +33,7 @@ header{position:sticky;top:0;z-index:200;background:rgba(26,43,66,.96);backdrop-
 nav{display:flex;align-items:center;justify-content:space-between;height:70px;}
 .brand{display:flex;align-items:center;gap:12px;}
 .brand img{height:42px;width:42px;object-fit:contain;}
-.brand b{font-family:'Playfair Display',serif;color:#fff;font-size:1.15rem;font-weight:700;letter-spacing:.5px;}
+.brand b{font-family:'Inria Serif',serif;color:#fff;font-size:1.15rem;font-weight:700;letter-spacing:.5px;}
 .brand small{display:block;color:var(--gold);font-size:.6rem;letter-spacing:2px;text-transform:uppercase;}
 .nav-links{display:flex;gap:30px;align-items:center;}
 .nav-links a{color:rgba(255,255,255,.82);font-size:.86rem;font-weight:500;transition:color .16s;}
@@ -46,12 +46,12 @@ nav{display:flex;align-items:center;justify-content:space-between;height:70px;}
 .hero::before{content:"";position:absolute;right:-80px;top:50%;transform:translateY(-50%);width:480px;height:480px;
   background:url('assets/images/vesper_logo_inverted.png') center/contain no-repeat;opacity:.06;}
 .hero-inner{position:relative;z-index:1;padding:90px 0 96px;max-width:680px;}
-.hero h1{font-family:'Playfair Display',serif;font-size:3.2rem;font-weight:800;line-height:1.08;margin:16px 0 18px;}
+.hero h1{font-family:'Inria Serif',serif;font-size:3.2rem;font-weight:800;line-height:1.08;margin:16px 0 18px;}
 .hero h1 span{color:var(--gold-lt);}
 .hero p{font-size:1.12rem;color:rgba(255,255,255,.8);margin-bottom:30px;max-width:560px;}
 .hero-cta{display:flex;gap:14px;flex-wrap:wrap;}
 .hero-stats{display:flex;gap:40px;margin-top:54px;flex-wrap:wrap;}
-.hero-stats div b{font-family:'Playfair Display',serif;font-size:2rem;color:var(--gold-lt);display:block;}
+.hero-stats div b{font-family:'Inria Serif',serif;font-size:2rem;color:var(--gold-lt);display:block;}
 .hero-stats div small{color:rgba(255,255,255,.65);font-size:.8rem;text-transform:uppercase;letter-spacing:1px;}
 
 /* TRUST BAR */
@@ -78,7 +78,7 @@ section{padding:82px 0;}
 .path .sec-lead{color:rgba(255,255,255,.7);}
 .levels{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-top:46px;}
 .lvl{background:linear-gradient(160deg,var(--navy2),var(--navy3));border:1px solid rgba(197,160,89,.25);border-radius:14px;padding:24px 20px;position:relative;overflow:hidden;}
-.lvl .cefr{font-family:'Playfair Display',serif;font-size:1.7rem;color:var(--gold-lt);font-weight:800;}
+.lvl .cefr{font-family:'Inria Serif',serif;font-size:1.7rem;color:var(--gold-lt);font-weight:800;}
 .lvl h4{margin:6px 0 6px;font-size:1rem;}
 .lvl p{color:rgba(255,255,255,.62);font-size:.82rem;margin:0;}
 .lvl .bar{position:absolute;left:0;bottom:0;height:4px;background:var(--gold);}
@@ -105,7 +105,7 @@ section{padding:82px 0;}
 .cert li i{color:var(--gold2);margin-top:3px;}
 .cert-badges{display:flex;gap:14px;flex-wrap:wrap;}
 .cert-badge{background:#fff;border:1px solid var(--border);border-radius:14px;padding:22px;text-align:center;flex:1;min-width:120px;}
-.cert-badge b{display:block;font-family:'Playfair Display',serif;font-size:1.4rem;color:var(--navy);}
+.cert-badge b{display:block;font-family:'Inria Serif',serif;font-size:1.4rem;color:var(--navy);}
 .cert-badge small{color:var(--muted);font-size:.78rem;}
 
 /* TESTIMONIALS */
@@ -123,7 +123,7 @@ section{padding:82px 0;}
 .plan.feat{border:2px solid var(--gold);box-shadow:0 18px 44px rgba(197,160,89,.22);}
 .plan.feat .ribbon{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:var(--gold);color:var(--navy);font-size:.68rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:5px 16px;border-radius:20px;}
 .plan h3{font-size:1.15rem;margin:0 0 4px;}
-.plan .price{font-family:'Playfair Display',serif;font-size:2.6rem;font-weight:800;color:var(--navy);margin:10px 0 2px;}
+.plan .price{font-family:'Inria Serif',serif;font-size:2.6rem;font-weight:800;color:var(--navy);margin:10px 0 2px;}
 .plan .price small{font-size:.9rem;color:var(--muted);font-weight:400;font-family:'Inter';}
 .plan ul{list-style:none;padding:0;margin:20px 0 26px;flex:1;}
 .plan li{font-size:.9rem;padding:8px 0;border-bottom:1px dashed var(--border);display:flex;gap:10px;align-items:flex-start;}

@@ -1,8 +1,8 @@
-<!DOCTYPE html><html lang="en"><head>
+﻿<!DOCTYPE html><html lang="en"><head>
 <script src="vesper_auth.js"></script><meta charset="UTF-8"><title>Core Practice: Level 3</title><link rel="stylesheet" href="assets/css/vesper_style.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700&family=Open+Sans:wght@400;600;700&display=swap');
-    body { background-color: #525659; margin: 0; padding: 40px 0; display: flex; flex-direction: column; align-items: center; font-family: 'Merriweather', serif; color: #1a2b42; }
+    @import url('https://fonts.googleapis.com/css2?family=Inria+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@300;400;500;600;700&display=swap');
+    body { background-color: #525659; margin: 0; padding: 40px 0; display: flex; flex-direction: column; align-items: center; font-family: 'Inria Serif', serif; color: #141c2a; }
     .page { background-color: white; width: 210mm; min-height: 297mm; padding: 20mm; box-sizing: border-box; box-shadow: 0 0 20px rgba(0,0,0,0.3); margin-bottom: 40px; position: relative; page-break-after: always; }
     @media print { body { background: none; margin: 0; padding: 0; display: block; } .page { box-shadow: none; margin: 0; width: 100%; height: 100%; page-break-after: always; border: none; } .no-print { display: none; } }
     @media screen and (max-width: 768px) {
@@ -15,31 +15,129 @@
         .cover-title { font-size: 2em !important; }
         .cover-subtitle { font-size: 1.2em !important; }
     }
-    h1, h2, h3 { font-family: 'Open Sans', sans-serif; }
-    .module-header { background-color: #1a2b42; color: #d4af37; padding: 15px 20mm; margin: -20mm -20mm 10mm -20mm; font-family: 'Merriweather', serif; font-size: 1.4em; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
+    h1, h2, h3 { font-family: 'Inter', sans-serif; }
+    .module-header { background-color: #141c2a; color: #d4af37; padding: 15px 20mm; margin: -20mm -20mm 10mm -20mm; font-family: 'Inria Serif', serif; font-size: 1.4em; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
     .lesson-title { border-bottom: 2px solid #34495e; padding-bottom: 15px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; }
-    .lesson-title h2 { margin: 0; font-size: 2.2em; color: #1a2b42; }
+    .lesson-title h2 { margin: 0; font-size: 2.2em; color: #141c2a; }
     .lesson-block { margin-bottom: 25px; padding: 20px 25px; background: #fff; border-left: 5px solid #ccc; border-radius: 0 5px 5px 0; }
     .lb-blue { border-color: #3498db; background: #ebf5fb; }
-    .lb-navy { border-color: #1a2b42; background: #fff; border: 1px solid #eee; border-left: 6px solid #1a2b42; }
+    .lb-navy { border-color: #141c2a; background: #fff; border: 1px solid #eee; border-left: 6px solid #141c2a; }
     .lb-purple { border-color: #8e44ad; background: #f5eef8; }
     .lb-green { border-color: #27ae60; background: #eafaf1; }
     .lb-red { border-color: #c0392b; background: #fdedec; }
-    .lb-header { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; font-weight: bold; font-family: 'Open Sans'; text-transform: uppercase; font-size: 1em; letter-spacing: 0.5px; }
+    .lb-header { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; font-weight: bold; font-family: 'Inter'; text-transform: uppercase; font-size: 1em; letter-spacing: 0.5px; }
     .lb-blue .lb-header { color: #2980b9; } 
-    .lb-navy .lb-header { color: #1a2b42; }
+    .lb-navy .lb-header { color: #141c2a; }
     .lb-purple .lb-header { color: #8e44ad; }
     .lb-green .lb-header { color: #27ae60; }
     .lb-red .lb-header { color: #c0392b; }
     .content-text { line-height: 1.8; font-size: 0.95em; color: #2c3e50; text-align: justify; }
     ul.deep-list { padding-left: 20px; list-style-type: square; } ul.deep-list li { margin-bottom: 12px; }
     .vocab-box { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
-    .vocab-item { background: #eee; padding: 5px 10px; border-radius: 3px; font-size: 0.9em; font-family: 'Open Sans'; }
+    .vocab-item { background: #eee; padding: 5px 10px; border-radius: 3px; font-size: 0.9em; font-family: 'Inter'; }
     .page-num { position: absolute; bottom: 20mm; right: 20mm; color: #999; font-size: 0.8em; }
     p { margin-bottom: 15px; }
     .intro-box { background-color: #f8f9fa; border: 1px solid #dee2e6; padding: 30px; border-radius: 8px; margin-top: 50px; }
+
+/* =====================================================================
+   VESPER PREMIUM SKIN (Practice student edition) - navy / gold / cream
+   Cosmetic overlay appended last so it wins the cascade. Covers both the
+   simple format (L1-3) and the rich format (L4-6: focus-badge, vocab-grid,
+   comp-tier, block-time, audio-player).
+   ===================================================================== */
+:root{ --navy:#141c2a; --navy2:#243654; --gold:#c5a059; --gold-d:#a8843d; --cream:#f5f2eb; --ink:#34414f; }
+body{ background:#2f3947 !important; }
+.page{ background:var(--cream) !important; box-shadow:0 14px 46px rgba(0,0,0,.40) !important; }
+
+/* ---------- MODULE HEADER ---------- */
+.module-header{
+  background:linear-gradient(135deg,#1d3454 0%,#141c2a 70%,#101d33 100%) !important;
+  color:#e9cf92 !important;
+  border-bottom:3px solid var(--gold) !important;
+  letter-spacing:1.5px !important;
+  box-shadow:0 4px 14px rgba(0,0,0,.18);
+}
+
+/* ---------- LESSON TITLE + FOCUS BADGE ---------- */
+.lesson-title{ border-bottom:none !important; position:relative; padding-bottom:18px !important; }
+.lesson-title::after{ content:""; position:absolute; left:0; bottom:0; width:84px; height:3px; background:var(--gold); }
+.lesson-title h2{ color:var(--navy) !important; font-family:'Inria Serif',serif !important; }
+.focus-badge{
+  background:linear-gradient(135deg,#caa15a,#b0863a) !important;
+  color:#141c2a !important; box-shadow:0 2px 8px rgba(176,134,58,.35);
+}
+
+/* ---------- LESSON BLOCKS as premium cards ---------- */
+.lesson-block{
+  border-radius:12px !important;
+  border:1px solid rgba(20,30,50,.06) !important;
+  border-left-width:5px !important; border-left-style:solid !important;
+  box-shadow:0 3px 14px rgba(20,30,50,.06) !important;
+  padding:22px 26px !important;
+}
+.lb-blue{ background:#eef5fb !important; border-left-color:#3a78b5 !important; }
+.lb-navy{ background:#ffffff !important; border-left-color:var(--navy) !important; }
+.lb-purple{ background:#f4eefa !important; border-left-color:#7d4ea8 !important; }
+.lb-green{ background:#ecf8f0 !important; border-left-color:#2e9e5b !important; }
+.lb-red{ background:#fdeeec !important; border-left-color:#c0492f !important; }
+.lb-header{ font-size:1.02em !important; align-items:center; }
+.lb-blue .lb-header{ color:#2f6da4 !important; }
+.lb-navy .lb-header{ color:var(--navy) !important; }
+.lb-purple .lb-header{ color:#6f3f97 !important; }
+.lb-green .lb-header{ color:#218a4e !important; }
+.lb-red .lb-header{ color:#b0402a !important; }
+
+/* ---------- TIME BADGE -> pill ---------- */
+.block-time{
+  background:#fff; color:#8a6d2f !important; border:1px solid #e6d6ad;
+  padding:3px 11px; border-radius:20px; font-family:'Inter',sans-serif;
+}
+
+/* ---------- CONTENT ---------- */
+.content-text{ text-align:left !important; line-height:1.75 !important; color:var(--ink) !important; font-size:0.97em !important; }
+
+/* ---------- VOCAB GRID ---------- */
+.vocab-grid{ gap:6px 28px !important; }
+.vocab-row{ border-bottom:1px dotted #d8cba6 !important; padding:5px 0 !important; }
+.vocab-row b{ color:var(--navy) !important; }
+.vocab-row span{ color:#6b7a8d !important; }
+
+/* ---------- COMPREHENSION TIERS ---------- */
+.comp-tier strong{ font-size:0.82em !important; }
+.tier-1 strong{ color:#218a4e !important; }
+.tier-2 strong{ color:#cc7a22 !important; }
+.tier-3 strong{ color:#7d4ea8 !important; }
+
+/* ---------- ANSWER KEY (student self-study) ---------- */
+.answer-key{
+  margin-top:14px; background:#f3f6ec; border:1px solid #d9e2c4;
+  border-left:5px solid #6f9c3a; border-radius:8px; padding:12px 16px;
+  font-family:'Inter',sans-serif;
+}
+.answer-key .ak-head{
+  font-size:0.74em; font-weight:700; text-transform:uppercase; letter-spacing:1px;
+  color:#4e7026; margin-bottom:6px; display:flex; align-items:center; gap:7px;
+}
+.answer-key .ak-body{ font-size:0.9em; line-height:1.6; color:#3f4a39; }
+
+/* ---------- SOLO-PRACTICE CALLOUT (replaces partner-only roleplay framing) ---------- */
+.solo-note{
+  margin-top:14px; background:#eef3fb; border:1px dashed #9bb6dd; border-radius:8px;
+  padding:11px 15px; font-family:'Inter',sans-serif; font-size:0.86em;
+  line-height:1.6; color:#33486b;
+}
+.solo-note b{ color:#21406e; }
+
+/* ---------- COVER + TOC + misc ---------- */
+.cover-title{ color:var(--navy) !important; }
+.cover-subtitle{ color:var(--gold-d) !important; }
+.toc a{ border-bottom:1px dotted #d8cba6 !important; }
+.toc a:hover{ color:var(--gold-d) !important; }
+.teacher-steps{ display:none !important; }
+.page-num{ color:#b3a98f !important; }
+
 </style>
-</head><body><div class="no-print" style="position: fixed; top: 20px; left: 20px; z-index: 1000;"><a href="index.html" style="background: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: bold; color: #1a2b42; box-shadow: 0 2px 5px rgba(0,0,0,0.2);"><i class="fas fa-arrow-left"></i> Dashboard</a></div><div class="page cover-page"><img src="assets/images/vesper_logo.jpg" alt="Vesper Academy" class="cover-logo" style="width:200px; margin-bottom:20px;"><div class="cover-title" style="font-size:3em; font-weight:bold; color:#1a2b42;">Core Practice: Level 3</div><div class="cover-subtitle" style="font-size:1.5em; color:#34495e;">Upper Intermediate (B1/B2)</div><div style="margin-top: auto;"><strong>Vesper Academy</strong><br>Student Workbook</div></div><div class="page">
+</head><body><div class="no-print" style="position: fixed; top: 20px; left: 20px; z-index: 1000;"><a href="index.html" style="background: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: bold; color: #141c2a; box-shadow: 0 2px 5px rgba(0,0,0,0.2);"><i class="fas fa-arrow-left"></i> Dashboard</a></div><div class="page cover-page"><img src="assets/images/vesper_logo.jpg" alt="Vesper Academy" class="cover-logo" style="width:200px; margin-bottom:20px;"><div class="cover-title" style="font-size:3em; font-weight:bold; color:#141c2a;">Core Practice: Level 3</div><div class="cover-subtitle" style="font-size:1.5em; color:#34495e;">Upper Intermediate (B1/B2)</div><div style="margin-top: auto;"><strong>Vesper Academy</strong><br>Student Workbook</div></div><div class="page">
 <div class="intro-box">
             <p><strong>Course Overview:</strong></p>
             <p>Level 3 focuses on <strong>Rhetoric, Philosophy & High-Level Negotiation</strong> (B1-C1). The 4-skills methodology here demands intense critical thinking. Texts are complex, and spoken outputs require diplomatic and persuasive language.</p>
@@ -54,20 +152,20 @@
             <!-- WARM UP -->
             <div class="lesson-block lb-blue">
                 <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
-                <div class="content-text"><strong>Phase 1: Devil's Advocate:</strong> Defend a terrible idea for 30 seconds (e.g., 'Mosquitoes are extremely good for humanity').<br><br><strong>Phase 2: The Fallacy:</strong> Explain what a 'strawman argument' is in your own words. Why is it dangerous?<br><br><strong>Phase 3: The Interruption:</strong> How do you politely but firmly interrupt someone who is dominating a conversation?</div>
+                <div class="content-text"><strong>1. Devil's Advocate:</strong> Defend a terrible idea for 30 seconds (e.g., 'Mosquitoes are extremely good for humanity').<br><br><strong>2. The Fallacy:</strong> Explain what a 'strawman argument' is in your own words. Why is it dangerous?<br><br><strong>3. The Interruption:</strong> How do you politely but firmly interrupt someone who is dominating a conversation?</div>
             </div>
             
             <!-- VOCAB -->
             <div class="lesson-block lb-navy">
                 <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
-                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Rebuttal (A counter-argument)<br>2. Fallacy (A flaw in logic)<br>3. Concede (Admit defeat on a point)<br>4. Unanimous (Fully in agreement)<br>5. Refute (Prove a statement wrong)<br>6. Assertion (A strong declaration)<br>7. Devil's advocate (Arguing against the consensus to test it)<br>8. Strawman (Misrepresenting an argument to easily defeat it)<br>9. Consensus (General agreement)<br>10. Controversial (Causing public disagreement)<br>11. Eloquent (Fluent or persuasive in speaking)<br>12. Rhetoric (The art of effective speaking)<br><br><strong>Drill Task:</strong> Select two words that are opposites (e.g. Concede and Refute) and use them in a complex sentence.</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Rebuttal (A counter-argument)<br>2. Fallacy (A flaw in logic)<br>3. Concede (Admit defeat on a point)<br>4. Unanimous (Fully in agreement)<br>5. Refute (Prove a statement wrong)<br>6. Assertion (A strong declaration)<br>7. Devil's advocate (Arguing against the consensus to test it)<br>8. Strawman (Misrepresenting an argument to easily defeat it)<br>9. Consensus (General agreement)<br>10. Controversial (Causing public disagreement)<br>11. Eloquent (Fluent or persuasive in speaking)<br>12. Rhetoric (The art of effective speaking)<br><br><strong>Your turn:</strong> Select two words that are opposites (e.g. Concede and Refute) and use them in a complex sentence.</div>
             </div>
             
             <!-- LISTENING -->
             <div class="lesson-block lb-purple">
                 <div class="lb-header"><i class="fas fa-headphones"></i> Main Listening Input</div>
                 <div class="content-text"><div style="margin-bottom:10px;"><audio controls style="height:30px; width:200px;"><source src="assets/audio/core_practice_level_3_lesson_1.mp3" type="audio/mpeg"></audio></div>
-                    <em>(The script text is hidden in the student manual. Listen to the audio closely to complete the exercise.)</em></div>
+                    <em>Press play and listen twice. The words are not printed here on purpose &mdash; train your ears! Then answer the questions below.</em></div>
             </div>
             
             <!-- COMPREHENSION -->
@@ -91,13 +189,13 @@
             <!-- WARM UP -->
             <div class="lesson-block lb-blue">
                 <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
-                <div class="content-text"><strong>Phase 1: The Handshake:</strong> Analyze the concept of a political handshake. Does a strong grip actually mean strength in modern diplomacy?<br><br><strong>Phase 2: Soft vs Hard Power:</strong> Define 'Hard Power' (Military/Economic force) versus 'Soft Power' (Culture/Influence). Give an example of a country using Soft Power.<br><br><strong>Phase 3: The Ultimatum:</strong> What is the danger of giving an enemy an 'ultimatum'?</div>
+                <div class="content-text"><strong>1. The Handshake:</strong> Analyze the concept of a political handshake. Does a strong grip actually mean strength in modern diplomacy?<br><br><strong>2. Soft vs Hard Power:</strong> Define 'Hard Power' (Military/Economic force) versus 'Soft Power' (Culture/Influence). Give an example of a country using Soft Power.<br><br><strong>3. The Ultimatum:</strong> What is the danger of giving an enemy an 'ultimatum'?</div>
             </div>
             
             <!-- VOCAB -->
             <div class="lesson-block lb-navy">
                 <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
-                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Ambassador (Official representative)<br>2. Sanction (Economic penalty)<br>3. Treaty (Formal agreement)<br>4. Sovereign (Independent and self-governing)<br>5. Escalate (Increase in intensity)<br>6. De-escalate (Decrease in intensity)<br>7. Leverage (Power to influence)<br>8. Diplomacy (Managing international relations)<br>9. Unprecedented (Never done or known before)<br>10. Coalition (Alliance for combined action)<br>11. Retaliation (Action taken in return for an injury)<br>12. Ultimatum (Final demand with a threat)<br><br><strong>Drill Task:</strong> Form a logical timeline using 4 words: Escalation -> Ultimatum -> Sanction -> Retaliation.</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Ambassador (Official representative)<br>2. Sanction (Economic penalty)<br>3. Treaty (Formal agreement)<br>4. Sovereign (Independent and self-governing)<br>5. Escalate (Increase in intensity)<br>6. De-escalate (Decrease in intensity)<br>7. Leverage (Power to influence)<br>8. Diplomacy (Managing international relations)<br>9. Unprecedented (Never done or known before)<br>10. Coalition (Alliance for combined action)<br>11. Retaliation (Action taken in return for an injury)<br>12. Ultimatum (Final demand with a threat)<br><br><strong>Your turn:</strong> Form a logical timeline using 4 words: Escalation -> Ultimatum -> Sanction -> Retaliation.</div>
             </div>
             
             <!-- READING -->
@@ -127,20 +225,20 @@
             <!-- WARM UP -->
             <div class="lesson-block lb-blue">
                 <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
-                <div class="content-text"><strong>Phase 1: The Triage:</strong> The ship is sinking. You can only save 3 items from a list of 10 (Gold, Radio, Compass, Water, Flare, Coat, Knife, Rope, Mirror, Book). Discuss and justify your choices immediately.<br><br><strong>Phase 2: The Apology:</strong> What makes a public corporate apology seem 'fake' vs 'genuine'?<br><br><strong>Phase 3: The Golden Hour:</strong> In a PR crisis, what is the 'Golden Hour' and why does speed matter?</div>
+                <div class="content-text"><strong>1. The Triage:</strong> The ship is sinking. You can only save 3 items from a list of 10 (Gold, Radio, Compass, Water, Flare, Coat, Knife, Rope, Mirror, Book). Discuss and justify your choices immediately.<br><br><strong>2. The Apology:</strong> What makes a public corporate apology seem 'fake' vs 'genuine'?<br><br><strong>3. The Golden Hour:</strong> In a PR crisis, what is the 'Golden Hour' and why does speed matter?</div>
             </div>
             
             <!-- VOCAB -->
             <div class="lesson-block lb-navy">
                 <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
-                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Breach (A breaking of a rule or security)<br>2. Accountable (Required or expected to justify actions)<br>3. Mitigation (Reducing severity or damage)<br>4. Transparency (Openness, lack of secrets)<br>5. PR Nightmare (A terrible public relations event)<br>6. Triage (Assigning degrees of urgency)<br>7. Scrutiny (Critical observation or examination)<br>8. Evacuate (Remove from danger)<br>9. Liability (Being legally responsible)<br>10. Fallout (The adverse results of a situation)<br>11. Contingency plan (Backup plan for emergencies)<br>12. Damage control (Action to limit negative consequences)<br><br><strong>Drill Task:</strong> Name three situations where a 'Contingency plan' is absolutely vital.</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Breach (A breaking of a rule or security)<br>2. Accountable (Required or expected to justify actions)<br>3. Mitigation (Reducing severity or damage)<br>4. Transparency (Openness, lack of secrets)<br>5. PR Nightmare (A terrible public relations event)<br>6. Triage (Assigning degrees of urgency)<br>7. Scrutiny (Critical observation or examination)<br>8. Evacuate (Remove from danger)<br>9. Liability (Being legally responsible)<br>10. Fallout (The adverse results of a situation)<br>11. Contingency plan (Backup plan for emergencies)<br>12. Damage control (Action to limit negative consequences)<br><br><strong>Your turn:</strong> Name three situations where a 'Contingency plan' is absolutely vital.</div>
             </div>
             
             <!-- LISTENING -->
             <div class="lesson-block lb-purple">
                 <div class="lb-header"><i class="fas fa-headphones"></i> Main Listening Input</div>
                 <div class="content-text"><div style="margin-bottom:10px;"><audio controls style="height:30px; width:200px;"><source src="assets/audio/core_practice_level_3_lesson_3.mp3" type="audio/mpeg"></audio></div>
-                    <em>(The script text is hidden in the student manual. Listen to the audio closely to complete the exercise.)</em></div>
+                    <em>Press play and listen twice. The words are not printed here on purpose &mdash; train your ears! Then answer the questions below.</em></div>
             </div>
             
             <!-- COMPREHENSION -->
@@ -164,13 +262,13 @@
             <!-- WARM UP -->
             <div class="lesson-block lb-blue">
                 <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
-                <div class="content-text"><strong>Phase 1: The Trolley Problem:</strong> A runaway train is heading towards 5 tied-up people. You can pull a lever to divert it to a track with 1 tied-up person. Do you pull it? Type Yes or No, and Why.<br><br><strong>Phase 2: Utilitarianism:</strong> 'The greatest good for the greatest number.' Is this always the best way to make laws?<br><br><strong>Phase 3: The Simulation:</strong> Is it possible we are living in a highly advanced computer simulation? Provide one piece of 'evidence'.</div>
+                <div class="content-text"><strong>1. The Trolley Problem:</strong> A runaway train is heading towards 5 tied-up people. You can pull a lever to divert it to a track with 1 tied-up person. Do you pull it? Type Yes or No, and Why.<br><br><strong>2. Utilitarianism:</strong> 'The greatest good for the greatest number.' Is this always the best way to make laws?<br><br><strong>3. The Simulation:</strong> Is it possible we are living in a highly advanced computer simulation? Provide one piece of 'evidence'.</div>
             </div>
             
             <!-- VOCAB -->
             <div class="lesson-block lb-navy">
                 <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
-                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Ethics (Moral principles)<br>2. Utilitarianism (Doctrine of greatest good)<br>3. Sentient (Able to perceive or feel things)<br>4. Consciousness (State of being aware)<br>5. Existential (Relating to existence)<br>6. Dilemma (Difficult choice between bad options)<br>7. Objective (Fact-based, universal truth)<br>8. Subjective (Opinion-based, personal truth)<br>9. Determinism (Belief that all events are pre-determined)<br>10. Free will (Power of acting without fate)<br>11. Hypocrisy (Claiming morals but acting otherwise)<br>12. Altruism (Selfless concern for others)<br><br><strong>Drill Task:</strong> Identify whether the concept of 'Beauty' is objective or subjective, using the vocabulary.</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Ethics (Moral principles)<br>2. Utilitarianism (Doctrine of greatest good)<br>3. Sentient (Able to perceive or feel things)<br>4. Consciousness (State of being aware)<br>5. Existential (Relating to existence)<br>6. Dilemma (Difficult choice between bad options)<br>7. Objective (Fact-based, universal truth)<br>8. Subjective (Opinion-based, personal truth)<br>9. Determinism (Belief that all events are pre-determined)<br>10. Free will (Power of acting without fate)<br>11. Hypocrisy (Claiming morals but acting otherwise)<br>12. Altruism (Selfless concern for others)<br><br><strong>Your turn:</strong> Identify whether the concept of 'Beauty' is objective or subjective, using the vocabulary.</div>
             </div>
             
             <!-- READING -->
@@ -200,20 +298,20 @@
             <!-- WARM UP -->
             <div class="lesson-block lb-blue">
                 <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
-                <div class="content-text"><strong>Phase 1: The Bubble:</strong> Think of something ridiculous that suddenly became very expensive (e.g. Crypto, rare sneakers, a specific toy). Why did people buy it?<br><br><strong>Phase 2: Universal Basic Income:</strong> Should the government give every citizen $1000 a month for free? Why or why not?<br><br><strong>Phase 3: The Stock Market:</strong> The teacher yells 'Market Crash!'. What is your immediate financial reaction?</div>
+                <div class="content-text"><strong>1. The Bubble:</strong> Think of something ridiculous that suddenly became very expensive (e.g. Crypto, rare sneakers, a specific toy). Why did people buy it?<br><br><strong>2. Universal Basic Income:</strong> Should the government give every citizen $1000 a month for free? Why or why not?<br><br><strong>3. The Stock Market:</strong> The teacher yells 'Market Crash!'. What is your immediate financial reaction?</div>
             </div>
             
             <!-- VOCAB -->
             <div class="lesson-block lb-navy">
                 <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
-                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Macroeconomics (Large-scale economic factors)<br>2. Recession (Period of economic decline)<br>3. Monopoly (Exclusive control of a market)<br>4. Subsidize (Financially support an industry)<br>5. Tariff (Tax on imports/exports)<br>6. Deficit (Spending more than earning)<br>7. Supply and demand (Core economic model)<br>8. Bailout (Financial rescue of a failing business)<br>9. Austerity (Strict economic policies/cuts)<br>10. Lucrative (Producing a great deal of profit)<br>11. Volatility (Liability to change rapidly, esp. stocks)<br>12. Bubble (Unsustainable surge in prices)<br><br><strong>Drill Task:</strong> Explain how 'Supply and demand' causes a 'Bubble'.</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Macroeconomics (Large-scale economic factors)<br>2. Recession (Period of economic decline)<br>3. Monopoly (Exclusive control of a market)<br>4. Subsidize (Financially support an industry)<br>5. Tariff (Tax on imports/exports)<br>6. Deficit (Spending more than earning)<br>7. Supply and demand (Core economic model)<br>8. Bailout (Financial rescue of a failing business)<br>9. Austerity (Strict economic policies/cuts)<br>10. Lucrative (Producing a great deal of profit)<br>11. Volatility (Liability to change rapidly, esp. stocks)<br>12. Bubble (Unsustainable surge in prices)<br><br><strong>Your turn:</strong> Explain how 'Supply and demand' causes a 'Bubble'.</div>
             </div>
             
             <!-- LISTENING -->
             <div class="lesson-block lb-purple">
                 <div class="lb-header"><i class="fas fa-headphones"></i> Main Listening Input</div>
                 <div class="content-text"><div style="margin-bottom:10px;"><audio controls style="height:30px; width:200px;"><source src="assets/audio/core_practice_level_3_lesson_5.mp3" type="audio/mpeg"></audio></div>
-                    <em>(The script text is hidden in the student manual. Listen to the audio closely to complete the exercise.)</em></div>
+                    <em>Press play and listen twice. The words are not printed here on purpose &mdash; train your ears! Then answer the questions below.</em></div>
             </div>
             
             <!-- COMPREHENSION -->
@@ -237,13 +335,13 @@
             <!-- WARM UP -->
             <div class="lesson-block lb-blue">
                 <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
-                <div class="content-text"><strong>Phase 1: The Hypothesis:</strong> You observe that plants in your house grow faster when you play heavy metal music. Formulate an instant, formal scientific hypothesis.<br><br><strong>Phase 2: Peer Review:</strong> Why is it important that scientists attack and criticize each other's work before it is published?<br><br><strong>Phase 3: The Mad Scientist:</strong> What is one ethical rule that science should NEVER break?</div>
+                <div class="content-text"><strong>1. The Hypothesis:</strong> You observe that plants in your house grow faster when you play heavy metal music. Formulate an instant, formal scientific hypothesis.<br><br><strong>2. Peer Review:</strong> Why is it important that scientists attack and criticize each other's work before it is published?<br><br><strong>3. The Mad Scientist:</strong> What is one ethical rule that science should NEVER break?</div>
             </div>
             
             <!-- VOCAB -->
             <div class="lesson-block lb-navy">
                 <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
-                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Hypothesis (Proposed explanation)<br>2. Empirical (Based on observation/data)<br>3. Anomaly (Deviation from the norm)<br>4. Catalyst (Substance accelerating a reaction)<br>5. Variable (Element that can change)<br>6. Peer-reviewed (Evaluated by experts)<br>7. Paradigm shift (Fundamental change in approach)<br>8. Replicate (Repeat an experiment)<br>9. Efficacy (Ability to produce intended result)<br>10. Placebo (Harmless pill for psychological effect)<br>11. Breakthrough (Sudden important discovery)<br>12. Skepticism (Doubtful attitude)<br><br><strong>Drill Task:</strong> Differentiate between a 'Hypothesis' and an 'Empirical fact'.</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Hypothesis (Proposed explanation)<br>2. Empirical (Based on observation/data)<br>3. Anomaly (Deviation from the norm)<br>4. Catalyst (Substance accelerating a reaction)<br>5. Variable (Element that can change)<br>6. Peer-reviewed (Evaluated by experts)<br>7. Paradigm shift (Fundamental change in approach)<br>8. Replicate (Repeat an experiment)<br>9. Efficacy (Ability to produce intended result)<br>10. Placebo (Harmless pill for psychological effect)<br>11. Breakthrough (Sudden important discovery)<br>12. Skepticism (Doubtful attitude)<br><br><strong>Your turn:</strong> Differentiate between a 'Hypothesis' and an 'Empirical fact'.</div>
             </div>
             
             <!-- READING -->
@@ -273,20 +371,20 @@
             <!-- WARM UP -->
             <div class="lesson-block lb-blue">
                 <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
-                <div class="content-text"><strong>Phase 1: The Haiku:</strong> Count your syllables! Write a 5-7-5 syllable poem about learning English and recite it aloud.<br><br><strong>Phase 2: The Villain:</strong> Argue passionately that the villain of a famous story (e.g., Thanos, Darth Vader, the Big Bad Wolf) was actually the misunderstood hero.<br><br><strong>Phase 3: The Metaphor:</strong> Explain the metaphor 'Time is a thief'.</div>
+                <div class="content-text"><strong>1. The Haiku:</strong> Count your syllables! Write a 5-7-5 syllable poem about learning English and recite it aloud.<br><br><strong>2. The Villain:</strong> Argue passionately that the villain of a famous story (e.g., Thanos, Darth Vader, the Big Bad Wolf) was actually the misunderstood hero.<br><br><strong>3. The Metaphor:</strong> Explain the metaphor 'Time is a thief'.</div>
             </div>
             
             <!-- VOCAB -->
             <div class="lesson-block lb-navy">
                 <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
-                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Protagonist (Main character)<br>2. Antagonist (Main villain/opponent)<br>3. Metaphor (Symbolic comparison)<br>4. Motif (Recurring theme/image)<br>5. Satire (Humor criticizing society)<br>6. Irony (Opposite of what is expected)<br>7. Foreshadowing (Hints of future events)<br>8. Cliché (Overused phrase/idea)<br>9. Ambiguous (Open to interpretation)<br>10. Narrative (The story/perspective)<br>11. Empathy (Understanding others' feelings)<br>12. Masterpiece (Outstanding work of art)<br><br><strong>Drill Task:</strong> Give an example of 'Irony' in real life.</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Protagonist (Main character)<br>2. Antagonist (Main villain/opponent)<br>3. Metaphor (Symbolic comparison)<br>4. Motif (Recurring theme/image)<br>5. Satire (Humor criticizing society)<br>6. Irony (Opposite of what is expected)<br>7. Foreshadowing (Hints of future events)<br>8. Cliché (Overused phrase/idea)<br>9. Ambiguous (Open to interpretation)<br>10. Narrative (The story/perspective)<br>11. Empathy (Understanding others' feelings)<br>12. Masterpiece (Outstanding work of art)<br><br><strong>Your turn:</strong> Give an example of 'Irony' in real life.</div>
             </div>
             
             <!-- LISTENING -->
             <div class="lesson-block lb-purple">
                 <div class="lb-header"><i class="fas fa-headphones"></i> Main Listening Input</div>
                 <div class="content-text"><div style="margin-bottom:10px;"><audio controls style="height:30px; width:200px;"><source src="assets/audio/core_practice_level_3_lesson_7.mp3" type="audio/mpeg"></audio></div>
-                    <em>(The script text is hidden in the student manual. Listen to the audio closely to complete the exercise.)</em></div>
+                    <em>Press play and listen twice. The words are not printed here on purpose &mdash; train your ears! Then answer the questions below.</em></div>
             </div>
             
             <!-- COMPREHENSION -->
@@ -310,13 +408,13 @@
             <!-- WARM UP -->
             <div class="lesson-block lb-blue">
                 <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
-                <div class="content-text"><strong>Phase 1: Micro-expressions:</strong> Look at your partner (or teacher) on camera. Try to read their current mood purely from their eyes. Type your guess.<br><br><strong>Phase 2: The Subconscious:</strong> Do you believe dreams actually mean something deep, or are they just random brain static?<br><br><strong>Phase 3: Cognitive Dissonance:</strong> Explain what it means when someone's actions don't match their beliefs.</div>
+                <div class="content-text"><strong>1. Micro-expressions:</strong> Look at your partner (or teacher) on camera. Try to read their current mood purely from their eyes. Type your guess.<br><br><strong>2. The Subconscious:</strong> Do you believe dreams actually mean something deep, or are they just random brain static?<br><br><strong>3. Cognitive Dissonance:</strong> Explain what it means when someone's actions don't match their beliefs.</div>
             </div>
             
             <!-- VOCAB -->
             <div class="lesson-block lb-navy">
                 <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
-                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Cognitive (Relating to mental processes)<br>2. Subconscious (Mind below awareness)<br>3. Narcissism (Excessive self-interest)<br>4. Empathy (Sharing another's feelings)<br>5. Projection (Attributing own faults to others)<br>6. Gaslighting (Manipulating someone to doubt their sanity)<br>7. Trauma (Deep emotional wound)<br>8. Repress (Subdue a thought/feeling)<br>9. Trigger (Stimulus causing a negative reaction)<br>10. Validation (Recognition of one's feelings)<br>11. Coping mechanism (Strategy to deal with stress)<br>12. Introversion (Focus on internal thoughts)<br><br><strong>Drill Task:</strong> Give a real-life example of a healthy vs unhealthy 'Coping mechanism'.</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Cognitive (Relating to mental processes)<br>2. Subconscious (Mind below awareness)<br>3. Narcissism (Excessive self-interest)<br>4. Empathy (Sharing another's feelings)<br>5. Projection (Attributing own faults to others)<br>6. Gaslighting (Manipulating someone to doubt their sanity)<br>7. Trauma (Deep emotional wound)<br>8. Repress (Subdue a thought/feeling)<br>9. Trigger (Stimulus causing a negative reaction)<br>10. Validation (Recognition of one's feelings)<br>11. Coping mechanism (Strategy to deal with stress)<br>12. Introversion (Focus on internal thoughts)<br><br><strong>Your turn:</strong> Give a real-life example of a healthy vs unhealthy 'Coping mechanism'.</div>
             </div>
             
             <!-- READING -->
@@ -346,20 +444,20 @@
             <!-- WARM UP -->
             <div class="lesson-block lb-blue">
                 <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
-                <div class="content-text"><strong>Phase 1: The Carbon Tax:</strong> Should governments tax humans based on exactly how much garbage they produce? Argue Yes or No instantly.<br><br><strong>Phase 2: Greenwashing:</strong> What does it mean when a massive oil company puts a picture of a green leaf on their logo?<br><br><strong>Phase 3: The Dystopia:</strong> Describe the weather in your city 50 years from now.</div>
+                <div class="content-text"><strong>1. The Carbon Tax:</strong> Should governments tax humans based on exactly how much garbage they produce? Argue Yes or No instantly.<br><br><strong>2. Greenwashing:</strong> What does it mean when a massive oil company puts a picture of a green leaf on their logo?<br><br><strong>3. The Dystopia:</strong> Describe the weather in your city 50 years from now.</div>
             </div>
             
             <!-- VOCAB -->
             <div class="lesson-block lb-navy">
                 <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
-                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Greenwashing (Fake environmentalism)<br>2. Mitigation (Reducing the severity)<br>3. Ecosystem (Interacting organisms/environment)<br>4. Biodiversity (Variety of life)<br>5. Decarbonize (Reduce carbon emissions)<br>6. Subsidies (Government financial aid)<br>7. Depletion (Reduction in number/quantity)<br>8. Renewable (Not depleted when used)<br>9. Tipping point (Point of no return)<br>10. Infrastructure (Basic physical structures)<br>11. Catastrophe (Great and sudden disaster)<br>12. Accountability (Being responsible/answerable)<br><br><strong>Drill Task:</strong> Use 'Tipping point' and 'Catastrophe' in a dramatic sentence.</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Greenwashing (Fake environmentalism)<br>2. Mitigation (Reducing the severity)<br>3. Ecosystem (Interacting organisms/environment)<br>4. Biodiversity (Variety of life)<br>5. Decarbonize (Reduce carbon emissions)<br>6. Subsidies (Government financial aid)<br>7. Depletion (Reduction in number/quantity)<br>8. Renewable (Not depleted when used)<br>9. Tipping point (Point of no return)<br>10. Infrastructure (Basic physical structures)<br>11. Catastrophe (Great and sudden disaster)<br>12. Accountability (Being responsible/answerable)<br><br><strong>Your turn:</strong> Use 'Tipping point' and 'Catastrophe' in a dramatic sentence.</div>
             </div>
             
             <!-- LISTENING -->
             <div class="lesson-block lb-purple">
                 <div class="lb-header"><i class="fas fa-headphones"></i> Main Listening Input</div>
                 <div class="content-text"><div style="margin-bottom:10px;"><audio controls style="height:30px; width:200px;"><source src="assets/audio/core_practice_level_3_lesson_9.mp3" type="audio/mpeg"></audio></div>
-                    <em>(The script text is hidden in the student manual. Listen to the audio closely to complete the exercise.)</em></div>
+                    <em>Press play and listen twice. The words are not printed here on purpose &mdash; train your ears! Then answer the questions below.</em></div>
             </div>
             
             <!-- COMPREHENSION -->
@@ -383,13 +481,13 @@
             <!-- WARM UP -->
             <div class="lesson-block lb-blue">
                 <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
-                <div class="content-text"><strong>Phase 1: The Dictator:</strong> If you were named absolute Dictator of your country tomorrow, what is the very first law you would pass?<br><br><strong>Phase 2: The Spectrum:</strong> Explain the difference between 'Left-wing' and 'Right-wing' politics in one sentence.<br><br><strong>Phase 3: The Vote:</strong> Conduct a rapid-fire poll in the chat on a trivial topic (e.g., 'Pineapple on pizza should be illegal'). Use parliamentary language to vote.</div>
+                <div class="content-text"><strong>1. The Dictator:</strong> If you were named absolute Dictator of your country tomorrow, what is the very first law you would pass?<br><br><strong>2. The Spectrum:</strong> Explain the difference between 'Left-wing' and 'Right-wing' politics in one sentence.<br><br><strong>3. The Vote:</strong> Conduct a rapid-fire poll in the chat on a trivial topic (e.g., 'Pineapple on pizza should be illegal'). Use parliamentary language to vote.</div>
             </div>
             
             <!-- VOCAB -->
             <div class="lesson-block lb-navy">
                 <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
-                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Legislation (Laws considered collectively)<br>2. Partisan (Prejudiced in favor of a particular cause)<br>3. Bipartisan (Involving agreement from two opposing parties)<br>4. Lobbying (Seeking to influence a politician)<br>5. Rhetoric (Persuasive speaking/writing)<br>6. Demagogue (Leader exploiting prejudices rather than logic)<br>7. Incumbent (Currently holding office)<br>8. Mandate (Authority to carry out a policy)<br>9. Grassroots (Ordinary people as the base of a movement)<br>10. Gerrymandering (Manipulating boundaries to favor one party)<br>11. Polarized (Divided into two sharply contrasting groups)<br>12. Corruption (Dishonest conduct by those in power)<br><br><strong>Drill Task:</strong> Explain why a 'Demagogue' usually uses highly 'Polarized' rhetoric.</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Legislation (Laws considered collectively)<br>2. Partisan (Prejudiced in favor of a particular cause)<br>3. Bipartisan (Involving agreement from two opposing parties)<br>4. Lobbying (Seeking to influence a politician)<br>5. Rhetoric (Persuasive speaking/writing)<br>6. Demagogue (Leader exploiting prejudices rather than logic)<br>7. Incumbent (Currently holding office)<br>8. Mandate (Authority to carry out a policy)<br>9. Grassroots (Ordinary people as the base of a movement)<br>10. Gerrymandering (Manipulating boundaries to favor one party)<br>11. Polarized (Divided into two sharply contrasting groups)<br>12. Corruption (Dishonest conduct by those in power)<br><br><strong>Your turn:</strong> Explain why a 'Demagogue' usually uses highly 'Polarized' rhetoric.</div>
             </div>
             
             <!-- READING -->
@@ -419,20 +517,20 @@
             <!-- WARM UP -->
             <div class="lesson-block lb-blue">
                 <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
-                <div class="content-text"><strong>Phase 1: The Timeline:</strong> Quickly organize 5 massive historical events (e.g., Pyramids built, WW2, Moon Landing, Fall of Rome, Black Death) in chronological order.<br><br><strong>Phase 2: Alternate Reality:</strong> What is one single event in history that, if changed, would make the modern world unrecognizable?<br><br><strong>Phase 3: The Quote:</strong> 'History is written by the victors.' Do you believe this is entirely true?</div>
+                <div class="content-text"><strong>1. The Timeline:</strong> Quickly organize 5 massive historical events (e.g., Pyramids built, WW2, Moon Landing, Fall of Rome, Black Death) in chronological order.<br><br><strong>2. Alternate Reality:</strong> What is one single event in history that, if changed, would make the modern world unrecognizable?<br><br><strong>3. The Quote:</strong> 'History is written by the victors.' Do you believe this is entirely true?</div>
             </div>
             
             <!-- VOCAB -->
             <div class="lesson-block lb-navy">
                 <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
-                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Empire (Extensive group of states under single supreme authority)<br>2. Colonization (Settling among and establishing control over indigenous people)<br>3. Revolution (Forcible overthrow of a government)<br>4. Legacy (Something handed down from an ancestor or predecessor)<br>5. Revisionism (Reinterpretation of the historical record)<br>6. Geopolitical (Politics relating to geography)<br>7. Fascism (Extreme authoritarian nationalism)<br>8. Propaganda (Biased or misleading information)<br>9. Unprecedented (Never done or known before)<br>10. Atrocity (Extremely wicked or cruel act)<br>11. Heritage (Valued objects and qualities passed down)<br>12. Tyrant (Cruel and oppressive ruler)<br><br><strong>Drill Task:</strong> How does 'Revisionism' change a nation's 'Legacy'?</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Empire (Extensive group of states under single supreme authority)<br>2. Colonization (Settling among and establishing control over indigenous people)<br>3. Revolution (Forcible overthrow of a government)<br>4. Legacy (Something handed down from an ancestor or predecessor)<br>5. Revisionism (Reinterpretation of the historical record)<br>6. Geopolitical (Politics relating to geography)<br>7. Fascism (Extreme authoritarian nationalism)<br>8. Propaganda (Biased or misleading information)<br>9. Unprecedented (Never done or known before)<br>10. Atrocity (Extremely wicked or cruel act)<br>11. Heritage (Valued objects and qualities passed down)<br>12. Tyrant (Cruel and oppressive ruler)<br><br><strong>Your turn:</strong> How does 'Revisionism' change a nation's 'Legacy'?</div>
             </div>
             
             <!-- LISTENING -->
             <div class="lesson-block lb-purple">
                 <div class="lb-header"><i class="fas fa-headphones"></i> Main Listening Input</div>
                 <div class="content-text"><div style="margin-bottom:10px;"><audio controls style="height:30px; width:200px;"><source src="assets/audio/core_practice_level_3_lesson_11.mp3" type="audio/mpeg"></audio></div>
-                    <em>(The script text is hidden in the student manual. Listen to the audio closely to complete the exercise.)</em></div>
+                    <em>Press play and listen twice. The words are not printed here on purpose &mdash; train your ears! Then answer the questions below.</em></div>
             </div>
             
             <!-- COMPREHENSION -->
@@ -456,13 +554,13 @@
             <!-- WARM UP -->
             <div class="lesson-block lb-blue">
                 <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
-                <div class="content-text"><strong>Phase 1: The Pitch:</strong> Pitch an absolutely ridiculous, dystopian billionaire tech idea (e.g., 'We sell subscription oxygen').<br><br><strong>Phase 2: The Singularity:</strong> What happens when artificial intelligence becomes smarter than humans? Does it help us or destroy us?<br><br><strong>Phase 3: Privacy vs Convenience:</strong> Would you let a company implant a microchip in your brain if it meant you never had to use a smartphone again?</div>
+                <div class="content-text"><strong>1. The Pitch:</strong> Pitch an absolutely ridiculous, dystopian billionaire tech idea (e.g., 'We sell subscription oxygen').<br><br><strong>2. The Singularity:</strong> What happens when artificial intelligence becomes smarter than humans? Does it help us or destroy us?<br><br><strong>3. Privacy vs Convenience:</strong> Would you let a company implant a microchip in your brain if it meant you never had to use a smartphone again?</div>
             </div>
             
             <!-- VOCAB -->
             <div class="lesson-block lb-navy">
                 <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
-                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Singularity (Point where AI surpasses human intelligence)<br>2. Dystopian (Imagined state/society with great suffering)<br>3. Cybernetic (Integration of technology and biology)<br>4. Invasive (Tending to intrude on privacy)<br>5. Biometric (Relating to body measurements like fingerprints)<br>6. Monopoly (Exclusive control of a trade/supply)<br>7. Inevitable (Certain to happen)<br>8. Obsolete (No longer produced or used)<br>9. Unprecedented (Never done or known before)<br>10. Consent (Permission for something to happen)<br>11. Surveillance (Close observation, especially of a suspected spy)<br>12. Exponential (Increasing rapidly)<br><br><strong>Drill Task:</strong> Give an example of 'Biometric' data that companies currently collect.</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Singularity (Point where AI surpasses human intelligence)<br>2. Dystopian (Imagined state/society with great suffering)<br>3. Cybernetic (Integration of technology and biology)<br>4. Invasive (Tending to intrude on privacy)<br>5. Biometric (Relating to body measurements like fingerprints)<br>6. Monopoly (Exclusive control of a trade/supply)<br>7. Inevitable (Certain to happen)<br>8. Obsolete (No longer produced or used)<br>9. Unprecedented (Never done or known before)<br>10. Consent (Permission for something to happen)<br>11. Surveillance (Close observation, especially of a suspected spy)<br>12. Exponential (Increasing rapidly)<br><br><strong>Your turn:</strong> Give an example of 'Biometric' data that companies currently collect.</div>
             </div>
             
             <!-- READING -->
@@ -492,20 +590,20 @@
             <!-- WARM UP -->
             <div class="lesson-block lb-blue">
                 <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
-                <div class="content-text"><strong>Phase 1: CEO Mindset:</strong> Make a ruthless decision instantly: 'The company is losing money. Fire 10% of the staff right now, or cut everyone's pay by 10%?' Defend your choice.<br><br><strong>Phase 2: The Start-up:</strong> Why do 90% of start-up businesses fail within the first five years?<br><br><strong>Phase 3: Outsourcing:</strong> Is it unethical for a company to move its factory to a poorer country to save money?</div>
+                <div class="content-text"><strong>1. CEO Mindset:</strong> Make a ruthless decision instantly: 'The company is losing money. Fire 10% of the staff right now, or cut everyone's pay by 10%?' Defend your choice.<br><br><strong>2. The Start-up:</strong> Why do 90% of start-up businesses fail within the first five years?<br><br><strong>3. Outsourcing:</strong> Is it unethical for a company to move its factory to a poorer country to save money?</div>
             </div>
             
             <!-- VOCAB -->
             <div class="lesson-block lb-navy">
                 <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
-                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Streamline (Make more efficient)<br>2. Overhead (Ongoing business expenses not related to creating a product)<br>3. Outsource (Obtain goods/services from an outside/foreign supplier)<br>4. Logistics (Detailed organization of a complex operation)<br>5. Vendor (A person or company offering something for sale)<br>6. Reputational damage (Harm to the good name of a company)<br>7. Stakeholder (Anyone with an interest in a business)<br>8. Profit margin (The amount by which revenue exceeds costs)<br>9. Saturated (A market with no room for new competitors)<br>10. Innovate (Make changes, introduce new methods)<br>11. Bankruptcy (Legal state of financial ruin)<br>12. Hostile takeover (Acquisition of a company against the wishes of its board)<br><br><strong>Drill Task:</strong> Describe how 'Outsourcing' affects 'Profit margins' and 'Overhead'.</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Streamline (Make more efficient)<br>2. Overhead (Ongoing business expenses not related to creating a product)<br>3. Outsource (Obtain goods/services from an outside/foreign supplier)<br>4. Logistics (Detailed organization of a complex operation)<br>5. Vendor (A person or company offering something for sale)<br>6. Reputational damage (Harm to the good name of a company)<br>7. Stakeholder (Anyone with an interest in a business)<br>8. Profit margin (The amount by which revenue exceeds costs)<br>9. Saturated (A market with no room for new competitors)<br>10. Innovate (Make changes, introduce new methods)<br>11. Bankruptcy (Legal state of financial ruin)<br>12. Hostile takeover (Acquisition of a company against the wishes of its board)<br><br><strong>Your turn:</strong> Describe how 'Outsourcing' affects 'Profit margins' and 'Overhead'.</div>
             </div>
             
             <!-- LISTENING -->
             <div class="lesson-block lb-purple">
                 <div class="lb-header"><i class="fas fa-headphones"></i> Main Listening Input</div>
                 <div class="content-text"><div style="margin-bottom:10px;"><audio controls style="height:30px; width:200px;"><source src="assets/audio/core_practice_level_3_lesson_13.mp3" type="audio/mpeg"></audio></div>
-                    <em>(The script text is hidden in the student manual. Listen to the audio closely to complete the exercise.)</em></div>
+                    <em>Press play and listen twice. The words are not printed here on purpose &mdash; train your ears! Then answer the questions below.</em></div>
             </div>
             
             <!-- COMPREHENSION -->
@@ -529,13 +627,13 @@
             <!-- WARM UP -->
             <div class="lesson-block lb-blue">
                 <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
-                <div class="content-text"><strong>Phase 1: Objection!:</strong> Practice shouting legal phrases at each other. Type: 'Objection! Hearsay!' 'Leading the witness!'<br><br><strong>Phase 2: The Settlement:</strong> Why do large corporations often pay millions of dollars to victims outside of court rather than going to trial?<br><br><strong>Phase 3: The Jury:</strong> Would you rather be judged by a single professional judge, or a jury of 12 random citizens? Why?</div>
+                <div class="content-text"><strong>1. Objection!:</strong> Practice shouting legal phrases at each other. Type: 'Objection! Hearsay!' 'Leading the witness!'<br><br><strong>2. The Settlement:</strong> Why do large corporations often pay millions of dollars to victims outside of court rather than going to trial?<br><br><strong>3. The Jury:</strong> Would you rather be judged by a single professional judge, or a jury of 12 random citizens? Why?</div>
             </div>
             
             <!-- VOCAB -->
             <div class="lesson-block lb-navy">
                 <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
-                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Negligence (Failure to take proper care in doing something)<br>2. Liability (The state of being legally responsible)<br>3. Settlement (An official agreement intended to resolve a dispute)<br>4. Plaintiff (Person who brings a case against another in court)<br>5. Defendant (Person accused or sued in court)<br>6. Testimony (Formal written or spoken statement in court)<br>7. Perjury (The offense of willfully telling an untruth in court)<br>8. Hearsay (Information received from other people that cannot be substantiated)<br>9. Verdict (A decision on a disputed issue in a civil or criminal case)<br>10. Precedent (An earlier event/action regarded as an example/guide)<br>11. Acquittal (A judgment that a person is not guilty)<br>12. Subpoena (A writ ordering a person to attend a court)<br><br><strong>Drill Task:</strong> Explain the difference between a 'Plaintiff' and a 'Defendant'.</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Negligence (Failure to take proper care in doing something)<br>2. Liability (The state of being legally responsible)<br>3. Settlement (An official agreement intended to resolve a dispute)<br>4. Plaintiff (Person who brings a case against another in court)<br>5. Defendant (Person accused or sued in court)<br>6. Testimony (Formal written or spoken statement in court)<br>7. Perjury (The offense of willfully telling an untruth in court)<br>8. Hearsay (Information received from other people that cannot be substantiated)<br>9. Verdict (A decision on a disputed issue in a civil or criminal case)<br>10. Precedent (An earlier event/action regarded as an example/guide)<br>11. Acquittal (A judgment that a person is not guilty)<br>12. Subpoena (A writ ordering a person to attend a court)<br><br><strong>Your turn:</strong> Explain the difference between a 'Plaintiff' and a 'Defendant'.</div>
             </div>
             
             <!-- READING -->
@@ -565,20 +663,20 @@
             <!-- WARM UP -->
             <div class="lesson-block lb-blue">
                 <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
-                <div class="content-text"><strong>Phase 1: Spin Doctor:</strong> Spin this terrible news: 'Our factory exploded.' (e.g., 'We have an exciting opportunity to build a modern facility.')<br><br><strong>Phase 2: The Paparazzi:</strong> Should it be illegal to take photographs of celebrities when they are in public places?<br><br><strong>Phase 3: Deepfakes:</strong> How will we know what is real in a world where video evidence can be perfectly faked?</div>
+                <div class="content-text"><strong>1. Spin Doctor:</strong> Spin this terrible news: 'Our factory exploded.' (e.g., 'We have an exciting opportunity to build a modern facility.')<br><br><strong>2. The Paparazzi:</strong> Should it be illegal to take photographs of celebrities when they are in public places?<br><br><strong>3. Deepfakes:</strong> How will we know what is real in a world where video evidence can be perfectly faked?</div>
             </div>
             
             <!-- VOCAB -->
             <div class="lesson-block lb-navy">
                 <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
-                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Sensationalize (Present info to provoke public interest/excitement)<br>2. Defamation (Damaging the good reputation of someone)<br>3. Libel (A published false statement that is damaging to a person's reputation)<br>4. Slander (Making false and damaging spoken statements)<br>5. Anonymous source (Unnamed person providing info)<br>6. Verify (Make sure something is true/accurate)<br>7. Clickbait (Internet content encouraging users to click a link)<br>8. Polarizing (Dividing into two sharply contrasting groups)<br>9. Editorialize (Insert personal opinions into an objective report)<br>10. Deepfake (Digitally altered video/audio to misrepresent reality)<br>11. Censorship (Suppression of speech/public communication)<br>12. Narrative (The chosen way a story is presented)<br><br><strong>Drill Task:</strong> Explain the exact legal difference between 'Libel' and 'Slander'.</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Sensationalize (Present info to provoke public interest/excitement)<br>2. Defamation (Damaging the good reputation of someone)<br>3. Libel (A published false statement that is damaging to a person's reputation)<br>4. Slander (Making false and damaging spoken statements)<br>5. Anonymous source (Unnamed person providing info)<br>6. Verify (Make sure something is true/accurate)<br>7. Clickbait (Internet content encouraging users to click a link)<br>8. Polarizing (Dividing into two sharply contrasting groups)<br>9. Editorialize (Insert personal opinions into an objective report)<br>10. Deepfake (Digitally altered video/audio to misrepresent reality)<br>11. Censorship (Suppression of speech/public communication)<br>12. Narrative (The chosen way a story is presented)<br><br><strong>Your turn:</strong> Explain the exact legal difference between 'Libel' and 'Slander'.</div>
             </div>
             
             <!-- LISTENING -->
             <div class="lesson-block lb-purple">
                 <div class="lb-header"><i class="fas fa-headphones"></i> Main Listening Input</div>
                 <div class="content-text"><div style="margin-bottom:10px;"><audio controls style="height:30px; width:200px;"><source src="assets/audio/core_practice_level_3_lesson_15.mp3" type="audio/mpeg"></audio></div>
-                    <em>(The script text is hidden in the student manual. Listen to the audio closely to complete the exercise.)</em></div>
+                    <em>Press play and listen twice. The words are not printed here on purpose &mdash; train your ears! Then answer the questions below.</em></div>
             </div>
             
             <!-- COMPREHENSION -->
@@ -602,13 +700,13 @@
             <!-- WARM UP -->
             <div class="lesson-block lb-blue">
                 <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
-                <div class="content-text"><strong>Phase 1: Stereotype Smash:</strong> State the biggest stereotype about your home country. Is there any truth to it at all?<br><br><strong>Phase 2: Cultural Appropriation vs Appreciation:</strong> Where is the line between respectfully enjoying another culture's food/clothing, and stealing it?<br><br><strong>Phase 3: The Monoculture:</strong> Are smartphones and the internet destroying local cultures and creating one boring global 'monoculture'?</div>
+                <div class="content-text"><strong>1. Stereotype Smash:</strong> State the biggest stereotype about your home country. Is there any truth to it at all?<br><br><strong>2. Cultural Appropriation vs Appreciation:</strong> Where is the line between respectfully enjoying another culture's food/clothing, and stealing it?<br><br><strong>3. The Monoculture:</strong> Are smartphones and the internet destroying local cultures and creating one boring global 'monoculture'?</div>
             </div>
             
             <!-- VOCAB -->
             <div class="lesson-block lb-navy">
                 <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
-                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Homogenization (Process of making things uniform or similar)<br>2. Globalization (Interaction/integration among people worldwide)<br>3. Appropriation (Unacknowledged or inappropriate adoption of customs)<br>4. Assimilation (Process of taking in and fully understanding ideas/culture)<br>5. Ethnocentrism (Evaluating other cultures according to preconceptions of one's own)<br>6. Taboo (A social or religious custom prohibiting a practice)<br>7. Heritage (Valued objects and qualities passed down from previous generations)<br>8. Indigenous (Originating or occurring naturally in a particular place)<br>9. Diaspora (Dispersion of any people from their original homeland)<br>10. Nuance (A subtle difference in meaning/expression)<br>11. Monoculture (A single, homogeneous culture without diversity)<br>12. Secular (Not subject to or bound by religious rule)<br><br><strong>Drill Task:</strong> Explain 'Ethnocentrism' using an example of a tourist in a foreign country.</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Homogenization (Process of making things uniform or similar)<br>2. Globalization (Interaction/integration among people worldwide)<br>3. Appropriation (Unacknowledged or inappropriate adoption of customs)<br>4. Assimilation (Process of taking in and fully understanding ideas/culture)<br>5. Ethnocentrism (Evaluating other cultures according to preconceptions of one's own)<br>6. Taboo (A social or religious custom prohibiting a practice)<br>7. Heritage (Valued objects and qualities passed down from previous generations)<br>8. Indigenous (Originating or occurring naturally in a particular place)<br>9. Diaspora (Dispersion of any people from their original homeland)<br>10. Nuance (A subtle difference in meaning/expression)<br>11. Monoculture (A single, homogeneous culture without diversity)<br>12. Secular (Not subject to or bound by religious rule)<br><br><strong>Your turn:</strong> Explain 'Ethnocentrism' using an example of a tourist in a foreign country.</div>
             </div>
             
             <!-- READING -->
@@ -638,20 +736,20 @@
             <!-- WARM UP -->
             <div class="lesson-block lb-blue">
                 <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
-                <div class="content-text"><strong>Phase 1: School Reform:</strong> If you were the all-powerful Principal of your old high school, what is the single most radical rule you would implement on day one?<br><br><strong>Phase 2: Standardized Testing:</strong> Do multiple-choice exams actually measure intelligence, or just the ability to memorize?<br><br><strong>Phase 3: The Value of a Degree:</strong> Is a university degree still worth the debt in the age of the internet?</div>
+                <div class="content-text"><strong>1. School Reform:</strong> If you were the all-powerful Principal of your old high school, what is the single most radical rule you would implement on day one?<br><br><strong>2. Standardized Testing:</strong> Do multiple-choice exams actually measure intelligence, or just the ability to memorize?<br><br><strong>3. The Value of a Degree:</strong> Is a university degree still worth the debt in the age of the internet?</div>
             </div>
             
             <!-- VOCAB -->
             <div class="lesson-block lb-navy">
                 <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
-                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Curriculum (Subjects comprising a course of study)<br>2. Pedagogy (The method and practice of teaching)<br>3. Standardized (Kept to a standard size/model)<br>4. Rote memorization (Learning technique based on repetition)<br>5. Critical thinking (Objective analysis to form a judgment)<br>6. Vocation (A strong feeling of suitability for a particular career/trade)<br>7. Tenure (Guaranteed permanent employment, esp. for teachers)<br>8. Disenfranchised (Deprived of power or rights/marginalized)<br>9. Aptitude (A natural ability to do something)<br>10. Pragmatic (Dealing with things sensibly and realistically)<br>11. Tuition (Money charged for teaching)<br>12. Academia (The environment associated with research/learning)<br><br><strong>Drill Task:</strong> Contrast 'Rote memorization' with 'Critical thinking'.</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Curriculum (Subjects comprising a course of study)<br>2. Pedagogy (The method and practice of teaching)<br>3. Standardized (Kept to a standard size/model)<br>4. Rote memorization (Learning technique based on repetition)<br>5. Critical thinking (Objective analysis to form a judgment)<br>6. Vocation (A strong feeling of suitability for a particular career/trade)<br>7. Tenure (Guaranteed permanent employment, esp. for teachers)<br>8. Disenfranchised (Deprived of power or rights/marginalized)<br>9. Aptitude (A natural ability to do something)<br>10. Pragmatic (Dealing with things sensibly and realistically)<br>11. Tuition (Money charged for teaching)<br>12. Academia (The environment associated with research/learning)<br><br><strong>Your turn:</strong> Contrast 'Rote memorization' with 'Critical thinking'.</div>
             </div>
             
             <!-- LISTENING -->
             <div class="lesson-block lb-purple">
                 <div class="lb-header"><i class="fas fa-headphones"></i> Main Listening Input</div>
                 <div class="content-text"><div style="margin-bottom:10px;"><audio controls style="height:30px; width:200px;"><source src="assets/audio/core_practice_level_3_lesson_17.mp3" type="audio/mpeg"></audio></div>
-                    <em>(The script text is hidden in the student manual. Listen to the audio closely to complete the exercise.)</em></div>
+                    <em>Press play and listen twice. The words are not printed here on purpose &mdash; train your ears! Then answer the questions below.</em></div>
             </div>
             
             <!-- COMPREHENSION -->
@@ -675,13 +773,13 @@
             <!-- WARM UP -->
             <div class="lesson-block lb-blue">
                 <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
-                <div class="content-text"><strong>Phase 1: Bioethics:</strong> Would you ever selectively alter the DNA of your unborn child to ensure they are exceptionally intelligent or attractive?<br><br><strong>Phase 2: Universal Healthcare:</strong> Should healthcare be a fundamental human right provided by the government, or a private business?<br><br><strong>Phase 3: The Placebo:</strong> How can the human brain heal the body just by 'believing' a fake pill is real?</div>
+                <div class="content-text"><strong>1. Bioethics:</strong> Would you ever selectively alter the DNA of your unborn child to ensure they are exceptionally intelligent or attractive?<br><br><strong>2. Universal Healthcare:</strong> Should healthcare be a fundamental human right provided by the government, or a private business?<br><br><strong>3. The Placebo:</strong> How can the human brain heal the body just by 'believing' a fake pill is real?</div>
             </div>
             
             <!-- VOCAB -->
             <div class="lesson-block lb-navy">
                 <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
-                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Pandemic (Prevalent over a whole country or the world)<br>2. Eradicate (Destroy completely; put an end to)<br>3. Pathogen (A bacterium, virus, or microorganism causing disease)<br>4. Quarantine (State of isolation to prevent spread of disease)<br>5. Efficacy (Ability to produce intended result)<br>6. Placebo (A harmless pill given for psychological benefit)<br>7. Bioethics (Ethics of medical and biological research)<br>8. Genetic modification (Altering genetic makeup)<br>9. Pharmaceutical (Relating to medicinal drugs)<br>10. Immunity (Ability to resist a particular infection)<br>11. Vulnerable (Susceptible to physical or emotional attack)<br>12. Malpractice (Improper, illegal, or negligent professional activity)<br><br><strong>Drill Task:</strong> Explain the ethical dilemma of 'Genetic modification' in humans.</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Pandemic (Prevalent over a whole country or the world)<br>2. Eradicate (Destroy completely; put an end to)<br>3. Pathogen (A bacterium, virus, or microorganism causing disease)<br>4. Quarantine (State of isolation to prevent spread of disease)<br>5. Efficacy (Ability to produce intended result)<br>6. Placebo (A harmless pill given for psychological benefit)<br>7. Bioethics (Ethics of medical and biological research)<br>8. Genetic modification (Altering genetic makeup)<br>9. Pharmaceutical (Relating to medicinal drugs)<br>10. Immunity (Ability to resist a particular infection)<br>11. Vulnerable (Susceptible to physical or emotional attack)<br>12. Malpractice (Improper, illegal, or negligent professional activity)<br><br><strong>Your turn:</strong> Explain the ethical dilemma of 'Genetic modification' in humans.</div>
             </div>
             
             <!-- READING -->
@@ -711,20 +809,20 @@
             <!-- WARM UP -->
             <div class="lesson-block lb-blue">
                 <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
-                <div class="content-text"><strong>Phase 1: Mars One:</strong> You are offered a one-way ticket to colonize Mars. You will be famous forever, but you will never see Earth again. Do you take it? Why?<br><br><strong>Phase 2: The Fermi Paradox:</strong> The universe is infinite, so aliens must exist. Why haven't they contacted us yet?<br><br><strong>Phase 3: Space Junk:</strong> What happens when the orbit around Earth becomes completely filled with dead satellites and trash?</div>
+                <div class="content-text"><strong>1. Mars One:</strong> You are offered a one-way ticket to colonize Mars. You will be famous forever, but you will never see Earth again. Do you take it? Why?<br><br><strong>2. The Fermi Paradox:</strong> The universe is infinite, so aliens must exist. Why haven't they contacted us yet?<br><br><strong>3. Space Junk:</strong> What happens when the orbit around Earth becomes completely filled with dead satellites and trash?</div>
             </div>
             
             <!-- VOCAB -->
             <div class="lesson-block lb-navy">
                 <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
-                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Colonize (Send settlers to a place and establish control)<br>2. Gravity (Force that attracts a body toward the center of the earth)<br>3. Trajectory (Path followed by a flying object)<br>4. Astronaut / Cosmonaut (Person trained for spaceflight)<br>5. Extraterrestrial (Outside, or originating outside, the limits of the earth)<br>6. Atmosphere (Envelope of gases surrounding a planet)<br>7. Vacuum (Space entirely devoid of matter)<br>8. Cosmos (The universe seen as a well-ordered whole)<br>9. Asteroid (Small rocky body orbiting the sun)<br>10. Light-year (Distance light travels in one year)<br>11. Infinite (Limitless or endless in space, extent, or size)<br>12. Interstellar (Occurring or situated between stars)<br><br><strong>Drill Task:</strong> Explain why a 'Vacuum' is extremely dangerous for the human body.</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Colonize (Send settlers to a place and establish control)<br>2. Gravity (Force that attracts a body toward the center of the earth)<br>3. Trajectory (Path followed by a flying object)<br>4. Astronaut / Cosmonaut (Person trained for spaceflight)<br>5. Extraterrestrial (Outside, or originating outside, the limits of the earth)<br>6. Atmosphere (Envelope of gases surrounding a planet)<br>7. Vacuum (Space entirely devoid of matter)<br>8. Cosmos (The universe seen as a well-ordered whole)<br>9. Asteroid (Small rocky body orbiting the sun)<br>10. Light-year (Distance light travels in one year)<br>11. Infinite (Limitless or endless in space, extent, or size)<br>12. Interstellar (Occurring or situated between stars)<br><br><strong>Your turn:</strong> Explain why a 'Vacuum' is extremely dangerous for the human body.</div>
             </div>
             
             <!-- LISTENING -->
             <div class="lesson-block lb-purple">
                 <div class="lb-header"><i class="fas fa-headphones"></i> Main Listening Input</div>
                 <div class="content-text"><div style="margin-bottom:10px;"><audio controls style="height:30px; width:200px;"><source src="assets/audio/core_practice_level_3_lesson_19.mp3" type="audio/mpeg"></audio></div>
-                    <em>(The script text is hidden in the student manual. Listen to the audio closely to complete the exercise.)</em></div>
+                    <em>Press play and listen twice. The words are not printed here on purpose &mdash; train your ears! Then answer the questions below.</em></div>
             </div>
             
             <!-- COMPREHENSION -->
@@ -748,13 +846,13 @@
             <!-- WARM UP -->
             <div class="lesson-block lb-blue">
                 <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
-                <div class="content-text"><strong>Phase 1: Utopia vs Dystopia:</strong> Describe your absolute perfect vision of the world 100 years from now in exactly one sentence.<br><br><strong>Phase 2: Immortality:</strong> If scientists invent a pill that stops aging forever, who should be allowed to take it?<br><br><strong>Phase 3: The Time Traveler:</strong> If a time traveler from 2100 arrived right now, what modern habit do you think they would beg us to stop doing?</div>
+                <div class="content-text"><strong>1. Utopia vs Dystopia:</strong> Describe your absolute perfect vision of the world 100 years from now in exactly one sentence.<br><br><strong>2. Immortality:</strong> If scientists invent a pill that stops aging forever, who should be allowed to take it?<br><br><strong>3. The Time Traveler:</strong> If a time traveler from 2100 arrived right now, what modern habit do you think they would beg us to stop doing?</div>
             </div>
             
             <!-- VOCAB -->
             <div class="lesson-block lb-navy">
                 <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
-                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Utopia (Imagined perfect society)<br>2. Dystopia (Imagined society with great suffering/injustice)<br>3. Futurology (Systematic forecasting of the future)<br>4. Transhumanism (Belief in enhancing humans via technology)<br>5. Inevitable (Certain to happen; unavoidable)<br>6. Apocalyptic (Describing the complete destruction of the world)<br>7. Prophesy (Say that a specified thing will happen in the future)<br>8. Optimism (Hopefulness about the future)<br>9. Pessimism (Tendency to see the worst aspect of things)<br>10. Legacy (What we leave behind for future generations)<br>11. Paradigm (A typical example or pattern of something)<br>12. Sentient (Able to perceive or feel things)<br><br><strong>Drill Task:</strong> Contrast 'Transhumanism' with 'Evolution'.</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Utopia (Imagined perfect society)<br>2. Dystopia (Imagined society with great suffering/injustice)<br>3. Futurology (Systematic forecasting of the future)<br>4. Transhumanism (Belief in enhancing humans via technology)<br>5. Inevitable (Certain to happen; unavoidable)<br>6. Apocalyptic (Describing the complete destruction of the world)<br>7. Prophesy (Say that a specified thing will happen in the future)<br>8. Optimism (Hopefulness about the future)<br>9. Pessimism (Tendency to see the worst aspect of things)<br>10. Legacy (What we leave behind for future generations)<br>11. Paradigm (A typical example or pattern of something)<br>12. Sentient (Able to perceive or feel things)<br><br><strong>Your turn:</strong> Contrast 'Transhumanism' with 'Evolution'.</div>
             </div>
             
             <!-- READING -->

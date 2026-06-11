@@ -1,10 +1,10 @@
-<!DOCTYPE html><html lang="en"><head>
+﻿<!DOCTYPE html><html lang="en"><head>
 <script src="vesper_auth.js"></script><meta charset="UTF-8"><title>Core Basics: Level 1 Student</title><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-<style>:root { --theme-color: #3498db; }:root { --theme-color: var(--theme-color); }
-    @import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700&family=Open+Sans:wght@400;600;700&display=swap');
+<style>:root { --theme-color: #141c2a; --accent: #3498db; --gold: #c5a059; --cream: #f5f2eb; --ink: #34414f; }
+    @import url('https://fonts.googleapis.com/css2?family=Inria+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@300;400;500;600;700&display=swap');
     
     /* RESET & BASE */
-    body { background-color: #525659; margin: 0; padding: 40px 0; display: flex; flex-direction: column; align-items: center; font-family: 'Merriweather', serif; color: var(--theme-color); }
+    body { background-color: #525659; margin: 0; padding: 40px 0; display: flex; flex-direction: column; align-items: center; font-family: 'Inria Serif', serif; color: var(--theme-color); }
     
     /* STANDARD PAGE (Teacher) */
     .page { background-color: white; width: 210mm; min-height: 297mm; padding: 20mm; box-sizing: border-box; box-shadow: 0 0 20px rgba(0,0,0,0.3); margin-bottom: 40px; position: relative; page-break-after: always; }
@@ -40,17 +40,17 @@
     .lesson-title h2 { margin: 0; font-size: 2.2em; color: var(--theme-color); }
     .lesson-block { margin-bottom: 25px; padding: 20px 25px; background: #fff; border-left: 5px solid #ccc; border-radius: 0 5px 5px 0; }
     .lb-blue { border-color: #3498db; background: #ebf5fb; }
-    .lb-navy { border-color: var(--theme-color); background: #fff; border: 1px solid #eee; border-left: 6px solid #1a2b42; }
+    .lb-navy { border-color: var(--theme-color); background: #fff; border: 1px solid #eee; border-left: 6px solid #141c2a; }
     .lb-green { border-color: #27ae60; background: #eafaf1; }
     .lb-red { border-color: #c0392b; background: #fdedec; }
-    .lb-header { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; font-weight: bold; font-family: 'Open Sans'; text-transform: uppercase; font-size: 1em; letter-spacing: 0.5px; }
+    .lb-header { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; font-weight: bold; font-family: 'Inter'; text-transform: uppercase; font-size: 1em; letter-spacing: 0.5px; }
     .lb-blue .lb-header { color: #2980b9; } 
     .lb-navy .lb-header { color: var(--theme-color); }
     .lb-green .lb-header { color: #27ae60; }
     .lb-red .lb-header { color: #c0392b; }
     .content-text { line-height: 1.8; font-size: 0.95em; color: #2c3e50; text-align: justify; }
     .vocab-box { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
-    .vocab-item { background: #eee; padding: 5px 10px; border-radius: 3px; font-size: 0.9em; font-family: 'Open Sans'; }
+    .vocab-item { background: #eee; padding: 5px 10px; border-radius: 3px; font-size: 0.9em; font-family: 'Inter'; }
     .page-num { position: absolute; bottom: 20mm; right: 20mm; color: #999; font-size: 0.8em; }
     
 
@@ -70,8 +70,8 @@
     }
     .top-row { display: flex; justify-content: space-between; align-items: center; width: 100%; margin-bottom: 5px;}
     .logo-container img { height: 40px; }
-    .academy-name { font-family: 'Merriweather', serif; font-weight: bold; font-size: 1.2em; letter-spacing: 2px; text-transform: uppercase; }
-    .lesson-headline { font-family: 'Merriweather', serif; font-size: 1.8em; font-weight: 300; }
+    .academy-name { font-family: 'Inria Serif', serif; font-weight: bold; font-size: 1.2em; letter-spacing: 2px; text-transform: uppercase; }
+    .lesson-headline { font-family: 'Inria Serif', serif; font-size: 1.8em; font-weight: 300; }
     
     .slide-layout {
         display: flex;
@@ -103,7 +103,7 @@
         letter-spacing: 1px;
     }
     
-    .sidebar-list { font-size: 0.9em; line-height: 1.6; color: #2c3e50; font-family: 'Open Sans'; }
+    .sidebar-list { font-size: 0.9em; line-height: 1.6; color: #2c3e50; font-family: 'Inter'; }
     .sidebar-list div { margin-bottom: 5px; }
     
     /* MAIN CONTENT */
@@ -129,11 +129,11 @@
     
     .section-title {
         color: var(--theme-color);
-        font-family: 'Merriweather', serif;
+        font-family: 'Inria Serif', serif;
         font-size: 1.4em;
         text-transform: uppercase;
         margin-bottom: 15px;
-        border-bottom: 1px solid #1a2b42;
+        border-bottom: 1px solid #141c2a;
         display: inline-block;
         padding-bottom: 5px;
     }
@@ -145,7 +145,7 @@
         font-size: 1.2em;
         margin-bottom: 40px;
         z-index: 1;
-        font-family: 'Open Sans', sans-serif;
+        font-family: 'Inter', sans-serif;
         background: rgba(255,255,255,0.5);
         padding: 15px;
         border-radius: 5px;
@@ -160,12 +160,12 @@
     
     .col { width: 48%; }
     
-    .content-item { margin-bottom: 15px; font-size: 1em; font-family: 'Open Sans', sans-serif; }
+    .content-item { margin-bottom: 15px; font-size: 1em; font-family: 'Inter', sans-serif; }
     .content-item strong { color: #c0392b; }
     
     /* TOC STYLES */
     .toc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px 40px; margin-top: 20px; }
-    .toc-item { border-bottom: 1px dotted #999; display: flex; justify-content: space-between; padding-bottom: 5px; font-family: 'Open Sans'; }
+    .toc-item { border-bottom: 1px dotted #999; display: flex; justify-content: space-between; padding-bottom: 5px; font-family: 'Inter'; }
     .toc-item a { text-decoration: none; color: var(--theme-color); font-weight: bold; width: 100%; display: flex; justify-content: space-between; }
     .toc-item a:hover { color: #c0392b; }
 
@@ -182,6 +182,116 @@
     /* CHECKPOINT SLIDE */
     .checkpoint-card { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); text-align: center; margin-bottom: 20px; border-top: 5px solid var(--theme-color); }
 .v-gloss{color:#8a7a55;font-size:.84em;font-style:italic;}
+
+/* =====================================================================
+   VESPER PREMIUM SKIN (student edition) — navy / gold / cream
+   Cosmetic overlay; overrides legacy inline styles via specificity.
+   ===================================================================== */
+body{ background:#2f3947 !important; }
+
+.slide-page{
+  background: var(--cream) !important;
+  box-shadow: 0 12px 44px rgba(0,0,0,.4) !important;
+}
+
+/* ---------- HEADER ---------- */
+.slide-header-bar{
+  background: linear-gradient(135deg,#1d3454 0%,#141c2a 65%,#101d33 100%) !important;
+  border-bottom: 3px solid var(--gold) !important;
+  color:#fff !important;
+  padding: 20px 38px !important;
+  min-height:0 !important; height:auto !important;
+  position:relative;
+}
+.slide-header-bar::before{
+  content:""; position:absolute; top:0; left:0; right:0; height:4px; background:var(--accent);
+}
+.academy-name{ display:none !important; }
+.logo-container img{
+  filter:none !important;
+  height:52px !important; width:auto !important;
+  background:var(--cream);
+  padding:5px 10px; border-radius:9px;
+  box-shadow:0 3px 9px rgba(0,0,0,.3);
+}
+.lesson-headline{
+  color:#fff !important; font-weight:600 !important;
+  font-size:1.7em !important; margin-top:14px !important;
+  letter-spacing:.3px;
+}
+
+/* ---------- AUDIO + HOMEWORK ---------- */
+.lesson-audio{
+  background:#fff !important; border:1px solid #e6dec9 !important;
+  border-left:4px solid var(--accent) !important; border-radius:8px !important;
+  box-shadow:0 2px 10px rgba(0,0,0,.05) !important;
+}
+.lesson-hw{
+  background:#fbf6ea !important; border-left:4px solid var(--gold) !important;
+  border-radius:8px !important;
+}
+
+/* ---------- SIDEBAR ---------- */
+.slide-layout{ height:auto !important; }
+.sidebar{
+  background:#efe9da !important; border-right:1px solid #ddd3bd !important;
+  padding:30px 22px !important;
+}
+.sidebar-title{
+  color:var(--theme-color) !important; border:none !important;
+  font-family:'Inria Serif',serif; padding-bottom:8px; letter-spacing:1.5px;
+  position:relative;
+}
+.sidebar-title::after{
+  content:""; position:absolute; left:0; bottom:0; width:38px; height:3px; background:var(--gold);
+}
+.sidebar-list{ color:#3a4654; }
+
+/* ---------- BODY ---------- */
+.slide-body{ padding:34px 42px !important; }
+.watermark{ display:none !important; }
+
+.section-title{
+  color:var(--theme-color) !important; border:none !important;
+  text-decoration:none !important; font-weight:700; letter-spacing:.5px;
+  padding-bottom:8px; position:relative;
+}
+.section-title::after{
+  content:""; position:absolute; left:0; bottom:0; width:46px; height:3px; background:var(--gold);
+}
+.center-title{ text-align:center; }
+.center-title::after{ left:50%; transform:translateX(-50%); width:72px; }
+
+.structure-content{
+  text-align:left !important; background:#fff !important;
+  border:1px solid #e7dfca !important; border-left:5px solid var(--gold) !important;
+  border-radius:8px !important; padding:22px 26px !important;
+  font-size:1.02em !important; line-height:1.75 !important;
+  box-shadow:0 2px 10px rgba(0,0,0,.04) !important; color:var(--ink) !important;
+}
+
+.two-cols{ gap:24px !important; }
+.col{
+  background:#fff; border:1px solid #ece5d4; border-top:3px solid var(--accent);
+  border-radius:8px; padding:18px 22px; width:auto !important; flex:1 1 0 !important;
+  box-sizing:border-box;
+}
+.content-text{ text-align:left !important; line-height:1.7 !important; color:var(--ink) !important; }
+
+/* ---------- NAV + PROGRESS ---------- */
+.nav-arrow{ background:rgba(22,39,63,.08); color:#141c2a; }
+.nav-arrow:hover{ background:var(--theme-color); color:#fff; }
+.progress-bar{ background:var(--gold) !important; }
+.progress-bar-container{ background:#e7e0cf !important; }
+
+/* ---------- TOC ---------- */
+.toc-item{ border-bottom:1px solid #d8cdb2 !important; }
+.toc-item a{ color:var(--theme-color) !important; }
+.toc-item a:hover{ color:#b08a3a !important; }
+
+/* ---------- CHECKPOINT + buttons ---------- */
+.checkpoint-card{ border-top:5px solid var(--gold) !important; }
+.nav-btn{ color:var(--theme-color) !important; }
 </style>
 </head><body><div class="no-print"><a href="index.html" class="nav-btn"><i class="fas fa-arrow-left"></i> Dashboard</a></div>
     <div class="slide-page" id="toc">
@@ -209,7 +319,7 @@
                 <div class="lesson-headline">Lesson 1 - Who Are You?</div>
             </div>
             
-            <div class="lesson-audio" style="background:#eef3f9; border:1px solid #c9d8ea; border-left:4px solid #1e5fa8; border-radius:6px; padding:12px 16px; margin:0 0 14px 0; margin:12px 24px;"><div style="font-weight:bold; color:#1a2b42; margin-bottom:6px;">&#127911; Lesson Audio &mdash; Listen before class</div><audio controls preload="none" style="width:100%;"><source src="assets/audio/core_basics_level_1_lesson_1.mp3" type="audio/mpeg">Your browser does not support audio.</audio><div style="font-size:0.85em; color:#33475e; margin-top:8px; line-height:1.6;"><strong>Listen &amp; Answer:</strong><br>1) What is the woman's name?<br>2) What is the man's name?<br>3) And you? Say: 'Hello, I am...'</div></div><div class="lesson-hw" style="background:#f7f3ea; border-left:4px solid #c5a059; border-radius:4px; padding:7px 14px; margin:6px 24px; font-size:0.78em; color:#3a3325; line-height:1.45;"><strong style="color:#a8843d;">&#9997;&#65039; Before next class (10 min):</strong> Record a 20-second voice note: 'Hello, I am... I am from...' &bull; Write your 4-line introduction in your notebook &bull; Listen to the lesson audio again before next class</div><div class="slide-layout">
+            <div class="lesson-audio" style="background:#eef3f9; border:1px solid #c9d8ea; border-left:4px solid #1e5fa8; border-radius:6px; padding:12px 16px; margin:0 0 14px 0; margin:12px 24px;"><div style="font-weight:bold; color:#141c2a; margin-bottom:6px;">&#127911; Lesson Audio &mdash; Listen before class</div><audio controls preload="none" style="width:100%;"><source src="assets/audio/core_basics_level_1_lesson_1.mp3" type="audio/mpeg">Your browser does not support audio.</audio><div style="font-size:0.85em; color:#33475e; margin-top:8px; line-height:1.6;"><strong>Listen &amp; Answer:</strong><br>1) What is the woman's name?<br>2) What is the man's name?<br>3) And you? Say: 'Hello, I am...'</div></div><div class="lesson-hw" style="background:#f7f3ea; border-left:4px solid #c5a059; border-radius:4px; padding:7px 14px; margin:6px 24px; font-size:0.78em; color:#3a3325; line-height:1.45;"><strong style="color:#a8843d;">&#9997;&#65039; Before next class (10 min):</strong> Record a 20-second voice note: 'Hello, I am... I am from...' &bull; Write your 4-line introduction in your notebook &bull; Listen to the lesson audio again before next class</div><div class="slide-layout">
                 <div class="sidebar">
                     <div class="sidebar-section">
                         <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">VOCABULARY</div>
@@ -245,7 +355,7 @@
             <a href="#sl2" class="nav-arrow nav-next"><i class="fas fa-chevron-right"></i></a>
             
             <div class="progress-bar-container"><div class="progress-bar" style="width:5.0%;"></div></div>
-            <div style="position:absolute; bottom:15px; right:30px; font-family:'Merriweather'; color:#999; font-size:0.8em;">Core Basics: Level 1 | 1</div>
+            <div style="position:absolute; bottom:15px; right:30px; font-family:'Inria Serif'; color:#999; font-size:0.8em;">Core Basics: Level 1 | 1</div>
         </div>
         
         <div class="slide-page" id="sl2">
@@ -257,7 +367,7 @@
                 <div class="lesson-headline">Lesson 2 - Where Are You From?</div>
             </div>
             
-            <div class="lesson-audio" style="background:#eef3f9; border:1px solid #c9d8ea; border-left:4px solid #1e5fa8; border-radius:6px; padding:12px 16px; margin:0 0 14px 0; margin:12px 24px;"><div style="font-weight:bold; color:#1a2b42; margin-bottom:6px;">&#127911; Lesson Audio &mdash; Listen before class</div><audio controls preload="none" style="width:100%;"><source src="assets/audio/core_basics_level_1_lesson_2.mp3" type="audio/mpeg">Your browser does not support audio.</audio><div style="font-size:0.85em; color:#33475e; margin-top:8px; line-height:1.6;"><strong>Listen &amp; Answer:</strong><br>1) Where is Ana from?<br>2) Where is Leo from?<br>3) And you? Say: 'I am from...'</div></div><div class="lesson-hw" style="background:#f7f3ea; border-left:4px solid #c5a059; border-radius:4px; padding:7px 14px; margin:6px 24px; font-size:0.78em; color:#3a3325; line-height:1.45;"><strong style="color:#a8843d;">&#9997;&#65039; Before next class (10 min):</strong> Find 3 country names in English on your phone and write them &bull; Write where 3 family members are from &bull; Listen to the lesson audio again</div><div class="slide-layout">
+            <div class="lesson-audio" style="background:#eef3f9; border:1px solid #c9d8ea; border-left:4px solid #1e5fa8; border-radius:6px; padding:12px 16px; margin:0 0 14px 0; margin:12px 24px;"><div style="font-weight:bold; color:#141c2a; margin-bottom:6px;">&#127911; Lesson Audio &mdash; Listen before class</div><audio controls preload="none" style="width:100%;"><source src="assets/audio/core_basics_level_1_lesson_2.mp3" type="audio/mpeg">Your browser does not support audio.</audio><div style="font-size:0.85em; color:#33475e; margin-top:8px; line-height:1.6;"><strong>Listen &amp; Answer:</strong><br>1) Where is Ana from?<br>2) Where is Leo from?<br>3) And you? Say: 'I am from...'</div></div><div class="lesson-hw" style="background:#f7f3ea; border-left:4px solid #c5a059; border-radius:4px; padding:7px 14px; margin:6px 24px; font-size:0.78em; color:#3a3325; line-height:1.45;"><strong style="color:#a8843d;">&#9997;&#65039; Before next class (10 min):</strong> Find 3 country names in English on your phone and write them &bull; Write where 3 family members are from &bull; Listen to the lesson audio again</div><div class="slide-layout">
                 <div class="sidebar">
                     <div class="sidebar-section">
                         <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">VOCABULARY</div>
@@ -293,7 +403,7 @@
             <a href="#sl3" class="nav-arrow nav-next"><i class="fas fa-chevron-right"></i></a>
             
             <div class="progress-bar-container"><div class="progress-bar" style="width:10.0%;"></div></div>
-            <div style="position:absolute; bottom:15px; right:30px; font-family:'Merriweather'; color:#999; font-size:0.8em;">Core Basics: Level 1 | 2</div>
+            <div style="position:absolute; bottom:15px; right:30px; font-family:'Inria Serif'; color:#999; font-size:0.8em;">Core Basics: Level 1 | 2</div>
         </div>
         
         <div class="slide-page" id="sl3">
@@ -305,7 +415,7 @@
                 <div class="lesson-headline">Lesson 3 - Jobs & Professions</div>
             </div>
             
-            <div class="lesson-audio" style="background:#eef3f9; border:1px solid #c9d8ea; border-left:4px solid #1e5fa8; border-radius:6px; padding:12px 16px; margin:0 0 14px 0; margin:12px 24px;"><div style="font-weight:bold; color:#1a2b42; margin-bottom:6px;">&#127911; Lesson Audio &mdash; Listen before class</div><audio controls preload="none" style="width:100%;"><source src="assets/audio/core_basics_level_1_lesson_3.mp3" type="audio/mpeg">Your browser does not support audio.</audio><div style="font-size:0.85em; color:#33475e; margin-top:8px; line-height:1.6;"><strong>Listen &amp; Answer:</strong><br>1) What is Ana's job?<br>2) Is Leo a teacher?<br>3) And you? Say: 'I am a...' or 'I am an...'</div></div><div class="lesson-hw" style="background:#f7f3ea; border-left:4px solid #c5a059; border-radius:4px; padding:7px 14px; margin:6px 24px; font-size:0.78em; color:#3a3325; line-height:1.45;"><strong style="color:#a8843d;">&#9997;&#65039; Before next class (10 min):</strong> Write the jobs of 3 people you know: 'My father is a...' &bull; Practice: a + consonant, an + vowel with 5 jobs &bull; Listen to the lesson audio again</div><div class="slide-layout">
+            <div class="lesson-audio" style="background:#eef3f9; border:1px solid #c9d8ea; border-left:4px solid #1e5fa8; border-radius:6px; padding:12px 16px; margin:0 0 14px 0; margin:12px 24px;"><div style="font-weight:bold; color:#141c2a; margin-bottom:6px;">&#127911; Lesson Audio &mdash; Listen before class</div><audio controls preload="none" style="width:100%;"><source src="assets/audio/core_basics_level_1_lesson_3.mp3" type="audio/mpeg">Your browser does not support audio.</audio><div style="font-size:0.85em; color:#33475e; margin-top:8px; line-height:1.6;"><strong>Listen &amp; Answer:</strong><br>1) What is Ana's job?<br>2) Is Leo a teacher?<br>3) And you? Say: 'I am a...' or 'I am an...'</div></div><div class="lesson-hw" style="background:#f7f3ea; border-left:4px solid #c5a059; border-radius:4px; padding:7px 14px; margin:6px 24px; font-size:0.78em; color:#3a3325; line-height:1.45;"><strong style="color:#a8843d;">&#9997;&#65039; Before next class (10 min):</strong> Write the jobs of 3 people you know: 'My father is a...' &bull; Practice: a + consonant, an + vowel with 5 jobs &bull; Listen to the lesson audio again</div><div class="slide-layout">
                 <div class="sidebar">
                     <div class="sidebar-section">
                         <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">VOCABULARY</div>
@@ -341,7 +451,7 @@
             <a href="#sl4" class="nav-arrow nav-next"><i class="fas fa-chevron-right"></i></a>
             
             <div class="progress-bar-container"><div class="progress-bar" style="width:15.0%;"></div></div>
-            <div style="position:absolute; bottom:15px; right:30px; font-family:'Merriweather'; color:#999; font-size:0.8em;">Core Basics: Level 1 | 3</div>
+            <div style="position:absolute; bottom:15px; right:30px; font-family:'Inria Serif'; color:#999; font-size:0.8em;">Core Basics: Level 1 | 3</div>
         </div>
         
         <div class="slide-page" id="sl4">
@@ -353,7 +463,7 @@
                 <div class="lesson-headline">Lesson 4 - Adjectives (Feelings)</div>
             </div>
             
-            <div class="lesson-audio" style="background:#eef3f9; border:1px solid #c9d8ea; border-left:4px solid #1e5fa8; border-radius:6px; padding:12px 16px; margin:0 0 14px 0; margin:12px 24px;"><div style="font-weight:bold; color:#1a2b42; margin-bottom:6px;">&#127911; Lesson Audio &mdash; Listen before class</div><audio controls preload="none" style="width:100%;"><source src="assets/audio/core_basics_level_1_lesson_4.mp3" type="audio/mpeg">Your browser does not support audio.</audio><div style="font-size:0.85em; color:#33475e; margin-top:8px; line-height:1.6;"><strong>Listen &amp; Answer:</strong><br>1) How is Leo today?<br>2) Why is Ana happy?<br>3) And you? Say: 'Today I am...'</div></div><div class="lesson-hw" style="background:#f7f3ea; border-left:4px solid #c5a059; border-radius:4px; padding:7px 14px; margin:6px 24px; font-size:0.78em; color:#3a3325; line-height:1.45;"><strong style="color:#a8843d;">&#9997;&#65039; Before next class (10 min):</strong> Write 3 sentences: 'Today I am... because...' &bull; Take an emoji from your phone and describe it: 'He is sad.' &bull; Listen to the lesson audio again</div><div class="slide-layout">
+            <div class="lesson-audio" style="background:#eef3f9; border:1px solid #c9d8ea; border-left:4px solid #1e5fa8; border-radius:6px; padding:12px 16px; margin:0 0 14px 0; margin:12px 24px;"><div style="font-weight:bold; color:#141c2a; margin-bottom:6px;">&#127911; Lesson Audio &mdash; Listen before class</div><audio controls preload="none" style="width:100%;"><source src="assets/audio/core_basics_level_1_lesson_4.mp3" type="audio/mpeg">Your browser does not support audio.</audio><div style="font-size:0.85em; color:#33475e; margin-top:8px; line-height:1.6;"><strong>Listen &amp; Answer:</strong><br>1) How is Leo today?<br>2) Why is Ana happy?<br>3) And you? Say: 'Today I am...'</div></div><div class="lesson-hw" style="background:#f7f3ea; border-left:4px solid #c5a059; border-radius:4px; padding:7px 14px; margin:6px 24px; font-size:0.78em; color:#3a3325; line-height:1.45;"><strong style="color:#a8843d;">&#9997;&#65039; Before next class (10 min):</strong> Write 3 sentences: 'Today I am... because...' &bull; Take an emoji from your phone and describe it: 'He is sad.' &bull; Listen to the lesson audio again</div><div class="slide-layout">
                 <div class="sidebar">
                     <div class="sidebar-section">
                         <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">VOCABULARY</div>
@@ -389,7 +499,7 @@
             <a href="#sl5" class="nav-arrow nav-next"><i class="fas fa-chevron-right"></i></a>
             
             <div class="progress-bar-container"><div class="progress-bar" style="width:20.0%;"></div></div>
-            <div style="position:absolute; bottom:15px; right:30px; font-family:'Merriweather'; color:#999; font-size:0.8em;">Core Basics: Level 1 | 4</div>
+            <div style="position:absolute; bottom:15px; right:30px; font-family:'Inria Serif'; color:#999; font-size:0.8em;">Core Basics: Level 1 | 4</div>
         </div>
         
         <div class="slide-page" id="sl5">
@@ -401,7 +511,7 @@
                 <div class="lesson-headline">Lesson 5 - Family Tree</div>
             </div>
             
-            <div class="lesson-audio" style="background:#eef3f9; border:1px solid #c9d8ea; border-left:4px solid #1e5fa8; border-radius:6px; padding:12px 16px; margin:0 0 14px 0; margin:12px 24px;"><div style="font-weight:bold; color:#1a2b42; margin-bottom:6px;">&#127911; Lesson Audio &mdash; Listen before class</div><audio controls preload="none" style="width:100%;"><source src="assets/audio/core_basics_level_1_lesson_5.mp3" type="audio/mpeg">Your browser does not support audio.</audio><div style="font-size:0.85em; color:#33475e; margin-top:8px; line-height:1.6;"><strong>Listen &amp; Answer:</strong><br>1) Who is Marta?<br>2) Is Leo's brother old or young?<br>3) And you? Say one sentence about your family.</div></div><div class="lesson-hw" style="background:#f7f3ea; border-left:4px solid #c5a059; border-radius:4px; padding:7px 14px; margin:6px 24px; font-size:0.78em; color:#3a3325; line-height:1.45;"><strong style="color:#a8843d;">&#9997;&#65039; Before next class (10 min):</strong> Draw a mini family tree with 5 names in English &bull; Write 3 sentences with possessive 's about your family &bull; Listen to the lesson audio again</div><div class="slide-layout">
+            <div class="lesson-audio" style="background:#eef3f9; border:1px solid #c9d8ea; border-left:4px solid #1e5fa8; border-radius:6px; padding:12px 16px; margin:0 0 14px 0; margin:12px 24px;"><div style="font-weight:bold; color:#141c2a; margin-bottom:6px;">&#127911; Lesson Audio &mdash; Listen before class</div><audio controls preload="none" style="width:100%;"><source src="assets/audio/core_basics_level_1_lesson_5.mp3" type="audio/mpeg">Your browser does not support audio.</audio><div style="font-size:0.85em; color:#33475e; margin-top:8px; line-height:1.6;"><strong>Listen &amp; Answer:</strong><br>1) Who is Marta?<br>2) Is Leo's brother old or young?<br>3) And you? Say one sentence about your family.</div></div><div class="lesson-hw" style="background:#f7f3ea; border-left:4px solid #c5a059; border-radius:4px; padding:7px 14px; margin:6px 24px; font-size:0.78em; color:#3a3325; line-height:1.45;"><strong style="color:#a8843d;">&#9997;&#65039; Before next class (10 min):</strong> Draw a mini family tree with 5 names in English &bull; Write 3 sentences with possessive 's about your family &bull; Listen to the lesson audio again</div><div class="slide-layout">
                 <div class="sidebar">
                     <div class="sidebar-section">
                         <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">VOCABULARY</div>
@@ -437,13 +547,13 @@
             <a href="#cp5" class="nav-arrow nav-next"><i class="fas fa-chevron-right"></i></a>
             
             <div class="progress-bar-container"><div class="progress-bar" style="width:25.0%;"></div></div>
-            <div style="position:absolute; bottom:15px; right:30px; font-family:'Merriweather'; color:#999; font-size:0.8em;">Core Basics: Level 1 | 5</div>
+            <div style="position:absolute; bottom:15px; right:30px; font-family:'Inria Serif'; color:#999; font-size:0.8em;">Core Basics: Level 1 | 5</div>
         </div>
         
             <div class="slide-page" id="cp5" style="background-color: var(--theme-color); color:white;">
                  <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; text-align:center; padding:50px;">
                     <i class="fas fa-flag-checkered" style="font-size:5em; margin-bottom:20px; opacity:0.8;"></i>
-                    <h1 style="font-size:3em; margin:0; font-family:'Merriweather';">CHECKPOINT</h1>
+                    <h1 style="font-size:3em; margin:0; font-family:'Inria Serif';">CHECKPOINT</h1>
                     <h2 style="font-size:1.5em; font-weight:300; opacity:0.9;">Lessons 1 - 5 Complete</h2>
                     <div style="background:white; color:#333; padding:30px; border-radius:10px; margin-top:40px; max-width:600px; box-shadow:0 10px 30px rgba(0,0,0,0.2);">
                         <h3 style="color:var(--theme-color); margin-top:0;">Time to Review!</h3>
@@ -464,7 +574,7 @@
                 <div class="lesson-headline">Lesson 6 - Colors & Clothing</div>
             </div>
             
-            <div class="lesson-audio" style="background:#eef3f9; border:1px solid #c9d8ea; border-left:4px solid #1e5fa8; border-radius:6px; padding:12px 16px; margin:0 0 14px 0; margin:12px 24px;"><div style="font-weight:bold; color:#1a2b42; margin-bottom:6px;">&#127911; Lesson Audio &mdash; Listen before class</div><audio controls preload="none" style="width:100%;"><source src="assets/audio/core_basics_level_1_lesson_6.mp3" type="audio/mpeg">Your browser does not support audio.</audio><div style="font-size:0.85em; color:#33475e; margin-top:8px; line-height:1.6;"><strong>Listen &amp; Answer:</strong><br>1) What color is Ana's new dress?<br>2) What is Leo wearing today?<br>3) And you? Say: 'Today I am wearing...'</div></div><div class="lesson-hw" style="background:#f7f3ea; border-left:4px solid #c5a059; border-radius:4px; padding:7px 14px; margin:6px 24px; font-size:0.78em; color:#3a3325; line-height:1.45;"><strong style="color:#a8843d;">&#9997;&#65039; Before next class (10 min):</strong> Open your closet and write 5 items with colors: 'a blue shirt' &bull; Describe what one family member is wearing today &bull; Listen to the lesson audio again</div><div class="slide-layout">
+            <div class="lesson-audio" style="background:#eef3f9; border:1px solid #c9d8ea; border-left:4px solid #1e5fa8; border-radius:6px; padding:12px 16px; margin:0 0 14px 0; margin:12px 24px;"><div style="font-weight:bold; color:#141c2a; margin-bottom:6px;">&#127911; Lesson Audio &mdash; Listen before class</div><audio controls preload="none" style="width:100%;"><source src="assets/audio/core_basics_level_1_lesson_6.mp3" type="audio/mpeg">Your browser does not support audio.</audio><div style="font-size:0.85em; color:#33475e; margin-top:8px; line-height:1.6;"><strong>Listen &amp; Answer:</strong><br>1) What color is Ana's new dress?<br>2) What is Leo wearing today?<br>3) And you? Say: 'Today I am wearing...'</div></div><div class="lesson-hw" style="background:#f7f3ea; border-left:4px solid #c5a059; border-radius:4px; padding:7px 14px; margin:6px 24px; font-size:0.78em; color:#3a3325; line-height:1.45;"><strong style="color:#a8843d;">&#9997;&#65039; Before next class (10 min):</strong> Open your closet and write 5 items with colors: 'a blue shirt' &bull; Describe what one family member is wearing today &bull; Listen to the lesson audio again</div><div class="slide-layout">
                 <div class="sidebar">
                     <div class="sidebar-section">
                         <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">VOCABULARY</div>
@@ -500,7 +610,7 @@
             <a href="#sl7" class="nav-arrow nav-next"><i class="fas fa-chevron-right"></i></a>
             
             <div class="progress-bar-container"><div class="progress-bar" style="width:30.0%;"></div></div>
-            <div style="position:absolute; bottom:15px; right:30px; font-family:'Merriweather'; color:#999; font-size:0.8em;">Core Basics: Level 1 | 6</div>
+            <div style="position:absolute; bottom:15px; right:30px; font-family:'Inria Serif'; color:#999; font-size:0.8em;">Core Basics: Level 1 | 6</div>
         </div>
         
         <div class="slide-page" id="sl7">
@@ -512,7 +622,7 @@
                 <div class="lesson-headline">Lesson 7 - Describing People</div>
             </div>
             
-            <div class="lesson-audio" style="background:#eef3f9; border:1px solid #c9d8ea; border-left:4px solid #1e5fa8; border-radius:6px; padding:12px 16px; margin:0 0 14px 0; margin:12px 24px;"><div style="font-weight:bold; color:#1a2b42; margin-bottom:6px;">&#127911; Lesson Audio &mdash; Listen before class</div><audio controls preload="none" style="width:100%;"><source src="assets/audio/core_basics_level_1_lesson_7.mp3" type="audio/mpeg">Your browser does not support audio.</audio><div style="font-size:0.85em; color:#33475e; margin-top:8px; line-height:1.6;"><strong>Listen &amp; Answer:</strong><br>1) Is Ana's friend tall or short?<br>2) Does he have glasses?<br>3) And you? Describe a friend: 'He is... / She is...'</div></div><div class="lesson-hw" style="background:#f7f3ea; border-left:4px solid #c5a059; border-radius:4px; padding:7px 14px; margin:6px 24px; font-size:0.78em; color:#3a3325; line-height:1.45;"><strong style="color:#a8843d;">&#9997;&#65039; Before next class (10 min):</strong> Describe your best friend in 3 written sentences &bull; Find a photo of a celebrity and describe hair + height &bull; Listen to the lesson audio again</div><div class="slide-layout">
+            <div class="lesson-audio" style="background:#eef3f9; border:1px solid #c9d8ea; border-left:4px solid #1e5fa8; border-radius:6px; padding:12px 16px; margin:0 0 14px 0; margin:12px 24px;"><div style="font-weight:bold; color:#141c2a; margin-bottom:6px;">&#127911; Lesson Audio &mdash; Listen before class</div><audio controls preload="none" style="width:100%;"><source src="assets/audio/core_basics_level_1_lesson_7.mp3" type="audio/mpeg">Your browser does not support audio.</audio><div style="font-size:0.85em; color:#33475e; margin-top:8px; line-height:1.6;"><strong>Listen &amp; Answer:</strong><br>1) Is Ana's friend tall or short?<br>2) Does he have glasses?<br>3) And you? Describe a friend: 'He is... / She is...'</div></div><div class="lesson-hw" style="background:#f7f3ea; border-left:4px solid #c5a059; border-radius:4px; padding:7px 14px; margin:6px 24px; font-size:0.78em; color:#3a3325; line-height:1.45;"><strong style="color:#a8843d;">&#9997;&#65039; Before next class (10 min):</strong> Describe your best friend in 3 written sentences &bull; Find a photo of a celebrity and describe hair + height &bull; Listen to the lesson audio again</div><div class="slide-layout">
                 <div class="sidebar">
                     <div class="sidebar-section">
                         <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">VOCABULARY</div>
@@ -548,7 +658,7 @@
             <a href="#sl8" class="nav-arrow nav-next"><i class="fas fa-chevron-right"></i></a>
             
             <div class="progress-bar-container"><div class="progress-bar" style="width:35.0%;"></div></div>
-            <div style="position:absolute; bottom:15px; right:30px; font-family:'Merriweather'; color:#999; font-size:0.8em;">Core Basics: Level 1 | 7</div>
+            <div style="position:absolute; bottom:15px; right:30px; font-family:'Inria Serif'; color:#999; font-size:0.8em;">Core Basics: Level 1 | 7</div>
         </div>
         
         <div class="slide-page" id="sl8">
@@ -560,7 +670,7 @@
                 <div class="lesson-headline">Lesson 8 - The Weather</div>
             </div>
             
-            <div class="lesson-audio" style="background:#eef3f9; border:1px solid #c9d8ea; border-left:4px solid #1e5fa8; border-radius:6px; padding:12px 16px; margin:0 0 14px 0; margin:12px 24px;"><div style="font-weight:bold; color:#1a2b42; margin-bottom:6px;">&#127911; Lesson Audio &mdash; Listen before class</div><audio controls preload="none" style="width:100%;"><source src="assets/audio/core_basics_level_1_lesson_8.mp3" type="audio/mpeg">Your browser does not support audio.</audio><div style="font-size:0.85em; color:#33475e; margin-top:8px; line-height:1.6;"><strong>Listen &amp; Answer:</strong><br>1) How is the weather today?<br>2) Is it cold in Leo's city?<br>3) And you? Say: 'Today it is... in my city.'</div></div><div class="lesson-hw" style="background:#f7f3ea; border-left:4px solid #c5a059; border-radius:4px; padding:7px 14px; margin:6px 24px; font-size:0.78em; color:#3a3325; line-height:1.45;"><strong style="color:#a8843d;">&#9997;&#65039; Before next class (10 min):</strong> Check tomorrow's weather and write it in English &bull; Write the weather for 3 world cities (use your phone) &bull; Listen to the lesson audio again</div><div class="slide-layout">
+            <div class="lesson-audio" style="background:#eef3f9; border:1px solid #c9d8ea; border-left:4px solid #1e5fa8; border-radius:6px; padding:12px 16px; margin:0 0 14px 0; margin:12px 24px;"><div style="font-weight:bold; color:#141c2a; margin-bottom:6px;">&#127911; Lesson Audio &mdash; Listen before class</div><audio controls preload="none" style="width:100%;"><source src="assets/audio/core_basics_level_1_lesson_8.mp3" type="audio/mpeg">Your browser does not support audio.</audio><div style="font-size:0.85em; color:#33475e; margin-top:8px; line-height:1.6;"><strong>Listen &amp; Answer:</strong><br>1) How is the weather today?<br>2) Is it cold in Leo's city?<br>3) And you? Say: 'Today it is... in my city.'</div></div><div class="lesson-hw" style="background:#f7f3ea; border-left:4px solid #c5a059; border-radius:4px; padding:7px 14px; margin:6px 24px; font-size:0.78em; color:#3a3325; line-height:1.45;"><strong style="color:#a8843d;">&#9997;&#65039; Before next class (10 min):</strong> Check tomorrow's weather and write it in English &bull; Write the weather for 3 world cities (use your phone) &bull; Listen to the lesson audio again</div><div class="slide-layout">
                 <div class="sidebar">
                     <div class="sidebar-section">
                         <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">VOCABULARY</div>
@@ -596,7 +706,7 @@
             <a href="#sl9" class="nav-arrow nav-next"><i class="fas fa-chevron-right"></i></a>
             
             <div class="progress-bar-container"><div class="progress-bar" style="width:40.0%;"></div></div>
-            <div style="position:absolute; bottom:15px; right:30px; font-family:'Merriweather'; color:#999; font-size:0.8em;">Core Basics: Level 1 | 8</div>
+            <div style="position:absolute; bottom:15px; right:30px; font-family:'Inria Serif'; color:#999; font-size:0.8em;">Core Basics: Level 1 | 8</div>
         </div>
         
         <div class="slide-page" id="sl9">
@@ -608,7 +718,7 @@
                 <div class="lesson-headline">Lesson 9 - Numbers 1-20</div>
             </div>
             
-            <div class="lesson-audio" style="background:#eef3f9; border:1px solid #c9d8ea; border-left:4px solid #1e5fa8; border-radius:6px; padding:12px 16px; margin:0 0 14px 0; margin:12px 24px;"><div style="font-weight:bold; color:#1a2b42; margin-bottom:6px;">&#127911; Lesson Audio &mdash; Listen before class</div><audio controls preload="none" style="width:100%;"><source src="assets/audio/core_basics_level_1_lesson_9.mp3" type="audio/mpeg">Your browser does not support audio.</audio><div style="font-size:0.85em; color:#33475e; margin-top:8px; line-height:1.6;"><strong>Listen &amp; Answer:</strong><br>1) How old is Ana's sister?<br>2) What is Leo's phone number? Listen for two numbers.<br>3) And you? Count from one to ten out loud.</div></div><div class="lesson-hw" style="background:#f7f3ea; border-left:4px solid #c5a059; border-radius:4px; padding:7px 14px; margin:6px 24px; font-size:0.78em; color:#3a3325; line-height:1.45;"><strong style="color:#a8843d;">&#9997;&#65039; Before next class (10 min):</strong> Write 5 important numbers of your life in words (age, floor...) &bull; Dictate your phone number in English to a mirror &bull; Listen to the lesson audio again</div><div class="slide-layout">
+            <div class="lesson-audio" style="background:#eef3f9; border:1px solid #c9d8ea; border-left:4px solid #1e5fa8; border-radius:6px; padding:12px 16px; margin:0 0 14px 0; margin:12px 24px;"><div style="font-weight:bold; color:#141c2a; margin-bottom:6px;">&#127911; Lesson Audio &mdash; Listen before class</div><audio controls preload="none" style="width:100%;"><source src="assets/audio/core_basics_level_1_lesson_9.mp3" type="audio/mpeg">Your browser does not support audio.</audio><div style="font-size:0.85em; color:#33475e; margin-top:8px; line-height:1.6;"><strong>Listen &amp; Answer:</strong><br>1) How old is Ana's sister?<br>2) What is Leo's phone number? Listen for two numbers.<br>3) And you? Count from one to ten out loud.</div></div><div class="lesson-hw" style="background:#f7f3ea; border-left:4px solid #c5a059; border-radius:4px; padding:7px 14px; margin:6px 24px; font-size:0.78em; color:#3a3325; line-height:1.45;"><strong style="color:#a8843d;">&#9997;&#65039; Before next class (10 min):</strong> Write 5 important numbers of your life in words (age, floor...) &bull; Dictate your phone number in English to a mirror &bull; Listen to the lesson audio again</div><div class="slide-layout">
                 <div class="sidebar">
                     <div class="sidebar-section">
                         <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">VOCABULARY</div>
@@ -644,7 +754,7 @@
             <a href="#sl10" class="nav-arrow nav-next"><i class="fas fa-chevron-right"></i></a>
             
             <div class="progress-bar-container"><div class="progress-bar" style="width:45.0%;"></div></div>
-            <div style="position:absolute; bottom:15px; right:30px; font-family:'Merriweather'; color:#999; font-size:0.8em;">Core Basics: Level 1 | 9</div>
+            <div style="position:absolute; bottom:15px; right:30px; font-family:'Inria Serif'; color:#999; font-size:0.8em;">Core Basics: Level 1 | 9</div>
         </div>
         
         <div class="slide-page" id="sl10">
@@ -656,7 +766,7 @@
                 <div class="lesson-headline">Lesson 10 - Time & Days</div>
             </div>
             
-            <div class="lesson-audio" style="background:#eef3f9; border:1px solid #c9d8ea; border-left:4px solid #1e5fa8; border-radius:6px; padding:12px 16px; margin:0 0 14px 0; margin:12px 24px;"><div style="font-weight:bold; color:#1a2b42; margin-bottom:6px;">&#127911; Lesson Audio &mdash; Listen before class</div><audio controls preload="none" style="width:100%;"><source src="assets/audio/core_basics_level_1_lesson_10.mp3" type="audio/mpeg">Your browser does not support audio.</audio><div style="font-size:0.85em; color:#33475e; margin-top:8px; line-height:1.6;"><strong>Listen &amp; Answer:</strong><br>1) What time is the class?<br>2) What time is it now?<br>3) And you? Say: 'My English class is at...'</div></div><div class="lesson-hw" style="background:#f7f3ea; border-left:4px solid #c5a059; border-radius:4px; padding:7px 14px; margin:6px 24px; font-size:0.78em; color:#3a3325; line-height:1.45;"><strong style="color:#a8843d;">&#9997;&#65039; Before next class (10 min):</strong> Write your daily schedule with 4 clock times in words &bull; Set 2 phone alarms and label them in English &bull; Listen to the lesson audio again</div><div class="slide-layout">
+            <div class="lesson-audio" style="background:#eef3f9; border:1px solid #c9d8ea; border-left:4px solid #1e5fa8; border-radius:6px; padding:12px 16px; margin:0 0 14px 0; margin:12px 24px;"><div style="font-weight:bold; color:#141c2a; margin-bottom:6px;">&#127911; Lesson Audio &mdash; Listen before class</div><audio controls preload="none" style="width:100%;"><source src="assets/audio/core_basics_level_1_lesson_10.mp3" type="audio/mpeg">Your browser does not support audio.</audio><div style="font-size:0.85em; color:#33475e; margin-top:8px; line-height:1.6;"><strong>Listen &amp; Answer:</strong><br>1) What time is the class?<br>2) What time is it now?<br>3) And you? Say: 'My English class is at...'</div></div><div class="lesson-hw" style="background:#f7f3ea; border-left:4px solid #c5a059; border-radius:4px; padding:7px 14px; margin:6px 24px; font-size:0.78em; color:#3a3325; line-height:1.45;"><strong style="color:#a8843d;">&#9997;&#65039; Before next class (10 min):</strong> Write your daily schedule with 4 clock times in words &bull; Set 2 phone alarms and label them in English &bull; Listen to the lesson audio again</div><div class="slide-layout">
                 <div class="sidebar">
                     <div class="sidebar-section">
                         <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">VOCABULARY</div>
@@ -692,13 +802,13 @@
             <a href="#cp10" class="nav-arrow nav-next"><i class="fas fa-chevron-right"></i></a>
             
             <div class="progress-bar-container"><div class="progress-bar" style="width:50.0%;"></div></div>
-            <div style="position:absolute; bottom:15px; right:30px; font-family:'Merriweather'; color:#999; font-size:0.8em;">Core Basics: Level 1 | 10</div>
+            <div style="position:absolute; bottom:15px; right:30px; font-family:'Inria Serif'; color:#999; font-size:0.8em;">Core Basics: Level 1 | 10</div>
         </div>
         
             <div class="slide-page" id="cp10" style="background-color: var(--theme-color); color:white;">
                  <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; text-align:center; padding:50px;">
                     <i class="fas fa-flag-checkered" style="font-size:5em; margin-bottom:20px; opacity:0.8;"></i>
-                    <h1 style="font-size:3em; margin:0; font-family:'Merriweather';">CHECKPOINT</h1>
+                    <h1 style="font-size:3em; margin:0; font-family:'Inria Serif';">CHECKPOINT</h1>
                     <h2 style="font-size:1.5em; font-weight:300; opacity:0.9;">Lessons 6 - 10 Complete</h2>
                     <div style="background:white; color:#333; padding:30px; border-radius:10px; margin-top:40px; max-width:600px; box-shadow:0 10px 30px rgba(0,0,0,0.2);">
                         <h3 style="color:var(--theme-color); margin-top:0;">Time to Review!</h3>
@@ -719,7 +829,7 @@
                 <div class="lesson-headline">Lesson 11 - Rooms in House</div>
             </div>
             
-            <div class="lesson-audio" style="background:#eef3f9; border:1px solid #c9d8ea; border-left:4px solid #1e5fa8; border-radius:6px; padding:12px 16px; margin:0 0 14px 0; margin:12px 24px;"><div style="font-weight:bold; color:#1a2b42; margin-bottom:6px;">&#127911; Lesson Audio &mdash; Listen before class</div><audio controls preload="none" style="width:100%;"><source src="assets/audio/core_basics_level_1_lesson_11.mp3" type="audio/mpeg">Your browser does not support audio.</audio><div style="font-size:0.85em; color:#33475e; margin-top:8px; line-height:1.6;"><strong>Listen &amp; Answer:</strong><br>1) How many bedrooms are in the apartment?<br>2) What room does Ana love?<br>3) And you? Say: 'My favorite room is the...'</div></div><div class="lesson-hw" style="background:#f7f3ea; border-left:4px solid #c5a059; border-radius:4px; padding:7px 14px; margin:6px 24px; font-size:0.78em; color:#3a3325; line-height:1.45;"><strong style="color:#a8843d;">&#9997;&#65039; Before next class (10 min):</strong> Write 4 rooms of your house with one adjective each &bull; Label 3 objects in your kitchen with sticky notes in English &bull; Listen to the lesson audio again</div><div class="slide-layout">
+            <div class="lesson-audio" style="background:#eef3f9; border:1px solid #c9d8ea; border-left:4px solid #1e5fa8; border-radius:6px; padding:12px 16px; margin:0 0 14px 0; margin:12px 24px;"><div style="font-weight:bold; color:#141c2a; margin-bottom:6px;">&#127911; Lesson Audio &mdash; Listen before class</div><audio controls preload="none" style="width:100%;"><source src="assets/audio/core_basics_level_1_lesson_11.mp3" type="audio/mpeg">Your browser does not support audio.</audio><div style="font-size:0.85em; color:#33475e; margin-top:8px; line-height:1.6;"><strong>Listen &amp; Answer:</strong><br>1) How many bedrooms are in the apartment?<br>2) What room does Ana love?<br>3) And you? Say: 'My favorite room is the...'</div></div><div class="lesson-hw" style="background:#f7f3ea; border-left:4px solid #c5a059; border-radius:4px; padding:7px 14px; margin:6px 24px; font-size:0.78em; color:#3a3325; line-height:1.45;"><strong style="color:#a8843d;">&#9997;&#65039; Before next class (10 min):</strong> Write 4 rooms of your house with one adjective each &bull; Label 3 objects in your kitchen with sticky notes in English &bull; Listen to the lesson audio again</div><div class="slide-layout">
                 <div class="sidebar">
                     <div class="sidebar-section">
                         <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">VOCABULARY</div>
@@ -755,7 +865,7 @@
             <a href="#sl12" class="nav-arrow nav-next"><i class="fas fa-chevron-right"></i></a>
             
             <div class="progress-bar-container"><div class="progress-bar" style="width:55.00000000000001%;"></div></div>
-            <div style="position:absolute; bottom:15px; right:30px; font-family:'Merriweather'; color:#999; font-size:0.8em;">Core Basics: Level 1 | 11</div>
+            <div style="position:absolute; bottom:15px; right:30px; font-family:'Inria Serif'; color:#999; font-size:0.8em;">Core Basics: Level 1 | 11</div>
         </div>
         
         <div class="slide-page" id="sl12">
@@ -767,7 +877,7 @@
                 <div class="lesson-headline">Lesson 12 - Prepositions of Place</div>
             </div>
             
-            <div class="lesson-audio" style="background:#eef3f9; border:1px solid #c9d8ea; border-left:4px solid #1e5fa8; border-radius:6px; padding:12px 16px; margin:0 0 14px 0; margin:12px 24px;"><div style="font-weight:bold; color:#1a2b42; margin-bottom:6px;">&#127911; Lesson Audio &mdash; Listen before class</div><audio controls preload="none" style="width:100%;"><source src="assets/audio/core_basics_level_1_lesson_12.mp3" type="audio/mpeg">Your browser does not support audio.</audio><div style="font-size:0.85em; color:#33475e; margin-top:8px; line-height:1.6;"><strong>Listen &amp; Answer:</strong><br>1) Where are the keys?<br>2) Where is the phone?<br>3) And you? Look around. Say: 'My phone is on / in / under...'</div></div><div class="lesson-hw" style="background:#f7f3ea; border-left:4px solid #c5a059; border-radius:4px; padding:7px 14px; margin:6px 24px; font-size:0.78em; color:#3a3325; line-height:1.45;"><strong style="color:#a8843d;">&#9997;&#65039; Before next class (10 min):</strong> Write where 5 objects are in your room: in / on / under &bull; Hide one object and write 2 clues in English &bull; Listen to the lesson audio again</div><div class="slide-layout">
+            <div class="lesson-audio" style="background:#eef3f9; border:1px solid #c9d8ea; border-left:4px solid #1e5fa8; border-radius:6px; padding:12px 16px; margin:0 0 14px 0; margin:12px 24px;"><div style="font-weight:bold; color:#141c2a; margin-bottom:6px;">&#127911; Lesson Audio &mdash; Listen before class</div><audio controls preload="none" style="width:100%;"><source src="assets/audio/core_basics_level_1_lesson_12.mp3" type="audio/mpeg">Your browser does not support audio.</audio><div style="font-size:0.85em; color:#33475e; margin-top:8px; line-height:1.6;"><strong>Listen &amp; Answer:</strong><br>1) Where are the keys?<br>2) Where is the phone?<br>3) And you? Look around. Say: 'My phone is on / in / under...'</div></div><div class="lesson-hw" style="background:#f7f3ea; border-left:4px solid #c5a059; border-radius:4px; padding:7px 14px; margin:6px 24px; font-size:0.78em; color:#3a3325; line-height:1.45;"><strong style="color:#a8843d;">&#9997;&#65039; Before next class (10 min):</strong> Write where 5 objects are in your room: in / on / under &bull; Hide one object and write 2 clues in English &bull; Listen to the lesson audio again</div><div class="slide-layout">
                 <div class="sidebar">
                     <div class="sidebar-section">
                         <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">VOCABULARY</div>
@@ -803,7 +913,7 @@
             <a href="#sl13" class="nav-arrow nav-next"><i class="fas fa-chevron-right"></i></a>
             
             <div class="progress-bar-container"><div class="progress-bar" style="width:60.0%;"></div></div>
-            <div style="position:absolute; bottom:15px; right:30px; font-family:'Merriweather'; color:#999; font-size:0.8em;">Core Basics: Level 1 | 12</div>
+            <div style="position:absolute; bottom:15px; right:30px; font-family:'Inria Serif'; color:#999; font-size:0.8em;">Core Basics: Level 1 | 12</div>
         </div>
         
         <div class="slide-page" id="sl13">
@@ -815,7 +925,7 @@
                 <div class="lesson-headline">Lesson 13 - There is / There are</div>
             </div>
             
-            <div class="lesson-audio" style="background:#eef3f9; border:1px solid #c9d8ea; border-left:4px solid #1e5fa8; border-radius:6px; padding:12px 16px; margin:0 0 14px 0; margin:12px 24px;"><div style="font-weight:bold; color:#1a2b42; margin-bottom:6px;">&#127911; Lesson Audio &mdash; Listen before class</div><audio controls preload="none" style="width:100%;"><source src="assets/audio/core_basics_level_1_lesson_13.mp3" type="audio/mpeg">Your browser does not support audio.</audio><div style="font-size:0.85em; color:#33475e; margin-top:8px; line-height:1.6;"><strong>Listen &amp; Answer:</strong><br>1) Is there a supermarket near the apartment?<br>2) How many restaurants are there on the street?<br>3) And you? Say: 'In my neighborhood, there is... / there are...'</div></div><div class="lesson-hw" style="background:#f7f3ea; border-left:4px solid #c5a059; border-radius:4px; padding:7px 14px; margin:6px 24px; font-size:0.78em; color:#3a3325; line-height:1.45;"><strong style="color:#a8843d;">&#9997;&#65039; Before next class (10 min):</strong> Write 5 sentences about your neighborhood with there is/are &bull; Count: how many pharmacies are there near your house? &bull; Listen to the lesson audio again</div><div class="slide-layout">
+            <div class="lesson-audio" style="background:#eef3f9; border:1px solid #c9d8ea; border-left:4px solid #1e5fa8; border-radius:6px; padding:12px 16px; margin:0 0 14px 0; margin:12px 24px;"><div style="font-weight:bold; color:#141c2a; margin-bottom:6px;">&#127911; Lesson Audio &mdash; Listen before class</div><audio controls preload="none" style="width:100%;"><source src="assets/audio/core_basics_level_1_lesson_13.mp3" type="audio/mpeg">Your browser does not support audio.</audio><div style="font-size:0.85em; color:#33475e; margin-top:8px; line-height:1.6;"><strong>Listen &amp; Answer:</strong><br>1) Is there a supermarket near the apartment?<br>2) How many restaurants are there on the street?<br>3) And you? Say: 'In my neighborhood, there is... / there are...'</div></div><div class="lesson-hw" style="background:#f7f3ea; border-left:4px solid #c5a059; border-radius:4px; padding:7px 14px; margin:6px 24px; font-size:0.78em; color:#3a3325; line-height:1.45;"><strong style="color:#a8843d;">&#9997;&#65039; Before next class (10 min):</strong> Write 5 sentences about your neighborhood with there is/are &bull; Count: how many pharmacies are there near your house? &bull; Listen to the lesson audio again</div><div class="slide-layout">
                 <div class="sidebar">
                     <div class="sidebar-section">
                         <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">VOCABULARY</div>
@@ -851,7 +961,7 @@
             <a href="#sl14" class="nav-arrow nav-next"><i class="fas fa-chevron-right"></i></a>
             
             <div class="progress-bar-container"><div class="progress-bar" style="width:65.0%;"></div></div>
-            <div style="position:absolute; bottom:15px; right:30px; font-family:'Merriweather'; color:#999; font-size:0.8em;">Core Basics: Level 1 | 13</div>
+            <div style="position:absolute; bottom:15px; right:30px; font-family:'Inria Serif'; color:#999; font-size:0.8em;">Core Basics: Level 1 | 13</div>
         </div>
         
         <div class="slide-page" id="sl14">
@@ -863,7 +973,7 @@
                 <div class="lesson-headline">Lesson 14 - Demonstratives (This/That)</div>
             </div>
             
-            <div class="lesson-audio" style="background:#eef3f9; border:1px solid #c9d8ea; border-left:4px solid #1e5fa8; border-radius:6px; padding:12px 16px; margin:0 0 14px 0; margin:12px 24px;"><div style="font-weight:bold; color:#1a2b42; margin-bottom:6px;">&#127911; Lesson Audio &mdash; Listen before class</div><audio controls preload="none" style="width:100%;"><source src="assets/audio/core_basics_level_1_lesson_14.mp3" type="audio/mpeg">Your browser does not support audio.</audio><div style="font-size:0.85em; color:#33475e; margin-top:8px; line-height:1.6;"><strong>Listen &amp; Answer:</strong><br>1) Is the red wallet Ana's wallet?<br>2) Whose phone is on the chair?<br>3) And you? Point at something. Say: 'This is my... That is...'</div></div><div class="lesson-hw" style="background:#f7f3ea; border-left:4px solid #c5a059; border-radius:4px; padding:7px 14px; margin:6px 24px; font-size:0.78em; color:#3a3325; line-height:1.45;"><strong style="color:#a8843d;">&#9997;&#65039; Before next class (10 min):</strong> Write 4 sentences pointing at objects: 2 near (this/these), 2 far (that/those) &bull; Practice the 4 words aloud with objects at home &bull; Listen to the lesson audio again</div><div class="slide-layout">
+            <div class="lesson-audio" style="background:#eef3f9; border:1px solid #c9d8ea; border-left:4px solid #1e5fa8; border-radius:6px; padding:12px 16px; margin:0 0 14px 0; margin:12px 24px;"><div style="font-weight:bold; color:#141c2a; margin-bottom:6px;">&#127911; Lesson Audio &mdash; Listen before class</div><audio controls preload="none" style="width:100%;"><source src="assets/audio/core_basics_level_1_lesson_14.mp3" type="audio/mpeg">Your browser does not support audio.</audio><div style="font-size:0.85em; color:#33475e; margin-top:8px; line-height:1.6;"><strong>Listen &amp; Answer:</strong><br>1) Is the red wallet Ana's wallet?<br>2) Whose phone is on the chair?<br>3) And you? Point at something. Say: 'This is my... That is...'</div></div><div class="lesson-hw" style="background:#f7f3ea; border-left:4px solid #c5a059; border-radius:4px; padding:7px 14px; margin:6px 24px; font-size:0.78em; color:#3a3325; line-height:1.45;"><strong style="color:#a8843d;">&#9997;&#65039; Before next class (10 min):</strong> Write 4 sentences pointing at objects: 2 near (this/these), 2 far (that/those) &bull; Practice the 4 words aloud with objects at home &bull; Listen to the lesson audio again</div><div class="slide-layout">
                 <div class="sidebar">
                     <div class="sidebar-section">
                         <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">VOCABULARY</div>
@@ -899,7 +1009,7 @@
             <a href="#sl15" class="nav-arrow nav-next"><i class="fas fa-chevron-right"></i></a>
             
             <div class="progress-bar-container"><div class="progress-bar" style="width:70.0%;"></div></div>
-            <div style="position:absolute; bottom:15px; right:30px; font-family:'Merriweather'; color:#999; font-size:0.8em;">Core Basics: Level 1 | 14</div>
+            <div style="position:absolute; bottom:15px; right:30px; font-family:'Inria Serif'; color:#999; font-size:0.8em;">Core Basics: Level 1 | 14</div>
         </div>
         
         <div class="slide-page" id="sl15">
@@ -911,7 +1021,7 @@
                 <div class="lesson-headline">Lesson 15 - Possessive Adjectives</div>
             </div>
             
-            <div class="lesson-audio" style="background:#eef3f9; border:1px solid #c9d8ea; border-left:4px solid #1e5fa8; border-radius:6px; padding:12px 16px; margin:0 0 14px 0; margin:12px 24px;"><div style="font-weight:bold; color:#1a2b42; margin-bottom:6px;">&#127911; Lesson Audio &mdash; Listen before class</div><audio controls preload="none" style="width:100%;"><source src="assets/audio/core_basics_level_1_lesson_15.mp3" type="audio/mpeg">Your browser does not support audio.</audio><div style="font-size:0.85em; color:#33475e; margin-top:8px; line-height:1.6;"><strong>Listen &amp; Answer:</strong><br>1) What color is her car?<br>2) Whose house is big, his or hers?<br>3) And you? Say: 'My... is...' and 'His / Her... is...'</div></div><div class="lesson-hw" style="background:#f7f3ea; border-left:4px solid #c5a059; border-radius:4px; padding:7px 14px; margin:6px 24px; font-size:0.78em; color:#3a3325; line-height:1.45;"><strong style="color:#a8843d;">&#9997;&#65039; Before next class (10 min):</strong> Write 5 sentences: my, your, his, her, our + object &bull; Describe one possession of each family member &bull; Listen to the lesson audio again</div><div class="slide-layout">
+            <div class="lesson-audio" style="background:#eef3f9; border:1px solid #c9d8ea; border-left:4px solid #1e5fa8; border-radius:6px; padding:12px 16px; margin:0 0 14px 0; margin:12px 24px;"><div style="font-weight:bold; color:#141c2a; margin-bottom:6px;">&#127911; Lesson Audio &mdash; Listen before class</div><audio controls preload="none" style="width:100%;"><source src="assets/audio/core_basics_level_1_lesson_15.mp3" type="audio/mpeg">Your browser does not support audio.</audio><div style="font-size:0.85em; color:#33475e; margin-top:8px; line-height:1.6;"><strong>Listen &amp; Answer:</strong><br>1) What color is her car?<br>2) Whose house is big, his or hers?<br>3) And you? Say: 'My... is...' and 'His / Her... is...'</div></div><div class="lesson-hw" style="background:#f7f3ea; border-left:4px solid #c5a059; border-radius:4px; padding:7px 14px; margin:6px 24px; font-size:0.78em; color:#3a3325; line-height:1.45;"><strong style="color:#a8843d;">&#9997;&#65039; Before next class (10 min):</strong> Write 5 sentences: my, your, his, her, our + object &bull; Describe one possession of each family member &bull; Listen to the lesson audio again</div><div class="slide-layout">
                 <div class="sidebar">
                     <div class="sidebar-section">
                         <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">VOCABULARY</div>
@@ -947,13 +1057,13 @@
             <a href="#cp15" class="nav-arrow nav-next"><i class="fas fa-chevron-right"></i></a>
             
             <div class="progress-bar-container"><div class="progress-bar" style="width:75.0%;"></div></div>
-            <div style="position:absolute; bottom:15px; right:30px; font-family:'Merriweather'; color:#999; font-size:0.8em;">Core Basics: Level 1 | 15</div>
+            <div style="position:absolute; bottom:15px; right:30px; font-family:'Inria Serif'; color:#999; font-size:0.8em;">Core Basics: Level 1 | 15</div>
         </div>
         
             <div class="slide-page" id="cp15" style="background-color: var(--theme-color); color:white;">
                  <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; text-align:center; padding:50px;">
                     <i class="fas fa-flag-checkered" style="font-size:5em; margin-bottom:20px; opacity:0.8;"></i>
-                    <h1 style="font-size:3em; margin:0; font-family:'Merriweather';">CHECKPOINT</h1>
+                    <h1 style="font-size:3em; margin:0; font-family:'Inria Serif';">CHECKPOINT</h1>
                     <h2 style="font-size:1.5em; font-weight:300; opacity:0.9;">Lessons 11 - 15 Complete</h2>
                     <div style="background:white; color:#333; padding:30px; border-radius:10px; margin-top:40px; max-width:600px; box-shadow:0 10px 30px rgba(0,0,0,0.2);">
                         <h3 style="color:var(--theme-color); margin-top:0;">Time to Review!</h3>
@@ -974,7 +1084,7 @@
                 <div class="lesson-headline">Lesson 16 - Nationalities</div>
             </div>
             
-            <div class="lesson-audio" style="background:#eef3f9; border:1px solid #c9d8ea; border-left:4px solid #1e5fa8; border-radius:6px; padding:12px 16px; margin:0 0 14px 0; margin:12px 24px;"><div style="font-weight:bold; color:#1a2b42; margin-bottom:6px;">&#127911; Lesson Audio &mdash; Listen before class</div><audio controls preload="none" style="width:100%;"><source src="assets/audio/core_basics_level_1_lesson_16.mp3" type="audio/mpeg">Your browser does not support audio.</audio><div style="font-size:0.85em; color:#33475e; margin-top:8px; line-height:1.6;"><strong>Listen &amp; Answer:</strong><br>1) What nationality is Marco?<br>2) Is the new teacher American?<br>3) And you? Say: 'I am...' with your nationality.</div></div><div class="lesson-hw" style="background:#f7f3ea; border-left:4px solid #c5a059; border-radius:4px; padding:7px 14px; margin:6px 24px; font-size:0.78em; color:#3a3325; line-height:1.45;"><strong style="color:#a8843d;">&#9997;&#65039; Before next class (10 min):</strong> Write 5 nationalities of people/brands you know &bull; Find 3 products at home and write where they are from &bull; Listen to the lesson audio again</div><div class="slide-layout">
+            <div class="lesson-audio" style="background:#eef3f9; border:1px solid #c9d8ea; border-left:4px solid #1e5fa8; border-radius:6px; padding:12px 16px; margin:0 0 14px 0; margin:12px 24px;"><div style="font-weight:bold; color:#141c2a; margin-bottom:6px;">&#127911; Lesson Audio &mdash; Listen before class</div><audio controls preload="none" style="width:100%;"><source src="assets/audio/core_basics_level_1_lesson_16.mp3" type="audio/mpeg">Your browser does not support audio.</audio><div style="font-size:0.85em; color:#33475e; margin-top:8px; line-height:1.6;"><strong>Listen &amp; Answer:</strong><br>1) What nationality is Marco?<br>2) Is the new teacher American?<br>3) And you? Say: 'I am...' with your nationality.</div></div><div class="lesson-hw" style="background:#f7f3ea; border-left:4px solid #c5a059; border-radius:4px; padding:7px 14px; margin:6px 24px; font-size:0.78em; color:#3a3325; line-height:1.45;"><strong style="color:#a8843d;">&#9997;&#65039; Before next class (10 min):</strong> Write 5 nationalities of people/brands you know &bull; Find 3 products at home and write where they are from &bull; Listen to the lesson audio again</div><div class="slide-layout">
                 <div class="sidebar">
                     <div class="sidebar-section">
                         <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">VOCABULARY</div>
@@ -1010,7 +1120,7 @@
             <a href="#sl17" class="nav-arrow nav-next"><i class="fas fa-chevron-right"></i></a>
             
             <div class="progress-bar-container"><div class="progress-bar" style="width:80.0%;"></div></div>
-            <div style="position:absolute; bottom:15px; right:30px; font-family:'Merriweather'; color:#999; font-size:0.8em;">Core Basics: Level 1 | 16</div>
+            <div style="position:absolute; bottom:15px; right:30px; font-family:'Inria Serif'; color:#999; font-size:0.8em;">Core Basics: Level 1 | 16</div>
         </div>
         
         <div class="slide-page" id="sl17">
@@ -1022,7 +1132,7 @@
                 <div class="lesson-headline">Lesson 17 - Opposites</div>
             </div>
             
-            <div class="lesson-audio" style="background:#eef3f9; border:1px solid #c9d8ea; border-left:4px solid #1e5fa8; border-radius:6px; padding:12px 16px; margin:0 0 14px 0; margin:12px 24px;"><div style="font-weight:bold; color:#1a2b42; margin-bottom:6px;">&#127911; Lesson Audio &mdash; Listen before class</div><audio controls preload="none" style="width:100%;"><source src="assets/audio/core_basics_level_1_lesson_17.mp3" type="audio/mpeg">Your browser does not support audio.</audio><div style="font-size:0.85em; color:#33475e; margin-top:8px; line-height:1.6;"><strong>Listen &amp; Answer:</strong><br>1) Is the new phone cheap or expensive?<br>2) Is Leo's old phone fast?<br>3) And you? Say two opposites: 'My city is big. My street is...'</div></div><div class="lesson-hw" style="background:#f7f3ea; border-left:4px solid #c5a059; border-radius:4px; padding:7px 14px; margin:6px 24px; font-size:0.78em; color:#3a3325; line-height:1.45;"><strong style="color:#a8843d;">&#9997;&#65039; Before next class (10 min):</strong> Write 8 opposite pairs you remember &bull; Describe your home with 3 opposites &bull; Listen to the lesson audio again</div><div class="slide-layout">
+            <div class="lesson-audio" style="background:#eef3f9; border:1px solid #c9d8ea; border-left:4px solid #1e5fa8; border-radius:6px; padding:12px 16px; margin:0 0 14px 0; margin:12px 24px;"><div style="font-weight:bold; color:#141c2a; margin-bottom:6px;">&#127911; Lesson Audio &mdash; Listen before class</div><audio controls preload="none" style="width:100%;"><source src="assets/audio/core_basics_level_1_lesson_17.mp3" type="audio/mpeg">Your browser does not support audio.</audio><div style="font-size:0.85em; color:#33475e; margin-top:8px; line-height:1.6;"><strong>Listen &amp; Answer:</strong><br>1) Is the new phone cheap or expensive?<br>2) Is Leo's old phone fast?<br>3) And you? Say two opposites: 'My city is big. My street is...'</div></div><div class="lesson-hw" style="background:#f7f3ea; border-left:4px solid #c5a059; border-radius:4px; padding:7px 14px; margin:6px 24px; font-size:0.78em; color:#3a3325; line-height:1.45;"><strong style="color:#a8843d;">&#9997;&#65039; Before next class (10 min):</strong> Write 8 opposite pairs you remember &bull; Describe your home with 3 opposites &bull; Listen to the lesson audio again</div><div class="slide-layout">
                 <div class="sidebar">
                     <div class="sidebar-section">
                         <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">VOCABULARY</div>
@@ -1058,7 +1168,7 @@
             <a href="#sl18" class="nav-arrow nav-next"><i class="fas fa-chevron-right"></i></a>
             
             <div class="progress-bar-container"><div class="progress-bar" style="width:85.0%;"></div></div>
-            <div style="position:absolute; bottom:15px; right:30px; font-family:'Merriweather'; color:#999; font-size:0.8em;">Core Basics: Level 1 | 17</div>
+            <div style="position:absolute; bottom:15px; right:30px; font-family:'Inria Serif'; color:#999; font-size:0.8em;">Core Basics: Level 1 | 17</div>
         </div>
         
         <div class="slide-page" id="sl18">
@@ -1070,7 +1180,7 @@
                 <div class="lesson-headline">Lesson 18 - Question Words</div>
             </div>
             
-            <div class="lesson-audio" style="background:#eef3f9; border:1px solid #c9d8ea; border-left:4px solid #1e5fa8; border-radius:6px; padding:12px 16px; margin:0 0 14px 0; margin:12px 24px;"><div style="font-weight:bold; color:#1a2b42; margin-bottom:6px;">&#127911; Lesson Audio &mdash; Listen before class</div><audio controls preload="none" style="width:100%;"><source src="assets/audio/core_basics_level_1_lesson_18.mp3" type="audio/mpeg">Your browser does not support audio.</audio><div style="font-size:0.85em; color:#33475e; margin-top:8px; line-height:1.6;"><strong>Listen &amp; Answer:</strong><br>1) Where is the party?<br>2) What time is the party?<br>3) And you? Ask one question with 'Where' and one with 'What'.</div></div><div class="lesson-hw" style="background:#f7f3ea; border-left:4px solid #c5a059; border-radius:4px; padding:7px 14px; margin:6px 24px; font-size:0.78em; color:#3a3325; line-height:1.45;"><strong style="color:#a8843d;">&#9997;&#65039; Before next class (10 min):</strong> Write 5 WH-questions to ask a famous person &bull; Ask one family member 2 questions in English and write the answers &bull; Listen to the lesson audio again</div><div class="slide-layout">
+            <div class="lesson-audio" style="background:#eef3f9; border:1px solid #c9d8ea; border-left:4px solid #1e5fa8; border-radius:6px; padding:12px 16px; margin:0 0 14px 0; margin:12px 24px;"><div style="font-weight:bold; color:#141c2a; margin-bottom:6px;">&#127911; Lesson Audio &mdash; Listen before class</div><audio controls preload="none" style="width:100%;"><source src="assets/audio/core_basics_level_1_lesson_18.mp3" type="audio/mpeg">Your browser does not support audio.</audio><div style="font-size:0.85em; color:#33475e; margin-top:8px; line-height:1.6;"><strong>Listen &amp; Answer:</strong><br>1) Where is the party?<br>2) What time is the party?<br>3) And you? Ask one question with 'Where' and one with 'What'.</div></div><div class="lesson-hw" style="background:#f7f3ea; border-left:4px solid #c5a059; border-radius:4px; padding:7px 14px; margin:6px 24px; font-size:0.78em; color:#3a3325; line-height:1.45;"><strong style="color:#a8843d;">&#9997;&#65039; Before next class (10 min):</strong> Write 5 WH-questions to ask a famous person &bull; Ask one family member 2 questions in English and write the answers &bull; Listen to the lesson audio again</div><div class="slide-layout">
                 <div class="sidebar">
                     <div class="sidebar-section">
                         <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">VOCABULARY</div>
@@ -1106,7 +1216,7 @@
             <a href="#sl19" class="nav-arrow nav-next"><i class="fas fa-chevron-right"></i></a>
             
             <div class="progress-bar-container"><div class="progress-bar" style="width:90.0%;"></div></div>
-            <div style="position:absolute; bottom:15px; right:30px; font-family:'Merriweather'; color:#999; font-size:0.8em;">Core Basics: Level 1 | 18</div>
+            <div style="position:absolute; bottom:15px; right:30px; font-family:'Inria Serif'; color:#999; font-size:0.8em;">Core Basics: Level 1 | 18</div>
         </div>
         
         <div class="slide-page" id="sl19">
@@ -1118,7 +1228,7 @@
                 <div class="lesson-headline">Lesson 19 - Yes/No Questions</div>
             </div>
             
-            <div class="lesson-audio" style="background:#eef3f9; border:1px solid #c9d8ea; border-left:4px solid #1e5fa8; border-radius:6px; padding:12px 16px; margin:0 0 14px 0; margin:12px 24px;"><div style="font-weight:bold; color:#1a2b42; margin-bottom:6px;">&#127911; Lesson Audio &mdash; Listen before class</div><audio controls preload="none" style="width:100%;"><source src="assets/audio/core_basics_level_1_lesson_19.mp3" type="audio/mpeg">Your browser does not support audio.</audio><div style="font-size:0.85em; color:#33475e; margin-top:8px; line-height:1.6;"><strong>Listen &amp; Answer:</strong><br>1) Is Ana free on Saturday?<br>2) Is the museum open on Sundays?<br>3) And you? Answer: 'Are you a student?' with a short answer.</div></div><div class="lesson-hw" style="background:#f7f3ea; border-left:4px solid #c5a059; border-radius:4px; padding:7px 14px; margin:6px 24px; font-size:0.78em; color:#3a3325; line-height:1.45;"><strong style="color:#a8843d;">&#9997;&#65039; Before next class (10 min):</strong> Write 3 truths + 1 lie about you for next class &bull; Practice short answers: Yes, I am / No, I don't (5 each) &bull; Listen to the lesson audio again</div><div class="slide-layout">
+            <div class="lesson-audio" style="background:#eef3f9; border:1px solid #c9d8ea; border-left:4px solid #1e5fa8; border-radius:6px; padding:12px 16px; margin:0 0 14px 0; margin:12px 24px;"><div style="font-weight:bold; color:#141c2a; margin-bottom:6px;">&#127911; Lesson Audio &mdash; Listen before class</div><audio controls preload="none" style="width:100%;"><source src="assets/audio/core_basics_level_1_lesson_19.mp3" type="audio/mpeg">Your browser does not support audio.</audio><div style="font-size:0.85em; color:#33475e; margin-top:8px; line-height:1.6;"><strong>Listen &amp; Answer:</strong><br>1) Is Ana free on Saturday?<br>2) Is the museum open on Sundays?<br>3) And you? Answer: 'Are you a student?' with a short answer.</div></div><div class="lesson-hw" style="background:#f7f3ea; border-left:4px solid #c5a059; border-radius:4px; padding:7px 14px; margin:6px 24px; font-size:0.78em; color:#3a3325; line-height:1.45;"><strong style="color:#a8843d;">&#9997;&#65039; Before next class (10 min):</strong> Write 3 truths + 1 lie about you for next class &bull; Practice short answers: Yes, I am / No, I don't (5 each) &bull; Listen to the lesson audio again</div><div class="slide-layout">
                 <div class="sidebar">
                     <div class="sidebar-section">
                         <div class="sidebar-title" style="color:var(--theme-color); border-bottom-color:var(--theme-color);">VOCABULARY</div>
@@ -1154,7 +1264,7 @@
             <a href="#sl20" class="nav-arrow nav-next"><i class="fas fa-chevron-right"></i></a>
             
             <div class="progress-bar-container"><div class="progress-bar" style="width:95.0%;"></div></div>
-            <div style="position:absolute; bottom:15px; right:30px; font-family:'Merriweather'; color:#999; font-size:0.8em;">Core Basics: Level 1 | 19</div>
+            <div style="position:absolute; bottom:15px; right:30px; font-family:'Inria Serif'; color:#999; font-size:0.8em;">Core Basics: Level 1 | 19</div>
         </div>
         
         <div class="slide-page" id="sl20">
@@ -1202,13 +1312,13 @@
             <a href="#cp20" class="nav-arrow nav-next"><i class="fas fa-chevron-right"></i></a>
             
             <div class="progress-bar-container"><div class="progress-bar" style="width:100.0%;"></div></div>
-            <div style="position:absolute; bottom:15px; right:30px; font-family:'Merriweather'; color:#999; font-size:0.8em;">Core Basics: Level 1 | 20</div>
+            <div style="position:absolute; bottom:15px; right:30px; font-family:'Inria Serif'; color:#999; font-size:0.8em;">Core Basics: Level 1 | 20</div>
         </div>
         
             <div class="slide-page" id="cp20" style="background-color: var(--theme-color); color:white;">
                  <div style="display:flex; flex-direction:column; align-items:center; justify-content:center; height:100%; text-align:center; padding:50px;">
                     <i class="fas fa-flag-checkered" style="font-size:5em; margin-bottom:20px; opacity:0.8;"></i>
-                    <h1 style="font-size:3em; margin:0; font-family:'Merriweather';">CHECKPOINT</h1>
+                    <h1 style="font-size:3em; margin:0; font-family:'Inria Serif';">CHECKPOINT</h1>
                     <h2 style="font-size:1.5em; font-weight:300; opacity:0.9;">Lessons 16 - 20 Complete</h2>
                     <div style="background:white; color:#333; padding:30px; border-radius:10px; margin-top:40px; max-width:600px; box-shadow:0 10px 30px rgba(0,0,0,0.2);">
                         <h3 style="color:var(--theme-color); margin-top:0;">Time to Review!</h3>

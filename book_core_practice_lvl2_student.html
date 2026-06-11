@@ -1,8 +1,8 @@
-<!DOCTYPE html><html lang="en"><head>
+﻿<!DOCTYPE html><html lang="en"><head>
 <script src="vesper_auth.js"></script><meta charset="UTF-8"><title>Core Practice: Level 2</title><link rel="stylesheet" href="assets/css/vesper_style.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700&family=Open+Sans:wght@400;600;700&display=swap');
-    body { background-color: #525659; margin: 0; padding: 40px 0; display: flex; flex-direction: column; align-items: center; font-family: 'Merriweather', serif; color: #1a2b42; }
+    @import url('https://fonts.googleapis.com/css2?family=Inria+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@300;400;500;600;700&display=swap');
+    body { background-color: #525659; margin: 0; padding: 40px 0; display: flex; flex-direction: column; align-items: center; font-family: 'Inria Serif', serif; color: #141c2a; }
     .page { background-color: white; width: 210mm; min-height: 297mm; padding: 20mm; box-sizing: border-box; box-shadow: 0 0 20px rgba(0,0,0,0.3); margin-bottom: 40px; position: relative; page-break-after: always; }
     @media print { body { background: none; margin: 0; padding: 0; display: block; } .page { box-shadow: none; margin: 0; width: 100%; height: 100%; page-break-after: always; border: none; } .no-print { display: none; } }
     @media screen and (max-width: 768px) {
@@ -15,31 +15,129 @@
         .cover-title { font-size: 2em !important; }
         .cover-subtitle { font-size: 1.2em !important; }
     }
-    h1, h2, h3 { font-family: 'Open Sans', sans-serif; }
-    .module-header { background-color: #1a2b42; color: #d4af37; padding: 15px 20mm; margin: -20mm -20mm 10mm -20mm; font-family: 'Merriweather', serif; font-size: 1.4em; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
+    h1, h2, h3 { font-family: 'Inter', sans-serif; }
+    .module-header { background-color: #141c2a; color: #d4af37; padding: 15px 20mm; margin: -20mm -20mm 10mm -20mm; font-family: 'Inria Serif', serif; font-size: 1.4em; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; }
     .lesson-title { border-bottom: 2px solid #34495e; padding-bottom: 15px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; }
-    .lesson-title h2 { margin: 0; font-size: 2.2em; color: #1a2b42; }
+    .lesson-title h2 { margin: 0; font-size: 2.2em; color: #141c2a; }
     .lesson-block { margin-bottom: 25px; padding: 20px 25px; background: #fff; border-left: 5px solid #ccc; border-radius: 0 5px 5px 0; }
     .lb-blue { border-color: #3498db; background: #ebf5fb; }
-    .lb-navy { border-color: #1a2b42; background: #fff; border: 1px solid #eee; border-left: 6px solid #1a2b42; }
+    .lb-navy { border-color: #141c2a; background: #fff; border: 1px solid #eee; border-left: 6px solid #141c2a; }
     .lb-purple { border-color: #8e44ad; background: #f5eef8; }
     .lb-green { border-color: #27ae60; background: #eafaf1; }
     .lb-red { border-color: #c0392b; background: #fdedec; }
-    .lb-header { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; font-weight: bold; font-family: 'Open Sans'; text-transform: uppercase; font-size: 1em; letter-spacing: 0.5px; }
+    .lb-header { display: flex; align-items: center; gap: 10px; margin-bottom: 15px; font-weight: bold; font-family: 'Inter'; text-transform: uppercase; font-size: 1em; letter-spacing: 0.5px; }
     .lb-blue .lb-header { color: #2980b9; } 
-    .lb-navy .lb-header { color: #1a2b42; }
+    .lb-navy .lb-header { color: #141c2a; }
     .lb-purple .lb-header { color: #8e44ad; }
     .lb-green .lb-header { color: #27ae60; }
     .lb-red .lb-header { color: #c0392b; }
     .content-text { line-height: 1.8; font-size: 0.95em; color: #2c3e50; text-align: justify; }
     ul.deep-list { padding-left: 20px; list-style-type: square; } ul.deep-list li { margin-bottom: 12px; }
     .vocab-box { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px; }
-    .vocab-item { background: #eee; padding: 5px 10px; border-radius: 3px; font-size: 0.9em; font-family: 'Open Sans'; }
+    .vocab-item { background: #eee; padding: 5px 10px; border-radius: 3px; font-size: 0.9em; font-family: 'Inter'; }
     .page-num { position: absolute; bottom: 20mm; right: 20mm; color: #999; font-size: 0.8em; }
     p { margin-bottom: 15px; }
     .intro-box { background-color: #f8f9fa; border: 1px solid #dee2e6; padding: 30px; border-radius: 8px; margin-top: 50px; }
+
+/* =====================================================================
+   VESPER PREMIUM SKIN (Practice student edition) - navy / gold / cream
+   Cosmetic overlay appended last so it wins the cascade. Covers both the
+   simple format (L1-3) and the rich format (L4-6: focus-badge, vocab-grid,
+   comp-tier, block-time, audio-player).
+   ===================================================================== */
+:root{ --navy:#141c2a; --navy2:#243654; --gold:#c5a059; --gold-d:#a8843d; --cream:#f5f2eb; --ink:#34414f; }
+body{ background:#2f3947 !important; }
+.page{ background:var(--cream) !important; box-shadow:0 14px 46px rgba(0,0,0,.40) !important; }
+
+/* ---------- MODULE HEADER ---------- */
+.module-header{
+  background:linear-gradient(135deg,#1d3454 0%,#141c2a 70%,#101d33 100%) !important;
+  color:#e9cf92 !important;
+  border-bottom:3px solid var(--gold) !important;
+  letter-spacing:1.5px !important;
+  box-shadow:0 4px 14px rgba(0,0,0,.18);
+}
+
+/* ---------- LESSON TITLE + FOCUS BADGE ---------- */
+.lesson-title{ border-bottom:none !important; position:relative; padding-bottom:18px !important; }
+.lesson-title::after{ content:""; position:absolute; left:0; bottom:0; width:84px; height:3px; background:var(--gold); }
+.lesson-title h2{ color:var(--navy) !important; font-family:'Inria Serif',serif !important; }
+.focus-badge{
+  background:linear-gradient(135deg,#caa15a,#b0863a) !important;
+  color:#141c2a !important; box-shadow:0 2px 8px rgba(176,134,58,.35);
+}
+
+/* ---------- LESSON BLOCKS as premium cards ---------- */
+.lesson-block{
+  border-radius:12px !important;
+  border:1px solid rgba(20,30,50,.06) !important;
+  border-left-width:5px !important; border-left-style:solid !important;
+  box-shadow:0 3px 14px rgba(20,30,50,.06) !important;
+  padding:22px 26px !important;
+}
+.lb-blue{ background:#eef5fb !important; border-left-color:#3a78b5 !important; }
+.lb-navy{ background:#ffffff !important; border-left-color:var(--navy) !important; }
+.lb-purple{ background:#f4eefa !important; border-left-color:#7d4ea8 !important; }
+.lb-green{ background:#ecf8f0 !important; border-left-color:#2e9e5b !important; }
+.lb-red{ background:#fdeeec !important; border-left-color:#c0492f !important; }
+.lb-header{ font-size:1.02em !important; align-items:center; }
+.lb-blue .lb-header{ color:#2f6da4 !important; }
+.lb-navy .lb-header{ color:var(--navy) !important; }
+.lb-purple .lb-header{ color:#6f3f97 !important; }
+.lb-green .lb-header{ color:#218a4e !important; }
+.lb-red .lb-header{ color:#b0402a !important; }
+
+/* ---------- TIME BADGE -> pill ---------- */
+.block-time{
+  background:#fff; color:#8a6d2f !important; border:1px solid #e6d6ad;
+  padding:3px 11px; border-radius:20px; font-family:'Inter',sans-serif;
+}
+
+/* ---------- CONTENT ---------- */
+.content-text{ text-align:left !important; line-height:1.75 !important; color:var(--ink) !important; font-size:0.97em !important; }
+
+/* ---------- VOCAB GRID ---------- */
+.vocab-grid{ gap:6px 28px !important; }
+.vocab-row{ border-bottom:1px dotted #d8cba6 !important; padding:5px 0 !important; }
+.vocab-row b{ color:var(--navy) !important; }
+.vocab-row span{ color:#6b7a8d !important; }
+
+/* ---------- COMPREHENSION TIERS ---------- */
+.comp-tier strong{ font-size:0.82em !important; }
+.tier-1 strong{ color:#218a4e !important; }
+.tier-2 strong{ color:#cc7a22 !important; }
+.tier-3 strong{ color:#7d4ea8 !important; }
+
+/* ---------- ANSWER KEY (student self-study) ---------- */
+.answer-key{
+  margin-top:14px; background:#f3f6ec; border:1px solid #d9e2c4;
+  border-left:5px solid #6f9c3a; border-radius:8px; padding:12px 16px;
+  font-family:'Inter',sans-serif;
+}
+.answer-key .ak-head{
+  font-size:0.74em; font-weight:700; text-transform:uppercase; letter-spacing:1px;
+  color:#4e7026; margin-bottom:6px; display:flex; align-items:center; gap:7px;
+}
+.answer-key .ak-body{ font-size:0.9em; line-height:1.6; color:#3f4a39; }
+
+/* ---------- SOLO-PRACTICE CALLOUT (replaces partner-only roleplay framing) ---------- */
+.solo-note{
+  margin-top:14px; background:#eef3fb; border:1px dashed #9bb6dd; border-radius:8px;
+  padding:11px 15px; font-family:'Inter',sans-serif; font-size:0.86em;
+  line-height:1.6; color:#33486b;
+}
+.solo-note b{ color:#21406e; }
+
+/* ---------- COVER + TOC + misc ---------- */
+.cover-title{ color:var(--navy) !important; }
+.cover-subtitle{ color:var(--gold-d) !important; }
+.toc a{ border-bottom:1px dotted #d8cba6 !important; }
+.toc a:hover{ color:var(--gold-d) !important; }
+.teacher-steps{ display:none !important; }
+.page-num{ color:#b3a98f !important; }
+
 </style>
-</head><body><div class="no-print" style="position: fixed; top: 20px; left: 20px; z-index: 1000;"><a href="index.html" style="background: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: bold; color: #1a2b42; box-shadow: 0 2px 5px rgba(0,0,0,0.2);"><i class="fas fa-arrow-left"></i> Dashboard</a></div><div class="page cover-page"><img src="assets/images/vesper_logo.jpg" alt="Vesper Academy" class="cover-logo" style="width:200px; margin-bottom:20px;"><div class="cover-title" style="font-size:3em; font-weight:bold; color:#1a2b42;">Core Practice: Level 2</div><div class="cover-subtitle" style="font-size:1.5em; color:#34495e;">Intermediate (A2/B1)</div><div style="margin-top: auto;"><strong>Vesper Academy</strong><br>Student Workbook</div></div><div class="page">
+</head><body><div class="no-print" style="position: fixed; top: 20px; left: 20px; z-index: 1000;"><a href="index.html" style="background: white; padding: 10px 20px; border-radius: 5px; text-decoration: none; font-weight: bold; color: #141c2a; box-shadow: 0 2px 5px rgba(0,0,0,0.2);"><i class="fas fa-arrow-left"></i> Dashboard</a></div><div class="page cover-page"><img src="assets/images/vesper_logo.jpg" alt="Vesper Academy" class="cover-logo" style="width:200px; margin-bottom:20px;"><div class="cover-title" style="font-size:3em; font-weight:bold; color:#141c2a;">Core Practice: Level 2</div><div class="cover-subtitle" style="font-size:1.5em; color:#34495e;">Intermediate (A2/B1)</div><div style="margin-top: auto;"><strong>Vesper Academy</strong><br>Student Workbook</div></div><div class="page">
 
 <div class="intro-box">
     <p><strong>Course Overview:</strong></p>
@@ -55,7 +153,7 @@
             <!-- WARM UP -->
             <div class="lesson-block lb-blue">
                 <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
-                <div class="content-text"><strong>Phase 1: The Elevator Pitch:</strong> You have 30 seconds to introduce yourself to a stranger in an elevator. What do you say? Go!<br><br><strong>Phase 2: Taboo Topics:</strong> Brainstorm 5 topics you should NEVER discuss during small talk in your country (e.g., salary, politics). Discuss why.<br><br><strong>Phase 3: The Icebreaker:</strong> Ask your partner: 'What is the most awkward conversation you have ever had with a stranger?'</div>
+                <div class="content-text"><strong>1. The Elevator Pitch:</strong> You have 30 seconds to introduce yourself to a stranger in an elevator. What do you say? Go!<br><br><strong>2. Taboo Topics:</strong> Brainstorm 5 topics you should NEVER discuss during small talk in your country (e.g., salary, politics). Discuss why.<br><br><strong>3. The Icebreaker:</strong> Ask your partner: 'What is the most awkward conversation you have ever had with a stranger?'</div>
             </div>
             
             <!-- VOCAB -->
@@ -68,7 +166,7 @@
             <div class="lesson-block lb-purple">
                 <div class="lb-header"><i class="fas fa-headphones"></i> Main Listening Input</div>
                 <div class="content-text"><div style="margin-bottom:10px;"><audio controls style="height:30px; width:200px;"><source src="assets/audio/core_practice_level_2_lesson_1.mp3" type="audio/mpeg"></audio></div>
-                    <em>(The script text is hidden in the student manual. Listen to the audio closely to complete the exercise.)</em></div>
+                    <em>Press play and listen twice. The words are not printed here on purpose &mdash; train your ears! Then answer the questions below.</em></div>
             </div>
             
             <!-- COMPREHENSION -->
@@ -92,13 +190,13 @@
             <!-- WARM UP -->
             <div class="lesson-block lb-blue">
                 <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
-                <div class="content-text"><strong>Phase 1: Chat Storm:</strong> Type the absolute worst customer service experience you have ever had in your life. (1 sentence!).<br><br><strong>Phase 2: The Right to Complain:</strong> Read the quote: 'The customer is always right.' Do you agree? Why or why not?<br><br><strong>Phase 3: Formal vs Informal:</strong> Look at this sentence: 'Your food sucks and I want my cash back.' Rewrite this to be highly formal and polite.</div>
+                <div class="content-text"><strong>1. Chat Storm:</strong> Type the absolute worst customer service experience you have ever had in your life. (1 sentence!).<br><br><strong>2. The Right to Complain:</strong> Read the quote: 'The customer is always right.' Do you agree? Why or why not?<br><br><strong>3. Formal vs Informal:</strong> Look at this sentence: 'Your food sucks and I want my cash back.' Rewrite this to be highly formal and polite.</div>
             </div>
             
             <!-- VOCAB -->
             <div class="lesson-block lb-navy">
                 <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
-                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Dissatisfaction (Unhappiness with service)<br>2. Unacceptable (Not adequate)<br>3. Incompetent (Lacking skill)<br>4. Reiterate (Repeat for emphasis)<br>5. Compensation (Money given for a loss)<br>6. Refund (Return of money)<br>7. Promptly (Quickly)<br>8. Appalling (Horrific / very bad)<br>9. Resolve (Fix a problem)<br>10. Defective (Broken upon arrival)<br>11. Misleading (Giving the wrong idea)<br>12. Acknowledge (Accept the truth of)<br><br><strong>Drill Task:</strong> Spelling test in the chat. The teacher reads the definition, you must type the exact word perfectly.</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Dissatisfaction (Unhappiness with service)<br>2. Unacceptable (Not adequate)<br>3. Incompetent (Lacking skill)<br>4. Reiterate (Repeat for emphasis)<br>5. Compensation (Money given for a loss)<br>6. Refund (Return of money)<br>7. Promptly (Quickly)<br>8. Appalling (Horrific / very bad)<br>9. Resolve (Fix a problem)<br>10. Defective (Broken upon arrival)<br>11. Misleading (Giving the wrong idea)<br>12. Acknowledge (Accept the truth of)<br><br><strong>Your turn:</strong> Spelling test in the chat. The teacher reads the definition, you must type the exact word perfectly.</div>
             </div>
             
             <!-- READING -->
@@ -128,20 +226,20 @@
             <!-- WARM UP -->
             <div class="lesson-block lb-blue">
                 <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
-                <div class="content-text"><strong>Phase 1: The Haggle:</strong> The teacher is selling a simple pen. Offer ridiculous prices. Teacher refuses until someone uses a smart reason.<br><br><strong>Phase 2: Cultural Differences:</strong> Is haggling (bargaining) normal in your country? In what situations is it acceptable vs rude?<br><br><strong>Phase 3: The Ultimatum:</strong> What does 'Take it or leave it' mean in a negotiation?</div>
+                <div class="content-text"><strong>1. The Haggle:</strong> The teacher is selling a simple pen. Offer ridiculous prices. Teacher refuses until someone uses a smart reason.<br><br><strong>2. Cultural Differences:</strong> Is haggling (bargaining) normal in your country? In what situations is it acceptable vs rude?<br><br><strong>3. The Ultimatum:</strong> What does 'Take it or leave it' mean in a negotiation?</div>
             </div>
             
             <!-- VOCAB -->
             <div class="lesson-block lb-navy">
                 <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
-                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Haggle (Argue about price)<br>2. Compromise (Meet in the middle)<br>3. Bargain (A good deal)<br>4. Counter-offer (Respond with a new price)<br>5. Walk away (Leave the deal)<br>6. Sweeten the deal (Add a bonus)<br>7. Bottom line (The absolute limit)<br>8. Rip-off (Too expensive/a scam)<br>9. Meet halfway (Compromise 50/50)<br>10. Non-negotiable (Cannot be changed)<br>11. Terms and conditions (The rules)<br>12. Handshake (Agreement symbol)<br><br><strong>Drill Task:</strong> Rapid fire matching. Teacher calls out a definition, student shouts the word.</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Haggle (Argue about price)<br>2. Compromise (Meet in the middle)<br>3. Bargain (A good deal)<br>4. Counter-offer (Respond with a new price)<br>5. Walk away (Leave the deal)<br>6. Sweeten the deal (Add a bonus)<br>7. Bottom line (The absolute limit)<br>8. Rip-off (Too expensive/a scam)<br>9. Meet halfway (Compromise 50/50)<br>10. Non-negotiable (Cannot be changed)<br>11. Terms and conditions (The rules)<br>12. Handshake (Agreement symbol)<br><br><strong>Your turn:</strong> Rapid fire matching. Teacher calls out a definition, student shouts the word.</div>
             </div>
             
             <!-- LISTENING -->
             <div class="lesson-block lb-purple">
                 <div class="lb-header"><i class="fas fa-headphones"></i> Main Listening Input</div>
                 <div class="content-text"><div style="margin-bottom:10px;"><audio controls style="height:30px; width:200px;"><source src="assets/audio/core_practice_level_2_lesson_3.mp3" type="audio/mpeg"></audio></div>
-                    <em>(The script text is hidden in the student manual. Listen to the audio closely to complete the exercise.)</em></div>
+                    <em>Press play and listen twice. The words are not printed here on purpose &mdash; train your ears! Then answer the questions below.</em></div>
             </div>
             
             <!-- COMPREHENSION -->
@@ -165,13 +263,13 @@
             <!-- WARM UP -->
             <div class="lesson-block lb-blue">
                 <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
-                <div class="content-text"><strong>Phase 1: Worst Case Scenario:</strong> What is worse: Losing your passport in a foreign country OR missing your flight home because you overslept? Type it.<br><br><strong>Phase 2: Airport Geography:</strong> Name 5 specific places inside an airport (e.g., duty-free, baggage claim, etc.).<br><br><strong>Phase 3: The Quote:</strong> 'A journey of a thousand miles begins with a single delayed flight.' Discuss.</div>
+                <div class="content-text"><strong>1. Worst Case Scenario:</strong> What is worse: Losing your passport in a foreign country OR missing your flight home because you overslept? Type it.<br><br><strong>2. Airport Geography:</strong> Name 5 specific places inside an airport (e.g., duty-free, baggage claim, etc.).<br><br><strong>3. The Quote:</strong> 'A journey of a thousand miles begins with a single delayed flight.' Discuss.</div>
             </div>
             
             <!-- VOCAB -->
             <div class="lesson-block lb-navy">
                 <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
-                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Overbooked (Too many tickets sold)<br>2. Cancelled (Will not happen)<br>3. Delayed (Running late)<br>4. Layover (Stop between flights)<br>5. Jet lag (Tiredness from time zones)<br>6. Luggage / Baggage (Suitcases)<br>7. Custom duties (Taxes at border)<br>8. Stranded (Stuck somewhere)<br>9. Itinerary (Schedule of travel)<br>10. Connecting flight (Second flight)<br>11. Turbulence (Rough air)<br>12. Compensation (Money given for trouble)<br><br><strong>Drill Task:</strong> Write a funny, grammatically correct sentence using 'Stranded' and 'Jet lag'.</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Overbooked (Too many tickets sold)<br>2. Cancelled (Will not happen)<br>3. Delayed (Running late)<br>4. Layover (Stop between flights)<br>5. Jet lag (Tiredness from time zones)<br>6. Luggage / Baggage (Suitcases)<br>7. Custom duties (Taxes at border)<br>8. Stranded (Stuck somewhere)<br>9. Itinerary (Schedule of travel)<br>10. Connecting flight (Second flight)<br>11. Turbulence (Rough air)<br>12. Compensation (Money given for trouble)<br><br><strong>Your turn:</strong> Write a funny, grammatically correct sentence using 'Stranded' and 'Jet lag'.</div>
             </div>
             
             <!-- READING -->
@@ -201,20 +299,20 @@
             <!-- WARM UP -->
             <div class="lesson-block lb-blue">
                 <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
-                <div class="content-text"><strong>Phase 1: The Question:</strong> What is the absolute worst question someone can ask you in a job interview?<br><br><strong>Phase 2: The Brag 10:</strong> You have 10 seconds to brag about your greatest life achievement. Go!<br><br><strong>Phase 3: Body Language:</strong> Are crossed arms confident or defensive? How should you sit?</div>
+                <div class="content-text"><strong>1. The Question:</strong> What is the absolute worst question someone can ask you in a job interview?<br><br><strong>2. The Brag 10:</strong> You have 10 seconds to brag about your greatest life achievement. Go!<br><br><strong>3. Body Language:</strong> Are crossed arms confident or defensive? How should you sit?</div>
             </div>
             
             <!-- VOCAB -->
             <div class="lesson-block lb-navy">
                 <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
-                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Qualifications (Diplomas/skills)<br>2. Track record (History of success)<br>3. Asset (Valuable addition)<br>4. Overqualified (Too much experience)<br>5. Under pressure (In stressful situations)<br>6. Delegate (Assign tasks to others)<br>7. Synergize (Work well together)<br>8. Proactive (Taking action early)<br>9. Detail-oriented (Focused on small things)<br>10. Shortcoming (Weakness/flaw)<br>11. Compensation package (Salary + benefits)<br>12. Probation period (Trial phase at work)<br><br><strong>Drill Task:</strong> Pronunciation marathon. Say all 12 words perfectly without stopping. Teacher times you.</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Qualifications (Diplomas/skills)<br>2. Track record (History of success)<br>3. Asset (Valuable addition)<br>4. Overqualified (Too much experience)<br>5. Under pressure (In stressful situations)<br>6. Delegate (Assign tasks to others)<br>7. Synergize (Work well together)<br>8. Proactive (Taking action early)<br>9. Detail-oriented (Focused on small things)<br>10. Shortcoming (Weakness/flaw)<br>11. Compensation package (Salary + benefits)<br>12. Probation period (Trial phase at work)<br><br><strong>Your turn:</strong> Pronunciation marathon. Say all 12 words perfectly without stopping. Teacher times you.</div>
             </div>
             
             <!-- LISTENING -->
             <div class="lesson-block lb-purple">
                 <div class="lb-header"><i class="fas fa-headphones"></i> Main Listening Input</div>
                 <div class="content-text"><div style="margin-bottom:10px;"><audio controls style="height:30px; width:200px;"><source src="assets/audio/core_practice_level_2_lesson_5.mp3" type="audio/mpeg"></audio></div>
-                    <em>(The script text is hidden in the student manual. Listen to the audio closely to complete the exercise.)</em></div>
+                    <em>Press play and listen twice. The words are not printed here on purpose &mdash; train your ears! Then answer the questions below.</em></div>
             </div>
             
             <!-- COMPREHENSION -->
@@ -238,13 +336,13 @@
             <!-- WARM UP -->
             <div class="lesson-block lb-blue">
                 <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
-                <div class="content-text"><strong>Phase 1: Doomsday:</strong> What happens to society if all internet servers shut down permanently tomorrow? Type the first 3 things that collapse.<br><br><strong>Phase 2: Generational Divide:</strong> Do you think Gen Z is 'lazy' because of technology, or just 'efficient'?<br><br><strong>Phase 3: Concept definition:</strong> Explain what 'planned obsolescence' is in your own words.</div>
+                <div class="content-text"><strong>1. Doomsday:</strong> What happens to society if all internet servers shut down permanently tomorrow? Type the first 3 things that collapse.<br><br><strong>2. Generational Divide:</strong> Do you think Gen Z is 'lazy' because of technology, or just 'efficient'?<br><br><strong>3. Concept definition:</strong> Explain what 'planned obsolescence' is in your own words.</div>
             </div>
             
             <!-- VOCAB -->
             <div class="lesson-block lb-navy">
                 <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
-                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Obsolete (No longer useful/outdated)<br>2. Cutting-edge (Most advanced status)<br>3. Gadget (Small mechanical device)<br>4. Glitch (Minor technical error)<br>5. Breakthrough (Major discovery)<br>6. Algorithm (Set of rules in code)<br>7. Automation (Machines replacing humans)<br>8. Privacy breach (Data stolen)<br>9. Tech-savvy (Good with technology)<br>10. State-of-the-art (Modern and advanced)<br>11. User-friendly (Easy to use)<br>12. Device dependency (Addiction to screens)<br><br><strong>Drill Task:</strong> Identify the adjective, noun, or verb forms of these words.</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Obsolete (No longer useful/outdated)<br>2. Cutting-edge (Most advanced status)<br>3. Gadget (Small mechanical device)<br>4. Glitch (Minor technical error)<br>5. Breakthrough (Major discovery)<br>6. Algorithm (Set of rules in code)<br>7. Automation (Machines replacing humans)<br>8. Privacy breach (Data stolen)<br>9. Tech-savvy (Good with technology)<br>10. State-of-the-art (Modern and advanced)<br>11. User-friendly (Easy to use)<br>12. Device dependency (Addiction to screens)<br><br><strong>Your turn:</strong> Identify the adjective, noun, or verb forms of these words.</div>
             </div>
             
             <!-- READING -->
@@ -274,20 +372,20 @@
             <!-- WARM UP -->
             <div class="lesson-block lb-blue">
                 <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
-                <div class="content-text"><strong>Phase 1: The Guilt Trip:</strong> What is one environmentally bad thing you do every day that you refuse to stop doing? (e.g. taking 30-minute hot showers).<br><br><strong>Phase 2: Microplastics:</strong> Explain what they are. Where do they end up?<br><br><strong>Phase 3: The Quote:</strong> 'There is no Planet B.' What does this mean?</div>
+                <div class="content-text"><strong>1. The Guilt Trip:</strong> What is one environmentally bad thing you do every day that you refuse to stop doing? (e.g. taking 30-minute hot showers).<br><br><strong>2. Microplastics:</strong> Explain what they are. Where do they end up?<br><br><strong>3. The Quote:</strong> 'There is no Planet B.' What does this mean?</div>
             </div>
             
             <!-- VOCAB -->
             <div class="lesson-block lb-navy">
                 <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
-                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Deforestation (Cutting down forests)<br>2. Ecosystem (Biological community)<br>3. Endanger (Put at risk of extinction)<br>4. Sustainable (Able to be maintained)<br>5. Carbon footprint (Emissions of an individual)<br>6. Renewable (Source not depleted when used)<br>7. Emission (Discharge of gas)<br>8. Biodegradable (Capable of decaying naturally)<br>9. Conservation (Protection of nature)<br>10. Greenhouse effect (Trapping of sun's warmth)<br>11. Fossil fuels (Coal, oil, gas)<br>12. Catalyst (Something causing change)<br><br><strong>Drill Task:</strong> Which words are nouns? Which are adjectives? Which are verbs?</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Deforestation (Cutting down forests)<br>2. Ecosystem (Biological community)<br>3. Endanger (Put at risk of extinction)<br>4. Sustainable (Able to be maintained)<br>5. Carbon footprint (Emissions of an individual)<br>6. Renewable (Source not depleted when used)<br>7. Emission (Discharge of gas)<br>8. Biodegradable (Capable of decaying naturally)<br>9. Conservation (Protection of nature)<br>10. Greenhouse effect (Trapping of sun's warmth)<br>11. Fossil fuels (Coal, oil, gas)<br>12. Catalyst (Something causing change)<br><br><strong>Your turn:</strong> Which words are nouns? Which are adjectives? Which are verbs?</div>
             </div>
             
             <!-- LISTENING -->
             <div class="lesson-block lb-purple">
                 <div class="lb-header"><i class="fas fa-headphones"></i> Main Listening Input</div>
                 <div class="content-text"><div style="margin-bottom:10px;"><audio controls style="height:30px; width:200px;"><source src="assets/audio/core_practice_level_2_lesson_7.mp3" type="audio/mpeg"></audio></div>
-                    <em>(The script text is hidden in the student manual. Listen to the audio closely to complete the exercise.)</em></div>
+                    <em>Press play and listen twice. The words are not printed here on purpose &mdash; train your ears! Then answer the questions below.</em></div>
             </div>
             
             <!-- COMPREHENSION -->
@@ -311,13 +409,13 @@
             <!-- WARM UP -->
             <div class="lesson-block lb-blue">
                 <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
-                <div class="content-text"><strong>Phase 1: Your Source:</strong> Where do you get your news? Twitter, TV, newspapers, or TikTok? Be honest.<br><br><strong>Phase 2: Clickbait:</strong> Write a terrible 'clickbait' title to describe what you ate for breakfast this morning.<br><br><strong>Phase 3: The Echo Chamber:</strong> What is an 'echo chamber' on social media?</div>
+                <div class="content-text"><strong>1. Your Source:</strong> Where do you get your news? Twitter, TV, newspapers, or TikTok? Be honest.<br><br><strong>2. Clickbait:</strong> Write a terrible 'clickbait' title to describe what you ate for breakfast this morning.<br><br><strong>3. The Echo Chamber:</strong> What is an 'echo chamber' on social media?</div>
             </div>
             
             <!-- VOCAB -->
             <div class="lesson-block lb-navy">
                 <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
-                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Sensationalism (Exaggerating to get attention)<br>2. Bias (Prejudice for/against something)<br>3. Objective (Neutral, factual)<br>4. Subjective (Based on opinion)<br>5. Manipulate (Control cleverly or unfairly)<br>6. Clickbait (Internet content meant to attract views)<br>7. Propaganda (Biased info promoting politics)<br>8. Verifiable (Able to be proven true)<br>9. Paparazzi (Photographers following celebs)<br>10. Censorship (Suppressing speech/news)<br>11. Anonymous (Unknown name)<br>12. Integrity (Honesty and morals)<br><br><strong>Drill Task:</strong> Identify pairs of antonyms (Objective vs Subjective).</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Sensationalism (Exaggerating to get attention)<br>2. Bias (Prejudice for/against something)<br>3. Objective (Neutral, factual)<br>4. Subjective (Based on opinion)<br>5. Manipulate (Control cleverly or unfairly)<br>6. Clickbait (Internet content meant to attract views)<br>7. Propaganda (Biased info promoting politics)<br>8. Verifiable (Able to be proven true)<br>9. Paparazzi (Photographers following celebs)<br>10. Censorship (Suppressing speech/news)<br>11. Anonymous (Unknown name)<br>12. Integrity (Honesty and morals)<br><br><strong>Your turn:</strong> Identify pairs of antonyms (Objective vs Subjective).</div>
             </div>
             
             <!-- READING -->
@@ -347,20 +445,20 @@
             <!-- WARM UP -->
             <div class="lesson-block lb-blue">
                 <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
-                <div class="content-text"><strong>Phase 1: The Fad Diet:</strong> What is the craziest diet trend you have seen on the internet (e.g. eating only raw meat)?<br><br><strong>Phase 2: Sleep:</strong> How many hours do you ACTUALLY sleep? What stops you from sleeping 8 hours?<br><br><strong>Phase 3: The Magic Pill:</strong> If you could take a pill to replace exercise, would you? Why?</div>
+                <div class="content-text"><strong>1. The Fad Diet:</strong> What is the craziest diet trend you have seen on the internet (e.g. eating only raw meat)?<br><br><strong>2. Sleep:</strong> How many hours do you ACTUALLY sleep? What stops you from sleeping 8 hours?<br><br><strong>3. The Magic Pill:</strong> If you could take a pill to replace exercise, would you? Why?</div>
             </div>
             
             <!-- VOCAB -->
             <div class="lesson-block lb-navy">
                 <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
-                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Sedentary (Spending much time seated)<br>2. Metabolism (Chemical processes in body)<br>3. Chronic (Persisting long term)<br>4. Deficit (Shortage / lacking amounts)<br>5. Deprivation (Lack of necessary things like sleep)<br>6. Endorphins (Hormones masking pain/causing joy)<br>7. Cardiovascular (Relating to heart)<br>8. Prescribe (Authorize medicine treatment)<br>9. Deteriorate (Become progressively worse)<br>10. Immune system (Body's defense)<br>11. Epidemic (Widespread occurrence)<br>12. Regimen (Prescribed course of diet/exercise)<br><br><strong>Drill Task:</strong> Shadow spelling. The teacher says the word, you type it before they finish defining it.</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Sedentary (Spending much time seated)<br>2. Metabolism (Chemical processes in body)<br>3. Chronic (Persisting long term)<br>4. Deficit (Shortage / lacking amounts)<br>5. Deprivation (Lack of necessary things like sleep)<br>6. Endorphins (Hormones masking pain/causing joy)<br>7. Cardiovascular (Relating to heart)<br>8. Prescribe (Authorize medicine treatment)<br>9. Deteriorate (Become progressively worse)<br>10. Immune system (Body's defense)<br>11. Epidemic (Widespread occurrence)<br>12. Regimen (Prescribed course of diet/exercise)<br><br><strong>Your turn:</strong> Shadow spelling. The teacher says the word, you type it before they finish defining it.</div>
             </div>
             
             <!-- LISTENING -->
             <div class="lesson-block lb-purple">
                 <div class="lb-header"><i class="fas fa-headphones"></i> Main Listening Input</div>
                 <div class="content-text"><div style="margin-bottom:10px;"><audio controls style="height:30px; width:200px;"><source src="assets/audio/core_practice_level_2_lesson_9.mp3" type="audio/mpeg"></audio></div>
-                    <em>(The script text is hidden in the student manual. Listen to the audio closely to complete the exercise.)</em></div>
+                    <em>Press play and listen twice. The words are not printed here on purpose &mdash; train your ears! Then answer the questions below.</em></div>
             </div>
             
             <!-- COMPREHENSION -->
@@ -384,13 +482,13 @@
             <!-- WARM UP -->
             <div class="lesson-block lb-blue">
                 <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
-                <div class="content-text"><strong>Phase 1: Financial Confession:</strong> Type the most ridiculous, useless thing you have ever wasted money on.<br><br><strong>Phase 2: The Core Rule:</strong> What does 'live below your means' mean?<br><br><strong>Phase 3: The Millionaire Myth:</strong> Do you believe anybody can become a millionaire just by 'saving coffee money'?</div>
+                <div class="content-text"><strong>1. Financial Confession:</strong> Type the most ridiculous, useless thing you have ever wasted money on.<br><br><strong>2. The Core Rule:</strong> What does 'live below your means' mean?<br><br><strong>3. The Millionaire Myth:</strong> Do you believe anybody can become a millionaire just by 'saving coffee money'?</div>
             </div>
             
             <!-- VOCAB -->
             <div class="lesson-block lb-navy">
                 <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
-                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Mortgage (Loan for a house)<br>2. Interest rate (Proportion of loan charged as interest)<br>3. Inflation (General increase in prices)<br>4. Bankruptcy (Legal state of ruin)<br>5. Asset (Property owned/value)<br>6. Liability (Thing you owe/debt)<br>7. Frugal (Sparing with money; economical)<br>8. Splurge (Spend extravagantly)<br>9. Diversify (Vary investments)<br>10. Income stream (Source of money coming in)<br>11. Nest egg (Sum of money saved for future)<br>12. Compound interest (Interest on interest)<br><br><strong>Drill Task:</strong> Differentiate positive vs negative terms. Asset vs Liability. Frugal vs Splurge.</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Mortgage (Loan for a house)<br>2. Interest rate (Proportion of loan charged as interest)<br>3. Inflation (General increase in prices)<br>4. Bankruptcy (Legal state of ruin)<br>5. Asset (Property owned/value)<br>6. Liability (Thing you owe/debt)<br>7. Frugal (Sparing with money; economical)<br>8. Splurge (Spend extravagantly)<br>9. Diversify (Vary investments)<br>10. Income stream (Source of money coming in)<br>11. Nest egg (Sum of money saved for future)<br>12. Compound interest (Interest on interest)<br><br><strong>Your turn:</strong> Differentiate positive vs negative terms. Asset vs Liability. Frugal vs Splurge.</div>
             </div>
             
             <!-- READING -->
@@ -420,20 +518,20 @@
             <!-- WARM UP -->
             <div class="lesson-block lb-blue">
                 <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
-                <div class="content-text"><strong>Phase 1: The Timeline:</strong> Pull out your phone. What is the very first post on your social media feed right now? Describe it in English to the class.<br><br><strong>Phase 2: The Block List:</strong> What behavior instantly makes you block or unfollow someone?<br><br><strong>Phase 3: The Filter:</strong> Have photo filters destroyed our real-world self-esteem? Discuss.</div>
+                <div class="content-text"><strong>1. The Timeline:</strong> Pull out your phone. What is the very first post on your social media feed right now? Describe it in English to the class.<br><br><strong>2. The Block List:</strong> What behavior instantly makes you block or unfollow someone?<br><br><strong>3. The Filter:</strong> Have photo filters destroyed our real-world self-esteem? Discuss.</div>
             </div>
             
             <!-- VOCAB -->
             <div class="lesson-block lb-navy">
                 <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
-                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Influencer (Person with social media weight)<br>2. Endorsement (Public approval/sponsorship)<br>3. Authenticity (Being genuine/real)<br>4. Toxic (Harmful/poisonous attitude)<br>5. Troll (Someone who provokes online)<br>6. Cyberbullying (Harassment online)<br>7. Validate (Seek approval from others)<br>8. Cancel culture (Boycotting someone socially)<br>9. Viral (Spreading rapidly)<br>10. Superficial (Lacking depth/only surface level)<br>11. Curate (Carefully select and organize)<br>12. FOMO (Fear Of Missing Out)<br><br><strong>Drill Task:</strong> Identify the nouns vs verbs. Write a sentence linking 'Validate' and 'Superficial'.</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Influencer (Person with social media weight)<br>2. Endorsement (Public approval/sponsorship)<br>3. Authenticity (Being genuine/real)<br>4. Toxic (Harmful/poisonous attitude)<br>5. Troll (Someone who provokes online)<br>6. Cyberbullying (Harassment online)<br>7. Validate (Seek approval from others)<br>8. Cancel culture (Boycotting someone socially)<br>9. Viral (Spreading rapidly)<br>10. Superficial (Lacking depth/only surface level)<br>11. Curate (Carefully select and organize)<br>12. FOMO (Fear Of Missing Out)<br><br><strong>Your turn:</strong> Identify the nouns vs verbs. Write a sentence linking 'Validate' and 'Superficial'.</div>
             </div>
             
             <!-- LISTENING -->
             <div class="lesson-block lb-purple">
                 <div class="lb-header"><i class="fas fa-headphones"></i> Main Listening Input</div>
                 <div class="content-text"><div style="margin-bottom:10px;"><audio controls style="height:30px; width:200px;"><source src="assets/audio/core_practice_level_2_lesson_11.mp3" type="audio/mpeg"></audio></div>
-                    <em>(The script text is hidden in the student manual. Listen to the audio closely to complete the exercise.)</em></div>
+                    <em>Press play and listen twice. The words are not printed here on purpose &mdash; train your ears! Then answer the questions below.</em></div>
             </div>
             
             <!-- COMPREHENSION -->
@@ -457,13 +555,13 @@
             <!-- WARM UP -->
             <div class="lesson-block lb-blue">
                 <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
-                <div class="content-text"><strong>Phase 1: Culture Shock:</strong> Name one thing a foreigner would find extremely weird or shocking about your culture.<br><br><strong>Phase 2: Stereotypes:</strong> What is a common global stereotype about your country? Is it true?<br><br><strong>Phase 3: The Quote:</strong> 'To speak another language is to possess a second soul.' Explain.</div>
+                <div class="content-text"><strong>1. Culture Shock:</strong> Name one thing a foreigner would find extremely weird or shocking about your culture.<br><br><strong>2. Stereotypes:</strong> What is a common global stereotype about your country? Is it true?<br><br><strong>3. The Quote:</strong> 'To speak another language is to possess a second soul.' Explain.</div>
             </div>
             
             <!-- VOCAB -->
             <div class="lesson-block lb-navy">
                 <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
-                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Heritage (Inherited traditions/property)<br>2. Assimilate (Absorb into a new culture)<br>3. Etiquette (Rules of polite behavior)<br>4. Taboo (Forbidden social custom)<br>5. Stereotype (Oversimplified image)<br>6. Integration (Mixing into a society)<br>7. Diverse (Showing a great deal of variety)<br>8. Xenophobia (Fear of foreigners)<br>9. Customary (According to custom)<br>10. Linguistic (Relating to language)<br>11. Norms (Standard rules of behavior)<br>12. Ethnocentrism (Judging other cultures by your own rules)<br><br><strong>Drill Task:</strong> Rapid spelling out loud. Group the negative words vs the positive words.</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Heritage (Inherited traditions/property)<br>2. Assimilate (Absorb into a new culture)<br>3. Etiquette (Rules of polite behavior)<br>4. Taboo (Forbidden social custom)<br>5. Stereotype (Oversimplified image)<br>6. Integration (Mixing into a society)<br>7. Diverse (Showing a great deal of variety)<br>8. Xenophobia (Fear of foreigners)<br>9. Customary (According to custom)<br>10. Linguistic (Relating to language)<br>11. Norms (Standard rules of behavior)<br>12. Ethnocentrism (Judging other cultures by your own rules)<br><br><strong>Your turn:</strong> Rapid spelling out loud. Group the negative words vs the positive words.</div>
             </div>
             
             <!-- READING -->
@@ -493,20 +591,20 @@
             <!-- WARM UP -->
             <div class="lesson-block lb-blue">
                 <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
-                <div class="content-text"><strong>Phase 1: The Memory:</strong> Describe your absolute worst teacher. What did they do wrong?<br><br><strong>Phase 2: Standardized Testing:</strong> Do written tests actually measure intelligence or just memory?<br><br><strong>Phase 3: Useless Knowledge:</strong> What is one subject you were forced to learn in school that you have NEVER used in real life?</div>
+                <div class="content-text"><strong>1. The Memory:</strong> Describe your absolute worst teacher. What did they do wrong?<br><br><strong>2. Standardized Testing:</strong> Do written tests actually measure intelligence or just memory?<br><br><strong>3. Useless Knowledge:</strong> What is one subject you were forced to learn in school that you have NEVER used in real life?</div>
             </div>
             
             <!-- VOCAB -->
             <div class="lesson-block lb-navy">
                 <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
-                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Curriculum (Subjects taught in a school)<br>2. Pedagogy (Method of teaching)<br>3. Memorization (Learning by heart)<br>4. Critical thinking (Objective analysis to judge)<br>5. Plagiarism (Copying someone's work)<br>6. Tuition (Money paid to be taught)<br>7. Scholarship (Grant payment for studies)<br>8. Extracurricular (Outside normal subjects)<br>9. Dropout (Someone who quits school)<br>10. Illiterate (Unable to read/write)<br>11. Compulsory (Required by law/rule)<br>12. Rote learning (Repetitive learning method)<br><br><strong>Drill Task:</strong> Link the words to a definition. Teacher reads definition randomly.</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Curriculum (Subjects taught in a school)<br>2. Pedagogy (Method of teaching)<br>3. Memorization (Learning by heart)<br>4. Critical thinking (Objective analysis to judge)<br>5. Plagiarism (Copying someone's work)<br>6. Tuition (Money paid to be taught)<br>7. Scholarship (Grant payment for studies)<br>8. Extracurricular (Outside normal subjects)<br>9. Dropout (Someone who quits school)<br>10. Illiterate (Unable to read/write)<br>11. Compulsory (Required by law/rule)<br>12. Rote learning (Repetitive learning method)<br><br><strong>Your turn:</strong> Link the words to a definition. Teacher reads definition randomly.</div>
             </div>
             
             <!-- LISTENING -->
             <div class="lesson-block lb-purple">
                 <div class="lb-header"><i class="fas fa-headphones"></i> Main Listening Input</div>
                 <div class="content-text"><div style="margin-bottom:10px;"><audio controls style="height:30px; width:200px;"><source src="assets/audio/core_practice_level_2_lesson_13.mp3" type="audio/mpeg"></audio></div>
-                    <em>(The script text is hidden in the student manual. Listen to the audio closely to complete the exercise.)</em></div>
+                    <em>Press play and listen twice. The words are not printed here on purpose &mdash; train your ears! Then answer the questions below.</em></div>
             </div>
             
             <!-- COMPREHENSION -->
@@ -530,13 +628,13 @@
             <!-- WARM UP -->
             <div class="lesson-block lb-blue">
                 <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
-                <div class="content-text"><strong>Phase 1: Red Flag / Green Flag:</strong> Type one 'red flag' (bad sign) and one 'green flag' (good sign) on a first date.<br><br><strong>Phase 2: Ghosting:</strong> Have you ever 'ghosted' someone (stopped replying suddenly)? Why do people do it?<br><br><strong>Phase 3: The Friend Zone:</strong> Can men and women truly be purely platonic friends?</div>
+                <div class="content-text"><strong>1. Red Flag / Green Flag:</strong> Type one 'red flag' (bad sign) and one 'green flag' (good sign) on a first date.<br><br><strong>2. Ghosting:</strong> Have you ever 'ghosted' someone (stopped replying suddenly)? Why do people do it?<br><br><strong>3. The Friend Zone:</strong> Can men and women truly be purely platonic friends?</div>
             </div>
             
             <!-- VOCAB -->
             <div class="lesson-block lb-navy">
                 <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
-                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Platonic (Friendly, not romantic)<br>2. Infatuation (Intense but short passion)<br>3. Compromise (Make concessions)<br>4. Boundary (A line that marks limits)<br>5. Mutual (Felt by both parties)<br>6. Incompatible (Cannot exist together happily)<br>7. Toxic (Poisonous relationship)<br>8. Ghosting (Ending contact without warning)<br>9. Unrequited (Not returned/rewarded)<br>10. Superficial (Only caring about looks)<br>11. Empathy (Understanding others' feelings)<br>12. Resentment (Bitter anger about unfairness)<br><br><strong>Drill Task:</strong> Replace the simple words in a sentence with these advanced terms.</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Platonic (Friendly, not romantic)<br>2. Infatuation (Intense but short passion)<br>3. Compromise (Make concessions)<br>4. Boundary (A line that marks limits)<br>5. Mutual (Felt by both parties)<br>6. Incompatible (Cannot exist together happily)<br>7. Toxic (Poisonous relationship)<br>8. Ghosting (Ending contact without warning)<br>9. Unrequited (Not returned/rewarded)<br>10. Superficial (Only caring about looks)<br>11. Empathy (Understanding others' feelings)<br>12. Resentment (Bitter anger about unfairness)<br><br><strong>Your turn:</strong> Replace the simple words in a sentence with these advanced terms.</div>
             </div>
             
             <!-- READING -->
@@ -566,20 +664,20 @@
             <!-- WARM UP -->
             <div class="lesson-block lb-blue">
                 <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
-                <div class="content-text"><strong>Phase 1: Dream Home:</strong> Money is no object. Describe exactly where your dream house is located and what weird feature it has (e.g., a bowling alley).<br><br><strong>Phase 2: Renter's Misery:</strong> What is the worst problem to have in an apartment? (Rats, noisy neighbors, or cold water?)<br><br><strong>Phase 3: The Market:</strong> Why are houses so incredibly expensive right now?</div>
+                <div class="content-text"><strong>1. Dream Home:</strong> Money is no object. Describe exactly where your dream house is located and what weird feature it has (e.g., a bowling alley).<br><br><strong>2. Renter's Misery:</strong> What is the worst problem to have in an apartment? (Rats, noisy neighbors, or cold water?)<br><br><strong>3. The Market:</strong> Why are houses so incredibly expensive right now?</div>
             </div>
             
             <!-- VOCAB -->
             <div class="lesson-block lb-navy">
                 <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
-                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Eviction (Legally forcing a tenant out)<br>2. Mortgage (Loan to buy property)<br>3. Amenities (Useful features/facilities in a building)<br>4. Commute (Travel to work)<br>5. Suburb (Residential area outside city)<br>6. Landlord (Person who rents out property)<br>7. Tenant (Person who rents)<br>8. Lease (Contract to rent)<br>9. Dilapidated (In ruins from age/neglect)<br>10. Down payment (Initial chunk of cash paid)<br>11. Real estate (Property/land)<br>12. Renovation (Repairing/improving a building)<br><br><strong>Drill Task:</strong> Phonetic stress. LAND-lord. TEN-ant. a-MEN-i-ties.</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Eviction (Legally forcing a tenant out)<br>2. Mortgage (Loan to buy property)<br>3. Amenities (Useful features/facilities in a building)<br>4. Commute (Travel to work)<br>5. Suburb (Residential area outside city)<br>6. Landlord (Person who rents out property)<br>7. Tenant (Person who rents)<br>8. Lease (Contract to rent)<br>9. Dilapidated (In ruins from age/neglect)<br>10. Down payment (Initial chunk of cash paid)<br>11. Real estate (Property/land)<br>12. Renovation (Repairing/improving a building)<br><br><strong>Your turn:</strong> Phonetic stress. LAND-lord. TEN-ant. a-MEN-i-ties.</div>
             </div>
             
             <!-- LISTENING -->
             <div class="lesson-block lb-purple">
                 <div class="lb-header"><i class="fas fa-headphones"></i> Main Listening Input</div>
                 <div class="content-text"><div style="margin-bottom:10px;"><audio controls style="height:30px; width:200px;"><source src="assets/audio/core_practice_level_2_lesson_15.mp3" type="audio/mpeg"></audio></div>
-                    <em>(The script text is hidden in the student manual. Listen to the audio closely to complete the exercise.)</em></div>
+                    <em>Press play and listen twice. The words are not printed here on purpose &mdash; train your ears! Then answer the questions below.</em></div>
             </div>
             
             <!-- COMPREHENSION -->
@@ -603,13 +701,13 @@
             <!-- WARM UP -->
             <div class="lesson-block lb-blue">
                 <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
-                <div class="content-text"><strong>Phase 1: The Heist:</strong> If you had to rob a bank, how would you escape? Type your movie-style plan.<br><br><strong>Phase 2: Punishments:</strong> Does prison actually 'rehabilitate' people, or just punish them?<br><br><strong>Phase 3: True Crime:</strong> Why are people so obsessed with watching documentaries about serial killers?</div>
+                <div class="content-text"><strong>1. The Heist:</strong> If you had to rob a bank, how would you escape? Type your movie-style plan.<br><br><strong>2. Punishments:</strong> Does prison actually 'rehabilitate' people, or just punish them?<br><br><strong>3. True Crime:</strong> Why are people so obsessed with watching documentaries about serial killers?</div>
             </div>
             
             <!-- VOCAB -->
             <div class="lesson-block lb-navy">
                 <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
-                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Alibi (Proof you were somewhere else)<br>2. Homicide (Murder)<br>3. Rehabilitate (Restore someone to normal life)<br>4. Incarceration (Being in prison)<br>5. Embezzlement (Stealing money from employer)<br>6. Acquitted (Found not guilty)<br>7. Convicted (Found guilty)<br>8. Forensic (Scientific crime investigation)<br>9. Perpetrator (Person who commits the crime)<br>10. Blackmail (Demanding money using secrets)<br>11. Smuggling (Moving things illegally)<br>12. Deterrent (Something that stops you from acting)<br><br><strong>Drill Task:</strong> Match the crime to the definition (e.g. Stealing money secretly from work = Embezzlement).</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Alibi (Proof you were somewhere else)<br>2. Homicide (Murder)<br>3. Rehabilitate (Restore someone to normal life)<br>4. Incarceration (Being in prison)<br>5. Embezzlement (Stealing money from employer)<br>6. Acquitted (Found not guilty)<br>7. Convicted (Found guilty)<br>8. Forensic (Scientific crime investigation)<br>9. Perpetrator (Person who commits the crime)<br>10. Blackmail (Demanding money using secrets)<br>11. Smuggling (Moving things illegally)<br>12. Deterrent (Something that stops you from acting)<br><br><strong>Your turn:</strong> Match the crime to the definition (e.g. Stealing money secretly from work = Embezzlement).</div>
             </div>
             
             <!-- READING -->
@@ -639,20 +737,20 @@
             <!-- WARM UP -->
             <div class="lesson-block lb-blue">
                 <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
-                <div class="content-text"><strong>Phase 1: The Earworm:</strong> What song is currently stuck in your head? Sing one line of it.<br><br><strong>Phase 2: Modern Art:</strong> A blank white canvas sells for $5 million. Is this a scam, or is it genius?<br><br><strong>Phase 3: AI Art:</strong> If a computer generates a beautiful painting, who is the artist: the computer, or the programmer?</div>
+                <div class="content-text"><strong>1. The Earworm:</strong> What song is currently stuck in your head? Sing one line of it.<br><br><strong>2. Modern Art:</strong> A blank white canvas sells for $5 million. Is this a scam, or is it genius?<br><br><strong>3. AI Art:</strong> If a computer generates a beautiful painting, who is the artist: the computer, or the programmer?</div>
             </div>
             
             <!-- VOCAB -->
             <div class="lesson-block lb-navy">
                 <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
-                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Masterpiece (A work of outstanding skill)<br>2. Subjective (Based on personal feelings)<br>3. Pretension (Trying to appear more important than reality)<br>4. Evoke (Bring a feeling to mind)<br>5. Avant-garde (New/unusual/experimental ideas)<br>6. Aesthetic (Concerned with beauty)<br>7. Genre (Category of art/music)<br>8. Melancholy (Feeling of pensive sadness)<br>9. Overrated (Rated higher than it deserves)<br>10. Canvas (Cloth used for painting)<br>11. Rhythm (Strong, regular repeated pattern)<br>12. Provocative (Causing anger or strong reaction)<br><br><strong>Drill Task:</strong> Pronounce correctly: A-vant-garde. Aes-thet-ic. Me-lan-cho-ly.</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Masterpiece (A work of outstanding skill)<br>2. Subjective (Based on personal feelings)<br>3. Pretension (Trying to appear more important than reality)<br>4. Evoke (Bring a feeling to mind)<br>5. Avant-garde (New/unusual/experimental ideas)<br>6. Aesthetic (Concerned with beauty)<br>7. Genre (Category of art/music)<br>8. Melancholy (Feeling of pensive sadness)<br>9. Overrated (Rated higher than it deserves)<br>10. Canvas (Cloth used for painting)<br>11. Rhythm (Strong, regular repeated pattern)<br>12. Provocative (Causing anger or strong reaction)<br><br><strong>Your turn:</strong> Pronounce correctly: A-vant-garde. Aes-thet-ic. Me-lan-cho-ly.</div>
             </div>
             
             <!-- LISTENING -->
             <div class="lesson-block lb-purple">
                 <div class="lb-header"><i class="fas fa-headphones"></i> Main Listening Input</div>
                 <div class="content-text"><div style="margin-bottom:10px;"><audio controls style="height:30px; width:200px;"><source src="assets/audio/core_practice_level_2_lesson_17.mp3" type="audio/mpeg"></audio></div>
-                    <em>(The script text is hidden in the student manual. Listen to the audio closely to complete the exercise.)</em></div>
+                    <em>Press play and listen twice. The words are not printed here on purpose &mdash; train your ears! Then answer the questions below.</em></div>
             </div>
             
             <!-- COMPREHENSION -->
@@ -676,13 +774,13 @@
             <!-- WARM UP -->
             <div class="lesson-block lb-blue">
                 <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
-                <div class="content-text"><strong>Phase 1: Phobias:</strong> Type your strangest fear (e.g., holes, clowns, the ocean).<br><br><strong>Phase 2: The Subconscious:</strong> Do our dreams actually mean anything, or are they just random brain noise?<br><br><strong>Phase 3: Nature vs Nurture:</strong> Is a person born 'evil', or does society make them evil?</div>
+                <div class="content-text"><strong>1. Phobias:</strong> Type your strangest fear (e.g., holes, clowns, the ocean).<br><br><strong>2. The Subconscious:</strong> Do our dreams actually mean anything, or are they just random brain noise?<br><br><strong>3. Nature vs Nurture:</strong> Is a person born 'evil', or does society make them evil?</div>
             </div>
             
             <!-- VOCAB -->
             <div class="lesson-block lb-navy">
                 <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
-                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Subconscious (Part of mind you're not fully aware of)<br>2. Cognitive (Relating to thinking/logic)<br>3. Empathy (Ability to feel others' pain)<br>4. Narcissism (Self-obsession)<br>5. Trauma (Deep psychological damage)<br>6. Introvert (Recharged by being alone)<br>7. Extrovert (Recharged by crowds)<br>8. Gaslighting (Manipulating someone into doubting their sanity)<br>9. Conditioned (Trained to react a certain way)<br>10. Placebo (Fake medicine that works psychologically)<br>11. Projection (Pushing your flaws onto others)<br>12. Catalyst (A trigger for a reaction)<br><br><strong>Drill Task:</strong> Match the psychological defense mechanism to its definition.</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Subconscious (Part of mind you're not fully aware of)<br>2. Cognitive (Relating to thinking/logic)<br>3. Empathy (Ability to feel others' pain)<br>4. Narcissism (Self-obsession)<br>5. Trauma (Deep psychological damage)<br>6. Introvert (Recharged by being alone)<br>7. Extrovert (Recharged by crowds)<br>8. Gaslighting (Manipulating someone into doubting their sanity)<br>9. Conditioned (Trained to react a certain way)<br>10. Placebo (Fake medicine that works psychologically)<br>11. Projection (Pushing your flaws onto others)<br>12. Catalyst (A trigger for a reaction)<br><br><strong>Your turn:</strong> Match the psychological defense mechanism to its definition.</div>
             </div>
             
             <!-- READING -->
@@ -712,20 +810,20 @@
             <!-- WARM UP -->
             <div class="lesson-block lb-blue">
                 <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
-                <div class="content-text"><strong>Phase 1: The Matrix:</strong> Would you plug your brain into a perfect virtual reality forever if you could? Why or why not?<br><br><strong>Phase 2: Mars:</strong> Elon Musk offers you a free, one-way ticket to Mars. Do you take it?<br><br><strong>Phase 3: Immortality:</strong> If a pill could stop aging, would you take it? What happens to earth's resources?</div>
+                <div class="content-text"><strong>1. The Matrix:</strong> Would you plug your brain into a perfect virtual reality forever if you could? Why or why not?<br><br><strong>2. Mars:</strong> Elon Musk offers you a free, one-way ticket to Mars. Do you take it?<br><br><strong>3. Immortality:</strong> If a pill could stop aging, would you take it? What happens to earth's resources?</div>
             </div>
             
             <!-- VOCAB -->
             <div class="lesson-block lb-navy">
                 <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
-                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Sentient (Able to perceive and feel things)<br>2. Cybernetics (Integrating tech with biology)<br>3. Dystopia (An imagined nightmare society)<br>4. Utopia (A perfect society)<br>5. Autonomous (Acting independently)<br>6. Algorithm (Coding rules)<br>7. Obsolete (No longer needed)<br>8. Colonize (Settle among and establish control)<br>9. Neural (Relating to nerves/brain)<br>10. Simulation (Imitation of a situation)<br>11. Immortality (Living forever)<br>12. Unprecedented (Never done before)<br><br><strong>Drill Task:</strong> Say the words aloud. Focus on the stress in 'Au-TON-o-mous' and 'Dys-TO-pi-a'.</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Sentient (Able to perceive and feel things)<br>2. Cybernetics (Integrating tech with biology)<br>3. Dystopia (An imagined nightmare society)<br>4. Utopia (A perfect society)<br>5. Autonomous (Acting independently)<br>6. Algorithm (Coding rules)<br>7. Obsolete (No longer needed)<br>8. Colonize (Settle among and establish control)<br>9. Neural (Relating to nerves/brain)<br>10. Simulation (Imitation of a situation)<br>11. Immortality (Living forever)<br>12. Unprecedented (Never done before)<br><br><strong>Your turn:</strong> Say the words aloud. Focus on the stress in 'Au-TON-o-mous' and 'Dys-TO-pi-a'.</div>
             </div>
             
             <!-- LISTENING -->
             <div class="lesson-block lb-purple">
                 <div class="lb-header"><i class="fas fa-headphones"></i> Main Listening Input</div>
                 <div class="content-text"><div style="margin-bottom:10px;"><audio controls style="height:30px; width:200px;"><source src="assets/audio/core_practice_level_2_lesson_19.mp3" type="audio/mpeg"></audio></div>
-                    <em>(The script text is hidden in the student manual. Listen to the audio closely to complete the exercise.)</em></div>
+                    <em>Press play and listen twice. The words are not printed here on purpose &mdash; train your ears! Then answer the questions below.</em></div>
             </div>
             
             <!-- COMPREHENSION -->
@@ -749,13 +847,13 @@
             <!-- WARM UP -->
             <div class="lesson-block lb-blue">
                 <div class="lb-header"><i class="fas fa-bolt"></i> Warm Up</div>
-                <div class="content-text"><strong>Phase 1: The Journey:</strong> Looking back at Level 2, what was the most difficult grammar topic or concept you learned?<br><br><strong>Phase 2: Advice:</strong> If you could go back in time to your first day of English class, what advice would you give yourself?<br><br><strong>Phase 3: Next Steps:</strong> What is your ultimate goal for Level 3?</div>
+                <div class="content-text"><strong>1. The Journey:</strong> Looking back at Level 2, what was the most difficult grammar topic or concept you learned?<br><br><strong>2. Advice:</strong> If you could go back in time to your first day of English class, what advice would you give yourself?<br><br><strong>3. Next Steps:</strong> What is your ultimate goal for Level 3?</div>
             </div>
             
             <!-- VOCAB -->
             <div class="lesson-block lb-navy">
                 <div class="lb-header"><i class="fas fa-spell-check"></i> Vocab Drill</div>
-                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Milestone (Significant event in development)<br>2. Perseverance (Doing something despite difficulty)<br>3. Proficient (Competent or skilled)<br>4. Articulate (Able to speak clearly/fluently)<br>5. Overcome (Succeed in dealing with a problem)<br>6. Dedication (Commitment to a task)<br>7. Plateau (A state of little/no change after progress)<br>8. Fluency (Smooth/easy flow of speech)<br>9. Culmination (The highest/climactic point)<br>10. Empower (Give power/confidence to)<br>11. Endeavor (Try hard to do or achieve)<br>12. Horizon (The limit of knowledge or experience)<br><br><strong>Drill Task:</strong> Write a short, motivating sentence using 'Perseverance' and 'Milestone'.</div>
+                <div class="content-text"><strong>Core Arsenal (12 words):</strong><br>1. Milestone (Significant event in development)<br>2. Perseverance (Doing something despite difficulty)<br>3. Proficient (Competent or skilled)<br>4. Articulate (Able to speak clearly/fluently)<br>5. Overcome (Succeed in dealing with a problem)<br>6. Dedication (Commitment to a task)<br>7. Plateau (A state of little/no change after progress)<br>8. Fluency (Smooth/easy flow of speech)<br>9. Culmination (The highest/climactic point)<br>10. Empower (Give power/confidence to)<br>11. Endeavor (Try hard to do or achieve)<br>12. Horizon (The limit of knowledge or experience)<br><br><strong>Your turn:</strong> Write a short, motivating sentence using 'Perseverance' and 'Milestone'.</div>
             </div>
             
             <!-- READING -->
