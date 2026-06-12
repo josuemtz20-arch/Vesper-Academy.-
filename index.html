@@ -83,6 +83,21 @@ section{padding:82px 0;}
 .lvl p{color:rgba(255,255,255,.62);font-size:.82rem;margin:0;}
 .lvl .bar{position:absolute;left:0;bottom:0;height:4px;background:var(--gold);}
 
+/* DIAGNOSTIC EXAM BANNER */
+.diag{background:linear-gradient(135deg,var(--cream),#efe9da);border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+.diag-inner{display:grid;grid-template-columns:1.2fr 1fr;gap:46px;align-items:center;}
+.diag-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(45,122,79,.1);border:1px solid rgba(45,122,79,.35);color:#2d7a4f;font-size:.7rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:6px 14px;border-radius:20px;margin-bottom:14px;}
+.diag-cta{display:flex;gap:14px;flex-wrap:wrap;margin-top:26px;}
+.btn-navy-ghost{background:transparent;color:var(--navy);border:1.5px solid rgba(20,28,42,.35);}
+.btn-navy-ghost:hover{border-color:var(--gold2);color:var(--gold2);}
+.diag-card{background:var(--navy);border-radius:18px;padding:30px 28px;color:#fff;box-shadow:0 22px 50px rgba(20,28,42,.25);}
+.diag-card h4{margin:0 0 16px;font-family:'Inria Serif',serif;font-size:1.1rem;color:var(--gold-lt);}
+.diag-card ul{list-style:none;padding:0;margin:0;}
+.diag-card li{display:flex;gap:11px;align-items:flex-start;font-size:.88rem;color:rgba(255,255,255,.8);padding:9px 0;border-bottom:1px dashed rgba(255,255,255,.14);}
+.diag-card li:last-child{border-bottom:none;}
+.diag-card li i{color:var(--gold);margin-top:3px;}
+@media(max-width:860px){.diag-inner{grid-template-columns:1fr;gap:30px;}}
+
 /* COURSES */
 .cgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:22px;margin-top:46px;}
 .course{border:1px solid var(--border);border-radius:16px;overflow:hidden;background:#fff;transition:transform .2s,box-shadow .2s;display:flex;flex-direction:column;}
@@ -185,8 +200,9 @@ footer{background:var(--navy3);color:rgba(255,255,255,.6);padding:54px 0 30px;}
         <a href="#cursos">Cursos</a>
         <a href="#certificacion">Certificación</a>
         <a href="#precios">Precios</a>
+        <a href="book_placement.html">Examen de nivel</a>
         <a href="materiales.html">Alumnos</a>
-        <a href="#contacto" class="btn btn-gold" style="padding:9px 20px;">Clase de prueba</a>
+        <a href="book_placement.html" class="btn btn-gold" style="padding:9px 20px;">Examen gratis</a>
       </div>
       <button class="nav-toggle" onclick="document.getElementById('navlinks').classList.toggle('show')"><i class="fas fa-bars"></i></button>
     </nav>
@@ -201,7 +217,7 @@ footer{background:var(--navy3);color:rgba(255,255,255,.6);padding:54px 0 30px;}
       <h1>Habla inglés con <span>confianza real</span>, no solo en teoría.</h1>
       <p>Desde el primer "hello" hasta tu certificación internacional. Método comunicativo, profesores reales y un plan que se adapta a tu nivel y a tu meta profesional.</p>
       <div class="hero-cta">
-        <a href="#contacto" class="btn btn-gold"><i class="fas fa-graduation-cap"></i> Reserva tu clase de prueba</a>
+        <a href="book_placement.html" class="btn btn-gold"><i class="fas fa-clipboard-check"></i> Haz tu examen diagnóstico gratis</a>
         <a href="#ruta" class="btn btn-ghost">Ver los niveles</a>
       </div>
       <div class="hero-stats">
@@ -278,6 +294,32 @@ footer{background:var(--navy3);color:rgba(255,255,255,.6);padding:54px 0 30px;}
       <div class="lvl"><div class="cefr">B1</div><h4>Independencia</h4><p>Opinar, narrar y manejar situaciones imprevistas.</p><div class="bar" style="width:52%"></div></div>
       <div class="lvl"><div class="cefr">B2</div><h4>Fluidez</h4><p>Debate, negociación y entornos corporativos globales.</p><div class="bar" style="width:72%"></div></div>
       <div class="lvl"><div class="cefr">C1–C2</div><h4>Dominio</h4><p>Matiz, retórica y certificación internacional.</p><div class="bar" style="width:100%"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- EXAMEN DIAGNÓSTICO -->
+<section id="examen" class="diag">
+  <div class="container">
+    <div class="diag-inner">
+      <div>
+        <span class="diag-badge"><i class="fas fa-gift"></i> Gratis · Sin registro</span>
+        <h2 class="sec-title">¿No sabes tu nivel de inglés?<br>Descúbrelo en 15 minutos.</h2>
+        <p class="sec-lead">Nuestro examen diagnóstico te ubica del nivel A0 al B2+ con 30 preguntas y te dice exactamente con qué curso empezar. Abierto a cualquier persona interesada: solo deja tu correo o WhatsApp y recibe tu resultado al instante.</p>
+        <div class="diag-cta">
+          <a href="book_placement.html" class="btn btn-gold"><i class="fas fa-clipboard-check"></i> Hacer el examen ahora</a>
+          <a href="book_placement.html#historial" class="btn btn-navy-ghost"><i class="fas fa-clock-rotate-left"></i> Ver historial de resultados</a>
+        </div>
+      </div>
+      <div class="diag-card">
+        <h4><i class="fas fa-circle-info"></i> Cómo funciona</h4>
+        <ul>
+          <li><i class="fas fa-pen"></i> 30 preguntas de opción múltiple, de A0 a B2+.</li>
+          <li><i class="fas fa-bolt"></i> Resultado inmediato con tu nivel MCER y curso recomendado.</li>
+          <li><i class="fas fa-cloud-arrow-up"></i> Tu resultado se guarda en el historial para tu profesor.</li>
+          <li><i class="fas fa-comments"></i> Después, una breve entrevista oral confirma tu nivel real.</li>
+        </ul>
+      </div>
     </div>
   </div>
 </section>
@@ -365,7 +407,7 @@ footer{background:var(--navy3);color:rgba(255,255,255,.6);padding:54px 0 30px;}
           <li><i class="fas fa-check"></i> Club de conversación mensual</li>
           <li><i class="fas fa-check"></i> Evaluación de progreso</li>
         </ul>
-        <a href="#contacto" class="btn btn-gold" style="justify-content:center;">Empezar</a>
+        <a href="book_placement.html" class="btn btn-gold" style="justify-content:center;">Empezar con el examen</a>
       </div>
       <div class="plan feat">
         <div class="ribbon">Más popular</div>
@@ -379,7 +421,7 @@ footer{background:var(--navy3);color:rgba(255,255,255,.6);padding:54px 0 30px;}
           <li><i class="fas fa-check"></i> Entrevista oral de nivel incluida</li>
           <li><i class="fas fa-check"></i> Seguimiento 1 a 1 del progreso</li>
         </ul>
-        <a href="#contacto" class="btn btn-gold" style="justify-content:center;">Reservar prueba</a>
+        <a href="book_placement.html" class="btn btn-gold" style="justify-content:center;">Hacer mi examen de nivel</a>
       </div>
       <div class="plan">
         <h3>Certificación</h3>
@@ -391,7 +433,7 @@ footer{background:var(--navy3);color:rgba(255,255,255,.6);padding:54px 0 30px;}
           <li><i class="fas fa-check"></i> Corrección con rúbrica de banda</li>
           <li><i class="fas fa-check"></i> Meta de banda garantizada por plan</li>
         </ul>
-        <a href="#contacto" class="btn btn-gold" style="justify-content:center;">Quiero certificarme</a>
+        <a href="book_placement.html" class="btn btn-gold" style="justify-content:center;">Quiero certificarme</a>
       </div>
     </div>
     <p style="color:var(--muted);font-size:.8rem;margin-top:22px;">Precios de referencia. Escríbenos para un plan a tu medida.</p>
@@ -422,17 +464,23 @@ footer{background:var(--navy3);color:rgba(255,255,255,.6);padding:54px 0 30px;}
 <section id="contacto" class="cta">
   <div class="container">
     <span class="eyebrow" style="color:var(--gold-lt);">Empieza hoy</span>
-    <h2 class="sec-title">Reserva tu clase de prueba gratuita</h2>
-    <p>Déjanos tu correo y te contactamos para agendar tu prueba de nivel y tu primera clase, sin compromiso.</p>
-    <form id="contactForm" action="https://formspree.io/f/mdavlzzo" method="POST">
+    <h2 class="sec-title">Tu primer paso: el examen diagnóstico gratis</h2>
+    <p>Descubre tu nivel real en 15 minutos y recibe tu curso recomendado al instante. Al terminar te enviamos tu resultado por correo y un asesor te contacta para confirmar tu nivel con una entrevista oral, sin compromiso.</p>
+    <a href="book_placement.html" class="btn btn-gold" style="font-size:1rem;padding:15px 32px;"><i class="fas fa-clipboard-check"></i> Hacer mi examen diagnóstico</a>
+    <p style="margin-top:40px;">¿Prefieres que te escribamos primero? Déjanos tus datos:</p>
+    <form id="contactForm" action="https://formsubmit.co/ajax/contacto@vesperacademy.com" method="POST">
+      <input type="hidden" name="_subject" value="Nuevo prospecto desde vesperacademy.com" />
+      <input type="hidden" name="_template" value="table" />
+      <input type="hidden" name="_captcha" value="false" />
+      <input type="hidden" name="_autoresponse" value="¡Hola! Gracias por tu interés en Vesper Academy. Recibimos tus datos y un asesor te contactará muy pronto. Mientras tanto, puedes descubrir tu nivel de inglés con nuestro examen diagnóstico gratis en https://vesperacademy.com/book_placement.html — Vesper Academy · contacto@vesperacademy.com" />
       <input type="email" name="email" placeholder="Tu correo" required />
       <input type="text" name="nombre" placeholder="Tu nombre" required />
-      <button type="submit" class="btn btn-gold"><i class="fas fa-paper-plane"></i> Reservar clase de prueba</button>
+      <button type="submit" class="btn btn-gold"><i class="fas fa-paper-plane"></i> Quiero que me contacten</button>
     </form>
     <div class="form-msg" id="formMsg" style="display:none;">
       <i class="fas fa-circle-check" style="color:var(--gold-lt);font-size:1.4rem;margin-bottom:8px;"></i>
       <strong style="display:block;font-size:1.05rem;color:#fff;margin-bottom:4px;">¡Gracias por tu interés!</strong>
-      Hemos recibido tu solicitud. Un asesor de Vesper Academy te contactará en las próximas 24 horas para agendar tu clase de prueba.
+      Hemos recibido tu solicitud y te enviamos un correo de confirmación. Un asesor de Vesper Academy te contactará en las próximas 24 horas. Mientras tanto, ¡haz tu <a href="book_placement.html" style="color:var(--gold-lt);text-decoration:underline;">examen diagnóstico gratis</a>!
     </div>
   </div>
 </section>
@@ -447,9 +495,9 @@ footer{background:var(--navy3);color:rgba(255,255,255,.6);padding:54px 0 30px;}
       <div><h5>Programas</h5>
         <a href="#cursos">Inglés General</a><a href="#cursos">Corporativo</a><a href="#cursos">Conversación</a><a href="#certificacion">Certificación</a></div>
       <div><h5>Academia</h5>
-        <a href="#metodo">Metodología</a><a href="#ruta">Niveles</a><a href="#precios">Precios</a><a href="#faq">Preguntas</a></div>
+        <a href="#metodo">Metodología</a><a href="#ruta">Niveles</a><a href="book_placement.html">Examen de nivel</a><a href="#precios">Precios</a><a href="#faq">Preguntas</a></div>
       <div><h5>Contacto</h5>
-        <a href="#contacto">Clase de prueba</a><a href="mailto:vesper.academy999@gmail.com">vesper.academy999@gmail.com</a><a href="materiales.html">Portal del alumno</a><a href="portal_profesores.html">Profesores</a></div>
+        <a href="book_placement.html">Examen diagnóstico</a><a href="mailto:contacto@vesperacademy.com">contacto@vesperacademy.com</a><a href="materiales.html">Portal del alumno</a><a href="portal_profesores.html">Profesores</a></div>
     </div>
     <div class="fbottom">
       <span>© <span id="year"></span> Vesper Academy. Todos los derechos reservados.</span>
@@ -483,13 +531,13 @@ footer{background:var(--navy3);color:rgba(255,255,255,.6);padding:54px 0 30px;}
           msg.style.display = 'block';
         } else {
           btn.disabled = false;
-          btn.innerHTML = '<i class="fas fa-paper-plane"></i> Reservar clase de prueba';
-          alert('Hubo un error al enviar. Intenta de nuevo o escríbenos a vesper.academy999@gmail.com');
+          btn.innerHTML = '<i class="fas fa-paper-plane"></i> Quiero que me contacten';
+          alert('Hubo un error al enviar. Intenta de nuevo o escríbenos a contacto@vesperacademy.com');
         }
       } catch {
         btn.disabled = false;
-        btn.innerHTML = '<i class="fas fa-paper-plane"></i> Reservar clase de prueba';
-        alert('Sin conexión. Intenta de nuevo o escríbenos a vesper.academy999@gmail.com');
+        btn.innerHTML = '<i class="fas fa-paper-plane"></i> Quiero que me contacten';
+        alert('Sin conexión. Intenta de nuevo o escríbenos a contacto@vesperacademy.com');
       }
     });
   }
