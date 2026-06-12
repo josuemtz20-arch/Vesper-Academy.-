@@ -22,6 +22,7 @@
 # student portal + tools
 # (exam.html + vesper_exam_data.js stay local: the data file carries answer keys)
 !/materiales.html
+!/onboarding.html
 !/book_placement.html
 !/audio_library.html
 !/lesson.html

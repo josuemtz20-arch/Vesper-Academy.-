@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<script src="vesper_auth.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Empecemos | Vesper Academy</title>
+<meta name="description" content="Cuéntanos qué te gusta y qué buscas, y armamos tu plan de inglés personalizado en Vesper Academy.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="assets/images/vesper_logo.png" type="image/png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inria+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@300;400;500;600;700&display=swap');
+*,*::before,*::after{box-sizing:border-box;}
+:root{--navy:#141c2a;--navy2:#243654;--gold:#c5a059;--gold2:#a8843d;--gold-lt:#d9bd84;--cream:#f5f2eb;--white:#fff;--border:#e4e0d8;--muted:#6b7a8d;--text:#141c2a;}
+body{margin:0;font-family:'Inter',sans-serif;color:var(--text);
+  background:radial-gradient(900px 500px at 80% -10%,rgba(197,160,89,.10),transparent 60%),var(--cream);
+  min-height:100vh;}
+
+/* HEADER */
+header{background:var(--navy);border-bottom:3px solid var(--gold);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:14px;position:sticky;top:0;z-index:50;}
+.brand{display:flex;align-items:center;gap:12px;color:#fff;text-decoration:none;}
+.brand img{height:40px;width:40px;object-fit:contain;}
+.brand b{font-family:'Inria Serif',serif;font-size:1.05rem;}
+.brand small{display:block;color:var(--gold);font-size:.58rem;letter-spacing:2px;text-transform:uppercase;}
+header a.skip{color:rgba(255,255,255,.7);font-size:.76rem;font-weight:600;letter-spacing:.5px;text-decoration:none;}
+header a.skip:hover{color:var(--gold);}
+
+.wrap{max-width:680px;margin:0 auto;padding:28px 20px 80px;}
+
+/* PROGRESS */
+.progress-wrap{margin-bottom:26px;}
+.progress-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
+.progress-top .step-counter{font-size:.78rem;color:var(--muted);font-weight:600;letter-spacing:.5px;}
+.progress-bar{height:6px;background:#e7e2d7;border-radius:4px;overflow:hidden;}
+.progress-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--gold),var(--gold-lt));transition:width .4s cubic-bezier(.4,0,.2,1);width:0;}
+
+/* STEP CARD */
+.step{display:none;animation:fade .35s ease;}
+.step.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+
+.card{background:var(--white);border:1px solid var(--border);border-radius:18px;padding:30px 28px;box-shadow:0 4px 18px rgba(26,43,66,.07);}
+.eyebrow{font-size:.7rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold2);font-weight:700;}
+.q-title{font-family:'Inria Serif',serif;font-size:1.55rem;font-weight:800;line-height:1.2;margin:8px 0 6px;}
+.q-help{color:var(--muted);font-size:.92rem;margin:0 0 22px;}
+
+/* NAME INTRO */
+.hero-emoji{font-size:2.6rem;margin-bottom:6px;}
+.name-input{width:100%;padding:14px 16px;font-size:1.02rem;border:1.5px solid var(--border);border-radius:12px;font-family:inherit;background:#fff;margin-top:6px;}
+.name-input:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(197,160,89,.18);}
+
+/* OPTION CARDS */
+.options{display:grid;gap:12px;margin-top:4px;}
+.options.two{grid-template-columns:1fr 1fr;}
+@media(max-width:520px){.options.two{grid-template-columns:1fr;}}
+.opt{display:flex;align-items:center;gap:14px;width:100%;text-align:left;background:#fbfaf6;border:1.5px solid var(--border);border-radius:12px;padding:15px 16px;cursor:pointer;font-family:inherit;font-size:.96rem;color:var(--text);transition:border-color .15s,background .15s,transform .12s;}
+.opt:hover{border-color:var(--gold);background:rgba(197,160,89,.07);}
+.opt .ic{width:42px;height:42px;flex-shrink:0;border-radius:11px;background:linear-gradient(135deg,var(--navy2),var(--navy));color:var(--gold-lt);display:flex;align-items:center;justify-content:center;font-size:1.15rem;}
+.opt .txt b{display:block;font-weight:600;font-size:.98rem;}
+.opt .txt span{display:block;color:var(--muted);font-size:.82rem;margin-top:2px;}
+.opt .check{margin-left:auto;width:24px;height:24px;border-radius:50%;border:2px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:.72rem;transition:all .15s;}
+.opt.selected{border-color:var(--gold);background:rgba(197,160,89,.13);}
+.opt.selected .check{background:var(--gold);border-color:var(--gold);}
+
+/* CHIPS (multi quick) */
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin-top:4px;}
+.chip{display:inline-flex;align-items:center;gap:8px;border:1.5px solid var(--border);background:#fbfaf6;border-radius:30px;padding:10px 16px;cursor:pointer;font-family:inherit;font-size:.9rem;color:var(--text);transition:all .15s;}
+.chip i{color:var(--gold2);font-size:.9rem;}
+.chip:hover{border-color:var(--gold);}
+.chip.selected{border-color:var(--gold);background:var(--navy);color:#fff;}
+.chip.selected i{color:var(--gold-lt);}
+
+/* NAV BUTTONS */
+.nav{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:24px;}
+.btn{display:inline-flex;align-items:center;gap:9px;font-weight:600;font-size:.95rem;padding:13px 26px;border-radius:11px;cursor:pointer;border:none;font-family:inherit;transition:transform .14s,box-shadow .14s,background .14s,opacity .14s;}
+.btn-gold{background:var(--gold);color:var(--navy);}
+.btn-gold:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(197,160,89,.38);}
+.btn-gold:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none;}
+.btn-back{background:transparent;color:var(--muted);padding:13px 10px;}
+.btn-back:hover{color:var(--navy);}
+.btn-back.hidden{visibility:hidden;}
+
+/* RESULT */
+.result-head{text-align:center;margin-bottom:24px;}
+.result-head .sello{width:84px;height:84px;border-radius:50%;margin:0 auto 16px;background:linear-gradient(135deg,var(--gold),var(--gold2));display:flex;align-items:center;justify-content:center;color:#fff;font-size:2.1rem;box-shadow:0 10px 30px rgba(197,160,89,.4);}
+.result-head h2{font-family:'Inria Serif',serif;font-size:1.8rem;margin:0 0 6px;}
+.result-head p{color:var(--muted);font-size:1rem;margin:0;max-width:520px;margin:0 auto;}
+.rec-label{display:flex;align-items:center;gap:10px;font-size:.74rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin:30px 0 14px;}
+.rec-label i{color:var(--gold2);}
+.rec-grid{display:grid;gap:14px;}
+.rec{display:flex;gap:16px;align-items:flex-start;background:#fff;border:1px solid var(--border);border-left:4px solid var(--gold);border-radius:13px;padding:18px;text-decoration:none;color:inherit;box-shadow:0 2px 8px rgba(26,43,66,.05);transition:transform .16s,box-shadow .16s;}
+.rec:hover{transform:translateY(-3px);box-shadow:0 12px 26px rgba(26,43,66,.13);}
+.rec.primary{border-left-color:var(--gold);background:linear-gradient(135deg,#fffdf8,#fbf6ea);}
+.rec .ric{width:48px;height:48px;flex-shrink:0;border-radius:12px;background:linear-gradient(135deg,var(--navy2),var(--navy));color:var(--gold-lt);display:flex;align-items:center;justify-content:center;font-size:1.3rem;}
+.rec .rbody{flex:1;}
+.rec .rbody .tagline{font-size:.66rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--gold2);}
+.rec .rbody h3{margin:3px 0 4px;font-size:1.05rem;}
+.rec .rbody p{margin:0;color:var(--muted);font-size:.86rem;line-height:1.5;}
+.rec .arrow{align-self:center;color:var(--gold2);font-size:.95rem;}
+.result-actions{margin-top:28px;display:flex;flex-direction:column;gap:12px;}
+.btn-block{width:100%;justify-content:center;font-size:1.05rem;padding:16px;}
+.redo{text-align:center;}
+.redo a{color:var(--muted);font-size:.85rem;text-decoration:underline;cursor:pointer;}
+.redo a:hover{color:var(--navy);}
+
+footer{text-align:center;color:var(--muted);font-size:.78rem;padding:10px 20px 30px;}
+</style>
+</head>
+<body>
+
+<header>
+  <a class="brand" href="index.html">
+    <img src="assets/images/vesper_logo_inverted.png" alt="Vesper Academy">
+    <span><b>Vesper Academy</b><small>Tu plan de inglés</small></span>
+  </a>
+  <a class="skip" id="skip-link" href="materiales.html">Saltar por ahora <i class="fas fa-arrow-right"></i></a>
+</header>
+
+<div class="wrap">
+
+  <div class="progress-wrap" id="progress-wrap" style="display:none;">
+    <div class="progress-top">
+      <span class="step-counter" id="step-counter">Paso 1 de 5</span>
+      <span class="step-counter" id="step-pct">0%</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="progress-fill"></div></div>
+  </div>
+
+  <!-- ── STEP 0: INTRO / NAME ── -->
+  <div class="step active" id="step-0">
+    <div class="card" style="text-align:center;">
+      <div class="hero-emoji">👋</div>
+      <span class="eyebrow">Bienvenido a Vesper</span>
+      <h1 class="q-title">Hagamos tu inglés a tu medida</h1>
+      <p class="q-help" style="margin-bottom:18px;">Antes de empezar, cuéntanos un poco sobre ti. Con unas pocas preguntas armamos un plan personalizado: el material justo para lo que te gusta y para donde estás. Sin exámenes ni tecnicismos.</p>
+      <input class="name-input" id="name-input" type="text" placeholder="¿Cómo te llamas? (opcional)" autocomplete="given-name">
+      <div style="margin-top:20px;">
+        <button class="btn btn-gold btn-block" onclick="start()"><i class="fas fa-wand-magic-sparkles"></i> Empecemos</button>
+      </div>
+      <p style="color:var(--muted);font-size:.8rem;margin:16px 0 0;"><i class="far fa-clock"></i> Menos de 2 minutos</p>
+    </div>
+  </div>
+
+  <!-- ── STEP 1: GOAL ── -->
+  <div class="step" id="step-1">
+    <div class="card">
+      <span class="eyebrow">Tu objetivo</span>
+      <h1 class="q-title">¿Para qué quieres el inglés?</h1>
+      <p class="q-help">Elige lo que más te mueve. Nos ayuda a enfocar tu plan.</p>
+      <div class="options" id="opts-goal"></div>
+    </div>
+  </div>
+
+  <!-- ── STEP 2: INTERESTS ── -->
+  <div class="step" id="step-2">
+    <div class="card">
+      <span class="eyebrow">Tus gustos</span>
+      <h1 class="q-title">¿Qué temas te gustan?</h1>
+      <p class="q-help">Elige todos los que quieras. Aprenderás más rápido con temas que te interesan.</p>
+      <div class="chips" id="opts-topics"></div>
+    </div>
+  </div>
+
+  <!-- ── STEP 3: LEVEL (self-assessment, no CEFR labels) ── -->
+  <div class="step" id="step-3">
+    <div class="card">
+      <span class="eyebrow">Tu punto de partida</span>
+      <h1 class="q-title">¿Cómo te sientes con tu inglés hoy?</h1>
+      <p class="q-help">Sé honesto: no hay respuesta buena ni mala. Esto solo nos dice por dónde empezar.</p>
+      <div class="options" id="opts-level"></div>
+    </div>
+  </div>
+
+  <!-- ── STEP 4: CAN-DO refine (optional) ── -->
+  <div class="step" id="step-4">
+    <div class="card">
+      <span class="eyebrow">Casi listo</span>
+      <h1 class="q-title">¿Qué puedes hacer ya con confianza?</h1>
+      <p class="q-help">Marca lo que harías sin pensarlo demasiado. Si no marcas nada, no pasa nada.</p>
+      <div class="options" id="opts-cando"></div>
+    </div>
+  </div>
+
+  <!-- ── STEP 5: LEARNING STYLE (optional) ── -->
+  <div class="step" id="step-5">
+    <div class="card">
+      <span class="eyebrow">Cómo aprendes mejor</span>
+      <h1 class="q-title">¿Qué disfrutas más al estudiar?</h1>
+      <p class="q-help">Elige lo que se te haga más ameno. Damos prioridad a ese tipo de material.</p>
+      <div class="chips" id="opts-style"></div>
+    </div>
+  </div>
+
+  <!-- NAV (shared for steps 1-5) -->
+  <div class="nav" id="nav" style="display:none;">
+    <button class="btn btn-back" id="btn-back" onclick="back()"><i class="fas fa-arrow-left"></i> Atrás</button>
+    <button class="btn btn-gold" id="btn-next" onclick="next()">Continuar <i class="fas fa-arrow-right"></i></button>
+  </div>
+
+  <!-- ── RESULT ── -->
+  <div class="step" id="step-result">
+    <div class="result-head">
+      <div class="sello"><i class="fas fa-check"></i></div>
+      <h2 id="result-greeting">¡Tu plan está listo!</h2>
+      <p id="result-sub"></p>
+    </div>
+
+    <div class="rec-label"><i class="fas fa-compass"></i> Empieza por aquí</div>
+    <div class="rec-grid" id="rec-grid"></div>
+
+    <div class="result-actions">
+      <a class="btn btn-gold btn-block" href="materiales.html"><i class="fas fa-graduation-cap"></i> Ir a mi material de estudio</a>
+      <div class="redo"><a onclick="retake()">Volver a empezar el cuestionario</a></div>
+    </div>
+  </div>
+
+</div>
+
+<footer>© <span id="y"></span> Vesper Academy · Tu material se adapta a ti</footer>
+
+<script>
+"use strict";
+document.getElementById("y").textContent = new Date().getFullYear();
+
+/* ════════════════════════════════════════════════════════════════
+   CATÁLOGO INTERNO
+   Los "niveles" (0=inicio … 5=dominio) y los cursos son SOLO la base
+   interna del contenido. El alumno nunca los ve: solo recibe material
+   descrito por su tema y su objetivo.
+   nivel:  0 ≈ A0 · 1 ≈ A1 · 2 ≈ A2 · 3 ≈ B1 · 4 ≈ B2 · 5 ≈ C1+
+   ════════════════════════════════════════════════════════════════ */
+var BOOKS = [
+  {id:"core_basics_lvl1", icon:"fa-shoe-prints",  t:"Primeros pasos en inglés", d:"Aprende a presentarte, saludar y formar tus primeras frases con confianza.", min:0,max:1, topics:["dailylife"], goals:["travel","social","work","study"], styles:["speaking","grammar"]},
+  {id:"daily_life_vol0",  icon:"fa-life-ring",     t:"Inglés para sobrevivir",  d:"Lo esencial para arrancar desde cero: lo que de verdad necesitas en el mundo real.", min:0,max:1, topics:["dailylife","travel"], goals:["travel","social"], styles:["speaking"]},
+  {id:"core_basics_lvl2", icon:"fa-mug-hot",       t:"Tu día a día en inglés",  d:"Habla de tu rutina, haz preguntas y describe a quienes te rodean.", min:0,max:2, topics:["dailylife"], goals:["travel","social","work","study"], styles:["speaking","grammar"]},
+  {id:"daily_life_vol1",  icon:"fa-suitcase-rolling", t:"Inglés para viajar y vivir", d:"Compras, viajes, salud y todas las situaciones reales del día a día.", min:1,max:2, topics:["travel","dailylife"], goals:["travel","social"], styles:["speaking","audio"]},
+  {id:"core_practice_lvl1", icon:"fa-headphones",  t:"Entrena tu oído",         d:"Escucha y habla con audio de voces nativas en cada lección.", min:1,max:2, topics:["dailylife"], goals:["social","travel","work"], styles:["audio","speaking"]},
+  {id:"core_basics_lvl3", icon:"fa-book-open",     t:"Cuenta tus historias",    d:"Habla del pasado, comparte experiencias y narra lo que te ha pasado.", min:1,max:3, topics:["dailylife"], goals:["travel","social","study","work"], styles:["speaking","reading"]},
+  {id:"cci1",             icon:"fa-bolt",          t:"Bootcamp de fluidez",     d:"Un mes intensivo, pensado para soltarte a hablar rápido.", min:1,max:3, topics:["dailylife"], goals:["social","work","travel"], styles:["speaking"]},
+  {id:"core_practice_lvl4", icon:"fa-palette",     t:"Arte y grandes historias", d:"Talleres de conversación inspirados en el arte y las historias que enganchan.", min:2,max:3, topics:["arts"], goals:["social","study"], styles:["speaking","reading"]},
+  {id:"core_basics_lvl4", icon:"fa-pen-nib",       t:"Escribe con soltura",     d:"Tus primeros textos y redacción guiada para expresarte por escrito.", min:2,max:3, topics:["dailylife"], goals:["study","work"], styles:["reading","grammar"]},
+  {id:"core_practice_lvl2", icon:"fa-dragon",      t:"Leyendas y misterios",    d:"Lee y escribe sobre mitos, leyendas y enigmas que te atrapan.", min:3,max:4, topics:["arts","popculture"], goals:["social","study"], styles:["reading"]},
+  {id:"core_practice_lvl3", icon:"fa-comments",    t:"Debate y descubre",       d:"Las cuatro destrezas integradas en debates y temas de actualidad.", min:3,max:4, topics:["society","science"], goals:["work","study","social"], styles:["speaking","reading"]},
+  {id:"daily_life_vol2",  icon:"fa-heart",         t:"Cultura y relaciones",    d:"Conversa con naturalidad sobre cultura, relaciones y psicología.", min:3,max:4, topics:["society","dailylife"], goals:["social","study"], styles:["speaking","reading"]},
+  {id:"core_grammar_lvl1", icon:"fa-cubes",        t:"Gramática que se queda",  d:"Consolida tus bases con práctica clara y bien aplicada.", min:3,max:3, topics:[], goals:["study","work"], styles:["grammar"]},
+  {id:"core_practice_lvl5", icon:"fa-microchip",   t:"Futuro y tecnología",     d:"Lee, escribe y debate sobre tecnología y el mundo que viene.", min:4,max:5, topics:["tech","science"], goals:["work","study"], styles:["reading","speaking"]},
+  {id:"core_grammar_lvl2", icon:"fa-diagram-project", t:"Gramática en contexto", d:"Estructuras avanzadas aplicadas a situaciones reales.", min:4,max:4, topics:[], goals:["study","work","exam"], styles:["grammar"]},
+  {id:"political_english", icon:"fa-landmark",     t:"Inglés político y global", d:"Diplomacia, asuntos globales y discurso público.", min:4,max:5, topics:["society"], goals:["work","study"], styles:["reading","speaking"]},
+  {id:"core_practice_lvl6", icon:"fa-clapperboard", t:"Cultura pop y sociedad", d:"Domina las cuatro destrezas con cine, series y grandes temas sociales.", min:5,max:5, topics:["popculture","society"], goals:["social","study","work"], styles:["speaking","reading"]},
+  {id:"core_grammar_lvl3", icon:"fa-gem",          t:"Gramática de alto nivel", d:"Estilo, matices y los detalles del inglés más avanzado.", min:5,max:5, topics:[], goals:["exam","study","work"], styles:["grammar"]},
+  {id:"cabin_crew",       icon:"fa-plane-departure", t:"Inglés de aviación",    d:"Seguridad, servicio y protocolo a bordo para tripulación de cabina.", min:2,max:5, topics:["travel"], goals:["aviation"], styles:["speaking"]},
+  {id:"exam_prep",        icon:"fa-stopwatch",     t:"Preparación de examen · I", d:"Estrategia y estructuras avanzadas para tu certificación.", min:4,max:5, topics:[], goals:["exam"], styles:["grammar","reading"]},
+  {id:"exam_prep_vol2",   icon:"fa-award",         t:"Preparación de examen · II", d:"Vocabulario temático y práctica aplicada de examen.", min:4,max:5, topics:[], goals:["exam"], styles:["reading","grammar"]}
+];
+
+/* ── DEFINICIÓN DE PREGUNTAS ── */
+var GOALS = [
+  {v:"work",     icon:"fa-briefcase",      t:"Mi trabajo y mi carrera",   s:"Reuniones, correos, presentaciones"},
+  {v:"travel",   icon:"fa-earth-americas", t:"Viajar y la vida diaria",   s:"Moverme por el mundo con confianza"},
+  {v:"exam",     icon:"fa-certificate",    t:"Aprobar un examen",         s:"IELTS, Cambridge, TOEFL"},
+  {v:"study",    icon:"fa-graduation-cap", t:"Mis estudios",              s:"Universidad, lecturas, escribir"},
+  {v:"social",   icon:"fa-comments",       t:"Conversar y hacer amigos",  s:"Hablar por gusto, sin miedo"},
+  {v:"aviation", icon:"fa-plane-departure",t:"Aviación / aerolíneas",     s:"Tripulación y trato con pasajeros"}
+];
+
+var TOPICS = [
+  {v:"dailylife",  icon:"fa-mug-hot",        t:"Vida diaria"},
+  {v:"travel",     icon:"fa-suitcase-rolling", t:"Viajes y cultura"},
+  {v:"business",   icon:"fa-briefcase",      t:"Negocios y oficina"},
+  {v:"tech",       icon:"fa-microchip",      t:"Tecnología y futuro"},
+  {v:"arts",       icon:"fa-palette",        t:"Arte y literatura"},
+  {v:"popculture", icon:"fa-clapperboard",   t:"Cine, series y cultura pop"},
+  {v:"society",    icon:"fa-landmark",       t:"Sociedad y mundo"},
+  {v:"science",    icon:"fa-flask",          t:"Ciencia y naturaleza"}
+];
+
+var LEVELS = [
+  {v:0, icon:"fa-seedling",   t:"Empiezo desde cero",                s:"Casi no sé nada de inglés"},
+  {v:1, icon:"fa-spell-check",t:"Sé palabras y frases muy básicas",  s:"Algo de vocabulario suelto"},
+  {v:2, icon:"fa-comment",    t:"Me apaño en conversaciones simples",s:"Cosas del día a día, despacio"},
+  {v:3, icon:"fa-comments",   t:"Me defiendo y doy mi opinión",      s:"En la mayoría de situaciones"},
+  {v:4, icon:"fa-feather",    t:"Hablo con bastante fluidez",        s:"Quiero pulir y sonar natural"},
+  {v:5, icon:"fa-crown",      t:"Domino el idioma",                  s:"Busco perfección o un examen alto"}
+];
+
+/* cada "puedo" tiene un nivel asociado para afinar la estimación */
+var CANDO = [
+  {w:1.5, icon:"fa-user",        t:"Presentarme y hablar de mi rutina"},
+  {w:2.5, icon:"fa-clock-rotate-left", t:"Contar algo que me pasó en el pasado"},
+  {w:3.5, icon:"fa-scale-balanced", t:"Defender mi opinión en una discusión"},
+  {w:4.5, icon:"fa-film",        t:"Entender películas o noticias sin subtítulos"}
+];
+
+var STYLES = [
+  {v:"audio",    icon:"fa-headphones",   t:"Escuchar y entrenar el oído"},
+  {v:"speaking", icon:"fa-comment-dots", t:"Practicar conversación"},
+  {v:"reading",  icon:"fa-book-open",    t:"Leer historias y textos"},
+  {v:"grammar",  icon:"fa-list-check",   t:"Entender bien la gramática"}
+];
+
+/* mapea temas del cuestionario a etiquetas internas de los libros */
+var TOPIC_MAP = { business:"work", dailylife:"dailylife", travel:"travel", tech:"tech", arts:"arts", popculture:"popculture", society:"society", science:"science" };
+
+/* ── ESTADO ── */
+var state = { name:"", goal:null, topics:[], level:null, cando:[], styles:[] };
+var stepOrder = ["step-1","step-2","step-3","step-4","step-5"];
+var curStep = -1; /* -1 = intro */
+
+/* ── RENDER DE OPCIONES ── */
+function optionCard(o, selected){
+  return '<button class="opt'+(selected?' selected':'')+'">'+
+    '<span class="ic"><i class="fas '+o.icon+'"></i></span>'+
+    '<span class="txt"><b>'+o.t+'</b>'+(o.s?'<span>'+o.s+'</span>':'')+'</span>'+
+    '<span class="check"><i class="fas fa-check"></i></span></button>';
+}
+function chip(o, selected){
+  return '<button class="chip'+(selected?' selected':'')+'"><i class="fas '+o.icon+'"></i> '+o.t+'</button>';
+}
+
+function renderGoal(){
+  var c = document.getElementById("opts-goal"); c.innerHTML="";
+  GOALS.forEach(function(o){
+    var el=document.createElement("div"); el.innerHTML=optionCard(o, state.goal===o.v);
+    var b=el.firstChild; b.onclick=function(){ state.goal=o.v; renderGoal(); refreshNav(); };
+    c.appendChild(b);
+  });
+}
+function renderLevel(){
+  var c = document.getElementById("opts-level"); c.innerHTML="";
+  LEVELS.forEach(function(o){
+    var el=document.createElement("div"); el.innerHTML=optionCard(o, state.level===o.v);
+    var b=el.firstChild; b.onclick=function(){ state.level=o.v; renderLevel(); refreshNav(); };
+    c.appendChild(b);
+  });
+}
+function renderCando(){
+  var c = document.getElementById("opts-cando"); c.innerHTML="";
+  CANDO.forEach(function(o,i){
+    var sel = state.cando.indexOf(i)!==-1;
+    var el=document.createElement("div"); el.innerHTML=optionCard(o, sel);
+    var b=el.firstChild; b.onclick=function(){ toggle(state.cando,i); renderCando(); };
+    c.appendChild(b);
+  });
+}
+function renderTopics(){
+  var c = document.getElementById("opts-topics"); c.innerHTML="";
+  TOPICS.forEach(function(o){
+    var sel = state.topics.indexOf(o.v)!==-1;
+    var el=document.createElement("div"); el.innerHTML=chip(o, sel);
+    var b=el.firstChild; b.onclick=function(){ toggle(state.topics,o.v); renderTopics(); refreshNav(); };
+    c.appendChild(b);
+  });
+}
+function renderStyles(){
+  var c = document.getElementById("opts-style"); c.innerHTML="";
+  STYLES.forEach(function(o){
+    var sel = state.styles.indexOf(o.v)!==-1;
+    var el=document.createElement("div"); el.innerHTML=chip(o, sel);
+    var b=el.firstChild; b.onclick=function(){ toggle(state.styles,o.v); renderStyles(); };
+    c.appendChild(b);
+  });
+}
+function toggle(arr,v){ var i=arr.indexOf(v); if(i===-1)arr.push(v); else arr.splice(i,1); }
+
+/* ── FLUJO ── */
+function start(){
+  state.name = document.getElementById("name-input").value.trim();
+  renderGoal(); renderTopics(); renderLevel(); renderCando(); renderStyles();
+  document.getElementById("step-0").classList.remove("active");
+  document.getElementById("progress-wrap").style.display="block";
+  document.getElementById("nav").style.display="flex";
+  document.getElementById("skip-link").style.display="none";
+  curStep = 0;
+  showStep();
+}
+function showStep(){
+  stepOrder.forEach(function(id){ document.getElementById(id).classList.remove("active"); });
+  document.getElementById(stepOrder[curStep]).classList.add("active");
+  var pct = Math.round(((curStep)/stepOrder.length)*100);
+  document.getElementById("progress-fill").style.width = (((curStep+1)/stepOrder.length)*100)+"%";
+  document.getElementById("step-counter").textContent = "Paso "+(curStep+1)+" de "+stepOrder.length;
+  document.getElementById("step-pct").textContent = Math.round(((curStep+1)/stepOrder.length)*100)+"%";
+  document.getElementById("btn-back").classList.toggle("hidden", curStep===0);
+  document.getElementById("btn-next").innerHTML = (curStep===stepOrder.length-1)
+    ? 'Ver mi plan <i class="fas fa-arrow-right"></i>'
+    : 'Continuar <i class="fas fa-arrow-right"></i>';
+  refreshNav();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+function refreshNav(){
+  /* pasos obligatorios: 0(goal),1(topics),2(level). 3(cando) y 4(styles) opcionales */
+  var ok = true;
+  if(curStep===0) ok = !!state.goal;
+  if(curStep===1) ok = state.topics.length>0;
+  if(curStep===2) ok = state.level!==null;
+  document.getElementById("btn-next").disabled = !ok;
+}
+function next(){
+  if(document.getElementById("btn-next").disabled) return;
+  if(curStep < stepOrder.length-1){ curStep++; showStep(); }
+  else finish();
+}
+function back(){
+  if(curStep>0){ curStep--; showStep(); }
+}
+
+/* ── MOTOR DE RECOMENDACIÓN ── */
+function computeLevel(){
+  var lvl = state.level;
+  if(state.cando.length){
+    var ceil = 0;
+    state.cando.forEach(function(i){ if(CANDO[i].w>ceil) ceil=CANDO[i].w; });
+    lvl = Math.round((state.level + ceil)/2);
+  }
+  return Math.max(0, Math.min(5, lvl));
+}
+function scoreBook(b, lvl, goalTopics){
+  /* descartar lo demasiado avanzado o demasiado básico */
+  if(lvl < b.min-1 || lvl > b.max+2) return -999;
+  var s = 0;
+  /* ajuste de nivel */
+  if(lvl>=b.min && lvl<=b.max) s += 7;
+  else if(lvl < b.min) s += 7 - 4*(b.min-lvl);   /* demasiado difícil: penaliza más */
+  else s += 7 - 2*(lvl - b.max);                  /* demasiado fácil: penaliza menos */
+  /* objetivo */
+  if(state.goal && b.goals.indexOf(state.goal)!==-1) s += 5;
+  /* temas */
+  goalTopics.forEach(function(t){ if(b.topics.indexOf(t)!==-1) s += 3; });
+  /* estilo */
+  state.styles.forEach(function(st){ if(b.styles.indexOf(st)!==-1) s += 1.5; });
+  return s;
+}
+function recommend(){
+  var lvl = computeLevel();
+  var goalTopics = state.topics.map(function(t){ return TOPIC_MAP[t]||t; });
+  var ranked = BOOKS.map(function(b){ return {b:b, s:scoreBook(b,lvl,goalTopics)}; })
+                    .filter(function(x){ return x.s>-900; })
+                    .sort(function(a,b){ return b.s-a.s; });
+  var picks = ranked.slice(0,3).map(function(x){ return x.b; });
+  /* asegurar el material del objetivo especializado si aplica */
+  function ensure(id){
+    if(picks.some(function(p){return p.id===id;})) return;
+    var bk = BOOKS.filter(function(b){return b.id===id;})[0];
+    if(bk){ picks.pop(); picks.unshift(bk); }
+  }
+  if(state.goal==="aviation") ensure("cabin_crew");
+  if(state.goal==="exam" && lvl>=3) ensure(lvl>=5?"exam_prep_vol2":"exam_prep");
+  return { level:lvl, picks:picks };
+}
+
+var GOAL_SUB = {
+  work:"Vamos a llevar tu inglés al terreno profesional, paso a paso.",
+  travel:"Prepárate para moverte por el mundo con confianza.",
+  exam:"Tu meta es clara. Vamos directo a por ese examen.",
+  study:"Construyamos el inglés que tus estudios necesitan.",
+  social:"Suelta la lengua y disfruta cada conversación.",
+  aviation:"Listos para despegar: tu inglés de aviación empieza aquí."
+};
+
+function finish(){
+  var r = recommend();
+  var recs = r.picks.map(function(b,i){
+    return { href:"libro.html?id="+b.id, icon:b.icon, t:b.t, d:b.d, tag:(i===0?"Tu punto de partida":"Para ti") };
+  });
+  /* complemento de audio si le gusta escuchar o desde nivel básico */
+  if(state.styles.indexOf("audio")!==-1 || r.level<=2){
+    recs.push({ href:"audio_library.html", icon:"fa-headphones-simple", t:"Biblioteca de audio", d:"Entrena el oído con diálogos y lecturas de voces nativas, a tu ritmo.", tag:"Complemento" });
+  }
+
+  /* guardar perfil para personalizar el portal */
+  var profile = {
+    name: state.name, goal: state.goal, topics: state.topics,
+    styles: state.styles, level: r.level, recommended: recs, ts: Date.now()
+  };
+  try { localStorage.setItem("vesper_profile", JSON.stringify(profile)); } catch(e){}
+
+  /* render resultado */
+  document.getElementById("result-greeting").textContent =
+    state.name ? ("¡Listo, "+state.name+"! Este es tu plan") : "¡Tu plan está listo!";
+  document.getElementById("result-sub").textContent = GOAL_SUB[state.goal] || "Este es el material hecho a tu medida.";
+
+  var grid = document.getElementById("rec-grid"); grid.innerHTML="";
+  recs.forEach(function(rec,i){
+    var a=document.createElement("a");
+    a.className="rec"+(i===0?" primary":""); a.href=rec.href;
+    a.innerHTML='<span class="ric"><i class="fas '+rec.icon+'"></i></span>'+
+      '<span class="rbody"><span class="tagline">'+rec.tag+'</span><h3>'+rec.t+'</h3><p>'+rec.d+'</p></span>'+
+      '<span class="arrow"><i class="fas fa-arrow-right"></i></span>';
+    grid.appendChild(a);
+  });
+
+  stepOrder.forEach(function(id){ document.getElementById(id).classList.remove("active"); });
+  document.getElementById("nav").style.display="none";
+  document.getElementById("progress-wrap").style.display="none";
+  document.getElementById("step-result").classList.add("active");
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function retake(){
+  state = { name:"", goal:null, topics:[], level:null, cando:[], styles:[] };
+  document.getElementById("step-result").classList.remove("active");
+  document.getElementById("name-input").value="";
+  document.getElementById("step-0").classList.add("active");
+  document.getElementById("skip-link").style.display="";
+  curStep=-1;
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+/* si llega con ?redo no autocompleta; si ya hay perfil y no pide rehacer, nada especial:
+   el cuestionario simplemente se muestra desde el inicio. */
+</script>
+</body>
+</html>
