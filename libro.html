@@ -171,6 +171,42 @@ body{margin:0;font-family:'Segoe UI',Arial,sans-serif;display:flex;align-items:c
     /* el candado ya se pasó aquí: quita su <script> del documento del libro */
     html = html.replace(/<script[^>]*src=["']vesper_auth\.js["'][^>]*>\s*<\/script>/gi, "");
 
+    /* arreglo móvil: los libros se generan con ancho de papel A4 (210mm),
+       así que en el teléfono se ven apretados. Se inyecta un viewport (si
+       falta) y overrides solo-móvil; la impresión no cambia porque todo va
+       dentro del media query. */
+    var mobileFix = "";
+    if (!/<meta[^>]+name=["']?viewport/i.test(html)) {
+      mobileFix += '<meta name="viewport" content="width=device-width, initial-scale=1.0">';
+    }
+    mobileFix +=
+      '<style id="vesper-mobile-fix">' +
+      'img{max-width:100%;height:auto;}' +
+      '@media (max-width:768px){' +
+        'html,body{overflow-x:hidden!important;}' +
+        '*{overflow-wrap:break-word;}' +
+        'body{padding:8px!important;}' +
+        '.book-container{max-width:100%!important;width:auto!important;padding:18px 14px!important;box-shadow:none!important;}' +
+        'h1{font-size:1.55em!important;margin-top:30px!important;}' +
+        'h2{font-size:1.25em!important;padding-left:10px!important;}' +
+        'h3{font-size:1.1em!important;}' +
+        '.cover-page{height:auto!important;min-height:60vh;}' +
+        '.cover-title{font-size:2.1em!important;}' +
+        '.cover-subtitle{font-size:1.15em!important;}' +
+        '.cover-logo{max-width:130px!important;}' +
+        '.lesson-block{padding:16px 12px!important;}' +
+        '.script-box,.vocab-list,.idiom-list,.question-box,.activity-box,.media-box{padding:12px 10px!important;}' +
+        'table{display:block!important;overflow-x:auto!important;max-width:100%!important;-webkit-overflow-scrolling:touch;}' +
+        'pre{white-space:pre-wrap!important;max-width:100%!important;}' +
+        '[style*="width"]{max-width:100%!important;}' +
+      '}' +
+      '</style>';
+    if (/<\/head>/i.test(html)) {
+      html = html.replace(/<\/head>/i, mobileFix + "</head>");
+    } else {
+      html = mobileFix + html;
+    }
+
     /* botón flotante para volver al portal */
     var chip =
       '<a href="materiales.html" style="position:fixed;bottom:14px;left:14px;z-index:99999;' +
