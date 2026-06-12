@@ -1,32 +1,39 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vesper Academy — Student Placement Test</title>
-    <meta name="description" content="Free English level placement test by Vesper Academy. Find your level: A0, A1, A2, B1, or B2+ in 30 questions.">
+    <title>Vesper Academy — Examen Diagnóstico de Inglés (Gratis)</title>
+    <meta name="description" content="Examen diagnóstico de inglés gratuito de Vesper Academy. Descubre tu nivel: A0, A1, A2, B1 o B2+ en 30 preguntas y recibe tu curso recomendado.">
+    <link rel="icon" href="assets/images/vesper_logo.png" type="image/png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inria+Serif:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --gold: #c9a84c;
-            --gold-light: #f0d080;
-            --dark: #0d0d0d;
-            --dark-card: #1a1a2e;
-            --dark-surface: #16213e;
-            --a0-color: #6c757d;
-            --a1-color: #3498db;
-            --a2-color: #27ae60;
+            --gold: #c5a059;
+            --gold-light: #d9bd84;
+            --gold-deep: #a8843d;
+            --navy: #141c2a;
+            --navy2: #1c2940;
+            --navy3: #243654;
+            --card: #1a2438;
+            --a0-color: #8d99a6;
+            --a1-color: #4aa3df;
+            --a2-color: #2ecc71;
             --b1-color: #e67e22;
-            --b2-color: #8e44ad;
+            --b2-color: #a569bd;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Inter', sans-serif;
-            background: var(--dark);
+            background:
+                radial-gradient(900px 480px at 85% -10%, rgba(197,160,89,.16), transparent 60%),
+                radial-gradient(700px 420px at -10% 110%, rgba(74,163,223,.08), transparent 60%),
+                linear-gradient(160deg, var(--navy2), var(--navy) 55%, #0e1622);
+            background-attachment: fixed;
             color: #fff;
             min-height: 100vh;
             display: flex;
@@ -37,416 +44,419 @@
         /* ── HEADER ── */
         .top-bar {
             width: 100%;
-            background: rgba(255,255,255,0.03);
-            border-bottom: 1px solid rgba(201,168,76,0.2);
-            padding: 14px 30px;
+            background: rgba(20,28,42,0.85);
+            backdrop-filter: blur(8px);
+            border-bottom: 1px solid rgba(197,160,89,0.25);
+            padding: 12px 26px;
             display: flex;
             align-items: center;
             gap: 14px;
+            position: sticky;
+            top: 0;
+            z-index: 50;
         }
-        .top-bar img { height: 36px; border-radius: 6px; }
-        .top-bar .brand { font-size: 0.75rem; font-weight: 700; letter-spacing: 3px; color: var(--gold); text-transform: uppercase; }
+        .top-bar img { height: 38px; border-radius: 8px; }
+        .top-bar .brand-txt b { font-family: 'Inria Serif', serif; font-size: 1.02rem; letter-spacing: .5px; display: block; line-height: 1.1; }
+        .top-bar .brand-txt small { font-size: 0.6rem; font-weight: 700; letter-spacing: 2.5px; color: var(--gold); text-transform: uppercase; }
+        .top-bar .home-link {
+            margin-left: auto;
+            color: rgba(255,255,255,0.75);
+            text-decoration: none;
+            font-size: 0.82rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 8px 14px;
+            border: 1px solid rgba(255,255,255,0.18);
+            border-radius: 20px;
+            transition: all .15s;
+        }
+        .top-bar .home-link:hover { color: var(--gold-light); border-color: var(--gold); }
 
         /* ── WRAPPER ── */
-        .wrapper {
-            width: 100%;
-            max-width: 760px;
-            padding: 40px 20px 80px;
-        }
+        .wrapper { width: 100%; max-width: 780px; padding: 40px 20px 90px; }
 
         /* ── SCREENS ── */
         .screen { display: none; animation: fadeIn 0.4s ease; }
         .screen.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
 
-        /* ── INTRO SCREEN ── */
-        .intro-hero {
-            text-align: center;
-            padding: 20px 0 40px;
-        }
-        .intro-icon {
-            font-size: 4rem;
-            background: linear-gradient(135deg, var(--gold), var(--gold-light));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+        h1, h2 { font-family: 'Inria Serif', serif; }
+
+        /* ── INTRO ── */
+        .intro-hero { text-align: center; padding: 14px 0 30px; }
+        .free-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(46,204,113,0.12);
+            border: 1px solid rgba(46,204,113,0.45);
+            color: #2ecc71;
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            padding: 7px 16px;
+            border-radius: 20px;
             margin-bottom: 20px;
         }
-        .intro-hero h1 {
-            font-size: 2.4rem;
-            font-weight: 900;
-            line-height: 1.2;
-            margin-bottom: 12px;
+        .intro-icon {
+            width: 84px; height: 84px;
+            margin: 0 auto 18px;
+            border-radius: 24px;
+            background: linear-gradient(135deg, rgba(197,160,89,.2), rgba(197,160,89,.05));
+            border: 1px solid rgba(197,160,89,.4);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 2.2rem;
+            color: var(--gold-light);
+            box-shadow: 0 14px 40px rgba(197,160,89,.18);
         }
-        .intro-hero h1 span { color: var(--gold); }
-        .intro-hero p { color: #aaa; font-size: 1.05rem; line-height: 1.7; max-width: 560px; margin: 0 auto 30px; }
+        .intro-hero h1 { font-size: 2.5rem; font-weight: 700; line-height: 1.15; margin-bottom: 14px; }
+        .intro-hero h1 span { color: var(--gold-light); font-style: italic; }
+        .intro-hero p { color: rgba(255,255,255,.68); font-size: 1.02rem; line-height: 1.7; max-width: 580px; margin: 0 auto; }
 
-        .info-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 16px;
-            margin: 30px 0;
-        }
+        .level-pills { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin: 26px 0 8px; }
+        .pill { padding: 6px 14px; border-radius: 20px; font-size: 0.76rem; font-weight: 700; letter-spacing: 1px; }
+        .pill.a0 { background: rgba(141,153,166,0.12); border: 1px solid var(--a0-color); color: var(--a0-color); }
+        .pill.a1 { background: rgba(74,163,223,0.12); border: 1px solid var(--a1-color); color: var(--a1-color); }
+        .pill.a2 { background: rgba(46,204,113,0.12); border: 1px solid var(--a2-color); color: var(--a2-color); }
+        .pill.b1 { background: rgba(230,126,34,0.12); border: 1px solid var(--b1-color); color: var(--b1-color); }
+        .pill.b2 { background: rgba(165,105,189,0.12); border: 1px solid var(--b2-color); color: var(--b2-color); }
+
+        .info-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 28px 0; }
         .info-card {
             background: rgba(255,255,255,0.04);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.09);
+            border-radius: 14px;
             padding: 18px 14px;
             text-align: center;
+            transition: transform .18s, border-color .18s;
         }
-        .info-card i { font-size: 1.5rem; color: var(--gold); margin-bottom: 8px; }
-        .info-card strong { display: block; font-size: 1.1rem; margin-bottom: 4px; }
-        .info-card span { font-size: 0.8rem; color: #888; }
+        .info-card:hover { transform: translateY(-3px); border-color: rgba(197,160,89,.45); }
+        .info-card i { font-size: 1.4rem; color: var(--gold); margin-bottom: 8px; }
+        .info-card strong { display: block; font-size: 1.05rem; margin-bottom: 3px; }
+        .info-card span { font-size: 0.78rem; color: rgba(255,255,255,.5); }
 
-        .name-field {
+        /* ── FORM CARD ── */
+        .form-card {
+            background: var(--card);
+            border: 1px solid rgba(197,160,89,0.3);
+            border-radius: 18px;
+            padding: 26px 26px 24px;
+            margin: 10px 0 22px;
+            box-shadow: 0 18px 50px rgba(0,0,0,.35);
+        }
+        .form-card h3 {
+            font-size: 0.78rem;
+            font-weight: 800;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            color: var(--gold);
+            margin-bottom: 6px;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .form-card .form-hint { color: rgba(255,255,255,.55); font-size: 0.85rem; line-height: 1.55; margin-bottom: 18px; }
+        .field { margin-bottom: 14px; }
+        .field label { display: block; font-size: 0.78rem; font-weight: 700; color: rgba(255,255,255,.75); margin-bottom: 7px; letter-spacing: .4px; }
+        .field label small { color: rgba(255,255,255,.4); font-weight: 500; }
+        .field .input-wrap {
+            display: flex; align-items: center; gap: 12px;
             background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(201,168,76,0.3);
-            border-radius: 12px;
-            padding: 20px 24px;
-            margin: 24px 0;
-            display: flex;
-            align-items: center;
-            gap: 16px;
+            border: 1.5px solid rgba(255,255,255,0.14);
+            border-radius: 11px;
+            padding: 13px 16px;
+            transition: border-color .15s, box-shadow .15s;
         }
-        .name-field label { font-weight: 600; white-space: nowrap; color: var(--gold); }
-        .name-field input {
-            flex: 1;
-            background: transparent;
-            border: none;
-            outline: none;
-            font-size: 1.05rem;
-            color: #fff;
-            font-family: 'Inter', sans-serif;
+        .field .input-wrap:focus-within { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(197,160,89,.15); }
+        .field .input-wrap i { color: rgba(255,255,255,.35); width: 16px; text-align: center; }
+        .field input {
+            flex: 1; background: transparent; border: none; outline: none;
+            font-size: 0.98rem; color: #fff; font-family: 'Inter', sans-serif;
         }
-        .name-field input::placeholder { color: #555; }
+        .field input::placeholder { color: rgba(255,255,255,.3); }
+        .contact-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+        .form-error {
+            display: none;
+            background: rgba(231,76,60,0.12);
+            border: 1px solid rgba(231,76,60,0.4);
+            color: #ff8a7a;
+            border-radius: 10px;
+            padding: 11px 14px;
+            font-size: 0.85rem;
+            margin-bottom: 14px;
+            align-items: flex-start; gap: 9px;
+        }
+        .form-error.visible { display: flex; }
+        .privacy-note { font-size: 0.74rem; color: rgba(255,255,255,.38); line-height: 1.5; margin-top: 4px; }
 
         .btn-start {
-            display: block;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
             width: 100%;
-            padding: 16px;
-            background: linear-gradient(135deg, var(--gold), #a07830);
-            color: #000;
+            padding: 17px;
+            background: linear-gradient(135deg, var(--gold-light), var(--gold-deep));
+            color: var(--navy);
             border: none;
             border-radius: 12px;
-            font-size: 1.1rem;
+            font-size: 1.08rem;
             font-weight: 800;
             font-family: 'Inter', sans-serif;
             cursor: pointer;
-            letter-spacing: 1px;
+            letter-spacing: .6px;
             transition: transform 0.15s, box-shadow 0.15s;
+            box-shadow: 0 10px 30px rgba(197,160,89,.25);
         }
-        .btn-start:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(201,168,76,0.3); }
+        .btn-start:hover { transform: translateY(-2px); box-shadow: 0 14px 40px rgba(197,160,89,.4); }
 
-        /* ── LEVEL BADGE PILLS ── */
-        .level-pills {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-            justify-content: center;
-            margin: 24px 0;
+        .history-link-row { text-align: center; margin-top: 22px; }
+        .history-link {
+            display: inline-flex; align-items: center; gap: 9px;
+            color: rgba(255,255,255,.6);
+            font-size: 0.88rem; font-weight: 600;
+            text-decoration: none;
+            padding: 10px 20px;
+            border: 1px solid rgba(255,255,255,.16);
+            border-radius: 24px;
+            cursor: pointer;
+            background: transparent;
+            font-family: 'Inter', sans-serif;
+            transition: all .15s;
         }
-        .pill {
-            padding: 6px 14px;
-            border-radius: 20px;
-            font-size: 0.78rem;
-            font-weight: 700;
-            letter-spacing: 1px;
-        }
-        .pill.a0 { background: rgba(108,117,125,0.15); border: 1px solid var(--a0-color); color: var(--a0-color); }
-        .pill.a1 { background: rgba(52,152,219,0.15); border: 1px solid var(--a1-color); color: var(--a1-color); }
-        .pill.a2 { background: rgba(39,174,96,0.15); border: 1px solid var(--a2-color); color: var(--a2-color); }
-        .pill.b1 { background: rgba(230,126,34,0.15); border: 1px solid var(--b1-color); color: var(--b1-color); }
-        .pill.b2 { background: rgba(142,68,173,0.15); border: 1px solid var(--b2-color); color: var(--b2-color); }
+        .history-link:hover { color: var(--gold-light); border-color: var(--gold); }
 
-        /* ── QUIZ SCREEN ── */
-        .quiz-top {
-            margin-bottom: 28px;
-        }
-        .progress-meta {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-        .progress-meta .q-counter { font-size: 0.85rem; color: #888; }
+        /* ── QUIZ ── */
+        .quiz-top { margin-bottom: 26px; }
+        .progress-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .progress-meta .q-counter { font-size: 0.85rem; color: rgba(255,255,255,.55); font-weight: 600; }
         .progress-meta .section-label {
-            font-size: 0.75rem;
-            font-weight: 700;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            padding: 4px 12px;
-            border-radius: 20px;
+            font-size: 0.72rem; font-weight: 800; letter-spacing: 1.5px;
+            text-transform: uppercase; padding: 5px 13px; border-radius: 20px;
         }
-        .progress-bar-wrap {
-            height: 6px;
-            background: rgba(255,255,255,0.08);
-            border-radius: 4px;
-            overflow: hidden;
-        }
+        .progress-bar-wrap { height: 7px; background: rgba(255,255,255,0.08); border-radius: 4px; overflow: hidden; }
         .progress-bar-fill {
-            height: 100%;
-            border-radius: 4px;
-            background: linear-gradient(90deg, var(--gold), var(--gold-light));
+            height: 100%; border-radius: 4px;
+            background: linear-gradient(90deg, var(--gold-deep), var(--gold-light));
             transition: width 0.4s cubic-bezier(0.4,0,0.2,1);
         }
 
         .question-card {
-            background: var(--dark-card);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 18px;
+            background: var(--card);
+            border: 1px solid rgba(255,255,255,0.09);
+            border-radius: 20px;
             padding: 32px;
-            margin-bottom: 20px;
+            margin-bottom: 18px;
+            box-shadow: 0 16px 44px rgba(0,0,0,.3);
         }
-        .question-number {
-            font-size: 0.75rem;
-            font-weight: 700;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            margin-bottom: 14px;
-            color: #666;
-        }
-        .question-text {
-            font-size: 1.2rem;
-            font-weight: 600;
-            line-height: 1.5;
-            margin-bottom: 28px;
-        }
-        .question-text em {
-            font-style: normal;
-            border-bottom: 2px dashed var(--gold);
-            padding-bottom: 2px;
-            color: var(--gold-light);
-        }
+        .question-number { font-size: 0.72rem; font-weight: 800; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 14px; color: rgba(255,255,255,.35); }
+        .question-text { font-size: 1.25rem; font-weight: 600; line-height: 1.5; margin-bottom: 26px; }
 
-        .options-grid {
-            display: grid;
-            gap: 10px;
-        }
+        .options-grid { display: grid; gap: 10px; }
         .option-btn {
             background: rgba(255,255,255,0.04);
-            border: 1.5px solid rgba(255,255,255,0.1);
-            border-radius: 10px;
+            border: 1.5px solid rgba(255,255,255,0.11);
+            border-radius: 11px;
             padding: 14px 18px;
-            color: #e0e0e0;
+            color: #e6e6e6;
             font-family: 'Inter', sans-serif;
-            font-size: 0.95rem;
+            font-size: 0.96rem;
             cursor: pointer;
             text-align: left;
             transition: all 0.15s;
-            display: flex;
-            align-items: center;
-            gap: 12px;
+            display: flex; align-items: center; gap: 13px;
         }
-        .option-btn:hover:not(:disabled) {
-            border-color: var(--gold);
-            background: rgba(201,168,76,0.08);
-            color: #fff;
-        }
+        .option-btn:hover:not(:disabled) { border-color: var(--gold); background: rgba(197,160,89,0.09); color: #fff; transform: translateX(3px); }
         .option-btn .opt-letter {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.06);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 0.8rem;
-            flex-shrink: 0;
+            width: 29px; height: 29px; border-radius: 50%;
+            background: rgba(255,255,255,0.07);
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; font-size: 0.8rem; flex-shrink: 0;
         }
-        .option-btn.selected {
-            border-color: var(--gold);
-            background: rgba(201,168,76,0.12);
-            color: #fff;
-        }
-        .option-btn.selected .opt-letter {
-            background: var(--gold);
-            color: #000;
-        }
-        .option-btn.correct {
-            border-color: #27ae60;
-            background: rgba(39,174,96,0.12);
-            color: #fff;
-        }
-        .option-btn.correct .opt-letter { background: #27ae60; color: #fff; }
-        .option-btn.wrong {
-            border-color: #e74c3c;
-            background: rgba(231,76,60,0.10);
-            color: #fff;
-        }
+        .option-btn.correct { border-color: #2ecc71; background: rgba(46,204,113,0.12); color: #fff; }
+        .option-btn.correct .opt-letter { background: #2ecc71; color: #0c2417; }
+        .option-btn.wrong { border-color: #e74c3c; background: rgba(231,76,60,0.10); color: #fff; }
         .option-btn.wrong .opt-letter { background: #e74c3c; color: #fff; }
         .option-btn:disabled { cursor: default; }
 
-        .feedback-bar {
-            padding: 12px 16px;
-            border-radius: 10px;
-            font-size: 0.9rem;
-            font-weight: 500;
-            margin-top: 12px;
-            display: none;
-            align-items: center;
-            gap: 10px;
-        }
-        .feedback-bar.correct { background: rgba(39,174,96,0.12); border: 1px solid rgba(39,174,96,0.3); color: #2ecc71; display: flex; }
-        .feedback-bar.wrong { background: rgba(231,76,60,0.10); border: 1px solid rgba(231,76,60,0.3); color: #e74c3c; display: flex; }
-        .feedback-bar.neutral { background: rgba(52,152,219,0.10); border: 1px solid rgba(52,152,219,0.3); color: #5dade2; display: flex; }
-
-        /* "I don't know" button */
-        .option-btn.idk-btn {
-            border-style: dashed;
-            border-color: rgba(255,255,255,0.18);
-            font-style: italic;
-            opacity: 0.9;
-            margin-top: 4px;
-        }
-        .option-btn.idk-btn:hover:not(:disabled) {
-            border-color: var(--a1-color);
-            background: rgba(52,152,219,0.08);
-        }
-        .option-btn.idk-btn .opt-letter { background: rgba(255,255,255,0.06); }
-        .option-btn.idk-btn.skipped {
-            border-color: var(--a1-color);
-            background: rgba(52,152,219,0.10);
-            color: #fff;
-            opacity: 1;
-        }
+        .option-btn.idk-btn { border-style: dashed; border-color: rgba(255,255,255,0.2); font-style: italic; opacity: 0.9; margin-top: 4px; }
+        .option-btn.idk-btn:hover:not(:disabled) { border-color: var(--a1-color); background: rgba(74,163,223,0.08); }
+        .option-btn.idk-btn.skipped { border-color: var(--a1-color); background: rgba(74,163,223,0.10); color: #fff; opacity: 1; }
         .option-btn.idk-btn.skipped .opt-letter { background: var(--a1-color); color: #fff; }
 
+        .feedback-bar {
+            padding: 12px 16px; border-radius: 10px;
+            font-size: 0.9rem; font-weight: 500; margin-top: 14px;
+            display: none; align-items: center; gap: 10px;
+        }
+        .feedback-bar.correct { background: rgba(46,204,113,0.12); border: 1px solid rgba(46,204,113,0.3); color: #2ecc71; display: flex; }
+        .feedback-bar.wrong { background: rgba(231,76,60,0.10); border: 1px solid rgba(231,76,60,0.3); color: #ff8a7a; display: flex; }
+        .feedback-bar.neutral { background: rgba(74,163,223,0.10); border: 1px solid rgba(74,163,223,0.3); color: #6fb9e8; display: flex; }
+
         .btn-next {
-            width: 100%;
-            padding: 15px;
-            background: rgba(201,168,76,0.12);
+            width: 100%; padding: 15px;
+            background: rgba(197,160,89,0.12);
             border: 1.5px solid var(--gold);
             border-radius: 12px;
-            color: var(--gold);
+            color: var(--gold-light);
             font-family: 'Inter', sans-serif;
-            font-size: 1rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.15s;
+            font-size: 1rem; font-weight: 700;
+            cursor: pointer; transition: all 0.15s;
             display: none;
         }
         .btn-next.visible { display: block; }
-        .btn-next:hover { background: var(--gold); color: #000; }
+        .btn-next:hover { background: var(--gold); color: var(--navy); }
 
-        /* ── RESULT SCREEN ── */
-        .result-hero {
-            text-align: center;
-            padding: 20px 0 30px;
-        }
+        /* ── RESULT ── */
+        .result-hero { text-align: center; padding: 16px 0 26px; }
         .result-badge {
-            display: inline-flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            width: 140px;
-            height: 140px;
-            border-radius: 50%;
-            margin: 0 auto 24px;
-            border: 4px solid;
-            position: relative;
+            display: inline-flex; flex-direction: column; align-items: center; justify-content: center;
+            width: 150px; height: 150px; border-radius: 50%;
+            margin: 0 auto 22px; border: 4px solid; position: relative;
+            animation: badgePop .5s cubic-bezier(.34,1.56,.64,1);
         }
-        .result-badge::after {
-            content: '';
-            position: absolute;
-            inset: -10px;
-            border-radius: 50%;
-            border: 1px solid;
-            opacity: 0.3;
-        }
-        .result-badge .badge-level { font-size: 2.2rem; font-weight: 900; }
-        .result-badge .badge-label { font-size: 0.65rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; opacity: 0.8; }
+        @keyframes badgePop { from { transform: scale(.6); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        .result-badge::after { content: ''; position: absolute; inset: -11px; border-radius: 50%; border: 1px solid; opacity: 0.3; }
+        .result-badge .badge-level { font-family: 'Inria Serif', serif; font-size: 2.5rem; font-weight: 700; }
+        .result-badge .badge-label { font-size: 0.62rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; opacity: 0.85; }
 
-        .result-name { font-size: 1.5rem; font-weight: 800; margin-bottom: 6px; }
-        .result-subtitle { color: #888; font-size: 0.95rem; margin-bottom: 30px; }
+        .result-name { font-family: 'Inria Serif', serif; font-size: 1.6rem; font-weight: 700; margin-bottom: 4px; }
+        .result-subtitle { color: rgba(255,255,255,.5); font-size: 0.92rem; margin-bottom: 6px; }
+        .result-contact { color: rgba(255,255,255,.45); font-size: 0.82rem; margin-bottom: 22px; }
+        .result-contact i { color: var(--gold); margin-right: 5px; }
 
-        .score-breakdown {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 10px;
-            margin: 24px 0;
+        .save-status {
+            display: inline-flex; align-items: center; gap: 8px;
+            font-size: 0.78rem; font-weight: 600;
+            padding: 7px 16px; border-radius: 20px; margin-bottom: 8px;
+            background: rgba(46,204,113,0.1); border: 1px solid rgba(46,204,113,0.35); color: #2ecc71;
         }
+        .save-status.local-only { background: rgba(74,163,223,0.1); border-color: rgba(74,163,223,0.35); color: #6fb9e8; }
+
+        .score-breakdown { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin: 22px 0; }
         .score-section {
             background: rgba(255,255,255,0.04);
             border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 12px;
-            padding: 14px 8px;
-            text-align: center;
+            border-radius: 12px; padding: 14px 8px; text-align: center;
         }
-        .score-section .sec-name { font-size: 0.65rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
+        .score-section .sec-name { font-size: 0.65rem; font-weight: 800; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 8px; }
         .score-section .sec-score { font-size: 1.4rem; font-weight: 900; }
-        .score-section .sec-max { font-size: 0.7rem; color: #666; }
+        .score-section .sec-max { font-size: 0.68rem; color: rgba(255,255,255,.4); }
 
         .result-card {
-            background: var(--dark-card);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: 18px;
-            padding: 28px;
-            margin: 20px 0;
-            text-align: left;
+            background: var(--card);
+            border: 1px solid rgba(255,255,255,0.09);
+            border-radius: 18px; padding: 28px; margin: 18px 0; text-align: left;
+            box-shadow: 0 16px 44px rgba(0,0,0,.3);
         }
-        .result-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 6px; color: var(--gold); }
-        .result-card p { color: #bbb; font-size: 0.9rem; line-height: 1.6; margin-bottom: 16px; }
+        .result-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 8px; color: var(--gold-light); }
+        .result-card p { color: rgba(255,255,255,.7); font-size: 0.92rem; line-height: 1.65; margin-bottom: 16px; }
         .result-card p:last-child { margin-bottom: 0; }
 
         .share-box {
-            background: rgba(201,168,76,0.06);
-            border: 1px solid rgba(201,168,76,0.2);
-            border-radius: 12px;
-            padding: 16px 20px;
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            margin-top: 20px;
+            background: rgba(197,160,89,0.07);
+            border: 1px solid rgba(197,160,89,0.25);
+            border-radius: 12px; padding: 16px 20px;
+            display: flex; align-items: center; gap: 14px; margin-top: 18px;
         }
         .share-box i { font-size: 1.3rem; color: var(--gold); }
-        .share-box p { color: #ccc; font-size: 0.87rem; line-height: 1.5; }
+        .share-box p { color: rgba(255,255,255,.72); font-size: 0.86rem; line-height: 1.55; }
 
-        .btn-print {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 12px 24px;
+        .result-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 18px; }
+        .btn-outline {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 12px 22px;
             background: transparent;
-            border: 1.5px solid rgba(255,255,255,0.2);
-            border-radius: 10px;
-            color: #ccc;
-            font-family: 'Inter', sans-serif;
-            font-size: 0.9rem;
-            font-weight: 600;
-            cursor: pointer;
-            margin-top: 16px;
-            transition: all 0.15s;
+            border: 1.5px solid rgba(255,255,255,0.22);
+            border-radius: 10px; color: #ddd;
+            font-family: 'Inter', sans-serif; font-size: 0.88rem; font-weight: 600;
+            cursor: pointer; text-decoration: none; transition: all 0.15s;
         }
-        .btn-print:hover { border-color: #fff; color: #fff; }
-        .btn-retake {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 12px 24px;
-            background: var(--gold);
-            border: none;
-            border-radius: 10px;
-            color: #000;
-            font-family: 'Inter', sans-serif;
-            font-size: 0.9rem;
-            font-weight: 800;
-            cursor: pointer;
-            margin-top: 16px;
-            margin-left: 10px;
-            transition: all 0.15s;
+        .btn-outline:hover { border-color: #fff; color: #fff; }
+        .btn-solid {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 12px 22px;
+            background: linear-gradient(135deg, var(--gold-light), var(--gold-deep));
+            border: none; border-radius: 10px; color: var(--navy);
+            font-family: 'Inter', sans-serif; font-size: 0.88rem; font-weight: 800;
+            cursor: pointer; text-decoration: none; transition: transform 0.15s, box-shadow .15s;
+        }
+        .btn-solid:hover { transform: translateY(-2px); box-shadow: 0 10px 26px rgba(197,160,89,.35); }
+
+        /* ── HISTORY ── */
+        .history-head { display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; margin-bottom: 8px; }
+        .history-head h2 { font-size: 1.7rem; }
+        .history-sub { color: rgba(255,255,255,.55); font-size: 0.9rem; line-height: 1.6; margin-bottom: 20px; }
+        .history-tools { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 18px; }
+        .history-search {
+            flex: 1; min-width: 200px;
+            display: flex; align-items: center; gap: 10px;
+            background: rgba(255,255,255,0.05);
+            border: 1.5px solid rgba(255,255,255,0.14);
+            border-radius: 11px; padding: 11px 15px;
+        }
+        .history-search:focus-within { border-color: var(--gold); }
+        .history-search i { color: rgba(255,255,255,.35); }
+        .history-search input { flex: 1; background: transparent; border: none; outline: none; color: #fff; font-family: 'Inter', sans-serif; font-size: 0.92rem; }
+        .history-search input::placeholder { color: rgba(255,255,255,.3); }
+
+        .history-list { display: grid; gap: 10px; }
+        .history-item {
+            background: var(--card);
+            border: 1px solid rgba(255,255,255,0.09);
+            border-radius: 14px;
+            padding: 16px 18px;
+            display: grid;
+            grid-template-columns: 58px 1fr auto;
+            gap: 16px; align-items: center;
+        }
+        .history-item .h-badge {
+            width: 58px; height: 58px; border-radius: 50%;
+            border: 2.5px solid;
+            display: flex; align-items: center; justify-content: center;
+            font-family: 'Inria Serif', serif; font-weight: 700; font-size: 1.05rem;
+        }
+        .history-item .h-name { font-weight: 700; font-size: 0.98rem; margin-bottom: 3px; }
+        .history-item .h-meta { font-size: 0.78rem; color: rgba(255,255,255,.5); line-height: 1.5; }
+        .history-item .h-meta i { width: 14px; text-align: center; margin-right: 4px; color: rgba(255,255,255,.35); }
+        .history-item .h-score { text-align: right; }
+        .history-item .h-score b { font-size: 1.15rem; }
+        .history-item .h-score small { display: block; color: rgba(255,255,255,.4); font-size: 0.7rem; margin-top: 2px; }
+        .history-item .h-tag {
+            display: inline-block; margin-top: 6px;
+            font-size: 0.62rem; font-weight: 800; letter-spacing: 1px; text-transform: uppercase;
+            padding: 3px 9px; border-radius: 12px;
+            background: rgba(255,255,255,.06); color: rgba(255,255,255,.45);
+        }
+        .history-empty {
+            text-align: center; padding: 50px 20px;
+            color: rgba(255,255,255,.45); font-size: 0.95rem; line-height: 1.7;
+            background: rgba(255,255,255,0.03);
+            border: 1px dashed rgba(255,255,255,0.15);
+            border-radius: 16px;
+        }
+        .history-empty i { font-size: 2rem; color: rgba(197,160,89,.5); display: block; margin-bottom: 12px; }
+        .history-loading { text-align: center; padding: 40px; color: rgba(255,255,255,.5); }
+        .history-note {
+            margin-top: 18px; font-size: 0.76rem; color: rgba(255,255,255,.38);
+            line-height: 1.55; text-align: center;
         }
 
         @media print {
-            .top-bar, .btn-print, .btn-retake, .share-box { display: none; }
-            body { background: #fff; color: #000; }
-            .result-card { border: 1px solid #ddd; }
-            .question-card, .screen { background: #fff; }
+            .top-bar, .btn-outline, .btn-solid, .share-box, .result-actions, .save-status { display: none !important; }
+            body { background: #fff !important; color: #000; }
+            .result-card { border: 1px solid #ddd; background: #fff; }
+            .result-card p { color: #333; }
+            .screen { background: #fff; }
         }
 
-        @media (max-width: 600px) {
+        @media (max-width: 620px) {
             .info-grid { grid-template-columns: 1fr; }
+            .contact-row { grid-template-columns: 1fr; }
             .score-breakdown { grid-template-columns: repeat(3, 1fr); }
-            .intro-hero h1 { font-size: 1.8rem; }
+            .intro-hero h1 { font-size: 1.9rem; }
+            .history-item { grid-template-columns: 48px 1fr; }
+            .history-item .h-badge { width: 48px; height: 48px; font-size: 0.9rem; }
+            .history-item .h-score { grid-column: 1 / -1; text-align: left; display: flex; align-items: baseline; gap: 8px; }
         }
     </style>
 </head>
@@ -454,18 +464,19 @@
 
 <div class="top-bar">
     <img src="assets/images/vesper_logo.jpg" alt="Vesper Academy">
-    <span class="brand">Vesper Academy</span>
+    <span class="brand-txt"><b>Vesper Academy</b><small>Examen Diagnóstico</small></span>
+    <a class="home-link" href="index.html"><i class="fas fa-arrow-left"></i> Página principal</a>
 </div>
 
 <div class="wrapper">
 
-    <!-- ═══════════ INTRO SCREEN ═══════════ -->
+    <!-- ═══════════ INTRO ═══════════ -->
     <div class="screen active" id="screen-intro">
         <div class="intro-hero">
+            <span class="free-tag"><i class="fas fa-gift"></i> 100% Gratis · Sin registro</span>
             <div class="intro-icon"><i class="fas fa-graduation-cap"></i></div>
-            <h1>Find Your <span>English Level</span></h1>
-            <p>Answer 30 questions to discover where you truly are — and get placed into the right course at Vesper Academy. Not sure about a question? Press <strong style="color:var(--gold);">"I'm not sure"</strong> — being honest gives the most accurate result.</p>
-
+            <h1>Descubre tu <span>nivel de inglés</span> en 15 minutos</h1>
+            <p>Responde 30 preguntas y conoce tu nivel real — de principiante absoluto (A0) a avanzado (B2+) — junto con el curso de Vesper Academy ideal para ti. Si no sabes una respuesta, pulsa <strong style="color:var(--gold-light);">"No estoy seguro/a"</strong>: ser honesto da el resultado más preciso.</p>
             <div class="level-pills">
                 <span class="pill a0">A0 Starter</span>
                 <span class="pill a1">A1 Beginner</span>
@@ -476,364 +487,354 @@
         </div>
 
         <div class="info-grid">
-            <div class="info-card">
-                <i class="fas fa-list-ol"></i>
-                <strong>30 Questions</strong>
-                <span>Multiple choice</span>
-            </div>
-            <div class="info-card">
-                <i class="fas fa-clock"></i>
-                <strong>~15 Minutes</strong>
-                <span>No time limit</span>
-            </div>
-            <div class="info-card">
-                <i class="fas fa-chart-bar"></i>
-                <strong>5 Levels</strong>
-                <span>A0 through B2+</span>
-            </div>
+            <div class="info-card"><i class="fas fa-list-ol"></i><strong>30 preguntas</strong><span>Opción múltiple</span></div>
+            <div class="info-card"><i class="fas fa-clock"></i><strong>~15 minutos</strong><span>Sin límite de tiempo</span></div>
+            <div class="info-card"><i class="fas fa-chart-bar"></i><strong>Resultado al instante</strong><span>Con curso recomendado</span></div>
         </div>
 
-        <div class="name-field">
-            <label for="student-name"><i class="fas fa-user"></i> &nbsp;Name</label>
-            <input type="text" id="student-name" placeholder="Enter your full name to begin..." autocomplete="off">
+        <div class="form-card">
+            <h3><i class="fas fa-id-card"></i> Tus datos para empezar</h3>
+            <p class="form-hint">Déjanos tu <strong style="color:#fff;">correo o tu WhatsApp</strong> (al menos uno) para guardar tu resultado en el historial y que un asesor pueda contactarte con tu plan recomendado.</p>
+
+            <div class="field">
+                <label for="student-name">Nombre completo *</label>
+                <div class="input-wrap"><i class="fas fa-user"></i>
+                    <input type="text" id="student-name" placeholder="Ej. María López" autocomplete="name">
+                </div>
+            </div>
+            <div class="contact-row">
+                <div class="field">
+                    <label for="student-email">Correo electrónico <small>(correo o teléfono)</small></label>
+                    <div class="input-wrap"><i class="fas fa-envelope"></i>
+                        <input type="email" id="student-email" placeholder="tu@correo.com" autocomplete="email">
+                    </div>
+                </div>
+                <div class="field">
+                    <label for="student-phone">WhatsApp / Teléfono <small>(correo o teléfono)</small></label>
+                    <div class="input-wrap"><i class="fab fa-whatsapp"></i>
+                        <input type="tel" id="student-phone" placeholder="+52 55 1234 5678" autocomplete="tel">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-error" id="form-error"><i class="fas fa-circle-exclamation" style="margin-top:2px;"></i><span id="form-error-text"></span></div>
+
+            <button class="btn-start" onclick="startTest()"><i class="fas fa-play"></i> Comenzar examen diagnóstico</button>
+            <p class="privacy-note"><i class="fas fa-lock"></i> Tus datos solo se usan para enviarte tu resultado y recomendaciones de Vesper Academy. Nunca los compartimos con terceros.</p>
         </div>
 
-        <button class="btn-start" onclick="startTest()">
-            <i class="fas fa-play"></i> &nbsp; Start Placement Test
-        </button>
+        <div class="history-link-row">
+            <button class="history-link" onclick="openHistory()"><i class="fas fa-clock-rotate-left"></i> Ver historial de resultados</button>
+        </div>
     </div>
 
-    <!-- ═══════════ QUIZ SCREEN ═══════════ -->
+    <!-- ═══════════ QUIZ ═══════════ -->
     <div class="screen" id="screen-quiz">
         <div class="quiz-top">
             <div class="progress-meta">
-                <span class="q-counter" id="q-counter">Question 1 of 30</span>
+                <span class="q-counter" id="q-counter">Pregunta 1 de 30</span>
                 <span class="section-label" id="section-label">A0 — Starter</span>
             </div>
-            <div class="progress-bar-wrap">
-                <div class="progress-bar-fill" id="progress-fill" style="width:0%"></div>
-            </div>
+            <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progress-fill" style="width:0%"></div></div>
         </div>
 
         <div class="question-card" id="question-card">
-            <div class="question-number" id="q-number">QUESTION 1</div>
+            <div class="question-number" id="q-number">PREGUNTA 1</div>
             <div class="question-text" id="q-text"></div>
             <div class="options-grid" id="options-grid"></div>
             <div class="feedback-bar" id="feedback-bar"></div>
         </div>
 
-        <button class="btn-next" id="btn-next" onclick="nextQuestion()">
-            Next Question <i class="fas fa-arrow-right"></i>
-        </button>
+        <button class="btn-next" id="btn-next" onclick="nextQuestion()">Siguiente pregunta <i class="fas fa-arrow-right"></i></button>
     </div>
 
-    <!-- ═══════════ RESULT SCREEN ═══════════ -->
+    <!-- ═══════════ RESULT ═══════════ -->
     <div class="screen" id="screen-result">
         <div class="result-hero">
             <div class="result-badge" id="result-badge">
                 <span class="badge-level" id="badge-level">A2</span>
                 <span class="badge-label" id="badge-label">Elementary</span>
             </div>
-            <div class="result-name" id="result-name">Maria Lopez</div>
-            <div class="result-subtitle">Your Vesper Academy English Level</div>
+            <div class="result-name" id="result-name">María López</div>
+            <div class="result-subtitle">Tu nivel de inglés según Vesper Academy</div>
+            <div class="result-contact" id="result-contact"></div>
+            <div class="save-status" id="save-status" style="display:none;"></div>
         </div>
 
         <div class="score-breakdown" id="score-breakdown"></div>
 
         <div class="result-card" id="result-card">
-            <h3 id="course-title">Recommended Course</h3>
+            <h3 id="course-title">Curso recomendado</h3>
             <p id="course-desc"></p>
             <p id="next-steps"></p>
-            <p id="confirm-note" style="margin-top:18px; padding-top:16px; border-top:1px solid rgba(255,255,255,0.1); color:#5dade2; font-size:0.9rem; line-height:1.6;"></p>
+            <p id="confirm-note" style="margin-top:18px; padding-top:16px; border-top:1px solid rgba(255,255,255,0.1); color:#6fb9e8; font-size:0.9rem; line-height:1.6;"></p>
         </div>
 
         <div class="share-box">
             <i class="fas fa-share-alt"></i>
-            <p>Take a screenshot of this page or print it and <strong>share it with your teacher</strong> before your first class. This helps them prepare the perfect lesson for you.</p>
+            <p>Tu resultado quedó guardado en el historial. También puedes tomar una captura de pantalla o imprimirlo y <strong>compartirlo con tu profesor</strong> antes de tu primera clase.</p>
         </div>
 
-        <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:4px;">
-            <button class="btn-print" onclick="window.print()"><i class="fas fa-print"></i> Print Result</button>
-            <button class="btn-retake" onclick="retakeTest()"><i class="fas fa-redo"></i> Retake Test</button>
+        <div class="result-actions">
+            <a class="btn-solid" href="index.html#contacto"><i class="fas fa-calendar-check"></i> Reservar mi clase de prueba</a>
+            <button class="btn-outline" onclick="window.print()"><i class="fas fa-print"></i> Imprimir</button>
+            <button class="btn-outline" onclick="openHistory()"><i class="fas fa-clock-rotate-left"></i> Ver historial</button>
+            <button class="btn-outline" onclick="retakeTest()"><i class="fas fa-redo"></i> Repetir examen</button>
         </div>
+    </div>
+
+    <!-- ═══════════ HISTORY ═══════════ -->
+    <div class="screen" id="screen-history">
+        <div class="history-head">
+            <h2><i class="fas fa-clock-rotate-left" style="color:var(--gold);"></i> Historial de resultados</h2>
+            <button class="history-link" onclick="showScreen('intro')"><i class="fas fa-arrow-left"></i> Volver</button>
+        </div>
+        <p class="history-sub">Resultados de quienes han presentado el examen diagnóstico. Los datos de contacto se muestran parcialmente ocultos para proteger la privacidad.</p>
+
+        <div class="history-tools">
+            <div class="history-search">
+                <i class="fas fa-magnifying-glass"></i>
+                <input type="text" id="history-search" placeholder="Buscar por nombre o nivel (ej. María, B1)..." oninput="renderHistory()">
+            </div>
+            <button class="history-link" onclick="loadHistory(true)"><i class="fas fa-rotate"></i> Actualizar</button>
+        </div>
+
+        <div class="history-loading" id="history-loading" style="display:none;"><i class="fas fa-circle-notch fa-spin"></i> Cargando historial…</div>
+        <div class="history-list" id="history-list"></div>
+        <p class="history-note" id="history-note"></p>
     </div>
 
 </div>
 
+<script src="vesper_auth.js"></script>
 <script>
 // ══════════════════════════════════════════
-//  QUESTION BANK — 30 questions across 5 levels
+//  BANCO DE PREGUNTAS — 30 preguntas, 5 niveles
 // ══════════════════════════════════════════
 const QUESTIONS = [
     // ── A0: STARTER (Q 1-6) ──
-    {
-        level: "A0",
-        levelName: "Starter",
-        text: "What color is the sky?",
-        options: ["Red", "Blue", "Green", "Yellow"],
-        correct: 1
-    },
-    {
-        level: "A0",
-        levelName: "Starter",
-        text: "How do you say hello in English?",
-        options: ["Bye", "Sorry", "Hello", "Please"],
-        correct: 2
-    },
-    {
-        level: "A0",
-        levelName: "Starter",
-        text: "What number comes after 4?",
-        options: ["3", "6", "5", "2"],
-        correct: 2
-    },
-    {
-        level: "A0",
-        levelName: "Starter",
-        text: "Choose the correct sentence:",
-        options: ["I am name Maria.", "My name is Maria.", "Name me is Maria.", "Am I Maria."],
-        correct: 1
-    },
-    {
-        level: "A0",
-        levelName: "Starter",
-        text: "Which word means the opposite of 'big'?",
-        options: ["Fast", "Happy", "Small", "Old"],
-        correct: 2
-    },
-    {
-        level: "A0",
-        levelName: "Starter",
-        text: "Complete: 'She ___ a teacher.'",
-        options: ["am", "are", "is", "be"],
-        correct: 2
-    },
+    { level: "A0", levelName: "Starter", text: "What color is the sky?", options: ["Red", "Blue", "Green", "Yellow"], correct: 1 },
+    { level: "A0", levelName: "Starter", text: "How do you say hello in English?", options: ["Bye", "Sorry", "Hello", "Please"], correct: 2 },
+    { level: "A0", levelName: "Starter", text: "What number comes after 4?", options: ["3", "6", "5", "2"], correct: 2 },
+    { level: "A0", levelName: "Starter", text: "Choose the correct sentence:", options: ["I am name Maria.", "My name is Maria.", "Name me is Maria.", "Am I Maria."], correct: 1 },
+    { level: "A0", levelName: "Starter", text: "Which word means the opposite of 'big'?", options: ["Fast", "Happy", "Small", "Old"], correct: 2 },
+    { level: "A0", levelName: "Starter", text: "Complete: 'She ___ a teacher.'", options: ["am", "are", "is", "be"], correct: 2 },
 
     // ── A1: BEGINNER (Q 7-12) ──
-    {
-        level: "A1",
-        levelName: "Beginner",
-        text: "Choose the correct sentence:",
-        options: ["He don't like pizza.", "He doesn't likes pizza.", "He doesn't like pizza.", "He no like pizza."],
-        correct: 2
-    },
-    {
-        level: "A1",
-        levelName: "Beginner",
-        text: "What time ___ you wake up?",
-        options: ["does", "do", "are", "is"],
-        correct: 1
-    },
-    {
-        level: "A1",
-        levelName: "Beginner",
-        text: "She ___ to school every day.",
-        options: ["go", "goes", "going", "is go"],
-        correct: 1
-    },
-    {
-        level: "A1",
-        levelName: "Beginner",
-        text: "Which is a correct short answer to 'Do you like coffee?'",
-        options: ["Yes, I like.", "Yes, I do.", "Yes, I does.", "Yes, do I."],
-        correct: 1
-    },
-    {
-        level: "A1",
-        levelName: "Beginner",
-        text: "I ___ breakfast every morning at 7 o'clock.",
-        options: ["eat", "have", "make", "do"],
-        correct: 1
-    },
-    {
-        level: "A1",
-        levelName: "Beginner",
-        text: "How ___ you? — I'm fine, thanks.",
-        options: ["is", "are", "do", "was"],
-        correct: 1
-    },
+    { level: "A1", levelName: "Beginner", text: "Choose the correct sentence:", options: ["He don't like pizza.", "He doesn't likes pizza.", "He doesn't like pizza.", "He no like pizza."], correct: 2 },
+    { level: "A1", levelName: "Beginner", text: "What time ___ you wake up?", options: ["does", "do", "are", "is"], correct: 1 },
+    { level: "A1", levelName: "Beginner", text: "She ___ to school every day.", options: ["go", "goes", "going", "is go"], correct: 1 },
+    { level: "A1", levelName: "Beginner", text: "Which is a correct short answer to 'Do you like coffee?'", options: ["Yes, I like.", "Yes, I do.", "Yes, I does.", "Yes, do I."], correct: 1 },
+    { level: "A1", levelName: "Beginner", text: "I ___ breakfast every morning at 7 o'clock.", options: ["eat", "have", "make", "do"], correct: 1 },
+    { level: "A1", levelName: "Beginner", text: "How ___ you? — I'm fine, thanks.", options: ["is", "are", "do", "was"], correct: 1 },
 
     // ── A2: ELEMENTARY (Q 13-18) ──
-    {
-        level: "A2",
-        levelName: "Elementary",
-        text: "Last weekend, I ___ to the cinema.",
-        options: ["go", "goes", "went", "was going"],
-        correct: 2
-    },
-    {
-        level: "A2",
-        levelName: "Elementary",
-        text: "I ___ never tried sushi before.",
-        options: ["did", "have", "had", "was"],
-        correct: 1
-    },
-    {
-        level: "A2",
-        levelName: "Elementary",
-        text: "Which sentence uses 'going to' correctly?",
-        options: ["I going to travel next year.", "I am go to travel next year.", "I am going to travel next year.", "I will going to travel."],
-        correct: 2
-    },
-    {
-        level: "A2",
-        levelName: "Elementary",
-        text: "New York is ___ than my city.",
-        options: ["more big", "biggest", "bigger", "very big"],
-        correct: 2
-    },
-    {
-        level: "A2",
-        levelName: "Elementary",
-        text: "I didn't ___ the movie last night.",
-        options: ["saw", "seen", "seeing", "see"],
-        correct: 3
-    },
-    {
-        level: "A2",
-        levelName: "Elementary",
-        text: "She ___ already finished her homework.",
-        options: ["is", "has", "had", "was"],
-        correct: 1
-    },
+    { level: "A2", levelName: "Elementary", text: "Last weekend, I ___ to the cinema.", options: ["go", "goes", "went", "was going"], correct: 2 },
+    { level: "A2", levelName: "Elementary", text: "I ___ never tried sushi before.", options: ["did", "have", "had", "was"], correct: 1 },
+    { level: "A2", levelName: "Elementary", text: "Which sentence uses 'going to' correctly?", options: ["I going to travel next year.", "I am go to travel next year.", "I am going to travel next year.", "I will going to travel."], correct: 2 },
+    { level: "A2", levelName: "Elementary", text: "New York is ___ than my city.", options: ["more big", "biggest", "bigger", "very big"], correct: 2 },
+    { level: "A2", levelName: "Elementary", text: "I didn't ___ the movie last night.", options: ["saw", "seen", "seeing", "see"], correct: 3 },
+    { level: "A2", levelName: "Elementary", text: "She ___ already finished her homework.", options: ["is", "has", "had", "was"], correct: 1 },
 
     // ── B1: INTERMEDIATE (Q 19-24) ──
-    {
-        level: "B1",
-        levelName: "Intermediate",
-        text: "If it ___ tomorrow, we will cancel the picnic.",
-        options: ["will rain", "rained", "rains", "is raining"],
-        correct: 2
-    },
-    {
-        level: "B1",
-        levelName: "Intermediate",
-        text: "The Eiffel Tower ___ in 1889.",
-        options: ["was built", "built", "has been built", "is built"],
-        correct: 0
-    },
-    {
-        level: "B1",
-        levelName: "Intermediate",
-        text: "You ___ take medicine without seeing a doctor first.",
-        options: ["don't have to", "mustn't", "should", "couldn't"],
-        correct: 1
-    },
-    {
-        level: "B1",
-        levelName: "Intermediate",
-        text: "The man ___ car was stolen called the police immediately.",
-        options: ["who", "which", "that", "whose"],
-        correct: 3
-    },
-    {
-        level: "B1",
-        levelName: "Intermediate",
-        text: "She said she ___ finish the project by Friday.",
-        options: ["will", "would", "should", "could have"],
-        correct: 1
-    },
-    {
-        level: "B1",
-        levelName: "Intermediate",
-        text: "I completely ___ the appointment — I forgot to write it down.",
-        options: ["missed", "lost", "failed", "dropped"],
-        correct: 0
-    },
+    { level: "B1", levelName: "Intermediate", text: "If it ___ tomorrow, we will cancel the picnic.", options: ["will rain", "rained", "rains", "is raining"], correct: 2 },
+    { level: "B1", levelName: "Intermediate", text: "The Eiffel Tower ___ in 1889.", options: ["was built", "built", "has been built", "is built"], correct: 0 },
+    { level: "B1", levelName: "Intermediate", text: "You ___ take medicine without seeing a doctor first.", options: ["don't have to", "mustn't", "should", "couldn't"], correct: 1 },
+    { level: "B1", levelName: "Intermediate", text: "The man ___ car was stolen called the police immediately.", options: ["who", "which", "that", "whose"], correct: 3 },
+    { level: "B1", levelName: "Intermediate", text: "She said she ___ finish the project by Friday.", options: ["will", "would", "should", "could have"], correct: 1 },
+    { level: "B1", levelName: "Intermediate", text: "I completely ___ the appointment — I forgot to write it down.", options: ["missed", "lost", "failed", "dropped"], correct: 0 },
 
     // ── B2+: UPPER INTERMEDIATE (Q 25-30) ──
-    {
-        level: "B2+",
-        levelName: "Upper Intermediate",
-        text: "If I ___ you, I would apologize immediately.",
-        options: ["am", "was", "were", "would be"],
-        correct: 2
-    },
-    {
-        level: "B2+",
-        levelName: "Upper Intermediate",
-        text: "Not only ___ late, but he also forgot the documents.",
-        options: ["he was", "was he", "he had been", "had he been"],
-        correct: 1
-    },
-    {
-        level: "B2+",
-        levelName: "Upper Intermediate",
-        text: "I need to ___ this report by midnight, or I will miss the deadline.",
-        options: ["hand in", "hand out", "give back", "put off"],
-        correct: 0
-    },
-    {
-        level: "B2+",
-        levelName: "Upper Intermediate",
-        text: "He speaks English as ___ he were born in London.",
-        options: ["if", "though", "well", "like"],
-        correct: 0
-    },
-    {
-        level: "B2+",
-        levelName: "Upper Intermediate",
-        text: "The politician denied ___ any bribes.",
-        options: ["to take", "to have taken", "taking", "that taking"],
-        correct: 2
-    },
-    {
-        level: "B2+",
-        levelName: "Upper Intermediate",
-        text: "By the time she arrived, the meeting ___.",
-        options: ["already ended", "has already ended", "had already ended", "was ending already"],
-        correct: 2
-    }
+    { level: "B2+", levelName: "Upper Intermediate", text: "If I ___ you, I would apologize immediately.", options: ["am", "was", "were", "would be"], correct: 2 },
+    { level: "B2+", levelName: "Upper Intermediate", text: "Not only ___ late, but he also forgot the documents.", options: ["he was", "was he", "he had been", "had he been"], correct: 1 },
+    { level: "B2+", levelName: "Upper Intermediate", text: "I need to ___ this report by midnight, or I will miss the deadline.", options: ["hand in", "hand out", "give back", "put off"], correct: 0 },
+    { level: "B2+", levelName: "Upper Intermediate", text: "He speaks English as ___ he were born in London.", options: ["if", "though", "well", "like"], correct: 0 },
+    { level: "B2+", levelName: "Upper Intermediate", text: "The politician denied ___ any bribes.", options: ["to take", "to have taken", "taking", "that taking"], correct: 2 },
+    { level: "B2+", levelName: "Upper Intermediate", text: "By the time she arrived, the meeting ___.", options: ["already ended", "has already ended", "had already ended", "was ending already"], correct: 2 }
 ];
 
 const LEVELS = {
-    "A0": { color: "#6c757d", name: "Starter" },
-    "A1": { color: "#3498db", name: "Beginner" },
-    "A2": { color: "#27ae60", name: "Elementary" },
-    "B1": { color: "#e67e22", name: "Intermediate" },
-    "B2+": { color: "#8e44ad", name: "Upper Intermediate" }
+    "A0":  { color: "#8d99a6", name: "Starter" },
+    "A1":  { color: "#4aa3df", name: "Beginner" },
+    "A2":  { color: "#2ecc71", name: "Elementary" },
+    "B1":  { color: "#e67e22", name: "Intermediate" },
+    "B2+": { color: "#a569bd", name: "Upper Intermediate" }
 };
 
 const COURSES = {
     "A0": {
-        title: "Core Basics — Level 1 & 2 (A0)",
-        desc: "You are at the very beginning of your English journey. This is a great starting point! Your course will focus on essential vocabulary, greetings, basic sentence structure, and everyday survival phrases.",
-        next: "Recommended next step: Book your first Core Basics class. You will learn to introduce yourself, describe your day, and form simple sentences with confidence."
+        title: "Core Basics — Nivel 1 y 2 (A0)",
+        desc: "Estás en el inicio de tu camino con el inglés. ¡Es un excelente punto de partida! Tu curso se enfocará en vocabulario esencial, saludos, estructura básica de oraciones y frases de supervivencia para el día a día.",
+        next: "Siguiente paso recomendado: reserva tu primera clase de Core Basics. Aprenderás a presentarte, describir tu día y formar oraciones simples con confianza."
     },
     "A1": {
-        title: "Core Basics — Level 2 & 3 (A1)",
-        desc: "You know the basics and are ready to build real sentences. Your course will cover Present Simple, asking questions, talking about routines, and basic past tense.",
-        next: "Recommended next step: Core Basics Level 2. You will learn to talk about your daily routine, describe other people, and ask and answer questions fluently."
+        title: "Core Basics — Nivel 2 y 3 (A1)",
+        desc: "Ya conoces lo básico y estás listo/a para construir oraciones reales. Tu curso cubrirá el presente simple, cómo hacer preguntas, hablar de rutinas y el pasado básico.",
+        next: "Siguiente paso recomendado: Core Basics Nivel 2. Aprenderás a hablar de tu rutina diaria, describir a otras personas y preguntar y responder con fluidez."
     },
     "A2": {
-        title: "Core Basics — Level 3 & 4 (A2)",
-        desc: "You can communicate in simple situations. Your course will expand your storytelling ability, covering Present Perfect, Comparatives, Going to, and simple Conditionals.",
-        next: "Recommended next step: Core Basics Level 3. You will learn to tell stories about the past, make plans, and compare ideas with confidence."
+        title: "Core Basics — Nivel 3 y 4 (A2)",
+        desc: "Puedes comunicarte en situaciones sencillas. Tu curso ampliará tu capacidad de contar historias, cubriendo el presente perfecto, comparativos, 'going to' y condicionales simples.",
+        next: "Siguiente paso recomendado: Core Basics Nivel 3. Aprenderás a contar historias en pasado, hacer planes y comparar ideas con confianza."
     },
     "B1": {
-        title: "Core Practice — Levels 1-3 (B1)",
-        desc: "You have a solid foundation. Your course will strengthen complex grammar including Passive Voice, Second Conditional, Reported Speech, and advanced Relative Clauses.",
-        next: "Recommended next step: Core Practice B1. You will focus on extended speaking tasks, reading complex texts, and producing natural-sounding connected speech."
+        title: "Core Practice — Niveles 1-3 (B1)",
+        desc: "Tienes una base sólida. Tu curso reforzará gramática compleja: voz pasiva, segundo condicional, estilo indirecto y cláusulas relativas avanzadas.",
+        next: "Siguiente paso recomendado: Core Practice B1. Te enfocarás en tareas extensas de conversación, lectura de textos complejos y un habla conectada y natural."
     },
     "B2+": {
-        title: "Core Practice — Levels 4-6 (B2+)",
-        desc: "Excellent! You demonstrate upper-intermediate ability with strong grammatical control. Your course will push toward near-native fluency, covering complex inversion, nuanced modal use, idiomatic language, and academic writing.",
-        next: "Recommended next step: Core Practice Advanced. You will engage in authentic debate, business English, C1-standard writing tasks, and exam preparation."
+        title: "Core Practice — Niveles 4-6 (B2+)",
+        desc: "¡Excelente! Demuestras un nivel intermedio-alto con gran control gramatical. Tu curso te acercará a la fluidez casi nativa: inversiones complejas, matices con modales, lenguaje idiomático y escritura académica.",
+        next: "Siguiente paso recomendado: Core Practice Avanzado. Participarás en debates auténticos, inglés de negocios, escritura nivel C1 y preparación de exámenes."
     }
 };
 
-// ══ STATE ══
+// ══ HISTORIAL — almacenamiento ══
+// 1) Siempre se guarda en este dispositivo (localStorage).
+// 2) Se intenta guardar en Firestore (colección "placement_results") para que
+//    el historial sea visible desde cualquier dispositivo. Requiere reglas de
+//    Firestore que permitan create/read en esa colección; si no, se ignora.
+// 3) Se envía una copia por Formspree para que la academia reciba cada prospecto.
+const LS_KEY = "vesper_placement_history_v1";
+const FORMSPREE_URL = "https://formspree.io/f/mdavlzzo";
+const FS_COLLECTION = "placement_results";
+
+function fsBase() {
+    var pid = (window.VesperAuth && VesperAuth.config.firebase.projectId) || "vesper-academy";
+    var key = (window.VesperAuth && VesperAuth.config.firebase.apiKey) || "";
+    return {
+        docs: "https://firestore.googleapis.com/v1/projects/" + pid + "/databases/(default)/documents",
+        key: key
+    };
+}
+
+function loadLocalHistory() {
+    try { return JSON.parse(localStorage.getItem(LS_KEY)) || []; }
+    catch (e) { return []; }
+}
+function saveLocalHistory(list) {
+    try { localStorage.setItem(LS_KEY, JSON.stringify(list.slice(0, 100))); } catch (e) {}
+}
+
+function saveResultToFirestore(rec) {
+    var fs = fsBase();
+    if (!fs.key) return Promise.reject(new Error("sin configuración"));
+    var body = {
+        fields: {
+            name:      { stringValue: rec.name },
+            email:     { stringValue: rec.email || "" },
+            phone:     { stringValue: rec.phone || "" },
+            level:     { stringValue: rec.level },
+            levelName: { stringValue: rec.levelName },
+            correct:   { integerValue: String(rec.correct) },
+            total:     { integerValue: String(rec.total) },
+            skipped:   { integerValue: String(rec.skipped) },
+            scores:    { mapValue: { fields: Object.keys(rec.scores).reduce(function (m, k) {
+                            m[k] = { integerValue: String(rec.scores[k]) }; return m;
+                        }, {}) } },
+            createdAt: { timestampValue: rec.date }
+        }
+    };
+    return fetch(fs.docs + "/" + FS_COLLECTION + "?key=" + encodeURIComponent(fs.key), {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+    }).then(function (r) {
+        if (!r.ok) throw new Error("HTTP " + r.status);
+        return r.json();
+    });
+}
+
+function fetchFirestoreHistory() {
+    var fs = fsBase();
+    if (!fs.key) return Promise.reject(new Error("sin configuración"));
+    return fetch(fs.docs + ":runQuery?key=" + encodeURIComponent(fs.key), {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+            structuredQuery: {
+                from: [{ collectionId: FS_COLLECTION }],
+                orderBy: [{ field: { fieldPath: "createdAt" }, direction: "DESCENDING" }],
+                limit: 200
+            }
+        })
+    }).then(function (r) {
+        if (!r.ok) throw new Error("HTTP " + r.status);
+        return r.json();
+    }).then(function (rows) {
+        return (rows || []).filter(function (x) { return x.document; }).map(function (x) {
+            var f = x.document.fields || {};
+            function s(k) { return (f[k] && f[k].stringValue) || ""; }
+            function n(k) { return parseInt((f[k] && f[k].integerValue) || "0", 10); }
+            return {
+                name: s("name") || "Sin nombre",
+                email: s("email"), phone: s("phone"),
+                level: s("level") || "?", levelName: s("levelName"),
+                correct: n("correct"), total: n("total") || 30, skipped: n("skipped"),
+                date: (f.createdAt && f.createdAt.timestampValue) || "",
+                source: "remote"
+            };
+        });
+    });
+}
+
+function sendResultToFormspree(rec) {
+    var fd = new FormData();
+    fd.append("_subject", "Examen diagnóstico: " + rec.name + " — Nivel " + rec.level);
+    fd.append("formulario", "Examen diagnóstico de inglés");
+    fd.append("nombre", rec.name);
+    fd.append("email", rec.email || "(no proporcionado)");
+    fd.append("telefono", rec.phone || "(no proporcionado)");
+    fd.append("nivel", rec.level + " — " + rec.levelName);
+    fd.append("aciertos", rec.correct + " / " + rec.total);
+    fd.append("no_seguras", String(rec.skipped));
+    fd.append("desglose", Object.keys(rec.scores).map(function (k) { return k + ": " + rec.scores[k] + "/6"; }).join(", "));
+    fd.append("fecha", rec.date);
+    return fetch(FORMSPREE_URL, { method: "POST", body: fd, headers: { "Accept": "application/json" } });
+}
+
+// ══ ESTADO ══
 let currentQ = 0;
 let scores = { A0: 0, A1: 0, A2: 0, B1: 0, "B2+": 0 };
 let studentName = "";
+let studentEmail = "";
+let studentPhone = "";
 let answered = false;
 let skipped = 0;
 
 const OPTS = ["A", "B", "C", "D"];
 
-// ══ FUNCTIONS ══
+// ══ VALIDACIÓN ══
+function isValidEmail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v); }
+function isValidPhone(v) { return (v.replace(/\D/g, "").length >= 7); }
+
+function showFormError(msg) {
+    var box = document.getElementById("form-error");
+    document.getElementById("form-error-text").textContent = msg;
+    box.classList.add("visible");
+}
+function clearFormError() { document.getElementById("form-error").classList.remove("visible"); }
+
+// ══ FLUJO DEL EXAMEN ══
 function startTest() {
-    studentName = document.getElementById("student-name").value.trim() || "Student";
+    clearFormError();
+    var name  = document.getElementById("student-name").value.trim();
+    var email = document.getElementById("student-email").value.trim();
+    var phone = document.getElementById("student-phone").value.trim();
+
+    if (!name) { showFormError("Escribe tu nombre completo para comenzar."); return; }
+    if (!email && !phone) { showFormError("Déjanos al menos un dato de contacto: tu correo electrónico o tu número de WhatsApp."); return; }
+    if (email && !isValidEmail(email)) { showFormError("El correo no parece válido. Revísalo (ejemplo: tu@correo.com)."); return; }
+    if (phone && !isValidPhone(phone)) { showFormError("El teléfono no parece válido. Incluye al menos 7 dígitos."); return; }
+
+    studentName = name;
+    studentEmail = email;
+    studentPhone = phone;
+
+    currentQ = 0;
+    scores = { A0: 0, A1: 0, A2: 0, B1: 0, "B2+": 0 };
+    skipped = 0;
+
     showScreen("quiz");
     renderQuestion();
 }
@@ -841,6 +842,7 @@ function startTest() {
 function showScreen(id) {
     document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
     document.getElementById("screen-" + id).classList.add("active");
+    window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
 function renderQuestion() {
@@ -849,7 +851,7 @@ function renderQuestion() {
     const total = QUESTIONS.length;
     const pct = (currentQ / total) * 100;
 
-    document.getElementById("q-counter").textContent = "Question " + (currentQ + 1) + " of " + total;
+    document.getElementById("q-counter").textContent = "Pregunta " + (currentQ + 1) + " de " + total;
     document.getElementById("progress-fill").style.width = pct + "%";
 
     const labelEl = document.getElementById("section-label");
@@ -859,7 +861,7 @@ function renderQuestion() {
     labelEl.style.border = "1px solid " + lvl.color + "66";
     labelEl.style.color = lvl.color;
 
-    document.getElementById("q-number").textContent = "QUESTION " + (currentQ + 1);
+    document.getElementById("q-number").textContent = "PREGUNTA " + (currentQ + 1);
     document.getElementById("q-text").textContent = q.text;
 
     const grid = document.getElementById("options-grid");
@@ -873,11 +875,11 @@ function renderQuestion() {
         grid.appendChild(btn);
     });
 
-    // "I'm not sure / I don't know" button — honesty gives a more accurate placement
+    // Botón "No estoy seguro/a" — la honestidad da una ubicación más precisa
     const idkBtn = document.createElement("button");
     idkBtn.className = "option-btn idk-btn";
     idkBtn.id = "opt-idk";
-    idkBtn.innerHTML = "<span class='opt-letter'><i class='fas fa-question'></i></span> I'm not sure / I don't know";
+    idkBtn.innerHTML = "<span class='opt-letter'><i class='fas fa-question'></i></span> No estoy seguro/a · I don't know";
     idkBtn.onclick = () => skipAnswer();
     grid.appendChild(idkBtn);
 
@@ -885,7 +887,7 @@ function renderQuestion() {
     document.getElementById("feedback-bar").innerHTML = "";
     const nextBtn = document.getElementById("btn-next");
     nextBtn.classList.remove("visible");
-    nextBtn.innerHTML = (currentQ === total - 1 ? "See My Results" : "Next Question") + " <i class='fas fa-arrow-right'></i>";
+    nextBtn.innerHTML = (currentQ === total - 1 ? "Ver mi resultado" : "Siguiente pregunta") + " <i class='fas fa-arrow-right'></i>";
 }
 
 function selectAnswer(idx) {
@@ -905,12 +907,12 @@ function selectAnswer(idx) {
         selectedBtn.classList.add("correct");
         scores[q.level]++;
         feedback.className = "feedback-bar correct";
-        feedback.innerHTML = "<i class='fas fa-check-circle'></i> Correct! Well done.";
+        feedback.innerHTML = "<i class='fas fa-check-circle'></i> ¡Correcto! Muy bien.";
     } else {
         selectedBtn.classList.add("wrong");
         correctBtn.classList.add("correct");
         feedback.className = "feedback-bar wrong";
-        feedback.innerHTML = "<i class='fas fa-times-circle'></i> The correct answer was: <strong>" + q.options[correct] + "</strong>";
+        feedback.innerHTML = "<i class='fas fa-times-circle'></i> La respuesta correcta era: <strong>" + q.options[correct] + "</strong>";
     }
 
     document.getElementById("btn-next").classList.add("visible");
@@ -925,7 +927,7 @@ function skipAnswer() {
 
     document.querySelectorAll(".option-btn").forEach(b => b.disabled = true);
 
-    // Does NOT add to the score (honest "not known" — better than a lucky guess)
+    // No suma puntos: un "no lo sé" honesto es mejor que un acierto por suerte
     skipped++;
 
     document.getElementById("opt-" + correct).classList.add("correct");
@@ -933,12 +935,11 @@ function skipAnswer() {
 
     const feedback = document.getElementById("feedback-bar");
     feedback.className = "feedback-bar neutral";
-    feedback.innerHTML = "<i class='fas fa-info-circle'></i> No problem &mdash; being honest helps us place you correctly. The answer was: <strong>" + q.options[correct] + "</strong>";
+    feedback.innerHTML = "<i class='fas fa-info-circle'></i> No hay problema &mdash; ser honesto nos ayuda a ubicarte mejor. La respuesta era: <strong>" + q.options[correct] + "</strong>";
 
     document.getElementById("btn-next").classList.add("visible");
 }
 
-// Fixed function name and flow to correctly update score metrics
 function nextQuestion() {
     currentQ++;
     if (currentQ >= QUESTIONS.length) {
@@ -948,18 +949,20 @@ function nextQuestion() {
     }
 }
 
+function computeLevel() {
+    const levelOrder = ["A0", "A1", "A2", "B1", "B2+"];
+    let placedLevel = "B2+";
+    for (let lv of levelOrder) {
+        if (scores[lv] < 4) { placedLevel = lv; break; }
+    }
+    return placedLevel;
+}
+
 function showResults() {
     showScreen("result");
 
     const levelOrder = ["A0", "A1", "A2", "B1", "B2+"];
-    let placedLevel = "B2+";
-    for (let lv of levelOrder) {
-        if (scores[lv] < 4) {
-            placedLevel = lv;
-            break;
-        }
-    }
-
+    const placedLevel = computeLevel();
     const lvlData = LEVELS[placedLevel];
     const courseData = COURSES[placedLevel];
 
@@ -973,15 +976,22 @@ function showResults() {
 
     document.getElementById("result-name").textContent = studentName;
 
+    var contactBits = [];
+    if (studentEmail) contactBits.push("<i class='fas fa-envelope'></i>" + escapeHtml(studentEmail));
+    if (studentPhone) contactBits.push("<i class='fab fa-whatsapp'></i>" + escapeHtml(studentPhone));
+    document.getElementById("result-contact").innerHTML = contactBits.join(" &nbsp;·&nbsp; ");
+
     const breakdown = document.getElementById("score-breakdown");
     breakdown.innerHTML = "";
+    let totalCorrect = 0;
     levelOrder.forEach(lv => {
         const sc = scores[lv];
+        totalCorrect += sc;
         const c = LEVELS[lv].color;
         const div = document.createElement("div");
         div.className = "score-section";
         div.style.borderColor = c + "44";
-        div.innerHTML = "<div class='sec-name' style='color:" + c + "'>" + lv + "</div><div class='sec-score' style='color:" + c + "'>" + sc + "</div><div class='sec-max'>/ 6 correct</div>";
+        div.innerHTML = "<div class='sec-name' style='color:" + c + "'>" + lv + "</div><div class='sec-score' style='color:" + c + "'>" + sc + "</div><div class='sec-max'>/ 6 aciertos</div>";
         breakdown.appendChild(div);
     });
 
@@ -989,13 +999,49 @@ function showResults() {
     document.getElementById("course-desc").textContent = courseData.desc;
     document.getElementById("next-steps").textContent = courseData.next;
 
-    // Always recommend the oral interview; flag any skipped questions
+    // Siempre recomendar la entrevista oral; señalar preguntas omitidas
     const note = document.getElementById("confirm-note");
-    let noteHtml = "<i class='fas fa-comments'></i> &nbsp;<strong>Next step: Oral Interview.</strong> This grammar test is only a first filter. Your teacher will confirm your real level with a short speaking interview.";
+    let noteHtml = "<i class='fas fa-comments'></i> &nbsp;<strong>Siguiente paso: entrevista oral.</strong> Este examen escrito es solo un primer filtro. Tu profesor confirmará tu nivel real con una breve entrevista hablada.";
     if (skipped > 0) {
-        noteHtml += "<br><br>You pressed <strong>'I'm not sure'</strong> on " + skipped + " question" + (skipped > 1 ? "s" : "") + " &mdash; the oral interview will help confirm where you truly belong.";
+        noteHtml += "<br><br>Marcaste <strong>'No estoy seguro/a'</strong> en " + skipped + " pregunta" + (skipped > 1 ? "s" : "") + " &mdash; la entrevista oral ayudará a confirmar tu nivel exacto.";
     }
     note.innerHTML = noteHtml;
+
+    // ── Guardar en el historial ──
+    const rec = {
+        name: studentName,
+        email: studentEmail,
+        phone: studentPhone,
+        level: placedLevel,
+        levelName: lvlData.name,
+        correct: totalCorrect,
+        total: QUESTIONS.length,
+        skipped: skipped,
+        scores: Object.assign({}, scores),
+        date: new Date().toISOString(),
+        source: "local"
+    };
+
+    const local = loadLocalHistory();
+    local.unshift(rec);
+    saveLocalHistory(local);
+
+    const status = document.getElementById("save-status");
+    status.style.display = "inline-flex";
+    status.className = "save-status local-only";
+    status.innerHTML = "<i class='fas fa-circle-notch fa-spin'></i> Guardando tu resultado…";
+
+    sendResultToFormspree(rec).catch(function () {});
+
+    saveResultToFirestore(rec).then(function () {
+        rec.savedRemote = true;
+        saveLocalHistory(local);
+        status.className = "save-status";
+        status.innerHTML = "<i class='fas fa-cloud-arrow-up'></i> Resultado guardado en el historial general";
+    }).catch(function () {
+        status.className = "save-status local-only";
+        status.innerHTML = "<i class='fas fa-device-mobile'></i> Resultado guardado en el historial de este dispositivo";
+    });
 }
 
 function retakeTest() {
@@ -1003,8 +1049,121 @@ function retakeTest() {
     scores = { A0: 0, A1: 0, A2: 0, B1: 0, "B2+": 0 };
     answered = false;
     skipped = 0;
-    document.getElementById("student-name").value = "";
     showScreen("intro");
+}
+
+// ══ HISTORIAL — vista ══
+let historyCache = null;
+
+function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+        return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+}
+function maskEmail(e) {
+    if (!e) return "";
+    var parts = e.split("@");
+    if (parts.length !== 2) return "•••";
+    var u = parts[0];
+    return (u.length <= 2 ? u.charAt(0) : u.slice(0, 2)) + "•••@" + parts[1];
+}
+function maskPhone(p) {
+    if (!p) return "";
+    var d = p.replace(/\D/g, "");
+    return d.length <= 4 ? "•••" : "••• ••• " + d.slice(-4);
+}
+function formatDate(iso) {
+    if (!iso) return "";
+    try {
+        return new Date(iso).toLocaleString("es-MX", {
+            day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit"
+        });
+    } catch (e) { return iso; }
+}
+
+function openHistory() {
+    showScreen("history");
+    loadHistory(false);
+}
+
+function loadHistory(force) {
+    const loading = document.getElementById("history-loading");
+    const list = document.getElementById("history-list");
+    const noteEl = document.getElementById("history-note");
+
+    if (historyCache && !force) { renderHistory(); return; }
+
+    loading.style.display = "block";
+    list.innerHTML = "";
+    noteEl.textContent = "";
+
+    const local = loadLocalHistory();
+
+    fetchFirestoreHistory().then(function (remote) {
+        // Los registros locales ya subidos a Firestore aparecen en "remote";
+        // solo se añaden los locales que no llegaron a guardarse en la nube.
+        const pendingLocal = local.filter(function (r) { return !r.savedRemote; });
+        historyCache = remote.concat(pendingLocal).sort(function (a, b) {
+            return String(b.date).localeCompare(String(a.date));
+        });
+        noteEl.textContent = "Mostrando el historial general (" + remote.length + " resultado" + (remote.length === 1 ? "" : "s") + " en la nube" +
+            (pendingLocal.length ? " + " + pendingLocal.length + " de este dispositivo" : "") + ").";
+        loading.style.display = "none";
+        renderHistory();
+    }).catch(function () {
+        historyCache = local.slice();
+        noteEl.textContent = "Mostrando solo los resultados guardados en este dispositivo. El historial general en la nube no está disponible en este momento.";
+        loading.style.display = "none";
+        renderHistory();
+    });
+}
+
+function renderHistory() {
+    const list = document.getElementById("history-list");
+    const q = (document.getElementById("history-search").value || "").trim().toLowerCase();
+    const items = (historyCache || []).filter(function (r) {
+        if (!q) return true;
+        return (r.name || "").toLowerCase().indexOf(q) !== -1 ||
+               (r.level || "").toLowerCase().indexOf(q) !== -1;
+    });
+
+    list.innerHTML = "";
+
+    if (!items.length) {
+        list.innerHTML = "<div class='history-empty'><i class='fas fa-inbox'></i>" +
+            (q ? "No hay resultados que coincidan con tu búsqueda."
+               : "Aún no hay resultados en el historial.<br>¡Sé la primera persona en presentar el examen diagnóstico!") +
+            "</div>";
+        return;
+    }
+
+    items.forEach(function (r) {
+        const lvl = LEVELS[r.level] || { color: "#8d99a6", name: r.levelName || "" };
+        const contact = [
+            r.email ? "<i class='fas fa-envelope'></i>" + escapeHtml(maskEmail(r.email)) : "",
+            r.phone ? "<i class='fab fa-whatsapp'></i>" + escapeHtml(maskPhone(r.phone)) : ""
+        ].filter(Boolean).join(" &nbsp; ");
+
+        const div = document.createElement("div");
+        div.className = "history-item";
+        div.innerHTML =
+            "<div class='h-badge' style='border-color:" + lvl.color + ";color:" + lvl.color + ";background:" + lvl.color + "15;'>" + escapeHtml(r.level) + "</div>" +
+            "<div>" +
+                "<div class='h-name'>" + escapeHtml(r.name) + "</div>" +
+                "<div class='h-meta'><i class='fas fa-calendar'></i>" + escapeHtml(formatDate(r.date)) +
+                (contact ? " &nbsp; " + contact : "") + "</div>" +
+            "</div>" +
+            "<div class='h-score'><b style='color:" + lvl.color + ";'>" + r.correct + "<span style='color:rgba(255,255,255,.4);font-size:.8rem;font-weight:600;'>/" + (r.total || 30) + "</span></b>" +
+                "<small>aciertos</small>" +
+                (r.source !== "remote" ? "<span class='h-tag'>este dispositivo</span>" : "") +
+            "</div>";
+        list.appendChild(div);
+    });
+}
+
+// Abrir directamente el historial con book_placement.html#historial
+if (location.hash === "#historial" || location.hash === "#history") {
+    openHistory();
 }
 </script>
 </body>

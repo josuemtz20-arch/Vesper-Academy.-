@@ -83,6 +83,21 @@ section{padding:82px 0;}
 .lvl p{color:rgba(255,255,255,.62);font-size:.82rem;margin:0;}
 .lvl .bar{position:absolute;left:0;bottom:0;height:4px;background:var(--gold);}
 
+/* DIAGNOSTIC EXAM BANNER */
+.diag{background:linear-gradient(135deg,var(--cream),#efe9da);border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+.diag-inner{display:grid;grid-template-columns:1.2fr 1fr;gap:46px;align-items:center;}
+.diag-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(45,122,79,.1);border:1px solid rgba(45,122,79,.35);color:#2d7a4f;font-size:.7rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:6px 14px;border-radius:20px;margin-bottom:14px;}
+.diag-cta{display:flex;gap:14px;flex-wrap:wrap;margin-top:26px;}
+.btn-navy-ghost{background:transparent;color:var(--navy);border:1.5px solid rgba(20,28,42,.35);}
+.btn-navy-ghost:hover{border-color:var(--gold2);color:var(--gold2);}
+.diag-card{background:var(--navy);border-radius:18px;padding:30px 28px;color:#fff;box-shadow:0 22px 50px rgba(20,28,42,.25);}
+.diag-card h4{margin:0 0 16px;font-family:'Inria Serif',serif;font-size:1.1rem;color:var(--gold-lt);}
+.diag-card ul{list-style:none;padding:0;margin:0;}
+.diag-card li{display:flex;gap:11px;align-items:flex-start;font-size:.88rem;color:rgba(255,255,255,.8);padding:9px 0;border-bottom:1px dashed rgba(255,255,255,.14);}
+.diag-card li:last-child{border-bottom:none;}
+.diag-card li i{color:var(--gold);margin-top:3px;}
+@media(max-width:860px){.diag-inner{grid-template-columns:1fr;gap:30px;}}
+
 /* COURSES */
 .cgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:22px;margin-top:46px;}
 .course{border:1px solid var(--border);border-radius:16px;overflow:hidden;background:#fff;transition:transform .2s,box-shadow .2s;display:flex;flex-direction:column;}
@@ -185,6 +200,7 @@ footer{background:var(--navy3);color:rgba(255,255,255,.6);padding:54px 0 30px;}
         <a href="#cursos">Cursos</a>
         <a href="#certificacion">Certificación</a>
         <a href="#precios">Precios</a>
+        <a href="book_placement.html">Examen de nivel</a>
         <a href="materiales.html">Alumnos</a>
         <a href="#contacto" class="btn btn-gold" style="padding:9px 20px;">Clase de prueba</a>
       </div>
@@ -202,7 +218,7 @@ footer{background:var(--navy3);color:rgba(255,255,255,.6);padding:54px 0 30px;}
       <p>Desde el primer "hello" hasta tu certificación internacional. Método comunicativo, profesores reales y un plan que se adapta a tu nivel y a tu meta profesional.</p>
       <div class="hero-cta">
         <a href="#contacto" class="btn btn-gold"><i class="fas fa-graduation-cap"></i> Reserva tu clase de prueba</a>
-        <a href="#ruta" class="btn btn-ghost">Ver los niveles</a>
+        <a href="book_placement.html" class="btn btn-ghost"><i class="fas fa-clipboard-check"></i> Examen de nivel gratis</a>
       </div>
       <div class="hero-stats">
         <div><b>A0–C2</b><small>Todos los niveles</small></div>
@@ -278,6 +294,32 @@ footer{background:var(--navy3);color:rgba(255,255,255,.6);padding:54px 0 30px;}
       <div class="lvl"><div class="cefr">B1</div><h4>Independencia</h4><p>Opinar, narrar y manejar situaciones imprevistas.</p><div class="bar" style="width:52%"></div></div>
       <div class="lvl"><div class="cefr">B2</div><h4>Fluidez</h4><p>Debate, negociación y entornos corporativos globales.</p><div class="bar" style="width:72%"></div></div>
       <div class="lvl"><div class="cefr">C1–C2</div><h4>Dominio</h4><p>Matiz, retórica y certificación internacional.</p><div class="bar" style="width:100%"></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- EXAMEN DIAGNÓSTICO -->
+<section id="examen" class="diag">
+  <div class="container">
+    <div class="diag-inner">
+      <div>
+        <span class="diag-badge"><i class="fas fa-gift"></i> Gratis · Sin registro</span>
+        <h2 class="sec-title">¿No sabes tu nivel de inglés?<br>Descúbrelo en 15 minutos.</h2>
+        <p class="sec-lead">Nuestro examen diagnóstico te ubica del nivel A0 al B2+ con 30 preguntas y te dice exactamente con qué curso empezar. Abierto a cualquier persona interesada: solo deja tu correo o WhatsApp y recibe tu resultado al instante.</p>
+        <div class="diag-cta">
+          <a href="book_placement.html" class="btn btn-gold"><i class="fas fa-clipboard-check"></i> Hacer el examen ahora</a>
+          <a href="book_placement.html#historial" class="btn btn-navy-ghost"><i class="fas fa-clock-rotate-left"></i> Ver historial de resultados</a>
+        </div>
+      </div>
+      <div class="diag-card">
+        <h4><i class="fas fa-circle-info"></i> Cómo funciona</h4>
+        <ul>
+          <li><i class="fas fa-pen"></i> 30 preguntas de opción múltiple, de A0 a B2+.</li>
+          <li><i class="fas fa-bolt"></i> Resultado inmediato con tu nivel MCER y curso recomendado.</li>
+          <li><i class="fas fa-cloud-arrow-up"></i> Tu resultado se guarda en el historial para tu profesor.</li>
+          <li><i class="fas fa-comments"></i> Después, una breve entrevista oral confirma tu nivel real.</li>
+        </ul>
+      </div>
     </div>
   </div>
 </section>
@@ -447,7 +489,7 @@ footer{background:var(--navy3);color:rgba(255,255,255,.6);padding:54px 0 30px;}
       <div><h5>Programas</h5>
         <a href="#cursos">Inglés General</a><a href="#cursos">Corporativo</a><a href="#cursos">Conversación</a><a href="#certificacion">Certificación</a></div>
       <div><h5>Academia</h5>
-        <a href="#metodo">Metodología</a><a href="#ruta">Niveles</a><a href="#precios">Precios</a><a href="#faq">Preguntas</a></div>
+        <a href="#metodo">Metodología</a><a href="#ruta">Niveles</a><a href="book_placement.html">Examen de nivel</a><a href="#precios">Precios</a><a href="#faq">Preguntas</a></div>
       <div><h5>Contacto</h5>
         <a href="#contacto">Clase de prueba</a><a href="mailto:vesper.academy999@gmail.com">vesper.academy999@gmail.com</a><a href="materiales.html">Portal del alumno</a><a href="portal_profesores.html">Profesores</a></div>
     </div>
