@@ -494,7 +494,7 @@
 
         <div class="form-card">
             <h3><i class="fas fa-id-card"></i> Tus datos para empezar</h3>
-            <p class="form-hint">Déjanos tu <strong style="color:#fff;">correo o tu WhatsApp</strong> (al menos uno) para guardar tu resultado en el historial y que un asesor pueda contactarte con tu plan recomendado.</p>
+            <p class="form-hint">Déjanos tu <strong style="color:#fff;">correo o tu WhatsApp</strong> (al menos uno). Guardaremos tu resultado en el historial, <strong style="color:#fff;">te enviaremos una copia por correo</strong> y un asesor podrá contactarte con tu plan recomendado.</p>
 
             <div class="field">
                 <label for="student-name">Nombre completo *</label>
@@ -572,11 +572,11 @@
 
         <div class="share-box">
             <i class="fas fa-share-alt"></i>
-            <p>Tu resultado quedó guardado en el historial. También puedes tomar una captura de pantalla o imprimirlo y <strong>compartirlo con tu profesor</strong> antes de tu primera clase.</p>
+            <p>Tu resultado quedó guardado en el historial y, si dejaste tu correo, <strong>te enviamos una copia por email</strong>. También puedes tomar una captura de pantalla o imprimirlo y <strong>compartirlo con tu profesor</strong> antes de tu primera clase.</p>
         </div>
 
         <div class="result-actions">
-            <a class="btn-solid" href="index.html#contacto"><i class="fas fa-calendar-check"></i> Reservar mi clase de prueba</a>
+            <a class="btn-solid" href="index.html#contacto"><i class="fas fa-comments"></i> Hablar con un asesor</a>
             <button class="btn-outline" onclick="window.print()"><i class="fas fa-print"></i> Imprimir</button>
             <button class="btn-outline" onclick="openHistory()"><i class="fas fa-clock-rotate-left"></i> Ver historial</button>
             <button class="btn-outline" onclick="retakeTest()"><i class="fas fa-redo"></i> Repetir examen</button>
@@ -694,9 +694,11 @@ const COURSES = {
 // 2) Se intenta guardar en Firestore (colección "placement_results") para que
 //    el historial sea visible desde cualquier dispositivo. Requiere reglas de
 //    Firestore que permitan create/read en esa colección; si no, se ignora.
-// 3) Se envía una copia por Formspree para que la academia reciba cada prospecto.
+// 3) Se notifica por correo a la academia (contacto@vesperacademy.com) vía
+//    FormSubmit y, si el alumno dejó su correo, se le envía una copia
+//    automática de su resultado (_autoresponse).
 const LS_KEY = "vesper_placement_history_v1";
-const FORMSPREE_URL = "https://formspree.io/f/mdavlzzo";
+const NOTIFY_URL = "https://formsubmit.co/ajax/contacto@vesperacademy.com";
 const FS_COLLECTION = "placement_results";
 
 function fsBase() {
@@ -778,19 +780,33 @@ function fetchFirestoreHistory() {
     });
 }
 
-function sendResultToFormspree(rec) {
+// Notifica a la academia y envía al alumno (si dejó correo) una copia
+// automática de su resultado.
+function sendResultEmails(rec) {
+    var course = COURSES[rec.level] || { title: "" };
     var fd = new FormData();
     fd.append("_subject", "Examen diagnóstico: " + rec.name + " — Nivel " + rec.level);
+    fd.append("_template", "table");
+    fd.append("_captcha", "false");
+    if (rec.email) {
+        fd.append("email", rec.email);
+        fd.append("_autoresponse",
+            "¡Hola, " + rec.name + "! Gracias por presentar el examen diagnóstico de Vesper Academy.\n\n" +
+            "Tu resultado: Nivel " + rec.level + " (" + rec.levelName + ") con " + rec.correct + " de " + rec.total + " aciertos.\n" +
+            "Curso recomendado: " + course.title + ".\n\n" +
+            "Siguiente paso: un asesor te contactará para agendar una breve entrevista oral gratuita que confirme tu nivel y resolver tus dudas.\n\n" +
+            "Vesper Academy · contacto@vesperacademy.com · https://vesperacademy.com");
+    }
     fd.append("formulario", "Examen diagnóstico de inglés");
     fd.append("nombre", rec.name);
-    fd.append("email", rec.email || "(no proporcionado)");
+    fd.append("correo", rec.email || "(no proporcionado)");
     fd.append("telefono", rec.phone || "(no proporcionado)");
     fd.append("nivel", rec.level + " — " + rec.levelName);
     fd.append("aciertos", rec.correct + " / " + rec.total);
     fd.append("no_seguras", String(rec.skipped));
     fd.append("desglose", Object.keys(rec.scores).map(function (k) { return k + ": " + rec.scores[k] + "/6"; }).join(", "));
     fd.append("fecha", rec.date);
-    return fetch(FORMSPREE_URL, { method: "POST", body: fd, headers: { "Accept": "application/json" } });
+    return fetch(NOTIFY_URL, { method: "POST", body: fd, headers: { "Accept": "application/json" } });
 }
 
 // ══ ESTADO ══
@@ -1031,7 +1047,7 @@ function showResults() {
     status.className = "save-status local-only";
     status.innerHTML = "<i class='fas fa-circle-notch fa-spin'></i> Guardando tu resultado…";
 
-    sendResultToFormspree(rec).catch(function () {});
+    sendResultEmails(rec).catch(function () {});
 
     saveResultToFirestore(rec).then(function () {
         rec.savedRemote = true;
