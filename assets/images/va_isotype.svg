@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Vesper Academy — isotipo VA">
+  <title>Vesper Academy — isotipo VA (reloj de arena)</title>
+  <!--
+    Isotipo VA de Vesper Academy.
+    La "V" es el triangulo superior del reloj de arena (apunta hacia abajo);
+    la "A" es el triangulo inferior (apunta hacia arriba). Comparten la cintura
+    del reloj y van rematadas por las tapas superior e inferior.
+    El trazo usa currentColor (hereda el color del contexto) para servir
+    tanto sobre cream como sobre navy. La arena va siempre en oro.
+  -->
+  <g fill="none" stroke="currentColor" stroke-width="22" stroke-linecap="round" stroke-linejoin="round" color="#141c2a">
+    <!-- Tapa superior -->
+    <line x1="166" y1="150" x2="346" y2="150"/>
+    <!-- Tapa inferior -->
+    <line x1="166" y1="362" x2="346" y2="362"/>
+
+    <!-- V: triangulo superior (apunta hacia abajo) -->
+    <path d="M182 166 L256 256 L330 166"/>
+
+    <!-- A: triangulo inferior (apunta hacia arriba) -->
+    <path d="M256 256 L184 346 L328 346 Z"/>
+    <!-- Travesano de la A -->
+    <line x1="219" y1="318" x2="293" y2="318"/>
+  </g>
+
+  <!-- Arena: hilo central que cae a la camara inferior -->
+  <g fill="#c5a059">
+    <circle cx="256" cy="286" r="6.5"/>
+    <circle cx="256" cy="305" r="4"/>
+  </g>
+</svg>

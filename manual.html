@@ -1,0 +1,195 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+<script src="vesper_auth.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Manual del profesor | Vesper Academy</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="assets/images/vesper_logo.png" type="image/png">
+<style>
+/* Pantalla de carga / error — el manual real sustituye al documento al cargar */
+:root{--navy:#141c2a;--navy2:#243654;--gold:#c5a059;--cream:#f5f2eb;--err:#b03a3a;}
+html,body{height:100%;}
+body{margin:0;font-family:'Segoe UI',Arial,sans-serif;display:flex;align-items:center;justify-content:center;
+  background:var(--navy);background-image:radial-gradient(ellipse at 30% 20%,#243654 0%,#10243e 70%);padding:20px;}
+.card{background:var(--cream);width:100%;max-width:430px;border-radius:14px;overflow:hidden;
+  box-shadow:0 18px 50px rgba(0,0,0,.45);text-align:center;}
+.card .head{background:var(--navy);color:var(--cream);padding:24px 30px 18px;border-bottom:4px solid var(--gold);}
+.card .head h1{font-family:Georgia,serif;font-size:20px;letter-spacing:1.5px;font-weight:normal;margin:0;}
+.card .head h1 b{color:#e3c35f;}
+.card .head p{font-size:11.5px;opacity:.8;margin:6px 0 0;letter-spacing:1px;text-transform:uppercase;}
+.card .body{padding:28px 30px 30px;color:#3a3325;font-size:14.5px;line-height:1.6;}
+.spinner{width:34px;height:34px;border:3px solid #d4c9ae;border-top-color:var(--gold);border-radius:50%;
+  margin:0 auto 16px;animation:spin .9s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.err{color:var(--err);font-weight:600;}
+.muted{color:#8d8270;font-size:12.5px;margin-top:14px;}
+.body a.btn{display:inline-block;margin-top:18px;padding:11px 22px;background:var(--navy);color:var(--cream);
+  border-radius:7px;text-decoration:none;font-size:14px;letter-spacing:.5px;}
+.body a.btn:hover{background:var(--navy2);}
+.body a.plain{color:#6b5d3f;font-size:13px;display:inline-block;margin-top:12px;}
+</style>
+</head>
+<body>
+
+<div class="card">
+  <div class="head">
+    <h1>VESPER <b>ACADEMY</b></h1>
+    <p>Manual del profesor</p>
+  </div>
+  <div class="body" id="status">
+    <div class="spinner"></div>
+    <div id="status-msg">Cargando manual&hellip;</div>
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var statusEl = document.getElementById("status");
+  var msgEl = document.getElementById("status-msg");
+
+  function fail(html) {
+    statusEl.innerHTML = html +
+      '<a class="plain" href="portal_profesores.html">&larr; Volver al portal del profesor</a>';
+  }
+  function note(text) { msgEl.textContent = text; }
+
+  /* ── 1. Validar el id pedido ── */
+  var id = new URLSearchParams(location.search).get("id") || "";
+  if (!/^[a-z0-9_]{1,60}$/.test(id)) {
+    fail('<div class="err">Manual no especificado.</div>' +
+         '<div class="muted">Abre un manual desde el portal del profesor.</div>');
+    return;
+  }
+
+  if (!window.VesperAuth) {
+    fail('<div class="err">No se pudo cargar el control de acceso.</div>' +
+         '<div class="muted">Recarga la p&aacute;gina.</div>');
+    return;
+  }
+
+  /* Base de Firestore donde viven los manuales (debe coincidir con
+     DB_ID en _scripts/upload_manuals.py) */
+  var DB_ID = "teachermanuals";
+
+  /* ── 2. Sesión de Firebase (el candado de vesper_auth.js ya redirige
+         en el sitio publicado; esto cubre ademas localhost/file://) ── */
+  VesperAuth.initFirebase().then(function (auth) {
+    var settled = false;
+    auth.onAuthStateChanged(function (user) {
+      if (settled) return;
+      settled = true;
+
+      var next = encodeURIComponent("manual.html" + location.search);
+      if (!user) {
+        fail('<div class="err">Necesitas iniciar sesi&oacute;n.</div>' +
+             '<a class="btn" href="login.html?next=' + next + '">Iniciar sesi&oacute;n</a>');
+        return;
+      }
+      if (!user.emailVerified) {
+        fail('<div class="err">Tu correo a&uacute;n no est&aacute; verificado.</div>' +
+             '<div class="muted">Busca el correo de verificaci&oacute;n y vuelve a entrar.</div>' +
+             '<a class="btn" href="login.html?verify=1&next=' + next + '">Ir al acceso</a>');
+        return;
+      }
+
+      note("Descargando manual…");
+      fetchManual(user);
+    });
+  }).catch(function () {
+    fail('<div class="err">Sin conexi&oacute;n con el servicio de acceso.</div>' +
+         '<div class="muted">Revisa tu conexi&oacute;n e int&eacute;ntalo de nuevo.</div>');
+  });
+
+  /* ── 3. Descargar el manual desde Firestore vía REST (las reglas del
+         servidor solo lo permiten a profesores autorizados). Se usa REST
+         y no el SDK porque la base tiene id propio ("teachermanuals"). ── */
+  function fetchManual(user) {
+    var base = "https://firestore.googleapis.com/v1/projects/" +
+               VesperAuth.config.firebase.projectId + "/databases/" + DB_ID +
+               "/documents/manuals/" + id;
+
+    user.getIdToken().then(function (token) {
+      function getDoc(url) {
+        return fetch(url, { headers: { "Authorization": "Bearer " + token } })
+          .then(function (r) {
+            return r.json().then(function (j) { return { status: r.status, body: j }; });
+          });
+      }
+
+      getDoc(base).then(function (meta) {
+        if (meta.status === 403) {
+          fail('<div class="err">Tu cuenta no tiene acceso de profesor.</div>' +
+               '<div class="muted">Sesi&oacute;n: ' + (user.email || "") +
+               '<br>Pide al administrador que autorice tu correo como profesor.</div>');
+          return;
+        }
+        if (meta.status === 404) {
+          fail('<div class="err">Este manual a&uacute;n no est&aacute; disponible en l&iacute;nea.</div>' +
+               '<div class="muted">El administrador todav&iacute;a no lo ha subido al servidor.</div>');
+          return;
+        }
+        if (meta.status !== 200) {
+          fail('<div class="err">No se pudo cargar el manual (HTTP ' + meta.status + ').</div>' +
+               '<div class="muted">Int&eacute;ntalo de nuevo en unos minutos.</div>');
+          return;
+        }
+
+        var f = meta.body.fields || {};
+        var count = parseInt((f.chunkCount || {}).integerValue || "1", 10);
+        note("Abriendo: " + ((f.title || {}).stringValue || id));
+
+        var jobs = [];
+        for (var i = 0; i < count; i++) { jobs.push(getDoc(base + "/chunks/" + i)); }
+        Promise.all(jobs).then(function (parts) {
+          var html = parts.map(function (p) {
+            return (p.status === 200 && ((p.body.fields || {}).html || {}).stringValue) || "";
+          }).join("");
+          if (html.length < 100) {
+            fail('<div class="err">El manual se descarg&oacute; incompleto.</div>' +
+                 '<div class="muted">Avisa al administrador para que lo vuelva a subir.</div>');
+            return;
+          }
+          render(html);
+        });
+      }).catch(function () {
+        fail('<div class="err">No hay conexi&oacute;n con el servidor de manuales.</div>' +
+             '<div class="muted">Revisa tu conexi&oacute;n e int&eacute;ntalo de nuevo.</div>');
+      });
+    }).catch(function () {
+      fail('<div class="err">No se pudo validar tu sesi&oacute;n.</div>' +
+           '<div class="muted">Cierra sesi&oacute;n y vuelve a entrar.</div>');
+    });
+  }
+
+  /* ── 4. Renderizar: el manual sustituye a esta página por completo,
+         así su CSS de impresión y sus scripts funcionan tal cual ── */
+  function render(html) {
+    /* el candado ya se pasó aquí: quita su <script> del documento del manual */
+    html = html.replace(/<script[^>]*src=["']vesper_auth\.js["'][^>]*>\s*<\/script>/gi, "");
+
+    /* botón flotante para volver al portal */
+    var chip =
+      '<a href="portal_profesores.html" style="position:fixed;bottom:14px;left:14px;z-index:99999;' +
+      'background:#10243e;color:#f5efe2;font:12px/1 sans-serif;padding:9px 14px;border-radius:20px;' +
+      'opacity:.88;box-shadow:0 2px 8px rgba(0,0,0,.3);text-decoration:none;" ' +
+      'onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=.88" class="no-print">' +
+      '&larr; Portal del profesor</a>' +
+      '<style>@media print{a.no-print{display:none!important}}</style>';
+    if (/<\/body>/i.test(html)) {
+      html = html.replace(/<\/body>(?![\s\S]*<\/body>)/i, chip + "</body>");
+    } else {
+      html += chip;
+    }
+
+    document.open();
+    document.write(html);
+    document.close();
+  }
+})();
+</script>
+</body>
+</html>

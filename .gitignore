@@ -1,0 +1,68 @@
+# ============================================================
+# Vesper Academy — PUBLIC repo whitelist
+# Default: EVERYTHING at the root is ignored (private/local).
+# Only the explicitly un-ignored files below are published.
+# Teacher manuals, answer keys, generators (*.py), data banks,
+# admin tools, _scripts/ and _archive/ stay local-only.
+# ============================================================
+/*
+
+# repo plumbing
+!/.gitignore
+!/.nojekyll
+!/CNAME
+
+# public site + auth gate (must stay at root)
+# (vesper_web/landing/promo stay local: index.html is the one canonical landing)
+!/index.html
+!/login.html
+!/access_admin.html
+!/vesper_auth.js
+
+# student portal + tools
+# (exam.html + vesper_exam_data.js stay local: the data file carries answer keys)
+!/materiales.html
+!/book_placement.html
+!/audio_library.html
+!/lesson.html
+
+# teacher portal (index ONLY — password-gated).
+# The teacher manuals stay local-only and are never published: the portal
+# opens them via manual.html, which downloads them from Firestore where
+# server-side rules only allow approved teacher accounts to read.
+!/portal_profesores.html
+!/manual.html
+
+# student book viewer: downloads the books from Firestore, where
+# server-side rules only allow approved student/teacher accounts to read.
+!/libro.html
+
+# Vesper Engine v2.0 — personalized course prompt builder (teacher-gated).
+# The syllabus data comes from the already-public student books.
+!/vesper_engine.html
+!/vesper_engine_data.js
+
+# Vesper Engine PWA (installable app): manifest + service worker.
+# App icons live under assets/images/ (already whitelisted below).
+!/manifest.webmanifest
+!/sw.js
+
+# lesson data consumed by the public pages
+!/vesper_audio_data.js
+!/vesper_reading_data.js
+!/vesper_basics_audio_data.js
+!/vesper_basics_lesson_data.js
+!/vesper_custom_transcripts.js
+
+# student books are NOT published anymore: they live in Firestore
+# (collection "studentbooks") and are served via libro.html to
+# approved accounts only. Source files stay local-only on disk;
+# re-upload after editing: python _scripts/upload_manuals.py upload-books
+
+# css / images / audio used by all public pages
+!/assets/
+
+# never publish these even if they appear inside whitelisted dirs
+__pycache__/
+*.pyc
+*.lnk

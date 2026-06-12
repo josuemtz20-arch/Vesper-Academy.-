@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vesper Academy | Administrar accesos</title>
+<script src="vesper_auth.js"></script>
+<style>
+  :root { --navy:#10243e; --gold:#c9a227; --gold2:#e3c35f; --cream:#f7f3ea; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:Arial,sans-serif; background:var(--cream); min-height:100vh; padding:40px 20px; }
+  .wrap { max-width:680px; margin:0 auto; }
+  h1 { font-family:Georgia,serif; color:var(--navy); font-size:26px; border-bottom:3px solid var(--gold); padding-bottom:10px; }
+  h2 { color:var(--navy); font-size:16px; margin:28px 0 8px; }
+  p, li { font-size:14px; line-height:1.65; color:#4a4334; }
+  ol { padding-left:22px; }
+  code { background:#ece5d4; padding:2px 6px; border-radius:4px; font-size:13px; }
+  .tool { background:#fff; border:1px solid #d4c9ae; border-radius:10px; padding:22px; margin-top:14px; }
+  input { width:100%; padding:11px 12px; font-size:15px; border:1px solid #d4c9ae; border-radius:7px; }
+  button { margin-top:12px; padding:11px 22px; font-size:14px; background:var(--navy); color:var(--cream);
+           border:none; border-radius:7px; cursor:pointer; }
+  button:hover { opacity:.9; }
+  .out { margin-top:14px; display:none; }
+  .out.show { display:block; }
+  .hash { font-family:Consolas,monospace; font-size:13px; background:#10243e; color:#e3c35f;
+          padding:12px; border-radius:7px; word-break:break-all; }
+  .copied { color:#2e7d4f; font-size:13px; margin-left:10px; display:none; }
+  .note { background:#eee8d8; border:1px solid #ddd0ad; border-radius:8px; padding:12px 14px; font-size:13px; margin-top:18px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Administrar accesos — Vesper Academy</h1>
+  <p style="margin-top:10px">Esta página es la herramienta del <b>desarrollador/administrador</b> para autorizar cuentas.
+     Por sí sola no concede nada: el acceso solo cambia cuando el código generado se añade al
+     archivo <code>vesper_auth.js</code> del sitio.</p>
+
+  <h2>Autorizar a una persona</h2>
+  <div class="tool">
+    <label for="email" style="font-size:13px;color:#6b6151">Correo de la persona (el mismo con el que se registró)</label>
+    <input type="email" id="email" placeholder="alumno@ejemplo.com" style="margin-top:6px">
+    <button id="go">Generar código de aprobación</button>
+    <div class="out" id="out">
+      <div class="hash" id="hash"></div>
+      <button id="copy" style="background:#2e7d4f">Copiar</button><span class="copied" id="copied">¡Copiado!</span>
+    </div>
+  </div>
+
+  <h2>Cómo activar el acceso</h2>
+  <ol>
+    <li>Genera el código de aprobación del correo (arriba).</li>
+    <li>Abre <code>vesper_auth.js</code> y pega el código (entre comillas y con coma) dentro de la lista
+        <code>approvedEmailHashes</code> — o simplemente pídeselo a Claude: <i>«aprueba el acceso de alumno@ejemplo.com»</i>.</li>
+    <li>Sube el cambio (<code>git push</code>). En 1-2 minutos esa persona ya podrá entrar.</li>
+    <li>Para <b>revocar</b> un acceso, borra su línea de la lista y vuelve a subir.</li>
+  </ol>
+
+  <h2>Añadir / editar maestro en el portal</h2>
+  <p>El <a href="portal_profesores.html">Portal del Profesor</a> exige <b>correo + contraseña individual</b>.
+     Cada maestro tiene su propia contraseña. Genera aquí la línea que debes pegar en el objeto
+     <code>teachers</code> de <code>vesper_auth.js</code>:</p>
+  <div class="tool">
+    <label for="temail" style="font-size:13px;color:#6b6151">Correo del maestro</label>
+    <input type="email" id="temail" placeholder="maestro@ejemplo.com" style="margin-top:6px">
+    <label for="tpass" style="font-size:13px;color:#6b6151;display:block;margin-top:12px">Contraseña del maestro</label>
+    <input type="text" id="tpass" placeholder="contraseña individual" style="margin-top:6px">
+    <button id="tgo">Generar línea para vesper_auth.js</button>
+    <div class="out" id="tout">
+      <div class="hash" id="thash"></div>
+      <button id="tcopy" style="background:#2e7d4f">Copiar</button><span class="copied" id="tcopied">¡Copiado!</span>
+    </div>
+  </div>
+  <ol>
+    <li>Escribe el correo y la contraseña del maestro y genera la línea.</li>
+    <li>Abre <code>vesper_auth.js</code> y pega la línea dentro del objeto <code>teachers</code>.</li>
+    <li>Sube el cambio (<code>git push</code>). El maestro ya podrá entrar con ese correo y contraseña.</li>
+    <li>Para <b>cambiar la contraseña</b> de un maestro: genera una línea nueva con su correo y la nueva contraseña, y reemplaza la línea antigua.</li>
+    <li>Para <b>revocar</b> a un maestro: borra su línea del objeto <code>teachers</code> y sube el cambio.</li>
+  </ol>
+
+  <div class="note">
+    <b>Privacidad:</b> en el sitio solo se publica el código (hash SHA-256), nunca el correo.
+    Nadie puede deducir el correo a partir del código.
+  </div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+  var out = document.getElementById("out"), hashEl = document.getElementById("hash");
+  document.getElementById("go").onclick = function () {
+    var email = document.getElementById("email").value.trim();
+    if (!email || email.indexOf("@") === -1) { alert("Escribe un correo válido."); return; }
+    VesperAuth.emailHash(email).then(function (h) {
+      hashEl.textContent = '"' + h + '",';
+      out.classList.add("show");
+      document.getElementById("copied").style.display = "none";
+    });
+  };
+  document.getElementById("copy").onclick = function () {
+    navigator.clipboard.writeText(hashEl.textContent).then(function () {
+      document.getElementById("copied").style.display = "inline";
+    });
+  };
+
+  var tout = document.getElementById("tout"), thashEl = document.getElementById("thash");
+  document.getElementById("tgo").onclick = function () {
+    var email = document.getElementById("temail").value.trim();
+    var pw = document.getElementById("tpass").value;
+    if (!email || email.indexOf("@") === -1) { alert("Escribe un correo válido."); return; }
+    if (!pw) { alert("Escribe una contraseña."); return; }
+    Promise.all([
+      VesperAuth.emailHash(email),
+      VesperAuth.teacherHash(pw)
+    ]).then(function (r) {
+      thashEl.textContent = '"' + r[0] + '": "' + r[1] + '"  /* ' + email + ' */';
+      tout.classList.add("show");
+      document.getElementById("tcopied").style.display = "none";
+    });
+  };
+  document.getElementById("tcopy").onclick = function () {
+    navigator.clipboard.writeText(thashEl.textContent).then(function () {
+      document.getElementById("tcopied").style.display = "inline";
+    });
+  };
+})();
+</script>
+</body>
+</html>

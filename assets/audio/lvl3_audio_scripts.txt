@@ -1,0 +1,63 @@
+# Vesper Academy - Core Basics Level 3 - Audio Scripts
+# All 20 listening dialogues for ElevenLabs TTS generation
+
+=== LESSON 1: Present Continuous ===
+A: What are you doing? B: I am making dinner. A: Why are you cooking at this hour? You never cook! B: Because today is our anniversary! A: Oh! I forgot! What are you making? B: Spaghetti. I think... wait... it is burning!
+
+=== LESSON 2: Present Simple vs Continuous ===
+A: Hi! Are you busy? B: Yes, very. I am working on a big project right now. A: Do you usually work on Saturdays? B: No, never! But today is an exception. My boss is visiting tomorrow. A: Oh no. Good luck! B: Thanks. I am drinking coffee to survive. Send help!
+
+=== LESSON 3: Present Perfect (Experiences) ===
+A: Welcome to the Travel Channel! Have you ever visited South America? B: Yes, I have been to Colombia, Peru, and Brazil. A: Have you ever tried the local food? B: Oh yes! I have eaten guinea pig in Peru. A: Really? Have you ever felt sick from the food? B: Once, yes. But I have also eaten the most amazing ceviche of my life there!
+
+=== LESSON 4: Past Simple Review (Storytelling) ===
+A: How was your weekend? B: It was a disaster! First, I went to the beach. Then, I realized I forgot my wallet at home. Suddenly, it started to rain heavily! A: Oh no! B: Luckily, a nice couple let me sit under their umbrella. After that, we had coffee together. A: That is actually nice! B: Yes! Finally, it was a good day. But I never found my wallet.
+
+=== LESSON 5: Going to (Future Plans) ===
+A: What are you going to do this summer? B: I am going to visit my grandmother in the countryside. A: How long are you going to stay? B: Two weeks. I am also going to try to learn how to cook her recipes. A: That sounds wonderful! Are you going to take photos? B: Of course! I am going to document everything. A: I am going to miss you! B: Do not worry, I am going to call you every day!
+
+=== LESSON 6: Comparatives ===
+A: I am thinking of buying a new car. B: What kind are you thinking? A: I want something bigger than my current one. B: What about this one? It is larger and more comfortable than yours. A: But is it cheaper? B: It is actually more expensive, but it is much safer and more fuel-efficient. A: But my current car is faster! B: Is being fast more important than being safe? A: You are right. I will take the new one.
+
+=== LESSON 7: Superlatives ===
+A: What is the best place you have ever visited? B: Definitely Kyoto, Japan. It is the most beautiful city I have ever seen. A: What makes it so special? B: It has the oldest temples in Japan. The food is the best I have ever tried. And it is the most peaceful place I have been to. A: What is the worst thing about it? B: The most difficult part is getting lost because the streets are so small!
+
+=== LESSON 8: Asking for Information (WH Questions) ===
+A: Welcome! I am going to ask you a few questions. Where are you from originally? B: I am from a small town in the south. A: How long have you lived in the city? B: About seven years now. A: What do you do for work? B: I am a graphic designer. A: How many hours do you work per day? B: Usually eight, but sometimes more. A: Why did you choose that career? B: Because I love creating things.
+
+=== LESSON 9: Modal Verbs (Should / Must / Have to) ===
+A: I have a big job interview tomorrow. What should I do? B: First, you should research the company. You must know their main products. A: Should I wear a suit? B: You dont have to, but you should dress professionally. Do not wear shorts! A: Should I bring my portfolio? B: You must bring it! A: What about arriving early? B: You should arrive 10 minutes early. You mustnt be late. A: Thanks! I must remember all of this!
+
+=== LESSON 10: Zero and First Conditionals ===
+A: I am worried about the presentation tomorrow. B: If you prepare well tonight, you will feel confident. A: But what if I forget everything? B: If that happens, just take a deep breath. If you stay calm, the words will come back to you. A: What if the audience asks difficult questions? B: If you do not know the answer, just say you will find out. Honesty is best. A: You know what? If I pass this presentation, I will buy you dinner! B: Deal! And if you fail, you still buy me dinner!
+
+=== LESSON 11: Second Conditional (Hypothetical) ===
+A: If you could have any superpower, what would it be? B: If I could choose, I would pick the ability to fly. A: Why would you choose flying? B: If I could fly, I would never use a car again. I would go everywhere! A: If you had that power, would you tell anyone? B: No! If I told people, my life would become crazy. I would hide it. A: Smart! If I were you, I would use it to avoid traffic.
+
+=== LESSON 12: Passive Voice (Introduction) ===
+A: Have you heard the news? B: No, what happened? A: The bank downtown was robbed this morning! B: No way! Was anyone hurt? A: Luckily, no one was injured. Two suspects were caught near the train station. B: Were they arrested? A: Yes, they were taken to the police station. The money was found in their car. B: Incredible! Has the bank been reopened? A: Yes, it was reopened at noon.
+
+=== LESSON 13: Reported Speech (Introduction) ===
+A: Did you talk to Maria today? B: Yes! She told me she was not coming to the party tomorrow. A: Really? What did she say exactly? B: She said she had too much work. She also mentioned that her boss had asked her to stay late. A: Oh no. Did she say anything else? B: Yes. She told me she would call us later. She asked whether we could record some videos for her. A: Of course! She also asked me to save her some food. B: Ha! She said she was on a diet but she still wanted cake.
+
+=== LESSON 14: Relative Clauses ===
+A: I am looking for the cafe that serves the best coffee in the city. B: Oh! I know the one you mean. It is the cafe which is on the corner of Main Street and Park Avenue. A: Is that the place where they have live music on weekends? B: Yes! The owner, whose family has been making coffee for three generations, is very passionate. A: And is it the cafe that was featured in that food magazine? B: Exactly! The journalist who wrote the article was very impressed.
+
+=== LESSON 15: Phrasal Verbs (Common Set) ===
+A: How is the new project going? B: Terribly! We have run out of time and budget. A: Have you given up? B: No, but I have put off the deadline twice already. My boss found out and is very angry. A: Can you work it out? B: I am trying to set up a meeting with the client tomorrow. A: I hope it works out. What if they turn down your proposal? B: Then I will need to come up with an entirely new plan. A: Look it up online. There are good templates. B: Good idea. I will look into it tonight.
+
+=== LESSON 16: Expressing Opinions ===
+A: What do you think about electric cars? B: In my opinion, they are the future of transportation. I believe they will replace petrol cars within 20 years. A: I am not sure about that. From my point of view, they are still too expensive for most people. B: That is a fair point. However, I think prices will drop significantly. A: I suppose you are right. I reckon the main issue is charging infrastructure. B: I agree completely. To be honest, that is the biggest challenge right now. A: It seems to me that governments need to invest more in that area. B: Absolutely. In my experience, when governments invest, things change fast.
+
+=== LESSON 17: Describing People and Places ===
+A: Tell me about your hometown. B: My hometown is a small but vibrant city in the south. It has a charming old quarter with cobblestone streets and colorful buildings. A: What are the people like? B: The people are incredibly warm and welcoming. Everyone knows each other. A: What does the main square look like? B: It is a picturesque plaza surrounded by magnificent colonial buildings. There is always a cheerful atmosphere there. A: It sounds breathtaking! B: It really is. Every time I go back, I am amazed by how serene yet lively it feels.
+
+=== LESSON 18: Talking About Health ===
+A: You look terrible. Are you okay? B: Not really. I have a splitting headache and I feel dizzy. A: How long have you had this? B: Since this morning. I also have a sore throat. A: You should see a doctor. B: I have an appointment this afternoon. The doctor might prescribe something for the headache. A: Do you have a fever? B: I think so. I feel very hot. A: Go home and rest. Take some medicine and drink lots of water. B: I will. I hope I recover before the weekend. A: I am sure you will. Get well soon!
+
+=== LESSON 19: Shopping and Negotiating ===
+A: Excuse me, how much is this jacket? B: It is 180 euros. A: That seems a bit expensive. Is there any discount? B: We have a 10% sale this week, so it would be 162 euros. A: Could you do 150? I am paying cash. B: Hmm. I can do 155, but that is the lowest I can go. A: If you include the scarf as well, I will pay 155. B: You drive a hard bargain. Alright, deal. A: Perfect! Can I get a receipt? B: Of course. And we offer a 30-day return policy if you change your mind.
+
+=== LESSON 20: Level 3 Final Review (A2 Exit) ===
+A: Congratulations on completing Level 3! How do you feel? B: I feel much more confident than before. I can now talk about more topics and express my opinions. A: What was the most difficult part? B: The Present Perfect was confusing at first. But now I understand it is for life experiences. A: What are you going to study next? B: I am going to start Level 4. I have already registered! A: If you could give one piece of advice to a new student, what would it be? B: I would say: do not be afraid to make mistakes. If you practice every day, you will improve faster than you think.
+

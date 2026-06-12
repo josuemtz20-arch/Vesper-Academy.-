@@ -1,0 +1,438 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<script src="vesper_auth.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vesper Academy | Audio Library</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inria+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@300;400;500;600;700&display=swap');
+        *, *::before, *::after { box-sizing: border-box; }
+        :root {
+            --navy:#141c2a; --navy2:#243654; --navy3:#14223a;
+            --gold:#c5a059; --gold-lt:#d9bd84; --gold2:#a8843d;
+            --cream:#f5f2eb; --white:#fff; --border:#e4e0d8;
+            --text:#141c2a; --muted:#6b7a8d;
+        }
+        body { font-family:'Inter',sans-serif; background:var(--cream); color:var(--text); margin:0; min-height:100vh; display:flex; flex-direction:column; }
+
+        /* HEADER */
+        header {
+            background:var(--navy); padding:0 48px; height:72px;
+            display:flex; align-items:center; justify-content:space-between;
+            border-bottom:3px solid var(--gold); box-shadow:0 2px 16px rgba(0,0,0,0.18);
+            position:sticky; top:0; z-index:100;
+        }
+        .logo-area { display:flex; align-items:center; gap:14px; }
+        .logo-area img { height:48px; width:48px; object-fit:contain; }
+        .logo-text h1 { margin:0; font-family:'Inria Serif',serif; font-size:1.25rem; font-weight:700; color:#fff; letter-spacing:0.5px; }
+        .logo-text p { margin:2px 0 0; font-size:0.7rem; color:var(--gold); letter-spacing:2px; text-transform:uppercase; font-weight:500; }
+        .head-right { display:flex; align-items:center; gap:22px; }
+        .head-right a { font-size:0.72rem; font-weight:600; letter-spacing:1px; text-transform:uppercase; color:rgba(255,255,255,0.75); text-decoration:none; display:flex; align-items:center; gap:7px; transition:color .2s; }
+        .head-right a:hover { color:var(--gold); }
+        .head-right > i { font-size:1.3rem; color:var(--gold); }
+
+        /* HERO */
+        .hero { position:relative; overflow:hidden; border-bottom:3px solid var(--gold);
+            background:radial-gradient(900px 320px at 78% -40%, rgba(197,160,89,0.18), transparent 60%), linear-gradient(160deg,var(--navy2),var(--navy) 55%,var(--navy3));
+            padding:44px 24px 40px; }
+        .hero::before { content:""; position:absolute; right:-40px; top:50%; transform:translateY(-50%); width:340px; height:340px;
+            background:url('assets/images/vesper_logo_inverted.png') center/contain no-repeat; opacity:0.08; }
+        .hero-inner { max-width:1120px; margin:0 auto; position:relative; z-index:1; }
+        .hero-emblem { display:flex; align-items:center; gap:16px; margin-bottom:16px; }
+        .hero-emblem img { width:62px; height:62px; object-fit:contain; }
+        .hero-emblem .kicker { font-size:0.7rem; letter-spacing:4px; text-transform:uppercase; color:var(--gold); font-weight:600; }
+        .hero-emblem .kicker + div { font-family:'Inria Serif',serif; color:#fff; font-size:1rem; font-weight:600; margin-top:2px; }
+        .hero h2 { font-family:'Inria Serif',serif; font-weight:800; font-size:2.5rem; margin:0 0 10px; color:#fff; }
+        .hero .lead { margin:0; color:rgba(255,255,255,0.72); font-size:0.96rem; max-width:560px; }
+        .hero .lead strong { color:var(--gold-lt); }
+
+        /* MAIN */
+        .main { flex:1; max-width:1120px; margin:0 auto; width:100%; padding:36px 24px 60px; }
+        .crumbs { display:flex; align-items:center; gap:10px; margin-bottom:24px; font-size:0.82rem; color:var(--muted); }
+        .crumbs a { color:var(--gold2); text-decoration:none; font-weight:600; cursor:pointer; }
+        .crumbs a:hover { text-decoration:underline; }
+        .crumbs .sep { opacity:0.5; }
+        .crumbs b { color:var(--navy); }
+
+        .view { animation:fade 0.32s ease both; }
+        @keyframes fade { from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:translateY(0);} }
+
+        .section-title { display:flex; align-items:center; gap:14px; margin:0 0 22px; }
+        .section-title h3 { margin:0; font-family:'Inria Serif',serif; font-size:1.5rem; color:var(--navy); }
+        .section-title .line { flex:1; height:1px; background:var(--border); }
+
+        /* LEVEL GRID */
+        .level-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:18px; }
+        .level-card {
+            background:var(--white); border:1px solid var(--border); border-radius:14px; overflow:hidden;
+            cursor:pointer; text-decoration:none; color:inherit;
+            box-shadow:0 1px 4px rgba(0,0,0,0.06); transition:transform .2s, box-shadow .2s, border-color .2s;
+            display:flex; flex-direction:column;
+        }
+        .level-card:hover { transform:translateY(-5px); box-shadow:0 14px 34px rgba(26,43,66,0.16); border-color:var(--gold); }
+        .level-card .lc-top {
+            height:96px; background:linear-gradient(135deg,var(--navy2),var(--navy3)); position:relative;
+            display:flex; align-items:center; padding:0 22px; gap:16px; border-bottom:3px solid var(--gold);
+        }
+        .level-card .lc-top .num {
+            width:54px; height:54px; border-radius:13px; background:var(--gold); color:var(--navy);
+            display:flex; align-items:center; justify-content:center; font-family:'Inria Serif',serif; font-weight:800; font-size:1.5rem; flex-shrink:0;
+        }
+        .level-card .lc-top .bigicon { position:absolute; right:18px; font-size:2.6rem; color:rgba(197,160,89,0.28); }
+        .level-card .lc-top .lvl-name { color:#fff; }
+        .level-card .lc-top .lvl-name b { display:block; font-size:1.05rem; font-weight:700; }
+        .level-card .lc-top .lvl-name small { font-size:0.72rem; color:var(--gold-lt); letter-spacing:0.5px; }
+        .level-card .lc-body { padding:16px 22px 18px; flex:1; display:flex; flex-direction:column; }
+        .level-card .lc-body p { margin:0; font-size:0.83rem; color:var(--muted); flex:1; line-height:1.5; }
+        .level-card .lc-foot { margin-top:14px; display:flex; align-items:center; justify-content:space-between; font-size:0.72rem; font-weight:700; letter-spacing:0.8px; text-transform:uppercase; color:var(--gold2); border-top:1px solid var(--border); padding-top:12px; }
+
+        /* DIAGNOSTICS small card variant */
+        .level-card.diag .lc-top { background:linear-gradient(135deg,#3a2d4a,#241a33); }
+        .level-card.diag .lc-top .num { background:var(--gold); }
+        .level-card.biz .lc-top { background:linear-gradient(135deg,#1d4044,#10262b); }
+        .level-card.biz .lc-top .num { background:var(--gold); }
+        .level-card.basics .lc-top { background:linear-gradient(135deg,#235c3f,#12301f); }
+        .level-card.basics .lc-top .num { background:var(--gold); }
+
+        /* LESSON GRID */
+        .lesson-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:14px; }
+        .lesson-card {
+            background:var(--white); border:1px solid var(--border); border-left:4px solid var(--gold);
+            border-radius:12px; padding:16px 18px; cursor:pointer; text-decoration:none; color:inherit;
+            display:flex; align-items:center; gap:14px; box-shadow:0 1px 4px rgba(0,0,0,0.05);
+            transition:transform .16s, box-shadow .16s, border-color .16s; animation:fade .4s ease both;
+        }
+        .lesson-card:hover { transform:translateY(-3px); box-shadow:0 10px 26px rgba(26,43,66,0.13); border-color:var(--gold); }
+        .lesson-card .lz-icon {
+            width:46px; height:46px; border-radius:11px; background:var(--navy); color:var(--gold);
+            display:flex; align-items:center; justify-content:center; font-size:1.1rem; flex-shrink:0;
+        }
+        .lesson-card .lz-meta { min-width:0; flex:1; }
+        .lesson-card .lz-meta .num { font-size:0.66rem; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:var(--gold2); }
+        .lesson-card .lz-meta h4 { margin:2px 0 0; font-size:0.96rem; font-weight:700; color:var(--navy); line-height:1.25; }
+        .lesson-card .lz-go { color:var(--muted); font-size:0.9rem; flex-shrink:0; transition:transform .16s, color .16s; }
+        .lesson-card:hover .lz-go { color:var(--gold2); transform:translateX(3px); }
+
+        .back-btn {
+            display:inline-flex; align-items:center; gap:8px; cursor:pointer; border:1px solid var(--border);
+            background:var(--white); color:var(--navy); border-radius:10px; padding:9px 16px; font-family:'Inter',sans-serif;
+            font-size:0.82rem; font-weight:600; margin-bottom:22px; transition:all .16s;
+        }
+        .back-btn:hover { border-color:var(--gold); color:var(--gold2); }
+        .exam-btn { display:inline-flex; align-items:center; gap:8px; text-decoration:none; background:var(--navy); color:#fff;
+            border-radius:10px; padding:10px 18px; font-size:0.82rem; font-weight:700; letter-spacing:0.4px; transition:background .16s; }
+        .exam-btn:hover { background:var(--gold); color:var(--navy); }
+        .exam-btn.hidden { display:none; }
+
+        footer { background:var(--navy); color:rgba(255,255,255,0.45); text-align:center; padding:30px 40px; font-size:0.78rem; letter-spacing:0.5px; border-top:3px solid var(--gold); }
+        footer .flogo { height:40px; width:40px; object-fit:contain; margin-bottom:10px; }
+        footer span { color:var(--gold); margin-left:16px; }
+        footer a { color:var(--gold); text-decoration:none; font-weight:600; }
+        footer .fnav { margin-top:14px; }
+
+        @media (max-width:680px){ header,.hero,.main{ padding-left:16px; padding-right:16px; } .hero h2{ font-size:2rem; } .head-right a span{ display:none; } }
+    </style>
+    <link rel="icon" href="assets/images/vesper_logo.png" type="image/png">
+</head>
+
+<body>
+    <header>
+        <div class="logo-area">
+            <img src="assets/images/vesper_logo_inverted.png" alt="Vesper Logo">
+            <div class="logo-text"><h1>Vesper Academy</h1><p>Audio Library</p></div>
+        </div>
+        <div class="head-right">
+            <a href="index.html"><i class="fas fa-arrow-left"></i><span>Curriculum Hub</span></a>
+            <i class="fas fa-headphones"></i>
+        </div>
+    </header>
+
+    <section class="hero">
+        <div class="hero-inner">
+            <div class="hero-emblem">
+                <img src="assets/images/vesper_logo_inverted.png" alt="Vesper Academy">
+                <div><div class="kicker">Vesper Academy</div><div>Core Practice · Listening Series</div></div>
+            </div>
+            <h2>Audio Library</h2>
+            <p class="lead">Choose a level, then a lesson. Each lesson opens its own page with the <strong>audio</strong>, a <strong>screen-ready reading</strong> (for lessons with no audio), an <strong>interactive whiteboard</strong>, and a <strong>visual vocabulary</strong> reference.</p>
+        </div>
+    </section>
+
+    <div class="main">
+        <div class="crumbs" id="crumbs"></div>
+
+        <!-- VIEW: LEVELS -->
+        <div class="view" id="view-levels">
+            <div class="section-title"><h3>Select a Level</h3><div class="line"></div></div>
+            <div class="level-grid" id="level-grid"></div>
+        </div>
+
+        <!-- VIEW: LESSONS -->
+        <div class="view" id="view-lessons" style="display:none">
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:22px;">
+                <button class="back-btn" id="back" style="margin-bottom:0"><i class="fas fa-arrow-left"></i> All levels</button>
+                <a class="exam-btn" id="exam-btn" href="#"><i class="fas fa-pen-to-square"></i> Take the Level Exam</a>
+            </div>
+            <div class="section-title"><h3 id="lessons-title">Lessons</h3><div class="line"></div></div>
+            <div class="lesson-grid" id="lesson-grid"></div>
+        </div>
+    </div>
+
+    <footer>
+        <img class="flogo" src="assets/images/vesper_logo_inverted.png" alt="Vesper"><br>
+        Vesper Academy — Audio Library <span>Core Practice · Levels 1–6</span>
+        <div class="fnav"><a href="index.html"><i class="fas fa-arrow-left"></i> Back to Original Index</a></div>
+    </footer>
+
+    <script src="vesper_audio_data.js"></script>
+    <script src="vesper_basics_audio_data.js"></script>
+    <script>
+        const DATA = window.VESPER_DATA || {};
+        const LEVEL_DESC = {
+            1:"Everyday English for absolute beginners — routines, hobbies, travel and first conversations.",
+            2:"Real-world communication — complaints, negotiation, interviews, media and culture.",
+            3:"Advanced discourse — debate, diplomacy, economics, science and global issues.",
+            4:"Creative writing & craft — storytelling, poetry, genre, criticism and the writer's voice.",
+            5:"Technology & the future — AI, robotics, space, cybersecurity and digital life.",
+            6:"Pop culture & society — virality, fandom, media, fashion and modern mythology."
+        };
+        const DIAG_TRACKS = [
+            { k:1, title:"Diagnostic Track 1" },
+            { k:2, title:"Diagnostic Track 2" }
+        ];
+        // Business English Premium (B2) listening resources that exist as audio files
+        const BUSINESS_TRACKS = [
+            { title:"Elevator Pitch A (weak)",  lesson:"Lesson 1 · First Impressions",  file:"corporate_b2_l1_pitch_a.mp3", icon:"fa-comment" },
+            { title:"Elevator Pitch B (strong)", lesson:"Lesson 1 · First Impressions",  file:"corporate_b2_l1_pitch_b.mp3", icon:"fa-comment-dots" },
+            { title:"Quarterly Board Call",      lesson:"Lesson 2 · Conference Call",     file:"corporate_b2_l2_call.mp3",    icon:"fa-phone-volume" }
+        ];
+        // Certification Prep listening drills (with deliberate distractors)
+        const CERT_TRACKS = [
+            { title:"Museum Tour (corrections & distractors)", lesson:"Listening Drill 1", file:"cert_prep_listening_1.mp3", icon:"fa-landmark" },
+            { title:"Academic Mini-Lecture (note-taking)",     lesson:"Listening Drill 2", file:"cert_prep_listening_2.mp3", icon:"fa-chalkboard" },
+            { title:"Storm News Report (Practice Lab 2)",      lesson:"Listening Drill 3", file:"cert_prep_listening_3.mp3", icon:"fa-cloud-bolt" }
+        ];
+
+        // exam.html is teacher-local (it carries answer keys); hide the exam button where it isn't deployed
+        let EXAM_AVAILABLE = true;
+        fetch("exam.html", { method: "HEAD" }).then(r => { EXAM_AVAILABLE = r.ok; }).catch(() => { EXAM_AVAILABLE = false; });
+
+        const levelGrid = document.getElementById("level-grid");
+        const lessonGrid = document.getElementById("lesson-grid");
+        const viewLevels = document.getElementById("view-levels");
+        const viewLessons = document.getElementById("view-lessons");
+        const crumbs = document.getElementById("crumbs");
+        const lessonsTitle = document.getElementById("lessons-title");
+
+        // ── BUILD LEVELS ──────────────────────────────────────────────
+        Object.keys(DATA).forEach(n => {
+            const lv = DATA[n];
+            const card = document.createElement("div");
+            card.className = "level-card";
+            card.innerHTML = `
+                <div class="lc-top">
+                    <div class="num">${n}</div>
+                    <div class="lvl-name"><b>Level ${n}</b><small>${lv.tag}</small></div>
+                    <i class="fas ${lv.icon} bigicon"></i>
+                </div>
+                <div class="lc-body">
+                    <p>${LEVEL_DESC[n] || ""}</p>
+                    <div class="lc-foot"><span>${lv.lessons.length} Lessons</span><i class="fas fa-arrow-right"></i></div>
+                </div>`;
+            card.addEventListener("click", () => showLessons(n));
+            levelGrid.appendChild(card);
+        });
+        // Diagnostics card
+        const dcard = document.createElement("div");
+        dcard.className = "level-card diag";
+        dcard.innerHTML = `
+            <div class="lc-top">
+                <div class="num"><i class="fas fa-stethoscope" style="font-size:1.2rem"></i></div>
+                <div class="lvl-name"><b>Diagnostics</b><small>Placement</small></div>
+                <i class="fas fa-clipboard-check bigicon"></i>
+            </div>
+            <div class="lc-body">
+                <p>Placement & diagnostic listening tracks used to find a student's starting level.</p>
+                <div class="lc-foot"><span>${DIAG_TRACKS.length} Tracks</span><i class="fas fa-arrow-right"></i></div>
+            </div>`;
+        dcard.addEventListener("click", showDiag);
+        levelGrid.appendChild(dcard);
+
+        // Core Basics cards (Levels 1-4, dialogue audio per lesson)
+        const BASICS = window.BASICS_DATA || {};
+        Object.keys(BASICS).forEach(n => {
+            const lv = BASICS[n];
+            const card = document.createElement("div");
+            card.className = "level-card basics";
+            card.innerHTML = `
+                <div class="lc-top">
+                    <div class="num">B${n}</div>
+                    <div class="lvl-name"><b>Basics ${n}</b><small>${lv.tag}</small></div>
+                    <i class="fas ${lv.icon} bigicon"></i>
+                </div>
+                <div class="lc-body">
+                    <p>Core Basics ${lv.tag} — one short dialogue (~1 min) per lesson with Listen &amp; Answer questions.</p>
+                    <div class="lc-foot"><span>${lv.lessons.length} Tracks</span><i class="fas fa-arrow-right"></i></div>
+                </div>`;
+            card.addEventListener("click", () => showBasics(n));
+            levelGrid.appendChild(card);
+        });
+
+        // Certification Prep card
+        const ccard = document.createElement("div");
+        ccard.className = "level-card diag";
+        ccard.innerHTML = `
+            <div class="lc-top">
+                <div class="num"><i class="fas fa-stopwatch" style="font-size:1.1rem"></i></div>
+                <div class="lvl-name"><b>Certification</b><small>IELTS · Cambridge · TOEFL</small></div>
+                <i class="fas fa-award bigicon"></i>
+            </div>
+            <div class="lc-body">
+                <p>Timed listening drills from the Certification Prep course — real exam distractors included.</p>
+                <div class="lc-foot"><span>${CERT_TRACKS.length} Tracks</span><i class="fas fa-arrow-right"></i></div>
+            </div>`;
+        ccard.addEventListener("click", showCert);
+        levelGrid.appendChild(ccard);
+
+        // Business English card
+        const bcard = document.createElement("div");
+        bcard.className = "level-card biz";
+        bcard.innerHTML = `
+            <div class="lc-top">
+                <div class="num"><i class="fas fa-briefcase" style="font-size:1.1rem"></i></div>
+                <div class="lvl-name"><b>Business English</b><small>Premium (B2)</small></div>
+                <i class="fas fa-building bigicon"></i>
+            </div>
+            <div class="lc-body">
+                <p>Listening resources from the Business English Premium course — elevator pitches and a board call.</p>
+                <div class="lc-foot"><span>${BUSINESS_TRACKS.length} Tracks</span><i class="fas fa-arrow-right"></i></div>
+            </div>`;
+        bcard.addEventListener("click", showBusiness);
+        levelGrid.appendChild(bcard);
+
+        setCrumbsHome();
+
+        // ── VIEWS ─────────────────────────────────────────────────────
+        function setCrumbsHome(){ crumbs.innerHTML = `<b>Audio Library</b>`; }
+        function setCrumbsLevel(label){ crumbs.innerHTML = `<a id="c-home">Audio Library</a><span class="sep">/</span><b>${label}</b>`;
+            document.getElementById("c-home").addEventListener("click", showLevels); }
+
+        function showLevels() {
+            viewLessons.style.display = "none"; viewLevels.style.display = "block";
+            setCrumbsHome(); window.scrollTo({top:0, behavior:"smooth"});
+        }
+        document.getElementById("back").addEventListener("click", showLevels);
+
+        function showLessons(n) {
+            const lv = DATA[n];
+            lessonsTitle.textContent = `Level ${n} — ${lv.tag}`;
+            setCrumbsLevel(`Level ${n} · ${lv.tag}`);
+            const eb = document.getElementById("exam-btn");
+            eb.href = `exam.html?level=${n}`;
+            eb.classList.toggle("hidden", !EXAM_AVAILABLE);
+            lessonGrid.innerHTML = "";
+            lv.lessons.forEach((les, i) => {
+                const a = document.createElement("a");
+                a.className = "lesson-card";
+                a.href = `lesson.html?level=${n}&lesson=${les.n}`;
+                a.style.animationDelay = (i * 0.015) + "s";
+                a.innerHTML = `
+                    <div class="lz-icon"><i class="fas ${les.icon}"></i></div>
+                    <div class="lz-meta"><div class="num">Lesson ${les.n}</div><h4>${les.title}</h4></div>
+                    <i class="fas fa-chevron-right lz-go"></i>`;
+                lessonGrid.appendChild(a);
+            });
+            viewLevels.style.display = "none"; viewLessons.style.display = "block";
+            window.scrollTo({top:0, behavior:"smooth"});
+        }
+
+        function showDiag() {
+            lessonsTitle.textContent = "Diagnostics — Placement";
+            setCrumbsLevel("Diagnostics");
+            document.getElementById("exam-btn").classList.add("hidden");
+            lessonGrid.innerHTML = "";
+            DIAG_TRACKS.forEach((t, i) => {
+                const a = document.createElement("a");
+                a.className = "lesson-card";
+                a.href = `lesson.html?diag=${t.k}`;
+                a.style.animationDelay = (i * 0.04) + "s";
+                a.innerHTML = `
+                    <div class="lz-icon"><i class="fas fa-headphones-simple"></i></div>
+                    <div class="lz-meta"><div class="num">Track ${t.k}</div><h4>${t.title}</h4></div>
+                    <i class="fas fa-chevron-right lz-go"></i>`;
+                lessonGrid.appendChild(a);
+            });
+            viewLevels.style.display = "none"; viewLessons.style.display = "block";
+            window.scrollTo({top:0, behavior:"smooth"});
+        }
+
+        function showBasics(n) {
+            const lv = BASICS[n];
+            lessonsTitle.textContent = `Core Basics ${n} — ${lv.tag}`;
+            setCrumbsLevel(`Basics ${n} · ${lv.tag}`);
+            document.getElementById("exam-btn").classList.add("hidden");
+            lessonGrid.innerHTML = "";
+            lv.lessons.forEach((les, i) => {
+                const a = document.createElement("a");
+                a.className = "lesson-card";
+                a.href = `lesson.html?basics=${n}&lesson=${les.n}`;
+                a.style.animationDelay = (i * 0.015) + "s";
+                a.innerHTML = `
+                    <div class="lz-icon"><i class="fas fa-headphones-simple"></i></div>
+                    <div class="lz-meta"><div class="num">Lesson ${les.n}</div><h4>${les.title}</h4></div>
+                    <i class="fas fa-chevron-right lz-go"></i>`;
+                lessonGrid.appendChild(a);
+            });
+            viewLevels.style.display = "none"; viewLessons.style.display = "block";
+            window.scrollTo({top:0, behavior:"smooth"});
+        }
+
+        function showCert() {
+            lessonsTitle.textContent = "Certification Prep — Listening Drills";
+            setCrumbsLevel("Certification");
+            document.getElementById("exam-btn").classList.add("hidden");
+            lessonGrid.innerHTML = "";
+            CERT_TRACKS.forEach((t, i) => {
+                const a = document.createElement("a");
+                a.className = "lesson-card";
+                const q = new URLSearchParams({ audio: t.file, title: t.title,
+                    sub: "Certification Prep (B2-C1)", crumb: "Certification · " + t.lesson, icon: t.icon });
+                a.href = `lesson.html?${q.toString()}`;
+                a.style.animationDelay = (i * 0.04) + "s";
+                a.innerHTML = `
+                    <div class="lz-icon"><i class="fas ${t.icon}"></i></div>
+                    <div class="lz-meta"><div class="num">${t.lesson}</div><h4>${t.title}</h4></div>
+                    <i class="fas fa-chevron-right lz-go"></i>`;
+                lessonGrid.appendChild(a);
+            });
+            viewLevels.style.display = "none"; viewLessons.style.display = "block";
+            window.scrollTo({top:0, behavior:"smooth"});
+        }
+
+        function showBusiness() {
+            lessonsTitle.textContent = "Business English — Premium (B2)";
+            setCrumbsLevel("Business English");
+            document.getElementById("exam-btn").classList.add("hidden");
+            lessonGrid.innerHTML = "";
+            BUSINESS_TRACKS.forEach((t, i) => {
+                const a = document.createElement("a");
+                a.className = "lesson-card";
+                const q = new URLSearchParams({ audio: t.file, title: t.title,
+                    sub: "Business English (B2)", crumb: "Business English · " + t.lesson, icon: t.icon });
+                a.href = `lesson.html?${q.toString()}`;
+                a.style.animationDelay = (i * 0.04) + "s";
+                a.innerHTML = `
+                    <div class="lz-icon"><i class="fas ${t.icon}"></i></div>
+                    <div class="lz-meta"><div class="num">${t.lesson}</div><h4>${t.title}</h4></div>
+                    <i class="fas fa-chevron-right lz-go"></i>`;
+                lessonGrid.appendChild(a);
+            });
+            viewLevels.style.display = "none"; viewLessons.style.display = "block";
+            window.scrollTo({top:0, behavior:"smooth"});
+        }
+    </script>
+</body>
+</html>
