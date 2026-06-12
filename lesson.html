@@ -86,7 +86,35 @@
         .card-box { background:var(--white); border:1px solid var(--border); border-radius:14px; box-shadow:0 2px 10px rgba(0,0,0,0.05); padding:26px; }
 
         /* AUDIO PLAYER */
-        .audio-card { text-align:center; padding:34px 26px; }
+        .audio-card { text-align:center; padding:0; overflow:hidden; }
+        .a-flex { display:flex; align-items:stretch; }
+        .a-main { flex:1; min-width:0; padding:34px 26px; display:flex; flex-direction:column; justify-content:center; }
+        /* album art panel — same generated cover as the banner/hub card */
+        .a-art {
+            position:relative; width:290px; flex-shrink:0; overflow:hidden;
+            display:flex; align-items:center; justify-content:center;
+            background:linear-gradient(135deg,var(--navy2),var(--navy3));
+            border-right:3px solid var(--gold);
+        }
+        .a-art .a-art-ghost { position:absolute; right:-22px; bottom:-26px; font-size:9rem; color:rgba(255,255,255,0.07); transform:rotate(-12deg); }
+        .a-art .a-art-medal {
+            width:96px; height:96px; border-radius:50%; border:2px solid rgba(255,255,255,0.35);
+            display:flex; align-items:center; justify-content:center; font-size:2.3rem; color:var(--gold-lt);
+            background:rgba(255,255,255,0.07); box-shadow:0 10px 30px rgba(0,0,0,0.35);
+        }
+        .a-art .a-art-label {
+            position:absolute; top:14px; left:14px; font-size:0.58rem; font-weight:700; letter-spacing:1.5px;
+            text-transform:uppercase; color:#fff; background:rgba(0,0,0,0.32); padding:4px 10px;
+            border-radius:12px; border:1px solid rgba(255,255,255,0.18);
+        }
+        /* equalizer bars: animate only while the audio is actually playing */
+        .a-eq { position:absolute; bottom:18px; left:0; right:0; height:26px; display:flex; align-items:flex-end; justify-content:center; gap:5px; opacity:0; transition:opacity .35s; color:var(--gold); }
+        .a-eq span { width:5px; height:25%; border-radius:3px; background:currentColor; animation:eq 1.05s ease-in-out infinite; animation-play-state:paused; }
+        .a-eq span:nth-child(2){ animation-delay:.18s; } .a-eq span:nth-child(3){ animation-delay:.32s; }
+        .a-eq span:nth-child(4){ animation-delay:.11s; } .a-eq span:nth-child(5){ animation-delay:.26s; }
+        @keyframes eq { 0%,100%{ height:22%; } 50%{ height:100%; } }
+        .audio-card.playing .a-eq { opacity:1; }
+        .audio-card.playing .a-eq span { animation-play-state:running; }
         .audio-card .big-play {
             width:84px; height:84px; border-radius:50%; border:none; cursor:pointer;
             background:var(--gold); color:var(--navy); font-size:1.7rem; margin:0 auto 22px;
@@ -257,6 +285,12 @@
             .brand p{ display:none; }
             .crumb{ display:none; }
             #board{ height:380px; }
+            /* audio player: art stacks on top of the controls */
+            .a-flex{ flex-direction:column; }
+            .a-art{ width:100%; height:180px; border-right:none; border-bottom:3px solid var(--gold); }
+            .a-art .a-art-medal{ width:76px; height:76px; font-size:1.8rem; }
+            .a-art .a-art-ghost{ font-size:7rem; }
+            .a-main{ padding:26px 18px; }
             /* whiteboard toolbar: one scrollable row instead of a tall stack */
             .wb-toolbar{ flex-wrap:nowrap; overflow-x:auto; -webkit-overflow-scrolling:touch; scrollbar-width:thin; }
             .wb-group{ flex-shrink:0; }
@@ -304,23 +338,33 @@
 
         <!-- AUDIO PANEL -->
         <div class="panel active" id="panel-audio">
-            <div class="card-box audio-card">
-                <button class="big-play" id="big-play" aria-label="Play"><i class="fas fa-play"></i></button>
-                <h3 class="a-title" id="a-title">Lesson Audio</h3>
-                <p class="a-sub" id="a-sub">Full listening track</p>
-                <div class="a-progress">
-                    <span class="a-time" id="a-cur">0:00</span>
-                    <div class="a-bar" id="a-bar"><div class="a-fill" id="a-fill"></div></div>
-                    <span class="a-time dur" id="a-dur">0:00</span>
+            <div class="card-box audio-card" id="audio-card">
+                <div class="a-flex">
+                    <div class="a-art" id="a-art">
+                        <span class="a-art-label" id="a-art-label"></span>
+                        <i class="fas fa-headphones a-art-ghost" id="a-art-ghost"></i>
+                        <span class="a-art-medal" id="a-art-medal"><i class="fas fa-headphones"></i></span>
+                        <div class="a-eq" id="a-eq"><span></span><span></span><span></span><span></span><span></span></div>
+                    </div>
+                    <div class="a-main">
+                        <button class="big-play" id="big-play" aria-label="Play"><i class="fas fa-play"></i></button>
+                        <h3 class="a-title" id="a-title">Lesson Audio</h3>
+                        <p class="a-sub" id="a-sub">Full listening track</p>
+                        <div class="a-progress">
+                            <span class="a-time" id="a-cur">0:00</span>
+                            <div class="a-bar" id="a-bar"><div class="a-fill" id="a-fill"></div></div>
+                            <span class="a-time dur" id="a-dur">0:00</span>
+                        </div>
+                        <div class="speed-row">
+                            <span>Speed</span>
+                            <button class="speed-btn" data-rate="0.75">0.75×</button>
+                            <button class="speed-btn active" data-rate="1">1×</button>
+                            <button class="speed-btn" data-rate="1.25">1.25×</button>
+                            <button class="speed-btn" data-rate="1.5">1.5×</button>
+                        </div>
+                        <div class="a-error" id="a-error"><i class="fas fa-triangle-exclamation"></i> Audio file not found for this lesson.</div>
+                    </div>
                 </div>
-                <div class="speed-row">
-                    <span>Speed</span>
-                    <button class="speed-btn" data-rate="0.75">0.75×</button>
-                    <button class="speed-btn active" data-rate="1">1×</button>
-                    <button class="speed-btn" data-rate="1.25">1.25×</button>
-                    <button class="speed-btn" data-rate="1.5">1.5×</button>
-                </div>
-                <div class="a-error" id="a-error"><i class="fas fa-triangle-exclamation"></i> Audio file not found for this lesson.</div>
             </div>
         </div>
 
@@ -555,10 +599,17 @@
         const bannerTagIcon = isDiag ? "fa-stethoscope" : (isCustom ? icon : "fa-layer-group");
         document.getElementById("banner-tag").innerHTML = `<i class="fas ${bannerTagIcon}"></i> ${esc(bannerTag)}`;
         document.getElementById("banner-icon").className = `fas ${icon} bg-icon`;
-        // banner art = the same deterministic cover the audio hub shows for this lesson
+        // banner + player album art = the same deterministic cover the audio hub shows
         if (window.VesperCovers && coverSeed) {
-            document.getElementById("banner").style.cssText += VesperCovers.coverStyle(coverSeed).css;
+            const cov = VesperCovers.coverStyle(coverSeed);
+            document.getElementById("banner").style.cssText += cov.css;
+            document.getElementById("a-art").style.cssText += cov.css;
+            document.getElementById("a-eq").style.color = cov.accent;
+            document.getElementById("a-art-medal").style.color = cov.accent;
         }
+        document.getElementById("a-art-ghost").className = `fas ${icon} a-art-ghost`;
+        document.getElementById("a-art-medal").innerHTML = `<i class="fas ${icon}"></i>`;
+        document.getElementById("a-art-label").textContent = bannerTag;
         // optional real photo: assets/images/lessons/L{lvl}_lesson{les}.jpg — shows if present
         if (showPhoto) {
             const photo = document.getElementById("banner-photo");
@@ -680,9 +731,10 @@
         const aBar = document.getElementById("a-bar"), aFill = document.getElementById("a-fill");
         const fmt = s => { if(!isFinite(s)) return "0:00"; const m=Math.floor(s/60),x=Math.floor(s%60); return `${m}:${x.toString().padStart(2,"0")}`; };
         bigPlay.addEventListener("click", () => { if (audio.paused) audio.play().catch(()=>{}); else audio.pause(); });
-        audio.addEventListener("play",  () => bpIc.className = "fas fa-pause");
-        audio.addEventListener("pause", () => bpIc.className = "fas fa-play");
-        audio.addEventListener("ended", () => bpIc.className = "fas fa-play");
+        const audioCard = document.getElementById("audio-card");
+        audio.addEventListener("play",  () => { bpIc.className = "fas fa-pause"; audioCard.classList.add("playing"); });
+        audio.addEventListener("pause", () => { bpIc.className = "fas fa-play"; audioCard.classList.remove("playing"); });
+        audio.addEventListener("ended", () => { bpIc.className = "fas fa-play"; audioCard.classList.remove("playing"); });
         audio.addEventListener("loadedmetadata", () => aDur.textContent = fmt(audio.duration));
         audio.addEventListener("timeupdate", () => {
             aCur.textContent = fmt(audio.currentTime);
