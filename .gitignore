@@ -53,6 +53,7 @@
 !/vesper_basics_audio_data.js
 !/vesper_basics_lesson_data.js
 !/vesper_custom_transcripts.js
+!/vesper_covers.js
 
 # student books are NOT published anymore: they live in Firestore
 # (collection "studentbooks") and are served via libro.html to
