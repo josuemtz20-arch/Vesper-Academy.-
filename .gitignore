@@ -11,6 +11,9 @@
 !/.gitignore
 !/.nojekyll
 !/CNAME
+!/.github/
+# temporary: manifest consumed by .github/workflows/fetch-lesson-art.yml
+!/_art_manifest.json
 
 # public site + auth gate (must stay at root)
 # (vesper_web/landing/promo stay local: index.html is the one canonical landing)
@@ -54,6 +57,7 @@
 !/vesper_basics_lesson_data.js
 !/vesper_custom_transcripts.js
 !/vesper_covers.js
+!/vesper_lesson_images.js
 
 # student books are NOT published anymore: they live in Firestore
 # (collection "studentbooks") and are served via libro.html to

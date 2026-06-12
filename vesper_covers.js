@@ -85,16 +85,28 @@ window.VesperCovers = (function () {
     return fallback || "fa-headphones-simple";
   }
 
-  /* cover block markup for the audio hub cards (CSS lives in audio_library.html) */
+  /* themed artwork for a lesson seed (vesper_lesson_images.js manifest), or null */
+  function artFor(seed) {
+    var A = window.VESPER_LESSON_ART;
+    if (!A || !A.map || !A.themes) return null;
+    var file = A.themes[A.map[seed]];
+    return file ? A.dir + file : null;
+  }
+
+  /* cover block markup for the audio hub cards (CSS lives in audio_library.html).
+     The themed image sits on top of the generated gradient art; if the image is
+     missing or fails to load it removes itself and the gradient shows through. */
   function coverHTML(seed, iconClass, label) {
     var c = coverStyle(seed);
+    var img = artFor(seed);
     return '<div class="vc-cover" style="' + c.css + '">' +
         '<i class="fas ' + iconClass + ' vc-ghost"></i>' +
         '<span class="vc-medal" style="color:' + c.accent + ';border-color:' + hexA(c.accent, 0.55) + '">' +
           '<i class="fas ' + iconClass + '"></i></span>' +
+        (img ? '<img class="vc-img" src="' + img + '" alt="" loading="lazy" onerror="this.remove()">' : '') +
         (label ? '<span class="vc-badge">' + label + '</span>' : '') +
       '</div>';
   }
 
-  return { coverStyle: coverStyle, coverHTML: coverHTML, iconFor: iconFor, palette: palette, hash: hash };
+  return { coverStyle: coverStyle, coverHTML: coverHTML, iconFor: iconFor, artFor: artFor, palette: palette, hash: hash };
 })();
