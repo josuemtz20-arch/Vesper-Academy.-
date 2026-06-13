@@ -11,6 +11,8 @@
 !/.gitignore
 !/.nojekyll
 !/CNAME
+!/README.md
+!/CLAUDE.md
 
 # public site + auth gate (must stay at root)
 # (vesper_web/landing/promo stay local: index.html is the one canonical landing)
