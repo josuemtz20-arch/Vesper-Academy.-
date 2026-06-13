@@ -11,9 +11,6 @@
 !/.gitignore
 !/.nojekyll
 !/CNAME
-!/.github/
-# temporary: manifest consumed by .github/workflows/fetch-lesson-art.yml
-!/_art_manifest.json
 
 # public site + auth gate (must stay at root)
 # (vesper_web/landing/promo stay local: index.html is the one canonical landing)
