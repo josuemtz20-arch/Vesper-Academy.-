@@ -2,6 +2,20 @@
 <html lang="es">
 <head>
 <script src="vesper_auth.js"></script>
+<script>
+/* Primera visita sin perfil: lanzamos el cuestionario de bienvenida.
+   Una sola vez por sesión, para no atrapar a quien decide saltarlo. */
+(function(){
+  try{
+    var hasProfile = !!localStorage.getItem("vesper_profile");
+    var seen = sessionStorage.getItem("vesper_onboard_seen");
+    if(!hasProfile && !seen){
+      sessionStorage.setItem("vesper_onboard_seen","1");
+      location.replace("onboarding.html");
+    }
+  }catch(e){}
+})();
+</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Portal del Alumno | Vesper Academy</title>
@@ -33,6 +47,20 @@ a.card:hover{transform:translateY(-3px);box-shadow:0 8px 22px rgba(26,43,66,.14)
 .card p{margin:0;color:var(--muted);font-size:.8rem;line-height:1.5;flex:1;}
 .card .go{margin-top:10px;font-size:.7rem;font-weight:600;letter-spacing:.8px;text-transform:uppercase;color:var(--gold2);border-top:1px solid var(--border);padding-top:10px;}
 .tools .card{border-top-color:var(--navy2);}
+/* ── Recomendado para ti (personalizado por el cuestionario) ── */
+#reco{display:none;margin:24px 0 8px;background:linear-gradient(135deg,#fffdf8,#f3ede0);border:1px solid var(--border);border-left:4px solid var(--gold);border-radius:14px;padding:24px 24px 20px;}
+#reco .reco-head{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:4px;}
+#reco h2.rtitle{font-family:'Inria Serif',serif;font-size:1.35rem;margin:0;}
+#reco .rsub{color:var(--muted);font-size:.9rem;margin:4px 0 18px;}
+#reco .reco-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px;}
+#reco a.rcard{display:flex;gap:13px;align-items:flex-start;background:#fff;border:1px solid var(--border);border-radius:11px;padding:15px;text-decoration:none;color:inherit;transition:transform .16s,box-shadow .16s;}
+#reco a.rcard:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(26,43,66,.13);}
+#reco a.rcard .ric{width:42px;height:42px;flex-shrink:0;border-radius:11px;background:linear-gradient(135deg,var(--navy2),var(--navy));color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:1.1rem;}
+#reco a.rcard .tag{font-size:.6rem;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--gold2);}
+#reco a.rcard h3{margin:2px 0 3px;font-size:.95rem;line-height:1.3;}
+#reco a.rcard p{margin:0;color:var(--muted);font-size:.78rem;line-height:1.45;}
+#reco .reco-foot{margin-top:16px;font-size:.82rem;color:var(--muted);}
+#reco .reco-foot a{color:var(--gold2);text-decoration:underline;cursor:pointer;}
 footer{background:var(--navy);color:rgba(255,255,255,.5);text-align:center;padding:24px;font-size:.78rem;border-top:3px solid var(--gold);}
 footer a{color:var(--gold);text-decoration:none;}
 </style>
@@ -52,9 +80,19 @@ footer a{color:var(--gold);text-decoration:none;}
 
 <div class="wrap">
   <div class="intro">
-    <h1>Tu material de estudio</h1>
+    <h1 id="intro-title">Tu material de estudio</h1>
     <p>Aquí encuentras los libros del estudiante de tu curso, la biblioteca de audio para entrenar el oído y la prueba de ubicación. Tu profesor te indica qué libro y lección corresponde a tu clase.</p>
   </div>
+
+  <!-- Recomendado para ti (se rellena con el perfil del cuestionario) -->
+  <section id="reco" aria-label="Recomendado para ti">
+    <div class="reco-head">
+      <h2 class="rtitle"><i class="fas fa-wand-magic-sparkles" style="color:var(--gold2);"></i> Recomendado para ti</h2>
+    </div>
+    <p class="rsub" id="reco-sub">Tu material, elegido a partir de tus gustos y objetivos.</p>
+    <div class="reco-grid" id="reco-grid"></div>
+    <p class="reco-foot">¿Cambiaron tus intereses? <a href="onboarding.html">Rehacer mi cuestionario</a></p>
+  </section>
 
   <h2 class="sec"><i class="fas fa-compass"></i> Empieza aquí</h2>
   <div class="grid tools">
@@ -129,6 +167,42 @@ footer a{color:var(--gold);text-decoration:none;}
   © <span id="y"></span> Vesper Academy · <a href="index.html">vesper.academy</a>
   <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
 </footer>
+
+<script>
+/* Personaliza el portal con el perfil del cuestionario de bienvenida. */
+(function(){
+  var raw; try{ raw = localStorage.getItem("vesper_profile"); }catch(e){ return; }
+  if(!raw) return;
+  var p; try{ p = JSON.parse(raw); }catch(e){ return; }
+  if(!p || !p.recommended || !p.recommended.length) return;
+
+  if(p.name){
+    document.getElementById("intro-title").textContent = "Hola, "+p.name+" 👋";
+  }
+  var GOAL_SUB = {
+    work:"Material enfocado en tu inglés profesional.",
+    travel:"Para moverte por el mundo con confianza.",
+    exam:"Tu ruta directa hacia el examen.",
+    study:"El inglés que tus estudios necesitan.",
+    social:"Para que disfrutes cada conversación.",
+    aviation:"Tu inglés de aviación, paso a paso."
+  };
+  var sub = document.getElementById("reco-sub");
+  sub.textContent = (GOAL_SUB[p.goal] || "Tu material, elegido a partir de tus gustos y objetivos.");
+
+  var grid = document.getElementById("reco-grid");
+  grid.innerHTML = "";
+  p.recommended.forEach(function(r){
+    var a = document.createElement("a");
+    a.className = "rcard"; a.href = r.href;
+    a.innerHTML = '<span class="ric"><i class="fas '+(r.icon||"fa-book")+'"></i></span>'+
+      '<span><span class="tag">'+(r.tag||"Para ti")+'</span>'+
+      '<h3>'+r.t+'</h3><p>'+r.d+'</p></span>';
+    grid.appendChild(a);
+  });
+  document.getElementById("reco").style.display = "block";
+})();
+</script>
 
 </body>
 </html>

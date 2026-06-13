@@ -22,6 +22,7 @@
 # student portal + tools
 # (exam.html + vesper_exam_data.js stay local: the data file carries answer keys)
 !/materiales.html
+!/onboarding.html
 !/book_placement.html
 !/audio_library.html
 !/lesson.html
@@ -54,6 +55,8 @@
 !/vesper_basics_audio_data.js
 !/vesper_basics_lesson_data.js
 !/vesper_custom_transcripts.js
+!/vesper_covers.js
+!/vesper_lesson_images.js
 
 # student books are NOT published anymore: they live in Firestore
 # (collection "studentbooks") and are served via libro.html to

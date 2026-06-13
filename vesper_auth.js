@@ -32,6 +32,7 @@
       "access_admin.html",
       "book_placement.html",
       "leccion.html",
+      "onboarding.html",
       "vesper_landing.html",
       "vesper_promo.html",
       "vesper_web.html"

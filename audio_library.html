@@ -97,19 +97,31 @@
         .level-card.basics .lc-top { background:linear-gradient(135deg,#235c3f,#12301f); }
         .level-card.basics .lc-top .num { background:var(--gold); }
 
-        /* LESSON GRID */
-        .lesson-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:14px; }
+        /* LESSON GRID — album-cover style cards */
+        .lesson-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:16px; }
         .lesson-card {
-            background:var(--white); border:1px solid var(--border); border-left:4px solid var(--gold);
-            border-radius:12px; padding:16px 18px; cursor:pointer; text-decoration:none; color:inherit;
-            display:flex; align-items:center; gap:14px; box-shadow:0 1px 4px rgba(0,0,0,0.05);
+            background:var(--white); border:1px solid var(--border); border-radius:14px; overflow:hidden;
+            cursor:pointer; text-decoration:none; color:inherit;
+            display:flex; flex-direction:column; box-shadow:0 1px 4px rgba(0,0,0,0.05);
             transition:transform .16s, box-shadow .16s, border-color .16s; animation:fade .4s ease both;
         }
-        .lesson-card:hover { transform:translateY(-3px); box-shadow:0 10px 26px rgba(26,43,66,0.13); border-color:var(--gold); }
-        .lesson-card .lz-icon {
-            width:46px; height:46px; border-radius:11px; background:var(--navy); color:var(--gold);
-            display:flex; align-items:center; justify-content:center; font-size:1.1rem; flex-shrink:0;
+        .lesson-card:hover { transform:translateY(-4px); box-shadow:0 12px 28px rgba(26,43,66,0.15); border-color:var(--gold); }
+        .vc-cover { position:relative; height:112px; display:flex; align-items:center; justify-content:center; overflow:hidden; border-bottom:3px solid var(--gold); }
+        .vc-cover .vc-ghost { position:absolute; right:-14px; bottom:-20px; font-size:5.4rem; color:rgba(255,255,255,0.07); transform:rotate(-12deg); }
+        .vc-cover .vc-medal {
+            width:54px; height:54px; border-radius:50%; border:1.5px solid;
+            display:flex; align-items:center; justify-content:center; font-size:1.3rem;
+            background:rgba(255,255,255,0.06); box-shadow:0 6px 18px rgba(0,0,0,0.3);
+            transition:transform .2s;
         }
+        .lesson-card:hover .vc-medal { transform:scale(1.1); }
+        .vc-cover .vc-img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
+        .vc-cover .vc-badge {
+            position:absolute; top:10px; left:10px; font-size:0.58rem; font-weight:700; letter-spacing:1.2px;
+            text-transform:uppercase; color:#fff; background:rgba(0,0,0,0.38); padding:3px 9px;
+            border-radius:12px; border:1px solid rgba(255,255,255,0.18); z-index:2; backdrop-filter:blur(2px);
+        }
+        .lesson-card .lz-body { display:flex; align-items:center; gap:10px; padding:13px 15px; flex:1; }
         .lesson-card .lz-meta { min-width:0; flex:1; }
         .lesson-card .lz-meta .num { font-size:0.66rem; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:var(--gold2); }
         .lesson-card .lz-meta h4 { margin:2px 0 0; font-size:0.96rem; font-weight:700; color:var(--navy); line-height:1.25; }
@@ -133,7 +145,18 @@
         footer a { color:var(--gold); text-decoration:none; font-weight:600; }
         footer .fnav { margin-top:14px; }
 
-        @media (max-width:680px){ header,.hero,.main{ padding-left:16px; padding-right:16px; } .hero h2{ font-size:2rem; } .head-right a span{ display:none; } }
+        @media (max-width:680px){
+            header,.hero,.main{ padding-left:16px; padding-right:16px; }
+            .hero h2{ font-size:2rem; }
+            .head-right a span{ display:none; }
+            .lesson-grid{ grid-template-columns:repeat(2,1fr); gap:12px; }
+            .vc-cover{ height:92px; }
+            .vc-cover .vc-medal{ width:46px; height:46px; font-size:1.1rem; }
+            .lesson-card .lz-body{ padding:11px 12px; }
+            .lesson-card .lz-meta h4{ font-size:0.85rem; }
+            .lesson-card .lz-go{ display:none; }
+            .level-grid{ gap:14px; }
+        }
     </style>
     <link rel="icon" href="assets/images/vesper_logo.png" type="image/png">
 </head>
@@ -189,6 +212,8 @@
 
     <script src="vesper_audio_data.js"></script>
     <script src="vesper_basics_audio_data.js"></script>
+    <script src="vesper_lesson_images.js"></script>
+    <script src="vesper_covers.js"></script>
     <script>
         const DATA = window.VESPER_DATA || {};
         const LEVEL_DESC = {
@@ -340,9 +365,11 @@
                 a.href = `lesson.html?level=${n}&lesson=${les.n}`;
                 a.style.animationDelay = (i * 0.015) + "s";
                 a.innerHTML = `
-                    <div class="lz-icon"><i class="fas ${les.icon}"></i></div>
-                    <div class="lz-meta"><div class="num">Lesson ${les.n}</div><h4>${les.title}</h4></div>
-                    <i class="fas fa-chevron-right lz-go"></i>`;
+                    ${VesperCovers.coverHTML(`L${n}-${les.n}`, les.icon, `Level ${n}`)}
+                    <div class="lz-body">
+                        <div class="lz-meta"><div class="num">Lesson ${les.n}</div><h4>${les.title}</h4></div>
+                        <i class="fas fa-chevron-right lz-go"></i>
+                    </div>`;
                 lessonGrid.appendChild(a);
             });
             viewLevels.style.display = "none"; viewLessons.style.display = "block";
@@ -360,9 +387,11 @@
                 a.href = `lesson.html?diag=${t.k}`;
                 a.style.animationDelay = (i * 0.04) + "s";
                 a.innerHTML = `
-                    <div class="lz-icon"><i class="fas fa-headphones-simple"></i></div>
-                    <div class="lz-meta"><div class="num">Track ${t.k}</div><h4>${t.title}</h4></div>
-                    <i class="fas fa-chevron-right lz-go"></i>`;
+                    ${VesperCovers.coverHTML(`DIAG-${t.k}`, t.k === 1 ? "fa-stethoscope" : "fa-wave-square", "Placement")}
+                    <div class="lz-body">
+                        <div class="lz-meta"><div class="num">Track ${t.k}</div><h4>${t.title}</h4></div>
+                        <i class="fas fa-chevron-right lz-go"></i>
+                    </div>`;
                 lessonGrid.appendChild(a);
             });
             viewLevels.style.display = "none"; viewLessons.style.display = "block";
@@ -381,9 +410,11 @@
                 a.href = `lesson.html?basics=${n}&lesson=${les.n}`;
                 a.style.animationDelay = (i * 0.015) + "s";
                 a.innerHTML = `
-                    <div class="lz-icon"><i class="fas fa-headphones-simple"></i></div>
-                    <div class="lz-meta"><div class="num">Lesson ${les.n}</div><h4>${les.title}</h4></div>
-                    <i class="fas fa-chevron-right lz-go"></i>`;
+                    ${VesperCovers.coverHTML(`B${n}-${les.n}`, VesperCovers.iconFor(les.title, lv.icon), `Basics ${n}`)}
+                    <div class="lz-body">
+                        <div class="lz-meta"><div class="num">Lesson ${les.n}</div><h4>${les.title}</h4></div>
+                        <i class="fas fa-chevron-right lz-go"></i>
+                    </div>`;
                 lessonGrid.appendChild(a);
             });
             viewLevels.style.display = "none"; viewLessons.style.display = "block";
@@ -403,9 +434,11 @@
                 a.href = `lesson.html?${q.toString()}`;
                 a.style.animationDelay = (i * 0.04) + "s";
                 a.innerHTML = `
-                    <div class="lz-icon"><i class="fas ${t.icon}"></i></div>
-                    <div class="lz-meta"><div class="num">${t.lesson}</div><h4>${t.title}</h4></div>
-                    <i class="fas fa-chevron-right lz-go"></i>`;
+                    ${VesperCovers.coverHTML(t.file, t.icon, "Cert Prep")}
+                    <div class="lz-body">
+                        <div class="lz-meta"><div class="num">${t.lesson}</div><h4>${t.title}</h4></div>
+                        <i class="fas fa-chevron-right lz-go"></i>
+                    </div>`;
                 lessonGrid.appendChild(a);
             });
             viewLevels.style.display = "none"; viewLessons.style.display = "block";
@@ -425,9 +458,11 @@
                 a.href = `lesson.html?${q.toString()}`;
                 a.style.animationDelay = (i * 0.04) + "s";
                 a.innerHTML = `
-                    <div class="lz-icon"><i class="fas ${t.icon}"></i></div>
-                    <div class="lz-meta"><div class="num">${t.lesson}</div><h4>${t.title}</h4></div>
-                    <i class="fas fa-chevron-right lz-go"></i>`;
+                    ${VesperCovers.coverHTML(t.file, t.icon, "Business")}
+                    <div class="lz-body">
+                        <div class="lz-meta"><div class="num">${t.lesson}</div><h4>${t.title}</h4></div>
+                        <i class="fas fa-chevron-right lz-go"></i>
+                    </div>`;
                 lessonGrid.appendChild(a);
             });
             viewLevels.style.display = "none"; viewLessons.style.display = "block";
