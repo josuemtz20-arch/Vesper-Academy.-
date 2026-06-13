@@ -1,20 +1,31 @@
 /* ============================================================
    VESPER ACADEMY — Service Worker (Vesper Engine PWA)
    ------------------------------------------------------------
-   App offline-first SOLO para el motor: cachea el cascaron del
-   Vesper Engine (HTML, datos del currículo, auth e iconos) para
-   que la app instalada abra sin conexión. El resto del sitio
-   (manuales, audio, Firestore) sigue yendo siempre a la red.
+   App offline-first para el Vesper Engine Y las lecciones gratis:
+   cachea ambos cascarones (HTML, datos, auth, mascota e iconos)
+   para que abran sin conexión. El resto del sitio (manuales,
+   audio, Firestore) sigue yendo siempre a la red.
    Sube CACHE_VERSION al cambiar cualquiera de estos archivos.
    ============================================================ */
 "use strict";
 
-var CACHE_VERSION = "vesper-engine-v1";
+var CACHE_VERSION = "vesper-v4";
 var CORE = [
+  /* Vesper Engine shell */
   "vesper_engine.html",
   "vesper_engine_data.js",
   "vesper_auth.js",
   "manifest.webmanifest",
+  /* Lecciones gratis (sin cuenta; offline tras la primera visita) */
+  "leccion.html",
+  "vesper_lessons.js",
+  "vesper_mascot.js",
+  "vesper_progress.js",
+  "vesper_sync.js",
+  "manifest_lecciones.webmanifest",
+  "assets/images/mascot/vesper_cat.png",
+  "assets/images/virtual_class_happy_cat.png",
+  /* iconos compartidos */
   "assets/images/va_isotype.svg",
   "assets/images/app_icon_192.png",
   "assets/images/app_icon_512.png",
@@ -57,7 +68,10 @@ self.addEventListener("fetch", function (event) {
   if (req.mode === "navigate") {
     event.respondWith(
       fetch(req).catch(function () {
-        return caches.match("vesper_engine.html");
+        /* sin conexión: sirve la página cacheada si la tenemos, si no el motor */
+        return caches.match(req).then(function (c) {
+          return c || caches.match("vesper_engine.html");
+        });
       })
     );
     return;
