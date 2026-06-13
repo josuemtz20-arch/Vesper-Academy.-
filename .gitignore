@@ -45,6 +45,7 @@
 # Vesper Engine PWA (installable app): manifest + service worker.
 # App icons live under assets/images/ (already whitelisted below).
 !/manifest.webmanifest
+!/manifest_lecciones.webmanifest
 !/sw.js
 
 # lesson data consumed by the public pages
@@ -59,8 +60,20 @@
 # approved accounts only. Source files stay local-only on disk;
 # re-upload after editing: python _scripts/upload_manuals.py upload-books
 
+# Free lessons layer (no-account, public). Vanilla static, added 2026-06-12.
+# Account-free interactive lessons: player + content + mascot config + progress store.
+# leccion.html does NOT load vesper_auth.js, so it never hits the login gate.
+!/leccion.html
+!/vesper_lessons.js
+!/vesper_mascot.js
+!/vesper_progress.js
+!/vesper_sync.js
+
 # css / images / audio used by all public pages
 !/assets/
+
+# mascot full-res source: keep local, don't ship the 2.9 MB original
+assets/images/mascot/vesper_cat_full.png
 
 # never publish these even if they appear inside whitelisted dirs
 __pycache__/
