@@ -46,9 +46,9 @@
             background:linear-gradient(135deg,var(--navy2),var(--navy3));
             border-bottom:3px solid var(--gold);
         }
-        .banner .bg-icon {
-            position:absolute; right:24px; top:50%; transform:translateY(-50%);
-            font-size:9rem; color:rgba(197,160,89,0.18);
+        .banner .bg-logo {
+            position:absolute; right:36px; top:50%; transform:translateY(-50%);
+            height:68%; max-height:160px; width:auto; object-fit:contain; opacity:0.32; z-index:1;
         }
         .banner::before {
             content:""; position:absolute; inset:0;
@@ -283,6 +283,7 @@
         @media (max-width:680px){
             header,.banner-inner,.wrap{ padding-left:16px; padding-right:16px; }
             .banner h2{ font-size:1.7rem; } .banner{ height:180px; }
+            .banner .bg-logo{ right:18px; height:55%; opacity:0.25; }
             .brand p{ display:none; }
             .crumb{ display:none; }
             #board{ height:380px; }
@@ -320,7 +321,7 @@
 
     <!-- BANNER -->
     <div class="banner" id="banner">
-        <i class="fas fa-headphones bg-icon" id="banner-icon"></i>
+        <img class="bg-logo" src="assets/images/vesper_logo_inverted.png" alt="">
         <img class="photo" id="banner-photo" alt="" style="display:none">
         <div class="overlay"></div>
         <div class="banner-inner">
@@ -600,11 +601,10 @@
         document.getElementById("banner-title").textContent = title;
         const bannerTagIcon = isDiag ? "fa-stethoscope" : (isCustom ? icon : "fa-layer-group");
         document.getElementById("banner-tag").innerHTML = `<i class="fas ${bannerTagIcon}"></i> ${esc(bannerTag)}`;
-        document.getElementById("banner-icon").className = `fas ${icon} bg-icon`;
-        // banner + player album art = the same deterministic cover the audio hub shows
+        // player album art = the same deterministic cover the audio hub shows
+        // (the banner keeps the brand navy background with the Vesper logo)
         if (window.VesperCovers && coverSeed) {
             const cov = VesperCovers.coverStyle(coverSeed);
-            document.getElementById("banner").style.cssText += cov.css;
             document.getElementById("a-art").style.cssText += cov.css;
             document.getElementById("a-eq").style.color = cov.accent;
             document.getElementById("a-art-medal").style.color = cov.accent;
@@ -613,19 +613,15 @@
         document.getElementById("a-art-medal").innerHTML = `<i class="fas ${icon}"></i>`;
         document.getElementById("a-art-label").textContent = bannerTag;
         const themeArt = window.VesperCovers ? VesperCovers.artFor(coverSeed) : null;
-        // banner photo chain: lesson-specific file wins, then the themed artwork,
-        // and if neither loads the generated gradient stays
-        (function setBannerPhoto(){
+        // optional real photo for the banner: assets/images/lessons/L{lvl}_lesson{les}.jpg
+        if (showPhoto) {
             const photo = document.getElementById("banner-photo");
-            const candidates = [];
-            if (showPhoto) candidates.push(`assets/images/lessons/L${lvl}_lesson${les}.jpg`);
-            if (themeArt) candidates.push(themeArt);
-            if (!candidates.length) { photo.remove(); return; }
-            let i = 0;
             photo.onload = () => { photo.style.display = "block"; };
-            photo.onerror = () => { i++; if (i < candidates.length) photo.src = candidates[i]; else photo.remove(); };
-            photo.src = candidates[0];
-        })();
+            photo.onerror = () => { photo.remove(); };
+            photo.src = `assets/images/lessons/L${lvl}_lesson${les}.jpg`;
+        } else {
+            document.getElementById("banner-photo").remove();
+        }
         // player album art uses the same themed image (gradient shows if it fails)
         if (themeArt) {
             const im = document.createElement("img");
