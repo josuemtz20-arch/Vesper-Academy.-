@@ -111,6 +111,46 @@
   .nudge{position:relative;background:var(--cream);border:1px dashed var(--gold);border-radius:12px;padding:11px 34px 11px 12px;font-size:.88rem;margin:14px 0;text-align:left}
   .nudge a{color:var(--ink);font-weight:600}
   .nudge .x{position:absolute;top:6px;right:8px;background:none;border:none;font-size:1.1rem;cursor:pointer;color:var(--muted)}
+  /* adaptive badge + warm-up */
+  .adapt-badge{display:inline-flex;align-items:center;gap:6px;background:var(--gold-tint);color:var(--ink);border:1px solid var(--gold);border-radius:999px;padding:5px 12px;font-size:.78rem;font-weight:600;margin:8px 0 2px}
+  .warm-dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--line);margin:0 3px}
+  .warm-dot.on{background:var(--gold)}
+  /* true / false */
+  .statement{font-size:1.08rem;background:var(--cream);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:6px 0 4px}
+  .tf-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0 4px}
+  .tf-btn{min-height:54px;border:1.5px solid var(--line);border-radius:13px;background:var(--paper);color:var(--ink);font-family:inherit;font-size:1.05rem;font-weight:600;cursor:pointer}
+  .tf-btn.sel{border-color:var(--gold);background:var(--gold-tint)}
+  .tf-btn.correct{border-color:var(--success);background:var(--ok-tint)}
+  .tf-btn.wrong{border-color:var(--error);background:var(--no-tint)}
+  .tf-btn.locked{cursor:default}
+  /* fill blank + translate input */
+  .type-input{width:100%;min-height:50px;border:1.5px solid var(--line);border-radius:13px;padding:12px 14px;font-family:inherit;font-size:1.05rem;color:var(--ink);background:var(--paper);-webkit-appearance:none}
+  .type-input:focus{outline:none;border-color:var(--gold)}
+  .type-input.correct{border-color:var(--success);background:var(--ok-tint)}
+  .type-input.wrong{border-color:var(--error);background:var(--no-tint)}
+  .fb-sentence{font-size:1.12rem;margin:8px 0 10px;line-height:2}
+  .fb-sentence input{display:inline-block;width:auto;min-width:108px;min-height:0;padding:6px 10px;vertical-align:baseline}
+  /* matching */
+  .match-cols{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:10px 0 4px}
+  .match-item{display:block;width:100%;text-align:center;border:1.5px solid var(--line);border-radius:12px;padding:12px 8px;margin-bottom:8px;background:var(--paper);color:var(--ink);font-family:inherit;font-size:.98rem;cursor:pointer;min-height:48px}
+  .match-item.sel{border-color:var(--gold);background:var(--gold-tint)}
+  .match-item.done{border-color:var(--success);background:var(--ok-tint);cursor:default;opacity:.7}
+  .match-item.bad{border-color:var(--error);background:var(--no-tint);animation:vc-shake .4s ease}
+  /* listening */
+  .listen-play{display:inline-flex;align-items:center;gap:10px;background:var(--ink);color:var(--cream);border:none;border-radius:14px;padding:14px 20px;font-family:inherit;font-size:1.05rem;font-weight:600;cursor:pointer;margin:4px 0 8px}
+  .listen-play .ic{font-size:1.25rem}
+  .listen-note{color:var(--muted);font-size:.85rem;margin:0 0 12px}
+  /* categorize */
+  .cat-pool{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 14px;min-height:40px}
+  .cat-tk{background:var(--paper);border:1.5px solid var(--line);border-radius:999px;padding:8px 14px;font-family:inherit;font-size:.96rem;color:var(--ink);cursor:pointer}
+  .cat-tk.sel{border-color:var(--gold);background:var(--gold-tint)}
+  .cat-tk.correct{border-color:var(--success);background:var(--ok-tint)}
+  .cat-tk.wrong{border-color:var(--error);background:var(--no-tint)}
+  .cat-buckets{display:grid;gap:10px}
+  .cat-bucket{border:1.5px dashed var(--line);border-radius:13px;padding:10px 12px;min-height:60px;background:var(--cream)}
+  .cat-bucket.active{border-color:var(--gold)}
+  .cat-bucket h4{margin:0 0 4px;font-size:.78rem;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+  .cat-bucket .cat-tk{margin:4px 4px 0 0;display:inline-block}
   @media(min-width:640px){
     h1{font-size:2rem}
     .mascot-img{width:84px;height:84px}
@@ -123,7 +163,10 @@
 <main id="app" aria-live="polite"></main>
 
 <script src="vesper_lessons.js"></script>
+<script src="vesper_activities.js"></script>
 <script src="vesper_mascot.js"></script>
+<script src="vesper_theme.js"></script>
+<script src="vesper_adaptive.js"></script>
 <script src="vesper_progress.js"></script>
 <script src="vesper_auth.js"></script>
 <script src="vesper_sync.js"></script>
@@ -131,13 +174,16 @@
 (function () {
   var qs = new URLSearchParams(location.search);
   var id = qs.get("id");
+  if (window.VESPER_ACTIVITIES && VESPER_ACTIVITIES.merge) VESPER_ACTIVITIES.merge(window.VESPER_LESSONS, window.VESPER_LESSONS_ORDER);
   var L = window.VESPER_LESSONS || {};
   var ORDER = window.VESPER_LESSONS_ORDER || Object.keys(L);
+  var A = window.VESPER_ADAPTIVE || null;
   var M = window.VESPER_MASCOT;
   var P = window.VesperProgress;
   var app = document.getElementById("app");
 
-  var lesson = null, exIdx = 0, results = [], earnedXp = 0;
+  var lesson = null, baseLesson = null, profile = (A && A.getProfile) ? A.getProfile() : null;
+  var exIdx = 0, results = [], earnedXp = 0;
 
   function esc(s) {
     return ("" + (s == null ? "" : s)).replace(/[&<>"]/g, function (c) {
@@ -178,27 +224,34 @@
   /* ---------- INDEX (no ?id=) ---------- */
   function renderIndex() {
     var st = P ? P.getState() : { streak: 0, xp: 0 };
-    var cards = ORDER.map(function (k) {
+    var viewOrder = (A && profile && A.recommendOrder) ? A.recommendOrder(ORDER, L) : ORDER;
+    var cards = viewOrder.map(function (k) {
       var l = L[k]; if (!l) return "";
       return '<button class="card lcard" data-go="' + esc(k) + '">'
         + '<div class="lcard-top"><span class="pill">' + esc(l.level) + '</span><span class="track">' + esc(l.track) + '</span></div>'
         + '<h2>' + esc(l.title) + '</h2>'
         + '<div class="muted">' + (l.exercises ? l.exercises.length : 0) + ' ejercicios &middot; +' + (l.xpReward || 0) + ' XP</div></button>';
     }).join("");
-    show('<div class="wrap"><div class="hero">' + mascot("welcome") + '</div>'
+    var hello = (A && profile) ? A.greeting() : "Hola!";
+    var sub = (A && profile)
+      ? 'Ordenamos las lecciones para tu nivel. Tu progreso se guarda en este dispositivo.'
+      : 'Aprende sin cuenta. Tu progreso se guarda en este dispositivo.';
+    show('<div class="wrap"><div class="hero">' + mascot("welcome", hello) + '</div>'
       + '<div class="stat-row"><div class="stat">&#128293; <b>' + (st.streak || 0) + '</b> dias</div>'
       + '<div class="stat">&#11088; <b>' + (st.xp || 0) + '</b> XP</div></div>'
-      + '<h1>Lecciones gratis</h1><p class="muted">Aprende sin cuenta. Tu progreso se guarda en este dispositivo.</p>'
+      + '<h1>Lecciones gratis</h1><p class="muted">' + sub + '</p>'
       + '<div class="grid">' + cards + '</div></div>');
     each("[data-go]", function (b) { b.onclick = function () { location.search = "?id=" + encodeURIComponent(b.getAttribute("data-go")); }; });
   }
 
   /* ---------- COVER ---------- */
   function renderCover() {
+    var line = (A ? A.personalize("Vamos con: " + lesson.title) : "Vamos con: " + lesson.title);
     show('<div class="wrap">' + topbar(6) + '<div class="card center">'
-      + mascot("welcome", "Vamos con: " + lesson.title)
+      + mascot("welcome", line)
       + '<div class="lcard-top center-row"><span class="pill">' + esc(lesson.level) + '</span><span class="track">' + esc(lesson.track) + '</span></div>'
       + '<h1>' + esc(lesson.title) + '</h1>'
+      + (lesson.adapted ? '<div class="adapt-badge">&#10024; ' + esc(lesson.adaptNote) + '</div>' : '')
       + '<p class="muted">' + lesson.exercises.length + ' ejercicios &middot; +' + (lesson.xpReward || 0) + ' XP</p>'
       + '<button class="btn btn-gold" id="start">Empezar</button></div></div>');
     byId("start").onclick = renderExplanation;
@@ -225,6 +278,12 @@
     var ex = lesson.exercises[exIdx];
     if (ex.type === "multiple_choice") renderMCQ(ex, pct, total);
     else if (ex.type === "word_order") renderWordOrder(ex, pct, total);
+    else if (ex.type === "true_false") renderTrueFalse(ex, pct, total);
+    else if (ex.type === "fill_blank") renderFillBlank(ex, pct, total);
+    else if (ex.type === "translate" || ex.type === "type_answer") renderTranslate(ex, pct, total);
+    else if (ex.type === "matching") renderMatching(ex, pct, total);
+    else if (ex.type === "listening") renderListening(ex, pct, total);
+    else if (ex.type === "categorize") renderCategorize(ex, pct, total);
     else advance();
   }
   function advance() {
@@ -308,6 +367,264 @@
     };
   }
 
+  /* ---------- shared helpers for typed/new activities ---------- */
+  function norm(s) {
+    return ("" + (s == null ? "" : s)).toLowerCase()
+      .replace(/[’‘'`]/g, "")
+      .replace(/[.,!?;:¿¡"]/g, " ")
+      .replace(/\s+/g, " ").trim();
+  }
+  function speak(text, audioPath) {
+    if (audioPath) {
+      try {
+        var a = new Audio(audioPath);
+        a.play().catch(function () { speakTTS(text); });
+        a.onerror = function () { speakTTS(text); };
+        return;
+      } catch (e) { /* cae a TTS */ }
+    }
+    speakTTS(text);
+  }
+  function speakTTS(text) {
+    try {
+      if (window.speechSynthesis) {
+        var u = new SpeechSynthesisUtterance(text);
+        u.lang = "en-US"; u.rate = 0.95;
+        speechSynthesis.cancel(); speechSynthesis.speak(u);
+      }
+    } catch (e) {}
+  }
+  function setVerifyNext(btn, total) {
+    btn.textContent = (exIdx + 1 < total) ? "Siguiente" : "Ver resultados";
+  }
+
+  /* ---------- TRUE / FALSE ---------- */
+  function renderTrueFalse(ex, pct, total) {
+    show('<div class="wrap">' + exHeader(pct, total) + '<div class="card">'
+      + '<h2>Verdadero o falso?</h2>'
+      + '<div class="statement">' + esc(ex.statement) + '</div>'
+      + '<div class="tf-row"><button class="tf-btn" data-v="1">Verdadero</button><button class="tf-btn" data-v="0">Falso</button></div>'
+      + '<div id="fb"></div><button class="btn" id="verify" disabled>Verificar</button></div></div>');
+    var sel = -1, done = false;
+    var btns = document.querySelectorAll(".tf-btn");
+    each(".tf-btn", function (b) {
+      b.onclick = function () {
+        if (done) return;
+        sel = +b.getAttribute("data-v");
+        for (var x = 0; x < btns.length; x++) btns[x].classList.remove("sel");
+        b.classList.add("sel"); byId("verify").disabled = false;
+      };
+    });
+    byId("verify").onclick = function () {
+      if (done) { advance(); return; }
+      done = true;
+      var ok = (sel === 1) === (!!ex.answer);
+      for (var x = 0; x < btns.length; x++) {
+        var v = +btns[x].getAttribute("data-v"); btns[x].classList.add("locked");
+        if ((v === 1) === (!!ex.answer)) btns[x].classList.add("correct");
+        if (v === sel && !ok) btns[x].classList.add("wrong");
+      }
+      results[exIdx] = ok;
+      byId("fb").innerHTML = feedbackBox(ok, ok ? "" : (ex.explanation || ("Respuesta: " + (ex.answer ? "Verdadero" : "Falso"))));
+      setVerifyNext(this, total);
+    };
+  }
+
+  /* ---------- FILL IN THE BLANK ---------- */
+  function renderFillBlank(ex, pct, total) {
+    var parts = ("" + (ex.sentence || "___")).split("___");
+    var answers = ex.answers || (ex.answer != null ? [ex.answer] : []);
+    show('<div class="wrap">' + exHeader(pct, total) + '<div class="card">'
+      + '<h2>Completa la frase</h2>'
+      + (ex.hint ? '<p class="hint">&#128161; ' + esc(ex.hint) + '</p>' : '')
+      + '<p class="fb-sentence">' + esc(parts[0])
+      + '<input id="blank" class="type-input" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" inputmode="text"> '
+      + esc(parts.slice(1).join("___")) + '</p>'
+      + '<div id="fb"></div><button class="btn" id="verify" disabled>Verificar</button></div></div>');
+    var done = false, inp = byId("blank");
+    inp.oninput = function () { byId("verify").disabled = !inp.value.trim(); };
+    inp.onkeydown = function (e) { if (e.key === "Enter" && !byId("verify").disabled) byId("verify").click(); };
+    inp.focus();
+    byId("verify").onclick = function () {
+      if (done) { advance(); return; }
+      done = true; inp.disabled = true;
+      var val = norm(inp.value);
+      var ok = answers.some(function (a) { return norm(a) === val; });
+      inp.classList.add(ok ? "correct" : "wrong");
+      results[exIdx] = ok;
+      byId("fb").innerHTML = feedbackBox(ok, ok ? "" : (ex.explanation || ("Respuesta: " + (answers[0] || ""))));
+      setVerifyNext(this, total);
+    };
+  }
+
+  /* ---------- TRANSLATE / TYPE ANSWER ---------- */
+  function renderTranslate(ex, pct, total) {
+    var answers = ex.answers || [];
+    show('<div class="wrap">' + exHeader(pct, total) + '<div class="card">'
+      + '<h2>Tu turno</h2><p class="body">' + esc(ex.prompt || "Traduce la frase") + '</p>'
+      + '<input id="trans" class="type-input" placeholder="Escribe en ingles..." autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false">'
+      + '<div id="fb"></div><button class="btn" id="verify" disabled>Verificar</button></div></div>');
+    var done = false, inp = byId("trans");
+    inp.oninput = function () { byId("verify").disabled = !inp.value.trim(); };
+    inp.onkeydown = function (e) { if (e.key === "Enter" && !byId("verify").disabled) byId("verify").click(); };
+    inp.focus();
+    byId("verify").onclick = function () {
+      if (done) { advance(); return; }
+      done = true; inp.disabled = true;
+      var val = norm(inp.value);
+      var ok = answers.some(function (a) { return norm(a) === val; });
+      inp.classList.add(ok ? "correct" : "wrong");
+      results[exIdx] = ok;
+      byId("fb").innerHTML = feedbackBox(ok, ok ? "" : (ex.explanation || ("Sugerencia: " + (answers[0] || ""))));
+      setVerifyNext(this, total);
+    };
+  }
+
+  /* ---------- MATCHING ---------- */
+  function renderMatching(ex, pct, total) {
+    var pairs = ex.pairs || [];
+    var lefts = pairs.map(function (p, i) { return { t: p.l, p: i }; });
+    var rights = shuffle(pairs.map(function (p, i) { return { t: p.r, p: i }; }));
+    var leftHtml = lefts.map(function (o) { return '<button class="match-item" data-side="l" data-p="' + o.p + '">' + esc(o.t) + '</button>'; }).join("");
+    var rightHtml = rights.map(function (o) { return '<button class="match-item" data-side="r" data-p="' + o.p + '">' + esc(o.t) + '</button>'; }).join("");
+    show('<div class="wrap">' + exHeader(pct, total) + '<div class="card">'
+      + '<h2>Emparejar</h2>'
+      + '<p class="hint">&#128161; ' + esc(ex.instruction || "Toca una palabra y luego su pareja.") + '</p>'
+      + '<div class="match-cols"><div>' + leftHtml + '</div><div>' + rightHtml + '</div></div>'
+      + '<div id="fb"></div><button class="btn" id="verify" disabled>Empareja todo</button></div></div>');
+    var selEl = null, matched = 0, errors = 0, done = false;
+    function clearSel() { if (selEl) selEl.classList.remove("sel"); selEl = null; }
+    each(".match-item", function (b) {
+      b.onclick = function () {
+        if (done || b.classList.contains("done")) return;
+        var side = b.getAttribute("data-side");
+        if (side === "l") {
+          if (selEl && selEl.getAttribute("data-side") === "l") clearSel();
+          selEl = b; b.classList.add("sel"); return;
+        }
+        if (!selEl) { return; }
+        var lp = +selEl.getAttribute("data-p"), rp = +b.getAttribute("data-p");
+        if (lp === rp) {
+          selEl.classList.remove("sel"); selEl.classList.add("done"); b.classList.add("done");
+          selEl = null; matched++;
+          if (matched === pairs.length) {
+            done = true;
+            results[exIdx] = errors === 0;
+            byId("fb").innerHTML = feedbackBox(errors === 0, errors === 0 ? "" : "Lo lograste con " + errors + " intento(s) de mas.");
+            var v = byId("verify"); v.disabled = false; setVerifyNext(v, total);
+          }
+        } else {
+          errors++;
+          var bad = b; bad.classList.add("bad"); var ls = selEl; if (ls) ls.classList.add("bad");
+          clearSel();
+          setTimeout(function () { bad.classList.remove("bad"); if (ls) ls.classList.remove("bad"); }, 420);
+        }
+      };
+    });
+    byId("verify").onclick = function () { if (done) advance(); };
+  }
+
+  /* ---------- LISTENING ---------- */
+  function renderListening(ex, pct, total) {
+    var hasOpts = Array.isArray(ex.options);
+    var qHtml;
+    if (hasOpts) {
+      qHtml = '<p class="body">' + esc(ex.question || "Que escuchaste?") + '</p>'
+        + '<div class="opts">' + ex.options.map(function (o, i) { return '<button class="opt" data-i="' + i + '">' + esc(o) + '</button>'; }).join("") + '</div>';
+    } else {
+      qHtml = '<p class="body">' + esc(ex.question || "Escribe lo que escuchaste") + '</p>'
+        + '<input id="ltype" class="type-input" placeholder="Escribe en ingles..." autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false">';
+    }
+    show('<div class="wrap">' + exHeader(pct, total) + '<div class="card">'
+      + '<h2>Escucha</h2>'
+      + '<button class="listen-play" id="play"><span class="ic">&#128266;</span> Reproducir</button>'
+      + '<div class="listen-note">Toca para escuchar. Puedes repetir las veces que quieras.</div>'
+      + qHtml + '<div id="fb"></div><button class="btn" id="verify" disabled>Verificar</button></div></div>');
+    byId("play").onclick = function () { speak(ex.text, ex.audio); };
+    var done = false;
+    if (hasOpts) {
+      var sel = -1, optEls = document.querySelectorAll(".opt");
+      each(".opt", function (b) {
+        b.onclick = function () {
+          if (done) return;
+          sel = +b.getAttribute("data-i");
+          for (var x = 0; x < optEls.length; x++) optEls[x].classList.remove("sel");
+          b.classList.add("sel"); byId("verify").disabled = false;
+        };
+      });
+      byId("verify").onclick = function () {
+        if (done) { advance(); return; }
+        done = true;
+        var ok = sel === ex.correctIndex;
+        for (var x = 0; x < optEls.length; x++) {
+          var i = +optEls[x].getAttribute("data-i"); optEls[x].classList.add("locked");
+          if (i === ex.correctIndex) optEls[x].classList.add("correct");
+          if (i === sel && !ok) optEls[x].classList.add("wrong");
+        }
+        results[exIdx] = ok;
+        byId("fb").innerHTML = feedbackBox(ok, ok ? "" : (ex.explanation || ("Era: " + esc(ex.options[ex.correctIndex]))));
+        setVerifyNext(this, total);
+      };
+    } else {
+      var answers = ex.answers || [ex.text];
+      var inp = byId("ltype");
+      inp.oninput = function () { byId("verify").disabled = !inp.value.trim(); };
+      inp.onkeydown = function (e) { if (e.key === "Enter" && !byId("verify").disabled) byId("verify").click(); };
+      byId("verify").onclick = function () {
+        if (done) { advance(); return; }
+        done = true; inp.disabled = true;
+        var val = norm(inp.value);
+        var ok = answers.some(function (a) { return norm(a) === val; });
+        inp.classList.add(ok ? "correct" : "wrong");
+        results[exIdx] = ok;
+        byId("fb").innerHTML = feedbackBox(ok, ok ? "" : ("Era: " + (ex.text || answers[0] || "")));
+        setVerifyNext(this, total);
+      };
+    }
+  }
+
+  /* ---------- CATEGORIZE ---------- */
+  function renderCategorize(ex, pct, total) {
+    var buckets = ex.buckets || [];
+    var items = (ex.items || []).map(function (it, i) { return { t: it.t, bucket: it.bucket, i: i, at: null }; });
+    var sel = null, done = false;
+    show('<div class="wrap">' + exHeader(pct, total) + '<div class="card">'
+      + '<h2>Clasifica</h2>'
+      + '<p class="hint">&#128161; ' + esc(ex.instruction || "Toca una palabra y luego su grupo.") + '</p>'
+      + '<div class="cat-pool" id="pool"></div>'
+      + '<div class="cat-buckets" id="buckets"></div>'
+      + '<div id="fb"></div><button class="btn" id="verify" disabled>Verificar</button></div></div>');
+
+    function tk(it, cls) { return '<button class="cat-tk' + (cls || "") + '" data-i="' + it.i + '">' + esc(it.t) + '</button>'; }
+    function draw() {
+      var pool = byId("pool"), bx = byId("buckets");
+      var loose = items.filter(function (o) { return o.at === null; });
+      pool.innerHTML = loose.length ? loose.map(function (o) { return tk(o, sel === o.i ? " sel" : ""); }).join("")
+        : '<span class="muted" style="font-size:.85rem">Todo clasificado &#9989;</span>';
+      bx.innerHTML = buckets.map(function (b) {
+        var inside = items.filter(function (o) { return o.at === b.id; }).map(function (o) { return tk(o, o.cls || ""); }).join("");
+        return '<div class="cat-bucket' + (sel !== null ? " active" : "") + '" data-b="' + b.id + '"><h4>' + esc(b.label) + '</h4>' + inside + '</div>';
+      }).join("");
+      if (!done) {
+        each("#pool [data-i]", function (c) { c.onclick = function () { var i = +c.getAttribute("data-i"); sel = (sel === i ? null : i); draw(); }; });
+        each(".cat-bucket [data-i]", function (c) { c.onclick = function () { var i = +c.getAttribute("data-i"); items[i].at = null; sel = i; draw(); }; });
+        each("#buckets [data-b]", function (c) { c.onclick = function () { if (sel === null) return; items[sel].at = c.getAttribute("data-b"); sel = null; draw(); }; });
+      }
+      byId("verify").disabled = done ? false : items.some(function (o) { return o.at === null; });
+    }
+    draw();
+    byId("verify").onclick = function () {
+      if (done) { advance(); return; }
+      done = true; sel = null;
+      var ok = true;
+      items.forEach(function (o) { if (o.at === o.bucket) o.cls = " correct"; else { o.cls = " wrong"; ok = false; } });
+      draw();
+      results[exIdx] = ok;
+      byId("fb").innerHTML = feedbackBox(ok, ok ? "" : "Revisa los que estan en rojo.");
+      setVerifyNext(this, total);
+    };
+  }
+
   /* ---------- FEEDBACK / XP ---------- */
   function renderFeedback() {
     var total = lesson.exercises.length;
@@ -355,20 +672,76 @@
     byId("home").onclick = function () { location.href = "index.html"; };
   }
 
+  /* ---------- ADAPTIVE START (warm-up + personalizacion) ---------- */
+  function buildAdapted() {
+    if (A && A.adaptLesson && profile) {
+      lesson = A.adaptLesson(baseLesson, { session: (A.getSession ? A.getSession() : null) });
+    } else {
+      lesson = baseLesson;
+    }
+  }
+
+  function startLesson() {
+    var sess = (A && A.getSession) ? A.getSession() : null;
+    var calibrate = A && profile && !sess && baseLesson.exercises && baseLesson.exercises.length >= 3;
+    if (calibrate) { renderWarmup(); }
+    else { buildAdapted(); renderCover(); }
+  }
+
+  /* quiz corto de calibracion al inicio de la sesion */
+  function renderWarmup() {
+    var band = A.levelToBand(A.profileLevel());
+    var qs2 = A.warmupBank(band, 3);
+    var idx = 0, ans = [];
+    function step() {
+      if (idx >= qs2.length) { finishWarm(); return; }
+      var q = qs2[idx];
+      var dots = qs2.map(function (_, i) { return '<span class="warm-dot' + (i <= idx ? " on" : "") + '"></span>'; }).join("");
+      var opts = q.options.map(function (o, i) { return '<button class="opt" data-i="' + i + '">' + esc(o) + '</button>'; }).join("");
+      show('<div class="wrap">' + topbar(6 + idx * 4) + '<div class="card center">'
+        + mascot("thinking", A.greeting() + " Calibremos la sesion en 3 toques.") + '</div>'
+        + '<div class="card"><div class="exnum">Calibracion &middot; ' + (idx + 1) + ' de ' + qs2.length + '</div>'
+        + '<h2>' + esc(q.q) + '</h2><div class="opts">' + opts + '</div>'
+        + '<div style="text-align:center;margin-top:10px">' + dots + '</div></div></div>');
+      each(".opt", function (b) {
+        b.onclick = function () {
+          var i = +b.getAttribute("data-i");
+          ans.push({ correct: i === q.correct, skill: q.skill });
+          idx++; step();
+        };
+      });
+    }
+    function finishWarm() {
+      var r = A.scoreWarmup(ans);
+      buildAdapted();
+      var msg = r.calibration > 0 ? "Vas muy bien: subimos el reto."
+        : (r.calibration < 0 ? "Reforzamos lo basico, con calma." : "Listo, ajusto la leccion a tu nivel.");
+      show('<div class="wrap">' + topbar(18) + '<div class="card center">'
+        + mascot(r.calibration >= 0 ? "correct" : "explaining", msg)
+        + '<h1>Sesion lista</h1>'
+        + '<p class="muted">' + r.correct + ' de ' + r.total + ' en la calibracion</p>'
+        + '<button class="btn btn-gold" id="go">Empezar leccion</button></div></div>');
+      byId("go").onclick = renderCover;
+    }
+    step();
+  }
+
   /* ---------- helpers ---------- */
   function byId(x) { return document.getElementById(x); }
   function each(sel, fn) { var n = document.querySelectorAll(sel); for (var i = 0; i < n.length; i++) fn(n[i]); }
 
   /* ---------- boot ---------- */
   if (!L || !Object.keys(L).length) { show('<div class="wrap"><div class="card center"><h1>Sin lecciones</h1><p class="muted">No se cargaron los datos.</p></div></div>'); return; }
+  if (window.VESPER_THEME && VESPER_THEME.mountFloat) VESPER_THEME.mountFloat();
   if (!id) { renderIndex(); return; }
-  lesson = L[id];
-  if (!lesson) {
+  baseLesson = L[id];
+  if (!baseLesson) {
     show('<div class="wrap"><div class="card center">' + mascot("incorrect", "No encuentro esa leccion.")
       + '<h1>Leccion no encontrada</h1><a class="btn btn-gold" href="leccion.html">Ver lecciones</a></div></div>');
     return;
   }
-  renderCover();
+  lesson = baseLesson;
+  startLesson();
 })();
 </script>
 <script>

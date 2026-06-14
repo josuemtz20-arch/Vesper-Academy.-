@@ -72,6 +72,15 @@
 !/vesper_progress.js
 !/vesper_sync.js
 
+# Expansion 2026-06-14: appearance "models" (themes + mascot skins),
+# adaptive lessons (onboarding profile + start-of-session warm-up) and
+# the expanded activity bank (true/false, fill-blank, matching,
+# listening, translate, categorize). All vanilla static, no-account.
+!/vesper_theme.js
+!/vesper_adaptive.js
+!/vesper_activities.js
+!/apariencia.html
+
 # css / images / audio used by all public pages
 !/assets/
 
