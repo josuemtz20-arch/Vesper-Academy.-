@@ -224,13 +224,19 @@ window.VESPER_ADAPTIVE = (function () {
     if (!p || !L) return order;
     var band = levelToBand(typeof p.level === "number" ? p.level : 1);
     var target = bandRank(band);
+    var interests = Array.isArray(p.topics) ? p.topics : [];
     var withMeta = order.map(function (id, idx) {
       var l = L[id] || {};
       var r = bandRank(l.level);
       var dist = (r < 0) ? 99 : Math.abs(r - target);
-      return { id: id, idx: idx, dist: dist };
+      /* afinidad por interes: 0 si el tema esta entre los intereses, si no 1 */
+      var topicMatch = (l.topic && interests.indexOf(l.topic) >= 0) ? 0 : 1;
+      return { id: id, idx: idx, dist: dist, topicMatch: topicMatch };
     });
-    withMeta.sort(function (a, b) { return a.dist - b.dist || a.idx - b.idx; });
+    /* primero cercania de nivel, luego coincidencia de interes, luego orden original */
+    withMeta.sort(function (a, b) {
+      return a.dist - b.dist || a.topicMatch - b.topicMatch || a.idx - b.idx;
+    });
     return withMeta.map(function (o) { return o.id; });
   }
 
