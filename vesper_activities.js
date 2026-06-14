@@ -19,7 +19,7 @@ window.VESPER_ACTIVITIES = (function () {
   var L = {
     /* ---------------- A1 · Vida diaria ---------------- */
     "act-a1-daily-routine": {
-      lessonId: "act-a1-daily-routine", level: "A1", track: "Practica", topic: "dailylife",
+      lessonId: "act-a1-daily-routine", level: "A1", track: "Practica", topic: "dailylife", skill: "use",
       title: "Rutina diaria", xpReward: 35, mascotState: "explaining",
       explanation: {
         body: "Usamos el present simple para hablar de rutinas: I get up, I have breakfast, I go to work. Con he/she/it agregamos -s: she gets up. (Para rutinas usamos el presente simple.)",
@@ -52,7 +52,7 @@ window.VESPER_ACTIVITIES = (function () {
 
     /* ---------------- A1 · Comida ---------------- */
     "act-a1-food": {
-      lessonId: "act-a1-food", level: "A1", track: "Practica", topic: "dailylife",
+      lessonId: "act-a1-food", level: "A1", track: "Practica", topic: "dailylife", skill: "vocab",
       title: "Comida y restaurante", xpReward: 35, mascotState: "explaining",
       explanation: {
         body: "Para pedir usamos \"I'd like...\" (me gustaria) y \"Can I have...?\". Contamos comida con a/an y some. (Para pedir comida con cortesia se usa I'd like o Can I have.)",
@@ -85,7 +85,7 @@ window.VESPER_ACTIVITIES = (function () {
 
     /* ---------------- A1 · Numeros y la hora ---------------- */
     "act-a1-time": {
-      lessonId: "act-a1-time", level: "A1", track: "Practica", topic: "dailylife",
+      lessonId: "act-a1-time", level: "A1", track: "Practica", topic: "dailylife", skill: "vocab",
       title: "Numeros y la hora", xpReward: 30, mascotState: "explaining",
       explanation: {
         body: "Para la hora: It's seven o'clock, It's half past eight (8:30), It's a quarter to nine (8:45). (La hora se dice con o'clock, half past, quarter to/past.)",
@@ -112,7 +112,7 @@ window.VESPER_ACTIVITIES = (function () {
 
     /* ---------------- A2 · Viajes ---------------- */
     "act-a2-travel": {
-      lessonId: "act-a2-travel", level: "A2", track: "Practica", topic: "travel",
+      lessonId: "act-a2-travel", level: "A2", track: "Practica", topic: "travel", skill: "vocab",
       title: "Viajes y aeropuerto", xpReward: 40, mascotState: "explaining",
       explanation: {
         body: "En el aeropuerto: check in, boarding pass, gate, departure, arrival. Para pedir direcciones: \"How do I get to...?\". (Vocabulario de viaje y como pedir indicaciones.)",
@@ -145,7 +145,7 @@ window.VESPER_ACTIVITIES = (function () {
 
     /* ---------------- A2 · Compras ---------------- */
     "act-a2-shopping": {
-      lessonId: "act-a2-shopping", level: "A2", track: "Practica", topic: "dailylife",
+      lessonId: "act-a2-shopping", level: "A2", track: "Practica", topic: "dailylife", skill: "use",
       title: "Compras", xpReward: 38, mascotState: "explaining",
       explanation: {
         body: "Para comprar: \"How much is it?\", \"Can I try it on?\", \"It's too expensive.\" Usa this/these para cerca y that/those para lejos. (Frases para ir de compras y demostrativos.)",
@@ -176,7 +176,7 @@ window.VESPER_ACTIVITIES = (function () {
 
     /* ---------------- A2 · Familia ---------------- */
     "act-a2-family": {
-      lessonId: "act-a2-family", level: "A2", track: "Practica", topic: "dailylife",
+      lessonId: "act-a2-family", level: "A2", track: "Practica", topic: "dailylife", skill: "vocab",
       title: "Familia y descripciones", xpReward: 36, mascotState: "explaining",
       explanation: {
         body: "Para describir personas usamos have got / has got y adjetivos: She has got brown eyes. He is tall and friendly. (Para describir usamos have/has got + adjetivos.)",
@@ -203,7 +203,7 @@ window.VESPER_ACTIVITIES = (function () {
 
     /* ---------------- B1 · Trabajo ---------------- */
     "act-b1-work": {
-      lessonId: "act-b1-work", level: "B1", track: "Practica", topic: "business",
+      lessonId: "act-b1-work", level: "B1", track: "Practica", topic: "business", skill: "use",
       title: "Trabajo y carrera", xpReward: 45, mascotState: "explaining",
       explanation: {
         body: "En contextos laborales: apply for a job, attend a meeting, meet a deadline, give feedback. Para experiencia usamos present perfect: I have worked here for three years. (Vocabulario y present perfect para experiencia laboral.)",
@@ -236,7 +236,7 @@ window.VESPER_ACTIVITIES = (function () {
 
     /* ---------------- B1 · Tecnologia ---------------- */
     "act-b1-tech": {
-      lessonId: "act-b1-tech", level: "B1", track: "Practica", topic: "tech",
+      lessonId: "act-b1-tech", level: "B1", track: "Practica", topic: "tech", skill: "vocab",
       title: "Tecnologia e internet", xpReward: 44, mascotState: "explaining",
       explanation: {
         body: "Verbos de tecnologia: download, upload, install, update, log in. Usa used to para habitos del pasado: I used to use a flip phone. (Vocabulario tech y 'used to' para el pasado.)",
@@ -269,7 +269,7 @@ window.VESPER_ACTIVITIES = (function () {
 
     /* ---------------- B2 · Conversacion y opinion ---------------- */
     "act-b2-opinion": {
-      lessonId: "act-b2-opinion", level: "B2", track: "Practica", topic: "society",
+      lessonId: "act-b2-opinion", level: "B2", track: "Practica", topic: "society", skill: "use",
       title: "Dar tu opinion", xpReward: 50, mascotState: "explaining",
       explanation: {
         body: "Para opinar con matices: \"I reckon...\", \"As far as I'm concerned...\", \"I'd argue that...\". Para acuerdo/desacuerdo: \"I see your point, but...\". (Conectores y expresiones para debatir con naturalidad.)",
@@ -296,13 +296,91 @@ window.VESPER_ACTIVITIES = (function () {
         { type: "translate", prompt: "Traduce: \"Entiendo tu punto, pero no estoy de acuerdo.\"",
           answers: ["i see your point but i disagree", "i see your point, but i disagree", "i understand your point but i disagree"], explanation: "I see your point, but I disagree." }
       ]
+    },
+
+    /* ---------------- A1 · Listening ---------------- */
+    "lis-a1-everyday": {
+      lessonId: "lis-a1-everyday", level: "A1", track: "Listening", topic: "dailylife", skill: "listening",
+      title: "Escucha: frases del día a día", xpReward: 35, mascotState: "explaining",
+      explanation: {
+        body: "Vamos a entrenar el oído con frases muy comunes. Toca el botón para escuchar (puedes repetir) y elige o escribe lo que oíste. (Entrena tu comprensión auditiva con frases cotidianas.)",
+        examples: [
+          { en: "Listen and choose.", es: "Escucha y elige." },
+          { en: "You can repeat the audio.", es: "Puedes repetir el audio." }
+        ]
+      },
+      exercises: [
+        { type: "listening", text: "My name is Anna.", question: "Que escuchaste?",
+          options: ["My name is Anna.", "My game is honor.", "My name is Hannah."], correctIndex: 0 },
+        { type: "listening", text: "I live in a small town.", question: "Donde vive?",
+          options: ["En un pueblo pequeño", "En una ciudad grande", "En una granja"], correctIndex: 0 },
+        { type: "listening", text: "She has two children.", question: "Cuantos hijos tiene?",
+          options: ["Dos", "Tres", "Ninguno"], correctIndex: 0 },
+        { type: "true_false", statement: "El audio decía: \"She has two children.\"", answer: true, explanation: "Asi es: two children = dos hijos." },
+        { type: "listening", text: "I get up at six.", question: "Escribe lo que escuchaste:",
+          answers: ["i get up at six"], explanation: "I get up at six." },
+        { type: "listening", text: "Thank you very much.", question: "Que significa lo que oiste?",
+          options: ["Muchas gracias", "De nada", "Lo siento"], correctIndex: 0 }
+      ]
+    },
+
+    /* ---------------- A2 · Listening ---------------- */
+    "lis-a2-plans": {
+      lessonId: "lis-a2-plans", level: "A2", track: "Listening", topic: "dailylife", skill: "listening",
+      title: "Escucha: planes y lugares", xpReward: 40, mascotState: "explaining",
+      explanation: {
+        body: "Escucha frases sobre planes, lugares y tiempo. Algunas piden elegir y otras escribir lo que oíste. (Comprensión auditiva nivel A2.)",
+        examples: [
+          { en: "We're going to the cinema tonight.", es: "Vamos al cine esta noche." },
+          { en: "The shop closes at nine.", es: "La tienda cierra a las nueve." }
+        ]
+      },
+      exercises: [
+        { type: "listening", text: "We are going to the beach on Saturday.", question: "Cuando van a la playa?",
+          options: ["El sábado", "El domingo", "El viernes"], correctIndex: 0 },
+        { type: "listening", text: "The train leaves at half past ten.", question: "A que hora sale el tren?",
+          options: ["10:30", "10:15", "11:30"], correctIndex: 0 },
+        { type: "listening", text: "Can you help me, please?", question: "Que escuchaste?",
+          options: ["Can you help me, please?", "Can you call me, please?", "Can you tell me, please?"], correctIndex: 0 },
+        { type: "listening", text: "I would like a table for two.", question: "Escribe lo que escuchaste:",
+          answers: ["i would like a table for two", "i'd like a table for two"], explanation: "I would like a table for two." },
+        { type: "true_false", statement: "El audio pedía una mesa para cuatro personas.", answer: false, explanation: "Era \"a table for two\" = para dos." },
+        { type: "listening", text: "The museum is closed on Mondays.", question: "Cuando cierra el museo?",
+          options: ["Los lunes", "Los domingos", "Nunca"], correctIndex: 0 }
+      ]
+    },
+
+    /* ---------------- B1 · Listening ---------------- */
+    "lis-b1-news": {
+      lessonId: "lis-b1-news", level: "B1", track: "Listening", topic: "society", skill: "listening",
+      title: "Escucha: anuncios e instrucciones", xpReward: 45, mascotState: "explaining",
+      explanation: {
+        body: "Escucha anuncios e instrucciones más largos y responde. Fíjate en los detalles: horas, lugares y acciones. (Comprensión auditiva nivel B1.)",
+        examples: [
+          { en: "The meeting has been moved to Friday.", es: "La reunión se cambió al viernes." },
+          { en: "Please turn off your phones.", es: "Por favor, apaguen sus teléfonos." }
+        ]
+      },
+      exercises: [
+        { type: "listening", text: "The flight to London has been delayed by one hour.", question: "Que pasa con el vuelo a Londres?",
+          options: ["Se retrasó una hora", "Fue cancelado", "Salió antes"], correctIndex: 0 },
+        { type: "listening", text: "Please remember to bring your passport tomorrow.", question: "Que debes recordar?",
+          options: ["Traer el pasaporte", "Traer dinero", "Llegar tarde"], correctIndex: 0 },
+        { type: "listening", text: "The meeting has been moved to Friday morning.", question: "Cuando es la reunion ahora?",
+          options: ["Viernes por la mañana", "Lunes por la tarde", "Jueves por la noche"], correctIndex: 0 },
+        { type: "listening", text: "Could you call me back later, please?", question: "Escribe lo que escuchaste:",
+          answers: ["could you call me back later please"], explanation: "Could you call me back later, please?" },
+        { type: "true_false", statement: "El anuncio pedía apagar los teléfonos.", answer: false, explanation: "Ese ejemplo era de la explicación, no del audio anterior." },
+        { type: "listening", text: "Tickets are available online from Monday.", question: "Desde cuando hay entradas online?",
+          options: ["Desde el lunes", "Desde el viernes", "Solo en taquilla"], correctIndex: 0 }
+      ]
     }
   };
 
   var ORDER = [
-    "act-a1-daily-routine", "act-a1-food", "act-a1-time",
-    "act-a2-travel", "act-a2-shopping", "act-a2-family",
-    "act-b1-work", "act-b1-tech", "act-b2-opinion"
+    "act-a1-daily-routine", "act-a1-food", "act-a1-time", "lis-a1-everyday",
+    "act-a2-travel", "act-a2-shopping", "act-a2-family", "lis-a2-plans",
+    "act-b1-work", "act-b1-tech", "lis-b1-news", "act-b2-opinion"
   ];
 
   /* Fusiona estas lecciones en el catalogo principal (VESPER_LESSONS). */

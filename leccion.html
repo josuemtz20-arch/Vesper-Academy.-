@@ -111,6 +111,53 @@
   .nudge{position:relative;background:var(--cream);border:1px dashed var(--gold);border-radius:12px;padding:11px 34px 11px 12px;font-size:.88rem;margin:14px 0;text-align:left}
   .nudge a{color:var(--ink);font-weight:600}
   .nudge .x{position:absolute;top:6px;right:8px;background:none;border:none;font-size:1.1rem;cursor:pointer;color:var(--muted)}
+  /* ===== Hub progresivo (estilo Test-English) ===== */
+  .hub-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:4px 0 6px}
+  .hub-hello{font-family:"Inria Serif",Georgia,serif;font-size:1.5rem;line-height:1.1;margin:0}
+  .hub-stats{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 4px}
+  .hub-stat{background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:5px 12px;font-size:.85rem;font-weight:600}
+  /* continue card */
+  .cont-card{display:flex;align-items:center;gap:14px;text-align:left;width:100%;background:linear-gradient(135deg,var(--ink),#26263e);color:var(--cream);border:none;border-radius:18px;padding:16px 18px;cursor:pointer;margin:10px 0 6px;box-shadow:var(--shadow)}
+  .cont-ico{flex:0 0 auto;width:48px;height:48px;border-radius:50%;background:var(--gold);color:var(--ink);display:flex;align-items:center;justify-content:center;font-size:1.4rem}
+  .cont-card .lbl{font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;opacity:.8}
+  .cont-card .ttl{font-weight:700;font-size:1.05rem;margin:2px 0}
+  .cont-card .meta{font-size:.8rem;opacity:.85}
+  /* level tabs */
+  .lvl-tabs{display:flex;gap:8px;overflow-x:auto;padding:8px 2px 4px;margin:6px -2px 2px;-webkit-overflow-scrolling:touch}
+  .lvl-tab{flex:0 0 auto;display:flex;align-items:center;gap:8px;border:1.5px solid var(--line);background:var(--paper);border-radius:13px;padding:8px 12px;cursor:pointer;font-family:inherit;color:var(--ink)}
+  .lvl-tab.on{border-color:var(--gold);background:var(--gold-tint)}
+  .lvl-tab .nm{font-weight:700;font-size:.95rem}
+  .lvl-tab .pc{font-size:.72rem;color:var(--muted)}
+  .ring{width:30px;height:30px;border-radius:50%;flex:0 0 auto;display:flex;align-items:center;justify-content:center;font-size:.62rem;font-weight:700;color:var(--ink)}
+  .ring i{width:22px;height:22px;border-radius:50%;background:var(--paper);display:flex;align-items:center;justify-content:center;font-style:normal}
+  /* level header */
+  .lvl-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:14px 0 2px}
+  .lvl-head h2{margin:0;font-size:1.2rem}
+  .lvl-head .lvl-badge{font-size:.72rem;font-weight:700;color:#fff;border-radius:999px;padding:3px 10px}
+  .lvl-prog{height:8px;background:var(--line);border-radius:999px;overflow:hidden;margin:6px 0 2px}
+  .lvl-prog i{display:block;height:100%;border-radius:999px;transition:width .5s ease}
+  /* skill section */
+  .skill-sec{margin:14px 0 2px}
+  .skill-h{display:flex;align-items:center;gap:8px;font-weight:700;font-size:.95rem;margin:8px 0 8px;color:var(--ink)}
+  .skill-h .ic{font-size:1.1rem}
+  .skill-h .ct{margin-left:auto;font-size:.78rem;color:var(--muted);font-weight:600}
+  /* lesson cards */
+  .lgrid{display:grid;gap:10px}
+  .lcard2{display:flex;align-items:center;gap:12px;text-align:left;width:100%;background:var(--paper);border:1.5px solid var(--line);border-radius:14px;padding:13px 14px;cursor:pointer;font-family:inherit;color:var(--ink)}
+  .lcard2:active:not(.locked){transform:translateY(1px)}
+  .lcard2.completed{border-color:var(--success)}
+  .lcard2.locked{opacity:.6;cursor:not-allowed;background:var(--cream)}
+  .lc-badge{flex:0 0 auto;width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.15rem;background:var(--gold-tint);color:var(--ink)}
+  .lcard2.completed .lc-badge{background:var(--ok-tint)}
+  .lcard2.locked .lc-badge{background:#e9e6dd}
+  .lc-body{flex:1;min-width:0}
+  .lc-ttl{font-weight:600;font-size:1rem;line-height:1.25}
+  .lc-sub{font-size:.8rem;color:var(--muted);margin-top:2px}
+  .lc-stars{color:var(--gold);font-size:.95rem;letter-spacing:1px}
+  .lc-stars .off{color:var(--line)}
+  .lc-go{flex:0 0 auto;color:var(--muted);font-size:1.1rem}
+  .hub-toast{position:fixed;left:50%;bottom:84px;transform:translateX(-50%) translateY(10px);background:var(--ink);color:var(--cream);padding:10px 16px;border-radius:999px;font-size:.85rem;font-weight:600;opacity:0;pointer-events:none;transition:opacity .2s ease,transform .2s ease;z-index:9997}
+  .hub-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
   /* adaptive badge + warm-up */
   .adapt-badge{display:inline-flex;align-items:center;gap:6px;background:var(--gold-tint);color:var(--ink);border:1px solid var(--gold);border-radius:999px;padding:5px 12px;font-size:.78rem;font-weight:600;margin:8px 0 2px}
   .warm-dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--line);margin:0 3px}
@@ -168,6 +215,7 @@
 <script src="vesper_theme.js"></script>
 <script src="vesper_adaptive.js"></script>
 <script src="vesper_progress.js"></script>
+<script src="vesper_path.js"></script>
 <script src="vesper_auth.js"></script>
 <script src="vesper_sync.js"></script>
 <script>
@@ -178,6 +226,7 @@
   var L = window.VESPER_LESSONS || {};
   var ORDER = window.VESPER_LESSONS_ORDER || Object.keys(L);
   var A = window.VESPER_ADAPTIVE || null;
+  var PATH = window.VESPER_PATH || null;
   var M = window.VESPER_MASCOT;
   var P = window.VesperProgress;
   var app = document.getElementById("app");
@@ -221,27 +270,115 @@
     return arr;
   }
 
-  /* ---------- INDEX (no ?id=) ---------- */
-  function renderIndex() {
-    var st = P ? P.getState() : { streak: 0, xp: 0 };
-    var viewOrder = (A && profile && A.recommendOrder) ? A.recommendOrder(ORDER, L) : ORDER;
-    var cards = viewOrder.map(function (k) {
-      var l = L[k]; if (!l) return "";
-      return '<button class="card lcard" data-go="' + esc(k) + '">'
-        + '<div class="lcard-top"><span class="pill">' + esc(l.level) + '</span><span class="track">' + esc(l.track) + '</span></div>'
-        + '<h2>' + esc(l.title) + '</h2>'
-        + '<div class="muted">' + (l.exercises ? l.exercises.length : 0) + ' ejercicios &middot; +' + (l.xpReward || 0) + ' XP</div></button>';
-    }).join("");
+  /* ---------- INDEX / HUB progresivo (no ?id=) ---------- */
+  function toast(msg) {
+    var t = byId("toast"); if (!t) return;
+    t.textContent = msg; t.classList.add("show");
+    clearTimeout(t._h); t._h = setTimeout(function () { t.classList.remove("show"); }, 1900);
+  }
+
+  function lessonCard(lid, built) {
+    var l = L[lid]; if (!l) return "";
+    var stt = PATH.status(lid, built);
+    var n = l.exercises ? l.exercises.length : 0;
+    var badge, second, attr, cls = "lcard2";
+    if (stt === "completed") {
+      cls += " completed"; badge = "&#10003;"; attr = 'data-go="' + esc(lid) + '"';
+      var sc = PATH.getScore(lid), s = PATH.stars(sc != null ? sc : 70), starsHtml = '<span class="lc-stars">';
+      for (var i = 0; i < 3; i++) starsHtml += (i < s ? "&#9733;" : '<span class="off">&#9733;</span>');
+      starsHtml += "</span>";
+      second = starsHtml + ' <span class="lc-sub">' + (sc != null ? sc + "% · Repasar" : "Completado") + "</span>";
+    } else if (stt === "open") {
+      badge = "&#9654;"; attr = 'data-go="' + esc(lid) + '"';
+      second = '<span class="lc-sub">' + n + " ejercicios &middot; +" + (l.xpReward || 0) + " XP</span>";
+    } else {
+      cls += " locked"; badge = "&#128274;"; attr = 'data-locked="1"';
+      second = '<span class="lc-sub">Completa la anterior para desbloquear</span>';
+    }
+    return '<button class="' + cls + '" ' + attr + '>'
+      + '<span class="lc-badge">' + badge + '</span>'
+      + '<span class="lc-body"><span class="lc-ttl">' + esc(l.title) + '</span>'
+      + '<span style="display:block;margin-top:3px">' + second + '</span></span>'
+      + '<span class="lc-go">' + (stt === "locked" ? "" : "&#8250;") + '</span></button>';
+  }
+
+  function renderIndex(selLevel) {
+    var st = P ? P.getState() : { streak: 0, xp: 0, shields: 0 };
     var hello = (A && profile) ? A.greeting() : "Hola!";
-    var sub = (A && profile)
-      ? 'Ordenamos las lecciones para tu nivel. Tu progreso se guarda en este dispositivo.'
-      : 'Aprende sin cuenta. Tu progreso se guarda en este dispositivo.';
-    show('<div class="wrap"><div class="hero">' + mascot("welcome", hello) + '</div>'
-      + '<div class="stat-row"><div class="stat">&#128293; <b>' + (st.streak || 0) + '</b> dias</div>'
-      + '<div class="stat">&#11088; <b>' + (st.xp || 0) + '</b> XP</div></div>'
-      + '<h1>Lecciones gratis</h1><p class="muted">' + sub + '</p>'
-      + '<div class="grid">' + cards + '</div></div>');
+    /* fallback simple si no hay motor de ruta */
+    if (!PATH) {
+      var cards = ORDER.map(function (k) {
+        var l = L[k]; if (!l) return "";
+        return '<button class="card lcard" data-go="' + esc(k) + '"><div class="lcard-top"><span class="pill">' + esc(l.level)
+          + '</span><span class="track">' + esc(l.track) + '</span></div><h2>' + esc(l.title) + '</h2>'
+          + '<div class="muted">' + (l.exercises ? l.exercises.length : 0) + ' ejercicios &middot; +' + (l.xpReward || 0) + ' XP</div></button>';
+      }).join("");
+      show('<div class="wrap"><div class="hero">' + mascot("welcome", hello) + '</div><h1>Lecciones gratis</h1><div class="grid">' + cards + '</div></div>');
+      each("[data-go]", function (b) { b.onclick = function () { location.search = "?id=" + encodeURIComponent(b.getAttribute("data-go")); }; });
+      return;
+    }
+
+    var built = PATH.build(L, ORDER);
+    if (!selLevel) {
+      var band = (A && profile) ? A.levelToBand(A.profileLevel()) : null;
+      if (band && built.levels[band] && built.levels[band].total) selLevel = band;
+      else {
+        for (var i = 0; i < PATH.LEVELS.length; i++) {
+          var lv = PATH.LEVELS[i], gg = built.levels[lv];
+          if (gg.total && gg.done < gg.total) { selLevel = lv; break; }
+        }
+        if (!selLevel) selLevel = PATH.LEVELS[0];
+      }
+    }
+
+    /* continuar donde lo dejaste */
+    var contId = PATH.continueLesson(built), contHtml = "";
+    if (contId && L[contId]) {
+      var cl = L[contId], anyDone = Object.keys(built.completed).length > 0;
+      contHtml = '<button class="cont-card" data-go="' + esc(contId) + '"><span class="cont-ico">&#9654;</span>'
+        + '<span style="min-width:0"><span class="lbl">' + (anyDone ? "Continuar" : "Empieza aquí") + '</span>'
+        + '<span class="ttl">' + esc(cl.title) + '</span>'
+        + '<span class="meta">' + esc(cl.level) + ' &middot; ' + (cl.exercises ? cl.exercises.length : 0) + ' ejercicios &middot; +' + (cl.xpReward || 0) + ' XP</span></span></button>';
+    }
+
+    /* pestañas de nivel con anillo de progreso */
+    var tabs = PATH.LEVELS.map(function (lv) {
+      var pr = PATH.levelProgress(lv, built), col = PATH.levelColor(lv);
+      var ring = '<span class="ring" style="background:conic-gradient(' + col + ' ' + pr.pct + '%, var(--line) 0)"><i>' + pr.pct + '</i></span>';
+      return '<button class="lvl-tab' + (lv === selLevel ? " on" : "") + '" data-lvl="' + lv + '">' + ring
+        + '<span><span class="nm">' + lv + '</span><br><span class="pc">' + pr.done + '/' + pr.total + '</span></span></button>';
+    }).join("");
+
+    /* secciones por destreza del nivel seleccionado */
+    var g = built.levels[selLevel], pr = PATH.levelProgress(selLevel, built), col = PATH.levelColor(selLevel);
+    var sections = "";
+    PATH.SKILL_ORDER.forEach(function (sk) {
+      var ids = g.bySkill[sk]; if (!ids || !ids.length) return;
+      var meta = PATH.SKILLS[sk];
+      var doneN = ids.filter(function (id) { return built.completed[id]; }).length;
+      sections += '<div class="skill-sec"><div class="skill-h"><span class="ic">' + meta.icon + '</span>' + meta.label
+        + '<span class="ct">' + doneN + "/" + ids.length + '</span></div><div class="lgrid">'
+        + ids.map(function (id) { return lessonCard(id, built); }).join("") + '</div></div>';
+    });
+    if (!sections) sections = '<p class="muted">Próximamente más lecciones en este nivel.</p>';
+
+    show('<div class="wrap">'
+      + '<div class="hub-head"><div><h1 class="hub-hello">' + esc(hello) + '</h1>'
+      + '<p class="muted" style="margin:2px 0 0;font-size:.88rem">Tu ruta de inglés, paso a paso.</p></div>'
+      + '<div>' + mascot("welcome", false, "sm") + '</div></div>'
+      + '<div class="hub-stats"><span class="hub-stat">&#128293; ' + (st.streak || 0) + ' días</span>'
+      + '<span class="hub-stat">&#11088; ' + (st.xp || 0) + ' XP</span>'
+      + ((st.shields || 0) ? '<span class="hub-stat">&#128737;&#65039; ' + st.shields + '</span>' : "") + '</div>'
+      + contHtml
+      + '<div class="lvl-tabs">' + tabs + '</div>'
+      + '<div class="lvl-head"><h2>Nivel ' + selLevel + '</h2>'
+      + '<span class="lvl-badge" style="background:' + col + '">' + pr.done + "/" + pr.total + '</span></div>'
+      + '<div class="lvl-prog"><i style="width:' + pr.pct + '%;background:' + col + '"></i></div>'
+      + sections + '</div><div class="hub-toast" id="toast"></div>');
+
+    each(".lvl-tab", function (b) { b.onclick = function () { renderIndex(b.getAttribute("data-lvl")); }; });
     each("[data-go]", function (b) { b.onclick = function () { location.search = "?id=" + encodeURIComponent(b.getAttribute("data-go")); }; });
+    each("[data-locked]", function (b) { b.onclick = function () { toast("Completa la lección anterior para desbloquear 🔒"); }; });
   }
 
   /* ---------- COVER ---------- */
@@ -630,6 +767,7 @@
     var total = lesson.exercises.length;
     var correct = results.filter(Boolean).length;
     earnedXp = Math.max(5, Math.round((lesson.xpReward || 0) * correct / Math.max(1, total)));
+    if (PATH && PATH.setScore && lesson.lessonId) PATH.setScore(lesson.lessonId, Math.round(100 * correct / Math.max(1, total)));
     var perfect = correct === total;
     show('<div class="wrap">' + topbar(86) + '<div class="card center">'
       + mascot(perfect ? "milestone" : "correct", perfect ? "Leccion perfecta!" : "Buen trabajo!")
