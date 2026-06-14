@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Apariencia · Vesper Academy</title>
+<meta name="description" content="Elige el modelo visual de la app y el skin de Vesper. Temas claros y oscuros.">
+<link rel="icon" href="assets/images/favicon_32.png" sizes="32x32">
+<meta name="theme-color" content="#1B1B2F">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inria+Serif:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1B1B2F; --gold:#C9A84C; --success:#2D9E75; --error:#C0392B;
+    --cream:#FBF8F1; --paper:#ffffff; --muted:#6b6b76; --line:#ece7da;
+    --gold-tint:rgba(201,168,76,.14); --ok-tint:rgba(45,158,117,.12);
+    --radius:16px; --shadow:0 6px 22px rgba(27,27,47,.08);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{background:var(--cream);color:var(--ink);font-family:Inter,system-ui,sans-serif;line-height:1.5}
+  .wrap{max-width:600px;margin:0 auto;padding:14px 16px 60px;min-height:100vh}
+  h1{font-family:"Inria Serif",Georgia,serif;font-size:1.7rem;margin:.2em 0}
+  h2{font-family:"Inria Serif",Georgia,serif;font-size:1.2rem;margin:.1em 0 .5em}
+  .muted{color:var(--muted);font-size:.92rem}
+  .topbar{display:flex;align-items:center;gap:12px;margin-bottom:12px}
+  .back{width:40px;height:40px;display:flex;align-items:center;justify-content:center;border-radius:50%;
+    text-decoration:none;color:var(--ink);background:var(--paper);border:1px solid var(--line);font-size:1.2rem}
+  .card{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px;margin-bottom:14px}
+  .preview-card{background:var(--cream);border:1px solid var(--line);border-radius:14px;padding:16px;text-align:center}
+  .pill{background:var(--ink);color:var(--cream);font-weight:600;font-size:.78rem;padding:3px 10px;border-radius:999px}
+  .track{color:var(--gold);font-weight:600;font-size:.85rem;text-transform:uppercase;letter-spacing:.04em;margin-left:6px}
+  .pv-opts{display:grid;gap:8px;margin-top:12px;text-align:left}
+  .pv-opt{border:1.5px solid var(--line);border-radius:12px;padding:10px 13px;background:var(--paper)}
+  .pv-opt.ok{border-color:var(--success);background:var(--ok-tint)}
+  .btn{display:block;width:100%;min-height:48px;border:none;border-radius:13px;font-family:inherit;font-size:1rem;font-weight:600;cursor:pointer;background:var(--gold);color:var(--ink);margin-top:10px}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <div class="topbar">
+    <a class="back" href="leccion.html" aria-label="Volver">&#8592;</a>
+    <h1 style="margin:0">Apariencia</h1>
+  </div>
+  <p class="muted">Elige el <b>modelo visual</b> de la app y el <b>skin</b> de Vesper. Se guarda en este dispositivo y se aplica en todas las lecciones.</p>
+
+  <div class="card">
+    <h2>Vista previa</h2>
+    <div class="preview-card">
+      <div id="pv-mascot"></div>
+      <div style="margin-top:10px"><span class="pill" id="pv-level">A1</span><span class="track">Practica</span></div>
+      <h2 style="margin:.3em 0">Rutina diaria</h2>
+      <div class="pv-opts">
+        <div class="pv-opt ok">She has breakfast at home. &#10003;</div>
+        <div class="pv-opt">She have breakfast at home.</div>
+      </div>
+      <button class="btn" type="button" onclick="if(window.VESPER_MASCOT){document.getElementById('pv-mascot').innerHTML=VESPER_MASCOT.render('correct',{size:'lg'});}">Botón de ejemplo</button>
+    </div>
+  </div>
+
+  <div class="card" id="picker-host"></div>
+</main>
+
+<script src="vesper_mascot.js"></script>
+<script src="vesper_theme.js"></script>
+<script>
+(function () {
+  function paintMascot() {
+    if (window.VESPER_MASCOT) {
+      document.getElementById("pv-mascot").innerHTML =
+        VESPER_MASCOT.render("welcome", { size: "lg", line: "Asi me veo con este skin." });
+    }
+  }
+  document.getElementById("picker-host").innerHTML =
+    '<h2>Personaliza</h2>' + VESPER_THEME.renderPicker();
+  VESPER_THEME.wirePicker(document.getElementById("picker-host"));
+  paintMascot();
+  /* refresca la vista previa al cambiar tema/skin */
+  window.addEventListener("vesper:appearance", paintMascot);
+})();
+</script>
+</body>
+</html>
