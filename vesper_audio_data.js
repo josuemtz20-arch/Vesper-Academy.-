@@ -4432,121 +4432,1101 @@ window.VESPER_DATA = {
     "n": 1,
     "title": "The Internet of Things",
     "icon": "fa-wifi",
-    "vocab": []
+    "vocab": [
+     {
+      "term": "Connected device",
+      "def": "An object that links to the internet"
+     },
+     {
+      "term": "Sensor",
+      "def": "A part that detects and measures changes"
+     },
+     {
+      "term": "Automation",
+      "def": "Making a task run without a person"
+     },
+     {
+      "term": "Smart home",
+      "def": "A house controlled by connected devices"
+     },
+     {
+      "term": "Real-time",
+      "def": "Happening with no noticeable delay"
+     },
+     {
+      "term": "Interconnected",
+      "def": "Linked together so each affects the others"
+     },
+     {
+      "term": "Embedded",
+      "def": "Built into something as a fixed part"
+     },
+     {
+      "term": "Remotely",
+      "def": "From a distance, not in person"
+     },
+     {
+      "term": "Ecosystem",
+      "def": "A group of devices that work together"
+     },
+     {
+      "term": "Data stream",
+      "def": "A continuous flow of information"
+     },
+     {
+      "term": "Seamless",
+      "def": "Smooth, with no gaps or interruptions"
+     },
+     {
+      "term": "Wearable",
+      "def": "A device you wear on your body"
+     }
+    ]
    },
    {
     "n": 2,
     "title": "Artificial Intelligence",
     "icon": "fa-brain",
-    "vocab": []
+    "vocab": [
+     {
+      "term": "Algorithm",
+      "def": "A set of rules a computer follows"
+     },
+     {
+      "term": "Machine learning",
+      "def": "Software that improves from data"
+     },
+     {
+      "term": "Neural network",
+      "def": "A system modeled on the human brain"
+     },
+     {
+      "term": "Training data",
+      "def": "Examples used to teach a model"
+     },
+     {
+      "term": "Bias",
+      "def": "An unfair tendency in a system's output"
+     },
+     {
+      "term": "Automate",
+      "def": "Make a task happen by machine"
+     },
+     {
+      "term": "Autonomous",
+      "def": "Able to act without human control"
+     },
+     {
+      "term": "Prediction",
+      "def": "A guess about a future result"
+     },
+     {
+      "term": "Generative",
+      "def": "Able to create new content"
+     },
+     {
+      "term": "Augment",
+      "def": "Add to and improve something"
+     },
+     {
+      "term": "Singularity",
+      "def": "A point where AI surpasses humans"
+     },
+     {
+      "term": "Sentient",
+      "def": "Able to feel or be aware"
+     }
+    ]
    },
    {
     "n": 3,
     "title": "Robotics",
     "icon": "fa-robot",
-    "vocab": []
+    "vocab": [
+     {
+      "term": "Automation",
+      "def": "Making work run without people"
+     },
+     {
+      "term": "Actuator",
+      "def": "A part that makes a machine move"
+     },
+     {
+      "term": "Precision",
+      "def": "Exactness and accuracy"
+     },
+     {
+      "term": "Assembly line",
+      "def": "A line where products are built in stages"
+     },
+     {
+      "term": "Humanoid",
+      "def": "Shaped like a human"
+     },
+     {
+      "term": "Mechanical",
+      "def": "Relating to machines and moving parts"
+     },
+     {
+      "term": "Programmable",
+      "def": "Able to be given instructions"
+     },
+     {
+      "term": "Dexterity",
+      "def": "Skill in using the hands"
+     },
+     {
+      "term": "Repetitive",
+      "def": "Done the same way again and again"
+     },
+     {
+      "term": "Prototype",
+      "def": "An early model used for testing"
+     },
+     {
+      "term": "Malfunction",
+      "def": "A failure to work correctly"
+     },
+     {
+      "term": "Manufacturing",
+      "def": "Making goods on a large scale"
+     }
+    ]
    },
    {
     "n": 4,
     "title": "Space Exploration",
     "icon": "fa-rocket",
-    "vocab": []
+    "vocab": [
+     {
+      "term": "Orbit",
+      "def": "A curved path around a planet or star"
+     },
+     {
+      "term": "Launch",
+      "def": "To send a rocket into space"
+     },
+     {
+      "term": "Gravity",
+      "def": "The force that pulls objects together"
+     },
+     {
+      "term": "Spacecraft",
+      "def": "A vehicle built to travel in space"
+     },
+     {
+      "term": "Astronaut",
+      "def": "A person trained to travel in space"
+     },
+     {
+      "term": "Colonize",
+      "def": "To settle and live in a new place"
+     },
+     {
+      "term": "Atmosphere",
+      "def": "The gases surrounding a planet"
+     },
+     {
+      "term": "Probe",
+      "def": "An unmanned craft sent to explore"
+     },
+     {
+      "term": "Trajectory",
+      "def": "The path a moving object follows"
+     },
+     {
+      "term": "Extraterrestrial",
+      "def": "Coming from outside Earth"
+     },
+     {
+      "term": "Pioneering",
+      "def": "Being the first to do something"
+     },
+     {
+      "term": "Vast",
+      "def": "Extremely large in size or extent"
+     }
+    ]
    },
    {
     "n": 5,
     "title": "Biotechnology",
     "icon": "fa-microchip",
-    "vocab": []
+    "vocab": [
+     {
+      "term": "Gene",
+      "def": "A unit that carries inherited traits"
+     },
+     {
+      "term": "DNA",
+      "def": "The molecule that holds genetic code"
+     },
+     {
+      "term": "Genetic engineering",
+      "def": "Changing an organism's genes"
+     },
+     {
+      "term": "Mutation",
+      "def": "A change in genetic material"
+     },
+     {
+      "term": "Clone",
+      "def": "An exact genetic copy"
+     },
+     {
+      "term": "Vaccine",
+      "def": "A medicine that prevents disease"
+     },
+     {
+      "term": "Organism",
+      "def": "A living thing"
+     },
+     {
+      "term": "Cell",
+      "def": "The smallest unit of life"
+     },
+     {
+      "term": "Modify",
+      "def": "To change something partly"
+     },
+     {
+      "term": "Breakthrough",
+      "def": "An important new discovery"
+     },
+     {
+      "term": "Ethical",
+      "def": "Relating to right and wrong conduct"
+     },
+     {
+      "term": "Diagnosis",
+      "def": "Identifying an illness"
+     }
+    ]
    },
    {
     "n": 6,
     "title": "Cybersecurity",
     "icon": "fa-shield-halved",
-    "vocab": []
+    "vocab": [
+     {
+      "term": "Hacker",
+      "def": "Someone who breaks into computer systems"
+     },
+     {
+      "term": "Encryption",
+      "def": "Coding data so others can't read it"
+     },
+     {
+      "term": "Malware",
+      "def": "Software designed to cause harm"
+     },
+     {
+      "term": "Firewall",
+      "def": "A barrier that blocks unwanted access"
+     },
+     {
+      "term": "Breach",
+      "def": "An unauthorized entry into a system"
+     },
+     {
+      "term": "Phishing",
+      "def": "Tricking people into sharing data"
+     },
+     {
+      "term": "Vulnerability",
+      "def": "A weak point that can be attacked"
+     },
+     {
+      "term": "Authentication",
+      "def": "Proving you are who you claim"
+     },
+     {
+      "term": "Data theft",
+      "def": "Stealing private information"
+     },
+     {
+      "term": "Backup",
+      "def": "A spare copy of data"
+     },
+     {
+      "term": "Threat",
+      "def": "Something that may cause harm"
+     },
+     {
+      "term": "Compromise",
+      "def": "To expose or weaken security"
+     }
+    ]
    },
    {
     "n": 7,
     "title": "Virtual Reality",
     "icon": "fa-vr-cardboard",
-    "vocab": []
+    "vocab": [
+     {
+      "term": "Immersive",
+      "def": "Surrounding you completely"
+     },
+     {
+      "term": "Headset",
+      "def": "A device worn to view virtual worlds"
+     },
+     {
+      "term": "Simulation",
+      "def": "An artificial version of something real"
+     },
+     {
+      "term": "Avatar",
+      "def": "A digital figure that represents you"
+     },
+     {
+      "term": "Augmented reality",
+      "def": "Digital images added to the real world"
+     },
+     {
+      "term": "Interactive",
+      "def": "Responding to the user's actions"
+     },
+     {
+      "term": "Render",
+      "def": "To generate an image by computer"
+     },
+     {
+      "term": "Virtual",
+      "def": "Existing only on a computer"
+     },
+     {
+      "term": "Lifelike",
+      "def": "Looking very real"
+     },
+     {
+      "term": "Motion tracking",
+      "def": "Following the movement of a body"
+     },
+     {
+      "term": "Disorienting",
+      "def": "Causing confusion about place or direction"
+     },
+     {
+      "term": "Presence",
+      "def": "The feeling of really being there"
+     }
+    ]
    },
    {
     "n": 8,
     "title": "Renewable Energy",
     "icon": "fa-solar-panel",
-    "vocab": []
+    "vocab": [
+     {
+      "term": "Renewable",
+      "def": "Able to be replaced naturally"
+     },
+     {
+      "term": "Solar power",
+      "def": "Energy from the sun"
+     },
+     {
+      "term": "Wind turbine",
+      "def": "A machine that makes power from wind"
+     },
+     {
+      "term": "Sustainable",
+      "def": "Able to continue without harm"
+     },
+     {
+      "term": "Fossil fuel",
+      "def": "Fuel from ancient buried remains"
+     },
+     {
+      "term": "Carbon footprint",
+      "def": "The amount of CO2 a person produces"
+     },
+     {
+      "term": "Grid",
+      "def": "The network that delivers electricity"
+     },
+     {
+      "term": "Emissions",
+      "def": "Gases released into the air"
+     },
+     {
+      "term": "Efficient",
+      "def": "Using little waste or energy"
+     },
+     {
+      "term": "Hydropower",
+      "def": "Energy from moving water"
+     },
+     {
+      "term": "Battery storage",
+      "def": "Holding energy for later use"
+     },
+     {
+      "term": "Transition",
+      "def": "A change from one state to another"
+     }
+    ]
    },
    {
     "n": 9,
     "title": "Smart Cities",
     "icon": "fa-palette",
-    "vocab": []
+    "vocab": [
+     {
+      "term": "Infrastructure",
+      "def": "The basic systems a city needs"
+     },
+     {
+      "term": "Sensor network",
+      "def": "Linked devices that collect data"
+     },
+     {
+      "term": "Urban",
+      "def": "Relating to a city"
+     },
+     {
+      "term": "Efficiency",
+      "def": "Getting good results with little waste"
+     },
+     {
+      "term": "Surveillance",
+      "def": "Close watching of people or places"
+     },
+     {
+      "term": "Connectivity",
+      "def": "The state of being linked together"
+     },
+     {
+      "term": "Smart grid",
+      "def": "A power system that manages itself"
+     },
+     {
+      "term": "Congestion",
+      "def": "Crowding, especially of traffic"
+     },
+     {
+      "term": "Sustainable",
+      "def": "Able to continue without harm"
+     },
+     {
+      "term": "Optimize",
+      "def": "Make as effective as possible"
+     },
+     {
+      "term": "Integrated",
+      "def": "Combined into one whole"
+     },
+     {
+      "term": "Resident",
+      "def": "A person who lives in a place"
+     }
+    ]
    },
    {
     "n": 10,
     "title": "Transportation",
     "icon": "fa-futbol",
-    "vocab": []
+    "vocab": [
+     {
+      "term": "Electric vehicle",
+      "def": "A car powered by electricity"
+     },
+     {
+      "term": "Autonomous",
+      "def": "Self-driving, without a driver"
+     },
+     {
+      "term": "Commute",
+      "def": "The trip between home and work"
+     },
+     {
+      "term": "Infrastructure",
+      "def": "Roads, rails and other base systems"
+     },
+     {
+      "term": "Emissions",
+      "def": "Gases released by vehicles"
+     },
+     {
+      "term": "Hyperloop",
+      "def": "A high-speed transport in a tube"
+     },
+     {
+      "term": "Public transit",
+      "def": "Shared transport for the public"
+     },
+     {
+      "term": "Charging station",
+      "def": "A place to recharge a vehicle"
+     },
+     {
+      "term": "Congestion",
+      "def": "Heavy crowding of traffic"
+     },
+     {
+      "term": "Logistics",
+      "def": "Organizing the movement of goods"
+     },
+     {
+      "term": "Mobility",
+      "def": "The ability to move around"
+     },
+     {
+      "term": "Sustainable",
+      "def": "Able to continue without harm"
+     }
+    ]
    },
    {
     "n": 11,
     "title": "Nanotechnology",
     "icon": "fa-microchip",
-    "vocab": []
+    "vocab": [
+     {
+      "term": "Nanoscale",
+      "def": "Measured in billionths of a meter"
+     },
+     {
+      "term": "Microscopic",
+      "def": "Too small to see without a microscope"
+     },
+     {
+      "term": "Particle",
+      "def": "A tiny piece of matter"
+     },
+     {
+      "term": "Molecule",
+      "def": "The smallest unit of a substance"
+     },
+     {
+      "term": "Manipulate",
+      "def": "To control or arrange skillfully"
+     },
+     {
+      "term": "Precision",
+      "def": "Exactness and accuracy"
+     },
+     {
+      "term": "Material",
+      "def": "The substance something is made of"
+     },
+     {
+      "term": "Application",
+      "def": "A practical use for something"
+     },
+     {
+      "term": "Engineer",
+      "def": "To design and build with skill"
+     },
+     {
+      "term": "Breakthrough",
+      "def": "An important new discovery"
+     },
+     {
+      "term": "Atomic",
+      "def": "Relating to atoms"
+     },
+     {
+      "term": "Revolutionize",
+      "def": "To change completely and for the better"
+     }
+    ]
    },
    {
     "n": 12,
     "title": "Big Data",
     "icon": "fa-database",
-    "vocab": []
+    "vocab": [
+     {
+      "term": "Dataset",
+      "def": "A collection of related information"
+     },
+     {
+      "term": "Analytics",
+      "def": "Studying data to find patterns"
+     },
+     {
+      "term": "Pattern",
+      "def": "A repeated, recognizable form"
+     },
+     {
+      "term": "Database",
+      "def": "An organized store of data"
+     },
+     {
+      "term": "Insight",
+      "def": "A deep, useful understanding"
+     },
+     {
+      "term": "Process",
+      "def": "To handle and work on data"
+     },
+     {
+      "term": "Volume",
+      "def": "The amount or quantity of data"
+     },
+     {
+      "term": "Trend",
+      "def": "A general direction of change"
+     },
+     {
+      "term": "Predictive",
+      "def": "Used to forecast future events"
+     },
+     {
+      "term": "Privacy",
+      "def": "Keeping personal information protected"
+     },
+     {
+      "term": "Cloud",
+      "def": "Online storage and computing"
+     },
+     {
+      "term": "Correlation",
+      "def": "A link between two things"
+     }
+    ]
    },
    {
     "n": 13,
     "title": "Social Media Algorithms",
     "icon": "fa-tower-broadcast",
-    "vocab": []
+    "vocab": [
+     {
+      "term": "Feed",
+      "def": "The stream of posts you see"
+     },
+     {
+      "term": "Engagement",
+      "def": "Likes, shares and comments on content"
+     },
+     {
+      "term": "Recommendation",
+      "def": "A suggestion of what to view"
+     },
+     {
+      "term": "Echo chamber",
+      "def": "A space where one view is repeated"
+     },
+     {
+      "term": "Personalized",
+      "def": "Adjusted to fit one person"
+     },
+     {
+      "term": "Addictive",
+      "def": "Hard to stop using"
+     },
+     {
+      "term": "Filter bubble",
+      "def": "Only seeing content you agree with"
+     },
+     {
+      "term": "Targeted",
+      "def": "Aimed at a specific group"
+     },
+     {
+      "term": "Manipulate",
+      "def": "To influence in an unfair way"
+     },
+     {
+      "term": "Viral",
+      "def": "Spreading very quickly online"
+     },
+     {
+      "term": "Curate",
+      "def": "To select and arrange content"
+     },
+     {
+      "term": "Attention economy",
+      "def": "Competing for people's attention"
+     }
+    ]
    },
    {
     "n": 14,
     "title": "Gaming Industry",
     "icon": "fa-headphones",
-    "vocab": []
+    "vocab": [
+     {
+      "term": "Console",
+      "def": "A device made for playing games"
+     },
+     {
+      "term": "Multiplayer",
+      "def": "Played by several people at once"
+     },
+     {
+      "term": "Immersive",
+      "def": "Drawing you fully into the world"
+     },
+     {
+      "term": "Esports",
+      "def": "Competitive video gaming"
+     },
+     {
+      "term": "Microtransaction",
+      "def": "A small in-game purchase"
+     },
+     {
+      "term": "Streaming",
+      "def": "Broadcasting gameplay live"
+     },
+     {
+      "term": "Developer",
+      "def": "A person or company that makes games"
+     },
+     {
+      "term": "Franchise",
+      "def": "A series of related game titles"
+     },
+     {
+      "term": "Graphics",
+      "def": "The visual images in a game"
+     },
+     {
+      "term": "Virtual",
+      "def": "Existing only on a computer"
+     },
+     {
+      "term": "Addictive",
+      "def": "Hard to stop playing"
+     },
+     {
+      "term": "Monetize",
+      "def": "To earn money from something"
+     }
+    ]
    },
    {
     "n": 15,
     "title": "Future of Work",
     "icon": "fa-forward",
-    "vocab": []
+    "vocab": [
+     {
+      "term": "Remote work",
+      "def": "Working away from an office"
+     },
+     {
+      "term": "Automation",
+      "def": "Machines doing human tasks"
+     },
+     {
+      "term": "Freelance",
+      "def": "Working for yourself, job by job"
+     },
+     {
+      "term": "Gig economy",
+      "def": "Work made of short-term jobs"
+     },
+     {
+      "term": "Upskill",
+      "def": "To learn new job skills"
+     },
+     {
+      "term": "Flexible",
+      "def": "Able to change to suit needs"
+     },
+     {
+      "term": "Hybrid",
+      "def": "Mixing office and home work"
+     },
+     {
+      "term": "Displacement",
+      "def": "Jobs lost to machines or change"
+     },
+     {
+      "term": "Collaboration",
+      "def": "Working together on a task"
+     },
+     {
+      "term": "Productivity",
+      "def": "The amount of useful work done"
+     },
+     {
+      "term": "Workforce",
+      "def": "All the people who work"
+     },
+     {
+      "term": "Adapt",
+      "def": "To change to fit new conditions"
+     }
+    ]
    },
    {
     "n": 16,
     "title": "Digital Nomads",
     "icon": "fa-earth-asia",
-    "vocab": []
+    "vocab": [
+     {
+      "term": "Nomad",
+      "def": "A person who moves from place to place"
+     },
+     {
+      "term": "Remote",
+      "def": "Done away from a fixed office"
+     },
+     {
+      "term": "Freelance",
+      "def": "Working for yourself, job by job"
+     },
+     {
+      "term": "Location-independent",
+      "def": "Able to work from anywhere"
+     },
+     {
+      "term": "Coworking",
+      "def": "A shared workspace for many people"
+     },
+     {
+      "term": "Flexibility",
+      "def": "The freedom to change plans"
+     },
+     {
+      "term": "Time zone",
+      "def": "A region with its own clock time"
+     },
+     {
+      "term": "Lifestyle",
+      "def": "The way a person lives"
+     },
+     {
+      "term": "Burnout",
+      "def": "Exhaustion from too much work"
+     },
+     {
+      "term": "Visa",
+      "def": "Official permission to enter a country"
+     },
+     {
+      "term": "Connectivity",
+      "def": "Access to the internet"
+     },
+     {
+      "term": "Self-employed",
+      "def": "Working for oneself"
+     }
+    ]
    },
    {
     "n": 17,
     "title": "Blockchain & Crypto",
     "icon": "fa-bitcoin-sign",
-    "vocab": []
+    "vocab": [
+     {
+      "term": "Cryptocurrency",
+      "def": "Digital money secured by code"
+     },
+     {
+      "term": "Blockchain",
+      "def": "A shared, unchangeable record of data"
+     },
+     {
+      "term": "Decentralized",
+      "def": "Not controlled by one authority"
+     },
+     {
+      "term": "Wallet",
+      "def": "Where you store digital money"
+     },
+     {
+      "term": "Mining",
+      "def": "Using computers to verify transactions"
+     },
+     {
+      "term": "Ledger",
+      "def": "A record of transactions"
+     },
+     {
+      "term": "Transaction",
+      "def": "An exchange of money or value"
+     },
+     {
+      "term": "Volatile",
+      "def": "Changing quickly and unpredictably"
+     },
+     {
+      "term": "Token",
+      "def": "A digital unit of value"
+     },
+     {
+      "term": "Secure",
+      "def": "Protected from harm or theft"
+     },
+     {
+      "term": "Speculation",
+      "def": "Buying in hope of a quick profit"
+     },
+     {
+      "term": "Anonymous",
+      "def": "Without a known identity"
+     }
+    ]
    },
    {
     "n": 18,
     "title": "E-Commerce",
     "icon": "fa-cart-shopping",
-    "vocab": []
+    "vocab": [
+     {
+      "term": "Online store",
+      "def": "A shop that operates on the internet"
+     },
+     {
+      "term": "Checkout",
+      "def": "Where you pay for your order"
+     },
+     {
+      "term": "Shipping",
+      "def": "Sending goods to the buyer"
+     },
+     {
+      "term": "Inventory",
+      "def": "The goods a business has in stock"
+     },
+     {
+      "term": "Marketplace",
+      "def": "A site where many sellers trade"
+     },
+     {
+      "term": "Consumer",
+      "def": "A person who buys goods"
+     },
+     {
+      "term": "Retail",
+      "def": "Selling goods to the public"
+     },
+     {
+      "term": "Refund",
+      "def": "Money returned to a buyer"
+     },
+     {
+      "term": "Logistics",
+      "def": "Organizing the movement of goods"
+     },
+     {
+      "term": "Conversion",
+      "def": "Turning a visitor into a buyer"
+     },
+     {
+      "term": "Subscription",
+      "def": "Paying regularly for a service"
+     },
+     {
+      "term": "Personalized",
+      "def": "Adjusted to fit one customer"
+     }
+    ]
    },
    {
     "n": 19,
     "title": "Tech Ethics",
     "icon": "fa-microchip",
-    "vocab": []
+    "vocab": [
+     {
+      "term": "Privacy",
+      "def": "Keeping personal information protected"
+     },
+     {
+      "term": "Consent",
+      "def": "Permission given freely"
+     },
+     {
+      "term": "Bias",
+      "def": "An unfair tendency in a system"
+     },
+     {
+      "term": "Accountability",
+      "def": "Being responsible for one's actions"
+     },
+     {
+      "term": "Transparency",
+      "def": "Being open and easy to understand"
+     },
+     {
+      "term": "Surveillance",
+      "def": "Close watching of people"
+     },
+     {
+      "term": "Exploitation",
+      "def": "Using someone unfairly for gain"
+     },
+     {
+      "term": "Regulation",
+      "def": "Official rules that control something"
+     },
+     {
+      "term": "Misuse",
+      "def": "Using something wrongly"
+     },
+     {
+      "term": "Dilemma",
+      "def": "A hard choice between options"
+     },
+     {
+      "term": "Responsible",
+      "def": "Acting in a careful, moral way"
+     },
+     {
+      "term": "Safeguard",
+      "def": "A measure that protects"
+     }
+    ]
    },
    {
     "n": 20,
     "title": "Predictions 2050",
     "icon": "fa-headphones",
-    "vocab": []
+    "vocab": [
+     {
+      "term": "Forecast",
+      "def": "A statement about the future"
+     },
+     {
+      "term": "Speculate",
+      "def": "To guess without firm evidence"
+     },
+     {
+      "term": "Inevitable",
+      "def": "Certain to happen"
+     },
+     {
+      "term": "Breakthrough",
+      "def": "An important new discovery"
+     },
+     {
+      "term": "Disruption",
+      "def": "A major break with the old way"
+     },
+     {
+      "term": "Sustainability",
+      "def": "Continuing without harming the future"
+     },
+     {
+      "term": "Longevity",
+      "def": "Long life or long duration"
+     },
+     {
+      "term": "Utopia",
+      "def": "An imagined perfect society"
+     },
+     {
+      "term": "Dystopia",
+      "def": "An imagined terrible society"
+     },
+     {
+      "term": "Trend",
+      "def": "A general direction of change"
+     },
+     {
+      "term": "Transformative",
+      "def": "Causing great change"
+     },
+     {
+      "term": "Foreseeable",
+      "def": "Able to be predicted"
+     }
+    ]
    }
   ]
  },
@@ -4558,121 +5538,1101 @@ window.VESPER_DATA = {
     "n": 1,
     "title": "The Viral Phenomenon",
     "icon": "fa-fire",
-    "vocab": []
+    "vocab": [
+     {
+      "term": "Viral",
+      "def": "Spreading very quickly online"
+     },
+     {
+      "term": "Trend",
+      "def": "Something popular for a short time"
+     },
+     {
+      "term": "Share",
+      "def": "To pass content to others online"
+     },
+     {
+      "term": "Engagement",
+      "def": "Likes, shares and comments"
+     },
+     {
+      "term": "Phenomenon",
+      "def": "A remarkable event or thing"
+     },
+     {
+      "term": "Overnight",
+      "def": "Happening suddenly, very fast"
+     },
+     {
+      "term": "Reach",
+      "def": "How many people content gets to"
+     },
+     {
+      "term": "Hashtag",
+      "def": "A keyword marked with # online"
+     },
+     {
+      "term": "Fleeting",
+      "def": "Lasting only a short time"
+     },
+     {
+      "term": "Sensation",
+      "def": "A person or thing causing great excitement"
+     },
+     {
+      "term": "Amplify",
+      "def": "To make louder or more widespread"
+     },
+     {
+      "term": "Relatable",
+      "def": "Easy to identify with"
+     }
+    ]
    },
    {
     "n": 2,
     "title": "Reality Television",
     "icon": "fa-headphones",
-    "vocab": []
+    "vocab": [
+     {
+      "term": "Reality TV",
+      "def": "Shows about real, unscripted people"
+     },
+     {
+      "term": "Contestant",
+      "def": "A person competing on a show"
+     },
+     {
+      "term": "Scripted",
+      "def": "Following a written plan"
+     },
+     {
+      "term": "Drama",
+      "def": "Exciting or tense conflict"
+     },
+     {
+      "term": "Editing",
+      "def": "Cutting footage to shape a story"
+     },
+     {
+      "term": "Staged",
+      "def": "Set up to look natural but planned"
+     },
+     {
+      "term": "Voyeuristic",
+      "def": "Enjoying watching others' lives"
+     },
+     {
+      "term": "Elimination",
+      "def": "Removing a contestant from the show"
+     },
+     {
+      "term": "Franchise",
+      "def": "A series of related shows"
+     },
+     {
+      "term": "Authentic",
+      "def": "Real and genuine"
+     },
+     {
+      "term": "Exploit",
+      "def": "To use unfairly for gain"
+     },
+     {
+      "term": "Audience",
+      "def": "The people watching"
+     }
+    ]
    },
    {
     "n": 3,
     "title": "Celebrity Worship",
     "icon": "fa-star",
-    "vocab": []
+    "vocab": [
+     {
+      "term": "Celebrity",
+      "def": "A famous person"
+     },
+     {
+      "term": "Idol",
+      "def": "Someone greatly admired"
+     },
+     {
+      "term": "Fame",
+      "def": "The state of being well known"
+     },
+     {
+      "term": "Obsession",
+      "def": "An idea that fills the mind"
+     },
+     {
+      "term": "Adoration",
+      "def": "Deep love and admiration"
+     },
+     {
+      "term": "Glamour",
+      "def": "Attractive, exciting charm"
+     },
+     {
+      "term": "Paparazzi",
+      "def": "Photographers who chase celebrities"
+     },
+     {
+      "term": "Influence",
+      "def": "The power to affect others"
+     },
+     {
+      "term": "Pedestal",
+      "def": "A position of high admiration"
+     },
+     {
+      "term": "Scandal",
+      "def": "A shocking, talked-about event"
+     },
+     {
+      "term": "Aspirational",
+      "def": "Inspiring a desire to be like someone"
+     },
+     {
+      "term": "Limelight",
+      "def": "Public attention"
+     }
+    ]
    },
    {
     "n": 4,
     "title": "Meme Culture",
     "icon": "fa-earth-americas",
-    "vocab": []
+    "vocab": [
+     {
+      "term": "Meme",
+      "def": "A funny image or idea shared online"
+     },
+     {
+      "term": "Format",
+      "def": "A reusable layout for a joke"
+     },
+     {
+      "term": "Ironic",
+      "def": "Meaning the opposite of the words"
+     },
+     {
+      "term": "Relatable",
+      "def": "Easy to identify with"
+     },
+     {
+      "term": "Caption",
+      "def": "Text added to an image"
+     },
+     {
+      "term": "Remix",
+      "def": "To rework existing content"
+     },
+     {
+      "term": "Niche",
+      "def": "Appealing to a small group"
+     },
+     {
+      "term": "Absurd",
+      "def": "Wildly unreasonable or silly"
+     },
+     {
+      "term": "Reference",
+      "def": "A mention of something known"
+     },
+     {
+      "term": "Wholesome",
+      "def": "Kind and positive in tone"
+     },
+     {
+      "term": "Dank",
+      "def": "Slang for an excellent meme"
+     },
+     {
+      "term": "Inside joke",
+      "def": "A joke only some people understand"
+     }
+    ]
    },
    {
     "n": 5,
     "title": "Streaming Wars",
     "icon": "fa-play",
-    "vocab": []
+    "vocab": [
+     {
+      "term": "Streaming",
+      "def": "Watching media over the internet"
+     },
+     {
+      "term": "Subscription",
+      "def": "Paying regularly for a service"
+     },
+     {
+      "term": "Platform",
+      "def": "A service that delivers content"
+     },
+     {
+      "term": "Binge-watch",
+      "def": "To watch many episodes in a row"
+     },
+     {
+      "term": "Original content",
+      "def": "Shows made by the platform itself"
+     },
+     {
+      "term": "Exclusive",
+      "def": "Available in only one place"
+     },
+     {
+      "term": "Library",
+      "def": "The whole collection of titles"
+     },
+     {
+      "term": "Algorithm",
+      "def": "Code that suggests what to watch"
+     },
+     {
+      "term": "Cord-cutting",
+      "def": "Dropping cable for streaming"
+     },
+     {
+      "term": "Competitor",
+      "def": "A rival in the same market"
+     },
+     {
+      "term": "Retention",
+      "def": "Keeping subscribers from leaving"
+     },
+     {
+      "term": "On-demand",
+      "def": "Available whenever you want it"
+     }
+    ]
    },
    {
     "n": 6,
     "title": "Cancel Culture",
     "icon": "fa-earth-americas",
-    "vocab": []
+    "vocab": [
+     {
+      "term": "Cancel",
+      "def": "To publicly reject a person"
+     },
+     {
+      "term": "Boycott",
+      "def": "To refuse to support something"
+     },
+     {
+      "term": "Accountability",
+      "def": "Being held responsible"
+     },
+     {
+      "term": "Backlash",
+      "def": "A strong negative reaction"
+     },
+     {
+      "term": "Outrage",
+      "def": "Strong public anger"
+     },
+     {
+      "term": "Controversial",
+      "def": "Causing public disagreement"
+     },
+     {
+      "term": "Reputation",
+      "def": "How others see a person"
+     },
+     {
+      "term": "Apology",
+      "def": "An expression of regret"
+     },
+     {
+      "term": "Mob mentality",
+      "def": "Acting as an angry crowd"
+     },
+     {
+      "term": "Redemption",
+      "def": "Earning back respect after a fault"
+     },
+     {
+      "term": "Censor",
+      "def": "To suppress unwanted speech"
+     },
+     {
+      "term": "Polarizing",
+      "def": "Splitting people into opposite sides"
+     }
+    ]
    },
    {
     "n": 7,
     "title": "Nostalgia as a Product",
     "icon": "fa-clock-rotate-left",
-    "vocab": []
+    "vocab": [
+     {
+      "term": "Nostalgia",
+      "def": "Fond longing for the past"
+     },
+     {
+      "term": "Reboot",
+      "def": "A fresh version of an old show"
+     },
+     {
+      "term": "Retro",
+      "def": "Styled like the recent past"
+     },
+     {
+      "term": "Reminisce",
+      "def": "To recall pleasant memories"
+     },
+     {
+      "term": "Throwback",
+      "def": "Something from an earlier time"
+     },
+     {
+      "term": "Sentimental",
+      "def": "Full of tender feelings"
+     },
+     {
+      "term": "Revival",
+      "def": "Bringing something back into use"
+     },
+     {
+      "term": "Marketing",
+      "def": "Promoting a product to sell it"
+     },
+     {
+      "term": "Franchise",
+      "def": "A series of related products"
+     },
+     {
+      "term": "Iconic",
+      "def": "Widely recognized and admired"
+     },
+     {
+      "term": "Cash in",
+      "def": "To profit from something"
+     },
+     {
+      "term": "Yearning",
+      "def": "A strong, wistful desire"
+     }
+    ]
    },
    {
     "n": 8,
     "title": "True Crime Obsession",
     "icon": "fa-handcuffs",
-    "vocab": []
+    "vocab": [
+     {
+      "term": "True crime",
+      "def": "Stories about real crimes"
+     },
+     {
+      "term": "Investigation",
+      "def": "A careful search for the truth"
+     },
+     {
+      "term": "Suspect",
+      "def": "A person thought to be guilty"
+     },
+     {
+      "term": "Motive",
+      "def": "A reason for a crime"
+     },
+     {
+      "term": "Evidence",
+      "def": "Facts that prove something"
+     },
+     {
+      "term": "Perpetrator",
+      "def": "The person who did a crime"
+     },
+     {
+      "term": "Verdict",
+      "def": "A court's decision"
+     },
+     {
+      "term": "Obsession",
+      "def": "An idea that fills the mind"
+     },
+     {
+      "term": "Gripping",
+      "def": "Holding your full attention"
+     },
+     {
+      "term": "Exploitative",
+      "def": "Using suffering unfairly for gain"
+     },
+     {
+      "term": "Cold case",
+      "def": "An unsolved old crime"
+     },
+     {
+      "term": "Chilling",
+      "def": "Frightening in a disturbing way"
+     }
+    ]
    },
    {
     "n": 9,
     "title": "Beauty Standards & Filters",
     "icon": "fa-wand-magic-sparkles",
-    "vocab": []
+    "vocab": [
+     {
+      "term": "Filter",
+      "def": "A digital effect that alters images"
+     },
+     {
+      "term": "Standard",
+      "def": "An accepted level or norm"
+     },
+     {
+      "term": "Insecurity",
+      "def": "A lack of confidence in oneself"
+     },
+     {
+      "term": "Airbrush",
+      "def": "To edit out flaws in a photo"
+     },
+     {
+      "term": "Unrealistic",
+      "def": "Not matching real life"
+     },
+     {
+      "term": "Flawless",
+      "def": "Without any faults"
+     },
+     {
+      "term": "Self-image",
+      "def": "How you see yourself"
+     },
+     {
+      "term": "Pressure",
+      "def": "A strong push to behave a way"
+     },
+     {
+      "term": "Authentic",
+      "def": "Real and genuine"
+     },
+     {
+      "term": "Distort",
+      "def": "To change the true shape of"
+     },
+     {
+      "term": "Validation",
+      "def": "Approval from others"
+     },
+     {
+      "term": "Conform",
+      "def": "To match what others expect"
+     }
+    ]
    },
    {
     "n": 10,
     "title": "The Influencer Economy",
     "icon": "fa-chart-line",
-    "vocab": []
+    "vocab": [
+     {
+      "term": "Influencer",
+      "def": "Someone who sways followers online"
+     },
+     {
+      "term": "Follower",
+      "def": "A person who subscribes to an account"
+     },
+     {
+      "term": "Sponsorship",
+      "def": "Payment to promote a brand"
+     },
+     {
+      "term": "Endorsement",
+      "def": "Public support for a product"
+     },
+     {
+      "term": "Brand",
+      "def": "A company's name and image"
+     },
+     {
+      "term": "Engagement",
+      "def": "Likes, shares and comments"
+     },
+     {
+      "term": "Monetize",
+      "def": "To earn money from content"
+     },
+     {
+      "term": "Authentic",
+      "def": "Real and genuine"
+     },
+     {
+      "term": "Niche",
+      "def": "A focused, specialized area"
+     },
+     {
+      "term": "Promotion",
+      "def": "Activity to increase sales"
+     },
+     {
+      "term": "Reach",
+      "def": "How many people you connect with"
+     },
+     {
+      "term": "Curated",
+      "def": "Carefully selected and arranged"
+     }
+    ]
    },
    {
     "n": 11,
     "title": "Satire and Cynicism",
     "icon": "fa-headphones",
-    "vocab": []
+    "vocab": [
+     {
+      "term": "Satire",
+      "def": "Humor used to criticize"
+     },
+     {
+      "term": "Cynicism",
+      "def": "Distrust of people's motives"
+     },
+     {
+      "term": "Irony",
+      "def": "Saying the opposite of the meaning"
+     },
+     {
+      "term": "Parody",
+      "def": "A funny imitation of something"
+     },
+     {
+      "term": "Mock",
+      "def": "To make fun of"
+     },
+     {
+      "term": "Wit",
+      "def": "Clever, quick humor"
+     },
+     {
+      "term": "Sarcasm",
+      "def": "Sharp, mocking remarks"
+     },
+     {
+      "term": "Ridicule",
+      "def": "Cruel, scornful mockery"
+     },
+     {
+      "term": "Exaggerate",
+      "def": "To make something seem larger"
+     },
+     {
+      "term": "Critique",
+      "def": "A detailed judgement"
+     },
+     {
+      "term": "Jaded",
+      "def": "Tired and lacking enthusiasm"
+     },
+     {
+      "term": "Subversive",
+      "def": "Aiming to undermine authority"
+     }
+    ]
    },
    {
     "n": 12,
     "title": "Fandom and Toxicity",
     "icon": "fa-headphones",
-    "vocab": []
+    "vocab": [
+     {
+      "term": "Fandom",
+      "def": "A community of devoted fans"
+     },
+     {
+      "term": "Devoted",
+      "def": "Very loyal and dedicated"
+     },
+     {
+      "term": "Toxic",
+      "def": "Harmful and hostile"
+     },
+     {
+      "term": "Gatekeeping",
+      "def": "Deciding who counts as a real fan"
+     },
+     {
+      "term": "Shipping",
+      "def": "Wanting characters to be a couple"
+     },
+     {
+      "term": "Loyalty",
+      "def": "Firm support for someone"
+     },
+     {
+      "term": "Backlash",
+      "def": "A strong negative reaction"
+     },
+     {
+      "term": "Entitled",
+      "def": "Feeling owed special treatment"
+     },
+     {
+      "term": "Community",
+      "def": "A group with shared interests"
+     },
+     {
+      "term": "Obsessive",
+      "def": "Unable to stop thinking about"
+     },
+     {
+      "term": "Defensive",
+      "def": "Quick to protect against criticism"
+     },
+     {
+      "term": "Harassment",
+      "def": "Repeated, aggressive bothering"
+     }
+    ]
    },
    {
     "n": 13,
     "title": "Pop Music Anatomy",
     "icon": "fa-music",
-    "vocab": []
+    "vocab": [
+     {
+      "term": "Hook",
+      "def": "A catchy part that grabs you"
+     },
+     {
+      "term": "Chorus",
+      "def": "The repeated main section"
+     },
+     {
+      "term": "Melody",
+      "def": "The main tune of a song"
+     },
+     {
+      "term": "Lyrics",
+      "def": "The words of a song"
+     },
+     {
+      "term": "Verse",
+      "def": "A section that tells the story"
+     },
+     {
+      "term": "Catchy",
+      "def": "Easy to remember and sing"
+     },
+     {
+      "term": "Beat",
+      "def": "The steady rhythm"
+     },
+     {
+      "term": "Bridge",
+      "def": "A contrasting middle section"
+     },
+     {
+      "term": "Production",
+      "def": "How a track is recorded and shaped"
+     },
+     {
+      "term": "Chart-topping",
+      "def": "Reaching number one"
+     },
+     {
+      "term": "Anthem",
+      "def": "An uplifting, widely loved song"
+     },
+     {
+      "term": "Formula",
+      "def": "A reliable method that works"
+     }
+    ]
    },
    {
     "n": 14,
     "title": "Video Games as Art",
     "icon": "fa-palette",
-    "vocab": []
+    "vocab": [
+     {
+      "term": "Narrative",
+      "def": "The story a game tells"
+     },
+     {
+      "term": "Immersive",
+      "def": "Drawing you fully in"
+     },
+     {
+      "term": "Aesthetic",
+      "def": "The visual style and feel"
+     },
+     {
+      "term": "Interactive",
+      "def": "Responding to the player"
+     },
+     {
+      "term": "Medium",
+      "def": "A form of artistic expression"
+     },
+     {
+      "term": "Soundtrack",
+      "def": "The music of a game"
+     },
+     {
+      "term": "Emotional",
+      "def": "Stirring strong feelings"
+     },
+     {
+      "term": "Storytelling",
+      "def": "The art of telling a story"
+     },
+     {
+      "term": "Design",
+      "def": "The planned look and play"
+     },
+     {
+      "term": "Atmosphere",
+      "def": "The mood of a place or work"
+     },
+     {
+      "term": "Masterpiece",
+      "def": "A work of outstanding skill"
+     },
+     {
+      "term": "Expression",
+      "def": "Showing thoughts or feelings"
+     }
+    ]
    },
    {
     "n": 15,
     "title": "The True Cost of Fast Fashion",
     "icon": "fa-shirt",
-    "vocab": []
+    "vocab": [
+     {
+      "term": "Fast fashion",
+      "def": "Cheap clothes made very quickly"
+     },
+     {
+      "term": "Sustainable",
+      "def": "Able to continue without harm"
+     },
+     {
+      "term": "Sweatshop",
+      "def": "A factory with poor, unfair conditions"
+     },
+     {
+      "term": "Disposable",
+      "def": "Made to be thrown away"
+     },
+     {
+      "term": "Exploitation",
+      "def": "Using workers unfairly for gain"
+     },
+     {
+      "term": "Overconsumption",
+      "def": "Buying far more than needed"
+     },
+     {
+      "term": "Ethical",
+      "def": "Relating to right and wrong"
+     },
+     {
+      "term": "Landfill",
+      "def": "A site where waste is buried"
+     },
+     {
+      "term": "Supply chain",
+      "def": "The steps to make and deliver goods"
+     },
+     {
+      "term": "Trend",
+      "def": "A passing style or fashion"
+     },
+     {
+      "term": "Garment",
+      "def": "A piece of clothing"
+     },
+     {
+      "term": "Wasteful",
+      "def": "Using more than is needed"
+     }
+    ]
    },
    {
     "n": 16,
     "title": "The Death of Print",
     "icon": "fa-print",
-    "vocab": []
+    "vocab": [
+     {
+      "term": "Print",
+      "def": "Words on paper, like newspapers"
+     },
+     {
+      "term": "Circulation",
+      "def": "How many copies are sold"
+     },
+     {
+      "term": "Digital",
+      "def": "Stored or shared by computer"
+     },
+     {
+      "term": "Subscription",
+      "def": "Paying regularly for content"
+     },
+     {
+      "term": "Obsolete",
+      "def": "No longer used or needed"
+     },
+     {
+      "term": "Journalism",
+      "def": "The work of reporting news"
+     },
+     {
+      "term": "Decline",
+      "def": "A steady fall or decrease"
+     },
+     {
+      "term": "Headline",
+      "def": "The title of a news story"
+     },
+     {
+      "term": "Archive",
+      "def": "A store of old records"
+     },
+     {
+      "term": "Tangible",
+      "def": "Able to be touched"
+     },
+     {
+      "term": "Revenue",
+      "def": "Income a business earns"
+     },
+     {
+      "term": "Nostalgic",
+      "def": "Longing fondly for the past"
+     }
+    ]
    },
    {
     "n": 17,
     "title": "Superheroes and Modern Mythology",
     "icon": "fa-mask",
-    "vocab": []
+    "vocab": [
+     {
+      "term": "Superhero",
+      "def": "A character with special powers"
+     },
+     {
+      "term": "Mythology",
+      "def": "A culture's traditional stories"
+     },
+     {
+      "term": "Archetype",
+      "def": "A typical, recurring character"
+     },
+     {
+      "term": "Villain",
+      "def": "The evil character in a story"
+     },
+     {
+      "term": "Origin story",
+      "def": "How a hero came to be"
+     },
+     {
+      "term": "Heroic",
+      "def": "Brave and admirable"
+     },
+     {
+      "term": "Symbolism",
+      "def": "Using symbols to show ideas"
+     },
+     {
+      "term": "Universe",
+      "def": "A connected fictional world"
+     },
+     {
+      "term": "Allegory",
+      "def": "A story with a hidden meaning"
+     },
+     {
+      "term": "Legacy",
+      "def": "What is passed on from the past"
+     },
+     {
+      "term": "Redemption",
+      "def": "Earning back goodness or respect"
+     },
+     {
+      "term": "Iconic",
+      "def": "Widely recognized and admired"
+     }
+    ]
    },
    {
     "n": 18,
     "title": "Subculture vs Mainstream",
     "icon": "fa-brain",
-    "vocab": []
+    "vocab": [
+     {
+      "term": "Subculture",
+      "def": "A small group with its own style"
+     },
+     {
+      "term": "Mainstream",
+      "def": "What most people accept"
+     },
+     {
+      "term": "Alternative",
+      "def": "Outside the usual or popular"
+     },
+     {
+      "term": "Identity",
+      "def": "Who a person feels they are"
+     },
+     {
+      "term": "Conform",
+      "def": "To match what others expect"
+     },
+     {
+      "term": "Rebel",
+      "def": "To resist accepted norms"
+     },
+     {
+      "term": "Underground",
+      "def": "Hidden from the mainstream"
+     },
+     {
+      "term": "Authentic",
+      "def": "Real and genuine"
+     },
+     {
+      "term": "Commercialize",
+      "def": "To make into a product for profit"
+     },
+     {
+      "term": "Niche",
+      "def": "A small, focused group"
+     },
+     {
+      "term": "Movement",
+      "def": "A group sharing a common goal"
+     },
+     {
+      "term": "Assimilate",
+      "def": "To absorb into the larger culture"
+     }
+    ]
    },
    {
     "n": 19,
     "title": "The Aesthetics of Dystopia",
     "icon": "fa-city",
-    "vocab": []
+    "vocab": [
+     {
+      "term": "Dystopia",
+      "def": "An imagined terrible society"
+     },
+     {
+      "term": "Bleak",
+      "def": "Cold, gloomy and hopeless"
+     },
+     {
+      "term": "Oppression",
+      "def": "Cruel, unjust control"
+     },
+     {
+      "term": "Aesthetic",
+      "def": "The visual style and feel"
+     },
+     {
+      "term": "Surveillance",
+      "def": "Close watching of people"
+     },
+     {
+      "term": "Apocalyptic",
+      "def": "Relating to total destruction"
+     },
+     {
+      "term": "Authoritarian",
+      "def": "Demanding strict obedience"
+     },
+     {
+      "term": "Decay",
+      "def": "Slow ruin or rotting"
+     },
+     {
+      "term": "Resistance",
+      "def": "Fighting against control"
+     },
+     {
+      "term": "Grim",
+      "def": "Harsh and forbidding"
+     },
+     {
+      "term": "Conformity",
+      "def": "Acting the same as everyone"
+     },
+     {
+      "term": "Foreboding",
+      "def": "A sense that something bad will come"
+     }
+    ]
    },
    {
     "n": 20,
     "title": "Pop Culture as History",
     "icon": "fa-book-open",
-    "vocab": []
+    "vocab": [
+     {
+      "term": "Era",
+      "def": "A distinct period of time"
+     },
+     {
+      "term": "Artifact",
+      "def": "An object from a culture or time"
+     },
+     {
+      "term": "Reflect",
+      "def": "To show or mirror something"
+     },
+     {
+      "term": "Generation",
+      "def": "People born around the same time"
+     },
+     {
+      "term": "Document",
+      "def": "To record for the future"
+     },
+     {
+      "term": "Significance",
+      "def": "Importance or meaning"
+     },
+     {
+      "term": "Legacy",
+      "def": "What is passed on from the past"
+     },
+     {
+      "term": "Movement",
+      "def": "A group sharing a common goal"
+     },
+     {
+      "term": "Snapshot",
+      "def": "A quick record of a moment"
+     },
+     {
+      "term": "Influential",
+      "def": "Having a strong effect"
+     },
+     {
+      "term": "Timeless",
+      "def": "Not affected by the passing of time"
+     },
+     {
+      "term": "Zeitgeist",
+      "def": "The spirit of a particular age"
+     }
+    ]
    }
   ]
  }
