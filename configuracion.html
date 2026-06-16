@@ -171,6 +171,14 @@
       <div class="chips" id="chips-focus" role="group" aria-labelledby="lab-focus"></div></div>
   </section>
 
+  <!-- ===== TEMAS DE INTERÉS ===== -->
+  <section class="card" aria-labelledby="h-topics">
+    <div class="sec-h"><span class="em">💡</span><h2 id="h-topics">Temas de interés</h2></div>
+    <p class="muted" style="margin:0 0 10px">Vesper usará estos temas para sus ejemplos y conversaciones —
+      en las lecciones y en el chat. Elige todos los que quieras.</p>
+    <div class="chips" id="chips-topics" role="group" aria-labelledby="h-topics"></div>
+  </section>
+
   <!-- ===== APARIENCIA ===== -->
   <section class="card" aria-labelledby="h-look">
     <div class="sec-h"><span class="em">🎨</span><h2 id="h-look">Apariencia</h2></div>
@@ -306,6 +314,14 @@
     var i = cur.indexOf(id);
     if (on && i < 0) cur.push(id); if (!on && i >= 0) cur.splice(i, 1);
     P.set({ focus: cur }); flash();
+  });
+
+  /* temas de interes (multi) — alimentan los ejemplos de Vesper y el motor adaptativo */
+  chipGroup("chips-topics", P.TOPIC_ORDER, P.TOPICS, p.topics || [], function (id, on) {
+    var cur = (P.get().topics || []).slice();
+    var i = cur.indexOf(id);
+    if (on && i < 0) cur.push(id); if (!on && i >= 0) cur.splice(i, 1);
+    P.set({ topics: cur }); flash();
   });
 
   /* helper: añade una descripción corta a cada opción para los seg-cards */

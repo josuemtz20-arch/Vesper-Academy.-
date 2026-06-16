@@ -9,7 +9,7 @@
    ============================================================ */
 "use strict";
 
-var CACHE_VERSION = "vesper-v7";
+var CACHE_VERSION = "vesper-v10";
 var CORE = [
   /* Vesper Engine shell */
   "vesper_engine.html",
@@ -18,6 +18,7 @@ var CORE = [
   "manifest.webmanifest",
   /* Lecciones gratis (sin cuenta; offline tras la primera visita) */
   "leccion.html",
+  "chat.html",
   "configuracion.html",
   "vesper_lessons.js",
   "vesper_activities.js",
