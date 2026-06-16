@@ -228,21 +228,32 @@
             { k:1, title:"Diagnostic Track 1" },
             { k:2, title:"Diagnostic Track 2" }
         ];
-        // Business English Premium (B2) listening resources that exist as audio files
-        const BUSINESS_TRACKS = [
-            { title:"Elevator Pitch A (weak)",  lesson:"Lesson 1 · First Impressions",  file:"corporate_b2_l1_pitch_a.mp3", icon:"fa-comment" },
-            { title:"Elevator Pitch B (strong)", lesson:"Lesson 1 · First Impressions",  file:"corporate_b2_l1_pitch_b.mp3", icon:"fa-comment-dots" },
-            { title:"Quarterly Board Call",      lesson:"Lesson 2 · Conference Call",     file:"corporate_b2_l2_call.mp3",    icon:"fa-phone-volume" },
-            { title:"Meeting Agenda Walk-through", lesson:"Lesson 3 · Effective Meetings",      file:"corporate_b2_l3_agenda.mp3",    icon:"fa-list-check" },
-            { title:"The Deadline Clash",          lesson:"Lesson 4 · Diplomatic Disagreement", file:"corporate_b2_l4_clash.mp3",     icon:"fa-handshake-angle" },
-            { title:"Q3 Dashboard Briefing",       lesson:"Lesson 5 · Presenting Data",         file:"corporate_b2_l5_dashboard.mp3", icon:"fa-chart-line" },
-            { title:"A Strong Opening",            lesson:"Lesson 6 · Executive Presentations", file:"corporate_b2_l6_opening.mp3",   icon:"fa-bullhorn" },
-            { title:"Email Tone A (blunt)",        lesson:"Lesson 7 · Email Etiquette",         file:"corporate_b2_l7_tone_a.mp3",    icon:"fa-envelope" },
-            { title:"Email Tone B (warm)",         lesson:"Lesson 7 · Email Etiquette",         file:"corporate_b2_l7_tone_b.mp3",    icon:"fa-envelope-open-text" },
-            { title:"The Conditional Trade",       lesson:"Lesson 8 · Negotiation",             file:"corporate_b2_l8_trade.mp3",     icon:"fa-scale-balanced" },
-            { title:"Feedback — Judgemental",      lesson:"Lesson 9 · Giving Feedback",         file:"corporate_b2_l9_feedback_a.mp3", icon:"fa-comment" },
-            { title:"Feedback — SBI Model",        lesson:"Lesson 9 · Giving Feedback",         file:"corporate_b2_l9_feedback_b.mp3", icon:"fa-comment-medical" },
-            { title:"Spoken Status Update",        lesson:"Lesson 10 · Status Reporting",       file:"corporate_b2_l10_status.mp3",   icon:"fa-clipboard-list" }
+        // Business English Premium (B2): one entry per LESSON. Lessons that ship more
+        // than one audio expose an A/B selector inside the player (variants[]).
+        const BUSINESS_LESSONS = [
+            { lesson:"Lesson 1 · First Impressions", title:"Two Elevator Pitches", icon:"fa-comment-dots",
+              variants:[ {label:"Weak pitch",  file:"corporate_b2_l1_pitch_a.mp3"},
+                         {label:"Strong pitch", file:"corporate_b2_l1_pitch_b.mp3"} ] },
+            { lesson:"Lesson 2 · Conference Call", title:"Quarterly Board Call", icon:"fa-phone-volume",
+              variants:[ {label:"Listen", file:"corporate_b2_l2_call.mp3"} ] },
+            { lesson:"Lesson 3 · Effective Meetings", title:"Meeting Agenda Walk-through", icon:"fa-list-check",
+              variants:[ {label:"Listen", file:"corporate_b2_l3_agenda.mp3"} ] },
+            { lesson:"Lesson 4 · Diplomatic Disagreement", title:"The Deadline Clash", icon:"fa-handshake-angle",
+              variants:[ {label:"Listen", file:"corporate_b2_l4_clash.mp3"} ] },
+            { lesson:"Lesson 5 · Presenting Data", title:"Q3 Dashboard Briefing", icon:"fa-chart-line",
+              variants:[ {label:"Listen", file:"corporate_b2_l5_dashboard.mp3"} ] },
+            { lesson:"Lesson 6 · Executive Presentations", title:"A Strong Opening", icon:"fa-bullhorn",
+              variants:[ {label:"Listen", file:"corporate_b2_l6_opening.mp3"} ] },
+            { lesson:"Lesson 7 · Email Etiquette", title:"Same Message, Two Tones", icon:"fa-envelope-open-text",
+              variants:[ {label:"Blunt", file:"corporate_b2_l7_tone_a.mp3"},
+                         {label:"Warm",  file:"corporate_b2_l7_tone_b.mp3"} ] },
+            { lesson:"Lesson 8 · Negotiation", title:"The Conditional Trade", icon:"fa-scale-balanced",
+              variants:[ {label:"Listen", file:"corporate_b2_l8_trade.mp3"} ] },
+            { lesson:"Lesson 9 · Giving Feedback", title:"Two Ways to Give Feedback", icon:"fa-comment-medical",
+              variants:[ {label:"Judgemental", file:"corporate_b2_l9_feedback_a.mp3"},
+                         {label:"SBI model",   file:"corporate_b2_l9_feedback_b.mp3"} ] },
+            { lesson:"Lesson 10 · Status Reporting", title:"Spoken Status Update", icon:"fa-clipboard-list",
+              variants:[ {label:"Listen", file:"corporate_b2_l10_status.mp3"} ] }
         ];
         // Certification Prep listening drills (with deliberate distractors)
         const CERT_TRACKS = [
@@ -343,7 +354,7 @@
             </div>
             <div class="lc-body">
                 <p>Listening resources from the Business English Premium course — pitches, calls, meetings, data, negotiation, feedback and more.</p>
-                <div class="lc-foot"><span>${BUSINESS_TRACKS.length} Tracks</span><i class="fas fa-arrow-right"></i></div>
+                <div class="lc-foot"><span>${BUSINESS_LESSONS.length} Lessons</span><i class="fas fa-arrow-right"></i></div>
             </div>`;
         bcard.addEventListener("click", showBusiness);
         levelGrid.appendChild(bcard);
@@ -460,17 +471,22 @@
             setCrumbsLevel("Business English");
             document.getElementById("exam-btn").classList.add("hidden");
             lessonGrid.innerHTML = "";
-            BUSINESS_TRACKS.forEach((t, i) => {
+            BUSINESS_LESSONS.forEach((L, i) => {
+                const def = L.variants[0];
                 const a = document.createElement("a");
                 a.className = "lesson-card";
-                const q = new URLSearchParams({ audio: t.file, title: t.title,
-                    sub: "Business English (B2)", crumb: "Business English · " + t.lesson, icon: t.icon });
+                const q = new URLSearchParams({ audio: def.file, title: L.title,
+                    sub: "Business English (B2)", crumb: "Business English · " + L.lesson, icon: L.icon });
+                if (L.variants.length > 1) q.set("variants", JSON.stringify(L.variants));
                 a.href = `lesson.html?${q.toString()}`;
                 a.style.animationDelay = (i * 0.04) + "s";
+                const versions = L.variants.length > 1
+                    ? ` <span style="font-weight:600;font-size:0.66rem;letter-spacing:.3px;color:#a8843d;background:rgba(197,160,89,.16);padding:2px 8px;border-radius:10px;white-space:nowrap;vertical-align:middle;">${L.variants.length} versions</span>`
+                    : "";
                 a.innerHTML = `
-                    ${VesperCovers.coverHTML(t.file, t.icon, "Business")}
+                    ${VesperCovers.coverHTML(def.file, L.icon, "Business")}
                     <div class="lz-body">
-                        <div class="lz-meta"><div class="num">${t.lesson}</div><h4>${t.title}</h4></div>
+                        <div class="lz-meta"><div class="num">${L.lesson}</div><h4>${L.title}${versions}</h4></div>
                         <i class="fas fa-chevron-right lz-go"></i>
                     </div>`;
                 lessonGrid.appendChild(a);

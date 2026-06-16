@@ -352,6 +352,7 @@
                         <button class="big-play" id="big-play" aria-label="Play"><i class="fas fa-play"></i></button>
                         <h3 class="a-title" id="a-title">Lesson Audio</h3>
                         <p class="a-sub" id="a-sub">Full listening track</p>
+                        <div class="speed-row variant-row" id="variant-row" style="display:none;flex-wrap:wrap"></div>
                         <div class="a-progress">
                             <span class="a-time" id="a-cur">0:00</span>
                             <div class="a-bar" id="a-bar"><div class="a-fill" id="a-fill"></div></div>
@@ -546,6 +547,7 @@
         const isCustom = !isBasics && params.get("audio") !== null;   // generic audio (e.g. Business English)
         let title, bannerTag, icon, vocab, audioSrc, crumbText, aSub, coverSeed, showPhoto = false;
         let basicsLesson = null;
+        let customVariants = [], curKey = "";
         if (isBasics) {
             const bl = parseInt(params.get("basics") || "1", 10);
             const bn = parseInt(params.get("lesson") || "1", 10);
@@ -562,15 +564,19 @@
             crumbText = `Basics ${bl} · Lesson ${bn}`;
             aSub = `${blv ? blv.tag : "Core Basics"} · Lesson ${bn} — dialogue (~1 min)`;
         } else if (isCustom) {
-            const f = params.get("audio");
+            // optional A/B versions for one lesson: ?variants=<JSON [{label,file},...]>
+            try { customVariants = JSON.parse(params.get("variants") || "[]") || []; } catch(e) { customVariants = []; }
+            if (!Array.isArray(customVariants)) customVariants = [];
+            const f = params.get("audio") || (customVariants[0] && customVariants[0].file) || "";
+            curKey = f.split("/").pop();
             title = params.get("title") || "Audio";
             bannerTag = params.get("sub") || "Vesper Audio";
             icon = params.get("icon") || "fa-headphones";
-            vocab = (window.BUSINESS_VOCAB || {})[f.split("/").pop()] || [];
+            vocab = (window.BUSINESS_VOCAB || {})[curKey] || [];
             audioSrc = f.includes("/") ? f : `assets/audio/${f}`;
             crumbText = params.get("crumb") || bannerTag;
             aSub = bannerTag;
-            coverSeed = f.split("/").pop();
+            coverSeed = curKey;
         } else if (isDiag) {
             const k = parseInt(params.get("diag") || "1", 10);
             title = `Diagnostic Track ${k}`; bannerTag = "Diagnostics"; icon = "fa-stethoscope";
@@ -669,15 +675,15 @@
             flush();
             return out;
         }
-        (function setupReading(){
+        function setupReading(){
+            chunks = [];
             if (isBasics) {
                 if (basicsLesson && basicsLesson.transcript)
                     chunks = chunks.concat(buildChunks(basicsLesson.transcript, null));
             } else if (isCustom) {
                 // Business / Certification tracks: transcript keyed by mp3 filename
                 const CT = window.CUSTOM_TRANSCRIPTS || {};
-                const key = (params.get("audio") || "").split("/").pop();
-                if (CT[key]) chunks = chunks.concat(buildChunks(CT[key], null));
+                if (CT[curKey]) chunks = chunks.concat(buildChunks(CT[curKey], null));
             } else {
                 const RD = window.VESPER_READING || {};
                 const entry = (!isDiag) ? ((RD[lvl] || RD[String(lvl)] || {})[les] || (RD[lvl] || {})[String(les)]) : null;
@@ -685,8 +691,9 @@
                 if (entry && entry.transcript) chunks = chunks.concat(buildChunks(entry.transcript, "Audio Transcript"));
             }
             hasReading = chunks.length > 0;
-            if (!hasReading) readingTab.style.display = "none";
-        })();
+            readingTab.style.display = hasReading ? "" : "none";
+        }
+        setupReading();
 
         const renderChunk = c => c.type === "h" ? c.html : `<p>${c.html}</p>`;
         function paginate(){
@@ -762,9 +769,39 @@
         });
         aBar.addEventListener("click", e => { const r=aBar.getBoundingClientRect(); if(audio.duration) audio.currentTime=((e.clientX-r.left)/r.width)*audio.duration; });
         document.querySelectorAll(".speed-btn").forEach(b => b.addEventListener("click", () => {
-            document.querySelectorAll(".speed-btn").forEach(x => x.classList.remove("active"));
+            b.parentElement.querySelectorAll(".speed-btn").forEach(x => x.classList.remove("active"));
             b.classList.add("active"); audio.playbackRate = parseFloat(b.dataset.rate);
         }));
+
+        // ── A/B VERSION SELECTOR (lessons that ship more than one audio) ──
+        const variantRow = document.getElementById("variant-row");
+        function selectVariant(file){
+            const k = file.split("/").pop();
+            if (k === curKey) return;
+            curKey = k;
+            audioSrc = `assets/audio/${curKey}`;
+            const wasPlaying = !audio.paused;
+            audio.pause(); audio.currentTime = 0; audio.src = audioSrc;
+            aFill.style.width = "0%"; aCur.textContent = "0:00"; aDur.textContent = "0:00";
+            document.getElementById("a-error").style.display = "none";
+            variantRow.querySelectorAll(".variant-btn").forEach(b =>
+                b.classList.toggle("active", b.dataset.file.split("/").pop() === curKey));
+            curPage = 0; setupReading();
+            if (document.getElementById("panel-reading").classList.contains("active")) layoutReading();
+            if (wasPlaying) audio.play().catch(()=>{});
+        }
+        if (customVariants.length > 1) {
+            variantRow.innerHTML = '<span>Version</span>';
+            customVariants.forEach(v => {
+                const b = document.createElement("button");
+                b.className = "speed-btn variant-btn" + (v.file.split("/").pop() === curKey ? " active" : "");
+                b.dataset.file = v.file;
+                b.textContent = v.label;
+                b.addEventListener("click", () => selectVariant(v.file));
+                variantRow.appendChild(b);
+            });
+            variantRow.style.display = "flex";
+        }
 
         // ── WHITEBOARD (object model: movable shapes, text, stickers) ──
         const canvas = document.getElementById("board");
