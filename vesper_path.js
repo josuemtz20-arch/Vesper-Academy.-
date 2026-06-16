@@ -24,10 +24,11 @@ window.VESPER_PATH = (function () {
   var SKILLS = {
     grammar:   { label: "Gramática",        icon: "📘", order: 0 },
     vocab:     { label: "Vocabulario",      icon: "🗂️", order: 1 },
-    listening: { label: "Listening",        icon: "🎧", order: 2 },
-    use:       { label: "Uso del inglés",   icon: "✍️", order: 3 }
+    reading:   { label: "Lectura",          icon: "📖", order: 2 },
+    listening: { label: "Listening",        icon: "🎧", order: 3 },
+    use:       { label: "Uso del inglés",   icon: "✍️", order: 4 }
   };
-  var SKILL_ORDER = ["grammar", "vocab", "listening", "use"];
+  var SKILL_ORDER = ["grammar", "vocab", "reading", "listening", "use"];
 
   var LEVEL_COLORS = { A1: "#4aa3df", A2: "#2ecc71", B1: "#e67e22", B2: "#a569bd", C1: "#c0392b" };
   function levelColor(lv) { return LEVEL_COLORS[normLevel(lv)] || "#C9A84C"; }
@@ -47,6 +48,8 @@ window.VESPER_PATH = (function () {
     if (track.indexOf("grammar") >= 0 || track.indexOf("gramát") >= 0 || track.indexOf("gramat") >= 0) return "grammar";
     var ex = l.exercises || [];
     if (!ex.length) return "use";
+    var read = ex.filter(function (e) { return e.type === "reading"; }).length;
+    if (read >= 1) return "reading";
     var listen = ex.filter(function (e) { return e.type === "listening"; }).length;
     if (listen >= Math.ceil(ex.length / 2)) return "listening";
     var vocab = ex.filter(function (e) { return e.type === "matching" || e.type === "categorize"; }).length;

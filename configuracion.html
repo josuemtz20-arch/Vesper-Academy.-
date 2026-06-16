@@ -31,8 +31,8 @@
     background:linear-gradient(var(--cream) 70%,rgba(251,248,241,0));padding-top:8px}
   .back{width:42px;height:42px;flex:none;display:flex;align-items:center;justify-content:center;border-radius:50%;
     text-decoration:none;color:var(--ink);background:var(--paper);border:1px solid var(--line);font-size:1.25rem}
-  .back:focus-visible,.seg button:focus-visible,.chip:focus-visible,.copybtn:focus-visible,
-  details.prompt summary:focus-visible,.name-input:focus-visible,.num:focus-visible,.switch:focus-visible,
+  .back:focus-visible,.seg button:focus-visible,.chip:focus-visible,
+  .name-input:focus-visible,.num:focus-visible,.switch:focus-visible,
   select.num:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
   .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
   .card{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);
@@ -55,16 +55,6 @@
   .tag{color:var(--muted);font-weight:700;font-size:.72rem;text-transform:uppercase;letter-spacing:.05em}
   .pv-greet{font-family:"Inria Serif",Georgia,serif;font-size:1.1rem;margin:.1em 0 .3em}
   .pv-body{font-size:.95rem}
-  details.prompt{margin-top:14px;border-top:1px dashed var(--line);padding-top:12px}
-  details.prompt summary{cursor:pointer;font-weight:600;font-size:.9rem;list-style:none;display:flex;align-items:center;gap:8px}
-  details.prompt summary::-webkit-details-marker{display:none}
-  details.prompt summary .chev{transition:transform .2s ease}
-  details.prompt[open] summary .chev{transform:rotate(90deg)}
-  pre.sys{white-space:pre-wrap;word-break:break-word;background:var(--cream);border:1px solid var(--line);
-    border-radius:12px;padding:12px;font:500 .82rem/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;max-height:300px;overflow:auto;margin:10px 0}
-  .copybtn{display:inline-flex;align-items:center;gap:7px;background:var(--ink);color:var(--cream);border:none;
-    border-radius:10px;padding:9px 14px;font:600 .85rem Inter,sans-serif;cursor:pointer}
-  .copybtn.ok{background:var(--success)}
 
   /* ---- segmented / option groups ---- */
   .seg{display:grid;gap:8px}
@@ -136,13 +126,6 @@
         <p class="pv-body" id="pv-body">—</p>
       </div>
     </div>
-    <details class="prompt">
-      <summary><span class="chev">&#9656;</span> Ver el prompt de Vesper (avanzado)</summary>
-      <p class="muted" style="margin:.4em 0">Este es el “cerebro” que se arma con tus ajustes. Cópialo y pégalo en el
-        <a href="vesper_engine.html">Vesper Engine</a> o en Claude para hablar con un Vesper a tu medida.</p>
-      <pre class="sys" id="pv-sys" aria-label="Prompt de sistema de Vesper">—</pre>
-      <button class="copybtn" id="copy-sys" type="button"><span class="i">&#128203;</span> <span class="lbl">Copiar prompt</span></button>
-    </details>
   </section>
 
   <!-- ===== TU PERFIL ===== -->
@@ -409,7 +392,6 @@
     $("pv-greet").textContent = pv.greet || "—";
     $("pv-body").textContent = pv.body || "";
     $("pv-cefr").textContent = P.cefrOf(cur);
-    $("pv-sys").textContent = P.systemPrompt(cur);
     if (window.VESPER_MASCOT) {
       var state = (cur.tone === "strict") ? "explaining" : (cur.tone === "motivating" ? "correct" : "welcome");
       $("pv-mascot").innerHTML = VESPER_MASCOT.render(state, { size: "lg" });
@@ -418,22 +400,6 @@
   paint();
   window.addEventListener("vesper:persona", paint);
   window.addEventListener("vesper:appearance", paint); /* refresca la mascota al cambiar skin */
-
-  /* copiar prompt */
-  $("copy-sys").addEventListener("click", function () {
-    var txt = P.systemPrompt(P.get());
-    var done = function () {
-      var b = $("copy-sys"); b.classList.add("ok"); b.querySelector(".lbl").textContent = "¡Copiado!";
-      setTimeout(function () { b.classList.remove("ok"); b.querySelector(".lbl").textContent = "Copiar prompt"; }, 1600);
-    };
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(txt).then(done, fallbackCopy);
-    } else fallbackCopy();
-    function fallbackCopy() {
-      var ta = document.createElement("textarea"); ta.value = txt; document.body.appendChild(ta);
-      ta.select(); try { document.execCommand("copy"); done(); } catch (e) {} document.body.removeChild(ta);
-    }
-  });
 
   /* toast "Guardado" */
   var noteT;
