@@ -566,7 +566,7 @@
             title = params.get("title") || "Audio";
             bannerTag = params.get("sub") || "Vesper Audio";
             icon = params.get("icon") || "fa-headphones";
-            vocab = [];
+            vocab = (window.BUSINESS_VOCAB || {})[f.split("/").pop()] || [];
             audioSrc = f.includes("/") ? f : `assets/audio/${f}`;
             crumbText = params.get("crumb") || bannerTag;
             aSub = bannerTag;
