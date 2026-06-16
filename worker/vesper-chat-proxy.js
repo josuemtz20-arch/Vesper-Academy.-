@@ -19,10 +19,10 @@
 
 /* ---------- Configuración (editable) ---------- */
 
-/* Modelo de Claude. Por defecto el más capaz (Opus 4.8); para un chat
- * público de alto volumen puedes bajar el costo cambiando a
- * "claude-sonnet-4-6". */
-const MODEL = "claude-opus-4-8";
+/* Modelo de Claude. Por defecto Sonnet 4.6: más barato y rápido, buena
+ * opción para un chat público de alto volumen. Para máxima calidad puedes
+ * subirlo a "claude-opus-4-8". */
+const MODEL = "claude-sonnet-4-6";
 
 /* Tope de tokens de salida por respuesta (también frena el abuso). */
 const MAX_TOKENS = 1024;

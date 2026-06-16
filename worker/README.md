@@ -80,8 +80,8 @@ Debe devolver una secuencia de eventos `data: {...}` (SSE) con el texto.
 
 En `vesper-chat-proxy.js`:
 
-- `MODEL` — `claude-opus-4-8` por defecto. Cambia a `claude-sonnet-4-6` para
-  reducir costo en un chat de alto volumen.
+- `MODEL` — `claude-sonnet-4-6` por defecto (más barato y rápido). Cámbialo a
+  `claude-opus-4-8` si quieres la máxima calidad.
 - `MAX_TOKENS` — tope de salida por respuesta.
 - `MAX_MESSAGES` — turnos de historial que se conservan.
 - `ALLOWED_ORIGINS` — dominios autorizados a usar el proxy.
