@@ -141,11 +141,31 @@ window.VESPER_PERSONA = (function () {
     exam: "aprobar un examen", study: "sus estudios",
     social: "conversar y hacer amigos", aviation: "inglés de aviación"
   };
-  var TOPIC_LABEL = {
-    dailylife: "vida diaria", travel: "viajes y cultura", business: "negocios y oficina",
-    tech: "tecnología y futuro", arts: "arte y literatura", popculture: "cine y cultura pop",
-    society: "sociedad y mundo", science: "ciencia y naturaleza"
+  /* Temas de interes (multi). Cada uno: etiqueta ES + emoji para la UI y una
+     frase en ingles para el system prompt ("use examples about ..."). Es la
+     fuente unica que consume el panel de Configuracion y el chat. */
+  var TOPICS = {
+    dailylife:  { label: "Vida diaria",         emoji: "☕",  en: "daily life" },
+    travel:     { label: "Viajes y cultura",    emoji: "🧳", en: "travel and culture" },
+    business:   { label: "Negocios y oficina",  emoji: "💼", en: "business and the office" },
+    tech:       { label: "Tecnología y futuro", emoji: "💻", en: "technology and the future" },
+    science:    { label: "Ciencia y naturaleza",emoji: "🔬", en: "science and nature" },
+    history:    { label: "Historia",            emoji: "🏛️", en: "history" },
+    philosophy: { label: "Filosofía",           emoji: "🧠", en: "philosophy and big ideas" },
+    arts:       { label: "Arte y literatura",   emoji: "🎨", en: "art and literature" },
+    music:      { label: "Música",              emoji: "🎵", en: "music" },
+    movies:     { label: "Películas y series",  emoji: "🎬", en: "films and TV series" },
+    anime:      { label: "Anime y manga",       emoji: "🌸", en: "anime and manga" },
+    gaming:     { label: "Videojuegos",         emoji: "🎮", en: "video games" },
+    popculture: { label: "Cultura pop",         emoji: "✨", en: "pop culture" },
+    sports:     { label: "Deportes",            emoji: "⚽", en: "sports" },
+    food:       { label: "Comida y cocina",     emoji: "🍳", en: "food and cooking" },
+    society:    { label: "Sociedad y mundo",    emoji: "🌍", en: "society and the world" }
   };
+  var TOPIC_ORDER = ["dailylife","travel","business","tech","science","history",
+    "philosophy","arts","music","movies","anime","gaming","popculture","sports","food","society"];
+  /* compat: etiqueta ES suelta (por si algun codigo viejo la espera) */
+  var TOPIC_LABEL = (function () { var m = {}; for (var k in TOPICS) m[k] = TOPICS[k].label.toLowerCase(); return m; })();
 
   /* ---------- Defaults ---------- */
   var DEFAULTS = {
@@ -200,6 +220,9 @@ window.VESPER_PERSONA = (function () {
     if (patch.cefr) prof.level = cefrToLevel(patch.cefr);
     /* callMe vacio = usa el nombre; si fijan name aqui, respétalo en el perfil */
     if (patch.name != null) prof.name = patch.name;
+    /* los temas de interes viven a nivel raiz (los lee el motor adaptativo y
+       el onboarding), no anidados en .vesper */
+    if (Array.isArray(patch.topics)) { prof.topics = patch.topics; delete prof.vesper.topics; }
     prof.ts = nowTs();   /* marca de tiempo para un futuro last-write-wins en sync */
     writeProfile(prof);
     emit();
@@ -310,10 +333,7 @@ window.VESPER_PERSONA = (function () {
     var m = { work: "their work and career", travel: "travel and everyday life", exam: "passing an English exam", study: "their studies", social: "talking and making friends", aviation: "aviation English" };
     return m[g] || null;
   }
-  function enTopic(t) {
-    var m = { dailylife: "daily life", travel: "travel and culture", business: "business and the office", tech: "technology and the future", arts: "art and literature", popculture: "film and pop culture", society: "society and the world", science: "science and nature" };
-    return m[t] || null;
-  }
+  function enTopic(t) { return (TOPICS[t] && TOPICS[t].en) || null; }
 
   /* ---------- VISTA PREVIA en vivo ---------- */
   /* Construye un mensaje de ejemplo de Vesper que cambia con el tono, la
@@ -386,6 +406,7 @@ window.VESPER_PERSONA = (function () {
     CORRECTION: CORRECTION, CORRECTION_ORDER: CORRECTION_ORDER,
     FOCUS: FOCUS, FOCUS_ORDER: FOCUS_ORDER,
     CEFR: CEFR, GOAL_LABEL: GOAL_LABEL, TOPIC_LABEL: TOPIC_LABEL,
+    TOPICS: TOPICS, TOPIC_ORDER: TOPIC_ORDER,
     DEFAULTS: DEFAULTS,
     /* estado */
     get: get, set: set, defaults: function () { return clone(DEFAULTS); },
