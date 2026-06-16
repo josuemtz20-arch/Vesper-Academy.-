@@ -211,6 +211,31 @@
   .cat-bucket.active{border-color:var(--gold)}
   .cat-bucket h4{margin:0 0 4px;font-size:.78rem;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
   .cat-bucket .cat-tk{margin:4px 4px 0 0;display:inline-block}
+  /* gamificación: meta diaria, logros, repaso */
+  .hub-stat.met{background:var(--ok-tint);border-color:var(--success);color:var(--ink)}
+  .lcard2.review{background:linear-gradient(135deg,var(--gold-tint),var(--paper));border-color:var(--gold);border-style:dashed}
+  .lcard2.review .lc-badge{background:var(--gold);color:var(--ink)}
+  .trophy-shelf{margin:8px 0 2px;border:1px solid var(--line);border-radius:14px;background:var(--paper);padding:4px 12px}
+  .trophy-shelf summary{cursor:pointer;font-weight:700;font-size:.9rem;list-style:none;display:flex;align-items:center;gap:8px;padding:8px 0}
+  .trophy-shelf summary::-webkit-details-marker{display:none}
+  .trophy-shelf .t-count{margin-left:auto;font-size:.78rem;color:var(--muted)}
+  .trophy-grid{display:flex;flex-wrap:wrap;gap:8px;padding:4px 0 10px}
+  .trophy{display:flex;align-items:center;gap:7px;border:1px solid var(--line);border-radius:999px;padding:5px 11px;font-size:.82rem;background:var(--cream);opacity:.55}
+  .trophy.on{opacity:1;border-color:var(--gold);background:var(--gold-tint)}
+  .trophy .t-ic{font-size:1rem}
+  .trophy .t-nm{font-weight:600}
+  .goal-card{background:var(--cream);border:1px solid var(--line);border-radius:13px;padding:12px;margin:12px 0;font-weight:600}
+  .goal-card.met{background:var(--ok-tint);border-color:var(--success)}
+  .goal-bar{height:9px;background:#eee6d4;border-radius:999px;overflow:hidden;margin:8px 0 4px}
+  .goal-bar i{display:block;height:100%;background:var(--gold);border-radius:999px;transition:width .5s ease}
+  .goal-card.met .goal-bar i{background:var(--success)}
+  .goal-done{display:block;color:var(--success);font-size:.86rem}
+  .ach-pop{display:grid;gap:8px;margin:12px 0}
+  .ach-badge{display:flex;align-items:center;gap:11px;text-align:left;background:var(--gold-tint);border:1px solid var(--gold);border-radius:13px;padding:10px 13px}
+  .ach-badge .ab-ic{font-size:1.7rem;line-height:1}
+  .ach-badge .ab-tx{display:flex;flex-direction:column}
+  .ach-badge .ab-tx b{font-size:.72rem;text-transform:uppercase;letter-spacing:.05em;color:var(--gold)}
+  .ach-badge .ab-tx span{font-weight:700}
   @media(min-width:640px){
     h1{font-size:2rem}
     .mascot-img{width:84px;height:84px}
@@ -327,8 +352,24 @@
       + '<span class="lc-go">' + (stt === "locked" ? "" : "&#8250;") + '</span></button>';
   }
 
+  /* Vitrina de logros (ganados + bloqueados), plegable. */
+  function buildTrophyShelf() {
+    if (!P || !P.achievementsState) return "";
+    var list = P.achievementsState();
+    var earned = list.filter(function (a) { return a.unlocked; }).length;
+    var chips = list.map(function (a) {
+      return '<span class="trophy' + (a.unlocked ? " on" : "") + '" title="' + esc(a.name + (a.desc ? " — " + a.desc : "")) + '">'
+        + '<span class="t-ic">' + (a.unlocked ? a.icon : "&#128274;") + '</span>'
+        + '<span class="t-nm">' + esc(a.name) + '</span></span>';
+    }).join("");
+    return '<details class="trophy-shelf"><summary>&#127942; Logros <span class="t-count">' + earned + '/' + list.length + '</span></summary>'
+      + '<div class="trophy-grid">' + chips + '</div></details>';
+  }
+
   function renderIndex(selLevel) {
     var st = P ? P.getState() : { streak: 0, xp: 0, shields: 0 };
+    var dg = (P && P.dailyGoal) ? P.dailyGoal() : null;
+    var trophyHtml = buildTrophyShelf();
     var hello = (A && profile) ? A.greeting() : "Hola!";
     /* fallback simple si no hay motor de ruta */
     if (!PATH) {
@@ -381,9 +422,22 @@
       var ids = g.bySkill[sk]; if (!ids || !ids.length) return;
       var meta = PATH.SKILLS[sk];
       var doneN = ids.filter(function (id) { return built.completed[id]; }).length;
+      var reviewReady = ids.length >= 2 && doneN === ids.length;
+      var reviewCard = "";
+      if (reviewReady) {
+        var rid = "review:" + selLevel + ":" + sk;
+        var mastered = !!((st.achievements || {})["master:" + selLevel + ":" + sk]);
+        var rsc = PATH.getScore(rid);
+        reviewCard = '<button class="lcard2 review' + (mastered ? " completed" : "") + '" data-go="' + esc(rid) + '">'
+          + '<span class="lc-badge">&#127942;</span>'
+          + '<span class="lc-body"><span class="lc-ttl">Repaso de ' + esc(meta.label) + '</span>'
+          + '<span style="display:block;margin-top:3px"><span class="lc-sub">'
+          + (rsc != null ? "Mejor: " + rsc + "% · Repetir" : "Pon a prueba todo lo aprendido") + '</span></span></span>'
+          + '<span class="lc-go">&#8250;</span></button>';
+      }
       sections += '<div class="skill-sec"><div class="skill-h"><span class="ic">' + meta.icon + '</span>' + meta.label
         + '<span class="ct">' + doneN + "/" + ids.length + '</span></div><div class="lgrid">'
-        + ids.map(function (id) { return lessonCard(id, built); }).join("") + '</div></div>';
+        + ids.map(function (id) { return lessonCard(id, built); }).join("") + reviewCard + '</div></div>';
     });
     if (!sections) sections = '<p class="muted">Próximamente más lecciones en este nivel.</p>';
 
@@ -397,7 +451,9 @@
       + mascot("welcome", false, "sm") + '</div></div>'
       + '<div class="hub-stats"><span class="hub-stat">&#128293; ' + (st.streak || 0) + ' días</span>'
       + '<span class="hub-stat">&#11088; ' + (st.xp || 0) + ' XP</span>'
+      + (dg ? '<span class="hub-stat' + (dg.met ? ' met' : '') + '">&#127919; ' + Math.min(dg.progress, dg.target) + '/' + dg.target + '</span>' : "")
       + ((st.shields || 0) ? '<span class="hub-stat">&#128737;&#65039; ' + st.shields + '</span>' : "") + '</div>'
+      + trophyHtml
       + contHtml
       + '<div class="lvl-tabs">' + tabs + '</div>'
       + '<div class="lvl-head"><h2>Nivel ' + selLevel + '</h2>'
@@ -891,25 +947,36 @@
   }
 
   /* ---------- FEEDBACK / XP ---------- */
+  var lastPerfect = false, masteryUnlocked = false;
   function renderFeedback() {
     var total = lesson.exercises.length;
     var correct = results.filter(Boolean).length;
+    var pct = Math.round(100 * correct / Math.max(1, total));
     earnedXp = Math.max(5, Math.round((lesson.xpReward || 0) * correct / Math.max(1, total)));
-    if (PATH && PATH.setScore && lesson.lessonId) PATH.setScore(lesson.lessonId, Math.round(100 * correct / Math.max(1, total)));
+    if (PATH && PATH.setScore && lesson.lessonId) PATH.setScore(lesson.lessonId, pct);
     var perfect = correct === total;
+    lastPerfect = perfect;
+    /* repaso aprobado (>=80%) -> desbloquea maestría de la destreza */
+    masteryUnlocked = false;
+    if (lesson.isReview && pct >= 80 && P && P.unlock) {
+      masteryUnlocked = P.unlock("master:" + lesson.reviewLevel + ":" + lesson.reviewSkill);
+    }
+    var head = lesson.isReview
+      ? (pct >= 80 ? "Repaso superado!" : "Sigue practicando")
+      : (perfect ? "Leccion perfecta!" : "Buen trabajo!");
     show('<div class="wrap">' + topbar(86) + '<div class="card center">'
-      + mascot(perfect ? "milestone" : "correct", perfect ? "Leccion perfecta!" : "Buen trabajo!")
+      + mascot((perfect || (lesson.isReview && pct >= 80)) ? "milestone" : "correct", head)
       + '<h1>+' + earnedXp + ' XP</h1>'
-      + '<p class="muted">' + correct + ' de ' + total + ' correctos</p>'
-      + '<div class="xpbar"><div class="xpfill" style="width:' + Math.round(100 * correct / total) + '%"></div></div>'
+      + '<p class="muted">' + correct + ' de ' + total + ' correctos &middot; ' + pct + '%</p>'
+      + '<div class="xpbar"><div class="xpfill" style="width:' + pct + '%"></div></div>'
       + '<button class="btn btn-gold" id="cont">Continuar</button></div></div>');
     byId("cont").onclick = renderStreak;
   }
 
   /* ---------- STREAK ---------- */
   function renderStreak() {
-    var info = P ? P.completeLesson(lesson.lessonId, earnedXp)
-                 : { streak: 1, xp: earnedXp, milestone: false, shields: 0 };
+    var info = P ? P.completeLesson(lesson.lessonId, earnedXp, { perfect: lastPerfect })
+                 : { streak: 1, xp: earnedXp, milestone: false, shields: 0, newAchievements: [], dailyGoal: null };
     var grid = P ? P.weekGrid() : [];
     var cells = grid.map(function (d) {
       return '<div class="day' + (d.active ? " on" : "") + (d.isToday ? " today" : "") + '"><span>' + d.label + '</span><i>' + (d.active ? "🔥" : "&middot;") + '</i></div>';
@@ -918,12 +985,39 @@
     for (var i = 0; i < (info.shields || 0); i++) shields += "🛡️";
     var mstate = info.milestone ? "milestone" : (info.streak > 0 ? "streak_alive" : "streak_broken");
     var hasNext = lesson.nextLessonId && L[lesson.nextLessonId];
+
+    /* meta diaria */
+    var dg = info.dailyGoal, goalHtml = "";
+    if (dg) {
+      var gp = Math.min(100, Math.round(100 * dg.progress / Math.max(1, dg.target)));
+      goalHtml = '<div class="goal-card' + (dg.met ? ' met' : '') + '">&#127919; Meta diaria '
+        + '<b>' + Math.min(dg.progress, dg.target) + '/' + dg.target + '</b>'
+        + '<div class="goal-bar"><i style="width:' + gp + '%"></i></div>'
+        + (dg.met ? '<span class="goal-done">Meta cumplida! &#10024;</span>' : '<span class="muted" style="font-size:.82rem">Te falta ' + Math.max(0, dg.target - dg.progress) + '</span>')
+        + '</div>';
+    }
+
+    /* logros recién desbloqueados (incluye maestría de repaso) */
+    var ach = (info.newAchievements || []).slice();
+    if (masteryUnlocked) ach.push("master:" + lesson.reviewLevel + ":" + lesson.reviewSkill);
+    var achHtml = "";
+    if (ach.length && P && P.achievementsState) {
+      var all = P.achievementsState(), byId2 = {};
+      all.forEach(function (a) { byId2[a.id] = a; });
+      achHtml = '<div class="ach-pop">' + ach.map(function (id) {
+        var a = byId2[id] || { icon: "⭐", name: id };
+        return '<div class="ach-badge"><span class="ab-ic">' + a.icon + '</span><span class="ab-tx"><b>Logro desbloqueado</b><span>' + esc(a.name) + '</span></span></div>';
+      }).join("") + '</div>';
+    }
+
     show('<div class="wrap">' + topbar(100) + '<div class="card center">'
       + mascot(mstate)
       + '<div class="flame">&#128293;</div>'
       + '<h1>' + info.streak + ' ' + (info.streak === 1 ? "dia" : "dias") + ' de racha</h1>'
       + (shields ? '<div class="shields">' + shields + '</div>' : '')
       + '<div class="week">' + cells + '</div>'
+      + goalHtml
+      + achHtml
       + '<div class="stat-row"><div class="stat">&#11088; <b>' + info.xp + '</b> XP total</div></div>'
       + (info.milestone ? '<div class="milestone">&#127881; Nuevo escudo de racha!</div>' : '')
       + '<div class="nudge" id="nudge">Guarda tu progreso en todos tus dispositivos: <a href="#" id="nudge-account">crea una cuenta</a> (opcional).'
@@ -953,6 +1047,34 @@
     var calibrate = A && profile && !sess && baseLesson.exercises && baseLesson.exercises.length >= 3;
     if (calibrate) { renderWarmup(); }
     else { buildAdapted(); renderCover(); }
+  }
+
+  /* ---------- REVIEW ("boss") quiz: lección sintética ---------- */
+  function buildReviewLesson(rid) {
+    if (!PATH) return null;
+    var p = rid.split(":"), lv = p[1], sk = p[2];
+    var meta = (PATH.SKILLS && PATH.SKILLS[sk]) || { label: sk };
+    var built = PATH.build(L, ORDER), gg = built.levels[lv];
+    if (!gg) return null;
+    var ids = (gg.bySkill[sk] || []).filter(function (x) { return built.completed[x]; });
+    if (ids.length < 2) return null;
+    var pool = [];
+    ids.forEach(function (lid) {
+      var l = L[lid]; if (!l || !l.exercises || !l.exercises.length) return;
+      var ex = shuffle(l.exercises.slice());
+      pool = pool.concat(ex.slice(0, 2)); /* hasta 2 por lección */
+    });
+    shuffle(pool);
+    var picked = pool.slice(0, Math.min(10, pool.length));
+    return {
+      lessonId: rid, level: lv, track: "Repaso", isReview: true, reviewLevel: lv, reviewSkill: sk,
+      title: "Repaso: " + meta.label + " " + lv,
+      explanation: {
+        body: "Pon a prueba todo lo que aprendiste en " + meta.label + " (" + lv + "). Son preguntas mezcladas de tus lecciones completadas. Necesitas 80% para la maestría. (Repaso general de la destreza.)",
+        examples: []
+      },
+      exercises: picked, xpReward: 20 + 5 * ids.length, mascotState: "thinking", nextLessonId: null
+    };
   }
 
   /* quiz corto de calibracion al inicio de la sesion */
@@ -1001,6 +1123,18 @@
   if (!L || !Object.keys(L).length) { show('<div class="wrap"><div class="card center"><h1>Sin lecciones</h1><p class="muted">No se cargaron los datos.</p></div></div>'); return; }
   if (window.VESPER_THEME && VESPER_THEME.mountFloat) VESPER_THEME.mountFloat();
   if (!id) { renderIndex(); return; }
+  if (id.indexOf("review:") === 0) {
+    baseLesson = buildReviewLesson(id);
+    if (!baseLesson || !baseLesson.exercises.length) {
+      show('<div class="wrap"><div class="card center">' + mascot("thinking", "Aún no hay repaso disponible.")
+        + '<h1>Repaso no disponible</h1><p class="muted">Completa al menos 2 lecciones de esta destreza.</p>'
+        + '<a class="btn btn-gold" href="leccion.html">Ver lecciones</a></div></div>');
+      return;
+    }
+    lesson = baseLesson;
+    renderCover();
+    return;
+  }
   baseLesson = L[id];
   if (!baseLesson) {
     show('<div class="wrap"><div class="card center">' + mascot("incorrect", "No encuentro esa leccion.")

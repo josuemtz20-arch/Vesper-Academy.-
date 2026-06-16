@@ -1,10 +1,15 @@
 /* ============================================================
  * vesper_progress.js — Account-free streak + XP store (localStorage).
  * window.VesperProgress API:
- *   getState()                     -> { xp, streak, lastDay, days, completed, shields }
- *   completeLesson(lessonId, xp)   -> { xp, streak, isNewDay, milestone, newShield, shields }
- *   addXp(n)                       -> new total xp
- *   weekGrid()                     -> [{ label, key, active, isToday }] (last 7 days)
+ *   getState()                       -> { xp, streak, lastDay, days, completed, shields, achievements, dayCounts, goalTarget }
+ *   completeLesson(lessonId, xp, opts) -> { xp, streak, isNewDay, milestone, newShield, shields, newAchievements, dailyGoal }
+ *   addXp(n)                         -> new total xp
+ *   weekGrid()                       -> [{ label, key, active, isToday }] (last 7 days)
+ *   unlock(id)                       -> true if achievement newly unlocked
+ *   achievementsState()              -> [{ id, name, icon, desc, unlocked, date }]
+ *   dailyGoal()                      -> { target, progress, met }
+ *   setGoal(n)                       -> new target
+ *   ACHIEVEMENTS                     -> catalog [{ id, name, icon, desc }]
  * Streak = consecutive calendar days with >=1 completed lesson.
  * A shield is earned every 7 days of streak (milestone).
  * Optional cloud sync (when logged in) is a no-op-safe hook for later.
@@ -12,13 +17,40 @@
 window.VesperProgress = (function () {
   var KEY = "vesperProgress";
   var DAY_LABELS = ["D", "L", "M", "X", "J", "V", "S"]; // Sun..Sat (es)
+  var DEFAULT_GOAL = 3;
+
+  /* Catálogo de logros. Los de "skill mastery" se desbloquean desde leccion.html
+     vía unlock("master:<NIVEL>:<skill>"); aquí solo viven los nombres bonitos. */
+  var ACHIEVEMENTS = [
+    { id: "first-lesson", name: "Primeros pasos", icon: "🐾", desc: "Completa tu primera lección." },
+    { id: "lessons-5", name: "Tomando ritmo", icon: "🚶", desc: "Completa 5 lecciones." },
+    { id: "lessons-25", name: "En marcha", icon: "🏃", desc: "Completa 25 lecciones." },
+    { id: "lessons-50", name: "Imparable", icon: "🚀", desc: "Completa 50 lecciones." },
+    { id: "lessons-100", name: "Centurión", icon: "💯", desc: "Completa 100 lecciones." },
+    { id: "perfect", name: "Sin errores", icon: "🎯", desc: "Termina una lección sin fallos." },
+    { id: "goal-met", name: "Meta del día", icon: "✅", desc: "Cumple tu meta diaria." },
+    { id: "streak-7", name: "Una semana", icon: "🔥", desc: "Mantén una racha de 7 días." },
+    { id: "streak-30", name: "Un mes entero", icon: "🗓️", desc: "Mantén una racha de 30 días." }
+  ];
+  /* Nombres legibles para los logros dinámicos de dominio por destreza. */
+  var SKILL_NAMES = { grammar: "Gramática", vocab: "Vocabulario", reading: "Lectura", listening: "Listening", use: "Uso del inglés" };
+  function masteryMeta(id) {
+    var p = id.split(":"); // master:A1:grammar
+    var lv = p[1] || "", sk = SKILL_NAMES[p[2]] || p[2] || "";
+    return { id: id, name: "Maestría: " + sk + " " + lv, icon: "🏆", desc: "Aprueba el repaso de " + sk + " (" + lv + ")." };
+  }
+  function metaFor(id) {
+    for (var i = 0; i < ACHIEVEMENTS.length; i++) if (ACHIEVEMENTS[i].id === id) return ACHIEVEMENTS[i];
+    if (id.indexOf("master:") === 0) return masteryMeta(id);
+    return { id: id, name: id, icon: "⭐", desc: "" };
+  }
 
   function pad(n) { return (n < 10 ? "0" : "") + n; }
   function dayKey(d) { d = d || new Date(); return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()); }
   function parseKey(k) { var p = k.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
   function dayDiff(aKey, bKey) { return Math.round((parseKey(bKey) - parseKey(aKey)) / 86400000); }
 
-  function defaults() { return { xp: 0, streak: 0, lastDay: null, days: {}, completed: {}, shields: 0 }; }
+  function defaults() { return { xp: 0, streak: 0, lastDay: null, days: {}, completed: {}, shields: 0, achievements: {}, dayCounts: {}, goalTarget: DEFAULT_GOAL }; }
 
   function load() {
     try {
@@ -39,7 +71,42 @@ window.VesperProgress = (function () {
 
   function addXp(n) { var s = load(); s.xp += (n || 0); save(s); return s.xp; }
 
-  function completeLesson(lessonId, xpEarned) {
+  /* nº de lecciones reales completadas (excluye repasos "review:..."). */
+  function lessonCount(s) {
+    var n = 0;
+    for (var k in s.completed) { if (k.indexOf("review:") !== 0) n++; }
+    return n;
+  }
+
+  /* Evalúa logros genéricos sobre el estado actual; marca los nuevos y
+     devuelve la lista de ids recién desbloqueados. */
+  function evalAchievements(s, ctx) {
+    ctx = ctx || {};
+    var unlocked = [];
+    function tryUnlock(id, cond) {
+      if (cond && !s.achievements[id]) { s.achievements[id] = dayKey(); unlocked.push(id); }
+    }
+    var count = lessonCount(s);
+    tryUnlock("first-lesson", count >= 1);
+    tryUnlock("lessons-5", count >= 5);
+    tryUnlock("lessons-25", count >= 25);
+    tryUnlock("lessons-50", count >= 50);
+    tryUnlock("lessons-100", count >= 100);
+    tryUnlock("perfect", !!ctx.perfect);
+    tryUnlock("streak-7", s.streak >= 7);
+    tryUnlock("streak-30", s.streak >= 30);
+    tryUnlock("goal-met", ctx.goalMet);
+    return unlocked;
+  }
+
+  function goalInfo(s, today) {
+    var target = s.goalTarget || DEFAULT_GOAL;
+    var progress = (s.dayCounts && s.dayCounts[today]) || 0;
+    return { target: target, progress: progress, met: progress >= target };
+  }
+
+  function completeLesson(lessonId, xpEarned, opts) {
+    opts = opts || {};
     var s = load();
     var today = dayKey();
     var isNewDay = s.lastDay !== today;
@@ -56,6 +123,7 @@ window.VesperProgress = (function () {
 
     s.lastDay = today;
     s.days[today] = true;
+    s.dayCounts[today] = (s.dayCounts[today] || 0) + 1;
     s.xp += (xpEarned || 0);
     if (lessonId) s.completed[lessonId] = today;
 
@@ -65,9 +133,44 @@ window.VesperProgress = (function () {
       if (earned > s.shields) { s.shields = earned; newShield = true; milestone = true; }
     }
 
+    var dg = goalInfo(s, today);
+    var newAchievements = evalAchievements(s, { perfect: !!opts.perfect, goalMet: dg.met });
+
     save(s);
     syncIfLoggedIn(s); // optional, safe no-op until accounts are wired
-    return { xp: s.xp, streak: s.streak, isNewDay: isNewDay, milestone: milestone, newShield: newShield, shields: s.shields };
+    return { xp: s.xp, streak: s.streak, isNewDay: isNewDay, milestone: milestone, newShield: newShield,
+      shields: s.shields, newAchievements: newAchievements, dailyGoal: dg };
+  }
+
+  /* Desbloqueo puntual desde otras páginas (p.ej. maestría por destreza).
+     Devuelve true solo si es nuevo. */
+  function unlock(id) {
+    if (!id) return false;
+    var s = load();
+    if (s.achievements[id]) return false;
+    s.achievements[id] = dayKey();
+    save(s);
+    return true;
+  }
+
+  function dailyGoal() { var s = load(); return goalInfo(s, dayKey()); }
+  function setGoal(n) { var s = load(); s.goalTarget = Math.max(1, Math.min(20, parseInt(n, 10) || DEFAULT_GOAL)); save(s); return s.goalTarget; }
+
+  /* Estado completo de logros para pintar la vitrina (ganados + bloqueados). */
+  function achievementsState() {
+    var s = load();
+    var seen = {}, out = [];
+    ACHIEVEMENTS.forEach(function (a) {
+      seen[a.id] = true;
+      out.push({ id: a.id, name: a.name, icon: a.icon, desc: a.desc, unlocked: !!s.achievements[a.id], date: s.achievements[a.id] || null });
+    });
+    /* logros dinámicos ya ganados (maestrías) que no están en el catálogo fijo */
+    for (var id in s.achievements) {
+      if (seen[id]) continue;
+      var m = metaFor(id);
+      out.push({ id: id, name: m.name, icon: m.icon, desc: m.desc, unlocked: true, date: s.achievements[id] });
+    }
+    return out;
   }
 
   function weekGrid() {
@@ -105,11 +208,15 @@ window.VesperProgress = (function () {
      streak = recalculada sobre la unión de días (evita inflar la racha). */
   function merge(remote) {
     var s = load(); remote = remote || {};
-    var days = {}, completed = {}, k;
+    var days = {}, completed = {}, achievements = {}, dayCounts = {}, k;
     for (k in (s.days || {})) days[k] = true;
     for (k in (remote.days || {})) days[k] = true;
     for (k in (s.completed || {})) completed[k] = s.completed[k];
     for (k in (remote.completed || {})) { if (!completed[k] || remote.completed[k] > completed[k]) completed[k] = remote.completed[k]; }
+    for (k in (s.achievements || {})) achievements[k] = s.achievements[k];
+    for (k in (remote.achievements || {})) { if (!achievements[k] || remote.achievements[k] < achievements[k]) achievements[k] = remote.achievements[k]; }
+    for (k in (s.dayCounts || {})) dayCounts[k] = s.dayCounts[k];
+    for (k in (remote.dayCounts || {})) { if ((remote.dayCounts[k] || 0) > (dayCounts[k] || 0)) dayCounts[k] = remote.dayCounts[k]; }
     var lastDay = s.lastDay || null;
     if (remote.lastDay && (!lastDay || remote.lastDay > lastDay)) lastDay = remote.lastDay;
     var merged = {
@@ -118,12 +225,16 @@ window.VesperProgress = (function () {
       lastDay: lastDay,
       days: days,
       completed: completed,
-      shields: Math.max(s.shields || 0, remote.shields || 0)
+      shields: Math.max(s.shields || 0, remote.shields || 0),
+      achievements: achievements,
+      dayCounts: dayCounts,
+      goalTarget: s.goalTarget || remote.goalTarget || DEFAULT_GOAL
     };
     merged.streak = recomputeStreak(days, lastDay);
     save(merged);
     return merged;
   }
 
-  return { getState: getState, completeLesson: completeLesson, addXp: addXp, weekGrid: weekGrid, merge: merge };
+  return { getState: getState, completeLesson: completeLesson, addXp: addXp, weekGrid: weekGrid, merge: merge,
+    unlock: unlock, dailyGoal: dailyGoal, setGoal: setGoal, achievementsState: achievementsState, ACHIEVEMENTS: ACHIEVEMENTS };
 })();
