@@ -17,6 +17,10 @@ chat.html  ──POST {system, messages}──►  Worker (key secreta)  ──�
   en modo streaming.
 - **Fija** el modelo y `max_tokens` en el servidor (no confía en el cliente),
   valida el origen (CORS) y acota el tamaño del historial.
+- **Añade siempre los guardrails** (constante `GUARDRAILS`) al final del system
+  prompt: mantienen a Vesper dentro del aprendizaje de inglés y evitan contenido
+  dañino o "cancelable", incluso si alguien manipula el navegador o llama al
+  proxy directamente. Como se imponen del lado del servidor, no se pueden saltar.
 - Devuelve el stream SSE tal cual al navegador.
 
 ## Requisitos
@@ -85,6 +89,9 @@ En `vesper-chat-proxy.js`:
 - `MAX_TOKENS` — tope de salida por respuesta.
 - `MAX_MESSAGES` — turnos de historial que se conservan.
 - `ALLOWED_ORIGINS` — dominios autorizados a usar el proxy.
+- `GUARDRAILS` — límites de tema y seguridad de Vesper (ámbito = solo inglés,
+  sin contenido dañino, apto para todas las edades). Edítalo si quieres ajustar
+  la severidad.
 
 ## Seguridad
 
