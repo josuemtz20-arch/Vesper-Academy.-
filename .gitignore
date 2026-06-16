@@ -82,8 +82,18 @@
 !/vesper_path.js
 !/apariencia.html
 
+# Expansion 2026-06-15 (Front 2): Vesper personalization. The "Configuracion"
+# panel + the persona engine that turns prefs into a dynamic system prompt,
+# a live preview and behavior hooks (tone lines, language mix, corrections).
+!/vesper_persona.js
+!/configuracion.html
+
 # css / images / audio used by all public pages
 !/assets/
+
+# Rive runtime (rive.js/.wasm): solo-local hasta que exista el .riv del usuario
+# (no enviar ~1.7 MB sin usar). Ver RIVE_SETUP.md.
+assets/rive/
 
 # mascot full-res source: keep local, don't ship the 2.9 MB original
 assets/images/mascot/vesper_cat_full.png

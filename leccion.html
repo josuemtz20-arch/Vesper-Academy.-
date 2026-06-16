@@ -214,6 +214,7 @@
 <script src="vesper_mascot.js"></script>
 <script src="vesper_theme.js"></script>
 <script src="vesper_adaptive.js"></script>
+<script src="vesper_persona.js"></script>
 <script src="vesper_progress.js"></script>
 <script src="vesper_path.js"></script>
 <script src="vesper_auth.js"></script>
@@ -227,6 +228,7 @@
   var ORDER = window.VESPER_LESSONS_ORDER || Object.keys(L);
   var A = window.VESPER_ADAPTIVE || null;
   var PATH = window.VESPER_PATH || null;
+  var PERS = window.VESPER_PERSONA || null;
   var M = window.VESPER_MASCOT;
   var P = window.VesperProgress;
   var app = document.getElementById("app");
@@ -252,9 +254,17 @@
     return '<div class="topbar"><a class="back" href="' + (id ? 'leccion.html' : 'index.html') + '" aria-label="Salir">&#8592;</a>'
       + '<div class="progress"><div class="bar" style="width:' + pct + '%"></div></div></div>';
   }
-  function feedbackBox(ok, detail) {
+  /* feedbackBox(ok, explanation, wrongFallback)
+     - explanation: el "por que" del ejercicio (se muestra al fallar siempre y
+       al acertar si la persona pidio retro explicativa: explainOnCorrect).
+     - wrongFallback: texto solo-al-fallar (p.ej. "Respuesta: ...").
+     - la frase de la mascota sale en el TONO elegido (VESPER_PERSONA.line). */
+  function feedbackBox(ok, explanation, wrongFallback) {
     var state = ok ? "correct" : "incorrect";
-    var line = (window.VESPER_MASCOT ? VESPER_MASCOT.get(state).line : (ok ? "Bien!" : "Casi..."));
+    var line = (PERS && PERS.line) ? PERS.line(state) : "";
+    if (!line) line = (window.VESPER_MASCOT ? VESPER_MASCOT.get(state).line : (ok ? "Bien!" : "Casi..."));
+    var showExp = (PERS && PERS.explainOnCorrect) ? (!ok || PERS.explainOnCorrect()) : !ok;
+    var detail = ok ? (showExp ? (explanation || "") : "") : (explanation || wrongFallback || "");
     var cat = (window.VESPER_MASCOT && VESPER_MASCOT.render)
       ? VESPER_MASCOT.render(state, { size: "sm", line: false })
       : '<img class="fb-cat" src="assets/images/virtual_class_happy_cat.png" alt="">';
@@ -365,7 +375,11 @@
     show('<div class="wrap">'
       + '<div class="hub-head"><div><h1 class="hub-hello">' + esc(hello) + '</h1>'
       + '<p class="muted" style="margin:2px 0 0;font-size:.88rem">Tu ruta de inglés, paso a paso.</p></div>'
-      + '<div>' + mascot("welcome", false, "sm") + '</div></div>'
+      + '<div style="display:flex;align-items:center;gap:8px">'
+      + '<a href="configuracion.html" aria-label="Configuración de Vesper" title="Configuración"'
+      + ' style="display:inline-flex;align-items:center;justify-content:center;width:42px;height:42px;flex:none;'
+      + 'border-radius:50%;background:var(--paper);border:1px solid var(--line);text-decoration:none;font-size:1.2rem">⚙️</a>'
+      + mascot("welcome", false, "sm") + '</div></div>'
       + '<div class="hub-stats"><span class="hub-stat">&#128293; ' + (st.streak || 0) + ' días</span>'
       + '<span class="hub-stat">&#11088; ' + (st.xp || 0) + ' XP</span>'
       + ((st.shields || 0) ? '<span class="hub-stat">&#128737;&#65039; ' + st.shields + '</span>' : "") + '</div>'
@@ -397,8 +411,10 @@
   /* ---------- EXPLANATION ---------- */
   function renderExplanation() {
     var ex = lesson.explanation || {};
+    var showEs = !PERS || PERS.showSpanish();   /* mezcla de idioma: oculta el ES si eligio "Solo ingles" */
     var examples = (ex.examples || []).map(function (e) {
-      return '<li><span class="en">' + esc(e.en) + '</span><span class="es">' + esc(e.es) + '</span></li>';
+      return '<li><span class="en">' + esc(e.en) + '</span>'
+        + (showEs && e.es ? '<span class="es">' + esc(e.es) + '</span>' : '') + '</li>';
     }).join("");
     show('<div class="wrap">' + topbar(22) + '<div class="card">'
       + mascot(lesson.mascotState || "explaining")
@@ -459,7 +475,7 @@
         if (i === sel && !ok) optEls[x].classList.add("wrong");
       }
       results[exIdx] = ok;
-      byId("fb").innerHTML = feedbackBox(ok, ok ? "" : (ex.explanation || ""));
+      byId("fb").innerHTML = feedbackBox(ok, ex.explanation || "", "Era: " + ex.options[ex.correctIndex]);
       this.textContent = (exIdx + 1 < total) ? "Siguiente" : "Ver resultados";
     };
   }
@@ -499,7 +515,7 @@
       }
       results[exIdx] = ok;
       draw();
-      byId("fb").innerHTML = feedbackBox(ok, ok ? "" : ("Orden correcto: " + ex.correctOrder.join(" ")));
+      byId("fb").innerHTML = feedbackBox(ok, "", "Orden correcto: " + ex.correctOrder.join(" "));
       this.textContent = (exIdx + 1 < total) ? "Siguiente" : "Ver resultados";
     };
   }
@@ -562,7 +578,7 @@
         if (v === sel && !ok) btns[x].classList.add("wrong");
       }
       results[exIdx] = ok;
-      byId("fb").innerHTML = feedbackBox(ok, ok ? "" : (ex.explanation || ("Respuesta: " + (ex.answer ? "Verdadero" : "Falso"))));
+      byId("fb").innerHTML = feedbackBox(ok, ex.explanation || "", "Respuesta: " + (ex.answer ? "Verdadero" : "Falso"));
       setVerifyNext(this, total);
     };
   }
@@ -589,7 +605,7 @@
       var ok = answers.some(function (a) { return norm(a) === val; });
       inp.classList.add(ok ? "correct" : "wrong");
       results[exIdx] = ok;
-      byId("fb").innerHTML = feedbackBox(ok, ok ? "" : (ex.explanation || ("Respuesta: " + (answers[0] || ""))));
+      byId("fb").innerHTML = feedbackBox(ok, ex.explanation || "", "Respuesta: " + (answers[0] || ""));
       setVerifyNext(this, total);
     };
   }
@@ -612,7 +628,7 @@
       var ok = answers.some(function (a) { return norm(a) === val; });
       inp.classList.add(ok ? "correct" : "wrong");
       results[exIdx] = ok;
-      byId("fb").innerHTML = feedbackBox(ok, ok ? "" : (ex.explanation || ("Sugerencia: " + (answers[0] || ""))));
+      byId("fb").innerHTML = feedbackBox(ok, ex.explanation || "", "Sugerencia: " + (answers[0] || ""));
       setVerifyNext(this, total);
     };
   }
@@ -647,7 +663,7 @@
           if (matched === pairs.length) {
             done = true;
             results[exIdx] = errors === 0;
-            byId("fb").innerHTML = feedbackBox(errors === 0, errors === 0 ? "" : "Lo lograste con " + errors + " intento(s) de mas.");
+            byId("fb").innerHTML = feedbackBox(errors === 0, "", "Lo lograste con " + errors + " intento(s) de mas.");
             var v = byId("verify"); v.disabled = false; setVerifyNext(v, total);
           }
         } else {
@@ -699,7 +715,7 @@
           if (i === sel && !ok) optEls[x].classList.add("wrong");
         }
         results[exIdx] = ok;
-        byId("fb").innerHTML = feedbackBox(ok, ok ? "" : (ex.explanation || ("Era: " + esc(ex.options[ex.correctIndex]))));
+        byId("fb").innerHTML = feedbackBox(ok, ex.explanation || "", "Era: " + ex.options[ex.correctIndex]);
         setVerifyNext(this, total);
       };
     } else {
@@ -714,7 +730,7 @@
         var ok = answers.some(function (a) { return norm(a) === val; });
         inp.classList.add(ok ? "correct" : "wrong");
         results[exIdx] = ok;
-        byId("fb").innerHTML = feedbackBox(ok, ok ? "" : ("Era: " + (ex.text || answers[0] || "")));
+        byId("fb").innerHTML = feedbackBox(ok, "", "Era: " + (ex.text || answers[0] || ""));
         setVerifyNext(this, total);
       };
     }
@@ -757,7 +773,7 @@
       items.forEach(function (o) { if (o.at === o.bucket) o.cls = " correct"; else { o.cls = " wrong"; ok = false; } });
       draw();
       results[exIdx] = ok;
-      byId("fb").innerHTML = feedbackBox(ok, ok ? "" : "Revisa los que estan en rojo.");
+      byId("fb").innerHTML = feedbackBox(ok, "", "Revisa los que estan en rojo.");
       setVerifyNext(this, total);
     };
   }
