@@ -88,6 +88,11 @@
 !/vesper_persona.js
 !/configuracion.html
 
+# Expansion 2026-06-16: big content pack (reading/listening/grammar/vocab/use
+# lessons) + new "reading" skill. Vanilla static, no-account; merged into
+# VESPER_LESSONS at boot by leccion.html.
+!/vesper_content_pack.js
+
 # css / images / audio used by all public pages
 !/assets/
 

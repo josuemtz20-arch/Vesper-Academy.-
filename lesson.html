@@ -147,6 +147,8 @@
         .rt-controls { display:flex; align-items:center; gap:8px; font-size:0.7rem; color:rgba(255,255,255,0.6); text-transform:uppercase; letter-spacing:1px; }
         .rt-size { width:36px; height:32px; border-radius:8px; border:1px solid rgba(255,255,255,0.2); background:var(--navy2); color:#fff; cursor:pointer; font-weight:700; font-size:0.85rem; transition:background .15s; }
         .rt-size:hover { background:var(--gold); color:var(--navy); border-color:var(--gold); }
+        .rt-speak { width:auto; padding:0 12px; gap:6px; display:inline-flex; align-items:center; }
+        .rt-speak.speaking { background:var(--gold); color:var(--navy); border-color:var(--gold); }
         .reading-body {
             font-family:'Inria Serif', Georgia, serif;
             font-size:var(--read-size, 1.3rem); line-height:1.9; color:#2c3a4d;
@@ -377,6 +379,7 @@
                 <div class="reading-toolbar">
                     <span class="rt-label"><i class="fas fa-book-open-reader"></i> Reading &mdash; presentation view</span>
                     <div class="rt-controls">
+                        <button class="rt-size rt-speak" id="r-speak" aria-label="Escuchar con voz natural"><i class="fas fa-volume-high"></i> Escuchar</button>
                         <span>Text size</span>
                         <button class="rt-size" id="r-smaller" aria-label="Smaller text">A&minus;</button>
                         <button class="rt-size" id="r-bigger" aria-label="Larger text">A+</button>
@@ -642,6 +645,9 @@
             document.querySelectorAll(".tab").forEach(t => t.classList.toggle("active", t.dataset.panel === name));
             document.querySelectorAll(".panel").forEach(p => p.classList.toggle("active", p.id === "panel-" + name));
             document.body.classList.toggle("reading-mode", name === "reading");
+            try{ if(window.speechSynthesis) speechSynthesis.cancel(); }catch(e){}
+            var rsb = document.getElementById("r-speak");
+            if(rsb){ rsb.classList.remove("speaking"); rsb.innerHTML = '<i class="fas fa-volume-high"></i> Escuchar'; }
             if (name === "board") fitBoard();
             if (name === "reading") layoutReading();
         }
@@ -740,6 +746,62 @@
             if (!document.getElementById("panel-reading").classList.contains("active")) return;
             clearTimeout(rzTimer); rzTimer = setTimeout(layoutReading, 150);
         });
+
+        // ── NATURAL VOICE (read-aloud + fallback when no MP3) ─────────
+        let _voices = null, _bestVoice = null;
+        function loadVoices(){
+            try{
+                if(!window.speechSynthesis) return;
+                _voices = speechSynthesis.getVoices() || [];
+                _bestVoice = pickBestVoice(_voices);
+            }catch(e){}
+        }
+        function pickBestVoice(voices){
+            if(!voices || !voices.length) return null;
+            let en = voices.filter(v => /^en(-|_|$)/i.test(v.lang||""));
+            if(!en.length) en = voices;
+            const prefs = [/natural/i,/neural/i,/\bgoogle\b/i,/microsoft .*online/i,/\bsiri\b/i,
+                /\b(samantha|aria|jenny|guy|libby|sonia|ryan|emma|ava|allison|nathan)\b/i,/\b(en-US|en-GB)\b/i];
+            for(const p of prefs){
+                const m = en.filter(v => p.test(v.name||"") || p.test(v.voiceURI||""));
+                const us = m.filter(v => /en-?US/i.test(v.lang||""));
+                if(us.length) return us[0];
+                if(m.length) return m[0];
+            }
+            const anyUS = en.filter(v => /en-?US/i.test(v.lang||""));
+            return anyUS[0] || en[0];
+        }
+        function speakText(text, rate){
+            try{
+                if(!window.speechSynthesis || !text) return;
+                if(!_voices) loadVoices();
+                speechSynthesis.cancel();
+                const u = new SpeechSynthesisUtterance(text);
+                if(_bestVoice){ u.voice = _bestVoice; u.lang = _bestVoice.lang || "en-US"; } else u.lang = "en-US";
+                u.rate = rate || 0.95; u.pitch = 1;
+                speechSynthesis.speak(u);
+            }catch(e){}
+        }
+        function stopSpeak(){ try{ if(window.speechSynthesis) speechSynthesis.cancel(); }catch(e){} }
+        if(window.speechSynthesis){ loadVoices(); try{ speechSynthesis.onvoiceschanged = loadVoices; }catch(e){} }
+
+        const rSpeakBtn = document.getElementById("r-speak");
+        if(rSpeakBtn){
+            rSpeakBtn.addEventListener("click", () => {
+                if(window.speechSynthesis && speechSynthesis.speaking){
+                    stopSpeak(); rSpeakBtn.classList.remove("speaking");
+                    rSpeakBtn.innerHTML = '<i class="fas fa-volume-high"></i> Escuchar'; return;
+                }
+                const txt = (readingBody.textContent || "").trim();
+                if(!txt) return;
+                const rate = Math.max(0.6, Math.min(1.2, (typeof audio !== "undefined" && audio.playbackRate) ? audio.playbackRate * 0.97 : 0.95));
+                speakText(txt, rate);
+                rSpeakBtn.classList.add("speaking");
+                rSpeakBtn.innerHTML = '<i class="fas fa-stop"></i> Detener';
+            });
+            // al pasar de página o cambiar de pestaña, corta la lectura
+            ["r-prev","r-next"].forEach(id => { const b=document.getElementById(id); if(b) b.addEventListener("click", () => { stopSpeak(); rSpeakBtn.classList.remove("speaking"); rSpeakBtn.innerHTML='<i class="fas fa-volume-high"></i> Escuchar'; }); });
+        }
 
         // ── AUDIO PLAYER ──────────────────────────────────────────────
         const audio = new Audio(); audio.src = audioSrc;

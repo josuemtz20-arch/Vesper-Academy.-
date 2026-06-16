@@ -184,9 +184,22 @@
   .match-item.done{border-color:var(--success);background:var(--ok-tint);cursor:default;opacity:.7}
   .match-item.bad{border-color:var(--error);background:var(--no-tint);animation:vc-shake .4s ease}
   /* listening */
-  .listen-play{display:inline-flex;align-items:center;gap:10px;background:var(--ink);color:var(--cream);border:none;border-radius:14px;padding:14px 20px;font-family:inherit;font-size:1.05rem;font-weight:600;cursor:pointer;margin:4px 0 8px}
+  .listen-controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:4px 0 8px}
+  .listen-play{display:inline-flex;align-items:center;gap:10px;background:var(--ink);color:var(--cream);border:none;border-radius:14px;padding:14px 20px;font-family:inherit;font-size:1.05rem;font-weight:600;cursor:pointer}
   .listen-play .ic{font-size:1.25rem}
+  .listen-slow{display:inline-flex;align-items:center;gap:8px;background:var(--paper);color:var(--ink);border:1.5px solid var(--line);border-radius:14px;padding:13px 16px;font-family:inherit;font-size:.95rem;font-weight:600;cursor:pointer}
+  .listen-slow:active{transform:translateY(1px)}
   .listen-note{color:var(--muted);font-size:.85rem;margin:0 0 12px}
+  /* reading passage */
+  .passage{background:var(--cream);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:6px 0 14px;max-height:340px;overflow:auto;-webkit-overflow-scrolling:touch}
+  .passage h3{font-family:"Inria Serif",Georgia,serif;font-size:1.15rem;margin:0 0 8px}
+  .passage p{font-size:1.04rem;line-height:1.7;margin:0 0 10px}
+  .passage p:last-child{margin-bottom:0}
+  .read-tag{display:inline-flex;align-items:center;gap:6px;background:var(--gold-tint);color:var(--ink);border:1px solid var(--gold);border-radius:999px;padding:4px 11px;font-size:.76rem;font-weight:600;margin:0 0 8px}
+  .rq{border-top:1px solid var(--line);padding-top:14px;margin-top:14px}
+  .rq:first-of-type{border-top:none;padding-top:0;margin-top:0}
+  .rq .rq-q{font-weight:600;font-size:1rem;margin:0 0 8px}
+  .rq-num{font-size:.78rem;color:var(--muted);font-weight:600;margin-bottom:4px}
   /* categorize */
   .cat-pool{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 14px;min-height:40px}
   .cat-tk{background:var(--paper);border:1.5px solid var(--line);border-radius:999px;padding:8px 14px;font-family:inherit;font-size:.96rem;color:var(--ink);cursor:pointer}
@@ -198,6 +211,31 @@
   .cat-bucket.active{border-color:var(--gold)}
   .cat-bucket h4{margin:0 0 4px;font-size:.78rem;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
   .cat-bucket .cat-tk{margin:4px 4px 0 0;display:inline-block}
+  /* gamificación: meta diaria, logros, repaso */
+  .hub-stat.met{background:var(--ok-tint);border-color:var(--success);color:var(--ink)}
+  .lcard2.review{background:linear-gradient(135deg,var(--gold-tint),var(--paper));border-color:var(--gold);border-style:dashed}
+  .lcard2.review .lc-badge{background:var(--gold);color:var(--ink)}
+  .trophy-shelf{margin:8px 0 2px;border:1px solid var(--line);border-radius:14px;background:var(--paper);padding:4px 12px}
+  .trophy-shelf summary{cursor:pointer;font-weight:700;font-size:.9rem;list-style:none;display:flex;align-items:center;gap:8px;padding:8px 0}
+  .trophy-shelf summary::-webkit-details-marker{display:none}
+  .trophy-shelf .t-count{margin-left:auto;font-size:.78rem;color:var(--muted)}
+  .trophy-grid{display:flex;flex-wrap:wrap;gap:8px;padding:4px 0 10px}
+  .trophy{display:flex;align-items:center;gap:7px;border:1px solid var(--line);border-radius:999px;padding:5px 11px;font-size:.82rem;background:var(--cream);opacity:.55}
+  .trophy.on{opacity:1;border-color:var(--gold);background:var(--gold-tint)}
+  .trophy .t-ic{font-size:1rem}
+  .trophy .t-nm{font-weight:600}
+  .goal-card{background:var(--cream);border:1px solid var(--line);border-radius:13px;padding:12px;margin:12px 0;font-weight:600}
+  .goal-card.met{background:var(--ok-tint);border-color:var(--success)}
+  .goal-bar{height:9px;background:#eee6d4;border-radius:999px;overflow:hidden;margin:8px 0 4px}
+  .goal-bar i{display:block;height:100%;background:var(--gold);border-radius:999px;transition:width .5s ease}
+  .goal-card.met .goal-bar i{background:var(--success)}
+  .goal-done{display:block;color:var(--success);font-size:.86rem}
+  .ach-pop{display:grid;gap:8px;margin:12px 0}
+  .ach-badge{display:flex;align-items:center;gap:11px;text-align:left;background:var(--gold-tint);border:1px solid var(--gold);border-radius:13px;padding:10px 13px}
+  .ach-badge .ab-ic{font-size:1.7rem;line-height:1}
+  .ach-badge .ab-tx{display:flex;flex-direction:column}
+  .ach-badge .ab-tx b{font-size:.72rem;text-transform:uppercase;letter-spacing:.05em;color:var(--gold)}
+  .ach-badge .ab-tx span{font-weight:700}
   @media(min-width:640px){
     h1{font-size:2rem}
     .mascot-img{width:84px;height:84px}
@@ -211,6 +249,7 @@
 
 <script src="vesper_lessons.js"></script>
 <script src="vesper_activities.js"></script>
+<script src="vesper_content_pack.js"></script>
 <script src="vesper_mascot.js"></script>
 <script src="vesper_theme.js"></script>
 <script src="vesper_adaptive.js"></script>
@@ -224,6 +263,7 @@
   var qs = new URLSearchParams(location.search);
   var id = qs.get("id");
   if (window.VESPER_ACTIVITIES && VESPER_ACTIVITIES.merge) VESPER_ACTIVITIES.merge(window.VESPER_LESSONS, window.VESPER_LESSONS_ORDER);
+  if (window.VESPER_CONTENT_PACK && VESPER_CONTENT_PACK.merge) VESPER_CONTENT_PACK.merge(window.VESPER_LESSONS, window.VESPER_LESSONS_ORDER);
   var L = window.VESPER_LESSONS || {};
   var ORDER = window.VESPER_LESSONS_ORDER || Object.keys(L);
   var A = window.VESPER_ADAPTIVE || null;
@@ -312,8 +352,24 @@
       + '<span class="lc-go">' + (stt === "locked" ? "" : "&#8250;") + '</span></button>';
   }
 
+  /* Vitrina de logros (ganados + bloqueados), plegable. */
+  function buildTrophyShelf() {
+    if (!P || !P.achievementsState) return "";
+    var list = P.achievementsState();
+    var earned = list.filter(function (a) { return a.unlocked; }).length;
+    var chips = list.map(function (a) {
+      return '<span class="trophy' + (a.unlocked ? " on" : "") + '" title="' + esc(a.name + (a.desc ? " — " + a.desc : "")) + '">'
+        + '<span class="t-ic">' + (a.unlocked ? a.icon : "&#128274;") + '</span>'
+        + '<span class="t-nm">' + esc(a.name) + '</span></span>';
+    }).join("");
+    return '<details class="trophy-shelf"><summary>&#127942; Logros <span class="t-count">' + earned + '/' + list.length + '</span></summary>'
+      + '<div class="trophy-grid">' + chips + '</div></details>';
+  }
+
   function renderIndex(selLevel) {
     var st = P ? P.getState() : { streak: 0, xp: 0, shields: 0 };
+    var dg = (P && P.dailyGoal) ? P.dailyGoal() : null;
+    var trophyHtml = buildTrophyShelf();
     var hello = (A && profile) ? A.greeting() : "Hola!";
     /* fallback simple si no hay motor de ruta */
     if (!PATH) {
@@ -366,9 +422,22 @@
       var ids = g.bySkill[sk]; if (!ids || !ids.length) return;
       var meta = PATH.SKILLS[sk];
       var doneN = ids.filter(function (id) { return built.completed[id]; }).length;
+      var reviewReady = ids.length >= 2 && doneN === ids.length;
+      var reviewCard = "";
+      if (reviewReady) {
+        var rid = "review:" + selLevel + ":" + sk;
+        var mastered = !!((st.achievements || {})["master:" + selLevel + ":" + sk]);
+        var rsc = PATH.getScore(rid);
+        reviewCard = '<button class="lcard2 review' + (mastered ? " completed" : "") + '" data-go="' + esc(rid) + '">'
+          + '<span class="lc-badge">&#127942;</span>'
+          + '<span class="lc-body"><span class="lc-ttl">Repaso de ' + esc(meta.label) + '</span>'
+          + '<span style="display:block;margin-top:3px"><span class="lc-sub">'
+          + (rsc != null ? "Mejor: " + rsc + "% · Repetir" : "Pon a prueba todo lo aprendido") + '</span></span></span>'
+          + '<span class="lc-go">&#8250;</span></button>';
+      }
       sections += '<div class="skill-sec"><div class="skill-h"><span class="ic">' + meta.icon + '</span>' + meta.label
         + '<span class="ct">' + doneN + "/" + ids.length + '</span></div><div class="lgrid">'
-        + ids.map(function (id) { return lessonCard(id, built); }).join("") + '</div></div>';
+        + ids.map(function (id) { return lessonCard(id, built); }).join("") + reviewCard + '</div></div>';
     });
     if (!sections) sections = '<p class="muted">Próximamente más lecciones en este nivel.</p>';
 
@@ -382,7 +451,9 @@
       + mascot("welcome", false, "sm") + '</div></div>'
       + '<div class="hub-stats"><span class="hub-stat">&#128293; ' + (st.streak || 0) + ' días</span>'
       + '<span class="hub-stat">&#11088; ' + (st.xp || 0) + ' XP</span>'
+      + (dg ? '<span class="hub-stat' + (dg.met ? ' met' : '') + '">&#127919; ' + Math.min(dg.progress, dg.target) + '/' + dg.target + '</span>' : "")
       + ((st.shields || 0) ? '<span class="hub-stat">&#128737;&#65039; ' + st.shields + '</span>' : "") + '</div>'
+      + trophyHtml
       + contHtml
       + '<div class="lvl-tabs">' + tabs + '</div>'
       + '<div class="lvl-head"><h2>Nivel ' + selLevel + '</h2>'
@@ -437,6 +508,7 @@
     else if (ex.type === "matching") renderMatching(ex, pct, total);
     else if (ex.type === "listening") renderListening(ex, pct, total);
     else if (ex.type === "categorize") renderCategorize(ex, pct, total);
+    else if (ex.type === "reading") renderReading(ex, pct, total);
     else advance();
   }
   function advance() {
@@ -527,22 +599,60 @@
       .replace(/[.,!?;:¿¡"]/g, " ")
       .replace(/\s+/g, " ").trim();
   }
-  function speak(text, audioPath) {
+  /* --- Voz natural: elige la mejor voz neural disponible en el dispositivo --- */
+  var _voiceCache = null, _bestVoice = null;
+  function loadVoices() {
+    try {
+      if (!window.speechSynthesis) return [];
+      _voiceCache = speechSynthesis.getVoices() || [];
+      _bestVoice = pickBestVoice(_voiceCache);
+      return _voiceCache;
+    } catch (e) { return []; }
+  }
+  function pickBestVoice(voices) {
+    if (!voices || !voices.length) return null;
+    var en = voices.filter(function (v) { return /^en(-|_|$)/i.test(v.lang || ""); });
+    if (!en.length) en = voices;
+    /* Prioridad: voces neurales/naturales modernas (no roboticas) */
+    var prefs = [
+      /natural/i, /neural/i, /\bgoogle\b/i, /microsoft .*online/i, /\bsiri\b/i,
+      /\b(samantha|aria|jenny|guy|libby|sonia|ryan|emma|ava|allison|nathan)\b/i,
+      /\b(en-US|en-GB)\b/i
+    ];
+    for (var p = 0; p < prefs.length; p++) {
+      var m = en.filter(function (v) { return prefs[p].test(v.name || "") || prefs[p].test(v.voiceURI || ""); });
+      /* prefiere en-US/en-GB dentro del match */
+      var us = m.filter(function (v) { return /en-?US/i.test(v.lang || ""); });
+      if (us.length) return us[0];
+      if (m.length) return m[0];
+    }
+    var anyUS = en.filter(function (v) { return /en-?US/i.test(v.lang || ""); });
+    return anyUS[0] || en[0];
+  }
+  if (window.speechSynthesis) {
+    loadVoices();
+    try { speechSynthesis.onvoiceschanged = loadVoices; } catch (e) {}
+  }
+  function speak(text, audioPath, rate) {
     if (audioPath) {
       try {
         var a = new Audio(audioPath);
-        a.play().catch(function () { speakTTS(text); });
-        a.onerror = function () { speakTTS(text); };
+        a.playbackRate = rate ? Math.max(0.5, Math.min(1, rate / 0.92)) : 1;
+        a.play().catch(function () { speakTTS(text, rate); });
+        a.onerror = function () { speakTTS(text, rate); };
         return;
       } catch (e) { /* cae a TTS */ }
     }
-    speakTTS(text);
+    speakTTS(text, rate);
   }
-  function speakTTS(text) {
+  function speakTTS(text, rate) {
     try {
       if (window.speechSynthesis) {
+        if (!_voiceCache) loadVoices();
         var u = new SpeechSynthesisUtterance(text);
-        u.lang = "en-US"; u.rate = 0.95;
+        if (_bestVoice) { u.voice = _bestVoice; u.lang = _bestVoice.lang || "en-US"; }
+        else { u.lang = "en-US"; }
+        u.rate = rate || 0.92; u.pitch = 1;
         speechSynthesis.cancel(); speechSynthesis.speak(u);
       }
     } catch (e) {}
@@ -690,10 +800,12 @@
     }
     show('<div class="wrap">' + exHeader(pct, total) + '<div class="card">'
       + '<h2>Escucha</h2>'
-      + '<button class="listen-play" id="play"><span class="ic">&#128266;</span> Reproducir</button>'
+      + '<div class="listen-controls"><button class="listen-play" id="play"><span class="ic">&#128266;</span> Reproducir</button>'
+      + '<button class="listen-slow" id="playslow">&#128034; Más lento</button></div>'
       + '<div class="listen-note">Toca para escuchar. Puedes repetir las veces que quieras.</div>'
       + qHtml + '<div id="fb"></div><button class="btn" id="verify" disabled>Verificar</button></div></div>');
     byId("play").onclick = function () { speak(ex.text, ex.audio); };
+    byId("playslow").onclick = function () { speak(ex.text, ex.audio, 0.62); };
     var done = false;
     if (hasOpts) {
       var sel = -1, optEls = document.querySelectorAll(".opt");
@@ -778,26 +890,93 @@
     };
   }
 
+  /* ---------- READING (pasaje + preguntas de comprension) ---------- */
+  function renderReading(ex, pct, total) {
+    var qs2 = ex.questions || [];
+    var paras = Array.isArray(ex.passage) ? ex.passage : ("" + (ex.passage || "")).split(/\n{2,}|\n/);
+    var passageHtml = paras.filter(function (p) { return ("" + p).trim(); })
+      .map(function (p) { return '<p>' + esc(p) + '</p>'; }).join("");
+    var qHtml = qs2.map(function (q, qi) {
+      var opts = (q.options || []).map(function (o, i) {
+        return '<button class="opt" data-q="' + qi + '" data-i="' + i + '">' + esc(o) + '</button>';
+      }).join("");
+      return '<div class="rq" data-qwrap="' + qi + '">'
+        + '<div class="rq-num">Pregunta ' + (qi + 1) + ' de ' + qs2.length + '</div>'
+        + '<div class="rq-q">' + esc(q.q || "Elige la opcion correcta") + '</div>'
+        + '<div class="opts">' + opts + '</div><div class="rq-fb" id="rfb-' + qi + '"></div></div>';
+    }).join("");
+    show('<div class="wrap">' + exHeader(pct, total) + '<div class="card">'
+      + '<span class="read-tag">&#128214; Lectura</span>'
+      + (ex.title ? '<h2>' + esc(ex.title) + '</h2>' : '<h2>Lee y responde</h2>')
+      + '<div class="passage">' + passageHtml + '</div>'
+      + qHtml + '<div id="fb"></div>'
+      + '<button class="btn" id="verify" disabled>Verificar</button></div></div>');
+
+    var picks = qs2.map(function () { return -1; });
+    var done = false;
+    each(".opt", function (b) {
+      b.onclick = function () {
+        if (done) return;
+        var qi = +b.getAttribute("data-q"), i = +b.getAttribute("data-i");
+        picks[qi] = i;
+        var group = document.querySelectorAll('.opt[data-q="' + qi + '"]');
+        for (var x = 0; x < group.length; x++) group[x].classList.remove("sel");
+        b.classList.add("sel");
+        byId("verify").disabled = picks.some(function (p) { return p < 0; });
+      };
+    });
+    byId("verify").onclick = function () {
+      if (done) { advance(); return; }
+      done = true;
+      var allOk = true;
+      qs2.forEach(function (q, qi) {
+        var group = document.querySelectorAll('.opt[data-q="' + qi + '"]');
+        var ok = picks[qi] === q.correctIndex;
+        if (!ok) allOk = false;
+        for (var x = 0; x < group.length; x++) {
+          var i = +group[x].getAttribute("data-i");
+          group[x].classList.add("locked");
+          if (i === q.correctIndex) group[x].classList.add("correct");
+          if (i === picks[qi] && !ok) group[x].classList.add("wrong");
+        }
+        byId("rfb-" + qi).innerHTML = feedbackBox(ok, q.explanation || "", "Era: " + (q.options[q.correctIndex] || ""));
+      });
+      results[exIdx] = allOk;
+      setVerifyNext(this, total);
+    };
+  }
+
   /* ---------- FEEDBACK / XP ---------- */
+  var lastPerfect = false, masteryUnlocked = false;
   function renderFeedback() {
     var total = lesson.exercises.length;
     var correct = results.filter(Boolean).length;
+    var pct = Math.round(100 * correct / Math.max(1, total));
     earnedXp = Math.max(5, Math.round((lesson.xpReward || 0) * correct / Math.max(1, total)));
-    if (PATH && PATH.setScore && lesson.lessonId) PATH.setScore(lesson.lessonId, Math.round(100 * correct / Math.max(1, total)));
+    if (PATH && PATH.setScore && lesson.lessonId) PATH.setScore(lesson.lessonId, pct);
     var perfect = correct === total;
+    lastPerfect = perfect;
+    /* repaso aprobado (>=80%) -> desbloquea maestría de la destreza */
+    masteryUnlocked = false;
+    if (lesson.isReview && pct >= 80 && P && P.unlock) {
+      masteryUnlocked = P.unlock("master:" + lesson.reviewLevel + ":" + lesson.reviewSkill);
+    }
+    var head = lesson.isReview
+      ? (pct >= 80 ? "Repaso superado!" : "Sigue practicando")
+      : (perfect ? "Leccion perfecta!" : "Buen trabajo!");
     show('<div class="wrap">' + topbar(86) + '<div class="card center">'
-      + mascot(perfect ? "milestone" : "correct", perfect ? "Leccion perfecta!" : "Buen trabajo!")
+      + mascot((perfect || (lesson.isReview && pct >= 80)) ? "milestone" : "correct", head)
       + '<h1>+' + earnedXp + ' XP</h1>'
-      + '<p class="muted">' + correct + ' de ' + total + ' correctos</p>'
-      + '<div class="xpbar"><div class="xpfill" style="width:' + Math.round(100 * correct / total) + '%"></div></div>'
+      + '<p class="muted">' + correct + ' de ' + total + ' correctos &middot; ' + pct + '%</p>'
+      + '<div class="xpbar"><div class="xpfill" style="width:' + pct + '%"></div></div>'
       + '<button class="btn btn-gold" id="cont">Continuar</button></div></div>');
     byId("cont").onclick = renderStreak;
   }
 
   /* ---------- STREAK ---------- */
   function renderStreak() {
-    var info = P ? P.completeLesson(lesson.lessonId, earnedXp)
-                 : { streak: 1, xp: earnedXp, milestone: false, shields: 0 };
+    var info = P ? P.completeLesson(lesson.lessonId, earnedXp, { perfect: lastPerfect })
+                 : { streak: 1, xp: earnedXp, milestone: false, shields: 0, newAchievements: [], dailyGoal: null };
     var grid = P ? P.weekGrid() : [];
     var cells = grid.map(function (d) {
       return '<div class="day' + (d.active ? " on" : "") + (d.isToday ? " today" : "") + '"><span>' + d.label + '</span><i>' + (d.active ? "🔥" : "&middot;") + '</i></div>';
@@ -806,24 +985,52 @@
     for (var i = 0; i < (info.shields || 0); i++) shields += "🛡️";
     var mstate = info.milestone ? "milestone" : (info.streak > 0 ? "streak_alive" : "streak_broken");
     var hasNext = lesson.nextLessonId && L[lesson.nextLessonId];
+
+    /* meta diaria */
+    var dg = info.dailyGoal, goalHtml = "";
+    if (dg) {
+      var gp = Math.min(100, Math.round(100 * dg.progress / Math.max(1, dg.target)));
+      goalHtml = '<div class="goal-card' + (dg.met ? ' met' : '') + '">&#127919; Meta diaria '
+        + '<b>' + Math.min(dg.progress, dg.target) + '/' + dg.target + '</b>'
+        + '<div class="goal-bar"><i style="width:' + gp + '%"></i></div>'
+        + (dg.met ? '<span class="goal-done">Meta cumplida! &#10024;</span>' : '<span class="muted" style="font-size:.82rem">Te falta ' + Math.max(0, dg.target - dg.progress) + '</span>')
+        + '</div>';
+    }
+
+    /* logros recién desbloqueados (incluye maestría de repaso) */
+    var ach = (info.newAchievements || []).slice();
+    if (masteryUnlocked) ach.push("master:" + lesson.reviewLevel + ":" + lesson.reviewSkill);
+    var achHtml = "";
+    if (ach.length && P && P.achievementsState) {
+      var all = P.achievementsState(), byId2 = {};
+      all.forEach(function (a) { byId2[a.id] = a; });
+      achHtml = '<div class="ach-pop">' + ach.map(function (id) {
+        var a = byId2[id] || { icon: "⭐", name: id };
+        return '<div class="ach-badge"><span class="ab-ic">' + a.icon + '</span><span class="ab-tx"><b>Logro desbloqueado</b><span>' + esc(a.name) + '</span></span></div>';
+      }).join("") + '</div>';
+    }
+
     show('<div class="wrap">' + topbar(100) + '<div class="card center">'
       + mascot(mstate)
       + '<div class="flame">&#128293;</div>'
       + '<h1>' + info.streak + ' ' + (info.streak === 1 ? "dia" : "dias") + ' de racha</h1>'
       + (shields ? '<div class="shields">' + shields + '</div>' : '')
       + '<div class="week">' + cells + '</div>'
+      + goalHtml
+      + achHtml
       + '<div class="stat-row"><div class="stat">&#11088; <b>' + info.xp + '</b> XP total</div></div>'
       + (info.milestone ? '<div class="milestone">&#127881; Nuevo escudo de racha!</div>' : '')
       + '<div class="nudge" id="nudge">Guarda tu progreso en todos tus dispositivos: <a href="#" id="nudge-account">crea una cuenta</a> (opcional).'
       + '<button class="x" id="xn" aria-label="Cerrar">&times;</button></div>'
       + (hasNext ? '<button class="btn btn-gold" id="nextL">Siguiente leccion &rarr;</button>'
+                   + '<button class="btn btn-ghost" id="moreL2">Ver todas las lecciones</button>'
                  : '<button class="btn btn-gold" id="moreL">Ver todas las lecciones</button>')
-      + '<button class="btn btn-ghost" id="home">Volver al inicio</button></div></div>');
+      + '</div></div>');
     var xn = byId("xn"); if (xn) xn.onclick = function () { byId("nudge").style.display = "none"; };
     var na = byId("nudge-account"); if (na) na.onclick = function (e) { e.preventDefault(); if (window.VESPER_SYNC && VESPER_SYNC.openAuth) VESPER_SYNC.openAuth(); else location.href = "login.html"; };
     var nx = byId("nextL"); if (nx) nx.onclick = function () { location.search = "?id=" + encodeURIComponent(lesson.nextLessonId); };
     var ml = byId("moreL"); if (ml) ml.onclick = function () { location.search = ""; };
-    byId("home").onclick = function () { location.href = "index.html"; };
+    var ml2 = byId("moreL2"); if (ml2) ml2.onclick = function () { location.search = ""; };
   }
 
   /* ---------- ADAPTIVE START (warm-up + personalizacion) ---------- */
@@ -840,6 +1047,34 @@
     var calibrate = A && profile && !sess && baseLesson.exercises && baseLesson.exercises.length >= 3;
     if (calibrate) { renderWarmup(); }
     else { buildAdapted(); renderCover(); }
+  }
+
+  /* ---------- REVIEW ("boss") quiz: lección sintética ---------- */
+  function buildReviewLesson(rid) {
+    if (!PATH) return null;
+    var p = rid.split(":"), lv = p[1], sk = p[2];
+    var meta = (PATH.SKILLS && PATH.SKILLS[sk]) || { label: sk };
+    var built = PATH.build(L, ORDER), gg = built.levels[lv];
+    if (!gg) return null;
+    var ids = (gg.bySkill[sk] || []).filter(function (x) { return built.completed[x]; });
+    if (ids.length < 2) return null;
+    var pool = [];
+    ids.forEach(function (lid) {
+      var l = L[lid]; if (!l || !l.exercises || !l.exercises.length) return;
+      var ex = shuffle(l.exercises.slice());
+      pool = pool.concat(ex.slice(0, 2)); /* hasta 2 por lección */
+    });
+    shuffle(pool);
+    var picked = pool.slice(0, Math.min(10, pool.length));
+    return {
+      lessonId: rid, level: lv, track: "Repaso", isReview: true, reviewLevel: lv, reviewSkill: sk,
+      title: "Repaso: " + meta.label + " " + lv,
+      explanation: {
+        body: "Pon a prueba todo lo que aprendiste en " + meta.label + " (" + lv + "). Son preguntas mezcladas de tus lecciones completadas. Necesitas 80% para la maestría. (Repaso general de la destreza.)",
+        examples: []
+      },
+      exercises: picked, xpReward: 20 + 5 * ids.length, mascotState: "thinking", nextLessonId: null
+    };
   }
 
   /* quiz corto de calibracion al inicio de la sesion */
@@ -888,6 +1123,18 @@
   if (!L || !Object.keys(L).length) { show('<div class="wrap"><div class="card center"><h1>Sin lecciones</h1><p class="muted">No se cargaron los datos.</p></div></div>'); return; }
   if (window.VESPER_THEME && VESPER_THEME.mountFloat) VESPER_THEME.mountFloat();
   if (!id) { renderIndex(); return; }
+  if (id.indexOf("review:") === 0) {
+    baseLesson = buildReviewLesson(id);
+    if (!baseLesson || !baseLesson.exercises.length) {
+      show('<div class="wrap"><div class="card center">' + mascot("thinking", "Aún no hay repaso disponible.")
+        + '<h1>Repaso no disponible</h1><p class="muted">Completa al menos 2 lecciones de esta destreza.</p>'
+        + '<a class="btn btn-gold" href="leccion.html">Ver lecciones</a></div></div>');
+      return;
+    }
+    lesson = baseLesson;
+    renderCover();
+    return;
+  }
   baseLesson = L[id];
   if (!baseLesson) {
     show('<div class="wrap"><div class="card center">' + mascot("incorrect", "No encuentro esa leccion.")
