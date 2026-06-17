@@ -1,0 +1,145 @@
+/* ============================================================
+   vesper_tokens.css — Sistema de design tokens + utilidades de
+   accesibilidad compartidas por todo Vesper Academy.
+
+   Se enlaza en el <head> ANTES del <style> propio de cada página,
+   de modo que sirve de base (paleta, escalas, foco visible,
+   skip-link, reduced-motion) y la página puede sobrescribir lo
+   que necesite. No define layout: solo tokens + a11y + helpers
+   que casi todas las páginas comparten.
+   ============================================================ */
+
+:root {
+  /* Paleta canónica (un único set; consolida --ink/--navy/--navy2). */
+  --va-ink: #1B1B2F;
+  --va-ink-2: #26263e;
+  --va-gold: #C9A84C;
+  --va-gold-tint: rgba(201, 168, 76, .14);
+  --va-cream: #FBF8F1;
+  --va-paper: #ffffff;
+  --va-muted: #5d6470;      /* AA sobre cream/paper (más oscuro que el viejo #6b7a8d) */
+  --va-line: #ece7da;
+  --va-success: #2D9E75;
+  --va-error: #C0392B;
+
+  /* Escala de espaciado (4 px base). */
+  --va-s1: 4px;
+  --va-s2: 8px;
+  --va-s3: 12px;
+  --va-s4: 16px;
+  --va-s5: 24px;
+  --va-s6: 32px;
+
+  /* Radios y sombras. */
+  --va-r-sm: 10px;
+  --va-r-md: 14px;
+  --va-r-lg: 18px;
+  --va-shadow: 0 6px 22px rgba(27, 27, 47, .08);
+  --va-shadow-lg: 0 14px 40px rgba(27, 27, 47, .16);
+
+  /* Tipografía. */
+  --va-font-display: "Inria Serif", Georgia, serif;
+  --va-font-text: Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  /* Anillo de foco accesible. */
+  --va-focus: #8a6d1f;
+}
+
+/* ---------- Accesibilidad: foco visible global ----------
+   Solo aparece con navegación por teclado (no estorba al ratón).
+   Se aplica a todo control interactivo en cualquier página que
+   incluya esta hoja, cubriendo el hueco de foco del sitio. */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+summary:focus-visible,
+[tabindex]:focus-visible,
+[role="button"]:focus-visible {
+  outline: 3px solid var(--va-focus);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* Lectores de pantalla: contenido solo-audible. */
+.va-sr-only {
+  position: absolute !important;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap; border: 0;
+}
+
+/* Skip-link "Saltar al contenido": oculto hasta recibir foco. */
+.va-skip-link {
+  position: absolute;
+  left: 8px; top: -48px;
+  z-index: 10000;
+  background: var(--va-ink);
+  color: var(--va-cream);
+  padding: 10px 16px;
+  border-radius: 0 0 10px 10px;
+  font-family: var(--va-font-text);
+  font-weight: 600;
+  text-decoration: none;
+  transition: top .18s ease;
+}
+.va-skip-link:focus {
+  top: 0;
+  outline: 3px solid var(--va-focus);
+  outline-offset: 2px;
+}
+
+/* Objetivo táctil mínimo recomendado en controles de barra/chip. */
+.va-tap { min-height: 44px; min-width: 44px; }
+
+/* Respeta la preferencia de movimiento reducido del sistema. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: .001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ============================================================
+   Preferencias del alumno aplicadas por vesper_prefs.js en <html>.
+   Funcionan en cualquier página que incluya esta hoja.
+   ============================================================ */
+
+/* --- Tamaño de texto (escala relativa; el sitio usa rem/em). --- */
+html[data-text-scale="lg"] { font-size: 112.5%; }
+html[data-text-scale="xl"] { font-size: 125%; }
+
+/* --- Alto contraste: oscurece textos secundarios y refuerza bordes/foco. --- */
+html.vesper-hc {
+  --va-muted: #2c3038;
+  --va-line: #b9b2a2;
+  --va-focus: #5a4300;
+}
+html.vesper-hc .va-muted,
+html.vesper-hc .muted { color: var(--va-muted) !important; }
+html.vesper-hc a:focus-visible,
+html.vesper-hc button:focus-visible,
+html.vesper-hc input:focus-visible,
+html.vesper-hc select:focus-visible,
+html.vesper-hc textarea:focus-visible,
+html.vesper-hc [tabindex]:focus-visible,
+html.vesper-hc [role="button"]:focus-visible {
+  outline-width: 4px;
+}
+
+/* --- Reducir movimiento por preferencia explícita (no solo del sistema). --- */
+html.vesper-reduce-motion *,
+html.vesper-reduce-motion *::before,
+html.vesper-reduce-motion *::after {
+  animation-duration: .001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: .001ms !important;
+  scroll-behavior: auto !important;
+}

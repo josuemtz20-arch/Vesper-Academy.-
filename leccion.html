@@ -15,6 +15,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inria+Serif:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/vesper_tokens.css">
+<script src="vesper_prefs.js"></script>
 <style>
   :root{
     --ink:#1B1B2F; --gold:#C9A84C; --success:#2D9E75; --error:#C0392B;
@@ -236,20 +238,48 @@
   .ach-badge .ab-tx{display:flex;flex-direction:column}
   .ach-badge .ab-tx b{font-size:.72rem;text-transform:uppercase;letter-spacing:.05em;color:var(--gold)}
   .ach-badge .ab-tx span{font-weight:700}
+  /* buscador + filtros del hub */
+  .hub-search{margin:12px 0 2px}
+  .srch{position:relative}
+  .srch-ic{position:absolute;left:13px;top:50%;transform:translateY(-50%);font-size:1rem;pointer-events:none;opacity:.7}
+  .srch input{width:100%;min-height:46px;border:1.5px solid var(--line);border-radius:13px;padding:11px 14px 11px 40px;
+    font-family:inherit;font-size:1rem;color:var(--ink);background:var(--paper);-webkit-appearance:none}
+  .srch input:focus{outline:none;border-color:var(--gold)}
+  .filter-row{display:flex;gap:8px;overflow-x:auto;padding:2px;margin:8px -2px 0;-webkit-overflow-scrolling:touch}
+  .filter-row + .filter-row{margin-top:6px}
+  .fchip{flex:0 0 auto;border:1.5px solid var(--line);background:var(--paper);border-radius:999px;padding:8px 13px;
+    font-family:inherit;font-size:.85rem;font-weight:600;color:var(--ink);cursor:pointer;min-height:40px;white-space:nowrap}
+  .fchip.on{border-color:var(--gold);background:var(--gold-tint)}
+  .fchip:active{transform:translateY(1px)}
+  .search-results{margin-top:12px}
+  .search-results .lc-lvl{display:inline-block;font-size:.7rem;font-weight:700;color:var(--gold);
+    letter-spacing:.04em;text-transform:uppercase;margin-right:6px}
+  .search-empty{padding:14px 4px;color:var(--muted)}
   @media(min-width:640px){
     h1{font-size:2rem}
     .mascot-img{width:84px;height:84px}
     .wrap{padding-top:22px}
   }
+  /* tablet / desktop: aprovecha el ancho con tarjetas de lección en 2 columnas.
+     El reproductor (cover, explicación y ejercicios) se mantiene en 1 columna. */
+  @media(min-width:760px){
+    .wrap{max-width:720px}
+    .lgrid{grid-template-columns:1fr 1fr;align-items:stretch}
+    .grid{grid-template-columns:1fr 1fr}
+    .lcard2{height:100%}
+  }
 </style>
 </head>
 <body>
+<a class="va-skip-link" href="#app">Saltar al contenido</a>
 <h2 class="sr-only">Lecciones gratis de Vesper Academy: lee la explicacion, resuelve los ejercicios y manten tu racha diaria.</h2>
 <main id="app" aria-live="polite"></main>
 
 <script src="vesper_lessons.js"></script>
 <script src="vesper_activities.js"></script>
 <script src="vesper_content_pack.js"></script>
+<script src="vesper_expansion.js"></script>
+<script src="vesper_expansion2.js"></script>
 <script src="vesper_mascot.js"></script>
 <script src="vesper_theme.js"></script>
 <script src="vesper_adaptive.js"></script>
@@ -264,6 +294,8 @@
   var id = qs.get("id");
   if (window.VESPER_ACTIVITIES && VESPER_ACTIVITIES.merge) VESPER_ACTIVITIES.merge(window.VESPER_LESSONS, window.VESPER_LESSONS_ORDER);
   if (window.VESPER_CONTENT_PACK && VESPER_CONTENT_PACK.merge) VESPER_CONTENT_PACK.merge(window.VESPER_LESSONS, window.VESPER_LESSONS_ORDER);
+  if (window.VESPER_EXPANSION && VESPER_EXPANSION.merge) VESPER_EXPANSION.merge(window.VESPER_LESSONS, window.VESPER_LESSONS_ORDER);
+  if (window.VESPER_EXPANSION2 && VESPER_EXPANSION2.merge) VESPER_EXPANSION2.merge(window.VESPER_LESSONS, window.VESPER_LESSONS_ORDER);
   var L = window.VESPER_LESSONS || {};
   var ORDER = window.VESPER_LESSONS_ORDER || Object.keys(L);
   var A = window.VESPER_ADAPTIVE || null;
@@ -299,7 +331,33 @@
        al acertar si la persona pidio retro explicativa: explainOnCorrect).
      - wrongFallback: texto solo-al-fallar (p.ej. "Respuesta: ...").
      - la frase de la mascota sale en el TONO elegido (VESPER_PERSONA.line). */
+  /* efecto de sonido ligero (WebAudio, sin archivos) en acierto/error.
+     Respeta la preferencia "Efectos de sonido" de Configuración. */
+  var _actx = null;
+  function playFx(ok) {
+    try {
+      if (window.VESPER_PREFS && !VESPER_PREFS.soundEnabled()) return;
+      var AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) return;
+      _actx = _actx || new AC();
+      if (_actx.state === "suspended") { try { _actx.resume(); } catch (e) {} }
+      var t = _actx.currentTime;
+      var notes = ok ? [660, 990] : [300, 200];   /* sube al acertar, baja al fallar */
+      notes.forEach(function (f, i) {
+        var o = _actx.createOscillator(), g = _actx.createGain();
+        o.type = "sine"; o.frequency.value = f;
+        var t0 = t + i * 0.09;
+        g.gain.setValueAtTime(0.0001, t0);
+        g.gain.exponentialRampToValueAtTime(0.12, t0 + 0.01);
+        g.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.16);
+        o.connect(g); g.connect(_actx.destination);
+        o.start(t0); o.stop(t0 + 0.18);
+      });
+    } catch (e) {}
+  }
+
   function feedbackBox(ok, explanation, wrongFallback) {
+    playFx(ok);
     var state = ok ? "correct" : "incorrect";
     var line = (PERS && PERS.line) ? PERS.line(state) : "";
     if (!line) line = (window.VESPER_MASCOT ? VESPER_MASCOT.get(state).line : (ok ? "Bien!" : "Casi..."));
@@ -441,6 +499,23 @@
     });
     if (!sections) sections = '<p class="muted">Próximamente más lecciones en este nivel.</p>';
 
+    /* buscador + filtros (atacan la falta de descubrimiento con 90+ lecciones) */
+    var skillChips = PATH.SKILL_ORDER.map(function (sk) {
+      var m = PATH.SKILLS[sk];
+      return '<button class="fchip" type="button" aria-pressed="false" data-skill="' + sk + '">' + m.icon + ' ' + esc(m.label) + '</button>';
+    }).join("");
+    var searchUI = '<div class="hub-search" id="hubSearch">'
+      + '<div class="srch"><span class="srch-ic" aria-hidden="true">&#128270;</span>'
+      + '<label class="sr-only" for="lessonSearch">Buscar lecciones por título, tema o nivel</label>'
+      + '<input id="lessonSearch" type="search" inputmode="search" autocomplete="off" role="searchbox"'
+      + ' aria-controls="searchResults" placeholder="Buscar lección, tema o nivel…"></div>'
+      + '<div class="filter-row" role="group" aria-label="Filtrar por destreza">'
+      + '<button class="fchip on" type="button" aria-pressed="true" data-skill="all">Todas</button>' + skillChips + '</div>'
+      + '<div class="filter-row" role="group" aria-label="Filtrar por estado">'
+      + '<button class="fchip on" type="button" aria-pressed="true" data-state="all">Todas</button>'
+      + '<button class="fchip" type="button" aria-pressed="false" data-state="open">Pendientes</button>'
+      + '<button class="fchip" type="button" aria-pressed="false" data-state="completed">Completadas</button></div></div>';
+
     show('<div class="wrap">'
       + '<div class="hub-head"><div><h1 class="hub-hello">' + esc(hello) + '</h1>'
       + '<p class="muted" style="margin:2px 0 0;font-size:.88rem">Tu ruta de inglés, paso a paso.</p></div>'
@@ -458,15 +533,83 @@
       + ((st.shields || 0) ? '<span class="hub-stat">&#128737;&#65039; ' + st.shields + '</span>' : "") + '</div>'
       + trophyHtml
       + contHtml
+      + searchUI
+      + '<div id="searchResults" class="search-results" aria-live="polite" hidden></div>'
+      + '<div id="levelView">'
       + '<div class="lvl-tabs">' + tabs + '</div>'
       + '<div class="lvl-head"><h2>Nivel ' + selLevel + '</h2>'
       + '<span class="lvl-badge" style="background:' + col + '">' + pr.done + "/" + pr.total + '</span></div>'
       + '<div class="lvl-prog"><i style="width:' + pr.pct + '%;background:' + col + '"></i></div>'
-      + sections + '</div><div class="hub-toast" id="toast"></div>');
+      + sections + '</div>'
+      + '</div><div class="hub-toast" id="toast"></div>');
 
     each(".lvl-tab", function (b) { b.onclick = function () { renderIndex(b.getAttribute("data-lvl")); }; });
     each("[data-go]", function (b) { b.onclick = function () { location.search = "?id=" + encodeURIComponent(b.getAttribute("data-go")); }; });
     each("[data-locked]", function (b) { b.onclick = function () { toast("Completa la lección anterior para desbloquear 🔒"); }; });
+
+    /* ---- lógica de búsqueda/filtros (sólo actualiza #searchResults) ---- */
+    function searchCard(lid) {
+      var l = L[lid]; if (!l) return "";
+      var stt = PATH.status(lid, built);
+      var badge, attr, cls = "lcard2";
+      if (stt === "completed") { cls += " completed"; badge = "&#10003;"; attr = 'data-go="' + esc(lid) + '"'; }
+      else if (stt === "open") { badge = "&#9654;"; attr = 'data-go="' + esc(lid) + '"'; }
+      else { cls += " locked"; badge = "&#128274;"; attr = 'data-locked="1"'; }
+      var sk = PATH.skillOf(l), m = PATH.SKILLS[sk] || { label: "", icon: "" };
+      return '<button class="' + cls + '" ' + attr + '>'
+        + '<span class="lc-badge">' + badge + '</span>'
+        + '<span class="lc-body"><span class="lc-ttl">' + esc(l.title) + '</span>'
+        + '<span class="lc-sub" style="display:block;margin-top:3px"><span class="lc-lvl">' + esc(l.level) + '</span>'
+        + m.icon + ' ' + esc(m.label) + (stt === "locked" ? ' &middot; &#128274;' : '') + '</span></span>'
+        + '<span class="lc-go">' + (stt === "locked" ? "" : "&#8250;") + '</span></button>';
+    }
+    var fSkill = "all", fState = "all", fQuery = "", fTimer = null;
+    function applyFilter() {
+      var active = !!fQuery.trim() || fSkill !== "all" || fState !== "all";
+      var lvView = byId("levelView"), res = byId("searchResults");
+      if (!res) return;
+      if (!active) { if (lvView) lvView.hidden = false; res.hidden = true; res.innerHTML = ""; return; }
+      if (lvView) lvView.hidden = true;
+      res.hidden = false;
+      var q = fQuery.trim().toLowerCase();
+      var hits = built.order.filter(function (id) {
+        var l = L[id]; if (!l) return false;
+        if (fSkill !== "all" && PATH.skillOf(l) !== fSkill) return false;
+        var stt = PATH.status(id, built);
+        if (fState === "completed" && stt !== "completed") return false;
+        if (fState === "open" && stt === "completed") return false;
+        if (q) {
+          var hay = (l.title + " " + (l.track || "") + " " + (l.level || "") + " " + (l.topic || "")).toLowerCase();
+          if (hay.indexOf(q) < 0) return false;
+        }
+        return true;
+      });
+      if (!hits.length) {
+        res.innerHTML = '<p class="search-empty">Sin resultados. Prueba otra palabra o quita un filtro.</p>';
+        return;
+      }
+      res.innerHTML = '<div class="muted" style="margin:0 2px 8px;font-size:.85rem">' + hits.length
+        + (hits.length === 1 ? ' lección' : ' lecciones') + '</div>'
+        + '<div class="lgrid">' + hits.map(searchCard).join("") + '</div>';
+      each("#searchResults [data-go]", function (b) { b.onclick = function () { location.search = "?id=" + encodeURIComponent(b.getAttribute("data-go")); }; });
+      each("#searchResults [data-locked]", function (b) { b.onclick = function () { toast("Completa la lección anterior para desbloquear 🔒"); }; });
+    }
+    var inp = byId("lessonSearch");
+    if (inp) inp.oninput = function () { fQuery = inp.value; clearTimeout(fTimer); fTimer = setTimeout(applyFilter, 150); };
+    each("#hubSearch [data-skill]", function (b) {
+      b.onclick = function () {
+        fSkill = b.getAttribute("data-skill");
+        each("#hubSearch [data-skill]", function (x) { var on = x === b; x.classList.toggle("on", on); x.setAttribute("aria-pressed", on ? "true" : "false"); });
+        applyFilter();
+      };
+    });
+    each("#hubSearch [data-state]", function (b) {
+      b.onclick = function () {
+        fState = b.getAttribute("data-state");
+        each("#hubSearch [data-state]", function (x) { var on = x === b; x.classList.toggle("on", on); x.setAttribute("aria-pressed", on ? "true" : "false"); });
+        applyFilter();
+      };
+    });
   }
 
   /* ---------- COVER ---------- */
@@ -809,6 +952,10 @@
       + qHtml + '<div id="fb"></div><button class="btn" id="verify" disabled>Verificar</button></div></div>');
     byId("play").onclick = function () { speak(ex.text, ex.audio); };
     byId("playslow").onclick = function () { speak(ex.text, ex.audio, 0.62); };
+    /* autoplay del audio si la preferencia está activa (Configuración → Sonido) */
+    if (!window.VESPER_PREFS || VESPER_PREFS.autoplayEnabled()) {
+      setTimeout(function () { try { speak(ex.text, ex.audio); } catch (e) {} }, 350);
+    }
     var done = false;
     if (hasOpts) {
       var sel = -1, optEls = document.querySelectorAll(".opt");

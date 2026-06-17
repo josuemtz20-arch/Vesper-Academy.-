@@ -105,6 +105,8 @@
     .save-note,.seg button,.switch::after{transform:none!important}
   }
 </style>
+<link rel="stylesheet" href="assets/css/vesper_tokens.css">
+<script src="vesper_prefs.js"></script>
 </head>
 <body>
 <main class="wrap">
@@ -186,6 +188,47 @@
     <div id="picker-host"></div>
   </section>
 
+  <!-- ===== ACCESIBILIDAD ===== -->
+  <section class="card" aria-labelledby="h-a11y">
+    <div class="sec-h"><span class="em">♿</span><h2 id="h-a11y">Accesibilidad</h2></div>
+    <p class="muted" style="margin:0 0 10px">Ajustes de lectura y movimiento. Se aplican en toda la app.</p>
+    <div class="field"><span class="label" id="lab-textscale">Tamaño del texto</span>
+      <div class="seg cols" id="seg-textscale" role="radiogroup" aria-labelledby="lab-textscale"></div></div>
+    <div class="field">
+      <div class="row" style="justify-content:space-between">
+        <span class="label" id="lab-hc" style="margin:0">Alto contraste
+          <span class="hint">Textos y bordes más marcados para leer mejor.</span></span>
+        <button class="switch" id="sw-hc" role="switch" aria-checked="false" aria-labelledby="lab-hc"></button>
+      </div>
+    </div>
+    <div class="field">
+      <div class="row" style="justify-content:space-between">
+        <span class="label" id="lab-rm" style="margin:0">Reducir movimiento
+          <span class="hint">Minimiza animaciones y transiciones.</span></span>
+        <button class="switch" id="sw-rm" role="switch" aria-checked="false" aria-labelledby="lab-rm"></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SONIDO ===== -->
+  <section class="card" aria-labelledby="h-sound">
+    <div class="sec-h"><span class="em">🔊</span><h2 id="h-sound">Sonido</h2></div>
+    <div class="field">
+      <div class="row" style="justify-content:space-between">
+        <span class="label" id="lab-snd" style="margin:0">Efectos de sonido
+          <span class="hint">Un pequeño sonido al acertar o fallar.</span></span>
+        <button class="switch" id="sw-snd" role="switch" aria-checked="true" aria-labelledby="lab-snd"></button>
+      </div>
+    </div>
+    <div class="field">
+      <div class="row" style="justify-content:space-between">
+        <span class="label" id="lab-autoplay" style="margin:0">Reproducir audio automáticamente
+          <span class="hint">En los ejercicios de listening, el audio empieza solo.</span></span>
+        <button class="switch" id="sw-autoplay" role="switch" aria-checked="true" aria-labelledby="lab-autoplay"></button>
+      </div>
+    </div>
+  </section>
+
   <!-- ===== METAS Y RECORDATORIOS ===== -->
   <section class="card" aria-labelledby="h-goals">
     <div class="sec-h"><span class="em">🎯</span><h2 id="h-goals">Metas y recordatorios</h2></div>
@@ -208,6 +251,13 @@
       </div>
       <p class="muted" id="rem-note" style="margin:8px 0 0;display:none">Tu navegador puede avisarte mientras la app esté
         instalada. Si no aparece, actívalo en los permisos del sitio.</p>
+    </div>
+    <div class="field">
+      <div class="row" style="justify-content:space-between">
+        <span class="label" id="lab-freeze" style="margin:0">Congelar racha
+          <span class="hint">Tu racha no se rompe los días que no practiques.</span></span>
+        <button class="switch" id="sw-freeze" role="switch" aria-checked="false" aria-labelledby="lab-freeze"></button>
+      </div>
     </div>
   </section>
 
@@ -400,6 +450,32 @@
   });
   function setSwitch(el, on) { el.setAttribute("aria-checked", on ? "true" : "false"); }
   function toggleRem(on) { $("rem-time-wrap").style.display = on ? "flex" : "none"; $("rem-note").style.display = on ? "block" : "none"; }
+
+  /* helper: cablea un switch booleano que persiste 'key' en el perfil */
+  function wireSwitch(id, current, key) {
+    var sw = $(id); if (!sw) return;
+    setSwitch(sw, !!current);
+    sw.addEventListener("click", function () {
+      var on = sw.getAttribute("aria-checked") !== "true";
+      setSwitch(sw, on);
+      var patch = {}; patch[key] = on; P.set(patch); flash();
+    });
+  }
+
+  /* ---------- accesibilidad ---------- */
+  var TEXTSCALE = { md: { label: "Normal", emoji: "🔤" }, lg: { label: "Grande", emoji: "🔠" }, xl: { label: "Muy grande", emoji: "🅰️" } };
+  radioGroup("seg-textscale", ["md", "lg", "xl"], TEXTSCALE, p.textScale || "md", function (id) {
+    P.set({ textScale: id }); flash();
+  });
+  wireSwitch("sw-hc", p.highContrast, "highContrast");
+  wireSwitch("sw-rm", p.reduceMotion, "reduceMotion");
+
+  /* ---------- sonido ---------- */
+  wireSwitch("sw-snd", p.soundFx !== false, "soundFx");
+  wireSwitch("sw-autoplay", p.autoplayAudio !== false, "autoplayAudio");
+
+  /* ---------- congelar racha ---------- */
+  wireSwitch("sw-freeze", p.freezeStreak, "freezeStreak");
 
   /* ---------- vista previa en vivo ---------- */
   function paint() {
