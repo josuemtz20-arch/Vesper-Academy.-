@@ -84,9 +84,31 @@ Debe devolver una secuencia de eventos `data: {...}` (SSE) con el texto.
 
 En `vesper-chat-proxy.js`:
 
-- `MODEL` — `claude-haiku-4-5` por defecto (el más económico). Súbelo a
-  `claude-sonnet-4-6` o `claude-opus-4-8` si quieres más calidad (más caro).
-- `MAX_TOKENS` — `512` (respuestas cortas = menos costo). Súbelo si las quieres más largas.
+- `MODEL_FREE` — `claude-haiku-4-5` (nivel gratis, para todos).
+- `MODEL_PRO` — `claude-sonnet-4-6` (nivel Pro, con código).
+- `MAX_TOKENS_FREE` / `MAX_TOKENS_PRO` — `512` / `768` (respuestas más cortas = menos costo).
+
+## Nivel Pro (Sonnet con código) — opcional
+
+El chat tiene dos niveles: **gratis** (Haiku, para todos) y **Pro** (Sonnet, para
+alumnos/pago). El nivel Pro se desbloquea con un **código** que el alumno escribe en
+el chat (botón de la insignia arriba a la derecha). El Worker valida ese código
+contra un **secreto**; nunca confía en el cliente.
+
+Para activarlo, define el secreto `PRO_CODE`:
+
+```bash
+cd worker
+wrangler secret put PRO_CODE
+#   -> escribe el código que quieras, p. ej.  VESPER-PRO-2026
+```
+
+O en el panel: tu Worker → **Settings → Variables and Secrets** → añade `PRO_CODE`.
+
+- **Entregar acceso:** dale ese código a los alumnos / a quien pague.
+- **Revocar a todos:** cambia el secreto `PRO_CODE` (rotación). Los códigos viejos
+  dejan de funcionar y vuelven a Haiku.
+- **Si NO defines `PRO_CODE`:** no pasa nada — todo el mundo usa Haiku (gratis).
 - `MAX_TOKENS` — tope de salida por respuesta.
 - `MAX_MESSAGES` — turnos de historial que se conservan.
 - `ALLOWED_ORIGINS` — dominios autorizados a usar el proxy.

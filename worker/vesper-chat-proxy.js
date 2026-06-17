@@ -19,15 +19,20 @@
 
 /* ---------- Configuración (editable) ---------- */
 
-/* Modelo de Claude. Por defecto Haiku 4.5: el más económico (input $1 /
- * output $5 por millón), rápido y de sobra capaz para practicar inglés
- * conversacional. Para más calidad puedes subir a "claude-sonnet-4-6" o
- * "claude-opus-4-8" (más caros). */
-const MODEL = "claude-haiku-4-5";
+/* Dos niveles:
+ *  - GRATIS (sin código): Haiku 4.5 — el más económico, de sobra para practicar.
+ *  - PRO (con código válido): Sonnet 4.6 — mejor pedagogía, para alumnos/pago.
+ * El nivel PRO se desbloquea con un "código Pro" que el alumno escribe en el
+ * chat; el código real vive como SECRETO del Worker (env.PRO_CODE) y se valida
+ * AQUÍ (en el servidor), nunca en la página. Si env.PRO_CODE no está definido,
+ * todo el mundo usa Haiku. */
+const MODEL_FREE = "claude-haiku-4-5";
+const MODEL_PRO  = "claude-sonnet-4-6";
 
-/* Tope de tokens de salida por respuesta. La salida es el mayor costo, y un
- * tutor debe responder corto: 512 es suficiente y abarata. También frena abuso. */
-const MAX_TOKENS = 512;
+/* Tope de tokens de salida por respuesta (la salida es el mayor costo). Pro
+ * recibe algo más de margen como ventaja. */
+const MAX_TOKENS_FREE = 512;
+const MAX_TOKENS_PRO  = 768;
 
 /* Máximo de turnos que aceptamos en el historial (recortamos los más
  * antiguos). Cada turno user+assistant cuenta como 2. Acotarlo limita el
@@ -87,6 +92,8 @@ function corsHeaders(origin) {
   const h = {
     "Access-Control-Allow-Methods": "POST, OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type",
+    /* el front lee X-Vesper-Tier para mostrar la insignia Gratis/Pro */
+    "Access-Control-Expose-Headers": "X-Vesper-Tier",
     "Access-Control-Max-Age": "86400",
     "Vary": "Origin"
   };
@@ -167,10 +174,16 @@ export default {
       return jsonError(400, "Faltan mensajes válidos en la conversación.", origin);
     }
 
+    /* Nivel: PRO solo si el código recibido coincide con el secreto del Worker.
+     * Se valida AQUÍ; el cliente no puede forzar Sonnet. */
+    const proCode = typeof body.proCode === "string" ? body.proCode : "";
+    const isPro = !!env.PRO_CODE && proCode === env.PRO_CODE;
+    const tier = isPro ? "pro" : "free";
+
     /* Construye la petición a Claude — modelo y max_tokens fijados aquí. */
     const payload = {
-      model: MODEL,
-      max_tokens: MAX_TOKENS,
+      model: isPro ? MODEL_PRO : MODEL_FREE,
+      max_tokens: isPro ? MAX_TOKENS_PRO : MAX_TOKENS_FREE,
       stream: true,
       /* La persona (del cliente) primero; los guardrails y la brevedad SIEMPRE
        * al final (mayor saliencia) y aunque el cliente no mande system. */
@@ -205,14 +218,15 @@ export default {
       });
     }
 
-    /* Reenvía el stream SSE tal cual, con cabeceras CORS. */
+    /* Reenvía el stream SSE tal cual, con cabeceras CORS + el nivel servido. */
     return new Response(upstream.body, {
       status: 200,
       headers: Object.assign(
         {
           "Content-Type": "text/event-stream; charset=utf-8",
           "Cache-Control": "no-cache",
-          "Connection": "keep-alive"
+          "Connection": "keep-alive",
+          "X-Vesper-Tier": tier
         },
         corsHeaders(origin)
       )
