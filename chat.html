@@ -277,7 +277,13 @@ header a.back:hover{color:var(--gold);}
       body: JSON.stringify({ system: SYSTEM, messages: history })
     }).then(function (res) {
       if (!res.ok) {
-        return res.text().then(function (t) { throw new Error("HTTP " + res.status + " " + t); });
+        return res.text().then(function (t) {
+          var detail = t;
+          try { var j = JSON.parse(t); if (j && j.error) detail = (typeof j.error === "string") ? j.error : (j.error.message || t); } catch (e) {}
+          var e = new Error("Vesper no pudo responder (código " + res.status + "): " + (detail || "sin detalle"));
+          e.handled = true;
+          throw e;
+        });
       }
       if (!res.body || !res.body.getReader) {
         throw new Error("streaming-unsupported");
@@ -337,9 +343,16 @@ header a.back:hover{color:var(--gold);}
       return pump();
     }).catch(function (err) {
       if (typingRow && typingRow.parentNode) typingRow.parentNode.removeChild(typingRow);
-      var msg = (err && err.message === "streaming-unsupported")
-        ? "Tu navegador no soporta streaming. Prueba con uno más reciente."
-        : "No se pudo conectar con Vesper. Revisa tu conexión e inténtalo de nuevo.";
+      var msg;
+      if (err && err.message === "streaming-unsupported") {
+        msg = "Tu navegador no soporta streaming. Prueba con uno más reciente.";
+      } else if (err && err.handled) {
+        msg = escapeHtml(err.message);
+      } else {
+        /* fetch rechazado sin respuesta: típico de bloqueo CORS/origen o sin red */
+        msg = "No se pudo conectar con Vesper. Suele ser un bloqueo de origen (CORS): "
+            + "abre la página desde tu dominio autorizado, o revisa tu conexión.";
+      }
       addError(msg);
       /* deshace el último turno de usuario para no dejar el historial colgado */
       if (history.length && history[history.length - 1].role === "user") {
