@@ -106,3 +106,40 @@ summary:focus-visible,
     scroll-behavior: auto !important;
   }
 }
+
+/* ============================================================
+   Preferencias del alumno aplicadas por vesper_prefs.js en <html>.
+   Funcionan en cualquier página que incluya esta hoja.
+   ============================================================ */
+
+/* --- Tamaño de texto (escala relativa; el sitio usa rem/em). --- */
+html[data-text-scale="lg"] { font-size: 112.5%; }
+html[data-text-scale="xl"] { font-size: 125%; }
+
+/* --- Alto contraste: oscurece textos secundarios y refuerza bordes/foco. --- */
+html.vesper-hc {
+  --va-muted: #2c3038;
+  --va-line: #b9b2a2;
+  --va-focus: #5a4300;
+}
+html.vesper-hc .va-muted,
+html.vesper-hc .muted { color: var(--va-muted) !important; }
+html.vesper-hc a:focus-visible,
+html.vesper-hc button:focus-visible,
+html.vesper-hc input:focus-visible,
+html.vesper-hc select:focus-visible,
+html.vesper-hc textarea:focus-visible,
+html.vesper-hc [tabindex]:focus-visible,
+html.vesper-hc [role="button"]:focus-visible {
+  outline-width: 4px;
+}
+
+/* --- Reducir movimiento por preferencia explícita (no solo del sistema). --- */
+html.vesper-reduce-motion *,
+html.vesper-reduce-motion *::before,
+html.vesper-reduce-motion *::after {
+  animation-duration: .001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: .001ms !important;
+  scroll-behavior: auto !important;
+}

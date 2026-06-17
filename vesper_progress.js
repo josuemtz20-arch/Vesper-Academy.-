@@ -50,6 +50,18 @@ window.VesperProgress = (function () {
   function parseKey(k) { var p = k.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
   function dayDiff(aKey, bKey) { return Math.round((parseKey(bKey) - parseKey(aKey)) / 86400000); }
 
+  /* ¿"Congelar racha" activado? Se guarda en vesper_profile.vesper.freezeStreak
+     (Configuración). Lee directo de localStorage para no depender del orden de
+     carga de scripts; usa VESPER_PREFS si está disponible. */
+  function freezeStreakOn() {
+    try { if (window.VESPER_PREFS && VESPER_PREFS.freezeStreak) return !!VESPER_PREFS.freezeStreak(); } catch (e) {}
+    try {
+      var prof = JSON.parse(localStorage.getItem("vesper_profile") || "null");
+      return !!(prof && prof.vesper && prof.vesper.freezeStreak);
+    } catch (e) {}
+    return false;
+  }
+
   function defaults() { return { xp: 0, streak: 0, lastDay: null, days: {}, completed: {}, shields: 0, achievements: {}, dayCounts: {}, goalTarget: DEFAULT_GOAL }; }
 
   function load() {
@@ -117,7 +129,12 @@ window.VesperProgress = (function () {
       var dd = dayDiff(s.lastDay, today);
       if (dd === 0) { /* already counted today: keep streak */ }
       else if (dd === 1) { s.streak += 1; }
-      else if (dd > 1) { s.streak = 1; } // missed a day -> reset
+      else if (dd > 1) {
+        // missed one or more days. Con "congelar racha" activado, la racha no se
+        // rompe: el regreso cuenta como continuación. Si no, se reinicia.
+        if (freezeStreakOn()) { s.streak += 1; }
+        else { s.streak = 1; }
+      }
       // dd < 0 (clock moved back): leave streak as-is
     }
 

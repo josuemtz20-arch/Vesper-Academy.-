@@ -80,9 +80,29 @@ window.VESPER_PERSONA = (function () {
         incorrect: "No. Look again carefully and fix it properly.",
         milestone: "Acceptable progress, {callMe}. Keep the discipline."
       }
+    },
+    socratic: {
+      label: "Socrático", emoji: "🤔",
+      persona: "Teach by asking. Guide the student to the answer with thoughtful questions instead of giving it directly. Make them reason, notice patterns, and discover the rule themselves.",
+      micro: {
+        welcome: "Hello {callMe}. Before we start — what do you already know about this?",
+        correct: "Exactly. And why do you think that is right, {callMe}?",
+        incorrect: "Interesting. What made you choose that? Let's reason it through.",
+        milestone: "You're thinking for yourself now, {callMe}. That's real progress."
+      }
+    },
+    zen: {
+      label: "Sereno", emoji: "🧘",
+      persona: "Be calm, patient and reassuring. Lower the pressure, normalise mistakes as part of learning, and keep a peaceful, unhurried tone so the student feels safe and relaxed.",
+      micro: {
+        welcome: "Welcome, {callMe}. Take a breath — there's no rush today.",
+        correct: "Lovely. Calm and correct, {callMe}.",
+        incorrect: "That's perfectly okay. Mistakes are part of the path. Let's look gently.",
+        milestone: "Steady, peaceful progress, {callMe}. Well done."
+      }
     }
   };
-  var TONE_ORDER = ["friendly", "professional", "motivating", "fun", "strict"];
+  var TONE_ORDER = ["friendly", "professional", "motivating", "fun", "strict", "socratic", "zen"];
 
   /* Estilo de ensenanza */
   var TEACHING = {
@@ -160,10 +180,14 @@ window.VESPER_PERSONA = (function () {
     popculture: { label: "Cultura pop",         emoji: "✨", en: "pop culture" },
     sports:     { label: "Deportes",            emoji: "⚽", en: "sports" },
     food:       { label: "Comida y cocina",     emoji: "🍳", en: "food and cooking" },
-    society:    { label: "Sociedad y mundo",    emoji: "🌍", en: "society and the world" }
+    society:    { label: "Sociedad y mundo",    emoji: "🌍", en: "society and the world" },
+    health:     { label: "Salud y bienestar",   emoji: "🩺", en: "health and well-being" },
+    finance:    { label: "Dinero y finanzas",   emoji: "💳", en: "money and personal finance" },
+    nature:     { label: "Naturaleza y aire libre", emoji: "🌲", en: "nature and the outdoors" }
   };
   var TOPIC_ORDER = ["dailylife","travel","business","tech","science","history",
-    "philosophy","arts","music","movies","anime","gaming","popculture","sports","food","society"];
+    "philosophy","arts","music","movies","anime","gaming","popculture","sports","food","society",
+    "health","finance","nature"];
   /* compat: etiqueta ES suelta (por si algun codigo viejo la espera) */
   var TOPIC_LABEL = (function () { var m = {}; for (var k in TOPICS) m[k] = TOPICS[k].label.toLowerCase(); return m; })();
 
@@ -179,7 +203,16 @@ window.VESPER_PERSONA = (function () {
     levelMode: "adaptive",      /* 'manual' | 'adaptive' */
     cefr: "",                   /* solo en modo manual: A0..C2 */
     dailyGoal: { type: "lessons", value: 1 },  /* type: 'lessons' | 'min' */
-    reminders: { on: false, time: "19:00" }
+    reminders: { on: false, time: "19:00" },
+    /* --- accesibilidad (las aplica vesper_prefs.js en todo el sitio) --- */
+    textScale: "md",            /* 'md' | 'lg' | 'xl' */
+    highContrast: false,        /* alto contraste */
+    reduceMotion: false,        /* forzar menos animacion (ademas de prefers-reduced-motion) */
+    /* --- sonido --- */
+    soundFx: true,              /* efectos de sonido en acierto/error */
+    autoplayAudio: true,        /* autoplay del audio en ejercicios de listening */
+    /* --- metas --- */
+    freezeStreak: false         /* congela la racha: no se rompe por dias sin practicar */
   };
 
   /* ---------- Lectura / escritura del perfil ---------- */
