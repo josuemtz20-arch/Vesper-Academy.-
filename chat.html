@@ -33,6 +33,10 @@ header a.back{color:rgba(255,255,255,.75);font-size:.76rem;font-weight:600;lette
 header a.back:hover{color:var(--gold);}
 .btn-new{background:none;border:1px solid rgba(255,255,255,.25);color:rgba(255,255,255,.85);border-radius:18px;padding:6px 13px;font:600 .72rem/1 'Inter',sans-serif;letter-spacing:.4px;cursor:pointer;display:inline-flex;align-items:center;gap:6px;}
 .btn-new:hover{border-color:var(--gold);color:var(--gold);}
+/* Insignia de nivel (Gratis/Pro) — también abre el código Pro */
+.tier{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.22);color:rgba(255,255,255,.85);border-radius:18px;padding:6px 12px;font:700 .7rem/1 'Inter',sans-serif;letter-spacing:.4px;cursor:pointer;white-space:nowrap;}
+.tier:hover{border-color:var(--gold);color:var(--gold);}
+.tier.pro{background:var(--gold);border-color:var(--gold);color:var(--navy);}
 
 /* Zona de chat */
 .chat-wrap{flex:1;display:flex;flex-direction:column;max-width:820px;width:100%;margin:0 auto;min-height:0;}
@@ -95,6 +99,7 @@ header a.back:hover{color:var(--gold);}
     <span><b>Vesper</b><small>Tutor IA</small></span>
   </a>
   <div class="right">
+    <button class="tier" id="tier" type="button" title="Nivel del chat — toca para un código Pro">Gratis · Haiku</button>
     <button class="btn-new" id="btn-new" type="button"><i class="fas fa-rotate-right"></i> Nueva</button>
     <a class="back" href="leccion.html"><i class="fas fa-arrow-left"></i> Lecciones</a>
   </div>
@@ -123,11 +128,48 @@ header a.back:hover{color:var(--gold);}
   var PROXY_URL = "https://patient-feather-4364.josuemtz20.workers.dev/";
 
   var HISTORY_KEY = "vesper_chat_history";
+  var PRO_KEY = "vesper_pro_code";
 
   var messagesEl = document.getElementById("messages");
   var inputEl = document.getElementById("input");
   var sendBtn = document.getElementById("send");
   var newBtn = document.getElementById("btn-new");
+  var tierEl = document.getElementById("tier");
+
+  /* Código Pro (desbloquea Sonnet). Vive solo en este dispositivo; el Worker
+     lo valida en el servidor. */
+  function getProCode() { try { return localStorage.getItem(PRO_KEY) || ""; } catch (e) { return ""; } }
+  function setProCode(v) { try { v ? localStorage.setItem(PRO_KEY, v) : localStorage.removeItem(PRO_KEY); } catch (e) {} }
+
+  /* Insignia de nivel. tier: "pro" | "free" | null (desconocido aún). */
+  function setTier(tier) {
+    if (tier === "pro") {
+      tierEl.textContent = "Pro · Sonnet";
+      tierEl.classList.add("pro");
+    } else {
+      tierEl.classList.remove("pro");
+      tierEl.textContent = getProCode() ? "Gratis · Haiku ⚠" : "Gratis · Haiku";
+    }
+  }
+
+  /* Pedir / cambiar / quitar el código Pro */
+  tierEl.addEventListener("click", function () {
+    var cur = getProCode();
+    var msg = cur
+      ? "Tu código Pro actual está guardado. Escribe uno nuevo para cambiarlo, o deja el campo vacío para quitarlo:"
+      : "¿Tienes un código Pro? Escríbelo para desbloquear a Vesper Pro (Sonnet). Lo dan los profesores / con tu plan.";
+    var v = window.prompt(msg, cur);
+    if (v === null) return;          // canceló
+    v = v.trim();
+    setProCode(v);
+    setTier(null);                   // se confirmará en el próximo mensaje
+    if (v) {
+      addError('Código guardado. Se aplicará en tu próximo mensaje. Si es válido, verás <b>Pro · Sonnet</b> arriba.');
+    } else {
+      addError('Código quitado. Seguirás con Vesper gratis (Haiku).');
+    }
+  });
+  setTier(null);
 
   /* System prompt del tutor: INCRUSTADO desde el perfil del alumno. */
   function buildSystem() {
@@ -274,8 +316,10 @@ header a.back:hover{color:var(--gold);}
     fetch(PROXY_URL, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ system: SYSTEM, messages: history })
+      body: JSON.stringify({ system: SYSTEM, messages: history, proCode: getProCode() })
     }).then(function (res) {
+      /* nivel que sirvió el servidor (Gratis/Pro) — actualiza la insignia */
+      try { setTier(res.headers.get("X-Vesper-Tier")); } catch (e) {}
       if (!res.ok) {
         return res.text().then(function (t) {
           var detail = t;
