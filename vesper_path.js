@@ -18,7 +18,7 @@
  * localStorage: "vesper_lesson_scores" = { lessonId: bestPct }
  * ============================================================ */
 window.VESPER_PATH = (function () {
-  var LEVELS = ["A1", "A2", "B1", "B2", "C1"];
+  var LEVELS = ["A1", "A2", "B1", "B2", "C1", "C2"];
   var SCORE_KEY = "vesper_lesson_scores";
 
   var SKILLS = {
@@ -30,7 +30,7 @@ window.VESPER_PATH = (function () {
   };
   var SKILL_ORDER = ["grammar", "vocab", "reading", "listening", "use"];
 
-  var LEVEL_COLORS = { A1: "#4aa3df", A2: "#2ecc71", B1: "#e67e22", B2: "#a569bd", C1: "#c0392b" };
+  var LEVEL_COLORS = { A1: "#4aa3df", A2: "#2ecc71", B1: "#e67e22", B2: "#a569bd", C1: "#c0392b", C2: "#1B1B2F" };
   function levelColor(lv) { return LEVEL_COLORS[normLevel(lv)] || "#C9A84C"; }
 
   function normLevel(lv) {
