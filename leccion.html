@@ -259,6 +259,14 @@
     .mascot-img{width:84px;height:84px}
     .wrap{padding-top:22px}
   }
+  /* tablet / desktop: aprovecha el ancho con tarjetas de lección en 2 columnas.
+     El reproductor (cover, explicación y ejercicios) se mantiene en 1 columna. */
+  @media(min-width:760px){
+    .wrap{max-width:720px}
+    .lgrid{grid-template-columns:1fr 1fr;align-items:stretch}
+    .grid{grid-template-columns:1fr 1fr}
+    .lcard2{height:100%}
+  }
 </style>
 </head>
 <body>
