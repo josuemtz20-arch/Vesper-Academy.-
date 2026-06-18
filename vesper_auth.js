@@ -196,7 +196,7 @@
   function addLogoutChip(email) {
     onDomReady(function () {
       var d = document.createElement("div");
-      d.style.cssText = "position:fixed;bottom:14px;right:14px;z-index:99999;background:#10243e;" +
+      d.style.cssText = "position:fixed;bottom:14px;right:14px;z-index:99999;background:#15152b;" +
         "color:#f5efe2;font:12px/1 sans-serif;padding:8px 12px;border-radius:20px;opacity:.85;" +
         "box-shadow:0 2px 8px rgba(0,0,0,.3);cursor:pointer;";
       d.title = email;
@@ -245,7 +245,7 @@
       "html.vsp-gating body{visibility:hidden!important}" +
       "#vsp-splash{position:fixed;inset:0;z-index:2147483647;visibility:visible!important;" +
         "display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;" +
-        "background:#141c2a;color:#f5f2eb;" +
+        "background:#1B1B2F;color:#f5f2eb;" +
         "font-family:'Inter',system-ui,-apple-system,Segoe UI,sans-serif;" +
         "transition:opacity .35s ease}" +
       "#vsp-splash.vsp-hide{opacity:0;pointer-events:none}" +

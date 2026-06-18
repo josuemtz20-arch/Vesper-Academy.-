@@ -107,7 +107,7 @@ window.VESPER_THEME = (function () {
       "--no-tint": rgba(t.error, t.dark ? .18 : .10),
       "--shadow": t.dark ? "0 6px 22px rgba(0,0,0,.45)" : "0 6px 22px rgba(27,27,47,.08)",
       /* tokens del sitio / onboarding */
-      "--navy": t.dark ? t.paper : t.ink, "--navy2": t.dark ? t.line : "#243654",
+      "--navy": t.dark ? t.paper : t.ink, "--navy2": t.dark ? t.line : "#2c2c4a",
       "--navy3": t.cream, "--text": t.ink, "--gold-lt": t.goldLt, "--gold-light": t.goldLt,
       "--gold2": t.goldDp, "--gold-deep": t.goldDp, "--white": t.paper, "--border": t.line,
       /* skin de mascota */
