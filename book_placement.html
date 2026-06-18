@@ -577,7 +577,8 @@
         </div>
 
         <div class="result-actions">
-            <a class="btn-solid" href="index.html#contacto"><i class="fas fa-comments"></i> Hablar con un asesor</a>
+            <a class="btn-solid" id="cta-create-account" href="login.html?tab=register&amp;next=materiales.html"><i class="fas fa-user-plus"></i> Crear mi cuenta y empezar</a>
+            <a class="btn-outline" href="index.html#contacto"><i class="fas fa-comments"></i> Hablar con un asesor</a>
             <button class="btn-outline" onclick="window.print()"><i class="fas fa-print"></i> Imprimir</button>
             <button class="btn-outline" onclick="openHistory()"><i class="fas fa-clock-rotate-left"></i> Ver historial</button>
             <button class="btn-outline" onclick="retakeTest()"><i class="fas fa-redo"></i> Repetir examen</button>
@@ -1042,6 +1043,14 @@ function showResults() {
     const local = loadLocalHistory();
     local.unshift(rec);
     saveLocalHistory(local);
+
+    // Embudo: guardar el lead para precargar el registro y el onboarding
+    try {
+        localStorage.setItem("vesper_lead", JSON.stringify({
+            name: studentName, email: studentEmail,
+            level: placedLevel, levelName: lvlData.name
+        }));
+    } catch (e) {}
 
     const status = document.getElementById("save-status");
     status.style.display = "inline-flex";

@@ -105,10 +105,23 @@
   tabL.onclick = function () { setTab("login"); };
   tabR.onclick = function () { setTab("register"); };
 
-  /* destino tras el login: solo rutas relativas dentro del sitio */
-  var next = qs.get("next") || "index.html";
+  /* Embudo de conversión: si llegamos desde el examen, abrir "Crear cuenta"
+     y precargar el correo capturado (vesper_lead). */
+  try {
+    var lead = JSON.parse(localStorage.getItem("vesper_lead") || "null");
+    if (lead && lead.email) {
+      var le = document.getElementById("l-email"), re = document.getElementById("r-email");
+      if (le && !le.value) le.value = lead.email;
+      if (re && !re.value) re.value = lead.email;
+    }
+  } catch (e) {}
+  if (qs.get("tab") === "register") setTab("register");
+
+  /* destino tras el login: por defecto el material del alumno; solo rutas
+     relativas dentro del sitio */
+  var next = qs.get("next") || "materiales.html";
   if (!/^[A-Za-z0-9_.-]+\.html(\?[\x20-\x7E]*)?$/.test(next) || next.indexOf("//") !== -1) {
-    next = "index.html";
+    next = "materiales.html";
   }
 
   if (!window.VesperAuth || !VesperAuth.isConfigured) {
