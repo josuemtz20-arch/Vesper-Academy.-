@@ -489,7 +489,7 @@ header.scrolled{background:rgba(20,28,42,.98);border-bottom-color:rgba(197,160,8
     <div class="pgrid text-left">
       <div class="plan reveal">
         <h3>Grupal</h3>
-        <div class="price">$<span data-price>89</span><small>/mes</small></div>
+        <div class="price">$<span data-price>2500</span><small> MXN/mes</small></div>
         <p class="plan-note">Grupos reducidos de hasta 6 alumnos.</p>
         <ul>
           <li><i class="fas fa-check" aria-hidden="true"></i> 2 clases en vivo por semana</li>
@@ -502,7 +502,7 @@ header.scrolled{background:rgba(20,28,42,.98);border-bottom-color:rgba(197,160,8
       <div class="plan feat reveal">
         <div class="ribbon">Más popular</div>
         <h3>1 a 1 Profesional</h3>
-        <div class="price">$<span data-price>199</span><small>/mes</small></div>
+        <div class="price">$250–400<small> MXN/hora</small></div>
         <p class="plan-note">Clases individuales a tu medida.</p>
         <ul>
           <li><i class="fas fa-check" aria-hidden="true"></i> 2 clases privadas por semana</li>
@@ -514,19 +514,19 @@ header.scrolled{background:rgba(20,28,42,.98);border-bottom-color:rgba(197,160,8
         <a href="book_placement.html" class="btn btn-gold btn-block">Empezar 1 a 1</a>
       </div>
       <div class="plan reveal">
-        <h3>Certificación</h3>
-        <div class="price">$<span data-price>249</span><small>/mes</small></div>
-        <p class="plan-note">Preparación intensiva IELTS / Cambridge.</p>
+        <h3>Especializados</h3>
+        <div class="price">$<span data-price>3000</span><small> MXN/mes</small></div>
+        <p class="plan-note">Certificación, corporativo o inglés técnico.</p>
         <ul>
           <li><i class="fas fa-check" aria-hidden="true"></i> 3 sesiones intensivas por semana</li>
           <li><i class="fas fa-check" aria-hidden="true"></i> Simulacros cronometrados completos</li>
           <li><i class="fas fa-check" aria-hidden="true"></i> Corrección con rúbrica de banda</li>
           <li><i class="fas fa-check" aria-hidden="true"></i> Meta de banda garantizada por plan</li>
         </ul>
-        <a href="book_placement.html" class="btn btn-gold btn-block">Quiero certificarme</a>
+        <a href="book_placement.html" class="btn btn-gold btn-block">Quiero especializarme</a>
       </div>
     </div>
-    <p class="price-footnote">Precios de referencia. Escríbenos para un plan a tu medida.</p>
+    <p class="price-footnote">Precios de referencia en pesos mexicanos (MXN). Escríbenos para un plan a tu medida.</p>
   </div>
 </section>
 
@@ -628,9 +628,9 @@ header.scrolled{background:rgba(20,28,42,.98);border-bottom-color:rgba(197,160,8
             if (start === null) start = ts;
             var p = Math.min((ts - start) / dur, 1);
             var eased = p >= 1 ? 1 : 1 - Math.pow(2, -10 * p);
-            span.textContent = Math.round(target * eased);
+            span.textContent = Math.round(target * eased).toLocaleString('es-MX');
             if (p < 1) requestAnimationFrame(step);
-            else span.textContent = target;
+            else span.textContent = target.toLocaleString('es-MX');
           }
           setTimeout(function(){ requestAnimationFrame(step); }, 250);
         });
