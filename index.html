@@ -97,6 +97,14 @@ nav{display:flex;align-items:center;justify-content:space-between;height:72px;ga
 .hero-stats{display:flex;gap:44px;margin-top:56px;flex-wrap:wrap;}
 .hero-stats div b{font-family:'Inria Serif',serif;font-size:1.5rem;color:var(--gold-lt);display:block;line-height:1.1;}
 .hero-stats div small{color:rgba(255,255,255,.66);font-size:.78rem;text-transform:uppercase;letter-spacing:1px;}
+.hero-grid{display:grid;grid-template-columns:1fr;align-items:center;}
+.hero-visual{display:none;}
+.hero-visual img{width:100%;height:500px;object-fit:cover;object-position:center;display:block;border-radius:var(--r-lg);border:1px solid rgba(197,160,89,.4);box-shadow:var(--sh-lg);background:var(--navy3);}
+@media(min-width:981px){
+  .hero-grid{grid-template-columns:minmax(0,1fr) minmax(0,400px);gap:56px;}
+  .hero-inner{max-width:none;}
+  .hero-visual{display:block;}
+}
 
 /* TRUST BAR */
 .trust{background:var(--cream);border-bottom:1px solid var(--border);}
@@ -132,15 +140,13 @@ section{padding:var(--s-section) 0;}
 .cgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px;margin-top:56px;}
 .course{border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;background:#fff;transition:transform .4s var(--ease-std),box-shadow .4s;display:flex;flex-direction:column;}
 .course:hover{transform:translateY(-4px);box-shadow:var(--sh-md);}
-.course .top{height:76px;display:flex;align-items:center;gap:14px;padding:0 24px;color:#fff;font-size:1.5rem;}
+.course .top{height:158px;position:relative;overflow:hidden;background:var(--navy3);}
+.course .top img{width:100%;height:100%;object-fit:cover;object-position:center;display:block;transition:transform .6s var(--ease-std);}
+.course:hover .top img{transform:scale(1.05);}
 .course .body{padding:22px 24px 24px;flex:1;display:flex;flex-direction:column;}
 .course h3{margin:0 0 8px;font-size:1.1rem;}
 .course p{color:var(--muted);font-size:var(--t-body);margin:0 0 16px;flex:1;}
 .course .tag{align-self:flex-start;font-size:.72rem;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--tag);background:var(--cream);padding:5px 12px;border-radius:var(--r-pill);}
-.c-green{background:linear-gradient(135deg,#2d7a4f,#1d5235);}
-.c-orange{background:linear-gradient(135deg,#c96b1a,#9a4f12);}
-.c-blue{background:linear-gradient(135deg,#1e5fa8,#15436f);}
-.c-purple{background:linear-gradient(135deg,#6b3fa0,#4a2a70);}
 
 /* CERTIFICATION band */
 .cert{background:linear-gradient(135deg,var(--cream),#efe9da);}
@@ -257,6 +263,7 @@ html.js-anim .hero-inner>.hero-cta{animation-delay:280ms;}
 html.js-anim .hero-inner>.cta-note{animation-delay:340ms;}
 html.js-anim .hero-inner>.hero-stats{animation-delay:400ms;}
 html.js-anim .hero::before{animation:heroMarkSettle 1.4s cubic-bezier(0.33,0,0.2,1) .15s both;}
+html.js-anim .hero-visual{opacity:0;animation:heroRise .8s var(--ease-out) .4s both;}
 
 /* Reveal en scroll — un solo contrato de clase. animation-fill-mode:backwards
    evita el flash durante el stagger y NO bloquea los :hover tras revelar. */
@@ -338,6 +345,7 @@ header.scrolled{background:rgba(20,28,42,.98);border-bottom-color:rgba(197,160,8
 <main id="main">
 <section class="hero">
   <div class="container">
+    <div class="hero-grid">
     <div class="hero-inner">
       <span class="eyebrow" style="color:var(--gold-lt)">Inglés en línea · Clases en vivo</span>
       <h1>Habla inglés con <span>confianza real</span>, no solo en teoría.</h1>
@@ -353,6 +361,8 @@ header.scrolled{background:rgba(20,28,42,.98);border-bottom-color:rgba(197,160,8
         <div><b>1:1</b><small>o grupos reducidos</small></div>
         <div><b>100%</b><small>En vivo, no grabado</small></div>
       </div>
+    </div>
+    <div class="hero-visual" aria-hidden="true"><img src="assets/images/lessons/theme_business.jpg" alt="" decoding="async"></div>
     </div>
   </div>
 </section>
@@ -422,17 +432,17 @@ header.scrolled{background:rgba(20,28,42,.98);border-bottom-color:rgba(197,160,8
     <h2 class="sec-title reveal" id="cursos-title">Un curso para cada meta</h2>
     <p class="sec-lead reveal">Programas generales y especializados, todos con la misma metodología comunicativa.</p>
     <div class="cgrid text-left">
-      <div class="course reveal"><div class="top c-green"><i class="fas fa-seedling" aria-hidden="true"></i></div>
+      <div class="course reveal"><div class="top"><img src="assets/images/lessons/theme_education.jpg" alt="" loading="lazy" decoding="async"></div>
         <div class="body"><h3>Inglés General</h3><p>De A0 a C2 en una progresión completa de práctica, gramática y conversación. La base para todo.</p><span class="tag">A0 – C2</span></div></div>
-      <div class="course reveal"><div class="top c-orange"><i class="fas fa-comments" aria-hidden="true"></i></div>
+      <div class="course reveal"><div class="top"><img src="assets/images/lessons/theme_conversation.jpg" alt="" loading="lazy" decoding="async"></div>
         <div class="body"><h3>Club de Conversación</h3><p>Más de 150 temas para soltar la lengua: cultura, tecnología, sociedad y debates que enganchan.</p><span class="tag">B1 – C2</span></div></div>
-      <div class="course reveal"><div class="top c-blue"><i class="fas fa-user-tie" aria-hidden="true"></i></div>
+      <div class="course reveal"><div class="top"><img src="assets/images/lessons/theme_negotiation.jpg" alt="" loading="lazy" decoding="async"></div>
         <div class="body"><h3>Inglés Corporativo</h3><p>Reuniones, presentaciones, negociación y correos. El inglés que mueve tu carrera profesional.</p><span class="tag">B2 – C1</span></div></div>
-      <div class="course reveal"><div class="top c-blue"><i class="fas fa-plane-departure" aria-hidden="true"></i></div>
+      <div class="course reveal"><div class="top"><img src="assets/images/lessons/theme_travel.jpg" alt="" loading="lazy" decoding="async"></div>
         <div class="body"><h3>Inglés de Aviación</h3><p>Para tripulación de cabina y atención a pasajeros: seguridad, servicio y protocolo en inglés.</p><span class="tag">Especializado</span></div></div>
-      <div class="course reveal"><div class="top c-purple"><i class="fas fa-landmark" aria-hidden="true"></i></div>
+      <div class="course reveal"><div class="top"><img src="assets/images/lessons/theme_diplomacy.jpg" alt="" loading="lazy" decoding="async"></div>
         <div class="body"><h3>Inglés Político y Global</h3><p>Diplomacia, economía y asuntos internacionales para profesionales del sector público.</p><span class="tag">B2 – C1</span></div></div>
-      <div class="course reveal"><div class="top c-purple"><i class="fas fa-stopwatch" aria-hidden="true"></i></div>
+      <div class="course reveal"><div class="top"><img src="assets/images/lessons/theme_achievement.jpg" alt="" loading="lazy" decoding="async"></div>
         <div class="body"><h3>Preparación de Certificación</h3><p>IELTS, Cambridge y TOEFL con simulacros cronometrados y estrategias de examinador.</p><span class="tag">B2 – C1</span></div></div>
     </div>
   </div>
