@@ -11,10 +11,10 @@
         @import url('https://fonts.googleapis.com/css2?family=Inria+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@300;400;500;600;700&display=swap');
         *, *::before, *::after { box-sizing: border-box; }
         :root {
-            --navy:#141c2a; --navy2:#243654; --navy3:#14223a;
+            --navy:#1B1B2F; --navy2:#2c2c4a; --navy3:#15152b;
             --gold:#c5a059; --gold-lt:#d9bd84; --gold2:#a8843d;
             --cream:#f5f2eb; --white:#fff; --border:#e4e0d8;
-            --text:#141c2a; --muted:#6b7a8d;
+            --text:#1B1B2F; --muted:#6b7a8d;
         }
         body { font-family:'Inter',sans-serif; background:var(--cream); color:var(--text); margin:0; min-height:100vh; }
 
@@ -440,12 +440,12 @@
                 </div>
                 <div class="wb-group">
                     <span class="wb-label">Color</span>
-                    <span class="swatch active" style="background:#141c2a" data-color="#141c2a"></span>
+                    <span class="swatch active" style="background:#1B1B2F" data-color="#1B1B2F"></span>
                     <span class="swatch" style="background:#c5a059" data-color="#c5a059"></span>
                     <span class="swatch" style="background:#b02a2a" data-color="#b02a2a"></span>
                     <span class="swatch" style="background:#2d7a4f" data-color="#2d7a4f"></span>
                     <span class="swatch" style="background:#1e5fa8" data-color="#1e5fa8"></span>
-                    <input type="color" class="pick" id="color-pick" value="#141c2a" title="Custom color">
+                    <input type="color" class="pick" id="color-pick" value="#1B1B2F" title="Custom color">
                 </div>
                 <div class="wb-group">
                     <span class="wb-label">Size</span>
@@ -876,7 +876,7 @@
         const boardPanel = document.getElementById("panel-board");
 
         let tool = "pen";              // select|pen|marker|eraser|text|line|arrow|rect|ellipse|tri|sticker
-        let color = "#141c2a", size = 4, pendingSticker = null;
+        let color = "#1B1B2F", size = 4, pendingSticker = null;
         let fillMode = false, dashMode = false;
         let dpr = 1, cssW = 0, cssH = 0;
         let objects = [];              // every drawn item, in z-order
@@ -924,7 +924,7 @@
         }
         function drawObj(o){
             ctx.globalAlpha = (o.alpha != null) ? o.alpha : 1;
-            ctx.strokeStyle = o.color || "#141c2a"; ctx.fillStyle = o.color || "#141c2a";
+            ctx.strokeStyle = o.color || "#1B1B2F"; ctx.fillStyle = o.color || "#1B1B2F";
             ctx.lineWidth = o.width || 2;
             ctx.setLineDash(o.dash ? [Math.max(6,(o.width||2)*3), Math.max(5,(o.width||2)*2.2)] : []);
             if (o.type === "path"){

@@ -7,7 +7,7 @@ window.VesperCovers = (function () {
 
   /* curated gradients in the Vesper navy/gold family: [from, to, accent] */
   var PALETTES = [
-    ["#243654", "#10243e", "#c5a059"], /* navy */
+    ["#2c2c4a", "#15152b", "#c5a059"], /* navy */
     ["#3a2d4a", "#241a33", "#d9bd84"], /* plum */
     ["#1d4044", "#10262b", "#c5a059"], /* teal */
     ["#235c3f", "#12301f", "#d9bd84"], /* green */

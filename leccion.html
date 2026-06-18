@@ -7,7 +7,7 @@
 <meta name="description" content="Aprende ingles gratis, sin cuenta. Lecciones cortas con ejercicios, racha diaria y XP.">
 <link rel="icon" href="assets/images/favicon_32.png" sizes="32x32">
 <link rel="manifest" href="manifest_lecciones.webmanifest">
-<meta name="theme-color" content="#141c2a">
+<meta name="theme-color" content="#1B1B2F">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Vesper Lecciones">
@@ -19,10 +19,10 @@
 <script src="vesper_prefs.js"></script>
 <style>
   :root{
-    --ink:#141c2a; --gold:#c5a059; --success:#2D9E75; --error:#C0392B;
+    --ink:#1B1B2F; --gold:#c5a059; --gold2:#a8843d; --success:#2D9E75; --error:#C0392B;
     --cream:#f5f2eb; --paper:#ffffff; --muted:#6b6b76; --line:#ece7da;
     --gold-tint:rgba(197,160,89,.14); --ok-tint:rgba(45,158,117,.12); --no-tint:rgba(192,57,43,.10);
-    --radius:16px; --shadow:0 6px 22px rgba(20,28,42,.08);
+    --radius:16px; --shadow:0 6px 22px rgba(27,27,47,.08);
   }
   *{box-sizing:border-box}
   html,body{margin:0}
@@ -119,7 +119,7 @@
   .hub-stats{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 4px}
   .hub-stat{background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:5px 12px;font-size:.85rem;font-weight:600}
   /* continue card */
-  .cont-card{display:flex;align-items:center;gap:14px;text-align:left;width:100%;background:linear-gradient(135deg,var(--ink),#26263e);color:var(--cream);border:none;border-radius:18px;padding:16px 18px;cursor:pointer;margin:10px 0 6px;box-shadow:var(--shadow)}
+  .cont-card{display:flex;align-items:center;gap:14px;text-align:left;width:100%;background:linear-gradient(135deg,var(--ink),#2c2c4a);color:var(--cream);border:none;border-radius:18px;padding:16px 18px;cursor:pointer;margin:10px 0 6px;box-shadow:var(--shadow)}
   .cont-ico{flex:0 0 auto;width:48px;height:48px;border-radius:50%;background:var(--gold);color:var(--ink);display:flex;align-items:center;justify-content:center;font-size:1.4rem}
   .cont-card .lbl{font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;opacity:.8}
   .cont-card .ttl{font-weight:700;font-size:1.05rem;margin:2px 0}
@@ -269,8 +269,562 @@
     .grid{grid-template-columns:1fr 1fr}
     .lcard2{height:100%}
   }
+  /* ===== Mapa de mundos (HUB estilo videojuego) ===== */
+  .hub-strip{display:flex;flex-wrap:wrap;gap:7px;margin:10px 0 2px}
+  .hub-icon{display:inline-flex;align-items:center;justify-content:center;width:42px;height:42px;flex:none;border-radius:50%;
+    background:var(--paper);border:1px solid var(--line);text-decoration:none;color:var(--ink);font-size:1.2rem;cursor:pointer;font-family:inherit}
+  .hub-icon:active{transform:translateY(1px)}
+  /* cinta de mundos */
+  .worlds{display:flex;gap:10px;overflow-x:auto;padding:10px 2px 12px;margin:10px -2px 2px;-webkit-overflow-scrolling:touch}
+  .world{flex:0 0 auto;position:relative;display:flex;flex-direction:column;align-items:center;gap:4px;min-width:80px;
+    border:1.5px solid var(--line);background:var(--paper);border-radius:15px;padding:10px 14px 9px;cursor:pointer;font-family:inherit;color:var(--ink)}
+  .world.on{border-color:var(--gold);background:var(--gold-tint);box-shadow:0 5px 16px rgba(27,27,47,.10)}
+  .world.locked{opacity:.5;cursor:not-allowed}
+  .world .w-ring{width:36px;height:36px;font-size:.66rem}
+  .world .w-ring i{width:27px;height:27px}
+  .world .w-nm{font-weight:800;font-size:.95rem;letter-spacing:.02em}
+  .world .w-pc{font-size:.68rem;color:var(--muted);font-weight:600}
+  .world .w-lk{position:absolute;top:4px;right:7px;font-size:.8rem}
+  /* ruta serpenteante */
+  .wmap{position:relative;display:flex;flex-direction:column;align-items:center;gap:28px;margin:18px 0 14px;padding:6px 0}
+  .wmap::before{content:"";position:absolute;top:6px;bottom:6px;left:50%;width:5px;transform:translateX(-50%);z-index:0;border-radius:3px;
+    background:repeating-linear-gradient(180deg,rgba(197,160,89,.5) 0 9px,transparent 9px 20px)}
+  .wmap::after{content:"";position:absolute;top:6px;bottom:6px;left:50%;width:1px;transform:translateX(-50%);z-index:0;
+    background:repeating-linear-gradient(180deg,rgba(197,160,89,.55) 0 3px,transparent 3px 16px)}
+  .wnode{position:relative;z-index:1;--dx:0px;transform:translateX(var(--dx));display:flex;flex-direction:column;align-items:center}
+  .wbtn{position:relative;width:74px;height:74px;border-radius:50%;border:3px solid var(--line);background:var(--paper);color:var(--ink);
+    font-size:1.6rem;display:flex;align-items:center;justify-content:center;cursor:pointer;font-family:inherit;
+    box-shadow:0 5px 0 rgba(27,27,47,.13),var(--shadow);transition:transform .12s ease}
+  .wbtn:active:not(.locked){transform:translateY(2px);box-shadow:0 2px 0 rgba(27,27,47,.13),var(--shadow)}
+  .wbtn.completed{background:linear-gradient(150deg,#dcc08a,var(--gold));border-color:var(--gold2,#a8843d);color:#fff;text-shadow:0 1px 1px rgba(27,27,47,.25)}
+  .wbtn.open{border-color:var(--gold);color:var(--gold2,#a8843d)}
+  .wbtn.locked{background:#e9e6dd;border-color:#dcd5c4;color:#a39d92;cursor:not-allowed;box-shadow:none}
+  .wbtn.is-current{width:88px;height:88px;font-size:2rem;border-color:var(--gold);
+    background:linear-gradient(150deg,var(--ink),#2c2c4a);color:var(--gold);
+    box-shadow:0 0 0 4px var(--paper),0 0 0 7px var(--gold),0 6px 18px rgba(27,27,47,.3)}
+  .wbtn.is-current::after{content:"";position:absolute;inset:-7px;border-radius:50%;pointer-events:none;
+    box-shadow:0 0 0 0 rgba(197,160,89,.55);animation:wpulse 1.7s ease-in-out infinite}
+  @keyframes wpulse{0%,100%{box-shadow:0 0 0 0 rgba(197,160,89,.5)}50%{box-shadow:0 0 0 13px rgba(197,160,89,0)}}
+  /* el marcador de "lección conquistada" y el remate del capstone los define cada mundo en su sección [data-world] */
+  @media(prefers-reduced-motion:reduce){.wbtn.is-current::after,.wbtn.completed::after,.wbtn.castle.completed svg path:last-child{animation:none}}
+  .wbtn.castle{width:90px;height:78px;border-radius:18px;border-width:4px;font-size:1.8rem;
+    background:linear-gradient(150deg,#dcc08a,var(--gold));border-color:var(--gold2,#a8843d);color:#fff}
+  .wlabel{position:absolute;top:-29px;left:50%;transform:translateX(-50%);white-space:nowrap;z-index:2;
+    background:var(--ink);color:var(--gold);font-size:.64rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+    padding:4px 11px;border-radius:999px;box-shadow:var(--shadow)}
+  .wlabel::after{content:"";position:absolute;left:50%;bottom:-4px;transform:translateX(-50%);width:0;height:0;
+    border:5px solid transparent;border-bottom:0;border-top-color:var(--ink)}
+  .wstars{display:block;margin-top:5px;color:var(--gold);font-size:.82rem;letter-spacing:1px;line-height:1}
+  .wstars .off{color:#cbbfa3}
+  .wnode.done .wstars{filter:drop-shadow(0 0 3px rgba(197,160,89,.45))}
+  .wtitle{margin-top:9px;font-size:.8rem;font-weight:600;color:var(--ink);text-align:center;max-width:135px;line-height:1.25}
+  .wnode.locked .wtitle{color:var(--muted);font-weight:500}
+  /* checkpoint de destreza */
+  .wcheck{position:relative;z-index:1;align-self:stretch;display:flex;align-items:center;gap:9px;margin:2px 4px -8px;padding:8px 14px;
+    background:var(--gold-tint);border:1px solid var(--gold);border-left:3px solid var(--gold);border-radius:999px;font-weight:700;font-size:.86rem;color:var(--ink)}
+  .wcheck .ic{position:relative;font-size:1.05rem}
+  .wcheck .ic::before{content:"\2691";color:var(--gold2,#a8843d);margin-right:4px;font-size:.95rem}
+  .wcheck .ct{margin-left:auto;font-size:.76rem;color:var(--gold2,#a8843d);font-weight:700}
+  /* gallardete de inicio de mundo */
+  .wstart{position:relative;z-index:1;align-self:center;margin:2px 0 6px;padding:5px 26px;background:var(--ink,#1B1B2F);color:var(--gold,#c5a059);
+    font-family:Georgia,serif;font-variant:small-caps;letter-spacing:.06em;font-size:.78rem;font-weight:700;border:1px solid var(--gold,#c5a059);
+    clip-path:polygon(8px 0,calc(100% - 8px) 0,100% 50%,calc(100% - 8px) 100%,8px 100%,0 50%);box-shadow:var(--shadow)}
+  /* ===== Banner de mundo (cabecera del mapa) ===== */
+  .world-banner{position:relative;height:130px;margin:14px 0 20px;border-radius:16px;overflow:hidden;
+    border:1px solid var(--gold,#c5a059);box-shadow:0 6px 22px rgba(27,27,47,.18),inset 0 0 0 1px rgba(197,160,89,.28)}
+  .world-banner__img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;display:block;z-index:0}
+  .world-banner::before{content:"";position:absolute;inset:0;z-index:1;
+    background:radial-gradient(125% 150% at 100% 50%,rgba(27,27,47,.62) 0%,rgba(27,27,47,0) 46%),
+               linear-gradient(90deg,rgba(27,27,47,.92) 0%,rgba(27,27,47,.78) 34%,rgba(27,27,47,.30) 62%,rgba(27,27,47,.05) 100%),
+               linear-gradient(180deg,rgba(27,27,47,.12) 0%,rgba(27,27,47,.42) 100%)}
+  .world-banner__body{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;justify-content:center;
+    gap:6px;padding:0 18px;max-width:60%}
+  .world-banner__logo{position:absolute;z-index:2;right:16px;top:50%;transform:translateY(-50%);height:78px;width:auto;
+    object-fit:contain;filter:drop-shadow(0 2px 7px rgba(27,27,47,.65))}
+  .world-banner__eyebrow{font-size:.62rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--gold,#c5a059);display:flex;align-items:center;gap:8px}
+  .world-banner__eyebrow::after{content:"";flex:0 0 26px;height:1px;background:var(--gold,#c5a059);opacity:.7}
+  .world-banner__title{font-family:"Inria Serif",Georgia,serif;font-size:1.5rem;line-height:1.05;font-weight:700;
+    color:var(--cream,#f5f2eb);text-shadow:0 1px 8px rgba(27,27,47,.6);margin:0}
+  .world-banner__meta{display:flex;align-items:center;gap:10px;font-size:.72rem;font-weight:600;color:rgba(245,242,235,.82)}
+  .world-banner__badge{font-weight:800;color:var(--ink,#1B1B2F);background:var(--gold,#c5a059);
+    padding:2px 8px;border-radius:999px;font-size:.66rem;letter-spacing:.04em}
+  .world-banner__bar{flex:1;max-width:120px;height:5px;border-radius:999px;background:rgba(245,242,235,.18);overflow:hidden}
+  .world-banner__bar > i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,#dcc08a,var(--gold,#c5a059))}
+  @media(min-width:640px){.world-banner{height:160px}.world-banner__title{font-size:1.85rem}.world-banner__logo{height:104px;right:24px}}
 /* Foco de teclado visible (WCAG 2.4.7) */
 :focus-visible{outline:3px solid var(--gold,#c5a059);outline-offset:2px}
+
+
+/* =====================================================================
+   VESPER ACADEMY — Hub "Ascenso a la Maestria" · capa de mundos
+   Pegar al FINAL del <style> de leccion.html (despues de la linea ~362).
+   ---------------------------------------------------------------------
+   ORO INVARIANTE: #c5a059 / #a8843d / --gold-tint = logro/recompensa.
+   --w-accent / --w-accent-soft / --w-glow = ATMOSFERA del mundo
+   (heredados inline desde WORLD_THEME via style en .world-banner y .wmap).
+   Solo se animan transform/opacity/filter/background-position en bucles.
+   Keyframes: globales "g-*", por mundo "amb-<NIVEL>-*". wpulse intacto.
+   wflag QUEDA OBSOLETO (los gestos-Mario se reemplazan) — ver pasos.
+   ===================================================================== */
+
+/* =========================================================
+   0. BASE COMUN DE LA CAPA AMBIENTAL (coordinador, una vez)
+   ========================================================= */
+.wamb{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:1}
+.wamb i{position:absolute;display:block;will-change:transform,opacity}
+.wamb--map{z-index:0}                 /* en el mapa: debajo de .wnode (z1) */
+
+/* =========================================================
+   1. ANIMACIONES GLOBALES (solo selectores BASE, sin [data-world])
+   ========================================================= */
+
+/* 1a. Banner: ken-burns + parallax del scrim */
+.world-banner__img{transform-origin:50% 50%;will-change:transform;
+  animation:g-kenburns 34s ease-in-out infinite alternate}
+@keyframes g-kenburns{
+  0%{transform:scale(1.06) translate3d(-1.2%,-0.8%,0)}
+  50%{transform:scale(1.11) translate3d(1.0%,0.6%,0)}
+  100%{transform:scale(1.07) translate3d(-0.6%,1.0%,0)}}
+.world-banner::before{will-change:transform;
+  animation:g-banner-parallax 38s ease-in-out infinite alternate}
+@keyframes g-banner-parallax{
+  0%{transform:translate3d(0,0,0)}
+  100%{transform:translate3d(-1.1%,0.4%,0)}}
+
+/* 1b. Ruta dorada que fluye (paint, sin layout) */
+.wmap::before{background-size:100% 29px;will-change:background-position;
+  animation:g-path-flow 2.6s linear infinite}
+.wmap::after{background-size:100% 19px;will-change:background-position;
+  animation:g-path-flow-fine 1.5s linear infinite}
+@keyframes g-path-flow{from{background-position:0 0}to{background-position:0 29px}}
+@keyframes g-path-flow-fine{from{background-position:0 0}to{background-position:0 19px}}
+
+/* 1c. Nodos en reposo: bob sutil (no el actual / bloqueado / castillo) */
+.wbtn:not(.is-current):not(.locked):not(.castle){will-change:transform;
+  animation:g-node-bob 4.2s ease-in-out infinite}
+.wnode:nth-of-type(4n+1) .wbtn:not(.is-current):not(.locked):not(.castle){animation-delay:-0.4s}
+.wnode:nth-of-type(4n+2) .wbtn:not(.is-current):not(.locked):not(.castle){animation-delay:-1.3s}
+.wnode:nth-of-type(4n+3) .wbtn:not(.is-current):not(.locked):not(.castle){animation-delay:-2.2s;animation-duration:4.8s}
+.wnode:nth-of-type(4n)   .wbtn:not(.is-current):not(.locked):not(.castle){animation-delay:-3.1s;animation-duration:3.9s}
+@keyframes g-node-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+.wbtn:active:not(.locked){animation:none}
+
+/* 1d. Cinta de mundos: entrada en cascada + lift en hover + halo "on" */
+.worlds .world{animation:g-world-in .5s cubic-bezier(.22,.61,.36,1) both}
+.worlds .world:nth-child(1){animation-delay:.02s}
+.worlds .world:nth-child(2){animation-delay:.08s}
+.worlds .world:nth-child(3){animation-delay:.14s}
+.worlds .world:nth-child(4){animation-delay:.20s}
+.worlds .world:nth-child(5){animation-delay:.26s}
+.worlds .world:nth-child(6){animation-delay:.32s}
+.worlds .world:nth-child(n+7){animation-delay:.38s}
+@keyframes g-world-in{from{opacity:0;transform:translateY(10px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+.world{transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease,background .18s ease}
+.world:not(.locked):hover,.world:not(.locked):focus-visible{transform:translateY(-3px);box-shadow:0 9px 22px rgba(27,27,47,.14)}
+.world.on{animation:g-world-onpulse 3.6s ease-in-out infinite}
+@keyframes g-world-onpulse{0%,100%{box-shadow:0 5px 16px rgba(27,27,47,.10)}50%{box-shadow:0 5px 20px rgba(197,160,89,.30)}}
+
+/* 1e. Barra de progreso: shimmer dorado (oro invariante, nunca acento) */
+.world-banner__bar > i{position:relative;overflow:hidden}
+.world-banner__bar > i::after{content:"";position:absolute;top:0;bottom:0;left:0;width:42%;
+  background:linear-gradient(100deg,rgba(255,255,255,0) 0%,rgba(255,255,255,.55) 50%,rgba(255,255,255,0) 100%);
+  transform:translateX(-160%);will-change:transform;
+  animation:g-bar-shimmer 3.4s ease-in-out infinite;pointer-events:none}
+@keyframes g-bar-shimmer{0%{transform:translateX(-160%)}60%{transform:translateX(320%)}100%{transform:translateX(320%)}}
+
+/* 1f. Estrellas ganadas: titileo dorado muy leve (recompensa) */
+.wnode.done .wstars{will-change:filter,opacity;animation:g-star-twinkle 5s ease-in-out infinite}
+.wnode:nth-of-type(3n+1).done .wstars{animation-delay:-1.7s}
+.wnode:nth-of-type(3n+2).done .wstars{animation-delay:-3.3s;animation-duration:5.6s}
+@keyframes g-star-twinkle{
+  0%,100%{filter:drop-shadow(0 0 3px rgba(197,160,89,.45)) brightness(1);opacity:1}
+  50%{filter:drop-shadow(0 0 6px rgba(197,160,89,.70)) brightness(1.12);opacity:.94}}
+
+/* =========================================================
+   2. MUNDO A1 — EL HOGAR · "brasas de amanecer" (acento #C07A33)
+   ========================================================= */
+.world-banner[data-world="A1"]::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:radial-gradient(78% 120% at 8% -6%,var(--w-accent-soft) 0%,rgba(192,122,51,0) 55%),
+             radial-gradient(40% 60% at 16% 4%,var(--w-glow) 0%,rgba(192,122,51,0) 60%);
+  mix-blend-mode:screen;opacity:.62;animation:amb-A1-glow 11s ease-in-out infinite}
+@keyframes amb-A1-glow{0%,100%{opacity:.5;filter:blur(.5px) saturate(1)}50%{opacity:.82;filter:blur(1.4px) saturate(1.18)}}
+.world-banner[data-world="A1"] .wamb i{bottom:6%;width:3px;height:3px;border-radius:50%;
+  background:var(--w-glow);filter:blur(.6px);opacity:0;box-shadow:0 0 4px var(--w-glow);
+  animation:amb-A1-rise 17s ease-in-out infinite}
+.world-banner[data-world="A1"] .wamb i:nth-child(1){left:12%;width:2px;height:2px;animation-duration:15s;animation-delay:2s}
+.world-banner[data-world="A1"] .wamb i:nth-child(2){left:26%;width:4px;height:4px;animation-duration:21s;animation-delay:5s}
+.world-banner[data-world="A1"] .wamb i:nth-child(3){left:39%;width:2px;height:2px;animation-duration:18s;animation-delay:7s}
+.world-banner[data-world="A1"] .wamb i:nth-child(4){left:52%;width:3px;height:3px;animation-duration:22s;animation-delay:11s}
+.world-banner[data-world="A1"] .wamb i:nth-child(5){left:64%;width:4px;height:4px;animation-duration:14s;animation-delay:13s}
+.world-banner[data-world="A1"] .wamb i:nth-child(6){left:77%;width:2px;height:2px;animation-duration:19s;animation-delay:3s}
+.world-banner[data-world="A1"] .wamb i:nth-child(7){left:88%;width:3px;height:3px;animation-duration:16s;animation-delay:19s}
+@keyframes amb-A1-rise{
+  0%{opacity:0;transform:translate3d(0,0,0) scale(.85)}
+  12%{opacity:.15}
+  46%{opacity:.5;transform:translate3d(5px,-30px,0) scale(1.05)}
+  72%{opacity:.34;transform:translate3d(2px,-48px,0) scale(.92)}
+  100%{opacity:0;transform:translate3d(8px,-64px,0) scale(.8)}}
+.wmap[data-world="A1"] .wamb--map i{bottom:4%;width:3px;height:3px;border-radius:50%;
+  background:var(--w-glow);filter:blur(.6px);opacity:0;animation:amb-A1-rise 20s ease-in-out infinite}
+.wmap[data-world="A1"] .wamb--map i:nth-child(1){left:18%;width:2px;height:2px;animation-duration:18s;animation-delay:2s}
+.wmap[data-world="A1"] .wamb--map i:nth-child(2){left:44%;width:3px;height:3px;animation-duration:22s;animation-delay:7s}
+.wmap[data-world="A1"] .wamb--map i:nth-child(3){left:70%;width:2px;height:2px;animation-duration:16s;animation-delay:13s}
+.wmap[data-world="A1"]::before{background-image:
+  linear-gradient(180deg,var(--w-accent-soft) 0%,rgba(192,122,51,0) 100%),
+  repeating-linear-gradient(180deg,rgba(197,160,89,.5) 0 9px,transparent 9px 20px)}
+.wmap[data-world="A1"] .wbtn.completed:not(.castle)::before{content:"";position:absolute;top:-13px;left:50%;
+  width:18px;height:9px;margin-left:-9px;background:transparent;border:1.5px solid var(--gold2,#a8843d);
+  border-bottom:0;border-radius:9px 9px 0 0;box-shadow:0 1px 0 0 var(--gold,#c5a059);
+  filter:drop-shadow(0 1px 1px rgba(27,27,47,.3))}
+.wmap[data-world="A1"] .wbtn.completed:not(.castle)::after{content:"";position:absolute;top:-19px;left:50%;
+  width:6px;height:10px;margin-left:-3px;background:var(--gold,#c5a059);
+  clip-path:polygon(50% 0%,100% 62%,82% 100%,18% 100%,0% 62%);transform-origin:50% 100%;
+  filter:drop-shadow(0 1px 1px rgba(27,27,47,.3));animation:amb-A1-settle .5s cubic-bezier(.34,1.32,.5,1) both}
+@keyframes amb-A1-settle{0%{opacity:0;transform:translateY(-3px) scale(1.08)}60%{opacity:1}100%{opacity:1;transform:translateY(0) scale(1)}}
+.wmap[data-world="A1"] .wstart{clip-path:none;border-radius:16px 16px 6px 6px;border-top-width:2px;padding-top:8px;
+  background:radial-gradient(8px 8px at 50% 2px,var(--w-glow) 0%,rgba(192,122,51,0) 70%),var(--ink,#1B1B2F)}
+.wmap[data-world="A1"] .wstart::before{content:"";position:absolute;top:-7px;left:50%;width:11px;height:13px;margin-left:-5.5px;
+  background:var(--gold,#c5a059);clip-path:polygon(50% 0%,78% 40%,72% 78%,50% 100%,28% 78%,22% 40%);
+  filter:drop-shadow(0 1px 2px rgba(27,27,47,.5))}
+.wmap[data-world="A1"] .wcheck .ic::before{content:"\1F525";color:var(--ink,#1B1B2F);margin-right:4px;font-size:.92rem;filter:saturate(.55) brightness(.62)}
+.wmap[data-world="A1"] .wbtn.castle{box-shadow:0 5px 0 rgba(27,27,47,.13),var(--shadow),0 0 14px var(--w-glow)}
+.world-banner[data-world="A1"] .world-banner__eyebrow{color:var(--w-accent)}
+
+/* =========================================================
+   3. MUNDO A2 — EL SENDERO · "deriva de hoja" (acento #5E8A4E)
+   ========================================================= */
+.world-banner[data-world="A2"] .wamb i{width:11px;height:11px;background:var(--w-glow);
+  border-radius:0 78% 12% 78% / 78% 12% 78% 12%;opacity:0;filter:drop-shadow(0 1px 1px rgba(27,27,47,.10));
+  animation:amb-A2-drift 14s ease-in-out infinite}
+.world-banner[data-world="A2"] .wamb i:nth-child(1){left:8%;top:-8%;width:12px;height:12px;animation-duration:13s;animation-delay:0s}
+.world-banner[data-world="A2"] .wamb i:nth-child(2){left:22%;top:-12%;width:9px;height:9px;animation-duration:16s;animation-delay:-3.2s}
+.world-banner[data-world="A2"] .wamb i:nth-child(3){left:37%;top:-6%;width:13px;height:13px;animation-duration:12s;animation-delay:-6.5s}
+.world-banner[data-world="A2"] .wamb i:nth-child(4){left:52%;top:-14%;width:8px;height:8px;animation-duration:18s;animation-delay:-1.6s}
+.world-banner[data-world="A2"] .wamb i:nth-child(5){left:67%;top:-7%;width:11px;height:11px;animation-duration:15s;animation-delay:-9s}
+.world-banner[data-world="A2"] .wamb i:nth-child(6){left:81%;top:-11%;width:10px;height:10px;animation-duration:17s;animation-delay:-4.8s}
+.world-banner[data-world="A2"] .wamb i:nth-child(7){left:93%;top:-9%;width:9px;height:9px;animation-duration:13.5s;animation-delay:-11s}
+@keyframes amb-A2-drift{
+  0%{transform:translate3d(0,0,0) rotate(-8deg);opacity:0}
+  12%{opacity:.34}
+  30%{transform:translate3d(-10px,8px,0) rotate(2deg);opacity:.35}
+  55%{transform:translate3d(8px,15px,0) rotate(-4deg);opacity:.30}
+  80%{transform:translate3d(-6px,22px,0) rotate(6deg);opacity:.16}
+  100%{transform:translate3d(4px,26px,0) rotate(8deg);opacity:0}}
+.world-banner[data-world="A2"]::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:linear-gradient(0deg,var(--w-accent-soft) 0%,rgba(94,138,78,.06) 32%,transparent 60%)}
+.wmap[data-world="A2"] .wamb--map i{width:9px;height:9px;background:var(--w-glow);
+  border-radius:0 78% 12% 78% / 78% 12% 78% 12%;opacity:0;animation:amb-A2-drift 16s ease-in-out infinite}
+.wmap[data-world="A2"] .wamb--map i:nth-child(1){left:14%;top:6%;animation-duration:17s;animation-delay:-2s}
+.wmap[data-world="A2"] .wamb--map i:nth-child(2){left:74%;top:28%;animation-duration:14s;animation-delay:-7.5s;width:7px;height:7px}
+.wmap[data-world="A2"] .wamb--map i:nth-child(3){left:46%;top:58%;animation-duration:18s;animation-delay:-12s}
+.wmap[data-world="A2"] .wamb--map i:nth-child(4){left:88%;top:74%;animation-duration:15s;animation-delay:-4.5s;width:8px;height:8px}
+.wmap[data-world="A2"]::before{background-image:
+  repeating-linear-gradient(180deg,rgba(197,160,89,.5) 0 9px,transparent 9px 20px),
+  repeating-linear-gradient(180deg,var(--w-accent-soft) 0 14px,transparent 14px 30px)}
+.wmap[data-world="A2"] .wbtn.completed:not(.castle)::before{content:"";position:absolute;top:-13px;right:-3px;
+  width:1.6px;height:11px;background:var(--gold2,#a8843d);border-radius:1px;transform:none}
+.wmap[data-world="A2"] .wbtn.completed:not(.castle)::after{content:"";position:absolute;top:-16px;right:-9px;
+  width:15px;height:11px;background:var(--gold,#c5a059);clip-path:polygon(50% 100%,0 55%,14% 18%,50% 42%,86% 18%,100% 55%);
+  transform-origin:50% 100%;filter:drop-shadow(0 1px 1px rgba(27,27,47,.30));
+  animation:amb-A2-settle .9s cubic-bezier(.34,1.4,.5,1) both}
+@keyframes amb-A2-settle{
+  0%{transform:rotate(-3deg) scale(.6);opacity:0}
+  55%{transform:rotate(2deg) scale(1.06);opacity:1}
+  78%{transform:rotate(-1.5deg) scale(.97)}
+  100%{transform:rotate(0deg) scale(1);opacity:1}}
+.wmap[data-world="A2"] .wcheck .ic::before{content:"\1F343";color:var(--ink,#1B1B2F);margin-right:4px;font-size:.95rem;filter:saturate(.5) brightness(.6)}
+.wmap[data-world="A2"] .wstart{font-family:Georgia,serif;font-variant:small-caps;
+  clip-path:polygon(10% 0,90% 0,100% 78%,82% 100%,18% 100%,0 78%);border-color:var(--gold,#c5a059);
+  box-shadow:var(--shadow),inset 0 0 0 1px rgba(94,138,78,.22)}
+.wmap[data-world="A2"] .wstart::before{content:"";display:inline-block;vertical-align:middle;width:11px;height:11px;margin-right:7px;
+  background:var(--gold,#c5a059);clip-path:polygon(50% 0,82% 32%,100% 50%,68% 68%,50% 100%,32% 68%,0 50%,18% 32%);
+  filter:drop-shadow(0 1px 1px rgba(27,27,47,.4))}
+.wmap[data-world="A2"] .wbtn.castle::after{content:"";position:absolute;left:50%;bottom:-9px;transform:translateX(-50%);
+  width:18px;height:3px;border-radius:999px;background:var(--w-glow);opacity:.7;pointer-events:none}
+.world-banner[data-world="A2"] .world-banner__eyebrow{color:var(--w-accent)}
+.world-banner[data-world="A2"] .world-banner__title{text-shadow:0 1px 8px rgba(27,27,47,.6),0 0 18px var(--w-glow)}
+
+/* =========================================================
+   4. MUNDO B1 — EL HORIZONTE · "mediodia despejado" (acento #3D86B0)
+   ========================================================= */
+.world-banner[data-world="B1"] .wamb i{border-radius:50%;
+  background:radial-gradient(circle at 50% 50%,var(--w-glow) 0%,rgba(61,134,176,0) 70%);
+  filter:blur(4px);opacity:.22}
+.world-banner[data-world="B1"] .wamb i:nth-child(1){width:13px;height:13px;left:16%;top:30%;animation:amb-B1-breathe 7.5s ease-in-out infinite}
+.world-banner[data-world="B1"] .wamb i:nth-child(2){width:9px;height:9px;left:35%;top:62%;animation:amb-B1-breathe 8.8s ease-in-out infinite .9s}
+.world-banner[data-world="B1"] .wamb i:nth-child(3){width:14px;height:14px;left:54%;top:24%;animation:amb-B1-breathe 9.6s ease-in-out infinite 1.8s}
+.world-banner[data-world="B1"] .wamb i:nth-child(4){width:10px;height:10px;left:72%;top:58%;animation:amb-B1-breathe 8.1s ease-in-out infinite .4s}
+.world-banner[data-world="B1"] .wamb i:nth-child(5){width:11px;height:11px;left:88%;top:38%;animation:amb-B1-breathe 10.4s ease-in-out infinite 2.6s}
+.world-banner[data-world="B1"] .wamb i:nth-child(6),
+.world-banner[data-world="B1"] .wamb i:nth-child(7),
+.world-banner[data-world="B1"] .wamb i:nth-child(8){width:2px;height:2px;border-radius:1px;filter:none;
+  background:rgba(197,160,89,.9);box-shadow:0 0 4px rgba(197,160,89,.55)}
+.world-banner[data-world="B1"] .wamb i:nth-child(6){left:44%;top:46%;animation:amb-B1-twinkle 5.2s ease-in-out infinite}
+.world-banner[data-world="B1"] .wamb i:nth-child(7){left:63%;top:70%;animation:amb-B1-twinkle 6.4s ease-in-out infinite 1.3s}
+.world-banner[data-world="B1"] .wamb i:nth-child(8){left:80%;top:28%;animation:amb-B1-twinkle 5.8s ease-in-out infinite 2.4s}
+.world-banner[data-world="B1"] .wamb i:nth-child(9){top:-10%;left:0;width:42%;height:120%;border-radius:0;filter:none;opacity:1;
+  background:linear-gradient(105deg,rgba(61,134,176,0) 0%,var(--w-accent-soft) 42%,rgba(245,242,235,.10) 50%,var(--w-accent-soft) 58%,rgba(61,134,176,0) 100%);
+  transform:translateX(-120%);animation:amb-B1-sweep 20s linear infinite}
+@keyframes amb-B1-breathe{0%,100%{transform:scale(.9);opacity:.12}50%{transform:scale(1.08);opacity:.40}}
+@keyframes amb-B1-twinkle{0%,100%{opacity:.15;transform:scale(.85)}50%{opacity:.7;transform:scale(1.15)}}
+@keyframes amb-B1-sweep{0%{transform:translateX(-120%)}22%{transform:translateX(360%)}22.01%,100%{transform:translateX(-120%)}}
+.world-banner[data-world="B1"] .world-banner__eyebrow{color:var(--w-accent)}
+.world-banner[data-world="B1"] .world-banner__eyebrow::after{background:var(--w-accent);opacity:.7}
+.wmap[data-world="B1"] .wamb--map i{border-radius:50%;
+  background:radial-gradient(circle at 50% 50%,var(--w-glow) 0%,rgba(61,134,176,0) 72%);filter:blur(5px);opacity:.16}
+.wmap[data-world="B1"] .wamb--map i:nth-child(1){width:90px;height:90px;left:8%;top:14%;animation:amb-B1-breathe 11s ease-in-out infinite}
+.wmap[data-world="B1"] .wamb--map i:nth-child(2){width:70px;height:70px;left:74%;top:48%;animation:amb-B1-breathe 12.5s ease-in-out infinite 2.2s}
+.wmap[data-world="B1"] .wamb--map i:nth-child(3){width:80px;height:80px;left:30%;top:80%;animation:amb-B1-breathe 13s ease-in-out infinite 1.1s}
+.wmap[data-world="B1"]::before{background-image:
+  repeating-linear-gradient(180deg,rgba(197,160,89,.5) 0 9px,transparent 9px 20px),
+  linear-gradient(180deg,var(--w-accent-soft),rgba(61,134,176,.04))}
+.wmap[data-world="B1"] .wbtn.completed:not(.castle)::before{content:"";position:absolute;top:-13px;right:-9px;
+  width:13px;height:13px;border:1.5px solid var(--gold2,#a8843d);
+  background:linear-gradient(135deg,var(--gold,#c5a059),#dcc08a);transform:rotate(45deg);box-shadow:0 1px 2px rgba(27,27,47,.3)}
+.wmap[data-world="B1"] .wbtn.completed:not(.castle)::after{content:"";position:absolute;top:-9.5px;right:-5.5px;
+  width:5px;height:5px;border-radius:50%;background:#fff;transform-origin:center;
+  box-shadow:0 0 0 1px var(--gold2,#a8843d),0 0 6px rgba(197,160,89,.6);animation:amb-B1-settle 1.1s ease-out forwards}
+@keyframes amb-B1-settle{
+  0%{box-shadow:0 0 0 1px var(--gold2,#a8843d),0 0 0 0 rgba(197,160,89,.9)}
+  40%{box-shadow:0 0 0 1px var(--gold2,#a8843d),0 0 10px 3px rgba(197,160,89,.85)}
+  100%{box-shadow:0 0 0 1px var(--gold2,#a8843d),0 0 6px 0 rgba(197,160,89,.55)}}
+.wmap[data-world="B1"] .wcheck .ic::before{content:"";display:inline-block;width:13px;height:13px;margin-right:5px;vertical-align:-1px;
+  background:radial-gradient(circle at 50% 18%,var(--w-accent) 0 2.4px,transparent 2.8px),
+            linear-gradient(var(--w-accent),var(--w-accent)) 50% 60%/2px 8px no-repeat;background-repeat:no-repeat}
+.wmap[data-world="B1"] .wstart{background:var(--ink,#1B1B2F);border:1px solid var(--w-accent);clip-path:none;
+  border-radius:16px 16px 4px 4px;box-shadow:var(--shadow),inset 0 0 0 1px rgba(61,134,176,.22)}
+.wmap[data-world="B1"] .wstart::after{content:"";position:absolute;left:14%;right:14%;bottom:4px;height:2px;
+  background:linear-gradient(90deg,transparent,var(--gold,#c5a059),transparent);border-radius:2px}
+.wmap[data-world="B1"] .wbtn.castle{border-radius:22px 22px 8px 8px}
+.wmap[data-world="B1"] .wbtn.castle::after{content:"";position:absolute;left:18%;right:18%;bottom:7px;height:2px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent);border-radius:2px;pointer-events:none}
+
+/* =========================================================
+   5. MUNDO B2 — LA TORRE · "hora dorada + ascenso" (acento #A8762E)
+   ========================================================= */
+.world-banner[data-world="B2"]::before{background-image:
+  linear-gradient(122deg,transparent 0%,transparent 42%,var(--w-accent-soft) 74%,color-mix(in srgb,var(--w-glow) 55%,transparent) 100%),
+  linear-gradient(180deg,transparent 55%,var(--w-accent-soft) 100%);mix-blend-mode:multiply}
+.world-banner[data-world="B2"] .wamb{z-index:1}
+.world-banner[data-world="B2"] .wamb::before{content:"";position:absolute;inset:-2% -1% -2% -1%;
+  background-image:repeating-linear-gradient(90deg,color-mix(in srgb,var(--w-accent) 6%,transparent) 0 1px,transparent 1px 46px);
+  opacity:.55;transform-origin:50% 100%;animation:amb-B2-grid 22s ease-in-out infinite;will-change:transform,opacity}
+.world-banner[data-world="B2"] .wamb i{width:4px;height:4px;border-radius:50%;
+  background:radial-gradient(circle at 50% 45%,var(--w-glow) 0%,color-mix(in srgb,var(--w-glow) 40%,transparent) 60%,transparent 100%);
+  filter:drop-shadow(0 0 3px var(--w-glow));bottom:-6px;opacity:0;
+  animation:amb-B2-ascend var(--d,17s) ease-in-out infinite;will-change:transform,opacity}
+.world-banner[data-world="B2"] .wamb i:nth-child(1){left:14%;width:3px;height:3px;--d:15s;animation-delay:-1s}
+.world-banner[data-world="B2"] .wamb i:nth-child(2){left:30%;width:5px;height:5px;--d:19s;animation-delay:-6s}
+.world-banner[data-world="B2"] .wamb i:nth-child(3){left:47%;width:4px;height:4px;--d:14s;animation-delay:-3s}
+.world-banner[data-world="B2"] .wamb i:nth-child(4){left:62%;width:3px;height:3px;--d:20s;animation-delay:-11s}
+.world-banner[data-world="B2"] .wamb i:nth-child(5){left:78%;width:5px;height:5px;--d:16s;animation-delay:-8s}
+.world-banner[data-world="B2"] .wamb i:nth-child(6){left:89%;width:4px;height:4px;--d:18s;animation-delay:-13s}
+@keyframes amb-B2-ascend{0%{transform:translateY(0) scale(.85);opacity:0}14%{opacity:.5}70%{opacity:.34}100%{transform:translateY(-22px) scale(1);opacity:0}}
+@keyframes amb-B2-grid{0%,100%{transform:translateY(0) scaleY(1);opacity:.5}50%{transform:translateY(-1.5px) scaleY(1.012);opacity:.62}}
+.world-banner[data-world="B2"] .world-banner__eyebrow{color:var(--w-accent);letter-spacing:1.4px}
+.wmap[data-world="B2"] .wamb--map{z-index:0}
+.wmap[data-world="B2"] .wamb--map::before{content:"";position:absolute;inset:0;
+  background-image:repeating-linear-gradient(90deg,color-mix(in srgb,var(--w-accent) 6%,transparent) 0 1px,transparent 1px 54px);
+  opacity:.5;animation:amb-B2-grid 26s ease-in-out infinite;will-change:transform,opacity}
+.wmap[data-world="B2"] .wamb--map i{width:4px;height:4px;border-radius:50%;bottom:-6px;opacity:0;
+  background:radial-gradient(circle at 50% 45%,var(--w-glow) 0%,transparent 70%);filter:drop-shadow(0 0 3px var(--w-glow));
+  animation:amb-B2-ascend var(--d,18s) ease-in-out infinite;will-change:transform,opacity}
+.wmap[data-world="B2"] .wamb--map i:nth-child(1){left:22%;--d:16s;animation-delay:-2s}
+.wmap[data-world="B2"] .wamb--map i:nth-child(2){left:50%;--d:20s;animation-delay:-9s}
+.wmap[data-world="B2"] .wamb--map i:nth-child(3){left:73%;--d:15s;animation-delay:-5s}
+.wmap[data-world="B2"]::before{background-image:
+  linear-gradient(180deg,color-mix(in srgb,var(--w-accent) 12%,transparent),color-mix(in srgb,var(--w-accent) 4%,transparent)),
+  repeating-linear-gradient(180deg,var(--gold,#c5a059) 0 10px,transparent 10px 22px)}
+.wmap[data-world="B2"] .wbtn.completed:not(.castle)::before,
+.wmap[data-world="B2"] .wbtn.completed:not(.castle)::after{content:"";position:absolute;left:50%;top:50%;width:15px;height:15px;
+  border-top:3px solid var(--gold,#c5a059);border-right:3px solid var(--gold,#c5a059);
+  transform:translate(-50%,-30%) rotate(-45deg);border-radius:1.5px;pointer-events:none}
+.wmap[data-world="B2"] .wbtn.completed:not(.castle)::after{transform:translate(-50%,5%) rotate(-45deg);opacity:.6;
+  transform-origin:50% 50%;animation:amb-B2-settle .42s cubic-bezier(.2,.7,.3,1) forwards}
+@keyframes amb-B2-settle{0%{transform:translate(-50%,-40%) rotate(-45deg) scale(1.18);opacity:0}100%{transform:translate(-50%,5%) rotate(-45deg) scale(1);opacity:.6}}
+.wmap[data-world="B2"] .wcheck{border-color:var(--w-accent)}
+.wmap[data-world="B2"] .wcheck .ic::before{content:"";display:inline-block;width:11px;height:12px;margin-right:5px;vertical-align:-1px;
+  background:linear-gradient(var(--ink,#1B1B2F),var(--ink,#1B1B2F)) 50% 0/2px 100% no-repeat,
+            linear-gradient(var(--ink,#1B1B2F),var(--ink,#1B1B2F)) 50% 30%/9px 2px no-repeat,
+            linear-gradient(var(--ink,#1B1B2F),var(--ink,#1B1B2F)) 50% 70%/9px 2px no-repeat}
+.wmap[data-world="B2"] .wbtn.castle{box-shadow:0 5px 0 rgba(27,27,47,.13),
+  0 0 0 4px color-mix(in srgb,var(--w-accent) 22%,transparent),0 6px 18px color-mix(in srgb,var(--w-glow) 50%,transparent)}
+.wmap[data-world="B2"] .wbtn.castle .wlabel{color:var(--w-accent);font-weight:700;letter-spacing:.4px}
+.wmap[data-world="B2"] .wstart{border:1px solid color-mix(in srgb,var(--w-accent) 45%,transparent);clip-path:none;
+  background:linear-gradient(180deg,var(--w-accent-soft),color-mix(in srgb,var(--w-accent) 4%,transparent));
+  color:var(--w-accent);border-radius:14px 14px 4px 4px}
+.wmap[data-world="B2"] .wstart::before{content:"";position:absolute;left:50%;top:-6px;width:11px;height:11px;
+  transform:translateX(-50%) rotate(45deg);background:var(--gold,#c5a059);border-radius:2px;
+  box-shadow:0 0 6px color-mix(in srgb,var(--gold,#c5a059) 60%,transparent)}
+
+/* =========================================================
+   6. MUNDO C1 — EL FIRMAMENTO · "starfield" (acento #6A5FA8)
+   ========================================================= */
+.world-banner[data-world="C1"]::before{background:
+  radial-gradient(135% 165% at 88% 42%,var(--w-accent-soft) 0%,rgba(106,95,168,0) 52%),
+  radial-gradient(125% 150% at 100% 50%,rgba(27,27,47,.60) 0%,rgba(27,27,47,0) 46%),
+  linear-gradient(90deg,rgba(31,28,58,.92) 0%,rgba(31,28,58,.78) 34%,rgba(31,28,58,.30) 62%,rgba(31,28,58,.05) 100%),
+  linear-gradient(180deg,rgba(27,27,47,.14) 0%,rgba(27,27,47,.44) 100%)}
+.world-banner[data-world="C1"] .wamb{z-index:1}
+.world-banner[data-world="C1"] .wamb::before{content:"";position:absolute;left:-25%;top:-40%;width:150%;height:180%;
+  background:radial-gradient(closest-side at 30% 38%,var(--w-accent-soft) 0%,rgba(106,95,168,.05) 46%,rgba(106,95,168,0) 70%),
+            radial-gradient(closest-side at 72% 64%,var(--w-glow) 0%,rgba(106,95,168,0) 55%);
+  opacity:.42;filter:blur(14px);transform-origin:55% 50%;will-change:transform;
+  animation:amb-C1-nebula 22s ease-in-out infinite alternate;pointer-events:none}
+@keyframes amb-C1-nebula{from{transform:rotate(0deg) scale(1)}to{transform:rotate(8deg) scale(1.04)}}
+.world-banner[data-world="C1"] .wamb i{width:2px;height:2px;border-radius:50%;
+  background:rgba(197,160,89,.9);box-shadow:0 0 4px 1px rgba(197,160,89,.55);opacity:.2;transform:scale(.9);
+  animation-name:amb-C1-twinkle;animation-timing-function:ease-in-out;animation-iteration-count:infinite;will-change:transform,opacity}
+.world-banner[data-world="C1"] .wamb i:nth-child(1){left:14%;top:30%;width:1.5px;height:1.5px;animation-duration:5s;animation-delay:-1s}
+.world-banner[data-world="C1"] .wamb i:nth-child(2){left:26%;top:64%;width:2px;height:2px;animation-duration:7s;animation-delay:-3s}
+.world-banner[data-world="C1"] .wamb i:nth-child(3){left:38%;top:22%;width:2.5px;height:2.5px;animation-duration:6s;animation-delay:-2s}
+.world-banner[data-world="C1"] .wamb i:nth-child(4){left:47%;top:52%;width:1.5px;height:1.5px;animation-duration:8s;animation-delay:-5s}
+.world-banner[data-world="C1"] .wamb i:nth-child(5){left:55%;top:34%;width:3px;height:3px;animation-duration:9s;animation-delay:-1s}
+.world-banner[data-world="C1"] .wamb i:nth-child(6){left:63%;top:70%;width:2px;height:2px;animation-duration:4s;animation-delay:-3s}
+.world-banner[data-world="C1"] .wamb i:nth-child(7){left:71%;top:26%;width:2px;height:2px;animation-duration:7s;animation-delay:-4s}
+.world-banner[data-world="C1"] .wamb i:nth-child(8){left:80%;top:58%;width:1.5px;height:1.5px;animation-duration:6s;animation-delay:-2s}
+.world-banner[data-world="C1"] .wamb i:nth-child(9){left:88%;top:38%;width:2.5px;height:2.5px;animation-duration:8s;animation-delay:-7s}
+.world-banner[data-world="C1"] .wamb i:nth-child(10){left:33%;top:46%;width:2px;height:2px;animation-duration:5s;animation-delay:-2s}
+.world-banner[data-world="C1"] .wamb i:nth-child(3),
+.world-banner[data-world="C1"] .wamb i:nth-child(7),
+.world-banner[data-world="C1"] .wamb i:nth-child(9){background:var(--w-accent);box-shadow:0 0 5px 1px var(--w-glow)}
+@keyframes amb-C1-twinkle{0%,100%{opacity:.12;transform:scale(.85)}50%{opacity:.6;transform:scale(1.1)}}
+.wmap[data-world="C1"] .wamb--map i{width:2px;height:2px;border-radius:50%;
+  background:rgba(197,160,89,.7);box-shadow:0 0 3px 1px rgba(197,160,89,.4);opacity:.16;transform:scale(.9);
+  animation-name:amb-C1-twinkle;animation-timing-function:ease-in-out;animation-iteration-count:infinite;will-change:transform,opacity}
+.wmap[data-world="C1"] .wamb--map i:nth-child(1){left:18%;top:12%;animation-duration:7s;animation-delay:-2s}
+.wmap[data-world="C1"] .wamb--map i:nth-child(2){left:78%;top:24%;width:2.5px;height:2.5px;background:var(--w-accent);box-shadow:0 0 4px 1px var(--w-glow);animation-duration:6s;animation-delay:-3s}
+.wmap[data-world="C1"] .wamb--map i:nth-child(3){left:30%;top:48%;animation-duration:9s;animation-delay:-1s}
+.wmap[data-world="C1"] .wamb--map i:nth-child(4){left:82%;top:62%;animation-duration:5s;animation-delay:-5s}
+.wmap[data-world="C1"] .wamb--map i:nth-child(5){left:14%;top:78%;width:2.5px;height:2.5px;background:var(--w-accent);box-shadow:0 0 4px 1px var(--w-glow);animation-duration:8s;animation-delay:-3s}
+.wmap[data-world="C1"] .wamb--map i:nth-child(6){left:66%;top:88%;animation-duration:7s;animation-delay:-7s}
+.world-banner[data-world="C1"] .world-banner__eyebrow{color:var(--w-accent)}
+.world-banner[data-world="C1"] .world-banner__eyebrow::after{background:var(--w-accent)}
+.wmap[data-world="C1"]::before{background-image:
+  repeating-linear-gradient(180deg,var(--w-accent-soft) 0 9px,transparent 9px 20px),
+  repeating-linear-gradient(180deg,rgba(197,160,89,.5) 0 9px,transparent 9px 20px)}
+.wmap[data-world="C1"]::after{background-image:
+  repeating-linear-gradient(180deg,var(--w-glow) 0 2px,transparent 2px 16px),
+  repeating-linear-gradient(180deg,rgba(197,160,89,.55) 0 3px,transparent 3px 16px)}
+.wmap[data-world="C1"] .wbtn.completed:not(.castle)::before{content:"";position:absolute;top:-13px;right:-3px;
+  width:1px;height:5px;background:var(--gold,#c5a059);border-radius:1px;transform:none;opacity:.7}
+.wmap[data-world="C1"] .wbtn.completed:not(.castle)::after{content:"";position:absolute;top:-14px;right:-9px;width:13px;height:13px;
+  background:var(--gold,#c5a059);clip-path:polygon(50% 0%,60% 40%,100% 50%,60% 60%,50% 100%,40% 60%,0% 50%,40% 40%);
+  transform-origin:50% 50%;filter:drop-shadow(0 1px 1px rgba(27,27,47,.3));animation:amb-C1-settle 1.1s ease-out 1 forwards}
+@keyframes amb-C1-settle{
+  0%{transform:scale(.4) rotate(-30deg);opacity:0}
+  55%{transform:scale(1.18) rotate(4deg);opacity:1;filter:drop-shadow(0 0 5px var(--w-glow)) drop-shadow(0 1px 1px rgba(27,27,47,.3))}
+  100%{transform:scale(1) rotate(0deg);opacity:1;filter:drop-shadow(0 1px 1px rgba(27,27,47,.3))}}
+.wmap[data-world="C1"] .wcheck .ic::before{content:"\2237";color:var(--w-accent);margin-right:4px;font-size:.95rem;letter-spacing:-1px}
+.wmap[data-world="C1"] .wstart{background:linear-gradient(180deg,rgba(31,28,58,.96),var(--ink,#1B1B2F));border-color:var(--w-accent);
+  box-shadow:0 0 0 1px var(--w-accent-soft),0 4px 14px rgba(31,28,58,.4),var(--shadow);
+  clip-path:polygon(0 100%,6% 28%,18% 8%,38% 0,62% 0,82% 8%,94% 28%,100% 100%);padding:7px 30px 5px}
+.wmap[data-world="C1"] .wbtn.castle{box-shadow:0 0 0 4px var(--paper,#fff),0 0 22px var(--w-glow),0 6px 18px rgba(31,28,58,.34)}
+
+/* =========================================================
+   7. MUNDO C2 — EL CASTILLO DEL SABER · "aurora" (acento #3FA08A)
+   ========================================================= */
+.world-banner[data-world="C2"]::before{background:
+  radial-gradient(135% 165% at 100% 50%,rgba(11,11,24,.78) 0%,rgba(11,11,24,0) 50%),
+  linear-gradient(90deg,rgba(11,11,24,.97) 0%,rgba(11,11,24,.90) 32%,rgba(13,13,30,.52) 62%,rgba(16,16,34,.18) 100%),
+  linear-gradient(180deg,rgba(11,11,24,.34) 0%,rgba(11,11,24,.62) 100%),
+  radial-gradient(120% 140% at 50% 110%,var(--w-accent-soft) 0%,rgba(63,160,138,0) 58%)}
+.world-banner[data-world="C2"] .world-banner__eyebrow{color:var(--w-accent)}
+.world-banner[data-world="C2"] .world-banner__eyebrow::after{background:linear-gradient(90deg,var(--w-accent),transparent);opacity:.85}
+.world-banner[data-world="C2"] .wamb{z-index:1}
+.world-banner[data-world="C2"] .wamb i:nth-child(-n+3){top:-22%;height:150%;width:46%;border-radius:50%;
+  background:linear-gradient(180deg,rgba(63,160,138,0) 0%,var(--w-glow) 30%,var(--w-accent-soft) 58%,rgba(63,160,138,0) 100%);
+  filter:blur(26px);opacity:.2;mix-blend-mode:screen;transform-origin:50% 50%}
+.world-banner[data-world="C2"] .wamb i:nth-child(1){left:6%;animation:amb-C2-aurora 19s ease-in-out infinite}
+.world-banner[data-world="C2"] .wamb i:nth-child(2){left:34%;width:40%;opacity:.16;filter:blur(30px);animation:amb-C2-aurora 22s ease-in-out -7s infinite}
+.world-banner[data-world="C2"] .wamb i:nth-child(3){left:60%;width:42%;opacity:.18;filter:blur(28px);animation:amb-C2-aurora 21s ease-in-out -13s infinite}
+.world-banner[data-world="C2"] .wamb i:nth-child(n+4){width:3px;height:3px;border-radius:50%;
+  background:radial-gradient(circle,#f0dca0 0%,#c5a059 55%,rgba(197,160,89,0) 100%);box-shadow:0 0 5px rgba(197,160,89,.7);opacity:.85}
+.world-banner[data-world="C2"] .wamb i:nth-child(4){top:24%;left:22%;animation:amb-C2-star 6.5s ease-in-out infinite}
+.world-banner[data-world="C2"] .wamb i:nth-child(5){top:18%;left:48%;width:2.5px;height:2.5px;animation:amb-C2-star 8s ease-in-out -2.4s infinite}
+.world-banner[data-world="C2"] .wamb i:nth-child(6){top:40%;left:71%;animation:amb-C2-star 7.2s ease-in-out -4.1s infinite}
+.world-banner[data-world="C2"] .wamb i:nth-child(7){top:30%;left:88%;width:2px;height:2px;animation:amb-C2-star 9s ease-in-out -5.6s infinite}
+@keyframes amb-C2-aurora{
+  0%{transform:translateX(-5%) scaleY(.96) skewX(-3deg);opacity:.14}
+  30%{transform:translateX(3%) scaleY(1.05) skewX(2deg);opacity:.22}
+  60%{transform:translateX(6%) scaleY(.98) skewX(4deg);opacity:.18}
+  100%{transform:translateX(-5%) scaleY(.96) skewX(-3deg);opacity:.14}}
+@keyframes amb-C2-star{0%,100%{opacity:.25;transform:scale(.85)}50%{opacity:.95;transform:scale(1.15)}}
+.wmap[data-world="C2"]::before{background-image:
+  repeating-linear-gradient(180deg,var(--w-accent-soft) 0 9px,transparent 9px 28px),
+  repeating-linear-gradient(180deg,rgba(197,160,89,.5) 0 9px,transparent 9px 20px)}
+.wmap[data-world="C2"]::after{background-image:
+  repeating-linear-gradient(180deg,rgba(63,160,138,.22) 0 3px,transparent 3px 16px),
+  repeating-linear-gradient(180deg,rgba(197,160,89,.55) 0 3px,transparent 3px 16px)}
+.wmap[data-world="C2"] .wamb--map{z-index:0}
+.wmap[data-world="C2"] .wamb--map i{top:-10%;height:120%;width:55%;border-radius:50%;
+  background:linear-gradient(180deg,rgba(63,160,138,0) 0%,var(--w-glow) 45%,rgba(63,160,138,0) 100%);
+  filter:blur(40px);opacity:.1;mix-blend-mode:screen;transform-origin:50% 50%}
+.wmap[data-world="C2"] .wamb--map i:nth-child(1){left:-8%;animation:amb-C2-aurora 22s ease-in-out infinite}
+.wmap[data-world="C2"] .wamb--map i:nth-child(2){left:52%;width:48%;opacity:.08;animation:amb-C2-aurora 20s ease-in-out -10s infinite}
+.wmap[data-world="C2"] .wbtn.completed:not(.castle)::before{content:"";position:absolute;top:-13px;left:50%;transform:translateX(-50%);
+  width:24px;height:9px;background:linear-gradient(180deg,var(--gold,#c5a059),var(--gold2,#a8843d));
+  -webkit-mask:radial-gradient(circle at 12% 100%,#000 1.4px,transparent 1.6px),radial-gradient(circle at 50% 100%,#000 1.4px,transparent 1.6px),radial-gradient(circle at 88% 100%,#000 1.4px,transparent 1.6px);
+          mask:radial-gradient(circle at 12% 100%,#000 1.4px,transparent 1.6px),radial-gradient(circle at 50% 100%,#000 1.4px,transparent 1.6px),radial-gradient(circle at 88% 100%,#000 1.4px,transparent 1.6px);
+  clip-path:polygon(0 100%,12% 8%,28% 68%,50% 0,72% 68%,88% 8%,100% 100%);filter:drop-shadow(0 1px 1px rgba(27,27,47,.3))}
+.wmap[data-world="C2"] .wbtn.completed:not(.castle)::after{content:"";position:absolute;top:-14px;left:50%;width:26px;height:11px;
+  transform:translateX(-50%);background:none;filter:none;
+  background-image:linear-gradient(105deg,transparent 35%,rgba(255,245,210,.85) 50%,transparent 65%);
+  background-size:220% 100%;background-repeat:no-repeat;
+  clip-path:polygon(0 100%,12% 8%,28% 68%,50% 0,72% 68%,88% 8%,100% 100%);animation:amb-C2-settle 1.4s ease-out forwards}
+@keyframes amb-C2-settle{
+  0%{transform:translateX(-50%) scale(1.1);background-position:140% 0;opacity:0}
+  18%{opacity:1}
+  100%{transform:translateX(-50%) scale(1);background-position:-40% 0;opacity:0}}
+.wmap[data-world="C2"] .wcheck{border-color:var(--w-accent);border-left-color:var(--w-accent);
+  background:linear-gradient(90deg,var(--w-accent-soft),var(--gold-tint))}
+.wmap[data-world="C2"] .wcheck .ic::before{content:"\16A8";color:var(--w-accent);margin-right:4px;font-size:1rem;text-shadow:0 0 4px var(--w-glow)}
+.wmap[data-world="C2"] .wbtn.castle{border-radius:14px 14px 18px 18px;
+  background:linear-gradient(165deg,#dcc08a,var(--gold,#c5a059));border-color:var(--gold2,#a8843d)}
+.wmap[data-world="C2"] .wbtn.castle::before{content:"";position:absolute;inset:-12px;border-radius:50%;pointer-events:none;z-index:-1;
+  background:radial-gradient(circle,rgba(197,160,89,.5) 0%,rgba(197,160,89,0) 68%);filter:blur(4px);animation:amb-C2-beacon 6.5s ease-in-out infinite}
+.wmap[data-world="C2"] .wbtn.castle::after{content:"";position:absolute;top:7px;left:50%;transform:translateX(-50%);
+  width:11px;height:13px;background:var(--w-accent);opacity:.42;
+  clip-path:polygon(50% 0,100% 22%,100% 64%,50% 100%,0 64%,0 22%);filter:drop-shadow(0 0 3px var(--w-glow))}
+.wmap[data-world="C2"] .wbtn.castle.completed svg path:last-child{transform-origin:23px 4px;animation:amb-C2-beacon 6.5s ease-in-out infinite}
+.wmap[data-world="C2"] .wlabel{letter-spacing:.1em}
+@keyframes amb-C2-beacon{0%,100%{opacity:.45;transform:scale(.97)}50%{opacity:.95;transform:scale(1.04)}}
+.wmap[data-world="C2"] .wstart{background:linear-gradient(160deg,#0b0b18,var(--ink,#1B1B2F));color:var(--gold,#c5a059);
+  border-color:var(--gold,#c5a059);box-shadow:0 0 0 1px var(--w-accent-soft),var(--shadow)}
+.wmap[data-world="C2"] .wstart > span{text-shadow:0 0 6px var(--w-glow)}
+
+/* =========================================================
+   8. PREFERS-REDUCED-MOTION — UN solo bloque que detiene/atenua TODO
+   (globales g-*, todos los amb-<NIVEL>-*, wpulse, capas .wamb).
+   Estado en reposo bello y legible; particulas congeladas como textura.
+   ========================================================= */
+@media (prefers-reduced-motion:reduce){
+  /* globales */
+  .world-banner__img,.world-banner::before,.wmap::before,.wmap::after,
+  .wbtn,.wbtn.is-current::after,.worlds .world,.world.on,
+  .world-banner__bar > i::after,.wnode.done .wstars,
+  /* capas ambientales (banner + mapa) y sus pseudos pintados */
+  .wamb i,.wamb::before,.wamb--map i,.wamb--map::before,
+  /* sellos de completado por mundo (settle) */
+  .wmap[data-world] .wbtn.completed:not(.castle)::after,
+  /* gestos del castillo por mundo */
+  .wmap[data-world] .wbtn.castle::before,
+  .wmap[data-world] .wbtn.castle.completed svg path:last-child,
+  /* scrim que respira (A1) */
+  .world-banner[data-world="A1"]::after{
+    animation:none !important;
+  }
+  .world-banner__img{transform:scale(1.06)}
+  .world:not(.locked):hover,.world:not(.locked):focus-visible{transform:none}
+  /* congelar particulas como textura tenue (no eliminarlas) */
+  .wamb i,.wamb--map i{opacity:.3;transform:none}
+  /* dejar sellos en su fotograma final, legibles */
+  .wmap[data-world] .wbtn.completed:not(.castle)::after{opacity:1;transform:none}
+  .wmap[data-world="B2"] .wbtn.completed:not(.castle)::after{transform:translate(-50%,5%) rotate(-45deg);opacity:.6}
+  .world-banner[data-world="A1"] .wamb i,.wmap[data-world="A1"] .wamb--map i{opacity:.32}
+  .world-banner[data-world="B1"] .wamb i:nth-child(9){opacity:0}
+}
 </style>
 </head>
 <body>
@@ -388,29 +942,142 @@
     clearTimeout(t._h); t._h = setTimeout(function () { t.classList.remove("show"); }, 1900);
   }
 
-  function lessonCard(lid, built) {
+  /* ---------- Mapa de mundos (HUB estilo videojuego) ---------- */
+  function hudHtml(st, dg, hello) {
+    var strip = '<div class="hub-strip">'
+      + '<span class="hub-stat" title="Racha">&#128293; ' + (st.streak || 0) + '</span>'
+      + '<span class="hub-stat" title="Experiencia">&#11088; ' + (st.xp || 0) + ' XP</span>'
+      + (dg ? '<span class="hub-stat' + (dg.met ? ' met' : '') + '" title="Meta diaria">&#127919; ' + Math.min(dg.progress, dg.target) + '/' + dg.target + '</span>' : "")
+      + ((st.shields || 0) ? '<span class="hub-stat" title="Escudos">&#128737;&#65039; ' + st.shields + '</span>' : "") + '</div>';
+    return '<div class="hub-head"><div><h1 class="hub-hello">' + esc(hello) + '</h1>'
+      + '<p class="muted" style="margin:2px 0 0;font-size:.84rem">Elige tu aventura, paso a paso.</p></div>'
+      + '<div style="display:flex;align-items:center;gap:8px">'
+      + '<button class="hub-icon" id="searchToggle" type="button" aria-label="Buscar lecciones" aria-controls="hubSearch" aria-expanded="false" title="Buscar">&#128270;</button>'
+      + '<a class="hub-icon" href="chat.html" aria-label="Habla con Vesper" title="Habla con Vesper">&#128172;</a>'
+      + '<a class="hub-icon" href="configuracion.html" aria-label="Configuración" title="Configuración">&#9881;&#65039;</a>'
+      + mascot("welcome", false, "sm") + '</div></div>'
+      + strip;
+  }
+
+  /* cada mundo (nivel) = ilustración + nombre + identidad temática (acento, atmósfera, partículas) */
+  var WORLD_THEME = {
+    A1: { file: "assets/images/lessons/theme_home.jpg",      worldName: "El Hogar",             accent:"#C07A33", accentSoft:"rgba(192,122,51,.15)", glow:"rgba(192,122,51,.40)", ambientName:"hearth",    ambientN:7,  mapN:3 },
+    A2: { file: "assets/images/lessons/theme_nature.jpg",    worldName: "El Sendero",           accent:"#5E8A4E", accentSoft:"rgba(94,138,78,.15)",  glow:"rgba(94,138,78,.38)",  ambientName:"trail",     ambientN:7,  mapN:4 },
+    B1: { file: "assets/images/lessons/theme_city.jpg",      worldName: "El Horizonte",         accent:"#3D86B0", accentSoft:"rgba(61,134,176,.15)", glow:"rgba(61,134,176,.34)", ambientName:"skyline",   ambientN:9,  mapN:3 },
+    B2: { file: "assets/images/lessons/theme_business.jpg",  worldName: "La Torre",             accent:"#A8762E", accentSoft:"rgba(168,118,46,.15)", glow:"rgba(168,118,46,.42)", ambientName:"ascent",    ambientN:6,  mapN:3 },
+    C1: { file: "assets/images/lessons/theme_space.jpg",     worldName: "El Firmamento",        accent:"#6A5FA8", accentSoft:"rgba(106,95,168,.16)", glow:"rgba(106,95,168,.40)", ambientName:"starfield", ambientN:10, mapN:6 },
+    C2: { file: "assets/images/lessons/theme_fantasy.jpg",   worldName: "El Castillo del Saber",accent:"#3FA08A", accentSoft:"rgba(63,160,138,.16)", glow:"rgba(63,160,138,.36)", ambientName:"aurora",    ambientN:7,  mapN:2 }
+  };
+  var WORLD_TAG = { A1: "Principiante", A2: "Básico", B1: "Intermedio", B2: "Intermedio alto", C1: "Avanzado", C2: "Maestría" };
+  var WORLD_UMBRAL = { A1: "Umbral del Hogar", A2: "Mojón del Sendero", B1: "Arco del Horizonte", B2: "Pórtico de la Torre", C1: "Portal del Firmamento", C2: "Sello del Castillo" };
+  /* style inline con las 3 variables del mundo (acento/soft/glow) */
+  function worldVars(t) { return '--w-accent:' + t.accent + ';--w-accent-soft:' + t.accentSoft + ';--w-glow:' + t.glow; }
+  /* capa ambiental reutilizable (N partículas <i>); mapMod=true para la del mapa */
+  function ambLayer(n, mapMod) { var dots = ""; for (var i = 0; i < n; i++) dots += "<i></i>"; return '<div class="wamb' + (mapMod ? ' wamb--map' : '') + '" aria-hidden="true">' + dots + '</div>'; }
+
+  function worldBanner(selLevel, built) {
+    var t = WORLD_THEME[selLevel]; if (!t) return "";
+    var pr = PATH.levelProgress(selLevel, built);
+    var n = PATH.LEVELS.indexOf(selLevel) + 1;
+    return '<section class="world-banner" data-world="' + selLevel + '" style="' + worldVars(t) + '" aria-label="Mundo ' + n + ': ' + esc(t.worldName) + '">'
+      + '<img class="world-banner__img" src="' + t.file + '" alt="" aria-hidden="true" decoding="async">'
+      + ambLayer(t.ambientN)
+      + '<div class="world-banner__body">'
+      + '<span class="world-banner__eyebrow">Mundo ' + n + ' &middot; ' + selLevel + '</span>'
+      + '<h2 class="world-banner__title">' + esc(t.worldName) + '</h2>'
+      + '<div class="world-banner__meta">'
+      + '<span class="world-banner__badge">' + selLevel + '</span>'
+      + '<span>' + (WORLD_TAG[selLevel] || "") + '</span>'
+      + '<span class="world-banner__bar"><i style="width:' + pr.pct + '%"></i></span>'
+      + '<span>' + pr.done + '/' + pr.total + '</span>'
+      + '</div></div>'
+      + '<img class="world-banner__logo" src="assets/images/vesper_logo_inverted.png" alt="Vesper Academy" decoding="async">'
+      + '</section>';
+  }
+
+  function worldsRibbon(built, selLevel) {
+    var prevDone = true;
+    var html = PATH.LEVELS.map(function (lv, idx) {
+      var pr = PATH.levelProgress(lv, built), col = PATH.levelColor(lv);
+      /* desbloqueado si: es el primero, el mundo anterior tiene avance, este mundo
+         ya tiene avance, o es el mundo seleccionado (nunca bloquea progreso existente) */
+      var reachable = (idx === 0) || prevDone || pr.done > 0 || lv === selLevel;
+      prevDone = pr.done > 0;
+      var ring = '<span class="ring w-ring" style="background:conic-gradient(' + col + ' ' + pr.pct + '%, var(--line) 0)"><i>' + pr.pct + '</i></span>';
+      var inner = ring + '<span class="w-nm">' + lv + '</span><span class="w-pc">' + pr.done + '/' + pr.total + '</span>';
+      if (!reachable) {
+        return '<button class="world locked" type="button" data-locked-world="1" aria-label="Mundo ' + lv + ', bloqueado">'
+          + inner + '<span class="w-lk" aria-hidden="true">&#128274;</span></button>';
+      }
+      return '<button class="world' + (lv === selLevel ? " on" : "") + '" type="button" data-lvl="' + lv + '"'
+        + (lv === selLevel ? ' aria-current="true"' : '') + ' aria-label="Mundo ' + lv + ', ' + pr.pct + '% completado">' + inner + '</button>';
+    }).join("");
+    return '<div class="worlds" role="group" aria-label="Mundos (niveles A1 a C2)">' + html + '</div>';
+  }
+
+  function nodeHtml(lid, built, currentId, dx) {
     var l = L[lid]; if (!l) return "";
     var stt = PATH.status(lid, built);
     var n = l.exercises ? l.exercises.length : 0;
-    var badge, second, attr, cls = "lcard2";
+    var glyph, attr, cls = "wbtn", wrapCls = "wnode", aria, label = "", stars = "", dis = "";
     if (stt === "completed") {
-      cls += " completed"; badge = "&#10003;"; attr = 'data-go="' + esc(lid) + '"';
-      var sc = PATH.getScore(lid), s = PATH.stars(sc != null ? sc : 70), starsHtml = '<span class="lc-stars">';
-      for (var i = 0; i < 3; i++) starsHtml += (i < s ? "&#9733;" : '<span class="off">&#9733;</span>');
-      starsHtml += "</span>";
-      second = starsHtml + ' <span class="lc-sub">' + (sc != null ? sc + "% · Repasar" : "Completado") + "</span>";
+      cls += " completed"; wrapCls += " done"; glyph = "&#10003;"; attr = 'data-go="' + esc(lid) + '"';
+      var sc = PATH.getScore(lid), s = PATH.stars(sc != null ? sc : 70), sh = '<span class="wstars" aria-hidden="true">';
+      for (var i = 0; i < 3; i++) sh += (i < s ? "&#9733;" : '<span class="off">&#9733;</span>');
+      stars = sh + "</span>";
+      aria = l.title + " — completado" + (sc != null ? ", " + sc + " por ciento" : "");
     } else if (stt === "open") {
-      badge = "&#9654;"; attr = 'data-go="' + esc(lid) + '"';
-      second = '<span class="lc-sub">' + n + " ejercicios &middot; +" + (l.xpReward || 0) + " XP</span>";
+      cls += " open"; glyph = "&#9654;"; attr = 'data-go="' + esc(lid) + '"';
+      if (lid === currentId) {
+        cls += " is-current";
+        label = '<span class="wlabel">' + (Object.keys(built.completed).length ? "Continuar" : "Empieza") + '</span>';
+      }
+      aria = l.title + " — desbloqueado, " + n + " ejercicios, " + (l.xpReward || 0) + " XP";
     } else {
-      cls += " locked"; badge = "&#128274;"; attr = 'data-locked="1"';
-      second = '<span class="lc-sub">Completa la anterior para desbloquear</span>';
+      cls += " locked"; wrapCls += " locked"; glyph = "&#128274;"; attr = 'data-locked="1"'; dis = ' aria-disabled="true"';
+      aria = l.title + " — bloqueado, completa la lección anterior";
     }
-    return '<button class="' + cls + '" ' + attr + '>'
-      + '<span class="lc-badge">' + badge + '</span>'
-      + '<span class="lc-body"><span class="lc-ttl">' + esc(l.title) + '</span>'
-      + '<span style="display:block;margin-top:3px">' + second + '</span></span>'
-      + '<span class="lc-go">' + (stt === "locked" ? "" : "&#8250;") + '</span></button>';
+    return '<div class="' + wrapCls + '" style="--dx:' + dx + 'px">' + label
+      + '<button class="' + cls + '" ' + attr + ' aria-label="' + esc(aria) + '"' + dis + '>' + glyph + '</button>'
+      + stars + '<span class="wtitle">' + esc(l.title) + '</span></div>';
+  }
+
+  function castleHtml(selLevel, sk, built, dx) {
+    var meta = PATH.SKILLS[sk], rid = "review:" + selLevel + ":" + sk;
+    var stt = P ? P.getState() : {};
+    var mastered = !!((stt.achievements || {})["master:" + selLevel + ":" + sk]);
+    var rsc = PATH.getScore(rid);
+    var aria = "Repaso de " + meta.label + (mastered ? ", superado" + (rsc != null ? ", mejor " + rsc + " por ciento" : "") : ", desafío disponible");
+    var castleSvg = '<svg viewBox="0 0 32 30" width="34" height="32" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true">'
+      + '<path d="M5 28V12l4-2v-3l3 2 4-3 4 3 3-2v3l4 2v16z"/><path d="M14 28v-6h4v6"/><path d="M20 7V2h6"/></svg>';
+    return '<div class="wnode' + (mastered ? " done" : "") + '" style="--dx:' + dx + 'px">'
+      + '<span class="wlabel">' + (selLevel === 'B2' ? 'Cima del mundo' : selLevel === 'C2' ? 'Maestría' : 'Cima') + '</span>'
+      + '<button class="wbtn castle' + (mastered ? " completed" : "") + '" data-go="' + esc(rid) + '" aria-label="' + esc(aria) + '">' + castleSvg + '</button>'
+      + '<span class="wtitle">Repaso de ' + esc(meta.label) + (rsc != null ? ' · ' + rsc + '%' : '') + '</span></div>';
+  }
+
+  function worldMap(selLevel, built) {
+    var g = built.levels[selLevel];
+    var banner = worldBanner(selLevel, built);
+    if (!g || !g.total) return banner + '<p class="muted" style="text-align:center;margin:24px 0">Próximamente más lecciones en este mundo.</p>';
+    var worldNo = PATH.LEVELS.indexOf(selLevel) + 1;
+    var currentId = PATH.continueLesson(built);
+    var DX = [-60, 0, 60, 0], ni = 0, parts = "";
+    PATH.SKILL_ORDER.forEach(function (sk) {
+      var ids = g.bySkill[sk]; if (!ids || !ids.length) return;
+      var meta = PATH.SKILLS[sk];
+      var doneN = ids.filter(function (id) { return built.completed[id]; }).length;
+      parts += '<div class="wcheck" role="separator" aria-label="' + esc(meta.label) + ', ' + doneN + ' de ' + ids.length + ' completadas">'
+        + '<span class="ic" aria-hidden="true">' + meta.icon + '</span>' + esc(meta.label)
+        + '<span class="ct">' + doneN + '/' + ids.length + '</span></div>';
+      ids.forEach(function (id) { parts += nodeHtml(id, built, currentId, DX[ni % 4]); ni++; });
+      if (ids.length >= 2 && doneN === ids.length) { parts += castleHtml(selLevel, sk, built, DX[ni % 4]); ni++; }
+    });
+    if (!parts) return banner + '<p class="muted" style="text-align:center;margin:24px 0">Próximamente más lecciones en este mundo.</p>';
+    var t = WORLD_THEME[selLevel] || {};
+    var startPennant = '<div class="wstart" aria-hidden="true"><span>' + (WORLD_UMBRAL[selLevel] || ('Mundo ' + worldNo)) + '</span></div>';
+    return banner + '<div class="wmap" data-world="' + selLevel + '" style="' + worldVars(t) + '">'
+      + ambLayer(t.mapN || 3, true) + startPennant + parts + '</div>';
   }
 
   /* Vitrina de logros (ganados + bloqueados), plegable. */
@@ -458,56 +1125,14 @@
       }
     }
 
-    /* continuar donde lo dejaste */
-    var contId = PATH.continueLesson(built), contHtml = "";
-    if (contId && L[contId]) {
-      var cl = L[contId], anyDone = Object.keys(built.completed).length > 0;
-      contHtml = '<button class="cont-card" data-go="' + esc(contId) + '"><span class="cont-ico">&#9654;</span>'
-        + '<span style="min-width:0"><span class="lbl">' + (anyDone ? "Continuar" : "Empieza aquí") + '</span>'
-        + '<span class="ttl">' + esc(cl.title) + '</span>'
-        + '<span class="meta">' + esc(cl.level) + ' &middot; ' + (cl.exercises ? cl.exercises.length : 0) + ' ejercicios &middot; +' + (cl.xpReward || 0) + ' XP</span></span></button>';
-    }
+    /* el mapa de mundos (renderWorlds + worldMap) reemplaza continuar/pestañas/secciones */
 
-    /* pestañas de nivel con anillo de progreso */
-    var tabs = PATH.LEVELS.map(function (lv) {
-      var pr = PATH.levelProgress(lv, built), col = PATH.levelColor(lv);
-      var ring = '<span class="ring" style="background:conic-gradient(' + col + ' ' + pr.pct + '%, var(--line) 0)"><i>' + pr.pct + '</i></span>';
-      return '<button class="lvl-tab' + (lv === selLevel ? " on" : "") + '" data-lvl="' + lv + '">' + ring
-        + '<span><span class="nm">' + lv + '</span><br><span class="pc">' + pr.done + '/' + pr.total + '</span></span></button>';
-    }).join("");
-
-    /* secciones por destreza del nivel seleccionado */
-    var g = built.levels[selLevel], pr = PATH.levelProgress(selLevel, built), col = PATH.levelColor(selLevel);
-    var sections = "";
-    PATH.SKILL_ORDER.forEach(function (sk) {
-      var ids = g.bySkill[sk]; if (!ids || !ids.length) return;
-      var meta = PATH.SKILLS[sk];
-      var doneN = ids.filter(function (id) { return built.completed[id]; }).length;
-      var reviewReady = ids.length >= 2 && doneN === ids.length;
-      var reviewCard = "";
-      if (reviewReady) {
-        var rid = "review:" + selLevel + ":" + sk;
-        var mastered = !!((st.achievements || {})["master:" + selLevel + ":" + sk]);
-        var rsc = PATH.getScore(rid);
-        reviewCard = '<button class="lcard2 review' + (mastered ? " completed" : "") + '" data-go="' + esc(rid) + '">'
-          + '<span class="lc-badge">&#127942;</span>'
-          + '<span class="lc-body"><span class="lc-ttl">Repaso de ' + esc(meta.label) + '</span>'
-          + '<span style="display:block;margin-top:3px"><span class="lc-sub">'
-          + (rsc != null ? "Mejor: " + rsc + "% · Repetir" : "Pon a prueba todo lo aprendido") + '</span></span></span>'
-          + '<span class="lc-go">&#8250;</span></button>';
-      }
-      sections += '<div class="skill-sec"><div class="skill-h"><span class="ic">' + meta.icon + '</span>' + meta.label
-        + '<span class="ct">' + doneN + "/" + ids.length + '</span></div><div class="lgrid">'
-        + ids.map(function (id) { return lessonCard(id, built); }).join("") + reviewCard + '</div></div>';
-    });
-    if (!sections) sections = '<p class="muted">Próximamente más lecciones en este nivel.</p>';
-
-    /* buscador + filtros (atacan la falta de descubrimiento con 90+ lecciones) */
+    /* buscador + filtros (ahora detrás del botón 🔍 del HUD) */
     var skillChips = PATH.SKILL_ORDER.map(function (sk) {
       var m = PATH.SKILLS[sk];
       return '<button class="fchip" type="button" aria-pressed="false" data-skill="' + sk + '">' + m.icon + ' ' + esc(m.label) + '</button>';
     }).join("");
-    var searchUI = '<div class="hub-search" id="hubSearch">'
+    var searchUI = '<div class="hub-search" id="hubSearch" hidden>'
       + '<div class="srch"><span class="srch-ic" aria-hidden="true">&#128270;</span>'
       + '<label class="sr-only" for="lessonSearch">Buscar lecciones por título, tema o nivel</label>'
       + '<input id="lessonSearch" type="search" inputmode="search" autocomplete="off" role="searchbox"'
@@ -520,33 +1145,16 @@
       + '<button class="fchip" type="button" aria-pressed="false" data-state="completed">Completadas</button></div></div>';
 
     show('<div class="wrap">'
-      + '<div class="hub-head"><div><h1 class="hub-hello">' + esc(hello) + '</h1>'
-      + '<p class="muted" style="margin:2px 0 0;font-size:.88rem">Tu ruta de inglés, paso a paso.</p></div>'
-      + '<div style="display:flex;align-items:center;gap:8px">'
-      + '<a href="chat.html" aria-label="Habla con Vesper" title="Habla con Vesper"'
-      + ' style="display:inline-flex;align-items:center;justify-content:center;width:42px;height:42px;flex:none;'
-      + 'border-radius:50%;background:var(--paper);border:1px solid var(--line);text-decoration:none;font-size:1.2rem">&#128172;</a>'
-      + '<a href="configuracion.html" aria-label="Configuración de Vesper" title="Configuración"'
-      + ' style="display:inline-flex;align-items:center;justify-content:center;width:42px;height:42px;flex:none;'
-      + 'border-radius:50%;background:var(--paper);border:1px solid var(--line);text-decoration:none;font-size:1.2rem">⚙️</a>'
-      + mascot("welcome", false, "sm") + '</div></div>'
-      + '<div class="hub-stats"><span class="hub-stat">&#128293; ' + (st.streak || 0) + ' días</span>'
-      + '<span class="hub-stat">&#11088; ' + (st.xp || 0) + ' XP</span>'
-      + (dg ? '<span class="hub-stat' + (dg.met ? ' met' : '') + '">&#127919; ' + Math.min(dg.progress, dg.target) + '/' + dg.target + '</span>' : "")
-      + ((st.shields || 0) ? '<span class="hub-stat">&#128737;&#65039; ' + st.shields + '</span>' : "") + '</div>'
-      + trophyHtml
-      + contHtml
+      + hudHtml(st, dg, hello)
+      + worldsRibbon(built, selLevel)
       + searchUI
       + '<div id="searchResults" class="search-results" aria-live="polite" hidden></div>'
-      + '<div id="levelView">'
-      + '<div class="lvl-tabs">' + tabs + '</div>'
-      + '<div class="lvl-head"><h2>Nivel ' + selLevel + '</h2>'
-      + '<span class="lvl-badge" style="background:' + col + '">' + pr.done + "/" + pr.total + '</span></div>'
-      + '<div class="lvl-prog"><i style="width:' + pr.pct + '%;background:' + col + '"></i></div>'
-      + sections + '</div>'
-      + '</div><div class="hub-toast" id="toast"></div>');
+      + '<div id="levelView">' + worldMap(selLevel, built) + '</div>'
+      + trophyHtml
+      + '<div class="hub-toast" id="toast"></div>');
 
-    each(".lvl-tab", function (b) { b.onclick = function () { renderIndex(b.getAttribute("data-lvl")); }; });
+    each(".world[data-lvl]", function (b) { b.onclick = function () { renderIndex(b.getAttribute("data-lvl")); }; });
+    each(".world[data-locked-world]", function (b) { b.onclick = function () { toast("Avanza en el mundo anterior para desbloquearlo 🔒"); }; });
     each("[data-go]", function (b) { b.onclick = function () { location.search = "?id=" + encodeURIComponent(b.getAttribute("data-go")); }; });
     each("[data-locked]", function (b) { b.onclick = function () { toast("Completa la lección anterior para desbloquear 🔒"); }; });
 
@@ -613,6 +1221,24 @@
         applyFilter();
       };
     });
+
+    /* abre/cierra el cajón de búsqueda; al cerrar, limpia filtros y vuelve al mapa */
+    function resetSearch() {
+      fQuery = ""; fSkill = "all"; fState = "all";
+      var si = byId("lessonSearch"); if (si) si.value = "";
+      each("#hubSearch [data-skill]", function (x) { var on = x.getAttribute("data-skill") === "all"; x.classList.toggle("on", on); x.setAttribute("aria-pressed", on ? "true" : "false"); });
+      each("#hubSearch [data-state]", function (x) { var on = x.getAttribute("data-state") === "all"; x.classList.toggle("on", on); x.setAttribute("aria-pressed", on ? "true" : "false"); });
+      applyFilter();
+    }
+    var sTog = byId("searchToggle");
+    if (sTog) sTog.onclick = function () {
+      var box = byId("hubSearch"); if (!box) return;
+      var willOpen = box.hidden;
+      box.hidden = !willOpen;
+      sTog.setAttribute("aria-expanded", willOpen ? "true" : "false");
+      if (willOpen) { var fi = byId("lessonSearch"); if (fi) setTimeout(function () { fi.focus(); }, 30); }
+      else resetSearch();
+    };
   }
 
   /* ---------- COVER ---------- */

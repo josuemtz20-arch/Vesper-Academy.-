@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#141c2a">
+<meta name="theme-color" content="#1B1B2F">
 <title>Vesper Academy | Inglés para profesionales del mundo real</title>
 <meta name="description" content="Academia de inglés en línea con metodología comunicativa: del nivel A0 a la certificación internacional (IELTS, Cambridge, TOEFL). Clases en vivo, audio nativo y seguimiento real del progreso.">
 <link rel="icon" href="assets/images/vesper_logo.png" type="image/png">
@@ -17,9 +17,9 @@
 *,*::before,*::after{box-sizing:border-box;}
 :root{
   /* Paleta */
-  --navy:#141c2a; --navy2:#243654; --navy3:#14223a;
+  --navy:#1B1B2F; --navy2:#2c2c4a; --navy3:#15152b;
   --gold:#c5a059; --gold-lt:#d9bd84; --gold2:#a8843d;
-  --cream:#f5f2eb; --white:#fff; --border:#e4e0d8; --text:#141c2a;
+  --cream:#f5f2eb; --white:#fff; --border:#e4e0d8; --text:#1B1B2F;
   --muted:#5a6b7d;        /* texto secundario — ~5.2:1 sobre blanco (AA) */
   --eyebrow:#7c5e22;      /* acento sobre fondo claro con contraste AA */
   --tag:#6f541d;          /* etiquetas pequeñas sobre crema (AA) */
@@ -34,8 +34,8 @@
   /* Radios */
   --r-sm:10px; --r-md:14px; --r-lg:18px; --r-pill:999px;
   /* Sombras (basadas en navy real) */
-  --sh-md:0 14px 34px rgba(20,28,42,.12);
-  --sh-lg:0 22px 50px rgba(20,28,42,.22);
+  --sh-md:0 14px 34px rgba(27,27,47,.12);
+  --sh-lg:0 22px 50px rgba(27,27,47,.22);
   /* Movimiento */
   --ease-out:cubic-bezier(0.22,1,0.36,1);
   --ease-std:cubic-bezier(0.4,0,0.2,1);
@@ -72,7 +72,7 @@ section[id]{scroll-margin-top:88px;}
 .text-left{text-align:left;}
 
 /* NAV */
-header{position:sticky;top:0;z-index:200;background:rgba(20,28,42,.96);backdrop-filter:blur(8px);border-bottom:1px solid rgba(197,160,89,.25);transition:background .4s var(--ease-std),box-shadow .4s,border-color .4s;}
+header{position:sticky;top:0;z-index:200;background:rgba(27,27,47,.96);backdrop-filter:blur(8px);border-bottom:1px solid rgba(197,160,89,.25);transition:background .4s var(--ease-std),box-shadow .4s,border-color .4s;}
 nav{display:flex;align-items:center;justify-content:space-between;height:72px;gap:24px;}
 .brand{display:flex;align-items:center;gap:12px;}
 .brand img{height:42px;width:42px;object-fit:contain;}
@@ -275,7 +275,7 @@ html.js-anim .lvl .bar{transform-origin:left;transform:scaleX(0);transition:tran
 html.js-anim .lvl.in-view .bar{transform:scaleX(1);}
 
 /* El nav se densifica al hacer scroll */
-header.scrolled{background:rgba(20,28,42,.98);border-bottom-color:rgba(197,160,89,.45);box-shadow:0 4px 20px rgba(0,0,0,.18);}
+header.scrolled{background:rgba(27,27,47,.98);border-bottom-color:rgba(197,160,89,.45);box-shadow:0 4px 20px rgba(0,0,0,.18);}
 
 /* Micro-interacciones de hover (premium = más lento, sin nuevos saltos en cards) */
 .btn:active{transform:translateY(0);transition-duration:.1s;}
@@ -332,8 +332,6 @@ header.scrolled{background:rgba(20,28,42,.98);border-bottom-color:rgba(197,160,8
         <a href="#certificacion">Certificación</a>
         <a href="#precios">Precios</a>
         <a href="leccion.html">Lecciones gratis</a>
-        <a href="chat.html">Habla con Vesper</a>
-        <a href="login.html">Iniciar sesión</a>
         <a href="book_placement.html" class="btn btn-gold nav-cta">Examen gratis</a>
       </div>
       <button class="nav-toggle" id="navToggle" aria-label="Abrir menú" aria-controls="navlinks" aria-expanded="false"><i class="fas fa-bars" aria-hidden="true"></i></button>
