@@ -111,7 +111,7 @@ section{padding:var(--s-section) 0;}
 
 /* METHOD CARDS */
 .grid3{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-top:56px;}
-.mcard{background:var(--white);border:1px solid var(--border);border-radius:var(--r-lg);padding:34px 30px;transition:transform .4s var(--ease-std),box-shadow .4s,border-color .4s;}
+.mcard{background:var(--white);border:1px solid var(--border);border-radius:var(--r-lg);padding:30px 28px;text-align:left;transition:transform .4s var(--ease-std),box-shadow .4s,border-color .4s;}
 .mcard:hover{transform:translateY(-4px);box-shadow:var(--sh-md);border-color:var(--gold);}
 .mcard .ic{width:54px;height:54px;border-radius:var(--r-md);background:linear-gradient(135deg,var(--navy2),var(--navy3));color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin-bottom:20px;}
 .mcard h3{font-size:var(--t-h3);margin:0 0 10px;}
@@ -122,7 +122,7 @@ section{padding:var(--s-section) 0;}
 .path .sec-title{color:#fff;}
 .path .sec-lead{color:rgba(255,255,255,.72);}
 .levels{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:18px;margin-top:56px;}
-.lvl{background:linear-gradient(160deg,var(--navy2),var(--navy3));border:1px solid rgba(197,160,89,.25);border-radius:var(--r-md);padding:26px 22px;position:relative;overflow:hidden;}
+.lvl{background:linear-gradient(160deg,var(--navy2),var(--navy3));border:1px solid rgba(197,160,89,.25);border-radius:var(--r-md);padding:26px 22px;text-align:left;position:relative;overflow:hidden;}
 .lvl .cefr{font-family:'Inria Serif',serif;font-size:1.5rem;color:var(--gold-lt);font-weight:700;}
 .lvl h4{margin:8px 0 8px;font-size:1rem;}
 .lvl p{color:rgba(255,255,255,.72);font-size:.85rem;margin:0;}
@@ -144,14 +144,15 @@ section{padding:var(--s-section) 0;}
 
 /* CERTIFICATION band */
 .cert{background:linear-gradient(135deg,var(--cream),#efe9da);}
-.cert-inner{display:grid;grid-template-columns:1.1fr 1fr;gap:56px;align-items:center;}
+.cert-inner{display:grid;grid-template-columns:1.2fr 1fr;gap:56px;align-items:center;}
 .cert ul{list-style:none;padding:0;margin:26px 0 0;}
 .cert li{display:flex;gap:12px;align-items:flex-start;margin-bottom:16px;font-size:var(--t-body);}
 .cert li i{color:var(--gold2);margin-top:3px;}
-.cert-badges{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
-.cert-badge{background:#fff;border:1px solid var(--border);border-radius:var(--r-md);padding:24px 14px;text-align:center;}
-.cert-badge b{display:block;font-family:'Inria Serif',serif;font-size:1.35rem;color:var(--navy);font-weight:700;}
-.cert-badge small{color:var(--muted);font-size:.8rem;}
+.cert-badges{display:grid;grid-template-columns:1fr;gap:14px;}
+.cert-badge{background:#fff;border:1px solid var(--border);border-radius:var(--r-md);padding:20px 24px;display:flex;align-items:center;justify-content:space-between;gap:18px;transition:transform .4s var(--ease-std),box-shadow .4s,border-color .4s;}
+.cert-badge:hover{transform:translateX(3px);border-color:var(--gold);box-shadow:var(--sh-md);}
+.cert-badge b{font-family:'Inria Serif',serif;font-size:1.45rem;color:var(--navy);font-weight:700;line-height:1;}
+.cert-badge small{color:var(--muted);font-size:.82rem;text-align:right;}
 
 /* TESTIMONIALS */
 .tgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:24px;margin-top:56px;}
@@ -164,7 +165,7 @@ section{padding:var(--s-section) 0;}
 
 /* PRICING */
 .price-intro{color:var(--muted);font-size:var(--t-small);margin:18px auto 0;}
-.pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px;margin-top:48px;align-items:stretch;}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px;margin-top:56px;align-items:stretch;}
 .plan{background:#fff;border:1px solid var(--border);border-radius:var(--r-lg);padding:34px 30px;display:flex;flex-direction:column;position:relative;transition:transform .4s var(--ease-std),box-shadow .4s;}
 .plan:hover{transform:translateY(-3px);box-shadow:var(--sh-md);}
 .plan.feat{border:2px solid var(--gold);box-shadow:0 18px 44px rgba(197,160,89,.22);}
