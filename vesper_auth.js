@@ -5,10 +5,17 @@
    - Las páginas protegidas cargan este script en su <head>.
    - Si el visitante no tiene sesión iniciada (Firebase Auth),
      se le redirige a login.html.
-   - Registrarse NO da acceso: el correo debe estar en la lista
-     de aprobados (approvedEmailHashes). Los correos se guardan
-     como hash SHA-256 para no exponerlos en el repositorio.
-   - Genera el hash de un correo en access_admin.html.
+   - Registrarse NO da acceso: el correo debe estar AUTORIZADO.
+     La autorización se consulta en Firestore (allowlist en
+     students/ o teachers/) con el idToken del propio usuario —
+     la MISMA fuente de verdad que ya protege manuales y libros.
+     Para dar acceso a alguien basta con añadirlo a esa allowlist
+     (un comando de _scripts/upload_manuals.py): tiene efecto
+     INMEDIATO y ya NO hace falta editar este archivo ni desplegar.
+   - El admin (adminEmail) entra siempre.
+   - approvedEmailHashes queda como RESPALDO legado: si Firestore
+     no responde se usa esta lista de hashes SHA-256. Puede vaciarse
+     cuando todos estén migrados a la allowlist de Firestore.
    - Las páginas de publicPages no requieren sesión.
    - Mientras firebase no esté configurado (valores PEGAR_*),
      el sitio queda ABIERTO y muestra un aviso. Pega aquí la
@@ -53,6 +60,11 @@
       "1181f429e6707d5b37cec24a77203cf30374fa337062d3f5d8c0abfe50b99dc9": "2c4227a42e5c7f6131a34e68e31cd6f9b78b2140ad789c7485e5d1ff76145ab1",  /* admin */
       "f77b653bf19243e8d70722a5e50ea3e86d4347ddc489224e083439e2137714bc": "fe28e97393299e8fcf7322f6e02bdf91cc915ccd24007fd0c8f99b26e4288a00"   /* profesora 1 */
     },
+    /* Base de Firestore donde vive la allowlist (debe coincidir con DB_ID en
+       _scripts/upload_manuals.py y en manual.html / libro.html). */
+    dbId: "teachermanuals",
+    /* El administrador entra siempre, aunque no tenga doc en la allowlist. */
+    adminEmail: "josuemtz20@gmail.com",
     loginPage: "login.html"
   };
 
@@ -117,6 +129,51 @@
     });
   }
 
+  /* ¿Existe MI propio documento en una colección de la allowlist? Las reglas
+     de Firestore permiten a cada usuario leer su propio doc (students/ y
+     teachers/). Mismo patrón REST que manual.html / libro.html. */
+  function fsDocExists(token, collection, email) {
+    var url = "https://firestore.googleapis.com/v1/projects/" +
+              CONFIG.firebase.projectId + "/databases/" + CONFIG.dbId +
+              "/documents/" + collection + "/" + encodeURIComponent(email);
+    return fetch(url, { headers: { "Authorization": "Bearer " + token } })
+      .then(function (r) { return r.status === 200; });
+  }
+
+  /* Aprobado si su correo está en students/ o teachers/ de Firestore. */
+  function isApprovedRemote(user) {
+    var email = String(user.email || "").trim().toLowerCase();
+    return user.getIdToken().then(function (token) {
+      return fsDocExists(token, "students", email).then(function (ok) {
+        return ok ? true : fsDocExists(token, "teachers", email);
+      });
+    });
+  }
+
+  /* Aprobación final (la usan la puerta y login.html):
+       1) el admin entra siempre;
+       2) allowlist en Firestore  -> fuente de verdad, efecto inmediato;
+       3) respaldo: lista de hashes legada (si Firestore no responde).
+     Cachea el "sí" en sessionStorage para no repetir la consulta al navegar. */
+  function isApprovedUser(user) {
+    var email = String(user.email || "").trim().toLowerCase();
+    if (email && email === String(CONFIG.adminEmail).trim().toLowerCase()) {
+      return Promise.resolve(true);
+    }
+    var cacheKey = "vesper_ok|" + email;
+    try { if (sessionStorage.getItem(cacheKey) === "1") return Promise.resolve(true); } catch (e) {}
+
+    return isApprovedRemote(user).then(function (ok) {
+      if (ok) {
+        try { sessionStorage.setItem(cacheKey, "1"); } catch (e) {}
+        return true;
+      }
+      return isApproved(email); /* respaldo legado */
+    }).catch(function () {
+      return isApproved(email); /* sin red hacia Firestore: usar respaldo */
+    });
+  }
+
   function onDomReady(fn) {
     if (document.readyState === "loading") {
       document.addEventListener("DOMContentLoaded", fn);
@@ -165,29 +222,85 @@
     initFirebase: initFirebase,
     emailHash: emailHash,
     isApproved: isApproved,
+    isApprovedUser: isApprovedUser,
     teacherHash: teacherHash,
     verifyTeacherLogin: verifyTeacherLogin
   };
+
+  /* ── Esqueleto de carga ──
+     En vez de ocultar TODO el documento (pantalla en blanco hasta que Firebase
+     + Firestore respondan, antes hasta 12 s), oscurecemos solo el contenido
+     protegido y mostramos la marca + un spinner. El splash se monta en
+     <html> (no en <body>, que aún no existe cuando corre este <head> script)
+     para pintarse cuanto antes. Filosofía fail-open intacta: si el backend
+     tarda más de REVEAL_MS, revelamos igualmente (mejor contenido que blanco). */
+  var REVEAL_MS = 6000;
+  var splashEl = null;
+
+  function injectGateStyles() {
+    if (document.getElementById("vsp-gate-style")) return;
+    var css = document.createElement("style");
+    css.id = "vsp-gate-style";
+    css.textContent =
+      "html.vsp-gating body{visibility:hidden!important}" +
+      "#vsp-splash{position:fixed;inset:0;z-index:2147483647;visibility:visible!important;" +
+        "display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;" +
+        "background:#141c2a;color:#f5f2eb;" +
+        "font-family:'Inter',system-ui,-apple-system,Segoe UI,sans-serif;" +
+        "transition:opacity .35s ease}" +
+      "#vsp-splash.vsp-hide{opacity:0;pointer-events:none}" +
+      "#vsp-splash img{width:60px;height:60px;object-fit:contain}" +
+      "#vsp-splash .vsp-ring{width:32px;height:32px;border-radius:50%;" +
+        "border:3px solid rgba(197,160,89,.25);border-top-color:#c5a059;" +
+        "animation:vsp-spin .8s linear infinite}" +
+      "#vsp-splash .vsp-msg{font-size:.9rem;letter-spacing:.04em;color:rgba(245,242,235,.72)}" +
+      "@keyframes vsp-spin{to{transform:rotate(360deg)}}" +
+      "@media (prefers-reduced-motion:reduce){" +
+        "#vsp-splash{transition:none}" +
+        "#vsp-splash .vsp-ring{animation:none;border-top-color:rgba(197,160,89,.55)}}";
+    (document.head || document.documentElement).appendChild(css);
+  }
+
+  function showSplash() {
+    if (splashEl) return;
+    injectGateStyles();
+    document.documentElement.classList.add("vsp-gating");
+    splashEl = document.createElement("div");
+    splashEl.id = "vsp-splash";
+    splashEl.setAttribute("role", "status");
+    splashEl.setAttribute("aria-live", "polite");
+    splashEl.innerHTML =
+      '<img src="assets/images/vesper_logo_inverted.png" alt="Vesper Academy">' +
+      '<div class="vsp-ring" aria-hidden="true"></div>' +
+      '<div class="vsp-msg">Cargando tu campus&hellip;</div>';
+    document.documentElement.appendChild(splashEl);
+  }
+
+  function reveal() {
+    clearTimeout(failSafe);
+    document.documentElement.classList.remove("vsp-gating");
+    if (splashEl) {
+      var s = splashEl; splashEl = null;
+      s.classList.add("vsp-hide");
+      setTimeout(function () { if (s && s.parentNode) s.parentNode.removeChild(s); }, 400);
+    }
+  }
 
   /* ── Puerta de acceso ── */
   if (isLocal || isPublic) return;
 
   if (!isConfigured) { showOpenAccessNotice(); return; }
 
-  /* Oculta el contenido hasta confirmar la sesión (evita el parpadeo) */
-  document.documentElement.style.visibility = "hidden";
-  var failSafe = setTimeout(function () {
-    document.documentElement.style.visibility = "";
-  }, 12000); /* si Firebase no responde, no dejar la página en blanco */
+  showSplash();
+  var failSafe = setTimeout(reveal, REVEAL_MS);
 
   initFirebase().then(function (auth) {
     auth.onAuthStateChanged(function (user) {
       if (!user) { redirectToLogin(); return; }
       if (!user.emailVerified) { redirectToLogin("verify"); return; }
-      isApproved(user.email).then(function (ok) {
+      isApprovedUser(user).then(function (ok) {
         if (ok) {
-          clearTimeout(failSafe);
-          document.documentElement.style.visibility = "";
+          reveal();
           addLogoutChip(user.email);
         } else {
           redirectToLogin("pending");
