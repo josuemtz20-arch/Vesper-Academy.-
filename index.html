@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#141c2a">
+<meta name="theme-color" content="#14122a">
 <title>Vesper Academy | Inglés para profesionales del mundo real</title>
 <meta name="description" content="Academia de inglés en línea con metodología comunicativa: del nivel A0 a la certificación internacional (IELTS, Cambridge, TOEFL). Clases en vivo, audio nativo y seguimiento real del progreso.">
 <link rel="icon" href="assets/images/vesper_logo.png" type="image/png">
@@ -16,13 +16,23 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;}
 :root{
-  /* Paleta */
-  --navy:#141c2a; --navy2:#243654; --navy3:#14223a;
-  --gold:#c5a059; --gold-lt:#d9bd84; --gold2:#a8843d;
-  --cream:#f5f2eb; --white:#fff; --border:#e4e0d8; --text:#141c2a;
+  /* ===== Paleta canónica Vesper — unificada con assets/css/vesper_tokens.css
+     y el tema "classic" de vesper_theme.js, con identidad "Estrella Vespertina":
+     del crepúsculo a la noche, guiados por una luz dorada (Venus al anochecer). */
+  --navy:#1B1B2F; --navy2:#243654; --navy3:#14223a;
+  --night:#14122a;        /* índigo profundo (noche) */
+  --dusk:#1f2342;         /* navy-violeta (crepúsculo) */
+  --twilight:#3a3a63;     /* violeta del horizonte */
+  --gold:#C9A84C; --gold-lt:#dcc173; --gold2:#a8843d;
+  --star:#f3e2ab;         /* destello de estrella */
+  --cream:#FBF8F1; --white:#fff; --border:#e4e0d8; --text:#1B1B2F;
   --muted:#5a6b7d;        /* texto secundario — ~5.2:1 sobre blanco (AA) */
   --eyebrow:#7c5e22;      /* acento sobre fondo claro con contraste AA */
   --tag:#6f541d;          /* etiquetas pequeñas sobre crema (AA) */
+  --hairline:rgba(201,168,76,.35); /* divisor dorado fino */
+  /* Cielo de marca: crepúsculo → noche, con resplandor dorado superior. */
+  --grad-dusk:linear-gradient(160deg,var(--dusk),var(--night) 60%,#0e0c1f);
+  --glow-gold:radial-gradient(900px 420px at 80% -10%,rgba(201,160,89,.24),transparent 60%);
   /* Escala tipográfica */
   --t-eyebrow:.72rem; --t-small:.82rem; --t-body:.95rem; --t-body-lg:1.05rem;
   --t-h3:1.15rem; --t-h2:2.15rem; --t-display:clamp(2.3rem,5vw,3rem);
@@ -36,6 +46,7 @@
   /* Sombras (basadas en navy real) */
   --sh-md:0 14px 34px rgba(20,28,42,.12);
   --sh-lg:0 22px 50px rgba(20,28,42,.22);
+  --sh-dusk:0 18px 44px rgba(20,18,42,.22);
   /* Movimiento */
   --ease-out:cubic-bezier(0.22,1,0.36,1);
   --ease-std:cubic-bezier(0.4,0,0.2,1);
@@ -57,8 +68,8 @@ section[id]{scroll-margin-top:88px;}
 .skip:focus{left:16px;}
 
 .btn{display:inline-flex;align-items:center;gap:9px;font-weight:600;font-size:.92rem;padding:13px 26px;border-radius:var(--r-sm);cursor:pointer;border:none;transition:transform .3s var(--ease-std),box-shadow .3s var(--ease-std),background .3s;font-family:inherit;}
-.btn-gold{background:var(--gold);color:var(--navy);}
-.btn-gold:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(197,160,89,.4);}
+.btn-gold{background:linear-gradient(135deg,var(--gold-lt),var(--gold) 55%,var(--gold2));color:#231a08;box-shadow:0 1px 0 rgba(255,255,255,.35) inset,0 6px 18px rgba(201,160,89,.28);}
+.btn-gold:hover{transform:translateY(-2px);box-shadow:0 1px 0 rgba(255,255,255,.45) inset,0 12px 28px rgba(201,160,89,.45);}
 .btn-ghost{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.5);}
 .btn-ghost:hover{border-color:var(--gold);color:var(--gold-lt);}
 .btn-block{justify-content:center;}
@@ -67,12 +78,13 @@ section[id]{scroll-margin-top:88px;}
 .hero .cta-note{color:rgba(255,255,255,.7);}
 
 .eyebrow{display:inline-block;font-size:var(--t-eyebrow);letter-spacing:2px;text-transform:uppercase;color:var(--eyebrow);font-weight:700;}
-.sec-title{font-family:'Inria Serif',serif;font-size:var(--t-h2);font-weight:700;margin:12px 0 16px;line-height:1.14;}
+.eyebrow::before{content:"✦";margin-right:8px;color:var(--gold);font-size:.9em;}
+.sec-title{font-family:'Inria Serif',serif;font-size:var(--t-h2);font-weight:700;margin:12px 0 16px;line-height:1.14;letter-spacing:-.01em;}
 .sec-lead{color:var(--muted);font-size:var(--t-body-lg);max-width:600px;}
 .text-left{text-align:left;}
 
 /* NAV */
-header{position:sticky;top:0;z-index:200;background:rgba(20,28,42,.96);backdrop-filter:blur(8px);border-bottom:1px solid rgba(197,160,89,.25);transition:background .4s var(--ease-std),box-shadow .4s,border-color .4s;}
+header{position:sticky;top:0;z-index:200;background:rgba(20,18,42,.92);backdrop-filter:blur(10px);border-bottom:1px solid rgba(201,168,76,.22);transition:background .4s var(--ease-std),box-shadow .4s,border-color .4s;}
 nav{display:flex;align-items:center;justify-content:space-between;height:72px;gap:24px;}
 .brand{display:flex;align-items:center;gap:12px;}
 .brand img{height:42px;width:42px;object-fit:contain;}
@@ -84,24 +96,55 @@ nav{display:flex;align-items:center;justify-content:space-between;height:72px;ga
 .nav-cta{padding:9px 20px;}
 .nav-toggle{display:none;background:none;border:none;color:#fff;font-size:1.4rem;cursor:pointer;padding:6px 8px;}
 
-/* HERO */
+/* HERO — "Estrella Vespertina": cielo del crepúsculo a la noche */
 .hero{position:relative;overflow:hidden;color:#fff;padding:0;
-  background:radial-gradient(900px 400px at 80% -10%,rgba(197,160,89,.22),transparent 60%),linear-gradient(160deg,var(--navy2),var(--navy) 55%,var(--navy3));}
-.hero::before{content:"";position:absolute;right:-80px;top:50%;transform:translateY(-50%);width:480px;height:480px;
-  background:url('assets/images/vesper_logo_inverted.png') center/contain no-repeat;opacity:.06;}
-.hero-inner{position:relative;z-index:1;padding:100px 0 104px;max-width:660px;}
-.hero h1{font-family:'Inria Serif',serif;font-size:var(--t-display);font-weight:700;line-height:1.05;margin:18px 0 20px;overflow-wrap:break-word;}
-.hero h1 span{color:var(--gold-lt);}
+  background:var(--glow-gold),radial-gradient(700px 380px at 12% 108%,rgba(58,58,99,.55),transparent 60%),var(--grad-dusk);}
+/* Campo de estrellas tenue (varios destellos vía radial-gradients). */
+.hero::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.0;
+  background-image:
+    radial-gradient(1.4px 1.4px at 18% 24%,rgba(255,255,255,.85),transparent),
+    radial-gradient(1.2px 1.2px at 32% 62%,rgba(243,226,171,.8),transparent),
+    radial-gradient(1.6px 1.6px at 54% 18%,rgba(255,255,255,.7),transparent),
+    radial-gradient(1.2px 1.2px at 68% 48%,rgba(255,255,255,.65),transparent),
+    radial-gradient(1.5px 1.5px at 82% 30%,rgba(243,226,171,.85),transparent),
+    radial-gradient(1.1px 1.1px at 90% 64%,rgba(255,255,255,.6),transparent),
+    radial-gradient(1.3px 1.3px at 44% 78%,rgba(255,255,255,.55),transparent),
+    radial-gradient(1.2px 1.2px at 8% 70%,rgba(255,255,255,.55),transparent);
+  animation:starsIn 1.6s ease .2s forwards;}
+/* La estrella vespertina: una luz dorada guía arriba a la derecha. */
+.hero-star{position:absolute;top:18%;right:14%;width:10px;height:10px;border-radius:50%;
+  background:radial-gradient(circle,#fff 0%,var(--star) 45%,rgba(243,226,171,0) 72%);
+  box-shadow:0 0 18px 6px rgba(243,226,171,.5),0 0 42px 14px rgba(201,168,76,.28);
+  pointer-events:none;z-index:1;opacity:0;animation:starGlow 4.5s ease-in-out 1s infinite,starsIn 1.2s ease .6s forwards;}
+.hero-star::before{content:"✦";position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  font-size:30px;color:var(--star);text-shadow:0 0 16px rgba(243,226,171,.7);line-height:1;}
+.hero-inner{position:relative;z-index:2;padding:104px 0 108px;max-width:660px;}
+.hero h1{font-family:'Inria Serif',serif;font-size:var(--t-display);font-weight:700;line-height:1.04;letter-spacing:-.01em;margin:18px 0 20px;overflow-wrap:break-word;}
+.hero h1 span{color:var(--gold-lt);text-shadow:0 0 26px rgba(201,168,76,.35);}
 .hero p{font-size:1.1rem;color:rgba(255,255,255,.82);margin-bottom:28px;max-width:540px;}
 .hero-cta{display:flex;gap:14px;flex-wrap:wrap;}
 .hero-stats{display:flex;gap:44px;margin-top:56px;flex-wrap:wrap;}
 .hero-stats div b{font-family:'Inria Serif',serif;font-size:1.5rem;color:var(--gold-lt);display:block;line-height:1.1;}
 .hero-stats div small{color:rgba(255,255,255,.66);font-size:.78rem;text-transform:uppercase;letter-spacing:1px;}
 .hero-grid{display:grid;grid-template-columns:1fr;align-items:center;}
-.hero-visual{display:none;}
-.hero-visual img{width:100%;height:500px;object-fit:cover;object-position:center;display:block;border-radius:var(--r-lg);border:1px solid rgba(197,160,89,.4);box-shadow:var(--sh-lg);background:var(--navy3);}
+/* Panel de marca crepuscular con la mascota Vesper como guía. */
+.hero-visual{display:none;position:relative;}
+.hero-orb{position:relative;border-radius:var(--r-lg);overflow:hidden;padding:40px 28px 32px;text-align:center;
+  background:radial-gradient(120% 90% at 50% 0%,rgba(58,58,99,.7),rgba(20,18,42,.95));
+  border:1px solid var(--hairline);box-shadow:var(--sh-lg);}
+.hero-orb::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background-image:radial-gradient(1.3px 1.3px at 20% 30%,rgba(255,255,255,.7),transparent),radial-gradient(1.2px 1.2px at 76% 22%,rgba(243,226,171,.8),transparent),radial-gradient(1.4px 1.4px at 60% 70%,rgba(255,255,255,.6),transparent),radial-gradient(1.1px 1.1px at 30% 78%,rgba(255,255,255,.5),transparent);}
+.hero-orb .moon{position:relative;width:118px;height:118px;margin:0 auto 18px;border-radius:50%;
+  background:rgba(20,18,42,.5);border:2px solid var(--gold);object-fit:cover;display:block;
+  box-shadow:0 0 30px rgba(201,168,76,.4);animation:vc-float-orb 5s ease-in-out infinite;}
+.hero-orb .greet{font-family:'Inria Serif',serif;color:var(--gold-lt);font-size:1.15rem;margin:0 0 6px;}
+.hero-orb .sub{color:rgba(255,255,255,.72);font-size:.9rem;margin:0 0 20px;}
+.hero-orb .btn{width:100%;justify-content:center;}
+@keyframes vc-float-orb{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
+@keyframes starGlow{0%,100%{opacity:.55;transform:scale(.92)}50%{opacity:1;transform:scale(1.12)}}
+@keyframes starsIn{to{opacity:1}}
 @media(min-width:981px){
-  .hero-grid{grid-template-columns:minmax(0,1fr) minmax(0,400px);gap:56px;}
+  .hero-grid{grid-template-columns:minmax(0,1fr) minmax(0,380px);gap:56px;}
   .hero-inner{max-width:none;}
   .hero-visual{display:block;}
 }
@@ -119,16 +162,30 @@ section{padding:var(--s-section) 0;}
 
 /* METHOD CARDS */
 .grid3{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-top:56px;}
-.mcard{background:var(--white);border:1px solid var(--border);border-radius:var(--r-lg);padding:30px 28px;text-align:left;transition:transform .4s var(--ease-std),box-shadow .4s,border-color .4s;}
-.mcard:hover{transform:translateY(-4px);box-shadow:var(--sh-md);border-color:var(--gold);}
+.mcard{position:relative;background:var(--white);border:1px solid var(--border);border-radius:var(--r-lg);padding:30px 28px;text-align:left;transition:transform .4s var(--ease-std),box-shadow .4s,border-color .4s;}
+.mcard::before{content:"";position:absolute;left:0;top:24px;bottom:24px;width:3px;border-radius:3px;background:linear-gradient(var(--gold),var(--gold2));opacity:0;transition:opacity .4s var(--ease-std);}
+.mcard:hover{transform:translateY(-4px);box-shadow:var(--sh-dusk);border-color:var(--hairline);}
+.mcard:hover::before{opacity:1;}
 .mcard .ic{width:54px;height:54px;border-radius:var(--r-md);background:linear-gradient(135deg,var(--navy2),var(--navy3));color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin-bottom:20px;}
 .mcard h3{font-size:var(--t-h3);margin:0 0 10px;}
 .mcard p{color:var(--muted);font-size:var(--t-body);margin:0;}
 
-/* PATH / LEVELS */
-.path{background:var(--navy);color:#fff;}
+/* PATH / LEVELS — cielo nocturno: el viaje A0→C2 hacia el dominio */
+.path{position:relative;overflow:hidden;color:#fff;
+  background:radial-gradient(700px 360px at 85% -10%,rgba(201,160,89,.16),transparent 60%),var(--grad-dusk);}
+.path::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.7;
+  background-image:
+    radial-gradient(1.3px 1.3px at 12% 22%,rgba(255,255,255,.7),transparent),
+    radial-gradient(1.2px 1.2px at 36% 64%,rgba(243,226,171,.7),transparent),
+    radial-gradient(1.5px 1.5px at 58% 16%,rgba(255,255,255,.6),transparent),
+    radial-gradient(1.1px 1.1px at 74% 52%,rgba(255,255,255,.55),transparent),
+    radial-gradient(1.3px 1.3px at 90% 28%,rgba(243,226,171,.7),transparent),
+    radial-gradient(1.1px 1.1px at 26% 84%,rgba(255,255,255,.5),transparent);}
+.path .container{position:relative;z-index:1;}
 .path .sec-title{color:#fff;}
 .path .sec-lead{color:rgba(255,255,255,.72);}
+.path .eyebrow{color:var(--gold-lt);}
+.path .eyebrow::before,.cta .eyebrow::before{color:var(--gold-lt);}
 .levels{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:18px;margin-top:56px;}
 .lvl{background:linear-gradient(160deg,var(--navy2),var(--navy3));border:1px solid rgba(197,160,89,.25);border-radius:var(--r-md);padding:26px 22px;text-align:left;position:relative;overflow:hidden;}
 .lvl .cefr{font-family:'Inria Serif',serif;font-size:1.5rem;color:var(--gold-lt);font-weight:700;}
@@ -139,7 +196,7 @@ section{padding:var(--s-section) 0;}
 /* COURSES */
 .cgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px;margin-top:56px;}
 .course{border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;background:#fff;transition:transform .4s var(--ease-std),box-shadow .4s;display:flex;flex-direction:column;}
-.course:hover{transform:translateY(-4px);box-shadow:var(--sh-md);}
+.course:hover{transform:translateY(-4px);box-shadow:var(--sh-dusk);border-color:var(--hairline);}
 .course .top{height:158px;position:relative;overflow:hidden;background:var(--navy3);}
 .course .top img{width:100%;height:100%;object-fit:cover;object-position:center;display:block;transition:transform .6s var(--ease-std);}
 .course:hover .top img{transform:scale(1.05);}
@@ -173,7 +230,7 @@ section{padding:var(--s-section) 0;}
 .price-intro{color:var(--muted);font-size:var(--t-small);margin:18px auto 0;}
 .pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px;margin-top:56px;align-items:stretch;}
 .plan{background:#fff;border:1px solid var(--border);border-radius:var(--r-lg);padding:34px 30px;display:flex;flex-direction:column;position:relative;transition:transform .4s var(--ease-std),box-shadow .4s;}
-.plan:hover{transform:translateY(-3px);box-shadow:var(--sh-md);}
+.plan:hover{transform:translateY(-3px);box-shadow:var(--sh-dusk);border-color:var(--hairline);}
 .plan.feat{border:2px solid var(--gold);box-shadow:0 18px 44px rgba(197,160,89,.22);}
 .plan.feat .ribbon{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:var(--gold);color:var(--navy);font-size:.68rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:5px 16px;border-radius:var(--r-pill);}
 .plan h3{font-size:var(--t-h3);margin:0 0 4px;}
@@ -194,9 +251,13 @@ section{padding:var(--s-section) 0;}
 .qitem button i{transition:transform .38s var(--ease-std);color:var(--gold2);}
 .qitem.open button i{transform:rotate(180deg);}
 
-/* CTA */
-.cta{background:linear-gradient(160deg,var(--navy2),var(--navy3));color:#fff;text-align:center;padding:108px 0;}
+/* CTA — última luz del día antes de la noche */
+.cta{position:relative;overflow:hidden;background:var(--glow-gold),var(--grad-dusk);color:#fff;text-align:center;padding:108px 0;}
+.cta::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.6;
+  background-image:radial-gradient(1.4px 1.4px at 16% 26%,rgba(255,255,255,.7),transparent),radial-gradient(1.2px 1.2px at 80% 22%,rgba(243,226,171,.75),transparent),radial-gradient(1.3px 1.3px at 64% 70%,rgba(255,255,255,.55),transparent),radial-gradient(1.1px 1.1px at 30% 78%,rgba(255,255,255,.5),transparent);}
+.cta .container{position:relative;z-index:1;}
 .cta .eyebrow{color:var(--gold-lt);}
+.cta .eyebrow::before{color:var(--gold-lt);}
 .cta .sec-title{color:#fff;}
 .cta p{color:rgba(255,255,255,.8);max-width:540px;margin:0 auto 30px;}
 .cta .cta-spacer{margin-top:40px;}
@@ -208,8 +269,8 @@ section{padding:var(--s-section) 0;}
 .steps li{display:flex;align-items:center;gap:9px;font-size:var(--t-small);color:rgba(255,255,255,.82);}
 .steps li i{color:var(--gold);}
 
-/* FOOTER */
-footer{background:var(--navy3);color:rgba(255,255,255,.62);padding:60px 0 32px;}
+/* FOOTER — la noche cerrada */
+footer{background:linear-gradient(180deg,var(--night),#0c0a1c);color:rgba(255,255,255,.62);padding:60px 0 32px;border-top:1px solid var(--hairline);}
 .fgrid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:40px;}
 .fgrid h5{color:#fff;font-size:.82rem;letter-spacing:1px;text-transform:uppercase;margin:0 0 16px;}
 .fgrid a{display:block;color:rgba(255,255,255,.62);font-size:.88rem;margin-bottom:12px;transition:color .16s;}
@@ -251,7 +312,6 @@ footer{background:var(--navy3);color:rgba(255,255,255,.62);padding:60px 0 32px;}
 
 /* ===== ANIMACIONES — "Quiet Confidence, Guided Eye" ===== */
 @keyframes heroRise{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:none;}}
-@keyframes heroMarkSettle{from{opacity:0;transform:translateY(-50%) scale(1.05);}to{opacity:.06;transform:translateY(-50%) scale(1);}}
 @keyframes revealRise{from{opacity:0;transform:translateY(22px);}to{opacity:1;transform:none;}}
 
 /* Cascada del hero al cargar (sobre el pliegue → sin observer) */
@@ -262,8 +322,7 @@ html.js-anim .hero-inner>p{animation-delay:180ms;}
 html.js-anim .hero-inner>.hero-cta{animation-delay:280ms;}
 html.js-anim .hero-inner>.cta-note{animation-delay:340ms;}
 html.js-anim .hero-inner>.hero-stats{animation-delay:400ms;}
-html.js-anim .hero::before{animation:heroMarkSettle 1.4s cubic-bezier(0.33,0,0.2,1) .15s both;}
-html.js-anim .hero-visual{opacity:0;animation:heroRise .8s var(--ease-out) .4s both;}
+html.js-anim .hero-visual{opacity:0;animation:heroRise .8s var(--ease-out) .45s both;}
 
 /* Reveal en scroll — un solo contrato de clase. animation-fill-mode:backwards
    evita el flash durante el stagger y NO bloquea los :hover tras revelar. */
@@ -275,7 +334,7 @@ html.js-anim .lvl .bar{transform-origin:left;transform:scaleX(0);transition:tran
 html.js-anim .lvl.in-view .bar{transform:scaleX(1);}
 
 /* El nav se densifica al hacer scroll */
-header.scrolled{background:rgba(20,28,42,.98);border-bottom-color:rgba(197,160,89,.45);box-shadow:0 4px 20px rgba(0,0,0,.18);}
+header.scrolled{background:rgba(14,12,31,.97);border-bottom-color:var(--hairline);box-shadow:0 4px 20px rgba(0,0,0,.22);}
 
 /* Micro-interacciones de hover (premium = más lento, sin nuevos saltos en cards) */
 .btn:active{transform:translateY(0);transition-duration:.1s;}
@@ -286,13 +345,14 @@ header.scrolled{background:rgba(20,28,42,.98);border-bottom-color:rgba(197,160,8
    nunca añade .js-anim bajo reduce, así que el contenido queda 100% visible) */
 @media (prefers-reduced-motion: reduce){
   html{scroll-behavior:auto;}
-  html.js-anim .reveal,html.js-anim .hero-inner>*,html.js-anim .hero::before,
+  html.js-anim .reveal,html.js-anim .hero-inner>*,html.js-anim .hero::before,.hero-star,
   html.js-anim .lvl .bar,.qitem .ans,.qitem button i,header,
   .mcard,.course,.btn,.lvl,.plan{
     opacity:1 !important;transform:none !important;transition:none !important;animation:none !important;
   }
   html.js-anim .lvl .bar{transform:scaleX(1) !important;}
-  html.js-anim .hero::before{opacity:.06 !important;transform:translateY(-50%) !important;}
+  .hero::before{opacity:1 !important;}
+  .hero-star{opacity:1 !important;}
 }
 
 /* Impresión: nunca ocultar contenido al imprimir (el observer no dispara) */
@@ -344,6 +404,7 @@ header.scrolled{background:rgba(20,28,42,.98);border-bottom-color:rgba(197,160,8
 <a id="top"></a>
 <main id="main">
 <section class="hero">
+  <span class="hero-star" aria-hidden="true"></span>
   <div class="container">
     <div class="hero-grid">
     <div class="hero-inner">
@@ -362,7 +423,15 @@ header.scrolled{background:rgba(20,28,42,.98);border-bottom-color:rgba(197,160,8
         <div><b>100%</b><small>En vivo, no grabado</small></div>
       </div>
     </div>
-    <div class="hero-visual" aria-hidden="true"><img src="assets/images/lessons/theme_business.jpg" alt="" decoding="async"></div>
+    <div class="hero-visual">
+      <div class="hero-orb">
+        <img class="moon" src="assets/images/mascot/vesper_cat.png" alt="Vesper, tu guía de aprendizaje" width="118" height="118" decoding="async"
+             onerror="this.onerror=null;this.src='assets/images/virtual_class_happy_cat.png'">
+        <p class="greet">Hola, soy Vesper</p>
+        <p class="sub">Te acompaño desde el primer “hello” hasta tu certificación.</p>
+        <a href="chat.html" class="btn btn-gold"><i class="fas fa-comment-dots" aria-hidden="true"></i> Habla con Vesper</a>
+      </div>
+    </div>
     </div>
   </div>
 </section>
