@@ -1101,14 +1101,19 @@
 
   /* ---------- FEEDBACK / XP ---------- */
   var lastPerfect = false, masteryUnlocked = false;
+  var PASS_PCT = 70;
   function renderFeedback() {
     var total = lesson.exercises.length;
     var correct = results.filter(Boolean).length;
     var pct = Math.round(100 * correct / Math.max(1, total));
-    earnedXp = Math.max(5, Math.round((lesson.xpReward || 0) * correct / Math.max(1, total)));
-    if (PATH && PATH.setScore && lesson.lessonId) PATH.setScore(lesson.lessonId, pct);
     var perfect = correct === total;
     lastPerfect = perfect;
+    /* Lecciones normales: hay que acertar >=70% para superarlas, ganar XP y
+       desbloquear la siguiente. Por debajo se ofrece reintentar (no completa).
+       Los repasos ("boss") conservan su lógica propia (>=80% = maestría). */
+    if (!lesson.isReview && pct < PASS_PCT) { renderRetry(correct, total, pct); return; }
+    earnedXp = Math.max(5, Math.round((lesson.xpReward || 0) * correct / Math.max(1, total)));
+    if (PATH && PATH.setScore && lesson.lessonId) PATH.setScore(lesson.lessonId, pct);
     /* repaso aprobado (>=80%) -> desbloquea maestría de la destreza */
     masteryUnlocked = false;
     if (lesson.isReview && pct >= 80 && P && P.unlock) {
@@ -1124,6 +1129,20 @@
       + '<div class="xpbar"><div class="xpfill" style="width:' + pct + '%"></div></div>'
       + '<button class="btn btn-gold" id="cont">Continuar</button></div></div>');
     byId("cont").onclick = renderStreak;
+  }
+
+  /* No alcanzó el umbral: no cuenta como superada (sin XP ni desbloqueo).
+     Ofrece reintentar la misma lección desde el primer ejercicio. */
+  function renderRetry(correct, total, pct) {
+    show('<div class="wrap">' + topbar(86) + '<div class="card center">'
+      + mascot("incorrect", "Casi! Repasa y vuelve a intentarlo.")
+      + '<h1>' + pct + '%</h1>'
+      + '<p class="muted">' + correct + ' de ' + total + ' correctos &middot; necesitas ' + PASS_PCT + '% para continuar</p>'
+      + '<div class="xpbar"><div class="xpfill" style="width:' + pct + '%;background:var(--error)"></div></div>'
+      + '<button class="btn btn-gold" id="retry">Reintentar</button>'
+      + '<button class="btn btn-ghost" id="backHome">Ver todas las lecciones</button></div></div>');
+    byId("retry").onclick = function () { exIdx = 0; results = []; earnedXp = 0; renderExercise(); };
+    byId("backHome").onclick = function () { location.search = ""; };
   }
 
   /* ---------- STREAK ---------- */
