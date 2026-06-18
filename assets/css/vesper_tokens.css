@@ -36,6 +36,22 @@
   --va-r-lg: 18px;
   --va-shadow: 0 6px 22px rgba(27, 27, 47, .08);
   --va-shadow-lg: 0 14px 40px rgba(27, 27, 47, .16);
+  /* Sombra "crepúsculo": tinte frío violáceo, para superficies premium. */
+  --va-shadow-dusk: 0 18px 44px rgba(20, 18, 42, .22);
+
+  /* ---- Identidad "Estrella Vespertina" (Vesper = lucero del atardecer) ----
+     Tonos de cielo del crepúsculo a la noche + una luz dorada guía. Se usan
+     en fondos oscuros (hero, CTA, footer, sección de niveles). No alteran el
+     contraste del texto sobre cream/paper, que sigue usando --va-ink/--va-muted. */
+  --va-night: #14122a;       /* índigo profundo (noche) */
+  --va-dusk: #1f2342;        /* navy-violeta (crepúsculo) */
+  --va-twilight: #3a3a63;    /* violeta del horizonte */
+  --va-star: #f3e2ab;        /* destello de estrella (gold muy claro) */
+  --va-hairline: rgba(201, 168, 76, .35);   /* divisor dorado fino */
+
+  /* Gradientes y resplandores reutilizables. */
+  --va-grad-dusk: linear-gradient(160deg, var(--va-dusk), var(--va-night) 60%, #0e0c1f);
+  --va-glow-gold: radial-gradient(900px 420px at 80% -10%, rgba(201, 168, 76, .22), transparent 60%);
 
   /* Tipografía. */
   --va-font-display: "Inria Serif", Georgia, serif;
