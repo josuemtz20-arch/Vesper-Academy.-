@@ -175,6 +175,7 @@
   /* fill blank + translate input */
   .type-input{width:100%;min-height:50px;border:1.5px solid var(--line);border-radius:13px;padding:12px 14px;font-family:inherit;font-size:1.05rem;color:var(--ink);background:var(--paper);-webkit-appearance:none}
   .type-input:focus{outline:none;border-color:var(--gold)}
+  .type-input:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
   .type-input.correct{border-color:var(--success);background:var(--ok-tint)}
   .type-input.wrong{border-color:var(--error);background:var(--no-tint)}
   .fb-sentence{font-size:1.12rem;margin:8px 0 10px;line-height:2}
@@ -268,6 +269,8 @@
     .grid{grid-template-columns:1fr 1fr}
     .lcard2{height:100%}
   }
+/* Foco de teclado visible (WCAG 2.4.7) */
+:focus-visible{outline:3px solid var(--gold,#c5a059);outline-offset:2px}
 </style>
 </head>
 <body>
