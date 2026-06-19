@@ -112,7 +112,19 @@ window.VESPER_TOEFL_PACK = (function () {
           hint: "Inversión tras adverbio negativo: Rarely + have + sujeto + participio." },
         { type: "multiple_choice", question: "Which sentence is parallel (correct)?", options: ["The course teaches reading, writing, and to speak.", "The course teaches reading, writing, and speaking.", "The course teaches to read, writing, and speaking.", "The course teaches reading, to write, and speaking."], correctIndex: 1, explanation: "El paralelismo exige la misma forma: reading, writing, speaking." },
         { type: "multiple_choice", question: "Choose the correct conditional (formal): \"If the sample ___ contaminated, the results would be invalid.\"", options: ["were", "is", "was being", "will be"], correctIndex: 0, explanation: "Segundo condicional formal: 'If the sample were contaminated, ...would be invalid.'" },
-        { type: "true_false", statement: "In strict academic English, \"data\" is often treated as a plural noun (e.g. \"the data suggest\").", answer: true, explanation: "En registro académico estricto 'data' suele ser plural: 'the data suggest'." }
+        { type: "true_false", statement: "In strict academic English, \"data\" is often treated as a plural noun (e.g. \"the data suggest\").", answer: true, explanation: "En registro académico estricto 'data' suele ser plural: 'the data suggest'." },
+        { type: "find_error", question: "Encuentra el error gramatical.",
+          segments: ["The list of new items ", { u: "are" }, " carefully ", { u: "stored" }, " in ", { u: "the cloud" }, " every ", { u: "night" }, "."],
+          correctIndex: 0, correction: "is (el núcleo del sujeto es 'the list', en singular)",
+          explanation: "El verbo concuerda con 'the list' (singular), no con 'items'." },
+        { type: "find_error", question: "Encuentra el error.",
+          segments: ["She ", { u: "has lived" }, " in Berlin ", { u: "since" }, " three ", { u: "years" }, ", and she still ", { u: "works" }, " there."],
+          correctIndex: 1, correction: "for ('for three years')",
+          explanation: "'Since' marca un punto de inicio; con una duración se usa 'for'." },
+        { type: "find_error", question: "Encuentra el error.",
+          segments: ["The new policy is ", { u: "more" }, " efficient ", { u: "but" }, " less ", { u: "costlier" }, " than ", { u: "the old one" }, "."],
+          correctIndex: 2, correction: "costly ('less costly', no 'less costlier')",
+          explanation: "No se combinan 'less' y el comparativo en '-er': lo correcto es 'less costly'." }
       ]
     },
 
@@ -239,7 +251,15 @@ window.VESPER_TOEFL_PACK = (function () {
         { type: "multiple_choice", question: "Which word means 'open to more than one interpretation'?", options: ["coherent", "ambiguous", "explicit", "redundant"], correctIndex: 1, explanation: "'Ambiguous' = ambiguo, con más de una lectura." },
         { type: "true_false", statement: "\"To substantiate a claim\" means to weaken it.", answer: false, explanation: "Significa respaldarla con pruebas, no debilitarla." },
         { type: "translate", prompt: "Traduce al inglés (académico): \"Los datos respaldan la hipótesis.\"",
-          answers: ["the data support the hypothesis", "the data supports the hypothesis"], explanation: "The data support the hypothesis." }
+          answers: ["the data support the hypothesis", "the data supports the hypothesis"], explanation: "The data support the hypothesis." },
+        { type: "find_error", question: "Encuentra el error (registro académico).",
+          segments: ["Hardly ", { u: "the experiment had begun" }, " ", { u: "when" }, " the equipment ", { u: "failed" }, ", ", { u: "forcing" }, " a delay."],
+          correctIndex: 0, correction: "had the experiment begun (inversión tras 'Hardly')",
+          explanation: "Tras un adverbio negativo inicial como 'Hardly' se invierte el sujeto y el auxiliar: 'Hardly had the experiment begun...'" },
+        { type: "find_error", question: "Encuentra el error.",
+          segments: ["The committee ", { u: "recommended" }, " that the report ", { u: "is" }, " ", { u: "submitted" }, " ", { u: "by Friday" }, "."],
+          correctIndex: 1, correction: "be ('recommended that the report be submitted')",
+          explanation: "Tras 'recommend that' el subjuntivo formal usa la forma base del verbo: 'be submitted'." }
       ]
     },
 
@@ -364,7 +384,19 @@ window.VESPER_TOEFL_PACK = (function () {
           correctOrder: ["Not", "only", "does", "the", "lecture", "rebut", "the", "reading"],
           hint: "Inversión enfática: Not only + does + sujeto + verbo." },
         { type: "translate", prompt: "Traduce (académico): \"La conferencia contradice el argumento del texto.\"",
-          answers: ["the lecture contradicts the argument of the reading", "the lecture contradicts the reading's argument"], explanation: "The lecture contradicts the reading's argument." }
+          answers: ["the lecture contradicts the argument of the reading", "the lecture contradicts the reading's argument"], explanation: "The lecture contradicts the reading's argument." },
+        { type: "find_error", question: "Encuentra el error (nivel avanzado).",
+          segments: ["Not only ", { u: "the results were" }, " surprising, ", { u: "but they also" }, " ", { u: "challenged" }, " ", { u: "a long-held theory" }, "."],
+          correctIndex: 0, correction: "were the results (inversión tras 'Not only')",
+          explanation: "'Not only' al inicio exige inversión: 'Not only were the results surprising...'" },
+        { type: "find_error", question: "Encuentra el error.",
+          segments: ["The phenomenon, ", { u: "together with" }, " its many causes, ", { u: "remain" }, " ", { u: "poorly" }, " ", { u: "understood" }, "."],
+          correctIndex: 1, correction: "remains (el sujeto 'the phenomenon' es singular)",
+          explanation: "'together with...' no cambia el número del sujeto; el verbo concuerda con 'phenomenon'." },
+        { type: "find_error", question: "Encuentra el error (condicional).",
+          segments: ["Had the policy been implemented earlier, ", { u: "the crisis" }, " ", { u: "may have" }, " ", { u: "been" }, " ", { u: "averted" }, "."],
+          correctIndex: 1, correction: "might have ('might have been averted' en el 3er condicional)",
+          explanation: "En el condicional tipo 3 la consecuencia usa 'would/might have + participio', no 'may have'." }
       ]
     },
 

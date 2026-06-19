@@ -74,6 +74,18 @@
   .opt.correct{border-color:var(--success);background:var(--ok-tint)}
   .opt.wrong{border-color:var(--error);background:var(--no-tint)}
   .opt.locked{cursor:default}
+  /* find the error (TOEFL written expression) */
+  .fe-sentence{font-size:1.12rem;line-height:2.2;margin:6px 0 14px;color:var(--ink)}
+  .fe-seg{display:inline;border:none;background:none;font-family:inherit;font-size:inherit;color:var(--ink);cursor:pointer;
+    text-decoration:underline;text-decoration-color:var(--gold2);text-underline-offset:4px;text-decoration-thickness:2px;
+    padding:1px 3px;border-radius:7px}
+  .fe-seg .fe-lab{font-size:.62em;font-weight:800;color:var(--gold2);margin-right:1px;vertical-align:super}
+  .fe-seg.sel{background:var(--gold-tint)}
+  .fe-seg.correct{background:var(--ok-tint);text-decoration-color:var(--success)}
+  .fe-seg.correct .fe-lab{color:var(--success)}
+  .fe-seg.wrong{background:var(--no-tint);text-decoration-color:var(--error)}
+  .fe-seg.wrong .fe-lab{color:var(--error)}
+  .fe-seg.locked{cursor:default}
   /* word order */
   .hint{background:var(--gold-tint);border-radius:12px;padding:8px 12px;font-size:.9rem;margin:2px 0 12px}
   .answer{min-height:56px;border:1.5px dashed var(--gold);border-radius:13px;padding:9px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;background:var(--cream)}
@@ -1734,6 +1746,7 @@
     else if (ex.type === "listening") renderListening(ex, pct, total);
     else if (ex.type === "categorize") renderCategorize(ex, pct, total);
     else if (ex.type === "reading") renderReading(ex, pct, total);
+    else if (ex.type === "find_error") renderFindError(ex, pct, total);
     else advance();
   }
   function advance() {
@@ -1784,6 +1797,54 @@
       results[exIdx] = ok;
       byId("fb").innerHTML = feedbackBox(ok, ex.explanation || "", "Era: " + ex.options[ex.correctIndex]);
       this.textContent = (exIdx + 1 < total) ? "Siguiente" : "Ver resultados";
+    };
+  }
+
+  /* ---------- FIND THE ERROR (TOEFL: written expression) ----------
+     Oracion partida en `segments`: las cadenas son texto fijo; los objetos
+     {u:"..."} son las partes subrayadas (candidatas A, B, C, D...). El
+     alumno toca la subrayada con el error. `correctIndex` apunta al orden
+     de la candidata erronea; `correction` (opcional) muestra el arreglo. */
+  function renderFindError(ex, pct, total) {
+    var letters = ["A", "B", "C", "D", "E", "F"];
+    var ci = 0;
+    var html = (ex.segments || []).map(function (seg) {
+      if (typeof seg === "string") return esc(seg);
+      var i = ci++;
+      return '<button class="fe-seg" data-i="' + i + '" aria-label="Opcion ' + letters[i] + ': ' + esc(seg.u) + '">'
+        + '<sup class="fe-lab" aria-hidden="true">' + letters[i] + '</sup>' + esc(seg.u) + '</button>';
+    }).join("");
+    show('<div class="wrap">' + exHeader(pct, total) + '<div class="card">'
+      + '<h2>' + esc(ex.question || "Encuentra el error") + '</h2>'
+      + '<p class="hint">&#128161; ' + esc(ex.hint || "Toca la parte subrayada que contiene el error gramatical.") + '</p>'
+      + '<div class="fe-sentence">' + html + '</div><div id="fb"></div>'
+      + '<button class="btn" id="verify" disabled>Verificar</button></div></div>');
+    var sel = -1, done = false;
+    var segEls = document.querySelectorAll(".fe-seg");
+    each(".fe-seg", function (b) {
+      b.onclick = function () {
+        if (done) return;
+        sel = +b.getAttribute("data-i");
+        for (var x = 0; x < segEls.length; x++) segEls[x].classList.remove("sel");
+        b.classList.add("sel");
+        byId("verify").disabled = false;
+      };
+    });
+    byId("verify").onclick = function () {
+      if (done) { advance(); return; }
+      done = true;
+      var ok = sel === ex.correctIndex;
+      for (var x = 0; x < segEls.length; x++) {
+        var i = +segEls[x].getAttribute("data-i");
+        segEls[x].classList.add("locked");
+        if (i === ex.correctIndex) segEls[x].classList.add("correct");
+        if (i === sel && !ok) segEls[x].classList.add("wrong");
+      }
+      results[exIdx] = ok;
+      var fix = ex.correction ? ("Corrección: " + ex.correction) : "";
+      var detail = ex.explanation ? (ex.explanation + (fix ? " — " + fix : "")) : fix;
+      byId("fb").innerHTML = feedbackBox(ok, detail, "El error estaba en la opción " + letters[ex.correctIndex] + ".");
+      setVerifyNext(this, total);
     };
   }
 
