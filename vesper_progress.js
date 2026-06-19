@@ -62,7 +62,7 @@ window.VesperProgress = (function () {
     return false;
   }
 
-  function defaults() { return { xp: 0, streak: 0, lastDay: null, days: {}, completed: {}, shields: 0, achievements: {}, dayCounts: {}, goalTarget: DEFAULT_GOAL }; }
+  function defaults() { return { xp: 0, streak: 0, lastDay: null, days: {}, completed: {}, shields: 0, achievements: {}, dayCounts: {}, goalTarget: DEFAULT_GOAL, bosses: {} }; }
 
   function load() {
     try {
@@ -83,10 +83,10 @@ window.VesperProgress = (function () {
 
   function addXp(n) { var s = load(); s.xp += (n || 0); save(s); return s.xp; }
 
-  /* nº de lecciones reales completadas (excluye repasos "review:..."). */
+  /* nº de lecciones reales completadas (excluye repasos "review:..." y jefes "boss:..."). */
   function lessonCount(s) {
     var n = 0;
-    for (var k in s.completed) { if (k.indexOf("review:") !== 0) n++; }
+    for (var k in s.completed) { if (k.indexOf("review:") !== 0 && k.indexOf("boss:") !== 0) n++; }
     return n;
   }
 
@@ -173,6 +173,20 @@ window.VesperProgress = (function () {
   function dailyGoal() { var s = load(); return goalInfo(s, dayKey()); }
   function setGoal(n) { var s = load(); s.goalTarget = Math.max(1, Math.min(20, parseInt(n, 10) || DEFAULT_GOAL)); save(s); return s.goalTarget; }
 
+  /* ---- Jefes de nivel ("boss") ----
+     Registra que el jefe de un mundo (NIVEL CEFR) fue superado y desbloquea el
+     siguiente mundo. Guarda la mejor puntuación. Devuelve true si se guardó. */
+  function passBoss(level, pct) {
+    if (!level) return false;
+    var s = load();
+    if (!s.bosses) s.bosses = {};
+    pct = Math.max(0, Math.min(100, Math.round(pct || 0)));
+    var cur = s.bosses[level];
+    if (!cur || pct > cur.pct) { s.bosses[level] = { pct: pct, date: dayKey() }; save(s); }
+    return true;
+  }
+  function bossPassed(level) { var s = load(); return !!(s.bosses && s.bosses[level]); }
+
   /* Estado completo de logros para pintar la vitrina (ganados + bloqueados). */
   function achievementsState() {
     var s = load();
@@ -225,7 +239,7 @@ window.VesperProgress = (function () {
      streak = recalculada sobre la unión de días (evita inflar la racha). */
   function merge(remote) {
     var s = load(); remote = remote || {};
-    var days = {}, completed = {}, achievements = {}, dayCounts = {}, k;
+    var days = {}, completed = {}, achievements = {}, dayCounts = {}, bosses = {}, k;
     for (k in (s.days || {})) days[k] = true;
     for (k in (remote.days || {})) days[k] = true;
     for (k in (s.completed || {})) completed[k] = s.completed[k];
@@ -234,6 +248,14 @@ window.VesperProgress = (function () {
     for (k in (remote.achievements || {})) { if (!achievements[k] || remote.achievements[k] < achievements[k]) achievements[k] = remote.achievements[k]; }
     for (k in (s.dayCounts || {})) dayCounts[k] = s.dayCounts[k];
     for (k in (remote.dayCounts || {})) { if ((remote.dayCounts[k] || 0) > (dayCounts[k] || 0)) dayCounts[k] = remote.dayCounts[k]; }
+    /* jefes: une por NIVEL — conserva mayor pct; fecha más antigua entre las disponibles */
+    for (k in (s.bosses || {})) bosses[k] = s.bosses[k];
+    for (k in (remote.bosses || {})) {
+      var rb = remote.bosses[k];
+      if (!bosses[k]) bosses[k] = rb;
+      else bosses[k] = { pct: Math.max(bosses[k].pct || 0, rb.pct || 0),
+                         date: (bosses[k].date && rb.date) ? (bosses[k].date < rb.date ? bosses[k].date : rb.date) : (bosses[k].date || rb.date) };
+    }
     var lastDay = s.lastDay || null;
     if (remote.lastDay && (!lastDay || remote.lastDay > lastDay)) lastDay = remote.lastDay;
     var merged = {
@@ -245,7 +267,8 @@ window.VesperProgress = (function () {
       shields: Math.max(s.shields || 0, remote.shields || 0),
       achievements: achievements,
       dayCounts: dayCounts,
-      goalTarget: s.goalTarget || remote.goalTarget || DEFAULT_GOAL
+      goalTarget: s.goalTarget || remote.goalTarget || DEFAULT_GOAL,
+      bosses: bosses
     };
     merged.streak = recomputeStreak(days, lastDay);
     save(merged);
@@ -253,5 +276,6 @@ window.VesperProgress = (function () {
   }
 
   return { getState: getState, completeLesson: completeLesson, addXp: addXp, weekGrid: weekGrid, merge: merge,
-    unlock: unlock, dailyGoal: dailyGoal, setGoal: setGoal, achievementsState: achievementsState, ACHIEVEMENTS: ACHIEVEMENTS };
+    unlock: unlock, dailyGoal: dailyGoal, setGoal: setGoal, passBoss: passBoss, bossPassed: bossPassed,
+    achievementsState: achievementsState, ACHIEVEMENTS: ACHIEVEMENTS };
 })();

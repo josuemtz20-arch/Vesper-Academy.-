@@ -145,11 +145,33 @@ window.VESPER_PATH = (function () {
     return 1;
   }
 
+  /* ---- Regiones / Jefes de nivel ("boss") ----
+     Un mundo (NIVEL) está "completo" cuando todas sus lecciones están hechas;
+     ahí se habilita el jefe. El siguiente mundo se desbloquea al superar el jefe
+     del anterior. Desbloqueo SUAVE: un mundo con progreso propio (done>0) también
+     queda abierto, para no atrapar a usuarios con avance previo. */
+  function regionComplete(lv, b) {
+    lv = normLevel(lv);
+    var g = b && b.levels && b.levels[lv];
+    return !!(g && g.total && g.done >= g.total);
+  }
+  function bossUnlocked(lv, b) { return regionComplete(lv, b); }
+  function regionUnlocked(lv, b) {
+    lv = normLevel(lv);
+    var i = LEVELS.indexOf(lv);
+    if (i <= 0) return true;                       // A1 siempre abierto
+    var prev = LEVELS[i - 1];
+    var passed = !!(window.VesperProgress && window.VesperProgress.bossPassed && window.VesperProgress.bossPassed(prev));
+    var hasProgress = !!(b && b.levels && b.levels[lv] && b.levels[lv].done > 0);
+    return passed || hasProgress;
+  }
+
   return {
     LEVELS: LEVELS, SKILLS: SKILLS, SKILL_ORDER: SKILL_ORDER,
     levelColor: levelColor, normLevel: normLevel, skillOf: skillOf,
     build: build, isCompleted: isCompleted, isUnlocked: isUnlocked, status: status,
     continueLesson: continueLesson, levelProgress: levelProgress,
+    regionComplete: regionComplete, bossUnlocked: bossUnlocked, regionUnlocked: regionUnlocked,
     getScore: getScore, setScore: setScore, stars: stars
   };
 })();

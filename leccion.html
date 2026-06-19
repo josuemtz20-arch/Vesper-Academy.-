@@ -286,19 +286,157 @@
   .world .w-pc{font-size:.68rem;color:var(--muted);font-weight:600}
   .world .w-lk{position:absolute;top:4px;right:7px;font-size:.8rem}
   /* ruta serpenteante */
-  .wmap{position:relative;display:flex;flex-direction:column;align-items:center;gap:28px;margin:18px 0 14px;padding:6px 0}
-  .wmap::before{content:"";position:absolute;top:6px;bottom:6px;left:50%;width:5px;transform:translateX(-50%);z-index:0;border-radius:3px;
-    background:repeating-linear-gradient(180deg,rgba(197,160,89,.5) 0 9px,transparent 9px 20px)}
-  .wmap::after{content:"";position:absolute;top:6px;bottom:6px;left:50%;width:1px;transform:translateX(-50%);z-index:0;
-    background:repeating-linear-gradient(180deg,rgba(197,160,89,.55) 0 3px,transparent 3px 16px)}
+  /* ===== Escena 2D del mundo: cielo estrellado navy + isla de terreno ===== */
+  .wsky{position:relative;margin:14px 0 16px;border-radius:20px;overflow:hidden;
+    background:radial-gradient(120% 90% at 50% -10%,#20203c 0%,var(--ink,#1B1B2F) 55%,#14122a 100%);
+    box-shadow:inset 0 0 0 1px rgba(197,160,89,.18),0 14px 34px rgba(20,18,42,.30)}
+  .wsky::before{content:"";position:absolute;inset:0;pointer-events:none;z-index:0;opacity:.55;
+    background-repeat:no-repeat;background-image:
+      radial-gradient(1.5px 1.5px at 12% 16%,rgba(243,226,171,.9),transparent 60%),
+      radial-gradient(1.2px 1.2px at 78% 8%,rgba(255,255,255,.7),transparent 60%),
+      radial-gradient(1.6px 1.6px at 33% 60%,rgba(243,226,171,.7),transparent 60%),
+      radial-gradient(1.2px 1.2px at 88% 46%,rgba(255,255,255,.6),transparent 60%),
+      radial-gradient(1.3px 1.3px at 58% 82%,rgba(243,226,171,.65),transparent 60%),
+      radial-gradient(1.1px 1.1px at 22% 90%,rgba(255,255,255,.5),transparent 60%),
+      radial-gradient(1.4px 1.4px at 68% 70%,rgba(243,226,171,.6),transparent 60%)}
+  .wisland{position:relative;z-index:1;margin:10px;border-radius:18px;padding:8px 0 16px;
+    border:1px solid var(--w-accent,#c5a059);
+    box-shadow:0 10px 26px rgba(20,18,42,.42),inset 0 1px 0 rgba(255,255,255,.05);
+    background:linear-gradient(180deg,rgba(27,27,47,.28),rgba(27,27,47,.64))}
+  .wisland::before{content:"";position:absolute;inset:0;z-index:-1;border-radius:18px;pointer-events:none;
+    background-image:var(--w-terrain);background-size:cover;background-position:center;opacity:.20;
+    filter:saturate(.85) brightness(.8);
+    -webkit-mask-image:linear-gradient(180deg,rgba(0,0,0,.95),rgba(0,0,0,.35) 70%,transparent);
+            mask-image:linear-gradient(180deg,rgba(0,0,0,.95),rgba(0,0,0,.35) 70%,transparent)}
+  .wisland::after{content:"";position:absolute;inset:0;z-index:-1;border-radius:18px;pointer-events:none;opacity:.5;
+    background:radial-gradient(80% 50% at 50% 0%,var(--w-glow,rgba(197,160,89,.25)) 0%,transparent 60%)}
+  .wmap{position:relative;display:flex;flex-direction:column;align-items:center;gap:30px;margin:0 auto;padding:12px 0 6px;width:100%;max-width:340px}
+  /* capa de terreno: paisaje del bioma detrás del camino. Las piezas se pintan
+     con clases .terr (compartidas con el motivo de bioma de la portada de lección). */
+  .wterrain{position:absolute;left:0;top:0;z-index:0;overflow:visible;pointer-events:none}
+  .terr .prop{opacity:.92}
+  .terr .sh{fill:rgba(8,7,20,.45)}
+  .terr .lf{fill:var(--w-accent,#5E8A4E)}
+  .terr .lf2{fill:var(--w-accent,#5E8A4E);opacity:.7}
+  .terr .tk{fill:#3a2a1c}
+  .terr .stem{fill:#cabfa6}
+  .terr .rk{fill:#34344f;stroke:rgba(255,255,255,.07);stroke-width:.6}
+  .terr .rk2{fill:none;stroke:rgba(255,255,255,.12);stroke-width:.6}
+  .terr .bdy{fill:#23234a;stroke:rgba(255,255,255,.06);stroke-width:.5}
+  .terr .win{fill:var(--gold,#c5a059)}
+  .terr .glow{fill:var(--gold,#c5a059);opacity:.32}
+  .terr .dot{fill:#f5f2eb;opacity:.85}
+  .terr .ln{fill:none;stroke:var(--w-accent,#5E8A4E);stroke-width:1.4;stroke-linecap:round}
+  .terr .ln2{fill:none;stroke:var(--w-accent,#5E8A4E);stroke-width:1.2;opacity:.7}
+  .terr .spark{fill:var(--gold,#c5a059)}
+  .terr .ring{fill:none;stroke:var(--w-accent,#6A5FA8);stroke-width:1.4;opacity:.8}
+  .terr .gem{fill:var(--w-accent,#3FA08A);opacity:.85}
+  .terr .gem2{fill:none;stroke:rgba(255,255,255,.28);stroke-width:.5}
+  .terr .flag{fill:none;stroke:var(--gold,#c5a059);stroke-width:1.2}
+  .biome-motif{flex:none;display:block}
+  .biome-motif .prop{opacity:1}
+  /* sendero SVG: calzada ancha + glow + línea dorada (trazado por JS sobre los nodos) */
+  .wtrail{position:absolute;left:0;top:0;z-index:1;overflow:visible;pointer-events:none}
+  .wtrail path{fill:none;stroke-linecap:round;stroke-linejoin:round}
+  .wtrail-road{stroke:var(--w-accent,#c5a059);stroke-width:17;opacity:.20}
+  .wtrail-glow{stroke:var(--w-glow,rgba(197,160,89,.4));stroke-width:9;opacity:.5}
+  .wtrail-line{stroke:var(--gold,#c5a059);stroke-width:3.5;stroke-dasharray:2 12;opacity:.95}
+  /* nodos/carteles por encima del terreno y el camino */
+  .wisland .wnode{z-index:2}
+  .wisland .wstart{z-index:2}
+  /* avatar (gato Vesper) que recorre el sendero */
+  .wavatar{position:absolute;left:0;top:0;width:50px;height:50px;z-index:3;object-fit:contain;
+    offset-anchor:50% 50%;offset-rotate:0deg;pointer-events:none;
+    filter:drop-shadow(0 6px 7px rgba(20,18,42,.5));animation:wbob 2.4s ease-in-out infinite}
+  @keyframes wbob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+  /* títulos/etiquetas legibles sobre la isla oscura */
+  .wisland .wtitle{color:var(--cream,#f5f2eb)}
+  .wisland .wnode.locked .wtitle{color:rgba(245,242,235,.55)}
+  /* checkpoint de destreza = cartel de zona tallado en el terreno */
+  .wisland .wcheck{position:relative;z-index:2;background:linear-gradient(180deg,#262649,#191930);
+    border:1px solid var(--w-accent,#c5a059);border-left:1px solid var(--w-accent,#c5a059);border-radius:11px;
+    color:var(--cream,#f5f2eb);letter-spacing:.02em;
+    box-shadow:0 4px 0 rgba(8,7,20,.5),inset 0 1px 0 rgba(255,255,255,.06)}
+  .wisland .wcheck .ic::before{color:var(--w-accent,#c5a059)}
+  .wisland .wcheck .ct{color:var(--gold,#c5a059)}
+  /* Guardián del mundo (jefe): arco/portal — distinto del castillo */
+  .wbtn.boss{width:92px;height:90px;border-radius:46px 46px 16px 16px;border-width:4px;font-size:1.8rem;
+    background:linear-gradient(160deg,#23234a,var(--ink,#1B1B2F));border-color:var(--w-accent,#c5a059);
+    color:var(--w-accent,#c5a059);box-shadow:0 7px 0 rgba(20,18,42,.45),0 10px 24px rgba(20,18,42,.5)}
+  .wbtn.boss.locked{filter:grayscale(.65) brightness(.7);color:#8e8aa6;border-color:#3a3a55;cursor:not-allowed;box-shadow:none}
+  .wbtn.boss.ready{color:var(--gold,#c5a059);border-color:var(--gold,#c5a059)}
+  .wbtn.boss.ready::after{content:"";position:absolute;inset:-7px;border-radius:46px 46px 16px 16px;pointer-events:none;
+    box-shadow:0 0 0 0 rgba(197,160,89,.5);animation:wpulse 1.7s ease-in-out infinite}
+  .wbtn.boss.conquered{background:linear-gradient(160deg,#dcc08a,var(--gold,#c5a059));color:#1B1B2F;border-color:var(--gold2,#a8843d)}
+  .wbtn.boss .beam{opacity:0}
+  .wbtn.boss.ready .beam,.wbtn.boss.conquered .beam{opacity:1;animation:wbeam 2.6s ease-in-out infinite}
+  @keyframes wbeam{0%,100%{opacity:.5}50%{opacity:1}}
+  .wboss-node .wlabel.boss-lb{background:var(--w-accent,#1B1B2F);color:#fff}
+  .wboss-node .wtitle{font-weight:800;color:var(--cream,#f5f2eb)}
+  .wbridge{display:block;width:4px;height:26px;margin:9px auto 0;border-radius:3px;
+    background:repeating-linear-gradient(180deg,var(--gold,#c5a059) 0 5px,transparent 5px 10px)}
+  /* mini-reto (repaso por destreza): más pequeño y subordinado al Guardián */
+  .wbtn.castle.mini{width:58px;height:54px;border-radius:14px;border-width:3px;font-size:1.2rem;
+    background:linear-gradient(150deg,#2c2c4a,#1B1B2F);border-color:var(--w-accent,#c5a059);color:var(--w-accent,#c5a059)}
+  .wbtn.castle.mini.completed{background:linear-gradient(150deg,#dcc08a,var(--gold,#c5a059));border-color:var(--gold2,#a8843d);color:#1B1B2F}
+  .wnode.mini .wtitle{font-size:.74rem}
+  .wnode.mini .wlabel.mini-lb{font-size:.56rem;background:#2c2c4a;color:var(--gold,#c5a059)}
+  /* reduce-motion: sin caminar del avatar, sin haz del faro, sin titileo del cielo */
+  @media(prefers-reduced-motion:reduce){
+    .wavatar{animation:none}
+    .wbtn.boss.ready .beam,.wbtn.boss.conquered .beam{animation:none;opacity:1}
+  }
+  .vesper-reduce-motion .wavatar{animation:none}
+  .vesper-reduce-motion .wbtn.boss .beam{animation:none;opacity:1}
+  .vesper-reduce-motion .wamb i,.vesper-reduce-motion .wisland::before,.vesper-reduce-motion .wisland::after{animation:none}
+  /* ===== Pantallas del Guardián (portada / medidor / resultado) ===== */
+  .boss-cover{background:linear-gradient(170deg,#23234a,var(--ink,#1B1B2F));color:var(--cream,#f5f2eb);
+    border:1px solid var(--w-accent,#c5a059);box-shadow:0 14px 40px rgba(20,18,42,.4)}
+  .boss-cover h1{color:var(--cream,#f5f2eb)}
+  .boss-cover .muted{color:rgba(245,242,235,.72)}
+  .boss-eyebrow{display:inline-block;font-size:.66rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--w-accent,#c5a059);margin-bottom:4px}
+  .boss-warn{font-size:.86rem;color:var(--gold,#c5a059);font-weight:700;margin:2px 0 10px}
+  .boss-emblem{font-size:3.2rem;line-height:1;filter:drop-shadow(0 6px 10px rgba(20,18,42,.5));
+    animation:boss-throb 2.4s ease-in-out infinite}
+  .boss-emblem.dim{filter:grayscale(.6) brightness(.7);animation:none}
+  .boss-emblem.lit{animation:boss-pop .6s cubic-bezier(.2,.7,.3,1.3) both}
+  @keyframes boss-throb{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+  @keyframes boss-pop{0%{transform:scale(.4);opacity:0}100%{transform:scale(1);opacity:1}}
+  .boss-meter{display:flex;align-items:center;gap:8px;margin:8px 0 2px;padding:7px 12px;border-radius:999px;
+    background:rgba(20,18,42,.06);border:1px solid var(--w-accent,#c5a059)}
+  .bm-ic{font-size:1rem;flex:none}
+  .bm-nm{font-size:.78rem;font-weight:800;color:var(--ink,#1B1B2F);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .bm-bar{flex:1;min-width:60px;height:9px;border-radius:999px;background:rgba(27,27,47,.14);overflow:hidden}
+  .bm-bar > i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--w-accent,#c5a059),#c0392b);
+    transition:width .5s ease}
+  .boss-unlock{margin:6px auto 2px;padding:8px 14px;border-radius:12px;font-weight:800;color:var(--ink,#1B1B2F);
+    background:var(--gold-tint,rgba(201,168,76,.16));border:1px solid var(--gold,#c5a059)}
+  @media(prefers-reduced-motion:reduce){.boss-emblem,.boss-emblem.lit{animation:none}}
+  .vesper-reduce-motion .boss-emblem{animation:none}
+  /* ===== Identidad del mundo al entrar a una lección ===== */
+  #app[data-world] .topbar .bar{background:linear-gradient(90deg,var(--w-accent,#c5a059),var(--gold,#c5a059))}
+  #app[data-world] .exnum{color:var(--w-accent,#c5a059)}
+  .lesson-world{display:flex;align-items:center;gap:12px;justify-content:center;margin:0 0 12px;padding:8px 14px;border-radius:14px;
+    background:linear-gradient(180deg,#23234a,#191930);border:1px solid var(--w-accent,#c5a059);box-shadow:0 4px 0 rgba(8,7,20,.4)}
+  .lesson-world .lw-tx{text-align:left}
+  .lesson-world .lw-ey{display:block;font-size:.6rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--w-accent,#c5a059)}
+  .lesson-world .lw-nm{display:block;font-family:"Inria Serif",Georgia,serif;font-size:1.06rem;line-height:1.1;color:var(--cream,#f5f2eb)}
   .wnode{position:relative;z-index:1;--dx:0px;transform:translateX(var(--dx));display:flex;flex-direction:column;align-items:center}
   .wbtn{position:relative;width:74px;height:74px;border-radius:50%;border:3px solid var(--line);background:var(--paper);color:var(--ink);
     font-size:1.6rem;display:flex;align-items:center;justify-content:center;cursor:pointer;font-family:inherit;
     box-shadow:0 5px 0 rgba(27,27,47,.13),var(--shadow);transition:transform .12s ease}
   .wbtn:active:not(.locked){transform:translateY(2px);box-shadow:0 2px 0 rgba(27,27,47,.13),var(--shadow)}
-  .wbtn.completed{background:linear-gradient(150deg,#dcc08a,var(--gold));border-color:var(--gold2,#a8843d);color:#fff;text-shadow:0 1px 1px rgba(27,27,47,.25)}
-  .wbtn.open{border-color:var(--gold);color:var(--gold2,#a8843d)}
-  .wbtn.locked{background:#e9e6dd;border-color:#dcd5c4;color:#a39d92;cursor:not-allowed;box-shadow:none}
+  .wbtn.completed{background:linear-gradient(150deg,#e6cd97,var(--gold));border-color:var(--gold2,#a8843d);color:#1f1a0e;
+    box-shadow:0 5px 0 rgba(120,86,20,.5),var(--shadow),inset 0 0 0 2.5px rgba(255,255,255,.38),inset 0 0 0 4.5px rgba(168,132,61,.4)}
+  .wbtn.open{border-color:var(--gold);color:var(--gold2,#a8843d);background:linear-gradient(150deg,#fffdf7,#f4eede);
+    box-shadow:0 5px 0 rgba(27,27,47,.18),var(--shadow),inset 0 0 0 2px rgba(197,160,89,.22)}
+  .wbtn.locked{background:linear-gradient(150deg,#2b2b44,#1f1f34);border-color:#3c3c58;color:#73738f;cursor:not-allowed;
+    box-shadow:0 4px 0 rgba(8,7,20,.5),inset 0 2px 7px rgba(0,0,0,.4)}
+  /* iconos SVG de estado del nodo */
+  .wbtn .wglyph{width:30px;height:30px;display:block}
+  .wbtn.is-current .wglyph{width:36px;height:36px}
+  .wbtn.completed .wglyph{width:31px;height:31px}
   .wbtn.is-current{width:88px;height:88px;font-size:2rem;border-color:var(--gold);
     background:linear-gradient(150deg,var(--ink),#2c2c4a);color:var(--gold);
     box-shadow:0 0 0 4px var(--paper),0 0 0 7px var(--gold),0 6px 18px rgba(27,27,47,.3)}
@@ -325,6 +463,20 @@
   .wcheck .ic{position:relative;font-size:1.05rem}
   .wcheck .ic::before{content:"\2691";color:var(--gold2,#a8843d);margin-right:4px;font-size:.95rem}
   .wcheck .ct{margin-left:auto;font-size:.76rem;color:var(--gold2,#a8843d);font-weight:700}
+  .wcheck .ck-ic{display:inline-flex;align-items:center}
+  .wcheck .ck-ic svg{width:18px;height:18px}
+  .wisland .wcheck .ck-ic{color:var(--w-accent,#c5a059)}
+  /* iconos de destreza (chips de filtro + resultados de búsqueda) */
+  .skill-ic{display:inline-flex;align-items:center;vertical-align:-3px}
+  .skill-ic svg{width:15px;height:15px}
+  .lc-sub .skill-ic svg{width:13px;height:13px}
+  /* escudo del jefe en SVG (portada / medidor / resultado) */
+  .boss-emblem{color:var(--w-accent,#c5a059);line-height:0}
+  .boss-emblem svg{width:54px;height:58px}
+  .boss-emblem.lit{color:var(--gold,#c5a059)}
+  .boss-emblem.dim{color:#8e8aa6}
+  .bm-ic{display:inline-flex;align-items:center;color:var(--w-accent,#c5a059)}
+  .bm-ic svg{width:16px;height:17px}
   /* gallardete de inicio de mundo */
   .wstart{position:relative;z-index:1;align-self:center;margin:2px 0 6px;padding:5px 26px;background:var(--ink,#1B1B2F);color:var(--gold,#c5a059);
     font-family:Georgia,serif;font-variant:small-caps;letter-spacing:.06em;font-size:.78rem;font-weight:700;border:1px solid var(--gold,#c5a059);
@@ -392,13 +544,7 @@
   0%{transform:translate3d(0,0,0)}
   100%{transform:translate3d(-1.1%,0.4%,0)}}
 
-/* 1b. Ruta dorada que fluye (paint, sin layout) */
-.wmap::before{background-size:100% 29px;will-change:background-position;
-  animation:g-path-flow 2.6s linear infinite}
-.wmap::after{background-size:100% 19px;will-change:background-position;
-  animation:g-path-flow-fine 1.5s linear infinite}
-@keyframes g-path-flow{from{background-position:0 0}to{background-position:0 29px}}
-@keyframes g-path-flow-fine{from{background-position:0 0}to{background-position:0 19px}}
+/* 1b. (El sendero punteado animado se sustituyó por el SVG .wtrail medido en JS) */
 
 /* 1c. Nodos en reposo: bob sutil (no el actual / bloqueado / castillo) */
 .wbtn:not(.is-current):not(.locked):not(.castle){will-change:transform;
@@ -959,21 +1105,222 @@
       + strip;
   }
 
-  /* cada mundo (nivel) = ilustración + nombre + identidad temática (acento, atmósfera, partículas) */
+  /* cada mundo (nivel) = ilustración + nombre + identidad temática (acento, atmósfera, partículas)
+     + jefe (Guardián del mundo: examen mixto que abre el siguiente nivel). */
   var WORLD_THEME = {
-    A1: { file: "assets/images/lessons/theme_home.jpg",      worldName: "El Hogar",             accent:"#C07A33", accentSoft:"rgba(192,122,51,.15)", glow:"rgba(192,122,51,.40)", ambientName:"hearth",    ambientN:7,  mapN:3 },
-    A2: { file: "assets/images/lessons/theme_nature.jpg",    worldName: "El Sendero",           accent:"#5E8A4E", accentSoft:"rgba(94,138,78,.15)",  glow:"rgba(94,138,78,.38)",  ambientName:"trail",     ambientN:7,  mapN:4 },
-    B1: { file: "assets/images/lessons/theme_city.jpg",      worldName: "El Horizonte",         accent:"#3D86B0", accentSoft:"rgba(61,134,176,.15)", glow:"rgba(61,134,176,.34)", ambientName:"skyline",   ambientN:9,  mapN:3 },
-    B2: { file: "assets/images/lessons/theme_business.jpg",  worldName: "La Torre",             accent:"#A8762E", accentSoft:"rgba(168,118,46,.15)", glow:"rgba(168,118,46,.42)", ambientName:"ascent",    ambientN:6,  mapN:3 },
-    C1: { file: "assets/images/lessons/theme_space.jpg",     worldName: "El Firmamento",        accent:"#6A5FA8", accentSoft:"rgba(106,95,168,.16)", glow:"rgba(106,95,168,.40)", ambientName:"starfield", ambientN:10, mapN:6 },
-    C2: { file: "assets/images/lessons/theme_fantasy.jpg",   worldName: "El Castillo del Saber",accent:"#3FA08A", accentSoft:"rgba(63,160,138,.16)", glow:"rgba(63,160,138,.36)", ambientName:"aurora",    ambientN:7,  mapN:2 }
+    A1: { file: "assets/images/lessons/theme_home.jpg",      worldName: "El Hogar",             accent:"#C07A33", accentSoft:"rgba(192,122,51,.15)", glow:"rgba(192,122,51,.40)", ambientName:"hearth",    ambientN:7,  mapN:3, boss:{ name:"El Centinela del Hogar",  pass:75 }, biome:["cottage","bush","lantern","pine","bush"] },
+    A2: { file: "assets/images/lessons/theme_nature.jpg",    worldName: "El Sendero",           accent:"#5E8A4E", accentSoft:"rgba(94,138,78,.15)",  glow:"rgba(94,138,78,.38)",  ambientName:"trail",     ambientN:7,  mapN:4, boss:{ name:"El Guardián del Sendero", pass:75 }, biome:["pine","pine","bush","mushroom","fern"] },
+    B1: { file: "assets/images/lessons/theme_city.jpg",      worldName: "El Horizonte",         accent:"#3D86B0", accentSoft:"rgba(61,134,176,.15)", glow:"rgba(61,134,176,.34)", ambientName:"skyline",   ambientN:9,  mapN:3, boss:{ name:"El Vigía del Horizonte",  pass:75 }, biome:["building","building","lamp","tower","rock"] },
+    B2: { file: "assets/images/lessons/theme_business.jpg",  worldName: "La Torre",             accent:"#A8762E", accentSoft:"rgba(168,118,46,.15)", glow:"rgba(168,118,46,.42)", ambientName:"ascent",    ambientN:6,  mapN:3, boss:{ name:"El Heraldo de la Torre",  pass:75 }, biome:["crag","rock","crag","banner","pine"] },
+    C1: { file: "assets/images/lessons/theme_space.jpg",     worldName: "El Firmamento",        accent:"#6A5FA8", accentSoft:"rgba(106,95,168,.16)", glow:"rgba(106,95,168,.40)", ambientName:"starfield", ambientN:10, mapN:6, boss:{ name:"El Custodio del Firmamento", pass:75 }, biome:["star4","planet","crystal","star4"] },
+    C2: { file: "assets/images/lessons/theme_fantasy.jpg",   worldName: "El Castillo del Saber",accent:"#3FA08A", accentSoft:"rgba(63,160,138,.16)", glow:"rgba(63,160,138,.36)", ambientName:"aurora",    ambientN:7,  mapN:2, boss:{ name:"El Soberano del Saber",   pass:75 }, biome:["spire","banner","crystal","pine"] }
   };
   var WORLD_TAG = { A1: "Principiante", A2: "Básico", B1: "Intermedio", B2: "Intermedio alto", C1: "Avanzado", C2: "Maestría" };
   var WORLD_UMBRAL = { A1: "Umbral del Hogar", A2: "Mojón del Sendero", B1: "Arco del Horizonte", B2: "Pórtico de la Torre", C1: "Portal del Firmamento", C2: "Sello del Castillo" };
+  var BOSS_AVATAR = "assets/images/mascot/vesper_cat.png";
+  /* metadatos del jefe de un nivel, con defaults si el mundo no declara boss */
+  function bossMeta(lv) { var t = WORLD_THEME[lv] || {}; var b = t.boss || {}; return { name: b.name || "El Guardián", subtitle: t.worldName || lv, pass: b.pass || 75 }; }
+
+  /* ===== Iconos de marca (SVG nítidos en lugar de emojis) ===== */
+  var SKILL_ICONS = {
+    grammar:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.4C9.7 5 7.2 4.7 4.4 5.3v12.5c2.8-.6 5.3-.3 7.6 1.1 2.3-1.4 4.8-1.7 7.6-1.1V5.3C16.8 4.7 14.3 5 12 6.4z"/><path d="M12 6.4V19"/></svg>',
+    vocab:     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3.4" y="8" width="12.6" height="10" rx="2"/><path d="M7.6 8V6.4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2V14a2 2 0 0 1-2 2"/><path d="M6.4 12.4h6M6.4 15h4"/></svg>',
+    reading:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 3.5h7l4 4v13h-11z"/><path d="M13.5 3.5v4h4"/><path d="M9 12h6M9 15.2h6M9 8.8h3"/></svg>',
+    listening: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5 14v-2a7 7 0 0 1 14 0v2"/><rect x="3.4" y="13.4" width="3.8" height="6.2" rx="1.7"/><rect x="16.8" y="13.4" width="3.8" height="6.2" rx="1.7"/></svg>',
+    use:       '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 6.4a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v6.8a2 2 0 0 1-2 2H10l-4 3.4v-3.4H6.5a2 2 0 0 1-2-2z"/><path d="M8 8.8h8M8 11.8h5"/></svg>'
+  };
+  function skillIcon(sk) { return '<span class="skill-ic" aria-hidden="true">' + (SKILL_ICONS[sk] || "") + '</span>'; }
+  /* glifo de estado del nodo de lección (check / play / candado) en SVG */
+  function nodeGlyph(state) {
+    if (state === "completed") return '<svg class="wglyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.6l4.6 4.6L19 7.4"/></svg>';
+    if (state === "locked")    return '<svg class="wglyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="10.5" width="14" height="9.5" rx="2.3"/><path d="M8 10.5V7.6a4 4 0 0 1 8 0v2.9"/><circle cx="12" cy="15" r="1.4" fill="currentColor" stroke="none"/></svg>';
+    return '<svg class="wglyph" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8.5 5.5v13l10.5-6.5z"/></svg>';
+  }
+  /* escudo SVG (jefe) — reemplaza el emoji 🛡️ */
+  function shieldSvg(cls) { return '<svg class="' + (cls || "") + '" viewBox="0 0 24 26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.5l8 3v6c0 5.4-3.6 8.6-8 10.6C7.6 20.1 4 16.9 4 11.5v-6z"/><path d="M8.4 12.2l2.7 2.7 4.5-4.9"/></svg>'; }
   /* style inline con las 3 variables del mundo (acento/soft/glow) */
   function worldVars(t) { return '--w-accent:' + t.accent + ';--w-accent-soft:' + t.accentSoft + ';--w-glow:' + t.glow; }
   /* capa ambiental reutilizable (N partículas <i>); mapMod=true para la del mapa */
   function ambLayer(n, mapMod) { var dots = ""; for (var i = 0; i < n; i++) dots += "<i></i>"; return '<div class="wamb' + (mapMod ? ' wamb--map' : '') + '" aria-hidden="true">' + dots + '</div>'; }
+
+  /* offset-x serpenteante por parada (da la curva al sendero) */
+  function dxFor(k) { return Math.round(64 * Math.sin(k * 0.85)); }
+  /* ¿reducir movimiento? (preferencia del SO o ajuste de Configuración) */
+  function reduceMotion() {
+    try {
+      if (document.documentElement.classList.contains("vesper-reduce-motion")) return true;
+      return !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+    } catch (e) { return false; }
+  }
+  /* pseudo-aleatorio determinista (estable entre re-medidas/resize) */
+  function trnd(i) { var x = Math.sin(i * 127.1 + 17.3) * 43758.5453; return x - Math.floor(x); }
+  /* una pieza de paisaje del bioma (kind) como <g> SVG, escalada y posicionada.
+     Paleta navy: cuerpos oscuros, acento del mundo en follaje/tejados, oro en luces. */
+  function terrainProp(px, py, sc, kind) {
+    var open = '<g class="prop ' + kind + '" transform="translate(' + px.toFixed(1) + ' ' + py.toFixed(1) + ') scale(' + sc.toFixed(2) + ')">';
+    var sh = '<ellipse class="sh" cx="0" cy="3" rx="10" ry="3"/>';
+    switch (kind) {
+      case "pine":     return open + '<ellipse class="sh" cx="0" cy="3" rx="10" ry="3"/><path class="lf2" d="M0 -9 L7 7 L-7 7 Z"/><path class="lf" d="M0 -19 L8 3 L-8 3 Z"/><rect class="tk" x="-1.5" y="5" width="3" height="5"/></g>';
+      case "bush":     return open + '<ellipse class="sh" cx="0" cy="4" rx="11" ry="3"/><circle class="lf" cx="-5" cy="1" r="6"/><circle class="lf" cx="5" cy="1" r="6"/><circle class="lf2" cx="0" cy="-4" r="7"/></g>';
+      case "rock":     return open + '<ellipse class="sh" cx="0" cy="3" rx="9" ry="3"/><path class="rk" d="M-8 4 L-5 -5 L2 -7 L8 -1 L7 4 Z"/></g>';
+      case "cottage":  return open + sh + '<rect class="bdy" x="-8" y="-6" width="16" height="12"/><path class="lf" d="M-10 -6 L0 -16 L10 -6 Z"/><rect class="win" x="-3" y="-2" width="6" height="6"/></g>';
+      case "lantern":  return open + '<ellipse class="sh" cx="0" cy="6" rx="5" ry="2"/><rect class="tk" x="-1" y="-4" width="2" height="10"/><circle class="glow" cx="0" cy="-7" r="4.4"/><circle class="win" cx="0" cy="-7" r="2.2"/></g>';
+      case "mushroom": return open + '<ellipse class="sh" cx="0" cy="5" rx="6" ry="2"/><rect class="stem" x="-2" y="-1" width="4" height="6"/><path class="lf" d="M-8 -1 A8 7 0 0 1 8 -1 Z"/><circle class="dot" cx="-3" cy="-3" r="1.2"/><circle class="dot" cx="3" cy="-2.5" r="1"/></g>';
+      case "fern":     return open + '<ellipse class="sh" cx="0" cy="4" rx="7" ry="2"/><path class="ln" d="M0 5 C-8 0 -8 -8 -2 -10"/><path class="ln" d="M0 5 C8 0 8 -8 2 -10"/><path class="ln2" d="M0 5 L0 -9"/></g>';
+      case "building": return open + sh + '<rect class="bdy" x="-7" y="-22" width="14" height="28"/><rect class="win" x="-4" y="-19" width="2.5" height="2.5"/><rect class="win" x="1.5" y="-19" width="2.5" height="2.5"/><rect class="win" x="-4" y="-13" width="2.5" height="2.5"/><rect class="win" x="1.5" y="-13" width="2.5" height="2.5"/><rect class="win" x="-4" y="-7" width="2.5" height="2.5"/><rect class="win" x="1.5" y="-7" width="2.5" height="2.5"/></g>';
+      case "tower":    return open + sh + '<rect class="bdy" x="-5" y="-19" width="10" height="25"/><rect class="bdy" x="-6" y="-22" width="2.5" height="3"/><rect class="bdy" x="-1.2" y="-22" width="2.5" height="3"/><rect class="bdy" x="3.5" y="-22" width="2.5" height="3"/><rect class="win" x="-1.5" y="-13" width="3" height="4"/></g>';
+      case "lamp":     return open + '<ellipse class="sh" cx="0" cy="7" rx="4" ry="2"/><path class="ln" d="M0 7 L0 -8 Q0 -11 3 -11"/><circle class="glow" cx="4" cy="-10" r="3.6"/><circle class="win" cx="4" cy="-10" r="1.8"/></g>';
+      case "crag":     return open + '<ellipse class="sh" cx="0" cy="4" rx="12" ry="3"/><path class="rk" d="M-12 5 L-3 -10 L1 -4 L6 -15 L12 5 Z"/><path class="rk2" d="M-3 -10 L1 -4 L6 -15"/></g>';
+      case "banner":   return open + '<ellipse class="sh" cx="0" cy="8" rx="3" ry="1.6"/><rect class="tk" x="-0.8" y="-12" width="1.6" height="20"/><path class="lf" d="M0.8 -12 L11 -9 L0.8 -6 Z"/></g>';
+      case "star4":    return open + '<path class="spark" d="M0 -9 L2 -2 L9 0 L2 2 L0 9 L-2 2 L-9 0 L-2 -2 Z"/></g>';
+      case "planet":   return open + '<circle class="lf" cx="0" cy="0" r="6"/><ellipse class="ring" cx="0" cy="0" rx="11" ry="3.4" transform="rotate(-18)"/></g>';
+      case "crystal":  return open + '<ellipse class="sh" cx="0" cy="7" rx="5" ry="2"/><path class="gem" d="M0 -11 L5 -2 L2 8 L-2 8 L-5 -2 Z"/><path class="gem2" d="M0 -11 L0 8"/></g>';
+      case "spire":    return open + sh + '<rect class="bdy" x="-5" y="-12" width="10" height="18"/><path class="lf" d="M-6 -12 L0 -22 L6 -12 Z"/><rect class="win" x="-1.5" y="-6" width="3" height="5"/><path class="flag" d="M0 -22 L0 -27 M0 -26 L5 -24.5 L0 -22"/></g>';
+      default:         return open + sh + '<circle class="lf" cx="0" cy="0" r="5"/></g>';
+    }
+  }
+  /* genera el paisaje del bioma alrededor del camino (evita los nodos) */
+  function terrainSvgInner(pts, W, H, biome) {
+    biome = (biome && biome.length) ? biome : ["pine", "bush", "rock"];
+    function pick(seed) { return biome[Math.floor(trnd(seed) * biome.length) % biome.length]; }
+    function near(px, py) { for (var j = 0; j < pts.length; j++) { var dx = pts[j][0] - px, dy = pts[j][1] - py; if (dx * dx + dy * dy < 60 * 60) return true; } return false; }
+    var s = "", y, k = 0;
+    for (y = 44; y < H - 18; y += 56) {
+      k++;
+      var lx = 7 + trnd(k * 2) * 26;                       // margen izquierdo
+      if (!near(lx, y)) s += terrainProp(lx, y, 0.8 + trnd(k * 3) * 0.55, pick(k * 5));
+      var rx = W - 7 - trnd(k * 2 + 1) * 26;                // margen derecho
+      if (!near(rx, y + 22)) s += terrainProp(rx, y + 22, 0.8 + trnd(k * 7) * 0.55, pick(k * 11));
+      if (trnd(k * 13) > 0.62) {                            // alguna pieza interior en hueco libre
+        var mx = W * 0.5 + (trnd(k * 17) - 0.5) * 112, my = y + 12;
+        if (!near(mx, my)) s += terrainProp(mx, my, 0.66 + trnd(k * 19) * 0.36, pick(k * 23));
+      }
+    }
+    return s;
+  }
+  /* mini-escena del bioma (3 piezas) para recibirte al empezar una lección del mundo */
+  function biomeMotif(lv) {
+    var th = WORLD_THEME[lv]; var b = (th && th.biome && th.biome.length) ? th.biome : ["pine", "bush", "rock"];
+    var u = []; for (var i = 0; i < b.length && u.length < 3; i++) { if (u.indexOf(b[i]) < 0) u.push(b[i]); }
+    while (u.length < 3) u.push(b[u.length % b.length]);
+    var inner = terrainProp(-22, 6, 1.05, u[0]) + terrainProp(0, 9, 1.4, u[1]) + terrainProp(22, 6, 1.0, u[2]);
+    return '<svg class="biome-motif terr" viewBox="-40 -30 80 44" width="100" height="55" aria-hidden="true" style="' + worldVars(th || {}) + '">' + inner + '</svg>';
+  }
+  /* aplica/quita la identidad del mundo (acento) al reproductor de lección, vía #app */
+  function applyLessonTheme(level) {
+    if (!app || !PATH) { return; }
+    var lv = PATH.normLevel(level), th = WORLD_THEME[lv];
+    if (!th) { clearLessonTheme(); return; }
+    app.setAttribute("data-world", lv);
+    app.style.setProperty("--w-accent", th.accent);
+    app.style.setProperty("--w-accent-soft", th.accentSoft);
+    app.style.setProperty("--w-glow", th.glow);
+  }
+  function clearLessonTheme() {
+    if (!app) return;
+    app.removeAttribute("data-world");
+    app.style.removeProperty("--w-accent");
+    app.style.removeProperty("--w-accent-soft");
+    app.style.removeProperty("--w-glow");
+  }
+  /* cinta de mundo (nombre + motivo del bioma) que recibe al empezar una lección */
+  function lessonWorldBanner(level) {
+    if (!PATH) return "";
+    var lv = PATH.normLevel(level), th = WORLD_THEME[lv];
+    if (!th) return "";
+    var n = PATH.LEVELS.indexOf(lv) + 1;
+    return '<div class="lesson-world" style="' + worldVars(th) + '">' + biomeMotif(lv)
+      + '<div class="lw-tx"><span class="lw-ey">Mundo ' + n + ' &middot; ' + lv + '</span>'
+      + '<span class="lw-nm">' + esc(th.worldName) + '</span></div></div>';
+  }
+
+  /* ----- Sendero 2D (medir-y-dibujar): tras pintar el mapa, mide el centro real
+     de cada nodo [data-stop] dentro de #wmap, traza una curva suave que los une
+     (SVG decorativo) + calzada + paisaje, y coloca al avatar (gato) sobre el nodo
+     actual. El avatar "camina" al nuevo nodo con offset-path cuando data-prev != data-cur.
+     Como mide el DOM real, queda alineado aunque cambien lecciones o ancho. ----- */
+  function paintTrail() {
+    var map = byId("wmap"); if (!map) return;
+    var svg = map.querySelector(".wtrail");
+    var avatar = map.querySelector(".wavatar");
+    var stops = map.querySelectorAll("[data-stop]");
+    if (!svg || !stops.length) return;
+    var mb = map.getBoundingClientRect();
+    var W = map.clientWidth || mb.width, H = map.clientHeight || mb.height, pts = [], i;
+    if (W < 80) { requestAnimationFrame(paintTrail); return; }   // aún sin layout: reintenta
+    for (i = 0; i < stops.length; i++) {
+      var btn = stops[i].querySelector(".wbtn") || stops[i];
+      var r = btn.getBoundingClientRect();
+      pts.push([ r.left - mb.left + r.width / 2, r.top - mb.top + r.height / 2 ]);
+    }
+    function seg(a, b) {
+      var my = ((a[1] + b[1]) / 2).toFixed(1);
+      return " C" + a[0].toFixed(1) + " " + my + " " + b[0].toFixed(1) + " " + my + " " + b[0].toFixed(1) + " " + b[1].toFixed(1);
+    }
+    var d = "M" + pts[0][0].toFixed(1) + " " + pts[0][1].toFixed(1);
+    for (i = 1; i < pts.length; i++) d += seg(pts[i - 1], pts[i]);
+    svg.setAttribute("viewBox", "0 0 " + W + " " + H);
+    svg.setAttribute("width", W); svg.setAttribute("height", H);
+    var paths = svg.querySelectorAll("path");
+    for (i = 0; i < paths.length; i++) paths[i].setAttribute("d", d);
+    /* capa de terreno: paisaje (árboles/rocas) alrededor del camino */
+    var terr = map.querySelector(".wterrain");
+    if (terr) {
+      terr.setAttribute("viewBox", "0 0 " + W + " " + H);
+      terr.setAttribute("width", W); terr.setAttribute("height", H);
+      var bw = WORLD_THEME[map.getAttribute("data-world")];
+      terr.innerHTML = terrainSvgInner(pts, W, H, bw && bw.biome);
+    }
+    if (!avatar) return;
+
+    /* longitud de arco acumulada en cada nodo => offset-distance exacto */
+    var line = paths[paths.length - 1], lens = [0];
+    if (line.getTotalLength) {
+      var tmp = line.cloneNode(false), pre = "M" + pts[0][0].toFixed(1) + " " + pts[0][1].toFixed(1);
+      svg.appendChild(tmp);
+      for (i = 1; i < pts.length; i++) { pre += seg(pts[i - 1], pts[i]); tmp.setAttribute("d", pre); lens.push(tmp.getTotalLength()); }
+      svg.removeChild(tmp);
+    } else { for (i = 1; i < pts.length; i++) lens.push(i); }
+    var total = lens[lens.length - 1] || 1;
+    function pctAt(idx) { idx = Math.max(0, Math.min(lens.length - 1, idx)); return (lens[idx] / total) * 100; }
+
+    var cur = parseInt(map.getAttribute("data-cur"), 10); if (isNaN(cur)) cur = 0;
+    var prev = parseInt(map.getAttribute("data-prev"), 10);
+    var canOffset = !!(window.CSS && CSS.supports && CSS.supports("offset-path", 'path("M0 0")'));
+    var animate = !isNaN(prev) && prev !== cur && !reduceMotion();
+
+    if (canOffset) {
+      avatar.style.setProperty("offset-path", 'path("' + d + '")');
+      if (animate) {
+        avatar.style.setProperty("transition", "none");
+        avatar.style.setProperty("offset-distance", pctAt(prev) + "%");
+        void avatar.offsetWidth;
+        avatar.style.setProperty("transition", "offset-distance 1s ease-in-out");
+        requestAnimationFrame(function () { avatar.style.setProperty("offset-distance", pctAt(cur) + "%"); });
+      } else {
+        avatar.style.setProperty("transition", "none");
+        avatar.style.setProperty("offset-distance", pctAt(cur) + "%");
+      }
+    } else {
+      /* fallback sin offset-path: centra con margen (deja libre transform para el bob) */
+      avatar.style.margin = "-25px 0 0 -25px";
+      var place = function (idx) { avatar.style.left = pts[idx][0] + "px"; avatar.style.top = pts[idx][1] + "px"; };
+      if (animate) {
+        place(prev); void avatar.offsetWidth;
+        avatar.style.transition = "left 1s ease-in-out, top 1s ease-in-out";
+        requestAnimationFrame(function () { place(cur); });
+      } else { avatar.style.transition = "none"; place(cur); }
+    }
+    map.removeAttribute("data-prev");
+  }
+  var _trailResizeBound = false;
+  function bindTrailResize() {
+    if (_trailResizeBound) return; _trailResizeBound = true;
+    var t = null;
+    window.addEventListener("resize", function () { clearTimeout(t); t = setTimeout(function () {
+      var m = byId("wmap"); if (m) { m.removeAttribute("data-prev"); paintTrail(); }
+    }, 160); });
+  }
 
   function worldBanner(selLevel, built) {
     var t = WORLD_THEME[selLevel]; if (!t) return "";
@@ -996,13 +1343,11 @@
   }
 
   function worldsRibbon(built, selLevel) {
-    var prevDone = true;
     var html = PATH.LEVELS.map(function (lv, idx) {
       var pr = PATH.levelProgress(lv, built), col = PATH.levelColor(lv);
-      /* desbloqueado si: es el primero, el mundo anterior tiene avance, este mundo
-         ya tiene avance, o es el mundo seleccionado (nunca bloquea progreso existente) */
-      var reachable = (idx === 0) || prevDone || pr.done > 0 || lv === selLevel;
-      prevDone = pr.done > 0;
+      /* desbloqueado si: A1, ya venciste al jefe del mundo anterior, este mundo ya
+         tiene avance propio (desbloqueo suave), o es el mundo seleccionado. */
+      var reachable = PATH.regionUnlocked(lv, built) || lv === selLevel;
       var ring = '<span class="ring w-ring" style="background:conic-gradient(' + col + ' ' + pr.pct + '%, var(--line) 0)"><i>' + pr.pct + '</i></span>';
       var inner = ring + '<span class="w-nm">' + lv + '</span><span class="w-pc">' + pr.done + '/' + pr.total + '</span>';
       if (!reachable) {
@@ -1015,45 +1360,80 @@
     return '<div class="worlds" role="group" aria-label="Mundos (niveles A1 a C2)">' + html + '</div>';
   }
 
-  function nodeHtml(lid, built, currentId, dx) {
+  /* mapa: id de lección -> índice de parada en el render actual (para animar al avatar);
+     AVATAR_LESSON = id de la lección donde descansa el gato (o "boss:NIVEL" si el mundo está listo). */
+  var TRAIL_STOPS = {}, _indexFirst = true, AVATAR_LESSON = null;
+
+  function nodeHtml(lid, built, currentId, dx, stop) {
     var l = L[lid]; if (!l) return "";
     var stt = PATH.status(lid, built);
     var n = l.exercises ? l.exercises.length : 0;
     var glyph, attr, cls = "wbtn", wrapCls = "wnode", aria, label = "", stars = "", dis = "";
     if (stt === "completed") {
-      cls += " completed"; wrapCls += " done"; glyph = "&#10003;"; attr = 'data-go="' + esc(lid) + '"';
+      cls += " completed"; wrapCls += " done"; glyph = nodeGlyph("completed"); attr = 'data-go="' + esc(lid) + '"';
       var sc = PATH.getScore(lid), s = PATH.stars(sc != null ? sc : 70), sh = '<span class="wstars" aria-hidden="true">';
       for (var i = 0; i < 3; i++) sh += (i < s ? "&#9733;" : '<span class="off">&#9733;</span>');
       stars = sh + "</span>";
       aria = l.title + " — completado" + (sc != null ? ", " + sc + " por ciento" : "");
     } else if (stt === "open") {
-      cls += " open"; glyph = "&#9654;"; attr = 'data-go="' + esc(lid) + '"';
+      cls += " open"; glyph = nodeGlyph("open"); attr = 'data-go="' + esc(lid) + '"';
       if (lid === currentId) {
         cls += " is-current";
         label = '<span class="wlabel">' + (Object.keys(built.completed).length ? "Continuar" : "Empieza") + '</span>';
       }
       aria = l.title + " — desbloqueado, " + n + " ejercicios, " + (l.xpReward || 0) + " XP";
     } else {
-      cls += " locked"; wrapCls += " locked"; glyph = "&#128274;"; attr = 'data-locked="1"'; dis = ' aria-disabled="true"';
+      cls += " locked"; wrapCls += " locked"; glyph = nodeGlyph("locked"); attr = 'data-locked="1"'; dis = ' aria-disabled="true"';
       aria = l.title + " — bloqueado, completa la lección anterior";
     }
-    return '<div class="' + wrapCls + '" style="--dx:' + dx + 'px">' + label
+    return '<div class="' + wrapCls + '" data-stop="' + stop + '" style="--dx:' + dx + 'px">' + label
       + '<button class="' + cls + '" ' + attr + ' aria-label="' + esc(aria) + '"' + dis + '>' + glyph + '</button>'
       + stars + '<span class="wtitle">' + esc(l.title) + '</span></div>';
   }
 
-  function castleHtml(selLevel, sk, built, dx) {
+  /* mini-reto por destreza (repaso) — subordinado al Guardián del mundo */
+  function castleHtml(selLevel, sk, built, dx, stop) {
     var meta = PATH.SKILLS[sk], rid = "review:" + selLevel + ":" + sk;
     var stt = P ? P.getState() : {};
     var mastered = !!((stt.achievements || {})["master:" + selLevel + ":" + sk]);
     var rsc = PATH.getScore(rid);
-    var aria = "Repaso de " + meta.label + (mastered ? ", superado" + (rsc != null ? ", mejor " + rsc + " por ciento" : "") : ", desafío disponible");
-    var castleSvg = '<svg viewBox="0 0 32 30" width="34" height="32" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" aria-hidden="true">'
-      + '<path d="M5 28V12l4-2v-3l3 2 4-3 4 3 3-2v3l4 2v16z"/><path d="M14 28v-6h4v6"/><path d="M20 7V2h6"/></svg>';
-    return '<div class="wnode' + (mastered ? " done" : "") + '" style="--dx:' + dx + 'px">'
-      + '<span class="wlabel">' + (selLevel === 'B2' ? 'Cima del mundo' : selLevel === 'C2' ? 'Maestría' : 'Cima') + '</span>'
-      + '<button class="wbtn castle' + (mastered ? " completed" : "") + '" data-go="' + esc(rid) + '" aria-label="' + esc(aria) + '">' + castleSvg + '</button>'
-      + '<span class="wtitle">Repaso de ' + esc(meta.label) + (rsc != null ? ' · ' + rsc + '%' : '') + '</span></div>';
+    var aria = "Mini-reto de " + meta.label + (mastered ? ", superado" + (rsc != null ? ", mejor " + rsc + " por ciento" : "") : ", desafío de destreza disponible");
+    var crest = '<svg viewBox="0 0 28 30" width="26" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true">'
+      + '<path d="M14 2l10 4v8c0 7-5 11-10 14C9 25 4 21 4 14V6z"/><path d="M10 14l3 3 6-6"/></svg>';
+    return '<div class="wnode mini' + (mastered ? " done" : "") + '" data-stop="' + stop + '" style="--dx:' + dx + 'px">'
+      + '<span class="wlabel mini-lb">Mini-reto</span>'
+      + '<button class="wbtn castle mini' + (mastered ? " completed" : "") + '" data-go="' + esc(rid) + '" aria-label="' + esc(aria) + '">' + crest + '</button>'
+      + '<span class="wtitle">' + esc(meta.label) + (rsc != null ? ' · ' + rsc + '%' : '') + '</span></div>';
+  }
+
+  /* Guardián del mundo: 3 estados — locked / ready / conquered */
+  function bossNodeHtml(selLevel, built, dx, stop) {
+    var bm = bossMeta(selLevel);
+    var complete = PATH.regionComplete(selLevel, built);
+    var passed = !!(P && P.bossPassed && P.bossPassed(selLevel));
+    var bid = "boss:" + selLevel;
+    var beacon = '<svg viewBox="0 0 32 34" width="34" height="36" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true">'
+      + '<path class="beam" d="M16 6.4 19 1.6M16 6.4 13 1.6M16 6.4l6-1.4M16 6.4l-6-1.4"/>'
+      + '<circle cx="16" cy="7.2" r="2.4" fill="currentColor" stroke="none"/>'
+      + '<path d="M12 31h8M12.8 31l1.4-12h3.6l1.4 12M12 19h8l-1-4.4h-6z"/></svg>';
+    var cls = "wbtn boss", attr, label, title, aria;
+    if (passed) {
+      cls += " conquered"; attr = 'data-go="' + bid + '"';
+      label = '<span class="wlabel boss-lb">Umbral superado</span>';
+      title = bm.name; aria = bm.name + ", guardián vencido. Repetir el examen.";
+    } else if (complete) {
+      cls += " ready"; attr = 'data-go="' + bid + '"';
+      label = '<span class="wlabel boss-lb">El Guardián</span>';
+      title = bm.name; aria = bm.name + ", examen del mundo disponible. Véncelo para abrir el siguiente nivel.";
+    } else {
+      cls += " locked"; attr = 'data-locked-boss="1"';
+      label = '<span class="wlabel boss-lb">Jefe del mundo</span>';
+      title = bm.name; aria = bm.name + ", bloqueado. Completa todas las lecciones del mundo para enfrentarlo.";
+    }
+    return '<div class="wnode wboss-node' + (passed ? " done" : "") + '" data-stop="' + stop + '" style="--dx:' + dx + 'px">'
+      + label + '<button class="' + cls + '" ' + attr + ' aria-label="' + esc(aria) + '">' + beacon + '</button>'
+      + '<span class="wtitle">' + esc(title) + '</span>'
+      + (passed ? '<span class="wbridge" aria-hidden="true"></span>' : '') + '</div>';
   }
 
   function worldMap(selLevel, built) {
@@ -1061,23 +1441,49 @@
     var banner = worldBanner(selLevel, built);
     if (!g || !g.total) return banner + '<p class="muted" style="text-align:center;margin:24px 0">Próximamente más lecciones en este mundo.</p>';
     var worldNo = PATH.LEVELS.indexOf(selLevel) + 1;
-    var currentId = PATH.continueLesson(built);
-    var DX = [-60, 0, 60, 0], ni = 0, parts = "";
+    /* "continuar" LOCAL del mundo: primera lección abierta (desbloqueada y sin completar)
+       en el orden de render — ahí descansa el gato (no el continue global, que puede
+       apuntar a otro nivel). */
+    var localCurId = null;
+    PATH.SKILL_ORDER.forEach(function (sk) {
+      var ids = g.bySkill[sk]; if (!ids) return;
+      ids.forEach(function (id) { if (!localCurId && PATH.status(id, built) === "open") localCurId = id; });
+    });
+    var si = 0, curStop = -1, parts = "";
+    TRAIL_STOPS = {};
     PATH.SKILL_ORDER.forEach(function (sk) {
       var ids = g.bySkill[sk]; if (!ids || !ids.length) return;
       var meta = PATH.SKILLS[sk];
       var doneN = ids.filter(function (id) { return built.completed[id]; }).length;
       parts += '<div class="wcheck" role="separator" aria-label="' + esc(meta.label) + ', ' + doneN + ' de ' + ids.length + ' completadas">'
-        + '<span class="ic" aria-hidden="true">' + meta.icon + '</span>' + esc(meta.label)
+        + '<span class="ck-ic" aria-hidden="true">' + (SKILL_ICONS[sk] || "") + '</span>' + esc(meta.label)
         + '<span class="ct">' + doneN + '/' + ids.length + '</span></div>';
-      ids.forEach(function (id) { parts += nodeHtml(id, built, currentId, DX[ni % 4]); ni++; });
-      if (ids.length >= 2 && doneN === ids.length) { parts += castleHtml(selLevel, sk, built, DX[ni % 4]); ni++; }
+      ids.forEach(function (id) {
+        if (id === localCurId) curStop = si;
+        TRAIL_STOPS[id] = si;
+        parts += nodeHtml(id, built, localCurId, dxFor(si), si); si++;
+      });
+      if (ids.length >= 2 && doneN === ids.length) { parts += castleHtml(selLevel, sk, built, dxFor(si), si); si++; }
     });
     if (!parts) return banner + '<p class="muted" style="text-align:center;margin:24px 0">Próximamente más lecciones en este mundo.</p>';
+    /* Guardián del mundo: siempre la última parada del sendero */
+    var bossStop = si;
+    parts += bossNodeHtml(selLevel, built, dxFor(si), si); si++;
+    TRAIL_STOPS["boss:" + selLevel] = bossStop;
+    if (curStop < 0) curStop = bossStop;            // mundo completo => el gato espera junto al jefe
+    AVATAR_LESSON = localCurId || ("boss:" + selLevel);
     var t = WORLD_THEME[selLevel] || {};
+    var terrain = t.file ? (";--w-terrain:url(" + t.file + ")") : "";
     var startPennant = '<div class="wstart" aria-hidden="true"><span>' + (WORLD_UMBRAL[selLevel] || ('Mundo ' + worldNo)) + '</span></div>';
-    return banner + '<div class="wmap" data-world="' + selLevel + '" style="' + worldVars(t) + '">'
-      + ambLayer(t.mapN || 3, true) + startPennant + parts + '</div>';
+    var scene = '<div class="wsky">'
+      + '<div class="wisland" data-world="' + selLevel + '" style="' + worldVars(t) + terrain + '">'
+      + '<div class="wmap" id="wmap" data-world="' + selLevel + '" data-cur="' + curStop + '" style="' + worldVars(t) + '">'
+      + '<svg class="wterrain terr" aria-hidden="true" focusable="false" preserveAspectRatio="none"></svg>'
+      + '<svg class="wtrail" aria-hidden="true" focusable="false" preserveAspectRatio="none"><path class="wtrail-road"/><path class="wtrail-glow"/><path class="wtrail-line"/></svg>'
+      + '<img class="wavatar" src="' + BOSS_AVATAR + '" alt="" aria-hidden="true" decoding="async">'
+      + ambLayer(t.mapN || 3, true) + startPennant + parts
+      + '</div></div></div>';
+    return banner + scene;
   }
 
   /* Vitrina de logros (ganados + bloqueados), plegable. */
@@ -1095,6 +1501,7 @@
   }
 
   function renderIndex(selLevel) {
+    clearLessonTheme();
     var st = P ? P.getState() : { streak: 0, xp: 0, shields: 0 };
     var dg = (P && P.dailyGoal) ? P.dailyGoal() : null;
     var trophyHtml = buildTrophyShelf();
@@ -1115,11 +1522,16 @@
     var built = PATH.build(L, ORDER);
     if (!selLevel) {
       var band = (A && profile) ? A.levelToBand(A.profileLevel()) : null;
-      if (band && built.levels[band] && built.levels[band].total) selLevel = band;
+      if (band && built.levels[band] && built.levels[band].total && PATH.regionUnlocked(band, built)) selLevel = band;
       else {
+        /* primer mundo DESBLOQUEADO aún sin completar; si el siguiente está bloqueado
+           (falta vencer su jefe), nos quedamos en el último desbloqueado (donde brilla el Guardián). */
         for (var i = 0; i < PATH.LEVELS.length; i++) {
           var lv = PATH.LEVELS[i], gg = built.levels[lv];
-          if (gg.total && gg.done < gg.total) { selLevel = lv; break; }
+          if (!gg.total) continue;
+          if (!PATH.regionUnlocked(lv, built)) break;   // bloqueado: detente en el anterior
+          selLevel = lv;
+          if (gg.done < gg.total) break;                 // incompleto y desbloqueado: aquí nos quedamos
         }
         if (!selLevel) selLevel = PATH.LEVELS[0];
       }
@@ -1130,7 +1542,7 @@
     /* buscador + filtros (ahora detrás del botón 🔍 del HUD) */
     var skillChips = PATH.SKILL_ORDER.map(function (sk) {
       var m = PATH.SKILLS[sk];
-      return '<button class="fchip" type="button" aria-pressed="false" data-skill="' + sk + '">' + m.icon + ' ' + esc(m.label) + '</button>';
+      return '<button class="fchip" type="button" aria-pressed="false" data-skill="' + sk + '">' + skillIcon(sk) + ' ' + esc(m.label) + '</button>';
     }).join("");
     var searchUI = '<div class="hub-search" id="hubSearch" hidden>'
       + '<div class="srch"><span class="srch-ic" aria-hidden="true">&#128270;</span>'
@@ -1154,9 +1566,26 @@
       + '<div class="hub-toast" id="toast"></div>');
 
     each(".world[data-lvl]", function (b) { b.onclick = function () { renderIndex(b.getAttribute("data-lvl")); }; });
-    each(".world[data-locked-world]", function (b) { b.onclick = function () { toast("Avanza en el mundo anterior para desbloquearlo 🔒"); }; });
+    each(".world[data-locked-world]", function (b) { b.onclick = function () { toast("Vence al guardián del mundo anterior para desbloquearlo 🔒"); }; });
     each("[data-go]", function (b) { b.onclick = function () { location.search = "?id=" + encodeURIComponent(b.getAttribute("data-go")); }; });
     each("[data-locked]", function (b) { b.onclick = function () { toast("Completa la lección anterior para desbloquear 🔒"); }; });
+    each("[data-locked-boss]", function (b) { b.onclick = function () { toast("Completa todas las lecciones del mundo para enfrentar al guardián 🛡️"); }; });
+
+    /* ---- avatar: traza el sendero y decide si "camina" tras completar una lección ---- */
+    (function () {
+      var map = byId("wmap"); if (!map) return;
+      var curId = AVATAR_LESSON, prevId = null;     // dónde descansa el gato en este mundo
+      try { prevId = sessionStorage.getItem("vesper_last_continue"); } catch (e) {}
+      if (_indexFirst && prevId && prevId !== curId && built.completed[prevId] && TRAIL_STOPS[prevId] != null) {
+        map.setAttribute("data-prev", TRAIL_STOPS[prevId]);   // sólo en carga fresca, no al cambiar de pestaña
+      }
+      try { sessionStorage.setItem("vesper_last_continue", curId || ""); } catch (e) {}
+      /* mide tras el layout (doble rAF): evita medir el sendero antes de tiempo.
+         El guardia W<80 en paintTrail reintenta solo si aún no hay layout. */
+      requestAnimationFrame(function () { requestAnimationFrame(paintTrail); });
+      bindTrailResize();
+    })();
+    _indexFirst = false;
 
     /* ---- lógica de búsqueda/filtros (sólo actualiza #searchResults) ---- */
     function searchCard(lid) {
@@ -1171,7 +1600,7 @@
         + '<span class="lc-badge">' + badge + '</span>'
         + '<span class="lc-body"><span class="lc-ttl">' + esc(l.title) + '</span>'
         + '<span class="lc-sub" style="display:block;margin-top:3px"><span class="lc-lvl">' + esc(l.level) + '</span>'
-        + m.icon + ' ' + esc(m.label) + (stt === "locked" ? ' &middot; &#128274;' : '') + '</span></span>'
+        + skillIcon(sk) + ' ' + esc(m.label) + '</span></span>'
         + '<span class="lc-go">' + (stt === "locked" ? "" : "&#8250;") + '</span></button>';
     }
     var fSkill = "all", fState = "all", fQuery = "", fTimer = null;
@@ -1243,8 +1672,11 @@
 
   /* ---------- COVER ---------- */
   function renderCover() {
+    applyLessonTheme(lesson.level);
+    if (lesson.isBoss) { renderBossCover(); return; }
     var line = (A ? A.personalize("Vamos con: " + lesson.title) : "Vamos con: " + lesson.title);
     show('<div class="wrap">' + topbar(6) + '<div class="card center">'
+      + lessonWorldBanner(lesson.level)
       + mascot("welcome", line)
       + '<div class="lcard-top center-row"><span class="pill">' + esc(lesson.level) + '</span><span class="track">' + esc(lesson.track) + '</span></div>'
       + '<h1>' + esc(lesson.title) + '</h1>'
@@ -1252,6 +1684,22 @@
       + '<p class="muted">' + lesson.exercises.length + ' ejercicios &middot; +' + (lesson.xpReward || 0) + ' XP</p>'
       + '<button class="btn btn-gold" id="start">Empezar</button></div></div>');
     byId("start").onclick = renderExplanation;
+  }
+
+  /* portada dramática del Guardián del mundo */
+  function renderBossCover() {
+    var bm = bossMeta(lesson.bossLevel), t = WORLD_THEME[lesson.bossLevel] || {};
+    show('<div class="wrap">' + topbar(6) + '<div class="card center boss-cover" style="' + worldVars(t) + '">'
+      + '<div class="boss-emblem" aria-hidden="true">' + shieldSvg() + '</div>'
+      + biomeMotif(lesson.bossLevel)
+      + '<span class="boss-eyebrow">Examen del mundo &middot; ' + esc(lesson.level) + '</span>'
+      + '<h1>' + esc(bm.name) + '</h1>'
+      + '<p class="muted">' + lesson.exercises.length + ' preguntas mezcladas de todas las destrezas &middot; necesitas ' + bm.pass + '% para vencerlo</p>'
+      + '<p class="boss-warn">Vence al guardián para abrir el mundo siguiente.</p>'
+      + '<button class="btn btn-gold" id="start">Enfrentar al Guardián</button>'
+      + '<button class="btn btn-ghost" id="bk">Volver al mapa</button></div></div>');
+    byId("start").onclick = renderExplanation;
+    byId("bk").onclick = function () { location.search = ""; };
   }
 
   /* ---------- EXPLANATION ---------- */
@@ -1291,7 +1739,17 @@
     if (exIdx < lesson.exercises.length) renderExercise(); else renderFeedback();
   }
   function exHeader(pct, total) {
-    return topbar(pct) + '<div class="exnum">Ejercicio ' + (exIdx + 1) + ' de ' + total + '</div>';
+    return topbar(pct) + (lesson.isBoss ? bossMeterHtml(total) : "") + '<div class="exnum">Ejercicio ' + (exIdx + 1) + ' de ' + total + '</div>';
+  }
+  /* medidor del Guardián: su escudo se rompe con cada acierto previo */
+  function bossMeterHtml(total) {
+    var hit = 0, i; for (i = 0; i < exIdx; i++) { if (results[i]) hit++; }
+    var remain = Math.max(0, Math.round(100 * (1 - hit / Math.max(1, total))));
+    var bm = bossMeta(lesson.bossLevel);
+    return '<div class="boss-meter" style="' + worldVars(WORLD_THEME[lesson.bossLevel] || {}) + '">'
+      + '<span class="bm-ic" aria-hidden="true">' + shieldSvg() + '</span>'
+      + '<span class="bm-nm">' + esc(bm.name) + '</span>'
+      + '<span class="bm-bar" role="img" aria-label="Escudo del guardián: ' + remain + '%"><i style="width:' + remain + '%"></i></span></div>';
   }
 
   function renderMCQ(ex, pct, total) {
@@ -1734,6 +2192,7 @@
     var pct = Math.round(100 * correct / Math.max(1, total));
     var perfect = correct === total;
     lastPerfect = perfect;
+    if (lesson.isBoss) { renderBossResult(correct, total, pct); return; }
     /* Lecciones normales: hay que acertar >=70% para superarlas, ganar XP y
        desbloquear la siguiente. Por debajo se ofrece reintentar (no completa).
        Los repasos ("boss") conservan su lógica propia (>=80% = maestría). */
@@ -1769,6 +2228,42 @@
       + '<button class="btn btn-ghost" id="backHome">Ver todas las lecciones</button></div></div>');
     byId("retry").onclick = function () { exIdx = 0; results = []; earnedXp = 0; renderExercise(); };
     byId("backHome").onclick = function () { location.search = ""; };
+  }
+
+  /* ---------- RESULTADO DEL JEFE (victoria / derrota) ---------- */
+  function renderBossResult(correct, total, pct) {
+    var bm = bossMeta(lesson.bossLevel);
+    if (pct < bm.pass) {
+      earnedXp = 0;
+      show('<div class="wrap">' + topbar(86) + '<div class="card center">'
+        + mascot("incorrect", "El guardián resiste. ¡Reagrúpate y vuelve!")
+        + '<div class="boss-emblem dim" aria-hidden="true">' + shieldSvg() + '</div>'
+        + '<h1>' + pct + '%</h1>'
+        + '<p class="muted">' + correct + ' de ' + total + ' correctos &middot; necesitas ' + bm.pass + '% para vencerlo</p>'
+        + '<div class="xpbar"><div class="xpfill" style="width:' + pct + '%;background:var(--error)"></div></div>'
+        + '<button class="btn btn-gold" id="retry">Reintentar examen</button>'
+        + '<button class="btn btn-ghost" id="backHome">Ver lecciones</button></div></div>');
+      byId("retry").onclick = function () { exIdx = 0; results = []; earnedXp = 0; renderExercise(); };
+      byId("backHome").onclick = function () { location.search = ""; };
+      return;
+    }
+    earnedXp = Math.max(20, lesson.xpReward || 60);
+    if (PATH && PATH.setScore) PATH.setScore(lesson.lessonId, pct);
+    if (P && P.passBoss) P.passBoss(lesson.bossLevel, pct);
+    var idxLv = PATH.LEVELS.indexOf(lesson.bossLevel);
+    var nextLv = (idxLv >= 0 && idxLv + 1 < PATH.LEVELS.length) ? PATH.LEVELS[idxLv + 1] : null;
+    var unlockHtml = nextLv
+      ? '<div class="boss-unlock">&#128275; ¡Mundo ' + nextLv + ' desbloqueado!</div>'
+      : '<div class="boss-unlock">&#128081; ¡Has dominado el último mundo!</div>';
+    show('<div class="wrap">' + topbar(92) + '<div class="card center">'
+      + mascot("milestone", "¡Guardián vencido!")
+      + '<div class="boss-emblem lit" aria-hidden="true">' + shieldSvg() + '</div>'
+      + '<h1>+' + earnedXp + ' XP</h1>'
+      + '<p class="muted">' + correct + ' de ' + total + ' correctos &middot; ' + pct + '%</p>'
+      + '<div class="xpbar"><div class="xpfill" style="width:' + pct + '%"></div></div>'
+      + unlockHtml
+      + '<button class="btn btn-gold" id="cont">Continuar</button></div></div>');
+    byId("cont").onclick = renderStreak;
   }
 
   /* ---------- STREAK ---------- */
@@ -1875,6 +2370,34 @@
     };
   }
 
+  /* ---------- BOSS ("Guardián del mundo"): examen mixto de TODAS las destrezas ---------- */
+  function buildBossExam(level) {
+    if (!PATH) return null;
+    level = PATH.normLevel ? PATH.normLevel(level) : level;
+    var built = PATH.build(L, ORDER), gg = built.levels[level];
+    if (!gg) return null;
+    var bm = bossMeta(level), pool = [];
+    PATH.SKILL_ORDER.forEach(function (sk) {
+      var ids = (gg.bySkill[sk] || []).filter(function (x) { return built.completed[x]; });
+      ids.forEach(function (lid) {
+        var l = L[lid]; if (!l || !l.exercises || !l.exercises.length) return;
+        pool = pool.concat(shuffle(l.exercises.slice()).slice(0, 1)); /* 1 por lección completada */
+      });
+    });
+    shuffle(pool);
+    var picked = pool.slice(0, Math.min(12, pool.length));
+    if (picked.length < 5) return null;   // material insuficiente
+    return {
+      lessonId: "boss:" + level, level: level, track: "Examen del mundo", isBoss: true, bossLevel: level,
+      title: bm.name + " · " + level,
+      explanation: {
+        body: "Demuestra tu dominio de " + level + ". Son preguntas mezcladas de todas las destrezas de tus lecciones completadas. Necesitas " + bm.pass + "% para vencer al guardián y abrir el siguiente mundo.",
+        examples: []
+      },
+      exercises: picked, xpReward: 60, mascotState: "thinking", nextLessonId: null
+    };
+  }
+
   /* quiz corto de calibracion al inicio de la sesion */
   function renderWarmup() {
     var band = A.levelToBand(A.profileLevel());
@@ -1926,6 +2449,18 @@
     if (!baseLesson || !baseLesson.exercises.length) {
       show('<div class="wrap"><div class="card center">' + mascot("thinking", "Aún no hay repaso disponible.")
         + '<h1>Repaso no disponible</h1><p class="muted">Completa al menos 2 lecciones de esta destreza.</p>'
+        + '<a class="btn btn-gold" href="leccion.html">Ver lecciones</a></div></div>');
+      return;
+    }
+    lesson = baseLesson;
+    renderCover();
+    return;
+  }
+  if (id.indexOf("boss:") === 0) {
+    baseLesson = buildBossExam(id.split(":")[1]);
+    if (!baseLesson || !baseLesson.exercises.length) {
+      show('<div class="wrap"><div class="card center">' + mascot("thinking", "El guardián aún no aparece.")
+        + '<h1>Jefe no disponible</h1><p class="muted">Completa las lecciones del mundo para enfrentar al guardián.</p>'
         + '<a class="btn btn-gold" href="leccion.html">Ver lecciones</a></div></div>');
       return;
     }
