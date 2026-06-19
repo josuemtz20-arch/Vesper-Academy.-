@@ -20,7 +20,7 @@
 
         /* HEADER */
         header {
-            background:var(--navy); padding:0 48px; height:72px;
+            background:var(--va-ink); padding:0 48px; height:72px;
             display:flex; align-items:center; justify-content:space-between;
             border-bottom:3px solid var(--gold); box-shadow:0 2px 16px rgba(0,0,0,0.18);
             position:sticky; top:0; z-index:100;
@@ -36,7 +36,7 @@
 
         /* HERO */
         .hero { position:relative; overflow:hidden; border-bottom:3px solid var(--gold);
-            background:radial-gradient(900px 320px at 78% -40%, rgba(197,160,89,0.18), transparent 60%), linear-gradient(160deg,var(--navy2),var(--navy) 55%,var(--va-night));
+            background:radial-gradient(900px 320px at 78% -40%, rgba(197,160,89,0.18), transparent 60%), linear-gradient(160deg,var(--va-ink-2),var(--va-ink) 55%,var(--va-night));
             padding:44px 24px 40px; }
         .hero::before { content:""; position:absolute; right:-40px; top:50%; transform:translateY(-50%); width:340px; height:340px;
             background:url('assets/images/vesper_logo_inverted.png') center/contain no-repeat; opacity:0.08; }
@@ -74,11 +74,11 @@
         }
         .level-card:hover { transform:translateY(-5px); box-shadow:0 14px 34px rgba(26,43,66,0.16); border-color:var(--gold); }
         .level-card .lc-top {
-            height:96px; background:linear-gradient(135deg,var(--navy2),var(--va-night)); position:relative;
+            height:96px; background:linear-gradient(135deg,var(--va-ink-2),var(--va-ink)); position:relative;
             display:flex; align-items:center; padding:0 22px; gap:16px; border-bottom:3px solid var(--gold);
         }
         .level-card .lc-top .num {
-            width:54px; height:54px; border-radius:13px; background:var(--gold); color:var(--navy);
+            width:54px; height:54px; border-radius:13px; background:var(--gold); color:var(--va-ink);
             display:flex; align-items:center; justify-content:center; font-family:'Inria Serif',serif; font-weight:800; font-size:1.5rem; flex-shrink:0;
         }
         .level-card .lc-top .bigicon { position:absolute; right:18px; font-size:2.6rem; color:rgba(197,160,89,0.28); }
@@ -134,12 +134,12 @@
             font-size:0.82rem; font-weight:600; margin-bottom:22px; transition:all .16s;
         }
         .back-btn:hover { border-color:var(--gold); color:var(--gold2); }
-        .exam-btn { display:inline-flex; align-items:center; gap:8px; text-decoration:none; background:var(--navy); color:#fff;
+        .exam-btn { display:inline-flex; align-items:center; gap:8px; text-decoration:none; background:var(--va-ink); color:#fff;
             border-radius:10px; padding:10px 18px; font-size:0.82rem; font-weight:700; letter-spacing:0.4px; transition:background .16s; }
-        .exam-btn:hover { background:var(--gold); color:var(--navy); }
+        .exam-btn:hover { background:var(--gold); color:var(--va-ink); }
         .exam-btn.hidden { display:none; }
 
-        footer { background:var(--navy); color:rgba(255,255,255,0.45); text-align:center; padding:30px 40px; font-size:0.78rem; letter-spacing:0.5px; border-top:3px solid var(--gold); }
+        footer { background:var(--va-ink); color:rgba(255,255,255,0.45); text-align:center; padding:30px 40px; font-size:0.78rem; letter-spacing:0.5px; border-top:3px solid var(--gold); }
         footer .flogo { height:40px; width:40px; object-fit:contain; margin-bottom:10px; }
         footer span { color:var(--gold); margin-left:16px; }
         footer a { color:var(--gold); text-decoration:none; font-weight:600; }
