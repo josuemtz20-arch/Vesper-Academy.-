@@ -14,6 +14,8 @@
   --va-ink: #1B1B2F;
   --va-ink-2: #2c2c4a;
   --va-gold: #C9A84C;
+  --va-gold-lt: #d9bd84;
+  --va-gold-deep: #a8843d;
   --va-gold-tint: rgba(201, 168, 76, .14);
   --va-cream: #FBF8F1;
   --va-paper: #ffffff;
@@ -59,6 +61,34 @@
 
   /* Anillo de foco accesible. */
   --va-focus: #8a6d1f;
+}
+
+/* ============================================================
+   Alias de compatibilidad (P0): los nombres heredados que cada
+   página define en su propio :root ahora DERIVAN del canon --va-*.
+   Objetivo: que al retirar la paleta local de una página (P0.3),
+   herede automáticamente el valor canónico sin tocar más CSS.
+   Solo se mapean nombres SIN ambigüedad (se omiten --gold2, --ok,
+   --err, --navy3 por tener significados/valores divergentes).
+   ============================================================ */
+:root {
+  --ink: var(--va-ink);
+  --navy: var(--va-ink);
+  --text: var(--va-ink);
+  --navy2: var(--va-ink-2);
+  --gold: var(--va-gold);
+  --gold-lt: var(--va-gold-lt);
+  --gold-light: var(--va-gold-lt);
+  --gold-deep: var(--va-gold-deep);
+  --cream: var(--va-cream);
+  --paper: var(--va-paper);
+  --white: var(--va-paper);
+  --muted: var(--va-muted);
+  --line: var(--va-line);
+  --border: var(--va-line);
+  --success: var(--va-success);
+  --error: var(--va-error);
+  --shadow: var(--va-shadow);
 }
 
 /* ---------- Accesibilidad: foco visible global ----------
