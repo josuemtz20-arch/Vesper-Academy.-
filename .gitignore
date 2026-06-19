@@ -110,6 +110,11 @@
 # handled by vesper_path.js. Vanilla static, no-account.
 !/vesper_toefl_pack.js
 
+# Expansion 2026-06-19 (b): base-level reinforcement (A1/A2/B1) — grammar,
+# vocabulary and reading lessons with level-appropriate difficulty, including
+# the new "find the error" (find_error) exercise type. Merged at boot.
+!/vesper_levels_pack.js
+
 # Expansion 2026-06-16: live chat with the Vesper AI tutor (public, no-account).
 # chat.html embeds the personalized system prompt from VESPER_PERSONA and talks
 # to Claude through a Cloudflare Worker proxy that hides the API key. The proxy
