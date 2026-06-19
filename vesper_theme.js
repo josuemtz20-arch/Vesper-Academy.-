@@ -28,7 +28,7 @@ window.VESPER_THEME = (function () {
       name: "Clasico Oro", emoji: "👑", dark: false,
       ink: "#1B1B2F", gold: "#C9A84C", goldLt: "#dcc173", goldDp: "#a8843d",
       success: "#2D9E75", error: "#C0392B",
-      cream: "#FBF8F1", paper: "#ffffff", muted: "#6b6b76", line: "#ece7da"
+      cream: "#FBF8F1", paper: "#ffffff", muted: "#5d6470", line: "#ece7da"
     },
     midnight: {
       name: "Medianoche", emoji: "🌙", dark: true,
@@ -40,13 +40,13 @@ window.VESPER_THEME = (function () {
       name: "Marfil", emoji: "🤍", dark: false,
       ink: "#23202b", gold: "#b8923f", goldLt: "#cba85e", goldDp: "#977630",
       success: "#2D9E75", error: "#C0392B",
-      cream: "#ffffff", paper: "#faf8f4", muted: "#7b7682", line: "#ece7da"
+      cream: "#ffffff", paper: "#faf8f4", muted: "#6f6a76", line: "#ece7da"
     },
     sunset: {
       name: "Atardecer", emoji: "🌇", dark: false,
       ink: "#2b1d22", gold: "#e0833f", goldLt: "#ee9d5e", goldDp: "#bd6526",
       success: "#3a9e7a", error: "#c0392b",
-      cream: "#fdf3ec", paper: "#fff8f3", muted: "#8a6f66", line: "#f0ddd0"
+      cream: "#fdf3ec", paper: "#fff8f3", muted: "#7a655c", line: "#f0ddd0"
     },
     forest: {
       name: "Bosque", emoji: "🌿", dark: false,
@@ -105,6 +105,10 @@ window.VESPER_THEME = (function () {
       "--cream": t.cream, "--paper": t.paper, "--muted": t.muted, "--line": t.line,
       "--gold-tint": rgba(t.gold, tintA), "--ok-tint": rgba(t.success, t.dark ? .18 : .12),
       "--no-tint": rgba(t.error, t.dark ? .18 : .10),
+      /* a11y: oro-texto accesible sobre la superficie del tema (oscuro en temas claros,
+         claro en temas oscuros) + anillo de foco visible por tema (WCAG 1.4.3/1.4.11/2.4.7) */
+      "--gold-ink": t.dark ? t.gold : "#7a5e12",
+      "--focus": t.dark ? t.goldLt : "#8a6d1f",
       "--shadow": t.dark ? "0 6px 22px rgba(0,0,0,.45)" : "0 6px 22px rgba(27,27,47,.08)",
       /* tokens del sitio / onboarding */
       "--navy": t.dark ? t.paper : t.ink, "--navy2": t.dark ? t.line : "#2c2c4a",
