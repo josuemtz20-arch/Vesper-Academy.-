@@ -999,6 +999,7 @@
 <script src="vesper_levels_pack.js"></script>
 <script src="vesper_themes_pack.js"></script>
 <script src="vesper_themes_pack2.js"></script>
+<script src="vesper_themes_pack3.js"></script>
 <script src="vesper_mascot.js"></script>
 <script src="vesper_theme.js"></script>
 <script src="vesper_adaptive.js"></script>
@@ -1019,6 +1020,7 @@
   if (window.VESPER_LEVELS_PACK && VESPER_LEVELS_PACK.merge) VESPER_LEVELS_PACK.merge(window.VESPER_LESSONS, window.VESPER_LESSONS_ORDER);
   if (window.VESPER_THEMES_PACK && VESPER_THEMES_PACK.merge) VESPER_THEMES_PACK.merge(window.VESPER_LESSONS, window.VESPER_LESSONS_ORDER);
   if (window.VESPER_THEMES_PACK2 && VESPER_THEMES_PACK2.merge) VESPER_THEMES_PACK2.merge(window.VESPER_LESSONS, window.VESPER_LESSONS_ORDER);
+  if (window.VESPER_THEMES_PACK3 && VESPER_THEMES_PACK3.merge) VESPER_THEMES_PACK3.merge(window.VESPER_LESSONS, window.VESPER_LESSONS_ORDER);
   var L = window.VESPER_LESSONS || {};
   var ORDER = window.VESPER_LESSONS_ORDER || Object.keys(L);
   var A = window.VESPER_ADAPTIVE || null;
@@ -1429,7 +1431,7 @@
   /* Guardián del mundo: 3 estados — locked / ready / conquered */
   function bossNodeHtml(selLevel, built, dx, stop) {
     var bm = bossMeta(selLevel);
-    var complete = PATH.regionComplete(selLevel, built);
+    var available = PATH.bossUnlocked(selLevel, built);   // el jefe siempre se puede enfrentar
     var passed = !!(P && P.bossPassed && P.bossPassed(selLevel));
     var bid = "boss:" + selLevel;
     var beacon = '<svg viewBox="0 0 32 34" width="34" height="36" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true">'
@@ -1441,14 +1443,14 @@
       cls += " conquered"; attr = 'data-go="' + bid + '"';
       label = '<span class="wlabel boss-lb">Umbral superado</span>';
       title = bm.name; aria = bm.name + ", guardián vencido. Repetir el examen.";
-    } else if (complete) {
+    } else if (available) {
       cls += " ready"; attr = 'data-go="' + bid + '"';
       label = '<span class="wlabel boss-lb">El Guardián</span>';
-      title = bm.name; aria = bm.name + ", examen del mundo disponible. Véncelo para abrir el siguiente nivel.";
+      title = bm.name; aria = bm.name + ", examen del mundo disponible. Véncelo para abrir el siguiente nivel (no hace falta terminar las lecciones).";
     } else {
       cls += " locked"; attr = 'data-locked-boss="1"';
       label = '<span class="wlabel boss-lb">Jefe del mundo</span>';
-      title = bm.name; aria = bm.name + ", bloqueado. Completa todas las lecciones del mundo para enfrentarlo.";
+      title = bm.name; aria = bm.name + ", bloqueado.";
     }
     return '<div class="wnode wboss-node' + (passed ? " done" : "") + '" data-stop="' + stop + '" style="--dx:' + dx + 'px">'
       + label + '<button class="' + cls + '" ' + attr + ' aria-label="' + esc(aria) + '">' + beacon + '</button>'
@@ -2446,11 +2448,13 @@
     var built = PATH.build(L, ORDER), gg = built.levels[level];
     if (!gg) return null;
     var bm = bossMeta(level), pool = [];
+    /* El jefe es un examen libre: se puede enfrentar sin completar el mundo,
+       así que tomamos preguntas de TODAS las lecciones del nivel (1 por lección). */
     PATH.SKILL_ORDER.forEach(function (sk) {
-      var ids = (gg.bySkill[sk] || []).filter(function (x) { return built.completed[x]; });
+      var ids = (gg.bySkill[sk] || []);
       ids.forEach(function (lid) {
         var l = L[lid]; if (!l || !l.exercises || !l.exercises.length) return;
-        pool = pool.concat(shuffle(l.exercises.slice()).slice(0, 1)); /* 1 por lección completada */
+        pool = pool.concat(shuffle(l.exercises.slice()).slice(0, 1)); /* 1 por lección del mundo */
       });
     });
     shuffle(pool);
@@ -2460,7 +2464,7 @@
       lessonId: "boss:" + level, level: level, track: "Examen del mundo", isBoss: true, bossLevel: level,
       title: bm.name + " · " + level,
       explanation: {
-        body: "Demuestra tu dominio de " + level + ". Son preguntas mezcladas de todas las destrezas de tus lecciones completadas. Necesitas " + bm.pass + "% para vencer al guardián y abrir el siguiente mundo.",
+        body: "Demuestra tu dominio de " + level + ". Son preguntas mezcladas de todas las destrezas del mundo (no hace falta terminar las lecciones). Necesitas " + bm.pass + "% para vencer al guardián y abrir el siguiente mundo.",
         examples: []
       },
       exercises: picked, xpReward: 60, mascotState: "thinking", nextLessonId: null

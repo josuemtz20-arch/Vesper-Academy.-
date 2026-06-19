@@ -125,6 +125,11 @@
 # (B2/C1/C2: meetings, news, psychology, society, ethics, development).
 !/vesper_themes_pack2.js
 
+# Expansion 2026-06-19 (e): more themes for A1/A2/B1 (city, jobs, sport:
+# vocab + listening) and thematic reading + vocabulary for B2/C1/C2
+# (gig economy, AI, philosophy of happiness, collocations, trends, nuance).
+!/vesper_themes_pack3.js
+
 # Expansion 2026-06-16: live chat with the Vesper AI tutor (public, no-account).
 # chat.html embeds the personalized system prompt from VESPER_PERSONA and talks
 # to Claude through a Cloudflare Worker proxy that hides the API key. The proxy
