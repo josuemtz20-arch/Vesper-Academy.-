@@ -1,0 +1,58 @@
+/* ============================================================
+   vesper_components.css — Componentes compartidos (botones, cards)
+   construidos sobre los tokens canónicos --va-* de vesper_tokens.css.
+
+   Se enlaza DESPUÉS de vesper_tokens.css y ANTES del <style> propio
+   de cada página, de modo que ofrece una base unificada que la página
+   puede afinar puntualmente. No define layout de página: solo el look
+   compartido de .btn / .card para que dejen de divergir entre páginas.
+   ============================================================ */
+
+/* ---------- Botones ---------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  font-family: inherit;
+  font-weight: 600;
+  font-size: .95rem;
+  line-height: 1.2;
+  padding: 13px 24px;
+  border: none;
+  border-radius: var(--va-r-sm);
+  cursor: pointer;
+  text-decoration: none;
+  background: var(--va-ink);
+  color: var(--va-cream);
+  transition: transform .18s ease, box-shadow .18s ease, background .18s ease, opacity .18s ease;
+}
+.btn:hover { transform: translateY(-2px); box-shadow: var(--va-shadow); }
+.btn:active:not(:disabled) { transform: translateY(1px); }
+.btn:disabled { opacity: .45; cursor: not-allowed; transform: none; }
+
+/* Variante oro (acción primaria). */
+.btn-gold { background: var(--va-gold); color: var(--va-ink); }
+
+/* Variante fantasma (acción secundaria). */
+.btn-ghost {
+  background: transparent;
+  color: var(--va-ink);
+  border: 1.5px solid var(--va-line);
+}
+
+/* Variante a ancho completo (apps de lección, formularios apilados). */
+.btn-block {
+  display: block;
+  width: 100%;
+  min-height: 50px;
+}
+
+/* ---------- Tarjeta ---------- */
+.card {
+  background: var(--va-paper);
+  border: 1px solid var(--va-line);
+  border-radius: var(--va-r-lg);
+  box-shadow: var(--va-shadow);
+  padding: 20px;
+}
