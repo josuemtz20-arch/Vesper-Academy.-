@@ -36,7 +36,7 @@
 
         /* HERO */
         .hero { position:relative; overflow:hidden; border-bottom:3px solid var(--gold);
-            background:radial-gradient(900px 320px at 78% -40%, rgba(197,160,89,0.18), transparent 60%), linear-gradient(160deg,var(--navy2),var(--navy) 55%,var(--navy3));
+            background:radial-gradient(900px 320px at 78% -40%, rgba(197,160,89,0.18), transparent 60%), linear-gradient(160deg,var(--navy2),var(--navy) 55%,var(--va-night));
             padding:44px 24px 40px; }
         .hero::before { content:""; position:absolute; right:-40px; top:50%; transform:translateY(-50%); width:340px; height:340px;
             background:url('assets/images/vesper_logo_inverted.png') center/contain no-repeat; opacity:0.08; }
@@ -55,13 +55,13 @@
         .crumbs a { color:var(--gold2); text-decoration:none; font-weight:600; cursor:pointer; }
         .crumbs a:hover { text-decoration:underline; }
         .crumbs .sep { opacity:0.5; }
-        .crumbs b { color:var(--navy); }
+        .crumbs b { color:var(--ink); }
 
         .view { animation:fade 0.32s ease both; }
         @keyframes fade { from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:translateY(0);} }
 
         .section-title { display:flex; align-items:center; gap:14px; margin:0 0 22px; }
-        .section-title h3 { margin:0; font-family:'Inria Serif',serif; font-size:1.5rem; color:var(--navy); }
+        .section-title h3 { margin:0; font-family:'Inria Serif',serif; font-size:1.5rem; color:var(--ink); }
         .section-title .line { flex:1; height:1px; background:var(--border); }
 
         /* LEVEL GRID */
@@ -74,7 +74,7 @@
         }
         .level-card:hover { transform:translateY(-5px); box-shadow:0 14px 34px rgba(26,43,66,0.16); border-color:var(--gold); }
         .level-card .lc-top {
-            height:96px; background:linear-gradient(135deg,var(--navy2),var(--navy3)); position:relative;
+            height:96px; background:linear-gradient(135deg,var(--navy2),var(--va-night)); position:relative;
             display:flex; align-items:center; padding:0 22px; gap:16px; border-bottom:3px solid var(--gold);
         }
         .level-card .lc-top .num {
@@ -124,13 +124,13 @@
         .lesson-card .lz-body { display:flex; align-items:center; gap:10px; padding:13px 15px; flex:1; }
         .lesson-card .lz-meta { min-width:0; flex:1; }
         .lesson-card .lz-meta .num { font-size:0.66rem; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:var(--gold2); }
-        .lesson-card .lz-meta h4 { margin:2px 0 0; font-size:0.96rem; font-weight:700; color:var(--navy); line-height:1.25; }
+        .lesson-card .lz-meta h4 { margin:2px 0 0; font-size:0.96rem; font-weight:700; color:var(--ink); line-height:1.25; }
         .lesson-card .lz-go { color:var(--muted); font-size:0.9rem; flex-shrink:0; transition:transform .16s, color .16s; }
         .lesson-card:hover .lz-go { color:var(--gold2); transform:translateX(3px); }
 
         .back-btn {
             display:inline-flex; align-items:center; gap:8px; cursor:pointer; border:1px solid var(--border);
-            background:var(--white); color:var(--navy); border-radius:10px; padding:9px 16px; font-family:'Inter',sans-serif;
+            background:var(--white); color:var(--ink); border-radius:10px; padding:9px 16px; font-family:'Inter',sans-serif;
             font-size:0.82rem; font-weight:600; margin-bottom:22px; transition:all .16s;
         }
         .back-btn:hover { border-color:var(--gold); color:var(--gold2); }
@@ -497,5 +497,7 @@
             window.scrollTo({top:0, behavior:"smooth"});
         }
     </script>
+    <!-- Aplica el tema elegido en Ajustes (modo claro/oscuro). Sin FAB. -->
+    <script src="vesper_theme.js"></script>
 </body>
 </html>
