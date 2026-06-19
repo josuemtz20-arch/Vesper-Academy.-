@@ -104,6 +104,12 @@
 !/vesper_expansion2.js
 !/vesper_prefs.js
 
+# Expansion 2026-06-19: TOEFL-style lessons for the advanced worlds (B2/C1/C2)
+# — academic reading passages, listening lectures and structure/writing tasks.
+# Merged into VESPER_LESSONS at boot by leccion.html; level progression is
+# handled by vesper_path.js. Vanilla static, no-account.
+!/vesper_toefl_pack.js
+
 # Expansion 2026-06-16: live chat with the Vesper AI tutor (public, no-account).
 # chat.html embeds the personalized system prompt from VESPER_PERSONA and talks
 # to Claude through a Cloudflare Worker proxy that hides the API key. The proxy
