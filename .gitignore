@@ -67,6 +67,8 @@
 # Account-free interactive lessons: player + content + mascot config + progress store.
 # leccion.html does NOT load vesper_auth.js, so it never hits the login gate.
 !/leccion.html
+# lecciones.html (plural): redirect stub so the plural URL also resolves.
+!/lecciones.html
 !/vesper_lessons.js
 !/vesper_mascot.js
 !/vesper_progress.js
