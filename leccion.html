@@ -286,17 +286,39 @@
   .hub-icon{display:inline-flex;align-items:center;justify-content:center;width:42px;height:42px;flex:none;border-radius:50%;
     background:var(--paper);border:1px solid var(--line);text-decoration:none;color:var(--ink);font-size:1.2rem;cursor:pointer;font-family:inherit}
   .hub-icon:active{transform:translateY(1px)}
-  /* cinta de mundos */
-  .worlds{display:flex;gap:10px;overflow-x:auto;padding:10px 2px 12px;margin:10px -2px 2px;-webkit-overflow-scrolling:touch}
-  .world{flex:0 0 auto;position:relative;display:flex;flex-direction:column;align-items:center;gap:4px;min-width:80px;
-    border:1.5px solid var(--line);background:var(--paper);border-radius:15px;padding:10px 14px 9px;cursor:pointer;font-family:inherit;color:var(--ink)}
-  .world.on{border-color:var(--gold);background:var(--gold-tint);box-shadow:0 5px 16px rgba(27,27,47,.10)}
-  .world.locked{opacity:.5;cursor:not-allowed}
-  .world .w-ring{width:36px;height:36px;font-size:.66rem}
-  .world .w-ring i{width:27px;height:27px}
-  .world .w-nm{font-weight:800;font-size:.95rem;letter-spacing:.02em}
-  .world .w-pc{font-size:.68rem;color:var(--muted);font-weight:600}
-  .world .w-lk{position:absolute;top:4px;right:7px;font-size:.8rem}
+  /* cinta de mundos (selector de niveles A1–C2) — cada mundo lleva su acento temático */
+  .worlds{display:flex;gap:11px;overflow-x:auto;padding:12px 4px 14px;margin:12px -4px 4px;
+    scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .worlds::-webkit-scrollbar{display:none}
+  .world{flex:0 0 auto;position:relative;display:flex;flex-direction:column;align-items:center;gap:7px;min-width:98px;
+    border:1.5px solid var(--line);background:var(--paper);border-radius:18px;padding:14px 12px 11px;cursor:pointer;
+    font-family:inherit;color:var(--ink);scroll-snap-align:start;box-shadow:0 2px 9px rgba(27,27,47,.05)}
+  .world::before{content:"";position:absolute;left:14px;right:14px;top:0;height:4px;border-radius:0 0 4px 4px;
+    background:var(--w-accent,var(--gold));opacity:0;transition:opacity .18s ease}
+  .world.on::before{opacity:1}
+  /* anillo de progreso con la sigla del nivel al centro */
+  .world .w-ring{position:relative;width:54px;height:54px;border-radius:50%;display:grid;place-items:center;flex:0 0 auto;
+    background:conic-gradient(var(--w-accent,var(--gold)) calc(var(--pct,0)*1%),var(--line) 0)}
+  .world .w-ring-hole{position:relative;width:44px;height:44px;border-radius:50%;background:var(--paper);
+    display:grid;place-items:center;box-shadow:inset 0 0 0 1px rgba(27,27,47,.05)}
+  .world .w-code{font-weight:800;font-size:1.02rem;letter-spacing:.01em;color:var(--ink)}
+  .world .w-nm{font-weight:700;font-size:.82rem;line-height:1.16;text-align:center;color:var(--ink);max-width:86px}
+  .world .w-pc{font-size:.72rem;color:var(--muted);font-weight:600}
+  .world.on{border-color:var(--w-accent,var(--gold));background:var(--w-accent-soft,var(--gold-tint))}
+  .world.on .w-pc{color:var(--ink)}
+  /* mundo dominado (100%) */
+  .world.complete .w-done{position:absolute;top:8px;right:9px;width:20px;height:20px;border-radius:50%;
+    background:var(--success);color:#fff;display:grid;place-items:center;box-shadow:0 1px 4px rgba(45,158,117,.4)}
+  .world.complete .w-done svg{width:13px;height:13px}
+  /* mundo bloqueado: legible (sin opacity baja que rompe contraste) */
+  .world.locked{cursor:not-allowed;background:var(--cream);border-style:dashed}
+  .world.locked .w-ring{background:var(--line)}
+  .world.locked .w-ring-hole{background:var(--cream)}
+  .world.locked .w-code,.world.locked .w-nm{color:var(--muted)}
+  .world .w-lk{position:absolute;top:7px;right:9px;width:21px;height:21px;border-radius:50%;background:var(--ink);
+    color:var(--cream);display:grid;place-items:center;opacity:.92}
+  .world .w-lk svg{width:12px;height:12px}
+  .world:focus-visible{outline:3px solid var(--w-accent,var(--gold));outline-offset:2px}
   /* ruta serpenteante */
   /* ===== Escena 2D del mundo: cielo estrellado navy + isla de terreno ===== */
   .wsky{position:relative;margin:14px 0 16px;border-radius:20px;overflow:hidden;
@@ -596,9 +618,9 @@
 .worlds .world:nth-child(n+7){animation-delay:.38s}
 @keyframes g-world-in{from{opacity:0;transform:translateY(10px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
 .world{transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease,background .18s ease}
-.world:not(.locked):hover,.world:not(.locked):focus-visible{transform:translateY(-3px);box-shadow:0 9px 22px rgba(27,27,47,.14)}
+.world:not(.locked):hover,.world:not(.locked):focus-visible{transform:translateY(-3px);box-shadow:0 9px 22px var(--w-glow,rgba(27,27,47,.16))}
 .world.on{animation:g-world-onpulse 3.6s ease-in-out infinite}
-@keyframes g-world-onpulse{0%,100%{box-shadow:0 5px 16px rgba(27,27,47,.10)}50%{box-shadow:0 5px 20px rgba(197,160,89,.30)}}
+@keyframes g-world-onpulse{0%,100%{box-shadow:0 5px 16px rgba(27,27,47,.09)}50%{box-shadow:0 7px 22px var(--w-glow,rgba(197,160,89,.30))}}
 
 /* 1e. Barra de progreso: shimmer dorado (oro invariante, nunca acento) */
 .world-banner__bar > i{position:relative;overflow:hidden}
@@ -1142,6 +1164,63 @@
 .vesper-reduce-motion .terr .smoke{opacity:.28}.vesper-reduce-motion .terr .beam{opacity:.2;transform:rotate(0deg)}
 .vesper-reduce-motion .watmo::before,.vesper-reduce-motion .watmo::after{animation:none!important}
 .vesper-reduce-motion .wsil{transform:none!important}
+
+/* =====================================================================
+   "Vesper te escribe": burbuja de chat flotante (FAB + globo emergente).
+   Llama la atención hacia el chat con un mensaje y un punto de no leído.
+   Se congela bajo prefers-reduced-motion / .vesper-reduce-motion.
+   ===================================================================== */
+.vchat-nudge{position:fixed;right:14px;bottom:16px;z-index:9998;display:flex;flex-direction:column;
+  align-items:flex-end;gap:11px;pointer-events:none}
+.vchat-nudge > *{pointer-events:auto}
+/* deja sitio para que el botón flotante no tape el final del contenido */
+body.has-chat-nudge .wrap{padding-bottom:96px}
+.vchat-fab{position:relative;width:62px;height:62px;border-radius:50%;display:grid;place-items:center;flex:0 0 auto;
+  background:var(--paper);border:2px solid var(--gold);box-shadow:0 8px 22px rgba(27,27,47,.22);
+  text-decoration:none;cursor:pointer;-webkit-tap-highlight-color:transparent;
+  opacity:0;transform:scale(.55) translateY(10px);transition:opacity .3s ease,transform .38s cubic-bezier(.18,.89,.32,1.4)}
+.vchat-fab img{width:54px;height:54px;border-radius:50%;object-fit:cover;display:block;background:var(--gold-tint)}
+.vchat-fab .vchat-dot{position:absolute;top:-3px;right:-3px;min-width:20px;height:20px;border-radius:999px;
+  background:var(--error);color:#fff;border:2px solid var(--paper);font-size:.7rem;font-weight:800;
+  display:grid;place-items:center;padding:0 4px;box-shadow:0 0 0 0 rgba(192,57,43,.5)}
+.vchat-fab .vchat-dot[hidden]{display:none}
+.vchat-pop{position:relative;max-width:236px;background:var(--paper);border:1px solid var(--line);
+  border-radius:16px 16px 5px 16px;box-shadow:0 12px 32px rgba(27,27,47,.22);padding:12px 13px 12px;
+  transform-origin:bottom right;opacity:0;transform:scale(.7) translateY(12px);
+  transition:opacity .25s ease,transform .28s cubic-bezier(.18,.89,.32,1.32)}
+.vchat-pop[hidden]{display:none}
+.vchat-pop::after{content:"";position:absolute;right:19px;bottom:-7px;width:13px;height:13px;background:var(--paper);
+  border-right:1px solid var(--line);border-bottom:1px solid var(--line);transform:rotate(45deg)}
+.vchat-name{font-size:.68rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--gold2);
+  display:flex;align-items:center;gap:6px;margin:0 0 5px}
+.vchat-name i{width:7px;height:7px;border-radius:50%;background:var(--success);display:inline-block;flex:0 0 auto}
+.vchat-msg{margin:0;font-size:.92rem;line-height:1.42;color:var(--ink)}
+.vchat-cta{display:inline-flex;align-items:center;gap:6px;margin-top:10px;background:var(--ink);color:var(--cream);
+  text-decoration:none;font-size:.84rem;font-weight:700;border-radius:11px;padding:9px 14px}
+.vchat-cta:active{transform:translateY(1px)}
+.vchat-x{position:absolute;top:5px;right:5px;width:25px;height:25px;border:none;background:none;cursor:pointer;
+  color:var(--muted);font-size:1.15rem;line-height:1;border-radius:50%;display:grid;place-items:center}
+.vchat-x:hover{background:var(--cream)}
+.vchat-typing{display:flex;gap:5px;padding:6px 2px 4px}
+.vchat-typing i{width:8px;height:8px;border-radius:50%;background:var(--muted);opacity:.45;
+  animation:vchat-type 1s ease-in-out infinite}
+.vchat-typing i:nth-child(2){animation-delay:.16s}
+.vchat-typing i:nth-child(3){animation-delay:.32s}
+@keyframes vchat-type{0%,60%,100%{opacity:.35;transform:translateY(0)}30%{opacity:1;transform:translateY(-4px)}}
+.vchat-nudge.show-fab .vchat-fab{opacity:1;transform:none}
+.vchat-nudge.show-pop .vchat-pop{opacity:1;transform:none}
+.vchat-nudge.wiggle.show-fab .vchat-fab{animation:vchat-wiggle 3.2s ease-in-out 1.1s infinite}
+.vchat-nudge.show-fab .vchat-dot:not([hidden]){animation:vchat-pulse 1.9s ease-in-out infinite}
+@keyframes vchat-wiggle{0%,86%,100%{transform:rotate(0)}90%{transform:rotate(-8deg)}94%{transform:rotate(8deg)}98%{transform:rotate(-3deg)}}
+@keyframes vchat-pulse{0%{box-shadow:0 0 0 0 rgba(192,57,43,.5)}70%{box-shadow:0 0 0 8px rgba(192,57,43,0)}100%{box-shadow:0 0 0 0 rgba(192,57,43,0)}}
+@media(prefers-reduced-motion:reduce){
+  .vchat-fab,.vchat-pop{transition:none}
+  .vchat-nudge.wiggle.show-fab .vchat-fab{animation:none}
+  .vchat-fab .vchat-dot,.vchat-typing i{animation:none!important}
+}
+.vesper-reduce-motion .vchat-fab,.vesper-reduce-motion .vchat-pop{transition:none}
+.vesper-reduce-motion .vchat-nudge.wiggle.show-fab .vchat-fab{animation:none}
+.vesper-reduce-motion .vchat-fab .vchat-dot,.vesper-reduce-motion .vchat-typing i{animation:none!important}
 </style>
 </head>
 <body>
@@ -1298,6 +1377,8 @@
     C2: { file: "assets/images/lessons/theme_fantasy.jpg",   worldName: "El Castillo del Saber",accent:"#3FA08A", accentSoft:"rgba(63,160,138,.16)", glow:"rgba(63,160,138,.36)", ambientName:"aurora",    ambientN:7,  mapN:2, boss:{ name:"El Soberano del Saber",   pass:92 }, biome:["spire","banner","crystal","pine"] }
   };
   var WORLD_TAG = { A1: "Principiante", A2: "Básico", B1: "Intermedio", B2: "Intermedio alto", C1: "Avanzado", C2: "Maestría" };
+  /* nombre corto de mundo para la cinta selectora (C2 abreviado para no desbordar) */
+  var WORLD_SHORT = { A1: "El Hogar", A2: "El Sendero", B1: "El Horizonte", B2: "La Torre", C1: "El Firmamento", C2: "El Castillo" };
   var WORLD_UMBRAL = { A1: "Umbral del Hogar", A2: "Mojón del Sendero", B1: "Arco del Horizonte", B2: "Pórtico de la Torre", C1: "Portal del Firmamento", C2: "Sello del Castillo" };
   var BOSS_AVATAR = "assets/images/mascot/vesper_cat.png";
   /* metadatos del jefe de un nivel, con defaults si el mundo no declara boss */
@@ -1725,21 +1806,39 @@
   }
 
   function worldsRibbon(built, selLevel) {
-    var html = PATH.LEVELS.map(function (lv, idx) {
-      var pr = PATH.levelProgress(lv, built), col = PATH.levelColor(lv);
+    var lockSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="10.7" width="14" height="9" rx="2.2"/><path d="M8 10.7V7.7a4 4 0 0 1 8 0v3"/></svg>';
+    var chkSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.6l4.6 4.6L19 7.4"/></svg>';
+    var html = PATH.LEVELS.map(function (lv) {
+      var pr = PATH.levelProgress(lv, built), t = WORLD_THEME[lv] || {};
+      var nm = WORLD_SHORT[lv] || t.worldName || lv, tag = WORLD_TAG[lv] || "";
+      var done = pr.done, total = pr.total, pct = pr.pct, complete = total > 0 && done >= total;
       /* desbloqueado si: A1, ya venciste al jefe del mundo anterior, este mundo ya
          tiene avance propio (desbloqueo suave), o es el mundo seleccionado. */
       var reachable = PATH.regionUnlocked(lv, built) || lv === selLevel;
-      var ring = '<span class="ring w-ring" style="background:conic-gradient(' + col + ' ' + pr.pct + '%, var(--line) 0)"><i>' + pr.pct + '</i></span>';
-      var inner = ring + '<span class="w-nm">' + lv + '</span><span class="w-pc">' + pr.done + '/' + pr.total + '</span>';
+      /* el acento del mundo (igual que banner/mapa) da identidad a cada tarjeta */
+      var vars = '--w-accent:' + (t.accent || '#c5a059')
+        + ';--w-accent-soft:' + (t.accentSoft || 'var(--gold-tint)')
+        + ';--w-glow:' + (t.glow || 'rgba(197,160,89,.30)')
+        + ';--pct:' + pct;
+      var ring = '<span class="w-ring" aria-hidden="true"><span class="w-ring-hole"><span class="w-code">' + lv + '</span></span></span>';
       if (!reachable) {
-        return '<button class="world locked" type="button" data-locked-world="1" aria-label="Mundo ' + lv + ', bloqueado">'
-          + inner + '<span class="w-lk" aria-hidden="true">&#128274;</span></button>';
+        return '<button class="world locked" type="button" data-locked-world="1" style="' + vars + '"'
+          + ' aria-label="Mundo ' + lv + ', ' + esc(nm) + ', ' + esc(tag) + '. Bloqueado: vence al guardián del mundo anterior para entrar.">'
+          + ring + '<span class="w-nm">' + esc(nm) + '</span><span class="w-pc">Bloqueado</span>'
+          + '<span class="w-lk">' + lockSvg + '</span></button>';
       }
-      return '<button class="world' + (lv === selLevel ? " on" : "") + '" type="button" data-lvl="' + lv + '"'
-        + (lv === selLevel ? ' aria-current="true"' : '') + ' aria-label="Mundo ' + lv + ', ' + pr.pct + '% completado">' + inner + '</button>';
+      var sel = lv === selLevel;
+      var stateTxt = complete ? 'Dominado, 100% completado'
+        : (done > 0 ? done + ' de ' + total + ' lecciones, ' + pct + ' por ciento'
+                    : total + ' lecciones, sin empezar');
+      var pcLine = complete ? '<span class="w-pc">Dominado</span>' : '<span class="w-pc">' + done + '/' + total + '</span>';
+      var doneBadge = complete ? '<span class="w-done">' + chkSvg + '</span>' : '';
+      return '<button class="world' + (sel ? ' on' : '') + (complete ? ' complete' : '') + '" type="button" data-lvl="' + lv + '" style="' + vars + '"'
+        + (sel ? ' aria-current="true"' : '')
+        + ' aria-label="Mundo ' + lv + ', ' + esc(nm) + ', ' + esc(tag) + '. ' + stateTxt + (sel ? '. Seleccionado' : '') + '.">'
+        + ring + '<span class="w-nm">' + esc(nm) + '</span>' + pcLine + doneBadge + '</button>';
     }).join("");
-    return '<div class="worlds" role="group" aria-label="Mundos (niveles A1 a C2)">' + html + '</div>';
+    return '<div class="worlds" role="group" aria-label="Mundos: niveles A1 a C2">' + html + '</div>';
   }
 
   /* mapa: id de lección -> índice de parada en el render actual (para animar al avatar);
@@ -2054,6 +2153,81 @@
       if (willOpen) { var fi = byId("lessonSearch"); if (fi) setTimeout(function () { fi.focus(); }, 30); }
       else resetSearch();
     };
+
+    /* burbuja flotante: "Vesper te escribe" para destacar el chat */
+    mountChatNudge();
+  }
+
+  /* ---------- Burbuja de chat flotante (Vesper "te manda un mensaje") ---------- */
+  function mountChatNudge() {
+    if (byId("vchatNudge")) return;                 // ya montada en esta carga
+    var seen = false;
+    try { seen = sessionStorage.getItem("vesper_chat_nudge") === "seen"; } catch (e) {}
+    var rm = reduceMotion();
+    var catImg = (window.VESPER_MASCOT && VESPER_MASCOT.canonical) || "assets/images/mascot/vesper_cat.png";
+    var fb = (window.VESPER_MASCOT && VESPER_MASCOT.fallback) || "assets/images/virtual_class_happy_cat.png";
+    var msg = "¡Hola! Soy Vesper. ¿Practicamos tu inglés? Pregúntame lo que quieras. 🐾";
+
+    var n = document.createElement("div");
+    n.className = "vchat-nudge";
+    n.id = "vchatNudge";
+    n.innerHTML =
+        '<div class="vchat-pop" id="vchatPop" role="group" aria-label="Mensaje de Vesper" hidden>'
+      +   '<button class="vchat-x" type="button" aria-label="Cerrar mensaje de Vesper">&times;</button>'
+      +   '<div class="vchat-name"><i></i>Vesper · en línea</div>'
+      +   '<div class="vchat-body" aria-live="polite"><div class="vchat-typing" aria-hidden="true"><i></i><i></i><i></i></div></div>'
+      + '</div>'
+      + '<a class="vchat-fab" href="chat.html" aria-label="Abrir chat con Vesper">'
+      +   '<img src="' + catImg + '" alt="" loading="lazy" decoding="async" onerror="this.onerror=null;this.src=\'' + fb + '\'">'
+      +   '<span class="vchat-dot" aria-hidden="true">1</span>'
+      + '</a>';
+    document.body.appendChild(n);
+    document.body.classList.add("has-chat-nudge");
+
+    var pop = byId("vchatPop");
+    var body = n.querySelector(".vchat-body");
+    var dot = n.querySelector(".vchat-dot");
+    var msgHtml = '<p class="vchat-msg">' + esc(msg) + '</p>'
+      + '<a class="vchat-cta" href="chat.html">Hablar con Vesper'
+      + '<svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13M12 6l6 6-6 6"/></svg></a>';
+
+    function markSeen() { try { sessionStorage.setItem("vesper_chat_nudge", "seen"); } catch (e) {} }
+    function showMsg() { if (body) body.innerHTML = msgHtml; }
+    function openPop() {
+      if (!pop) return;
+      pop.hidden = false;
+      requestAnimationFrame(function () { n.classList.add("show-pop"); });
+      if (rm) { showMsg(); return; }
+      clearTimeout(n._t3);
+      n._t3 = setTimeout(showMsg, 1250);           // primero "escribiendo...", luego el mensaje
+    }
+    function dismiss() {
+      n.classList.remove("show-pop");
+      clearTimeout(n._t3);
+      setTimeout(function () { if (pop) pop.hidden = true; }, 260);
+      if (dot) dot.hidden = true;
+      markSeen();
+    }
+    var xb = n.querySelector(".vchat-x");
+    if (xb) xb.onclick = function (e) { e.preventDefault(); e.stopPropagation(); dismiss(); };
+    var fab = n.querySelector(".vchat-fab");
+    if (fab) fab.addEventListener("click", markSeen);
+    if (pop) pop.addEventListener("click", function (ev) { if (ev.target.closest("a")) markSeen(); });
+
+    if (rm) {                                       // sin animación: muestra botón y, si es nuevo, el mensaje estático
+      n.classList.add("show-fab");
+      if (seen && dot) dot.hidden = true;
+      if (!seen) { showMsg(); n._t2 = setTimeout(openPop, 120); }
+      else if (dot) dot.hidden = true;
+      return;
+    }
+    n._t1 = setTimeout(function () { n.classList.add("show-fab"); }, seen ? 250 : 650);
+    if (!seen) {
+      n.classList.add("wiggle");
+      n._t2 = setTimeout(openPop, 1650);
+    } else if (dot) {
+      dot.hidden = true;                            // ya visto: solo el botón, sin globo ni punto
+    }
   }
 
   /* ---------- COVER ---------- */
