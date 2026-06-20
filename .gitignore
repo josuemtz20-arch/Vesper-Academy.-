@@ -12,6 +12,9 @@
 !/.nojekyll
 !/CNAME
 
+# planning note for the AI-guardian work (picked up by a new web session)
+!/GUARDIANS_TODO.md
+
 # public site + auth gate (must stay at root)
 # (vesper_web/landing/promo stay local: index.html is the one canonical landing)
 !/index.html
@@ -103,6 +106,37 @@
 # Configuración (text size, contrast, reduced motion, sound) across the site.
 !/vesper_expansion2.js
 !/vesper_prefs.js
+
+# Expansion 2026-06-19: TOEFL-style lessons for the advanced worlds (B2/C1/C2)
+# — academic reading passages, listening lectures and structure/writing tasks.
+# Merged into VESPER_LESSONS at boot by leccion.html; level progression is
+# handled by vesper_path.js. Vanilla static, no-account.
+!/vesper_toefl_pack.js
+
+# Expansion 2026-06-19 (b): base-level reinforcement (A1/A2/B1) — grammar,
+# vocabulary and reading lessons with level-appropriate difficulty, including
+# the new "find the error" (find_error) exercise type. Merged at boot.
+!/vesper_levels_pack.js
+
+# Expansion 2026-06-19 (c): themed lessons for A1/A2/B1 — each theme brings
+# a vocabulary lesson and a listening lesson (TTS, no audio files), with
+# level-appropriate difficulty. Merged at boot.
+!/vesper_themes_pack.js
+
+# Expansion 2026-06-19 (d): extra themes for A1/A2/B1 (house, health, tech:
+# vocab + listening) plus thematic listening for the advanced worlds
+# (B2/C1/C2: meetings, news, psychology, society, ethics, development).
+!/vesper_themes_pack2.js
+
+# Expansion 2026-06-19 (e): more themes for A1/A2/B1 (city, jobs, sport:
+# vocab + listening) and thematic reading + vocabulary for B2/C1/C2
+# (gig economy, AI, philosophy of happiness, collocations, trends, nuance).
+!/vesper_themes_pack3.js
+
+# Expansion 2026-06-20: dedicated boss exam banks (fresh wording/contexts,
+# sampled each attempt). C1/C2 are short TOEFL-style exams (reading +
+# listening + structure). Consumed by buildBossExam in leccion.html.
+!/vesper_boss_exams.js
 
 # Expansion 2026-06-16: live chat with the Vesper AI tutor (public, no-account).
 # chat.html embeds the personalized system prompt from VESPER_PERSONA and talks

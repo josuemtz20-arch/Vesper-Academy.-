@@ -74,6 +74,18 @@
   .opt.correct{border-color:var(--success);background:var(--ok-tint)}
   .opt.wrong{border-color:var(--error);background:var(--no-tint)}
   .opt.locked{cursor:default}
+  /* find the error (TOEFL written expression) */
+  .fe-sentence{font-size:1.12rem;line-height:2.2;margin:6px 0 14px;color:var(--ink)}
+  .fe-seg{display:inline;border:none;background:none;font-family:inherit;font-size:inherit;color:var(--ink);cursor:pointer;
+    text-decoration:underline;text-decoration-color:var(--gold2);text-underline-offset:4px;text-decoration-thickness:2px;
+    padding:1px 3px;border-radius:7px}
+  .fe-seg .fe-lab{font-size:.62em;font-weight:800;color:var(--gold2);margin-right:1px;vertical-align:super}
+  .fe-seg.sel{background:var(--gold-tint)}
+  .fe-seg.correct{background:var(--ok-tint);text-decoration-color:var(--success)}
+  .fe-seg.correct .fe-lab{color:var(--success)}
+  .fe-seg.wrong{background:var(--no-tint);text-decoration-color:var(--error)}
+  .fe-seg.wrong .fe-lab{color:var(--error)}
+  .fe-seg.locked{cursor:default}
   /* word order */
   .hint{background:var(--gold-tint);border-radius:12px;padding:8px 12px;font-size:.9rem;margin:2px 0 12px}
   .answer{min-height:56px;border:1.5px dashed var(--gold);border-radius:13px;padding:9px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;background:var(--cream)}
@@ -473,6 +485,13 @@
   /* escudo del jefe en SVG (portada / medidor / resultado) */
   .boss-emblem{color:var(--w-accent,#c5a059);line-height:0}
   .boss-emblem svg{width:54px;height:58px}
+  .boss-emblem svg.boss-art{width:118px;height:118px}
+  /* retrato del guardián (IA) en portada / resultado y en el nodo del mapa; respaldo = bossArt SVG */
+  .boss-emblem img.boss-photo{display:block;margin:2px auto;width:120px;height:120px;border-radius:50%;
+    object-fit:cover;border:3px solid var(--w-accent,#c5a059);box-shadow:0 8px 20px rgba(20,18,42,.55)}
+  .boss-emblem.lit img.boss-photo{border-color:var(--gold,#c5a059)}
+  .wbtn.boss .boss-node-photo{display:block;width:100%;height:100%;object-fit:cover;border-radius:42px 42px 12px 12px}
+  .wbtn.boss .boss-art{width:100%;height:100%}
   .boss-emblem.lit{color:var(--gold,#c5a059)}
   .boss-emblem.dim{color:#8e8aa6}
   .bm-ic{display:inline-flex;align-items:center;color:var(--w-accent,#c5a059)}
@@ -983,6 +1002,12 @@
 <script src="vesper_content_pack.js"></script>
 <script src="vesper_expansion.js"></script>
 <script src="vesper_expansion2.js"></script>
+<script src="vesper_toefl_pack.js"></script>
+<script src="vesper_levels_pack.js"></script>
+<script src="vesper_themes_pack.js"></script>
+<script src="vesper_themes_pack2.js"></script>
+<script src="vesper_themes_pack3.js"></script>
+<script src="vesper_boss_exams.js"></script>
 <script src="vesper_mascot.js"></script>
 <script src="vesper_theme.js"></script>
 <script src="vesper_adaptive.js"></script>
@@ -999,6 +1024,11 @@
   if (window.VESPER_CONTENT_PACK && VESPER_CONTENT_PACK.merge) VESPER_CONTENT_PACK.merge(window.VESPER_LESSONS, window.VESPER_LESSONS_ORDER);
   if (window.VESPER_EXPANSION && VESPER_EXPANSION.merge) VESPER_EXPANSION.merge(window.VESPER_LESSONS, window.VESPER_LESSONS_ORDER);
   if (window.VESPER_EXPANSION2 && VESPER_EXPANSION2.merge) VESPER_EXPANSION2.merge(window.VESPER_LESSONS, window.VESPER_LESSONS_ORDER);
+  if (window.VESPER_TOEFL_PACK && VESPER_TOEFL_PACK.merge) VESPER_TOEFL_PACK.merge(window.VESPER_LESSONS, window.VESPER_LESSONS_ORDER);
+  if (window.VESPER_LEVELS_PACK && VESPER_LEVELS_PACK.merge) VESPER_LEVELS_PACK.merge(window.VESPER_LESSONS, window.VESPER_LESSONS_ORDER);
+  if (window.VESPER_THEMES_PACK && VESPER_THEMES_PACK.merge) VESPER_THEMES_PACK.merge(window.VESPER_LESSONS, window.VESPER_LESSONS_ORDER);
+  if (window.VESPER_THEMES_PACK2 && VESPER_THEMES_PACK2.merge) VESPER_THEMES_PACK2.merge(window.VESPER_LESSONS, window.VESPER_LESSONS_ORDER);
+  if (window.VESPER_THEMES_PACK3 && VESPER_THEMES_PACK3.merge) VESPER_THEMES_PACK3.merge(window.VESPER_LESSONS, window.VESPER_LESSONS_ORDER);
   var L = window.VESPER_LESSONS || {};
   var ORDER = window.VESPER_LESSONS_ORDER || Object.keys(L);
   var A = window.VESPER_ADAPTIVE || null;
@@ -1108,18 +1138,18 @@
   /* cada mundo (nivel) = ilustración + nombre + identidad temática (acento, atmósfera, partículas)
      + jefe (Guardián del mundo: examen mixto que abre el siguiente nivel). */
   var WORLD_THEME = {
-    A1: { file: "assets/images/lessons/theme_home.jpg",      worldName: "El Hogar",             accent:"#C07A33", accentSoft:"rgba(192,122,51,.15)", glow:"rgba(192,122,51,.40)", ambientName:"hearth",    ambientN:7,  mapN:3, boss:{ name:"El Centinela del Hogar",  pass:75 }, biome:["cottage","bush","lantern","pine","bush"] },
-    A2: { file: "assets/images/lessons/theme_nature.jpg",    worldName: "El Sendero",           accent:"#5E8A4E", accentSoft:"rgba(94,138,78,.15)",  glow:"rgba(94,138,78,.38)",  ambientName:"trail",     ambientN:7,  mapN:4, boss:{ name:"El Guardián del Sendero", pass:75 }, biome:["pine","pine","bush","mushroom","fern"] },
-    B1: { file: "assets/images/lessons/theme_city.jpg",      worldName: "El Horizonte",         accent:"#3D86B0", accentSoft:"rgba(61,134,176,.15)", glow:"rgba(61,134,176,.34)", ambientName:"skyline",   ambientN:9,  mapN:3, boss:{ name:"El Vigía del Horizonte",  pass:75 }, biome:["building","building","lamp","tower","rock"] },
-    B2: { file: "assets/images/lessons/theme_business.jpg",  worldName: "La Torre",             accent:"#A8762E", accentSoft:"rgba(168,118,46,.15)", glow:"rgba(168,118,46,.42)", ambientName:"ascent",    ambientN:6,  mapN:3, boss:{ name:"El Heraldo de la Torre",  pass:75 }, biome:["crag","rock","crag","banner","pine"] },
-    C1: { file: "assets/images/lessons/theme_space.jpg",     worldName: "El Firmamento",        accent:"#6A5FA8", accentSoft:"rgba(106,95,168,.16)", glow:"rgba(106,95,168,.40)", ambientName:"starfield", ambientN:10, mapN:6, boss:{ name:"El Custodio del Firmamento", pass:75 }, biome:["star4","planet","crystal","star4"] },
-    C2: { file: "assets/images/lessons/theme_fantasy.jpg",   worldName: "El Castillo del Saber",accent:"#3FA08A", accentSoft:"rgba(63,160,138,.16)", glow:"rgba(63,160,138,.36)", ambientName:"aurora",    ambientN:7,  mapN:2, boss:{ name:"El Soberano del Saber",   pass:75 }, biome:["spire","banner","crystal","pine"] }
+    A1: { file: "assets/images/lessons/theme_home.jpg",      worldName: "El Hogar",             accent:"#C07A33", accentSoft:"rgba(192,122,51,.15)", glow:"rgba(192,122,51,.40)", ambientName:"hearth",    ambientN:7,  mapN:3, boss:{ name:"El Centinela del Hogar",  pass:85 }, biome:["cottage","bush","lantern","pine","bush"] },
+    A2: { file: "assets/images/lessons/theme_nature.jpg",    worldName: "El Sendero",           accent:"#5E8A4E", accentSoft:"rgba(94,138,78,.15)",  glow:"rgba(94,138,78,.38)",  ambientName:"trail",     ambientN:7,  mapN:4, boss:{ name:"El Guardián del Sendero", pass:85 }, biome:["pine","pine","bush","mushroom","fern"] },
+    B1: { file: "assets/images/lessons/theme_city.jpg",      worldName: "El Horizonte",         accent:"#3D86B0", accentSoft:"rgba(61,134,176,.15)", glow:"rgba(61,134,176,.34)", ambientName:"skyline",   ambientN:9,  mapN:3, boss:{ name:"El Vigía del Horizonte",  pass:85 }, biome:["building","building","lamp","tower","rock"] },
+    B2: { file: "assets/images/lessons/theme_business.jpg",  worldName: "La Torre",             accent:"#A8762E", accentSoft:"rgba(168,118,46,.15)", glow:"rgba(168,118,46,.42)", ambientName:"ascent",    ambientN:6,  mapN:3, boss:{ name:"El Heraldo de la Torre",  pass:88 }, biome:["crag","rock","crag","banner","pine"] },
+    C1: { file: "assets/images/lessons/theme_space.jpg",     worldName: "El Firmamento",        accent:"#6A5FA8", accentSoft:"rgba(106,95,168,.16)", glow:"rgba(106,95,168,.40)", ambientName:"starfield", ambientN:10, mapN:6, boss:{ name:"El Custodio del Firmamento", pass:90 }, biome:["star4","planet","crystal","star4"] },
+    C2: { file: "assets/images/lessons/theme_fantasy.jpg",   worldName: "El Castillo del Saber",accent:"#3FA08A", accentSoft:"rgba(63,160,138,.16)", glow:"rgba(63,160,138,.36)", ambientName:"aurora",    ambientN:7,  mapN:2, boss:{ name:"El Soberano del Saber",   pass:92 }, biome:["spire","banner","crystal","pine"] }
   };
   var WORLD_TAG = { A1: "Principiante", A2: "Básico", B1: "Intermedio", B2: "Intermedio alto", C1: "Avanzado", C2: "Maestría" };
   var WORLD_UMBRAL = { A1: "Umbral del Hogar", A2: "Mojón del Sendero", B1: "Arco del Horizonte", B2: "Pórtico de la Torre", C1: "Portal del Firmamento", C2: "Sello del Castillo" };
   var BOSS_AVATAR = "assets/images/mascot/vesper_cat.png";
   /* metadatos del jefe de un nivel, con defaults si el mundo no declara boss */
-  function bossMeta(lv) { var t = WORLD_THEME[lv] || {}; var b = t.boss || {}; return { name: b.name || "El Guardián", subtitle: t.worldName || lv, pass: b.pass || 75 }; }
+  function bossMeta(lv) { var t = WORLD_THEME[lv] || {}; var b = t.boss || {}; return { name: b.name || "El Guardián", subtitle: t.worldName || lv, pass: b.pass || 85 }; }
 
   /* ===== Iconos de marca (SVG nítidos en lugar de emojis) ===== */
   var SKILL_ICONS = {
@@ -1138,6 +1168,81 @@
   }
   /* escudo SVG (jefe) — reemplaza el emoji 🛡️ */
   function shieldSvg(cls) { return '<svg class="' + (cls || "") + '" viewBox="0 0 24 26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.5l8 3v6c0 5.4-3.6 8.6-8 10.6C7.6 20.1 4 16.9 4 11.5v-6z"/><path d="M8.4 12.2l2.7 2.7 4.5-4.9"/></svg>'; }
+
+  /* Retrato temático del guardián de cada mundo (SVG, hereda el color del
+     acento del mundo via .boss-emblem). C2 es un caballero, como el resto
+     evoca el tema de su mundo: hogar, sendero, horizonte, torre, firmamento. */
+  var BOSS_ART = {
+    /* A1 · El Centinela del Hogar — guardián con farol */
+    A1: '<circle cx="60" cy="60" r="53" stroke-opacity=".18"/>'
+      + '<circle cx="58" cy="44" r="13"/>'
+      + '<path d="M32 99c2-19 11-29 26-29s24 10 26 29" stroke-opacity=".95"/>'
+      + '<path d="M46 63q12 8 24 0" stroke-opacity=".45"/>'
+      + '<path d="M72 86c6-1 11-4 14-9" stroke-opacity=".7"/>'
+      + '<path d="M82 60h16M85 60v3M95 60v3"/>'
+      + '<rect x="82" y="63" width="16" height="19" rx="2.5"/>'
+      + '<line x1="90" y1="63" x2="90" y2="82" stroke-opacity=".4"/>'
+      + '<circle cx="90" cy="73" r="4" fill="currentColor" stroke="none" fill-opacity=".85"/>',
+    /* A2 · El Guardián del Sendero — encapuchado con bastón de hoja */
+    A2: '<circle cx="60" cy="60" r="53" stroke-opacity=".18"/>'
+      + '<path d="M44 50a15 14 0 0 1 30 0v4a15 16 0 0 1-30 0z"/>'
+      + '<path d="M42 50c2-15 9-22 17-22s15 7 17 22" stroke-opacity=".7"/>'
+      + '<path d="M34 100c2-20 11-30 25-30s23 10 25 30"/>'
+      + '<path d="M86 26v64" stroke-opacity=".85"/>'
+      + '<path d="M86 46c-10-1-16-8-16-16 10-1 16 6 16 16M86 40c9-1 14-7 14-15-9 1-14 7-14 15" fill="currentColor" stroke="none" fill-opacity=".22"/>'
+      + '<path d="M86 46c-10-1-16-8-16-16 10-1 16 6 16 16M86 40c9-1 14-7 14-15-9 1-14 7-14 15"/>',
+    /* B1 · El Vigía del Horizonte — vigía con catalejo */
+    B1: '<circle cx="60" cy="60" r="53" stroke-opacity=".18"/>'
+      + '<circle cx="50" cy="44" r="13"/>'
+      + '<path d="M28 99c2-19 11-29 24-29 4 0 8 1 11 4" stroke-opacity=".95"/>'
+      + '<path d="M68 80c6-2 11-5 14-10" stroke-opacity=".7"/>'
+      + '<rect x="76" y="56" width="24" height="10" rx="5" transform="rotate(-30 88 61)"/>'
+      + '<path d="M96 46l2 5 5 2-5 2-2 5-2-5-5-2 5-2z" fill="currentColor" stroke="none" fill-opacity=".85"/>',
+    /* B2 · El Heraldo de la Torre — heraldo con estandarte */
+    B2: '<circle cx="60" cy="60" r="53" stroke-opacity=".18"/>'
+      + '<circle cx="54" cy="44" r="12"/>'
+      + '<path d="M30 100c2-19 11-29 24-29s22 10 24 29"/>'
+      + '<path d="M86 22v70" stroke-opacity=".85"/>'
+      + '<circle cx="86" cy="20" r="3" fill="currentColor" stroke="none"/>'
+      + '<path d="M86 28h24l-7 10 7 10H86z" fill="currentColor" stroke="none" fill-opacity=".22"/>'
+      + '<path d="M86 28h24l-7 10 7 10H86"/>',
+    /* C1 · El Custodio del Firmamento — figura astral con estrellas */
+    C1: '<circle cx="60" cy="60" r="53" stroke-opacity=".18"/>'
+      + '<circle cx="60" cy="48" r="12"/>'
+      + '<path d="M34 100c2-20 11-30 26-30s24 10 26 30"/>'
+      + '<path d="M28 46a32 20 0 0 1 64 0" stroke-opacity=".35"/>'
+      + '<path d="M60 18l2.6 6.4 6.4 2.6-6.4 2.6L60 36l-2.6-6.4-6.4-2.6 6.4-2.6z" fill="currentColor" stroke="none"/>'
+      + '<g fill="currentColor" stroke="none"><circle cx="32" cy="44" r="2"/><circle cx="88" cy="44" r="2"/><circle cx="42" cy="26" r="1.5"/><circle cx="78" cy="26" r="1.5"/></g>'
+      + '<path d="M54 84l6 7 6-7" stroke-opacity=".45"/>',
+    /* C2 · El Soberano del Saber — CABALLERO con yelmo (visera en cruz) y penacho */
+    C2: '<circle cx="60" cy="60" r="53" stroke-opacity=".18"/>'
+      + '<path d="M61 14c12 1 17 9 13 19" stroke-opacity=".75"/>'
+      + '<path d="M61 14c-3 6-3 12 2 16" stroke-opacity=".5"/>'
+      + '<path d="M43 44c0-9 8-15 17-15s17 6 17 15v9c0 7-6 12-17 12s-17-5-17-12z"/>'
+      + '<path d="M60 33v28" stroke-width="3.2"/>'
+      + '<path d="M47 48h26" stroke-width="3.2"/>'
+      + '<g fill="currentColor" stroke="none"><circle cx="53" cy="60" r="1.5"/><circle cx="60" cy="61" r="1.5"/><circle cx="67" cy="60" r="1.5"/></g>'
+      + '<path d="M30 101c2-16 14-23 30-23s28 7 30 23"/>'
+      + '<path d="M38 88q22-10 44 0" stroke-opacity=".4"/>'
+  };
+  function bossArt(lv) {
+    var inner = BOSS_ART[lv] || shieldSvg();
+    if (inner === shieldSvg()) return inner;
+    return '<svg class="boss-art" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + inner + '</svg>';
+  }
+  /* retratos de guardianes (IA, uno por mundo); cae al SVG bossArt temático si falta el PNG */
+  var BOSS_PORTRAIT = {
+    A1: "assets/images/guardians/guardian_a1.png", A2: "assets/images/guardians/guardian_a2.png",
+    B1: "assets/images/guardians/guardian_b1.png", B2: "assets/images/guardians/guardian_b2.png",
+    C1: "assets/images/guardians/guardian_c1.png", C2: "assets/images/guardians/guardian_c2.png"
+  };
+  /* el onerror corre en scope global (este script es un IIFE): se expone en window; respaldo = bossArt */
+  window.__vbossFallback = function (img, lv) { try { if (img) img.outerHTML = bossArt(lv); } catch (e) {} };
+  function bossPortrait(lv) {
+    var src = BOSS_PORTRAIT[lv];
+    if (!src) return bossArt(lv);
+    return '<img class="boss-photo" src="' + src + '" alt="" loading="lazy" decoding="async" onerror="window.__vbossFallback(this,\'' + lv + '\')">';
+  }
   /* style inline con las 3 variables del mundo (acento/soft/glow) */
   function worldVars(t) { return '--w-accent:' + t.accent + ';--w-accent-soft:' + t.accentSoft + ';--w-glow:' + t.glow; }
   /* capa ambiental reutilizable (N partículas <i>); mapMod=true para la del mapa */
@@ -1409,7 +1514,7 @@
   /* Guardián del mundo: 3 estados — locked / ready / conquered */
   function bossNodeHtml(selLevel, built, dx, stop) {
     var bm = bossMeta(selLevel);
-    var complete = PATH.regionComplete(selLevel, built);
+    var available = PATH.bossUnlocked(selLevel, built);   // el jefe siempre se puede enfrentar
     var passed = !!(P && P.bossPassed && P.bossPassed(selLevel));
     var bid = "boss:" + selLevel;
     var beacon = '<svg viewBox="0 0 32 34" width="34" height="36" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true">'
@@ -1421,17 +1526,19 @@
       cls += " conquered"; attr = 'data-go="' + bid + '"';
       label = '<span class="wlabel boss-lb">Umbral superado</span>';
       title = bm.name; aria = bm.name + ", guardián vencido. Repetir el examen.";
-    } else if (complete) {
+    } else if (available) {
       cls += " ready"; attr = 'data-go="' + bid + '"';
       label = '<span class="wlabel boss-lb">El Guardián</span>';
-      title = bm.name; aria = bm.name + ", examen del mundo disponible. Véncelo para abrir el siguiente nivel.";
+      title = bm.name; aria = bm.name + ", examen del mundo disponible. Véncelo para abrir el siguiente nivel (no hace falta terminar las lecciones).";
     } else {
       cls += " locked"; attr = 'data-locked-boss="1"';
       label = '<span class="wlabel boss-lb">Jefe del mundo</span>';
-      title = bm.name; aria = bm.name + ", bloqueado. Completa todas las lecciones del mundo para enfrentarlo.";
+      title = bm.name; aria = bm.name + ", bloqueado.";
     }
     return '<div class="wnode wboss-node' + (passed ? " done" : "") + '" data-stop="' + stop + '" style="--dx:' + dx + 'px">'
-      + label + '<button class="' + cls + '" ' + attr + ' aria-label="' + esc(aria) + '">' + beacon + '</button>'
+      + label + '<button class="' + cls + '" ' + attr + ' aria-label="' + esc(aria) + '">'
+      + (BOSS_PORTRAIT[selLevel] ? '<img class="boss-node-photo" src="' + BOSS_PORTRAIT[selLevel] + '" alt="" loading="lazy" decoding="async" onerror="window.__vbossFallback(this,\'' + selLevel + '\')">' : beacon)
+      + '</button>'
       + '<span class="wtitle">' + esc(title) + '</span>'
       + (passed ? '<span class="wbridge" aria-hidden="true"></span>' : '') + '</div>';
   }
@@ -1690,7 +1797,7 @@
   function renderBossCover() {
     var bm = bossMeta(lesson.bossLevel), t = WORLD_THEME[lesson.bossLevel] || {};
     show('<div class="wrap">' + topbar(6) + '<div class="card center boss-cover" style="' + worldVars(t) + '">'
-      + '<div class="boss-emblem" aria-hidden="true">' + shieldSvg() + '</div>'
+      + '<div class="boss-emblem" aria-hidden="true">' + bossPortrait(lesson.bossLevel) + '</div>'
       + biomeMotif(lesson.bossLevel)
       + '<span class="boss-eyebrow">Examen del mundo &middot; ' + esc(lesson.level) + '</span>'
       + '<h1>' + esc(bm.name) + '</h1>'
@@ -1732,6 +1839,7 @@
     else if (ex.type === "listening") renderListening(ex, pct, total);
     else if (ex.type === "categorize") renderCategorize(ex, pct, total);
     else if (ex.type === "reading") renderReading(ex, pct, total);
+    else if (ex.type === "find_error") renderFindError(ex, pct, total);
     else advance();
   }
   function advance() {
@@ -1782,6 +1890,54 @@
       results[exIdx] = ok;
       byId("fb").innerHTML = feedbackBox(ok, ex.explanation || "", "Era: " + ex.options[ex.correctIndex]);
       this.textContent = (exIdx + 1 < total) ? "Siguiente" : "Ver resultados";
+    };
+  }
+
+  /* ---------- FIND THE ERROR (TOEFL: written expression) ----------
+     Oracion partida en `segments`: las cadenas son texto fijo; los objetos
+     {u:"..."} son las partes subrayadas (candidatas A, B, C, D...). El
+     alumno toca la subrayada con el error. `correctIndex` apunta al orden
+     de la candidata erronea; `correction` (opcional) muestra el arreglo. */
+  function renderFindError(ex, pct, total) {
+    var letters = ["A", "B", "C", "D", "E", "F"];
+    var ci = 0;
+    var html = (ex.segments || []).map(function (seg) {
+      if (typeof seg === "string") return esc(seg);
+      var i = ci++;
+      return '<button class="fe-seg" data-i="' + i + '" aria-label="Opcion ' + letters[i] + ': ' + esc(seg.u) + '">'
+        + '<sup class="fe-lab" aria-hidden="true">' + letters[i] + '</sup>' + esc(seg.u) + '</button>';
+    }).join("");
+    show('<div class="wrap">' + exHeader(pct, total) + '<div class="card">'
+      + '<h2>' + esc(ex.question || "Encuentra el error") + '</h2>'
+      + '<p class="hint">&#128161; ' + esc(ex.hint || "Toca la parte subrayada que contiene el error gramatical.") + '</p>'
+      + '<div class="fe-sentence">' + html + '</div><div id="fb"></div>'
+      + '<button class="btn" id="verify" disabled>Verificar</button></div></div>');
+    var sel = -1, done = false;
+    var segEls = document.querySelectorAll(".fe-seg");
+    each(".fe-seg", function (b) {
+      b.onclick = function () {
+        if (done) return;
+        sel = +b.getAttribute("data-i");
+        for (var x = 0; x < segEls.length; x++) segEls[x].classList.remove("sel");
+        b.classList.add("sel");
+        byId("verify").disabled = false;
+      };
+    });
+    byId("verify").onclick = function () {
+      if (done) { advance(); return; }
+      done = true;
+      var ok = sel === ex.correctIndex;
+      for (var x = 0; x < segEls.length; x++) {
+        var i = +segEls[x].getAttribute("data-i");
+        segEls[x].classList.add("locked");
+        if (i === ex.correctIndex) segEls[x].classList.add("correct");
+        if (i === sel && !ok) segEls[x].classList.add("wrong");
+      }
+      results[exIdx] = ok;
+      var fix = ex.correction ? ("Corrección: " + ex.correction) : "";
+      var detail = ex.explanation ? (ex.explanation + (fix ? " — " + fix : "")) : fix;
+      byId("fb").innerHTML = feedbackBox(ok, detail, "El error estaba en la opción " + letters[ex.correctIndex] + ".");
+      setVerifyNext(this, total);
     };
   }
 
@@ -2237,7 +2393,7 @@
       earnedXp = 0;
       show('<div class="wrap">' + topbar(86) + '<div class="card center">'
         + mascot("incorrect", "El guardián resiste. ¡Reagrúpate y vuelve!")
-        + '<div class="boss-emblem dim" aria-hidden="true">' + shieldSvg() + '</div>'
+        + '<div class="boss-emblem dim" aria-hidden="true">' + bossPortrait(lesson.bossLevel) + '</div>'
         + '<h1>' + pct + '%</h1>'
         + '<p class="muted">' + correct + ' de ' + total + ' correctos &middot; necesitas ' + bm.pass + '% para vencerlo</p>'
         + '<div class="xpbar"><div class="xpfill" style="width:' + pct + '%;background:var(--error)"></div></div>'
@@ -2257,7 +2413,7 @@
       : '<div class="boss-unlock">&#128081; ¡Has dominado el último mundo!</div>';
     show('<div class="wrap">' + topbar(92) + '<div class="card center">'
       + mascot("milestone", "¡Guardián vencido!")
-      + '<div class="boss-emblem lit" aria-hidden="true">' + shieldSvg() + '</div>'
+      + '<div class="boss-emblem lit" aria-hidden="true">' + bossPortrait(lesson.bossLevel) + '</div>'
       + '<h1>+' + earnedXp + ' XP</h1>'
       + '<p class="muted">' + correct + ' de ' + total + ' correctos &middot; ' + pct + '%</p>'
       + '<div class="xpbar"><div class="xpfill" style="width:' + pct + '%"></div></div>'
@@ -2374,24 +2530,84 @@
   function buildBossExam(level) {
     if (!PATH) return null;
     level = PATH.normLevel ? PATH.normLevel(level) : level;
+    var bm = bossMeta(level);
+    /* Banco dedicado del jefe: preguntas NUEVAS (palabras y contextos
+       distintos a las lecciones). En C1/C2, formato TOEFL pero corto. Se
+       muestrea en cada intento para dar variedad. */
+    var bank = window.VESPER_BOSS_EXAMS && window.VESPER_BOSS_EXAMS[level];
+    if (bank && bank.exercises && bank.exercises.length >= 5) {
+      var SIZE = ({ A1: 8, A2: 8, B1: 8, B2: 9, C1: 11, C2: 13 })[level] || 8;
+      var all = bank.exercises.slice(), pickedB;
+      if (bank.toefl) {
+        /* TOEFL corto: garantiza 1 lectura + 1 listening y completa con el resto */
+        var rd = shuffle(all.filter(function (e) { return e.type === "reading"; })).slice(0, 1);
+        var ls = shuffle(all.filter(function (e) { return e.type === "listening"; })).slice(0, 1);
+        var rest = shuffle(all.filter(function (e) { return e.type !== "reading" && e.type !== "listening"; }));
+        pickedB = rd.concat(ls).concat(rest).slice(0, SIZE);
+      } else {
+        pickedB = shuffle(all).slice(0, SIZE);
+      }
+      shuffle(pickedB);
+      return {
+        lessonId: "boss:" + level, level: level, track: "Examen del mundo", isBoss: true, bossLevel: level,
+        title: bm.name + " · " + level,
+        explanation: {
+          body: "Demuestra tu dominio de " + level + ". "
+            + (bank.toefl ? "Examen al estilo TOEFL (versión corta), con preguntas nuevas de lectura, listening y estructura. "
+                          : "Preguntas nuevas, con palabras y contextos distintos a los de las lecciones. ")
+            + "Necesitas " + bm.pass + "% para vencer al guardián y abrir el siguiente mundo.",
+          examples: []
+        },
+        exercises: pickedB, xpReward: 70, mascotState: "thinking", nextLessonId: null
+      };
+    }
+    /* Fallback (sin banco): arma el examen desde las lecciones del mundo. */
     var built = PATH.build(L, ORDER), gg = built.levels[level];
     if (!gg) return null;
-    var bm = bossMeta(level), pool = [];
+    var pool = [];
+    /* Dificultad por nivel: los mundos avanzados (B2/C1/C2) son más largos y
+       eligen los ejercicios más exigentes; los básicos, variados. */
+    var hard = (["B2", "C1", "C2"].indexOf(level) >= 0);
+    var EXAM_SIZE = ({ B2: 12, C1: 13, C2: 14 })[level] || 12;
+    var WEIGHT = { find_error: 5, reading: 5, word_order: 4, translate: 4, type_answer: 4,
+                   fill_blank: 3, multiple_choice: 3, categorize: 3, listening: 2, true_false: 1, matching: 1 };
+    function exW(e) { return WEIGHT[e.type] || 2; }
+    /* El jefe es un examen libre: preguntas de TODAS las lecciones del nivel
+       (1 por lección). En niveles altos se toma la pregunta más difícil de
+       cada lección. */
     PATH.SKILL_ORDER.forEach(function (sk) {
-      var ids = (gg.bySkill[sk] || []).filter(function (x) { return built.completed[x]; });
-      ids.forEach(function (lid) {
+      (gg.bySkill[sk] || []).forEach(function (lid) {
         var l = L[lid]; if (!l || !l.exercises || !l.exercises.length) return;
-        pool = pool.concat(shuffle(l.exercises.slice()).slice(0, 1)); /* 1 por lección completada */
+        var exs = l.exercises.slice();
+        if (hard) { exs.sort(function (a, b) { return exW(b) - exW(a); }); pool.push(exs[0]); }
+        else { pool.push(shuffle(exs)[0]); }
       });
     });
-    shuffle(pool);
-    var picked = pool.slice(0, Math.min(12, pool.length));
+    var picked;
+    if (hard) {
+      pool.sort(function (a, b) { return exW(b) - exW(a); });   // las más difíciles primero
+      picked = []; var seen = {}, TYPE_CAP = { reading: 2 };
+      for (var i = 0; i < pool.length && picked.length < EXAM_SIZE; i++) {
+        var tp = pool[i].type, cap = TYPE_CAP[tp] || 4;          // variedad: máx por tipo
+        if ((seen[tp] || 0) >= cap) continue;
+        seen[tp] = (seen[tp] || 0) + 1;
+        picked.push(pool[i]);
+      }
+      /* si los topes dejaron el examen corto, rellena con lo que quede (sin más lecturas) */
+      for (var j = 0; j < pool.length && picked.length < EXAM_SIZE; j++) {
+        if (picked.indexOf(pool[j]) < 0 && pool[j].type !== "reading") picked.push(pool[j]);
+      }
+    } else {
+      shuffle(pool);
+      picked = pool.slice(0, Math.min(EXAM_SIZE, pool.length));
+    }
     if (picked.length < 5) return null;   // material insuficiente
+    shuffle(picked);                       // orden de presentación variado
     return {
       lessonId: "boss:" + level, level: level, track: "Examen del mundo", isBoss: true, bossLevel: level,
       title: bm.name + " · " + level,
       explanation: {
-        body: "Demuestra tu dominio de " + level + ". Son preguntas mezcladas de todas las destrezas de tus lecciones completadas. Necesitas " + bm.pass + "% para vencer al guardián y abrir el siguiente mundo.",
+        body: "Demuestra tu dominio de " + level + ". Son preguntas mezcladas de todas las destrezas del mundo (no hace falta terminar las lecciones). Necesitas " + bm.pass + "% para vencer al guardián y abrir el siguiente mundo.",
         examples: []
       },
       exercises: picked, xpReward: 60, mascotState: "thinking", nextLessonId: null
