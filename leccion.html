@@ -20,6 +20,9 @@
 <style>
   :root{
     --ink:#1B1B2F; --gold:#c5a059; --gold2:#a8843d; --success:#2D9E75; --error:#C0392B;
+    /* Variantes oscuras SOLO para texto sobre fondo claro (WCAG AA >=4.5:1).
+       El oro/verde brillante se reserva para barras, bordes y rellenos. */
+    --gold-ink:#7a5c20; --success-ink:#1d7a59;
     --cream:#f5f2eb; --paper:#ffffff; --muted:#6b6b76; --line:#ece7da;
     --gold-tint:rgba(197,160,89,.14); --ok-tint:rgba(45,158,117,.12); --no-tint:rgba(192,57,43,.10);
     --radius:16px; --shadow:0 6px 22px rgba(27,27,47,.08);
@@ -35,7 +38,7 @@
   .muted{color:var(--muted);font-size:.92rem}
   /* top bar */
   .topbar{display:flex;align-items:center;gap:12px;margin-bottom:14px}
-  .back{flex:0 0 auto;width:40px;height:40px;display:flex;align-items:center;justify-content:center;border-radius:50%;
+  .back{flex:0 0 auto;width:44px;height:44px;display:flex;align-items:center;justify-content:center;border-radius:50%;
     text-decoration:none;color:var(--ink);background:var(--paper);border:1px solid var(--line);font-size:1.2rem}
   .progress{flex:1;height:10px;background:#eee6d4;border-radius:999px;overflow:hidden}
   .bar{height:100%;background:var(--gold);border-radius:999px;transition:width .35s ease}
@@ -51,7 +54,7 @@
   /* meta pills */
   .lcard-top{display:flex;align-items:center;gap:8px;margin:6px 0}
   .pill{background:var(--ink);color:var(--cream);font-weight:600;font-size:.78rem;padding:3px 10px;border-radius:999px}
-  .track{color:var(--gold);font-weight:600;font-size:.85rem;text-transform:uppercase;letter-spacing:.04em}
+  .track{color:var(--gold-ink);font-weight:600;font-size:.85rem;text-transform:uppercase;letter-spacing:.04em}
   /* body + examples */
   .body{font-size:1.02rem}
   .examples{list-style:none;padding:0;margin:14px 0 4px;display:grid;gap:8px}
@@ -79,10 +82,10 @@
   .fe-seg{display:inline;border:none;background:none;font-family:inherit;font-size:inherit;color:var(--ink);cursor:pointer;
     text-decoration:underline;text-decoration-color:var(--gold2);text-underline-offset:4px;text-decoration-thickness:2px;
     padding:1px 3px;border-radius:7px}
-  .fe-seg .fe-lab{font-size:.62em;font-weight:800;color:var(--gold2);margin-right:1px;vertical-align:super}
+  .fe-seg .fe-lab{font-size:.62em;font-weight:800;color:var(--gold-ink);margin-right:1px;vertical-align:super}
   .fe-seg.sel{background:var(--gold-tint)}
   .fe-seg.correct{background:var(--ok-tint);text-decoration-color:var(--success)}
-  .fe-seg.correct .fe-lab{color:var(--success)}
+  .fe-seg.correct .fe-lab{color:var(--success-ink)}
   .fe-seg.wrong{background:var(--no-tint);text-decoration-color:var(--error)}
   .fe-seg.wrong .fe-lab{color:var(--error)}
   .fe-seg.locked{cursor:default}
@@ -92,7 +95,7 @@
   .answer .ph{color:var(--muted);font-size:.92rem;padding:4px 6px}
   .bank{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;min-height:44px}
   .chip{background:var(--paper);border:1.5px solid var(--line);border-radius:999px;padding:9px 15px;font-family:inherit;font-size:1rem;
-    color:var(--ink);cursor:pointer;min-height:42px}
+    color:var(--ink);cursor:pointer;min-height:44px}
   .chip.placed{background:var(--gold-tint);border-color:var(--gold)}
   .chip.correct{background:var(--ok-tint);border-color:var(--success)}
   .chip.wrong{background:var(--no-tint);border-color:var(--error)}
@@ -124,7 +127,7 @@
   /* soft account nudge */
   .nudge{position:relative;background:var(--cream);border:1px dashed var(--gold);border-radius:12px;padding:11px 34px 11px 12px;font-size:.88rem;margin:14px 0;text-align:left}
   .nudge a{color:var(--ink);font-weight:600}
-  .nudge .x{position:absolute;top:6px;right:8px;background:none;border:none;font-size:1.1rem;cursor:pointer;color:var(--muted)}
+  .nudge .x{position:absolute;top:2px;right:2px;width:44px;height:44px;display:flex;align-items:center;justify-content:center;background:none;border:none;font-size:1.1rem;cursor:pointer;color:var(--muted)}
   /* ===== Hub progresivo (estilo Test-English) ===== */
   .hub-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:4px 0 6px}
   .hub-hello{font-family:"Inria Serif",Georgia,serif;font-size:1.5rem;line-height:1.1;margin:0}
@@ -167,7 +170,7 @@
   .lc-body{flex:1;min-width:0}
   .lc-ttl{font-weight:600;font-size:1rem;line-height:1.25}
   .lc-sub{font-size:.8rem;color:var(--muted);margin-top:2px}
-  .lc-stars{color:var(--gold);font-size:.95rem;letter-spacing:1px}
+  .lc-stars{color:var(--gold-ink);font-size:.95rem;letter-spacing:1px}
   .lc-stars .off{color:var(--line)}
   .lc-go{flex:0 0 auto;color:var(--muted);font-size:1.1rem}
   .hub-toast{position:fixed;left:50%;bottom:84px;transform:translateX(-50%) translateY(10px);background:var(--ink);color:var(--cream);padding:10px 16px;border-radius:999px;font-size:.85rem;font-weight:600;opacity:0;pointer-events:none;transition:opacity .2s ease,transform .2s ease;z-index:9997}
@@ -244,12 +247,12 @@
   .goal-bar{height:9px;background:#eee6d4;border-radius:999px;overflow:hidden;margin:8px 0 4px}
   .goal-bar i{display:block;height:100%;background:var(--gold);border-radius:999px;transition:width .5s ease}
   .goal-card.met .goal-bar i{background:var(--success)}
-  .goal-done{display:block;color:var(--success);font-size:.86rem}
+  .goal-done{display:block;color:var(--success-ink);font-size:.86rem}
   .ach-pop{display:grid;gap:8px;margin:12px 0}
   .ach-badge{display:flex;align-items:center;gap:11px;text-align:left;background:var(--gold-tint);border:1px solid var(--gold);border-radius:13px;padding:10px 13px}
   .ach-badge .ab-ic{font-size:1.7rem;line-height:1}
   .ach-badge .ab-tx{display:flex;flex-direction:column}
-  .ach-badge .ab-tx b{font-size:.72rem;text-transform:uppercase;letter-spacing:.05em;color:var(--gold)}
+  .ach-badge .ab-tx b{font-size:.72rem;text-transform:uppercase;letter-spacing:.05em;color:var(--gold-ink)}
   .ach-badge .ab-tx span{font-weight:700}
   /* buscador + filtros del hub */
   .hub-search{margin:12px 0 2px}
@@ -260,12 +263,12 @@
   .srch input:focus{outline:none;border-color:var(--gold)}
   .filter-row{display:flex;gap:8px;overflow-x:auto;padding:2px;margin:8px -2px 0;-webkit-overflow-scrolling:touch}
   .filter-row + .filter-row{margin-top:6px}
-  .fchip{flex:0 0 auto;border:1.5px solid var(--line);background:var(--paper);border-radius:999px;padding:8px 13px;
-    font-family:inherit;font-size:.85rem;font-weight:600;color:var(--ink);cursor:pointer;min-height:40px;white-space:nowrap}
+  .fchip{flex:0 0 auto;display:inline-flex;align-items:center;border:1.5px solid var(--line);background:var(--paper);border-radius:999px;padding:8px 13px;
+    font-family:inherit;font-size:.85rem;font-weight:600;color:var(--ink);cursor:pointer;min-height:44px;white-space:nowrap}
   .fchip.on{border-color:var(--gold);background:var(--gold-tint)}
   .fchip:active{transform:translateY(1px)}
   .search-results{margin-top:12px}
-  .search-results .lc-lvl{display:inline-block;font-size:.7rem;font-weight:700;color:var(--gold);
+  .search-results .lc-lvl{display:inline-block;font-size:.7rem;font-weight:700;color:var(--gold-ink);
     letter-spacing:.04em;text-transform:uppercase;margin-right:6px}
   .search-empty{padding:14px 4px;color:var(--muted)}
   @media(min-width:640px){
@@ -283,7 +286,7 @@
   }
   /* ===== Mapa de mundos (HUB estilo videojuego) ===== */
   .hub-strip{display:flex;flex-wrap:wrap;gap:7px;margin:10px 0 2px}
-  .hub-icon{display:inline-flex;align-items:center;justify-content:center;width:42px;height:42px;flex:none;border-radius:50%;
+  .hub-icon{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;flex:none;border-radius:50%;
     background:var(--paper);border:1px solid var(--line);text-decoration:none;color:var(--ink);font-size:1.2rem;cursor:pointer;font-family:inherit}
   .hub-icon:active{transform:translateY(1px)}
   /* cinta de mundos (selector de niveles A1–C2) — cada mundo lleva su acento temático */
@@ -1198,7 +1201,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
 .vchat-cta{display:inline-flex;align-items:center;gap:6px;margin-top:10px;background:var(--ink);color:var(--cream);
   text-decoration:none;font-size:.84rem;font-weight:700;border-radius:11px;padding:9px 14px}
 .vchat-cta:active{transform:translateY(1px)}
-.vchat-x{position:absolute;top:5px;right:5px;width:25px;height:25px;border:none;background:none;cursor:pointer;
+.vchat-x{position:absolute;top:2px;right:2px;width:44px;height:44px;border:none;background:none;cursor:pointer;
   color:var(--muted);font-size:1.15rem;line-height:1;border-radius:50%;display:grid;place-items:center}
 .vchat-x:hover{background:var(--cream)}
 .vchat-typing{display:flex;gap:5px;padding:6px 2px 4px}
@@ -1244,7 +1247,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
 .hub-rank{display:inline-block;margin-top:6px;font-size:.7rem;font-weight:800;letter-spacing:.03em;
   color:#2b2410;background:linear-gradient(135deg,#e9d39a,var(--gold,#c5a059));border-radius:999px;padding:3px 11px}
 .hub-actions{display:flex;align-items:center;gap:7px;flex:0 0 auto}
-.hub-ic{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:50%;
+.hub-ic{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:50%;
   background:rgba(245,242,235,.10);border:1px solid rgba(245,242,235,.20);color:#f5f2eb;text-decoration:none;cursor:pointer;font-family:inherit}
 .hub-ic svg{width:19px;height:19px}
 .hub-ic:hover{background:rgba(197,160,89,.32);border-color:var(--gold)}
@@ -1344,7 +1347,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
 <body>
 <a class="va-skip-link" href="#app">Saltar al contenido</a>
 <h2 class="sr-only">Lecciones gratis de Vesper Academy: lee la explicacion, resuelve los ejercicios y manten tu racha diaria.</h2>
-<main id="app" aria-live="polite"></main>
+<main id="app"></main>
 
 <!-- Boton para descargar/instalar las lecciones como app (PWA). Solo se muestra cuando el navegador lo permite -->
 <button id="install-btn" type="button" aria-label="Instalar la app de lecciones">
@@ -1403,7 +1406,18 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
     });
   }
-  function show(html) { app.innerHTML = html; window.scrollTo(0, 0); }
+  function show(html) {
+    app.innerHTML = html;
+    window.scrollTo(0, 0);
+    /* Patrón SPA accesible: al cambiar de pantalla mueve el foco al primer
+       encabezado para que los lectores de pantalla anuncien la pantalla nueva
+       (sustituye al aria-live global que reanunciaba todo el contenido). */
+    var h = app.querySelector("h1, h2");
+    if (h) {
+      h.setAttribute("tabindex", "-1");
+      try { h.focus({ preventScroll: true }); } catch (e) { try { h.focus(); } catch (e2) {} }
+    }
+  }
 
   function mascot(state, line, size) {
     if (window.VESPER_MASCOT && VESPER_MASCOT.render) {
@@ -1413,8 +1427,10 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       + (line ? '<div class="bubble">' + esc(line) + '</div>' : '') + '</div>';
   }
   function topbar(pct) {
-    return '<div class="topbar"><a class="back" href="' + (id ? 'leccion.html' : 'index.html') + '" aria-label="Salir">&#8592;</a>'
-      + '<div class="progress"><div class="bar" style="width:' + pct + '%"></div></div></div>';
+    var p = Math.round(pct);
+    return '<nav class="topbar" aria-label="Lección"><a class="back" href="' + (id ? 'leccion.html' : 'index.html') + '" aria-label="Salir">&#8592;</a>'
+      + '<div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + p + '" aria-label="Progreso de la lección: ' + p + '%">'
+      + '<div class="bar" style="width:' + pct + '%"></div></div></nav>';
   }
   /* feedbackBox(ok, explanation, wrongFallback)
      - explanation: el "por que" del ejercicio (se muestra al fallar siempre y
@@ -2049,7 +2065,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       var sc = PATH.getScore(lid), s = PATH.stars(sc != null ? sc : 70), sh = '<span class="wstars" aria-hidden="true">';
       for (var i = 0; i < 3; i++) sh += (i < s ? "&#9733;" : '<span class="off">&#9733;</span>');
       stars = sh + "</span>";
-      aria = l.title + " — completado" + (sc != null ? ", " + sc + " por ciento" : "");
+      aria = l.title + " — completado" + (sc != null ? ", " + sc + " por ciento" : "") + ", " + s + " de 3 estrellas";
     } else if (stt === "open") {
       cls += " open"; glyph = nodeGlyph("open"); attr = 'data-go="' + esc(lid) + '"';
       if (lid === currentId) {
@@ -2419,6 +2435,9 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     }
     var xb = n.querySelector(".vchat-x");
     if (xb) xb.onclick = function (e) { e.preventDefault(); e.stopPropagation(); dismiss(); };
+    document.addEventListener("keydown", function (e) {
+      if ((e.key === "Escape" || e.key === "Esc") && pop && !pop.hidden) dismiss();
+    });
     var fab = n.querySelector(".vchat-fab");
     if (fab) fab.addEventListener("click", markSeen);
     if (pop) pop.addEventListener("click", function (ev) { if (ev.target.closest("a")) markSeen(); });
@@ -2523,10 +2542,10 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
   }
 
   function renderMCQ(ex, pct, total) {
-    var opts = ex.options.map(function (o, i) { return '<button class="opt" data-i="' + i + '">' + esc(o) + '</button>'; }).join("");
+    var opts = ex.options.map(function (o, i) { return '<button class="opt" data-i="' + i + '" aria-pressed="false">' + esc(o) + '</button>'; }).join("");
     show('<div class="wrap">' + exHeader(pct, total) + '<div class="card">'
       + '<h2>' + esc(ex.question || "Elige la opcion correcta") + '</h2>'
-      + '<div class="opts">' + opts + '</div><div id="fb"></div>'
+      + '<div class="opts" role="group" aria-label="Opciones de respuesta">' + opts + '</div><div id="fb" role="status" aria-live="polite"></div>'
       + '<button class="btn" id="verify" disabled>Verificar</button></div></div>');
     var sel = -1, done = false;
     var optEls = document.querySelectorAll(".opt");
@@ -2534,8 +2553,9 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       b.onclick = function () {
         if (done) return;
         sel = +b.getAttribute("data-i");
-        for (var x = 0; x < optEls.length; x++) optEls[x].classList.remove("sel");
+        for (var x = 0; x < optEls.length; x++) { optEls[x].classList.remove("sel"); optEls[x].setAttribute("aria-pressed", "false"); }
         b.classList.add("sel");
+        b.setAttribute("aria-pressed", "true");
         byId("verify").disabled = false;
       };
     });
@@ -2546,8 +2566,8 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       for (var x = 0; x < optEls.length; x++) {
         var i = +optEls[x].getAttribute("data-i");
         optEls[x].classList.add("locked");
-        if (i === ex.correctIndex) optEls[x].classList.add("correct");
-        if (i === sel && !ok) optEls[x].classList.add("wrong");
+        if (i === ex.correctIndex) { optEls[x].classList.add("correct"); optEls[x].setAttribute("aria-label", ex.options[i] + (i === sel ? ", tu respuesta, correcta" : ", respuesta correcta")); }
+        if (i === sel && !ok) { optEls[x].classList.add("wrong"); optEls[x].setAttribute("aria-label", ex.options[i] + ", tu respuesta, incorrecta"); }
       }
       results[exIdx] = ok;
       byId("fb").innerHTML = feedbackBox(ok, ex.explanation || "", "Era: " + ex.options[ex.correctIndex]);
@@ -2566,13 +2586,13 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     var html = (ex.segments || []).map(function (seg) {
       if (typeof seg === "string") return esc(seg);
       var i = ci++;
-      return '<button class="fe-seg" data-i="' + i + '" aria-label="Opcion ' + letters[i] + ': ' + esc(seg.u) + '">'
+      return '<button class="fe-seg" data-i="' + i + '" aria-pressed="false" aria-label="Opcion ' + letters[i] + ': ' + esc(seg.u) + '">'
         + '<sup class="fe-lab" aria-hidden="true">' + letters[i] + '</sup>' + esc(seg.u) + '</button>';
     }).join("");
     show('<div class="wrap">' + exHeader(pct, total) + '<div class="card">'
       + '<h2>' + esc(ex.question || "Encuentra el error") + '</h2>'
       + '<p class="hint">&#128161; ' + esc(ex.hint || "Toca la parte subrayada que contiene el error gramatical.") + '</p>'
-      + '<div class="fe-sentence">' + html + '</div><div id="fb"></div>'
+      + '<div class="fe-sentence">' + html + '</div><div id="fb" role="status" aria-live="polite"></div>'
       + '<button class="btn" id="verify" disabled>Verificar</button></div></div>');
     var sel = -1, done = false;
     var segEls = document.querySelectorAll(".fe-seg");
@@ -2580,8 +2600,9 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       b.onclick = function () {
         if (done) return;
         sel = +b.getAttribute("data-i");
-        for (var x = 0; x < segEls.length; x++) segEls[x].classList.remove("sel");
+        for (var x = 0; x < segEls.length; x++) { segEls[x].classList.remove("sel"); segEls[x].setAttribute("aria-pressed", "false"); }
         b.classList.add("sel");
+        b.setAttribute("aria-pressed", "true");
         byId("verify").disabled = false;
       };
     });
@@ -2592,8 +2613,9 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       for (var x = 0; x < segEls.length; x++) {
         var i = +segEls[x].getAttribute("data-i");
         segEls[x].classList.add("locked");
-        if (i === ex.correctIndex) segEls[x].classList.add("correct");
-        if (i === sel && !ok) segEls[x].classList.add("wrong");
+        var baseLab = "Opcion " + letters[i];
+        if (i === ex.correctIndex) { segEls[x].classList.add("correct"); segEls[x].setAttribute("aria-label", baseLab + (i === sel ? ", tu respuesta, correcta" : ", aquí estaba el error")); }
+        if (i === sel && !ok) { segEls[x].classList.add("wrong"); segEls[x].setAttribute("aria-label", baseLab + ", tu respuesta, incorrecta"); }
       }
       results[exIdx] = ok;
       var fix = ex.correction ? ("Corrección: " + ex.correction) : "";
@@ -2611,7 +2633,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       + '<h2>Ordena las palabras</h2>'
       + (ex.hint ? '<p class="hint">&#128161; ' + esc(ex.hint) + '</p>' : '')
       + '<div class="answer" id="answer" aria-label="Tu respuesta"></div>'
-      + '<div class="bank" id="bank"></div><div id="fb"></div>'
+      + '<div class="bank" id="bank"></div><div id="fb" role="status" aria-live="polite"></div>'
       + '<button class="btn" id="verify" disabled>Verificar</button></div></div>');
 
     function draw() {
@@ -2717,16 +2739,16 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     show('<div class="wrap">' + exHeader(pct, total) + '<div class="card">'
       + '<h2>Verdadero o falso?</h2>'
       + '<div class="statement">' + esc(ex.statement) + '</div>'
-      + '<div class="tf-row"><button class="tf-btn" data-v="1">Verdadero</button><button class="tf-btn" data-v="0">Falso</button></div>'
-      + '<div id="fb"></div><button class="btn" id="verify" disabled>Verificar</button></div></div>');
+      + '<div class="tf-row" role="group" aria-label="Verdadero o falso"><button class="tf-btn" data-v="1" aria-pressed="false">Verdadero</button><button class="tf-btn" data-v="0" aria-pressed="false">Falso</button></div>'
+      + '<div id="fb" role="status" aria-live="polite"></div><button class="btn" id="verify" disabled>Verificar</button></div></div>');
     var sel = -1, done = false;
     var btns = document.querySelectorAll(".tf-btn");
     each(".tf-btn", function (b) {
       b.onclick = function () {
         if (done) return;
         sel = +b.getAttribute("data-v");
-        for (var x = 0; x < btns.length; x++) btns[x].classList.remove("sel");
-        b.classList.add("sel"); byId("verify").disabled = false;
+        for (var x = 0; x < btns.length; x++) { btns[x].classList.remove("sel"); btns[x].setAttribute("aria-pressed", "false"); }
+        b.classList.add("sel"); b.setAttribute("aria-pressed", "true"); byId("verify").disabled = false;
       };
     });
     byId("verify").onclick = function () {
@@ -2735,8 +2757,9 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       var ok = (sel === 1) === (!!ex.answer);
       for (var x = 0; x < btns.length; x++) {
         var v = +btns[x].getAttribute("data-v"); btns[x].classList.add("locked");
-        if ((v === 1) === (!!ex.answer)) btns[x].classList.add("correct");
-        if (v === sel && !ok) btns[x].classList.add("wrong");
+        var lab = (v === 1 ? "Verdadero" : "Falso");
+        if ((v === 1) === (!!ex.answer)) { btns[x].classList.add("correct"); btns[x].setAttribute("aria-label", lab + (v === sel ? ", tu respuesta, correcta" : ", respuesta correcta")); }
+        if (v === sel && !ok) { btns[x].classList.add("wrong"); btns[x].setAttribute("aria-label", lab + ", tu respuesta, incorrecta"); }
       }
       results[exIdx] = ok;
       byId("fb").innerHTML = feedbackBox(ok, ex.explanation || "", "Respuesta: " + (ex.answer ? "Verdadero" : "Falso"));
@@ -2752,9 +2775,9 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       + '<h2>Completa la frase</h2>'
       + (ex.hint ? '<p class="hint">&#128161; ' + esc(ex.hint) + '</p>' : '')
       + '<p class="fb-sentence">' + esc(parts[0])
-      + '<input id="blank" class="type-input" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" inputmode="text"> '
+      + '<input id="blank" class="type-input" aria-label="Palabra que completa la frase" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" inputmode="text"> '
       + esc(parts.slice(1).join("___")) + '</p>'
-      + '<div id="fb"></div><button class="btn" id="verify" disabled>Verificar</button></div></div>');
+      + '<div id="fb" role="status" aria-live="polite"></div><button class="btn" id="verify" disabled>Verificar</button></div></div>');
     var done = false, inp = byId("blank");
     inp.oninput = function () { byId("verify").disabled = !inp.value.trim(); };
     inp.onkeydown = function (e) { if (e.key === "Enter" && !byId("verify").disabled) byId("verify").click(); };
@@ -2776,8 +2799,8 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     var answers = ex.answers || [];
     show('<div class="wrap">' + exHeader(pct, total) + '<div class="card">'
       + '<h2>Tu turno</h2><p class="body">' + esc(ex.prompt || "Traduce la frase") + '</p>'
-      + '<input id="trans" class="type-input" placeholder="Escribe en ingles..." autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false">'
-      + '<div id="fb"></div><button class="btn" id="verify" disabled>Verificar</button></div></div>');
+      + '<input id="trans" class="type-input" aria-label="Tu respuesta en inglés" placeholder="Escribe en ingles..." autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false">'
+      + '<div id="fb" role="status" aria-live="polite"></div><button class="btn" id="verify" disabled>Verificar</button></div></div>');
     var done = false, inp = byId("trans");
     inp.oninput = function () { byId("verify").disabled = !inp.value.trim(); };
     inp.onkeydown = function (e) { if (e.key === "Enter" && !byId("verify").disabled) byId("verify").click(); };
@@ -2799,28 +2822,31 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     var pairs = ex.pairs || [];
     var lefts = pairs.map(function (p, i) { return { t: p.l, p: i }; });
     var rights = shuffle(pairs.map(function (p, i) { return { t: p.r, p: i }; }));
-    var leftHtml = lefts.map(function (o) { return '<button class="match-item" data-side="l" data-p="' + o.p + '">' + esc(o.t) + '</button>'; }).join("");
+    var leftHtml = lefts.map(function (o) { return '<button class="match-item" data-side="l" data-p="' + o.p + '" aria-pressed="false">' + esc(o.t) + '</button>'; }).join("");
     var rightHtml = rights.map(function (o) { return '<button class="match-item" data-side="r" data-p="' + o.p + '">' + esc(o.t) + '</button>'; }).join("");
     show('<div class="wrap">' + exHeader(pct, total) + '<div class="card">'
       + '<h2>Emparejar</h2>'
       + '<p class="hint">&#128161; ' + esc(ex.instruction || "Toca una palabra y luego su pareja.") + '</p>'
       + '<div class="match-cols"><div>' + leftHtml + '</div><div>' + rightHtml + '</div></div>'
-      + '<div id="fb"></div><button class="btn" id="verify" disabled>Empareja todo</button></div></div>');
+      + '<div id="fb" role="status" aria-live="polite"></div><button class="btn" id="verify" disabled>Empareja todo</button></div></div>');
     var selEl = null, matched = 0, errors = 0, done = false;
-    function clearSel() { if (selEl) selEl.classList.remove("sel"); selEl = null; }
+    function clearSel() { if (selEl) { selEl.classList.remove("sel"); selEl.setAttribute("aria-pressed", "false"); } selEl = null; }
+    function setStatus(msg) { var f = byId("fb"); if (f && !done) f.innerHTML = msg ? '<p class="muted" style="margin:10px 0 0">' + esc(msg) + '</p>' : ""; }
     each(".match-item", function (b) {
       b.onclick = function () {
         if (done || b.classList.contains("done")) return;
         var side = b.getAttribute("data-side");
         if (side === "l") {
           if (selEl && selEl.getAttribute("data-side") === "l") clearSel();
-          selEl = b; b.classList.add("sel"); return;
+          selEl = b; b.classList.add("sel"); b.setAttribute("aria-pressed", "true"); return;
         }
         if (!selEl) { return; }
         var lp = +selEl.getAttribute("data-p"), rp = +b.getAttribute("data-p");
         if (lp === rp) {
-          selEl.classList.remove("sel"); selEl.classList.add("done"); b.classList.add("done");
-          selEl = null; matched++;
+          selEl.classList.remove("sel"); selEl.setAttribute("aria-pressed", "false");
+          selEl.classList.add("done"); b.classList.add("done");
+          selEl.setAttribute("aria-label", selEl.textContent + ", emparejado"); b.setAttribute("aria-label", b.textContent + ", emparejado");
+          selEl = null; matched++; setStatus("Pareja correcta.");
           if (matched === pairs.length) {
             done = true;
             results[exIdx] = errors === 0;
@@ -2831,6 +2857,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
           errors++;
           var bad = b; bad.classList.add("bad"); var ls = selEl; if (ls) ls.classList.add("bad");
           clearSel();
+          setStatus("Par incorrecto, intenta otra vez.");
           setTimeout(function () { bad.classList.remove("bad"); if (ls) ls.classList.remove("bad"); }, 420);
         }
       };
@@ -2844,17 +2871,17 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     var qHtml;
     if (hasOpts) {
       qHtml = '<p class="body">' + esc(ex.question || "Que escuchaste?") + '</p>'
-        + '<div class="opts">' + ex.options.map(function (o, i) { return '<button class="opt" data-i="' + i + '">' + esc(o) + '</button>'; }).join("") + '</div>';
+        + '<div class="opts" role="group" aria-label="Opciones de respuesta">' + ex.options.map(function (o, i) { return '<button class="opt" data-i="' + i + '" aria-pressed="false">' + esc(o) + '</button>'; }).join("") + '</div>';
     } else {
       qHtml = '<p class="body">' + esc(ex.question || "Escribe lo que escuchaste") + '</p>'
-        + '<input id="ltype" class="type-input" placeholder="Escribe en ingles..." autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false">';
+        + '<input id="ltype" class="type-input" aria-label="Lo que escuchaste, en inglés" placeholder="Escribe en ingles..." autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false">';
     }
     show('<div class="wrap">' + exHeader(pct, total) + '<div class="card">'
       + '<h2>Escucha</h2>'
-      + '<div class="listen-controls"><button class="listen-play" id="play"><span class="ic">&#128266;</span> Reproducir</button>'
-      + '<button class="listen-slow" id="playslow">&#128034; Más lento</button></div>'
+      + '<div class="listen-controls"><button class="listen-play" id="play"><span class="ic" aria-hidden="true">&#128266;</span> Reproducir</button>'
+      + '<button class="listen-slow" id="playslow"><span aria-hidden="true">&#128034;</span> Más lento</button></div>'
       + '<div class="listen-note">Toca para escuchar. Puedes repetir las veces que quieras.</div>'
-      + qHtml + '<div id="fb"></div><button class="btn" id="verify" disabled>Verificar</button></div></div>');
+      + qHtml + '<div id="fb" role="status" aria-live="polite"></div><button class="btn" id="verify" disabled>Verificar</button></div></div>');
     byId("play").onclick = function () { speak(ex.text, ex.audio); };
     byId("playslow").onclick = function () { speak(ex.text, ex.audio, 0.62); };
     /* autoplay del audio si la preferencia está activa (Configuración → Sonido) */
@@ -2868,8 +2895,8 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
         b.onclick = function () {
           if (done) return;
           sel = +b.getAttribute("data-i");
-          for (var x = 0; x < optEls.length; x++) optEls[x].classList.remove("sel");
-          b.classList.add("sel"); byId("verify").disabled = false;
+          for (var x = 0; x < optEls.length; x++) { optEls[x].classList.remove("sel"); optEls[x].setAttribute("aria-pressed", "false"); }
+          b.classList.add("sel"); b.setAttribute("aria-pressed", "true"); byId("verify").disabled = false;
         };
       });
       byId("verify").onclick = function () {
@@ -2878,8 +2905,8 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
         var ok = sel === ex.correctIndex;
         for (var x = 0; x < optEls.length; x++) {
           var i = +optEls[x].getAttribute("data-i"); optEls[x].classList.add("locked");
-          if (i === ex.correctIndex) optEls[x].classList.add("correct");
-          if (i === sel && !ok) optEls[x].classList.add("wrong");
+          if (i === ex.correctIndex) { optEls[x].classList.add("correct"); optEls[x].setAttribute("aria-label", ex.options[i] + (i === sel ? ", tu respuesta, correcta" : ", respuesta correcta")); }
+          if (i === sel && !ok) { optEls[x].classList.add("wrong"); optEls[x].setAttribute("aria-label", ex.options[i] + ", tu respuesta, incorrecta"); }
         }
         results[exIdx] = ok;
         byId("fb").innerHTML = feedbackBox(ok, ex.explanation || "", "Era: " + ex.options[ex.correctIndex]);
@@ -2913,7 +2940,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       + '<p class="hint">&#128161; ' + esc(ex.instruction || "Toca una palabra y luego su grupo.") + '</p>'
       + '<div class="cat-pool" id="pool"></div>'
       + '<div class="cat-buckets" id="buckets"></div>'
-      + '<div id="fb"></div><button class="btn" id="verify" disabled>Verificar</button></div></div>');
+      + '<div id="fb" role="status" aria-live="polite"></div><button class="btn" id="verify" disabled>Verificar</button></div></div>');
 
     function tk(it, cls) { return '<button class="cat-tk' + (cls || "") + '" data-i="' + it.i + '">' + esc(it.t) + '</button>'; }
     function draw() {
@@ -2953,18 +2980,18 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       .map(function (p) { return '<p>' + esc(p) + '</p>'; }).join("");
     var qHtml = qs2.map(function (q, qi) {
       var opts = (q.options || []).map(function (o, i) {
-        return '<button class="opt" data-q="' + qi + '" data-i="' + i + '">' + esc(o) + '</button>';
+        return '<button class="opt" data-q="' + qi + '" data-i="' + i + '" aria-pressed="false">' + esc(o) + '</button>';
       }).join("");
       return '<div class="rq" data-qwrap="' + qi + '">'
         + '<div class="rq-num">Pregunta ' + (qi + 1) + ' de ' + qs2.length + '</div>'
-        + '<div class="rq-q">' + esc(q.q || "Elige la opcion correcta") + '</div>'
-        + '<div class="opts">' + opts + '</div><div class="rq-fb" id="rfb-' + qi + '"></div></div>';
+        + '<div class="rq-q" id="rq-q-' + qi + '">' + esc(q.q || "Elige la opcion correcta") + '</div>'
+        + '<div class="opts" role="group" aria-labelledby="rq-q-' + qi + '">' + opts + '</div><div class="rq-fb" id="rfb-' + qi + '" role="status" aria-live="polite"></div></div>';
     }).join("");
     show('<div class="wrap">' + exHeader(pct, total) + '<div class="card">'
       + '<span class="read-tag">&#128214; Lectura</span>'
       + (ex.title ? '<h2>' + esc(ex.title) + '</h2>' : '<h2>Lee y responde</h2>')
       + '<div class="passage">' + passageHtml + '</div>'
-      + qHtml + '<div id="fb"></div>'
+      + qHtml + '<div id="fb" role="status" aria-live="polite"></div>'
       + '<button class="btn" id="verify" disabled>Verificar</button></div></div>');
 
     var picks = qs2.map(function () { return -1; });
@@ -2975,8 +3002,9 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
         var qi = +b.getAttribute("data-q"), i = +b.getAttribute("data-i");
         picks[qi] = i;
         var group = document.querySelectorAll('.opt[data-q="' + qi + '"]');
-        for (var x = 0; x < group.length; x++) group[x].classList.remove("sel");
+        for (var x = 0; x < group.length; x++) { group[x].classList.remove("sel"); group[x].setAttribute("aria-pressed", "false"); }
         b.classList.add("sel");
+        b.setAttribute("aria-pressed", "true");
         byId("verify").disabled = picks.some(function (p) { return p < 0; });
       };
     });
@@ -2991,8 +3019,8 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
         for (var x = 0; x < group.length; x++) {
           var i = +group[x].getAttribute("data-i");
           group[x].classList.add("locked");
-          if (i === q.correctIndex) group[x].classList.add("correct");
-          if (i === picks[qi] && !ok) group[x].classList.add("wrong");
+          if (i === q.correctIndex) { group[x].classList.add("correct"); group[x].setAttribute("aria-label", q.options[i] + (i === picks[qi] ? ", tu respuesta, correcta" : ", respuesta correcta")); }
+          if (i === picks[qi] && !ok) { group[x].classList.add("wrong"); group[x].setAttribute("aria-label", q.options[i] + ", tu respuesta, incorrecta"); }
         }
         byId("rfb-" + qi).innerHTML = feedbackBox(ok, q.explanation || "", "Era: " + (q.options[q.correctIndex] || ""));
       });
@@ -3289,7 +3317,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       show('<div class="wrap">' + topbar(6 + idx * 4) + '<div class="card center">'
         + mascot("thinking", A.greeting() + " Calibremos la sesion en 3 toques.") + '</div>'
         + '<div class="card"><div class="exnum">Calibracion &middot; ' + (idx + 1) + ' de ' + qs2.length + '</div>'
-        + '<h2>' + esc(q.q) + '</h2><div class="opts">' + opts + '</div>'
+        + '<h2>' + esc(q.q) + '</h2><div class="opts" role="group" aria-label="Opciones de respuesta">' + opts + '</div>'
         + '<div style="text-align:center;margin-top:10px">' + dots + '</div></div></div>');
       each(".opt", function (b) {
         b.onclick = function () {
