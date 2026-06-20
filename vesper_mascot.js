@@ -41,7 +41,7 @@ window.VESPER_MASCOT = (function () {
     correct:       { image: EXImg.correct, anim: "bounce", fx: "sparkle", lines: ["Perfecto!", "Excelente, asi se hace.", "Lo tienes!"] },
     incorrect:     { image: EXImg.incorrect, anim: "shake", fx: "",    lines: ["Casi! Mira la explicacion.", "Tranquilo, equivocarse tambien ensena.", "Vuelve a intentarlo en la proxima."] },
     correcting:    { image: EXImg.correcting, anim: "tilt", fx: "",    lines: ["La respuesta correcta es esta.", "Mira, asi se dice.", "Quedate con esta y sigue."] },
-    streak_alive:  { image: EXImg.streak, anim: "pulse", fx: "flame",  lines: ["Tu racha sigue viva!", "Un dia mas sumado. Sigue asi.", "La constancia es tu superpoder."] },
+    streak_alive:  { image: EXImg.streak, anim: "pump", fx: "flame",  lines: ["Tu racha sigue viva!", "Un dia mas sumado. Sigue asi.", "La constancia es tu superpoder."] },
     streak_broken: { image: CANON, anim: "dim",       fx: "",         lines: ["Empezamos una racha nueva. Vamos!", "Hoy es un gran dia para volver.", "Cada racha empieza con un dia."] },
     milestone:     { image: EXImg.correct, anim: "celebrate", fx: "confetti", lines: ["Increible! Lograste algo grande.", "Eso merece un escudo. Felicidades!", "Que orgullo, sigue brillando."] }
   };
@@ -127,7 +127,8 @@ window.VESPER_MASCOT = (function () {
       ".vc-anim-float{animation:vc-float 3s ease-in-out infinite}",
       ".vc-anim-tilt{animation:vc-tilt 3s ease-in-out infinite}",
       ".vc-anim-pulse{animation:vc-soft 2s ease-in-out infinite}",
-      ".vc-anim-wave{animation:vc-wave 1.2s ease-in-out}",
+      ".vc-anim-wave{transform-origin:60% 92%;animation:vc-wave 1.05s ease-in-out 2}",
+      ".vc-anim-pump{transform-origin:50% 95%;animation:vc-pump .62s cubic-bezier(.3,.82,.4,1) 3}",
       ".vc-anim-bounce{animation:vc-bounce .7s cubic-bezier(.28,.84,.42,1)}",
       ".vc-anim-shake{animation:vc-shake .5s ease}",
       ".vc-anim-celebrate{animation:vc-celebrate .9s ease}",
@@ -135,14 +136,15 @@ window.VESPER_MASCOT = (function () {
       "@keyframes vc-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}",
       "@keyframes vc-tilt{0%,100%{transform:rotate(-4deg)}50%{transform:rotate(4deg)}}",
       "@keyframes vc-soft{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}",
-      "@keyframes vc-wave{0%{transform:rotate(0)}25%{transform:rotate(-8deg)}50%{transform:rotate(8deg)}75%{transform:rotate(-4deg)}100%{transform:rotate(0)}}",
+      "@keyframes vc-wave{0%{transform:rotate(0)}15%{transform:rotate(-11deg)}35%{transform:rotate(7deg)}55%{transform:rotate(-9deg)}75%{transform:rotate(5deg)}100%{transform:rotate(0)}}",
+      "@keyframes vc-pump{0%{transform:translateY(0) scale(1)}28%{transform:translateY(-13px) scale(1.07)}55%{transform:translateY(0) scale(.97)}78%{transform:translateY(-5px) scale(1.02)}100%{transform:translateY(0) scale(1)}}",
       "@keyframes vc-bounce{0%{transform:translateY(0) scale(1)}30%{transform:translateY(-14px) scale(1.08)}55%{transform:translateY(0) scale(.97)}75%{transform:translateY(-6px) scale(1.02)}100%{transform:translateY(0) scale(1)}}",
       "@keyframes vc-shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-6px)}80%{transform:translateX(6px)}}",
       "@keyframes vc-celebrate{0%{transform:scale(1) rotate(0)}30%{transform:scale(1.15) rotate(-6deg)}60%{transform:scale(1.05) rotate(6deg)}100%{transform:scale(1) rotate(0)}}",
       "@keyframes vc-twinkle{0%{opacity:0;transform:scale(.6)}50%{opacity:1;transform:scale(1.1)}100%{opacity:0;transform:scale(.6)}}",
       "@keyframes vc-rise{0%{opacity:0;transform:translateY(6px) scale(.8)}30%{opacity:1}100%{opacity:0;transform:translateY(-26px) scale(1.1)}}",
       "@keyframes vc-fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}",
-      "@media (prefers-reduced-motion: reduce){.vc-anim-float,.vc-anim-tilt,.vc-anim-pulse,.vc-anim-wave,.vc-anim-bounce,.vc-anim-shake,.vc-anim-celebrate,.vc-fx{animation:none!important}}"
+      "@media (prefers-reduced-motion: reduce){.vc-anim-float,.vc-anim-tilt,.vc-anim-pulse,.vc-anim-wave,.vc-anim-pump,.vc-anim-bounce,.vc-anim-shake,.vc-anim-celebrate,.vc-fx{animation:none!important}}"
     ].join("\n");
     var el = document.createElement("style");
     el.id = "vesper-mascot-css";
