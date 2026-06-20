@@ -1330,12 +1330,29 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
 .medal:not(.on) .medal__nm{color:var(--muted)}
 @media(prefers-reduced-motion:reduce){.logros__chev{transition:none}.medal.on .medal__disc{animation:none}}
 .vesper-reduce-motion .medal.on .medal__disc{animation:none}
+/* Boton flotante "Instalar app" (PWA / descarga como app). Oculto hasta que el navegador ofrece la instalacion */
+#install-btn{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom));z-index:60;
+  display:none;align-items:center;gap:8px;background:var(--gold);color:var(--ink);border:none;border-radius:999px;
+  padding:12px 20px;font-family:inherit;font-size:.95rem;font-weight:700;cursor:pointer;
+  box-shadow:0 8px 24px rgba(27,27,47,.22);max-width:calc(100% - 32px)}
+#install-btn.show{display:inline-flex}
+#install-btn:active{transform:translateX(-50%) translateY(1px)}
+#install-btn svg{width:18px;height:18px;flex:0 0 auto}
+@media(prefers-reduced-motion:reduce){#install-btn:active{transform:translateX(-50%)}}
 </style>
 </head>
 <body>
 <a class="va-skip-link" href="#app">Saltar al contenido</a>
 <h2 class="sr-only">Lecciones gratis de Vesper Academy: lee la explicacion, resuelve los ejercicios y manten tu racha diaria.</h2>
 <main id="app" aria-live="polite"></main>
+
+<!-- Boton para descargar/instalar las lecciones como app (PWA). Solo se muestra cuando el navegador lo permite -->
+<button id="install-btn" type="button" aria-label="Instalar la app de lecciones">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M12 3v12"></path><path d="m7 10 5 5 5-5"></path><path d="M5 21h14"></path>
+  </svg>
+  Instalar app
+</button>
 
 <script src="vesper_lessons.js"></script>
 <script src="vesper_activities.js"></script>
@@ -3346,6 +3363,37 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       navigator.serviceWorker.register("sw.js").catch(function () { /* sin SW: sigue funcionando online */ });
     });
   }
+
+  /* Descargar como app: boton "Instalar app" que aparece cuando el navegador ofrece la instalacion (PWA) */
+  (function () {
+    var deferred = null;
+    var btn = document.getElementById("install-btn");
+    if (!btn) return;
+
+    /* Ya corriendo como app instalada (o TWA de la Play Store): no mostrar nada */
+    var standalone = window.matchMedia && window.matchMedia("(display-mode: standalone)").matches;
+    if (standalone || navigator.standalone || document.referrer.indexOf("android-app://") === 0) return;
+
+    window.addEventListener("beforeinstallprompt", function (e) {
+      e.preventDefault();
+      deferred = e;
+      btn.classList.add("show");
+    });
+
+    btn.addEventListener("click", function () {
+      if (!deferred) return;
+      deferred.prompt();
+      deferred.userChoice.then(function () {
+        deferred = null;
+        btn.classList.remove("show");
+      });
+    });
+
+    window.addEventListener("appinstalled", function () {
+      deferred = null;
+      btn.classList.remove("show");
+    });
+  })();
 </script>
 </body>
 </html>

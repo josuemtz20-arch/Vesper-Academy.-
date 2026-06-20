@@ -1,0 +1,43 @@
+{
+  "packageId": "com.vesperacademy.lecciones",
+  "host": "vesperacademy.com",
+  "name": "Vesper Academy — Lecciones",
+  "launcherName": "Vesper Lecciones",
+  "display": "standalone",
+  "orientation": "portrait",
+  "themeColor": "#1B1B2F",
+  "themeColorDark": "#1B1B2F",
+  "navigationColor": "#1B1B2F",
+  "navigationColorDark": "#1B1B2F",
+  "navigationDividerColor": "#1B1B2F",
+  "navigationDividerColorDark": "#1B1B2F",
+  "backgroundColor": "#FBF8F1",
+  "enableNotifications": false,
+  "startUrl": "/leccion.html",
+  "iconUrl": "https://vesperacademy.com/assets/images/app_icon_512.png",
+  "maskableIconUrl": "https://vesperacademy.com/assets/images/app_icon_maskable_512.png",
+  "splashScreenFadeOutDuration": 300,
+  "signingKey": {
+    "path": "./android.keystore",
+    "alias": "android"
+  },
+  "appVersionName": "1.0.0",
+  "appVersionCode": 1,
+  "shortcuts": [],
+  "generatorApp": "bubblewrap-cli",
+  "webManifestUrl": "https://vesperacademy.com/manifest_lecciones.webmanifest",
+  "fallbackType": "customtabs",
+  "features": {},
+  "alphaDependencies": {
+    "enabled": false
+  },
+  "enableSiteSettingsShortcut": true,
+  "isChromeOSOnly": false,
+  "isMetaQuest": false,
+  "fullScopeUrl": "https://vesperacademy.com/",
+  "minSdkVersion": 21,
+  "orientationLockEnabled": true,
+  "additionalTrustedOrigins": [],
+  "retainedBundles": [],
+  "appVersion": "1.0.0"
+}

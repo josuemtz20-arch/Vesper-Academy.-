@@ -52,6 +52,17 @@
 !/manifest_lecciones.webmanifest
 !/sw.js
 
+# Play Store (TWA) packaging for the free-lessons PWA.
+# assetlinks.json MUST be published (Digital Asset Links verification).
+# twa-manifest.json + the guide are repo config; published is harmless.
+# The keystore and the generated .aab/.apk binaries stay LOCAL (see below).
+!/.well-known/
+!/twa-manifest.json
+!/PLAY_STORE.md
+*.keystore
+*.aab
+*.apk
+
 # lesson data consumed by the public pages
 !/vesper_audio_data.js
 !/vesper_reading_data.js
