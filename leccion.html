@@ -485,6 +485,7 @@
   /* escudo del jefe en SVG (portada / medidor / resultado) */
   .boss-emblem{color:var(--w-accent,#c5a059);line-height:0}
   .boss-emblem svg{width:54px;height:58px}
+  .boss-emblem svg.boss-art{width:118px;height:118px}
   .boss-emblem.lit{color:var(--gold,#c5a059)}
   .boss-emblem.dim{color:#8e8aa6}
   .bm-ic{display:inline-flex;align-items:center;color:var(--w-accent,#c5a059)}
@@ -1161,6 +1162,68 @@
   }
   /* escudo SVG (jefe) — reemplaza el emoji 🛡️ */
   function shieldSvg(cls) { return '<svg class="' + (cls || "") + '" viewBox="0 0 24 26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.5l8 3v6c0 5.4-3.6 8.6-8 10.6C7.6 20.1 4 16.9 4 11.5v-6z"/><path d="M8.4 12.2l2.7 2.7 4.5-4.9"/></svg>'; }
+
+  /* Retrato temático del guardián de cada mundo (SVG, hereda el color del
+     acento del mundo via .boss-emblem). C2 es un caballero, como el resto
+     evoca el tema de su mundo: hogar, sendero, horizonte, torre, firmamento. */
+  var BOSS_ART = {
+    /* A1 · El Centinela del Hogar — guardián con farol */
+    A1: '<circle cx="60" cy="60" r="53" stroke-opacity=".18"/>'
+      + '<circle cx="58" cy="44" r="13"/>'
+      + '<path d="M32 99c2-19 11-29 26-29s24 10 26 29" stroke-opacity=".95"/>'
+      + '<path d="M46 63q12 8 24 0" stroke-opacity=".45"/>'
+      + '<path d="M72 86c6-1 11-4 14-9" stroke-opacity=".7"/>'
+      + '<path d="M82 60h16M85 60v3M95 60v3"/>'
+      + '<rect x="82" y="63" width="16" height="19" rx="2.5"/>'
+      + '<line x1="90" y1="63" x2="90" y2="82" stroke-opacity=".4"/>'
+      + '<circle cx="90" cy="73" r="4" fill="currentColor" stroke="none" fill-opacity=".85"/>',
+    /* A2 · El Guardián del Sendero — encapuchado con bastón de hoja */
+    A2: '<circle cx="60" cy="60" r="53" stroke-opacity=".18"/>'
+      + '<path d="M44 50a15 14 0 0 1 30 0v4a15 16 0 0 1-30 0z"/>'
+      + '<path d="M42 50c2-15 9-22 17-22s15 7 17 22" stroke-opacity=".7"/>'
+      + '<path d="M34 100c2-20 11-30 25-30s23 10 25 30"/>'
+      + '<path d="M86 26v64" stroke-opacity=".85"/>'
+      + '<path d="M86 46c-10-1-16-8-16-16 10-1 16 6 16 16M86 40c9-1 14-7 14-15-9 1-14 7-14 15" fill="currentColor" stroke="none" fill-opacity=".22"/>'
+      + '<path d="M86 46c-10-1-16-8-16-16 10-1 16 6 16 16M86 40c9-1 14-7 14-15-9 1-14 7-14 15"/>',
+    /* B1 · El Vigía del Horizonte — vigía con catalejo */
+    B1: '<circle cx="60" cy="60" r="53" stroke-opacity=".18"/>'
+      + '<circle cx="50" cy="44" r="13"/>'
+      + '<path d="M28 99c2-19 11-29 24-29 4 0 8 1 11 4" stroke-opacity=".95"/>'
+      + '<path d="M68 80c6-2 11-5 14-10" stroke-opacity=".7"/>'
+      + '<rect x="76" y="56" width="24" height="10" rx="5" transform="rotate(-30 88 61)"/>'
+      + '<path d="M96 46l2 5 5 2-5 2-2 5-2-5-5-2 5-2z" fill="currentColor" stroke="none" fill-opacity=".85"/>',
+    /* B2 · El Heraldo de la Torre — heraldo con estandarte */
+    B2: '<circle cx="60" cy="60" r="53" stroke-opacity=".18"/>'
+      + '<circle cx="54" cy="44" r="12"/>'
+      + '<path d="M30 100c2-19 11-29 24-29s22 10 24 29"/>'
+      + '<path d="M86 22v70" stroke-opacity=".85"/>'
+      + '<circle cx="86" cy="20" r="3" fill="currentColor" stroke="none"/>'
+      + '<path d="M86 28h24l-7 10 7 10H86z" fill="currentColor" stroke="none" fill-opacity=".22"/>'
+      + '<path d="M86 28h24l-7 10 7 10H86"/>',
+    /* C1 · El Custodio del Firmamento — figura astral con estrellas */
+    C1: '<circle cx="60" cy="60" r="53" stroke-opacity=".18"/>'
+      + '<circle cx="60" cy="48" r="12"/>'
+      + '<path d="M34 100c2-20 11-30 26-30s24 10 26 30"/>'
+      + '<path d="M28 46a32 20 0 0 1 64 0" stroke-opacity=".35"/>'
+      + '<path d="M60 18l2.6 6.4 6.4 2.6-6.4 2.6L60 36l-2.6-6.4-6.4-2.6 6.4-2.6z" fill="currentColor" stroke="none"/>'
+      + '<g fill="currentColor" stroke="none"><circle cx="32" cy="44" r="2"/><circle cx="88" cy="44" r="2"/><circle cx="42" cy="26" r="1.5"/><circle cx="78" cy="26" r="1.5"/></g>'
+      + '<path d="M54 84l6 7 6-7" stroke-opacity=".45"/>',
+    /* C2 · El Soberano del Saber — CABALLERO con yelmo (visera en cruz) y penacho */
+    C2: '<circle cx="60" cy="60" r="53" stroke-opacity=".18"/>'
+      + '<path d="M61 14c12 1 17 9 13 19" stroke-opacity=".75"/>'
+      + '<path d="M61 14c-3 6-3 12 2 16" stroke-opacity=".5"/>'
+      + '<path d="M43 44c0-9 8-15 17-15s17 6 17 15v9c0 7-6 12-17 12s-17-5-17-12z"/>'
+      + '<path d="M60 33v28" stroke-width="3.2"/>'
+      + '<path d="M47 48h26" stroke-width="3.2"/>'
+      + '<g fill="currentColor" stroke="none"><circle cx="53" cy="60" r="1.5"/><circle cx="60" cy="61" r="1.5"/><circle cx="67" cy="60" r="1.5"/></g>'
+      + '<path d="M30 101c2-16 14-23 30-23s28 7 30 23"/>'
+      + '<path d="M38 88q22-10 44 0" stroke-opacity=".4"/>'
+  };
+  function bossArt(lv) {
+    var inner = BOSS_ART[lv] || shieldSvg();
+    if (inner === shieldSvg()) return inner;
+    return '<svg class="boss-art" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + inner + '</svg>';
+  }
   /* style inline con las 3 variables del mundo (acento/soft/glow) */
   function worldVars(t) { return '--w-accent:' + t.accent + ';--w-accent-soft:' + t.accentSoft + ';--w-glow:' + t.glow; }
   /* capa ambiental reutilizable (N partículas <i>); mapMod=true para la del mapa */
@@ -1713,7 +1776,7 @@
   function renderBossCover() {
     var bm = bossMeta(lesson.bossLevel), t = WORLD_THEME[lesson.bossLevel] || {};
     show('<div class="wrap">' + topbar(6) + '<div class="card center boss-cover" style="' + worldVars(t) + '">'
-      + '<div class="boss-emblem" aria-hidden="true">' + shieldSvg() + '</div>'
+      + '<div class="boss-emblem" aria-hidden="true">' + bossArt(lesson.bossLevel) + '</div>'
       + biomeMotif(lesson.bossLevel)
       + '<span class="boss-eyebrow">Examen del mundo &middot; ' + esc(lesson.level) + '</span>'
       + '<h1>' + esc(bm.name) + '</h1>'
@@ -2309,7 +2372,7 @@
       earnedXp = 0;
       show('<div class="wrap">' + topbar(86) + '<div class="card center">'
         + mascot("incorrect", "El guardián resiste. ¡Reagrúpate y vuelve!")
-        + '<div class="boss-emblem dim" aria-hidden="true">' + shieldSvg() + '</div>'
+        + '<div class="boss-emblem dim" aria-hidden="true">' + bossArt(lesson.bossLevel) + '</div>'
         + '<h1>' + pct + '%</h1>'
         + '<p class="muted">' + correct + ' de ' + total + ' correctos &middot; necesitas ' + bm.pass + '% para vencerlo</p>'
         + '<div class="xpbar"><div class="xpfill" style="width:' + pct + '%;background:var(--error)"></div></div>'
@@ -2329,7 +2392,7 @@
       : '<div class="boss-unlock">&#128081; ¡Has dominado el último mundo!</div>';
     show('<div class="wrap">' + topbar(92) + '<div class="card center">'
       + mascot("milestone", "¡Guardián vencido!")
-      + '<div class="boss-emblem lit" aria-hidden="true">' + shieldSvg() + '</div>'
+      + '<div class="boss-emblem lit" aria-hidden="true">' + bossArt(lesson.bossLevel) + '</div>'
       + '<h1>+' + earnedXp + ' XP</h1>'
       + '<p class="muted">' + correct + ' de ' + total + ' correctos &middot; ' + pct + '%</p>'
       + '<div class="xpbar"><div class="xpfill" style="width:' + pct + '%"></div></div>'
