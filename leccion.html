@@ -1360,26 +1360,32 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
 .den-back:hover{border-color:color-mix(in srgb,var(--w-accent,#c5a059) 50%,var(--line));background:var(--cream)}
 .den-back svg{width:20px;height:20px}
 
-/* cabecera del recinto */
-.den-head{position:relative;overflow:hidden;border-radius:20px;padding:20px 18px;color:#fff;
-  background:linear-gradient(145deg,#262644,#131328);box-shadow:0 14px 34px rgba(16,16,34,.28)}
+/* cabecera del recinto: texto + medallón con emblema temático (IA) */
+.den-head{position:relative;overflow:hidden;border-radius:20px;padding:18px;color:#fff;
+  background:linear-gradient(145deg,#262644,#131328);box-shadow:0 14px 34px rgba(16,16,34,.28);
+  display:flex;align-items:center;gap:15px}
 .den-head::before{content:"";position:absolute;inset:0;pointer-events:none;
   background:radial-gradient(135% 100% at 88% -18%,var(--w-glow,rgba(197,160,89,.5)),transparent 58%)}
 .den-head::after{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--w-accent,#c5a059);opacity:.9}
-.den-struct{position:absolute;right:-8px;bottom:-14px;width:132px;height:132px;color:var(--w-accent,#c5a059);opacity:.92;pointer-events:none}
-.den-struct svg{width:100%;height:100%;display:block;filter:drop-shadow(0 6px 14px rgba(0,0,0,.4))}
-.den-head__in{position:relative;z-index:1}
+.den-emblem{position:relative;z-index:1;flex:0 0 auto;width:98px;height:98px;border-radius:50%;overflow:hidden;
+  border:3px solid var(--w-accent,#c5a059);
+  box-shadow:0 0 0 4px rgba(255,255,255,.05),0 8px 22px rgba(0,0,0,.42),0 0 24px var(--w-glow,rgba(197,160,89,.4))}
+.den-emblem__img{width:100%;height:100%;object-fit:cover;display:block}
+.den-emblem.is-svg{display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.06);color:var(--w-accent,#c5a059)}
+.den-emblem.is-svg svg{width:58%;height:58%}
+.den-head__in{position:relative;z-index:1;flex:1;min-width:0}
 .den-head__eyebrow{display:inline-flex;align-items:center;gap:6px;font-size:.68rem;letter-spacing:.13em;text-transform:uppercase;
   font-weight:700;color:#fff;padding:4px 11px;border-radius:999px;
   background:color-mix(in srgb,var(--w-accent,#c5a059) 30%,transparent);border:1px solid color-mix(in srgb,var(--w-accent,#c5a059) 55%,transparent)}
-.den-head__ttl{font-family:"Inria Serif",Georgia,serif;font-size:1.55rem;line-height:1.14;margin:.34em 0 .18em;max-width:74%}
-.den-head__intro{font-size:.9rem;color:rgba(255,255,255,.82);max-width:76%;margin:0}
-.den-head__stats{display:flex;gap:9px;margin-top:14px;flex-wrap:wrap}
-.den-stat{display:inline-flex;align-items:baseline;gap:5px;padding:5px 11px;border-radius:11px;
+.den-head__ttl{font-family:"Inria Serif",Georgia,serif;font-size:1.4rem;line-height:1.14;margin:.34em 0 .18em}
+.den-head__intro{font-size:.88rem;color:rgba(255,255,255,.82);margin:0}
+.den-head__stats{display:flex;gap:8px;margin-top:13px;flex-wrap:wrap}
+.den-stat{display:inline-flex;align-items:baseline;gap:5px;padding:5px 10px;border-radius:11px;
   background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.12)}
 .den-stat b{font-size:1rem;font-weight:800;color:#fff;font-variant-numeric:tabular-nums}
 .den-stat span{font-size:.72rem;color:rgba(255,255,255,.66)}
-.den-head__bar{position:relative;margin-top:13px;height:9px;border-radius:999px;background:rgba(255,255,255,.16);overflow:hidden;max-width:78%}
+.den-head__bar{position:relative;margin-top:13px;height:9px;border-radius:999px;background:rgba(255,255,255,.16);overflow:hidden}
+@media(max-width:420px){.den-emblem{width:84px;height:84px}.den-head__intro{display:none}}
 .den-head__bar > i{display:block;height:100%;border-radius:999px;
   background:linear-gradient(90deg,var(--w-accent,#c5a059),color-mix(in srgb,var(--w-accent,#c5a059) 55%,#fff));transition:width .45s ease}
 
@@ -1425,7 +1431,10 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
 /* el acceso al recinto va fuera del árbol: sin conectores ni tronco */
 .den-enter{margin:14px 0 4px;border-width:1.5px;border-color:color-mix(in srgb,var(--w-accent,#c5a059) 35%,var(--line))}
 .den-enter::before,.den-enter::after{display:none}
-.den-enter .branch__ic{background:var(--w-accent,#c5a059);color:#1f1a0e}
+.den-enter .branch__ic{overflow:hidden;padding:0;background:var(--w-accent,#c5a059);color:#1f1a0e;
+  border:2px solid color-mix(in srgb,var(--w-accent,#c5a059) 65%,#fff)}
+.den-enter .branch__ic .den-emblem__img{width:100%;height:100%;object-fit:cover;display:block}
+.den-enter .branch__ic.is-svg{display:flex;align-items:center;justify-content:center}
 .den-enter .branch__ic svg{width:30px;height:30px}
 
 /* mazo de tarjetas (sala abierta) */
@@ -2358,6 +2367,21 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
   };
   function branchIcon(k) { return '<span aria-hidden="true">' + (BRANCH_ICN[k] || BRANCH_ICN.spark) + '</span>'; }
   var DEN_STRUCT_NAME = { house:"la casa", cave:"la cueva", harbor:"el puerto", tower:"la torre", observatory:"el observatorio", castle:"el castillo" };
+  /* emblemas temáticos (IA, Higgsfield) — uno por mundo; cae al SVG de estructura si falta el archivo */
+  var DEN_EMBLEM = {
+    A1: "assets/images/vocab/den_a1.webp", A2: "assets/images/vocab/den_a2.webp",
+    B1: "assets/images/vocab/den_b1.webp", B2: "assets/images/vocab/den_b2.webp",
+    C1: "assets/images/vocab/den_c1.webp", C2: "assets/images/vocab/den_c2.webp"
+  };
+  /* onerror en scope global (IIFE): respaldo = SVG de la estructura */
+  window.__vdenFallback = function (img, structure) {
+    try { if (img) { var p = img.parentNode; img.outerHTML = DEN_STRUCT[structure] || ""; if (p) p.classList.add("is-svg"); } } catch (e) {}
+  };
+  function denEmblemImg(level, structure) {
+    var src = DEN_EMBLEM[level];
+    if (!src) return DEN_STRUCT[structure] || "";
+    return '<img class="den-emblem__img" src="' + src + '" alt="" loading="lazy" decoding="async" onerror="window.__vdenFallback(this,\'' + structure + '\')">';
+  }
 
   /* tarjetas "ya las sé": persistencia local por nivel|palabra */
   var DEN_KNOWN_KEY = "vesper_vocab_known";
@@ -2382,7 +2406,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     var arrow = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>';
     return '<button class="branch den-enter" type="button" data-den="' + esc(selLevel) + '" style="margin-left:0;width:100%"'
       + ' aria-label="Explorar el vocabulario de ' + esc(d.name) + '">'
-      + '<span class="branch__ic">' + (DEN_STRUCT[d.structure] || branchIcon("book")) + '</span>'
+      + '<span class="branch__ic">' + denEmblemImg(selLevel, d.structure) + '</span>'
       + '<span class="branch__bd"><span class="branch__nm">Explorar vocabulario</span>'
       + '<span class="branch__hint">' + esc(d.name) + ' · tarjetas y actividades</span>'
       + '<span class="branch__meta"><span class="branch__bar"><i style="width:' + pr.pct + '%"></i></span>'
@@ -2416,7 +2440,6 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       + '<div class="den-top"><button class="den-back" id="denBack" type="button" aria-label="Volver al mapa">' + back + '</button>'
       + '<div class="muted" style="font-size:.85rem">Mundo ' + (PATH.LEVELS.indexOf(selLevel) + 1) + ' · ' + esc(selLevel) + '</div></div>'
       + '<header class="den-head">'
-      + '<div class="den-struct">' + (DEN_STRUCT[d.structure] || "") + '</div>'
       + '<div class="den-head__in">'
       + '<span class="den-head__eyebrow">Recinto de ' + esc(DEN_STRUCT_NAME[d.structure] || "vocabulario") + '</span>'
       + '<h1 class="den-head__ttl">' + esc(d.name) + '</h1>'
@@ -2426,7 +2449,9 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       + '<span class="den-stat"><b>' + pr.total + '</b><span>palabras</span></span>'
       + '<span class="den-stat"><b>' + pr.pct + '%</b><span>dominado</span></span></div>'
       + '<div class="den-head__bar"><i style="width:' + pr.pct + '%"></i></div>'
-      + '</div></header>'
+      + '</div>'
+      + '<div class="den-emblem">' + denEmblemImg(selLevel, d.structure) + '</div>'
+      + '</header>'
       + '<div class="den-tree">' + branches + '</div>'
       + '</div><div class="hub-toast" id="toast"></div></div>');
     byId("denBack").onclick = function () { renderIndex(selLevel); };
