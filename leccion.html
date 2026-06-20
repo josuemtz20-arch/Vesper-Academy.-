@@ -1130,18 +1130,18 @@
   /* cada mundo (nivel) = ilustración + nombre + identidad temática (acento, atmósfera, partículas)
      + jefe (Guardián del mundo: examen mixto que abre el siguiente nivel). */
   var WORLD_THEME = {
-    A1: { file: "assets/images/lessons/theme_home.jpg",      worldName: "El Hogar",             accent:"#C07A33", accentSoft:"rgba(192,122,51,.15)", glow:"rgba(192,122,51,.40)", ambientName:"hearth",    ambientN:7,  mapN:3, boss:{ name:"El Centinela del Hogar",  pass:75 }, biome:["cottage","bush","lantern","pine","bush"] },
-    A2: { file: "assets/images/lessons/theme_nature.jpg",    worldName: "El Sendero",           accent:"#5E8A4E", accentSoft:"rgba(94,138,78,.15)",  glow:"rgba(94,138,78,.38)",  ambientName:"trail",     ambientN:7,  mapN:4, boss:{ name:"El Guardián del Sendero", pass:75 }, biome:["pine","pine","bush","mushroom","fern"] },
-    B1: { file: "assets/images/lessons/theme_city.jpg",      worldName: "El Horizonte",         accent:"#3D86B0", accentSoft:"rgba(61,134,176,.15)", glow:"rgba(61,134,176,.34)", ambientName:"skyline",   ambientN:9,  mapN:3, boss:{ name:"El Vigía del Horizonte",  pass:75 }, biome:["building","building","lamp","tower","rock"] },
-    B2: { file: "assets/images/lessons/theme_business.jpg",  worldName: "La Torre",             accent:"#A8762E", accentSoft:"rgba(168,118,46,.15)", glow:"rgba(168,118,46,.42)", ambientName:"ascent",    ambientN:6,  mapN:3, boss:{ name:"El Heraldo de la Torre",  pass:75 }, biome:["crag","rock","crag","banner","pine"] },
-    C1: { file: "assets/images/lessons/theme_space.jpg",     worldName: "El Firmamento",        accent:"#6A5FA8", accentSoft:"rgba(106,95,168,.16)", glow:"rgba(106,95,168,.40)", ambientName:"starfield", ambientN:10, mapN:6, boss:{ name:"El Custodio del Firmamento", pass:75 }, biome:["star4","planet","crystal","star4"] },
-    C2: { file: "assets/images/lessons/theme_fantasy.jpg",   worldName: "El Castillo del Saber",accent:"#3FA08A", accentSoft:"rgba(63,160,138,.16)", glow:"rgba(63,160,138,.36)", ambientName:"aurora",    ambientN:7,  mapN:2, boss:{ name:"El Soberano del Saber",   pass:75 }, biome:["spire","banner","crystal","pine"] }
+    A1: { file: "assets/images/lessons/theme_home.jpg",      worldName: "El Hogar",             accent:"#C07A33", accentSoft:"rgba(192,122,51,.15)", glow:"rgba(192,122,51,.40)", ambientName:"hearth",    ambientN:7,  mapN:3, boss:{ name:"El Centinela del Hogar",  pass:85 }, biome:["cottage","bush","lantern","pine","bush"] },
+    A2: { file: "assets/images/lessons/theme_nature.jpg",    worldName: "El Sendero",           accent:"#5E8A4E", accentSoft:"rgba(94,138,78,.15)",  glow:"rgba(94,138,78,.38)",  ambientName:"trail",     ambientN:7,  mapN:4, boss:{ name:"El Guardián del Sendero", pass:85 }, biome:["pine","pine","bush","mushroom","fern"] },
+    B1: { file: "assets/images/lessons/theme_city.jpg",      worldName: "El Horizonte",         accent:"#3D86B0", accentSoft:"rgba(61,134,176,.15)", glow:"rgba(61,134,176,.34)", ambientName:"skyline",   ambientN:9,  mapN:3, boss:{ name:"El Vigía del Horizonte",  pass:85 }, biome:["building","building","lamp","tower","rock"] },
+    B2: { file: "assets/images/lessons/theme_business.jpg",  worldName: "La Torre",             accent:"#A8762E", accentSoft:"rgba(168,118,46,.15)", glow:"rgba(168,118,46,.42)", ambientName:"ascent",    ambientN:6,  mapN:3, boss:{ name:"El Heraldo de la Torre",  pass:88 }, biome:["crag","rock","crag","banner","pine"] },
+    C1: { file: "assets/images/lessons/theme_space.jpg",     worldName: "El Firmamento",        accent:"#6A5FA8", accentSoft:"rgba(106,95,168,.16)", glow:"rgba(106,95,168,.40)", ambientName:"starfield", ambientN:10, mapN:6, boss:{ name:"El Custodio del Firmamento", pass:90 }, biome:["star4","planet","crystal","star4"] },
+    C2: { file: "assets/images/lessons/theme_fantasy.jpg",   worldName: "El Castillo del Saber",accent:"#3FA08A", accentSoft:"rgba(63,160,138,.16)", glow:"rgba(63,160,138,.36)", ambientName:"aurora",    ambientN:7,  mapN:2, boss:{ name:"El Soberano del Saber",   pass:92 }, biome:["spire","banner","crystal","pine"] }
   };
   var WORLD_TAG = { A1: "Principiante", A2: "Básico", B1: "Intermedio", B2: "Intermedio alto", C1: "Avanzado", C2: "Maestría" };
   var WORLD_UMBRAL = { A1: "Umbral del Hogar", A2: "Mojón del Sendero", B1: "Arco del Horizonte", B2: "Pórtico de la Torre", C1: "Portal del Firmamento", C2: "Sello del Castillo" };
   var BOSS_AVATAR = "assets/images/mascot/vesper_cat.png";
   /* metadatos del jefe de un nivel, con defaults si el mundo no declara boss */
-  function bossMeta(lv) { var t = WORLD_THEME[lv] || {}; var b = t.boss || {}; return { name: b.name || "El Guardián", subtitle: t.worldName || lv, pass: b.pass || 75 }; }
+  function bossMeta(lv) { var t = WORLD_THEME[lv] || {}; var b = t.boss || {}; return { name: b.name || "El Guardián", subtitle: t.worldName || lv, pass: b.pass || 85 }; }
 
   /* ===== Iconos de marca (SVG nítidos en lugar de emojis) ===== */
   var SKILL_ICONS = {
@@ -2448,18 +2448,44 @@
     var built = PATH.build(L, ORDER), gg = built.levels[level];
     if (!gg) return null;
     var bm = bossMeta(level), pool = [];
-    /* El jefe es un examen libre: se puede enfrentar sin completar el mundo,
-       así que tomamos preguntas de TODAS las lecciones del nivel (1 por lección). */
+    /* Dificultad por nivel: los mundos avanzados (B2/C1/C2) son más largos y
+       eligen los ejercicios más exigentes; los básicos, variados. */
+    var hard = (["B2", "C1", "C2"].indexOf(level) >= 0);
+    var EXAM_SIZE = ({ B2: 12, C1: 13, C2: 14 })[level] || 12;
+    var WEIGHT = { find_error: 5, reading: 5, word_order: 4, translate: 4, type_answer: 4,
+                   fill_blank: 3, multiple_choice: 3, categorize: 3, listening: 2, true_false: 1, matching: 1 };
+    function exW(e) { return WEIGHT[e.type] || 2; }
+    /* El jefe es un examen libre: preguntas de TODAS las lecciones del nivel
+       (1 por lección). En niveles altos se toma la pregunta más difícil de
+       cada lección. */
     PATH.SKILL_ORDER.forEach(function (sk) {
-      var ids = (gg.bySkill[sk] || []);
-      ids.forEach(function (lid) {
+      (gg.bySkill[sk] || []).forEach(function (lid) {
         var l = L[lid]; if (!l || !l.exercises || !l.exercises.length) return;
-        pool = pool.concat(shuffle(l.exercises.slice()).slice(0, 1)); /* 1 por lección del mundo */
+        var exs = l.exercises.slice();
+        if (hard) { exs.sort(function (a, b) { return exW(b) - exW(a); }); pool.push(exs[0]); }
+        else { pool.push(shuffle(exs)[0]); }
       });
     });
-    shuffle(pool);
-    var picked = pool.slice(0, Math.min(12, pool.length));
+    var picked;
+    if (hard) {
+      pool.sort(function (a, b) { return exW(b) - exW(a); });   // las más difíciles primero
+      picked = []; var seen = {}, TYPE_CAP = { reading: 2 };
+      for (var i = 0; i < pool.length && picked.length < EXAM_SIZE; i++) {
+        var tp = pool[i].type, cap = TYPE_CAP[tp] || 4;          // variedad: máx por tipo
+        if ((seen[tp] || 0) >= cap) continue;
+        seen[tp] = (seen[tp] || 0) + 1;
+        picked.push(pool[i]);
+      }
+      /* si los topes dejaron el examen corto, rellena con lo que quede (sin más lecturas) */
+      for (var j = 0; j < pool.length && picked.length < EXAM_SIZE; j++) {
+        if (picked.indexOf(pool[j]) < 0 && pool[j].type !== "reading") picked.push(pool[j]);
+      }
+    } else {
+      shuffle(pool);
+      picked = pool.slice(0, Math.min(EXAM_SIZE, pool.length));
+    }
     if (picked.length < 5) return null;   // material insuficiente
+    shuffle(picked);                       // orden de presentación variado
     return {
       lessonId: "boss:" + level, level: level, track: "Examen del mundo", isBoss: true, bossLevel: level,
       title: bm.name + " · " + level,
