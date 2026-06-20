@@ -1351,97 +1351,129 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
 
 /* ============================================================
    RECINTO TEMÁTICO DE VOCABULARIO ("ramas")
-   hereda --w-accent / --w-glow del mundo (worldVars inline).
+   hereda --w-accent / --w-accent-soft / --w-glow del mundo.
    ============================================================ */
 .den{margin-top:6px}
 .den-top{display:flex;align-items:center;gap:10px;margin:2px 0 12px}
 .den-back{flex:0 0 auto;width:40px;height:40px;display:flex;align-items:center;justify-content:center;border-radius:50%;
-  border:1px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer}
+  border:1px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer;transition:background .14s,border-color .14s}
+.den-back:hover{border-color:color-mix(in srgb,var(--w-accent,#c5a059) 50%,var(--line));background:var(--cream)}
 .den-back svg{width:20px;height:20px}
-.den-head{position:relative;overflow:hidden;border-radius:var(--radius);padding:18px 16px 16px;color:#fff;
-  background:linear-gradient(150deg,#22223c,#15152a);border:1px solid rgba(255,255,255,.06)}
+
+/* cabecera del recinto */
+.den-head{position:relative;overflow:hidden;border-radius:20px;padding:20px 18px;color:#fff;
+  background:linear-gradient(145deg,#262644,#131328);box-shadow:0 14px 34px rgba(16,16,34,.28)}
 .den-head::before{content:"";position:absolute;inset:0;pointer-events:none;
-  background:radial-gradient(120% 90% at 82% -10%,var(--w-glow,rgba(197,160,89,.4)),transparent 60%)}
-.den-struct{position:absolute;right:8px;bottom:-6px;width:104px;height:104px;opacity:.9;color:var(--w-accent,#c5a059)}
-.den-struct svg{width:100%;height:100%;display:block;filter:drop-shadow(0 4px 10px rgba(0,0,0,.35))}
-.den-head__eyebrow{font-size:.74rem;letter-spacing:.12em;text-transform:uppercase;color:var(--w-accent,#e6cd97);font-weight:700}
-.den-head__ttl{font-family:"Inria Serif",Georgia,serif;font-size:1.5rem;line-height:1.15;margin:.12em 0 .2em;max-width:72%}
-.den-head__intro{font-size:.9rem;color:rgba(255,255,255,.82);max-width:74%;margin:0}
-.den-head__bar{position:relative;z-index:1;margin-top:12px;height:8px;border-radius:999px;background:rgba(255,255,255,.16);overflow:hidden;max-width:74%}
-.den-head__bar > i{display:block;height:100%;border-radius:999px;background:var(--w-accent,#c5a059);transition:width .4s ease}
-.den-head__pct{font-size:.78rem;color:rgba(255,255,255,.7);margin-top:5px}
+  background:radial-gradient(135% 100% at 88% -18%,var(--w-glow,rgba(197,160,89,.5)),transparent 58%)}
+.den-head::after{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--w-accent,#c5a059);opacity:.9}
+.den-struct{position:absolute;right:-8px;bottom:-14px;width:132px;height:132px;color:var(--w-accent,#c5a059);opacity:.92;pointer-events:none}
+.den-struct svg{width:100%;height:100%;display:block;filter:drop-shadow(0 6px 14px rgba(0,0,0,.4))}
+.den-head__in{position:relative;z-index:1}
+.den-head__eyebrow{display:inline-flex;align-items:center;gap:6px;font-size:.68rem;letter-spacing:.13em;text-transform:uppercase;
+  font-weight:700;color:#fff;padding:4px 11px;border-radius:999px;
+  background:color-mix(in srgb,var(--w-accent,#c5a059) 30%,transparent);border:1px solid color-mix(in srgb,var(--w-accent,#c5a059) 55%,transparent)}
+.den-head__ttl{font-family:"Inria Serif",Georgia,serif;font-size:1.55rem;line-height:1.14;margin:.34em 0 .18em;max-width:74%}
+.den-head__intro{font-size:.9rem;color:rgba(255,255,255,.82);max-width:76%;margin:0}
+.den-head__stats{display:flex;gap:9px;margin-top:14px;flex-wrap:wrap}
+.den-stat{display:inline-flex;align-items:baseline;gap:5px;padding:5px 11px;border-radius:11px;
+  background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.12)}
+.den-stat b{font-size:1rem;font-weight:800;color:#fff;font-variant-numeric:tabular-nums}
+.den-stat span{font-size:.72rem;color:rgba(255,255,255,.66)}
+.den-head__bar{position:relative;margin-top:13px;height:9px;border-radius:999px;background:rgba(255,255,255,.16);overflow:hidden;max-width:78%}
+.den-head__bar > i{display:block;height:100%;border-radius:999px;
+  background:linear-gradient(90deg,var(--w-accent,#c5a059),color-mix(in srgb,var(--w-accent,#c5a059) 55%,#fff));transition:width .45s ease}
 
 /* árbol de ramas: tronco a la izquierda, ramas-tarjeta a la derecha */
-.den-tree{position:relative;padding:10px 0 4px;margin-top:14px}
-.den-tree::before{content:"";position:absolute;left:24px;top:0;bottom:22px;width:4px;border-radius:3px;
-  background:linear-gradient(180deg,var(--w-accent,#c5a059),color-mix(in srgb,var(--w-accent,#c5a059) 35%,transparent));opacity:.5}
-.branch{position:relative;margin:0 0 14px 50px;width:auto;display:flex;align-items:center;gap:12px;text-align:left;
-  background:var(--paper);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);
-  padding:13px 14px;cursor:pointer;color:inherit;font:inherit}
-.branch::before{content:"";position:absolute;left:-26px;top:50%;width:26px;height:3px;border-radius:2px;
-  background:var(--w-accent,#c5a059);opacity:.5}
-.branch::after{content:"";position:absolute;left:-32px;top:50%;width:13px;height:13px;margin-top:-6.5px;border-radius:50%;
+.den-tree{position:relative;padding:8px 0 4px;margin-top:18px}
+.den-tree::before{content:"";position:absolute;left:27px;top:2px;bottom:24px;width:3px;border-radius:3px;
+  background:linear-gradient(180deg,var(--w-accent,#c5a059),color-mix(in srgb,var(--w-accent,#c5a059) 28%,transparent));opacity:.5}
+.branch{position:relative;margin:0 0 13px 58px;width:auto;display:flex;align-items:center;gap:13px;text-align:left;
+  background:var(--paper);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);
+  padding:13px 14px;cursor:pointer;color:inherit;font:inherit;
+  transition:transform .15s ease,box-shadow .15s ease,border-color .15s ease}
+.branch:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(27,27,47,.13);
+  border-color:color-mix(in srgb,var(--w-accent,#c5a059) 42%,var(--line))}
+.branch:active{transform:translateY(0)}
+.branch.done{border-color:color-mix(in srgb,var(--w-accent,#c5a059) 48%,var(--line));
+  background:linear-gradient(180deg,var(--paper),var(--w-accent-soft,var(--gold-tint)))}
+/* conector tronco -> rama (línea + brote) */
+.branch::before{content:"";position:absolute;left:-31px;top:50%;width:31px;height:3px;
+  background:linear-gradient(90deg,transparent,var(--w-accent,#c5a059));opacity:.6}
+.branch::after{content:"";position:absolute;left:-37px;top:50%;width:14px;height:14px;margin-top:-7px;border-radius:50%;
   background:var(--paper);border:3px solid var(--w-accent,#c5a059);box-shadow:0 0 0 3px var(--paper)}
-.branch.done::after{background:var(--w-accent,#c5a059)}
-.branch:active{transform:translateY(1px)}
-.branch__ic{flex:0 0 auto;width:46px;height:46px;border-radius:13px;display:flex;align-items:center;justify-content:center;
+.branch.done::after{background:var(--w-accent,#c5a059);box-shadow:0 0 0 3px var(--paper),0 0 11px var(--w-glow,rgba(197,160,89,.5))}
+.branch__ic{position:relative;flex:0 0 auto;width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;
   background:var(--w-accent-soft,var(--gold-tint));color:var(--w-accent,#a8843d)}
 .branch__ic svg{width:26px;height:26px}
+.branch.done .branch__ic{background:var(--w-accent,#c5a059);color:#1f1a0e}
+.branch__ic .bdone{position:absolute;right:-5px;bottom:-5px;width:19px;height:19px;border-radius:50%;
+  background:var(--success);color:#fff;display:flex;align-items:center;justify-content:center;border:2px solid var(--paper)}
+.branch__ic .bdone svg{width:12px;height:12px}
 .branch__bd{flex:1;min-width:0}
-.branch__nm{font-weight:700;font-size:1rem;line-height:1.2}
-.branch__hint{font-size:.8rem;color:var(--muted);margin-top:1px}
-.branch__meta{display:flex;align-items:center;gap:8px;margin-top:7px}
+.branch__nm{font-weight:700;font-size:1.02rem;line-height:1.2;display:flex;align-items:center;gap:7px}
+.branch__no{flex:0 0 auto;font-size:.66rem;font-weight:800;color:var(--w-accent,#a8843d);
+  background:var(--w-accent-soft,var(--gold-tint));border-radius:6px;padding:2px 6px;letter-spacing:.04em}
+.branch__hint{font-size:.8rem;color:var(--muted);margin-top:2px}
+.branch__meta{display:flex;align-items:center;gap:8px;margin-top:8px}
 .branch__bar{flex:1;height:6px;border-radius:999px;background:var(--cream);overflow:hidden}
 .branch__bar > i{display:block;height:100%;border-radius:999px;background:var(--w-accent,#c5a059);transition:width .4s ease}
 .branch__ct{font-size:.74rem;color:var(--muted);font-variant-numeric:tabular-nums}
-.branch__go{flex:0 0 auto;color:var(--muted);font-size:1.3rem;line-height:1}
-.branch.done .branch__go{color:var(--success)}
+.branch__go{flex:0 0 auto;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  color:var(--muted);background:var(--cream);font-size:1.1rem;line-height:1}
+.branch:hover .branch__go{color:var(--w-accent,#a8843d)}
+.branch.done .branch__go{color:var(--success);background:var(--ok-tint)}
 /* el acceso al recinto va fuera del árbol: sin conectores ni tronco */
-.den-enter{margin:12px 0 4px}
+.den-enter{margin:14px 0 4px;border-width:1.5px;border-color:color-mix(in srgb,var(--w-accent,#c5a059) 35%,var(--line))}
 .den-enter::before,.den-enter::after{display:none}
+.den-enter .branch__ic{background:var(--w-accent,#c5a059);color:#1f1a0e}
 .den-enter .branch__ic svg{width:30px;height:30px}
 
 /* mazo de tarjetas (sala abierta) */
 .deck{margin-top:4px}
-.deck-progress{display:flex;align-items:center;gap:8px;margin:4px 2px 12px}
+.deck-progress{display:flex;align-items:center;gap:8px;margin:4px 2px 14px}
 .deck-progress .dp-bar{flex:1;height:7px;border-radius:999px;background:var(--cream);overflow:hidden}
 .deck-progress .dp-bar > i{display:block;height:100%;background:var(--w-accent,#c5a059);border-radius:999px;transition:width .35s}
 .deck-progress .dp-ct{font-size:.78rem;color:var(--muted);font-variant-numeric:tabular-nums}
-.deck-card{perspective:1200px;margin:0 auto 14px;max-width:420px}
-.dc-inner{position:relative;width:100%;min-height:200px;transition:transform .5s cubic-bezier(.2,.7,.2,1);transform-style:preserve-3d}
+.deck-card{perspective:1300px;margin:0 auto 16px;max-width:430px;cursor:pointer}
+.dc-inner{position:relative;width:100%;min-height:218px;transition:transform .55s cubic-bezier(.2,.74,.2,1);transform-style:preserve-3d}
 .deck-card.flipped .dc-inner{transform:rotateY(180deg)}
-.dc-face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;
-  border-radius:18px;padding:22px;border:1px solid var(--line);box-shadow:var(--shadow)}
-.dc-front{background:linear-gradient(160deg,#fffdf7,#f3edde)}
-.dc-back{background:linear-gradient(160deg,#23233e,#161630);color:#fff;transform:rotateY(180deg)}
-.dc-tag{font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;font-weight:700;opacity:.6}
-.dc-word{font-family:"Inria Serif",Georgia,serif;font-size:1.7rem;line-height:1.15}
+.dc-face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;overflow:hidden;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:11px;text-align:center;
+  border-radius:20px;padding:24px;border:1px solid var(--line);box-shadow:0 12px 30px rgba(27,27,47,.12)}
+.dc-face::before{content:"";position:absolute;left:0;right:0;top:0;height:4px;background:var(--w-accent,#c5a059)}
+.dc-front{background:linear-gradient(160deg,#fffdf7,#f1ebdb)}
+.dc-back{background:linear-gradient(160deg,#26264a,#15152c);color:#fff;transform:rotateY(180deg)}
+.dc-tag{font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;font-weight:700;opacity:.55}
+.dc-word{font-family:"Inria Serif",Georgia,serif;font-size:1.72rem;line-height:1.16;padding:0 6px}
 .dc-back .dc-word{color:var(--w-accent,#e6cd97)}
-.dc-hint{font-size:.82rem;color:var(--muted)}
-.dc-back .dc-hint{color:rgba(255,255,255,.6)}
-.dc-say{margin-top:2px;width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:var(--paper);
-  display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--ink)}
+.dc-hint{display:inline-flex;align-items:center;gap:6px;font-size:.8rem;color:var(--muted)}
+.dc-hint svg{width:14px;height:14px}
+.dc-back .dc-hint{color:rgba(255,255,255,.62)}
+.dc-say{margin-top:2px;width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--paper);
+  display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--ink);transition:transform .12s}
+.dc-say:active{transform:scale(.92)}
 .dc-back .dc-say{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.2);color:#fff}
 .dc-say svg{width:20px;height:20px}
 .deck-ctrls{display:flex;align-items:center;gap:10px}
-.deck-ctrls .dnav{flex:0 0 auto;width:46px;height:46px;border-radius:50%;border:1px solid var(--line);background:var(--paper);
+.deck-ctrls .dnav{flex:0 0 auto;width:48px;height:48px;border-radius:50%;border:1px solid var(--line);background:var(--paper);
   display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--ink)}
-.deck-ctrls .dnav[disabled]{opacity:.4;cursor:default}
+.deck-ctrls .dnav[disabled]{opacity:.38;cursor:default}
 .deck-ctrls .dnav svg{width:22px;height:22px}
-.deck-ctrls .dknow{flex:1;height:46px;border-radius:999px;border:2px solid var(--w-accent,#c5a059);background:transparent;
-  color:var(--w-accent,#a8843d);font-weight:700;cursor:pointer}
+.deck-ctrls .dknow{flex:1;height:48px;border-radius:999px;border:2px solid var(--w-accent,#c5a059);background:transparent;
+  color:var(--w-accent,#a8843d);font-weight:700;cursor:pointer;transition:background .14s,color .14s}
 .deck-ctrls .dknow.on{background:var(--w-accent,#c5a059);color:#1f1a0e;border-color:var(--w-accent,#c5a059)}
-.deck-actions{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
-.deck-actions .btn{flex:1;min-width:130px}
+.deck-actions{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}
+.deck-actions .btn{flex:1;min-width:140px}
 
 /* mini-actividad de la rama */
 .den-quiz{margin-top:4px}
-.dq-q{font-family:"Inria Serif",Georgia,serif;font-size:1.5rem;text-align:center;margin:10px 0 4px}
+.dq-q{font-family:"Inria Serif",Georgia,serif;font-size:1.6rem;text-align:center;margin:10px 0 4px}
 .dq-sub{text-align:center;color:var(--muted);font-size:.85rem;margin-bottom:14px}
 .dq-opts{display:grid;gap:10px}
-.dq-opt{display:block;width:100%;text-align:left;padding:14px 16px;border-radius:12px;border:1.5px solid var(--line);
-  background:var(--paper);font:inherit;font-size:1.02rem;cursor:pointer}
+.dq-opt{display:block;width:100%;text-align:left;padding:15px 16px;border-radius:13px;border:1.5px solid var(--line);
+  background:var(--paper);font:inherit;font-size:1.02rem;cursor:pointer;transition:border-color .12s,background .12s,transform .1s}
+.dq-opt:hover:not([disabled]){border-color:color-mix(in srgb,var(--w-accent,#c5a059) 45%,var(--line))}
+.dq-opt:active:not([disabled]){transform:scale(.99)}
 .dq-opt.right{border-color:var(--success);background:var(--ok-tint)}
 .dq-opt.wrong{border-color:var(--error);background:var(--no-tint)}
 .dq-opt[disabled]{cursor:default}
@@ -1453,7 +1485,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
   .deck-card.flipped .dc-inner{transform:none}
   .deck-card.flipped .dc-front{opacity:0;pointer-events:none}
   .dc-back{transform:none}
-  .branch:active{transform:none}
+  .branch:hover,.branch:active{transform:none}
 }
 </style>
 </head>
@@ -2321,7 +2353,8 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     crown:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8l3 9h10l3-9-5 4-3-6-3 6z"/><path d="M6 20h12"/></svg>',
     scepter:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M8 16L18 6"/><circle cx="19" cy="5" r="2.4"/><path d="M5 21l4-4M6 16l2 2"/></svg>',
     gem:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4h12l3 5-9 11L3 9z"/><path d="M3 9h18M9 4l3 16M15 4l-3 16"/></svg>',
-    feather:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M19 5a6 6 0 0 0-8 0L5 11v8M5 19l9-9M8 16h6"/></svg>'
+    feather:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M19 5a6 6 0 0 0-8 0L5 11v8M5 19l9-9M8 16h6"/></svg>',
+    family:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="7" r="2.6"/><circle cx="16" cy="7" r="2.6"/><path d="M3.5 19v-1.5a4 4 0 0 1 4-4h1a4 4 0 0 1 4 4V19M12.5 19v-1.5a4 4 0 0 1 4-4h0a4 4 0 0 1 4 4V19"/></svg>'
   };
   function branchIcon(k) { return '<span aria-hidden="true">' + (BRANCH_ICN[k] || BRANCH_ICN.spark) + '</span>'; }
   var DEN_STRUCT_NAME = { house:"la casa", cave:"la cueva", harbor:"el puerto", tower:"la torre", observatory:"el observatorio", castle:"el castillo" };
@@ -2365,14 +2398,15 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     var t = WORLD_THEME[selLevel] || {};
     var pr = denProgress(d);
     var back = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>';
-    var branches = d.branches.map(function (br) {
+    var doneBadge = '<span class="bdone" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.6l4.6 4.6L19 7.4"/></svg></span>';
+    var branches = d.branches.map(function (br, i) {
       var bp = branchProgress(selLevel, br), pct = bp.total ? Math.round(100 * bp.done / bp.total) : 0;
       var done = bp.total && bp.done >= bp.total;
       return '<button class="branch' + (done ? ' done' : '') + '" type="button" data-branch="' + esc(br.id) + '"'
-        + ' aria-label="' + esc(br.name) + ', ' + bp.done + ' de ' + bp.total + ' tarjetas dominadas">'
-        + '<span class="branch__ic">' + branchIcon(br.icon) + '</span>'
-        + '<span class="branch__bd"><span class="branch__nm">' + esc(br.name) + '</span>'
-        + (br.hint ? '<span class="branch__hint">' + esc(br.hint) + '</span>' : '')
+        + ' aria-label="Sala ' + (i + 1) + ': ' + esc(br.name) + ', ' + bp.done + ' de ' + bp.total + ' tarjetas dominadas">'
+        + '<span class="branch__ic">' + branchIcon(br.icon) + (done ? doneBadge : "") + '</span>'
+        + '<span class="branch__bd"><span class="branch__nm"><span class="branch__no">' + (i + 1) + '</span>' + esc(br.name) + '</span>'
+        + '<span class="branch__hint">' + (br.hint ? esc(br.hint) + ' · ' : "") + br.cards.length + ' tarjetas</span>'
         + '<span class="branch__meta"><span class="branch__bar"><i style="width:' + pct + '%"></i></span>'
         + '<span class="branch__ct">' + bp.done + '/' + bp.total + '</span></span></span>'
         + '<span class="branch__go">' + (done ? "&#10003;" : "&#8250;") + '</span></button>';
@@ -2383,12 +2417,16 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       + '<div class="muted" style="font-size:.85rem">Mundo ' + (PATH.LEVELS.indexOf(selLevel) + 1) + ' · ' + esc(selLevel) + '</div></div>'
       + '<header class="den-head">'
       + '<div class="den-struct">' + (DEN_STRUCT[d.structure] || "") + '</div>'
-      + '<div class="den-head__eyebrow">Recinto de ' + esc(DEN_STRUCT_NAME[d.structure] || "vocabulario") + '</div>'
+      + '<div class="den-head__in">'
+      + '<span class="den-head__eyebrow">Recinto de ' + esc(DEN_STRUCT_NAME[d.structure] || "vocabulario") + '</span>'
       + '<h1 class="den-head__ttl">' + esc(d.name) + '</h1>'
       + '<p class="den-head__intro">' + esc(d.intro) + '</p>'
+      + '<div class="den-head__stats">'
+      + '<span class="den-stat"><b>' + d.branches.length + '</b><span>salas</span></span>'
+      + '<span class="den-stat"><b>' + pr.total + '</b><span>palabras</span></span>'
+      + '<span class="den-stat"><b>' + pr.pct + '%</b><span>dominado</span></span></div>'
       + '<div class="den-head__bar"><i style="width:' + pr.pct + '%"></i></div>'
-      + '<div class="den-head__pct">' + pr.done + '/' + pr.total + ' palabras dominadas · ' + pr.pct + '%</div>'
-      + '</header>'
+      + '</div></header>'
       + '<div class="den-tree">' + branches + '</div>'
       + '</div><div class="hub-toast" id="toast"></div></div>');
     byId("denBack").onclick = function () { renderIndex(selLevel); };
@@ -2408,6 +2446,8 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     var sayIc = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18 6a8 8 0 0 1 0 12"/></svg>';
     var prevIc = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>';
     var nextIc = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>';
+    var flipIc = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8a8 8 0 0 1 14-4l2 2M20 6V2M20 16a8 8 0 0 1-14 4l-2-2M4 18v4"/></svg>';
+    var hasPractice = br.practice && L[br.practice];
     var t = WORLD_THEME[selLevel] || {};
     show('<div class="wrap"><div class="den deck-wrap" data-struct="' + esc(d.structure) + '" style="' + worldVars(t) + '">'
       + '<div class="den-top"><button class="den-back" id="deckBack" type="button" aria-label="Volver a las ramas">' + back + '</button>'
@@ -2416,15 +2456,18 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       + '<div class="deck"><div class="deck-progress"><span class="dp-bar"><i id="dpFill"></i></span><span class="dp-ct" id="dpCt"></span></div>'
       + '<div class="deck-card" id="deckCard"><div class="dc-inner">'
       + '<div class="dc-face dc-front"><span class="dc-tag">English</span><span class="dc-word" id="dcEn"></span>'
-      + '<button class="dc-say" id="sayEn" type="button" aria-label="Escuchar">' + sayIc + '</button><span class="dc-hint">Toca para ver el significado</span></div>'
+      + '<button class="dc-say" id="sayEn" type="button" aria-label="Escuchar">' + sayIc + '</button>'
+      + '<span class="dc-hint">' + flipIc + ' Toca para ver el significado</span></div>'
       + '<div class="dc-face dc-back"><span class="dc-tag">Español</span><span class="dc-word" id="dcEs"></span>'
-      + '<button class="dc-say" id="sayEn2" type="button" aria-label="Escuchar en inglés">' + sayIc + '</button><span class="dc-hint">Toca para volver</span></div>'
+      + '<button class="dc-say" id="sayEn2" type="button" aria-label="Escuchar en inglés">' + sayIc + '</button>'
+      + '<span class="dc-hint">' + flipIc + ' Toca para volver</span></div>'
       + '</div></div>'
       + '<div class="deck-ctrls"><button class="dnav" id="dPrev" type="button" aria-label="Anterior">' + prevIc + '</button>'
       + '<button class="dknow" id="dKnow" type="button"></button>'
       + '<button class="dnav" id="dNext" type="button" aria-label="Siguiente">' + nextIc + '</button></div>'
-      + '<div class="deck-actions"><button class="btn btn-gold" id="dQuiz" type="button">Poner a prueba</button></div>'
-      + '</div></div><div class="hub-toast" id="toast"></div></div>');
+      + '<div class="deck-actions"><button class="btn btn-gold" id="dQuiz" type="button">Poner a prueba</button>'
+      + (hasPractice ? '<button class="btn btn-ghost" id="dPractice" type="button">Practicar en la lección</button>' : "")
+      + '</div></div></div><div class="hub-toast" id="toast"></div></div>');
 
     var card = byId("deckCard");
     function curCard() { return br.cards[idx]; }
@@ -2455,6 +2498,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     };
     byId("deckBack").onclick = function () { renderDen(selLevel); };
     byId("dQuiz").onclick = function () { denQuiz(selLevel, br); };
+    if (hasPractice) byId("dPractice").onclick = function () { location.search = "?id=" + encodeURIComponent(br.practice); };
     render();
   }
 
