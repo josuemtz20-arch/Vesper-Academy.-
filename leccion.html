@@ -1221,6 +1221,115 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
 .vesper-reduce-motion .vchat-fab,.vesper-reduce-motion .vchat-pop{transition:none}
 .vesper-reduce-motion .vchat-nudge.wiggle.show-fab .vchat-fab{animation:none}
 .vesper-reduce-motion .vchat-fab .vchat-dot,.vesper-reduce-motion .vchat-typing i{animation:none!important}
+
+/* =====================================================================
+   Hub premium: hero (cabecera) + sección de niveles + vitrina de logros.
+   El hero es un panel SIEMPRE oscuro (como el banner del mundo) → usa
+   --navy/--navy2 (oscuros en todos los temas) con texto claro fijo;
+   los elementos sobre ORO llevan texto oscuro fijo (oro es claro en
+   todos los temas). Resto usa tokens que el motor de temas adapta.
+   ===================================================================== */
+.hub-hero{position:relative;overflow:hidden;border-radius:20px;margin:2px 0 12px;padding:15px 15px 14px;
+  background:linear-gradient(140deg,var(--navy,#1B1B2F),var(--navy2,#2c2c4a));color:#f5f2eb;
+  box-shadow:0 12px 30px rgba(20,18,42,.26)}
+.hub-hero::before{content:"";position:absolute;right:-46px;top:-58px;width:200px;height:200px;border-radius:50%;
+  background:radial-gradient(circle,rgba(197,160,89,.30),transparent 70%);pointer-events:none}
+.hub-hero__top{position:relative;z-index:1;display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.hub-hero__greet{display:flex;align-items:center;gap:11px;min-width:0}
+.hub-hero__greet .vesper-mascot{flex:0 0 auto;gap:0}
+.hub-hero__greet .vc-img{width:52px;height:52px;border-color:var(--gold)}
+.hub-hero__id{min-width:0}
+.hub-hello{font-family:"Inria Serif",Georgia,serif;font-size:1.42rem;line-height:1.05;margin:0;color:#f5f2eb}
+.hub-sub{margin:4px 0 0;font-size:.82rem;color:rgba(245,242,235,.72)}
+.hub-rank{display:inline-block;margin-top:6px;font-size:.7rem;font-weight:800;letter-spacing:.03em;
+  color:#2b2410;background:linear-gradient(135deg,#e9d39a,var(--gold,#c5a059));border-radius:999px;padding:3px 11px}
+.hub-actions{display:flex;align-items:center;gap:7px;flex:0 0 auto}
+.hub-ic{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:50%;
+  background:rgba(245,242,235,.10);border:1px solid rgba(245,242,235,.20);color:#f5f2eb;text-decoration:none;cursor:pointer;font-family:inherit}
+.hub-ic svg{width:19px;height:19px}
+.hub-ic:hover{background:rgba(197,160,89,.32);border-color:var(--gold)}
+.hub-ic:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.hub-stats3{position:relative;z-index:1;display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.hstat{flex:1 1 92px;display:flex;align-items:center;gap:9px;background:rgba(245,242,235,.07);
+  border:1px solid rgba(245,242,235,.14);border-radius:13px;padding:9px 11px;min-width:0}
+.hstat__ic{width:30px;height:30px;flex:0 0 auto;border-radius:9px;display:grid;place-items:center;
+  background:rgba(197,160,89,.20);color:var(--gold,#c5a059)}
+.hstat__ic svg{width:17px;height:17px}
+.hstat__tx{display:flex;flex-direction:column;min-width:0}
+.hstat__v{font-size:1.02rem;font-weight:800;line-height:1.05;color:#f5f2eb;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hstat__l{font-size:.62rem;text-transform:uppercase;letter-spacing:.05em;color:rgba(245,242,235,.62);font-weight:700;margin-top:2px;white-space:nowrap}
+.hstat__ring{width:30px;height:30px;flex:0 0 auto;border-radius:50%;display:grid;place-items:center;
+  background:conic-gradient(var(--gold,#c5a059) calc(var(--gp,0)*1%),rgba(245,242,235,.16) 0)}
+.hstat__ring i{width:22px;height:22px;border-radius:50%;background:#26243f;display:grid;place-items:center;
+  font-style:normal;font-size:.64rem;font-weight:800;color:var(--gold,#c5a059)}
+.hstat.met .hstat__ic{background:rgba(45,158,117,.28);color:#86e3c1}
+.hstat.met .hstat__ring{background:conic-gradient(#2D9E75 calc(var(--gp,0)*1%),rgba(245,242,235,.16) 0)}
+.hstat.met .hstat__ring i{color:#86e3c1}
+/* vida en los iconos de estadística: flameo, destello, gleam y respiración del anillo */
+.ic-flame{transform-origin:50% 85%;animation:ic-flame 1.5s ease-in-out infinite}
+.ic-flame__core{animation:ic-core 1.5s ease-in-out infinite}
+.ic-star{transform-origin:50% 50%;animation:ic-star 3.2s ease-in-out infinite}
+.ic-star__tw{animation:ic-twinkle 1.8s ease-in-out infinite}
+.ic-shield{transform-origin:50% 55%;animation:ic-shield 2.6s ease-in-out infinite}
+.ic-shield__gl{animation:ic-gleam 3.4s ease-in-out infinite}
+.hstat__ring{animation:ic-ring 3.6s ease-in-out infinite}
+.hstat.met .hstat__ring{animation:ic-ring-met 1.8s ease-in-out infinite}
+@keyframes ic-flame{0%,100%{transform:scale(1) rotate(0)}25%{transform:scale(1.06,1.13) rotate(-2.5deg)}55%{transform:scale(.96,1.02) rotate(1.5deg)}80%{transform:scale(1.05,1.09) rotate(2.5deg)}}
+@keyframes ic-core{0%,100%{opacity:.35}40%{opacity:.85}70%{opacity:.5}}
+@keyframes ic-star{0%,100%{transform:rotate(0) scale(1)}50%{transform:rotate(8deg) scale(1.12)}}
+@keyframes ic-twinkle{0%,100%{opacity:.15}45%{opacity:1}}
+@keyframes ic-shield{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
+@keyframes ic-gleam{0%,62%,100%{opacity:0}78%{opacity:.9}}
+@keyframes ic-ring{0%,100%{transform:scale(1)}50%{transform:scale(1.045)}}
+@keyframes ic-ring-met{0%,100%{transform:scale(1);box-shadow:0 0 0 0 rgba(45,158,117,.5)}50%{transform:scale(1.05);box-shadow:0 0 0 5px rgba(45,158,117,0)}}
+@media(prefers-reduced-motion:reduce){
+  .ic-flame,.ic-flame__core,.ic-star,.ic-star__tw,.ic-shield,.ic-shield__gl,.hstat__ring,.hstat.met .hstat__ring{animation:none!important}
+  .ic-star__tw,.ic-shield__gl{opacity:.55}
+}
+.vesper-reduce-motion .ic-flame,.vesper-reduce-motion .ic-flame__core,.vesper-reduce-motion .ic-star,.vesper-reduce-motion .ic-star__tw,.vesper-reduce-motion .ic-shield,.vesper-reduce-motion .ic-shield__gl,.vesper-reduce-motion .hstat__ring,.vesper-reduce-motion .hstat.met .hstat__ring{animation:none!important}
+/* sección "Elige tu mundo" (encabezado de la cinta) */
+.worlds-sec{margin:6px 0 2px}
+.worlds-sec__head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 2px}
+.worlds-sec__ttl{font-family:"Inria Serif",Georgia,serif;font-size:1.18rem;margin:0;line-height:1.1}
+.worlds-sec__sub{margin:2px 0 0;font-size:.78rem;color:var(--muted)}
+.worlds-sec__meta{flex:0 0 auto;display:inline-flex;align-items:baseline;gap:4px;background:var(--paper);
+  border:1px solid var(--line);border-radius:999px;padding:5px 12px;white-space:nowrap;box-shadow:0 2px 8px rgba(27,27,47,.05)}
+.worlds-sec__big{font-weight:800;font-size:1rem;color:var(--ink)}
+.worlds-sec__small{font-size:.72rem;color:var(--muted);font-weight:600}
+/* logros: vitrina premium */
+.logros{margin:18px 0 4px;border:1px solid var(--line);border-radius:16px;background:var(--paper);
+  box-shadow:0 4px 16px rgba(27,27,47,.05);overflow:hidden}
+.logros__sum{list-style:none;cursor:pointer;display:flex;align-items:center;gap:11px;padding:13px 14px}
+.logros__sum::-webkit-details-marker{display:none}
+.logros__sum:focus-visible{outline:2px solid var(--gold);outline-offset:-2px}
+.logros__ic{flex:0 0 auto;width:38px;height:38px;border-radius:11px;display:grid;place-items:center;
+  background:linear-gradient(135deg,#e9d39a,var(--gold,#c5a059));color:#2b2410}
+.logros__ic svg{width:21px;height:21px}
+.logros__h{display:flex;flex-direction:column;min-width:0;flex:1}
+.logros__ttl{font-weight:800;font-size:1rem;line-height:1.1;color:var(--ink)}
+.logros__bar{height:7px;border-radius:999px;background:var(--line);overflow:hidden;margin-top:6px;max-width:220px}
+.logros__bar i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,#dcc08a,var(--gold,#c5a059))}
+.logros__count{flex:0 0 auto;font-weight:800;font-size:.86rem;color:var(--ink);background:var(--gold-tint);
+  border:1px solid var(--gold);border-radius:999px;padding:3px 10px}
+.logros__chev{flex:0 0 auto;color:var(--muted);transition:transform .2s ease}
+.logros[open] .logros__chev{transform:rotate(180deg)}
+.logros__grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:12px 8px;padding:4px 14px 16px}
+.medal{display:flex;flex-direction:column;align-items:center;text-align:center;gap:7px}
+.medal__disc{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;line-height:1;
+  background:var(--cream);border:2px solid var(--line);position:relative;color:var(--muted)}
+.medal__disc svg{width:27px;height:27px}
+.medal.on .medal__disc{color:#2b2410;background:radial-gradient(circle at 50% 32%,#f5e3ad,var(--gold,#c5a059));border-color:var(--gold2,#a8843d);
+  box-shadow:0 5px 13px var(--gold-tint),inset 0 1px 2px rgba(255,255,255,.55);animation:medal-shine 4.5s ease-in-out infinite}
+.medal.on:nth-child(3n) .medal__disc{animation-delay:1.5s}
+.medal.on:nth-child(3n+1) .medal__disc{animation-delay:.8s}
+@keyframes medal-shine{0%,100%{box-shadow:0 5px 13px var(--gold-tint),inset 0 1px 2px rgba(255,255,255,.55)}
+  50%{box-shadow:0 6px 16px var(--gold-tint),0 0 11px rgba(197,160,89,.45),inset 0 1px 3px rgba(255,255,255,.75)}}
+.medal.on .medal__disc::after{content:"";position:absolute;inset:-4px;border-radius:50%;border:1px solid var(--gold);opacity:.35}
+.medal__lk{width:19px;height:19px;color:var(--muted)}
+.medal__nm{font-size:.72rem;font-weight:600;line-height:1.18;color:var(--ink)}
+.medal:not(.on) .medal__nm{color:var(--muted)}
+@media(prefers-reduced-motion:reduce){.logros__chev{transition:none}.medal.on .medal__disc{animation:none}}
+.vesper-reduce-motion .medal.on .medal__disc{animation:none}
 </style>
 </head>
 <body>
@@ -1350,20 +1459,37 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
   }
 
   /* ---------- Mapa de mundos (HUB estilo videojuego) ---------- */
-  function hudHtml(st, dg, hello) {
-    var strip = '<div class="hub-strip">'
-      + '<span class="hub-stat" title="Racha">&#128293; ' + (st.streak || 0) + '</span>'
-      + '<span class="hub-stat" title="Experiencia">&#11088; ' + (st.xp || 0) + ' XP</span>'
-      + (dg ? '<span class="hub-stat' + (dg.met ? ' met' : '') + '" title="Meta diaria">&#127919; ' + Math.min(dg.progress, dg.target) + '/' + dg.target + '</span>' : "")
-      + ((st.shields || 0) ? '<span class="hub-stat" title="Escudos">&#128737;&#65039; ' + st.shields + '</span>' : "") + '</div>';
-    return '<div class="hub-head"><div><h1 class="hub-hello">' + esc(hello) + '</h1>'
-      + '<p class="muted" style="margin:2px 0 0;font-size:.84rem">Elige tu aventura, paso a paso.</p></div>'
-      + '<div style="display:flex;align-items:center;gap:8px">'
-      + '<button class="hub-icon" id="searchToggle" type="button" aria-label="Buscar lecciones" aria-controls="hubSearch" aria-expanded="false" title="Buscar">&#128270;</button>'
-      + '<a class="hub-icon" href="chat.html" aria-label="Habla con Vesper" title="Habla con Vesper">&#128172;</a>'
-      + '<a class="hub-icon" href="configuracion.html" aria-label="Configuración" title="Configuración">&#9881;&#65039;</a>'
-      + mascot("welcome", false, "sm") + '</div></div>'
-      + strip;
+  function hudHtml(st, dg, hello, info) {
+    info = info || {};
+    /* tarjetas de estadística (icono de marca + valor + etiqueta) */
+    var tiles = '<div class="hstat"><span class="hstat__ic">' + HUB_ICN.flame + '</span>'
+      + '<span class="hstat__tx"><span class="hstat__v">' + (st.streak || 0) + '</span><span class="hstat__l">Racha</span></span></div>'
+      + '<div class="hstat"><span class="hstat__ic">' + HUB_ICN.star + '</span>'
+      + '<span class="hstat__tx"><span class="hstat__v">' + (st.xp || 0) + '</span><span class="hstat__l">XP</span></span></div>';
+    if (dg) {
+      var gp = dg.target ? Math.min(100, Math.round(100 * dg.progress / dg.target)) : 0;
+      tiles += '<div class="hstat' + (dg.met ? ' met' : '') + '">'
+        + '<span class="hstat__ring" style="--gp:' + gp + '" aria-hidden="true"><i>' + Math.min(dg.progress, dg.target) + '</i></span>'
+        + '<span class="hstat__tx"><span class="hstat__v">' + Math.min(dg.progress, dg.target) + '/' + dg.target + '</span><span class="hstat__l">Meta de hoy</span></span></div>';
+    }
+    if (st.shields || 0) {
+      tiles += '<div class="hstat"><span class="hstat__ic">' + HUB_ICN.shield + '</span>'
+        + '<span class="hstat__tx"><span class="hstat__v">' + st.shields + '</span><span class="hstat__l">Escudos</span></span></div>';
+    }
+    var idLine = info.band
+      ? '<span class="hub-rank">Tu nivel · ' + esc(info.band) + (info.bandTag ? ' ' + esc(info.bandTag) : '') + '</span>'
+      : '<p class="hub-sub">Elige tu aventura, paso a paso.</p>';
+    return '<header class="hub-hero">'
+      + '<div class="hub-hero__top">'
+      + '<div class="hub-hero__greet">' + mascot("welcome", false, "sm")
+      + '<div class="hub-hero__id"><h1 class="hub-hello">' + esc(hello) + '</h1>' + idLine + '</div></div>'
+      + '<div class="hub-actions">'
+      + '<button class="hub-ic" id="searchToggle" type="button" aria-label="Buscar lecciones" aria-controls="hubSearch" aria-expanded="false" title="Buscar">' + HUB_ICN.search + '</button>'
+      + '<a class="hub-ic" href="chat.html" aria-label="Habla con Vesper" title="Habla con Vesper">' + HUB_ICN.chat + '</a>'
+      + '<a class="hub-ic" href="configuracion.html" aria-label="Configuración" title="Configuración">' + HUB_ICN.gear + '</a>'
+      + '</div></div>'
+      + '<div class="hub-stats3">' + tiles + '</div>'
+      + '</header>';
   }
 
   /* cada mundo (nivel) = ilustración + nombre + identidad temática (acento, atmósfera, partículas)
@@ -1379,6 +1505,44 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
   var WORLD_TAG = { A1: "Principiante", A2: "Básico", B1: "Intermedio", B2: "Intermedio alto", C1: "Avanzado", C2: "Maestría" };
   /* nombre corto de mundo para la cinta selectora (C2 abreviado para no desbordar) */
   var WORLD_SHORT = { A1: "El Hogar", A2: "El Sendero", B1: "El Horizonte", B2: "La Torre", C1: "El Firmamento", C2: "El Castillo" };
+  /* iconos SVG de marca para el hero (estadísticas + acciones) — sin emojis */
+  var HUB_ICN = {
+    flame:  '<svg class="ic-flame" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13 2c.4 2.9-1.1 4.4-2.6 5.9C9 9.3 8 10.9 8 13a4.5 4.5 0 0 0 9 0c0-1.4-.5-2.6-1.3-3.6-.3.9-1 1.5-1.9 1.7 1-2.3.3-4.9-1.8-7.1z"/><path class="ic-flame__core" d="M12 12.4c-1 .6-1.5 1.5-1.5 2.5a1.8 1.8 0 0 0 3.6 0c0-.8-.4-1.5-1.1-2-.2.5-.6.8-1 .9.3-.5.3-.9 0-1.3z" fill="#fff" opacity=".5"/></svg>',
+    star:   '<svg class="ic-star" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3.4l2.5 5 5.5.6-4.1 3.7 1.1 5.4L12 16.9l-5 2.6 1.1-5.4-4.1-3.7 5.5-.6z"/><circle class="ic-star__tw" cx="18.6" cy="5.8" r="1.5" fill="#fff"/></svg>',
+    shield: '<svg class="ic-shield" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2.5l7 2.6v5.4c0 4.9-3.2 7.9-7 9.5-3.8-1.6-7-4.6-7-9.5V5.1z"/><path class="ic-shield__gl" d="M8.6 7.2l3-1.1M8.2 9.8l5-1.9" stroke="#fff" stroke-width="1.1" stroke-linecap="round" fill="none" opacity="0"/></svg>',
+    search: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>',
+    chat:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.5 8.5 0 0 1-12.2 7.7L3 21l1.9-5.6A8.5 8.5 0 1 1 21 11.5z"/></svg>',
+    gear:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 13a7.7 7.7 0 0 0 0-2l2-1.5-2-3.4-2.3 1a7.7 7.7 0 0 0-1.7-1l-.4-2.5h-4l-.4 2.5a7.7 7.7 0 0 0-1.7 1l-2.3-1-2 3.4 2 1.5a7.7 7.7 0 0 0 0 2l-2 1.5 2 3.4 2.3-1a7.7 7.7 0 0 0 1.7 1l.4 2.5h4l.4-2.5a7.7 7.7 0 0 0 1.7-1l2.3 1 2-3.4z"/></svg>'
+  };
+  /* iconos SVG de marca para los logros (reemplazan emojis); van oscuros sobre el medallón dorado */
+  var ACH_ICON = {
+    /* Primeros pasos — huella de gato */
+    "first-lesson": '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><ellipse cx="6.6" cy="11" rx="1.7" ry="2.2"/><ellipse cx="10" cy="8" rx="1.8" ry="2.4"/><ellipse cx="14" cy="8" rx="1.8" ry="2.4"/><ellipse cx="17.4" cy="11" rx="1.7" ry="2.2"/><path d="M12 12.4c-2.5 0-4.4 1.9-4.4 3.9 0 1.5 1.1 2.5 2.6 2.5.9 0 1.4-.4 1.8-.4s.9.4 1.8.4c1.5 0 2.6-1 2.6-2.5 0-2-1.9-3.9-4.4-3.9z"/></svg>',
+    /* Tomando ritmo — huellas (pasos) */
+    "lessons-5": '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M9 3.4c1.4 0 2.3 1.7 2.3 3.7 0 1.5-.6 2.7-1.7 2.9-1.1.2-2-.8-2.2-2.4C7.2 5.9 7.6 3.4 9 3.4z"/><path d="M7.5 12.1c1.3-.2 2 .6 2 1.6 0 .8-.6 1.3-1.6 1.3-.9 0-1.7-.5-1.7-1.3 0-.7.5-1.5 1.3-1.6z"/><path d="M15 9.3c1.4 0 2.3 1.7 2.3 3.7 0 1.5-.6 2.7-1.7 2.9-1.1.2-2-.8-2.2-2.4-.2-1.7.2-4.2 1.6-4.2z"/><path d="M13.5 18c1.3-.2 2 .6 2 1.6 0 .8-.6 1.3-1.6 1.3-.9 0-1.7-.5-1.7-1.3 0-.7.5-1.5 1.3-1.6z"/></svg>',
+    /* En marcha — figura corriendo */
+    "lessons-25": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="14.6" cy="4.4" r="1.9"/><path d="M13.9 7.3 10.4 9.2l1.8 3.1 3.3 1.4M12.4 12.3l-2.5 2.9L6.9 16.4M15.5 10.6l3.4 2.5M9.7 8.7 6.9 8.1"/></svg>',
+    /* Imparable — cohete */
+    "lessons-50": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.6c2.7 1.5 4.1 4.4 4.1 7.8 0 1.4-.3 2.6-.5 3.4H8.4c-.2-.8-.5-2-.5-3.4 0-3.4 1.4-6.3 4.1-7.8z"/><circle cx="12" cy="9.4" r="1.5"/><path d="M8.5 13.6 6.4 16.2l3 .3M15.5 13.6l2.1 2.6-3 .3M10.4 17.3v2.4M13.6 17.3v2.4"/></svg>',
+    /* Centurión — medalla con estrella y cintas */
+    "lessons-100": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8.6 3.5l2.2 5M15.4 3.5l-2.2 5"/><circle cx="12" cy="14.6" r="5.4"/><path d="M12 11.9l.9 1.9 2 .2-1.5 1.4.5 2-1.9-1-1.9 1 .5-2-1.5-1.4 2-.2z" fill="currentColor" stroke="none"/></svg>',
+    /* Sin errores — diana */
+    "perfect": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="8.4"/><circle cx="12" cy="12" r="4.7"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/></svg>',
+    /* Meta del día — check en círculo */
+    "goal-met": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.4"/><path d="M8 12.2l2.7 2.7L16 9.2"/></svg>',
+    /* Una semana — llama */
+    "streak-7": '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13 2c.4 2.9-1.1 4.4-2.6 5.9C9 9.3 8 10.9 8 13a4.5 4.5 0 0 0 9 0c0-1.4-.5-2.6-1.3-3.6-.3.9-1 1.5-1.9 1.7 1-2.3.3-4.9-1.8-7.1z"/></svg>',
+    /* Un mes entero — calendario */
+    "streak-30": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5.5" width="16" height="15" rx="2.5"/><path d="M4 9.6h16M8 3.4v4M16 3.4v4"/><path d="M8.4 13h2.2M13.4 13h2.2M8.4 16.6h2.2M13.4 16.6h2.2"/></svg>',
+    /* Maestría — trofeo */
+    "trophy": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4.5h10v4a5 5 0 0 1-10 0z"/><path d="M7 6.2H4.6v1.4A3.4 3.4 0 0 0 8 11M17 6.2h2.4v1.4A3.4 3.4 0 0 1 16 11"/><path d="M12 13.5v2.7M9 20h6M10.2 20l.5-3.8h2.6l.5 3.8"/></svg>',
+    /* respaldo — estrella */
+    "_default": '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3.4l2.5 5 5.5.6-4.1 3.7 1.1 5.4L12 16.9l-5 2.6 1.1-5.4-4.1-3.7 5.5-.6z"/></svg>'
+  };
+  function achIcon(id) {
+    if (id && id.indexOf("master:") === 0) return ACH_ICON.trophy;
+    return ACH_ICON[id] || ACH_ICON._default;
+  }
   var WORLD_UMBRAL = { A1: "Umbral del Hogar", A2: "Mojón del Sendero", B1: "Arco del Horizonte", B2: "Pórtico de la Torre", C1: "Portal del Firmamento", C2: "Sello del Castillo" };
   var BOSS_AVATAR = "assets/images/mascot/vesper_cat.png";
   /* metadatos del jefe de un nivel, con defaults si el mundo no declara boss */
@@ -1841,6 +2005,19 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     return '<div class="worlds" role="group" aria-label="Mundos: niveles A1 a C2">' + html + '</div>';
   }
 
+  /* envoltura con encabezado de sección para la cinta de mundos */
+  function worldsSection(built, selLevel) {
+    var totalDone = Object.keys(built.completed || {}).length;
+    var totalAll = (built.order || []).length;
+    return '<section class="worlds-sec" aria-label="Selección de mundo">'
+      + '<div class="worlds-sec__head"><div>'
+      + '<h2 class="worlds-sec__ttl">Elige tu mundo</h2>'
+      + '<p class="worlds-sec__sub">Tu travesía de A1 a C2</p></div>'
+      + '<span class="worlds-sec__meta"><span class="worlds-sec__big">' + totalDone + '</span>'
+      + '<span class="worlds-sec__small">/ ' + totalAll + ' lecciones</span></span></div>'
+      + worldsRibbon(built, selLevel) + '</section>';
+  }
+
   /* mapa: id de lección -> índice de parada en el render actual (para animar al avatar);
      AVATAR_LESSON = id de la lección donde descansa el gato (o "boss:NIVEL" si el mundo está listo). */
   var TRAIL_STOPS = {}, _indexFirst = true, AVATAR_LESSON = null;
@@ -1974,14 +2151,27 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
   function buildTrophyShelf() {
     if (!P || !P.achievementsState) return "";
     var list = P.achievementsState();
+    var total = list.length;
     var earned = list.filter(function (a) { return a.unlocked; }).length;
-    var chips = list.map(function (a) {
-      return '<span class="trophy' + (a.unlocked ? " on" : "") + '" title="' + esc(a.name + (a.desc ? " — " + a.desc : "")) + '">'
-        + '<span class="t-ic">' + (a.unlocked ? a.icon : "&#128274;") + '</span>'
-        + '<span class="t-nm">' + esc(a.name) + '</span></span>';
+    var pct = total ? Math.round(100 * earned / total) : 0;
+    var lockSvg = '<svg class="medal__lk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="10.7" width="14" height="9" rx="2.2"/><path d="M8 10.7V7.7a4 4 0 0 1 8 0v3"/></svg>';
+    var trophySvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4.5h10v4a5 5 0 0 1-10 0z"/><path d="M7 6.2H4.6v1.4A3.4 3.4 0 0 0 8 11M17 6.2h2.4v1.4A3.4 3.4 0 0 1 16 11"/><path d="M12 13.5v2.7M9 20h6M10.2 20l.5-3.8h2.6l.5 3.8"/></svg>';
+    var chev = '<svg class="logros__chev" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>';
+    /* desbloqueados primero (manteniendo el orden del catálogo) */
+    var sorted = list.slice().sort(function (a, b) { return (b.unlocked ? 1 : 0) - (a.unlocked ? 1 : 0); });
+    var medals = sorted.map(function (a) {
+      return '<div class="medal' + (a.unlocked ? ' on' : '') + '" title="' + esc(a.name + (a.desc ? ' — ' + a.desc : '')) + '">'
+        + '<span class="medal__disc" aria-hidden="true">' + (a.unlocked ? achIcon(a.id) : lockSvg) + '</span>'
+        + '<span class="medal__nm">' + esc(a.name) + '</span></div>';
     }).join("");
-    return '<details class="trophy-shelf"><summary>&#127942; Logros <span class="t-count">' + earned + '/' + list.length + '</span></summary>'
-      + '<div class="trophy-grid">' + chips + '</div></details>';
+    return '<details class="logros">'
+      + '<summary class="logros__sum" aria-label="Logros: ' + earned + ' de ' + total + ' desbloqueados">'
+      + '<span class="logros__ic">' + trophySvg + '</span>'
+      + '<span class="logros__h"><span class="logros__ttl">Logros</span>'
+      + '<span class="logros__bar" aria-hidden="true"><i style="width:' + pct + '%"></i></span></span>'
+      + '<span class="logros__count">' + earned + '/' + total + '</span>' + chev
+      + '</summary>'
+      + '<div class="logros__grid">' + medals + '</div></details>';
   }
 
   function renderIndex(selLevel) {
@@ -2040,9 +2230,11 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       + '<button class="fchip" type="button" aria-pressed="false" data-state="open">Pendientes</button>'
       + '<button class="fchip" type="button" aria-pressed="false" data-state="completed">Completadas</button></div></div>';
 
+    var heroBand = (A && profile && A.profileLevel) ? A.levelToBand(A.profileLevel()) : null;
+    var heroInfo = { band: heroBand, bandTag: heroBand ? (WORLD_TAG[heroBand] || "") : "" };
     show('<div class="wrap">'
-      + hudHtml(st, dg, hello)
-      + worldsRibbon(built, selLevel)
+      + hudHtml(st, dg, hello, heroInfo)
+      + worldsSection(built, selLevel)
       + searchUI
       + '<div id="searchResults" class="search-results" aria-live="polite" hidden></div>'
       + '<div id="levelView">' + worldMap(selLevel, built) + '</div>'
