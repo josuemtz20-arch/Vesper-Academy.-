@@ -1488,6 +1488,22 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
 .dq-opt[disabled]{cursor:default}
 .dq-bar{height:7px;border-radius:999px;background:var(--cream);overflow:hidden;margin:0 0 14px}
 .dq-bar > i{display:block;height:100%;background:var(--w-accent,#c5a059);border-radius:999px;transition:width .3s}
+/* reacción de Vesper a cada respuesta de la prueba */
+.dq-react{margin-top:16px}
+.dq-react:empty{display:none}
+.dq-react__in{display:flex;align-items:center;gap:11px;justify-content:center;border-radius:13px;padding:10px 14px}
+.dq-react__in.ok{background:var(--ok-tint)}
+.dq-react__in.no{background:var(--no-tint)}
+.dq-react__in .vesper-mascot{flex:0 0 auto}
+.dq-react__tx{text-align:left;line-height:1.25}
+.dq-react__tx b{display:block;font-size:.96rem}
+.dq-react__tx span{font-size:.84rem;color:var(--muted)}
+/* Vesper explica la palabra actual del mazo */
+.deck-explain{display:flex;align-items:center;gap:11px;margin:2px 2px 14px;padding:10px 13px;border-radius:14px;
+  background:var(--w-accent-soft,var(--gold-tint));border:1px solid color-mix(in srgb,var(--w-accent,#c5a059) 28%,var(--line))}
+.deck-explain .de-cat{flex:0 0 auto}
+.deck-explain__tip{margin:0;font-size:.88rem;line-height:1.4}
+.deck-explain__tip b{color:var(--w-accent,#a8843d)}
 
 @media(prefers-reduced-motion:reduce){
   .dc-inner{transition:none}
@@ -2382,6 +2398,13 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     if (!src) return DEN_STRUCT[structure] || "";
     return '<img class="den-emblem__img" src="' + src + '" alt="" loading="lazy" decoding="async" onerror="window.__vdenFallback(this,\'' + structure + '\')">';
   }
+  /* consejos que Vesper rota mientras explica cada tarjeta de vocabulario */
+  var DECK_TIPS = [
+    "Tócala para escucharla y repítela en voz alta.",
+    "Imagina una escena con la palabra para recordarla.",
+    "Cúbrela con el dedo y trata de recordar el significado.",
+    "Úsala hoy en una frase tuya."
+  ];
 
   /* tarjetas "ya las sé": persistencia local por nivel|palabra */
   var DEN_KNOWN_KEY = "vesper_vocab_known";
@@ -2487,6 +2510,8 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       + '<button class="dc-say" id="sayEn2" type="button" aria-label="Escuchar en inglés">' + sayIc + '</button>'
       + '<span class="dc-hint">' + flipIc + ' Toca para volver</span></div>'
       + '</div></div>'
+      + '<div class="deck-explain"><div class="de-cat">' + mascot("explaining", false, "sm") + '</div>'
+      + '<p class="deck-explain__tip" id="deckTip"></p></div>'
       + '<div class="deck-ctrls"><button class="dnav" id="dPrev" type="button" aria-label="Anterior">' + prevIc + '</button>'
       + '<button class="dknow" id="dKnow" type="button"></button>'
       + '<button class="dnav" id="dNext" type="button" aria-label="Siguiente">' + nextIc + '</button></div>'
@@ -2509,6 +2534,8 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       var kb = byId("dKnow");
       kb.classList.toggle("on", on);
       kb.textContent = on ? "✓ Ya la sé" : "Marcar como sabida";
+      var tip = byId("deckTip");
+      if (tip) tip.innerHTML = '<b>' + esc(c.en) + '</b> se dice <b>' + esc(c.es) + '</b>. ' + DECK_TIPS[idx % DECK_TIPS.length];
     }
     card.onclick = function (e) { if (e.target.closest(".dc-say")) return; card.classList.toggle("flipped"); };
     byId("sayEn").onclick = function (e) { e.stopPropagation(); speak(curCard().en); };
@@ -2564,7 +2591,8 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
         + '<div class="dq-sub">¿Qué significa en español?</div>'
         + '<div class="dq-opts">' + opts.map(function (o, k) {
             return '<button class="dq-opt" type="button" data-k="' + k + '" data-es="' + esc(o) + '">' + esc(o) + '</button>';
-          }).join("") + '</div>');
+          }).join("") + '</div>'
+        + '<div class="dq-react" id="dqReact" aria-live="polite"></div>');
       each(".dq-opt", function (b) {
         b.onclick = function () {
           var chosen = b.getAttribute("data-es"), good = chosen === c.es;
@@ -2573,15 +2601,21 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
             if (x.getAttribute("data-es") === c.es) x.classList.add("right");
             else if (x === b) x.classList.add("wrong");
           });
+          /* Vesper reacciona: acierto -> "correct"; error -> "correcting" (te corrige) */
+          var rc = byId("dqReact");
+          if (rc) rc.innerHTML = '<div class="dq-react__in ' + (good ? "ok" : "no") + '">'
+            + mascot(good ? "correct" : "correcting", false, "sm")
+            + '<div class="dq-react__tx"><b>' + (good ? "¡Correcto!" : "Te corrijo") + '</b>'
+            + '<span>«' + esc(c.en) + '» = «' + esc(c.es) + '»</span></div></div>';
           if (good) { correct++; var m = knownMap(); m[cardKey(selLevel, c.en)] = 1; saveKnown(m); }
-          setTimeout(function () { qi++; step(); }, good ? 520 : 1000);
+          setTimeout(function () { qi++; step(); }, good ? 760 : 1500);
         };
       });
     }
     function finish() {
       var pct = qs.length ? Math.round(100 * correct / qs.length) : 0;
       var msg = pct >= 80 ? "¡Excelente! Dominas esta rama." : pct >= 50 ? "¡Bien! Repasa las que fallaste." : "Sigue practicando con las tarjetas.";
-      shell('<div style="text-align:center;padding:8px 4px">' + mascot(pct >= 80 ? "milestone" : "thinking", false, "md")
+      shell('<div style="text-align:center;padding:8px 4px">' + mascot(pct >= 80 ? "milestone" : "explaining", false, "md")
         + '<h1 style="font-family:\'Inria Serif\',Georgia,serif">' + correct + ' / ' + qs.length + '</h1>'
         + '<p class="muted">' + esc(msg) + '</p>'
         + '<div class="deck-actions" style="justify-content:center">'

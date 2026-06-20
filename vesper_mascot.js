@@ -21,18 +21,27 @@ window.VESPER_MASCOT = (function () {
   var BASE = "assets/images/mascot/";
   var CANON = BASE + "vesper_cat.png";                       // imagen principal (ponla aqui)
   var FALLBACK = "assets/images/virtual_class_happy_cat.png"; // respaldo si falta la principal
+  /* variantes de expresion del gato de marca (IA, Higgsfield); si falta el
+     archivo, el onerror cae a CANON y luego al FALLBACK historico. */
+  var EXImg = {
+    correct:    BASE + "vesper_cat_correct.webp",
+    incorrect:  BASE + "vesper_cat_incorrect.webp",
+    correcting: BASE + "vesper_cat_correcting.webp",
+    explaining: BASE + "vesper_cat_explaining.webp"
+  };
 
   // state -> { image, anim, fx, lines[] }
   var STATES = {
     welcome:       { image: CANON, anim: "wave",      fx: "",         lines: ["Hola, soy Vesper. Listo para aprender?", "Que bueno verte. Empecemos!", "Una leccion corta y vamos creciendo."] },
-    explaining:    { image: CANON, anim: "float",     fx: "",         lines: ["Lee con calma y mira los ejemplos.", "Esto es mas facil de lo que parece.", "Fijate en el patron de la regla."] },
+    explaining:    { image: EXImg.explaining, anim: "float", fx: "",   lines: ["Lee con calma y mira los ejemplos.", "Esto es mas facil de lo que parece.", "Fijate en el patron de la regla."] },
     idle:          { image: CANON, anim: "float",     fx: "",         lines: ["Aqui estoy cuando me necesites.", "Tomate tu tiempo."] },
     thinking:      { image: CANON, anim: "tilt",      fx: "",         lines: ["Mmm... piensa con cuidado.", "Tu puedes con esta."] },
-    correct:       { image: CANON, anim: "bounce",    fx: "sparkle",  lines: ["Perfecto!", "Excelente, asi se hace.", "Lo tienes!"] },
-    incorrect:     { image: CANON, anim: "shake",     fx: "",         lines: ["Casi! Mira la explicacion.", "Tranquilo, equivocarse tambien ensena.", "Vuelve a intentarlo en la proxima."] },
+    correct:       { image: EXImg.correct, anim: "bounce", fx: "sparkle", lines: ["Perfecto!", "Excelente, asi se hace.", "Lo tienes!"] },
+    incorrect:     { image: EXImg.incorrect, anim: "shake", fx: "",    lines: ["Casi! Mira la explicacion.", "Tranquilo, equivocarse tambien ensena.", "Vuelve a intentarlo en la proxima."] },
+    correcting:    { image: EXImg.correcting, anim: "tilt", fx: "",    lines: ["La respuesta correcta es esta.", "Mira, asi se dice.", "Quedate con esta y sigue."] },
     streak_alive:  { image: CANON, anim: "pulse",     fx: "flame",    lines: ["Tu racha sigue viva!", "Un dia mas sumado. Sigue asi.", "La constancia es tu superpoder."] },
     streak_broken: { image: CANON, anim: "dim",       fx: "",         lines: ["Empezamos una racha nueva. Vamos!", "Hoy es un gran dia para volver.", "Cada racha empieza con un dia."] },
-    milestone:     { image: CANON, anim: "celebrate", fx: "confetti", lines: ["Increible! Lograste algo grande.", "Eso merece un escudo. Felicidades!", "Que orgullo, sigue brillando."] }
+    milestone:     { image: EXImg.correct, anim: "celebrate", fx: "confetti", lines: ["Increible! Lograste algo grande.", "Eso merece un escudo. Felicidades!", "Que orgullo, sigue brillando."] }
   };
 
   function pick(a) { return (a && a.length) ? a[Math.floor(Math.random() * a.length)] : ""; }
@@ -40,8 +49,10 @@ window.VESPER_MASCOT = (function () {
   function escapeHtml(t) { return ("" + (t == null ? "" : t)).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
 
   function imgTag(s, anim) {
+    /* 1er fallo: cae al gato canonico de marca; 2o fallo: respaldo historico */
     return '<img class="vc-img vc-anim-' + anim + '" alt="Vesper Cat" src="' + (s.image || CANON) + '"'
-      + ' onerror="this.onerror=null;this.src=\'' + FALLBACK + '\'">';
+      + ' data-canon="' + CANON + '"'
+      + ' onerror="if(!this.dataset.f){this.dataset.f=1;this.src=this.getAttribute(\'data-canon\');}else{this.onerror=null;this.src=\'' + FALLBACK + '\';}">';
   }
   function fxHtml(fx) {
     if (fx === "sparkle") return '<span class="vc-fx vc-sparkle">✨</span><span class="vc-fx vc-sparkle d2">✨</span>';
