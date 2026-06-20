@@ -582,6 +582,12 @@
    1. ANIMACIONES GLOBALES (solo selectores BASE, sin [data-world])
    ========================================================= */
 
+/* 0. PERF: congela las animaciones decorativas de un bloque cuando sale del
+   viewport. Las animaciones infinitas (ken-burns, blur, box-shadow, titileos)
+   son la causa principal de los "tirones"; pausarlas fuera de pantalla libera
+   el hilo principal sin alterar nada de lo que se ve. */
+.anim-paused,.anim-paused *{animation-play-state:paused !important}
+
 /* 1a. Banner: ken-burns + parallax del scrim */
 .world-banner__img{transform-origin:50% 50%;will-change:transform;
   animation:g-kenburns 34s ease-in-out infinite alternate}
@@ -630,13 +636,14 @@
   animation:g-bar-shimmer 3.4s ease-in-out infinite;pointer-events:none}
 @keyframes g-bar-shimmer{0%{transform:translateX(-160%)}60%{transform:translateX(320%)}100%{transform:translateX(320%)}}
 
-/* 1f. Estrellas ganadas: titileo dorado muy leve (recompensa) */
-.wnode.done .wstars{will-change:filter,opacity;animation:g-star-twinkle 5s ease-in-out infinite}
+/* 1f. Estrellas ganadas: titileo dorado muy leve (recompensa).
+   PERF: el resplandor (drop-shadow) es estático y sólo animamos opacity, que el
+   compositor resuelve sin repintar. Antes se animaba el filter en CADA nodo
+   completado del mundo => repintura por frame y tirones al desplazarse. */
+.wnode.done .wstars{filter:drop-shadow(0 0 4px rgba(197,160,89,.55));will-change:opacity;animation:g-star-twinkle 5s ease-in-out infinite}
 .wnode:nth-of-type(3n+1).done .wstars{animation-delay:-1.7s}
 .wnode:nth-of-type(3n+2).done .wstars{animation-delay:-3.3s;animation-duration:5.6s}
-@keyframes g-star-twinkle{
-  0%,100%{filter:drop-shadow(0 0 3px rgba(197,160,89,.45)) brightness(1);opacity:1}
-  50%{filter:drop-shadow(0 0 6px rgba(197,160,89,.70)) brightness(1.12);opacity:.94}}
+@keyframes g-star-twinkle{0%,100%{opacity:1}50%{opacity:.82}}
 
 /* =========================================================
    2. MUNDO A1 — EL HOGAR · "brasas de amanecer" (acento #C07A33)
@@ -1949,6 +1956,22 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     }, { passive: true });
   }
 
+  /* ---- perf: pausa las animaciones decorativas de cada bloque mientras está
+     fuera del viewport. Las animaciones infinitas (banner, cinta de mundos,
+     escena del mapa, vitrina de logros) son la causa principal de los tirones;
+     congelarlas cuando no se ven evita repinturas/composiciones inútiles. ---- */
+  var _animIO = null;
+  function observeAnims() {
+    if (!("IntersectionObserver" in window)) return;
+    if (_animIO) _animIO.disconnect();
+    _animIO = new IntersectionObserver(function (entries) {
+      for (var i = 0; i < entries.length; i++) {
+        entries[i].target.classList.toggle("anim-paused", !entries[i].isIntersecting);
+      }
+    }, { rootMargin: "150px 0px" });
+    each(".world-banner,.worlds,.wisland,.logros", function (el) { _animIO.observe(el); });
+  }
+
   function worldBanner(selLevel, built) {
     var t = WORLD_THEME[selLevel]; if (!t) return "";
     var pr = PATH.levelProgress(selLevel, built);
@@ -2261,6 +2284,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       requestAnimationFrame(function () { requestAnimationFrame(paintTrail); });
       bindTrailResize();
       bindParallax();
+      observeAnims();
     })();
     _indexFirst = false;
 
