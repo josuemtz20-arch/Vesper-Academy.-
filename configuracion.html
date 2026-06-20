@@ -112,22 +112,6 @@
   .sec-tag--ai{background:var(--gold-tint);color:var(--gold-deep,#a8843d);
     border:1px solid color-mix(in srgb,var(--gold) 42%,var(--line))}
   .sec-tag--app{background:#eef0f4;color:var(--muted);border:1px solid var(--line)}
-
-  /* ---- visor del prompt en vivo ---- */
-  .prompt-card summary{list-style:none;cursor:pointer;outline:none}
-  .prompt-card summary::-webkit-details-marker{display:none}
-  .prompt-card summary .chev{margin-left:6px;transition:transform .2s ease;color:var(--muted)}
-  .prompt-card[open] summary .chev{transform:rotate(180deg)}
-  .prompt-card summary:focus-visible{outline:3px solid var(--ink);outline-offset:3px;border-radius:8px}
-  .prompt-box{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:.8rem;line-height:1.55;
-    white-space:pre-wrap;word-break:break-word;background:#15152a;color:#e9e7f2;border-radius:12px;padding:14px;
-    margin:12px 0 0;max-height:360px;overflow:auto;border:1px solid #2a2a46;-webkit-overflow-scrolling:touch}
-  .prompt-actions{display:flex;gap:10px;margin-top:10px;flex-wrap:wrap;align-items:center}
-  .btn-copy{cursor:pointer;border:1.5px solid var(--line);background:var(--paper);color:var(--ink);
-    font:600 .88rem Inter,sans-serif;border-radius:11px;padding:9px 15px;transition:border-color .15s,color .15s}
-  .btn-copy:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
-  .btn-copy.ok{border-color:var(--success);color:var(--success)}
-  .prompt-meta{font-size:.8rem;color:var(--muted)}
 </style>
 <link rel="stylesheet" href="assets/css/vesper_tokens.css">
 <script src="vesper_prefs.js"></script>
@@ -154,24 +138,6 @@
     </div>
   </section>
 
-  <!-- ===== PROMPT EN VIVO DEL TUTOR ===== -->
-  <details class="card prompt-card" id="prompt-det">
-    <summary>
-      <div class="sec-h" style="margin:0"><span class="em">🧩</span>
-        <h2 id="h-prompt" style="margin:0">El prompt de tu tutor</h2>
-        <span class="sec-tag sec-tag--ai">En vivo</span>
-        <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
-      </div>
-    </summary>
-    <p class="muted" style="margin:12px 0 0">Esta es la instrucción exacta que recibe la IA de Vesper en el chat.
-      Cambia <b>automáticamente</b> con tu <b>Perfil</b>, tu <b>Personalidad</b> y tus <b>Temas</b>.
-      (Apariencia, Accesibilidad, Sonido y Metas son ajustes de la app: no modifican el prompt.)</p>
-    <pre class="prompt-box" id="prompt-box" tabindex="0" aria-label="Prompt del tutor" aria-live="polite"></pre>
-    <div class="prompt-actions">
-      <button class="btn-copy" id="btn-copy" type="button">Copiar prompt</button>
-      <span class="prompt-meta" id="prompt-meta"></span>
-    </div>
-  </details>
 
   <!-- ===== TU PERFIL ===== -->
   <section class="card" aria-labelledby="h-perfil">
@@ -534,34 +500,7 @@
       var state = TONE_STATE[cur.tone] || "welcome";
       $("pv-mascot").innerHTML = VESPER_MASCOT.render(state, { size: "lg" });
     }
-    paintPrompt();
   }
-  /* ---------- visor del prompt en vivo ---------- */
-  function paintPrompt() {
-    var box = $("prompt-box"); if (!box || !P.systemPrompt) return;
-    var txt = P.systemPrompt();
-    box.textContent = txt;
-    var meta = $("prompt-meta");
-    if (meta) {
-      var words = txt.split(/\s+/).filter(Boolean).length;
-      meta.textContent = words + " palabras · se actualiza al instante";
-    }
-  }
-  var copyBtn = $("btn-copy");
-  if (copyBtn) copyBtn.addEventListener("click", function () {
-    var txt = P.systemPrompt ? P.systemPrompt() : "";
-    function done() {
-      copyBtn.classList.add("ok"); var old = copyBtn.textContent; copyBtn.textContent = "Copiado ✓";
-      setTimeout(function () { copyBtn.classList.remove("ok"); copyBtn.textContent = old; }, 1400);
-    }
-    function fallback() {
-      try { var ta = document.createElement("textarea"); ta.value = txt; ta.setAttribute("readonly", "");
-        ta.style.position = "fixed"; ta.style.opacity = "0"; document.body.appendChild(ta); ta.select();
-        document.execCommand("copy"); document.body.removeChild(ta); done(); } catch (e) {}
-    }
-    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(done, fallback);
-    else fallback();
-  });
   paint();
   window.addEventListener("vesper:persona", paint);
   window.addEventListener("vesper:appearance", paint); /* refresca la mascota al cambiar skin */
