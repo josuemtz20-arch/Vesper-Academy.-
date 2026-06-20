@@ -1339,6 +1339,122 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
 #install-btn:active{transform:translateX(-50%) translateY(1px)}
 #install-btn svg{width:18px;height:18px;flex:0 0 auto}
 @media(prefers-reduced-motion:reduce){#install-btn:active{transform:translateX(-50%)}}
+
+/* ============================================================
+   RENDIMIENTO · saltar pintado fuera de pantalla y pausar
+   animaciones de bloques que no se ven (mejor scroll/CPU).
+   ============================================================ */
+.va-cv{content-visibility:auto;contain-intrinsic-size:1px 520px}
+.logros{content-visibility:auto;contain-intrinsic-size:1px 240px}
+.search-results{content-visibility:auto;contain-intrinsic-size:1px 320px}
+.va-paused,.va-paused *{animation-play-state:paused!important}
+
+/* ============================================================
+   RECINTO TEMÁTICO DE VOCABULARIO ("ramas")
+   hereda --w-accent / --w-glow del mundo (worldVars inline).
+   ============================================================ */
+.den{margin-top:6px}
+.den-top{display:flex;align-items:center;gap:10px;margin:2px 0 12px}
+.den-back{flex:0 0 auto;width:40px;height:40px;display:flex;align-items:center;justify-content:center;border-radius:50%;
+  border:1px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer}
+.den-back svg{width:20px;height:20px}
+.den-head{position:relative;overflow:hidden;border-radius:var(--radius);padding:18px 16px 16px;color:#fff;
+  background:linear-gradient(150deg,#22223c,#15152a);border:1px solid rgba(255,255,255,.06)}
+.den-head::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(120% 90% at 82% -10%,var(--w-glow,rgba(197,160,89,.4)),transparent 60%)}
+.den-struct{position:absolute;right:8px;bottom:-6px;width:104px;height:104px;opacity:.9;color:var(--w-accent,#c5a059)}
+.den-struct svg{width:100%;height:100%;display:block;filter:drop-shadow(0 4px 10px rgba(0,0,0,.35))}
+.den-head__eyebrow{font-size:.74rem;letter-spacing:.12em;text-transform:uppercase;color:var(--w-accent,#e6cd97);font-weight:700}
+.den-head__ttl{font-family:"Inria Serif",Georgia,serif;font-size:1.5rem;line-height:1.15;margin:.12em 0 .2em;max-width:72%}
+.den-head__intro{font-size:.9rem;color:rgba(255,255,255,.82);max-width:74%;margin:0}
+.den-head__bar{position:relative;z-index:1;margin-top:12px;height:8px;border-radius:999px;background:rgba(255,255,255,.16);overflow:hidden;max-width:74%}
+.den-head__bar > i{display:block;height:100%;border-radius:999px;background:var(--w-accent,#c5a059);transition:width .4s ease}
+.den-head__pct{font-size:.78rem;color:rgba(255,255,255,.7);margin-top:5px}
+
+/* árbol de ramas: tronco a la izquierda, ramas-tarjeta a la derecha */
+.den-tree{position:relative;padding:10px 0 4px;margin-top:14px}
+.den-tree::before{content:"";position:absolute;left:24px;top:0;bottom:22px;width:4px;border-radius:3px;
+  background:linear-gradient(180deg,var(--w-accent,#c5a059),color-mix(in srgb,var(--w-accent,#c5a059) 35%,transparent));opacity:.5}
+.branch{position:relative;margin:0 0 14px 50px;width:auto;display:flex;align-items:center;gap:12px;text-align:left;
+  background:var(--paper);border:1px solid var(--line);border-radius:14px;box-shadow:var(--shadow);
+  padding:13px 14px;cursor:pointer;color:inherit;font:inherit}
+.branch::before{content:"";position:absolute;left:-26px;top:50%;width:26px;height:3px;border-radius:2px;
+  background:var(--w-accent,#c5a059);opacity:.5}
+.branch::after{content:"";position:absolute;left:-32px;top:50%;width:13px;height:13px;margin-top:-6.5px;border-radius:50%;
+  background:var(--paper);border:3px solid var(--w-accent,#c5a059);box-shadow:0 0 0 3px var(--paper)}
+.branch.done::after{background:var(--w-accent,#c5a059)}
+.branch:active{transform:translateY(1px)}
+.branch__ic{flex:0 0 auto;width:46px;height:46px;border-radius:13px;display:flex;align-items:center;justify-content:center;
+  background:var(--w-accent-soft,var(--gold-tint));color:var(--w-accent,#a8843d)}
+.branch__ic svg{width:26px;height:26px}
+.branch__bd{flex:1;min-width:0}
+.branch__nm{font-weight:700;font-size:1rem;line-height:1.2}
+.branch__hint{font-size:.8rem;color:var(--muted);margin-top:1px}
+.branch__meta{display:flex;align-items:center;gap:8px;margin-top:7px}
+.branch__bar{flex:1;height:6px;border-radius:999px;background:var(--cream);overflow:hidden}
+.branch__bar > i{display:block;height:100%;border-radius:999px;background:var(--w-accent,#c5a059);transition:width .4s ease}
+.branch__ct{font-size:.74rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.branch__go{flex:0 0 auto;color:var(--muted);font-size:1.3rem;line-height:1}
+.branch.done .branch__go{color:var(--success)}
+/* el acceso al recinto va fuera del árbol: sin conectores ni tronco */
+.den-enter{margin:12px 0 4px}
+.den-enter::before,.den-enter::after{display:none}
+.den-enter .branch__ic svg{width:30px;height:30px}
+
+/* mazo de tarjetas (sala abierta) */
+.deck{margin-top:4px}
+.deck-progress{display:flex;align-items:center;gap:8px;margin:4px 2px 12px}
+.deck-progress .dp-bar{flex:1;height:7px;border-radius:999px;background:var(--cream);overflow:hidden}
+.deck-progress .dp-bar > i{display:block;height:100%;background:var(--w-accent,#c5a059);border-radius:999px;transition:width .35s}
+.deck-progress .dp-ct{font-size:.78rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.deck-card{perspective:1200px;margin:0 auto 14px;max-width:420px}
+.dc-inner{position:relative;width:100%;min-height:200px;transition:transform .5s cubic-bezier(.2,.7,.2,1);transform-style:preserve-3d}
+.deck-card.flipped .dc-inner{transform:rotateY(180deg)}
+.dc-face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;
+  border-radius:18px;padding:22px;border:1px solid var(--line);box-shadow:var(--shadow)}
+.dc-front{background:linear-gradient(160deg,#fffdf7,#f3edde)}
+.dc-back{background:linear-gradient(160deg,#23233e,#161630);color:#fff;transform:rotateY(180deg)}
+.dc-tag{font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;font-weight:700;opacity:.6}
+.dc-word{font-family:"Inria Serif",Georgia,serif;font-size:1.7rem;line-height:1.15}
+.dc-back .dc-word{color:var(--w-accent,#e6cd97)}
+.dc-hint{font-size:.82rem;color:var(--muted)}
+.dc-back .dc-hint{color:rgba(255,255,255,.6)}
+.dc-say{margin-top:2px;width:42px;height:42px;border-radius:50%;border:1px solid var(--line);background:var(--paper);
+  display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--ink)}
+.dc-back .dc-say{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.2);color:#fff}
+.dc-say svg{width:20px;height:20px}
+.deck-ctrls{display:flex;align-items:center;gap:10px}
+.deck-ctrls .dnav{flex:0 0 auto;width:46px;height:46px;border-radius:50%;border:1px solid var(--line);background:var(--paper);
+  display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--ink)}
+.deck-ctrls .dnav[disabled]{opacity:.4;cursor:default}
+.deck-ctrls .dnav svg{width:22px;height:22px}
+.deck-ctrls .dknow{flex:1;height:46px;border-radius:999px;border:2px solid var(--w-accent,#c5a059);background:transparent;
+  color:var(--w-accent,#a8843d);font-weight:700;cursor:pointer}
+.deck-ctrls .dknow.on{background:var(--w-accent,#c5a059);color:#1f1a0e;border-color:var(--w-accent,#c5a059)}
+.deck-actions{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap}
+.deck-actions .btn{flex:1;min-width:130px}
+
+/* mini-actividad de la rama */
+.den-quiz{margin-top:4px}
+.dq-q{font-family:"Inria Serif",Georgia,serif;font-size:1.5rem;text-align:center;margin:10px 0 4px}
+.dq-sub{text-align:center;color:var(--muted);font-size:.85rem;margin-bottom:14px}
+.dq-opts{display:grid;gap:10px}
+.dq-opt{display:block;width:100%;text-align:left;padding:14px 16px;border-radius:12px;border:1.5px solid var(--line);
+  background:var(--paper);font:inherit;font-size:1.02rem;cursor:pointer}
+.dq-opt.right{border-color:var(--success);background:var(--ok-tint)}
+.dq-opt.wrong{border-color:var(--error);background:var(--no-tint)}
+.dq-opt[disabled]{cursor:default}
+.dq-bar{height:7px;border-radius:999px;background:var(--cream);overflow:hidden;margin:0 0 14px}
+.dq-bar > i{display:block;height:100%;background:var(--w-accent,#c5a059);border-radius:999px;transition:width .3s}
+
+@media(prefers-reduced-motion:reduce){
+  .dc-inner{transition:none}
+  .deck-card.flipped .dc-inner{transform:none}
+  .deck-card.flipped .dc-front{opacity:0;pointer-events:none}
+  .dc-back{transform:none}
+  .branch:active{transform:none}
+}
 </style>
 </head>
 <body>
@@ -1371,6 +1487,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
 <script src="vesper_persona.js"></script>
 <script src="vesper_progress.js"></script>
 <script src="vesper_path.js"></script>
+<script src="vesper_vocab_dens.js"></script>
 <script src="vesper_auth.js"></script>
 <script src="vesper_sync.js"></script>
 <script>
@@ -1390,6 +1507,9 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
   var ORDER = window.VESPER_LESSONS_ORDER || Object.keys(L);
   var A = window.VESPER_ADAPTIVE || null;
   var PATH = window.VESPER_PATH || null;
+  var DENS = window.VESPER_VOCAB_DENS || null;
+  var _denCache = null;
+  function densData() { if (!_denCache && DENS && DENS.build) _denCache = DENS.build(L, ORDER); return _denCache || {}; }
   var PERS = window.VESPER_PERSONA || null;
   var M = window.VESPER_MASCOT;
   var P = window.VesperProgress;
@@ -2161,7 +2281,260 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       + '<img class="wavatar" src="' + BOSS_AVATAR + '" alt="" aria-hidden="true" decoding="async">'
       + ambLayer(t.mapN || 3, true) + startPennant + parts
       + '</div></div></div>';
-    return banner + scene;
+    return banner + denEntryHtml(selLevel) + scene;
+  }
+
+  /* ============================================================
+     RECINTO TEMÁTICO DE VOCABULARIO ("ramas")
+     ============================================================ */
+  /* ilustración SVG de la estructura por tipo (casa, cueva, torre…) */
+  var DEN_STRUCT = {
+    house: '<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M10 30 32 12l22 18"/><path d="M15 28v22h34V28"/><rect x="27" y="38" width="10" height="12"/><rect x="19" y="31" width="7" height="6"/><rect x="38" y="31" width="7" height="6"/></svg>',
+    cave: '<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M6 52c0-20 12-34 26-34s26 14 26 34"/><path d="M22 52c0-9 4.5-15 10-15s10 6 10 15"/><path d="M14 33l5 3M50 33l-5 3M32 22v6"/></svg>',
+    harbor: '<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M32 10v30"/><circle cx="32" cy="16" r="4"/><path d="M18 34c0 9 6 14 14 14s14-5 14-14"/><path d="M12 34h10M42 34h10M8 52h48"/></svg>',
+    tower: '<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M22 22h20v30H22z"/><path d="M20 22l3-8 3 4 3-6 3 6 3-4 3 6 3-4 3 8"/><rect x="28" y="40" width="8" height="12"/><path d="M27 30h10"/></svg>',
+    observatory: '<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M14 50a18 18 0 0 1 36 0z"/><path d="M40 22l10-6M44 24l8 2"/><circle cx="36" cy="24" r="3"/><path d="M8 50h48"/></svg>',
+    castle: '<svg viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M14 26v26h36V26"/><path d="M14 26v-6h6v4h6v-4h6v4h6v-4h6v6"/><rect x="27" y="38" width="10" height="14"/><path d="M22 32h6M36 32h6"/></svg>'
+  };
+  /* iconos SVG por rama (clave semántica -> glifo); respaldo genérico */
+  var BRANCH_ICN = {
+    pot:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10h16l-1.4 8.2a2 2 0 0 1-2 1.8H7.4a2 2 0 0 1-2-1.8z"/><path d="M3 10h18M9 6c0-1.2 1-1.6 1.5-2M14 6c0-1.2 1-1.6 1.5-2"/></svg>',
+    sofa:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11V8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v3"/><path d="M3 12a2 2 0 0 1 2 2v3h14v-3a2 2 0 0 1 2-2 2 2 0 0 1 0 4v3H3v-3a2 2 0 0 1 0-4z"/></svg>',
+    bed:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18V8M3 13h18v5M21 18v-4a2 2 0 0 0-2-2H9v3"/><circle cx="6.5" cy="10.5" r="1.6"/></svg>',
+    leaf:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19c0-9 6-14 15-14 0 9-6 14-15 14z"/><path d="M5 19c3-5 6-7 11-9"/></svg>',
+    compass:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/></svg>',
+    bag:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8h12l1 12H5z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>',
+    drop:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c4 5 6 8 6 11a6 6 0 0 1-12 0c0-3 2-6 6-11z"/></svg>',
+    bolt:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4 14h6l-1 8 9-12h-6z"/></svg>',
+    anchor:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="2.4"/><path d="M12 7.4V21M5 13a7 7 0 0 0 14 0M5 13H3m16 0h2"/></svg>',
+    flame:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M13 2c.4 2.9-1.1 4.4-2.6 5.9C9 9.3 8 10.9 8 13a4.5 4.5 0 0 0 9 0c0-1.4-.5-2.6-1.3-3.6-.3.9-1 1.5-1.9 1.7 1-2.3.3-4.9-1.8-7.1z"/></svg>',
+    globe:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.5 2.5 15 0 18M12 3c-2.5 2.5-2.5 15 0 18"/></svg>',
+    chat:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.5 8.5 0 0 1-12.2 7.7L3 21l1.9-5.6A8.5 8.5 0 1 1 21 11.5z"/></svg>',
+    briefcase:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7.5" width="18" height="12" rx="2"/><path d="M9 7.5V6a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v1.5M3 12h18"/></svg>',
+    book:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5A2 2 0 0 1 6 4h13v15H6a2 2 0 0 0-2 2z"/><path d="M19 19v3H6a2 2 0 0 1-2-2"/></svg>',
+    gear:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 13a7.7 7.7 0 0 0 0-2l2-1.5-2-3.4-2.3 1a7.7 7.7 0 0 0-1.7-1l-.4-2.5h-4l-.4 2.5a7.7 7.7 0 0 0-1.7 1l-2.3-1-2 3.4 2 1.5a7.7 7.7 0 0 0 0 2l-2 1.5 2 3.4 2.3-1a7.7 7.7 0 0 0 1.7 1l.4 2.5h4l.4-2.5a7.7 7.7 0 0 0 1.7-1l2.3 1 2-3.4z"/></svg>',
+    link:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 15l6-6M10 6l1-1a4 4 0 0 1 6 6l-1 1M14 18l-1 1a4 4 0 0 1-6-6l1-1"/></svg>',
+    star:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3.4l2.5 5 5.5.6-4.1 3.7 1.1 5.4L12 16.9l-5 2.6 1.1-5.4-4.1-3.7 5.5-.6z"/></svg>',
+    eye:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s4-7 10-7 10 7 10 7-4 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="2.8"/></svg>',
+    scroll:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4h11a2 2 0 0 1 2 2v11M6 4a2 2 0 0 0-2 2v2h4M8 20h9a2 2 0 0 0 2-2"/><path d="M8 4v14a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-2h4"/></svg>',
+    spark:'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l1.8 6.2L20 10l-6.2 1.8L12 18l-1.8-6.2L4 10l6.2-1.8z"/></svg>',
+    crown:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8l3 9h10l3-9-5 4-3-6-3 6z"/><path d="M6 20h12"/></svg>',
+    scepter:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M8 16L18 6"/><circle cx="19" cy="5" r="2.4"/><path d="M5 21l4-4M6 16l2 2"/></svg>',
+    gem:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 4h12l3 5-9 11L3 9z"/><path d="M3 9h18M9 4l3 16M15 4l-3 16"/></svg>',
+    feather:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M19 5a6 6 0 0 0-8 0L5 11v8M5 19l9-9M8 16h6"/></svg>'
+  };
+  function branchIcon(k) { return '<span aria-hidden="true">' + (BRANCH_ICN[k] || BRANCH_ICN.spark) + '</span>'; }
+  var DEN_STRUCT_NAME = { house:"la casa", cave:"la cueva", harbor:"el puerto", tower:"la torre", observatory:"el observatorio", castle:"el castillo" };
+
+  /* tarjetas "ya las sé": persistencia local por nivel|palabra */
+  var DEN_KNOWN_KEY = "vesper_vocab_known";
+  function knownMap() { try { return JSON.parse(localStorage.getItem(DEN_KNOWN_KEY) || "{}") || {}; } catch (e) { return {}; } }
+  function saveKnown(m) { try { localStorage.setItem(DEN_KNOWN_KEY, JSON.stringify(m)); } catch (e) {} }
+  function cardKey(lv, en) { return lv + "|" + ("" + en).toLowerCase().replace(/^to\s+/, ""); }
+  function branchProgress(lv, br) {
+    var m = knownMap(), n = 0;
+    br.cards.forEach(function (c) { if (m[cardKey(lv, c.en)]) n++; });
+    return { done: n, total: br.cards.length };
+  }
+  function denProgress(den) {
+    var done = 0, total = 0;
+    den.branches.forEach(function (br) { var p = branchProgress(den.level, br); done += p.done; total += p.total; });
+    return { done: done, total: total, pct: total ? Math.round(100 * done / total) : 0 };
+  }
+
+  /* botón de acceso al recinto, bajo el banner del mundo */
+  function denEntryHtml(selLevel) {
+    var d = densData()[selLevel]; if (!d || !d.branches || !d.branches.length) return "";
+    var pr = denProgress(d);
+    var arrow = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>';
+    return '<button class="branch den-enter" type="button" data-den="' + esc(selLevel) + '" style="margin-left:0;width:100%"'
+      + ' aria-label="Explorar el vocabulario de ' + esc(d.name) + '">'
+      + '<span class="branch__ic">' + (DEN_STRUCT[d.structure] || branchIcon("book")) + '</span>'
+      + '<span class="branch__bd"><span class="branch__nm">Explorar vocabulario</span>'
+      + '<span class="branch__hint">' + esc(d.name) + ' · tarjetas y actividades</span>'
+      + '<span class="branch__meta"><span class="branch__bar"><i style="width:' + pr.pct + '%"></i></span>'
+      + '<span class="branch__ct">' + pr.done + '/' + pr.total + '</span></span></span>'
+      + '<span class="branch__go">' + arrow + '</span></button>';
+  }
+
+  /* vista principal del recinto: cabecera temática + ramas */
+  function renderDen(selLevel) {
+    clearLessonTheme();
+    var d = densData()[selLevel];
+    if (!d) { renderIndex(selLevel); return; }
+    var t = WORLD_THEME[selLevel] || {};
+    var pr = denProgress(d);
+    var back = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>';
+    var branches = d.branches.map(function (br) {
+      var bp = branchProgress(selLevel, br), pct = bp.total ? Math.round(100 * bp.done / bp.total) : 0;
+      var done = bp.total && bp.done >= bp.total;
+      return '<button class="branch' + (done ? ' done' : '') + '" type="button" data-branch="' + esc(br.id) + '"'
+        + ' aria-label="' + esc(br.name) + ', ' + bp.done + ' de ' + bp.total + ' tarjetas dominadas">'
+        + '<span class="branch__ic">' + branchIcon(br.icon) + '</span>'
+        + '<span class="branch__bd"><span class="branch__nm">' + esc(br.name) + '</span>'
+        + (br.hint ? '<span class="branch__hint">' + esc(br.hint) + '</span>' : '')
+        + '<span class="branch__meta"><span class="branch__bar"><i style="width:' + pct + '%"></i></span>'
+        + '<span class="branch__ct">' + bp.done + '/' + bp.total + '</span></span></span>'
+        + '<span class="branch__go">' + (done ? "&#10003;" : "&#8250;") + '</span></button>';
+    }).join("");
+    show('<div class="wrap">'
+      + '<div class="den" data-struct="' + esc(d.structure) + '" style="' + worldVars(t) + '">'
+      + '<div class="den-top"><button class="den-back" id="denBack" type="button" aria-label="Volver al mapa">' + back + '</button>'
+      + '<div class="muted" style="font-size:.85rem">Mundo ' + (PATH.LEVELS.indexOf(selLevel) + 1) + ' · ' + esc(selLevel) + '</div></div>'
+      + '<header class="den-head">'
+      + '<div class="den-struct">' + (DEN_STRUCT[d.structure] || "") + '</div>'
+      + '<div class="den-head__eyebrow">Recinto de ' + esc(DEN_STRUCT_NAME[d.structure] || "vocabulario") + '</div>'
+      + '<h1 class="den-head__ttl">' + esc(d.name) + '</h1>'
+      + '<p class="den-head__intro">' + esc(d.intro) + '</p>'
+      + '<div class="den-head__bar"><i style="width:' + pr.pct + '%"></i></div>'
+      + '<div class="den-head__pct">' + pr.done + '/' + pr.total + ' palabras dominadas · ' + pr.pct + '%</div>'
+      + '</header>'
+      + '<div class="den-tree">' + branches + '</div>'
+      + '</div><div class="hub-toast" id="toast"></div></div>');
+    byId("denBack").onclick = function () { renderIndex(selLevel); };
+    each(".branch[data-branch]", function (b) {
+      b.onclick = function () { openBranch(selLevel, b.getAttribute("data-branch")); };
+    });
+    gateAnims();
+  }
+
+  /* sala abierta: mazo de tarjetas con volteo + audio + "ya la sé" */
+  function openBranch(selLevel, branchId) {
+    var d = densData()[selLevel]; if (!d) return renderDen(selLevel);
+    var br = null; d.branches.forEach(function (x) { if (x.id === branchId) br = x; });
+    if (!br || !br.cards.length) return renderDen(selLevel);
+    var idx = 0;
+    var back = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>';
+    var sayIc = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18 6a8 8 0 0 1 0 12"/></svg>';
+    var prevIc = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg>';
+    var nextIc = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>';
+    var t = WORLD_THEME[selLevel] || {};
+    show('<div class="wrap"><div class="den deck-wrap" data-struct="' + esc(d.structure) + '" style="' + worldVars(t) + '">'
+      + '<div class="den-top"><button class="den-back" id="deckBack" type="button" aria-label="Volver a las ramas">' + back + '</button>'
+      + '<div style="min-width:0"><div style="font-weight:700">' + esc(br.name) + '</div>'
+      + '<div class="muted" style="font-size:.82rem">' + esc(d.name) + '</div></div></div>'
+      + '<div class="deck"><div class="deck-progress"><span class="dp-bar"><i id="dpFill"></i></span><span class="dp-ct" id="dpCt"></span></div>'
+      + '<div class="deck-card" id="deckCard"><div class="dc-inner">'
+      + '<div class="dc-face dc-front"><span class="dc-tag">English</span><span class="dc-word" id="dcEn"></span>'
+      + '<button class="dc-say" id="sayEn" type="button" aria-label="Escuchar">' + sayIc + '</button><span class="dc-hint">Toca para ver el significado</span></div>'
+      + '<div class="dc-face dc-back"><span class="dc-tag">Español</span><span class="dc-word" id="dcEs"></span>'
+      + '<button class="dc-say" id="sayEn2" type="button" aria-label="Escuchar en inglés">' + sayIc + '</button><span class="dc-hint">Toca para volver</span></div>'
+      + '</div></div>'
+      + '<div class="deck-ctrls"><button class="dnav" id="dPrev" type="button" aria-label="Anterior">' + prevIc + '</button>'
+      + '<button class="dknow" id="dKnow" type="button"></button>'
+      + '<button class="dnav" id="dNext" type="button" aria-label="Siguiente">' + nextIc + '</button></div>'
+      + '<div class="deck-actions"><button class="btn btn-gold" id="dQuiz" type="button">Poner a prueba</button></div>'
+      + '</div></div><div class="hub-toast" id="toast"></div></div>');
+
+    var card = byId("deckCard");
+    function curCard() { return br.cards[idx]; }
+    function render() {
+      card.classList.remove("flipped");
+      var c = curCard();
+      byId("dcEn").textContent = c.en;
+      byId("dcEs").textContent = c.es;
+      byId("dpCt").textContent = (idx + 1) + " / " + br.cards.length;
+      byId("dpFill").style.width = Math.round(100 * (idx + 1) / br.cards.length) + "%";
+      byId("dPrev").disabled = idx === 0;
+      byId("dNext").disabled = idx === br.cards.length - 1;
+      var m = knownMap(), on = !!m[cardKey(selLevel, c.en)];
+      var kb = byId("dKnow");
+      kb.classList.toggle("on", on);
+      kb.textContent = on ? "✓ Ya la sé" : "Marcar como sabida";
+    }
+    card.onclick = function (e) { if (e.target.closest(".dc-say")) return; card.classList.toggle("flipped"); };
+    byId("sayEn").onclick = function (e) { e.stopPropagation(); speak(curCard().en); };
+    byId("sayEn2").onclick = function (e) { e.stopPropagation(); speak(curCard().en); };
+    byId("dPrev").onclick = function () { if (idx > 0) { idx--; render(); } };
+    byId("dNext").onclick = function () { if (idx < br.cards.length - 1) { idx++; render(); } };
+    byId("dKnow").onclick = function () {
+      var c = curCard(), m = knownMap(), k = cardKey(selLevel, c.en);
+      if (m[k]) delete m[k]; else m[k] = 1;
+      saveKnown(m); render();
+      if (m[k] && idx < br.cards.length - 1) { setTimeout(function () { idx++; render(); }, 220); }
+    };
+    byId("deckBack").onclick = function () { renderDen(selLevel); };
+    byId("dQuiz").onclick = function () { denQuiz(selLevel, br); };
+    render();
+  }
+
+  /* mini-actividad: elige el significado correcto (de la rama) */
+  function denQuiz(selLevel, br) {
+    var d = densData()[selLevel];
+    var pool = br.cards.slice();
+    var qs = pool.slice();
+    /* baraja y limita a 8 preguntas */
+    for (var i = qs.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var tmp = qs[i]; qs[i] = qs[j]; qs[j] = tmp; }
+    qs = qs.slice(0, Math.min(8, qs.length));
+    var allEs = pool.map(function (c) { return c.es; });
+    var qi = 0, correct = 0;
+    var t = WORLD_THEME[selLevel] || {};
+    var back = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>';
+    function shell(inner) {
+      show('<div class="wrap"><div class="den" data-struct="' + esc(d.structure) + '" style="' + worldVars(t) + '">'
+        + '<div class="den-top"><button class="den-back" id="qBack" type="button" aria-label="Volver al mazo">' + back + '</button>'
+        + '<div style="font-weight:700">' + esc(br.name) + ' · prueba</div></div>'
+        + '<div class="den-quiz">' + inner + '</div></div><div class="hub-toast" id="toast"></div></div>');
+      var qb = byId("qBack"); if (qb) qb.onclick = function () { openBranch(selLevel, br.id); };
+    }
+    function step() {
+      if (qi >= qs.length) return finish();
+      var c = qs[qi];
+      /* 3 distractores + la correcta */
+      var opts = [c.es], guard = 0;
+      while (opts.length < Math.min(4, allEs.length) && guard < 50) {
+        var cand = allEs[Math.floor(Math.random() * allEs.length)];
+        if (opts.indexOf(cand) < 0) opts.push(cand);
+        guard++;
+      }
+      for (var i = opts.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var tmp = opts[i]; opts[i] = opts[j]; opts[j] = tmp; }
+      var pct = Math.round(100 * qi / qs.length);
+      shell('<div class="dq-bar"><i style="width:' + pct + '%"></i></div>'
+        + '<div class="dq-sub">Pregunta ' + (qi + 1) + ' de ' + qs.length + '</div>'
+        + '<div class="dq-q">' + esc(c.en) + '</div>'
+        + '<div class="dq-sub">¿Qué significa en español?</div>'
+        + '<div class="dq-opts">' + opts.map(function (o, k) {
+            return '<button class="dq-opt" type="button" data-k="' + k + '" data-es="' + esc(o) + '">' + esc(o) + '</button>';
+          }).join("") + '</div>');
+      each(".dq-opt", function (b) {
+        b.onclick = function () {
+          var chosen = b.getAttribute("data-es"), good = chosen === c.es;
+          each(".dq-opt", function (x) {
+            x.disabled = true;
+            if (x.getAttribute("data-es") === c.es) x.classList.add("right");
+            else if (x === b) x.classList.add("wrong");
+          });
+          if (good) { correct++; var m = knownMap(); m[cardKey(selLevel, c.en)] = 1; saveKnown(m); }
+          setTimeout(function () { qi++; step(); }, good ? 520 : 1000);
+        };
+      });
+    }
+    function finish() {
+      var pct = qs.length ? Math.round(100 * correct / qs.length) : 0;
+      var msg = pct >= 80 ? "¡Excelente! Dominas esta rama." : pct >= 50 ? "¡Bien! Repasa las que fallaste." : "Sigue practicando con las tarjetas.";
+      shell('<div style="text-align:center;padding:8px 4px">' + mascot(pct >= 80 ? "milestone" : "thinking", false, "md")
+        + '<h1 style="font-family:\'Inria Serif\',Georgia,serif">' + correct + ' / ' + qs.length + '</h1>'
+        + '<p class="muted">' + esc(msg) + '</p>'
+        + '<div class="deck-actions" style="justify-content:center">'
+        + '<button class="btn btn-ghost" id="qAgain" type="button">Otra vez</button>'
+        + '<button class="btn btn-gold" id="qDone" type="button">Volver a la sala</button></div></div>');
+      byId("qAgain").onclick = function () { denQuiz(selLevel, br); };
+      byId("qDone").onclick = function () { openBranch(selLevel, br.id); };
+    }
+    step();
+  }
+
+  /* ---- RENDIMIENTO: pausa animaciones de bloques fuera de pantalla ---- */
+  var _animObs = null;
+  function gateAnims() {
+    if (reduceMotion()) return;
+    if (!("IntersectionObserver" in window)) return;
+    if (!_animObs) {
+      _animObs = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) { en.target.classList.toggle("va-paused", !en.isIntersecting); });
+      }, { rootMargin: "120px 0px" });
+    } else { _animObs.disconnect(); }
+    each(".wmap, .world-banner, .den-tree, .den-head", function (el) { _animObs.observe(el); });
   }
 
   /* Vitrina de logros (ganados + bloqueados), plegable. */
@@ -2260,6 +2633,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
 
     each(".world[data-lvl]", function (b) { b.onclick = function () { renderIndex(b.getAttribute("data-lvl")); }; });
     each(".world[data-locked-world]", function (b) { b.onclick = function () { toast("Vence al guardián del mundo anterior para desbloquearlo 🔒"); }; });
+    each(".den-enter[data-den]", function (b) { b.onclick = function () { renderDen(b.getAttribute("data-den")); }; });
     each("[data-go]", function (b) { b.onclick = function () { location.search = "?id=" + encodeURIComponent(b.getAttribute("data-go")); }; });
     each("[data-locked]", function (b) { b.onclick = function () { toast("Completa la lección anterior para desbloquear 🔒"); }; });
     each("[data-locked-boss]", function (b) { b.onclick = function () { toast("Completa todas las lecciones del mundo para enfrentar al guardián 🛡️"); }; });
@@ -2280,6 +2654,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       bindParallax();
     })();
     _indexFirst = false;
+    gateAnims();
 
     /* ---- lógica de búsqueda/filtros (sólo actualiza #searchResults) ---- */
     function searchCard(lid) {

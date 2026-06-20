@@ -94,6 +94,8 @@
 !/vesper_adaptive.js
 !/vesper_activities.js
 !/vesper_path.js
+# recintos tematicos de vocabulario (ramas) — datos publicos, sin claves
+!/vesper_vocab_dens.js
 !/apariencia.html
 
 # Expansion 2026-06-15 (Front 2): Vesper personalization. The "Configuracion"
