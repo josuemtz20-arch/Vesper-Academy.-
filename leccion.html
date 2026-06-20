@@ -2452,7 +2452,7 @@
        muestrea en cada intento para dar variedad. */
     var bank = window.VESPER_BOSS_EXAMS && window.VESPER_BOSS_EXAMS[level];
     if (bank && bank.exercises && bank.exercises.length >= 5) {
-      var SIZE = ({ A1: 8, A2: 8, B1: 8, B2: 9, C1: 9, C2: 9 })[level] || 8;
+      var SIZE = ({ A1: 8, A2: 8, B1: 8, B2: 9, C1: 11, C2: 13 })[level] || 8;
       var all = bank.exercises.slice(), pickedB;
       if (bank.toefl) {
         /* TOEFL corto: garantiza 1 lectura + 1 listening y completa con el resto */

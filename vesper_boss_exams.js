@@ -124,7 +124,15 @@ window.VESPER_BOSS_EXAMS = {
     { type: "multiple_choice", question: "Which best paraphrases \"the findings are inconclusive\"?", options: ["the findings clearly prove the theory", "the findings do not give a clear answer", "the findings were never published"], correctIndex: 1, explanation: "'inconclusive' = no concluyente." },
     { type: "word_order", words: ["Only", "later", "did", "they", "realize", "the", "truth"], correctOrder: ["Only", "later", "did", "they", "realize", "the", "truth"], hint: "Inversión tras 'Only later'." },
     { type: "fill_blank", sentence: "The results, ___ surprising, were consistent with the theory. (aunque)", answers: ["though", "although", "while"], hint: "Conector de concesión.", explanation: "though/although/while introducen la concesión." },
-    { type: "multiple_choice", question: "\"To substantiate a claim\" means to ___ it.", options: ["weaken", "support with evidence", "merely repeat"], correctIndex: 1, explanation: "'substantiate' = respaldar con pruebas." }
+    { type: "multiple_choice", question: "\"To substantiate a claim\" means to ___ it.", options: ["weaken", "support with evidence", "merely repeat"], correctIndex: 1, explanation: "'substantiate' = respaldar con pruebas." },
+    { type: "multiple_choice", question: "A \"tentative\" conclusion is one that is ___.", options: ["provisional and uncertain", "final and proven", "completely false"], correctIndex: 0, explanation: "'tentative' = provisional, no definitivo." },
+    { type: "find_error", question: "Encuentra el error.",
+      segments: ["Not until the results were published ", { u: "the team" }, " ", { u: "could" }, " ", { u: "finally" }, " ", { u: "relax" }, "."],
+      correctIndex: 0, correction: "could the team (inversión tras 'Not until...')", explanation: "'Not until...' al inicio exige inversión: 'Not until... could the team finally relax.'" },
+    { type: "multiple_choice", question: "Choose the most academic verb: \"The study ___ a strong correlation.\"", options: ["dug up", "revealed", "spotted"], correctIndex: 1, explanation: "'revealed' es el registro académico adecuado." },
+    { type: "fill_blank", sentence: "The hypothesis was ___ by the new data. (respaldada)", answers: ["supported", "confirmed", "substantiated"], hint: "Respaldar con pruebas.", explanation: "supported/confirmed by the data." },
+    { type: "multiple_choice", question: "\"The two theories are not mutually exclusive\" means...", options: ["both can be true at the same time", "only one can be true", "both must be false"], correctIndex: 0, explanation: "No se excluyen: pueden ser ciertas a la vez." },
+    { type: "word_order", words: ["Rarely", "is", "such", "precision", "achieved"], correctOrder: ["Rarely", "is", "such", "precision", "achieved"], hint: "Inversión tras 'Rarely'." }
   ] },
 
   /* ===================== C2 · TOEFL (corto) ===================== */
@@ -157,7 +165,17 @@ window.VESPER_BOSS_EXAMS = {
     { type: "multiple_choice", question: "The word \"ubiquitous\" means...", options: ["found everywhere", "extremely rare", "poorly made"], correctIndex: 0, explanation: "'ubiquitous' = omnipresente." },
     { type: "word_order", words: ["Not", "until", "much", "later", "did", "the", "truth", "emerge"], correctOrder: ["Not", "until", "much", "later", "did", "the", "truth", "emerge"], hint: "Inversión tras 'Not until...'." },
     { type: "fill_blank", sentence: "___ the evidence is compelling, it remains contested. (concesión formal)", answers: ["Although", "While", "Though"], hint: "Conector de concesión.", explanation: "Although/While/Though introducen la concesión." },
-    { type: "multiple_choice", question: "\"To reconcile two opposing views\" means to ___ them.", options: ["make them compatible", "reject both of them", "ignore them completely"], correctIndex: 0, explanation: "'reconcile' = conciliar/hacer compatibles." }
+    { type: "multiple_choice", question: "\"To reconcile two opposing views\" means to ___ them.", options: ["make them compatible", "reject both of them", "ignore them completely"], correctIndex: 0, explanation: "'reconcile' = conciliar/hacer compatibles." },
+    { type: "multiple_choice", question: "An \"intractable\" problem is one that is ___.", options: ["very hard to solve", "easily solved", "imaginary"], correctIndex: 0, explanation: "'intractable' = muy difícil de resolver." },
+    { type: "find_error", question: "Encuentra el error.",
+      segments: ["So compelling ", { u: "the argument was" }, " that ", { u: "few" }, " ", { u: "dared" }, " ", { u: "to object" }, "."],
+      correctIndex: 0, correction: "was the argument (inversión tras 'So + adjetivo')", explanation: "Al anteponer 'So + adjetivo' se invierte: 'So compelling was the argument that...'." },
+    { type: "multiple_choice", question: "\"The findings, while suggestive, are far from definitive\" implies the findings...", options: ["settle the question for good", "hint at something but do not prove it", "are completely worthless"], correctIndex: 1, explanation: "Sugieren algo pero no lo demuestran." },
+    { type: "multiple_choice", question: "\"To corroborate a theory\" means to ___ it.", options: ["contradict", "support with further evidence", "complicate"], correctIndex: 1, explanation: "'corroborate' = corroborar/respaldar." },
+    { type: "fill_blank", sentence: "___ compelling the data may seem, some scepticism is warranted. (por muy... que)", answers: ["However", "No matter how"], hint: "Concesión + adjetivo.", explanation: "'However compelling... may seem' = por muy convincentes que parezcan." },
+    { type: "word_order", words: ["Such", "was", "his", "influence", "that", "none", "objected"], correctOrder: ["Such", "was", "his", "influence", "that", "none", "objected"], hint: "Inversión tras 'Such was...'." },
+    { type: "multiple_choice", question: "A \"nuanced\" argument is one that is ___.", options: ["overly simple", "subtle and carefully qualified", "clearly wrong"], correctIndex: 1, explanation: "'nuanced' = matizado." },
+    { type: "multiple_choice", question: "\"This account, though plausible, remains speculative\" means it is ___.", options: ["a proven fact", "believable but unproven", "obviously false"], correctIndex: 1, explanation: "Verosímil pero no demostrado." }
   ] }
 
 };
