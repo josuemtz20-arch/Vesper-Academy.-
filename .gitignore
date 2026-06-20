@@ -130,6 +130,11 @@
 # (gig economy, AI, philosophy of happiness, collocations, trends, nuance).
 !/vesper_themes_pack3.js
 
+# Expansion 2026-06-20: dedicated boss exam banks (fresh wording/contexts,
+# sampled each attempt). C1/C2 are short TOEFL-style exams (reading +
+# listening + structure). Consumed by buildBossExam in leccion.html.
+!/vesper_boss_exams.js
+
 # Expansion 2026-06-16: live chat with the Vesper AI tutor (public, no-account).
 # chat.html embeds the personalized system prompt from VESPER_PERSONA and talks
 # to Claude through a Cloudflare Worker proxy that hides the API key. The proxy

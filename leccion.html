@@ -1000,6 +1000,7 @@
 <script src="vesper_themes_pack.js"></script>
 <script src="vesper_themes_pack2.js"></script>
 <script src="vesper_themes_pack3.js"></script>
+<script src="vesper_boss_exams.js"></script>
 <script src="vesper_mascot.js"></script>
 <script src="vesper_theme.js"></script>
 <script src="vesper_adaptive.js"></script>
@@ -2445,9 +2446,41 @@
   function buildBossExam(level) {
     if (!PATH) return null;
     level = PATH.normLevel ? PATH.normLevel(level) : level;
+    var bm = bossMeta(level);
+    /* Banco dedicado del jefe: preguntas NUEVAS (palabras y contextos
+       distintos a las lecciones). En C1/C2, formato TOEFL pero corto. Se
+       muestrea en cada intento para dar variedad. */
+    var bank = window.VESPER_BOSS_EXAMS && window.VESPER_BOSS_EXAMS[level];
+    if (bank && bank.exercises && bank.exercises.length >= 5) {
+      var SIZE = ({ A1: 8, A2: 8, B1: 8, B2: 9, C1: 9, C2: 9 })[level] || 8;
+      var all = bank.exercises.slice(), pickedB;
+      if (bank.toefl) {
+        /* TOEFL corto: garantiza 1 lectura + 1 listening y completa con el resto */
+        var rd = shuffle(all.filter(function (e) { return e.type === "reading"; })).slice(0, 1);
+        var ls = shuffle(all.filter(function (e) { return e.type === "listening"; })).slice(0, 1);
+        var rest = shuffle(all.filter(function (e) { return e.type !== "reading" && e.type !== "listening"; }));
+        pickedB = rd.concat(ls).concat(rest).slice(0, SIZE);
+      } else {
+        pickedB = shuffle(all).slice(0, SIZE);
+      }
+      shuffle(pickedB);
+      return {
+        lessonId: "boss:" + level, level: level, track: "Examen del mundo", isBoss: true, bossLevel: level,
+        title: bm.name + " · " + level,
+        explanation: {
+          body: "Demuestra tu dominio de " + level + ". "
+            + (bank.toefl ? "Examen al estilo TOEFL (versión corta), con preguntas nuevas de lectura, listening y estructura. "
+                          : "Preguntas nuevas, con palabras y contextos distintos a los de las lecciones. ")
+            + "Necesitas " + bm.pass + "% para vencer al guardián y abrir el siguiente mundo.",
+          examples: []
+        },
+        exercises: pickedB, xpReward: 70, mascotState: "thinking", nextLessonId: null
+      };
+    }
+    /* Fallback (sin banco): arma el examen desde las lecciones del mundo. */
     var built = PATH.build(L, ORDER), gg = built.levels[level];
     if (!gg) return null;
-    var bm = bossMeta(level), pool = [];
+    var pool = [];
     /* Dificultad por nivel: los mundos avanzados (B2/C1/C2) son más largos y
        eligen los ejercicios más exigentes; los básicos, variados. */
     var hard = (["B2", "C1", "C2"].indexOf(level) >= 0);
