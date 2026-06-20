@@ -486,6 +486,12 @@
   .boss-emblem{color:var(--w-accent,#c5a059);line-height:0}
   .boss-emblem svg{width:54px;height:58px}
   .boss-emblem svg.boss-art{width:118px;height:118px}
+  /* retrato del guardián (IA) en portada / resultado y en el nodo del mapa; respaldo = bossArt SVG */
+  .boss-emblem img.boss-photo{display:block;margin:2px auto;width:120px;height:120px;border-radius:50%;
+    object-fit:cover;border:3px solid var(--w-accent,#c5a059);box-shadow:0 8px 20px rgba(20,18,42,.55)}
+  .boss-emblem.lit img.boss-photo{border-color:var(--gold,#c5a059)}
+  .wbtn.boss .boss-node-photo{display:block;width:100%;height:100%;object-fit:cover;border-radius:42px 42px 12px 12px}
+  .wbtn.boss .boss-art{width:100%;height:100%}
   .boss-emblem.lit{color:var(--gold,#c5a059)}
   .boss-emblem.dim{color:#8e8aa6}
   .bm-ic{display:inline-flex;align-items:center;color:var(--w-accent,#c5a059)}
@@ -1224,6 +1230,19 @@
     if (inner === shieldSvg()) return inner;
     return '<svg class="boss-art" viewBox="0 0 120 120" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + inner + '</svg>';
   }
+  /* retratos de guardianes (IA, uno por mundo); cae al SVG bossArt temático si falta el PNG */
+  var BOSS_PORTRAIT = {
+    A1: "assets/images/guardians/guardian_a1.png", A2: "assets/images/guardians/guardian_a2.png",
+    B1: "assets/images/guardians/guardian_b1.png", B2: "assets/images/guardians/guardian_b2.png",
+    C1: "assets/images/guardians/guardian_c1.png", C2: "assets/images/guardians/guardian_c2.png"
+  };
+  /* el onerror corre en scope global (este script es un IIFE): se expone en window; respaldo = bossArt */
+  window.__vbossFallback = function (img, lv) { try { if (img) img.outerHTML = bossArt(lv); } catch (e) {} };
+  function bossPortrait(lv) {
+    var src = BOSS_PORTRAIT[lv];
+    if (!src) return bossArt(lv);
+    return '<img class="boss-photo" src="' + src + '" alt="" loading="lazy" decoding="async" onerror="window.__vbossFallback(this,\'' + lv + '\')">';
+  }
   /* style inline con las 3 variables del mundo (acento/soft/glow) */
   function worldVars(t) { return '--w-accent:' + t.accent + ';--w-accent-soft:' + t.accentSoft + ';--w-glow:' + t.glow; }
   /* capa ambiental reutilizable (N partículas <i>); mapMod=true para la del mapa */
@@ -1517,7 +1536,9 @@
       title = bm.name; aria = bm.name + ", bloqueado.";
     }
     return '<div class="wnode wboss-node' + (passed ? " done" : "") + '" data-stop="' + stop + '" style="--dx:' + dx + 'px">'
-      + label + '<button class="' + cls + '" ' + attr + ' aria-label="' + esc(aria) + '">' + beacon + '</button>'
+      + label + '<button class="' + cls + '" ' + attr + ' aria-label="' + esc(aria) + '">'
+      + (BOSS_PORTRAIT[selLevel] ? '<img class="boss-node-photo" src="' + BOSS_PORTRAIT[selLevel] + '" alt="" loading="lazy" decoding="async" onerror="window.__vbossFallback(this,\'' + selLevel + '\')">' : beacon)
+      + '</button>'
       + '<span class="wtitle">' + esc(title) + '</span>'
       + (passed ? '<span class="wbridge" aria-hidden="true"></span>' : '') + '</div>';
   }
@@ -1776,7 +1797,7 @@
   function renderBossCover() {
     var bm = bossMeta(lesson.bossLevel), t = WORLD_THEME[lesson.bossLevel] || {};
     show('<div class="wrap">' + topbar(6) + '<div class="card center boss-cover" style="' + worldVars(t) + '">'
-      + '<div class="boss-emblem" aria-hidden="true">' + bossArt(lesson.bossLevel) + '</div>'
+      + '<div class="boss-emblem" aria-hidden="true">' + bossPortrait(lesson.bossLevel) + '</div>'
       + biomeMotif(lesson.bossLevel)
       + '<span class="boss-eyebrow">Examen del mundo &middot; ' + esc(lesson.level) + '</span>'
       + '<h1>' + esc(bm.name) + '</h1>'
@@ -2372,7 +2393,7 @@
       earnedXp = 0;
       show('<div class="wrap">' + topbar(86) + '<div class="card center">'
         + mascot("incorrect", "El guardián resiste. ¡Reagrúpate y vuelve!")
-        + '<div class="boss-emblem dim" aria-hidden="true">' + bossArt(lesson.bossLevel) + '</div>'
+        + '<div class="boss-emblem dim" aria-hidden="true">' + bossPortrait(lesson.bossLevel) + '</div>'
         + '<h1>' + pct + '%</h1>'
         + '<p class="muted">' + correct + ' de ' + total + ' correctos &middot; necesitas ' + bm.pass + '% para vencerlo</p>'
         + '<div class="xpbar"><div class="xpfill" style="width:' + pct + '%;background:var(--error)"></div></div>'
@@ -2392,7 +2413,7 @@
       : '<div class="boss-unlock">&#128081; ¡Has dominado el último mundo!</div>';
     show('<div class="wrap">' + topbar(92) + '<div class="card center">'
       + mascot("milestone", "¡Guardián vencido!")
-      + '<div class="boss-emblem lit" aria-hidden="true">' + bossArt(lesson.bossLevel) + '</div>'
+      + '<div class="boss-emblem lit" aria-hidden="true">' + bossPortrait(lesson.bossLevel) + '</div>'
       + '<h1>+' + earnedXp + ' XP</h1>'
       + '<p class="muted">' + correct + ' de ' + total + ' correctos &middot; ' + pct + '%</p>'
       + '<div class="xpbar"><div class="xpfill" style="width:' + pct + '%"></div></div>'
