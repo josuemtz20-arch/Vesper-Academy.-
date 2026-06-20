@@ -347,12 +347,22 @@
   .terr .flag{fill:none;stroke:var(--gold,#c5a059);stroke-width:1.2}
   .biome-motif{flex:none;display:block}
   .biome-motif .prop{opacity:1}
-  /* sendero SVG: calzada ancha + glow + línea dorada (trazado por JS sobre los nodos) */
+  /* ===== Camino temático (calzada en capas, trazado por JS sobre los nodos) =====
+     Orden DOM = profundidad. paintTrail pone el MISMO "d" medido en todas las
+     <path>; .wtrail-line queda penúltima (el avatar mide su longitud) y
+     .wtrail-comet última (cuenta de luz que recorre la ruta). El carácter de
+     cada mundo se afina en .wmap[data-world="XX"] más abajo. */
   .wtrail{position:absolute;left:0;top:0;z-index:1;overflow:visible;pointer-events:none}
   .wtrail path{fill:none;stroke-linecap:round;stroke-linejoin:round}
-  .wtrail-road{stroke:var(--w-accent,#c5a059);stroke-width:17;opacity:.20}
-  .wtrail-glow{stroke:var(--w-glow,rgba(197,160,89,.4));stroke-width:9;opacity:.5}
-  .wtrail-line{stroke:var(--gold,#c5a059);stroke-width:3.5;stroke-dasharray:2 12;opacity:.95}
+  .wtrail-base{stroke:var(--w-accent,#c5a059);stroke-width:26;opacity:.16;stroke-linecap:round}   /* arcén/terreno bajo la calzada */
+  .wtrail-road{stroke:var(--w-accent,#c5a059);stroke-width:16;opacity:.30}                          /* superficie de la calzada */
+  .wtrail-tex{stroke:var(--w-accent,#c5a059);stroke-width:19;opacity:.34;stroke-dasharray:1.5 8}    /* textura: adoquín/tabla/peldaño/estrella */
+  .wtrail-glow{stroke:var(--w-glow,rgba(197,160,89,.4));stroke-width:10;opacity:.55}
+  .wtrail-line{stroke:var(--gold,#c5a059);stroke-width:3.5;stroke-dasharray:2 12;opacity:.95}        /* veta dorada = ruta recorrida (PENÚLTIMA) */
+  .wtrail-comet{stroke:var(--gold,#c5a059);stroke-width:7;stroke-linecap:round;stroke-dasharray:16 99999;  /* cuenta de luz dorada (ÚLTIMA) */
+    filter:drop-shadow(0 0 6px var(--gold,#c5a059));opacity:.95;
+    will-change:stroke-dashoffset;animation:g-comet 13s linear infinite;animation-play-state:paused}  /* paintTrail la reanuda con --total ya medido */
+  @keyframes g-comet{from{stroke-dashoffset:0}to{stroke-dashoffset:calc(-1 * var(--total,4000px))}}
   /* nodos/carteles por encima del terreno y el camino */
   .wisland .wnode{z-index:2}
   .wisland .wstart{z-index:2}
@@ -990,6 +1000,148 @@
   .world-banner[data-world="A1"] .wamb i,.wmap[data-world="A1"] .wamb--map i{opacity:.32}
   .world-banner[data-world="B1"] .wamb i:nth-child(9){opacity:0}
 }
+
+/* =====================================================================
+   VESPER ACADEMY — "El Sendero Vivo": camino temático + paisaje en capas
+   + vida (animación). Oro (#c5a059/#a8843d) = recompensa INVARIANTE; el
+   acento del mundo (--w-accent/-soft/--w-glow) lleva la atmósfera. Solo
+   se animan transform / opacity / filter / stroke-dashoffset. Todo se
+   congela bajo prefers-reduced-motion y .vesper-reduce-motion (al final).
+   ===================================================================== */
+
+/* ---- keyframes globales (g-*) ---- */
+@keyframes g-sway{0%,100%{transform:rotate(-1.5deg)}50%{transform:rotate(1.5deg)}}
+@keyframes g-flag{0%,100%{transform:skewX(-7deg) rotate(-1.5deg)}50%{transform:skewX(7deg) rotate(1.5deg)}}
+@keyframes g-flick{0%,100%{opacity:.6}42%{opacity:1}68%{opacity:.82}}
+@keyframes g-twinkle{0%,100%{opacity:.5;transform:scale(.8)}50%{opacity:1;transform:scale(1.14)}}
+@keyframes g-beam{0%,100%{transform:rotate(-20deg);opacity:.1}50%{transform:rotate(20deg);opacity:.3}}
+@keyframes g-smoke{0%{transform:translateY(0) scale(1);opacity:.55}100%{transform:translateY(-13px) scale(1.7);opacity:0}}
+@keyframes g-roadbreathe{0%,100%{opacity:.42}50%{opacity:.66}}   /* centrado en la base .55 del glow */
+@keyframes g-roadtwinkle{0%,100%{opacity:.7}50%{opacity:1}}
+
+/* ---- terreno: profundidad + suelo + vida ---- */
+.wterrain{overflow:visible}
+/* siluetas laterales = masas de terreno continuas (el camino atraviesa un lugar) */
+.terr .sil{fill:#23234a;opacity:.55}
+.terr .sil2{fill:#20203c;opacity:.6}                 /* capa trasera, más oscura/lejana */
+.terr .sil-rim{fill:none;stroke:var(--w-accent,#5E8A4E);stroke-width:1.1;opacity:.5}
+/* repisa de suelo bajo cada grupo de props (para que no "floten") */
+.terr .ground{fill:var(--w-accent-soft,rgba(197,160,89,.12));opacity:.85}
+/* perspectiva atmosférica: lejos = más claro/desaturado; cerca = más oscuro/saturado */
+.terr .far{opacity:.55;filter:saturate(.7)}
+.terr .near{filter:brightness(.92) saturate(1.12)}
+/* pivotes por elemento (SVG necesita transform-box:fill-box) */
+.terr .sway,.terr .lf,.terr .lf2,.terr .flag,.terr .ring,.terr .spark,.terr .gem,.terr .glow,.terr .win,.terr .beam,.terr .smoke{transform-box:fill-box}
+/* vida idle de props (global; el camino se afina por mundo más abajo) */
+.terr .sway{transform-origin:50% 100%;animation:g-sway 4.8s ease-in-out infinite}
+.terr .flag{transform-origin:0% 100%;animation:g-flag 3.4s ease-in-out infinite}
+.terr .glow,.terr .win{transform-origin:50% 50%;animation:g-flick 5s ease-in-out infinite}
+.terr .spark,.terr .gem{transform-origin:50% 50%;animation:g-twinkle 5.5s ease-in-out infinite}
+.terr .ring{fill:none;stroke:var(--w-accent,#6A5FA8);stroke-width:1.4;opacity:.8}          /* anillo estático (girar una elipse se ve mal) */
+.terr .beamray{fill:var(--w-glow,rgba(61,134,176,.5))}
+.terr .beam{transform-origin:0% 50%;opacity:.2;animation:g-beam 7s ease-in-out infinite}    /* faro: pivota en la lámpara */
+.terr .smoke{transform-origin:50% 100%;animation:g-smoke 4.6s ease-out infinite}
+/* desfase determinista por posición para que no titilen al unísono */
+.terr .prop:nth-of-type(2n) .glow,.terr .prop:nth-of-type(2n) .win{animation-delay:-2.3s}
+.terr .prop:nth-of-type(3n) .glow,.terr .prop:nth-of-type(3n) .win{animation-delay:-3.7s}
+.terr .prop:nth-of-type(3n) .spark,.terr .prop:nth-of-type(3n) .gem{animation-delay:-3.1s}
+.terr .prop:nth-of-type(3n+1) .spark,.terr .prop:nth-of-type(3n+1) .gem{animation-delay:-1.6s}
+.terr .prop:nth-of-type(4n) .sway{animation-duration:5.6s}
+.terr .prop:nth-of-type(5n) .sway{animation-duration:4.1s}
+/* solo animan las piezas de PRIMER PLANO (.near) + el héroe (sin clase de
+   profundidad); las capas lejana (.far) y media (.mid) descansan estáticas para
+   no tener ~150 animaciones simultáneas en un mapa de 4000px (la quietud del
+   fondo además refuerza la profundidad). */
+.terr .far .sway,.terr .far .glow,.terr .far .spark,.terr .far .win,.terr .far .gem,.terr .far .flag,
+.terr .mid .sway,.terr .mid .glow,.terr .mid .spark,.terr .mid .win,.terr .mid .gem,.terr .mid .flag{animation:none}
+
+/* ---- carácter del camino por mundo ----
+   La textura/veta son ESTÁTICAS (patrón labrado: adoquín/tabla/peldaño/estrella);
+   el único trazo en movimiento es .wtrail-comet (una cuenta de luz fina) para no
+   repintar toda la franja del mapa varias veces por fotograma. Los respiros de luz
+   usan opacity (compositor). */
+/* A1 — adoquín de hogar (cálido) */
+.wmap[data-world="A1"] .wtrail-tex{stroke-dasharray:2 7}
+.wmap[data-world="A1"] .wtrail-comet{animation-duration:12s}
+/* A2 — pasaderas de piedra en el bosque (dosel que respira) */
+.wmap[data-world="A2"] .wtrail-tex{stroke-dasharray:3 9}
+.wmap[data-world="A2"] .wtrail-glow{animation:g-roadbreathe 6s ease-in-out infinite}
+.wmap[data-world="A2"] .wtrail-comet{animation-duration:16s}
+/* B1 — paseo marítimo con farolas (vía guiada) */
+.wmap[data-world="B1"] .wtrail-tex{stroke-dasharray:2 7}
+.wmap[data-world="B1"] .wtrail-line{stroke-dasharray:1 14;stroke-width:4;filter:drop-shadow(0 0 4px var(--gold,#c5a059))}
+.wmap[data-world="B1"] .wtrail-comet{animation-duration:10s}
+/* B2 — escalinata de ascenso (peldaños fijos; el cometa SUBE) */
+.wmap[data-world="B2"] .wtrail-tex{stroke-dasharray:12 5;opacity:.5}
+.wmap[data-world="B2"] .wtrail-line{stroke-dasharray:3 10}
+.wmap[data-world="B2"] .wtrail-comet{animation-duration:13s;animation-direction:reverse}
+/* C1 — vía constelar (sin pavimento; la ruta ES luz) */
+.wmap[data-world="C1"] .wtrail-base{opacity:.1}
+.wmap[data-world="C1"] .wtrail-road{opacity:.16}
+.wmap[data-world="C1"] .wtrail-tex{opacity:0}
+.wmap[data-world="C1"] .wtrail-glow{stroke-width:13;opacity:.42;filter:blur(1px)}
+.wmap[data-world="C1"] .wtrail-line{stroke-dasharray:1 9;stroke-width:2.4;filter:drop-shadow(0 0 5px var(--gold,#c5a059));animation:g-roadtwinkle 6s ease-in-out infinite}
+.wmap[data-world="C1"] .wtrail-comet{animation-duration:18s}
+/* C2 — calzada de aurora hacia el castillo */
+.wmap[data-world="C2"] .wtrail-road{opacity:.26;filter:blur(1px)}
+.wmap[data-world="C2"] .wtrail-tex{opacity:0}
+.wmap[data-world="C2"] .wtrail-glow{stroke-width:12;animation:g-roadbreathe 8s ease-in-out infinite}
+.wmap[data-world="C2"] .wtrail-line{stroke-dasharray:3 11}
+.wmap[data-world="C2"] .wtrail-comet{animation-duration:15s}
+
+/* ---- profundidad al hacer scroll (parallax): las masas laterales (fondo)
+   se rezagan respecto a nodos/camino. JS (applyParallax) traslada .wsil ~0.12x
+   del scroll; se anula bajo reduced-motion. ---- */
+.wsil{will-change:transform}
+
+/* ---- atmósfera por mundo (.watmo): una capa de clima/niebla/nebulosa/aurora
+   detrás del camino y los nodos. Tokens de acento/glow; solo transform/opacity. ---- */
+.watmo{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.watmo::before,.watmo::after{content:"";position:absolute;pointer-events:none;will-change:transform,opacity}
+/* A1 — bruma cálida de hogar que sube del suelo */
+.wisland[data-world="A1"] .watmo::before{inset:auto 0 0 0;height:55%;
+  background:radial-gradient(120% 90% at 50% 120%,var(--w-glow) 0%,transparent 60%);opacity:.22;animation:g-atmo-breathe 9s ease-in-out infinite}
+/* A2 — niebla de bosque a la deriva en el tercio inferior */
+.wisland[data-world="A2"] .watmo::before{inset:auto -20% 5% -20%;height:42%;
+  background:linear-gradient(0deg,var(--w-accent-soft) 0%,transparent 82%);opacity:.55;filter:blur(2px);animation:g-atmo-drift 26s ease-in-out infinite alternate}
+/* B1 — calina costera que barre en horizontal */
+.wisland[data-world="B1"] .watmo::before{inset:28% -28% auto -28%;height:34%;
+  background:linear-gradient(90deg,transparent,var(--w-accent-soft) 44%,rgba(255,255,255,.06) 50%,var(--w-accent-soft) 56%,transparent);opacity:.5;filter:blur(3px);animation:g-atmo-sweep 30s linear infinite}
+/* B2 — polvo dorado que asciende */
+.wisland[data-world="B2"] .watmo::before{inset:auto 0 0 0;height:62%;
+  background:linear-gradient(0deg,var(--w-accent-soft) 0%,transparent 72%);opacity:.4;animation:g-atmo-breathe 11s ease-in-out infinite}
+/* C1 — nubes de nebulosa a la deriva */
+.wisland[data-world="C1"] .watmo::before{inset:-12% -15% auto -15%;height:72%;
+  background:radial-gradient(closest-side at 30% 40%,var(--w-accent-soft) 0%,transparent 70%),radial-gradient(closest-side at 75% 60%,var(--w-glow) 0%,transparent 65%);opacity:.5;filter:blur(8px);animation:g-atmo-float 34s ease-in-out infinite alternate}
+/* C2 — cortinas de aurora que ondean */
+.wisland[data-world="C2"] .watmo::before{inset:-12% 0 auto 0;height:82%;transform-origin:50% 0;
+  background:linear-gradient(95deg,transparent 0%,var(--w-glow) 35%,var(--w-accent-soft) 55%,transparent 100%);opacity:.28;filter:blur(10px);animation:g-atmo-aurora 16s ease-in-out infinite}
+.wisland[data-world="C2"] .watmo::after{inset:-8% 0 auto 0;height:62%;transform-origin:50% 0;
+  background:linear-gradient(85deg,transparent 12%,var(--w-accent-soft) 50%,transparent 88%);opacity:.2;filter:blur(14px);animation:g-atmo-aurora 22s ease-in-out -6s infinite}
+@keyframes g-atmo-breathe{0%,100%{opacity:.15;transform:translateY(7px)}50%{opacity:.3;transform:translateY(-5px)}}
+@keyframes g-atmo-drift{0%{transform:translateX(-6%)}100%{transform:translateX(6%)}}
+@keyframes g-atmo-sweep{0%{transform:translateX(-32%)}100%{transform:translateX(32%)}}
+@keyframes g-atmo-float{0%{transform:translate(-3%,0)}100%{transform:translate(4%,2%)}}
+@keyframes g-atmo-aurora{0%,100%{transform:skewX(-7deg) translateX(-4%);opacity:.16}50%{transform:skewX(7deg) translateX(4%);opacity:.32}}
+
+/* ---- reduced-motion: congela TODO lo nuevo en un cuadro bello y legible ---- */
+@media(prefers-reduced-motion:reduce){
+  /* !important: vence a los ajustes por mundo .wmap[data-world] .wtrail-* (0,3,0) */
+  .wtrail-comet,.wtrail-tex,.wtrail-line,.wtrail-glow,.wtrail-road{animation:none!important}
+  .wtrail-comet{stroke-dashoffset:calc(var(--total,0px) * (var(--rest,0) / -100))}
+  .terr .sway,.terr .flag,.terr .glow,.terr .win,.terr .spark,.terr .gem,.terr .ring,.terr .beam,.terr .smoke{animation:none}
+  .terr .glow,.terr .win,.terr .spark,.terr .gem{opacity:1;transform:none}
+  .terr .smoke{opacity:.28}.terr .beam{opacity:.2;transform:rotate(0deg)}
+  .watmo::before,.watmo::after{animation:none!important}
+  .wsil{transform:none!important}
+}
+.vesper-reduce-motion .wtrail-comet,.vesper-reduce-motion .wtrail-tex,.vesper-reduce-motion .wtrail-line,.vesper-reduce-motion .wtrail-glow,.vesper-reduce-motion .wtrail-road{animation:none!important}
+.vesper-reduce-motion .wtrail-comet{stroke-dashoffset:calc(var(--total,0px) * (var(--rest,0) / -100))}
+.vesper-reduce-motion .terr .sway,.vesper-reduce-motion .terr .flag,.vesper-reduce-motion .terr .glow,.vesper-reduce-motion .terr .win,.vesper-reduce-motion .terr .spark,.vesper-reduce-motion .terr .gem,.vesper-reduce-motion .terr .ring,.vesper-reduce-motion .terr .beam,.vesper-reduce-motion .terr .smoke{animation:none}
+.vesper-reduce-motion .terr .glow,.vesper-reduce-motion .terr .win,.vesper-reduce-motion .terr .spark,.vesper-reduce-motion .terr .gem{opacity:1;transform:none}
+.vesper-reduce-motion .terr .smoke{opacity:.28}.vesper-reduce-motion .terr .beam{opacity:.2;transform:rotate(0deg)}
+.vesper-reduce-motion .watmo::before,.vesper-reduce-motion .watmo::after{animation:none!important}
+.vesper-reduce-motion .wsil{transform:none!important}
 </style>
 </head>
 <body>
@@ -1259,49 +1411,145 @@
   }
   /* pseudo-aleatorio determinista (estable entre re-medidas/resize) */
   function trnd(i) { var x = Math.sin(i * 127.1 + 17.3) * 43758.5453; return x - Math.floor(x); }
-  /* una pieza de paisaje del bioma (kind) como <g> SVG, escalada y posicionada.
+  /* héroe (gran motivo firmado) y estilo de silueta lateral por mundo */
+  var HERO_KIND = { A1: "hero_cottage", A2: "hero_oak", B1: "hero_lighthouse", B2: "hero_tower", C1: "hero_planet", C2: "hero_castle" };
+  function silStyle(world) {
+    switch (world) {
+      case "A1": return { segH: 64, amp: 16, baseW: 24, mode: "smooth" };  // colinas
+      case "A2": return { segH: 30, amp: 30, baseW: 22, mode: "spiky" };   // copas de bosque
+      case "B1": return { segH: 52, amp: 24, baseW: 26, mode: "step" };    // tejados de ciudad
+      case "B2": return { segH: 64, amp: 34, baseW: 24, mode: "jag" };     // picos
+      case "C1": return { mode: "none" };                                   // espacio: sin masas
+      case "C2": return { segH: 44, amp: 32, baseW: 24, mode: "spiky" };   // almenas/agujas
+      default:   return { segH: 60, amp: 20, baseW: 24, mode: "smooth" };
+    }
+  }
+  /* masa de terreno continua a lo largo de un borde (banco/treeline/skyline).
+     Dibuja 2 capas (atrás/oscura + frente) + filo de acento para dar profundidad. */
+  function sideMass(side, W, H, SIL) {
+    if (!SIL || SIL.mode === "none") return "";
+    var L = (side === "L"), n = Math.ceil((H + 40) / SIL.segH), sd = L ? 311 : 417;
+    function inset(i, lay) {
+      var t = trnd(sd + i * 1.7 + lay * 23), base = SIL.baseW + lay * 9;
+      if (SIL.mode === "spiky") return base + (i % 2 ? SIL.amp : SIL.amp * 0.12);
+      if (SIL.mode === "step")  return base + (Math.floor(i / 2) % 2 ? SIL.amp : 2);
+      if (SIL.mode === "jag")   return base + t * SIL.amp;
+      return base + (0.5 + 0.5 * Math.sin(i * 0.9)) * SIL.amp * 0.7 + t * 4;   // smooth
+    }
+    function body(lay, cls) {
+      var outX = L ? -30 : W + 30, i, x, ins = inset(0, lay);
+      x = L ? ins : W - ins;
+      var d = "M " + outX + " -30 L " + x.toFixed(1) + " -20";
+      for (i = 1; i <= n; i++) { ins = inset(i, lay); x = L ? ins : W - ins; d += " L " + x.toFixed(1) + " " + (-20 + i * SIL.segH); }
+      d += " L " + outX + " " + (H + 30) + " Z";
+      return '<path class="' + cls + '" d="' + d + '"/>';
+    }
+    var i, x, ins, rim = "";                                  // filo de acento sobre el contorno del frente
+    for (i = 0; i <= n; i++) { ins = inset(i, 0); x = L ? ins : W - ins; rim += (i ? " L " : "M ") + x.toFixed(1) + " " + (-20 + i * SIL.segH); }
+    return body(1, "sil2") + body(0, "sil") + '<path class="sil-rim" d="' + rim + '"/>';
+  }
+
+  /* una pieza de paisaje (kind) como <g> SVG escalado/posicionado. La parte viva
+     (follaje, banderas, humo, haz) va en sub-grupos con clase (.sway/.flag/.smoke/
+     .beam) para animarse SIN tocar el transform de colocación. depth='far'|'near'
+     da perspectiva atmosférica; delay desfasa el balanceo de forma determinista.
      Paleta navy: cuerpos oscuros, acento del mundo en follaje/tejados, oro en luces. */
-  function terrainProp(px, py, sc, kind) {
-    var open = '<g class="prop ' + kind + '" transform="translate(' + px.toFixed(1) + ' ' + py.toFixed(1) + ') scale(' + sc.toFixed(2) + ')">';
+  function terrainProp(px, py, sc, kind, depth, delay) {
+    var cls = "prop " + kind + (depth ? " " + depth : "");
+    var open = '<g class="' + cls + '" transform="translate(' + px.toFixed(1) + ' ' + py.toFixed(1) + ') scale(' + sc.toFixed(2) + ')">';
+    var dl = (delay != null) ? ' style="animation-delay:-' + delay.toFixed(2) + 's"' : '';
+    function sway(inner) { return '<g class="sway"' + dl + '>' + inner + '</g>'; }
     var sh = '<ellipse class="sh" cx="0" cy="3" rx="10" ry="3"/>';
     switch (kind) {
-      case "pine":     return open + '<ellipse class="sh" cx="0" cy="3" rx="10" ry="3"/><path class="lf2" d="M0 -9 L7 7 L-7 7 Z"/><path class="lf" d="M0 -19 L8 3 L-8 3 Z"/><rect class="tk" x="-1.5" y="5" width="3" height="5"/></g>';
-      case "bush":     return open + '<ellipse class="sh" cx="0" cy="4" rx="11" ry="3"/><circle class="lf" cx="-5" cy="1" r="6"/><circle class="lf" cx="5" cy="1" r="6"/><circle class="lf2" cx="0" cy="-4" r="7"/></g>';
-      case "rock":     return open + '<ellipse class="sh" cx="0" cy="3" rx="9" ry="3"/><path class="rk" d="M-8 4 L-5 -5 L2 -7 L8 -1 L7 4 Z"/></g>';
-      case "cottage":  return open + sh + '<rect class="bdy" x="-8" y="-6" width="16" height="12"/><path class="lf" d="M-10 -6 L0 -16 L10 -6 Z"/><rect class="win" x="-3" y="-2" width="6" height="6"/></g>';
-      case "lantern":  return open + '<ellipse class="sh" cx="0" cy="6" rx="5" ry="2"/><rect class="tk" x="-1" y="-4" width="2" height="10"/><circle class="glow" cx="0" cy="-7" r="4.4"/><circle class="win" cx="0" cy="-7" r="2.2"/></g>';
-      case "mushroom": return open + '<ellipse class="sh" cx="0" cy="5" rx="6" ry="2"/><rect class="stem" x="-2" y="-1" width="4" height="6"/><path class="lf" d="M-8 -1 A8 7 0 0 1 8 -1 Z"/><circle class="dot" cx="-3" cy="-3" r="1.2"/><circle class="dot" cx="3" cy="-2.5" r="1"/></g>';
-      case "fern":     return open + '<ellipse class="sh" cx="0" cy="4" rx="7" ry="2"/><path class="ln" d="M0 5 C-8 0 -8 -8 -2 -10"/><path class="ln" d="M0 5 C8 0 8 -8 2 -10"/><path class="ln2" d="M0 5 L0 -9"/></g>';
-      case "building": return open + sh + '<rect class="bdy" x="-7" y="-22" width="14" height="28"/><rect class="win" x="-4" y="-19" width="2.5" height="2.5"/><rect class="win" x="1.5" y="-19" width="2.5" height="2.5"/><rect class="win" x="-4" y="-13" width="2.5" height="2.5"/><rect class="win" x="1.5" y="-13" width="2.5" height="2.5"/><rect class="win" x="-4" y="-7" width="2.5" height="2.5"/><rect class="win" x="1.5" y="-7" width="2.5" height="2.5"/></g>';
-      case "tower":    return open + sh + '<rect class="bdy" x="-5" y="-19" width="10" height="25"/><rect class="bdy" x="-6" y="-22" width="2.5" height="3"/><rect class="bdy" x="-1.2" y="-22" width="2.5" height="3"/><rect class="bdy" x="3.5" y="-22" width="2.5" height="3"/><rect class="win" x="-1.5" y="-13" width="3" height="4"/></g>';
-      case "lamp":     return open + '<ellipse class="sh" cx="0" cy="7" rx="4" ry="2"/><path class="ln" d="M0 7 L0 -8 Q0 -11 3 -11"/><circle class="glow" cx="4" cy="-10" r="3.6"/><circle class="win" cx="4" cy="-10" r="1.8"/></g>';
-      case "crag":     return open + '<ellipse class="sh" cx="0" cy="4" rx="12" ry="3"/><path class="rk" d="M-12 5 L-3 -10 L1 -4 L6 -15 L12 5 Z"/><path class="rk2" d="M-3 -10 L1 -4 L6 -15"/></g>';
-      case "banner":   return open + '<ellipse class="sh" cx="0" cy="8" rx="3" ry="1.6"/><rect class="tk" x="-0.8" y="-12" width="1.6" height="20"/><path class="lf" d="M0.8 -12 L11 -9 L0.8 -6 Z"/></g>';
-      case "star4":    return open + '<path class="spark" d="M0 -9 L2 -2 L9 0 L2 2 L0 9 L-2 2 L-9 0 L-2 -2 Z"/></g>';
-      case "planet":   return open + '<circle class="lf" cx="0" cy="0" r="6"/><ellipse class="ring" cx="0" cy="0" rx="11" ry="3.4" transform="rotate(-18)"/></g>';
-      case "crystal":  return open + '<ellipse class="sh" cx="0" cy="7" rx="5" ry="2"/><path class="gem" d="M0 -11 L5 -2 L2 8 L-2 8 L-5 -2 Z"/><path class="gem2" d="M0 -11 L0 8"/></g>';
-      case "spire":    return open + sh + '<rect class="bdy" x="-5" y="-12" width="10" height="18"/><path class="lf" d="M-6 -12 L0 -22 L6 -12 Z"/><rect class="win" x="-1.5" y="-6" width="3" height="5"/><path class="flag" d="M0 -22 L0 -27 M0 -26 L5 -24.5 L0 -22"/></g>';
+      case "pine":     return open + '<ellipse class="sh" cx="0" cy="7" rx="11" ry="3.2"/>'
+        + sway('<rect class="tk" x="-1.7" y="2" width="3.4" height="8"/><path class="lf2" d="M0 -6 L9 9 L-9 9 Z"/><path class="lf2" d="M0 -14 L7.5 3 L-7.5 3 Z"/><path class="lf" d="M0 -22 L6 -4 L-6 -4 Z"/>') + '</g>';
+      case "bush":     return open + '<ellipse class="sh" cx="0" cy="5" rx="12" ry="3.2"/>'
+        + sway('<circle class="lf" cx="-5.5" cy="1" r="6.5"/><circle class="lf" cx="5.5" cy="1" r="6.5"/><circle class="lf2" cx="0" cy="-4.5" r="7.5"/><circle class="lf2" cx="-2" cy="-1" r="4"/>') + '</g>';
+      case "rock":     return open + '<ellipse class="sh" cx="0" cy="3" rx="10" ry="3"/><path class="rk" d="M-9 4 L-5 -6 L3 -8 L9 -1 L8 4 Z"/><path class="rk2" d="M-5 -6 L1 -3 L9 -1"/></g>';
+      case "cottage":  return open + '<ellipse class="sh" cx="0" cy="8" rx="13" ry="3.2"/><rect class="bdy" x="-9" y="-6" width="18" height="14"/><path class="lf" d="M-11 -6 L0 -18 L11 -6 Z"/><rect class="tk" x="4.5" y="-16" width="3.4" height="7"/><rect class="win" x="-4" y="-2" width="7" height="7" rx="1"/></g>';
+      case "lantern":  return open + '<ellipse class="sh" cx="0" cy="7" rx="5" ry="2"/><rect class="tk" x="-1" y="-5" width="2" height="12"/><circle class="glow" cx="0" cy="-8" r="5.2"/><circle class="win" cx="0" cy="-8" r="2.4"/></g>';
+      case "mushroom": return open + '<ellipse class="sh" cx="0" cy="5" rx="7" ry="2"/>'
+        + sway('<rect class="stem" x="-2" y="-1" width="4" height="6"/><path class="lf" d="M-9 -1 A9 8 0 0 1 9 -1 Z"/><circle class="dot" cx="-3.5" cy="-3.5" r="1.4"/><circle class="dot" cx="3" cy="-3" r="1.1"/>') + '</g>';
+      case "fern":     return open + '<ellipse class="sh" cx="0" cy="4" rx="8" ry="2"/>'
+        + sway('<path class="ln" d="M0 5 C-9 0 -9 -9 -2 -11"/><path class="ln" d="M0 5 C9 0 9 -9 2 -11"/><path class="ln2" d="M0 5 L0 -10"/>') + '</g>';
+      case "building": return open + '<ellipse class="sh" cx="0" cy="8" rx="11" ry="3"/><rect class="bdy" x="-8" y="-27" width="16" height="34"/><rect class="bdy" x="-8" y="-30" width="16" height="3"/>'
+        + '<rect class="win" x="-5" y="-23" width="3" height="3"/><rect class="win" x="2" y="-23" width="3" height="3"/><rect class="win" x="-5" y="-16" width="3" height="3"/><rect class="win" x="2" y="-16" width="3" height="3"/><rect class="win" x="-5" y="-9" width="3" height="3"/><rect class="win" x="2" y="-9" width="3" height="3"/><rect class="win" x="-5" y="-2" width="3" height="3"/><rect class="win" x="2" y="-2" width="3" height="3"/></g>';
+      case "tower":    return open + '<ellipse class="sh" cx="0" cy="8" rx="8" ry="2.6"/><rect class="bdy" x="-5" y="-22" width="10" height="29"/><rect class="bdy" x="-6.5" y="-25" width="3" height="3.5"/><rect class="bdy" x="-1.5" y="-25" width="3" height="3.5"/><rect class="bdy" x="3.5" y="-25" width="3" height="3.5"/><rect class="win" x="-2" y="-15" width="4" height="5" rx="1"/></g>';
+      case "lamp":     return open + '<ellipse class="sh" cx="0" cy="7" rx="4" ry="2"/><path class="ln" d="M0 7 L0 -9 Q0 -12 3 -12"/><circle class="glow" cx="4" cy="-11" r="4"/><circle class="win" cx="4" cy="-11" r="1.9"/></g>';
+      case "crag":     return open + '<ellipse class="sh" cx="0" cy="4" rx="12" ry="3"/><path class="rk" d="M-12 5 L-3 -11 L1 -4 L6 -16 L12 5 Z"/><path class="rk2" d="M-3 -11 L1 -4 L6 -16"/></g>';
+      case "banner":   return open + '<ellipse class="sh" cx="0" cy="8" rx="3" ry="1.6"/><rect class="tk" x="-0.8" y="-13" width="1.6" height="21"/>'
+        + '<path class="flag" d="M0.8 -13 L12 -10 L0.8 -6 Z"/></g>';
+      case "star4":    return open + '<path class="spark" d="M0 -10 L2.2 -2.2 L10 0 L2.2 2.2 L0 10 L-2.2 2.2 L-10 0 L-2.2 -2.2 Z"/></g>';
+      case "planet":   return open + '<circle class="lf" cx="0" cy="0" r="6.5"/><ellipse class="ring" cx="0" cy="0" rx="12" ry="3.6" transform="rotate(-18)"/><circle class="gem" cx="-2.5" cy="-2" r="1.6"/></g>';
+      case "crystal":  return open + '<ellipse class="sh" cx="0" cy="8" rx="5" ry="2"/><path class="gem" d="M0 -12 L5.5 -2 L2 9 L-2 9 L-5.5 -2 Z"/><path class="gem2" d="M0 -12 L0 9 M-5.5 -2 L5.5 -2"/></g>';
+      case "spire":    return open + '<ellipse class="sh" cx="0" cy="7" rx="6" ry="2"/><rect class="bdy" x="-5" y="-13" width="10" height="20"/><path class="lf" d="M-6 -13 L0 -24 L6 -13 Z"/><rect class="win" x="-1.7" y="-7" width="3.4" height="5" rx="1"/><rect class="tk" x="-0.6" y="-30" width="1.2" height="7"/><path class="flag" d="M0.6 -30 L7 -28 L0.6 -25 Z"/></g>';
+      /* ---- héroes (un gran motivo firmado por mundo) ---- */
+      case "hero_cottage": return open + '<ellipse class="sh" cx="0" cy="13" rx="23" ry="5"/><rect class="bdy" x="-15" y="-10" width="30" height="23"/><path class="lf" d="M-18 -10 L0 -29 L18 -10 Z"/><rect class="tk" x="8" y="-27" width="4.6" height="11"/><circle class="smoke" cx="10.3" cy="-28" r="2.8"/><rect class="win" x="-11" y="-4" width="7" height="8" rx="1"/><rect class="win" x="4" y="-4" width="7" height="8" rx="1"/><rect class="rk" x="-2.5" y="1" width="5" height="12"/></g>';
+      case "hero_oak":     return open + '<ellipse class="sh" cx="0" cy="15" rx="20" ry="5"/><rect class="tk" x="-3.6" y="-4" width="7.2" height="19"/>'
+        + sway('<circle class="lf2" cx="-11" cy="-11" r="11"/><circle class="lf2" cx="11" cy="-11" r="11"/><circle class="lf" cx="0" cy="-22" r="13"/><circle class="lf" cx="-6" cy="-13" r="9"/><circle class="lf" cx="7" cy="-14" r="8"/>')
+        + '<circle class="glow" cx="9" cy="-1" r="3.6"/><circle class="win" cx="9" cy="-1" r="1.7"/></g>';
+      case "hero_lighthouse": return open + '<ellipse class="sh" cx="0" cy="17" rx="15" ry="4.5"/><path class="bdy" d="M-7 17 L-5 -14 L5 -14 L7 17 Z"/><rect class="rk" x="-6" y="-1" width="12" height="3"/><rect class="rk" x="-6.5" y="9" width="13" height="3"/><rect class="bdy" x="-5.5" y="-23" width="11" height="9"/><path class="lf" d="M-6.5 -23 L0 -30 L6.5 -23 Z"/><g class="beam"><path class="beamray" d="M0 -18.5 L36 -31 L36 -6 Z"/></g><circle class="glow" cx="0" cy="-18.5" r="4.2"/><circle class="win" cx="0" cy="-18.5" r="2.1"/></g>';
+      case "hero_tower":   return open + '<ellipse class="sh" cx="0" cy="19" rx="15" ry="4.5"/><rect class="bdy" x="-8" y="-22" width="16" height="41"/><rect class="bdy" x="-10" y="-26" width="3.6" height="5"/><rect class="bdy" x="-1.8" y="-26" width="3.6" height="5"/><rect class="bdy" x="6.4" y="-26" width="3.6" height="5"/><rect class="win" x="-3" y="-15" width="6" height="7" rx="1"/><rect class="win" x="-3" y="-1" width="6" height="7" rx="1"/><rect class="tk" x="-0.7" y="-38" width="1.4" height="13"/><path class="flag" d="M0.7 -38 L12 -34.5 L0.7 -31 Z"/></g>';
+      case "hero_planet":  return open + '<circle class="lf" cx="0" cy="0" r="13"/><ellipse class="ring" cx="0" cy="0" rx="23" ry="6.8" transform="rotate(-20)"/><circle class="gem" cx="-5" cy="-4" r="3.2"/><circle class="gem" cx="4" cy="3" r="2"/><circle class="gem" cx="19" cy="-13" r="2.6"/><path class="spark" d="M-17 15 L-16 12 L-13 11 L-16 10 L-17 7 L-18 10 L-21 11 L-18 12 Z"/></g>';
+      case "hero_castle":  return open + '<ellipse class="sh" cx="0" cy="17" rx="25" ry="5"/><rect class="bdy" x="-18" y="-6" width="36" height="23"/><rect class="bdy" x="-18" y="-14" width="9" height="10"/><rect class="bdy" x="9" y="-14" width="9" height="10"/><rect class="bdy" x="-5" y="-21" width="10" height="17"/><path class="gem" d="M-13.5 -14 L-13.5 -23 L-9 -23 L-9 -14 Z"/><path class="gem" d="M9 -14 L9 -23 L13.5 -23 L13.5 -14 Z"/><path class="lf" d="M-5.5 -21 L0 -30 L5.5 -21 Z"/><rect class="win" x="-2" y="-15" width="4" height="5"/><rect class="win" x="-15" y="-1" width="4" height="5"/><rect class="win" x="11" y="-1" width="4" height="5"/><rect class="tk" x="-0.6" y="-36" width="1.2" height="8"/><path class="flag" d="M0.6 -36 L9 -33.5 L0.6 -31 Z"/></g>';
       default:         return open + sh + '<circle class="lf" cx="0" cy="0" r="5"/></g>';
     }
   }
-  /* genera el paisaje del bioma alrededor del camino (evita los nodos) */
-  function terrainSvgInner(pts, W, H, biome) {
+
+  /* genera el paisaje en CAPAS alrededor del camino (evita los nodos):
+     masas laterales continuas (atrás) + héroe del mundo + grupos de props
+     "asentados" en repisas de suelo, ordenados por Y para solaparse con
+     profundidad. trnd(seed) mantiene todo estable entre re-medidas/resize. */
+  function terrainSvgInner(pts, W, H, biome, world, firstY) {
     biome = (biome && biome.length) ? biome : ["pine", "bush", "rock"];
     function pick(seed) { return biome[Math.floor(trnd(seed) * biome.length) % biome.length]; }
-    function near(px, py) { for (var j = 0; j < pts.length; j++) { var dx = pts[j][0] - px, dy = pts[j][1] - py; if (dx * dx + dy * dy < 60 * 60) return true; } return false; }
-    var s = "", y, k = 0;
-    for (y = 44; y < H - 18; y += 56) {
-      k++;
-      var lx = 7 + trnd(k * 2) * 26;                       // margen izquierdo
-      if (!near(lx, y)) s += terrainProp(lx, y, 0.8 + trnd(k * 3) * 0.55, pick(k * 5));
-      var rx = W - 7 - trnd(k * 2 + 1) * 26;                // margen derecho
-      if (!near(rx, y + 22)) s += terrainProp(rx, y + 22, 0.8 + trnd(k * 7) * 0.55, pick(k * 11));
-      if (trnd(k * 13) > 0.62) {                            // alguna pieza interior en hueco libre
-        var mx = W * 0.5 + (trnd(k * 17) - 0.5) * 112, my = y + 12;
-        if (!near(mx, my)) s += terrainProp(mx, my, 0.66 + trnd(k * 19) * 0.36, pick(k * 23));
+    function near(px, py) { for (var j = 0; j < pts.length; j++) { var dx = pts[j][0] - px, dy = pts[j][1] - py; if (dx * dx + dy * dy < 72 * 72) return true; } return false; }
+    var SIL = silStyle(world);
+    var masses = sideMass("L", W, H, SIL) + sideMass("R", W, H, SIL);   // masas continuas (fondo)
+    var ground = "", arr = [];
+
+    /* héroe del mundo: una vez, arriba, en el margen, sin pisar nodos */
+    var heroK = HERO_KIND[world];
+    if (heroK) {
+      var hy = Math.max(64, (firstY || 80) + 46), hx = 48;   // 48 >= rx(25)*scale(1.75) ≈ 44 => no se sale del borde
+      if (near(hx, hy)) hx = W - 48;
+      if (!near(hx, hy)) {
+        ground += '<ellipse class="ground" cx="' + hx + '" cy="' + (hy + 7) + '" rx="24" ry="5"/>';
+        arr.push({ y: hy, svg: terrainProp(hx, hy, 1.75, heroK, "", null) });
       }
     }
-    return s;
+
+    /* grupos (clusters) a cada margen, asentados en una repisa de suelo */
+    var y, k = 0, step = 64;
+    for (y = 48; y < H - 26; y += step) {
+      k++;
+      var sides = [["L", y, k], ["R", y + 26, k + 90]];
+      for (var si = 0; si < sides.length; si++) {
+        var sideL = sides[si][0] === "L", baseY = sides[si][1], seed = sides[si][2];
+        var dmode = (seed % 3 === 0) ? "far" : (seed % 3 === 1 ? "near" : "mid");
+        var nprops = 1 + (trnd(seed * 1.3) > 0.58 ? 1 : 0);     // 1–2 piezas
+        var margin = 9, cx = 0, cn = 0;
+        for (var c = 0; c < nprops; c++) {
+          var off = c * 14;
+          var x = sideL ? (margin + off + trnd(seed + c) * 5) : (W - margin - off - trnd(seed + c) * 5);
+          var yy = baseY - c * 3;
+          if (near(x, yy)) continue;
+          var kind = pick(seed * 5 + c * 7);
+          var sc = (dmode === "far") ? (0.5 + trnd(seed + c) * 0.22)
+                 : (dmode === "near") ? (1.05 + trnd(seed + c) * 0.4)
+                 : (0.78 + trnd(seed + c) * 0.4);
+          var delay = trnd(seed * 3 + c) * 6;
+          arr.push({ y: yy + (dmode === "near" ? 6 : 0), svg: terrainProp(x, yy, sc, kind, dmode, delay) });
+          cx += x; cn++;
+        }
+        if (cn) ground += '<ellipse class="ground" cx="' + (cx / cn).toFixed(1) + '" cy="' + (baseY + 4) + '" rx="' + (12 + nprops * 6) + '" ry="4"/>';
+      }
+    }
+    arr.sort(function (a, b) { return a.y - b.y; });               // cerca (Y mayor) se pinta encima
+    var props = "";
+    for (var i = 0; i < arr.length; i++) props += arr[i].svg;
+    /* .wsil envuelve las masas (fondo) para poder rezagarlas con parallax al hacer scroll */
+    return '<g class="wsil">' + masses + '</g>' + ground + props;  // z: masas < suelo < props
   }
   /* mini-escena del bioma (3 piezas) para recibirte al empezar una lección del mundo */
   function biomeMotif(lv) {
@@ -1374,12 +1622,14 @@
       terr.setAttribute("viewBox", "0 0 " + W + " " + H);
       terr.setAttribute("width", W); terr.setAttribute("height", H);
       var bw = WORLD_THEME[map.getAttribute("data-world")];
-      terr.innerHTML = terrainSvgInner(pts, W, H, bw && bw.biome);
+      terr.innerHTML = terrainSvgInner(pts, W, H, bw && bw.biome, map.getAttribute("data-world"), pts[0] ? pts[0][1] : 0);
     }
     if (!avatar) return;
 
-    /* longitud de arco acumulada en cada nodo => offset-distance exacto */
-    var line = paths[paths.length - 1], lens = [0];
+    /* longitud de arco acumulada en cada nodo => offset-distance exacto.
+       OJO: mide la veta dorada (.wtrail-line), NO la última <path> — esa es
+       ahora la cuenta-cometa y robaría la medición del avatar. */
+    var line = svg.querySelector(".wtrail-line") || paths[paths.length - 1], lens = [0];
     if (line.getTotalLength) {
       var tmp = line.cloneNode(false), pre = "M" + pts[0][0].toFixed(1) + " " + pts[0][1].toFixed(1);
       svg.appendChild(tmp);
@@ -1391,6 +1641,14 @@
 
     var cur = parseInt(map.getAttribute("data-cur"), 10); if (isNaN(cur)) cur = 0;
     var prev = parseInt(map.getAttribute("data-prev"), 10);
+    /* cuenta-cometa: longitud total del trazo (para el bucle) + posición de
+       reposo = nodo actual (para prefers-reduced-motion: el haz se aparca ahí). */
+    var comet = svg.querySelector(".wtrail-comet");
+    if (comet) {
+      comet.style.setProperty("--total", total.toFixed(1) + "px");
+      comet.style.setProperty("--rest", pctAt(cur).toFixed(1));
+      comet.style.setProperty("animation-play-state", "running");   // arranca con --total ya medido (evita el salto del primer ciclo)
+    }
     var canOffset = !!(window.CSS && CSS.supports && CSS.supports("offset-path", 'path("M0 0")'));
     var animate = !isNaN(prev) && prev !== cur && !reduceMotion();
 
@@ -1417,6 +1675,7 @@
       } else { avatar.style.transition = "none"; place(cur); }
     }
     map.removeAttribute("data-prev");
+    applyParallax();                                  // estado inicial de la profundidad por scroll
   }
   var _trailResizeBound = false;
   function bindTrailResize() {
@@ -1425,6 +1684,24 @@
     window.addEventListener("resize", function () { clearTimeout(t); t = setTimeout(function () {
       var m = byId("wmap"); if (m) { m.removeAttribute("data-prev"); paintTrail(); }
     }, 160); });
+  }
+  /* ---- profundidad al hacer scroll: rezaga las masas laterales (.wsil) ~0.12x.
+     rAF-gated, una lectura + una escritura de transform por frame; nulo bajo
+     reduced-motion (y la CSS .wsil{transform:none!important} lo refuerza). ---- */
+  var _parRaf = 0, _parallaxBound = false;
+  function applyParallax() {
+    var map = byId("wmap"); if (!map) return;
+    var sil = map.querySelector(".wsil"); if (!sil) return;
+    if (reduceMotion()) { sil.style.transform = ""; return; }
+    var scrolled = -map.getBoundingClientRect().top; if (scrolled < 0) scrolled = 0;
+    sil.style.transform = "translate3d(0," + (scrolled * 0.12).toFixed(1) + "px,0)";
+  }
+  function bindParallax() {
+    if (_parallaxBound) return; _parallaxBound = true;
+    window.addEventListener("scroll", function () {
+      if (_parRaf) return;
+      _parRaf = requestAnimationFrame(function () { _parRaf = 0; applyParallax(); });
+    }, { passive: true });
   }
 
   function worldBanner(selLevel, built) {
@@ -1584,9 +1861,10 @@
     var startPennant = '<div class="wstart" aria-hidden="true"><span>' + (WORLD_UMBRAL[selLevel] || ('Mundo ' + worldNo)) + '</span></div>';
     var scene = '<div class="wsky">'
       + '<div class="wisland" data-world="' + selLevel + '" style="' + worldVars(t) + terrain + '">'
+      + '<div class="watmo" aria-hidden="true"></div>'
       + '<div class="wmap" id="wmap" data-world="' + selLevel + '" data-cur="' + curStop + '" style="' + worldVars(t) + '">'
       + '<svg class="wterrain terr" aria-hidden="true" focusable="false" preserveAspectRatio="none"></svg>'
-      + '<svg class="wtrail" aria-hidden="true" focusable="false" preserveAspectRatio="none"><path class="wtrail-road"/><path class="wtrail-glow"/><path class="wtrail-line"/></svg>'
+      + '<svg class="wtrail" aria-hidden="true" focusable="false" preserveAspectRatio="none"><path class="wtrail-base"/><path class="wtrail-road"/><path class="wtrail-tex"/><path class="wtrail-glow"/><path class="wtrail-line"/><path class="wtrail-comet"/></svg>'
       + '<img class="wavatar" src="' + BOSS_AVATAR + '" alt="" aria-hidden="true" decoding="async">'
       + ambLayer(t.mapN || 3, true) + startPennant + parts
       + '</div></div></div>';
@@ -1691,6 +1969,7 @@
          El guardia W<80 en paintTrail reintenta solo si aún no hay layout. */
       requestAnimationFrame(function () { requestAnimationFrame(paintTrail); });
       bindTrailResize();
+      bindParallax();
     })();
     _indexFirst = false;
 
