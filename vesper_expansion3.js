@@ -1183,6 +1183,448 @@ window.VESPER_EXPANSION3 = (function () {
           { t: "You're kidding!", bucket: "s" }, { t: "Oh well", bucket: "r" } ] },
         { type: "true_false", statement: "Interjections like \"No way!\" make spoken English sound more natural.", answer: true, explanation: "Sí, son muy típicas del habla cotidiana." }
       ]
+    },
+
+    /* ============================================================
+     * ===== TODAS LAS CLASES GRAMATICALES (partes de la oración) =
+     * ===== sustantivos · pronombres · adjetivos · adverbios ·  ==
+     * ===== artículos/determinantes · cuantificadores · verbos  ==
+     * ============================================================ */
+
+    /* ---------- SUSTANTIVOS: plurales (A1) ---------- */
+    "x3-a1-grammar-nouns-plural": {
+      lessonId: "x3-a1-grammar-nouns-plural", level: "A1", track: "Gramática", topic: "grammar", skill: "grammar",
+      title: "Sustantivos: el plural", xpReward: 34, mascotState: "explaining",
+      explanation: {
+        body: "El plural regular añade -s (book → books). Si la palabra acaba en -s, -ss, -sh, -ch, -x se añade -es (box → boxes). Si acaba en consonante + y, se cambia a -ies (city → cities). Hay plurales irregulares: man → men, woman → women, child → children, foot → feet.",
+        examples: [
+          { en: "one car, two cars", es: "un coche, dos coches" },
+          { en: "one box, two boxes", es: "una caja, dos cajas" },
+          { en: "one child, two children", es: "un niño, dos niños" }
+        ]
+      },
+      exercises: [
+        { type: "multiple_choice", question: "What is the plural of \"box\"?", options: ["boxs", "boxes", "boxies"], correctIndex: 1, explanation: "Tras -x se añade -es: boxes." },
+        { type: "multiple_choice", question: "What is the plural of \"city\"?", options: ["citys", "cityes", "cities"], correctIndex: 2, explanation: "Consonante + y → -ies: cities." },
+        { type: "categorize", instruction: "¿Plural regular o irregular?", buckets: [
+          { id: "r", label: "Regular" }, { id: "i", label: "Irregular" } ], items: [
+          { t: "dogs", bucket: "r" }, { t: "children", bucket: "i" },
+          { t: "tables", bucket: "r" }, { t: "feet", bucket: "i" },
+          { t: "books", bucket: "r" }, { t: "men", bucket: "i" } ] },
+        { type: "fill_blank", sentence: "I have two ___ (woman) in my team.", answers: ["women"], hint: "Plural irregular de 'woman'.", explanation: "woman → women." },
+        { type: "find_error", question: "Encuentra el error.",
+          segments: ["There ", { u: "are" }, " ", { u: "three" }, " ", { u: "childs" }, " in the ", { u: "park" }, "."],
+          correctIndex: 2, correction: "children (plural irregular)",
+          explanation: "El plural de 'child' es 'children', no 'childs'." },
+        { type: "translate", prompt: "Traduce: \"Tengo cinco libros.\"", answers: ["i have five books"], explanation: "I have five books." }
+      ]
+    },
+
+    /* ---------- SUSTANTIVOS: contables/incontables (A2) ---------- */
+    "x3-a2-grammar-nouns-countable": {
+      lessonId: "x3-a2-grammar-nouns-countable", level: "A2", track: "Gramática", topic: "grammar", skill: "grammar",
+      title: "Sustantivos contables e incontables", xpReward: 44, mascotState: "explaining",
+      explanation: {
+        body: "Los contables se pueden contar y tienen plural (apple → apples). Los incontables NO se cuentan ni llevan plural ni 'a/an' (water, money, rice, information). Para cantidades de incontables usamos 'some' o medidas: 'a glass of water', 'a piece of advice'. Con contables: many; con incontables: much.",
+        examples: [
+          { en: "I'd like some water.", es: "Quisiera un poco de agua." },
+          { en: "How much money do you have?", es: "¿Cuánto dinero tienes?" },
+          { en: "There are many apples.", es: "Hay muchas manzanas." }
+        ]
+      },
+      exercises: [
+        { type: "categorize", instruction: "¿Contable o incontable?", buckets: [
+          { id: "c", label: "Countable" }, { id: "u", label: "Uncountable" } ], items: [
+          { t: "apple", bucket: "c" }, { t: "water", bucket: "u" },
+          { t: "book", bucket: "c" }, { t: "money", bucket: "u" },
+          { t: "chair", bucket: "c" }, { t: "rice", bucket: "u" } ] },
+        { type: "multiple_choice", question: "Choose: \"How ___ sugar do you want?\"", options: ["many", "much", "any"], correctIndex: 1, explanation: "'sugar' es incontable → much." },
+        { type: "multiple_choice", question: "Choose: \"There aren't ___ chairs.\"", options: ["much", "many", "a"], correctIndex: 1, explanation: "'chairs' es contable plural → many." },
+        { type: "find_error", question: "Encuentra el error.",
+          segments: ["I ", { u: "need" }, " ", { u: "an" }, " ", { u: "information" }, " ", { u: "please" }, "."],
+          correctIndex: 1, correction: "(quita 'an') some information",
+          explanation: "'information' es incontable: no lleva 'a/an'. Di 'some information'." },
+        { type: "fill_blank", sentence: "Can I have a ___ of water, please?", answers: ["glass", "bottle"], hint: "Un recipiente para medir incontables.", explanation: "a glass/bottle of water." },
+        { type: "true_false", statement: "Uncountable nouns usually have no plural form.", answer: true, explanation: "Correcto: no se dice 'waters', 'moneys', etc." }
+      ]
+    },
+
+    /* ---------- SUSTANTIVOS: el genitivo sajón (A2) ---------- */
+    "x3-a2-grammar-possessive-s": {
+      lessonId: "x3-a2-grammar-possessive-s", level: "A2", track: "Gramática", topic: "grammar", skill: "grammar",
+      title: "El posesivo: el genitivo sajón ('s)", xpReward: 42, mascotState: "explaining",
+      explanation: {
+        body: "Para indicar posesión con personas usamos 's: 'Ana's car' (el coche de Ana). Con plurales que ya acaban en -s solo se añade el apóstrofo: 'my parents' house'. Con cosas se suele preferir 'of': 'the door of the car'. No confundas: 'It's' = it is; 'its' = su (posesivo).",
+        examples: [
+          { en: "This is Tom's bike.", es: "Esta es la bici de Tom." },
+          { en: "The students' books are here.", es: "Los libros de los estudiantes están aquí." }
+        ]
+      },
+      exercises: [
+        { type: "multiple_choice", question: "How do you say \"the dog of Maria\"?", options: ["the Maria's dog", "Maria's dog", "Maria dog's"], correctIndex: 1, explanation: "Persona + 's + objeto: Maria's dog." },
+        { type: "multiple_choice", question: "Plural ending in -s: \"my friends ___ party\".", options: ["'s", "'", "s'"], correctIndex: 1, explanation: "Plural en -s: solo apóstrofo → friends' party." },
+        { type: "fill_blank", sentence: "Where is ___ (the office of the manager)?", answers: ["the manager's office"], hint: "persona + 's + cosa.", explanation: "the manager's office." },
+        { type: "find_error", question: "Encuentra el error.",
+          segments: ["The ", { u: "cat" }, " is ", { u: "playing" }, " with ", { u: "it's" }, " ", { u: "ball" }, "."],
+          correctIndex: 2, correction: "its (posesivo, sin apóstrofo)",
+          explanation: "'its' (su) es posesivo; 'it's' = it is. Aquí va 'its ball'." },
+        { type: "translate", prompt: "Traduce: \"Es la casa de mis padres.\"", answers: ["it's my parents' house", "it is my parents' house", "this is my parents' house"], explanation: "It's my parents' house." }
+      ]
+    },
+
+    /* ---------- PRONOMBRES: sujeto y objeto (A1) ---------- */
+    "x3-a1-grammar-pronouns": {
+      lessonId: "x3-a1-grammar-pronouns", level: "A1", track: "Gramática", topic: "grammar", skill: "grammar",
+      title: "Pronombres de sujeto y de objeto", xpReward: 34, mascotState: "explaining",
+      explanation: {
+        body: "Los pronombres de SUJETO hacen la acción y van antes del verbo: I, you, he, she, it, we, they. Los de OBJETO la reciben y van después del verbo o preposición: me, you, him, her, it, us, them. Ejemplo: 'She loves him' (Ella lo quiere).",
+        examples: [
+          { en: "I see her every day.", es: "La veo cada día." },
+          { en: "They help us.", es: "Ellos nos ayudan." },
+          { en: "Give it to me.", es: "Dámelo a mí." }
+        ]
+      },
+      exercises: [
+        { type: "matching", instruction: "Une el pronombre de sujeto con el de objeto.", pairs: [
+          { l: "I", r: "me" }, { l: "he", r: "him" },
+          { l: "she", r: "her" }, { l: "we", r: "us" },
+          { l: "they", r: "them" } ] },
+        { type: "multiple_choice", question: "Choose: \"Can you help ___?\" (a mí)", options: ["I", "me", "my"], correctIndex: 1, explanation: "Tras el verbo va el pronombre objeto: me." },
+        { type: "multiple_choice", question: "Choose: \"___ are my friends.\"", options: ["Them", "They", "Their"], correctIndex: 1, explanation: "Sujeto → They." },
+        { type: "find_error", question: "Encuentra el error.",
+          segments: ["My sister and ", { u: "me" }, " ", { u: "like" }, " ", { u: "pizza" }, " ", { u: "together" }, "."],
+          correctIndex: 0, correction: "I (como sujeto: ...and I)",
+          explanation: "Como sujeto se dice 'My sister and I', no '...and me'." },
+        { type: "fill_blank", sentence: "I don't know that man. Do you know ___?", answers: ["him"], hint: "Pronombre objeto masculino.", explanation: "him = lo/le (objeto)." },
+        { type: "translate", prompt: "Traduce: \"Nosotros los conocemos.\"", answers: ["we know them"], explanation: "We know them." }
+      ]
+    },
+
+    /* ---------- PRONOMBRES: posesivos (A2) ---------- */
+    "x3-a2-grammar-possessives": {
+      lessonId: "x3-a2-grammar-possessives", level: "A2", track: "Gramática", topic: "grammar", skill: "grammar",
+      title: "Adjetivos y pronombres posesivos", xpReward: 42, mascotState: "explaining",
+      explanation: {
+        body: "Los ADJETIVOS posesivos van antes del sustantivo: my, your, his, her, its, our, their ('my car'). Los PRONOMBRES posesivos van solos, sin sustantivo: mine, yours, his, hers, ours, theirs ('It's mine'). Ejemplo: 'This is my book and that one is yours'.",
+        examples: [
+          { en: "This is my house.", es: "Esta es mi casa." },
+          { en: "The blue car is hers.", es: "El coche azul es suyo (de ella)." }
+        ]
+      },
+      exercises: [
+        { type: "matching", instruction: "Une el adjetivo posesivo con su pronombre.", pairs: [
+          { l: "my", r: "mine" }, { l: "your", r: "yours" },
+          { l: "her", r: "hers" }, { l: "our", r: "ours" },
+          { l: "their", r: "theirs" } ] },
+        { type: "multiple_choice", question: "Choose: \"This pen is ___.\" (de mí, solo)", options: ["my", "mine", "me"], correctIndex: 1, explanation: "Pronombre posesivo (va solo): mine." },
+        { type: "multiple_choice", question: "Choose: \"___ house is very big.\"", options: ["Their", "Theirs", "Them"], correctIndex: 0, explanation: "Antes del sustantivo va el adjetivo: Their house." },
+        { type: "find_error", question: "Encuentra el error.",
+          segments: ["Is ", { u: "this" }, " bag ", { u: "your" }, " or ", { u: "hers" }, "?"],
+          correctIndex: 1, correction: "yours (pronombre, va solo)",
+          explanation: "Sin sustantivo detrás se usa el pronombre 'yours', no 'your'." },
+        { type: "fill_blank", sentence: "We love ___ new flat. (de nosotros)", answers: ["our"], hint: "Adjetivo posesivo, antes del sustantivo.", explanation: "our flat = nuestro piso." },
+        { type: "translate", prompt: "Traduce: \"Este es mi coche y aquel es suyo (de ella).\"", answers: ["this is my car and that one is hers", "this is my car and that is hers"], explanation: "This is my car and that one is hers." }
+      ]
+    },
+
+    /* ---------- PRONOMBRES: reflexivos (B1) ---------- */
+    "x3-b1-grammar-reflexive": {
+      lessonId: "x3-b1-grammar-reflexive", level: "B1", track: "Gramática", topic: "grammar", skill: "grammar",
+      title: "Pronombres reflexivos", xpReward: 52, mascotState: "explaining",
+      explanation: {
+        body: "Los reflexivos (myself, yourself, himself, herself, itself, ourselves, yourselves, themselves) se usan cuando el sujeto y el objeto son la misma persona: 'I hurt myself'. También para enfatizar ('I did it myself') y con 'by + reflexivo' = solo, sin ayuda ('She lives by herself').",
+        examples: [
+          { en: "He cut himself while cooking.", es: "Se cortó cocinando." },
+          { en: "We enjoyed ourselves at the party.", es: "Nos lo pasamos bien en la fiesta." },
+          { en: "She did it by herself.", es: "Lo hizo ella sola." }
+        ]
+      },
+      exercises: [
+        { type: "matching", instruction: "Une el pronombre con su reflexivo.", pairs: [
+          { l: "I", r: "myself" }, { l: "he", r: "himself" },
+          { l: "they", r: "themselves" }, { l: "we", r: "ourselves" },
+          { l: "you (sing.)", r: "yourself" } ] },
+        { type: "multiple_choice", question: "Choose: \"The children dressed ___.\"", options: ["themself", "themselves", "theirselves"], correctIndex: 1, explanation: "Plural: themselves (forma correcta)." },
+        { type: "fill_blank", sentence: "Be careful with the knife or you'll hurt ___.", answers: ["yourself"], hint: "Reflexivo de 'you' singular.", explanation: "yourself." },
+        { type: "find_error", question: "Encuentra el error.",
+          segments: ["She ", { u: "lives" }, " ", { u: "by" }, " ", { u: "herselves" }, " in the ", { u: "city" }, "."],
+          correctIndex: 2, correction: "herself (singular)",
+          explanation: "El reflexivo de 'she' es 'herself' (no 'herselves')." },
+        { type: "multiple_choice", question: "\"I made this cake myself\" emphasises that...", options: ["someone helped me", "I did it without help", "I bought it"], correctIndex: 1, explanation: "El reflexivo enfatiza que lo hizo sin ayuda." },
+        { type: "translate", prompt: "Traduce: \"Nos lo pasamos genial.\"", answers: ["we enjoyed ourselves", "we really enjoyed ourselves"], explanation: "We enjoyed ourselves." }
+      ]
+    },
+
+    /* ---------- PRONOMBRES: relativos (B1) ---------- */
+    "x3-b1-grammar-relative": {
+      lessonId: "x3-b1-grammar-relative", level: "B1", track: "Gramática", topic: "grammar", skill: "grammar",
+      title: "Pronombres relativos (who, which, that...)", xpReward: 54, mascotState: "explaining",
+      explanation: {
+        body: "Los relativos unen información sobre un sustantivo: WHO para personas, WHICH para cosas, THAT para ambos, WHERE para lugares, WHOSE para posesión. Ejemplo: 'The man who lives next door' / 'the book which I bought' / 'the city where I was born'.",
+        examples: [
+          { en: "That's the woman who helped me.", es: "Esa es la mujer que me ayudó." },
+          { en: "This is the house where I grew up.", es: "Esta es la casa donde crecí." }
+        ]
+      },
+      exercises: [
+        { type: "matching", instruction: "Une el relativo con su uso.", pairs: [
+          { l: "who", r: "personas" }, { l: "which", r: "cosas" },
+          { l: "where", r: "lugares" }, { l: "whose", r: "posesión" } ] },
+        { type: "multiple_choice", question: "Choose: \"The car ___ is parked outside is mine.\"", options: ["who", "which", "where"], correctIndex: 1, explanation: "Para cosas: which (o that)." },
+        { type: "multiple_choice", question: "Choose: \"She's the teacher ___ son is in my class.\"", options: ["who", "which", "whose"], correctIndex: 2, explanation: "Posesión: whose (cuyo)." },
+        { type: "fill_blank", sentence: "This is the restaurant ___ we had dinner.", answers: ["where"], hint: "Relativo de lugar.", explanation: "where = donde." },
+        { type: "find_error", question: "Encuentra el error.",
+          segments: ["The ", { u: "people" }, " ", { u: "which" }, " ", { u: "live" }, " ", { u: "here" }, " are kind."],
+          correctIndex: 1, correction: "who (personas)",
+          explanation: "Para personas se usa 'who' (o 'that'), no 'which'." },
+        { type: "translate", prompt: "Traduce: \"Ese es el hombre que me ayudó.\"", answers: ["that's the man who helped me", "that is the man who helped me", "that's the man that helped me"], explanation: "That's the man who helped me." }
+      ]
+    },
+
+    /* ---------- ADJETIVOS: básicos y posición (A1) ---------- */
+    "x3-a1-grammar-adjectives": {
+      lessonId: "x3-a1-grammar-adjectives", level: "A1", track: "Gramática", topic: "grammar", skill: "grammar",
+      title: "Adjetivos: descripción y posición", xpReward: 34, mascotState: "explaining",
+      explanation: {
+        body: "Los adjetivos describen al sustantivo y NUNCA cambian (no tienen plural): 'a red car', 'two red cars'. Van ANTES del sustantivo ('a big house') o DESPUÉS del verbo 'be' ('the house is big'). En inglés no se dice 'a car red'.",
+        examples: [
+          { en: "She has a beautiful garden.", es: "Tiene un jardín bonito." },
+          { en: "The dogs are happy.", es: "Los perros están felices." }
+        ]
+      },
+      exercises: [
+        { type: "matching", instruction: "Une el adjetivo con su traducción.", pairs: [
+          { l: "big", r: "grande" }, { l: "small", r: "pequeño" },
+          { l: "happy", r: "feliz" }, { l: "expensive", r: "caro" },
+          { l: "old", r: "viejo" }, { l: "beautiful", r: "bonito" } ] },
+        { type: "multiple_choice", question: "Choose the correct order.", options: ["a house big", "a big house", "big a house"], correctIndex: 1, explanation: "El adjetivo va antes del sustantivo: a big house." },
+        { type: "find_error", question: "Encuentra el error.",
+          segments: ["They ", { u: "have" }, " two ", { u: "reds" }, " ", { u: "cars" }, " ", { u: "outside" }, "."],
+          correctIndex: 1, correction: "red (los adjetivos no llevan plural)",
+          explanation: "Los adjetivos no tienen plural: 'red cars', no 'reds cars'." },
+        { type: "word_order", words: ["She", "has", "a", "small", "dog"], correctOrder: ["She", "has", "a", "small", "dog"], hint: "artículo + adjetivo + sustantivo." },
+        { type: "fill_blank", sentence: "The film was very ___. I didn't like it. (negativo)", answers: ["boring", "bad", "long"], hint: "Adjetivo negativo.", explanation: "boring/bad = aburrido/malo." },
+        { type: "true_false", statement: "In English, adjectives change for plural (e.g. \"bigs\").", answer: false, explanation: "Los adjetivos en inglés son invariables." }
+      ]
+    },
+
+    /* ---------- ADJETIVOS: comparativos y superlativos (A2) ---------- */
+    "x3-a2-grammar-comparatives": {
+      lessonId: "x3-a2-grammar-comparatives", level: "A2", track: "Gramática", topic: "grammar", skill: "grammar",
+      title: "Comparativos y superlativos", xpReward: 44, mascotState: "explaining",
+      explanation: {
+        body: "Adjetivos cortos: comparativo -er + than (taller than), superlativo the ___-est (the tallest). Adjetivos largos: more/the most (more interesting, the most interesting). Irregulares: good → better → the best; bad → worse → the worst.",
+        examples: [
+          { en: "She is taller than me.", es: "Es más alta que yo." },
+          { en: "This is the most expensive shop.", es: "Esta es la tienda más cara." },
+          { en: "My phone is better than yours.", es: "Mi teléfono es mejor que el tuyo." }
+        ]
+      },
+      exercises: [
+        { type: "multiple_choice", question: "Comparative of \"big\": \"An elephant is ___ a dog.\"", options: ["bigger than", "more big than", "the biggest"], correctIndex: 0, explanation: "Adjetivo corto: bigger than (se dobla la g)." },
+        { type: "multiple_choice", question: "Superlative of \"interesting\":", options: ["the interestingest", "the most interesting", "more interesting"], correctIndex: 1, explanation: "Adjetivo largo: the most interesting." },
+        { type: "fill_blank", sentence: "Today is ___ (good) than yesterday.", answers: ["better"], hint: "Comparativo irregular de 'good'.", explanation: "good → better." },
+        { type: "find_error", question: "Encuentra el error.",
+          segments: ["This ", { u: "book" }, " is ", { u: "more" }, " ", { u: "cheap" }, " ", { u: "than" }, " that one."],
+          correctIndex: 1, correction: "cheaper (adjetivo corto)",
+          explanation: "'cheap' es corto: 'cheaper than', no 'more cheap'." },
+        { type: "categorize", instruction: "¿Comparativo con -er o con 'more'?", buckets: [
+          { id: "er", label: "-er" }, { id: "more", label: "more" } ], items: [
+          { t: "fast", bucket: "er" }, { t: "beautiful", bucket: "more" },
+          { t: "old", bucket: "er" }, { t: "expensive", bucket: "more" } ] },
+        { type: "translate", prompt: "Traduce: \"Es el día más feliz de mi vida.\"", answers: ["it's the happiest day of my life", "it is the happiest day of my life"], explanation: "It's the happiest day of my life." }
+      ]
+    },
+
+    /* ---------- ADJETIVOS: orden (B2) ---------- */
+    "x3-b2-grammar-adjective-order": {
+      lessonId: "x3-b2-grammar-adjective-order", level: "B2", track: "Gramática", topic: "grammar", skill: "grammar",
+      title: "El orden de los adjetivos", xpReward: 60, mascotState: "explaining",
+      explanation: {
+        body: "Cuando hay varios adjetivos antes de un sustantivo, siguen un orden fijo: Opinión → Tamaño → Edad → Forma → Color → Origen → Material → Propósito. Ejemplo: 'a lovely small old round red Italian wooden table'. No se suelen usar más de tres seguidos.",
+        examples: [
+          { en: "a beautiful old wooden table", es: "una bonita mesa antigua de madera" },
+          { en: "a small black leather bag", es: "un bolso pequeño de cuero negro" }
+        ]
+      },
+      exercises: [
+        { type: "multiple_choice", question: "Choose the natural order.", options: ["a red big car", "a big red car", "a car big red"], correctIndex: 1, explanation: "Tamaño antes que color: big (size) + red (colour)." },
+        { type: "multiple_choice", question: "Choose the natural order.", options: ["an old lovely house", "a lovely old house", "a house lovely old"], correctIndex: 1, explanation: "Opinión (lovely) antes que edad (old)." },
+        { type: "word_order", words: ["a", "small", "black", "bag"], correctOrder: ["a", "small", "black", "bag"], hint: "tamaño + color + sustantivo." },
+        { type: "find_error", question: "Encuentra el error de orden.",
+          segments: ["She ", { u: "bought" }, " a ", { u: "Italian" }, " ", { u: "beautiful" }, " ", { u: "scarf" }, "."],
+          correctIndex: 1, correction: "beautiful Italian (opinión antes que origen)",
+          explanation: "La opinión va antes del origen: 'a beautiful Italian scarf'." },
+        { type: "fill_blank", sentence: "Order: a ___ (round / nice / wooden) bowl.", answers: ["nice round wooden", "a nice round wooden"], hint: "Opinión → forma → material.", explanation: "a nice round wooden bowl." },
+        { type: "true_false", statement: "Opinion adjectives usually come before fact adjectives (size, colour...).", answer: true, explanation: "Sí: opinión primero, luego los datos objetivos." }
+      ]
+    },
+
+    /* ---------- ADVERBIOS: de modo y formación (A2) ---------- */
+    "x3-a2-grammar-adverbs-manner": {
+      lessonId: "x3-a2-grammar-adverbs-manner", level: "A2", track: "Gramática", topic: "grammar", skill: "grammar",
+      title: "Adverbios de modo (-ly)", xpReward: 42, mascotState: "explaining",
+      explanation: {
+        body: "Los adverbios de modo dicen CÓMO se hace algo y suelen formarse con adjetivo + -ly: slow → slowly, careful → carefully. Si acaba en -y, pasa a -ily (happy → happily). Cuidado con los irregulares: good → well; fast → fast; hard → hard. El adverbio modifica al verbo, no al sustantivo.",
+        examples: [
+          { en: "She speaks English fluently.", es: "Habla inglés con fluidez." },
+          { en: "He drives carefully.", es: "Conduce con cuidado." },
+          { en: "They sing well.", es: "Cantan bien." }
+        ]
+      },
+      exercises: [
+        { type: "multiple_choice", question: "Adverb of \"careful\":", options: ["carefuly", "carefully", "carefuly"], correctIndex: 1, explanation: "careful + -ly = carefully." },
+        { type: "multiple_choice", question: "Adverb of \"good\":", options: ["goodly", "well", "gooder"], correctIndex: 1, explanation: "Irregular: good → well." },
+        { type: "fill_blank", sentence: "Please speak ___ (slow); I don't understand.", answers: ["slowly"], hint: "slow + -ly.", explanation: "slowly = despacio." },
+        { type: "find_error", question: "Encuentra el error.",
+          segments: ["She ", { u: "sings" }, " ", { u: "very" }, " ", { u: "good" }, " ", { u: "today" }, "."],
+          correctIndex: 2, correction: "well (adverbio)",
+          explanation: "Tras el verbo va el adverbio 'well', no el adjetivo 'good'." },
+        { type: "categorize", instruction: "¿Adjetivo o adverbio?", buckets: [
+          { id: "adj", label: "Adjective" }, { id: "adv", label: "Adverb" } ], items: [
+          { t: "quick", bucket: "adj" }, { t: "quickly", bucket: "adv" },
+          { t: "happy", bucket: "adj" }, { t: "carefully", bucket: "adv" } ] },
+        { type: "translate", prompt: "Traduce: \"Él trabaja muy duro.\"", answers: ["he works very hard"], explanation: "He works very hard ('hard' es adverbio, no 'hardly')." }
+      ]
+    },
+
+    /* ---------- ADVERBIOS: tipos (B1) ---------- */
+    "x3-b1-grammar-adverbs-types": {
+      lessonId: "x3-b1-grammar-adverbs-types", level: "B1", track: "Gramática", topic: "grammar", skill: "grammar",
+      title: "Tipos de adverbios y su posición", xpReward: 52, mascotState: "explaining",
+      explanation: {
+        body: "Hay adverbios de modo (quickly), lugar (here, outside), tiempo (yesterday, soon), frecuencia (always, often) y grado (very, quite, too). Orden habitual al final: modo + lugar + tiempo ('She sang beautifully at the theatre last night'). Los de grado van antes del adjetivo o adverbio que modifican (very tired, too fast).",
+        examples: [
+          { en: "He ran quickly to the station this morning.", es: "Corrió rápido a la estación esta mañana." },
+          { en: "The film was quite good.", es: "La película estuvo bastante bien." }
+        ]
+      },
+      exercises: [
+        { type: "categorize", instruction: "¿Qué tipo de adverbio es?", buckets: [
+          { id: "p", label: "Place" }, { id: "t", label: "Time" }, { id: "d", label: "Degree" } ], items: [
+          { t: "here", bucket: "p" }, { t: "yesterday", bucket: "t" },
+          { t: "very", bucket: "d" }, { t: "outside", bucket: "p" },
+          { t: "soon", bucket: "t" }, { t: "too", bucket: "d" } ] },
+        { type: "multiple_choice", question: "Choose the natural order (manner-place-time).", options: ["She worked yesterday hard at home.", "She worked hard at home yesterday.", "She worked at home yesterday hard."], correctIndex: 1, explanation: "modo (hard) + lugar (at home) + tiempo (yesterday)." },
+        { type: "multiple_choice", question: "Choose: \"This coffee is ___ hot to drink.\"", options: ["too", "very much", "enough"], correctIndex: 0, explanation: "'too + adjetivo' = demasiado (con sentido negativo)." },
+        { type: "fill_blank", sentence: "I'm ___ tired to go out tonight. (excessively)", answers: ["too"], hint: "Adverbio de grado: demasiado.", explanation: "too tired = demasiado cansado." },
+        { type: "find_error", question: "Encuentra el error de posición.",
+          segments: ["He ", { u: "speaks" }, " ", { u: "fluently" }, " ", { u: "very" }, " ", { u: "French" }, "."],
+          correctIndex: 2, correction: "very fluently (grado antes del adverbio)",
+          explanation: "El adverbio de grado va antes: 'He speaks French very fluently'." },
+        { type: "true_false", statement: "Degree adverbs like \"very\" go before the word they modify.", answer: true, explanation: "Sí: very tired, too fast, quite good." }
+      ]
+    },
+
+    /* ---------- ARTÍCULOS / DETERMINANTES: a / an / the (A1) ---------- */
+    "x3-a1-grammar-articles": {
+      lessonId: "x3-a1-grammar-articles", level: "A1", track: "Gramática", topic: "grammar", skill: "grammar",
+      title: "Artículos: a / an / the", xpReward: 34, mascotState: "explaining",
+      explanation: {
+        body: "Usamos A/AN (un/una) para algo no específico y singular: 'a' antes de consonante (a book), 'an' antes de sonido vocálico (an apple, an hour). THE (el/la/los/las) para algo concreto o ya mencionado. No se usa artículo con ideas generales en plural: 'I like dogs' (los perros en general).",
+        examples: [
+          { en: "I have a dog. The dog is black.", es: "Tengo un perro. El perro es negro." },
+          { en: "She is an engineer.", es: "Ella es ingeniera." }
+        ]
+      },
+      exercises: [
+        { type: "multiple_choice", question: "Choose: \"I want ___ orange.\"", options: ["a", "an", "the"], correctIndex: 1, explanation: "'orange' empieza por sonido vocálico → an." },
+        { type: "multiple_choice", question: "Choose: \"She plays ___ guitar very well.\"", options: ["a", "an", "the"], correctIndex: 2, explanation: "Con instrumentos: the guitar." },
+        { type: "categorize", instruction: "¿'a' o 'an'?", buckets: [
+          { id: "a", label: "a" }, { id: "an", label: "an" } ], items: [
+          { t: "house", bucket: "a" }, { t: "apple", bucket: "an" },
+          { t: "egg", bucket: "an" }, { t: "car", bucket: "a" },
+          { t: "hour", bucket: "an" }, { t: "book", bucket: "a" } ] },
+        { type: "find_error", question: "Encuentra el error.",
+          segments: ["He ", { u: "is" }, " ", { u: "a" }, " ", { u: "honest" }, " ", { u: "man" }, "."],
+          correctIndex: 1, correction: "an (honest empieza por sonido vocálico, la h es muda)",
+          explanation: "'honest' tiene h muda → sonido vocálico → 'an honest man'." },
+        { type: "fill_blank", sentence: "I like music. ___ music in this film is great.", answers: ["the", "The"], hint: "Algo concreto (la de esta película).", explanation: "The music = la música concreta del film." },
+        { type: "true_false", statement: "We say \"an university\".", answer: false, explanation: "'university' empieza por sonido /ju/ (consonante): 'a university'." }
+      ]
+    },
+
+    /* ---------- DETERMINANTES: demostrativos (A2) ---------- */
+    "x3-a2-grammar-demonstratives": {
+      lessonId: "x3-a2-grammar-demonstratives", level: "A2", track: "Gramática", topic: "grammar", skill: "grammar",
+      title: "Demostrativos: this / that / these / those", xpReward: 42, mascotState: "explaining",
+      explanation: {
+        body: "Los demostrativos señalan: THIS (este/esta, cerca, singular), THESE (estos/estas, cerca, plural), THAT (ese/aquel, lejos, singular), THOSE (esos/aquellos, lejos, plural). Pueden ir con sustantivo ('this book') o solos ('I like these').",
+        examples: [
+          { en: "This is my friend Ana.", es: "Esta es mi amiga Ana." },
+          { en: "Those shoes are expensive.", es: "Aquellos zapatos son caros." }
+        ]
+      },
+      exercises: [
+        { type: "categorize", instruction: "¿Cerca o lejos?", buckets: [
+          { id: "near", label: "Near (this/these)" }, { id: "far", label: "Far (that/those)" } ], items: [
+          { t: "this", bucket: "near" }, { t: "that", bucket: "far" },
+          { t: "these", bucket: "near" }, { t: "those", bucket: "far" } ] },
+        { type: "multiple_choice", question: "Choose: \"___ apples here are fresh.\" (near, plural)", options: ["This", "These", "Those"], correctIndex: 1, explanation: "Cerca + plural → These." },
+        { type: "multiple_choice", question: "Choose: \"Look at ___ mountains far away.\"", options: ["these", "this", "those"], correctIndex: 2, explanation: "Lejos + plural → those." },
+        { type: "fill_blank", sentence: "___ is my house, right here. (singular, near)", answers: ["this", "This"], hint: "Cerca, singular.", explanation: "This is my house." },
+        { type: "find_error", question: "Encuentra el error.",
+          segments: ["I ", { u: "want" }, " ", { u: "this" }, " ", { u: "shoes" }, " ", { u: "please" }, "."],
+          correctIndex: 1, correction: "these (plural)",
+          explanation: "'shoes' es plural: 'these shoes' (cerca) o 'those shoes' (lejos)." },
+        { type: "translate", prompt: "Traduce: \"Esos coches son rápidos.\"", answers: ["those cars are fast"], explanation: "Those cars are fast." }
+      ]
+    },
+
+    /* ---------- CUANTIFICADORES (A2) ---------- */
+    "x3-a2-grammar-quantifiers": {
+      lessonId: "x3-a2-grammar-quantifiers", level: "A2", track: "Gramática", topic: "grammar", skill: "grammar",
+      title: "Cuantificadores: some, any, much, many...", xpReward: 44, mascotState: "explaining",
+      explanation: {
+        body: "Cuantificadores expresan cantidad. SOME en afirmativas, ANY en negativas y preguntas. MANY + contables, MUCH + incontables. A LOT OF / LOTS OF sirve para ambos. A FEW (algunos, contables), A LITTLE (un poco, incontables). Ejemplo: 'I have some money but not many coins'.",
+        examples: [
+          { en: "There are some apples in the bowl.", es: "Hay algunas manzanas en el bol." },
+          { en: "I don't have any milk.", es: "No tengo nada de leche." },
+          { en: "We have a lot of homework.", es: "Tenemos muchos deberes." }
+        ]
+      },
+      exercises: [
+        { type: "multiple_choice", question: "Choose: \"Is there ___ sugar?\"", options: ["some", "any", "many"], correctIndex: 1, explanation: "En preguntas se usa 'any'." },
+        { type: "multiple_choice", question: "Choose: \"How ___ people came?\"", options: ["much", "many", "a little"], correctIndex: 1, explanation: "'people' es contable → many." },
+        { type: "multiple_choice", question: "Choose: \"I have ___ time before the train. (un poco)\"", options: ["a few", "a little", "many"], correctIndex: 1, explanation: "'time' es incontable → a little." },
+        { type: "fill_blank", sentence: "There aren't ___ eggs left.", answers: ["any", "many"], hint: "Negativa, contable.", explanation: "any/many con negativa + contable." },
+        { type: "categorize", instruction: "¿Con contables o incontables?", buckets: [
+          { id: "c", label: "Countable (many)" }, { id: "u", label: "Uncountable (much)" } ], items: [
+          { t: "books", bucket: "c" }, { t: "water", bucket: "u" },
+          { t: "friends", bucket: "c" }, { t: "money", bucket: "u" } ] },
+        { type: "translate", prompt: "Traduce: \"Hay algunos libros pero no mucho tiempo.\"", answers: ["there are some books but not much time", "there are some books, but not much time"], explanation: "There are some books but not much time." }
+      ]
+    },
+
+    /* ---------- VERBOS: regulares e irregulares (A2) ---------- */
+    "x3-a2-grammar-irregular-verbs": {
+      lessonId: "x3-a2-grammar-irregular-verbs", level: "A2", track: "Gramática", topic: "grammar", skill: "grammar",
+      title: "Verbos: regulares e irregulares", xpReward: 44, mascotState: "explaining",
+      explanation: {
+        body: "Los verbos son la clase de palabra que expresa acciones o estados. En pasado, los REGULARES añaden -ed (work → worked). Los IRREGULARES cambian de forma y hay que aprenderlos: go → went → gone; see → saw → seen; have → had → had. El participio (3ª forma) se usa en perfectos y pasiva.",
+        examples: [
+          { en: "I worked yesterday. (regular)", es: "Trabajé ayer." },
+          { en: "She went home early. (irregular)", es: "Se fue a casa pronto." }
+        ]
+      },
+      exercises: [
+        { type: "matching", instruction: "Une el infinitivo con su pasado simple.", pairs: [
+          { l: "go", r: "went" }, { l: "see", r: "saw" },
+          { l: "buy", r: "bought" }, { l: "take", r: "took" },
+          { l: "eat", r: "ate" }, { l: "make", r: "made" } ] },
+        { type: "categorize", instruction: "¿Pasado regular o irregular?", buckets: [
+          { id: "r", label: "Regular (-ed)" }, { id: "i", label: "Irregular" } ], items: [
+          { t: "played", bucket: "r" }, { t: "went", bucket: "i" },
+          { t: "watched", bucket: "r" }, { t: "saw", bucket: "i" },
+          { t: "lived", bucket: "r" }, { t: "took", bucket: "i" } ] },
+        { type: "fill_blank", sentence: "Yesterday I ___ (buy) a new jacket.", answers: ["bought"], hint: "Pasado irregular de 'buy'.", explanation: "buy → bought." },
+        { type: "find_error", question: "Encuentra el error.",
+          segments: ["She ", { u: "goed" }, " to the ", { u: "shop" }, " ", { u: "and" }, " ", { u: "bought" }, " milk."],
+          correctIndex: 0, correction: "went (irregular)",
+          explanation: "El pasado de 'go' es 'went', no 'goed'." },
+        { type: "multiple_choice", question: "Past participle of \"eat\" (used in 'have ___'):", options: ["ate", "eaten", "eated"], correctIndex: 1, explanation: "eat → ate → eaten." },
+        { type: "translate", prompt: "Traduce: \"Vi una buena película anoche.\"", answers: ["i saw a good film last night", "i saw a good movie last night"], explanation: "I saw a good film last night." }
+      ]
     }
 
   };
@@ -1192,14 +1634,20 @@ window.VESPER_EXPANSION3 = (function () {
     /* A1 */ "x3-a1-vocab-food", "x3-a1-vocab-body", "x3-a1-grammar-there-is",
              "x3-a1-grammar-can", "x3-a1-read-myday", "x3-a1-listen-greetings", "x3-a1-vocab-time",
              "x3-a1-grammar-prep-place", "x3-a1-vocab-interjections",
+             "x3-a1-grammar-nouns-plural", "x3-a1-grammar-pronouns", "x3-a1-grammar-adjectives", "x3-a1-grammar-articles",
     /* A2 */ "x3-a2-vocab-jobs", "x3-a2-vocab-weather", "x3-a2-grammar-going-to",
              "x3-a2-grammar-adverbs-freq", "x3-a2-read-market", "x3-a2-listen-directions", "x3-a2-use-restaurant",
              "x3-a2-grammar-prep-time", "x3-a2-grammar-conjunctions",
+             "x3-a2-grammar-nouns-countable", "x3-a2-grammar-possessive-s", "x3-a2-grammar-possessives",
+             "x3-a2-grammar-comparatives", "x3-a2-grammar-adverbs-manner", "x3-a2-grammar-demonstratives",
+             "x3-a2-grammar-quantifiers", "x3-a2-grammar-irregular-verbs",
     /* B1 */ "x3-b1-vocab-health", "x3-b1-vocab-technology", "x3-b1-grammar-second-conditional",
              "x3-b1-grammar-passive", "x3-b1-read-environment", "x3-b1-listen-interview", "x3-b1-use-phrasal-verbs",
              "x3-b1-grammar-conjunctions", "x3-b1-grammar-dependent-prep", "x3-b1-vocab-interjections2",
+             "x3-b1-grammar-reflexive", "x3-b1-grammar-relative", "x3-b1-grammar-adverbs-types",
     /* B2 */ "x3-b2-vocab-work", "x3-b2-vocab-media", "x3-b2-grammar-reported-speech",
              "x3-b2-grammar-third-conditional", "x3-b2-read-remote-work", "x3-b2-use-linkers",
+             "x3-b2-grammar-adjective-order",
     /* C1 */ "x3-c1-vocab-academic", "x3-c1-vocab-idioms", "x3-c1-grammar-inversion",
              "x3-c1-grammar-cleft", "x3-c1-read-ai", "x3-c1-listen-lecture",
     /* C2 */ "x3-c2-vocab-nuance", "x3-c2-vocab-idioms-advanced", "x3-c2-grammar-subjunctive",
