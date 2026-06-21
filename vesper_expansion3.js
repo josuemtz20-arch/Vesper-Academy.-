@@ -981,6 +981,208 @@ window.VESPER_EXPANSION3 = (function () {
           explanation: "En registro formal se evita la contracción 'can't': usa 'cannot' o 'are unable to'." },
         { type: "translate", prompt: "Reescribe en formal: \"We need to get your details.\"", answers: ["we require your details", "we are required to obtain your details", "we need to obtain your details"], explanation: "P. ej.: 'We require your details.'" }
       ]
+    },
+
+    /* ============================================================
+     * ===== CLASES DE PALABRAS: preposiciones · conjunciones ·====
+     * ===== interjecciones (en el nivel adecuado a cada una) =====
+     * ============================================================ */
+
+    /* ---------- Preposiciones de lugar (A1) ---------- */
+    "x3-a1-grammar-prep-place": {
+      lessonId: "x3-a1-grammar-prep-place", level: "A1", track: "Gramática", topic: "grammar", skill: "grammar",
+      title: "Preposiciones de lugar", xpReward: 34, mascotState: "explaining",
+      explanation: {
+        body: "Las preposiciones de lugar dicen DÓNDE está algo: in (dentro), on (sobre), under (debajo), next to (al lado de), behind (detrás), in front of (delante), between (entre). Van antes del sustantivo: 'The cat is under the table'.",
+        examples: [
+          { en: "The book is on the table.", es: "El libro está sobre la mesa." },
+          { en: "The ball is under the chair.", es: "La pelota está debajo de la silla." },
+          { en: "The shop is next to the bank.", es: "La tienda está al lado del banco." }
+        ]
+      },
+      exercises: [
+        { type: "matching", instruction: "Une la preposición con su traducción.", pairs: [
+          { l: "in", r: "dentro de" }, { l: "on", r: "sobre" },
+          { l: "under", r: "debajo de" }, { l: "behind", r: "detrás de" },
+          { l: "next to", r: "al lado de" }, { l: "between", r: "entre" } ] },
+        { type: "multiple_choice", question: "Choose: \"The keys are ___ the bag.\" (inside)", options: ["in", "on", "under"], correctIndex: 0, explanation: "'in' = dentro de." },
+        { type: "multiple_choice", question: "Choose: \"The cat is sleeping ___ the bed.\" (under it)", options: ["on", "under", "next to"], correctIndex: 1, explanation: "'under' = debajo de." },
+        { type: "find_error", question: "Encuentra el error.",
+          segments: ["The ", { u: "lamp" }, " ", { u: "is" }, " ", { u: "in" }, " the ", { u: "table" }, "."],
+          correctIndex: 2, correction: "on (sobre la mesa)",
+          explanation: "Algo encima de una superficie va con 'on': 'on the table'." },
+        { type: "fill_blank", sentence: "The bank is ___ to the supermarket.", answers: ["next"], hint: "Al lado de = ___ to.", explanation: "next to = al lado de." },
+        { type: "translate", prompt: "Traduce: \"El perro está detrás del coche.\"", answers: ["the dog is behind the car"], explanation: "The dog is behind the car." }
+      ]
+    },
+
+    /* ---------- Interjecciones básicas (A1) ---------- */
+    "x3-a1-vocab-interjections": {
+      lessonId: "x3-a1-vocab-interjections", level: "A1", track: "Vocabulario", topic: "social", skill: "vocab",
+      title: "Interjecciones: expresar emociones", xpReward: 32, mascotState: "explaining",
+      explanation: {
+        body: "Las interjecciones son palabras cortas que expresan una emoción o reacción: Wow! (asombro), Ouch! (dolor), Oops! (error pequeño), Yuck! (asco), Hooray! (alegría), Shh! (silencio). Suelen ir solas y con signo de exclamación.",
+        examples: [
+          { en: "Wow! That's amazing!", es: "¡Guau! ¡Es increíble!" },
+          { en: "Ouch! That hurts!", es: "¡Ay! ¡Eso duele!" },
+          { en: "Oops! I dropped it.", es: "¡Uy! Se me cayó." }
+        ]
+      },
+      exercises: [
+        { type: "matching", instruction: "Une la interjección con la emoción que expresa.", pairs: [
+          { l: "Wow!", r: "asombro" }, { l: "Ouch!", r: "dolor" },
+          { l: "Oops!", r: "error pequeño" }, { l: "Yuck!", r: "asco" },
+          { l: "Hooray!", r: "alegría" }, { l: "Shh!", r: "silencio" } ] },
+        { type: "multiple_choice", question: "You hit your finger. You say:", options: ["Hooray!", "Ouch!", "Yuck!"], correctIndex: 1, explanation: "'Ouch!' expresa dolor (¡Ay!)." },
+        { type: "multiple_choice", question: "You see something disgusting. You say:", options: ["Yuck!", "Wow!", "Shh!"], correctIndex: 0, explanation: "'Yuck!' expresa asco (¡Puaj!)." },
+        { type: "fill_blank", sentence: "___! I forgot my keys. (small mistake)", answers: ["oops", "oops!"], hint: "Reacción a un error pequeño.", explanation: "Oops! = ¡Uy!" },
+        { type: "categorize", instruction: "¿Emoción positiva o negativa?", buckets: [
+          { id: "p", label: "Positive" }, { id: "n", label: "Negative" } ], items: [
+          { t: "Wow!", bucket: "p" }, { t: "Ouch!", bucket: "n" },
+          { t: "Hooray!", bucket: "p" }, { t: "Yuck!", bucket: "n" } ] },
+        { type: "true_false", statement: "Interjections often express a sudden feeling or reaction.", answer: true, explanation: "Sí: sorpresa, dolor, alegría, asco, etc." }
+      ]
+    },
+
+    /* ---------- Preposiciones de tiempo (A2) ---------- */
+    "x3-a2-grammar-prep-time": {
+      lessonId: "x3-a2-grammar-prep-time", level: "A2", track: "Gramática", topic: "grammar", skill: "grammar",
+      title: "Preposiciones de tiempo: in / on / at", xpReward: 44, mascotState: "explaining",
+      explanation: {
+        body: "Tres preposiciones para el tiempo: AT para horas y momentos puntuales (at 6 o'clock, at night), ON para días y fechas (on Monday, on 5 May), IN para periodos largos: meses, estaciones, años (in July, in summer, in 2025). Regla rápida: at < on < in (de lo más concreto a lo más amplio).",
+        examples: [
+          { en: "The class starts at nine o'clock.", es: "La clase empieza a las nueve." },
+          { en: "We meet on Friday.", es: "Nos vemos el viernes." },
+          { en: "My birthday is in May.", es: "Mi cumpleaños es en mayo." }
+        ]
+      },
+      exercises: [
+        { type: "categorize", instruction: "¿Con qué preposición de tiempo va?", buckets: [
+          { id: "at", label: "at" }, { id: "on", label: "on" }, { id: "in", label: "in" } ], items: [
+          { t: "7 o'clock", bucket: "at" }, { t: "Monday", bucket: "on" },
+          { t: "summer", bucket: "in" }, { t: "night", bucket: "at" },
+          { t: "my birthday", bucket: "on" }, { t: "2025", bucket: "in" } ] },
+        { type: "multiple_choice", question: "Choose: \"I get up ___ 6 o'clock.\"", options: ["in", "on", "at"], correctIndex: 2, explanation: "Con horas usamos 'at'." },
+        { type: "multiple_choice", question: "Choose: \"We have a party ___ Saturday.\"", options: ["at", "on", "in"], correctIndex: 1, explanation: "Con días usamos 'on'." },
+        { type: "find_error", question: "Encuentra el error.",
+          segments: ["My ", { u: "holiday" }, " ", { u: "is" }, " ", { u: "on" }, " ", { u: "August" }, "."],
+          correctIndex: 2, correction: "in (con meses: in August)",
+          explanation: "Con meses usamos 'in': 'in August'." },
+        { type: "fill_blank", sentence: "The shop opens ___ the morning.", answers: ["in"], hint: "in the morning/afternoon/evening.", explanation: "Partes del día: in the morning (excepto 'at night')." },
+        { type: "translate", prompt: "Traduce: \"La reunión es el lunes a las diez.\"", answers: ["the meeting is on monday at ten", "the meeting is on monday at ten o'clock"], explanation: "The meeting is on Monday at ten." }
+      ]
+    },
+
+    /* ---------- Conjunciones coordinantes (A2) ---------- */
+    "x3-a2-grammar-conjunctions": {
+      lessonId: "x3-a2-grammar-conjunctions", level: "A2", track: "Gramática", topic: "grammar", skill: "grammar",
+      title: "Conjunciones: and, but, or, so, because", xpReward: 44, mascotState: "explaining",
+      explanation: {
+        body: "Las conjunciones unen ideas. AND añade, BUT contrasta, OR da alternativa, SO expresa consecuencia, BECAUSE da la causa. Ejemplo: 'I was tired, so I went to bed' / 'I went to bed because I was tired'. (so = por eso; because = porque.)",
+        examples: [
+          { en: "I like tea and coffee.", es: "Me gusta el té y el café." },
+          { en: "It's cheap but good.", es: "Es barato pero bueno." },
+          { en: "I stayed home because it was raining.", es: "Me quedé en casa porque llovía." }
+        ]
+      },
+      exercises: [
+        { type: "matching", instruction: "Une la conjunción con su función.", pairs: [
+          { l: "and", r: "añadir" }, { l: "but", r: "contrastar" },
+          { l: "or", r: "alternativa" }, { l: "so", r: "consecuencia" },
+          { l: "because", r: "causa" } ] },
+        { type: "multiple_choice", question: "Choose: \"She is small ___ very strong.\"", options: ["and", "but", "or"], correctIndex: 1, explanation: "Hay contraste (pequeña pero fuerte): 'but'." },
+        { type: "multiple_choice", question: "Choose: \"I was hungry, ___ I made a sandwich.\"", options: ["because", "but", "so"], correctIndex: 2, explanation: "Consecuencia: tenía hambre, por eso (so) hice un sándwich." },
+        { type: "fill_blank", sentence: "We didn't go out ___ it was raining.", answers: ["because"], hint: "Indica la causa.", explanation: "because = porque (introduce la causa)." },
+        { type: "find_error", question: "Encuentra el error.",
+          segments: ["I ", { u: "stayed" }, " ", { u: "home" }, " ", { u: "so" }, " I was ", { u: "tired" }, "."],
+          correctIndex: 2, correction: "because (la causa va con 'because')",
+          explanation: "La causa (estar cansado) va con 'because': 'I stayed home because I was tired'." },
+        { type: "translate", prompt: "Traduce: \"¿Quieres té o café?\"", answers: ["do you want tea or coffee", "would you like tea or coffee", "do you want tea or coffee?"], explanation: "Do you want tea or coffee?" }
+      ]
+    },
+
+    /* ---------- Conjunciones subordinantes (B1) ---------- */
+    "x3-b1-grammar-conjunctions": {
+      lessonId: "x3-b1-grammar-conjunctions", level: "B1", track: "Gramática", topic: "grammar", skill: "grammar",
+      title: "Conjunciones subordinantes", xpReward: 54, mascotState: "explaining",
+      explanation: {
+        body: "Las conjunciones subordinantes conectan una oración principal con una subordinada: although/though (aunque), while (mientras/aunque), unless (a menos que), since/as (ya que), so that (para que), as soon as (en cuanto). Pueden ir al principio (con coma) o en medio: 'Although it was late, she worked' = 'She worked although it was late'.",
+        examples: [
+          { en: "Although it was raining, we went out.", es: "Aunque llovía, salimos." },
+          { en: "I'll wait unless you tell me to leave.", es: "Esperaré a menos que me digas que me vaya." },
+          { en: "Call me as soon as you arrive.", es: "Llámame en cuanto llegues." }
+        ]
+      },
+      exercises: [
+        { type: "matching", instruction: "Une la conjunción con su traducción.", pairs: [
+          { l: "although", r: "aunque" }, { l: "unless", r: "a menos que" },
+          { l: "while", r: "mientras" }, { l: "since", r: "ya que" },
+          { l: "so that", r: "para que" }, { l: "as soon as", r: "en cuanto" } ] },
+        { type: "multiple_choice", question: "Choose: \"___ he was tired, he finished the report.\"", options: ["Although", "So that", "Unless"], correctIndex: 0, explanation: "Contraste: aunque estaba cansado (Although)." },
+        { type: "multiple_choice", question: "Choose: \"You'll miss the bus ___ you hurry.\"", options: ["although", "unless", "since"], correctIndex: 1, explanation: "unless = a menos que (condición negativa)." },
+        { type: "fill_blank", sentence: "She spoke slowly ___ everyone could understand.", answers: ["so that"], hint: "Indica propósito (para que).", explanation: "so that = para que (propósito)." },
+        { type: "find_error", question: "Encuentra el error.",
+          segments: ["Although ", { u: "it" }, " ", { u: "was" }, " expensive, ", { u: "but" }, " he ", { u: "bought" }, " it."],
+          correctIndex: 2, correction: "(quita 'but')",
+          explanation: "Con 'although' NO se usa 'but' en la misma frase: o 'Although... , he bought it' o 'It was expensive, but he bought it'." },
+        { type: "translate", prompt: "Traduce: \"En cuanto termine, te llamaré.\"", answers: ["as soon as i finish i'll call you", "as soon as i finish, i'll call you", "as soon as i finish i will call you"], explanation: "As soon as I finish, I'll call you." }
+      ]
+    },
+
+    /* ---------- Preposiciones dependientes (B1) ---------- */
+    "x3-b1-grammar-dependent-prep": {
+      lessonId: "x3-b1-grammar-dependent-prep", level: "B1", track: "Gramática", topic: "grammar", skill: "grammar",
+      title: "Preposiciones dependientes (good at, interested in...)", xpReward: 54, mascotState: "explaining",
+      explanation: {
+        body: "Muchos adjetivos y verbos van seguidos SIEMPRE de una preposición fija que hay que memorizar: good at (bueno en), interested in (interesado en), afraid of (asustado de), depend on (depender de), listen to (escuchar), look for (buscar). Si va un verbo después, se usa la forma -ing: 'interested in learning'.",
+        examples: [
+          { en: "She is good at maths.", es: "Es buena en matemáticas." },
+          { en: "I'm interested in learning Japanese.", es: "Me interesa aprender japonés." },
+          { en: "It depends on the weather.", es: "Depende del tiempo." }
+        ]
+      },
+      exercises: [
+        { type: "matching", instruction: "Une la expresión con su preposición correcta.", pairs: [
+          { l: "good ___ (skilled)", r: "at" }, { l: "interested ___", r: "in" },
+          { l: "afraid ___", r: "of" }, { l: "depend ___", r: "on" },
+          { l: "listen ___", r: "to" }, { l: "married ___", r: "to" } ] },
+        { type: "multiple_choice", question: "Choose: \"He is afraid ___ spiders.\"", options: ["of", "to", "at"], correctIndex: 0, explanation: "afraid of = tener miedo de." },
+        { type: "multiple_choice", question: "Choose: \"I'm interested ___ history.\"", options: ["on", "in", "at"], correctIndex: 1, explanation: "interested in = interesado en." },
+        { type: "fill_blank", sentence: "Are you good ___ playing the guitar?", answers: ["at"], hint: "good ___ (habilidad).", explanation: "good at + -ing = bueno en hacer algo." },
+        { type: "find_error", question: "Encuentra el error.",
+          segments: ["Success ", { u: "depends" }, " ", { u: "of" }, " ", { u: "hard" }, " ", { u: "work" }, "."],
+          correctIndex: 1, correction: "on (depend on)",
+          explanation: "Es 'depend ON', no 'depend of'." },
+        { type: "translate", prompt: "Traduce: \"Estoy buscando mis llaves.\"", answers: ["i'm looking for my keys", "i am looking for my keys"], explanation: "I'm looking for my keys (look for = buscar)." }
+      ]
+    },
+
+    /* ---------- Interjecciones de reacción (B1) ---------- */
+    "x3-b1-vocab-interjections2": {
+      lessonId: "x3-b1-vocab-interjections2", level: "B1", track: "Vocabulario", topic: "social", skill: "vocab",
+      title: "Interjecciones en conversación", xpReward: 52, mascotState: "explaining",
+      explanation: {
+        body: "En la conversación real usamos interjecciones para reaccionar con naturalidad: No way! (¡No me digas!), You're kidding! (¡Es broma!), Phew! (¡uf!, alivio), Ugh! (fastidio), Yikes! (susto), Oh well (qué le vamos a hacer), Well... (para dudar/empezar). Suenan muy naturales y propias de hablantes nativos.",
+        examples: [
+          { en: "No way! I can't believe it!", es: "¡No me digas! ¡No me lo puedo creer!" },
+          { en: "Phew! That was close.", es: "¡Uf! Por poco." },
+          { en: "Oh well, maybe next time.", es: "Bueno, será la próxima." }
+        ]
+      },
+      exercises: [
+        { type: "matching", instruction: "Une la interjección con su sentido.", pairs: [
+          { l: "No way!", r: "¡No me digas!" }, { l: "Phew!", r: "alivio (¡uf!)" },
+          { l: "Yikes!", r: "susto" }, { l: "Ugh!", r: "fastidio/asco" },
+          { l: "Oh well", r: "resignación" }, { l: "You're kidding!", r: "¡es broma!" } ] },
+        { type: "multiple_choice", question: "You just avoided an accident. You say:", options: ["Phew!", "Hooray!", "Ugh!"], correctIndex: 0, explanation: "'Phew!' expresa alivio." },
+        { type: "multiple_choice", question: "A friend shares shocking news. You react:", options: ["Oh well.", "No way!", "Shh!"], correctIndex: 1, explanation: "'No way!' expresa sorpresa o incredulidad." },
+        { type: "fill_blank", sentence: "___ well, we can try again tomorrow.", answers: ["oh"], hint: "Resignación: '___ well'.", explanation: "Oh well = expresa resignación ('qué le vamos a hacer')." },
+        { type: "categorize", instruction: "¿Reacción de sorpresa o de alivio/resignación?", buckets: [
+          { id: "s", label: "Surprise" }, { id: "r", label: "Relief/Resignation" } ], items: [
+          { t: "No way!", bucket: "s" }, { t: "Phew!", bucket: "r" },
+          { t: "You're kidding!", bucket: "s" }, { t: "Oh well", bucket: "r" } ] },
+        { type: "true_false", statement: "Interjections like \"No way!\" make spoken English sound more natural.", answer: true, explanation: "Sí, son muy típicas del habla cotidiana." }
+      ]
     }
 
   };
@@ -989,10 +1191,13 @@ window.VESPER_EXPANSION3 = (function () {
   var ORDER = [
     /* A1 */ "x3-a1-vocab-food", "x3-a1-vocab-body", "x3-a1-grammar-there-is",
              "x3-a1-grammar-can", "x3-a1-read-myday", "x3-a1-listen-greetings", "x3-a1-vocab-time",
+             "x3-a1-grammar-prep-place", "x3-a1-vocab-interjections",
     /* A2 */ "x3-a2-vocab-jobs", "x3-a2-vocab-weather", "x3-a2-grammar-going-to",
              "x3-a2-grammar-adverbs-freq", "x3-a2-read-market", "x3-a2-listen-directions", "x3-a2-use-restaurant",
+             "x3-a2-grammar-prep-time", "x3-a2-grammar-conjunctions",
     /* B1 */ "x3-b1-vocab-health", "x3-b1-vocab-technology", "x3-b1-grammar-second-conditional",
              "x3-b1-grammar-passive", "x3-b1-read-environment", "x3-b1-listen-interview", "x3-b1-use-phrasal-verbs",
+             "x3-b1-grammar-conjunctions", "x3-b1-grammar-dependent-prep", "x3-b1-vocab-interjections2",
     /* B2 */ "x3-b2-vocab-work", "x3-b2-vocab-media", "x3-b2-grammar-reported-speech",
              "x3-b2-grammar-third-conditional", "x3-b2-read-remote-work", "x3-b2-use-linkers",
     /* C1 */ "x3-c1-vocab-academic", "x3-c1-vocab-idioms", "x3-c1-grammar-inversion",
