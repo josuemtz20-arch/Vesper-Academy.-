@@ -1460,6 +1460,11 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
 .dc-tag{font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;font-weight:700;opacity:.55}
 .dc-word{font-family:"Inria Serif",Georgia,serif;font-size:1.72rem;line-height:1.16;padding:0 6px}
 .dc-back .dc-word{color:var(--w-accent,#e6cd97)}
+/* categoría gramatical (cómo se usa la palabra) */
+.dc-pos{display:inline-block;font-size:.7rem;letter-spacing:.05em;font-style:italic;color:var(--muted);
+  background:var(--w-accent-soft,var(--gold-tint));border:1px solid color-mix(in srgb,var(--w-accent,#c5a059) 30%,var(--line));
+  border-radius:999px;padding:2px 11px}
+.deck-pos{color:var(--w-accent,#a8843d);font-style:italic}
 /* B1+: explicación en inglés en la cara trasera (frase, no palabra suelta) */
 .dc-word.is-def{font-family:inherit;font-size:1.06rem;line-height:1.4;font-weight:600;padding:0 4px}
 .dc-back .dc-word.is-def{color:#fff}
@@ -2472,6 +2477,21 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
   ];
   /* a partir de B1 la tarjeta se explica en inglés en vez de traducirse */
   var ENG_LEVELS = { B1: 1, B2: 1, C1: 1, C2: 1 };
+  /* etiqueta de categoría gramatical (cómo se usa la palabra) */
+  var POS_LABEL = {
+    noun:   { es: "sustantivo", en: "noun" },
+    verb:   { es: "verbo",      en: "verb" },
+    adj:    { es: "adjetivo",   en: "adjective" },
+    adv:    { es: "adverbio",   en: "adverb" },
+    prep:   { es: "preposición", en: "preposition" },
+    conn:   { es: "conector",   en: "connector" },
+    phrase: { es: "expresión",  en: "phrase" },
+    idiom:  { es: "modismo",    en: "idiom" }
+  };
+  function posLabel(pos, eng) {
+    var p = POS_LABEL[pos]; if (!p) return "";
+    return eng ? p.en : p.es;
+  }
 
   /* tarjetas "ya las sé": persistencia local por nivel|palabra */
   var DEN_KNOWN_KEY = "vesper_vocab_known";
@@ -2579,6 +2599,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       + '<div class="deck"><div class="deck-progress"><span class="dp-bar"><i id="dpFill"></i></span><span class="dp-ct" id="dpCt"></span></div>'
       + '<div class="deck-card" id="deckCard"><div class="dc-inner">'
       + '<div class="dc-face dc-front"><span class="dc-tag">English</span><span class="dc-word" id="dcEn"></span>'
+      + '<span class="dc-pos" id="dcPos"></span>'
       + '<button class="dc-say" id="sayEn" type="button" aria-label="Escuchar">' + sayIc + '</button>'
       + '<span class="dc-hint">' + flipIc + ' Toca para ver el significado</span></div>'
       + '<div class="dc-face dc-back"><span class="dc-tag" id="dcBackTag">Español</span><span class="dc-word" id="dcEs"></span>'
@@ -2604,7 +2625,11 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       card.classList.remove("flipped");
       var c = curCard();
       byId("dcEn").textContent = c.en;
-      var useEng = !!ENG_LEVELS[selLevel] && !!c.def;
+      var engLvl = !!ENG_LEVELS[selLevel];
+      var useEng = engLvl && !!c.def;
+      var posTx = posLabel(c.pos, engLvl);
+      var dcPos = byId("dcPos");
+      if (dcPos) { dcPos.textContent = posTx; dcPos.style.display = posTx ? "" : "none"; }
       var dcEs = byId("dcEs"), backTag = byId("dcBackTag"), trans = byId("dcTrans"), transEs = byId("dcTransEs");
       if (useEng) {
         dcEs.textContent = c.def; dcEs.classList.add("is-def");
@@ -2627,8 +2652,9 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       kb.textContent = on ? "✓ Ya la sé" : "Marcar como sabida";
       var tip = byId("deckTip");
       if (tip) {
-        if (useEng) tip.innerHTML = '<b>' + esc(c.en) + '</b> — ' + esc(c.def) + ' ' + DECK_TIPS_EN[idx % DECK_TIPS_EN.length];
-        else tip.innerHTML = '<b>' + esc(c.en) + '</b> se dice <b>' + esc(c.es) + '</b>. ' + DECK_TIPS[idx % DECK_TIPS.length];
+        var posNote = posTx ? ' <i class="deck-pos">(' + esc(posTx) + ')</i>' : '';
+        if (useEng) tip.innerHTML = '<b>' + esc(c.en) + '</b>' + posNote + ' — ' + esc(c.def) + ' ' + DECK_TIPS_EN[idx % DECK_TIPS_EN.length];
+        else tip.innerHTML = '<b>' + esc(c.en) + '</b>' + posNote + ' se dice <b>' + esc(c.es) + '</b>. ' + DECK_TIPS[idx % DECK_TIPS.length];
       }
     }
     card.onclick = function (e) { if (e.target.closest(".dc-say") || e.target.closest(".dc-trans")) return; card.classList.toggle("flipped"); };

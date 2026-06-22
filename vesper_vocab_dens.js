@@ -612,6 +612,30 @@ window.VESPER_VOCAB_DENS = (function () {
     return "other";
   }
 
+  /* ---- PARTE DE LA ORACIÓN (part of speech) por tarjeta ----
+     Para que quede claro CÓMO usar cada palabra. Se calcula con reglas:
+     verbos por "to …", expresiones/modismos/conectores por el tema de la sala
+     o por listas explícitas; el resto, sustantivo. */
+  function set(str) { var o = {}; str.split(" ").forEach(function (w) { o[w] = 1; }); return o; }
+  var POS_OVERRIDE = { "point of view": "noun", "peer review": "noun", "insofar as": "conn", "vis-à-vis": "prep" };
+  var POS_ADJ = set("cheap expensive tired hungry thirsty sick healthy strong weak cold fair true fit local foreign renewable online inevitable ambiguous coherent profound subtle robust feasible redundant prevalent plausible compelling intricate nuanced arbitrary meticulous astute succinct lucid cogent articulate scrupulous arduous candid eloquent sagacious prudent tenacious erudite aforementioned");
+  var POS_ADV = set("always never often sometimes soon early late today tomorrow yesterday near far straight abroad downtown left right north south east west henceforth hitherto hereby thereby wherein heretofore forthwith");
+  var POS_CONN = set("however therefore although moreover whereas despite thus nevertheless otherwise meanwhile consequently furthermore notwithstanding albeit ergo whereby");
+  function vocabPos(card, branch) {
+    var en = ("" + (card.en || "")).toLowerCase().trim();
+    var hint = ("" + ((branch && branch.hint) || "")).toLowerCase();
+    if (hint.indexOf("modismo") >= 0) return "idiom";
+    if (hint.indexOf("conector") >= 0) return "conn";
+    if (hint.indexOf("colocaci") >= 0) return "phrase";
+    if (POS_OVERRIDE[en]) return POS_OVERRIDE[en];
+    if (POS_CONN[en]) return "conn";
+    if (POS_ADV[en]) return "adv";
+    if (POS_ADJ[en]) return "adj";
+    if (/^to\s+\S+$/.test(en)) return "verb";        // verbo simple "to go"
+    if (/\s/.test(en)) return "phrase";               // colocación / expresión de varias palabras
+    return "noun";
+  }
+
   function build(L, ORDER) {
     L = L || {}; ORDER = ORDER || Object.keys(L);
     var harvested = harvest(L, ORDER);
@@ -621,7 +645,7 @@ window.VESPER_VOCAB_DENS = (function () {
       /* clona ramas curadas y reúne claves ya usadas para deduplicar */
       var used = {}, branches = src.branches.map(function (b) {
         var cards = b.cards.map(function (c) {
-          used[keyOf(c.en)] = 1; return { en: c.en, es: c.es, def: c.def };
+          used[keyOf(c.en)] = 1; return { en: c.en, es: c.es, def: c.def, pos: vocabPos(c, b) };
         });
         return { id: b.id, name: b.name, icon: b.icon, hint: b.hint, practice: b.practice, curated: true, cards: cards };
       });
@@ -656,7 +680,8 @@ window.VESPER_VOCAB_DENS = (function () {
           branches.push({
             id: "more-" + k + (part > 1 ? ("-" + part) : ""),
             name: meta[k].name + (nChunks > 1 ? (" · " + part) : ""),
-            icon: meta[k].icon, hint: "Del mundo " + lv, curated: false, cards: arr.slice(i, i + chunk)
+            icon: meta[k].icon, hint: "Del mundo " + lv, curated: false,
+            cards: arr.slice(i, i + chunk).map(function (c) { return { en: c.en, es: c.es, pos: vocabPos(c, null) }; })
           });
           part++;
         }
