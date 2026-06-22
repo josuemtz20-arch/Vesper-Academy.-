@@ -1460,6 +1460,14 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
 .dc-tag{font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;font-weight:700;opacity:.55}
 .dc-word{font-family:"Inria Serif",Georgia,serif;font-size:1.72rem;line-height:1.16;padding:0 6px}
 .dc-back .dc-word{color:var(--w-accent,#e6cd97)}
+/* B1+: explicación en inglés en la cara trasera (frase, no palabra suelta) */
+.dc-word.is-def{font-family:inherit;font-size:1.06rem;line-height:1.4;font-weight:600;padding:0 4px}
+.dc-back .dc-word.is-def{color:#fff}
+.dc-trans{margin-top:2px;background:none;border:1px solid rgba(255,255,255,.32);color:rgba(255,255,255,.82);
+  border-radius:999px;padding:5px 13px;font:inherit;font-size:.76rem;cursor:pointer;transition:transform .12s,background .12s}
+.dc-trans:hover{background:rgba(255,255,255,.1)}
+.dc-trans:active{transform:scale(.95)}
+.dc-trans-es{font-size:.98rem;color:var(--w-accent,#e6cd97);font-weight:600}
 .dc-hint{display:inline-flex;align-items:center;gap:6px;font-size:.8rem;color:var(--muted)}
 .dc-hint svg{width:14px;height:14px}
 .dc-back .dc-hint{color:rgba(255,255,255,.62)}
@@ -2455,6 +2463,15 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     "Cúbrela con el dedo y trata de recordar el significado.",
     "Úsala hoy en una frase tuya."
   ];
+  /* B1+: Vesper explica en inglés (aprendizaje monolingüe) */
+  var DECK_TIPS_EN = [
+    "Say it aloud and picture when you'd use it.",
+    "Try to use it in your own sentence today.",
+    "Notice its tone and how formal it feels.",
+    "Link it to a word you already know."
+  ];
+  /* a partir de B1 la tarjeta se explica en inglés en vez de traducirse */
+  var ENG_LEVELS = { B1: 1, B2: 1, C1: 1, C2: 1 };
 
   /* tarjetas "ya las sé": persistencia local por nivel|palabra */
   var DEN_KNOWN_KEY = "vesper_vocab_known";
@@ -2564,7 +2581,9 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       + '<div class="dc-face dc-front"><span class="dc-tag">English</span><span class="dc-word" id="dcEn"></span>'
       + '<button class="dc-say" id="sayEn" type="button" aria-label="Escuchar">' + sayIc + '</button>'
       + '<span class="dc-hint">' + flipIc + ' Toca para ver el significado</span></div>'
-      + '<div class="dc-face dc-back"><span class="dc-tag">Español</span><span class="dc-word" id="dcEs"></span>'
+      + '<div class="dc-face dc-back"><span class="dc-tag" id="dcBackTag">Español</span><span class="dc-word" id="dcEs"></span>'
+      + '<button class="dc-trans" id="dcTrans" type="button" hidden>ver traducción</button>'
+      + '<span class="dc-trans-es" id="dcTransEs" hidden></span>'
       + '<button class="dc-say" id="sayEn2" type="button" aria-label="Escuchar en inglés">' + sayIc + '</button>'
       + '<span class="dc-hint">' + flipIc + ' Toca para volver</span></div>'
       + '</div></div>'
@@ -2585,7 +2604,19 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       card.classList.remove("flipped");
       var c = curCard();
       byId("dcEn").textContent = c.en;
-      byId("dcEs").textContent = c.es;
+      var useEng = !!ENG_LEVELS[selLevel] && !!c.def;
+      var dcEs = byId("dcEs"), backTag = byId("dcBackTag"), trans = byId("dcTrans"), transEs = byId("dcTransEs");
+      if (useEng) {
+        dcEs.textContent = c.def; dcEs.classList.add("is-def");
+        if (backTag) backTag.textContent = "In English";
+        if (trans) { trans.hidden = false; trans.textContent = "ver traducción"; }
+        if (transEs) { transEs.hidden = true; transEs.textContent = c.es; }
+      } else {
+        dcEs.textContent = c.es; dcEs.classList.remove("is-def");
+        if (backTag) backTag.textContent = "Español";
+        if (trans) trans.hidden = true;
+        if (transEs) transEs.hidden = true;
+      }
       byId("dpCt").textContent = (idx + 1) + " / " + br.cards.length;
       byId("dpFill").style.width = Math.round(100 * (idx + 1) / br.cards.length) + "%";
       byId("dPrev").disabled = idx === 0;
@@ -2595,11 +2626,21 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       kb.classList.toggle("on", on);
       kb.textContent = on ? "✓ Ya la sé" : "Marcar como sabida";
       var tip = byId("deckTip");
-      if (tip) tip.innerHTML = '<b>' + esc(c.en) + '</b> se dice <b>' + esc(c.es) + '</b>. ' + DECK_TIPS[idx % DECK_TIPS.length];
+      if (tip) {
+        if (useEng) tip.innerHTML = '<b>' + esc(c.en) + '</b> — ' + esc(c.def) + ' ' + DECK_TIPS_EN[idx % DECK_TIPS_EN.length];
+        else tip.innerHTML = '<b>' + esc(c.en) + '</b> se dice <b>' + esc(c.es) + '</b>. ' + DECK_TIPS[idx % DECK_TIPS.length];
+      }
     }
-    card.onclick = function (e) { if (e.target.closest(".dc-say")) return; card.classList.toggle("flipped"); };
+    card.onclick = function (e) { if (e.target.closest(".dc-say") || e.target.closest(".dc-trans")) return; card.classList.toggle("flipped"); };
     byId("sayEn").onclick = function (e) { e.stopPropagation(); speak(curCard().en); };
     byId("sayEn2").onclick = function (e) { e.stopPropagation(); speak(curCard().en); };
+    var dcTransBtn = byId("dcTrans");
+    if (dcTransBtn) dcTransBtn.onclick = function (e) {
+      e.stopPropagation();
+      var t = byId("dcTransEs"); if (!t) return;
+      t.hidden = !t.hidden;
+      this.textContent = t.hidden ? "ver traducción" : "ocultar traducción";
+    };
     byId("dPrev").onclick = function () { if (idx > 0) { idx--; render(); } };
     byId("dNext").onclick = function () { if (idx < br.cards.length - 1) { idx++; render(); } };
     byId("dKnow").onclick = function () {
