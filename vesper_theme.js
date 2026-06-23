@@ -120,6 +120,20 @@ window.VESPER_THEME = (function () {
   };
   var ACCESSORY_ORDER = ["none", "bowtie", "cap", "glasses", "wizard", "scarf", "halo", "crown"];
 
+  /* ---- Pelajes: apariencias COMPLETAS (imagen real del gato), generadas con
+         IA a partir de Vesper. classic = el gato original (+ color del skin).
+         Los demás reemplazan la imagen y NO reciben el tinte de color. ---- */
+  var MASCOT_DIR = "assets/images/mascot/";
+  var PELAJES = {
+    classic: { name: "Vesper",     img: MASCOT_DIR + "vesper_cat.png" },
+    gray:    { name: "Gris",       img: MASCOT_DIR + "skins/gray.png" },
+    calico:  { name: "Multicolor", img: MASCOT_DIR + "skins/calico.png" },
+    lion:    { name: "León",       img: MASCOT_DIR + "skins/lion.png" },
+    cosmic:  { name: "Cósmico",    img: MASCOT_DIR + "skins/cosmic.png" },
+    dragon:  { name: "Dragón",     img: MASCOT_DIR + "skins/dragon.png" }
+  };
+  var PELAJE_ORDER = ["classic", "gray", "calico", "lion", "cosmic", "dragon"];
+
   /* ---- helpers de color ---- */
   function clampHex(h) { return /^#([0-9a-f]{6})$/i.test(h) ? h : "#000000"; }
   function rgba(hex, a) {
@@ -134,9 +148,10 @@ window.VESPER_THEME = (function () {
       return {
         theme: THEMES[s.theme] ? s.theme : "classic",
         skin: SKINS[s.skin] ? s.skin : "gold",
-        accessory: ACCESSORIES[s.accessory] ? s.accessory : "none"
+        accessory: ACCESSORIES[s.accessory] ? s.accessory : "none",
+        pelaje: PELAJES[s.pelaje] ? s.pelaje : "classic"
       };
-    } catch (e) { return { theme: "classic", skin: "gold", accessory: "none" }; }
+    } catch (e) { return { theme: "classic", skin: "gold", accessory: "none", pelaje: "classic" }; }
   }
   function write(state) { try { localStorage.setItem(STORE, JSON.stringify(state)); } catch (e) {} }
 
@@ -218,6 +233,9 @@ window.VESPER_THEME = (function () {
       ".vt-accsw{height:42px;display:flex;align-items:center;justify-content:center;margin-bottom:6px;border-radius:9px;background:var(--cream,#FBF8F1)}",
       ".vt-accsw svg{width:38px;height:38px}",
       ".vt-accsw .vt-none{color:var(--muted,#6b6b76);font-size:1.2rem}",
+      /* pelajes (apariencias completas con miniatura) */
+      ".vt-pelsw{height:60px;display:flex;align-items:center;justify-content:center;margin-bottom:6px;border-radius:9px;background:var(--cream,#FBF8F1);overflow:hidden}",
+      ".vt-pelsw img{height:58px;width:auto;object-fit:contain}",
       /* estado bloqueado (skins y accesorios) */
       ".vt-card.locked,.vt-skin.locked{opacity:.5;cursor:not-allowed}",
       ".vt-card{position:relative}.vt-skin{position:relative}",
@@ -278,8 +296,17 @@ window.VESPER_THEME = (function () {
         + '<div class="vt-accsw">' + sw + '</div><div class="vt-nm">' + a.name + '</div>'
         + (locked ? '<span class="vt-lock" aria-hidden="true">&#128274;</span>' : "") + '</div>';
     }).join("");
+    var pelCards = PELAJE_ORDER.map(function (id) {
+      var p = PELAJES[id];
+      var locked = !unlockedFor("pelaje", id);
+      return '<div class="vt-card' + (cur.pelaje === id ? " on" : "") + (locked ? " locked" : "")
+        + '" data-pelaje="' + id + '"' + (locked ? ' title="' + reqLabelFor("pelaje", id) + '" aria-disabled="true"' : "") + '>'
+        + '<div class="vt-pelsw"><img src="' + p.img + '" alt="" loading="lazy"></div><div class="vt-nm">' + p.name + '</div>'
+        + (locked ? '<span class="vt-lock" aria-hidden="true">&#128274;</span>' : "") + '</div>';
+    }).join("");
     return '<div class="vt-panel">'
       + '<div class="vt-h">Tema de la app</div><div class="vt-grid" data-vt-themes>' + themeCards + '</div>'
+      + '<div class="vt-h">Aspecto de Vesper</div><div class="vt-grid" data-vt-pelajes>' + pelCards + '</div>'
       + '<div class="vt-h">Color de Vesper</div><div class="vt-skins" data-vt-skins>' + skinDots + '</div>'
       + '<div class="vt-h">Accesorios de Vesper</div><div class="vt-grid" data-vt-accs>' + accCards + '</div>'
       + '<p class="vt-note" data-vt-note aria-live="polite"></p>'
@@ -291,6 +318,7 @@ window.VESPER_THEME = (function () {
     var themeBox = scope.querySelector("[data-vt-themes]");
     var skinBox = scope.querySelector("[data-vt-skins]");
     var accBox = scope.querySelector("[data-vt-accs]");
+    var pelBox = scope.querySelector("[data-vt-pelajes]");
     var note = scope.querySelector("[data-vt-note]");
     function say(msg) { if (note) note.textContent = msg || ""; }
     if (themeBox) themeBox.addEventListener("click", function (e) {
@@ -299,13 +327,22 @@ window.VESPER_THEME = (function () {
       var on = themeBox.querySelector(".vt-card.on"); if (on) on.classList.remove("on");
       c.classList.add("on"); say("");
     });
+    if (pelBox) pelBox.addEventListener("click", function (e) {
+      var c = e.target.closest("[data-pelaje]"); if (!c) return;
+      var id = c.getAttribute("data-pelaje");
+      if (c.classList.contains("locked")) { say("Aspecto bloqueado — " + reqLabelFor("pelaje", id)); return; }
+      api.setPelaje(id);
+      var on = pelBox.querySelector(".vt-card.on"); if (on) on.classList.remove("on");
+      c.classList.add("on"); say("");
+    });
     if (skinBox) skinBox.addEventListener("click", function (e) {
       var c = e.target.closest("[data-skin]"); if (!c) return;
       var id = c.getAttribute("data-skin");
       if (c.classList.contains("locked")) { say("Color bloqueado — " + reqLabelFor("skin", id)); return; }
       api.setSkin(id);
       var on = skinBox.querySelector(".vt-skin.on"); if (on) on.classList.remove("on");
-      c.classList.add("on"); say("");
+      c.classList.add("on");
+      say(read().pelaje !== "classic" ? "El color se aplica al aspecto “Vesper” clásico." : "");
     });
     if (accBox) accBox.addEventListener("click", function (e) {
       var c = e.target.closest("[data-acc]"); if (!c) return;
@@ -344,12 +381,14 @@ window.VESPER_THEME = (function () {
   var api = {
     themes: THEMES, themeOrder: THEME_ORDER, skins: SKINS, skinOrder: SKIN_ORDER,
     accessories: ACCESSORIES, accessoryOrder: ACCESSORY_ORDER,
+    pelajes: PELAJES, pelajeOrder: PELAJE_ORDER,
     current: null,
     get: read,
     apply: apply,
     setTheme: function (id) { if (!THEMES[id]) return; var s = read(); s.theme = id; write(s); apply(s); },
     setSkin: function (id) { if (!SKINS[id]) return; var s = read(); s.skin = id; write(s); apply(s); },
     setAccessory: function (id) { if (!ACCESSORIES[id]) return; var s = read(); s.accessory = id; write(s); apply(s); },
+    setPelaje: function (id) { if (!PELAJES[id]) return; var s = read(); s.pelaje = id; write(s); apply(s); },
     set: function (theme, skin) { var s = read(); s.theme = theme; s.skin = skin; write(s); apply(s); },
     renderPicker: renderPicker, wirePicker: wirePicker, mountFloat: mountFloat
   };

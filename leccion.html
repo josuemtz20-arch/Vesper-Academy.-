@@ -255,6 +255,7 @@
   .ach-badge .cos-dot{display:inline-block;width:24px;height:24px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 2px var(--gold)}
   .ach-badge .cos-svg{display:inline-flex;width:30px;height:30px}
   .ach-badge .cos-svg svg{width:30px;height:30px}
+  .ach-badge .cos-pel img{width:34px;height:34px;object-fit:contain;display:block}
   .cos-cta{display:inline-block;margin-top:2px;font-weight:700;color:var(--gold-ink,var(--gold));text-decoration:none;font-size:.86rem}
   /* buscador + filtros del hub */
   .hub-search{margin:12px 0 2px}
@@ -400,6 +401,8 @@
     offset-anchor:50% 50%;offset-rotate:0deg;pointer-events:none;animation:wbob 2.4s ease-in-out infinite}
   .wavatar .wcat{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;
     filter:drop-shadow(0 6px 7px rgba(20,18,42,.5)) var(--vc-filter,hue-rotate(0deg))}
+  /* pelaje (apariencia completa por imagen): conserva sus propios colores (sin tinte) */
+  .wavatar.has-pelaje .wcat{filter:drop-shadow(0 6px 7px rgba(20,18,42,.5))}
   .wavatar .wacc{position:absolute;inset:0;pointer-events:none}
   .wavatar .wacc svg{width:100%;height:100%;display:block;overflow:visible;
     filter:drop-shadow(0 1px 1px rgba(20,18,42,.45))}
@@ -1805,7 +1808,22 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     } catch (e) {}
     return "";
   }
-  /* etiqueta visual para un cosmético recién desbloqueado {kind:"skin"|"acc",id} */
+  /* Pelaje (apariencia completa) activo del gato del mapa, con guard de desbloqueo.
+     Devuelve {src, animal}: animal=true cuando NO es el Vesper clásico. */
+  function currentPelaje() {
+    try {
+      if (window.VESPER_THEME && VESPER_THEME.get) {
+        var id = VESPER_THEME.get().pelaje;
+        if (id && id !== "classic") {
+          var locked = window.VESPER_COSMETICS && VESPER_COSMETICS.isUnlocked && !VESPER_COSMETICS.isUnlocked("pelaje", id);
+          var p = VESPER_THEME.pelajes && VESPER_THEME.pelajes[id];
+          if (!locked && p && p.img) return { src: p.img, animal: true };
+        }
+      }
+    } catch (e) {}
+    return { src: BOSS_AVATAR, animal: false };
+  }
+  /* etiqueta visual para un cosmético recién desbloqueado {kind:"skin"|"acc"|"pelaje",id} */
   function cosmeticLabel(c) {
     try {
       if (c.kind === "skin" && window.VESPER_THEME && VESPER_THEME.skins) {
@@ -1817,6 +1835,11 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
         var a = VESPER_THEME.accessories[c.id];
         return { name: (a ? a.name : c.id),
           ic: (a && a.svg) ? '<span class="cos-svg">' + a.svg + '</span>' : "&#127870;" };
+      }
+      if (c.kind === "pelaje" && window.VESPER_THEME && VESPER_THEME.pelajes) {
+        var pj = VESPER_THEME.pelajes[c.id];
+        return { name: "Aspecto: " + (pj ? pj.name : c.id),
+          ic: (pj && pj.img) ? '<span class="cos-pel"><img src="' + pj.img + '" alt=""></span>' : "&#128062;" };
       }
     } catch (e) {}
     return { name: c.id, ic: "&#11088;" };
@@ -2411,13 +2434,14 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     var t = WORLD_THEME[selLevel] || {};
     var terrain = t.file ? (";--w-terrain:url(" + t.file + ")") : "";
     var startPennant = '<div class="wstart" aria-hidden="true"><span>' + (WORLD_UMBRAL[selLevel] || ('Mundo ' + worldNo)) + '</span></div>';
+    var pj = currentPelaje();
     var scene = '<div class="wsky">'
       + '<div class="wisland" data-world="' + selLevel + '" style="' + worldVars(t) + terrain + '">'
       + '<div class="watmo" aria-hidden="true"></div>'
       + '<div class="wmap" id="wmap" data-world="' + selLevel + '" data-cur="' + curStop + '" style="' + worldVars(t) + '">'
       + '<svg class="wterrain terr" aria-hidden="true" focusable="false" preserveAspectRatio="none"></svg>'
       + '<svg class="wtrail" aria-hidden="true" focusable="false" preserveAspectRatio="none"><path class="wtrail-base"/><path class="wtrail-road"/><path class="wtrail-tex"/><path class="wtrail-glow"/><path class="wtrail-line"/><path class="wtrail-comet"/></svg>'
-      + '<div class="wavatar" aria-hidden="true"><img class="wcat" src="' + BOSS_AVATAR + '" alt="" decoding="async">'
+      + '<div class="wavatar' + (pj.animal ? ' has-pelaje' : '') + '" aria-hidden="true"><img class="wcat" src="' + pj.src + '" alt="" decoding="async">'
       + '<span class="wacc">' + currentAccessorySvg() + '</span></div>'
       + ambLayer(t.mapN || 3, true) + startPennant + parts
       + '</div></div></div>';

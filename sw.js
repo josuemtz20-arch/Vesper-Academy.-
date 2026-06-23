@@ -9,7 +9,7 @@
    ============================================================ */
 "use strict";
 
-var CACHE_VERSION = "vesper-v29";
+var CACHE_VERSION = "vesper-v30";
 var CORE = [
   /* Vesper Engine shell */
   "vesper_engine.html",
@@ -45,6 +45,12 @@ var CORE = [
   "manifest_lecciones.webmanifest",
   "assets/images/mascot/vesper_cat.png",
   "assets/images/virtual_class_happy_cat.png",
+  /* Pelajes (apariencias completas de Vesper, generadas con IA) */
+  "assets/images/mascot/skins/gray.png",
+  "assets/images/mascot/skins/calico.png",
+  "assets/images/mascot/skins/lion.png",
+  "assets/images/mascot/skins/cosmic.png",
+  "assets/images/mascot/skins/dragon.png",
   /* iconos compartidos */
   "assets/images/va_isotype.svg",
   "assets/images/app_icon_192.png",

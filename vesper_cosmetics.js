@@ -49,6 +49,16 @@ window.VESPER_COSMETICS = (function () {
     halo:    { type: "achievement", id: "lessons-100" },
     crown:   { type: "boss", level: "C2" }
   };
+  /* Pelajes = apariencias completas (imagen real del gato, no filtro de color).
+     Tier "premium": grandes hitos de lecciones / XP / racha. */
+  var PELAJE_REQS = {
+    classic: { type: "free" },
+    gray:    { type: "lessons", n: 25 },
+    calico:  { type: "lessons", n: 50 },
+    lion:    { type: "lessons", n: 100 },
+    cosmic:  { type: "xp", n: 3000 },
+    dragon:  { type: "achievement", id: "streak-30" }
+  };
 
   /* nombres cortos de mundo para los textos de requisito */
   var WORLD_NAME = {
@@ -56,7 +66,7 @@ window.VESPER_COSMETICS = (function () {
     B2: "la Torre", C1: "el Firmamento", C2: "el Castillo del Saber"
   };
 
-  function reqsFor(kind) { return kind === "skin" ? SKIN_REQS : ACC_REQS; }
+  function reqsFor(kind) { return kind === "skin" ? SKIN_REQS : (kind === "pelaje" ? PELAJE_REQS : ACC_REQS); }
 
   function P() { return window.VesperProgress; }
 
@@ -91,9 +101,10 @@ window.VESPER_COSMETICS = (function () {
 
   function unlocked() {
     var s = state();
-    var out = { skins: [], accessories: [] };
+    var out = { skins: [], accessories: [], pelajes: [] };
     for (var sk in SKIN_REQS) { if (!s || meets(SKIN_REQS[sk], s)) out.skins.push(sk); }
     for (var ac in ACC_REQS) { if (!s || meets(ACC_REQS[ac], s)) out.accessories.push(ac); }
+    for (var pl in PELAJE_REQS) { if (!s || meets(PELAJE_REQS[pl], s)) out.pelajes.push(pl); }
     return out;
   }
 
@@ -123,6 +134,7 @@ window.VESPER_COSMETICS = (function () {
     var u = unlocked(), keys = [];
     u.skins.forEach(function (id) { if (SKIN_REQS[id] && SKIN_REQS[id].type !== "free") keys.push("skin:" + id); });
     u.accessories.forEach(function (id) { if (ACC_REQS[id] && ACC_REQS[id].type !== "free") keys.push("acc:" + id); });
+    (u.pelajes || []).forEach(function (id) { if (PELAJE_REQS[id] && PELAJE_REQS[id].type !== "free") keys.push("pelaje:" + id); });
     return keys;
   }
   function loadSeen() {
@@ -136,7 +148,7 @@ window.VESPER_COSMETICS = (function () {
     if (seen === null) { saveSeen(cur); return []; }  // siembra silenciosa
     var set = {}; seen.forEach(function (k) { set[k] = true; });
     return cur.filter(function (k) { return !set[k]; }).map(function (k) {
-      var p = k.split(":"); return { kind: p[0] === "skin" ? "skin" : "acc", id: p[1] };
+      var p = k.split(":"); return { kind: p[0], id: p[1] };
     });
   }
   function markSeen() {
@@ -148,7 +160,7 @@ window.VESPER_COSMETICS = (function () {
   }
 
   return {
-    skinReqs: SKIN_REQS, accessoryReqs: ACC_REQS,
+    skinReqs: SKIN_REQS, accessoryReqs: ACC_REQS, pelajeReqs: PELAJE_REQS,
     isUnlocked: isUnlocked, unlocked: unlocked, reqLabel: reqLabel,
     pending: pending, markSeen: markSeen
   };

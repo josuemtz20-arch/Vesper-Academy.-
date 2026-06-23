@@ -51,6 +51,7 @@
   .pv-mascot img,.pv-mascot .vc-img{width:96px!important;height:96px!important}
   .pv-acc{position:absolute;left:0;top:0;width:96px;height:96px;pointer-events:none}
   .pv-acc svg{width:100%;height:100%;display:block;overflow:visible;filter:drop-shadow(0 1px 1px rgba(20,18,42,.4))}
+  .pv-pel{width:96px;height:96px;object-fit:contain;display:block}
   .pv-text{min-width:0;flex:1}
   .pv-meta{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:6px}
   .pill{background:var(--ink);color:var(--cream);font-weight:600;font-size:.72rem;padding:3px 10px;border-radius:999px}
@@ -503,11 +504,20 @@
     $("pv-cefr").textContent = P.cefrOf(cur);
     if (window.VESPER_MASCOT) {
       var state = TONE_STATE[cur.tone] || "welcome";
-      $("pv-mascot").innerHTML = VESPER_MASCOT.render(state, { size: "lg" });
+      var appr = (window.VESPER_THEME && VESPER_THEME.get) ? VESPER_THEME.get() : null;
+      /* aspecto (pelaje) completo: muestra la imagen del animal si está desbloqueado */
+      var pelId = appr ? appr.pelaje : "classic";
+      var pelLocked = pelId && pelId !== "classic" && window.VESPER_COSMETICS && VESPER_COSMETICS.isUnlocked && !VESPER_COSMETICS.isUnlocked("pelaje", pelId);
+      var pel = appr && VESPER_THEME.pelajes && VESPER_THEME.pelajes[pelId];
+      if (pelId !== "classic" && !pelLocked && pel && pel.img) {
+        $("pv-mascot").innerHTML = '<img class="pv-pel" src="' + pel.img + '" alt="Vesper">';
+      } else {
+        $("pv-mascot").innerHTML = VESPER_MASCOT.render(state, { size: "lg" });
+      }
       /* superpone el accesorio elegido sobre la mascota de la vista previa */
       try {
-        if (window.VESPER_THEME && VESPER_THEME.get) {
-          var accId = VESPER_THEME.get().accessory;
+        if (appr) {
+          var accId = appr.accessory;
           var accOk = !(accId && accId !== "none" && window.VESPER_COSMETICS && VESPER_COSMETICS.isUnlocked && !VESPER_COSMETICS.isUnlocked("acc", accId));
           var acc = VESPER_THEME.accessories && VESPER_THEME.accessories[accId];
           if (accOk && acc && acc.svg) $("pv-mascot").insertAdjacentHTML("beforeend", '<span class="pv-acc" aria-hidden="true">' + acc.svg + '</span>');
