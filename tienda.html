@@ -118,7 +118,7 @@
 
   function paintHearts() {
     var on = E.livesActive(), h = E.hearts(), mx = E.maxHearts(), row = "";
-    for (var i = 0; i < mx; i++) row += '<span class="hp">' + (window.VESPER_ICN ? (i < h ? VESPER_ICN.heart : VESPER_ICN.heartEmpty) : (i < h ? "❤️" : "🤍")) + '</span>';
+    for (var i = 0; i < mx; i++) row += '<span class="hp">' + (window.VESPER_ICN ? (i < h ? VESPER_ICN.heart : VESPER_ICN.heartEmpty) : "") + '</span>';
     var meta;
     if (!on) meta = "Modo desafío apagado · actívalo en Configuración";
     else if (h >= mx) meta = "Vidas al máximo";
@@ -135,7 +135,7 @@
     $("store").innerHTML = E.STORE.map(function (it) {
       var disabled = gems < it.cost || (it.id === "hearts" && E.hearts() >= E.maxHearts());
       var ic = ICN ? ICN.store(it.id) : it.icon;
-      var cost = (ICN ? '<span class="bgem">' + ICN.gem + '</span>' : '💎 ') + it.cost;
+      var cost = (ICN ? '<span class="bgem">' + ICN.gem + '</span>' : '') + it.cost;
       return '<div class="item"><span class="ic">' + ic + '</span>'
         + '<span class="tx"><b>' + it.name + '</b><span>' + it.desc + '</span></span>'
         + '<button class="buy" data-id="' + it.id + '"' + (disabled ? ' disabled' : '') + '>' + cost + '</button></div>';

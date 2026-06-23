@@ -70,6 +70,9 @@
   .zoneline td{border-top:2px dashed var(--promote)}
   .zoneline.down td{border-top:2px dashed var(--relegate)}
   .note{font-size:.84rem;color:var(--muted);text-align:center;margin-top:10px}
+  .ei{display:inline-flex;align-items:center;vertical-align:-.14em}
+  .ei svg{width:1.05em;height:1.05em;display:block}
+  .banner .ei{margin-right:2px}
 </style>
 </head>
 <body>
@@ -107,13 +110,14 @@
   if (!LG) { $("head").innerHTML = '<p class="muted">La liga no está disponible.</p>'; return; }
 
   function esc(s) { return ("" + (s == null ? "" : s)).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+  function ig(n) { return (window.VESPER_ICN && VESPER_ICN[n]) ? '<span class="ei">' + VESPER_ICN[n] + '</span>' : ""; }
 
   /* aviso del cierre de la semana anterior (ascenso/descenso) */
   var last = LG.lastResult();
   if (last && (last.promoted || last.relegated)) {
     $("result").innerHTML = last.promoted
-      ? '<div class="banner up">🎉 ¡Ascendiste de liga la semana pasada! Sigue así.</div>'
-      : '<div class="banner down">⬇️ Bajaste de liga la semana pasada. ¡A recuperar el puesto!</div>';
+      ? '<div class="banner up">' + ig('trophy') + ' ¡Ascendiste de liga la semana pasada! Sigue así.</div>'
+      : '<div class="banner down">' + ig('arrowDown') + ' Bajaste de liga la semana pasada. ¡A recuperar el puesto!</div>';
     if (last.promoted && window.VESPER_SFX) { try { VESPER_SFX.levelup(); } catch (e) {} }
     if (LG.clearLast) LG.clearLast();
   }
@@ -179,7 +183,7 @@
       }
       LG.liveStandings().then(function (rows) {
         if (rows && rows.length) {
-          paintHead({ icon: (ICN ? ICN.globe : "🌐"), name: "Liga global · esta semana", badge: "En la nube" });
+          paintHead({ icon: (ICN ? ICN.globe : ""), name: "Liga global · esta semana", badge: "En la nube" });
           paintBoard(rows, "alias");
         } else {
           showSimulated(false);   /* 403/sin datos: liga simulada */

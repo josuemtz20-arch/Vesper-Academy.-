@@ -57,9 +57,11 @@ window.VESPER_MASCOT = (function () {
       + ' onerror="if(!this.dataset.f){this.dataset.f=1;this.src=this.getAttribute(\'data-canon\');}else{this.onerror=null;this.src=\'' + FALLBACK + '\';}">';
   }
   function fxHtml(fx) {
-    if (fx === "sparkle") return '<span class="vc-fx vc-sparkle">✨</span><span class="vc-fx vc-sparkle d2">✨</span>';
-    if (fx === "confetti") return '<span class="vc-fx vc-confetti">🎉</span><span class="vc-fx vc-confetti d2">⭐</span><span class="vc-fx vc-confetti d3">✨</span>';
-    if (fx === "flame") return '<span class="vc-fx vc-flame">🔥</span>';
+    var I = window.VESPER_ICN || {};
+    var sp = I.sparkle || "", st = I.star || "", fl = I.flame || "";
+    if (fx === "sparkle") return '<span class="vc-fx vc-sparkle">' + sp + '</span><span class="vc-fx vc-sparkle d2">' + sp + '</span>';
+    if (fx === "confetti") return '<span class="vc-fx vc-confetti">' + st + '</span><span class="vc-fx vc-confetti d2">' + st + '</span><span class="vc-fx vc-confetti d3">' + sp + '</span>';
+    if (fx === "flame") return '<span class="vc-fx vc-flame">' + fl + '</span>';
     return "";
   }
 
@@ -117,7 +119,9 @@ window.VESPER_MASCOT = (function () {
       ".vc-md .vc-img{width:84px;height:84px}",
       ".vc-lg .vc-img{width:120px;height:120px}",
       ".vc-bubble{background:rgba(201,168,76,.14);border-radius:14px;padding:9px 13px;font-size:.95rem;max-width:300px;text-align:center;color:#1B1B2F;animation:vc-fade .3s ease}",
-      ".vc-fx{position:absolute;font-size:1.15rem;pointer-events:none;z-index:2}",
+      ".vc-fx{position:absolute;font-size:1.15rem;pointer-events:none;z-index:2;color:#C9A84C}",
+      ".vc-fx svg{width:1.05em;height:1.05em;display:block}",
+      ".vc-flame svg{color:#C9A84C}",
       ".vc-sparkle{top:-6px;right:-6px;animation:vc-twinkle 1s ease-out infinite}",
       ".vc-sparkle.d2{top:auto;bottom:-4px;left:-6px;right:auto;animation-delay:.5s}",
       ".vc-confetti{top:-10px;left:46%;animation:vc-rise 1.2s ease-out forwards}",
