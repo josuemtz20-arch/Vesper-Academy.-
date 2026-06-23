@@ -29,6 +29,12 @@
 !/book_placement.html
 !/audio_library.html
 !/lesson.html
+# SEO: landings de descubrimiento (2026-06-23) + indexación. Estáticas,
+# indexables, embudan al examen con atribución ?src=. Sin claves.
+!/examen-ingles-gratis.html
+!/ingles-para-call-center.html
+!/robots.txt
+!/sitemap.xml
 
 # teacher portal (index ONLY — password-gated).
 # The teacher manuals stay local-only and are never published: the portal
