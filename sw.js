@@ -9,7 +9,7 @@
    ============================================================ */
 "use strict";
 
-var CACHE_VERSION = "vesper-v31";
+var CACHE_VERSION = "vesper-v32";
 var CORE = [
   /* Vesper Engine shell */
   "vesper_engine.html",
@@ -42,6 +42,12 @@ var CORE = [
   "vesper_progress.js",
   "vesper_cosmetics.js",
   "vesper_sync.js",
+  /* Engagement (comparativa Duolingo): repaso espaciado, economía y liga */
+  "vesper_srs.js",
+  "vesper_economy.js",
+  "vesper_league.js",
+  "tienda.html",
+  "liga.html",
   "manifest_lecciones.webmanifest",
   "assets/images/mascot/vesper_cat.png",
   "assets/images/virtual_class_happy_cat.png",
