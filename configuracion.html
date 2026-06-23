@@ -293,6 +293,12 @@
       <a href="tienda.html" style="margin-top:12px;display:inline-block;text-decoration:none;font-weight:700;
         background:var(--gold);color:var(--ink);padding:11px 18px;border-radius:12px">Abrir la tienda 🛒</a>
     </div>
+    <div class="field">
+      <label class="label" for="league-alias" style="margin:0">Alias para la liga
+        <span class="hint">El nombre con el que apareces en el leaderboard real (con sesión iniciada). Si lo dejas vacío, usamos un código anónimo. No mostramos tu correo.</span></label>
+      <input class="name-input" id="league-alias" type="text" maxlength="24" autocomplete="off"
+        placeholder="Tu alias (opcional)" style="margin-top:8px">
+    </div>
   </section>
 
   <p class="muted" style="text-align:center;margin:6px 0 0">
@@ -526,6 +532,24 @@
       });
     }
     var gc = $("gem-count"); if (gc) gc.textContent = "💎 " + E.gems();
+  })();
+
+  /* ---------- alias para la liga (leaderboard real) ---------- */
+  (function () {
+    var inp = $("league-alias"); if (!inp) return;
+    function readAlias() {
+      try { var p = JSON.parse(localStorage.getItem("vesper_profile") || "null"); return (p && p.vesper && p.vesper.leagueAlias) || ""; } catch (e) { return ""; }
+    }
+    function writeAlias(v) {
+      try {
+        var p = JSON.parse(localStorage.getItem("vesper_profile") || "null") || {};
+        p.vesper = p.vesper || {};
+        p.vesper.leagueAlias = v;
+        localStorage.setItem("vesper_profile", JSON.stringify(p));
+      } catch (e) {}
+    }
+    inp.value = readAlias();
+    inp.addEventListener("input", function () { writeAlias(inp.value.trim().slice(0, 24)); flash(); });
   })();
 
   /* ---------- vista previa en vivo ---------- */

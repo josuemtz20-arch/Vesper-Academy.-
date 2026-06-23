@@ -39,6 +39,8 @@
       "access_admin.html",
       "book_placement.html",
       "leccion.html",
+      "liga.html",
+      "tienda.html",
       "onboarding.html",
       "vesper_landing.html",
       "vesper_promo.html",

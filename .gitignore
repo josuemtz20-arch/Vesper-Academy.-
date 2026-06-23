@@ -105,6 +105,11 @@
 # Liga semanal competitiva (rivales simulados, lado cliente). Sin claves.
 !/vesper_league.js
 !/liga.html
+# Leaderboard real (Firestore REST, reusa VesperAuth) + efectos de sonido
+# compartidos (WebAudio + haptics). Sin claves. Doc de la regla a publicar.
+!/vesper_league_cloud.js
+!/vesper_sfx.js
+!/FIRESTORE_LEAGUE_RULES.md
 # recintos tematicos de vocabulario (ramas) — datos publicos, sin claves
 !/vesper_vocab_dens.js
 !/apariencia.html

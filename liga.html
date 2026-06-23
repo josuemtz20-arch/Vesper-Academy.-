@@ -56,6 +56,8 @@
   .zoneline td{border-top:2px dashed var(--promote)}
   .zoneline.down td{border-top:2px dashed var(--relegate)}
   .note{font-size:.84rem;color:var(--muted);text-align:center;margin-top:6px}
+  .cta-signin{margin-top:12px;border:none;cursor:pointer;font-weight:700;background:var(--ink);color:var(--cream);
+    padding:10px 16px;border-radius:12px;font-size:.92rem}
 </style>
 </head>
 <body>
@@ -80,7 +82,11 @@
   <p class="note">Tu XP es real: súmalo completando lecciones. Los rivales son simulados (motivación local).</p>
 </main>
 
+<script src="vesper_prefs.js"></script>
+<script src="vesper_sfx.js"></script>
+<script src="vesper_auth.js"></script>
 <script src="vesper_league.js"></script>
+<script src="vesper_league_cloud.js"></script>
 <script>
 (function () {
   var LG = window.VESPER_LEAGUE;
@@ -95,33 +101,79 @@
     $("result").innerHTML = last.promoted
       ? '<div class="banner up">🎉 ¡Ascendiste de liga la semana pasada! Sigue así.</div>'
       : '<div class="banner down">⬇️ Bajaste de liga la semana pasada. ¡A recuperar el puesto!</div>';
+    if (last.promoted && window.VESPER_SFX) { try { VESPER_SFX.levelup(); } catch (e) {} }
     if (LG.clearLast) LG.clearLast();
   }
 
-  var t = LG.tier();
   function fmtTimer() {
     var ms = LG.weekEndsInMs(), d = Math.floor(ms / 86400000), h = Math.floor((ms % 86400000) / 3600000);
     return "Termina en " + (d > 0 ? d + "d " : "") + h + "h";
   }
-  $("head").innerHTML = '<div class="icon">' + t.icon + '</div><div class="name">' + esc(t.name) + '</div>'
-    + '<div class="timer">' + fmtTimer() + '</div>';
-  $("pz").textContent = LG.promotionZone();
-  $("rz").textContent = LG.relegationZone();
+  var pz = LG.promotionZone(), rz = LG.relegationZone();
+  $("pz").textContent = pz;
+  $("rz").textContent = rz;
 
-  var rows = LG.standings(), n = rows.length, pz = LG.promotionZone(), rz = LG.relegationZone();
-  var html = rows.map(function (r) {
-    var cls = "";
-    if (r.rank <= pz) cls += " row-up";
-    else if (r.rank > n - rz) cls += " row-down";
-    if (r.isMe) cls += " me";
-    /* línea divisoria de zona de ascenso (después del último que asciende) */
-    var zone = (r.rank === pz) ? ' zoneline' : ((r.rank === n - rz) ? ' zoneline down' : '');
-    return '<tr class="' + cls.trim() + zone + '">'
-      + '<td class="rk">' + r.rank + '</td>'
-      + '<td class="nm">' + (r.isMe ? "Tú" : esc(r.name)) + '</td>'
-      + '<td class="xp">' + r.xp + ' XP</td></tr>';
-  }).join("");
-  $("board").innerHTML = html;
+  function paintHead(opts) {
+    $("head").innerHTML = '<div class="icon">' + opts.icon + '</div>'
+      + '<div class="name">' + esc(opts.name) + '</div>'
+      + '<div class="timer">' + fmtTimer() + (opts.badge ? ' &middot; <b>' + opts.badge + '</b>' : '') + '</div>'
+      + (opts.cta || "");
+  }
+  function paintBoard(rows, nameKey) {
+    var n = rows.length;
+    $("board").innerHTML = rows.map(function (r) {
+      var cls = "";
+      if (r.rank <= pz) cls += " row-up";
+      else if (r.rank > n - rz) cls += " row-down";
+      if (r.isMe) cls += " me";
+      var zone = (r.rank === pz) ? ' zoneline' : ((r.rank === n - rz) ? ' zoneline down' : '');
+      var label = r.isMe ? "Tú" : esc(r[nameKey] || "Estudiante");
+      return '<tr class="' + cls.trim() + zone + '">'
+        + '<td class="rk">' + r.rank + '</td>'
+        + '<td class="nm">' + label + '</td>'
+        + '<td class="xp">' + r.xp + ' XP</td></tr>';
+    }).join("");
+  }
+
+  /* liga simulada (sin cuenta o si la nube no está disponible) */
+  function showSimulated(showCta) {
+    var t = LG.tier();
+    var cta = showCta
+      ? '<button class="cta-signin" id="signin">Inicia sesión para competir de verdad</button>'
+      : "";
+    paintHead({ icon: t.icon, name: t.name, badge: "", cta: cta });
+    paintBoard(LG.standings(), "name");
+    var si = $("signin");
+    if (si) si.onclick = function () {
+      if (window.VESPER_SYNC && VESPER_SYNC.openAuth) VESPER_SYNC.openAuth();
+      else location.href = "login.html";
+    };
+  }
+
+  /* intenta la tabla REAL; si no hay sesión/nube/regla, cae a la simulada */
+  var cloud = window.VESPER_LEAGUE_CLOUD;
+  if (cloud && cloud.available()) {
+    showSimulated(false);   /* pinta algo de inmediato mientras carga la nube */
+    var tries = 0;
+    (function attempt() {
+      if (!cloud.signedIn()) {
+        /* aún no llega el estado de auth: reintenta un par de veces, luego CTA */
+        if (tries++ < 6) { setTimeout(attempt, 500); return; }
+        showSimulated(true);
+        return;
+      }
+      LG.liveStandings().then(function (rows) {
+        if (rows && rows.length) {
+          paintHead({ icon: "🌐", name: "Liga global · esta semana", badge: "En la nube" });
+          paintBoard(rows, "alias");
+        } else {
+          showSimulated(false);   /* 403/sin datos: liga simulada */
+        }
+      }).catch(function () { showSimulated(false); });
+    })();
+  } else {
+    showSimulated(false);
+  }
 })();
 </script>
 </body>

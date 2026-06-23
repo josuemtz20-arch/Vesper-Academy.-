@@ -141,7 +141,29 @@ window.VESPER_LEAGUE = (function () {
   /* ---- API pública ---- */
   function standings() { var s = ensureWeek(load()); return tableRows(s, false); }
   function myRank() { var s = ensureWeek(load()); return rankOf(s, false); }
-  function addXp(n) { var s = ensureWeek(load()); s.myXp = Math.max(0, (s.myXp || 0) + (n || 0)); save(s); return s.myXp; }
+  function weekId() { return isoWeek(new Date()); }
+  function addXp(n) {
+    var s = ensureWeek(load());
+    s.myXp = Math.max(0, (s.myXp || 0) + (n || 0));
+    save(s);
+    /* leaderboard real: si hay sesión verificada, espeja tu XP semanal a la nube */
+    try {
+      if (window.VESPER_LEAGUE_CLOUD && VESPER_LEAGUE_CLOUD.signedIn && VESPER_LEAGUE_CLOUD.signedIn()) {
+        VESPER_LEAGUE_CLOUD.pushScore(s.week, s.myXp);
+      }
+    } catch (e) {}
+    return s.myXp;
+  }
+  /* tabla en vivo: usa la nube si hay sesión; si no, resuelve null (el llamador
+     cae a standings() simulado). */
+  function liveStandings() {
+    try {
+      if (window.VESPER_LEAGUE_CLOUD && VESPER_LEAGUE_CLOUD.signedIn && VESPER_LEAGUE_CLOUD.signedIn()) {
+        return VESPER_LEAGUE_CLOUD.fetchBoard(weekId());
+      }
+    } catch (e) {}
+    return Promise.resolve(null);
+  }
   function tier() { var s = ensureWeek(load()); var t = TIERS[s.tier] || TIERS[0]; return { idx: s.tier, id: t.id, name: t.name, icon: t.icon }; }
   function promotionZone() { return PROMOTE; }
   function relegationZone() { return RELEGATE; }
@@ -154,8 +176,8 @@ window.VESPER_LEAGUE = (function () {
      si existe window.VESPER_LEAGUE_CLOUD, se podría delegar standings()/addXp(). */
   var cloudHook = null;
 
-  return { addXp: addXp, standings: standings, myRank: myRank, tier: tier,
-    promotionZone: promotionZone, relegationZone: relegationZone, size: size,
+  return { addXp: addXp, standings: standings, liveStandings: liveStandings, myRank: myRank, tier: tier,
+    weekId: weekId, promotionZone: promotionZone, relegationZone: relegationZone, size: size,
     weekEndsInMs: weekEndsInMs, lastResult: lastResult, clearLast: clearLast,
     TIERS: TIERS, cloudHook: cloudHook };
 })();

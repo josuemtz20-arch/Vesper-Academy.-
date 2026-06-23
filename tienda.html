@@ -67,6 +67,8 @@
 
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
+<script src="vesper_prefs.js"></script>
+<script src="vesper_sfx.js"></script>
 <script src="vesper_economy.js"></script>
 <script>
 (function () {
@@ -104,6 +106,7 @@
     for (var i = 0; i < btns.length; i++) {
       btns[i].addEventListener("click", function () {
         var r = E.buy(this.getAttribute("data-id"));
+        if (r.ok && window.VESPER_SFX) { try { VESPER_SFX.coin(); } catch (e) {} }
         toast(r.ok ? ("✓ " + r.msg) : r.msg);
         paint();
       });

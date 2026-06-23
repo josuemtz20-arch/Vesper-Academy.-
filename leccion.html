@@ -17,6 +17,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Inria+Serif:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/vesper_tokens.css">
 <script src="vesper_prefs.js"></script>
+<script src="vesper_sfx.js"></script>
 <style>
   :root{
     --ink:#1B1B2F; --gold:#c5a059; --gold2:#a8843d; --success:#2D9E75; --error:#C0392B;
@@ -1648,6 +1649,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
 <script src="vesper_vocab_dens.js"></script>
 <script src="vesper_auth.js"></script>
 <script src="vesper_sync.js"></script>
+<script src="vesper_league_cloud.js"></script>
 <script>
 (function () {
   var qs = new URLSearchParams(location.search);
@@ -1701,10 +1703,13 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
        al acertar si la persona pidio retro explicativa: explainOnCorrect).
      - wrongFallback: texto solo-al-fallar (p.ej. "Respuesta: ...").
      - la frase de la mascota sale en el TONO elegido (VESPER_PERSONA.line). */
-  /* efecto de sonido ligero (WebAudio, sin archivos) en acierto/error.
-     Respeta la preferencia "Efectos de sonido" de Configuración. */
+  /* efecto de sonido de acierto/error. Ahora delega en el módulo compartido
+     VESPER_SFX (sonidos más cálidos + haptics). Conserva la firma playFx(ok)
+     para no tocar las llamadas existentes desde feedbackBox. Si el módulo no
+     cargó, cae a un beep WebAudio local (degradación). */
   var _actx = null;
   function playFx(ok) {
+    if (window.VESPER_SFX) { try { ok ? VESPER_SFX.correct() : VESPER_SFX.wrong(); return; } catch (e) {} }
     try {
       if (window.VESPER_PREFS && !VESPER_PREFS.soundEnabled()) return;
       var AC = window.AudioContext || window.webkitAudioContext;
@@ -1712,7 +1717,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       _actx = _actx || new AC();
       if (_actx.state === "suspended") { try { _actx.resume(); } catch (e) {} }
       var t = _actx.currentTime;
-      var notes = ok ? [660, 990] : [300, 200];   /* sube al acertar, baja al fallar */
+      var notes = ok ? [660, 990] : [300, 200];
       notes.forEach(function (f, i) {
         var o = _actx.createOscillator(), g = _actx.createGain();
         o.type = "sine"; o.frequency.value = f;
@@ -1725,6 +1730,8 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       });
     } catch (e) {}
   }
+  /* atajo seguro para disparar un cue con nombre del módulo de sonido */
+  function sfx(name, arg) { try { if (window.VESPER_SFX && VESPER_SFX[name]) VESPER_SFX[name](arg); } catch (e) {} }
 
   /* lluvia de confeti DOM, ligera y autolimpiable. Respeta prefers-reduced-motion
      (en ese caso el CSS la oculta). n = nº de piezas. */
@@ -3489,7 +3496,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     /* punto único: results[exIdx] ya está fijado por el renderer. Actualiza combo
        y dispara un pequeño festejo cada 3 aciertos seguidos. */
     var wasOk = !!results[exIdx];
-    if (wasOk) { combo++; if (combo > maxCombo) maxCombo = combo; if (combo >= 3 && combo % 3 === 0) burstConfetti(14); }
+    if (wasOk) { combo++; if (combo > maxCombo) maxCombo = combo; if (combo >= 3 && combo % 3 === 0) { burstConfetti(14); sfx("combo", combo); } }
     else combo = 0;
     /* SRS: en repaso, califica el ítem; en lecciones normales, registra el fallo. */
     try {
@@ -3502,6 +3509,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     var blocked = false;
     if (!wasOk && window.VESPER_ECONOMY && VESPER_ECONOMY.livesActive && VESPER_ECONOMY.livesActive()) {
       VESPER_ECONOMY.loseHeart();
+      sfx("heartloss");
       if (VESPER_ECONOMY.hearts() <= 0) blocked = true;
     }
     exIdx++;
@@ -4147,7 +4155,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     /* boost de XP comprado en la tienda (un solo uso) */
     var boost = (window.VESPER_ECONOMY && VESPER_ECONOMY.consumeXpBoost) ? VESPER_ECONOMY.consumeXpBoost() : 0;
     if (boost > 1) earnedXp = Math.round(earnedXp * boost);
-    if (perfect) burstConfetti(40);
+    if (perfect) { burstConfetti(40); sfx("fanfare"); } else { sfx("complete"); }
     if (PATH && PATH.setScore && lesson.lessonId) PATH.setScore(lesson.lessonId, pct);
     /* repaso aprobado (>=80%) -> desbloquea maestría de la destreza */
     masteryUnlocked = false;
@@ -4201,6 +4209,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       return;
     }
     earnedXp = Math.max(20, lesson.xpReward || 60);
+    sfx("fanfare");
     if (PATH && PATH.setScore) PATH.setScore(lesson.lessonId, pct);
     if (P && P.passBoss) P.passBoss(lesson.bossLevel, pct);
     var idxLv = PATH.LEVELS.indexOf(lesson.bossLevel);
@@ -4279,6 +4288,11 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
         VESPER_COSMETICS.markSeen();
       }
     } catch (e) {}
+
+    /* sonido de la pantalla de racha: escudo nuevo > logro/cosmético
+       (cosHtml ya refleja los cosméticos recién desbloqueados) */
+    if (info.milestone) sfx("levelup");
+    else if (ach.length || cosHtml) sfx("achievement");
 
     show('<div class="wrap">' + topbar(100) + '<div class="card center">'
       + mascot(mstate)
