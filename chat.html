@@ -80,6 +80,50 @@ header a.back:hover{color:var(--gold);}
 /* Aviso de configuración (sin PROXY_URL) */
 .setup-note{background:#fbf3df;border:1px solid #e7d8a8;border-left:4px solid var(--gold2);color:#5a4d2e;font-size:.82rem;line-height:1.5;padding:11px 15px;border-radius:8px;margin:14px 18px 0;}
 .setup-note code{background:#fff;border:1px solid #e7d8a8;border-radius:4px;padding:1px 5px;font-size:.9em;}
+
+/* ── Nivel 1: hablar (micrófono, voz de Vesper, práctica de pronunciación) ── */
+.iconbtn{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.22);color:rgba(255,255,255,.85);border-radius:18px;padding:6px 10px;font:700 .72rem/1 'Inter',sans-serif;cursor:pointer;white-space:nowrap;display:inline-flex;align-items:center;gap:6px;}
+.iconbtn:hover{border-color:var(--gold);color:var(--gold);}
+.iconbtn.on{background:var(--gold);border-color:var(--gold);color:var(--navy);}
+
+.mic{flex:none;width:46px;height:46px;border-radius:12px;border:1px solid var(--border);background:#fff;color:var(--navy);font-size:1.05rem;cursor:pointer;transition:.15s;}
+.mic:hover{border-color:var(--gold);color:var(--gold2);}
+.mic.on{background:var(--err);border-color:var(--err);color:#fff;animation:micpulse 1.2s infinite;}
+@keyframes micpulse{0%,100%{box-shadow:0 0 0 0 rgba(176,58,58,.45);}50%{box-shadow:0 0 0 7px rgba(176,58,58,0);}}
+
+.say-row{margin-top:7px;}
+.say-btn{background:rgba(197,160,89,.14);border:1px solid var(--gold);color:var(--gold2);border-radius:14px;padding:5px 11px;font:700 .72rem/1 'Inter',sans-serif;cursor:pointer;display:inline-flex;align-items:center;gap:6px;}
+.say-btn:hover{background:var(--gold);color:var(--navy);}
+
+.pron{margin:2px 0;border:1px solid var(--gold);background:#fff;border-radius:14px;padding:13px 15px 14px;max-width:88%;align-self:flex-start;box-shadow:0 2px 12px rgba(27,27,47,.10);}
+.pron h4{margin:0 0 8px;font:800 .68rem/1.2 'Inter',sans-serif;letter-spacing:.5px;text-transform:uppercase;color:var(--gold2);}
+.pron .target{font-size:1.06rem;line-height:1.75;margin-bottom:11px;color:#2a3344;}
+.pron .target b{font-weight:600;padding:1px 2px;border-radius:5px;}
+.pron .target b.hit{color:var(--ok);}
+.pron .target b.miss{color:var(--err);background:rgba(176,58,58,.09);}
+.pron .ctl{display:flex;gap:8px;flex-wrap:wrap;align-items:center;}
+.pron .pbtn{border:1px solid var(--border);background:var(--cream);color:var(--navy);border-radius:11px;padding:9px 13px;font:700 .8rem/1 'Inter',sans-serif;cursor:pointer;display:inline-flex;align-items:center;gap:7px;}
+.pron .pbtn.primary{background:var(--navy);color:var(--gold);border-color:var(--navy);}
+.pron .pbtn.listening{background:var(--err);color:#fff;border-color:var(--err);animation:micpulse 1.2s infinite;}
+.pron .score{font:800 1.05rem/1 'Inter',sans-serif;margin-left:auto;}
+.pron .score.good{color:var(--ok);}.pron .score.mid{color:var(--gold2);}.pron .score.low{color:var(--err);}
+.pron .fb{font-size:.84rem;color:var(--muted);margin-top:9px;line-height:1.5;}
+.pron .close{float:right;background:none;border:none;color:var(--muted);font-size:1.05rem;line-height:1;cursor:pointer;}
+
+.chat-cta{align-self:center;max-width:92%;display:flex;gap:12px;align-items:center;background:linear-gradient(135deg,var(--navy),var(--navy2));color:var(--cream);border:none;border-radius:14px;padding:13px 16px;cursor:pointer;font-family:'Inter',sans-serif;text-align:left;margin:6px 0;box-shadow:0 4px 16px rgba(27,27,47,.18);}
+.chat-cta .cic{flex:none;width:38px;height:38px;border-radius:50%;background:var(--gold);color:var(--navy);display:flex;align-items:center;justify-content:center;font-size:1.05rem;}
+.chat-cta .ctx b{display:block;font-size:.92rem;}.chat-cta .ctx span{font-size:.78rem;opacity:.85;}
+.chat-cta .go{margin-left:auto;color:var(--gold);font-weight:700;font-size:1.15rem;}
+
+/* Header compacto en móvil: botones solo-icono + sin subtítulo de marca, para que quepa */
+@media (max-width:480px){
+  header{padding:10px 12px;}
+  header .right{gap:8px;}
+  .brand small{display:none;}
+  .back .lbl,.btn-new .lbl{display:none;}
+  .btn-new,header a.back{padding:6px 9px;}
+  .tier{padding:6px 9px;}
+}
 </style>
 <link rel="stylesheet" href="assets/css/vesper_tokens.css">
 <script src="vesper_prefs.js"></script>
@@ -101,9 +145,10 @@ header a.back:hover{color:var(--gold);}
     <span><b>Vesper</b><small>Tutor IA</small></span>
   </a>
   <div class="right">
+    <button class="iconbtn" id="tts" type="button" title="Vesper lee sus respuestas en voz alta" aria-pressed="true"><i class="fas fa-volume-high"></i></button>
     <button class="tier" id="tier" type="button" title="Nivel del chat — toca para un código Pro">Gratis · Haiku</button>
-    <button class="btn-new" id="btn-new" type="button"><i class="fas fa-rotate-right"></i> Nueva</button>
-    <a class="back" href="leccion.html"><i class="fas fa-arrow-left"></i> Lecciones</a>
+    <button class="btn-new" id="btn-new" type="button"><i class="fas fa-rotate-right"></i> <span class="lbl">Nueva</span></button>
+    <a class="back" href="leccion.html"><i class="fas fa-arrow-left"></i> <span class="lbl">Lecciones</span></a>
   </div>
 </header>
 
@@ -111,15 +156,17 @@ header a.back:hover{color:var(--gold);}
   <div class="messages" id="messages" aria-live="polite"></div>
   <div class="composer">
     <div class="row">
-      <textarea id="input" rows="1" placeholder="Escribe tu mensaje a Vesper…" autofocus></textarea>
+      <textarea id="input" rows="1" placeholder="Escribe o toca 🎙️ para hablar…" autofocus></textarea>
+      <button class="mic" id="mic" type="button" aria-label="Hablar (dictado por voz)" title="Hablar"><i class="fas fa-microphone"></i></button>
       <button class="send" id="send" type="button" aria-label="Enviar"><i class="fas fa-paper-plane"></i></button>
     </div>
-    <p class="hint">Vesper es un tutor con IA. Enter para enviar · Shift+Enter para salto de línea.</p>
+    <p class="hint">🎙️ Toca el micrófono para hablar · Enter para enviar · practica sin miedo a equivocarte.</p>
   </div>
 </div>
 
 <script src="vesper_adaptive.js"></script>
 <script src="vesper_persona.js"></script>
+<script src="vesper_analytics.js"></script>
 <script>
 (function () {
   "use strict";
@@ -273,7 +320,7 @@ header a.back:hover{color:var(--gold);}
       }
     } catch (e) {}
     if (!text) text = "Hi! I'm Vesper, your English tutor. Escríbeme lo que quieras practicar y empezamos. 😊";
-    addMessage("vesper", text);
+    decorate(addMessage("vesper", text), text);
   }
 
   /* Pinta el historial guardado (si lo hay) o el saludo. */
@@ -285,7 +332,10 @@ header a.back:hover{color:var(--gold);}
         'y pega su URL en la constante <code>PROXY_URL</code> de <code>chat.html</code>.'));
     }
     if (history.length) {
-      history.forEach(function (m) { addMessage(m.role, m.content); });
+      history.forEach(function (m) {
+        var b = addMessage(m.role, m.content);
+        if (m.role !== "user") decorate(b, m.content);
+      });
     } else {
       greet();
     }
@@ -307,6 +357,7 @@ header a.back:hover{color:var(--gold);}
     addMessage("user", text);
     history.push({ role: "user", content: text });
     saveHistory();
+    track("chat_send", { len: text.length });
 
     sending = true;
     sendBtn.disabled = true;
@@ -379,6 +430,9 @@ header a.back:hover{color:var(--gold);}
         if (acc.trim()) {
           history.push({ role: "assistant", content: acc });
           saveHistory();
+          decorate(body, acc);
+          if (ttsOn) speak(englishPart(acc));
+          maybeCta();
         } else {
           ensureBubble();
           body.textContent = "(Vesper no devolvió respuesta. Intenta de nuevo.)";
@@ -441,6 +495,180 @@ header a.back:hover{color:var(--gold);}
 
   /* Si cambian las preferencias en otra pestaña, refresca el prompt. */
   window.addEventListener("vesper:persona", function () { SYSTEM = buildSystem(); });
+
+  /* ════════════════════════════════════════════════════════════
+     NIVEL 1 — Práctica de HABLAR: micrófono (dictado), voz de Vesper
+     (TTS) y práctica de pronunciación con feedback palabra por palabra.
+     Todo en el cliente (Web Speech API); sin tocar el backend. Es el
+     on-ramp natural a las clases en vivo (CTA al examen de nivel).
+     ════════════════════════════════════════════════════════════ */
+  function track(ev, props) { try { if (window.VA) VA.track(ev, props || {}); } catch (e) {} }
+  function goLead(src) {
+    if (window.VA) { VA.goPlacement(src); return; }
+    location.href = "book_placement.html?src=" + encodeURIComponent(src || "chat");
+  }
+
+  var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  var canSTT = !!SR;
+  var canTTS = ("speechSynthesis" in window) && ("SpeechSynthesisUtterance" in window);
+
+  var micBtn = document.getElementById("mic");
+  var ttsBtn = document.getElementById("tts");
+  if (!canSTT && micBtn) micBtn.style.display = "none";
+  if (!canTTS && ttsBtn) ttsBtn.style.display = "none";
+
+  /* ── Voz de Vesper (TTS) ── */
+  var TTS_KEY = "vesper_chat_tts";
+  var ttsOn = canTTS && (function () { try { var v = localStorage.getItem(TTS_KEY); return v === null ? true : v === "1"; } catch (e) { return true; } })();
+  var _voices = [];
+  function loadVoices() { try { _voices = window.speechSynthesis.getVoices() || []; } catch (e) { _voices = []; } }
+  if (canTTS) { loadVoices(); try { window.speechSynthesis.onvoiceschanged = loadVoices; } catch (e) {} }
+  function enVoice() {
+    var pref = ["Google US English", "Samantha", "Microsoft Aria", "Microsoft Jenny", "Microsoft Zira"];
+    for (var i = 0; i < pref.length; i++) for (var j = 0; j < _voices.length; j++) if (_voices[j].name.indexOf(pref[i]) === 0) return _voices[j];
+    for (var k = 0; k < _voices.length; k++) if ((_voices[k].lang || "").toLowerCase().indexOf("en-us") === 0) return _voices[k];
+    for (var m = 0; m < _voices.length; m++) if ((_voices[m].lang || "").toLowerCase().indexOf("en") === 0) return _voices[m];
+    return null;
+  }
+  function speak(text, rate) {
+    if (!canTTS || !text) return;
+    try {
+      window.speechSynthesis.cancel();
+      var u = new SpeechSynthesisUtterance(text);
+      u.lang = "en-US"; u.rate = rate || 0.95;
+      var v = enVoice(); if (v) u.voice = v;
+      window.speechSynthesis.speak(u);
+    } catch (e) {}
+  }
+  if (ttsBtn) {
+    var paintTts = function () {
+      ttsBtn.classList.toggle("on", ttsOn);
+      ttsBtn.setAttribute("aria-pressed", ttsOn ? "true" : "false");
+      ttsBtn.innerHTML = '<i class="fas fa-volume-' + (ttsOn ? "high" : "xmark") + '"></i>';
+      ttsBtn.title = ttsOn ? "Vesper lee en voz alta (tocar para silenciar)" : "Voz de Vesper silenciada (tocar para activar)";
+    };
+    paintTts();
+    ttsBtn.addEventListener("click", function () {
+      ttsOn = !ttsOn;
+      try { localStorage.setItem(TTS_KEY, ttsOn ? "1" : "0"); } catch (e) {}
+      if (!ttsOn) { try { window.speechSynthesis.cancel(); } catch (e) {} }
+      paintTts(); track("tts_toggle", { on: ttsOn });
+    });
+  }
+
+  /* ── Extraer la parte en inglés (para leer y para practicar) ── */
+  function splitSentences(t) { return (String(t).replace(/\s+/g, " ").match(/[^.!?]+[.!?]*/g) || [String(t)]); }
+  function isEng(s) { if (/[áéíóúñ¿¡]/i.test(s)) return false; return (s.toLowerCase().match(/[a-z']+/g) || []).length >= 2; }
+  function englishPart(text) { return splitSentences(text).map(function (s) { return s.trim(); }).filter(Boolean).filter(isEng).join(" ").trim(); }
+
+  /* ── Dictado por voz hacia el cuadro de texto ── */
+  var rec = null, listening = false;
+  function setMic(on) { listening = on; if (micBtn) { micBtn.classList.toggle("on", on); micBtn.setAttribute("aria-label", on ? "Detener" : "Hablar (dictado por voz)"); } }
+  function startDictation() {
+    if (!canSTT || listening) return;
+    try { rec = new SR(); } catch (e) { return; }
+    rec.lang = "en-US"; rec.interimResults = true; rec.continuous = false; rec.maxAlternatives = 1;
+    var base = inputEl.value.trim();
+    rec.onresult = function (e) {
+      var fin = "", int = "";
+      for (var i = e.resultIndex; i < e.results.length; i++) { var r = e.results[i]; if (r.isFinal) fin += r[0].transcript; else int += r[0].transcript; }
+      inputEl.value = (base ? base + " " : "") + (fin || int); autoGrow();
+    };
+    rec.onerror = function () { setMic(false); };
+    rec.onend = function () { setMic(false); inputEl.focus(); };
+    try { rec.start(); setMic(true); track("voice_input_used"); bumpSpeak(); } catch (e) { setMic(false); }
+  }
+  if (micBtn) micBtn.addEventListener("click", function () {
+    if (listening) { try { rec.stop(); } catch (e) {} setMic(false); }
+    else startDictation();
+  });
+
+  /* ── Botón "Practícalo" bajo cada respuesta de Vesper ── */
+  function decorate(body, text) {
+    if (!canSTT || !body || !body.parentNode) return;
+    var target = englishPart(text);
+    if (!target || target.split(/\s+/).length < 2) return;   // nada útil que practicar
+    var bubble = body.parentNode;
+    if (bubble.querySelector(".say-row")) return;             // idempotente
+    var row = el("div", "say-row");
+    var btn = el("button", "say-btn", '<i class="fas fa-microphone-lines"></i> Practícalo');
+    btn.type = "button";
+    btn.addEventListener("click", function () { openPron(target, bubble.parentNode); });
+    row.appendChild(btn);
+    bubble.appendChild(row);
+  }
+
+  /* ── Puntuación de pronunciación (bag-of-words, tolerante al orden) ── */
+  function normWords(s) { return (String(s).toLowerCase().match(/[a-z0-9']+/g) || []); }
+  function scorePron(target, said) {
+    var T = normWords(target), pool = normWords(said);
+    var matched = T.map(function (w) { var i = pool.indexOf(w); if (i >= 0) { pool.splice(i, 1); return true; } return false; });
+    var hits = matched.filter(Boolean).length;
+    return { pct: Math.round(100 * hits / Math.max(1, T.length)), hits: hits, total: T.length, matched: matched, words: T };
+  }
+  function openPron(target, afterRow) {
+    track("pron_practice"); bumpSpeak();
+    var panel = el("div", "pron"), pr = null, prListening = false;
+    function render(result) {
+      var tgtHtml = result
+        ? result.words.map(function (w, i) { return '<b class="' + (result.matched[i] ? "hit" : "miss") + '">' + escapeHtml(w) + "</b>"; }).join(" ")
+        : escapeHtml(target);
+      var scoreHtml = result ? '<span class="score ' + (result.pct >= 80 ? "good" : result.pct >= 50 ? "mid" : "low") + '">' + result.pct + "%</span>" : "";
+      var fb = result
+        ? (result.pct >= 80 ? "¡Muy bien! Suenas claro. " : result.pct >= 50 ? "Vas bien. Repite las palabras en rojo. " : "Sigue practicando — di cada palabra despacio. ")
+          + (result.pct < 100 ? "Toca «Escúchalo» para oír el modelo." : "")
+        : "Lee la frase en voz alta. Toca «Habla ahora» y dila.";
+      panel.innerHTML =
+        '<button class="close" aria-label="Cerrar">&times;</button>'
+        + '<h4><i class="fas fa-microphone-lines"></i> Practica decirlo</h4>'
+        + '<div class="target">' + tgtHtml + "</div>"
+        + '<div class="ctl">'
+        +   '<button class="pbtn primary" data-act="rec"><i class="fas fa-microphone"></i> ' + (result ? "Otra vez" : "Habla ahora") + "</button>"
+        +   '<button class="pbtn" data-act="listen"><i class="fas fa-volume-high"></i> Escúchalo</button>'
+        +   scoreHtml
+        + "</div>"
+        + '<div class="fb">' + fb + "</div>";
+      panel.querySelector(".close").onclick = function () { try { if (pr) pr.abort(); } catch (e) {} if (panel.parentNode) panel.parentNode.removeChild(panel); };
+      panel.querySelector('[data-act="listen"]').onclick = function () { speak(target); };
+      panel.querySelector('[data-act="rec"]').onclick = runPron;
+    }
+    function runPron() {
+      if (!canSTT || prListening) return;
+      try { pr = new SR(); } catch (e) { return; }
+      pr.lang = "en-US"; pr.interimResults = false; pr.continuous = false; pr.maxAlternatives = 1;
+      var recBtn = panel.querySelector('[data-act="rec"]');
+      pr.onresult = function (e) {
+        var said = ""; for (var i = 0; i < e.results.length; i++) said += e.results[i][0].transcript;
+        var res = scorePron(target, said); track("pron_score", { pct: res.pct }); render(res); maybeCta();
+      };
+      pr.onerror = function () { prListening = false; if (recBtn) { recBtn.classList.remove("listening"); recBtn.innerHTML = '<i class="fas fa-microphone"></i> Otra vez'; } };
+      pr.onend = function () { prListening = false; if (recBtn) recBtn.classList.remove("listening"); };
+      try { pr.start(); prListening = true; recBtn.classList.add("listening"); recBtn.innerHTML = '<i class="fas fa-microphone"></i> Escuchando…'; } catch (e) {}
+    }
+    render(null);
+    if (afterRow && afterRow.parentNode) afterRow.parentNode.insertBefore(panel, afterRow.nextSibling);
+    else messagesEl.appendChild(panel);
+    scrollToBottom();
+  }
+
+  /* ── On-ramp: tras practicar hablar, ofrece la clase en vivo ── */
+  var SPEAK_KEY = "vesper_chat_speakacts";
+  function bumpSpeak() { try { sessionStorage.setItem(SPEAK_KEY, (+sessionStorage.getItem(SPEAK_KEY) || 0) + 1); } catch (e) {} }
+  function speakActs() { try { return +sessionStorage.getItem(SPEAK_KEY) || 0; } catch (e) { return 0; } }
+  function maybeCta() {
+    if (speakActs() < 2) return;
+    try { if (sessionStorage.getItem("vesper_chat_cta") === "1") return; sessionStorage.setItem("vesper_chat_cta", "1"); } catch (e) {}
+    var c = el("button", "chat-cta");
+    c.type = "button";
+    c.innerHTML = '<span class="cic"><i class="fas fa-graduation-cap"></i></span>'
+      + '<span class="ctx"><b>¿Listo para hablar con un profesor?</b>'
+      + "<span>Practicar aquí es el primer paso. Haz tu examen de nivel gratis.</span></span>"
+      + '<span class="go">&rarr;</span>';
+    c.addEventListener("click", function () { goLead("chat-speaking"); });
+    messagesEl.appendChild(c); scrollToBottom();
+  }
+
+  track("chat_view", { stt: canSTT, tts: canTTS });
 
   renderInitial();
 })();
