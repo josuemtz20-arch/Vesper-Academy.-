@@ -17,6 +17,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Inria+Serif:wght@400;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/vesper_tokens.css">
 <script src="vesper_prefs.js"></script>
+<script src="vesper_sfx.js"></script>
+<script src="vesper_icons.js"></script>
 <style>
   :root{
     --ink:#1B1B2F; --gold:#c5a059; --gold2:#a8843d; --success:#2D9E75; --error:#C0392B;
@@ -67,6 +69,74 @@
   .btn:active:not(:disabled){transform:translateY(1px)}
   /* MCQ */
   .exnum{font-size:.82rem;color:var(--muted);font-weight:600;margin:-4px 0 10px}
+  /* icono SVG en línea (auto-escala con el texto) */
+  .ei{display:inline-flex;align-items:center;vertical-align:-.14em}
+  .ei svg{width:1.05em;height:1.05em;display:block}
+  .flame .ei svg{width:1em;height:1em}
+  .ach-badge .ab-ic svg{width:1.7rem;height:1.7rem}
+  .srch-ic svg{width:1rem;height:1rem;display:block}
+  .shields{color:var(--gold)}
+  .shields .ei{margin:0 1px}
+  /* combo dentro de la lección */
+  .combo-chip{display:inline-flex;align-items:center;gap:7px;font-size:.8rem;font-weight:700;letter-spacing:.01em;
+    color:var(--ink);background:linear-gradient(180deg,#fbe7b6,#f4d488);border:1px solid var(--gold2);
+    padding:5px 13px;border-radius:999px;margin:0 0 10px;box-shadow:0 4px 14px rgba(168,132,61,.28);
+    animation:combo-pop .35s cubic-bezier(.2,.8,.3,1.2)}
+  .combo-chip b{font-size:1rem;font-variant-numeric:tabular-nums}
+  @keyframes combo-pop{0%{transform:scale(.6) translateY(4px);opacity:0}60%{transform:scale(1.12)}100%{transform:scale(1);opacity:1}}
+  .xp-bonus{display:inline-block;font-size:.9rem;font-weight:700;color:var(--gold2);margin:8px 0 2px;
+    background:var(--gold-tint);padding:5px 12px;border-radius:999px}
+  /* confetti (lección perfecta / combos) */
+  .confetti{position:fixed;inset:0;pointer-events:none;z-index:60;overflow:hidden}
+  .confetti i{position:absolute;top:-12px;width:9px;height:14px;border-radius:2px;opacity:.95;
+    animation:confetti-fall var(--cf-dur,1900ms) cubic-bezier(.2,.7,.3,1) forwards}
+  @keyframes confetti-fall{0%{transform:translateY(-10vh) rotate(0);opacity:1}
+    100%{transform:translateY(110vh) rotate(720deg);opacity:.85}}
+  @media(prefers-reduced-motion:reduce){.combo-chip{animation:none}.confetti{display:none}}
+  /* speaking */
+  .speak-target{text-align:center;margin:8px 0 14px;padding:20px 16px;border-radius:16px;
+    background:linear-gradient(165deg,var(--gold-tint),rgba(197,160,89,.04));border:1px solid var(--gold2)}
+  .speak-target .en{display:block;font-family:"Inria Serif",Georgia,serif;font-size:1.5rem;line-height:1.25;color:var(--ink)}
+  .speak-target .es{display:block;font-size:.92rem;color:var(--muted);margin-top:6px}
+  .speak-row{display:flex;gap:10px;justify-content:center;margin-bottom:12px}
+  .speak-row .btn{margin-top:0;width:auto;min-height:44px;padding:10px 16px;font-size:.92rem;border-radius:999px}
+  .mic-btn{width:100%;background:linear-gradient(180deg,#fff,#f5ead0);border:1.5px solid var(--gold);color:var(--ink)}
+  .mic-btn.rec{background:linear-gradient(180deg,#ffe6e6,#ffcccc);border-color:#e88;animation:mic-pulse 1.1s ease infinite}
+  @keyframes mic-pulse{0%,100%{box-shadow:0 0 0 0 rgba(192,57,43,.38)}50%{box-shadow:0 0 0 12px rgba(192,57,43,0)}}
+  .heard{text-align:center;min-height:1.2em;margin:10px 0 2px;font-size:.95rem;color:var(--muted)}
+  @media(prefers-reduced-motion:reduce){.mic-btn.rec{animation:none}}
+  /* tarjetas de acción del hub (repaso espaciado y liga) */
+  .hub-card{display:flex;align-items:center;gap:14px;width:100%;text-align:left;cursor:pointer;
+    padding:15px 16px;border-radius:16px;margin-bottom:14px;transition:transform .15s ease,box-shadow .15s ease}
+  .hub-card:hover{transform:translateY(-2px)}
+  .hub-card .hc-ic{flex:0 0 auto;width:46px;height:46px;border-radius:14px;display:flex;align-items:center;
+    justify-content:center;font-size:1.5rem}
+  .hub-card .hc-ic svg{width:24px;height:24px}
+  .hub-card .hc-tx{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
+  .hub-card .hc-tx b{font-size:1.02rem}
+  .hub-card .hc-tx span{font-size:.86rem}
+  .hub-card .hc-cta{flex:0 0 auto;font-weight:700;font-size:.9rem;opacity:.9}
+  /* repaso espaciado: cálido crema-oro */
+  .srs-banner{border:1px solid var(--gold2);background:linear-gradient(180deg,#fffdf6,#f8edcf);
+    box-shadow:0 6px 20px rgba(168,132,61,.16)}
+  .srs-banner .hc-ic{background:var(--gold-tint);color:var(--gold2)}
+  .srs-banner .hc-tx span{color:var(--muted)}
+  .srs-banner .hc-cta{color:var(--gold2)}
+  /* liga: premium crepúsculo (índigo + oro) */
+  .league-widget{border:1px solid #2c2c4a;color:var(--cream);
+    background:linear-gradient(160deg,#2a2c50,#1B1B2F 65%,#14122a);box-shadow:0 12px 30px rgba(20,18,42,.32)}
+  .league-widget .hc-ic{background:rgba(201,168,76,.18);box-shadow:inset 0 0 0 1px rgba(243,226,171,.35)}
+  .league-widget .hc-tx b{color:#fff}
+  .league-widget .hc-tx span{color:#c8c6e0}
+  .league-widget .hc-cta{color:var(--gold)}
+  /* tira de gemas/vidas durante el ejercicio */
+  .econ-strip{display:flex;justify-content:flex-end;gap:8px;align-items:center;margin:2px 0 10px}
+  .econ-gems,.econ-hearts{display:inline-flex;align-items:center;gap:5px;font-weight:700;font-size:.86rem;
+    padding:4px 11px;border-radius:999px;border:1px solid var(--line);background:var(--paper)}
+  .econ-gems{color:#0f7c8a}
+  .econ-strip .ei{display:inline-flex}
+  .econ-strip .ei svg{width:15px;height:15px;display:block}
+  .econ-hearts .ei+.ei{margin-left:1px}
   .opts{display:grid;gap:10px;margin:6px 0}
   .opt{text-align:left;background:var(--paper);border:1.5px solid var(--line);border-radius:13px;padding:13px 15px;font-family:inherit;
     font-size:1rem;color:var(--ink);cursor:pointer;min-height:50px}
@@ -1288,6 +1358,10 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
 .hstat__ic{width:30px;height:30px;flex:0 0 auto;border-radius:9px;display:grid;place-items:center;
   background:rgba(197,160,89,.20);color:var(--gold,#c5a059)}
 .hstat__ic svg{width:17px;height:17px}
+.hstat--link{text-decoration:none;cursor:pointer;transition:background .15s ease}
+.hstat--link:hover{background:rgba(245,242,235,.12)}
+.hstat__ic--badge{background:rgba(245,242,235,.12)}
+.hstat__ic--badge svg{width:24px;height:24px}
 .hstat__tx{display:flex;flex-direction:column;min-width:0}
 .hstat__v{font-size:1.02rem;font-weight:800;line-height:1.05;color:#f5f2eb;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .hstat__l{font-size:.62rem;text-transform:uppercase;letter-spacing:.05em;color:rgba(245,242,235,.62);font-weight:700;margin-top:2px;white-space:nowrap}
@@ -1618,10 +1692,14 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
 <script src="vesper_progress.js"></script>
 <script src="vesper_cosmetics.js"></script>
 <script src="vesper_path.js"></script>
+<script src="vesper_srs.js"></script>
+<script src="vesper_economy.js"></script>
+<script src="vesper_league.js"></script>
 <script src="vesper_vocab_dens.js"></script>
 <script src="vesper_auth.js"></script>
 <script src="vesper_sync.js"></script>
 <script src="vesper_analytics.js"></script>
+<script src="vesper_league_cloud.js"></script>
 <script>
 (function () {
   var qs = new URLSearchParams(location.search);
@@ -1650,6 +1728,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
 
   var lesson = null, baseLesson = null, profile = (A && A.getProfile) ? A.getProfile() : null;
   var exIdx = 0, results = [], earnedXp = 0;
+  var combo = 0, maxCombo = 0;   /* aciertos consecutivos dentro de la lección (Fase A) */
 
   function esc(s) {
     return ("" + (s == null ? "" : s)).replace(/[&<>"]/g, function (c) {
@@ -1699,10 +1778,13 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
        al acertar si la persona pidio retro explicativa: explainOnCorrect).
      - wrongFallback: texto solo-al-fallar (p.ej. "Respuesta: ...").
      - la frase de la mascota sale en el TONO elegido (VESPER_PERSONA.line). */
-  /* efecto de sonido ligero (WebAudio, sin archivos) en acierto/error.
-     Respeta la preferencia "Efectos de sonido" de Configuración. */
+  /* efecto de sonido de acierto/error. Ahora delega en el módulo compartido
+     VESPER_SFX (sonidos más cálidos + haptics). Conserva la firma playFx(ok)
+     para no tocar las llamadas existentes desde feedbackBox. Si el módulo no
+     cargó, cae a un beep WebAudio local (degradación). */
   var _actx = null;
   function playFx(ok) {
+    if (window.VESPER_SFX) { try { ok ? VESPER_SFX.correct() : VESPER_SFX.wrong(); return; } catch (e) {} }
     try {
       if (window.VESPER_PREFS && !VESPER_PREFS.soundEnabled()) return;
       var AC = window.AudioContext || window.webkitAudioContext;
@@ -1710,7 +1792,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       _actx = _actx || new AC();
       if (_actx.state === "suspended") { try { _actx.resume(); } catch (e) {} }
       var t = _actx.currentTime;
-      var notes = ok ? [660, 990] : [300, 200];   /* sube al acertar, baja al fallar */
+      var notes = ok ? [660, 990] : [300, 200];
       notes.forEach(function (f, i) {
         var o = _actx.createOscillator(), g = _actx.createGain();
         o.type = "sine"; o.frequency.value = f;
@@ -1721,6 +1803,37 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
         o.connect(g); g.connect(_actx.destination);
         o.start(t0); o.stop(t0 + 0.18);
       });
+    } catch (e) {}
+  }
+  /* atajo seguro para disparar un cue con nombre del módulo de sonido */
+  function sfx(name, arg) { try { if (window.VESPER_SFX && VESPER_SFX[name]) VESPER_SFX[name](arg); } catch (e) {} }
+  /* icono SVG de marca por nombre, en línea (envuelto en .ei para alinear y
+     escalar con el texto). "" si el set no cargó. */
+  function ic(name) {
+    var s = (window.VESPER_ICN && VESPER_ICN[name]) ? VESPER_ICN[name] : "";
+    return s ? '<span class="ei">' + s + '</span>' : "";
+  }
+
+  /* lluvia de confeti DOM, ligera y autolimpiable. Respeta prefers-reduced-motion
+     (en ese caso el CSS la oculta). n = nº de piezas. */
+  function burstConfetti(n) {
+    try {
+      if (window.matchMedia && matchMedia("(prefers-reduced-motion:reduce)").matches) return;
+      n = n || 24;
+      var cols = ["#C9A84C", "#4aa3df", "#2ecc71", "#e67e22", "#a569bd", "#ff6b6b"];
+      var box = document.createElement("div"); box.className = "confetti";
+      var html = "", i;
+      for (i = 0; i < n; i++) {
+        var left = Math.round(Math.random() * 100);
+        var delay = Math.round(Math.random() * 240);
+        var dur = 1500 + Math.round(Math.random() * 900);
+        var col = cols[i % cols.length];
+        html += '<i style="left:' + left + '%;background:' + col + ';--cf-dur:' + dur
+          + 'ms;animation-delay:' + delay + 'ms"></i>';
+      }
+      box.innerHTML = html;
+      document.body.appendChild(box);
+      setTimeout(function () { if (box.parentNode) box.parentNode.removeChild(box); }, 2900);
     } catch (e) {}
   }
 
@@ -1761,12 +1874,16 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       + '<span class="hstat__tx"><span class="hstat__v">' + (st.streak || 0) + '</span><span class="hstat__l">Racha</span></span></div>'
       + '<div class="hstat"><span class="hstat__ic">' + HUB_ICN.star + '</span>'
       + '<span class="hstat__tx"><span class="hstat__v">' + (st.xp || 0) + '</span><span class="hstat__l">XP</span></span></div>';
-    if (dg) {
-      var gp = dg.target ? Math.min(100, Math.round(100 * dg.progress / dg.target)) : 0;
-      tiles += '<div class="hstat' + (dg.met ? ' met' : '') + '">'
-        + '<span class="hstat__ring" style="--gp:' + gp + '" aria-hidden="true"><i>' + Math.min(dg.progress, dg.target) + '</i></span>'
-        + '<span class="hstat__tx"><span class="hstat__v">' + Math.min(dg.progress, dg.target) + '/' + dg.target + '</span><span class="hstat__l">Meta de hoy</span></span></div>';
-    }
+    /* en lugar de la meta diaria: la liga semanal (tier + tu puesto), tappable */
+    try {
+      if (window.VESPER_LEAGUE && VESPER_LEAGUE.tier) {
+        var lt = VESPER_LEAGUE.tier(), lr = VESPER_LEAGUE.myRank();
+        var lic = (window.VESPER_ICN ? VESPER_ICN.tier(lt.id) : (lt.icon || ""));
+        tiles += '<a class="hstat hstat--link" href="liga.html" aria-label="Liga ' + esc(lt.name) + ', puesto ' + lr + '">'
+          + '<span class="hstat__ic hstat__ic--badge">' + lic + '</span>'
+          + '<span class="hstat__tx"><span class="hstat__v">' + lr + 'º</span><span class="hstat__l">' + esc(lt.name.replace(/^Liga\s+/, "")) + '</span></span></a>';
+      }
+    } catch (e) {}
     if (st.shields || 0) {
       tiles += '<div class="hstat"><span class="hstat__ic">' + HUB_ICN.shield + '</span>'
         + '<span class="hstat__tx"><span class="hstat__v">' + st.shields + '</span><span class="hstat__l">Escudos</span></span></div>';
@@ -1879,12 +1996,12 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       if (c.kind === "acc" && window.VESPER_THEME && VESPER_THEME.accessories) {
         var a = VESPER_THEME.accessories[c.id];
         return { name: (a ? a.name : c.id),
-          ic: (a && a.svg) ? '<span class="cos-svg">' + a.svg + '</span>' : "&#127870;" };
+          ic: (a && a.svg) ? '<span class="cos-svg">' + a.svg + '</span>' : ic('sparkle') };
       }
       if (c.kind === "pelaje" && window.VESPER_THEME && VESPER_THEME.pelajes) {
         var pj = VESPER_THEME.pelajes[c.id];
         return { name: "Aspecto: " + (pj ? pj.name : c.id),
-          ic: (pj && pj.img) ? '<span class="cos-pel"><img src="' + pj.img + '" alt=""></span>' : "&#128062;" };
+          ic: (pj && pj.img) ? '<span class="cos-pel"><img src="' + pj.img + '" alt=""></span>' : ic('paw') };
       }
     } catch (e) {}
     return { name: c.id, ic: "&#11088;" };
@@ -3159,7 +3276,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       return '<button class="fchip" type="button" aria-pressed="false" data-skill="' + sk + '">' + skillIcon(sk) + ' ' + esc(m.label) + '</button>';
     }).join("");
     var searchUI = '<div class="hub-search" id="hubSearch" hidden>'
-      + '<div class="srch"><span class="srch-ic" aria-hidden="true">&#128270;</span>'
+      + '<div class="srch"><span class="srch-ic" aria-hidden="true">' + HUB_ICN.search + '</span>'
       + '<label class="sr-only" for="lessonSearch">Buscar lecciones por título, tema o nivel</label>'
       + '<input id="lessonSearch" type="search" inputmode="search" autocomplete="off" role="searchbox"'
       + ' aria-controls="searchResults" placeholder="Buscar lección, tema o nivel…"></div>'
@@ -3172,10 +3289,20 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
 
     var heroBand = (A && profile && A.profileLevel) ? A.levelToBand(A.profileLevel()) : null;
     var heroInfo = { band: heroBand, bandTag: heroBand ? (WORLD_TAG[heroBand] || "") : "" };
+    /* la liga ahora vive en el HUD (en lugar de la meta diaria); aquí solo el repaso */
+    var srsDue = (window.VESPER_SRS && VESPER_SRS.dueCount) ? VESPER_SRS.dueCount() : 0;
+    var srsIcon = (window.VESPER_ICN ? VESPER_ICN.repaso : "");
+    var srsBanner = srsDue > 0
+      ? '<button class="hub-card srs-banner" id="srsGo" type="button">'
+        + '<span class="hc-ic" aria-hidden="true">' + srsIcon + '</span>'
+        + '<span class="hc-tx"><b>Repaso de errores</b><span>Tienes ' + srsDue + ' ejercicio' + (srsDue === 1 ? "" : "s") + ' por repasar</span></span>'
+        + '<span class="hc-cta">Repasar &rarr;</span></button>'
+      : "";
     show('<div class="wrap">'
       + hudHtml(st, dg, hello, heroInfo)
       + placementCard("leccion-hub")
       + worldsSection(built, selLevel)
+      + srsBanner
       + searchUI
       + '<div id="searchResults" class="search-results" aria-live="polite" hidden></div>'
       + '<div id="levelView">' + worldMap(selLevel, built) + '</div>'
@@ -3184,12 +3311,13 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
 
     bindCta();
     if (_indexFirst) track("hub_view", { level: selLevel });
+    var srsGo = byId("srsGo"); if (srsGo) srsGo.onclick = function () { location.search = "?id=review:srs"; };
     each(".world[data-lvl]", function (b) { b.onclick = function () { renderIndex(b.getAttribute("data-lvl")); }; });
-    each(".world[data-locked-world]", function (b) { b.onclick = function () { toast("Vence al guardián del mundo anterior para desbloquearlo 🔒"); }; });
+    each(".world[data-locked-world]", function (b) { b.onclick = function () { toast("Vence al guardián del mundo anterior para desbloquearlo"); }; });
     each(".den-enter[data-den]", function (b) { b.onclick = function () { renderDen(b.getAttribute("data-den")); }; });
     each("[data-go]", function (b) { b.onclick = function () { location.search = "?id=" + encodeURIComponent(b.getAttribute("data-go")); }; });
-    each("[data-locked]", function (b) { b.onclick = function () { toast("Completa la lección anterior para desbloquear 🔒"); }; });
-    each("[data-locked-boss]", function (b) { b.onclick = function () { toast("Completa todas las lecciones del mundo para enfrentar al guardián 🛡️"); }; });
+    each("[data-locked]", function (b) { b.onclick = function () { toast("Completa la lección anterior para desbloquear"); }; });
+    each("[data-locked-boss]", function (b) { b.onclick = function () { toast("Completa todas las lecciones del mundo para enfrentar al guardián"); }; });
 
     /* ---- avatar: traza el sendero y decide si "camina" tras completar una lección ---- */
     (function () {
@@ -3216,7 +3344,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       var badge, attr, cls = "lcard2";
       if (stt === "completed") { cls += " completed"; badge = "&#10003;"; attr = 'data-go="' + esc(lid) + '"'; }
       else if (stt === "open") { badge = "&#9654;"; attr = 'data-go="' + esc(lid) + '"'; }
-      else { cls += " locked"; badge = "&#128274;"; attr = 'data-locked="1"'; }
+      else { cls += " locked"; badge = ic('lock'); attr = 'data-locked="1"'; }
       var sk = PATH.skillOf(l), m = PATH.SKILLS[sk] || { label: "", icon: "" };
       return '<button class="' + cls + '" ' + attr + '>'
         + '<span class="lc-badge">' + badge + '</span>'
@@ -3254,7 +3382,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
         + (hits.length === 1 ? ' lección' : ' lecciones') + '</div>'
         + '<div class="lgrid">' + hits.map(searchCard).join("") + '</div>';
       each("#searchResults [data-go]", function (b) { b.onclick = function () { location.search = "?id=" + encodeURIComponent(b.getAttribute("data-go")); }; });
-      each("#searchResults [data-locked]", function (b) { b.onclick = function () { toast("Completa la lección anterior para desbloquear 🔒"); }; });
+      each("#searchResults [data-locked]", function (b) { b.onclick = function () { toast("Completa la lección anterior para desbloquear"); }; });
     }
     var inp = byId("lessonSearch");
     if (inp) inp.oninput = function () { fQuery = inp.value; clearTimeout(fTimer); fTimer = setTimeout(applyFilter, 150); };
@@ -3298,7 +3426,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
        cambio de día/racha). Las lecciones/jefes ya celebran en renderStreak. */
     try {
       var cosPend = (window.VESPER_COSMETICS && VESPER_COSMETICS.pending) ? VESPER_COSMETICS.pending() : [];
-      if (cosPend.length) { toast("¡Nuevo aspecto de Vesper desbloqueado! Elígelo en Configuración 🎨"); VESPER_COSMETICS.markSeen(); }
+      if (cosPend.length) { toast("¡Nuevo aspecto de Vesper desbloqueado! Elígelo en Configuración"); VESPER_COSMETICS.markSeen(); }
     } catch (e) {}
   }
 
@@ -3310,7 +3438,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     var rm = reduceMotion();
     var catImg = (window.VESPER_MASCOT && VESPER_MASCOT.canonical) || "assets/images/mascot/vesper_cat.png";
     var fb = (window.VESPER_MASCOT && VESPER_MASCOT.fallback) || "assets/images/virtual_class_happy_cat.png";
-    var msg = "¡Hola! Soy Vesper. ¿Practicamos tu inglés? Pregúntame lo que quieras. 🐾";
+    var msg = "¡Hola! Soy Vesper. ¿Practicamos tu inglés? Pregúntame lo que quieras.";
 
     var n = document.createElement("div");
     n.className = "vchat-nudge";
@@ -3385,7 +3513,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       + mascot("welcome", line)
       + '<div class="lcard-top center-row"><span class="pill">' + esc(lesson.level) + '</span><span class="track">' + esc(lesson.track) + '</span></div>'
       + '<h1>' + esc(lesson.title) + '</h1>'
-      + (lesson.adapted ? '<div class="adapt-badge">&#10024; ' + esc(lesson.adaptNote) + '</div>' : '')
+      + (lesson.adapted ? '<div class="adapt-badge">' + ic('sparkle') + ' ' + esc(lesson.adaptNote) + '</div>' : '')
       + '<p class="muted">' + lesson.exercises.length + ' ejercicios &middot; +' + (lesson.xpReward || 0) + ' XP</p>'
       + '<button class="btn btn-gold" id="start">Empezar</button></div></div>');
     byId("start").onclick = renderExplanation;
@@ -3425,6 +3553,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
 
   /* ---------- EXERCISES ---------- */
   function renderExercise() {
+    if (exIdx === 0) { combo = 0; maxCombo = 0; }   /* arranque/reintento: combo a cero */
     var total = lesson.exercises.length;
     var pct = 22 + Math.round(58 * (exIdx / total));
     var ex = lesson.exercises[exIdx];
@@ -3438,14 +3567,74 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     else if (ex.type === "categorize") renderCategorize(ex, pct, total);
     else if (ex.type === "reading") renderReading(ex, pct, total);
     else if (ex.type === "find_error") renderFindError(ex, pct, total);
+    else if (ex.type === "speak") renderSpeak(ex, pct, total);
     else advance();
   }
   function advance() {
+    /* punto único: results[exIdx] ya está fijado por el renderer. Actualiza combo
+       y dispara un pequeño festejo cada 3 aciertos seguidos. */
+    var wasOk = !!results[exIdx];
+    if (wasOk) { combo++; if (combo > maxCombo) maxCombo = combo; if (combo >= 3 && combo % 3 === 0) { burstConfetti(14); sfx("combo", combo); } }
+    else combo = 0;
+    /* SRS: en repaso, califica el ítem; en lecciones normales, registra el fallo. */
+    try {
+      if (window.VESPER_SRS) {
+        if (lesson.srsReview && lesson.srsIds) VESPER_SRS.grade(lesson.srsIds[exIdx], wasOk);
+        else if (!wasOk && !lesson.isBoss) VESPER_SRS.record(lesson.lessonId, lesson.exercises[exIdx], { level: lesson.level });
+      }
+    } catch (e) {}
+    /* Vidas (modo desafío, opcional): un fallo resta corazón. */
+    var blocked = false;
+    if (!wasOk && window.VESPER_ECONOMY && VESPER_ECONOMY.livesActive && VESPER_ECONOMY.livesActive()) {
+      VESPER_ECONOMY.loseHeart();
+      sfx("heartloss");
+      if (VESPER_ECONOMY.hearts() <= 0) blocked = true;
+    }
     exIdx++;
+    if (blocked) { renderNoHearts(); return; }
     if (exIdx < lesson.exercises.length) renderExercise(); else renderFeedback();
   }
+  function resumeRun() {
+    if (exIdx < lesson.exercises.length) renderExercise(); else renderFeedback();
+  }
+  /* Pantalla "sin vidas" (solo en modo desafío). Recarga con gemas o espera. */
+  function renderNoHearts() {
+    var E = window.VESPER_ECONOMY;
+    var secs = E ? E.secsToNextHeart() : 0;
+    var mins = Math.max(1, Math.ceil(secs / 60));
+    var cost = 50, canBuy = E && E.gems() >= cost;
+    show('<div class="wrap">' + topbar(86) + '<div class="card center">'
+      + mascot("incorrect", "Te quedaste sin vidas. Recupera fuerzas y vuelve.")
+      + '<div class="flame">' + ic('heartBroken') + '</div>'
+      + '<h1>Sin vidas</h1>'
+      + '<p class="muted">Una vida nueva en ~' + mins + ' min &middot; ' + ic('gem') + ' ' + (E ? E.gems() : 0) + '</p>'
+      + (canBuy ? '<button class="btn btn-gold" id="buyH">Recargar vidas (50 ' + ic('gem') + ')</button>' : '')
+      + '<button class="btn btn-ghost" id="backHome">Salir al mapa</button>'
+      + '<p class="hint" style="margin-top:10px">Puedes desactivar el modo desafío en Configuración.</p>'
+      + '</div></div>');
+    var bh = byId("buyH");
+    if (bh) bh.onclick = function () { var r = E.buy("hearts"); if (r.ok) resumeRun(); else toast2(r.msg); };
+    byId("backHome").onclick = function () { location.search = ""; };
+  }
+  function toast2(msg) { try { alert(msg); } catch (e) {} }
+  function comboChip() {
+    if (combo < 2) return "";
+    return '<div class="combo-chip" role="status" aria-label="Combo de ' + combo + ' aciertos">' + ic('flame') + ' <b>x' + combo + '</b> combo</div>';
+  }
+  function econStrip() {
+    var E = window.VESPER_ECONOMY; if (!E) return "";
+    var ICN = window.VESPER_ICN;
+    var gemIc = ICN ? ICN.gem : "";
+    var html = '<span class="econ-gems"><span class="ei">' + gemIc + '</span>' + E.gems() + '</span>';
+    if (E.livesActive && E.livesActive()) {
+      var h = E.hearts(), mx = E.maxHearts(), hh = "", i;
+      for (i = 0; i < mx; i++) hh += '<span class="ei">' + (ICN ? (i < h ? ICN.heart : ICN.heartEmpty) : "") + '</span>';
+      html += '<span class="econ-hearts" aria-label="' + h + ' de ' + mx + ' vidas">' + hh + '</span>';
+    }
+    return '<div class="econ-strip">' + html + '</div>';
+  }
   function exHeader(pct, total) {
-    return topbar(pct) + (lesson.isBoss ? bossMeterHtml(total) : "") + '<div class="exnum">Ejercicio ' + (exIdx + 1) + ' de ' + total + '</div>';
+    return topbar(pct) + econStrip() + (lesson.isBoss ? bossMeterHtml(total) : "") + comboChip() + '<div class="exnum">Ejercicio ' + (exIdx + 1) + ' de ' + total + '</div>';
   }
   /* medidor del Guardián: su escudo se rompe con cada acierto previo */
   function bossMeterHtml(total) {
@@ -3507,7 +3696,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     }).join("");
     show('<div class="wrap">' + exHeader(pct, total) + '<div class="card">'
       + '<h2>' + esc(ex.question || "Encuentra el error") + '</h2>'
-      + '<p class="hint">&#128161; ' + esc(ex.hint || "Toca la parte subrayada que contiene el error gramatical.") + '</p>'
+      + '<p class="hint">' + ic('bulb') + '' + esc(ex.hint || "Toca la parte subrayada que contiene el error gramatical.") + '</p>'
       + '<div class="fe-sentence">' + html + '</div><div id="fb"></div>'
       + '<button class="btn" id="verify" disabled>Verificar</button></div></div>');
     var sel = -1, done = false;
@@ -3545,7 +3734,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     var done = false;
     show('<div class="wrap">' + exHeader(pct, total) + '<div class="card">'
       + '<h2>Ordena las palabras</h2>'
-      + (ex.hint ? '<p class="hint">&#128161; ' + esc(ex.hint) + '</p>' : '')
+      + (ex.hint ? '<p class="hint">' + ic('bulb') + '' + esc(ex.hint) + '</p>' : '')
       + '<div class="answer" id="answer" aria-label="Tu respuesta"></div>'
       + '<div class="bank" id="bank"></div><div id="fb"></div>'
       + '<button class="btn" id="verify" disabled>Verificar</button></div></div>');
@@ -3648,6 +3837,94 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     btn.textContent = (exIdx + 1 < total) ? "Siguiente" : "Ver resultados";
   }
 
+  /* ---------- SPEAKING (reconocimiento de voz) ----------
+     ex: { text: "frase en inglés a decir", es: "traducción/pista", audio?: "ruta.mp3" }
+     Usa Web Speech API (SpeechRecognition). Si no hay soporte, degrada a
+     "escucha y repite" con autoevaluación honesta. */
+  function levDist(a, b) {
+    var m = a.length, n = b.length; if (!m) return n; if (!n) return m;
+    var prev = [], cur = [], i, j;
+    for (j = 0; j <= n; j++) prev[j] = j;
+    for (i = 1; i <= m; i++) {
+      cur[0] = i;
+      for (j = 1; j <= n; j++) {
+        var cost = a.charAt(i - 1) === b.charAt(j - 1) ? 0 : 1;
+        cur[j] = Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + cost);
+      }
+      for (j = 0; j <= n; j++) prev[j] = cur[j];
+    }
+    return prev[n];
+  }
+  function speechSim(said, target) {
+    var a = norm(said), b = norm(target);
+    if (!a || !b) return 0;
+    return 1 - levDist(a, b) / Math.max(a.length, b.length);
+  }
+  function renderSpeak(ex, pct, total) {
+    var target = ex.text || ex.answer || ex.prompt || "";
+    var showEs = (!PERS || PERS.showSpanish()) && ex.es;
+    var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    show('<div class="wrap">' + exHeader(pct, total) + '<div class="card">'
+      + '<h2>Dilo en voz alta</h2>'
+      + '<div class="speak-target"><span class="en">' + esc(target) + '</span>'
+      + (showEs ? '<span class="es">' + esc(ex.es) + '</span>' : '') + '</div>'
+      + '<div class="speak-row">'
+      + '<button class="btn btn-ghost" id="hear">' + ic('speaker') + ' Escuchar</button>'
+      + '<button class="btn btn-ghost" id="slow">' + ic('rewind') + ' Más lento</button></div>'
+      + (SR
+          ? '<button class="btn mic-btn" id="mic">' + ic('mic') + ' Toca y habla</button><div class="heard" id="heard"></div>'
+          : '<p class="hint">' + ic('bulb') + 'Tu navegador no reconoce voz. Escucha y repite en voz alta; luego confírmalo tú.</p>')
+      + '<div id="fb"></div>'
+      + '<button class="btn" id="verify"' + (SR ? ' disabled' : '') + '>' + (SR ? 'Verificar' : 'Lo dije bien') + '</button>'
+      + (SR ? '<button class="btn btn-ghost" id="skip">No puedo hablar ahora</button>' : '')
+      + '</div></div>');
+    byId("hear").onclick = function () { speak(target, ex.audio, 0.92); };
+    byId("slow").onclick = function () { speak(target, ex.audio, 0.62); };
+
+    var done = false, ok = false;
+    function settle(result, heardTxt) {
+      if (done) return; done = true;
+      ok = result;
+      results[exIdx] = ok;
+      var h = byId("heard");
+      if (h && heardTxt != null) h.innerHTML = '<span class="muted">Te escuché:</span> “' + esc(heardTxt) + '”';
+      byId("fb").innerHTML = feedbackBox(ok, ex.explanation || ("Modelo: " + target), "Inténtalo: " + target);
+      var v = byId("verify"); v.disabled = false;
+      v.textContent = (exIdx + 1 < total) ? "Siguiente" : "Ver resultados";
+      v.onclick = function () { advance(); };
+      var mic = byId("mic"); if (mic) { mic.disabled = true; mic.classList.remove("rec"); }
+      var sk = byId("skip"); if (sk) sk.style.display = "none";
+    }
+
+    if (SR) {
+      var rec = null, listening = false;
+      byId("mic").onclick = function () {
+        if (done || listening) return;
+        try {
+          rec = new SR(); rec.lang = "en-US"; rec.interimResults = false; rec.maxAlternatives = 3;
+        } catch (e) { settle(false, null); return; }
+        listening = true; this.classList.add("rec"); this.textContent = "Escuchando…";
+        var self = this;
+        rec.onresult = function (e2) {
+          var best = "", bestSim = 0, r = e2.results[0], k;
+          for (k = 0; k < r.length; k++) {
+            var s = speechSim(r[k].transcript, target);
+            if (s > bestSim) { bestSim = s; best = r[k].transcript; }
+          }
+          settle(bestSim >= 0.7, best);
+        };
+        rec.onerror = function () { listening = false; self.classList.remove("rec"); self.innerHTML = ic('mic') + ' Reintentar'; };
+        rec.onend = function () { listening = false; if (!done) { self.classList.remove("rec"); self.innerHTML = ic('mic') + ' Reintentar'; } };
+        try { rec.start(); } catch (e) { settle(false, null); }
+      };
+      byId("skip").onclick = function () { settle(true, null); };   /* sin penalizar: autoevaluación honesta */
+      byId("verify").onclick = function () { if (done) advance(); };
+    } else {
+      /* sin reconocimiento: autoevaluación */
+      byId("verify").onclick = function () { settle(true, null); byId("verify").onclick = function () { advance(); }; };
+    }
+  }
+
   /* ---------- TRUE / FALSE ---------- */
   function renderTrueFalse(ex, pct, total) {
     show('<div class="wrap">' + exHeader(pct, total) + '<div class="card">'
@@ -3686,7 +3963,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     var answers = ex.answers || (ex.answer != null ? [ex.answer] : []);
     show('<div class="wrap">' + exHeader(pct, total) + '<div class="card">'
       + '<h2>Completa la frase</h2>'
-      + (ex.hint ? '<p class="hint">&#128161; ' + esc(ex.hint) + '</p>' : '')
+      + (ex.hint ? '<p class="hint">' + ic('bulb') + '' + esc(ex.hint) + '</p>' : '')
       + '<p class="fb-sentence">' + esc(parts[0])
       + '<input id="blank" class="type-input" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" inputmode="text"> '
       + esc(parts.slice(1).join("___")) + '</p>'
@@ -3739,7 +4016,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     var rightHtml = rights.map(function (o) { return '<button class="match-item" data-side="r" data-p="' + o.p + '">' + esc(o.t) + '</button>'; }).join("");
     show('<div class="wrap">' + exHeader(pct, total) + '<div class="card">'
       + '<h2>Emparejar</h2>'
-      + '<p class="hint">&#128161; ' + esc(ex.instruction || "Toca una palabra y luego su pareja.") + '</p>'
+      + '<p class="hint">' + ic('bulb') + '' + esc(ex.instruction || "Toca una palabra y luego su pareja.") + '</p>'
       + '<div class="match-cols"><div>' + leftHtml + '</div><div>' + rightHtml + '</div></div>'
       + '<div id="fb"></div><button class="btn" id="verify" disabled>Empareja todo</button></div></div>');
     var selEl = null, matched = 0, errors = 0, done = false;
@@ -3787,8 +4064,8 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     }
     show('<div class="wrap">' + exHeader(pct, total) + '<div class="card">'
       + '<h2>Escucha</h2>'
-      + '<div class="listen-controls"><button class="listen-play" id="play"><span class="ic">&#128266;</span> Reproducir</button>'
-      + '<button class="listen-slow" id="playslow">&#128034; Más lento</button></div>'
+      + '<div class="listen-controls"><button class="listen-play" id="play"><span class="ic">' + ic('speaker') + '</span> Reproducir</button>'
+      + '<button class="listen-slow" id="playslow">' + ic('rewind') + ' Más lento</button></div>'
       + '<div class="listen-note">Toca para escuchar. Puedes repetir las veces que quieras.</div>'
       + qHtml + '<div id="fb"></div><button class="btn" id="verify" disabled>Verificar</button></div></div>');
     byId("play").onclick = function () { speak(ex.text, ex.audio); };
@@ -3846,7 +4123,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     var sel = null, done = false;
     show('<div class="wrap">' + exHeader(pct, total) + '<div class="card">'
       + '<h2>Clasifica</h2>'
-      + '<p class="hint">&#128161; ' + esc(ex.instruction || "Toca una palabra y luego su grupo.") + '</p>'
+      + '<p class="hint">' + ic('bulb') + '' + esc(ex.instruction || "Toca una palabra y luego su grupo.") + '</p>'
       + '<div class="cat-pool" id="pool"></div>'
       + '<div class="cat-buckets" id="buckets"></div>'
       + '<div id="fb"></div><button class="btn" id="verify" disabled>Verificar</button></div></div>');
@@ -3856,7 +4133,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       var pool = byId("pool"), bx = byId("buckets");
       var loose = items.filter(function (o) { return o.at === null; });
       pool.innerHTML = loose.length ? loose.map(function (o) { return tk(o, sel === o.i ? " sel" : ""); }).join("")
-        : '<span class="muted" style="font-size:.85rem">Todo clasificado &#9989;</span>';
+        : '<span class="muted" style="font-size:.85rem">Todo clasificado ' + ic('checkCircle') + '</span>';
       bx.innerHTML = buckets.map(function (b) {
         var inside = items.filter(function (o) { return o.at === b.id; }).map(function (o) { return tk(o, o.cls || ""); }).join("");
         return '<div class="cat-bucket' + (sel !== null ? " active" : "") + '" data-b="' + b.id + '"><h4>' + esc(b.label) + '</h4>' + inside + '</div>';
@@ -3897,7 +4174,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
         + '<div class="opts">' + opts + '</div><div class="rq-fb" id="rfb-' + qi + '"></div></div>';
     }).join("");
     show('<div class="wrap">' + exHeader(pct, total) + '<div class="card">'
-      + '<span class="read-tag">&#128214; Lectura</span>'
+      + '<span class="read-tag">' + ic('book') + ' Lectura</span>'
       + (ex.title ? '<h2>' + esc(ex.title) + '</h2>' : '<h2>Lee y responde</h2>')
       + '<div class="passage">' + passageHtml + '</div>'
       + qHtml + '<div id="fb"></div>'
@@ -3950,21 +4227,31 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     /* Lecciones normales: hay que acertar >=70% para superarlas, ganar XP y
        desbloquear la siguiente. Por debajo se ofrece reintentar (no completa).
        Los repasos ("boss") conservan su lógica propia (>=80% = maestría). */
-    if (!lesson.isReview && pct < PASS_PCT) { renderRetry(correct, total, pct); return; }
-    earnedXp = Math.max(5, Math.round((lesson.xpReward || 0) * correct / Math.max(1, total)));
-    track("lesson_complete", { id: lesson.lessonId, level: lesson.level, pct: pct, type: lesson.isReview ? "review" : "lesson" });
+    if (!lesson.isReview && !lesson.srsReview && pct < PASS_PCT) { renderRetry(correct, total, pct); return; }
+    var baseXp = Math.max(5, Math.round((lesson.xpReward || 0) * correct / Math.max(1, total)));
+    /* bonus por mejor combo de la sesión: +5% por cada acierto seguido sobre 2, tope +50% */
+    var comboBonus = maxCombo >= 3 ? Math.round(baseXp * Math.min(0.5, (maxCombo - 2) * 0.05)) : 0;
+    earnedXp = baseXp + comboBonus;
+    /* boost de XP comprado en la tienda (un solo uso) */
+    var boost = (window.VESPER_ECONOMY && VESPER_ECONOMY.consumeXpBoost) ? VESPER_ECONOMY.consumeXpBoost() : 0;
+    if (boost > 1) earnedXp = Math.round(earnedXp * boost);
+    track("lesson_complete", { id: lesson.lessonId, level: lesson.level, pct: pct, type: lesson.srsReview ? "srs" : (lesson.isReview ? "review" : "lesson") });
+    if (perfect) { burstConfetti(40); sfx("fanfare"); } else { sfx("complete"); }
     if (PATH && PATH.setScore && lesson.lessonId) PATH.setScore(lesson.lessonId, pct);
     /* repaso aprobado (>=80%) -> desbloquea maestría de la destreza */
     masteryUnlocked = false;
     if (lesson.isReview && pct >= 80 && P && P.unlock) {
       masteryUnlocked = P.unlock("master:" + lesson.reviewLevel + ":" + lesson.reviewSkill);
     }
-    var head = lesson.isReview
-      ? (pct >= 80 ? "Repaso superado!" : "Sigue practicando")
-      : (perfect ? "Leccion perfecta!" : "Buen trabajo!");
+    var head = lesson.srsReview
+      ? "Repaso completado"
+      : (lesson.isReview
+          ? (pct >= 80 ? "Repaso superado!" : "Sigue practicando")
+          : (perfect ? "Leccion perfecta!" : "Buen trabajo!"));
     show('<div class="wrap">' + topbar(86) + '<div class="card center">'
       + mascot((perfect || (lesson.isReview && pct >= 80)) ? "milestone" : "correct", head)
       + '<h1>+' + earnedXp + ' XP</h1>'
+      + (comboBonus > 0 ? '<div class="xp-bonus">' + ic('flame') + ' +' + comboBonus + ' XP por combo de x' + maxCombo + '</div>' : '')
       + '<p class="muted">' + correct + ' de ' + total + ' correctos &middot; ' + pct + '%</p>'
       + '<div class="xpbar"><div class="xpfill" style="width:' + pct + '%"></div></div>'
       + '<button class="btn btn-gold" id="cont">Continuar</button></div></div>');
@@ -4005,13 +4292,14 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     }
     earnedXp = Math.max(20, lesson.xpReward || 60);
     track("boss_win", { level: lesson.bossLevel, pct: pct });
+    sfx("fanfare");
     if (PATH && PATH.setScore) PATH.setScore(lesson.lessonId, pct);
     if (P && P.passBoss) P.passBoss(lesson.bossLevel, pct);
     var idxLv = PATH.LEVELS.indexOf(lesson.bossLevel);
     var nextLv = (idxLv >= 0 && idxLv + 1 < PATH.LEVELS.length) ? PATH.LEVELS[idxLv + 1] : null;
     var unlockHtml = nextLv
-      ? '<div class="boss-unlock">&#128275; ¡Mundo ' + nextLv + ' desbloqueado!</div>'
-      : '<div class="boss-unlock">&#128081; ¡Has dominado el último mundo!</div>';
+      ? '<div class="boss-unlock">' + ic('unlock') + ' ¡Mundo ' + nextLv + ' desbloqueado!</div>'
+      : '<div class="boss-unlock">' + ic('crown') + ' ¡Has dominado el último mundo!</div>';
     show('<div class="wrap">' + topbar(92) + '<div class="card center">'
       + mascot("milestone", "¡Guardián vencido!")
       + '<div class="boss-emblem lit" aria-hidden="true">' + bossPortrait(lesson.bossLevel) + '</div>'
@@ -4032,12 +4320,22 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
   function renderStreak() {
     var info = P ? P.completeLesson(lesson.lessonId, earnedXp, { perfect: lastPerfect })
                  : { streak: 1, xp: earnedXp, milestone: false, shields: 0, newAchievements: [], dailyGoal: null };
+    /* premio de gemas por avanzar (economía): proporcional al XP + extra por lección perfecta */
+    var gemReward = 0;
+    try {
+      if (window.VESPER_ECONOMY && VESPER_ECONOMY.award) {
+        gemReward = Math.max(1, Math.round((earnedXp || 0) / 10)) + (lastPerfect ? 5 : 0) + (info.milestone ? 10 : 0);
+        VESPER_ECONOMY.award(gemReward);
+      }
+    } catch (e) {}
+    /* liga semanal: tu XP real cuenta para el ranking */
+    try { if (window.VESPER_LEAGUE && VESPER_LEAGUE.addXp) VESPER_LEAGUE.addXp(earnedXp || 0); } catch (e) {}
     var grid = P ? P.weekGrid() : [];
     var cells = grid.map(function (d) {
-      return '<div class="day' + (d.active ? " on" : "") + (d.isToday ? " today" : "") + '"><span>' + d.label + '</span><i>' + (d.active ? "🔥" : "&middot;") + '</i></div>';
+      return '<div class="day' + (d.active ? " on" : "") + (d.isToday ? " today" : "") + '"><span>' + d.label + '</span><i>' + (d.active ? ic('flame') : "&middot;") + '</i></div>';
     }).join("");
     var shields = "";
-    for (var i = 0; i < (info.shields || 0); i++) shields += "🛡️";
+    for (var i = 0; i < (info.shields || 0); i++) shields += ic('shieldLn');
     var mstate = info.milestone ? "milestone" : (info.streak > 0 ? "streak_alive" : "streak_broken");
     var hasNext = lesson.nextLessonId && L[lesson.nextLessonId];
 
@@ -4045,10 +4343,10 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     var dg = info.dailyGoal, goalHtml = "";
     if (dg) {
       var gp = Math.min(100, Math.round(100 * dg.progress / Math.max(1, dg.target)));
-      goalHtml = '<div class="goal-card' + (dg.met ? ' met' : '') + '">&#127919; Meta diaria '
+      goalHtml = '<div class="goal-card' + (dg.met ? ' met' : '') + '">' + ic('target') + ' Meta diaria '
         + '<b>' + Math.min(dg.progress, dg.target) + '/' + dg.target + '</b>'
         + '<div class="goal-bar"><i style="width:' + gp + '%"></i></div>'
-        + (dg.met ? '<span class="goal-done">Meta cumplida! &#10024;</span>' : '<span class="muted" style="font-size:.82rem">Te falta ' + Math.max(0, dg.target - dg.progress) + '</span>')
+        + (dg.met ? '<span class="goal-done">Meta cumplida! ' + ic('sparkle') + '</span>' : '<span class="muted" style="font-size:.82rem">Te falta ' + Math.max(0, dg.target - dg.progress) + '</span>')
         + '</div>';
     }
 
@@ -4060,8 +4358,8 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       var all = P.achievementsState(), byId2 = {};
       all.forEach(function (a) { byId2[a.id] = a; });
       achHtml = '<div class="ach-pop">' + ach.map(function (id) {
-        var a = byId2[id] || { icon: "⭐", name: id };
-        return '<div class="ach-badge"><span class="ab-ic">' + a.icon + '</span><span class="ab-tx"><b>Logro desbloqueado</b><span>' + esc(a.name) + '</span></span></div>';
+        var a = byId2[id] || { icon: "", name: id };
+        return '<div class="ach-badge"><span class="ab-ic">' + achIcon(a.id) + '</span><span class="ab-tx"><b>Logro desbloqueado</b><span>' + esc(a.name) + '</span></span></div>';
       }).join("") + '</div>';
     }
 
@@ -4079,17 +4377,24 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       }
     } catch (e) {}
 
+    /* sonido de la pantalla de racha: escudo nuevo > logro/cosmético
+       (cosHtml ya refleja los cosméticos recién desbloqueados) */
+    if (info.milestone) sfx("levelup");
+    else if (ach.length || cosHtml) sfx("achievement");
+
     show('<div class="wrap">' + topbar(100) + '<div class="card center">'
       + mascot(mstate)
-      + '<div class="flame">&#128293;</div>'
+      + '<div class="flame">' + ic('flame') + '</div>'
       + '<h1>' + info.streak + ' ' + (info.streak === 1 ? "dia" : "dias") + ' de racha</h1>'
       + (shields ? '<div class="shields">' + shields + '</div>' : '')
       + '<div class="week">' + cells + '</div>'
       + goalHtml
       + achHtml
       + cosHtml
-      + '<div class="stat-row"><div class="stat">&#11088; <b>' + info.xp + '</b> XP total</div></div>'
-      + (info.milestone ? '<div class="milestone">&#127881; Nuevo escudo de racha!</div>' : '')
+      + '<div class="stat-row"><div class="stat">&#11088; <b>' + info.xp + '</b> XP total</div>'
+      + (gemReward > 0 ? '<div class="stat">' + ic('gem') + ' <b>+' + gemReward + '</b> gemas</div>' : '')
+      + '</div>'
+      + (info.milestone ? '<div class="milestone">' + ic('trophy') + ' Nuevo escudo de racha!</div>' : '')
       + placementCard("leccion-leccion", {
           compact: true,
           title: "¿Y si lo llevas a una clase real?",
@@ -4114,6 +4419,29 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     } else {
       lesson = baseLesson;
     }
+    injectSpeaking(lesson);
+  }
+
+  /* Inserta UN ejercicio de speaking al final de las lecciones normales,
+     derivado de los ejemplos de la explicación (frase en inglés + traducción).
+     Siempre se puede saltar sin penalizar, así que es seguro inyectarlo.
+     Se omite en jefes, repasos y si la lección ya trae speaking. */
+  function injectSpeaking(ls) {
+    try {
+      if (!ls || ls.isBoss || ls.isReview || ls.srsReview) return;
+      var exs = ls.exercises || [];
+      if (!exs.length) return;
+      for (var i = 0; i < exs.length; i++) if (exs[i].type === "speak") return;
+      var ex = (ls.explanation && ls.explanation.examples) || [];
+      var cand = null;
+      for (var j = 0; j < ex.length; j++) {
+        var en = ex[j] && ex[j].en;
+        if (en && en.split(/\s+/).length >= 2 && en.length <= 60) { cand = ex[j]; break; }
+      }
+      if (!cand) return;
+      ls.exercises = exs.concat([{ type: "speak", text: cand.en, es: cand.es || "",
+        explanation: "Practica la pronunciación repitiendo el modelo. Lo importante es soltarte." }]);
+    } catch (e) {}
   }
 
   function startLesson() {
@@ -4285,6 +4613,18 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
   if (!L || !Object.keys(L).length) { show('<div class="wrap"><div class="card center"><h1>Sin lecciones</h1><p class="muted">No se cargaron los datos.</p></div></div>'); return; }
   if (window.VESPER_THEME && VESPER_THEME.mountFloat) VESPER_THEME.mountFloat();
   if (!id) { renderIndex(); return; }
+  if (id === "review:srs") {
+    baseLesson = (window.VESPER_SRS && VESPER_SRS.buildReviewLesson) ? VESPER_SRS.buildReviewLesson() : null;
+    if (!baseLesson || !baseLesson.exercises.length) {
+      show('<div class="wrap"><div class="card center">' + mascot("correct", "¡Sin errores pendientes!")
+        + '<h1>Nada que repasar</h1><p class="muted">Cuando falles ejercicios aparecerán aquí para repasarlos.</p>'
+        + '<a class="btn btn-gold" href="leccion.html">Ver lecciones</a></div></div>');
+      return;
+    }
+    lesson = baseLesson;
+    renderCover();
+    return;
+  }
   if (id.indexOf("review:") === 0) {
     baseLesson = buildReviewLesson(id);
     if (!baseLesson || !baseLesson.exercises.length) {

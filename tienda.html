@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tienda · Vesper Academy</title>
+<meta name="description" content="Gasta las gemas que ganas practicando: recarga vidas, congela tu racha o activa un boost de XP.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="assets/images/favicon_32.png" sizes="32x32">
+<meta name="theme-color" content="#1B1B2F">
+<link rel="manifest" href="manifest_lecciones.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inria+Serif:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1B1B2F; --gold:#C9A84C; --gold2:#a8843d; --success:#2D9E75; --error:#C0392B;
+    --cream:#FBF8F1; --paper:#ffffff; --muted:#5d6470; --line:#ece7da;
+    --gold-tint:rgba(201,168,76,.14);
+    --radius:18px; --shadow:0 6px 22px rgba(27,27,47,.08);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{background:var(--cream);color:var(--ink);font-family:Inter,system-ui,sans-serif;line-height:1.5;-webkit-text-size-adjust:100%}
+  .wrap{max-width:560px;margin:0 auto;padding:14px 16px 90px}
+  a{color:inherit}
+  h1{font-family:"Inria Serif",Georgia,serif;font-size:1.6rem;margin:.2em 0}
+  .muted{color:var(--muted);font-size:.92rem}
+  .topbar{display:flex;align-items:center;gap:12px;margin:4px 0 16px}
+  .back{width:42px;height:42px;flex:none;display:flex;align-items:center;justify-content:center;border-radius:50%;
+    text-decoration:none;color:var(--ink);background:var(--paper);border:1px solid var(--line);font-size:1.25rem}
+  .back:focus-visible,.buy:focus-visible{outline:3px solid var(--gold2);outline-offset:2px}
+  .card{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px;margin-bottom:14px}
+  /* hero: saldo de gemas */
+  .hero{position:relative;overflow:hidden;text-align:center;color:var(--cream);border:1px solid #2c2c4a;
+    background:linear-gradient(160deg,#2a2c50,#1B1B2F 62%,#14122a);padding:24px 18px}
+  .hero::after{content:"";position:absolute;inset:0;pointer-events:none;
+    background:radial-gradient(420px 200px at 78% -20%,rgba(201,168,76,.28),transparent 60%)}
+  .hero .lbl{position:relative;font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;color:#c8c6e0;font-weight:700}
+  .hero .bal{position:relative;display:inline-flex;align-items:center;gap:8px;font-family:"Inria Serif",Georgia,serif;font-size:2.6rem;line-height:1.1;margin-top:4px}
+  .hero .bal .gem{display:inline-flex;filter:drop-shadow(0 2px 8px rgba(31,184,204,.45))}
+  .hero .bal .gem svg{width:38px;height:38px}
+  .hero .sub{position:relative;color:#b9b7d4;font-size:.85rem;margin-top:4px}
+  /* panel de vidas */
+  .lives{display:flex;align-items:center;gap:14px}
+  .lives .hearts{display:inline-flex;gap:3px;line-height:1}
+  .lives .hearts .hp{display:inline-flex}
+  .lives .hearts .hp svg{width:26px;height:26px}
+  .lives .meta{font-size:.88rem;color:var(--muted);font-weight:600}
+  .sec-title{font-family:"Inria Serif",Georgia,serif;font-size:1.1rem;margin:2px 0 12px}
+  /* items de la tienda */
+  .item{display:flex;align-items:center;gap:14px}
+  .item+.item{margin-top:14px;padding-top:14px;border-top:1px solid var(--line)}
+  .item .ic{flex:none;width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;
+    font-size:1.7rem;background:var(--gold-tint);box-shadow:inset 0 0 0 1px rgba(201,168,76,.25)}
+  .item .ic svg{width:26px;height:26px}
+  .buy{display:inline-flex;align-items:center;gap:6px}
+  .buy .bgem{display:inline-flex}
+  .buy .bgem svg{width:16px;height:16px}
+  .item .tx{flex:1;min-width:0}
+  .item .tx b{font-size:1.02rem}
+  .item .tx span{display:block;color:var(--muted);font-size:.86rem}
+  .buy{flex:none;border:none;cursor:pointer;font-weight:800;background:linear-gradient(180deg,#d7bd6b,var(--gold));color:var(--ink);
+    padding:11px 15px;border-radius:12px;font-size:.95rem;white-space:nowrap;box-shadow:0 4px 12px rgba(168,132,61,.3);
+    transition:transform .12s ease}
+  .buy:hover:not([disabled]){transform:translateY(-1px)}
+  .buy[disabled]{opacity:.4;cursor:not-allowed;background:var(--line);color:var(--muted);box-shadow:none}
+  .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(8px);background:var(--ink);color:var(--cream);
+    padding:11px 20px;border-radius:999px;font-weight:600;opacity:0;transition:opacity .25s,transform .25s;pointer-events:none;z-index:20;
+    box-shadow:0 14px 40px rgba(27,27,47,.28)}
+  .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  .note{font-size:.84rem;color:var(--muted);text-align:center;margin-top:10px}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <div class="topbar">
+    <a class="back" href="configuracion.html" aria-label="Volver">&#8592;</a>
+    <h1>Tienda</h1>
+  </div>
+
+  <section class="card hero">
+    <div class="lbl">Tus gemas</div>
+    <div class="bal"><span class="gem" id="gemic"></span> <span id="gembal">0</span></div>
+    <div class="sub">Las ganas practicando · sin dinero real</div>
+  </section>
+
+  <section class="card">
+    <div class="sec-title">Tus vidas</div>
+    <div class="lives" id="hearts-row"></div>
+  </section>
+
+  <section class="card">
+    <div class="sec-title">Mejoras</div>
+    <div id="store"></div>
+  </section>
+
+  <p class="note">Compra mejoras con las gemas que ganas en tus lecciones.</p>
+</main>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="vesper_prefs.js"></script>
+<script src="vesper_sfx.js"></script>
+<script src="vesper_icons.js"></script>
+<script src="vesper_economy.js"></script>
+<script>
+(function () {
+  var E = window.VESPER_ECONOMY;
+  var $ = function (id) { return document.getElementById(id); };
+  if (!E) { $("store").innerHTML = '<p class="muted">La tienda no está disponible.</p>'; return; }
+
+  var toastT = null;
+  function toast(msg) {
+    var t = $("toast"); t.textContent = msg; t.classList.add("show");
+    clearTimeout(toastT); toastT = setTimeout(function () { t.classList.remove("show"); }, 1800);
+  }
+
+  function paintHearts() {
+    var on = E.livesActive(), h = E.hearts(), mx = E.maxHearts(), row = "";
+    for (var i = 0; i < mx; i++) row += '<span class="hp">' + (window.VESPER_ICN ? (i < h ? VESPER_ICN.heart : VESPER_ICN.heartEmpty) : "") + '</span>';
+    var meta;
+    if (!on) meta = "Modo desafío apagado · actívalo en Configuración";
+    else if (h >= mx) meta = "Vidas al máximo";
+    else { var s = E.secsToNextHeart(), m = Math.max(1, Math.ceil(s / 60)); meta = "Próxima vida en ~" + m + " min"; }
+    $("hearts-row").innerHTML = '<span class="hearts">' + row + '</span><span class="meta">' + meta + '</span>';
+  }
+
+  var ICN = window.VESPER_ICN;
+  function paint() {
+    if (ICN) { var gi = $("gemic"); if (gi) gi.innerHTML = ICN.gem; }
+    $("gembal").textContent = E.gems();
+    paintHearts();
+    var gems = E.gems();
+    $("store").innerHTML = E.STORE.map(function (it) {
+      var disabled = gems < it.cost || (it.id === "hearts" && E.hearts() >= E.maxHearts());
+      var ic = ICN ? ICN.store(it.id) : it.icon;
+      var cost = (ICN ? '<span class="bgem">' + ICN.gem + '</span>' : '') + it.cost;
+      return '<div class="item"><span class="ic">' + ic + '</span>'
+        + '<span class="tx"><b>' + it.name + '</b><span>' + it.desc + '</span></span>'
+        + '<button class="buy" data-id="' + it.id + '"' + (disabled ? ' disabled' : '') + '>' + cost + '</button></div>';
+    }).join("");
+    var btns = document.querySelectorAll(".buy");
+    for (var i = 0; i < btns.length; i++) {
+      btns[i].addEventListener("click", function () {
+        var r = E.buy(this.getAttribute("data-id"));
+        if (r.ok && window.VESPER_SFX) { try { VESPER_SFX.coin(); } catch (e) {} }
+        toast(r.ok ? ("✓ " + r.msg) : r.msg);
+        paint();
+      });
+    }
+  }
+  paint();
+})();
+</script>
+</body>
+</html>

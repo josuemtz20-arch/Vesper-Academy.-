@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Liga semanal · Vesper Academy</title>
+<meta name="description" content="Compite cada semana sumando XP. Los primeros ascienden de liga; practica para mantenerte arriba.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="assets/images/favicon_32.png" sizes="32x32">
+<meta name="theme-color" content="#1B1B2F">
+<link rel="manifest" href="manifest_lecciones.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inria+Serif:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1B1B2F; --gold:#C9A84C; --gold2:#a8843d; --success:#2D9E75; --error:#C0392B;
+    --cream:#FBF8F1; --paper:#ffffff; --muted:#5d6470; --line:#ece7da; --xp:#0f7c8a;
+    --promote:#2D9E75; --relegate:#C0392B; --radius:18px; --shadow:0 6px 22px rgba(27,27,47,.08);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{background:var(--cream);color:var(--ink);font-family:Inter,system-ui,sans-serif;line-height:1.5;-webkit-text-size-adjust:100%}
+  .wrap{max-width:560px;margin:0 auto;padding:14px 16px 90px}
+  a{color:inherit}
+  h1{font-family:"Inria Serif",Georgia,serif;font-size:1.5rem;margin:.2em 0}
+  .muted{color:var(--muted);font-size:.92rem}
+  .topbar{display:flex;align-items:center;gap:12px;margin:4px 0 16px}
+  .back{width:42px;height:42px;flex:none;display:flex;align-items:center;justify-content:center;border-radius:50%;
+    text-decoration:none;color:var(--ink);background:var(--paper);border:1px solid var(--line);font-size:1.25rem}
+  .back:focus-visible,.cta-signin:focus-visible{outline:3px solid var(--gold2);outline-offset:2px}
+  .card{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px;margin-bottom:14px}
+  /* cabecera premium de la liga (medallón crepúsculo) */
+  .league-head{position:relative;overflow:hidden;text-align:center;color:var(--cream);border:1px solid #2c2c4a;
+    background:linear-gradient(160deg,#2a2c50,#1B1B2F 62%,#14122a);padding:24px 18px}
+  .league-head::after{content:"";position:absolute;inset:0;pointer-events:none;
+    background:radial-gradient(420px 220px at 76% -22%,rgba(201,168,76,.30),transparent 60%)}
+  .league-head .icon{position:relative;display:inline-flex;align-items:center;justify-content:center;
+    width:78px;height:78px;border-radius:50%;font-size:2.6rem;line-height:1;margin-bottom:6px;color:var(--gold);
+    background:rgba(201,168,76,.16);box-shadow:inset 0 0 0 2px rgba(243,226,171,.4),0 8px 22px rgba(0,0,0,.3)}
+  .league-head .icon svg{width:46px;height:46px}
+  .league-head .name{position:relative;font-family:"Inria Serif",Georgia,serif;font-size:1.5rem;margin:.1em 0}
+  .timer{position:relative;font-size:.86rem;color:#c8c6e0}
+  .timer b{color:var(--gold);font-weight:700}
+  .cta-signin{position:relative;margin-top:14px;border:none;cursor:pointer;font-weight:700;
+    background:linear-gradient(180deg,#d7bd6b,var(--gold));color:var(--ink);
+    padding:11px 18px;border-radius:12px;font-size:.92rem;box-shadow:0 4px 14px rgba(168,132,61,.34)}
+  .legend{display:flex;gap:16px;justify-content:center;font-size:.82rem;color:var(--muted);margin-top:12px}
+  .legend i{font-style:normal;display:inline-flex;align-items:center}
+  .dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:5px}
+  .dot.up{background:var(--promote)} .dot.down{background:var(--relegate)}
+  .banner{padding:12px 14px;border-radius:14px;font-weight:600;margin-bottom:14px;text-align:center}
+  .banner.up{background:rgba(45,158,117,.14);color:#1c6b4f}
+  .banner.down{background:rgba(192,57,43,.12);color:#8e2c22}
+  table{width:100%;border-collapse:collapse}
+  tr{border-bottom:1px solid var(--line)}
+  tr:last-child{border-bottom:none}
+  td{padding:12px 4px;vertical-align:middle}
+  .rk{width:40px;text-align:center}
+  .rk span{display:inline-flex;align-items:center;justify-content:center;min-width:26px;height:26px;padding:0 6px;
+    border-radius:999px;font-weight:800;font-size:.85rem;color:var(--muted);background:var(--cream);border:1px solid var(--line)}
+  tr.r1 .rk span{background:linear-gradient(180deg,#f3d98a,#d9b441);color:#5a4300;border-color:#d9b441}
+  tr.r2 .rk span{background:linear-gradient(180deg,#e9eaee,#c9ccd4);color:#3a3d45;border-color:#c9ccd4}
+  tr.r3 .rk span{background:linear-gradient(180deg,#e7c39a,#cE9b67);color:#5a3a1c;border-color:#cE9b67}
+  .nm{font-weight:600}
+  .xp{text-align:right;font-weight:800;white-space:nowrap;color:var(--xp);font-variant-numeric:tabular-nums}
+  .me{background:var(--gold-tint,rgba(201,168,76,.14));box-shadow:inset 3px 0 0 var(--gold)}
+  .me .nm{color:var(--ink);font-weight:700}
+  .row-down .rk span{color:var(--relegate)}
+  .zoneline td{border-top:2px dashed var(--promote)}
+  .zoneline.down td{border-top:2px dashed var(--relegate)}
+  .note{font-size:.84rem;color:var(--muted);text-align:center;margin-top:10px}
+  .ei{display:inline-flex;align-items:center;vertical-align:-.14em}
+  .ei svg{width:1.05em;height:1.05em;display:block}
+  .banner .ei{margin-right:2px}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <div class="topbar">
+    <a class="back" href="leccion.html" aria-label="Volver a las lecciones">&#8592;</a>
+    <h1>Liga semanal</h1>
+  </div>
+
+  <div id="result"></div>
+
+  <section class="card league-head" id="head"></section>
+
+  <section class="card">
+    <table><tbody id="board"></tbody></table>
+    <div class="legend">
+      <i><span class="dot up"></span>Ascienden los primeros <b id="pz">3</b></i>
+      <i><span class="dot down"></span>Descienden los últimos <b id="rz">3</b></i>
+    </div>
+  </section>
+
+  <p class="note">Tu XP es real: súmalo completando lecciones. Los rivales son simulados (motivación local).</p>
+</main>
+
+<script src="vesper_prefs.js"></script>
+<script src="vesper_sfx.js"></script>
+<script src="vesper_icons.js"></script>
+<script src="vesper_auth.js"></script>
+<script src="vesper_league.js"></script>
+<script src="vesper_league_cloud.js"></script>
+<script>
+(function () {
+  var LG = window.VESPER_LEAGUE;
+  var $ = function (id) { return document.getElementById(id); };
+  if (!LG) { $("head").innerHTML = '<p class="muted">La liga no está disponible.</p>'; return; }
+
+  function esc(s) { return ("" + (s == null ? "" : s)).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+  function ig(n) { return (window.VESPER_ICN && VESPER_ICN[n]) ? '<span class="ei">' + VESPER_ICN[n] + '</span>' : ""; }
+
+  /* aviso del cierre de la semana anterior (ascenso/descenso) */
+  var last = LG.lastResult();
+  if (last && (last.promoted || last.relegated)) {
+    $("result").innerHTML = last.promoted
+      ? '<div class="banner up">' + ig('trophy') + ' ¡Ascendiste de liga la semana pasada! Sigue así.</div>'
+      : '<div class="banner down">' + ig('arrowDown') + ' Bajaste de liga la semana pasada. ¡A recuperar el puesto!</div>';
+    if (last.promoted && window.VESPER_SFX) { try { VESPER_SFX.levelup(); } catch (e) {} }
+    if (LG.clearLast) LG.clearLast();
+  }
+
+  function fmtTimer() {
+    var ms = LG.weekEndsInMs(), d = Math.floor(ms / 86400000), h = Math.floor((ms % 86400000) / 3600000);
+    return "Termina en " + (d > 0 ? d + "d " : "") + h + "h";
+  }
+  var pz = LG.promotionZone(), rz = LG.relegationZone();
+  $("pz").textContent = pz;
+  $("rz").textContent = rz;
+
+  function paintHead(opts) {
+    $("head").innerHTML = '<div class="icon">' + opts.icon + '</div>'
+      + '<div class="name">' + esc(opts.name) + '</div>'
+      + '<div class="timer">' + fmtTimer() + (opts.badge ? ' &middot; <b>' + opts.badge + '</b>' : '') + '</div>'
+      + (opts.cta || "");
+  }
+  function paintBoard(rows, nameKey) {
+    var n = rows.length;
+    $("board").innerHTML = rows.map(function (r) {
+      var cls = "";
+      if (r.rank <= 3) cls += " r" + r.rank;
+      if (r.rank <= pz) cls += " row-up";
+      else if (r.rank > n - rz) cls += " row-down";
+      if (r.isMe) cls += " me";
+      var zone = (r.rank === pz) ? ' zoneline' : ((r.rank === n - rz) ? ' zoneline down' : '');
+      var label = r.isMe ? "Tú" : esc(r[nameKey] || "Estudiante");
+      return '<tr class="' + cls.trim() + zone + '">'
+        + '<td class="rk"><span>' + r.rank + '</span></td>'
+        + '<td class="nm">' + label + '</td>'
+        + '<td class="xp">' + r.xp + ' XP</td></tr>';
+    }).join("");
+  }
+
+  var ICN = window.VESPER_ICN;
+  /* liga simulada (sin cuenta o si la nube no está disponible) */
+  function showSimulated(showCta) {
+    var t = LG.tier();
+    var cta = showCta
+      ? '<button class="cta-signin" id="signin">Inicia sesión para competir de verdad</button>'
+      : "";
+    paintHead({ icon: (ICN ? ICN.tier(t.id) : t.icon), name: t.name, badge: "", cta: cta });
+    paintBoard(LG.standings(), "name");
+    var si = $("signin");
+    if (si) si.onclick = function () {
+      if (window.VESPER_SYNC && VESPER_SYNC.openAuth) VESPER_SYNC.openAuth();
+      else location.href = "login.html";
+    };
+  }
+
+  /* intenta la tabla REAL; si no hay sesión/nube/regla, cae a la simulada */
+  var cloud = window.VESPER_LEAGUE_CLOUD;
+  if (cloud && cloud.available()) {
+    showSimulated(false);   /* pinta algo de inmediato mientras carga la nube */
+    var tries = 0;
+    (function attempt() {
+      if (!cloud.signedIn()) {
+        /* aún no llega el estado de auth: reintenta un par de veces, luego CTA */
+        if (tries++ < 6) { setTimeout(attempt, 500); return; }
+        showSimulated(true);
+        return;
+      }
+      LG.liveStandings().then(function (rows) {
+        if (rows && rows.length) {
+          paintHead({ icon: (ICN ? ICN.globe : ""), name: "Liga global · esta semana", badge: "En la nube" });
+          paintBoard(rows, "alias");
+        } else {
+          showSimulated(false);   /* 403/sin datos: liga simulada */
+        }
+      }).catch(function () { showSimulated(false); });
+    })();
+  } else {
+    showSimulated(false);
+  }
+})();
+</script>
+</body>
+</html>

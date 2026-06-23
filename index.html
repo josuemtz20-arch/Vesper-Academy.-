@@ -98,8 +98,15 @@ nav{display:flex;align-items:center;justify-content:space-between;height:72px;ga
 .hero-stats div b{font-family:'Inria Serif',serif;font-size:1.5rem;color:var(--gold-lt);display:block;line-height:1.1;}
 .hero-stats div small{color:rgba(255,255,255,.66);font-size:.78rem;text-transform:uppercase;letter-spacing:1px;}
 .hero-grid{display:grid;grid-template-columns:1fr;align-items:center;}
-.hero-visual{display:block;max-width:420px;margin:10px auto 0;}
+.hero-visual{display:block;max-width:420px;margin:10px auto 0;position:relative;cursor:pointer;border-radius:var(--r-lg);transition:transform .25s var(--ease-out),box-shadow .25s var(--ease-out);}
 .hero-visual img{width:100%;height:auto;display:block;border-radius:var(--r-lg);border:1px solid rgba(197,160,89,.4);box-shadow:var(--sh-lg);background:var(--navy3);}
+.hero-visual:hover,.hero-visual:focus-visible{transform:translateY(-6px);}
+.hero-visual:hover img,.hero-visual:focus-visible img{border-color:var(--gold-lt);box-shadow:0 24px 60px rgba(0,0,0,.45);}
+.hero-visual-cta{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);display:inline-flex;align-items:center;gap:8px;
+  padding:10px 20px;border-radius:999px;background:var(--gold);color:var(--navy);font-weight:700;font-size:.92rem;white-space:nowrap;
+  box-shadow:0 8px 24px rgba(0,0,0,.35);opacity:0;transition:opacity .25s var(--ease-out),transform .25s var(--ease-out);pointer-events:none;}
+.hero-visual:hover .hero-visual-cta,.hero-visual:focus-visible .hero-visual-cta{opacity:1;transform:translateX(-50%) translateY(-2px);}
+@media (hover:none){.hero-visual-cta{opacity:1;}}
 @media(min-width:981px){
   .hero-grid{grid-template-columns:minmax(0,1fr) minmax(0,420px);gap:56px;}
   .hero-inner{max-width:none;}
@@ -360,7 +367,7 @@ header.scrolled{background:rgba(27,27,47,.98);border-bottom-color:rgba(197,160,8
         <div><b>100%</b><small>En vivo, no grabado</small></div>
       </div>
     </div>
-    <div class="hero-visual"><img src="assets/images/hero_vesper_cat.png" alt="Vesper, la mascota de Vesper Academy, presentando junto al logotipo de la academia" decoding="async"></div>
+    <a class="hero-visual" href="leccion.html" aria-label="Ir a las lecciones de Vesper Academy"><img src="assets/images/hero_vesper_cat.png" alt="Vesper, la mascota de Vesper Academy, junto al logotipo de la academia" decoding="async"><span class="hero-visual-cta"><i class="fas fa-play" aria-hidden="true"></i> Ir a las lecciones</span></a>
     </div>
   </div>
 </section>

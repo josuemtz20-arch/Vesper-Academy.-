@@ -38,7 +38,10 @@
   .card{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);
     padding:18px;margin-bottom:14px}
   .sec-h{display:flex;align-items:baseline;gap:8px;margin:0 0 12px}
-  .sec-h .em{font-size:1.15rem}
+  .sec-h .em{font-size:1.15rem;display:inline-flex;align-items:center;color:var(--gold-deep,#a8843d)}
+  .sec-h .em svg{width:1.2rem;height:1.2rem;display:block}
+  .em-inline{display:inline-flex;align-items:center;vertical-align:-.14em}
+  .em-inline svg{width:1.05em;height:1.05em;display:block}
   .field{margin:14px 0 0}
   .field:first-of-type{margin-top:0}
   .label{font-weight:600;font-size:.95rem;margin-bottom:8px;display:block}
@@ -66,7 +69,9 @@
     border:1.5px solid var(--line);border-radius:13px;padding:11px 13px;background:var(--paper);color:var(--ink);
     font:inherit;transition:border-color .15s ease,background .15s ease,transform .1s ease}
   .seg button:active{transform:scale(.985)}
-  .seg button .em{font-size:1.2rem;flex:none;width:1.4em;text-align:center}
+  .seg button .em{flex:none;display:inline-flex;align-items:center;justify-content:center;width:1.7rem;color:var(--gold-deep,#a8843d)}
+  .seg button .em svg{width:1.3rem;height:1.3rem;display:block}
+  .seg button .em:empty{display:none}
   .seg button .t{font-weight:600}
   .seg button .d{display:block;font-weight:400;color:var(--muted);font-size:.82rem}
   .seg button[aria-checked="true"],.seg button[aria-pressed="true"]{border-color:var(--gold-deep,#a8843d);border-width:2px;background:var(--gold-tint)}
@@ -75,8 +80,11 @@
 
   /* compact chips (focus areas) */
   .chips{display:flex;flex-wrap:wrap;gap:9px}
-  .chip{cursor:pointer;border:1.5px solid var(--line);border-radius:999px;padding:8px 14px;background:var(--paper);
-    color:var(--ink);font:600 .88rem Inter,sans-serif}
+  .chip{cursor:pointer;border:1.5px solid var(--line);border-radius:999px;padding:8px 13px;background:var(--paper);
+    color:var(--ink);font:600 .88rem Inter,sans-serif;display:inline-flex;align-items:center;gap:7px}
+  .chip-ic{display:inline-flex;color:var(--gold-deep,#a8843d)}
+  .chip-ic svg{width:1.15em;height:1.15em;display:block}
+  .chip-ic:empty{display:none}
   .chip[aria-pressed="true"]{border-color:var(--gold-deep,#a8843d);border-width:2px;background:var(--gold-tint)}
   .chip[aria-pressed="true"]::after{content:"\00a0✓";color:var(--success);font-weight:700}
 
@@ -115,6 +123,9 @@
   .sec-tag--ai{background:var(--gold-tint);color:var(--gold-deep,#a8843d);
     border:1px solid color-mix(in srgb,var(--gold) 42%,var(--line))}
   .sec-tag--app{background:#eef0f4;color:var(--muted);border:1px solid var(--line)}
+  .gem-count{display:inline-flex;align-items:center;gap:6px}
+  .gem-count .gi{display:inline-flex}
+  .gem-count .gi svg{width:18px;height:18px;display:block}
 </style>
 <link rel="stylesheet" href="assets/css/vesper_tokens.css">
 <script src="vesper_prefs.js"></script>
@@ -144,7 +155,7 @@
 
   <!-- ===== TU PERFIL ===== -->
   <section class="card" aria-labelledby="h-perfil">
-    <div class="sec-h"><span class="em">🪪</span><h2 id="h-perfil">Tu perfil</h2><span class="sec-tag sec-tag--ai">Da forma a la IA</span></div>
+    <div class="sec-h"><span class="em" data-ic="idcard"></span><h2 id="h-perfil">Tu perfil</h2><span class="sec-tag sec-tag--ai">Da forma a la IA</span></div>
     <div class="field">
       <label class="label" for="callme">¿Cómo quieres que Vesper te llame?
         <span class="hint">Tu nombre o un apodo. Lo usará al hablarte.</span></label>
@@ -163,7 +174,7 @@
 
   <!-- ===== PERSONALIDAD DE VESPER ===== -->
   <section class="card" aria-labelledby="h-pers">
-    <div class="sec-h"><span class="em">✨</span><h2 id="h-pers">Personalidad de Vesper</h2><span class="sec-tag sec-tag--ai">Da forma a la IA</span></div>
+    <div class="sec-h"><span class="em" data-ic="sparkle"></span><h2 id="h-pers">Personalidad de Vesper</h2><span class="sec-tag sec-tag--ai">Da forma a la IA</span></div>
 
     <div class="field"><span class="label" id="lab-tone">Tono</span>
       <div class="seg cols" id="seg-tone" role="radiogroup" aria-labelledby="lab-tone"></div></div>
@@ -187,7 +198,7 @@
 
   <!-- ===== TEMAS DE INTERÉS ===== -->
   <section class="card" aria-labelledby="h-topics">
-    <div class="sec-h"><span class="em">💡</span><h2 id="h-topics">Temas de interés</h2><span class="sec-tag sec-tag--ai">Da forma a la IA</span></div>
+    <div class="sec-h"><span class="em" data-ic="bulb"></span><h2 id="h-topics">Temas de interés</h2><span class="sec-tag sec-tag--ai">Da forma a la IA</span></div>
     <p class="muted" style="margin:0 0 10px">Vesper usará estos temas para sus ejemplos y conversaciones —
       en las lecciones y en el chat. Elige todos los que quieras.</p>
     <div class="chips" id="chips-topics" role="group" aria-labelledby="h-topics"></div>
@@ -195,7 +206,7 @@
 
   <!-- ===== APARIENCIA ===== -->
   <section class="card" aria-labelledby="h-look">
-    <div class="sec-h"><span class="em">🎨</span><h2 id="h-look">Apariencia</h2><span class="sec-tag sec-tag--app">Ajuste de la app</span></div>
+    <div class="sec-h"><span class="em" data-ic="palette"></span><h2 id="h-look">Apariencia</h2><span class="sec-tag sec-tag--app">Ajuste de la app</span></div>
     <p class="muted" style="margin:0 0 6px">Elige el tema de color (claro u oscuro), el color de Vesper y sus accesorios.
       Los colores y accesorios se desbloquean al avanzar en las lecciones.</p>
     <div id="picker-host"></div>
@@ -203,7 +214,7 @@
 
   <!-- ===== ACCESIBILIDAD ===== -->
   <section class="card" aria-labelledby="h-a11y">
-    <div class="sec-h"><span class="em">♿</span><h2 id="h-a11y">Accesibilidad</h2><span class="sec-tag sec-tag--app">Ajuste de la app</span></div>
+    <div class="sec-h"><span class="em" data-ic="access"></span><h2 id="h-a11y">Accesibilidad</h2><span class="sec-tag sec-tag--app">Ajuste de la app</span></div>
     <p class="muted" style="margin:0 0 10px">Ajustes de lectura y movimiento. Se aplican en toda la app.</p>
     <div class="field"><span class="label" id="lab-textscale">Tamaño del texto</span>
       <div class="seg cols" id="seg-textscale" role="radiogroup" aria-labelledby="lab-textscale"></div></div>
@@ -225,7 +236,7 @@
 
   <!-- ===== SONIDO ===== -->
   <section class="card" aria-labelledby="h-sound">
-    <div class="sec-h"><span class="em">🔊</span><h2 id="h-sound">Sonido</h2><span class="sec-tag sec-tag--app">Ajuste de la app</span></div>
+    <div class="sec-h"><span class="em" data-ic="speaker"></span><h2 id="h-sound">Sonido</h2><span class="sec-tag sec-tag--app">Ajuste de la app</span></div>
     <div class="field">
       <div class="row" style="justify-content:space-between">
         <span class="label" id="lab-snd" style="margin:0">Efectos de sonido
@@ -244,7 +255,7 @@
 
   <!-- ===== METAS Y RECORDATORIOS ===== -->
   <section class="card" aria-labelledby="h-goals">
-    <div class="sec-h"><span class="em">🎯</span><h2 id="h-goals">Metas y recordatorios</h2><span class="sec-tag sec-tag--app">Ajuste de la app</span></div>
+    <div class="sec-h"><span class="em" data-ic="target"></span><h2 id="h-goals">Metas y recordatorios</h2><span class="sec-tag sec-tag--app">Ajuste de la app</span></div>
     <div class="field">
       <span class="label">Meta diaria</span>
       <div class="row">
@@ -274,6 +285,33 @@
     </div>
   </section>
 
+  <!-- ===== MODO DESAFÍO Y TIENDA ===== -->
+  <section class="card" aria-labelledby="h-challenge">
+    <div class="sec-h"><span class="em" data-ic="swords"></span><h2 id="h-challenge">Modo desafío y tienda</h2><span class="sec-tag sec-tag--app">Ajuste de la app</span></div>
+    <div class="field">
+      <div class="row" style="justify-content:space-between">
+        <span class="label" id="lab-challenge" style="margin:0">Modo desafío (vidas)
+          <span class="hint">Cada fallo resta un corazón; al quedarte sin vidas, esperas o las recargas con gemas. Apagado = reintentos infinitos, sin presión.</span></span>
+        <button class="switch" id="sw-challenge" role="switch" aria-checked="false" aria-labelledby="lab-challenge"></button>
+      </div>
+    </div>
+    <div class="field">
+      <div class="row" style="justify-content:space-between;align-items:center">
+        <span class="label" style="margin:0">Tus gemas
+          <span class="hint">Ganas gemas al completar lecciones. Gástalas en la tienda.</span></span>
+        <span class="label gem-count" id="gem-count" style="margin:0;font-weight:800">0</span>
+      </div>
+      <a href="tienda.html" style="margin-top:12px;display:inline-block;text-decoration:none;font-weight:700;
+        background:var(--gold);color:var(--ink);padding:11px 18px;border-radius:12px">Abrir la tienda <span class="em-inline" data-ic="cart"></span></a>
+    </div>
+    <div class="field">
+      <label class="label" for="league-alias" style="margin:0">Alias para la liga
+        <span class="hint">El nombre con el que apareces en el leaderboard real (con sesión iniciada). Si lo dejas vacío, usamos un código anónimo. No mostramos tu correo.</span></label>
+      <input class="name-input" id="league-alias" type="text" maxlength="24" autocomplete="off"
+        placeholder="Tu alias (opcional)" style="margin-top:8px">
+    </div>
+  </section>
+
   <p class="muted" style="text-align:center;margin:6px 0 0">
     Tus ajustes se guardan automáticamente en este dispositivo.</p>
 </main>
@@ -286,6 +324,20 @@
 <script src="vesper_theme.js"></script>
 <script src="vesper_adaptive.js"></script>
 <script src="vesper_persona.js"></script>
+<script src="vesper_icons.js"></script>
+<script src="vesper_opticons.js"></script>
+<script src="vesper_economy.js"></script>
+<script>
+/* rellena los iconos SVG de marca en los encabezados de sección (sin emojis) */
+(function () {
+  var I = window.VESPER_ICN; if (!I) return;
+  var els = document.querySelectorAll("[data-ic]");
+  for (var i = 0; i < els.length; i++) {
+    var n = els[i].getAttribute("data-ic");
+    if (I[n]) els[i].innerHTML = I[n];
+  }
+})();
+</script>
 <script>
 (function () {
   var P = window.VESPER_PERSONA;
@@ -293,6 +345,7 @@
   var $ = function (id) { return document.getElementById(id); };
 
   /* ---------- builders de controles ---------- */
+  function optIc(id) { return (window.VESPER_OPT && VESPER_OPT.get) ? VESPER_OPT.get(id) : ""; }
   function radioGroup(hostId, order, dict, current, onPick) {
     var host = $(hostId); if (!host) return;
     var hasCurrent = order.indexOf(current) >= 0;
@@ -302,7 +355,7 @@
       /* roving tabindex: solo un radio por grupo es tabbable (el activo, o el 1ro) */
       var tab = (on || (!hasCurrent && i === 0)) ? "0" : "-1";
       return '<button type="button" role="radio" aria-checked="' + on + '" tabindex="' + tab + '" data-id="' + id + '">'
-        + '<span class="em" aria-hidden="true">' + (o.emoji || "") + '</span>'
+        + '<span class="em" aria-hidden="true">' + optIc(id) + '</span>'
         + '<span class="t">' + o.label + '</span>'
         + '<span class="chk" aria-hidden="true">✓</span></button>';
     }).join("");
@@ -335,7 +388,7 @@
     host.innerHTML = order.map(function (id) {
       var o = dict[id]; var on = currentArr.indexOf(id) !== -1;
       return '<button type="button" class="chip" aria-pressed="' + on + '" data-id="' + id + '">'
-        + (o.emoji ? '<span aria-hidden="true">' + o.emoji + '</span> ' : '') + o.label + '</button>';
+        + '<span class="chip-ic" aria-hidden="true">' + optIc(id) + '</span>' + o.label + '</button>';
     }).join("");
     host.addEventListener("click", function (e) {
       var b = e.target.closest("[data-id]"); if (!b) return;
@@ -355,8 +408,8 @@
   callme.addEventListener("input", function () { P.set({ callMe: callme.value.trim() }); flash(); });
 
   /* modo de nivel (adaptativo / manual) */
-  var LEVELMODE = { adaptive: { label: "Adaptativo", emoji: "🧭", desc: "Vesper ajusta la dificultad según tu desempeño." },
-                    manual:   { label: "Manual",     emoji: "🎚️", desc: "Tú fijas el nivel CEFR." } };
+  var LEVELMODE = { adaptive: { label: "Adaptativo", emoji: "", desc: "Vesper ajusta la dificultad según tu desempeño." },
+                    manual:   { label: "Manual",     emoji: "", desc: "Tú fijas el nivel CEFR." } };
   radioGroup("seg-levelmode", ["adaptive", "manual"], LEVELMODE, p.levelMode, function (id) {
     P.set({ levelMode: id }); toggleCefr(id); flash();
   });
@@ -441,7 +494,7 @@
     var dg = P.get().dailyGoal || { type: "lessons", value: 1 }; dg.value = v;
     P.set({ dailyGoal: dg }); flash();
   });
-  var GOALTYPE = { lessons: { label: "lecciones", emoji: "📚" }, min: { label: "minutos", emoji: "⏱️" } };
+  var GOALTYPE = { lessons: { label: "lecciones", emoji: "" }, min: { label: "minutos", emoji: "" } };
   radioGroup("seg-goaltype", ["lessons", "min"], GOALTYPE, (p.dailyGoal && p.dailyGoal.type) || "lessons", function (id) {
     var dg = P.get().dailyGoal || { type: "lessons", value: 1 }; dg.type = id; P.set({ dailyGoal: dg }); flash();
   });
@@ -478,7 +531,7 @@
   }
 
   /* ---------- accesibilidad ---------- */
-  var TEXTSCALE = { md: { label: "Normal", emoji: "🔤" }, lg: { label: "Grande", emoji: "🔠" }, xl: { label: "Muy grande", emoji: "🅰️" } };
+  var TEXTSCALE = { md: { label: "Normal", emoji: "" }, lg: { label: "Grande", emoji: "" }, xl: { label: "Muy grande", emoji: "" } };
   radioGroup("seg-textscale", ["md", "lg", "xl"], TEXTSCALE, p.textScale || "md", function (id) {
     P.set({ textScale: id }); flash();
   });
@@ -491,6 +544,38 @@
 
   /* ---------- congelar racha ---------- */
   wireSwitch("sw-freeze", p.freezeStreak, "freezeStreak");
+
+  /* ---------- modo desafío (vidas) + gemas ---------- */
+  (function () {
+    var E = window.VESPER_ECONOMY; if (!E) return;
+    var sw = $("sw-challenge");
+    if (sw) {
+      setSwitch(sw, E.livesActive());
+      sw.addEventListener("click", function () {
+        var on = sw.getAttribute("aria-checked") !== "true";
+        setSwitch(sw, on); E.setChallenge(on); flash();
+      });
+    }
+    var gc = $("gem-count"); if (gc) gc.innerHTML = (window.VESPER_ICN ? '<span class="gi">' + VESPER_ICN.gem + '</span>' : '') + E.gems();
+  })();
+
+  /* ---------- alias para la liga (leaderboard real) ---------- */
+  (function () {
+    var inp = $("league-alias"); if (!inp) return;
+    function readAlias() {
+      try { var p = JSON.parse(localStorage.getItem("vesper_profile") || "null"); return (p && p.vesper && p.vesper.leagueAlias) || ""; } catch (e) { return ""; }
+    }
+    function writeAlias(v) {
+      try {
+        var p = JSON.parse(localStorage.getItem("vesper_profile") || "null") || {};
+        p.vesper = p.vesper || {};
+        p.vesper.leagueAlias = v;
+        localStorage.setItem("vesper_profile", JSON.stringify(p));
+      } catch (e) {}
+    }
+    inp.value = readAlias();
+    inp.addEventListener("input", function () { writeAlias(inp.value.trim().slice(0, 24)); flash(); });
+  })();
 
   /* ---------- vista previa en vivo ---------- */
   /* tono -> expresion del gato (usa las caras IA del set de Vesper) */
