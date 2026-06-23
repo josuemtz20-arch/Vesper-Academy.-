@@ -37,12 +37,15 @@
   .hero::after{content:"";position:absolute;inset:0;pointer-events:none;
     background:radial-gradient(420px 200px at 78% -20%,rgba(201,168,76,.28),transparent 60%)}
   .hero .lbl{position:relative;font-size:.8rem;letter-spacing:.12em;text-transform:uppercase;color:#c8c6e0;font-weight:700}
-  .hero .bal{position:relative;font-family:"Inria Serif",Georgia,serif;font-size:2.6rem;line-height:1.1;margin-top:4px}
-  .hero .bal .gem{filter:drop-shadow(0 2px 6px rgba(15,124,138,.5))}
+  .hero .bal{position:relative;display:inline-flex;align-items:center;gap:8px;font-family:"Inria Serif",Georgia,serif;font-size:2.6rem;line-height:1.1;margin-top:4px}
+  .hero .bal .gem{display:inline-flex;filter:drop-shadow(0 2px 8px rgba(31,184,204,.45))}
+  .hero .bal .gem svg{width:38px;height:38px}
   .hero .sub{position:relative;color:#b9b7d4;font-size:.85rem;margin-top:4px}
   /* panel de vidas */
   .lives{display:flex;align-items:center;gap:14px}
-  .lives .hearts{font-size:1.5rem;letter-spacing:2px;line-height:1}
+  .lives .hearts{display:inline-flex;gap:3px;line-height:1}
+  .lives .hearts .hp{display:inline-flex}
+  .lives .hearts .hp svg{width:26px;height:26px}
   .lives .meta{font-size:.88rem;color:var(--muted);font-weight:600}
   .sec-title{font-family:"Inria Serif",Georgia,serif;font-size:1.1rem;margin:2px 0 12px}
   /* items de la tienda */
@@ -50,6 +53,10 @@
   .item+.item{margin-top:14px;padding-top:14px;border-top:1px solid var(--line)}
   .item .ic{flex:none;width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;
     font-size:1.7rem;background:var(--gold-tint);box-shadow:inset 0 0 0 1px rgba(201,168,76,.25)}
+  .item .ic svg{width:26px;height:26px}
+  .buy{display:inline-flex;align-items:center;gap:6px}
+  .buy .bgem{display:inline-flex}
+  .buy .bgem svg{width:16px;height:16px}
   .item .tx{flex:1;min-width:0}
   .item .tx b{font-size:1.02rem}
   .item .tx span{display:block;color:var(--muted);font-size:.86rem}
@@ -74,7 +81,7 @@
 
   <section class="card hero">
     <div class="lbl">Tus gemas</div>
-    <div class="bal"><span class="gem">💎</span> <span id="gembal">0</span></div>
+    <div class="bal"><span class="gem" id="gemic"></span> <span id="gembal">0</span></div>
     <div class="sub">Las ganas practicando · sin dinero real</div>
   </section>
 
@@ -95,6 +102,7 @@
 
 <script src="vesper_prefs.js"></script>
 <script src="vesper_sfx.js"></script>
+<script src="vesper_icons.js"></script>
 <script src="vesper_economy.js"></script>
 <script>
 (function () {
@@ -110,7 +118,7 @@
 
   function paintHearts() {
     var on = E.livesActive(), h = E.hearts(), mx = E.maxHearts(), row = "";
-    for (var i = 0; i < mx; i++) row += (i < h ? "❤️" : "🤍");
+    for (var i = 0; i < mx; i++) row += '<span class="hp">' + (window.VESPER_ICN ? (i < h ? VESPER_ICN.heart : VESPER_ICN.heartEmpty) : (i < h ? "❤️" : "🤍")) + '</span>';
     var meta;
     if (!on) meta = "Modo desafío apagado · actívalo en Configuración";
     else if (h >= mx) meta = "Vidas al máximo";
@@ -118,15 +126,19 @@
     $("hearts-row").innerHTML = '<span class="hearts">' + row + '</span><span class="meta">' + meta + '</span>';
   }
 
+  var ICN = window.VESPER_ICN;
   function paint() {
+    if (ICN) { var gi = $("gemic"); if (gi) gi.innerHTML = ICN.gem; }
     $("gembal").textContent = E.gems();
     paintHearts();
     var gems = E.gems();
     $("store").innerHTML = E.STORE.map(function (it) {
       var disabled = gems < it.cost || (it.id === "hearts" && E.hearts() >= E.maxHearts());
-      return '<div class="item"><span class="ic">' + it.icon + '</span>'
+      var ic = ICN ? ICN.store(it.id) : it.icon;
+      var cost = (ICN ? '<span class="bgem">' + ICN.gem + '</span>' : '💎 ') + it.cost;
+      return '<div class="item"><span class="ic">' + ic + '</span>'
         + '<span class="tx"><b>' + it.name + '</b><span>' + it.desc + '</span></span>'
-        + '<button class="buy" data-id="' + it.id + '"' + (disabled ? ' disabled' : '') + '>💎 ' + it.cost + '</button></div>';
+        + '<button class="buy" data-id="' + it.id + '"' + (disabled ? ' disabled' : '') + '>' + cost + '</button></div>';
     }).join("");
     var btns = document.querySelectorAll(".buy");
     for (var i = 0; i < btns.length; i++) {

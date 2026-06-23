@@ -36,8 +36,9 @@
   .league-head::after{content:"";position:absolute;inset:0;pointer-events:none;
     background:radial-gradient(420px 220px at 76% -22%,rgba(201,168,76,.30),transparent 60%)}
   .league-head .icon{position:relative;display:inline-flex;align-items:center;justify-content:center;
-    width:78px;height:78px;border-radius:50%;font-size:2.6rem;line-height:1;margin-bottom:6px;
+    width:78px;height:78px;border-radius:50%;font-size:2.6rem;line-height:1;margin-bottom:6px;color:var(--gold);
     background:rgba(201,168,76,.16);box-shadow:inset 0 0 0 2px rgba(243,226,171,.4),0 8px 22px rgba(0,0,0,.3)}
+  .league-head .icon svg{width:46px;height:46px}
   .league-head .name{position:relative;font-family:"Inria Serif",Georgia,serif;font-size:1.5rem;margin:.1em 0}
   .timer{position:relative;font-size:.86rem;color:#c8c6e0}
   .timer b{color:var(--gold);font-weight:700}
@@ -95,6 +96,7 @@
 
 <script src="vesper_prefs.js"></script>
 <script src="vesper_sfx.js"></script>
+<script src="vesper_icons.js"></script>
 <script src="vesper_auth.js"></script>
 <script src="vesper_league.js"></script>
 <script src="vesper_league_cloud.js"></script>
@@ -147,13 +149,14 @@
     }).join("");
   }
 
+  var ICN = window.VESPER_ICN;
   /* liga simulada (sin cuenta o si la nube no está disponible) */
   function showSimulated(showCta) {
     var t = LG.tier();
     var cta = showCta
       ? '<button class="cta-signin" id="signin">Inicia sesión para competir de verdad</button>'
       : "";
-    paintHead({ icon: t.icon, name: t.name, badge: "", cta: cta });
+    paintHead({ icon: (ICN ? ICN.tier(t.id) : t.icon), name: t.name, badge: "", cta: cta });
     paintBoard(LG.standings(), "name");
     var si = $("signin");
     if (si) si.onclick = function () {
@@ -176,7 +179,7 @@
       }
       LG.liveStandings().then(function (rows) {
         if (rows && rows.length) {
-          paintHead({ icon: "🌐", name: "Liga global · esta semana", badge: "En la nube" });
+          paintHead({ icon: (ICN ? ICN.globe : "🌐"), name: "Liga global · esta semana", badge: "En la nube" });
           paintBoard(rows, "alias");
         } else {
           showSimulated(false);   /* 403/sin datos: liga simulada */

@@ -109,6 +109,7 @@
 # compartidos (WebAudio + haptics). Sin claves. Doc de la regla a publicar.
 !/vesper_league_cloud.js
 !/vesper_sfx.js
+!/vesper_icons.js
 !/FIRESTORE_LEAGUE_RULES.md
 # recintos tematicos de vocabulario (ramas) — datos publicos, sin claves
 !/vesper_vocab_dens.js

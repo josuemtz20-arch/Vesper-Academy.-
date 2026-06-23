@@ -18,6 +18,7 @@
 <link rel="stylesheet" href="assets/css/vesper_tokens.css">
 <script src="vesper_prefs.js"></script>
 <script src="vesper_sfx.js"></script>
+<script src="vesper_icons.js"></script>
 <style>
   :root{
     --ink:#1B1B2F; --gold:#c5a059; --gold2:#a8843d; --success:#2D9E75; --error:#C0392B;
@@ -102,6 +103,7 @@
   .hub-card:hover{transform:translateY(-2px)}
   .hub-card .hc-ic{flex:0 0 auto;width:46px;height:46px;border-radius:14px;display:flex;align-items:center;
     justify-content:center;font-size:1.5rem}
+  .hub-card .hc-ic svg{width:24px;height:24px}
   .hub-card .hc-tx{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
   .hub-card .hc-tx b{font-size:1.02rem}
   .hub-card .hc-tx span{font-size:.86rem}
@@ -124,7 +126,9 @@
   .econ-gems,.econ-hearts{display:inline-flex;align-items:center;gap:5px;font-weight:700;font-size:.86rem;
     padding:4px 11px;border-radius:999px;border:1px solid var(--line);background:var(--paper)}
   .econ-gems{color:#0f7c8a}
-  .econ-hearts{letter-spacing:1px}
+  .econ-strip .ei{display:inline-flex}
+  .econ-strip .ei svg{width:15px;height:15px;display:block}
+  .econ-hearts .ei+.ei{margin-left:1px}
   .opts{display:grid;gap:10px;margin:6px 0}
   .opt{text-align:left;background:var(--paper);border:1.5px solid var(--line);border-radius:13px;padding:13px 15px;font-family:inherit;
     font-size:1rem;color:var(--ink);cursor:pointer;min-height:50px}
@@ -1327,6 +1331,10 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
 .hstat__ic{width:30px;height:30px;flex:0 0 auto;border-radius:9px;display:grid;place-items:center;
   background:rgba(197,160,89,.20);color:var(--gold,#c5a059)}
 .hstat__ic svg{width:17px;height:17px}
+.hstat--link{text-decoration:none;cursor:pointer;transition:background .15s ease}
+.hstat--link:hover{background:rgba(245,242,235,.12)}
+.hstat__ic--badge{background:rgba(245,242,235,.12)}
+.hstat__ic--badge svg{width:24px;height:24px}
 .hstat__tx{display:flex;flex-direction:column;min-width:0}
 .hstat__v{font-size:1.02rem;font-weight:800;line-height:1.05;color:#f5f2eb;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .hstat__l{font-size:.62rem;text-transform:uppercase;letter-spacing:.05em;color:rgba(245,242,235,.62);font-weight:700;margin-top:2px;white-space:nowrap}
@@ -1807,12 +1815,16 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       + '<span class="hstat__tx"><span class="hstat__v">' + (st.streak || 0) + '</span><span class="hstat__l">Racha</span></span></div>'
       + '<div class="hstat"><span class="hstat__ic">' + HUB_ICN.star + '</span>'
       + '<span class="hstat__tx"><span class="hstat__v">' + (st.xp || 0) + '</span><span class="hstat__l">XP</span></span></div>';
-    if (dg) {
-      var gp = dg.target ? Math.min(100, Math.round(100 * dg.progress / dg.target)) : 0;
-      tiles += '<div class="hstat' + (dg.met ? ' met' : '') + '">'
-        + '<span class="hstat__ring" style="--gp:' + gp + '" aria-hidden="true"><i>' + Math.min(dg.progress, dg.target) + '</i></span>'
-        + '<span class="hstat__tx"><span class="hstat__v">' + Math.min(dg.progress, dg.target) + '/' + dg.target + '</span><span class="hstat__l">Meta de hoy</span></span></div>';
-    }
+    /* en lugar de la meta diaria: la liga semanal (tier + tu puesto), tappable */
+    try {
+      if (window.VESPER_LEAGUE && VESPER_LEAGUE.tier) {
+        var lt = VESPER_LEAGUE.tier(), lr = VESPER_LEAGUE.myRank();
+        var lic = (window.VESPER_ICN ? VESPER_ICN.tier(lt.id) : (lt.icon || ""));
+        tiles += '<a class="hstat hstat--link" href="liga.html" aria-label="Liga ' + esc(lt.name) + ', puesto ' + lr + '">'
+          + '<span class="hstat__ic hstat__ic--badge">' + lic + '</span>'
+          + '<span class="hstat__tx"><span class="hstat__v">' + lr + 'º</span><span class="hstat__l">' + esc(lt.name.replace(/^Liga\s+/, "")) + '</span></span></a>';
+      }
+    } catch (e) {}
     if (st.shields || 0) {
       tiles += '<div class="hstat"><span class="hstat__ic">' + HUB_ICN.shield + '</span>'
         + '<span class="hstat__tx"><span class="hstat__v">' + st.shields + '</span><span class="hstat__l">Escudos</span></span></div>';
@@ -3218,28 +3230,18 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
 
     var heroBand = (A && profile && A.profileLevel) ? A.levelToBand(A.profileLevel()) : null;
     var heroInfo = { band: heroBand, bandTag: heroBand ? (WORLD_TAG[heroBand] || "") : "" };
-    var leagueWidget = "";
-    try {
-      if (window.VESPER_LEAGUE && VESPER_LEAGUE.tier) {
-        var lt = VESPER_LEAGUE.tier(), lr = VESPER_LEAGUE.myRank(), lz = VESPER_LEAGUE.promotionZone();
-        var zoneTxt = lr <= lz ? "¡En zona de ascenso!" : ("Puesto " + lr + " de " + VESPER_LEAGUE.size());
-        leagueWidget = '<button class="hub-card league-widget" id="leagueGo" type="button">'
-          + '<span class="hc-ic" aria-hidden="true">' + lt.icon + '</span>'
-          + '<span class="hc-tx"><b>' + esc(lt.name) + '</b><span>' + zoneTxt + '</span></span>'
-          + '<span class="hc-cta">Ver liga &rarr;</span></button>';
-      }
-    } catch (e) {}
+    /* la liga ahora vive en el HUD (en lugar de la meta diaria); aquí solo el repaso */
     var srsDue = (window.VESPER_SRS && VESPER_SRS.dueCount) ? VESPER_SRS.dueCount() : 0;
+    var srsIcon = (window.VESPER_ICN ? VESPER_ICN.repaso : "&#128260;");
     var srsBanner = srsDue > 0
       ? '<button class="hub-card srs-banner" id="srsGo" type="button">'
-        + '<span class="hc-ic" aria-hidden="true">&#128260;</span>'
+        + '<span class="hc-ic" aria-hidden="true">' + srsIcon + '</span>'
         + '<span class="hc-tx"><b>Repaso de errores</b><span>Tienes ' + srsDue + ' ejercicio' + (srsDue === 1 ? "" : "s") + ' por repasar</span></span>'
         + '<span class="hc-cta">Repasar &rarr;</span></button>'
       : "";
     show('<div class="wrap">'
       + hudHtml(st, dg, hello, heroInfo)
       + worldsSection(built, selLevel)
-      + leagueWidget
       + srsBanner
       + searchUI
       + '<div id="searchResults" class="search-results" aria-live="polite" hidden></div>'
@@ -3247,7 +3249,6 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       + trophyHtml
       + '<div class="hub-toast" id="toast"></div>');
 
-    var lgGo = byId("leagueGo"); if (lgGo) lgGo.onclick = function () { location.href = "liga.html"; };
     var srsGo = byId("srsGo"); if (srsGo) srsGo.onclick = function () { location.search = "?id=review:srs"; };
     each(".world[data-lvl]", function (b) { b.onclick = function () { renderIndex(b.getAttribute("data-lvl")); }; });
     each(".world[data-locked-world]", function (b) { b.onclick = function () { toast("Vence al guardián del mundo anterior para desbloquearlo 🔒"); }; });
@@ -3559,10 +3560,12 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
   }
   function econStrip() {
     var E = window.VESPER_ECONOMY; if (!E) return "";
-    var html = '<span class="econ-gems">&#128142; ' + E.gems() + '</span>';
+    var ICN = window.VESPER_ICN;
+    var gemIc = ICN ? ICN.gem : "&#128142;";
+    var html = '<span class="econ-gems"><span class="ei">' + gemIc + '</span>' + E.gems() + '</span>';
     if (E.livesActive && E.livesActive()) {
       var h = E.hearts(), mx = E.maxHearts(), hh = "", i;
-      for (i = 0; i < mx; i++) hh += (i < h ? "❤️" : "🤍");
+      for (i = 0; i < mx; i++) hh += '<span class="ei">' + (ICN ? (i < h ? ICN.heart : ICN.heartEmpty) : (i < h ? "❤️" : "🤍")) + '</span>';
       html += '<span class="econ-hearts" aria-label="' + h + ' de ' + mx + ' vidas">' + hh + '</span>';
     }
     return '<div class="econ-strip">' + html + '</div>';
