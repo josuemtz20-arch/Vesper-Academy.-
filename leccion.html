@@ -103,6 +103,13 @@
   .econ-strip{display:flex;justify-content:flex-end;gap:12px;align-items:center;margin:2px 0 8px;font-weight:700}
   .econ-gems{color:#0a8f9c}
   .econ-hearts{letter-spacing:1px}
+  /* widget de liga en el hub */
+  .league-widget{display:flex;align-items:center;gap:12px;width:100%;text-align:left;cursor:pointer;
+    border:1px solid #d9c6f0;background:linear-gradient(180deg,#fbf7ff,#f1e7fb)}
+  .league-widget .lw-ic{font-size:1.7rem}
+  .league-widget .lw-tx{flex:1;display:flex;flex-direction:column}
+  .league-widget .lw-tx b{font-size:1rem}
+  .league-widget .lw-cta{font-weight:700;color:#7a3fb0}
   .opts{display:grid;gap:10px;margin:6px 0}
   .opt{text-align:left;background:var(--paper);border:1.5px solid var(--line);border-radius:13px;padding:13px 15px;font-family:inherit;
     font-size:1rem;color:var(--ink);cursor:pointer;min-height:50px}
@@ -1637,6 +1644,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
 <script src="vesper_path.js"></script>
 <script src="vesper_srs.js"></script>
 <script src="vesper_economy.js"></script>
+<script src="vesper_league.js"></script>
 <script src="vesper_vocab_dens.js"></script>
 <script src="vesper_auth.js"></script>
 <script src="vesper_sync.js"></script>
@@ -3189,6 +3197,17 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
 
     var heroBand = (A && profile && A.profileLevel) ? A.levelToBand(A.profileLevel()) : null;
     var heroInfo = { band: heroBand, bandTag: heroBand ? (WORLD_TAG[heroBand] || "") : "" };
+    var leagueWidget = "";
+    try {
+      if (window.VESPER_LEAGUE && VESPER_LEAGUE.tier) {
+        var lt = VESPER_LEAGUE.tier(), lr = VESPER_LEAGUE.myRank(), lz = VESPER_LEAGUE.promotionZone();
+        var zoneTxt = lr <= lz ? "¡En zona de ascenso!" : ("Puesto " + lr + " de " + VESPER_LEAGUE.size());
+        leagueWidget = '<button class="card league-widget" id="leagueGo" type="button">'
+          + '<span class="lw-ic" aria-hidden="true">' + lt.icon + '</span>'
+          + '<span class="lw-tx"><b>' + esc(lt.name) + '</b><span class="muted">' + zoneTxt + '</span></span>'
+          + '<span class="lw-cta">Ver liga &rarr;</span></button>';
+      }
+    } catch (e) {}
     var srsDue = (window.VESPER_SRS && VESPER_SRS.dueCount) ? VESPER_SRS.dueCount() : 0;
     var srsBanner = srsDue > 0
       ? '<button class="card srs-banner" id="srsGo" type="button">'
@@ -3199,6 +3218,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     show('<div class="wrap">'
       + hudHtml(st, dg, hello, heroInfo)
       + worldsSection(built, selLevel)
+      + leagueWidget
       + srsBanner
       + searchUI
       + '<div id="searchResults" class="search-results" aria-live="polite" hidden></div>'
@@ -3206,6 +3226,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       + trophyHtml
       + '<div class="hub-toast" id="toast"></div>');
 
+    var lgGo = byId("leagueGo"); if (lgGo) lgGo.onclick = function () { location.href = "liga.html"; };
     var srsGo = byId("srsGo"); if (srsGo) srsGo.onclick = function () { location.search = "?id=review:srs"; };
     each(".world[data-lvl]", function (b) { b.onclick = function () { renderIndex(b.getAttribute("data-lvl")); }; });
     each(".world[data-locked-world]", function (b) { b.onclick = function () { toast("Vence al guardián del mundo anterior para desbloquearlo 🔒"); }; });
@@ -4210,6 +4231,8 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
         VESPER_ECONOMY.award(gemReward);
       }
     } catch (e) {}
+    /* liga semanal: tu XP real cuenta para el ranking */
+    try { if (window.VESPER_LEAGUE && VESPER_LEAGUE.addXp) VESPER_LEAGUE.addXp(earnedXp || 0); } catch (e) {}
     var grid = P ? P.weekGrid() : [];
     var cells = grid.map(function (d) {
       return '<div class="day' + (d.active ? " on" : "") + (d.isToday ? " today" : "") + '"><span>' + d.label + '</span><i>' + (d.active ? "🔥" : "&middot;") + '</i></div>';

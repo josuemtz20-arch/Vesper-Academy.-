@@ -102,6 +102,9 @@
 !/vesper_srs.js
 !/vesper_economy.js
 !/tienda.html
+# Liga semanal competitiva (rivales simulados, lado cliente). Sin claves.
+!/vesper_league.js
+!/liga.html
 # recintos tematicos de vocabulario (ramas) — datos publicos, sin claves
 !/vesper_vocab_dens.js
 !/apariencia.html

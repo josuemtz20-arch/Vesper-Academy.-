@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Liga semanal · Vesper Academy</title>
+<meta name="description" content="Compite cada semana sumando XP. Los primeros ascienden de liga; practica para mantenerte arriba.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="assets/images/favicon_32.png" sizes="32x32">
+<meta name="theme-color" content="#1B1B2F">
+<link rel="manifest" href="manifest_lecciones.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inria+Serif:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1B1B2F; --gold:#c5a059; --success:#2D9E75; --error:#C0392B;
+    --cream:#f5f2eb; --paper:#ffffff; --muted:#6b6b76; --line:#ece7da;
+    --promote:#2D9E75; --relegate:#C0392B; --radius:16px; --shadow:0 6px 22px rgba(27,27,47,.08);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{background:var(--cream);color:var(--ink);font-family:Inter,system-ui,sans-serif;line-height:1.5;-webkit-text-size-adjust:100%}
+  .wrap{max-width:620px;margin:0 auto;padding:14px 16px 80px}
+  a{color:inherit}
+  h1{font-family:"Inria Serif",Georgia,serif;font-size:1.5rem;margin:.2em 0}
+  .muted{color:var(--muted);font-size:.92rem}
+  .topbar{display:flex;align-items:center;gap:12px;margin:4px 0 14px}
+  .back{width:42px;height:42px;flex:none;display:flex;align-items:center;justify-content:center;border-radius:50%;
+    text-decoration:none;color:var(--ink);background:var(--paper);border:1px solid var(--line);font-size:1.25rem}
+  .back:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+  .card{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px;margin-bottom:14px}
+  .league-head{text-align:center}
+  .league-head .icon{font-size:3rem;line-height:1}
+  .league-head .name{font-family:"Inria Serif",Georgia,serif;font-size:1.5rem;margin:.1em 0}
+  .timer{font-size:.9rem;color:var(--muted)}
+  .legend{display:flex;gap:14px;justify-content:center;font-size:.82rem;color:var(--muted);margin-top:8px}
+  .legend i{font-style:normal}
+  .dot{display:inline-block;width:9px;height:9px;border-radius:50%;vertical-align:middle;margin-right:4px}
+  .dot.up{background:var(--promote)} .dot.down{background:var(--relegate)}
+  .banner{padding:12px 14px;border-radius:12px;font-weight:600;margin-bottom:14px;text-align:center}
+  .banner.up{background:rgba(45,158,117,.14);color:#1c6b4f}
+  .banner.down{background:rgba(192,57,43,.12);color:#8e2c22}
+  table{width:100%;border-collapse:collapse}
+  tr{border-bottom:1px solid var(--line)}
+  tr:last-child{border-bottom:none}
+  td{padding:11px 6px;vertical-align:middle}
+  .rk{width:34px;text-align:center;font-weight:700;color:var(--muted)}
+  .nm{font-weight:600}
+  .xp{text-align:right;font-weight:700;white-space:nowrap;color:#0a8f9c}
+  .me{background:rgba(197,160,89,.14)}
+  .me .nm{color:var(--ink)}
+  .row-up .rk{color:var(--promote)}
+  .row-down .rk{color:var(--relegate)}
+  .zoneline{position:relative}
+  .zoneline td{border-top:2px dashed var(--promote)}
+  .zoneline.down td{border-top:2px dashed var(--relegate)}
+  .note{font-size:.84rem;color:var(--muted);text-align:center;margin-top:6px}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <div class="topbar">
+    <a class="back" href="leccion.html" aria-label="Volver a las lecciones">&#8592;</a>
+    <h1>Liga semanal</h1>
+  </div>
+
+  <div id="result"></div>
+
+  <section class="card league-head" id="head"></section>
+
+  <section class="card">
+    <table><tbody id="board"></tbody></table>
+    <div class="legend">
+      <i><span class="dot up"></span>Ascienden los primeros <b id="pz">3</b></i>
+      <i><span class="dot down"></span>Descienden los últimos <b id="rz">3</b></i>
+    </div>
+  </section>
+
+  <p class="note">Tu XP es real: súmalo completando lecciones. Los rivales son simulados (motivación local).</p>
+</main>
+
+<script src="vesper_league.js"></script>
+<script>
+(function () {
+  var LG = window.VESPER_LEAGUE;
+  var $ = function (id) { return document.getElementById(id); };
+  if (!LG) { $("head").innerHTML = '<p class="muted">La liga no está disponible.</p>'; return; }
+
+  function esc(s) { return ("" + (s == null ? "" : s)).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+
+  /* aviso del cierre de la semana anterior (ascenso/descenso) */
+  var last = LG.lastResult();
+  if (last && (last.promoted || last.relegated)) {
+    $("result").innerHTML = last.promoted
+      ? '<div class="banner up">🎉 ¡Ascendiste de liga la semana pasada! Sigue así.</div>'
+      : '<div class="banner down">⬇️ Bajaste de liga la semana pasada. ¡A recuperar el puesto!</div>';
+    if (LG.clearLast) LG.clearLast();
+  }
+
+  var t = LG.tier();
+  function fmtTimer() {
+    var ms = LG.weekEndsInMs(), d = Math.floor(ms / 86400000), h = Math.floor((ms % 86400000) / 3600000);
+    return "Termina en " + (d > 0 ? d + "d " : "") + h + "h";
+  }
+  $("head").innerHTML = '<div class="icon">' + t.icon + '</div><div class="name">' + esc(t.name) + '</div>'
+    + '<div class="timer">' + fmtTimer() + '</div>';
+  $("pz").textContent = LG.promotionZone();
+  $("rz").textContent = LG.relegationZone();
+
+  var rows = LG.standings(), n = rows.length, pz = LG.promotionZone(), rz = LG.relegationZone();
+  var html = rows.map(function (r) {
+    var cls = "";
+    if (r.rank <= pz) cls += " row-up";
+    else if (r.rank > n - rz) cls += " row-down";
+    if (r.isMe) cls += " me";
+    /* línea divisoria de zona de ascenso (después del último que asciende) */
+    var zone = (r.rank === pz) ? ' zoneline' : ((r.rank === n - rz) ? ' zoneline down' : '');
+    return '<tr class="' + cls.trim() + zone + '">'
+      + '<td class="rk">' + r.rank + '</td>'
+      + '<td class="nm">' + (r.isMe ? "Tú" : esc(r.name)) + '</td>'
+      + '<td class="xp">' + r.xp + ' XP</td></tr>';
+  }).join("");
+  $("board").innerHTML = html;
+})();
+</script>
+</body>
+</html>
