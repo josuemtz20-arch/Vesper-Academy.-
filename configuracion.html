@@ -115,6 +115,9 @@
   .sec-tag--ai{background:var(--gold-tint);color:var(--gold-deep,#a8843d);
     border:1px solid color-mix(in srgb,var(--gold) 42%,var(--line))}
   .sec-tag--app{background:#eef0f4;color:var(--muted);border:1px solid var(--line)}
+  .gem-count{display:inline-flex;align-items:center;gap:6px}
+  .gem-count .gi{display:inline-flex}
+  .gem-count .gi svg{width:18px;height:18px;display:block}
 </style>
 <link rel="stylesheet" href="assets/css/vesper_tokens.css">
 <script src="vesper_prefs.js"></script>
@@ -288,7 +291,7 @@
       <div class="row" style="justify-content:space-between;align-items:center">
         <span class="label" style="margin:0">Tus gemas
           <span class="hint">Ganas gemas al completar lecciones. Gástalas en la tienda.</span></span>
-        <span class="label" id="gem-count" style="margin:0;font-weight:800">💎 0</span>
+        <span class="label gem-count" id="gem-count" style="margin:0;font-weight:800">0</span>
       </div>
       <a href="tienda.html" style="margin-top:12px;display:inline-block;text-decoration:none;font-weight:700;
         background:var(--gold);color:var(--ink);padding:11px 18px;border-radius:12px">Abrir la tienda 🛒</a>
@@ -313,6 +316,7 @@
 <script src="vesper_theme.js"></script>
 <script src="vesper_adaptive.js"></script>
 <script src="vesper_persona.js"></script>
+<script src="vesper_icons.js"></script>
 <script src="vesper_economy.js"></script>
 <script>
 (function () {
@@ -531,7 +535,7 @@
         setSwitch(sw, on); E.setChallenge(on); flash();
       });
     }
-    var gc = $("gem-count"); if (gc) gc.textContent = "💎 " + E.gems();
+    var gc = $("gem-count"); if (gc) gc.innerHTML = (window.VESPER_ICN ? '<span class="gi">' + VESPER_ICN.gem + '</span>' : '💎 ') + E.gems();
   })();
 
   /* ---------- alias para la liga (leaderboard real) ---------- */
