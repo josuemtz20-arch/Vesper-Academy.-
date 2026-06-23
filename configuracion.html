@@ -274,6 +274,27 @@
     </div>
   </section>
 
+  <!-- ===== MODO DESAFÍO Y TIENDA ===== -->
+  <section class="card" aria-labelledby="h-challenge">
+    <div class="sec-h"><span class="em">⚔️</span><h2 id="h-challenge">Modo desafío y tienda</h2><span class="sec-tag sec-tag--app">Ajuste de la app</span></div>
+    <div class="field">
+      <div class="row" style="justify-content:space-between">
+        <span class="label" id="lab-challenge" style="margin:0">Modo desafío (vidas)
+          <span class="hint">Cada fallo resta un corazón; al quedarte sin vidas, esperas o las recargas con gemas. Apagado = reintentos infinitos, sin presión.</span></span>
+        <button class="switch" id="sw-challenge" role="switch" aria-checked="false" aria-labelledby="lab-challenge"></button>
+      </div>
+    </div>
+    <div class="field">
+      <div class="row" style="justify-content:space-between;align-items:center">
+        <span class="label" style="margin:0">Tus gemas
+          <span class="hint">Ganas gemas al completar lecciones. Gástalas en la tienda.</span></span>
+        <span class="label" id="gem-count" style="margin:0;font-weight:800">💎 0</span>
+      </div>
+      <a href="tienda.html" style="margin-top:12px;display:inline-block;text-decoration:none;font-weight:700;
+        background:var(--gold);color:var(--ink);padding:11px 18px;border-radius:12px">Abrir la tienda 🛒</a>
+    </div>
+  </section>
+
   <p class="muted" style="text-align:center;margin:6px 0 0">
     Tus ajustes se guardan automáticamente en este dispositivo.</p>
 </main>
@@ -286,6 +307,7 @@
 <script src="vesper_theme.js"></script>
 <script src="vesper_adaptive.js"></script>
 <script src="vesper_persona.js"></script>
+<script src="vesper_economy.js"></script>
 <script>
 (function () {
   var P = window.VESPER_PERSONA;
@@ -491,6 +513,20 @@
 
   /* ---------- congelar racha ---------- */
   wireSwitch("sw-freeze", p.freezeStreak, "freezeStreak");
+
+  /* ---------- modo desafío (vidas) + gemas ---------- */
+  (function () {
+    var E = window.VESPER_ECONOMY; if (!E) return;
+    var sw = $("sw-challenge");
+    if (sw) {
+      setSwitch(sw, E.livesActive());
+      sw.addEventListener("click", function () {
+        var on = sw.getAttribute("aria-checked") !== "true";
+        setSwitch(sw, on); E.setChallenge(on); flash();
+      });
+    }
+    var gc = $("gem-count"); if (gc) gc.textContent = "💎 " + E.gems();
+  })();
 
   /* ---------- vista previa en vivo ---------- */
   /* tono -> expresion del gato (usa las caras IA del set de Vesper) */

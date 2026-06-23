@@ -97,6 +97,11 @@
 # Cosméticos de Vesper (2026-06-22): colores/accesorios que se desbloquean con el
 # progreso. Catálogo de requisitos + evaluación; lee VesperProgress. Sin claves.
 !/vesper_cosmetics.js
+# Engagement 2026-06-23 (comparativa Duolingo): repaso espaciado de errores
+# (Leitner) y economía opcional (vidas + gemas + tienda). Vanilla, sin claves.
+!/vesper_srs.js
+!/vesper_economy.js
+!/tienda.html
 # recintos tematicos de vocabulario (ramas) — datos publicos, sin claves
 !/vesper_vocab_dens.js
 !/apariencia.html

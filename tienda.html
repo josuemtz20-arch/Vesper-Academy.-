@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tienda · Vesper Academy</title>
+<meta name="description" content="Gasta las gemas que ganas practicando: recarga vidas, congela tu racha o activa un boost de XP.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="assets/images/favicon_32.png" sizes="32x32">
+<meta name="theme-color" content="#1B1B2F">
+<link rel="manifest" href="manifest_lecciones.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inria+Serif:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1B1B2F; --gold:#c5a059; --success:#2D9E75; --error:#C0392B;
+    --cream:#f5f2eb; --paper:#ffffff; --muted:#6b6b76; --line:#ece7da;
+    --radius:16px; --shadow:0 6px 22px rgba(27,27,47,.08);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{background:var(--cream);color:var(--ink);font-family:Inter,system-ui,sans-serif;line-height:1.5;-webkit-text-size-adjust:100%}
+  .wrap{max-width:620px;margin:0 auto;padding:14px 16px 80px}
+  a{color:inherit}
+  h1{font-family:"Inria Serif",Georgia,serif;font-size:1.7rem;margin:.2em 0}
+  .muted{color:var(--muted);font-size:.92rem}
+  .topbar{display:flex;align-items:center;gap:12px;margin:4px 0 14px}
+  .back{width:42px;height:42px;flex:none;display:flex;align-items:center;justify-content:center;border-radius:50%;
+    text-decoration:none;color:var(--ink);background:var(--paper);border:1px solid var(--line);font-size:1.25rem}
+  .back:focus-visible,.buy:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+  .gembar{margin-left:auto;font-weight:800;font-size:1.05rem;color:#0a8f9c}
+  .card{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px;margin-bottom:14px}
+  .hearts-row{display:flex;align-items:center;gap:10px;font-size:1.3rem}
+  .hearts-row .meta{font-size:.9rem;color:var(--muted);font-weight:600}
+  .item{display:flex;align-items:center;gap:14px}
+  .item+.item{margin-top:8px;padding-top:16px;border-top:1px solid var(--line)}
+  .item .ic{font-size:1.9rem;flex:none}
+  .item .tx{flex:1;min-width:0}
+  .item .tx b{font-size:1.02rem}
+  .item .tx span{display:block;color:var(--muted);font-size:.86rem}
+  .buy{flex:none;border:none;cursor:pointer;font-weight:700;background:var(--gold);color:var(--ink);
+    padding:10px 14px;border-radius:12px;font-size:.92rem;white-space:nowrap}
+  .buy[disabled]{opacity:.45;cursor:not-allowed}
+  .toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:var(--cream);
+    padding:10px 18px;border-radius:999px;font-weight:600;opacity:0;transition:opacity .25s;pointer-events:none;z-index:20}
+  .toast.show{opacity:1}
+  .note{font-size:.86rem;color:var(--muted);text-align:center;margin-top:6px}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <div class="topbar">
+    <a class="back" href="configuracion.html" aria-label="Volver">&#8592;</a>
+    <h1>Tienda</h1>
+    <span class="gembar" id="gembar">💎 0</span>
+  </div>
+
+  <section class="card">
+    <div class="hearts-row" id="hearts-row"></div>
+  </section>
+
+  <section class="card" id="store"></section>
+
+  <p class="note">Las gemas se ganan practicando. Esta tienda no usa dinero real.</p>
+</main>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="vesper_economy.js"></script>
+<script>
+(function () {
+  var E = window.VESPER_ECONOMY;
+  var $ = function (id) { return document.getElementById(id); };
+  if (!E) { $("store").innerHTML = '<p class="muted">La tienda no está disponible.</p>'; return; }
+
+  var toastT = null;
+  function toast(msg) {
+    var t = $("toast"); t.textContent = msg; t.classList.add("show");
+    clearTimeout(toastT); toastT = setTimeout(function () { t.classList.remove("show"); }, 1800);
+  }
+
+  function paintHearts() {
+    var on = E.livesActive(), h = E.hearts(), mx = E.maxHearts(), row = "";
+    for (var i = 0; i < mx; i++) row += (i < h ? "❤️" : "🤍");
+    var meta;
+    if (!on) meta = "Modo desafío apagado · actívalo en Configuración";
+    else if (h >= mx) meta = "Vidas al máximo";
+    else { var s = E.secsToNextHeart(), m = Math.max(1, Math.ceil(s / 60)); meta = "Próxima vida en ~" + m + " min"; }
+    $("hearts-row").innerHTML = '<span>' + row + '</span><span class="meta">' + meta + '</span>';
+  }
+
+  function paint() {
+    $("gembar").textContent = "💎 " + E.gems();
+    paintHearts();
+    var gems = E.gems();
+    $("store").innerHTML = E.STORE.map(function (it) {
+      var disabled = gems < it.cost || (it.id === "hearts" && E.hearts() >= E.maxHearts());
+      return '<div class="item"><span class="ic">' + it.icon + '</span>'
+        + '<span class="tx"><b>' + it.name + '</b><span>' + it.desc + '</span></span>'
+        + '<button class="buy" data-id="' + it.id + '"' + (disabled ? ' disabled' : '') + '>💎 ' + it.cost + '</button></div>';
+    }).join("");
+    var btns = document.querySelectorAll(".buy");
+    for (var i = 0; i < btns.length; i++) {
+      btns[i].addEventListener("click", function () {
+        var r = E.buy(this.getAttribute("data-id"));
+        toast(r.ok ? ("✓ " + r.msg) : r.msg);
+        paint();
+      });
+    }
+  }
+  paint();
+})();
+</script>
+</body>
+</html>

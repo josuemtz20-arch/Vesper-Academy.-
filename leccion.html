@@ -67,6 +67,42 @@
   .btn:active:not(:disabled){transform:translateY(1px)}
   /* MCQ */
   .exnum{font-size:.82rem;color:var(--muted);font-weight:600;margin:-4px 0 10px}
+  /* combo dentro de la lección */
+  .combo-chip{display:inline-flex;align-items:center;gap:6px;font-size:.82rem;font-weight:700;
+    color:#b8541a;background:linear-gradient(180deg,#fff3e0,#ffe2bf);border:1px solid #f1b878;
+    padding:3px 10px;border-radius:999px;margin:0 0 8px;animation:combo-pop .35s ease}
+  .combo-chip b{font-size:.95rem}
+  @keyframes combo-pop{0%{transform:scale(.6);opacity:0}60%{transform:scale(1.12)}100%{transform:scale(1);opacity:1}}
+  .xp-bonus{font-size:.92rem;font-weight:700;color:#b8541a;margin:6px 0 2px}
+  /* confetti (lección perfecta / combos) */
+  .confetti{position:fixed;inset:0;pointer-events:none;z-index:60;overflow:hidden}
+  .confetti i{position:absolute;top:-12px;width:9px;height:14px;border-radius:2px;opacity:.95;
+    animation:confetti-fall var(--cf-dur,1900ms) cubic-bezier(.2,.7,.3,1) forwards}
+  @keyframes confetti-fall{0%{transform:translateY(-10vh) rotate(0);opacity:1}
+    100%{transform:translateY(110vh) rotate(720deg);opacity:.85}}
+  @media(prefers-reduced-motion:reduce){.combo-chip{animation:none}.confetti{display:none}}
+  /* speaking */
+  .speak-target{text-align:center;margin:6px 0 12px;padding:14px;border-radius:14px;
+    background:var(--card-2,#faf6ec);border:1px solid var(--line,#e7ddc4)}
+  .speak-target .en{display:block;font-size:1.4rem;font-weight:700;color:var(--ink,#2a2a32)}
+  .speak-target .es{display:block;font-size:.92rem;color:var(--muted);margin-top:4px}
+  .speak-row{display:flex;gap:8px;justify-content:center;margin-bottom:10px}
+  .mic-btn{width:100%;background:linear-gradient(180deg,#fff,#f3ead2);border:1px solid #e3d39c}
+  .mic-btn.rec{background:linear-gradient(180deg,#ffe2e2,#ffc9c9);border-color:#f1a0a0;animation:mic-pulse 1s ease infinite}
+  @keyframes mic-pulse{0%,100%{box-shadow:0 0 0 0 rgba(231,76,60,.4)}50%{box-shadow:0 0 0 10px rgba(231,76,60,0)}}
+  .heard{text-align:center;min-height:1.2em;margin:8px 0;font-size:.95rem}
+  @media(prefers-reduced-motion:reduce){.mic-btn.rec{animation:none}}
+  /* banner de repaso espaciado en el hub */
+  .srs-banner{display:flex;align-items:center;gap:12px;width:100%;text-align:left;cursor:pointer;
+    border:1px solid #e3d39c;background:linear-gradient(180deg,#fffdf6,#fbf2d8)}
+  .srs-banner .srs-ic{font-size:1.6rem}
+  .srs-banner .srs-tx{flex:1;display:flex;flex-direction:column}
+  .srs-banner .srs-tx b{font-size:1rem}
+  .srs-banner .srs-cta{font-weight:700;color:#b8541a}
+  /* tira de gemas/vidas durante el ejercicio */
+  .econ-strip{display:flex;justify-content:flex-end;gap:12px;align-items:center;margin:2px 0 8px;font-weight:700}
+  .econ-gems{color:#0a8f9c}
+  .econ-hearts{letter-spacing:1px}
   .opts{display:grid;gap:10px;margin:6px 0}
   .opt{text-align:left;background:var(--paper);border:1.5px solid var(--line);border-radius:13px;padding:13px 15px;font-family:inherit;
     font-size:1rem;color:var(--ink);cursor:pointer;min-height:50px}
@@ -1599,6 +1635,8 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
 <script src="vesper_progress.js"></script>
 <script src="vesper_cosmetics.js"></script>
 <script src="vesper_path.js"></script>
+<script src="vesper_srs.js"></script>
+<script src="vesper_economy.js"></script>
 <script src="vesper_vocab_dens.js"></script>
 <script src="vesper_auth.js"></script>
 <script src="vesper_sync.js"></script>
@@ -1630,6 +1668,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
 
   var lesson = null, baseLesson = null, profile = (A && A.getProfile) ? A.getProfile() : null;
   var exIdx = 0, results = [], earnedXp = 0;
+  var combo = 0, maxCombo = 0;   /* aciertos consecutivos dentro de la lección (Fase A) */
 
   function esc(s) {
     return ("" + (s == null ? "" : s)).replace(/[&<>"]/g, function (c) {
@@ -1676,6 +1715,29 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
         o.connect(g); g.connect(_actx.destination);
         o.start(t0); o.stop(t0 + 0.18);
       });
+    } catch (e) {}
+  }
+
+  /* lluvia de confeti DOM, ligera y autolimpiable. Respeta prefers-reduced-motion
+     (en ese caso el CSS la oculta). n = nº de piezas. */
+  function burstConfetti(n) {
+    try {
+      if (window.matchMedia && matchMedia("(prefers-reduced-motion:reduce)").matches) return;
+      n = n || 24;
+      var cols = ["#C9A84C", "#4aa3df", "#2ecc71", "#e67e22", "#a569bd", "#ff6b6b"];
+      var box = document.createElement("div"); box.className = "confetti";
+      var html = "", i;
+      for (i = 0; i < n; i++) {
+        var left = Math.round(Math.random() * 100);
+        var delay = Math.round(Math.random() * 240);
+        var dur = 1500 + Math.round(Math.random() * 900);
+        var col = cols[i % cols.length];
+        html += '<i style="left:' + left + '%;background:' + col + ';--cf-dur:' + dur
+          + 'ms;animation-delay:' + delay + 'ms"></i>';
+      }
+      box.innerHTML = html;
+      document.body.appendChild(box);
+      setTimeout(function () { if (box.parentNode) box.parentNode.removeChild(box); }, 2900);
     } catch (e) {}
   }
 
@@ -3127,15 +3189,24 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
 
     var heroBand = (A && profile && A.profileLevel) ? A.levelToBand(A.profileLevel()) : null;
     var heroInfo = { band: heroBand, bandTag: heroBand ? (WORLD_TAG[heroBand] || "") : "" };
+    var srsDue = (window.VESPER_SRS && VESPER_SRS.dueCount) ? VESPER_SRS.dueCount() : 0;
+    var srsBanner = srsDue > 0
+      ? '<button class="card srs-banner" id="srsGo" type="button">'
+        + '<span class="srs-ic" aria-hidden="true">&#128260;</span>'
+        + '<span class="srs-tx"><b>Repaso de errores</b><span class="muted">Tienes ' + srsDue + ' ejercicio' + (srsDue === 1 ? "" : "s") + ' por repasar</span></span>'
+        + '<span class="srs-cta">Repasar &rarr;</span></button>'
+      : "";
     show('<div class="wrap">'
       + hudHtml(st, dg, hello, heroInfo)
       + worldsSection(built, selLevel)
+      + srsBanner
       + searchUI
       + '<div id="searchResults" class="search-results" aria-live="polite" hidden></div>'
       + '<div id="levelView">' + worldMap(selLevel, built) + '</div>'
       + trophyHtml
       + '<div class="hub-toast" id="toast"></div>');
 
+    var srsGo = byId("srsGo"); if (srsGo) srsGo.onclick = function () { location.search = "?id=review:srs"; };
     each(".world[data-lvl]", function (b) { b.onclick = function () { renderIndex(b.getAttribute("data-lvl")); }; });
     each(".world[data-locked-world]", function (b) { b.onclick = function () { toast("Vence al guardián del mundo anterior para desbloquearlo 🔒"); }; });
     each(".den-enter[data-den]", function (b) { b.onclick = function () { renderDen(b.getAttribute("data-den")); }; });
@@ -3376,6 +3447,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
 
   /* ---------- EXERCISES ---------- */
   function renderExercise() {
+    if (exIdx === 0) { combo = 0; maxCombo = 0; }   /* arranque/reintento: combo a cero */
     var total = lesson.exercises.length;
     var pct = 22 + Math.round(58 * (exIdx / total));
     var ex = lesson.exercises[exIdx];
@@ -3389,14 +3461,71 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     else if (ex.type === "categorize") renderCategorize(ex, pct, total);
     else if (ex.type === "reading") renderReading(ex, pct, total);
     else if (ex.type === "find_error") renderFindError(ex, pct, total);
+    else if (ex.type === "speak") renderSpeak(ex, pct, total);
     else advance();
   }
   function advance() {
+    /* punto único: results[exIdx] ya está fijado por el renderer. Actualiza combo
+       y dispara un pequeño festejo cada 3 aciertos seguidos. */
+    var wasOk = !!results[exIdx];
+    if (wasOk) { combo++; if (combo > maxCombo) maxCombo = combo; if (combo >= 3 && combo % 3 === 0) burstConfetti(14); }
+    else combo = 0;
+    /* SRS: en repaso, califica el ítem; en lecciones normales, registra el fallo. */
+    try {
+      if (window.VESPER_SRS) {
+        if (lesson.srsReview && lesson.srsIds) VESPER_SRS.grade(lesson.srsIds[exIdx], wasOk);
+        else if (!wasOk && !lesson.isBoss) VESPER_SRS.record(lesson.lessonId, lesson.exercises[exIdx], { level: lesson.level });
+      }
+    } catch (e) {}
+    /* Vidas (modo desafío, opcional): un fallo resta corazón. */
+    var blocked = false;
+    if (!wasOk && window.VESPER_ECONOMY && VESPER_ECONOMY.livesActive && VESPER_ECONOMY.livesActive()) {
+      VESPER_ECONOMY.loseHeart();
+      if (VESPER_ECONOMY.hearts() <= 0) blocked = true;
+    }
     exIdx++;
+    if (blocked) { renderNoHearts(); return; }
     if (exIdx < lesson.exercises.length) renderExercise(); else renderFeedback();
   }
+  function resumeRun() {
+    if (exIdx < lesson.exercises.length) renderExercise(); else renderFeedback();
+  }
+  /* Pantalla "sin vidas" (solo en modo desafío). Recarga con gemas o espera. */
+  function renderNoHearts() {
+    var E = window.VESPER_ECONOMY;
+    var secs = E ? E.secsToNextHeart() : 0;
+    var mins = Math.max(1, Math.ceil(secs / 60));
+    var cost = 50, canBuy = E && E.gems() >= cost;
+    show('<div class="wrap">' + topbar(86) + '<div class="card center">'
+      + mascot("incorrect", "Te quedaste sin vidas. Recupera fuerzas y vuelve.")
+      + '<div class="flame">&#128148;</div>'
+      + '<h1>Sin vidas</h1>'
+      + '<p class="muted">Una vida nueva en ~' + mins + ' min &middot; 💎 ' + (E ? E.gems() : 0) + '</p>'
+      + (canBuy ? '<button class="btn btn-gold" id="buyH">Recargar vidas (50 💎)</button>' : '')
+      + '<button class="btn btn-ghost" id="backHome">Salir al mapa</button>'
+      + '<p class="hint" style="margin-top:10px">Puedes desactivar el modo desafío en Configuración.</p>'
+      + '</div></div>');
+    var bh = byId("buyH");
+    if (bh) bh.onclick = function () { var r = E.buy("hearts"); if (r.ok) resumeRun(); else toast2(r.msg); };
+    byId("backHome").onclick = function () { location.search = ""; };
+  }
+  function toast2(msg) { try { alert(msg); } catch (e) {} }
+  function comboChip() {
+    if (combo < 2) return "";
+    return '<div class="combo-chip" role="status" aria-label="Combo de ' + combo + ' aciertos">&#128293; <b>x' + combo + '</b> combo</div>';
+  }
+  function econStrip() {
+    var E = window.VESPER_ECONOMY; if (!E) return "";
+    var html = '<span class="econ-gems">&#128142; ' + E.gems() + '</span>';
+    if (E.livesActive && E.livesActive()) {
+      var h = E.hearts(), mx = E.maxHearts(), hh = "", i;
+      for (i = 0; i < mx; i++) hh += (i < h ? "❤️" : "🤍");
+      html += '<span class="econ-hearts" aria-label="' + h + ' de ' + mx + ' vidas">' + hh + '</span>';
+    }
+    return '<div class="econ-strip">' + html + '</div>';
+  }
   function exHeader(pct, total) {
-    return topbar(pct) + (lesson.isBoss ? bossMeterHtml(total) : "") + '<div class="exnum">Ejercicio ' + (exIdx + 1) + ' de ' + total + '</div>';
+    return topbar(pct) + econStrip() + (lesson.isBoss ? bossMeterHtml(total) : "") + comboChip() + '<div class="exnum">Ejercicio ' + (exIdx + 1) + ' de ' + total + '</div>';
   }
   /* medidor del Guardián: su escudo se rompe con cada acierto previo */
   function bossMeterHtml(total) {
@@ -3597,6 +3726,94 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
   }
   function setVerifyNext(btn, total) {
     btn.textContent = (exIdx + 1 < total) ? "Siguiente" : "Ver resultados";
+  }
+
+  /* ---------- SPEAKING (reconocimiento de voz) ----------
+     ex: { text: "frase en inglés a decir", es: "traducción/pista", audio?: "ruta.mp3" }
+     Usa Web Speech API (SpeechRecognition). Si no hay soporte, degrada a
+     "escucha y repite" con autoevaluación honesta. */
+  function levDist(a, b) {
+    var m = a.length, n = b.length; if (!m) return n; if (!n) return m;
+    var prev = [], cur = [], i, j;
+    for (j = 0; j <= n; j++) prev[j] = j;
+    for (i = 1; i <= m; i++) {
+      cur[0] = i;
+      for (j = 1; j <= n; j++) {
+        var cost = a.charAt(i - 1) === b.charAt(j - 1) ? 0 : 1;
+        cur[j] = Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + cost);
+      }
+      for (j = 0; j <= n; j++) prev[j] = cur[j];
+    }
+    return prev[n];
+  }
+  function speechSim(said, target) {
+    var a = norm(said), b = norm(target);
+    if (!a || !b) return 0;
+    return 1 - levDist(a, b) / Math.max(a.length, b.length);
+  }
+  function renderSpeak(ex, pct, total) {
+    var target = ex.text || ex.answer || ex.prompt || "";
+    var showEs = (!PERS || PERS.showSpanish()) && ex.es;
+    var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    show('<div class="wrap">' + exHeader(pct, total) + '<div class="card">'
+      + '<h2>Dilo en voz alta</h2>'
+      + '<div class="speak-target"><span class="en">' + esc(target) + '</span>'
+      + (showEs ? '<span class="es">' + esc(ex.es) + '</span>' : '') + '</div>'
+      + '<div class="speak-row">'
+      + '<button class="btn btn-ghost" id="hear">&#128266; Escuchar</button>'
+      + '<button class="btn btn-ghost" id="slow">&#128034; Más lento</button></div>'
+      + (SR
+          ? '<button class="btn mic-btn" id="mic">&#127908; Toca y habla</button><div class="heard" id="heard"></div>'
+          : '<p class="hint">&#128161; Tu navegador no reconoce voz. Escucha y repite en voz alta; luego confírmalo tú.</p>')
+      + '<div id="fb"></div>'
+      + '<button class="btn" id="verify"' + (SR ? ' disabled' : '') + '>' + (SR ? 'Verificar' : 'Lo dije bien') + '</button>'
+      + (SR ? '<button class="btn btn-ghost" id="skip">No puedo hablar ahora</button>' : '')
+      + '</div></div>');
+    byId("hear").onclick = function () { speak(target, ex.audio, 0.92); };
+    byId("slow").onclick = function () { speak(target, ex.audio, 0.62); };
+
+    var done = false, ok = false;
+    function settle(result, heardTxt) {
+      if (done) return; done = true;
+      ok = result;
+      results[exIdx] = ok;
+      var h = byId("heard");
+      if (h && heardTxt != null) h.innerHTML = '<span class="muted">Te escuché:</span> “' + esc(heardTxt) + '”';
+      byId("fb").innerHTML = feedbackBox(ok, ex.explanation || ("Modelo: " + target), "Inténtalo: " + target);
+      var v = byId("verify"); v.disabled = false;
+      v.textContent = (exIdx + 1 < total) ? "Siguiente" : "Ver resultados";
+      v.onclick = function () { advance(); };
+      var mic = byId("mic"); if (mic) { mic.disabled = true; mic.classList.remove("rec"); }
+      var sk = byId("skip"); if (sk) sk.style.display = "none";
+    }
+
+    if (SR) {
+      var rec = null, listening = false;
+      byId("mic").onclick = function () {
+        if (done || listening) return;
+        try {
+          rec = new SR(); rec.lang = "en-US"; rec.interimResults = false; rec.maxAlternatives = 3;
+        } catch (e) { settle(false, null); return; }
+        listening = true; this.classList.add("rec"); this.textContent = "Escuchando…";
+        var self = this;
+        rec.onresult = function (e2) {
+          var best = "", bestSim = 0, r = e2.results[0], k;
+          for (k = 0; k < r.length; k++) {
+            var s = speechSim(r[k].transcript, target);
+            if (s > bestSim) { bestSim = s; best = r[k].transcript; }
+          }
+          settle(bestSim >= 0.7, best);
+        };
+        rec.onerror = function () { listening = false; self.classList.remove("rec"); self.textContent = "🎤 Reintentar"; };
+        rec.onend = function () { listening = false; if (!done) { self.classList.remove("rec"); self.textContent = "🎤 Reintentar"; } };
+        try { rec.start(); } catch (e) { settle(false, null); }
+      };
+      byId("skip").onclick = function () { settle(true, null); };   /* sin penalizar: autoevaluación honesta */
+      byId("verify").onclick = function () { if (done) advance(); };
+    } else {
+      /* sin reconocimiento: autoevaluación */
+      byId("verify").onclick = function () { settle(true, null); byId("verify").onclick = function () { advance(); }; };
+    }
   }
 
   /* ---------- TRUE / FALSE ---------- */
@@ -3901,20 +4118,30 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     /* Lecciones normales: hay que acertar >=70% para superarlas, ganar XP y
        desbloquear la siguiente. Por debajo se ofrece reintentar (no completa).
        Los repasos ("boss") conservan su lógica propia (>=80% = maestría). */
-    if (!lesson.isReview && pct < PASS_PCT) { renderRetry(correct, total, pct); return; }
-    earnedXp = Math.max(5, Math.round((lesson.xpReward || 0) * correct / Math.max(1, total)));
+    if (!lesson.isReview && !lesson.srsReview && pct < PASS_PCT) { renderRetry(correct, total, pct); return; }
+    var baseXp = Math.max(5, Math.round((lesson.xpReward || 0) * correct / Math.max(1, total)));
+    /* bonus por mejor combo de la sesión: +5% por cada acierto seguido sobre 2, tope +50% */
+    var comboBonus = maxCombo >= 3 ? Math.round(baseXp * Math.min(0.5, (maxCombo - 2) * 0.05)) : 0;
+    earnedXp = baseXp + comboBonus;
+    /* boost de XP comprado en la tienda (un solo uso) */
+    var boost = (window.VESPER_ECONOMY && VESPER_ECONOMY.consumeXpBoost) ? VESPER_ECONOMY.consumeXpBoost() : 0;
+    if (boost > 1) earnedXp = Math.round(earnedXp * boost);
+    if (perfect) burstConfetti(40);
     if (PATH && PATH.setScore && lesson.lessonId) PATH.setScore(lesson.lessonId, pct);
     /* repaso aprobado (>=80%) -> desbloquea maestría de la destreza */
     masteryUnlocked = false;
     if (lesson.isReview && pct >= 80 && P && P.unlock) {
       masteryUnlocked = P.unlock("master:" + lesson.reviewLevel + ":" + lesson.reviewSkill);
     }
-    var head = lesson.isReview
-      ? (pct >= 80 ? "Repaso superado!" : "Sigue practicando")
-      : (perfect ? "Leccion perfecta!" : "Buen trabajo!");
+    var head = lesson.srsReview
+      ? "Repaso completado"
+      : (lesson.isReview
+          ? (pct >= 80 ? "Repaso superado!" : "Sigue practicando")
+          : (perfect ? "Leccion perfecta!" : "Buen trabajo!"));
     show('<div class="wrap">' + topbar(86) + '<div class="card center">'
       + mascot((perfect || (lesson.isReview && pct >= 80)) ? "milestone" : "correct", head)
       + '<h1>+' + earnedXp + ' XP</h1>'
+      + (comboBonus > 0 ? '<div class="xp-bonus">&#128293; +' + comboBonus + ' XP por combo de x' + maxCombo + '</div>' : '')
       + '<p class="muted">' + correct + ' de ' + total + ' correctos &middot; ' + pct + '%</p>'
       + '<div class="xpbar"><div class="xpfill" style="width:' + pct + '%"></div></div>'
       + '<button class="btn btn-gold" id="cont">Continuar</button></div></div>');
@@ -3975,6 +4202,14 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
   function renderStreak() {
     var info = P ? P.completeLesson(lesson.lessonId, earnedXp, { perfect: lastPerfect })
                  : { streak: 1, xp: earnedXp, milestone: false, shields: 0, newAchievements: [], dailyGoal: null };
+    /* premio de gemas por avanzar (economía): proporcional al XP + extra por lección perfecta */
+    var gemReward = 0;
+    try {
+      if (window.VESPER_ECONOMY && VESPER_ECONOMY.award) {
+        gemReward = Math.max(1, Math.round((earnedXp || 0) / 10)) + (lastPerfect ? 5 : 0) + (info.milestone ? 10 : 0);
+        VESPER_ECONOMY.award(gemReward);
+      }
+    } catch (e) {}
     var grid = P ? P.weekGrid() : [];
     var cells = grid.map(function (d) {
       return '<div class="day' + (d.active ? " on" : "") + (d.isToday ? " today" : "") + '"><span>' + d.label + '</span><i>' + (d.active ? "🔥" : "&middot;") + '</i></div>';
@@ -4031,7 +4266,9 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       + goalHtml
       + achHtml
       + cosHtml
-      + '<div class="stat-row"><div class="stat">&#11088; <b>' + info.xp + '</b> XP total</div></div>'
+      + '<div class="stat-row"><div class="stat">&#11088; <b>' + info.xp + '</b> XP total</div>'
+      + (gemReward > 0 ? '<div class="stat">&#128142; <b>+' + gemReward + '</b> gemas</div>' : '')
+      + '</div>'
       + (info.milestone ? '<div class="milestone">&#127881; Nuevo escudo de racha!</div>' : '')
       + '<div class="nudge" id="nudge">Guarda tu progreso en todos tus dispositivos: <a href="#" id="nudge-account">crea una cuenta</a> (opcional).'
       + '<button class="x" id="xn" aria-label="Cerrar">&times;</button></div>'
@@ -4053,6 +4290,29 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     } else {
       lesson = baseLesson;
     }
+    injectSpeaking(lesson);
+  }
+
+  /* Inserta UN ejercicio de speaking al final de las lecciones normales,
+     derivado de los ejemplos de la explicación (frase en inglés + traducción).
+     Siempre se puede saltar sin penalizar, así que es seguro inyectarlo.
+     Se omite en jefes, repasos y si la lección ya trae speaking. */
+  function injectSpeaking(ls) {
+    try {
+      if (!ls || ls.isBoss || ls.isReview || ls.srsReview) return;
+      var exs = ls.exercises || [];
+      if (!exs.length) return;
+      for (var i = 0; i < exs.length; i++) if (exs[i].type === "speak") return;
+      var ex = (ls.explanation && ls.explanation.examples) || [];
+      var cand = null;
+      for (var j = 0; j < ex.length; j++) {
+        var en = ex[j] && ex[j].en;
+        if (en && en.split(/\s+/).length >= 2 && en.length <= 60) { cand = ex[j]; break; }
+      }
+      if (!cand) return;
+      ls.exercises = exs.concat([{ type: "speak", text: cand.en, es: cand.es || "",
+        explanation: "Practica la pronunciación repitiendo el modelo. Lo importante es soltarte." }]);
+    } catch (e) {}
   }
 
   function startLesson() {
@@ -4224,6 +4484,18 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
   if (!L || !Object.keys(L).length) { show('<div class="wrap"><div class="card center"><h1>Sin lecciones</h1><p class="muted">No se cargaron los datos.</p></div></div>'); return; }
   if (window.VESPER_THEME && VESPER_THEME.mountFloat) VESPER_THEME.mountFloat();
   if (!id) { renderIndex(); return; }
+  if (id === "review:srs") {
+    baseLesson = (window.VESPER_SRS && VESPER_SRS.buildReviewLesson) ? VESPER_SRS.buildReviewLesson() : null;
+    if (!baseLesson || !baseLesson.exercises.length) {
+      show('<div class="wrap"><div class="card center">' + mascot("correct", "¡Sin errores pendientes!")
+        + '<h1>Nada que repasar</h1><p class="muted">Cuando falles ejercicios aparecerán aquí para repasarlos.</p>'
+        + '<a class="btn btn-gold" href="leccion.html">Ver lecciones</a></div></div>');
+      return;
+    }
+    lesson = baseLesson;
+    renderCover();
+    return;
+  }
   if (id.indexOf("review:") === 0) {
     baseLesson = buildReviewLesson(id);
     if (!baseLesson || !baseLesson.exercises.length) {
