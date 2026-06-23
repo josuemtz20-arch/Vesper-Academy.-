@@ -69,12 +69,14 @@
   /* MCQ */
   .exnum{font-size:.82rem;color:var(--muted);font-weight:600;margin:-4px 0 10px}
   /* combo dentro de la lección */
-  .combo-chip{display:inline-flex;align-items:center;gap:6px;font-size:.82rem;font-weight:700;
-    color:#b8541a;background:linear-gradient(180deg,#fff3e0,#ffe2bf);border:1px solid #f1b878;
-    padding:3px 10px;border-radius:999px;margin:0 0 8px;animation:combo-pop .35s ease}
-  .combo-chip b{font-size:.95rem}
-  @keyframes combo-pop{0%{transform:scale(.6);opacity:0}60%{transform:scale(1.12)}100%{transform:scale(1);opacity:1}}
-  .xp-bonus{font-size:.92rem;font-weight:700;color:#b8541a;margin:6px 0 2px}
+  .combo-chip{display:inline-flex;align-items:center;gap:7px;font-size:.8rem;font-weight:700;letter-spacing:.01em;
+    color:var(--ink);background:linear-gradient(180deg,#fbe7b6,#f4d488);border:1px solid var(--gold2);
+    padding:5px 13px;border-radius:999px;margin:0 0 10px;box-shadow:0 4px 14px rgba(168,132,61,.28);
+    animation:combo-pop .35s cubic-bezier(.2,.8,.3,1.2)}
+  .combo-chip b{font-size:1rem;font-variant-numeric:tabular-nums}
+  @keyframes combo-pop{0%{transform:scale(.6) translateY(4px);opacity:0}60%{transform:scale(1.12)}100%{transform:scale(1);opacity:1}}
+  .xp-bonus{display:inline-block;font-size:.9rem;font-weight:700;color:var(--gold2);margin:8px 0 2px;
+    background:var(--gold-tint);padding:5px 12px;border-radius:999px}
   /* confetti (lección perfecta / combos) */
   .confetti{position:fixed;inset:0;pointer-events:none;z-index:60;overflow:hidden}
   .confetti i{position:absolute;top:-12px;width:9px;height:14px;border-radius:2px;opacity:.95;
@@ -83,34 +85,46 @@
     100%{transform:translateY(110vh) rotate(720deg);opacity:.85}}
   @media(prefers-reduced-motion:reduce){.combo-chip{animation:none}.confetti{display:none}}
   /* speaking */
-  .speak-target{text-align:center;margin:6px 0 12px;padding:14px;border-radius:14px;
-    background:var(--card-2,#faf6ec);border:1px solid var(--line,#e7ddc4)}
-  .speak-target .en{display:block;font-size:1.4rem;font-weight:700;color:var(--ink,#2a2a32)}
-  .speak-target .es{display:block;font-size:.92rem;color:var(--muted);margin-top:4px}
-  .speak-row{display:flex;gap:8px;justify-content:center;margin-bottom:10px}
-  .mic-btn{width:100%;background:linear-gradient(180deg,#fff,#f3ead2);border:1px solid #e3d39c}
-  .mic-btn.rec{background:linear-gradient(180deg,#ffe2e2,#ffc9c9);border-color:#f1a0a0;animation:mic-pulse 1s ease infinite}
-  @keyframes mic-pulse{0%,100%{box-shadow:0 0 0 0 rgba(231,76,60,.4)}50%{box-shadow:0 0 0 10px rgba(231,76,60,0)}}
-  .heard{text-align:center;min-height:1.2em;margin:8px 0;font-size:.95rem}
+  .speak-target{text-align:center;margin:8px 0 14px;padding:20px 16px;border-radius:16px;
+    background:linear-gradient(165deg,var(--gold-tint),rgba(197,160,89,.04));border:1px solid var(--gold2)}
+  .speak-target .en{display:block;font-family:"Inria Serif",Georgia,serif;font-size:1.5rem;line-height:1.25;color:var(--ink)}
+  .speak-target .es{display:block;font-size:.92rem;color:var(--muted);margin-top:6px}
+  .speak-row{display:flex;gap:10px;justify-content:center;margin-bottom:12px}
+  .speak-row .btn{margin-top:0;width:auto;min-height:44px;padding:10px 16px;font-size:.92rem;border-radius:999px}
+  .mic-btn{width:100%;background:linear-gradient(180deg,#fff,#f5ead0);border:1.5px solid var(--gold);color:var(--ink)}
+  .mic-btn.rec{background:linear-gradient(180deg,#ffe6e6,#ffcccc);border-color:#e88;animation:mic-pulse 1.1s ease infinite}
+  @keyframes mic-pulse{0%,100%{box-shadow:0 0 0 0 rgba(192,57,43,.38)}50%{box-shadow:0 0 0 12px rgba(192,57,43,0)}}
+  .heard{text-align:center;min-height:1.2em;margin:10px 0 2px;font-size:.95rem;color:var(--muted)}
   @media(prefers-reduced-motion:reduce){.mic-btn.rec{animation:none}}
-  /* banner de repaso espaciado en el hub */
-  .srs-banner{display:flex;align-items:center;gap:12px;width:100%;text-align:left;cursor:pointer;
-    border:1px solid #e3d39c;background:linear-gradient(180deg,#fffdf6,#fbf2d8)}
-  .srs-banner .srs-ic{font-size:1.6rem}
-  .srs-banner .srs-tx{flex:1;display:flex;flex-direction:column}
-  .srs-banner .srs-tx b{font-size:1rem}
-  .srs-banner .srs-cta{font-weight:700;color:#b8541a}
+  /* tarjetas de acción del hub (repaso espaciado y liga) */
+  .hub-card{display:flex;align-items:center;gap:14px;width:100%;text-align:left;cursor:pointer;
+    padding:15px 16px;border-radius:16px;margin-bottom:14px;transition:transform .15s ease,box-shadow .15s ease}
+  .hub-card:hover{transform:translateY(-2px)}
+  .hub-card .hc-ic{flex:0 0 auto;width:46px;height:46px;border-radius:14px;display:flex;align-items:center;
+    justify-content:center;font-size:1.5rem}
+  .hub-card .hc-tx{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
+  .hub-card .hc-tx b{font-size:1.02rem}
+  .hub-card .hc-tx span{font-size:.86rem}
+  .hub-card .hc-cta{flex:0 0 auto;font-weight:700;font-size:.9rem;opacity:.9}
+  /* repaso espaciado: cálido crema-oro */
+  .srs-banner{border:1px solid var(--gold2);background:linear-gradient(180deg,#fffdf6,#f8edcf);
+    box-shadow:0 6px 20px rgba(168,132,61,.16)}
+  .srs-banner .hc-ic{background:var(--gold-tint);color:var(--gold2)}
+  .srs-banner .hc-tx span{color:var(--muted)}
+  .srs-banner .hc-cta{color:var(--gold2)}
+  /* liga: premium crepúsculo (índigo + oro) */
+  .league-widget{border:1px solid #2c2c4a;color:var(--cream);
+    background:linear-gradient(160deg,#2a2c50,#1B1B2F 65%,#14122a);box-shadow:0 12px 30px rgba(20,18,42,.32)}
+  .league-widget .hc-ic{background:rgba(201,168,76,.18);box-shadow:inset 0 0 0 1px rgba(243,226,171,.35)}
+  .league-widget .hc-tx b{color:#fff}
+  .league-widget .hc-tx span{color:#c8c6e0}
+  .league-widget .hc-cta{color:var(--gold)}
   /* tira de gemas/vidas durante el ejercicio */
-  .econ-strip{display:flex;justify-content:flex-end;gap:12px;align-items:center;margin:2px 0 8px;font-weight:700}
-  .econ-gems{color:#0a8f9c}
+  .econ-strip{display:flex;justify-content:flex-end;gap:8px;align-items:center;margin:2px 0 10px}
+  .econ-gems,.econ-hearts{display:inline-flex;align-items:center;gap:5px;font-weight:700;font-size:.86rem;
+    padding:4px 11px;border-radius:999px;border:1px solid var(--line);background:var(--paper)}
+  .econ-gems{color:#0f7c8a}
   .econ-hearts{letter-spacing:1px}
-  /* widget de liga en el hub */
-  .league-widget{display:flex;align-items:center;gap:12px;width:100%;text-align:left;cursor:pointer;
-    border:1px solid #d9c6f0;background:linear-gradient(180deg,#fbf7ff,#f1e7fb)}
-  .league-widget .lw-ic{font-size:1.7rem}
-  .league-widget .lw-tx{flex:1;display:flex;flex-direction:column}
-  .league-widget .lw-tx b{font-size:1rem}
-  .league-widget .lw-cta{font-weight:700;color:#7a3fb0}
   .opts{display:grid;gap:10px;margin:6px 0}
   .opt{text-align:left;background:var(--paper);border:1.5px solid var(--line);border-radius:13px;padding:13px 15px;font-family:inherit;
     font-size:1rem;color:var(--ink);cursor:pointer;min-height:50px}
@@ -3209,18 +3223,18 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       if (window.VESPER_LEAGUE && VESPER_LEAGUE.tier) {
         var lt = VESPER_LEAGUE.tier(), lr = VESPER_LEAGUE.myRank(), lz = VESPER_LEAGUE.promotionZone();
         var zoneTxt = lr <= lz ? "¡En zona de ascenso!" : ("Puesto " + lr + " de " + VESPER_LEAGUE.size());
-        leagueWidget = '<button class="card league-widget" id="leagueGo" type="button">'
-          + '<span class="lw-ic" aria-hidden="true">' + lt.icon + '</span>'
-          + '<span class="lw-tx"><b>' + esc(lt.name) + '</b><span class="muted">' + zoneTxt + '</span></span>'
-          + '<span class="lw-cta">Ver liga &rarr;</span></button>';
+        leagueWidget = '<button class="hub-card league-widget" id="leagueGo" type="button">'
+          + '<span class="hc-ic" aria-hidden="true">' + lt.icon + '</span>'
+          + '<span class="hc-tx"><b>' + esc(lt.name) + '</b><span>' + zoneTxt + '</span></span>'
+          + '<span class="hc-cta">Ver liga &rarr;</span></button>';
       }
     } catch (e) {}
     var srsDue = (window.VESPER_SRS && VESPER_SRS.dueCount) ? VESPER_SRS.dueCount() : 0;
     var srsBanner = srsDue > 0
-      ? '<button class="card srs-banner" id="srsGo" type="button">'
-        + '<span class="srs-ic" aria-hidden="true">&#128260;</span>'
-        + '<span class="srs-tx"><b>Repaso de errores</b><span class="muted">Tienes ' + srsDue + ' ejercicio' + (srsDue === 1 ? "" : "s") + ' por repasar</span></span>'
-        + '<span class="srs-cta">Repasar &rarr;</span></button>'
+      ? '<button class="hub-card srs-banner" id="srsGo" type="button">'
+        + '<span class="hc-ic" aria-hidden="true">&#128260;</span>'
+        + '<span class="hc-tx"><b>Repaso de errores</b><span>Tienes ' + srsDue + ' ejercicio' + (srsDue === 1 ? "" : "s") + ' por repasar</span></span>'
+        + '<span class="hc-cta">Repasar &rarr;</span></button>'
       : "";
     show('<div class="wrap">'
       + hudHtml(st, dg, hello, heroInfo)
