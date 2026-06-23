@@ -609,6 +609,7 @@
 </div>
 
 <script src="vesper_auth.js"></script>
+<script src="vesper_analytics.js"></script>
 <script>
 // ══════════════════════════════════════════
 //  BANCO DE PREGUNTAS — 30 preguntas, 5 niveles
@@ -736,6 +737,7 @@ function saveResultToFirestore(rec) {
             scores:    { mapValue: { fields: Object.keys(rec.scores).reduce(function (m, k) {
                             m[k] = { integerValue: String(rec.scores[k]) }; return m;
                         }, {}) } },
+            origin:    { stringValue: rec.origin || "" },
             createdAt: { timestampValue: rec.date }
         }
     };
@@ -775,6 +777,7 @@ function fetchFirestoreHistory() {
                 email: s("email"), phone: s("phone"),
                 level: s("level") || "?", levelName: s("levelName"),
                 correct: n("correct"), total: n("total") || 30, skipped: n("skipped"),
+                origin: s("origin"),
                 date: (f.createdAt && f.createdAt.timestampValue) || "",
                 source: "remote"
             };
@@ -807,6 +810,7 @@ function sendResultEmails(rec) {
     fd.append("aciertos", rec.correct + " / " + rec.total);
     fd.append("no_seguras", String(rec.skipped));
     fd.append("desglose", Object.keys(rec.scores).map(function (k) { return k + ": " + rec.scores[k] + "/6"; }).join(", "));
+    fd.append("origen", rec.origin || "(directo / no especificado)");
     fd.append("fecha", rec.date);
     return fetch(NOTIFY_URL, { method: "POST", body: fd, headers: { "Accept": "application/json" } });
 }
@@ -819,6 +823,8 @@ let studentEmail = "";
 let studentPhone = "";
 let answered = false;
 let skipped = 0;
+// Atribución: de qué momento de la app llegó este lead (?src= de leccion.html)
+let leadOrigin = (window.VA ? VA.readSource() : "");
 
 const OPTS = ["A", "B", "C", "D"];
 
@@ -848,6 +854,8 @@ function startTest() {
     studentName = name;
     studentEmail = email;
     studentPhone = phone;
+
+    if (window.VA) VA.track("exam_start", { src: leadOrigin });
 
     currentQ = 0;
     scores = { A0: 0, A1: 0, A2: 0, B1: 0, "B2+": 0 };
@@ -1037,6 +1045,7 @@ function showResults() {
         skipped: skipped,
         scores: Object.assign({}, scores),
         date: new Date().toISOString(),
+        origin: leadOrigin,
         source: "local"
     };
 
@@ -1048,9 +1057,11 @@ function showResults() {
     try {
         localStorage.setItem("vesper_lead", JSON.stringify({
             name: studentName, email: studentEmail,
-            level: placedLevel, levelName: lvlData.name
+            level: placedLevel, levelName: lvlData.name, origin: leadOrigin
         }));
     } catch (e) {}
+
+    if (window.VA) VA.track("lead_submit", { src: leadOrigin, level: placedLevel });
 
     const status = document.getElementById("save-status");
     status.style.display = "inline-flex";
@@ -1177,7 +1188,8 @@ function renderHistory() {
             "<div>" +
                 "<div class='h-name'>" + escapeHtml(r.name) + "</div>" +
                 "<div class='h-meta'><i class='fas fa-calendar'></i>" + escapeHtml(formatDate(r.date)) +
-                (contact ? " &nbsp; " + contact : "") + "</div>" +
+                (contact ? " &nbsp; " + contact : "") +
+                (r.origin ? " &nbsp; <i class='fas fa-tag'></i>" + escapeHtml(r.origin) : "") + "</div>" +
             "</div>" +
             "<div class='h-score'><b style='color:" + lvl.color + ";'>" + r.correct + "<span style='color:rgba(255,255,255,.4);font-size:.8rem;font-weight:600;'>/" + (r.total || 30) + "</span></b>" +
                 "<small>aciertos</small>" +
@@ -1186,6 +1198,9 @@ function renderHistory() {
         list.appendChild(div);
     });
 }
+
+// Medición: llegada al examen (con el origen que trae el ?src=)
+if (window.VA) VA.track("exam_view", { src: leadOrigin });
 
 // Abrir directamente el historial con book_placement.html#historial
 if (location.hash === "#historial" || location.hash === "#history") {
