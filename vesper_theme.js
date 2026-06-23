@@ -72,7 +72,7 @@ window.VESPER_THEME = (function () {
   /* ---- Skins de mascota: recolorean el aro/borde y aplican un filtro
          sutil al PNG para variar el "modelo" sin arte extra. ---- */
   var SKINS = {
-    gold:   { name: "Dorado",  ring: "#C9A84C", glow: "rgba(201,168,76,.45)",  filter: "none" },
+    gold:   { name: "Dorado",  ring: "#C9A84C", glow: "rgba(201,168,76,.45)",  filter: "hue-rotate(0deg)" },
     rose:   { name: "Rosa",    ring: "#dd8aa9", glow: "rgba(221,138,169,.45)", filter: "hue-rotate(-35deg) saturate(1.05)" },
     mint:   { name: "Menta",   ring: "#5cc4a0", glow: "rgba(92,196,160,.45)",  filter: "hue-rotate(70deg) saturate(1.05)" },
     sky:    { name: "Cielo",   ring: "#5aa6e0", glow: "rgba(90,166,224,.45)",  filter: "hue-rotate(140deg) saturate(1.05)" },
@@ -80,6 +80,45 @@ window.VESPER_THEME = (function () {
     ember:  { name: "Brasa",   ring: "#e0834f", glow: "rgba(224,131,79,.45)",  filter: "hue-rotate(-12deg) saturate(1.25)" }
   };
   var SKIN_ORDER = ["gold", "rose", "mint", "sky", "violet", "ember"];
+
+  /* ---- Accesorios: vestimenta SVG superpuesta sobre el gato. Cada SVG usa
+         viewBox "0 0 50 50" alineado a un avatar de 50x50 (la cabeza queda en
+         el tercio superior-centro). Paleta de marca (oro/navy); NO se le aplica
+         el hue-rotate del color para que el accesorio conserve su tono. ---- */
+  var GOLD = "#C9A84C", NAVY = "#1B1B2F";
+  /* Coordenadas calibradas a la silueta de vesper_cat.png (box 50x50):
+     cabeza y~8-22 centro x~26; cara/ojos y~18-26; cuello y~31-33 x~25. */
+  var ACCESSORIES = {
+    none: { name: "Sin accesorio", svg: "" },
+    bowtie: { name: "Moño", svg:
+      '<svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg"><g stroke="' + NAVY + '" stroke-width="1.4" stroke-linejoin="round">'
+      + '<path d="M26 33 L17 29 V37 Z" fill="' + GOLD + '"/><path d="M26 33 L35 29 V37 Z" fill="' + GOLD + '"/>'
+      + '<rect x="23.4" y="30.4" width="5.2" height="5.2" rx="1.3" fill="' + NAVY + '"/></g></svg>' },
+    cap: { name: "Birrete", svg:
+      '<svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg"><g stroke-linejoin="round">'
+      + '<path d="M17 13 V18 Q26 22 35 18 V13" fill="' + NAVY + '"/>'
+      + '<path d="M10 11 L26 5 L42 11 L26 17 Z" fill="' + NAVY + '"/>'
+      + '<path d="M42 11 V19" stroke="' + GOLD + '" stroke-width="1.6"/><circle cx="42" cy="20.4" r="2" fill="' + GOLD + '"/></g></svg>' },
+    glasses: { name: "Gafas", svg:
+      '<svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg"><g fill="none" stroke="' + NAVY + '" stroke-width="2.1">'
+      + '<circle cx="20.5" cy="22" r="5"/><circle cx="33" cy="22" r="5"/><path d="M25.5 22 h2.5"/>'
+      + '<path d="M15.5 21 l-3.2 -1.2"/><path d="M38 21 l3.2 -1.2"/></g></svg>' },
+    wizard: { name: "Sombrero de mago", svg:
+      '<svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg"><g stroke="' + NAVY + '" stroke-width="1.4" stroke-linejoin="round">'
+      + '<path d="M26 -5 L36 15 H16 Z" fill="#3c3a6e"/><path d="M12 15 H40 V18 H12 Z" fill="#2a2850"/>'
+      + '<path d="M26 3 l1.6 3.4 -1.6 3.4 -1.6 -3.4 z" fill="' + GOLD + '" stroke="none"/></g></svg>' },
+    scarf: { name: "Bufanda", svg:
+      '<svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg"><g stroke="' + NAVY + '" stroke-width="1.3" stroke-linejoin="round">'
+      + '<path d="M16 31 Q26 37 36 31 V35 Q26 41 16 35 Z" fill="' + GOLD + '"/>'
+      + '<path d="M30 34 L34 44 L29.5 44.6 L27.5 35 Z" fill="' + GOLD + '"/></g></svg>' },
+    halo: { name: "Aureola", svg:
+      '<svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg"><ellipse cx="26" cy="5.5" rx="11" ry="3.4" fill="none" stroke="' + GOLD + '" stroke-width="2.6"/></svg>' },
+    crown: { name: "Corona", svg:
+      '<svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg"><g stroke="' + NAVY + '" stroke-width="1.5" stroke-linejoin="round">'
+      + '<path d="M14 14 L14 5 L20 9.5 L26 2 L32 9.5 L38 5 L38 14 Z" fill="' + GOLD + '"/>'
+      + '<circle cx="26" cy="2.5" r="1.7" fill="' + NAVY + '"/></g></svg>' }
+  };
+  var ACCESSORY_ORDER = ["none", "bowtie", "cap", "glasses", "wizard", "scarf", "halo", "crown"];
 
   /* ---- helpers de color ---- */
   function clampHex(h) { return /^#([0-9a-f]{6})$/i.test(h) ? h : "#000000"; }
@@ -92,8 +131,12 @@ window.VESPER_THEME = (function () {
   function read() {
     try {
       var s = JSON.parse(localStorage.getItem(STORE) || "{}");
-      return { theme: THEMES[s.theme] ? s.theme : "classic", skin: SKINS[s.skin] ? s.skin : "gold" };
-    } catch (e) { return { theme: "classic", skin: "gold" }; }
+      return {
+        theme: THEMES[s.theme] ? s.theme : "classic",
+        skin: SKINS[s.skin] ? s.skin : "gold",
+        accessory: ACCESSORIES[s.accessory] ? s.accessory : "none"
+      };
+    } catch (e) { return { theme: "classic", skin: "gold", accessory: "none" }; }
   }
   function write(state) { try { localStorage.setItem(STORE, JSON.stringify(state)); } catch (e) {} }
 
@@ -171,6 +214,16 @@ window.VESPER_THEME = (function () {
       ".vt-dot{width:40px;height:40px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 2px var(--line,#ece7da);transition:box-shadow .15s ease}",
       ".vt-skin.on .vt-dot{box-shadow:0 0 0 3px var(--gold,#C9A84C)}",
       ".vt-skin.on{color:var(--ink,#1B1B2F)}",
+      /* accesorios (cards con SVG) */
+      ".vt-accsw{height:42px;display:flex;align-items:center;justify-content:center;margin-bottom:6px;border-radius:9px;background:var(--cream,#FBF8F1)}",
+      ".vt-accsw svg{width:38px;height:38px}",
+      ".vt-accsw .vt-none{color:var(--muted,#6b6b76);font-size:1.2rem}",
+      /* estado bloqueado (skins y accesorios) */
+      ".vt-card.locked,.vt-skin.locked{opacity:.5;cursor:not-allowed}",
+      ".vt-card{position:relative}.vt-skin{position:relative}",
+      ".vt-lock{position:absolute;top:3px;right:5px;font-size:.82rem;line-height:1;filter:grayscale(.2)}",
+      ".vt-skin .vt-lock{top:-2px;right:-2px}",
+      ".vt-note{font-size:.8rem;color:var(--muted,#6b6b76);margin:10px 0 0;min-height:1.1em}",
       /* boton flotante + modal */
       ".vt-fab{position:fixed;right:16px;bottom:16px;z-index:9998;width:52px;height:52px;border-radius:50%;border:none;cursor:pointer;background:var(--gold,#C9A84C);color:var(--ink,#1B1B2F);font-size:1.3rem;box-shadow:0 6px 18px rgba(0,0,0,.22);display:flex;align-items:center;justify-content:center}",
       ".vt-fab:active{transform:scale(.94)}",
@@ -187,6 +240,16 @@ window.VESPER_THEME = (function () {
     (document.head || document.documentElement).appendChild(el);
   }
 
+  /* ¿está desbloqueado este cosmético? (consulta VESPER_COSMETICS; fail-open) */
+  function unlockedFor(kind, id) {
+    try { if (window.VESPER_COSMETICS && VESPER_COSMETICS.isUnlocked) return !!VESPER_COSMETICS.isUnlocked(kind, id); } catch (e) {}
+    return true;
+  }
+  function reqLabelFor(kind, id) {
+    try { if (window.VESPER_COSMETICS && VESPER_COSMETICS.reqLabel) return VESPER_COSMETICS.reqLabel(kind, id); } catch (e) {}
+    return "Bloqueado";
+  }
+
   function renderPicker() {
     injectPickerCSS();
     var cur = read();
@@ -200,12 +263,26 @@ window.VESPER_THEME = (function () {
     }).join("");
     var skinDots = SKIN_ORDER.map(function (id) {
       var s = SKINS[id];
-      return '<div class="vt-skin' + (cur.skin === id ? " on" : "") + '" data-skin="' + id + '">'
-        + '<div class="vt-dot" style="background:' + s.ring + '"></div>' + s.name + '</div>';
+      var locked = !unlockedFor("skin", id);
+      return '<div class="vt-skin' + (cur.skin === id ? " on" : "") + (locked ? " locked" : "")
+        + '" data-skin="' + id + '"' + (locked ? ' title="' + reqLabelFor("skin", id) + '" aria-disabled="true"' : "") + '>'
+        + '<div class="vt-dot" style="background:' + s.ring + '"></div>' + s.name
+        + (locked ? '<span class="vt-lock" aria-hidden="true">&#128274;</span>' : "") + '</div>';
+    }).join("");
+    var accCards = ACCESSORY_ORDER.map(function (id) {
+      var a = ACCESSORIES[id];
+      var locked = !unlockedFor("acc", id);
+      var sw = a.svg || '<span class="vt-none">&#8212;</span>';
+      return '<div class="vt-card' + (cur.accessory === id ? " on" : "") + (locked ? " locked" : "")
+        + '" data-acc="' + id + '"' + (locked ? ' title="' + reqLabelFor("acc", id) + '" aria-disabled="true"' : "") + '>'
+        + '<div class="vt-accsw">' + sw + '</div><div class="vt-nm">' + a.name + '</div>'
+        + (locked ? '<span class="vt-lock" aria-hidden="true">&#128274;</span>' : "") + '</div>';
     }).join("");
     return '<div class="vt-panel">'
       + '<div class="vt-h">Tema de la app</div><div class="vt-grid" data-vt-themes>' + themeCards + '</div>'
-      + '<div class="vt-h">Skin de Vesper</div><div class="vt-skins" data-vt-skins>' + skinDots + '</div>'
+      + '<div class="vt-h">Color de Vesper</div><div class="vt-skins" data-vt-skins>' + skinDots + '</div>'
+      + '<div class="vt-h">Accesorios de Vesper</div><div class="vt-grid" data-vt-accs>' + accCards + '</div>'
+      + '<p class="vt-note" data-vt-note aria-live="polite"></p>'
       + '</div>';
   }
 
@@ -213,17 +290,30 @@ window.VESPER_THEME = (function () {
     scope = scope || document;
     var themeBox = scope.querySelector("[data-vt-themes]");
     var skinBox = scope.querySelector("[data-vt-skins]");
+    var accBox = scope.querySelector("[data-vt-accs]");
+    var note = scope.querySelector("[data-vt-note]");
+    function say(msg) { if (note) note.textContent = msg || ""; }
     if (themeBox) themeBox.addEventListener("click", function (e) {
       var c = e.target.closest("[data-theme]"); if (!c) return;
       api.setTheme(c.getAttribute("data-theme"));
       var on = themeBox.querySelector(".vt-card.on"); if (on) on.classList.remove("on");
-      c.classList.add("on");
+      c.classList.add("on"); say("");
     });
     if (skinBox) skinBox.addEventListener("click", function (e) {
       var c = e.target.closest("[data-skin]"); if (!c) return;
-      api.setSkin(c.getAttribute("data-skin"));
+      var id = c.getAttribute("data-skin");
+      if (c.classList.contains("locked")) { say("Color bloqueado — " + reqLabelFor("skin", id)); return; }
+      api.setSkin(id);
       var on = skinBox.querySelector(".vt-skin.on"); if (on) on.classList.remove("on");
-      c.classList.add("on");
+      c.classList.add("on"); say("");
+    });
+    if (accBox) accBox.addEventListener("click", function (e) {
+      var c = e.target.closest("[data-acc]"); if (!c) return;
+      var id = c.getAttribute("data-acc");
+      if (c.classList.contains("locked")) { say("Accesorio bloqueado — " + reqLabelFor("acc", id)); return; }
+      api.setAccessory(id);
+      var on = accBox.querySelector(".vt-card.on"); if (on) on.classList.remove("on");
+      c.classList.add("on"); say("");
     });
   }
 
@@ -253,12 +343,14 @@ window.VESPER_THEME = (function () {
 
   var api = {
     themes: THEMES, themeOrder: THEME_ORDER, skins: SKINS, skinOrder: SKIN_ORDER,
+    accessories: ACCESSORIES, accessoryOrder: ACCESSORY_ORDER,
     current: null,
     get: read,
     apply: apply,
     setTheme: function (id) { if (!THEMES[id]) return; var s = read(); s.theme = id; write(s); apply(s); },
     setSkin: function (id) { if (!SKINS[id]) return; var s = read(); s.skin = id; write(s); apply(s); },
-    set: function (theme, skin) { var s = { theme: theme, skin: skin }; write(s); apply(s); },
+    setAccessory: function (id) { if (!ACCESSORIES[id]) return; var s = read(); s.accessory = id; write(s); apply(s); },
+    set: function (theme, skin) { var s = read(); s.theme = theme; s.skin = skin; write(s); apply(s); },
     renderPicker: renderPicker, wirePicker: wirePicker, mountFloat: mountFloat
   };
 

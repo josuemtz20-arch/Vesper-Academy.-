@@ -94,6 +94,9 @@
 !/vesper_adaptive.js
 !/vesper_activities.js
 !/vesper_path.js
+# Cosméticos de Vesper (2026-06-22): colores/accesorios que se desbloquean con el
+# progreso. Catálogo de requisitos + evaluación; lee VesperProgress. Sin claves.
+!/vesper_cosmetics.js
 # recintos tematicos de vocabulario (ramas) — datos publicos, sin claves
 !/vesper_vocab_dens.js
 !/apariencia.html

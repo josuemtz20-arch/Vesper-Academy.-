@@ -251,6 +251,11 @@
   .ach-badge .ab-tx{display:flex;flex-direction:column}
   .ach-badge .ab-tx b{font-size:.72rem;text-transform:uppercase;letter-spacing:.05em;color:var(--gold)}
   .ach-badge .ab-tx span{font-weight:700}
+  /* celebración de cosmético desbloqueado (reusa .ach-pop/.ach-badge) */
+  .ach-badge .cos-dot{display:inline-block;width:24px;height:24px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 2px var(--gold)}
+  .ach-badge .cos-svg{display:inline-flex;width:30px;height:30px}
+  .ach-badge .cos-svg svg{width:30px;height:30px}
+  .cos-cta{display:inline-block;margin-top:2px;font-weight:700;color:var(--gold-ink,var(--gold));text-decoration:none;font-size:.86rem}
   /* buscador + filtros del hub */
   .hub-search{margin:12px 0 2px}
   .srch{position:relative}
@@ -388,10 +393,16 @@
   /* nodos/carteles por encima del terreno y el camino */
   .wisland .wnode{z-index:2}
   .wisland .wstart{z-index:2}
-  /* avatar (gato Vesper) que recorre el sendero */
-  .wavatar{position:absolute;left:0;top:0;width:50px;height:50px;z-index:3;object-fit:contain;
-    offset-anchor:50% 50%;offset-rotate:0deg;pointer-events:none;
-    filter:drop-shadow(0 6px 7px rgba(20,18,42,.5));animation:wbob 2.4s ease-in-out infinite}
+  /* avatar (gato Vesper) que recorre el sendero — contenedor animado;
+     el gato (.wcat) lleva el color del skin (--vc-filter); la capa .wacc
+     superpone el accesorio elegido sin recibir el tinte de color */
+  .wavatar{position:absolute;left:0;top:0;width:50px;height:50px;z-index:3;
+    offset-anchor:50% 50%;offset-rotate:0deg;pointer-events:none;animation:wbob 2.4s ease-in-out infinite}
+  .wavatar .wcat{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;
+    filter:drop-shadow(0 6px 7px rgba(20,18,42,.5)) var(--vc-filter,hue-rotate(0deg))}
+  .wavatar .wacc{position:absolute;inset:0;pointer-events:none}
+  .wavatar .wacc svg{width:100%;height:100%;display:block;overflow:visible;
+    filter:drop-shadow(0 1px 1px rgba(20,18,42,.45))}
   @keyframes wbob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
   /* títulos/etiquetas legibles sobre la isla oscura */
   .wisland .wtitle{color:var(--cream,#f5f2eb)}
@@ -1583,6 +1594,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
 <script src="vesper_adaptive.js"></script>
 <script src="vesper_persona.js"></script>
 <script src="vesper_progress.js"></script>
+<script src="vesper_cosmetics.js"></script>
 <script src="vesper_path.js"></script>
 <script src="vesper_vocab_dens.js"></script>
 <script src="vesper_auth.js"></script>
@@ -1780,6 +1792,35 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
   }
   var WORLD_UMBRAL = { A1: "Umbral del Hogar", A2: "Mojón del Sendero", B1: "Arco del Horizonte", B2: "Pórtico de la Torre", C1: "Portal del Firmamento", C2: "Sello del Castillo" };
   var BOSS_AVATAR = "assets/images/mascot/vesper_cat.png";
+  /* SVG del accesorio de Vesper elegido (vacío = ninguno). De vesper_theme.js. */
+  function currentAccessorySvg() {
+    try {
+      if (window.VESPER_THEME && VESPER_THEME.get) {
+        var id = VESPER_THEME.get().accessory;
+        if (id && id !== "none" && window.VESPER_COSMETICS && VESPER_COSMETICS.isUnlocked
+            && !VESPER_COSMETICS.isUnlocked("acc", id)) return "";   // no mostrar accesorios bloqueados
+        var acc = VESPER_THEME.accessories && VESPER_THEME.accessories[id];
+        return (acc && acc.svg) || "";
+      }
+    } catch (e) {}
+    return "";
+  }
+  /* etiqueta visual para un cosmético recién desbloqueado {kind:"skin"|"acc",id} */
+  function cosmeticLabel(c) {
+    try {
+      if (c.kind === "skin" && window.VESPER_THEME && VESPER_THEME.skins) {
+        var s = VESPER_THEME.skins[c.id];
+        return { name: "Color: " + (s ? s.name : c.id),
+          ic: '<span class="cos-dot" style="background:' + (s ? s.ring : "#C9A84C") + '"></span>' };
+      }
+      if (c.kind === "acc" && window.VESPER_THEME && VESPER_THEME.accessories) {
+        var a = VESPER_THEME.accessories[c.id];
+        return { name: (a ? a.name : c.id),
+          ic: (a && a.svg) ? '<span class="cos-svg">' + a.svg + '</span>' : "&#127870;" };
+      }
+    } catch (e) {}
+    return { name: c.id, ic: "&#11088;" };
+  }
   /* metadatos del jefe de un nivel, con defaults si el mundo no declara boss */
   function bossMeta(lv) { var t = WORLD_THEME[lv] || {}; var b = t.boss || {}; return { name: b.name || "El Guardián", subtitle: t.worldName || lv, pass: b.pass || 85 }; }
 
@@ -2376,7 +2417,8 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       + '<div class="wmap" id="wmap" data-world="' + selLevel + '" data-cur="' + curStop + '" style="' + worldVars(t) + '">'
       + '<svg class="wterrain terr" aria-hidden="true" focusable="false" preserveAspectRatio="none"></svg>'
       + '<svg class="wtrail" aria-hidden="true" focusable="false" preserveAspectRatio="none"><path class="wtrail-base"/><path class="wtrail-road"/><path class="wtrail-tex"/><path class="wtrail-glow"/><path class="wtrail-line"/><path class="wtrail-comet"/></svg>'
-      + '<img class="wavatar" src="' + BOSS_AVATAR + '" alt="" aria-hidden="true" decoding="async">'
+      + '<div class="wavatar" aria-hidden="true"><img class="wcat" src="' + BOSS_AVATAR + '" alt="" decoding="async">'
+      + '<span class="wacc">' + currentAccessorySvg() + '</span></div>'
       + ambLayer(t.mapN || 3, true) + startPennant + parts
       + '</div></div></div>';
     return banner + denEntryHtml(selLevel) + scene;
@@ -3179,6 +3221,13 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
 
     /* burbuja flotante: "Vesper te escribe" para destacar el chat */
     mountChatNudge();
+
+    /* aviso suave si quedan cosméticos desbloqueados sin estrenar (p.ej. por
+       cambio de día/racha). Las lecciones/jefes ya celebran en renderStreak. */
+    try {
+      var cosPend = (window.VESPER_COSMETICS && VESPER_COSMETICS.pending) ? VESPER_COSMETICS.pending() : [];
+      if (cosPend.length) { toast("¡Nuevo aspecto de Vesper desbloqueado! Elígelo en Configuración 🎨"); VESPER_COSMETICS.markSeen(); }
+    } catch (e) {}
   }
 
   /* ---------- Burbuja de chat flotante (Vesper "te manda un mensaje") ---------- */
@@ -3935,6 +3984,20 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       }).join("") + '</div>';
     }
 
+    /* cosméticos recién desbloqueados (color/accesorio de Vesper por progreso) */
+    var cosHtml = "";
+    try {
+      var cosNew = (window.VESPER_COSMETICS && VESPER_COSMETICS.pending) ? VESPER_COSMETICS.pending() : [];
+      if (cosNew.length) {
+        cosHtml = '<div class="ach-pop">' + cosNew.slice(0, 4).map(function (c) {
+          var lab = cosmeticLabel(c);
+          return '<div class="ach-badge"><span class="ab-ic">' + lab.ic + '</span><span class="ab-tx"><b>Nuevo aspecto de Vesper</b><span>' + esc(lab.name) + '</span></span></div>';
+        }).join("")
+        + '<a class="cos-cta" href="configuracion.html">Pruébalo en Configuración &rarr;</a></div>';
+        VESPER_COSMETICS.markSeen();
+      }
+    } catch (e) {}
+
     show('<div class="wrap">' + topbar(100) + '<div class="card center">'
       + mascot(mstate)
       + '<div class="flame">&#128293;</div>'
@@ -3943,6 +4006,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       + '<div class="week">' + cells + '</div>'
       + goalHtml
       + achHtml
+      + cosHtml
       + '<div class="stat-row"><div class="stat">&#11088; <b>' + info.xp + '</b> XP total</div></div>'
       + (info.milestone ? '<div class="milestone">&#127881; Nuevo escudo de racha!</div>' : '')
       + '<div class="nudge" id="nudge">Guarda tu progreso en todos tus dispositivos: <a href="#" id="nudge-account">crea una cuenta</a> (opcional).'
