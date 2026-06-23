@@ -69,7 +69,8 @@
     border:1.5px solid var(--line);border-radius:13px;padding:11px 13px;background:var(--paper);color:var(--ink);
     font:inherit;transition:border-color .15s ease,background .15s ease,transform .1s ease}
   .seg button:active{transform:scale(.985)}
-  .seg button .em{font-size:1.2rem;flex:none;width:1.4em;text-align:center}
+  .seg button .em{flex:none;display:inline-flex;align-items:center;justify-content:center;width:1.7rem;color:var(--gold-deep,#a8843d)}
+  .seg button .em svg{width:1.3rem;height:1.3rem;display:block}
   .seg button .em:empty{display:none}
   .seg button .t{font-weight:600}
   .seg button .d{display:block;font-weight:400;color:var(--muted);font-size:.82rem}
@@ -79,8 +80,11 @@
 
   /* compact chips (focus areas) */
   .chips{display:flex;flex-wrap:wrap;gap:9px}
-  .chip{cursor:pointer;border:1.5px solid var(--line);border-radius:999px;padding:8px 14px;background:var(--paper);
-    color:var(--ink);font:600 .88rem Inter,sans-serif}
+  .chip{cursor:pointer;border:1.5px solid var(--line);border-radius:999px;padding:8px 13px;background:var(--paper);
+    color:var(--ink);font:600 .88rem Inter,sans-serif;display:inline-flex;align-items:center;gap:7px}
+  .chip-ic{display:inline-flex;color:var(--gold-deep,#a8843d)}
+  .chip-ic svg{width:1.15em;height:1.15em;display:block}
+  .chip-ic:empty{display:none}
   .chip[aria-pressed="true"]{border-color:var(--gold-deep,#a8843d);border-width:2px;background:var(--gold-tint)}
   .chip[aria-pressed="true"]::after{content:"\00a0✓";color:var(--success);font-weight:700}
 
@@ -321,6 +325,7 @@
 <script src="vesper_adaptive.js"></script>
 <script src="vesper_persona.js"></script>
 <script src="vesper_icons.js"></script>
+<script src="vesper_opticons.js"></script>
 <script src="vesper_economy.js"></script>
 <script>
 /* rellena los iconos SVG de marca en los encabezados de sección (sin emojis) */
@@ -340,6 +345,7 @@
   var $ = function (id) { return document.getElementById(id); };
 
   /* ---------- builders de controles ---------- */
+  function optIc(id) { return (window.VESPER_OPT && VESPER_OPT.get) ? VESPER_OPT.get(id) : ""; }
   function radioGroup(hostId, order, dict, current, onPick) {
     var host = $(hostId); if (!host) return;
     var hasCurrent = order.indexOf(current) >= 0;
@@ -349,7 +355,7 @@
       /* roving tabindex: solo un radio por grupo es tabbable (el activo, o el 1ro) */
       var tab = (on || (!hasCurrent && i === 0)) ? "0" : "-1";
       return '<button type="button" role="radio" aria-checked="' + on + '" tabindex="' + tab + '" data-id="' + id + '">'
-        + '<span class="em" aria-hidden="true">' + (o.emoji || "") + '</span>'
+        + '<span class="em" aria-hidden="true">' + optIc(id) + '</span>'
         + '<span class="t">' + o.label + '</span>'
         + '<span class="chk" aria-hidden="true">✓</span></button>';
     }).join("");
@@ -382,7 +388,7 @@
     host.innerHTML = order.map(function (id) {
       var o = dict[id]; var on = currentArr.indexOf(id) !== -1;
       return '<button type="button" class="chip" aria-pressed="' + on + '" data-id="' + id + '">'
-        + (o.emoji ? '<span aria-hidden="true">' + o.emoji + '</span> ' : '') + o.label + '</button>';
+        + '<span class="chip-ic" aria-hidden="true">' + optIc(id) + '</span>' + o.label + '</button>';
     }).join("");
     host.addEventListener("click", function (e) {
       var b = e.target.closest("[data-id]"); if (!b) return;
