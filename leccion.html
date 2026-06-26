@@ -3325,16 +3325,11 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
         + '<span class="hc-tx"><b>Repaso de errores</b><span>Tienes ' + srsDue + ' ejercicio' + (srsDue === 1 ? "" : "s") + ' por repasar</span></span>'
         + '<span class="hc-cta">Repasar &rarr;</span></button>'
       : "";
-    var examBanner = '<button class="hub-card" id="examGo" type="button">'
-      + '<span class="hc-ic" aria-hidden="true">🎓</span>'
-      + '<span class="hc-tx"><b>Examen de nivel</b><span>Evalúa tu dominio de A1 a C2</span></span>'
-      + '<span class="hc-cta">Presentar &rarr;</span></button>';
     show('<div class="wrap">'
       + hudHtml(st, dg, hello, heroInfo)
       + placementCard("leccion-hub")
       + worldsSection(built, selLevel)
       + srsBanner
-      + examBanner
       + searchUI
       + '<div id="searchResults" class="search-results" aria-live="polite" hidden></div>'
       + '<div id="levelView">' + worldMap(selLevel, built) + '</div>'
@@ -3344,7 +3339,6 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     bindCta();
     if (_indexFirst) track("hub_view", { level: selLevel });
     var srsGo = byId("srsGo"); if (srsGo) srsGo.onclick = function () { location.search = "?id=review:srs"; };
-    var examGo = byId("examGo"); if (examGo) examGo.onclick = function () { location.search = "?id=exams"; };
     each(".world[data-lvl]", function (b) { b.onclick = function () { renderIndex(b.getAttribute("data-lvl")); }; });
     each(".world[data-locked-world]", function (b) { b.onclick = function () { toast("Vence al guardián del mundo anterior para desbloquearlo"); }; });
     each(".den-enter[data-den]", function (b) { b.onclick = function () { renderDen(b.getAttribute("data-den")); }; });
