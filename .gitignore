@@ -122,6 +122,13 @@
 !/vesper_icons.js
 !/vesper_opticons.js
 !/FIRESTORE_LEAGUE_RULES.md
+# Registro central de calificaciones (2026-06-26): los exámenes (boss/lección/
+# nivelación) guardan su resultado en exam_results (Firestore REST, reusa
+# VesperAuth) espejado a localStorage; el profesor los consulta en
+# portal_calificaciones.html (gated). Sin claves. Doc de la regla a publicar.
+!/vesper_results.js
+!/portal_calificaciones.html
+!/FIRESTORE_EXAM_RESULTS_RULES.md
 # recintos tematicos de vocabulario (ramas) — datos publicos, sin claves
 !/vesper_vocab_dens.js
 !/apariencia.html

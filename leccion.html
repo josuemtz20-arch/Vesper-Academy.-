@@ -1700,6 +1700,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
 <script src="vesper_sync.js"></script>
 <script src="vesper_analytics.js"></script>
 <script src="vesper_league_cloud.js"></script>
+<script src="vesper_results.js"></script>
 <script>
 (function () {
   var qs = new URLSearchParams(location.search);
@@ -4217,6 +4218,17 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
   /* ---------- FEEDBACK / XP ---------- */
   var lastPerfect = false, masteryUnlocked = false;
   var PASS_PCT = 70;
+  /* Detalle por pregunta para el registro central de calificaciones:
+     texto + tipo + acierto. Reusa lesson.exercises[] + results[]. */
+  function examDetail() {
+    return (lesson.exercises || []).map(function (ex, i) {
+      ex = ex || {};
+      var q = ex.question || ex.sentence || ex.statement || ex.prompt || ex.title
+              || (ex.words ? ex.words.join(" ") : "") || "";
+      return { q: q, type: ex.type || "", correct: !!results[i] };
+    });
+  }
+
   function renderFeedback() {
     var total = lesson.exercises.length;
     var correct = results.filter(Boolean).length;
@@ -4238,6 +4250,15 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     track("lesson_complete", { id: lesson.lessonId, level: lesson.level, pct: pct, type: lesson.srsReview ? "srs" : (lesson.isReview ? "review" : "lesson") });
     if (perfect) { burstConfetti(40); sfx("fanfare"); } else { sfx("complete"); }
     if (PATH && PATH.setScore && lesson.lessonId) PATH.setScore(lesson.lessonId, pct);
+    /* Registro central de la calificación de la lección (solo superadas, para
+       no llenar el panel de intentos abandonados). No debe romper la pantalla. */
+    try {
+      if (window.VESPER_RESULTS) VESPER_RESULTS.record({
+        examType: "lesson", examId: lesson.lessonId, level: lesson.level,
+        score: correct, total: total, percent: pct,
+        threshold: PASS_PCT, passed: pct >= PASS_PCT, detail: examDetail()
+      });
+    } catch (e) {}
     /* repaso aprobado (>=80%) -> desbloquea maestría de la destreza */
     masteryUnlocked = false;
     if (lesson.isReview && pct >= 80 && P && P.unlock) {
@@ -4275,6 +4296,15 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
   /* ---------- RESULTADO DEL JEFE (victoria / derrota) ---------- */
   function renderBossResult(correct, total, pct) {
     var bm = bossMeta(lesson.bossLevel);
+    /* Registro central del intento (aprobado o reprobado) para el panel del
+       profesor. Nunca debe romper la pantalla de resultado. */
+    try {
+      if (window.VESPER_RESULTS) VESPER_RESULTS.record({
+        examType: "boss", examId: lesson.lessonId, level: lesson.bossLevel,
+        score: correct, total: total, percent: pct,
+        threshold: bm.pass, passed: pct >= bm.pass, detail: examDetail()
+      });
+    } catch (e) {}
     if (pct < bm.pass) {
       earnedXp = 0;
       track("boss_fail", { level: lesson.bossLevel, pct: pct });

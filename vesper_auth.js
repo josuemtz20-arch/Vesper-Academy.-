@@ -217,6 +217,21 @@
     location.replace(url);
   }
 
+  /* ¿El usuario con sesión es profesor o admin? El admin entra siempre; el
+     resto debe tener su doc en teachers/{correo en minúsculas} (misma
+     allowlist que ya gobierna manuales). Solo lectura; resuelve bool.
+     La usa el panel de calificaciones (portal_calificaciones.html). */
+  function isTeacher(user) {
+    if (!user) return Promise.resolve(false);
+    var email = String(user.email || "").trim().toLowerCase();
+    if (email && email === String(CONFIG.adminEmail).trim().toLowerCase()) {
+      return Promise.resolve(true);
+    }
+    return user.getIdToken().then(function (token) {
+      return fsDocExists(token, "teachers", email);
+    }).catch(function () { return false; });
+  }
+
   /* API compartida para login.html y access_admin.html */
   window.VesperAuth = {
     config: CONFIG,
@@ -225,6 +240,7 @@
     emailHash: emailHash,
     isApproved: isApproved,
     isApprovedUser: isApprovedUser,
+    isTeacher: isTeacher,
     teacherHash: teacherHash,
     verifyTeacherLogin: verifyTeacherLogin
   };

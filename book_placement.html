@@ -609,6 +609,7 @@
 </div>
 
 <script src="vesper_auth.js"></script>
+<script src="vesper_results.js"></script>
 <script src="vesper_analytics.js"></script>
 <script>
 // ══════════════════════════════════════════
@@ -1062,6 +1063,20 @@ function showResults() {
     } catch (e) {}
 
     if (window.VA) VA.track("lead_submit", { src: leadOrigin, level: placedLevel });
+
+    // Si es un alumno con sesión verificada, unifica la nivelación en el panel
+    // central de calificaciones (además del lead anónimo en placement_results).
+    try {
+        if (window.VESPER_RESULTS && VESPER_RESULTS.signedIn()) VESPER_RESULTS.record({
+            examType: "placement", examId: "placement", level: placedLevel,
+            score: totalCorrect, total: QUESTIONS.length,
+            percent: Math.round(100 * totalCorrect / Math.max(1, QUESTIONS.length)),
+            threshold: 0, passed: true,
+            detail: levelOrder.map(function (lv) {
+                return { q: lv + " (bloque)", type: "level_block", correct: scores[lv] >= 4 };
+            })
+        });
+    } catch (e) {}
 
     const status = document.getElementById("save-status");
     status.style.display = "inline-flex";
