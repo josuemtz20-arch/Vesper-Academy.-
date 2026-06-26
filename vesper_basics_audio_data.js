@@ -122,82 +122,82 @@ window.BASICS_DATA = {
       },
       {
         "n": 4,
-        "title": "Negatives (Don't vs Doesn't)",
+        "title": "Adverbs of Frequency",
         "file": "core_basics_level_2_lesson_4.mp3"
       },
       {
         "n": 5,
-        "title": "Short Answers",
+        "title": "Object Pronouns",
         "file": "core_basics_level_2_lesson_5.mp3"
       },
       {
         "n": 6,
-        "title": "Adverbs of Frequency",
+        "title": "Hobbies (Like + ing)",
         "file": "core_basics_level_2_lesson_6.mp3"
       },
       {
         "n": 7,
-        "title": "Object Pronouns",
+        "title": "Past Tense (Past Simple)",
         "file": "core_basics_level_2_lesson_7.mp3"
       },
       {
         "n": 8,
-        "title": "Hobbies (Like + ing)",
+        "title": "Regular Verbs in the Past (-ed)",
         "file": "core_basics_level_2_lesson_8.mp3"
       },
       {
         "n": 9,
-        "title": "Past Simple Intro (Did)",
+        "title": "Irregular Verbs in the Past",
         "file": "core_basics_level_2_lesson_9.mp3"
       },
       {
         "n": 10,
-        "title": "Regular Verbs (-ed)",
+        "title": "Review: Past Verbs",
         "file": "core_basics_level_2_lesson_10.mp3"
       },
       {
         "n": 11,
-        "title": "Irregular Verbs 1",
+        "title": "Going to a Restaurant",
         "file": "core_basics_level_2_lesson_11.mp3"
       },
       {
         "n": 12,
-        "title": "Irregular Verbs 2",
+        "title": "Activities at Home",
         "file": "core_basics_level_2_lesson_12.mp3"
       },
       {
         "n": 13,
-        "title": "Negative Past (Didn't)",
+        "title": "Future with Will",
         "file": "core_basics_level_2_lesson_13.mp3"
       },
       {
         "n": 14,
-        "title": "Past Questions (Did you?)",
+        "title": "Listening Clips Practice",
         "file": "core_basics_level_2_lesson_14.mp3"
       },
       {
         "n": 15,
-        "title": "Future with Will",
+        "title": "Imperative Sentences",
         "file": "core_basics_level_2_lesson_15.mp3"
       },
       {
         "n": 16,
-        "title": "Imperatives",
+        "title": "Can & Can't",
         "file": "core_basics_level_2_lesson_16.mp3"
       },
       {
         "n": 17,
-        "title": "Can / Can't",
+        "title": "Different Ways to Invite",
         "file": "core_basics_level_2_lesson_17.mp3"
       },
       {
         "n": 18,
-        "title": "Let's / Why don't we",
+        "title": "Continuous vs Simple (Now vs Usually)",
         "file": "core_basics_level_2_lesson_18.mp3"
       },
       {
         "n": 19,
-        "title": "Past vs Present",
+        "title": "Review & Practice",
         "file": "core_basics_level_2_lesson_19.mp3"
       }
     ]
