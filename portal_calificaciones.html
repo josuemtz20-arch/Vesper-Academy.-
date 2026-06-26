@@ -62,6 +62,11 @@ tbody tr.row:hover{background:#faf7f0;}
 .detailrow td{background:#fbf9f4;padding:0;}
 .detailbox{padding:12px 18px 16px;}
 .detailbox h4{margin:0 0 8px;font-size:.78rem;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);}
+.detailbox h4:not(:first-child){margin-top:16px;}
+.skgrid{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:4px;}
+.skchip{display:flex;flex-direction:column;gap:2px;background:#fff;border:1px solid var(--border);border-radius:8px;padding:8px 12px;min-width:104px;}
+.skchip .sklbl{font-size:.7rem;color:var(--muted);}
+.skchip .skval{font-size:.92rem;}
 .qlist{display:flex;flex-direction:column;gap:5px;}
 .qitem{display:flex;align-items:flex-start;gap:8px;font-size:.82rem;line-height:1.4;}
 .qitem i{margin-top:2px;}
@@ -184,6 +189,28 @@ footer a{color:var(--gold);text-decoration:none;}
       '<div class="stat"><b>' + rate + '%</b><span>Tasa de aprobación</span></div>';
   }
 
+  var SK_LABEL = { grammar: "Gramática", vocab: "Vocabulario", use: "Uso del inglés", reading: "Lectura", listening: "Listening", otro: "Otros" };
+  var SK_ORDER = ["grammar", "vocab", "use", "reading", "listening", "otro"];
+
+  function skillSummaryHtml(detail) {
+    var by = {};
+    detail.forEach(function (d) {
+      var sk = d.skill || "otro";
+      if (!by[sk]) by[sk] = { c: 0, t: 0 };
+      by[sk].t++; if (d.correct) by[sk].c++;
+    });
+    var keys = SK_ORDER.filter(function (s) { return by[s]; });
+    // si no hay destrezas reales (todo cae en "otro"), no mostramos el resumen
+    if (!keys.length || (keys.length === 1 && keys[0] === "otro")) return "";
+    var chips = keys.map(function (s) {
+      var b = by[s], p = Math.round(100 * b.c / Math.max(1, b.t));
+      var col = p >= 70 ? "#2d7a4f" : (p >= 50 ? "#a8843d" : "#b03a3a");
+      return '<div class="skchip"><span class="sklbl">' + esc(SK_LABEL[s] || s) + '</span>' +
+             '<span class="skval" style="color:' + col + '"><b>' + b.c + '/' + b.t + '</b> · ' + p + '%</span></div>';
+    }).join("");
+    return '<h4>Desempeño por destreza</h4><div class="skgrid">' + chips + '</div>';
+  }
+
   function detailHtml(r) {
     if (!r.detail || !r.detail.length) {
       return '<div class="detailbox"><h4>Detalle</h4><div class="qlist"><div class="qitem">Sin detalle por pregunta para este intento.</div></div></div>';
@@ -193,7 +220,8 @@ footer a{color:var(--gold);text-decoration:none;}
       return '<div class="qitem">' + icon + '<span>' + esc(d.q || "(pregunta)") +
              '<span class="qt">' + esc(d.type || "") + '</span></span></div>';
     }).join("");
-    return '<div class="detailbox"><h4>Detalle por pregunta</h4><div class="qlist">' + items + '</div></div>';
+    return '<div class="detailbox">' + skillSummaryHtml(r.detail) +
+           '<h4>Detalle por pregunta</h4><div class="qlist">' + items + '</div></div>';
   }
 
   function render() {

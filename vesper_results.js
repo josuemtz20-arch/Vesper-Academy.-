@@ -87,6 +87,7 @@ window.VESPER_RESULTS = (function () {
         detail.push({
           q: String(d.q == null ? "" : d.q).slice(0, 200),
           type: String(d.type == null ? "" : d.type),
+          skill: String(d.skill == null ? "" : d.skill),
           correct: !!d.correct
         });
       }
@@ -114,6 +115,7 @@ window.VESPER_RESULTS = (function () {
       return { mapValue: { fields: {
         q: { stringValue: d.q },
         type: { stringValue: d.type },
+        skill: { stringValue: d.skill || "" },
         correct: { booleanValue: d.correct }
       } } };
     });
@@ -148,6 +150,7 @@ window.VESPER_RESULTS = (function () {
       detail.push({
         q: (df.q && df.q.stringValue) || "",
         type: (df.type && df.type.stringValue) || "",
+        skill: (df.skill && df.skill.stringValue) || "",
         correct: !!(df.correct && df.correct.booleanValue)
       });
     }

@@ -4226,7 +4226,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       ex = ex || {};
       var q = ex.question || ex.sentence || ex.statement || ex.prompt || ex.title
               || (ex.words ? ex.words.join(" ") : "") || "";
-      return { q: q, type: ex.type || "", correct: !!results[i] };
+      return { q: q, type: ex.type || "", skill: ex.skill || "", correct: !!results[i] };
     });
   }
 
