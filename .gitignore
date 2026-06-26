@@ -199,6 +199,10 @@
 # banks. Lo consume buildLevelExam (exam:NIVEL) en leccion.html y se registra
 # en el panel de calificaciones. Vanilla, sin claves.
 !/vesper_level_exams.js
+# Examen de fin de manual por libro (2026-06-26): banco por manual alineado al
+# temario (SYLLABI). Lo consume buildManualExam (mexam:BOOKID) en leccion.html;
+# se registra en el panel de calificaciones. Vanilla, sin claves.
+!/vesper_manual_exams.js
 
 # Expansion 2026-06-16: live chat with the Vesper AI tutor (public, no-account).
 # chat.html embeds the personalized system prompt from VESPER_PERSONA and talks

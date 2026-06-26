@@ -218,10 +218,23 @@ body{margin:0;font-family:'Segoe UI',Arial,sans-serif;display:flex;align-items:c
       'onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=.88" class="no-print">' +
       '&larr; Mis materiales</a>' +
       '<style>@media print{a.no-print{display:none!important}}</style>';
+    /* botón flotante: examen de este manual (solo para libros que tienen examen) */
+    var EXAM_BOOKS = ["core_basics_lvl1","core_basics_lvl2","core_basics_lvl3","core_basics_lvl4",
+      "core_grammar_lvl1","core_grammar_lvl2","core_grammar_lvl3",
+      "core_practice_lvl1","core_practice_lvl2","core_practice_lvl3","core_practice_lvl4","core_practice_lvl5","core_practice_lvl6",
+      "daily_life_vol0","daily_life_vol1","daily_life_vol2",
+      "cabin_crew","political_english","cci1","exam_prep","exam_prep_vol2"];
+    var examChip = (EXAM_BOOKS.indexOf(id) >= 0)
+      ? '<a href="leccion.html?id=mexam:' + encodeURIComponent(id) + '" style="position:fixed;bottom:14px;right:14px;z-index:99999;' +
+        'background:#C9A84C;color:#1B1B2F;font:600 12px/1 sans-serif;padding:9px 14px;border-radius:20px;' +
+        'opacity:.92;box-shadow:0 2px 8px rgba(0,0,0,.3);text-decoration:none;" ' +
+        'onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=.92" class="no-print">' +
+        '&#128221; Examen del manual</a>'
+      : "";
     if (/<\/body>/i.test(html)) {
-      html = html.replace(/<\/body>(?![\s\S]*<\/body>)/i, chip + "</body>");
+      html = html.replace(/<\/body>(?![\s\S]*<\/body>)/i, chip + examChip + "</body>");
     } else {
-      html += chip;
+      html += chip + examChip;
     }
 
     document.open();

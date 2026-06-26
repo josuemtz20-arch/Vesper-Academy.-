@@ -119,6 +119,10 @@ footer a{color:var(--gold);text-decoration:none;}
     </a>
   </div>
 
+  <h2 class="sec"><i class="fas fa-clipboard-check"></i> Exámenes de manual</h2>
+  <p style="color:var(--muted);font-size:.86rem;margin:-6px 0 16px;max-width:660px;">Examen de fin de manual para cada libro (gramática, vocabulario, uso del inglés, lectura y listening). Tu resultado queda registrado para tu profesor.</p>
+  <div class="grid" id="manual-exams-grid"></div>
+
   <h2 class="sec"><i class="fas fa-cubes"></i> Core Basics — Fundamentos</h2>
   <div class="grid">
     <a class="card" href="libro.html?id=core_basics_lvl1"><span class="lvl">A0</span><h3>Core Basics · Nivel 1</h3><p>To Be or Not To Be. Identidad, presentaciones y lo esencial.</p><span class="go">Abrir libro <i class="fas fa-arrow-right"></i></span></a>
@@ -170,6 +174,42 @@ footer a{color:var(--gold);text-decoration:none;}
   © <span id="y"></span> Vesper Academy · <a href="index.html">vesper.academy</a>
   <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
 </footer>
+
+<script>
+/* Tarjetas de examen de fin de manual (una por libro). */
+(function(){
+  var EXAMS=[
+    {id:"core_basics_lvl1",lvl:"A0",t:"Core Basics · Nivel 1"},
+    {id:"core_basics_lvl2",lvl:"A1",t:"Core Basics · Nivel 2"},
+    {id:"core_basics_lvl3",lvl:"A2",t:"Core Basics · Nivel 3"},
+    {id:"core_basics_lvl4",lvl:"A2+",t:"Core Basics · Nivel 4"},
+    {id:"core_grammar_lvl1",lvl:"B1",t:"Grammar Foundations"},
+    {id:"core_grammar_lvl2",lvl:"B2",t:"Grammar in Context"},
+    {id:"core_grammar_lvl3",lvl:"C1+",t:"Grammar Mastery"},
+    {id:"core_practice_lvl1",lvl:"A1–A2",t:"Practice · Nivel 1"},
+    {id:"core_practice_lvl2",lvl:"B1",t:"Practice · Nivel 2"},
+    {id:"core_practice_lvl3",lvl:"B1–B2",t:"Practice · Nivel 3"},
+    {id:"core_practice_lvl4",lvl:"A2–B1",t:"Practice · Nivel 4"},
+    {id:"core_practice_lvl5",lvl:"B2–C1",t:"Practice · Nivel 5"},
+    {id:"core_practice_lvl6",lvl:"C2",t:"Practice · Nivel 6"},
+    {id:"daily_life_vol0",lvl:"A0",t:"Daily Life · Vol. 0"},
+    {id:"daily_life_vol1",lvl:"A1–A2",t:"Daily Life · Vol. 1"},
+    {id:"daily_life_vol2",lvl:"B1–B2",t:"Daily Life · Vol. 2"},
+    {id:"cabin_crew",lvl:"Aviación",t:"Aviation English"},
+    {id:"political_english",lvl:"B2–C1",t:"Political English"},
+    {id:"cci1",lvl:"Intensivo",t:"Curso Intensivo (CCI 1)"},
+    {id:"exam_prep",lvl:"B2–C1",t:"Exam Prep · Vol. 1"},
+    {id:"exam_prep_vol2",lvl:"B2–C1",t:"Exam Prep · Vol. 2"}
+  ];
+  var g=document.getElementById("manual-exams-grid"); if(!g) return;
+  g.innerHTML = EXAMS.map(function(e){
+    return '<a class="card" href="leccion.html?id=mexam:'+e.id+'">'
+      +'<span class="lvl">'+e.lvl+'</span><h3>Examen · '+e.t+'</h3>'
+      +'<p>Examen de fin de manual: pon a prueba lo que estudiaste en este libro.</p>'
+      +'<span class="go">Presentar examen <i class="fas fa-arrow-right"></i></span></a>';
+  }).join("");
+})();
+</script>
 
 <script>
 /* Personaliza el portal con el perfil del cuestionario de bienvenida. */

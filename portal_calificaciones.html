@@ -51,6 +51,7 @@ tbody tr.row:hover{background:#faf7f0;}
 .who b{font-weight:600;}
 .who small{display:block;color:var(--muted);font-size:.72rem;}
 .tag{display:inline-block;font-size:.66rem;font-weight:800;letter-spacing:.4px;text-transform:uppercase;padding:3px 9px;border-radius:20px;background:#e9edf3;color:#2c2c4a;border:1px solid #d4dbe6;}
+.tag.manual{background:#e6f0fb;color:#1e5fa8;border-color:#cbe0f6;}
 .tag.exam{background:#efe7f7;color:#5b3a8a;border-color:#ddccef;}
 .tag.boss{background:#f6e6e8;color:#8a2f3b;border-color:#ecccd1;}
 .tag.placement{background:#e6f0fb;color:#1e5fa8;border-color:#cbe0f6;}
@@ -114,6 +115,7 @@ footer a{color:var(--gold);text-decoration:none;}
     <div class="toolbar">
       <select id="f-type">
         <option value="">Todos los tipos</option>
+        <option value="manual">Examen de manual</option>
         <option value="exam">Examen de nivel</option>
         <option value="boss">Examen de mundo</option>
         <option value="placement">Nivelación</option>
@@ -154,7 +156,7 @@ footer a{color:var(--gold);text-decoration:none;}
   var fType = document.getElementById("f-type");
   var fQ = document.getElementById("f-q");
 
-  var TYPE_LABEL = { exam: "Examen de nivel", boss: "Examen de mundo", placement: "Nivelación", lesson: "Lección" };
+  var TYPE_LABEL = { manual: "Examen de manual", exam: "Examen de nivel", boss: "Examen de mundo", placement: "Nivelación", lesson: "Lección" };
   var allRows = [];
 
   function esc(t) {
@@ -243,7 +245,7 @@ footer a{color:var(--gold);text-decoration:none;}
 
     var html = "";
     rows.forEach(function (r, i) {
-      var tcls = (r.examType === "exam" || r.examType === "boss" || r.examType === "placement" || r.examType === "lesson") ? r.examType : "";
+      var tcls = (r.examType === "manual" || r.examType === "exam" || r.examType === "boss" || r.examType === "placement" || r.examType === "lesson") ? r.examType : "";
       var state = r.examType === "placement"
         ? '<span class="state">—</span>'
         : '<span class="state ' + (r.passed ? "pass" : "fail") + '">' +
@@ -253,7 +255,7 @@ footer a{color:var(--gold);text-decoration:none;}
           '<td class="who"><b>' + esc(r.alias || "Estudiante") + '</b>' +
             (r.email ? '<small>' + esc(r.email) + '</small>' : '') + '</td>' +
           '<td><span class="tag ' + tcls + '">' + esc(TYPE_LABEL[r.examType] || r.examType) + '</span>' +
-            (r.examId && r.examType === "lesson" ? '<small style="color:var(--muted)">' + esc(r.examId) + '</small>' : '') + '</td>' +
+            (r.examId && (r.examType === "lesson" || r.examType === "manual") ? '<small style="color:var(--muted)">' + esc(r.examId) + '</small>' : '') + '</td>' +
           '<td>' + esc(r.level || "—") + '</td>' +
           '<td>' + r.score + ' / ' + r.total + '</td>' +
           '<td class="pct">' + r.percent + '%</td>' +
