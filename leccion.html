@@ -3233,6 +3233,31 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       + '<div class="logros__grid">' + medals + '</div></details>';
   }
 
+  /* Selector de exámenes de nivel (A1–C2). Se abre desde el hub (?id=exams). */
+  function renderExamPicker() {
+    clearLessonTheme();
+    var levels = (PATH && PATH.LEVELS) ? PATH.LEVELS : ["A1", "A2", "B1", "B2", "C1", "C2"];
+    var avail = window.VESPER_LEVEL_EXAMS || {};
+    var cards = levels.map(function (lv) {
+      var bank = avail[lv];
+      var n = (bank && bank.exercises) ? bank.exercises.length : 0;
+      if (!n) return "";
+      var pass = (bank && bank.pass) ? bank.pass : 70;
+      return '<button class="card lcard" data-exam="' + esc(lv) + '">'
+        + '<div class="lcard-top"><span class="pill">' + esc(lv) + '</span><span class="track">Examen de nivel</span></div>'
+        + '<h2>Examen ' + esc(lv) + '</h2>'
+        + '<div class="muted">' + n + ' ejercicios &middot; aprobar con ' + pass + '%</div></button>';
+    }).join("");
+    show('<div class="wrap">'
+      + '<div class="hero">' + mascot("welcome", "Elige el examen de nivel que quieres presentar.") + '</div>'
+      + '<h1>Examen de nivel</h1>'
+      + '<p class="muted" style="margin:-6px 0 14px">Evaluación completa por nivel: gramática, vocabulario, uso del inglés, lectura y listening. Tu resultado queda registrado para tu profesor.</p>'
+      + '<div class="grid">' + cards + '</div>'
+      + '<div style="margin-top:18px"><a class="btn btn-ghost" href="leccion.html">&larr; Volver a lecciones</a></div>'
+      + '</div>');
+    each("[data-exam]", function (b) { b.onclick = function () { location.search = "?id=exam:" + encodeURIComponent(b.getAttribute("data-exam")); }; });
+  }
+
   function renderIndex(selLevel) {
     clearLessonTheme();
     var st = P ? P.getState() : { streak: 0, xp: 0, shields: 0 };
@@ -3300,11 +3325,16 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
         + '<span class="hc-tx"><b>Repaso de errores</b><span>Tienes ' + srsDue + ' ejercicio' + (srsDue === 1 ? "" : "s") + ' por repasar</span></span>'
         + '<span class="hc-cta">Repasar &rarr;</span></button>'
       : "";
+    var examBanner = '<button class="hub-card" id="examGo" type="button">'
+      + '<span class="hc-ic" aria-hidden="true">🎓</span>'
+      + '<span class="hc-tx"><b>Examen de nivel</b><span>Evalúa tu dominio de A1 a C2</span></span>'
+      + '<span class="hc-cta">Presentar &rarr;</span></button>';
     show('<div class="wrap">'
       + hudHtml(st, dg, hello, heroInfo)
       + placementCard("leccion-hub")
       + worldsSection(built, selLevel)
       + srsBanner
+      + examBanner
       + searchUI
       + '<div id="searchResults" class="search-results" aria-live="polite" hidden></div>'
       + '<div id="levelView">' + worldMap(selLevel, built) + '</div>'
@@ -3314,6 +3344,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     bindCta();
     if (_indexFirst) track("hub_view", { level: selLevel });
     var srsGo = byId("srsGo"); if (srsGo) srsGo.onclick = function () { location.search = "?id=review:srs"; };
+    var examGo = byId("examGo"); if (examGo) examGo.onclick = function () { location.search = "?id=exams"; };
     each(".world[data-lvl]", function (b) { b.onclick = function () { renderIndex(b.getAttribute("data-lvl")); }; });
     each(".world[data-locked-world]", function (b) { b.onclick = function () { toast("Vence al guardián del mundo anterior para desbloquearlo"); }; });
     each(".den-enter[data-den]", function (b) { b.onclick = function () { renderDen(b.getAttribute("data-den")); }; });
@@ -4740,6 +4771,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
   if (!L || !Object.keys(L).length) { show('<div class="wrap"><div class="card center"><h1>Sin lecciones</h1><p class="muted">No se cargaron los datos.</p></div></div>'); return; }
   if (window.VESPER_THEME && VESPER_THEME.mountFloat) VESPER_THEME.mountFloat();
   if (!id) { renderIndex(); return; }
+  if (id === "exams") { renderExamPicker(); return; }
   if (id === "review:srs") {
     baseLesson = (window.VESPER_SRS && VESPER_SRS.buildReviewLesson) ? VESPER_SRS.buildReviewLesson() : null;
     if (!baseLesson || !baseLesson.exercises.length) {
