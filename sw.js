@@ -9,7 +9,7 @@
    ============================================================ */
 "use strict";
 
-var CACHE_VERSION = "vesper-v42";
+var CACHE_VERSION = "vesper-v43";
 var CORE = [
   /* Vesper Engine shell */
   "vesper_engine.html",
@@ -32,6 +32,7 @@ var CORE = [
   "vesper_themes_pack3.js",
   "vesper_toefl_pack.js",
   "vesper_boss_exams.js",
+  "vesper_level_exams.js",
   "vesper_prefs.js",
   "vesper_analytics.js",
   "assets/css/vesper_tokens.css",
