@@ -4237,10 +4237,11 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     var perfect = correct === total;
     lastPerfect = perfect;
     if (lesson.isBoss) { renderBossResult(correct, total, pct); return; }
+    if (lesson.isExam) { renderExamResult(correct, total, pct); return; }
     /* Lecciones normales: hay que acertar >=70% para superarlas, ganar XP y
        desbloquear la siguiente. Por debajo se ofrece reintentar (no completa).
        Los repasos ("boss") conservan su lógica propia (>=80% = maestría). */
-    if (!lesson.isReview && !lesson.srsReview && !lesson.isExam && pct < PASS_PCT) { renderRetry(correct, total, pct); return; }
+    if (!lesson.isReview && !lesson.srsReview && pct < PASS_PCT) { renderRetry(correct, total, pct); return; }
     var baseXp = Math.max(5, Math.round((lesson.xpReward || 0) * correct / Math.max(1, total)));
     /* bonus por mejor combo de la sesión: +5% por cada acierto seguido sobre 2, tope +50% */
     var comboBonus = maxCombo >= 3 ? Math.round(baseXp * Math.min(0.5, (maxCombo - 2) * 0.05)) : 0;
@@ -4251,20 +4252,15 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     track("lesson_complete", { id: lesson.lessonId, level: lesson.level, pct: pct, type: lesson.srsReview ? "srs" : (lesson.isReview ? "review" : "lesson") });
     if (perfect) { burstConfetti(40); sfx("fanfare"); } else { sfx("complete"); }
     if (PATH && PATH.setScore && lesson.lessonId) PATH.setScore(lesson.lessonId, pct);
-    /* Registro central: las lecciones se registran solo al superarlas (para no
-       llenar el panel); los exámenes de nivel se registran SIEMPRE (aprobado o
-       reprobado), como tipo "exam". No debe romper la pantalla. */
+    /* Registro central de la calificación de la lección (solo superadas, para
+       no llenar el panel de intentos abandonados). No debe romper la pantalla.
+       Los exámenes de nivel se registran aparte, en renderExamResult. */
     try {
-      if (window.VESPER_RESULTS) {
-        var _exam = !!lesson.isExam;
-        var _thr = _exam ? (lesson.examPass || PASS_PCT) : PASS_PCT;
-        VESPER_RESULTS.record({
-          examType: _exam ? "exam" : "lesson",
-          examId: _exam ? ("exam:" + lesson.examLevel) : lesson.lessonId,
-          level: lesson.level, score: correct, total: total, percent: pct,
-          threshold: _thr, passed: pct >= _thr, detail: examDetail()
-        });
-      }
+      if (window.VESPER_RESULTS) VESPER_RESULTS.record({
+        examType: "lesson", examId: lesson.lessonId, level: lesson.level,
+        score: correct, total: total, percent: pct,
+        threshold: PASS_PCT, passed: pct >= PASS_PCT, detail: examDetail()
+      });
     } catch (e) {}
     /* repaso aprobado (>=80%) -> desbloquea maestría de la destreza */
     masteryUnlocked = false;
@@ -4351,6 +4347,66 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       + '<button class="btn btn-gold" id="cont">Continuar</button></div></div>');
     bindCta();
     byId("cont").onclick = renderStreak;
+  }
+
+  /* ---------- RESULTADO DEL EXAMEN DE NIVEL (aprobado / reprobado) ----------
+     Calificación PRELIMINAR automática: veredicto claro + desglose por destreza.
+     Registra el intento (siempre) y, si aprueba, otorga XP y continúa la racha;
+     si reprueba, ofrece reintentar sin XP. */
+  function renderExamResult(correct, total, pct) {
+    var pass = lesson.examPass || PASS_PCT;
+    var passed = pct >= pass;
+    lastPerfect = (correct === total);
+    earnedXp = passed ? Math.max(20, Math.round((lesson.xpReward || 60) * correct / Math.max(1, total))) : 0;
+    track("exam_complete", { level: lesson.examLevel, pct: pct, passed: passed });
+    if (PATH && PATH.setScore && lesson.lessonId) PATH.setScore(lesson.lessonId, pct);
+    /* registro central (siempre, aprobado o reprobado) */
+    try {
+      if (window.VESPER_RESULTS) VESPER_RESULTS.record({
+        examType: "exam", examId: "exam:" + lesson.examLevel, level: lesson.level,
+        score: correct, total: total, percent: pct,
+        threshold: pass, passed: passed, detail: examDetail()
+      });
+    } catch (e) {}
+    /* desglose preliminar por destreza */
+    var bySkill = {};
+    (lesson.exercises || []).forEach(function (ex, i) {
+      var sk = (ex && ex.skill) || "otro";
+      if (!bySkill[sk]) bySkill[sk] = { c: 0, t: 0 };
+      bySkill[sk].t++; if (results[i]) bySkill[sk].c++;
+    });
+    var SK_LABEL = { grammar: "Gramática", vocab: "Vocabulario", use: "Uso del inglés", reading: "Lectura", listening: "Listening", otro: "Otros" };
+    var rows = ["grammar", "vocab", "use", "reading", "listening", "otro"].filter(function (s) { return bySkill[s]; }).map(function (s) {
+      var b = bySkill[s], p = Math.round(100 * b.c / Math.max(1, b.t));
+      return '<div style="display:flex;justify-content:space-between;gap:12px;padding:7px 2px;border-bottom:1px solid #ece7da;font-size:.9rem">'
+        + '<span>' + SK_LABEL[s] + '</span><span style="color:#6b6b76"><b style="color:#1B1B2F">' + b.c + '/' + b.t + '</b> &middot; ' + p + '%</span></div>';
+    }).join("");
+    var verdict = passed ? "Aprobado" : "Reprobado";
+    var vStyle = passed
+      ? "background:#e7f4ec;color:#2d7a4f;border:2px solid #2d7a4f"
+      : "background:#f7e7e7;color:#b03a3a;border:2px solid #b03a3a";
+    if (passed) { burstConfetti(40); sfx("fanfare"); } else { sfx("complete"); }
+    show('<div class="wrap">' + topbar(92) + '<div class="card center">'
+      + mascot(passed ? "milestone" : "incorrect", passed ? "¡Examen de nivel aprobado!" : "Aún no alcanzas el nivel. ¡Sigue practicando!")
+      + '<div style="display:inline-block;margin:6px auto 4px;padding:8px 22px;border-radius:999px;font:800 1.05rem/1 Inter,system-ui,sans-serif;letter-spacing:1.5px;text-transform:uppercase;' + vStyle + '">' + verdict + '</div>'
+      + '<h1>' + pct + '%</h1>'
+      + '<p class="muted">' + correct + ' de ' + total + ' correctos &middot; necesitas ' + pass + '% para aprobar</p>'
+      + '<div class="xpbar"><div class="xpfill" style="width:' + pct + '%' + (passed ? '' : ';background:var(--error)') + '"></div></div>'
+      + (passed ? '<div class="xp-bonus" style="margin-top:8px">' + ic('flame') + ' +' + earnedXp + ' XP</div>' : '')
+      + '<div style="margin:16px auto 4px;text-align:left;max-width:300px">'
+        + '<div style="font:700 .72rem/1 Inter,system-ui,sans-serif;letter-spacing:1px;text-transform:uppercase;color:#6b6b76;margin-bottom:4px">Desglose por destreza</div>'
+        + rows + '</div>'
+      + '<p class="muted" style="font-size:.76rem;margin-top:12px">Resultado preliminar automático. Tu profesor puede confirmarlo con una evaluación oral.</p>'
+      + (passed
+          ? '<button class="btn btn-gold" id="cont">Continuar</button>'
+          : '<button class="btn btn-gold" id="retry">Reintentar examen</button><button class="btn btn-ghost" id="backHome">Ver lecciones</button>')
+      + '</div></div>');
+    if (passed) {
+      byId("cont").onclick = renderStreak;
+    } else {
+      byId("retry").onclick = function () { exIdx = 0; results = []; earnedXp = 0; renderExercise(); };
+      byId("backHome").onclick = function () { location.search = ""; };
+    }
   }
 
   /* ---------- STREAK ---------- */
