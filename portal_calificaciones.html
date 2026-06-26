@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<script src="vesper_auth.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calificaciones | Vesper Academy</title>
+<meta name="description" content="Panel de resultados de exámenes de los alumnos. Acceso restringido al profesorado.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="assets/images/vesper_logo.png" type="image/png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inria+Serif:ital,wght@0,400;0,700&family=Inter:wght@300;400;500;600;700;800&display=swap');
+*,*::before,*::after{box-sizing:border-box;}
+:root{--navy:#1B1B2F;--navy2:#2c2c4a;--gold:#c5a059;--gold2:#a8843d;--cream:#f5f2eb;--border:#e4e0d8;--muted:#6b7a8d;--err:#b03a3a;--ok:#2d7a4f;--accent:#8a2f3b;}
+body{margin:0;font-family:'Inter',sans-serif;background:var(--cream);color:var(--navy);}
+header{background:var(--navy);border-bottom:3px solid var(--gold);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:14px;position:sticky;top:0;z-index:50;}
+.brand{display:flex;align-items:center;gap:12px;color:#fff;text-decoration:none;}
+.brand img{height:42px;width:42px;object-fit:contain;}
+.brand b{font-family:'Inria Serif',serif;font-size:1.1rem;}
+.brand small{display:block;color:var(--gold);font-size:.6rem;letter-spacing:2px;text-transform:uppercase;}
+header .right{display:flex;align-items:center;gap:18px;}
+header a.back{color:rgba(255,255,255,.75);font-size:.78rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;text-decoration:none;}
+header a.back:hover{color:var(--gold);}
+.wrap{max-width:1100px;margin:0 auto;padding:32px 20px 70px;}
+.intro h1{font-family:'Inria Serif',serif;font-size:1.8rem;margin:0 0 8px;}
+.intro p{color:var(--muted);max-width:720px;margin:0 0 6px;font-size:.92rem;line-height:1.55;}
+
+.notice{background:#fbf3df;border:1px solid #e7d8a8;border-left:4px solid var(--gold2);border-radius:8px;padding:14px 16px;margin:20px 0;font-size:.88rem;color:#5a4d2e;line-height:1.55;}
+.notice.bad{background:#f7e7e7;border-color:#e2bcbc;border-left-color:var(--err);color:#6a2a2a;}
+.notice i{margin-right:6px;}
+
+.stats{display:flex;flex-wrap:wrap;gap:12px;margin:22px 0 14px;}
+.stat{background:#fff;border:1px solid var(--border);border-top:4px solid var(--accent);border-radius:10px;padding:12px 18px;min-width:130px;box-shadow:0 1px 4px rgba(0,0,0,.06);}
+.stat b{display:block;font-size:1.5rem;line-height:1.1;font-family:'Inria Serif',serif;}
+.stat span{font-size:.7rem;letter-spacing:1px;text-transform:uppercase;color:var(--muted);}
+
+.toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:18px 0 14px;}
+.toolbar select,.toolbar input{padding:9px 11px;border:1px solid var(--border);border-radius:8px;font:inherit;font-size:.85rem;background:#fff;}
+.toolbar input{min-width:200px;flex:1;max-width:320px;}
+.toolbar .spacer{flex:1;}
+.toolbar button{padding:9px 14px;border:1px solid var(--border);background:#fff;border-radius:8px;font:inherit;font-size:.82rem;font-weight:600;cursor:pointer;color:var(--navy);}
+.toolbar button:hover{border-color:var(--gold);}
+
+.tablecard{background:#fff;border:1px solid var(--border);border-radius:12px;box-shadow:0 1px 4px rgba(0,0,0,.06);overflow:hidden;}
+table{width:100%;border-collapse:collapse;font-size:.86rem;}
+thead th{text-align:left;background:#f3eee2;color:var(--navy);font-size:.7rem;letter-spacing:.8px;text-transform:uppercase;padding:11px 14px;border-bottom:1px solid var(--border);}
+tbody td{padding:11px 14px;border-bottom:1px solid #f0ece3;vertical-align:middle;}
+tbody tr.row{cursor:pointer;}
+tbody tr.row:hover{background:#faf7f0;}
+.who b{font-weight:600;}
+.who small{display:block;color:var(--muted);font-size:.72rem;}
+.tag{display:inline-block;font-size:.66rem;font-weight:800;letter-spacing:.4px;text-transform:uppercase;padding:3px 9px;border-radius:20px;background:#e9edf3;color:#2c2c4a;border:1px solid #d4dbe6;}
+.tag.exam{background:#efe7f7;color:#5b3a8a;border-color:#ddccef;}
+.tag.boss{background:#f6e6e8;color:#8a2f3b;border-color:#ecccd1;}
+.tag.placement{background:#e6f0fb;color:#1e5fa8;border-color:#cbe0f6;}
+.tag.lesson{background:#e7f4ec;color:#2d7a4f;border-color:#cfe9da;}
+.pct{font-weight:700;}
+.state{font-size:.72rem;font-weight:700;}
+.state.pass{color:var(--ok);}
+.state.fail{color:var(--err);}
+.detailrow td{background:#fbf9f4;padding:0;}
+.detailbox{padding:12px 18px 16px;}
+.detailbox h4{margin:0 0 8px;font-size:.78rem;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);}
+.detailbox h4:not(:first-child){margin-top:16px;}
+.skgrid{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:4px;}
+.skchip{display:flex;flex-direction:column;gap:2px;background:#fff;border:1px solid var(--border);border-radius:8px;padding:8px 12px;min-width:104px;}
+.skchip .sklbl{font-size:.7rem;color:var(--muted);}
+.skchip .skval{font-size:.92rem;}
+.qlist{display:flex;flex-direction:column;gap:5px;}
+.qitem{display:flex;align-items:flex-start;gap:8px;font-size:.82rem;line-height:1.4;}
+.qitem i{margin-top:2px;}
+.qitem i.c{color:var(--ok);}
+.qitem i.x{color:var(--err);}
+.qitem .qt{font-size:.66rem;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-left:6px;}
+.empty{padding:40px 20px;text-align:center;color:var(--muted);}
+
+#loading{padding:50px 20px;text-align:center;color:var(--muted);}
+#loading .spin{display:inline-block;width:28px;height:28px;border:3px solid rgba(138,47,59,.2);border-top-color:var(--accent);border-radius:50%;animation:sp .8s linear infinite;margin-bottom:12px;}
+@keyframes sp{to{transform:rotate(360deg)}}
+
+footer{background:var(--navy);color:rgba(255,255,255,.5);text-align:center;padding:24px;font-size:.78rem;border-top:3px solid var(--gold);}
+footer a{color:var(--gold);text-decoration:none;}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+@media(max-width:640px){.who small{font-size:.68rem}thead th:nth-child(3),tbody td:nth-child(3){display:none}}
+</style>
+<link rel="stylesheet" href="assets/css/vesper_tokens.css">
+</head>
+<body>
+
+<header>
+  <a class="brand" href="index.html">
+    <img src="assets/images/vesper_logo_inverted.png" alt="Vesper Academy">
+    <span><b>Vesper Academy</b><small>Calificaciones</small></span>
+  </a>
+  <div class="right">
+    <a class="back" href="portal_profesores.html"><i class="fas fa-toolbox"></i> Portal profesor</a>
+    <a class="back" href="index.html"><i class="fas fa-arrow-left"></i> Sitio principal</a>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="intro">
+    <h1>Resultados de exámenes</h1>
+    <p>Calificaciones de tus alumnos registradas dentro de la plataforma: exámenes
+       de mundo (boss), nivelación y lecciones. Toca una fila para ver el detalle
+       pregunta por pregunta. Todo vive aquí — sin recurrir a fuentes externas.</p>
+  </div>
+
+  <div id="loading"><div class="spin"></div><div>Cargando calificaciones…</div></div>
+
+  <div id="content" style="display:none">
+    <div class="stats" id="stats"></div>
+    <div class="toolbar">
+      <select id="f-type">
+        <option value="">Todos los tipos</option>
+        <option value="exam">Examen de nivel</option>
+        <option value="boss">Examen de mundo</option>
+        <option value="placement">Nivelación</option>
+        <option value="lesson">Lección</option>
+      </select>
+      <input id="f-q" type="search" placeholder="Buscar alumno (alias o correo)…">
+      <span class="spacer"></span>
+      <button id="f-reload"><i class="fas fa-rotate"></i> Actualizar</button>
+    </div>
+    <div class="tablecard">
+      <table>
+        <thead><tr>
+          <th>Alumno</th><th>Examen</th><th>Nivel</th><th>Resultado</th><th>%</th><th>Estado</th><th>Fecha</th>
+        </tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div id="msg" style="display:none"></div>
+</div>
+
+<footer>
+  © <span id="y"></span> Vesper Academy · <a href="index.html">vesper.academy</a> · Área de profesores
+</footer>
+
+<script src="vesper_results.js"></script>
+<script>
+(function () {
+  "use strict";
+  document.getElementById("y").textContent = new Date().getFullYear();
+
+  var loadingEl = document.getElementById("loading");
+  var contentEl = document.getElementById("content");
+  var msgEl = document.getElementById("msg");
+  var rowsEl = document.getElementById("rows");
+  var statsEl = document.getElementById("stats");
+  var fType = document.getElementById("f-type");
+  var fQ = document.getElementById("f-q");
+
+  var TYPE_LABEL = { exam: "Examen de nivel", boss: "Examen de mundo", placement: "Nivelación", lesson: "Lección" };
+  var allRows = [];
+
+  function esc(t) {
+    return ("" + (t == null ? "" : t)).replace(/[&<>"]/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
+    });
+  }
+  function fmtDate(d) {
+    if (!d) return "—";
+    try { return new Date(d).toLocaleString("es", { dateStyle: "medium", timeStyle: "short" }); }
+    catch (e) { return d; }
+  }
+
+  function showMsg(html, bad) {
+    loadingEl.style.display = "none";
+    contentEl.style.display = "none";
+    msgEl.style.display = "block";
+    msgEl.className = "notice" + (bad ? " bad" : "");
+    msgEl.innerHTML = html;
+  }
+
+  function renderStats(rows) {
+    var students = {}, passed = 0, graded = 0;
+    rows.forEach(function (r) {
+      students[r.studentUid || r.email || r.alias] = true;
+      if (r.examType !== "placement") { graded++; if (r.passed) passed++; }
+    });
+    var rate = graded ? Math.round(100 * passed / graded) : 0;
+    statsEl.innerHTML =
+      '<div class="stat"><b>' + rows.length + '</b><span>Intentos</span></div>' +
+      '<div class="stat"><b>' + Object.keys(students).length + '</b><span>Alumnos</span></div>' +
+      '<div class="stat"><b>' + rate + '%</b><span>Tasa de aprobación</span></div>';
+  }
+
+  var SK_LABEL = { grammar: "Gramática", vocab: "Vocabulario", use: "Uso del inglés", reading: "Lectura", listening: "Listening", otro: "Otros" };
+  var SK_ORDER = ["grammar", "vocab", "use", "reading", "listening", "otro"];
+
+  function skillSummaryHtml(detail) {
+    var by = {};
+    detail.forEach(function (d) {
+      var sk = d.skill || "otro";
+      if (!by[sk]) by[sk] = { c: 0, t: 0 };
+      by[sk].t++; if (d.correct) by[sk].c++;
+    });
+    var keys = SK_ORDER.filter(function (s) { return by[s]; });
+    // si no hay destrezas reales (todo cae en "otro"), no mostramos el resumen
+    if (!keys.length || (keys.length === 1 && keys[0] === "otro")) return "";
+    var chips = keys.map(function (s) {
+      var b = by[s], p = Math.round(100 * b.c / Math.max(1, b.t));
+      var col = p >= 70 ? "#2d7a4f" : (p >= 50 ? "#a8843d" : "#b03a3a");
+      return '<div class="skchip"><span class="sklbl">' + esc(SK_LABEL[s] || s) + '</span>' +
+             '<span class="skval" style="color:' + col + '"><b>' + b.c + '/' + b.t + '</b> · ' + p + '%</span></div>';
+    }).join("");
+    return '<h4>Desempeño por destreza</h4><div class="skgrid">' + chips + '</div>';
+  }
+
+  function detailHtml(r) {
+    if (!r.detail || !r.detail.length) {
+      return '<div class="detailbox"><h4>Detalle</h4><div class="qlist"><div class="qitem">Sin detalle por pregunta para este intento.</div></div></div>';
+    }
+    var items = r.detail.map(function (d) {
+      var icon = d.correct ? '<i class="fas fa-check-circle c"></i>' : '<i class="fas fa-times-circle x"></i>';
+      return '<div class="qitem">' + icon + '<span>' + esc(d.q || "(pregunta)") +
+             '<span class="qt">' + esc(d.type || "") + '</span></span></div>';
+    }).join("");
+    return '<div class="detailbox">' + skillSummaryHtml(r.detail) +
+           '<h4>Detalle por pregunta</h4><div class="qlist">' + items + '</div></div>';
+  }
+
+  function render() {
+    var type = fType.value;
+    var q = fQ.value.trim().toLowerCase();
+    var rows = allRows.filter(function (r) {
+      if (type && r.examType !== type) return false;
+      if (q) {
+        var hay = (r.alias + " " + r.email).toLowerCase();
+        if (hay.indexOf(q) === -1) return false;
+      }
+      return true;
+    });
+
+    if (!rows.length) {
+      rowsEl.innerHTML = '<tr><td colspan="7" class="empty">No hay resultados que coincidan.</td></tr>';
+      return;
+    }
+
+    var html = "";
+    rows.forEach(function (r, i) {
+      var tcls = (r.examType === "exam" || r.examType === "boss" || r.examType === "placement" || r.examType === "lesson") ? r.examType : "";
+      var state = r.examType === "placement"
+        ? '<span class="state">—</span>'
+        : '<span class="state ' + (r.passed ? "pass" : "fail") + '">' +
+          (r.passed ? "Aprobado" : "Reprobado") + '</span>';
+      html +=
+        '<tr class="row" data-i="' + i + '">' +
+          '<td class="who"><b>' + esc(r.alias || "Estudiante") + '</b>' +
+            (r.email ? '<small>' + esc(r.email) + '</small>' : '') + '</td>' +
+          '<td><span class="tag ' + tcls + '">' + esc(TYPE_LABEL[r.examType] || r.examType) + '</span>' +
+            (r.examId && r.examType === "lesson" ? '<small style="color:var(--muted)">' + esc(r.examId) + '</small>' : '') + '</td>' +
+          '<td>' + esc(r.level || "—") + '</td>' +
+          '<td>' + r.score + ' / ' + r.total + '</td>' +
+          '<td class="pct">' + r.percent + '%</td>' +
+          '<td>' + state + '</td>' +
+          '<td style="color:var(--muted);font-size:.78rem">' + esc(fmtDate(r.date)) + '</td>' +
+        '</tr>' +
+        '<tr class="detailrow" data-d="' + i + '" style="display:none"><td colspan="7">' + detailHtml(r) + '</td></tr>';
+    });
+    rowsEl.innerHTML = html;
+    // guardamos el subconjunto filtrado para resolver clics por índice
+    rowsEl._rows = rows;
+  }
+
+  rowsEl.addEventListener("click", function (e) {
+    var tr = e.target.closest("tr.row");
+    if (!tr) return;
+    var i = tr.getAttribute("data-i");
+    var dr = rowsEl.querySelector('tr.detailrow[data-d="' + i + '"]');
+    if (dr) dr.style.display = (dr.style.display === "none") ? "" : "none";
+  });
+
+  fType.addEventListener("change", render);
+  fQ.addEventListener("input", render);
+
+  function load() {
+    if (!window.VESPER_RESULTS || !VESPER_RESULTS.available()) {
+      showMsg('<i class="fas fa-cloud"></i> La nube no está configurada. Cuando se conecte ' +
+        'Firebase y se publique la regla de <code>exam_results</code>, las calificaciones ' +
+        'aparecerán aquí. Mientras tanto, los resultados solo viven en el dispositivo de cada alumno.', true);
+      return;
+    }
+    loadingEl.style.display = "block";
+    contentEl.style.display = "none";
+    msgEl.style.display = "none";
+
+    VESPER_RESULTS.fetchAll({ limit: 500 }).then(function (rows) {
+      if (rows === null) {
+        showMsg('<i class="fas fa-lock"></i> No se pudieron leer las calificaciones. ' +
+          'Verifica que tu cuenta sea de profesor/admin y que la regla de Firestore para ' +
+          '<code>exam_results</code> esté publicada (ver <b>FIRESTORE_EXAM_RESULTS_RULES.md</b>).', true);
+        return;
+      }
+      allRows = rows;
+      loadingEl.style.display = "none";
+      msgEl.style.display = "none";
+      contentEl.style.display = "block";
+      renderStats(rows);
+      render();
+      if (!rows.length) {
+        rowsEl.innerHTML = '<tr><td colspan="7" class="empty">Aún no hay resultados registrados. ' +
+          'En cuanto un alumno con sesión termine un examen o una lección, aparecerá aquí.</td></tr>';
+      }
+    });
+  }
+
+  document.getElementById("f-reload").addEventListener("click", load);
+
+  // El gate de vesper_auth.js ya exige sesión verificada + allowlist para esta
+  // página protegida. Aquí confirmamos además que sea PROFESOR/ADMIN antes de
+  // mostrar datos; si no, avisamos (y la regla de Firestore lo bloquea igual).
+  function boot() {
+    if (!window.VesperAuth || !VesperAuth.isConfigured) {
+      showMsg('<i class="fas fa-cloud"></i> Firebase no está configurado en <code>vesper_auth.js</code>; ' +
+        'el panel de calificaciones necesita la nube para reunir los resultados de todos los alumnos.', true);
+      return;
+    }
+    VesperAuth.initFirebase().then(function (auth) {
+      auth.onAuthStateChanged(function (user) {
+        if (!user || !user.emailVerified) { return; /* el gate redirige al login */ }
+        VesperAuth.isTeacher(user).then(function (ok) {
+          if (!ok) {
+            showMsg('<i class="fas fa-user-lock"></i> Esta sección es solo para profesores. ' +
+              'Tu cuenta (<b>' + esc(user.email) + '</b>) no está en la lista de profesorado. ' +
+              'Pide al administrador que te autorice.', true);
+            return;
+          }
+          load();
+        });
+      });
+    }).catch(function () {
+      showMsg('<i class="fas fa-triangle-exclamation"></i> No se pudo conectar con el servicio. ' +
+        'Revisa tu conexión y recarga.', true);
+    });
+  }
+
+  boot();
+})();
+</script>
+</body>
+</html>

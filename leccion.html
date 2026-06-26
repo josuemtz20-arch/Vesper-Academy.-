@@ -1685,6 +1685,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
 <script src="vesper_themes_pack2.js"></script>
 <script src="vesper_themes_pack3.js"></script>
 <script src="vesper_boss_exams.js"></script>
+<script src="vesper_level_exams.js"></script>
 <script src="vesper_mascot.js"></script>
 <script src="vesper_theme.js"></script>
 <script src="vesper_adaptive.js"></script>
@@ -1700,6 +1701,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
 <script src="vesper_sync.js"></script>
 <script src="vesper_analytics.js"></script>
 <script src="vesper_league_cloud.js"></script>
+<script src="vesper_results.js"></script>
 <script>
 (function () {
   var qs = new URLSearchParams(location.search);
@@ -3231,6 +3233,31 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       + '<div class="logros__grid">' + medals + '</div></details>';
   }
 
+  /* Selector de exámenes de nivel (A1–C2). Se abre desde el hub (?id=exams). */
+  function renderExamPicker() {
+    clearLessonTheme();
+    var levels = (PATH && PATH.LEVELS) ? PATH.LEVELS : ["A1", "A2", "B1", "B2", "C1", "C2"];
+    var avail = window.VESPER_LEVEL_EXAMS || {};
+    var cards = levels.map(function (lv) {
+      var bank = avail[lv];
+      var n = (bank && bank.exercises) ? bank.exercises.length : 0;
+      if (!n) return "";
+      var pass = (bank && bank.pass) ? bank.pass : 70;
+      return '<button class="card lcard" data-exam="' + esc(lv) + '">'
+        + '<div class="lcard-top"><span class="pill">' + esc(lv) + '</span><span class="track">Examen de nivel</span></div>'
+        + '<h2>Examen ' + esc(lv) + '</h2>'
+        + '<div class="muted">' + n + ' ejercicios &middot; aprobar con ' + pass + '%</div></button>';
+    }).join("");
+    show('<div class="wrap">'
+      + '<div class="hero">' + mascot("welcome", "Elige el examen de nivel que quieres presentar.") + '</div>'
+      + '<h1>Examen de nivel</h1>'
+      + '<p class="muted" style="margin:-6px 0 14px">Evaluación completa por nivel: gramática, vocabulario, uso del inglés, lectura y listening. Tu resultado queda registrado para tu profesor.</p>'
+      + '<div class="grid">' + cards + '</div>'
+      + '<div style="margin-top:18px"><a class="btn btn-ghost" href="leccion.html">&larr; Volver a lecciones</a></div>'
+      + '</div>');
+    each("[data-exam]", function (b) { b.onclick = function () { location.search = "?id=exam:" + encodeURIComponent(b.getAttribute("data-exam")); }; });
+  }
+
   function renderIndex(selLevel) {
     clearLessonTheme();
     var st = P ? P.getState() : { streak: 0, xp: 0, shields: 0 };
@@ -3298,11 +3325,16 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
         + '<span class="hc-tx"><b>Repaso de errores</b><span>Tienes ' + srsDue + ' ejercicio' + (srsDue === 1 ? "" : "s") + ' por repasar</span></span>'
         + '<span class="hc-cta">Repasar &rarr;</span></button>'
       : "";
+    var examBanner = '<button class="hub-card" id="examGo" type="button">'
+      + '<span class="hc-ic" aria-hidden="true">🎓</span>'
+      + '<span class="hc-tx"><b>Examen de nivel</b><span>Evalúa tu dominio de A1 a C2</span></span>'
+      + '<span class="hc-cta">Presentar &rarr;</span></button>';
     show('<div class="wrap">'
       + hudHtml(st, dg, hello, heroInfo)
       + placementCard("leccion-hub")
       + worldsSection(built, selLevel)
       + srsBanner
+      + examBanner
       + searchUI
       + '<div id="searchResults" class="search-results" aria-live="polite" hidden></div>'
       + '<div id="levelView">' + worldMap(selLevel, built) + '</div>'
@@ -3312,6 +3344,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     bindCta();
     if (_indexFirst) track("hub_view", { level: selLevel });
     var srsGo = byId("srsGo"); if (srsGo) srsGo.onclick = function () { location.search = "?id=review:srs"; };
+    var examGo = byId("examGo"); if (examGo) examGo.onclick = function () { location.search = "?id=exams"; };
     each(".world[data-lvl]", function (b) { b.onclick = function () { renderIndex(b.getAttribute("data-lvl")); }; });
     each(".world[data-locked-world]", function (b) { b.onclick = function () { toast("Vence al guardián del mundo anterior para desbloquearlo"); }; });
     each(".den-enter[data-den]", function (b) { b.onclick = function () { renderDen(b.getAttribute("data-den")); }; });
@@ -4217,6 +4250,17 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
   /* ---------- FEEDBACK / XP ---------- */
   var lastPerfect = false, masteryUnlocked = false;
   var PASS_PCT = 70;
+  /* Detalle por pregunta para el registro central de calificaciones:
+     texto + tipo + acierto. Reusa lesson.exercises[] + results[]. */
+  function examDetail() {
+    return (lesson.exercises || []).map(function (ex, i) {
+      ex = ex || {};
+      var q = ex.question || ex.sentence || ex.statement || ex.prompt || ex.title
+              || (ex.words ? ex.words.join(" ") : "") || "";
+      return { q: q, type: ex.type || "", skill: ex.skill || "", correct: !!results[i] };
+    });
+  }
+
   function renderFeedback() {
     var total = lesson.exercises.length;
     var correct = results.filter(Boolean).length;
@@ -4224,6 +4268,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     var perfect = correct === total;
     lastPerfect = perfect;
     if (lesson.isBoss) { renderBossResult(correct, total, pct); return; }
+    if (lesson.isExam) { renderExamResult(correct, total, pct); return; }
     /* Lecciones normales: hay que acertar >=70% para superarlas, ganar XP y
        desbloquear la siguiente. Por debajo se ofrece reintentar (no completa).
        Los repasos ("boss") conservan su lógica propia (>=80% = maestría). */
@@ -4238,6 +4283,16 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     track("lesson_complete", { id: lesson.lessonId, level: lesson.level, pct: pct, type: lesson.srsReview ? "srs" : (lesson.isReview ? "review" : "lesson") });
     if (perfect) { burstConfetti(40); sfx("fanfare"); } else { sfx("complete"); }
     if (PATH && PATH.setScore && lesson.lessonId) PATH.setScore(lesson.lessonId, pct);
+    /* Registro central de la calificación de la lección (solo superadas, para
+       no llenar el panel de intentos abandonados). No debe romper la pantalla.
+       Los exámenes de nivel se registran aparte, en renderExamResult. */
+    try {
+      if (window.VESPER_RESULTS) VESPER_RESULTS.record({
+        examType: "lesson", examId: lesson.lessonId, level: lesson.level,
+        score: correct, total: total, percent: pct,
+        threshold: PASS_PCT, passed: pct >= PASS_PCT, detail: examDetail()
+      });
+    } catch (e) {}
     /* repaso aprobado (>=80%) -> desbloquea maestría de la destreza */
     masteryUnlocked = false;
     if (lesson.isReview && pct >= 80 && P && P.unlock) {
@@ -4275,6 +4330,15 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
   /* ---------- RESULTADO DEL JEFE (victoria / derrota) ---------- */
   function renderBossResult(correct, total, pct) {
     var bm = bossMeta(lesson.bossLevel);
+    /* Registro central del intento (aprobado o reprobado) para el panel del
+       profesor. Nunca debe romper la pantalla de resultado. */
+    try {
+      if (window.VESPER_RESULTS) VESPER_RESULTS.record({
+        examType: "boss", examId: lesson.lessonId, level: lesson.bossLevel,
+        score: correct, total: total, percent: pct,
+        threshold: bm.pass, passed: pct >= bm.pass, detail: examDetail()
+      });
+    } catch (e) {}
     if (pct < bm.pass) {
       earnedXp = 0;
       track("boss_fail", { level: lesson.bossLevel, pct: pct });
@@ -4314,6 +4378,66 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       + '<button class="btn btn-gold" id="cont">Continuar</button></div></div>');
     bindCta();
     byId("cont").onclick = renderStreak;
+  }
+
+  /* ---------- RESULTADO DEL EXAMEN DE NIVEL (aprobado / reprobado) ----------
+     Calificación PRELIMINAR automática: veredicto claro + desglose por destreza.
+     Registra el intento (siempre) y, si aprueba, otorga XP y continúa la racha;
+     si reprueba, ofrece reintentar sin XP. */
+  function renderExamResult(correct, total, pct) {
+    var pass = lesson.examPass || PASS_PCT;
+    var passed = pct >= pass;
+    lastPerfect = (correct === total);
+    earnedXp = passed ? Math.max(20, Math.round((lesson.xpReward || 60) * correct / Math.max(1, total))) : 0;
+    track("exam_complete", { level: lesson.examLevel, pct: pct, passed: passed });
+    if (PATH && PATH.setScore && lesson.lessonId) PATH.setScore(lesson.lessonId, pct);
+    /* registro central (siempre, aprobado o reprobado) */
+    try {
+      if (window.VESPER_RESULTS) VESPER_RESULTS.record({
+        examType: "exam", examId: "exam:" + lesson.examLevel, level: lesson.level,
+        score: correct, total: total, percent: pct,
+        threshold: pass, passed: passed, detail: examDetail()
+      });
+    } catch (e) {}
+    /* desglose preliminar por destreza */
+    var bySkill = {};
+    (lesson.exercises || []).forEach(function (ex, i) {
+      var sk = (ex && ex.skill) || "otro";
+      if (!bySkill[sk]) bySkill[sk] = { c: 0, t: 0 };
+      bySkill[sk].t++; if (results[i]) bySkill[sk].c++;
+    });
+    var SK_LABEL = { grammar: "Gramática", vocab: "Vocabulario", use: "Uso del inglés", reading: "Lectura", listening: "Listening", otro: "Otros" };
+    var rows = ["grammar", "vocab", "use", "reading", "listening", "otro"].filter(function (s) { return bySkill[s]; }).map(function (s) {
+      var b = bySkill[s], p = Math.round(100 * b.c / Math.max(1, b.t));
+      return '<div style="display:flex;justify-content:space-between;gap:12px;padding:7px 2px;border-bottom:1px solid #ece7da;font-size:.9rem">'
+        + '<span>' + SK_LABEL[s] + '</span><span style="color:#6b6b76"><b style="color:#1B1B2F">' + b.c + '/' + b.t + '</b> &middot; ' + p + '%</span></div>';
+    }).join("");
+    var verdict = passed ? "Aprobado" : "Reprobado";
+    var vStyle = passed
+      ? "background:#e7f4ec;color:#2d7a4f;border:2px solid #2d7a4f"
+      : "background:#f7e7e7;color:#b03a3a;border:2px solid #b03a3a";
+    if (passed) { burstConfetti(40); sfx("fanfare"); } else { sfx("complete"); }
+    show('<div class="wrap">' + topbar(92) + '<div class="card center">'
+      + mascot(passed ? "milestone" : "incorrect", passed ? "¡Examen de nivel aprobado!" : "Aún no alcanzas el nivel. ¡Sigue practicando!")
+      + '<div style="display:inline-block;margin:6px auto 4px;padding:8px 22px;border-radius:999px;font:800 1.05rem/1 Inter,system-ui,sans-serif;letter-spacing:1.5px;text-transform:uppercase;' + vStyle + '">' + verdict + '</div>'
+      + '<h1>' + pct + '%</h1>'
+      + '<p class="muted">' + correct + ' de ' + total + ' correctos &middot; necesitas ' + pass + '% para aprobar</p>'
+      + '<div class="xpbar"><div class="xpfill" style="width:' + pct + '%' + (passed ? '' : ';background:var(--error)') + '"></div></div>'
+      + (passed ? '<div class="xp-bonus" style="margin-top:8px">' + ic('flame') + ' +' + earnedXp + ' XP</div>' : '')
+      + '<div style="margin:16px auto 4px;text-align:left;max-width:300px">'
+        + '<div style="font:700 .72rem/1 Inter,system-ui,sans-serif;letter-spacing:1px;text-transform:uppercase;color:#6b6b76;margin-bottom:4px">Desglose por destreza</div>'
+        + rows + '</div>'
+      + '<p class="muted" style="font-size:.76rem;margin-top:12px">Resultado preliminar automático. Tu profesor puede confirmarlo con una evaluación oral.</p>'
+      + (passed
+          ? '<button class="btn btn-gold" id="cont">Continuar</button>'
+          : '<button class="btn btn-gold" id="retry">Reintentar examen</button><button class="btn btn-ghost" id="backHome">Ver lecciones</button>')
+      + '</div></div>');
+    if (passed) {
+      byId("cont").onclick = renderStreak;
+    } else {
+      byId("retry").onclick = function () { exIdx = 0; results = []; earnedXp = 0; renderExercise(); };
+      byId("backHome").onclick = function () { location.search = ""; };
+    }
   }
 
   /* ---------- STREAK ---------- */
@@ -4567,6 +4691,40 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     };
   }
 
+  /* ---------- EXAMEN DE NIVEL: evaluación formal y completa de un nivel ----------
+     A diferencia del jefe (corto y muestreado), el examen de nivel presenta TODO
+     el banco de ese nivel (vesper_level_exams.js), ordenado por destreza
+     (gramática → vocabulario → uso → lectura → listening). No es isBoss: corre
+     por la vía normal de renderFeedback y se registra como examType "exam". */
+  function buildLevelExam(level) {
+    if (!PATH) return null;
+    level = PATH.normLevel ? PATH.normLevel(level) : level;
+    var bank = window.VESPER_LEVEL_EXAMS && window.VESPER_LEVEL_EXAMS[level];
+    if (!bank || !bank.exercises || bank.exercises.length < 5) return null;
+    var pass = bank.pass || 70;
+    var SKILL_RANK = { grammar: 0, vocab: 1, use: 2, reading: 3, listening: 4 };
+    /* orden estable por destreza, conservando el orden de autoría dentro de cada una */
+    var exs = bank.exercises.map(function (e, i) { return { e: e, i: i }; });
+    exs.sort(function (a, b) {
+      var ra = (a.e.skill in SKILL_RANK) ? SKILL_RANK[a.e.skill] : 9;
+      var rb = (b.e.skill in SKILL_RANK) ? SKILL_RANK[b.e.skill] : 9;
+      return (ra - rb) || (a.i - b.i);
+    });
+    var ordered = exs.map(function (x) { return x.e; });
+    return {
+      lessonId: "exam:" + level, level: level, track: "Examen de nivel",
+      isExam: true, examLevel: level, examPass: pass,
+      title: "Examen de nivel · " + level,
+      explanation: {
+        body: "Evaluación completa del nivel " + level + ": gramática, vocabulario, uso del inglés, "
+          + "lectura y listening. Son " + ordered.length + " ejercicios. Necesitas " + pass
+          + "% para aprobar. Tu resultado queda registrado para tu profesor.",
+        examples: []
+      },
+      exercises: ordered, xpReward: 80, mascotState: "thinking", nextLessonId: null
+    };
+  }
+
   /* quiz corto de calibracion al inicio de la sesion */
   function renderWarmup() {
     var band = A.levelToBand(A.profileLevel());
@@ -4613,6 +4771,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
   if (!L || !Object.keys(L).length) { show('<div class="wrap"><div class="card center"><h1>Sin lecciones</h1><p class="muted">No se cargaron los datos.</p></div></div>'); return; }
   if (window.VESPER_THEME && VESPER_THEME.mountFloat) VESPER_THEME.mountFloat();
   if (!id) { renderIndex(); return; }
+  if (id === "exams") { renderExamPicker(); return; }
   if (id === "review:srs") {
     baseLesson = (window.VESPER_SRS && VESPER_SRS.buildReviewLesson) ? VESPER_SRS.buildReviewLesson() : null;
     if (!baseLesson || !baseLesson.exercises.length) {
@@ -4642,6 +4801,18 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     if (!baseLesson || !baseLesson.exercises.length) {
       show('<div class="wrap"><div class="card center">' + mascot("thinking", "El guardián aún no aparece.")
         + '<h1>Jefe no disponible</h1><p class="muted">Completa las lecciones del mundo para enfrentar al guardián.</p>'
+        + '<a class="btn btn-gold" href="leccion.html">Ver lecciones</a></div></div>');
+      return;
+    }
+    lesson = baseLesson;
+    renderCover();
+    return;
+  }
+  if (id.indexOf("exam:") === 0) {
+    baseLesson = buildLevelExam(id.split(":")[1]);
+    if (!baseLesson || !baseLesson.exercises.length) {
+      show('<div class="wrap"><div class="card center">' + mascot("thinking", "Ese examen aún no está disponible.")
+        + '<h1>Examen no disponible</h1><p class="muted">Aún no hay examen para ese nivel.</p>'
         + '<a class="btn btn-gold" href="leccion.html">Ver lecciones</a></div></div>');
       return;
     }

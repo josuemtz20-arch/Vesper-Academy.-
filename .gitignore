@@ -122,6 +122,16 @@
 !/vesper_icons.js
 !/vesper_opticons.js
 !/FIRESTORE_LEAGUE_RULES.md
+# Ruleset completo de Firestore (base teachermanuals): allowlist, manuales,
+# libros, progreso, liga y exam_results. Referencia desplegable.
+!/firestore.rules
+# Registro central de calificaciones (2026-06-26): los exámenes (boss/lección/
+# nivelación) guardan su resultado en exam_results (Firestore REST, reusa
+# VesperAuth) espejado a localStorage; el profesor los consulta en
+# portal_calificaciones.html (gated). Sin claves. Doc de la regla a publicar.
+!/vesper_results.js
+!/portal_calificaciones.html
+!/FIRESTORE_EXAM_RESULTS_RULES.md
 # recintos tematicos de vocabulario (ramas) — datos publicos, sin claves
 !/vesper_vocab_dens.js
 !/apariencia.html
@@ -183,6 +193,12 @@
 # sampled each attempt). C1/C2 are short TOEFL-style exams (reading +
 # listening + structure). Consumed by buildBossExam in leccion.html.
 !/vesper_boss_exams.js
+
+# Examen de nivel formal por CEFR (2026-06-26): banco completo por nivel
+# (gramática, vocab, uso, lectura, listening) + enriquecimiento de los boss
+# banks. Lo consume buildLevelExam (exam:NIVEL) en leccion.html y se registra
+# en el panel de calificaciones. Vanilla, sin claves.
+!/vesper_level_exams.js
 
 # Expansion 2026-06-16: live chat with the Vesper AI tutor (public, no-account).
 # chat.html embeds the personalized system prompt from VESPER_PERSONA and talks
