@@ -122,6 +122,9 @@
 !/vesper_icons.js
 !/vesper_opticons.js
 !/FIRESTORE_LEAGUE_RULES.md
+# Ruleset completo de Firestore (base teachermanuals): allowlist, manuales,
+# libros, progreso, liga y exam_results. Referencia desplegable.
+!/firestore.rules
 # Registro central de calificaciones (2026-06-26): los exámenes (boss/lección/
 # nivelación) guardan su resultado en exam_results (Firestore REST, reusa
 # VesperAuth) espejado a localStorage; el profesor los consulta en
