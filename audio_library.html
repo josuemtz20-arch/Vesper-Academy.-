@@ -265,9 +265,16 @@
             { title:"Storm News Report (Practice Lab 2)",      lesson:"Listening Drill 3", file:"cert_prep_listening_3.mp3", icon:"fa-cloud-bolt" }
         ];
 
-        // exam.html is teacher-local (it carries answer keys); hide the exam button where it isn't deployed
+        // Each level / course has its own end-of-course exam (exam.html?course=... or ?level=...).
+        // The button is hidden only if exam.html isn't reachable at all.
         let EXAM_AVAILABLE = true;
         fetch("exam.html", { method: "HEAD" }).then(r => { EXAM_AVAILABLE = r.ok; }).catch(() => { EXAM_AVAILABLE = false; });
+        function setExamBtn(href, label) {
+            const eb = document.getElementById("exam-btn");
+            eb.href = href;
+            eb.innerHTML = '<i class="fas fa-pen-to-square"></i> ' + label;
+            eb.classList.toggle("hidden", !EXAM_AVAILABLE);
+        }
 
         const levelGrid = document.getElementById("level-grid");
         const lessonGrid = document.getElementById("lesson-grid");
@@ -379,9 +386,7 @@
             const lv = DATA[n];
             lessonsTitle.textContent = `Level ${n} — ${lv.tag}`;
             setCrumbsLevel(`Level ${n} · ${lv.tag}`);
-            const eb = document.getElementById("exam-btn");
-            eb.href = `exam.html?level=${n}`;
-            eb.classList.toggle("hidden", !EXAM_AVAILABLE);
+            setExamBtn(`exam.html?level=${n}`, `Take the Level ${n} Exam`);
             lessonGrid.innerHTML = "";
             lv.lessons.forEach((les, i) => {
                 const a = document.createElement("a");
@@ -426,7 +431,7 @@
             const lv = BASICS[n];
             lessonsTitle.textContent = `Core Basics ${n} — ${lv.tag}`;
             setCrumbsLevel(`Basics ${n} · ${lv.tag}`);
-            document.getElementById("exam-btn").classList.add("hidden");
+            setExamBtn(`exam.html?course=core_basics_lvl${n}`, `Take the Basics ${n} Exam`);
             lessonGrid.innerHTML = "";
             lv.lessons.forEach((les, i) => {
                 const a = document.createElement("a");
@@ -448,7 +453,7 @@
         function showCert() {
             lessonsTitle.textContent = "Certification Prep — Listening Drills";
             setCrumbsLevel("Certification");
-            document.getElementById("exam-btn").classList.add("hidden");
+            setExamBtn("exam.html?course=cert_prep", "Take the Certification Exam");
             lessonGrid.innerHTML = "";
             CERT_TRACKS.forEach((t, i) => {
                 const a = document.createElement("a");
@@ -472,7 +477,7 @@
         function showBusiness() {
             lessonsTitle.textContent = "Business English — Premium (B2)";
             setCrumbsLevel("Business English");
-            document.getElementById("exam-btn").classList.add("hidden");
+            setExamBtn("exam.html?course=corporate_b2", "Take the Business Exam");
             lessonGrid.innerHTML = "";
             BUSINESS_LESSONS.forEach((L, i) => {
                 const def = L.variants[0];

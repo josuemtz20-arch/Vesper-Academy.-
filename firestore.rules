@@ -58,6 +58,18 @@ service cloud.firestore {
       allow write: if false;
     }
 
+    // —— Exámenes por curso/manual: alumnos autorizados, profesores o el admin ——
+    // (exam.html → /documents/exams/{id}). Guardan las claves de respuesta, por eso
+    // NO se publican como archivo estático; se leen con el idToken del alumno.
+    match /exams/{id} {
+      allow read:  if request.auth != null && (
+                     exists(/databases/$(database)/documents/students/$(request.auth.token.email))
+                     || exists(/databases/$(database)/documents/teachers/$(request.auth.token.email))
+                     || request.auth.token.email == "josuemtz20@gmail.com"
+                   );
+      allow write: if false;   // alta desde el script admin (upload-exams)
+    }
+
     // —— Progreso del alumno (racha + XP): self-scoped ——
     // (vesper_sync.js → /documents/progress/{uid})
     match /progress/{uid} {

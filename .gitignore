@@ -23,7 +23,8 @@
 !/vesper_auth.js
 
 # student portal + tools
-# (exam.html + vesper_exam_data.js stay local: the data file carries answer keys)
+# (exam.html is PUBLISHED but login-gated; its DATA + answer keys stay LOCAL and
+#  are served from Firestore — see the per-course exam block further down.)
 !/materiales.html
 !/onboarding.html
 !/book_placement.html
@@ -46,6 +47,18 @@
 # student book viewer: downloads the books from Firestore, where
 # server-side rules only allow approved student/teacher accounts to read.
 !/libro.html
+
+# Per-course end-of-level exams (login-gated: exam.html is NOT in publicPages).
+# One exam per teacher manual/level, self-graded MCQs + teacher-graded Writing &
+# Speaking, score logged to exam_results (portal_calificaciones.html).
+# The exam VIEWER is published; the exam DATA (with answer keys) is NOT — it lives
+# in Firestore (collection "exams"), fetched with the student's idToken, exactly
+# like manuals/books. Regenerate the bank with _scripts/build_exams.py and upload
+# with `python _scripts/upload_manuals.py upload-exams`.  vesper_exam_data.js stays
+# LOCAL (it carries answer keys). The id-only index below has NO answers and just
+# lets manual.html/libro.html show the "exam" chip.
+!/exam.html
+!/vesper_exam_index.js
 
 # Vesper Engine v2.0 — personalized course prompt builder (teacher-gated).
 # The syllabus data comes from the already-public student books.

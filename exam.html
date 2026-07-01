@@ -1,0 +1,358 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<script src="vesper_auth.js"></script>
+<script src="vesper_results.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vesper Academy | Exam</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inria+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@300;400;500;600;700&display=swap');
+*,*::before,*::after{box-sizing:border-box;}
+:root{--navy:#141c2a;--navy2:#243654;--navy3:#14223a;--gold:#c5a059;--gold-lt:#d9bd84;--gold2:#a8843d;
+  --cream:#f5f2eb;--white:#fff;--border:#e4e0d8;--text:#141c2a;--muted:#6b7a8d;--green:#2d7a4f;--red:#b02a2a;}
+body{font-family:'Inter',sans-serif;background:var(--cream);color:var(--text);margin:0;min-height:100vh;}
+header{background:var(--navy);padding:0 32px;height:64px;display:flex;align-items:center;justify-content:space-between;
+  border-bottom:3px solid var(--gold);position:sticky;top:0;z-index:50;}
+.brand{display:flex;align-items:center;gap:12px;}
+.brand img{height:42px;width:42px;object-fit:contain;}
+.brand h1{margin:0;font-family:'Inria Serif',serif;font-size:1.1rem;color:#fff;letter-spacing:.5px;}
+.brand p{margin:1px 0 0;font-size:.62rem;color:var(--gold);letter-spacing:2px;text-transform:uppercase;}
+.head-right a{display:inline-flex;align-items:center;gap:8px;text-decoration:none;background:var(--gold);color:var(--navy);
+  font-weight:700;font-size:.74rem;letter-spacing:.8px;text-transform:uppercase;padding:9px 16px;border-radius:9px;transition:background .18s;}
+.head-right a:hover{background:var(--gold-lt);}
+
+.hero{background:radial-gradient(800px 300px at 80% -40%,rgba(197,160,89,.18),transparent 60%),linear-gradient(160deg,var(--navy2),var(--navy) 60%,var(--navy3));
+  border-bottom:3px solid var(--gold);padding:40px 24px;}
+.hero-inner{max-width:860px;margin:0 auto;}
+.hero .kicker{font-size:.7rem;letter-spacing:4px;text-transform:uppercase;color:var(--gold);font-weight:600;}
+.hero h2{font-family:'Inria Serif',serif;font-weight:800;font-size:2.3rem;margin:6px 0 10px;color:#fff;}
+.hero p{margin:0;color:rgba(255,255,255,.72);font-size:.95rem;}
+.hero .meta{margin-top:16px;display:flex;gap:10px;flex-wrap:wrap;}
+.hero .chip{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:.72rem;
+  padding:6px 12px;border-radius:20px;display:flex;align-items:center;gap:7px;}
+.hero .chip i{color:var(--gold);}
+
+.wrap{max-width:860px;margin:0 auto;padding:30px 24px 60px;}
+.section{margin-bottom:34px;animation:fade .3s ease both;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+.sec-head{display:flex;align-items:center;gap:12px;margin-bottom:6px;}
+.sec-letter{width:38px;height:38px;border-radius:10px;background:var(--navy);color:var(--gold);display:flex;
+  align-items:center;justify-content:center;font-family:'Inria Serif',serif;font-weight:800;font-size:1.1rem;flex-shrink:0;}
+.sec-head h3{margin:0;font-family:'Inria Serif',serif;font-size:1.4rem;color:var(--navy);}
+.sec-instr{font-size:.85rem;color:var(--muted);margin:0 0 16px 50px;}
+
+.passage{background:var(--white);border:1px solid var(--border);border-left:4px solid var(--gold);border-radius:12px;
+  padding:20px 24px;margin-bottom:18px;font-family:'Inria Serif',Georgia,serif;font-size:1.05rem;line-height:1.8;color:#2c3a4d;}
+.passage strong{font-family:'Inter',sans-serif;font-weight:700;color:var(--navy);display:inline-block;font-size:.72em;
+  letter-spacing:1px;text-transform:uppercase;margin:1.1em 0 .2em;}
+.passage .first{margin-top:0;}
+.audio-wrap{margin-bottom:18px;}
+.audio-wrap audio{width:100%;max-width:420px;height:42px;}
+.audio-note{font-size:.8rem;color:var(--muted);margin-top:6px;}
+
+.qcard{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:18px 20px;margin-bottom:14px;
+  box-shadow:0 1px 4px rgba(0,0,0,.05);transition:border-color .15s;}
+.qcard.answered{border-color:var(--gold);}
+.q-text{font-size:.98rem;font-weight:600;color:var(--navy);margin:0 0 14px;line-height:1.5;}
+.q-text .qn{color:var(--gold2);margin-right:6px;}
+.options{display:grid;gap:9px;}
+.opt{display:flex;align-items:center;gap:11px;border:1px solid var(--border);background:var(--cream);border-radius:9px;
+  padding:11px 15px;cursor:pointer;font-size:.9rem;transition:all .14s;text-align:left;font-family:'Inter',sans-serif;color:var(--text);}
+.opt:hover{border-color:var(--gold);background:var(--white);}
+.opt .mark{width:24px;height:24px;border-radius:50%;border:2px solid var(--border);flex-shrink:0;display:flex;
+  align-items:center;justify-content:center;font-size:.7rem;font-weight:700;color:var(--muted);}
+.opt.sel{border-color:var(--navy);background:var(--navy);color:#fff;}
+.opt.sel .mark{border-color:var(--gold);background:var(--gold);color:var(--navy);}
+.graded .opt{cursor:default;}
+.opt.correct{border-color:var(--green);background:#eafaf1;color:var(--navy);}
+.opt.correct .mark{border-color:var(--green);background:var(--green);color:#fff;}
+.opt.wrong{border-color:var(--red);background:#fdedec;color:var(--navy);}
+.opt.wrong .mark{border-color:var(--red);background:var(--red);color:#fff;}
+
+.open-task{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:18px 20px;margin-bottom:14px;}
+.open-task .ot-q{font-size:.95rem;font-weight:600;color:var(--navy);margin:0 0 10px;}
+.open-task textarea{width:100%;min-height:90px;border:1px solid var(--border);border-radius:8px;padding:11px;
+  font-family:'Inter',sans-serif;font-size:.9rem;resize:vertical;color:var(--text);}
+.open-task textarea:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(197,160,89,.2);}
+.open-note{font-size:.78rem;color:var(--muted);margin:2px 0 16px 50px;display:flex;align-items:center;gap:7px;}
+.open-note i{color:var(--gold2);}
+
+.submit-bar{position:sticky;bottom:0;background:rgba(245,242,235,.95);backdrop-filter:blur(6px);border-top:1px solid var(--border);
+  padding:16px 24px;display:flex;align-items:center;justify-content:space-between;gap:14px;margin:0 -24px;}
+.submit-bar .prog{font-size:.82rem;color:var(--muted);font-weight:600;}
+.btn{border:none;border-radius:10px;padding:13px 26px;font-family:'Inter',sans-serif;font-weight:700;font-size:.88rem;
+  cursor:pointer;transition:all .16s;letter-spacing:.5px;}
+.btn-gold{background:var(--gold);color:var(--navy);box-shadow:0 4px 14px rgba(197,160,89,.4);}
+.btn-gold:hover{background:var(--gold-lt);}
+.btn-ghost{background:var(--white);color:var(--navy);border:1px solid var(--border);}
+.btn-ghost:hover{border-color:var(--gold);}
+
+/* RESULTS */
+.results{display:none;background:var(--white);border:1px solid var(--border);border-radius:16px;padding:32px;margin-bottom:30px;
+  box-shadow:0 10px 30px rgba(26,43,66,.12);text-align:center;}
+.results.show{display:block;animation:fade .35s ease both;}
+.score-ring{width:130px;height:130px;border-radius:50%;margin:0 auto 16px;display:flex;align-items:center;justify-content:center;
+  flex-direction:column;background:conic-gradient(var(--gold) var(--pct,0%),var(--border) 0);}
+.score-ring .inner{width:104px;height:104px;border-radius:50%;background:var(--white);display:flex;align-items:center;justify-content:center;flex-direction:column;}
+.score-ring .pct{font-family:'Inria Serif',serif;font-size:1.9rem;font-weight:800;color:var(--navy);line-height:1;}
+.score-ring .lbl{font-size:.62rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-top:3px;}
+.band{font-family:'Inria Serif',serif;font-size:1.5rem;font-weight:700;margin:4px 0 4px;}
+.results .sub{color:var(--muted);font-size:.9rem;margin-bottom:18px;}
+.breakdown{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:20px;}
+.bd-item{background:var(--cream);border:1px solid var(--border);border-radius:10px;padding:12px;}
+.bd-item .bd-t{font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;}
+.bd-item .bd-s{font-size:1.2rem;font-weight:700;color:var(--navy);margin-top:3px;}
+
+footer{background:var(--navy);color:rgba(255,255,255,.4);text-align:center;padding:22px;font-size:.74rem;border-top:3px solid var(--gold);}
+footer img{height:30px;width:30px;object-fit:contain;vertical-align:middle;margin-right:8px;}
+
+.err{max-width:600px;margin:60px auto;text-align:center;color:var(--muted);}
+.err i{font-size:2.4rem;color:var(--border);}
+
+@media(max-width:680px){header,.hero,.wrap{padding-left:16px;padding-right:16px;}.hero h2{font-size:1.7rem;}
+  .sec-instr,.open-note{margin-left:0;}.brand p{display:none;}}
+</style>
+<link rel="icon" href="assets/images/vesper_logo.png" type="image/png">
+</head>
+<body>
+<header>
+  <div class="brand"><img src="assets/images/vesper_logo_inverted.png" alt="Vesper"><div><h1>Vesper Academy</h1><p>Exam</p></div></div>
+  <div class="head-right"><a href="index.html"><i class="fas fa-arrow-left"></i> <span>Dashboard</span></a></div>
+</header>
+
+<section class="hero">
+  <div class="hero-inner">
+    <div class="kicker" id="kicker">End-of-Level Exam</div>
+    <h2 id="exam-title">Exam</h2>
+    <p id="exam-desc"></p>
+    <div class="meta" id="exam-meta"></div>
+  </div>
+</section>
+
+<div class="wrap">
+  <div class="results" id="results"></div>
+  <div id="exam-body"></div>
+  <div class="submit-bar" id="submit-bar" style="display:none">
+    <span class="prog" id="prog">0 answered</span>
+    <button class="btn btn-gold" id="submit-btn">Submit &amp; Grade</button>
+  </div>
+</div>
+
+<footer><img src="assets/images/vesper_logo_inverted.png" alt="">Vesper Academy — Assessment</footer>
+
+<script>
+(function () {
+  "use strict";
+  const params = new URLSearchParams(location.search);
+  const rawKey = params.get("course") || params.get("level") || "1";
+  // numeric ?level=N is an alias for the Core Practice course id used in Firestore
+  const examId = /^[0-9]+$/.test(rawKey) ? "core_practice_lvl" + rawKey : rawKey;
+  const body = document.getElementById("exam-body");
+  const isLocal = location.protocol === "file:" ||
+                  location.hostname === "localhost" || location.hostname === "127.0.0.1";
+  const DB_ID = "teachermanuals";   // named Firestore base (matches manual.html / libro.html)
+
+  function fail(html) {
+    document.querySelector(".wrap").innerHTML =
+      '<div class="err"><i class="fas fa-file-circle-question"></i><br><br>' + html +
+      '<br><br><a href="index.html" style="color:var(--gold2)">Back to Dashboard</a></div>';
+    const sb = document.getElementById("submit-bar"); if (sb) sb.style.display = "none";
+  }
+  function note(t) { document.getElementById("exam-desc").textContent = t; }
+
+  /* ── Data source ──────────────────────────────────────────────────────────
+     The exam (with answer keys) is NEVER published as a static file — that would
+     leak every answer in git. On the live site exam.html downloads it from
+     Firestore with the student's idToken (same gated pattern as manual.html /
+     libro.html); the server rules only let approved students/teachers read it.
+     On localhost the local build output is loaded directly for dev preview. */
+  if (isLocal) {
+    const s = document.createElement("script");
+    s.src = "vesper_exam_data.js";
+    s.onload = function () {
+      const EX = (window.VESPER_EXAM || {})[rawKey] || (window.VESPER_EXAM || {})[examId];
+      if (!EX) fail("No exam found for this level yet.");
+      else renderExam(EX);
+    };
+    s.onerror = function () { fail("Local exam data not found.<br><span style='font-size:.82rem'>Run: python _scripts/build_exams.py</span>"); };
+    document.head.appendChild(s);
+  } else {
+    loadFromFirestore();
+  }
+
+  function loadFromFirestore() {
+    if (!window.VesperAuth) { fail("Could not load the access control. Reload the page."); return; }
+    note("Loading exam…");
+    VesperAuth.initFirebase().then(function (auth) {
+      let settled = false;
+      auth.onAuthStateChanged(function (user) {
+        if (settled) return; settled = true;
+        const next = encodeURIComponent("exam.html" + location.search);
+        if (!user) {
+          fail('You need to sign in.<br><a class="head-right" style="display:inline-block;margin-top:10px" href="login.html?next=' + next + '"><i class="fas fa-right-to-bracket"></i> Sign in</a>');
+          return;
+        }
+        if (!user.emailVerified) { fail("Your email isn't verified yet. Check your inbox and sign in again."); return; }
+        fetchExam(user);
+      });
+    }).catch(function () { fail("No connection to the access service."); });
+  }
+
+  function fetchExam(user) {
+    const url = "https://firestore.googleapis.com/v1/projects/" +
+                VesperAuth.config.firebase.projectId + "/databases/" + DB_ID +
+                "/documents/exams/" + encodeURIComponent(examId);
+    user.getIdToken().then(function (token) {
+      fetch(url, { headers: { "Authorization": "Bearer " + token } })
+        .then(function (r) { return r.json().then(function (j) { return { status: r.status, body: j }; }); })
+        .then(function (res) {
+          if (res.status === 403) { fail("Your account can't open exams yet.<br><span style='font-size:.82rem'>Ask the academy to enable your email.</span>"); return; }
+          if (res.status === 404) { fail("This exam isn't available online yet.<br><span style='font-size:.82rem'>The academy hasn't uploaded it.</span>"); return; }
+          if (res.status !== 200) { fail("Could not load the exam (HTTP " + res.status + ")."); return; }
+          const f = res.body.fields || {};
+          let EX = null;
+          try { EX = JSON.parse((f.data || {}).stringValue || ""); } catch (e) { EX = null; }
+          if (!EX || !EX.sections) { fail("The exam downloaded incomplete. Tell the academy to re-upload it."); return; }
+          renderExam(EX);
+        })
+        .catch(function () { fail("No connection to the exam server."); });
+    }).catch(function () { fail("Could not validate your session."); });
+  }
+
+  function recordResult(correct, total, EX) {
+    try {
+      if (window.VESPER_RESULTS && total) {
+        const pct = Math.round(correct / total * 100);
+        const threshold = EX.pass || 60;
+        VESPER_RESULTS.record({
+          examType: "exam", examId: "exam:" + examId, level: EX.level || "",
+          score: correct, total: total, percent: pct,
+          threshold: threshold, passed: pct >= threshold
+        });
+      }
+    } catch (e) { /* recording never blocks the exam */ }
+  }
+
+  function renderExam(EX) {
+    document.title = `Vesper Academy | ${EX.title} Exam`;
+    document.getElementById("exam-title").textContent = EX.title + " — Exam";
+    document.getElementById("exam-desc").textContent = EX.desc || "";
+    // count closed (auto-graded) questions
+    let totalClosed = 0;
+    EX.sections.forEach(s => { if (s.type !== "open") totalClosed += (s.questions || []).length; });
+    document.getElementById("exam-meta").innerHTML =
+      `<span class="chip"><i class="fas fa-list-check"></i> ${totalClosed} graded questions</span>` +
+      `<span class="chip"><i class="fas fa-clock"></i> ~45 min</span>` +
+      `<span class="chip"><i class="fas fa-award"></i> Auto-scored + teacher section</span>`;
+
+    const LETTERS = ["A","B","C","D","E","F"];
+    const responses = {};   // qid -> selected index
+    const answers = {};     // qid -> correct index (kept in JS, NOT in the DOM, so it isn't visible before grading)
+    let qIndex = 0;
+
+    EX.sections.forEach((sec, si) => {
+      const secEl = document.createElement("div");
+      secEl.className = "section";
+      let html = `<div class="sec-head"><div class="sec-letter">${LETTERS[si]}</div><h3>${sec.title}</h3></div>`;
+      if (sec.instructions) html += `<p class="sec-instr">${sec.instructions}</p>`;
+      secEl.innerHTML = html;
+
+      if (sec.passage) {
+        const p = document.createElement("div"); p.className = "passage";
+        p.innerHTML = sec.passage.replace(/^<strong>/, '<strong class="first">');
+        secEl.appendChild(p);
+      }
+      if (sec.audio) {
+        const a = document.createElement("div"); a.className = "audio-wrap";
+        a.innerHTML = `<audio controls><source src="${sec.audio}" type="audio/mpeg"></audio>` +
+          `<div class="audio-note"><i class="fas fa-headphones"></i> Listen as many times as you need before answering.</div>`;
+        secEl.appendChild(a);
+      }
+
+      if (sec.type === "open") {
+        secEl.insertAdjacentHTML("beforeend",
+          '<p class="open-note"><i class="fas fa-user-pen"></i> This section is evaluated by your teacher — it is not auto-scored.</p>');
+        (sec.tasks || []).forEach((t, i) => {
+          const ot = document.createElement("div"); ot.className = "open-task";
+          ot.innerHTML = `<p class="ot-q"><span class="qn">${i+1}.</span>${t}</p><textarea placeholder="Write your answer here…"></textarea>`;
+          secEl.appendChild(ot);
+        });
+      } else {
+        (sec.questions || []).forEach(q => {
+          qIndex++;
+          const qid = "q" + qIndex;
+          const card = document.createElement("div"); card.className = "qcard"; card.dataset.qid = qid;
+          answers[qid] = q.answer; card.dataset.section = si;
+          let oh = `<p class="q-text"><span class="qn">${qIndex}.</span>${q.q}</p><div class="options">`;
+          q.options.forEach((opt, oi) => {
+            oh += `<button class="opt" data-oi="${oi}"><span class="mark">${LETTERS[oi]}</span><span>${opt}</span></button>`;
+          });
+          oh += `</div>`;
+          card.innerHTML = oh;
+          card.querySelectorAll(".opt").forEach(btn => btn.addEventListener("click", () => {
+            if (card.classList.contains("graded")) return;
+            card.querySelectorAll(".opt").forEach(b => b.classList.remove("sel"));
+            btn.classList.add("sel"); card.classList.add("answered");
+            responses[qid] = parseInt(btn.dataset.oi, 10);
+            updateProg();
+          }));
+          secEl.appendChild(card);
+        });
+      }
+      body.appendChild(secEl);
+    });
+
+    document.getElementById("submit-bar").style.display = "flex";
+    function updateProg(){
+      document.getElementById("prog").textContent = `${Object.keys(responses).length} / ${totalClosed} answered`;
+    }
+    updateProg();
+
+    document.getElementById("submit-btn").addEventListener("click", grade);
+    function grade(){
+      const perSection = {};
+      let correct = 0;
+      document.querySelectorAll(".qcard").forEach(card => {
+        card.classList.add("graded");
+        const ans = answers[card.dataset.qid];
+        const sel = responses[card.dataset.qid];
+        const si = card.dataset.section;
+        perSection[si] = perSection[si] || { c: 0, t: 0 };
+        perSection[si].t++;
+        card.querySelectorAll(".opt").forEach(btn => {
+          const oi = parseInt(btn.dataset.oi, 10);
+          btn.classList.remove("sel");
+          if (oi === ans) btn.classList.add("correct");
+          else if (oi === sel) btn.classList.add("wrong");
+        });
+        if (sel === ans) { correct++; perSection[si].c++; }
+      });
+      const pct = totalClosed ? Math.round(correct / totalClosed * 100) : 0;
+      const band = pct >= 85 ? ["Distinction","#2d7a4f"] : pct >= 70 ? ["Merit","#a8843d"]
+                 : pct >= 50 ? ["Pass","#1e5fa8"] : ["Keep practising","#b02a2a"];
+      let bd = "";
+      EX.sections.forEach((sec, si) => {
+        if (sec.type === "open") { bd += `<div class="bd-item"><div class="bd-t">${sec.title}</div><div class="bd-s" style="font-size:.85rem;color:var(--muted)">Teacher-graded</div></div>`; return; }
+        const ps = perSection[si] || { c:0, t:(sec.questions||[]).length };
+        bd += `<div class="bd-item"><div class="bd-t">${sec.title}</div><div class="bd-s">${ps.c}/${ps.t}</div></div>`;
+      });
+      const res = document.getElementById("results");
+      res.innerHTML =
+        `<div class="score-ring" style="--pct:${pct}%"><div class="inner"><span class="pct">${pct}%</span><span class="lbl">Score</span></div></div>` +
+        `<div class="band" style="color:${band[1]}">${band[0]}</div>` +
+        `<p class="sub">${correct} of ${totalClosed} auto-graded questions correct. The Writing &amp; Speaking section is assessed by your teacher.</p>` +
+        `<div class="breakdown">${bd}</div>` +
+        `<button class="btn btn-ghost" onclick="window.scrollTo({top:0,behavior:'smooth'})">Review answers</button>`;
+      res.classList.add("show");
+      document.getElementById("submit-btn").textContent = "Submitted";
+      document.getElementById("submit-btn").disabled = true;
+      res.scrollIntoView({ behavior: "smooth" });
+      recordResult(correct, totalClosed, EX);
+    }
+  }
+})();
+</script>
+</body>
+</html>
