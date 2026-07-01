@@ -67,7 +67,10 @@ service cloud.firestore {
                      || exists(/databases/$(database)/documents/teachers/$(request.auth.token.email))
                      || request.auth.token.email == "josuemtz20@gmail.com"
                    );
-      allow write: if false;   // alta desde el script admin (upload-exams)
+      // alta/actualizacion SOLO desde la cuenta admin (upload_manuals.py upload-exams,
+      // que inicia sesion como el admin y escribe con su idToken).
+      allow write: if request.auth != null
+                   && request.auth.token.email == "josuemtz20@gmail.com";
     }
 
     // —— Progreso del alumno (racha + XP): self-scoped ——
