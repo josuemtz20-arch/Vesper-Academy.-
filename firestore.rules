@@ -45,6 +45,14 @@ service cloud.firestore {
                      || request.auth.token.email == "josuemtz20@gmail.com"
                    );
       allow write: if false;
+      // el manual va troceado en la subcoleccion chunks/{n}: mismo permiso de lectura
+      match /chunks/{n} {
+        allow read:  if request.auth != null && (
+                       exists(/databases/$(database)/documents/teachers/$(request.auth.token.email))
+                       || request.auth.token.email == "josuemtz20@gmail.com"
+                     );
+        allow write: if false;
+      }
     }
 
     // —— Libros del alumno: alumnos autorizados, profesores o el admin ——
@@ -56,6 +64,15 @@ service cloud.firestore {
                      || request.auth.token.email == "josuemtz20@gmail.com"
                    );
       allow write: if false;
+      // el libro va troceado en la subcoleccion chunks/{n}: mismo permiso de lectura
+      match /chunks/{n} {
+        allow read:  if request.auth != null && (
+                       exists(/databases/$(database)/documents/students/$(request.auth.token.email))
+                       || exists(/databases/$(database)/documents/teachers/$(request.auth.token.email))
+                       || request.auth.token.email == "josuemtz20@gmail.com"
+                     );
+        allow write: if false;
+      }
     }
 
     // —— Exámenes por curso/manual: alumnos autorizados, profesores o el admin ——
