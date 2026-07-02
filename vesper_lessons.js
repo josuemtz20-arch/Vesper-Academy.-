@@ -3,8 +3,14 @@
  * Core Grammar ladder A1 -> B1 (15 lessons). Authored + adversarially
  * verified by a multi-agent workflow (2026-06-12), then normalized
  * (word_order always solvable; MCQ correctIndex validated).
- * Schema per lesson: { lessonId, level, track, title,
- *   explanation:{ body, examples:[{en,es}] },
+ * Schema per lesson: { lessonId, level, track, title, tipo?,
+ *   explanation:{ body, examples:[{en,es}], sections?:[...] },
+ *   tipo: "aprende" | "practica" (opcional; sin campo = practica).
+ *   sections (solo aprende): [{kind:"intro"|"regla"|"resumen"|"puente", body}
+ *     | {kind:"vocab", items:[{en,ipa?,es}]}
+ *     | {kind:"expresiones"|"ejemplos", items:[{en,es}]}
+ *     | {kind:"errores", items:[{no,si,pq}]}] — leccion.html las renderiza
+ *   como pantalla de ensenanza rica; body+examples quedan como fallback.
  *   exercises:[ {type:"multiple_choice",question,options,correctIndex,explanation}
  *             | {type:"word_order",words,correctOrder,hint} ],
  *   xpReward, mascotState, nextLessonId }
@@ -15,6 +21,7 @@ window.VESPER_LESSONS = {
                                   "lessonId":  "core-grammar-01-to-be",
                                   "level":  "A1",
                                   "track":  "Core Grammar",
+                                  "tipo":  "aprende",
                                   "title":  "Verb \"to be\"",
                                   "explanation":  {
                                                       "body":  "We use the verb \"to be\" to say who or what someone is. The forms are: I am, you/we/they are, he/she/it is. To make it negative, add not: I am not, he isn\u0027t, we aren\u0027t. For yes/no questions, put the verb first: Are you happy? Is she a teacher? (El verbo \"to be\" cambia segun el pronombre: am, is, are; significa \"ser\" o \"estar\".)",
@@ -35,7 +42,45 @@ window.VESPER_LESSONS = {
                                                                            "en":  "Are you from Mexico?",
                                                                            "es":  "Eres de Mexico?"
                                                                        }
-                                                                   ]
+                                                                   ],
+                                                      "sections":  [
+                                                          { "kind": "intro",
+                                                            "body": "\"To be\" es el verbo mas importante del ingles: con el dices quien eres, como estas y de donde vienes. Es lo primero que necesitas para presentarte." },
+                                                          { "kind": "regla",
+                                                            "body": "Solo tiene 3 formas en presente: I am - he/she/it is - you/we/they are. Negativo: agrega not (isn't, aren't). Pregunta: el verbo va primero (Are you...?, Is she...?)." },
+                                                          { "kind": "vocab",
+                                                            "items": [
+                                                                { "en": "I am (I'm)", "ipa": "aim", "es": "yo soy / estoy" },
+                                                                { "en": "he / she / it is", "ipa": "iz", "es": "el / ella / eso es, esta" },
+                                                                { "en": "you / we / they are", "ipa": "ar", "es": "tu eres, somos, son" },
+                                                                { "en": "isn't / aren't", "ipa": "'iznt / arnt", "es": "no es / no son" }
+                                                            ] },
+                                                          { "kind": "expresiones",
+                                                            "items": [
+                                                                { "en": "How are you?", "es": "Como estas?" },
+                                                                { "en": "I'm fine, thanks.", "es": "Estoy bien, gracias." },
+                                                                { "en": "I'm from Mexico.", "es": "Soy de Mexico." },
+                                                                { "en": "My name is...", "es": "Mi nombre es..." }
+                                                            ] },
+                                                          { "kind": "ejemplos",
+                                                            "items": [
+                                                                { "en": "I am a student.", "es": "Soy estudiante." },
+                                                                { "en": "She is happy.", "es": "Ella esta feliz." },
+                                                                { "en": "We aren't at home.", "es": "No estamos en casa." },
+                                                                { "en": "Are you from Mexico?", "es": "Eres de Mexico?" }
+                                                            ] },
+                                                          { "kind": "errores",
+                                                            "items": [
+                                                                { "no": "I is happy.", "si": "I am happy.", "pq": "Con \"I\" siempre va \"am\"." },
+                                                                { "no": "She are my friend.", "si": "She is my friend.", "pq": "he, she e it usan \"is\"." },
+                                                                { "no": "I have 25 years.", "si": "I am 25 years old.", "pq": "La edad en ingles se dice con \"to be\", no con \"have\"." },
+                                                                { "no": "Is very tall.", "si": "He is very tall.", "pq": "En ingles el sujeto nunca se omite." }
+                                                            ] },
+                                                          { "kind": "resumen",
+                                                            "body": "am con I - is con he/she/it - are con you/we/they. Negativo con not; pregunta con el verbo primero. Y recuerda: la edad va con \"to be\"." },
+                                                          { "kind": "puente",
+                                                            "body": "Ahora te toca a ti: 5 ejercicios rapidos para dominarlo." }
+                                                      ]
                                                   },
                                   "exercises":  [
                                                     {
