@@ -53,13 +53,28 @@ window.VESPER_GRADEBOOK = (function () {
 
   /* Rúbrica de progreso diario: duración normal de un curso y aspectos que
      el profesor evalúa cada día con ✓/✗ (✓=100, ✗=0; sin marcar no cuenta).
-     Es la MISMA rúbrica para todos los niveles. */
+     Es la MISMA rúbrica para todos los niveles. Para añadir o quitar un
+     aspecto basta editar esta lista: la cuadrícula del profesor y del alumno,
+     la gráfica y los promedios se adaptan solos. Las 'key' son estables (son
+     los campos en Firestore): no las cambies para no perder lo ya capturado. */
   var COURSE_DAYS = 20;
   var DAILY_ASPECTS = [
     { key: "asistencia",    label: "Asistencia" },
-    { key: "participacion", label: "Participación" },
+    { key: "puntualidad",   label: "Puntualidad" },
+    { key: "material",      label: "Material" },
     { key: "tarea",         label: "Tarea" },
-    { key: "speaking",      label: "Speaking" }
+    { key: "participacion", label: "Participación" },
+    { key: "actitud",       label: "Actitud" },
+    { key: "trabajo_clase", label: "Trabajo en clase" },
+    { key: "uso_ingles",    label: "Uso del inglés" },
+    { key: "speaking",      label: "Speaking" },
+    { key: "pronunciacion", label: "Pronunciación" },
+    { key: "fluidez",       label: "Fluidez" },
+    { key: "listening",     label: "Listening" },
+    { key: "reading",       label: "Reading" },
+    { key: "writing",       label: "Writing" },
+    { key: "gramatica",     label: "Gramática" },
+    { key: "vocabulario",   label: "Vocabulario" }
   ];
 
   function available() { return !!(window.VesperAuth && window.VesperAuth.isConfigured); }
