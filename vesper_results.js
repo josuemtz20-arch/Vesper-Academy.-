@@ -28,6 +28,7 @@
  *   aliasOf()          -> alias público actual (o código anónimo)
  *   record(result)     -> registra un intento (local + nube si hay sesión)
  *   fetchAll({limit})  -> Promise<[fila]|null>  (lectura del profe)
+ *   fetchMine()        -> Promise<[fila]|null>  (el alumno lee SUS intentos)
  *   localAll()         -> intentos guardados en este dispositivo
  * ============================================================ */
 window.VESPER_RESULTS = (function () {
@@ -219,9 +220,38 @@ window.VESPER_RESULTS = (function () {
     }).catch(function () { return null; });
   }
 
+  /* lectura del ALUMNO: solo SUS intentos (la regla lo permite vía el filtro
+     studentUid == uid; sin orderBy para no requerir índice compuesto — se
+     ordena aquí por fecha desc). Resuelve null sin sesión o con error. */
+  function fetchMine() {
+    if (!signedIn()) return Promise.resolve(null);
+    return currentUser.getIdToken().then(function (token) {
+      return fetch(base() + ":runQuery", {
+        method: "POST",
+        headers: { "Authorization": "Bearer " + token, "Content-Type": "application/json" },
+        body: JSON.stringify({ structuredQuery: {
+          from: [{ collectionId: COLLECTION }],
+          where: { fieldFilter: {
+            field: { fieldPath: "studentUid" },
+            op: "EQUAL",
+            value: { stringValue: currentUser.uid }
+          } },
+          limit: 1000
+        } })
+      }).then(function (r) {
+        if (r.status !== 200) return null;
+        return r.json().then(function (rows) {
+          return (rows || []).filter(function (x) { return x.document; }).map(function (x) {
+            return readDoc(x.document);
+          }).sort(function (a, b) { return (b.date || "") < (a.date || "") ? -1 : 1; });
+        });
+      });
+    }).catch(function () { return null; });
+  }
+
   start();
   return {
     available: available, signedIn: signedIn, aliasOf: aliasOf,
-    record: record, fetchAll: fetchAll, localAll: localAll
+    record: record, fetchAll: fetchAll, fetchMine: fetchMine, localAll: localAll
   };
 })();

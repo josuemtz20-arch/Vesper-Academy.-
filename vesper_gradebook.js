@@ -27,6 +27,7 @@
  *   available()               -> ¿hay Firebase configurado?
  *   signedIn()                -> ¿hay sesión verificada?
  *   fetchGrades()             -> Promise<{correo: fila}|null> (lectura profe)
+ *   fetchMyGrade()            -> Promise<fila|null> (el alumno lee SU boleta)
  *   saveGrade(email, data)    -> Promise<bool> (upsert de la parte manual)
  *   buildRoster(attempts, grades) -> [fila por alumno] (función pura)
  *   computeFinal(row)         -> { final:int|null, passed:bool|null } (pura)
@@ -109,6 +110,22 @@ window.VESPER_GRADEBOOK = (function () {
           });
           return map;
         });
+      });
+    }).catch(function () { return null; });
+  }
+
+  /* lectura del ALUMNO: su propio doc de gradebook (la regla permite leer
+     gradebook/{su correo}). Resuelve null sin sesión, sin doc (404) o error. */
+  function fetchMyGrade() {
+    if (!signedIn()) return Promise.resolve(null);
+    var email = String(currentUser.email || "").trim().toLowerCase();
+    if (!email) return Promise.resolve(null);
+    return currentUser.getIdToken().then(function (token) {
+      return fetch(base() + "/" + COLLECTION + "/" + encodeURIComponent(email), {
+        headers: { "Authorization": "Bearer " + token }
+      }).then(function (r) {
+        if (r.status !== 200) return null;
+        return r.json().then(readDoc);
       });
     }).catch(function () { return null; });
   }
@@ -231,7 +248,7 @@ window.VESPER_GRADEBOOK = (function () {
   return {
     WEIGHTS: WEIGHTS, PASS_THRESHOLD: PASS_THRESHOLD,
     available: available, signedIn: signedIn,
-    fetchGrades: fetchGrades, saveGrade: saveGrade,
+    fetchGrades: fetchGrades, fetchMyGrade: fetchMyGrade, saveGrade: saveGrade,
     buildRoster: buildRoster, computeFinal: computeFinal
   };
 })();

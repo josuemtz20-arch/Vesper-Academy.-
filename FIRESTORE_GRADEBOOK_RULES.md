@@ -73,6 +73,11 @@ Reglas, o `firebase deploy --only firestore:rules`). Tiene efecto inmediato.
   Firestore solo la devuelve si la regla garantiza acceso a todos los docs,
   por eso un alumno normal recibe 403 y la boleta le muestra el aviso de
   "solo profesores". No hace falta índice compuesto.
+- **Alumno (`mi_boleta.html`):** cada alumno consulta su propia boleta con la
+  MISMA regla: GET directo a `gradebook/{su correo}` (`fetchMyGrade`) y un
+  `runQuery` de `exam_results` filtrado por `studentUid == uid` (`fetchMine`,
+  sin `orderBy` para no requerir índice compuesto). No hay que publicar nada
+  adicional.
 - **Cálculo de la final:** promedio ponderado (Exámenes 50 % · Lecciones 30 % ·
   Participación 20 %, configurable en `vesper_gradebook.js` → `WEIGHTS`);
   si a un alumno le falta un criterio, se renormalizan los pesos con los que

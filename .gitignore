@@ -151,6 +151,8 @@
 !/portal_boleta.html
 !/vesper_gradebook.js
 !/FIRESTORE_GRADEBOOK_RULES.md
+# ... y la vista del alumno: cada quien consulta SOLO su boleta (misma regla).
+!/mi_boleta.html
 # recintos tematicos de vocabulario (ramas) — datos publicos, sin claves
 !/vesper_vocab_dens.js
 !/apariencia.html
