@@ -60,6 +60,23 @@ header a.back:hover{color:var(--gold);}
 #loading .spin{display:inline-block;width:28px;height:28px;border:3px solid rgba(138,47,59,.2);border-top-color:var(--accent);border-radius:50%;animation:sp .8s linear infinite;margin-bottom:12px;}
 @keyframes sp{to{transform:rotate(360deg)}}
 
+/* gráfica lineal de progreso día a día */
+.pchart-wrap{position:relative;margin-top:4px;}
+.pchart svg{display:block;width:100%;height:auto;touch-action:none;}
+.pchart-legend{display:flex;flex-wrap:wrap;gap:18px;margin:2px 2px 8px;font-size:.78rem;color:var(--muted);}
+.pchart-legend span{display:inline-flex;align-items:center;gap:7px;}
+.pchart-legend i{width:18px;height:0;border-top:3px solid #ccc;border-radius:2px;display:inline-block;}
+.pchart .grid-l{stroke:#efeadf;stroke-width:1;}
+.pchart .thresh{stroke:#c9b58a;stroke-width:1;}
+.pchart .axis-t{fill:var(--muted);font-size:11px;font-family:'Inter',sans-serif;}
+.pchart .thresh-t{fill:#a8843d;font-size:10px;font-family:'Inter',sans-serif;}
+.pchart .cross{stroke:#c9c2b4;stroke-width:1;opacity:0;}
+.pchart .hi{opacity:0;}
+.ptip{position:absolute;pointer-events:none;background:var(--navy);color:#fff;font-size:.72rem;line-height:1.45;padding:8px 11px;border-radius:8px;box-shadow:0 6px 18px rgba(0,0,0,.28);opacity:0;transition:opacity .08s;max-width:90%;z-index:5;}
+.ptip .pt-d{font-weight:700;color:var(--gold);}
+.ptip .pt-r{display:block;margin-top:2px;}
+.ptip .pt-a{display:block;margin-top:4px;color:rgba(255,255,255,.82);font-size:.68rem;}
+
 /* rúbrica de progreso diario (solo lectura para el alumno) */
 .dwrap{overflow-x:auto;}
 table.dgrid{border-collapse:separate;border-spacing:3px;font-size:.72rem;margin-top:6px;}
@@ -122,6 +139,21 @@ footer a{color:var(--gold);text-decoration:none;}
       </div>
     </div>
 
+    <div class="boleta" id="progress-card" style="display:none;margin-top:16px;">
+      <div class="bhead" style="border-bottom:1px solid var(--border);">
+        <div class="who"><b>Tu progreso día a día</b><small id="pchart-sub"></small></div>
+      </div>
+      <div class="pchart-legend">
+        <span><i style="border-color:#b5651d"></i>Puntaje del día</span>
+        <span><i style="border-color:#1e5fa8"></i>Promedio acumulado</span>
+      </div>
+      <div class="pchart-wrap">
+        <div class="pchart" id="pchart"></div>
+        <div class="ptip" id="ptip"></div>
+      </div>
+      <p class="fine" style="margin-top:12px;">Cada punto naranja es tu porcentaje de ✓ ese día; la línea azul es tu promedio acumulado (así va tu Participación). Pasa el cursor o toca un día para ver el detalle.</p>
+    </div>
+
     <div class="boleta" id="daily-card" style="display:none;margin-top:16px;">
       <div class="bhead" style="border-bottom:1px solid var(--border);">
         <div class="who"><b id="daily-title"></b><small id="daily-sub"></small></div>
@@ -175,6 +207,180 @@ footer a{color:var(--gold);text-decoration:none;}
                  : ('Aún no tienes ' + what + 'es registrados con sesión');
   }
 
+  /* ── gráfica lineal de progreso día a día (SVG propio, sin librerías) ── */
+  var DAILY_COLOR = "#b5651d", CUM_COLOR = "#1e5fa8";
+  var chartData = null; // { perDay, cum, aspText, first, last } para el hover
+
+  function computeSeries(daily) {
+    var days = (daily && daily.days) || {};
+    var N = GB.COURSE_DAYS;
+    var perDay = {}, cum = {}, aspText = {}, cumOk = 0, cumTot = 0, first = 0, last = 0;
+    for (var d = 1; d <= N; d++) {
+      var cell = days[d] || {}, ok = 0, tot = 0, parts = [];
+      GB.DAILY_ASPECTS.forEach(function (a) {
+        if (typeof cell[a.key] === "boolean") {
+          tot++; if (cell[a.key]) ok++;
+          parts.push(esc(a.label) + (cell[a.key] ? " ✓" : " ✗"));
+        }
+      });
+      perDay[d] = tot ? Math.round(100 * ok / tot) : null;
+      aspText[d] = parts;
+      if (tot) { cumOk += ok; cumTot += tot; if (!first) first = d; last = d; }
+      cum[d] = cumTot ? Math.round(100 * cumOk / cumTot) : null;
+    }
+    return { perDay: perDay, cum: cum, aspText: aspText, first: first, last: last, N: N };
+  }
+
+  function renderProgressChart(daily) {
+    var card = document.getElementById("progress-card");
+    var s = computeSeries(daily);
+    if (!s.last) { card.style.display = "none"; chartData = null; return; }
+    chartData = s;
+
+    var W = 640, H = 240, PADL = 30, PADR = 14, PADT = 14, PADB = 24;
+    var plotW = W - PADL - PADR, plotH = H - PADT - PADB, N = s.N;
+    var THRESH = GB.PASS_THRESHOLD;
+    function xF(d) { return PADL + (N === 1 ? 0.5 : (d - 1) / (N - 1)) * plotW; }
+    function yF(v) { return PADT + (1 - v / 100) * plotH; }
+    function r2(n) { return Math.round(n * 10) / 10; }
+
+    var svg = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" ' +
+      'aria-label="Gráfica de tu progreso diario: puntaje de cada día y promedio acumulado a lo largo de ' +
+      N + ' días. El detalle día por día también está en la tabla de abajo.">';
+
+    // gridlines horizontales + etiquetas Y (0/50/100)
+    [0, 25, 50, 75, 100].forEach(function (v) {
+      svg += '<line class="grid-l" x1="' + PADL + '" y1="' + r2(yF(v)) + '" x2="' + (W - PADR) + '" y2="' + r2(yF(v)) + '"/>';
+    });
+    [0, 50, 100].forEach(function (v) {
+      svg += '<text class="axis-t" x="' + (PADL - 6) + '" y="' + r2(yF(v) + 3.5) + '" text-anchor="end">' + v + '</text>';
+    });
+
+    // línea de meta (umbral de aprobación), hairline sólida + etiqueta directa
+    svg += '<line class="thresh" x1="' + PADL + '" y1="' + r2(yF(THRESH)) + '" x2="' + (W - PADR) + '" y2="' + r2(yF(THRESH)) + '"/>';
+    svg += '<text class="thresh-t" x="' + (W - PADR) + '" y="' + r2(yF(THRESH) - 4) + '" text-anchor="end">Meta ' + THRESH + '</text>';
+
+    // etiquetas X (días 1,5,10,15,20 mientras existan)
+    [1, 5, 10, 15, 20].forEach(function (d) {
+      if (d > N) return;
+      svg += '<text class="axis-t" x="' + r2(xF(d)) + '" y="' + (H - 8) + '" text-anchor="middle">' + d + '</text>';
+    });
+
+    // línea de promedio acumulado (continua de first..last)
+    var cumPts = [];
+    for (var d = s.first; d <= s.last; d++) cumPts.push(r2(xF(d)) + ',' + r2(yF(s.cum[d])));
+    if (cumPts.length > 1) {
+      svg += '<polyline fill="none" stroke="' + CUM_COLOR + '" stroke-width="2.5" ' +
+        'stroke-linejoin="round" stroke-linecap="round" points="' + cumPts.join(' ') + '"/>';
+    }
+
+    // línea de puntaje diario: tramos entre días evaluados consecutivos (corta en huecos)
+    var run = [];
+    function flushRun() {
+      if (run.length > 1) {
+        svg += '<polyline fill="none" stroke="' + DAILY_COLOR + '" stroke-width="2" ' +
+          'stroke-linejoin="round" stroke-linecap="round" opacity=".9" points="' + run.join(' ') + '"/>';
+      }
+      run = [];
+    }
+    for (var d = 1; d <= N; d++) {
+      if (s.perDay[d] == null) { flushRun(); continue; }
+      run.push(r2(xF(d)) + ',' + r2(yF(s.perDay[d])));
+    }
+    flushRun();
+
+    // puntos del día (con anillo de superficie para legibilidad)
+    for (var d = 1; d <= N; d++) {
+      if (s.perDay[d] == null) continue;
+      svg += '<circle cx="' + r2(xF(d)) + '" cy="' + r2(yF(s.perDay[d])) +
+        '" r="3.6" fill="' + DAILY_COLOR + '" stroke="#fff" stroke-width="1.5"/>';
+    }
+
+    // etiqueta directa del promedio actual al final de la línea azul
+    var endY = yF(s.cum[s.last]);
+    svg += '<circle cx="' + r2(xF(s.last)) + '" cy="' + r2(endY) +
+      '" r="4" fill="' + CUM_COLOR + '" stroke="#fff" stroke-width="1.5"/>';
+
+    // capas de hover: crosshair + puntos resaltados
+    svg += '<line class="cross" id="pcross" y1="' + PADT + '" y2="' + (H - PADB) + '"/>';
+    svg += '<circle class="hi" id="phi-day" r="5.5" fill="none" stroke="' + DAILY_COLOR + '" stroke-width="2"/>';
+    svg += '<circle class="hi" id="phi-cum" r="5.5" fill="none" stroke="' + CUM_COLOR + '" stroke-width="2"/>';
+    svg += '</svg>';
+
+    document.getElementById("pchart").innerHTML = svg;
+    document.getElementById("pchart-sub").textContent =
+      "Curso de " + N + " días · promedio actual " + s.cum[s.last] + "%";
+    card.style.display = "block";
+
+    attachHover(xF, yF);
+  }
+
+  function attachHover(xF, yF) {
+    var wrap = document.querySelector(".pchart-wrap");
+    var svg = wrap.querySelector("svg");
+    var tip = document.getElementById("ptip");
+    var cross = document.getElementById("pcross");
+    var hiD = document.getElementById("phi-day");
+    var hiC = document.getElementById("phi-cum");
+    var N = chartData.N;
+    var PADL = 30, plotW = 640 - PADL - 14;
+    var lastDay = 0, svgRect = null, wrapW = 0;
+
+    // rects cacheados: se remiden solo al invalidarse (resize/scroll), no en cada movimiento
+    function measure() { svgRect = svg.getBoundingClientRect(); wrapW = wrap.getBoundingClientRect().width; }
+    function invalidate() { svgRect = null; }
+
+    function hide() {
+      tip.style.opacity = 0; cross.style.opacity = 0;
+      hiD.style.opacity = 0; hiC.style.opacity = 0;
+      tip.style.left = ""; tip.style.top = "";  // sin residuo que desborde tras un resize
+      lastDay = 0;
+    }
+
+    function move(clientX) {
+      if (!svgRect) measure();
+      if (!svgRect.width) return;
+      var vx = (clientX - svgRect.left) / svgRect.width * 640; // coord del viewBox (solo X)
+      var day = Math.round((vx - PADL) / plotW * (N - 1)) + 1;
+      day = Math.max(1, Math.min(N, day));
+      if (day === lastDay) return;  // mismo día: nada que reconstruir (evita reflow por movimiento)
+      lastDay = day;
+
+      var pd = chartData.perDay[day], cm = chartData.cum[day];
+      var cx = xF(day);
+      // escrituras al SVG (crosshair + puntos resaltados, en el x real del día)
+      cross.setAttribute("x1", cx); cross.setAttribute("x2", cx); cross.style.opacity = 1;
+      if (pd != null) { hiD.setAttribute("cx", cx); hiD.setAttribute("cy", yF(pd)); hiD.style.opacity = 1; }
+      else hiD.style.opacity = 0;
+      if (cm != null) { hiC.setAttribute("cx", cx); hiC.setAttribute("cy", yF(cm)); hiC.style.opacity = 1; }
+      else hiC.style.opacity = 0;
+
+      var asp = chartData.aspText[day] || [];
+      tip.innerHTML = '<span class="pt-d">Día ' + day + '</span>' +
+        '<span class="pt-r">Puntaje: ' + (pd == null ? "sin evaluar" : pd + "%") + '</span>' +
+        (cm == null ? '' : '<span class="pt-r">Promedio: ' + cm + '%</span>') +
+        (asp.length ? '<span class="pt-a">' + asp.join(" · ") + '</span>' : '');
+      tip.style.opacity = 1;
+
+      // posición: centrada sobre el punto real y acotada al ancho del contenedor
+      // (se mide el tooltip una vez por cambio de día, no por movimiento)
+      var px = cx * (svgRect.width / 640);
+      var tw = tip.offsetWidth, th = tip.offsetHeight;
+      var left = Math.max(2, Math.min(wrapW - tw - 2, px - tw / 2));
+      var pointY = yF(Math.max(pd == null ? 0 : pd, cm == null ? 0 : cm)) * (svgRect.height / 240);
+      var top = pointY - th - 10;
+      if (top < 2) top = pointY + 14; // si no cabe arriba del punto, va abajo
+      tip.style.left = left + "px";
+      tip.style.top = top + "px";
+    }
+
+    svg.addEventListener("pointermove", function (e) { move(e.clientX); });
+    svg.addEventListener("pointerdown", function (e) { invalidate(); lastDay = 0; move(e.clientX); });
+    svg.addEventListener("pointerleave", hide);
+    window.addEventListener("resize", function () { invalidate(); hide(); });
+    window.addEventListener("scroll", invalidate, true);
+  }
+
   function renderDaily(daily) {
     var card = document.getElementById("daily-card");
     var st = GB.dailyStats(daily ? daily.days : {});
@@ -225,6 +431,7 @@ footer a{color:var(--gold);text-decoration:none;}
     document.getElementById("c-part-sub").textContent = (st.cells > 0)
       ? ('Promedio de tu progreso diario · ' + st.daysTouched + ' de ' + GB.COURSE_DAYS + ' días evaluados')
       : 'La asigna tu profesor en clase';
+    renderProgressChart(daily);
     renderDaily(daily);
 
     var f = GB.computeFinal(row);
