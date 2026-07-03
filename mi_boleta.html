@@ -81,7 +81,7 @@ header a.back:hover{color:var(--gold);}
 .dwrap{overflow-x:auto;}
 table.dgrid{border-collapse:separate;border-spacing:3px;font-size:.72rem;margin-top:6px;}
 table.dgrid th{padding:2px 0;text-align:center;color:var(--muted);font-size:.62rem;min-width:26px;font-weight:600;}
-table.dgrid th.asp{text-align:left;padding-right:12px;font-size:.78rem;color:var(--navy);min-width:104px;}
+table.dgrid th.asp{text-align:left;padding-right:12px;font-size:.78rem;color:var(--navy);min-width:120px;white-space:nowrap;}
 table.dgrid td{width:26px;height:26px;min-width:26px;text-align:center;border:1px solid var(--border);border-radius:6px;background:#fff;font-size:.78rem;color:#c9c2b4;}
 table.dgrid td.on{background:#e7f4ec;border-color:#cfe9da;color:var(--ok);font-weight:800;}
 table.dgrid td.off{background:#f7e7e7;border-color:#e2bcbc;color:var(--err);font-weight:800;}
@@ -214,21 +214,18 @@ footer a{color:var(--gold);text-decoration:none;}
   function computeSeries(daily) {
     var days = (daily && daily.days) || {};
     var N = GB.COURSE_DAYS;
-    var perDay = {}, cum = {}, aspText = {}, cumOk = 0, cumTot = 0, first = 0, last = 0;
+    var perDay = {}, cum = {}, okc = {}, totc = {}, cumOk = 0, cumTot = 0, first = 0, last = 0;
     for (var d = 1; d <= N; d++) {
-      var cell = days[d] || {}, ok = 0, tot = 0, parts = [];
+      var cell = days[d] || {}, ok = 0, tot = 0;
       GB.DAILY_ASPECTS.forEach(function (a) {
-        if (typeof cell[a.key] === "boolean") {
-          tot++; if (cell[a.key]) ok++;
-          parts.push(esc(a.label) + (cell[a.key] ? " ✓" : " ✗"));
-        }
+        if (typeof cell[a.key] === "boolean") { tot++; if (cell[a.key]) ok++; }
       });
       perDay[d] = tot ? Math.round(100 * ok / tot) : null;
-      aspText[d] = parts;
+      okc[d] = ok; totc[d] = tot;
       if (tot) { cumOk += ok; cumTot += tot; if (!first) first = d; last = d; }
       cum[d] = cumTot ? Math.round(100 * cumOk / cumTot) : null;
     }
-    return { perDay: perDay, cum: cum, aspText: aspText, first: first, last: last, N: N };
+    return { perDay: perDay, cum: cum, okc: okc, totc: totc, first: first, last: last, N: N };
   }
 
   function renderProgressChart(daily) {
@@ -355,11 +352,11 @@ footer a{color:var(--gold);text-decoration:none;}
       if (cm != null) { hiC.setAttribute("cx", cx); hiC.setAttribute("cy", yF(cm)); hiC.style.opacity = 1; }
       else hiC.style.opacity = 0;
 
-      var asp = chartData.aspText[day] || [];
+      var tot = chartData.totc[day], ok = chartData.okc[day];
       tip.innerHTML = '<span class="pt-d">Día ' + day + '</span>' +
         '<span class="pt-r">Puntaje: ' + (pd == null ? "sin evaluar" : pd + "%") + '</span>' +
         (cm == null ? '' : '<span class="pt-r">Promedio: ' + cm + '%</span>') +
-        (asp.length ? '<span class="pt-a">' + asp.join(" · ") + '</span>' : '');
+        (tot ? '<span class="pt-a">Cumpliste ' + ok + ' de ' + tot + ' aspectos</span>' : '');
       tip.style.opacity = 1;
 
       // posición: centrada sobre el punto real y acotada al ancho del contenedor

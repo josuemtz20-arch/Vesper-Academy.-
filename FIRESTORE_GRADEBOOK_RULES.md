@@ -78,8 +78,10 @@ Documento `daily_progress/{correo}`:
 
 ```
 daily_progress/{correo}  ->  {
-  days: {                    // mapa día -> aspectos evaluados ese día
-    "1": { asistencia: bool, participacion: bool, tarea: bool, speaking: bool },
+  days: {                    // mapa día -> aspectos evaluados ese día (bool)
+    "1": { asistencia, puntualidad, material, tarea, participacion, actitud,
+           trabajo_clase, uso_ingles, speaking, pronunciacion, fluidez,
+           listening, reading, writing, gramatica, vocabulario },
     "2": { ... }, ... "20": { ... }
   },
   alias:      string,
@@ -89,9 +91,10 @@ daily_progress/{correo}  ->  {
 }
 ```
 
-El promedio de la rúbrica (✓=100, ✗=0; celdas sin marcar no cuentan) se
-convierte automáticamente en la **Participación** de la boleta — un solo lugar
-para capturar la asistencia/participación/tarea/speaking del día a día.
+La lista de aspectos vive en `vesper_gradebook.js` (`DAILY_ASPECTS`); añadir o
+quitar aspectos es editar esa lista, la regla no valida campos concretos del
+mapa `days`. El promedio de la rúbrica (✓=100, ✗=0; celdas sin marcar no
+cuentan) se convierte automáticamente en la **Participación** de la boleta.
 
 Publica las reglas (consola de Firebase → Firestore → base `teachermanuals` →
 Reglas, o `firebase deploy --only firestore:rules`). Tiene efecto inmediato.
