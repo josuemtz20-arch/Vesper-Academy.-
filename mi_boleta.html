@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<script src="vesper_auth.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mi boleta | Vesper Academy</title>
+<meta name="description" content="Consulta tu boleta de calificaciones: exámenes, lecciones, participación y calificación final. Requiere sesión de alumno.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="assets/images/vesper_logo.png" type="image/png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inria+Serif:ital,wght@0,400;0,700&family=Inter:wght@300;400;500;600;700;800&display=swap');
+*,*::before,*::after{box-sizing:border-box;}
+:root{--navy:#1B1B2F;--navy2:#2c2c4a;--gold:#c5a059;--gold2:#a8843d;--cream:#f5f2eb;--border:#e4e0d8;--muted:#6b7a8d;--err:#b03a3a;--ok:#2d7a4f;--accent:#8a2f3b;}
+body{margin:0;font-family:'Inter',sans-serif;background:var(--cream);color:var(--navy);}
+header{background:var(--navy);border-bottom:3px solid var(--gold);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:14px;position:sticky;top:0;z-index:50;}
+.brand{display:flex;align-items:center;gap:12px;color:#fff;text-decoration:none;}
+.brand img{height:42px;width:42px;object-fit:contain;}
+.brand b{font-family:'Inria Serif',serif;font-size:1.1rem;}
+.brand small{display:block;color:var(--gold);font-size:.6rem;letter-spacing:2px;text-transform:uppercase;}
+header .right{display:flex;align-items:center;gap:18px;}
+header a.back{color:rgba(255,255,255,.75);font-size:.78rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;text-decoration:none;}
+header a.back:hover{color:var(--gold);}
+.wrap{max-width:760px;margin:0 auto;padding:32px 20px 70px;}
+.intro h1{font-family:'Inria Serif',serif;font-size:1.8rem;margin:0 0 8px;}
+.intro p{color:var(--muted);margin:0 0 6px;font-size:.92rem;line-height:1.55;}
+
+.notice{background:#fbf3df;border:1px solid #e7d8a8;border-left:4px solid var(--gold2);border-radius:8px;padding:14px 16px;margin:20px 0;font-size:.88rem;color:#5a4d2e;line-height:1.55;}
+.notice.bad{background:#f7e7e7;border-color:#e2bcbc;border-left-color:var(--err);color:#6a2a2a;}
+.notice i{margin-right:6px;}
+
+.boleta{background:#fff;border:1px solid var(--border);border-top:4px solid var(--accent);border-radius:14px;box-shadow:0 1px 4px rgba(0,0,0,.06);padding:26px 26px 22px;margin-top:22px;}
+.bhead{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;border-bottom:1px solid var(--border);padding-bottom:16px;margin-bottom:6px;}
+.bhead .who b{font-family:'Inria Serif',serif;font-size:1.25rem;}
+.bhead .who small{display:block;color:var(--muted);font-size:.78rem;margin-top:2px;}
+.lvl{display:inline-block;font-size:.7rem;font-weight:800;letter-spacing:.6px;text-transform:uppercase;padding:4px 12px;border-radius:20px;background:#fff;border:1.5px solid currentColor;}
+
+.crit{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 2px;border-bottom:1px solid #f0ece3;}
+.crit .lbl b{display:block;font-size:.92rem;}
+.crit .lbl small{color:var(--muted);font-size:.74rem;}
+.crit .val{font-weight:800;font-size:1.15rem;white-space:nowrap;}
+.crit .val .na{color:var(--muted);font-weight:400;font-size:.9rem;}
+.crit .val .w{color:var(--muted);font-weight:500;font-size:.7rem;margin-left:6px;letter-spacing:.5px;}
+
+.finalrow{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 2px 4px;}
+.finalrow .lbl{font-size:.78rem;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;}
+.finalbox{text-align:right;}
+.finalbox b{font-family:'Inria Serif',serif;font-size:2.4rem;line-height:1;}
+.finalbox b.pass{color:var(--ok);}
+.finalbox b.fail{color:var(--err);}
+.finalbox span{display:block;font-size:.72rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-top:4px;}
+.finalbox span.pass{color:var(--ok);}
+.finalbox span.fail{color:var(--err);}
+.finalbox .na{color:var(--muted);font-weight:400;font-size:1rem;}
+
+.fine{color:var(--muted);font-size:.78rem;line-height:1.55;margin-top:18px;}
+
+#loading{padding:50px 20px;text-align:center;color:var(--muted);}
+#loading .spin{display:inline-block;width:28px;height:28px;border:3px solid rgba(138,47,59,.2);border-top-color:var(--accent);border-radius:50%;animation:sp .8s linear infinite;margin-bottom:12px;}
+@keyframes sp{to{transform:rotate(360deg)}}
+
+footer{background:var(--navy);color:rgba(255,255,255,.5);text-align:center;padding:24px;font-size:.78rem;border-top:3px solid var(--gold);}
+footer a{color:var(--gold);text-decoration:none;}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+</style>
+<link rel="stylesheet" href="assets/css/vesper_tokens.css">
+</head>
+<body>
+
+<header>
+  <a class="brand" href="index.html">
+    <img src="assets/images/vesper_logo_inverted.png" alt="Vesper Academy">
+    <span><b>Vesper Academy</b><small>Mi boleta</small></span>
+  </a>
+  <div class="right">
+    <a class="back" href="materiales.html"><i class="fas fa-book-open"></i> Portal del alumno</a>
+    <a class="back" href="index.html"><i class="fas fa-arrow-left"></i> Sitio principal</a>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="intro">
+    <h1>Mi boleta de calificaciones</h1>
+    <p>Tu avance en escala 0–100, con la misma boleta para todos los niveles:
+       <b>Exámenes</b> y <b>Lecciones</b> se calculan con tu mejor marca en cada uno,
+       y la <b>Participación</b> la asigna tu profesor.</p>
+  </div>
+
+  <div id="loading"><div class="spin"></div><div>Cargando tu boleta…</div></div>
+
+  <div id="content" style="display:none">
+    <div class="boleta">
+      <div class="bhead">
+        <div class="who"><b id="b-alias"></b><small id="b-email"></small></div>
+        <span id="b-level"></span>
+      </div>
+      <div class="crit">
+        <div class="lbl"><b>Exámenes</b><small id="c-exams-sub"></small></div>
+        <div class="val" id="c-exams"></div>
+      </div>
+      <div class="crit">
+        <div class="lbl"><b>Lecciones</b><small id="c-lessons-sub"></small></div>
+        <div class="val" id="c-lessons"></div>
+      </div>
+      <div class="crit">
+        <div class="lbl"><b>Participación</b><small>La asigna tu profesor en clase</small></div>
+        <div class="val" id="c-part"></div>
+      </div>
+      <div class="finalrow">
+        <div class="lbl">Calificación final</div>
+        <div class="finalbox" id="c-final"></div>
+      </div>
+    </div>
+    <p class="fine" id="fine"></p>
+  </div>
+
+  <div id="msg" style="display:none"></div>
+</div>
+
+<footer>
+  © <span id="y"></span> Vesper Academy · <a href="index.html">vesper.academy</a>
+</footer>
+
+<script src="vesper_path.js"></script>
+<script src="vesper_results.js"></script>
+<script src="vesper_gradebook.js"></script>
+<script>
+(function () {
+  "use strict";
+  document.getElementById("y").textContent = new Date().getFullYear();
+
+  var loadingEl = document.getElementById("loading");
+  var contentEl = document.getElementById("content");
+  var msgEl = document.getElementById("msg");
+  var GB = window.VESPER_GRADEBOOK;
+
+  function esc(t) {
+    return ("" + (t == null ? "" : t)).replace(/[&<>"]/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
+    });
+  }
+  function showMsg(html, bad) {
+    loadingEl.style.display = "none";
+    contentEl.style.display = "none";
+    msgEl.style.display = "block";
+    msgEl.className = "notice" + (bad ? " bad" : "");
+    msgEl.innerHTML = html;
+  }
+  function pctHtml(avg, w) {
+    if (avg == null) return '<span class="na">Sin datos aún</span>';
+    return avg + '%<span class="w">' + Math.round(w * 100) + '% de la final</span>';
+  }
+  function countSub(count, what) {
+    return count ? ('Tu mejor marca en cada ' + what + ' · ' + count + ' intento' + (count === 1 ? '' : 's'))
+                 : ('Aún no tienes ' + what + 'es registrados con sesión');
+  }
+
+  function render(user, row) {
+    document.getElementById("b-alias").textContent = row.alias || "Estudiante";
+    document.getElementById("b-email").textContent = user.email || "";
+    var lvEl = document.getElementById("b-level");
+    var lv = (window.VESPER_PATH && row.level) ? VESPER_PATH.normLevel(row.level) : (row.level || "");
+    if (lv) {
+      lvEl.className = "lvl";
+      lvEl.style.color = window.VESPER_PATH ? VESPER_PATH.levelColor(lv) : "#a8843d";
+      lvEl.textContent = "Nivel " + lv;
+    } else {
+      lvEl.textContent = "";
+    }
+
+    document.getElementById("c-exams").innerHTML = pctHtml(row.examsAvg, GB.WEIGHTS.exams);
+    document.getElementById("c-exams-sub").textContent = countSub(row.examsCount, "examen");
+    document.getElementById("c-lessons").innerHTML = pctHtml(row.lessonsAvg, GB.WEIGHTS.lessons);
+    document.getElementById("c-lessons-sub").textContent = row.lessonsCount
+      ? ('Tu mejor marca en cada lección · ' + row.lessonsCount + ' intento' + (row.lessonsCount === 1 ? '' : 's'))
+      : 'Aún no tienes lecciones registradas con sesión';
+    document.getElementById("c-part").innerHTML = pctHtml(row.participacion, GB.WEIGHTS.participation);
+
+    var f = GB.computeFinal(row);
+    var box = document.getElementById("c-final");
+    if (f.final == null) {
+      box.innerHTML = '<span class="na">Sin calificaciones aún</span>';
+    } else {
+      var cls = f.passed ? "pass" : "fail";
+      box.innerHTML = '<b class="' + cls + '">' + f.final + '</b>' +
+        '<span class="' + cls + '">' + (f.passed ? "Aprobado" : "En riesgo") + '</span>';
+    }
+
+    document.getElementById("fine").innerHTML =
+      'La final pondera: Exámenes ' + Math.round(GB.WEIGHTS.exams * 100) +
+      '% · Lecciones ' + Math.round(GB.WEIGHTS.lessons * 100) +
+      '% · Participación ' + Math.round(GB.WEIGHTS.participation * 100) +
+      '%. Los criterios que aún no tienes no cuentan en tu contra. Se aprueba con ' +
+      GB.PASS_THRESHOLD + ' o más. Sigue practicando: solo cuenta tu <b>mejor</b> intento.';
+
+    loadingEl.style.display = "none";
+    msgEl.style.display = "none";
+    contentEl.style.display = "block";
+  }
+
+  function load(user) {
+    Promise.all([
+      VESPER_RESULTS.fetchMine(),
+      GB.fetchMyGrade()
+    ]).then(function (res) {
+      var attempts = res[0], grade = res[1];
+      if (attempts === null) {
+        showMsg('<i class="fas fa-cloud"></i> No se pudieron leer tus resultados de la nube. ' +
+          'Revisa tu conexión y recarga. Tus intentos siguen guardados en este dispositivo.', true);
+        return;
+      }
+      var email = String(user.email || "").trim().toLowerCase();
+      var grades = {};
+      if (grade) grades[email] = grade;
+      /* buildRoster con SOLO mis intentos + mi doc de gradebook → mi fila */
+      var roster = GB.buildRoster(attempts, grades);
+      var mine = null;
+      for (var i = 0; i < roster.length; i++) {
+        if (roster[i].email === email || roster[i].studentUid === user.uid) { mine = roster[i]; break; }
+      }
+      if (!mine) {
+        mine = { alias: VESPER_RESULTS.aliasOf(), email: email, studentUid: user.uid, level: "",
+                 examsAvg: null, examsCount: 0, lessonsAvg: null, lessonsCount: 0,
+                 participacion: null, notes: "" };
+      }
+      render(user, mine);
+    });
+  }
+
+  function boot() {
+    if (!window.VesperAuth || !VesperAuth.isConfigured) {
+      showMsg('<i class="fas fa-cloud"></i> Firebase no está configurado; tu boleta necesita ' +
+        'la nube para reunir tus resultados.', true);
+      return;
+    }
+    VesperAuth.initFirebase().then(function (auth) {
+      auth.onAuthStateChanged(function (user) {
+        if (!user || !user.emailVerified) { return; /* el gate redirige al login */ }
+        load(user);
+      });
+    }).catch(function () {
+      showMsg('<i class="fas fa-triangle-exclamation"></i> No se pudo conectar con el servicio. ' +
+        'Revisa tu conexión y recarga.', true);
+    });
+  }
+
+  boot();
+})();
+</script>
+</body>
+</html>
