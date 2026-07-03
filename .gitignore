@@ -86,6 +86,7 @@
 !/vesper_audio_data.js
 !/vesper_reading_data.js
 !/vesper_basics_audio_data.js
+!/vesper_biz_path_audio_data.js
 !/vesper_basics_lesson_data.js
 !/vesper_custom_transcripts.js
 !/vesper_covers.js

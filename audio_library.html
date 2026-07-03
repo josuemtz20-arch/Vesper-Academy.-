@@ -215,6 +215,7 @@
 
     <script src="vesper_audio_data.js"></script>
     <script src="vesper_basics_audio_data.js"></script>
+    <script src="vesper_biz_path_audio_data.js"></script>
     <script src="vesper_lesson_images.js"></script>
     <script src="vesper_covers.js"></script>
     <script>
@@ -369,6 +370,26 @@
         bcard.addEventListener("click", showBusiness);
         levelGrid.appendChild(bcard);
 
+        // Business Path cards (B1 Foundations + C1 Strategic Influence) — audio model per lesson
+        const BIZ_PATH = window.BIZ_PATH_DATA || {};
+        Object.keys(BIZ_PATH).forEach(lvl => {
+            const bp = BIZ_PATH[lvl];
+            const card = document.createElement("div");
+            card.className = "level-card biz";
+            card.innerHTML = `
+                <div class="lc-top">
+                    <div class="num"><i class="fas ${bp.icon}" style="font-size:1.1rem"></i></div>
+                    <div class="lvl-name"><b>Business Path ${lvl === "b1" ? "I" : "III"}</b><small>${bp.tag}</small></div>
+                    <i class="fas fa-building bigicon"></i>
+                </div>
+                <div class="lc-body">
+                    <p>Audio models from ${bp.sub} — one native-voice model of the target skill per lesson, with transcript and vocabulary.</p>
+                    <div class="lc-foot"><span>${bp.lessons.length} Lessons</span><i class="fas fa-arrow-right"></i></div>
+                </div>`;
+            card.addEventListener("click", () => showBizPath(lvl));
+            levelGrid.appendChild(card);
+        });
+
         setCrumbsHome();
 
         // ── VIEWS ─────────────────────────────────────────────────────
@@ -495,6 +516,32 @@
                     ${VesperCovers.coverHTML(def.file, L.icon, "Business")}
                     <div class="lz-body">
                         <div class="lz-meta"><div class="num">${L.lesson}</div><h4>${L.title}${versions}</h4></div>
+                        <i class="fas fa-chevron-right lz-go"></i>
+                    </div>`;
+                lessonGrid.appendChild(a);
+            });
+            viewLevels.style.display = "none"; viewLessons.style.display = "block";
+            window.scrollTo({top:0, behavior:"smooth"});
+        }
+
+        function showBizPath(lvl) {
+            const bp = BIZ_PATH[lvl];
+            const course = lvl === "b1" ? "corporate_b1" : "corporate_c1";
+            lessonsTitle.textContent = `Business Path ${lvl === "b1" ? "I" : "III"} — ${bp.tag}`;
+            setCrumbsLevel(bp.crumb);
+            setExamBtn(`exam.html?course=${course}`, "Take the Business Path Exam");
+            lessonGrid.innerHTML = "";
+            bp.lessons.forEach((les, i) => {
+                const a = document.createElement("a");
+                a.className = "lesson-card";
+                const q = new URLSearchParams({ audio: les.file, title: les.title,
+                    sub: bp.sub, crumb: bp.crumb + " · Lesson " + les.n, icon: les.icon });
+                a.href = `lesson.html?${q.toString()}`;
+                a.style.animationDelay = (i * 0.015) + "s";
+                a.innerHTML = `
+                    ${VesperCovers.coverHTML(les.file, les.icon, bp.crumb)}
+                    <div class="lz-body">
+                        <div class="lz-meta"><div class="num">Lesson ${les.n}</div><h4>${les.title}</h4></div>
                         <i class="fas fa-chevron-right lz-go"></i>
                     </div>`;
                 lessonGrid.appendChild(a);
