@@ -72,7 +72,7 @@ header a.back:hover{color:var(--gold);}
 .pchart .thresh-t{fill:#a8843d;font-size:10px;font-family:'Inter',sans-serif;}
 .pchart .cross{stroke:#c9c2b4;stroke-width:1;opacity:0;}
 .pchart .hi{opacity:0;}
-.ptip{position:absolute;pointer-events:none;background:var(--navy);color:#fff;font-size:.72rem;line-height:1.45;padding:8px 11px;border-radius:8px;box-shadow:0 6px 18px rgba(0,0,0,.28);opacity:0;transition:opacity .08s;white-space:nowrap;z-index:5;transform:translate(-50%,-100%);}
+.ptip{position:absolute;pointer-events:none;background:var(--navy);color:#fff;font-size:.72rem;line-height:1.45;padding:8px 11px;border-radius:8px;box-shadow:0 6px 18px rgba(0,0,0,.28);opacity:0;transition:opacity .08s;max-width:90%;z-index:5;}
 .ptip .pt-d{font-weight:700;color:var(--gold);}
 .ptip .pt-r{display:block;margin-top:2px;}
 .ptip .pt-a{display:block;margin-top:4px;color:rgba(255,255,255,.82);font-size:.68rem;}
@@ -323,28 +323,36 @@ footer a{color:var(--gold);text-decoration:none;}
     var hiD = document.getElementById("phi-day");
     var hiC = document.getElementById("phi-cum");
     var N = chartData.N;
+    var PADL = 30, plotW = 640 - PADL - 14;
+    var lastDay = 0, svgRect = null, wrapW = 0;
+
+    // rects cacheados: se remiden solo al invalidarse (resize/scroll), no en cada movimiento
+    function measure() { svgRect = svg.getBoundingClientRect(); wrapW = wrap.getBoundingClientRect().width; }
+    function invalidate() { svgRect = null; }
 
     function hide() {
       tip.style.opacity = 0; cross.style.opacity = 0;
       hiD.style.opacity = 0; hiC.style.opacity = 0;
-      // soltar la posición para que un tooltip oculto no cause overflow tras un resize
-      tip.style.left = ""; tip.style.top = "";
+      tip.style.left = ""; tip.style.top = "";  // sin residuo que desborde tras un resize
+      lastDay = 0;
     }
+
     function move(clientX) {
-      var rect = svg.getBoundingClientRect();
-      if (!rect.width) return;
-      var vx = (clientX - rect.left) / rect.width * 640; // coord del viewBox (solo X)
-      // día más cercano (1..N) por proximidad en X
-      var PADL = 30, plotW = 640 - PADL - 14;
-      var frac = (vx - PADL) / plotW;
-      var day = Math.round(frac * (N - 1)) + 1;
+      if (!svgRect) measure();
+      if (!svgRect.width) return;
+      var vx = (clientX - svgRect.left) / svgRect.width * 640; // coord del viewBox (solo X)
+      var day = Math.round((vx - PADL) / plotW * (N - 1)) + 1;
       day = Math.max(1, Math.min(N, day));
+      if (day === lastDay) return;  // mismo día: nada que reconstruir (evita reflow por movimiento)
+      lastDay = day;
+
       var pd = chartData.perDay[day], cm = chartData.cum[day];
-      cross.setAttribute("x1", xF(day)); cross.setAttribute("x2", xF(day));
-      cross.style.opacity = 1;
-      if (pd != null) { hiD.setAttribute("cx", xF(day)); hiD.setAttribute("cy", yF(pd)); hiD.style.opacity = 1; }
+      var cx = xF(day);
+      // escrituras al SVG (crosshair + puntos resaltados, en el x real del día)
+      cross.setAttribute("x1", cx); cross.setAttribute("x2", cx); cross.style.opacity = 1;
+      if (pd != null) { hiD.setAttribute("cx", cx); hiD.setAttribute("cy", yF(pd)); hiD.style.opacity = 1; }
       else hiD.style.opacity = 0;
-      if (cm != null) { hiC.setAttribute("cx", xF(day)); hiC.setAttribute("cy", yF(cm)); hiC.style.opacity = 1; }
+      if (cm != null) { hiC.setAttribute("cx", cx); hiC.setAttribute("cy", yF(cm)); hiC.style.opacity = 1; }
       else hiC.style.opacity = 0;
 
       var asp = chartData.aspText[day] || [];
@@ -352,18 +360,25 @@ footer a{color:var(--gold);text-decoration:none;}
         '<span class="pt-r">Puntaje: ' + (pd == null ? "sin evaluar" : pd + "%") + '</span>' +
         (cm == null ? '' : '<span class="pt-r">Promedio: ' + cm + '%</span>') +
         (asp.length ? '<span class="pt-a">' + asp.join(" · ") + '</span>' : '');
-      // posición del tooltip dentro del contenedor
-      var px = (xF(day) / 640) * rect.width;
-      var pw = wrap.getBoundingClientRect().width;
-      px = Math.max(60, Math.min(pw - 60, px));
-      tip.style.left = px + "px";
-      tip.style.top = (yF(Math.max(pd == null ? 0 : pd, cm == null ? 0 : cm)) / 240 * rect.height - 12) + "px";
       tip.style.opacity = 1;
+
+      // posición: centrada sobre el punto real y acotada al ancho del contenedor
+      // (se mide el tooltip una vez por cambio de día, no por movimiento)
+      var px = cx * (svgRect.width / 640);
+      var tw = tip.offsetWidth, th = tip.offsetHeight;
+      var left = Math.max(2, Math.min(wrapW - tw - 2, px - tw / 2));
+      var pointY = yF(Math.max(pd == null ? 0 : pd, cm == null ? 0 : cm)) * (svgRect.height / 240);
+      var top = pointY - th - 10;
+      if (top < 2) top = pointY + 14; // si no cabe arriba del punto, va abajo
+      tip.style.left = left + "px";
+      tip.style.top = top + "px";
     }
 
     svg.addEventListener("pointermove", function (e) { move(e.clientX); });
-    svg.addEventListener("pointerdown", function (e) { move(e.clientX); });
+    svg.addEventListener("pointerdown", function (e) { invalidate(); lastDay = 0; move(e.clientX); });
     svg.addEventListener("pointerleave", hide);
+    window.addEventListener("resize", function () { invalidate(); hide(); });
+    window.addEventListener("scroll", invalidate, true);
   }
 
   function renderDaily(daily) {
