@@ -192,11 +192,15 @@ window.VESPER_GRADEBOOK = (function () {
     }).catch(function () { return false; });
   }
 
-  /* ---- progreso diario (rúbrica ✓/✗ del curso) ---- */
-
-  /* lee un doc REST de daily_progress -> { email, alias, studentUid, days }.
-     days = { "1".."20": { asistencia:bool, participacion:bool, ... } };
-     las celdas sin evaluar simplemente no existen en el mapa. */
+  /* ---- progreso diario (modelo "todo bueno, restar taches") ----
+     Cada día que TUVO CLASE arranca con los 16 aspectos en bueno (✓). El
+     profesor solo marca ✗ (tache) donde el alumno falló; cada tache baja
+     puntos. Es lo más simple: no hay que marcar las 16 casillas por día.
+     Almacenamiento en days[d]:
+       - la PRESENCIA de la clave del día = hubo clase (día activo).
+       - `_activo:true` marca el día (para que un día sin taches se guarde).
+       - `aspectKey:false` = un tache en ese aspecto.
+       - los aspectos buenos NO se guardan (bueno = ausente). */
   function readDailyDoc(doc) {
     var f = (doc && doc.fields) || {};
     function s(k) { return (f[k] && f[k].stringValue) || ""; }
@@ -208,13 +212,11 @@ window.VESPER_GRADEBOOK = (function () {
       var day = parseInt(d, 10);
       if (!(day >= 1 && day <= COURSE_DAYS)) return;
       var af = (dm[d] && dm[d].mapValue && dm[d].mapValue.fields) || {};
-      var cell = {};
+      var cell = {}; // día con clase (presencia); solo guardamos los taches
       DAILY_ASPECTS.forEach(function (a) {
-        if (af[a.key] && typeof af[a.key].booleanValue === "boolean") {
-          cell[a.key] = af[a.key].booleanValue;
-        }
+        if (af[a.key] && af[a.key].booleanValue === false) cell[a.key] = false;
       });
-      if (Object.keys(cell).length) days[day] = cell;
+      days[day] = cell;
     });
     return {
       email: email, alias: s("alias"), studentUid: s("studentUid"),
@@ -229,14 +231,12 @@ window.VESPER_GRADEBOOK = (function () {
     Object.keys(days || {}).forEach(function (d) {
       var day = parseInt(d, 10);
       if (!(day >= 1 && day <= COURSE_DAYS)) return;
-      var cellFields = {}, any = false;
+      // cada día presente = hubo clase; marcamos _activo y solo los taches
+      var cellFields = { _activo: { booleanValue: true } };
       DAILY_ASPECTS.forEach(function (a) {
-        if (typeof (days[d] || {})[a.key] === "boolean") {
-          cellFields[a.key] = { booleanValue: days[d][a.key] };
-          any = true;
-        }
+        if ((days[d] || {})[a.key] === false) cellFields[a.key] = { booleanValue: false };
       });
-      if (any) fields[String(day)] = { mapValue: { fields: cellFields } };
+      fields[String(day)] = { mapValue: { fields: cellFields } };
     });
     return { mapValue: { fields: fields } };
   }
@@ -306,25 +306,23 @@ window.VESPER_GRADEBOOK = (function () {
     }).catch(function () { return false; });
   }
 
-  /* estadística de la rúbrica: ✓=100, ✗=0, sin marcar no cuenta.
-     -> { avg: int|null, cells: nº celdas evaluadas, daysTouched: días con
-     al menos una marca }. avg es lo que alimenta la Participación. */
+  /* estadística de la rúbrica: cada día con clase aporta los 16 aspectos en
+     bueno (✓=100) y cada tache (✗) resta uno. -> { avg, cells, daysTouched }
+     donde daysTouched = días con clase. avg alimenta la Participación. */
   function dailyStats(days) {
-    var ok = 0, total = 0, touched = 0;
+    var N = DAILY_ASPECTS.length;
+    var ok = 0, total = 0, held = 0;
     Object.keys(days || {}).forEach(function (d) {
-      var cell = days[d] || {}, any = false;
-      DAILY_ASPECTS.forEach(function (a) {
-        if (typeof cell[a.key] === "boolean") {
-          total++; any = true;
-          if (cell[a.key]) ok++;
-        }
-      });
-      if (any) touched++;
+      var day = parseInt(d, 10);
+      if (!(day >= 1 && day <= COURSE_DAYS)) return;
+      var cell = days[d] || {}, taches = 0;
+      DAILY_ASPECTS.forEach(function (a) { if (cell[a.key] === false) taches++; });
+      held++; total += N; ok += (N - taches);
     });
     return {
       avg: total ? Math.round(100 * ok / total) : null,
       cells: total,
-      daysTouched: touched
+      daysTouched: held
     };
   }
 

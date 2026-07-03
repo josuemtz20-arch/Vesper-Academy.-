@@ -160,7 +160,7 @@ footer a{color:var(--gold);text-decoration:none;}
         <span class="lvl" id="daily-avg" style="color:var(--accent)"></span>
       </div>
       <div class="dwrap"><table class="dgrid" id="daily-grid"></table></div>
-      <p class="fine" style="margin-top:14px;">✓ = cumpliste ese día · ✗ = no cumpliste · · = aún sin evaluar. El promedio de tus ✓ es tu Participación.</p>
+      <p class="fine" style="margin-top:14px;">✓ = bien · ✗ = tache (fallaste ese aspecto) · · = sin clase ese día. Cada día con clase arranca en bueno y cada tache baja tu Participación.</p>
     </div>
 
     <p class="fine" id="fine"></p>
@@ -213,16 +213,19 @@ footer a{color:var(--gold);text-decoration:none;}
 
   function computeSeries(daily) {
     var days = (daily && daily.days) || {};
-    var N = GB.COURSE_DAYS;
+    var N = GB.COURSE_DAYS, A = GB.DAILY_ASPECTS.length;
     var perDay = {}, cum = {}, okc = {}, totc = {}, cumOk = 0, cumTot = 0, first = 0, last = 0;
     for (var d = 1; d <= N; d++) {
-      var cell = days[d] || {}, ok = 0, tot = 0;
-      GB.DAILY_ASPECTS.forEach(function (a) {
-        if (typeof cell[a.key] === "boolean") { tot++; if (cell[a.key]) ok++; }
-      });
-      perDay[d] = tot ? Math.round(100 * ok / tot) : null;
-      okc[d] = ok; totc[d] = tot;
-      if (tot) { cumOk += ok; cumTot += tot; if (!first) first = d; last = d; }
+      if (days[d]) {                    // hubo clase: todo bueno menos los taches
+        var taches = 0;
+        GB.DAILY_ASPECTS.forEach(function (a) { if (days[d][a.key] === false) taches++; });
+        var ok = A - taches;
+        perDay[d] = Math.round(100 * ok / A);
+        okc[d] = ok; totc[d] = A;
+        cumOk += ok; cumTot += A; if (!first) first = d; last = d;
+      } else {                          // sin clase ese día
+        perDay[d] = null; okc[d] = 0; totc[d] = 0;
+      }
       cum[d] = cumTot ? Math.round(100 * cumOk / cumTot) : null;
     }
     return { perDay: perDay, cum: cum, okc: okc, totc: totc, first: first, last: last, N: N };
@@ -354,9 +357,9 @@ footer a{color:var(--gold);text-decoration:none;}
 
       var tot = chartData.totc[day], ok = chartData.okc[day];
       tip.innerHTML = '<span class="pt-d">Día ' + day + '</span>' +
-        '<span class="pt-r">Puntaje: ' + (pd == null ? "sin evaluar" : pd + "%") + '</span>' +
+        '<span class="pt-r">Puntaje: ' + (pd == null ? "sin clase" : pd + "%") + '</span>' +
         (cm == null ? '' : '<span class="pt-r">Promedio: ' + cm + '%</span>') +
-        (tot ? '<span class="pt-a">Cumpliste ' + ok + ' de ' + tot + ' aspectos</span>' : '');
+        (tot ? '<span class="pt-a">Bien en ' + ok + ' de ' + tot + ' aspectos</span>' : '');
       tip.style.opacity = 1;
 
       // posición: centrada sobre el punto real y acotada al ancho del contenedor
@@ -384,7 +387,7 @@ footer a{color:var(--gold);text-decoration:none;}
     if (!daily || st.cells === 0) { card.style.display = "none"; return; }
     document.getElementById("daily-title").textContent = "Progreso diario";
     document.getElementById("daily-sub").textContent =
-      "Curso de " + GB.COURSE_DAYS + " días · " + st.daysTouched + " evaluados";
+      "Curso de " + GB.COURSE_DAYS + " días · " + st.daysTouched + " con clase";
     document.getElementById("daily-avg").textContent = "Promedio " + st.avg + "%";
 
     var head = '<thead><tr><th class="asp"></th>';
@@ -393,9 +396,10 @@ footer a{color:var(--gold);text-decoration:none;}
     var body = GB.DAILY_ASPECTS.map(function (a) {
       var cells = '';
       for (var d = 1; d <= GB.COURSE_DAYS; d++) {
-        var v = (daily.days[d] || {})[a.key];
-        var cls = v === true ? 'on' : (v === false ? 'off' : '');
-        var txt = v === true ? '✓' : (v === false ? '✗' : '·');
+        var held = !!daily.days[d];
+        var tache = held && (daily.days[d][a.key] === false);
+        var cls = !held ? '' : (tache ? 'off' : 'on');   // sin clase = vacío
+        var txt = !held ? '·' : (tache ? '✗' : '✓');
         cells += '<td class="' + cls + '">' + txt + '</td>';
       }
       return '<tr><th class="asp">' + esc(a.label) + '</th>' + cells + '</tr>';
@@ -426,7 +430,7 @@ footer a{color:var(--gold);text-decoration:none;}
     document.getElementById("c-part").innerHTML = pctHtml(row.participacion, GB.WEIGHTS.participation);
     var st = GB.dailyStats(daily ? daily.days : {});
     document.getElementById("c-part-sub").textContent = (st.cells > 0)
-      ? ('Promedio de tu progreso diario · ' + st.daysTouched + ' de ' + GB.COURSE_DAYS + ' días evaluados')
+      ? ('Promedio de tu progreso diario · ' + st.daysTouched + ' de ' + GB.COURSE_DAYS + ' días con clase')
       : 'La asigna tu profesor en clase';
     renderProgressChart(daily);
     renderDaily(daily);
