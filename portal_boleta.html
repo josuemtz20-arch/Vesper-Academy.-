@@ -13,7 +13,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Inria+Serif:ital,wght@0,400;0,700&family=Inter:wght@300;400;500;600;700;800&display=swap');
 *,*::before,*::after{box-sizing:border-box;}
 :root{--navy:#1B1B2F;--navy2:#2c2c4a;--gold:#c5a059;--gold2:#a8843d;--cream:#f5f2eb;--border:#e4e0d8;--muted:#6b7a8d;--err:#b03a3a;--ok:#2d7a4f;--accent:#8a2f3b;}
-body{margin:0;font-family:'Inter',sans-serif;background:var(--cream);color:var(--navy);}
+body{margin:0;font-family:'Inter',sans-serif;background:var(--cream);color:var(--navy);min-height:100vh;}
 header{background:var(--navy);border-bottom:3px solid var(--gold);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:14px;position:sticky;top:0;z-index:50;}
 .brand{display:flex;align-items:center;gap:12px;color:#fff;text-decoration:none;}
 .brand img{height:42px;width:42px;object-fit:contain;}
@@ -98,7 +98,7 @@ table.dgrid td.cell.off.ro:hover{border-color:#e2bcbc;}
 #loading .spin{display:inline-block;width:28px;height:28px;border:3px solid rgba(138,47,59,.2);border-top-color:var(--accent);border-radius:50%;animation:sp .8s linear infinite;margin-bottom:12px;}
 @keyframes sp{to{transform:rotate(360deg)}}
 
-footer{background:var(--navy);color:rgba(255,255,255,.5);text-align:center;padding:24px;font-size:.78rem;border-top:3px solid var(--gold);}
+footer{background:var(--navy);color:rgba(255,255,255,.5);text-align:center;padding:24px;font-size:.78rem;border-top:3px solid var(--gold);position:sticky;top:100vh;}
 footer a{color:var(--gold);text-decoration:none;}
 :focus-visible{outline:3px solid var(--gold);outline-offset:2px}
 @media(max-width:640px){
@@ -126,17 +126,6 @@ footer a{color:var(--gold);text-decoration:none;}
 <div class="wrap">
   <div class="intro">
     <h1>Boleta de calificaciones</h1>
-    <p>Una fila por alumno con la <b>misma tabla para todos los niveles</b> (A1–C2), en
-       escala 0–100: <b>Exámenes</b> y <b>Lecciones</b> se calculan solos con los
-       resultados de la plataforma (mejor marca de cada examen o lección) y la
-       <b>Participación</b> la capturas tú aquí mismo — se guarda al escribirla.</p>
-    <p>En <b>Diario</b> llevas la rúbrica del curso (20 días × 16 aspectos). Es
-       simple: marca el día que <b>hubo clase</b> y todo arranca en bueno (✓);
-       solo pones <b>✗ (tache)</b> donde el alumno falló y cada tache baja puntos.
-       El promedio se vuelve automáticamente la <b>Participación</b> del alumno.</p>
-    <p id="weights-note"></p>
-    <p>Los alumnos aparecen en la boleta en cuanto registran su primer intento con
-       sesión iniciada (o cuando les capturas una participación).</p>
   </div>
 
   <div id="loading"><div class="spin"></div><div>Cargando boleta…</div></div>
@@ -202,14 +191,6 @@ footer a{color:var(--gold);text-decoration:none;}
       return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
     });
   }
-
-  /* nota de pesos en la intro, generada desde la configuración del módulo */
-  document.getElementById("weights-note").innerHTML =
-    'La <b>calificación final</b> pondera: Exámenes ' + Math.round(GB.WEIGHTS.exams * 100) +
-    '% · Lecciones ' + Math.round(GB.WEIGHTS.lessons * 100) +
-    '% · Participación ' + Math.round(GB.WEIGHTS.participation * 100) +
-    '%. Si a un alumno le falta un criterio, la final se calcula solo con los que sí tiene. ' +
-    'Se aprueba con ' + GB.PASS_THRESHOLD + ' o más.';
 
   /* filtro de nivel con los 6 CEFR canónicos */
   (window.VESPER_PATH ? VESPER_PATH.LEVELS : ["A1","A2","B1","B2","C1","C2"]).forEach(function (lv) {
