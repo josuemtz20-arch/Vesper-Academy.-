@@ -145,6 +145,12 @@
 !/vesper_results.js
 !/portal_calificaciones.html
 !/FIRESTORE_EXAM_RESULTS_RULES.md
+# Boleta de calificaciones (2026-07-03): una fila por alumno, tabla genérica
+# para todos los niveles (A1–C2). Exámenes/lecciones automáticos (exam_results)
+# + participación manual del profe (colección gradebook; regla en su doc).
+!/portal_boleta.html
+!/vesper_gradebook.js
+!/FIRESTORE_GRADEBOOK_RULES.md
 # recintos tematicos de vocabulario (ramas) — datos publicos, sin claves
 !/vesper_vocab_dens.js
 !/apariencia.html

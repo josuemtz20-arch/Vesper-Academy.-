@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<script src="vesper_auth.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Boleta de calificaciones | Vesper Academy</title>
+<meta name="description" content="Boleta de calificaciones por alumno: una tabla genérica para todos los niveles. Acceso restringido al profesorado.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="assets/images/vesper_logo.png" type="image/png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inria+Serif:ital,wght@0,400;0,700&family=Inter:wght@300;400;500;600;700;800&display=swap');
+*,*::before,*::after{box-sizing:border-box;}
+:root{--navy:#1B1B2F;--navy2:#2c2c4a;--gold:#c5a059;--gold2:#a8843d;--cream:#f5f2eb;--border:#e4e0d8;--muted:#6b7a8d;--err:#b03a3a;--ok:#2d7a4f;--accent:#8a2f3b;}
+body{margin:0;font-family:'Inter',sans-serif;background:var(--cream);color:var(--navy);}
+header{background:var(--navy);border-bottom:3px solid var(--gold);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:14px;position:sticky;top:0;z-index:50;}
+.brand{display:flex;align-items:center;gap:12px;color:#fff;text-decoration:none;}
+.brand img{height:42px;width:42px;object-fit:contain;}
+.brand b{font-family:'Inria Serif',serif;font-size:1.1rem;}
+.brand small{display:block;color:var(--gold);font-size:.6rem;letter-spacing:2px;text-transform:uppercase;}
+header .right{display:flex;align-items:center;gap:18px;}
+header a.back{color:rgba(255,255,255,.75);font-size:.78rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;text-decoration:none;}
+header a.back:hover{color:var(--gold);}
+.wrap{max-width:1100px;margin:0 auto;padding:32px 20px 70px;}
+.intro h1{font-family:'Inria Serif',serif;font-size:1.8rem;margin:0 0 8px;}
+.intro p{color:var(--muted);max-width:760px;margin:0 0 6px;font-size:.92rem;line-height:1.55;}
+
+.notice{background:#fbf3df;border:1px solid #e7d8a8;border-left:4px solid var(--gold2);border-radius:8px;padding:14px 16px;margin:20px 0;font-size:.88rem;color:#5a4d2e;line-height:1.55;}
+.notice.bad{background:#f7e7e7;border-color:#e2bcbc;border-left-color:var(--err);color:#6a2a2a;}
+.notice i{margin-right:6px;}
+
+.stats{display:flex;flex-wrap:wrap;gap:12px;margin:22px 0 14px;}
+.stat{background:#fff;border:1px solid var(--border);border-top:4px solid var(--accent);border-radius:10px;padding:12px 18px;min-width:130px;box-shadow:0 1px 4px rgba(0,0,0,.06);}
+.stat b{display:block;font-size:1.5rem;line-height:1.1;font-family:'Inria Serif',serif;}
+.stat span{font-size:.7rem;letter-spacing:1px;text-transform:uppercase;color:var(--muted);}
+
+.toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:18px 0 14px;}
+.toolbar select,.toolbar input{padding:9px 11px;border:1px solid var(--border);border-radius:8px;font:inherit;font-size:.85rem;background:#fff;}
+.toolbar input{min-width:200px;flex:1;max-width:320px;}
+.toolbar .spacer{flex:1;}
+.toolbar button{padding:9px 14px;border:1px solid var(--border);background:#fff;border-radius:8px;font:inherit;font-size:.82rem;font-weight:600;cursor:pointer;color:var(--navy);}
+.toolbar button:hover{border-color:var(--gold);}
+
+.tablecard{background:#fff;border:1px solid var(--border);border-radius:12px;box-shadow:0 1px 4px rgba(0,0,0,.06);overflow:hidden;}
+table{width:100%;border-collapse:collapse;font-size:.86rem;}
+thead th{text-align:left;background:#f3eee2;color:var(--navy);font-size:.7rem;letter-spacing:.8px;text-transform:uppercase;padding:11px 14px;border-bottom:1px solid var(--border);}
+tbody td{padding:11px 14px;border-bottom:1px solid #f0ece3;vertical-align:middle;}
+tbody tr:hover{background:#faf7f0;}
+.who b{font-weight:600;}
+.who small{display:block;color:var(--muted);font-size:.72rem;}
+.lvl{display:inline-block;font-size:.66rem;font-weight:800;letter-spacing:.4px;text-transform:uppercase;padding:3px 10px;border-radius:20px;background:#fff;border:1.5px solid currentColor;}
+.avg{font-weight:700;}
+.avg small{display:block;font-weight:400;color:var(--muted);font-size:.7rem;}
+.na{color:var(--muted);font-weight:400;}
+td.part{white-space:nowrap;}
+td.part input{width:74px;padding:7px 9px;border:1px solid var(--border);border-radius:8px;font:inherit;font-size:.86rem;text-align:center;background:#fff;}
+td.part input:focus{border-color:var(--gold);}
+td.part .sv{display:inline-block;width:18px;margin-left:6px;font-size:.85rem;text-align:center;}
+td.part .sv .fa-circle-check{color:var(--ok);}
+td.part .sv .fa-circle-exclamation{color:var(--err);}
+td.part .sv .fa-spinner{color:var(--muted);animation:sp .8s linear infinite;}
+.final{font-weight:800;font-size:.95rem;}
+.final.pass{color:var(--ok);}
+.final.fail{color:var(--err);}
+.empty{padding:40px 20px;text-align:center;color:var(--muted);}
+
+#loading{padding:50px 20px;text-align:center;color:var(--muted);}
+#loading .spin{display:inline-block;width:28px;height:28px;border:3px solid rgba(138,47,59,.2);border-top-color:var(--accent);border-radius:50%;animation:sp .8s linear infinite;margin-bottom:12px;}
+@keyframes sp{to{transform:rotate(360deg)}}
+
+footer{background:var(--navy);color:rgba(255,255,255,.5);text-align:center;padding:24px;font-size:.78rem;border-top:3px solid var(--gold);}
+footer a{color:var(--gold);text-decoration:none;}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+@media(max-width:640px){
+  .who small{font-size:.68rem}
+  thead th:nth-child(2),tbody td:nth-child(2){display:none}
+  .avg small{display:none}
+}
+</style>
+<link rel="stylesheet" href="assets/css/vesper_tokens.css">
+</head>
+<body>
+
+<header>
+  <a class="brand" href="index.html">
+    <img src="assets/images/vesper_logo_inverted.png" alt="Vesper Academy">
+    <span><b>Vesper Academy</b><small>Boleta</small></span>
+  </a>
+  <div class="right">
+    <a class="back" href="portal_calificaciones.html"><i class="fas fa-chart-line"></i> Resultados</a>
+    <a class="back" href="portal_profesores.html"><i class="fas fa-toolbox"></i> Portal profesor</a>
+    <a class="back" href="index.html"><i class="fas fa-arrow-left"></i> Sitio principal</a>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="intro">
+    <h1>Boleta de calificaciones</h1>
+    <p>Una fila por alumno con la <b>misma tabla para todos los niveles</b> (A1–C2), en
+       escala 0–100: <b>Exámenes</b> y <b>Lecciones</b> se calculan solos con los
+       resultados de la plataforma (mejor marca de cada examen o lección) y la
+       <b>Participación</b> la capturas tú aquí mismo — se guarda al escribirla.</p>
+    <p id="weights-note"></p>
+    <p>Los alumnos aparecen en la boleta en cuanto registran su primer intento con
+       sesión iniciada (o cuando les capturas una participación).</p>
+  </div>
+
+  <div id="loading"><div class="spin"></div><div>Cargando boleta…</div></div>
+
+  <div id="content" style="display:none">
+    <div id="warn" class="notice" style="display:none"></div>
+    <div class="stats" id="stats"></div>
+    <div class="toolbar">
+      <input id="f-q" type="search" placeholder="Buscar alumno (alias o correo)…">
+      <select id="f-level"><option value="">Todos los niveles</option></select>
+      <select id="f-sort">
+        <option value="final">Ordenar: Final (mayor a menor)</option>
+        <option value="name">Ordenar: Nombre (A–Z)</option>
+        <option value="level">Ordenar: Nivel (A1–C2)</option>
+      </select>
+      <span class="spacer"></span>
+      <button id="f-reload"><i class="fas fa-rotate"></i> Actualizar</button>
+    </div>
+    <div class="tablecard">
+      <table>
+        <thead><tr>
+          <th>Alumno</th><th>Nivel</th><th>Exámenes</th><th>Lecciones</th><th>Participación</th><th>Final</th>
+        </tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div id="msg" style="display:none"></div>
+</div>
+
+<footer>
+  © <span id="y"></span> Vesper Academy · <a href="index.html">vesper.academy</a> · Área de profesores
+</footer>
+
+<script src="vesper_path.js"></script>
+<script src="vesper_results.js"></script>
+<script src="vesper_gradebook.js"></script>
+<script>
+(function () {
+  "use strict";
+  document.getElementById("y").textContent = new Date().getFullYear();
+
+  var loadingEl = document.getElementById("loading");
+  var contentEl = document.getElementById("content");
+  var msgEl = document.getElementById("msg");
+  var warnEl = document.getElementById("warn");
+  var rowsEl = document.getElementById("rows");
+  var statsEl = document.getElementById("stats");
+  var fQ = document.getElementById("f-q");
+  var fLevel = document.getElementById("f-level");
+  var fSort = document.getElementById("f-sort");
+
+  var GB = window.VESPER_GRADEBOOK;
+  var roster = [];          // filas de GB.buildRoster
+  var canSave = false;      // false mientras la regla de gradebook no responda
+
+  function esc(t) {
+    return ("" + (t == null ? "" : t)).replace(/[&<>"]/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
+    });
+  }
+
+  /* nota de pesos en la intro, generada desde la configuración del módulo */
+  document.getElementById("weights-note").innerHTML =
+    'La <b>calificación final</b> pondera: Exámenes ' + Math.round(GB.WEIGHTS.exams * 100) +
+    '% · Lecciones ' + Math.round(GB.WEIGHTS.lessons * 100) +
+    '% · Participación ' + Math.round(GB.WEIGHTS.participation * 100) +
+    '%. Si a un alumno le falta un criterio, la final se calcula solo con los que sí tiene. ' +
+    'Se aprueba con ' + GB.PASS_THRESHOLD + ' o más.';
+
+  /* filtro de nivel con los 6 CEFR canónicos */
+  (window.VESPER_PATH ? VESPER_PATH.LEVELS : ["A1","A2","B1","B2","C1","C2"]).forEach(function (lv) {
+    var o = document.createElement("option");
+    o.value = lv; o.textContent = lv;
+    fLevel.appendChild(o);
+  });
+  function normLevel(lv) {
+    return (window.VESPER_PATH && lv) ? VESPER_PATH.normLevel(lv) : (lv || "");
+  }
+  function levelColor(lv) {
+    return window.VESPER_PATH ? VESPER_PATH.levelColor(lv) : "#a8843d";
+  }
+
+  function showMsg(html, bad) {
+    loadingEl.style.display = "none";
+    contentEl.style.display = "none";
+    msgEl.style.display = "block";
+    msgEl.className = "notice" + (bad ? " bad" : "");
+    msgEl.innerHTML = html;
+  }
+
+  function renderStats() {
+    var finals = [];
+    roster.forEach(function (r) {
+      var f = GB.computeFinal(r).final;
+      if (f != null) finals.push(f);
+    });
+    var avg = finals.length
+      ? Math.round(finals.reduce(function (a, b) { return a + b; }, 0) / finals.length) : 0;
+    var passed = finals.filter(function (f) { return f >= GB.PASS_THRESHOLD; }).length;
+    statsEl.innerHTML =
+      '<div class="stat"><b>' + roster.length + '</b><span>Alumnos</span></div>' +
+      '<div class="stat"><b>' + (finals.length ? avg : "—") + '</b><span>Promedio general</span></div>' +
+      '<div class="stat"><b>' + passed + '</b><span>Aprobados (≥' + GB.PASS_THRESHOLD + ')</span></div>';
+  }
+
+  function avgCell(avg, count, unit) {
+    if (avg == null) return '<span class="na">—</span>';
+    return '<span class="avg">' + avg + '%<small>' + count + ' ' + unit + (count === 1 ? "" : "s") + '</small></span>';
+  }
+
+  function finalCell(row) {
+    var f = GB.computeFinal(row);
+    if (f.final == null) return '<span class="na">—</span>';
+    return '<span class="final ' + (f.passed ? "pass" : "fail") + '">' + f.final + '</span>';
+  }
+
+  function sortRows(rows) {
+    var mode = fSort.value;
+    var LV = window.VESPER_PATH ? VESPER_PATH.LEVELS : ["A1","A2","B1","B2","C1","C2"];
+    rows.sort(function (a, b) {
+      if (mode === "name") {
+        return a.alias.localeCompare(b.alias, "es") || a.email.localeCompare(b.email);
+      }
+      if (mode === "level") {
+        var ia = LV.indexOf(normLevel(a.level)), ib = LV.indexOf(normLevel(b.level));
+        if (ia === -1) ia = 99; if (ib === -1) ib = 99;
+        return (ia - ib) || a.alias.localeCompare(b.alias, "es");
+      }
+      var fa = GB.computeFinal(a).final, fb = GB.computeFinal(b).final;
+      if (fa == null && fb == null) return a.alias.localeCompare(b.alias, "es");
+      if (fa == null) return 1;
+      if (fb == null) return -1;
+      return fb - fa;
+    });
+    return rows;
+  }
+
+  function render() {
+    var q = fQ.value.trim().toLowerCase();
+    var lv = fLevel.value;
+    var rows = roster.filter(function (r) {
+      if (lv && normLevel(r.level) !== lv) return false;
+      if (q && (r.alias + " " + r.email).toLowerCase().indexOf(q) === -1) return false;
+      return true;
+    });
+    sortRows(rows);
+
+    if (!rows.length) {
+      rowsEl.innerHTML = '<tr><td colspan="6" class="empty">' +
+        (roster.length ? 'No hay alumnos que coincidan.' :
+         'Aún no hay alumnos en la boleta. En cuanto un alumno con sesión termine un examen o una lección, aparecerá aquí.') +
+        '</td></tr>';
+      return;
+    }
+
+    var html = "";
+    rows.forEach(function (r) {
+      var lvN = normLevel(r.level);
+      var lvHtml = lvN
+        ? '<span class="lvl" style="color:' + levelColor(lvN) + '">' + esc(lvN) + '</span>'
+        : '<span class="na">—</span>';
+      html +=
+        '<tr data-key="' + esc(r.key) + '">' +
+          '<td class="who"><b>' + esc(r.alias) + '</b>' +
+            (r.email ? '<small>' + esc(r.email) + '</small>' : '') + '</td>' +
+          '<td>' + lvHtml + '</td>' +
+          '<td>' + avgCell(r.examsAvg, r.examsCount, "intento") + '</td>' +
+          '<td>' + avgCell(r.lessonsAvg, r.lessonsCount, "intento") + '</td>' +
+          '<td class="part">' +
+            '<input type="number" min="0" max="100" inputmode="numeric" ' +
+              'value="' + (r.participacion == null ? "" : r.participacion) + '" ' +
+              'aria-label="Participación de ' + esc(r.alias) + '" ' +
+              (canSave && r.email ? '' : 'disabled title="' +
+                (r.email ? 'Publica la regla de gradebook para poder guardar' :
+                           'Sin correo registrado: no se puede guardar') + '" ') +
+              'data-key="' + esc(r.key) + '">' +
+            '<span class="sv" data-sv="' + esc(r.key) + '"></span>' +
+          '</td>' +
+          '<td class="fin" data-fin="' + esc(r.key) + '">' + finalCell(r) + '</td>' +
+        '</tr>';
+    });
+    rowsEl.innerHTML = html;
+  }
+
+  function rowByKey(key) {
+    for (var i = 0; i < roster.length; i++) if (roster[i].key === key) return roster[i];
+    return null;
+  }
+
+  /* --- guardado automático de Participación (debounce por alumno) --- */
+  var timers = {};
+  function setSv(key, html) {
+    var el = rowsEl.querySelector('.sv[data-sv="' + CSS.escape(key) + '"]');
+    if (el) el.innerHTML = html;
+  }
+  function refreshFinal(key) {
+    var r = rowByKey(key);
+    var el = rowsEl.querySelector('.fin[data-fin="' + CSS.escape(key) + '"]');
+    if (r && el) el.innerHTML = finalCell(r);
+    renderStats();
+  }
+
+  rowsEl.addEventListener("input", function (e) {
+    var inp = e.target;
+    if (!inp.matches || !inp.matches('td.part input')) return;
+    var key = inp.getAttribute("data-key");
+    var r = rowByKey(key);
+    if (!r) return;
+    var v = parseInt(inp.value, 10);
+    if (inp.value !== "" && !isNaN(v)) {
+      v = Math.max(0, Math.min(100, v));
+      if (String(v) !== inp.value) inp.value = v;  // recorta 150 -> 100 al vuelo
+      r.participacion = v;
+    } else if (inp.value === "") {
+      r.participacion = null;
+    } else {
+      return;
+    }
+    refreshFinal(key);
+    if (r.participacion == null || !r.email) return; // no hay nada que subir
+    clearTimeout(timers[key]);
+    setSv(key, '<i class="fas fa-spinner"></i>');
+    timers[key] = setTimeout(function () { save(r); }, 800);
+  });
+
+  function save(r) {
+    var val = r.participacion;
+    GB.saveGrade(r.email, {
+      participacion: val, notes: r.notes,
+      alias: r.alias, studentUid: r.studentUid
+    }).then(function (ok) {
+      if (r.participacion !== val) return; // ya escribió otro valor; lo salva su propio timer
+      setSv(r.key, ok
+        ? '<i class="fas fa-circle-check" title="Guardado"></i>'
+        : '<i class="fas fa-circle-exclamation" title="No se pudo guardar. Revisa tu conexión o la regla de gradebook e inténtalo de nuevo."></i>');
+    });
+  }
+
+  fQ.addEventListener("input", render);
+  fLevel.addEventListener("change", render);
+  fSort.addEventListener("change", render);
+  document.getElementById("f-reload").addEventListener("click", load);
+
+  function load() {
+    loadingEl.style.display = "block";
+    contentEl.style.display = "none";
+    msgEl.style.display = "none";
+
+    Promise.all([
+      VESPER_RESULTS.fetchAll({ limit: 1000 }),
+      GB.fetchGrades()
+    ]).then(function (res) {
+      var attempts = res[0], grades = res[1];
+      if (attempts === null) {
+        showMsg('<i class="fas fa-lock"></i> No se pudieron leer los resultados. ' +
+          'Verifica que tu cuenta sea de profesor/admin y que la regla de Firestore para ' +
+          '<code>exam_results</code> esté publicada (ver <b>FIRESTORE_EXAM_RESULTS_RULES.md</b>).', true);
+        return;
+      }
+      canSave = grades !== null;
+      roster = GB.buildRoster(attempts, grades || {});
+      loadingEl.style.display = "none";
+      contentEl.style.display = "block";
+      warnEl.style.display = canSave ? "none" : "block";
+      if (!canSave) {
+        warnEl.innerHTML = '<i class="fas fa-triangle-exclamation"></i> La boleta se muestra en ' +
+          'modo lectura: falta publicar la regla de Firestore para <code>gradebook</code> ' +
+          '(ver <b>FIRESTORE_GRADEBOOK_RULES.md</b>). Hasta entonces no se puede guardar la Participación.';
+      }
+      renderStats();
+      render();
+    });
+  }
+
+  /* mismo boot que portal_calificaciones.html: gate de página + check de profe */
+  function boot() {
+    if (!window.VesperAuth || !VesperAuth.isConfigured) {
+      showMsg('<i class="fas fa-cloud"></i> Firebase no está configurado en <code>vesper_auth.js</code>; ' +
+        'la boleta necesita la nube para reunir los resultados de todos los alumnos.', true);
+      return;
+    }
+    VesperAuth.initFirebase().then(function (auth) {
+      auth.onAuthStateChanged(function (user) {
+        if (!user || !user.emailVerified) { return; /* el gate redirige al login */ }
+        VesperAuth.isTeacher(user).then(function (ok) {
+          if (!ok) {
+            showMsg('<i class="fas fa-user-lock"></i> Esta sección es solo para profesores. ' +
+              'Tu cuenta (<b>' + esc(user.email) + '</b>) no está en la lista de profesorado. ' +
+              'Pide al administrador que te autorice.', true);
+            return;
+          }
+          load();
+        });
+      });
+    }).catch(function () {
+      showMsg('<i class="fas fa-triangle-exclamation"></i> No se pudo conectar con el servicio. ' +
+        'Revisa tu conexión y recarga.', true);
+    });
+  }
+
+  boot();
+})();
+</script>
+</body>
+</html>
