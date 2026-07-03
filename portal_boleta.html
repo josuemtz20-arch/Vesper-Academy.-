@@ -79,10 +79,16 @@ td.daily{white-space:nowrap;}
 table.dgrid{width:auto;border-collapse:separate;border-spacing:3px;font-size:.72rem;}
 table.dgrid th{background:transparent;border:0;padding:2px 0;text-align:center;color:var(--muted);font-size:.62rem;min-width:26px;letter-spacing:0;}
 table.dgrid th.asp{text-align:left;padding-right:12px;font-size:.72rem;color:var(--navy);min-width:120px;white-space:nowrap;text-transform:none;letter-spacing:.2px;}
+table.dgrid th.dhead{cursor:pointer;border:1px solid transparent;border-radius:6px;padding:3px 0;min-width:26px;}
+table.dgrid th.dhead:hover{border-color:var(--gold);}
+table.dgrid th.dhead.on{background:#efe7d3;color:var(--navy);font-weight:800;border-color:#e0d2ad;}
+table.dgrid th.dhead.ro{cursor:default;}
 table.dgrid td.cell{width:26px;height:26px;min-width:26px;text-align:center;border:1px solid var(--border);border-radius:6px;background:#fff;cursor:pointer;padding:0;font-size:.78rem;color:#c9c2b4;user-select:-webkit-user-select;user-select:none;}
 table.dgrid td.cell:hover{border-color:var(--gold);}
 table.dgrid td.cell.on{background:#e7f4ec;border-color:#cfe9da;color:var(--ok);font-weight:800;}
 table.dgrid td.cell.off{background:#f7e7e7;border-color:#e2bcbc;color:var(--err);font-weight:800;}
+table.dgrid td.cell.idle{background:#f6f4ef;border-color:#efece4;color:#d3cdbf;cursor:default;}
+table.dgrid td.cell.idle:hover{border-color:#efece4;}
 table.dgrid td.cell.ro{cursor:default;}
 table.dgrid td.cell.ro:hover{border-color:var(--border);}
 table.dgrid td.cell.on.ro:hover{border-color:#cfe9da;}
@@ -124,11 +130,10 @@ footer a{color:var(--gold);text-decoration:none;}
        escala 0–100: <b>Exámenes</b> y <b>Lecciones</b> se calculan solos con los
        resultados de la plataforma (mejor marca de cada examen o lección) y la
        <b>Participación</b> la capturas tú aquí mismo — se guarda al escribirla.</p>
-    <p>En <b>Diario</b> llevas la rúbrica del curso: 20 días × 16 aspectos
-       (asistencia, puntualidad, material, tarea, participación, actitud, uso del
-       inglés, speaking, listening, reading, writing, gramática, vocabulario y más),
-       con ✓/✗ por día. Su promedio (✓=100, ✗=0) se vuelve automáticamente la
-       <b>Participación</b> del alumno; las celdas sin marcar no cuentan.</p>
+    <p>En <b>Diario</b> llevas la rúbrica del curso (20 días × 16 aspectos). Es
+       simple: marca el día que <b>hubo clase</b> y todo arranca en bueno (✓);
+       solo pones <b>✗ (tache)</b> donde el alumno falló y cada tache baja puntos.
+       El promedio se vuelve automáticamente la <b>Participación</b> del alumno.</p>
     <p id="weights-note"></p>
     <p>Los alumnos aparecen en la boleta en cuanto registran su primer intento con
        sesión iniciada (o cuando les capturas una participación).</p>
@@ -336,24 +341,36 @@ footer a{color:var(--gold);text-decoration:none;}
   function dailyBoxHtml(r) {
     var rec = (r.email && dailyMap[r.email]) || { days: {} };
     var editable = dailyEditable(r);
+    // encabezado: cada número de día se puede activar (hubo clase)
     var head = '<tr><th class="asp"></th>';
-    for (var d = 1; d <= GB.COURSE_DAYS; d++) head += '<th>' + d + '</th>';
+    for (var d = 1; d <= GB.COURSE_DAYS; d++) {
+      var held = !!rec.days[d];
+      head += '<th class="dhead' + (held ? ' on' : '') + (editable ? '' : ' ro') +
+              '" data-dh="' + esc(r.key) + '" data-day="' + d + '"' +
+              (editable ? ' role="button" tabindex="0"' : '') +
+              ' title="' + (held ? 'Día con clase — toca para quitar' : 'Toca si hubo clase') + '">' + d + '</th>';
+    }
     head += '</tr>';
     var body = GB.DAILY_ASPECTS.map(function (a) {
       var cells = '';
       for (var d = 1; d <= GB.COURSE_DAYS; d++) {
-        var v = (rec.days[d] || {})[a.key];
-        var cls = (v === true ? ' on' : (v === false ? ' off' : '')) + (editable ? '' : ' ro');
-        var txt = v === true ? '✓' : (v === false ? '✗' : '·');
-        cells += '<td class="cell' + cls + '" data-ck="' + esc(r.key) + '" data-day="' + d +
-                 '" data-asp="' + a.key + '" role="button" tabindex="' + (editable ? '0' : '-1') +
-                 '" aria-label="' + esc(a.label) + ' día ' + d + '">' + txt + '</td>';
+        var held = !!rec.days[d];
+        var tache = held && (rec.days[d][a.key] === false);
+        var cls, txt, active = editable && held;
+        if (!held) { cls = 'idle'; txt = '·'; }
+        else if (tache) { cls = 'off'; txt = '✗'; }
+        else { cls = 'on'; txt = '✓'; }
+        cells += '<td class="cell ' + cls + (active ? '' : ' ro') + '" data-ck="' + esc(r.key) +
+                 '" data-day="' + d + '" data-asp="' + a.key + '"' +
+                 (active ? ' role="button" tabindex="0"' : '') +
+                 ' aria-label="' + esc(a.label) + ' día ' + d + '">' + txt + '</td>';
       }
       return '<tr><th class="asp">' + esc(a.label) + '</th>' + cells + '</tr>';
     }).join('');
     var note = editable
-      ? 'Toca una celda para alternar: vacío → ✓ → ✗ → vacío. El promedio (✓=100, ✗=0) ' +
-        'se vuelve la <b>Participación</b> del alumno al instante; las celdas sin marcar no cuentan.'
+      ? 'Toca el <b>número del día</b> si hubo clase: todo arranca en ✓ (bueno). Luego toca una ' +
+        'casilla para marcar <b>✗ (tache)</b> donde el alumno falló — cada tache baja puntos. El ' +
+        'promedio se vuelve la <b>Participación</b> del alumno al instante.'
       : (r.email
           ? 'Solo lectura: publica la regla de Firestore para <code>daily_progress</code> ' +
             '(ver <b>FIRESTORE_GRADEBOOK_RULES.md</b>) para poder capturar.'
@@ -408,15 +425,52 @@ footer a{color:var(--gold);text-decoration:none;}
       }
       return;
     }
+    var dh = e.target.closest("th.dhead");
+    if (dh && !dh.classList.contains("ro")) { toggleDay(dh); return; }
     var cell = e.target.closest("td.cell");
     if (cell && !cell.classList.contains("ro")) toggleCell(cell);
   });
   rowsEl.addEventListener("keydown", function (e) {
     if (e.key !== "Enter" && e.key !== " ") return;
+    var dh = e.target.closest && e.target.closest("th.dhead");
+    if (dh && !dh.classList.contains("ro")) { e.preventDefault(); toggleDay(dh); return; }
     var cell = e.target.closest && e.target.closest("td.cell");
     if (cell && !cell.classList.contains("ro")) { e.preventDefault(); toggleCell(cell); }
   });
 
+  function recFor(r) {
+    var rec = dailyMap[r.email];
+    if (!rec) rec = dailyMap[r.email] = { email: r.email, alias: r.alias, studentUid: r.studentUid, days: {} };
+    return rec;
+  }
+
+  /* el promedio de la rúbrica ALIMENTA la Participación; guarda con debounce */
+  function afterDailyChange(r, key) {
+    var st = refreshDailyCount(r);
+    var inp = rowsEl.querySelector('td.part input[data-key="' + CSS.escape(key) + '"]');
+    r.participacion = (st.avg != null) ? st.avg : null;
+    if (inp) inp.value = (st.avg != null) ? st.avg : "";
+    refreshFinal(key);
+    clearTimeout(dtimers[key]);
+    setSv(key, '<i class="fas fa-spinner"></i>');
+    dtimers[key] = setTimeout(function () { saveDailyRow(r); }, 800);
+  }
+
+  /* activar / quitar un día (hubo clase): al activar arranca todo en bueno */
+  function toggleDay(dh) {
+    var key = dh.getAttribute("data-dh"), day = dh.getAttribute("data-day");
+    var r = rowByKey(key);
+    if (!r || !r.email) return;
+    var rec = recFor(r);
+    if (rec.days[day]) delete rec.days[day];   // quitar el día
+    else rec.days[day] = {};                    // día con clase, todo bueno
+    // toda la columna cambia -> re-render de la caja
+    var dr = rowsEl.querySelector('tr.detailrow[data-d="' + CSS.escape(key) + '"]');
+    if (dr) dr.firstChild.innerHTML = dailyBoxHtml(r);
+    afterDailyChange(r, key);
+  }
+
+  /* marcar / quitar un tache (solo en días con clase; el guardia .ro lo asegura) */
   function toggleCell(cell) {
     var key = cell.getAttribute("data-ck");
     var day = cell.getAttribute("data-day");
@@ -424,35 +478,15 @@ footer a{color:var(--gold);text-decoration:none;}
     var r = rowByKey(key);
     if (!r || !r.email) return;
     var rec = dailyMap[r.email];
-    if (!rec) rec = dailyMap[r.email] = { email: r.email, alias: r.alias, studentUid: r.studentUid, days: {} };
-
-    /* ciclo: sin marcar -> ✓ -> ✗ -> sin marcar */
-    var cur = (rec.days[day] || {})[asp];
-    if (cur === undefined) {
-      rec.days[day] = rec.days[day] || {};
-      rec.days[day][asp] = true;
-      cell.classList.add("on"); cell.classList.remove("off"); cell.textContent = "✓";
-    } else if (cur === true) {
-      rec.days[day][asp] = false;
-      cell.classList.add("off"); cell.classList.remove("on"); cell.textContent = "✗";
-    } else {
+    if (!rec || !rec.days[day]) return; // el día no tiene clase activa
+    if (rec.days[day][asp] === false) {  // era tache -> vuelve a bueno
       delete rec.days[day][asp];
-      if (!Object.keys(rec.days[day]).length) delete rec.days[day];
-      cell.classList.remove("on", "off"); cell.textContent = "·";
+      cell.classList.remove("off"); cell.classList.add("on"); cell.textContent = "✓";
+    } else {                             // bueno -> tache
+      rec.days[day][asp] = false;
+      cell.classList.remove("on"); cell.classList.add("off"); cell.textContent = "✗";
     }
-
-    /* el promedio de la rúbrica ALIMENTA la Participación al instante */
-    var st = refreshDailyCount(r);
-    if (st.avg != null) {
-      r.participacion = st.avg;
-      var inp = rowsEl.querySelector('td.part input[data-key="' + CSS.escape(key) + '"]');
-      if (inp) inp.value = st.avg;
-    }
-    refreshFinal(key);
-
-    clearTimeout(dtimers[key]);
-    setSv(key, '<i class="fas fa-spinner"></i>');
-    dtimers[key] = setTimeout(function () { saveDailyRow(r); }, 800);
+    afterDailyChange(r, key);
   }
 
   var dtimers = {};
