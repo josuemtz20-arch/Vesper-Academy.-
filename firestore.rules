@@ -19,23 +19,31 @@ rules_version = '2';
  * firestore:rules` si tienes firebase-tools configurado.)
  *
  * El alta/baja de manuales, libros y de la allowlist (students/teachers)
- * la hace un script de administración con credenciales privilegiadas
- * (service account), que IGNORA estas reglas; por eso aquí el cliente
- * tiene `write: if false` en esas colecciones.
+ * lo hace `_scripts/upload_manuals.py`, que INICIA SESIÓN COMO EL ADMIN
+ * (signInWithPassword → idToken) y escribe por REST con ese token. Por eso
+ * NO ignora estas reglas: la escritura en esas colecciones debe permitir al
+ * admin (`isAdmin()`), no `if false`. (Solo sería `if false` si las subidas
+ * usaran una service account / Admin SDK, que aquí NO se usa.)
  * ============================================================ */
 service cloud.firestore {
   match /databases/{database}/documents {
+
+    // El admin sube manuales/libros/allowlists con SU idToken (no service account).
+    function isAdmin() {
+      return request.auth != null
+             && request.auth.token.email == "josuemtz20@gmail.com";
+    }
 
     // —— Allowlist de acceso: cada quien lee SOLO su propio doc (id = correo) ——
     // vesper_auth.js consulta students/{correo} y teachers/{correo} con el
     // token del propio usuario para decidir si tiene acceso.
     match /students/{email} {
       allow read:  if request.auth != null && request.auth.token.email == email;
-      allow write: if false;   // alta/baja desde el script admin
+      allow write: if isAdmin();   // alta/baja desde el script admin
     }
     match /teachers/{email} {
       allow read:  if request.auth != null && request.auth.token.email == email;
-      allow write: if false;
+      allow write: if isAdmin();
     }
 
     // —— Manuales del profesor: solo profesores autorizados o el admin ——
@@ -45,14 +53,14 @@ service cloud.firestore {
                      exists(/databases/$(database)/documents/teachers/$(request.auth.token.email))
                      || request.auth.token.email == "josuemtz20@gmail.com"
                    );
-      allow write: if false;
+      allow write: if isAdmin();
       // el manual va troceado en la subcoleccion chunks/{n}: mismo permiso de lectura
       match /chunks/{n} {
         allow read:  if request.auth != null && (
                        exists(/databases/$(database)/documents/teachers/$(request.auth.token.email))
                        || request.auth.token.email == "josuemtz20@gmail.com"
                      );
-        allow write: if false;
+        allow write: if isAdmin();
       }
     }
 
@@ -64,7 +72,7 @@ service cloud.firestore {
                      || exists(/databases/$(database)/documents/teachers/$(request.auth.token.email))
                      || request.auth.token.email == "josuemtz20@gmail.com"
                    );
-      allow write: if false;
+      allow write: if isAdmin();
       // el libro va troceado en la subcoleccion chunks/{n}: mismo permiso de lectura
       match /chunks/{n} {
         allow read:  if request.auth != null && (
@@ -72,7 +80,7 @@ service cloud.firestore {
                        || exists(/databases/$(database)/documents/teachers/$(request.auth.token.email))
                        || request.auth.token.email == "josuemtz20@gmail.com"
                      );
-        allow write: if false;
+        allow write: if isAdmin();
       }
     }
 
