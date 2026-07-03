@@ -26,7 +26,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Inria+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@300;400;500;600;700&display=swap');
 *,*::before,*::after{box-sizing:border-box;}
 :root{--navy:#1B1B2F;--navy2:#2c2c4a;--gold:#c5a059;--gold2:#a8843d;--cream:#f5f2eb;--border:#e4e0d8;--muted:#6b7a8d;}
-body{margin:0;font-family:'Inter',sans-serif;background:var(--cream);color:var(--navy);}
+body{margin:0;font-family:'Inter',sans-serif;background:var(--cream);color:var(--navy);min-height:100vh;}
 header{background:var(--navy);border-bottom:3px solid var(--gold);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:14px;position:sticky;top:0;z-index:50;}
 .brand{display:flex;align-items:center;gap:12px;color:#fff;text-decoration:none;}
 .brand img{height:42px;width:42px;object-fit:contain;}
@@ -61,7 +61,7 @@ a.card:hover{transform:translateY(-3px);box-shadow:0 8px 22px rgba(26,43,66,.14)
 #reco a.rcard p{margin:0;color:var(--muted);font-size:.78rem;line-height:1.45;}
 #reco .reco-foot{margin-top:16px;font-size:.82rem;color:var(--muted);}
 #reco .reco-foot a{color:var(--gold2);text-decoration:underline;cursor:pointer;}
-footer{background:var(--navy);color:rgba(255,255,255,.5);text-align:center;padding:24px;font-size:.78rem;border-top:3px solid var(--gold);}
+footer{background:var(--navy);color:rgba(255,255,255,.5);text-align:center;padding:24px;font-size:.78rem;border-top:3px solid var(--gold);position:sticky;top:100vh;}
 footer a{color:var(--gold);text-decoration:none;}
 /* Foco de teclado visible (WCAG 2.4.7) */
 :focus-visible{outline:3px solid var(--gold,#c5a059);outline-offset:2px}
