@@ -56,6 +56,43 @@ match /gradebook/{email} {
 }
 ```
 
+Y el bloque de **progreso diario** (rúbrica del curso: 20 días × aspectos,
+✓/✗ por celda), en la misma colección de reglas:
+
+```
+match /daily_progress/{email} {
+  // lee: el propio alumno (su doc), un profesor o el admin
+  allow read:  if request.auth != null && (
+                 request.auth.token.email == email
+                 || exists(/databases/$(database)/documents/teachers/$(request.auth.token.email))
+                 || request.auth.token.email == "josuemtz20@gmail.com"
+               );
+  // escribe: SOLO profesores/admin
+  allow write: if request.auth != null
+               && (exists(/databases/$(database)/documents/teachers/$(request.auth.token.email))
+                   || request.auth.token.email == "josuemtz20@gmail.com");
+}
+```
+
+Documento `daily_progress/{correo}`:
+
+```
+daily_progress/{correo}  ->  {
+  days: {                    // mapa día -> aspectos evaluados ese día
+    "1": { asistencia: bool, participacion: bool, tarea: bool, speaking: bool },
+    "2": { ... }, ... "20": { ... }
+  },
+  alias:      string,
+  studentUid: string,
+  updatedAt:  timestamp,
+  updatedBy:  string
+}
+```
+
+El promedio de la rúbrica (✓=100, ✗=0; celdas sin marcar no cuentan) se
+convierte automáticamente en la **Participación** de la boleta — un solo lugar
+para capturar la asistencia/participación/tarea/speaking del día a día.
+
 Publica las reglas (consola de Firebase → Firestore → base `teachermanuals` →
 Reglas, o `firebase deploy --only firestore:rules`). Tiene efecto inmediato.
 

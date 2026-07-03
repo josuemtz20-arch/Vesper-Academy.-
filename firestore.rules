@@ -7,12 +7,12 @@ rules_version = '2';
  * sitio leen/escriben con el idToken del usuario (Firebase Auth).
  *
  * ⚠️  IMPORTANTE: este archivo es la referencia COMPLETA reconstruida a
- *     partir del comportamiento del cliente. Lo ÚNICO nuevo que la boleta
- *     de calificaciones necesita es el bloque `gradebook` (el panel de
- *     resultados ya usa `exam_results`). Si ya tienes reglas publicadas
- *     para manuals/studentbooks/students/teachers, compara antes de
- *     reemplazar: lo más seguro es solo AÑADIR el bloque `gradebook` a
- *     tus reglas actuales.
+ *     partir del comportamiento del cliente. Lo nuevo que la boleta de
+ *     calificaciones necesita son los bloques `gradebook` y `daily_progress`
+ *     (el panel de resultados ya usa `exam_results`). Si ya tienes reglas
+ *     publicadas para manuals/studentbooks/students/teachers, compara antes
+ *     de reemplazar: lo más seguro es solo AÑADIR esos bloques a tus reglas
+ *     actuales.
  *
  * Publica en: consola de Firebase → Firestore → base "teachermanuals" →
  * pestaña Reglas → pegar → Publicar. (O `firebase deploy --only
@@ -138,6 +138,23 @@ service cloud.firestore {
                    && request.resource.data.participacion is int
                    && request.resource.data.participacion >= 0
                    && request.resource.data.participacion <= 100;
+    }
+
+    // —— Progreso diario (NUEVO): rúbrica del curso (20 días × aspectos,
+    //    ✓/✗) capturada por el profesor. Un doc por alumno (id = correo en
+    //    minúsculas). El alumno lee SOLO su rúbrica; profes/admin leen y
+    //    escriben todas ——
+    // (vesper_gradebook.js → /documents/daily_progress/{correo};
+    //  ver FIRESTORE_GRADEBOOK_RULES.md)
+    match /daily_progress/{email} {
+      allow read:  if request.auth != null && (
+                     request.auth.token.email == email
+                     || exists(/databases/$(database)/documents/teachers/$(request.auth.token.email))
+                     || request.auth.token.email == "josuemtz20@gmail.com"
+                   );
+      allow write: if request.auth != null
+                   && (exists(/databases/$(database)/documents/teachers/$(request.auth.token.email))
+                       || request.auth.token.email == "josuemtz20@gmail.com");
     }
 
   }

@@ -60,6 +60,15 @@ header a.back:hover{color:var(--gold);}
 #loading .spin{display:inline-block;width:28px;height:28px;border:3px solid rgba(138,47,59,.2);border-top-color:var(--accent);border-radius:50%;animation:sp .8s linear infinite;margin-bottom:12px;}
 @keyframes sp{to{transform:rotate(360deg)}}
 
+/* rúbrica de progreso diario (solo lectura para el alumno) */
+.dwrap{overflow-x:auto;}
+table.dgrid{border-collapse:separate;border-spacing:3px;font-size:.72rem;margin-top:6px;}
+table.dgrid th{padding:2px 0;text-align:center;color:var(--muted);font-size:.62rem;min-width:26px;font-weight:600;}
+table.dgrid th.asp{text-align:left;padding-right:12px;font-size:.78rem;color:var(--navy);min-width:104px;}
+table.dgrid td{width:26px;height:26px;min-width:26px;text-align:center;border:1px solid var(--border);border-radius:6px;background:#fff;font-size:.78rem;color:#c9c2b4;}
+table.dgrid td.on{background:#e7f4ec;border-color:#cfe9da;color:var(--ok);font-weight:800;}
+table.dgrid td.off{background:#f7e7e7;border-color:#e2bcbc;color:var(--err);font-weight:800;}
+
 footer{background:var(--navy);color:rgba(255,255,255,.5);text-align:center;padding:24px;font-size:.78rem;border-top:3px solid var(--gold);}
 footer a{color:var(--gold);text-decoration:none;}
 :focus-visible{outline:3px solid var(--gold);outline-offset:2px}
@@ -104,7 +113,7 @@ footer a{color:var(--gold);text-decoration:none;}
         <div class="val" id="c-lessons"></div>
       </div>
       <div class="crit">
-        <div class="lbl"><b>Participación</b><small>La asigna tu profesor en clase</small></div>
+        <div class="lbl"><b>Participación</b><small id="c-part-sub">La asigna tu profesor en clase</small></div>
         <div class="val" id="c-part"></div>
       </div>
       <div class="finalrow">
@@ -112,6 +121,16 @@ footer a{color:var(--gold);text-decoration:none;}
         <div class="finalbox" id="c-final"></div>
       </div>
     </div>
+
+    <div class="boleta" id="daily-card" style="display:none;margin-top:16px;">
+      <div class="bhead" style="border-bottom:1px solid var(--border);">
+        <div class="who"><b id="daily-title"></b><small id="daily-sub"></small></div>
+        <span class="lvl" id="daily-avg" style="color:var(--accent)"></span>
+      </div>
+      <div class="dwrap"><table class="dgrid" id="daily-grid"></table></div>
+      <p class="fine" style="margin-top:14px;">✓ = cumpliste ese día · ✗ = no cumpliste · · = aún sin evaluar. El promedio de tus ✓ es tu Participación.</p>
+    </div>
+
     <p class="fine" id="fine"></p>
   </div>
 
@@ -156,7 +175,33 @@ footer a{color:var(--gold);text-decoration:none;}
                  : ('Aún no tienes ' + what + 'es registrados con sesión');
   }
 
-  function render(user, row) {
+  function renderDaily(daily) {
+    var card = document.getElementById("daily-card");
+    var st = GB.dailyStats(daily ? daily.days : {});
+    if (!daily || st.cells === 0) { card.style.display = "none"; return; }
+    document.getElementById("daily-title").textContent = "Progreso diario";
+    document.getElementById("daily-sub").textContent =
+      "Curso de " + GB.COURSE_DAYS + " días · " + st.daysTouched + " evaluados";
+    document.getElementById("daily-avg").textContent = "Promedio " + st.avg + "%";
+
+    var head = '<thead><tr><th class="asp"></th>';
+    for (var d = 1; d <= GB.COURSE_DAYS; d++) head += '<th>' + d + '</th>';
+    head += '</tr></thead>';
+    var body = GB.DAILY_ASPECTS.map(function (a) {
+      var cells = '';
+      for (var d = 1; d <= GB.COURSE_DAYS; d++) {
+        var v = (daily.days[d] || {})[a.key];
+        var cls = v === true ? 'on' : (v === false ? 'off' : '');
+        var txt = v === true ? '✓' : (v === false ? '✗' : '·');
+        cells += '<td class="' + cls + '">' + txt + '</td>';
+      }
+      return '<tr><th class="asp">' + esc(a.label) + '</th>' + cells + '</tr>';
+    }).join('');
+    document.getElementById("daily-grid").innerHTML = head + '<tbody>' + body + '</tbody>';
+    card.style.display = "block";
+  }
+
+  function render(user, row, daily) {
     document.getElementById("b-alias").textContent = row.alias || "Estudiante";
     document.getElementById("b-email").textContent = user.email || "";
     var lvEl = document.getElementById("b-level");
@@ -176,6 +221,11 @@ footer a{color:var(--gold);text-decoration:none;}
       ? ('Tu mejor marca en cada lección · ' + row.lessonsCount + ' intento' + (row.lessonsCount === 1 ? '' : 's'))
       : 'Aún no tienes lecciones registradas con sesión';
     document.getElementById("c-part").innerHTML = pctHtml(row.participacion, GB.WEIGHTS.participation);
+    var st = GB.dailyStats(daily ? daily.days : {});
+    document.getElementById("c-part-sub").textContent = (st.cells > 0)
+      ? ('Promedio de tu progreso diario · ' + st.daysTouched + ' de ' + GB.COURSE_DAYS + ' días evaluados')
+      : 'La asigna tu profesor en clase';
+    renderDaily(daily);
 
     var f = GB.computeFinal(row);
     var box = document.getElementById("c-final");
@@ -202,9 +252,10 @@ footer a{color:var(--gold);text-decoration:none;}
   function load(user) {
     Promise.all([
       VESPER_RESULTS.fetchMine(),
-      GB.fetchMyGrade()
+      GB.fetchMyGrade(),
+      GB.fetchMyDaily()
     ]).then(function (res) {
-      var attempts = res[0], grade = res[1];
+      var attempts = res[0], grade = res[1], daily = res[2];
       if (attempts === null) {
         showMsg('<i class="fas fa-cloud"></i> No se pudieron leer tus resultados de la nube. ' +
           'Revisa tu conexión y recarga. Tus intentos siguen guardados en este dispositivo.', true);
@@ -224,7 +275,12 @@ footer a{color:var(--gold);text-decoration:none;}
                  examsAvg: null, examsCount: 0, lessonsAvg: null, lessonsCount: 0,
                  participacion: null, notes: "" };
       }
-      render(user, mine);
+      /* el promedio del progreso diario manda sobre la participación mostrada */
+      if (daily) {
+        var st = GB.dailyStats(daily.days);
+        if (st.avg != null) mine.participacion = st.avg;
+      }
+      render(user, mine, daily);
     });
   }
 

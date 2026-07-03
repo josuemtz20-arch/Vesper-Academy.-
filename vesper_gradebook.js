@@ -31,16 +31,36 @@
  *   saveGrade(email, data)    -> Promise<bool> (upsert de la parte manual)
  *   buildRoster(attempts, grades) -> [fila por alumno] (función pura)
  *   computeFinal(row)         -> { final:int|null, passed:bool|null } (pura)
+ *
+ * Progreso diario (rúbrica del curso: COURSE_DAYS días × DAILY_ASPECTS,
+ * ✓/✗ por celda; su promedio ALIMENTA la Participación de la boleta):
+ *   COURSE_DAYS / DAILY_ASPECTS -> configuración de la rúbrica
+ *   fetchDailyAll()           -> Promise<{correo: rec}|null> (lectura profe)
+ *   fetchMyDaily()            -> Promise<rec|null> (el alumno lee SU rúbrica)
+ *   saveDaily(email, data)    -> Promise<bool> (upsert de la rúbrica)
+ *   dailyStats(days)          -> { avg, cells, daysTouched } (función pura)
  * ============================================================ */
 window.VESPER_GRADEBOOK = (function () {
   var DB_ID = "teachermanuals";
   var COLLECTION = "gradebook";
+  var DAILY_COLLECTION = "daily_progress";
 
   /* Pesos de la calificación final (deben sumar 1). Si un componente no
      existe aún (p. ej. alumno sin exámenes), se excluye y los pesos
      restantes se renormalizan — la falta de datos NO cuenta como cero. */
   var WEIGHTS = { exams: 0.5, lessons: 0.3, participation: 0.2 };
   var PASS_THRESHOLD = 70; // % mínimo para "Aprobado" en la final
+
+  /* Rúbrica de progreso diario: duración normal de un curso y aspectos que
+     el profesor evalúa cada día con ✓/✗ (✓=100, ✗=0; sin marcar no cuenta).
+     Es la MISMA rúbrica para todos los niveles. */
+  var COURSE_DAYS = 20;
+  var DAILY_ASPECTS = [
+    { key: "asistencia",    label: "Asistencia" },
+    { key: "participacion", label: "Participación" },
+    { key: "tarea",         label: "Tarea" },
+    { key: "speaking",      label: "Speaking" }
+  ];
 
   function available() { return !!(window.VesperAuth && window.VesperAuth.isConfigured); }
   function projectId() { try { return window.VesperAuth.config.firebase.projectId; } catch (e) { return null; } }
@@ -157,6 +177,142 @@ window.VESPER_GRADEBOOK = (function () {
     }).catch(function () { return false; });
   }
 
+  /* ---- progreso diario (rúbrica ✓/✗ del curso) ---- */
+
+  /* lee un doc REST de daily_progress -> { email, alias, studentUid, days }.
+     days = { "1".."20": { asistencia:bool, participacion:bool, ... } };
+     las celdas sin evaluar simplemente no existen en el mapa. */
+  function readDailyDoc(doc) {
+    var f = (doc && doc.fields) || {};
+    function s(k) { return (f[k] && f[k].stringValue) || ""; }
+    var name = (doc && doc.name) || "";
+    var email = name.slice(name.lastIndexOf("/") + 1).toLowerCase();
+    var days = {};
+    var dm = (f.days && f.days.mapValue && f.days.mapValue.fields) || {};
+    Object.keys(dm).forEach(function (d) {
+      var day = parseInt(d, 10);
+      if (!(day >= 1 && day <= COURSE_DAYS)) return;
+      var af = (dm[d] && dm[d].mapValue && dm[d].mapValue.fields) || {};
+      var cell = {};
+      DAILY_ASPECTS.forEach(function (a) {
+        if (af[a.key] && typeof af[a.key].booleanValue === "boolean") {
+          cell[a.key] = af[a.key].booleanValue;
+        }
+      });
+      if (Object.keys(cell).length) days[day] = cell;
+    });
+    return {
+      email: email, alias: s("alias"), studentUid: s("studentUid"),
+      days: days,
+      updatedAt: (f.updatedAt && f.updatedAt.timestampValue) || "",
+      updatedBy: s("updatedBy")
+    };
+  }
+
+  function daysToFs(days) {
+    var fields = {};
+    Object.keys(days || {}).forEach(function (d) {
+      var day = parseInt(d, 10);
+      if (!(day >= 1 && day <= COURSE_DAYS)) return;
+      var cellFields = {}, any = false;
+      DAILY_ASPECTS.forEach(function (a) {
+        if (typeof (days[d] || {})[a.key] === "boolean") {
+          cellFields[a.key] = { booleanValue: days[d][a.key] };
+          any = true;
+        }
+      });
+      if (any) fields[String(day)] = { mapValue: { fields: cellFields } };
+    });
+    return { mapValue: { fields: fields } };
+  }
+
+  /* lectura del profe: todas las rúbricas -> mapa por correo (o null). */
+  function fetchDailyAll() {
+    if (!signedIn()) return Promise.resolve(null);
+    return currentUser.getIdToken().then(function (token) {
+      return fetch(base() + ":runQuery", {
+        method: "POST",
+        headers: { "Authorization": "Bearer " + token, "Content-Type": "application/json" },
+        body: JSON.stringify({ structuredQuery: {
+          from: [{ collectionId: DAILY_COLLECTION }],
+          limit: 1000
+        } })
+      }).then(function (r) {
+        if (r.status !== 200) return null;
+        return r.json().then(function (rows) {
+          var map = {};
+          (rows || []).forEach(function (x) {
+            if (!x.document) return;
+            var rec = readDailyDoc(x.document);
+            if (rec.email) map[rec.email] = rec;
+          });
+          return map;
+        });
+      });
+    }).catch(function () { return null; });
+  }
+
+  /* lectura del ALUMNO: su propia rúbrica (o null si no hay/404/error). */
+  function fetchMyDaily() {
+    if (!signedIn()) return Promise.resolve(null);
+    var email = String(currentUser.email || "").trim().toLowerCase();
+    if (!email) return Promise.resolve(null);
+    return currentUser.getIdToken().then(function (token) {
+      return fetch(base() + "/" + DAILY_COLLECTION + "/" + encodeURIComponent(email), {
+        headers: { "Authorization": "Bearer " + token }
+      }).then(function (r) {
+        if (r.status !== 200) return null;
+        return r.json().then(readDailyDoc);
+      });
+    }).catch(function () { return null; });
+  }
+
+  /* upsert de la rúbrica completa de un alumno (el mapa days se reemplaza
+     entero — el llamador manda el estado completo). Solo profe/admin. */
+  function saveDaily(email, data) {
+    email = String(email || "").trim().toLowerCase();
+    if (!email || !signedIn()) return Promise.resolve(false);
+    var fields = {
+      days: daysToFs((data && data.days) || {}),
+      alias: { stringValue: String((data && data.alias) || "").slice(0, 24) },
+      studentUid: { stringValue: String((data && data.studentUid) || "") },
+      updatedAt: { timestampValue: new Date().toISOString() },
+      updatedBy: { stringValue: String(currentUser.email || "").toLowerCase() }
+    };
+    var mask = Object.keys(fields).map(function (k) {
+      return "updateMask.fieldPaths=" + k;
+    }).join("&");
+    return currentUser.getIdToken().then(function (token) {
+      return fetch(base() + "/" + DAILY_COLLECTION + "/" + encodeURIComponent(email) + "?" + mask, {
+        method: "PATCH",
+        headers: { "Authorization": "Bearer " + token, "Content-Type": "application/json" },
+        body: JSON.stringify({ fields: fields })
+      }).then(function (r) { return r.status === 200; });
+    }).catch(function () { return false; });
+  }
+
+  /* estadística de la rúbrica: ✓=100, ✗=0, sin marcar no cuenta.
+     -> { avg: int|null, cells: nº celdas evaluadas, daysTouched: días con
+     al menos una marca }. avg es lo que alimenta la Participación. */
+  function dailyStats(days) {
+    var ok = 0, total = 0, touched = 0;
+    Object.keys(days || {}).forEach(function (d) {
+      var cell = days[d] || {}, any = false;
+      DAILY_ASPECTS.forEach(function (a) {
+        if (typeof cell[a.key] === "boolean") {
+          total++; any = true;
+          if (cell[a.key]) ok++;
+        }
+      });
+      if (any) touched++;
+    });
+    return {
+      avg: total ? Math.round(100 * ok / total) : null,
+      cells: total,
+      daysTouched: touched
+    };
+  }
+
   /* ---- construcción de la boleta (funciones puras, sin red) ---- */
 
   /* promedio del MEJOR percent por examen distinto: los reintentos cuentan
@@ -247,8 +403,11 @@ window.VESPER_GRADEBOOK = (function () {
   start();
   return {
     WEIGHTS: WEIGHTS, PASS_THRESHOLD: PASS_THRESHOLD,
+    COURSE_DAYS: COURSE_DAYS, DAILY_ASPECTS: DAILY_ASPECTS,
     available: available, signedIn: signedIn,
     fetchGrades: fetchGrades, fetchMyGrade: fetchMyGrade, saveGrade: saveGrade,
+    fetchDailyAll: fetchDailyAll, fetchMyDaily: fetchMyDaily,
+    saveDaily: saveDaily, dailyStats: dailyStats,
     buildRoster: buildRoster, computeFinal: computeFinal
   };
 })();
