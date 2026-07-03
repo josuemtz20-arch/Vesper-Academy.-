@@ -11,8 +11,589 @@
    ============================================================ */
 window.VesperEngine = {
   PROMPT_V2: "# VESPER ACADEMY — PERSONALIZED COURSE ENGINE v2.0\n# Sistema: Curso 100% personalizado ANCLADO AL CURRÍCULO OFICIAL\n# Motor: antigravity / Claude / cualquier LLM de alta capacidad\n# Diferencia vs v1.0: el curso NO se inventa. Se construye seleccionando y\n# adaptando lecciones reales de los 13 manuales de Vesper Academy.\n\n---\n\n## IDENTIDAD Y MISIÓN\n\nEres **Vesper**, el tutor personalizado de Vesper Academy. Tu método no es improvisado: detrás de ti hay un currículo completo de 13 manuales y ~260 lecciones que cubre desde A0 hasta C2. Tu trabajo es:\n\n1. Diagnosticar el nivel REAL del alumno (no el que él cree tener).\n2. Ubicarlo en el punto exacto del currículo oficial.\n3. Construir una ruta personalizada SELECCIONANDO lecciones de los manuales.\n4. Entregar cada lección ADAPTADA a sus intereses, meta y tiempo — sin alterar la progresión pedagógica del manual.\n\n**Regla de oro:** La estructura, el orden gramatical y los objetivos de aprendizaje vienen del currículo. Lo que se personaliza es el *contexto*: ejemplos, vocabulario temático, simulaciones, ritmo y profundidad. El esqueleto es Vesper Academy; la piel es el alumno.\n\n---\n\n## EL CURRÍCULO OFICIAL (TU ÚNICA FUENTE DE RUTA)\n\n**Track 1 — Core Basics (A0 → A2+):** 4 libros. Fundamentos: alfabeto, presente simple, vocabulario de supervivencia, rutinas, pasado simple, futuro básico.\n\n**Track 2 — Core Grammar (B1 → C2):** 3 libros + overview. Gramática formal progresiva: tiempos perfectos, modales, condicionales, voz pasiva, reported speech, inversión, estructuras avanzadas.\n\n**Track 3 — Core Practice (A2 → C2):** 5 libros. Aplicación comunicativa: conversación, comprensión, producción escrita y oral por niveles.\n\n**Anatomía oficial de toda lección (5 bloques, orden inalterable):**\n1. **Warm Up** — activación, 5 min\n2. **Theory & Vocab** — input nuevo\n3. **Controlled Practice** — ejercicios guiados\n4. **Simulation** — uso en contexto realista\n5. **1-on-1 Expansion** — producción libre con feedback\n\n**Comprensión en 3 niveles:** literal → inferencial → opinión aplicada.\n\n> Si tienes acceso a los archivos HTML de los manuales, extrae de ahí el temario exacto del libro asignado. Si no, sigue la progresión CEFR estándar declarada arriba y pide al administrador el syllabus del libro correspondiente.\n\n---\n\n## FASE 1 — INTAKE CONVERSACIONAL (una pregunta a la vez, nunca formulario)\n\nRecolecta en este orden, esperando cada respuesta:\n\n1. **Nombre** — \"¡Hola! Soy Vesper, tu tutor de inglés de Vesper Academy. ¿Cómo te llamas?\"\n2. **Meta principal** — ¿Para qué quieres el inglés? (trabajo, viaje, examen, migración, contenido, conversación)\n3. **Plazo** — ¿Tienes una fecha límite o es a tu ritmo?\n4. **Nivel autopercibido** — ¿Cómo describirías tu inglés hoy? (cero / básico / intermedio / avanzado)\n5. **Intereses** — 3 temas que te apasionen (estos alimentarán TODOS los ejemplos del curso)\n6. **Tiempo disponible** — ¿Cuántos días por semana y minutos por sesión?\n7. **Debilidad percibida** — ¿Qué te cuesta más? (hablar, escuchar, gramática, vocabulario, miedo a equivocarte)\n\n---\n\n## FASE 2 — PLACEMENT TEST (verificación del nivel real)\n\nNUNCA confíes en el nivel autopercibido. Aplica un diagnóstico de 3 partes, calibrado para empezar un nivel DEBAJO de lo que el alumno declaró:\n\n**Parte A — Gramática escalonada (6 ítems):** una oración para completar por cada nivel A1→C1. Detente cuando falle 2 seguidas.\n\n**Parte B — Producción escrita:** \"Escríbeme 4-6 oraciones en inglés sobre [uno de sus intereses declarados].\" Evalúa: rango gramatical, precisión, vocabulario, cohesión.\n\n**Parte C — Comprensión:** un párrafo corto en inglés (calibrado al nivel aparente) + 3 preguntas: una literal, una inferencial, una de opinión.\n\n**Asignación de nivel y libro:**\n\n| Resultado | CEFR | Libro asignado |\n|---|---|---|\n| No produce oraciones completas | A0 | Core Basics 1 |\n| Presente simple con errores | A1 | Core Basics 2 |\n| Pasado/futuro básico funcional | A2 | Core Basics 3-4 + Practice 1 |\n| Tiempos perfectos inestables | B1 | Core Grammar 1 + Practice 2 |\n| Gramática sólida, falta naturalidad | B2 | Core Grammar 2 + Practice 3 |\n| Matices, registro, errores raros | C1 | Core Grammar 3 + Practice 4 |\n| Casi nativo, pule estilo | C2 | Core Grammar 3 (final) + Practice 5 |\n\nComunica el resultado SIEMPRE en positivo: \"Tu nivel actual es B1 — eso significa que ya tienes la base para [meta]. Tu punto de partida es el libro X, lección Y.\"\n\n---\n\n## FASE 3 — PERFIL DEL ALUMNO (genera y muestra esta ficha)\n\n```\n📋 PERFIL VESPER\nNombre: [.]\nNivel verificado: [CEFR] | Autopercibido: [.]\nMeta: [.] | Plazo: [.]\nLibro(s) asignado(s): [.]\nLección de inicio: [.]\nIntereses: [1, 2, 3]\nDisponibilidad: [X días/sem, Y min]\nDebilidad foco: [.]\nEstilo de adaptación: [ejemplos sobre sus intereses + énfasis en su debilidad]\n```\n\n---\n\n## FASE 4 — RUTA PERSONALIZADA\n\nConstruye un roadmap de las próximas 8-12 lecciones TOMADAS del syllabus del libro asignado, en su orden original, pero con títulos re-contextualizados a los intereses del alumno.\n\nEjemplo (alumno B1, le gusta el fútbol, meta: trabajo):\n- Lección 7 del manual: \"Modals of Ability or Permission\"\n- En su ruta: \"Lección 7 — Modals: lo que tu equipo *can, could y be able to* hacer (y pedir permiso en la oficina)\"\n\nReglas del roadmap:\n- Respeta el orden del manual. No saltes lecciones salvo dominio demostrado.\n- Si la meta tiene plazo, calcula cuántas lecciones por semana se necesitan y dilo con honestidad (\"con 2 sesiones/semana llegas a B2 en ~X meses\").\n- Marca cada 4 lecciones un checkpoint de evaluación.\n\n---\n\n## FASE 5 — ENTREGA DE LECCIONES\n\nCada vez que el alumno pida \"siguiente lección\", genera la lección correspondiente del manual con los 5 bloques oficiales, adaptando SOLO el contexto:\n\n- **Warm Up:** pregunta conectada a sus intereses.\n- **Theory & Vocab:** la teoría del manual intacta; los ejemplos, reescritos sobre sus temas. Vocabulario meta del manual + 3-5 palabras de su dominio de interés.\n- **Controlled Practice:** mismos tipos de ejercicio del manual, contenido tematizado.\n- **Simulation:** escenario realista ligado a su META (entrevista, viaje, llamada de trabajo).\n- **1-on-1 Expansion:** tarea de producción libre; corrige con el método sandwich (logro → corrección → reto).\n\n**Calibración por nivel (densidad del input):**\n- A0-A1: instrucciones en español, inglés mínimo y repetido.\n- A2-B1: mezcla 50/50, instrucciones simples en inglés.\n- B2+: todo en inglés; español solo para aclarar matices si lo pide.\n\n---\n\n## FASE 6 — EVALUACIÓN Y ADAPTACIÓN CONTINUA\n\n**Cada 4 lecciones:** mini-examen (10 ítems: 4 gramática, 3 vocabulario, 2 comprensión, 1 producción).\n- ≥80%: avanza; considera acelerar.\n- 60-79%: avanza con una lección de refuerzo intercalada.\n- <60%: repite el bloque con nuevos contextos (nunca los mismos ejercicios).\n\n**Reglas de adaptación en vivo:**\n- Si el alumno dice \"muy fácil\" 2 veces → sube densidad y reduce andamiaje.\n- Si comete el mismo error 3 veces → micro-lección de 5 min sobre ese punto antes de continuar.\n- Si falta >1 semana → al volver, repaso de 10 min antes de la lección nueva.\n- Si pierde motivación → conecta la siguiente lección directamente con su meta (\"esto es exactamente lo que dirás en tu entrevista\").\n\n---\n\n## COMANDOS DEL ALUMNO\n\n| Comando | Acción |\n|---|---|\n| \"siguiente lección\" | Entrega la próxima lección de la ruta |\n| \"mi progreso\" | Muestra perfil + lecciones completadas + % hacia su meta |\n| \"corrígeme\" | Modo corrección: el alumno escribe libre, tú corriges con sandwich |\n| \"examen\" | Adelanta el checkpoint de evaluación |\n| \"más difícil\" / \"más fácil\" | Recalibra densidad inmediatamente |\n| \"cambiar tema\" | Actualiza intereses del perfil y re-tematiza la ruta |\n| \"repasar [tema]\" | Micro-lección de refuerzo sin romper la ruta |\n\n---\n\n## CONDUCTA DEL TUTOR\n\n- Cálido pero exigente. Celebra logros específicos, nunca elogios vacíos.\n- Una cosa a la vez: nunca entregues dos bloques sin interacción del alumno.\n- Corrige TODOS los errores en producción, pero prioriza máximo 2 por turno para no abrumar (los demás, anótalos para la micro-lección).\n- Nunca inventes contenido fuera de la progresión del currículo: si el alumno pide un tema 3 niveles arriba, dile honestamente en qué lección de su ruta llegará a eso.\n- Si detectas frustración, valida primero, ajusta después.",
-  TRACKS: [{"name": "Track 1 — Core Basics (A0 → A2+)", "books": ["core_basics_lvl1", "core_basics_lvl2", "core_basics_lvl3", "core_basics_lvl4"]}, {"name": "Track 2 — Core Grammar (B1 → C2)", "books": ["core_grammar_lvl1", "core_grammar_lvl2", "core_grammar_lvl3"]}, {"name": "Track 3 — Core Practice (A1 → C2)", "books": ["core_practice_lvl1", "core_practice_lvl2", "core_practice_lvl3", "core_practice_lvl4", "core_practice_lvl5", "core_practice_lvl6"]}],
+  TRACKS: [{"name": "Track 1 — Core Basics (A0 → A2+)", "books": ["core_basics_lvl1", "core_basics_lvl2", "core_basics_lvl3", "core_basics_lvl4"]}, {"name": "Track 2 — Core Grammar (B1 → C2)", "books": ["core_grammar_lvl1", "core_grammar_lvl2", "core_grammar_lvl3"]}, {"name": "Track 3 — Core Practice (A1 → C2)", "books": ["core_practice_lvl1", "core_practice_lvl2", "core_practice_lvl3", "core_practice_lvl4", "core_practice_lvl5", "core_practice_lvl6"]}, {"name": "Track 4 — Certification Path (B1 → C2)", "books": ["cert_prep_b1", "cert_prep_b2", "cert_prep_c1", "cert_prep"]}, {"name": "Track 5 — Business Path (B1 → C1)", "books": ["corporate_b1", "corporate_b2", "corporate_c1"]}],
   SYLLABI: {
+  "cert_prep_b1": {
+  "name": "Certification Path I: Gateway",
+  "cefr": "B1",
+  "desc": "B1 Preliminary · IELTS 4.5-5.5 · TOEFL — drills cronometrados y modelos por nivel",
+  "lessons": [
+    {
+      "n": 1,
+      "t": "Signs, Notices & Short Messages"
+    },
+    {
+      "n": 2,
+      "t": "Matching People to Texts"
+    },
+    {
+      "n": 3,
+      "t": "The Gapped Text: Sentence Fit"
+    },
+    {
+      "n": 4,
+      "t": "Numbers, Prices & Times"
+    },
+    {
+      "n": 5,
+      "t": "Everyday Conversations: Who Wants What?"
+    },
+    {
+      "n": 6,
+      "t": "Following a Simple Talk"
+    },
+    {
+      "n": 7,
+      "t": "The 100-Word Email"
+    },
+    {
+      "n": 8,
+      "t": "Connectors that Score"
+    },
+    {
+      "n": 9,
+      "t": "The Story Task"
+    },
+    {
+      "n": 10,
+      "t": "Talking About Yourself: The A.R.E. Formula"
+    },
+    {
+      "n": 11,
+      "t": "Describing a Photo Like a Pro"
+    },
+    {
+      "n": 12,
+      "t": "Making Plans Together"
+    },
+    {
+      "n": 13,
+      "t": "Grammar the Examiner Rewards"
+    },
+    {
+      "n": 14,
+      "t": "Open Cloze: The Little Words"
+    },
+    {
+      "n": 15,
+      "t": "Daily Life, School & Work"
+    },
+    {
+      "n": 16,
+      "t": "Travel, Places & Weather"
+    },
+    {
+      "n": 17,
+      "t": "Food, Health & Sport"
+    },
+    {
+      "n": 18,
+      "t": "Receptive Lab: Reading & Listening Circuit"
+    },
+    {
+      "n": 19,
+      "t": "Productive Lab: Writing & Speaking Circuit"
+    },
+    {
+      "n": 20,
+      "t": "Exam Day: Your B1 Battle Plan"
+    }
+  ]
+},
+  "cert_prep_b2": {
+  "name": "Certification Path II: Ascent",
+  "cefr": "B2",
+  "desc": "B2 First · IELTS 5.5-6.5 · TOEFL — paráfrasis, distractores y escritura estructurada",
+  "lessons": [
+    {
+      "n": 1,
+      "t": "Paraphrase Radar: T/F/NG Without Fear"
+    },
+    {
+      "n": 2,
+      "t": "Gapped Text Logic: Referencing Devices"
+    },
+    {
+      "n": 3,
+      "t": "Multiple Matching at Speed"
+    },
+    {
+      "n": 4,
+      "t": "Form Filling & the Spelling Trap"
+    },
+    {
+      "n": 5,
+      "t": "Multiple Choice: Kill the Distractor"
+    },
+    {
+      "n": 6,
+      "t": "Lecture Notes: Follow the Signposts"
+    },
+    {
+      "n": 7,
+      "t": "Essay Architecture: Thesis & Topic Sentences"
+    },
+    {
+      "n": 8,
+      "t": "The Informal Email & the Review"
+    },
+    {
+      "n": 9,
+      "t": "The Report: Headings & Recommendations"
+    },
+    {
+      "n": 10,
+      "t": "Part 1 Fluency Formulas"
+    },
+    {
+      "n": 11,
+      "t": "The Long Turn: Compare, Don't Describe"
+    },
+    {
+      "n": 12,
+      "t": "Negotiate & Decide: The Collaborative Task"
+    },
+    {
+      "n": 13,
+      "t": "Key Word Transformations: The 2-Point Habit"
+    },
+    {
+      "n": 14,
+      "t": "Word Formation: Prefix, Suffix, Meaning Shift"
+    },
+    {
+      "n": 15,
+      "t": "Cities, Housing & Transport"
+    },
+    {
+      "n": 16,
+      "t": "Family, Friendship & Generations"
+    },
+    {
+      "n": 17,
+      "t": "Sport, Art & Free Time"
+    },
+    {
+      "n": 18,
+      "t": "Receptive Lab: Reading & Listening Circuit"
+    },
+    {
+      "n": 19,
+      "t": "Productive Lab: Writing & Speaking Circuit"
+    },
+    {
+      "n": 20,
+      "t": "Exam Day: Your B2 Battle Plan"
+    }
+  ]
+},
+  "cert_prep_c1": {
+  "name": "Certification Path III: Summit",
+  "cefr": "C1-C2",
+  "desc": "CAE · CPE · IELTS 7.0+ — matiz, registro y resistencia de examen",
+  "lessons": [
+    {
+      "n": 1,
+      "t": "Cross-Text Synthesis: Four Voices, One Question"
+    },
+    {
+      "n": 2,
+      "t": "Nuance, Irony & Understatement"
+    },
+    {
+      "n": 3,
+      "t": "Dense Text Mapping: Read Like an Editor"
+    },
+    {
+      "n": 4,
+      "t": "Fast Speech, Real Accents"
+    },
+    {
+      "n": 5,
+      "t": "What They Mean, Not What They Say"
+    },
+    {
+      "n": 6,
+      "t": "The Academic Lecture: Cornell Notes at Speed"
+    },
+    {
+      "n": 7,
+      "t": "The Band 8+ Essay: Concession & Hedging"
+    },
+    {
+      "n": 8,
+      "t": "Proposals & Reports that Persuade"
+    },
+    {
+      "n": 9,
+      "t": "Register Control: From Chatty to Chancellery"
+    },
+    {
+      "n": 10,
+      "t": "Part 3: Think Aloud, Elegantly"
+    },
+    {
+      "n": 11,
+      "t": "The 2-Minute Long Turn at Band 9"
+    },
+    {
+      "n": 12,
+      "t": "Disagree Like a Diplomat"
+    },
+    {
+      "n": 13,
+      "t": "Advanced Transformations & Idiomatic Gaps"
+    },
+    {
+      "n": 14,
+      "t": "Collocation & Precision: The C1 Lexical Edge"
+    },
+    {
+      "n": 15,
+      "t": "Economics, Inequality & Public Policy"
+    },
+    {
+      "n": 16,
+      "t": "Science, Ethics & Innovation"
+    },
+    {
+      "n": 17,
+      "t": "Culture, Identity & Language"
+    },
+    {
+      "n": 18,
+      "t": "The Receptive Gauntlet"
+    },
+    {
+      "n": 19,
+      "t": "The Productive Gauntlet"
+    },
+    {
+      "n": 20,
+      "t": "Exam Day: Your C1-C2 Battle Plan"
+    }
+  ]
+},
+  "cert_prep": {
+  "name": "Certification Prep · Intensivo",
+  "cefr": "B2-C2",
+  "desc": "Manual de bandas: drills cronometrados, modelos Band 6/8 y simulacro final",
+  "lessons": [
+    {
+      "n": 1,
+      "t": "Skim, Scan & Strategic Ignorance"
+    },
+    {
+      "n": 2,
+      "t": "Fact vs. Opinion & Writer's Attitude"
+    },
+    {
+      "n": 3,
+      "t": "Catching Distractors & Corrections"
+    },
+    {
+      "n": 4,
+      "t": "Lecture Note-Taking & Signposting"
+    },
+    {
+      "n": 5,
+      "t": "Task 2 Essay — From Band 6 to Band 8"
+    },
+    {
+      "n": 6,
+      "t": "Task 1 — Describing Data with Precision"
+    },
+    {
+      "n": 7,
+      "t": "The Formal Letter & Email"
+    },
+    {
+      "n": 8,
+      "t": "Part 2 Long Turn — The 2-Minute Talk"
+    },
+    {
+      "n": 9,
+      "t": "Part 3 — Speculating & Abstract Discussion"
+    },
+    {
+      "n": 10,
+      "t": "Word Formation — Building the Missing Word"
+    },
+    {
+      "n": 11,
+      "t": "Key Word Transformations"
+    },
+    {
+      "n": 12,
+      "t": "Environment & Climate"
+    },
+    {
+      "n": 13,
+      "t": "Technology & Artificial Intelligence"
+    },
+    {
+      "n": 14,
+      "t": "Education & Learning"
+    },
+    {
+      "n": 15,
+      "t": "Health & Lifestyle"
+    },
+    {
+      "n": 16,
+      "t": "Work, Money & Careers"
+    },
+    {
+      "n": 17,
+      "t": "Crime & Punishment"
+    },
+    {
+      "n": 18,
+      "t": "Media, Fame & Advertising"
+    },
+    {
+      "n": 19,
+      "t": "Globalisation, Culture & Travel"
+    },
+    {
+      "n": 20,
+      "t": "Practice Lab 1 — Reading & Use of English Circuit"
+    },
+    {
+      "n": 21,
+      "t": "Practice Lab 2 — Listening & Speaking Circuit"
+    },
+    {
+      "n": 22,
+      "t": "Practice Lab 3 — Writing Circuit"
+    },
+    {
+      "n": 23,
+      "t": "Mock Exam Day — Measure the Band"
+    }
+  ]
+},
+  "corporate_b1": {
+  "name": "Business Path I: Office Foundations",
+  "cefr": "B1",
+  "desc": "Inglés de oficina de supervivencia: llamadas, correos, juntas y clientes",
+  "lessons": [
+    {
+      "n": 1,
+      "t": "Introductions & Networking Basics"
+    },
+    {
+      "n": 2,
+      "t": "Phone Calls that Work"
+    },
+    {
+      "n": 3,
+      "t": "Professional Emails 101"
+    },
+    {
+      "n": 4,
+      "t": "Small Talk & Rapport"
+    },
+    {
+      "n": 5,
+      "t": "Scheduling & Rescheduling"
+    },
+    {
+      "n": 6,
+      "t": "Polite Requests & Favors"
+    },
+    {
+      "n": 7,
+      "t": "Explaining a Process"
+    },
+    {
+      "n": 8,
+      "t": "Reporting a Problem & Asking for Help"
+    },
+    {
+      "n": 9,
+      "t": "Meeting Survival Kit"
+    },
+    {
+      "n": 10,
+      "t": "Opinions & Suggestions"
+    },
+    {
+      "n": 11,
+      "t": "Status Updates & Standups"
+    },
+    {
+      "n": 12,
+      "t": "Delegating & Offering Help"
+    },
+    {
+      "n": 13,
+      "t": "Customer Service Calls"
+    },
+    {
+      "n": 14,
+      "t": "Handling Complaints"
+    },
+    {
+      "n": 15,
+      "t": "Orders, Invoices & Deliveries"
+    },
+    {
+      "n": 16,
+      "t": "The Service Recovery Email"
+    },
+    {
+      "n": 17,
+      "t": "Job Interview Basics"
+    },
+    {
+      "n": 18,
+      "t": "Talking About Your Experience"
+    },
+    {
+      "n": 19,
+      "t": "The Performance Check-in"
+    },
+    {
+      "n": 20,
+      "t": "Capstone: A Full Office Day"
+    }
+  ]
+},
+  "corporate_b2": {
+  "name": "Business English Premium",
+  "cefr": "B2",
+  "desc": "Comunicación corporativa efectiva con audio nativo",
+  "lessons": [
+    {
+      "n": 1,
+      "t": "First Impressions & Professional Networking"
+    },
+    {
+      "n": 2,
+      "t": "Mastering the Conference Call"
+    },
+    {
+      "n": 3,
+      "t": "Running Effective Meetings"
+    },
+    {
+      "n": 4,
+      "t": "Diplomatic Agreement & Disagreement"
+    },
+    {
+      "n": 5,
+      "t": "Presenting Data & Metrics"
+    },
+    {
+      "n": 6,
+      "t": "Structuring Executive Presentations"
+    },
+    {
+      "n": 7,
+      "t": "Professional Email & Corporate Chat Etiquette"
+    },
+    {
+      "n": 8,
+      "t": "Negotiation Essentials"
+    },
+    {
+      "n": 9,
+      "t": "Giving & Receiving Feedback"
+    },
+    {
+      "n": 10,
+      "t": "Project Updates & Status Reporting (Capstone)"
+    }
+  ]
+},
+  "corporate_c1": {
+  "name": "Business Path III: Strategic Influence",
+  "cefr": "C1",
+  "desc": "Persuasión, negociación, liderazgo y el sales pitch capstone",
+  "lessons": [
+    {
+      "n": 1,
+      "t": "The Architecture of Influence"
+    },
+    {
+      "n": 2,
+      "t": "Framing & Reframing"
+    },
+    {
+      "n": 3,
+      "t": "Storytelling for Business Impact"
+    },
+    {
+      "n": 4,
+      "t": "Data Storytelling & the So-What Test"
+    },
+    {
+      "n": 5,
+      "t": "Diplomatic Language & Hedging"
+    },
+    {
+      "n": 6,
+      "t": "Conflict Management Conversations"
+    },
+    {
+      "n": 7,
+      "t": "Feedback at the Top"
+    },
+    {
+      "n": 8,
+      "t": "Cross-Cultural & Global Leadership"
+    },
+    {
+      "n": 9,
+      "t": "Anchors & Openings"
+    },
+    {
+      "n": 10,
+      "t": "Concessions & Trades"
+    },
+    {
+      "n": 11,
+      "t": "Deadlock, BATNA & Walking Away"
+    },
+    {
+      "n": 12,
+      "t": "Multi-Party & Internal Negotiation"
+    },
+    {
+      "n": 13,
+      "t": "Executive Presence & High-Impact Speaking"
+    },
+    {
+      "n": 14,
+      "t": "Boardroom & Stakeholder Communication"
+    },
+    {
+      "n": 15,
+      "t": "Debating Complex Ideas & Defending Positions"
+    },
+    {
+      "n": 16,
+      "t": "Q&A Under Fire & Crisis Communication"
+    },
+    {
+      "n": 17,
+      "t": "Crisis Simulation: The First 24 Hours"
+    },
+    {
+      "n": 18,
+      "t": "Global Leadership Scenario"
+    },
+    {
+      "n": 19,
+      "t": "The Persuasive Sales Pitch I: Design"
+    },
+    {
+      "n": 20,
+      "t": "The Persuasive Sales Pitch II: Deliver & Close (Capstone)"
+    }
+  ]
+},
   "core_basics_lvl1": {
     "name": "Core Basics · Level 1",
     "cefr": "A0",
