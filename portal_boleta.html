@@ -65,6 +65,29 @@ td.part .sv .fa-spinner{color:var(--muted);animation:sp .8s linear infinite;}
 .final.fail{color:var(--err);}
 .empty{padding:40px 20px;text-align:center;color:var(--muted);}
 
+/* ── rúbrica de progreso diario (20 días × aspectos, ✓/✗) ── */
+td.daily{white-space:nowrap;}
+.dbtn{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border:1px solid var(--border);background:#fff;border-radius:8px;font:inherit;font-size:.76rem;font-weight:600;cursor:pointer;color:var(--navy);}
+.dbtn:hover{border-color:var(--gold);}
+.dbtn[disabled]{opacity:.5;cursor:not-allowed;}
+.dbtn i{color:var(--gold2);}
+.detailrow td{background:#fbf9f4;padding:0;border-bottom:1px solid #f0ece3;}
+.dbox{padding:14px 18px 18px;}
+.dbox h4{margin:0 0 4px;font-size:.78rem;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);}
+.dbox .dnote{font-size:.74rem;color:var(--muted);margin:0 0 12px;line-height:1.5;}
+.dwrap{overflow-x:auto;}
+table.dgrid{width:auto;border-collapse:separate;border-spacing:3px;font-size:.72rem;}
+table.dgrid th{background:transparent;border:0;padding:2px 0;text-align:center;color:var(--muted);font-size:.62rem;min-width:26px;letter-spacing:0;}
+table.dgrid th.asp{text-align:left;padding-right:12px;font-size:.72rem;color:var(--navy);min-width:100px;text-transform:none;letter-spacing:.2px;}
+table.dgrid td.cell{width:26px;height:26px;min-width:26px;text-align:center;border:1px solid var(--border);border-radius:6px;background:#fff;cursor:pointer;padding:0;font-size:.78rem;color:#c9c2b4;user-select:-webkit-user-select;user-select:none;}
+table.dgrid td.cell:hover{border-color:var(--gold);}
+table.dgrid td.cell.on{background:#e7f4ec;border-color:#cfe9da;color:var(--ok);font-weight:800;}
+table.dgrid td.cell.off{background:#f7e7e7;border-color:#e2bcbc;color:var(--err);font-weight:800;}
+table.dgrid td.cell.ro{cursor:default;}
+table.dgrid td.cell.ro:hover{border-color:var(--border);}
+table.dgrid td.cell.on.ro:hover{border-color:#cfe9da;}
+table.dgrid td.cell.off.ro:hover{border-color:#e2bcbc;}
+
 #loading{padding:50px 20px;text-align:center;color:var(--muted);}
 #loading .spin{display:inline-block;width:28px;height:28px;border:3px solid rgba(138,47,59,.2);border-top-color:var(--accent);border-radius:50%;animation:sp .8s linear infinite;margin-bottom:12px;}
 @keyframes sp{to{transform:rotate(360deg)}}
@@ -101,6 +124,10 @@ footer a{color:var(--gold);text-decoration:none;}
        escala 0–100: <b>Exámenes</b> y <b>Lecciones</b> se calculan solos con los
        resultados de la plataforma (mejor marca de cada examen o lección) y la
        <b>Participación</b> la capturas tú aquí mismo — se guarda al escribirla.</p>
+    <p>En <b>Diario</b> llevas la rúbrica del curso: 20 días × Asistencia,
+       Participación, Tarea y Speaking, con ✓/✗ por día. Su promedio (✓=100, ✗=0)
+       se vuelve automáticamente la <b>Participación</b> del alumno; las celdas sin
+       marcar no cuentan.</p>
     <p id="weights-note"></p>
     <p>Los alumnos aparecen en la boleta en cuanto registran su primer intento con
        sesión iniciada (o cuando les capturas una participación).</p>
@@ -125,7 +152,7 @@ footer a{color:var(--gold);text-decoration:none;}
     <div class="tablecard">
       <table>
         <thead><tr>
-          <th>Alumno</th><th>Nivel</th><th>Exámenes</th><th>Lecciones</th><th>Participación</th><th>Final</th>
+          <th>Alumno</th><th>Nivel</th><th>Exámenes</th><th>Lecciones</th><th>Diario</th><th>Participación</th><th>Final</th>
         </tr></thead>
         <tbody id="rows"></tbody>
       </table>
@@ -160,6 +187,9 @@ footer a{color:var(--gold);text-decoration:none;}
   var GB = window.VESPER_GRADEBOOK;
   var roster = [];          // filas de GB.buildRoster
   var canSave = false;      // false mientras la regla de gradebook no responda
+  var dailyMap = {};        // correo -> { email, alias, studentUid, days }
+  var canDaily = false;     // false mientras la regla de daily_progress no responda
+  var openDaily = {};       // key -> true (rúbricas expandidas, sobrevive al re-render)
 
   function esc(t) {
     return ("" + (t == null ? "" : t)).replace(/[&<>"]/g, function (c) {
@@ -254,7 +284,7 @@ footer a{color:var(--gold);text-decoration:none;}
     sortRows(rows);
 
     if (!rows.length) {
-      rowsEl.innerHTML = '<tr><td colspan="6" class="empty">' +
+      rowsEl.innerHTML = '<tr><td colspan="7" class="empty">' +
         (roster.length ? 'No hay alumnos que coincidan.' :
          'Aún no hay alumnos en la boleta. En cuanto un alumno con sesión termine un examen o una lección, aparecerá aquí.') +
         '</td></tr>';
@@ -267,6 +297,8 @@ footer a{color:var(--gold);text-decoration:none;}
       var lvHtml = lvN
         ? '<span class="lvl" style="color:' + levelColor(lvN) + '">' + esc(lvN) + '</span>'
         : '<span class="na">—</span>';
+      var rec = r.email ? dailyMap[r.email] : null;
+      var st = GB.dailyStats(rec ? rec.days : {});
       html +=
         '<tr data-key="' + esc(r.key) + '">' +
           '<td class="who"><b>' + esc(r.alias) + '</b>' +
@@ -274,6 +306,10 @@ footer a{color:var(--gold);text-decoration:none;}
           '<td>' + lvHtml + '</td>' +
           '<td>' + avgCell(r.examsAvg, r.examsCount, "intento") + '</td>' +
           '<td>' + avgCell(r.lessonsAvg, r.lessonsCount, "intento") + '</td>' +
+          '<td class="daily"><button class="dbtn" data-dk="' + esc(r.key) + '" ' +
+            'aria-label="Progreso diario de ' + esc(r.alias) + '">' +
+            '<i class="fas fa-calendar-days"></i> <span data-dcount="' + esc(r.key) + '">' +
+            st.daysTouched + '/' + GB.COURSE_DAYS + '</span></button></td>' +
           '<td class="part">' +
             '<input type="number" min="0" max="100" inputmode="numeric" ' +
               'value="' + (r.participacion == null ? "" : r.participacion) + '" ' +
@@ -285,9 +321,54 @@ footer a{color:var(--gold);text-decoration:none;}
             '<span class="sv" data-sv="' + esc(r.key) + '"></span>' +
           '</td>' +
           '<td class="fin" data-fin="' + esc(r.key) + '">' + finalCell(r) + '</td>' +
-        '</tr>';
+        '</tr>' +
+        '<tr class="detailrow" data-d="' + esc(r.key) + '"' +
+          (openDaily[r.key] ? '' : ' style="display:none"') + '><td colspan="7">' +
+          (openDaily[r.key] ? dailyBoxHtml(r) : '') + '</td></tr>';
     });
     rowsEl.innerHTML = html;
+  }
+
+  /* --- rúbrica diaria: cuadrícula 20 días × aspectos --- */
+  function dailyEditable(r) { return canDaily && !!r.email; }
+
+  function dailyBoxHtml(r) {
+    var rec = (r.email && dailyMap[r.email]) || { days: {} };
+    var editable = dailyEditable(r);
+    var head = '<tr><th class="asp"></th>';
+    for (var d = 1; d <= GB.COURSE_DAYS; d++) head += '<th>' + d + '</th>';
+    head += '</tr>';
+    var body = GB.DAILY_ASPECTS.map(function (a) {
+      var cells = '';
+      for (var d = 1; d <= GB.COURSE_DAYS; d++) {
+        var v = (rec.days[d] || {})[a.key];
+        var cls = (v === true ? ' on' : (v === false ? ' off' : '')) + (editable ? '' : ' ro');
+        var txt = v === true ? '✓' : (v === false ? '✗' : '·');
+        cells += '<td class="cell' + cls + '" data-ck="' + esc(r.key) + '" data-day="' + d +
+                 '" data-asp="' + a.key + '" role="button" tabindex="' + (editable ? '0' : '-1') +
+                 '" aria-label="' + esc(a.label) + ' día ' + d + '">' + txt + '</td>';
+      }
+      return '<tr><th class="asp">' + esc(a.label) + '</th>' + cells + '</tr>';
+    }).join('');
+    var note = editable
+      ? 'Toca una celda para alternar: vacío → ✓ → ✗ → vacío. El promedio (✓=100, ✗=0) ' +
+        'se vuelve la <b>Participación</b> del alumno al instante; las celdas sin marcar no cuentan.'
+      : (r.email
+          ? 'Solo lectura: publica la regla de Firestore para <code>daily_progress</code> ' +
+            '(ver <b>FIRESTORE_GRADEBOOK_RULES.md</b>) para poder capturar.'
+          : 'Sin correo registrado: no se puede guardar la rúbrica de este alumno.');
+    return '<div class="dbox"><h4>Progreso diario — curso de ' + GB.COURSE_DAYS + ' días</h4>' +
+           '<p class="dnote">' + note + '</p>' +
+           '<div class="dwrap"><table class="dgrid"><thead>' + head + '</thead><tbody>' +
+           body + '</tbody></table></div></div>';
+  }
+
+  function refreshDailyCount(r) {
+    var rec = (r.email && dailyMap[r.email]) || { days: {} };
+    var st = GB.dailyStats(rec.days);
+    var el = rowsEl.querySelector('[data-dcount="' + CSS.escape(r.key) + '"]');
+    if (el) el.textContent = st.daysTouched + '/' + GB.COURSE_DAYS;
+    return st;
   }
 
   function rowByKey(key) {
@@ -306,6 +387,93 @@ footer a{color:var(--gold);text-decoration:none;}
     var el = rowsEl.querySelector('.fin[data-fin="' + CSS.escape(key) + '"]');
     if (r && el) el.innerHTML = finalCell(r);
     renderStats();
+  }
+
+  /* expandir/cerrar rúbrica y alternar celdas ✓/✗ */
+  rowsEl.addEventListener("click", function (e) {
+    var btn = e.target.closest(".dbtn");
+    if (btn) {
+      var k = btn.getAttribute("data-dk");
+      var dr = rowsEl.querySelector('tr.detailrow[data-d="' + CSS.escape(k) + '"]');
+      if (!dr) return;
+      if (openDaily[k]) {
+        delete openDaily[k];
+        dr.style.display = "none";
+      } else {
+        openDaily[k] = true;
+        var r = rowByKey(k);
+        if (r) dr.firstChild.innerHTML = dailyBoxHtml(r);
+        dr.style.display = "";
+      }
+      return;
+    }
+    var cell = e.target.closest("td.cell");
+    if (cell && !cell.classList.contains("ro")) toggleCell(cell);
+  });
+  rowsEl.addEventListener("keydown", function (e) {
+    if (e.key !== "Enter" && e.key !== " ") return;
+    var cell = e.target.closest && e.target.closest("td.cell");
+    if (cell && !cell.classList.contains("ro")) { e.preventDefault(); toggleCell(cell); }
+  });
+
+  function toggleCell(cell) {
+    var key = cell.getAttribute("data-ck");
+    var day = cell.getAttribute("data-day");
+    var asp = cell.getAttribute("data-asp");
+    var r = rowByKey(key);
+    if (!r || !r.email) return;
+    var rec = dailyMap[r.email];
+    if (!rec) rec = dailyMap[r.email] = { email: r.email, alias: r.alias, studentUid: r.studentUid, days: {} };
+
+    /* ciclo: sin marcar -> ✓ -> ✗ -> sin marcar */
+    var cur = (rec.days[day] || {})[asp];
+    if (cur === undefined) {
+      rec.days[day] = rec.days[day] || {};
+      rec.days[day][asp] = true;
+      cell.classList.add("on"); cell.classList.remove("off"); cell.textContent = "✓";
+    } else if (cur === true) {
+      rec.days[day][asp] = false;
+      cell.classList.add("off"); cell.classList.remove("on"); cell.textContent = "✗";
+    } else {
+      delete rec.days[day][asp];
+      if (!Object.keys(rec.days[day]).length) delete rec.days[day];
+      cell.classList.remove("on", "off"); cell.textContent = "·";
+    }
+
+    /* el promedio de la rúbrica ALIMENTA la Participación al instante */
+    var st = refreshDailyCount(r);
+    if (st.avg != null) {
+      r.participacion = st.avg;
+      var inp = rowsEl.querySelector('td.part input[data-key="' + CSS.escape(key) + '"]');
+      if (inp) inp.value = st.avg;
+    }
+    refreshFinal(key);
+
+    clearTimeout(dtimers[key]);
+    setSv(key, '<i class="fas fa-spinner"></i>');
+    dtimers[key] = setTimeout(function () { saveDailyRow(r); }, 800);
+  }
+
+  var dtimers = {};
+  function saveDailyRow(r) {
+    var rec = dailyMap[r.email];
+    if (!rec) return;
+    var snapshot = JSON.stringify(rec.days);
+    var jobs = [GB.saveDaily(r.email, { days: rec.days, alias: r.alias, studentUid: r.studentUid })];
+    /* con al menos una celda marcada, sincronizamos también la Participación */
+    if (r.participacion != null && canSave) {
+      jobs.push(GB.saveGrade(r.email, {
+        participacion: r.participacion, notes: r.notes,
+        alias: r.alias, studentUid: r.studentUid
+      }));
+    }
+    Promise.all(jobs).then(function (res) {
+      if (JSON.stringify(rec.days) !== snapshot) return; // hubo más cambios; los salva su timer
+      var ok = res.every(function (x) { return x; });
+      setSv(r.key, ok
+        ? '<i class="fas fa-circle-check" title="Guardado"></i>'
+        : '<i class="fas fa-circle-exclamation" title="No se pudo guardar. Revisa tu conexión o las reglas de Firestore e inténtalo de nuevo."></i>');
+    });
   }
 
   rowsEl.addEventListener("input", function (e) {
@@ -356,9 +524,10 @@ footer a{color:var(--gold);text-decoration:none;}
 
     Promise.all([
       VESPER_RESULTS.fetchAll({ limit: 1000 }),
-      GB.fetchGrades()
+      GB.fetchGrades(),
+      GB.fetchDailyAll()
     ]).then(function (res) {
-      var attempts = res[0], grades = res[1];
+      var attempts = res[0], grades = res[1], daily = res[2];
       if (attempts === null) {
         showMsg('<i class="fas fa-lock"></i> No se pudieron leer los resultados. ' +
           'Verifica que tu cuenta sea de profesor/admin y que la regla de Firestore para ' +
@@ -366,14 +535,29 @@ footer a{color:var(--gold);text-decoration:none;}
         return;
       }
       canSave = grades !== null;
+      canDaily = daily !== null;
+      dailyMap = daily || {};
       roster = GB.buildRoster(attempts, grades || {});
+      /* el promedio de la rúbrica manda sobre la participación mostrada:
+         si un alumno tiene celdas diarias, su Participación es ese promedio. */
+      roster.forEach(function (r) {
+        if (!r.email) return;
+        var rec = dailyMap[r.email];
+        if (rec) {
+          var st = GB.dailyStats(rec.days);
+          if (st.avg != null) r.participacion = st.avg;
+        }
+      });
       loadingEl.style.display = "none";
       contentEl.style.display = "block";
-      warnEl.style.display = canSave ? "none" : "block";
-      if (!canSave) {
+      warnEl.style.display = (canSave && canDaily) ? "none" : "block";
+      if (!canSave || !canDaily) {
+        var falta = [];
+        if (!canSave) falta.push("<code>gradebook</code>");
+        if (!canDaily) falta.push("<code>daily_progress</code>");
         warnEl.innerHTML = '<i class="fas fa-triangle-exclamation"></i> La boleta se muestra en ' +
-          'modo lectura: falta publicar la regla de Firestore para <code>gradebook</code> ' +
-          '(ver <b>FIRESTORE_GRADEBOOK_RULES.md</b>). Hasta entonces no se puede guardar la Participación.';
+          'modo lectura: falta publicar en Firestore la regla de ' + falta.join(" y ") +
+          ' (ver <b>FIRESTORE_GRADEBOOK_RULES.md</b>). Hasta entonces no se puede guardar.';
       }
       renderStats();
       render();
