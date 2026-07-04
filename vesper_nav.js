@@ -68,7 +68,9 @@
         "background:var(--navy,#1B1B2F);border-top:1px solid rgba(197,160,89,.5);",
         "padding-bottom:env(safe-area-inset-bottom);",
         "font-family:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;",
-        "box-shadow:0 -6px 22px rgba(0,0,0,.22)}",
+        "box-shadow:0 -6px 22px rgba(0,0,0,.22);transition:opacity .2s ease}",
+      /* Oculta la barra mientras se escribe (no pelear con el teclado). */
+      "#vsp-tabbar.vsp-hidden{opacity:0;pointer-events:none}",
       "#vsp-tabbar a{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;",
         "padding:9px 4px 8px;text-decoration:none;color:rgba(245,242,235,.62);",
         "font-size:.66rem;font-weight:600;letter-spacing:.02em;line-height:1;",
@@ -82,8 +84,10 @@
       "#vsp-tabbar a.on span{font-weight:700}",
       /* Espacio al final para que el contenido no quede tapado. */
       "#vsp-nav-spacer{height:calc(60px + env(safe-area-inset-bottom));width:100%}",
-      /* Sube los flotantes conocidos por encima de la barra. */
-      ".vchat-nudge{bottom:calc(72px + env(safe-area-inset-bottom))!important}",
+      /* Sube los flotantes conocidos por encima de la barra:
+         FAB de chat, FAB de apariencia (vesper_theme.js), botón instalar
+         PWA y el chip de cerrar sesión (vesper_auth.js). */
+      ".vchat-nudge,.vt-fab,#install-btn{bottom:calc(72px + env(safe-area-inset-bottom))!important}",
       ".vsp-logout-chip{bottom:calc(72px + env(safe-area-inset-bottom))!important}",
       /* Escritorio: píldora flotante centrada. */
       "@media(min-width:768px){",
@@ -119,6 +123,23 @@
 
     document.body.appendChild(spacer);
     document.body.appendChild(nav);
+
+    /* Ocultar la barra al escribir: en móvil, un tab bar fijo pelea con el
+       teclado y el compositor (chat) o los ejercicios de escribir. */
+    function isText(el) {
+      if (!el) return false;
+      if (el.isContentEditable) return true;
+      var tag = el.tagName;
+      if (tag === "TEXTAREA") return true;
+      if (tag === "INPUT") return /^(text|search|email|url|tel|password|number|)$/i.test(el.type || "");
+      return false;
+    }
+    document.addEventListener("focusin", function (e) {
+      if (isText(e.target)) nav.classList.add("vsp-hidden");
+    });
+    document.addEventListener("focusout", function (e) {
+      if (isText(e.target)) nav.classList.remove("vsp-hidden");
+    });
   }
 
   if (document.readyState === "loading") {
