@@ -159,7 +159,7 @@
           btn.disabled = false;
           return;
         }
-        return VesperAuth.isApproved(email).then(function (ok) {
+        return VesperAuth.isApprovedUser(cred.user).then(function (ok) {
           if (ok) { location.href = next; }
           else {
             show("info", "Sesión correcta, pero tu cuenta aún no ha sido aprobada por el administrador.");
