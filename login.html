@@ -20,7 +20,8 @@
   .head p { font-family:Arial,sans-serif; font-size:12px; opacity:.75; margin-top:6px; letter-spacing:1px; }
   .tabs { display:flex; font-family:Arial,sans-serif; }
   .tab { flex:1; padding:13px; text-align:center; cursor:pointer; font-size:14px;
-         background:#ece5d4; color:#6b6151; border-bottom:2px solid transparent; }
+         font-family:Arial,sans-serif; border:0; border-bottom:2px solid transparent;
+         background:#ece5d4; color:#6b6151; }
   .tab.active { background:var(--cream); color:var(--navy); font-weight:bold; border-bottom-color:var(--gold); }
   form { padding:26px 30px 30px; display:none; }
   form.active { display:block; }
@@ -36,6 +37,8 @@
   button.main:disabled { opacity:.55; cursor:wait; }
   .aux { font-family:Arial,sans-serif; font-size:13px; text-align:center; margin-top:14px; }
   .aux a { color:var(--navy2); cursor:pointer; text-decoration:underline; }
+  .linkbtn { border:0; background:none; padding:0; font:inherit; color:var(--navy2);
+             cursor:pointer; text-decoration:underline; }
   .msg { font-family:Arial,sans-serif; font-size:13.5px; line-height:1.5; border-radius:8px;
          padding:12px 14px; margin:18px 30px 0; display:none; }
   .msg.err { display:block; background:#f6e2e2; color:var(--err); border:1px solid #e3bcbc; }
@@ -52,9 +55,11 @@
     <h1>VESPER <b>ACADEMY</b></h1>
     <p>ACCESO AL CAMPUS</p>
   </div>
-  <div class="tabs">
-    <div class="tab active" id="tab-login">Iniciar sesión</div>
-    <div class="tab" id="tab-register">Crear cuenta</div>
+  <div class="tabs" role="tablist" aria-label="Acceso o registro">
+    <button type="button" class="tab active" id="tab-login" role="tab"
+            aria-selected="true" aria-controls="form-login">Iniciar sesión</button>
+    <button type="button" class="tab" id="tab-register" role="tab"
+            aria-selected="false" aria-controls="form-register">Crear cuenta</button>
   </div>
 
   <div class="msg" id="msg"></div>
@@ -65,7 +70,7 @@
     <label for="l-pass">Contraseña</label>
     <input type="password" id="l-pass" autocomplete="current-password" required>
     <button class="main" type="submit">Entrar</button>
-    <div class="aux"><a id="forgot">¿Olvidaste tu contraseña?</a></div>
+    <div class="aux"><button type="button" id="forgot" class="linkbtn">¿Olvidaste tu contraseña?</button></div>
   </form>
 
   <form id="form-register">
@@ -99,6 +104,8 @@
   function setTab(which) {
     var login = which === "login";
     tabL.classList.toggle("active", login); tabR.classList.toggle("active", !login);
+    tabL.setAttribute("aria-selected", login ? "true" : "false");
+    tabR.setAttribute("aria-selected", login ? "false" : "true");
     formL.classList.toggle("active", login); formR.classList.toggle("active", !login);
     clearMsg();
   }

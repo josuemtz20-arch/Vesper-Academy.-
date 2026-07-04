@@ -5,6 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vesper Academy — Examen Diagnóstico de Inglés (Gratis)</title>
     <meta name="description" content="Examen diagnóstico de inglés gratuito de Vesper Academy. Descubre tu nivel: A0, A1, A2, B1 o B2+ en 30 preguntas y recibe tu curso recomendado.">
+    <link rel="canonical" href="https://vesperacademy.com/book_placement.html">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="es_MX">
+    <meta property="og:site_name" content="Vesper Academy">
+    <meta property="og:title" content="Examen diagnóstico de inglés gratis — descubre tu nivel">
+    <meta property="og:description" content="30 preguntas, sin registro, resultado al instante con tu nivel CEFR (A0–B2+) y curso recomendado.">
+    <meta property="og:url" content="https://vesperacademy.com/book_placement.html">
+    <meta property="og:image" content="https://vesperacademy.com/assets/images/lessons/theme_city.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Examen diagnóstico de inglés gratis — descubre tu nivel">
+    <meta name="twitter:description" content="30 preguntas, sin registro, resultado al instante con tu nivel CEFR y curso recomendado.">
+    <meta name="twitter:image" content="https://vesperacademy.com/assets/images/lessons/theme_city.jpg">
     <link rel="icon" href="assets/images/vesper_logo.png" type="image/png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inria+Serif:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -543,7 +555,7 @@
             <div class="question-number" id="q-number">PREGUNTA 1</div>
             <div class="question-text" id="q-text"></div>
             <div class="options-grid" id="options-grid"></div>
-            <div class="feedback-bar" id="feedback-bar"></div>
+            <div class="feedback-bar" id="feedback-bar" role="status" aria-live="polite"></div>
         </div>
 
         <button class="btn-next" id="btn-next" onclick="nextQuestion()">Siguiente pregunta <i class="fas fa-arrow-right"></i></button>
@@ -917,6 +929,15 @@ function renderQuestion() {
     nextBtn.innerHTML = (currentQ === total - 1 ? "Ver mi resultado" : "Siguiente pregunta") + " <i class='fas fa-arrow-right'></i>";
 }
 
+/* pista visual NO basada en color (para daltonismo) + etiqueta para lectores
+   de pantalla: pone ✓/✗ en la letra de la opción calificada. */
+function markLetter(btn, glyph, label) {
+    if (!btn) return;
+    const l = btn.querySelector(".opt-letter");
+    if (l) l.textContent = glyph;
+    if (label) btn.setAttribute("aria-label", label);
+}
+
 function selectAnswer(idx) {
     if (answered) return;
     answered = true;
@@ -932,12 +953,15 @@ function selectAnswer(idx) {
 
     if (idx === correct) {
         selectedBtn.classList.add("correct");
+        markLetter(selectedBtn, "✓", "Correcto");
         scores[q.level]++;
         feedback.className = "feedback-bar correct";
         feedback.innerHTML = "<i class='fas fa-check-circle'></i> ¡Correcto! Muy bien.";
     } else {
         selectedBtn.classList.add("wrong");
+        markLetter(selectedBtn, "✗", "Tu respuesta, incorrecta");
         correctBtn.classList.add("correct");
+        markLetter(correctBtn, "✓", "Respuesta correcta");
         feedback.className = "feedback-bar wrong";
         feedback.innerHTML = "<i class='fas fa-times-circle'></i> La respuesta correcta era: <strong>" + q.options[correct] + "</strong>";
     }
@@ -957,6 +981,7 @@ function skipAnswer() {
     // No suma puntos: un "no lo sé" honesto es mejor que un acierto por suerte
     skipped++;
 
+    markLetter(document.getElementById("opt-" + correct), "✓", "Respuesta correcta");
     document.getElementById("opt-" + correct).classList.add("correct");
     document.getElementById("opt-idk").classList.add("skipped");
 

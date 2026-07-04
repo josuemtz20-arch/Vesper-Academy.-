@@ -108,9 +108,10 @@ footer a{color:var(--gold);text-decoration:none;}
 <div class="wrap">
   <div class="intro">
     <h1>Mi boleta de calificaciones</h1>
-    <p>Tu avance en escala 0–100, con la misma boleta para todos los niveles:
-       <b>Exámenes</b> y <b>Lecciones</b> se calculan con tu mejor marca en cada uno,
-       y la <b>Participación</b> la asigna tu profesor.</p>
+    <p>Tu avance en escala 0–100, con la misma boleta para todos los niveles.
+       Tus intentos en la app son <b>práctica</b>: te muestran cómo vas, pero la
+       nota de <b>Exámenes</b> y <b>Lecciones</b> que cuenta para la final la
+       <b>confirma tu profesor</b>. La <b>Participación</b> también la asigna él.</p>
   </div>
 
   <div id="loading"><div class="spin"></div><div>Cargando tu boleta…</div></div>
@@ -205,6 +206,31 @@ footer a{color:var(--gold);text-decoration:none;}
   function countSub(count, what) {
     return count ? ('Tu mejor marca en cada ' + what + ' · ' + count + ' intento' + (count === 1 ? '' : 's'))
                  : ('Aún no tienes ' + what + 'es registrados con sesión');
+  }
+
+  /* Exámenes/Lecciones: si tu profesor ya CONFIRMÓ la nota, esa es la de
+     registro y cuenta para la final. Mientras no la confirme, solo ves tu
+     promedio de PRÁCTICA (lo que sacaste autocalificándote), claramente
+     marcado como que aún NO cuenta. */
+  function gradeValHtml(grade, practice, w) {
+    if (grade != null) {
+      return grade + '%<span class="w">' + Math.round(w * 100) + '% de la final</span>';
+    }
+    if (practice != null) {
+      return '<span class="na">práctica ' + practice + '%</span>';
+    }
+    return '<span class="na">Sin datos aún</span>';
+  }
+  function gradeSub(grade, practice, count, what) {
+    if (grade != null) {
+      return 'Nota confirmada por tu profesor' +
+        (practice != null ? ' · tu práctica: ' + practice + '%' : '');
+    }
+    if (practice != null) {
+      return 'Práctica: tu mejor marca en ' + count + ' intento' + (count === 1 ? '' : 's') +
+        '. Aún no cuenta para la nota (la confirma tu profesor).';
+    }
+    return 'Aún no tienes ' + what + ' registrados con sesión';
   }
 
   /* ── gráfica lineal de progreso día a día (SVG propio, sin librerías) ── */
@@ -421,12 +447,10 @@ footer a{color:var(--gold);text-decoration:none;}
       lvEl.textContent = "";
     }
 
-    document.getElementById("c-exams").innerHTML = pctHtml(row.examsAvg, GB.WEIGHTS.exams);
-    document.getElementById("c-exams-sub").textContent = countSub(row.examsCount, "examen");
-    document.getElementById("c-lessons").innerHTML = pctHtml(row.lessonsAvg, GB.WEIGHTS.lessons);
-    document.getElementById("c-lessons-sub").textContent = row.lessonsCount
-      ? ('Tu mejor marca en cada lección · ' + row.lessonsCount + ' intento' + (row.lessonsCount === 1 ? '' : 's'))
-      : 'Aún no tienes lecciones registradas con sesión';
+    document.getElementById("c-exams").innerHTML = gradeValHtml(row.examsGrade, row.examsAvg, GB.WEIGHTS.exams);
+    document.getElementById("c-exams-sub").textContent = gradeSub(row.examsGrade, row.examsAvg, row.examsCount, "exámenes");
+    document.getElementById("c-lessons").innerHTML = gradeValHtml(row.lessonsGrade, row.lessonsAvg, GB.WEIGHTS.lessons);
+    document.getElementById("c-lessons-sub").textContent = gradeSub(row.lessonsGrade, row.lessonsAvg, row.lessonsCount, "lecciones");
     document.getElementById("c-part").innerHTML = pctHtml(row.participacion, GB.WEIGHTS.participation);
     var st = GB.dailyStats(daily ? daily.days : {});
     document.getElementById("c-part-sub").textContent = (st.cells > 0)
@@ -449,8 +473,9 @@ footer a{color:var(--gold);text-decoration:none;}
       'La final pondera: Exámenes ' + Math.round(GB.WEIGHTS.exams * 100) +
       '% · Lecciones ' + Math.round(GB.WEIGHTS.lessons * 100) +
       '% · Participación ' + Math.round(GB.WEIGHTS.participation * 100) +
-      '%. Los criterios que aún no tienes no cuentan en tu contra. Se aprueba con ' +
-      GB.PASS_THRESHOLD + ' o más. Sigue practicando: solo cuenta tu <b>mejor</b> intento.';
+      '%. Solo entran las notas <b>confirmadas por tu profesor</b>; tu práctica ' +
+      'te ayuda a prepararte pero no cuenta por sí sola. Los criterios que aún no ' +
+      'tienes no cuentan en tu contra. Se aprueba con ' + GB.PASS_THRESHOLD + ' o más.';
 
     loadingEl.style.display = "none";
     msgEl.style.display = "none";
@@ -481,6 +506,7 @@ footer a{color:var(--gold);text-decoration:none;}
       if (!mine) {
         mine = { alias: VESPER_RESULTS.aliasOf(), email: email, studentUid: user.uid, level: "",
                  examsAvg: null, examsCount: 0, lessonsAvg: null, lessonsCount: 0,
+                 examsGrade: null, lessonsGrade: null,
                  participacion: null, notes: "" };
       }
       /* el promedio del progreso diario manda sobre la participación mostrada */

@@ -103,17 +103,24 @@ window.VESPER_GRADEBOOK = (function () {
     return Math.max(0, Math.min(100, v));
   }
 
-  /* lee un doc REST de gradebook -> fila plana. El id del doc es el correo. */
+  /* lee un doc REST de gradebook -> fila plana. El id del doc es el correo.
+     participacion / examsGrade / lessonsGrade son los tres números que captura
+     el PROFESOR (0..100). examsGrade/lessonsGrade son la nota de registro de
+     Exámenes y Lecciones: el profesor confirma (o corrige) el promedio de
+     práctica del alumno. Si aún no las confirma, quedan null y NO cuentan. */
   function readDoc(doc) {
     var f = (doc && doc.fields) || {};
     function s(k) { return (f[k] && f[k].stringValue) || ""; }
+    function iOrNull(k) {
+      return (f[k] && f[k].integerValue != null) ? clampPct(f[k].integerValue) : null;
+    }
     var name = (doc && doc.name) || "";
     var email = name.slice(name.lastIndexOf("/") + 1).toLowerCase();
-    var p = (f.participacion && f.participacion.integerValue != null)
-      ? clampPct(f.participacion.integerValue) : null;
     return {
       email: email,
-      participacion: p,
+      participacion: iOrNull("participacion"),
+      examsGrade: iOrNull("examsGrade"),
+      lessonsGrade: iOrNull("lessonsGrade"),
       notes: s("notes"),
       alias: s("alias"),
       studentUid: s("studentUid"),
@@ -167,19 +174,26 @@ window.VESPER_GRADEBOOK = (function () {
 
   /* upsert de la parte manual de un alumno. PATCH con updateMask crea el
      doc si no existe; el mask DEBE listar cada campo enviado para no borrar
-     los demás. La regla exige participacion int 0..100 y cuenta de profe. */
+     los demás. Solo profe/admin (lo exige la regla de Firestore).
+     Los tres componentes numéricos (participacion, examsGrade, lessonsGrade)
+     son OPCIONALES por llamada: se incluyen en el updateMask solo si vienen
+     como número 0..100, así una llamada que toca un componente no borra los
+     otros. La regla valida cada uno solo si está presente. */
   function saveGrade(email, data) {
     email = String(email || "").trim().toLowerCase();
-    var p = clampPct(data && data.participacion);
-    if (!email || p == null || !signedIn()) return Promise.resolve(false);
+    if (!email || !signedIn()) return Promise.resolve(false);
+    data = data || {};
     var fields = {
-      participacion: { integerValue: String(p) },
-      notes: { stringValue: String((data && data.notes) || "").slice(0, 500) },
-      alias: { stringValue: String((data && data.alias) || "").slice(0, 24) },
-      studentUid: { stringValue: String((data && data.studentUid) || "") },
+      notes: { stringValue: String(data.notes || "").slice(0, 500) },
+      alias: { stringValue: String(data.alias || "").slice(0, 24) },
+      studentUid: { stringValue: String(data.studentUid || "") },
       updatedAt: { timestampValue: new Date().toISOString() },
       updatedBy: { stringValue: String(currentUser.email || "").toLowerCase() }
     };
+    ["participacion", "examsGrade", "lessonsGrade"].forEach(function (k) {
+      var v = clampPct(data[k]);
+      if (v != null) fields[k] = { integerValue: String(v) };
+    });
     var mask = Object.keys(fields).map(function (k) {
       return "updateMask.fieldPaths=" + k;
     }).join("&");
@@ -348,7 +362,8 @@ window.VESPER_GRADEBOOK = (function () {
       if (!by[key]) {
         by[key] = { key: key, email: "", alias: "", studentUid: "", level: "",
                     examsBest: {}, examsCount: 0, lessonsBest: {}, lessonsCount: 0,
-                    participacion: null, notes: "", lastDate: "" };
+                    participacion: null, examsGrade: null, lessonsGrade: null,
+                    notes: "", lastDate: "" };
       }
       return by[key];
     }
@@ -382,6 +397,8 @@ window.VESPER_GRADEBOOK = (function () {
       var e = entry(email);
       e.email = email;
       e.participacion = g.participacion;
+      e.examsGrade = g.examsGrade;      // nota de exámenes confirmada por el profe
+      e.lessonsGrade = g.lessonsGrade;  // nota de lecciones confirmada por el profe
       e.notes = g.notes || "";
       if (!e.alias && g.alias) e.alias = g.alias;
       if (!e.studentUid && g.studentUid) e.studentUid = g.studentUid;
@@ -392,18 +409,27 @@ window.VESPER_GRADEBOOK = (function () {
       return {
         key: e.key, email: e.email, alias: e.alias || "Estudiante",
         studentUid: e.studentUid, level: e.level, lastDate: e.lastDate,
+        // Promedios de PRÁCTICA (autocalificados por el alumno; referencia, no nota).
         examsAvg: bestAvg(e.examsBest), examsCount: e.examsCount,
         lessonsAvg: bestAvg(e.lessonsBest), lessonsCount: e.lessonsCount,
+        // Notas de REGISTRO (las confirma el profesor) y participación.
+        examsGrade: e.examsGrade, lessonsGrade: e.lessonsGrade,
         participacion: e.participacion, notes: e.notes
       };
     });
   }
 
-  /* final ponderada SOLO con los componentes presentes (pesos renormalizados). */
+  /* Final ponderada. INTEGRIDAD: la nota de registro se calcula SOLO con datos
+     capturados por el profesor — Exámenes/Lecciones CONFIRMADOS
+     (examsGrade/lessonsGrade) y Participación. Los promedios automáticos
+     (examsAvg/lessonsAvg) los escribe el propio alumno al autocalificarse, así
+     que son PRÁCTICA y NO entran en la final. Los componentes que el profesor
+     aún no confirma se excluyen y los pesos se renormalizan con los presentes
+     (la falta de dato no cuenta como cero). */
   function computeFinal(row) {
     var parts = [
-      { w: WEIGHTS.exams, v: row.examsAvg },
-      { w: WEIGHTS.lessons, v: row.lessonsAvg },
+      { w: WEIGHTS.exams, v: (row.examsGrade != null ? row.examsGrade : null) },
+      { w: WEIGHTS.lessons, v: (row.lessonsGrade != null ? row.lessonsGrade : null) },
       { w: WEIGHTS.participation, v: row.participacion }
     ].filter(function (p) { return p.v != null; });
     if (!parts.length) return { final: null, passed: null };

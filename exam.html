@@ -324,8 +324,16 @@ footer img{height:30px;width:30px;object-fit:contain;vertical-align:middle;margi
         card.querySelectorAll(".opt").forEach(btn => {
           const oi = parseInt(btn.dataset.oi, 10);
           btn.classList.remove("sel");
-          if (oi === ans) btn.classList.add("correct");
-          else if (oi === sel) btn.classList.add("wrong");
+          const mark = btn.querySelector(".mark");
+          if (oi === ans) {                       // la respuesta correcta
+            btn.classList.add("correct");
+            if (mark) mark.textContent = "✓"; // ✓ (pista no basada en color)
+            btn.setAttribute("aria-label", "Respuesta correcta");
+          } else if (oi === sel) {                // lo que eligió el alumno y estaba mal
+            btn.classList.add("wrong");
+            if (mark) mark.textContent = "✗"; // ✗
+            btn.setAttribute("aria-label", "Tu respuesta, incorrecta");
+          }
         });
         if (sel === ans) { correct++; perSection[si].c++; }
       });

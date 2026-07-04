@@ -54,10 +54,28 @@ En las reglas de Firestore de la base `teachermanuals`, dentro de
 
 ```
 match /exam_results/{id} {
-  // el alumno crea SOLO sus propios intentos
+  // el alumno crea SOLO sus propios intentos, y deben ser internamente
+  // coherentes: score<=total, percent cuadra con score/total (±1 por redondeo),
+  // y examType es uno conocido. Ver firestore.rules para la versión canónica.
   allow create: if request.auth != null
                 && request.resource.data.studentUid == request.auth.uid
-                && request.resource.data.percent is int;
+                && request.resource.data.score is int
+                && request.resource.data.total is int
+                && request.resource.data.percent is int
+                && request.resource.data.score >= 0
+                && request.resource.data.total >= 0
+                && request.resource.data.score <= request.resource.data.total
+                && request.resource.data.percent >= 0
+                && request.resource.data.percent <= 100
+                && (
+                     (request.resource.data.total == 0 && request.resource.data.percent == 0)
+                     || (request.resource.data.total > 0
+                         && request.resource.data.percent * request.resource.data.total
+                            >= (request.resource.data.score * 100) - request.resource.data.total
+                         && request.resource.data.percent * request.resource.data.total
+                            <= (request.resource.data.score * 100) + request.resource.data.total)
+                   )
+                && request.resource.data.examType in ["lesson", "exam", "boss", "placement"];
 
   // lee: el dueño, o un profesor/admin (allowlist en teachers/ o el correo admin)
   allow read:   if request.auth != null && (
@@ -73,6 +91,24 @@ match /exam_results/{id} {
 
 Publica las reglas (consola de Firebase → Firestore → Reglas, o
 `firebase deploy --only firestore:rules`). Tiene efecto inmediato.
+
+> **⚠️ Integridad — estos intentos son PRÁCTICA, no la nota oficial.** Los
+> exámenes se autocalifican en el navegador y es el propio alumno quien escribe
+> `exam_results` con su token, así que un alumno decidido puede fabricar un
+> intento internamente coherente (p. ej. `score:10,total:10,percent:100`). Las
+> validaciones de arriba bloquean las falsificaciones burdas, pero **no
+> convierten esto en evaluación confiable**. Por eso la boleta ya **no** deriva
+> la calificación de aquí: los promedios de `exam_results` se muestran como
+> *práctica* y la nota de registro de Exámenes/Lecciones la **confirma el
+> profesor** (`gradebook.examsGrade` / `gradebook.lessonsGrade`, ver
+> `FIRESTORE_GRADEBOOK_RULES.md`). Para una nota 100 % a prueba de manipulación
+> haría falta calificar del lado del servidor (Cloud Function / Admin SDK), que
+> requiere el plan Blaze de Firebase.
+>
+> **Claves de respuesta:** la colección `exams/{id}` (donde viven las claves) es
+> legible por cualquier alumno de la allowlist. Si esto te importa para la
+> integridad del examen, separa la clave en un subdocumento legible solo por
+> profesores/admin, o califica del lado del servidor.
 
 > **Importante — casing del correo:** los documentos de la allowlist se llavean
 > con el **correo en minúsculas** (igual que `fsDocExists` en `vesper_auth.js`).

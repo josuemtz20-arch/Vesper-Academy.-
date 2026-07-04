@@ -11,6 +11,8 @@
 !/.gitignore
 !/.nojekyll
 !/CNAME
+# mapa del repo + modelo de seguridad (sin claves)
+!/README.md
 
 # planning note for the AI-guardian work (picked up by a new web session)
 !/GUARDIANS_TODO.md

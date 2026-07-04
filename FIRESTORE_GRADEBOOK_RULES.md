@@ -16,6 +16,8 @@ minúsculas, igual que la allowlist `students/{correo}`):
 ```
 gradebook/{correo}  ->  {
   participacion: int,     // 0..100, capturada por el profesor
+  examsGrade:    int,     // 0..100, nota de EXÁMENES confirmada por el profesor (opcional)
+  lessonsGrade:  int,     // 0..100, nota de LECCIONES confirmada por el profesor (opcional)
   notes:         string,  // notas libres del profesor (opcional)
   alias:         string,  // alias del alumno (para mostrarlo en el roster)
   studentUid:    string,  // uid informativo (el join real es por correo)
@@ -27,10 +29,20 @@ gradebook/{correo}  ->  {
 Base de datos: `teachermanuals` (la misma que `exam_results`).
 
 - **Escriben** solo los profesores (allowlist `teachers/{correo}`) o el admin.
-  La regla valida `participacion` int 0..100.
+  Cada componente numérico (`participacion`, `examsGrade`, `lessonsGrade`) es
+  **opcional** por escritura, pero si está presente la regla lo valida int
+  0..100 (el `updateMask` deja tocar uno sin borrar los otros).
 - **Leen** el propio alumno (solo su doc), los profesores y el admin.
 - El roster de la boleta se deriva de `exam_results` + `gradebook`; **no**
   hace falta relajar la regla de `students/`.
+
+> **¿Por qué `examsGrade` / `lessonsGrade`?** Los promedios automáticos de
+> `exam_results` los escribe el propio alumno (autocalificación), así que **no**
+> son una nota confiable. La boleta los muestra como *práctica* y toma como nota
+> de registro de Exámenes/Lecciones lo que el **profesor confirma** en estos dos
+> campos (en `portal_boleta.html` puede aceptar el promedio de práctica con un
+> clic o escribir otro número). `vesper_gradebook.js → computeFinal` usa SOLO
+> `examsGrade`, `lessonsGrade` y `participacion` — nunca el promedio de práctica.
 
 ## Regla a añadir
 
@@ -46,13 +58,23 @@ match /gradebook/{email} {
                  || exists(/databases/$(database)/documents/teachers/$(request.auth.token.email))
                  || request.auth.token.email == "josuemtz20@gmail.com"
                );
-  // escribe: SOLO profesores/admin, con participacion int 0..100
+  // escribe: SOLO profesores/admin. participacion/examsGrade/lessonsGrade son
+  // opcionales por escritura; si están presentes deben ser int 0..100.
   allow write: if request.auth != null
                && (exists(/databases/$(database)/documents/teachers/$(request.auth.token.email))
                    || request.auth.token.email == "josuemtz20@gmail.com")
-               && request.resource.data.participacion is int
-               && request.resource.data.participacion >= 0
-               && request.resource.data.participacion <= 100;
+               && (!("participacion" in request.resource.data)
+                   || (request.resource.data.participacion is int
+                       && request.resource.data.participacion >= 0
+                       && request.resource.data.participacion <= 100))
+               && (!("examsGrade" in request.resource.data)
+                   || (request.resource.data.examsGrade is int
+                       && request.resource.data.examsGrade >= 0
+                       && request.resource.data.examsGrade <= 100))
+               && (!("lessonsGrade" in request.resource.data)
+                   || (request.resource.data.lessonsGrade is int
+                       && request.resource.data.lessonsGrade >= 0
+                       && request.resource.data.lessonsGrade <= 100));
 }
 ```
 
@@ -119,7 +141,10 @@ Reglas, o `firebase deploy --only firestore:rules`). Tiene efecto inmediato.
   sin `orderBy` para no requerir índice compuesto). No hay que publicar nada
   adicional.
 - **Cálculo de la final:** promedio ponderado (Exámenes 50 % · Lecciones 30 % ·
-  Participación 20 %, configurable en `vesper_gradebook.js` → `WEIGHTS`);
-  si a un alumno le falta un criterio, se renormalizan los pesos con los que
-  sí tiene (la falta de datos no cuenta como cero). Aprueba con ≥ 70
-  (`PASS_THRESHOLD`).
+  Participación 20 %, configurable en `vesper_gradebook.js` → `WEIGHTS`) usando
+  **solo datos capturados por el profesor**: `examsGrade`, `lessonsGrade` y
+  `participacion`. Los promedios de práctica (`examsAvg`/`lessonsAvg`, derivados
+  de `exam_results`) se muestran como referencia pero **no** entran en la final.
+  Si a un alumno le falta un criterio (p. ej. el profe aún no confirma Exámenes),
+  se renormalizan los pesos con los que sí tiene (la falta de datos no cuenta
+  como cero). Aprueba con ≥ 70 (`PASS_THRESHOLD`).

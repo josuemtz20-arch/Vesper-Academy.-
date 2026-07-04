@@ -32,11 +32,27 @@
 <body>
 <div class="wrap">
   <h1>Administrar accesos — Vesper Academy</h1>
-  <p style="margin-top:10px">Esta página es la herramienta del <b>desarrollador/administrador</b> para autorizar cuentas.
-     Por sí sola no concede nada: el acceso solo cambia cuando el código generado se añade al
-     archivo <code>vesper_auth.js</code> del sitio.</p>
+  <p style="margin-top:10px">Esta página es la herramienta del <b>desarrollador/administrador</b>.</p>
 
-  <h2>Autorizar a una persona</h2>
+  <div class="note" style="background:#e1efe6;border-color:#bcd9c7;color:#2a5a3e">
+    <b>Forma recomendada (efecto inmediato):</b> la <b>fuente de verdad</b> del acceso es la
+    <b>allowlist en Firestore</b> (colecciones <code>students/</code> y <code>teachers/</code>).
+    Para autorizar a alguien basta añadir su correo ahí; <code>vesper_auth.js</code> lo comprueba
+    al instante — <b>no</b> hace falta editar código ni volver a subir el sitio. Eso lo hace el
+    admin con la herramienta local <code>_scripts/upload_manuals.py</code> (inicia sesión como el
+    admin y escribe con su idToken):
+    <div style="margin-top:8px"><code>python3 _scripts/upload_manuals.py add-student alumno@correo.com</code></div>
+    <div style="margin-top:4px"><code>python3 _scripts/upload_manuals.py add-teacher maestro@correo.com</code></div>
+    <div style="margin-top:4px"><code>python3 _scripts/upload_manuals.py remove alguien@correo.com</code> &nbsp;(revocar)</div>
+    <div style="margin-top:8px;font-size:12px">Esa herramienta vive <b>fuera</b> del repositorio público
+      (la <code>.gitignore</code> mantiene privados los scripts de admin); pídesela al desarrollador
+      si no la tienes. Los generadores de abajo son el <b>respaldo legado</b> y la contraseña del
+      portal de profesores.</div>
+  </div>
+
+  <h2>Respaldo legado: código de aprobación (hash)</h2>
+  <p>Solo se usa si Firestore no responde: <code>vesper_auth.js</code> cae a la lista
+     <code>approvedEmailHashes</code>. Genera aquí el código de un correo para esa lista de respaldo.</p>
   <div class="tool">
     <label for="email" style="font-size:13px;color:#6b6151">Correo de la persona (el mismo con el que se registró)</label>
     <input type="email" id="email" placeholder="alumno@ejemplo.com" style="margin-top:6px">
@@ -47,19 +63,30 @@
     </div>
   </div>
 
-  <h2>Cómo activar el acceso</h2>
+  <h2>Cómo usar el respaldo legado</h2>
   <ol>
     <li>Genera el código de aprobación del correo (arriba).</li>
     <li>Abre <code>vesper_auth.js</code> y pega el código (entre comillas y con coma) dentro de la lista
-        <code>approvedEmailHashes</code> — o simplemente pídeselo a Claude: <i>«aprueba el acceso de alumno@ejemplo.com»</i>.</li>
-    <li>Sube el cambio (<code>git push</code>). En 1-2 minutos esa persona ya podrá entrar.</li>
-    <li>Para <b>revocar</b> un acceso, borra su línea de la lista y vuelve a subir.</li>
+        <code>approvedEmailHashes</code>.</li>
+    <li>Sube el cambio (<code>git push</code>). En 1-2 minutos ese respaldo estará activo.</li>
+    <li>Para <b>revocar</b>, borra su línea de la lista y vuelve a subir.</li>
   </ol>
+  <p style="font-size:13px;color:#6b6151">Nota: mientras Firestore responda, la allowlist manda; esta lista
+     solo entra en juego como red de seguridad. Lo normal es autorizar con <code>upload_manuals.py</code>
+     (arriba) y no tocar esta lista.</p>
 
   <h2>Añadir / editar maestro en el portal</h2>
-  <p>El <a href="portal_profesores.html">Portal del Profesor</a> exige <b>correo + contraseña individual</b>.
-     Cada maestro tiene su propia contraseña. Genera aquí la línea que debes pegar en el objeto
-     <code>teachers</code> de <code>vesper_auth.js</code>:</p>
+  <p>El <a href="portal_profesores.html">Portal del Profesor</a> pide una <b>contraseña individual</b>
+     por maestro. Genera aquí la línea que debes pegar en el objeto <code>teachers</code> de
+     <code>vesper_auth.js</code>:</p>
+  <div class="note">
+    <b>Ojo — esto es solo una comodidad de la interfaz.</b> Esa contraseña se comprueba en el
+    navegador (hash público), así que <b>no</b> es lo que realmente protege manuales ni
+    calificaciones: eso lo protegen las reglas de Firestore, que exigen que el correo del maestro
+    esté en la allowlist <code>teachers/</code> (autorízalo con
+    <code>python3 _scripts/upload_manuals.py add-teacher …</code>). Sin ese doc en Firestore, el
+    maestro no puede leer/escribir datos aunque adivine la contraseña del portal.
+  </div>
   <div class="tool">
     <label for="temail" style="font-size:13px;color:#6b6151">Correo del maestro</label>
     <input type="email" id="temail" placeholder="maestro@ejemplo.com" style="margin-top:6px">
