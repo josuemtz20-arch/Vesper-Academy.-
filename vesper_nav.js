@@ -38,8 +38,8 @@
     { id: "boleta",   label: "Boleta",   href: "mi_boleta.html",
       match: ["mi_boleta.html"],
       icon: '<rect x="5" y="3.5" width="14" height="17" rx="2.2"/><path d="M9 3.5V6h6V3.5"/><path d="M8.5 11h7M8.5 15h4.5"/>' },
-    { id: "perfil",   label: "Perfil",   href: "configuracion.html",
-      match: ["configuracion.html", "apariencia.html", "tienda.html", "onboarding.html"],
+    { id: "perfil",   label: "Perfil",   href: "perfil.html",
+      match: ["perfil.html", "configuracion.html", "apariencia.html", "tienda.html", "onboarding.html"],
       icon: '<circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c0-3.7 3.4-5.6 7.5-5.6s7.5 1.9 7.5 5.6"/>' }
   ];
 

@@ -42,6 +42,7 @@
       "liga.html",
       "tienda.html",
       "onboarding.html",
+      "perfil.html",
       "vesper_landing.html",
       "vesper_promo.html",
       "vesper_web.html"

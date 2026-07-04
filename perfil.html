@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<script src="vesper_auth.js"></script>
+<script src="vesper_identity.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mi perfil | Vesper Academy</title>
+<meta name="description" content="Tu perfil de estudiante en Vesper Academy: tu nivel, tu objetivo, tu cuenta y tu progreso.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="assets/images/vesper_logo.png" type="image/png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inria+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@300;400;500;600;700&display=swap');
+*,*::before,*::after{box-sizing:border-box;}
+:root{--navy:#1B1B2F;--navy2:#2c2c4a;--gold:#c5a059;--gold2:#8f6f2e;--cream:#f5f2eb;--border:#e4e0d8;--muted:#5a6673;--good:#2f7d5b;}
+body{margin:0;font-family:'Inter',sans-serif;background:var(--cream);color:var(--navy);min-height:100vh;}
+.skip-link{position:absolute;left:-999px;top:0;z-index:200;background:var(--navy);color:#fff;padding:10px 16px;border-radius:0 0 8px 0;text-decoration:none;font-weight:600;}
+.skip-link:focus{left:0;}
+header{background:var(--navy);border-bottom:3px solid var(--gold);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:14px;position:sticky;top:0;z-index:50;}
+.brand{display:flex;align-items:center;gap:12px;color:#fff;text-decoration:none;}
+.brand img{height:42px;width:42px;object-fit:contain;}
+.brand b{font-family:'Inria Serif',serif;font-size:1.1rem;}
+.brand small{display:block;color:var(--gold);font-size:.6rem;letter-spacing:2px;text-transform:uppercase;}
+header a.back{color:rgba(255,255,255,.82);font-size:.78rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;text-decoration:none;}
+header a.back:hover,header a.back:focus-visible{color:var(--gold);}
+.wrap{max-width:760px;margin:0 auto;padding:30px 20px 40px;}
+
+/* Tarjeta de identidad */
+.idcard{display:flex;align-items:center;gap:18px;background:linear-gradient(135deg,var(--navy),#27274c);color:#fff;border:1px solid rgba(197,160,89,.4);border-radius:18px;padding:24px;box-shadow:0 10px 30px rgba(26,27,47,.24);}
+.idcard .avatar{width:76px;height:76px;flex-shrink:0;border-radius:50%;background:linear-gradient(135deg,var(--gold),#a8843d);display:flex;align-items:center;justify-content:center;overflow:hidden;color:var(--navy);font-family:'Inria Serif',serif;font-size:2rem;font-weight:700;}
+.idcard .avatar img{width:100%;height:100%;object-fit:cover;}
+.idcard .who{min-width:0;}
+.idcard .who h1{font-family:'Inria Serif',serif;font-size:1.6rem;margin:0 0 6px;line-height:1.15;}
+.idcard .chips{display:flex;flex-wrap:wrap;gap:8px;}
+.idcard .chip{background:rgba(255,255,255,.12);border:1px solid rgba(197,160,89,.4);color:#f5efe2;font-size:.74rem;font-weight:600;padding:5px 11px;border-radius:20px;display:inline-flex;align-items:center;gap:6px;}
+.idcard .chip i{color:var(--gold);}
+
+h2.sec{font-size:.74rem;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:var(--muted);margin:32px 0 12px;}
+
+/* Cuenta */
+.card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,.06);}
+.acct{display:flex;align-items:center;gap:14px;}
+.acct .st{width:44px;height:44px;flex-shrink:0;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.15rem;}
+.acct .st.on{background:rgba(47,125,91,.12);color:var(--good);}
+.acct .st.off{background:rgba(143,111,46,.12);color:var(--gold2);}
+.acct .info{flex:1;min-width:0;}
+.acct .info b{display:block;font-size:.98rem;}
+.acct .info span{display:block;color:var(--muted);font-size:.85rem;margin-top:2px;word-break:break-word;}
+.acct .btn{flex-shrink:0;background:var(--gold);color:var(--navy);font-weight:700;font-size:.82rem;padding:10px 16px;border-radius:9px;text-decoration:none;white-space:nowrap;}
+.acct .btn:hover,.acct .btn:focus-visible{background:#b6924a;}
+@media(max-width:520px){.acct{flex-wrap:wrap;}.acct .btn{width:100%;text-align:center;}}
+
+/* Progreso */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+.stat{background:#fff;border:1px solid var(--border);border-radius:14px;padding:18px 14px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,.06);}
+.stat .n{font-family:'Inria Serif',serif;font-size:1.7rem;color:var(--navy);line-height:1;}
+.stat .l{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-top:6px;}
+.stat i{color:var(--gold2);font-size:1rem;margin-bottom:6px;display:block;}
+
+/* Acciones */
+.actions{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;}
+a.act,button.act{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--border);border-radius:12px;padding:15px 16px;text-decoration:none;color:inherit;font-family:inherit;font-size:.92rem;font-weight:600;cursor:pointer;text-align:left;width:100%;transition:border-color .15s,box-shadow .15s;}
+a.act:hover,a.act:focus-visible,button.act:hover,button.act:focus-visible{border-color:var(--gold);box-shadow:0 6px 16px rgba(26,43,66,.1);}
+a.act .ic,button.act .ic{width:38px;height:38px;flex-shrink:0;border-radius:10px;background:linear-gradient(135deg,var(--navy2),var(--navy));color:var(--gold);display:flex;align-items:center;justify-content:center;}
+button.act.danger .ic{background:linear-gradient(135deg,#7a1f1f,#571414);color:#f3d6d6;}
+
+footer{background:var(--navy);color:rgba(255,255,255,.65);text-align:center;padding:22px;font-size:.78rem;border-top:3px solid var(--gold);margin-top:40px;}
+footer a{color:var(--gold);text-decoration:none;}
+:focus-visible{outline:3px solid var(--gold,#c5a059);outline-offset:2px;}
+</style>
+<link rel="stylesheet" href="assets/css/vesper_tokens.css">
+</head>
+<body>
+
+<a class="skip-link" href="#main">Saltar al contenido</a>
+
+<header>
+  <a class="brand" href="materiales.html">
+    <img src="assets/images/vesper_logo_inverted.png" alt="Vesper Academy — portal">
+    <span><b>Vesper Academy</b><small>Mi perfil</small></span>
+  </a>
+  <a class="back" href="materiales.html"><i class="fas fa-arrow-left" aria-hidden="true"></i> Portal</a>
+</header>
+
+<main class="wrap" id="main">
+
+  <section class="idcard" aria-label="Tu identidad">
+    <span class="avatar" id="avatar" aria-hidden="true">🎓</span>
+    <div class="who">
+      <h1 id="p-name">Estudiante</h1>
+      <div class="chips">
+        <span class="chip" id="p-level"><i class="fas fa-signal" aria-hidden="true"></i> <span>Nivel</span></span>
+        <span class="chip" id="p-goal" hidden><i class="fas fa-bullseye" aria-hidden="true"></i> <span></span></span>
+      </div>
+    </div>
+  </section>
+
+  <h2 class="sec">Tu cuenta</h2>
+  <div class="card">
+    <div class="acct" id="acct">
+      <span class="st off" id="acct-st" aria-hidden="true"><i class="fas fa-user"></i></span>
+      <div class="info">
+        <b id="acct-title">Comprobando tu sesión…</b>
+        <span id="acct-sub"></span>
+      </div>
+      <a class="btn" id="acct-btn" href="login.html" hidden>Iniciar sesión</a>
+    </div>
+  </div>
+
+  <h2 class="sec">Tu progreso</h2>
+  <div class="stats">
+    <div class="stat"><i class="fas fa-bolt" aria-hidden="true"></i><div class="n" id="s-xp">0</div><div class="l">XP total</div></div>
+    <div class="stat"><i class="fas fa-fire" aria-hidden="true"></i><div class="n" id="s-streak">0</div><div class="l">Días de racha</div></div>
+    <div class="stat"><i class="fas fa-circle-check" aria-hidden="true"></i><div class="n" id="s-done">0</div><div class="l">Lecciones</div></div>
+  </div>
+
+  <h2 class="sec">Ajustes</h2>
+  <div class="actions">
+    <a class="act" href="onboarding.html"><span class="ic" aria-hidden="true"><i class="fas fa-wand-magic-sparkles"></i></span> Editar mi plan</a>
+    <a class="act" href="apariencia.html"><span class="ic" aria-hidden="true"><i class="fas fa-palette"></i></span> Apariencia</a>
+    <a class="act" href="configuracion.html"><span class="ic" aria-hidden="true"><i class="fas fa-robot"></i></span> Personalizar a Vesper</a>
+    <button type="button" class="act danger" id="logout" hidden><span class="ic" aria-hidden="true"><i class="fas fa-arrow-right-from-bracket"></i></span> Cerrar sesión</button>
+  </div>
+
+</main>
+
+<footer>© <span id="y"></span> Vesper Academy · <a href="materiales.html">Portal del alumno</a></footer>
+
+<script>
+(function(){
+  "use strict";
+  document.getElementById("y").textContent = new Date().getFullYear();
+
+  var LEVEL_NAME = {0:"Principiante",1:"Inicial",2:"Básico",3:"Intermedio",4:"Avanzado",5:"Experto"};
+  var GOAL_NAME = {work:"Inglés para el trabajo",travel:"Viajes y vida diaria",exam:"Aprobar un examen",
+                   study:"Estudios",social:"Conversar y socializar",aviation:"Aviación"};
+
+  var profile = {};
+  try{ profile = JSON.parse(localStorage.getItem("vesper_profile")||"{}")||{}; }catch(e){}
+
+  /* Identidad */
+  var name = profile.name || "Estudiante";
+  document.getElementById("p-name").textContent = name;
+  var av = document.getElementById("avatar");
+  var initial = (name.trim()[0]||"E").toUpperCase();
+  av.textContent = initial;
+
+  var lvlChip = document.getElementById("p-level").querySelector("span");
+  if(typeof profile.level === "number"){
+    lvlChip.textContent = LEVEL_NAME[profile.level] || "Tu nivel";
+  } else {
+    lvlChip.textContent = "Sin nivel aún";
+  }
+  if(profile.goal && GOAL_NAME[profile.goal]){
+    var goalChip = document.getElementById("p-goal");
+    goalChip.querySelector("span").textContent = GOAL_NAME[profile.goal];
+    goalChip.hidden = false;
+  }
+
+  /* Progreso (desde el store local de las lecciones) */
+  var prog = {};
+  try{ prog = JSON.parse(localStorage.getItem("vesperProgress")||"{}")||{}; }catch(e){}
+  document.getElementById("s-xp").textContent = prog.xp || 0;
+  document.getElementById("s-streak").textContent = prog.streak || 0;
+  document.getElementById("s-done").textContent = prog.completed ? Object.keys(prog.completed).length : 0;
+
+  /* Cuenta: refleja la sesión de Firebase (si la hay). Modo libre si no. */
+  var st = document.getElementById("acct-st");
+  var title = document.getElementById("acct-title");
+  var sub = document.getElementById("acct-sub");
+  var btn = document.getElementById("acct-btn");
+  var logout = document.getElementById("logout");
+
+  function renderFree(){
+    st.className = "st off"; st.innerHTML = '<i class="fas fa-user"></i>';
+    title.textContent = "Modo libre";
+    sub.textContent = "Estás practicando sin cuenta. Inicia sesión para guardar tu progreso en tu cuenta y verlo en cualquier dispositivo.";
+    btn.hidden = false; logout.hidden = true;
+  }
+  function renderLinked(email){
+    st.className = "st on"; st.innerHTML = '<i class="fas fa-circle-check"></i>';
+    title.textContent = "Cuenta vinculada";
+    sub.textContent = email + " · tu progreso de lecciones se guarda automáticamente en tu cuenta.";
+    btn.hidden = true; logout.hidden = false;
+  }
+
+  /* Estado inicial optimista según el perfil local; luego confirma con Firebase. */
+  if(profile.account && profile.account.email){ renderLinked(profile.account.email); }
+  else { renderFree(); }
+
+  if(window.VesperAuth && VesperAuth.initFirebase){
+    VesperAuth.initFirebase().then(function(auth){
+      auth.onAuthStateChanged(function(user){
+        if(user && user.emailVerified){ renderLinked(String(user.email||"").toLowerCase()); }
+        else { renderFree(); }
+      });
+      logout.addEventListener("click", function(){
+        try{ auth.signOut(); }catch(e){}
+      });
+    }).catch(function(){ /* sin red: deja el estado local */ });
+  }
+})();
+</script>
+
+<script src="vesper_nav.js"></script>
+
+</body>
+</html>
