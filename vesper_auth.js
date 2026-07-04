@@ -198,6 +198,7 @@
   function addLogoutChip(email) {
     onDomReady(function () {
       var d = document.createElement("div");
+      d.className = "vsp-logout-chip";
       d.style.cssText = "position:fixed;bottom:14px;right:14px;z-index:99999;background:#15152b;" +
         "color:#f5efe2;font:12px/1 sans-serif;padding:8px 12px;border-radius:20px;opacity:.85;" +
         "box-shadow:0 2px 8px rgba(0,0,0,.3);cursor:pointer;";

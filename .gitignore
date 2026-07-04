@@ -30,6 +30,9 @@
 !/book_placement.html
 !/audio_library.html
 !/lesson.html
+# Barra de navegación persistente del alumno (Inicio/Aprender/Audio/Boleta/Perfil).
+# Se auto-inyecta en materiales/leccion/audio_library/mi_boleta/chat. Sin claves.
+!/vesper_nav.js
 # SEO: landings de descubrimiento (2026-06-23) + indexación. Estáticas,
 # indexables, embudan al examen con atribución ?src=. Sin claves.
 !/examen-ingles-gratis.html

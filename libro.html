@@ -144,7 +144,16 @@ body{margin:0;font-family:'Segoe UI',Arial,sans-serif;display:flex;align-items:c
 
         var f = meta.body.fields || {};
         var count = parseInt((f.chunkCount || {}).integerValue || "1", 10);
-        note("Abriendo: " + ((f.title || {}).stringValue || id));
+        var bookTitle = (f.title || {}).stringValue || id;
+        note("Abriendo: " + bookTitle);
+
+        /* Rastreador ligero para el héroe "Hoy" del portal (materiales.html):
+           recuerda el último libro abierto con éxito. Cross-página, durable. */
+        try {
+          localStorage.setItem("vesper_last", JSON.stringify({
+            href: "libro.html?id=" + id, title: bookTitle, kind: "libro", ts: Date.now()
+          }));
+        } catch (e) {}
 
         var jobs = [];
         for (var i = 0; i < count; i++) { jobs.push(getDoc(base + "/chunks/" + i)); }

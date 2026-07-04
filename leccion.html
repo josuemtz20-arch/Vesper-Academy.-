@@ -4654,6 +4654,15 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
   }
 
   function startLesson() {
+    /* Rastreador ligero para el héroe "Hoy" del portal (materiales.html):
+       recuerda la última lección real (no exámenes/boss). */
+    try {
+      if (baseLesson && baseLesson.title && !baseLesson.isBoss && !baseLesson.isReview) {
+        localStorage.setItem("vesper_last", JSON.stringify({
+          href: "leccion.html", title: baseLesson.title, kind: "leccion", ts: Date.now()
+        }));
+      }
+    } catch (e) {}
     var sess = (A && A.getSession) ? A.getSession() : null;
     var calibrate = A && profile && !sess && baseLesson.exercises && baseLesson.exercises.length >= 3;
     if (calibrate) { renderWarmup(); }
@@ -4962,5 +4971,6 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     });
   })();
 </script>
+<script src="vesper_nav.js"></script>
 </body>
 </html>
