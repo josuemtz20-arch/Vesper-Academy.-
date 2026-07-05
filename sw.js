@@ -9,7 +9,7 @@
    ============================================================ */
 "use strict";
 
-var CACHE_VERSION = "vesper-v55";
+var CACHE_VERSION = "vesper-v56";
 var CORE = [
   /* Vesper Engine shell */
   "vesper_engine.html",
@@ -36,6 +36,7 @@ var CORE = [
   "vesper_toefl_pack.js",
   "vesper_boss_exams.js",
   "vesper_level_exams.js",
+  "vesper_vocab_dens.js",
   "vesper_prefs.js",
   "vesper_analytics.js",
   "assets/css/vesper_tokens.css",
@@ -60,6 +61,13 @@ var CORE = [
   "liga.html",
   "manifest_lecciones.webmanifest",
   "assets/images/mascot/vesper_cat.png",
+  /* expresiones reactivas de la mascota (se animan al acertar/fallar/racha…) */
+  "assets/images/mascot/vesper_cat_correct.webp",
+  "assets/images/mascot/vesper_cat_incorrect.webp",
+  "assets/images/mascot/vesper_cat_streak.webp",
+  "assets/images/mascot/vesper_cat_welcome.webp",
+  "assets/images/mascot/vesper_cat_explaining.webp",
+  "assets/images/mascot/vesper_cat_correcting.webp",
   "assets/images/virtual_class_happy_cat.png",
   /* Pelajes (apariencias completas de Vesper, generadas con IA) */
   "assets/images/mascot/skins/gray.png",
@@ -106,13 +114,17 @@ self.addEventListener("fetch", function (event) {
   if (url.origin !== self.location.origin) return;
   if (/firebase|firestore|googleapis|gstatic/.test(url.href)) return;
 
-  /* Navegaciones (abrir la app): red primero, cae al cache del motor. */
+  /* Navegaciones (abrir la app): red primero, cae al cache. */
   if (req.mode === "navigate") {
     event.respondWith(
       fetch(req).catch(function () {
-        /* sin conexión: sirve la página cacheada si la tenemos, si no el motor */
+        /* sin conexión: sirve la página cacheada si la tenemos; si no, el hogar
+           del alumno (lecciones), que es adonde llega la mayoría. Solo si eso
+           tampoco está cacheado caemos al motor. */
         return caches.match(req).then(function (c) {
-          return c || caches.match("vesper_engine.html");
+          return c || caches.match("leccion.html").then(function (l) {
+            return l || caches.match("vesper_engine.html");
+          });
         });
       })
     );

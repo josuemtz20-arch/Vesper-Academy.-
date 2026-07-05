@@ -57,6 +57,18 @@ td.part{white-space:nowrap;}
 td.part input{width:74px;padding:7px 9px;border:1px solid var(--border);border-radius:8px;font:inherit;font-size:.86rem;text-align:center;background:#fff;}
 td.part input:focus{border-color:var(--gold);}
 td.part .sv{display:inline-block;width:18px;margin-left:6px;font-size:.85rem;text-align:center;}
+/* casillas de nota de registro (Exámenes / Lecciones) capturadas por el profe */
+td.grade{white-space:nowrap;}
+td.grade .row1{display:flex;align-items:center;gap:2px;}
+td.grade input{width:64px;padding:7px 9px;border:1px solid var(--border);border-radius:8px;font:inherit;font-size:.86rem;text-align:center;background:#fff;}
+td.grade input:focus{border-color:var(--gold);}
+td.grade .sv{display:inline-block;width:16px;font-size:.82rem;text-align:center;}
+td.grade .sv .fa-circle-check{color:var(--ok);}
+td.grade .sv .fa-circle-exclamation{color:var(--err);}
+td.grade .sv .fa-spinner{color:var(--muted);animation:sp .8s linear infinite;}
+td.grade .prac{display:block;margin-top:3px;font-size:.66rem;color:var(--muted);white-space:nowrap;}
+td.grade .prac button{border:0;background:none;padding:0;margin-left:4px;font:inherit;font-size:.66rem;color:var(--gold2);text-decoration:underline;cursor:pointer;}
+td.grade .prac button[disabled]{color:var(--muted);text-decoration:none;cursor:default;}
 td.part .sv .fa-circle-check{color:var(--ok);}
 td.part .sv .fa-circle-exclamation{color:var(--err);}
 td.part .sv .fa-spinner{color:var(--muted);animation:sp .8s linear infinite;}
@@ -126,6 +138,12 @@ footer a{color:var(--gold);text-decoration:none;}
 <div class="wrap">
   <div class="intro">
     <h1>Boleta de calificaciones</h1>
+    <p>Las columnas <b>Exámenes</b> y <b>Lecciones</b> son la <b>nota de
+       registro</b>: tú la confirmas. Debajo de cada casilla verás el promedio
+       de <i>práctica</i> del alumno (lo que sacó autocalificándose en la app) —
+       es solo una referencia y <b>no cuenta para la final</b> hasta que la
+       escribas aquí. Así la calificación depende de lo que el profesor valida,
+       no de lo que el alumno se pone a sí mismo.</p>
   </div>
 
   <div id="loading"><div class="spin"></div><div>Cargando boleta…</div></div>
@@ -233,6 +251,35 @@ footer a{color:var(--gold);text-decoration:none;}
     return '<span class="avg">' + avg + '%<small>' + count + ' ' + unit + (count === 1 ? "" : "s") + '</small></span>';
   }
 
+  /* casilla de nota de registro (Exámenes / Lecciones): input editable por el
+     profesor + el promedio de PRÁCTICA del alumno como referencia y un enlace
+     "usar" para copiarlo con un clic. kind = "exams" | "lessons". */
+  function gradeCell(kind, row) {
+    var grade = kind === "exams" ? row.examsGrade : row.lessonsGrade;
+    var prac = kind === "exams" ? row.examsAvg : row.lessonsAvg;
+    var editable = canSave && row.email;
+    var pracTxt = (prac == null)
+      ? 'sin práctica'
+      : 'práctica ' + prac + '%' +
+        (editable ? ' <button type="button" class="use-prac" data-gk="' + esc(row.key) +
+                    '" data-gkind="' + kind + '" data-prac="' + prac +
+                    '" title="Usar el promedio de práctica como nota">usar</button>' : '');
+    return '<td class="grade">' +
+      '<span class="row1">' +
+        '<input type="number" min="0" max="100" inputmode="numeric" ' +
+          'value="' + (grade == null ? "" : grade) + '" ' +
+          'placeholder="' + (prac == null ? "—" : prac) + '" ' +
+          'aria-label="' + (kind === "exams" ? "Calificación de exámenes de " : "Calificación de lecciones de ") + esc(row.alias) + '" ' +
+          (editable ? '' : 'disabled title="' +
+            (row.email ? 'Publica la regla de gradebook para poder guardar' :
+                         'Sin correo registrado: no se puede guardar') + '" ') +
+          'data-gk="' + esc(row.key) + '" data-gkind="' + kind + '">' +
+        '<span class="sv" data-gsv="' + kind + ':' + esc(row.key) + '"></span>' +
+      '</span>' +
+      '<small class="prac">' + pracTxt + '</small>' +
+    '</td>';
+  }
+
   function finalCell(row) {
     var f = GB.computeFinal(row);
     if (f.final == null) return '<span class="na">—</span>';
@@ -291,8 +338,8 @@ footer a{color:var(--gold);text-decoration:none;}
           '<td class="who"><b>' + esc(r.alias) + '</b>' +
             (r.email ? '<small>' + esc(r.email) + '</small>' : '') + '</td>' +
           '<td>' + lvHtml + '</td>' +
-          '<td>' + avgCell(r.examsAvg, r.examsCount, "intento") + '</td>' +
-          '<td>' + avgCell(r.lessonsAvg, r.lessonsCount, "intento") + '</td>' +
+          gradeCell("exams", r) +
+          gradeCell("lessons", r) +
           '<td class="daily"><button class="dbtn" data-dk="' + esc(r.key) + '" ' +
             'aria-label="Progreso diario de ' + esc(r.alias) + '">' +
             '<i class="fas fa-calendar-days"></i> <span data-dcount="' + esc(r.key) + '">' +
@@ -527,6 +574,67 @@ footer a{color:var(--gold);text-decoration:none;}
         : '<i class="fas fa-circle-exclamation" title="No se pudo guardar. Revisa tu conexión o la regla de gradebook e inténtalo de nuevo."></i>');
     });
   }
+
+  /* --- notas de registro (Exámenes / Lecciones) capturadas por el profe --- */
+  var gtimers = {};
+  function setGradeSv(kind, key, html) {
+    var el = rowsEl.querySelector('.sv[data-gsv="' + kind + ':' + CSS.escape(key) + '"]');
+    if (el) el.innerHTML = html;
+  }
+  function gradeVal(r, kind) { return kind === "exams" ? r.examsGrade : r.lessonsGrade; }
+  function setGradeVal(r, kind, v) { if (kind === "exams") r.examsGrade = v; else r.lessonsGrade = v; }
+
+  function saveGradeField(r, kind) {
+    var val = gradeVal(r, kind);
+    var data = { notes: r.notes, alias: r.alias, studentUid: r.studentUid };
+    data[kind === "exams" ? "examsGrade" : "lessonsGrade"] = val;
+    GB.saveGrade(r.email, data).then(function (ok) {
+      if (gradeVal(r, kind) !== val) return; // ya se escribió otro valor; lo salva su timer
+      setGradeSv(kind, r.key, ok
+        ? '<i class="fas fa-circle-check" title="Guardado"></i>'
+        : '<i class="fas fa-circle-exclamation" title="No se pudo guardar. Revisa tu conexión o la regla de gradebook."></i>');
+    });
+  }
+  function queueGradeSave(r, kind, delay) {
+    var id = kind + ":" + r.key;
+    clearTimeout(gtimers[id]);
+    setGradeSv(kind, r.key, '<i class="fas fa-spinner"></i>');
+    gtimers[id] = setTimeout(function () { saveGradeField(r, kind); }, delay || 800);
+  }
+
+  rowsEl.addEventListener("input", function (e) {
+    var inp = e.target;
+    if (!inp.matches || !inp.matches('td.grade input')) return;
+    var key = inp.getAttribute("data-gk"), kind = inp.getAttribute("data-gkind");
+    var r = rowByKey(key);
+    if (!r) return;
+    var v = parseInt(inp.value, 10);
+    if (inp.value !== "" && !isNaN(v)) {
+      v = Math.max(0, Math.min(100, v));
+      if (String(v) !== inp.value) inp.value = v;   // recorta 150 -> 100 al vuelo
+      setGradeVal(r, kind, v);
+    } else if (inp.value === "") {
+      setGradeVal(r, kind, null);
+    } else { return; }
+    refreshFinal(key);
+    if (gradeVal(r, kind) == null || !r.email) return; // vacío: no se sube por REST aquí
+    queueGradeSave(r, kind);
+  });
+
+  /* enlace "usar": copia el promedio de práctica del alumno como nota de registro */
+  rowsEl.addEventListener("click", function (e) {
+    var b = e.target.closest && e.target.closest("button.use-prac");
+    if (!b) return;
+    var key = b.getAttribute("data-gk"), kind = b.getAttribute("data-gkind");
+    var prac = parseInt(b.getAttribute("data-prac"), 10);
+    var r = rowByKey(key);
+    if (!r || !r.email || isNaN(prac)) return;
+    var inp = rowsEl.querySelector('td.grade input[data-gk="' + CSS.escape(key) + '"][data-gkind="' + kind + '"]');
+    if (inp) inp.value = prac;
+    setGradeVal(r, kind, prac);
+    refreshFinal(key);
+    queueGradeSave(r, kind, 400);
+  });
 
   fQ.addEventListener("input", render);
   fLevel.addEventListener("change", render);

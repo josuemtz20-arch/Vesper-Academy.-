@@ -117,10 +117,38 @@ service cloud.firestore {
     // —— Resultados de exámenes: el alumno CREA lo suyo; el dueño,
     //    los profesores y el admin pueden LEER; intentos inmutables ——
     // (vesper_results.js → /documents/exam_results/{autoId})
+    //
+    // ⚠️  IMPORTANTE (integridad de la boleta): estos intentos los ESCRIBE el
+    //     propio alumno (autocalificación en el navegador), así que NO son una
+    //     fuente de verdad confiable para la calificación oficial. Sirven como
+    //     PRÁCTICA/progreso; la nota de registro la confirma el profesor
+    //     (ver vesper_gradebook.js / portal_boleta.html). Aun así validamos la
+    //     coherencia interna del intento para bloquear las falsificaciones más
+    //     burdas (percent que no cuadra con score/total, score>total, tipos de
+    //     examen inventados).
     match /exam_results/{id} {
       allow create: if request.auth != null
                     && request.resource.data.studentUid == request.auth.uid
-                    && request.resource.data.percent is int;
+                    && request.resource.data.score is int
+                    && request.resource.data.total is int
+                    && request.resource.data.percent is int
+                    && request.resource.data.score >= 0
+                    && request.resource.data.total >= 0
+                    && request.resource.data.score <= request.resource.data.total
+                    && request.resource.data.percent >= 0
+                    && request.resource.data.percent <= 100
+                    // percent debe cuadrar con score/total (±1 por redondeo);
+                    // si total==0 el percent debe ser 0.
+                    && (
+                         (request.resource.data.total == 0 && request.resource.data.percent == 0)
+                         || (request.resource.data.total > 0
+                             && request.resource.data.percent * request.resource.data.total
+                                >= (request.resource.data.score * 100) - request.resource.data.total
+                             && request.resource.data.percent * request.resource.data.total
+                                <= (request.resource.data.score * 100) + request.resource.data.total)
+                       )
+                    // solo tipos de examen conocidos
+                    && request.resource.data.examType in ["lesson", "exam", "boss", "placement"];
       allow read:   if request.auth != null && (
                        resource.data.studentUid == request.auth.uid
                        || exists(/databases/$(database)/documents/teachers/$(request.auth.token.email))
@@ -140,12 +168,27 @@ service cloud.firestore {
                      || exists(/databases/$(database)/documents/teachers/$(request.auth.token.email))
                      || request.auth.token.email == "josuemtz20@gmail.com"
                    );
+      // escribe: SOLO profes/admin. Cada componente numérico (participacion,
+      // examsGrade, lessonsGrade) es OPCIONAL por escritura, pero si está
+      // presente debe ser int 0..100. examsGrade/lessonsGrade son la nota de
+      // registro de Exámenes/Lecciones confirmada por el profesor (la única que
+      // cuenta para la final; los promedios de práctica los escribe el alumno
+      // en exam_results y NO se usan para la nota).
       allow write: if request.auth != null
                    && (exists(/databases/$(database)/documents/teachers/$(request.auth.token.email))
                        || request.auth.token.email == "josuemtz20@gmail.com")
-                   && request.resource.data.participacion is int
-                   && request.resource.data.participacion >= 0
-                   && request.resource.data.participacion <= 100;
+                   && (!("participacion" in request.resource.data)
+                       || (request.resource.data.participacion is int
+                           && request.resource.data.participacion >= 0
+                           && request.resource.data.participacion <= 100))
+                   && (!("examsGrade" in request.resource.data)
+                       || (request.resource.data.examsGrade is int
+                           && request.resource.data.examsGrade >= 0
+                           && request.resource.data.examsGrade <= 100))
+                   && (!("lessonsGrade" in request.resource.data)
+                       || (request.resource.data.lessonsGrade is int
+                           && request.resource.data.lessonsGrade >= 0
+                           && request.resource.data.lessonsGrade <= 100));
     }
 
     // —— Progreso diario (NUEVO): rúbrica del curso (20 días × aspectos,
