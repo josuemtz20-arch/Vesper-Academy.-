@@ -56,9 +56,10 @@
     try { if (window.gtag) window.gtag("event", name, props || {}); } catch (e) {}
   }
 
-  /* Escritura opcional a Firestore (DB (default)) — sólo si VA.cfg.cloud.
-     Reutiliza la apiKey pública ya presente en vesper_auth.js. Requiere una
-     regla que permita 'create' en la colección app_events. Si falla, se ignora. */
+  /* Escritura opcional a Firestore (base "teachermanuals", la única del
+     proyecto) — sólo si VA.cfg.cloud. Reutiliza la apiKey pública ya presente
+     en vesper_auth.js. Requiere la regla 'create' de app_events
+     (_scripts/firestore.rules). Si falla, se ignora. */
   function toCloud(name, props, rec) {
     if (!VA.cfg.cloud) return;
     try {
@@ -66,7 +67,7 @@
       var key = cfg && cfg.apiKey, pid = (cfg && cfg.projectId) || "vesper-academy";
       if (!key || /PEGAR/.test(key)) return;
       var url = "https://firestore.googleapis.com/v1/projects/" + pid +
-        "/databases/(default)/documents/app_events?key=" + encodeURIComponent(key);
+        "/databases/teachermanuals/documents/app_events?key=" + encodeURIComponent(key);
       var body = { fields: {
         event:     { stringValue: String(name) },
         props:     { stringValue: JSON.stringify(props || {}) },

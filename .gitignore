@@ -45,6 +45,8 @@
 !/ingles-para-call-center.html
 !/robots.txt
 !/sitemap.xml
+# 404 con marca para GitHub Pages (estática, sin claves, noindex).
+!/404.html
 
 # teacher portal (index ONLY — password-gated).
 # The teacher manuals stay local-only and are never published: the portal

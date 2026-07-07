@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Página no encontrada | Vesper Academy</title>
+<meta name="description" content="La página que buscas no existe o cambió de lugar. Vuelve al inicio de Vesper Academy o prueba una lección gratis.">
+<meta name="robots" content="noindex, follow">
+<link rel="icon" href="assets/images/favicon_32.png" type="image/png">
+<style>
+  :root{
+    --navy:#1B1B2F; --navy2:#222b47; --gold:#C9A84C; --cream:#FAF6EC;
+    --muted:#8b90a8; --white:#ffffff;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{
+    min-height:100vh; display:flex; align-items:center; justify-content:center;
+    background:linear-gradient(160deg,var(--navy) 0%,var(--navy2) 100%);
+    color:var(--cream); font-family:'Open Sans','Segoe UI',system-ui,sans-serif;
+    padding:24px; text-align:center;
+  }
+  .card{max-width:520px}
+  .code{
+    font-family:Merriweather,Georgia,serif; font-size:clamp(4rem,18vw,7rem);
+    font-weight:700; color:var(--gold); line-height:1; letter-spacing:.04em;
+  }
+  .code .o{display:inline-block; animation:tilt 3.4s ease-in-out infinite}
+  @keyframes tilt{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(6deg)}}
+  @media (prefers-reduced-motion:reduce){.code .o{animation:none}}
+  h1{
+    font-family:Merriweather,Georgia,serif; font-size:1.35rem; font-weight:700;
+    margin:14px 0 8px; color:var(--white);
+  }
+  p{color:var(--muted); font-size:.98rem; line-height:1.6; margin-bottom:26px}
+  .links{display:flex; flex-wrap:wrap; gap:12px; justify-content:center}
+  .btn{
+    display:inline-block; padding:12px 22px; border-radius:12px;
+    text-decoration:none; font-weight:600; font-size:.95rem;
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .btn:hover{transform:translateY(-2px)}
+  .btn:focus-visible{outline:3px solid var(--gold); outline-offset:3px}
+  .btn-gold{background:var(--gold); color:var(--navy); box-shadow:0 6px 18px rgba(201,168,76,.25)}
+  .btn-line{border:1.5px solid rgba(201,168,76,.55); color:var(--cream)}
+  .brand{
+    margin-top:36px; font-size:.8rem; color:var(--muted);
+    letter-spacing:.14em; text-transform:uppercase;
+  }
+  .brand b{color:var(--gold)}
+</style>
+</head>
+<body>
+  <main class="card">
+    <div class="code" aria-hidden="true">4<span class="o">0</span>4</div>
+    <h1>Esta página no existe (o cambió de lugar)</h1>
+    <p>No te preocupes: tu inglés sigue intacto. Vuelve al inicio o aprovecha el viaje con una lección gratis.</p>
+    <nav class="links" aria-label="Enlaces útiles">
+      <a class="btn btn-gold" href="/">Ir al inicio</a>
+      <a class="btn btn-line" href="/leccion.html">Lecciones gratis</a>
+      <a class="btn btn-line" href="/examen-ingles-gratis.html">Examen de inglés gratis</a>
+    </nav>
+    <div class="brand"><b>Vesper</b> Academy</div>
+  </main>
+</body>
+</html>
