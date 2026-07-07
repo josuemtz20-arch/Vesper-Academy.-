@@ -186,6 +186,11 @@ body{margin:0;font-family:'Segoe UI',Arial,sans-serif;display:flex;align-items:c
     mobileFix +=
       '<style id="vesper-mobile-fix">' +
       'img{max-width:100%;height:auto;}' +
+      /* la navegación propia del manual ("← Dashboard" a index/hub) no aplica
+         dentro del visor: el visor pone su propio chip de regreso. Ocultarla
+         también evita que sus reglas móviles (.no-print{top/left}) estiren
+         los chips inyectados a pantalla completa. */
+      '.no-print:not(.vm-chip){display:none!important;}' +
       '@media (max-width:768px){' +
         'html,body{overflow-x:hidden!important;}' +
         '*{overflow-wrap:break-word;}' +
@@ -211,23 +216,30 @@ body{margin:0;font-family:'Segoe UI',Arial,sans-serif;display:flex;align-items:c
       html = mobileFix + html;
     }
 
-    /* botón flotante para volver al portal */
+    /* botón flotante para volver al portal.
+       vm-chip: blindaje contra el CSS de los libros — su regla móvil
+       .no-print{top:10px;left:10px} fijaba top+bottom y left+right a la vez
+       y estiraba estos pills a pantalla completa. */
     var chip =
-      '<a href="portal_profesores.html" style="position:fixed;bottom:14px;left:14px;z-index:99999;' +
+      '<a href="portal_profesores.html" style="position:fixed;top:auto;bottom:calc(14px + env(safe-area-inset-bottom));left:14px;right:auto;z-index:99999;' +
       'background:#1B1B2F;color:#f5efe2;font:12px/1 sans-serif;padding:9px 14px;border-radius:20px;' +
       'opacity:.88;box-shadow:0 2px 8px rgba(0,0,0,.3);text-decoration:none;" ' +
-      'onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=.88" class="no-print">' +
+      'onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=.88" class="no-print vm-chip vm-chip-l">' +
       '&larr; Portal del profesor</a>';
     /* chip de examen: solo si este manual tiene un examen publicado */
     if ((window.VESPER_EXAM_IDS || []).indexOf(id) !== -1) {
       chip +=
-        '<a href="exam.html?course=' + encodeURIComponent(id) + '" style="position:fixed;bottom:14px;right:14px;z-index:99999;' +
+        '<a href="exam.html?course=' + encodeURIComponent(id) + '" style="position:fixed;top:auto;bottom:calc(14px + env(safe-area-inset-bottom));right:14px;left:auto;z-index:99999;' +
         'background:#c5a059;color:#1B1B2F;font:700 12px/1 sans-serif;padding:9px 14px;border-radius:20px;' +
         'opacity:.92;box-shadow:0 2px 8px rgba(0,0,0,.3);text-decoration:none;" ' +
-        'onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=.92" class="no-print">' +
+        'onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=.92" class="no-print vm-chip vm-chip-r">' +
         'Examen del nivel &rarr;</a>';
     }
-    chip += '<style>@media print{a.no-print{display:none!important}}</style>';
+    chip += '<style>' +
+      'a.vm-chip{position:fixed!important;top:auto!important;width:auto!important;height:auto!important;display:inline-block!important;}' +
+      'a.vm-chip-l{left:14px!important;right:auto!important;bottom:calc(14px + env(safe-area-inset-bottom))!important;}' +
+      'a.vm-chip-r{right:14px!important;left:auto!important;bottom:calc(14px + env(safe-area-inset-bottom))!important;}' +
+      '@media print{a.no-print{display:none!important}}</style>';
     if (/<\/body>/i.test(html)) {
       html = html.replace(/<\/body>(?![\s\S]*<\/body>)/i, chip + "</body>");
     } else {
