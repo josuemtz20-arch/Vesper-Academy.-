@@ -1394,6 +1394,16 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
 .hstat.met .hstat__ic{background:rgba(45,158,117,.28);color:#86e3c1}
 .hstat.met .hstat__ring{background:conic-gradient(#2D9E75 calc(var(--gp,0)*1%),rgba(245,242,235,.16) 0)}
 .hstat.met .hstat__ring i{color:#86e3c1}
+/* Móvil angosto: compactamos los tiles del héroe para que el número (XP/racha)
+   no se corte con "…". Icono, padding y tipografía un punto más pequeños. */
+@media(max-width:430px){
+  .hub-stats3{gap:6px}
+  .hstat{flex:1 1 84px;gap:7px;padding:8px 9px}
+  .hstat__ic,.hstat__ring{width:26px;height:26px}
+  .hstat__ic svg{width:15px;height:15px}
+  .hstat__v{font-size:.94rem}
+  .hstat__l{font-size:.58rem}
+}
 /* vida en los iconos de estadística: flameo, destello, gleam y respiración del anillo */
 .ic-flame{transform-origin:50% 85%;animation:ic-flame 1.5s ease-in-out infinite}
 .ic-flame__core{animation:ic-core 1.5s ease-in-out infinite}
@@ -3514,6 +3524,9 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     var seen = false;
     try { seen = sessionStorage.getItem("vesper_chat_nudge") === "seen"; } catch (e) {}
     var rm = reduceMotion();
+    /* En móvil NO auto-abrimos el globo: taparía el mapa/contenido ("encimado").
+       Mostramos solo el botón flotante con su punto; el alumno lo toca para abrir. */
+    var small = (window.innerWidth || document.documentElement.clientWidth || 0) < 560;
     var catImg = (window.VESPER_MASCOT && VESPER_MASCOT.canonical) || "assets/images/mascot/vesper_cat.png";
     var fb = (window.VESPER_MASCOT && VESPER_MASCOT.fallback) || "assets/images/virtual_class_happy_cat.png";
     var msg = "¡Hola! Soy Vesper. ¿Practicamos tu inglés? Pregúntame lo que quieras.";
@@ -3567,14 +3580,14 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     if (rm) {                                       // sin animación: muestra botón y, si es nuevo, el mensaje estático
       n.classList.add("show-fab");
       if (seen && dot) dot.hidden = true;
-      if (!seen) { showMsg(); n._t2 = setTimeout(openPop, 120); }
-      else if (dot) dot.hidden = true;
+      if (!seen && !small) { showMsg(); n._t2 = setTimeout(openPop, 120); }
+      else if (seen && dot) dot.hidden = true;      // móvil sin ver: deja solo el punto de aviso
       return;
     }
     n._t1 = setTimeout(function () { n.classList.add("show-fab"); }, seen ? 250 : 650);
     if (!seen) {
       n.classList.add("wiggle");
-      n._t2 = setTimeout(openPop, 1650);
+      if (!small) n._t2 = setTimeout(openPop, 1650); // móvil: solo botón + punto, sin globo que tape el mapa
     } else if (dot) {
       dot.hidden = true;                            // ya visto: solo el botón, sin globo ni punto
     }

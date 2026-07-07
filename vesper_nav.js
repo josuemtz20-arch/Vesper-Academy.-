@@ -85,10 +85,12 @@
       /* Espacio al final para que el contenido no quede tapado. */
       "#vsp-nav-spacer{height:calc(60px + env(safe-area-inset-bottom));width:100%}",
       /* Sube los flotantes conocidos por encima de la barra:
-         FAB de chat, FAB de apariencia (vesper_theme.js), botón instalar
-         PWA y el chip de cerrar sesión (vesper_auth.js). */
-      ".vchat-nudge,.vt-fab,#install-btn{bottom:calc(72px + env(safe-area-inset-bottom))!important}",
+         FAB de chat, botón instalar PWA y el chip de cerrar sesión. */
+      ".vchat-nudge,#install-btn{bottom:calc(72px + env(safe-area-inset-bottom))!important}",
       ".vsp-logout-chip{bottom:calc(72px + env(safe-area-inset-bottom))!important}",
+      /* El FAB de apariencia (vesper_theme.js) va abajo-IZQUIERDA: así no se
+         encima con la burbuja de chat ni con el chip de sesión (abajo-derecha). */
+      ".vt-fab{bottom:calc(72px + env(safe-area-inset-bottom))!important;left:16px!important;right:auto!important}",
       /* Escritorio: píldora flotante centrada. */
       "@media(min-width:768px){",
         "#vsp-tabbar{left:50%;right:auto;transform:translateX(-50%);bottom:18px;",
@@ -96,6 +98,9 @@
           "padding-bottom:0;box-shadow:0 12px 34px rgba(0,0,0,.34)}",
         "#vsp-tabbar a{padding:11px 4px}",
         "#vsp-tabbar a.on::before{top:0;border-radius:0 0 3px 3px}",
+        /* La píldora de escritorio es más alta; sube un poco los flotantes para
+           que la burbuja de chat no roce su esquina. */
+        ".vchat-nudge,.vt-fab,#install-btn,.vsp-logout-chip{bottom:88px!important}",
         "#vsp-nav-spacer{height:96px}}",
       "@media(prefers-reduced-motion:reduce){#vsp-tabbar a{transition:none}}"
     ].join("");

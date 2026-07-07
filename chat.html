@@ -80,6 +80,16 @@ header a.back:hover{color:var(--gold);}
 .composer .send:hover:not(:disabled){background:var(--navy2);}
 .composer .send:disabled{opacity:.5;cursor:not-allowed;}
 .composer .hint{max-width:820px;margin:7px auto 0;font-size:.7rem;color:var(--muted);text-align:center;}
+/* La barra de navegación del alumno (vesper_nav.js) es fija abajo; reservamos su
+   altura para que NO se encime con el compositor. Al enfocar el textarea la barra
+   se oculta sola, así que ahí quitamos el hueco y el compositor baja con el teclado. */
+body{padding-bottom:calc(58px + env(safe-area-inset-bottom));}
+@media(min-width:768px){body{padding-bottom:86px;}}   /* escritorio: la píldora flota centrada abajo */
+body:has(.composer textarea:focus){padding-bottom:0;}
+/* Este layout es de altura fija (flex): el spacer de nav.js sobra y solo mete
+   hueco muerto (incluido sobre el teclado). Reservamos el sitio con el padding
+   de arriba, que sí se retira al escribir. */
+#vsp-nav-spacer{display:none!important;}
 
 /* Aviso de configuración (sin PROXY_URL) */
 .setup-note{background:#fbf3df;border:1px solid #e7d8a8;border-left:4px solid var(--gold2);color:#5a4d2e;font-size:.82rem;line-height:1.5;padding:11px 15px;border-radius:8px;margin:14px 18px 0;}
@@ -193,7 +203,7 @@ header a.back:hover{color:var(--gold);}
   <div class="messages" id="messages" aria-live="polite"></div>
   <div class="composer">
     <div class="row">
-      <textarea id="input" rows="1" placeholder="Escribe o toca 🎙️ para hablar…" aria-label="Escribe tu mensaje para Vesper"></textarea>
+      <textarea id="input" rows="1" placeholder="Escribe tu mensaje…" aria-label="Escribe tu mensaje para Vesper (o toca el micrófono para hablar)"></textarea>
       <button class="mic" id="mic" type="button" aria-label="Hablar (dictado por voz)" title="Hablar"><i class="fas fa-microphone"></i></button>
       <button class="send" id="send" type="button" aria-label="Enviar"><i class="fas fa-paper-plane"></i></button>
     </div>
