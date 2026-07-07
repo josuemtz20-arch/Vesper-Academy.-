@@ -13,10 +13,12 @@
  * El intento se espeja SIEMPRE en localStorage (`vesper_exam_results_v1`),
  * así funciona sin cuenta. Con sesión verificada además sube a Firestore.
  *
- * Privacidad: a diferencia de la liga (tabla pública entre alumnos), esta
- * colección SOLO la leen el dueño y los profesores/admin (regla de Firestore),
- * por eso sí se guarda el correo del alumno cuando hay sesión — útil para que
- * el profe identifique a su alumno. Sin sesión, solo queda el alias.
+ * Privacidad (2026-07-07): los intentos ya NO guardan el correo del alumno.
+ * Cada intento lleva `sid` (id opaco = hash del correo, el mismo de roster/)
+ * y `group` (el grupo del alumno): el profesor identifica al alumno por su
+ * NOMBRE vía roster/{sid} y las reglas solo le dejan leer intentos de SUS
+ * grupos (where group == <suyo>). El admin sigue leyendo todo. Los intentos
+ * viejos con correo quedan visibles solo para el dueño y el admin.
  *
  * Degrada en silencio: sin Firebase, sin sesión, o si falta publicar la regla
  * (403), record() escribe solo en local y NUNCA bloquea la pantalla de
@@ -27,9 +29,12 @@
  *   signedIn()         -> ¿hay sesión verificada?
  *   aliasOf()          -> alias público actual (o código anónimo)
  *   record(result)     -> registra un intento (local + nube si hay sesión)
- *   fetchAll({limit})  -> Promise<[fila]|null>  (lectura del profe)
+ *   fetchAll({limit})  -> Promise<[fila]|null>  (profe: solo SUS grupos; admin: todo)
  *   fetchMine()        -> Promise<[fila]|null>  (el alumno lee SUS intentos)
  *   localAll()         -> intentos guardados en este dispositivo
+ *   isAdminUser()      -> ¿la sesión es la cuenta admin?
+ *   fetchMyGroups()    -> Promise<[grupo]> del profesor con sesión
+ *   computeSid(email)  -> Promise<sid> (hash opaco, igual que el script admin)
  * ============================================================ */
 window.VESPER_RESULTS = (function () {
   var DB_ID = "teachermanuals";
@@ -59,6 +64,41 @@ window.VESPER_RESULTS = (function () {
   }
 
   function signedIn() { return !!currentUser; }
+
+  /* ---- identidad opaca del alumno (sid + grupo) ----
+     El sid es determinista (hash del correo, igual que sid_of() en
+     upload_manuals.py) y el grupo lo siembra vesper_auth.js en
+     vesper_profile al validar la allowlist. Con ellos el intento queda
+     identificable para el profesor SIN exponer el correo. */
+  function profileOf() {
+    try { return JSON.parse(localStorage.getItem("vesper_profile") || "{}") || {}; }
+    catch (e) { return {}; }
+  }
+
+  function computeSid(email) {
+    email = String(email || "").trim().toLowerCase();
+    if (!email || !(window.crypto && crypto.subtle && window.TextEncoder)) {
+      return Promise.resolve("");
+    }
+    return crypto.subtle.digest("SHA-256", new TextEncoder().encode("vesper-sid-v1|" + email))
+      .then(function (buf) {
+        return Array.prototype.map.call(new Uint8Array(buf), function (b) {
+          return ("0" + b.toString(16)).slice(-2);
+        }).join("").slice(0, 20);
+      }).catch(function () { return ""; });
+  }
+
+  /* sid del usuario actual: el sembrado en el perfil o, si falta, se calcula. */
+  function mySid() {
+    var p = profileOf();
+    if (p.sid) return Promise.resolve(String(p.sid));
+    return computeSid(currentUser && currentUser.email);
+  }
+
+  function myGroup() {
+    var p = profileOf();
+    return String(p.group || "");
+  }
 
   /* alias público: el de Configuración o un código estable derivado del uid. */
   function aliasOf() {
@@ -96,7 +136,8 @@ window.VESPER_RESULTS = (function () {
     return {
       studentUid: (currentUser && currentUser.uid) ? currentUser.uid : "",
       alias: aliasOf(),
-      email: (currentUser && currentUser.email) ? String(currentUser.email).trim().toLowerCase() : "",
+      sid: "",             // se resuelve en record() antes de subir
+      group: myGroup(),
       examType: String(r.examType || "lesson"),
       examId: String(r.examId || ""),
       level: String(r.level || ""),
@@ -123,7 +164,8 @@ window.VESPER_RESULTS = (function () {
     return { fields: {
       studentUid: { stringValue: rec.studentUid },
       alias: { stringValue: rec.alias },
-      email: { stringValue: rec.email },
+      sid: { stringValue: rec.sid },
+      group: { stringValue: rec.group },
       examType: { stringValue: rec.examType },
       examId: { stringValue: rec.examId },
       level: { stringValue: rec.level },
@@ -156,7 +198,8 @@ window.VESPER_RESULTS = (function () {
       });
     }
     return {
-      studentUid: s("studentUid"), alias: s("alias") || "Estudiante", email: s("email"),
+      studentUid: s("studentUid"), alias: s("alias") || "Estudiante",
+      sid: s("sid"), group: s("group"), email: s("email") /* solo docs viejos */,
       examType: s("examType") || "lesson", examId: s("examId"), level: s("level"),
       score: n("score"), total: n("total"), percent: n("percent"),
       passed: b("passed"), threshold: n("threshold"),
@@ -185,7 +228,10 @@ window.VESPER_RESULTS = (function () {
     try { rec = normalize(result); } catch (e) { return Promise.resolve(false); }
     saveLocal(rec);
     if (!signedIn()) return Promise.resolve(false);
-    return currentUser.getIdToken().then(function (token) {
+    return mySid().then(function (sid) {
+      rec.sid = sid;
+      return currentUser.getIdToken();
+    }).then(function (token) {
       return fetch(collPath(), {
         method: "POST",
         headers: { "Authorization": "Bearer " + token, "Content-Type": "application/json" },
@@ -194,27 +240,83 @@ window.VESPER_RESULTS = (function () {
     }).catch(function () { return false; });
   }
 
-  /* lectura del profe: runQuery ordenado por fecha desc. Ordena/limita.
-     Resuelve null si no hay sesión, falta la regla (403) o hay error. */
+  /* ¿la sesión actual es la cuenta admin? (ve todo, incluidos docs viejos) */
+  function isAdminUser() {
+    try {
+      return String(currentUser.email || "").trim().toLowerCase() ===
+             String(window.VesperAuth.config.adminEmail || "").trim().toLowerCase();
+    } catch (e) { return false; }
+  }
+
+  /* grupos asignados al profesor con sesión (teachers/{correo}.groups; la
+     regla permite leer el propio doc). [] si no tiene o si falla. */
+  function fetchMyGroups() {
+    if (!signedIn()) return Promise.resolve([]);
+    var email = String(currentUser.email || "").trim().toLowerCase();
+    return currentUser.getIdToken().then(function (token) {
+      return fetch(base() + "/teachers/" + encodeURIComponent(email), {
+        headers: { "Authorization": "Bearer " + token }
+      }).then(function (r) {
+        if (r.status !== 200) return [];
+        return r.json().then(function (doc) {
+          var vals = (doc.fields && doc.fields.groups && doc.fields.groups.arrayValue &&
+                      doc.fields.groups.arrayValue.values) || [];
+          return vals.map(function (v) { return v.stringValue || ""; }).filter(Boolean);
+        });
+      });
+    }).catch(function () { return []; });
+  }
+
+  /* lectura del profe. El ADMIN lee toda la colección (query ordenada); un
+     PROFESOR solo puede leer intentos de SUS grupos, así que se lanza una
+     query filtrada `group == g` por cada grupo (sin orderBy para no exigir
+     índice compuesto) y se ordena aquí. Resuelve null si no hay sesión o si
+     falta la regla (403); [] si el profesor no tiene grupos asignados. */
   function fetchAll(opts) {
     opts = opts || {};
     var limit = Math.max(1, Math.min(1000, parseInt(opts.limit, 10) || 500));
     if (!signedIn()) return Promise.resolve(null);
-    return currentUser.getIdToken().then(function (token) {
+
+    function runQuery(token, query) {
       return fetch(base() + ":runQuery", {
         method: "POST",
         headers: { "Authorization": "Bearer " + token, "Content-Type": "application/json" },
-        body: JSON.stringify({ structuredQuery: {
-          from: [{ collectionId: COLLECTION }],
-          orderBy: [{ field: { fieldPath: "createdAt" }, direction: "DESCENDING" }],
-          limit: limit
-        } })
+        body: JSON.stringify({ structuredQuery: query })
       }).then(function (r) {
         if (r.status !== 200) return null;
         return r.json().then(function (rows) {
           return (rows || []).filter(function (x) { return x.document; }).map(function (x) {
             return readDoc(x.document);
           });
+        });
+      });
+    }
+
+    return currentUser.getIdToken().then(function (token) {
+      if (isAdminUser()) {
+        return runQuery(token, {
+          from: [{ collectionId: COLLECTION }],
+          orderBy: [{ field: { fieldPath: "createdAt" }, direction: "DESCENDING" }],
+          limit: limit
+        });
+      }
+      return fetchMyGroups().then(function (groups) {
+        if (!groups.length) return [];
+        return Promise.all(groups.map(function (g) {
+          return runQuery(token, {
+            from: [{ collectionId: COLLECTION }],
+            where: { fieldFilter: {
+              field: { fieldPath: "group" }, op: "EQUAL",
+              value: { stringValue: g }
+            } },
+            limit: limit
+          });
+        })).then(function (parts) {
+          if (parts.every(function (p) { return p === null; })) return null;
+          var rows = [];
+          parts.forEach(function (p) { if (p) rows = rows.concat(p); });
+          rows.sort(function (a, b) { return (b.date || "") < (a.date || "") ? -1 : 1; });
+          return rows.slice(0, limit);
         });
       });
     }).catch(function () { return null; });
@@ -252,6 +354,7 @@ window.VESPER_RESULTS = (function () {
   start();
   return {
     available: available, signedIn: signedIn, aliasOf: aliasOf,
-    record: record, fetchAll: fetchAll, fetchMine: fetchMine, localAll: localAll
+    record: record, fetchAll: fetchAll, fetchMine: fetchMine, localAll: localAll,
+    isAdminUser: isAdminUser, fetchMyGroups: fetchMyGroups, computeSid: computeSid
   };
 })();

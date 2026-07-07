@@ -506,16 +506,20 @@ footer a{color:var(--gold);text-decoration:none;}
         return;
       }
       var email = String(user.email || "").trim().toLowerCase();
+      /* mi doc de gradebook viene keyed por sid (id opaco del alumno) */
       var grades = {};
-      if (grade) grades[email] = grade;
-      /* buildRoster con SOLO mis intentos + mi doc de gradebook → mi fila */
-      var roster = GB.buildRoster(attempts, grades);
+      if (grade && grade.sid) grades[grade.sid] = grade;
+      /* buildRoster con SOLO mis intentos + mi doc de gradebook → mi fila
+         (sin roster/: el alumno no necesita — ni puede — leer esa colección) */
+      var roster = GB.buildRoster({}, attempts, grades);
       var mine = null;
       for (var i = 0; i < roster.length; i++) {
-        if (roster[i].email === email || roster[i].studentUid === user.uid) { mine = roster[i]; break; }
+        if ((grade && grade.sid && roster[i].sid === grade.sid) ||
+            roster[i].studentUid === user.uid ||
+            roster[i].key === "legacy:" + email) { mine = roster[i]; break; }
       }
       if (!mine) {
-        mine = { alias: VESPER_RESULTS.aliasOf(), email: email, studentUid: user.uid, level: "",
+        mine = { alias: VESPER_RESULTS.aliasOf(), studentUid: user.uid, level: "",
                  examsAvg: null, examsCount: 0, lessonsAvg: null, lessonsCount: 0,
                  examsGrade: null, lessonsGrade: null,
                  participacion: null, notes: "" };

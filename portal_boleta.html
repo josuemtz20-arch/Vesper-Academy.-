@@ -163,7 +163,8 @@ footer a{color:var(--gold);text-decoration:none;}
     <div id="warn" class="notice" style="display:none"></div>
     <div class="stats" id="stats"></div>
     <div class="toolbar">
-      <input id="f-q" type="search" placeholder="Buscar alumno (alias o correo)…">
+      <input id="f-q" type="search" placeholder="Buscar alumno (nombre o alias)…">
+      <select id="f-group"><option value="">Todos mis grupos</option></select>
       <select id="f-level"><option value="">Todos los niveles</option></select>
       <select id="f-sort">
         <option value="final">Ordenar: Final (mayor a menor)</option>
@@ -205,13 +206,14 @@ footer a{color:var(--gold);text-decoration:none;}
   var rowsEl = document.getElementById("rows");
   var statsEl = document.getElementById("stats");
   var fQ = document.getElementById("f-q");
+  var fGroup = document.getElementById("f-group");
   var fLevel = document.getElementById("f-level");
   var fSort = document.getElementById("f-sort");
 
   var GB = window.VESPER_GRADEBOOK;
   var roster = [];          // filas de GB.buildRoster
   var canSave = false;      // false mientras la regla de gradebook no responda
-  var dailyMap = {};        // correo -> { email, alias, studentUid, days }
+  var dailyMap = {};        // sid -> { sid, alias, studentUid, days }
   var canDaily = false;     // false mientras la regla de daily_progress no responda
   var openDaily = {};       // key -> true (rúbricas expandidas, sobrevive al re-render)
 
@@ -268,7 +270,7 @@ footer a{color:var(--gold);text-decoration:none;}
   function gradeCell(kind, row) {
     var grade = kind === "exams" ? row.examsGrade : row.lessonsGrade;
     var prac = kind === "exams" ? row.examsAvg : row.lessonsAvg;
-    var editable = canSave && row.email;
+    var editable = canSave && row.sid;
     var pracTxt = (prac == null)
       ? 'sin práctica'
       : 'práctica ' + prac + '%' +
@@ -280,10 +282,10 @@ footer a{color:var(--gold);text-decoration:none;}
         '<input type="number" min="0" max="100" inputmode="numeric" ' +
           'value="' + (grade == null ? "" : grade) + '" ' +
           'placeholder="' + (prac == null ? "—" : prac) + '" ' +
-          'aria-label="' + (kind === "exams" ? "Calificación de exámenes de " : "Calificación de lecciones de ") + esc(row.alias) + '" ' +
+          'aria-label="' + (kind === "exams" ? "Calificación de exámenes de " : "Calificación de lecciones de ") + esc(row.name) + '" ' +
           (editable ? '' : 'disabled title="' +
-            (row.email ? 'Publica la regla de gradebook para poder guardar' :
-                         'Sin correo registrado: no se puede guardar') + '" ') +
+            (row.sid ? 'Publica la regla de gradebook para poder guardar' :
+                       'Intento antiguo sin registro: no se puede calificar') + '" ') +
           'data-gk="' + esc(row.key) + '" data-gkind="' + kind + '">' +
         '<span class="sv" data-gsv="' + kind + ':' + esc(row.key) + '"></span>' +
       '</span>' +
@@ -302,15 +304,15 @@ footer a{color:var(--gold);text-decoration:none;}
     var LV = window.VESPER_PATH ? VESPER_PATH.LEVELS : ["A1","A2","B1","B2","C1","C2"];
     rows.sort(function (a, b) {
       if (mode === "name") {
-        return a.alias.localeCompare(b.alias, "es") || a.email.localeCompare(b.email);
+        return a.name.localeCompare(b.name, "es") || a.key.localeCompare(b.key);
       }
       if (mode === "level") {
         var ia = LV.indexOf(normLevel(a.level)), ib = LV.indexOf(normLevel(b.level));
         if (ia === -1) ia = 99; if (ib === -1) ib = 99;
-        return (ia - ib) || a.alias.localeCompare(b.alias, "es");
+        return (ia - ib) || a.name.localeCompare(b.name, "es");
       }
       var fa = GB.computeFinal(a).final, fb = GB.computeFinal(b).final;
-      if (fa == null && fb == null) return a.alias.localeCompare(b.alias, "es");
+      if (fa == null && fb == null) return a.name.localeCompare(b.name, "es");
       if (fa == null) return 1;
       if (fb == null) return -1;
       return fb - fa;
@@ -318,12 +320,26 @@ footer a{color:var(--gold);text-decoration:none;}
     return rows;
   }
 
+  /* Nivel a mostrar: el NOMBRE del registro (Principiante…Experto) manda;
+     si no hay, la sigla de los intentos como respaldo. */
+  function levelHtml(r) {
+    if (r.levelName) {
+      return '<span class="lvl" style="color:var(--gold2)">' + esc(r.levelName) + '</span>';
+    }
+    var lvN = normLevel(r.level);
+    return lvN
+      ? '<span class="lvl" style="color:' + levelColor(lvN) + '">' + esc(lvN) + '</span>'
+      : '<span class="na">—</span>';
+  }
+
   function render() {
     var q = fQ.value.trim().toLowerCase();
     var lv = fLevel.value;
+    var gr = fGroup.value;
     var rows = roster.filter(function (r) {
-      if (lv && normLevel(r.level) !== lv) return false;
-      if (q && (r.alias + " " + r.email).toLowerCase().indexOf(q) === -1) return false;
+      if (gr && r.group !== gr) return false;
+      if (lv && normLevel(r.level) !== lv && r.levelName !== lv) return false;
+      if (q && (r.name + " " + r.alias).toLowerCase().indexOf(q) === -1) return false;
       return true;
     });
     sortRows(rows);
@@ -331,37 +347,37 @@ footer a{color:var(--gold);text-decoration:none;}
     if (!rows.length) {
       rowsEl.innerHTML = '<tr><td colspan="7" class="empty">' +
         (roster.length ? 'No hay alumnos que coincidan.' :
-         'Aún no hay alumnos en la boleta. En cuanto un alumno con sesión termine un examen o una lección, aparecerá aquí.') +
+         'Aún no tienes alumnos asignados. Pide al administrador que registre a tus ' +
+         'alumnos con un grupo y te asigne ese grupo (set-teacher-groups).') +
         '</td></tr>';
       return;
     }
 
     var html = "";
     rows.forEach(function (r) {
-      var lvN = normLevel(r.level);
-      var lvHtml = lvN
-        ? '<span class="lvl" style="color:' + levelColor(lvN) + '">' + esc(lvN) + '</span>'
-        : '<span class="na">—</span>';
-      var rec = r.email ? dailyMap[r.email] : null;
+      var rec = r.sid ? dailyMap[r.sid] : null;
       var st = GB.dailyStats(rec ? rec.days : {});
+      var sub = [];
+      if (r.alias && r.alias !== r.name) sub.push(r.alias);
+      if (r.group) sub.push("grupo " + r.group);
       html +=
         '<tr data-key="' + esc(r.key) + '">' +
-          '<td class="who"><b>' + esc(r.alias) + '</b>' +
-            (r.email ? '<small>' + esc(r.email) + '</small>' : '') + '</td>' +
-          '<td>' + lvHtml + '</td>' +
+          '<td class="who"><b>' + esc(r.name) + '</b>' +
+            (sub.length ? '<small>' + esc(sub.join(" · ")) + '</small>' : '') + '</td>' +
+          '<td>' + levelHtml(r) + '</td>' +
           gradeCell("exams", r) +
           gradeCell("lessons", r) +
           '<td class="daily"><button class="dbtn" data-dk="' + esc(r.key) + '" ' +
-            'aria-label="Progreso diario de ' + esc(r.alias) + '">' +
+            'aria-label="Progreso diario de ' + esc(r.name) + '">' +
             '<i class="fas fa-calendar-days"></i> <span data-dcount="' + esc(r.key) + '">' +
             st.daysTouched + '/' + GB.COURSE_DAYS + '</span></button></td>' +
           '<td class="part">' +
             '<input type="number" min="0" max="100" inputmode="numeric" ' +
               'value="' + (r.participacion == null ? "" : r.participacion) + '" ' +
-              'aria-label="Participación de ' + esc(r.alias) + '" ' +
-              (canSave && r.email ? '' : 'disabled title="' +
-                (r.email ? 'Publica la regla de gradebook para poder guardar' :
-                           'Sin correo registrado: no se puede guardar') + '" ') +
+              'aria-label="Participación de ' + esc(r.name) + '" ' +
+              (canSave && r.sid ? '' : 'disabled title="' +
+                (r.sid ? 'Publica la regla de gradebook para poder guardar' :
+                         'Intento antiguo sin registro: no se puede calificar') + '" ') +
               'data-key="' + esc(r.key) + '">' +
             '<span class="sv" data-sv="' + esc(r.key) + '"></span>' +
           '</td>' +
@@ -375,10 +391,10 @@ footer a{color:var(--gold);text-decoration:none;}
   }
 
   /* --- rúbrica diaria: cuadrícula 20 días × aspectos --- */
-  function dailyEditable(r) { return canDaily && !!r.email; }
+  function dailyEditable(r) { return canDaily && !!r.sid; }
 
   function dailyBoxHtml(r) {
-    var rec = (r.email && dailyMap[r.email]) || { days: {} };
+    var rec = (r.sid && dailyMap[r.sid]) || { days: {} };
     var editable = dailyEditable(r);
     // encabezado: cada número de día se puede activar (hubo clase)
     var head = '<tr><th class="asp"></th>';
@@ -410,10 +426,10 @@ footer a{color:var(--gold);text-decoration:none;}
       ? 'Toca el <b>número del día</b> si hubo clase: todo arranca en ✓ (bueno). Luego toca una ' +
         'casilla para marcar <b>✗ (tache)</b> donde el alumno falló — cada tache baja puntos. El ' +
         'promedio se vuelve la <b>Participación</b> del alumno al instante.'
-      : (r.email
+      : (r.sid
           ? 'Solo lectura: publica la regla de Firestore para <code>daily_progress</code> ' +
             '(ver <b>FIRESTORE_GRADEBOOK_RULES.md</b>) para poder capturar.'
-          : 'Sin correo registrado: no se puede guardar la rúbrica de este alumno.');
+          : 'Intento antiguo sin registro: no se puede guardar la rúbrica de este alumno.');
     return '<div class="dbox"><h4>Progreso diario — curso de ' + GB.COURSE_DAYS + ' días</h4>' +
            '<p class="dnote">' + note + '</p>' +
            '<div class="dwrap"><table class="dgrid"><thead>' + head + '</thead><tbody>' +
@@ -421,7 +437,7 @@ footer a{color:var(--gold);text-decoration:none;}
   }
 
   function refreshDailyCount(r) {
-    var rec = (r.email && dailyMap[r.email]) || { days: {} };
+    var rec = (r.sid && dailyMap[r.sid]) || { days: {} };
     var st = GB.dailyStats(rec.days);
     var el = rowsEl.querySelector('[data-dcount="' + CSS.escape(r.key) + '"]');
     if (el) el.textContent = st.daysTouched + '/' + GB.COURSE_DAYS;
@@ -478,8 +494,8 @@ footer a{color:var(--gold);text-decoration:none;}
   });
 
   function recFor(r) {
-    var rec = dailyMap[r.email];
-    if (!rec) rec = dailyMap[r.email] = { email: r.email, alias: r.alias, studentUid: r.studentUid, days: {} };
+    var rec = dailyMap[r.sid];
+    if (!rec) rec = dailyMap[r.sid] = { sid: r.sid, alias: r.alias, studentUid: r.studentUid, days: {} };
     return rec;
   }
 
@@ -499,7 +515,7 @@ footer a{color:var(--gold);text-decoration:none;}
   function toggleDay(dh) {
     var key = dh.getAttribute("data-dh"), day = dh.getAttribute("data-day");
     var r = rowByKey(key);
-    if (!r || !r.email) return;
+    if (!r || !r.sid) return;
     var rec = recFor(r);
     if (rec.days[day]) delete rec.days[day];   // quitar el día
     else rec.days[day] = {};                    // día con clase, todo bueno
@@ -515,8 +531,8 @@ footer a{color:var(--gold);text-decoration:none;}
     var day = cell.getAttribute("data-day");
     var asp = cell.getAttribute("data-asp");
     var r = rowByKey(key);
-    if (!r || !r.email) return;
-    var rec = dailyMap[r.email];
+    if (!r || !r.sid) return;
+    var rec = dailyMap[r.sid];
     if (!rec || !rec.days[day]) return; // el día no tiene clase activa
     if (rec.days[day][asp] === false) {  // era tache -> vuelve a bueno
       delete rec.days[day][asp];
@@ -530,13 +546,13 @@ footer a{color:var(--gold);text-decoration:none;}
 
   var dtimers = {};
   function saveDailyRow(r) {
-    var rec = dailyMap[r.email];
+    var rec = dailyMap[r.sid];
     if (!rec) return;
     var snapshot = JSON.stringify(rec.days);
-    var jobs = [GB.saveDaily(r.email, { days: rec.days, alias: r.alias, studentUid: r.studentUid })];
+    var jobs = [GB.saveDaily(r.sid, { days: rec.days, alias: r.alias, studentUid: r.studentUid })];
     /* con al menos una celda marcada, sincronizamos también la Participación */
     if (r.participacion != null && canSave) {
-      jobs.push(GB.saveGrade(r.email, {
+      jobs.push(GB.saveGrade(r.sid, {
         participacion: r.participacion, notes: r.notes,
         alias: r.alias, studentUid: r.studentUid
       }));
@@ -567,7 +583,7 @@ footer a{color:var(--gold);text-decoration:none;}
       return;
     }
     refreshFinal(key);
-    if (r.participacion == null || !r.email) return; // no hay nada que subir
+    if (r.participacion == null || !r.sid) return; // no hay nada que subir
     clearTimeout(timers[key]);
     setSv(key, '<i class="fas fa-spinner"></i>');
     timers[key] = setTimeout(function () { save(r); }, 800);
@@ -575,7 +591,7 @@ footer a{color:var(--gold);text-decoration:none;}
 
   function save(r) {
     var val = r.participacion;
-    GB.saveGrade(r.email, {
+    GB.saveGrade(r.sid, {
       participacion: val, notes: r.notes,
       alias: r.alias, studentUid: r.studentUid
     }).then(function (ok) {
@@ -599,7 +615,7 @@ footer a{color:var(--gold);text-decoration:none;}
     var val = gradeVal(r, kind);
     var data = { notes: r.notes, alias: r.alias, studentUid: r.studentUid };
     data[kind === "exams" ? "examsGrade" : "lessonsGrade"] = val;
-    GB.saveGrade(r.email, data).then(function (ok) {
+    GB.saveGrade(r.sid, data).then(function (ok) {
       if (gradeVal(r, kind) !== val) return; // ya se escribió otro valor; lo salva su timer
       setGradeSv(kind, r.key, ok
         ? '<i class="fas fa-circle-check" title="Guardado"></i>'
@@ -628,7 +644,7 @@ footer a{color:var(--gold);text-decoration:none;}
       setGradeVal(r, kind, null);
     } else { return; }
     refreshFinal(key);
-    if (gradeVal(r, kind) == null || !r.email) return; // vacío: no se sube por REST aquí
+    if (gradeVal(r, kind) == null || !r.sid) return; // vacío: no se sube por REST aquí
     queueGradeSave(r, kind);
   });
 
@@ -639,7 +655,7 @@ footer a{color:var(--gold);text-decoration:none;}
     var key = b.getAttribute("data-gk"), kind = b.getAttribute("data-gkind");
     var prac = parseInt(b.getAttribute("data-prac"), 10);
     var r = rowByKey(key);
-    if (!r || !r.email || isNaN(prac)) return;
+    if (!r || !r.sid || isNaN(prac)) return;
     var inp = rowsEl.querySelector('td.grade input[data-gk="' + CSS.escape(key) + '"][data-gkind="' + kind + '"]');
     if (inp) inp.value = prac;
     setGradeVal(r, kind, prac);
@@ -648,41 +664,75 @@ footer a{color:var(--gold);text-decoration:none;}
   });
 
   fQ.addEventListener("input", render);
+  fGroup.addEventListener("change", render);
   fLevel.addEventListener("change", render);
   fSort.addEventListener("change", render);
   document.getElementById("f-reload").addEventListener("click", load);
+
+  /* llena el filtro de grupos con los grupos presentes en el roster */
+  function fillGroupFilter(rosterMap) {
+    var groups = {};
+    Object.keys(rosterMap || {}).forEach(function (sid) {
+      var g = rosterMap[sid].group;
+      if (g) groups[g] = true;
+    });
+    var current = fGroup.value;
+    fGroup.innerHTML = '<option value="">Todos mis grupos</option>';
+    Object.keys(groups).sort().forEach(function (g) {
+      var o = document.createElement("option");
+      o.value = g; o.textContent = "Grupo " + g;
+      fGroup.appendChild(o);
+    });
+    fGroup.value = current || "";
+    fGroup.style.display = Object.keys(groups).length > 1 ? "" : "none";
+  }
 
   function load() {
     loadingEl.style.display = "block";
     contentEl.style.display = "none";
     msgEl.style.display = "none";
 
+    /* 1) roster (todos MIS alumnos registrados) + intentos; 2) con los sids
+       del roster, la parte manual (gradebook) y las rúbricas por batchGet. */
     Promise.all([
-      VESPER_RESULTS.fetchAll({ limit: 1000 }),
-      GB.fetchGrades(),
-      GB.fetchDailyAll()
+      GB.fetchRoster(),
+      VESPER_RESULTS.fetchAll({ limit: 1000 })
     ]).then(function (res) {
-      var attempts = res[0], grades = res[1], daily = res[2];
-      if (attempts === null) {
-        showMsg('<i class="fas fa-lock"></i> No se pudieron leer los resultados. ' +
-          'Verifica que tu cuenta sea de profesor/admin y que la regla de Firestore para ' +
-          '<code>exam_results</code> esté publicada (ver <b>FIRESTORE_EXAM_RESULTS_RULES.md</b>).', true);
+      var rosterMap = res[0], attempts = res[1];
+      if (rosterMap === null && attempts === null) {
+        showMsg('<i class="fas fa-lock"></i> No se pudieron leer los alumnos ni los resultados. ' +
+          'Verifica que tu cuenta sea de profesor/admin, que tengas grupos asignados y que las ' +
+          'reglas de Firestore para <code>roster</code> y <code>exam_results</code> estén ' +
+          'publicadas (ver <b>FIRESTORE_GRADEBOOK_RULES.md</b>).', true);
         return;
       }
-      canSave = grades !== null;
-      canDaily = daily !== null;
-      dailyMap = daily || {};
-      roster = GB.buildRoster(attempts, grades || {});
-      /* el promedio de la rúbrica manda sobre la participación mostrada:
-         si un alumno tiene celdas diarias, su Participación es ese promedio. */
-      roster.forEach(function (r) {
-        if (!r.email) return;
-        var rec = dailyMap[r.email];
-        if (rec) {
-          var st = GB.dailyStats(rec.days);
-          if (st.avg != null) r.participacion = st.avg;
-        }
+      rosterMap = rosterMap || {};
+      var sids = Object.keys(rosterMap);
+      return Promise.all([
+        GB.fetchGrades(sids),
+        GB.fetchDailyAll(sids)
+      ]).then(function (res2) {
+        var grades = res2[0], daily = res2[1];
+        canSave = grades !== null;
+        canDaily = daily !== null;
+        dailyMap = daily || {};
+        fillGroupFilter(rosterMap);
+        roster = GB.buildRoster(rosterMap, attempts || [], grades || {});
+        /* el promedio de la rúbrica manda sobre la participación mostrada:
+           si un alumno tiene celdas diarias, su Participación es ese promedio. */
+        roster.forEach(function (r) {
+          if (!r.sid) return;
+          var rec = dailyMap[r.sid];
+          if (rec) {
+            var st = GB.dailyStats(rec.days);
+            if (st.avg != null) r.participacion = st.avg;
+          }
+        });
+        finishLoad();
       });
+    });
+
+    function finishLoad() {
       loadingEl.style.display = "none";
       contentEl.style.display = "block";
       warnEl.style.display = (canSave && canDaily) ? "none" : "block";
@@ -696,7 +746,7 @@ footer a{color:var(--gold);text-decoration:none;}
       }
       renderStats();
       render();
-    });
+    }
   }
 
   /* mismo boot que portal_calificaciones.html: gate de página + check de profe */

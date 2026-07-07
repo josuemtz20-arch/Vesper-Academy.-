@@ -16,7 +16,8 @@ Colección de nivel superior, un documento por intento (id automático):
 exam_results/{autoId}  ->  {
   studentUid: string,   // request.auth.uid (dueño del intento)
   alias:      string,   // alias del alumno (estilo liga)
-  email:      string,   // correo del alumno con sesión (opcional, "" si anónimo)
+  sid:        string,   // id OPACO del alumno (hash del correo; ver roster/)
+  group:      string,   // grupo del alumno al momento del intento
   examType:   string,   // "boss" | "placement" | "lesson"
   examId:     string,   // "boss:B1" | "placement" | id de lección
   level:      string,   // nivel CEFR
@@ -37,15 +38,18 @@ Base de datos: `teachermanuals` (la misma que usa `vesper_sync.js` y
 - `studentUid` = `request.auth.uid`: cada alumno **crea** solo sus propios
   intentos. Los intentos son **inmutables** (no se editan ni borran desde el
   cliente).
-- El profesor/admin **lee** los intentos de todos sus alumnos.
+- El admin lee todo; cada **profesor** solo lee los intentos cuyo `group`
+  está en su lista `teachers/{correo}.groups`.
 
-## Privacidad
+## Privacidad (2026-07-07)
 
-A diferencia de la liga (tabla pública entre alumnos), esta colección **solo la
-leen el dueño del intento y los profesores/admin** (lo garantiza la regla). Por
-eso aquí sí se guarda el correo del alumno cuando hay sesión: ayuda al profesor a
-identificarlo, sin exponerlo a otros alumnos. Un alumno anónimo (sin cuenta) no
-sube nada a la nube; solo queda en su dispositivo.
+Los intentos **ya no guardan el correo** del alumno: llevan `sid` (hash opaco
+del correo, el mismo id de `roster/{sid}`) y `group`. El profesor identifica
+al alumno por su **nombre** (vía `roster/`) y nunca ve correos; además solo
+puede leer intentos de **sus grupos** (lo garantiza la regla). Los intentos
+viejos que sí guardaron correo quedan visibles solo para su dueño y el admin
+(no tienen `group`). Un alumno anónimo (sin cuenta) no sube nada a la nube;
+solo queda en su dispositivo.
 
 ## Regla a añadir
 
@@ -77,17 +81,23 @@ match /exam_results/{id} {
                    )
                 && request.resource.data.examType in ["lesson", "exam", "boss", "placement"];
 
-  // lee: el dueño, o un profesor/admin (allowlist en teachers/ o el correo admin)
+  // lee: el dueño, el admin, o un profesor DEL GRUPO del intento
+  // (teacherSeesGroup: helper definido en firestore.rules — compara
+  // resource.data.group contra teachers/{correo}.groups)
   allow read:   if request.auth != null && (
                    resource.data.studentUid == request.auth.uid
-                   || exists(/databases/$(database)/documents/teachers/$(request.auth.token.email))
                    || request.auth.token.email == "josuemtz20@gmail.com"
+                   || teacherSeesGroup(resource.data.group)
                 );
 
   // intentos inmutables: el profe solo consulta
   allow update, delete: if false;
 }
 ```
+
+> La versión canónica y completa (incluidos los helpers `teacherSeesGroup`,
+> `ownSid` y los bloques `roster`, `gradebook`, `daily_progress`) vive en
+> `_scripts/firestore.rules` — pega ESE archivo completo al publicar.
 
 Publica las reglas (consola de Firebase → Firestore → Reglas, o
 `firebase deploy --only firestore:rules`). Tiene efecto inmediato.
@@ -119,12 +129,13 @@ Publica las reglas (consola de Firebase → Firestore → Reglas, o
 
 ## Nota sobre la consulta del profesor
 
-`portal_calificaciones.html` hace un `runQuery` sobre toda la colección
-`exam_results` ordenado por `createdAt` descendente. Firestore solo devuelve la
-consulta si la regla garantiza el acceso a **todos** los documentos que
-podrían devolverse; por eso un alumno normal recibe `null` (no es profesor) y el
-panel le muestra el aviso de "solo profesores". El profesor/admin sí obtiene la
-tabla completa. No hace falta índice compuesto: el orden es por un solo campo.
+El **admin** hace un `runQuery` sobre toda la colección ordenado por
+`createdAt` descendente (un solo campo: sin índice compuesto). Un **profesor**
+no puede consultar la colección completa (su regla depende del `group` de cada
+doc), así que `vesper_results.js::fetchAll` lanza una query filtrada
+`where group == <g>` por cada uno de sus grupos (sin `orderBy`, para no exigir
+índice compuesto) y ordena en el cliente. Un alumno normal recibe `null` y el
+panel le muestra el aviso de "solo profesores".
 
 ## Lecturas / cómo se llena
 

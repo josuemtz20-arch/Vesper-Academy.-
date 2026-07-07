@@ -1,150 +1,96 @@
 # Activar la boleta de calificaciones (Firestore)
 
-La boleta (`portal_boleta.html`) muestra **una fila por alumno** con la misma
-tabla para todos los niveles (A1–C2): Exámenes y Lecciones se calculan solos
-con los intentos ya guardados en `exam_results`, y la **Participación** la
-captura el profesor. Esa parte manual vive en una colección nueva,
-`gradebook`, que necesita su propia regla de seguridad. Mientras no se
-publique, la boleta funciona en **modo lectura** (muestra un aviso y no deja
-guardar la participación); no se rompe nada.
+La boleta (`portal_boleta.html`) muestra **una fila por alumno registrado**:
+la lista sale de la colección `roster/` (todos los alumnos dados de alta,
+con su **nombre**), Exámenes y Lecciones se calculan solos con los intentos
+guardados en `exam_results`, y la **Participación** la captura el profesor
+(colecciones `gradebook` y `daily_progress`). Mientras las reglas no estén
+publicadas, la boleta funciona en **modo lectura** (aviso, sin guardar); no
+se rompe nada.
+
+> **Reglas completas:** el archivo canónico es `_scripts/firestore.rules`
+> (local, no publicado). Pégalo COMPLETO en la consola de Firebase →
+> Firestore → base `teachermanuals` → Reglas → Publicar. Este documento solo
+> explica el modelo.
+
+## Grupos y privacidad (2026-07-07)
+
+- Cada alumno pertenece a **un grupo** (`students/{correo}.group`) y cada
+  profesor tiene una **lista de grupos** (`teachers/{correo}.groups`). Las
+  reglas solo dejan a un profesor leer alumnos/resultados/boletas **de sus
+  grupos**; un profesor sin `groups` no ve a nadie. El admin ve todo.
+- Los **correos de los alumnos no son visibles para los profesores**. Todo
+  lo que toca el profesor está indexado por `sid`: un hash opaco del correo
+  (`sha256("vesper-sid-v1|" + correo)` recortado a 20 hex), el mismo cálculo
+  en `upload_manuals.py::sid_of()` y en `vesper_gradebook.js::mySid()`.
+- Los intentos nuevos de `exam_results` llevan `sid` + `group` y **ya no
+  guardan el correo**. Los intentos viejos (con correo, sin grupo) solo los
+  ven su dueño y el admin.
 
 ## Modelo de datos
 
-Colección de nivel superior, **un documento por alumno** (id = correo en
-minúsculas, igual que la allowlist `students/{correo}`):
-
 ```
-gradebook/{correo}  ->  {
-  participacion: int,     // 0..100, capturada por el profesor
-  examsGrade:    int,     // 0..100, nota de EXÁMENES confirmada por el profesor (opcional)
-  lessonsGrade:  int,     // 0..100, nota de LECCIONES confirmada por el profesor (opcional)
-  notes:         string,  // notas libres del profesor (opcional)
-  alias:         string,  // alias del alumno (para mostrarlo en el roster)
-  studentUid:    string,  // uid informativo (el join real es por correo)
-  updatedAt:     timestamp,
-  updatedBy:     string   // correo del profesor que guardó
+roster/{sid} -> {            // espejo SIN correo de la allowlist (lo escribe
+  name:      string,         //   upload_manuals.py: add-student / set-group /
+  level:     int,            //   sync-roster). Es la base del roster de la
+  levelName: string,         //   boleta: el profesor ve NOMBRES, nunca correos.
+  group:     string,
+  updatedAt: timestamp
+}
+
+gradebook/{sid} -> {         // parte manual capturada por el profesor
+  participacion: int,        // 0..100 (opcional; validada si está presente)
+  examsGrade:    int,        // 0..100 nota de EXÁMENES confirmada (opcional)
+  lessonsGrade:  int,        // 0..100 nota de LECCIONES confirmada (opcional)
+  notes: string, alias: string, studentUid: string,
+  updatedAt: timestamp, updatedBy: string
+}
+
+daily_progress/{sid} -> {    // rúbrica del curso (20 días × aspectos, ✓/✗)
+  days: { "1": {...}, ... "20": {...} },
+  alias: string, studentUid: string,
+  updatedAt: timestamp, updatedBy: string
 }
 ```
 
 Base de datos: `teachermanuals` (la misma que `exam_results`).
 
-- **Escriben** solo los profesores (allowlist `teachers/{correo}`) o el admin.
-  Cada componente numérico (`participacion`, `examsGrade`, `lessonsGrade`) es
-  **opcional** por escritura, pero si está presente la regla lo valida int
-  0..100 (el `updateMask` deja tocar uno sin borrar los otros).
-- **Leen** el propio alumno (solo su doc), los profesores y el admin.
-- El roster de la boleta se deriva de `exam_results` + `gradebook`; **no**
-  hace falta relajar la regla de `students/`.
+## Quién lee / escribe qué
 
-> **¿Por qué `examsGrade` / `lessonsGrade`?** Los promedios automáticos de
-> `exam_results` los escribe el propio alumno (autocalificación), así que **no**
-> son una nota confiable. La boleta los muestra como *práctica* y toma como nota
-> de registro de Exámenes/Lecciones lo que el **profesor confirma** en estos dos
-> campos (en `portal_boleta.html` puede aceptar el promedio de práctica con un
-> clic o escribir otro número). `vesper_gradebook.js → computeFinal` usa SOLO
-> `examsGrade`, `lessonsGrade` y `participacion` — nunca el promedio de práctica.
+- `roster/`: **escribe** solo el admin (script). **Lee** el admin (todo) y
+  cada profesor **con filtro `group == <uno de sus grupos>`** (la regla
+  exige que el grupo del doc esté en sus `groups`).
+- `gradebook/` y `daily_progress/`: **escriben** el admin y los profesores
+  del grupo del alumno (el grupo se resuelve contra `roster/{sid}.group`).
+  **Lee** además el propio alumno: su `sid` está en `students/{correo}.sid`
+  y la regla compara (`ownSid() == sid`).
+- Los portales del profesor **no listan** `gradebook`/`daily_progress`
+  completos: leen el roster (por grupos) y luego un `batchGet` con esos
+  sids — así la regla por-documento siempre es demostrable.
+- El alumno (`mi_boleta.html`): GET directo a `gradebook/{su sid}` +
+  `runQuery` de `exam_results` filtrado por `studentUid == uid`. Nada extra
+  que publicar.
 
-## Regla a añadir
-
-En las reglas de Firestore de la base `teachermanuals`, dentro de
-`match /databases/{database}/documents { ... }` (ya incluida en
-`firestore.rules` de este repo):
+## Alta y operación (script admin)
 
 ```
-match /gradebook/{email} {
-  // lee: el propio alumno (su doc), un profesor o el admin
-  allow read:  if request.auth != null && (
-                 request.auth.token.email == email
-                 || exists(/databases/$(database)/documents/teachers/$(request.auth.token.email))
-                 || request.auth.token.email == "josuemtz20@gmail.com"
-               );
-  // escribe: SOLO profesores/admin. participacion/examsGrade/lessonsGrade son
-  // opcionales por escritura; si están presentes deben ser int 0..100.
-  allow write: if request.auth != null
-               && (exists(/databases/$(database)/documents/teachers/$(request.auth.token.email))
-                   || request.auth.token.email == "josuemtz20@gmail.com")
-               && (!("participacion" in request.resource.data)
-                   || (request.resource.data.participacion is int
-                       && request.resource.data.participacion >= 0
-                       && request.resource.data.participacion <= 100))
-               && (!("examsGrade" in request.resource.data)
-                   || (request.resource.data.examsGrade is int
-                       && request.resource.data.examsGrade >= 0
-                       && request.resource.data.examsGrade <= 100))
-               && (!("lessonsGrade" in request.resource.data)
-                   || (request.resource.data.lessonsGrade is int
-                       && request.resource.data.lessonsGrade >= 0
-                       && request.resource.data.lessonsGrade <= 100));
-}
+python _scripts/upload_manuals.py add-student correo@x.com --name "Ana" --level Basico --group grupo-a
+python _scripts/upload_manuals.py set-group correo@x.com grupo-a
+python _scripts/upload_manuals.py add-teacher profe@x.com --groups grupo-a grupo-b
+python _scripts/upload_manuals.py set-teacher-groups profe@x.com grupo-a
+python _scripts/upload_manuals.py sync-roster   # backfill: puebla roster/ y sid
+                                                # para alumnos ya registrados
 ```
 
-Y el bloque de **progreso diario** (rúbrica del curso: 20 días × aspectos,
-✓/✗ por celda), en la misma colección de reglas:
+Tras cambiar de modelo hay que ejecutar **una vez** `sync-roster` y asignar
+`--group`/`set-group` a cada alumno y `set-teacher-groups` a cada profesor.
 
-```
-match /daily_progress/{email} {
-  // lee: el propio alumno (su doc), un profesor o el admin
-  allow read:  if request.auth != null && (
-                 request.auth.token.email == email
-                 || exists(/databases/$(database)/documents/teachers/$(request.auth.token.email))
-                 || request.auth.token.email == "josuemtz20@gmail.com"
-               );
-  // escribe: SOLO profesores/admin
-  allow write: if request.auth != null
-               && (exists(/databases/$(database)/documents/teachers/$(request.auth.token.email))
-                   || request.auth.token.email == "josuemtz20@gmail.com");
-}
-```
+## Cálculo de la final
 
-Documento `daily_progress/{correo}`:
-
-```
-daily_progress/{correo}  ->  {
-  days: {                    // mapa día -> aspectos evaluados ese día (bool)
-    "1": { asistencia, puntualidad, material, tarea, participacion, actitud,
-           trabajo_clase, uso_ingles, speaking, pronunciacion, fluidez,
-           listening, reading, writing, gramatica, vocabulario },
-    "2": { ... }, ... "20": { ... }
-  },
-  alias:      string,
-  studentUid: string,
-  updatedAt:  timestamp,
-  updatedBy:  string
-}
-```
-
-La lista de aspectos vive en `vesper_gradebook.js` (`DAILY_ASPECTS`); añadir o
-quitar aspectos es editar esa lista, la regla no valida campos concretos del
-mapa `days`. El promedio de la rúbrica (✓=100, ✗=0; celdas sin marcar no
-cuentan) se convierte automáticamente en la **Participación** de la boleta.
-
-Publica las reglas (consola de Firebase → Firestore → base `teachermanuals` →
-Reglas, o `firebase deploy --only firestore:rules`). Tiene efecto inmediato.
-
-> **Casing del correo:** igual que el resto de allowlists, el doc id es el
-> correo en **minúsculas**. `vesper_gradebook.js` ya normaliza antes de
-> escribir; para la lectura del alumno, `request.auth.token.email` debe
-> coincidir con el id (registra los correos en minúsculas).
-
-## Cómo se llena / se lee
-
-- **Profesor:** `portal_boleta.html` → escribe con `VESPER_GRADEBOOK.saveGrade`
-  (PATCH con `updateMask`, upsert: crea el doc la primera vez). El guardado es
-  automático al capturar el número (debounce ~0.8 s, icono de estado por fila).
-- **Lectura del profe:** `runQuery` sobre toda la colección `gradebook`;
-  Firestore solo la devuelve si la regla garantiza acceso a todos los docs,
-  por eso un alumno normal recibe 403 y la boleta le muestra el aviso de
-  "solo profesores". No hace falta índice compuesto.
-- **Alumno (`mi_boleta.html`):** cada alumno consulta su propia boleta con la
-  MISMA regla: GET directo a `gradebook/{su correo}` (`fetchMyGrade`) y un
-  `runQuery` de `exam_results` filtrado por `studentUid == uid` (`fetchMine`,
-  sin `orderBy` para no requerir índice compuesto). No hay que publicar nada
-  adicional.
-- **Cálculo de la final:** promedio ponderado (Exámenes 50 % · Lecciones 30 % ·
-  Participación 20 %, configurable en `vesper_gradebook.js` → `WEIGHTS`) usando
-  **solo datos capturados por el profesor**: `examsGrade`, `lessonsGrade` y
-  `participacion`. Los promedios de práctica (`examsAvg`/`lessonsAvg`, derivados
-  de `exam_results`) se muestran como referencia pero **no** entran en la final.
-  Si a un alumno le falta un criterio (p. ej. el profe aún no confirma Exámenes),
-  se renormalizan los pesos con los que sí tiene (la falta de datos no cuenta
-  como cero). Aprueba con ≥ 70 (`PASS_THRESHOLD`).
+Promedio ponderado (Exámenes 50 % · Lecciones 30 % · Participación 20 %,
+`vesper_gradebook.js` → `WEIGHTS`) usando **solo datos capturados por el
+profesor** (`examsGrade`, `lessonsGrade`, `participacion`). Los promedios de
+práctica (derivados de `exam_results`, autocalificación del alumno) se
+muestran como referencia pero **no** entran en la final. Criterios faltantes
+se excluyen y los pesos se renormalizan. Aprueba con ≥ 70 (`PASS_THRESHOLD`).
+El promedio de la rúbrica diaria (✓=100, ✗=0) alimenta la Participación.

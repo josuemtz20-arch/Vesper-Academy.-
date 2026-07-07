@@ -131,7 +131,7 @@ footer a{color:var(--gold);text-decoration:none;}
         <option value="placement">Nivelación</option>
         <option value="lesson">Lección</option>
       </select>
-      <input id="f-q" type="search" placeholder="Buscar alumno (alias o correo)…">
+      <input id="f-q" type="search" placeholder="Buscar alumno (nombre, alias o grupo)…">
       <span class="spacer"></span>
       <button id="f-reload"><i class="fas fa-rotate"></i> Actualizar</button>
     </div>
@@ -153,6 +153,7 @@ footer a{color:var(--gold);text-decoration:none;}
 </footer>
 
 <script src="vesper_results.js"></script>
+<script src="vesper_gradebook.js"></script>
 <script>
 (function () {
   "use strict";
@@ -168,6 +169,24 @@ footer a{color:var(--gold);text-decoration:none;}
 
   var TYPE_LABEL = { exam: "Examen de nivel", boss: "Examen de mundo", placement: "Nivelación", lesson: "Lección" };
   var allRows = [];
+  var rosterMap = {};   // sid -> { name, group, levelName } (roster/, sin correos)
+
+  /* nombre a mostrar: el del registro (roster) manda; luego el alias del
+     intento. El correo solo aparece en intentos viejos, que las reglas ya
+     solo le muestran al admin. */
+  function nameOf(r) {
+    var st = r.sid ? rosterMap[r.sid] : null;
+    return (st && st.name) || r.alias || "Estudiante";
+  }
+  function subOf(r) {
+    var st = r.sid ? rosterMap[r.sid] : null;
+    var parts = [];
+    if (r.alias && r.alias !== nameOf(r)) parts.push(r.alias);
+    var g = (st && st.group) || r.group;
+    if (g) parts.push("grupo " + g);
+    if (!r.sid && r.email) parts.push(r.email); // legado: solo lo recibe el admin
+    return parts.join(" · ");
+  }
 
   function esc(t) {
     return ("" + (t == null ? "" : t)).replace(/[&<>"]/g, function (c) {
@@ -191,7 +210,7 @@ footer a{color:var(--gold);text-decoration:none;}
   function renderStats(rows) {
     var students = {}, passed = 0, graded = 0;
     rows.forEach(function (r) {
-      students[r.studentUid || r.email || r.alias] = true;
+      students[r.sid || r.studentUid || r.email || r.alias] = true;
       if (r.examType !== "placement") { graded++; if (r.passed) passed++; }
     });
     var rate = graded ? Math.round(100 * passed / graded) : 0;
@@ -242,7 +261,7 @@ footer a{color:var(--gold);text-decoration:none;}
     var rows = allRows.filter(function (r) {
       if (type && r.examType !== type) return false;
       if (q) {
-        var hay = (r.alias + " " + r.email).toLowerCase();
+        var hay = (nameOf(r) + " " + r.alias + " " + subOf(r)).toLowerCase();
         if (hay.indexOf(q) === -1) return false;
       }
       return true;
@@ -262,8 +281,8 @@ footer a{color:var(--gold);text-decoration:none;}
           (r.passed ? "Aprobado" : "Reprobado") + '</span>';
       html +=
         '<tr class="row" data-i="' + i + '">' +
-          '<td class="who"><b>' + esc(r.alias || "Estudiante") + '</b>' +
-            (r.email ? '<small>' + esc(r.email) + '</small>' : '') + '</td>' +
+          '<td class="who"><b>' + esc(nameOf(r)) + '</b>' +
+            (subOf(r) ? '<small>' + esc(subOf(r)) + '</small>' : '') + '</td>' +
           '<td><span class="tag ' + tcls + '">' + esc(TYPE_LABEL[r.examType] || r.examType) + '</span>' +
             (r.examId && r.examType === "lesson" ? '<small style="color:var(--muted)">' + esc(r.examId) + '</small>' : '') + '</td>' +
           '<td>' + esc(r.level || "—") + '</td>' +
@@ -301,11 +320,17 @@ footer a{color:var(--gold);text-decoration:none;}
     contentEl.style.display = "none";
     msgEl.style.display = "none";
 
-    VESPER_RESULTS.fetchAll({ limit: 500 }).then(function (rows) {
+    Promise.all([
+      VESPER_RESULTS.fetchAll({ limit: 500 }),
+      window.VESPER_GRADEBOOK ? VESPER_GRADEBOOK.fetchRoster() : Promise.resolve({})
+    ]).then(function (res) {
+      var rows = res[0];
+      rosterMap = res[1] || {};
       if (rows === null) {
         showMsg('<i class="fas fa-lock"></i> No se pudieron leer las calificaciones. ' +
-          'Verifica que tu cuenta sea de profesor/admin y que la regla de Firestore para ' +
-          '<code>exam_results</code> esté publicada (ver <b>FIRESTORE_EXAM_RESULTS_RULES.md</b>).', true);
+          'Verifica que tu cuenta sea de profesor/admin, que tengas grupos asignados y que la ' +
+          'regla de Firestore para <code>exam_results</code> esté publicada ' +
+          '(ver <b>FIRESTORE_EXAM_RESULTS_RULES.md</b>).', true);
         return;
       }
       allRows = rows;
@@ -315,8 +340,8 @@ footer a{color:var(--gold);text-decoration:none;}
       renderStats(rows);
       render();
       if (!rows.length) {
-        rowsEl.innerHTML = '<tr><td colspan="7" class="empty">Aún no hay resultados registrados. ' +
-          'En cuanto un alumno con sesión termine un examen o una lección, aparecerá aquí.</td></tr>';
+        rowsEl.innerHTML = '<tr><td colspan="7" class="empty">Aún no hay resultados de tus grupos. ' +
+          'En cuanto un alumno tuyo con sesión termine un examen o una lección, aparecerá aquí.</td></tr>';
       }
     });
   }

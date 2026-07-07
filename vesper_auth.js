@@ -165,6 +165,13 @@
         p.name = String(f.name.stringValue).slice(0, 60);
         changed = true;
       }
+      /* sid y grupo los administra el admin (no son elección del alumno):
+         se refrescan siempre. Los usa vesper_results.js para etiquetar cada
+         intento sin exponer el correo del alumno a los profesores. */
+      var sid = (f.sid && f.sid.stringValue) || "";
+      var grp = (f.group && f.group.stringValue) || "";
+      if (sid && p.sid !== sid) { p.sid = sid; changed = true; }
+      if (p.group !== grp) { p.group = grp; changed = true; }
       if (changed) localStorage.setItem("vesper_profile", JSON.stringify(p));
     } catch (e) {}
   }
