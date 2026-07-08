@@ -33,6 +33,12 @@ rules_version = '2';
  *   - exam_results: el alumno crea lo suyo; el profesor solo LEE intentos
  *     de sus grupos (query `group == g`); admin todo. Inmutables.
  *
+ * Acceso POR CURSO (2026-07-07, reintegrado 2026-07-08):
+ *   - students/{correo}.books = lista opcional de ids de curso permitidos.
+ *     Si existe, el alumno SOLO abre esos libros (studentbooks/) y sus
+ *     exámenes (exams/); si NO existe, ve TODO (compat hacia atrás). Admin y
+ *     profesores siempre ven todo. Helper: studentBookAllowed(id).
+ *
  * El alta/baja (manuales, libros, allowlist, roster) la hace
  * _scripts/upload_manuals.py INICIANDO SESIÓN COMO EL ADMIN (idToken),
  * por eso esas escrituras permiten isAdmin() y no `if false`.
@@ -91,6 +97,26 @@ service cloud.firestore {
                   .data.get('group', '') in myGroups();
     }
 
+    // ¿Usuario (verificado) en la allowlist de alumnos?
+    function isStudent() {
+      return verifiedEmail()
+             && exists(/databases/$(database)/documents/students/$(request.auth.token.email));
+    }
+
+    // Acceso POR CURSO (opcional, 2026-07-07): si students/{correo} tiene el
+    // campo `books` (lista de ids de curso/libro), el alumno SOLO puede abrir
+    // esos ids (libro Y su examen comparten id). Si NO tiene `books`, ve TODO
+    // (compat: los alumnos dados de alta antes de esta función no se afectan).
+    // Lo escribe el script admin con add-student --books / set-courses. Admin y
+    // profesores no pasan por aquí: ellos ven todo (ver los match de abajo).
+    function studentBookAllowed(id) {
+      return isStudent()
+             && (
+               !("books" in get(/databases/$(database)/documents/students/$(request.auth.token.email)).data)
+               || id in get(/databases/$(database)/documents/students/$(request.auth.token.email)).data.books
+             );
+    }
+
     /* ---------- allowlist de acceso ---------- */
     // Cada quien lee SOLO su propio doc (id = correo en minúsculas);
     // vesper_auth.js lo consulta para decidir el acceso al campus.
@@ -113,28 +139,23 @@ service cloud.firestore {
       }
     }
 
-    /* ---------- libros del alumno (libro.html) ---------- */
+    /* ---------- libros del alumno (libro.html) ----------
+       Admin y profesores ven todo; el alumno, solo los libros que su
+       allowlist permite (studentBookAllowed: todos si no tiene lista `books`). */
     match /studentbooks/{id} {
-      allow read:  if isAdmin() || isTeacher() || (
-                     verifiedEmail()
-                     && exists(/databases/$(database)/documents/students/$(request.auth.token.email))
-                   );
+      allow read:  if isAdmin() || isTeacher() || studentBookAllowed(id);
       allow write: if isAdmin();
       match /chunks/{n} {
-        allow read:  if isAdmin() || isTeacher() || (
-                       verifiedEmail()
-                       && exists(/databases/$(database)/documents/students/$(request.auth.token.email))
-                     );
+        allow read:  if isAdmin() || isTeacher() || studentBookAllowed(id);
         allow write: if isAdmin();
       }
     }
 
-    /* ---------- exámenes con clave de respuesta (exam.html) ---------- */
+    /* ---------- exámenes con clave de respuesta (exam.html) ----------
+       Mismo gate por curso que el libro: el examen comparte id con su curso,
+       así un alumno con lista `books` solo abre los exámenes de sus cursos. */
     match /exams/{id} {
-      allow read:  if isAdmin() || isTeacher() || (
-                     verifiedEmail()
-                     && exists(/databases/$(database)/documents/students/$(request.auth.token.email))
-                   );
+      allow read:  if isAdmin() || isTeacher() || studentBookAllowed(id);
       allow write: if isAdmin();
     }
 
