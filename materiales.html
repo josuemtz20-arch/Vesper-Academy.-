@@ -141,11 +141,68 @@ footer a:hover{color:var(--gold-lt);}
 /* Foco de teclado visible (WCAG 2.4.7) */
 :focus-visible{outline:3px solid var(--gold,#c5a059);outline-offset:2px;}
 
+/* Enlace discreto para volver a ver la guía de bienvenida. */
+.tour-replay{display:inline-flex;align-items:center;gap:7px;margin-top:10px;background:none;border:none;padding:4px 0;
+  font-family:inherit;font-size:.82rem;font-weight:600;color:var(--gold2);cursor:pointer;border-bottom:1px dashed transparent;transition:border-color .16s,color .16s;}
+.tour-replay:hover,.tour-replay:focus-visible{color:var(--navy);border-bottom-color:var(--gold);}
+.tour-replay i{font-size:.86rem;}
+
+/* ── Guía de bienvenida (primera visita): presenta todas las herramientas ── */
+#vtour[hidden]{display:none;}
+#vtour{position:fixed;inset:0;z-index:10000;display:flex;align-items:center;justify-content:center;padding:20px;
+  background:radial-gradient(600px 300px at 50% 0%,rgba(197,160,89,.14),transparent 60%),rgba(15,16,26,.72);
+  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);animation:vtFade .28s var(--ease-out) both;}
+@keyframes vtFade{from{opacity:0;}to{opacity:1;}}
+.vtour-card{position:relative;width:100%;max-width:452px;background:var(--white);border-radius:var(--r-lg);
+  border:1px solid var(--border);box-shadow:var(--sh-lg);overflow:hidden;animation:vtPop .42s var(--ease-out) both;}
+@keyframes vtPop{from{opacity:0;transform:translateY(22px) scale(.97);}to{opacity:1;transform:none;}}
+.vtour-close{position:absolute;top:12px;right:12px;z-index:2;width:34px;height:34px;border-radius:50%;border:none;
+  background:rgba(255,255,255,.14);color:#fff;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .16s;}
+.vtour-close:hover,.vtour-close:focus-visible{background:rgba(255,255,255,.3);}
+/* Zona superior navy (mascota o icono de la herramienta) */
+.vtour-top{position:relative;background:radial-gradient(360px 150px at 80% -20%,rgba(217,189,132,.28),transparent 62%),linear-gradient(135deg,var(--navy2),var(--navy) 60%,var(--navy3));
+  padding:30px 26px 26px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px;min-height:150px;justify-content:center;}
+.vtour-media{width:96px;height:96px;border-radius:50%;object-fit:cover;background:rgba(255,255,255,.06);
+  border:2px solid rgba(197,160,89,.55);box-shadow:0 10px 26px rgba(0,0,0,.34);}
+.vtour-badge{width:76px;height:76px;border-radius:20px;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,var(--gold-lt),var(--gold));color:var(--navy);font-size:2rem;box-shadow:0 10px 24px rgba(197,160,89,.4);}
+.vtour-chip{display:inline-flex;align-items:center;gap:7px;font-size:.64rem;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;
+  color:var(--gold-lt);background:rgba(197,160,89,.14);border:1px solid rgba(197,160,89,.4);padding:5px 12px;border-radius:999px;}
+.vtour-chip svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+/* Zona inferior de texto */
+.vtour-body{padding:22px 26px 20px;}
+.vtour-title{font-family:'Inria Serif',serif;font-size:1.4rem;line-height:1.2;margin:0 0 8px;color:var(--navy);}
+.vtour-desc{margin:0;color:var(--muted);font-size:.96rem;line-height:1.55;}
+/* Puntos de progreso */
+.vtour-dots{display:flex;justify-content:center;gap:7px;margin:20px 0 4px;}
+.vtour-dots i{width:7px;height:7px;border-radius:50%;background:var(--border);transition:width .25s var(--ease-out),background .25s;}
+.vtour-dots i.on{width:22px;background:var(--gold);}
+/* Acciones */
+.vtour-actions{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:6px 26px 24px;}
+.vtour-skip{background:none;border:none;padding:8px 4px;font-family:inherit;font-size:.86rem;font-weight:600;color:var(--muted);cursor:pointer;transition:color .16s;}
+.vtour-skip:hover,.vtour-skip:focus-visible{color:var(--navy);}
+.vtour-fwd{display:flex;align-items:center;gap:8px;}
+.vtour-back{width:44px;height:44px;border-radius:var(--r-sm);border:1px solid var(--border);background:#fff;color:var(--navy);font-size:.95rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:border-color .16s,background .16s;}
+.vtour-back:hover,.vtour-back:focus-visible{border-color:var(--gold);}
+.vtour-back[disabled]{opacity:.4;cursor:default;}
+.vtour-next{display:inline-flex;align-items:center;gap:9px;background:var(--gold);color:var(--navy);border:none;border-radius:var(--r-sm);
+  padding:13px 22px;font-family:inherit;font-size:.9rem;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(197,160,89,.32);transition:transform .16s,box-shadow .16s,background .16s;}
+.vtour-next:hover,.vtour-next:focus-visible{transform:translateY(-2px);background:var(--gold-lt);box-shadow:var(--sh-md);}
+.vtour-next i{transition:transform .25s var(--ease-out);}
+.vtour-next:hover i{transform:translateX(3px);}
+/* Resalte del héroe al terminar la guía ("empieza aquí 👇") */
+#today.vtour-spot{animation:vtSpot 2.6s ease-out 1;}
+@keyframes vtSpot{0%{box-shadow:0 0 0 0 rgba(197,160,89,.0),var(--sh-md);}
+  12%{box-shadow:0 0 0 6px rgba(197,160,89,.55),0 0 34px 6px rgba(197,160,89,.4);}
+  60%{box-shadow:0 0 0 3px rgba(197,160,89,.35),var(--sh-md);}
+  100%{box-shadow:0 0 0 0 rgba(197,160,89,0),var(--sh-md);}}
+
 /* Respeto total a prefers-reduced-motion. */
 @media (prefers-reduced-motion: reduce){
   html{scroll-behavior:auto;}
   *{animation:none !important;transition:none !important;}
   .v-rise{opacity:1 !important;transform:none !important;}
+  #vtour,.vtour-card{animation:none !important;}
 }
 </style>
 <link rel="stylesheet" href="assets/css/vesper_tokens.css">
@@ -169,6 +226,7 @@ footer a:hover{color:var(--gold-lt);}
     <span class="eyebrow">Portal del alumno</span>
     <h1 id="intro-title">Tu material de estudio</h1>
     <p>Aquí encuentras los libros del estudiante de tu curso y la biblioteca de audio para entrenar el oído. Tu profesor te indica qué libro y lección corresponde a tu clase.</p>
+    <button type="button" class="tour-replay" id="tour-replay"><i class="fas fa-compass" aria-hidden="true"></i> Ver guía rápida</button>
   </div>
 
   <!-- Héroe "Hoy": continúa donde lo dejaste / empieza por aquí -->
@@ -394,6 +452,161 @@ footer a:hover{color:var(--gold-lt);}
   btn.addEventListener("click", function(){
     setOpen(catalog.classList.contains("is-collapsed"));
   });
+})();
+</script>
+
+<!-- ── Guía de bienvenida: introducción a las herramientas (1ª visita) ── -->
+<div id="vtour" hidden role="dialog" aria-modal="true" aria-labelledby="vtour-title" aria-describedby="vtour-desc">
+  <div class="vtour-card">
+    <button type="button" class="vtour-close" id="vtour-close" aria-label="Cerrar la guía">&times;</button>
+    <div class="vtour-top" id="vtour-top"></div>
+    <div class="vtour-body">
+      <h2 class="vtour-title" id="vtour-title"></h2>
+      <p class="vtour-desc" id="vtour-desc"></p>
+      <div class="vtour-dots" id="vtour-dots" aria-hidden="true"></div>
+    </div>
+    <div class="vtour-actions">
+      <button type="button" class="vtour-skip" id="vtour-skip">Saltar</button>
+      <div class="vtour-fwd">
+        <button type="button" class="vtour-back" id="vtour-back" aria-label="Anterior"><i class="fas fa-arrow-left" aria-hidden="true"></i></button>
+        <button type="button" class="vtour-next" id="vtour-next">Siguiente <i class="fas fa-arrow-right" aria-hidden="true"></i></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* Guía de bienvenida del portal. Presenta las herramientas una sola vez
+   (marca en localStorage) y termina resaltando el héroe "Hoy" como primer
+   paso. Reabrible con el enlace "Ver guía rápida" o con ?tour=1. */
+(function(){
+  var KEY = "vesper_hub_tour_v1";
+  /* Iconito de "barra inferior" para situar cada herramienta. */
+  var BAR = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2.5"/><path d="M3 15h18"/></svg>';
+
+  /* Cada paso: mascota (img) o icono (fa), dónde vive, título y descripción. */
+  var STEPS = [
+    { img:"assets/images/mascot/vesper_cat_welcome.webp",
+      title:"¡Hola! Soy Vesper 👋",
+      desc:"Bienvenido/a a tu portal del alumno. En unos segundos te enseño todo lo que puedes hacer aquí — así nada te resulta confuso." },
+    { fa:"fa-layer-group", where:"Barra inferior · Inicio",
+      title:"Tus libros",
+      desc:"Todos los libros de tu curso viven aquí, en <b>Inicio</b>. Tu profe te dice cuál abrir en cada clase; el resto queda a un toque." },
+    { fa:"fa-graduation-cap", where:"Barra inferior · Aprender",
+      title:"Aprender y practicar",
+      desc:"El <b>mapa de lecciones</b> interactivo: avanza mundo por mundo y gana experiencia. Ahí mismo puedes <b>chatear con Vesper</b> para practicar hablando." },
+    { fa:"fa-headphones", where:"Barra inferior · Audio",
+      title:"Biblioteca de audio",
+      desc:"Entrena el oído con audios de voces nativas de cada lección. Ideal para repasar la pronunciación en cualquier momento." },
+    { fa:"fa-clipboard-list", where:"Barra inferior · Boleta",
+      title:"Tu boleta",
+      desc:"Consulta tus <b>calificaciones</b> y tu avance cuando quieras. Aquí ves cómo vas en cada evaluación." },
+    { fa:"fa-user", where:"Barra inferior · Perfil",
+      title:"Tu perfil",
+      desc:"Personaliza tu <b>gato Vesper</b>, cambia la apariencia y gestiona tu cuenta. Hazlo tuyo." },
+    { img:"assets/images/mascot/vesper_cat_explaining.webp",
+      title:"¡Listo para empezar!",
+      desc:"Tu primer paso te espera justo aquí arriba, en el botón grande de <b>“Hoy”</b>. Tócalo y comienza. ¡Nos vemos dentro!",
+      last:true }
+  ];
+
+  var el = {
+    ov:document.getElementById("vtour"),
+    top:document.getElementById("vtour-top"),
+    title:document.getElementById("vtour-title"),
+    desc:document.getElementById("vtour-desc"),
+    dots:document.getElementById("vtour-dots"),
+    back:document.getElementById("vtour-back"),
+    next:document.getElementById("vtour-next"),
+    skip:document.getElementById("vtour-skip"),
+    close:document.getElementById("vtour-close")
+  };
+  if(!el.ov) return;
+  var i = 0, lastFocus = null;
+
+  /* Puntos de progreso */
+  el.dots.innerHTML = STEPS.map(function(){ return "<i></i>"; }).join("");
+  var dotEls = Array.prototype.slice.call(el.dots.querySelectorAll("i"));
+
+  function render(){
+    var s = STEPS[i];
+    el.top.innerHTML =
+      (s.img ? '<img class="vtour-media" src="'+s.img+'" alt="Vesper">'
+             : '<span class="vtour-badge"><i class="fas '+s.fa+'" aria-hidden="true"></i></span>') +
+      (s.where ? '<span class="vtour-chip">'+BAR+s.where+'</span>' : '');
+    el.title.innerHTML = s.title;
+    el.desc.innerHTML = s.desc;
+    dotEls.forEach(function(d,k){ d.classList.toggle("on", k===i); });
+    el.back.disabled = (i===0);
+    el.next.innerHTML = s.last
+      ? '¡Empezar! <i class="fas fa-rocket" aria-hidden="true"></i>'
+      : 'Siguiente <i class="fas fa-arrow-right" aria-hidden="true"></i>';
+  }
+
+  function go(n){ i = Math.max(0, Math.min(STEPS.length-1, n)); render(); el.next.focus(); }
+
+  function open(){
+    lastFocus = document.activeElement;
+    i = 0; render();
+    el.ov.hidden = false;
+    document.body.style.overflow = "hidden";
+    el.next.focus();
+    document.addEventListener("keydown", onKey);
+  }
+
+  function finish(spotlight){
+    el.ov.hidden = true;
+    document.body.style.overflow = "";
+    document.removeEventListener("keydown", onKey);
+    try{ localStorage.setItem(KEY, "1"); }catch(e){}
+    if(lastFocus && lastFocus.focus){ try{ lastFocus.focus(); }catch(e){} }
+    if(spotlight){ spotHero(); }
+  }
+
+  /* Resalta el héroe "Hoy" como el primer paso a dar. */
+  function spotHero(){
+    var hero = document.getElementById("today");
+    if(!hero || hero.style.display === "none") return;
+    try{ hero.scrollIntoView({behavior:"smooth", block:"center"}); }catch(e){}
+    hero.classList.remove("vtour-spot");
+    void hero.offsetWidth;            /* reinicia la animación */
+    hero.classList.add("vtour-spot");
+    setTimeout(function(){ hero.classList.remove("vtour-spot"); }, 2700);
+  }
+
+  function onKey(e){
+    if(e.key === "Escape"){ finish(false); }
+    else if(e.key === "ArrowRight"){ if(i < STEPS.length-1) go(i+1); }
+    else if(e.key === "ArrowLeft"){ if(i > 0) go(i-1); }
+    else if(e.key === "Tab"){
+      /* Trampa de foco simple dentro de la tarjeta. */
+      var f = el.ov.querySelectorAll("button:not([disabled])");
+      if(!f.length) return;
+      var first = f[0], last = f[f.length-1];
+      if(e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+      else if(!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+    }
+  }
+
+  el.next.addEventListener("click", function(){
+    if(STEPS[i].last){ finish(true); } else { go(i+1); }
+  });
+  el.back.addEventListener("click", function(){ go(i-1); });
+  el.skip.addEventListener("click", function(){ finish(false); });
+  el.close.addEventListener("click", function(){ finish(false); });
+
+  /* Reabrir a demanda desde el enlace del intro. */
+  var replay = document.getElementById("tour-replay");
+  if(replay){ replay.addEventListener("click", open); }
+
+  /* Autoarranque: primera visita o ?tour=1. Esperamos un poco para no
+     competir con el render del héroe/recomendaciones. */
+  var force = /[?&]tour=1\b/.test(location.search);
+  var seen = false;
+  try{ seen = !!localStorage.getItem(KEY); }catch(e){}
+  if(force || !seen){
+    setTimeout(open, force ? 60 : 620);
+  }
 })();
 </script>
 
