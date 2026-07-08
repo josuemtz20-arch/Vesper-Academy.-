@@ -61,7 +61,10 @@ match /exam_results/{id} {
   // el alumno crea SOLO sus propios intentos, y deben ser internamente
   // coherentes: score<=total, percent cuadra con score/total (±1 por redondeo),
   // y examType es uno conocido. Ver firestore.rules para la versión canónica.
+  // 🔒 email_verified: exige correo VERIFICADO (Firebase deja crear cuentas
+  //    con correos ajenos sin verificar; ver nota de seguridad en firestore.rules).
   allow create: if request.auth != null
+                && request.auth.token.email_verified == true
                 && request.resource.data.studentUid == request.auth.uid
                 && request.resource.data.score is int
                 && request.resource.data.total is int
@@ -83,10 +86,12 @@ match /exam_results/{id} {
 
   // lee: el dueño, el admin, o un profesor DEL GRUPO del intento
   // (teacherSeesGroup: helper definido en firestore.rules — compara
-  // resource.data.group contra teachers/{correo}.groups)
+  // resource.data.group contra teachers/{correo}.groups; el helper y el
+  // check del admin deben exigir también email_verified == true)
   allow read:   if request.auth != null && (
                    resource.data.studentUid == request.auth.uid
-                   || request.auth.token.email == "josuemtz20@gmail.com"
+                   || (request.auth.token.email_verified == true
+                       && request.auth.token.email == "josuemtz20@gmail.com")
                    || teacherSeesGroup(resource.data.group)
                 );
 
@@ -119,6 +124,14 @@ Publica las reglas (consola de Firebase → Firestore → Reglas, o
 > legible por cualquier alumno de la allowlist. Si esto te importa para la
 > integridad del examen, separa la clave en un subdocumento legible solo por
 > profesores/admin, o califica del lado del servidor.
+
+> **🔒 Importante — correo verificado:** toda regla que confíe en
+> `request.auth.token.email` (o en `exists(...teachers/$(...email))`) debe exigir
+> además `request.auth.token.email_verified == true`. Sin eso, cualquiera puede
+> crear con la API pública de Firebase una cuenta con el correo de un
+> profesor/alumno aún no registrado (sin verificarlo) y pasar la regla. El
+> cliente ya exige correo verificado en todos sus flujos, así que añadirlo a las
+> reglas no rompe nada. Ver la cabecera de `firestore.rules`.
 
 > **Importante — casing del correo:** los documentos de la allowlist se llavean
 > con el **correo en minúsculas** (igual que `fsDocExists` en `vesper_auth.js`).

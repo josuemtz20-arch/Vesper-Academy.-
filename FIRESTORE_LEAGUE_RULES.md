@@ -27,8 +27,12 @@ En las reglas de Firestore de la base `teachermanuals`, dentro de
 
 ```
 match /leagues/{week}/members/{uid} {
-  allow read:  if request.auth != null;                 // cualquier autenticado ve la tabla
+  // email_verified: solo cuentas con correo verificado (el cliente ya lo
+  // exige; evita cuentas fabricadas con la API pública de Firebase)
+  allow read:  if request.auth != null
+               && request.auth.token.email_verified == true;
   allow write: if request.auth != null
+               && request.auth.token.email_verified == true
                && request.auth.uid == uid               // cada quien edita SOLO su entrada
                && request.resource.data.xp is int;       // valida el XP
 }

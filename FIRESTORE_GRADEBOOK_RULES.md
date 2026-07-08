@@ -13,6 +13,14 @@ se rompe nada.
 > Firestore → base `teachermanuals` → Reglas → Publicar. Este documento solo
 > explica el modelo.
 
+> **🔒 Correo verificado obligatorio (2026-07-08):** toda regla que confíe en
+> `request.auth.token.email` debe exigir además
+> `request.auth.token.email_verified == true`. Sin eso, un atacante puede crear
+> una cuenta con el correo (aún no registrado) de un profesor y ESCRIBIR
+> calificaciones, o con el de un alumno y leer su boleta. Verifica que
+> `_scripts/firestore.rules` incluya este check antes de publicar (la
+> referencia `firestore.rules` del repo ya lo trae).
+
 ## Grupos y privacidad (2026-07-07)
 
 - Cada alumno pertenece a **un grupo** (`students/{correo}.group`) y cada

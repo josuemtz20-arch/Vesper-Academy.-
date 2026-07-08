@@ -14,6 +14,20 @@ rules_version = '2';
  *     de reemplazar: lo más seguro es solo AÑADIR esos bloques a tus reglas
  *     actuales.
  *
+ * 🔒 SEGURIDAD (2026-07-08) — correo VERIFICADO obligatorio:
+ *     Firebase Auth permite crear una cuenta con CUALQUIER correo (ajeno)
+ *     sin verificarlo, usando la API pública con la apiKey del sitio. El
+ *     token de esa cuenta trae `email` = el correo suplantado y
+ *     `email_verified` = false. Si las reglas solo comparan
+ *     `request.auth.token.email`, un atacante que registre el correo de un
+ *     alumno/profesor AÚN NO registrado leería sus datos (o escribiría
+ *     calificaciones, si suplanta a un profesor). Por eso TODA regla que
+ *     confíe en el correo exige además `email_verified == true` (helper
+ *     `verifiedEmail()`). El cliente ya exigía correo verificado en todas
+ *     sus rutas, así que esto NO rompe ningún flujo legítimo.
+ *     ⚠️ Aplica este mismo endurecimiento al archivo canónico local
+ *     `_scripts/firestore.rules` antes de publicar, si publicas desde ahí.
+ *
  * Publica en: consola de Firebase → Firestore → base "teachermanuals" →
  * pestaña Reglas → pegar → Publicar. (O `firebase deploy --only
  * firestore:rules` si tienes firebase-tools configurado.)
@@ -24,42 +38,51 @@ rules_version = '2';
  * NO ignora estas reglas: la escritura en esas colecciones debe permitir al
  * admin (`isAdmin()`), no `if false`. (Solo sería `if false` si las subidas
  * usaran una service account / Admin SDK, que aquí NO se usa.)
+ * NOTA: la cuenta del admin debe tener su correo VERIFICADO (una vez) para
+ * que `isAdmin()` pase con el endurecimiento de arriba.
  * ============================================================ */
 service cloud.firestore {
   match /databases/{database}/documents {
 
+    // Correo del token VERIFICADO: la única forma segura de confiar en
+    // request.auth.token.email (ver nota de seguridad en la cabecera).
+    function verifiedEmail() {
+      return request.auth != null
+             && request.auth.token.email_verified == true;
+    }
+
     // El admin sube manuales/libros/allowlists con SU idToken (no service account).
     function isAdmin() {
-      return request.auth != null
+      return verifiedEmail()
              && request.auth.token.email == "josuemtz20@gmail.com";
+    }
+
+    // ¿El usuario (con correo verificado) está en la allowlist de profesores?
+    function isTeacher() {
+      return verifiedEmail()
+             && exists(/databases/$(database)/documents/teachers/$(request.auth.token.email));
     }
 
     // —— Allowlist de acceso: cada quien lee SOLO su propio doc (id = correo) ——
     // vesper_auth.js consulta students/{correo} y teachers/{correo} con el
     // token del propio usuario para decidir si tiene acceso.
     match /students/{email} {
-      allow read:  if request.auth != null && request.auth.token.email == email;
+      allow read:  if verifiedEmail() && request.auth.token.email == email;
       allow write: if isAdmin();   // alta/baja desde el script admin
     }
     match /teachers/{email} {
-      allow read:  if request.auth != null && request.auth.token.email == email;
+      allow read:  if verifiedEmail() && request.auth.token.email == email;
       allow write: if isAdmin();
     }
 
     // —— Manuales del profesor: solo profesores autorizados o el admin ——
     // (manual.html → /documents/manuals/{id})
     match /manuals/{id} {
-      allow read:  if request.auth != null && (
-                     exists(/databases/$(database)/documents/teachers/$(request.auth.token.email))
-                     || request.auth.token.email == "josuemtz20@gmail.com"
-                   );
+      allow read:  if isTeacher() || isAdmin();
       allow write: if isAdmin();
       // el manual va troceado en la subcoleccion chunks/{n}: mismo permiso de lectura
       match /chunks/{n} {
-        allow read:  if request.auth != null && (
-                       exists(/databases/$(database)/documents/teachers/$(request.auth.token.email))
-                       || request.auth.token.email == "josuemtz20@gmail.com"
-                     );
+        allow read:  if isTeacher() || isAdmin();
         allow write: if isAdmin();
       }
     }
@@ -67,18 +90,16 @@ service cloud.firestore {
     // —— Libros del alumno: alumnos autorizados, profesores o el admin ——
     // (libro.html → /documents/studentbooks/{id})
     match /studentbooks/{id} {
-      allow read:  if request.auth != null && (
-                     exists(/databases/$(database)/documents/students/$(request.auth.token.email))
-                     || exists(/databases/$(database)/documents/teachers/$(request.auth.token.email))
-                     || request.auth.token.email == "josuemtz20@gmail.com"
+      allow read:  if isAdmin() || isTeacher() || (
+                     verifiedEmail()
+                     && exists(/databases/$(database)/documents/students/$(request.auth.token.email))
                    );
       allow write: if isAdmin();
       // el libro va troceado en la subcoleccion chunks/{n}: mismo permiso de lectura
       match /chunks/{n} {
-        allow read:  if request.auth != null && (
-                       exists(/databases/$(database)/documents/students/$(request.auth.token.email))
-                       || exists(/databases/$(database)/documents/teachers/$(request.auth.token.email))
-                       || request.auth.token.email == "josuemtz20@gmail.com"
+        allow read:  if isAdmin() || isTeacher() || (
+                       verifiedEmail()
+                       && exists(/databases/$(database)/documents/students/$(request.auth.token.email))
                      );
         allow write: if isAdmin();
       }
@@ -88,28 +109,28 @@ service cloud.firestore {
     // (exam.html → /documents/exams/{id}). Guardan las claves de respuesta, por eso
     // NO se publican como archivo estático; se leen con el idToken del alumno.
     match /exams/{id} {
-      allow read:  if request.auth != null && (
-                     exists(/databases/$(database)/documents/students/$(request.auth.token.email))
-                     || exists(/databases/$(database)/documents/teachers/$(request.auth.token.email))
-                     || request.auth.token.email == "josuemtz20@gmail.com"
+      allow read:  if isAdmin() || isTeacher() || (
+                     verifiedEmail()
+                     && exists(/databases/$(database)/documents/students/$(request.auth.token.email))
                    );
       // alta/actualizacion SOLO desde la cuenta admin (upload_manuals.py upload-exams,
       // que inicia sesion como el admin y escribe con su idToken).
-      allow write: if request.auth != null
-                   && request.auth.token.email == "josuemtz20@gmail.com";
+      allow write: if isAdmin();
     }
 
     // —— Progreso del alumno (racha + XP): self-scoped ——
-    // (vesper_sync.js → /documents/progress/{uid})
+    // (vesper_sync.js → /documents/progress/{uid}; el cliente solo sincroniza
+    //  con correo verificado, así que exigirlo aquí no rompe nada)
     match /progress/{uid} {
-      allow read, write: if request.auth != null && request.auth.uid == uid;
+      allow read, write: if verifiedEmail() && request.auth.uid == uid;
     }
 
-    // —— Liga semanal: lee cualquier autenticado; escribe SOLO su entrada ——
-    // (vesper_league_cloud.js → /documents/leagues/{week}/members/{uid})
+    // —— Liga semanal: lee cualquier autenticado VERIFICADO; escribe SOLO su entrada ——
+    // (vesper_league_cloud.js → /documents/leagues/{week}/members/{uid};
+    //  el cliente solo participa con correo verificado)
     match /leagues/{week}/members/{uid} {
-      allow read:  if request.auth != null;
-      allow write: if request.auth != null
+      allow read:  if verifiedEmail();
+      allow write: if verifiedEmail()
                    && request.auth.uid == uid
                    && request.resource.data.xp is int;
     }
@@ -127,7 +148,7 @@ service cloud.firestore {
     //     burdas (percent que no cuadra con score/total, score>total, tipos de
     //     examen inventados).
     match /exam_results/{id} {
-      allow create: if request.auth != null
+      allow create: if verifiedEmail()
                     && request.resource.data.studentUid == request.auth.uid
                     && request.resource.data.score is int
                     && request.resource.data.total is int
@@ -151,8 +172,8 @@ service cloud.firestore {
                     && request.resource.data.examType in ["lesson", "exam", "boss", "placement"];
       allow read:   if request.auth != null && (
                        resource.data.studentUid == request.auth.uid
-                       || exists(/databases/$(database)/documents/teachers/$(request.auth.token.email))
-                       || request.auth.token.email == "josuemtz20@gmail.com"
+                       || isTeacher()
+                       || isAdmin()
                     );
       allow update, delete: if false;
     }
@@ -163,20 +184,15 @@ service cloud.firestore {
     // (vesper_gradebook.js → /documents/gradebook/{correo};
     //  ver FIRESTORE_GRADEBOOK_RULES.md)
     match /gradebook/{email} {
-      allow read:  if request.auth != null && (
-                     request.auth.token.email == email
-                     || exists(/databases/$(database)/documents/teachers/$(request.auth.token.email))
-                     || request.auth.token.email == "josuemtz20@gmail.com"
-                   );
+      allow read:  if isAdmin() || isTeacher()
+                   || (verifiedEmail() && request.auth.token.email == email);
       // escribe: SOLO profes/admin. Cada componente numérico (participacion,
       // examsGrade, lessonsGrade) es OPCIONAL por escritura, pero si está
       // presente debe ser int 0..100. examsGrade/lessonsGrade son la nota de
       // registro de Exámenes/Lecciones confirmada por el profesor (la única que
       // cuenta para la final; los promedios de práctica los escribe el alumno
       // en exam_results y NO se usan para la nota).
-      allow write: if request.auth != null
-                   && (exists(/databases/$(database)/documents/teachers/$(request.auth.token.email))
-                       || request.auth.token.email == "josuemtz20@gmail.com")
+      allow write: if (isTeacher() || isAdmin())
                    && (!("participacion" in request.resource.data)
                        || (request.resource.data.participacion is int
                            && request.resource.data.participacion >= 0
@@ -198,14 +214,9 @@ service cloud.firestore {
     // (vesper_gradebook.js → /documents/daily_progress/{correo};
     //  ver FIRESTORE_GRADEBOOK_RULES.md)
     match /daily_progress/{email} {
-      allow read:  if request.auth != null && (
-                     request.auth.token.email == email
-                     || exists(/databases/$(database)/documents/teachers/$(request.auth.token.email))
-                     || request.auth.token.email == "josuemtz20@gmail.com"
-                   );
-      allow write: if request.auth != null
-                   && (exists(/databases/$(database)/documents/teachers/$(request.auth.token.email))
-                       || request.auth.token.email == "josuemtz20@gmail.com");
+      allow read:  if isAdmin() || isTeacher()
+                   || (verifiedEmail() && request.auth.token.email == email);
+      allow write: if isTeacher() || isAdmin();
     }
 
   }
