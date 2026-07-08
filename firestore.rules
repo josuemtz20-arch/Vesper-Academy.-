@@ -1,48 +1,46 @@
 rules_version = '2';
 
 /* ============================================================
- * Vesper Academy — Reglas de Firestore (base "teachermanuals")
+ * Vesper Academy — Reglas de Firestore, base "teachermanuals"
  * ------------------------------------------------------------
- * Estas reglas gobiernan TODAS las colecciones que las páginas del
- * sitio leen/escriben con el idToken del usuario (Firebase Auth).
+ * ESTE archivo es el que se publica: consola de Firebase → Firestore →
+ * seleccionar la base "teachermanuals" → pestaña Reglas → pegar TODO →
+ * Publicar. (La base "(default)" tiene su propio archivo:
+ * firestore.default.rules — ver ahí placement_results.)
  *
- * ⚠️  IMPORTANTE: este archivo es la referencia COMPLETA reconstruida a
- *     partir del comportamiento del cliente. Lo nuevo que la boleta de
- *     calificaciones necesita son los bloques `gradebook` y `daily_progress`
- *     (el panel de resultados ya usa `exam_results`). Si ya tienes reglas
- *     publicadas para manuals/studentbooks/students/teachers, compara antes
- *     de reemplazar: lo más seguro es solo AÑADIR esos bloques a tus reglas
- *     actuales.
+ * Cubre TODO lo que el sitio lee/escribe hoy:
+ *   students/ teachers/ (allowlist) · manuals/ studentbooks/ exams/
+ *   progress/ · leagues/ · exam_results/ · roster/ · gradebook/
+ *   daily_progress/ (boleta por sid) · app_events (analytics).
  *
- * 🔒 SEGURIDAD (2026-07-08) — correo VERIFICADO obligatorio:
+ * 🔒 SEGURIDAD — correo VERIFICADO obligatorio:
  *     Firebase Auth permite crear una cuenta con CUALQUIER correo (ajeno)
- *     sin verificarlo, usando la API pública con la apiKey del sitio. El
- *     token de esa cuenta trae `email` = el correo suplantado y
- *     `email_verified` = false. Si las reglas solo comparan
- *     `request.auth.token.email`, un atacante que registre el correo de un
- *     alumno/profesor AÚN NO registrado leería sus datos (o escribiría
- *     calificaciones, si suplanta a un profesor). Por eso TODA regla que
- *     confíe en el correo exige además `email_verified == true` (helper
- *     `verifiedEmail()`). El cliente ya exigía correo verificado en todas
- *     sus rutas, así que esto NO rompe ningún flujo legítimo.
- *     ⚠️ Aplica este mismo endurecimiento al archivo canónico local
- *     `_scripts/firestore.rules` antes de publicar, si publicas desde ahí.
+ *     sin verificarlo, usando la API pública con la apiKey del sitio. Por
+ *     eso TODA regla que confíe en request.auth.token.email exige además
+ *     email_verified == true (helper verifiedEmail()). El cliente ya exige
+ *     correo verificado en todos sus flujos, así que no rompe nada.
+ *     La cuenta del admin debe tener su correo verificado (una vez).
  *
- * Publica en: consola de Firebase → Firestore → base "teachermanuals" →
- * pestaña Reglas → pegar → Publicar. (O `firebase deploy --only
- * firestore:rules` si tienes firebase-tools configurado.)
+ * Modelo de grupos y privacidad (2026-07-07):
+ *   - students/{correo}.sid  = hash opaco del correo (sid_of() del script
+ *     admin); .group = grupo del alumno.
+ *   - teachers/{correo}.groups = lista de grupos que ese profesor ve.
+ *   - roster/{sid} = espejo SIN correo de la allowlist (name/level/
+ *     levelName/group). El profesor ve NOMBRES, nunca correos.
+ *   - gradebook/{sid} y daily_progress/{sid}: la boleta. El alumno lee
+ *     SOLO la suya (students/{su correo}.sid == sid); el profesor solo
+ *     las de SUS grupos (roster/{sid}.group ∈ sus groups); admin todo.
+ *   - exam_results: el alumno crea lo suyo; el profesor solo LEE intentos
+ *     de sus grupos (query `group == g`); admin todo. Inmutables.
  *
- * El alta/baja de manuales, libros y de la allowlist (students/teachers)
- * lo hace `_scripts/upload_manuals.py`, que INICIA SESIÓN COMO EL ADMIN
- * (signInWithPassword → idToken) y escribe por REST con ese token. Por eso
- * NO ignora estas reglas: la escritura en esas colecciones debe permitir al
- * admin (`isAdmin()`), no `if false`. (Solo sería `if false` si las subidas
- * usaran una service account / Admin SDK, que aquí NO se usa.)
- * NOTA: la cuenta del admin debe tener su correo VERIFICADO (una vez) para
- * que `isAdmin()` pase con el endurecimiento de arriba.
+ * El alta/baja (manuales, libros, allowlist, roster) la hace
+ * _scripts/upload_manuals.py INICIANDO SESIÓN COMO EL ADMIN (idToken),
+ * por eso esas escrituras permiten isAdmin() y no `if false`.
  * ============================================================ */
 service cloud.firestore {
   match /databases/{database}/documents {
+
+    /* ---------- helpers ---------- */
 
     // Correo del token VERIFICADO: la única forma segura de confiar en
     // request.auth.token.email (ver nota de seguridad en la cabecera).
@@ -51,51 +49,77 @@ service cloud.firestore {
              && request.auth.token.email_verified == true;
     }
 
-    // El admin sube manuales/libros/allowlists con SU idToken (no service account).
     function isAdmin() {
       return verifiedEmail()
              && request.auth.token.email == "josuemtz20@gmail.com";
     }
 
-    // ¿El usuario (con correo verificado) está en la allowlist de profesores?
+    // ¿Usuario (verificado) en la allowlist de profesores?
     function isTeacher() {
       return verifiedEmail()
              && exists(/databases/$(database)/documents/teachers/$(request.auth.token.email));
     }
 
-    // —— Allowlist de acceso: cada quien lee SOLO su propio doc (id = correo) ——
-    // vesper_auth.js consulta students/{correo} y teachers/{correo} con el
-    // token del propio usuario para decidir si tiene acceso.
+    // Grupos asignados al profesor con sesión ([] si no tiene campo groups).
+    function myGroups() {
+      return get(/databases/$(database)/documents/teachers/$(request.auth.token.email))
+               .data.get('groups', []);
+    }
+
+    // ¿Este profesor tiene asignado el grupo g?
+    function teacherSeesGroup(g) {
+      return isTeacher() && g in myGroups();
+    }
+
+    // sid del alumno con sesión (sembrado por el admin en students/{correo}).
+    // El exists() previo evita que get() sobre un doc ausente (p. ej. un
+    // profesor, que no tiene doc en students/) haga fallar toda la regla.
+    function ownSid(sid) {
+      return verifiedEmail()
+             && exists(/databases/$(database)/documents/students/$(request.auth.token.email))
+             && get(/databases/$(database)/documents/students/$(request.auth.token.email))
+                  .data.get('sid', '') == sid;
+    }
+
+    // ¿Este profesor tiene asignado el grupo del alumno {sid} (según el
+    // roster que mantiene el script admin)? Con guarda exists() para que un
+    // sid sin entrada en roster deniegue en vez de errar.
+    function teacherOfSid(sid) {
+      return isTeacher()
+             && exists(/databases/$(database)/documents/roster/$(sid))
+             && get(/databases/$(database)/documents/roster/$(sid))
+                  .data.get('group', '') in myGroups();
+    }
+
+    /* ---------- allowlist de acceso ---------- */
+    // Cada quien lee SOLO su propio doc (id = correo en minúsculas);
+    // vesper_auth.js lo consulta para decidir el acceso al campus.
     match /students/{email} {
       allow read:  if verifiedEmail() && request.auth.token.email == email;
-      allow write: if isAdmin();   // alta/baja desde el script admin
+      allow write: if isAdmin();
     }
     match /teachers/{email} {
       allow read:  if verifiedEmail() && request.auth.token.email == email;
       allow write: if isAdmin();
     }
 
-    // —— Manuales del profesor: solo profesores autorizados o el admin ——
-    // (manual.html → /documents/manuals/{id})
+    /* ---------- manuales del profesor (manual.html) ---------- */
     match /manuals/{id} {
       allow read:  if isTeacher() || isAdmin();
       allow write: if isAdmin();
-      // el manual va troceado en la subcoleccion chunks/{n}: mismo permiso de lectura
       match /chunks/{n} {
         allow read:  if isTeacher() || isAdmin();
         allow write: if isAdmin();
       }
     }
 
-    // —— Libros del alumno: alumnos autorizados, profesores o el admin ——
-    // (libro.html → /documents/studentbooks/{id})
+    /* ---------- libros del alumno (libro.html) ---------- */
     match /studentbooks/{id} {
       allow read:  if isAdmin() || isTeacher() || (
                      verifiedEmail()
                      && exists(/databases/$(database)/documents/students/$(request.auth.token.email))
                    );
       allow write: if isAdmin();
-      // el libro va troceado en la subcoleccion chunks/{n}: mismo permiso de lectura
       match /chunks/{n} {
         allow read:  if isAdmin() || isTeacher() || (
                        verifiedEmail()
@@ -105,29 +129,21 @@ service cloud.firestore {
       }
     }
 
-    // —— Exámenes por curso/manual: alumnos autorizados, profesores o el admin ——
-    // (exam.html → /documents/exams/{id}). Guardan las claves de respuesta, por eso
-    // NO se publican como archivo estático; se leen con el idToken del alumno.
+    /* ---------- exámenes con clave de respuesta (exam.html) ---------- */
     match /exams/{id} {
       allow read:  if isAdmin() || isTeacher() || (
                      verifiedEmail()
                      && exists(/databases/$(database)/documents/students/$(request.auth.token.email))
                    );
-      // alta/actualizacion SOLO desde la cuenta admin (upload_manuals.py upload-exams,
-      // que inicia sesion como el admin y escribe con su idToken).
       allow write: if isAdmin();
     }
 
-    // —— Progreso del alumno (racha + XP): self-scoped ——
-    // (vesper_sync.js → /documents/progress/{uid}; el cliente solo sincroniza
-    //  con correo verificado, así que exigirlo aquí no rompe nada)
+    /* ---------- progreso del alumno: racha + XP (vesper_sync.js) ---------- */
     match /progress/{uid} {
       allow read, write: if verifiedEmail() && request.auth.uid == uid;
     }
 
-    // —— Liga semanal: lee cualquier autenticado VERIFICADO; escribe SOLO su entrada ——
-    // (vesper_league_cloud.js → /documents/leagues/{week}/members/{uid};
-    //  el cliente solo participa con correo verificado)
+    /* ---------- liga semanal (vesper_league_cloud.js) ---------- */
     match /leagues/{week}/members/{uid} {
       allow read:  if verifiedEmail();
       allow write: if verifiedEmail()
@@ -135,18 +151,11 @@ service cloud.firestore {
                    && request.resource.data.xp is int;
     }
 
-    // —— Resultados de exámenes: el alumno CREA lo suyo; el dueño,
-    //    los profesores y el admin pueden LEER; intentos inmutables ——
-    // (vesper_results.js → /documents/exam_results/{autoId})
-    //
-    // ⚠️  IMPORTANTE (integridad de la boleta): estos intentos los ESCRIBE el
-    //     propio alumno (autocalificación en el navegador), así que NO son una
-    //     fuente de verdad confiable para la calificación oficial. Sirven como
-    //     PRÁCTICA/progreso; la nota de registro la confirma el profesor
-    //     (ver vesper_gradebook.js / portal_boleta.html). Aun así validamos la
-    //     coherencia interna del intento para bloquear las falsificaciones más
-    //     burdas (percent que no cuadra con score/total, score>total, tipos de
-    //     examen inventados).
+    /* ---------- resultados de exámenes (vesper_results.js) ----------
+       El alumno CREA sus intentos (autocalificación => son PRÁCTICA, no la
+       nota oficial; la nota la confirma el profesor en gradebook). Lee: el
+       dueño, el admin, o un profesor DEL GRUPO del intento (su panel lanza
+       queries `where group == g` por cada grupo suyo). Inmutables. */
     match /exam_results/{id} {
       allow create: if verifiedEmail()
                     && request.resource.data.studentUid == request.auth.uid
@@ -158,8 +167,7 @@ service cloud.firestore {
                     && request.resource.data.score <= request.resource.data.total
                     && request.resource.data.percent >= 0
                     && request.resource.data.percent <= 100
-                    // percent debe cuadrar con score/total (±1 por redondeo);
-                    // si total==0 el percent debe ser 0.
+                    // percent debe cuadrar con score/total (±1 por redondeo)
                     && (
                          (request.resource.data.total == 0 && request.resource.data.percent == 0)
                          || (request.resource.data.total > 0
@@ -168,31 +176,38 @@ service cloud.firestore {
                              && request.resource.data.percent * request.resource.data.total
                                 <= (request.resource.data.score * 100) + request.resource.data.total)
                        )
-                    // solo tipos de examen conocidos
                     && request.resource.data.examType in ["lesson", "exam", "boss", "placement"];
       allow read:   if request.auth != null && (
                        resource.data.studentUid == request.auth.uid
-                       || isTeacher()
                        || isAdmin()
+                       || ("group" in resource.data
+                           && teacherSeesGroup(resource.data.group))
                     );
       allow update, delete: if false;
     }
 
-    // —— Boleta de calificaciones (NUEVO): participación capturada por el
-    //    profesor. Un doc por alumno (id = correo en minúsculas). El alumno
-    //    lee SOLO su boleta; profes/admin leen y escriben todas ——
-    // (vesper_gradebook.js → /documents/gradebook/{correo};
-    //  ver FIRESTORE_GRADEBOOK_RULES.md)
-    match /gradebook/{email} {
-      allow read:  if isAdmin() || isTeacher()
-                   || (verifiedEmail() && request.auth.token.email == email);
-      // escribe: SOLO profes/admin. Cada componente numérico (participacion,
-      // examsGrade, lessonsGrade) es OPCIONAL por escritura, pero si está
-      // presente debe ser int 0..100. examsGrade/lessonsGrade son la nota de
-      // registro de Exámenes/Lecciones confirmada por el profesor (la única que
-      // cuenta para la final; los promedios de práctica los escribe el alumno
-      // en exam_results y NO se usan para la nota).
-      allow write: if (isTeacher() || isAdmin())
+    /* ---------- roster: espejo sin correo de la allowlist ----------
+       Lo escribe SOLO el script admin (add-student / set-group /
+       sync-roster). El admin lista todo; un profesor solo puede consultar
+       `where group == <uno de sus grupos>`. */
+    match /roster/{sid} {
+      allow read:  if isAdmin()
+                   || ("group" in resource.data
+                       && teacherSeesGroup(resource.data.group));
+      allow write: if isAdmin();
+    }
+
+    /* ---------- boleta: parte manual del profesor (gradebook/{sid}) ----------
+       Lee: el propio alumno (students/{correo}.sid == sid), los profesores
+       del grupo del alumno (roster/{sid}.group ∈ sus groups) y el admin.
+       Escribe: SOLO profes del grupo o admin. participacion / examsGrade /
+       lessonsGrade son OPCIONALES por escritura, pero si vienen deben ser
+       int 0..100 (validación por campo). */
+    match /gradebook/{sid} {
+      allow read:  if isAdmin()
+                   || ownSid(sid)
+                   || teacherOfSid(sid);
+      allow write: if (isAdmin() || teacherOfSid(sid))
                    && (!("participacion" in request.resource.data)
                        || (request.resource.data.participacion is int
                            && request.resource.data.participacion >= 0
@@ -207,16 +222,36 @@ service cloud.firestore {
                            && request.resource.data.lessonsGrade <= 100));
     }
 
-    // —— Progreso diario (NUEVO): rúbrica del curso (20 días × aspectos,
-    //    ✓/✗) capturada por el profesor. Un doc por alumno (id = correo en
-    //    minúsculas). El alumno lee SOLO su rúbrica; profes/admin leen y
-    //    escriben todas ——
-    // (vesper_gradebook.js → /documents/daily_progress/{correo};
-    //  ver FIRESTORE_GRADEBOOK_RULES.md)
-    match /daily_progress/{email} {
-      allow read:  if isAdmin() || isTeacher()
-                   || (verifiedEmail() && request.auth.token.email == email);
-      allow write: if isTeacher() || isAdmin();
+    /* ---------- rúbrica diaria del curso (daily_progress/{sid}) ----------
+       Mismo esquema de permisos que gradebook. */
+    match /daily_progress/{sid} {
+      allow read:  if isAdmin()
+                   || ownSid(sid)
+                   || teacherOfSid(sid);
+      allow write: if isAdmin() || teacherOfSid(sid);
+    }
+
+    /* ---------- analytics ligera (vesper_analytics.js) ----------
+       Eventos anónimos (create sin sesión, con la apiKey pública). Solo
+       CREATE con forma validada y tamaños acotados; leer/borrar, solo el
+       admin (desde consola siempre se puede). Si no usas VA.cfg.cloud,
+       puedes dejar este bloque igual: nadie escribe. */
+    match /app_events/{id} {
+      allow create: if request.resource.data.keys().hasOnly(
+                         ["event", "props", "vid", "sid", "page", "createdAt"])
+                    && request.resource.data.event is string
+                    && request.resource.data.event.size() <= 64
+                    && request.resource.data.props is string
+                    && request.resource.data.props.size() <= 2000
+                    && request.resource.data.vid is string
+                    && request.resource.data.vid.size() <= 40
+                    && request.resource.data.sid is string
+                    && request.resource.data.sid.size() <= 40
+                    && request.resource.data.page is string
+                    && request.resource.data.page.size() <= 120
+                    && request.resource.data.createdAt is timestamp;
+      allow read:   if isAdmin();
+      allow update, delete: if false;
     }
 
   }

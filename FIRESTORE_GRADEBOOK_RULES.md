@@ -8,18 +8,17 @@ guardados en `exam_results`, y la **Participación** la captura el profesor
 publicadas, la boleta funciona en **modo lectura** (aviso, sin guardar); no
 se rompe nada.
 
-> **Reglas completas:** el archivo canónico es `_scripts/firestore.rules`
-> (local, no publicado). Pégalo COMPLETO en la consola de Firebase →
+> **Reglas completas:** el archivo canónico es `firestore.rules` (en la raíz
+> de este repositorio). Pégalo COMPLETO en la consola de Firebase →
 > Firestore → base `teachermanuals` → Reglas → Publicar. Este documento solo
-> explica el modelo.
+> explica el modelo. (La base `(default)` usa `firestore.default.rules`.)
 
 > **🔒 Correo verificado obligatorio (2026-07-08):** toda regla que confíe en
 > `request.auth.token.email` debe exigir además
 > `request.auth.token.email_verified == true`. Sin eso, un atacante puede crear
 > una cuenta con el correo (aún no registrado) de un profesor y ESCRIBIR
-> calificaciones, o con el de un alumno y leer su boleta. Verifica que
-> `_scripts/firestore.rules` incluya este check antes de publicar (la
-> referencia `firestore.rules` del repo ya lo trae).
+> calificaciones, o con el de un alumno y leer su boleta. El archivo
+> `firestore.rules` del repo ya incluye este check en todas las reglas.
 
 ## Grupos y privacidad (2026-07-07)
 

@@ -101,8 +101,10 @@ match /exam_results/{id} {
 ```
 
 > La versión canónica y completa (incluidos los helpers `teacherSeesGroup`,
-> `ownSid` y los bloques `roster`, `gradebook`, `daily_progress`) vive en
-> `_scripts/firestore.rules` — pega ESE archivo completo al publicar.
+> `ownSid` y los bloques `roster`, `gradebook`, `daily_progress`) es el
+> archivo `firestore.rules` de este repositorio — pega ESE archivo completo
+> al publicar en la base `teachermanuals`. Para la base `(default)`
+> (placement_results) usa `firestore.default.rules`.
 
 Publica las reglas (consola de Firebase → Firestore → Reglas, o
 `firebase deploy --only firestore:rules`). Tiene efecto inmediato.
