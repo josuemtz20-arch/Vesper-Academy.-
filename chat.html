@@ -12,14 +12,13 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Vesper Chat">
 <link rel="icon" href="assets/images/favicon_32.png" type="image/png" sizes="32x32">
-<link rel="icon" href="assets/images/va_isotype.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="assets/images/apple_touch_icon.png">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inria+Serif:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap');
 *,*::before,*::after{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
 button,textarea,a{touch-action:manipulation;}
-:root{--navy:#1B1B2F;--navy2:#2c2c4a;--gold:#c5a059;--gold2:#a8843d;--cream:#f5f2eb;--border:#e4e0d8;--muted:#6b7a8d;--err:#b03a3a;--ok:#2d7a4f;}
+:root{--navy:var(--va-ink,#1B1B2F);--navy2:var(--va-ink-2,#2c2c4a);--gold:var(--va-gold,#c5a059);--gold2:#a8843d;--cream:var(--va-cream,#f5f2eb);--border:#e4e0d8;--muted:#6b7a8d;--err:#b03a3a;--ok:#2d7a4f;}
 html{height:100%;}
 /* Altura bloqueada al viewport real (móvil): --app-h la fija el JS al alto del
    visualViewport, así el teclado no tapa el composer. Fallbacks: 100dvh y 100%. */

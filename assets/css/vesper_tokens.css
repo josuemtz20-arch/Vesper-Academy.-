@@ -13,9 +13,11 @@
   /* Paleta canónica (un único set; consolida --ink/--navy/--navy2). */
   --va-ink: #1B1B2F;
   --va-ink-2: #2c2c4a;
-  --va-gold: #C9A84C;
-  --va-gold-tint: rgba(201, 168, 76, .14);
-  --va-cream: #FBF8F1;
+  /* Oro y crema alineados con la paleta que ya usa la portada y la gran
+     mayoría de páginas (#c5a059 / #f5f2eb): un único oro en todo el sitio. */
+  --va-gold: #c5a059;
+  --va-gold-tint: rgba(197, 160, 89, .14);
+  --va-cream: #f5f2eb;
   --va-paper: #ffffff;
   --va-muted: #5d6470;      /* AA sobre cream/paper (más oscuro que el viejo #6b7a8d) */
   --va-line: #ece7da;
@@ -47,11 +49,11 @@
   --va-dusk: #1f2342;        /* navy-violeta (crepúsculo) */
   --va-twilight: #3a3a63;    /* violeta del horizonte */
   --va-star: #f3e2ab;        /* destello de estrella (gold muy claro) */
-  --va-hairline: rgba(201, 168, 76, .35);   /* divisor dorado fino */
+  --va-hairline: rgba(197, 160, 89, .35);   /* divisor dorado fino */
 
   /* Gradientes y resplandores reutilizables. */
   --va-grad-dusk: linear-gradient(160deg, var(--va-dusk), var(--va-night) 60%, #0e0c1f);
-  --va-glow-gold: radial-gradient(900px 420px at 80% -10%, rgba(201, 168, 76, .22), transparent 60%);
+  --va-glow-gold: radial-gradient(900px 420px at 80% -10%, rgba(197, 160, 89, .22), transparent 60%);
 
   /* Tipografía. */
   --va-font-display: "Inria Serif", Georgia, serif;

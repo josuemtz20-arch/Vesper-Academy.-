@@ -3,32 +3,38 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#1B1B2F">
 <title>Página no encontrada | Vesper Academy</title>
 <meta name="description" content="La página que buscas no existe o cambió de lugar. Vuelve al inicio de Vesper Academy o prueba una lección gratis.">
 <meta name="robots" content="noindex, follow">
-<link rel="icon" href="assets/images/favicon_32.png" type="image/png">
+<link rel="icon" href="assets/images/favicon_32.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="assets/images/apple_touch_icon.png">
+<link rel="stylesheet" href="assets/css/vesper_tokens.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inria+Serif:wght@400;700&family=Inter:wght@400;500;600;700&display=swap">
 <style>
   :root{
-    --navy:#1B1B2F; --navy2:#222b47; --gold:#C9A84C; --cream:#FAF6EC;
+    --navy:var(--va-ink,#1B1B2F); --navy2:#222b47; --gold:var(--va-gold,#c5a059); --cream:var(--va-cream,#f5f2eb);
     --muted:#8b90a8; --white:#ffffff;
   }
   *{margin:0;padding:0;box-sizing:border-box}
   body{
     min-height:100vh; display:flex; align-items:center; justify-content:center;
     background:linear-gradient(160deg,var(--navy) 0%,var(--navy2) 100%);
-    color:var(--cream); font-family:'Open Sans','Segoe UI',system-ui,sans-serif;
+    color:var(--cream); font-family:var(--va-font-text,Inter,system-ui,sans-serif);
     padding:24px; text-align:center;
   }
   .card{max-width:520px}
   .code{
-    font-family:Merriweather,Georgia,serif; font-size:clamp(4rem,18vw,7rem);
+    font-family:var(--va-font-display,'Inria Serif',Georgia,serif); font-size:clamp(4rem,18vw,7rem);
     font-weight:700; color:var(--gold); line-height:1; letter-spacing:.04em;
   }
   .code .o{display:inline-block; animation:tilt 3.4s ease-in-out infinite}
   @keyframes tilt{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(6deg)}}
   @media (prefers-reduced-motion:reduce){.code .o{animation:none}}
   h1{
-    font-family:Merriweather,Georgia,serif; font-size:1.35rem; font-weight:700;
+    font-family:var(--va-font-display,'Inria Serif',Georgia,serif); font-size:1.35rem; font-weight:700;
     margin:14px 0 8px; color:var(--white);
   }
   p{color:var(--muted); font-size:.98rem; line-height:1.6; margin-bottom:26px}

@@ -5,16 +5,19 @@
 <script src="vesper_auth.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#1B1B2F">
     <title>Vesper Academy | Audio Library</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="Biblioteca de audio para practicar listening en Vesper Academy.">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inria+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@300;400;500;600;700&display=swap');
         *, *::before, *::after { box-sizing: border-box; }
         :root {
-            --navy:#1B1B2F; --navy2:#2c2c4a; --navy3:#15152b;
-            --gold:#c5a059; --gold-lt:#d9bd84; --gold2:#a8843d;
-            --cream:#f5f2eb; --white:#fff; --border:#e4e0d8;
-            --text:#1B1B2F; --muted:#6b7a8d;
+            --navy:var(--va-ink,#1B1B2F); --navy2:var(--va-ink-2,#2c2c4a); --navy3:#15152b;
+            --gold:var(--va-gold,#c5a059); --gold-lt:#d9bd84; --gold2:#a8843d;
+            --cream:var(--va-cream,#f5f2eb); --white:#fff; --border:#e4e0d8;
+            --text:var(--va-ink,#1B1B2F); --muted:#6b7a8d;
         }
         body { font-family:'Inter',sans-serif; background:var(--cream); color:var(--text); margin:0; min-height:100vh; display:flex; flex-direction:column; }
 
@@ -160,7 +163,8 @@
     /* Foco de teclado visible (WCAG 2.4.7) */
 :focus-visible{outline:3px solid var(--gold,#c5a059);outline-offset:2px}
 </style>
-    <link rel="icon" href="assets/images/vesper_logo.png" type="image/png">
+    <link rel="icon" href="assets/images/favicon_32.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="assets/images/apple_touch_icon.png">
 <link rel="stylesheet" href="assets/css/vesper_tokens.css">
 </head>
 

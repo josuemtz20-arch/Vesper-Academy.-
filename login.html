@@ -3,48 +3,56 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#1B1B2F">
 <title>Vesper Academy | Acceso</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="Accede al campus de Vesper Academy: inicia sesión o crea tu cuenta de alumno.">
+<link rel="icon" href="assets/images/favicon_32.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="assets/images/apple_touch_icon.png">
 <script src="vesper_auth.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inria+Serif:wght@400;700&family=Inter:wght@400;500;600;700&display=swap">
 <style>
-  :root { --navy:#1B1B2F; --navy2:#2c2c4a; --gold:#c5a059; --gold2:#d9bd84; --cream:#f5f2eb; --err:#b03a3a; --ok:#2e7d4f; }
+  :root { --navy:var(--va-ink,#1B1B2F); --navy2:var(--va-ink-2,#2c2c4a); --gold:var(--va-gold,#c5a059); --gold2:#d9bd84; --cream:var(--va-cream,#f5f2eb); --err:#b03a3a; --ok:#2e7d4f; }
   * { box-sizing:border-box; margin:0; padding:0; }
-  body { font-family:Georgia,'Times New Roman',serif; background:var(--navy); min-height:100vh;
+  body { font-family:var(--va-font-text,Inter,system-ui,sans-serif); background:var(--navy); min-height:100vh;
          display:flex; align-items:center; justify-content:center; padding:20px;
          background-image:radial-gradient(ellipse at 30% 20%, #2c2c4a 0%, #1B1B2F 70%); }
   .card { background:var(--cream); width:100%; max-width:420px; border-radius:14px;
           box-shadow:0 18px 50px rgba(0,0,0,.45); overflow:hidden; }
   .head { background:var(--navy); color:var(--cream); padding:28px 30px 22px; text-align:center;
           border-bottom:4px solid var(--gold); }
-  .head h1 { font-size:24px; letter-spacing:2px; font-weight:normal; }
+  .head h1 { font-family:var(--va-font-display,'Inria Serif',Georgia,serif); font-size:24px; letter-spacing:2px; font-weight:normal; }
   .head h1 b { color:var(--gold2); }
-  .head p { font-family:Arial,sans-serif; font-size:12px; opacity:.75; margin-top:6px; letter-spacing:1px; }
-  .tabs { display:flex; font-family:Arial,sans-serif; }
+  .head p { font-family:var(--va-font-text,Inter,system-ui,sans-serif); font-size:12px; opacity:.75; margin-top:6px; letter-spacing:1px; }
+  .tabs { display:flex; font-family:var(--va-font-text,Inter,system-ui,sans-serif); }
   .tab { flex:1; padding:13px; text-align:center; cursor:pointer; font-size:14px;
-         font-family:Arial,sans-serif; border:0; border-bottom:2px solid transparent;
+         font-family:var(--va-font-text,Inter,system-ui,sans-serif); border:0; border-bottom:2px solid transparent;
          background:#ece5d4; color:#6b6151; }
   .tab.active { background:var(--cream); color:var(--navy); font-weight:bold; border-bottom-color:var(--gold); }
   form { padding:26px 30px 30px; display:none; }
   form.active { display:block; }
-  label { display:block; font-family:Arial,sans-serif; font-size:12px; letter-spacing:1px;
+  label { display:block; font-family:var(--va-font-text,Inter,system-ui,sans-serif); font-size:12px; letter-spacing:1px;
           color:#6b6151; margin:14px 0 5px; text-transform:uppercase; }
   input { width:100%; padding:11px 12px; font-size:15px; border:1px solid #d4c9ae; border-radius:7px;
-          background:#fff; font-family:Arial,sans-serif; }
+          background:#fff; font-family:var(--va-font-text,Inter,system-ui,sans-serif); }
   input:focus { outline:2px solid var(--gold2); border-color:var(--gold); }
   button.main { width:100%; margin-top:22px; padding:13px; font-size:15px; letter-spacing:1px;
           background:var(--navy); color:var(--cream); border:none; border-radius:7px; cursor:pointer;
-          font-family:Arial,sans-serif; }
+          font-family:var(--va-font-text,Inter,system-ui,sans-serif); }
   button.main:hover { background:var(--navy2); }
   button.main:disabled { opacity:.55; cursor:wait; }
-  .aux { font-family:Arial,sans-serif; font-size:13px; text-align:center; margin-top:14px; }
+  .aux { font-family:var(--va-font-text,Inter,system-ui,sans-serif); font-size:13px; text-align:center; margin-top:14px; }
   .aux a { color:var(--navy2); cursor:pointer; text-decoration:underline; }
   .linkbtn { border:0; background:none; padding:0; font:inherit; color:var(--navy2);
              cursor:pointer; text-decoration:underline; }
-  .msg { font-family:Arial,sans-serif; font-size:13.5px; line-height:1.5; border-radius:8px;
+  .msg { font-family:var(--va-font-text,Inter,system-ui,sans-serif); font-size:13.5px; line-height:1.5; border-radius:8px;
          padding:12px 14px; margin:18px 30px 0; display:none; }
   .msg.err { display:block; background:#f6e2e2; color:var(--err); border:1px solid #e3bcbc; }
   .msg.ok  { display:block; background:#e1efe6; color:var(--ok); border:1px solid #bcd9c7; }
   .msg.info{ display:block; background:#eee8d8; color:#5a4d2e; border:1px solid #ddd0ad; }
-  .foot { font-family:Arial,sans-serif; font-size:11.5px; color:#8d8270; text-align:center; padding:0 30px 24px; line-height:1.6; }
+  .foot { font-family:var(--va-font-text,Inter,system-ui,sans-serif); font-size:11.5px; color:#8d8270; text-align:center; padding:0 30px 24px; line-height:1.6; }
   .foot a { color:var(--navy2); }
 </style>
 <link rel="stylesheet" href="assets/css/vesper_tokens.css">
