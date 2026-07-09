@@ -347,6 +347,19 @@
         }
     /* Foco de teclado visible (WCAG 2.4.7) */
 :focus-visible{outline:3px solid var(--gold,#c5a059);outline-offset:2px}
+
+/* Pestaña Whiteboard: ahora carga la Pizarra Virtual profesional (Fabric.js) via iframe.
+   La herramienta de dibujo antigua sigue en el DOM pero oculta (no se elimina nada). */
+#panel-board > .wb-toolbar,
+#panel-board > .wb-stage,
+#panel-board > .wb-hint,
+#panel-board > .wb-narration { display:none !important; }
+#wb-frame { display:block; width:100%; height:min(78vh,780px); min-height:480px; border:1px solid var(--border);
+    border-radius:12px; background:#fff; box-shadow:0 10px 30px rgba(26,43,66,0.10); }
+.wb-open-full { display:inline-flex; align-items:center; gap:7px; margin:0 0 12px; font-family:'Inter',sans-serif;
+    font-size:0.8rem; font-weight:600; color:var(--navy); text-decoration:none; border:1px solid var(--border);
+    background:var(--white); border-radius:8px; padding:8px 12px; transition:border-color .15s, color .15s; }
+.wb-open-full:hover { border-color:var(--gold); color:var(--gold2); }
 </style>
     <link rel="icon" href="assets/images/vesper_logo.png" type="image/png">
 <link rel="stylesheet" href="assets/css/vesper_tokens.css">
@@ -440,6 +453,10 @@
 
         <!-- WHITEBOARD PANEL -->
         <div class="panel" id="panel-board">
+            <!-- La pestaña Whiteboard carga la Pizarra Virtual (Fabric.js). La herramienta
+                 antigua permanece más abajo, oculta por CSS (no se elimina). -->
+            <a class="wb-open-full" href="whiteboard/" target="_blank" rel="noopener"><i class="fas fa-up-right-from-square"></i> Abrir en pantalla completa</a>
+            <iframe id="wb-frame" title="Pizarra Virtual" loading="lazy"></iframe>
             <div class="wb-toolbar">
                 <div class="wb-group">
                     <button class="tool-btn" id="t-select" title="Select & move"><i class="fas fa-arrow-pointer"></i></button>
@@ -718,7 +735,11 @@
             try{ if(window.speechSynthesis) speechSynthesis.cancel(); }catch(e){}
             var rsb = document.getElementById("r-speak");
             if(rsb){ rsb.classList.remove("speaking"); rsb.innerHTML = '<i class="fas fa-volume-high"></i> Escuchar'; }
-            if (name === "board") fitBoard();
+            if (name === "board") {
+                fitBoard();
+                var wbf = document.getElementById("wb-frame");
+                if (wbf && !wbf.src) wbf.src = "whiteboard/?embed=1"; // carga diferida de la Pizarra Virtual
+            }
             if (name === "reading") layoutReading();
         }
         document.querySelectorAll(".tab").forEach(tab =>

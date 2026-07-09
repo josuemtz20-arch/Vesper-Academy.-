@@ -35,6 +35,11 @@
         .app { flex:1; min-height:0; display:flex; flex-direction:column; margin:0 14px 14px;
             border-radius:14px; overflow:hidden; box-shadow:0 14px 40px rgba(26,43,66,0.14); }
 
+        /* Modo incrustado (?embed=1): oculta la cabecera para insertarla en un iframe */
+        html.embed header { display:none; }
+        html.embed body { background:transparent; }
+        html.embed .app { margin:8px; box-shadow:none; }
+
         /* Toolbar */
         .toolbar { display:flex; flex-wrap:wrap; align-items:center; gap:8px; padding:11px 14px; background:var(--navy); }
         .tgroup { display:flex; align-items:center; gap:6px; padding:0 8px; border-right:1px solid rgba(255,255,255,0.12); }
@@ -79,6 +84,10 @@
         }
         :focus-visible { outline:3px solid var(--gold); outline-offset:2px; }
     </style>
+    <script>
+      // Modo incrustado: si la URL trae ?embed, oculta la cabecera (se usa dentro del iframe de lesson.html).
+      if (new URLSearchParams(location.search).has("embed")) document.documentElement.classList.add("embed");
+    </script>
 </head>
 <body>
     <header>
