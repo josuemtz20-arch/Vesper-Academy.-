@@ -217,6 +217,29 @@ body{margin:0;font-family:'Segoe UI',Arial,sans-serif;display:flex;align-items:c
         'table{display:block!important;overflow-x:auto!important;max-width:100%!important;-webkit-overflow-scrolling:touch;}' +
         'pre{white-space:pre-wrap!important;max-width:100%!important;}' +
         '[style*="width"]{max-width:100%!important;}' +
+        /* ── el arreglo clave: los libros usan .page A4 con 12mm (~45px) de
+           relleno lateral en móvil, que se come ~24% del ancho y aprieta todo.
+           Bajarlo a 16px y re-ajustar los elementos "a sangre" (que salen al
+           borde con margen negativo = al relleno de la página) para que no se
+           desborden. Aplica a TODAS las pieles (base/premium2/basics/bespoke). ── */
+        '.page:not(.cover-page){padding:16px 16px 30px!important;}' +
+        '.cover-page{padding-left:18px!important;padding-right:18px!important;}' +
+        '.module-header{margin-left:-16px!important;margin-right:-16px!important;margin-top:-16px!important;padding-left:16px!important;padding-right:16px!important;}' +
+        '.lesson-title{margin-left:-16px!important;margin-right:-16px!important;padding-left:18px!important;padding-right:18px!important;}' +
+        '.toolkit-divider{margin-left:-16px!important;margin-right:-16px!important;padding-left:16px!important;padding-right:16px!important;}' +
+        '.lesson-block{padding:15px 15px 16px!important;}' +
+        '.vesper-hero{padding:13px 14px!important;gap:12px!important;}' +
+        '.vesper-hero .vh-cat{flex:0 0 44px!important;width:44px!important;height:44px!important;}' +
+        '.lesson-block .lb-header{gap:11px!important;}' +
+        '.lesson-block .lb-header i{flex:0 0 34px!important;width:34px!important;height:34px!important;}' +
+        '.lesson-block .lb-header::before{left:46px!important;}' +
+        '.tier,.yourturn{padding:11px 13px!important;}' +
+        '.vcard{padding:10px 12px!important;gap:9px!important;}' +
+        '.page-num{left:16px!important;right:16px!important;}' +
+        /* índice (TOC): en móvil pasa de 2 columnas apretadas a 1 sola,
+           y los títulos largos ya pueden encoger/envolver sin desbordar. */
+        '.toc-grid{grid-template-columns:1fr!important;gap:8px 0!important;}' +
+        '.toc-item,.toc-item a{min-width:0!important;}' +
       '}' +
       '</style>';
     if (/<\/head>/i.test(html)) {
