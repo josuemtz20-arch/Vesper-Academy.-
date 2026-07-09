@@ -196,6 +196,13 @@
             font-weight:600; letter-spacing:0.3px; }
         .stat-level b { color:#fff; }
 
+        /* GROUP HEADERS inside the level grid */
+        .grid-head { grid-column:1 / -1; display:flex; align-items:baseline; gap:12px; margin:18px 0 0; }
+        .grid-head:first-child { margin-top:0; }
+        .grid-head .gh-title { font-family:'Inria Serif',serif; font-size:1.1rem; font-weight:700; color:var(--navy); }
+        .grid-head .gh-kicker { font-size:0.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; color:var(--gold2); }
+        .grid-head .gh-line { flex:1; height:1px; background:var(--border); align-self:center; }
+
         /* LOCKED collection cards */
         .level-card.locked { cursor:not-allowed; opacity:0.72; filter:saturate(0.55); }
         .level-card.locked:hover { transform:none; box-shadow:0 1px 4px rgba(0,0,0,0.06); border-color:var(--border); }
@@ -324,7 +331,7 @@
         <!-- VIEW: LEVELS -->
         <div class="view" id="view-levels">
             <div class="recent-section" id="recent-section" style="display:none"></div>
-            <div class="section-title"><h3>Select a Level</h3><div class="line"></div></div>
+            <div class="section-title"><h3>Explore the Library</h3><div class="line"></div></div>
             <div class="level-grid" id="level-grid"></div>
         </div>
 
@@ -492,118 +499,79 @@
             m.onclick = e => { if (e.target === m) close(); };
         }
 
-        // ── BUILD LEVELS ──────────────────────────────────────────────
-        Object.keys(DATA).forEach(n => {
-            const lv = DATA[n];
-            const card = document.createElement("div");
-            card.className = "level-card";
-            card.innerHTML = `
-                <div class="lc-top">
-                    <div class="num">${n}</div>
-                    <div class="lvl-name"><b>Level ${n}</b><small>${lv.tag}</small></div>
-                    <i class="fas ${lv.icon} bigicon"></i>
-                </div>
-                <div class="lc-body">
-                    <p>${LEVEL_DESC[n] || ""}</p>
-                    <div class="lc-foot"><span>${lv.lessons.length} Lessons</span><i class="fas fa-arrow-right"></i></div>
-                </div>`;
-            const col = "level:" + n;
-            if (isLocked(col)) lockCard(card, col);
-            card.addEventListener("click", () => isLocked(col) ? showLock(col) : showLessons(n));
-            levelGrid.appendChild(card);
-        });
-        // Diagnostics card
-        const dcard = document.createElement("div");
-        dcard.className = "level-card diag";
-        dcard.innerHTML = `
-            <div class="lc-top">
-                <div class="num"><i class="fas fa-stethoscope" style="font-size:1.2rem"></i></div>
-                <div class="lvl-name"><b>Diagnostics</b><small>Placement</small></div>
-                <i class="fas fa-clipboard-check bigicon"></i>
-            </div>
-            <div class="lc-body">
-                <p>Placement & diagnostic listening tracks used to find a student's starting level.</p>
-                <div class="lc-foot"><span>${DIAG_TRACKS.length} Tracks</span><i class="fas fa-arrow-right"></i></div>
-            </div>`;
-        dcard.addEventListener("click", showDiag);
-        levelGrid.appendChild(dcard);
-
-        // Core Basics cards (Levels 1-4, dialogue audio per lesson)
+        // ── BUILD LANDING GRID ────────────────────────────────────────
+        // Collections are grouped and ordered low→high by CEFR so the grid
+        // reads as a clear learning path: Placement → Core Basics → Main
+        // Levels → Business & Exams. One shared builder renders every card.
         const BASICS = window.BASICS_DATA || {};
-        Object.keys(BASICS).forEach(n => {
-            const lv = BASICS[n];
-            const card = document.createElement("div");
-            card.className = "level-card basics";
-            card.innerHTML = `
-                <div class="lc-top">
-                    <div class="num">B${n}</div>
-                    <div class="lvl-name"><b>Basics ${n}</b><small>${lv.tag}</small></div>
-                    <i class="fas ${lv.icon} bigicon"></i>
-                </div>
-                <div class="lc-body">
-                    <p>Core Basics ${lv.tag} — one short dialogue (~1 min) per lesson with Listen &amp; Answer questions.</p>
-                    <div class="lc-foot"><span>${lv.lessons.length} Tracks</span><i class="fas fa-arrow-right"></i></div>
-                </div>`;
-            const col = "basics:" + n;
-            if (isLocked(col)) lockCard(card, col);
-            card.addEventListener("click", () => isLocked(col) ? showLock(col) : showBasics(n));
-            levelGrid.appendChild(card);
-        });
-
-        // Certification Prep card
-        const ccard = document.createElement("div");
-        ccard.className = "level-card diag";
-        ccard.innerHTML = `
-            <div class="lc-top">
-                <div class="num"><i class="fas fa-stopwatch" style="font-size:1.1rem"></i></div>
-                <div class="lvl-name"><b>Certification</b><small>IELTS · Cambridge · TOEFL</small></div>
-                <i class="fas fa-award bigicon"></i>
-            </div>
-            <div class="lc-body">
-                <p>Timed listening drills from the Certification Prep course — real exam distractors included.</p>
-                <div class="lc-foot"><span>${CERT_TRACKS.length} Tracks</span><i class="fas fa-arrow-right"></i></div>
-            </div>`;
-        if (isLocked("cert")) lockCard(ccard, "cert");
-        ccard.addEventListener("click", () => isLocked("cert") ? showLock("cert") : showCert());
-        levelGrid.appendChild(ccard);
-
-        // Business English card
-        const bcard = document.createElement("div");
-        bcard.className = "level-card biz";
-        bcard.innerHTML = `
-            <div class="lc-top">
-                <div class="num"><i class="fas fa-briefcase" style="font-size:1.1rem"></i></div>
-                <div class="lvl-name"><b>Business English</b><small>Premium (B2)</small></div>
-                <i class="fas fa-building bigicon"></i>
-            </div>
-            <div class="lc-body">
-                <p>Listening resources from the Business English Premium course — pitches, calls, meetings, data, negotiation, feedback and more.</p>
-                <div class="lc-foot"><span>${BUSINESS_LESSONS.length} Lessons</span><i class="fas fa-arrow-right"></i></div>
-            </div>`;
-        if (isLocked("business")) lockCard(bcard, "business");
-        bcard.addEventListener("click", () => isLocked("business") ? showLock("business") : showBusiness());
-        levelGrid.appendChild(bcard);
-
-        // Business Path cards (B1 Foundations + C1 Strategic Influence) — audio model per lesson
         const BIZ_PATH = window.BIZ_PATH_DATA || {};
-        Object.keys(BIZ_PATH).forEach(lvl => {
-            const bp = BIZ_PATH[lvl];
+
+        function renderCollectionCard(s) {
             const card = document.createElement("div");
-            card.className = "level-card biz";
+            card.className = "level-card" + (s.cls ? " " + s.cls : "");
+            card.dataset.col = s.col;
             card.innerHTML = `
                 <div class="lc-top">
-                    <div class="num"><i class="fas ${bp.icon}" style="font-size:1.1rem"></i></div>
-                    <div class="lvl-name"><b>Business Path ${lvl === "b1" ? "I" : "III"}</b><small>${bp.tag}</small></div>
-                    <i class="fas fa-building bigicon"></i>
+                    <div class="num">${s.numHTML}</div>
+                    <div class="lvl-name"><b>${s.name}</b><small>${s.sub}</small></div>
+                    <i class="fas ${s.bigicon} bigicon"></i>
                 </div>
                 <div class="lc-body">
-                    <p>Audio models from ${bp.sub} — one native-voice model of the target skill per lesson, with transcript and vocabulary.</p>
-                    <div class="lc-foot"><span>${bp.lessons.length} Lessons</span><i class="fas fa-arrow-right"></i></div>
+                    <p>${s.desc}</p>
+                    <div class="lc-foot"><span>${s.count} ${s.countLabel}</span><i class="fas fa-arrow-right"></i></div>
                 </div>`;
-            const col = "bizpath:" + lvl;
-            if (isLocked(col)) lockCard(card, col);
-            card.addEventListener("click", () => isLocked(col) ? showLock(col) : showBizPath(lvl));
-            levelGrid.appendChild(card);
+            if (isLocked(s.col)) lockCard(card, s.col);
+            card.addEventListener("click", () => isLocked(s.col) ? showLock(s.col) : s.onOpen());
+            return card;
+        }
+
+        // ── Card specs, one factory per collection type ──
+        const levelSpec = n => { const lv = DATA[n]; return {
+            col:"level:"+n, cls:"", numHTML:n, name:`Level ${n}`, sub:lv.tag, bigicon:lv.icon,
+            desc:LEVEL_DESC[n] || "", count:lv.lessons.length, countLabel:"Lessons", onOpen:() => showLessons(n) }; };
+        const basicsSpec = n => { const lv = BASICS[n]; return {
+            col:"basics:"+n, cls:"basics", numHTML:"B"+n, name:`Basics ${n}`, sub:lv.tag, bigicon:lv.icon,
+            desc:`Core Basics ${lv.tag} — one short dialogue (~1 min) per lesson with Listen &amp; Answer questions.`,
+            count:lv.lessons.length, countLabel:"Tracks", onOpen:() => showBasics(n) }; };
+        const bizPathSpec = lvl => { const bp = BIZ_PATH[lvl]; return {
+            col:"bizpath:"+lvl, cls:"biz", numHTML:`<i class="fas ${bp.icon}" style="font-size:1.1rem"></i>`,
+            name:`Business Path ${lvl === "b1" ? "I" : "III"}`, sub:bp.tag, bigicon:"fa-building",
+            desc:`Audio models from ${bp.sub} — one native-voice model of the target skill per lesson, with transcript and vocabulary.`,
+            count:bp.lessons.length, countLabel:"Lessons", onOpen:() => showBizPath(lvl) }; };
+        const diagSpec = {
+            col:"diag", cls:"diag", numHTML:'<i class="fas fa-stethoscope" style="font-size:1.2rem"></i>',
+            name:"Diagnostics", sub:"Placement", bigicon:"fa-clipboard-check",
+            desc:"Placement & diagnostic listening tracks used to find a student's starting level.",
+            count:DIAG_TRACKS.length, countLabel:"Tracks", onOpen:showDiag };
+        const certSpec = {
+            col:"cert", cls:"diag", numHTML:'<i class="fas fa-stopwatch" style="font-size:1.1rem"></i>',
+            name:"Certification", sub:"IELTS · Cambridge · TOEFL", bigicon:"fa-award",
+            desc:"Timed listening drills from the Certification Prep course — real exam distractors included.",
+            count:CERT_TRACKS.length, countLabel:"Tracks", onOpen:showCert };
+        const businessSpec = {
+            col:"business", cls:"biz", numHTML:'<i class="fas fa-briefcase" style="font-size:1.1rem"></i>',
+            name:"Business English", sub:"Premium (B2)", bigicon:"fa-building",
+            desc:"Listening resources from the Business English Premium course — pitches, calls, meetings, data, negotiation, feedback and more.",
+            count:BUSINESS_LESSONS.length, countLabel:"Lessons", onOpen:showBusiness };
+
+        // Professional track ordered by unlock level (B1 → B2 → B2 → C1).
+        const proSpecs = [...Object.keys(BIZ_PATH).map(bizPathSpec), businessSpec, certSpec]
+            .sort((a, b) => (REQ[a.col] || 0) - (REQ[b.col] || 0));
+
+        const GROUPS = [
+            { kicker:"Start here",              title:"Placement",        specs:[diagSpec] },
+            { kicker:"Foundations · A0–A2",     title:"Core Basics",      specs:Object.keys(BASICS).map(basicsSpec) },
+            { kicker:"Core curriculum · A1–C1", title:"Main Levels",      specs:Object.keys(DATA).map(levelSpec) },
+            { kicker:"Professional · B1–C1",    title:"Business & Exams", specs:proSpecs }
+        ];
+
+        GROUPS.forEach(g => {
+            if (!g.specs.length) return;
+            const head = document.createElement("div");
+            head.className = "grid-head";
+            head.innerHTML = `<span class="gh-title">${g.title}</span><span class="gh-kicker">${g.kicker}</span><span class="gh-line"></span>`;
+            levelGrid.appendChild(head);
+            g.specs.forEach(s => levelGrid.appendChild(renderCollectionCard(s)));
         });
 
         // ── UNIFIED INDEX ─────────────────────────────────────────────
@@ -660,7 +628,7 @@
 
         // Hero stats
         document.getElementById("stat-lessons").textContent = ITEMS.length;
-        document.getElementById("stat-collections").textContent = levelGrid.children.length;
+        document.getElementById("stat-collections").textContent = levelGrid.querySelectorAll(".level-card").length;
 
         // ── SHARED CARD RENDERER ──────────────────────────────────────
         function cardHTML(it, i) {
