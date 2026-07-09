@@ -160,6 +160,42 @@
         footer a { color:var(--gold); text-decoration:none; font-weight:600; }
         footer .fnav { margin-top:14px; }
 
+        /* SEARCH + CONTINUE LISTENING (hub enhancements) */
+        .hero-tools { margin-top:24px; max-width:540px; }
+        .hero-search { display:flex; align-items:center; gap:12px; background:rgba(255,255,255,0.07);
+            border:1px solid rgba(197,160,89,0.4); border-radius:12px; padding:12px 16px;
+            transition:border-color .16s, background .16s; }
+        .hero-search:focus-within { border-color:var(--gold); background:rgba(255,255,255,0.12); }
+        .hero-search > i { color:var(--gold); font-size:0.95rem; }
+        .hero-search input { flex:1; background:transparent; border:none; outline:none; color:#fff;
+            font-family:'Inter',sans-serif; font-size:0.92rem; min-width:0; }
+        .hero-search input::placeholder { color:rgba(255,255,255,0.5); }
+        .hero-search input::-webkit-search-cancel-button { -webkit-appearance:none; }
+        .hero-search kbd { font-family:'Inter',sans-serif; font-size:0.62rem; font-weight:700; color:rgba(255,255,255,0.55);
+            border:1px solid rgba(255,255,255,0.25); border-radius:5px; padding:2px 7px; letter-spacing:0.5px; }
+        .hero-search:focus-within kbd { display:none; }
+        .hero-stats { margin-top:14px; display:flex; gap:22px; flex-wrap:wrap; font-size:0.74rem;
+            color:rgba(255,255,255,0.6); letter-spacing:0.3px; }
+        .hero-stats b { color:var(--gold-lt); font-weight:700; }
+
+        .recent-section { margin-bottom:40px; }
+        .recent-head { display:flex; align-items:center; gap:16px; margin:0 0 22px; }
+        .recent-title { margin:0; font-family:'Inria Serif',serif; font-size:1.3rem; color:var(--navy);
+            display:flex; align-items:center; gap:10px; white-space:nowrap; }
+        .recent-head .line { flex:1; height:1px; background:var(--border); }
+        .recent-clear { background:none; border:none; color:var(--muted); font-size:0.72rem; font-weight:700;
+            cursor:pointer; letter-spacing:0.6px; text-transform:uppercase; display:inline-flex; align-items:center;
+            gap:6px; transition:color .16s; flex-shrink:0; }
+        .recent-clear:hover { color:var(--gold2); }
+
+        .ver-badge { font-weight:600; font-size:0.66rem; letter-spacing:.3px; color:#a8843d;
+            background:rgba(197,160,89,.16); padding:2px 8px; border-radius:10px; white-space:nowrap; vertical-align:middle; }
+
+        .result-count { font-size:0.82rem; color:var(--muted); margin:0 0 20px; }
+        .search-empty { text-align:center; padding:56px 20px; color:var(--muted); }
+        .search-empty i { font-size:2.4rem; color:var(--border); margin-bottom:14px; display:block; }
+        .search-empty b { display:block; color:var(--navy); font-size:1.05rem; margin-bottom:4px; }
+
         @media (max-width:680px){
             header,.hero,.main{ padding-left:16px; padding-right:16px; }
             .hero h2{ font-size:2rem; }
@@ -200,6 +236,18 @@
             </div>
             <h2>Audio Library</h2>
             <p class="lead">Choose a level, then a lesson. Each lesson opens its own page with the <strong>audio</strong>, a <strong>screen-ready reading</strong> (for lessons with no audio), an <strong>interactive whiteboard</strong>, and a <strong>visual vocabulary</strong> reference.</p>
+            <div class="hero-tools">
+                <div class="hero-search">
+                    <i class="fas fa-magnifying-glass"></i>
+                    <input id="search" type="search" placeholder="Search every audio lesson…" aria-label="Search audio lessons" autocomplete="off">
+                    <kbd id="search-kbd">/</kbd>
+                </div>
+                <div class="hero-stats">
+                    <span><b id="stat-lessons">0</b> lessons</span>
+                    <span><b id="stat-collections">0</b> collections</span>
+                    <span><b>6</b> levels · A0–C1</span>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -217,8 +265,16 @@
 
         <div class="crumbs" id="crumbs"></div>
 
+        <!-- VIEW: SEARCH RESULTS -->
+        <div class="view" id="view-search" style="display:none">
+            <div class="section-title"><h3><i class="fas fa-magnifying-glass" style="color:var(--gold2);font-size:1.1rem;margin-right:8px"></i>Search</h3><div class="line"></div></div>
+            <p class="result-count" id="search-count"></p>
+            <div class="lesson-grid" id="search-results"></div>
+        </div>
+
         <!-- VIEW: LEVELS -->
         <div class="view" id="view-levels">
+            <div class="recent-section" id="recent-section" style="display:none"></div>
             <div class="section-title"><h3>Select a Level</h3><div class="line"></div></div>
             <div class="level-grid" id="level-grid"></div>
         </div>
@@ -308,8 +364,13 @@
         const lessonGrid = document.getElementById("lesson-grid");
         const viewLevels = document.getElementById("view-levels");
         const viewLessons = document.getElementById("view-lessons");
+        const viewSearch = document.getElementById("view-search");
         const crumbs = document.getElementById("crumbs");
         const lessonsTitle = document.getElementById("lessons-title");
+        const searchInput = document.getElementById("search");
+        const searchResults = document.getElementById("search-results");
+        const searchCount = document.getElementById("search-count");
+        const recentSection = document.getElementById("recent-section");
 
         // ── BUILD LEVELS ──────────────────────────────────────────────
         Object.keys(DATA).forEach(n => {
@@ -417,164 +478,186 @@
             levelGrid.appendChild(card);
         });
 
+        // ── UNIFIED INDEX ─────────────────────────────────────────────
+        // One flat list of every playable item across all collections, so
+        // search, "Continue Listening" and the per-collection views all
+        // render from the same source instead of duplicating href logic.
+        const ITEMS = [];
+        const push = o => ITEMS.push(o);
+
+        Object.keys(DATA).forEach(n => {
+            const lv = DATA[n];
+            lv.lessons.forEach(les => push({ col:"level:"+n, group:`Level ${n} · ${lv.tag}`,
+                badge:`Level ${n}`, num:`Lesson ${les.n}`, title:les.title, icon:les.icon,
+                seed:`L${n}-${les.n}`, href:`lesson.html?level=${n}&lesson=${les.n}` }));
+        });
+        DIAG_TRACKS.forEach(t => push({ col:"diag", group:"Diagnostics · Placement", badge:"Placement",
+            num:`Track ${t.k}`, title:t.title, icon:t.k===1?"fa-stethoscope":"fa-wave-square",
+            seed:`DIAG-${t.k}`, href:`lesson.html?diag=${t.k}` }));
+        Object.keys(BASICS).forEach(n => {
+            const lv = BASICS[n];
+            lv.lessons.forEach(les => push({ col:"basics:"+n, group:`Core Basics ${n} · ${lv.tag}`,
+                badge:`Basics ${n}`, num:`Lesson ${les.n}`, title:les.title,
+                icon:VesperCovers.iconFor(les.title, lv.icon), seed:`B${n}-${les.n}`,
+                href:`lesson.html?basics=${n}&lesson=${les.n}` }));
+        });
+        CERT_TRACKS.forEach(t => {
+            const q = new URLSearchParams({ audio:t.file, title:t.title, sub:"Certification Prep (B2-C1)",
+                crumb:"Certification · "+t.lesson, icon:t.icon });
+            push({ col:"cert", group:"Certification · IELTS · Cambridge · TOEFL", badge:"Cert Prep",
+                num:t.lesson, title:t.title, icon:t.icon, seed:t.file, href:`lesson.html?${q.toString()}` });
+        });
+        BUSINESS_LESSONS.forEach(L => {
+            const def = L.variants[0];
+            const q = new URLSearchParams({ audio:def.file, title:L.title, sub:"Business English (B2)",
+                crumb:"Business English · "+L.lesson, icon:L.icon });
+            if (L.variants.length > 1) q.set("variants", JSON.stringify(L.variants));
+            push({ col:"business", group:"Business English · Premium (B2)", badge:"Business",
+                num:L.lesson, title:L.title, icon:L.icon, seed:def.file, href:`lesson.html?${q.toString()}`,
+                versions:L.variants.length > 1 ? L.variants.length : 0 });
+        });
+        Object.keys(BIZ_PATH).forEach(lvl => {
+            const bp = BIZ_PATH[lvl];
+            bp.lessons.forEach(les => {
+                const q = new URLSearchParams({ audio:les.file, title:les.title, sub:bp.sub,
+                    crumb:bp.crumb+" · Lesson "+les.n, icon:les.icon });
+                push({ col:"bizpath:"+lvl, group:`${bp.crumb} · ${bp.tag}`, badge:bp.crumb,
+                    num:`Lesson ${les.n}`, title:les.title, icon:les.icon, seed:les.file,
+                    href:`lesson.html?${q.toString()}` });
+            });
+        });
+
+        const ITEM_BY_HREF = {};
+        ITEMS.forEach(it => { ITEM_BY_HREF[it.href] = it; });
+
+        // Hero stats
+        document.getElementById("stat-lessons").textContent = ITEMS.length;
+        document.getElementById("stat-collections").textContent = levelGrid.children.length;
+
+        // ── SHARED CARD RENDERER ──────────────────────────────────────
+        function cardHTML(it, i) {
+            const versions = it.versions ? ` <span class="ver-badge">${it.versions} versions</span>` : "";
+            return `<a class="lesson-card" href="${it.href}" data-href="${it.href}" style="animation-delay:${(i * 0.015).toFixed(3)}s">
+                ${VesperCovers.coverHTML(it.seed, it.icon, it.badge)}
+                <div class="lz-body">
+                    <div class="lz-meta"><div class="num">${it.num}</div><h4>${it.title}${versions}</h4></div>
+                    <i class="fas fa-chevron-right lz-go"></i>
+                </div></a>`;
+        }
+        function renderCards(container, items) { container.innerHTML = items.map(cardHTML).join(""); }
+        function itemsFor(col) { return ITEMS.filter(it => it.col === col); }
+
+        // ── CONTINUE LISTENING (localStorage) ─────────────────────────
+        const RECENT_KEY = "vesper_audio_recent";
+        function getRecent() { try { return JSON.parse(localStorage.getItem(RECENT_KEY) || "[]"); } catch (e) { return []; } }
+        function pushRecent(href) {
+            let r = getRecent().filter(h => h !== href);
+            r.unshift(href); r = r.slice(0, 6);
+            try { localStorage.setItem(RECENT_KEY, JSON.stringify(r)); } catch (e) {}
+        }
+        document.addEventListener("click", e => {
+            const card = e.target.closest(".lesson-card[data-href]");
+            if (card) pushRecent(card.getAttribute("data-href"));
+        });
+        function renderRecent() {
+            const items = getRecent().map(h => ITEM_BY_HREF[h]).filter(Boolean);
+            if (!items.length) { recentSection.style.display = "none"; recentSection.innerHTML = ""; return; }
+            recentSection.style.display = "block";
+            recentSection.innerHTML =
+                `<div class="recent-head">
+                    <h3 class="recent-title"><i class="fas fa-clock-rotate-left" style="color:var(--gold2);font-size:1.05rem"></i> Continue Listening</h3>
+                    <div class="line"></div>
+                    <button class="recent-clear" id="recent-clear"><i class="fas fa-xmark"></i> Clear</button>
+                </div>
+                <div class="lesson-grid">${items.map(cardHTML).join("")}</div>`;
+            document.getElementById("recent-clear").addEventListener("click", () => {
+                try { localStorage.removeItem(RECENT_KEY); } catch (e) {}
+                renderRecent();
+            });
+        }
+
+        // ── SEARCH ────────────────────────────────────────────────────
+        let searchTimer;
+        searchInput.addEventListener("input", () => { clearTimeout(searchTimer); searchTimer = setTimeout(runSearch, 110); });
+        function runSearch() {
+            const raw = searchInput.value.trim();
+            if (!raw) { showLevels(); return; }
+            const terms = raw.toLowerCase().split(/\s+/);
+            const results = ITEMS.filter(it => {
+                const hay = (it.title + " " + it.num + " " + it.group).toLowerCase();
+                return terms.every(t => hay.includes(t));
+            });
+            setCrumbsLevel("Search");
+            searchCount.textContent = `${results.length} result${results.length === 1 ? "" : "s"} for “${raw}”`;
+            if (!results.length) {
+                searchResults.innerHTML =
+                    `<div class="search-empty"><i class="fas fa-magnifying-glass"></i><b>No matches</b>Try a lesson title, a topic, or a level name.</div>`;
+            } else {
+                renderCards(searchResults, results.slice(0, 60));
+            }
+            viewLevels.style.display = "none"; viewLessons.style.display = "none"; viewSearch.style.display = "block";
+        }
+        document.addEventListener("keydown", e => {
+            if (e.key === "/" && document.activeElement !== searchInput && !/^(INPUT|TEXTAREA)$/.test(document.activeElement.tagName)) {
+                e.preventDefault(); searchInput.focus();
+            } else if (e.key === "Escape" && document.activeElement === searchInput) {
+                searchInput.value = ""; searchInput.blur(); showLevels();
+            }
+        });
+
         setCrumbsHome();
+        renderRecent();
 
         // ── VIEWS ─────────────────────────────────────────────────────
         function setCrumbsHome(){ crumbs.innerHTML = `<b>Audio Library</b>`; }
         function setCrumbsLevel(label){ crumbs.innerHTML = `<a id="c-home">Audio Library</a><span class="sep">/</span><b>${label}</b>`;
             document.getElementById("c-home").addEventListener("click", showLevels); }
 
+        // Open a collection's lesson view from the shared index.
+        function openCollection(col, title, crumb, exam) {
+            lessonsTitle.textContent = title;
+            setCrumbsLevel(crumb);
+            if (exam) setExamBtn(exam.href, exam.label);
+            else document.getElementById("exam-btn").classList.add("hidden");
+            renderCards(lessonGrid, itemsFor(col));
+            viewSearch.style.display = "none"; viewLevels.style.display = "none"; viewLessons.style.display = "block";
+            window.scrollTo({top:0, behavior:"smooth"});
+        }
+
         function showLevels() {
-            viewLessons.style.display = "none"; viewLevels.style.display = "block";
+            if (searchInput) searchInput.value = "";
+            viewSearch.style.display = "none"; viewLessons.style.display = "none"; viewLevels.style.display = "block";
+            renderRecent();
             setCrumbsHome(); window.scrollTo({top:0, behavior:"smooth"});
         }
         document.getElementById("back").addEventListener("click", showLevels);
 
         function showLessons(n) {
             const lv = DATA[n];
-            lessonsTitle.textContent = `Level ${n} — ${lv.tag}`;
-            setCrumbsLevel(`Level ${n} · ${lv.tag}`);
-            setExamBtn(`exam.html?level=${n}`, `Take the Level ${n} Exam`);
-            lessonGrid.innerHTML = "";
-            lv.lessons.forEach((les, i) => {
-                const a = document.createElement("a");
-                a.className = "lesson-card";
-                a.href = `lesson.html?level=${n}&lesson=${les.n}`;
-                a.style.animationDelay = (i * 0.015) + "s";
-                a.innerHTML = `
-                    ${VesperCovers.coverHTML(`L${n}-${les.n}`, les.icon, `Level ${n}`)}
-                    <div class="lz-body">
-                        <div class="lz-meta"><div class="num">Lesson ${les.n}</div><h4>${les.title}</h4></div>
-                        <i class="fas fa-chevron-right lz-go"></i>
-                    </div>`;
-                lessonGrid.appendChild(a);
-            });
-            viewLevels.style.display = "none"; viewLessons.style.display = "block";
-            window.scrollTo({top:0, behavior:"smooth"});
+            openCollection("level:"+n, `Level ${n} — ${lv.tag}`, `Level ${n} · ${lv.tag}`,
+                { href:`exam.html?level=${n}`, label:`Take the Level ${n} Exam` });
         }
-
         function showDiag() {
-            lessonsTitle.textContent = "Diagnostics — Placement";
-            setCrumbsLevel("Diagnostics");
-            document.getElementById("exam-btn").classList.add("hidden");
-            lessonGrid.innerHTML = "";
-            DIAG_TRACKS.forEach((t, i) => {
-                const a = document.createElement("a");
-                a.className = "lesson-card";
-                a.href = `lesson.html?diag=${t.k}`;
-                a.style.animationDelay = (i * 0.04) + "s";
-                a.innerHTML = `
-                    ${VesperCovers.coverHTML(`DIAG-${t.k}`, t.k === 1 ? "fa-stethoscope" : "fa-wave-square", "Placement")}
-                    <div class="lz-body">
-                        <div class="lz-meta"><div class="num">Track ${t.k}</div><h4>${t.title}</h4></div>
-                        <i class="fas fa-chevron-right lz-go"></i>
-                    </div>`;
-                lessonGrid.appendChild(a);
-            });
-            viewLevels.style.display = "none"; viewLessons.style.display = "block";
-            window.scrollTo({top:0, behavior:"smooth"});
+            openCollection("diag", "Diagnostics — Placement", "Diagnostics", null);
         }
-
         function showBasics(n) {
             const lv = BASICS[n];
-            lessonsTitle.textContent = `Core Basics ${n} — ${lv.tag}`;
-            setCrumbsLevel(`Basics ${n} · ${lv.tag}`);
-            setExamBtn(`exam.html?course=core_basics_lvl${n}`, `Take the Basics ${n} Exam`);
-            lessonGrid.innerHTML = "";
-            lv.lessons.forEach((les, i) => {
-                const a = document.createElement("a");
-                a.className = "lesson-card";
-                a.href = `lesson.html?basics=${n}&lesson=${les.n}`;
-                a.style.animationDelay = (i * 0.015) + "s";
-                a.innerHTML = `
-                    ${VesperCovers.coverHTML(`B${n}-${les.n}`, VesperCovers.iconFor(les.title, lv.icon), `Basics ${n}`)}
-                    <div class="lz-body">
-                        <div class="lz-meta"><div class="num">Lesson ${les.n}</div><h4>${les.title}</h4></div>
-                        <i class="fas fa-chevron-right lz-go"></i>
-                    </div>`;
-                lessonGrid.appendChild(a);
-            });
-            viewLevels.style.display = "none"; viewLessons.style.display = "block";
-            window.scrollTo({top:0, behavior:"smooth"});
+            openCollection("basics:"+n, `Core Basics ${n} — ${lv.tag}`, `Basics ${n} · ${lv.tag}`,
+                { href:`exam.html?course=core_basics_lvl${n}`, label:`Take the Basics ${n} Exam` });
         }
-
         function showCert() {
-            lessonsTitle.textContent = "Certification Prep — Listening Drills";
-            setCrumbsLevel("Certification");
-            setExamBtn("exam.html?course=cert_prep", "Take the Certification Exam");
-            lessonGrid.innerHTML = "";
-            CERT_TRACKS.forEach((t, i) => {
-                const a = document.createElement("a");
-                a.className = "lesson-card";
-                const q = new URLSearchParams({ audio: t.file, title: t.title,
-                    sub: "Certification Prep (B2-C1)", crumb: "Certification · " + t.lesson, icon: t.icon });
-                a.href = `lesson.html?${q.toString()}`;
-                a.style.animationDelay = (i * 0.04) + "s";
-                a.innerHTML = `
-                    ${VesperCovers.coverHTML(t.file, t.icon, "Cert Prep")}
-                    <div class="lz-body">
-                        <div class="lz-meta"><div class="num">${t.lesson}</div><h4>${t.title}</h4></div>
-                        <i class="fas fa-chevron-right lz-go"></i>
-                    </div>`;
-                lessonGrid.appendChild(a);
-            });
-            viewLevels.style.display = "none"; viewLessons.style.display = "block";
-            window.scrollTo({top:0, behavior:"smooth"});
+            openCollection("cert", "Certification Prep — Listening Drills", "Certification",
+                { href:"exam.html?course=cert_prep", label:"Take the Certification Exam" });
         }
-
         function showBusiness() {
-            lessonsTitle.textContent = "Business English — Premium (B2)";
-            setCrumbsLevel("Business English");
-            setExamBtn("exam.html?course=corporate_b2", "Take the Business Exam");
-            lessonGrid.innerHTML = "";
-            BUSINESS_LESSONS.forEach((L, i) => {
-                const def = L.variants[0];
-                const a = document.createElement("a");
-                a.className = "lesson-card";
-                const q = new URLSearchParams({ audio: def.file, title: L.title,
-                    sub: "Business English (B2)", crumb: "Business English · " + L.lesson, icon: L.icon });
-                if (L.variants.length > 1) q.set("variants", JSON.stringify(L.variants));
-                a.href = `lesson.html?${q.toString()}`;
-                a.style.animationDelay = (i * 0.04) + "s";
-                const versions = L.variants.length > 1
-                    ? ` <span style="font-weight:600;font-size:0.66rem;letter-spacing:.3px;color:#a8843d;background:rgba(197,160,89,.16);padding:2px 8px;border-radius:10px;white-space:nowrap;vertical-align:middle;">${L.variants.length} versions</span>`
-                    : "";
-                a.innerHTML = `
-                    ${VesperCovers.coverHTML(def.file, L.icon, "Business")}
-                    <div class="lz-body">
-                        <div class="lz-meta"><div class="num">${L.lesson}</div><h4>${L.title}${versions}</h4></div>
-                        <i class="fas fa-chevron-right lz-go"></i>
-                    </div>`;
-                lessonGrid.appendChild(a);
-            });
-            viewLevels.style.display = "none"; viewLessons.style.display = "block";
-            window.scrollTo({top:0, behavior:"smooth"});
+            openCollection("business", "Business English — Premium (B2)", "Business English",
+                { href:"exam.html?course=corporate_b2", label:"Take the Business Exam" });
         }
-
         function showBizPath(lvl) {
             const bp = BIZ_PATH[lvl];
             const course = lvl === "b1" ? "corporate_b1" : "corporate_c1";
-            lessonsTitle.textContent = `Business Path ${lvl === "b1" ? "I" : "III"} — ${bp.tag}`;
-            setCrumbsLevel(bp.crumb);
-            setExamBtn(`exam.html?course=${course}`, "Take the Business Path Exam");
-            lessonGrid.innerHTML = "";
-            bp.lessons.forEach((les, i) => {
-                const a = document.createElement("a");
-                a.className = "lesson-card";
-                const q = new URLSearchParams({ audio: les.file, title: les.title,
-                    sub: bp.sub, crumb: bp.crumb + " · Lesson " + les.n, icon: les.icon });
-                a.href = `lesson.html?${q.toString()}`;
-                a.style.animationDelay = (i * 0.015) + "s";
-                a.innerHTML = `
-                    ${VesperCovers.coverHTML(les.file, les.icon, bp.crumb)}
-                    <div class="lz-body">
-                        <div class="lz-meta"><div class="num">Lesson ${les.n}</div><h4>${les.title}</h4></div>
-                        <i class="fas fa-chevron-right lz-go"></i>
-                    </div>`;
-                lessonGrid.appendChild(a);
-            });
-            viewLevels.style.display = "none"; viewLessons.style.display = "block";
-            window.scrollTo({top:0, behavior:"smooth"});
+            openCollection("bizpath:"+lvl, `Business Path ${lvl === "b1" ? "I" : "III"} — ${bp.tag}`, bp.crumb,
+                { href:`exam.html?course=${course}`, label:"Take the Business Path Exam" });
         }
     </script>
 <script src="vesper_nav.js"></script>
