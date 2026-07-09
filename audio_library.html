@@ -191,6 +191,54 @@
         .ver-badge { font-weight:600; font-size:0.66rem; letter-spacing:.3px; color:#a8843d;
             background:rgba(197,160,89,.16); padding:2px 8px; border-radius:10px; white-space:nowrap; vertical-align:middle; }
 
+        .stat-level { display:inline-flex; align-items:center; gap:6px; background:rgba(197,160,89,0.18);
+            border:1px solid rgba(197,160,89,0.45); color:var(--gold-lt); padding:3px 11px; border-radius:20px;
+            font-weight:600; letter-spacing:0.3px; }
+        .stat-level b { color:#fff; }
+
+        /* LOCKED collection cards */
+        .level-card.locked { cursor:not-allowed; opacity:0.72; filter:saturate(0.55); }
+        .level-card.locked:hover { transform:none; box-shadow:0 1px 4px rgba(0,0,0,0.06); border-color:var(--border); }
+        .level-card.locked .lc-top { filter:grayscale(0.35) brightness(0.82); }
+        .level-card.locked .lc-foot { color:var(--muted); }
+        .level-card .lock-flag { position:absolute; top:12px; right:16px; display:inline-flex; align-items:center; gap:6px;
+            background:rgba(0,0,0,0.5); color:var(--gold-lt); font-size:0.66rem; font-weight:700; letter-spacing:0.6px;
+            padding:4px 10px; border-radius:20px; border:1px solid rgba(197,160,89,0.4); backdrop-filter:blur(2px); }
+
+        /* LOCKED lesson cards */
+        .lesson-card.locked { cursor:not-allowed; }
+        .lesson-card.locked:hover { transform:none; box-shadow:0 1px 4px rgba(0,0,0,0.05); border-color:var(--border); }
+        .lesson-card.locked .vc-cover { filter:grayscale(0.6) brightness(0.7); }
+        .lesson-card.locked .lz-meta h4 { color:var(--muted); }
+        .lesson-card .vc-lock { position:absolute; top:10px; right:10px; z-index:3; width:26px; height:26px; border-radius:50%;
+            display:flex; align-items:center; justify-content:center; font-size:0.72rem; color:#fff;
+            background:rgba(0,0,0,0.55); border:1px solid rgba(255,255,255,0.25); }
+
+        /* LOCK modal */
+        .lock-modal { position:fixed; inset:0; z-index:2000; display:none; align-items:center; justify-content:center;
+            background:rgba(20,20,38,0.6); padding:22px; backdrop-filter:blur(3px); }
+        .lock-modal.open { display:flex; animation:fade 0.2s ease both; }
+        .lock-box { background:var(--white); border:1px solid var(--border); border-top:4px solid var(--gold);
+            border-radius:16px; max-width:400px; width:100%; padding:30px 28px 24px; text-align:center; position:relative;
+            box-shadow:0 24px 60px rgba(20,20,38,0.35); }
+        .lock-box .lock-x { position:absolute; top:12px; right:14px; background:none; border:none; font-size:1.5rem;
+            line-height:1; color:var(--muted); cursor:pointer; }
+        .lock-box .lock-x:hover { color:var(--navy); }
+        .lock-box .lock-ico { width:58px; height:58px; margin:0 auto 16px; border-radius:16px;
+            background:linear-gradient(135deg,var(--navy2),var(--navy3)); color:var(--gold);
+            display:flex; align-items:center; justify-content:center; font-size:1.5rem; border:1px solid rgba(197,160,89,0.4); }
+        .lock-box h3 { margin:0 0 10px; font-family:'Inria Serif',serif; font-size:1.35rem; color:var(--navy); }
+        .lock-box p { margin:0 0 8px; font-size:0.92rem; color:var(--text); line-height:1.5; }
+        .lock-box p b { color:var(--gold2); }
+        .lock-box .lock-sub { font-size:0.82rem; color:var(--muted); margin-bottom:20px; }
+        .lock-box .lock-actions { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
+        .lock-box .lock-cta { display:inline-flex; align-items:center; gap:8px; text-decoration:none; background:var(--navy);
+            color:#fff; border-radius:10px; padding:10px 18px; font-size:0.84rem; font-weight:700; transition:background .16s; }
+        .lock-box .lock-cta:hover { background:var(--gold); color:var(--navy); }
+        .lock-box .lock-dismiss { background:none; border:1px solid var(--border); color:var(--navy); border-radius:10px;
+            padding:10px 18px; font-size:0.84rem; font-weight:600; cursor:pointer; transition:border-color .16s; }
+        .lock-box .lock-dismiss:hover { border-color:var(--gold); color:var(--gold2); }
+
         .result-count { font-size:0.82rem; color:var(--muted); margin:0 0 20px; }
         .search-empty { text-align:center; padding:56px 20px; color:var(--muted); }
         .search-empty i { font-size:2.4rem; color:var(--border); margin-bottom:14px; display:block; }
@@ -243,6 +291,7 @@
                     <kbd id="search-kbd">/</kbd>
                 </div>
                 <div class="hero-stats">
+                    <span id="stat-level" class="stat-level" style="display:none"></span>
                     <span><b id="stat-lessons">0</b> lessons</span>
                     <span><b id="stat-collections">0</b> collections</span>
                     <span><b>6</b> levels · A0–C1</span>
@@ -372,6 +421,77 @@
         const searchCount = document.getElementById("search-count");
         const recentSection = document.getElementById("recent-section");
 
+        // ── LEVEL AVAILABILITY MODEL ──────────────────────────────────
+        // Each collection unlocks at a CEFR level. The student's own level
+        // lives in vesper_profile.level (0=A0 … 5=C1, seeded from Firestore
+        // by vesper_auth.js). A collection is locked when its requirement is
+        // above the student's level. Fail-open: with no known level (free
+        // mode / not signed in) nothing is locked. Edit REQ to re-tune.
+        const CEFR = ["A0", "A1", "A2", "B1", "B2", "C1"];
+        const REQ = {
+            "basics:1":0, "basics:2":1, "basics:3":2, "basics:4":2,
+            "level:1":1, "level:2":2, "level:3":3, "level:4":4, "level:5":4, "level:6":5,
+            "bizpath:b1":3, "business":4, "cert":4, "bizpath:c1":5
+            // "diag" is intentionally absent → placement tracks are always open.
+        };
+        function cefrLabel(n) { return CEFR[Math.max(0, Math.min(5, n | 0))]; }
+        function studentLevel() {
+            try {
+                const p = JSON.parse(localStorage.getItem("vesper_profile") || "{}");
+                return (p && typeof p.level === "number") ? p.level : null;
+            } catch (e) { return null; }
+        }
+        const STU = studentLevel();
+        function isLocked(col) { const r = REQ[col]; return STU != null && r != null && r > STU; }
+
+        // Show the student's own level in the hero.
+        if (STU != null) {
+            const el = document.getElementById("stat-level");
+            el.innerHTML = `Your level <b>${cefrLabel(STU)}</b>`;
+            el.style.display = "";
+        }
+
+        // Grey out + flag a locked collection card on the landing grid.
+        function lockCard(card, col) {
+            const need = cefrLabel(REQ[col]);
+            card.classList.add("locked");
+            card.setAttribute("aria-disabled", "true");
+            const top = card.querySelector(".lc-top");
+            if (top) {
+                const flag = document.createElement("span");
+                flag.className = "lock-flag";
+                flag.innerHTML = `<i class="fas fa-lock"></i> ${need}`;
+                top.appendChild(flag);
+            }
+            const foot = card.querySelector(".lc-foot");
+            if (foot) foot.innerHTML = `<span><i class="fas fa-lock"></i> Unlocks at ${need}</span><i class="fas fa-lock"></i>`;
+        }
+
+        // Explain why a collection is locked and offer the placement test.
+        function showLock(col) {
+            const need = cefrLabel(REQ[col]);
+            const yours = STU != null ? cefrLabel(STU) : null;
+            let m = document.getElementById("lock-modal");
+            if (!m) { m = document.createElement("div"); m.id = "lock-modal"; m.className = "lock-modal"; document.body.appendChild(m); }
+            m.innerHTML =
+                `<div class="lock-box" role="dialog" aria-modal="true" aria-labelledby="lock-h">
+                    <button class="lock-x" aria-label="Close">&times;</button>
+                    <div class="lock-ico"><i class="fas fa-lock"></i></div>
+                    <h3 id="lock-h">Locked for now</h3>
+                    <p>This collection unlocks at level <b>${need}</b>.${yours ? ` Your level is <b>${yours}</b>.` : ""}</p>
+                    <p class="lock-sub">Keep progressing through your levels — or take the placement test if you think you should be placed higher.</p>
+                    <div class="lock-actions">
+                        <a class="lock-cta" href="book_placement.html"><i class="fas fa-clipboard-check"></i> Placement test</a>
+                        <button class="lock-dismiss">Got it</button>
+                    </div>
+                </div>`;
+            m.classList.add("open");
+            const close = () => m.classList.remove("open");
+            m.querySelector(".lock-x").onclick = close;
+            m.querySelector(".lock-dismiss").onclick = close;
+            m.onclick = e => { if (e.target === m) close(); };
+        }
+
         // ── BUILD LEVELS ──────────────────────────────────────────────
         Object.keys(DATA).forEach(n => {
             const lv = DATA[n];
@@ -387,7 +507,9 @@
                     <p>${LEVEL_DESC[n] || ""}</p>
                     <div class="lc-foot"><span>${lv.lessons.length} Lessons</span><i class="fas fa-arrow-right"></i></div>
                 </div>`;
-            card.addEventListener("click", () => showLessons(n));
+            const col = "level:" + n;
+            if (isLocked(col)) lockCard(card, col);
+            card.addEventListener("click", () => isLocked(col) ? showLock(col) : showLessons(n));
             levelGrid.appendChild(card);
         });
         // Diagnostics card
@@ -422,7 +544,9 @@
                     <p>Core Basics ${lv.tag} — one short dialogue (~1 min) per lesson with Listen &amp; Answer questions.</p>
                     <div class="lc-foot"><span>${lv.lessons.length} Tracks</span><i class="fas fa-arrow-right"></i></div>
                 </div>`;
-            card.addEventListener("click", () => showBasics(n));
+            const col = "basics:" + n;
+            if (isLocked(col)) lockCard(card, col);
+            card.addEventListener("click", () => isLocked(col) ? showLock(col) : showBasics(n));
             levelGrid.appendChild(card);
         });
 
@@ -439,7 +563,8 @@
                 <p>Timed listening drills from the Certification Prep course — real exam distractors included.</p>
                 <div class="lc-foot"><span>${CERT_TRACKS.length} Tracks</span><i class="fas fa-arrow-right"></i></div>
             </div>`;
-        ccard.addEventListener("click", showCert);
+        if (isLocked("cert")) lockCard(ccard, "cert");
+        ccard.addEventListener("click", () => isLocked("cert") ? showLock("cert") : showCert());
         levelGrid.appendChild(ccard);
 
         // Business English card
@@ -455,7 +580,8 @@
                 <p>Listening resources from the Business English Premium course — pitches, calls, meetings, data, negotiation, feedback and more.</p>
                 <div class="lc-foot"><span>${BUSINESS_LESSONS.length} Lessons</span><i class="fas fa-arrow-right"></i></div>
             </div>`;
-        bcard.addEventListener("click", showBusiness);
+        if (isLocked("business")) lockCard(bcard, "business");
+        bcard.addEventListener("click", () => isLocked("business") ? showLock("business") : showBusiness());
         levelGrid.appendChild(bcard);
 
         // Business Path cards (B1 Foundations + C1 Strategic Influence) — audio model per lesson
@@ -474,7 +600,9 @@
                     <p>Audio models from ${bp.sub} — one native-voice model of the target skill per lesson, with transcript and vocabulary.</p>
                     <div class="lc-foot"><span>${bp.lessons.length} Lessons</span><i class="fas fa-arrow-right"></i></div>
                 </div>`;
-            card.addEventListener("click", () => showBizPath(lvl));
+            const col = "bizpath:" + lvl;
+            if (isLocked(col)) lockCard(card, col);
+            card.addEventListener("click", () => isLocked(col) ? showLock(col) : showBizPath(lvl));
             levelGrid.appendChild(card);
         });
 
@@ -537,11 +665,14 @@
         // ── SHARED CARD RENDERER ──────────────────────────────────────
         function cardHTML(it, i) {
             const versions = it.versions ? ` <span class="ver-badge">${it.versions} versions</span>` : "";
-            return `<a class="lesson-card" href="${it.href}" data-href="${it.href}" style="animation-delay:${(i * 0.015).toFixed(3)}s">
+            const locked = isLocked(it.col);
+            const lockOverlay = locked ? `<span class="vc-lock"><i class="fas fa-lock"></i></span>` : "";
+            return `<a class="lesson-card${locked ? " locked" : ""}" href="${it.href}" data-href="${it.href}" data-col="${it.col}"${locked ? ' aria-disabled="true"' : ""} style="animation-delay:${(i * 0.015).toFixed(3)}s">
                 ${VesperCovers.coverHTML(it.seed, it.icon, it.badge)}
+                ${lockOverlay}
                 <div class="lz-body">
                     <div class="lz-meta"><div class="num">${it.num}</div><h4>${it.title}${versions}</h4></div>
-                    <i class="fas fa-chevron-right lz-go"></i>
+                    <i class="fas ${locked ? "fa-lock" : "fa-chevron-right"} lz-go"></i>
                 </div></a>`;
         }
         function renderCards(container, items) { container.innerHTML = items.map(cardHTML).join(""); }
@@ -556,8 +687,14 @@
             try { localStorage.setItem(RECENT_KEY, JSON.stringify(r)); } catch (e) {}
         }
         document.addEventListener("click", e => {
-            const card = e.target.closest(".lesson-card[data-href]");
-            if (card) pushRecent(card.getAttribute("data-href"));
+            const card = e.target.closest(".lesson-card");
+            if (!card) return;
+            if (card.classList.contains("locked")) {   // locked lesson → block nav, explain
+                e.preventDefault();
+                showLock(card.getAttribute("data-col"));
+                return;
+            }
+            if (card.hasAttribute("data-href")) pushRecent(card.getAttribute("data-href"));
         });
         function renderRecent() {
             const items = getRecent().map(h => ITEM_BY_HREF[h]).filter(Boolean);
@@ -598,6 +735,10 @@
             viewLevels.style.display = "none"; viewLessons.style.display = "none"; viewSearch.style.display = "block";
         }
         document.addEventListener("keydown", e => {
+            if (e.key === "Escape") {   // close the lock modal first, if open
+                const m = document.getElementById("lock-modal");
+                if (m && m.classList.contains("open")) { m.classList.remove("open"); return; }
+            }
             if (e.key === "/" && document.activeElement !== searchInput && !/^(INPUT|TEXTAREA)$/.test(document.activeElement.tagName)) {
                 e.preventDefault(); searchInput.focus();
             } else if (e.key === "Escape" && document.activeElement === searchInput) {
