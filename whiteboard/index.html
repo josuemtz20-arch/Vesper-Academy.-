@@ -1,0 +1,442 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#1B1B2F">
+    <title>Vesper Academy | Pizarra Virtual</title>
+    <meta name="description" content="Pizarra virtual profesional de Vesper Academy: dibuja, inserta imágenes, exporta a PNG o JSON.">
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="icon" href="../assets/images/favicon_32.png" type="image/png" sizes="32x32">
+    <link rel="apple-touch-icon" href="../assets/images/apple_touch_icon.png">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inria+Serif:wght@400;700&family=Inter:wght@300;400;500;600;700&display=swap');
+        *, *::before, *::after { box-sizing: border-box; }
+        :root {
+            --navy:#1B1B2F; --navy2:#2c2c4a; --gold:#c5a059; --gold-lt:#d9bd84; --gold2:#a8843d;
+            --cream:#f5f2eb; --white:#fff; --border:#e4e0d8; --text:#1B1B2F; --muted:#6b7a8d;
+        }
+        html, body { height:100%; margin:0; }
+        body { font-family:'Inter',sans-serif; background:var(--cream); color:var(--text);
+            -webkit-font-smoothing:antialiased; display:flex; flex-direction:column; }
+
+        header { display:flex; align-items:center; gap:12px; padding:12px 18px; }
+        header .logo { width:38px; height:38px; border-radius:10px; background:var(--navy); color:var(--gold);
+            display:flex; align-items:center; justify-content:center; overflow:hidden; }
+        header .logo img { width:100%; height:100%; object-fit:contain; }
+        header h1 { font-size:1.15rem; margin:0; color:var(--navy); line-height:1.1; }
+        header p { margin:0; font-size:0.72rem; color:var(--muted); }
+        header .spacer { flex:1; }
+        header a.back { text-decoration:none; font-size:0.8rem; font-weight:600; color:var(--navy);
+            border:1px solid var(--border); background:var(--white); border-radius:8px; padding:8px 12px; }
+        header a.back:hover { border-color:var(--gold); color:var(--gold2); }
+
+        .app { flex:1; min-height:0; display:flex; flex-direction:column; margin:0 14px 14px;
+            border-radius:14px; overflow:hidden; box-shadow:0 14px 40px rgba(26,43,66,0.14); }
+
+        /* Toolbar */
+        .toolbar { display:flex; flex-wrap:wrap; align-items:center; gap:8px; padding:11px 14px; background:var(--navy); }
+        .tgroup { display:flex; align-items:center; gap:6px; padding:0 8px; border-right:1px solid rgba(255,255,255,0.12); }
+        .tgroup:last-child { border-right:none; }
+        .tbtn { width:40px; height:40px; border-radius:9px; border:1px solid rgba(255,255,255,0.15);
+            background:var(--navy2); color:#fff; cursor:pointer; font-size:0.95rem;
+            display:flex; align-items:center; justify-content:center; transition:background .15s, color .15s; }
+        .tbtn:hover { background:#2e466a; }
+        .tbtn.active { background:var(--gold); color:var(--navy); border-color:var(--gold); }
+        .tbtn:disabled { opacity:0.4; cursor:not-allowed; }
+        .tbtn.accent:hover { background:#33507a; }
+        .tlabel { color:rgba(255,255,255,0.6); font-size:0.62rem; text-transform:uppercase; letter-spacing:1px; }
+        .swatch { width:26px; height:26px; border-radius:50%; cursor:pointer; border:2px solid transparent; transition:transform .12s; }
+        .swatch:hover { transform:scale(1.15); }
+        .swatch.active { border-color:#fff; box-shadow:0 0 0 2px var(--gold); }
+        input[type=color].pick { width:34px; height:34px; border:none; background:none; cursor:pointer; padding:0; }
+        .size-slider { width:96px; accent-color:var(--gold); cursor:pointer; }
+        .size-val { color:rgba(255,255,255,0.85); font-size:0.78rem; width:20px; text-align:right; }
+        .zoom-val { min-width:52px; text-align:center; background:var(--navy2); color:#fff; border:1px solid rgba(255,255,255,0.15);
+            border-radius:9px; padding:9px 6px; font-size:0.78rem; font-weight:600; cursor:pointer; }
+        .save-json { height:40px; display:inline-flex; align-items:center; gap:8px; padding:0 14px; border:none;
+            border-radius:9px; background:var(--gold); color:var(--navy); font-weight:700; font-size:0.82rem; cursor:pointer; font-family:inherit; }
+        .save-json:hover { background:var(--gold-lt); }
+
+        /* Stage */
+        .stage { position:relative; flex:1; min-height:0; background:#efeee9;
+            background-image:linear-gradient(45deg,#e7e5df 25%,transparent 25%,transparent 75%,#e7e5df 75%),
+                             linear-gradient(45deg,#e7e5df 25%,transparent 25%,transparent 75%,#e7e5df 75%);
+            background-size:26px 26px; background-position:0 0, 13px 13px; overflow:hidden; }
+        .stage canvas { position:absolute; top:0; left:0; }
+
+        /* Status */
+        .status { display:flex; flex-wrap:wrap; align-items:center; gap:16px; padding:8px 16px;
+            background:var(--cream); border-top:1px solid var(--border); font-size:0.76rem; color:var(--muted); }
+        .status .cur { font-weight:600; color:var(--navy); }
+        .status .hint { margin-left:auto; color:#8a97a6; }
+
+        @media (max-width:760px){
+            .toolbar { flex-wrap:nowrap; overflow-x:auto; }
+            .tgroup { flex-shrink:0; }
+            .status .hint { display:none; }
+        }
+        :focus-visible { outline:3px solid var(--gold); outline-offset:2px; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo"><img src="../assets/images/vesper_logo_inverted.png" alt="Vesper" onerror="this.style.display='none';this.parentNode.textContent='V'"></div>
+        <div><h1>Pizarra Virtual</h1><p>Vesper Academy · Fabric.js</p></div>
+        <div class="spacer"></div>
+        <a class="back" href="../materiales.html"><i class="fas fa-arrow-left"></i> Materiales</a>
+    </header>
+
+    <div class="app">
+        <div class="toolbar" id="toolbar">
+            <div class="tgroup">
+                <button class="tbtn" data-tool="select" title="Seleccionar / mover (V)"><i class="fas fa-arrow-pointer"></i></button>
+                <button class="tbtn active" data-tool="pen" title="Lápiz (P)"><i class="fas fa-pen"></i></button>
+                <button class="tbtn" data-tool="line" title="Línea (L)"><i class="fas fa-minus"></i></button>
+                <button class="tbtn" data-tool="rect" title="Rectángulo (R)"><i class="far fa-square"></i></button>
+                <button class="tbtn" data-tool="circle" title="Elipse (C)"><i class="far fa-circle"></i></button>
+                <button class="tbtn" data-tool="triangle" title="Triángulo (T)"><i class="fas fa-caret-up"></i></button>
+                <button class="tbtn" data-tool="text" title="Texto (X)"><i class="fas fa-font"></i></button>
+                <button class="tbtn" data-tool="pan" title="Desplazar lienzo (H) · o Alt+arrastrar"><i class="fas fa-hand"></i></button>
+            </div>
+            <div class="tgroup">
+                <span class="tlabel">Color</span>
+                <span class="swatch active" style="background:#1B1B2F" data-color="#1B1B2F"></span>
+                <span class="swatch" style="background:#c5a059" data-color="#c5a059"></span>
+                <span class="swatch" style="background:#b02a2a" data-color="#b02a2a"></span>
+                <span class="swatch" style="background:#2d7a4f" data-color="#2d7a4f"></span>
+                <span class="swatch" style="background:#1e5fa8" data-color="#1e5fa8"></span>
+                <input type="color" class="pick" id="color-pick" value="#1B1B2F" title="Color personalizado">
+            </div>
+            <div class="tgroup">
+                <span class="tlabel">Grosor</span>
+                <input type="range" class="size-slider" id="size" min="1" max="40" value="3">
+                <span class="size-val" id="size-val">3</span>
+            </div>
+            <div class="tgroup">
+                <button class="tbtn" id="zoom-out" title="Alejar"><i class="fas fa-magnifying-glass-minus"></i></button>
+                <span class="zoom-val" id="zoom-val" title="Restablecer vista">100%</span>
+                <button class="tbtn" id="zoom-in" title="Acercar"><i class="fas fa-magnifying-glass-plus"></i></button>
+                <button class="tbtn" id="zoom-reset" title="Ajustar vista"><i class="fas fa-expand"></i></button>
+            </div>
+            <div class="tgroup" style="margin-left:auto">
+                <button class="tbtn" id="undo" title="Deshacer (Ctrl+Z)" disabled><i class="fas fa-rotate-left"></i></button>
+                <button class="tbtn" id="redo" title="Rehacer (Ctrl+Y)" disabled><i class="fas fa-rotate-right"></i></button>
+                <button class="tbtn" id="delete" title="Borrar seleccionado (Supr)"><i class="fas fa-delete-left"></i></button>
+            </div>
+            <div class="tgroup">
+                <button class="tbtn accent" id="add-image" title="Insertar imagen"><i class="fas fa-image"></i></button>
+                <button class="tbtn accent" id="load-json" title="Cargar JSON"><i class="fas fa-file-import"></i></button>
+                <button class="tbtn accent" id="save-png" title="Descargar PNG"><i class="fas fa-download"></i></button>
+                <button class="save-json" id="save-json"><i class="fas fa-floppy-disk"></i> Guardar JSON</button>
+                <button class="tbtn" id="clear" title="Limpiar todo"><i class="fas fa-trash"></i></button>
+            </div>
+        </div>
+
+        <div class="stage" id="stage">
+            <canvas id="board"></canvas>
+        </div>
+
+        <div class="status">
+            <span class="cur" id="st-tool">Lápiz</span>
+            <span>Zoom: <span id="st-zoom">100%</span></span>
+            <span>Objetos: <span id="st-count">0</span></span>
+            <span class="hint">Rueda = zoom · Alt+arrastrar = mover lienzo · Supr = borrar · Ctrl+Z / Ctrl+Y = deshacer / rehacer · doble clic en texto para editar</span>
+        </div>
+    </div>
+
+    <input type="file" id="img-input" accept="image/*" hidden>
+    <input type="file" id="json-input" accept="application/json,.json" hidden>
+
+    <script src="https://cdn.jsdelivr.net/npm/fabric@6.5.4/dist/index.min.js"></script>
+    <script>
+    /* ============================================================
+       VESPER · Pizarra Virtual — versión estática autocontenida.
+       Misma arquitectura que la app React (vesper-whiteboard/) pero
+       portada a JS de navegador con Fabric.js por CDN (sin build).
+       ============================================================ */
+    (function () {
+      "use strict";
+      const { Canvas, Rect, Ellipse, Triangle, Line, Textbox, FabricImage, Point, PencilBrush } = fabric;
+
+      const TOOLS = { SELECT:"select", PEN:"pen", RECT:"rect", LINE:"line", CIRCLE:"circle", TRIANGLE:"triangle", TEXT:"text", PAN:"pan" };
+      const SHAPE_TOOLS = [TOOLS.RECT, TOOLS.LINE, TOOLS.CIRCLE, TOOLS.TRIANGLE];
+      const ZOOM = { MIN:0.2, MAX:5, STEP:1.2 };
+      const TOOL_LABEL = { select:"Seleccionar", pen:"Lápiz", line:"Línea", rect:"Rectángulo", circle:"Elipse", triangle:"Triángulo", text:"Texto", pan:"Desplazar" };
+
+      // ── estado ──
+      let activeTool = TOOLS.PEN;
+      let strokeColor = "#1B1B2F";
+      let strokeWidth = 3;
+
+      const stage = document.getElementById("stage");
+      const canvas = new Canvas("board", {
+        backgroundColor: "#ffffff",
+        preserveObjectStacking: true,
+        selection: true,
+        fireRightClick: false,
+        stopContextMenu: true,
+      });
+
+      function fit() {
+        const r = stage.getBoundingClientRect();
+        canvas.setDimensions({ width: r.width, height: r.height });
+        canvas.requestRenderAll();
+      }
+      fit();
+      new ResizeObserver(fit).observe(stage);
+
+      // ── geometría de figuras (pura) ──
+      function createShape(tool, p) {
+        const stroke = { stroke: strokeColor, strokeWidth, strokeUniform: true };
+        const box = { ...stroke, left: p.x, top: p.y, originX: "left", originY: "top", fill: "transparent" };
+        switch (tool) {
+          case TOOLS.RECT: return new Rect({ ...box, width: 1, height: 1, rx: 2, ry: 2 });
+          case TOOLS.TRIANGLE: return new Triangle({ ...box, width: 1, height: 1 });
+          case TOOLS.CIRCLE: return new Ellipse({ ...box, rx: 1, ry: 1 });
+          case TOOLS.LINE: return new Line([p.x, p.y, p.x, p.y], stroke);
+          default: return null;
+        }
+      }
+      function updateShape(shape, tool, origin, p) {
+        if (tool === TOOLS.LINE) { shape.set({ x2: p.x, y2: p.y }); shape.setCoords(); return; }
+        const left = Math.min(origin.x, p.x), top = Math.min(origin.y, p.y);
+        const w = Math.abs(p.x - origin.x), h = Math.abs(p.y - origin.y);
+        if (tool === TOOLS.CIRCLE) shape.set({ left, top, rx: w / 2, ry: h / 2 });
+        else shape.set({ left, top, width: w, height: h });
+        shape.setCoords();
+      }
+      function isNegligible(shape, tool) {
+        if (tool === TOOLS.LINE) return Math.hypot(shape.x2 - shape.x1, shape.y2 - shape.y1) < 3;
+        const w = shape.width != null ? shape.width : (shape.rx || 0) * 2;
+        const h = shape.height != null ? shape.height : (shape.ry || 0) * 2;
+        return w < 3 && h < 3;
+      }
+
+      // ── historial (undo/redo por snapshots) ──
+      const history = (() => {
+        const stack = []; let index = -1, restoring = false;
+        const undoBtn = document.getElementById("undo"), redoBtn = document.getElementById("redo");
+        const sync = () => { undoBtn.disabled = index <= 0; redoBtn.disabled = index >= stack.length - 1; };
+        function save() {
+          if (restoring) return;
+          const snap = JSON.stringify(canvas.toJSON());
+          stack.splice(index + 1);
+          if (stack[index] === snap) return;
+          stack.push(snap); index++;
+          if (stack.length > 60) { stack.shift(); index--; }
+          sync();
+        }
+        async function load(snap) {
+          restoring = true;
+          try { await canvas.loadFromJSON(JSON.parse(snap)); canvas.requestRenderAll(); }
+          finally { restoring = false; }
+        }
+        async function undo() { if (index <= 0) return; index--; await load(stack[index]); sync(); refreshCount(); }
+        async function redo() { if (index >= stack.length - 1) return; index++; await load(stack[index]); sync(); refreshCount(); }
+        function reset() { stack.length = 0; index = -1; save(); }
+        return { save, undo, redo, reset, isRestoring: () => restoring, setRestoring: (v) => { restoring = v; } };
+      })();
+
+      // ── UI helpers ──
+      const stTool = document.getElementById("st-tool");
+      const stZoom = document.getElementById("st-zoom");
+      const stCount = document.getElementById("st-count");
+      const zoomVal = document.getElementById("zoom-val");
+      function refreshCount() { stCount.textContent = canvas.getObjects().length; }
+      function refreshZoom() { const z = Math.round(canvas.getZoom() * 100) + "%"; stZoom.textContent = z; zoomVal.textContent = z; }
+
+      function setTool(tool) {
+        activeTool = tool;
+        document.querySelectorAll(".tbtn[data-tool]").forEach((b) => b.classList.toggle("active", b.dataset.tool === tool));
+        stTool.textContent = TOOL_LABEL[tool] || tool;
+        const isPen = tool === TOOLS.PEN, isSelect = tool === TOOLS.SELECT;
+        canvas.isDrawingMode = isPen;
+        canvas.selection = isSelect;
+        canvas.skipTargetFind = !isSelect;
+        canvas.defaultCursor = tool === TOOLS.PAN ? "grab" : tool === TOOLS.TEXT ? "text" : "default";
+        if (isPen) {
+          if (!(canvas.freeDrawingBrush instanceof PencilBrush)) canvas.freeDrawingBrush = new PencilBrush(canvas);
+          canvas.freeDrawingBrush.color = strokeColor;
+          canvas.freeDrawingBrush.width = strokeWidth;
+        }
+      }
+
+      // ── interacción (dibujo / pan / texto) ──
+      let drawing = false, origin = null, shape = null, panning = false, lastClient = null;
+      canvas.on("mouse:down", (opt) => {
+        const e = opt.e;
+        if (activeTool === TOOLS.PAN || e.altKey) { panning = true; lastClient = { x: e.clientX, y: e.clientY }; canvas.setCursor("grabbing"); return; }
+        if (activeTool === TOOLS.TEXT) { placeText(opt); return; }
+        if (!SHAPE_TOOLS.includes(activeTool)) return;
+        drawing = true;
+        origin = canvas.getScenePoint(e);
+        shape = createShape(activeTool, origin);
+        if (shape) canvas.add(shape);
+      });
+      canvas.on("mouse:move", (opt) => {
+        const e = opt.e;
+        if (panning && lastClient) { canvas.relativePan(new Point(e.clientX - lastClient.x, e.clientY - lastClient.y)); lastClient = { x: e.clientX, y: e.clientY }; return; }
+        if (!drawing || !shape) return;
+        updateShape(shape, activeTool, origin, canvas.getScenePoint(e));
+        canvas.requestRenderAll();
+      });
+      canvas.on("mouse:up", () => {
+        if (panning) { panning = false; lastClient = null; canvas.setCursor(activeTool === TOOLS.PAN ? "grab" : "default"); return; }
+        if (drawing && shape) {
+          drawing = false;
+          if (isNegligible(shape, activeTool)) canvas.remove(shape);
+          else { shape.setCoords(); history.save(); refreshCount(); }
+          shape = null; origin = null;
+        }
+      });
+      function placeText(opt) {
+        const p = canvas.getScenePoint(opt.e);
+        const t = new Textbox("Escribe aquí…", { left: p.x, top: p.y, fontFamily: "Inter, sans-serif", fontSize: 24, fill: strokeColor, width: 240 });
+        canvas.add(t); canvas.setActiveObject(t); t.enterEditing(); t.selectAll();
+        history.save(); refreshCount();
+      }
+      canvas.on("mouse:wheel", (opt) => {
+        const e = opt.e;
+        let z = canvas.getZoom() * (e.deltaY < 0 ? ZOOM.STEP : 1 / ZOOM.STEP);
+        z = Math.min(Math.max(z, ZOOM.MIN), ZOOM.MAX);
+        canvas.zoomToPoint(new Point(e.offsetX, e.offsetY), z);
+        refreshZoom(); e.preventDefault(); e.stopPropagation();
+      });
+
+      // history + count listeners
+      canvas.on("path:created", () => { history.save(); refreshCount(); });
+      canvas.on("object:modified", () => { history.save(); refreshCount(); });
+      canvas.on("object:removed", refreshCount);
+
+      // ── toolbar wiring ──
+      document.querySelectorAll(".tbtn[data-tool]").forEach((b) => b.addEventListener("click", () => setTool(b.dataset.tool)));
+      document.querySelectorAll(".swatch").forEach((s) => s.addEventListener("click", () => {
+        document.querySelectorAll(".swatch").forEach((x) => x.classList.remove("active"));
+        s.classList.add("active"); setColor(s.dataset.color);
+        document.getElementById("color-pick").value = s.dataset.color;
+      }));
+      document.getElementById("color-pick").addEventListener("input", (e) => {
+        document.querySelectorAll(".swatch").forEach((x) => x.classList.remove("active"));
+        setColor(e.target.value);
+      });
+      function setColor(c) {
+        strokeColor = c;
+        if (canvas.freeDrawingBrush) canvas.freeDrawingBrush.color = c;
+        const a = canvas.getActiveObject();
+        if (a) {
+          if (a.type === "line" || a.type === "path" || a.type === "textbox") a.set(a.type === "textbox" ? "fill" : "stroke", c);
+          else a.set("stroke", c);
+          canvas.requestRenderAll(); history.save();
+        }
+      }
+      const sizeVal = document.getElementById("size-val");
+      document.getElementById("size").addEventListener("input", (e) => {
+        strokeWidth = parseInt(e.target.value, 10); sizeVal.textContent = strokeWidth;
+        if (canvas.freeDrawingBrush) canvas.freeDrawingBrush.width = strokeWidth;
+      });
+
+      document.getElementById("undo").addEventListener("click", history.undo);
+      document.getElementById("redo").addEventListener("click", history.redo);
+      document.getElementById("delete").addEventListener("click", deleteSelected);
+      function deleteSelected() {
+        const objs = canvas.getActiveObjects();
+        if (!objs.length) return;
+        history.setRestoring(true);
+        objs.forEach((o) => canvas.remove(o));
+        canvas.discardActiveObject(); canvas.requestRenderAll();
+        history.setRestoring(false); history.save(); refreshCount();
+      }
+
+      function applyZoom(z) {
+        z = Math.min(Math.max(z, ZOOM.MIN), ZOOM.MAX);
+        canvas.zoomToPoint(new Point(canvas.getWidth() / 2, canvas.getHeight() / 2), z);
+        refreshZoom();
+      }
+      document.getElementById("zoom-in").addEventListener("click", () => applyZoom(canvas.getZoom() * ZOOM.STEP));
+      document.getElementById("zoom-out").addEventListener("click", () => applyZoom(canvas.getZoom() / ZOOM.STEP));
+      const resetView = () => { canvas.setViewportTransform([1, 0, 0, 1, 0, 0]); refreshZoom(); };
+      document.getElementById("zoom-reset").addEventListener("click", resetView);
+      zoomVal.addEventListener("click", resetView);
+
+      document.getElementById("clear").addEventListener("click", () => {
+        if (!canvas.getObjects().length) return;
+        if (!confirm("¿Borrar toda la pizarra? Puedes deshacer con Ctrl+Z.")) return;
+        history.setRestoring(true);
+        canvas.remove(...canvas.getObjects()); canvas.requestRenderAll();
+        history.setRestoring(false); history.save(); refreshCount();
+      });
+
+      // ── exportación / importación ──
+      function download(name, href) { const a = document.createElement("a"); a.href = href; a.download = name; document.body.appendChild(a); a.click(); a.remove(); }
+      document.getElementById("save-json").addEventListener("click", () => {
+        const blob = new Blob([JSON.stringify(canvas.toJSON(), null, 2)], { type: "application/json" });
+        const url = URL.createObjectURL(blob); download("pizarra-vesper.json", url);
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+      });
+      document.getElementById("save-png").addEventListener("click", () => {
+        const vpt = canvas.viewportTransform ? [...canvas.viewportTransform] : null;
+        canvas.setViewportTransform([1, 0, 0, 1, 0, 0]);
+        let url;
+        try { url = canvas.toDataURL({ format: "png", multiplier: 2, enableRetinaScaling: false }); }
+        catch (err) { if (vpt) canvas.setViewportTransform(vpt); alert("No se puede exportar: una imagen externa bloquea el lienzo (CORS)."); return; }
+        if (vpt) canvas.setViewportTransform(vpt);
+        canvas.requestRenderAll(); download("pizarra-vesper.png", url);
+      });
+
+      const imgInput = document.getElementById("img-input");
+      document.getElementById("add-image").addEventListener("click", () => imgInput.click());
+      imgInput.addEventListener("change", (e) => {
+        const file = e.target.files && e.target.files[0]; if (!file) return;
+        const reader = new FileReader();
+        reader.onload = async () => {
+          try {
+            const img = await FabricImage.fromURL(String(reader.result));
+            const scale = Math.min(canvas.getWidth() * 0.6 / img.width, canvas.getHeight() * 0.6 / img.height, 1);
+            img.scale(scale);
+            const c = canvas.getVpCenter();
+            img.set({ left: c.x, top: c.y, originX: "center", originY: "center" });
+            canvas.add(img); canvas.setActiveObject(img); canvas.requestRenderAll();
+            history.save(); refreshCount();
+          } catch (err) { alert("No se pudo insertar la imagen."); }
+        };
+        reader.readAsDataURL(file); e.target.value = "";
+      });
+
+      const jsonInput = document.getElementById("json-input");
+      document.getElementById("load-json").addEventListener("click", () => jsonInput.click());
+      jsonInput.addEventListener("change", async (e) => {
+        const file = e.target.files && e.target.files[0]; if (!file) return;
+        const text = await file.text();
+        history.setRestoring(true);
+        try { await canvas.loadFromJSON(JSON.parse(text)); canvas.requestRenderAll(); }
+        catch (err) { history.setRestoring(false); alert("JSON inválido: " + err.message); return; }
+        history.setRestoring(false); history.reset(); refreshCount();
+        e.target.value = "";
+      });
+
+      // ── atajos de teclado ──
+      const TOOL_KEYS = { v:TOOLS.SELECT, p:TOOLS.PEN, l:TOOLS.LINE, r:TOOLS.RECT, c:TOOLS.CIRCLE, t:TOOLS.TRIANGLE, x:TOOLS.TEXT, h:TOOLS.PAN };
+      document.addEventListener("keydown", (e) => {
+        const active = canvas.getActiveObject();
+        const editing = active && active.isEditing;
+        const tag = document.activeElement && document.activeElement.tagName;
+        const inField = tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT";
+        const meta = e.ctrlKey || e.metaKey;
+        if (editing) return;
+        if (meta && e.key.toLowerCase() === "z" && !e.shiftKey) { e.preventDefault(); history.undo(); }
+        else if (meta && (e.key.toLowerCase() === "y" || (e.shiftKey && e.key.toLowerCase() === "z"))) { e.preventDefault(); history.redo(); }
+        else if (!inField && (e.key === "Delete" || e.key === "Backspace")) { e.preventDefault(); deleteSelected(); }
+        else if (!inField && !meta && TOOL_KEYS[e.key.toLowerCase()]) setTool(TOOL_KEYS[e.key.toLowerCase()]);
+      });
+
+      // ── init ──
+      setTool(TOOLS.PEN);
+      history.reset();
+      refreshCount();
+      refreshZoom();
+    })();
+    </script>
+</body>
+</html>

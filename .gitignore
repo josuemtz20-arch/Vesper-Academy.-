@@ -33,6 +33,11 @@
 !/book_placement.html
 !/audio_library.html
 !/lesson.html
+# Pizarra Virtual autónoma (2026-07-08): app estática de whiteboard con Fabric.js
+# por CDN (sin build). Vive en /whiteboard/ (URL limpia vesperacademy.com/whiteboard).
+# Sin claves. El código fuente React/Vite (vesper-whiteboard/) queda local-only.
+!/whiteboard/
+!/whiteboard/index.html
 # Barra de navegación persistente del alumno (Inicio/Aprender/Audio/Boleta/Perfil).
 # Se auto-inyecta en materiales/leccion/audio_library/mi_boleta/chat/perfil. Sin claves.
 !/vesper_nav.js
