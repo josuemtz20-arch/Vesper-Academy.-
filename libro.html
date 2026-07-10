@@ -286,6 +286,24 @@ body{margin:0;font-family:'Segoe UI',Arial,sans-serif;display:flex;align-items:c
       'el.classList.add("vm-jump");setTimeout(function(){el.classList.remove("vm-jump");},2500);}' +
       'if(document.readyState==="complete"){setTimeout(jump,120);}' +
       'else{window.addEventListener("load",function(){setTimeout(jump,120);});}})();<\/script>';
+
+    /* Blindaje de enlaces "practicar en la app": algunos libros traen botones
+       hacia leccion.html?id=… (o lesson.html?id=…) usando el ancla LOCAL de la
+       lección (l1, sl1, lesson3…). Ese id NO existe en el motor de lecciones de
+       la app, así que el alumno caía en "Lección no encontrada". Si el id apunta
+       a una lección que vive AQUÍ (el libro tiene ese ancla), lo mantenemos
+       dentro del libro (scroll + resalte) en vez de mandarlo a un id inexistente.
+       Si el id sí es una lección real de la app (el libro no tiene ese ancla),
+       dejamos que navegue con normalidad. */
+    chip += '<script>(function(){' +
+      'document.addEventListener("click",function(e){' +
+      'var a=e.target&&e.target.closest?e.target.closest("a[href]"):null;if(!a)return;' +
+      'var m=(a.getAttribute("href")||"").match(/(?:^|\\/)(?:leccion|lesson)\\.html\\?(?:[^#]*&)?id=([a-z0-9_:-]+)/i);' +
+      'if(!m)return;var el=document.getElementById(m[1]);if(!el)return;' +
+      'e.preventDefault();' +
+      'try{el.scrollIntoView({behavior:"smooth",block:"start"});}catch(_){el.scrollIntoView();}' +
+      'el.classList.add("vm-jump");setTimeout(function(){el.classList.remove("vm-jump");},2500);' +
+      '},true);})();<\/script>';
     if (/<\/body>/i.test(html)) {
       html = html.replace(/<\/body>(?![\s\S]*<\/body>)/i, chip + "</body>");
     } else {
