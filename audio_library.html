@@ -301,7 +301,7 @@
                     <span id="stat-level" class="stat-level" style="display:none"></span>
                     <span><b id="stat-lessons">0</b> lessons</span>
                     <span><b id="stat-collections">0</b> collections</span>
-                    <span><b>6</b> levels · A0–C1</span>
+                    <span><b>6</b> levels · Pre-A1–C1</span>
                 </div>
             </div>
         </div>
@@ -430,11 +430,11 @@
 
         // ── LEVEL AVAILABILITY MODEL ──────────────────────────────────
         // Each collection unlocks at a CEFR level. The student's own level
-        // lives in vesper_profile.level (0=A0 … 5=C1, seeded from Firestore
+        // lives in vesper_profile.level (0=Pre-A1 … 5=C1, seeded from Firestore
         // by vesper_auth.js). A collection is locked when its requirement is
         // above the student's level. Fail-open: with no known level (free
         // mode / not signed in) nothing is locked. Edit REQ to re-tune.
-        const CEFR = ["A0", "A1", "A2", "B1", "B2", "C1"];
+        const CEFR = ["Pre-A1", "A1", "A2", "B1", "B2", "C1"];
         const REQ = {
             "basics:1":0, "basics:2":1, "basics:3":2, "basics:4":2,
             "level:1":1, "level:2":2, "level:3":3, "level:4":4, "level:5":4, "level:6":5,
@@ -560,7 +560,7 @@
 
         const GROUPS = [
             { kicker:"Start here",              title:"Placement",        specs:[diagSpec] },
-            { kicker:"Foundations · A0–A2",     title:"Core Basics",      specs:Object.keys(BASICS).map(basicsSpec) },
+            { kicker:"Foundations · Pre-A1–A2",     title:"Core Basics",      specs:Object.keys(BASICS).map(basicsSpec) },
             { kicker:"Core curriculum · A1–C1", title:"Main Levels",      specs:Object.keys(DATA).map(levelSpec) },
             { kicker:"Professional · B1–C1",    title:"Business & Exams", specs:proSpecs }
         ];

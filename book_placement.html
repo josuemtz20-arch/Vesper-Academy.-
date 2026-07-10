@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vesper Academy — Examen Diagnóstico de Inglés (Gratis)</title>
-    <meta name="description" content="Examen diagnóstico de inglés gratuito de Vesper Academy. Descubre tu nivel: A0, A1, A2, B1 o B2+ en 30 preguntas y recibe tu curso recomendado.">
+    <meta name="description" content="Examen diagnóstico de inglés gratuito de Vesper Academy. Descubre tu nivel: Pre-A1, A1, A2, B1 o B2+ en 30 preguntas y recibe tu curso recomendado.">
     <link rel="canonical" href="https://vesperacademy.com/book_placement.html">
     <meta property="og:type" content="website">
     <meta property="og:locale" content="es_MX">
     <meta property="og:site_name" content="Vesper Academy">
     <meta property="og:title" content="Examen diagnóstico de inglés gratis — descubre tu nivel">
-    <meta property="og:description" content="30 preguntas, sin registro, resultado al instante con tu nivel CEFR (A0–B2+) y curso recomendado.">
+    <meta property="og:description" content="30 preguntas, sin registro, resultado al instante con tu nivel CEFR (Pre-A1–B2+) y curso recomendado.">
     <meta property="og:url" content="https://vesperacademy.com/book_placement.html">
     <meta property="og:image" content="https://vesperacademy.com/assets/images/lessons/theme_city.jpg">
     <meta name="twitter:card" content="summary_large_image">
@@ -489,9 +489,9 @@
             <span class="free-tag"><i class="fas fa-gift"></i> 100% Gratis · Sin registro</span>
             <div class="intro-icon"><i class="fas fa-graduation-cap"></i></div>
             <h1>Descubre tu <span>nivel de inglés</span> en 15 minutos</h1>
-            <p>Responde 30 preguntas y conoce tu nivel real — de principiante absoluto (A0) a avanzado (B2+) — junto con el curso de Vesper Academy ideal para ti. Si no sabes una respuesta, pulsa <strong style="color:var(--gold-light);">"No estoy seguro/a"</strong>: ser honesto da el resultado más preciso.</p>
+            <p>Responde 30 preguntas y conoce tu nivel real — de principiante absoluto (Pre-A1) a avanzado (B2+) — junto con el curso de Vesper Academy ideal para ti. Si no sabes una respuesta, pulsa <strong style="color:var(--gold-light);">"No estoy seguro/a"</strong>: ser honesto da el resultado más preciso.</p>
             <div class="level-pills">
-                <span class="pill a0">A0 Starter</span>
+                <span class="pill a0">Pre-A1 Starter</span>
                 <span class="pill a1">A1 Beginner</span>
                 <span class="pill a2">A2 Elementary</span>
                 <span class="pill b1">B1 Intermediate</span>
@@ -546,7 +546,7 @@
         <div class="quiz-top">
             <div class="progress-meta">
                 <span class="q-counter" id="q-counter">Pregunta 1 de 30</span>
-                <span class="section-label" id="section-label">A0 — Starter</span>
+                <span class="section-label" id="section-label">Pre-A1 — Starter</span>
             </div>
             <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progress-fill" style="width:0%"></div></div>
         </div>
@@ -628,13 +628,13 @@
 //  BANCO DE PREGUNTAS — 30 preguntas, 5 niveles
 // ══════════════════════════════════════════
 const QUESTIONS = [
-    // ── A0: STARTER (Q 1-6) ──
-    { level: "A0", levelName: "Starter", text: "What color is the sky?", options: ["Red", "Blue", "Green", "Yellow"], correct: 1 },
-    { level: "A0", levelName: "Starter", text: "How do you say hello in English?", options: ["Bye", "Sorry", "Hello", "Please"], correct: 2 },
-    { level: "A0", levelName: "Starter", text: "What number comes after 4?", options: ["3", "6", "5", "2"], correct: 2 },
-    { level: "A0", levelName: "Starter", text: "Choose the correct sentence:", options: ["I am name Maria.", "My name is Maria.", "Name me is Maria.", "Am I Maria."], correct: 1 },
-    { level: "A0", levelName: "Starter", text: "Which word means the opposite of 'big'?", options: ["Fast", "Happy", "Small", "Old"], correct: 2 },
-    { level: "A0", levelName: "Starter", text: "Complete: 'She ___ a teacher.'", options: ["am", "are", "is", "be"], correct: 2 },
+    // ── Pre-A1: STARTER (Q 1-6) ──
+    { level: "Pre-A1", levelName: "Starter", text: "What color is the sky?", options: ["Red", "Blue", "Green", "Yellow"], correct: 1 },
+    { level: "Pre-A1", levelName: "Starter", text: "How do you say hello in English?", options: ["Bye", "Sorry", "Hello", "Please"], correct: 2 },
+    { level: "Pre-A1", levelName: "Starter", text: "What number comes after 4?", options: ["3", "6", "5", "2"], correct: 2 },
+    { level: "Pre-A1", levelName: "Starter", text: "Choose the correct sentence:", options: ["I am name Maria.", "My name is Maria.", "Name me is Maria.", "Am I Maria."], correct: 1 },
+    { level: "Pre-A1", levelName: "Starter", text: "Which word means the opposite of 'big'?", options: ["Fast", "Happy", "Small", "Old"], correct: 2 },
+    { level: "Pre-A1", levelName: "Starter", text: "Complete: 'She ___ a teacher.'", options: ["am", "are", "is", "be"], correct: 2 },
 
     // ── A1: BEGINNER (Q 7-12) ──
     { level: "A1", levelName: "Beginner", text: "Choose the correct sentence:", options: ["He don't like pizza.", "He doesn't likes pizza.", "He doesn't like pizza.", "He no like pizza."], correct: 2 },
@@ -670,7 +670,7 @@ const QUESTIONS = [
 ];
 
 const LEVELS = {
-    "A0":  { color: "#8d99a6", name: "Starter" },
+    "Pre-A1":  { color: "#8d99a6", name: "Starter" },
     "A1":  { color: "#4aa3df", name: "Beginner" },
     "A2":  { color: "#2ecc71", name: "Elementary" },
     "B1":  { color: "#e67e22", name: "Intermediate" },
@@ -678,8 +678,8 @@ const LEVELS = {
 };
 
 const COURSES = {
-    "A0": {
-        title: "Core Basics — Nivel 1 y 2 (A0)",
+    "Pre-A1": {
+        title: "Core Basics — Nivel 1 y 2 (Pre-A1)",
         desc: "Estás en el inicio de tu camino con el inglés. ¡Es un excelente punto de partida! Tu curso se enfocará en vocabulario esencial, saludos, estructura básica de oraciones y frases de supervivencia para el día a día.",
         next: "Siguiente paso recomendado: reserva tu primera clase de Core Basics. Aprenderás a presentarte, describir tu día y formar oraciones simples con confianza."
     },
@@ -830,7 +830,7 @@ function sendResultEmails(rec) {
 
 // ══ ESTADO ══
 let currentQ = 0;
-let scores = { A0: 0, A1: 0, A2: 0, B1: 0, "B2+": 0 };
+let scores = { "Pre-A1": 0, A1: 0, A2: 0, B1: 0, "B2+": 0 };
 let studentName = "";
 let studentEmail = "";
 let studentPhone = "";
@@ -871,7 +871,7 @@ function startTest() {
     if (window.VA) VA.track("exam_start", { src: leadOrigin });
 
     currentQ = 0;
-    scores = { A0: 0, A1: 0, A2: 0, B1: 0, "B2+": 0 };
+    scores = { "Pre-A1": 0, A1: 0, A2: 0, B1: 0, "B2+": 0 };
     skipped = 0;
 
     showScreen("quiz");
@@ -1002,7 +1002,7 @@ function nextQuestion() {
 }
 
 function computeLevel() {
-    const levelOrder = ["A0", "A1", "A2", "B1", "B2+"];
+    const levelOrder = ["Pre-A1", "A1", "A2", "B1", "B2+"];
     let placedLevel = "B2+";
     for (let lv of levelOrder) {
         if (scores[lv] < 4) { placedLevel = lv; break; }
@@ -1013,7 +1013,7 @@ function computeLevel() {
 function showResults() {
     showScreen("result");
 
-    const levelOrder = ["A0", "A1", "A2", "B1", "B2+"];
+    const levelOrder = ["Pre-A1", "A1", "A2", "B1", "B2+"];
     const placedLevel = computeLevel();
     const lvlData = LEVELS[placedLevel];
     const courseData = COURSES[placedLevel];
@@ -1123,7 +1123,7 @@ function showResults() {
 
 function retakeTest() {
     currentQ = 0;
-    scores = { A0: 0, A1: 0, A2: 0, B1: 0, "B2+": 0 };
+    scores = { "Pre-A1": 0, A1: 0, A2: 0, B1: 0, "B2+": 0 };
     answered = false;
     skipped = 0;
     showScreen("intro");

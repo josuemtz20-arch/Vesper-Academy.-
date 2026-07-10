@@ -149,7 +149,7 @@
   }
 
   /* Siembra el perfil local (vesper_profile) desde el doc students/{correo}
-     que el admin creó con `add-student --level`: nivel (0=A0 … 5=C1+) y
+     que el admin creó con `add-student --level`: nivel (0=Pre-A1 … 5=C1+) y
      nombre. Solo RELLENA lo vacío — nunca pisa lo que el alumno eligió. */
   function seedProfileFromStudentDoc(doc) {
     try {
