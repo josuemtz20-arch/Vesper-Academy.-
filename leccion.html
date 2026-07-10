@@ -2721,15 +2721,26 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     "C1-dome":1,"C1-telescope":1,"C1-archive":1,"C1-aurora":1,"C1-nebula":1,"C1-comet":1,
     "C2-gate":1,"C2-throne":1,"C2-vault":1,"C2-spire":1,"C2-sanctum":1,"C2-courtyard":1
   };
+  /* emblemas por BUCKET de las salas auto-generadas ("Más vocabulario").
+     Estas ramas no son curadas (id "more-<bucket>[-N]"), así que comparten un
+     emblema temático por tema en vez de uno por sala. Un archivo por bucket. */
+  var MORE_EMBLEM = { verbs:1, phrases:1, food:1, nature:1, travel:1, work:1, tech:1, people:1, body:1, time:1, other:1 };
+  function moreBucketOf(branchId) {
+    var m = /^more-([a-z]+)(?:-\d+)?$/.exec("" + (branchId || ""));
+    return (m && MORE_EMBLEM[m[1]]) ? m[1] : "";
+  }
   /* onerror en scope global (IIFE): respaldo = glifo SVG de la rama */
   window.__vbranchFallback = function (img, iconKey) {
     try { if (img) { var p = img.parentNode; img.outerHTML = (BRANCH_ICN[iconKey] || BRANCH_ICN.spark);
       if (p) { p.classList.remove("has-img"); p.classList.add("is-svg"); } } } catch (e) {}
   };
-  function branchHasImg(level, branchId) { return !!BRANCH_EMBLEM[level + "-" + branchId]; }
+  function branchHasImg(level, branchId) { return !!BRANCH_EMBLEM[level + "-" + branchId] || !!moreBucketOf(branchId); }
   function branchEmblemHtml(level, branchId, iconKey) {
     if (!branchHasImg(level, branchId)) return branchIcon(iconKey);
-    var src = "assets/images/vocab/branch_" + String(level).toLowerCase() + "_" + branchId + ".webp";
+    var bucket = moreBucketOf(branchId);
+    var src = bucket
+      ? "assets/images/vocab/more_" + bucket + ".webp"
+      : "assets/images/vocab/branch_" + String(level).toLowerCase() + "_" + branchId + ".webp";
     return '<img class="branch-emblem__img" src="' + src + '" alt="" loading="lazy" decoding="async"'
       + ' onerror="window.__vbranchFallback(this,\'' + iconKey + '\')">';
   }
