@@ -4939,7 +4939,10 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
   baseLesson = L[id];
   if (!baseLesson) {
     show('<div class="wrap"><div class="card center">' + mascot("incorrect", "No encuentro esa leccion.")
-      + '<h1>Leccion no encontrada</h1><a class="btn btn-gold" href="leccion.html">Ver lecciones</a></div></div>');
+      + '<h1>Leccion no encontrada</h1>'
+      + '<p class="muted">Puede que este tema viva en tu libro. Ábrelo desde tus materiales y busca la lección ahí.</p>'
+      + '<a class="btn btn-gold" href="materiales.html">Ir a mis materiales</a>'
+      + '<a class="btn btn-ghost" href="leccion.html">Ver lecciones</a></div></div>');
     return;
   }
   lesson = baseLesson;
