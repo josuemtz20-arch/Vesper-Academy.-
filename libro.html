@@ -271,7 +271,21 @@ body{margin:0;font-family:'Segoe UI',Arial,sans-serif;display:flex;align-items:c
       'a.vm-chip{position:fixed!important;top:auto!important;width:auto!important;height:auto!important;display:inline-block!important;}' +
       'a.vm-chip-l{left:14px!important;right:auto!important;bottom:calc(14px + env(safe-area-inset-bottom))!important;}' +
       'a.vm-chip-r{right:14px!important;left:auto!important;bottom:calc(14px + env(safe-area-inset-bottom))!important;}' +
+      '@keyframes vmFlash{0%,100%{box-shadow:0 0 0 0 rgba(197,160,89,0);}18%{box-shadow:0 0 0 4px rgba(197,160,89,.7),0 0 26px 6px rgba(197,160,89,.45);}}' +
+      '.vm-jump{animation:vmFlash 2.4s ease-out 1;}' +
       '@media print{a.no-print{display:none!important}}</style>';
+
+    /* Enlace profundo a una lección: si la URL trae #anchor (desde el buscador
+       de temas del portal), lleva el scroll a esa lección y la resalta. Como el
+       libro reemplaza el documento con document.write, el navegador no aplica
+       el fragmento solo; lo hacemos a mano tras pintar. */
+    chip += '<script>(function(){var h=(location.hash||"").replace(/^#/,"");' +
+      'if(!/^[a-z0-9_]{1,40}$/i.test(h))return;' +
+      'function jump(){var el=document.getElementById(h);if(!el)return;' +
+      'try{el.scrollIntoView({behavior:"smooth",block:"start"});}catch(e){el.scrollIntoView();}' +
+      'el.classList.add("vm-jump");setTimeout(function(){el.classList.remove("vm-jump");},2500);}' +
+      'if(document.readyState==="complete"){setTimeout(jump,120);}' +
+      'else{window.addEventListener("load",function(){setTimeout(jump,120);});}})();<\/script>';
     if (/<\/body>/i.test(html)) {
       html = html.replace(/<\/body>(?![\s\S]*<\/body>)/i, chip + "</body>");
     } else {
