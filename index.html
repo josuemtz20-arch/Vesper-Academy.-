@@ -199,16 +199,27 @@ section{padding:var(--s-section) 0;}
 
 /* PRICING */
 .price-intro{color:var(--muted);font-size:var(--t-small);margin:18px auto 0;}
-.pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px;margin-top:56px;align-items:stretch;}
-.plan{background:#fff;border:1px solid var(--border);border-radius:var(--r-lg);padding:34px 30px;display:flex;flex-direction:column;position:relative;transition:transform .4s var(--ease-std),box-shadow .4s;}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px;margin-top:56px;align-items:start;}
+.plan{background:#fff;border:1px solid var(--border);border-radius:var(--r-lg);position:relative;transition:transform .4s var(--ease-std),box-shadow .4s,border-color .4s;}
 .plan:hover{transform:translateY(-3px);box-shadow:var(--sh-md);}
 .plan.feat{border:2px solid var(--gold);box-shadow:0 18px 44px rgba(197,160,89,.22);}
-.plan.feat .ribbon{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:var(--gold);color:var(--navy);font-size:.68rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:5px 16px;border-radius:var(--r-pill);}
-.plan h3{font-size:var(--t-h3);margin:0 0 4px;}
-.plan .price{font-family:'Inria Serif',serif;font-size:2rem;font-weight:700;color:var(--navy);margin:10px 0 2px;}
-.plan .price small{font-size:.9rem;color:var(--muted);font-weight:400;font-family:'Inter',sans-serif;}
+.plan.feat .ribbon{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:var(--gold);color:var(--navy);font-size:.68rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:5px 16px;border-radius:var(--r-pill);z-index:1;}
+.plan summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:28px 30px;}
+.plan summary::-webkit-details-marker{display:none;}
+.plan summary:focus-visible{outline:2px solid var(--gold2);outline-offset:-3px;border-radius:var(--r-md);}
+.plan[open] summary{border-bottom:1px dashed var(--border);}
+.plan-head{display:flex;flex-direction:column;gap:2px;min-width:0;}
+.plan-head:not(.plan-price-col){flex:1 1 auto;}
+.plan-head.plan-price-col{align-items:flex-end;text-align:right;flex:0 0 auto;}
+.plan-head h3{font-size:var(--t-h3);margin:0 0 4px;}
+.plan-head .plan-note{white-space:normal;}
+.plan .price{font-family:'Inria Serif',serif;font-size:1.7rem;font-weight:700;color:var(--navy);margin:0;}
+.plan .price small{font-size:.85rem;color:var(--muted);font-weight:400;font-family:'Inter',sans-serif;}
+.plan summary .chev{color:var(--gold2);font-size:1rem;flex:0 0 auto;transition:transform .35s var(--ease-std);}
+.plan[open] summary .chev{transform:rotate(180deg);}
+.plan-body{padding:4px 30px 30px;}
 .plan-note{color:var(--muted);font-size:var(--t-small);margin:0;}
-.plan ul{list-style:none;padding:0;margin:22px 0 28px;flex:1;}
+.plan ul{list-style:none;padding:0;margin:18px 0 24px;}
 .plan li{font-size:var(--t-body);padding:9px 0;border-bottom:1px dashed var(--border);display:flex;gap:10px;align-items:flex-start;}
 .plan li i{color:var(--gold2);margin-top:4px;}
 .price-footnote{color:var(--muted);font-size:var(--t-small);margin-top:24px;}
@@ -269,6 +280,9 @@ footer{background:var(--navy3);color:rgba(255,255,255,.62);padding:60px 0 32px;}
   .cta{padding:68px 0;}
   .fgrid{grid-template-columns:1fr 1fr;gap:32px;}
   .trust-inner{grid-template-columns:1fr;gap:14px;}
+  .plan summary{flex-wrap:wrap;padding:22px 24px;}
+  .plan-head.plan-price-col{align-items:flex-start;text-align:left;}
+  .plan-body{padding:4px 24px 24px;}
 }
 @media(max-width:560px){
   .cta form{flex-direction:column;}
@@ -463,13 +477,13 @@ header.scrolled{background:rgba(27,27,47,.98);border-bottom-color:rgba(197,160,8
       <summary><span><i class="fas fa-graduation-cap" aria-hidden="true"></i> Ver nuestros cursos</span> <i class="fas fa-chevron-down chev" aria-hidden="true"></i></summary>
       <div class="cgrid text-left">
         <div class="course"><div class="top"><img src="assets/images/lessons/theme_education.jpg" alt="" loading="lazy" decoding="async"></div>
-          <div class="body"><h3>Inglés General</h3><p>De cero a C2 en una progresión completa de práctica, gramática y conversación. La base para todo.</p><span class="tag">A1 – C2</span></div></div>
+          <div class="body"><h3>Inglés General</h3><p>De cero a C2 en una progresión completa de práctica, gramática y conversación. La base para todo.</p><span class="tag">Pre-A1 – C2</span></div></div>
         <div class="course"><div class="top"><img src="assets/images/lessons/theme_conversation.jpg" alt="" loading="lazy" decoding="async"></div>
-          <div class="body"><h3>Club de Conversación</h3><p>Más de 150 temas para soltar la lengua: cultura, tecnología, sociedad y debates que enganchan.</p><span class="tag">B1 – C2</span></div></div>
+          <div class="body"><h3>Club de Conversación</h3><p>Más de 120 temas para soltar la lengua, desde lo básico hasta el debate avanzado: cultura, tecnología, sociedad y más.</p><span class="tag">A1 – C2</span></div></div>
         <div class="course"><div class="top"><img src="assets/images/lessons/theme_negotiation.jpg" alt="" loading="lazy" decoding="async"></div>
-          <div class="body"><h3>Inglés Corporativo</h3><p>Ruta de 3 niveles — Foundations (B1), Premium (B2) e Influence (C1): reuniones, negociación y correos. El inglés que mueve tu carrera profesional.</p><span class="tag">B1 – C1</span></div></div>
+          <div class="body"><h3>Inglés Corporativo</h3><p>Ruta de 3 niveles — Office Foundations (B1), Business Premium (B2) y Strategic Influence (C1): reuniones, negociación y correos. El inglés que mueve tu carrera profesional.</p><span class="tag">B1 – C1</span></div></div>
         <div class="course"><div class="top"><img src="assets/images/lessons/theme_achievement.jpg" alt="" loading="lazy" decoding="async"></div>
-          <div class="body"><h3>Preparación de Certificación</h3><p>Ruta de 3 niveles — Gateway (B1), Ascent (B2) y Summit (C1–C2): IELTS, Cambridge y TOEFL con simulacros cronometrados y estrategias de examinador.</p><span class="tag">B1 – C2</span></div></div>
+          <div class="body"><h3>Preparación de Certificación</h3><p>Ruta progresiva — Gateway (B1), Ascent (B2) y Summit (C1–C2), más un módulo intensivo de repaso: IELTS, Cambridge y TOEFL con simulacros cronometrados y estrategias de examinador.</p><span class="tag">B1 – C2</span></div></div>
       </div>
     </details>
   </div>
@@ -507,46 +521,64 @@ header.scrolled{background:rgba(27,27,47,.98);border-bottom-color:rgba(197,160,8
     <p class="sec-lead reveal">Elige el ritmo que se ajusta a tu vida. Todos los planes incluyen material, audio y seguimiento de progreso.</p>
     <p class="price-intro reveal"><i class="fas fa-circle-check" aria-hidden="true" style="color:var(--gold2)"></i> Todos los planes empiezan con tu examen de nivel gratis.</p>
     <div class="pgrid text-left">
-      <div class="plan reveal">
-        <h3>Grupal</h3>
-        <div class="price">$<span data-price>2500</span><small> MXN/mes</small></div>
-        <p class="plan-note">Grupos reducidos de hasta 6 alumnos.</p>
-        <ul>
-          <li><i class="fas fa-check" aria-hidden="true"></i> 2 clases en vivo por semana</li>
-          <li><i class="fas fa-check" aria-hidden="true"></i> Acceso al material y audios</li>
-          <li><i class="fas fa-check" aria-hidden="true"></i> Club de conversación mensual</li>
-          <li><i class="fas fa-check" aria-hidden="true"></i> Evaluación de progreso</li>
-        </ul>
-        <a href="book_placement.html" class="btn btn-gold btn-block">Elegir plan Grupal</a>
-      </div>
-      <div class="plan feat reveal">
-        <div class="ribbon">Más popular</div>
-        <h3>1 a 1 Profesional</h3>
-        <div class="price">$250–400<small> MXN/hora</small></div>
-        <p class="plan-note">Clases individuales a tu medida.</p>
-        <ul>
-          <li><i class="fas fa-check" aria-hidden="true"></i> 2 clases privadas por semana</li>
-          <li><i class="fas fa-check" aria-hidden="true"></i> Plan personalizado a tu meta</li>
-          <li><i class="fas fa-check" aria-hidden="true"></i> Inglés corporativo o de examen</li>
-          <li><i class="fas fa-check" aria-hidden="true"></i> Entrevista oral de nivel incluida</li>
-          <li><i class="fas fa-check" aria-hidden="true"></i> Seguimiento 1 a 1 del progreso</li>
-        </ul>
-        <a href="book_placement.html" class="btn btn-gold btn-block">Empezar 1 a 1</a>
-      </div>
-      <div class="plan reveal">
-        <h3>Especializados</h3>
-        <div class="price">$<span data-price>3000</span><small> MXN/mes</small></div>
-        <p class="plan-note">Certificación, corporativo o inglés técnico.</p>
-        <ul>
-          <li><i class="fas fa-check" aria-hidden="true"></i> 3 sesiones intensivas por semana</li>
-          <li><i class="fas fa-check" aria-hidden="true"></i> Simulacros cronometrados completos</li>
-          <li><i class="fas fa-check" aria-hidden="true"></i> Corrección con rúbrica de banda</li>
-          <li><i class="fas fa-check" aria-hidden="true"></i> Meta de banda garantizada por plan</li>
-        </ul>
-        <a href="book_placement.html" class="btn btn-gold btn-block">Quiero especializarme</a>
-      </div>
+      <details class="plan reveal">
+        <summary aria-label="Ver detalles del plan Grupal">
+          <div class="plan-head"><h3>Grupal</h3><p class="plan-note">Grupos reducidos de hasta 6 alumnos.</p></div>
+          <div class="plan-head plan-price-col">
+            <div class="price">$<span data-price>2500</span><small> MXN/mes</small></div>
+          </div>
+          <i class="fas fa-chevron-down chev" aria-hidden="true"></i>
+        </summary>
+        <div class="plan-body">
+          <ul>
+            <li><i class="fas fa-check" aria-hidden="true"></i> 2 clases en vivo por semana</li>
+            <li><i class="fas fa-check" aria-hidden="true"></i> Acceso al material y audios</li>
+            <li><i class="fas fa-check" aria-hidden="true"></i> Club de conversación mensual</li>
+            <li><i class="fas fa-check" aria-hidden="true"></i> Evaluación de progreso</li>
+          </ul>
+          <a href="book_placement.html" class="btn btn-gold btn-block">Elegir plan Grupal</a>
+        </div>
+      </details>
+      <details class="plan feat reveal">
+        <summary aria-label="Ver detalles del plan 1 a 1 Profesional">
+          <div class="ribbon">Más popular</div>
+          <div class="plan-head"><h3>1 a 1 Profesional</h3><p class="plan-note">Clases individuales a tu medida.</p></div>
+          <div class="plan-head plan-price-col">
+            <div class="price">$250–400<small> MXN/hora</small></div>
+          </div>
+          <i class="fas fa-chevron-down chev" aria-hidden="true"></i>
+        </summary>
+        <div class="plan-body">
+          <ul>
+            <li><i class="fas fa-check" aria-hidden="true"></i> 2 clases privadas por semana</li>
+            <li><i class="fas fa-check" aria-hidden="true"></i> Plan personalizado a tu meta</li>
+            <li><i class="fas fa-check" aria-hidden="true"></i> Inglés corporativo o de examen</li>
+            <li><i class="fas fa-check" aria-hidden="true"></i> Entrevista oral de nivel incluida</li>
+            <li><i class="fas fa-check" aria-hidden="true"></i> Seguimiento 1 a 1 del progreso</li>
+          </ul>
+          <a href="book_placement.html" class="btn btn-gold btn-block">Empezar 1 a 1</a>
+        </div>
+      </details>
+      <details class="plan reveal">
+        <summary aria-label="Ver detalles del plan Especializados">
+          <div class="plan-head"><h3>Especializados</h3><p class="plan-note">Certificación, corporativo o inglés técnico.</p></div>
+          <div class="plan-head plan-price-col">
+            <div class="price">$<span data-price>3000</span><small> MXN/mes</small></div>
+          </div>
+          <i class="fas fa-chevron-down chev" aria-hidden="true"></i>
+        </summary>
+        <div class="plan-body">
+          <ul>
+            <li><i class="fas fa-check" aria-hidden="true"></i> 3 sesiones intensivas por semana</li>
+            <li><i class="fas fa-check" aria-hidden="true"></i> Simulacros cronometrados completos</li>
+            <li><i class="fas fa-check" aria-hidden="true"></i> Corrección con rúbrica de banda</li>
+            <li><i class="fas fa-check" aria-hidden="true"></i> Meta de banda garantizada por plan</li>
+          </ul>
+          <a href="book_placement.html" class="btn btn-gold btn-block">Quiero especializarme</a>
+        </div>
+      </details>
     </div>
-    <p class="price-footnote">Precios de referencia en pesos mexicanos (MXN). Escríbenos para un plan a tu medida.</p>
+    <p class="price-footnote">Toca cada plan para ver el detalle completo. Precios de referencia en pesos mexicanos (MXN). Escríbenos para un plan a tu medida.</p>
   </div>
 </section>
 
