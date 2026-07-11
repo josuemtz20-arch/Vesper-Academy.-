@@ -27,7 +27,7 @@
      marcan esta pestaña como activa. */
   var TABS = [
     { id: "inicio",   label: "Inicio",   href: "materiales.html",
-      match: ["materiales.html"],
+      match: ["materiales.html", "libro.html"],
       icon: '<path d="M3 11l9-8 9 8"/><path d="M5 10v10h5v-6h4v6h5V10"/>' },
     { id: "aprender", label: "Aprender", href: "leccion.html",
       match: ["leccion.html", "chat.html", "liga.html", "lesson.html"],

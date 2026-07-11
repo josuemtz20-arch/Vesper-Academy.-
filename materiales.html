@@ -84,6 +84,21 @@ header a.back:hover,header a.back:focus-visible{color:var(--navy);background:var
 #today:hover .t-go i,#today:focus-visible .t-go i{transform:translateX(4px);}
 @media(max-width:560px){#today{flex-direction:column;align-items:flex-start;gap:14px;}#today .t-go{align-self:stretch;justify-content:center;}}
 
+/* ── Accesos rápidos: el resto de tus herramientas en la app ── */
+#quicknav{margin:22px 0 4px;}
+#quicknav .qn-lbl{font-size:.7rem;letter-spacing:2px;text-transform:uppercase;color:var(--gold2);font-weight:700;margin:0 2px 12px;}
+.qn-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+a.qn{display:flex;flex-direction:column;align-items:flex-start;gap:10px;text-decoration:none;color:var(--navy);
+  background:var(--white);border:1px solid var(--border);border-radius:var(--r-md);padding:16px 16px 14px;
+  box-shadow:var(--sh-sm);transition:transform .24s var(--ease-out),box-shadow .24s var(--ease-out),border-color .24s;}
+a.qn:hover,a.qn:focus-visible{transform:translateY(-4px);box-shadow:var(--sh-md);border-color:var(--gold);outline:none;}
+a.qn .qn-ic{width:42px;height:42px;flex-shrink:0;border-radius:11px;display:flex;align-items:center;justify-content:center;
+  font-size:1.05rem;background:linear-gradient(135deg,var(--navy2),var(--navy3));color:var(--gold);}
+a.qn .qn-t{font-weight:700;font-size:.98rem;line-height:1.2;}
+a.qn .qn-d{font-size:.76rem;color:var(--muted);line-height:1.35;}
+@media(max-width:640px){.qn-grid{grid-template-columns:repeat(2,1fr);gap:10px;}
+  a.qn{padding:13px 13px 12px;}a.qn .qn-ic{width:38px;height:38px;}a.qn .qn-d{display:none;}}
+
 /* ── Buscador de temas y libros ── */
 #search{margin:24px 0 8px;background:linear-gradient(135deg,#fffdf8,#f3ede0);border:1px solid var(--border);border-left:4px solid var(--gold);border-radius:var(--r-md);padding:24px 24px 22px;box-shadow:var(--sh-sm);}
 #search .s-head h2{font-family:'Inria Serif',serif;font-size:1.4rem;margin:0;display:flex;align-items:center;gap:10px;}
@@ -254,6 +269,33 @@ footer a:hover{color:var(--gold-lt);}
     </span>
     <span class="t-go" id="today-go">Continuar <i class="fas fa-arrow-right" aria-hidden="true"></i></span>
   </a>
+
+  <!-- Accesos rápidos: todas tus herramientas visibles desde el portal -->
+  <nav id="quicknav" class="v-rise" aria-label="Tus herramientas">
+    <p class="qn-lbl">Tus herramientas</p>
+    <div class="qn-grid">
+      <a class="qn" href="leccion.html">
+        <span class="qn-ic"><i class="fas fa-graduation-cap" aria-hidden="true"></i></span>
+        <span class="qn-t">Lecciones</span>
+        <span class="qn-d">Practica por mundos, a tu ritmo</span>
+      </a>
+      <a class="qn" href="audio_library.html">
+        <span class="qn-ic"><i class="fas fa-headphones" aria-hidden="true"></i></span>
+        <span class="qn-t">Audio</span>
+        <span class="qn-d">Entrena el oído con audios</span>
+      </a>
+      <a class="qn" href="mi_boleta.html">
+        <span class="qn-ic"><i class="fas fa-clipboard-list" aria-hidden="true"></i></span>
+        <span class="qn-t">Mi boleta</span>
+        <span class="qn-d">Tus calificaciones y avance</span>
+      </a>
+      <a class="qn" href="perfil.html">
+        <span class="qn-ic"><i class="fas fa-user" aria-hidden="true"></i></span>
+        <span class="qn-t">Mi perfil</span>
+        <span class="qn-d">Tu cuenta y preferencias</span>
+      </a>
+    </div>
+  </nav>
 
   <!-- Buscador de temas y libros (reemplaza la vieja "ruta recomendada") -->
   <section id="search" class="v-rise" aria-labelledby="search-title">
