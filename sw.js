@@ -9,7 +9,7 @@
    ============================================================ */
 "use strict";
 
-var CACHE_VERSION = "vesper-v70";
+var CACHE_VERSION = "vesper-v71";
 var CORE = [
   /* Vesper Engine shell */
   "vesper_engine.html",

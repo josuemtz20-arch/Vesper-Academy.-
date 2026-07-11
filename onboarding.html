@@ -236,9 +236,7 @@ document.getElementById("y").textContent = new Date().getFullYear();
    ════════════════════════════════════════════════════════════════ */
 var BOOKS = [
   {id:"core_basics_lvl1", icon:"fa-shoe-prints",  t:"Primeros pasos en inglés", d:"Aprende a presentarte, saludar y formar tus primeras frases con confianza.", min:0,max:1, topics:["dailylife"], goals:["travel","social","work","study"], styles:["speaking","grammar"]},
-  {id:"daily_life_vol0",  icon:"fa-life-ring",     t:"Inglés para sobrevivir",  d:"Lo esencial para arrancar desde cero: lo que de verdad necesitas en el mundo real.", min:0,max:1, topics:["dailylife","travel"], goals:["travel","social"], styles:["speaking"]},
   {id:"core_basics_lvl2", icon:"fa-mug-hot",       t:"Tu día a día en inglés",  d:"Habla de tu rutina, haz preguntas y describe a quienes te rodean.", min:0,max:2, topics:["dailylife"], goals:["travel","social","work","study"], styles:["speaking","grammar"]},
-  {id:"daily_life_vol1",  icon:"fa-suitcase-rolling", t:"Inglés para viajar y vivir", d:"Compras, viajes, salud y todas las situaciones reales del día a día.", min:1,max:2, topics:["travel","dailylife"], goals:["travel","social"], styles:["speaking","audio"]},
   {id:"core_practice_lvl1", icon:"fa-headphones",  t:"Entrena tu oído",         d:"Escucha y habla con audio de voces nativas en cada lección.", min:1,max:2, topics:["dailylife"], goals:["social","travel","work"], styles:["audio","speaking"]},
   {id:"core_basics_lvl3", icon:"fa-book-open",     t:"Cuenta tus historias",    d:"Habla del pasado, comparte experiencias y narra lo que te ha pasado.", min:1,max:3, topics:["dailylife"], goals:["travel","social","study","work"], styles:["speaking","reading"]},
   {id:"cci1",             icon:"fa-bolt",          t:"Bootcamp de fluidez",     d:"Un mes intensivo, pensado para soltarte a hablar rápido.", min:1,max:3, topics:["dailylife"], goals:["social","work","travel"], styles:["speaking"]},
@@ -246,14 +244,11 @@ var BOOKS = [
   {id:"core_basics_lvl4", icon:"fa-pen-nib",       t:"Escribe con soltura",     d:"Tus primeros textos y redacción guiada para expresarte por escrito.", min:2,max:3, topics:["dailylife"], goals:["study","work"], styles:["reading","grammar"]},
   {id:"core_practice_lvl2", icon:"fa-dragon",      t:"Leyendas y misterios",    d:"Lee y escribe sobre mitos, leyendas y enigmas que te atrapan.", min:3,max:4, topics:["arts","popculture"], goals:["social","study"], styles:["reading"]},
   {id:"core_practice_lvl3", icon:"fa-comments",    t:"Debate y descubre",       d:"Las cuatro destrezas integradas en debates y temas de actualidad.", min:3,max:4, topics:["society","science"], goals:["work","study","social"], styles:["speaking","reading"]},
-  {id:"daily_life_vol2",  icon:"fa-heart",         t:"Cultura y relaciones",    d:"Conversa con naturalidad sobre cultura, relaciones y psicología.", min:3,max:4, topics:["society","dailylife"], goals:["social","study"], styles:["speaking","reading"]},
   {id:"core_grammar_lvl1", icon:"fa-cubes",        t:"Gramática que se queda",  d:"Consolida tus bases con práctica clara y bien aplicada.", min:3,max:3, topics:[], goals:["study","work"], styles:["grammar"]},
   {id:"core_practice_lvl5", icon:"fa-microchip",   t:"Futuro y tecnología",     d:"Lee, escribe y debate sobre tecnología y el mundo que viene.", min:4,max:5, topics:["tech","science"], goals:["work","study"], styles:["reading","speaking"]},
   {id:"core_grammar_lvl2", icon:"fa-diagram-project", t:"Gramática en contexto", d:"Estructuras avanzadas aplicadas a situaciones reales.", min:4,max:4, topics:[], goals:["study","work","exam"], styles:["grammar"]},
-  {id:"political_english", icon:"fa-landmark",     t:"Inglés político y global", d:"Diplomacia, asuntos globales y discurso público.", min:4,max:5, topics:["society"], goals:["work","study"], styles:["reading","speaking"]},
   {id:"core_practice_lvl6", icon:"fa-clapperboard", t:"Cultura pop y sociedad", d:"Domina las cuatro destrezas con cine, series y grandes temas sociales.", min:5,max:5, topics:["popculture","society"], goals:["social","study","work"], styles:["speaking","reading"]},
   {id:"core_grammar_lvl3", icon:"fa-gem",          t:"Gramática de alto nivel", d:"Estilo, matices y los detalles del inglés más avanzado.", min:5,max:5, topics:[], goals:["exam","study","work"], styles:["grammar"]},
-  {id:"cabin_crew",       icon:"fa-plane-departure", t:"Inglés de aviación",    d:"Seguridad, servicio y protocolo a bordo para tripulación de cabina.", min:2,max:5, topics:["travel"], goals:["aviation"], styles:["speaking"]},
   {id:"exam_prep",        icon:"fa-stopwatch",     t:"Preparación de examen · I", d:"Estrategia y estructuras avanzadas para tu certificación.", min:4,max:5, topics:[], goals:["exam"], styles:["grammar","reading"]},
   {id:"exam_prep_vol2",   icon:"fa-award",         t:"Preparación de examen · II", d:"Vocabulario temático y práctica aplicada de examen.", min:4,max:5, topics:[], goals:["exam"], styles:["reading","grammar"]}
 ];
@@ -264,8 +259,7 @@ var GOALS = [
   {v:"travel",   icon:"fa-earth-americas", t:"Viajar y la vida diaria",   s:"Moverme por el mundo con confianza"},
   {v:"exam",     icon:"fa-certificate",    t:"Aprobar un examen",         s:"IELTS, Cambridge, TOEFL"},
   {v:"study",    icon:"fa-graduation-cap", t:"Mis estudios",              s:"Universidad, lecturas, escribir"},
-  {v:"social",   icon:"fa-comments",       t:"Conversar y hacer amigos",  s:"Hablar por gusto, sin miedo"},
-  {v:"aviation", icon:"fa-plane-departure",t:"Aviación / aerolíneas",     s:"Tripulación y trato con pasajeros"}
+  {v:"social",   icon:"fa-comments",       t:"Conversar y hacer amigos",  s:"Hablar por gusto, sin miedo"}
 ];
 
 var TOPICS = [
@@ -456,7 +450,6 @@ function recommend(){
     var bk = BOOKS.filter(function(b){return b.id===id;})[0];
     if(bk){ picks.pop(); picks.unshift(bk); }
   }
-  if(state.goal==="aviation") ensure("cabin_crew");
   if(state.goal==="exam" && lvl>=3) ensure(lvl>=5?"exam_prep_vol2":"exam_prep");
   return { level:lvl, picks:picks };
 }
@@ -466,8 +459,7 @@ var GOAL_SUB = {
   travel:"Prepárate para moverte por el mundo con confianza.",
   exam:"Tu meta es clara. Vamos directo a por ese examen.",
   study:"Construyamos el inglés que tus estudios necesitan.",
-  social:"Suelta la lengua y disfruta cada conversación.",
-  aviation:"Listos para despegar: tu inglés de aviación empieza aquí."
+  social:"Suelta la lengua y disfruta cada conversación."
 };
 
 function finish(){
