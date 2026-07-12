@@ -2721,15 +2721,39 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     "C1-dome":1,"C1-telescope":1,"C1-archive":1,"C1-aurora":1,"C1-nebula":1,"C1-comet":1,
     "C2-gate":1,"C2-throne":1,"C2-vault":1,"C2-spire":1,"C2-sanctum":1,"C2-courtyard":1
   };
+  /* emblemas de las salas de DESBORDE ("Más …", auto-generadas por cubo temático),
+     por NIVEL-cubo. El id de la sala es "more-<cubo>" o "more-<cubo>-<n>"; todos los
+     trozos del mismo cubo comparten un emblema. Si falta el archivo -> glifo SVG. */
+  var MORE_EMBLEM = {
+    "A1-time":1,"A1-body":1,"A1-other":1,
+    "A2-nature":1,"A2-body":1,"A2-other":1,
+    "B1-phrases":1,"B1-other":1,
+    "B2-other":1,
+    "C1-phrases":1,"C1-other":1,
+    "C2-other":1
+  };
+  /* cubo temático de una sala de desborde: "more-other-2" -> "other" */
+  function moreBucket(branchId) { return String(branchId).replace(/^more-/, "").replace(/-\d+$/, ""); }
   /* onerror en scope global (IIFE): respaldo = glifo SVG de la rama */
   window.__vbranchFallback = function (img, iconKey) {
     try { if (img) { var p = img.parentNode; img.outerHTML = (BRANCH_ICN[iconKey] || BRANCH_ICN.spark);
       if (p) { p.classList.remove("has-img"); p.classList.add("is-svg"); } } } catch (e) {}
   };
-  function branchHasImg(level, branchId) { return !!BRANCH_EMBLEM[level + "-" + branchId]; }
+  /* archivo webp del emblema de una sala (curada o de desborde), o "" si no hay */
+  function branchEmblemSrc(level, branchId) {
+    if (BRANCH_EMBLEM[level + "-" + branchId])
+      return "assets/images/vocab/branch_" + String(level).toLowerCase() + "_" + branchId + ".webp";
+    if (/^more-/.test(branchId)) {
+      var b = moreBucket(branchId);
+      if (MORE_EMBLEM[level + "-" + b])
+        return "assets/images/vocab/more_" + String(level).toLowerCase() + "_" + b + ".webp";
+    }
+    return "";
+  }
+  function branchHasImg(level, branchId) { return !!branchEmblemSrc(level, branchId); }
   function branchEmblemHtml(level, branchId, iconKey) {
-    if (!branchHasImg(level, branchId)) return branchIcon(iconKey);
-    var src = "assets/images/vocab/branch_" + String(level).toLowerCase() + "_" + branchId + ".webp";
+    var src = branchEmblemSrc(level, branchId);
+    if (!src) return branchIcon(iconKey);
     return '<img class="branch-emblem__img" src="' + src + '" alt="" loading="lazy" decoding="async"'
       + ' onerror="window.__vbranchFallback(this,\'' + iconKey + '\')">';
   }
