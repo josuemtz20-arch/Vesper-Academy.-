@@ -48,6 +48,14 @@
 # indexables, embudan al examen con atribución ?src=. Sin claves.
 !/examen-ingles-gratis.html
 !/ingles-para-call-center.html
+# Páginas de detalle de curso/plan (marketing, públicas, sin gate ni claves).
+# Enlazadas desde la fila de íconos de index.html #cursos / #precios. Comparten
+# assets/css/vesper_course.css (ya whitelisted vía !/assets/).
+!/curso-ingles-general.html
+!/curso-club-conversacion.html
+!/curso-ingles-corporativo.html
+!/curso-certificacion.html
+!/planes.html
 !/robots.txt
 !/sitemap.xml
 # 404 con marca para GitHub Pages (estática, sin claves, noindex).
