@@ -2721,17 +2721,16 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     "C1-dome":1,"C1-telescope":1,"C1-archive":1,"C1-aurora":1,"C1-nebula":1,"C1-comet":1,
     "C2-gate":1,"C2-throne":1,"C2-vault":1,"C2-spire":1,"C2-sanctum":1,"C2-courtyard":1
   };
-  /* emblemas de las salas de DESBORDE ("Más …", auto-generadas por cubo temático),
-     por NIVEL-cubo. El id de la sala es "more-<cubo>" o "more-<cubo>-<n>"; todos los
-     trozos del mismo cubo comparten un emblema. Si falta el archivo -> glifo SVG. */
-  var MORE_EMBLEM = {
-    "A1-time":1,"A1-body":1,"A1-other":1,
-    "A2-nature":1,"A2-body":1,"A2-other":1,
-    "B1-phrases":1,"B1-other":1,
-    "B2-other":1,
-    "C1-phrases":1,"C1-other":1,
-    "C2-other":1
+  /* emblemas de las salas de DESBORDE ("Más …", auto-generadas por cubo temático).
+     El id de la sala es "more-<cubo>" o "more-<cubo>-<n>"; todos los trozos del mismo
+     cubo comparten emblema. Dos capas: (1) por CUBO (uno por tema, reusado en todos los
+     mundos — archivo more_<cubo>.webp); (2) override por NIVEL para los mundos más
+     inmersivos (more_<nivel>_<cubo>.webp). Sin archivo -> glifo SVG. */
+  var MORE_BUCKET_EMBLEM = {
+    verbs:1, phrases:1, food:1, nature:1, travel:1, work:1,
+    tech:1, people:1, body:1, time:1, other:1
   };
+  var MORE_LEVEL_EMBLEM = { "C1-phrases":1, "C1-other":1, "A2-nature":1 };
   /* cubo temático de una sala de desborde: "more-other-2" -> "other" */
   function moreBucket(branchId) { return String(branchId).replace(/^more-/, "").replace(/-\d+$/, ""); }
   /* onerror en scope global (IIFE): respaldo = glifo SVG de la rama */
@@ -2745,8 +2744,10 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       return "assets/images/vocab/branch_" + String(level).toLowerCase() + "_" + branchId + ".webp";
     if (/^more-/.test(branchId)) {
       var b = moreBucket(branchId);
-      if (MORE_EMBLEM[level + "-" + b])
+      if (MORE_LEVEL_EMBLEM[level + "-" + b])
         return "assets/images/vocab/more_" + String(level).toLowerCase() + "_" + b + ".webp";
+      if (MORE_BUCKET_EMBLEM[b])
+        return "assets/images/vocab/more_" + b + ".webp";
     }
     return "";
   }
