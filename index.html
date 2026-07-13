@@ -138,9 +138,11 @@ section{padding:var(--s-section) 0;}
 
 /* METHOD CARDS */
 .grid3{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-top:56px;}
-.mcard{background:var(--white);border:1px solid var(--border);border-radius:var(--r-lg);padding:30px 28px;text-align:left;transition:transform .4s var(--ease-std),box-shadow .4s,border-color .4s;}
-.mcard:hover{transform:translateY(-4px);box-shadow:var(--sh-md);border-color:var(--gold);}
-.mcard .ic{width:54px;height:54px;border-radius:var(--r-md);background:linear-gradient(135deg,var(--navy2),var(--navy3));color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin-bottom:20px;}
+.mcard{background:none;border:none;padding:6px 8px;text-align:left;transition:transform .45s var(--ease-std);}
+.mcard:hover{transform:translateY(-6px);}
+.mcard .ic{width:70px;height:70px;border-radius:var(--r-md);background:linear-gradient(135deg,var(--navy2),var(--navy3));display:flex;align-items:center;justify-content:center;margin-bottom:20px;overflow:hidden;transition:transform .45s var(--ease-std);}
+.mcard .ic img{width:100%;height:100%;object-fit:contain;display:block;}
+.mcard:hover .ic{transform:scale(1.05);}
 .mcard h3{font-size:var(--t-h3);margin:0 0 10px;}
 .mcard p{color:var(--muted);font-size:var(--t-body);margin:0;}
 
@@ -193,12 +195,14 @@ section{padding:var(--s-section) 0;}
 
 /* Fila representativa de planes (ícono + precio → planes.html) */
 .ptiles{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:52px;align-items:stretch;}
-.ptile{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;gap:11px;padding:40px 26px 30px;border:1px solid var(--border);border-radius:var(--r-lg);background:#fff;color:inherit;transition:transform .4s var(--ease-std),box-shadow .4s,border-color .3s;}
-.ptile:hover,.ptile:focus-visible{transform:translateY(-6px);box-shadow:var(--sh-md);border-color:var(--gold);}
-.ptile.feat{border:2px solid var(--gold);box-shadow:0 18px 44px rgba(197,160,89,.22);}
-.ptile .ribbon{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:var(--gold);color:var(--navy);font-size:.68rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:5px 16px;border-radius:var(--r-pill);}
-.ptile .ic{width:78px;height:78px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.85rem;color:var(--gold-lt);background:linear-gradient(135deg,var(--navy2),var(--navy3));border:2px solid rgba(197,160,89,.35);transition:transform .4s var(--ease-std),border-color .3s;}
-.ptile:hover .ic{transform:scale(1.06);border-color:var(--gold);}
+.ptile{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;gap:11px;padding:40px 26px 30px;border:none;border-radius:var(--r-lg);background:#fff;color:inherit;box-shadow:0 10px 30px rgba(27,27,47,.07);transition:transform .4s var(--ease-std),box-shadow .4s;}
+.ptile:hover,.ptile:focus-visible{transform:translateY(-6px);box-shadow:var(--sh-md);}
+.ptile.feat{box-shadow:0 18px 44px rgba(197,160,89,.22);}
+.ptile.feat::before{content:"";position:absolute;inset:0;border-radius:var(--r-lg);border:2px solid var(--gold);pointer-events:none;}
+.ptile .ribbon{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:var(--gold);color:var(--navy);font-size:.68rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:5px 16px;border-radius:var(--r-pill);z-index:1;}
+.ptile .ic{width:82px;height:82px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--navy2),var(--navy3));overflow:hidden;transition:transform .4s var(--ease-std);}
+.ptile .ic img{width:100%;height:100%;object-fit:contain;display:block;}
+.ptile:hover .ic{transform:scale(1.06);}
 .ptile h3{font-size:var(--t-h3);margin:0;}
 .ptile .price{font-family:'Inria Serif',serif;font-size:1.7rem;font-weight:700;color:var(--navy);margin:0;}
 .ptile .price small{font-size:.85rem;color:var(--muted);font-weight:400;font-family:'Inter',sans-serif;}
@@ -464,22 +468,22 @@ header.scrolled{background:rgba(27,27,47,.98);border-bottom-color:rgba(197,160,8
     <p class="sec-lead reveal">Nada de listas de gramática que se olvidan. Cada clase está diseñada para que produzcas inglés real: el 80% del tiempo hablas tú.</p>
     <div class="grid3">
       <div class="mcard reveal">
-        <div class="ic"><i class="fas fa-comments" aria-hidden="true"></i></div>
+        <div class="ic"><img src="assets/images/icons/method_communicative.png" alt="" width="70" height="70" decoding="async"></div>
         <h3>Método comunicativo</h3>
         <p>Roleplays, simulaciones y debates basados en situaciones reales. La gramática se activa al usarla, no memorizándola.</p>
       </div>
       <div class="mcard reveal">
-        <div class="ic"><i class="fas fa-headphones" aria-hidden="true"></i></div>
+        <div class="ic"><img src="assets/images/icons/method_audio.png" alt="" width="70" height="70" decoding="async"></div>
         <h3>Audio nativo en cada lección</h3>
         <p>Diálogos grabados con voces nativas y comprensión en tres niveles: literal, inferencia y opinión. Entrenas el oído de verdad.</p>
       </div>
       <div class="mcard reveal">
-        <div class="ic"><i class="fas fa-user-check" aria-hidden="true"></i></div>
+        <div class="ic"><img src="assets/images/icons/method_level.png" alt="" width="70" height="70" decoding="async"></div>
         <h3>Nivel confirmado, no adivinado</h3>
         <p>Prueba de ubicación + entrevista oral para empezar exactamente donde estás. Sin perder el tiempo en lo que ya sabes.</p>
       </div>
       <div class="mcard reveal">
-        <div class="ic"><i class="fas fa-briefcase" aria-hidden="true"></i></div>
+        <div class="ic"><img src="assets/images/icons/method_professional.png" alt="" width="70" height="70" decoding="async"></div>
         <h3>Enfoque profesional</h3>
         <p>Inglés corporativo, de negocios, atención al cliente y más. Aprendes el inglés que tu carrera necesita.</p>
       </div>
@@ -575,7 +579,7 @@ header.scrolled{background:rgba(27,27,47,.98);border-bottom-color:rgba(197,160,8
     <p class="price-intro reveal"><i class="fas fa-circle-check" aria-hidden="true" style="color:var(--gold2)"></i> Todos los planes empiezan con tu examen de nivel gratis.</p>
     <div class="ptiles">
       <a class="ptile reveal" href="planes.html#grupal">
-        <span class="ic"><i class="fas fa-users" aria-hidden="true"></i></span>
+        <span class="ic"><img src="assets/images/icons/plan_group.png" alt="" width="82" height="82" decoding="async"></span>
         <h3>Grupal</h3>
         <div class="price">$<span data-price>2500</span><small> MXN/mes</small></div>
         <p class="plan-note">Grupos reducidos de hasta 6 alumnos.</p>
@@ -583,14 +587,14 @@ header.scrolled{background:rgba(27,27,47,.98);border-bottom-color:rgba(197,160,8
       </a>
       <a class="ptile feat reveal" href="planes.html#profesional">
         <span class="ribbon">Más popular</span>
-        <span class="ic"><i class="fas fa-user-tie" aria-hidden="true"></i></span>
+        <span class="ic"><img src="assets/images/icons/plan_one_to_one.png" alt="" width="82" height="82" decoding="async"></span>
         <h3>1 a 1 Profesional</h3>
         <div class="price">$250–400<small> MXN/hora</small></div>
         <p class="plan-note">Clases individuales a tu medida.</p>
         <span class="more">Ver plan <i class="fas fa-arrow-right" aria-hidden="true"></i></span>
       </a>
       <a class="ptile reveal" href="planes.html#especializados">
-        <span class="ic"><i class="fas fa-medal" aria-hidden="true"></i></span>
+        <span class="ic"><img src="assets/images/icons/plan_specialized.png" alt="" width="82" height="82" decoding="async"></span>
         <h3>Especializados</h3>
         <div class="price">$<span data-price>3000</span><small> MXN/mes</small></div>
         <p class="plan-note">Certificación, corporativo o inglés técnico.</p>
