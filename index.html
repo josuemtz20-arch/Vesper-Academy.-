@@ -176,13 +176,15 @@ section{padding:var(--s-section) 0;}
 .courses[open] summary .chev{transform:rotate(180deg);}
 .courses .cgrid{margin-top:34px;}
 
-/* Fila representativa de cursos (ícono → página de detalle) */
+/* Fila representativa de cursos (foto temática → página de detalle) */
 .ctiles{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;margin-top:52px;}
-.ctile{display:flex;flex-direction:column;align-items:center;text-align:center;gap:13px;padding:34px 20px 26px;border:1px solid var(--border);border-radius:var(--r-lg);background:#fff;color:inherit;transition:transform .4s var(--ease-std),box-shadow .4s,border-color .3s;}
-.ctile:hover,.ctile:focus-visible{transform:translateY(-6px);box-shadow:var(--sh-md);border-color:var(--gold);}
-.ctile .ic{width:84px;height:84px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2rem;color:var(--gold-lt);background:linear-gradient(135deg,var(--navy2),var(--navy3));border:2px solid rgba(197,160,89,.35);transition:transform .4s var(--ease-std),border-color .3s;}
-.ctile:hover .ic{transform:scale(1.06);border-color:var(--gold);}
-.ctile h3{font-size:1.05rem;margin:0;}
+.ctile{display:flex;flex-direction:column;align-items:center;text-align:center;gap:13px;padding:16px 12px;background:none;border:none;color:inherit;transition:transform .45s var(--ease-std);}
+.ctile:hover,.ctile:focus-visible{transform:translateY(-8px);}
+.ctile .ph{width:122px;height:122px;border-radius:50%;overflow:hidden;background:var(--navy3);box-shadow:0 12px 28px rgba(27,27,47,.20);transition:transform .5s var(--ease-std),box-shadow .5s;}
+.ctile .ph img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s var(--ease-std);}
+.ctile:hover .ph{transform:scale(1.05);box-shadow:0 18px 38px rgba(27,27,47,.28);}
+.ctile:hover .ph img{transform:scale(1.08);}
+.ctile h3{font-size:1.05rem;margin:6px 0 0;}
 .ctile p{color:var(--muted);font-size:.85rem;line-height:1.45;margin:0;}
 .ctile .tag{font-size:.7rem;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--tag);background:var(--cream);padding:5px 12px;border-radius:var(--r-pill);}
 .ctile .more{margin-top:auto;padding-top:6px;color:var(--gold2);font-weight:700;font-size:.8rem;display:inline-flex;align-items:center;gap:7px;}
@@ -509,28 +511,28 @@ header.scrolled{background:rgba(27,27,47,.98);border-bottom-color:rgba(197,160,8
     <p class="sec-lead reveal">Programas generales y especializados, todos con la misma metodología comunicativa.</p>
     <div class="ctiles">
       <a class="ctile reveal" href="curso-ingles-general.html">
-        <span class="ic"><i class="fas fa-graduation-cap" aria-hidden="true"></i></span>
+        <span class="ph"><img src="assets/images/lessons/theme_education.jpg" alt="" decoding="async"></span>
         <h3>Inglés General</h3>
         <p>De cero a C2, tu base completa de inglés.</p>
         <span class="tag">Pre-A1 – C2</span>
         <span class="more">Ver curso <i class="fas fa-arrow-right" aria-hidden="true"></i></span>
       </a>
       <a class="ctile reveal" href="curso-club-conversacion.html">
-        <span class="ic"><i class="fas fa-comments" aria-hidden="true"></i></span>
+        <span class="ph"><img src="assets/images/lessons/theme_conversation.jpg" alt="" decoding="async"></span>
         <h3>Club de Conversación</h3>
         <p>+120 temas para soltar la lengua sin miedo.</p>
         <span class="tag">A1 – C2</span>
         <span class="more">Ver curso <i class="fas fa-arrow-right" aria-hidden="true"></i></span>
       </a>
       <a class="ctile reveal" href="curso-ingles-corporativo.html">
-        <span class="ic"><i class="fas fa-briefcase" aria-hidden="true"></i></span>
+        <span class="ph"><img src="assets/images/lessons/theme_negotiation.jpg" alt="" decoding="async"></span>
         <h3>Inglés Corporativo</h3>
         <p>El inglés que mueve tu carrera profesional.</p>
         <span class="tag">B1 – C1</span>
         <span class="more">Ver curso <i class="fas fa-arrow-right" aria-hidden="true"></i></span>
       </a>
       <a class="ctile reveal" href="curso-certificacion.html">
-        <span class="ic"><i class="fas fa-award" aria-hidden="true"></i></span>
+        <span class="ph"><img src="assets/images/lessons/theme_achievement.jpg" alt="" decoding="async"></span>
         <h3>Preparación de Certificación</h3>
         <p>IELTS, Cambridge y TOEFL con estrategia real.</p>
         <span class="tag">B1 – C2</span>
