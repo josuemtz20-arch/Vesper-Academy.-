@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<script src="vesper_auth.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oral Interview &mdash; Level Confirmation | Vesper Academy</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --navy: #141c2a;
+            --gold: #c5a059;
+            --beige: #f4f1ea;
+            --slate: #34495e;
+            --good: #27ae60;
+            --ok: #f39c12;
+            --bad: #c0392b;
+            --border: #e4e0d8;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--beige);
+            color: var(--navy);
+            margin: 0;
+            padding: 20px;
+            font-size: 14px;
+        }
+
+        .container {
+            max-width: 920px;
+            margin: 0 auto;
+            background: white;
+            padding: 0 0 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        /* HEADER */
+        .top-bar {
+            background: var(--navy);
+            border-bottom: 3px solid var(--gold);
+            padding: 16px 30px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+        .top-bar img { height: 42px; border-radius: 6px; background: #fff; padding: 3px; }
+        .top-bar .titles h1 { margin: 0; font-size: 1.2rem; color: #fff; font-weight: 700; }
+        .top-bar .titles p { margin: 2px 0 0; font-size: 0.72rem; color: var(--gold); letter-spacing: 2px; text-transform: uppercase; }
+        .top-bar .back {
+            margin-left: auto; color: var(--gold); text-decoration: none; font-size: 0.8rem;
+            font-weight: 600; border: 1px solid var(--gold); padding: 7px 14px; border-radius: 6px;
+            transition: all 0.2s;
+        }
+        .top-bar .back:hover { background: var(--gold); color: var(--navy); }
+
+        .body-pad { padding: 24px 30px; }
+
+        /* INSTRUCTIONS */
+        .how-to {
+            background: #fffdf5;
+            border: 1px solid #e8dcc0;
+            border-left: 4px solid var(--gold);
+            border-radius: 0 6px 6px 0;
+            padding: 16px 20px;
+            margin-bottom: 24px;
+        }
+        .how-to h2 { margin: 0 0 10px; font-size: 0.95rem; color: #a8843d; text-transform: uppercase; letter-spacing: 1px; }
+        .how-to ol { margin: 0; padding-left: 20px; }
+        .how-to li { margin-bottom: 6px; line-height: 1.55; color: var(--slate); font-size: 0.9rem; }
+
+        /* PROFILE */
+        .profile {
+            display: grid;
+            grid-template-columns: 1.4fr 1fr 1.2fr 1.2fr;
+            gap: 14px;
+            margin-bottom: 26px;
+            background: #f8f9fa;
+            padding: 16px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+        .field label { display: block; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--slate); margin-bottom: 5px; }
+        .field input, .field select {
+            width: 100%; padding: 8px 10px; border: 1px solid #ccc; border-radius: 5px;
+            font-family: inherit; font-size: 0.9rem; color: var(--navy); background: #fff;
+        }
+
+        /* SECTION TITLES */
+        .section-label {
+            font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px;
+            color: var(--slate); border-bottom: 2px solid var(--gold); padding-bottom: 8px;
+            margin: 32px 0 16px; display: flex; align-items: center; gap: 10px;
+        }
+        .section-label i { color: var(--gold); }
+
+        /* LEVEL LADDER */
+        .level-card {
+            border: 1px solid var(--border);
+            border-left: 5px solid var(--lvl, #ccc);
+            border-radius: 0 8px 8px 0;
+            margin-bottom: 14px;
+            overflow: hidden;
+        }
+        .level-head {
+            display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+            padding: 12px 16px; background: #fafafa;
+        }
+        .level-badge {
+            font-weight: 700; font-size: 0.8rem; color: #fff;
+            background: var(--lvl); padding: 4px 10px; border-radius: 20px; min-width: 84px; text-align: center;
+        }
+        .level-name { font-weight: 700; color: var(--navy); font-size: 0.95rem; }
+        .level-cefr { font-size: 0.72rem; color: #95a5a6; }
+        .course-chip {
+            margin-left: auto; font-size: 0.72rem; font-weight: 600; color: var(--slate);
+            background: #fff; border: 1px solid var(--border); border-radius: 20px; padding: 4px 12px;
+            display: inline-flex; align-items: center; gap: 6px;
+        }
+        .course-chip i { color: var(--gold); }
+        .level-body { padding: 14px 16px; }
+        .qlist { margin: 0 0 12px; padding-left: 20px; }
+        .qlist li { margin-bottom: 7px; line-height: 1.5; color: var(--navy); font-size: 0.9rem; }
+        .look-for {
+            font-size: 0.82rem; color: var(--slate); background: #f4f6f7;
+            border-radius: 5px; padding: 8px 12px; margin-bottom: 12px;
+        }
+        .look-for b { color: var(--slate); }
+
+        .rate-row { display: flex; gap: 8px; flex-wrap: wrap; }
+        .rate-btn {
+            flex: 1; min-width: 120px; padding: 9px; border: 1.5px solid #ddd; background: #fff;
+            border-radius: 6px; cursor: pointer; font-family: inherit; font-size: 0.82rem; font-weight: 600;
+            color: #7f8c8d; transition: all 0.15s;
+        }
+        .rate-btn:hover { border-color: #bbb; }
+        .rate-btn.sel-well { background: var(--good); border-color: var(--good); color: #fff; }
+        .rate-btn.sel-ok { background: var(--ok); border-color: var(--ok); color: #fff; }
+        .rate-btn.sel-bad { background: var(--bad); border-color: var(--bad); color: #fff; }
+
+        /* RUBRIC */
+        .rubric { width: 100%; border-collapse: collapse; }
+        .rubric th, .rubric td { padding: 9px 10px; text-align: left; border-bottom: 1px solid #eee; font-size: 0.88rem; }
+        .rubric th { background: var(--navy); color: #fff; font-weight: 500; font-size: 0.8rem; }
+        .rubric td.crit { font-weight: 600; color: var(--slate); }
+        .rubric .dots { display: flex; gap: 6px; }
+        .dot {
+            width: 22px; height: 22px; border-radius: 50%; border: 1.5px solid #ccc; background: #eee;
+            cursor: pointer; display: flex; align-items: center; justify-content: center;
+            font-size: 0.7rem; font-weight: 700; color: #aaa; transition: transform 0.1s;
+        }
+        .dot:hover { transform: scale(1.15); }
+        .dot.on1 { background: var(--bad); border-color: var(--bad); color: #fff; }
+        .dot.on2 { background: var(--ok); border-color: var(--ok); color: #fff; }
+        .dot.on3 { background: var(--good); border-color: var(--good); color: #fff; }
+
+        /* RESULT */
+        .result-box {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 20px;
+            margin-top: 26px; align-items: stretch;
+        }
+        .confirm-panel {
+            background: var(--navy); color: #fff; border-radius: 10px; padding: 22px; text-align: center;
+        }
+        .confirm-panel .label { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 2px; color: var(--gold); }
+        .confirm-panel .suggested { font-size: 0.82rem; color: rgba(255,255,255,0.7); margin: 8px 0 14px; }
+        .confirm-panel select {
+            font-size: 1.35rem; font-weight: 700; padding: 8px 16px; border-radius: 8px; border: 2px solid var(--gold);
+            background: #fff; color: var(--navy); font-family: inherit; cursor: pointer; text-align: center; max-width: 100%;
+        }
+        /* RECOMMENDER CARD */
+        .rec-course {
+            margin-top: 16px; background: rgba(197,160,89,0.12); border: 1px solid var(--gold);
+            border-radius: 8px; padding: 12px 14px; text-align: left;
+        }
+        .rec-course .rc-label { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 1.5px; color: var(--gold); font-weight: 700; }
+        .rec-course .rc-name { font-size: 1rem; font-weight: 700; color: #fff; margin: 4px 0 2px; }
+        .rec-course .rc-desc { font-size: 0.78rem; color: rgba(255,255,255,0.72); line-height: 1.4; }
+        .rec-course a {
+            display: inline-flex; align-items: center; gap: 6px; margin-top: 8px; font-size: 0.78rem;
+            font-weight: 700; color: var(--navy); background: var(--gold); text-decoration: none;
+            padding: 6px 12px; border-radius: 6px;
+        }
+        .notes-panel { display: flex; flex-direction: column; }
+        .notes-panel label { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--slate); margin-bottom: 6px; }
+        .notes-panel textarea {
+            flex: 1; width: 100%; min-height: 120px; padding: 12px; border: 1px solid #ccc; border-radius: 8px;
+            font-family: inherit; font-size: 0.9rem; resize: vertical; background: #fcfcfc; color: var(--navy);
+        }
+
+        /* ACTIONS */
+        .actions { text-align: center; margin-top: 26px; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+        .actions button {
+            padding: 11px 26px; cursor: pointer; border: none; border-radius: 6px; font-family: inherit;
+            font-weight: 700; font-size: 0.85rem;
+        }
+        .btn-copy { background: var(--good); color: #fff; }
+        .btn-print { background: var(--navy); color: #fff; }
+        .btn-clear { background: #95a5a6; color: #fff; }
+
+        @media print {
+            body { background: #fff; padding: 0; }
+            .no-print { display: none !important; }
+            .container { box-shadow: none; }
+            .how-to { background: #fffdf5 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+            .rate-btn, .dot, .level-badge, .confirm-panel, .rubric th, .course-chip, .rec-course { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        }
+
+        @media (max-width: 700px) {
+            .profile { grid-template-columns: 1fr 1fr; }
+            .result-box { grid-template-columns: 1fr; }
+            .course-chip { margin-left: 0; }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- HEADER -->
+        <div class="top-bar">
+            <img src="assets/images/vesper_logo.jpg" alt="Vesper Academy">
+            <div class="titles">
+                <h1>Oral Interview</h1>
+                <p>Level &amp; Course Finder</p>
+            </div>
+            <a href="portal_profesores.html" class="back no-print"><i class="fas fa-arrow-left"></i> Portal</a>
+        </div>
+
+        <div class="body-pad">
+
+            <!-- INSTRUCTIONS -->
+            <div class="how-to no-print">
+                <h2><i class="fas fa-chalkboard-teacher"></i> How to run this 5&ndash;7 minute interview</h2>
+                <ol>
+                    <li><strong>Warm up (30 sec):</strong> Greet the student and chat casually to relax them. Do not score this.</li>
+                    <li><strong>Climb the ladder:</strong> Start ONE rung <em>below</em> their placement-test result. Ask the questions for that rung, then move up. You don't need to ask every question &mdash; ask enough to judge.</li>
+                    <li><strong>Keep going up</strong> until the student clearly struggles to respond. Rate each rung: <em>Coped well / Hesitant / Struggled</em>.</li>
+                    <li><strong>The tool finds the level &amp; course:</strong> the true level is the <strong>highest rung the student handled comfortably</strong>. Each rung is a Vesper course, so the recommended course appears automatically. Trust what you hear over the test score.</li>
+                    <li><strong>Score the rubric</strong> (overall impression) and write a short note. Then copy or print the report.</li>
+                </ol>
+            </div>
+
+            <!-- PROFILE -->
+            <div class="profile">
+                <div class="field">
+                    <label>Student</label>
+                    <input type="text" id="student" placeholder="Full name" oninput="save()">
+                </div>
+                <div class="field">
+                    <label>Date</label>
+                    <input type="text" id="date" placeholder="DD/MM/YYYY" oninput="save()">
+                </div>
+                <div class="field">
+                    <label>Interviewer</label>
+                    <input type="text" id="interviewer" placeholder="Teacher name" oninput="save()">
+                </div>
+                <div class="field">
+                    <label>Placement Result</label>
+                    <select id="placement" onchange="save()">
+                        <option value="">&mdash;</option>
+                        <option value="Principiante">Principiante (Pre-A1)</option>
+                        <option value="Inicial">Inicial (A1)</option>
+                        <option value="Básico">Básico (A2)</option>
+                        <option value="Intermedio">Intermedio (B1)</option>
+                        <option value="Avanzado">Avanzado (B2)</option>
+                        <option value="Experto">Experto (C1)</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- LADDER -->
+            <div class="section-label"><i class="fas fa-stairs"></i> The Level Ladder &mdash; ask, listen, rate</div>
+            <div id="ladder"></div>
+
+            <!-- RUBRIC -->
+            <div class="section-label"><i class="fas fa-star-half-stroke"></i> Overall Impression Rubric <span style="font-size:0.7rem; font-weight:400; text-transform:none; letter-spacing:0; color:#95a5a6; margin-left:auto;">1 = weak &nbsp; 2 = okay &nbsp; 3 = strong</span></div>
+            <table class="rubric">
+                <thead>
+                    <tr><th style="width:32%;">Criterion</th><th>What to listen for</th><th style="width:110px;">Score</th></tr>
+                </thead>
+                <tbody id="rubric-body"></tbody>
+            </table>
+
+            <!-- RESULT -->
+            <div class="result-box">
+                <div class="confirm-panel">
+                    <div class="label">Confirmed Level</div>
+                    <div class="suggested" id="suggested">Suggested: &mdash;</div>
+                    <select id="confirmed" onchange="onConfirmChange()">
+                        <option value="">&mdash;</option>
+                        <option value="Principiante">Principiante</option>
+                        <option value="Inicial">Inicial</option>
+                        <option value="Básico">Básico</option>
+                        <option value="Intermedio">Intermedio</option>
+                        <option value="Avanzado">Avanzado</option>
+                        <option value="Experto">Experto</option>
+                    </select>
+                    <div class="rec-course" id="rec-course" style="display:none;">
+                        <div class="rc-label"><i class="fas fa-graduation-cap"></i> Curso recomendado</div>
+                        <div class="rc-name" id="rc-name"></div>
+                        <div class="rc-desc" id="rc-desc"></div>
+                        <a id="rc-link" href="#" target="_blank" rel="noopener"><i class="fas fa-book-open"></i> Abrir curso</a>
+                    </div>
+                </div>
+                <div class="notes-panel">
+                    <label>Interviewer Notes</label>
+                    <textarea id="notes" placeholder="Strengths, weaknesses, recommended course, anything notable..." oninput="save()"></textarea>
+                </div>
+            </div>
+
+            <!-- ACTIONS -->
+            <div class="actions no-print">
+                <button class="btn-copy" onclick="copyReport()"><i class="fas fa-copy"></i> Copy Report</button>
+                <button class="btn-print" onclick="window.print()"><i class="fas fa-print"></i> Print</button>
+                <button class="btn-clear" onclick="clearAll()"><i class="fas fa-undo"></i> Clear</button>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // ── DATA ────────────────────────────────────────────────
+        // Rungs are labelled by Vesper Academy's OWN course levels
+        // (Principiante..Experto). CEFR is kept only as a small internal
+        // subtitle. Each rung maps to a recommended course + first book.
+        const LEVELS = [
+            {
+                id: "Principiante", num: 0, cefr: "Pre-A1 · Survival", color: "#6c757d",
+                course: "Core Basics · Nivel 1", href: "libro.html?id=core_basics_lvl1",
+                blurb: "Primeros pasos: identidad, presentaciones y frases de supervivencia.",
+                questions: [
+                    "Hello! What's your name? Can you spell it for me?",
+                    "Where are you from? Where do you live?",
+                    "How old are you?",
+                    "Count from one to twenty for me.",
+                    "What day is it today? What's the weather like?",
+                    "Look around the room — what things can you name in English?"
+                ],
+                look: "Gives name and basic personal facts. Uses isolated words and memorised phrases. Understands very slow, simple questions, often with gestures."
+            },
+            {
+                id: "Inicial", num: 1, cefr: "A1 · Routines", color: "#3498db",
+                course: "Core Basics · Nivel 2", href: "libro.html?id=core_basics_lvl2",
+                blurb: "Rutinas, preguntas y presente simple en oraciones completas.",
+                questions: [
+                    "What do you do every day? Tell me about your morning.",
+                    "Tell me about your family. How many brothers or sisters do you have?",
+                    "What food do you like? What don't you like?",
+                    "What do you do in your free time?",
+                    "Describe your best friend. What does he or she look like?",
+                    "What time do you get up and go to bed? Why?"
+                ],
+                look: "Full simple present-tense sentences. Joins ideas with 'and', 'but', 'because'. Talks about familiar everyday topics without long freezes."
+            },
+            {
+                id: "Básico", num: 2, cefr: "A2 · Past & stories", color: "#27ae60",
+                course: "Core Basics · Niveles 3–4", href: "libro.html?id=core_basics_lvl3",
+                blurb: "Pasado, futuro e historias sencillas conectadas.",
+                questions: [
+                    "What did you do last weekend?",
+                    "What are your plans for your next holiday?",
+                    "Tell me about the last film you watched or a place you visited.",
+                    "How is your town different now compared to when you were a child?",
+                    "Tell me about a person who is important to you and how you met.",
+                    "Have you ever tried a food you didn't like? What happened?"
+                ],
+                look: "Handles past and future comfortably. Tells a simple connected story with linking words (because, then, after that). Can compare past and present."
+            },
+            {
+                id: "Intermedio", num: 3, cefr: "B1 · Opinions", color: "#e67e22",
+                course: "Core Practice · Niveles 1–3", href: "libro.html?id=core_practice_lvl1",
+                blurb: "Opiniones con razones, hipotéticos y turnos de habla más largos.",
+                questions: [
+                    "What do you think about social media? Is it good or bad? Why?",
+                    "If you won a lot of money, what would you do?",
+                    "Tell me about a problem in your city and how you would solve it.",
+                    "Describe a person you admire and explain why.",
+                    "What would you change about your job or your studies if you could?",
+                    "Is it better to live in a big city or the countryside? Explain."
+                ],
+                look: "Expresses opinions with reasons. Manages hypotheticals ('would'). Speaks in longer turns without much hesitation; self-corrects."
+            },
+            {
+                id: "Avanzado", num: 4, cefr: "B2 · Argue", color: "#8e44ad",
+                course: "Core Practice · Niveles 4–5", href: "libro.html?id=core_practice_lvl4",
+                blurb: "Argumentar, ver ambos lados y especular con vocabulario abstracto.",
+                questions: [
+                    "Should university education be free? Argue your opinion.",
+                    "What are the advantages and disadvantages of working from home?",
+                    "How has technology changed the way people build relationships?",
+                    "Tell me about a difficult decision you made. Would you do it differently now?",
+                    "Some people say social media does more harm than good. How far do you agree?",
+                    "What do you think your country will be like in twenty years?"
+                ],
+                look: "Argues a position, sees both sides, speculates about the future. Uses abstract vocabulary and a range of tenses; near-natural, flowing speech."
+            },
+            {
+                id: "Experto", num: 5, cefr: "C1 · Nuance", color: "#c0392b",
+                course: "Core Practice · Nivel 6 + Certification / Business", href: "libro.html?id=core_practice_lvl6",
+                blurb: "Matiz, temas abstractos y precisión casi nativa. Listo para certificación o negocios.",
+                questions: [
+                    "To what extent should governments regulate artificial intelligence?",
+                    "Is economic growth always a sign of a healthy society? Why or why not?",
+                    "Describe a book, film or idea that changed how you see the world, and explain its impact.",
+                    "How do you tell the difference between confidence and arrogance in a leader?",
+                    "“The best solution to a problem often creates a new one.” Do you agree?",
+                    "If you could redesign the education system from scratch, what principles would guide you?"
+                ],
+                look: "Handles abstract, nuanced topics with precision. Uses idiomatic and low-frequency vocabulary, hedging and emphasis naturally. Errors are rare and don't block meaning."
+            }
+        ];
+
+        const RUBRIC = [
+            ["Fluency & Coherence", "Does speech flow, or is it full of long pauses?"],
+            ["Vocabulary Range", "Variety of words, or repetitive and basic?"],
+            ["Grammar Accuracy", "Are structures correct, or frequent errors?"],
+            ["Pronunciation", "Is the student easy to understand?"],
+            ["Interaction", "Do they understand questions and respond appropriately?"]
+        ];
+
+        // Quick lookup by level id
+        const LVL_BY_ID = {};
+        LEVELS.forEach(L => { LVL_BY_ID[L.id] = L; });
+        const ORDER = LEVELS.map(L => L.id);
+
+        const levelStatus = {};
+        ORDER.forEach(id => { levelStatus[id] = null; });
+        const rubricScore = { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0 };
+
+        // ── BUILD UI ────────────────────────────────────────────
+        function buildLadder() {
+            const wrap = document.getElementById("ladder");
+            wrap.innerHTML = "";
+            LEVELS.forEach(L => {
+                const qs = L.questions.map(q => `<li>${q}</li>`).join("");
+                wrap.innerHTML += `
+                <div class="level-card" style="--lvl:${L.color}">
+                    <div class="level-head">
+                        <span class="level-badge">Nivel ${L.num}</span>
+                        <div><span class="level-name">${L.id}</span> &nbsp;<span class="level-cefr">${L.cefr}</span></div>
+                        <span class="course-chip"><i class="fas fa-graduation-cap"></i> ${L.course}</span>
+                    </div>
+                    <div class="level-body">
+                        <ul class="qlist">${qs}</ul>
+                        <div class="look-for"><b><i class="fas fa-ear-listen"></i> Listen for:</b> ${L.look}</div>
+                        <div class="rate-row">
+                            <button class="rate-btn" id="rt-${L.id}-well" onclick="rate('${L.id}','well')"><i class="fas fa-check"></i> Coped well</button>
+                            <button class="rate-btn" id="rt-${L.id}-ok" onclick="rate('${L.id}','ok')"><i class="fas fa-minus"></i> Hesitant</button>
+                            <button class="rate-btn" id="rt-${L.id}-bad" onclick="rate('${L.id}','bad')"><i class="fas fa-xmark"></i> Struggled</button>
+                        </div>
+                    </div>
+                </div>`;
+            });
+        }
+
+        function buildRubric() {
+            const body = document.getElementById("rubric-body");
+            body.innerHTML = "";
+            RUBRIC.forEach((r, i) => {
+                body.innerHTML += `
+                <tr>
+                    <td class="crit">${r[0]}</td>
+                    <td style="color:#7f8c8d; font-size:0.82rem;">${r[1]}</td>
+                    <td><div class="dots">
+                        <div class="dot" id="d-${i}-1" onclick="setDot(${i},1)">1</div>
+                        <div class="dot" id="d-${i}-2" onclick="setDot(${i},2)">2</div>
+                        <div class="dot" id="d-${i}-3" onclick="setDot(${i},3)">3</div>
+                    </div></td>
+                </tr>`;
+            });
+        }
+
+        // ── INTERACTION ─────────────────────────────────────────
+        function rate(level, val) {
+            levelStatus[level] = val;
+            ["well", "ok", "bad"].forEach(v => {
+                const b = document.getElementById(`rt-${level}-${v}`);
+                b.className = "rate-btn" + (v === val ? " sel-" + v : "");
+            });
+            updateSuggestion();
+            save();
+        }
+
+        function setDot(crit, val) {
+            rubricScore[crit] = val;
+            for (let v = 1; v <= 3; v++) {
+                const d = document.getElementById(`d-${crit}-${v}`);
+                d.className = "dot" + (v <= val ? " on" + val : "");
+            }
+            save();
+        }
+
+        // Recommender: highest rung handled well = confirmed level + course.
+        function updateSuggestion() {
+            let suggested = null;
+            for (const lv of ORDER) {
+                if (levelStatus[lv] === "well") suggested = lv;
+            }
+            const el = document.getElementById("suggested");
+            const conf = document.getElementById("confirmed");
+            if (suggested) {
+                el.innerHTML = "Suggested: <strong style='color:#fff'>" + suggested + "</strong> (highest rung handled well)";
+                if (!conf.value) conf.value = suggested;
+            } else {
+                el.textContent = "Suggested: —";
+            }
+            renderRecommendation();
+        }
+
+        // Show the recommended course for whatever level is confirmed
+        // (or, if none confirmed yet, the suggested one).
+        function renderRecommendation() {
+            const conf = document.getElementById("confirmed").value;
+            const box = document.getElementById("rec-course");
+            const L = LVL_BY_ID[conf];
+            if (!L) { box.style.display = "none"; return; }
+            box.style.display = "block";
+            document.getElementById("rc-name").textContent = L.course;
+            document.getElementById("rc-desc").textContent = L.blurb;
+            document.getElementById("rc-link").href = L.href;
+        }
+
+        function onConfirmChange() {
+            renderRecommendation();
+            save();
+        }
+
+        // ── PERSISTENCE ─────────────────────────────────────────
+        function save() {
+            const data = {
+                student: val("student"), date: val("date"), interviewer: val("interviewer"),
+                placement: val("placement"), confirmed: val("confirmed"), notes: val("notes"),
+                levelStatus, rubricScore
+            };
+            localStorage.setItem("vesperOralInterview", JSON.stringify(data));
+        }
+        function val(id) { return document.getElementById(id).value; }
+
+        function load() {
+            const raw = localStorage.getItem("vesperOralInterview");
+            if (!raw) { renderRecommendation(); return; }
+            const d = JSON.parse(raw);
+            ["student", "date", "interviewer", "placement", "confirmed", "notes"].forEach(k => {
+                if (d[k] !== undefined) document.getElementById(k).value = d[k];
+            });
+            if (d.levelStatus) Object.keys(d.levelStatus).forEach(lv => {
+                if (d.levelStatus[lv] && levelStatus.hasOwnProperty(lv)) rate(lv, d.levelStatus[lv]);
+            });
+            if (d.rubricScore) Object.keys(d.rubricScore).forEach(i => {
+                if (d.rubricScore[i]) setDot(Number(i), d.rubricScore[i]);
+            });
+            updateSuggestion();
+            renderRecommendation();
+        }
+
+        function clearAll() {
+            if (!confirm("Clear all interview data?")) return;
+            localStorage.removeItem("vesperOralInterview");
+            location.reload();
+        }
+
+        // ── REPORT ──────────────────────────────────────────────
+        function copyReport() {
+            const statusLabel = { well: "Coped well", ok: "Hesitant", bad: "Struggled", null: "-" };
+            const conf = val("confirmed");
+            const L = LVL_BY_ID[conf];
+            let t = "==========================================\n";
+            t += "VESPER ACADEMY - ORAL INTERVIEW REPORT\n";
+            t += "==========================================\n";
+            t += "Student:     " + (val("student") || "-") + "\n";
+            t += "Date:        " + (val("date") || "-") + "\n";
+            t += "Interviewer: " + (val("interviewer") || "-") + "\n";
+            t += "Placement test result: " + (val("placement") || "-") + "\n";
+            t += "------------------------------------------\n";
+            t += "LEVEL LADDER (Vesper levels):\n";
+            ORDER.forEach(lv => {
+                const L2 = LVL_BY_ID[lv];
+                t += "  Nivel " + L2.num + " " + lv.padEnd(13) + " : " + (statusLabel[levelStatus[lv]] || "-") + "\n";
+            });
+            t += "------------------------------------------\n";
+            t += "RUBRIC (out of 3):\n";
+            RUBRIC.forEach((r, i) => { t += "  " + r[0].padEnd(22) + ": " + (rubricScore[i] || "-") + "\n"; });
+            t += "------------------------------------------\n";
+            t += "CONFIRMED LEVEL: " + (conf || "-") + (L ? "  (" + L.cefr.split(" ")[0] + ")" : "") + "\n";
+            t += "RECOMMENDED COURSE: " + (L ? L.course : "-") + "\n";
+            t += "------------------------------------------\n";
+            t += "NOTES:\n" + (val("notes") || "(none)") + "\n";
+            t += "==========================================\n";
+            navigator.clipboard.writeText(t)
+                .then(() => alert("Report copied to clipboard!"))
+                .catch(e => alert("Copy failed: " + e));
+        }
+
+        // ── INIT ────────────────────────────────────────────────
+        buildLadder();
+        buildRubric();
+        load();
+    </script>
+</body>
+
+</html>

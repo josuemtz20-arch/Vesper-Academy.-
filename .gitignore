@@ -31,6 +31,9 @@
 !/onboarding.html
 !/perfil.html
 !/book_placement.html
+# Entrevista oral del profesor: escalera de niveles Vesper + banco de preguntas
+# + rúbrica + recomendador de curso. Solo preguntas de conversación (sin claves).
+!/book_oral_interview.html
 !/audio_library.html
 !/lesson.html
 # Pizarra Virtual autónoma (2026-07-08): app estática de whiteboard con Fabric.js
