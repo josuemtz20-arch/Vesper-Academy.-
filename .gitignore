@@ -179,6 +179,10 @@
 !/portal_boleta.html
 !/vesper_gradebook.js
 !/FIRESTORE_GRADEBOOK_RULES.md
+# Leads del examen diagnóstico (2026-07-14): book_placement.html guarda cada
+# nivelación anónima en placement_results (create sin sesión, validado; read
+# solo profes/admin). Doc de la regla a publicar.
+!/FIRESTORE_PLACEMENT_RULES.md
 # ... y la vista del alumno: cada quien consulta SOLO su boleta (misma regla).
 !/mi_boleta.html
 # recintos tematicos de vocabulario (ramas) — datos publicos, sin claves

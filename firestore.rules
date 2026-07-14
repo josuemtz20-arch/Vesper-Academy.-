@@ -208,5 +208,43 @@ service cloud.firestore {
                        || request.auth.token.email == "josuemtz20@gmail.com");
     }
 
+    // —— Leads del examen diagnóstico (nivelación pública, SIN registro) ——
+    // (book_placement.html → /documents/placement_results/{autoId})
+    //
+    // El examen diagnóstico es público y anónimo (no requiere iniciar sesión),
+    // así que el ALTA del lead la hace un visitante SIN token (request.auth es
+    // null). Por eso `create` no puede exigir autenticación; en su lugar se
+    // valida la forma del documento y se exige al menos un dato de contacto
+    // (correo o WhatsApp) para frenar el spam de registros vacíos.
+    //
+    // La LECTURA queda restringida a profesores y al admin: estos documentos
+    // contienen datos de contacto (correo/teléfono) de los prospectos y NO
+    // deben quedar expuestos públicamente por la API. Los intentos son
+    // inmutables (sin update/delete).
+    match /placement_results/{id} {
+      allow create: if request.resource.data.name is string
+                    && request.resource.data.name.size() > 0
+                    && request.resource.data.name.size() <= 120
+                    && request.resource.data.level is string
+                    && request.resource.data.level.size() <= 20
+                    && request.resource.data.correct is int
+                    && request.resource.data.total is int
+                    && request.resource.data.correct >= 0
+                    && request.resource.data.total >= 0
+                    && request.resource.data.correct <= request.resource.data.total
+                    && request.resource.data.email is string
+                    && request.resource.data.email.size() <= 200
+                    && request.resource.data.phone is string
+                    && request.resource.data.phone.size() <= 60
+                    // al menos un dato de contacto (correo o WhatsApp)
+                    && (request.resource.data.email.size() > 0
+                        || request.resource.data.phone.size() > 0);
+      allow read:   if request.auth != null && (
+                       exists(/databases/$(database)/documents/teachers/$(request.auth.token.email))
+                       || request.auth.token.email == "josuemtz20@gmail.com"
+                    );
+      allow update, delete: if false;
+    }
+
   }
 }
