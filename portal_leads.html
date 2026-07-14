@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<script src="vesper_auth.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Leads del examen | Vesper Academy</title>
+<meta name="description" content="Prospectos que terminaron el examen diagnóstico. Acceso restringido al profesorado.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="assets/images/vesper_logo.png" type="image/png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inria+Serif:ital,wght@0,400;0,700&family=Inter:wght@300;400;500;600;700;800&display=swap');
+*,*::before,*::after{box-sizing:border-box;}
+:root{--navy:#1B1B2F;--navy2:#2c2c4a;--gold:#c5a059;--gold2:#a8843d;--cream:#f5f2eb;--border:#e4e0d8;--muted:#6b7a8d;--err:#b03a3a;--ok:#2d7a4f;--accent:#1e5fa8;}
+body{margin:0;font-family:'Inter',sans-serif;background:var(--cream);color:var(--navy);min-height:100vh;}
+header{background:var(--navy);border-bottom:3px solid var(--gold);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:14px;position:sticky;top:0;z-index:50;}
+.brand{display:flex;align-items:center;gap:12px;color:#fff;text-decoration:none;}
+.brand img{height:42px;width:42px;object-fit:contain;}
+.brand b{font-family:'Inria Serif',serif;font-size:1.1rem;}
+.brand small{display:block;color:var(--gold);font-size:.6rem;letter-spacing:2px;text-transform:uppercase;}
+header .right{display:flex;align-items:center;gap:18px;}
+header a.back{color:rgba(255,255,255,.75);font-size:.78rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;text-decoration:none;}
+header a.back:hover{color:var(--gold);}
+@media(max-width:640px){
+  header{padding:10px 14px;gap:10px;}
+  .brand img{height:34px;width:34px;}
+  .brand b{font-size:.98rem;}
+  .brand small{font-size:.55rem;letter-spacing:1.5px;}
+  header .right{gap:7px;}
+  header a.back{font-size:0;padding:10px 12px;border:1px solid rgba(255,255,255,.2);border-radius:10px;display:inline-flex;align-items:center;justify-content:center;}
+  header a.back i{font-size:1rem;margin:0;}
+}
+.wrap{max-width:1100px;margin:0 auto;padding:32px 20px 70px;}
+.intro h1{font-family:'Inria Serif',serif;font-size:1.8rem;margin:0 0 8px;}
+.intro p{color:var(--muted);max-width:760px;margin:0 0 6px;font-size:.92rem;line-height:1.55;}
+.notice{background:#fbf3df;border:1px solid #e7d8a8;border-left:4px solid var(--gold2);border-radius:8px;padding:14px 16px;margin:20px 0;font-size:.88rem;color:#5a4d2e;line-height:1.55;}
+.notice.bad{background:#f7e7e7;border-color:#e2bcbc;border-left-color:var(--err);color:#6a2a2a;}
+.notice i{margin-right:6px;}
+.stats{display:flex;flex-wrap:wrap;gap:12px;margin:22px 0 14px;}
+.stat{background:#fff;border:1px solid var(--border);border-top:4px solid var(--accent);border-radius:10px;padding:12px 18px;min-width:130px;box-shadow:0 1px 4px rgba(0,0,0,.06);}
+.stat b{display:block;font-size:1.5rem;line-height:1.1;font-family:'Inria Serif',serif;}
+.stat span{font-size:.7rem;letter-spacing:1px;text-transform:uppercase;color:var(--muted);}
+.toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:18px 0 14px;}
+.toolbar select,.toolbar input{padding:9px 11px;border:1px solid var(--border);border-radius:8px;font:inherit;font-size:.85rem;background:#fff;}
+.toolbar input{min-width:200px;flex:1;max-width:320px;}
+.toolbar .spacer{flex:1;}
+.toolbar button{padding:9px 14px;border:1px solid var(--border);background:#fff;border-radius:8px;font:inherit;font-size:.82rem;font-weight:600;cursor:pointer;color:var(--navy);}
+.toolbar button:hover{border-color:var(--gold);}
+.tablecard{background:#fff;border:1px solid var(--border);border-radius:12px;box-shadow:0 1px 4px rgba(0,0,0,.06);overflow:hidden;}
+table{width:100%;border-collapse:collapse;font-size:.86rem;}
+thead th{text-align:left;background:#f3eee2;color:var(--navy);font-size:.7rem;letter-spacing:.8px;text-transform:uppercase;padding:11px 14px;border-bottom:1px solid var(--border);}
+tbody td{padding:11px 14px;border-bottom:1px solid #f0ece3;vertical-align:middle;}
+.who b{font-weight:600;}
+.contact a{color:var(--accent);text-decoration:none;}
+.contact a:hover{text-decoration:underline;}
+.contact .c-line{display:block;font-size:.82rem;}
+.contact .c-line i{width:16px;color:var(--muted);margin-right:5px;}
+.contact .none{color:var(--muted);font-style:italic;}
+.tag{display:inline-block;font-size:.66rem;font-weight:800;letter-spacing:.4px;text-transform:uppercase;padding:3px 9px;border-radius:20px;border:1px solid #cbe0f6;background:#e6f0fb;color:#1e5fa8;}
+.origin{color:var(--muted);font-size:.76rem;}
+.empty{padding:40px 20px;text-align:center;color:var(--muted);}
+#loading{padding:50px 20px;text-align:center;color:var(--muted);}
+#loading .spin{display:inline-block;width:28px;height:28px;border:3px solid rgba(30,95,168,.2);border-top-color:var(--accent);border-radius:50%;animation:sp .8s linear infinite;margin-bottom:12px;}
+@keyframes sp{to{transform:rotate(360deg)}}
+footer{background:var(--navy);color:rgba(255,255,255,.5);text-align:center;padding:24px;font-size:.78rem;border-top:3px solid var(--gold);position:sticky;top:100vh;}
+footer a{color:var(--gold);text-decoration:none;}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+@media(max-width:640px){thead th:nth-child(4),tbody td:nth-child(4){display:none}}
+</style>
+<link rel="stylesheet" href="assets/css/vesper_tokens.css">
+</head>
+<body>
+
+<header>
+  <a class="brand" href="index.html">
+    <img src="assets/images/vesper_logo_inverted.png" alt="Vesper Academy">
+    <span><b>Vesper Academy</b><small>Leads del examen</small></span>
+  </a>
+  <div class="right">
+    <a class="back" href="portal_calificaciones.html"><i class="fas fa-chart-bar"></i> Calificaciones</a>
+    <a class="back" href="portal_profesores.html"><i class="fas fa-toolbox"></i> Portal profesor</a>
+    <a class="back" href="index.html"><i class="fas fa-arrow-left"></i> Sitio principal</a>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="intro">
+    <h1>Leads del examen diagnóstico</h1>
+    <p>Prospectos que terminaron el examen de nivelación público
+       (<code>book_placement.html</code>). Cada persona dejó su nombre y su correo
+       o WhatsApp. Estos datos son de contacto: trátalos con cuidado y no los
+       compartas fuera de la academia.</p>
+  </div>
+
+  <div id="loading"><div class="spin"></div><div>Cargando leads…</div></div>
+
+  <div id="content" style="display:none">
+    <div class="stats" id="stats"></div>
+    <div class="toolbar">
+      <select id="f-level">
+        <option value="">Todos los niveles</option>
+        <option value="Pre-A1">Pre-A1</option>
+        <option value="A1">A1</option>
+        <option value="A2">A2</option>
+        <option value="B1">B1</option>
+        <option value="B2+">B2+</option>
+      </select>
+      <input id="f-q" type="search" placeholder="Buscar por nombre, correo o teléfono…">
+      <span class="spacer"></span>
+      <button id="f-csv"><i class="fas fa-file-csv"></i> Exportar CSV</button>
+      <button id="f-reload"><i class="fas fa-rotate"></i> Actualizar</button>
+    </div>
+    <div class="tablecard">
+      <table>
+        <thead><tr>
+          <th>Prospecto</th><th>Contacto</th><th>Nivel</th><th>Aciertos</th><th>Origen</th><th>Fecha</th>
+        </tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div id="msg" style="display:none"></div>
+</div>
+
+<footer>
+  © <span id="y"></span> Vesper Academy · <a href="index.html">vesper.academy</a> · Área de profesores
+</footer>
+
+<script>
+(function () {
+  "use strict";
+  document.getElementById("y").textContent = new Date().getFullYear();
+
+  var DB_ID = (window.VesperAuth && VesperAuth.config && VesperAuth.config.dbId) || "teachermanuals";
+  var COLLECTION = "placement_results";
+
+  var loadingEl = document.getElementById("loading");
+  var contentEl = document.getElementById("content");
+  var msgEl = document.getElementById("msg");
+  var rowsEl = document.getElementById("rows");
+  var statsEl = document.getElementById("stats");
+  var fLevel = document.getElementById("f-level");
+  var fQ = document.getElementById("f-q");
+
+  var allRows = [];
+
+  function projectId() { try { return VesperAuth.config.firebase.projectId; } catch (e) { return "vesper-academy"; } }
+  function base() { return "https://firestore.googleapis.com/v1/projects/" + projectId() + "/databases/" + DB_ID + "/documents"; }
+
+  function esc(t) {
+    return ("" + (t == null ? "" : t)).replace(/[&<>"]/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
+    });
+  }
+  function fmtDate(d) {
+    if (!d) return "—";
+    try { return new Date(d).toLocaleString("es", { dateStyle: "medium", timeStyle: "short" }); }
+    catch (e) { return d; }
+  }
+
+  function readDoc(doc) {
+    var f = (doc && doc.fields) || {};
+    function s(k) { return (f[k] && f[k].stringValue) || ""; }
+    function n(k) { return parseInt((f[k] && f[k].integerValue) || "0", 10); }
+    return {
+      name: s("name") || "Sin nombre",
+      email: s("email"), phone: s("phone"),
+      level: s("level") || "?", levelName: s("levelName"),
+      correct: n("correct"), total: n("total") || 30,
+      origin: s("origin"),
+      date: (f.createdAt && f.createdAt.timestampValue) || ""
+    };
+  }
+
+  function showMsg(html, bad) {
+    loadingEl.style.display = "none";
+    contentEl.style.display = "none";
+    msgEl.style.display = "block";
+    msgEl.className = "notice" + (bad ? " bad" : "");
+    msgEl.innerHTML = html;
+  }
+
+  function renderStats(rows) {
+    var withEmail = 0, withPhone = 0;
+    rows.forEach(function (r) { if (r.email) withEmail++; if (r.phone) withPhone++; });
+    statsEl.innerHTML =
+      '<div class="stat"><b>' + rows.length + '</b><span>Leads</span></div>' +
+      '<div class="stat"><b>' + withEmail + '</b><span>Con correo</span></div>' +
+      '<div class="stat"><b>' + withPhone + '</b><span>Con WhatsApp</span></div>';
+  }
+
+  function contactHtml(r) {
+    var lines = [];
+    if (r.email) lines.push('<span class="c-line"><i class="fas fa-envelope"></i>' +
+      '<a href="mailto:' + esc(r.email) + '">' + esc(r.email) + '</a></span>');
+    if (r.phone) {
+      var wa = r.phone.replace(/\D/g, "");
+      lines.push('<span class="c-line"><i class="fab fa-whatsapp"></i>' +
+        (wa.length >= 7 ? '<a href="https://wa.me/' + esc(wa) + '" target="_blank" rel="noopener">' + esc(r.phone) + '</a>'
+                        : esc(r.phone)) + '</span>');
+    }
+    return lines.length ? lines.join("") : '<span class="none">Sin contacto</span>';
+  }
+
+  function render() {
+    var level = fLevel.value;
+    var q = fQ.value.trim().toLowerCase();
+    var rows = allRows.filter(function (r) {
+      if (level && r.level !== level) return false;
+      if (q) {
+        var hay = (r.name + " " + r.email + " " + r.phone).toLowerCase();
+        if (hay.indexOf(q) === -1) return false;
+      }
+      return true;
+    });
+
+    if (!rows.length) {
+      rowsEl.innerHTML = '<tr><td colspan="6" class="empty">No hay leads que coincidan.</td></tr>';
+      return;
+    }
+
+    rowsEl.innerHTML = rows.map(function (r) {
+      return '<tr>' +
+        '<td class="who"><b>' + esc(r.name) + '</b></td>' +
+        '<td class="contact">' + contactHtml(r) + '</td>' +
+        '<td><span class="tag">' + esc(r.level) + '</span></td>' +
+        '<td>' + r.correct + ' / ' + r.total + '</td>' +
+        '<td class="origin">' + esc(r.origin || "—") + '</td>' +
+        '<td style="color:var(--muted);font-size:.78rem">' + esc(fmtDate(r.date)) + '</td>' +
+      '</tr>';
+    }).join("");
+  }
+
+  function toCSV() {
+    var level = fLevel.value, q = fQ.value.trim().toLowerCase();
+    var rows = allRows.filter(function (r) {
+      if (level && r.level !== level) return false;
+      if (q) { var hay = (r.name + " " + r.email + " " + r.phone).toLowerCase(); if (hay.indexOf(q) === -1) return false; }
+      return true;
+    });
+    function cell(v) { return '"' + String(v == null ? "" : v).replace(/"/g, '""') + '"'; }
+    var head = ["Nombre", "Correo", "WhatsApp", "Nivel", "Aciertos", "Total", "Origen", "Fecha"];
+    var lines = [head.map(cell).join(",")];
+    rows.forEach(function (r) {
+      lines.push([r.name, r.email, r.phone, r.level, r.correct, r.total, r.origin, r.date].map(cell).join(","));
+    });
+    var blob = new Blob(["﻿" + lines.join("\r\n")], { type: "text/csv;charset=utf-8;" });
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "leads_examen_diagnostico.csv";
+    document.body.appendChild(a); a.click();
+    setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 0);
+  }
+
+  function load(user) {
+    loadingEl.style.display = "block";
+    contentEl.style.display = "none";
+    msgEl.style.display = "none";
+
+    user.getIdToken().then(function (token) {
+      return fetch(base() + ":runQuery", {
+        method: "POST",
+        headers: { "Authorization": "Bearer " + token, "Content-Type": "application/json" },
+        body: JSON.stringify({ structuredQuery: {
+          from: [{ collectionId: COLLECTION }],
+          orderBy: [{ field: { fieldPath: "createdAt" }, direction: "DESCENDING" }],
+          limit: 1000
+        } })
+      });
+    }).then(function (r) {
+      if (r.status !== 200) return null;
+      return r.json();
+    }).then(function (data) {
+      if (data === null) {
+        showMsg('<i class="fas fa-lock"></i> No se pudieron leer los leads. Verifica que tu cuenta ' +
+          'sea de profesor/admin y que la regla de Firestore para <code>placement_results</code> ' +
+          'esté publicada en la base <b>' + esc(DB_ID) + '</b> (ver <b>FIRESTORE_PLACEMENT_RULES.md</b>).', true);
+        return;
+      }
+      allRows = (data || []).filter(function (x) { return x.document; }).map(function (x) { return readDoc(x.document); });
+      loadingEl.style.display = "none";
+      msgEl.style.display = "none";
+      contentEl.style.display = "block";
+      renderStats(allRows);
+      render();
+      if (!allRows.length) {
+        rowsEl.innerHTML = '<tr><td colspan="6" class="empty">Aún no hay leads. En cuanto alguien ' +
+          'termine el examen diagnóstico dejando su correo o WhatsApp, aparecerá aquí.</td></tr>';
+      }
+    }).catch(function () {
+      showMsg('<i class="fas fa-triangle-exclamation"></i> No se pudo conectar con el servicio. ' +
+        'Revisa tu conexión y recarga.', true);
+    });
+  }
+
+  fLevel.addEventListener("change", render);
+  fQ.addEventListener("input", render);
+  document.getElementById("f-csv").addEventListener("click", toCSV);
+
+  function boot() {
+    if (!window.VesperAuth || !VesperAuth.isConfigured) {
+      showMsg('<i class="fas fa-cloud"></i> Firebase no está configurado en <code>vesper_auth.js</code>; ' +
+        'el panel de leads necesita la nube para reunir los prospectos.', true);
+      return;
+    }
+    VesperAuth.initFirebase().then(function (auth) {
+      var handled = false;
+      auth.onAuthStateChanged(function (user) {
+        if (handled) return;
+        if (!user || !user.emailVerified) { return; /* el gate redirige al login */ }
+        handled = true;
+        VesperAuth.isTeacher(user).then(function (ok) {
+          if (!ok) {
+            showMsg('<i class="fas fa-user-lock"></i> Esta sección es solo para profesores. ' +
+              'Tu cuenta (<b>' + esc(user.email) + '</b>) no está en la lista de profesorado. ' +
+              'Pide al administrador que te autorice.', true);
+            return;
+          }
+          document.getElementById("f-reload").addEventListener("click", function () { load(user); });
+          load(user);
+        });
+      });
+    }).catch(function () {
+      showMsg('<i class="fas fa-triangle-exclamation"></i> No se pudo conectar con el servicio. ' +
+        'Revisa tu conexión y recarga.', true);
+    });
+  }
+
+  boot();
+})();
+</script>
+</body>
+</html>

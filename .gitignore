@@ -183,6 +183,9 @@
 # nivelación anónima en placement_results (create sin sesión, validado; read
 # solo profes/admin). Doc de la regla a publicar.
 !/FIRESTORE_PLACEMENT_RULES.md
+# Panel de leads del examen diagnostico (solo profes/admin): lee
+# placement_results con el token del profesor. Ver FIRESTORE_PLACEMENT_RULES.md.
+!/portal_leads.html
 # ... y la vista del alumno: cada quien consulta SOLO su boleta (misma regla).
 !/mi_boleta.html
 # recintos tematicos de vocabulario (ramas) — datos publicos, sin claves

@@ -512,20 +512,20 @@
             <div class="field">
                 <label for="student-name">Nombre completo *</label>
                 <div class="input-wrap"><i class="fas fa-user"></i>
-                    <input type="text" id="student-name" placeholder="Ej. María López" autocomplete="name">
+                    <input type="text" id="student-name" placeholder="Ej. María López" autocomplete="name" maxlength="120">
                 </div>
             </div>
             <div class="contact-row">
                 <div class="field">
                     <label for="student-email">Correo electrónico <small>(correo o teléfono)</small></label>
                     <div class="input-wrap"><i class="fas fa-envelope"></i>
-                        <input type="email" id="student-email" placeholder="tu@correo.com" autocomplete="email">
+                        <input type="email" id="student-email" placeholder="tu@correo.com" autocomplete="email" maxlength="200">
                     </div>
                 </div>
                 <div class="field">
                     <label for="student-phone">WhatsApp / Teléfono <small>(correo o teléfono)</small></label>
                     <div class="input-wrap"><i class="fab fa-whatsapp"></i>
-                        <input type="tel" id="student-phone" placeholder="+52 55 1234 5678" autocomplete="tel">
+                        <input type="tel" id="student-phone" placeholder="+52 55 1234 5678" autocomplete="tel" maxlength="60">
                     </div>
                 </div>
             </div>
@@ -718,10 +718,15 @@ const NOTIFY_URL = "https://formsubmit.co/ajax/contacto@vesperacademy.com";
 const FS_COLLECTION = "placement_results";
 
 function fsBase() {
-    var pid = (window.VesperAuth && VesperAuth.config.firebase.projectId) || "vesper-academy";
-    var key = (window.VesperAuth && VesperAuth.config.firebase.apiKey) || "";
+    var cfg = (window.VesperAuth && VesperAuth.config) || {};
+    var pid = (cfg.firebase && cfg.firebase.projectId) || "vesper-academy";
+    var key = (cfg.firebase && cfg.firebase.apiKey) || "";
+    // MISMA base que el resto del sitio (vesper_auth.js CONFIG.dbId,
+    // vesper_results.js). Antes apuntaba a "(default)", una base distinta a la
+    // que gobiernan las reglas de firestore.rules → los leads se denegaban.
+    var db  = cfg.dbId || "teachermanuals";
     return {
-        docs: "https://firestore.googleapis.com/v1/projects/" + pid + "/databases/(default)/documents",
+        docs: "https://firestore.googleapis.com/v1/projects/" + pid + "/databases/" + db + "/documents",
         key: key
     };
 }

@@ -9,13 +9,20 @@ la página intenta:
 2. Enviar un aviso por correo a `contacto@vesperacademy.com` vía FormSubmit
    (canal externo).
 
-## ⚠️ El bug que impedía recibir leads
+## ⚠️ Los dos bugs que impedían recibir leads
 
-En las reglas publicadas **no existía ninguna regla para `placement_results`**.
-En Firestore, toda colección sin regla explícita se **deniega por defecto**, así
-que **cada intento de guardar un lead era rechazado** y solo quedaba en el
-`localStorage` del propio visitante (inservible para la academia). La regla de
-abajo lo corrige.
+1. **Faltaba la regla.** En las reglas publicadas **no existía ninguna regla
+   para `placement_results`**. En Firestore, toda colección sin regla explícita
+   se **deniega por defecto**, así que cada intento de guardar un lead era
+   rechazado. La regla de abajo lo corrige.
+2. **Base de datos equivocada.** `book_placement.html` guardaba los leads en la
+   base `(default)`, mientras que TODO el resto del sitio (y estas reglas) vive
+   en la base **`teachermanuals`** (`vesper_auth.js` → `CONFIG.dbId`). Aunque se
+   publicara la regla en `teachermanuals`, no gobernaba `(default)`. Ya se
+   corrigió `fsBase()` en `book_placement.html` para usar `teachermanuals`.
+
+Sin uno u otro arreglo, el lead solo quedaba en el `localStorage` del propio
+visitante (inservible para la academia).
 
 ## Modelo de datos
 
@@ -30,7 +37,10 @@ placement_results/{autoId} -> {
 }
 ```
 
-Base de datos: la misma que usa el resto del sitio (`vesper_auth.js`).
+Base de datos: **`teachermanuals`** (la misma que usa el resto del sitio). Los
+topes de longitud de la regla (`name` ≤ 120, `email` ≤ 200, `phone` ≤ 60) están
+alineados con los `maxlength` de los inputs del examen, para que la regla nunca
+rechace un lead legítimo.
 
 ## Regla a añadir
 
@@ -65,19 +75,27 @@ match /placement_results/{id} {
 }
 ```
 
-**Publica las reglas** (consola de Firebase → Firestore → pestaña Reglas →
-pegar → Publicar, o `firebase deploy --only firestore:rules`). Tiene efecto
-inmediato. Sin este paso, el arreglo del repositorio **no** cambia nada en
-producción: el archivo `firestore.rules` es solo la referencia.
+**Publica las reglas en la base `teachermanuals`** (consola de Firebase →
+Firestore → selecciona la base **`teachermanuals`** → pestaña Reglas → pegar →
+Publicar, o `firebase deploy --only firestore:rules`). Tiene efecto inmediato.
+Sin este paso, el arreglo del repositorio **no** cambia nada en producción: el
+archivo `firestore.rules` es solo la referencia. Asegúrate de publicarlas en la
+base correcta (`teachermanuals`), no en `(default)`.
 
 ## Cómo ver los leads
 
-- **Consola de Firebase** → Firestore → colección `placement_results`. Ahí
-  aparece cada persona que terminó el examen (nombre, contacto, nivel, aciertos,
-  fecha y origen `?src=`).
-- El "historial general" que se muestra dentro de `book_placement.html` lee sin
-  token, así que a los visitantes anónimos solo les muestra su propio resultado
-  guardado en su dispositivo (comportamiento correcto de privacidad).
+- **Panel de leads (recomendado):** `portal_leads.html` — una página protegida
+  (solo profes/admin con sesión verificada) que lista los prospectos con
+  búsqueda por nombre/correo/teléfono, filtro por nivel y exportación a CSV. Se
+  llega desde el Portal del profesor → tarjeta "Leads del examen". Lee
+  `placement_results` con el token del profesor (por eso la regla de LECTURA es
+  solo para profes/admin).
+- **Consola de Firebase** → Firestore (base `teachermanuals`) → colección
+  `placement_results`. Ahí aparece cada persona que terminó el examen (nombre,
+  contacto, nivel, aciertos, fecha y origen `?src=`).
+- El "historial general" dentro de `book_placement.html` lee sin token, así que
+  a los visitantes anónimos solo les muestra su propio resultado guardado en su
+  dispositivo (comportamiento correcto de privacidad).
 
 ## Privacidad
 
