@@ -4,120 +4,189 @@
 <script src="vesper_auth.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#1B1B2F">
 <title>Portal del Profesor | Vesper Academy</title>
-<meta name="description" content="Índice de manuales del profesor de Vesper Academy. Acceso restringido.">
+<meta name="description" content="Centro del profesor de Vesper Academy: manuales, herramientas de clase y panel de calificaciones. Acceso restringido.">
 <meta name="robots" content="noindex, nofollow">
-<link rel="icon" href="assets/images/vesper_logo.png" type="image/png">
+<link rel="icon" href="assets/images/favicon_32.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="assets/images/apple_touch_icon.png">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inria+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inria+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@300;400;500;600;700;800&display=swap');
 *,*::before,*::after{box-sizing:border-box;}
-:root{--navy:#1B1B2F;--navy2:#2c2c4a;--gold:#c5a059;--gold2:#a8843d;--cream:#f5f2eb;--border:#e4e0d8;--muted:#6b7a8d;--err:#b03a3a;}
-body{margin:0;font-family:'Inter',sans-serif;background:var(--cream);color:var(--navy);min-height:100vh;}
-header{background:var(--navy);border-bottom:3px solid var(--gold);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:14px;position:sticky;top:0;z-index:50;}
+:root{
+  --navy:var(--va-ink,#1B1B2F);--navy2:#222b47;--navy3:#141a2e;
+  --gold:var(--va-gold,#c5a059);--gold-lt:#d9bd84;--gold2:#8f6f2e;
+  --cream:var(--va-cream,#f5f2eb);--white:#fff;--border:#e4e0d8;--muted:#5a6673;--err:#C0392B;
+  --r-sm:10px;--r-md:14px;--r-lg:18px;
+  --sh-sm:0 1px 4px rgba(27,27,47,.06);
+  --sh-md:0 14px 34px rgba(27,27,47,.12);
+  --sh-lg:0 22px 50px rgba(27,27,47,.22);
+  --ease-out:cubic-bezier(0.22,1,0.36,1);
+}
+html{scroll-behavior:smooth;}
+body{margin:0;font-family:'Inter',sans-serif;color:var(--navy);min-height:100vh;line-height:1.6;
+  background:radial-gradient(760px 340px at 88% -8%,rgba(197,160,89,.13),transparent 62%),var(--cream);}
+
+.skip-link{position:absolute;left:-999px;top:0;z-index:200;background:var(--navy);color:#fff;padding:10px 16px;border-radius:0 0 8px 0;text-decoration:none;font-weight:600;}
+.skip-link:focus{left:0;}
+
+/* ── Cabecera: navy con velo y filo dorado (igual que el portal del alumno) ── */
+header{background:rgba(27,27,47,.96);backdrop-filter:blur(8px);border-bottom:1px solid rgba(197,160,89,.35);
+  padding:0 24px;min-height:66px;display:flex;align-items:center;justify-content:space-between;gap:14px;
+  position:sticky;top:0;z-index:50;box-shadow:0 2px 18px rgba(0,0,0,.12);}
 .brand{display:flex;align-items:center;gap:12px;color:#fff;text-decoration:none;}
-.brand img{height:42px;width:42px;object-fit:contain;}
-.brand b{font-family:'Inria Serif',serif;font-size:1.1rem;}
+.brand img{height:40px;width:40px;object-fit:contain;}
+.brand b{font-family:'Inria Serif',serif;font-size:1.12rem;letter-spacing:.3px;}
 .brand small{display:block;color:var(--gold);font-size:.6rem;letter-spacing:2px;text-transform:uppercase;}
-header .right{display:flex;align-items:center;gap:18px;}
-header a.back{color:rgba(255,255,255,.75);font-size:.78rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;text-decoration:none;}
-header a.back:hover{color:var(--gold);}
-/* Móvil: header compacto — enlaces de nav como chips solo-icono para que no se
-   amontonen (el texto sigue en el árbol de accesibilidad para lectores de pantalla). */
+header .right{display:flex;align-items:center;gap:10px;}
+header a.back{display:inline-flex;align-items:center;gap:7px;color:rgba(255,255,255,.82);font-size:.76rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;text-decoration:none;padding:9px 13px;border-radius:var(--r-sm);border:1px solid rgba(255,255,255,.16);transition:color .16s,border-color .16s,background .16s;}
+header a.back:hover,header a.back:focus-visible{color:var(--navy);background:var(--gold);border-color:var(--gold);outline:none;}
 @media(max-width:640px){
-  header{padding:10px 14px;gap:10px;}
+  header{padding:0 14px;min-height:58px;}
   .brand img{height:34px;width:34px;}
   .brand b{font-size:.98rem;}
   .brand small{font-size:.55rem;letter-spacing:1.5px;}
   header .right{gap:7px;}
-  header a.back{font-size:0;padding:10px 12px;border:1px solid rgba(255,255,255,.2);border-radius:10px;display:inline-flex;align-items:center;justify-content:center;}
+  header a.back{font-size:0;padding:11px 12px;}
   header a.back i{font-size:1rem;margin:0;}
 }
-.wrap{max-width:1100px;margin:0 auto;padding:36px 20px 70px;}
-.intro h1{font-family:'Inria Serif',serif;font-size:1.9rem;margin:0 0 8px;}
-.intro p{color:var(--muted);max-width:680px;margin:0 0 6px;}
-.warn{background:#fbf3df;border:1px solid #e7d8a8;border-left:4px solid var(--gold2);border-radius:8px;padding:12px 16px;margin:18px 0 4px;font-size:.86rem;color:#5a4d2e;line-height:1.5;}
-.warn i{color:var(--gold2);margin-right:6px;}
 
-/* Leyenda de familias */
-.legend{display:flex;flex-wrap:wrap;gap:8px;margin:22px 0 4px;align-items:center;}
-.legend span.t{font-size:.72rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-right:4px;}
-.legend .chip{font-size:.7rem;font-weight:700;padding:4px 11px;border-radius:20px;display:inline-flex;align-items:center;gap:7px;background:#fff;border:1px solid var(--border);color:var(--navy);}
-.legend .chip::before{content:"";width:10px;height:10px;border-radius:50%;background:var(--c);}
-.legend .chip.basics{--c:#2d7a4f;}
-.legend .chip.practice{--c:#b5651d;}
-.legend .chip.grammar{--c:#1e5fa8;}
-.legend .chip.daily{--c:#0f8a7e;}
-.legend .chip.special{--c:#a8843d;}
-.legend .chip.exam{--c:#8a2f3b;}
+.wrap{max-width:1120px;margin:0 auto;padding:0 22px 70px;}
 
-/* Secciones por familia: cada una con su color (acento, fondo de insignia y borde) */
+/* Entrada sobria */
+@keyframes vRise{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:none;}}
+.v-rise{animation:vRise .6s var(--ease-out) both;}
+
+/* ── Héroe: banda navy con eyebrow, título serif y estadísticas ── */
+.hero{margin:24px auto 0;max-width:1120px;padding:0 22px;}
+.hero-in{position:relative;overflow:hidden;border-radius:var(--r-lg);padding:38px 38px 32px;color:#fff;
+  background:radial-gradient(680px 260px at 88% -20%,rgba(217,189,132,.26),transparent 60%),linear-gradient(140deg,var(--navy2),var(--navy) 55%,var(--navy3));
+  border:1px solid rgba(197,160,89,.4);box-shadow:var(--sh-md);}
+.hero-in::after{content:"";position:absolute;right:-40px;top:-40px;width:220px;height:220px;border-radius:50%;
+  background:radial-gradient(circle,rgba(197,160,89,.18),transparent 70%);pointer-events:none;}
+.hero .eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:.7rem;letter-spacing:2.4px;text-transform:uppercase;color:var(--gold-lt);font-weight:700;margin:0 0 12px;}
+.hero .eyebrow i{font-size:.82rem;}
+.hero h1{font-family:'Inria Serif',serif;font-size:clamp(2rem,4.6vw,2.7rem);line-height:1.1;margin:0 0 10px;}
+.hero p{color:rgba(255,255,255,.82);max-width:620px;margin:0;font-size:1.02rem;}
+.hero-stats{display:flex;flex-wrap:wrap;gap:26px;margin-top:24px;padding-top:22px;border-top:1px solid rgba(255,255,255,.14);}
+.hero-stats .st b{display:block;font-family:'Inria Serif',serif;font-size:1.7rem;color:var(--gold-lt);line-height:1;}
+.hero-stats .st span{font-size:.72rem;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.62);}
+@media(max-width:560px){.hero-in{padding:28px 22px 24px;}.hero-stats{gap:20px;}}
+
+/* ── Aviso de privacidad ── */
+.warn{display:flex;gap:12px;align-items:flex-start;background:linear-gradient(135deg,#fffdf8,#f6efe0);border:1px solid #e7d8a8;border-left:4px solid var(--gold);border-radius:var(--r-md);padding:14px 18px;margin:26px 0 0;font-size:.86rem;color:#5a4d2e;line-height:1.55;box-shadow:var(--sh-sm);}
+.warn i{color:var(--gold2);font-size:1rem;margin-top:2px;}
+
+/* ── Barra de filtro: búsqueda + píldoras de familia ── */
+#filter{position:sticky;top:66px;z-index:40;margin:26px -22px 0;padding:16px 22px;
+  background:linear-gradient(var(--cream),rgba(245,242,235,.92));backdrop-filter:blur(6px);border-bottom:1px solid var(--border);}
+.f-box{position:relative;display:flex;align-items:center;max-width:520px;}
+.f-box .f-ic{position:absolute;left:15px;color:var(--gold2);font-size:.95rem;pointer-events:none;}
+#q{width:100%;font-family:inherit;font-size:.98rem;color:var(--navy);background:#fff;border:1px solid var(--border);border-radius:var(--r-sm);padding:13px 42px 13px 42px;box-shadow:var(--sh-sm);transition:border-color .16s,box-shadow .16s;}
+#q::placeholder{color:#9aa2ad;}
+#q:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(197,160,89,.22);}
+#q::-webkit-search-cancel-button{display:none;}
+.f-clear{position:absolute;right:9px;width:30px;height:30px;border:none;background:none;color:var(--muted);font-size:1.05rem;cursor:pointer;border-radius:50%;display:none;align-items:center;justify-content:center;}
+.f-clear:hover{background:rgba(27,27,47,.06);color:var(--navy);}
+.f-box.has-val .f-clear{display:flex;}
+.pills{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;}
+.pill{font-size:.74rem;font-weight:700;padding:7px 14px;border-radius:20px;cursor:pointer;user-select:none;
+  background:#fff;border:1px solid var(--border);color:var(--navy);display:inline-flex;align-items:center;gap:7px;transition:all .16s;}
+.pill::before{content:"";width:9px;height:9px;border-radius:50%;background:var(--c,#8f6f2e);}
+.pill:hover{border-color:var(--gold);}
+.pill[aria-pressed="true"]{background:var(--navy);color:#fff;border-color:var(--navy);}
+.pill.all::before{background:linear-gradient(135deg,var(--gold),#8a2f3b);}
+.pill.tools::before{background:#2c2c4a;}
+.pill.basics::before{background:#2d7a4f;}
+.pill.practice::before{background:#b5651d;}
+.pill.grammar::before{background:#1e5fa8;}
+.pill.special::before{background:#a8843d;}
+.pill.exam::before{background:#8a2f3b;}
+@media(max-width:640px){#filter{top:58px;}}
+
+/* Estado vacío del filtro */
+#empty{display:none;text-align:center;color:var(--muted);padding:60px 20px;}
+#empty i{font-size:2rem;color:var(--gold);opacity:.6;display:block;margin-bottom:12px;}
+
+/* ── Secciones por familia ── */
 .grp{--accent:var(--gold2);--accent-bg:#f3eee2;--accent-line:#e6dcc2;}
-.grp.tools{--accent:#2c2c4a;--accent-bg:#e9edf3;--accent-line:#d4dbe6;}
+.grp.tools{--accent:#3a3a63;--accent-bg:#e9edf3;--accent-line:#d4dbe6;}
 .grp.basics{--accent:#2d7a4f;--accent-bg:#e7f4ec;--accent-line:#cfe9da;}
 .grp.practice{--accent:#b5651d;--accent-bg:#fbeede;--accent-line:#f0dcc0;}
 .grp.grammar{--accent:#1e5fa8;--accent-bg:#e6f0fb;--accent-line:#cbe0f6;}
-.grp.daily{--accent:#0f8a7e;--accent-bg:#e0f2f1;--accent-line:#c5e8e4;}
-.grp.special{--accent:#a8843d;--accent-bg:#f7efdd;--accent-line:#ecdcb4;}  /* oro / bronce — elegante */
-.grp.exam{--accent:#8a2f3b;--accent-bg:#f6e6e8;--accent-line:#ecccd1;}     /* borgoña — elegante */
-h2.sec{display:flex;align-items:center;gap:10px;font-size:.82rem;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:var(--navy);border-bottom:2px solid var(--accent);padding-bottom:10px;margin:40px 0 18px;}
-h2.sec i{color:var(--accent);}
+.grp.special{--accent:#a8843d;--accent-bg:#f7efdd;--accent-line:#ecdcb4;}
+.grp.exam{--accent:#8a2f3b;--accent-bg:#f6e6e8;--accent-line:#ecccd1;}
+h2.sec{display:flex;align-items:center;gap:12px;font-size:.82rem;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;color:var(--navy);margin:44px 0 18px;}
+h2.sec .sec-ic{width:34px;height:34px;flex-shrink:0;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:.92rem;background:var(--accent);color:#fff;box-shadow:0 4px 12px rgba(27,27,47,.14);}
+h2.sec .sec-ln{flex:1;height:2px;background:linear-gradient(90deg,var(--accent-line),transparent);border-radius:2px;}
+h2.sec .sec-ct{font-size:.7rem;font-weight:700;color:var(--muted);letter-spacing:.5px;background:var(--accent-bg);color:var(--accent);padding:3px 10px;border-radius:20px;}
 
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(248px,1fr));gap:16px;}
-.card{background:#fff;border:1px solid var(--border);border-top:4px solid var(--accent);border-radius:10px;padding:16px 18px 14px;display:flex;flex-direction:column;gap:6px;box-shadow:0 1px 4px rgba(0,0,0,.06);transition:transform .16s,box-shadow .16s;}
-.card:hover{transform:translateY(-3px);box-shadow:0 10px 24px rgba(26,43,66,.13);}
-.card h3{margin:4px 0 0;font-size:.98rem;line-height:1.3;}
-.card p{margin:0;color:var(--muted);font-size:.8rem;line-height:1.5;flex:1;}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(256px,1fr));gap:16px;}
 
-/* Insignia: muestra el nivel en texto, coloreada según la FAMILIA de la sección */
-.lvl{align-self:flex-start;font-size:.66rem;font-weight:800;letter-spacing:.6px;text-transform:uppercase;padding:4px 11px;border-radius:20px;background:var(--accent-bg);color:var(--accent);border:1px solid var(--accent-line);}
-
-.card .links{margin-top:10px;border-top:1px solid var(--border);padding-top:10px;display:flex;flex-direction:column;gap:8px;}
-.card a.go{font-size:.78rem;font-weight:700;letter-spacing:.3px;text-decoration:none;display:flex;align-items:center;gap:6px;}
+.card{position:relative;background:#fff;border:1px solid var(--border);border-radius:var(--r-md);padding:18px 18px 16px;
+  display:flex;flex-direction:column;gap:8px;box-shadow:var(--sh-sm);
+  transition:transform .22s var(--ease-out),box-shadow .22s var(--ease-out),border-color .22s;overflow:hidden;}
+.card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--accent);}
+.card:hover{transform:translateY(-4px);box-shadow:var(--sh-md);border-color:var(--accent-line);}
+.card-top{display:flex;align-items:center;gap:12px;}
+.card .medal{width:44px;height:44px;flex-shrink:0;border-radius:11px;display:flex;align-items:center;justify-content:center;
+  font-size:1.06rem;background:linear-gradient(135deg,var(--navy2),var(--navy3));color:var(--gold);}
+.grp.tools .card .medal{background:linear-gradient(135deg,var(--accent),#22284a);color:var(--gold-lt);}
+.lvl{align-self:flex-start;font-size:.64rem;font-weight:800;letter-spacing:.6px;text-transform:uppercase;padding:4px 10px;border-radius:20px;background:var(--accent-bg);color:var(--accent);border:1px solid var(--accent-line);white-space:nowrap;}
+.card h3{margin:2px 0 0;font-size:1rem;line-height:1.28;}
+.card p{margin:0;color:var(--muted);font-size:.82rem;line-height:1.5;flex:1;}
+.card .links{margin-top:8px;border-top:1px solid var(--border);padding-top:12px;display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;}
+.card a.go{font-size:.79rem;font-weight:700;letter-spacing:.2px;text-decoration:none;display:inline-flex;align-items:center;gap:7px;transition:gap .18s,opacity .16s;}
 .card a.primary{color:var(--accent);}
-.card a.primary:hover{opacity:.78;}
-.card a.alt{color:var(--muted);font-weight:500;font-size:.74rem;}
+.card a.primary:hover{gap:10px;}
+.card a.alt{color:var(--muted);font-weight:600;font-size:.76rem;}
 .card a.alt:hover{color:var(--navy);}
 
-footer{background:var(--navy);color:rgba(255,255,255,.5);text-align:center;padding:24px;font-size:.78rem;border-top:3px solid var(--gold);position:sticky;top:100vh;}
+footer{background:var(--navy3);color:rgba(255,255,255,.6);text-align:center;padding:26px;font-size:.78rem;border-top:1px solid rgba(197,160,89,.35);margin-top:48px;}
 footer a{color:var(--gold);text-decoration:none;}
+footer a:hover{color:var(--gold-lt);}
 
-/* ── Puerta de acceso (correo + contraseña, sobre el candado de Firebase) ── */
-#gate{position:fixed;inset:0;z-index:9999;background:var(--navy);background-image:radial-gradient(ellipse at 30% 20%,#2c2c4a 0%,#1B1B2F 70%);display:flex;align-items:center;justify-content:center;padding:20px;}
+/* ── Puerta de acceso (correo + contraseña) ── */
+#gate{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;
+  background:radial-gradient(720px 380px at 30% 10%,rgba(197,160,89,.16),transparent 60%),linear-gradient(160deg,var(--navy2),var(--navy) 55%,#0e0c1f);}
 #gate.hidden{display:none;}
-.gate-card{background:var(--cream);width:100%;max-width:400px;border-radius:14px;box-shadow:0 18px 50px rgba(0,0,0,.45);overflow:hidden;font-family:Arial,sans-serif;}
-.gate-card .gh{background:var(--navy);color:var(--cream);padding:26px 30px 20px;text-align:center;border-bottom:4px solid var(--gold);}
-.gate-card .gh h2{font-family:Georgia,serif;font-size:21px;letter-spacing:1.5px;font-weight:normal;margin:0;}
-.gate-card .gh h2 b{color:#d9bd84;}
-.gate-card .gh p{font-size:11.5px;opacity:.8;margin-top:6px;letter-spacing:1px;}
-.gate-card form{padding:24px 30px 28px;}
-.gate-card label{display:block;font-size:12px;letter-spacing:1px;color:#6b6151;margin:0 0 6px;text-transform:uppercase;}
-.gate-card input{width:100%;padding:11px 12px;font-size:15px;border:1px solid #d4c9ae;border-radius:7px;background:#fff;}
-.gate-card input:focus{outline:2px solid #d9bd84;border-color:var(--gold);}
-.gate-card button{width:100%;margin-top:18px;padding:13px;font-size:15px;letter-spacing:1px;background:var(--navy);color:var(--cream);border:none;border-radius:7px;cursor:pointer;}
+.gate-card{background:var(--cream);width:100%;max-width:400px;border-radius:var(--r-lg);box-shadow:var(--sh-lg);overflow:hidden;border:1px solid rgba(197,160,89,.4);}
+.gate-card .gh{position:relative;overflow:hidden;background:linear-gradient(140deg,var(--navy2),var(--navy3));color:var(--cream);padding:30px 30px 24px;text-align:center;border-bottom:3px solid var(--gold);}
+.gate-card .gh .lock{width:52px;height:52px;margin:0 auto 14px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;background:linear-gradient(135deg,var(--gold-lt),var(--gold));color:var(--navy);box-shadow:0 6px 16px rgba(197,160,89,.34);}
+.gate-card .gh h2{font-family:'Inria Serif',serif;font-size:1.35rem;letter-spacing:.5px;font-weight:normal;margin:0;}
+.gate-card .gh h2 b{color:var(--gold-lt);font-weight:700;}
+.gate-card .gh p{font-size:.68rem;opacity:.82;margin-top:8px;letter-spacing:2px;text-transform:uppercase;}
+.gate-card form{padding:24px 30px 26px;}
+.gate-card label{display:block;font-size:.68rem;letter-spacing:1.2px;color:#6b6151;margin:0 0 6px;text-transform:uppercase;font-weight:700;}
+.gate-card input{width:100%;padding:12px 13px;font-size:15px;border:1px solid #d4c9ae;border-radius:var(--r-sm);background:#fff;font-family:inherit;}
+.gate-card input:focus{outline:2px solid var(--gold);border-color:var(--gold);}
+.gate-card button{width:100%;margin-top:20px;padding:13px;font-size:15px;font-weight:700;letter-spacing:.5px;background:var(--navy);color:var(--cream);border:none;border-radius:var(--r-sm);cursor:pointer;transition:background .16s;display:flex;align-items:center;justify-content:center;gap:8px;}
 .gate-card button:hover{background:var(--navy2);}
-.gate-card .gerr{color:var(--err);font-size:13px;margin-top:12px;min-height:18px;}
-.gate-card .gnote{font-size:11.5px;color:#8d8270;text-align:center;padding:0 30px 22px;line-height:1.6;}
-/* Foco de teclado visible (WCAG 2.4.7) */
+.gate-card .gerr{color:var(--err);font-size:13px;margin-top:12px;min-height:18px;text-align:center;}
+.gate-card .gnote{font-size:.72rem;color:#8d8270;text-align:center;padding:0 30px 22px;line-height:1.6;}
 :focus-visible{outline:3px solid var(--gold,#c5a059);outline-offset:2px}
 </style>
 <link rel="stylesheet" href="assets/css/vesper_tokens.css">
 </head>
 <body>
 
+<a class="skip-link" href="#content">Saltar al contenido</a>
+
 <!-- Puerta de acceso de profesor (correo + contraseña) -->
 <div id="gate">
   <div class="gate-card">
     <div class="gh">
+      <div class="lock"><i class="fas fa-lock"></i></div>
       <h2>VESPER <b>ACADEMY</b></h2>
-      <p>ÁREA DE PROFESORES</p>
+      <p>Área de profesores</p>
     </div>
     <form id="gate-form">
       <label for="gate-email">Correo electrónico</label>
       <input type="email" id="gate-email" autocomplete="email" required autofocus>
-      <label for="gate-pass" style="margin-top:14px">Contraseña de profesor</label>
+      <label for="gate-pass" style="margin-top:16px">Contraseña de profesor</label>
       <input type="password" id="gate-pass" autocomplete="off" required>
-      <button type="submit">Entrar</button>
+      <button type="submit"><i class="fas fa-arrow-right-to-bracket"></i> Entrar</button>
       <div class="gerr" id="gate-err"></div>
     </form>
     <div class="gnote">Acceso restringido al profesorado de Vesper Academy.</div>
@@ -135,131 +204,150 @@ footer a{color:var(--gold);text-decoration:none;}
   </div>
 </header>
 
-<div class="wrap">
-  <div class="intro">
-    <h1>Manuales del profesor</h1>
-    <p>Índice de los manuales principales (versión del profesor con notas, soluciones y guías) y su versión del alumno. Organizados por curso y con color por nivel para diferenciarlos de un vistazo.</p>
+<!-- ── Héroe ── -->
+<div class="hero v-rise">
+  <div class="hero-in">
+    <div class="eyebrow"><i class="fas fa-chalkboard-user"></i> Centro del profesor</div>
+    <h1>Todo lo que necesitas para dar clase</h1>
+    <p>Manuales del profesor con notas y soluciones, herramientas de aula y tu panel de calificaciones — organizados por curso y filtrables al instante.</p>
+    <div class="hero-stats">
+      <div class="st"><b id="stat-manuals">—</b><span>Manuales</span></div>
+      <div class="st"><b id="stat-tools">—</b><span>Herramientas</span></div>
+      <div class="st"><b>Pre-A1 → C2</b><span>Cobertura</span></div>
+    </div>
   </div>
+</div>
+
+<div class="wrap" id="content">
 
   <div class="warn">
-    <i class="fas fa-lock"></i><b>Privado:</b> los manuales del profesor no forman parte del sitio público:
-    se descargan de un servidor protegido que solo responde a cuentas de profesor autorizadas y verificadas.
-    Si un manual te indica que no tienes acceso, pide al administrador que autorice tu correo.
+    <i class="fas fa-shield-halved"></i>
+    <div><b>Privado:</b> los manuales del profesor no forman parte del sitio público. Se descargan de un servidor protegido que solo responde a cuentas de profesor autorizadas y verificadas. Si un manual te indica que no tienes acceso, pide al administrador que autorice tu correo.</div>
   </div>
 
-  <div class="legend">
-    <span class="t">Familias:</span>
-    <span class="chip basics">Core Basics</span>
-    <span class="chip practice">Core Practice</span>
-    <span class="chip grammar">Grammar</span>
-    <span class="chip daily">Daily Life</span>
-    <span class="chip special">Especializados</span>
-    <span class="chip exam">Exámenes</span>
+  <!-- Barra de filtro -->
+  <div id="filter">
+    <div class="f-box">
+      <i class="fas fa-magnifying-glass f-ic"></i>
+      <input type="search" id="q" placeholder="Buscar manual, curso o herramienta…" autocomplete="off" aria-label="Buscar en el portal">
+      <button class="f-clear" id="q-clear" type="button" aria-label="Borrar búsqueda"><i class="fas fa-xmark"></i></button>
+    </div>
+    <div class="pills" role="group" aria-label="Filtrar por familia">
+      <span class="pill all" data-fam="all" role="button" tabindex="0" aria-pressed="true">Todo</span>
+      <span class="pill tools" data-fam="tools" role="button" tabindex="0" aria-pressed="false">Herramientas</span>
+      <span class="pill basics" data-fam="basics" role="button" tabindex="0" aria-pressed="false">Core Basics</span>
+      <span class="pill practice" data-fam="practice" role="button" tabindex="0" aria-pressed="false">Core Practice</span>
+      <span class="pill grammar" data-fam="grammar" role="button" tabindex="0" aria-pressed="false">Grammar</span>
+      <span class="pill special" data-fam="special" role="button" tabindex="0" aria-pressed="false">Especializados</span>
+      <span class="pill exam" data-fam="exam" role="button" tabindex="0" aria-pressed="false">Exámenes</span>
+    </div>
   </div>
+
+  <div id="empty"><i class="fas fa-magnifying-glass"></i>No hay resultados para tu búsqueda.<br>Prueba con otro término o quita el filtro.</div>
 
   <!-- HERRAMIENTAS DEL PROFESOR -->
-  <section class="grp tools">
-    <h2 class="sec"><i class="fas fa-toolbox"></i> Herramientas del profesor</h2>
+  <section class="grp tools" data-fam="tools">
+    <h2 class="sec"><span class="sec-ic"><i class="fas fa-toolbox"></i></span> Herramientas del profesor <span class="sec-ln"></span> <span class="sec-ct"></span></h2>
     <div class="grid">
-      <div class="card"><span class="lvl free">Todos los niveles</span><h3>Biblioteca de audio</h3><p>Diálogos y lecturas con voz nativa de todos los cursos, con transcripción y vocabulario — para usar en clase.</p>
-        <div class="links"><a class="go primary" href="audio_library.html"><i class="fas fa-headphones"></i> Abrir biblioteca</a></div></div>
-      <div class="card"><span class="lvl free">Pre-A1–C2</span><h3>Vesper Engine v2.0</h3><p>Curso 100% personalizado anclado al currículo oficial: genera el prompt maestro del tutor con el syllabus real de los 13 manuales.</p>
-        <div class="links"><a class="go primary" href="vesper_engine.html"><i class="fas fa-robot"></i> Abrir el motor</a></div></div>
-      <div class="card"><span class="lvl b2">B2–C2</span><h3>Entrevista de diagnóstico</h3><p>Evaluación integral avanzada que el profesor realiza con el alumno para confirmar su nivel.</p>
-        <div class="links"><a class="go primary" href="manual.html?id=diagnostic_advanced"><i class="fas fa-clipboard-check"></i> Guía del profesor</a><a class="go alt" href="libro.html?id=diagnostic_advanced">Versión del alumno</a></div></div>
-      <div class="card"><span class="lvl free">Gratis · 10 min</span><h3>Prueba de ubicación</h3><p>Test de nivel (Pre-A1–B2+) con retroalimentación inmediata para nuevos alumnos.</p>
-        <div class="links"><a class="go primary" href="book_placement.html"><i class="fas fa-compass"></i> Abrir prueba</a></div></div>
-      <div class="card"><span class="lvl free">Niveles Vesper</span><h3>Entrevista oral</h3><p>Escalera de 6 niveles (Principiante–Experto) con banco de 36 preguntas y rúbrica; confirma el nivel y recomienda el curso automáticamente.</p>
-        <div class="links"><a class="go primary" href="book_oral_interview.html"><i class="fas fa-comments"></i> Abrir herramienta</a></div></div>
-      <div class="card"><span class="lvl free">Calificaciones</span><h3>Resultados de exámenes</h3><p>Panel con las calificaciones de tus alumnos dentro de la plataforma: exámenes de mundo, nivelación y lecciones, con detalle por pregunta. Requiere sesión de profesor verificada.</p>
-        <div class="links"><a class="go primary" href="portal_calificaciones.html"><i class="fas fa-chart-line"></i> Ver calificaciones</a></div></div>
-      <div class="card"><span class="lvl free">Calificaciones</span><h3>Boleta de calificaciones</h3><p>Una fila por alumno con la misma tabla para todos los niveles: promedios automáticos de exámenes y lecciones, participación capturada por ti y calificación final ponderada (0–100).</p>
-        <div class="links"><a class="go primary" href="portal_boleta.html"><i class="fas fa-clipboard-list"></i> Abrir boleta</a></div></div>
-      <div class="card"><span class="lvl admin">Admin</span><h3>Administrar accesos</h3><p>Autoriza cuentas de alumnos y profesores y cambia la contraseña del portal.</p>
-        <div class="links"><a class="go primary" href="access_admin.html"><i class="fas fa-user-shield"></i> Abrir panel</a></div></div>
+      <div class="card"><div class="card-top"><div class="medal"><i class="fas fa-headphones"></i></div><span class="lvl">Todos los niveles</span></div><h3>Biblioteca de audio</h3><p>Diálogos y lecturas con voz nativa de todos los cursos, con transcripción y vocabulario — para usar en clase.</p>
+        <div class="links"><a class="go primary" href="audio_library.html">Abrir biblioteca <i class="fas fa-arrow-right"></i></a></div></div>
+      <div class="card"><div class="card-top"><div class="medal"><i class="fas fa-robot"></i></div><span class="lvl">Pre-A1–C2</span></div><h3>Vesper Engine v2.0</h3><p>Curso 100% personalizado anclado al currículo oficial: genera el prompt maestro del tutor con el syllabus real de los 13 manuales.</p>
+        <div class="links"><a class="go primary" href="vesper_engine.html">Abrir el motor <i class="fas fa-arrow-right"></i></a></div></div>
+      <div class="card"><div class="card-top"><div class="medal"><i class="fas fa-clipboard-check"></i></div><span class="lvl">B2–C2</span></div><h3>Entrevista de diagnóstico</h3><p>Evaluación integral avanzada que el profesor realiza con el alumno para confirmar su nivel.</p>
+        <div class="links"><a class="go primary" href="manual.html?id=diagnostic_advanced">Guía del profesor <i class="fas fa-arrow-right"></i></a><a class="go alt" href="libro.html?id=diagnostic_advanced">Versión del alumno</a></div></div>
+      <div class="card"><div class="card-top"><div class="medal"><i class="fas fa-compass"></i></div><span class="lvl">Gratis · 10 min</span></div><h3>Prueba de ubicación</h3><p>Test de nivel (Pre-A1–B2+) con retroalimentación inmediata para nuevos alumnos.</p>
+        <div class="links"><a class="go primary" href="book_placement.html">Abrir prueba <i class="fas fa-arrow-right"></i></a></div></div>
+      <div class="card"><div class="card-top"><div class="medal"><i class="fas fa-comments"></i></div><span class="lvl">Pre-A1–B2+</span></div><h3>Entrevista oral</h3><p>Escalera de niveles con bancos de preguntas y rúbrica para confirmar el nivel real del alumno.</p>
+        <div class="links"><a class="go primary" href="manual.html?id=oral_interview">Abrir herramienta <i class="fas fa-arrow-right"></i></a></div></div>
+      <div class="card"><div class="card-top"><div class="medal"><i class="fas fa-chart-line"></i></div><span class="lvl">Calificaciones</span></div><h3>Resultados de exámenes</h3><p>Panel con las calificaciones de tus alumnos dentro de la plataforma: exámenes de mundo, nivelación y lecciones, con detalle por pregunta. Requiere sesión de profesor verificada.</p>
+        <div class="links"><a class="go primary" href="portal_calificaciones.html">Ver calificaciones <i class="fas fa-arrow-right"></i></a></div></div>
+      <div class="card"><div class="card-top"><div class="medal"><i class="fas fa-clipboard-list"></i></div><span class="lvl">Calificaciones</span></div><h3>Boleta de calificaciones</h3><p>Una fila por alumno con la misma tabla para todos los niveles: promedios automáticos de exámenes y lecciones, participación capturada por ti y calificación final ponderada (0–100).</p>
+        <div class="links"><a class="go primary" href="portal_boleta.html">Abrir boleta <i class="fas fa-arrow-right"></i></a></div></div>
+      <div class="card"><div class="card-top"><div class="medal"><i class="fas fa-user-shield"></i></div><span class="lvl">Admin</span></div><h3>Administrar accesos</h3><p>Autoriza cuentas de alumnos y profesores y cambia la contraseña del portal.</p>
+        <div class="links"><a class="go primary" href="access_admin.html">Abrir panel <i class="fas fa-arrow-right"></i></a></div></div>
     </div>
   </section>
 
   <!-- CORE BASICS -->
-  <section class="grp basics">
-    <h2 class="sec"><i class="fas fa-cubes"></i> Core Basics — Fundamentos</h2>
+  <section class="grp basics" data-fam="basics">
+    <h2 class="sec"><span class="sec-ic"><i class="fas fa-cubes"></i></span> Core Basics — Fundamentos <span class="sec-ln"></span> <span class="sec-ct"></span></h2>
     <div class="grid">
-      <div class="card"><span class="lvl a0">Pre-A1</span><h3>Core Basics · Nivel 1</h3><p>To Be or Not To Be. Identidad, presentaciones y lo esencial.</p>
-        <div class="links"><a class="go primary" href="manual.html?id=core_basics_lvl1"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="libro.html?id=core_basics_lvl1">Versión del alumno</a></div></div>
-      <div class="card"><span class="lvl a1">A1</span><h3>Core Basics · Nivel 2</h3><p>Do I Know? Rutinas, preguntas y presente simple.</p>
-        <div class="links"><a class="go primary" href="manual.html?id=core_basics_lvl2"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="libro.html?id=core_basics_lvl2">Versión del alumno</a></div></div>
-      <div class="card"><span class="lvl a2">A2</span><h3>Core Basics · Nivel 3</h3><p>Have I Been? Pasado, experiencias e historias.</p>
-        <div class="links"><a class="go primary" href="manual.html?id=core_basics_lvl3"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="libro.html?id=core_basics_lvl3">Versión del alumno</a></div></div>
-      <div class="card"><span class="lvl a2">A2+</span><h3>Core Basics · Nivel 4</h3><p>Let's Write. Primeros textos y redacción guiada.</p>
-        <div class="links"><a class="go primary" href="manual.html?id=core_basics_lvl4"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="libro.html?id=core_basics_lvl4">Versión del alumno</a></div></div>
+      <div class="card"><div class="card-top"><div class="medal"><i class="fas fa-chalkboard-teacher"></i></div><span class="lvl">Pre-A1</span></div><h3>Core Basics · Nivel 1</h3><p>To Be or Not To Be. Identidad, presentaciones y lo esencial.</p>
+        <div class="links"><a class="go primary" href="manual.html?id=core_basics_lvl1">Manual del profesor <i class="fas fa-arrow-right"></i></a><a class="go alt" href="libro.html?id=core_basics_lvl1">Versión del alumno</a></div></div>
+      <div class="card"><div class="card-top"><div class="medal"><i class="fas fa-chalkboard-teacher"></i></div><span class="lvl">A1</span></div><h3>Core Basics · Nivel 2</h3><p>Do I Know? Rutinas, preguntas y presente simple.</p>
+        <div class="links"><a class="go primary" href="manual.html?id=core_basics_lvl2">Manual del profesor <i class="fas fa-arrow-right"></i></a><a class="go alt" href="libro.html?id=core_basics_lvl2">Versión del alumno</a></div></div>
+      <div class="card"><div class="card-top"><div class="medal"><i class="fas fa-chalkboard-teacher"></i></div><span class="lvl">A2</span></div><h3>Core Basics · Nivel 3</h3><p>Have I Been? Pasado, experiencias e historias.</p>
+        <div class="links"><a class="go primary" href="manual.html?id=core_basics_lvl3">Manual del profesor <i class="fas fa-arrow-right"></i></a><a class="go alt" href="libro.html?id=core_basics_lvl3">Versión del alumno</a></div></div>
+      <div class="card"><div class="card-top"><div class="medal"><i class="fas fa-chalkboard-teacher"></i></div><span class="lvl">A2+</span></div><h3>Core Basics · Nivel 4</h3><p>Let's Write. Primeros textos y redacción guiada.</p>
+        <div class="links"><a class="go primary" href="manual.html?id=core_basics_lvl4">Manual del profesor <i class="fas fa-arrow-right"></i></a><a class="go alt" href="libro.html?id=core_basics_lvl4">Versión del alumno</a></div></div>
     </div>
   </section>
 
   <!-- CORE PRACTICE -->
-  <section class="grp practice">
-    <h2 class="sec"><i class="fas fa-tools"></i> Core Practice — Talleres</h2>
+  <section class="grp practice" data-fam="practice">
+    <h2 class="sec"><span class="sec-ic"><i class="fas fa-tools"></i></span> Core Practice — Talleres <span class="sec-ln"></span> <span class="sec-ct"></span></h2>
     <div class="grid">
-      <div class="card"><span class="lvl a1">A1–A2</span><h3>Practice · Nivel 1</h3><p>Listening y speaking con audio nativo en cada lección.</p>
-        <div class="links"><a class="go primary" href="manual.html?id=core_practice_lvl1"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="libro.html?id=core_practice_lvl1">Versión del alumno</a></div></div>
-      <div class="card"><span class="lvl b1">B1</span><h3>Practice · Nivel 2</h3><p>Lectura y escritura: leyendas, mitos y misterios.</p>
-        <div class="links"><a class="go primary" href="manual.html?id=core_practice_lvl2"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="libro.html?id=core_practice_lvl2">Versión del alumno</a></div></div>
-      <div class="card"><span class="lvl b1">B1–B2</span><h3>Practice · Nivel 3</h3><p>Las 4 destrezas: debate y descubrimiento.</p>
-        <div class="links"><a class="go primary" href="manual.html?id=core_practice_lvl3"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="libro.html?id=core_practice_lvl3">Versión del alumno</a></div></div>
-      <div class="card"><span class="lvl a2">A2–B1</span><h3>Practice · Nivel 4</h3><p>Arte y literatura: talleres orales.</p>
-        <div class="links"><a class="go primary" href="manual.html?id=core_practice_lvl4"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="libro.html?id=core_practice_lvl4">Versión del alumno</a></div></div>
-      <div class="card"><span class="lvl b2">B2–C1</span><h3>Practice · Nivel 5</h3><p>Futuro y tecnología: lectura y escritura.</p>
-        <div class="links"><a class="go primary" href="manual.html?id=core_practice_lvl5"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="libro.html?id=core_practice_lvl5">Versión del alumno</a></div></div>
-      <div class="card"><span class="lvl c2">C2</span><h3>Practice · Nivel 6</h3><p>Cultura pop y sociedad: dominio de las 4 destrezas.</p>
-        <div class="links"><a class="go primary" href="manual.html?id=core_practice_lvl6"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="libro.html?id=core_practice_lvl6">Versión del alumno</a></div></div>
+      <div class="card"><div class="card-top"><div class="medal"><i class="fas fa-chalkboard-teacher"></i></div><span class="lvl">A1–A2</span></div><h3>Practice · Nivel 1</h3><p>Listening y speaking con audio nativo en cada lección.</p>
+        <div class="links"><a class="go primary" href="manual.html?id=core_practice_lvl1">Manual del profesor <i class="fas fa-arrow-right"></i></a><a class="go alt" href="libro.html?id=core_practice_lvl1">Versión del alumno</a></div></div>
+      <div class="card"><div class="card-top"><div class="medal"><i class="fas fa-chalkboard-teacher"></i></div><span class="lvl">B1</span></div><h3>Practice · Nivel 2</h3><p>Lectura y escritura: leyendas, mitos y misterios.</p>
+        <div class="links"><a class="go primary" href="manual.html?id=core_practice_lvl2">Manual del profesor <i class="fas fa-arrow-right"></i></a><a class="go alt" href="libro.html?id=core_practice_lvl2">Versión del alumno</a></div></div>
+      <div class="card"><div class="card-top"><div class="medal"><i class="fas fa-chalkboard-teacher"></i></div><span class="lvl">B1–B2</span></div><h3>Practice · Nivel 3</h3><p>Las 4 destrezas: debate y descubrimiento.</p>
+        <div class="links"><a class="go primary" href="manual.html?id=core_practice_lvl3">Manual del profesor <i class="fas fa-arrow-right"></i></a><a class="go alt" href="libro.html?id=core_practice_lvl3">Versión del alumno</a></div></div>
+      <div class="card"><div class="card-top"><div class="medal"><i class="fas fa-chalkboard-teacher"></i></div><span class="lvl">A2–B1</span></div><h3>Practice · Nivel 4</h3><p>Arte y literatura: talleres orales.</p>
+        <div class="links"><a class="go primary" href="manual.html?id=core_practice_lvl4">Manual del profesor <i class="fas fa-arrow-right"></i></a><a class="go alt" href="libro.html?id=core_practice_lvl4">Versión del alumno</a></div></div>
+      <div class="card"><div class="card-top"><div class="medal"><i class="fas fa-chalkboard-teacher"></i></div><span class="lvl">B2–C1</span></div><h3>Practice · Nivel 5</h3><p>Futuro y tecnología: lectura y escritura.</p>
+        <div class="links"><a class="go primary" href="manual.html?id=core_practice_lvl5">Manual del profesor <i class="fas fa-arrow-right"></i></a><a class="go alt" href="libro.html?id=core_practice_lvl5">Versión del alumno</a></div></div>
+      <div class="card"><div class="card-top"><div class="medal"><i class="fas fa-chalkboard-teacher"></i></div><span class="lvl">C2</span></div><h3>Practice · Nivel 6</h3><p>Cultura pop y sociedad: dominio de las 4 destrezas.</p>
+        <div class="links"><a class="go primary" href="manual.html?id=core_practice_lvl6">Manual del profesor <i class="fas fa-arrow-right"></i></a><a class="go alt" href="libro.html?id=core_practice_lvl6">Versión del alumno</a></div></div>
     </div>
   </section>
 
   <!-- CORE GRAMMAR -->
-  <section class="grp grammar">
-    <h2 class="sec"><i class="fas fa-book"></i> Core Grammar — Gramática</h2>
+  <section class="grp grammar" data-fam="grammar">
+    <h2 class="sec"><span class="sec-ic"><i class="fas fa-book"></i></span> Core Grammar — Gramática <span class="sec-ln"></span> <span class="sec-ct"></span></h2>
     <div class="grid">
-      <div class="card"><span class="lvl b1">B1</span><h3>Grammar Foundations</h3><p>Drills fundamentales para consolidar la base.</p>
-        <div class="links"><a class="go primary" href="manual.html?id=core_grammar_lvl1"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="libro.html?id=core_grammar_lvl1">Versión del alumno</a></div></div>
-      <div class="card"><span class="lvl b2">B2</span><h3>Grammar in Context</h3><p>Estructuras complejas aplicadas en contexto.</p>
-        <div class="links"><a class="go primary" href="manual.html?id=core_grammar_lvl2"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="libro.html?id=core_grammar_lvl2">Versión del alumno</a></div></div>
-      <div class="card"><span class="lvl c1">C1+</span><h3>Grammar Mastery</h3><p>Estilo, matices y excepciones del inglés avanzado.</p>
-        <div class="links"><a class="go primary" href="manual.html?id=core_grammar_lvl3"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="libro.html?id=core_grammar_lvl3">Versión del alumno</a></div></div>
+      <div class="card"><div class="card-top"><div class="medal"><i class="fas fa-chalkboard-teacher"></i></div><span class="lvl">B1</span></div><h3>Grammar Foundations</h3><p>Drills fundamentales para consolidar la base.</p>
+        <div class="links"><a class="go primary" href="manual.html?id=core_grammar_lvl1">Manual del profesor <i class="fas fa-arrow-right"></i></a><a class="go alt" href="libro.html?id=core_grammar_lvl1">Versión del alumno</a></div></div>
+      <div class="card"><div class="card-top"><div class="medal"><i class="fas fa-chalkboard-teacher"></i></div><span class="lvl">B2</span></div><h3>Grammar in Context</h3><p>Estructuras complejas aplicadas en contexto.</p>
+        <div class="links"><a class="go primary" href="manual.html?id=core_grammar_lvl2">Manual del profesor <i class="fas fa-arrow-right"></i></a><a class="go alt" href="libro.html?id=core_grammar_lvl2">Versión del alumno</a></div></div>
+      <div class="card"><div class="card-top"><div class="medal"><i class="fas fa-chalkboard-teacher"></i></div><span class="lvl">C1+</span></div><h3>Grammar Mastery</h3><p>Estilo, matices y excepciones del inglés avanzado.</p>
+        <div class="links"><a class="go primary" href="manual.html?id=core_grammar_lvl3">Manual del profesor <i class="fas fa-arrow-right"></i></a><a class="go alt" href="libro.html?id=core_grammar_lvl3">Versión del alumno</a></div></div>
     </div>
   </section>
 
   <!-- ESPECIALIZADOS -->
-  <section class="grp special">
-    <h2 class="sec"><i class="fas fa-briefcase"></i> Cursos especializados</h2>
+  <section class="grp special" data-fam="special">
+    <h2 class="sec"><span class="sec-ic"><i class="fas fa-briefcase"></i></span> Cursos especializados <span class="sec-ln"></span> <span class="sec-ct"></span></h2>
     <div class="grid">
-      <div class="card"><span class="lvl special">Intensivo</span><h3>Curso Intensivo (CCI 1)</h3><p>Bootcamp de fluidez rápida — primer mes.</p>
-        <div class="links"><a class="go primary" href="manual.html?id=cci1"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="libro.html?id=cci1">Versión del alumno</a></div></div>
-      <div class="card"><span class="lvl b1">B1</span><h3>Business Path I · Office Foundations</h3><p>Inglés de oficina de supervivencia: llamadas, correos, juntas y clientes — 20 lecciones con audio.</p>
-        <div class="links"><a class="go primary" href="manual.html?id=corporate_b1"><i class="fas fa-user-tie"></i> Manual del profesor</a><a class="go alt" href="libro.html?id=corporate_b1">Versión del alumno</a></div></div>
-      <div class="card"><span class="lvl b2">B2</span><h3>Business English Premium</h3><p>Comunicación corporativa efectiva — 10 lecciones detalladas con audio nativo.</p>
-        <div class="links"><a class="go primary" href="manual.html?id=corporate_b2"><i class="fas fa-user-tie"></i> Manual del profesor</a><a class="go alt" href="libro.html?id=corporate_b2">Versión del alumno</a></div></div>
-      <div class="card"><span class="lvl c1">C1</span><h3>Business Path III · Strategic Influence</h3><p>Persuasión, negociación, liderazgo, crisis y el sales pitch capstone — 20 lecciones.</p>
-        <div class="links"><a class="go primary" href="manual.html?id=corporate_c1"><i class="fas fa-user-tie"></i> Manual del profesor</a><a class="go alt" href="libro.html?id=corporate_c1">Versión del alumno</a></div></div>
+      <div class="card"><div class="card-top"><div class="medal"><i class="fas fa-bolt"></i></div><span class="lvl">Intensivo</span></div><h3>Curso Intensivo (CCI 1)</h3><p>Bootcamp de fluidez rápida — primer mes.</p>
+        <div class="links"><a class="go primary" href="manual.html?id=cci1">Manual del profesor <i class="fas fa-arrow-right"></i></a><a class="go alt" href="libro.html?id=cci1">Versión del alumno</a></div></div>
+      <div class="card"><div class="card-top"><div class="medal"><i class="fas fa-user-tie"></i></div><span class="lvl">B1</span></div><h3>Business Path I · Office Foundations</h3><p>Inglés de oficina de supervivencia: llamadas, correos, juntas y clientes — 20 lecciones con audio.</p>
+        <div class="links"><a class="go primary" href="manual.html?id=corporate_b1">Manual del profesor <i class="fas fa-arrow-right"></i></a><a class="go alt" href="libro.html?id=corporate_b1">Versión del alumno</a></div></div>
+      <div class="card"><div class="card-top"><div class="medal"><i class="fas fa-user-tie"></i></div><span class="lvl">B2</span></div><h3>Business English Premium</h3><p>Comunicación corporativa efectiva — 10 lecciones detalladas con audio nativo.</p>
+        <div class="links"><a class="go primary" href="manual.html?id=corporate_b2">Manual del profesor <i class="fas fa-arrow-right"></i></a><a class="go alt" href="libro.html?id=corporate_b2">Versión del alumno</a></div></div>
+      <div class="card"><div class="card-top"><div class="medal"><i class="fas fa-user-tie"></i></div><span class="lvl">C1</span></div><h3>Business Path III · Strategic Influence</h3><p>Persuasión, negociación, liderazgo, crisis y el sales pitch capstone — 20 lecciones.</p>
+        <div class="links"><a class="go primary" href="manual.html?id=corporate_c1">Manual del profesor <i class="fas fa-arrow-right"></i></a><a class="go alt" href="libro.html?id=corporate_c1">Versión del alumno</a></div></div>
     </div>
   </section>
 
   <!-- EXAM PREP -->
-  <section class="grp exam">
-    <h2 class="sec"><i class="fas fa-graduation-cap"></i> Preparación de exámenes</h2>
+  <section class="grp exam" data-fam="exam">
+    <h2 class="sec"><span class="sec-ic"><i class="fas fa-graduation-cap"></i></span> Preparación de exámenes <span class="sec-ln"></span> <span class="sec-ct"></span></h2>
     <div class="grid">
-      <div class="card"><span class="lvl b2">B2–C1</span><h3>Exam Prep · Vol. 1</h3><p>Sintaxis avanzada y estrategia de examen.</p>
-        <div class="links"><a class="go primary" href="manual.html?id=exam_prep"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="libro.html?id=exam_prep">Versión del alumno</a></div></div>
-      <div class="card"><span class="lvl b2">B2–C1</span><h3>Exam Prep · Vol. 2</h3><p>Vocabulario temático y práctica aplicada.</p>
-        <div class="links"><a class="go primary" href="manual.html?id=exam_prep_vol2"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="libro.html?id=exam_prep_vol2">Versión del alumno</a></div></div>
-      <div class="card"><span class="lvl b1">B1</span><h3>Certification Path I · Gateway</h3><p>Primera certificación: B1 Preliminary, IELTS 4.5–5.5 y TOEFL. 20 lecciones con drills cronometrados.</p>
-        <div class="links"><a class="go primary" href="manual.html?id=cert_prep_b1"><i class="fas fa-stopwatch"></i> Manual del profesor</a><a class="go alt" href="libro.html?id=cert_prep_b1">Versión del alumno</a></div></div>
-      <div class="card"><span class="lvl b2">B2</span><h3>Certification Path II · Ascent</h3><p>B2 First e IELTS 5.5–6.5: paráfrasis, distractores y escritura estructurada. 20 lecciones.</p>
-        <div class="links"><a class="go primary" href="manual.html?id=cert_prep_b2"><i class="fas fa-stopwatch"></i> Manual del profesor</a><a class="go alt" href="libro.html?id=cert_prep_b2">Versión del alumno</a></div></div>
-      <div class="card"><span class="lvl c1">C1–C2</span><h3>Certification Path III · Summit</h3><p>CAE, CPE e IELTS 7.0+: matiz, registro y resistencia. 20 lecciones.</p>
-        <div class="links"><a class="go primary" href="manual.html?id=cert_prep_c1"><i class="fas fa-stopwatch"></i> Manual del profesor</a><a class="go alt" href="libro.html?id=cert_prep_c1">Versión del alumno</a></div></div>
-      <div class="card"><span class="lvl b2">B2–C2</span><h3>Certification Prep · Intensivo</h3><p>Estrategia de examen: drills cronometrados, modelos Band 6/8 y simulacro final.</p>
-        <div class="links"><a class="go primary" href="manual.html?id=cert_prep"><i class="fas fa-stopwatch"></i> Manual del profesor</a><a class="go alt" href="libro.html?id=cert_prep">Versión del alumno</a></div></div>
-      <div class="card"><span class="lvl b2">B2–C2</span><h3>Diagnóstico Avanzado</h3><p>Evaluación integral — se realiza con tu profesor.</p>
-        <div class="links"><a class="go primary" href="manual.html?id=diagnostic_advanced"><i class="fas fa-chalkboard-teacher"></i> Manual del profesor</a><a class="go alt" href="libro.html?id=diagnostic_advanced">Versión del alumno</a></div></div>
+      <div class="card"><div class="card-top"><div class="medal"><i class="fas fa-chalkboard-teacher"></i></div><span class="lvl">B2–C1</span></div><h3>Exam Prep · Vol. 1</h3><p>Sintaxis avanzada y estrategia de examen.</p>
+        <div class="links"><a class="go primary" href="manual.html?id=exam_prep">Manual del profesor <i class="fas fa-arrow-right"></i></a><a class="go alt" href="libro.html?id=exam_prep">Versión del alumno</a></div></div>
+      <div class="card"><div class="card-top"><div class="medal"><i class="fas fa-chalkboard-teacher"></i></div><span class="lvl">B2–C1</span></div><h3>Exam Prep · Vol. 2</h3><p>Vocabulario temático y práctica aplicada.</p>
+        <div class="links"><a class="go primary" href="manual.html?id=exam_prep_vol2">Manual del profesor <i class="fas fa-arrow-right"></i></a><a class="go alt" href="libro.html?id=exam_prep_vol2">Versión del alumno</a></div></div>
+      <div class="card"><div class="card-top"><div class="medal"><i class="fas fa-stopwatch"></i></div><span class="lvl">B1</span></div><h3>Certification Path I · Gateway</h3><p>Primera certificación: B1 Preliminary, IELTS 4.5–5.5 y TOEFL. 20 lecciones con drills cronometrados.</p>
+        <div class="links"><a class="go primary" href="manual.html?id=cert_prep_b1">Manual del profesor <i class="fas fa-arrow-right"></i></a><a class="go alt" href="libro.html?id=cert_prep_b1">Versión del alumno</a></div></div>
+      <div class="card"><div class="card-top"><div class="medal"><i class="fas fa-stopwatch"></i></div><span class="lvl">B2</span></div><h3>Certification Path II · Ascent</h3><p>B2 First e IELTS 5.5–6.5: paráfrasis, distractores y escritura estructurada. 20 lecciones.</p>
+        <div class="links"><a class="go primary" href="manual.html?id=cert_prep_b2">Manual del profesor <i class="fas fa-arrow-right"></i></a><a class="go alt" href="libro.html?id=cert_prep_b2">Versión del alumno</a></div></div>
+      <div class="card"><div class="card-top"><div class="medal"><i class="fas fa-stopwatch"></i></div><span class="lvl">C1–C2</span></div><h3>Certification Path III · Summit</h3><p>CAE, CPE e IELTS 7.0+: matiz, registro y resistencia. 20 lecciones.</p>
+        <div class="links"><a class="go primary" href="manual.html?id=cert_prep_c1">Manual del profesor <i class="fas fa-arrow-right"></i></a><a class="go alt" href="libro.html?id=cert_prep_c1">Versión del alumno</a></div></div>
+      <div class="card"><div class="card-top"><div class="medal"><i class="fas fa-stopwatch"></i></div><span class="lvl">B2–C2</span></div><h3>Certification Prep · Intensivo</h3><p>Estrategia de examen: drills cronometrados, modelos Band 6/8 y simulacro final.</p>
+        <div class="links"><a class="go primary" href="manual.html?id=cert_prep">Manual del profesor <i class="fas fa-arrow-right"></i></a><a class="go alt" href="libro.html?id=cert_prep">Versión del alumno</a></div></div>
+      <div class="card"><div class="card-top"><div class="medal"><i class="fas fa-chalkboard-teacher"></i></div><span class="lvl">B2–C2</span></div><h3>Diagnóstico Avanzado</h3><p>Evaluación integral — se realiza con tu profesor.</p>
+        <div class="links"><a class="go primary" href="manual.html?id=diagnostic_advanced">Manual del profesor <i class="fas fa-arrow-right"></i></a><a class="go alt" href="libro.html?id=diagnostic_advanced">Versión del alumno</a></div></div>
     </div>
   </section>
 </div>
@@ -273,6 +361,66 @@ footer a{color:var(--gold);text-decoration:none;}
   "use strict";
   document.getElementById("y").textContent = new Date().getFullYear();
 
+  /* ── Estadísticas del héroe (contadas del DOM para no desincronizar) ── */
+  var toolsSec = document.querySelector('section.tools');
+  var manualCards = 0, toolCards = 0;
+  document.querySelectorAll('section.grp').forEach(function (sec) {
+    var n = sec.querySelectorAll('.card').length;
+    if (sec.classList.contains('tools')) toolCards += n; else manualCards += n;
+  });
+  document.getElementById('stat-manuals').textContent = manualCards;
+  document.getElementById('stat-tools').textContent = toolCards;
+  document.querySelectorAll('section.grp').forEach(function (sec) {
+    var ct = sec.querySelector('.sec-ct');
+    if (ct) ct.textContent = sec.querySelectorAll('.card').length;
+  });
+
+  /* ── Filtro: búsqueda de texto + píldoras de familia ── */
+  var q = document.getElementById('q');
+  var qClear = document.getElementById('q-clear');
+  var fbox = q.closest('.f-box');
+  var empty = document.getElementById('empty');
+  var pills = Array.prototype.slice.call(document.querySelectorAll('.pill'));
+  var sections = Array.prototype.slice.call(document.querySelectorAll('section.grp'));
+  var activeFam = 'all';
+
+  function norm(s) { return (s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, ''); }
+
+  function apply() {
+    var term = norm(q.value.trim());
+    fbox.classList.toggle('has-val', q.value.length > 0);
+    var anyVisible = false;
+    sections.forEach(function (sec) {
+      var famOk = (activeFam === 'all' || sec.getAttribute('data-fam') === activeFam);
+      var shownInSec = 0;
+      sec.querySelectorAll('.card').forEach(function (card) {
+        var textOk = !term || norm(card.textContent).indexOf(term) !== -1;
+        var show = famOk && textOk;
+        card.style.display = show ? '' : 'none';
+        if (show) shownInSec++;
+      });
+      sec.style.display = shownInSec > 0 ? '' : 'none';
+      if (shownInSec > 0) anyVisible = true;
+    });
+    empty.style.display = anyVisible ? 'none' : 'block';
+  }
+
+  q.addEventListener('input', apply);
+  qClear.addEventListener('click', function () { q.value = ''; q.focus(); apply(); });
+
+  function setFam(fam, el) {
+    activeFam = fam;
+    pills.forEach(function (p) { p.setAttribute('aria-pressed', p === el ? 'true' : 'false'); });
+    apply();
+  }
+  pills.forEach(function (p) {
+    p.addEventListener('click', function () { setFam(p.getAttribute('data-fam'), p); });
+    p.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setFam(p.getAttribute('data-fam'), p); }
+    });
+  });
+
+  /* ── Puerta de acceso de profesor ── */
   var gate = document.getElementById("gate");
   var form = document.getElementById("gate-form");
   var emailEl = document.getElementById("gate-email");
@@ -285,7 +433,6 @@ footer a{color:var(--gold);text-decoration:none;}
     try { sessionStorage.setItem(KEY, "1"); } catch (e) {}
   }
 
-  /* Si ya se desbloqueó en esta sesión, no volver a pedir el acceso */
   try { if (sessionStorage.getItem(KEY) === "1") gate.classList.add("hidden"); } catch (e) {}
 
   form.addEventListener("submit", function (ev) {
