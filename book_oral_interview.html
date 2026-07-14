@@ -78,7 +78,7 @@
         /* PROFILE */
         .profile {
             display: grid;
-            grid-template-columns: 1.4fr 1fr 1.2fr 1.2fr;
+            grid-template-columns: 1.3fr 1.3fr 1fr 1.1fr 1.1fr;
             gap: 14px;
             margin-bottom: 26px;
             background: #f8f9fa;
@@ -200,6 +200,8 @@
             padding: 11px 26px; cursor: pointer; border: none; border-radius: 6px; font-family: inherit;
             font-weight: 700; font-size: 0.85rem;
         }
+        .btn-send { background: var(--gold); color: var(--navy); }
+        .btn-send:disabled { opacity: 0.6; cursor: default; }
         .btn-copy { background: var(--good); color: #fff; }
         .btn-print { background: var(--navy); color: #fff; }
         .btn-clear { background: #95a5a6; color: #fff; }
@@ -251,6 +253,10 @@
                 <div class="field">
                     <label>Student</label>
                     <input type="text" id="student" placeholder="Full name" oninput="save()">
+                </div>
+                <div class="field">
+                    <label>Correo del alumno</label>
+                    <input type="email" id="studentEmail" placeholder="alumno@correo.com" oninput="save()">
                 </div>
                 <div class="field">
                     <label>Date</label>
@@ -316,6 +322,7 @@
 
             <!-- ACTIONS -->
             <div class="actions no-print">
+                <button class="btn-send" id="btn-send" onclick="sendToStudent()"><i class="fas fa-paper-plane"></i> Enviar resultado al alumno</button>
                 <button class="btn-copy" onclick="copyReport()"><i class="fas fa-copy"></i> Copy Report</button>
                 <button class="btn-print" onclick="window.print()"><i class="fas fa-print"></i> Print</button>
                 <button class="btn-clear" onclick="clearAll()"><i class="fas fa-undo"></i> Clear</button>
@@ -534,7 +541,8 @@
         // ── PERSISTENCE ─────────────────────────────────────────
         function save() {
             const data = {
-                student: val("student"), date: val("date"), interviewer: val("interviewer"),
+                student: val("student"), studentEmail: val("studentEmail"),
+                date: val("date"), interviewer: val("interviewer"),
                 placement: val("placement"), confirmed: val("confirmed"), notes: val("notes"),
                 levelStatus, rubricScore
             };
@@ -546,7 +554,7 @@
             const raw = localStorage.getItem("vesperOralInterview");
             if (!raw) { renderRecommendation(); return; }
             const d = JSON.parse(raw);
-            ["student", "date", "interviewer", "placement", "confirmed", "notes"].forEach(k => {
+            ["student", "studentEmail", "date", "interviewer", "placement", "confirmed", "notes"].forEach(k => {
                 if (d[k] !== undefined) document.getElementById(k).value = d[k];
             });
             if (d.levelStatus) Object.keys(d.levelStatus).forEach(lv => {
@@ -563,6 +571,65 @@
             if (!confirm("Clear all interview data?")) return;
             localStorage.removeItem("vesperOralInterview");
             location.reload();
+        }
+
+        // ── SEND RESULT TO STUDENT ──────────────────────────────
+        // Reuses the placement test's FormSubmit endpoint (already
+        // email-activated). The student gets their result as an
+        // auto-response; the academy inbox gets a copy. Internal
+        // interviewer notes are NOT sent to the student.
+        const NOTIFY_URL = "https://formsubmit.co/ajax/contacto@vesperacademy.com";
+        function isValidEmail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v); }
+
+        function sendToStudent() {
+            const email = val("studentEmail").trim();
+            const name = val("student").trim() || "alumno/a";
+            const conf = val("confirmed");
+            const L = LVL_BY_ID[conf];
+            if (!isValidEmail(email)) {
+                alert("Escribe un correo válido del alumno para enviarle su resultado.");
+                document.getElementById("studentEmail").focus();
+                return;
+            }
+            if (!conf || !L) {
+                alert("Primero confirma el nivel del alumno (panel 'Confirmed Level') para poder enviarle un resultado.");
+                return;
+            }
+            if (!confirm("¿Enviar el resultado a " + email + "?\n\nNivel: " + conf + "\nCurso recomendado: " + L.course)) return;
+
+            const cefr = L.cefr.split(" ")[0];
+            const btn = document.getElementById("btn-send");
+            const prev = btn.innerHTML;
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando…';
+
+            const fd = new FormData();
+            fd.append("_subject", "Tu resultado de la entrevista oral — Vesper Academy");
+            fd.append("_template", "table");
+            fd.append("_captcha", "false");
+            // Auto-response = the copy the STUDENT receives.
+            fd.append("email", email);
+            fd.append("_autoresponse",
+                "¡Hola, " + name + "! Gracias por tu entrevista oral en Vesper Academy.\n\n" +
+                "Tu nivel confirmado es: " + conf + " (" + cefr + ").\n" +
+                "Curso recomendado: " + L.course + ".\n\n" +
+                "Tu profesor te compartirá los siguientes pasos muy pronto. ¡Nos vemos en clase!\n\n" +
+                "Vesper Academy · contacto@vesperacademy.com · https://vesperacademy.com");
+            // Copy for the academy inbox.
+            fd.append("formulario", "Entrevista oral — resultado enviado al alumno");
+            fd.append("alumno", name);
+            fd.append("correo_alumno", email);
+            fd.append("nivel_confirmado", conf + " (" + cefr + ")");
+            fd.append("curso_recomendado", L.course);
+            fd.append("entrevistador", val("interviewer") || "-");
+            fd.append("fecha", val("date") || "-");
+            if (val("notes")) fd.append("notas_internas", val("notes"));
+
+            fetch(NOTIFY_URL, { method: "POST", body: fd, headers: { "Accept": "application/json" } })
+                .then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
+                .then(function () { alert("¡Resultado enviado a " + email + "! El alumno recibirá una copia por correo."); })
+                .catch(function (e) { alert("No se pudo enviar el correo: " + e.message + "\nRevisa la conexión e inténtalo de nuevo."); })
+                .then(function () { btn.disabled = false; btn.innerHTML = prev; });
         }
 
         // ── REPORT ──────────────────────────────────────────────
