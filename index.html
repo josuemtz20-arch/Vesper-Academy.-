@@ -18,7 +18,8 @@
 <meta name="twitter:title" content="Vesper Academy — Inglés para profesionales del mundo real">
 <meta name="twitter:description" content="De principiante a certificación internacional. Clases en vivo, audio nativo y seguimiento real del progreso.">
 <meta name="twitter:image" content="https://vesperacademy.com/assets/images/lessons/theme_city.jpg">
-<link rel="icon" href="assets/images/vesper_logo.png" type="image/png">
+<link rel="icon" href="assets/images/favicon_32.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="assets/images/apple_touch_icon.png">
 <link rel="manifest" href="manifest_lecciones.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -29,9 +30,9 @@
 *,*::before,*::after{box-sizing:border-box;}
 :root{
   /* Paleta */
-  --navy:#1B1B2F; --navy2:#222b47; --navy3:#141a2e;
-  --gold:#c5a059; --gold-lt:#d9bd84; --gold2:#a8843d;
-  --cream:#f5f2eb; --white:#fff; --border:#e4e0d8; --text:#1B1B2F;
+  --navy:var(--va-ink,#1B1B2F); --navy2:#222b47; --navy3:#141a2e;
+  --gold:var(--va-gold,#c5a059); --gold-lt:#d9bd84; --gold2:#a8843d;
+  --cream:var(--va-cream,#f5f2eb); --white:#fff; --border:#e4e0d8; --text:var(--va-ink,#1B1B2F);
   --muted:#5a6b7d;        /* texto secundario — ~5.2:1 sobre blanco (AA) */
   --eyebrow:#7c5e22;      /* acento sobre fondo claro con contraste AA */
   --tag:#6f541d;          /* etiquetas pequeñas sobre crema (AA) */
@@ -138,11 +139,9 @@ section{padding:var(--s-section) 0;}
 
 /* METHOD CARDS */
 .grid3{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-top:56px;}
-.mcard{background:none;border:none;padding:6px 8px;text-align:left;transition:transform .45s var(--ease-std);}
-.mcard:hover{transform:translateY(-6px);}
-.mcard .ic{width:70px;height:70px;border-radius:var(--r-md);background:linear-gradient(135deg,var(--navy2),var(--navy3));display:flex;align-items:center;justify-content:center;margin-bottom:20px;overflow:hidden;transition:transform .45s var(--ease-std);}
-.mcard .ic img{width:100%;height:100%;object-fit:contain;display:block;}
-.mcard:hover .ic{transform:scale(1.05);}
+.mcard{background:var(--white);border:1px solid var(--border);border-radius:var(--r-lg);padding:30px 28px;text-align:left;transition:transform .4s var(--ease-std),box-shadow .4s,border-color .4s;}
+.mcard:hover{transform:translateY(-4px);box-shadow:var(--sh-md);border-color:var(--gold);}
+.mcard .ic{width:54px;height:54px;border-radius:var(--r-md);background:linear-gradient(135deg,var(--navy2),var(--navy3));color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin-bottom:20px;}
 .mcard h3{font-size:var(--t-h3);margin:0 0 10px;}
 .mcard p{color:var(--muted);font-size:var(--t-body);margin:0;}
 
@@ -178,15 +177,13 @@ section{padding:var(--s-section) 0;}
 .courses[open] summary .chev{transform:rotate(180deg);}
 .courses .cgrid{margin-top:34px;}
 
-/* Fila representativa de cursos (foto temática → página de detalle) */
+/* Fila representativa de cursos (ícono → página de detalle) */
 .ctiles{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;margin-top:52px;}
-.ctile{display:flex;flex-direction:column;align-items:center;text-align:center;gap:13px;padding:16px 12px;background:none;border:none;color:inherit;transition:transform .45s var(--ease-std);}
-.ctile:hover,.ctile:focus-visible{transform:translateY(-8px);}
-.ctile .ph{width:122px;height:122px;border-radius:50%;overflow:hidden;background:var(--navy3);box-shadow:0 12px 28px rgba(27,27,47,.20);transition:transform .5s var(--ease-std),box-shadow .5s;}
-.ctile .ph img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .6s var(--ease-std);}
-.ctile:hover .ph{transform:scale(1.05);box-shadow:0 18px 38px rgba(27,27,47,.28);}
-.ctile:hover .ph img{transform:scale(1.08);}
-.ctile h3{font-size:1.05rem;margin:6px 0 0;}
+.ctile{display:flex;flex-direction:column;align-items:center;text-align:center;gap:13px;padding:34px 20px 26px;border:1px solid var(--border);border-radius:var(--r-lg);background:#fff;color:inherit;transition:transform .4s var(--ease-std),box-shadow .4s,border-color .3s;}
+.ctile:hover,.ctile:focus-visible{transform:translateY(-6px);box-shadow:var(--sh-md);border-color:var(--gold);}
+.ctile .ic{width:84px;height:84px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:2rem;color:var(--gold-lt);background:linear-gradient(135deg,var(--navy2),var(--navy3));border:2px solid rgba(197,160,89,.35);transition:transform .4s var(--ease-std),border-color .3s;}
+.ctile:hover .ic{transform:scale(1.06);border-color:var(--gold);}
+.ctile h3{font-size:1.05rem;margin:0;}
 .ctile p{color:var(--muted);font-size:.85rem;line-height:1.45;margin:0;}
 .ctile .tag{font-size:.7rem;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--tag);background:var(--cream);padding:5px 12px;border-radius:var(--r-pill);}
 .ctile .more{margin-top:auto;padding-top:6px;color:var(--gold2);font-weight:700;font-size:.8rem;display:inline-flex;align-items:center;gap:7px;}
@@ -195,14 +192,12 @@ section{padding:var(--s-section) 0;}
 
 /* Fila representativa de planes (ícono + precio → planes.html) */
 .ptiles{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:52px;align-items:stretch;}
-.ptile{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;gap:11px;padding:40px 26px 30px;border:none;border-radius:var(--r-lg);background:#fff;color:inherit;box-shadow:0 10px 30px rgba(27,27,47,.07);transition:transform .4s var(--ease-std),box-shadow .4s;}
-.ptile:hover,.ptile:focus-visible{transform:translateY(-6px);box-shadow:var(--sh-md);}
-.ptile.feat{box-shadow:0 18px 44px rgba(197,160,89,.22);}
-.ptile.feat::before{content:"";position:absolute;inset:0;border-radius:var(--r-lg);border:2px solid var(--gold);pointer-events:none;}
-.ptile .ribbon{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:var(--gold);color:var(--navy);font-size:.68rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:5px 16px;border-radius:var(--r-pill);z-index:1;}
-.ptile .ic{width:82px;height:82px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--navy2),var(--navy3));overflow:hidden;transition:transform .4s var(--ease-std);}
-.ptile .ic img{width:100%;height:100%;object-fit:contain;display:block;}
-.ptile:hover .ic{transform:scale(1.06);}
+.ptile{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;gap:11px;padding:40px 26px 30px;border:1px solid var(--border);border-radius:var(--r-lg);background:#fff;color:inherit;transition:transform .4s var(--ease-std),box-shadow .4s,border-color .3s;}
+.ptile:hover,.ptile:focus-visible{transform:translateY(-6px);box-shadow:var(--sh-md);border-color:var(--gold);}
+.ptile.feat{border:2px solid var(--gold);box-shadow:0 18px 44px rgba(197,160,89,.22);}
+.ptile .ribbon{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:var(--gold);color:var(--navy);font-size:.68rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:5px 16px;border-radius:var(--r-pill);}
+.ptile .ic{width:78px;height:78px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.85rem;color:var(--gold-lt);background:linear-gradient(135deg,var(--navy2),var(--navy3));border:2px solid rgba(197,160,89,.35);transition:transform .4s var(--ease-std),border-color .3s;}
+.ptile:hover .ic{transform:scale(1.06);border-color:var(--gold);}
 .ptile h3{font-size:var(--t-h3);margin:0;}
 .ptile .price{font-family:'Inria Serif',serif;font-size:1.7rem;font-weight:700;color:var(--navy);margin:0;}
 .ptile .price small{font-size:.85rem;color:var(--muted);font-weight:400;font-family:'Inter',sans-serif;}
@@ -234,27 +229,16 @@ section{padding:var(--s-section) 0;}
 
 /* PRICING */
 .price-intro{color:var(--muted);font-size:var(--t-small);margin:18px auto 0;}
-.pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px;margin-top:56px;align-items:start;}
-.plan{background:#fff;border:1px solid var(--border);border-radius:var(--r-lg);position:relative;transition:transform .4s var(--ease-std),box-shadow .4s,border-color .4s;}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px;margin-top:56px;align-items:stretch;}
+.plan{background:#fff;border:1px solid var(--border);border-radius:var(--r-lg);padding:34px 30px;display:flex;flex-direction:column;position:relative;transition:transform .4s var(--ease-std),box-shadow .4s;}
 .plan:hover{transform:translateY(-3px);box-shadow:var(--sh-md);}
 .plan.feat{border:2px solid var(--gold);box-shadow:0 18px 44px rgba(197,160,89,.22);}
-.plan.feat .ribbon{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:var(--gold);color:var(--navy);font-size:.68rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:5px 16px;border-radius:var(--r-pill);z-index:1;}
-.plan summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:28px 30px;}
-.plan summary::-webkit-details-marker{display:none;}
-.plan summary:focus-visible{outline:2px solid var(--gold2);outline-offset:-3px;border-radius:var(--r-md);}
-.plan[open] summary{border-bottom:1px dashed var(--border);}
-.plan-head{display:flex;flex-direction:column;gap:2px;min-width:0;}
-.plan-head:not(.plan-price-col){flex:1 1 auto;}
-.plan-head.plan-price-col{align-items:flex-end;text-align:right;flex:0 0 auto;}
-.plan-head h3{font-size:var(--t-h3);margin:0 0 4px;}
-.plan-head .plan-note{white-space:normal;}
-.plan .price{font-family:'Inria Serif',serif;font-size:1.7rem;font-weight:700;color:var(--navy);margin:0;}
-.plan .price small{font-size:.85rem;color:var(--muted);font-weight:400;font-family:'Inter',sans-serif;}
-.plan summary .chev{color:var(--gold2);font-size:1rem;flex:0 0 auto;transition:transform .35s var(--ease-std);}
-.plan[open] summary .chev{transform:rotate(180deg);}
-.plan-body{padding:4px 30px 30px;}
+.plan.feat .ribbon{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:var(--gold);color:var(--navy);font-size:.68rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:5px 16px;border-radius:var(--r-pill);}
+.plan h3{font-size:var(--t-h3);margin:0 0 4px;}
+.plan .price{font-family:'Inria Serif',serif;font-size:2rem;font-weight:700;color:var(--navy);margin:10px 0 2px;}
+.plan .price small{font-size:.9rem;color:var(--muted);font-weight:400;font-family:'Inter',sans-serif;}
 .plan-note{color:var(--muted);font-size:var(--t-small);margin:0;}
-.plan ul{list-style:none;padding:0;margin:18px 0 24px;}
+.plan ul{list-style:none;padding:0;margin:22px 0 28px;flex:1;}
 .plan li{font-size:var(--t-body);padding:9px 0;border-bottom:1px dashed var(--border);display:flex;gap:10px;align-items:flex-start;}
 .plan li i{color:var(--gold2);margin-top:4px;}
 .price-footnote{color:var(--muted);font-size:var(--t-small);margin-top:24px;}
@@ -319,9 +303,6 @@ footer{background:var(--navy3);color:rgba(255,255,255,.62);padding:60px 0 32px;}
   .cta{padding:68px 0;}
   .fgrid{grid-template-columns:1fr 1fr;gap:32px;}
   .trust-inner{grid-template-columns:1fr;gap:14px;}
-  .plan summary{flex-wrap:wrap;padding:22px 24px;}
-  .plan-head.plan-price-col{align-items:flex-start;text-align:left;}
-  .plan-body{padding:4px 24px 24px;}
 }
 @media(max-width:560px){
   .cta form{flex-direction:column;}
@@ -468,22 +449,22 @@ header.scrolled{background:rgba(27,27,47,.98);border-bottom-color:rgba(197,160,8
     <p class="sec-lead reveal">Nada de listas de gramática que se olvidan. Cada clase está diseñada para que produzcas inglés real: el 80% del tiempo hablas tú.</p>
     <div class="grid3">
       <div class="mcard reveal">
-        <div class="ic"><img src="assets/images/icons/method_communicative.png" alt="" width="70" height="70" decoding="async"></div>
+        <div class="ic"><i class="fas fa-comments" aria-hidden="true"></i></div>
         <h3>Método comunicativo</h3>
         <p>Roleplays, simulaciones y debates basados en situaciones reales. La gramática se activa al usarla, no memorizándola.</p>
       </div>
       <div class="mcard reveal">
-        <div class="ic"><img src="assets/images/icons/method_audio.png" alt="" width="70" height="70" decoding="async"></div>
+        <div class="ic"><i class="fas fa-headphones" aria-hidden="true"></i></div>
         <h3>Audio nativo en cada lección</h3>
         <p>Diálogos grabados con voces nativas y comprensión en tres niveles: literal, inferencia y opinión. Entrenas el oído de verdad.</p>
       </div>
       <div class="mcard reveal">
-        <div class="ic"><img src="assets/images/icons/method_level.png" alt="" width="70" height="70" decoding="async"></div>
+        <div class="ic"><i class="fas fa-user-check" aria-hidden="true"></i></div>
         <h3>Nivel confirmado, no adivinado</h3>
         <p>Prueba de ubicación + entrevista oral para empezar exactamente donde estás. Sin perder el tiempo en lo que ya sabes.</p>
       </div>
       <div class="mcard reveal">
-        <div class="ic"><img src="assets/images/icons/method_professional.png" alt="" width="70" height="70" decoding="async"></div>
+        <div class="ic"><i class="fas fa-briefcase" aria-hidden="true"></i></div>
         <h3>Enfoque profesional</h3>
         <p>Inglés corporativo, de negocios, atención al cliente y más. Aprendes el inglés que tu carrera necesita.</p>
       </div>
@@ -515,28 +496,28 @@ header.scrolled{background:rgba(27,27,47,.98);border-bottom-color:rgba(197,160,8
     <p class="sec-lead reveal">Programas generales y especializados, todos con la misma metodología comunicativa.</p>
     <div class="ctiles">
       <a class="ctile reveal" href="curso-ingles-general.html">
-        <span class="ph"><img src="assets/images/lessons/theme_education.jpg" alt="" decoding="async"></span>
+        <span class="ic"><i class="fas fa-graduation-cap" aria-hidden="true"></i></span>
         <h3>Inglés General</h3>
         <p>De cero a C2, tu base completa de inglés.</p>
-        <span class="tag">Pre-A1 – C2</span>
-        <span class="more">Ver curso <i class="fas fa-arrow-right" aria-hidden="true"></i></span>
-      </a>
-      <a class="ctile reveal" href="curso-club-conversacion.html">
-        <span class="ph"><img src="assets/images/lessons/theme_conversation.jpg" alt="" decoding="async"></span>
-        <h3>Club de Conversación</h3>
-        <p>+120 temas para soltar la lengua sin miedo.</p>
         <span class="tag">A1 – C2</span>
         <span class="more">Ver curso <i class="fas fa-arrow-right" aria-hidden="true"></i></span>
       </a>
+      <a class="ctile reveal" href="curso-club-conversacion.html">
+        <span class="ic"><i class="fas fa-comments" aria-hidden="true"></i></span>
+        <h3>Club de Conversación</h3>
+        <p>+150 temas para soltar la lengua sin miedo.</p>
+        <span class="tag">B1 – C2</span>
+        <span class="more">Ver curso <i class="fas fa-arrow-right" aria-hidden="true"></i></span>
+      </a>
       <a class="ctile reveal" href="curso-ingles-corporativo.html">
-        <span class="ph"><img src="assets/images/lessons/theme_negotiation.jpg" alt="" decoding="async"></span>
+        <span class="ic"><i class="fas fa-briefcase" aria-hidden="true"></i></span>
         <h3>Inglés Corporativo</h3>
         <p>El inglés que mueve tu carrera profesional.</p>
         <span class="tag">B1 – C1</span>
         <span class="more">Ver curso <i class="fas fa-arrow-right" aria-hidden="true"></i></span>
       </a>
       <a class="ctile reveal" href="curso-certificacion.html">
-        <span class="ph"><img src="assets/images/lessons/theme_achievement.jpg" alt="" decoding="async"></span>
+        <span class="ic"><i class="fas fa-award" aria-hidden="true"></i></span>
         <h3>Preparación de Certificación</h3>
         <p>IELTS, Cambridge y TOEFL con estrategia real.</p>
         <span class="tag">B1 – C2</span>
@@ -579,7 +560,7 @@ header.scrolled{background:rgba(27,27,47,.98);border-bottom-color:rgba(197,160,8
     <p class="price-intro reveal"><i class="fas fa-circle-check" aria-hidden="true" style="color:var(--gold2)"></i> Todos los planes empiezan con tu examen de nivel gratis.</p>
     <div class="ptiles">
       <a class="ptile reveal" href="planes.html#grupal">
-        <span class="ic"><img src="assets/images/icons/plan_group.png" alt="" width="82" height="82" decoding="async"></span>
+        <span class="ic"><i class="fas fa-users" aria-hidden="true"></i></span>
         <h3>Grupal</h3>
         <div class="price">$<span data-price>2500</span><small> MXN/mes</small></div>
         <p class="plan-note">Grupos reducidos de hasta 6 alumnos.</p>
@@ -587,14 +568,14 @@ header.scrolled{background:rgba(27,27,47,.98);border-bottom-color:rgba(197,160,8
       </a>
       <a class="ptile feat reveal" href="planes.html#profesional">
         <span class="ribbon">Más popular</span>
-        <span class="ic"><img src="assets/images/icons/plan_one_to_one.png" alt="" width="82" height="82" decoding="async"></span>
+        <span class="ic"><i class="fas fa-user-tie" aria-hidden="true"></i></span>
         <h3>1 a 1 Profesional</h3>
         <div class="price">$250–400<small> MXN/hora</small></div>
         <p class="plan-note">Clases individuales a tu medida.</p>
         <span class="more">Ver plan <i class="fas fa-arrow-right" aria-hidden="true"></i></span>
       </a>
       <a class="ptile reveal" href="planes.html#especializados">
-        <span class="ic"><img src="assets/images/icons/plan_specialized.png" alt="" width="82" height="82" decoding="async"></span>
+        <span class="ic"><i class="fas fa-medal" aria-hidden="true"></i></span>
         <h3>Especializados</h3>
         <div class="price">$<span data-price>3000</span><small> MXN/mes</small></div>
         <p class="plan-note">Certificación, corporativo o inglés técnico.</p>
