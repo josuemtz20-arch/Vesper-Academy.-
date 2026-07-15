@@ -47,6 +47,9 @@
 # Enlace automático cuenta Firebase <-> identidad local (nombre/alias/liga).
 # No destructivo; sin sesión no hace nada. Requiere vesper_auth.js. Sin claves.
 !/vesper_identity.js
+# Puerta de nombre: la 1a vez que un alumno entra al portal debe elegir su nombre.
+# Bloqueante; exime admin/profes; dormant sin sesion. Requiere vesper_auth.js. Sin claves.
+!/vesper_name_gate.js
 # SEO: landings de descubrimiento (2026-06-23) + indexación. Estáticas,
 # indexables, embudan al examen con atribución ?src=. Sin claves.
 !/examen-ingles-gratis.html

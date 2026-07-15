@@ -138,7 +138,8 @@ footer{text-align:center;color:var(--muted);font-size:.78rem;padding:10px 20px 3
       <span class="eyebrow">Bienvenido a Vesper</span>
       <h1 class="q-title">Hagamos tu inglés a tu medida</h1>
       <p class="q-help" style="margin-bottom:18px;">Antes de empezar, cuéntanos un poco sobre ti. Con unas pocas preguntas armamos un plan personalizado: el material justo para lo que te gusta y para donde estás. Sin exámenes ni tecnicismos.</p>
-      <input class="name-input" id="name-input" type="text" placeholder="¿Cómo te llamas? (opcional)" autocomplete="given-name">
+      <input class="name-input" id="name-input" type="text" placeholder="¿Cómo te llamas?" autocomplete="given-name" maxlength="40" required>
+      <p id="name-err" style="display:none;text-align:left;color:#c0392b;font-size:.85rem;margin:8px 4px 0;">Escribe tu nombre (al menos 2 letras) para continuar.</p>
       <div style="margin-top:20px;">
         <button class="btn btn-gold btn-block" onclick="start()"><i class="fas fa-wand-magic-sparkles"></i> Empecemos</button>
       </div>
@@ -371,7 +372,14 @@ function toggle(arr,v){ var i=arr.indexOf(v); if(i===-1)arr.push(v); else arr.sp
 
 /* ── FLUJO ── */
 function start(){
-  state.name = document.getElementById("name-input").value.trim();
+  var el = document.getElementById("name-input");
+  var nm = el.value.trim().replace(/\s+/g," ");
+  if(nm.length < 2 || !/[A-Za-zÀ-ÿ]/.test(nm)){
+    document.getElementById("name-err").style.display = "block";
+    el.focus(); return;
+  }
+  document.getElementById("name-err").style.display = "none";
+  state.name = nm;
   renderGoal(); renderTopics(); renderLevel(); renderCando(); renderStyles();
   document.getElementById("step-0").classList.remove("active");
   document.getElementById("progress-wrap").style.display="block";
@@ -474,7 +482,7 @@ function finish(){
 
   /* guardar perfil para personalizar el portal */
   var profile = {
-    name: state.name, goal: state.goal, topics: state.topics,
+    name: state.name, nameChosen: true, goal: state.goal, topics: state.topics,
     styles: state.styles, level: r.level, recommended: recs, ts: Date.now()
   };
   try { localStorage.setItem("vesper_profile", JSON.stringify(profile)); } catch(e){}
