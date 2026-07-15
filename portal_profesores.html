@@ -220,6 +220,23 @@ footer a:hover{color:var(--gold-lt);}
 
 <div class="wrap" id="content">
 
+  <!-- MIS CLASES (Google Meet) — se llena desde teachers/{correo}.classes -->
+  <style>
+  .myclasses{margin:0 0 22px;}
+  .mc-title{font-size:1rem;color:var(--gold,#c5a059);margin:0 0 12px;display:flex;align-items:center;gap:8px;font-weight:700;text-transform:uppercase;letter-spacing:1px;}
+  .mc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;}
+  .mc-card{display:flex;align-items:center;justify-content:space-between;gap:12px;background:linear-gradient(135deg,#1B1B2F,#27274c);border:1px solid rgba(197,160,89,.4);border-radius:14px;padding:16px 18px;color:#fff;}
+  .mc-card .mc-info b{display:block;font-size:1rem;}
+  .mc-card .mc-info span{display:block;color:#c9cbd6;font-size:.8rem;margin-top:3px;}
+  .mc-join{flex-shrink:0;background:#c5a059;color:#1B1B2F;font-weight:700;font-size:.85rem;padding:10px 16px;border-radius:9px;text-decoration:none;white-space:nowrap;}
+  .mc-join:hover,.mc-join:focus-visible{background:#b6924a;}
+  .mc-nolink{flex-shrink:0;color:#c9cbd6;font-size:.8rem;}
+  </style>
+  <section class="myclasses" id="myclasses" hidden aria-label="Mis clases">
+    <h2 class="mc-title"><i class="fas fa-video" aria-hidden="true"></i> Mis clases</h2>
+    <div class="mc-grid" id="mc-grid"></div>
+  </section>
+
   <div class="warn">
     <i class="fas fa-shield-halved"></i>
     <div><b>Privado:</b> los manuales del profesor no forman parte del sitio público. Se descargan de un servidor protegido que solo responde a cuentas de profesor autorizadas y verificadas. Si un manual te indica que no tienes acceso, pide al administrador que autorice tu correo.</div>
@@ -452,6 +469,59 @@ footer a:hover{color:var(--gold-lt);}
       else { err.textContent = "Correo o contraseña incorrectos."; pass.select(); }
     });
   });
+})();
+</script>
+
+<!-- Mis clases: lee el doc PROPIO del profesor (teachers/{correo}) con su idToken -->
+<script>
+(function(){
+  "use strict";
+  if(!window.VesperAuth || !VesperAuth.initFirebase) return;
+  var cfg = VesperAuth.config || {};
+  var pid = cfg.firebase && cfg.firebase.projectId;
+  var db  = cfg.dbId || "teachermanuals";
+  if(!pid) return;
+  function esc(s){ return String(s==null?"":s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];}); }
+  function parseClasses(doc){
+    var out=[];
+    try{
+      (doc.fields.classes.arrayValue.values||[]).forEach(function(v){
+        var f=(v.mapValue&&v.mapValue.fields)||{};
+        out.push({ name:(f.name&&f.name.stringValue)||"",
+                   time:(f.time&&f.time.stringValue)||"",
+                   meetUrl:(f.meetUrl&&f.meetUrl.stringValue)||"" });
+      });
+    }catch(e){}
+    return out;
+  }
+  function render(classes){
+    var grid=document.getElementById("mc-grid"), sec=document.getElementById("myclasses");
+    if(!grid||!sec||!classes.length) return;
+    grid.innerHTML="";
+    classes.forEach(function(c){
+      var card=document.createElement("div"); card.className="mc-card";
+      var url=c.meetUrl||"";
+      card.innerHTML='<div class="mc-info"><b>'+esc(c.name||"Clase")+'</b>'+
+        '<span>'+esc(c.time?("Diario · "+c.time):"Diario")+'</span></div>'+
+        (url?'<a class="mc-join" href="'+esc(url)+'" target="_blank" rel="noopener">Entrar a la clase</a>'
+            :'<span class="mc-nolink">Sin link</span>');
+      grid.appendChild(card);
+    });
+    sec.hidden=false;
+  }
+  VesperAuth.initFirebase().then(function(auth){
+    auth.onAuthStateChanged(function(user){
+      if(!user || !user.emailVerified) return;
+      var email=String(user.email||"").trim().toLowerCase();
+      user.getIdToken().then(function(token){
+        var url="https://firestore.googleapis.com/v1/projects/"+pid+"/databases/"+db+
+                "/documents/teachers/"+encodeURIComponent(email);
+        return fetch(url,{headers:{Authorization:"Bearer "+token}});
+      }).then(function(r){ return r&&r.status===200 ? r.json() : null; })
+        .then(function(doc){ if(doc) render(parseClasses(doc)); })
+        .catch(function(){});
+    });
+  }).catch(function(){});
 })();
 </script>
 </body>

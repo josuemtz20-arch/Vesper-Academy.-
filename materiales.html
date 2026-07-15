@@ -261,6 +261,26 @@ footer a:hover{color:var(--gold-lt);}
     <button type="button" class="tour-replay" id="tour-replay"><i class="fas fa-compass" aria-hidden="true"></i> Ver guía rápida</button>
   </div>
 
+  <!-- Tu clase en vivo (Google Meet) — se llena desde students/{correo} -->
+  <style>
+  .myclass{display:none;align-items:center;gap:14px;background:linear-gradient(135deg,#1B1B2F,#27274c);border:1px solid rgba(197,160,89,.45);border-radius:16px;padding:18px 20px;margin:0 0 16px;text-decoration:none;color:#fff;box-shadow:0 8px 24px rgba(26,27,47,.2);}
+  .myclass .mycl-ic{width:46px;height:46px;flex-shrink:0;border-radius:12px;background:linear-gradient(135deg,#c5a059,#a8843d);color:#1B1B2F;display:flex;align-items:center;justify-content:center;font-size:1.1rem;}
+  .myclass .mycl-body{flex:1;min-width:0;}
+  .myclass .mycl-kicker{display:block;color:#c5a059;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;}
+  .myclass .mycl-title{display:block;font-size:1.05rem;font-weight:600;margin-top:2px;}
+  .myclass .mycl-go{flex-shrink:0;background:#c5a059;color:#1B1B2F;font-weight:700;font-size:.85rem;padding:10px 16px;border-radius:9px;white-space:nowrap;}
+  .myclass:hover .mycl-go,.myclass:focus-visible .mycl-go{background:#b6924a;}
+  @media(max-width:520px){.myclass{flex-wrap:wrap;}.myclass .mycl-go{width:100%;text-align:center;}}
+  </style>
+  <a id="myclass" class="myclass" href="#" target="_blank" rel="noopener" aria-label="Entrar a tu clase por Google Meet">
+    <span class="mycl-ic"><i class="fas fa-video" aria-hidden="true"></i></span>
+    <span class="mycl-body">
+      <span class="mycl-kicker">Tu clase en vivo</span>
+      <span class="mycl-title" id="myclass-title"></span>
+    </span>
+    <span class="mycl-go">Entrar <i class="fas fa-arrow-right" aria-hidden="true"></i></span>
+  </a>
+
   <!-- Héroe "Hoy": continúa donde lo dejaste / empieza por aquí -->
   <a id="today" class="v-rise" href="#" aria-label="Continuar tu estudio">
     <span class="t-ic"><i class="fas fa-play" id="today-ic" aria-hidden="true"></i></span>
@@ -815,6 +835,43 @@ footer a:hover{color:var(--gold-lt);}
   if(force || !seen){
     setTimeout(open, force ? 60 : 620);
   }
+})();
+</script>
+
+<!-- Tu clase en vivo: lee el doc PROPIO del alumno (students/{correo}) con su idToken -->
+<script>
+(function(){
+  "use strict";
+  if(!window.VesperAuth || !VesperAuth.initFirebase) return;
+  var cfg = VesperAuth.config || {};
+  var pid = cfg.firebase && cfg.firebase.projectId;
+  var db  = cfg.dbId || "teachermanuals";
+  if(!pid) return;
+  function sv(f,k){ return (f[k] && f[k].stringValue) || ""; }
+  function show(name,time,url){
+    if(!url) return;
+    var a=document.getElementById("myclass"), t=document.getElementById("myclass-title");
+    if(!a||!t) return;
+    t.textContent = (name||"Tu clase") + (time? (" · Diario "+time) : " · Diario");
+    a.href = url;
+    a.style.display = "flex";
+  }
+  VesperAuth.initFirebase().then(function(auth){
+    auth.onAuthStateChanged(function(user){
+      if(!user || !user.emailVerified) return;
+      var email=String(user.email||"").trim().toLowerCase();
+      user.getIdToken().then(function(token){
+        var url="https://firestore.googleapis.com/v1/projects/"+pid+"/databases/"+db+
+                "/documents/students/"+encodeURIComponent(email);
+        return fetch(url,{headers:{Authorization:"Bearer "+token}});
+      }).then(function(r){ return r&&r.status===200 ? r.json() : null; })
+        .then(function(doc){
+          if(!doc||!doc.fields) return;
+          var f=doc.fields;
+          show(sv(f,"className"), sv(f,"classTime"), sv(f,"classMeetUrl"));
+        }).catch(function(){});
+    });
+  }).catch(function(){});
 })();
 </script>
 
