@@ -575,14 +575,14 @@
 
         // ── SEND RESULT TO STUDENT ──────────────────────────────
         // Reuses the placement test's FormSubmit endpoint (already
-        // email-activated). The student is added as a direct recipient
-        // via _cc, so they get the same result email as the academy —
-        // more reliable delivery than an auto-response (which often
-        // lands in spam on first contact).
-        // ⚠️ Because _cc copies the WHOLE email to the student, the
-        // payload here must contain ONLY student-safe fields. The
-        // interviewer's internal notes are deliberately NOT emailed
-        // (they stay in Copy Report + localStorage for the academy).
+        // email-activated). The STUDENT receives a warm, personalized
+        // welcome via _autoresponse — the only FormSubmit channel that
+        // sends a real written message (not a raw field table, which is
+        // all _cc can forward). The message confirms exactly the level
+        // and course the student is placed into.
+        // The academy gets the full notification SEPARATELY, so the
+        // interviewer's internal notes are safe to include there — the
+        // student never sees the notification, only the autoresponse.
         const NOTIFY_URL = "https://formsubmit.co/ajax/contacto@vesperacademy.com";
         function isValidEmail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v); }
 
@@ -608,25 +608,42 @@
             btn.disabled = true;
             btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando…';
 
+            // Warm, personalized welcome the STUDENT receives.
+            const welcome =
+                "¡Hola, " + name + "! 🎉\n\n" +
+                "¡Felicidades por completar tu entrevista oral en Vesper Academy! " +
+                "Fue un gusto escucharte hablar en inglés.\n\n" +
+                "Después de conversar contigo, este es el punto exacto desde donde vas a comenzar:\n\n" +
+                "   ✦ TU NIVEL:  " + conf + "  (" + cefr + ")\n" +
+                "   ✦ TU CURSO:  " + L.course + "\n\n" +
+                "En este nivel vas a trabajar: " + L.blurb + "\n\n" +
+                "Elegimos este punto a propósito: es justo el reto ideal para ti — ni tan fácil " +
+                "que te aburras, ni tan difícil que te frustres. Desde aquí vas a avanzar con confianza.\n\n" +
+                "¿Qué sigue? Tu profesor te compartirá muy pronto los detalles de tus primeras clases " +
+                "y cómo abrir tus materiales. ¡Nos vemos en clase! 🚀\n\n" +
+                "— El equipo de Vesper Academy\n" +
+                "contacto@vesperacademy.com · https://vesperacademy.com";
+
             const fd = new FormData();
-            fd.append("_subject", "Tu resultado de la entrevista oral — Vesper Academy");
+            fd.append("_subject", "¡Tu nivel confirmado! — Vesper Academy");
             fd.append("_template", "table");
             fd.append("_captcha", "false");
-            // Student is a DIRECT recipient (better delivery than autoresponse).
-            fd.append("_cc", email);
-            fd.append("email", email); // Reply-To -> student, so the academy can reply directly.
-            // Student-safe content ONLY (this whole email is copied to the student).
-            fd.append("mensaje", "¡Hola, " + name + "! Este es el resultado de tu entrevista oral en Vesper Academy.");
+            // The student's copy: a real written message, not a data table.
+            fd.append("email", email);        // Reply-To -> student; triggers the autoresponse below.
+            fd.append("_autoresponse", welcome);
+            // Full notification for the academy inbox (the student does NOT see this).
+            fd.append("formulario", "Entrevista oral — resultado enviado al alumno");
             fd.append("alumno", name);
+            fd.append("correo_alumno", email);
             fd.append("nivel_confirmado", conf + " (" + cefr + ")");
             fd.append("curso_recomendado", L.course);
+            fd.append("entrevistador", val("interviewer") || "-");
             fd.append("fecha", val("date") || "-");
-            fd.append("siguiente_paso", "Tu profesor te compartirá los siguientes pasos muy pronto. ¡Nos vemos en clase!");
-            fd.append("_footer", "Vesper Academy · contacto@vesperacademy.com · https://vesperacademy.com");
+            if (val("notes")) fd.append("notas_internas", val("notes"));
 
             fetch(NOTIFY_URL, { method: "POST", body: fd, headers: { "Accept": "application/json" } })
                 .then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
-                .then(function () { alert("¡Resultado enviado a " + email + "! El alumno recibe una copia directa (CC).\n\nSi es la primera vez que se usa CC, revisa el correo de la academia (contacto@vesperacademy.com) por un mensaje de confirmación de FormSubmit y actívalo una vez."); })
+                .then(function () { alert("¡Enviado! " + name + " recibirá un correo de bienvenida con su nivel (" + conf + ") y su curso confirmados.\n\nSi no lo ve en unos minutos, pídele que revise la carpeta de spam o promociones."); })
                 .catch(function (e) { alert("No se pudo enviar el correo: " + e.message + "\nRevisa la conexión e inténtalo de nuevo."); })
                 .then(function () { btn.disabled = false; btn.innerHTML = prev; });
         }
