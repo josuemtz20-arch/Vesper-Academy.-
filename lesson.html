@@ -695,6 +695,12 @@
         document.title = `Vesper Academy | ${title}`;
         document.getElementById("crumb").innerHTML = esc(crumbText).replace(/(Level \d+)/, "<b>$1</b>");
         document.getElementById("banner-title").textContent = title;
+        // Alimenta el héroe "Hoy" del portal: esta lección queda como última actividad.
+        try {
+            localStorage.setItem("vesper_last", JSON.stringify({
+                href: "lesson.html" + location.search, title: title, kind: "lesson", ts: Date.now()
+            }));
+        } catch (e) {}
         const bannerTagIcon = isDiag ? "fa-stethoscope" : (isCustom ? icon : "fa-layer-group");
         document.getElementById("banner-tag").innerHTML = `<i class="fas ${bannerTagIcon}"></i> ${esc(bannerTag)}`;
         // player album art = the same deterministic cover the audio hub shows

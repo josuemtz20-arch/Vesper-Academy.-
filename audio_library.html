@@ -769,6 +769,22 @@
                 { href:`exam.html?course=${course}`, label:"Take the Business Path Exam" });
         }
     </script>
+<script>
+/* Alimenta el héroe "Hoy" del portal (materiales.html): al reproducir un audio,
+   la biblioteca queda como última actividad del alumno. Escucha en fase de
+   captura porque los eventos de <audio>/<video> no burbujean. */
+(function(){
+    "use strict";
+    document.addEventListener("play", function(){
+        try{
+            localStorage.setItem("vesper_last", JSON.stringify({
+                href: "audio_library.html", title: "Biblioteca de audio",
+                kind: "audio", ts: Date.now()
+            }));
+        }catch(e){}
+    }, true);
+})();
+</script>
 <script src="vesper_nav.js"></script>
 </body>
 </html>

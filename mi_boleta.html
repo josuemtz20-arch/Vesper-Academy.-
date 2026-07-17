@@ -528,6 +528,13 @@ footer a{color:var(--gold);text-decoration:none;}
         var st = GB.dailyStats(daily.days);
         if (st.avg != null) mine.participacion = st.avg;
       }
+      /* Resumen cacheado para el teaser del portal (materiales.html):
+         solo promedios, sin correo ni datos personales. */
+      try {
+        localStorage.setItem("vesper_boleta_summary", JSON.stringify({
+          examsAvg: mine.examsAvg, lessonsAvg: mine.lessonsAvg, ts: Date.now()
+        }));
+      } catch (e) {}
       render(user, mine, daily);
     });
   }

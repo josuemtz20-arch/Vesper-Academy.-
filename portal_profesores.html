@@ -10,6 +10,10 @@
 <meta name="robots" content="noindex, nofollow">
 <link rel="icon" href="assets/images/favicon_32.png" type="image/png" sizes="32x32">
 <link rel="apple-touch-icon" href="assets/images/apple_touch_icon.png">
+<!-- Preconexión temprana a los CDNs (fuentes e iconos): recorta el primer render -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inria+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@300;400;500;600;700;800&display=swap');
@@ -143,6 +147,21 @@ h2.sec .sec-ct{font-size:.7rem;font-weight:700;color:var(--muted);letter-spacing
 .card a.alt{color:var(--muted);font-weight:600;font-size:.76rem;}
 .card a.alt:hover{color:var(--navy);}
 
+/* ── Añadidos: recientes, búsqueda profunda y tarjeta admin condicional ── */
+#recent{display:none;flex-wrap:wrap;align-items:center;gap:8px;margin:18px 0 0;}
+#recent.on{display:flex;}
+#recent .rc-lbl{font-size:.7rem;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:var(--muted);margin-right:2px;}
+#recent a{display:inline-flex;align-items:center;gap:7px;font-size:.78rem;font-weight:600;color:var(--navy);text-decoration:none;background:#fff;border:1px solid var(--border);border-radius:20px;padding:7px 14px;transition:border-color .16s,box-shadow .16s;}
+#recent a:hover,#recent a:focus-visible{border-color:var(--gold);box-shadow:var(--sh-sm);}
+#recent a i{color:var(--gold2);font-size:.8rem;}
+#deep{margin:16px 0 0;background:linear-gradient(135deg,#fffdf8,#f6f1e4);border:1px solid var(--border);border-left:4px solid var(--gold);border-radius:var(--r-md);padding:14px 16px;box-shadow:var(--sh-sm);}
+#deep[hidden]{display:none;}
+#deep .dp-lbl{font-size:.68rem;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:var(--gold2);margin:0 0 10px;display:flex;align-items:center;gap:8px;}
+#deep a{display:flex;flex-direction:column;gap:2px;text-decoration:none;color:var(--navy);background:#fff;border:1px solid var(--border);border-radius:var(--r-sm);padding:9px 12px;margin-top:6px;transition:border-color .14s,box-shadow .14s;}
+#deep a:hover,#deep a:focus-visible{border-color:var(--gold);box-shadow:var(--sh-sm);}
+#deep a b{font-size:.9rem;font-weight:600;}
+#deep a span{font-size:.74rem;color:var(--muted);}
+.card.admin-hidden{display:none !important;}
 footer{background:var(--navy3);color:rgba(255,255,255,.6);text-align:center;padding:26px;font-size:.78rem;border-top:1px solid rgba(197,160,89,.35);margin-top:48px;}
 footer a{color:var(--gold);text-decoration:none;}
 footer a:hover{color:var(--gold-lt);}
@@ -260,6 +279,12 @@ footer a:hover{color:var(--gold-lt);}
     </div>
   </div>
 
+  <!-- Abiertos recientemente (memoria local del navegador, por dispositivo) -->
+  <div id="recent" aria-label="Abiertos recientemente"></div>
+
+  <!-- Búsqueda profunda: lecciones DENTRO de los manuales (índice de libros) -->
+  <div id="deep" hidden aria-label="Lecciones encontradas en los manuales"></div>
+
   <div id="empty"><i class="fas fa-magnifying-glass"></i>No hay resultados para tu búsqueda.<br>Prueba con otro término o quita el filtro.</div>
 
   <!-- HERRAMIENTAS DEL PROFESOR -->
@@ -280,7 +305,7 @@ footer a:hover{color:var(--gold-lt);}
         <div class="links"><a class="go primary" href="portal_calificaciones.html">Ver calificaciones <i class="fas fa-arrow-right"></i></a></div></div>
       <div class="card"><div class="card-top"><div class="medal"><i class="fas fa-clipboard-list"></i></div><span class="lvl">Calificaciones</span></div><h3>Boleta de calificaciones</h3><p>Una fila por alumno con la misma tabla para todos los niveles: promedios automáticos de exámenes y lecciones, participación capturada por ti y calificación final ponderada (0–100).</p>
         <div class="links"><a class="go primary" href="portal_boleta.html">Abrir boleta <i class="fas fa-arrow-right"></i></a></div></div>
-      <div class="card"><div class="card-top"><div class="medal"><i class="fas fa-user-shield"></i></div><span class="lvl">Admin</span></div><h3>Administrar accesos</h3><p>Autoriza cuentas de alumnos y profesores y cambia la contraseña del portal.</p>
+      <div class="card" id="card-admin"><div class="card-top"><div class="medal"><i class="fas fa-user-shield"></i></div><span class="lvl">Admin</span></div><h3>Administrar accesos</h3><p>Autoriza cuentas de alumnos y profesores y cambia la contraseña del portal.</p>
         <div class="links"><a class="go primary" href="access_admin.html">Abrir panel <i class="fas fa-arrow-right"></i></a></div></div>
     </div>
   </section>
@@ -304,15 +329,15 @@ footer a:hover{color:var(--gold-lt);}
   <section class="grp practice" data-fam="practice">
     <h2 class="sec"><span class="sec-ic"><i class="fas fa-tools"></i></span> Core Practice — Talleres <span class="sec-ln"></span> <span class="sec-ct"></span></h2>
     <div class="grid">
-      <div class="card"><div class="card-top"><div class="medal"><i class="fas fa-chalkboard-teacher"></i></div><span class="lvl">A1–A2</span></div><h3>Practice · Nivel 1</h3><p>Listening y speaking con audio nativo en cada lección.</p>
+      <div class="card"><div class="card-top"><div class="medal"><i class="fas fa-chalkboard-teacher"></i></div><span class="lvl">B1</span></div><h3>Practice · Nivel 1</h3><p>Listening y speaking con audio nativo en cada lección.</p>
         <div class="links"><a class="go primary" href="manual.html?id=core_practice_lvl1">Manual del profesor <i class="fas fa-arrow-right"></i></a><a class="go alt" href="libro.html?id=core_practice_lvl1">Versión del alumno</a></div></div>
-      <div class="card"><div class="card-top"><div class="medal"><i class="fas fa-chalkboard-teacher"></i></div><span class="lvl">B1</span></div><h3>Practice · Nivel 2</h3><p>Lectura y escritura: leyendas, mitos y misterios.</p>
+      <div class="card"><div class="card-top"><div class="medal"><i class="fas fa-chalkboard-teacher"></i></div><span class="lvl">B1+</span></div><h3>Practice · Nivel 2</h3><p>Lectura y escritura: leyendas, mitos y misterios.</p>
         <div class="links"><a class="go primary" href="manual.html?id=core_practice_lvl2">Manual del profesor <i class="fas fa-arrow-right"></i></a><a class="go alt" href="libro.html?id=core_practice_lvl2">Versión del alumno</a></div></div>
-      <div class="card"><div class="card-top"><div class="medal"><i class="fas fa-chalkboard-teacher"></i></div><span class="lvl">B1–B2</span></div><h3>Practice · Nivel 3</h3><p>Las 4 destrezas: debate y descubrimiento.</p>
+      <div class="card"><div class="card-top"><div class="medal"><i class="fas fa-chalkboard-teacher"></i></div><span class="lvl">B2</span></div><h3>Practice · Nivel 3</h3><p>Las 4 destrezas: debate y descubrimiento.</p>
         <div class="links"><a class="go primary" href="manual.html?id=core_practice_lvl3">Manual del profesor <i class="fas fa-arrow-right"></i></a><a class="go alt" href="libro.html?id=core_practice_lvl3">Versión del alumno</a></div></div>
-      <div class="card"><div class="card-top"><div class="medal"><i class="fas fa-chalkboard-teacher"></i></div><span class="lvl">A2–B1</span></div><h3>Practice · Nivel 4</h3><p>Arte y literatura: talleres orales.</p>
+      <div class="card"><div class="card-top"><div class="medal"><i class="fas fa-chalkboard-teacher"></i></div><span class="lvl">B2+</span></div><h3>Practice · Nivel 4</h3><p>Arte y literatura: talleres orales.</p>
         <div class="links"><a class="go primary" href="manual.html?id=core_practice_lvl4">Manual del profesor <i class="fas fa-arrow-right"></i></a><a class="go alt" href="libro.html?id=core_practice_lvl4">Versión del alumno</a></div></div>
-      <div class="card"><div class="card-top"><div class="medal"><i class="fas fa-chalkboard-teacher"></i></div><span class="lvl">B2–C1</span></div><h3>Practice · Nivel 5</h3><p>Futuro y tecnología: lectura y escritura.</p>
+      <div class="card"><div class="card-top"><div class="medal"><i class="fas fa-chalkboard-teacher"></i></div><span class="lvl">C1</span></div><h3>Practice · Nivel 5</h3><p>Futuro y tecnología: lectura y escritura.</p>
         <div class="links"><a class="go primary" href="manual.html?id=core_practice_lvl5">Manual del profesor <i class="fas fa-arrow-right"></i></a><a class="go alt" href="libro.html?id=core_practice_lvl5">Versión del alumno</a></div></div>
       <div class="card"><div class="card-top"><div class="medal"><i class="fas fa-chalkboard-teacher"></i></div><span class="lvl">C2</span></div><h3>Practice · Nivel 6</h3><p>Cultura pop y sociedad: dominio de las 4 destrezas.</p>
         <div class="links"><a class="go primary" href="manual.html?id=core_practice_lvl6">Manual del profesor <i class="fas fa-arrow-right"></i></a><a class="go alt" href="libro.html?id=core_practice_lvl6">Versión del alumno</a></div></div>
@@ -373,6 +398,8 @@ footer a:hover{color:var(--gold-lt);}
   © <span id="y"></span> Vesper Academy · <a href="index.html">vesper.academy</a> · Área de profesores
 </footer>
 
+<!-- Índice de temas (autogenerado): permite buscar lecciones DENTRO de los manuales -->
+<script src="vesper_book_index.js"></script>
 <script>
 (function () {
   "use strict";
@@ -420,6 +447,9 @@ footer a:hover{color:var(--gold-lt);}
       if (shownInSec > 0) anyVisible = true;
     });
     empty.style.display = anyVisible ? 'none' : 'block';
+    /* recuerda el filtro durante la sesión (volver de un manual no lo pierde) */
+    try { sessionStorage.setItem('vesper_prof_filter', JSON.stringify({ q: q.value, fam: activeFam })); } catch (e) {}
+    deepSearch(term);
   }
 
   q.addEventListener('input', apply);
@@ -436,6 +466,73 @@ footer a:hover{color:var(--gold-lt);}
       if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setFam(p.getAttribute('data-fam'), p); }
     });
   });
+
+  /* ── Búsqueda profunda: lecciones dentro de los manuales (índice de libros) ── */
+  var deep = document.getElementById('deep');
+  var DIDX = window.VESPER_BOOK_INDEX || [];
+  function escT(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
+  function deepSearch(term) {
+    if (!deep) return;
+    if (!DIDX.length || !term || term.length < 3) { deep.hidden = true; deep.innerHTML = ''; return; }
+    var hits = [];
+    for (var i = 0; i < DIDX.length && hits.length < 8; i++) {
+      var bk = DIDX[i], ls = bk.lessons || [];
+      for (var j = 0; j < ls.length && hits.length < 8; j++) {
+        if (norm(ls[j].t).indexOf(term) !== -1) hits.push({ bk: bk, l: ls[j] });
+      }
+    }
+    if (!hits.length) { deep.hidden = true; deep.innerHTML = ''; return; }
+    var html = '<div class="dp-lbl"><i class="fas fa-book-open" aria-hidden="true"></i> Lecciones en los manuales</div>';
+    hits.forEach(function (h) {
+      var href = 'manual.html?id=' + encodeURIComponent(h.bk.id) + (h.l.a ? ('#' + h.l.a) : '');
+      html += '<a href="' + href + '"><b>' + escT(h.l.t) + '</b><span>' +
+              escT(h.bk.title + (h.l.n ? (' · Lección ' + h.l.n) : '')) + '</span></a>';
+    });
+    deep.innerHTML = html; deep.hidden = false;
+  }
+
+  /* ── Abiertos recientemente: chips con los últimos manuales/herramientas ── */
+  var RKEY = 'vesper_prof_recent';
+  (function () {
+    var box = document.getElementById('recent');
+    if (!box) return;
+    function renderRecent() {
+      var list = [];
+      try { list = JSON.parse(localStorage.getItem(RKEY) || '[]'); } catch (e) {}
+      if (!list.length) { box.classList.remove('on'); return; }
+      var html = '<span class="rc-lbl">Recientes</span>';
+      list.slice(0, 6).forEach(function (r) {
+        if (!r || !r.href || !r.t) return;
+        html += '<a href="' + escT(r.href) + '"><i class="fas fa-clock-rotate-left" aria-hidden="true"></i>' + escT(r.t) + '</a>';
+      });
+      box.innerHTML = html; box.classList.add('on');
+    }
+    document.querySelectorAll('.card a.go.primary').forEach(function (a) {
+      a.addEventListener('click', function () {
+        try {
+          var card = a.closest('.card');
+          var t = (card && card.querySelector('h3') ? card.querySelector('h3').textContent : a.textContent).trim();
+          var href = a.getAttribute('href');
+          var list = JSON.parse(localStorage.getItem(RKEY) || '[]')
+            .filter(function (x) { return x && x.href !== href; });
+          list.unshift({ href: href, t: t, ts: Date.now() });
+          localStorage.setItem(RKEY, JSON.stringify(list.slice(0, 6)));
+        } catch (e) {}
+      });
+    });
+    renderRecent();
+  })();
+
+  /* ── Restaura el filtro de la sesión (si lo hay) ── */
+  try {
+    var savedF = JSON.parse(sessionStorage.getItem('vesper_prof_filter') || 'null');
+    if (savedF) {
+      if (savedF.q) q.value = savedF.q;
+      var pel = pills.filter(function (p) { return p.getAttribute('data-fam') === savedF.fam; })[0];
+      if (savedF.fam && savedF.fam !== 'all' && pel) { setFam(savedF.fam, pel); }
+      else if (savedF.q) { apply(); }
+    }
+  } catch (e) {}
 
   /* ── Puerta de acceso de profesor ── */
   var gate = document.getElementById("gate");
@@ -513,6 +610,15 @@ footer a:hover{color:var(--gold-lt);}
     auth.onAuthStateChanged(function(user){
       if(!user || !user.emailVerified) return;
       var email=String(user.email||"").trim().toLowerCase();
+      /* La tarjeta "Administrar accesos" solo es útil para el admin: se oculta
+         a los demás profesores. Fail-open: sin sesión o sin config, se muestra. */
+      try{
+        var adm=String(cfg.adminEmail||"").trim().toLowerCase();
+        if(adm && email && email!==adm){
+          var cAdm=document.getElementById("card-admin");
+          if(cAdm) cAdm.classList.add("admin-hidden");
+        }
+      }catch(e){}
       user.getIdToken().then(function(token){
         var url="https://firestore.googleapis.com/v1/projects/"+pid+"/databases/"+db+
                 "/documents/teachers/"+encodeURIComponent(email);
