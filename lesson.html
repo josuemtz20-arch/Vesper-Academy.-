@@ -24,8 +24,16 @@
            (antes, en páginas cortas el footer flotaba a media pantalla). */
         body { font-family:'Inter',sans-serif; background:var(--cream); color:var(--text); margin:0; min-height:100vh; display:flex; flex-direction:column; }
         /* El espaciador de la barra inferior (vesper_nav.js) hereda el navy del
-           footer para que no quede una franja crema suelta bajo él. */
+           footer para que no quede una franja crema suelta bajo él (móvil). */
         footer ~ #vsp-nav-spacer { background:var(--navy); }
+        /* Escritorio: la barra es una píldora flotante, así que el espaciador
+           sobra — fuera. El footer queda pegado al borde inferior y la píldora
+           flota encima; el texto va a la izquierda para que no lo tape. */
+        @media (min-width:768px){
+            footer ~ #vsp-nav-spacer { display:none; }
+            footer { display:flex; align-items:center; justify-content:flex-start; gap:6px;
+                     text-align:left; min-height:88px; padding:14px 28px; }
+        }
 
         /* HEADER */
         header {
