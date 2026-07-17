@@ -347,23 +347,7 @@ a.qn .qn-live{font-size:.74rem;font-weight:700;color:var(--gold2);}
     <div class="s-empty" id="s-empty" hidden></div>
   </section>
 
-  <!-- Tu curso (personalizado): se llena desde el perfil del cuestionario.
-       Si no hay perfil, queda oculto y el catálogo completo se muestra como siempre. -->
-  <section class="cat-sec" id="mycourse" aria-label="Tu curso" hidden>
-    <h2 class="sec"><i class="fas fa-route" aria-hidden="true"></i> Tu curso — Recomendado para ti</h2>
-    <div class="grid" id="mycourse-grid"></div>
-  </section>
-
-  <!-- Divulgación progresiva: con perfil, el catálogo completo queda plegado tras este botón. -->
-  <div class="explore-bar" id="explore-bar" hidden>
-    <button type="button" class="explore-btn" id="explore-btn" aria-expanded="true" aria-controls="catalog">
-      <i class="fas fa-layer-group" aria-hidden="true"></i> Explorar todos los libros
-      <i class="fas fa-chevron-down chev" aria-hidden="true"></i>
-    </button>
-  </div>
-
   <!-- Catálogo por curso -->
-  <div id="catalog">
   <section class="cat-sec" aria-label="Core Basics">
     <h2 class="sec"><i class="fas fa-seedling" aria-hidden="true"></i> Core Basics — Fundamentos</h2>
     <div class="grid">
@@ -423,7 +407,6 @@ a.qn .qn-live{font-size:.74rem;font-weight:700;color:var(--gold2);}
         <a class="card" href="libro.html?id=diagnostic_advanced"><span class="cic" aria-hidden="true"><i class="fas fa-magnifying-glass-chart"></i></span><span class="cbody"><h3>Diagnóstico Avanzado</h3><p>Evaluación integral — se realiza con tu profesor.</p><span class="go">Abrir examen <i class="fas fa-arrow-right" aria-hidden="true"></i></span></span></a>
     </div>
   </section>
-  </div><!-- /#catalog -->
 </main>
 
 <footer>
@@ -490,52 +473,7 @@ a.qn .qn-live{font-size:.74rem;font-weight:700;color:var(--gold2);}
     }catch(e){}
   })();
 
-  /* ── 4) "Tu curso" + divulgación progresiva del catálogo ──
-     Con perfil del cuestionario: muestra los libros recomendados arriba y
-     pliega el catálogo completo tras "Explorar todos los libros".
-     Sin perfil (o ante cualquier error): no toca nada y el catálogo
-     completo sigue visible como siempre (fail-open). */
-  (function(){
-    if(!profile || !profile.recommended || !profile.recommended.length) return;
-    var sec  = document.getElementById("mycourse");
-    var grid = document.getElementById("mycourse-grid");
-    var cat  = document.getElementById("catalog");
-    var bar  = document.getElementById("explore-bar");
-    var btn  = document.getElementById("explore-btn");
-    if(!sec || !grid || !cat || !bar || !btn) return;
-    try{
-      profile.recommended.slice(0,4).forEach(function(r){
-        if(!r || !r.href || !r.t) return;
-        var a = document.createElement("a");
-        a.className = "card"; a.href = r.href;
-        var cic = document.createElement("span");
-        cic.className = "cic"; cic.setAttribute("aria-hidden","true");
-        cic.innerHTML = '<i class="fas '+(String(r.icon||"fa-book").replace(/[^\w-]/g,""))+'"></i>';
-        var body = document.createElement("span"); body.className = "cbody";
-        var h3 = document.createElement("h3"); h3.textContent = r.t;
-        var p = document.createElement("p"); p.textContent = r.d || (r.tag || "Recomendado para ti");
-        var go = document.createElement("span"); go.className = "go";
-        go.innerHTML = 'Abrir <i class="fas fa-arrow-right" aria-hidden="true"></i>';
-        body.appendChild(h3); body.appendChild(p); body.appendChild(go);
-        a.appendChild(cic); a.appendChild(body);
-        grid.appendChild(a);
-      });
-      if(!grid.children.length) return;
-      sec.hidden = false;
-      bar.hidden = false;
-      cat.classList.add("is-collapsed");
-      btn.setAttribute("aria-expanded","false");
-      btn.addEventListener("click", function(){
-        var open = cat.classList.toggle("is-collapsed") === false;
-        btn.setAttribute("aria-expanded", open ? "true" : "false");
-      });
-    }catch(e){
-      /* ante cualquier fallo, garantizamos el estado clásico */
-      try{ cat.classList.remove("is-collapsed"); sec.hidden = true; }catch(e2){}
-    }
-  })();
-
-  /* ── 5) Teaser de la boleta: última calificación cacheada por mi_boleta.html ── */
+  /* ── 4) Teaser de la boleta: última calificación cacheada por mi_boleta.html ── */
   (function(){
     try{
       var s = JSON.parse(localStorage.getItem("vesper_boleta_summary")||"null");
