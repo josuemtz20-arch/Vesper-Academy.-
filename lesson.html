@@ -20,7 +20,12 @@
             --cream:#f5f2eb; --white:#fff; --border:#e4e0d8;
             --text:#1B1B2F; --muted:#6b7a8d;
         }
-        body { font-family:'Inter',sans-serif; background:var(--cream); color:var(--text); margin:0; min-height:100vh; }
+        /* Columna flex: el contenido crece y el footer queda anclado abajo
+           (antes, en páginas cortas el footer flotaba a media pantalla). */
+        body { font-family:'Inter',sans-serif; background:var(--cream); color:var(--text); margin:0; min-height:100vh; display:flex; flex-direction:column; }
+        /* El espaciador de la barra inferior (vesper_nav.js) hereda el navy del
+           footer para que no quede una franja crema suelta bajo él. */
+        footer ~ #vsp-nav-spacer { background:var(--navy); }
 
         /* HEADER */
         header {
@@ -60,7 +65,7 @@
         }
         .banner img.photo { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
         .banner .overlay { position:absolute; inset:0; background:linear-gradient(0deg, rgba(20,34,58,0.92) 0%, rgba(20,34,58,0.25) 70%, transparent 100%); }
-        .banner-inner { position:relative; z-index:2; max-width:1080px; width:100%; margin:0 auto; padding:0 32px 24px; }
+        .banner-inner { position:relative; z-index:2; max-width:1380px; width:100%; margin:0 auto; padding:0 32px 24px; }
         .banner .tag {
             display:inline-flex; align-items:center; gap:7px;
             font-size:0.66rem; font-weight:700; letter-spacing:1.5px; text-transform:uppercase;
@@ -69,7 +74,9 @@
         .banner h2 { margin:0; font-family:'Inria Serif',serif; font-weight:800; font-size:2.5rem; color:#fff; line-height:1.05; }
 
         /* LAYOUT */
-        .wrap { max-width:1080px; margin:0 auto; padding:26px 32px 70px; }
+        /* 1380px: aprovecha las pantallas anchas (antes 1080 dejaba márgenes enormes);
+           flex:1 empuja el footer al fondo en páginas cortas. */
+        .wrap { max-width:1380px; width:100%; margin:0 auto; padding:26px 32px 70px; flex:1; }
 
         /* TABS */
         .tabs { display:flex; gap:8px; margin-bottom:24px; flex-wrap:wrap; }
@@ -171,7 +178,8 @@
         body.reading-mode .banner { display:none; }
         body.reading-mode footer { display:none; }
         /* reading-mode fills the viewport natively so the text fits without page scroll */
-        body.reading-mode .wrap { height:calc(100vh - 64px); display:flex; flex-direction:column; overflow:hidden; padding-bottom:10px; }
+        /* En modo lectura el alto es exacto (scroll interno): sin crecer por flex. */
+        body.reading-mode .wrap { height:calc(100vh - 64px); flex:0 0 auto; display:flex; flex-direction:column; overflow:hidden; padding-bottom:10px; }
         body.reading-mode .tabs { flex-shrink:0; }
         body.reading-mode #panel-reading.active { display:flex; flex:1; min-height:0; }
         .reading-body strong { font-family:'Inter', sans-serif; font-weight:700; color:var(--navy);
