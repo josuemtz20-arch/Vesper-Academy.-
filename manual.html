@@ -5,14 +5,20 @@
 <script src="vesper_exam_index.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#1B1B2F">
 <title>Manual del profesor | Vesper Academy</title>
+<meta name="description" content="Manual del profesor de Vesper Academy.">
 <meta name="robots" content="noindex, nofollow">
-<link rel="icon" href="assets/images/vesper_logo.png" type="image/png">
+<link rel="icon" href="assets/images/favicon_32.png" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="assets/images/apple_touch_icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inria+Serif:wght@400;700&family=Inter:wght@400;500;600;700&display=swap">
 <style>
 /* Pantalla de carga / error — el manual real sustituye al documento al cargar */
-:root{--navy:#1B1B2F;--navy2:#2c2c4a;--gold:#c5a059;--cream:#f5f2eb;--err:#b03a3a;}
+:root{--navy:var(--va-ink,#1B1B2F);--navy2:var(--va-ink-2,#2c2c4a);--gold:var(--va-gold,#c5a059);--cream:var(--va-cream,#f5f2eb);--err:#b03a3a;}
 html,body{height:100%;}
-body{margin:0;font-family:'Segoe UI',Arial,sans-serif;display:flex;align-items:center;justify-content:center;
+body{margin:0;font-family:var(--va-font-text,Inter,system-ui,sans-serif);display:flex;align-items:center;justify-content:center;
   background:var(--navy);background-image:radial-gradient(ellipse at 30% 20%,#2c2c4a 0%,#1B1B2F 70%);padding:20px;}
 .card{background:var(--cream);width:100%;max-width:430px;border-radius:14px;overflow:hidden;
   box-shadow:0 18px 50px rgba(0,0,0,.45);text-align:center;}
@@ -263,6 +269,30 @@ body{margin:0;font-family:'Segoe UI',Arial,sans-serif;display:flex;align-items:c
       'a.vm-chip-l{left:14px!important;right:auto!important;bottom:calc(14px + env(safe-area-inset-bottom))!important;}' +
       'a.vm-chip-r{right:14px!important;left:auto!important;bottom:calc(14px + env(safe-area-inset-bottom))!important;}' +
       '@media print{a.no-print{display:none!important}}</style>';
+
+    /* Vesper Player: mejora cada <audio> del manual con retroceso 5s (para
+       shadowing), velocidad 0.75x/1x/1.25x y bucle. Sin dependencias. */
+    chip += '<style>' +
+      '.vxa-bar{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 10px;}' +
+      '.vxa-bar button{font:700 11px/1 sans-serif;padding:7px 11px;border-radius:14px;border:1px solid #c5a059;background:#fff;color:#1B1B2F;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.15);}' +
+      '.vxa-bar button.on{background:#1B1B2F;color:#e8c987;}' +
+      'audio[data-vxa]{width:100%!important;max-width:430px!important;height:34px!important;}' +
+      '@media print{.vxa-bar{display:none!important}}</style>';
+    chip += '<script>(function(){function up(){' +
+      'var list=document.querySelectorAll("audio:not([data-vxa])");' +
+      'Array.prototype.forEach.call(list,function(a){a.setAttribute("data-vxa","1");' +
+      'var bar=document.createElement("div");bar.className="vxa-bar no-print";' +
+      'function mk(t,tip,fn){var b=document.createElement("button");b.type="button";b.textContent=t;b.title=tip;' +
+      'b.addEventListener("click",function(){fn(b);});bar.appendChild(b);return b;}' +
+      'mk("\\u27F2 5s","Retroceder 5 segundos",function(){a.currentTime=Math.max(0,a.currentTime-5);});' +
+      'var sp=[1,0.75,1.25],si=0;' +
+      'mk("1\\u00D7","Velocidad: 0.75\\u00D7 para aprender, 1.25\\u00D7 para reto",function(b){' +
+      'si=(si+1)%sp.length;a.playbackRate=sp[si];b.textContent=sp[si]+"\\u00D7";b.classList.toggle("on",sp[si]!==1);});' +
+      'a.addEventListener("play",function(){a.playbackRate=sp[si];});' +
+      'mk("\\uD83D\\uDD01","Repetir en bucle",function(b){a.loop=!a.loop;b.classList.toggle("on",a.loop);});' +
+      'if(a.parentNode){a.parentNode.insertBefore(bar,a.nextSibling);}});}' +
+      'if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",up);}else{up();}' +
+      'window.addEventListener("load",up);})();<\/script>';
     if (/<\/body>/i.test(html)) {
       html = html.replace(/<\/body>(?![\s\S]*<\/body>)/i, chip + "</body>");
     } else {
