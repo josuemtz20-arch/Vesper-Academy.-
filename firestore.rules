@@ -40,10 +40,50 @@ service cloud.firestore {
     match /students/{email} {
       allow read:  if request.auth != null && request.auth.token.email == email;
       allow write: if isAdmin();   // alta/baja desde el script admin
+      // El alumno espeja su constancia de aceptación de Términos/Aviso (y
+      // NADA más): solo puede tocar tosAcceptedAt/tosVersion, y los valores
+      // deben ser EXACTAMENTE los de su constancia tos_acceptances/{uid}.
+      // Así el doc del alumno registra el momento real de aceptación (nunca
+      // uno inventado a posteriori) y el alumno sigue sin poder crearse ni
+      // alterar su propio doc de acceso.
+      allow update: if request.auth != null
+                    && request.auth.token.email == email
+                    && request.resource.data.diff(resource.data).affectedKeys()
+                         .hasOnly(["tosAcceptedAt", "tosVersion"])
+                    && exists(/databases/$(database)/documents/tos_acceptances/$(request.auth.uid))
+                    && request.resource.data.tosVersion ==
+                         get(/databases/$(database)/documents/tos_acceptances/$(request.auth.uid)).data.tosVersion
+                    && request.resource.data.tosAcceptedAt ==
+                         get(/databases/$(database)/documents/tos_acceptances/$(request.auth.uid)).data.tosAcceptedAt;
     }
     match /teachers/{email} {
       allow read:  if request.auth != null && request.auth.token.email == email;
       allow write: if isAdmin();
+    }
+
+    // —— Constancia de aceptación de Términos y Aviso de Privacidad ——
+    // login.html la crea en el MOMENTO en que el alumno marca la casilla
+    // de aceptación al registrarse (vesper_auth.js recordTosAcceptance):
+    // un doc por usuario (id = uid de Firebase Auth) con correo, versión
+    // aceptada y fecha. Inmutable: nadie (ni el propio usuario) puede
+    // editarla ni borrarla después.
+    match /tos_acceptances/{uid} {
+      allow create: if request.auth != null
+                    && request.auth.uid == uid
+                    && request.resource.data.keys().hasOnly(["email", "tosVersion", "tosAcceptedAt"])
+                    && request.resource.data.email is string
+                    && request.resource.data.email.lower() == request.auth.token.email.lower()
+                    && request.resource.data.tosVersion is string
+                    && request.resource.data.tosVersion.size() > 0
+                    && request.resource.data.tosVersion.size() <= 60
+                    // la fecha debe ser "ahora" (tolerancia por desfase del
+                    // reloj del cliente), no una fecha inventada
+                    && request.resource.data.tosAcceptedAt is timestamp
+                    && request.resource.data.tosAcceptedAt > request.time - duration.value(10, 'm')
+                    && request.resource.data.tosAcceptedAt < request.time + duration.value(10, 'm');
+      allow read:   if request.auth != null
+                    && (request.auth.uid == uid || isAdmin());
+      allow update, delete: if false;
     }
 
     // —— Manuales del profesor: solo profesores autorizados o el admin ——

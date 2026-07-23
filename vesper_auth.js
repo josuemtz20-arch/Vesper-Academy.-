@@ -45,7 +45,10 @@
       "perfil.html",
       "vesper_landing.html",
       "vesper_promo.html",
-      "vesper_web.html"
+      "vesper_web.html",
+      "aviso-de-privacidad.html",
+      "terminos-y-condiciones.html",
+      "politica-de-reembolsos.html"
     ],
     /* SHA-256 de ("vesper-academy-v1|" + correo en minúsculas).
        Añade una línea por persona autorizada. */
@@ -68,7 +71,12 @@
     dbId: "teachermanuals",
     /* El administrador entra siempre, aunque no tenga doc en la allowlist. */
     adminEmail: "josuemtz20@gmail.com",
-    loginPage: "login.html"
+    loginPage: "login.html",
+    /* Versión vigente de los documentos legales (Términos + Aviso de
+       Privacidad). Debe coincidir con la versión publicada en
+       terminos-y-condiciones.html y aviso-de-privacidad.html; al publicar
+       una nueva versión de los documentos, actualiza esta cadena. */
+    legalVersion: "v1.0-2026-07-23"
   };
 
   var page = decodeURIComponent((location.pathname.split("/").pop() || "index.html")) || "index.html";
@@ -148,6 +156,61 @@
     return fsGetOwnDoc(token, collection, email).then(function (doc) { return !!doc; });
   }
 
+  /* Constancia de aceptación de Términos + Aviso de Privacidad (LFPDPPP).
+     Se escribe en tos_acceptances/{uid} en el MOMENTO de aceptar (registro
+     en login.html), con la versión vigente de los documentos. Las reglas la
+     hacen inmutable: una vez creada no puede editarse ni borrarse. Devuelve
+     una promesa que nunca rechaza para no bloquear el alta de la cuenta. */
+  function recordTosAcceptance(user) {
+    if (!user) return Promise.resolve(false);
+    var url = "https://firestore.googleapis.com/v1/projects/" +
+              CONFIG.firebase.projectId + "/databases/" + CONFIG.dbId +
+              "/documents/tos_acceptances/" + encodeURIComponent(user.uid);
+    return user.getIdToken().then(function (token) {
+      return fetch(url, {
+        method: "PATCH",
+        headers: { "Authorization": "Bearer " + token, "Content-Type": "application/json" },
+        body: JSON.stringify({ fields: {
+          email: { stringValue: String(user.email || "").trim().toLowerCase() },
+          tosVersion: { stringValue: CONFIG.legalVersion },
+          tosAcceptedAt: { timestampValue: new Date().toISOString() }
+        } })
+      }).then(function (r) { return r.status === 200; });
+    }).catch(function () { return false; });
+  }
+
+  /* Espeja la constancia al doc students/{correo} (campos tosAcceptedAt y
+     tosVersion) la primera vez que el alumno entra ya aprobado — el doc de
+     students lo crea el admin DESPUÉS del registro, así que en el momento
+     de aceptar aún no existe. Las reglas solo permiten copiar EXACTAMENTE
+     los valores de tos_acceptances/{uid}, de modo que la fecha registrada
+     siempre es la del momento real de aceptación. Silencioso si falla. */
+  function syncTosToStudentDoc(user, studentDoc) {
+    try {
+      var f = (studentDoc && studentDoc.fields) || {};
+      if (f.tosVersion) return; /* ya espejado */
+      var email = String(user.email || "").trim().toLowerCase();
+      user.getIdToken().then(function (token) {
+        return fsGetOwnDoc(token, "tos_acceptances", user.uid).then(function (acc) {
+          var af = (acc && acc.fields) || null;
+          if (!af || !af.tosVersion || !af.tosAcceptedAt) return; /* nunca aceptó: no inventar */
+          var url = "https://firestore.googleapis.com/v1/projects/" +
+                    CONFIG.firebase.projectId + "/databases/" + CONFIG.dbId +
+                    "/documents/students/" + encodeURIComponent(email) +
+                    "?updateMask.fieldPaths=tosVersion&updateMask.fieldPaths=tosAcceptedAt";
+          return fetch(url, {
+            method: "PATCH",
+            headers: { "Authorization": "Bearer " + token, "Content-Type": "application/json" },
+            body: JSON.stringify({ fields: {
+              tosVersion: { stringValue: af.tosVersion.stringValue },
+              tosAcceptedAt: { timestampValue: af.tosAcceptedAt.timestampValue }
+            } })
+          });
+        });
+      }).catch(function () {});
+    } catch (e) {}
+  }
+
   /* Siembra el perfil local (vesper_profile) desde el doc students/{correo}
      que el admin creó con `add-student --level`: nivel (0=Pre-A1 … 5=C1+) y
      nombre. Solo RELLENA lo vacío — nunca pisa lo que el alumno eligió. */
@@ -181,7 +244,11 @@
     var email = String(user.email || "").trim().toLowerCase();
     return user.getIdToken().then(function (token) {
       return fsGetOwnDoc(token, "students", email).then(function (doc) {
-        if (doc) { seedProfileFromStudentDoc(doc); return true; }
+        if (doc) {
+          seedProfileFromStudentDoc(doc);
+          syncTosToStudentDoc(user, doc);
+          return true;
+        }
         return fsDocExists(token, "teachers", email);
       });
     });
@@ -277,6 +344,7 @@
     isApproved: isApproved,
     isApprovedUser: isApprovedUser,
     isTeacher: isTeacher,
+    recordTosAcceptance: recordTosAcceptance,
     teacherHash: teacherHash,
     verifyTeacherLogin: verifyTeacherLogin
   };

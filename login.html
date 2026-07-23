@@ -46,6 +46,11 @@
   .msg.info{ display:block; background:#eee8d8; color:#5a4d2e; border:1px solid #ddd0ad; }
   .foot { font-family:Arial,sans-serif; font-size:11.5px; color:#8d8270; text-align:center; padding:0 30px 24px; line-height:1.6; }
   .foot a { color:var(--navy2); }
+  .legal-accept { display:flex; gap:9px; align-items:flex-start; margin-top:18px;
+                  font-family:Arial,sans-serif; font-size:12.5px; line-height:1.55; color:#4a4436;
+                  text-transform:none; letter-spacing:normal; }
+  .legal-accept input { width:auto; margin-top:2px; accent-color:var(--gold); cursor:pointer; }
+  .legal-accept a { color:var(--navy2); text-decoration:underline; }
 </style>
 <link rel="stylesheet" href="assets/css/vesper_tokens.css">
 </head>
@@ -80,13 +85,20 @@
     <input type="password" id="r-pass" autocomplete="new-password" required>
     <label for="r-pass2">Repite la contraseña</label>
     <input type="password" id="r-pass2" autocomplete="new-password" required>
+    <label class="legal-accept" for="r-tos">
+      <input type="checkbox" id="r-tos" required>
+      <span>He leído y acepto los <a href="terminos-y-condiciones.html" target="_blank" rel="noopener">Términos y Condiciones</a> y el <a href="aviso-de-privacidad.html" target="_blank" rel="noopener">Aviso de Privacidad</a>.</span>
+    </label>
     <button class="main" type="submit">Crear cuenta</button>
     <div class="aux">Tras registrarte: verifica tu correo y espera la aprobación del administrador.</div>
   </form>
 
   <div class="foot">
     ¿Solo quieres conocer tu nivel? Haz el
-    <a href="book_placement.html">Placement Test</a> — no necesita cuenta.
+    <a href="book_placement.html">Placement Test</a> — no necesita cuenta.<br>
+    <a href="aviso-de-privacidad.html">Aviso de Privacidad</a> ·
+    <a href="terminos-y-condiciones.html">Términos y Condiciones</a> ·
+    <a href="politica-de-reembolsos.html">Reembolsos</a>
   </div>
 </div>
 
@@ -185,8 +197,13 @@
       if (p1.length < 8 || !/[A-Za-z]/.test(p1) || !/[0-9]/.test(p1)) {
         show("err", "La contraseña debe tener al menos 8 caracteres e incluir letras y números."); return;
       }
+      if (!document.getElementById("r-tos").checked) {
+        show("err", "Para crear tu cuenta debes aceptar los Términos y Condiciones y el Aviso de Privacidad."); return;
+      }
       btn.disabled = true;
       auth.createUserWithEmailAndPassword(email, p1).then(function (cred) {
+        /* Constancia de aceptación (fecha + versión); no bloquea el registro. */
+        VesperAuth.recordTosAcceptance(cred.user);
         return cred.user.sendEmailVerification().then(function () {
           show("ok", "Cuenta creada. Te hemos enviado un correo de verificación — haz clic en el enlace. " +
                      "Cuando el administrador apruebe tu cuenta tendrás acceso al campus.");
