@@ -62,6 +62,14 @@
 !/curso-ingles-corporativo.html
 !/curso-certificacion.html
 !/planes.html
+# documentos legales (2026-07-23): Aviso de Privacidad, Términos y Condiciones
+# y Política de Reembolsos — públicos, enlazados desde todos los footers y
+# desde la casilla de aceptación del registro. Doc de reglas de la constancia
+# de aceptación (tos_acceptances) junto a los demás FIRESTORE_*.md.
+!/aviso-de-privacidad.html
+!/terminos-y-condiciones.html
+!/politica-de-reembolsos.html
+!/FIRESTORE_TOS_RULES.md
 !/robots.txt
 !/sitemap.xml
 # 404 con marca para GitHub Pages (estática, sin claves, noindex).
