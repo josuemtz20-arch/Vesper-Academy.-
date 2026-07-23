@@ -13,7 +13,9 @@ documentos legales por cada alumno (requisito para empezar a cobrar).
    `teachermanuals` con:
    - `email` — correo del alumno (minúsculas)
    - `tosVersion` — versión aceptada (`CONFIG.legalVersion`, hoy `v1.0-2026-07-23`)
-   - `tosAcceptedAt` — fecha/hora de la aceptación
+   - `tosAcceptedAt` — fecha/hora de la aceptación, puesta por el
+     **servidor** de Firestore (`REQUEST_TIME`), no por el reloj del
+     dispositivo del alumno.
    Las reglas hacen este doc **inmutable** (ni el alumno puede editarlo) y
    validan que la fecha sea "ahora" (±10 min), no una inventada.
 3. **Espejo en students/.** El doc `students/{correo}` lo crea el admin al

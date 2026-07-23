@@ -163,18 +163,26 @@
      una promesa que nunca rechaza para no bloquear el alta de la cuenta. */
   function recordTosAcceptance(user) {
     if (!user) return Promise.resolve(false);
+    var docName = "projects/" + CONFIG.firebase.projectId + "/databases/" +
+                  CONFIG.dbId + "/documents/tos_acceptances/" + user.uid;
     var url = "https://firestore.googleapis.com/v1/projects/" +
               CONFIG.firebase.projectId + "/databases/" + CONFIG.dbId +
-              "/documents/tos_acceptances/" + encodeURIComponent(user.uid);
+              "/documents:commit";
     return user.getIdToken().then(function (token) {
       return fetch(url, {
-        method: "PATCH",
+        method: "POST",
         headers: { "Authorization": "Bearer " + token, "Content-Type": "application/json" },
-        body: JSON.stringify({ fields: {
-          email: { stringValue: String(user.email || "").trim().toLowerCase() },
-          tosVersion: { stringValue: CONFIG.legalVersion },
-          tosAcceptedAt: { timestampValue: new Date().toISOString() }
-        } })
+        body: JSON.stringify({ writes: [{
+          update: { name: docName, fields: {
+            email: { stringValue: String(user.email || "").trim().toLowerCase() },
+            tosVersion: { stringValue: CONFIG.legalVersion }
+          } },
+          /* tosAcceptedAt lo pone el SERVIDOR (REQUEST_TIME): la constancia
+             no depende del reloj del dispositivo del alumno y siempre cae
+             dentro de la ventana que validan las reglas. */
+          updateTransforms: [{ fieldPath: "tosAcceptedAt", setToServerValue: "REQUEST_TIME" }],
+          currentDocument: { exists: false }
+        }] })
       }).then(function (r) { return r.status === 200; });
     }).catch(function () { return false; });
   }
