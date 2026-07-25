@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#1B1B2F">
+<meta name="theme-color" content="#14122a">
 <title>Inglés en línea que te hace hablar | Vesper Academy</title>
 <meta name="description" content="Inglés en línea con clases en vivo y método comunicativo: hablas desde el día uno, de cero a tu certificación (IELTS, Cambridge, TOEFL). Prueba una lección gratis, sin registro.">
 <link rel="canonical" href="https://vesperacademy.com/">
@@ -23,773 +23,1558 @@
 <link rel="manifest" href="manifest_lecciones.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inria+Serif:wght@400;700&family=Inter:wght@400;500;600;700&display=swap">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-<style>
-*,*::before,*::after{box-sizing:border-box;}
-:root{
-  /* Paleta */
-  --navy:var(--va-ink,#1B1B2F); --navy2:#222b47; --navy3:#141a2e;
-  --gold:var(--va-gold,#c5a059); --gold-lt:#d9bd84; --gold2:#a8843d;
-  --cream:var(--va-cream,#f5f2eb); --white:#fff; --border:#e4e0d8; --text:var(--va-ink,#1B1B2F);
-  --muted:#5a6b7d;        /* texto secundario — ~5.2:1 sobre blanco (AA) */
-  --eyebrow:#7c5e22;      /* acento sobre fondo claro con contraste AA */
-  --tag:#6f541d;          /* etiquetas pequeñas sobre crema (AA) */
-  /* Escala tipográfica */
-  --t-eyebrow:.72rem; --t-small:.82rem; --t-body:.95rem; --t-body-lg:1.05rem;
-  --t-h3:1.15rem; --t-h2:2.15rem; --t-display:clamp(2.3rem,5vw,3rem);
-  /* Escala de espaciado (base 8) */
-  --s-2:8px; --s-3:12px; --s-4:16px; --s-6:24px; --s-8:32px; --s-10:40px;
-  --s-section:96px;
-  --gutter:32px;
-  --maxw:1120px;
-  /* Radios */
-  --r-sm:10px; --r-md:14px; --r-lg:18px; --r-pill:999px;
-  /* Sombras (basadas en navy real) */
-  --sh-md:0 14px 34px rgba(27,27,47,.12);
-  --sh-lg:0 22px 50px rgba(27,27,47,.22);
-  /* Movimiento */
-  --ease-out:cubic-bezier(0.22,1,0.36,1);
-  --ease-std:cubic-bezier(0.4,0,0.2,1);
-}
-html{scroll-behavior:smooth;}
-body{font-family:'Inter',sans-serif;color:var(--text);margin:0;background:var(--white);line-height:1.6;font-size:1rem;}
-a{text-decoration:none;color:inherit;}
-img{max-width:100%;}
-h1,h2,h3,h4,h5{line-height:1.2;}
-.container{max-width:var(--maxw);margin:0 auto;padding:0 var(--gutter);}
-section[id]{scroll-margin-top:88px;}
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,600;0,6..96,700;1,6..96,400;1,6..96,500&family=Inter:wght@400;500;600;700&display=swap">
 
-/* Foco visible global (WCAG 2.4.7) */
-:focus-visible{outline:3px solid var(--gold2);outline-offset:2px;border-radius:6px;}
-.on-dark :focus-visible,.hero :focus-visible,.path :focus-visible,.cta :focus-visible,header :focus-visible,footer :focus-visible{outline-color:var(--gold-lt);}
+<!-- Los tokens se cargan primero: la hoja propia de la pagina debe poder sobrescribirlos. -->
+<link rel="stylesheet" href="assets/css/vesper_tokens.css">
 
-/* Skip link */
-.skip{position:absolute;left:-999px;top:8px;z-index:500;background:var(--gold);color:var(--navy);padding:10px 18px;border-radius:var(--r-sm);font-weight:600;}
-.skip:focus{left:16px;}
-
-.btn{display:inline-flex;align-items:center;gap:9px;font-weight:600;font-size:.92rem;padding:13px 26px;border-radius:var(--r-sm);cursor:pointer;border:none;transition:transform .3s var(--ease-std),box-shadow .3s var(--ease-std),background .3s;font-family:inherit;}
-.btn-gold{background:var(--gold);color:var(--navy);}
-.btn-gold:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(197,160,89,.4);}
-.btn-ghost{background:transparent;color:#fff;border:1.5px solid rgba(255,255,255,.5);}
-.btn-ghost:hover{border-color:var(--gold);color:var(--gold-lt);}
-.btn-block{justify-content:center;}
-.btn-lg{font-size:1rem;padding:15px 32px;}
-.cta-note{color:var(--muted);font-size:var(--t-small);margin:14px 0 0;}
-.hero .cta-note{color:rgba(255,255,255,.7);}
-
-.eyebrow{display:inline-block;font-size:var(--t-eyebrow);letter-spacing:2px;text-transform:uppercase;color:var(--eyebrow);font-weight:700;}
-.sec-title{font-family:'Inria Serif',serif;font-size:var(--t-h2);font-weight:700;margin:12px 0 16px;line-height:1.14;}
-.sec-lead{color:var(--muted);font-size:var(--t-body-lg);max-width:600px;}
-.text-left{text-align:left;}
-
-/* NAV */
-header{position:sticky;top:0;z-index:200;background:rgba(27,27,47,.96);backdrop-filter:blur(8px);border-bottom:1px solid rgba(197,160,89,.25);transition:background .4s var(--ease-std),box-shadow .4s,border-color .4s;}
-nav{display:flex;align-items:center;justify-content:space-between;height:72px;gap:24px;}
-.brand{display:flex;align-items:center;gap:12px;}
-.brand img{height:42px;width:42px;object-fit:contain;}
-.brand b{font-family:'Inria Serif',serif;color:#fff;font-size:1.15rem;font-weight:700;letter-spacing:.5px;}
-.brand small{display:block;color:var(--gold);font-size:.6rem;letter-spacing:2px;text-transform:uppercase;}
-.nav-links{display:flex;gap:32px;align-items:center;}
-.nav-links a{color:rgba(255,255,255,.82);font-size:.88rem;font-weight:500;transition:color .16s;}
-.nav-links a:hover{color:var(--gold-lt);}
-.nav-cta{padding:9px 20px;}
-.nav-toggle{display:none;background:none;border:none;color:#fff;font-size:1.4rem;cursor:pointer;padding:6px 8px;}
-
-/* HERO */
-.hero{position:relative;overflow:hidden;color:#fff;padding:0;
-  background:radial-gradient(900px 400px at 80% -10%,rgba(197,160,89,.22),transparent 60%),linear-gradient(160deg,var(--navy2),var(--navy) 55%,var(--navy3));}
-.hero::before{content:"";position:absolute;right:-80px;top:50%;transform:translateY(-50%);width:480px;height:480px;
-  background:url('assets/images/vesper_logo_inverted.png') center/contain no-repeat;opacity:.06;}
-.hero-inner{position:relative;z-index:1;padding:100px 0 104px;max-width:660px;}
-.hero h1{font-family:'Inria Serif',serif;font-size:var(--t-display);font-weight:700;line-height:1.05;margin:18px 0 20px;overflow-wrap:break-word;}
-.hero h1 span{color:var(--gold-lt);}
-.hero p{font-size:1.1rem;color:rgba(255,255,255,.82);margin-bottom:28px;max-width:540px;}
-.hero-cta{display:flex;gap:14px;flex-wrap:wrap;}
-.hero-stats{display:flex;gap:44px;margin-top:56px;flex-wrap:wrap;}
-.hero-stats div b{font-family:'Inria Serif',serif;font-size:1.5rem;color:var(--gold-lt);display:block;line-height:1.1;}
-.hero-stats div small{color:rgba(255,255,255,.66);font-size:.78rem;text-transform:uppercase;letter-spacing:1px;}
-.hero-grid{display:grid;grid-template-columns:1fr;align-items:center;}
-.hero-visual{display:block;max-width:420px;margin:10px auto 0;position:relative;cursor:pointer;border-radius:var(--r-lg);transition:transform .25s var(--ease-out),box-shadow .25s var(--ease-out);}
-.hero-visual img{width:100%;height:auto;display:block;border-radius:var(--r-lg);border:1px solid rgba(197,160,89,.4);box-shadow:var(--sh-lg);background:var(--navy3);}
-.hero-visual:hover,.hero-visual:focus-visible{transform:translateY(-6px);}
-.hero-visual:hover img,.hero-visual:focus-visible img{border-color:var(--gold-lt);box-shadow:0 24px 60px rgba(0,0,0,.45);}
-.hero-visual-cta{position:absolute;left:50%;bottom:16px;transform:translateX(-50%);display:inline-flex;align-items:center;gap:8px;
-  padding:10px 20px;border-radius:999px;background:var(--gold);color:var(--navy);font-weight:700;font-size:.92rem;white-space:nowrap;
-  box-shadow:0 8px 24px rgba(0,0,0,.35);opacity:0;transition:opacity .25s var(--ease-out),transform .25s var(--ease-out);pointer-events:none;}
-.hero-visual:hover .hero-visual-cta,.hero-visual:focus-visible .hero-visual-cta{opacity:1;transform:translateX(-50%) translateY(-2px);}
-@media (hover:none){.hero-visual-cta{opacity:1;}}
-@media(min-width:981px){
-  .hero-grid{grid-template-columns:minmax(0,1fr) minmax(0,420px);gap:56px;}
-  .hero-inner{max-width:none;}
-  .hero-visual{margin:0;}
-}
-
-/* TRUST BAR */
-.trust{background:var(--cream);border-bottom:1px solid var(--border);}
-.trust-inner{display:flex;align-items:center;justify-content:center;gap:48px;padding:28px 0;flex-wrap:wrap;color:var(--muted);font-weight:600;font-size:.88rem;}
-.trust-inner i{color:var(--gold2);margin-right:8px;}
-
-/* SECTIONS */
-section{padding:var(--s-section) 0;}
-.center{text-align:center;}
-.center .sec-lead{margin:0 auto;}
-.intro-grid-gap{margin-top:56px;}
-
-/* METHOD CARDS */
-.grid3{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;margin-top:56px;}
-.mcard{background:var(--white);border:1px solid var(--border);border-radius:var(--r-lg);padding:30px 28px;text-align:left;transition:transform .4s var(--ease-std),box-shadow .4s,border-color .4s;}
-.mcard:hover{transform:translateY(-4px);box-shadow:var(--sh-md);border-color:var(--gold);}
-.mcard .ic{width:54px;height:54px;border-radius:13px;background:var(--gold);color:var(--navy);display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin-bottom:20px;}
-.mcard h3{font-size:var(--t-h3);margin:0 0 10px;}
-.mcard p{color:var(--muted);font-size:var(--t-body);margin:0;}
-
-/* PATH / LEVELS */
-.path{background:var(--navy);color:#fff;}
-.path .sec-title{color:#fff;}
-.path .sec-lead{color:rgba(255,255,255,.72);}
-.levels{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:18px;margin-top:56px;}
-.lvl{background:linear-gradient(160deg,var(--navy2),var(--navy3));border:1px solid rgba(197,160,89,.25);border-radius:var(--r-md);padding:26px 22px;text-align:left;position:relative;overflow:hidden;}
-.lvl .cefr{font-family:'Inria Serif',serif;font-size:1.5rem;color:var(--gold-lt);font-weight:700;}
-.lvl h4{margin:8px 0 8px;font-size:1rem;}
-.lvl p{color:rgba(255,255,255,.72);font-size:.85rem;margin:0;}
-.lvl .bar{position:absolute;left:0;bottom:0;height:4px;background:var(--gold);width:var(--p,0);}
-
-/* COURSES */
-.cgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px;margin-top:56px;}
-.course{border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;background:#fff;transition:transform .4s var(--ease-std),box-shadow .4s;display:flex;flex-direction:column;}
-.course:hover{transform:translateY(-4px);box-shadow:var(--sh-md);}
-.course .top{height:158px;position:relative;overflow:hidden;background:var(--navy3);}
-.course .top img{width:100%;height:100%;object-fit:cover;object-position:center;display:block;transition:transform .6s var(--ease-std);}
-.course:hover .top img{transform:scale(1.05);}
-.course .body{padding:22px 24px 24px;flex:1;display:flex;flex-direction:column;}
-.course h3{margin:0 0 8px;font-size:1.1rem;}
-.course p{color:var(--muted);font-size:var(--t-body);margin:0 0 16px;flex:1;}
-.course .tag{align-self:flex-start;font-size:.72rem;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--tag);background:var(--cream);padding:5px 12px;border-radius:var(--r-pill);}
-/* Cursos colapsables (pestaña) */
-.courses{max-width:840px;margin:40px auto 0;}
-.courses summary{list-style:none;cursor:pointer;display:inline-flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--border);border-radius:var(--r-pill);padding:14px 26px;font-family:inherit;font-size:1rem;font-weight:700;color:var(--navy);transition:box-shadow .3s,border-color .3s,transform .3s;}
-.courses summary::-webkit-details-marker{display:none;}
-.courses summary:hover{border-color:var(--gold);box-shadow:var(--sh-md);transform:translateY(-2px);}
-.courses summary:focus-visible{outline:2px solid var(--gold);outline-offset:3px;}
-.courses summary .chev{color:var(--gold2);transition:transform .35s var(--ease-std);}
-.courses[open] summary .chev{transform:rotate(180deg);}
-.courses .cgrid{margin-top:34px;}
-
-/* Fila representativa de cursos (portada ilustrada estilo audio hub → página de detalle) */
-.ctiles{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;margin-top:52px;}
-.ctile{display:flex;flex-direction:column;border:1px solid var(--border);border-radius:14px;overflow:hidden;background:#fff;color:inherit;box-shadow:0 1px 4px rgba(0,0,0,.06);transition:transform .3s var(--ease-std),box-shadow .3s,border-color .3s;}
-.ctile:hover,.ctile:focus-visible{transform:translateY(-6px);box-shadow:0 14px 34px rgba(26,43,66,.16);border-color:var(--gold);}
-.ctile .cvr{position:relative;height:128px;overflow:hidden;border-bottom:3px solid var(--gold);background:linear-gradient(135deg,var(--navy2),var(--navy3));}
-.ctile .cvr img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .5s var(--ease-std);}
-.ctile:hover .cvr img{transform:scale(1.05);}
-.ctile .cvr-badge{position:absolute;top:10px;left:10px;font-size:.6rem;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;color:#fff;background:rgba(0,0,0,.4);padding:4px 10px;border-radius:12px;border:1px solid rgba(255,255,255,.2);z-index:2;}
-.ctile .cbody{display:flex;flex-direction:column;align-items:flex-start;text-align:left;gap:8px;padding:18px 20px 20px;flex:1;}
-.ctile h3{font-size:1.05rem;margin:0;}
-.ctile p{color:var(--muted);font-size:.85rem;line-height:1.45;margin:0;flex:1;}
-.ctile .more{margin-top:6px;color:var(--gold2);font-weight:700;font-size:.8rem;display:inline-flex;align-items:center;gap:7px;}
-.ctile .more i{transition:transform .3s var(--ease-std);}
-.ctile:hover .more i{transform:translateX(4px);}
-
-/* Fila representativa de planes (ícono + precio → planes.html) */
-.ptiles{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:52px;align-items:stretch;}
-.ptile{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;gap:11px;padding:40px 26px 30px;border:1px solid var(--border);border-radius:var(--r-lg);background:#fff;color:inherit;transition:transform .4s var(--ease-std),box-shadow .4s,border-color .3s;}
-.ptile:hover,.ptile:focus-visible{transform:translateY(-6px);box-shadow:var(--sh-md);border-color:var(--gold);}
-.ptile.feat{border:2px solid var(--gold);box-shadow:0 18px 44px rgba(197,160,89,.22);}
-.ptile .ribbon{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:var(--gold);color:var(--navy);font-size:.68rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:5px 16px;border-radius:var(--r-pill);}
-.ptile .ic{width:78px;height:78px;border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:1.85rem;color:var(--navy);background:var(--gold);transition:transform .4s var(--ease-std),box-shadow .3s;}
-.ptile:hover .ic{transform:scale(1.06);box-shadow:0 10px 24px rgba(197,160,89,.35);}
-.ptile h3{font-size:var(--t-h3);margin:0;}
-.ptile .price{font-family:'Inria Serif',serif;font-size:1.7rem;font-weight:700;color:var(--navy);margin:0;}
-.ptile .price small{font-size:.85rem;color:var(--muted);font-weight:400;font-family:'Inter',sans-serif;}
-.ptile .plan-note{color:var(--muted);font-size:var(--t-small);margin:0;min-height:2.4em;}
-.ptile .more{margin-top:auto;padding-top:8px;color:var(--gold2);font-weight:700;font-size:.82rem;display:inline-flex;align-items:center;gap:7px;}
-.ptile .more i{transition:transform .3s var(--ease-std);}
-.ptile:hover .more i{transform:translateX(4px);}
-
-/* CERTIFICATION band */
-.cert{background:linear-gradient(135deg,var(--cream),#efe9da);}
-.cert-inner{display:grid;grid-template-columns:1.2fr 1fr;gap:56px;align-items:center;}
-.cert ul{list-style:none;padding:0;margin:26px 0 0;}
-.cert li{display:flex;gap:12px;align-items:flex-start;margin-bottom:16px;font-size:var(--t-body);}
-.cert li i{color:var(--gold2);margin-top:3px;}
-.cert-badges{display:grid;grid-template-columns:1fr;gap:14px;}
-.cert-badge{background:#fff;border:1px solid var(--border);border-radius:var(--r-md);padding:20px 24px;display:flex;align-items:center;justify-content:space-between;gap:18px;transition:transform .4s var(--ease-std),box-shadow .4s,border-color .4s;}
-.cert-badge:hover{transform:translateX(3px);border-color:var(--gold);box-shadow:var(--sh-md);}
-.cert-badge b{font-family:'Inria Serif',serif;font-size:1.45rem;color:var(--navy);font-weight:700;line-height:1;}
-.cert-badge small{color:var(--muted);font-size:.82rem;text-align:right;}
-
-/* TESTIMONIALS */
-.tgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:24px;margin-top:56px;}
-.tcard{background:#fff;border:1px solid var(--border);border-left:4px solid var(--gold);border-radius:var(--r-md);padding:28px;}
-.tcard p{font-style:italic;color:var(--text);margin:0 0 18px;font-size:var(--t-body-lg);}
-.tcard .who{display:flex;align-items:center;gap:12px;}
-.tcard .who .av{width:42px;height:42px;border-radius:50%;background:var(--navy);color:var(--gold);display:flex;align-items:center;justify-content:center;font-weight:700;flex:0 0 auto;}
-.tcard .who b{font-size:.92rem;}.tcard .who small{color:var(--muted);font-size:var(--t-small);display:block;}
-.stars{color:var(--gold2);font-size:.9rem;margin-bottom:12px;letter-spacing:2px;}
-
-/* PRICING */
-.price-intro{color:var(--muted);font-size:var(--t-small);margin:18px auto 0;}
-.pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px;margin-top:56px;align-items:stretch;}
-.plan{background:#fff;border:1px solid var(--border);border-radius:var(--r-lg);padding:34px 30px;display:flex;flex-direction:column;position:relative;transition:transform .4s var(--ease-std),box-shadow .4s;}
-.plan:hover{transform:translateY(-3px);box-shadow:var(--sh-md);}
-.plan.feat{border:2px solid var(--gold);box-shadow:0 18px 44px rgba(197,160,89,.22);}
-.plan.feat .ribbon{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:var(--gold);color:var(--navy);font-size:.68rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:5px 16px;border-radius:var(--r-pill);}
-.plan h3{font-size:var(--t-h3);margin:0 0 4px;}
-.plan .price{font-family:'Inria Serif',serif;font-size:2rem;font-weight:700;color:var(--navy);margin:10px 0 2px;}
-.plan .price small{font-size:.9rem;color:var(--muted);font-weight:400;font-family:'Inter',sans-serif;}
-.plan-note{color:var(--muted);font-size:var(--t-small);margin:0;}
-.plan ul{list-style:none;padding:0;margin:22px 0 28px;flex:1;}
-.plan li{font-size:var(--t-body);padding:9px 0;border-bottom:1px dashed var(--border);display:flex;gap:10px;align-items:flex-start;}
-.plan li i{color:var(--gold2);margin-top:4px;}
-.price-footnote{color:var(--muted);font-size:var(--t-small);margin-top:24px;}
-
-/* FAQ */
-.faq{max-width:760px;margin:56px auto 0;text-align:left;}
-.qitem{border:1px solid var(--border);border-radius:var(--r-md);margin-bottom:14px;overflow:hidden;background:#fff;}
-.qitem button{width:100%;text-align:left;background:none;border:none;padding:20px 24px;font-family:inherit;font-size:1rem;font-weight:600;color:var(--navy);cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:12px;}
-.qitem .ans{max-height:0;overflow:hidden;transition:max-height .42s cubic-bezier(0.33,0,0.2,1);padding:0 24px;color:var(--muted);font-size:var(--t-body);}
-.qitem.open .ans{max-height:260px;padding-bottom:20px;}
-.qitem button i{transition:transform .38s var(--ease-std);color:var(--gold2);}
-.qitem.open button i{transform:rotate(180deg);}
-
-/* CTA */
-.cta{background:linear-gradient(160deg,var(--navy2),var(--navy3));color:#fff;text-align:center;padding:108px 0;}
-.cta .eyebrow{color:var(--gold-lt);}
-.cta .sec-title{color:#fff;}
-.cta p{color:rgba(255,255,255,.8);max-width:540px;margin:0 auto 30px;}
-.cta .cta-spacer{margin-top:40px;}
-.cta form{display:flex;gap:12px;max-width:480px;margin:0 auto;flex-wrap:wrap;}
-.cta input{flex:1;min-width:200px;padding:14px 18px;border-radius:var(--r-sm);border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.08);color:#fff;font-family:inherit;font-size:.92rem;}
-.cta input::placeholder{color:rgba(255,255,255,.62);}
-.form-msg{margin-top:18px;color:var(--gold-lt);font-size:.92rem;min-height:20px;}
-.steps{list-style:none;padding:0;margin:8px auto 30px;display:flex;flex-wrap:wrap;justify-content:center;gap:12px 26px;max-width:780px;}
-.steps li{display:flex;align-items:center;gap:9px;font-size:var(--t-small);color:rgba(255,255,255,.82);}
-.steps li i{color:var(--gold);}
-
-/* FOOTER */
-footer{background:var(--navy3);color:rgba(255,255,255,.62);padding:60px 0 32px;}
-.fgrid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;margin-bottom:40px;}
-.fgrid h5{color:#fff;font-size:.82rem;letter-spacing:1px;text-transform:uppercase;margin:0 0 16px;}
-.fgrid a{display:block;color:rgba(255,255,255,.62);font-size:.88rem;margin-bottom:12px;transition:color .16s;}
-.fgrid a:hover{color:var(--gold-lt);}
-.fbrand img{height:46px;width:auto;margin-bottom:16px;}
-.fbrand p{font-size:.88rem;max-width:280px;}
-.fbottom{border-top:1px solid rgba(255,255,255,.14);padding-top:24px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;font-size:.8rem;}
-.fbottom .social a{margin-left:16px;color:rgba(255,255,255,.62);font-size:1.1rem;}
-.fbottom .social a:hover{color:var(--gold-lt);}
-
-/* ===== BREAKPOINTS ===== */
-@media(max-width:1024px){
-  .nav-links{display:none;position:absolute;top:72px;left:0;right:0;background:var(--navy);flex-direction:column;padding:20px 24px;gap:18px;border-bottom:1px solid rgba(197,160,89,.25);box-shadow:0 14px 30px rgba(0,0,0,.25);}
-  .nav-links.show{display:flex;}
-  .nav-links a{font-size:1rem;}
-  .nav-toggle{display:block;}
-}
-@media(max-width:980px){
-  .grid3{grid-template-columns:repeat(2,1fr);}
-  .cert-inner{grid-template-columns:1fr;gap:36px;}
-  .ctiles{grid-template-columns:repeat(2,1fr);}
-}
-@media(max-width:760px){
-  .ptiles{grid-template-columns:1fr;max-width:400px;margin-left:auto;margin-right:auto;}
-}
-@media(max-width:820px){
-  .trust-inner{display:grid;grid-template-columns:1fr 1fr;gap:16px 28px;text-align:left;justify-items:start;}
-}
-@media(max-width:680px){
-  :root{--s-section:60px;--gutter:22px;}
-  .hero-inner{padding:72px 0 76px;}
-  .hero-stats{gap:30px 36px;margin-top:42px;}
-  .cta{padding:68px 0;}
-  .fgrid{grid-template-columns:1fr 1fr;gap:32px;}
-  .trust-inner{grid-template-columns:1fr;gap:14px;}
-}
-@media(max-width:560px){
-  .cta form{flex-direction:column;}
-  .cta input,.cta form .btn{width:100%;min-width:0;}
-  .fgrid{grid-template-columns:1fr;}
-  .grid3{grid-template-columns:1fr;}
-  .ctiles{grid-template-columns:1fr;max-width:320px;margin-left:auto;margin-right:auto;}
-}
-
-/* ===== ANIMACIONES — "Quiet Confidence, Guided Eye" ===== */
-@keyframes heroRise{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:none;}}
-@keyframes heroMarkSettle{from{opacity:0;transform:translateY(-50%) scale(1.05);}to{opacity:.06;transform:translateY(-50%) scale(1);}}
-@keyframes revealRise{from{opacity:0;transform:translateY(22px);}to{opacity:1;transform:none;}}
-
-/* Cascada del hero al cargar (sobre el pliegue → sin observer) */
-html.js-anim .hero-inner>*{opacity:0;animation:heroRise .7s var(--ease-out) both;}
-html.js-anim .hero-inner>.eyebrow{animation-delay:0ms;}
-html.js-anim .hero-inner>h1{animation-delay:90ms;}
-html.js-anim .hero-inner>p{animation-delay:180ms;}
-html.js-anim .hero-inner>.hero-cta{animation-delay:280ms;}
-html.js-anim .hero-inner>.cta-note{animation-delay:340ms;}
-html.js-anim .hero-inner>.hero-stats{animation-delay:400ms;}
-html.js-anim .hero::before{animation:heroMarkSettle 1.4s cubic-bezier(0.33,0,0.2,1) .15s both;}
-html.js-anim .hero-visual{opacity:0;animation:heroRise .8s var(--ease-out) .4s both;}
-
-/* Reveal en scroll — un solo contrato de clase. animation-fill-mode:backwards
-   evita el flash durante el stagger y NO bloquea los :hover tras revelar. */
-html.js-anim .reveal{opacity:0;}
-html.js-anim .reveal.in-view{opacity:1;animation:revealRise .7s var(--ease-out) backwards;animation-delay:calc(var(--i,0)*70ms);}
-
-/* Barras de nivel: se llenan con scaleX (cero layout shift), en cascada A1→C2 */
-html.js-anim .lvl .bar{transform-origin:left;transform:scaleX(0);transition:transform .9s cubic-bezier(0.16,1,0.3,1) calc(var(--i,0)*70ms + .15s);}
-html.js-anim .lvl.in-view .bar{transform:scaleX(1);}
-
-/* El nav se densifica al hacer scroll */
-header.scrolled{background:rgba(27,27,47,.98);border-bottom-color:rgba(197,160,89,.45);box-shadow:0 4px 20px rgba(0,0,0,.18);}
-
-/* Micro-interacciones de hover (premium = más lento, sin nuevos saltos en cards) */
-.btn:active{transform:translateY(0);transition-duration:.1s;}
-.lvl{transition:transform .4s var(--ease-std),border-color .4s;}
-.lvl:hover{transform:translateY(-3px);border-color:rgba(197,160,89,.5);}
-
-/* Respeto total a prefers-reduced-motion (red de seguridad; el JS además
-   nunca añade .js-anim bajo reduce, así que el contenido queda 100% visible) */
-@media (prefers-reduced-motion: reduce){
-  html{scroll-behavior:auto;}
-  html.js-anim .reveal,html.js-anim .hero-inner>*,html.js-anim .hero::before,
-  html.js-anim .lvl .bar,.qitem .ans,.qitem button i,header,
-  .mcard,.course,.btn,.lvl,.plan{
-    opacity:1 !important;transform:none !important;transition:none !important;animation:none !important;
-  }
-  html.js-anim .lvl .bar{transform:scaleX(1) !important;}
-  html.js-anim .hero::before{opacity:.06 !important;transform:translateY(-50%) !important;}
-}
-
-/* Impresión: nunca ocultar contenido al imprimir (el observer no dispara) */
-@media print{
-  html.js-anim .reveal,html.js-anim .hero-inner>*{opacity:1 !important;transform:none !important;animation:none !important;}
-  html.js-anim .lvl .bar{transform:scaleX(1) !important;}
-}
-</style>
 <script>
-  /* Anti-FOUC: marca <html> ANTES de pintar para que el hero y los reveals
-     arranquen ocultos sin parpadeo. Solo si hay IntersectionObserver y el
-     usuario no pidió reduce-motion; si no, el contenido queda 100% visible. */
+  /* Anti-FOUC: marca <html> ANTES de pintar. Respeta tanto la preferencia del
+     sistema como la explícita del alumno (vesper_profile.reduceMotion), que es
+     la que gobierna .vesper-reduce-motion en el resto del sitio. */
   (function(){ try {
-    if ('IntersectionObserver' in window &&
+    var pref = false;
+    try { var p = JSON.parse(localStorage.getItem("vesper_profile") || "null");
+          pref = !!(p && (p.vesper ? p.vesper.reduceMotion : p.reduceMotion)); } catch (e) {}
+    if ('IntersectionObserver' in window && !pref &&
         !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       document.documentElement.classList.add('js-anim');
     }
   } catch (e) {} })();
 </script>
-<link rel="stylesheet" href="assets/css/vesper_tokens.css">
+
+<style>
+*,*::before,*::after{box-sizing:border-box;}
+
+/* ============================================================
+   VESPERTINA — la estrella de la tarde
+   Todo color resuelve a un token --va-*. Sin paleta paralela.
+   ============================================================ */
+:root{
+  /* Superficies (identidad "Estrella Vespertina", por fin usada) */
+  --night:var(--va-night,#14122a);
+  --dusk:var(--va-dusk,#1f2342);
+  --twilight:var(--va-twilight,#3a3a63);
+  --gold:var(--va-gold,#c5a059);
+  --gold-deep:#a8843d;              /* oro AA sólo para texto GRANDE sobre crema */
+  --gold-ink:#7c5e22;               /* oro AA para texto pequeño — 5.2:1 sobre crema */
+  --star:var(--va-star,#f3e2ab);
+  --cream:var(--va-cream,#f5f2eb);
+  --ink:var(--va-ink,#1B1B2F);
+  --line:var(--va-line,#ece7da);
+  --muted:var(--va-muted,#5d6470);
+  --hair:var(--va-hairline,rgba(197,160,89,.35));
+  --gold-tint:var(--va-gold-tint,rgba(197,160,89,.14));
+
+  /* Texto sobre noche */
+  --on-night:rgba(245,242,235,.90);
+  --on-night-soft:rgba(245,242,235,.62);
+
+  /* Tipografía */
+  --display:"Bodoni Moda",Didot,"Times New Roman",serif;
+  --text:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --t-eyebrow:.7rem; --t-small:.83rem; --t-body:.95rem; --t-lead:1.08rem;
+  --t-h3:1.25rem; --t-h2:clamp(2rem,3.4vw,2.7rem); --t-display:clamp(2.9rem,6vw,4.8rem);
+
+  /* Espacio / medida */
+  --s-section:clamp(72px,9vw,120px);
+  --gutter:clamp(22px,4vw,40px);
+  --maxw:1160px;
+
+  /* Radios — cuatro valores, sin excepciones */
+  --r-sm:var(--va-r-sm,10px); --r-md:var(--va-r-md,14px); --r-lg:var(--va-r-lg,18px); --r-pill:999px;
+
+  /* Movimiento */
+  --ease-out:cubic-bezier(0.22,1,0.36,1);
+  --ease-std:cubic-bezier(0.4,0,0.2,1);
+}
+
+@property --aur-a{syntax:'<angle>';inherits:false;initial-value:0deg;}
+@property --aur-b{syntax:'<angle>';inherits:false;initial-value:180deg;}
+
+html{scroll-behavior:smooth;}
+body{
+  margin:0;background:var(--night);color:var(--on-night);
+  font-family:var(--text);font-size:1rem;line-height:1.62;
+  -webkit-font-smoothing:antialiased;letter-spacing:-0.011em;
+}
+a{text-decoration:none;color:inherit;}
+img{max-width:100%;}
+h1,h2,h3,h4{line-height:1.08;margin:0;font-weight:600;}
+.container{max-width:var(--maxw);margin:0 auto;padding:0 var(--gutter);}
+section[id]{scroll-margin-top:86px;}
+:focus-visible{outline:2px solid var(--star);outline-offset:3px;border-radius:var(--r-sm);}
+.band-cream :focus-visible{outline-color:var(--gold-deep);}
+
+.sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;}
+.skip{position:absolute;left:-999px;top:8px;z-index:500;background:var(--gold);color:var(--night);padding:10px 18px;border-radius:var(--r-sm);font-weight:600;}
+.skip:focus{left:16px;}
+
+/* Iconos: sprite SVG en línea, hereda currentColor. Adiós Font Awesome. */
+.i{width:1em;height:1em;flex:0 0 auto;stroke:currentColor;fill:none;
+   stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;vertical-align:-.125em;}
+
+/* ---------- Tipografía compartida ---------- */
+.eyebrow{
+  display:inline-block;font-size:var(--t-eyebrow);font-weight:600;
+  letter-spacing:.22em;text-transform:uppercase;color:var(--star);
+}
+.band-cream .eyebrow{color:var(--gold-ink);}
+.rule{display:block;width:34px;height:1px;background:var(--gold);margin-bottom:20px;}
+.sec-title{
+  font-family:var(--display);font-optical-sizing:auto;
+  font-size:var(--t-h2);font-weight:600;letter-spacing:-.005em;
+  margin:16px 0 14px;text-wrap:balance;
+}
+.sec-lead{color:var(--on-night-soft);font-size:var(--t-lead);max-width:52ch;margin:0;text-wrap:pretty;}
+.band-cream .sec-lead{color:var(--muted);}
+
+/* ---------- Botones ---------- */
+.btn{
+  display:inline-flex;align-items:center;gap:10px;font-family:inherit;
+  font-weight:600;font-size:.93rem;padding:14px 28px;border:none;cursor:pointer;
+  border-radius:var(--r-sm);position:relative;overflow:hidden;
+  transition:transform .3s var(--ease-std),box-shadow .3s var(--ease-std),border-color .3s,color .3s;
+}
+.btn-gold{background:var(--gold);color:var(--night);}
+.btn-gold:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(197,160,89,.32);}
+/* Barrido de oro enmascarado, sólo en hover */
+.btn-gold::after{
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(105deg,transparent 38%,rgba(255,255,255,.55) 50%,transparent 62%);
+  transform:translateX(-120%);
+}
+.btn-gold:hover::after{transition:transform .75s var(--ease-out);transform:translateX(120%);}
+.btn-ghost{background:transparent;color:var(--on-night);border:1px solid rgba(245,242,235,.32);}
+.btn-ghost:hover{border-color:var(--gold);color:var(--star);}
+.btn-lg{font-size:1rem;padding:16px 32px;}
+
+/* ---------- NAV ---------- */
+header{
+  position:sticky;top:0;z-index:200;background:transparent;
+  border-bottom:1px solid transparent;
+  transition:background .45s var(--ease-std),border-color .45s,backdrop-filter .45s;
+}
+header.scrolled{background:rgba(20,18,42,.92);backdrop-filter:blur(14px);border-bottom-color:var(--hair);}
+header::after{
+  content:"";position:absolute;left:0;right:0;bottom:-1px;height:1px;
+  background:linear-gradient(90deg,var(--gold),var(--star));
+  transform:scaleX(0);transform-origin:left;
+}
+@supports (animation-timeline: scroll()){
+  header::after{animation:navprog linear both;animation-timeline:scroll(root);}
+  @keyframes navprog{from{transform:scaleX(0);}to{transform:scaleX(1);}}
+}
+nav{display:flex;align-items:center;justify-content:space-between;height:78px;gap:24px;}
+.brand{display:flex;align-items:center;gap:12px;}
+.brand img{height:40px;width:40px;object-fit:contain;}
+.brand b{font-family:var(--display);font-optical-sizing:auto;font-size:1.18rem;font-weight:500;color:var(--cream);letter-spacing:.01em;display:block;line-height:1.1;}
+.brand small{display:block;color:var(--star);font-size:.56rem;letter-spacing:.24em;text-transform:uppercase;}
+.nav-links{display:flex;gap:30px;align-items:center;}
+.nav-links a{position:relative;color:rgba(245,242,235,.78);font-size:.87rem;font-weight:500;padding:4px 0;transition:color .2s;}
+.nav-links a::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--gold);transform:scaleX(0);transform-origin:left;transition:transform .32s var(--ease-out);}
+.nav-links a:hover{color:var(--star);}
+.nav-links a:hover::after{transform:scaleX(1);}
+/* Especificidad: `.nav-links a` (0,1,1) gana a `.btn-gold` (0,1,0) y dejaba
+   el CTA con texto crema sobre oro (1.8:1). Hay que subir el selector. */
+.nav-links a.nav-cta{color:var(--night);}
+.nav-cta{padding:10px 22px;font-size:.86rem;}
+.nav-toggle{display:none;background:none;border:none;color:var(--cream);font-size:1.35rem;cursor:pointer;
+  line-height:1;min-width:44px;min-height:44px;align-items:center;justify-content:center;}
+
+/* ---------- HERO ---------- */
+.hero{position:relative;overflow:hidden;isolation:isolate;margin-top:-78px;padding-top:78px;}
+/* Aurora: dos gradientes cónicos girando en sentidos opuestos vía @property */
+.hero::before{
+  content:"";position:absolute;inset:-25% -12%;z-index:-2;contain:paint;
+  background:
+    conic-gradient(from var(--aur-a) at 24% 20%,
+      transparent 0deg, rgba(197,160,89,.17) 55deg, transparent 130deg,
+      rgba(58,58,99,.42) 215deg, transparent 320deg),
+    conic-gradient(from var(--aur-b) at 76% 74%,
+      transparent 0deg, rgba(243,226,171,.11) 70deg, transparent 165deg,
+      rgba(31,35,66,.62) 255deg, transparent 340deg);
+  filter:blur(52px);
+}
+/* Campo de estrellas + base noche */
+.hero::after{
+  content:"";position:absolute;inset:0;z-index:-3;pointer-events:none;
+  background-color:var(--night);
+  background-image:
+    radial-gradient(1.6px 1.6px at 11% 24%,rgba(243,226,171,.55),transparent 62%),
+    radial-gradient(1.2px 1.2px at 19% 62%,rgba(243,226,171,.38),transparent 62%),
+    radial-gradient(1.8px 1.8px at 31% 14%,rgba(243,226,171,.60),transparent 62%),
+    radial-gradient(1.1px 1.1px at 44% 78%,rgba(243,226,171,.30),transparent 62%),
+    radial-gradient(1.5px 1.5px at 57% 30%,rgba(243,226,171,.45),transparent 62%),
+    radial-gradient(1.2px 1.2px at 66% 66%,rgba(243,226,171,.34),transparent 62%),
+    radial-gradient(2px 2px   at 74% 18%,rgba(243,226,171,.66),transparent 62%),
+    radial-gradient(1.1px 1.1px at 83% 52%,rgba(243,226,171,.30),transparent 62%),
+    radial-gradient(1.4px 1.4px at 92% 34%,rgba(243,226,171,.44),transparent 62%),
+    radial-gradient(1.2px 1.2px at 38% 46%,rgba(243,226,171,.26),transparent 62%),
+    radial-gradient(1.3px 1.3px at 8% 84%,rgba(243,226,171,.28),transparent 62%),
+    radial-gradient(1.6px 1.6px at 88% 80%,rgba(243,226,171,.32),transparent 62%),
+    radial-gradient(900px 420px at 80% -10%,rgba(197,160,89,.22),transparent 60%),
+    linear-gradient(168deg,var(--dusk),var(--night) 58%,#0e0c1f);
+}
+/* Foco que sigue al cursor (sólo puntero fino) */
+.hero .spot{
+  position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:0;
+  transition:opacity .5s var(--ease-std);
+  background:radial-gradient(600px 600px at var(--mx,50%) var(--my,40%),rgba(197,160,89,.09),transparent 62%);
+}
+.hero.spot-on .spot{opacity:1;}
+
+.hero-grid{display:grid;grid-template-columns:1fr;gap:48px;align-items:center;padding:clamp(56px,7vw,86px) 0 clamp(40px,5vw,60px);}
+.hero h1{
+  font-family:var(--display);font-optical-sizing:auto;
+  font-size:var(--t-display);font-weight:600;letter-spacing:-.012em;
+  line-height:1.02;margin:20px 0 22px;color:var(--cream);text-wrap:balance;
+}
+.hero h1 em{font-style:italic;font-weight:500;color:var(--star);}
+.hero .lead{font-size:var(--t-lead);color:var(--on-night-soft);max-width:46ch;margin:0 0 30px;text-wrap:pretty;}
+.hero-cta{display:flex;gap:14px;flex-wrap:wrap;}
+.cta-note{color:rgba(245,242,235,.52);font-size:var(--t-small);margin:16px 0 0;}
+
+/* La lámina: grabado enmarcado en arco.
+   El chip vive FUERA del elemento enmascarado — si no, el degradado
+   inferior de la máscara se lo come. */
+.plate-wrap{position:relative;justify-self:center;width:min(100%,390px);}
+.plate{
+  position:relative;width:100%;aspect-ratio:3/4;
+  border:1px solid var(--hair);border-radius:200px 200px var(--r-lg) var(--r-lg);
+  background:linear-gradient(168deg,#1b1e3a,var(--night) 62%,#0d0b1c);
+  overflow:hidden;
+  box-shadow:var(--va-shadow-dusk,0 18px 44px rgba(20,18,42,.22));
+  -webkit-mask-image:linear-gradient(to bottom,#000 74%,rgba(0,0,0,.25));
+  mask-image:linear-gradient(to bottom,#000 74%,rgba(0,0,0,.25));
+}
+.plate::before{ /* filete de oro interior */
+  content:"";position:absolute;inset:13px;border:1px solid rgba(197,160,89,.26);
+  border-radius:188px 188px var(--r-md) var(--r-md);pointer-events:none;z-index:2;
+}
+.plate::after{ /* velo para asentar la lámina en la noche */
+  content:"";position:absolute;inset:0;pointer-events:none;z-index:1;
+  background:linear-gradient(to bottom,transparent 52%,rgba(14,12,31,.55));
+}
+.plate img{width:100%;height:100%;object-fit:cover;display:block;}
+.plate-chip{
+  position:absolute;left:50%;bottom:18px;z-index:3;transform:translateX(-50%);
+  display:inline-flex;align-items:center;gap:8px;white-space:nowrap;
+  padding:8px 16px;border-radius:var(--r-pill);
+  background:rgba(20,18,42,.82);border:1px solid var(--hair);backdrop-filter:blur(6px);
+  color:var(--star);font-size:.73rem;font-weight:600;letter-spacing:.06em;
+}
+.plate-chip .dot{width:6px;height:6px;border-radius:50%;background:#4ade80;flex:0 0 auto;}
+
+/* Riel de cifras, dividido por filetes de oro */
+.statrail{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--hair);}
+.statrail div{padding:26px 0 34px 26px;border-left:1px solid var(--hair);}
+.statrail div:first-child{border-left:0;padding-left:0;}
+.statrail b{
+  display:block;font-family:var(--display);font-optical-sizing:auto;
+  font-size:1.85rem;font-weight:600;color:var(--star);line-height:1;
+  font-variant-numeric:tabular-nums;
+}
+.statrail small{display:block;margin-top:9px;color:rgba(245,242,235,.55);font-size:.72rem;letter-spacing:.13em;text-transform:uppercase;}
+
+@media(min-width:981px){
+  .hero-grid{grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:64px;}
+  .hero{min-height:88svh;display:flex;flex-direction:column;justify-content:center;}
+}
+
+/* ---------- RIEL DE CREDENCIALES ---------- */
+.creds{background:var(--dusk);border-top:1px solid var(--hair);border-bottom:1px solid var(--hair);}
+.creds-inner{display:grid;grid-template-columns:repeat(5,1fr);}
+.creds-inner span{
+  padding:22px 8px;text-align:center;border-left:1px solid rgba(197,160,89,.18);
+  color:rgba(243,226,171,.78);font-size:.71rem;font-weight:600;
+  letter-spacing:.14em;text-transform:uppercase;
+}
+.creds-inner span:first-child{border-left:0;}
+
+/* ---------- BANDAS ---------- */
+section{padding:var(--s-section) 0;}
+.band-cream{background:var(--cream);color:var(--ink);}
+.band-cream .sec-title{color:var(--ink);}
+
+/* ---------- MÉTODO: pliego 2x2 con cruz de filetes ---------- */
+.mgrid{display:grid;grid-template-columns:1fr 1fr;margin-top:56px;}
+.mcell{padding:38px clamp(24px,3.4vw,44px);border-top:1px solid var(--line);border-left:1px solid var(--line);}
+.mcell:nth-child(-n+2){border-top:0;padding-top:0;}
+.mcell:nth-child(odd){border-left:0;padding-left:0;}
+.mcell .ic{
+  width:66px;height:66px;border-radius:50%;background:var(--gold-tint);
+  display:grid;place-items:center;color:var(--gold-ink);font-size:1.6rem;margin-bottom:22px;
+}
+.mcell h3{font-family:var(--display);font-optical-sizing:auto;font-size:var(--t-h3);font-weight:600;margin-bottom:10px;color:var(--ink);}
+.mcell p{color:var(--muted);font-size:var(--t-body);margin:0;text-wrap:pretty;}
+
+/* Barra 80/20 */
+.ratio{margin-top:58px;}
+.ratio-bar{height:10px;border-radius:var(--r-pill);background:#e6dfd0;overflow:hidden;display:flex;}
+.ratio-bar i{display:block;height:100%;transform-origin:left;}
+.ratio-bar .you{background:var(--gold);flex:0 0 80%;}
+.ratio-bar .teach{background:#cbbfa6;flex:0 0 20%;}
+.ratio-legend{display:flex;justify-content:space-between;margin-top:14px;font-size:var(--t-small);color:var(--muted);}
+.ratio-legend b{color:var(--ink);font-weight:600;}
+
+/* ---------- RESULTADOS ---------- */
+.rgrid{display:grid;grid-template-columns:repeat(3,1fr);margin-top:56px;border-top:1px solid var(--hair);}
+.rgrid div{padding:40px 0 10px 34px;border-left:1px solid var(--hair);}
+.rgrid div:first-child{border-left:0;padding-left:0;}
+.rgrid b{
+  display:block;font-family:var(--display);font-optical-sizing:auto;
+  font-size:clamp(2.4rem,4.4vw,3.5rem);font-weight:600;color:var(--star);
+  line-height:1;font-variant-numeric:tabular-nums;
+}
+.rgrid p{margin:14px 0 0;color:var(--on-night-soft);font-size:var(--t-body);max-width:26ch;}
+
+/* ============================================================
+   LA CONSTELACIÓN — #ruta
+   Panel pegajoso a la izquierda, cinco escalones a la derecha,
+   y un hilo de oro que se dibuja hacia abajo conforme bajas.
+   Cada tramo se dibuja solo: no depende de medir la altura total.
+   ============================================================ */
+.const-grid{display:grid;grid-template-columns:1fr;gap:44px;margin-top:60px;}
+
+.const-sticky{align-self:start;}
+.const-cefr{
+  font-family:var(--display);font-optical-sizing:auto;
+  font-size:clamp(3.6rem,7vw,5.6rem);font-weight:600;line-height:.92;
+  color:var(--star);letter-spacing:-.02em;display:block;
+  font-variant-numeric:tabular-nums;
+}
+.const-name{
+  display:block;margin-top:10px;font-size:.78rem;font-weight:600;
+  letter-spacing:.2em;text-transform:uppercase;color:var(--gold);
+}
+.const-goal{margin:18px 0 0;color:var(--on-night-soft);font-size:var(--t-body);max-width:30ch;min-height:4.4em;}
+.const-meter{margin-top:24px;height:2px;background:rgba(197,160,89,.22);position:relative;overflow:hidden;}
+.const-meter i{position:absolute;inset:0 auto 0 0;background:linear-gradient(90deg,var(--gold),var(--star));
+  width:var(--p,16%);transition:width .7s var(--ease-out);}
+.const-count{margin-top:12px;font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:rgba(245,242,235,.6);font-variant-numeric:tabular-nums;}
+
+.const-track{list-style:none;margin:0;padding:0;counter-reset:paso;}
+.cstep{position:relative;padding:0 0 clamp(46px,6vw,74px) 62px;}
+.cstep:last-child{padding-bottom:0;}
+/* El tramo de hilo que baja de este nodo al siguiente */
+.cstep::before{
+  content:"";position:absolute;left:19px;top:44px;bottom:0;width:1px;
+  background:linear-gradient(180deg,var(--gold),rgba(197,160,89,.28));
+  transform:scaleY(0);transform-origin:top;
+}
+.cstep:last-child::before{display:none;}
+.cnode{
+  position:absolute;left:0;top:6px;width:40px;height:40px;border-radius:50%;
+  display:grid;place-items:center;border:1px solid var(--hair);
+  background:var(--night);color:rgba(197,160,89,.45);
+  transition:color .5s var(--ease-out),border-color .5s,background .5s,box-shadow .5s;
+}
+.cstep.in-view .cnode{color:var(--star);border-color:var(--gold);box-shadow:0 0 0 5px rgba(197,160,89,.09);}
+.cstep h3{
+  font-family:var(--display);font-optical-sizing:auto;
+  font-size:1.32rem;font-weight:600;color:var(--cream);margin:0 0 4px;
+}
+.cstep .clevel{
+  display:inline-block;font-size:.68rem;font-weight:600;letter-spacing:.18em;
+  text-transform:uppercase;color:var(--gold);margin-bottom:9px;
+}
+.cstep p{margin:0;color:var(--on-night-soft);font-size:var(--t-body);max-width:46ch;text-wrap:pretty;}
+.cstep .cwhat{
+  margin:14px 0 0;padding-top:13px;border-top:1px solid rgba(197,160,89,.18);
+  font-size:.85rem;color:rgba(245,242,235,.62);
+}
+.cstep .cwhat b{color:var(--star);font-weight:600;}
+
+@media(min-width:901px){
+  .const-grid{grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:64px;}
+  .const-sticky{position:sticky;top:118px;}
+}
+
+/* ============================================================
+   ASÍ SE VE UNA CLASE — panel diagramático, sin fotografía
+   ============================================================ */
+.clase-panel{border:1px solid var(--hair);border-radius:var(--r-lg);overflow:hidden;
+  background:var(--dusk);margin-top:54px;box-shadow:var(--va-shadow-dusk,0 18px 44px rgba(20,18,42,.22));}
+.clase-chrome{display:flex;align-items:center;gap:8px;padding:13px 18px;
+  border-bottom:1px solid var(--hair);background:rgba(14,12,31,.55);}
+.clase-chrome i{width:9px;height:9px;border-radius:50%;background:rgba(245,242,235,.16);}
+.clase-chrome .ttl{margin-left:14px;font-size:.73rem;color:rgba(245,242,235,.62);letter-spacing:.06em;}
+.clase-chrome .live{margin-left:auto;display:inline-flex;align-items:center;gap:7px;
+  font-size:.66rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#7ee2a8;}
+.clase-chrome .live b{width:7px;height:7px;border-radius:50%;background:#4ade80;display:block;}
+.clase-body{display:grid;grid-template-columns:1fr;gap:0;}
+.clase-mat{position:relative;min-height:230px;background:var(--night);overflow:hidden;
+  border-bottom:1px solid var(--hair);}
+.clase-mat img{width:100%;height:100%;position:absolute;inset:0;object-fit:cover;opacity:.9;}
+.clase-mat .tag{position:absolute;left:16px;top:16px;z-index:2;font-size:.63rem;font-weight:600;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--star);
+  background:rgba(14,12,31,.78);border:1px solid var(--hair);padding:6px 12px;border-radius:var(--r-pill);}
+.clase-talk{padding:26px clamp(20px,3vw,32px);display:flex;flex-direction:column;gap:14px;justify-content:center;}
+.line{margin:0;font-size:.92rem;line-height:1.5;}
+.line.say{color:var(--on-night);padding-left:14px;border-left:2px solid rgba(245,242,235,.16);}
+.line.say s{color:rgba(255,255,255,.62);text-decoration-color:#e07a7a;}
+.line.fix{color:var(--star);padding-left:14px;border-left:2px solid var(--gold);font-size:.87rem;}
+.line.fix b{color:var(--star);font-weight:600;}
+.line.fix span{color:rgba(245,242,235,.55);}
+.line.ok{color:#8fdcb0;font-size:.85rem;padding-left:14px;border-left:2px solid #3f9e6b;}
+.clase-foot{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--hair);}
+.clase-foot span{padding:16px 18px;border-left:1px solid var(--hair);font-size:.76rem;
+  color:rgba(245,242,235,.6);display:flex;align-items:center;gap:9px;}
+.clase-foot span:first-child{border-left:0;}
+.clase-foot svg{color:var(--gold);}
+@media(min-width:901px){.clase-body{grid-template-columns:1fr 1fr;}
+  .clase-mat{border-bottom:0;border-right:1px solid var(--hair);}}
+
+/* ============================================================
+   CURSOS — emblemas grabados, marco de oro que se dibuja
+   ============================================================ */
+.ctiles{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;margin-top:54px;}
+.ctile{position:relative;display:flex;flex-direction:column;color:inherit;
+  border:1px solid var(--hair);border-radius:var(--r-md);overflow:hidden;background:var(--dusk);
+  transition:transform .38s var(--ease-std);}
+.ctile:hover,.ctile:focus-visible{transform:translateY(-6px);}
+/* marco de filete que crece desde las esquinas */
+.ctile::before,.ctile::after{content:"";position:absolute;inset:0;pointer-events:none;z-index:3;
+  border-radius:var(--r-md);transition:transform .45s var(--ease-out);}
+.ctile::before{border-top:1px solid var(--gold);border-bottom:1px solid var(--gold);transform:scaleX(0);}
+.ctile::after{border-left:1px solid var(--gold);border-right:1px solid var(--gold);transform:scaleY(0);}
+.ctile:hover::before,.ctile:focus-visible::before{transform:scaleX(1);}
+.ctile:hover::after,.ctile:focus-visible::after{transform:scaleY(1);}
+.ctile .cvr{position:relative;aspect-ratio:16/9;overflow:hidden;background:var(--night);}
+.ctile .cvr img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
+  transition:transform .6s var(--ease-std);}
+.ctile:hover .cvr img{transform:scale(1.04);}
+.ctile .cvr::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(14,12,31,.88),rgba(14,12,31,.18));}
+.ctile .badge{position:absolute;left:12px;top:12px;z-index:2;font-size:.6rem;font-weight:600;
+  letter-spacing:.13em;text-transform:uppercase;color:var(--star);
+  border:1px solid var(--hair);background:rgba(14,12,31,.6);padding:4px 10px;border-radius:var(--r-pill);}
+.ctile h3{position:absolute;left:16px;right:16px;bottom:14px;z-index:2;
+  font-family:var(--display);font-optical-sizing:auto;font-size:1.08rem;font-weight:600;color:var(--cream);}
+.ctile .cbody{padding:18px 18px 20px;display:flex;flex-direction:column;gap:10px;flex:1;}
+.ctile p{margin:0;color:var(--on-night-soft);font-size:.85rem;line-height:1.5;flex:1;}
+.ctile .more{display:inline-flex;align-items:center;gap:8px;color:var(--star);font-weight:600;font-size:.8rem;}
+.ctile .more svg{transition:transform .3s var(--ease-std);}
+.ctile:hover .more svg{transform:translateX(4px);}
+
+/* ============================================================
+   EL RAIL TEMÁTICO — dos filas en marcha contraria
+   ============================================================ */
+.temas{padding:clamp(46px,6vw,74px) 0;border-top:1px solid var(--hair);border-bottom:1px solid var(--hair);
+  background:var(--night);overflow:hidden;contain:layout paint;}
+.temas-head{text-align:center;margin-bottom:34px;}
+.marquee{overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);
+  mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);}
+.marquee+.marquee{margin-top:14px;}
+.mtrack{display:flex;gap:14px;width:max-content;}
+.mtrack img{width:88px;height:88px;object-fit:cover;border-radius:var(--r-sm);
+  border:1px solid rgba(197,160,89,.22);opacity:.55;flex:0 0 auto;transition:opacity .3s;}
+.marquee:hover .mtrack img{opacity:.78;}
+@keyframes marchL{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+@keyframes marchR{from{transform:translateX(-50%);}to{transform:translateX(0);}}
+html.js-anim .marquee.l .mtrack{animation:marchL 60s linear infinite;}
+html.js-anim .marquee.r .mtrack{animation:marchR 75s linear infinite;}
+
+/* ============================================================
+   CERTIFICACIÓN — expediente, pestañas y comparador de bandas
+   ============================================================ */
+.dossier{background:var(--dusk);border:1px solid var(--hair);border-radius:var(--r-lg);
+  padding:clamp(26px,4vw,44px);margin-top:52px;color:var(--on-night);
+  box-shadow:var(--va-shadow-dusk,0 18px 44px rgba(20,18,42,.22));}
+.dossier-grid{display:grid;grid-template-columns:1fr;gap:40px;}
+.dclaims{list-style:none;margin:0;padding:0;counter-reset:d;}
+.dclaims li{counter-increment:d;position:relative;padding:0 0 18px 46px;margin-bottom:18px;
+  border-bottom:1px solid rgba(197,160,89,.18);}
+.dclaims li:last-child{border-bottom:0;margin-bottom:0;padding-bottom:0;}
+.dclaims li::before{content:counter(d,decimal-leading-zero);position:absolute;left:0;top:-2px;
+  font-family:var(--display);font-optical-sizing:auto;font-size:1.2rem;font-weight:600;color:var(--gold);}
+.dclaims b{display:block;color:var(--cream);font-weight:600;margin-bottom:4px;font-size:.98rem;}
+.dclaims p{margin:0;color:var(--on-night-soft);font-size:.88rem;}
+.tabs{display:flex;gap:0;border-bottom:1px solid var(--hair);margin-bottom:22px;}
+.tabs button{flex:1;background:none;border:none;cursor:pointer;font-family:inherit;
+  padding:13px 8px;color:rgba(245,242,235,.55);font-size:.85rem;font-weight:600;
+  border-bottom:2px solid transparent;margin-bottom:-1px;transition:color .25s,border-color .25s;}
+.tabs button[aria-selected="true"]{color:var(--star);border-bottom-color:var(--gold);}
+.tabs button:hover{color:var(--on-night);}
+.tabpanel[hidden]{display:none;}
+.tabpanel dl{margin:0;display:grid;grid-template-columns:auto 1fr;gap:11px 18px;font-size:.89rem;}
+.tabpanel dt{color:rgba(245,242,235,.62);font-size:.76rem;letter-spacing:.1em;text-transform:uppercase;padding-top:3px;}
+.tabpanel dd{margin:0;color:var(--on-night);}
+.tabpanel dd b{color:var(--star);font-family:var(--display);font-optical-sizing:auto;font-size:1.2rem;font-weight:600;}
+
+/* Comparador Banda 6 / Banda 8 */
+.bandcmp{margin-top:34px;padding-top:30px;border-top:1px solid rgba(197,160,89,.2);}
+.bandcmp h4{font-family:var(--display);font-optical-sizing:auto;font-size:1.1rem;font-weight:600;color:var(--cream);margin-bottom:6px;}
+.bandcmp .hint{color:rgba(245,242,235,.62);font-size:.82rem;margin:0 0 18px;}
+.cmp{position:relative;border:1px solid var(--hair);border-radius:var(--r-md);overflow:hidden;background:var(--night);}
+.cmp-layer{padding:26px clamp(18px,2.6vw,30px);font-size:.93rem;line-height:1.62;}
+.cmp-layer .lbl{display:inline-block;font-size:.63rem;font-weight:600;letter-spacing:.16em;
+  text-transform:uppercase;margin-bottom:12px;padding:4px 11px;border-radius:var(--r-pill);border:1px solid var(--hair);}
+.cmp-b6{color:rgba(245,242,235,.62);}
+.cmp-b6 .lbl{color:rgba(245,242,235,.6);}
+.cmp-b8{position:absolute;inset:0;background:var(--night);color:var(--on-night);
+  clip-path:inset(0 0 0 var(--cut,50%));}
+.cmp-b8 .lbl{color:var(--star);border-color:var(--gold);}
+.cmp-b8 em{font-style:normal;color:var(--star);}
+.cmp-div{position:absolute;top:0;bottom:0;left:var(--cut,50%);width:1px;background:var(--gold);z-index:3;pointer-events:none;}
+.cmp-div::after{content:"";position:absolute;left:50%;top:50%;width:30px;height:30px;transform:translate(-50%,-50%);
+  border-radius:50%;background:var(--gold);border:2px solid var(--night);}
+/* `touch-action:pan-y` es obligatorio: sin él, en el móvil este input
+   invisible de 275x235 se traga el gesto y la página no hace scroll cuando
+   el dedo cae encima. Con pan-y, el arrastre vertical desplaza la página y
+   sólo el horizontal mueve el comparador. */
+.cmp-range{position:absolute;inset:0;width:100%;height:100%;opacity:0;cursor:ew-resize;z-index:4;margin:0;touch-action:pan-y;}
+.cmp-range:focus-visible+.cmp-div{outline:2px solid var(--star);outline-offset:2px;}
+@media(min-width:901px){.dossier-grid{grid-template-columns:1fr 1fr;gap:52px;}}
+
+/* ============================================================
+   PRECIOS
+   ============================================================ */
+.ptiles{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:52px;align-items:stretch;}
+.ptile{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;gap:11px;
+  padding:40px 26px 30px;border:1px solid var(--line);border-radius:var(--r-lg);background:#fff;color:var(--ink);
+  transition:transform .38s var(--ease-std),border-color .3s;}
+.ptile:hover,.ptile:focus-visible{transform:translateY(-6px);border-color:var(--gold);}
+.ptile.feat{background:var(--night);color:var(--on-night);border-color:var(--gold);}
+.ptile .ribbon{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--gold);
+  color:var(--night);font-size:.66rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
+  padding:5px 16px;border-radius:var(--r-pill);}
+.ptile .ic{width:64px;height:64px;border-radius:50%;display:grid;place-items:center;font-size:1.5rem;
+  color:var(--gold-ink);background:var(--gold-tint);}
+.ptile.feat .ic{color:var(--star);background:rgba(197,160,89,.16);}
+.ptile h3{font-family:var(--display);font-optical-sizing:auto;font-size:1.18rem;font-weight:600;margin:0;}
+.ptile.feat h3{color:var(--cream);}
+.ptile .price{font-family:var(--display);font-optical-sizing:auto;font-size:1.75rem;font-weight:600;margin:0;
+  font-variant-numeric:tabular-nums;min-width:6ch;}
+.ptile.feat .price{color:var(--star);}
+.ptile .price small{font-size:.82rem;color:var(--muted);font-weight:400;font-family:var(--text);}
+.ptile.feat .price small{color:rgba(245,242,235,.55);}
+.ptile .pnote{color:var(--muted);font-size:.83rem;margin:0;min-height:2.4em;}
+.ptile.feat .pnote{color:var(--on-night-soft);}
+.ptile .more{margin-top:auto;padding-top:10px;color:var(--gold-ink);font-weight:600;font-size:.82rem;
+  display:inline-flex;align-items:center;gap:7px;}
+.ptile.feat .more{color:var(--star);}
+.ptile .more svg{transition:transform .3s var(--ease-std);}
+.ptile:hover .more svg{transform:translateX(4px);}
+.pfoot{color:var(--muted);font-size:.83rem;margin-top:26px;text-align:center;}
+
+/* ============================================================
+   FAQ — <details> nativo
+   ============================================================ */
+.faq{max-width:780px;margin:52px auto 0;}
+.qitem{border:1px solid var(--hair);border-radius:var(--r-md);margin-bottom:13px;
+  background:var(--dusk);overflow:hidden;}
+.qitem summary{list-style:none;cursor:pointer;padding:19px 24px;font-weight:600;font-size:.98rem;
+  color:var(--cream);display:flex;justify-content:space-between;align-items:center;gap:14px;}
+.qitem summary::-webkit-details-marker{display:none;}
+.qitem summary:hover{color:var(--star);}
+.qitem summary svg{color:var(--gold);flex:0 0 auto;transition:transform .38s var(--ease-std);}
+.qitem[open] summary svg{transform:rotate(180deg);}
+.qbody{padding:0 24px 20px;color:var(--on-night-soft);font-size:.92rem;}
+/* Sólo animamos block-size. Transicionar `content-visibility` con
+   allow-discrete deja el panel atrapado en `hidden` (y por tanto en 0px)
+   si la transición nunca corre — p. ej. con la pestaña en segundo plano.
+   Sin ella, el contenido se muestra al instante y sólo la altura anima. */
+@supports (interpolate-size: allow-keywords){
+  :root{interpolate-size:allow-keywords;}
+  /* Bajo `js-anim` únicamente: si no hay animación (reduced-motion, o la red
+     de seguridad ya disparó) queda el <details> nativo, que siempre abre. */
+  html.js-anim .qitem::details-content{block-size:0;overflow:hidden;transition:block-size .4s var(--ease-std);}
+  html.js-anim .qitem[open]::details-content{block-size:auto;}
+}
+
+/* ============================================================
+   CONTACTO
+   ============================================================ */
+.cta-band{position:relative;overflow:hidden;background:var(--night);}
+.cta-band>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.55;z-index:0;}
+.cta-band::after{content:"";position:absolute;inset:0;z-index:1;
+  background:linear-gradient(105deg,rgba(14,12,31,.92),rgba(14,12,31,.62));}
+.cta-band .container{position:relative;z-index:2;}
+.cta-grid{display:grid;grid-template-columns:1fr;gap:46px;align-items:start;}
+.steps{list-style:none;margin:28px 0 0;padding:0;counter-reset:s;}
+.steps li{counter-increment:s;position:relative;padding:0 0 24px 48px;}
+.steps li:last-child{padding-bottom:0;}
+.steps li::before{content:counter(s);position:absolute;left:0;top:-3px;width:32px;height:32px;
+  border-radius:50%;border:1px solid var(--hair);display:grid;place-items:center;
+  font-family:var(--display);font-size:.9rem;font-weight:600;color:var(--star);background:var(--night);}
+.steps li::after{content:"";position:absolute;left:16px;top:32px;bottom:6px;width:1px;background:rgba(197,160,89,.28);}
+.steps li:last-child::after{display:none;}
+.steps b{display:block;color:var(--cream);font-weight:600;margin-bottom:3px;font-size:.96rem;}
+.steps p{margin:0;color:var(--on-night-soft);font-size:.87rem;}
+.formcard{background:rgba(58,58,99,.28);border:1px solid var(--hair);border-radius:var(--r-lg);
+  padding:clamp(24px,3.4vw,34px);backdrop-filter:blur(8px);}
+.field{position:relative;margin-bottom:16px;}
+.field input,.field textarea{width:100%;padding:19px 16px 8px;border-radius:var(--r-sm);
+  border:1px solid rgba(245,242,235,.22);background:rgba(14,12,31,.5);color:var(--cream);
+  font-family:inherit;font-size:.93rem;transition:border-color .25s;}
+.field textarea{min-height:96px;resize:vertical;}
+.field input:focus,.field textarea:focus{border-color:var(--gold);outline:none;}
+.field label{position:absolute;left:17px;top:14px;color:rgba(245,242,235,.5);font-size:.9rem;
+  pointer-events:none;transition:transform .22s var(--ease-out),font-size .22s,color .22s;transform-origin:left top;}
+.field input:focus+label,.field input:not(:placeholder-shown)+label,
+.field textarea:focus+label,.field textarea:not(:placeholder-shown)+label{
+  transform:translateY(-8px) scale(.76);color:var(--star);}
+.formmsg{margin-top:16px;color:var(--star);font-size:.9rem;}
+
+/* ============================================================
+   FOOTER
+   ============================================================ */
+footer{background:#0e0c1f;border-top:1px solid var(--hair);padding:60px 0 30px;color:rgba(245,242,235,.58);}
+.fgrid{display:grid;grid-template-columns:1.7fr 1fr 1fr 1fr 1fr;gap:36px;margin-bottom:38px;}
+.fbrand b{display:block;font-family:var(--display);font-optical-sizing:auto;font-size:1.32rem;
+  font-weight:500;color:var(--cream);margin-bottom:10px;}
+.fbrand p{font-size:.87rem;max-width:30ch;margin:0;}
+.fbrand .vesp{display:flex;align-items:center;gap:12px;margin-top:20px;padding-top:18px;
+  border-top:1px solid rgba(197,160,89,.18);}
+.fbrand .vesp img{width:56px;height:56px;border-radius:50%;background:rgba(197,160,89,.1);flex:0 0 auto;}
+.fbrand .vesp a{color:var(--star);font-weight:600;font-size:.87rem;}
+.fbrand .vesp small{display:block;color:rgba(245,242,235,.62);font-size:.76rem;}
+.fgrid h5{color:var(--cream);font-size:.72rem;letter-spacing:.16em;text-transform:uppercase;margin:0 0 15px;font-weight:600;}
+.fgrid a{display:block;color:rgba(245,242,235,.58);font-size:.86rem;margin-bottom:11px;transition:color .2s;}
+.fgrid a:hover{color:var(--star);}
+.fbottom{border-top:1px solid rgba(245,242,235,.1);padding-top:22px;display:flex;
+  justify-content:space-between;flex-wrap:wrap;gap:12px;font-size:.79rem;}
+.fbottom .social a{margin-left:16px;color:rgba(245,242,235,.58);}
+.fbottom .social a:hover{color:var(--star);}
+
+
+/* ============================================================
+   BREAKPOINTS — cuatro, alineados. Cierra la ventana rota 761–819.
+   ============================================================ */
+@media(max-width:1180px){
+  .nav-links{
+    display:none;position:fixed;inset:78px 0 0;background:rgba(14,12,31,.98);
+    backdrop-filter:blur(16px);flex-direction:column;justify-content:flex-start;
+    padding:40px var(--gutter);gap:26px;border-top:1px solid var(--hair);
+  }
+  .nav-links.show{display:flex;}
+  .nav-links a{font-size:1.15rem;}
+  html.js-anim .nav-links.show a{animation:linkIn .45s var(--ease-out) both;}
+  html.js-anim .nav-links.show a:nth-child(1){animation-delay:.04s}
+  html.js-anim .nav-links.show a:nth-child(2){animation-delay:.08s}
+  html.js-anim .nav-links.show a:nth-child(3){animation-delay:.12s}
+  html.js-anim .nav-links.show a:nth-child(4){animation-delay:.16s}
+  html.js-anim .nav-links.show a:nth-child(5){animation-delay:.20s}
+  html.js-anim .nav-links.show a:nth-child(6){animation-delay:.24s}
+  .nav-toggle{display:inline-flex;}
+  .ctiles{grid-template-columns:repeat(2,1fr);}
+  .fgrid{grid-template-columns:1.6fr 1fr 1fr;row-gap:34px;}
+}
+@media(max-width:900px){
+  .hero-grid{gap:40px;}
+  .plate-wrap{width:min(100%,330px);}
+  .ptiles{grid-template-columns:1fr;max-width:420px;margin-left:auto;margin-right:auto;}
+  .mgrid{grid-template-columns:1fr;}
+  .mcell{border-left:0;padding-left:0;padding-right:0;}
+  .mcell:nth-child(2){border-top:1px solid var(--line);padding-top:38px;}
+  .rgrid{grid-template-columns:1fr;}
+  .rgrid div{border-left:0;padding-left:0;border-top:1px solid var(--hair);}
+  .rgrid div:first-child{border-top:0;}
+  /* Cinco credenciales en 900px quedan a ~150px cada una: se aprietan. A tres. */
+  .creds-inner{grid-template-columns:repeat(3,1fr);}
+  .creds-inner span:nth-child(4){border-left:0;}
+  .creds-inner span:nth-child(n+4){border-top:1px solid rgba(197,160,89,.18);}
+}
+@media(max-width:700px){
+  .statrail{grid-template-columns:1fr 1fr;}
+  .statrail div{padding:22px 0 24px 22px;border-top:1px solid var(--hair);}
+  .statrail div:nth-child(-n+2){border-top:0;}
+  .statrail div:nth-child(odd){border-left:0;padding-left:0;}
+  .creds-inner{grid-template-columns:1fr 1fr;}
+  .creds-inner span{border-left:0;border-top:1px solid rgba(197,160,89,.18);padding:16px 8px;}
+  .creds-inner span:nth-child(-n+2){border-top:0;}
+  .creds-inner span:last-child{grid-column:1 / -1;}
+  .ctiles{grid-template-columns:1fr;max-width:380px;margin-left:auto;margin-right:auto;}
+  .clase-foot{grid-template-columns:1fr;}
+  .clase-foot span{border-left:0;border-top:1px solid var(--hair);}
+  .clase-foot span:first-child{border-top:0;}
+  .fgrid{grid-template-columns:1fr 1fr;}
+  .fbrand{grid-column:1 / -1;}
+}
+@media(max-width:520px){
+  .hero-cta{flex-direction:column;align-items:stretch;}
+  .hero-cta .btn{justify-content:center;}
+  .fgrid{grid-template-columns:1fr;}
+  .fbottom{flex-direction:column;}
+  .fbottom .social a{margin:0 16px 0 0;}
+  /* La sangría de 62px dejaba el texto de la constelación en 199px a 320. */
+  :root{--t-display:clamp(2.5rem,8.5vw,4.8rem);}
+  .cstep{padding-left:46px;}
+  .cstep::before{left:16px;top:38px;}
+  .cnode{width:34px;height:34px;}
+  .cnode svg{font-size:.9rem;}
+}
+
+/* Objetivos táctiles: en el móvil todo enlace debe medir 44px de alto.
+   Los del pie medían 22px. */
+@media(max-width:900px){
+  .fgrid a,.fbrand .vesp a,.fbottom .social a{
+    display:flex;align-items:center;min-height:44px;margin-bottom:0;
+  }
+  .fbottom .social{display:flex;flex-wrap:wrap;gap:0 18px;}
+  .fbottom .social a{margin-left:0;}
+}
+
+/* ============================================================
+   ANIMACIÓN
+   ============================================================ */
+@keyframes aurA{to{--aur-a:360deg;}}
+@keyframes aurB{to{--aur-b:540deg;}}
+@keyframes rise{from{opacity:0;transform:translateY(22px);}to{opacity:1;transform:none;}}
+@keyframes linkIn{from{opacity:0;transform:translateY(-10px);}to{opacity:1;transform:none;}}
+
+html.js-anim .hero::before{animation:aurA 40s linear infinite,aurB 65s linear infinite;}
+html.js-anim .hero-copy>*{opacity:0;animation:rise .75s var(--ease-out) both;}
+html.js-anim .hero-copy>.rule{animation-delay:0ms;}
+html.js-anim .hero-copy>.eyebrow{animation-delay:60ms;}
+html.js-anim .hero-copy>h1{animation-delay:130ms;}
+html.js-anim .hero-copy>.lead{animation-delay:220ms;}
+html.js-anim .hero-copy>.hero-cta{animation-delay:300ms;}
+html.js-anim .hero-copy>.cta-note{animation-delay:360ms;}
+html.js-anim .plate-wrap{opacity:0;animation:rise .9s var(--ease-out) .34s both;}
+html.js-anim .statrail{opacity:0;animation:rise .8s var(--ease-out) .46s both;}
+
+html.js-anim .reveal{opacity:0;}
+html.js-anim .reveal.in-view{opacity:1;animation:rise .72s var(--ease-out) backwards;animation-delay:calc(var(--i,0)*70ms);}
+
+html.js-anim .ratio-bar i{transform:scaleX(0);transition:transform 1.1s cubic-bezier(0.16,1,0.3,1) .15s;}
+html.js-anim .ratio.in-view .ratio-bar i{transform:scaleX(1);}
+
+/* El hilo de oro se dibuja tramo a tramo */
+html.js-anim .cstep::before{transition:transform 1.05s cubic-bezier(0.16,1,0.3,1);}
+html.js-anim .cstep.in-view::before{transform:scaleY(1);}
+/* Sin JS el hilo está entero y los nodos encendidos */
+html:not(.js-anim) .cstep::before{transform:scaleY(1);}
+
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto;}
+  html.js-anim .reveal,html.js-anim .hero-copy>*,html.js-anim .plate-wrap,html.js-anim .statrail,
+  html.js-anim .nav-links.show a,.btn,header,header::after{
+    opacity:1 !important;transform:none !important;animation:none !important;transition:none !important;
+  }
+  html.js-anim .hero::before{animation:none !important;}
+  html.js-anim .ratio-bar i{transform:scaleX(1) !important;transition:none !important;}
+  header::after{transform:scaleX(1) !important;}
+  /* La constelación se queda quieta y completa: sin sticky, hilo entero, todos los nodos encendidos */
+  .const-sticky{position:static !important;}
+  .cstep::before{transform:scaleY(1) !important;transition:none !important;}
+  .cnode{color:var(--star) !important;border-color:var(--gold) !important;}
+  /* El rail se detiene pero sigue explorable arrastrando */
+  html.js-anim .marquee .mtrack{animation:none !important;}
+  .marquee{overflow-x:auto;scroll-snap-type:x proximity;}
+  .ctile::before,.ctile::after{transition:none !important;}
+}
+@media print{
+  html.js-anim .reveal,html.js-anim .hero-copy>*,html.js-anim .plate-wrap,html.js-anim .statrail{
+    opacity:1 !important;transform:none !important;animation:none !important;}
+}
+</style>
 <script src="vesper_prefs.js"></script>
 <script src="vesper_analytics.js"></script>
 </head>
 <body>
 
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"EducationalOrganization",
+  "name":"Vesper Academy",
+  "url":"https://vesperacademy.com/",
+  "logo":"https://vesperacademy.com/assets/images/app_icon_512.png",
+  "description":"Academia de inglés en línea con clases en vivo y método comunicativo, de nivel A1 a C2 y preparación para IELTS, Cambridge y TOEFL.",
+  "email":"contacto@vesperacademy.com",
+  "areaServed":{"@type":"Country","name":"México"},
+  "sameAs":["https://www.instagram.com/vesper.academy/"],
+  "hasOfferCatalog":{
+    "@type":"OfferCatalog",
+    "name":"Cursos de inglés",
+    "itemListElement":[
+      {"@type":"Course","name":"Inglés General","description":"Ruta completa de A1 a C2 con las cuatro destrezas integradas.","url":"https://vesperacademy.com/curso-ingles-general.html","provider":{"@type":"EducationalOrganization","name":"Vesper Academy"}},
+      {"@type":"Course","name":"Club de Conversación","description":"Más de 120 temas de conversación en grupos reducidos.","url":"https://vesperacademy.com/curso-club-conversacion.html","provider":{"@type":"EducationalOrganization","name":"Vesper Academy"}},
+      {"@type":"Course","name":"Inglés Corporativo","description":"Juntas, negociación, correos y presentaciones para equipos y profesionales.","url":"https://vesperacademy.com/curso-ingles-corporativo.html","provider":{"@type":"EducationalOrganization","name":"Vesper Academy"}},
+      {"@type":"Course","name":"Preparación de Certificación","description":"IELTS, Cambridge y TOEFL con estrategia de examen y simulacros cronometrados.","url":"https://vesperacademy.com/curso-certificacion.html","provider":{"@type":"EducationalOrganization","name":"Vesper Academy"}}
+    ]
+  }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"FAQPage",
+  "mainEntity":[
+    {"@type":"Question","name":"¿Necesito saber algo de inglés para empezar?","acceptedAnswer":{"@type":"Answer","text":"No. El nivel A1 empieza desde cero absoluto: cómo se saluda, cómo te presentas y cómo se pronuncia. Si ya sabes algo, el examen diagnóstico te coloca en el peldaño correcto para que no repitas lo que ya dominas."}},
+    {"@type":"Question","name":"¿Las clases son en vivo o grabadas?","acceptedAnswer":{"@type":"Answer","text":"Todas en vivo, con un profesor real. No vendemos videos pregrabados: hablar sólo se aprende hablando con alguien que te corrige en el momento."}},
+    {"@type":"Question","name":"¿Qué pasa si falto a una clase?","acceptedAnswer":{"@type":"Answer","text":"Recibes el material de la sesión y, en los planes 1:1, se reprograma avisando con anticipación. En grupal puedes incorporarte a otro grupo del mismo nivel esa semana."}},
+    {"@type":"Question","name":"¿Cuánto tardo en subir de nivel?","acceptedAnswer":{"@type":"Answer","text":"Depende del nivel y de cuánto practiques fuera de clase. Como referencia, pasar de un peldaño al siguiente suele llevar entre cuatro y seis meses con dos sesiones por semana."}},
+    {"@type":"Question","name":"¿Preparan para IELTS, Cambridge y TOEFL?","acceptedAnswer":{"@type":"Answer","text":"Sí, con estrategia específica por examen, simulacros cronometrados y meta de banda acordada desde el principio."}},
+    {"@type":"Question","name":"¿Facturan a empresas?","acceptedAnswer":{"@type":"Answer","text":"Sí. Emitimos factura y armamos planes para equipos, con reporte de avance por participante."}}
+  ]
+}
+</script>
+
 <a class="skip" href="#main">Saltar al contenido</a>
 
-<header>
-  <div class="container">
-    <nav>
-      <a class="brand" href="#top" aria-label="Vesper Academy — inicio">
-        <img src="assets/images/vesper_logo_inverted.png" alt="" width="42" height="42">
-        <span><b>Vesper Academy</b><small>English Excellence</small></span>
-      </a>
-      <div class="nav-links" id="navlinks">
-        <a href="#metodo">Metodología</a>
-        <a href="#cursos">Cursos</a>
-        <a href="#certificacion">Certificación</a>
-        <a href="#precios">Precios</a>
-        <a href="leccion.html">Lecciones gratis</a>
-        <a href="login.html">Acceso alumnos</a>
-        <a href="book_placement.html" class="btn btn-gold nav-cta">Examen gratis</a>
-      </div>
-      <button class="nav-toggle" id="navToggle" aria-label="Abrir menú" aria-controls="navlinks" aria-expanded="false"><i class="fas fa-bars" aria-hidden="true"></i></button>
-    </nav>
-  </div>
+<!-- Sprite de iconos: 3.5 KB, hereda currentColor, reemplaza Font Awesome -->
+<svg style="display:none" aria-hidden="true" focusable="false"><defs>
+  <symbol id="i-speech" viewBox="0 0 24 24"><path d="M3 6.5A2.5 2.5 0 0 1 5.5 4h7A2.5 2.5 0 0 1 15 6.5v3A2.5 2.5 0 0 1 12.5 12H8l-3.2 2.6a.4.4 0 0 1-.65-.31V12H5.5A2.5 2.5 0 0 1 3 9.5z"/><path d="M9 15.2a2.5 2.5 0 0 0 2.4 1.8h4.1l3.2 2.6a.4.4 0 0 0 .65-.31V17h.15A2.5 2.5 0 0 0 22 14.5v-3A2.5 2.5 0 0 0 19.5 9H18"/></symbol>
+  <symbol id="i-audio" viewBox="0 0 24 24"><path d="M4 14v-2a8 8 0 0 1 16 0v2"/><rect x="2.5" y="13.5" width="4" height="7" rx="1.6"/><rect x="17.5" y="13.5" width="4" height="7" rx="1.6"/><path d="M9.5 9.5v5M12 7.5v9M14.5 10.5v3"/></symbol>
+  <symbol id="i-summit" viewBox="0 0 24 24"><path d="M2 20h4v-4H2zM8.5 20h4v-7.5h-4zM15 20h4V8h-4z"/><path d="M19.6 4.2 20.3 2l.7 2.2 2.2.7-2.2.7-.7 2.2-.7-2.2-2.2-.7z"/></symbol>
+  <symbol id="i-case" viewBox="0 0 24 24"><rect x="2.5" y="7" width="19" height="13" rx="2.2"/><path d="M8.5 7V5.4A1.9 1.9 0 0 1 10.4 3.5h3.2A1.9 1.9 0 0 1 15.5 5.4V7"/><path d="M2.5 12h19M10.6 12v2.2h2.8V12"/></symbol>
+  <symbol id="i-check-doc" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="17" rx="2.2"/><path d="M9 4V2.8h6V4"/><path d="m8.6 13 2.4 2.4 4.4-4.6"/></symbol>
+  <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13.2 2.5 5 13.4h5.3L9.8 21.5 18 10.6h-5.3z"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4 12h15m-6-6 6 6-6 6"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M3.5 7h17M3.5 12h17M3.5 17h17"/></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 2.8 2.6 6.1 6.6.6-5 4.3 1.5 6.4L12 16.9l-5.7 3.3 1.5-6.4-5-4.3 6.6-.6z"/></symbol>
+  <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m6 9.5 6 6 6-6"/></symbol>
+</defs></svg>
+
+<header id="site-header">
+  <nav class="container" aria-label="Principal">
+    <a class="brand" href="#top">
+      <img src="assets/images/landing/brand_mark_96.webp" alt="" width="40" height="40" decoding="async">
+      <span><b>Vesper Academy</b><small lang="en">English Excellence</small></span>
+    </a>
+    <button class="nav-toggle" id="navToggle" aria-expanded="false" aria-controls="navLinks" aria-label="Abrir menú">
+      <svg class="i" style="font-size:1.35rem"><use href="#i-menu"/></svg>
+    </button>
+    <div class="nav-links" id="navLinks">
+      <a href="#metodo">Metodología</a>
+      <a href="#cursos">Cursos</a>
+      <a href="#certificacion">Certificación</a>
+      <a href="#precios">Precios</a>
+      <a href="leccion.html">Lecciones gratis</a>
+      <a href="login.html">Acceso alumnos</a>
+      <a href="book_placement.html" class="btn btn-gold nav-cta">Examen gratis</a>
+    </div>
+  </nav>
 </header>
 
-<a id="top"></a>
 <main id="main">
-<section class="hero">
-  <div class="container">
-    <div class="hero-grid">
-    <div class="hero-inner">
-      <span class="eyebrow" style="color:var(--gold-lt)">Inglés en línea · Clases en vivo</span>
-      <h1>Habla inglés con <span>confianza real</span>, no solo en teoría.</h1>
-      <p>Desde el primer "hello" hasta tu certificación internacional. Método comunicativo, profesores reales y un plan que se adapta a tu nivel y a tu meta profesional.</p>
+<span id="top"></span>
+
+<!-- ============ HERO ============ -->
+<section class="hero" id="hero">
+  <div class="spot" aria-hidden="true"></div>
+  <div class="container hero-grid">
+    <div class="hero-copy">
+      <span class="rule"></span>
+      <span class="eyebrow">Inglés en línea · Clases en vivo</span>
+      <h1>Habla inglés con <em>confianza real</em>, no solo en teoría.</h1>
+      <p class="lead">Desde el primer «hello» hasta tu certificación internacional. Método comunicativo, profesores reales y un plan que se adapta a tu nivel y a tu meta profesional.</p>
       <div class="hero-cta">
-        <a href="book_placement.html" class="btn btn-gold"><i class="fas fa-clipboard-check" aria-hidden="true"></i> Examen diagnóstico gratis</a>
-        <a href="leccion.html" class="btn btn-ghost"><i class="fas fa-bolt" aria-hidden="true"></i> Prueba una lección gratis</a>
+        <a href="book_placement.html" class="btn btn-gold"><svg class="i"><use href="#i-check-doc"/></svg> Examen diagnóstico gratis</a>
+        <a href="leccion.html" class="btn btn-ghost"><svg class="i"><use href="#i-bolt"/></svg> Prueba una lección</a>
       </div>
       <p class="cta-note">Gratis · sin registro · 15 minutos · resultado al instante</p>
-      <div class="hero-stats">
-        <div><b>A1–C2</b><small>Todos los niveles</small></div>
-        <div><b>4</b><small>Destrezas integradas</small></div>
-        <div><b>1:1</b><small>o grupos reducidos</small></div>
-        <div><b>100%</b><small>En vivo, no grabado</small></div>
-      </div>
     </div>
-    <a class="hero-visual" href="leccion.html" aria-label="Ir a las lecciones de Vesper Academy"><img src="assets/images/hero_vesper_cat.png" alt="Vesper, la mascota de Vesper Academy, junto al logotipo de la academia" decoding="async"><span class="hero-visual-cta"><i class="fas fa-play" aria-hidden="true"></i> Ir a las lecciones</span></a>
+
+    <div class="plate-wrap">
+      <div class="plate">
+        <img src="assets/images/landing/hero_engraving.webp" alt="Emblema grabado: la estrella vespertina sobre un libro abierto, enmarcada por hojas de acanto" width="780" height="1040" fetchpriority="high" decoding="async">
+      </div>
+      <span class="plate-chip"><i class="dot"></i> B2 · Negociación · en vivo</span>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="statrail">
+      <div><b>A1–C2</b><small>Todos los niveles</small></div>
+      <div><b>4</b><small>Destrezas integradas</small></div>
+      <div><b>1:1</b><small>o grupos reducidos</small></div>
+      <div><b>100%</b><small>En vivo, no grabado</small></div>
     </div>
   </div>
 </section>
 
-<div class="trust">
+<!-- ============ CREDENCIALES ============ -->
+<div class="creds">
   <div class="container">
-    <div class="trust-inner reveal">
-      <span><i class="fas fa-certificate" aria-hidden="true"></i>Alineado al MCER</span>
-      <span><i class="fas fa-headset" aria-hidden="true"></i>Profesores con experiencia nativa</span>
-      <span><i class="fas fa-bullseye" aria-hidden="true"></i>Preparación IELTS · Cambridge · TOEFL</span>
-      <span><i class="fas fa-chart-line" aria-hidden="true"></i>Seguimiento medible del progreso</span>
+    <div class="creds-inner">
+      <span>MCER · CEFR</span>
+      <span>IELTS</span>
+      <span>Cambridge English</span>
+      <span>TOEFL iBT</span>
+      <span>Profesores certificados</span>
     </div>
   </div>
 </div>
 
-<!-- METODOLOGÍA -->
-<section id="metodo" aria-labelledby="metodo-title">
-  <div class="container center">
-    <span class="eyebrow reveal">Por qué Vesper funciona</span>
-    <h2 class="sec-title reveal" id="metodo-title">Aprendes hablando, desde el día uno</h2>
-    <p class="sec-lead reveal">Nada de listas de gramática que se olvidan. Cada clase está diseñada para que produzcas inglés real: el 80% del tiempo hablas tú.</p>
-    <div class="grid3">
-      <div class="mcard reveal">
-        <div class="ic"><i class="fas fa-comments" aria-hidden="true"></i></div>
+<!-- ============ MÉTODO ============ -->
+<section id="metodo" class="band-cream">
+  <div class="container">
+    <div class="reveal">
+      <span class="rule" style="background:var(--gold-ink)"></span>
+      <span class="eyebrow">Por qué Vesper funciona</span>
+      <h2 class="sec-title">Aprendes hablando, desde el día uno.</h2>
+      <p class="sec-lead">Nada de clases donde el profesor habla y tú tomas notas. Aquí el 80&nbsp;% del tiempo hablas tú.</p>
+    </div>
+
+    <div class="mgrid">
+      <div class="mcell reveal">
+        <div class="ic"><svg class="i" style="font-size:1.6rem"><use href="#i-speech"/></svg></div>
         <h3>Método comunicativo</h3>
-        <p>Roleplays, simulaciones y debates basados en situaciones reales. La gramática se activa al usarla, no memorizándola.</p>
+        <p>Situaciones reales desde la primera sesión: pides, negocias, explicas y discrepas. La gramática aparece cuando la necesitas, no antes.</p>
       </div>
-      <div class="mcard reveal">
-        <div class="ic"><i class="fas fa-headphones" aria-hidden="true"></i></div>
-        <h3>Audio nativo en cada lección</h3>
-        <p>Diálogos grabados con voces nativas y comprensión en tres niveles: literal, inferencia y opinión. Entrenas el oído de verdad.</p>
+      <div class="mcell reveal">
+        <div class="ic"><svg class="i" style="font-size:1.6rem"><use href="#i-audio"/></svg></div>
+        <h3>Oído entrenado</h3>
+        <p>Audio en cada lección con voces y acentos distintos. Dejas de entender «el inglés del salón» y empiezas a entender el inglés del mundo.</p>
       </div>
-      <div class="mcard reveal">
-        <div class="ic"><i class="fas fa-user-check" aria-hidden="true"></i></div>
-        <h3>Nivel confirmado, no adivinado</h3>
-        <p>Prueba de ubicación + entrevista oral para empezar exactamente donde estás. Sin perder el tiempo en lo que ya sabes.</p>
+      <div class="mcell reveal">
+        <div class="ic"><svg class="i" style="font-size:1.6rem"><use href="#i-summit"/></svg></div>
+        <h3>Tu nivel, medido</h3>
+        <p>Empiezas con un diagnóstico y avanzas por la escala MCER con evidencia. Siempre sabes en qué nivel estás y qué falta para el siguiente.</p>
       </div>
-      <div class="mcard reveal">
-        <div class="ic"><i class="fas fa-briefcase" aria-hidden="true"></i></div>
-        <h3>Enfoque profesional</h3>
-        <p>Inglés corporativo, de negocios, atención al cliente y más. Aprendes el inglés que tu carrera necesita.</p>
+      <div class="mcell reveal">
+        <div class="ic"><svg class="i" style="font-size:1.6rem"><use href="#i-case"/></svg></div>
+        <h3>Inglés que se usa</h3>
+        <p>Entrevistas, juntas, correos y presentaciones. Practicas el inglés que tu trabajo te va a pedir el lunes, no el de un libro de texto.</p>
+      </div>
+    </div>
+
+    <div class="ratio reveal">
+      <div class="ratio-bar"><i class="you"></i><i class="teach"></i></div>
+      <div class="ratio-legend">
+        <span><b>80 %</b> hablas tú</span>
+        <span><b>20 %</b> explica el profesor</span>
       </div>
     </div>
   </div>
 </section>
 
-<!-- RUTA / NIVELES -->
-<section id="ruta" class="path" aria-labelledby="ruta-title">
-  <div class="container center">
-    <span class="eyebrow reveal">Tu ruta de aprendizaje</span>
-    <h2 class="sec-title reveal" id="ruta-title">De principiante absoluto a dominio total</h2>
-    <p class="sec-lead reveal">Una progresión clara alineada al Marco Común Europeo (MCER). Cada nivel tiene una meta concreta.</p>
-    <div class="levels">
-      <div class="lvl reveal"><div class="cefr">A1</div><h4>Fundamentos</h4><p>Sobrevivir y presentarte: identidad, rutinas, lo esencial.</p><div class="bar" style="--p:16%"></div></div>
-      <div class="lvl reveal"><div class="cefr">A2</div><h4>Confianza</h4><p>Conversación cotidiana, pasado y futuro, primeras historias.</p><div class="bar" style="--p:34%"></div></div>
-      <div class="lvl reveal"><div class="cefr">B1</div><h4>Independencia</h4><p>Opinar, narrar y manejar situaciones imprevistas.</p><div class="bar" style="--p:52%"></div></div>
-      <div class="lvl reveal"><div class="cefr">B2</div><h4>Fluidez</h4><p>Debate, negociación y entornos corporativos globales.</p><div class="bar" style="--p:72%"></div></div>
-      <div class="lvl reveal"><div class="cefr">C1–C2</div><h4>Dominio</h4><p>Matiz, retórica y certificación internacional.</p><div class="bar" style="--p:100%"></div></div>
+<!-- ============ RESULTADOS ============ -->
+<section id="resultados">
+  <div class="container">
+    <div class="reveal">
+      <span class="rule"></span>
+      <span class="eyebrow">Lo que puedes esperar</span>
+      <h2 class="sec-title">Progreso que se mide, no que se promete.</h2>
+    </div>
+    <div class="rgrid reveal">
+      <div><b><span data-count="15">15</span> min</b><p>Es lo que tarda el examen diagnóstico en decirte tu nivel exacto.</p></div>
+      <div><b><span data-count="80">80</span> %</b><p>Del tiempo de clase lo ocupas hablando tú, no escuchando.</p></div>
+      <div><b>A1<span class="sr"> a </span>–C2</b><p>La escala completa del MCER, sin saltarte peldaños ni inventarlos.</p></div>
     </div>
   </div>
 </section>
 
-<!-- CURSOS (plegable) -->
-<section id="cursos" aria-labelledby="cursos-title">
-  <div class="container center">
-    <span class="eyebrow reveal">Nuestros programas</span>
-    <h2 class="sec-title reveal" id="cursos-title">Un curso para cada meta</h2>
-    <p class="sec-lead reveal">Programas generales y especializados, todos con la misma metodología comunicativa.</p>
+<!-- ============ LA CONSTELACIÓN ============ -->
+<section id="ruta">
+  <div class="container">
+    <div class="reveal">
+      <span class="rule"></span>
+      <span class="eyebrow">Tu ruta de aprendizaje</span>
+      <h2 class="sec-title">De principiante absoluto a dominio total.</h2>
+      <p class="sec-lead">Cinco peldaños del Marco Común Europeo. No te saltas ninguno, y en cada uno sabes exactamente qué tienes que poder hacer para pasar al siguiente.</p>
+    </div>
+
+    <div class="const-grid">
+      <div class="const-sticky" aria-hidden="true">
+        <b class="const-cefr" id="cLevel">A1</b>
+        <span class="const-name" id="cName">Principiante</span>
+        <p class="const-goal" id="cGoal">Sobrevives en inglés: te presentas, pides lo que necesitas y entiendes instrucciones sencillas.</p>
+        <div class="const-meter"><i id="cMeter" style="--p:16%"></i></div>
+        <p class="const-count"><span id="cIdx">1</span> / 5 · Ruta Vesper</p>
+      </div>
+
+      <ol class="const-track">
+        <li class="cstep" data-cefr="A1" data-name="Principiante" data-p="16%"
+            data-goal="Sobrevives en inglés: te presentas, pides lo que necesitas y entiendes instrucciones sencillas.">
+          <span class="cnode"><svg class="i" style="font-size:1.05rem;fill:currentColor;stroke:none"><use href="#i-star"/></svg></span>
+          <span class="clevel">Peldaño 01 · A1</span>
+          <h3>Principiante</h3>
+          <p>Empiezas desde cero real. Saludas, te presentas, dices de dónde eres y a qué te dedicas, y pides lo básico sin traducir mentalmente cada palabra.</p>
+          <p class="cwhat">Lo sabes cuando: <b>puedes presentarte y pedir algo en una tienda sin ayuda.</b></p>
+        </li>
+
+        <li class="cstep" data-cefr="A2" data-name="Básico" data-p="34%"
+            data-goal="Manejas la rutina: hablas de tu día, tu trabajo y tus planes, y resuelves situaciones cotidianas.">
+          <span class="cnode"><svg class="i" style="font-size:1.05rem;fill:currentColor;stroke:none"><use href="#i-star"/></svg></span>
+          <span class="clevel">Peldaño 02 · A2</span>
+          <h3>Básico</h3>
+          <p>Ya no solo sobrevives: cuentas. Hablas de tu rutina, de lo que hiciste el fin de semana y de lo que vas a hacer, y resuelves un hotel o una cita médica.</p>
+          <p class="cwhat">Lo sabes cuando: <b>puedes contar lo que hiciste ayer sin trabarte.</b></p>
+        </li>
+
+        <li class="cstep" data-cefr="B1" data-name="Intermedio" data-p="52%"
+            data-goal="Te defiendes solo: sostienes una conversación, explicas tus razones y trabajas en inglés con apoyo.">
+          <span class="cnode"><svg class="i" style="font-size:1.05rem;fill:currentColor;stroke:none"><use href="#i-star"/></svg></span>
+          <span class="clevel">Peldaño 03 · B1</span>
+          <h3>Intermedio</h3>
+          <p>El punto de inflexión. Sostienes una conversación completa, explicas por qué piensas algo y empiezas a usar inglés en el trabajo sin que sea un suplicio.</p>
+          <p class="cwhat">Lo sabes cuando: <b>puedes discrepar y explicar tu razón.</b></p>
+        </li>
+
+        <li class="cstep" data-cefr="B2" data-name="Intermedio alto" data-p="72%"
+            data-goal="Trabajas en inglés: negocias, presentas y participas en juntas al ritmo de los demás.">
+          <span class="cnode"><svg class="i" style="font-size:1.05rem;fill:currentColor;stroke:none"><use href="#i-star"/></svg></span>
+          <span class="clevel">Peldaño 04 · B2</span>
+          <h3>Intermedio alto</h3>
+          <p>El nivel que piden casi todas las vacantes y casi todas las universidades. Negocias, presentas ante un grupo y sigues una junta al ritmo de los demás.</p>
+          <p class="cwhat">Lo sabes cuando: <b>puedes llevar una junta entera en inglés.</b></p>
+        </li>
+
+        <li class="cstep" data-cefr="C1–C2" data-name="Avanzado · Experto" data-p="100%"
+            data-goal="Dominio: matizas, persuades, entiendes el humor y la ironía, y escribes con precisión profesional.">
+          <span class="cnode"><svg class="i" style="font-size:1.05rem;fill:currentColor;stroke:none"><use href="#i-star"/></svg></span>
+          <span class="clevel">Peldaño 05 · C1–C2</span>
+          <h3>Avanzado y Experto</h3>
+          <p>Dejas de traducir. Matizas, persuades, captas el sarcasmo y el subtexto, y escribes con la precisión que exige un informe o una propuesta seria.</p>
+          <p class="cwhat">Lo sabes cuando: <b>el idioma deja de ser el tema y solo importa lo que dices.</b></p>
+        </li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ASÍ SE VE UNA CLASE ============ -->
+<section id="clase" class="band-cream">
+  <div class="container">
+    <div class="reveal">
+      <span class="rule" style="background:var(--gold-ink)"></span>
+      <span class="eyebrow">Dentro de la sesión</span>
+      <h2 class="sec-title">Así se ve una clase.</h2>
+      <p class="sec-lead">Sin misterio: material real, corrección en el momento y una meta clara para los 50 minutos.</p>
+    </div>
+
+    <div class="clase-panel reveal">
+      <div class="clase-chrome">
+        <i></i><i></i><i></i>
+        <span class="ttl">Vesper · B2 Negociación · Sesión 14</span>
+        <span class="live"><b></b> En vivo</span>
+      </div>
+      <div class="clase-body">
+        <div class="clase-mat">
+          <img src="assets/images/landing/clase_material.webp" alt="" width="560" height="700" loading="lazy" decoding="async">
+          <span class="tag">Material de la sesión</span>
+        </div>
+        <div class="clase-talk">
+          <p class="line say"><span lang="en">«I would like to <s>discuss about</s> the price before we sign.»</span></p>
+          <p class="line fix"><b lang="en">discuss</b> no lleva «about». <span lang="en">→ discuss the price</span></p>
+          <p class="line say"><span lang="en">«Could we revisit the timeline? It's a bit tight on our side.»</span></p>
+          <p class="line ok">Perfecto. «<span lang="en">A bit tight</span>» es exactamente lo que dirías en la junta real.</p>
+        </div>
+      </div>
+      <div class="clase-foot">
+        <span><svg class="i"><use href="#i-check-doc"/></svg> Corrección inmediata</span>
+        <span><svg class="i"><use href="#i-speech"/></svg> Roleplay con caso real</span>
+        <span><svg class="i"><use href="#i-summit"/></svg> Meta explícita por sesión</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CURSOS ============ -->
+<section id="cursos">
+  <div class="container">
+    <div class="reveal">
+      <span class="rule"></span>
+      <span class="eyebrow">Nuestros programas</span>
+      <h2 class="sec-title">Un curso para cada meta.</h2>
+      <p class="sec-lead">Cuatro caminos con el mismo método. Elige por lo que necesitas conseguir, no por el nivel que crees tener.</p>
+    </div>
+
     <div class="ctiles">
       <a class="ctile reveal" href="curso-ingles-general.html">
-        <span class="cvr"><img src="assets/images/lessons/course_general.jpg" alt="" loading="lazy" decoding="async"><span class="cvr-badge">A1 – C2</span></span>
-        <span class="cbody">
+        <div class="cvr">
+          <img src="assets/images/landing/course_general.webp" alt="" width="720" height="402" loading="lazy" decoding="async">
+          <span class="badge">A1 – C2</span>
           <h3>Inglés General</h3>
-          <p>De cero a C2, tu base completa de inglés.</p>
-          <span class="more">Ver curso <i class="fas fa-arrow-right" aria-hidden="true"></i></span>
-        </span>
+        </div>
+        <div class="cbody">
+          <p>La ruta completa, de cero a dominio. Las cuatro destrezas en cada sesión y un salto de nivel medido.</p>
+          <span class="more">Ver el curso <svg class="i"><use href="#i-arrow"/></svg></span>
+        </div>
       </a>
       <a class="ctile reveal" href="curso-club-conversacion.html">
-        <span class="cvr"><img src="assets/images/lessons/course_conversation.jpg" alt="" loading="lazy" decoding="async"><span class="cvr-badge">B1 – C2</span></span>
-        <span class="cbody">
+        <div class="cvr">
+          <img src="assets/images/landing/course_conversation.webp" alt="" width="720" height="402" loading="lazy" decoding="async">
+          <span class="badge">A2 – C2</span>
           <h3>Club de Conversación</h3>
-          <p>+150 temas para soltar la lengua sin miedo.</p>
-          <span class="more">Ver curso <i class="fas fa-arrow-right" aria-hidden="true"></i></span>
-        </span>
+        </div>
+        <div class="cbody">
+          <p>Más de 120 temas para soltar la lengua. Grupos reducidos, sin lectura en voz alta y sin turnos muertos.</p>
+          <span class="more">Ver el curso <svg class="i"><use href="#i-arrow"/></svg></span>
+        </div>
       </a>
       <a class="ctile reveal" href="curso-ingles-corporativo.html">
-        <span class="cvr"><img src="assets/images/lessons/course_corporate.jpg" alt="" loading="lazy" decoding="async"><span class="cvr-badge">B1 – C1</span></span>
-        <span class="cbody">
+        <div class="cvr">
+          <img src="assets/images/landing/course_corporate.webp" alt="" width="720" height="402" loading="lazy" decoding="async">
+          <span class="badge">B1 – C1</span>
           <h3>Inglés Corporativo</h3>
-          <p>El inglés que mueve tu carrera profesional.</p>
-          <span class="more">Ver curso <i class="fas fa-arrow-right" aria-hidden="true"></i></span>
-        </span>
+        </div>
+        <div class="cbody">
+          <p>Juntas, negociación, correos y presentaciones. Para equipos y para quien ya trabaja en inglés.</p>
+          <span class="more">Ver el curso <svg class="i"><use href="#i-arrow"/></svg></span>
+        </div>
       </a>
       <a class="ctile reveal" href="curso-certificacion.html">
-        <span class="cvr"><img src="assets/images/lessons/course_certification.jpg" alt="" loading="lazy" decoding="async"><span class="cvr-badge">B1 – C2</span></span>
-        <span class="cbody">
-          <h3>Preparación de Certificación</h3>
-          <p>IELTS, Cambridge y TOEFL con estrategia real.</p>
-          <span class="more">Ver curso <i class="fas fa-arrow-right" aria-hidden="true"></i></span>
-        </span>
+        <div class="cvr">
+          <img src="assets/images/landing/course_certification.webp" alt="" width="720" height="402" loading="lazy" decoding="async">
+          <span class="badge">B1 – C1</span>
+          <h3>Certificación</h3>
+        </div>
+        <div class="cbody">
+          <p>IELTS, Cambridge y TOEFL con estrategia de examen, simulacros cronometrados y meta de banda.</p>
+          <span class="more">Ver el curso <svg class="i"><use href="#i-arrow"/></svg></span>
+        </div>
       </a>
     </div>
   </div>
 </section>
 
-<!-- CERTIFICACIÓN -->
-<section id="certificacion" class="cert" aria-labelledby="cert-title">
+<!-- ============ EL RAIL TEMÁTICO ============ -->
+<!-- aria-hidden va SÓLO en los rieles decorativos: el encabezado es copy real
+     y debe seguir en el árbol de accesibilidad y en el esquema de títulos. -->
+<div class="temas">
+  <div class="container temas-head">
+    <span class="eyebrow">Más de 200 temas</span>
+    <h2 class="sec-title" style="margin-bottom:0">De la cocina a la sala de juntas.</h2>
+  </div>
+  <div class="marquee l" aria-hidden="true"><div class="mtrack" id="mt1"></div></div>
+  <div class="marquee r" aria-hidden="true"><div class="mtrack" id="mt2"></div></div>
+</div>
+
+<!-- ============ CERTIFICACIÓN ============ -->
+<section id="certificacion" class="band-cream">
   <div class="container">
-    <div class="cert-inner">
-      <div>
-        <span class="eyebrow reveal">Certificación internacional</span>
-        <h2 class="sec-title reveal" id="cert-title">Tu título de inglés, con estrategia real</h2>
-        <p class="sec-lead reveal">No solo practicamos: entrenamos para la banda que necesitas, con la técnica que los examinadores premian.</p>
-        <ul class="reveal">
-          <li><i class="fas fa-circle-check" aria-hidden="true"></i> Simulacros cronometrados en condiciones reales de examen.</li>
-          <li><i class="fas fa-circle-check" aria-hidden="true"></i> Respuestas modelo Banda 6 vs Banda 8, para que veas la diferencia exacta.</li>
-          <li><i class="fas fa-circle-check" aria-hidden="true"></i> Listening con distractores, como en el examen real.</li>
-          <li><i class="fas fa-circle-check" aria-hidden="true"></i> Meta clara: subir entre +0.5 y +1.0 banda por curso.</li>
-        </ul>
-      </div>
-      <div class="cert-badges">
-        <div class="cert-badge reveal"><b>IELTS</b><small>Academic &amp; General</small></div>
-        <div class="cert-badge reveal"><b>Cambridge</b><small>B2 First · C1 Advanced</small></div>
-        <div class="cert-badge reveal"><b>TOEFL</b><small>iBT</small></div>
+    <div class="reveal">
+      <span class="rule" style="background:var(--gold-ink)"></span>
+      <span class="eyebrow">Certificación internacional</span>
+      <h2 class="sec-title">Tu título de inglés, con estrategia real.</h2>
+      <p class="sec-lead">Preparamos el examen que necesitas, no «inglés en general». La diferencia entre una banda 6 y una banda 8 casi nunca es vocabulario.</p>
+    </div>
+
+    <div class="dossier reveal">
+      <div class="dossier-grid">
+        <ol class="dclaims">
+          <li><b>Diagnóstico de banda desde el día uno</b><p>Sabes en qué banda estás antes de empezar, y qué te separa de la que necesitas.</p></li>
+          <li><b>Estrategia por sección, no fuerza bruta</b><p>Cada parte del examen tiene su técnica. Se entrena por separado y se cronometra.</p></li>
+          <li><b>Simulacros en condiciones reales</b><p>Con reloj, sin pausas y con corrección comentada, para que el día del examen no sea la primera vez.</p></li>
+          <li><b>Speaking con examinador simulado</b><p>La parte que más pesa y menos se practica. Aquí se practica todas las semanas.</p></li>
+        </ol>
+
+        <div>
+          <div class="tabs" role="tablist" aria-label="Exámenes de certificación">
+            <button role="tab" id="tab-ielts" aria-controls="p-ielts" aria-selected="true">IELTS</button>
+            <button role="tab" id="tab-camb" aria-controls="p-camb" aria-selected="false" tabindex="-1">Cambridge</button>
+            <button role="tab" id="tab-toefl" aria-controls="p-toefl" aria-selected="false" tabindex="-1">TOEFL iBT</button>
+          </div>
+          <div class="tabpanel" role="tabpanel" id="p-ielts" aria-labelledby="tab-ielts">
+            <dl>
+              <dt>Meta típica</dt><dd><b>6.5 – 7.5</b> banda global</dd>
+              <dt>Formato</dt><dd>Listening, Reading, Writing y Speaking · 2 h 45 min</dd>
+              <dt>Se entrena</dt><dd>Task 1 y Task 2 de Writing, y el Speaking en tres partes</dd>
+              <dt>Vigencia</dt><dd>2 años</dd>
+            </dl>
+          </div>
+          <div class="tabpanel" role="tabpanel" id="p-camb" aria-labelledby="tab-camb" hidden>
+            <dl>
+              <dt>Meta típica</dt><dd><b>B2 First</b> o <b>C1 Advanced</b></dd>
+              <dt>Formato</dt><dd>Reading &amp; Use of English, Writing, Listening y Speaking</dd>
+              <dt>Se entrena</dt><dd>Use of English, que es donde se cae la mayoría</dd>
+              <dt>Vigencia</dt><dd>No caduca</dd>
+            </dl>
+          </div>
+          <div class="tabpanel" role="tabpanel" id="p-toefl" aria-labelledby="tab-toefl" hidden>
+            <dl>
+              <dt>Meta típica</dt><dd><b>90 – 105</b> de 120</dd>
+              <dt>Formato</dt><dd>Cuatro secciones, todo por computadora · unas 2 h</dd>
+              <dt>Se entrena</dt><dd>Las tareas integradas: leer, escuchar y luego responder</dd>
+              <dt>Vigencia</dt><dd>2 años</dd>
+            </dl>
+          </div>
+
+          <div class="bandcmp">
+            <h4>Banda 6 contra banda 8</h4>
+            <p class="hint">Arrastra para comparar la misma idea escrita en dos bandas.</p>
+            <div class="cmp" id="cmp">
+              <div class="cmp-layer cmp-b6">
+                <span class="lbl">Banda 6</span>
+                <p lang="en" style="margin:0">Many people think that remote work is good. It has advantages and disadvantages. In my opinion, companies should let people work from home because it is better for them.</p>
+              </div>
+              <div class="cmp-layer cmp-b8">
+                <span class="lbl">Banda 8</span>
+                <p lang="en" style="margin:0">Remote work is often framed as a perk, but <em>the evidence points elsewhere</em>: firms that adopted it retained staff longer. The case for it rests less on comfort than on <em>retention</em>.</p>
+              </div>
+              <input class="cmp-range" id="cmpRange" type="range" min="0" max="100" value="50"
+                     aria-label="Comparar banda 6 y banda 8">
+              <span class="cmp-div" id="cmpDiv"></span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- PRECIOS -->
-<section id="precios" style="background:var(--cream)" aria-labelledby="precios-title">
-  <div class="container center">
-    <span class="eyebrow reveal">Planes flexibles</span>
-    <h2 class="sec-title reveal" id="precios-title">Invierte en tu inglés</h2>
-    <p class="sec-lead reveal">Elige el ritmo que se ajusta a tu vida. Todos los planes incluyen material, audio y seguimiento de progreso.</p>
-    <p class="price-intro reveal"><i class="fas fa-circle-check" aria-hidden="true" style="color:var(--gold2)"></i> Todos los planes empiezan con tu examen de nivel gratis.</p>
+<!-- ============ PRECIOS ============ -->
+<section id="precios" class="band-cream" style="padding-top:0">
+  <div class="container">
+    <div class="reveal">
+      <span class="rule" style="background:var(--gold-ink)"></span>
+      <span class="eyebrow">Planes flexibles</span>
+      <h2 class="sec-title">Invierte en tu inglés.</h2>
+      <p class="sec-lead">Sin inscripción, sin permanencia y sin material extra que comprar. El precio que ves es el que pagas.</p>
+    </div>
+
     <div class="ptiles">
       <a class="ptile reveal" href="planes.html#grupal">
-        <span class="ic"><i class="fas fa-users" aria-hidden="true"></i></span>
+        <span class="ic"><svg class="i" style="font-size:1.5rem"><use href="#i-speech"/></svg></span>
         <h3>Grupal</h3>
-        <div class="price">$<span data-price>2500</span><small> MXN/mes</small></div>
-        <p class="plan-note">Grupos reducidos de hasta 6 alumnos.</p>
-        <span class="more">Ver plan <i class="fas fa-arrow-right" aria-hidden="true"></i></span>
+        <p class="price">$<span data-count="2500">2500</span> <small>MXN / mes</small></p>
+        <p class="pnote">Grupos reducidos, dos sesiones por semana.</p>
+        <span class="more">Ver el plan <svg class="i"><use href="#i-arrow"/></svg></span>
       </a>
       <a class="ptile feat reveal" href="planes.html#profesional">
         <span class="ribbon">Más popular</span>
-        <span class="ic"><i class="fas fa-user-tie" aria-hidden="true"></i></span>
-        <h3>1 a 1 Profesional</h3>
-        <div class="price">$250–400<small> MXN/hora</small></div>
-        <p class="plan-note">Clases individuales a tu medida.</p>
-        <span class="more">Ver plan <i class="fas fa-arrow-right" aria-hidden="true"></i></span>
+        <span class="ic"><svg class="i" style="font-size:1.5rem"><use href="#i-case"/></svg></span>
+        <h3>Profesional 1:1</h3>
+        <p class="price">$<span data-count="250">250</span>–<span data-count="400">400</span> <small>MXN / hora</small></p>
+        <p class="pnote">Clase individual, horario y contenido a tu medida.</p>
+        <span class="more">Ver el plan <svg class="i"><use href="#i-arrow"/></svg></span>
       </a>
       <a class="ptile reveal" href="planes.html#especializados">
-        <span class="ic"><i class="fas fa-medal" aria-hidden="true"></i></span>
+        <span class="ic"><svg class="i" style="font-size:1.5rem"><use href="#i-summit"/></svg></span>
         <h3>Especializados</h3>
-        <div class="price">$<span data-price>3000</span><small> MXN/mes</small></div>
-        <p class="plan-note">Certificación, corporativo o inglés técnico.</p>
-        <span class="more">Ver plan <i class="fas fa-arrow-right" aria-hidden="true"></i></span>
+        <p class="price">$<span data-count="3000">3000</span> <small>MXN / mes</small></p>
+        <p class="pnote">Certificación y corporativo, con meta de examen.</p>
+        <span class="more">Ver el plan <svg class="i"><use href="#i-arrow"/></svg></span>
       </a>
     </div>
-    <p class="price-footnote">Toca cada plan para ver el detalle completo. Precios de referencia en pesos mexicanos (MXN). Escríbenos para un plan a tu medida.</p>
+    <p class="pfoot">Precios en pesos mexicanos. Facturamos a empresas.</p>
   </div>
 </section>
 
-<!-- FAQ -->
-<section id="faq" aria-labelledby="faq-title">
-  <div class="container center">
-    <span class="eyebrow reveal">Preguntas frecuentes</span>
-    <h2 class="sec-title reveal" id="faq-title">Todo lo que necesitas saber</h2>
-    <div class="faq">
-      <div class="qitem reveal"><button aria-expanded="false" aria-controls="faq1"><span>¿Necesito saber algo de inglés para empezar?</span> <i class="fas fa-chevron-down" aria-hidden="true"></i></button>
-        <div class="ans" id="faq1" role="region">Para nada. Tenemos niveles desde cero (principiante absoluto). Hacemos una prueba de ubicación y una entrevista oral para empezar exactamente donde estás.</div></div>
-      <div class="qitem reveal"><button aria-expanded="false" aria-controls="faq2"><span>¿Las clases son en vivo o grabadas?</span> <i class="fas fa-chevron-down" aria-hidden="true"></i></button>
-        <div class="ans" id="faq2" role="region">100% en vivo con un profesor real. La interacción y la corrección inmediata son el corazón del método. Hablas tú la mayor parte del tiempo.</div></div>
-      <div class="qitem reveal"><button aria-expanded="false" aria-controls="faq3"><span>¿Cómo sé que estoy progresando?</span> <i class="fas fa-chevron-down" aria-hidden="true"></i></button>
-        <div class="ans" id="faq3" role="region">Cada clase se evalúa por fluidez, precisión y profesionalismo. Recibes seguimiento continuo de tu nivel y, en los planes de certificación, simulacros de entrada, mitad y salida para medir tu avance en bandas.</div></div>
-      <div class="qitem reveal"><button aria-expanded="false" aria-controls="faq4"><span>¿Preparan para IELTS, Cambridge o TOEFL?</span> <i class="fas fa-chevron-down" aria-hidden="true"></i></button>
-        <div class="ans" id="faq4" role="region">Sí. Nuestro programa de certificación cubre los tres, con drills cronometrados, respuestas modelo por banda y técnicas específicas que los examinadores premian.</div></div>
-      <div class="qitem reveal"><button aria-expanded="false" aria-controls="faq5"><span>¿Puedo tomar clases individuales?</span> <i class="fas fa-chevron-down" aria-hidden="true"></i></button>
-        <div class="ans" id="faq5" role="region">Por supuesto. Ofrecemos clases 1 a 1 totalmente personalizadas, además de grupos reducidos. En las clases privadas el profesor adapta cada actividad a tu meta.</div></div>
-    </div>
-  </div>
-</section>
-
-<!-- CTA / CONTACTO -->
-<section id="contacto" class="cta" aria-labelledby="contacto-title">
+<!-- ============ FAQ ============ -->
+<section id="faq">
   <div class="container">
-    <span class="eyebrow reveal">Empieza hoy</span>
-    <h2 class="sec-title reveal" id="contacto-title">Tu primer paso: el examen diagnóstico gratis</h2>
-    <p>Descubre tu nivel real en 15 minutos, sin registro y sin compromiso, y recibe tu curso recomendado al instante. Después, un asesor lo confirma contigo en una breve entrevista oral.</p>
-    <a href="book_placement.html" class="btn btn-gold btn-lg"><i class="fas fa-clipboard-check" aria-hidden="true"></i> Hacer mi examen diagnóstico</a>
-    <ul class="steps reveal">
-      <li><i class="fas fa-pen" aria-hidden="true"></i> 30 preguntas, de principiante a B2+</li>
-      <li><i class="fas fa-bolt" aria-hidden="true"></i> Nivel MCER y curso recomendado al instante</li>
-      <li><i class="fas fa-cloud-arrow-up" aria-hidden="true"></i> Se guarda en tu historial para tu profesor</li>
-      <li><i class="fas fa-comments" aria-hidden="true"></i> Entrevista oral para confirmar tu nivel</li>
-    </ul>
-    <p class="cta-spacer">¿Prefieres que te escribamos primero? Déjanos tus datos:</p>
-    <form id="contactForm" action="https://formsubmit.co/ajax/contacto@vesperacademy.com" method="POST">
-      <input type="hidden" name="_subject" value="Nuevo prospecto desde vesperacademy.com" />
-      <input type="hidden" name="_template" value="table" />
-      <input type="hidden" name="_captcha" value="false" />
-      <input type="hidden" name="_autoresponse" value="¡Hola! Gracias por tu interés en Vesper Academy. Recibimos tus datos y un asesor te contactará muy pronto. Mientras tanto, puedes descubrir tu nivel de inglés con nuestro examen diagnóstico gratis en https://vesperacademy.com/book_placement.html — Vesper Academy · contacto@vesperacademy.com" />
-      <input type="email" name="email" placeholder="Tu correo" aria-label="Tu correo electrónico" autocomplete="email" required />
-      <input type="text" name="nombre" placeholder="Tu nombre" aria-label="Tu nombre" autocomplete="name" required />
-      <button type="submit" class="btn btn-gold"><i class="fas fa-paper-plane" aria-hidden="true"></i> Quiero que me contacten</button>
-    </form>
-    <div class="form-msg" id="formMsg" role="status" aria-live="polite" style="display:none;">
-      <i class="fas fa-circle-check" aria-hidden="true" style="color:var(--gold-lt);font-size:1.4rem;margin-bottom:8px;"></i>
-      <strong style="display:block;font-size:1.05rem;color:#fff;margin-bottom:4px;">¡Gracias por tu interés!</strong>
-      Hemos recibido tu solicitud y te enviamos un correo de confirmación. Un asesor de Vesper Academy te contactará en las próximas 24 horas. Mientras tanto, ¡haz tu <a href="book_placement.html" style="color:var(--gold-lt);text-decoration:underline;">examen diagnóstico gratis</a>!
+    <div class="reveal" style="text-align:center">
+      <span class="eyebrow">Preguntas frecuentes</span>
+      <h2 class="sec-title">Todo lo que necesitas saber.</h2>
+    </div>
+    <div class="faq">
+      <details class="qitem"><summary>¿Necesito saber algo de inglés para empezar? <svg class="i"><use href="#i-chevron"/></svg></summary>
+        <div class="qbody">No. El nivel A1 empieza desde cero absoluto: cómo se saluda, cómo te presentas y cómo se pronuncia. Si ya sabes algo, el examen diagnóstico te coloca en el peldaño correcto para que no repitas lo que ya dominas.</div></details>
+      <details class="qitem"><summary>¿Las clases son en vivo o grabadas? <svg class="i"><use href="#i-chevron"/></svg></summary>
+        <div class="qbody">Todas en vivo, con un profesor real. No vendemos videos pregrabados: hablar sólo se aprende hablando con alguien que te corrige en el momento.</div></details>
+      <details class="qitem"><summary>¿Qué pasa si falto a una clase? <svg class="i"><use href="#i-chevron"/></svg></summary>
+        <div class="qbody">Recibes el material de la sesión y, en los planes 1:1, se reprograma avisando con anticipación. En grupal puedes incorporarte a otro grupo del mismo nivel esa semana.</div></details>
+      <details class="qitem"><summary>¿Cuánto tardo en subir de nivel? <svg class="i"><use href="#i-chevron"/></svg></summary>
+        <div class="qbody">Depende del nivel y de cuánto practiques fuera de clase. Como referencia, pasar de un peldaño al siguiente suele llevar entre cuatro y seis meses con dos sesiones por semana. Te lo decimos con evidencia, no con una promesa.</div></details>
+      <details class="qitem"><summary>¿Preparan para IELTS, Cambridge y TOEFL? <svg class="i"><use href="#i-chevron"/></svg></summary>
+        <div class="qbody">Sí, con estrategia específica por examen, simulacros cronometrados y meta de banda acordada desde el principio. No es «inglés en general» con el nombre del examen encima.</div></details>
+      <details class="qitem"><summary>¿Facturan a empresas? <svg class="i"><use href="#i-chevron"/></svg></summary>
+        <div class="qbody">Sí. Emitimos factura y armamos planes para equipos, con reporte de avance por participante. Escríbenos y te mandamos una propuesta.</div></details>
     </div>
   </div>
 </section>
+
+<!-- ============ CONTACTO ============ -->
+<section id="contacto" class="cta-band">
+  <img src="assets/images/landing/cta_texture.webp" alt="" width="1440" height="804" loading="lazy" decoding="async">
+  <div class="container">
+    <div class="cta-grid">
+      <div class="reveal">
+        <span class="rule"></span>
+        <span class="eyebrow">Empieza hoy</span>
+        <h2 class="sec-title">Tu primer paso: el examen diagnóstico gratis.</h2>
+        <p class="sec-lead">Quince minutos, sin registro y sin compromiso. Sales sabiendo tu nivel y qué curso te toca.</p>
+        <ol class="steps">
+          <li><b>Haces el diagnóstico</b><p>15 minutos, en línea, resultado inmediato.</p></li>
+          <li><b>Te decimos tu peldaño</b><p>Con lo que ya dominas y lo que falta para el siguiente.</p></li>
+          <li><b>Eliges horario y plan</b><p>Grupal o 1:1, según tu meta y tu agenda.</p></li>
+          <li><b>Primera clase</b><p>Hablas inglés desde esa misma sesión.</p></li>
+        </ol>
+        <p style="margin-top:28px"><a href="book_placement.html" class="btn btn-gold btn-lg"><svg class="i"><use href="#i-check-doc"/></svg> Empezar el examen gratis</a></p>
+      </div>
+
+      <div class="formcard reveal">
+        <h3 style="font-family:var(--display);font-size:1.2rem;font-weight:600;color:var(--cream);margin-bottom:6px">¿Prefieres que te escribamos?</h3>
+        <p style="color:var(--on-night-soft);font-size:.88rem;margin:0 0 22px">Déjanos tus datos y te contactamos con una propuesta.</p>
+        <form id="contactForm" action="https://formsubmit.co/ajax/contacto@vesperacademy.com" method="POST">
+          <div class="field"><input type="text" id="f-name" name="nombre" placeholder=" " required autocomplete="name"><label for="f-name">Tu nombre</label></div>
+          <div class="field"><input type="email" id="f-mail" name="email" placeholder=" " required autocomplete="email"><label for="f-mail">Tu correo</label></div>
+          <div class="field"><textarea id="f-msg" name="mensaje" placeholder=" "></textarea><label for="f-msg">¿Qué necesitas? (opcional)</label></div>
+          <button type="submit" class="btn btn-gold" style="width:100%;justify-content:center">Enviar <svg class="i"><use href="#i-arrow"/></svg></button>
+        </form>
+        <div class="formmsg" id="formMsg" role="status" hidden></div>
+      </div>
+    </div>
+  </div>
+</section>
+
 </main>
 
 <footer>
   <div class="container">
     <div class="fgrid">
-      <div class="fbrand reveal">
-        <img src="assets/images/vesper_logo_inverted.png" alt="Vesper Academy" width="46" height="44" loading="lazy" decoding="async">
-        <p>Inglés en línea para profesionales del mundo real. Del primer "hello" a tu certificación internacional.</p>
+      <div class="fbrand">
+        <b>Vesper Academy</b>
+        <p>Vesper: la estrella que aparece al atardecer. Empieza cuando termina tu día.</p>
+        <div class="vesp">
+          <img src="assets/images/mascot/vesper_cat_welcome.webp" alt="" width="56" height="56" loading="lazy" decoding="async">
+          <span>
+            <a href="leccion.html">Lecciones gratis con Vesper</a>
+            <small>Nuestra app de práctica, sin costo</small>
+          </span>
+        </div>
       </div>
-      <div class="reveal"><h5>Programa</h5>
-        <a href="#metodo">Metodología</a><a href="#ruta">Niveles</a><a href="#certificacion">Certificación</a><a href="#precios">Precios</a></div>
-      <div class="reveal"><h5>Recursos gratis</h5>
-        <a href="leccion.html">Lecciones gratis</a><a href="book_placement.html">Examen de nivel</a></div>
-      <div class="reveal"><h5>Accesos</h5>
-        <a href="materiales.html">Portal del alumno</a><a href="portal_profesores.html">Profesores</a><a href="login.html">Iniciar sesión</a></div>
+      <div>
+        <h5>Programa</h5>
+        <a href="curso-ingles-general.html">Inglés General</a>
+        <a href="curso-club-conversacion.html">Club de Conversación</a>
+        <a href="curso-ingles-corporativo.html">Inglés Corporativo</a>
+        <a href="curso-certificacion.html">Certificación</a>
+      </div>
+      <div>
+        <h5>Gratis</h5>
+        <a href="book_placement.html">Examen diagnóstico</a>
+        <a href="leccion.html">Lecciones interactivas</a>
+        <a href="audio_library.html">Biblioteca de audio</a>
+      </div>
+      <div>
+        <h5>Precios</h5>
+        <a href="planes.html#grupal">Plan grupal</a>
+        <a href="planes.html#profesional">Plan 1:1</a>
+        <a href="planes.html#especializados">Especializados</a>
+      </div>
+      <div>
+        <h5>Accesos</h5>
+        <a href="login.html">Iniciar sesión</a>
+        <a href="materiales.html">Portal de alumnos</a>
+        <a href="portal_profesores.html">Portal de profesores</a>
+      </div>
     </div>
     <div class="fbottom">
-      <span>© <span id="year"></span> Vesper Academy. Todos los derechos reservados.</span>
+      <span>© <span id="year">2026</span> Vesper Academy · Hecho en México</span>
       <span class="social">
-        <a href="https://www.instagram.com/vesper.academy/" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram" aria-hidden="true"></i></a>
+        <a href="https://www.instagram.com/vesper.academy/" rel="noopener" target="_blank">Instagram</a>
+        <a href="mailto:contacto@vesperacademy.com">contacto@vesperacademy.com</a>
       </span>
     </div>
   </div>
 </footer>
 
+
 <script>
-  document.getElementById('year').textContent = new Date().getFullYear();
+(function(){
+  try{
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  // ===== Animaciones: scroll-reveal + barras + conteo de precios + nav =====
-  (function(){
-    // El <head> ya añadió .js-anim a <html> si procede (anti-FOUC). Aquí solo
-    // montamos la lógica; si algo falla, revelamos todo para no ocultar contenido.
-    var root = document.documentElement;
-    if (root.classList.contains('js-anim')) {
-     try {
-      // Conteo ascendente de precios (easeOutExpo), una sola vez por tarjeta
-      var countUp = function(plan){
-        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-        plan.querySelectorAll('[data-price]').forEach(function(span){
-          if (span.dataset.counted) return;
-          span.dataset.counted = '1';
-          var target = parseInt(span.textContent, 10) || 0;
-          var dur = 1000, start = null;
-          span.textContent = '0';
-          function step(ts){
-            if (start === null) start = ts;
-            var p = Math.min((ts - start) / dur, 1);
-            var eased = p >= 1 ? 1 : 1 - Math.pow(2, -10 * p);
-            span.textContent = Math.round(target * eased).toLocaleString('es-MX');
-            if (p < 1) requestAnimationFrame(step);
-            else span.textContent = target.toLocaleString('es-MX');
-          }
-          setTimeout(function(){ requestAnimationFrame(step); }, 250);
-        });
-      }
+    /* Red de seguridad: si el observer NUNCA dispara (pestaña en segundo
+       plano al cargar, motor sin composición, extensión que lo rompe), el
+       contenido se quedaría invisible para siempre. A los 3 s, si no hubo
+       ni una sola llamada, se revela todo y se acabó. */
+    var ioHits = 0;
+    setTimeout(function(){
+      if (ioHits > 0) return;
+      /* Quitar `js-anim` ES la salida de emergencia que ya define el CSS:
+         sin ella no hay opacity:0, ni hilo colapsado, ni acordeón animado.
+         No basta con añadir .in-view — si el documento no compone, las
+         animaciones y transiciones se quedan clavadas en su fotograma inicial. */
+      document.documentElement.classList.remove('js-anim');
+      document.querySelectorAll('.reveal,.cstep').forEach(function(el){ el.classList.add('in-view'); });
+      document.querySelectorAll('img[loading="lazy"]').forEach(function(im){ im.loading = 'eager'; });
+    }, 3000);
 
-      // Un único IntersectionObserver para todos los .reveal
+    /* Reveal en scroll — un solo observer, stagger por --i */
+    var els = document.querySelectorAll('.reveal');
+    if ('IntersectionObserver' in window && !reduce){
       var io = new IntersectionObserver(function(entries){
-        entries.forEach(function(entry){
-          if (!entry.isIntersecting) return;
-          var el = entry.target;
-          try {
-            var sibs = Array.prototype.filter.call(el.parentNode.children, function(c){
-              return c.classList.contains('reveal');
-            });
-            el.style.setProperty('--i', Math.min(sibs.indexOf(el), 5));
-            el.classList.add('in-view');
-            io.unobserve(el);
-            if (el.matches('.plan, .ptile')) countUp(el);
-          } catch (err) {
-            // que un fallo puntual no oculte ni bloquee a los demás
-            el.classList.add('in-view');
-            io.unobserve(el);
-          }
+        ioHits++;
+        entries.forEach(function(e){
+          if(!e.isIntersecting) return;
+          var el = e.target, sibs = el.parentElement ? [].slice.call(el.parentElement.children).filter(function(n){return n.classList.contains('reveal');}) : [];
+          el.style.setProperty('--i', Math.min(sibs.indexOf(el), 5));
+          el.classList.add('in-view');
+          io.unobserve(el);
         });
-      }, { threshold: 0.14, rootMargin: '0px 0px -8% 0px' });
-      document.querySelectorAll('.reveal').forEach(function(el){ io.observe(el); });
-
-      // El nav se densifica tras hacer scroll (rAF-debounced)
-      var header = document.querySelector('header'), ticking = false, scrolled = false;
-      var onScroll = function(){
-        if (ticking) return;
-        ticking = true;
-        requestAnimationFrame(function(){
-          var s = window.scrollY > 40;
-          if (s !== scrolled){ scrolled = s; header.classList.toggle('scrolled', s); }
-          ticking = false;
-        });
-      };
-      window.addEventListener('scroll', onScroll, { passive: true });
-      onScroll();
-     } catch (e) { root.classList.remove('js-anim'); }
+      },{threshold:.14, rootMargin:'0px 0px -8% 0px'});
+      els.forEach(function(el){ io.observe(el); });
+    } else {
+      els.forEach(function(el){ el.classList.add('in-view'); });
     }
-  })();
 
-  // ===== Menú móvil (con estado accesible) =====
-  (function(){
-    var toggle = document.getElementById('navToggle');
-    var links = document.getElementById('navlinks');
-    if (!toggle || !links) return;
-    var setOpen = function(open){
-      links.classList.toggle('show', open);
-      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
-      toggle.setAttribute('aria-label', open ? 'Cerrar menú' : 'Abrir menú');
-    };
-    toggle.addEventListener('click', function(){ setOpen(!links.classList.contains('show')); });
-    links.querySelectorAll('a').forEach(function(a){ a.addEventListener('click', function(){ setOpen(false); }); });
-  })();
+    /* Conteo ascendente, es-MX, easeOutExpo */
+    var counted = new WeakSet();
+    function countUp(node){
+      if(counted.has(node)) return; counted.add(node);
+      var target = parseFloat(node.dataset.count), start = null, dur = 1000;
+      function step(ts){
+        if(!start) start = ts;
+        var p = Math.min((ts - start)/dur, 1);
+        var e = p === 1 ? 1 : 1 - Math.pow(2, -10*p);
+        node.textContent = Math.round(target*e).toLocaleString('es-MX');
+        if(p < 1) requestAnimationFrame(step);
+      }
+      node.textContent = '0';
+      setTimeout(function(){ requestAnimationFrame(step); }, 250);
+    }
+    var nums = document.querySelectorAll('[data-count]');
+    if ('IntersectionObserver' in window && !reduce){
+      var io2 = new IntersectionObserver(function(entries){
+        entries.forEach(function(e){ if(e.isIntersecting){ countUp(e.target); io2.unobserve(e.target); } });
+      },{threshold:.4});
+      nums.forEach(function(n){ io2.observe(n); });
+    }
 
-  // ===== FAQ acordeón (con aria-expanded sincronizado) =====
-  document.querySelectorAll('.qitem button').forEach(function(btn){
-    btn.addEventListener('click', function(){
-      var item = btn.parentNode;
-      var open = item.classList.toggle('open');
-      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    /* La Constelación: el hilo se dibuja tramo a tramo y el panel
+       pegajoso muestra el peldaño que domina la pantalla. */
+    var steps = [].slice.call(document.querySelectorAll('.cstep'));
+    if (steps.length){
+      var elLevel = document.getElementById('cLevel'),
+          elName  = document.getElementById('cName'),
+          elGoal  = document.getElementById('cGoal'),
+          elMeter = document.getElementById('cMeter'),
+          elIdx   = document.getElementById('cIdx');
+      function paint(step){
+        var i = steps.indexOf(step);
+        elLevel.textContent = step.dataset.cefr;
+        elName.textContent  = step.dataset.name;
+        elGoal.textContent  = step.dataset.goal;
+        elMeter.style.setProperty('--p', step.dataset.p);
+        elIdx.textContent   = i + 1;
+      }
+      if ('IntersectionObserver' in window && !reduce){
+        /* Dibujo del hilo: una vez que entra, se queda */
+        var ioDraw = new IntersectionObserver(function(en){
+          ioHits++;
+          en.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in-view'); ioDraw.unobserve(e.target); } });
+        },{threshold:.25, rootMargin:'0px 0px -12% 0px'});
+        steps.forEach(function(s){ ioDraw.observe(s); });
+
+        /* Peldaño activo: el más cercano a la banda central del viewport */
+        var ioActive = new IntersectionObserver(function(en){
+          en.forEach(function(e){ if(e.isIntersecting) paint(e.target); });
+        },{rootMargin:'-42% 0px -42% 0px'});
+        steps.forEach(function(s){ ioActive.observe(s); });
+      } else {
+        steps.forEach(function(s){ s.classList.add('in-view'); });
+      }
+      paint(steps[0]);
+    }
+
+    /* Nav se densifica al hacer scroll */
+    var header = document.getElementById('site-header'), ticking = false;
+    function onScroll(){
+      if(ticking) return; ticking = true;
+      requestAnimationFrame(function(){
+        header.classList.toggle('scrolled', window.scrollY > 40);
+        ticking = false;
+      });
+    }
+    window.addEventListener('scroll', onScroll, {passive:true}); onScroll();
+
+    /* Menú móvil */
+    var tgl = document.getElementById('navToggle'), links = document.getElementById('navLinks');
+    tgl.addEventListener('click', function(){
+      var open = links.classList.toggle('show');
+      tgl.setAttribute('aria-expanded', String(open));
+      tgl.setAttribute('aria-label', open ? 'Cerrar menú' : 'Abrir menú');
     });
-  });
-
-  // ===== Formulario de contacto =====
-  const contactForm = document.getElementById('contactForm');
-  if (contactForm) {
-    contactForm.addEventListener('submit', async function(e) {
-      e.preventDefault();
-      const btn = contactForm.querySelector('button[type="submit"]');
-      btn.disabled = true;
-      btn.textContent = 'Enviando…';
-      try {
-        const res = await fetch(contactForm.action, {
-          method: 'POST',
-          body: new FormData(contactForm),
-          headers: { 'Accept': 'application/json' }
-        });
-        if (res.ok) {
-          contactForm.style.display = 'none';
-          const msg = document.getElementById('formMsg');
-          msg.style.display = 'block';
-        } else {
-          btn.disabled = false;
-          btn.innerHTML = '<i class="fas fa-paper-plane" aria-hidden="true"></i> Quiero que me contacten';
-          alert('Hubo un error al enviar. Intenta de nuevo o escríbenos a contacto@vesperacademy.com');
-        }
-      } catch {
-        btn.disabled = false;
-        btn.innerHTML = '<i class="fas fa-paper-plane" aria-hidden="true"></i> Quiero que me contacten';
-        alert('Sin conexión. Intenta de nuevo o escríbenos a contacto@vesperacademy.com');
+    links.addEventListener('click', function(ev){
+      if(ev.target.tagName === 'A' && links.classList.contains('show')){
+        links.classList.remove('show'); tgl.setAttribute('aria-expanded','false');
       }
     });
+
+    /* Año en el pie */
+    var yr = document.getElementById('year'); if(yr) yr.textContent = new Date().getFullYear();
+
+    /* Rail temático: se llena desde JS y se duplica exacto para que el
+       bucle de -50% no dé tirones. Decorativo -> aria-hidden en el markup. */
+    var TEMAS = ['conversation','mind','question','business','negotiation','diplomacy','career',
+                 'achievement','globe','finance','science','technology','travel','news','medicine',
+                 'education','debate','writing','justice','future','city','music','food','nature'];
+    function fillTrack(id, list){
+      var el = document.getElementById(id); if(!el) return;
+      /* Miniaturas propias a 176px (2x de 88). Servir los theme_*.jpg de
+         900x1125 aquí costaba 2.8 MB para pintar cuadritos de 88 px. */
+      var html = list.map(function(t){
+        return '<img src="assets/images/landing/rail/'+t+'.webp" alt="" width="88" height="88" loading="lazy" decoding="async">';
+      }).join('');
+      el.innerHTML = html + html;   /* duplicado exacto = bucle sin salto */
+    }
+    fillTrack('mt1', TEMAS.slice(0,12));
+    fillTrack('mt2', TEMAS.slice(12));
+
+    /* Pestañas de certificación — teclado con flechas (patrón WAI-ARIA) */
+    var tablist = document.querySelector('[role="tablist"]');
+    if (tablist){
+      var tabs = [].slice.call(tablist.querySelectorAll('[role="tab"]'));
+      function select(tab){
+        tabs.forEach(function(t){
+          var on = t === tab;
+          t.setAttribute('aria-selected', String(on));
+          t.tabIndex = on ? 0 : -1;
+          document.getElementById(t.getAttribute('aria-controls')).hidden = !on;
+        });
+      }
+      tabs.forEach(function(t){
+        t.addEventListener('click', function(){ select(t); });
+        t.addEventListener('keydown', function(ev){
+          var i = tabs.indexOf(t), n = null;
+          if(ev.key === 'ArrowRight') n = tabs[(i+1) % tabs.length];
+          else if(ev.key === 'ArrowLeft') n = tabs[(i-1+tabs.length) % tabs.length];
+          else if(ev.key === 'Home') n = tabs[0];
+          else if(ev.key === 'End') n = tabs[tabs.length-1];
+          if(n){ ev.preventDefault(); select(n); n.focus(); }
+        });
+      });
+    }
+
+    /* Comparador banda 6 / banda 8 — un <input type=range> mueve el clip-path,
+       así que funciona con teclado sin escribir nada extra. */
+    var rng = document.getElementById('cmpRange'), cmp = document.getElementById('cmp');
+    if (rng && cmp){
+      var applyCut = function(){ cmp.style.setProperty('--cut', rng.value + '%'); };
+      rng.addEventListener('input', applyCut);
+      applyCut();
+    }
+
+    /* Formulario de contacto — mismo flujo formsubmit.co, sin alert() */
+    var form = document.getElementById('contactForm'), msg = document.getElementById('formMsg');
+    if (form){
+      form.addEventListener('submit', function(ev){
+        ev.preventDefault();
+        var btn = form.querySelector('button[type=submit]');
+        btn.disabled = true; btn.textContent = 'Enviando…';
+        fetch(form.action, {method:'POST', body:new FormData(form), headers:{'Accept':'application/json'}})
+          .then(function(r){ if(!r.ok) throw new Error('http'); return r.json(); })
+          .then(function(){
+            form.hidden = true; msg.hidden = false;
+            msg.textContent = 'Listo. Te escribimos en menos de 24 horas.';
+          })
+          .catch(function(){
+            btn.disabled = false; btn.textContent = 'Enviar';
+            msg.hidden = false;
+            msg.innerHTML = 'No se pudo enviar. Escríbenos a <a href="mailto:contacto@vesperacademy.com" style="color:var(--star);text-decoration:underline">contacto@vesperacademy.com</a>.';
+          });
+      });
+    }
+
+    /* Foco que sigue al cursor — sólo puntero fino, nunca bajo reduce */
+    var hero = document.getElementById('hero');
+    if(hero && !reduce && window.matchMedia('(hover: hover) and (pointer: fine)').matches){
+      var raf = null;
+      hero.addEventListener('pointermove', function(ev){
+        if(raf) return;
+        raf = requestAnimationFrame(function(){
+          var r = hero.getBoundingClientRect();
+          hero.style.setProperty('--mx', ((ev.clientX - r.left)/r.width*100).toFixed(1) + '%');
+          hero.style.setProperty('--my', ((ev.clientY - r.top)/r.height*100).toFixed(1) + '%');
+          raf = null;
+        });
+      }, {passive:true});
+      hero.addEventListener('pointerenter', function(){ hero.classList.add('spot-on'); });
+      hero.addEventListener('pointerleave', function(){ hero.classList.remove('spot-on'); });
+    }
+  } catch(e){
+    document.documentElement.classList.remove('js-anim');
   }
+})();
 </script>
 </body>
 </html>
