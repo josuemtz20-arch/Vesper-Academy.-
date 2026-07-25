@@ -571,17 +571,10 @@ html.js-anim .marquee.r .mtrack{animation:marchR 75s linear infinite;}
 .qitem summary svg{color:var(--gold);flex:0 0 auto;transition:transform .38s var(--ease-std);}
 .qitem[open] summary svg{transform:rotate(180deg);}
 .qbody{padding:0 24px 20px;color:var(--on-night-soft);font-size:.92rem;}
-/* Sólo animamos block-size. Transicionar `content-visibility` con
-   allow-discrete deja el panel atrapado en `hidden` (y por tanto en 0px)
-   si la transición nunca corre — p. ej. con la pestaña en segundo plano.
-   Sin ella, el contenido se muestra al instante y sólo la altura anima. */
-@supports (interpolate-size: allow-keywords){
-  :root{interpolate-size:allow-keywords;}
-  /* Bajo `js-anim` únicamente: si no hay animación (reduced-motion, o la red
-     de seguridad ya disparó) queda el <details> nativo, que siempre abre. */
-  html.js-anim .qitem::details-content{block-size:0;overflow:hidden;transition:block-size .4s var(--ease-std);}
-  html.js-anim .qitem[open]::details-content{block-size:auto;}
-}
+/* El acordeón NO se anima a propósito. La transición block-size:0 -> auto
+   (interpolate-size) deja el panel en 0px si por lo que sea no llega a
+   correr, y entonces las preguntas no abren. <details> nativo abre
+   siempre. Vale más un FAQ que funciona que un desplegable bonito. */
 
 /* ============================================================
    CONTACTO
@@ -1367,23 +1360,46 @@ html:not(.js-anim) .cstep::before{transform:scaleY(1);}
        plano al cargar, motor sin composición, extensión que lo rompe), el
        contenido se quedaría invisible para siempre. A los 3 s, si no hubo
        ni una sola llamada, se revela todo y se acabó. */
-    var ioHits = 0;
-    setTimeout(function(){
-      if (ioHits > 0) return;
-      /* Quitar `js-anim` ES la salida de emergencia que ya define el CSS:
+    function rescate(){
+      /* La señal correcta NO es "¿disparó el observer?" — IntersectionObserver
+         siempre entrega una tanda inicial, así que contarlas da un falso OK.
+         La pregunta útil es: ¿hay algo YA en pantalla que debería haberse
+         revelado y sigue sin revelarse? Si lo hay, el observer no está
+         haciendo su trabajo y hay que enseñarlo todo.
+         Quitar `js-anim` es la salida de emergencia que ya define el CSS:
          sin ella no hay opacity:0, ni hilo colapsado, ni acordeón animado.
-         No basta con añadir .in-view — si el documento no compone, las
-         animaciones y transiciones se quedan clavadas en su fotograma inicial. */
+         Añadir .in-view no basta: si el documento no compone, animaciones y
+         transiciones se quedan clavadas en su fotograma inicial. */
+      var pending = [].slice.call(document.querySelectorAll('.reveal:not(.in-view),.cstep:not(.in-view)'));
+      var overdue = pending.some(function(el){
+        var r = el.getBoundingClientRect();
+        return r.top < window.innerHeight && r.bottom > 0;   // visible pero sin revelar
+      });
+      /* El hero es lo más importante y NO depende del observer: va con una
+         cascada de `animation ... both` desde opacity:0. Si a los 3 s el h1
+         sigue transparente, el motor de animación no está corriendo y la
+         portada estaría en blanco. Es la comprobación de mayor riesgo. */
+      var h1 = document.querySelector('.hero h1');
+      var heroStuck = h1 && parseFloat(getComputedStyle(h1).opacity) < 0.9;
+      if (!overdue && !heroStuck) return;
       document.documentElement.classList.remove('js-anim');
-      document.querySelectorAll('.reveal,.cstep').forEach(function(el){ el.classList.add('in-view'); });
+      pending.forEach(function(el){ el.classList.add('in-view'); });
       document.querySelectorAll('img[loading="lazy"]').forEach(function(im){ im.loading = 'eager'; });
-    }, 3000);
+    }
+    setTimeout(rescate, 3000);
+    /* Segunda pasada: al primer scroll con margen de gracia. Cubre el caso de
+       que el observer exista pero nunca dispare — a los 3 s no había nada
+       "atrasado" porque todos los .reveal estaban aún bajo el pliegue. */
+    var once = false;
+    window.addEventListener('scroll', function(){
+      if (once) return; once = true;
+      setTimeout(rescate, 1500);
+    }, {passive:true, once:true});
 
     /* Reveal en scroll — un solo observer, stagger por --i */
     var els = document.querySelectorAll('.reveal');
     if ('IntersectionObserver' in window && !reduce){
       var io = new IntersectionObserver(function(entries){
-        ioHits++;
         entries.forEach(function(e){
           if(!e.isIntersecting) return;
           var el = e.target, sibs = el.parentElement ? [].slice.call(el.parentElement.children).filter(function(n){return n.classList.contains('reveal');}) : [];
@@ -1440,7 +1456,6 @@ html:not(.js-anim) .cstep::before{transform:scaleY(1);}
       if ('IntersectionObserver' in window && !reduce){
         /* Dibujo del hilo: una vez que entra, se queda */
         var ioDraw = new IntersectionObserver(function(en){
-          ioHits++;
           en.forEach(function(e){ if(e.isIntersecting){ e.target.classList.add('in-view'); ioDraw.unobserve(e.target); } });
         },{threshold:.25, rootMargin:'0px 0px -12% 0px'});
         steps.forEach(function(s){ ioDraw.observe(s); });
