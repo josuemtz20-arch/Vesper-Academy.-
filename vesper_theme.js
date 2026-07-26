@@ -24,6 +24,20 @@ window.VESPER_THEME = (function () {
   /* ---- Temas: cada uno define la paleta base. Las variantes oscuras
          marcan dark:true para ajustar color-scheme y sombras. ---- */
   var THEMES = {
+    /* Vespertina: la paleta de la portada. cream/paper/line son literalmente
+       --va-night / --va-dusk / --va-twilight, así que el hub queda del mismo
+       tono que las bandas de noche de index.html.
+       OJO con goldDp: en un tema OSCURO tiene que ser más CLARO que gold, no
+       más oscuro. buildVars() mapea --gold2 = goldDp sin mirar `dark`, y --gold2
+       es el color de todas las micro-etiquetas en versalitas. Con el #a8843d
+       "oro profundo" de los temas claros esto caería a 4.38:1 sobre paper —
+       falla AA. Con #dcc173 da 8.65:1. */
+    vespertina: {
+      name: "Vespertina", emoji: "✦", dark: true,
+      ink: "#EDE7D6", gold: "#C9A84C", goldLt: "#f3e2ab", goldDp: "#dcc173",
+      success: "#41C595", error: "#E07065",
+      cream: "#14122a", paper: "#1f2342", muted: "#b3b0c9", line: "#3a3a63"
+    },
     classic: {
       name: "Clasico Oro", emoji: "👑", dark: false,
       ink: "#1B1B2F", gold: "#C9A84C", goldLt: "#dcc173", goldDp: "#a8843d",
@@ -62,12 +76,14 @@ window.VESPER_THEME = (function () {
     },
     nebula: {
       name: "Nebulosa", emoji: "🪐", dark: true,
-      ink: "#efeafb", gold: "#b58cff", goldLt: "#caaaff", goldDp: "#8f63e0",
+      /* goldDp era #8f63e0: 3.95:1 sobre su propio paper, o sea fallaba AA en
+         cada micro-etiqueta que usa --gold2. Aclarado a 5.49:1. */
+      ink: "#efeafb", gold: "#b58cff", goldLt: "#caaaff", goldDp: "#a482ec",
       success: "#46c79b", error: "#e0708a",
       cream: "#150f24", paper: "#221a38", muted: "#a497c4", line: "#352a52"
     }
   };
-  var THEME_ORDER = ["classic", "midnight", "ivory", "sunset", "forest", "ocean", "nebula"];
+  var THEME_ORDER = ["vespertina", "classic", "midnight", "ivory", "sunset", "forest", "ocean", "nebula"];
 
   /* ---- Skins de mascota: recolorean el aro/borde y aplican un filtro
          sutil al PNG para variar el "modelo" sin arte extra. ---- */
@@ -142,16 +158,22 @@ window.VESPER_THEME = (function () {
     return "rgba(" + ((n >> 16) & 255) + "," + ((n >> 8) & 255) + "," + (n & 255) + "," + a + ")";
   }
 
+  /* Tema por omisión. Es "vespertina" para que el alumno que nunca eligió tema
+     vea la misma identidad de noche que la portada. read() NO persiste, así que
+     esto sólo alcanza a quien no ha tocado el selector: el que ya escogió
+     "Clasico Oro" (o cualquier otro) lo conserva. */
+  var DEFAULT_THEME = "vespertina";
+
   function read() {
     try {
       var s = JSON.parse(localStorage.getItem(STORE) || "{}");
       return {
-        theme: THEMES[s.theme] ? s.theme : "classic",
+        theme: THEMES[s.theme] ? s.theme : DEFAULT_THEME,
         skin: SKINS[s.skin] ? s.skin : "gold",
         accessory: ACCESSORIES[s.accessory] ? s.accessory : "none",
         pelaje: PELAJES[s.pelaje] ? s.pelaje : "classic"
       };
-    } catch (e) { return { theme: "classic", skin: "gold", accessory: "none", pelaje: "classic" }; }
+    } catch (e) { return { theme: DEFAULT_THEME, skin: "gold", accessory: "none", pelaje: "classic" }; }
   }
   function write(state) { try { localStorage.setItem(STORE, JSON.stringify(state)); } catch (e) {} }
 
@@ -180,7 +202,7 @@ window.VESPER_THEME = (function () {
 
   function apply(state) {
     state = state || read();
-    var t = THEMES[state.theme] || THEMES.classic;
+    var t = THEMES[state.theme] || THEMES[DEFAULT_THEME];
     var sk = SKINS[state.skin] || SKINS.gold;
     var vars = buildVars(t, sk);
     var lines = [":root{"];
@@ -201,6 +223,10 @@ window.VESPER_THEME = (function () {
     var root = document.documentElement;
     root.setAttribute("data-vesper-theme", state.theme);
     root.setAttribute("data-vesper-skin", state.skin);
+    /* Señal claro/oscuro para CSS que no puede leer `dark` del tema. La usa
+       `.va-display` en vesper_tokens.css: un didone necesita eje óptico bajo y
+       más peso sobre fondo claro, y lo contrario sobre fondo oscuro. */
+    if (root.classList) root.classList[t.dark ? "add" : "remove"]("vesper-dark");
     if (window.matchMedia) {
       var meta = document.querySelector('meta[name="theme-color"]');
       if (meta) meta.setAttribute("content", t.dark ? t.cream : t.ink);

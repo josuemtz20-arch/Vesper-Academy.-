@@ -49,12 +49,23 @@
   --va-star: #f3e2ab;        /* destello de estrella (gold muy claro) */
   --va-hairline: rgba(201, 168, 76, .35);   /* divisor dorado fino */
 
+  /* Texto sobre las superficies de noche. Nacieron en la portada como vars
+     locales; viven aquí para que cualquier página con bandas oscuras use el
+     mismo par en vez de inventar su propio rgba(255,255,255,...). */
+  --va-on-night: rgba(245, 242, 235, .90);
+  --va-on-night-soft: rgba(245, 242, 235, .62);
+
   /* Gradientes y resplandores reutilizables. */
   --va-grad-dusk: linear-gradient(160deg, var(--va-dusk), var(--va-night) 60%, #0e0c1f);
   --va-glow-gold: radial-gradient(900px 420px at 80% -10%, rgba(201, 168, 76, .22), transparent 60%);
 
-  /* Tipografía. */
-  --va-font-display: "Inria Serif", Georgia, serif;
+  /* Tipografía. El display es Bodoni Moda (didone) desde el rediseño de la
+     portada. Antes este token decía "Inria Serif" y la portada lo pisaba en
+     local, que es justo de donde salía la deriva: el resto del sitio seguía
+     en Inria. Ojo con los didones sobre fondo claro — ver la nota de
+     `font-optical-sizing` más abajo. */
+  --va-font-display: "Bodoni Moda", Didot, "Times New Roman", Georgia, serif;
+  --va-font-display-legacy: "Inria Serif", Georgia, serif;
   --va-font-text: Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
 
   /* Anillo de foco accesible. */
@@ -76,6 +87,33 @@ summary:focus-visible,
   outline: 3px solid var(--va-focus);
   outline-offset: 2px;
   border-radius: 6px;
+}
+
+/* ---------- Didone (Bodoni Moda) legible en claro Y en oscuro ----------
+   Bodoni tiene trazos finos casi de un pelo. Sobre fondo claro se pierden por
+   dos motivos que se suman:
+     1) `-webkit-font-smoothing:antialiased` adelgaza el glifo. Favorece al
+        texto claro sobre oscuro (que engorda) y castiga al oscuro sobre claro.
+     2) `font-optical-sizing:auto` pide un `opsz` parecido al tamaño en px, o
+        sea el corte de DISPLAY, que es el de los finos más finos.
+   La portada resuelve esto por banda (`.band-cream`). Aquí no se puede: en las
+   páginas del alumno "claro u oscuro" lo decide el tema EN CALIENTE. Así que la
+   señal es la clase `.vesper-dark` que `vesper_theme.js` pone en <html>.
+   Marca los titulares con `.va-display` para acogerse a esto. Una página sin
+   motor de temas no lleva la clase y recibe el tratamiento de claro, que es el
+   correcto para las superficies crema. */
+.va-display {
+  font-family: var(--va-font-display);
+  font-optical-sizing: none;
+  font-variation-settings: "opsz" 8, "wght" 700;
+}
+html.vesper-dark .va-display {
+  font-optical-sizing: auto;
+  font-variation-settings: normal;
+}
+html.vesper-dark {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 /* Lectores de pantalla: contenido solo-audible. */
