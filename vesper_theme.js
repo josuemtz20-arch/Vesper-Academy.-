@@ -194,6 +194,10 @@ window.VESPER_THEME = (function () {
       /* a11y: oro-texto accesible sobre la superficie del tema (oscuro en temas claros,
          claro en temas oscuros) + anillo de foco visible por tema (WCAG 1.4.3/1.4.11/2.4.7) */
       "--gold-ink": t.dark ? t.gold : "#7a5e12",
+      /* Texto/glifo SOBRE una superficie de oro. Oscuro en los dos modos:
+         --ink no vale, porque en tema oscuro es claro y claro-sobre-oro da
+         ~1.8:1. En tema oscuro el tono mas oscuro del tema es su cream. */
+      "--on-gold": t.dark ? t.cream : t.ink,
       "--focus": t.dark ? t.goldLt : "#8a6d1f",
       "--shadow": t.dark ? "0 6px 22px rgba(0,0,0,.45)" : "0 6px 22px rgba(27,27,47,.08)",
       /* tokens del sitio / onboarding */
@@ -275,7 +279,7 @@ window.VESPER_THEME = (function () {
       ".vt-skin .vt-lock{top:-2px;right:-2px}",
       ".vt-note{font-size:.8rem;color:var(--muted,#6b6b76);margin:10px 0 0;min-height:1.1em}",
       /* boton flotante + modal */
-      ".vt-fab{position:fixed;right:16px;bottom:16px;z-index:9998;width:52px;height:52px;border-radius:50%;border:none;cursor:pointer;background:var(--gold,#C9A84C);color:var(--ink,#1B1B2F);font-size:1.3rem;box-shadow:0 6px 18px rgba(0,0,0,.22);display:flex;align-items:center;justify-content:center}",
+      ".vt-fab{position:fixed;right:16px;bottom:16px;z-index:9998;width:52px;height:52px;border-radius:50%;border:none;cursor:pointer;background:var(--gold,#C9A84C);color:var(--on-gold,#1B1B2F);font-size:1.3rem;box-shadow:0 6px 18px rgba(0,0,0,.22);display:flex;align-items:center;justify-content:center}",
       ".vt-fab:active{transform:scale(.94)}",
       ".vt-modal{position:fixed;inset:0;z-index:9999;background:rgba(10,10,20,.5);display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s ease}",
       ".vt-modal.show{opacity:1;pointer-events:auto}",
