@@ -1704,8 +1704,11 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       pequeño sobre fondo claro. Para eso está --gold-ink (5.5:1).
    ============================================================ */
 :root{
-  /* oro legible para TEXTO sobre fondos claros — 5.47:1 sobre cream */
-  --gold-ink:#7d612b;
+  /* OJO: --gold-ink NO se define aquí. Lo publica vesper_theme.js en su
+     buildVars() y depende del modo (`t.dark ? t.gold : "#7a5e12"`): oro
+     oscuro en temas claros, oro CLARO en los oscuros. Fijarlo en la página
+     rompería el modo noche, que desde el tema "Vespertina" es el de por
+     defecto. El fallback de cada uso cubre el caso de que el motor no cargue. */
   /* tamaño mínimo de etiqueta: nada informativo por debajo de esto */
   --fs-label:.78rem;   /* 12.5px */
   --fs-meta:.82rem;    /* 13.1px */
@@ -1753,7 +1756,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
 .ach-badge .ab-tx b,
 .cos-cta,
 .srs-banner .hc-cta,
-.hub-card .hc-cta{color:var(--gold-ink)}
+.hub-card .hc-cta{color:var(--gold-ink,#7a5e12)}
 
 /* -- 3. chips de etiqueta sobre acento de mundo -------------
       #fff sobre los acentos daba 3.2-4.0:1. Se oscurece el fondo
@@ -1837,19 +1840,19 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
   color:var(--muted);font:inherit;font-size:var(--fs-meta);font-weight:600;cursor:pointer;
   transition:border-color .14s ease,color .14s ease;
 }
-.worlds-more:hover{border-color:var(--gold-ink);color:var(--ink)}
+.worlds-more:hover{border-color:var(--gold-ink,#7a5e12);color:var(--ink)}
 @media(prefers-reduced-motion:reduce){ .worlds-more{transition:none} }
 
 /* -- primera visita: qué significan las palabras del mapa --- */
 .primer{
   position:relative;margin:0 0 16px;padding:16px 16px 14px;
-  background:var(--paper);border:1px solid var(--line);border-left:4px solid var(--gold-ink);
+  background:var(--paper);border:1px solid var(--line);border-left:4px solid var(--gold-ink,#7a5e12);
   border-radius:var(--va-r-md,14px);box-shadow:var(--shadow);
 }
 .primer__t{margin:0 0 8px;font-family:var(--va-font-display,"Inria Serif",Georgia,serif);font-size:1.06rem}
 .primer__l{margin:0;padding:0;list-style:none;display:grid;gap:7px}
 .primer__l li{font-size:var(--fs-meta);line-height:1.45;color:var(--ink)}
-.primer__l b{color:var(--gold-ink)}
+.primer__l b{color:var(--gold-ink,#7a5e12)}
 .primer__x{
   margin-top:12px;width:100%;min-height:44px;padding:10px 14px;
   background:var(--ink);color:var(--cream);border:0;border-radius:11px;
@@ -1878,14 +1881,14 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
    ============================================================ */
 .wbtn.is-current{
   background:linear-gradient(150deg,#fff3cf,#e3bd63 55%,#c69a35);
-  color:#231b06;
+  color:var(--on-gold,#231b06);
   border-color:#fff6df;
-  box-shadow:0 0 0 4px var(--ink),0 0 0 8px var(--gold,#C9A84C),
+  box-shadow:0 0 0 4px var(--on-gold,#1B1B2F),0 0 0 8px var(--gold,#C9A84C),
              0 10px 26px rgba(0,0,0,.42),
              inset 0 2px 0 rgba(255,255,255,.6);
 }
 /* el glifo: sobre oro claro va oscuro, no dorado */
-.wbtn.is-current .wglyph{color:#231b06}
+.wbtn.is-current .wglyph{color:var(--on-gold,#231b06)}
 /* Las lecciones normales disponibles eran BLANCO PURO (#fffdf7), más
    luminosas que el propio nodo actual. Bajan a una crema cálida: se
    siguen leyendo como "puedes entrar" contra el mapa oscuro (~13:1)
@@ -1901,6 +1904,41 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
    por pantalla; 24px acerca el sendero sin apelmazarlo */
 .wmap{gap:24px}
 
+/* ============================================================
+   MODO NOCHE: superficies que SIEMPRE son oscuras
+
+   El tema por defecto pasó a ser "Vespertina" (dark). El motor de
+   temas invierte --ink y --cream, pero el escenario del mapa
+   (.wsky/.wisland/.wmap/.wcheck) pinta sus PROPIOS degradados navy
+   y no se invierte nunca. Las reglas que ponían texto con
+   var(--cream) sobre esas superficies quedaron con texto casi negro
+   sobre fondo casi negro:
+
+     .wtitle  (el nombre de la lección)   1,08:1
+     .wcheck  (la destreza y su conteo)   1,27:1
+
+   Sobre una superficie que no cambia con el tema, el color del texto
+   tampoco puede cambiar: van fijos y claros.
+   ============================================================ */
+/* nota de especificidad: los originales son `.wisland .wtitle` y
+   `.wisland .wcheck` (0,2,0), así que un `.wcheck` pelado (0,1,0) NO
+   los gana — hay que igualar el descendiente. */
+.wisland .wtitle,
+.wboss-node .wtitle,
+.wisland .wcheck,
+.wcheck{color:#EDE7D6}
+.wisland .wcheck .ct{color:var(--gold,#C9A84C)}
+
+/* El CTA del examen usaba var(--ink) como primera parada del
+   degradado: en tema oscuro --ink es CLARO, así que la tarjeta se
+   volvía medio beige y su texto dorado caía a 1,85:1. --navy sí es
+   oscuro en los dos modos (t.dark ? t.paper : t.ink). */
+.pcta{background:linear-gradient(135deg,var(--navy,#1B1B2F),var(--navy2,#2c2c4a));color:#EDE7D6}
+
+/* .hub-card es un <button> que nunca declaró fondo: heredaba el gris
+   del navegador, y con color-scheme:dark ese gris pasó a #6b6b6b. */
+.hub-card{background:var(--paper,#fff);border:1px solid var(--line,#ece7da);color:var(--ink,#1B1B2F)}
+
 /* -- botón de "ver el resto del mundo", bajo el sendero ----- */
 .wmore{margin:-6px 0 18px;padding:0 2px}
 .wmore__btn{
@@ -1910,7 +1948,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
   color:var(--ink);font:inherit;font-size:.9rem;font-weight:700;cursor:pointer;
   transition:border-color .14s ease,background .14s ease;
 }
-.wmore__btn:hover{border-color:var(--gold-ink);background:var(--gold-tint)}
+.wmore__btn:hover{border-color:var(--gold-ink,#7a5e12);background:var(--gold-tint)}
 .wmore__sub{font-size:var(--fs-label);font-weight:500;color:var(--muted)}
 @media(prefers-reduced-motion:reduce){ .wmore__btn{transition:none} }
 </style>
