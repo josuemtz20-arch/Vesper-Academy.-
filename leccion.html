@@ -1856,6 +1856,51 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
   font:inherit;font-weight:700;cursor:pointer;
 }
 
+/* ============================================================
+   EL SENDERO: jerarquía de los nodos
+
+   Medido sobre el mapa real, el relleno de cada estado era:
+     completada  gradiente oro claro   (#e6cd97 -> #C9A84C)  brillante
+     ACTUAL      gradiente navy        (#1B1B2F -> #2c2c4a)  OSCURO
+     disponible  gradiente crema       (#fffdf7 -> #f4eede)  brillante
+     bloqueada   gradiente navy        (#2b2b44 -> #1f1f34)  oscuro
+
+   O sea: el nodo que hay que tocar compartía paleta con los
+   BLOQUEADOS y quedaba más apagado que las lecciones normales de
+   al lado, sobre un mapa que ya es oscuro. La jerarquía estaba
+   invertida justo en el punto que más importa. Se distinguía por
+   tamaño, doble anillo y pulso, pero el relleno decía "inactivo".
+
+   Ahora el nodo actual es el más luminoso del sendero. Se sigue
+   diferenciando de una lección ya completada por tamaño (88 vs 74),
+   el doble anillo blanco+oro, el pulso, el glifo de play (vs palomita)
+   y las estrellas que sólo llevan las completadas.
+   ============================================================ */
+.wbtn.is-current{
+  background:linear-gradient(150deg,#fff3cf,#e3bd63 55%,#c69a35);
+  color:#231b06;
+  border-color:#fff6df;
+  box-shadow:0 0 0 4px var(--ink),0 0 0 8px var(--gold,#C9A84C),
+             0 10px 26px rgba(0,0,0,.42),
+             inset 0 2px 0 rgba(255,255,255,.6);
+}
+/* el glifo: sobre oro claro va oscuro, no dorado */
+.wbtn.is-current .wglyph{color:#231b06}
+/* Las lecciones normales disponibles eran BLANCO PURO (#fffdf7), más
+   luminosas que el propio nodo actual. Bajan a una crema cálida: se
+   siguen leyendo como "puedes entrar" contra el mapa oscuro (~13:1)
+   pero ya no compiten con el nodo actual. */
+.wbtn.open:not(.is-current){background:linear-gradient(150deg,#f4ecda,#e4dbc2)}
+/* las completadas también bajan un punto para que la actual mande */
+.wbtn.completed{background:linear-gradient(150deg,#dcc492,#c2a259)}
+
+/* la píldora "Empieza"/"Continuar": es el rótulo de "estás aquí" */
+.wnode .wlabel{font-size:.74rem;padding:5px 13px;letter-spacing:.06em}
+
+/* ritmo vertical: 30px de gap daban 166px por nodo y sólo ~5 nodos
+   por pantalla; 24px acerca el sendero sin apelmazarlo */
+.wmap{gap:24px}
+
 /* -- botón de "ver el resto del mundo", bajo el sendero ----- */
 .wmore{margin:-6px 0 18px;padding:0 2px}
 .wmore__btn{
