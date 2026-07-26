@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-<html lang="es">
+<!-- class="vesper-dark" va escrita a mano para que el tratamiento de didone
+     sobre oscuro sea correcto ANTES de que corra un script. vesper_theme.js
+     la corrige si el alumno tiene elegido un tema claro. -->
+<html lang="es" class="vesper-dark">
 <head>
 <script src="vesper_auth.js"></script>
 <script src="vesper_identity.js"></script>
@@ -23,323 +26,499 @@
 <title>Portal del Alumno | Vesper Academy</title>
 <meta name="description" content="Material de estudio para alumnos de Vesper Academy: libros del estudiante y biblioteca de audio.">
 <link rel="icon" href="assets/images/vesper_logo.png" type="image/png">
-<!-- Preconexión temprana a los CDNs (fuentes e iconos): recorta el primer render -->
+<meta name="theme-color" content="#14122a">
+<!-- Preconexión temprana a las fuentes. Ya no hay preconnect a cdnjs: Font
+     Awesome se fue en favor del sprite SVG en línea, como en la portada. -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<!-- Bodoni Moda (display, eje óptico variable) + Inter, en una sola petición y
+     como <link>: antes iba en un @import DENTRO del <style>, que no arranca
+     hasta que el CSS se parsea y dejaba los preconnect de adorno. -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,600;0,6..96,700;1,6..96,400;1,6..96,500&family=Inter:wght@400;500;600;700&display=swap">
+<!-- Tokens ANTES del <style> de la página, como manda su cabecera. Estuvo
+     después durante mucho tiempo, al revés del contrato. -->
+<link rel="stylesheet" href="assets/css/vesper_tokens.css">
+<script>
+/* Sólo animamos si hay IntersectionObserver y nadie pidió menos movimiento
+   (ni el sistema ni el propio alumno). Misma puerta que la portada: sin esta
+   clase el CSS deja todo revelado, así que un fallo de JS nunca esconde nada. */
+(function(){
+  try{
+    var p = JSON.parse(localStorage.getItem("vesper_profile")||"null");
+    var quiere = p && p.vesper && p.vesper.reduceMotion;
+    var sistema = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if(window.IntersectionObserver && !quiere && !sistema){
+      document.documentElement.classList.add("js-anim");
+    }
+  }catch(e){}
+})();
+</script>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inria+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@300;400;500;600;700&display=swap');
 *,*::before,*::after{box-sizing:border-box;}
+
+/* ============================================================
+   Paleta: TODO resuelve a un token. Sin paleta paralela.
+   Estos nombres son EXACTAMENTE los que emite buildVars() de vesper_theme.js
+   desde su <style> al final del <head>, así que el tema del alumno los pisa en
+   caliente y la página entera lo sigue sin una sola regla condicional.
+
+   Los valores de aquí son los del tema "vespertina", NO los del sistema crema
+   anterior. Es deliberado: el service worker sirve subrecursos de caché primero
+   (sw.js), así que un alumno puede recibir este HTML nuevo junto a un
+   vesper_theme.js viejo. Sembrando la noche aquí, el hub sale de noche aunque
+   el motor de temas no llegue nunca — y ese es justo el problema que veníamos
+   a resolver, así que no puede depender de que un script cargue.
+
+   PROHIBIDO consumir --navy3: buildVars lo mapea a t.cream, que en un tema
+   CLARO es crema de verdad. Un fondo con --navy3 y texto claro encima queda
+   invisible en cuanto alguien elige "Clasico Oro". Para superficies oscuras va
+   --navy (t.ink en claro, t.paper en oscuro: oscuro en los dos casos).
+   ============================================================ */
 :root{
-  /* Paleta alineada con la landing (index.html) para una identidad única. */
-  --navy:#1B1B2F;--navy2:#222b47;--navy3:#141a2e;
-  --gold:#c5a059;--gold-lt:#d9bd84;--gold2:#8f6f2e;
-  --cream:#f5f2eb;--white:#fff;--border:#e4e0d8;--muted:#5a6673;
-  /* Radios, sombras y movimiento (mismo lenguaje que la landing). */
-  --r-sm:10px;--r-md:14px;--r-lg:18px;
-  --sh-sm:0 1px 4px rgba(27,27,47,.06);
-  --sh-md:0 14px 34px rgba(27,27,47,.12);
-  --sh-lg:0 22px 50px rgba(27,27,47,.22);
+  --navy:var(--va-dusk,#1f2342);
+  --navy2:var(--va-twilight,#3a3a63);
+  --gold:var(--va-gold,#C9A84C);
+  --gold-lt:var(--va-star,#f3e2ab);
+  /* Oro "profundo" — sólo para superficies y adornos, NUNCA para texto pequeño.
+     En un tema oscuro tiene que ser CLARO: sobre crepúsculo #dcc173 da 8.65:1,
+     mientras que el #a8843d de los temas claros daría 4.38:1. */
+  --gold2:#dcc173;
+  /* Oro para TEXTO PEQUEÑO. El motor de temas ya calcula el valor accesible por
+     tema (t.dark ? t.gold : "#7a5e12"), que es justo el problema que la portada
+     resolvió a mano: #c5a059/#a8843d sólo cumplen AA a partir de 24px, así que
+     sobre crema hace falta bajar a #7a5e12 (6.4:1). Aquí sembramos el valor de
+     noche para cuando el motor no carga. */
+  --gold-ink:var(--va-gold,#C9A84C);
+  --cream:var(--va-night,#14122a);
+  --white:var(--va-dusk,#1f2342);
+  --paper:var(--va-dusk,#1f2342);
+  --text:#EDE7D6;
+  --ink:#EDE7D6;
+  --border:var(--va-twilight,#3a3a63);
+  --line:var(--va-twilight,#3a3a63);
+  --muted:#b3b0c9;
+  --hair:var(--va-hairline,rgba(201,168,76,.35));
+  --on-night:var(--va-on-night,rgba(245,242,235,.90));
+  --on-night-soft:var(--va-on-night-soft,rgba(245,242,235,.62));
+
+  /* Ritmo. Más apretado que el clamp(72px,9vw,120px) de la portada: una
+     portada respira porque persuade, un hub es herramienta de uso diario y el
+     alumno no debería scrollear de más para llegar a su libro. */
+  --s-section:clamp(38px,5vw,64px);
+  --gutter:clamp(18px,4vw,32px);
+  --maxw:1160px;
+
+  --t-eyebrow:.7rem;--t-small:.83rem;--t-body:.95rem;--t-lead:1.05rem;
+  --t-h3:1.05rem;--t-h2:clamp(1.5rem,2.6vw,1.9rem);--t-display:clamp(1.9rem,4.2vw,2.6rem);
+
+  --r-sm:var(--va-r-sm,10px);--r-md:var(--va-r-md,14px);--r-lg:var(--va-r-lg,18px);--r-pill:999px;
+  --sh:var(--va-shadow,0 6px 22px rgba(27,27,47,.08));
+  --sh-dusk:var(--va-shadow-dusk,0 18px 44px rgba(20,18,42,.22));
   --ease-out:cubic-bezier(0.22,1,0.36,1);
 }
+
+/* Alto contraste sobre noche. --muted va aquí como literal (para que la noche
+   sobreviva sin JS), así que la rama de vesper_tokens.css no lo alcanza: hay que
+   reforzarlo también aquí. La especificidad (0,2,1) le gana al :root que inyecta
+   el motor de temas, así que manda con cualquier tema. */
+html.vesper-hc.vesper-dark{--muted:#d9d5e4;--border:#6d6da0;--line:#6d6da0;}
+
 html{scroll-behavior:smooth;}
-body{margin:0;font-family:'Inter',sans-serif;color:var(--navy);min-height:100vh;line-height:1.6;
-  background:radial-gradient(760px 340px at 88% -8%,rgba(197,160,89,.14),transparent 62%),var(--cream);}
+body{margin:0;font-family:var(--va-font-text,Inter,system-ui,sans-serif);
+  color:var(--text);min-height:100vh;line-height:1.62;letter-spacing:-0.011em;
+  background:var(--va-glow-gold,radial-gradient(900px 420px at 80% -10%,rgba(201,168,76,.22),transparent 60%)),var(--cream);
+  background-attachment:fixed,scroll;}
 
 /* Salto al contenido (a11y) */
-.skip-link{position:absolute;left:-999px;top:0;z-index:200;background:var(--navy);color:#fff;padding:10px 16px;border-radius:0 0 8px 0;text-decoration:none;font-weight:600;}
+.skip-link{position:absolute;left:-999px;top:0;z-index:200;background:var(--navy);color:var(--on-night);padding:10px 16px;border-radius:0 0 8px 0;text-decoration:none;font-weight:600;}
 .skip-link:focus{left:0;}
 
-/* ── Cabecera: navy con velo y filo dorado, como la landing ── */
-header{background:rgba(27,27,47,.96);backdrop-filter:blur(8px);border-bottom:1px solid rgba(197,160,89,.35);
-  padding:0 24px;min-height:66px;display:flex;align-items:center;justify-content:space-between;gap:14px;
-  position:sticky;top:0;z-index:50;box-shadow:0 2px 18px rgba(0,0,0,.12);}
-.brand{display:flex;align-items:center;gap:12px;color:#fff;text-decoration:none;}
-.brand img{height:40px;width:40px;object-fit:contain;}
-.brand b{font-family:'Inria Serif',serif;font-size:1.12rem;letter-spacing:.3px;}
-.brand small{display:block;color:var(--gold);font-size:.6rem;letter-spacing:2px;text-transform:uppercase;}
-header a.back{display:inline-flex;align-items:center;gap:7px;color:rgba(255,255,255,.82);font-size:.76rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;text-decoration:none;padding:8px 12px;border-radius:var(--r-sm);border:1px solid rgba(255,255,255,.16);transition:color .16s,border-color .16s,background .16s;}
+/* Iconos: sprite SVG en línea, hereda currentColor. Adiós Font Awesome. */
+.i{width:1em;height:1em;flex:0 0 auto;stroke:currentColor;fill:none;
+  stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;vertical-align:-.125em;}
+
+/* Un solo filete de oro como marca de sección. Sustituye a las siete
+   micro-etiquetas en versalitas casi idénticas que había antes. */
+.rule{display:block;width:34px;height:1px;background:var(--gold);margin-bottom:16px;}
+.eyebrow{display:inline-block;font-size:var(--t-eyebrow);font-weight:600;
+  letter-spacing:.22em;text-transform:uppercase;color:var(--gold-ink);}
+
+/* ── Cabecera: noche con velo y filo de oro ── */
+header{background:var(--navy);
+  border-bottom:1px solid var(--hair);
+  padding:0 var(--gutter);min-height:66px;display:flex;align-items:center;justify-content:space-between;gap:14px;
+  position:sticky;top:0;z-index:50;}
+@supports (backdrop-filter:blur(1px)){
+  header{background:color-mix(in srgb,var(--navy) 92%,transparent);backdrop-filter:blur(14px);}
+}
+.brand{display:flex;align-items:center;gap:12px;color:var(--on-night);text-decoration:none;}
+.brand img{height:38px;width:38px;object-fit:contain;}
+.brand b{font-family:var(--va-font-display);font-size:1.08rem;letter-spacing:.01em;font-weight:600;}
+.brand small{display:block;color:var(--gold);font-size:.58rem;letter-spacing:.24em;text-transform:uppercase;}
+header a.back{display:inline-flex;align-items:center;gap:8px;color:var(--on-night-soft);font-size:.72rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;padding:9px 13px;border-radius:var(--r-sm);border:1px solid var(--hair);transition:color .16s,border-color .16s,background .16s;}
 header a.back:hover,header a.back:focus-visible{color:var(--navy);background:var(--gold);border-color:var(--gold);}
-.wrap{max-width:1100px;margin:0 auto;padding:40px 22px 40px;}
-.intro{margin-bottom:4px;}
-.intro .eyebrow{display:inline-block;font-size:.7rem;letter-spacing:2px;text-transform:uppercase;color:var(--gold2);font-weight:700;margin-bottom:8px;}
-.intro h1{font-family:'Inria Serif',serif;font-size:clamp(1.9rem,4.2vw,2.35rem);line-height:1.12;margin:0 0 10px;}
-.intro p{color:var(--muted);max-width:640px;margin:0 0 6px;font-size:1.02rem;}
 
-/* Entrada sobria (respeta reduce-motion más abajo). */
-@keyframes vRise{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:none;}}
-.v-rise{animation:vRise .6s var(--ease-out) both;}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:var(--s-section) var(--gutter) calc(var(--s-section) + 12px);}
 
-/* ── Héroe "Hoy": una sola acción, arriba del todo ── */
-#today{display:none;align-items:center;gap:18px;margin:26px 0 6px;text-decoration:none;
-  background:radial-gradient(520px 200px at 90% -30%,rgba(217,189,132,.22),transparent 60%),linear-gradient(135deg,var(--navy2),var(--navy) 58%,var(--navy3));
-  color:#fff;border:1px solid rgba(197,160,89,.42);
-  border-radius:var(--r-lg);padding:22px 26px;box-shadow:var(--sh-md);
+/* ── Saludo ── */
+.intro{margin-bottom:6px;}
+.intro h1{font-family:var(--va-font-display);font-size:var(--t-display);line-height:1.08;font-weight:600;
+  margin:10px 0 10px;letter-spacing:-.012em;text-wrap:balance;}
+.intro p{color:var(--muted);max-width:52ch;margin:0;font-size:var(--t-lead);text-wrap:pretty;}
+.tour-replay{display:inline-flex;align-items:center;gap:8px;margin-top:12px;background:none;border:none;padding:4px 0;
+  font-family:inherit;font-size:var(--t-small);font-weight:600;color:var(--gold-ink);cursor:pointer;border-bottom:1px dashed transparent;transition:border-color .16s;}
+/* El hover NO cambia el color del texto: --gold es un tono medio en algunos
+   temas (el de "ocean" es un azul) y bajaria del 4.5 exigido. La respuesta
+   visual la da el subrayado, que no tiene que cumplir contraste de texto. */
+.tour-replay:hover,.tour-replay:focus-visible{border-bottom-color:var(--gold);}
+
+/* ── Revelado: mismo contrato que la portada. Sin .js-anim todo queda
+   visible, así que un fallo de JS nunca esconde contenido. ── */
+html.js-anim .reveal{opacity:0;}
+html.js-anim .reveal.in-view{opacity:1;animation:rise .6s var(--ease-out) backwards;
+  animation-delay:calc(var(--i,0) * 60ms);}
+@keyframes rise{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:none;}}
+
+/* ── Clase en vivo: la superficie más destacada cuando existe ── */
+.myclass{display:none;align-items:center;gap:14px;
+  background-color:var(--navy);
+  background-image:linear-gradient(150deg,var(--navy2),var(--navy) 70%);
+  border:1px solid var(--hair);border-radius:var(--r-lg);padding:18px 20px;margin:22px 0 0;
+  text-decoration:none;color:var(--on-night);box-shadow:var(--sh-dusk);
+  transition:transform .24s var(--ease-out),border-color .24s;}
+.myclass:hover,.myclass:focus-visible{transform:translateY(-3px);border-color:var(--gold);}
+.myclass .mycl-ic{width:44px;height:44px;flex-shrink:0;border-radius:var(--r-md);
+  background:linear-gradient(135deg,var(--gold-lt),var(--gold));color:var(--navy);
+  display:flex;align-items:center;justify-content:center;font-size:1.05rem;}
+.myclass .mycl-body{flex:1;min-width:0;}
+.myclass .mycl-kicker{display:block;color:var(--gold-lt);font-size:var(--t-eyebrow);font-weight:600;text-transform:uppercase;letter-spacing:.18em;}
+.myclass .mycl-title{display:block;font-family:var(--va-font-display);font-size:1.1rem;font-weight:600;margin-top:3px;}
+.myclass .mycl-go{flex-shrink:0;display:inline-flex;align-items:center;gap:8px;background:var(--gold);color:var(--navy);font-weight:700;font-size:var(--t-small);padding:11px 17px;border-radius:var(--r-sm);white-space:nowrap;transition:background .18s;}
+.myclass:hover .mycl-go,.myclass:focus-visible .mycl-go{background:var(--gold-lt);}
+@media(max-width:520px){.myclass{flex-wrap:wrap;}.myclass .mycl-go{width:100%;justify-content:center;}}
+
+/* ── Héroe "Hoy": la lámina. Una sola acción, arriba del todo. ── */
+#today{display:none;align-items:center;gap:18px;margin:20px 0 0;text-decoration:none;
+  background-color:var(--navy);
+  background-image:
+    radial-gradient(520px 200px at 90% -30%,rgba(243,226,171,.16),transparent 60%),
+    linear-gradient(150deg,var(--navy2),var(--navy) 62%);
+  color:var(--on-night);border:1px solid var(--hair);
+  border-radius:var(--r-lg);padding:24px 26px;box-shadow:var(--sh-dusk);
   transition:transform .28s var(--ease-out),box-shadow .28s var(--ease-out),border-color .28s;position:relative;overflow:hidden;}
-#today:hover,#today:focus-visible{transform:translateY(-4px);box-shadow:var(--sh-lg);border-color:var(--gold-lt);}
-#today .t-ic{width:54px;height:54px;flex-shrink:0;border-radius:var(--r-md);background:linear-gradient(135deg,var(--gold-lt),var(--gold));
-  color:var(--navy);display:flex;align-items:center;justify-content:center;font-size:1.4rem;box-shadow:0 6px 16px rgba(197,160,89,.34);}
+#today:hover,#today:focus-visible{transform:translateY(-4px);border-color:var(--gold);}
+#today .t-ic{width:52px;height:52px;flex-shrink:0;border-radius:var(--r-md);background:linear-gradient(135deg,var(--gold-lt),var(--gold));
+  color:var(--navy);display:flex;align-items:center;justify-content:center;font-size:1.3rem;}
 #today .t-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:5px;}
-#today .t-kicker{font-size:.68rem;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:var(--gold-lt);}
-#today .t-title{font-family:'Inria Serif',serif;font-size:1.32rem;line-height:1.25;}
-#today .t-go{flex-shrink:0;display:inline-flex;align-items:center;gap:8px;background:var(--gold);color:var(--navy);font-weight:700;font-size:.82rem;
+#today .t-kicker{font-size:var(--t-eyebrow);font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:var(--gold-lt);}
+#today .t-title{font-family:var(--va-font-display);font-size:1.3rem;font-weight:600;line-height:1.2;}
+#today .t-go{flex-shrink:0;display:inline-flex;align-items:center;gap:8px;background:var(--gold);color:var(--navy);font-weight:700;font-size:var(--t-small);
   padding:12px 20px;border-radius:var(--r-sm);white-space:nowrap;transition:background .18s;}
-#today .t-go i{transition:transform .28s var(--ease-out);}
-#today:hover .t-go i,#today:focus-visible .t-go i{transform:translateX(4px);}
+#today:hover .t-go,#today:focus-visible .t-go{background:var(--gold-lt);}
+#today .t-go .i{transition:transform .28s var(--ease-out);}
+#today:hover .t-go .i,#today:focus-visible .t-go .i{transform:translateX(4px);}
+/* Racha: el gato de la racha existía sin usarse en ninguna parte. */
+#today .t-streak{display:flex;align-items:center;gap:8px;font-size:var(--t-small);font-weight:600;
+  color:var(--gold-lt);font-variant-numeric:tabular-nums;}
+#today .t-streak img{width:24px;height:24px;border-radius:50%;object-fit:cover;
+  border:1px solid var(--hair);background:rgba(201,168,76,.12);}
 @media(max-width:560px){#today{flex-direction:column;align-items:flex-start;gap:14px;}#today .t-go{align-self:stretch;justify-content:center;}}
 
-/* ── Accesos rápidos: el resto de tus herramientas en la app ── */
-#quicknav{margin:22px 0 4px;}
-#quicknav .qn-lbl{font-size:.7rem;letter-spacing:2px;text-transform:uppercase;color:var(--gold2);font-weight:700;margin:0 2px 12px;}
-.qn-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
-a.qn{display:flex;flex-direction:column;align-items:flex-start;gap:10px;text-decoration:none;color:var(--navy);
-  background:var(--white);border:1px solid var(--border);border-radius:var(--r-md);padding:16px 16px 14px;
-  box-shadow:var(--sh-sm);transition:transform .24s var(--ease-out),box-shadow .24s var(--ease-out),border-color .24s;}
-a.qn:hover,a.qn:focus-visible{transform:translateY(-4px);box-shadow:var(--sh-md);border-color:var(--gold);outline:none;}
-a.qn .qn-ic{width:42px;height:42px;flex-shrink:0;border-radius:11px;display:flex;align-items:center;justify-content:center;
-  font-size:1.05rem;background:linear-gradient(135deg,var(--navy2),var(--navy3));color:var(--gold);}
-a.qn .qn-t{font-weight:700;font-size:.98rem;line-height:1.2;}
-a.qn .qn-d{font-size:.76rem;color:var(--muted);line-height:1.35;}
-@media(max-width:640px){.qn-grid{grid-template-columns:repeat(2,1fr);gap:10px;}
-  a.qn{padding:13px 13px 12px;}a.qn .qn-ic{width:38px;height:38px;}a.qn .qn-d{display:none;}}
+/* ── Tus herramientas: un RIEL con divisores de oro, no cuatro cajas ──
+   Es el motivo estructural de la portada (.statrail): la retícula se dibuja
+   con filetes de 1px y los :first-child los ponen a cero. */
+#quicknav{margin:calc(var(--s-section) * .8) 0 0;}
+.qn-grid{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--hair);}
+a.qn{display:flex;flex-direction:column;align-items:flex-start;gap:9px;text-decoration:none;color:var(--text);
+  padding:22px 20px 20px;border-left:1px solid var(--hair);
+  transition:background .2s var(--ease-out);}
+a.qn:first-child{border-left:0;padding-left:0;}
+a.qn:hover,a.qn:focus-visible{background:var(--hair);outline:none;}
+a.qn .qn-ic{width:38px;height:38px;flex-shrink:0;border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;
+  font-size:1rem;border:1px solid var(--hair);color:var(--gold);transition:color .2s,border-color .2s;}
+a.qn:hover .qn-ic,a.qn:focus-visible .qn-ic{color:var(--gold-lt);border-color:var(--gold);}
+a.qn .qn-t{font-weight:600;font-size:var(--t-h3);line-height:1.2;}
+a.qn .qn-d{font-size:var(--t-small);color:var(--muted);line-height:1.4;max-width:22ch;}
+a.qn .qn-live{font-size:var(--t-small);font-weight:700;color:var(--gold-ink);font-variant-numeric:tabular-nums;}
+@media(max-width:760px){
+  .qn-grid{grid-template-columns:repeat(2,1fr);}
+  a.qn{padding:18px 16px;border-top:1px solid var(--hair);}
+  a.qn:nth-child(-n+2){border-top:0;}
+  a.qn:nth-child(odd){border-left:0;padding-left:0;}
+  a.qn .qn-d{display:none;}
+}
 
-/* ── Buscador de temas y libros ── */
-#search{margin:24px 0 8px;background:linear-gradient(135deg,#fffdf8,#f3ede0);border:1px solid var(--border);border-left:4px solid var(--gold);border-radius:var(--r-md);padding:24px 24px 22px;box-shadow:var(--sh-sm);}
-#search .s-head h2{font-family:'Inria Serif',serif;font-size:1.4rem;margin:0;display:flex;align-items:center;gap:10px;}
-#search .s-head h2 i{color:var(--gold2);font-size:1.1rem;}
-#search .s-sub{color:var(--muted);font-size:.92rem;margin:6px 0 16px;max-width:640px;}
+/* ── Buscador ── */
+#search{margin:calc(var(--s-section) * .8) 0 0;padding-top:26px;border-top:1px solid var(--hair);}
+#search .s-head h2{font-family:var(--va-font-display);font-size:var(--t-h2);font-weight:600;margin:0;line-height:1.1;}
+#search .s-sub{color:var(--muted);font-size:var(--t-body);margin:8px 0 18px;max-width:52ch;text-wrap:pretty;}
 .s-box{position:relative;display:flex;align-items:center;}
-.s-box .s-ic{position:absolute;left:16px;color:var(--gold2);font-size:.98rem;pointer-events:none;}
-#q{width:100%;font-family:inherit;font-size:1rem;color:var(--navy);background:#fff;border:1px solid var(--border);border-radius:var(--r-sm);padding:14px 44px 14px 44px;box-shadow:var(--sh-sm);transition:border-color .16s,box-shadow .16s;}
-#q::placeholder{color:#9aa2ad;}
-#q:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(197,160,89,.22);}
+.s-box .s-ic{position:absolute;left:16px;color:var(--gold-ink);font-size:1rem;pointer-events:none;}
+#q{width:100%;font-family:inherit;font-size:1rem;color:var(--text);background:var(--white);border:1px solid var(--border);border-radius:var(--r-sm);padding:14px 44px 14px 44px;transition:border-color .16s,box-shadow .16s;}
+#q::placeholder{color:var(--muted);opacity:.85;}
+#q:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px var(--hair);}
 #q::-webkit-search-cancel-button{display:none;}
 .s-clear{position:absolute;right:10px;width:30px;height:30px;border:none;background:none;color:var(--muted);font-size:1.1rem;cursor:pointer;border-radius:50%;display:none;align-items:center;justify-content:center;transition:background .16s,color .16s;}
-.s-clear:hover,.s-clear:focus-visible{background:rgba(27,27,47,.06);color:var(--navy);}
+.s-clear:hover,.s-clear:focus-visible{background:var(--hair);color:var(--text);}
 .s-box.has-val .s-clear{display:flex;}
 #results{margin-top:14px;display:flex;flex-direction:column;gap:8px;max-height:min(58vh,520px);overflow-y:auto;-webkit-overflow-scrolling:touch;}
 #results:empty{margin-top:0;}
-.res-group{font-size:.66rem;font-weight:700;letter-spacing:1.4px;text-transform:uppercase;color:var(--muted);margin:8px 2px 2px;}
+.res-group{font-size:var(--t-eyebrow);font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin:10px 2px 2px;}
 .res-group:first-child{margin-top:2px;}
-a.res{display:flex;gap:12px;align-items:center;background:#fff;border:1px solid var(--border);border-radius:var(--r-sm);padding:11px 13px;text-decoration:none;color:inherit;transition:border-color .14s,box-shadow .14s,background .14s;}
-a.res:hover,a.res:focus-visible,a.res.active{border-color:var(--gold);box-shadow:var(--sh-sm);background:#fffdf7;outline:none;}
-a.res .res-ic{width:38px;height:38px;flex-shrink:0;border-radius:10px;background:linear-gradient(135deg,var(--navy2),var(--navy3));color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:.98rem;}
-a.res.res-book .res-ic{background:linear-gradient(135deg,var(--gold-lt),var(--gold));color:var(--navy);}
+a.res{display:flex;gap:12px;align-items:center;background:var(--white);border:1px solid var(--border);border-radius:var(--r-sm);padding:11px 13px;text-decoration:none;color:inherit;transition:border-color .14s,background .14s;}
+a.res:hover,a.res:focus-visible,a.res.active{border-color:var(--gold);outline:none;}
+a.res .res-ic{width:36px;height:36px;flex-shrink:0;border-radius:9px;border:1px solid var(--hair);color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:.95rem;}
+a.res.res-book .res-ic{background:linear-gradient(135deg,var(--gold-lt),var(--gold));color:var(--navy);border-color:transparent;}
 a.res .res-body{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;}
-a.res .res-t{font-size:.94rem;font-weight:600;line-height:1.3;color:var(--navy);}
-a.res .res-t mark{background:rgba(197,160,89,.32);color:inherit;border-radius:3px;padding:0 1px;}
-a.res .res-meta{font-size:.74rem;color:var(--muted);}
-a.res .res-go{color:var(--gold2);font-size:.8rem;flex-shrink:0;opacity:0;transition:opacity .14s,transform .14s;}
+a.res .res-t{font-size:var(--t-body);font-weight:600;line-height:1.3;color:var(--text);}
+a.res .res-t mark{background:var(--hair);color:inherit;border-radius:3px;padding:0 2px;}
+a.res .res-meta{font-size:var(--t-small);color:var(--muted);}
+a.res .res-go{color:var(--gold-ink);flex-shrink:0;opacity:0;transition:opacity .14s,transform .14s;}
 a.res:hover .res-go,a.res:focus-visible .res-go,a.res.active .res-go{opacity:1;transform:translateX(2px);}
-.s-empty{margin-top:14px;padding:18px;text-align:center;color:var(--muted);font-size:.9rem;background:#fff;border:1px dashed var(--border);border-radius:var(--r-sm);}
-.s-empty b{color:var(--navy);}
+.s-empty{margin-top:14px;padding:18px;text-align:center;color:var(--muted);font-size:var(--t-body);background:var(--white);border:1px dashed var(--border);border-radius:var(--r-sm);}
+.s-empty b{color:var(--text);}
 
-/* ── Explorar todos los libros (divulgación progresiva) ── */
-.explore-bar{margin:36px 0 0;}
-.explore-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;background:#fff;border:1px solid var(--border);border-radius:var(--r-md);padding:16px 20px;font-family:inherit;font-size:.95rem;font-weight:600;color:var(--navy);cursor:pointer;box-shadow:var(--sh-sm);transition:border-color .18s,box-shadow .18s,transform .18s;}
-.explore-btn:hover,.explore-btn:focus-visible{border-color:var(--gold);box-shadow:var(--sh-md);transform:translateY(-1px);}
-.explore-btn i.fa-layer-group{color:var(--gold2);}
-.explore-btn .chev{transition:transform .25s var(--ease-out);}
-.explore-btn[aria-expanded="true"] .chev{transform:rotate(180deg);}
+/* ── Catálogo por curso ──
+   Cada grupo abre con una cubierta grabada (mismo tratamiento que .ctile de la
+   portada: 16/9, degradado que oscurece, título encima de la imagen). Es lo que
+   da identidad a los 6 grupos: antes los 6 iconos iban en el mismo cuadrado
+   navy y eran indistinguibles de un vistazo. */
+.cat-sec{margin-top:var(--s-section);}
+.grp{position:relative;display:block;border-radius:var(--r-md);overflow:hidden;
+  border:1px solid var(--hair);margin-bottom:20px;background:var(--navy);}
+.grp-cvr{position:relative;aspect-ratio:16/5;overflow:hidden;}
+.grp-cvr img{width:100%;height:100%;object-fit:cover;display:block;opacity:.92;}
+/* Mosaico para los dos grupos sin emblema propio: se compone con las
+   miniaturas de rail/ que la portada ya sirve a 176px. */
+.grp-cvr.mosaic{display:grid;grid-template-columns:repeat(3,1fr);gap:0;}
+.grp-cvr.mosaic img{opacity:.6;}
+.grp-cvr::after{content:"";position:absolute;inset:0;
+  background:linear-gradient(to top,var(--navy) 12%,rgba(20,18,42,.55) 55%,rgba(20,18,42,.15));}
+.grp-txt{position:absolute;left:0;right:0;bottom:0;z-index:1;padding:18px 20px;display:flex;align-items:flex-end;gap:12px;}
+.grp-txt .grp-ic{color:var(--gold);font-size:1.15rem;flex-shrink:0;margin-bottom:2px;}
+.grp-txt h2{margin:0;font-family:var(--va-font-display);font-size:var(--t-h2);font-weight:600;
+  line-height:1.1;color:var(--on-night);text-wrap:balance;}
+.grp-txt .grp-n{margin-left:auto;flex-shrink:0;font-size:var(--t-eyebrow);font-weight:600;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--gold-lt);border:1px solid var(--hair);border-radius:var(--r-pill);padding:5px 11px;
+  font-variant-numeric:tabular-nums;background:rgba(20,18,42,.55);}
+@media(max-width:640px){
+  .grp-cvr{aspect-ratio:16/7;}
+  .grp-txt{padding:14px 15px;}
+  .grp-txt .grp-n{display:none;}
+}
 
-#catalog.is-collapsed{display:none;}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(258px,1fr));gap:14px;}
 
-/* filtro por nivel del alumno (lenguaje amigable, sin siglas) */
-.lvl-filter{display:none;flex-wrap:wrap;align-items:center;gap:8px;margin:28px 0 4px;}
-.lvl-filter .lf-label{font-size:.72rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-right:2px;}
-.lf{border:1px solid var(--border);background:#fff;border-radius:999px;padding:8px 16px;font-family:inherit;font-size:.8rem;font-weight:500;color:var(--navy);cursor:pointer;transition:background .16s,color .16s,border-color .16s;}
-.lf:hover,.lf:focus-visible{border-color:var(--gold);}
-.lf[aria-pressed="true"]{background:var(--navy);color:#fff;border-color:var(--navy);font-weight:600;}
-
-h2.sec{display:flex;align-items:center;gap:10px;font-size:.78rem;font-weight:700;letter-spacing:1.8px;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--border);padding-bottom:11px;margin:40px 0 20px;}
-h2.sec::before{content:"";width:22px;height:3px;border-radius:2px;background:var(--gold);flex-shrink:0;}
-h2.sec i{color:var(--gold2);}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px;}
-
-/* Tarjeta de libro: icono claro + nombre (sin etiqueta de nivel) */
-a.card{display:flex;gap:14px;align-items:flex-start;background:#fff;border:1px solid var(--border);border-radius:var(--r-md);padding:17px;text-decoration:none;color:inherit;box-shadow:var(--sh-sm);transition:transform .2s var(--ease-out),box-shadow .2s var(--ease-out),border-color .2s;}
-a.card:hover,a.card:focus-visible{transform:translateY(-3px);box-shadow:var(--sh-md);border-color:var(--gold);}
-a.card .cic{width:46px;height:46px;flex-shrink:0;border-radius:12px;background:linear-gradient(135deg,var(--navy2),var(--navy3));color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:1.2rem;transition:color .2s;}
-a.card:hover .cic,a.card:focus-visible .cic{color:var(--gold-lt);}
+/* Tarjeta de libro */
+a.card{display:flex;gap:14px;align-items:flex-start;background:var(--white);border:1px solid var(--border);border-radius:var(--r-md);padding:17px;text-decoration:none;color:inherit;
+  transition:transform .2s var(--ease-out),box-shadow .2s var(--ease-out),border-color .2s;}
+a.card:hover,a.card:focus-visible{transform:translateY(-3px);box-shadow:var(--sh);border-color:var(--gold);}
+a.card .cic{width:42px;height:42px;flex-shrink:0;border-radius:var(--r-sm);border:1px solid var(--hair);color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:1.05rem;transition:color .2s,border-color .2s;}
+a.card:hover .cic,a.card:focus-visible .cic{color:var(--gold-lt);border-color:var(--gold);}
 a.card .cbody{flex:1;min-width:0;display:flex;flex-direction:column;gap:5px;}
-a.card h3{margin:0;font-size:1rem;line-height:1.3;}
-a.card p{margin:0;color:var(--muted);font-size:.82rem;line-height:1.5;}
-a.card .go{margin-top:4px;font-size:.7rem;font-weight:700;letter-spacing:.8px;text-transform:uppercase;color:var(--gold2);display:inline-flex;align-items:center;gap:6px;}
-a.card .go i{transition:transform .2s var(--ease-out);}
-a.card:hover .go i,a.card:focus-visible .go i{transform:translateX(3px);}
-.cat-sec.hidden{display:none;}
-a.card.hidden{display:none;}
+a.card h3{margin:0;font-family:var(--va-font-display);font-size:var(--t-h3);font-weight:600;line-height:1.25;}
+a.card p{margin:0;color:var(--muted);font-size:var(--t-small);line-height:1.5;max-width:34ch;}
+a.card .go{margin-top:4px;font-size:var(--t-eyebrow);font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-ink);display:inline-flex;align-items:center;gap:7px;}
+a.card .go .i{transition:transform .2s var(--ease-out);}
+a.card:hover .go .i,a.card:focus-visible .go .i{transform:translateX(3px);}
+.cat-sec.hidden,a.card.hidden{display:none;}
 
-footer{background:var(--navy3);color:rgba(255,255,255,.65);text-align:center;padding:26px;font-size:.78rem;border-top:1px solid rgba(197,160,89,.35);margin-top:48px;}
-footer a{color:var(--gold);text-decoration:none;}
-footer a:hover{color:var(--gold-lt);}
-/* Foco de teclado visible (WCAG 2.4.7) */
-:focus-visible{outline:3px solid var(--gold,#c5a059);outline-offset:2px;}
+/* --navy, NO --navy3: buildVars mapea --navy3 a t.cream, que en tema claro es
+   crema y dejaría este texto claro sobre fondo claro. */
+footer{background:var(--navy);color:var(--on-night-soft);text-align:center;padding:32px var(--gutter);font-size:var(--t-small);
+  border-top:1px solid var(--hair);margin-top:var(--s-section);}
+footer .fcat{width:52px;height:52px;border-radius:50%;object-fit:cover;margin:0 auto 12px;display:block;
+  border:1px solid var(--hair);background:rgba(201,168,76,.1);}
+footer a{color:var(--gold-lt);text-decoration:none;}
+footer a:hover{color:var(--gold);text-decoration:underline;}
 
-/* Enlace discreto para volver a ver la guía de bienvenida. */
-.tour-replay{display:inline-flex;align-items:center;gap:7px;margin-top:10px;background:none;border:none;padding:4px 0;
-  font-family:inherit;font-size:.82rem;font-weight:600;color:var(--gold2);cursor:pointer;border-bottom:1px dashed transparent;transition:border-color .16s,color .16s;}
-.tour-replay:hover,.tour-replay:focus-visible{color:var(--navy);border-bottom-color:var(--gold);}
-.tour-replay i{font-size:.86rem;}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px;}
 
-/* ── Guía de bienvenida (primera visita): presenta todas las herramientas ── */
+/* ── Guía de bienvenida (primera visita) ──
+   z-index 100001: la píldora de "salir" de vesper_auth.js va a 99999, así que
+   con los 10000 de antes el modal quedaba TAPADO por ella. */
 #vtour[hidden]{display:none;}
-#vtour{position:fixed;inset:0;z-index:10000;display:flex;align-items:center;justify-content:center;padding:20px;
-  background:radial-gradient(600px 300px at 50% 0%,rgba(197,160,89,.14),transparent 60%),rgba(15,16,26,.72);
+#vtour{position:fixed;inset:0;z-index:100001;display:flex;align-items:center;justify-content:center;padding:20px;
+  background:radial-gradient(600px 300px at 50% 0%,rgba(201,168,76,.14),transparent 60%),rgba(14,12,31,.82);
   -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);animation:vtFade .28s var(--ease-out) both;}
 @keyframes vtFade{from{opacity:0;}to{opacity:1;}}
 .vtour-card{position:relative;width:100%;max-width:452px;background:var(--white);border-radius:var(--r-lg);
-  border:1px solid var(--border);box-shadow:var(--sh-lg);overflow:hidden;animation:vtPop .42s var(--ease-out) both;}
+  border:1px solid var(--hair);box-shadow:var(--sh-dusk);overflow:hidden;animation:vtPop .42s var(--ease-out) both;}
 @keyframes vtPop{from{opacity:0;transform:translateY(22px) scale(.97);}to{opacity:1;transform:none;}}
 .vtour-close{position:absolute;top:12px;right:12px;z-index:2;width:34px;height:34px;border-radius:50%;border:none;
-  background:rgba(255,255,255,.14);color:#fff;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .16s;}
-.vtour-close:hover,.vtour-close:focus-visible{background:rgba(255,255,255,.3);}
-/* Zona superior navy (mascota o icono de la herramienta) */
-.vtour-top{position:relative;background:radial-gradient(360px 150px at 80% -20%,rgba(217,189,132,.28),transparent 62%),linear-gradient(135deg,var(--navy2),var(--navy) 60%,var(--navy3));
+  background:rgba(245,242,235,.14);color:var(--on-night);font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .16s;}
+.vtour-close:hover,.vtour-close:focus-visible{background:rgba(245,242,235,.3);}
+.vtour-top{position:relative;background-color:var(--navy);background-image:radial-gradient(360px 150px at 80% -20%,rgba(243,226,171,.24),transparent 62%),linear-gradient(150deg,var(--navy2),var(--navy) 62%);
   padding:30px 26px 26px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px;min-height:150px;justify-content:center;}
-.vtour-media{width:96px;height:96px;border-radius:50%;object-fit:cover;background:rgba(255,255,255,.06);
-  border:2px solid rgba(197,160,89,.55);box-shadow:0 10px 26px rgba(0,0,0,.34);}
-.vtour-badge{width:76px;height:76px;border-radius:20px;display:flex;align-items:center;justify-content:center;
-  background:linear-gradient(135deg,var(--gold-lt),var(--gold));color:var(--navy);font-size:2rem;box-shadow:0 10px 24px rgba(197,160,89,.4);}
-.vtour-chip{display:inline-flex;align-items:center;gap:7px;font-size:.64rem;font-weight:700;letter-spacing:1.2px;text-transform:uppercase;
-  color:var(--gold-lt);background:rgba(197,160,89,.14);border:1px solid rgba(197,160,89,.4);padding:5px 12px;border-radius:999px;}
+.vtour-media{width:96px;height:96px;border-radius:50%;object-fit:cover;background:rgba(245,242,235,.06);
+  border:2px solid var(--hair);box-shadow:var(--sh-dusk);}
+.vtour-badge{width:74px;height:74px;border-radius:20px;display:flex;align-items:center;justify-content:center;
+  background:linear-gradient(135deg,var(--gold-lt),var(--gold));color:var(--navy);font-size:1.9rem;}
+.vtour-chip{display:inline-flex;align-items:center;gap:7px;font-size:var(--t-eyebrow);font-weight:600;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--gold-lt);background:rgba(201,168,76,.14);border:1px solid var(--hair);padding:5px 12px;border-radius:var(--r-pill);}
 .vtour-chip svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
-/* Zona inferior de texto */
 .vtour-body{padding:22px 26px 20px;}
-.vtour-title{font-family:'Inria Serif',serif;font-size:1.4rem;line-height:1.2;margin:0 0 8px;color:var(--navy);}
-.vtour-desc{margin:0;color:var(--muted);font-size:.96rem;line-height:1.55;}
-/* Puntos de progreso */
+.vtour-title{font-family:var(--va-font-display);font-size:1.35rem;font-weight:600;line-height:1.15;margin:0 0 8px;color:var(--text);}
+.vtour-desc{margin:0;color:var(--muted);font-size:var(--t-body);line-height:1.55;}
 .vtour-dots{display:flex;justify-content:center;gap:7px;margin:20px 0 4px;}
 .vtour-dots i{width:7px;height:7px;border-radius:50%;background:var(--border);transition:width .25s var(--ease-out),background .25s;}
 .vtour-dots i.on{width:22px;background:var(--gold);}
-/* Acciones */
 .vtour-actions{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:6px 26px 24px;}
-.vtour-skip{background:none;border:none;padding:8px 4px;font-family:inherit;font-size:.86rem;font-weight:600;color:var(--muted);cursor:pointer;transition:color .16s;}
-.vtour-skip:hover,.vtour-skip:focus-visible{color:var(--navy);}
+.vtour-skip{background:none;border:none;padding:8px 4px;font-family:inherit;font-size:var(--t-small);font-weight:600;color:var(--muted);cursor:pointer;transition:color .16s;}
+.vtour-skip:hover,.vtour-skip:focus-visible{color:var(--text);}
 .vtour-fwd{display:flex;align-items:center;gap:8px;}
-.vtour-back{width:44px;height:44px;border-radius:var(--r-sm);border:1px solid var(--border);background:#fff;color:var(--navy);font-size:.95rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:border-color .16s,background .16s;}
+.vtour-back{width:44px;height:44px;border-radius:var(--r-sm);border:1px solid var(--border);background:var(--white);color:var(--text);font-size:.95rem;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:border-color .16s;}
 .vtour-back:hover,.vtour-back:focus-visible{border-color:var(--gold);}
 .vtour-back[disabled]{opacity:.4;cursor:default;}
 .vtour-next{display:inline-flex;align-items:center;gap:9px;background:var(--gold);color:var(--navy);border:none;border-radius:var(--r-sm);
-  padding:13px 22px;font-family:inherit;font-size:.9rem;font-weight:700;cursor:pointer;box-shadow:0 6px 16px rgba(197,160,89,.32);transition:transform .16s,box-shadow .16s,background .16s;}
-.vtour-next:hover,.vtour-next:focus-visible{transform:translateY(-2px);background:var(--gold-lt);box-shadow:var(--sh-md);}
-.vtour-next i{transition:transform .25s var(--ease-out);}
-.vtour-next:hover i{transform:translateX(3px);}
-/* Resalte del héroe al terminar la guía ("empieza aquí 👇") */
+  padding:13px 22px;font-family:inherit;font-size:var(--t-body);font-weight:700;cursor:pointer;transition:transform .16s,background .16s;}
+.vtour-next:hover,.vtour-next:focus-visible{transform:translateY(-2px);background:var(--gold-lt);}
+.vtour-next .i{transition:transform .25s var(--ease-out);}
+.vtour-next:hover .i{transform:translateX(3px);}
+/* Resalte del héroe al terminar la guía */
 #today.vtour-spot{animation:vtSpot 2.6s ease-out 1;}
-@keyframes vtSpot{0%{box-shadow:0 0 0 0 rgba(197,160,89,.0),var(--sh-md);}
-  12%{box-shadow:0 0 0 6px rgba(197,160,89,.55),0 0 34px 6px rgba(197,160,89,.4);}
-  60%{box-shadow:0 0 0 3px rgba(197,160,89,.35),var(--sh-md);}
-  100%{box-shadow:0 0 0 0 rgba(197,160,89,0),var(--sh-md);}}
+@keyframes vtSpot{0%{box-shadow:var(--sh-dusk);}
+  12%{box-shadow:0 0 0 6px rgba(201,168,76,.5),0 0 34px 6px rgba(201,168,76,.36);}
+  60%{box-shadow:0 0 0 3px rgba(201,168,76,.3),var(--sh-dusk);}
+  100%{box-shadow:var(--sh-dusk);}}
 
-/* ── Racha de estudio (chip en el héroe "Hoy") ── */
-#today .t-streak{font-size:.72rem;font-weight:700;letter-spacing:.4px;color:#ffd98a;}
-
-/* Línea "en vivo" dentro de un acceso rápido (teaser de la boleta) */
-a.qn .qn-live{font-size:.74rem;font-weight:700;color:var(--gold2);}
-
-/* Respeto total a prefers-reduced-motion. */
+/* Respeto total a prefers-reduced-motion: no sólo apaga el movimiento, deja
+   el estado FINAL puesto (igual que la portada). */
 @media (prefers-reduced-motion: reduce){
   html{scroll-behavior:auto;}
   *{animation:none !important;transition:none !important;}
-  .v-rise{opacity:1 !important;transform:none !important;}
+  html.js-anim .reveal,html.js-anim .reveal.in-view{opacity:1 !important;transform:none !important;}
   #vtour,.vtour-card{animation:none !important;}
 }
 </style>
-<link rel="stylesheet" href="assets/css/vesper_tokens.css">
+
+<!-- Preferencias del alumno (tamaño de texto, alto contraste, menos
+     movimiento). No se cargaba aquí, así que las reglas html[data-text-scale] /
+     .vesper-hc de vesper_tokens.css estaban inertes en esta página. -->
+<script src="vesper_prefs.js"></script>
+<!-- ⚠️ ORDEN CARGADO DE SIGNIFICADO: vesper_theme.js tiene que ser el ÚLTIMO
+     elemento del <head>. apply() hace appendChild al <head> TAL COMO ESTÁ
+     PARSEADO en ese momento, así que si el script va antes del <style> de la
+     página, su :root queda ANTES y la página gana: el motor de temas se vuelve
+     inerte sin dar ningún error. Es exactamente lo que le pasa hoy a
+     perfil.html y onboarding.html, que lo cargan al principio del <head>. -->
+<script src="vesper_theme.js"></script>
 </head>
 <body>
 
 <a class="skip-link" href="#main">Saltar al contenido</a>
 
+<!-- ── Sprite de iconos en línea ──────────────────────────────────────────
+     Reemplaza la hoja completa de Font Awesome 6 que venía del CDN (~30 KB
+     bloqueantes) por ~2 KB aquí mismo. Trazo, no relleno, y heredan
+     currentColor, así que cambian de color con el tema sin ayuda.
+     El índice de libros guarda una clase FA por libro (icon:"fa-mug-hot"); la
+     tabla FA_MAP de más abajo la traduce a estos símbolos. Son menos marcas que
+     libros a propósito: cada grupo ya se identifica por su cubierta grabada, y
+     un juego corto de marcas hace que el catálogo se lea como un sistema en vez
+     de como 24 pictogramas sin relación. -->
+<svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute;overflow:hidden">
+  <symbol id="i-book" viewBox="0 0 24 24"><path d="M3 5.2A1.7 1.7 0 0 1 4.7 3.5h5.6A1.7 1.7 0 0 1 12 5.2v14a1.4 1.4 0 0 0-1.4-1.4H3z"/><path d="M21 5.2a1.7 1.7 0 0 0-1.7-1.7h-5.6A1.7 1.7 0 0 0 12 5.2v14a1.4 1.4 0 0 1 1.4-1.4H21z"/></symbol>
+  <symbol id="i-speech" viewBox="0 0 24 24"><path d="M3 6.5A2.5 2.5 0 0 1 5.5 4h7A2.5 2.5 0 0 1 15 6.5v3A2.5 2.5 0 0 1 12.5 12H8l-3.2 2.6a.4.4 0 0 1-.65-.31V12H5.5A2.5 2.5 0 0 1 3 9.5z"/><path d="M9 15.2a2.5 2.5 0 0 0 2.4 1.8h4.1l3.2 2.6a.4.4 0 0 0 .65-.31V17h.15A2.5 2.5 0 0 0 22 14.5v-3A2.5 2.5 0 0 0 19.5 9H18"/></symbol>
+  <symbol id="i-audio" viewBox="0 0 24 24"><path d="M4 14v-2a8 8 0 0 1 16 0v2"/><rect x="2.5" y="13.5" width="4" height="7" rx="1.6"/><rect x="17.5" y="13.5" width="4" height="7" rx="1.6"/><path d="M9.5 9.5v5M12 7.5v9M14.5 10.5v3"/></symbol>
+  <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="7" height="7" rx="1.6"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.6"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.6"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.6"/></symbol>
+  <symbol id="i-check-doc" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="17" rx="2.2"/><path d="M9 4V2.8h6V4"/><path d="m8.6 13 2.4 2.4 4.4-4.6"/></symbol>
+  <symbol id="i-case" viewBox="0 0 24 24"><rect x="2.5" y="7" width="19" height="13" rx="2.2"/><path d="M8.5 7V5.4A1.9 1.9 0 0 1 10.4 3.5h3.2A1.9 1.9 0 0 1 15.5 5.4V7"/><path d="M2.5 12h19M10.6 12v2.2h2.8V12"/></symbol>
+  <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13.2 2.5 5 13.4h5.3L9.8 21.5 18 10.6h-5.3z"/></symbol>
+  <symbol id="i-palette" viewBox="0 0 24 24"><path d="M12 21a9 9 0 1 1 9-9c0 2.2-1.8 3.2-3.4 3.2h-1.4a1.9 1.9 0 0 0-1.3 3.3A1.8 1.8 0 0 1 12 21"/><circle cx="7.6" cy="12" r="1.1"/><circle cx="9.9" cy="8.2" r="1.1"/><circle cx="14.4" cy="7.8" r="1.1"/></symbol>
+  <symbol id="i-summit" viewBox="0 0 24 24"><path d="M2 20h4v-4H2zM8.5 20h4v-7.5h-4zM15 20h4V8h-4z"/><path d="M19.6 4.2 20.3 2l.7 2.2 2.2.7-2.2.7-.7 2.2-.7-2.2-2.2-.7z"/></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 2.8 2.6 6.1 6.6.6-5 4.3 1.5 6.4L12 16.9l-5.7 3.3 1.5-6.4-5-4.3 6.6-.6z"/></symbol>
+  <symbol id="i-cap" viewBox="0 0 24 24"><path d="M2.5 8.6 12 4.2l9.5 4.4L12 13z"/><path d="M6.4 10.4v5.2c0 1.6 2.5 2.9 5.6 2.9s5.6-1.3 5.6-2.9v-5.2"/><path d="M21.5 8.6v5.6"/></symbol>
+  <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4.5 20.5a7.5 7.5 0 0 1 15 0"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.8" cy="10.8" r="7"/><path d="m16 16 5 5"/></symbol>
+  <symbol id="i-video" viewBox="0 0 24 24"><rect x="2.5" y="6" width="13" height="12" rx="2.2"/><path d="m15.5 11 6-3.2v8.4l-6-3.2z"/></symbol>
+  <symbol id="i-compass" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m15.6 8.4-2 5.2-5.2 2 2-5.2z"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5.4v13.2l11-6.6z"/></symbol>
+  <symbol id="i-rocket" viewBox="0 0 24 24"><path d="M13.5 3.2c3.8 1 6.3 3.5 7.3 7.3l-8.3 8.3-6.3-6.3z"/><path d="M6.2 12.5 3.5 15.2l2.4.6.6 2.4 2.7-2.7"/><circle cx="15.2" cy="8.8" r="1.5"/></symbol>
+  <symbol id="i-flame" viewBox="0 0 24 24"><path d="M13 2.5c.4 2.9-1.1 4.4-2.6 5.9C9 9.9 7.6 11.4 7.6 14a4.4 4.4 0 0 0 8.8 0c0-1.6-.7-2.9-1.7-4"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4 12h15m-6-6 6 6-6 6"/></symbol>
+  <symbol id="i-arrow-left" viewBox="0 0 24 24"><path d="M20 12H5m6-6-6 6 6 6"/></symbol>
+  <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m6 9.5 6 6 6-6"/></symbol>
+</svg>
+
 <header>
   <a class="brand" href="index.html">
-    <img src="assets/images/vesper_logo_inverted.png" alt="Vesper Academy — inicio">
-    <span><b>Vesper Academy</b><small>Portal del Alumno</small></span>
+    <img src="assets/images/vesper_logo_inverted.png" alt="Vesper Academy — inicio" width="38" height="38">
+    <span><b class="va-display">Vesper Academy</b><small>Portal del Alumno</small></span>
   </a>
-  <div style="display:flex;align-items:center;gap:18px;">
-    <a class="back" href="index.html"><i class="fas fa-arrow-left" aria-hidden="true"></i> Sitio principal</a>
-  </div>
+  <a class="back" href="index.html"><svg class="i" aria-hidden="true"><use href="#i-arrow-left"/></svg> Sitio principal</a>
 </header>
 
 <main class="wrap" id="main">
-  <div class="intro v-rise">
+  <div class="intro reveal">
+    <span class="rule" aria-hidden="true"></span>
     <span class="eyebrow">Portal del alumno</span>
-    <h1 id="intro-title">Tu material de estudio</h1>
+    <h1 class="va-display" id="intro-title">Tu material de estudio</h1>
     <p>Aquí encuentras los libros del estudiante de tu curso y la biblioteca de audio para entrenar el oído. Tu profesor te indica qué libro y lección corresponde a tu clase.</p>
-    <button type="button" class="tour-replay" id="tour-replay"><i class="fas fa-compass" aria-hidden="true"></i> Ver guía rápida</button>
+    <button type="button" class="tour-replay" id="tour-replay"><svg class="i" aria-hidden="true"><use href="#i-compass"/></svg> Ver guía rápida</button>
   </div>
 
-  <!-- Tu clase en vivo (Google Meet) — se llena desde students/{correo} -->
-  <style>
-  .myclass{display:none;align-items:center;gap:14px;background:linear-gradient(135deg,#1B1B2F,#27274c);border:1px solid rgba(197,160,89,.45);border-radius:16px;padding:18px 20px;margin:0 0 16px;text-decoration:none;color:#fff;box-shadow:0 8px 24px rgba(26,27,47,.2);}
-  .myclass .mycl-ic{width:46px;height:46px;flex-shrink:0;border-radius:12px;background:linear-gradient(135deg,#c5a059,#a8843d);color:#1B1B2F;display:flex;align-items:center;justify-content:center;font-size:1.1rem;}
-  .myclass .mycl-body{flex:1;min-width:0;}
-  .myclass .mycl-kicker{display:block;color:#c5a059;font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;}
-  .myclass .mycl-title{display:block;font-size:1.05rem;font-weight:600;margin-top:2px;}
-  .myclass .mycl-go{flex-shrink:0;background:#c5a059;color:#1B1B2F;font-weight:700;font-size:.85rem;padding:10px 16px;border-radius:9px;white-space:nowrap;}
-  .myclass:hover .mycl-go,.myclass:focus-visible .mycl-go{background:#b6924a;}
-  @media(max-width:520px){.myclass{flex-wrap:wrap;}.myclass .mycl-go{width:100%;text-align:center;}}
-  </style>
-  <a id="myclass" class="myclass" href="#" target="_blank" rel="noopener" aria-label="Entrar a tu clase por Google Meet">
-    <span class="mycl-ic"><i class="fas fa-video" aria-hidden="true"></i></span>
+  <!-- Tu clase en vivo (Google Meet) — se llena desde students/{correo}.
+       El <style> que vivía aquí dentro, con hex fijo, se fue a la hoja de
+       arriba: era el tercer bloque de estilos de la página. -->
+  <a id="myclass" class="myclass reveal" href="#" target="_blank" rel="noopener" aria-label="Entrar a tu clase por Google Meet">
+    <span class="mycl-ic"><svg class="i" aria-hidden="true"><use href="#i-video"/></svg></span>
     <span class="mycl-body">
       <span class="mycl-kicker">Tu clase en vivo</span>
-      <span class="mycl-title" id="myclass-title"></span>
+      <span class="mycl-title va-display" id="myclass-title"></span>
     </span>
-    <span class="mycl-go">Entrar <i class="fas fa-arrow-right" aria-hidden="true"></i></span>
+    <span class="mycl-go">Entrar <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span>
   </a>
 
   <!-- Héroe "Hoy": continúa donde lo dejaste / empieza por aquí -->
-  <a id="today" class="v-rise" href="#" aria-label="Continuar tu estudio">
-    <span class="t-ic"><i class="fas fa-play" id="today-ic" aria-hidden="true"></i></span>
+  <a id="today" class="reveal" href="#" aria-label="Continuar tu estudio">
+    <span class="t-ic"><svg class="i" id="today-ic" aria-hidden="true"><use href="#i-play"/></svg></span>
     <span class="t-body">
       <span class="t-kicker" id="today-kicker">Hoy</span>
-      <span class="t-title" id="today-title">Continúa tu estudio</span>
+      <span class="t-title va-display" id="today-title">Continúa tu estudio</span>
       <span class="t-streak" id="today-streak" hidden></span>
     </span>
-    <span class="t-go" id="today-go">Continuar <i class="fas fa-arrow-right" aria-hidden="true"></i></span>
+    <span class="t-go" id="today-go">Continuar <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span>
   </a>
 
   <!-- Accesos rápidos: todas tus herramientas visibles desde el portal -->
-  <nav id="quicknav" class="v-rise" aria-label="Tus herramientas">
-    <p class="qn-lbl">Tus herramientas</p>
+  <nav id="quicknav" class="reveal" aria-label="Tus herramientas">
     <div class="qn-grid">
       <a class="qn" href="leccion.html">
-        <span class="qn-ic"><i class="fas fa-graduation-cap" aria-hidden="true"></i></span>
+        <span class="qn-ic"><svg class="i" aria-hidden="true"><use href="#i-cap"/></svg></span>
         <span class="qn-t">Lecciones</span>
         <span class="qn-d">Practica por mundos, a tu ritmo</span>
       </a>
       <a class="qn" href="audio_library.html">
-        <span class="qn-ic"><i class="fas fa-headphones" aria-hidden="true"></i></span>
+        <span class="qn-ic"><svg class="i" aria-hidden="true"><use href="#i-audio"/></svg></span>
         <span class="qn-t">Audio</span>
         <span class="qn-d">Entrena el oído con audios</span>
       </a>
       <a class="qn" href="mi_boleta.html">
-        <span class="qn-ic"><i class="fas fa-clipboard-list" aria-hidden="true"></i></span>
+        <span class="qn-ic"><svg class="i" aria-hidden="true"><use href="#i-check-doc"/></svg></span>
         <span class="qn-t">Mi boleta</span>
         <span class="qn-d">Tus calificaciones y avance</span>
         <span class="qn-live" id="qn-boleta-live" hidden></span>
       </a>
       <a class="qn" href="perfil.html">
-        <span class="qn-ic"><i class="fas fa-user" aria-hidden="true"></i></span>
+        <span class="qn-ic"><svg class="i" aria-hidden="true"><use href="#i-user"/></svg></span>
         <span class="qn-t">Mi perfil</span>
         <span class="qn-d">Tu cuenta y preferencias</span>
       </a>
     </div>
   </nav>
 
-  <!-- Buscador de temas y libros (reemplaza la vieja "ruta recomendada") -->
-  <section id="search" class="v-rise" aria-labelledby="search-title">
+  <!-- Buscador de temas y libros -->
+  <section id="search" class="reveal" aria-labelledby="search-title">
     <div class="s-head">
-      <h2 id="search-title"><i class="fas fa-magnifying-glass" aria-hidden="true"></i> ¿Qué quieres repasar?</h2>
+      <h2 class="va-display" id="search-title">¿Qué quieres repasar?</h2>
     </div>
     <p class="s-sub">Busca un <b>tema</b> o un <b>libro</b> y ve directo a la lección. Prueba con <em>“pasado simple”</em>, <em>“entrevista de trabajo”</em> o <em>“aeropuerto”</em>.</p>
     <div class="s-box" id="s-box">
-      <i class="fas fa-magnifying-glass s-ic" aria-hidden="true"></i>
+      <svg class="i s-ic" aria-hidden="true"><use href="#i-search"/></svg>
       <input id="q" type="search" placeholder="Buscar un tema o libro…" autocomplete="off"
              role="combobox" aria-expanded="false" aria-controls="results" aria-autocomplete="list"
+             data-vsp-keep-nav
              aria-label="Buscar temas o libros en todo tu material">
       <button type="button" class="s-clear" id="q-clear" aria-label="Borrar búsqueda">&times;</button>
     </div>
@@ -347,72 +526,173 @@ a.qn .qn-live{font-size:.74rem;font-weight:700;color:var(--gold2);}
     <div class="s-empty" id="s-empty" hidden></div>
   </section>
 
-  <!-- Catálogo por curso -->
-  <section class="cat-sec" aria-label="Core Basics">
-    <h2 class="sec"><i class="fas fa-seedling" aria-hidden="true"></i> Core Basics — Fundamentos</h2>
-    <div class="grid">
-        <a class="card" href="libro.html?id=core_basics_lvl1"><span class="cic" aria-hidden="true"><i class="fas fa-shoe-prints"></i></span><span class="cbody"><h3>Core Basics · Nivel 1</h3><p>To Be or Not To Be. Identidad, presentaciones y lo esencial.</p><span class="go">Abrir libro <i class="fas fa-arrow-right" aria-hidden="true"></i></span></span></a>
-        <a class="card" href="libro.html?id=core_basics_lvl2"><span class="cic" aria-hidden="true"><i class="fas fa-mug-hot"></i></span><span class="cbody"><h3>Core Basics · Nivel 2</h3><p>Do I Know? Rutinas, preguntas y presente simple.</p><span class="go">Abrir libro <i class="fas fa-arrow-right" aria-hidden="true"></i></span></span></a>
-        <a class="card" href="libro.html?id=core_basics_lvl3"><span class="cic" aria-hidden="true"><i class="fas fa-book-open"></i></span><span class="cbody"><h3>Core Basics · Nivel 3</h3><p>Have I Been? Pasado, experiencias e historias.</p><span class="go">Abrir libro <i class="fas fa-arrow-right" aria-hidden="true"></i></span></span></a>
-        <a class="card" href="libro.html?id=core_basics_lvl4"><span class="cic" aria-hidden="true"><i class="fas fa-pen-nib"></i></span><span class="cbody"><h3>Core Basics · Nivel 4</h3><p>Let's Write. Primeros textos y redacción guiada.</p><span class="go">Abrir libro <i class="fas fa-arrow-right" aria-hidden="true"></i></span></span></a>
-    </div>
-  </section>
-
-  <section class="cat-sec" aria-label="Core Practice">
-    <h2 class="sec"><i class="fas fa-dumbbell" aria-hidden="true"></i> Core Practice — Talleres</h2>
-    <div class="grid">
-        <a class="card" href="libro.html?id=core_practice_lvl1"><span class="cic" aria-hidden="true"><i class="fas fa-headphones"></i></span><span class="cbody"><h3>Practice · Nivel 1</h3><p>Listening y speaking con audio nativo en cada lección.</p><span class="go">Abrir libro <i class="fas fa-arrow-right" aria-hidden="true"></i></span></span></a>
-        <a class="card" href="libro.html?id=core_practice_lvl2"><span class="cic" aria-hidden="true"><i class="fas fa-dragon"></i></span><span class="cbody"><h3>Practice · Nivel 2</h3><p>Lectura y escritura: leyendas, mitos y misterios.</p><span class="go">Abrir libro <i class="fas fa-arrow-right" aria-hidden="true"></i></span></span></a>
-        <a class="card" href="libro.html?id=core_practice_lvl3"><span class="cic" aria-hidden="true"><i class="fas fa-comments"></i></span><span class="cbody"><h3>Practice · Nivel 3</h3><p>Las 4 destrezas: debate y descubrimiento.</p><span class="go">Abrir libro <i class="fas fa-arrow-right" aria-hidden="true"></i></span></span></a>
-        <a class="card" href="libro.html?id=core_practice_lvl4"><span class="cic" aria-hidden="true"><i class="fas fa-palette"></i></span><span class="cbody"><h3>Practice · Nivel 4</h3><p>Arte y literatura: talleres orales.</p><span class="go">Abrir libro <i class="fas fa-arrow-right" aria-hidden="true"></i></span></span></a>
-        <a class="card" href="libro.html?id=core_practice_lvl5"><span class="cic" aria-hidden="true"><i class="fas fa-microchip"></i></span><span class="cbody"><h3>Practice · Nivel 5</h3><p>Futuro y tecnología: lectura y escritura.</p><span class="go">Abrir libro <i class="fas fa-arrow-right" aria-hidden="true"></i></span></span></a>
-        <a class="card" href="libro.html?id=core_practice_lvl6"><span class="cic" aria-hidden="true"><i class="fas fa-clapperboard"></i></span><span class="cbody"><h3>Practice · Nivel 6</h3><p>Cultura pop y sociedad: dominio de las 4 destrezas.</p><span class="go">Abrir libro <i class="fas fa-arrow-right" aria-hidden="true"></i></span></span></a>
-    </div>
-  </section>
-
-  <section class="cat-sec" aria-label="Core Grammar">
-    <h2 class="sec"><i class="fas fa-spell-check" aria-hidden="true"></i> Core Grammar — Gramática</h2>
-    <div class="grid">
-        <a class="card" href="libro.html?id=core_grammar_lvl1"><span class="cic" aria-hidden="true"><i class="fas fa-cubes"></i></span><span class="cbody"><h3>Grammar Foundations</h3><p>Drills fundamentales para consolidar la base.</p><span class="go">Abrir libro <i class="fas fa-arrow-right" aria-hidden="true"></i></span></span></a>
-        <a class="card" href="libro.html?id=core_grammar_lvl2"><span class="cic" aria-hidden="true"><i class="fas fa-diagram-project"></i></span><span class="cbody"><h3>Grammar in Context</h3><p>Estructuras complejas aplicadas en contexto.</p><span class="go">Abrir libro <i class="fas fa-arrow-right" aria-hidden="true"></i></span></span></a>
-        <a class="card" href="libro.html?id=core_grammar_lvl3"><span class="cic" aria-hidden="true"><i class="fas fa-gem"></i></span><span class="cbody"><h3>Grammar Mastery</h3><p>Estilo, matices y excepciones del inglés avanzado.</p><span class="go">Abrir libro <i class="fas fa-arrow-right" aria-hidden="true"></i></span></span></a>
-    </div>
-  </section>
-
-  <section class="cat-sec" aria-label="Certification">
-    <h2 class="sec"><i class="fas fa-certificate" aria-hidden="true"></i> Certification — Certificaciones y exámenes</h2>
-    <div class="grid">
-        <a class="card" href="libro.html?id=cert_prep_b1"><span class="cic" aria-hidden="true"><i class="fas fa-certificate"></i></span><span class="cbody"><h3>Certification Path I · Gateway</h3><p>Tu primera certificación: B1 Preliminary, IELTS 4.5–5.5 y TOEFL con drills cronometrados.</p><span class="go">Abrir libro <i class="fas fa-arrow-right" aria-hidden="true"></i></span></span></a>
-        <a class="card" href="libro.html?id=cert_prep_b2"><span class="cic" aria-hidden="true"><i class="fas fa-medal"></i></span><span class="cbody"><h3>Certification Path II · Ascent</h3><p>B2 First e IELTS 5.5–6.5: paráfrasis, distractores y escritura estructurada.</p><span class="go">Abrir libro <i class="fas fa-arrow-right" aria-hidden="true"></i></span></span></a>
-        <a class="card" href="libro.html?id=cert_prep_c1"><span class="cic" aria-hidden="true"><i class="fas fa-trophy"></i></span><span class="cbody"><h3>Certification Path III · Summit</h3><p>CAE, CPE e IELTS 7.0+: matiz, registro y resistencia de examen.</p><span class="go">Abrir libro <i class="fas fa-arrow-right" aria-hidden="true"></i></span></span></a>
-        <a class="card" href="libro.html?id=cert_prep"><span class="cic" aria-hidden="true"><i class="fas fa-clipboard-check"></i></span><span class="cbody"><h3>Certification Prep · Intensivo</h3><p>Manual de bandas: drills cronometrados, modelos Band 6/8 y simulacro final.</p><span class="go">Abrir libro <i class="fas fa-arrow-right" aria-hidden="true"></i></span></span></a>
-        <a class="card" href="libro.html?id=exam_prep"><span class="cic" aria-hidden="true"><i class="fas fa-stopwatch"></i></span><span class="cbody"><h3>Exam Prep · Vol. 1</h3><p>Sintaxis avanzada y estrategia de examen.</p><span class="go">Abrir libro <i class="fas fa-arrow-right" aria-hidden="true"></i></span></span></a>
-        <a class="card" href="libro.html?id=exam_prep_vol2"><span class="cic" aria-hidden="true"><i class="fas fa-clipboard-list"></i></span><span class="cbody"><h3>Exam Prep · Vol. 2</h3><p>Vocabulario temático y práctica aplicada.</p><span class="go">Abrir libro <i class="fas fa-arrow-right" aria-hidden="true"></i></span></span></a>
-    </div>
-  </section>
-
-  <section class="cat-sec" aria-label="Business">
-    <h2 class="sec"><i class="fas fa-briefcase" aria-hidden="true"></i> Business — Inglés de negocios</h2>
-    <div class="grid">
-        <a class="card" href="libro.html?id=corporate_b1"><span class="cic" aria-hidden="true"><i class="fas fa-briefcase"></i></span><span class="cbody"><h3>Business Path I · Foundations</h3><p>Inglés de oficina de supervivencia: llamadas, correos, juntas y clientes.</p><span class="go">Abrir libro <i class="fas fa-arrow-right" aria-hidden="true"></i></span></span></a>
-        <a class="card" href="libro.html?id=corporate_b2"><span class="cic" aria-hidden="true"><i class="fas fa-building"></i></span><span class="cbody"><h3>Business English Premium</h3><p>Comunicación corporativa efectiva: pitch, juntas y reportes con audio nativo.</p><span class="go">Abrir libro <i class="fas fa-arrow-right" aria-hidden="true"></i></span></span></a>
-        <a class="card" href="libro.html?id=corporate_c1"><span class="cic" aria-hidden="true"><i class="fas fa-handshake"></i></span><span class="cbody"><h3>Business Path III · Influence</h3><p>Persuasión, negociación, liderazgo y el sales pitch final.</p><span class="go">Abrir libro <i class="fas fa-arrow-right" aria-hidden="true"></i></span></span></a>
-    </div>
-  </section>
-
-  <section class="cat-sec" aria-label="Otros cursos">
-    <h2 class="sec"><i class="fas fa-star" aria-hidden="true"></i> Otros cursos</h2>
-    <div class="grid">
-        <a class="card" href="libro.html?id=cci1"><span class="cic" aria-hidden="true"><i class="fas fa-bolt"></i></span><span class="cbody"><h3>Curso Intensivo (CCI 1)</h3><p>Bootcamp de fluidez rápida — primer mes.</p><span class="go">Abrir libro <i class="fas fa-arrow-right" aria-hidden="true"></i></span></span></a>
-        <a class="card" href="libro.html?id=diagnostic_advanced"><span class="cic" aria-hidden="true"><i class="fas fa-magnifying-glass-chart"></i></span><span class="cbody"><h3>Diagnóstico Avanzado</h3><p>Evaluación integral — se realiza con tu profesor.</p><span class="go">Abrir examen <i class="fas fa-arrow-right" aria-hidden="true"></i></span></span></a>
-    </div>
-  </section>
+  <!-- Catálogo por curso. Los 24 enlaces de aquí abajo son el RESPALDO:
+       si vesper_book_index.js carga, el script del final los vuelve a pintar
+       desde el índice (fuente única). Si no carga, esto es lo que se ve. -->
+  <div id="catalog">
+    <section class="cat-sec" data-group="basics" aria-label="Core Basics">
+      <div class="grp">
+        <div class="grp-cvr">
+          <img src="assets/images/landing/course_general.webp" alt="Emblema grabado del curso de inglés general" loading="lazy" decoding="async" width="640" height="200">
+        </div>
+        <div class="grp-txt">
+          <svg class="i grp-ic" aria-hidden="true"><use href="#i-book"/></svg>
+          <h2>Core Basics — Fundamentos</h2>
+          <span class="grp-n">4 libros</span>
+        </div>
+      </div>
+      <div class="grid">
+        <a class="card" href="libro.html?id=core_basics_lvl1"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-book"/></svg></span><span class="cbody"><h3 class="va-display">Core Basics · Nivel 1</h3><p>To Be or Not To Be. Identidad, presentaciones y lo esencial.</p><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
+        <a class="card" href="libro.html?id=core_basics_lvl2"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-book"/></svg></span><span class="cbody"><h3 class="va-display">Core Basics · Nivel 2</h3><p>Do I Know? Rutinas, preguntas y presente simple.</p><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
+        <a class="card" href="libro.html?id=core_basics_lvl3"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-book"/></svg></span><span class="cbody"><h3 class="va-display">Core Basics · Nivel 3</h3><p>Have I Been? Pasado, experiencias e historias.</p><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
+        <a class="card" href="libro.html?id=core_basics_lvl4"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-book"/></svg></span><span class="cbody"><h3 class="va-display">Core Basics · Nivel 4</h3><p>Let's Write. Primeros textos y redacción guiada.</p><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
+      </div>
+    </section>
+    <section class="cat-sec" data-group="practice" aria-label="Core Practice">
+      <div class="grp">
+        <div class="grp-cvr">
+          <img src="assets/images/landing/course_conversation.webp" alt="Emblema grabado del club de conversación" loading="lazy" decoding="async" width="640" height="200">
+        </div>
+        <div class="grp-txt">
+          <svg class="i grp-ic" aria-hidden="true"><use href="#i-speech"/></svg>
+          <h2>Core Practice — Talleres</h2>
+          <span class="grp-n">6 libros</span>
+        </div>
+      </div>
+      <div class="grid">
+        <a class="card" href="libro.html?id=core_practice_lvl1"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-audio"/></svg></span><span class="cbody"><h3 class="va-display">Practice · Nivel 1</h3><p>Listening y speaking con audio nativo en cada lección.</p><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
+        <a class="card" href="libro.html?id=core_practice_lvl2"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-palette"/></svg></span><span class="cbody"><h3 class="va-display">Practice · Nivel 2</h3><p>Lectura y escritura: leyendas, mitos y misterios.</p><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
+        <a class="card" href="libro.html?id=core_practice_lvl3"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-speech"/></svg></span><span class="cbody"><h3 class="va-display">Practice · Nivel 3</h3><p>Las 4 destrezas: debate y descubrimiento.</p><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
+        <a class="card" href="libro.html?id=core_practice_lvl4"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-palette"/></svg></span><span class="cbody"><h3 class="va-display">Practice · Nivel 4</h3><p>Arte y literatura: talleres orales.</p><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
+        <a class="card" href="libro.html?id=core_practice_lvl5"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-bolt"/></svg></span><span class="cbody"><h3 class="va-display">Practice · Nivel 5</h3><p>Futuro y tecnología: lectura y escritura.</p><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
+        <a class="card" href="libro.html?id=core_practice_lvl6"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-palette"/></svg></span><span class="cbody"><h3 class="va-display">Practice · Nivel 6</h3><p>Cultura pop y sociedad: dominio de las 4 destrezas.</p><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
+      </div>
+    </section>
+    <section class="cat-sec" data-group="grammar" aria-label="Core Grammar">
+      <div class="grp">
+        <div class="grp-cvr mosaic">
+          <img src="assets/images/landing/rail/writing.webp" alt="" role="presentation" loading="lazy" decoding="async" width="640" height="200">
+          <img src="assets/images/landing/rail/mind.webp" alt="" role="presentation" loading="lazy" decoding="async" width="640" height="200">
+          <img src="assets/images/landing/rail/question.webp" alt="" role="presentation" loading="lazy" decoding="async" width="640" height="200">
+        </div>
+        <div class="grp-txt">
+          <svg class="i grp-ic" aria-hidden="true"><use href="#i-grid"/></svg>
+          <h2>Core Grammar — Gramática</h2>
+          <span class="grp-n">3 libros</span>
+        </div>
+      </div>
+      <div class="grid">
+        <a class="card" href="libro.html?id=core_grammar_lvl1"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-grid"/></svg></span><span class="cbody"><h3 class="va-display">Grammar Foundations</h3><p>Drills fundamentales para consolidar la base.</p><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
+        <a class="card" href="libro.html?id=core_grammar_lvl2"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-grid"/></svg></span><span class="cbody"><h3 class="va-display">Grammar in Context</h3><p>Estructuras complejas aplicadas en contexto.</p><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
+        <a class="card" href="libro.html?id=core_grammar_lvl3"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-grid"/></svg></span><span class="cbody"><h3 class="va-display">Grammar Mastery</h3><p>Estilo, matices y excepciones del inglés avanzado.</p><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
+      </div>
+    </section>
+    <section class="cat-sec" data-group="cert" aria-label="Certification">
+      <div class="grp">
+        <div class="grp-cvr">
+          <img src="assets/images/landing/course_certification.webp" alt="Emblema grabado de certificaciones" loading="lazy" decoding="async" width="640" height="200">
+        </div>
+        <div class="grp-txt">
+          <svg class="i grp-ic" aria-hidden="true"><use href="#i-summit"/></svg>
+          <h2>Certification — Certificaciones y exámenes</h2>
+          <span class="grp-n">6 libros</span>
+        </div>
+      </div>
+      <div class="grid">
+        <a class="card" href="libro.html?id=cert_prep_b1"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-check-doc"/></svg></span><span class="cbody"><h3 class="va-display">Certification Path I · Gateway</h3><p>Tu primera certificación: B1 Preliminary, IELTS 4.5–5.5 y TOEFL con drills cronometrados.</p><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
+        <a class="card" href="libro.html?id=cert_prep_b2"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-summit"/></svg></span><span class="cbody"><h3 class="va-display">Certification Path II · Ascent</h3><p>B2 First e IELTS 5.5–6.5: paráfrasis, distractores y escritura estructurada.</p><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
+        <a class="card" href="libro.html?id=cert_prep_c1"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-summit"/></svg></span><span class="cbody"><h3 class="va-display">Certification Path III · Summit</h3><p>CAE, CPE e IELTS 7.0+: matiz, registro y resistencia de examen.</p><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
+        <a class="card" href="libro.html?id=cert_prep"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-check-doc"/></svg></span><span class="cbody"><h3 class="va-display">Certification Prep · Intensivo</h3><p>Manual de bandas: drills cronometrados, modelos Band 6/8 y simulacro final.</p><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
+        <a class="card" href="libro.html?id=exam_prep"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-check-doc"/></svg></span><span class="cbody"><h3 class="va-display">Exam Prep · Vol. 1</h3><p>Sintaxis avanzada y estrategia de examen.</p><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
+        <a class="card" href="libro.html?id=exam_prep_vol2"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-check-doc"/></svg></span><span class="cbody"><h3 class="va-display">Exam Prep · Vol. 2</h3><p>Vocabulario temático y práctica aplicada.</p><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
+      </div>
+    </section>
+    <section class="cat-sec" data-group="biz" aria-label="Business">
+      <div class="grp">
+        <div class="grp-cvr">
+          <img src="assets/images/landing/course_corporate.webp" alt="Emblema grabado de inglés corporativo" loading="lazy" decoding="async" width="640" height="200">
+        </div>
+        <div class="grp-txt">
+          <svg class="i grp-ic" aria-hidden="true"><use href="#i-case"/></svg>
+          <h2>Business — Inglés de negocios</h2>
+          <span class="grp-n">3 libros</span>
+        </div>
+      </div>
+      <div class="grid">
+        <a class="card" href="libro.html?id=corporate_b1"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-case"/></svg></span><span class="cbody"><h3 class="va-display">Business Path I · Foundations</h3><p>Inglés de oficina de supervivencia: llamadas, correos, juntas y clientes.</p><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
+        <a class="card" href="libro.html?id=corporate_b2"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-case"/></svg></span><span class="cbody"><h3 class="va-display">Business English Premium</h3><p>Comunicación corporativa efectiva: pitch, juntas y reportes con audio nativo.</p><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
+        <a class="card" href="libro.html?id=corporate_c1"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-speech"/></svg></span><span class="cbody"><h3 class="va-display">Business Path III · Influence</h3><p>Persuasión, negociación, liderazgo y el sales pitch final.</p><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
+      </div>
+    </section>
+    <section class="cat-sec" data-group="otros" aria-label="Otros cursos">
+      <div class="grp">
+        <div class="grp-cvr mosaic">
+          <img src="assets/images/landing/rail/achievement.webp" alt="" role="presentation" loading="lazy" decoding="async" width="640" height="200">
+          <img src="assets/images/landing/rail/globe.webp" alt="" role="presentation" loading="lazy" decoding="async" width="640" height="200">
+          <img src="assets/images/landing/rail/travel.webp" alt="" role="presentation" loading="lazy" decoding="async" width="640" height="200">
+        </div>
+        <div class="grp-txt">
+          <svg class="i grp-ic" aria-hidden="true"><use href="#i-star"/></svg>
+          <h2>Otros cursos</h2>
+          <span class="grp-n">2 libros</span>
+        </div>
+      </div>
+      <div class="grid">
+        <a class="card" href="libro.html?id=cci1"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-bolt"/></svg></span><span class="cbody"><h3 class="va-display">Curso Intensivo (CCI 1)</h3><p>Bootcamp de fluidez rápida — primer mes.</p><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
+        <a class="card" href="libro.html?id=diagnostic_advanced"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-search"/></svg></span><span class="cbody"><h3 class="va-display">Diagnóstico Avanzado</h3><p>Evaluación integral — se realiza con tu profesor.</p><span class="go">Abrir examen <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
+      </div>
+    </section>
+  </div>
 </main>
 
 <footer>
+  <img class="fcat" src="assets/images/mascot/vesper_cat_welcome.webp" alt="" role="presentation" width="52" height="52" loading="lazy" decoding="async">
   © <span id="y"></span> Vesper Academy · <a href="index.html">vesper.academy</a>
   <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
 </footer>
+
+<script>
+/* Iconos del sprite desde JS. Un <i class="fas …"> se construía en tres sitios
+   distintos (héroe, resultados de búsqueda, guía de bienvenida); ahora los tres
+   pasan por aquí, así que el sprite tiene un solo punto de entrada.
+   FA_MAP traduce las clases de Font Awesome que guarda vesper_book_index.js
+   (icon:"fa-mug-hot") al símbolo correspondiente. Son menos marcas que libros a
+   propósito — ver el comentario del sprite. */
+var VIcon = (function(){
+  var FA_MAP = {
+    "fa-shoe-prints":"i-book","fa-mug-hot":"i-book","fa-book-open":"i-book","fa-pen-nib":"i-book",
+    "fa-headphones":"i-audio","fa-comments":"i-speech","fa-handshake":"i-speech",
+    "fa-dragon":"i-palette","fa-palette":"i-palette","fa-clapperboard":"i-palette",
+    "fa-cubes":"i-grid","fa-diagram-project":"i-grid","fa-gem":"i-grid","fa-layer-group":"i-grid",
+    "fa-certificate":"i-check-doc","fa-clipboard-check":"i-check-doc","fa-clipboard-list":"i-check-doc",
+    "fa-stopwatch":"i-check-doc","fa-medal":"i-summit","fa-trophy":"i-summit",
+    "fa-briefcase":"i-case","fa-building":"i-case",
+    "fa-bolt":"i-bolt","fa-microchip":"i-bolt",
+    "fa-magnifying-glass-chart":"i-search","fa-graduation-cap":"i-cap","fa-user":"i-user",
+    "fa-play":"i-play","fa-rocket":"i-rocket","fa-compass":"i-compass","fa-star":"i-star"
+  };
+  function sym(name){
+    if(!name) return "i-book";
+    if(name.indexOf("i-") === 0) return name;
+    return FA_MAP[name] || "i-book";
+  }
+  return {
+    sym: sym,
+    /* Marca completa, para innerHTML. */
+    svg: function(name, cls){
+      return '<svg class="i'+(cls ? " "+cls : "")+'" aria-hidden="true"><use href="#'+sym(name)+'"/></svg>';
+    },
+    /* Cambia el destino de un <use> ya existente sin tocar el className del
+       <svg> (que llevaría por delante la clase .i y dejaría el icono sin
+       tamaño ni trazo). */
+    set: function(el, name){
+      if(!el) return;
+      var u = el.querySelector("use");
+      if(u) u.setAttribute("href", "#"+sym(name));
+    }
+  };
+})();
+</script>
 
 <script>
 /* Personaliza el portal con el perfil + héroe "Hoy" + divulgación progresiva. */
@@ -434,19 +714,21 @@ a.qn .qn-live{font-size:.74rem;font-weight:700;color:var(--gold2);}
     var kicker, title, href, go, ic;
     if(last && last.href && last.title){
       kicker = "Continúa donde lo dejaste"; title = last.title; href = last.href;
-      go = "Continuar"; ic = "fa-play";
+      go = "Continuar"; ic = "i-play";
     } else if(profile && profile.recommended && profile.recommended.length){
       var r0 = profile.recommended[0];
       kicker = "Empieza por aquí"; title = r0.t; href = r0.href;
-      go = "Empezar"; ic = "fa-play";
+      go = "Empezar"; ic = "i-play";
     } else {
       kicker = "Empieza aquí"; title = "Ve a tus lecciones y practica hoy";
-      href = "leccion.html"; go = "Ir a lecciones"; ic = "fa-play";
+      href = "leccion.html"; go = "Ir a lecciones"; ic = "i-play";
     }
     document.getElementById("today-kicker").textContent = kicker;
     document.getElementById("today-title").textContent = title;
-    document.getElementById("today-ic").className = "fas "+ic;
-    document.getElementById("today-go").innerHTML = go+' <i class="fas fa-arrow-right" aria-hidden="true"></i>';
+    /* El icono es un <use> del sprite, no una clase de fuente: se cambia el
+       destino, no el className (que borraría la clase .i). */
+    VIcon.set(document.getElementById("today-ic"), ic);
+    document.getElementById("today-go").innerHTML = go+" "+VIcon.svg("i-arrow");
     hero.href = href;
     hero.style.display = "flex";
   })();
@@ -468,7 +750,13 @@ a.qn .qn-live{font-size:.74rem;font-weight:700;color:var(--gold2);}
       localStorage.setItem("vesper_streak", JSON.stringify(st));
       if(st.count >= 2){
         var el = document.getElementById("today-streak");
-        if(el){ el.textContent = "🔥 "+st.count+" días seguidos — ¡sigue así!"; el.hidden = false; }
+        if(el){
+          /* vesper_cat_streak.webp existía en el repo sin usarse en ninguna
+             parte. Este es su sitio: la racha es justo el momento de premio. */
+          el.innerHTML = '<img src="assets/images/mascot/vesper_cat_streak.webp" alt="" role="presentation" width="24" height="24" decoding="async">'+
+                         '<span>'+st.count+' días seguidos — ¡sigue así!</span>';
+          el.hidden = false;
+        }
       }
     }catch(e){}
   })();
@@ -688,10 +976,10 @@ a.qn .qn-live{font-size:.74rem;font-weight:700;color:var(--gold2);}
       a.className = "res res-"+e.kind; a.href = e.href; a.setAttribute("role","option");
       a.id = "res-opt-"+(ridSeq++);   /* id estable para aria-activedescendant */
       a.innerHTML =
-        '<span class="res-ic" aria-hidden="true"><i class="fas '+e.icon+'"></i></span>'+
+        '<span class="res-ic" aria-hidden="true">'+VIcon.svg(e.icon)+'</span>'+
         '<span class="res-body"><span class="res-t">'+highlight(e.title, alts)+'</span>'+
         '<span class="res-meta">'+esc(e.meta)+'</span></span>'+
-        '<i class="fas fa-arrow-right res-go" aria-hidden="true"></i>';
+        VIcon.svg("i-arrow", "res-go");
       frag.appendChild(a);
     }
     if(less.length){ addGroup("Temas · "+less.length); less.forEach(addItem); }
@@ -751,8 +1039,8 @@ a.qn .qn-live{font-size:.74rem;font-weight:700;color:var(--gold2);}
     <div class="vtour-actions">
       <button type="button" class="vtour-skip" id="vtour-skip">Saltar</button>
       <div class="vtour-fwd">
-        <button type="button" class="vtour-back" id="vtour-back" aria-label="Anterior"><i class="fas fa-arrow-left" aria-hidden="true"></i></button>
-        <button type="button" class="vtour-next" id="vtour-next">Siguiente <i class="fas fa-arrow-right" aria-hidden="true"></i></button>
+        <button type="button" class="vtour-back" id="vtour-back" aria-label="Anterior"><svg class="i" aria-hidden="true"><use href="#i-arrow-left"/></svg></button>
+        <button type="button" class="vtour-next" id="vtour-next">Siguiente <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></button>
       </div>
     </div>
   </div>
@@ -815,15 +1103,15 @@ a.qn .qn-live{font-size:.74rem;font-weight:700;color:var(--gold2);}
     var s = STEPS[i];
     el.top.innerHTML =
       (s.img ? '<img class="vtour-media" src="'+s.img+'" alt="Vesper">'
-             : '<span class="vtour-badge"><i class="fas '+s.fa+'" aria-hidden="true"></i></span>') +
+             : '<span class="vtour-badge">'+VIcon.svg(s.fa)+'</span>') +
       (s.where ? '<span class="vtour-chip">'+BAR+s.where+'</span>' : '');
     el.title.innerHTML = s.title;
     el.desc.innerHTML = s.desc;
     dotEls.forEach(function(d,k){ d.classList.toggle("on", k===i); });
     el.back.disabled = (i===0);
     el.next.innerHTML = s.last
-      ? '¡Empezar! <i class="fas fa-rocket" aria-hidden="true"></i>'
-      : 'Siguiente <i class="fas fa-arrow-right" aria-hidden="true"></i>';
+      ? '¡Empezar! '+VIcon.svg("i-rocket")
+      : 'Siguiente '+VIcon.svg("i-arrow");
   }
 
   function go(n){ i = Math.max(0, Math.min(STEPS.length-1, n)); render(); el.next.focus(); }
@@ -942,6 +1230,106 @@ a.qn .qn-live{font-size:.74rem;font-weight:700;color:var(--gold2);}
         }).catch(function(){});
     });
   }).catch(function(){});
+})();
+</script>
+
+<script>
+/* ── Catálogo: reconciliación contra vesper_book_index.js ──────────────────
+   Las 24 tarjetas están escritas a mano en el HTML y aquí se COMPARAN con el
+   índice, que es la fuente canónica (autogenerado desde los libros del alumno).
+   Reconciliar, y no construir desde cero, es deliberado: vesper_book_index.js
+   no está en el CORE del service worker y los subrecursos se sirven de caché
+   primero, así que un render desde cero daría un catálogo VACÍO en una carga
+   fría sin red — justo la razón de existir de esta página.
+   Nunca borramos una tarjeta: un libro de menos es peor que un título viejo. */
+(function(){
+  var IX = window.VESPER_BOOK_INDEX;
+  if(!IX || !IX.length) return;                 /* respaldo estático intacto */
+
+  var byId = {};
+  IX.forEach(function(b){ byId[b.id] = b; });
+
+  var cards = Array.prototype.slice.call(document.querySelectorAll('#catalog a.card'));
+  var seen = {}, fixed = 0;
+  cards.forEach(function(el){
+    var m = /[?&]id=([^&#]+)/.exec(el.getAttribute('href') || '');
+    if(!m) return;
+    var b = byId[decodeURIComponent(m[1])];
+    if(!b){
+      try{ if(window.VA && VA.track) VA.track("hub_catalog_orphan", { id: m[1] }); }catch(e){}
+      return;
+    }
+    seen[b.id] = 1;
+    var h = el.querySelector('h3'), p = el.querySelector('p');
+    if(h && b.title && h.textContent.trim() !== b.title){ h.textContent = b.title; fixed++; }
+    if(p && b.desc  && p.textContent.trim() !== b.desc ){ p.textContent = b.desc;  fixed++; }
+    if(b.lessons && b.lessons.length) el.setAttribute('data-lessons', b.lessons.length);
+  });
+
+  /* Un libro que existe en el índice y no en el HTML: lo reportamos para que se
+     añada a mano. No lo inventamos aquí, porque su grupo y su copy son
+     decisiones editoriales, no de plantilla. */
+  var missing = IX.filter(function(b){ return !seen[b.id]; });
+  if(missing.length){
+    try{
+      if(window.VA && VA.track) VA.track("hub_catalog_missing", {
+        ids: missing.map(function(b){ return b.id; }).join(",")
+      });
+    }catch(e){}
+  }
+})();
+</script>
+
+<script>
+/* ── Revelado al hacer scroll ──────────────────────────────────────────────
+   Mismo contrato que la portada: sin .js-anim el CSS deja todo visible, así que
+   ningún fallo aquí puede esconder contenido.
+   La red de seguridad NO cuenta llamadas del observer: IntersectionObserver
+   siempre entrega una tanda inicial, así que un contador da un OK falso. La
+   señal buena es geométrica — ¿queda algo dentro de la pantalla sin revelar? */
+(function(){
+  var root = document.documentElement;
+  if(!root.classList.contains("js-anim")) return;
+
+  var items = Array.prototype.slice.call(document.querySelectorAll(".reveal"));
+  if(!items.length) return;
+
+  /* Escalonado por posición entre hermanos, topado a 5 para que una lista larga
+     no acabe esperando un segundo entero. */
+  items.forEach(function(el){
+    var sibs = el.parentElement ? Array.prototype.slice.call(el.parentElement.children) : [el];
+    el.style.setProperty("--i", Math.min(sibs.indexOf(el), 5));
+  });
+
+  function show(el){ el.classList.add("in-view"); }
+
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(en){
+      if(en.isIntersecting){ show(en.target); io.unobserve(en.target); }
+    });
+  }, { threshold:.12, rootMargin:"0px 0px -8% 0px" });
+  items.forEach(function(el){ io.observe(el); });
+
+  function rescue(){
+    var vh = window.innerHeight || 800, stuck = 0;
+    items.forEach(function(el){
+      if(el.classList.contains("in-view")) return;
+      var r = el.getBoundingClientRect();
+      if(r.top < vh && r.bottom > 0) stuck++;
+    });
+    var h1 = document.getElementById("intro-title");
+    var faint = h1 && parseFloat(getComputedStyle(h1).opacity) < .9;
+    if(stuck || faint){
+      root.classList.remove("js-anim");
+      items.forEach(show);
+      try{ io.disconnect(); }catch(e){}
+    }
+  }
+  setTimeout(rescue, 3000);
+  window.addEventListener("scroll", function once(){
+    window.removeEventListener("scroll", once);
+    setTimeout(rescue, 1500);
+  }, { passive:true });
 })();
 </script>
 

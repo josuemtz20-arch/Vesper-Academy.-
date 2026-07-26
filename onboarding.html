@@ -2,7 +2,6 @@
 <html lang="es">
 <head>
 <script src="vesper_auth.js"></script>
-<script src="vesper_theme.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Empecemos | Vesper Academy</title>
@@ -48,7 +47,7 @@ header a.skip:hover{color:var(--gold);}
 
 /* NAME INTRO */
 .hero-emoji{font-size:2.6rem;margin-bottom:6px;}
-.name-input{width:100%;padding:14px 16px;font-size:1.02rem;border:1.5px solid var(--border);border-radius:12px;font-family:inherit;background:#fff;margin-top:6px;}
+.name-input{width:100%;padding:14px 16px;font-size:1.02rem;border:1.5px solid var(--border);border-radius:12px;font-family:inherit;background:var(--paper,#fff);margin-top:6px;}
 .name-input:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(197,160,89,.18);}
 
 /* OPTION CARDS */
@@ -79,7 +78,7 @@ header a.skip:hover{color:var(--gold);}
 .btn-gold:hover{transform:translateY(-2px);box-shadow:0 8px 20px rgba(197,160,89,.38);}
 .btn-gold:disabled{opacity:.45;cursor:not-allowed;transform:none;box-shadow:none;}
 .btn-back{background:transparent;color:var(--muted);padding:13px 10px;}
-.btn-back:hover{color:var(--navy);}
+.btn-back:hover{color:var(--text,#1B1B2F);}
 .btn-back.hidden{visibility:hidden;}
 
 /* RESULT */
@@ -90,7 +89,7 @@ header a.skip:hover{color:var(--gold);}
 .rec-label{display:flex;align-items:center;gap:10px;font-size:.74rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);margin:30px 0 14px;}
 .rec-label i{color:var(--gold2);}
 .rec-grid{display:grid;gap:14px;}
-.rec{display:flex;gap:16px;align-items:flex-start;background:#fff;border:1px solid var(--border);border-left:4px solid var(--gold);border-radius:13px;padding:18px;text-decoration:none;color:inherit;box-shadow:0 2px 8px rgba(26,43,66,.05);transition:transform .16s,box-shadow .16s;}
+.rec{display:flex;gap:16px;align-items:flex-start;background:var(--paper,#fff);border:1px solid var(--border);border-left:4px solid var(--gold);border-radius:13px;padding:18px;text-decoration:none;color:inherit;box-shadow:0 2px 8px rgba(26,43,66,.05);transition:transform .16s,box-shadow .16s;}
 .rec:hover{transform:translateY(-3px);box-shadow:0 12px 26px rgba(26,43,66,.13);}
 .rec.primary{border-left-color:var(--gold);background:linear-gradient(135deg,#fffdf8,#fbf6ea);}
 .rec .ric{width:48px;height:48px;flex-shrink:0;border-radius:12px;background:linear-gradient(135deg,var(--navy2),var(--navy));color:var(--gold-lt);display:flex;align-items:center;justify-content:center;font-size:1.3rem;}
@@ -103,13 +102,18 @@ header a.skip:hover{color:var(--gold);}
 .btn-block{width:100%;justify-content:center;font-size:1.05rem;padding:16px;}
 .redo{text-align:center;}
 .redo a{color:var(--muted);font-size:.85rem;text-decoration:underline;cursor:pointer;}
-.redo a:hover{color:var(--navy);}
+.redo a:hover{color:var(--text,#1B1B2F);}
 
 footer{text-align:center;color:var(--muted);font-size:.78rem;padding:10px 20px 30px;}
 /* Foco de teclado visible (WCAG 2.4.7) */
 :focus-visible{outline:3px solid var(--gold,#c5a059);outline-offset:2px}
 </style>
 <link rel="stylesheet" href="assets/css/vesper_tokens.css">
+<!-- vesper_theme.js va AL FINAL del <head> a proposito: apply() hace
+     appendChild al <head> tal como esta parseado, asi que cargado antes
+     del <style> de la pagina su :root quedaba ANTES y la pagina ganaba.
+     El motor de temas estaba inerte aqui: elegir tema no hacia nada. -->
+<script src="vesper_theme.js"></script>
 </head>
 <body>
 

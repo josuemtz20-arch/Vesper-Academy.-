@@ -70,9 +70,15 @@ window.VESPER_THEME = (function () {
     },
     ocean: {
       name: "Oceano", emoji: "🌊", dark: false,
-      ink: "#10222e", gold: "#2f86c5", goldLt: "#4f9fd6", goldDp: "#236699",
+      /* gold era #2f86c5: 4.14:1 contra su propio ink, o sea un boton dorado
+         con texto oscuro encima no llegaba a AA. Aclarado a 4.63:1. El oro
+         de texto pequeno no sale de aqui sino de --gold-ink, que buildVars
+         fija en #7a5e12 para los temas claros. */
+      ink: "#10222e", gold: "#3a8fcb", goldLt: "#4f9fd6", goldDp: "#236699",
       success: "#1f9e8a", error: "#c0392b",
-      cream: "#eef5fa", paper: "#ffffff", muted: "#5d7689", line: "#d8e4ee"
+      /* muted era #5d7689: 4.32:1 sobre su propio cream, por debajo del 4.5
+         que pide AA para texto pequeno. Oscurecido a 5.08:1. */
+      cream: "#eef5fa", paper: "#ffffff", muted: "#516b7e", line: "#d8e4ee"
     },
     nebula: {
       name: "Nebulosa", emoji: "🪐", dark: true,

@@ -65,7 +65,7 @@
       /* Superficie: navy del tema con respaldo; borde superior dorado. */
       "#vsp-tabbar{position:fixed;left:0;right:0;bottom:0;z-index:9997;",
         "display:flex;justify-content:space-around;align-items:stretch;",
-        "background:var(--navy,#1B1B2F);border-top:1px solid rgba(197,160,89,.5);",
+        "background:var(--navy,#1B1B2F);border-top:1px solid var(--va-hairline,rgba(201,168,76,.5));",
         "padding-bottom:env(safe-area-inset-bottom);",
         "font-family:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;",
         "box-shadow:0 -6px 22px rgba(0,0,0,.22);transition:opacity .2s ease}",
@@ -130,9 +130,19 @@
     document.body.appendChild(nav);
 
     /* Ocultar la barra al escribir: en móvil, un tab bar fijo pelea con el
-       teclado y el compositor (chat) o los ejercicios de escribir. */
+       teclado y el compositor (chat) o los ejercicios de escribir.
+       Dos límites, porque tal cual estaba se pasaba de listo:
+         · Sólo donde hay teclado en pantalla. En un escritorio con ratón no hay
+           teclado que estorbe y la barra desaparecía por nada.
+         · [data-vsp-keep-nav] permite renunciar. Lo usa el buscador del hub: es
+           un combobox con lista de resultados, o sea exactamente el momento en
+           el que el alumno más necesita seguir viendo a dónde puede ir. */
+    var tienePantallaTactil = !window.matchMedia ||
+      window.matchMedia("(hover: none) and (pointer: coarse)").matches;
+
     function isText(el) {
       if (!el) return false;
+      if (el.hasAttribute && el.hasAttribute("data-vsp-keep-nav")) return false;
       if (el.isContentEditable) return true;
       var tag = el.tagName;
       if (tag === "TEXTAREA") return true;
@@ -140,7 +150,7 @@
       return false;
     }
     document.addEventListener("focusin", function (e) {
-      if (isText(e.target)) nav.classList.add("vsp-hidden");
+      if (tienePantallaTactil && isText(e.target)) nav.classList.add("vsp-hidden");
     });
     document.addEventListener("focusout", function (e) {
       if (isText(e.target)) nav.classList.remove("vsp-hidden");

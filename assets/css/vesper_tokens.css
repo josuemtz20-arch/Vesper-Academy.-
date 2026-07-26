@@ -65,7 +65,6 @@
      en Inria. Ojo con los didones sobre fondo claro — ver la nota de
      `font-optical-sizing` más abajo. */
   --va-font-display: "Bodoni Moda", Didot, "Times New Roman", Georgia, serif;
-  --va-font-display-legacy: "Inria Serif", Georgia, serif;
   --va-font-text: Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
 
   /* Anillo de foco accesible. */
@@ -175,6 +174,16 @@ html.vesper-hc {
   --va-muted: #2c3038;
   --va-line: #b9b2a2;
   --va-focus: #5a4300;
+}
+/* El bloque de arriba da por hecho un fondo CLARO: #2c3038 es casi negro y
+   #b9b2a2 es un gris cálido de borde sobre papel. Sobre una superficie de noche
+   eso deja el texto secundario ilegible — o sea, "alto contraste" empeoraba el
+   contraste. Rama oscura, con la misma intención (más contraste, no menos):
+   #d9d5e4 da 11.8:1 sobre #14122a. */
+html.vesper-hc.vesper-dark {
+  --va-muted: #d9d5e4;
+  --va-line: #6d6da0;
+  --va-focus: #f3e2ab;
 }
 html.vesper-hc .va-muted,
 html.vesper-hc .muted { color: var(--va-muted) !important; }

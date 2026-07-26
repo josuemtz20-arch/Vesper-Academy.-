@@ -3,7 +3,6 @@
 <head>
 <script src="vesper_auth.js"></script>
 <script src="vesper_identity.js"></script>
-<script src="vesper_theme.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mi perfil | Vesper Academy</title>
@@ -15,7 +14,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Inria+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@300;400;500;600;700&display=swap');
 *,*::before,*::after{box-sizing:border-box;}
 :root{--navy:#1B1B2F;--navy2:#2c2c4a;--gold:#c5a059;--gold2:#8f6f2e;--cream:#f5f2eb;--border:#e4e0d8;--muted:#5a6673;--good:#2f7d5b;}
-body{margin:0;font-family:'Inter',sans-serif;background:var(--cream);color:var(--navy);min-height:100vh;}
+body{margin:0;font-family:'Inter',sans-serif;background:var(--cream);color:var(--text,#1B1B2F);min-height:100vh;}
 .skip-link{position:absolute;left:-999px;top:0;z-index:200;background:var(--navy);color:#fff;padding:10px 16px;border-radius:0 0 8px 0;text-decoration:none;font-weight:600;}
 .skip-link:focus{left:0;}
 header{background:var(--navy);border-bottom:3px solid var(--gold);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:14px;position:sticky;top:0;z-index:50;}
@@ -28,7 +27,10 @@ header a.back:hover,header a.back:focus-visible{color:var(--gold);}
 .wrap{max-width:760px;margin:0 auto;padding:30px 20px 40px;}
 
 /* Tarjeta de identidad */
-.idcard{display:flex;align-items:center;gap:18px;background:linear-gradient(135deg,var(--navy),#27274c);color:#fff;border:1px solid rgba(197,160,89,.4);border-radius:18px;padding:24px;box-shadow:0 10px 30px rgba(26,27,47,.24);}
+/* background-COLOR ademas del degradado: el degradado vive en
+   background-image, asi que sin esto un fallo al pintarlo dejaria el texto
+   blanco de la tarjeta sobre el fondo de la pagina. */
+.idcard{display:flex;align-items:center;gap:18px;background-color:var(--navy);background-image:linear-gradient(135deg,var(--navy),#27274c);color:#fff;border:1px solid rgba(197,160,89,.4);border-radius:18px;padding:24px;box-shadow:0 10px 30px rgba(26,27,47,.24);}
 .idcard .avatar{width:76px;height:76px;flex-shrink:0;border-radius:50%;background:linear-gradient(135deg,var(--gold),#a8843d);display:flex;align-items:center;justify-content:center;overflow:hidden;color:var(--navy);font-family:'Inria Serif',serif;font-size:2rem;font-weight:700;}
 .idcard .avatar img{width:100%;height:100%;object-fit:cover;}
 .idcard .who{min-width:0;}
@@ -40,7 +42,7 @@ header a.back:hover,header a.back:focus-visible{color:var(--gold);}
 h2.sec{font-size:.74rem;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:var(--muted);margin:32px 0 12px;}
 
 /* Cuenta */
-.card{background:#fff;border:1px solid var(--border);border-radius:14px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,.06);}
+.card{background:var(--paper,#fff);border:1px solid var(--border);border-radius:14px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,.06);}
 .acct{display:flex;align-items:center;gap:14px;}
 .acct .st{width:44px;height:44px;flex-shrink:0;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.15rem;}
 .acct .st.on{background:rgba(47,125,91,.12);color:var(--good);}
@@ -54,14 +56,14 @@ h2.sec{font-size:.74rem;font-weight:700;letter-spacing:1.6px;text-transform:uppe
 
 /* Progreso */
 .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
-.stat{background:#fff;border:1px solid var(--border);border-radius:14px;padding:18px 14px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,.06);}
-.stat .n{font-family:'Inria Serif',serif;font-size:1.7rem;color:var(--navy);line-height:1;}
+.stat{background:var(--paper,#fff);border:1px solid var(--border);border-radius:14px;padding:18px 14px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,.06);}
+.stat .n{font-family:'Inria Serif',serif;font-size:1.7rem;color:var(--text,#1B1B2F);line-height:1;}
 .stat .l{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-top:6px;}
 .stat i{color:var(--gold2);font-size:1rem;margin-bottom:6px;display:block;}
 
 /* Acciones */
 .actions{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;}
-a.act,button.act{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--border);border-radius:12px;padding:15px 16px;text-decoration:none;color:inherit;font-family:inherit;font-size:.92rem;font-weight:600;cursor:pointer;text-align:left;width:100%;transition:border-color .15s,box-shadow .15s;}
+a.act,button.act{display:flex;align-items:center;gap:12px;background:var(--paper,#fff);border:1px solid var(--border);border-radius:12px;padding:15px 16px;text-decoration:none;color:inherit;font-family:inherit;font-size:.92rem;font-weight:600;cursor:pointer;text-align:left;width:100%;transition:border-color .15s,box-shadow .15s;}
 a.act:hover,a.act:focus-visible,button.act:hover,button.act:focus-visible{border-color:var(--gold);box-shadow:0 6px 16px rgba(26,43,66,.1);}
 a.act .ic,button.act .ic{width:38px;height:38px;flex-shrink:0;border-radius:10px;background:linear-gradient(135deg,var(--navy2),var(--navy));color:var(--gold);display:flex;align-items:center;justify-content:center;}
 button.act.danger .ic{background:linear-gradient(135deg,#7a1f1f,#571414);color:#f3d6d6;}
@@ -71,6 +73,11 @@ footer a{color:var(--gold);text-decoration:none;}
 :focus-visible{outline:3px solid var(--gold,#c5a059);outline-offset:2px;}
 </style>
 <link rel="stylesheet" href="assets/css/vesper_tokens.css">
+<!-- vesper_theme.js va AL FINAL del <head> a proposito: apply() hace
+     appendChild al <head> tal como esta parseado, asi que cargado antes
+     del <style> de la pagina su :root quedaba ANTES y la pagina ganaba.
+     El motor de temas estaba inerte aqui: elegir tema no hacia nada. -->
+<script src="vesper_theme.js"></script>
 </head>
 <body>
 
