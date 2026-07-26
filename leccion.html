@@ -1690,12 +1690,194 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
   .dc-back{transform:none}
   .branch:hover,.branch:active{transform:none}
 }
+
+/* ============================================================
+   CAPA DE LEGIBILIDAD  (va al final a propósito: corrige por
+   selector lo que quedó demasiado pequeño o con poco contraste
+   sin tener que tocar las ~45 reglas originales una por una)
+
+   Dos problemas medidos en el móvil real (375px):
+   1) 97 nodos de texto por debajo de 14px, el peor a 9.28px, y
+      justamente los títulos de lección (.wtitle) a 12.8px.
+   2) El oro de marca (--va-gold #C9A84C) sobre cream da 2.15:1.
+      Sirve como color decorativo o sobre navy, pero NO como texto
+      pequeño sobre fondo claro. Para eso está --gold-ink (5.5:1).
+   ============================================================ */
+:root{
+  /* oro legible para TEXTO sobre fondos claros — 5.47:1 sobre cream */
+  --gold-ink:#7d612b;
+  /* tamaño mínimo de etiqueta: nada informativo por debajo de esto */
+  --fs-label:.78rem;   /* 12.5px */
+  --fs-meta:.82rem;    /* 13.1px */
+}
+
+/* -- el foco programático de show() no debe pintar un anillo; el
+      anillo de :focus-visible (vesper_tokens.css) se conserva -- */
+[tabindex="-1"]:focus{outline:none}
+
+/* -- 1. piso de legibilidad -------------------------------- */
+.wtitle{font-size:.875rem;max-width:150px}          /* 12.8 -> 14px: es el nombre de la lección */
+.wnode.mini .wtitle{font-size:.82rem}
+.wisland .wnode.locked .wtitle{color:rgba(245,242,235,.75)}   /* .55 era demasiado tenue */
+.wnode.locked .wtitle{font-weight:600}
+.hstat__l{font-size:.72rem;color:rgba(245,242,235,.85)}
+@media(max-width:430px){ .hstat__l{font-size:.7rem} }         /* antes encogía a .58rem (9.28px) */
+.world-banner__eyebrow{font-size:.7rem;letter-spacing:.14em}
+.world-banner__badge{font-size:.72rem}
+.world .w-pc{font-size:var(--fs-label)}
+.worlds-sec__small{font-size:var(--fs-label)}
+.worlds-sec__sub{font-size:var(--fs-meta)}
+.wcheck .ct,.skill-h .ct{font-size:var(--fs-meta)}
+.branch__ct{font-size:var(--fs-label)}
+.branch__hint{font-size:var(--fs-meta)}
+.medal__nm{font-size:var(--fs-label)}
+.wlabel{font-size:.7rem}
+.wnode.mini .wlabel.mini-lb{font-size:.66rem}
+.lesson-world .lw-ey{font-size:.68rem}
+.boss-eyebrow{font-size:.7rem}
+.dc-tag{font-size:.72rem;opacity:.72}
+.den-stat span{font-size:var(--fs-label)}
+.den-head__eyebrow{font-size:.72rem}
+.branch__no{font-size:.72rem}
+.search-results .lc-lvl{font-size:var(--fs-label)}
+.ach-badge .ab-tx b{font-size:var(--fs-label)}
+.rq-num,.cat-bucket h4,.trophy-shelf .t-count{font-size:var(--fs-meta)}
+
+/* -- 2. oro legible donde el texto va sobre fondo CLARO -----
+      Ojo: sólo aquí. Sobre navy (.pcta, .wcheck dentro del mapa,
+      el hero) el oro claro es el que contrasta, y oscurecerlo lo
+      empeoraría — por eso la lista es explícita y no un `*`. */
+.skill-h .ct,
+.branch__no,
+.search-results .lc-lvl,
+.ach-badge .ab-tx b,
+.cos-cta,
+.srs-banner .hc-cta,
+.hub-card .hc-cta{color:var(--gold-ink)}
+
+/* -- 3. chips de etiqueta sobre acento de mundo -------------
+      #fff sobre los acentos daba 3.2-4.0:1. Se oscurece el fondo
+      del chip en vez de aclarar el texto, para no perder el color. */
+.wlabel,
+.wboss-node .wlabel.boss-lb{background:var(--w-accent-ink,#1B1B2F);color:#fff;font-weight:800}
+
+/* -- 4. el objetivo táctil mínimo de los iconos del HUD ----- */
+.hub-ic{min-width:44px;min-height:44px}
+
+/* -- 5. el velo del banner del mundo -------------------------
+      El texto del banner vive sobre una FOTO. El velo bajaba a
+      .30 al 62% del ancho, justo donde termina la fila de meta
+      ("A1 · Principiante · 0/47"), así que su contraste dependía
+      de lo clara que fuera la foto de cada mundo. Se mantiene
+      oscuro a lo largo de toda la caja de texto (max-width 60%). */
+.world-banner::before{
+  background:radial-gradient(125% 150% at 100% 50%,rgba(27,27,47,.62) 0%,rgba(27,27,47,0) 46%),
+             linear-gradient(90deg,rgba(27,27,47,.94) 0%,rgba(27,27,47,.88) 40%,rgba(27,27,47,.62) 68%,rgba(27,27,47,.10) 100%),
+             linear-gradient(180deg,rgba(27,27,47,.14) 0%,rgba(27,27,47,.44) 100%);
+}
+
+/* ============================================================
+   "¿QUÉ SIGUE?" — la tarjeta de acción principal del hub.
+   Es deliberadamente la pieza con más peso visual de la página:
+   fondo oscuro contra el cream, tipografía display grande y un
+   único botón. Todo lo demás del hub es secundario respecto a
+   esto, y así debe leerse de un vistazo.
+   ============================================================ */
+.nextstep{
+  position:relative;overflow:hidden;
+  margin:16px 0 18px;padding:20px 20px 18px;
+  border-radius:var(--va-r-lg,18px);
+  background:var(--va-grad-dusk,linear-gradient(160deg,#1f2342,#14122a 60%,#0e0c1f));
+  box-shadow:var(--va-shadow-dusk,0 18px 44px rgba(20,18,42,.22));
+  border:1px solid rgba(201,168,76,.28);
+}
+/* halo del color del mundo, para que la tarjeta pertenezca al mundo activo */
+.nextstep::before{
+  content:"";position:absolute;inset:-40% -20% auto auto;width:70%;height:170%;
+  background:radial-gradient(closest-side,var(--w-glow,rgba(201,168,76,.4)),transparent 70%);
+  opacity:.55;pointer-events:none;
+}
+.nextstep > *{position:relative}
+.nextstep__ey{
+  display:block;font-size:.78rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--va-star,#f3e2ab);margin-bottom:6px;
+}
+.nextstep__t{
+  font-family:var(--va-font-display,"Inria Serif",Georgia,serif);
+  font-size:1.6rem;line-height:1.15;margin:0 0 8px;color:#fff;
+}
+.nextstep__meta{
+  margin:0 0 16px;font-size:.85rem;color:rgba(245,242,235,.86);
+  display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+}
+.nextstep__sk{
+  display:inline-block;padding:3px 10px;border-radius:999px;
+  background:rgba(201,168,76,.18);border:1px solid rgba(201,168,76,.42);
+  color:var(--va-star,#f3e2ab);font-weight:700;font-size:.75rem;
+}
+.nextstep__go{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  width:100%;min-height:54px;padding:14px 18px;
+  border:0;border-radius:14px;cursor:pointer;
+  background:linear-gradient(180deg,#d8b968,#bb9740);
+  color:#241d07;font:inherit;font-size:1.02rem;font-weight:800;letter-spacing:.01em;
+  box-shadow:0 6px 18px rgba(0,0,0,.28);
+  transition:transform .14s ease,filter .14s ease;
+}
+.nextstep__go svg{width:20px;height:20px;flex:0 0 auto}
+.nextstep__go:hover{filter:brightness(1.05)}
+.nextstep__go:active{transform:translateY(1px)}
+@media(max-width:380px){ .nextstep__t{font-size:1.4rem} }
+@media(prefers-reduced-motion:reduce){ .nextstep__go{transition:none} }
+
+/* -- "ver los mundos que faltan", bajo la cinta ------------- */
+.worlds-more{
+  display:block;width:100%;margin:10px 0 0;padding:11px 14px;min-height:44px;
+  background:transparent;border:1px dashed var(--line);border-radius:12px;
+  color:var(--muted);font:inherit;font-size:var(--fs-meta);font-weight:600;cursor:pointer;
+  transition:border-color .14s ease,color .14s ease;
+}
+.worlds-more:hover{border-color:var(--gold-ink);color:var(--ink)}
+@media(prefers-reduced-motion:reduce){ .worlds-more{transition:none} }
+
+/* -- primera visita: qué significan las palabras del mapa --- */
+.primer{
+  position:relative;margin:0 0 16px;padding:16px 16px 14px;
+  background:var(--paper);border:1px solid var(--line);border-left:4px solid var(--gold-ink);
+  border-radius:var(--va-r-md,14px);box-shadow:var(--shadow);
+}
+.primer__t{margin:0 0 8px;font-family:var(--va-font-display,"Inria Serif",Georgia,serif);font-size:1.06rem}
+.primer__l{margin:0;padding:0;list-style:none;display:grid;gap:7px}
+.primer__l li{font-size:var(--fs-meta);line-height:1.45;color:var(--ink)}
+.primer__l b{color:var(--gold-ink)}
+.primer__x{
+  margin-top:12px;width:100%;min-height:44px;padding:10px 14px;
+  background:var(--ink);color:var(--cream);border:0;border-radius:11px;
+  font:inherit;font-weight:700;cursor:pointer;
+}
+
+/* -- botón de "ver el resto del mundo", bajo el sendero ----- */
+.wmore{margin:-6px 0 18px;padding:0 2px}
+.wmore__btn{
+  width:100%;display:flex;flex-direction:column;align-items:center;gap:3px;
+  padding:14px 16px;min-height:56px;
+  background:var(--paper);border:1px dashed var(--line);border-radius:14px;
+  color:var(--ink);font:inherit;font-size:.9rem;font-weight:700;cursor:pointer;
+  transition:border-color .14s ease,background .14s ease;
+}
+.wmore__btn:hover{border-color:var(--gold-ink);background:var(--gold-tint)}
+.wmore__sub{font-size:var(--fs-label);font-weight:500;color:var(--muted)}
+@media(prefers-reduced-motion:reduce){ .wmore__btn{transition:none} }
 </style>
 </head>
 <body>
 <a class="va-skip-link" href="#app">Saltar al contenido</a>
-<h2 class="sr-only">Lecciones gratis de Vesper Academy: lee la explicacion, resuelve los ejercicios y manten tu racha diaria.</h2>
-<main id="app" aria-live="polite"></main>
+<p class="sr-only">Lecciones gratis de Vesper Academy: lee la explicacion, resuelve los ejercicios y manten tu racha diaria.</p>
+<!-- #app ya NO es aria-live: envolver toda la pantalla en una región viva hacía que
+     cada re-render releyera la pantalla completa. Ahora show() mueve el foco al título
+     de la pantalla nueva (eso la anuncia) y los avisos puntuales van a #sr-announce. -->
+<main id="app"></main>
+<div id="sr-announce" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
 
 <!-- Boton para descargar/instalar las lecciones como app (PWA). Solo se muestra cuando el navegador lo permite -->
 <button id="install-btn" type="button" aria-label="Instalar la app de lecciones">
@@ -1770,7 +1952,37 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
     });
   }
-  function show(html) { app.innerHTML = html; window.scrollTo(0, 0); }
+  /* ---- anuncios para lectores de pantalla ----
+     Región viva pequeña y dedicada. Se limpia antes de escribir para que dos
+     mensajes iguales seguidos ("Correcto" dos veces) sí se vuelvan a anunciar. */
+  var _srEl = null;
+  function announce(msg) {
+    if (!msg) return;
+    if (!_srEl) _srEl = document.getElementById("sr-announce");
+    if (!_srEl) return;
+    _srEl.textContent = "";
+    setTimeout(function () { if (_srEl) _srEl.textContent = msg; }, 60);
+  }
+
+  /* show(html) es el ÚNICO punto donde se escribe la pantalla.
+     Al reemplazar innerHTML el foco caía a <body>: quien usa teclado volvía al
+     principio del documento en cada paso y quien usa lector de pantalla no se
+     enteraba de que la pantalla había cambiado. Ahora movemos el foco al título
+     de la pantalla nueva, que es lo que la anuncia. */
+  function show(html) {
+    app.innerHTML = html;
+    window.scrollTo(0, 0);
+    focusScreen();
+  }
+  function focusScreen() {
+    var h = app.querySelector("h1, h2, [data-screen-title]");
+    if (!h) h = app.querySelector(".card, .wrap") || app;
+    try {
+      if (!h.hasAttribute("tabindex")) h.setAttribute("tabindex", "-1");
+      h.focus({ preventScroll: true });
+    } catch (e) { try { h.focus(); } catch (e2) {} }
+    window.scrollTo(0, 0);
+  }
 
   /* tipo de lección: "aprende" (enseña con secciones ricas) o "practica"
      (ejercita). Campo opcional en los datos: sin campo = práctica, así las
@@ -1814,8 +2026,13 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       + (line ? '<div class="bubble">' + esc(line) + '</div>' : '') + '</div>';
   }
   function topbar(pct) {
-    return '<div class="topbar"><a class="back" href="' + (id ? 'leccion.html' : 'index.html') + '" aria-label="Salir">&#8592;</a>'
-      + '<div class="progress"><div class="bar" style="width:' + pct + '%"></div></div></div>';
+    /* la barra era un div decorativo: sin role ni valor, quien no la ve no
+       sabía cuánto le falta. Y "Salir" no decía a dónde. */
+    var back = id ? "Salir de la lección y volver al mapa" : "Volver al inicio";
+    return '<div class="topbar"><a class="back" href="' + (id ? 'leccion.html' : 'index.html') + '" aria-label="' + back + '">&#8592;</a>'
+      + '<div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + Math.round(pct) + '"'
+      + ' aria-label="Progreso de la lección">'
+      + '<div class="bar" style="width:' + pct + '%"></div></div></div>';
   }
   /* feedbackBox(ok, explanation, wrongFallback)
      - explanation: el "por que" del ejercicio (se muestra al fallar siempre y
@@ -1951,12 +2168,12 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
   /* cada mundo (nivel) = ilustración + nombre + identidad temática (acento, atmósfera, partículas)
      + jefe (Guardián del mundo: examen mixto que abre el siguiente nivel). */
   var WORLD_THEME = {
-    A1: { file: "assets/images/lessons/theme_home.jpg",      worldName: "El Hogar",             accent:"#C07A33", accentSoft:"rgba(192,122,51,.15)", glow:"rgba(192,122,51,.40)", ambientName:"hearth",    ambientN:7,  mapN:3, boss:{ name:"El Centinela del Hogar",  pass:85 }, biome:["cottage","bush","lantern","pine","bush"] },
-    A2: { file: "assets/images/lessons/theme_nature.jpg",    worldName: "El Sendero",           accent:"#5E8A4E", accentSoft:"rgba(94,138,78,.15)",  glow:"rgba(94,138,78,.38)",  ambientName:"trail",     ambientN:7,  mapN:4, boss:{ name:"El Guardián del Sendero", pass:85 }, biome:["pine","pine","bush","mushroom","fern"] },
-    B1: { file: "assets/images/lessons/theme_city.jpg",      worldName: "El Horizonte",         accent:"#3D86B0", accentSoft:"rgba(61,134,176,.15)", glow:"rgba(61,134,176,.34)", ambientName:"skyline",   ambientN:9,  mapN:3, boss:{ name:"El Vigía del Horizonte",  pass:85 }, biome:["building","building","lamp","tower","rock"] },
-    B2: { file: "assets/images/lessons/theme_business.jpg",  worldName: "La Torre",             accent:"#A8762E", accentSoft:"rgba(168,118,46,.15)", glow:"rgba(168,118,46,.42)", ambientName:"ascent",    ambientN:6,  mapN:3, boss:{ name:"El Heraldo de la Torre",  pass:88 }, biome:["crag","rock","crag","banner","pine"] },
-    C1: { file: "assets/images/lessons/theme_space.jpg",     worldName: "El Firmamento",        accent:"#6A5FA8", accentSoft:"rgba(106,95,168,.16)", glow:"rgba(106,95,168,.40)", ambientName:"starfield", ambientN:10, mapN:6, boss:{ name:"El Custodio del Firmamento", pass:90 }, biome:["star4","planet","crystal","star4"] },
-    C2: { file: "assets/images/lessons/theme_fantasy.jpg",   worldName: "El Castillo del Saber",accent:"#3FA08A", accentSoft:"rgba(63,160,138,.16)", glow:"rgba(63,160,138,.36)", ambientName:"aurora",    ambientN:7,  mapN:2, boss:{ name:"El Soberano del Saber",   pass:92 }, biome:["spire","banner","crystal","pine"] }
+    A1: { file: "assets/images/lessons/theme_home.jpg",      worldName: "El Hogar",             accent:"#C07A33", accentInk:"#8f5722", accentSoft:"rgba(192,122,51,.15)", glow:"rgba(192,122,51,.40)", ambientName:"hearth",    ambientN:7,  mapN:3, boss:{ name:"El Centinela del Hogar",  pass:85 }, biome:["cottage","bush","lantern","pine","bush"] },
+    A2: { file: "assets/images/lessons/theme_nature.jpg",    worldName: "El Sendero",           accent:"#5E8A4E", accentInk:"#3f6234", accentSoft:"rgba(94,138,78,.15)",  glow:"rgba(94,138,78,.38)",  ambientName:"trail",     ambientN:7,  mapN:4, boss:{ name:"El Guardián del Sendero", pass:85 }, biome:["pine","pine","bush","mushroom","fern"] },
+    B1: { file: "assets/images/lessons/theme_city.jpg",      worldName: "El Horizonte",         accent:"#3D86B0", accentInk:"#2b607f", accentSoft:"rgba(61,134,176,.15)", glow:"rgba(61,134,176,.34)", ambientName:"skyline",   ambientN:9,  mapN:3, boss:{ name:"El Vigía del Horizonte",  pass:85 }, biome:["building","building","lamp","tower","rock"] },
+    B2: { file: "assets/images/lessons/theme_business.jpg",  worldName: "La Torre",             accent:"#A8762E", accentInk:"#7a5520", accentSoft:"rgba(168,118,46,.15)", glow:"rgba(168,118,46,.42)", ambientName:"ascent",    ambientN:6,  mapN:3, boss:{ name:"El Heraldo de la Torre",  pass:88 }, biome:["crag","rock","crag","banner","pine"] },
+    C1: { file: "assets/images/lessons/theme_space.jpg",     worldName: "El Firmamento",        accent:"#6A5FA8", accentInk:"#4c4383", accentSoft:"rgba(106,95,168,.16)", glow:"rgba(106,95,168,.40)", ambientName:"starfield", ambientN:10, mapN:6, boss:{ name:"El Custodio del Firmamento", pass:90 }, biome:["star4","planet","crystal","star4"] },
+    C2: { file: "assets/images/lessons/theme_fantasy.jpg",   worldName: "El Castillo del Saber",accent:"#3FA08A", accentInk:"#2b7061", accentSoft:"rgba(63,160,138,.16)", glow:"rgba(63,160,138,.36)", ambientName:"aurora",    ambientN:7,  mapN:2, boss:{ name:"El Soberano del Saber",   pass:92 }, biome:["spire","banner","crystal","pine"] }
   };
   var WORLD_TAG = { A1: "Principiante", A2: "Básico", B1: "Intermedio", B2: "Intermedio alto", C1: "Avanzado", C2: "Maestría" };
   /* nombre corto de mundo para la cinta selectora (C2 abreviado para no desbordar) */
@@ -2146,7 +2363,10 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     return '<img class="boss-photo" src="' + src + '" alt="" loading="lazy" decoding="async" onerror="window.__vbossFallback(this,\'' + lv + '\')">';
   }
   /* style inline con las 3 variables del mundo (acento/soft/glow) */
-  function worldVars(t) { return '--w-accent:' + t.accent + ';--w-accent-soft:' + t.accentSoft + ';--w-glow:' + t.glow; }
+  /* accentInk = variante oscura del acento, legible como TEXTO o como fondo
+     de chip con texto blanco (>=5.5:1). El acento normal solo vale para
+     trazos, glows y superficies grandes. */
+  function worldVars(t) { return '--w-accent:' + t.accent + ';--w-accent-soft:' + t.accentSoft + ';--w-glow:' + t.glow + ';--w-accent-ink:' + (t.accentInk || t.accent) + ';'; }
   /* capa ambiental reutilizable (N partículas <i>); mapMod=true para la del mapa */
   function ambLayer(n, mapMod) { var dots = ""; for (var i = 0; i < n; i++) dots += "<i></i>"; return '<div class="wamb' + (mapMod ? ' wamb--map' : '') + '" aria-hidden="true">' + dots + '</div>'; }
 
@@ -2477,7 +2697,14 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
   function worldsRibbon(built, selLevel) {
     var lockSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="10.7" width="14" height="9" rx="2.2"/><path d="M8 10.7V7.7a4 4 0 0 1 8 0v3"/></svg>';
     var chkSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.6l4.6 4.6L19 7.4"/></svg>';
-    var html = PATH.LEVELS.map(function (lv) {
+    /* Quien empieza veía SEIS mundos de los que CINCO decían "Bloqueado",
+       antes siquiera de ver algo que pudiera tocar. Por defecto mostramos
+       sólo los mundos a los que ya puede entrar; el resto, tras un botón. */
+    var levels = PATH.LEVELS.filter(function (lv) {
+      return _worldsExpanded || PATH.regionUnlocked(lv, built) || lv === selLevel;
+    });
+    _worldsLockedN = PATH.LEVELS.length - levels.length;
+    var html = levels.map(function (lv) {
       var pr = PATH.levelProgress(lv, built), t = WORLD_THEME[lv] || {};
       var nm = WORLD_SHORT[lv] || t.worldName || lv, tag = WORLD_TAG[lv] || "";
       var done = pr.done, total = pr.total, pct = pr.pct, complete = total > 0 && done >= total;
@@ -2514,18 +2741,27 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
   function worldsSection(built, selLevel) {
     var totalDone = Object.keys(built.completed || {}).length;
     var totalAll = (built.order || []).length;
+    var ribbon = worldsRibbon(built, selLevel);   /* fija _worldsLockedN */
+    var moreWorlds = (_worldsLockedN > 0)
+      ? '<button class="worlds-more" type="button" id="worldsMore" aria-expanded="false">'
+        + 'Ver los ' + _worldsLockedN + ' mundos que faltan</button>'
+      : "";
     return '<section class="worlds-sec" aria-label="Selección de mundo">'
       + '<div class="worlds-sec__head"><div>'
-      + '<h2 class="worlds-sec__ttl">Elige tu mundo</h2>'
-      + '<p class="worlds-sec__sub">Tu travesía de A1 a C2</p></div>'
+      + '<h2 class="worlds-sec__ttl">Tu travesía</h2>'
+      + '<p class="worlds-sec__sub">Seis mundos, de principiante a maestría</p></div>'
       + '<span class="worlds-sec__meta"><span class="worlds-sec__big">' + totalDone + '</span>'
       + '<span class="worlds-sec__small">/ ' + totalAll + ' lecciones</span></span></div>'
-      + worldsRibbon(built, selLevel) + '</section>';
+      + ribbon + moreWorlds + '</section>';
   }
 
   /* mapa: id de lección -> índice de parada en el render actual (para animar al avatar);
      AVATAR_LESSON = id de la lección donde descansa el gato (o "boss:NIVEL" si el mundo está listo). */
   var TRAIL_STOPS = {}, _indexFirst = true, AVATAR_LESSON = null;
+  /* ¿el sendero muestra el mundo entero o sólo hasta donde llega la persona? */
+  var _mapExpanded = false;
+  /* ¿la cinta muestra los seis mundos o sólo los alcanzables? */
+  var _worldsExpanded = false, _worldsLockedN = 0;
 
   function nodeHtml(lid, built, currentId, dx, stop) {
     var l = L[lid]; if (!l) return "";
@@ -2614,16 +2850,41 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       var ids = g.bySkill[sk]; if (!ids) return;
       ids.forEach(function (id) { if (!localCurId && PATH.status(id, built) === "open") localCurId = id; });
     });
+    /* ---- pliegue del sendero ----------------------------------------
+       Un mundo trae hasta 47 lecciones y para quien empieza 42 están
+       bloqueadas: el mapa medía 7.300px y la única lección jugable caía
+       fuera de pantalla. Por defecto dibujamos sólo hasta el grupo de
+       destreza donde está la persona; el resto se ofrece con un botón.
+
+       Se pliega ANTES de generar, no con CSS: paintTrail() mide el rect
+       de cada [data-stop] y data-cur es un índice dentro de esa lista,
+       así que ocultar nodos ya renderizados descuadraría sendero y gato.
+       Al generar menos paradas, si/curStop/TRAIL_STOPS siguen cuadrando. */
+    /* Dentro de cada destreza sólo dibujamos hasta un poco más allá de donde
+       llega la persona: lo alcanzado + LOOKAHEAD candados como zanahoria. Una
+       destreza totalmente bloqueada no se dibuja. Así el sendero pasa de 47
+       paradas a ~15 sin dejar de ser continuo. */
+    var LOOKAHEAD = 2, hiddenN = 0;
     var si = 0, curStop = -1, parts = "";
     TRAIL_STOPS = {};
     PATH.SKILL_ORDER.forEach(function (sk) {
       var ids = g.bySkill[sk]; if (!ids || !ids.length) return;
       var meta = PATH.SKILLS[sk];
       var doneN = ids.filter(function (id) { return built.completed[id]; }).length;
+
+      var vis = ids;
+      if (!_mapExpanded) {
+        var lastReach = -1, k;
+        for (k = 0; k < ids.length; k++) if (PATH.status(ids[k], built) !== "locked") lastReach = k;
+        if (lastReach < 0) { hiddenN += ids.length; return; }   /* destreza aún fuera de alcance */
+        vis = ids.slice(0, Math.min(ids.length, lastReach + 1 + LOOKAHEAD));
+        hiddenN += ids.length - vis.length;
+      }
+
       parts += '<div class="wcheck" role="separator" aria-label="' + esc(meta.label) + ', ' + doneN + ' de ' + ids.length + ' completadas">'
         + '<span class="ck-ic" aria-hidden="true">' + (SKILL_ICONS[sk] || "") + '</span>' + esc(meta.label)
         + '<span class="ct">' + doneN + '/' + ids.length + '</span></div>';
-      ids.forEach(function (id) {
+      vis.forEach(function (id) {
         if (id === localCurId) curStop = si;
         TRAIL_STOPS[id] = si;
         parts += nodeHtml(id, built, localCurId, dxFor(si), si); si++;
@@ -2651,7 +2912,13 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       + '<span class="wacc">' + currentAccessorySvg() + '</span></div>'
       + ambLayer(t.mapN || 3, true) + startPennant + parts
       + '</div></div></div>';
-    return banner + denEntryHtml(selLevel) + scene;
+    /* el botón vive FUERA de .wmap: no lleva data-stop y no entra en la medición */
+    var moreBtn = hiddenN > 0
+      ? '<div class="wmore"><button class="wmore__btn" type="button" id="mapMore">'
+        + 'Ver las ' + hiddenN + ' lecciones restantes de este mundo'
+        + '<span class="wmore__sub">Se desbloquean conforme avanzas</span></button></div>'
+      : "";
+    return banner + denEntryHtml(selLevel) + scene + moreBtn;
   }
 
   /* ============================================================
@@ -3325,6 +3592,81 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     each("[data-exam]", function (b) { b.onclick = function () { location.search = "?id=exam:" + encodeURIComponent(b.getAttribute("data-exam")); }; });
   }
 
+  /* ---- ¿qué sigue? ------------------------------------------------
+     Antes el hub abría con un saludo, tres ceros, un anuncio y seis
+     mundos de los que cinco decían "Bloqueado"; la única lección que
+     se podía tocar quedaba a 1.068px de scroll, fuera de pantalla.
+     nextUp() resuelve la siguiente acción real y nextStepCard() la
+     pone arriba del todo, que es la respuesta a "¿y ahora qué hago?". */
+  function nextUp(built, selLevel) {
+    var g = built.levels[selLevel];
+    if (!g || !g.total) return null;
+    var found = null;
+    PATH.SKILL_ORDER.forEach(function (sk) {
+      var ids = g.bySkill[sk]; if (!ids || found) return;
+      ids.forEach(function (id) {
+        if (found) return;
+        if (PATH.status(id, built) === "open") found = { id: id, skill: sk };
+      });
+    });
+    if (found) {
+      var l = L[found.id] || {};
+      return {
+        id: found.id,
+        title: l.title || found.id,
+        n: l.exercises ? l.exercises.length : 0,
+        xp: l.xpReward || 0,
+        tipo: tipoOf(l),
+        skill: (PATH.SKILLS[found.skill] || {}).label || "",
+        isBoss: false,
+        fresh: !Object.keys(built.completed || {}).length
+      };
+    }
+    /* mundo terminado: lo que sigue es el Guardián */
+    var bm = bossMeta(selLevel);
+    return { id: "boss:" + selLevel, title: bm.name, n: 0, xp: 0, tipo: "practica", skill: "", isBoss: true, pass: bm.pass, fresh: false };
+  }
+
+  function nextStepCard(built, selLevel) {
+    var nx = nextUp(built, selLevel);
+    if (!nx) return "";
+    var t = WORLD_THEME[selLevel] || {};
+    var verb = nx.isBoss ? "Enfrentar al Guardián" : (nx.fresh ? "Empezar" : "Continuar");
+    var eyebrow = nx.fresh ? "Tu primera lección" : (nx.isBoss ? "Prueba final del mundo" : "Continúa donde te quedaste");
+    var meta = nx.isBoss
+      ? 'Necesitas ' + nx.pass + '% para vencerlo'
+      : (nx.n + ' ejercicio' + (nx.n === 1 ? "" : "s") + ' &middot; unos ' + Math.max(2, Math.round(nx.n * 0.7)) + ' min &middot; +' + nx.xp + ' XP');
+    return '<section class="nextstep" style="' + worldVars(t) + '" aria-labelledby="nextstep-t">'
+      + '<span class="nextstep__ey">' + esc(eyebrow) + '</span>'
+      + '<h2 class="nextstep__t" id="nextstep-t">' + esc(nx.title) + '</h2>'
+      + '<p class="nextstep__meta">' + (nx.skill ? '<span class="nextstep__sk">' + esc(nx.skill) + '</span>' : "") + meta + '</p>'
+      + '<button class="nextstep__go" type="button" data-go="' + esc(nx.id) + '">' + verb
+      + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13"/><path d="m12 5 7 7-7 7"/></svg></button>'
+      + '</section>';
+  }
+
+  /* ---- primera visita: traducir el mundo temático ------------------
+     El hub habla de mundos, guardianes, senderos, rachas y XP sin
+     explicar ninguno. Para quien llega nuevo eso es ruido, no tema.
+     Se muestra una vez y se puede cerrar. */
+  var PRIMER_KEY = "vesper_leccion_primer";
+  function primerSeen() {
+    try { return localStorage.getItem(PRIMER_KEY) === "1"; } catch (e) { return true; }
+  }
+  function primerHtml() {
+    if (primerSeen()) return "";
+    return '<section class="primer" id="primer" aria-labelledby="primer-t">'
+      + '<h2 class="primer__t" id="primer-t">Cómo funciona esto</h2>'
+      + '<ul class="primer__l">'
+      + '<li><b>Mundo</b>: un nivel de inglés. Empiezas en El Hogar (lo más básico) y avanzas hasta El Castillo.</li>'
+      + '<li><b>Sendero</b>: el camino de lecciones del mundo. Se desbloquean en orden, una tras otra.</li>'
+      + '<li><b>Guardián</b>: el examen al final de cada mundo. Pásalo y se abre el mundo siguiente.</li>'
+      + '<li><b>XP y racha</b>: puntos por lección y días seguidos practicando. Sirven para medir tu constancia.</li>'
+      + '</ul>'
+      + '<button class="primer__x" type="button" id="primerX">Entendido, empecemos</button>'
+      + '</section>';
+  }
+
   function renderIndex(selLevel) {
     clearLessonTheme();
     var st = P ? P.getState() : { streak: 0, xp: 0, shields: 0 };
@@ -3400,28 +3742,55 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       + '<span class="hc-ic" aria-hidden="true">🎓</span>'
       + '<span class="hc-tx"><b>Examen de nivel</b><span>Evalúa tu dominio de A1 a C2</span></span>'
       + '<span class="hc-cta">Presentar &rarr;</span></button>';
+    /* Orden del hub, de más a menos urgente para quien aprende:
+       1) qué hago ahora  2) repaso pendiente  3) dónde estoy (mundos)
+       4) el mapa  5) todo lo demás. El anuncio del examen de nivel baja
+       al final: es venta, no aprendizaje, y antes era lo segundo que se
+       veía al abrir la página. */
     show('<div class="wrap">'
       + hudHtml(st, dg, hello, heroInfo)
-      + placementCard("leccion-hub")
-      + worldsSection(built, selLevel)
+      + nextStepCard(built, selLevel)
+      + primerHtml()
       + srsBanner
-      + examBanner
+      + worldsSection(built, selLevel)
       + searchUI
       + '<div id="searchResults" class="search-results" aria-live="polite" hidden></div>'
       + '<div id="levelView">' + worldMap(selLevel, built) + '</div>'
       + trophyHtml
+      + examBanner
+      + placementCard("leccion-hub")
       + '<div class="hub-toast" id="toast"></div>');
 
     bindCta();
     if (_indexFirst) track("hub_view", { level: selLevel });
     var srsGo = byId("srsGo"); if (srsGo) srsGo.onclick = function () { location.search = "?id=review:srs"; };
     var examGo = byId("examGo"); if (examGo) examGo.onclick = function () { location.search = "?id=exams"; };
-    each(".world[data-lvl]", function (b) { b.onclick = function () { renderIndex(b.getAttribute("data-lvl")); }; });
+    each(".world[data-lvl]", function (b) { b.onclick = function () { _mapExpanded = false; renderIndex(b.getAttribute("data-lvl")); }; });
     each(".world[data-locked-world]", function (b) { b.onclick = function () { toast("Vence al guardián del mundo anterior para desbloquearlo"); }; });
     each(".den-enter[data-den]", function (b) { b.onclick = function () { renderDen(b.getAttribute("data-den")); }; });
     each("[data-go]", function (b) { b.onclick = function () { location.search = "?id=" + encodeURIComponent(b.getAttribute("data-go")); }; });
     each("[data-locked]", function (b) { b.onclick = function () { toast("Completa la lección anterior para desbloquear"); }; });
     each("[data-locked-boss]", function (b) { b.onclick = function () { toast("Completa todas las lecciones del mundo para enfrentar al guardián"); }; });
+    var mapMore = byId("mapMore");
+    if (mapMore) mapMore.onclick = function () {
+      _mapExpanded = true;
+      renderIndex(selLevel);
+      announce("Mostrando el mundo completo");
+    };
+    var worldsMore = byId("worldsMore");
+    if (worldsMore) worldsMore.onclick = function () {
+      _worldsExpanded = true;
+      renderIndex(selLevel);
+      announce("Mostrando los seis mundos");
+    };
+    var primerX = byId("primerX");
+    if (primerX) primerX.onclick = function () {
+      try { localStorage.setItem(PRIMER_KEY, "1"); } catch (e) {}
+      var box = byId("primer");
+      if (box) box.parentNode.removeChild(box);
+      var go = document.querySelector(".nextstep__go");
+      if (go) go.focus();
+    };
 
     /* ---- avatar: traza el sendero y decide si "camina" tras completar una lección ---- */
     (function () {
@@ -3805,19 +4174,21 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
   }
 
   function renderMCQ(ex, pct, total) {
-    var opts = ex.options.map(function (o, i) { return '<button class="opt" data-i="' + i + '">' + esc(o) + '</button>'; }).join("");
+    var opts = ex.options.map(function (o, i) {
+      return '<button class="opt" type="button" aria-pressed="false" data-i="' + i + '" lang="en">' + esc(o) + '</button>';
+    }).join("");
     show('<div class="wrap">' + exHeader(pct, total) + '<div class="card">'
-      + '<h2>' + esc(ex.question || "Elige la opcion correcta") + '</h2>'
-      + '<div class="opts">' + opts + '</div><div id="fb"></div>'
-      + '<button class="btn" id="verify" disabled>Verificar</button></div></div>');
+      + '<h2 lang="en">' + esc(ex.question || "Elige la opcion correcta") + '</h2>'
+      + '<div class="opts" role="group" aria-label="Opciones de respuesta">' + opts + '</div><div id="fb"></div>'
+      + '<button class="btn" id="verify" disabled aria-describedby="verify-hint">Verificar</button>'
+      + '<span class="sr-only" id="verify-hint">Elige una opción para poder verificar.</span></div></div>');
     var sel = -1, done = false;
     var optEls = document.querySelectorAll(".opt");
     each(".opt", function (b) {
       b.onclick = function () {
         if (done) return;
         sel = +b.getAttribute("data-i");
-        for (var x = 0; x < optEls.length; x++) optEls[x].classList.remove("sel");
-        b.classList.add("sel");
+        pickOne(optEls, b);
         byId("verify").disabled = false;
       };
     });
@@ -3825,14 +4196,12 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       if (done) { advance(); return; }
       done = true;
       var ok = sel === ex.correctIndex;
-      for (var x = 0; x < optEls.length; x++) {
-        var i = +optEls[x].getAttribute("data-i");
-        optEls[x].classList.add("locked");
-        if (i === ex.correctIndex) optEls[x].classList.add("correct");
-        if (i === sel && !ok) optEls[x].classList.add("wrong");
-      }
+      lockChoices(optEls,
+        function (el) { return +el.getAttribute("data-i") === ex.correctIndex; },
+        function (el) { return +el.getAttribute("data-i") === sel; });
       results[exIdx] = ok;
       byId("fb").innerHTML = feedbackBox(ok, ex.explanation || "", "Era: " + ex.options[ex.correctIndex]);
+      announceResult(ok, ok ? "" : "La respuesta era " + ex.options[ex.correctIndex]);
       setVerifyNext(this, total);
     };
   }
@@ -3994,6 +4363,44 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     btn.textContent = (exIdx + 1 < total) ? "Siguiente" : "Ver resultados";
   }
 
+  /* ============================================================
+     SEMÁNTICA COMPARTIDA DE LOS EJERCICIOS
+
+     Las opciones eran <button class="opt"> cuyo único estado era una
+     clase CSS: quien usa lector de pantalla no oía que había elegido
+     una opción, ni cuál era la correcta al verificar — el resultado
+     se comunicaba SOLO por color. Estos tres helpers lo arreglan de
+     una vez para todos los renderers.
+     ============================================================ */
+
+  /* selección exclusiva dentro de un grupo (elegir != confirmar, por eso
+     aria-pressed de botón y no radio: no cambiamos el modelo de teclado) */
+  function pickOne(els, chosen) {
+    for (var i = 0; i < els.length; i++) {
+      var on = els[i] === chosen;
+      els[i].classList.toggle("sel", on);
+      els[i].setAttribute("aria-pressed", on ? "true" : "false");
+    }
+  }
+
+  /* tras verificar: congela el grupo y dice en palabras qué fue cada opción */
+  function lockChoices(els, isCorrectFn, isChosenFn) {
+    for (var i = 0; i < els.length; i++) {
+      var el = els[i], good = isCorrectFn(el, i), mine = isChosenFn(el, i);
+      el.classList.add("locked");
+      el.setAttribute("aria-disabled", "true");
+      if (good) el.classList.add("correct");
+      if (mine && !good) el.classList.add("wrong");
+      var tag = good ? "Respuesta correcta" : (mine ? "Tu respuesta, incorrecta" : null);
+      if (tag) el.insertAdjacentHTML("beforeend", '<span class="sr-only"> (' + tag + ')</span>');
+    }
+  }
+
+  /* el veredicto, dicho en voz alta para quien no ve el color */
+  function announceResult(ok, detail) {
+    announce((ok ? "Correcto. " : "Incorrecto. ") + (detail || ""));
+  }
+
   /* ---------- SPEAKING (reconocimiento de voz) ----------
      ex: { text: "frase en inglés a decir", es: "traducción/pista", audio?: "ruta.mp3" }
      Usa Web Speech API (SpeechRecognition). Si no hay soporte, degrada a
@@ -4086,30 +4493,32 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
   function renderTrueFalse(ex, pct, total) {
     show('<div class="wrap">' + exHeader(pct, total) + '<div class="card">'
       + '<h2>Verdadero o falso?</h2>'
-      + '<div class="statement">' + esc(ex.statement) + '</div>'
-      + '<div class="tf-row"><button class="tf-btn" data-v="1">Verdadero</button><button class="tf-btn" data-v="0">Falso</button></div>'
-      + '<div id="fb"></div><button class="btn" id="verify" disabled>Verificar</button></div></div>');
+      + '<div class="statement" lang="en">' + esc(ex.statement) + '</div>'
+      + '<div class="tf-row" role="group" aria-label="Verdadero o falso">'
+      + '<button class="tf-btn" type="button" aria-pressed="false" data-v="1">Verdadero</button>'
+      + '<button class="tf-btn" type="button" aria-pressed="false" data-v="0">Falso</button></div>'
+      + '<div id="fb"></div><button class="btn" id="verify" disabled aria-describedby="verify-hint">Verificar</button>'
+      + '<span class="sr-only" id="verify-hint">Elige verdadero o falso para poder verificar.</span></div></div>');
     var sel = -1, done = false;
     var btns = document.querySelectorAll(".tf-btn");
     each(".tf-btn", function (b) {
       b.onclick = function () {
         if (done) return;
         sel = +b.getAttribute("data-v");
-        for (var x = 0; x < btns.length; x++) btns[x].classList.remove("sel");
-        b.classList.add("sel"); byId("verify").disabled = false;
+        pickOne(btns, b);
+        byId("verify").disabled = false;
       };
     });
     byId("verify").onclick = function () {
       if (done) { advance(); return; }
       done = true;
       var ok = (sel === 1) === (!!ex.answer);
-      for (var x = 0; x < btns.length; x++) {
-        var v = +btns[x].getAttribute("data-v"); btns[x].classList.add("locked");
-        if ((v === 1) === (!!ex.answer)) btns[x].classList.add("correct");
-        if (v === sel && !ok) btns[x].classList.add("wrong");
-      }
+      lockChoices(btns,
+        function (el) { return (+el.getAttribute("data-v") === 1) === (!!ex.answer); },
+        function (el) { return +el.getAttribute("data-v") === sel; });
       results[exIdx] = ok;
       byId("fb").innerHTML = feedbackBox(ok, ex.explanation || "", "Respuesta: " + (ex.answer ? "Verdadero" : "Falso"));
+      announceResult(ok, ok ? "" : "Era " + (ex.answer ? "verdadero" : "falso"));
       setVerifyNext(this, total);
     };
   }
