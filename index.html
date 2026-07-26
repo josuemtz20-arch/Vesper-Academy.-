@@ -545,6 +545,22 @@ section{padding:var(--s-section) 0;}
 }
 .med-face.on{opacity:1;}
 
+/* Movimiento generado. El bucle se hizo con Higgsfield partiendo de un
+   fotograma que YA traía pintado el fondo del medallón, así que el vídeo
+   llena el círculo entero y no hay costura donde su fondo se encuentre con
+   el del marco: por eso no necesita canal alfa. Va encima del retrato fijo
+   y sube de opacidad sólo cuando puede reproducirse, así el still de debajo
+   nunca deja ver un cuadro negro mientras carga. */
+.med-motion{
+  position:absolute;inset:0;z-index:2;width:100%;height:100%;
+  object-fit:cover;display:block;pointer-events:none;
+  opacity:0;transition:opacity .55s var(--ease-std);
+}
+.medallion.motion-on .med-motion{opacity:1;}
+/* Con el vídeo en marcha, el párpado dibujado en CSS sobra: si no, se
+   sumarían dos parpadeos distintos y desacompasados. */
+.medallion.motion-on .med-lid{animation:none !important;transform:scaleY(0) !important;}
+
 /* Parpadeo. La imagen es plana y no tiene capa de ojos, así que el
    párpado se DIBUJA encima: una elipse del color del pelaje, plegada a
    scaleY(0) y desplegada 90 ms. Las coordenadas están calibradas sobre
@@ -1089,6 +1105,9 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
     clip-path:none !important;animation:none !important;
   }
   .med-bust,.med-face,.plate-seal,.seal-say,.med-strip button,.med-strip button img{transition:none !important;}
+  /* El vídeo ni siquiera se descarga con movimiento reducido (lo decide el
+     JS), pero si ya estaba montado cuando cambió la preferencia, se esconde. */
+  .med-motion{display:none !important;}
   .medallion:hover .med-bust,.plate-seal:focus-visible .med-bust{--bt:0deg;--bz:1.15;}
 }
 @media print{
@@ -1097,7 +1116,7 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
   html.js-anim .vesper-stage.in-view .med-halo,html.js-anim .vesper-stage.in-view .med-fillet{
     opacity:1 !important;transform:none !important;animation:none !important;}
   html.js-anim .vesper-stage .med-glass{clip-path:none !important;animation:none !important;}
-  .med-spark,.med-glint,.med-lid,.seal-say{display:none !important;}
+  .med-spark,.med-glint,.med-lid,.seal-say,.med-motion{display:none !important;}
 }
 </style>
 <script src="vesper_prefs.js"></script>
@@ -2062,6 +2081,62 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
       return pool[i];
     }
 
+    /* ---- Movimiento generado ------------------------------------
+       El bucle de 4 s (2,5 s quieto + un parpadeo lento) sale de un
+       image-to-video hecho con Higgsfield sobre un fotograma que ya traía
+       el fondo del medallón pintado. Se monta desde JS y NO desde el HTML
+       a propósito: así quien pide menos movimiento, o navega con ahorro de
+       datos, no descarga ni un byte de vídeo. Si algo falla —códec, red,
+       autoplay bloqueado— simplemente se queda el retrato fijo, que es
+       exactamente lo que había antes. */
+    var VID = {webm:'assets/video/vesper_idle.webm', mp4:'assets/video/vesper_idle.mp4'};
+    var conn = navigator.connection || navigator.webkitConnection || {};
+    var hayMovimiento = !vReduce && !conn.saveData;
+
+    function montarMovimiento(med){
+      if (!med) return null;
+      var ya = med.querySelector('.med-motion');
+      if (ya || !hayMovimiento) return ya;
+      var glass = med.querySelector('.med-glass');
+      if (!glass) return null;
+      var v = document.createElement('video');
+      v.className = 'med-motion';
+      v.muted = true; v.loop = true; v.playsInline = true; v.preload = 'auto';
+      /* Los atributos van también en el DOM: iOS exige muted+playsinline
+         puestos en el elemento para dejar reproducir sin gesto del usuario. */
+      v.setAttribute('muted',''); v.setAttribute('playsinline','');
+      v.setAttribute('loop',''); v.setAttribute('aria-hidden','true');
+      [['webm','video/webm'],['mp4','video/mp4']].forEach(function(p){
+        var s = document.createElement('source');
+        s.src = VID[p[0]]; s.type = p[1]; v.appendChild(s);
+      });
+      v.addEventListener('canplay', function(){
+        med.dataset.motion = 'listo';
+        /* Sólo se enciende si el retrato en descanso es el que está puesto:
+           si el visitante ya eligió otro gesto en la tira, no se lo pisamos. */
+        if (med.getAttribute('data-state') === 'welcome'){
+          med.classList.add('motion-on');
+          var p = v.play(); if (p && p.catch) p.catch(function(){});
+        }
+      }, {once:true});
+      v.addEventListener('error', function(){
+        med.classList.remove('motion-on'); med.dataset.motion = 'no';
+      }, {once:true});
+      glass.appendChild(v);
+      return v;
+    }
+
+    /* El sello del hero está sobre el pliegue, así que su vídeo se monta
+       DESPUÉS de load y en tiempo muerto: el LCP sigue siendo el grabado. */
+    var sealMed = document.querySelector('.plate-seal .medallion');
+    if (sealMed && hayMovimiento){
+      window.addEventListener('load', function(){
+        var go = function(){ montarMovimiento(sealMed); };
+        if (window.requestIdleCallback) requestIdleCallback(go, {timeout:2500});
+        else setTimeout(go, 1200);
+      }, {once:true});
+    }
+
     var full = document.querySelector('.vesper-stage');
     if (full){
       var med   = full.querySelector('.medallion'),
@@ -2074,6 +2149,17 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
         for (var j=0;j<botes.length;j++) botes[j].setAttribute('aria-pressed', String(botes[j].dataset.face === cara));
         med.setAttribute('data-state', cara);
         if (burb) burb.textContent = frase(cara);
+        /* El vídeo es el estado en descanso. Al elegir otro gesto se
+           desvanece y deja ver el retrato fijo de debajo; al volver a
+           «welcome», reaparece. Se pausa lo que no se ve: no tiene sentido
+           decodificar fotogramas detrás de una imagen opaca. */
+        var v = med.querySelector('.med-motion');
+        if (v && med.dataset.motion === 'listo'){
+          var enDescanso = (cara === 'welcome');
+          med.classList.toggle('motion-on', enDescanso);
+          if (enDescanso){ var p = v.play(); if (p && p.catch) p.catch(function(){}); }
+          else v.pause();
+        }
       };
 
       for (var b=0;b<botes.length;b++){
@@ -2090,6 +2176,28 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
       };
       full.addEventListener('pointerenter', calentar, {passive:true, once:true});
       full.addEventListener('focusin', calentar, {once:true});
+
+      /* El retrato grande monta su vídeo cuando la sección entra en pantalla
+         —está muy por debajo del pliegue— y lo pausa al salir. Si el sello
+         del hero ya lo bajó, es el mismo archivo y sale de la caché. */
+      if (hayMovimiento && 'IntersectionObserver' in window){
+        var vio = new IntersectionObserver(function(en){
+          var visible = en[0].isIntersecting;
+          var v = montarMovimiento(med);
+          if (!v || med.dataset.motion !== 'listo') return;
+          if (visible && med.getAttribute('data-state') === 'welcome'){
+            var p = v.play(); if (p && p.catch) p.catch(function(){});
+          } else if (!visible) v.pause();
+        }, {threshold:.2});
+        vio.observe(full);
+      }
+      /* Con la pestaña de fondo no se decodifica nada. */
+      document.addEventListener('visibilitychange', function(){
+        var v = med.querySelector('.med-motion');
+        if (!v || med.dataset.motion !== 'listo') return;
+        if (document.hidden) v.pause();
+        else if (med.classList.contains('motion-on')){ var p = v.play(); if (p && p.catch) p.catch(function(){}); }
+      });
 
       /* Confeti al clic sobre el retrato. El sprite #i-star ya existe, así
          que no hay arte nuevo que cargar. */

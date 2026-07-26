@@ -114,6 +114,15 @@ self.addEventListener("fetch", function (event) {
   if (url.origin !== self.location.origin) return;
   if (/firebase|firestore|googleapis|gstatic/.test(url.href)) return;
 
+  /* El vídeo va SIEMPRE por red, sin pasar por aquí. <video> pide rangos y
+     eso rompe este handler por los dos lados: cache.put() lanza con una
+     respuesta 206 (la Cache API no admite parciales) y devolver un 200
+     entero a una petición Range deja a Safari sin reproducir. La portada no
+     registra el SW, pero leccion.html sí lo hace en el ámbito raíz, así que
+     el alumno que ya usó la app vuelve a la portada con el SW mandando. */
+  if (req.destination === "video" || req.headers.has("range") ||
+      /\.(mp4|webm|m4v|mov)$/i.test(url.pathname)) return;
+
   /* Navegaciones (abrir la app): red primero, cae al cache. */
   if (req.mode === "navigate") {
     event.respondWith(
