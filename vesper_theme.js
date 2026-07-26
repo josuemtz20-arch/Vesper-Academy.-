@@ -170,16 +170,43 @@ window.VESPER_THEME = (function () {
      "Clasico Oro" (o cualquier otro) lo conserva. */
   var DEFAULT_THEME = "vespertina";
 
+  /* ---- Migración de una sola vez al estrenar "vespertina" ----
+     El problema: `theme:"classic"` guardado NO prueba que alguien eligiera
+     "Clasico Oro". read() no persiste nunca, pero setSkin/setAccessory/setPelaje
+     hacen write(read()), o sea que quien sólo cambió el PELAJE de su gato se
+     llevó `theme:"classic"` de propina, sin haber tocado el selector de temas.
+     Esos son los que hay que mover: para ellos "classic" era el predeterminado
+     viejo, no una preferencia.
+     Regla, deliberadamente estrecha:
+       · sin marca de migración Y theme === "classic"  -> pasa a vespertina
+       · cualquier otro tema guardado (medianoche, marfil, oceano…) -> intacto,
+         eso sí fue una elección explícita
+     Se estampa `v` para que no vuelva a correr, así que quien reelija "Clasico
+     Oro" después de esto lo conserva para siempre. */
+  var STATE_V = 2;
+
+  function migrate(s) {
+    if (!s || s.v >= STATE_V) return s;
+    if (s.theme === "classic") s.theme = DEFAULT_THEME;
+    s.v = STATE_V;
+    try { localStorage.setItem(STORE, JSON.stringify(s)); } catch (e) {}
+    return s;
+  }
+
   function read() {
     try {
-      var s = JSON.parse(localStorage.getItem(STORE) || "{}");
+      var raw = localStorage.getItem(STORE);
+      var s = JSON.parse(raw || "{}");
+      /* Sólo migramos si ya HABÍA algo guardado: sin nada, el default ya manda. */
+      if (raw) s = migrate(s);
       return {
         theme: THEMES[s.theme] ? s.theme : DEFAULT_THEME,
         skin: SKINS[s.skin] ? s.skin : "gold",
         accessory: ACCESSORIES[s.accessory] ? s.accessory : "none",
-        pelaje: PELAJES[s.pelaje] ? s.pelaje : "classic"
+        pelaje: PELAJES[s.pelaje] ? s.pelaje : "classic",
+        v: STATE_V
       };
-    } catch (e) { return { theme: DEFAULT_THEME, skin: "gold", accessory: "none", pelaje: "classic" }; }
+    } catch (e) { return { theme: DEFAULT_THEME, skin: "gold", accessory: "none", pelaje: "classic", v: STATE_V }; }
   }
   function write(state) { try { localStorage.setItem(STORE, JSON.stringify(state)); } catch (e) {} }
 

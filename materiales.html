@@ -390,6 +390,79 @@ footer a:hover{color:var(--gold);text-decoration:underline;}
   html.js-anim .reveal,html.js-anim .reveal.in-view{opacity:1 !important;transform:none !important;}
   #vtour,.vtour-card{animation:none !important;}
 }
+
+/* ============================================================
+   TEMAS CLAROS: estructura propia, no la de noche.
+   ------------------------------------------------------------
+   La retícula de esta página se construye con filetes de oro en vez de cajas,
+   que es el recurso de la portada. Ese recurso DEPENDE de un suelo oscuro:
+   un filete de oro al 35 % sobre casi-negro compone un trazo bien visible
+   (2.02:1 contra la página), pero sobre crema compone un crema-dorado pálido
+   (1.28:1) y desaparece. Igual las tarjetas: blanco sobre crema da 1.06:1, o
+   sea ninguna separación de superficie.
+   Resultado medido: en claro la página perdía casi toda su estructura — el riel
+   de herramientas quedaba en cuatro etiquetas flotando y el catálogo en tarjetas
+   invisibles. Así que en claro se vuelve a lo que SÍ funciona sobre papel:
+   superficie, borde y una sombra corta.
+   Va al final de la hoja a propósito: empata en especificidad con las reglas
+   de los @media de arriba, y el orden de fuente es lo que decide.
+   ============================================================ */
+html:not(.vesper-dark){
+  /* Sobre papel el borde tiene que ser un borde, no un destello de oro. */
+  --hair:var(--va-line,#e4e0d8);
+}
+/* Tarjetas de libro: vuelven a ser tarjetas. */
+html:not(.vesper-dark) a.card{
+  border-color:var(--border);
+  box-shadow:var(--sh);
+}
+/* Herramientas: en claro NO es un riel dividido, son cuatro tarjetas. */
+html:not(.vesper-dark) .qn-grid{
+  border-top:0;
+  gap:12px;
+}
+html:not(.vesper-dark) .qn-grid > a.qn{
+  background:var(--white);
+  border:1px solid var(--border);
+  border-radius:var(--r-md);
+  box-shadow:var(--sh);
+  padding:16px 16px 14px;
+}
+html:not(.vesper-dark) .qn-grid > a.qn:hover,
+html:not(.vesper-dark) .qn-grid > a.qn:focus-visible{
+  background:var(--white);
+  border-color:var(--gold);
+  transform:translateY(-3px);
+}
+html:not(.vesper-dark) a.qn .qn-ic{
+  background:linear-gradient(135deg,var(--navy),#2c2c4a);
+  border-color:transparent;
+  color:var(--gold);
+}
+/* Una banda elevada para que la página no sea un solo campo crema plano.
+   Es el equivalente honesto de la alternancia de bandas de la portada: no
+   "claro/oscuro" sino "un escalón por encima del suelo". */
+html:not(.vesper-dark) #search{
+  background:var(--white);
+  border:1px solid var(--border);
+  border-radius:var(--r-lg);
+  box-shadow:var(--sh);
+  padding:26px clamp(18px,3vw,28px) 24px;
+  border-top:1px solid var(--border);
+}
+html:not(.vesper-dark) #q{
+  background:var(--cream);
+}
+html:not(.vesper-dark) a.res{
+  border-color:var(--border);
+  box-shadow:var(--sh);
+}
+/* La cubierta de cada grupo ya trae su propio velo oscuro, pero el bloque
+   necesita separarse del papel. */
+html:not(.vesper-dark) .grp{
+  box-shadow:var(--sh);
+}
+html:not(.vesper-dark) .vtour-back{border-color:var(--border);}
 </style>
 
 <!-- Preferencias del alumno (tamaño de texto, alto contraste, menos
