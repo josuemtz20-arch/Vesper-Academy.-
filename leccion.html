@@ -1939,6 +1939,51 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
    del navegador, y con color-scheme:dark ese gris pasó a #6b6b6b. */
 .hub-card{background:var(--paper,#fff);border:1px solid var(--line,#ece7da);color:var(--ink,#1B1B2F)}
 
+/* ============================================================
+   LA ESCENA DEL MAPA, TEMA POR TEMA
+
+   El escenario se pintaba con un navy fijo en los 8 temas, así que
+   bajo "Bosque" o "Atardecer" era un bloque azul pegado encima de
+   una página cálida, y bajo "Nebulosa" o "Medianoche" no se notaba
+   que hubieras cambiado de tema.
+
+   Peor: dos superficies usaban var(--ink) como parada de degradado,
+   y --ink es CLARO en los temas oscuros. Medido en producción con el
+   tema por defecto: el "cielo nocturno" tenía una banda de luminancia
+   0,80 (casi blanca) por el medio, y el nodo del Guardián otra igual.
+
+   La regla: la escena SIEMPRE es de noche, pero la noche la pone el
+   tema. --navy y --navy2 sirven porque el motor los deriva como
+   `t.dark ? t.paper : t.ink` y `t.dark ? t.line : "#2c2c4a"`, o sea
+   son oscuros en los ocho temas.
+   ============================================================ */
+.wsky{background:radial-gradient(120% 90% at 50% -10%,
+      var(--navy2,#2c2c4a) 0%, var(--navy,#1B1B2F) 58%, #0e0c1f 100%)}
+
+/* El velo de la isla pasa de navy a negro neutro: así el color de la
+   noche lo decide el cielo del tema y no un azul fijo por encima. */
+.wisland{background:linear-gradient(180deg,rgba(0,0,0,.22),rgba(0,0,0,.52))}
+
+/* Profundidad: resplandor del mundo en el horizonte + viñeta abajo,
+   para que el sendero se hunda en la distancia en vez de flotar. */
+.wsky::after{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(140% 55% at 50% 6%, var(--w-glow,rgba(201,168,76,.30)) 0%, transparent 60%),
+    radial-gradient(130% 75% at 50% 106%, rgba(0,0,0,.55) 0%, transparent 62%);
+}
+
+/* El Guardián y los nodos bloqueados también siguen la noche del tema */
+.wbtn.boss{background:linear-gradient(160deg,var(--navy2,#23234a),var(--navy,#1B1B2F))}
+.wbtn.locked{background:linear-gradient(150deg,var(--navy2,#2b2b44),var(--navy,#1f1f34))}
+.wisland .wcheck{background:linear-gradient(180deg,var(--navy2,#262649),var(--navy,#191930))}
+
+/* La skin elegida (Dorado/Rosa/Menta/Cielo/Violeta/Brasa) ya teñía al
+   gato con --vc-filter, pero en el mapa no se notaba. Un halo con su
+   color hace que la elección se vea también aquí. */
+.wavatar::after{content:"";position:absolute;inset:-9px;z-index:-1;border-radius:50%;pointer-events:none;
+  background:radial-gradient(closest-side,var(--vc-glow,rgba(201,168,76,.45)),transparent 72%);
+  opacity:.5}
+
 /* -- botón de "ver el resto del mundo", bajo el sendero ----- */
 .wmore{margin:-6px 0 18px;padding:0 2px}
 .wmore__btn{
@@ -2985,7 +3030,10 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     var terrain = t.file ? (";--w-terrain:url(" + t.file + ")") : "";
     var startPennant = '<div class="wstart" aria-hidden="true"><span>' + (WORLD_UMBRAL[selLevel] || ('Mundo ' + worldNo)) + '</span></div>';
     var pj = currentPelaje();
-    var scene = '<div class="wsky">'
+    /* worldVars también en .wsky: el resplandor del horizonte y el color de
+       la noche viven ahí, y .wsky es PADRE de .wisland, así que no heredaba
+       el acento del mundo (se quedaba en el oro por defecto en los 6). */
+    var scene = '<div class="wsky" style="' + worldVars(t) + '">'
       + '<div class="wisland" data-world="' + selLevel + '" style="' + worldVars(t) + terrain + '">'
       + '<div class="watmo" aria-hidden="true"></div>'
       + '<div class="wmap" id="wmap" data-world="' + selLevel + '" data-cur="' + curStop + '" style="' + worldVars(t) + '">'
