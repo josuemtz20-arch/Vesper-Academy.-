@@ -1125,6 +1125,76 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
   html.js-anim .vesper-stage .med-glass{clip-path:none !important;animation:none !important;}
   .med-spark,.med-glint,.med-lid,.seal-say,.med-motion{display:none !important;}
 }
+
+/* ============================================================
+   BUSCADOR DE CURSO + MONUMENTO TIPOGRAFICO
+   Dos piezas que la portada no tenía y que son lo mejor de la
+   referencia: el buscador pegado bajo el heroe y el monumento
+   tipografico coronando el pie. Todo lo demas queda intacto.
+   ============================================================ */
+/* padding:0 — la regla global de <section> mete 115px arriba y abajo, y esta
+   barra tiene que ser cenida: es un control, no una seccion. */
+.finder{background:var(--dusk);border-top:1px solid var(--hair);padding:0;}
+.finder form{display:grid;grid-template-columns:repeat(4,1fr) auto;align-items:stretch;}
+.finder .f{display:flex;flex-direction:column;gap:5px;padding:20px 22px;
+  border-left:1px solid rgba(197,160,89,.2);min-width:0;}
+.finder .f:first-child{border-left:0;padding-left:0;}
+.finder label{font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--star);font-weight:600;}
+.finder select{
+  border:0;background:transparent;padding:0 18px 0 0;max-width:100%;
+  font-family:var(--text);font-size:.95rem;font-weight:500;color:var(--cream);cursor:pointer;
+  text-overflow:ellipsis;appearance:none;
+  background-image:linear-gradient(45deg,transparent 50%,var(--star) 50%),
+                   linear-gradient(135deg,var(--star) 50%,transparent 50%);
+  background-position:right 4px center,right 0 center;
+  background-size:4px 4px,4px 4px;background-repeat:no-repeat;
+}
+.finder select option{background:var(--dusk);color:var(--cream);}
+.finder select:focus-visible{outline:2px solid var(--gold-lt,var(--star));outline-offset:4px;}
+.finder .go{
+  border:0;padding:0 32px;background:var(--gold);color:#241d08;cursor:pointer;
+  font-family:var(--text);font-size:.78rem;font-weight:600;letter-spacing:.16em;
+  text-transform:uppercase;transition:background .3s;
+}
+.finder .go:hover{background:var(--star);}
+@media(max-width:1000px){
+  .finder form{grid-template-columns:1fr 1fr;}
+  .finder .f{border-left:0;border-top:1px solid rgba(197,160,89,.2);padding:15px 0;}
+  .finder .f:nth-child(2),.finder .f:nth-child(4){border-left:1px solid rgba(197,160,89,.2);padding-left:20px;}
+  .finder .go{grid-column:1/-1;padding:16px;}
+}
+
+/* El monumento: el nombre a tamano brutal como corona del pie. Va
+   aria-hidden porque el nombre ya se anuncia en el pie: aqui es dibujo. */
+.monument{
+  background:linear-gradient(to bottom,var(--night),#0e0c1f);
+  padding:clamp(46px,6vw,84px) 0 0;overflow:hidden;
+}
+/* padding-bottom en em del PROPIO titular: con line-height .8 la caja mide
+   menos que la tinta y la cola de la "p" —0.252em medidos con
+   measureText, no estimados— se salia por abajo y cruzaba ACADEMY. Al ir en
+   em, la holgura escala sola con la tipografia fluida. */
+.mon-word{
+  font-family:var(--display);font-weight:700;
+  font-size:clamp(3.4rem,15.5vw,12.5rem);line-height:.8;letter-spacing:-.035em;
+  color:var(--cream);margin:0;padding-bottom:.14em;text-align:center;white-space:nowrap;
+  font-optical-sizing:auto;
+}
+/* La holgura se mide contra la TINTA, no contra la caja: con line-height .8
+   la cola de la "p" de Vesper baja 24px por debajo de la caja del parrafo y
+   se cruzaba con ACADEMY. El margen va en em del titular para que la
+   separacion aguante en cualquier tamano de la escala fluida. */
+.mon-sub{
+  text-align:center;color:var(--star);font-size:.68rem;
+  letter-spacing:.5em;text-transform:uppercase;margin:0;
+}
+.mon-word+.mon-sub{margin-top:clamp(16px,1.8vw,30px);}
+html.js-anim .monument{opacity:0;}
+html.js-anim .monument.in-view{opacity:1;animation:rise .9s var(--ease-out) both;}
+@media (prefers-reduced-motion: reduce){
+  html.js-anim .monument{opacity:1 !important;transform:none !important;animation:none !important;}
+}
 </style>
 <script src="vesper_prefs.js"></script>
 <script src="vesper_analytics.js"></script>
@@ -1260,6 +1330,53 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
       <div><b>1:1</b><small>o grupos reducidos</small></div>
       <div><b>100%</b><small>En vivo, no grabado</small></div>
     </div>
+  </div>
+</section>
+
+
+<!-- ============ BUSCADOR (injerto 66nord) ============ -->
+<section class="finder" aria-label="Encuentra tu curso">
+  <div class="container">
+    <form id="finder">
+      <div class="f">
+        <label for="f-nivel">Tu nivel</label>
+        <select id="f-nivel">
+          <option value="">No lo s&eacute; todav&iacute;a</option>
+          <option>Principiante</option>
+          <option>Inicial</option>
+          <option>B&aacute;sico</option>
+          <option>Intermedio</option>
+          <option>Avanzado</option>
+          <option>Experto</option>
+        </select>
+      </div>
+      <div class="f">
+        <label for="f-meta">Tu meta</label>
+        <select id="f-meta">
+          <option value="curso-ingles-general.html">Hablar con soltura</option>
+          <option value="curso-club-conversacion.html">Perder el miedo a conversar</option>
+          <option value="curso-ingles-corporativo.html">Usarlo en el trabajo</option>
+          <option value="curso-certificacion.html">Certificarme</option>
+        </select>
+      </div>
+      <div class="f">
+        <label for="f-modo">Modalidad</label>
+        <select id="f-modo">
+          <option value="grupal">Grupo reducido</option>
+          <option value="profesional">Clase individual</option>
+          <option value="especializados">Para mi empresa</option>
+        </select>
+      </div>
+      <div class="f">
+        <label for="f-horario">Horario</label>
+        <select id="f-horario">
+          <option>Ma&ntilde;ana</option>
+          <option>Tarde</option>
+          <option>Noche</option>
+        </select>
+      </div>
+      <button class="go" type="submit">Ver mi curso</button>
+    </form>
   </div>
 </section>
 
@@ -1768,6 +1885,13 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
 
 </main>
 
+<!-- ============ MONUMENTO (injerto 66nord) ============ -->
+<section class="monument reveal" aria-hidden="true">
+  <p class="mon-word">Vesper</p>
+  <p class="mon-sub">Academy</p>
+</section>
+
+
 <footer>
   <div class="container">
     <div class="fgrid">
@@ -2240,6 +2364,24 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
   } catch(e){
     document.documentElement.classList.remove('js-anim');
   }
+})();
+</script>
+
+<script>
+/* Injerto 66nord: el buscador. Lleva el nivel como parametro para que la
+   pagina de curso pueda recogerlo; la modalidad decide el ancla de planes. */
+(function(){
+  var f = document.getElementById('finder');
+  if (!f) return;
+  f.addEventListener('submit', function(e){
+    e.preventDefault();
+    var meta  = document.getElementById('f-meta').value || 'planes.html';
+    var nivel = document.getElementById('f-nivel').value;
+    var modo  = document.getElementById('f-modo').value;
+    var url   = meta + (nivel ? '?nivel=' + encodeURIComponent(nivel) : '');
+    if (modo) url += (nivel ? '&' : '?') + 'plan=' + encodeURIComponent(modo);
+    window.location.href = url;
+  });
 })();
 </script>
 </body>
