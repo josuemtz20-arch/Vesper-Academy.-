@@ -104,41 +104,122 @@ window.VESPER_THEME = (function () {
   var SKIN_ORDER = ["gold", "rose", "mint", "sky", "violet", "ember"];
 
   /* ---- Accesorios: vestimenta SVG superpuesta sobre el gato. Cada SVG usa
-         viewBox "0 0 50 50" alineado a un avatar de 50x50 (la cabeza queda en
-         el tercio superior-centro). Paleta de marca (oro/navy); NO se le aplica
-         el hue-rotate del color para que el accesorio conserve su tono. ---- */
-  var GOLD = "#C9A84C", NAVY = "#1B1B2F";
-  /* Coordenadas calibradas a la silueta de vesper_cat.png (box 50x50):
-     cabeza y~8-22 centro x~26; cara/ojos y~18-26; cuello y~31-33 x~25. */
+         viewBox "0 0 50 50" alineado al RETRATO de Vesper (la imagen llena el
+         cuadro), no a una silueta de cuerpo entero.
+
+         GEOMETRÍA MEDIDA sobre assets/images/mascot/vesper_cat.png (512px, se
+         divide por 10.24 para pasar al box de 50):
+           punta de oreja izq. y=7.0 · der. y=9.8 · coronilla y=13.5
+           ojo izq. centro (18.8, 23.5) · ojo der. (30.7, 24.5) · ~5 x 3.7 c/u
+           barbilla y~32 · camisa/cuello blanco y=35..46 · centro de cara x~25.5
+
+         Las coordenadas anteriores estaban calibradas a mano a otra silueta y
+         no cuadraban con este arte: el moño y la bufanda iban a y~29-37 (la
+         BARBILLA del gato, no el cuello) y la lente derecha a cx=33, 2,3
+         unidades fuera del ojo. Ahora cada pieza va sobre el rasgo medido.
+
+         Paleta de marca (oro/navy). NO reciben el hue-rotate del color del
+         skin, para que el accesorio conserve su tono.
+
+         Los degradados llevan id con sufijo propio ("vaG<acc>"): el selector
+         pinta los 8 accesorios A LA VEZ en la misma página y unos ids
+         repetidos harían que el primero se robara el relleno de los demás. */
+  var GOLD = "#C9A84C", GOLD_HI = "#EFD489", GOLD_LO = "#9A7C2E", NAVY = "#1B1B2F", NAVY_HI = "#3A3A5E";
+
+  function grad(id, x1, y1, x2, y2, stops) {
+    var s = "";
+    for (var i = 0; i < stops.length; i++) s += '<stop offset="' + stops[i][0] + '" stop-color="' + stops[i][1] + '"/>';
+    return '<linearGradient id="' + id + '" x1="' + x1 + '" y1="' + y1 + '" x2="' + x2 + '" y2="' + y2
+      + '" gradientUnits="userSpaceOnUse">' + s + '</linearGradient>';
+  }
+  /* overflow visible: el gorro de mago y la corona salen del box a propósito */
+  function accSvg(inner) {
+    return '<svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg" fill="none" style="overflow:visible">' + inner + '</svg>';
+  }
+
   var ACCESSORIES = {
     none: { name: "Sin accesorio", svg: "" },
-    bowtie: { name: "Moño", svg:
-      '<svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg"><g stroke="' + NAVY + '" stroke-width="1.4" stroke-linejoin="round">'
-      + '<path d="M26 33 L17 29 V37 Z" fill="' + GOLD + '"/><path d="M26 33 L35 29 V37 Z" fill="' + GOLD + '"/>'
-      + '<rect x="23.4" y="30.4" width="5.2" height="5.2" rx="1.3" fill="' + NAVY + '"/></g></svg>' },
-    cap: { name: "Birrete", svg:
-      '<svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg"><g stroke-linejoin="round">'
-      + '<path d="M17 13 V18 Q26 22 35 18 V13" fill="' + NAVY + '"/>'
-      + '<path d="M10 11 L26 5 L42 11 L26 17 Z" fill="' + NAVY + '"/>'
-      + '<path d="M42 11 V19" stroke="' + GOLD + '" stroke-width="1.6"/><circle cx="42" cy="20.4" r="2" fill="' + GOLD + '"/></g></svg>' },
-    glasses: { name: "Gafas", svg:
-      '<svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg"><g fill="none" stroke="' + NAVY + '" stroke-width="2.1">'
-      + '<circle cx="20.5" cy="22" r="5"/><circle cx="33" cy="22" r="5"/><path d="M25.5 22 h2.5"/>'
-      + '<path d="M15.5 21 l-3.2 -1.2"/><path d="M38 21 l3.2 -1.2"/></g></svg>' },
-    wizard: { name: "Sombrero de mago", svg:
-      '<svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg"><g stroke="' + NAVY + '" stroke-width="1.4" stroke-linejoin="round">'
-      + '<path d="M26 -5 L36 15 H16 Z" fill="#3c3a6e"/><path d="M12 15 H40 V18 H12 Z" fill="#2a2850"/>'
-      + '<path d="M26 3 l1.6 3.4 -1.6 3.4 -1.6 -3.4 z" fill="' + GOLD + '" stroke="none"/></g></svg>' },
-    scarf: { name: "Bufanda", svg:
-      '<svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg"><g stroke="' + NAVY + '" stroke-width="1.3" stroke-linejoin="round">'
-      + '<path d="M16 31 Q26 37 36 31 V35 Q26 41 16 35 Z" fill="' + GOLD + '"/>'
-      + '<path d="M30 34 L34 44 L29.5 44.6 L27.5 35 Z" fill="' + GOLD + '"/></g></svg>' },
-    halo: { name: "Aureola", svg:
-      '<svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg"><ellipse cx="26" cy="5.5" rx="11" ry="3.4" fill="none" stroke="' + GOLD + '" stroke-width="2.6"/></svg>' },
-    crown: { name: "Corona", svg:
-      '<svg viewBox="0 0 50 50" xmlns="http://www.w3.org/2000/svg"><g stroke="' + NAVY + '" stroke-width="1.5" stroke-linejoin="round">'
-      + '<path d="M14 14 L14 5 L20 9.5 L26 2 L32 9.5 L38 5 L38 14 Z" fill="' + GOLD + '"/>'
-      + '<circle cx="26" cy="2.5" r="1.7" fill="' + NAVY + '"/></g></svg>' }
+
+    /* Moño — al cuello de la camisa (y 37-45), no a la barbilla */
+    bowtie: { name: "Moño", svg: accSvg(
+      '<defs>' + grad("vaGbt", 25, 36, 25, 45, [[0, GOLD_HI], [.55, GOLD], [1, GOLD_LO]]) + '</defs>'
+      + '<g stroke="' + NAVY + '" stroke-width="1.15" stroke-linejoin="round">'
+      + '<path d="M25.4 40.6c-3.8-2.8-6.5-4-8.7-4.2-.6 2.1-.6 6.4 0 8.5 2.2-.2 4.9-1.5 8.7-4.3z" fill="url(#vaGbt)"/>'
+      + '<path d="M25.4 40.6c3.8-2.8 6.5-4 8.7-4.2.6 2.1.6 6.4 0 8.5-2.2-.2-4.9-1.5-8.7-4.3z" fill="url(#vaGbt)"/>'
+      + '<rect x="23" y="38" width="4.8" height="5.2" rx="1.5" fill="' + NAVY + '"/></g>'
+      + '<g stroke="rgba(255,255,255,.5)" stroke-width=".8" stroke-linecap="round">'
+      + '<path d="M21.6 39.2c-1.5.3-2.8.7-3.9 1.2"/><path d="M29.2 39.2c1.5.3 2.8.7 3.9 1.2"/></g>'
+      + '<path class="vacc-shine" d="M24 39.4h2.8" stroke="rgba(255,255,255,.55)" stroke-width=".9" stroke-linecap="round"/>'
+    ) },
+
+    /* Birrete — copa ceñida a la coronilla (y 13.5) + tabla y borla */
+    cap: { name: "Birrete", svg: accSvg(
+      '<defs>' + grad("vaGcpB", 26, 12, 26, 19, [[0, NAVY_HI], [1, NAVY]])
+      + grad("vaGcpT", 10, 5, 42, 17, [[0, "#4A4A78"], [.5, "#33335A"], [1, "#23233F"]])
+      + grad("vaGcpG", 26, 11, 26, 23, [[0, GOLD_HI], [1, GOLD_LO]]) + '</defs>'
+      + '<path d="M17.4 12.6v5c5.7 3.4 11.4 3.4 17.2 0v-5z" fill="url(#vaGcpB)" stroke="' + NAVY + '" stroke-width="1"/>'
+      + '<path d="M10 11.2 26 5l16 6.2L26 17.4z" fill="url(#vaGcpT)" stroke="' + NAVY + '" stroke-width="1" stroke-linejoin="round"/>'
+      + '<path d="M10 11.2 26 5l16 6.2" stroke="rgba(255,255,255,.3)" stroke-width=".85" stroke-linejoin="round"/>'
+      + '<g class="vacc-tassel">'
+      + '<path d="M41.6 11.5c.7 3.5.3 6.4-1.2 8.7" stroke="url(#vaGcpG)" stroke-width="1.5" stroke-linecap="round"/>'
+      + '<circle cx="40.2" cy="21.4" r="2.1" fill="url(#vaGcpG)" stroke="' + GOLD_LO + '" stroke-width=".55"/></g>'
+    ) },
+
+    /* Gafas — lentes centradas en los ojos MEDIDOS, con su ligera inclinación */
+    glasses: { name: "Gafas", svg: accSvg(
+      '<defs>' + grad("vaGgl", 15, 19, 35, 29, [[0, "rgba(255,255,255,.32)"], [1, "rgba(255,255,255,.05)"]]) + '</defs>'
+      + '<circle cx="18.8" cy="23.5" r="5" fill="url(#vaGgl)"/>'
+      + '<circle cx="30.7" cy="24.5" r="5" fill="url(#vaGgl)"/>'
+      + '<g stroke="' + NAVY + '" stroke-width="1.9" stroke-linecap="round">'
+      + '<circle cx="18.8" cy="23.5" r="5"/><circle cx="30.7" cy="24.5" r="5"/>'
+      + '<path d="M23.8 23.7c.7-.5 1.5-.4 2 .2"/>'
+      + '<path d="M13.9 22.2 10.2 20.7"/><path d="M35.7 23.4l3.8-1.2"/></g>'
+      + '<g stroke="rgba(255,255,255,.8)" stroke-width="1.05" stroke-linecap="round">'
+      + '<path class="vacc-shine" d="M16.4 21.3c.7-.7 1.5-1.1 2.4-1.2"/>'
+      + '<path class="vacc-shine d2" d="M28.3 22.3c.7-.7 1.5-1.1 2.4-1.2"/></g>'
+    ) },
+
+    /* Sombrero de mago — ala apoyada en la coronilla, cono con caída */
+    wizard: { name: "Sombrero de mago", svg: accSvg(
+      '<defs>' + grad("vaGwzC", 18, 0, 34, 16, [[0, "#4A4788"], [.55, "#332F63"], [1, "#221F45"]])
+      + grad("vaGwzB", 11, 13, 41, 19, [[0, "#332F63"], [.5, "#403B76"], [1, "#221F45"]]) + '</defs>'
+      + '<path d="M27-2.4c-.6 5.9 1.4 12.4 4.8 17.6-4 1.6-9.2 1.6-13.2 0C22 10 24.8 4 27-2.4z" fill="url(#vaGwzC)" stroke="' + NAVY + '" stroke-width="1" stroke-linejoin="round"/>'
+      + '<path d="M11.6 15.4c0-1.8 6.4-3.2 14.4-3.2s14.4 1.4 14.4 3.2-6.4 3.6-14.4 3.6-14.4-1.8-14.4-3.6z" fill="url(#vaGwzB)" stroke="' + NAVY + '" stroke-width="1"/>'
+      + '<path d="M19.2 13.4c4.5 1 9.3 1 13.8 0" stroke="' + GOLD + '" stroke-width="1.5" stroke-linecap="round"/>'
+      + '<path class="vacc-twinkle" d="M27 4.2l.9 2 2 .9-2 .9-.9 2-.9-2-2-.9 2-.9z" fill="' + GOLD_HI + '"/>'
+      + '<path class="vacc-twinkle d2" d="M23.2 9.6l.6 1.3 1.3.6-1.3.6-.6 1.3-.6-1.3-1.3-.6 1.3-.6z" fill="' + GOLD + '"/>'
+    ) },
+
+    /* Bufanda — vuelta sobre los hombros (y 36-44) + caída que se balancea */
+    scarf: { name: "Bufanda", svg: accSvg(
+      '<defs>' + grad("vaGsf", 15, 36, 35, 47, [[0, GOLD_HI], [.5, GOLD], [1, GOLD_LO]]) + '</defs>'
+      + '<path d="M15.4 36.4c6.6 4.7 13.4 4.7 20 0v4.6c-6.6 4.7-13.4 4.7-20 0z" fill="url(#vaGsf)" stroke="' + NAVY + '" stroke-width="1.1" stroke-linejoin="round"/>'
+      + '<g class="vacc-sway"><path d="M29.2 40.6 34.8 50.4h-5.4l-3.2-9.2z" fill="url(#vaGsf)" stroke="' + NAVY + '" stroke-width="1.1" stroke-linejoin="round"/></g>'
+      + '<g stroke="rgba(27,27,47,.3)" stroke-width=".7" stroke-linecap="round">'
+      + '<path d="M19 38.3v3.9"/><path d="M23 39.5v4"/><path d="M27.4 39.5v4"/><path d="M31.6 38.3v3.9"/></g>'
+    ) },
+
+    /* Aureola — flotando sobre las orejas (punta más alta y=7) */
+    halo: { name: "Aureola", svg: accSvg(
+      '<defs><radialGradient id="vaGhlA" cx="26" cy="4" r="13" gradientUnits="userSpaceOnUse">'
+      + '<stop offset=".5" stop-color="rgba(239,212,137,0)"/><stop offset="1" stop-color="rgba(239,212,137,.45)"/></radialGradient>'
+      + grad("vaGhlR", 15, 4, 37, 6, [[0, GOLD_LO], [.5, GOLD_HI], [1, GOLD_LO]]) + '</defs>'
+      + '<g class="vacc-halo">'
+      + '<ellipse cx="26" cy="4" rx="12.6" ry="4.2" fill="url(#vaGhlA)"/>'
+      + '<ellipse cx="26" cy="4" rx="10.6" ry="3.2" stroke="url(#vaGhlR)" stroke-width="2.5"/>'
+      + '<ellipse cx="26" cy="3.5" rx="10.6" ry="3.2" stroke="rgba(255,255,255,.42)" stroke-width=".75"/></g>'
+    ) },
+
+    /* Corona — apoyada entre las orejas, sobre la coronilla (y 13.5) */
+    crown: { name: "Corona", svg: accSvg(
+      '<defs>' + grad("vaGcr", 26, 2, 26, 16, [[0, GOLD_HI], [.5, GOLD], [1, GOLD_LO]]) + '</defs>'
+      + '<g stroke="' + NAVY + '" stroke-width="1.15" stroke-linejoin="round">'
+      + '<path d="M15.4 11.4V4.2l5.3 4.4L26 2.2l5.3 6.4 5.3-4.4v7.2c-7 1.8-14.2 1.8-21.2 0z" fill="url(#vaGcr)"/>'
+      + '<path d="M15.4 11.2c7 2.1 14.2 2.1 21.2 0v3.5c-7 2.1-14.2 2.1-21.2 0z" fill="url(#vaGcr)"/></g>'
+      + '<g fill="' + NAVY + '"><circle cx="26" cy="2" r="1.5"/><circle cx="15.4" cy="4" r="1.1"/><circle cx="36.6" cy="4" r="1.1"/></g>'
+      + '<g class="vacc-shine" fill="rgba(255,255,255,.6)">'
+      + '<circle cx="21.2" cy="12.6" r=".9"/><circle cx="26" cy="13.1" r="1"/><circle cx="30.8" cy="12.6" r=".9"/></g>'
+    ) }
   };
   var ACCESSORY_ORDER = ["none", "bowtie", "cap", "glasses", "wizard", "scarf", "halo", "crown"];
 
@@ -274,6 +355,53 @@ window.VESPER_THEME = (function () {
     } catch (e) {}
   }
 
+  /* ---------- animación de los accesorios ----------
+     Va en su propia hoja SIEMPRE inyectada (no sólo con el selector): los
+     accesorios se pintan también sobre el gato del mapa en leccion.html, y
+     ahí nadie llama a injectPickerCSS. Sólo se animan opacity/transform.
+     transform-box:fill-box es obligatorio — sin él, transform-origin en un
+     nodo SVG se resuelve contra el viewport del <svg> y la pieza sale
+     volando en vez de girar sobre su propio anclaje. */
+  function injectAccCSS() {
+    if (typeof document === "undefined" || document.getElementById("vesper-acc-css")) return;
+    var css = [
+      ".vacc-shine{animation:vacc-shine 3.4s ease-in-out infinite}",
+      ".vacc-shine.d2{animation-delay:1.2s}",
+      "@keyframes vacc-shine{0%,100%{opacity:.32}50%{opacity:1}}",
+      ".vacc-halo{transform-box:fill-box;transform-origin:50% 50%;animation:vacc-halo 4.2s ease-in-out infinite}",
+      "@keyframes vacc-halo{0%,100%{transform:translateY(.5px);opacity:.9}50%{transform:translateY(-1.1px);opacity:1}}",
+      ".vacc-sway{transform-box:fill-box;transform-origin:45% 0%;animation:vacc-sway 3.8s ease-in-out infinite}",
+      ".vacc-tassel{transform-box:fill-box;transform-origin:92% 4%;animation:vacc-sway 3.2s ease-in-out infinite}",
+      "@keyframes vacc-sway{0%,100%{transform:rotate(-3.5deg)}50%{transform:rotate(3.5deg)}}",
+      ".vacc-twinkle{transform-box:fill-box;transform-origin:50% 50%;animation:vacc-twinkle 2.6s ease-in-out infinite}",
+      ".vacc-twinkle.d2{animation-delay:1.1s}",
+      "@keyframes vacc-twinkle{0%,100%{opacity:.35;transform:scale(.8)}50%{opacity:1;transform:scale(1.15)}}",
+      "@media(prefers-reduced-motion:reduce){.vacc-shine,.vacc-halo,.vacc-sway,.vacc-tassel,.vacc-twinkle{animation:none}}",
+      ".vesper-reduce-motion .vacc-shine,.vesper-reduce-motion .vacc-halo,.vesper-reduce-motion .vacc-sway,"
+        + ".vesper-reduce-motion .vacc-tassel,.vesper-reduce-motion .vacc-twinkle{animation:none}"
+    ].join("\n");
+    var el = document.createElement("style"); el.id = "vesper-acc-css"; el.textContent = css;
+    (document.head || document.documentElement).appendChild(el);
+  }
+
+  /* Vista previa de un accesorio PUESTO sobre Vesper.
+     Antes el selector pintaba el SVG suelto en un cuadro crema: como las
+     piezas están calibradas a la cabeza del gato (el moño va a y=40 de 50),
+     suelto se veía descentrado o cortado y no se entendía qué eras. Con el
+     retrato debajo se ve exactamente lo que te vas a poner. Usa el pelaje
+     activo para que la prueba sea la de tu gato. */
+  function accessoryPreview(id) {
+    var a = ACCESSORIES[id] || {};
+    var st = read();
+    var pel = PELAJES[st.pelaje] || PELAJES.classic;
+    if (id === "none") {
+      return '<span class="vt-accfig"><img src="' + pel.img + '" alt="" loading="lazy"'
+        + (st.pelaje === "classic" ? ' class="vt-tint"' : "") + '></span>';
+    }
+    return '<span class="vt-accfig"><img src="' + pel.img + '" alt="" loading="lazy"'
+      + (st.pelaje === "classic" ? ' class="vt-tint"' : "") + '>' + (a.svg || "") + '</span>';
+  }
+
   /* ---------- UI: panel de eleccion ---------- */
   function injectPickerCSS() {
     if (document.getElementById("vesper-theme-css")) return;
@@ -292,10 +420,17 @@ window.VESPER_THEME = (function () {
       ".vt-dot{width:40px;height:40px;border-radius:50%;border:3px solid #fff;box-shadow:0 0 0 2px var(--line,#ece7da);transition:box-shadow .15s ease}",
       ".vt-skin.on .vt-dot{box-shadow:0 0 0 3px var(--gold,#C9A84C)}",
       ".vt-skin.on{color:var(--ink,#1B1B2F)}",
-      /* accesorios (cards con SVG) */
-      ".vt-accsw{height:42px;display:flex;align-items:center;justify-content:center;margin-bottom:6px;border-radius:9px;background:var(--cream,#FBF8F1)}",
-      ".vt-accsw svg{width:38px;height:38px}",
-      ".vt-accsw .vt-none{color:var(--muted,#6b6b76);font-size:1.2rem}",
+      /* accesorios: se previsualizan PUESTOS sobre el retrato de Vesper.
+         Fondo navy (el gato es PNG con alpha) para que el oro se lea. */
+      ".vt-accsw{position:relative;height:70px;display:flex;align-items:center;justify-content:center;margin-bottom:6px;"
+        + "border-radius:9px;background:radial-gradient(115% 100% at 50% 4%,#2f2f52,#1B1B2F);overflow:hidden}",
+      ".vt-accfig{position:relative;display:block;width:64px;height:64px}",
+      ".vt-accfig img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}",
+      ".vt-accfig img.vt-tint{filter:var(--vc-filter,none)}",
+      ".vt-accfig svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible;"
+        + "filter:drop-shadow(0 1px 1px rgba(10,9,24,.55))}",
+      ".vt-card.on .vt-accsw{box-shadow:inset 0 0 0 1px var(--gold,#C9A84C)}",
+      ".vt-accsw .vt-none{color:rgba(237,231,214,.7);font-size:1.2rem}",
       /* pelajes (apariencias completas con miniatura) */
       ".vt-pelsw{height:60px;display:flex;align-items:center;justify-content:center;margin-bottom:6px;border-radius:9px;background:var(--cream,#FBF8F1);overflow:hidden}",
       ".vt-pelsw img{height:58px;width:auto;object-fit:contain}",
@@ -353,7 +488,7 @@ window.VESPER_THEME = (function () {
     var accCards = ACCESSORY_ORDER.map(function (id) {
       var a = ACCESSORIES[id];
       var locked = !unlockedFor("acc", id);
-      var sw = a.svg || '<span class="vt-none">&#8212;</span>';
+      var sw = accessoryPreview(id);
       return '<div class="vt-card' + (cur.accessory === id ? " on" : "") + (locked ? " locked" : "")
         + '" data-acc="' + id + '"' + (locked ? ' title="' + reqLabelFor("acc", id) + '" aria-disabled="true"' : "") + '>'
         + '<div class="vt-accsw">' + sw + '</div><div class="vt-nm">' + a.name + '</div>'
@@ -384,6 +519,17 @@ window.VESPER_THEME = (function () {
     var pelBox = scope.querySelector("[data-vt-pelajes]");
     var note = scope.querySelector("[data-vt-note]");
     function say(msg) { if (note) note.textContent = msg || ""; }
+    /* las miniaturas de accesorio llevan el gato DEBAJO: si cambias de
+       aspecto (pelaje) hay que repintarlas o seguirían probándose sobre el
+       gato anterior. */
+    function refreshAccPreviews() {
+      if (!accBox) return;
+      var cards = accBox.querySelectorAll("[data-acc]");
+      for (var i = 0; i < cards.length; i++) {
+        var sw = cards[i].querySelector(".vt-accsw");
+        if (sw) sw.innerHTML = accessoryPreview(cards[i].getAttribute("data-acc"));
+      }
+    }
     if (themeBox) themeBox.addEventListener("click", function (e) {
       var c = e.target.closest("[data-theme]"); if (!c) return;
       api.setTheme(c.getAttribute("data-theme"));
@@ -396,7 +542,7 @@ window.VESPER_THEME = (function () {
       if (c.classList.contains("locked")) { say("Aspecto bloqueado — " + reqLabelFor("pelaje", id)); return; }
       api.setPelaje(id);
       var on = pelBox.querySelector(".vt-card.on"); if (on) on.classList.remove("on");
-      c.classList.add("on"); say("");
+      c.classList.add("on"); say(""); refreshAccPreviews();
     });
     if (skinBox) skinBox.addEventListener("click", function (e) {
       var c = e.target.closest("[data-skin]"); if (!c) return;
@@ -453,11 +599,14 @@ window.VESPER_THEME = (function () {
     setAccessory: function (id) { if (!ACCESSORIES[id]) return; var s = read(); s.accessory = id; write(s); apply(s); },
     setPelaje: function (id) { if (!PELAJES[id]) return; var s = read(); s.pelaje = id; write(s); apply(s); },
     set: function (theme, skin) { var s = read(); s.theme = theme; s.skin = skin; write(s); apply(s); },
+    accessoryPreview: accessoryPreview,
     renderPicker: renderPicker, wirePicker: wirePicker, mountFloat: mountFloat
   };
 
-  /* auto-aplica al cargar */
+  /* auto-aplica al cargar. injectAccCSS va aquí (y no en injectPickerCSS)
+     porque el mapa de leccion.html pinta el accesorio sin abrir el selector. */
   if (typeof document !== "undefined") {
+    injectAccCSS();
     apply(read());
   }
   return api;

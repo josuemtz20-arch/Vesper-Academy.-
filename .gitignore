@@ -154,6 +154,10 @@
 # Cosméticos de Vesper (2026-06-22): colores/accesorios que se desbloquean con el
 # progreso. Catálogo de requisitos + evaluación; lee VesperProgress. Sin claves.
 !/vesper_cosmetics.js
+# Paseo guiado con Vesper (2026-07-29): coachmarks con foco de luz que señalan
+# los elementos reales del hub (sendero, destrezas, Guardián, tu gato). Sustituye
+# a la tarjeta de viñetas que explicaba el mapa sin apuntar a nada. Sin claves.
+!/vesper_tour.js
 # Engagement 2026-06-23 (comparativa Duolingo): repaso espaciado de errores
 # (Leitner) y economía opcional (vidas + gemas + tienda). Vanilla, sin claves.
 !/vesper_srs.js

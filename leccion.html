@@ -1843,21 +1843,26 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
 .worlds-more:hover{border-color:var(--gold-ink,#7a5e12);color:var(--ink)}
 @media(prefers-reduced-motion:reduce){ .worlds-more{transition:none} }
 
-/* -- primera visita: qué significan las palabras del mapa --- */
-.primer{
-  position:relative;margin:0 0 16px;padding:16px 16px 14px;
-  background:var(--paper);border:1px solid var(--line);border-left:4px solid var(--gold-ink,#7a5e12);
-  border-radius:var(--va-r-md,14px);box-shadow:var(--shadow);
+/* -- lanzadera del paseo guiado ------------------------------
+   Sustituye a la tarjeta .primer de viñetas. Es una fila discreta
+   y PERMANENTE: el primer sólo se veía una vez y al cerrarlo no
+   había manera de recuperar la explicación. */
+.tourbar{margin:0 0 14px}
+.tourbar__btn{
+  width:100%;display:flex;align-items:center;gap:11px;
+  min-height:52px;padding:10px 14px;
+  background:var(--paper);border:1px dashed var(--line);border-radius:var(--va-r-md,14px);
+  color:var(--ink);font:inherit;text-align:left;cursor:pointer;
+  transition:border-color .14s ease,background .14s ease;
 }
-.primer__t{margin:0 0 8px;font-family:var(--va-font-display,"Inria Serif",Georgia,serif);font-size:1.06rem}
-.primer__l{margin:0;padding:0;list-style:none;display:grid;gap:7px}
-.primer__l li{font-size:var(--fs-meta);line-height:1.45;color:var(--ink)}
-.primer__l b{color:var(--gold-ink,#7a5e12)}
-.primer__x{
-  margin-top:12px;width:100%;min-height:44px;padding:10px 14px;
-  background:var(--ink);color:var(--cream);border:0;border-radius:11px;
-  font:inherit;font-weight:700;cursor:pointer;
-}
+.tourbar__btn:hover{border-color:var(--gold-ink,#7a5e12);background:var(--gold-tint)}
+.tourbar__ic{flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;
+  width:34px;height:34px;border-radius:50%;background:var(--gold-tint);color:var(--gold-ink,#7a5e12)}
+.tourbar__ic svg{width:19px;height:19px}
+.tourbar__tx{display:flex;flex-direction:column;line-height:1.3}
+.tourbar__tx b{font-size:.95rem}
+.tourbar__tx span{font-size:var(--fs-label);color:var(--muted)}
+@media(prefers-reduced-motion:reduce){ .tourbar__btn{transition:none} }
 
 /* ============================================================
    EL SENDERO: jerarquía de los nodos
@@ -1996,6 +2001,119 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
 .wmore__btn:hover{border-color:var(--gold-ink,#7a5e12);background:var(--gold-tint)}
 .wmore__sub{font-size:var(--fs-label);font-weight:500;color:var(--muted)}
 @media(prefers-reduced-motion:reduce){ .wmore__btn{transition:none} }
+
+/* ============================================================
+   EL MAPA, PASADA DE APARIENCIA
+
+   Cuatro cosas que el escenario no contaba:
+
+   1) CUÁNTO LLEVAS ANDADO. El sendero se pintaba igual de punta a
+      punta: la veta dorada recorría TODO el camino, incluida la
+      parte que aún no has pisado. Ahora .wtrail-done dibuja en oro
+      macizo sólo hasta el nodo actual (paintTrail le pone el
+      dasharray con la longitud de arco ya medida), así que de un
+      vistazo ves el trecho hecho y el que falta.
+
+   2) LOS CANDADOS PARECÍAN AVERÍAS. Un nodo bloqueado era un disco
+      navy casi negro con el glifo a #73738f (2,4:1): leía "roto",
+      no "todavía no". Pasa a aro discontinuo + glifo legible: la
+      forma dice "futuro" y el color ya no grita error.
+
+   3) LAS DESTREZAS NO SE MEDÍAN. El cartel de destreza decía "3/8"
+      en texto y nada más. Le ponemos su propia barra.
+
+   4) LA ISLA FLOTABA. Se le añade una niebla baja para que el
+      terreno se asiente en la noche en vez de cortarse en seco.
+
+   Recordatorio de la casa: esta superficie es SIEMPRE oscura, así
+   que el texto va en claro LITERAL (#EDE7D6), nunca var(--cream)
+   — el motor de temas invierte --cream y en modo noche el nombre
+   de la lección caía a 1,08:1.
+   ============================================================ */
+
+/* -- 1) trecho recorrido ------------------------------------- */
+.wtrail-done{stroke:var(--gold,#c5a059);stroke-width:6;opacity:.95;stroke-linecap:round;
+  filter:drop-shadow(0 0 5px var(--w-glow,rgba(197,160,89,.5)))}
+
+/* -- niebla baja de la isla ---------------------------------- */
+.wisland::after{background:
+  radial-gradient(80% 50% at 50% 0%,var(--w-glow,rgba(197,160,89,.25)) 0%,transparent 60%),
+  linear-gradient(180deg,transparent 78%,rgba(12,10,26,.55) 100%)}
+
+/* -- 2) el candado como "todavía no", no como avería --------- */
+.wbtn.locked{border-style:dashed;border-color:#565478;color:#A9A4C4;
+  box-shadow:0 4px 0 rgba(8,7,20,.45),inset 0 2px 7px rgba(0,0,0,.32)}
+.wbtn.locked .wglyph{opacity:.9}
+/* el nombre de una lección bloqueada estaba a .55 de alfa (~4,3:1 sobre la
+   isla): sube a .72 para que el texto pequeño pase AA cómodo */
+.wisland .wnode.locked .wtitle{color:rgba(237,231,214,.72)}
+
+/* -- 3) barra de la destreza --------------------------------- */
+.wcheck{flex-wrap:wrap}
+.wcheck .ck-bar{flex:0 0 100%;height:4px;margin:6px 0 0;border-radius:999px;
+  background:rgba(237,231,214,.16);overflow:hidden}
+.wcheck .ck-bar > i{display:block;height:100%;border-radius:999px;
+  background:linear-gradient(90deg,var(--w-accent,#c5a059),var(--gold,#c5a059));
+  transition:width .5s ease}
+@media(prefers-reduced-motion:reduce){ .wcheck .ck-bar > i{transition:none} }
+
+/* ============================================================
+   LOS GUARDIANES (las otras mascotas)
+
+   El retrato del guardián se pintaba como una foto redonda con un
+   borde de 3px, igual en los tres estados: bloqueado sólo bajaba
+   el brillo. No se leía como personaje ni como puerta del mundo.
+
+   Ahora es un MEDALLÓN: aro doble (acento del mundo + filete de
+   oro), aura del mundo detrás y tres estados distintos —
+   sellado (bloqueado), despierto (disponible) y vencido.
+   Los PNG son opacos con fondo navy horneado (29,34,53), así que
+   el recorte circular casa con la noche del mapa sin halo blanco.
+   ============================================================ */
+
+/* -- medallón de la portada / resultado --------------------- */
+.boss-emblem{position:relative}
+.boss-emblem img.boss-photo{
+  width:124px;height:124px;border-width:2px;
+  box-shadow:0 0 0 5px rgba(12,10,26,.85),0 0 0 6.5px var(--w-accent,#c5a059),
+             0 0 26px var(--w-glow,rgba(197,160,89,.45)),0 10px 24px rgba(20,18,42,.6)}
+.boss-emblem.lit img.boss-photo{
+  box-shadow:0 0 0 5px rgba(12,10,26,.85),0 0 0 7px var(--gold,#c5a059),
+             0 0 34px var(--gold,#c5a059),0 10px 24px rgba(20,18,42,.6)}
+/* sellado: la piedra aún no despierta */
+.boss-emblem.dim img.boss-photo{filter:grayscale(.72) brightness(.62) contrast(.95);
+  box-shadow:0 0 0 5px rgba(12,10,26,.85),0 0 0 6.5px #4A4866,0 8px 20px rgba(20,18,42,.55)}
+
+/* -- el nodo del mapa: un portal, no una foto recortada -----
+   OJO con overflow:hidden aquí: .wbtn.boss.ready::after es el aro que late
+   y vive en inset:-7px, o sea FUERA de la caja. Recortar el botón para
+   encajar el retrato apagaba ese pulso, que es justo la señal de "ya puedes
+   entrar". Por eso el retrato conserva el radio del arco (no se recorta con
+   overflow) y el latido del despierto va por filter, que no desborda. */
+.wbtn.boss{padding:0}
+/* velo interior: hunde el retrato en el arco y separa cara de borde */
+.wbtn.boss::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+  border-radius:42px 42px 12px 12px;
+  background:radial-gradient(115% 85% at 50% 22%,transparent 40%,rgba(10,9,24,.55) 100%),
+             linear-gradient(180deg,transparent 55%,rgba(10,9,24,.72) 100%)}
+.wboss-node .wbtn.boss::after{z-index:2}      /* el aro del pulso, por encima del velo */
+
+/* sellado: gris y cerrado */
+.wbtn.boss.locked{border-style:dashed}
+.wbtn.boss.locked .boss-node-photo{filter:grayscale(.8) brightness(.5)}
+.wbtn.boss.locked::before{background:linear-gradient(180deg,rgba(10,9,24,.5),rgba(10,9,24,.8))}
+/* despierto: el aura del mundo alrededor y el retrato respirando */
+.wbtn.boss.ready{box-shadow:0 7px 0 rgba(20,18,42,.45),0 10px 24px rgba(20,18,42,.5),
+  0 0 22px var(--w-glow,rgba(197,160,89,.5))}
+.wbtn.boss.ready .boss-node-photo{animation:g-boss-breathe 5.2s ease-in-out infinite}
+@keyframes g-boss-breathe{0%,100%{filter:brightness(1)}50%{filter:brightness(1.15) saturate(1.07)}}
+/* vencido: filete de oro y el retrato ya a plena luz */
+.wbtn.boss.conquered{background:linear-gradient(160deg,#23234a,var(--ink,#1B1B2F));
+  border-color:var(--gold,#c5a059);
+  box-shadow:0 7px 0 rgba(120,86,20,.45),0 10px 24px rgba(20,18,42,.5),inset 0 0 0 2px rgba(230,205,151,.45)}
+.wbtn.boss.conquered .boss-node-photo{filter:none}
+@media(prefers-reduced-motion:reduce){ .wbtn.boss.ready .boss-node-photo{animation:none} }
+.vesper-reduce-motion .wbtn.boss.ready .boss-node-photo{animation:none}
 </style>
 </head>
 <body>
@@ -2030,6 +2148,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
 <script src="vesper_level_exams.js"></script>
 <script src="vesper_mascot.js"></script>
 <script src="vesper_theme.js"></script>
+<script src="vesper_tour.js"></script>
 <script src="vesper_adaptive.js"></script>
 <script src="vesper_persona.js"></script>
 <script src="vesper_progress.js"></script>
@@ -2747,6 +2866,17 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       comet.style.setProperty("--rest", pctAt(cur).toFixed(1));
       comet.style.setProperty("animation-play-state", "running");   // arranca con --total ya medido (evita el salto del primer ciclo)
     }
+    /* trecho ANDADO en oro macizo: mismo "d" que el resto, pero el trazo se
+       corta con dasharray a la longitud de arco del nodo actual. Antes la veta
+       dorada cubría el camino entero y no distinguías lo hecho de lo que falta.
+       Si el gato está en la primera parada no hay nada recorrido: se oculta
+       (un dash de 0 con linecap:round pintaría un punto suelto). */
+    var done = svg.querySelector(".wtrail-done");
+    if (done) {
+      var travelled = lens[Math.max(0, Math.min(lens.length - 1, cur))] || 0;
+      done.setAttribute("stroke-dasharray", travelled.toFixed(1) + " 99999");
+      done.style.display = travelled > 1 ? "" : "none";
+    }
     var canOffset = !!(window.CSS && CSS.supports && CSS.supports("offset-path", 'path("M0 0")'));
     var animate = !isNaN(prev) && prev !== cur && !reduceMotion();
 
@@ -3009,9 +3139,11 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
         hiddenN += ids.length - vis.length;
       }
 
+      var ckPct = ids.length ? Math.round((doneN / ids.length) * 100) : 0;
       parts += '<div class="wcheck" role="separator" aria-label="' + esc(meta.label) + ', ' + doneN + ' de ' + ids.length + ' completadas">'
         + '<span class="ck-ic" aria-hidden="true">' + (SKILL_ICONS[sk] || "") + '</span>' + esc(meta.label)
-        + '<span class="ct">' + doneN + '/' + ids.length + '</span></div>';
+        + '<span class="ct">' + doneN + '/' + ids.length + '</span>'
+        + '<span class="ck-bar" aria-hidden="true"><i style="width:' + ckPct + '%"></i></span></div>';
       vis.forEach(function (id) {
         if (id === localCurId) curStop = si;
         TRAIL_STOPS[id] = si;
@@ -3038,7 +3170,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       + '<div class="watmo" aria-hidden="true"></div>'
       + '<div class="wmap" id="wmap" data-world="' + selLevel + '" data-cur="' + curStop + '" style="' + worldVars(t) + '">'
       + '<svg class="wterrain terr" aria-hidden="true" focusable="false" preserveAspectRatio="none"></svg>'
-      + '<svg class="wtrail" aria-hidden="true" focusable="false" preserveAspectRatio="none"><path class="wtrail-base"/><path class="wtrail-road"/><path class="wtrail-tex"/><path class="wtrail-glow"/><path class="wtrail-line"/><path class="wtrail-comet"/></svg>'
+      + '<svg class="wtrail" aria-hidden="true" focusable="false" preserveAspectRatio="none"><path class="wtrail-base"/><path class="wtrail-road"/><path class="wtrail-tex"/><path class="wtrail-glow"/><path class="wtrail-done"/><path class="wtrail-line"/><path class="wtrail-comet"/></svg>'
       + '<div class="wavatar' + (pj.animal ? ' has-pelaje' : '') + '" aria-hidden="true"><img class="wcat" src="' + pj.src + '" alt="" decoding="async">'
       + '<span class="wacc">' + currentAccessorySvg() + '</span></div>'
       + ambLayer(t.mapN || 3, true) + startPennant + parts
@@ -3780,26 +3912,94 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
      El hub habla de mundos, guardianes, senderos, rachas y XP sin
      explicar ninguno. Para quien llega nuevo eso es ruido, no tema.
      Se muestra una vez y se puede cerrar. */
-  var PRIMER_KEY = "vesper_leccion_primer";
-  function primerSeen() {
-    try { return localStorage.getItem(PRIMER_KEY) === "1"; } catch (e) { return true; }
+  /* ---- el paseo guiado ("cómo funciona esto") ----------------------
+     Antes esto era una tarjeta de viñetas: explicaba mundo / sendero /
+     Guardián / XP en texto, ANTES de que vieras la pantalla y sin
+     señalar nada. Había que emparejar cada palabra con un dibujo a
+     ojo. Ahora las mismas cuatro ideas se cuentan encima de los
+     elementos de verdad, con el foco de luz sobre cada uno
+     (vesper_tour.js). Se lanza solo la primera vez y queda un botón
+     para repetirlo, que antes no existía: si cerrabas el primer, no
+     había forma de volver a leerlo. */
+  var TOUR_KEY = "leccion-hub-v1";
+  var PRIMER_KEY = "vesper_leccion_primer";        /* legado: quien ya cerró el primer no recibe el paseo automático */
+  function tourSeen() {
+    try {
+      if (window.VESPER_TOUR && VESPER_TOUR.seen(TOUR_KEY)) return true;
+      return localStorage.getItem(PRIMER_KEY) === "1";
+    } catch (e) { return true; }
   }
-  function primerHtml() {
-    if (primerSeen()) return "";
-    return '<section class="primer" id="primer" aria-labelledby="primer-t">'
-      + '<h2 class="primer__t" id="primer-t">Cómo funciona esto</h2>'
-      + '<ul class="primer__l">'
-      + '<li><b>Mundo</b>: un nivel de inglés. Empiezas en El Hogar (lo más básico) y avanzas hasta El Castillo.</li>'
-      + '<li><b>Sendero</b>: el camino de lecciones del mundo. Se desbloquean en orden, una tras otra.</li>'
-      + '<li><b>Guardián</b>: el examen al final de cada mundo. Pásalo y se abre el mundo siguiente.</li>'
-      + '<li><b>XP y racha</b>: puntos por lección y días seguidos practicando. Sirven para medir tu constancia.</li>'
-      + '</ul>'
-      + '<button class="primer__x" type="button" id="primerX">Entendido, empecemos</button>'
-      + '</section>';
+  function tourSteps(selLevel) {
+    var wt = WORLD_THEME[selLevel] || {};
+    var wname = wt.worldName || "este mundo";
+    return [
+      { el: null,
+        title: "Te enseño esto en un minuto",
+        text: "Soy Vesper. Voy a señalarte las cuatro cosas que necesitas entender para moverte por aquí. Puedes salir cuando quieras." },
+      { el: ".nextstep", pad: 10,
+        title: "Empieza siempre por aquí",
+        text: "Esta tarjeta es tu siguiente paso. Si algún día no sabes qué hacer, pulsa este botón y ya está: te lleva a la lección que te toca." },
+      { el: ".hub-stats3", pad: 10,
+        title: "Tu racha y tu XP",
+        text: "La racha son los días seguidos que practicas; el XP, los puntos que ganas en cada lección. No desbloquean el curso: miden tu constancia (y te consiguen accesorios)." },
+      { el: ".world-banner", pad: 8,
+        title: "Un mundo = un nivel",
+        text: "Ahora estás en " + wname + ". Hay seis mundos, del más básico al más avanzado, y cada uno tiene su propio paisaje y su color." },
+      { el: ".wbtn.is-current", shape: "circle", pad: 12,
+        title: "Aquí estás tú",
+        text: "El círculo grande y luminoso es tu lección de ahora. El camino dorado que llega hasta él es lo que ya llevas andado; lo que sigue en gris con el borde punteado todavía no está abierto." },
+      { el: ".wcheck", pad: 8,
+        title: "El sendero va por destrezas",
+        text: "Estos carteles agrupan las lecciones por lo que entrenan: vocabulario, gramática, escucha… La barra te dice cuánto llevas de ese grupo." },
+      { el: ".wbtn.boss", pad: 12,
+        title: "El Guardián del mundo",
+        text: "Al final de cada mundo hay un examen con su propio personaje. Vencerlo abre el mundo siguiente — y no hace falta terminar todas las lecciones para intentarlo." },
+      { el: ".wavatar", shape: "circle", pad: 14,
+        title: "Y este soy yo, contigo",
+        text: "Camino por el sendero hasta donde te has quedado. Según avanzas vas soltando colores, aspectos y accesorios para mí: puedes cambiármelos cuando quieras." },
+      { el: null,
+        title: "Listo, ya sabes leer el mapa",
+        text: "Si se te olvida algo, el botón «Cómo funciona» te trae otra vez este paseo. ¡Vamos a tu lección!" }
+    ];
+  }
+  function tourBarHtml() {
+    return '<div class="tourbar">'
+      + '<button class="tourbar__btn" type="button" id="tourGo">'
+      + '<span class="tourbar__ic" aria-hidden="true">' + (window.VESPER_ICN ? (VESPER_ICN.compass || VESPER_ICN.star || "") : "") + '</span>'
+      + '<span class="tourbar__tx"><b>Cómo funciona</b>'
+      + '<span>' + (tourSeen() ? "Repite el paseo guiado del mapa" : "Un paseo de un minuto por el mapa") + '</span></span>'
+      + '</button></div>';
+  }
+  /* No arranques el paseo encima de otra puerta bloqueante: la del nombre
+     obligatorio (vesper_name_gate.js) y el velo de la sesión (vsp-splash)
+     tapan la pantalla, así que el foco de luz señalaría a ciegas y los dos
+     diálogos se pelearían por el foco del teclado. En ese caso el paseo
+     espera: sigue sin marcarse como visto y saldrá en la siguiente carga.  */
+  function prefersNoTour() {
+    return !!(document.getElementById("vesper-name-gate") || document.getElementById("vsp-splash"));
+  }
+  /* lanza el paseo; devuelve false si no hay nada que señalar todavía */
+  var _tourLevel = null;                            /* mundo pintado ahora mismo (lo fija renderIndex) */
+  function startTour() {
+    if (!window.VESPER_TOUR) return false;
+    return VESPER_TOUR.start(tourSteps(_tourLevel), {
+      key: TOUR_KEY,
+      onEnd: function () {
+        try { localStorage.setItem(PRIMER_KEY, "1"); } catch (e) {}
+        var go = document.querySelector(".nextstep__go");
+        if (go && go.focus) go.focus();
+        var bar = byId("tourGo");
+        if (bar) {
+          var sub = bar.querySelector(".tourbar__tx span");
+          if (sub) sub.textContent = "Repite el paseo guiado del mapa";
+        }
+      }
+    });
   }
 
   function renderIndex(selLevel) {
     clearLessonTheme();
+    _tourLevel = selLevel;                          /* el paseo nombra el mundo que estás viendo */
     var st = P ? P.getState() : { streak: 0, xp: 0, shields: 0 };
     var dg = (P && P.dailyGoal) ? P.dailyGoal() : null;
     var trophyHtml = buildTrophyShelf();
@@ -3881,7 +4081,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     show('<div class="wrap">'
       + hudHtml(st, dg, hello, heroInfo)
       + nextStepCard(built, selLevel)
-      + primerHtml()
+      + tourBarHtml()
       + srsBanner
       + worldsSection(built, selLevel)
       + searchUI
@@ -3914,13 +4114,9 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       renderIndex(selLevel);
       announce("Mostrando los seis mundos");
     };
-    var primerX = byId("primerX");
-    if (primerX) primerX.onclick = function () {
-      try { localStorage.setItem(PRIMER_KEY, "1"); } catch (e) {}
-      var box = byId("primer");
-      if (box) box.parentNode.removeChild(box);
-      var go = document.querySelector(".nextstep__go");
-      if (go) go.focus();
+    var tourGo = byId("tourGo");
+    if (tourGo) tourGo.onclick = function () {
+      if (!startTour()) toast("El paseo necesita el mapa cargado");
     };
 
     /* ---- avatar: traza el sendero y decide si "camina" tras completar una lección ---- */
@@ -3938,6 +4134,15 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       bindTrailResize();
       bindParallax();
     })();
+    /* ---- paseo guiado la primera vez ----
+       Va DESPUÉS de paintTrail: el foco de luz mide el rect de los nodos, y
+       antes de trazar el sendero el gato y el Guardián aún no están en su
+       sitio. El margen extra deja además que asiente el scroll restaurado. */
+    if (_indexFirst && !tourSeen() && !prefersNoTour()) {
+      setTimeout(function () {
+        if (window.VESPER_TOUR && !VESPER_TOUR.active()) startTour();
+      }, 620);
+    }
     _indexFirst = false;
     gateAnims();
 
