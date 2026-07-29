@@ -266,36 +266,37 @@ nav{display:flex;align-items:center;justify-content:space-between;height:78px;ga
 .hero-cta{display:flex;gap:14px;flex-wrap:wrap;}
 .cta-note{color:rgba(245,242,235,.52);font-size:var(--t-small);margin:16px 0 0;}
 
-/* La lámina: grabado enmarcado en arco.
-   El chip vive FUERA del elemento enmascarado — si no, el degradado
-   inferior de la máscara se lo come. */
-.plate-wrap{position:relative;justify-self:center;width:min(100%,390px);}
-.plate{
-  position:relative;width:100%;aspect-ratio:3/4;
-  border:1px solid var(--hair);border-radius:200px 200px var(--r-lg) var(--r-lg);
-  background:linear-gradient(168deg,#1b1e3a,var(--night) 62%,#0d0b1c);
-  overflow:hidden;
-  box-shadow:var(--va-shadow-dusk,0 18px 44px rgba(20,18,42,.22));
-  -webkit-mask-image:linear-gradient(to bottom,#000 74%,rgba(0,0,0,.25));
-  mask-image:linear-gradient(to bottom,#000 74%,rgba(0,0,0,.25));
+/* El hero tiene UN solo sujeto: Vesper. Detrás va el logotipo en
+   filigrana —la marca, no un grabado— y nada más: sin lámina, sin arco,
+   sin chip. Todo lo que compita con el gato le quita el papel. */
+/* --medh es la medida madre: el retrato y la filigrana salen los dos de
+   ella, así su relación es la misma a 360 px que a 1440 px. Si cada uno
+   llevara su propio clamp, el aro del logotipo entraría y saldría del
+   medallón según el ancho de la ventana. */
+.plate-wrap{
+  --medh:clamp(212px,29vw,286px);
+  position:relative;justify-self:center;width:min(100%,390px);
+  display:grid;place-items:center;
+  /* La filigrana va en absoluto y no ocupa alto, así que el nombre se
+     colaba bajo el riel de cifras cuando la columna se apila (móvil). El
+     relleno le reserva su sitio; en escritorio no cambia nada porque la
+     columna de texto sigue siendo la alta. */
+  padding-bottom:calc(var(--medh) * .5);
 }
-.plate::before{ /* filete de oro interior */
-  content:"";position:absolute;inset:13px;border:1px solid rgba(197,160,89,.26);
-  border-radius:188px 188px var(--r-md) var(--r-md);pointer-events:none;z-index:2;
+/* La filigrana: el emblema alado queda DETRÁS del retrato —que ya es un
+   medallón, tenerlos los dos a la vista era repetir el mismo aro dos
+   veces— y lo que se lee es el nombre, suelto bajo el gato. De ahí el
+   1.05 y el -6 %: a tamaño mayor las alas asomaban por encima de las
+   orejas y parecían cuernos; a tamaño menor «VESPER» se metía debajo del
+   medallón y se cortaba. */
+.hero-brand{
+  /* Se ancla al CENTRO DEL RETRATO, no al 50 % de la caja: la caja lleva
+     relleno abajo y un 50 % la dejaría medio relleno más abajo. */
+  position:absolute;top:calc(var(--medh) * .5);left:50%;z-index:0;
+  transform:translate(-50%,-6%);
+  width:calc(var(--medh) * 1.05);height:auto;max-width:none;
+  opacity:.12;pointer-events:none;user-select:none;
 }
-.plate::after{ /* velo para asentar la lámina en la noche */
-  content:"";position:absolute;inset:0;pointer-events:none;z-index:1;
-  background:linear-gradient(to bottom,transparent 52%,rgba(14,12,31,.55));
-}
-.plate img{width:100%;height:100%;object-fit:cover;display:block;}
-.plate-chip{
-  position:absolute;left:50%;bottom:18px;z-index:3;transform:translateX(-50%);
-  display:inline-flex;align-items:center;gap:8px;white-space:nowrap;
-  padding:8px 16px;border-radius:var(--r-pill);
-  background:rgba(20,18,42,.82);border:1px solid var(--hair);backdrop-filter:blur(6px);
-  color:var(--star);font-size:.73rem;font-weight:600;letter-spacing:.06em;
-}
-.plate-chip .dot{width:6px;height:6px;border-radius:50%;background:#4ade80;flex:0 0 auto;}
 
 /* Riel de cifras, dividido por filetes de oro */
 .statrail{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--hair);}
@@ -618,33 +619,33 @@ section{padding:var(--s-section) 0;}
 .med-spark.s2{top:44%;left:-5%;width:10px;height:10px;}
 .med-spark.s3{bottom:8%;right:-2%;width:11px;height:11px;}
 
-/* ---------- El sello del hero ---------- */
-/* Va como HERMANO de .plate, nunca dentro: .plate lleva un mask-image con
-   degradado inferior que se traga lo que viva adentro. Es la misma razón
-   por la que .plate-chip está fuera (ver el comentario de .plate-wrap). */
-/* El desplazamiento vertical va en PORCENTAJE de la lámina, no en píxeles:
-   el chip mide 236px fijos y se centra, así que con un `bottom` en px el
-   sello acababa rozándolo —1px de solape a 1440 y a ras a 900—. Con 24%
-   la separación crece y encoge con la lámina y nunca hay que mantener una
-   tabla de números por breakpoint. */
-.plate-seal{
-  position:absolute;left:-14px;bottom:24%;z-index:4;display:block;
+/* ---------- Vesper como retrato del hero ---------- */
+/* Antes era un sello de 104px colgado de la lámina; ahora la lámina no
+   existe y el medallón ES el hero. Sube de tamaño, se centra sobre la
+   filigrana y conserva íntegras sus animaciones (halo, rayos, destellos,
+   parpadeo, flotación, ladeo al hover y el bucle en vídeo). */
+.hero-vesper{
+  position:relative;z-index:1;display:block;
   border-radius:50%;transition:transform .42s var(--ease-out);
 }
 /* El tamaño vive aquí y no en un style="" en línea: con el valor en el
-   atributo, la regla de 520px no podría bajarlo nunca. */
-.plate-seal .medallion{--med:104px;}
-.plate-seal:hover,.plate-seal:focus-visible{transform:translateY(-5px) scale(1.04);}
+   atributo, ninguna media query podría bajarlo. */
+.hero-vesper .medallion{--med:var(--medh);}
+.hero-vesper:hover,.hero-vesper:focus-visible{transform:translateY(-6px) scale(1.02);}
+/* La frase pasa de flotar al costado a colgar debajo: centrada bajo un
+   círculo grande no puede chocar con la columna de texto ni salirse por
+   el borde de la pantalla, que era el riesgo de anclarla a la derecha. */
 .seal-say{
-  position:absolute;left:calc(100% + 12px);top:50%;transform:translateY(-50%) scale(.94);
-  transform-origin:left center;
-  display:block;width:max-content;max-width:min(46vw,230px);
+  position:absolute;left:50%;top:calc(100% + 16px);
+  transform:translateX(-50%) translateY(6px) scale(.96);
+  transform-origin:top center;
+  display:block;width:max-content;max-width:min(70vw,240px);text-align:center;
   padding:9px 14px;border-radius:var(--r-md);
   background:rgba(20,18,42,.86);border:1px solid var(--hair);backdrop-filter:blur(6px);
   color:var(--star);font-size:.76rem;line-height:1.35;font-weight:600;
   opacity:0;pointer-events:none;transition:opacity .3s var(--ease-std),transform .3s var(--ease-out);
 }
-.plate-seal:hover .seal-say,.plate-seal:focus-visible .seal-say{opacity:1;transform:translateY(-50%) scale(1);}
+.hero-vesper:hover .seal-say,.hero-vesper:focus-visible .seal-say{opacity:1;transform:translateX(-50%) scale(1);}
 
 /* ============================================================
    SECCIÓN VESPER — la banda de noche que cierra el bloque de venta
@@ -715,8 +716,6 @@ section{padding:var(--s-section) 0;}
   .vesper-stage{align-items:center;}
 }
 @media(max-width:520px){
-  .plate-seal{left:-6px;}
-  .plate-seal .medallion{--med:82px;}
   .med-strip button{width:48px;height:48px;}
 }
 
@@ -1014,6 +1013,9 @@ html:not(.js-anim) .cstep::before{transform:scaleY(1);}
 @keyframes medIris{from{clip-path:circle(0% at 50% 50%);}to{clip-path:circle(71% at 50% 50%);}}
 @keyframes medFade{from{opacity:0;}to{opacity:1;}}
 @keyframes sealIn{from{opacity:0;transform:scale(.7) rotate(-14deg);}to{opacity:1;transform:none;}}
+/* Sólo opacidad: la filigrana ya lleva su propio transform de encuadre y
+   animarlo aquí lo pisaría. */
+@keyframes brandIn{from{opacity:0;}to{opacity:.12;}}
 @keyframes confettiUp{
   0%{opacity:0;transform:translate(-50%,0) scale(.4) rotate(0deg);}
   12%{opacity:1;}
@@ -1033,13 +1035,15 @@ html.js-anim .medallion[data-blink="glint"] .med-glint{animation:medGlint 6s eas
 html.js-anim .medallion[data-blink="glint"] .med-glint.r{animation-delay:.09s;}
 /* Ladeo de cabeza al hover. Las orejas son parte del mismo bitmap y no se
    pueden mover solas; el ladeo es lo que sí lee como curiosidad. */
-.medallion:hover .med-bust,.plate-seal:focus-visible .med-bust{--bt:-2.6deg;--bz:1.09;}
+.medallion:hover .med-bust,.hero-vesper:focus-visible .med-bust{--bt:-2.6deg;--bz:1.09;}
 
-/* Sello del hero: entra después de la lámina, girando hasta su sitio.
-   Si el motor de animación se atasca, rescate() quita js-anim y esta
-   regla —y su opacity:0— desaparecen con ella. */
-html.js-anim .plate-seal{opacity:0;animation:sealIn .7s var(--ease-out) 1.05s both;}
-html.js-anim .plate-seal .medallion{animation:medFloat 6.5s ease-in-out 1.7s infinite;}
+/* Vesper entra después del texto, girando hasta su sitio, y se queda
+   flotando. Si el motor de animación se atasca, rescate() quita js-anim y
+   esta regla —y su opacity:0— desaparecen con ella. */
+html.js-anim .hero-vesper{opacity:0;animation:sealIn .7s var(--ease-out) .62s both;}
+html.js-anim .hero-vesper .medallion{animation:medFloat 6.5s ease-in-out 1.3s infinite;}
+/* La filigrana asoma con el mismo compás, un punto antes que el retrato. */
+html.js-anim .hero-brand{opacity:0;animation:brandIn 1.2s var(--ease-out) .5s both;}
 
 /* Sección: iris que abre el marco, rayos que aparecen después y flotación
    que arranca cuando ya se asentó todo. .vesper-stage es un .reveal, así
@@ -1088,7 +1092,7 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
      destellar. La TIRA DE EXPRESIONES sigue viva a propósito — es una
      interacción que inicia la persona, no una animación automática — pero
      el fundido pasa a cambio instantáneo. */
-  html.js-anim .plate-seal,html.js-anim .medallion,
+  html.js-anim .hero-vesper,html.js-anim .medallion,
   html.js-anim .medallion .med-rays,html.js-anim .medallion .med-halo,
   html.js-anim .medallion .med-spark,html.js-anim .medallion .med-lid,
   html.js-anim .medallion .med-glint,html.js-anim .vesper-stage.in-view .medallion,
@@ -1104,17 +1108,20 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
   html.js-anim .vesper-stage .med-glass,html.js-anim .vesper-stage.in-view .med-glass{
     clip-path:none !important;animation:none !important;
   }
-  .med-bust,.med-face,.plate-seal,.seal-say,.med-strip button,.med-strip button img{transition:none !important;}
+  .med-bust,.med-face,.hero-vesper,.seal-say,.med-strip button,.med-strip button img{transition:none !important;}
   /* El vídeo ni siquiera se descarga con movimiento reducido (lo decide el
      JS), pero si ya estaba montado cuando cambió la preferencia, se esconde. */
   .med-motion{display:none !important;}
-  .medallion:hover .med-bust,.plate-seal:focus-visible .med-bust{--bt:0deg;--bz:1.15;}
+  .medallion:hover .med-bust,.hero-vesper:focus-visible .med-bust{--bt:0deg;--bz:1.15;}
+  /* La filigrana no entra: se queda puesta. */
+  html.js-anim .hero-brand{opacity:.12 !important;animation:none !important;}
 }
 @media print{
   html.js-anim .reveal,html.js-anim .hero-copy>*,html.js-anim .plate-wrap,html.js-anim .statrail,
-  html.js-anim .plate-seal,html.js-anim .vesper-stage.in-view .med-rays,
+  html.js-anim .hero-vesper,html.js-anim .vesper-stage.in-view .med-rays,
   html.js-anim .vesper-stage.in-view .med-halo,html.js-anim .vesper-stage.in-view .med-fillet{
     opacity:1 !important;transform:none !important;animation:none !important;}
+  .hero-brand{display:none !important;}
   html.js-anim .vesper-stage .med-glass{clip-path:none !important;animation:none !important;}
   .med-spark,.med-glint,.med-lid,.seal-say,.med-motion{display:none !important;}
 }
@@ -1219,21 +1226,17 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
     </div>
 
     <div class="plate-wrap">
-      <div class="plate">
-        <img src="assets/images/landing/hero_emblem.webp" alt="Emblema grabado de Vesper Academy: el reloj de arena alado que forma la V, dentro de un círculo, bajo la estrella vespertina y enmarcado por hojas de acanto" width="780" height="1040" fetchpriority="high" decoding="async">
-      </div>
-      <span class="plate-chip"><i class="dot"></i> B2 · Negociación · en vivo</span>
+      <!-- Un solo sujeto: Vesper. Detrás, el logotipo en filigrana; el
+           grabado con acanto que ocupaba esta columna se retiró. -->
+      <img class="hero-brand" src="assets/images/vesper_logo_inverted.png" alt="" aria-hidden="true" width="534" height="515" decoding="async">
 
-      <!-- El sello: Vesper vuelve arriba del pliegue, pero enmarcado y
-           pequeño. Va FUERA de .plate porque la máscara de .plate se come
-           lo que viva dentro (misma razón que .plate-chip). -->
-      <a class="plate-seal" href="leccion.html">
+      <a class="hero-vesper" href="leccion.html">
         <span class="medallion" data-vesper data-state="welcome">
           <span class="med-halo" aria-hidden="true"></span>
           <span class="med-rays" aria-hidden="true"></span>
           <span class="med-glass">
             <span class="med-bust">
-              <img class="med-face on" data-face="welcome" src="assets/images/mascot/vesper_cat_welcome.webp" alt="Vesper, el gato tutor de Vesper Academy, saludando con la pata" width="600" height="600" decoding="async">
+              <img class="med-face on" data-face="welcome" src="assets/images/mascot/vesper_cat_welcome.webp" alt="Vesper, el gato tutor de Vesper Academy, saludando con la pata" width="600" height="600" fetchpriority="high" decoding="async">
               <span class="med-lid l" aria-hidden="true"></span>
               <span class="med-lid r" aria-hidden="true"></span>
               <span class="med-glint l" aria-hidden="true"></span>
@@ -2126,9 +2129,10 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
       return v;
     }
 
-    /* El sello del hero está sobre el pliegue, así que su vídeo se monta
-       DESPUÉS de load y en tiempo muerto: el LCP sigue siendo el grabado. */
-    var sealMed = document.querySelector('.plate-seal .medallion');
+    /* El retrato del hero está sobre el pliegue, así que su vídeo se monta
+       DESPUÉS de load y en tiempo muerto: el LCP sigue siendo el still del
+       gato, que ya viene con fetchpriority alto. */
+    var sealMed = document.querySelector('.hero-vesper .medallion');
     if (sealMed && hayMovimiento){
       window.addEventListener('load', function(){
         var go = function(){ montarMovimiento(sealMed); };
@@ -2226,7 +2230,7 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
 
     /* La frase del sello rota sola, pero sólo cuando la pestaña está a la
        vista: un setInterval corriendo en segundo plano no le sirve a nadie. */
-    var sello = document.querySelector('.plate-seal .seal-say');
+    var sello = document.querySelector('.hero-vesper .seal-say');
     if (sello && !vReduce){
       setInterval(function(){
         if (document.hidden) return;
