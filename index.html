@@ -95,7 +95,7 @@
          banda en cualquier pantalla de 864px o menos, que es reproducir el
          problema original abajo del pliegue. */
   --t-h3:1.25rem; --t-h4:clamp(1.5rem,2.5vw,2.05rem);
-  --t-h2:clamp(2.05rem,4.6vw,4.25rem); --t-display:clamp(2.9rem,6vw,4.8rem);
+  --t-h2:clamp(2rem,3.4vw,2.7rem); --t-display:clamp(2.9rem,6vw,4.8rem);
 
   /* Espacio / medida */
   --s-section:clamp(72px,9vw,120px);
@@ -394,9 +394,15 @@ section{padding:var(--s-section) 0;}
 /* El mínimo de la cifra baja a 1.7rem: en móvil el encabezado se apila y con
    la cifra en 32px contra un titular de 33 las dos leían igual de fuerte, o
    sea la cifra dejaba de ser marca de ritmo y competía con el título. */
+/* Reescalada al devolver --t-h2 a su tamaño original: la cifra estaba
+   calibrada contra un título de 66px y con el título en 43 pasaba a medir
+   MÁS que él (46 contra 43), que es justo la inversión que el comentario de
+   arriba venía a evitar. Se conservan las proporciones originales respecto
+   al título —0.83 el suelo, 0.70 el tramo fluido, 0.68 el techo— para que
+   la cifra siga siendo marca de ritmo y no compita. */
 .chap-num{
   display:block;margin:0 0 10px;font-family:var(--display);
-  font-optical-sizing:auto;font-size:clamp(1.7rem,3.2vw,2.9rem);
+  font-optical-sizing:auto;font-size:clamp(1.66rem,2.38vw,1.84rem);
   font-weight:600;line-height:.86;letter-spacing:-.02em;
   color:var(--gold);font-variant-numeric:tabular-nums;
 }
@@ -1249,89 +1255,6 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
   .med-spark,.med-glint,.med-lid,.seal-say,.med-motion{display:none !important;}
 }
 
-/* ============================================================
-   BUSCADOR DE CURSO + MONUMENTO TIPOGRAFICO
-   Dos piezas que la portada no tenía y que son lo mejor de la
-   referencia: el buscador pegado bajo el heroe y el monumento
-   tipografico coronando el pie. Todo lo demas queda intacto.
-   ============================================================ */
-/* padding:0 — la regla global de <section> mete 115px arriba y abajo, y esta
-   barra tiene que ser cenida: es un control, no una seccion. */
-.finder{background:var(--dusk);border-top:1px solid var(--hair);padding:0;}
-.finder form{display:grid;grid-template-columns:repeat(4,1fr) auto;align-items:stretch;}
-.finder .f{display:flex;flex-direction:column;gap:5px;padding:20px 22px;
-  border-left:1px solid rgba(197,160,89,.2);min-width:0;}
-.finder .f:first-child{border-left:0;padding-left:0;}
-.finder label{font-size:.68rem;letter-spacing:.2em;text-transform:uppercase;
-  color:var(--star);font-weight:600;}
-.finder select{
-  border:0;background:transparent;padding:0 18px 0 0;max-width:100%;
-  font-family:var(--text);font-size:.95rem;font-weight:500;color:var(--cream);cursor:pointer;
-  text-overflow:ellipsis;appearance:none;
-  background-image:linear-gradient(45deg,transparent 50%,var(--star) 50%),
-                   linear-gradient(135deg,var(--star) 50%,transparent 50%);
-  background-position:right 4px center,right 0 center;
-  background-size:4px 4px,4px 4px;background-repeat:no-repeat;
-}
-.finder select option{background:var(--dusk);color:var(--cream);}
-.finder select:focus-visible{outline:2px solid var(--gold-lt,var(--star));outline-offset:4px;}
-.finder .go{
-  border:0;padding:0 32px;background:var(--gold);color:#241d08;cursor:pointer;
-  font-family:var(--text);font-size:.78rem;font-weight:600;letter-spacing:.16em;
-  text-transform:uppercase;transition:background .3s;
-}
-.finder .go:hover{background:var(--star);}
-@media(max-width:1000px){
-  .finder form{grid-template-columns:1fr 1fr;}
-  .finder .f{border-left:0;border-top:1px solid rgba(197,160,89,.2);padding:15px 0;}
-  .finder .f:nth-child(2),.finder .f:nth-child(4){border-left:1px solid rgba(197,160,89,.2);padding-left:20px;}
-  .finder .go{grid-column:1/-1;padding:16px;}
-}
-
-/* El monumento: el nombre a tamano brutal como corona del pie. Va
-   aria-hidden porque el nombre ya se anuncia en el pie: aqui es dibujo. */
-.monument{
-  background:linear-gradient(to bottom,var(--night),#0e0c1f);
-  padding:clamp(46px,6vw,84px) 0 0;overflow:hidden;
-}
-/* padding-bottom en em del PROPIO titular: con line-height .8 la caja mide
-   menos que la tinta y la cola de la "p" —0.252em medidos con
-   measureText, no estimados— se salia por abajo y cruzaba ACADEMY. Al ir en
-   em, la holgura escala sola con la tipografia fluida. */
-.mon-word{
-  font-family:var(--display);font-weight:700;
-  font-size:clamp(3.4rem,15.5vw,12.5rem);line-height:.8;letter-spacing:-.035em;
-  color:var(--cream);margin:0;padding-bottom:.14em;text-align:center;white-space:nowrap;
-  font-optical-sizing:auto;
-}
-/* La holgura se mide contra la TINTA, no contra la caja: con line-height .8
-   la cola de la "p" de Vesper baja 24px por debajo de la caja del parrafo y
-   se cruzaba con ACADEMY. El margen va en em del titular para que la
-   separacion aguante en cualquier tamano de la escala fluida. */
-.mon-sub{
-  text-align:center;color:var(--star);font-size:.68rem;
-  letter-spacing:.5em;text-transform:uppercase;margin:0;
-}
-.mon-word+.mon-sub{margin-top:clamp(16px,1.8vw,30px);}
-html.js-anim .monument{opacity:0;}
-html.js-anim .monument.in-view{opacity:1;animation:rise .9s var(--ease-out) both;}
-@media (prefers-reduced-motion: reduce){
-  html.js-anim .monument{opacity:1 !important;transform:none !important;animation:none !important;}
-}
-
-/* ---------- LAMINAS A SANGRE ----------
-   La portada tenia DOS imagenes de mas de 380px en trece pantallas y media:
-   por eso se leia como un tunel de texto sobre noche. Estas bandas son lo
-   que hace que la pagina respire imagen. Van con filete de oro arriba y
-   abajo —el mismo vocabulario que el riel de credenciales— en vez de con
-   velo degradado: el velo tendria que adivinar el color de la banda vecina
-   y da bordes sucios cuando la de arriba es crema y la de abajo noche. */
-.plate-band{
-  display:block;width:100%;overflow:hidden;background:var(--night);
-  height:clamp(168px,23vw,330px);
-  border-top:1px solid var(--hair);border-bottom:1px solid var(--hair);
-}
-.plate-band img{width:100%;height:100%;object-fit:cover;display:block;}
 </style>
 <script src="vesper_prefs.js"></script>
 <script src="vesper_analytics.js"></script>
@@ -1471,52 +1394,6 @@ html.js-anim .monument.in-view{opacity:1;animation:rise .9s var(--ease-out) both
 </section>
 
 
-<!-- ============ BUSCADOR (injerto 66nord) ============ -->
-<section class="finder" aria-label="Encuentra tu curso">
-  <div class="container">
-    <form id="finder">
-      <div class="f">
-        <label for="f-nivel">Tu nivel</label>
-        <select id="f-nivel">
-          <option value="">No lo s&eacute; todav&iacute;a</option>
-          <option>Principiante</option>
-          <option>Inicial</option>
-          <option>B&aacute;sico</option>
-          <option>Intermedio</option>
-          <option>Avanzado</option>
-          <option>Experto</option>
-        </select>
-      </div>
-      <div class="f">
-        <label for="f-meta">Tu meta</label>
-        <select id="f-meta">
-          <option value="curso-ingles-general.html">Hablar con soltura</option>
-          <option value="curso-club-conversacion.html">Perder el miedo a conversar</option>
-          <option value="curso-ingles-corporativo.html">Usarlo en el trabajo</option>
-          <option value="curso-certificacion.html">Certificarme</option>
-        </select>
-      </div>
-      <div class="f">
-        <label for="f-modo">Modalidad</label>
-        <select id="f-modo">
-          <option value="grupal">Grupo reducido</option>
-          <option value="profesional">Clase individual</option>
-          <option value="especializados">Para mi empresa</option>
-        </select>
-      </div>
-      <div class="f">
-        <label for="f-horario">Horario</label>
-        <select id="f-horario">
-          <option>Ma&ntilde;ana</option>
-          <option>Tarde</option>
-          <option>Noche</option>
-        </select>
-      </div>
-      <button class="go" type="submit">Ver mi curso</button>
-    </form>
-  </div>
-</section>
-
 <!-- ============ CREDENCIALES ============ -->
 <div class="creds">
   <div class="container">
@@ -1606,10 +1483,6 @@ html.js-anim .monument.in-view{opacity:1;animation:rise .9s var(--ease-out) both
 </section>
 
 <!-- ============ LA CONSTELACIÓN ============ -->
-<div class="plate-band">
-  <img src="assets/images/landing/plate_ruta.webp" alt="Grabado de un sendero que asciende hacia una cumbre bajo la estrella vespertina" width="1600" height="450" loading="lazy" decoding="async">
-</div>
-
 <section id="ruta">
   <div class="container">
     <div class="chap-head reveal">
@@ -2000,7 +1873,7 @@ html.js-anim .monument.in-view{opacity:1;animation:rise .9s var(--ease-out) both
 </section>
 
 <!-- ============ FAQ ============ -->
-<section id="faq" class="band-cream">
+<section id="faq">
   <div class="container">
     <div class="quiet-head reveal" style="text-align:center">
       <span class="eyebrow">Preguntas frecuentes</span>
@@ -2063,13 +1936,6 @@ html.js-anim .monument.in-view{opacity:1;animation:rise .9s var(--ease-out) both
 </section>
 
 </main>
-
-<!-- ============ MONUMENTO (injerto 66nord) ============ -->
-<section class="monument reveal" aria-hidden="true">
-  <p class="mon-word">Vesper</p>
-  <p class="mon-sub">Academy</p>
-</section>
-
 
 <footer>
   <div class="container">
@@ -2546,22 +2412,5 @@ html.js-anim .monument.in-view{opacity:1;animation:rise .9s var(--ease-out) both
 })();
 </script>
 
-<script>
-/* Injerto 66nord: el buscador. Lleva el nivel como parametro para que la
-   pagina de curso pueda recogerlo; la modalidad decide el ancla de planes. */
-(function(){
-  var f = document.getElementById('finder');
-  if (!f) return;
-  f.addEventListener('submit', function(e){
-    e.preventDefault();
-    var meta  = document.getElementById('f-meta').value || 'planes.html';
-    var nivel = document.getElementById('f-nivel').value;
-    var modo  = document.getElementById('f-modo').value;
-    var url   = meta + (nivel ? '?nivel=' + encodeURIComponent(nivel) : '');
-    if (modo) url += (nivel ? '&' : '?') + 'plan=' + encodeURIComponent(modo);
-    window.location.href = url;
-  });
-})();
-</script>
 </body>
 </html>
