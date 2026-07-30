@@ -73,14 +73,23 @@
   /* Tipografía */
   --display:"Bodoni Moda",Didot,"Times New Roman",serif;
   --text:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;
-  --t-eyebrow:.7rem; --t-small:.83rem; --t-body:.95rem; --t-lead:1.08rem;
-  /* El titular del héroe ya estaba en registro editorial (77px contra 15 de
-     cuerpo, 5:1). Los ONCE títulos de sección se quedaban en 43 y eran los
-     que rompían el registro: en una portada de este tipo cada sección
-     vuelve a golpear cerca del tamaño del héroe. 43 -> 68. */
-     El minimo se queda en 2.05rem y no en 2.3: en movil el heroe cae a 40px
-     y un titulo de seccion de 37 lo igualaba, aplanando la jerarquia. */
-  --t-h3:1.25rem; --t-h2:clamp(2.05rem,4.6vw,4.25rem); --t-display:clamp(2.9rem,6vw,4.8rem);
+  /* Tercer registro: la versalita. 66nord la usa a 16px con 0.4em de
+     tracking; aquí .78rem/.26em, que es lo que aguanta un rótulo español
+     largo ("La app de práctica · sin costo") sin desbordar la columna
+     estrecha del encabezado de capítulo. */
+  --t-eyebrow:.78rem; --t-small:.83rem; --t-body:.95rem; --t-lead:1.08rem;
+  /* CUATRO tamaños de titular, no dos. El error anterior no fue el tamaño
+     sino la UNIFORMIDAD: los once títulos de sección quedaron en 59px, así
+     que subir de 43 a 59 sólo los hizo gritar a todos por igual — y si todo
+     grita, nada destaca. Ahora --t-h2 es la voz de las cinco secciones que
+     sostienen el argumento de venta y --t-h4 la del material de apoyo.
+     El mínimo de h2 se queda en 2.05rem y no en 2.3: en móvil el héroe cae
+     a 40px y un título de sección de 37 lo igualaba, aplanando la jerarquía. */
+  /* El mínimo de h4 baja a 1.35rem (no 1.55): a 375px el título de capítulo
+     cae a 33px y con h4 en 24.8 la distancia era de 1.32:1 — se perdía en
+     móvil justo la jerarquía que esto viene a crear. A 21.6 queda en 1.52:1. */
+  --t-h3:1.25rem; --t-h4:clamp(1.35rem,2.5vw,2.05rem);
+  --t-h2:clamp(2.05rem,4.6vw,4.25rem); --t-display:clamp(2.9rem,6vw,4.8rem);
 
   /* Espacio / medida */
   --s-section:clamp(72px,9vw,120px);
@@ -335,6 +344,54 @@ section{padding:var(--s-section) 0;}
 .band-cream{background:var(--cream);color:var(--ink);}
 .band-cream .sec-title{color:var(--ink);}
 
+/* ============================================================
+   REGISTRO EDITORIAL — tres voces de encabezado
+   ------------------------------------------------------------
+   Antes había UNA: filete de 34px + versalita + titular + entradilla,
+   repetida once veces en el mismo ancho y con la misma sangría. Eso es
+   lo que hacía que la página se leyera igual de arriba a abajo por más
+   que se subiera el cuerpo de los títulos.
+
+   .chap-head  Las CINCO secciones que sostienen la venta (método, ruta,
+               cursos, certificación, precios). Numeradas 01–05, filete
+               a todo el ancho y encabezado ASIMÉTRICO: la cifra y la
+               versalita en la columna estrecha, el titular y la
+               entradilla en la ancha. La asimetría es el gesto que
+               copiamos de 66nord; el número es lo que da el ritmo.
+               Además AHORRA alto: cifra y titular comparten fila en
+               vez de apilarse.
+   .quiet-head Material de apoyo (resultados, clase, temas, Vesper,
+               FAQ). Sólo versalita y titular a --t-h4. Sin filete.
+   El héroe y el cierre conservan el filete corto: son los dos extremos
+   de la página y no forman parte de la numeración.
+   ============================================================ */
+.chap-head{
+  display:grid;grid-template-columns:1fr;gap:14px 48px;
+  border-top:1px solid var(--hair);padding-top:clamp(20px,2.4vw,30px);
+}
+.band-cream .chap-head{border-top-color:#ded6c4;}
+/* El mínimo de la cifra baja a 1.7rem: en móvil el encabezado se apila y con
+   la cifra en 32px contra un titular de 33 las dos leían igual de fuerte, o
+   sea la cifra dejaba de ser marca de ritmo y competía con el título. */
+.chap-num{
+  display:block;margin:0 0 10px;font-family:var(--display);
+  font-optical-sizing:auto;font-size:clamp(1.7rem,3.2vw,2.9rem);
+  font-weight:600;line-height:.86;letter-spacing:-.02em;
+  color:var(--gold);font-variant-numeric:tabular-nums;
+}
+/* --gold (#c5a059) da 2.6:1 sobre crema: vale para texto GRANDE (>=24px,
+   umbral AA 3:1 — no llega) así que sobre crema va el oro profundo. */
+.band-cream .chap-num{color:var(--gold-deep);}
+.chap-head .sec-title{margin-top:0;}
+.chap-mark{align-self:start;}
+@media(min-width:901px){
+  .chap-head{grid-template-columns:minmax(0,4fr) minmax(0,8fr);}
+}
+
+.quiet-head .sec-title,.sec-title.sm{
+  font-size:var(--t-h4);margin:10px 0 12px;letter-spacing:0;
+}
+
 /* ---------- MÉTODO: pliego 2x2 con cruz de filetes ---------- */
 .mgrid{display:grid;grid-template-columns:1fr 1fr;margin-top:56px;}
 .mcell{padding:38px clamp(24px,3.4vw,44px);border-top:1px solid var(--line);border-left:1px solid var(--line);}
@@ -356,10 +413,22 @@ section{padding:var(--s-section) 0;}
 .ratio-legend{display:flex;justify-content:space-between;margin-top:14px;font-size:var(--t-small);color:var(--muted);}
 .ratio-legend b{color:var(--ink);font-weight:600;}
 
-/* ---------- RESULTADOS ---------- */
-.rgrid{display:grid;grid-template-columns:repeat(3,1fr);margin-top:56px;border-top:1px solid var(--hair);}
-.rgrid div{padding:40px 0 10px 34px;border-left:1px solid var(--hair);}
-.rgrid div:first-child{border-left:0;padding-left:0;}
+/* ---------- RESULTADOS: la lámina pasa a ser figura ----------
+   Las tres cifras flotaban sobre la noche y la lámina grabada era una banda
+   a sangre de 294px ENTRE secciones: al no tener marco ni pie se leía como
+   un hueco sin llenar, no como contenido. Aquí la lámina es la cabecera de
+   un pliego con filete y las cifras van dentro. El grabado mide 1600x450
+   (3.56:1) —proporción de banda ancha— así que corona el pliego a lo largo;
+   NO puede ir en columna al lado del texto sin recortarle la composición. */
+.rfig{
+  margin-top:40px;border:1px solid var(--hair);border-radius:var(--r-lg);
+  overflow:hidden;background:var(--dusk);
+}
+.rfig-art{margin:0;height:clamp(132px,16vw,205px);border-bottom:1px solid var(--hair);}
+.rfig-art img{width:100%;height:100%;object-fit:cover;display:block;}
+.rgrid{display:grid;grid-template-columns:repeat(3,1fr);}
+.rgrid div{padding:32px clamp(20px,2.6vw,30px);border-left:1px solid var(--hair);}
+.rgrid div:first-child{border-left:0;}
 .rgrid b{
   display:block;font-family:var(--display);font-optical-sizing:auto;
   font-size:clamp(2.4rem,4.4vw,3.5rem);font-weight:600;color:var(--star);
@@ -929,8 +998,10 @@ footer{background:#0e0c1f;border-top:1px solid var(--hair);padding:60px 0 30px;c
   .mgrid{grid-template-columns:1fr;}
   .mcell{border-left:0;padding-left:0;padding-right:0;}
   .mcell:nth-child(2){border-top:1px solid var(--line);padding-top:38px;}
+  /* Apiladas, pero YA NO con padding-left:0: ahora viven dentro del pliego
+     de .rfig y pegarlas al filete izquierdo las dejaría sin margen. */
   .rgrid{grid-template-columns:1fr;}
-  .rgrid div{border-left:0;padding-left:0;border-top:1px solid var(--hair);}
+  .rgrid div{border-left:0;border-top:1px solid var(--hair);}
   .rgrid div:first-child{border-top:0;}
   /* Cinco credenciales en 900px quedan a ~150px cada una: se aprietan. A tres. */
   .creds-inner{grid-template-columns:repeat(3,1fr);}
@@ -1416,11 +1487,15 @@ html.js-anim .monument.in-view{opacity:1;animation:rise .9s var(--ease-out) both
 <!-- ============ MÉTODO ============ -->
 <section id="metodo" class="band-cream">
   <div class="container">
-    <div class="reveal">
-      <span class="rule" style="background:var(--gold-ink)"></span>
-      <span class="eyebrow">Por qué Vesper funciona</span>
-      <h2 class="sec-title">Aprendes hablando, desde el día uno.</h2>
-      <p class="sec-lead">Nada de clases donde el profesor habla y tú tomas notas. Aquí el 80&nbsp;% del tiempo hablas tú.</p>
+    <div class="chap-head reveal">
+      <div class="chap-mark">
+        <span class="chap-num">01</span>
+        <span class="eyebrow">Por qué Vesper funciona</span>
+      </div>
+      <div>
+        <h2 class="sec-title">Aprendes hablando, desde el día uno.</h2>
+        <p class="sec-lead">Nada de clases donde el profesor habla y tú tomas notas. Aquí el 80&nbsp;% del tiempo hablas tú.</p>
+      </div>
     </div>
 
     <div class="mgrid">
@@ -1457,21 +1532,24 @@ html.js-anim .monument.in-view{opacity:1;animation:rise .9s var(--ease-out) both
 </section>
 
 <!-- ============ RESULTADOS ============ -->
-<div class="plate-band">
-  <img src="assets/images/landing/plate_conversacion.webp" alt="Grabado de dos burbujas de dialogo con una estrella vespertina entre ellas" width="1600" height="450" loading="lazy" decoding="async">
-</div>
-
+<!-- La lámina que estaba AQUÍ como banda a sangre de 294px ahora corona el
+     pliego de las cifras, unos renglones más abajo: sin marco ni pie, entre
+     dos secciones, se leía como un hueco en vez de como contenido. -->
 <section id="resultados">
   <div class="container">
-    <div class="reveal">
-      <span class="rule"></span>
+    <div class="quiet-head reveal">
       <span class="eyebrow">Lo que puedes esperar</span>
       <h2 class="sec-title">Progreso que se mide, no que se promete.</h2>
     </div>
-    <div class="rgrid reveal">
-      <div><b><span data-count="15">15</span> min</b><p>Es lo que tarda el examen diagnóstico en decirte tu nivel exacto.</p></div>
-      <div><b><span data-count="80">80</span> %</b><p>Del tiempo de clase lo ocupas hablando tú, no escuchando.</p></div>
-      <div><b>A1<span class="sr"> a </span>–C2</b><p>La escala completa del MCER, sin saltarte peldaños ni inventarlos.</p></div>
+    <div class="rfig reveal">
+      <figure class="rfig-art">
+        <img src="assets/images/landing/plate_conversacion.webp" alt="Grabado de dos burbujas de dialogo con una estrella vespertina entre ellas" width="1600" height="450" loading="lazy" decoding="async">
+      </figure>
+      <div class="rgrid">
+        <div><b><span data-count="15">15</span> min</b><p>Es lo que tarda el examen diagnóstico en decirte tu nivel exacto.</p></div>
+        <div><b><span data-count="80">80</span> %</b><p>Del tiempo de clase lo ocupas hablando tú, no escuchando.</p></div>
+        <div><b>A1<span class="sr"> a </span>–C2</b><p>La escala completa del MCER, sin saltarte peldaños ni inventarlos.</p></div>
+      </div>
     </div>
   </div>
 </section>
@@ -1483,11 +1561,15 @@ html.js-anim .monument.in-view{opacity:1;animation:rise .9s var(--ease-out) both
 
 <section id="ruta">
   <div class="container">
-    <div class="reveal">
-      <span class="rule"></span>
-      <span class="eyebrow">Tu ruta de aprendizaje</span>
+    <div class="chap-head reveal">
+      <div class="chap-mark">
+        <span class="chap-num">02</span>
+        <span class="eyebrow">Tu ruta de aprendizaje</span>
+      </div>
+      <div>
       <h2 class="sec-title">De principiante absoluto a dominio total.</h2>
       <p class="sec-lead">Cinco peldaños del Marco Común Europeo. No te saltas ninguno, y en cada uno sabes exactamente qué tienes que poder hacer para pasar al siguiente.</p>
+      </div>
     </div>
 
     <div class="const-grid">
@@ -1552,8 +1634,7 @@ html.js-anim .monument.in-view{opacity:1;animation:rise .9s var(--ease-out) both
 <!-- ============ ASÍ SE VE UNA CLASE ============ -->
 <section id="clase" class="band-cream">
   <div class="container">
-    <div class="reveal">
-      <span class="rule" style="background:var(--gold-ink)"></span>
+    <div class="quiet-head reveal">
       <span class="eyebrow">Dentro de la sesión</span>
       <h2 class="sec-title">Así se ve una clase.</h2>
       <p class="sec-lead">Sin misterio: material real, corrección en el momento y una meta clara para los 50 minutos.</p>
@@ -1589,11 +1670,15 @@ html.js-anim .monument.in-view{opacity:1;animation:rise .9s var(--ease-out) both
 <!-- ============ CURSOS ============ -->
 <section id="cursos">
   <div class="container">
-    <div class="reveal">
-      <span class="rule"></span>
-      <span class="eyebrow">Nuestros programas</span>
-      <h2 class="sec-title">Un curso para cada meta.</h2>
-      <p class="sec-lead">Cuatro caminos con el mismo método. Elige por lo que necesitas conseguir, no por el nivel que crees tener.</p>
+    <div class="chap-head reveal">
+      <div class="chap-mark">
+        <span class="chap-num">03</span>
+        <span class="eyebrow">Nuestros programas</span>
+      </div>
+      <div>
+        <h2 class="sec-title">Un curso para cada meta.</h2>
+        <p class="sec-lead">Cuatro caminos con el mismo método. Elige por lo que necesitas conseguir, no por el nivel que crees tener.</p>
+      </div>
     </div>
 
     <div class="ctiles">
@@ -1649,7 +1734,7 @@ html.js-anim .monument.in-view{opacity:1;animation:rise .9s var(--ease-out) both
 <!-- aria-hidden va SÓLO en los rieles decorativos: el encabezado es copy real
      y debe seguir en el árbol de accesibilidad y en el esquema de títulos. -->
 <div class="temas">
-  <div class="container temas-head">
+  <div class="container temas-head quiet-head">
     <span class="eyebrow">Más de 200 temas</span>
     <h2 class="sec-title" style="margin-bottom:0">De la cocina a la sala de juntas.</h2>
   </div>
@@ -1660,11 +1745,15 @@ html.js-anim .monument.in-view{opacity:1;animation:rise .9s var(--ease-out) both
 <!-- ============ CERTIFICACIÓN ============ -->
 <section id="certificacion" class="band-cream">
   <div class="container">
-    <div class="reveal">
-      <span class="rule" style="background:var(--gold-ink)"></span>
-      <span class="eyebrow">Certificación internacional</span>
-      <h2 class="sec-title">Tu título de inglés, con estrategia real.</h2>
-      <p class="sec-lead">Preparamos el examen que necesitas, no «inglés en general». La diferencia entre una banda 6 y una banda 8 casi nunca es vocabulario.</p>
+    <div class="chap-head reveal">
+      <div class="chap-mark">
+        <span class="chap-num">04</span>
+        <span class="eyebrow">Certificación internacional</span>
+      </div>
+      <div>
+        <h2 class="sec-title">Tu título de inglés, con estrategia real.</h2>
+        <p class="sec-lead">Preparamos el examen que necesitas, no «inglés en general». La diferencia entre una banda 6 y una banda 8 casi nunca es vocabulario.</p>
+      </div>
     </div>
 
     <div class="dossier reveal">
@@ -1731,13 +1820,20 @@ html.js-anim .monument.in-view{opacity:1;animation:rise .9s var(--ease-out) both
 </section>
 
 <!-- ============ PRECIOS ============ -->
-<section id="precios" class="band-cream" style="padding-top:0">
+<!-- padding-top reducido, no 0: precios sigue a certificación y las dos son
+     crema, pero el capítulo 05 abre con filete a todo el ancho y a 0 el
+     filete quedaba pegado al comparador de bandas de la sección anterior. -->
+<section id="precios" class="band-cream" style="padding-top:clamp(44px,5vw,68px)">
   <div class="container">
-    <div class="reveal">
-      <span class="rule" style="background:var(--gold-ink)"></span>
-      <span class="eyebrow">Planes flexibles</span>
-      <h2 class="sec-title">Invierte en tu inglés.</h2>
-      <p class="sec-lead">Sin inscripción, sin permanencia y sin material extra que comprar. El precio que ves es el que pagas.</p>
+    <div class="chap-head reveal">
+      <div class="chap-mark">
+        <span class="chap-num">05</span>
+        <span class="eyebrow">Planes flexibles</span>
+      </div>
+      <div>
+        <h2 class="sec-title">Invierte en tu inglés.</h2>
+        <p class="sec-lead">Sin inscripción, sin permanencia y sin material extra que comprar. El precio que ves es el que pagas.</p>
+      </div>
     </div>
 
     <div class="ptiles">
@@ -1822,8 +1918,7 @@ html.js-anim .monument.in-view{opacity:1;animation:rise .9s var(--ease-out) both
       </div>
     </div>
 
-    <div class="vesper-copy reveal">
-      <span class="rule"></span>
+    <div class="vesper-copy quiet-head reveal">
       <span class="eyebrow">La app de práctica · sin costo</span>
       <h2 class="sec-title">Y entre clase y clase, te espera <em>Vesper</em>.</h2>
       <p class="sec-lead">Vesper es el gato que da clase cuando nosotros no estamos. Vive en nuestra app de práctica, se acuerda de lo que fallaste y te lo vuelve a poner enfrente hasta que deja de fallarte. Es gratis, y no hace falta ser alumno para usarlo.</p>
@@ -1856,7 +1951,7 @@ html.js-anim .monument.in-view{opacity:1;animation:rise .9s var(--ease-out) both
 <!-- ============ FAQ ============ -->
 <section id="faq" class="band-cream">
   <div class="container">
-    <div class="reveal" style="text-align:center">
+    <div class="quiet-head reveal" style="text-align:center">
       <span class="eyebrow">Preguntas frecuentes</span>
       <h2 class="sec-title">Todo lo que necesitas saber.</h2>
     </div>
@@ -1878,10 +1973,11 @@ html.js-anim .monument.in-view{opacity:1;animation:rise .9s var(--ease-out) both
 </section>
 
 <!-- ============ CONTACTO ============ -->
-<div class="plate-band">
-  <img src="assets/images/landing/plate_farol.webp" alt="Grabado de un farol encendido que irradia luz" width="1600" height="450" loading="lazy" decoding="async">
-</div>
-
+<!-- Aquí había una tercera lámina a sangre. Se retiró: el cierre ya trae su
+     propia imagen a sangre (cta_texture, 1373px de alto), así que la lámina
+     era una segunda imagen pegada a la primera. De tres bandas iguales queda
+     UNA —la del sendero, que abre el capítulo 02—: tres veces el mismo
+     recurso es un tic, una vez es un gesto. -->
 <section id="contacto" class="cta-band">
   <img src="assets/images/landing/cta_texture.webp" alt="" width="1440" height="804" loading="lazy" decoding="async">
   <div class="container">
