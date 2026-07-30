@@ -85,10 +85,16 @@
      sostienen el argumento de venta y --t-h4 la del material de apoyo.
      El mínimo de h2 se queda en 2.05rem y no en 2.3: en móvil el héroe cae
      a 40px y un título de sección de 37 lo igualaba, aplanando la jerarquía. */
-  /* El mínimo de h4 baja a 1.35rem (no 1.55): a 375px el título de capítulo
-     cae a 33px y con h4 en 24.8 la distancia era de 1.32:1 — se perdía en
-     móvil justo la jerarquía que esto viene a crear. A 21.6 queda en 1.52:1. */
-  --t-h3:1.25rem; --t-h4:clamp(1.35rem,2.5vw,2.05rem);
+  /* El suelo de h4 queda en 1.5rem (24px), no en 1.35 ni en 1.55. Es un
+     equilibrio de DOS distancias, y 2.5vw no supera el suelo hasta 960px, así
+     que el suelo gobierna todo el móvil y la tableta:
+       · contra el título de capítulo (32.8 en móvil): 1.37:1 — la jerarquía
+         que este rediseño viene a crear sigue viéndose.
+       · contra los h3 de tarjeta (--t-h3, 20px): 1.20:1 — a 1.35rem (21.6)
+         eran 1.08:1 y los tres niveles de encabezado se aplanaban en una sola
+         banda en cualquier pantalla de 864px o menos, que es reproducir el
+         problema original abajo del pliegue. */
+  --t-h3:1.25rem; --t-h4:clamp(1.5rem,2.5vw,2.05rem);
   --t-h2:clamp(2.05rem,4.6vw,4.25rem); --t-display:clamp(2.9rem,6vw,4.8rem);
 
   /* Espacio / medida */
@@ -137,9 +143,12 @@ section[id]{scroll-margin-top:86px;}
    stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;vertical-align:-.125em;}
 
 /* ---------- Tipografía compartida ---------- */
+/* .26em, que es el valor que documenta el bloque de tokens. 66nord usa la
+   versalita a 16px con 0.4em; .26em es lo que aguanta aquí un rótulo español
+   largo sin partirse en la columna estrecha del encabezado de capítulo. */
 .eyebrow{
   display:inline-block;font-size:var(--t-eyebrow);font-weight:600;
-  letter-spacing:.22em;text-transform:uppercase;color:var(--star);
+  letter-spacing:.26em;text-transform:uppercase;color:var(--star);
 }
 .band-cream .eyebrow{color:var(--gold-ink);}
 .rule{display:block;width:34px;height:1px;background:var(--gold);margin-bottom:20px;}
@@ -375,7 +384,13 @@ section{padding:var(--s-section) 0;}
   display:grid;grid-template-columns:1fr;gap:14px 48px;
   border-top:1px solid var(--hair);padding-top:clamp(20px,2.4vw,30px);
 }
-.band-cream .chap-head{border-top-color:#ded6c4;}
+/* Este filete NO es un divisor decorativo cualquiera: es la unica senal de
+   que arranca un capitulo numerado, asi que tiene que pesar lo MISMO en las
+   dos superficies. A #ded6c4 sobre crema daba 1.36:1 contra 2.00:1 en noche
+   —menos de la mitad del salto de luminosidad—, o sea los capitulos 01, 04 y
+   05 se anunciaban a media voz. #c9b98f iguala el salto. (Los filetes de
+   .mcell si son divisores incidentales y por eso se quedan tenues.) */
+.band-cream .chap-head{border-top-color:#c9b98f;}
 /* El mínimo de la cifra baja a 1.7rem: en móvil el encabezado se apila y con
    la cifra en 32px contra un titular de 33 las dos leían igual de fuerte, o
    sea la cifra dejaba de ser marca de ritmo y competía con el título. */
@@ -390,11 +405,17 @@ section{padding:var(--s-section) 0;}
 .band-cream .chap-num{color:var(--gold-deep);}
 .chap-head .sec-title{margin-top:0;}
 .chap-mark{align-self:start;}
+/* El suelo de 310px en la columna de la marca NO es decorativo: las dos
+   columnas arrancan a 901px, que es justo donde la estrecha es MÁS estrecha
+   (263px a 912px de viewport). El rótulo más largo, "CERTIFICACIÓN
+   INTERNACIONAL", mide ~290px a .26em, así que sin el suelo se partía en dos
+   líneas en toda la banda de 901 a ~970px y descuadraba el encabezado del
+   capítulo 04. Con minmax(310px,4fr) la cifra y el rótulo caben siempre. */
 @media(min-width:901px){
-  .chap-head{grid-template-columns:minmax(0,4fr) minmax(0,8fr);}
+  .chap-head{grid-template-columns:minmax(310px,4fr) minmax(0,8fr);}
 }
 
-.quiet-head .sec-title,.sec-title.sm{
+.quiet-head .sec-title{
   font-size:var(--t-h4);margin:10px 0 12px;letter-spacing:0;
 }
 
@@ -430,7 +451,13 @@ section{padding:var(--s-section) 0;}
   margin-top:40px;border:1px solid var(--hair);border-radius:var(--r-lg);
   overflow:hidden;background:var(--dusk);
 }
-.rfig-art{margin:0;height:clamp(132px,16vw,205px);border-bottom:1px solid var(--hair);}
+/* La figura toma la PROPORCION de la lamina (1600x450), no una altura sacada
+   del viewport. Con height fija la caja daba 1078x205 = 5.26:1 contra un
+   original de 3.556:1, asi que object-fit:cover tiraba el 32 % del grabado
+   (304 de 450 filas) y cortaba en plano las dos burbujas de dialogo por
+   arriba y por abajo: justo lo que hace que una lamina se lea como recorte
+   accidental. Con aspect-ratio, cover ya no recorta nada. */
+.rfig-art{margin:0;aspect-ratio:1600/450;border-bottom:1px solid var(--hair);}
 .rfig-art img{width:100%;height:100%;object-fit:cover;display:block;}
 .rgrid{display:grid;grid-template-columns:repeat(3,1fr);}
 .rgrid div{padding:32px clamp(20px,2.6vw,30px);border-left:1px solid var(--hair);}
@@ -1508,7 +1535,7 @@ html.js-anim .monument.in-view{opacity:1;animation:rise .9s var(--ease-out) both
   <div class="container">
     <div class="chap-head reveal">
       <div class="chap-mark">
-        <span class="chap-num">01</span>
+        <span class="chap-num" aria-hidden="true">01</span>
         <span class="eyebrow">Por qué Vesper funciona</span>
       </div>
       <div>
@@ -1561,9 +1588,14 @@ html.js-anim .monument.in-view{opacity:1;animation:rise .9s var(--ease-out) both
       <h2 class="sec-title">Progreso que se mide, no que se promete.</h2>
     </div>
     <div class="rfig reveal">
-      <figure class="rfig-art">
-        <img src="assets/images/landing/plate_conversacion.webp" alt="Grabado de dos burbujas de dialogo con una estrella vespertina entre ellas" width="1600" height="450" loading="lazy" decoding="async">
-      </figure>
+      <!-- div y alt="" a proposito: la lamina es ORNAMENTO que remata el
+           pliego. Como <figure> con alt descriptivo se anunciaba una
+           descripcion de 74 caracteres entre el encabezado y las tres cifras
+           que introduce; asi el adorno sale del arbol de accesibilidad y la
+           seccion se lee encabezado -> cifras. -->
+      <div class="rfig-art">
+        <img src="assets/images/landing/plate_conversacion.webp" alt="" width="1600" height="450" loading="lazy" decoding="async">
+      </div>
       <div class="rgrid">
         <div><b><span data-count="15">15</span> min</b><p>Es lo que tarda el examen diagnóstico en decirte tu nivel exacto.</p></div>
         <div><b><span data-count="80">80</span> %</b><p>Del tiempo de clase lo ocupas hablando tú, no escuchando.</p></div>
@@ -1582,7 +1614,7 @@ html.js-anim .monument.in-view{opacity:1;animation:rise .9s var(--ease-out) both
   <div class="container">
     <div class="chap-head reveal">
       <div class="chap-mark">
-        <span class="chap-num">02</span>
+        <span class="chap-num" aria-hidden="true">02</span>
         <span class="eyebrow">Tu ruta de aprendizaje</span>
       </div>
       <div>
@@ -1691,7 +1723,7 @@ html.js-anim .monument.in-view{opacity:1;animation:rise .9s var(--ease-out) both
   <div class="container">
     <div class="chap-head reveal">
       <div class="chap-mark">
-        <span class="chap-num">03</span>
+        <span class="chap-num" aria-hidden="true">03</span>
         <span class="eyebrow">Nuestros programas</span>
       </div>
       <div>
@@ -1766,7 +1798,7 @@ html.js-anim .monument.in-view{opacity:1;animation:rise .9s var(--ease-out) both
   <div class="container">
     <div class="chap-head reveal">
       <div class="chap-mark">
-        <span class="chap-num">04</span>
+        <span class="chap-num" aria-hidden="true">04</span>
         <span class="eyebrow">Certificación internacional</span>
       </div>
       <div>
@@ -1846,7 +1878,7 @@ html.js-anim .monument.in-view{opacity:1;animation:rise .9s var(--ease-out) both
   <div class="container">
     <div class="chap-head reveal">
       <div class="chap-mark">
-        <span class="chap-num">05</span>
+        <span class="chap-num" aria-hidden="true">05</span>
         <span class="eyebrow">Planes flexibles</span>
       </div>
       <div>
