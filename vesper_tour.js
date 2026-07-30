@@ -161,11 +161,21 @@ window.VESPER_TOUR = (function () {
 
   /* ¿el elemento está pintado? Un objetivo con display:none mide 0 y el foco
      de luz se quedaría en una esquina apuntando a nada: eso vale como "no
-     existe" y el paso se salta. */
+     existe" y el paso se salta.
+     Medir la caja NO basta: el botón flotante del chat (.vchat-fab) ocupa sus
+     62px desde que se monta, pero entra con opacity:0 hasta que le ponen
+     .show-fab. Un elemento así mide, así que pasaría el filtro y acabaríamos
+     iluminando un hueco vacío. Por eso también miramos lo calculado. */
   function visible(el) {
     if (!el || !el.getBoundingClientRect) return false;
     var r = el.getBoundingClientRect();
-    return r.width > 1 && r.height > 1;
+    if (r.width <= 1 || r.height <= 1) return false;
+    try {
+      var cs = getComputedStyle(el);
+      if (cs.visibility === "hidden" || cs.display === "none") return false;
+      if (parseFloat(cs.opacity) < 0.05) return false;
+    } catch (e) {}
+    return true;
   }
 
   function place() {
