@@ -556,7 +556,48 @@ section{padding:var(--s-section) 0;}
 /* ============================================================
    CURSOS — emblemas grabados, marco de oro que se dibuja
    ============================================================ */
-.ctiles{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;margin-top:54px;}
+/* ------------------------------------------------------------
+   El carrusel. En la referencia los mandos NO van sobre las fichas:
+   viven en una columna propia a la izquierda —dos botones redondos y
+   un contador 01/02 con filete de avance— y las fichas desfilan a su
+   derecha. Aquí se reusa la asimetría que ya tiene el capítulo.
+   El desplazamiento es scroll nativo con scroll-snap: da el gesto
+   táctil gratis y evita meter una librería para cuatro tarjetas.
+   ------------------------------------------------------------ */
+.ccar{display:grid;grid-template-columns:132px minmax(0,1fr);gap:26px;
+  align-items:start;margin-top:54px;}
+.ccar-rail{display:flex;flex-direction:column;gap:14px;padding-top:6px;}
+.ccar-btn{width:54px;height:54px;border-radius:50%;display:grid;place-items:center;
+  border:1px solid var(--hair);background:transparent;color:var(--star);cursor:pointer;
+  font-size:1.15rem;transition:border-color .3s,background .3s,color .3s,opacity .3s;}
+.ccar-btn:hover:not(:disabled),.ccar-btn:focus-visible{border-color:var(--gold);background:var(--gold-tint);}
+.ccar-btn:disabled{opacity:.3;cursor:default;}
+/* El contador: la página actual grande, el total pequeño, y debajo un
+   filete partido en tantos tramos como páginas — el tramo vivo en oro. */
+.ccar-count{margin-top:12px;display:flex;align-items:baseline;gap:9px;
+  font-variant-numeric:tabular-nums;}
+.ccar-count b{font-size:2.35rem;font-weight:700;color:var(--cream);line-height:1;}
+.ccar-count span{font-size:1.05rem;font-weight:600;color:rgba(245,242,235,.34);}
+.ccar-bar{margin-top:10px;display:flex;gap:6px;width:104px;}
+.ccar-bar i{flex:1;height:2px;background:rgba(245,242,235,.16);transition:background .35s;}
+.ccar-bar i.on{background:var(--gold);}
+/* Sin relleno horizontal: cualquier padding-inline deja la pista en reposo
+   con scrollLeft > 0 y entonces el reparto en páginas y el apagado de los
+   botones salen corridos. El filete de oro de la ficha se dibuja con
+   inset:0 DENTRO de la tarjeta, así que no hay nada que recortar. */
+/* `proximity` y no `mandatory`: el imán obligatorio puede volver a pegar la
+   pista al punto de anclaje mientras corre un desplazamiento programático,
+   y ese conflicto es justo el que deja los botones sin efecto. Con
+   proximity el dedo conserva el imán y el botón llega siempre a su destino.
+   La animación la pone el CSS, no el JS (ver el bloque del carrusel): así
+   `prefers-reduced-motion` la apaga con la regla de `scroll-behavior` que
+   ya existe más abajo, sin que el JS tenga que consultar nada. */
+.ccar-track{display:flex;gap:22px;overflow-x:auto;scroll-snap-type:x proximity;
+  scroll-behavior:smooth;
+  scrollbar-width:none;-ms-overflow-style:none;padding-bottom:4px;}
+@media (prefers-reduced-motion: reduce){ .ccar-track{scroll-behavior:auto;} }
+.ccar-track::-webkit-scrollbar{display:none;}
+.ctile{flex:0 0 calc((100% - 44px)/3);scroll-snap-align:start;}
 .ctile{position:relative;display:flex;flex-direction:column;color:inherit;
   border:1px solid var(--hair);border-radius:var(--r-md);overflow:hidden;background:var(--dusk);
   transition:transform .38s var(--ease-std);}
@@ -572,33 +613,34 @@ section{padding:var(--s-section) 0;}
 .ctile .cvr img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
   transition:transform .6s var(--ease-std);}
 .ctile:hover .cvr img{transform:scale(1.04);}
-.ctile .cvr::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(14,12,31,.88),rgba(14,12,31,.18));}
-.ctile .badge{position:absolute;left:12px;top:12px;z-index:2;font-size:.6rem;font-weight:600;
-  letter-spacing:.13em;text-transform:uppercase;color:var(--star);
-  border:1px solid var(--hair);background:rgba(14,12,31,.6);padding:4px 10px;border-radius:var(--r-pill);}
-.ctile h3{position:absolute;left:16px;right:16px;bottom:14px;z-index:2;
-  font-family:var(--display);font-optical-sizing:auto;font-size:1.08rem;font-weight:600;color:var(--cream);}
-.ctile .cbody{padding:18px 18px 20px;display:flex;flex-direction:column;gap:10px;flex:1;}
-.ctile p{margin:0;color:var(--on-night-soft);font-size:.85rem;line-height:1.5;flex:1;}
-.ctile .more{display:inline-flex;align-items:center;gap:8px;color:var(--star);font-weight:600;font-size:.8rem;}
-.ctile .more svg{transition:transform .3s var(--ease-std);}
-.ctile:hover .more svg{transform:translateX(4px);}
-/* El precio, al modo de 66nord: NO es una tabla aparte, es el último dato
-   de la ficha del producto. Va bajo un filete, después de la descripción y
-   antes del enlace, en tipo discreto. El «Desde» es literal, no adorno: el
-   curso se puede tomar en varios planes y ésta es la vía más barata. Sobre
-   noche el didone NO se corrige (ver el bloque de Bodoni de más arriba). */
-.ctile .cmeta{margin-top:auto;padding-top:12px;border-top:1px solid var(--hair);
-  display:flex;flex-direction:column;gap:4px;}
-.ctile .cmeta-k{font-size:.62rem;font-weight:600;letter-spacing:.13em;text-transform:uppercase;
-  color:rgba(245,242,235,.52);}
-.ctile .cprice{flex:0 0 auto;margin:0;font-family:var(--display);font-optical-sizing:auto;
-  font-size:1.16rem;font-weight:600;color:var(--star);font-variant-numeric:tabular-nums;
-  display:flex;align-items:baseline;flex-wrap:wrap;gap:6px;line-height:1.25;}
-.ctile .cprice .from{font-family:var(--text);font-size:.62rem;font-weight:600;
-  letter-spacing:.13em;text-transform:uppercase;color:rgba(245,242,235,.52);}
+/* La lámina ya no lleva texto encima, así que tampoco necesita el velo que
+   lo hacía legible: sólo un apagado leve para que no compita con la ficha. */
+.ctile .cvr::after{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(14,12,31,.55),rgba(14,12,31,.10));}
+.ctile .cbody{padding:18px 18px 20px;display:flex;flex-direction:column;gap:7px;flex:1;}
+/* Orden de la referencia: título, categoría, los dos datos bajo filete y,
+   al final, el precio como pieza MÁS grande de la tarjeta. Medido sobre el
+   vídeo: precio ~32px contra título ~26px, es decir el precio manda por
+   tamaño, no sólo por posición. El rótulo «Desde» va encima, diminuto. */
+.ctile h3{margin:0;font-family:var(--display);font-optical-sizing:auto;
+  font-size:1.3rem;font-weight:600;color:var(--cream);line-height:1.22;}
+.ctile .ccat{font-size:.76rem;font-weight:500;color:var(--star);opacity:.78;}
+.ctile p{margin:4px 0 0;color:var(--on-night-soft);font-size:.83rem;line-height:1.5;flex:1;}
+.ctile .cfacts{list-style:none;margin:10px 0 0;padding:11px 0 0;border-top:1px solid var(--hair);
+  display:flex;flex-wrap:wrap;gap:6px 18px;}
+.ctile .cfacts li{display:inline-flex;align-items:center;gap:7px;
+  font-size:.76rem;color:rgba(245,242,235,.62);}
+.ctile .cfacts svg{color:var(--star);opacity:.72;font-size:.95rem;}
+.ctile .cfrom{margin:13px 0 0;flex:0 0 auto;font-size:.63rem;font-weight:700;
+  letter-spacing:.15em;text-transform:uppercase;color:rgba(245,242,235,.5);line-height:1;}
+.ctile .cprice{flex:0 0 auto;margin:5px 0 0;font-family:var(--display);font-optical-sizing:auto;
+  font-size:1.82rem;font-weight:600;color:var(--star);font-variant-numeric:tabular-nums;
+  display:flex;align-items:baseline;flex-wrap:wrap;gap:7px;line-height:1.1;}
 .ctile .cprice .unit{font-family:var(--text);font-size:.72rem;font-weight:400;
   color:rgba(245,242,235,.52);}
+.ctile .more{margin-top:14px;display:inline-flex;align-items:center;gap:8px;
+  color:var(--star);font-weight:600;font-size:.8rem;}
+.ctile .more svg{transition:transform .3s var(--ease-std);}
+.ctile:hover .more svg{transform:translateX(4px);}
 
 /* ============================================================
    VESPER — el retrato en medallón
@@ -1045,7 +1087,7 @@ footer{background:#0e0c1f;border-top:1px solid var(--hair);padding:60px 0 30px;c
   html.js-anim .nav-links.show a:nth-child(5){animation-delay:.20s}
   html.js-anim .nav-links.show a:nth-child(6){animation-delay:.24s}
   .nav-toggle{display:inline-flex;}
-  .ctiles{grid-template-columns:repeat(2,1fr);}
+  .ctile{flex-basis:calc((100% - 22px)/2);}
   .fgrid{grid-template-columns:1.6fr 1fr 1fr;row-gap:34px;}
 }
 @media(max-width:900px){
@@ -1079,7 +1121,17 @@ footer{background:#0e0c1f;border-top:1px solid var(--hair);padding:60px 0 30px;c
   .creds-inner span{border-left:0;border-top:1px solid rgba(197,160,89,.18);padding:16px 8px;}
   .creds-inner span:nth-child(-n+2){border-top:0;}
   .creds-inner span:last-child{grid-column:1 / -1;}
-  .ctiles{grid-template-columns:1fr;max-width:380px;margin-left:auto;margin-right:auto;}
+  /* Móvil: los mandos bajan a una fila bajo la pista. El contador se pone
+     en línea con los botones para no gastar un renglón entero, y la ficha
+     deja asomar la siguiente (86%) — el borde cortado es lo que le dice al
+     pulgar que hay más a la derecha. */
+  .ccar{grid-template-columns:1fr;gap:18px;}
+  .ccar-rail{grid-row:2;flex-direction:row;align-items:center;gap:12px;padding-top:0;}
+  .ccar-btn{width:46px;height:46px;}
+  .ccar-count{margin-top:0;margin-left:4px;}
+  .ccar-count b{font-size:1.7rem;}
+  .ccar-bar{margin-top:0;margin-left:auto;width:88px;}
+  .ctile{flex-basis:86%;}
   .fgrid{grid-template-columns:1fr 1fr;}
   .fbrand{grid-column:1 / -1;}
 }
@@ -1320,6 +1372,10 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
   <symbol id="i-menu" viewBox="0 0 24 24"><path d="M3.5 7h17M3.5 12h17M3.5 17h17"/></symbol>
   <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 2.8 2.6 6.1 6.6.6-5 4.3 1.5 6.4L12 16.9l-5.7 3.3 1.5-6.4-5-4.3 6.6-.6z"/></symbol>
   <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m6 9.5 6 6 6-6"/></symbol>
+  <!-- Los dos datos de la ficha de curso. Mismo trazo de 1.5 y esquinas
+       redondeadas que el resto del juego, para que no se noten añadidos. -->
+  <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3.4" y="5.2" width="17.2" height="15.4" rx="2.2"/><path d="M8 3.2v3.6M16 3.2v3.6M3.4 10.2h17.2"/><path d="M7.6 13.8h1.5M11.3 13.8h1.5M15 13.8h1.5M7.6 17.2h1.5M11.3 17.2h1.5"/></symbol>
+  <symbol id="i-gauge" viewBox="0 0 24 24"><path d="M3.2 18.4a9.4 9.4 0 1 1 17.6 0"/><path d="m12.9 15.1 3.7-4.6"/><circle cx="12" cy="16.6" r="1.35"/></symbol>
 </defs></svg>
 
 <header id="site-header">
@@ -1576,67 +1632,88 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
       </div>
     </div>
 
-    <div class="ctiles">
+    <div class="ccar">
+      <div class="ccar-rail">
+        <button type="button" class="ccar-btn" id="ccarNext" aria-label="Ver los siguientes cursos">
+          <svg class="i"><use href="#i-arrow"/></svg>
+        </button>
+        <button type="button" class="ccar-btn" id="ccarPrev" aria-label="Ver los cursos anteriores">
+          <svg class="i" style="transform:rotate(180deg)"><use href="#i-arrow"/></svg>
+        </button>
+        <p class="ccar-count" aria-hidden="true"><b id="ccarNow">01</b><span id="ccarAll">02</span></p>
+        <div class="ccar-bar" id="ccarBar" aria-hidden="true"></div>
+      </div>
+      <div class="ccar-track" id="ccarTrack" tabindex="0" role="group"
+           aria-label="Cursos disponibles. Usa las flechas del teclado para recorrerlos.">
       <a class="ctile reveal" href="curso-ingles-general.html">
         <div class="cvr">
           <img src="assets/images/landing/course_general.webp" alt="" width="720" height="402" loading="lazy" decoding="async">
-          <span class="badge">A1 – C2</span>
-          <h3>Inglés General</h3>
         </div>
         <div class="cbody">
+          <h3>Inglés General</h3>
+          <span class="ccat">A1 – C2</span>
           <p>La ruta completa, de cero a dominio. Las cuatro destrezas en cada sesión y un salto de nivel medido.</p>
-          <div class="cmeta">
-            <span class="cmeta-k">Grupo o 1 a 1 · 2 por semana</span>
-            <p class="cprice"><span class="from">Desde</span> $2,500 <span class="unit">MXN / mes</span></p>
-          </div>
+          <ul class="cfacts">
+            <li><svg class="i"><use href="#i-calendar"/></svg> 2 por semana</li>
+            <li><svg class="i"><use href="#i-gauge"/></svg> Grupo o 1 a 1</li>
+          </ul>
+          <p class="cfrom">Desde</p>
+          <p class="cprice">$2,500 <span class="unit">MXN / mes</span></p>
           <span class="more">Ver el curso <svg class="i"><use href="#i-arrow"/></svg></span>
         </div>
       </a>
       <a class="ctile reveal" href="curso-club-conversacion.html">
         <div class="cvr">
           <img src="assets/images/landing/course_conversation.webp" alt="" width="720" height="402" loading="lazy" decoding="async">
-          <span class="badge">A2 – C2</span>
-          <h3>Club de Conversación</h3>
         </div>
         <div class="cbody">
+          <h3>Club de Conversación</h3>
+          <span class="ccat">A2 – C2</span>
           <p>Más de 120 temas para soltar la lengua. Grupos reducidos, sin lectura en voz alta y sin turnos muertos.</p>
-          <div class="cmeta">
-            <span class="cmeta-k">Grupo reducido · 2 por semana</span>
-            <p class="cprice"><span class="from">Desde</span> $2,500 <span class="unit">MXN / mes</span></p>
-          </div>
+          <ul class="cfacts">
+            <li><svg class="i"><use href="#i-calendar"/></svg> 2 por semana</li>
+            <li><svg class="i"><use href="#i-gauge"/></svg> Grupo reducido</li>
+          </ul>
+          <p class="cfrom">Desde</p>
+          <p class="cprice">$2,500 <span class="unit">MXN / mes</span></p>
           <span class="more">Ver el curso <svg class="i"><use href="#i-arrow"/></svg></span>
         </div>
       </a>
       <a class="ctile reveal" href="curso-ingles-corporativo.html">
         <div class="cvr">
           <img src="assets/images/landing/course_corporate.webp" alt="" width="720" height="402" loading="lazy" decoding="async">
-          <span class="badge">B1 – C1</span>
-          <h3>Inglés Corporativo</h3>
         </div>
         <div class="cbody">
+          <h3>Inglés Corporativo</h3>
+          <span class="ccat">B1 – C1</span>
           <p>Juntas, negociación, correos y presentaciones. Para equipos y para quien ya trabaja en inglés.</p>
-          <div class="cmeta">
-            <span class="cmeta-k">Especializado · 3 por semana</span>
-            <p class="cprice"><span class="from">Desde</span> $3,000 <span class="unit">MXN / mes</span></p>
-          </div>
+          <ul class="cfacts">
+            <li><svg class="i"><use href="#i-calendar"/></svg> 3 por semana</li>
+            <li><svg class="i"><use href="#i-gauge"/></svg> Equipos o 1 a 1</li>
+          </ul>
+          <p class="cfrom">Desde</p>
+          <p class="cprice">$3,000 <span class="unit">MXN / mes</span></p>
           <span class="more">Ver el curso <svg class="i"><use href="#i-arrow"/></svg></span>
         </div>
       </a>
       <a class="ctile reveal" href="curso-certificacion.html">
         <div class="cvr">
           <img src="assets/images/landing/course_certification.webp" alt="" width="720" height="402" loading="lazy" decoding="async">
-          <span class="badge">B1 – C1</span>
-          <h3>Certificación</h3>
         </div>
         <div class="cbody">
+          <h3>Certificación</h3>
+          <span class="ccat">B1 – C1</span>
           <p>IELTS, Cambridge y TOEFL con estrategia de examen, simulacros cronometrados y meta de banda.</p>
-          <div class="cmeta">
-            <span class="cmeta-k">Especializado · meta de banda</span>
-            <p class="cprice"><span class="from">Desde</span> $3,000 <span class="unit">MXN / mes</span></p>
-          </div>
+          <ul class="cfacts">
+            <li><svg class="i"><use href="#i-calendar"/></svg> 3 por semana</li>
+            <li><svg class="i"><use href="#i-gauge"/></svg> Meta de banda</li>
+          </ul>
+          <p class="cfrom">Desde</p>
+          <p class="cprice">$3,000 <span class="unit">MXN / mes</span></p>
           <span class="more">Ver el curso <svg class="i"><use href="#i-arrow"/></svg></span>
         </div>
       </a>
+      </div>
     </div>
   </div>
 </section>
@@ -2073,6 +2150,109 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
       },{threshold:.4});
       nums.forEach(function(n){ io2.observe(n); });
     }
+
+    /* Carrusel de cursos. Scroll nativo: el gesto tactil y el teclado ya
+       vienen dados por el navegador, asi que aqui solo se gobiernan los dos
+       botones y el contador.
+
+       Las paginas NO salen de dividir scrollWidth entre clientWidth. Los
+       huecos entre fichas hacen que la pista mida un pelo mas de lo que
+       cabe (a 1000px: 1902 de pista contra 940 de hueco = 2.02) y esa
+       decima inventaba una TERCERA pagina con 44px dentro. Se cuenta lo que
+       de verdad ve el usuario: cuantas fichas caben, y cuantas tandas de
+       esas salen. Ademas se avanza por FICHAS, no por ancho de pista, para
+       que cada pagina empiece con una tarjeta pegada al filete y no a
+       medias. */
+    (function(){
+      var track = document.getElementById('ccarTrack');
+      if (!track) return;
+      var prev = document.getElementById('ccarPrev'),
+          next = document.getElementById('ccarNext'),
+          now  = document.getElementById('ccarNow'),
+          all  = document.getElementById('ccarAll'),
+          bar  = document.getElementById('ccarBar'),
+          cards = [].slice.call(track.children),
+          pages = 1, step = 1, perView = 1,
+          /* Posicion que se QUIERE tener. No se puede releer `scrollLeft` en
+             cada clic: mientras corre el desplazamiento suave sigue
+             devolviendo el valor viejo, asi que dos clics seguidos calculaban
+             el MISMO destino y el carrusel se quedaba clavado en la pagina 2.
+             Se lleva aparte y se re-sincroniza cuando el dedo manda. */
+          want = 0;
+
+      function pad(n){ return (n < 10 ? '0' : '') + n; }
+
+      function measure(){
+        if (!cards.length) return;
+        var w   = cards[0].getBoundingClientRect().width,
+            gap = parseFloat(getComputedStyle(track).columnGap) || 0;
+        step    = w + gap;
+        /* +1 de holgura: el ancho de la ficha es fraccionario y sin ella
+           "casi dos" se redondea a una. */
+        perView = Math.max(1, Math.round((track.clientWidth + gap + 1) / step));
+        perView = Math.min(perView, cards.length);
+        pages   = Math.max(1, Math.ceil(cards.length / perView));
+        all.textContent = pad(pages);
+        if (bar.children.length !== pages){
+          bar.innerHTML = '';
+          for (var i = 0; i < pages; i++) bar.appendChild(document.createElement('i'));
+        }
+        want = track.scrollLeft;
+        sync();
+      }
+
+      /* `pos` es la posicion que se QUIERE pintar. Hace falta porque con
+         `scroll-behavior:smooth` el navegador anima: justo despues de
+         asignar `scrollLeft`, leerlo devuelve todavia el valor viejo y el
+         contador se quedaria un paso atras. El listener de scroll llama sin
+         argumento y usa la posicion real, que es la que manda al final. */
+      function sync(pos){
+        var max  = track.scrollWidth - track.clientWidth,
+            sl   = (pos == null ? track.scrollLeft : pos),
+            page = Math.round(sl / (step * perView));
+        /* Al final del recorrido siempre es la ultima pagina, aunque el
+           ultimo tramo sea mas corto que los demas. */
+        if (max > 0 && sl >= max - 2) page = pages - 1;
+        page = Math.max(0, Math.min(page, pages - 1));
+        now.textContent = pad(page + 1);
+        [].forEach.call(bar.children, function(el, i){ el.classList.toggle('on', i === page); });
+        prev.disabled = sl <= 2;
+        next.disabled = max <= 2 || sl >= max - 2;
+      }
+
+      /* Se ASIGNA la posicion en vez de pedir un scroll animado. Una
+         asignacion aterriza siempre —aunque el entorno no produzca cuadros
+         y la animacion no llegue a correr—, mientras que un
+         `behavior:'smooth'` que se queda a medias deja el carrusel inmovil.
+         Lo suave lo pone `scroll-behavior` en el CSS, que ademas respeta
+         `prefers-reduced-motion` sin preguntar nada aqui. */
+      function go(dir){
+        var max = track.scrollWidth - track.clientWidth;
+        want = Math.max(0, Math.min(max, want + dir * step * perView));
+        track.scrollLeft = want;
+        sync(want);
+      }
+      next.addEventListener('click', function(){ go(1); });
+      prev.addEventListener('click', function(){ go(-1); });
+
+      /* Con rebote: mientras corre la animacion llegan eventos sin parar y
+         el temporizador se reinicia, asi que esto solo se ejecuta cuando la
+         pista YA se paro — momento en que la posicion real es la buena. */
+      var t;
+      track.addEventListener('scroll', function(){
+        clearTimeout(t); t = setTimeout(function(){ want = track.scrollLeft; sync(); }, 60);
+      }, {passive:true});
+
+      if ('ResizeObserver' in window) new ResizeObserver(measure).observe(track);
+      /* El listener de ventana va SIEMPRE, no solo como recambio: si el
+         observer no dispara al cambiar el ancho, el numero de fichas por
+         pantalla se queda del breakpoint anterior y el contador miente. */
+      window.addEventListener('resize', measure);
+      /* Las laminas son lazy: hasta que cargan, la pista puede medir de
+         menos y el contador saldria corto. */
+      window.addEventListener('load', measure);
+      measure();
+    })();
 
     /* La Constelación: el hilo se dibuja tramo a tramo y el panel
        pegajoso muestra el peldaño que domina la pantalla. */
