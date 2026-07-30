@@ -551,41 +551,6 @@ section{padding:var(--s-section) 0;}
 }
 
 /* ============================================================
-   ASÍ SE VE UNA CLASE — panel diagramático, sin fotografía
-   ============================================================ */
-.clase-panel{border:1px solid var(--hair);border-radius:var(--r-lg);overflow:hidden;
-  background:var(--dusk);margin-top:54px;box-shadow:var(--va-shadow-dusk,0 18px 44px rgba(20,18,42,.22));}
-.clase-chrome{display:flex;align-items:center;gap:8px;padding:13px 18px;
-  border-bottom:1px solid var(--hair);background:rgba(14,12,31,.55);}
-.clase-chrome i{width:9px;height:9px;border-radius:50%;background:rgba(245,242,235,.16);}
-.clase-chrome .ttl{margin-left:14px;font-size:.73rem;color:rgba(245,242,235,.62);letter-spacing:.06em;}
-.clase-chrome .live{margin-left:auto;display:inline-flex;align-items:center;gap:7px;
-  font-size:.66rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#7ee2a8;}
-.clase-chrome .live b{width:7px;height:7px;border-radius:50%;background:#4ade80;display:block;}
-.clase-body{display:grid;grid-template-columns:1fr;gap:0;}
-.clase-mat{position:relative;min-height:230px;background:var(--night);overflow:hidden;
-  border-bottom:1px solid var(--hair);}
-.clase-mat img{width:100%;height:100%;position:absolute;inset:0;object-fit:cover;opacity:.9;}
-.clase-mat .tag{position:absolute;left:16px;top:16px;z-index:2;font-size:.63rem;font-weight:600;
-  letter-spacing:.14em;text-transform:uppercase;color:var(--star);
-  background:rgba(14,12,31,.78);border:1px solid var(--hair);padding:6px 12px;border-radius:var(--r-pill);}
-.clase-talk{padding:26px clamp(20px,3vw,32px);display:flex;flex-direction:column;gap:14px;justify-content:center;}
-.line{margin:0;font-size:.92rem;line-height:1.5;}
-.line.say{color:var(--on-night);padding-left:14px;border-left:2px solid rgba(245,242,235,.16);}
-.line.say s{color:rgba(255,255,255,.62);text-decoration-color:#e07a7a;}
-.line.fix{color:var(--star);padding-left:14px;border-left:2px solid var(--gold);font-size:.87rem;}
-.line.fix b{color:var(--star);font-weight:600;}
-.line.fix span{color:rgba(245,242,235,.55);}
-.line.ok{color:#8fdcb0;font-size:.85rem;padding-left:14px;border-left:2px solid #3f9e6b;}
-.clase-foot{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--hair);}
-.clase-foot span{padding:16px 18px;border-left:1px solid var(--hair);font-size:.76rem;
-  color:rgba(245,242,235,.6);display:flex;align-items:center;gap:9px;}
-.clase-foot span:first-child{border-left:0;}
-.clase-foot svg{color:var(--gold);}
-@media(min-width:901px){.clase-body{grid-template-columns:1fr 1fr;}
-  .clase-mat{border-bottom:0;border-right:1px solid var(--hair);}}
-
-/* ============================================================
    CURSOS — emblemas grabados, marco de oro que se dibuja
    ============================================================ */
 .ctiles{display:grid;grid-template-columns:repeat(4,1fr);gap:22px;margin-top:54px;}
@@ -1070,9 +1035,6 @@ footer{background:#0e0c1f;border-top:1px solid var(--hair);padding:60px 0 30px;c
   .creds-inner span:nth-child(-n+2){border-top:0;}
   .creds-inner span:last-child{grid-column:1 / -1;}
   .ctiles{grid-template-columns:1fr;max-width:380px;margin-left:auto;margin-right:auto;}
-  .clase-foot{grid-template-columns:1fr;}
-  .clase-foot span{border-left:0;border-top:1px solid var(--hair);}
-  .clase-foot span:first-child{border-top:0;}
   .fgrid{grid-template-columns:1fr 1fr;}
   .fbrand{grid-column:1 / -1;}
 }
@@ -1551,42 +1513,6 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
           <p class="cwhat">Lo sabes cuando: <b>el idioma deja de ser el tema y solo importa lo que dices.</b></p>
         </li>
       </ol>
-    </div>
-  </div>
-</section>
-
-<!-- ============ ASÍ SE VE UNA CLASE ============ -->
-<section id="clase" class="band-cream">
-  <div class="container">
-    <div class="quiet-head reveal">
-      <span class="eyebrow">Dentro de la sesión</span>
-      <h2 class="sec-title">Así se ve una clase.</h2>
-      <p class="sec-lead">Sin misterio: material real, corrección en el momento y una meta clara para los 50 minutos.</p>
-    </div>
-
-    <div class="clase-panel reveal">
-      <div class="clase-chrome">
-        <i></i><i></i><i></i>
-        <span class="ttl">Vesper · B2 Negociación · Sesión 14</span>
-        <span class="live"><b></b> En vivo</span>
-      </div>
-      <div class="clase-body">
-        <div class="clase-mat">
-          <img src="assets/images/landing/clase_material.webp" alt="" width="560" height="700" loading="lazy" decoding="async">
-          <span class="tag">Material de la sesión</span>
-        </div>
-        <div class="clase-talk">
-          <p class="line say"><span lang="en">«I would like to <s>discuss about</s> the price before we sign.»</span></p>
-          <p class="line fix"><b lang="en">discuss</b> no lleva «about». <span lang="en">→ discuss the price</span></p>
-          <p class="line say"><span lang="en">«Could we revisit the timeline? It's a bit tight on our side.»</span></p>
-          <p class="line ok">Perfecto. «<span lang="en">A bit tight</span>» es exactamente lo que dirías en la junta real.</p>
-        </div>
-      </div>
-      <div class="clase-foot">
-        <span><svg class="i"><use href="#i-check-doc"/></svg> Corrección inmediata</span>
-        <span><svg class="i"><use href="#i-speech"/></svg> Roleplay con caso real</span>
-        <span><svg class="i"><use href="#i-summit"/></svg> Meta explícita por sesión</span>
-      </div>
     </div>
   </div>
 </section>
