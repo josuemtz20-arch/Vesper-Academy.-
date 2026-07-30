@@ -189,6 +189,12 @@ section[id]{scroll-margin-top:86px;}
 }
 .band-cream .sec-title,
 .band-cream .mcell h3,
+/* La cifra de capítulo entra aquí por la MISMA razón que las demás: sobre
+   crema, con optical-sizing auto a 41px, Bodoni sirve su corte de DISPLAY —
+   los finos más finos de la familia— y encima el oro sólo da 3.28:1, así que
+   trazo delgado y contraste bajo se suman. Sobre noche NO se corrige: ahí el
+   didone se ve como debe, igual que el resto de las bandas oscuras. */
+.band-cream .chap-num,
 .ptile:not(.feat) h3,
 .ptile:not(.feat) .price{
   font-optical-sizing:none;
@@ -429,9 +435,22 @@ section{padding:var(--s-section) 0;}
 .rgrid{display:grid;grid-template-columns:repeat(3,1fr);}
 .rgrid div{padding:32px clamp(20px,2.6vw,30px);border-left:1px solid var(--hair);}
 .rgrid div:first-child{border-left:0;}
+/* El techo baja de 3.5rem a 2.9rem (56 -> 46px a 1280). A 56 estas cifras
+   eran el segundo texto más grande de la página después del héroe y quedaban
+   a un pelo de los títulos de CAPÍTULO (59): una sección de apoyo pisando a
+   las cinco que sostienen la venta. Y dejaban a su propio h2 —32px, voz de
+   apoyo— dominado 1.75:1, o sea el encabezado leía como pie de foto de las
+   cifras que introduce. A 46 las cifras siguen mandando dentro de su pliego
+   (1.45:1 contra el h2) sin competir con los capítulos.
+   El SUELO va en 1.9rem y no en 2.1: el mínimo de --t-h2 es 2.05rem (32.8px),
+   así que un suelo de 2.1 (33.6) volvía a dejar las cifras de una sección de
+   apoyo por encima de los títulos de capítulo en pantallas estrechas. Con
+   1.9rem la cifra queda por debajo del capítulo en TODO el rango (comprobado
+   en los cruces de los clamp: 400, 700, 900, 1055, 1280 y 1500px) y mantiene
+   ~1.4:1 sobre su propio h2 en todo el rango. */
 .rgrid b{
   display:block;font-family:var(--display);font-optical-sizing:auto;
-  font-size:clamp(2.4rem,4.4vw,3.5rem);font-weight:600;color:var(--star);
+  font-size:clamp(1.9rem,4.4vw,2.9rem);font-weight:600;color:var(--star);
   line-height:1;font-variant-numeric:tabular-nums;
 }
 .rgrid p{margin:14px 0 0;color:var(--on-night-soft);font-size:var(--t-body);max-width:26ch;}
