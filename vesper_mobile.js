@@ -177,6 +177,13 @@
     /* ---------- 6. Año del pie ---------- */
     all(".m-year").forEach(function (el) { el.textContent = new Date().getFullYear(); });
 
+    /* ---------- 6b. WhatsApp: no enseñar un enlace muerto ----------
+       Mientras el href siga con el número de relleno, el botón se quita y
+       el CTA ocupa la barra entera. En cuanto se ponga el número real
+       aparece solo, sin tocar nada más. */
+    var wa = app.querySelector(".m-dock__wa");
+    if (wa && /\/520{6,}$/.test(wa.getAttribute("href") || "")) wa.remove();
+
     /* ---------- 7. Barra de acción fija ---------- */
     var dock = app.querySelector(".m-dock");
     if (dock) {
