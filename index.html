@@ -28,6 +28,10 @@
 <!-- Los tokens se cargan primero: la hoja propia de la pagina debe poder sobrescribirlos. -->
 <link rel="stylesheet" href="assets/css/vesper_tokens.css">
 
+<!-- Edición móvil. Solo pinta en táctiles de <=820px; en escritorio este
+     archivo no aplica una sola regla y la portada queda como siempre. -->
+<link rel="stylesheet" href="assets/css/vesper_mobile.css">
+
 <script>
   /* Anti-FOUC: marca <html> ANTES de pintar. Respeta tanto la preferencia del
      sistema como la explícita del alumno (vesper_profile.reduceMotion), que es
@@ -1376,6 +1380,13 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
        redondeadas que el resto del juego, para que no se noten añadidos. -->
   <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3.4" y="5.2" width="17.2" height="15.4" rx="2.2"/><path d="M8 3.2v3.6M16 3.2v3.6M3.4 10.2h17.2"/><path d="M7.6 13.8h1.5M11.3 13.8h1.5M15 13.8h1.5M7.6 17.2h1.5M11.3 17.2h1.5"/></symbol>
   <symbol id="i-gauge" viewBox="0 0 24 24"><path d="M3.2 18.4a9.4 9.4 0 1 1 17.6 0"/><path d="m12.9 15.1 3.7-4.6"/><circle cx="12" cy="16.6" r="1.35"/></symbol>
+  <!-- Los cinco que pedía la edición móvil. Mismo trazo de 1.5 salvo el
+       de WhatsApp, que es un glifo de marca y va de relleno (.i--solid). -->
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m4.8 12.6 4.6 4.6L19.2 7"/></symbol>
+  <symbol id="i-people" viewBox="0 0 24 24"><circle cx="9" cy="8.2" r="3.3"/><path d="M2.9 19.8a6.1 6.1 0 0 1 12.2 0"/><path d="M16.4 5.6a3.1 3.1 0 0 1 0 6.1"/><path d="M17.6 14a5.7 5.7 0 0 1 3.5 5.4"/></symbol>
+  <symbol id="i-person" viewBox="0 0 24 24"><circle cx="12" cy="7.4" r="3.7"/><path d="M5.2 20.2a6.8 6.8 0 0 1 13.6 0"/></symbol>
+  <symbol id="i-instagram" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5.2"/><circle cx="12" cy="12" r="4.1"/><circle cx="17.3" cy="6.8" r="1.05"/></symbol>
+  <symbol id="i-whatsapp" viewBox="0 0 24 24"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2m0 18.15a8.2 8.2 0 0 1-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.19 8.19 0 0 1-1.26-4.38c0-4.54 3.7-8.23 8.25-8.23a8.2 8.2 0 0 1 8.24 8.24c0 4.54-3.7 8.23-8.24 8.23m4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.24-.64.8-.78.97-.15.16-.29.18-.54.06-.25-.13-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.01-.38.11-.51.11-.11.25-.29.37-.43.12-.15.16-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.4-.42-.56-.43h-.48c-.16 0-.43.06-.65.31-.22.25-.85.83-.85 2.03s.87 2.35.99 2.51c.12.17 1.71 2.61 4.15 3.66.58.25 1.03.4 1.39.51.58.19 1.11.16 1.53.1.47-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.15-1.18-.06-.11-.22-.17-.47-.29"/></symbol>
 </defs></svg>
 
 <header id="site-header">
@@ -2592,6 +2603,340 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
   }
 })();
 </script>
+
+<!-- ============================================================
+     EDICIÓN MÓVIL DE LA PORTADA. Solo se muestra en táctiles de
+     <=820px (vesper_mobile.css); en escritorio queda en display:none
+     y no se ve ni se calcula nada. Los iconos salen del sprite de
+     arriba, no de Font Awesome.
+     ============================================================ -->
+<div id="m-app">
+
+  <!-- Barra superior -->
+  <header class="m-bar">
+    <a class="m-brand" href="#m-app" aria-label="Vesper Academy — inicio">
+      <img src="assets/images/vesper_logo_inverted.png" alt="" width="26" height="26" loading="lazy" decoding="async">
+      <b>Vesper Academy</b>
+    </a>
+    <div style="display:flex;align-items:center;gap:6px">
+      <a class="m-bar__cta" href="book_placement.html">Examen gratis</a>
+      <button class="m-burger" type="button" id="m-burger" aria-label="Abrir menú" aria-controls="m-sheet" aria-expanded="false"><svg class="i" aria-hidden="true"><use href="#i-menu"/></svg></button>
+    </div>
+  </header>
+
+  <div class="m-sheet" id="m-sheet">
+    <div class="m-sheet__inner">
+      <a href="#m-metodo">Metodología</a>
+      <a href="#m-cursos">Cursos</a>
+      <a href="#m-cert">Certificación</a>
+      <a href="#m-precios">Precios</a>
+      <a href="#m-contacto">Contacto</a>
+      <a class="is-gold" href="leccion.html">Lecciones gratis <svg class="i" aria-hidden="true"><use href="#i-bolt"/></svg></a>
+      <a class="m-btn m-btn--ghost" href="login.html">Acceso alumnos</a>
+    </div>
+  </div>
+
+  <!-- Hero -->
+  <section class="m-hero">
+    <div class="m-hero__top">
+      <div class="m-hero__copy">
+        <span class="m-eyebrow m-eyebrow--dark">Clases 100% en vivo</span>
+        <h2 class="m-h1">Habla inglés con <span>confianza real</span></h2>
+        <p>Método comunicativo con profesores reales. Hablas desde el día uno.</p>
+      </div>
+      <div class="m-cat">
+        <img src="assets/images/mascot/vesper_cat_welcome.webp" alt="Vesper, la mascota de Vesper Academy"
+             width="96" height="96" loading="lazy" decoding="async">
+        <i aria-hidden="true"></i><i aria-hidden="true"></i>
+      </div>
+    </div>
+
+    <div class="m-cta">
+      <a class="m-btn" href="book_placement.html">Examen de nivel gratis</a>
+      <a class="m-link m-link--gold" href="leccion.html"><span>Probar una lección</span><svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+    </div>
+    <p class="m-hero__note">Sin registro · 15 min · resultado al instante</p>
+
+    <div class="m-stats">
+      <div><b>A1–C2</b><small>Niveles</small></div>
+      <div><b>1:1</b><small>o grupo ≤6</small></div>
+      <div><b>100%</b><small>En vivo</small></div>
+    </div>
+  </section>
+
+  <!-- Confianza -->
+  <div class="m-chips m-sb">
+    <span><svg class="i" aria-hidden="true"><use href="#i-check-doc"/></svg> MCER</span>
+    <span><svg class="i" aria-hidden="true"><use href="#i-summit"/></svg> IELTS · Cambridge · TOEFL</span>
+    <span><svg class="i" aria-hidden="true"><use href="#i-star"/></svg> Profesores nativos</span>
+  </div>
+
+  <!-- Método -->
+  <section class="m-method" id="m-metodo">
+    <span class="m-eyebrow m-eyebrow--dark">El método</span>
+    <div class="m-method__claim">
+      <span class="m-method__num">80%</span>
+      <p>del tiempo de clase <b>hablas tú</b>. La gramática se activa al usarla, no memorizándola.</p>
+    </div>
+    <div class="m-tags">
+      <span><svg class="i" aria-hidden="true"><use href="#i-speech"/></svg>Roleplays reales</span>
+      <span><svg class="i" aria-hidden="true"><use href="#i-audio"/></svg>Audio nativo</span>
+      <span><svg class="i" aria-hidden="true"><use href="#i-gauge"/></svg>Nivel confirmado</span>
+      <span><svg class="i" aria-hidden="true"><use href="#i-case"/></svg>Enfoque pro</span>
+    </div>
+    <a class="m-link m-link--gold" href="curso-ingles-general.html"><span>Cómo es una clase</span><svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+  </section>
+
+  <!-- Niveles -->
+  <section class="m-levels">
+    <span class="m-eyebrow m-eyebrow--dark">Tu ruta</span>
+    <h2 class="m-h2" style="color:#fff">De cero a dominio, nivel por nivel</h2>
+    <p>Toca un nivel para ver su meta.</p>
+    <button class="m-lvl is-open" type="button" aria-expanded="true">
+      <span class="m-lvl__cefr">A1</span>
+      <span class="m-lvl__body"><span class="m-lvl__name">Fundamentos</span><span class="m-lvl__goal">Sobrevivir y presentarte: identidad, rutinas, lo esencial.</span></span>
+      <span class="m-lvl__bar"><i style="width:16%"></i></span>
+    </button>
+    <button class="m-lvl" type="button" aria-expanded="false">
+      <span class="m-lvl__cefr">A2</span>
+      <span class="m-lvl__body"><span class="m-lvl__name">Confianza</span><span class="m-lvl__goal">Conversación cotidiana, pasado y futuro, primeras historias.</span></span>
+      <span class="m-lvl__bar"><i style="width:34%"></i></span>
+    </button>
+    <button class="m-lvl" type="button" aria-expanded="false">
+      <span class="m-lvl__cefr">B1</span>
+      <span class="m-lvl__body"><span class="m-lvl__name">Independencia</span><span class="m-lvl__goal">Opinar, narrar y manejar situaciones imprevistas.</span></span>
+      <span class="m-lvl__bar"><i style="width:52%"></i></span>
+    </button>
+    <button class="m-lvl" type="button" aria-expanded="false">
+      <span class="m-lvl__cefr">B2</span>
+      <span class="m-lvl__body"><span class="m-lvl__name">Fluidez</span><span class="m-lvl__goal">Debate, negociación y entornos corporativos globales.</span></span>
+      <span class="m-lvl__bar"><i style="width:72%"></i></span>
+    </button>
+    <button class="m-lvl" type="button" aria-expanded="false">
+      <span class="m-lvl__cefr">C1–C2</span>
+      <span class="m-lvl__body"><span class="m-lvl__name">Dominio</span><span class="m-lvl__goal">Matiz, retórica y certificación internacional.</span></span>
+      <span class="m-lvl__bar"><i style="width:100%"></i></span>
+    </button>
+  </section>
+
+  <!-- Programas (baraja) -->
+  <section class="m-flush" id="m-cursos">
+    <div>
+      <span class="m-eyebrow">Programas</span>
+      <h2 class="m-h2">Un curso para cada meta</h2>
+      <p class="m-lead">Toca una carta para traerla al frente; tócala otra vez para entrar.</p>
+    </div>
+    <div class="m-deck m-deck--courses" data-kind="courses" data-start="0">
+      <button class="m-card" type="button" aria-label="Inglés General" data-href="curso-ingles-general.html">
+        <span class="m-course">
+          <img src="assets/images/landing/course_general.webp" alt="" loading="lazy" decoding="async">
+          <span class="m-course__shade"></span><span class="m-course__veil"></span>
+          <span class="m-badge">A1 – C2</span><span class="m-course__n">01</span>
+          <b class="m-course__t">Inglés General</b>
+          <span class="m-course__go" aria-hidden="true"><svg class="i"><use href="#i-arrow"/></svg></span>
+        </span>
+      </button>
+      <button class="m-card" type="button" aria-label="Club de Conversación" data-href="curso-club-conversacion.html">
+        <span class="m-course">
+          <img src="assets/images/landing/course_conversation.webp" alt="" loading="lazy" decoding="async">
+          <span class="m-course__shade"></span><span class="m-course__veil"></span>
+          <span class="m-badge">B1 – C2</span><span class="m-course__n">02</span>
+          <b class="m-course__t">Club de Conversación</b>
+          <span class="m-course__go" aria-hidden="true"><svg class="i"><use href="#i-arrow"/></svg></span>
+        </span>
+      </button>
+      <button class="m-card" type="button" aria-label="Inglés Corporativo" data-href="curso-ingles-corporativo.html">
+        <span class="m-course">
+          <img src="assets/images/landing/course_corporate.webp" alt="" loading="lazy" decoding="async">
+          <span class="m-course__shade"></span><span class="m-course__veil"></span>
+          <span class="m-badge">B1 – C1</span><span class="m-course__n">03</span>
+          <b class="m-course__t">Inglés Corporativo</b>
+          <span class="m-course__go" aria-hidden="true"><svg class="i"><use href="#i-arrow"/></svg></span>
+        </span>
+      </button>
+      <button class="m-card" type="button" aria-label="Preparación de Certificación" data-href="curso-certificacion.html">
+        <span class="m-course">
+          <img src="assets/images/landing/course_certification.webp" alt="" loading="lazy" decoding="async">
+          <span class="m-course__shade"></span><span class="m-course__veil"></span>
+          <span class="m-badge">B1 – C2</span><span class="m-course__n">04</span>
+          <b class="m-course__t">Preparación de Certificación</b>
+          <span class="m-course__go" aria-hidden="true"><svg class="i"><use href="#i-arrow"/></svg></span>
+        </span>
+      </button>
+    </div>
+    <div>
+      <p class="m-lead" data-detail="0" style="min-height:39px">Tu base completa de inglés, de cero a C2, con las cuatro destrezas integradas.</p>
+      <p class="m-lead" data-detail="1" style="min-height:39px" hidden>+150 temas para soltar la lengua sin miedo, en grupos reducidos.</p>
+      <p class="m-lead" data-detail="2" style="min-height:39px" hidden>Reuniones, correos y negociación: el inglés que mueve tu carrera.</p>
+      <p class="m-lead" data-detail="3" style="min-height:39px" hidden>IELTS, Cambridge y TOEFL con estrategia y simulacros por banda.</p>
+      <div class="m-deck-foot">
+        <a class="m-link" data-detail="0" href="curso-ingles-general.html"><span>Ver el curso</span><svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        <a class="m-link" data-detail="1" href="curso-club-conversacion.html" hidden><span>Ver el curso</span><svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        <a class="m-link" data-detail="2" href="curso-ingles-corporativo.html" hidden><span>Ver el curso</span><svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        <a class="m-link" data-detail="3" href="curso-certificacion.html" hidden><span>Ver el curso</span><svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        <span class="m-count">01 / 04</span>
+      </div>
+      <div class="m-dots">
+        <button type="button" class="is-on" aria-label="Curso 1"></button>
+        <button type="button" aria-label="Curso 2"></button>
+        <button type="button" aria-label="Curso 3"></button>
+        <button type="button" aria-label="Curso 4"></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Certificación -->
+  <section class="m-cert" id="m-cert">
+    <span class="m-eyebrow">Certificación</span>
+    <h2 class="m-h2">+0.5 a +1.0 banda por curso</h2>
+    <p>Simulacros cronometrados y respuestas modelo Banda 6 vs Banda 8, con la técnica que premian los examinadores.</p>
+    <div class="m-cert__row">
+      <div><b>IELTS</b><small>Academic · General</small></div>
+      <div><b>Cambridge</b><small>B2 · C1</small></div>
+      <div><b>TOEFL</b><small>iBT</small></div>
+    </div>
+    <a class="m-link" href="curso-certificacion.html"><span>Cómo preparamos el examen</span><svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+  </section>
+
+  <!-- Precios (baraja) -->
+  <section class="m-flush" id="m-precios">
+    <div>
+      <span class="m-eyebrow">Planes</span>
+      <h2 class="m-h2">Invierte en tu inglés</h2>
+      <p class="m-lead">Toca una carta para verla al frente; tócala otra vez para entrar.</p>
+    </div>
+    <div class="m-deck m-deck--plans" data-kind="plans" data-start="1">
+      <button class="m-card" type="button" aria-label="Plan grupal" data-href="planes.html#grupal">
+        <span class="m-plan">
+          <span class="m-plan__body">
+            <span class="m-plan__kind"><svg class="i" aria-hidden="true"><use href="#i-people"/></svg>Grupal</span>
+            <b class="m-plan__name">Grupal</b>
+            <span class="m-plan__rule"></span>
+            <span class="m-plan__price"><span class="m-plan__cur">$</span><span class="m-plan__amt">2,500</span></span>
+            <span class="m-plan__unit">MXN / mes</span>
+            <span class="m-plan__note">Grupos de hasta 6 alumnos</span>
+          </span>
+        </span>
+      </button>
+      <button class="m-card" type="button" aria-label="Plan 1 a 1 profesional" data-href="planes.html#profesional">
+        <span class="m-plan">
+          <span class="m-plan__ribbon">Más popular</span>
+          <span class="m-plan__body">
+            <span class="m-plan__kind"><svg class="i" aria-hidden="true"><use href="#i-person"/></svg>1 a 1</span>
+            <b class="m-plan__name">1 a 1 Profesional</b>
+            <span class="m-plan__rule"></span>
+            <span class="m-plan__price"><span class="m-plan__cur">$</span><span class="m-plan__amt">250–400</span></span>
+            <span class="m-plan__unit">MXN / hora</span>
+            <span class="m-plan__note">A tu medida, horario flexible</span>
+          </span>
+        </span>
+      </button>
+      <button class="m-card" type="button" aria-label="Planes especializados" data-href="planes.html#especializados">
+        <span class="m-plan">
+          <span class="m-plan__body">
+            <span class="m-plan__kind"><svg class="i" aria-hidden="true"><use href="#i-star"/></svg>Especial</span>
+            <b class="m-plan__name">Especializados</b>
+            <span class="m-plan__rule"></span>
+            <span class="m-plan__price"><span class="m-plan__cur">$</span><span class="m-plan__amt">3,000</span></span>
+            <span class="m-plan__unit">MXN / mes</span>
+            <span class="m-plan__note">Certificación · corporativo · técnico</span>
+          </span>
+        </span>
+      </button>
+    </div>
+    <div>
+      <p class="m-includes"><span>Incluye</span><i></i></p>
+      <ul class="m-perks" data-detail="0" hidden>
+        <li><svg class="i" aria-hidden="true"><use href="#i-check"/></svg>4 clases en vivo por semana</li>
+        <li><svg class="i" aria-hidden="true"><use href="#i-check"/></svg>Material y audio incluidos</li>
+        <li><svg class="i" aria-hidden="true"><use href="#i-check"/></svg>Seguimiento mensual de nivel</li>
+      </ul>
+      <ul class="m-perks" data-detail="1">
+        <li><svg class="i" aria-hidden="true"><use href="#i-check"/></svg>Horario y temario personalizados</li>
+        <li><svg class="i" aria-hidden="true"><use href="#i-check"/></svg>Corrección inmediata en cada clase</li>
+        <li><svg class="i" aria-hidden="true"><use href="#i-check"/></svg>Plan enfocado a tu meta profesional</li>
+      </ul>
+      <ul class="m-perks" data-detail="2" hidden>
+        <li><svg class="i" aria-hidden="true"><use href="#i-check"/></svg>Simulacros por banda (IELTS/TOEFL)</li>
+        <li><svg class="i" aria-hidden="true"><use href="#i-check"/></svg>Inglés corporativo y técnico</li>
+        <li><svg class="i" aria-hidden="true"><use href="#i-check"/></svg>Informe de progreso por banda</li>
+      </ul>
+      <a class="m-btn m-btn--dark" data-follow href="planes.html#profesional" style="margin-top:16px">Ver este plan</a>
+      <div class="m-deck-foot" style="margin-top:12px">
+        <div class="m-dots">
+          <button type="button" aria-label="Plan 1"></button>
+          <button type="button" class="is-on" aria-label="Plan 2"></button>
+          <button type="button" aria-label="Plan 3"></button>
+        </div>
+        <span class="m-count">02 / 03</span>
+      </div>
+      <p class="m-lead" style="margin-top:11px">Precios de referencia en MXN. Todos los planes empiezan con tu examen de nivel gratis.</p>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section>
+    <h2 class="m-h2" style="margin-bottom:14px">Dudas frecuentes</h2>
+    <div class="m-faq">
+      <button type="button" aria-expanded="false"><span>¿Necesito saber algo de inglés?</span><svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></button>
+      <div class="m-faq__a">No. Tenemos niveles desde cero absoluto y hacemos una prueba de ubicación con entrevista oral para empezar justo donde estás.</div>
+    </div>
+    <div class="m-faq">
+      <button type="button" aria-expanded="false"><span>¿Las clases son en vivo?</span><svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></button>
+      <div class="m-faq__a">100% en vivo con un profesor real. La interacción y la corrección inmediata son el corazón del método.</div>
+    </div>
+    <div class="m-faq">
+      <button type="button" aria-expanded="false"><span>¿Cómo mido mi progreso?</span><svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></button>
+      <div class="m-faq__a">Cada clase se evalúa por fluidez, precisión y profesionalismo, con simulacros de entrada, mitad y salida en los planes de certificación.</div>
+    </div>
+    <a class="m-link" href="examen-ingles-gratis.html"><span>Ver las 5 preguntas</span><svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+  </section>
+
+  <!-- Cierre -->
+  <section class="m-close" id="m-contacto">
+    <h2 class="m-h2">Tu primer paso es gratis</h2>
+    <p>Descubre tu nivel real en 15 minutos y recibe tu curso recomendado al instante.</p>
+    <a class="m-btn" href="book_placement.html">Hacer mi examen</a>
+    <button class="m-disclose" type="button" aria-expanded="false" aria-controls="m-form">¿Prefieres que te escribamos?</button>
+    <form class="m-form" id="m-form" action="https://formsubmit.co/ajax/contacto@vesperacademy.com" method="POST">
+      <input type="hidden" name="_subject" value="Nuevo prospecto desde vesperacademy.com (móvil)">
+      <input type="hidden" name="_template" value="table">
+      <input type="hidden" name="_captcha" value="false">
+      <input type="email" name="email" placeholder="Tu correo" aria-label="Tu correo electrónico" autocomplete="email" required>
+      <input type="text" name="nombre" placeholder="Tu nombre" aria-label="Tu nombre" autocomplete="name" required>
+      <button type="submit">Quiero que me contacten</button>
+    </form>
+    <p class="m-formmsg" role="status" aria-live="polite"></p>
+  </section>
+
+  <!-- Pie -->
+  <footer class="m-foot">
+    <div class="m-foot__brand">
+      <img src="assets/images/vesper_logo_inverted.png" alt="Vesper Academy" width="30" height="29" loading="lazy" decoding="async">
+      <b>Vesper Academy</b>
+    </div>
+    <div class="m-foot__links">
+      <a href="leccion.html">Lecciones gratis</a>
+      <a href="book_placement.html">Examen de nivel</a>
+      <a href="materiales.html">Portal del alumno</a>
+      <a href="portal_profesores.html">Profesores</a>
+    </div>
+    <div class="m-foot__bottom">
+      <span>© <span class="m-year">2026</span> Vesper Academy</span>
+      <a href="https://www.instagram.com/vesper.academy/" target="_blank" rel="noopener" aria-label="Instagram"><svg class="i" aria-hidden="true"><use href="#i-instagram"/></svg></a>
+    </div>
+  </footer>
+
+  <!-- Barra de acción fija -->
+  <div class="m-dock">
+    <div class="m-dock__row">
+      <a class="m-btn" href="book_placement.html">Examen de nivel gratis</a>
+      <a class="m-dock__wa" href="https://wa.me/520000000000" target="_blank" rel="noopener" aria-label="Escríbenos por WhatsApp"><svg class="i i--solid" aria-hidden="true"><use href="#i-whatsapp"/></svg></a>
+    </div>
+  </div>
+</div>
+
+<script src="vesper_mobile.js" defer></script>
 
 </body>
 </html>

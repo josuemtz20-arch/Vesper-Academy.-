@@ -217,6 +217,10 @@
 !/vesper_expansion2.js
 !/vesper_prefs.js
 
+# Edición móvil de la portada: la hoja va en assets/ (ya whitelisted),
+# este script vive en la raíz y hay que dejarlo pasar a mano.
+!/vesper_mobile.js
+
 # Expansion 3: 39 more lessons + vocabulary across all levels (A1-C2),
 # all skills (grammar, vocab, reading, listening, practical use). Vocabulary
 # lessons feed the vocab dens automatically via their matching pairs.
