@@ -193,7 +193,7 @@ section[id]{scroll-margin-top:86px;}
    Arreglo: suavizado del sistema sobre claro, eje óptico bajo (trazo mucho
    más robusto) y un punto más de peso. Las bandas de noche se quedan como
    estaban, que ahí el didone se ve como debe. */
-.hero,.creds,#resultados,#ruta,.temas,#cursos,#contacto,footer,.dossier,.ptile.feat{
+.hero,.creds,#resultados,#ruta,.temas,#cursos,#contacto,footer,.dossier{
   -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
 }
 .band-cream .sec-title,
@@ -204,8 +204,11 @@ section[id]{scroll-margin-top:86px;}
    trazo delgado y contraste bajo se suman. Sobre noche NO se corrige: ahí el
    didone se ve como debe, igual que el resto de las bandas oscuras. */
 .band-cream .chap-num,
-.ptile:not(.feat) h3,
-.ptile:not(.feat) .price{
+/* Los tres planes viven ahora sobre crema (ya no hay tarjeta de noche
+   destacada), así que TODO su didone entra en esta corrección, no sólo
+   el de las columnas no destacadas como antes. */
+.plan h3,
+.plan-price .amt{
   font-optical-sizing:none;
   font-variation-settings:"opsz" 8,"wght" 700;
 }
@@ -580,6 +583,22 @@ section{padding:var(--s-section) 0;}
 .ctile .more{display:inline-flex;align-items:center;gap:8px;color:var(--star);font-weight:600;font-size:.8rem;}
 .ctile .more svg{transition:transform .3s var(--ease-std);}
 .ctile:hover .more svg{transform:translateX(4px);}
+/* El precio, al modo de 66nord: NO es una tabla aparte, es el último dato
+   de la ficha del producto. Va bajo un filete, después de la descripción y
+   antes del enlace, en tipo discreto. El «Desde» es literal, no adorno: el
+   curso se puede tomar en varios planes y ésta es la vía más barata. Sobre
+   noche el didone NO se corrige (ver el bloque de Bodoni de más arriba). */
+.ctile .cmeta{margin-top:auto;padding-top:12px;border-top:1px solid var(--hair);
+  display:flex;flex-direction:column;gap:4px;}
+.ctile .cmeta-k{font-size:.62rem;font-weight:600;letter-spacing:.13em;text-transform:uppercase;
+  color:rgba(245,242,235,.52);}
+.ctile .cprice{flex:0 0 auto;margin:0;font-family:var(--display);font-optical-sizing:auto;
+  font-size:1.16rem;font-weight:600;color:var(--star);font-variant-numeric:tabular-nums;
+  display:flex;align-items:baseline;flex-wrap:wrap;gap:6px;line-height:1.25;}
+.ctile .cprice .from{font-family:var(--text);font-size:.62rem;font-weight:600;
+  letter-spacing:.13em;text-transform:uppercase;color:rgba(245,242,235,.52);}
+.ctile .cprice .unit{font-family:var(--text);font-size:.72rem;font-weight:400;
+  color:rgba(245,242,235,.52);}
 
 /* ============================================================
    VESPER — el retrato en medallón
@@ -882,35 +901,56 @@ html.js-anim .marquee.r .mtrack{animation:marchR 75s linear infinite;}
 @media(min-width:901px){.dossier-grid{grid-template-columns:1fr 1fr;gap:52px;}}
 
 /* ============================================================
-   PRECIOS
+   PRECIOS — registro editorial (referencia: 66nord.com)
+   ------------------------------------------------------------
+   Allí el precio no es NUNCA una tabla de planes: es el último dato
+   de una ficha, en tipo discreto y con «à partir de» delante. Aquí se
+   traduce igual y eso obliga a quitar tres cosas que gritaban: la caja
+   blanca sobre crema (que convertía la sección en comparativa), el
+   medallón de icono (decorativo, no informa) y el listón flotante.
+   Quedan tres columnas alineadas a la IZQUIERDA y separadas por filete
+   —la retícula, no la caja, es lo que ordena—, con la cifra al pie.
+
+   El realce del plan popular baja de listón a versalita de oro más
+   filete permanente arriba: sigue señalando sin reintroducir la tabla.
+   El filete que se dibuja al pasar es el mismo gesto que ya usan las
+   fichas de curso, así que no añade vocabulario nuevo a la página.
    ============================================================ */
-.ptiles{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:52px;align-items:stretch;}
-.ptile{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;gap:11px;
-  padding:40px 26px 30px;border:1px solid var(--line);border-radius:var(--r-lg);background:#fff;color:var(--ink);
-  transition:transform .38s var(--ease-std),border-color .3s;}
-.ptile:hover,.ptile:focus-visible{transform:translateY(-6px);border-color:var(--gold);}
-.ptile.feat{background:var(--night);color:var(--on-night);border-color:var(--gold);}
-.ptile .ribbon{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:var(--gold);
-  color:var(--night);font-size:.66rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;
-  padding:5px 16px;border-radius:var(--r-pill);}
-.ptile .ic{width:64px;height:64px;border-radius:50%;display:grid;place-items:center;font-size:1.5rem;
-  color:var(--gold-ink);background:var(--gold-tint);}
-.ptile.feat .ic{color:var(--star);background:rgba(197,160,89,.16);}
-.ptile h3{font-family:var(--display);font-optical-sizing:auto;font-size:1.18rem;font-weight:600;margin:0;}
-.ptile.feat h3{color:var(--cream);}
-.ptile .price{font-family:var(--display);font-optical-sizing:auto;font-size:1.75rem;font-weight:600;margin:0;
-  font-variant-numeric:tabular-nums;min-width:6ch;}
-.ptile.feat .price{color:var(--star);}
-.ptile .price small{font-size:.82rem;color:var(--muted);font-weight:400;font-family:var(--text);}
-.ptile.feat .price small{color:rgba(245,242,235,.55);}
-.ptile .pnote{color:var(--muted);font-size:.83rem;margin:0;min-height:2.4em;}
-.ptile.feat .pnote{color:var(--on-night-soft);}
-.ptile .more{margin-top:auto;padding-top:10px;color:var(--gold-ink);font-weight:600;font-size:.82rem;
+.plans{display:grid;grid-template-columns:repeat(3,1fr);margin-top:52px;
+  border-top:1px solid var(--line);}
+.plan{position:relative;display:flex;flex-direction:column;gap:11px;color:var(--ink);
+  padding:28px 26px 24px;border-left:1px solid var(--line);}
+/* Primera y última pegadas al borde del contenedor: así la columna 1
+   alinea con el titular de la sección y la retícula se lee como pliego. */
+.plan:first-child{border-left:0;padding-left:0;}
+.plan:last-child{padding-right:0;}
+.plan::before{content:"";position:absolute;left:0;right:0;top:-1px;height:2px;
+  background:var(--gold);transform:scaleX(0);transform-origin:left;
+  transition:transform .45s var(--ease-out);}
+.plan:hover::before,.plan:focus-visible::before,.plan.feat::before{transform:scaleX(1);}
+.plan-tag{font-size:.63rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--muted);}
+.plan.feat .plan-tag{color:var(--gold-ink);}
+.plan h3{font-family:var(--display);font-size:var(--t-h3);font-weight:600;margin:0;color:var(--ink);}
+.plan-desc{margin:0;color:var(--muted);font-size:.87rem;line-height:1.55;}
+.plan-spec{list-style:none;margin:2px 0 0;padding:0;display:flex;flex-direction:column;}
+.plan-spec li{font-size:.79rem;color:var(--muted);padding:7px 0;
+  border-top:1px solid var(--line);}
+/* La cifra: al PIE de la ficha y en cuerpo contenido. Antes iba a 1.75rem
+   centrada y era lo más ruidoso de la tarjeta; aquí pesa lo mismo que un
+   h3 y gana por posición, no por tamaño. tabular-nums para que las tres
+   columnas alineen el dígito aunque cambien las cantidades. */
+.plan-price{margin:14px 0 0;display:flex;align-items:baseline;flex-wrap:wrap;gap:7px;
+  font-variant-numeric:tabular-nums;}
+.plan-price .from{font-size:.63rem;font-weight:700;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--muted);}
+.plan-price .amt{font-family:var(--display);font-size:1.55rem;font-weight:600;color:var(--ink);}
+.plan-price .unit{font-size:.76rem;color:var(--muted);}
+.plan .more{margin-top:auto;padding-top:16px;color:var(--gold-ink);font-weight:600;font-size:.82rem;
   display:inline-flex;align-items:center;gap:7px;}
-.ptile.feat .more{color:var(--star);}
-.ptile .more svg{transition:transform .3s var(--ease-std);}
-.ptile:hover .more svg{transform:translateX(4px);}
-.pfoot{color:var(--muted);font-size:.83rem;margin-top:26px;text-align:center;}
+.plan .more svg{transition:transform .3s var(--ease-std);}
+.plan:hover .more svg{transform:translateX(4px);}
+.pfoot{color:var(--muted);font-size:.83rem;margin-top:26px;}
 
 /* ============================================================
    FAQ — <details> nativo
@@ -1011,7 +1051,12 @@ footer{background:#0e0c1f;border-top:1px solid var(--hair);padding:60px 0 30px;c
 @media(max-width:900px){
   .hero-grid{gap:40px;}
   .plate-wrap{width:min(100%,330px);}
-  .ptiles{grid-template-columns:1fr;max-width:420px;margin-left:auto;margin-right:auto;}
+  /* Apiladas: el filete que separaba columnas pasa a separar filas, igual
+     que en .mcell. Sin max-width ni centrado — la ficha sigue alineada al
+     titular de la sección, que es lo que sostiene el registro editorial. */
+  .plans{grid-template-columns:1fr;}
+  .plan{border-left:0;padding-left:0;padding-right:0;padding-top:26px;}
+  .plan+.plan{border-top:1px solid var(--line);}
   .mgrid{grid-template-columns:1fr;}
   .mcell{border-left:0;padding-left:0;padding-right:0;}
   .mcell:nth-child(2){border-top:1px solid var(--line);padding-top:38px;}
@@ -1540,6 +1585,10 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
         </div>
         <div class="cbody">
           <p>La ruta completa, de cero a dominio. Las cuatro destrezas en cada sesión y un salto de nivel medido.</p>
+          <div class="cmeta">
+            <span class="cmeta-k">Grupo o 1 a 1 · 2 por semana</span>
+            <p class="cprice"><span class="from">Desde</span> $2,500 <span class="unit">MXN / mes</span></p>
+          </div>
           <span class="more">Ver el curso <svg class="i"><use href="#i-arrow"/></svg></span>
         </div>
       </a>
@@ -1551,6 +1600,10 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
         </div>
         <div class="cbody">
           <p>Más de 120 temas para soltar la lengua. Grupos reducidos, sin lectura en voz alta y sin turnos muertos.</p>
+          <div class="cmeta">
+            <span class="cmeta-k">Grupo reducido · 2 por semana</span>
+            <p class="cprice"><span class="from">Desde</span> $2,500 <span class="unit">MXN / mes</span></p>
+          </div>
           <span class="more">Ver el curso <svg class="i"><use href="#i-arrow"/></svg></span>
         </div>
       </a>
@@ -1562,6 +1615,10 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
         </div>
         <div class="cbody">
           <p>Juntas, negociación, correos y presentaciones. Para equipos y para quien ya trabaja en inglés.</p>
+          <div class="cmeta">
+            <span class="cmeta-k">Especializado · 3 por semana</span>
+            <p class="cprice"><span class="from">Desde</span> $3,000 <span class="unit">MXN / mes</span></p>
+          </div>
           <span class="more">Ver el curso <svg class="i"><use href="#i-arrow"/></svg></span>
         </div>
       </a>
@@ -1573,6 +1630,10 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
         </div>
         <div class="cbody">
           <p>IELTS, Cambridge y TOEFL con estrategia de examen, simulacros cronometrados y meta de banda.</p>
+          <div class="cmeta">
+            <span class="cmeta-k">Especializado · meta de banda</span>
+            <p class="cprice"><span class="from">Desde</span> $3,000 <span class="unit">MXN / mes</span></p>
+          </div>
           <span class="more">Ver el curso <svg class="i"><use href="#i-arrow"/></svg></span>
         </div>
       </a>
@@ -1686,31 +1747,45 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
       </div>
     </div>
 
-    <div class="ptiles">
-      <a class="ptile reveal" href="planes.html#grupal">
-        <span class="ic"><svg class="i" style="font-size:1.5rem"><use href="#i-speech"/></svg></span>
+    <div class="plans">
+      <a class="plan reveal" href="planes.html#grupal">
+        <span class="plan-tag">Hasta 6 alumnos</span>
         <h3>Grupal</h3>
-        <p class="price">$<span data-count="2500">2500</span> <small>MXN / mes</small></p>
-        <p class="pnote">Grupos reducidos, dos sesiones por semana.</p>
+        <p class="plan-desc">La energía de aprender acompañado, con la atención de un grupo pequeño.</p>
+        <ul class="plan-spec">
+          <li>2 clases en vivo por semana</li>
+          <li>Club de conversación mensual</li>
+          <li>Material y audios incluidos</li>
+        </ul>
+        <p class="plan-price"><span class="amt">$2,500</span> <span class="unit">MXN / mes</span></p>
         <span class="more">Ver el plan <svg class="i"><use href="#i-arrow"/></svg></span>
       </a>
-      <a class="ptile feat reveal" href="planes.html#profesional">
-        <span class="ribbon">Más popular</span>
-        <span class="ic"><svg class="i" style="font-size:1.5rem"><use href="#i-case"/></svg></span>
-        <h3>Profesional 1:1</h3>
-        <p class="price">$<span data-count="250">250</span>–<span data-count="400">400</span> <small>MXN / hora</small></p>
-        <p class="pnote">Clase individual, horario y contenido a tu medida.</p>
+      <a class="plan feat reveal" href="planes.html#profesional">
+        <span class="plan-tag">Más popular</span>
+        <h3>Profesional 1 a 1</h3>
+        <p class="plan-desc">El profesor adapta cada actividad a tu meta y a tu ritmo. La vía más rápida.</p>
+        <ul class="plan-spec">
+          <li>2 clases privadas por semana</li>
+          <li>Plan personalizado a tu meta</li>
+          <li>Entrevista oral de nivel incluida</li>
+        </ul>
+        <p class="plan-price"><span class="from">Desde</span> <span class="amt">$250</span> <span class="unit">MXN / hora</span></p>
         <span class="more">Ver el plan <svg class="i"><use href="#i-arrow"/></svg></span>
       </a>
-      <a class="ptile reveal" href="planes.html#especializados">
-        <span class="ic"><svg class="i" style="font-size:1.5rem"><use href="#i-summit"/></svg></span>
+      <a class="plan reveal" href="planes.html#especializados">
+        <span class="plan-tag">Con meta de examen</span>
         <h3>Especializados</h3>
-        <p class="price">$<span data-count="3000">3000</span> <small>MXN / mes</small></p>
-        <p class="pnote">Certificación y corporativo, con meta de examen.</p>
+        <p class="plan-desc">Para quien necesita un resultado concreto: una banda, un puesto, una certificación.</p>
+        <ul class="plan-spec">
+          <li>3 sesiones intensivas por semana</li>
+          <li>Simulacros cronometrados completos</li>
+          <li>Corrección con rúbrica de banda</li>
+        </ul>
+        <p class="plan-price"><span class="amt">$3,000</span> <span class="unit">MXN / mes</span></p>
         <span class="more">Ver el plan <svg class="i"><use href="#i-arrow"/></svg></span>
       </a>
     </div>
-    <p class="pfoot">Precios en pesos mexicanos. Facturamos a empresas.</p>
+    <p class="pfoot">Precios en pesos mexicanos, sin inscripción ni permanencia. El plan 1 a 1 va de $250 a $400 por hora. Facturamos a empresas.</p>
   </div>
 </section>
 
