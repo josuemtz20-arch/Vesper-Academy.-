@@ -172,7 +172,7 @@ body{margin:0;font-family:var(--va-font-text,Inter,system-ui,sans-serif);display
                  '<div class="muted">Avisa a la academia para que lo vuelva a subir.</div>');
             return;
           }
-          render(html);
+          render(html, token, base);
         });
       }).catch(function () {
         fail('<div class="err">No hay conexi&oacute;n con el servidor de libros.</div>' +
@@ -186,9 +186,26 @@ body{margin:0;font-family:var(--va-font-text,Inter,system-ui,sans-serif);display
 
   /* ── 4. Renderizar: el libro sustituye a esta página por completo,
          así su CSS de impresión y sus scripts funcionan tal cual ── */
-  function render(html) {
+  function render(html, token, base) {
     /* el candado ya se pasó aquí: quita su <script> del documento del libro */
     html = html.replace(/<script[^>]*src=["']vesper_auth\.js["'][^>]*>\s*<\/script>/gi, "");
+
+    /* ── Libros paginados (las páginas REALES del documento de Canva) ──
+       Estos libros no traen el contenido dentro del HTML: el trozo 0 es solo una
+       carcasa (~5 KB) y cada página vive en su propio documento de Firestore, que
+       la carcasa pide según el alumno va bajando. Así un libro de 90 páginas y
+       11 MB abre al instante en vez de descargarse entero.
+       Como document.write crea un documento NUEVO, el SDK de Firebase de esta
+       página desaparece: hay que pasarle a la carcasa el idToken y la ruta base
+       para que pueda leer. El token dura ~1 h; la carcasa avisa si caduca. */
+    if (/VESPER_PAGED_BOOK/.test(html)) {
+      var boot = "<script>window.VESPER_BOOK=" +
+        JSON.stringify({ token: token, base: base }).replace(/</g, "\\u003c") +
+        ";<\/script>";
+      html = /<head[^>]*>/i.test(html)
+        ? html.replace(/<head[^>]*>/i, function (m) { return m + boot; })
+        : boot + html;
+    }
 
     /* arreglo móvil: los libros se generan con ancho de papel A4 (210mm),
        así que en el teléfono se ven apretados. Se inyecta un viewport (si
