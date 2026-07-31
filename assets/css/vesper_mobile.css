@@ -64,15 +64,17 @@
 
   /* --- Botones (oro plano, radio 3, versalita) --- */
   #m-app .m-btn { display: flex; align-items: center; justify-content: center; height: 52px;
-    border: none; border-radius: 3px; background: #c5a059; color: #1B1B2F; cursor: pointer;
+    border: none; border-radius: 0; background: #c5a059; color: #1B1B2F; cursor: pointer;
     font: 700 12.5px 'Inter', sans-serif; letter-spacing: .13em; text-transform: uppercase; }
   #m-app .m-btn--dark { background: #1B1B2F; color: #fff; height: 48px; font-size: 12px; }
   #m-app .m-btn--ghost { background: transparent; color: #fff; height: 48px; font-size: 11.5px;
     border: 1px solid rgba(255,255,255,.28); font-weight: 700; }
-  /* #8a6a2a y no #a8843d: sobre blanco daba 3.48:1 y hace falta 4.5. Ahora 5.03. */
+  /* Ni #a8843d (3.48:1 sobre blanco) ni #8a6a2a: ese pasaba en blanco pero
+     caía a 4.15 sobre la parada oscura del degradado de la banda de
+     certificación (#efe9da). #7d5f26 da 4.90 en ese peor fondo. */
   #m-app .m-link { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; padding: 0 2px;
-    font: 600 13px 'Inter', sans-serif; color: #8a6a2a; }
-  #m-app .m-link span { border-bottom: 1px solid rgba(138,106,42,.45); padding-bottom: 3px; }
+    font: 600 13px 'Inter', sans-serif; color: #7d5f26; }
+  #m-app .m-link span { border-bottom: 1px solid rgba(125,95,38,.45); padding-bottom: 3px; }
   #m-app .m-link .i { margin-bottom: 2px; }
   #m-app .m-link--gold { color: #d9bd84; align-self: center; }
   #m-app .m-link--gold span { border-bottom-color: rgba(217,189,132,.45); }
@@ -87,7 +89,7 @@
     font-weight: 700; letter-spacing: .3px;
     font-optical-sizing: none; font-variation-settings: 'opsz' 8; }
   #m-app .m-bar__cta { display: inline-flex; align-items: center; height: 40px; padding: 0 13px;
-    border-radius: 3px; background: #c5a059; color: #1B1B2F;
+    border-radius: 0; background: #c5a059; color: #1B1B2F;
     font: 700 11.5px 'Inter', sans-serif; letter-spacing: .1em; text-transform: uppercase; }
   #m-app .m-burger { width: 44px; height: 44px; display: flex; align-items: center;
     justify-content: center; background: none; border: none; color: #fff; font-size: 20px; cursor: pointer; }
@@ -118,7 +120,7 @@
   /* Mascota (animaciones tomadas de vesper_mascot.js) */
   #m-app .m-cat { flex: none; margin-top: 12px; position: relative; line-height: 0;
     animation: vc-float 3s ease-in-out infinite; }
-  #m-app .m-cat img { width: 96px; height: 96px; border-radius: 50%; object-fit: cover; display: block;
+  #m-app .m-cat img { width: 96px; height: 96px; border-radius: 0; object-fit: cover; display: block;
     background: rgba(201,168,76,.14); border: 2px solid #C9A84C;
     transform-origin: 60% 92%; animation: vc-wave 1.05s ease-in-out 2; }
   #m-app .m-cat i { position: absolute; width: 13px; height: 13px; border-radius: 50%;
@@ -129,7 +131,7 @@
 
   /* Stats */
   #m-app .m-stats { display: flex; gap: 8px; margin-top: 18px; }
-  #m-app .m-stats div { flex: 1; text-align: center; padding: 9px 4px; border-radius: 3px;
+  #m-app .m-stats div { flex: 1; text-align: center; padding: 9px 4px; border-radius: 0;
     background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1); }
   #m-app .m-stats b { display: block; font-family: 'Bodoni Moda', Georgia, serif; font-size: 17px;
     font-weight: 700; color: #d9bd84; line-height: 1.15;
@@ -142,8 +144,8 @@
     background: #f5f2eb; border-bottom: 1px solid #ece7da; }
   #m-app .m-chips span { flex: none; display: inline-flex; align-items: center; gap: 6px;
     font: 600 11.5px 'Inter', sans-serif; color: #5d6470; background: #fff;
-    border: 1px solid #ece7da; border-radius: 999px; padding: 7px 12px; }
-  #m-app .m-chips .i { color: #8a6a2a; }
+    border: 1px solid #ece7da; border-radius: 0; padding: 7px 12px; }
+  #m-app .m-chips .i { color: #7d5f26; }
 
   /* 6. Método (banda navy, la cifra primero) ------------------ */
   #m-app .m-method { background: #1B1B2F; color: #fff; padding: 28px 20px 26px; }
@@ -155,7 +157,7 @@
   #m-app .m-method__claim b { color: #fff; font-weight: 600; }
   #m-app .m-tags { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 20px; }
   #m-app .m-tags span { display: flex; align-items: center; gap: 9px; padding: 11px 12px;
-    border: 1px solid rgba(255,255,255,.14); border-radius: 3px;
+    border: 1px solid rgba(255,255,255,.14); border-radius: 0;
     font: 600 12px 'Inter', sans-serif; color: #fff; }
   #m-app .m-tags .i { color: #d9bd84; font-size: 14px; }
 
@@ -175,61 +177,62 @@
   #m-app .m-lvl__goal { display: none; font: 400 12px/1.45 'Inter', sans-serif;
     color: rgba(255,255,255,.66); margin-top: 3px; }
   #m-app .m-lvl.is-open .m-lvl__goal { display: block; }
-  #m-app .m-lvl__bar { flex: none; width: 56px; height: 4px; border-radius: 2px;
+  #m-app .m-lvl__bar { flex: none; width: 56px; height: 4px; border-radius: 0;
     background: rgba(255,255,255,.14); overflow: hidden; }
   #m-app .m-lvl__bar i { display: block; height: 100%; background: #c5a059; }
 
-  /* 8. Baraja (cursos y planes) ------------------------------ */
-  #m-app .m-deck { position: relative; overflow: hidden; }
-  #m-app .m-deck--courses { height: 266px; margin-top: 16px; }
-  #m-app .m-deck--plans { height: 292px; margin-top: 14px; }
-  #m-app .m-card { position: absolute; left: 16px; top: 10px; padding: 0; border: none;
-    background: none; cursor: pointer; transform-origin: 0 100%;
-    transition: transform .46s cubic-bezier(.22,1,.36,1), opacity .46s,
-                left .46s cubic-bezier(.22,1,.36,1); }
-  #m-app .m-deck--courses .m-card { width: 196px; height: 244px; }
-  #m-app .m-deck--plans .m-card { width: 202px; height: 264px; top: 14px; }
+  /* 8. Riel de cartas (cursos y planes) -----------------------
+     Antes era una baraja: las cartas iban en position:absolute y se
+     solapaban unas sobre otras a propósito. Ahora van una al lado de la
+     otra, sin pisarse, con arrastre nativo y anclaje al centro. */
+  /* Anclaje al BORDE IZQUIERDO, no al centro: con `center` la primera carta
+     nunca puede centrarse (su centro cae antes del centro del riel), así que
+     el navegador saltaba sola a la segunda — medido, arrancaba en scrollLeft
+     156 teniendo data-start="0". */
+  #m-app .m-deck { display: flex; gap: 10px; overflow-x: auto; overflow-y: hidden;
+    scroll-snap-type: x mandatory; scroll-padding-left: 20px;
+    padding: 12px 20px 16px; -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; }
+  #m-app .m-deck::-webkit-scrollbar { width: 0; height: 0; }
+  #m-app .m-deck--courses { margin-top: 4px; }
+  #m-app .m-deck--plans { margin-top: 2px; }
+  #m-app .m-card { flex: 0 0 auto; width: 214px; scroll-snap-align: start;
+    padding: 0; border: none; background: none; cursor: pointer; text-align: left;
+    transition: opacity .3s; }
 
-  /* Carta de curso */
-  #m-app .m-course { position: relative; display: block; width: 100%; height: 100%;
-    border-radius: 4px; overflow: hidden; background: #141a2e; border: 1px solid rgba(197,160,89,.35);
-    border-bottom: 3px solid #c5a059; box-shadow: 0 8px 20px rgba(20,18,42,.22); }
-  #m-app .m-card.is-active .m-course { border-color: #c5a059; box-shadow: 0 18px 40px rgba(20,18,42,.34); }
-  #m-app .m-course img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
-  #m-app .m-course__shade { position: absolute; inset: auto 0 0 0; height: 120px;
-    background: linear-gradient(to top, rgba(20,18,42,.86), rgba(20,18,42,0)); }
-  #m-app .m-course__veil { position: absolute; inset: 0; background: rgba(20,18,42,.34);
-    transition: background .46s; }
-  #m-app .m-card.is-active .m-course__veil { background: rgba(20,18,42,0); }
-  #m-app .m-badge { position: absolute; top: 10px; left: 10px; z-index: 2;
+  /* Carta de curso: foto arriba, BANDA SÓLIDA abajo.
+     El título ya no va sobre la foto. Medido con muestreo de píxeles, encima
+     de la imagen caía a 3.31:1 en el punto más claro (hace falta 4.5); sobre
+     la banda #141a2e es 15.9:1 pase lo que pase con la foto. */
+  #m-app .m-course { position: relative; display: flex; flex-direction: column;
+    width: 100%; background: #141a2e; border: 1px solid rgba(197,160,89,.35);
+    border-bottom: 3px solid #c5a059; }
+  #m-app .m-card.is-active .m-course { border-color: #c5a059; }
+  #m-app .m-course__pic { position: relative; display: block; height: 148px; overflow: hidden; }
+  #m-app .m-course__pic img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  #m-app .m-badge { position: absolute; top: 0; left: 0; z-index: 2;
     font: 700 11px 'Inter', sans-serif; letter-spacing: .1em; text-transform: uppercase;
-    color: #1B1B2F; background: #c5a059; padding: 4px 8px; border-radius: 2px; }
-  #m-app .m-course__n { position: absolute; top: 11px; right: 12px; z-index: 2;
-    font-family: 'Bodoni Moda', Georgia, serif; font-size: 15px; font-weight: 700; color: rgba(255,255,255,.78);
+    color: #1B1B2F; background: #c5a059; padding: 5px 9px; }
+  #m-app .m-course__cap { display: flex; align-items: baseline; gap: 9px; padding: 12px 13px 13px; }
+  #m-app .m-course__n { flex: none; font-family: 'Bodoni Moda', Georgia, serif; font-size: 14px;
+    font-weight: 700; color: #d9bd84;
     font-optical-sizing: none; font-variation-settings: 'opsz' 8; }
-  #m-app .m-course__t { position: absolute; left: 13px; right: 13px; bottom: 12px; z-index: 2;
+  #m-app .m-course__t { flex: 1; min-width: 0; min-height: 43px;
     font-family: 'Bodoni Moda', Georgia, serif; font-size: 18px; font-weight: 700; color: #fff;
-    line-height: 1.18; text-align: left;
-    font-optical-sizing: none; font-variation-settings: 'opsz' 8; }
-  /* Pista de que la carta del frente sí lleva a algún sitio */
-  #m-app .m-card.is-active .m-course__go { opacity: 1; }
-  #m-app .m-course__go { position: absolute; right: 11px; bottom: 12px; z-index: 3; opacity: 0;
-    width: 26px; height: 26px; border-radius: 50%; background: #c5a059; color: #1B1B2F;
-    display: flex; align-items: center; justify-content: center; font-size: 14px; transition: opacity .3s; }
+    line-height: 1.18; font-optical-sizing: none; font-variation-settings: 'opsz' 8; }
 
   /* Carta de precio */
   #m-app .m-plan { position: relative; display: flex; flex-direction: column; width: 100%;
-    height: 100%; border-radius: 4px; overflow: hidden; background: #faf8f3;
-    border: 1px solid #e4e0d8; box-shadow: 0 5px 14px rgba(27,27,47,.09); text-align: left; }
-  #m-app .m-card.is-active .m-plan { background: #fff; border-color: #c5a059;
-    box-shadow: 0 20px 44px rgba(27,27,47,.18); }
+    min-height: 262px; background: #faf8f3;
+    border: 1px solid #e4e0d8; text-align: left; }
+  #m-app .m-card.is-active .m-plan { background: #fff; border-color: #c5a059; }
   #m-app .m-plan__ribbon { display: flex; align-items: center; justify-content: center; height: 24px;
     flex: none; background: #c5a059; color: #1B1B2F; font: 700 11px 'Inter', sans-serif;
     letter-spacing: .12em; text-transform: uppercase; }
   #m-app .m-plan__body { display: flex; flex-direction: column; flex: 1; padding: 16px 16px 14px; }
   #m-app .m-plan__kind { display: flex; align-items: center; gap: 7px;
     font: 700 11px 'Inter', sans-serif; letter-spacing: .12em; text-transform: uppercase; color: #7c5e22; }
-  #m-app .m-plan__kind .i { font-size: 13px; color: #8a6a2a; }
+  #m-app .m-plan__kind .i { font-size: 13px; color: #7d5f26; }
   #m-app .m-plan__name { display: block; font-family: 'Bodoni Moda', Georgia, serif; font-size: 18px;
     font-weight: 700; line-height: 1.18; color: #4a4a5e; margin-top: 9px;
     font-optical-sizing: none; font-variation-settings: 'opsz' 8; }
@@ -238,7 +241,7 @@
   #m-app .m-card.is-active .m-plan__rule { background: #c5a059; }
   #m-app .m-plan__price { display: flex; align-items: flex-start; gap: 2px; }
   #m-app .m-plan__cur { font-family: 'Bodoni Moda', Georgia, serif; font-size: 15px;
-    font-weight: 700; color: #8a6a2a; padding-top: 5px;
+    font-weight: 700; color: #7d5f26; padding-top: 5px;
     font-optical-sizing: none; font-variation-settings: 'opsz' 8; }
   #m-app .m-plan__amt { font-family: 'Bodoni Moda', Georgia, serif; font-size: 32px;
     font-weight: 700; line-height: .98; color: #1B1B2F; letter-spacing: -.01em; }
@@ -253,7 +256,7 @@
   #m-app .m-deck-foot { display: flex; align-items: center; justify-content: space-between;
     gap: 12px; margin-top: 6px; }
   #m-app .m-dots { display: flex; align-items: center; gap: 0; margin: -19px -9px; }
-  #m-app .m-dots button { width: 6px; height: 6px; padding: 19px 9px; border: none; border-radius: 3px;
+  #m-app .m-dots button { width: 6px; height: 6px; padding: 19px 9px; border: none; border-radius: 0;
     box-sizing: content-box; background: rgba(27,27,47,.28); background-clip: content-box; cursor: pointer;
     transition: width .3s, background-color .3s; }
   #m-app .m-dots button.is-on { width: 20px; background-color: #c5a059; }
@@ -265,13 +268,13 @@
   #m-app .m-perks { display: flex; flex-direction: column; gap: 8px; list-style: none; padding: 0; margin: 0; }
   #m-app .m-perks li { display: flex; gap: 9px; align-items: flex-start;
     font: 400 12.5px/1.4 'Inter', sans-serif; color: #1B1B2F; }
-  #m-app .m-perks .i { color: #8a6a2a; margin-top: 2px; font-size: 15px; }
+  #m-app .m-perks .i { color: #7d5f26; margin-top: 2px; font-size: 15px; }
 
   /* 9. Certificación ---------------------------------------- */
   #m-app .m-cert { background: linear-gradient(135deg, #f5f2eb, #efe9da); padding: 28px 20px; }
   #m-app .m-cert p { font: 400 13px/1.5 'Inter', sans-serif; color: #5d6470; margin: 6px 0 14px; }
   #m-app .m-cert__row { display: flex; gap: 8px; }
-  #m-app .m-cert__row div { flex: 1; background: #fff; border: 1px solid #ece7da; border-radius: 3px;
+  #m-app .m-cert__row div { flex: 1; background: #fff; border: 1px solid #ece7da; border-radius: 0;
     padding: 12px 10px; text-align: center; }
   #m-app .m-cert__row b { display: block; font-family: 'Bodoni Moda', Georgia, serif;
     font-size: 16px; font-weight: 700; color: #1B1B2F;
@@ -279,12 +282,12 @@
   #m-app .m-cert__row small { font: 400 11.5px 'Inter', sans-serif; color: #5d6470; }
 
   /* 10. FAQ -------------------------------------------------- */
-  #m-app .m-faq { border: 1px solid #ece7da; border-radius: 3px; background: #fff;
+  #m-app .m-faq { border: 1px solid #ece7da; border-radius: 0; background: #fff;
     overflow: hidden; margin-bottom: 8px; }
   #m-app .m-faq button { display: flex; width: 100%; align-items: center; justify-content: space-between;
     gap: 12px; min-height: 52px; padding: 12px 15px; background: none; border: none; cursor: pointer;
     text-align: left; font: 600 13.5px/1.35 'Inter', sans-serif; color: #1B1B2F; }
-  #m-app .m-faq .i { color: #8a6a2a; font-size: 15px; transition: transform .3s; }
+  #m-app .m-faq .i { color: #7d5f26; font-size: 15px; transition: transform .3s; }
   #m-app .m-faq.is-open .i { transform: rotate(180deg); }
   #m-app .m-faq__a { display: none; padding: 0 15px 14px; font: 400 12.5px/1.55 'Inter', sans-serif; color: #5d6470; }
   #m-app .m-faq.is-open .m-faq__a { display: block; }
@@ -299,11 +302,11 @@
     min-height: 44px; cursor: pointer; }
   #m-app .m-form { display: none; flex-direction: column; gap: 9px; text-align: left; }
   #m-app .m-form.is-open { display: flex; }
-  #m-app .m-form input { height: 48px; padding: 0 16px; border-radius: 3px;
+  #m-app .m-form input { height: 48px; padding: 0 16px; border-radius: 0;
     border: 1px solid rgba(255,255,255,.24); background: rgba(255,255,255,.08); color: #fff;
     font: 400 16px 'Inter', sans-serif; }
   #m-app .m-form input::placeholder { color: rgba(255,255,255,.6); }
-  #m-app .m-form button { height: 48px; border-radius: 3px; border: 1px solid #c5a059;
+  #m-app .m-form button { height: 48px; border-radius: 0; border: 1px solid #c5a059;
     background: transparent; color: #f3e2ab; cursor: pointer;
     font: 700 11.5px 'Inter', sans-serif; letter-spacing: .13em; text-transform: uppercase; }
   #m-app .m-formmsg { font: 400 12.5px/1.5 'Inter', sans-serif; color: #f3e2ab; margin-top: 12px; }
@@ -333,7 +336,7 @@
   #m-app .m-dock__row { display: flex; gap: 9px; align-items: center; }
   #m-app .m-dock .m-btn { flex: 1; height: 50px; font-size: 12px; }
   #m-app .m-dock__wa { flex: none; width: 50px; height: 50px; display: flex; align-items: center;
-    justify-content: center; border-radius: 3px; background: transparent;
+    justify-content: center; border-radius: 0; background: transparent;
     border: 1px solid rgba(255,255,255,.32); color: #fff; font-size: 20px; }
 
   #m-app section { padding: 30px 20px 26px; }

@@ -63,80 +63,98 @@
       });
     });
 
-    /* ---------- 3. Barajas (cursos y planes) ---------- */
-    /* Geometría: la carta activa al frente; las vecinas desplazadas,
-       escaladas y giradas. Un solo cálculo para cualquier baraja. */
-    function layout(deck, idx) {
-      var cards = all(".m-card", deck);
-      if (!cards.length) return;
-      var cw = cards[0].offsetWidth || 196;
-      var plans = deck.dataset.kind === "plans";
-      /* margen izquierdo: 16px en un teléfono; centrado si la pantalla es ancha */
-      var gutter = Math.max(16, Math.round((deck.clientWidth - 560) / 2) + 16);
-      var strip = Math.max(46, Math.min(56, Math.round((deck.clientWidth - gutter * 2 - cw) / (cards.length - 1))));
-      var cur = gutter;
-      cards.forEach(function (card, i) {
-        var a = Math.abs(i - idx), left = cur;
-        cur += (i === idx ? cw : strip);
-        card.style.left = left + "px";
-        card.style.transform = a === 0 ? "translateY(-6px) scale(1)"
-          : "scale(" + (plans ? ".86" : ".82") + ") rotate(" + (i < idx ? -3 : 3) + "deg)";
-        card.style.zIndex = a === 0 ? "60" : String(10 + i);
-        card.style.opacity = a === 0 ? "1"
-          : String(Math.max(plans ? 0.72 : 0.66, 1 - a * (plans ? 0.08 : 0.1)));
-        card.classList.toggle("is-active", a === 0);
-        card.setAttribute("aria-current", a === 0 ? "true" : "false");
-        card.tabIndex = 0;
+    /* ---------- 3. Rieles de cartas (cursos y planes) ----------
+       Las cartas ya no se solapan ni se posicionan a mano: van una al lado
+       de la otra y el arrastre lo hace el navegador. Aquí solo se escucha
+       ese arrastre para saber cuál quedó centrada y sincronizar el panel
+       de detalle, los puntos, el contador y el enlace de la sección. */
+
+    var BORDE = 20; /* mismo valor que el scroll-padding-left del riel */
+
+    /* posición del borde izquierdo de una carta dentro del riel, sin depender
+       de offsetParent (el riel ya no es position:relative) */
+    function izquierda(deck, card) {
+      return card.getBoundingClientRect().left - deck.getBoundingClientRect().left + deck.scrollLeft;
+    }
+
+    function cartaElegida(deck, cards) {
+      /* En el tope derecho la última carta ya no puede llegar al borde
+         izquierdo, así que por cercanía saldría siempre la penúltima y el
+         contador nunca marcaría la última. Al final del riel, la última. */
+      if (deck.scrollLeft >= deck.scrollWidth - deck.clientWidth - 4) return cards.length - 1;
+      var ref = deck.scrollLeft + BORDE, best = 0, bd = Infinity;
+      cards.forEach(function (c, i) {
+        var d = Math.abs(izquierda(deck, c) - ref);
+        if (d < bd) { bd = d; best = i; }
       });
-      /* panel de detalle asociado (descripción / ventajas / contador / puntos) */
+      return best;
+    }
+
+    /* Pinta el estado de un índice dado. Separado de la detección para que un
+       clic en un punto surta efecto aunque el desplazamiento suave aún no haya
+       terminado (o el navegador no lo anime). */
+    function aplicar(deck, cards, idx, force) {
+      if (!force && String(idx) === deck.dataset.idx) return;
+      deck.dataset.idx = String(idx);
       var host = deck.parentNode;
-      all("[data-detail]", host).forEach(function (el) {
-        el.hidden = Number(el.dataset.detail) !== idx;
+      cards.forEach(function (c, i) {
+        c.classList.toggle("is-active", i === idx);
+        c.setAttribute("aria-current", i === idx ? "true" : "false");
       });
-      all(".m-dots button", host).forEach(function (b, i) { b.classList.toggle("is-on", i === idx); });
+      all("[data-detail]", host).forEach(function (el) { el.hidden = Number(el.dataset.detail) !== idx; });
+      all(".m-dots button", host).forEach(function (b, i) {
+        b.classList.toggle("is-on", i === idx);
+        b.setAttribute("aria-current", i === idx ? "true" : "false");
+      });
       var pad = function (n) { return (n < 10 ? "0" : "") + n; };
       var count = host.querySelector(".m-count");
       if (count) count.textContent = pad(idx + 1) + " / " + pad(cards.length);
-      /* el botón de la sección sigue a la carta elegida (planes.html#grupal, …) */
+      /* el botón de la sección sigue a la carta centrada (planes.html#grupal, …) */
       var follow = host.querySelector("[data-follow]");
       if (follow && cards[idx].dataset.href) follow.setAttribute("href", cards[idx].dataset.href);
-      deck.dataset.idx = String(idx);
     }
 
-    var decks = all(".m-deck");
-    decks.forEach(function (deck) {
-      var cards = all(".m-card", deck);
-      cards.forEach(function (card, i) {
-        on(card, "click", function () {
-          /* primer toque: traer la carta al frente. Segundo toque sobre la
-             carta que ya está al frente: entrar. Así nadie navega sin querer. */
-          if (Number(deck.dataset.idx) === i && card.dataset.href) { window.location.href = card.dataset.href; return; }
-          layout(deck, i);
-        });
-      });
-      all(".m-dots button", deck.parentNode).forEach(function (b, i) {
-        on(b, "click", function () { layout(deck, i); });
-      });
-      /* deslizar con el dedo también mueve la baraja */
-      var x0 = null;
-      on(deck, "touchstart", function (e) { x0 = e.touches[0].clientX; }, { passive: true });
-      on(deck, "touchend", function (e) {
-        if (x0 === null) return;
-        var dx = e.changedTouches[0].clientX - x0, i = Number(deck.dataset.idx || 0);
-        if (Math.abs(dx) > 40) layout(deck, Math.min(cards.length - 1, Math.max(0, i + (dx < 0 ? 1 : -1))));
-        x0 = null;
-      });
-      layout(deck, Number(deck.dataset.start || 0));
-    });
+    function irA(deck, cards, i, suave) {
+      var card = cards[i];
+      if (!card) return;
+      var x = izquierda(deck, card) - BORDE;
+      x = Math.max(0, Math.min(x, deck.scrollWidth - deck.clientWidth));
+      if (suave && deck.scrollTo) deck.scrollTo({ left: x, behavior: "smooth" });
+      else deck.scrollLeft = x;
+    }
 
-    /* al girar la pantalla la geometría se recalcula */
-    var rt;
-    on(window, "resize", function () {
-      clearTimeout(rt);
-      rt = setTimeout(function () {
-        decks.forEach(function (d) { layout(d, Number(d.dataset.idx || 0)); });
-      }, 150);
-    }, { passive: true });
+    all(".m-deck").forEach(function (deck) {
+      var cards = all(".m-card", deck);
+      if (!cards.length) return;
+
+      /* Estrangulado por reloj, no por requestAnimationFrame: rAF no es fiable
+         cuando la pestaña no compone cuadros y el resalte se quedaba clavado.
+         Esto refresca cada 60 ms como mucho y SIEMPRE remata al final. */
+      var ultimo = 0, temp = null;
+      var refrescar = function () {
+        ultimo = Date.now(); temp = null;
+        aplicar(deck, cards, cartaElegida(deck, cards));
+      };
+      on(deck, "scroll", function () {
+        clearTimeout(temp);
+        if (Date.now() - ultimo > 60) refrescar();
+        else temp = setTimeout(refrescar, 60);
+      }, { passive: true });
+
+      all(".m-dots button", deck.parentNode).forEach(function (b, i) {
+        on(b, "click", function () { irA(deck, cards, i, true); aplicar(deck, cards, i); });
+      });
+      /* al girar la pantalla, recolocar la que estuviera elegida */
+      var rt;
+      on(window, "resize", function () {
+        clearTimeout(rt);
+        rt = setTimeout(function () { irA(deck, cards, Number(deck.dataset.idx || 0), false); }, 150);
+      }, { passive: true });
+      /* arranque: la carta que marque data-start (el plan popular, p.ej.) */
+      var ini = Number(deck.dataset.start || 0);
+      irA(deck, cards, ini, false);
+      aplicar(deck, cards, ini, true);
+    });
 
     /* ---------- 4. FAQ ---------- */
     all(".m-faq button").forEach(function (btn) {
