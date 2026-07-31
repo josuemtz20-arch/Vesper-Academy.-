@@ -9,7 +9,7 @@
    ============================================================ */
 "use strict";
 
-var CACHE_VERSION = "vesper-v91";
+var CACHE_VERSION = "vesper-v92";
 var CORE = [
   /* Vesper Engine shell */
   "vesper_engine.html",
@@ -40,6 +40,9 @@ var CORE = [
   "vesper_prefs.js",
   "vesper_analytics.js",
   "assets/css/vesper_tokens.css",
+  /* Edición móvil de la portada (solo pinta en táctiles <=820px) */
+  "assets/css/vesper_mobile.css",
+  "vesper_mobile.js",
   "vesper_mascot.js",
   "vesper_theme.js",
   "vesper_tour.js",
