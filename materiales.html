@@ -323,6 +323,22 @@ a.card .go .i{transition:transform .2s var(--ease-out);}
 a.card:hover .go .i,a.card:focus-visible .go .i{transform:translateX(3px);}
 .cat-sec.hidden,a.card.hidden{display:none;}
 
+/* ── Filtro por curso ──
+   Mismas píldoras que el portal del profesor, para que las dos superficies se
+   manejen igual. <button> de verdad: un <span role="button"> recibe foco pero
+   no dispara con Espacio. Nace oculto y el JS le pone .on, así que sin JS no
+   queda un riel de controles muertos. */
+#famfilter{display:none;flex-wrap:wrap;gap:8px;
+  margin:calc(var(--s-section) * .8) 0 0;padding-top:26px;border-top:1px solid var(--hair);}
+#famfilter.on{display:flex;}
+.fam{font-family:inherit;font-size:var(--t-small);font-weight:600;padding:9px 15px;
+  border-radius:var(--r-pill);cursor:pointer;background:none;border:1px solid var(--hair);
+  color:var(--muted);display:inline-flex;align-items:center;gap:8px;
+  transition:background .16s,color .16s,border-color .16s;}
+.fam:hover,.fam:focus-visible{color:var(--text);border-color:var(--gold);}
+.fam[aria-pressed="true"]{background:var(--gold);color:var(--navy);border-color:var(--gold);}
+.fam .fam-n{font-size:var(--t-eyebrow);font-variant-numeric:tabular-nums;opacity:.75;}
+
 /* --navy, NO --navy3: buildVars mapea --navy3 a t.cream, que en tema claro es
    crema y dejaría este texto claro sobre fondo claro. */
 footer{background:var(--navy);color:var(--on-night-soft);text-align:center;padding:32px var(--gutter);font-size:var(--t-small);
@@ -598,6 +614,14 @@ html:not(.vesper-dark) .vtour-back{border-color:var(--border);}
     <div id="results" role="listbox" aria-label="Resultados de la búsqueda"></div>
     <div class="s-empty" id="s-empty" hidden></div>
   </section>
+
+  <!-- Filtro por curso. Lo PINTA el JS (ver el final del documento): sin JS no
+       aparece ninguna píldora y el catálogo sale entero, que es el estado
+       correcto. El buscador de arriba resuelve "quiero este tema"; esto
+       resuelve "enséñame sólo mi curso", que con 24 libros en 6 grupos era la
+       única forma de navegar que faltaba. -->
+  <nav id="famfilter" aria-label="Filtrar el catálogo por curso"></nav>
+  <p id="fam-live" class="va-sr-only" role="status" aria-live="polite"></p>
 
   <!-- Catálogo por curso. Los 24 enlaces de aquí abajo son el RESPALDO:
        si vesper_book_index.js carga, el script del final los vuelve a pintar
@@ -1350,6 +1374,77 @@ var VIcon = (function(){
       });
     }catch(e){}
   }
+})();
+</script>
+
+<script>
+/* ── Filtro por curso ──────────────────────────────────────────────────────
+   Las píldoras se derivan del DOM, no de una lista escrita a mano: si mañana
+   se añade o se quita un grupo del catálogo, el filtro lo sigue solo. Corre
+   DESPUÉS del parche del índice para que los conteos sean los definitivos.
+   Contrato: sin JS no hay píldoras y el catálogo sale entero. */
+(function(){
+  var wrap = document.getElementById('famfilter');
+  var live = document.getElementById('fam-live');
+  var secs = Array.prototype.slice.call(document.querySelectorAll('#catalog .cat-sec'));
+  if(!wrap || secs.length < 2) return;         /* con un solo grupo no hay nada que filtrar */
+
+  var KEY = 'vesper_hub_fam';
+  var total = 0;
+  var defs = secs.map(function(s){
+    var h = s.querySelector('.grp-txt h2');
+    /* "Core Basics — Fundamentos" -> "Core Basics": el guión largo separa el
+       nombre del curso de su subtítulo, y en una píldora sólo cabe el nombre. */
+    var label = (h ? h.textContent : (s.getAttribute('aria-label') || '')).split('—')[0].trim();
+    var n = s.querySelectorAll('a.card').length;
+    total += n;
+    return { fam: s.getAttribute('data-group'), label: label, n: n, sec: s };
+  });
+  defs.unshift({ fam:'all', label:'Todo', n: total, sec:null });
+
+  var btns = defs.map(function(d){
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'fam';
+    b.setAttribute('data-fam', d.fam);
+    b.setAttribute('aria-pressed', d.fam === 'all' ? 'true' : 'false');
+    b.appendChild(document.createTextNode(d.label));
+    var n = document.createElement('span');
+    n.className = 'fam-n';
+    n.textContent = d.n;
+    b.appendChild(n);
+    wrap.appendChild(b);
+    return b;
+  });
+  wrap.classList.add('on');
+
+  function apply(fam, announce){
+    defs.forEach(function(d){
+      if(d.sec) d.sec.classList.toggle('hidden', fam !== 'all' && d.fam !== fam);
+    });
+    btns.forEach(function(b){
+      b.setAttribute('aria-pressed', b.getAttribute('data-fam') === fam ? 'true' : 'false');
+    });
+    try{ sessionStorage.setItem(KEY, fam); }catch(e){}
+    if(announce && live){
+      var d = defs.filter(function(x){ return x.fam === fam; })[0];
+      live.textContent = fam === 'all'
+        ? ('Mostrando los ' + total + ' libros.')
+        : ('Mostrando ' + d.n + ' libro' + (d.n === 1 ? '' : 's') + ' de ' + d.label + '.');
+    }
+    try{ if(window.VA && VA.track) VA.track("hub_fam_filter", { fam: fam }); }catch(e){}
+  }
+
+  btns.forEach(function(b){
+    b.addEventListener('click', function(){ apply(b.getAttribute('data-fam'), true); });
+  });
+
+  /* Restaura la elección de la sesión. Si el grupo guardado ya no existe
+     (se dio de baja un curso), cae a "Todo" en vez de dejar el catálogo vacío. */
+  try{
+    var saved = sessionStorage.getItem(KEY);
+    if(saved && saved !== 'all' && defs.some(function(d){ return d.fam === saved; })) apply(saved, false);
+  }catch(e){}
 })();
 </script>
 
