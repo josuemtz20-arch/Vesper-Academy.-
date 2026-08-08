@@ -267,43 +267,96 @@ html.vesper-dark .pill{--c:var(--c-night);}
    las familias para que gane el orden, y la rama oscura sube especificidad. */
 .grp{--accent:var(--a-day);}
 html.vesper-dark .grp{--accent:var(--a-night);}
-h2.sec{display:flex;align-items:center;gap:12px;font-family:var(--va-font-display);font-size:var(--t-h2);
-  font-weight:600;line-height:1.1;letter-spacing:-.01em;text-transform:none;color:var(--text);margin:var(--s-section) 0 18px;}
-h2.sec .sec-ic{width:38px;height:38px;flex-shrink:0;border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;
-  font-size:1.05rem;border:1px solid var(--hair);color:var(--accent);background:none;}
-h2.sec .sec-ln{flex:1;height:1px;background:var(--hair);}
-h2.sec .sec-ct{font-size:var(--t-eyebrow);font-weight:600;letter-spacing:.16em;text-transform:uppercase;
-  color:var(--muted);border:1px solid var(--hair);padding:5px 11px;border-radius:var(--r-pill);
-  font-variant-numeric:tabular-nums;flex-shrink:0;}
-@media(max-width:640px){h2.sec .sec-ct{display:none;}}
+/* ── Las familias son CAPITULOS, no bandas ──
+   Mismo indice editorial que el portal del alumno: numero grande y lamina en
+   una columna fija a la izquierda, y los manuales como filas tipograficas a la
+   derecha. Con 31 manuales en 6 familias es donde mas rinde.
+   Todo sale de CONTADORES CSS y de los tres <span> que el encabezado ya tenia
+   (.sec-ic, .sec-ln, .sec-ct): asi no se toca el marcado y el filtro, el
+   buscador y los chips de recientes siguen viendo lo suyo. */
+#content{counter-reset:cap;}
+section.grp{counter-increment:cap;
+  display:grid;grid-template-columns:250px 1fr;gap:clamp(26px,4.5vw,60px);
+  padding:clamp(30px,4.5vw,50px) 0;
+  border-top:1px solid var(--hair);
+  border-top-color:color-mix(in srgb,var(--gold-ink) 55%,transparent);}
 
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(256px,1fr));gap:14px;}
+/* El encabezado se convierte en la columna del capitulo. */
+/* La cabecera de capitulo se fija DEBAJO de la barra de filtro, que tambien es
+   sticky. El desplazamiento no puede ser un numero fijo: las 7 pildoras se
+   envuelven a dos filas por debajo de ~1100px y la barra crece. --filtro-h la
+   mide el JS del final y la actualiza al redimensionar; el 128px del fallback
+   es su altura a una fila, por si el script no corre. */
+h2.sec{display:flex;flex-direction:column;align-items:stretch;gap:0;
+  position:sticky;top:calc(66px + var(--filtro-h,128px) + 18px);align-self:start;
+  font-family:var(--va-font-display);font-size:1.3rem;font-weight:600;line-height:1.15;
+  letter-spacing:-.01em;text-transform:none;color:var(--text);margin:0;}
+h2.sec::before{content:counter(cap,decimal-leading-zero);
+  font-family:var(--va-font-display);font-weight:400;
+  font-size:clamp(2.6rem,5vw,3.9rem);line-height:.82;color:var(--accent);
+  font-variant-numeric:lining-nums;margin-bottom:14px;}
+h2.sec .sec-ic{display:none;}   /* el numero sustituye al icono */
+/* La cuenta la rellena el JS del final; aqui solo deja de ser una pildora. */
+h2.sec .sec-ct{order:1;margin:7px 0 0;padding:0;border:0;background:none;
+  font-family:var(--va-font-text,Inter,sans-serif);
+  font-size:var(--t-small);font-weight:400;letter-spacing:0;text-transform:none;
+  color:var(--muted);font-variant-numeric:tabular-nums;}
+/* El filete decorativo se recicla como la lamina del capitulo: ya era un span
+   vacio, asi que no hace falta anadir un <img>. */
+h2.sec .sec-ln{order:2;flex:none;height:auto;aspect-ratio:16/10;margin-top:18px;
+  background:var(--navy) center/cover no-repeat;border:1px solid var(--border);
+  filter:saturate(.72) contrast(1.05) brightness(.92);}
+.grp.tools    h2.sec .sec-ln{background-image:url("assets/images/landing/rail/education.webp");}
+.grp.basics   h2.sec .sec-ln{background-image:url("assets/images/landing/course_general.webp");}
+.grp.practice h2.sec .sec-ln{background-image:url("assets/images/landing/course_conversation.webp");}
+.grp.grammar  h2.sec .sec-ln{background-image:url("assets/images/landing/rail/writing.webp");}
+.grp.special  h2.sec .sec-ln{background-image:url("assets/images/landing/course_corporate.webp");}
+.grp.exam     h2.sec .sec-ln{background-image:url("assets/images/landing/course_certification.webp");}
+
+.grid{display:flex;flex-direction:column;counter-reset:fila;}
 
 /* Tarjeta de recurso: medallon relleno con el acento de familia + pildora de
    nivel. El profesor escanea por nivel antes que por titulo. */
-.card{position:relative;background:var(--white);border:1px solid var(--border);border-radius:var(--r-md);
-  padding:18px;display:flex;flex-direction:column;gap:8px;overflow:hidden;
-  /* Sombra en reposo, no solo al hover. Sobre NOCHE es invisible (oscuro sobre
-     oscuro) pero en los temas claros es lo unico que despega la tarjeta del
-     papel: medido, tarjeta contra pagina da 1.04-1.09 de separacion, o sea
-     nada. Los filetes de oro dependen de un suelo oscuro; en claro hace falta
-     elevacion. */
-  box-shadow:0 1px 3px rgba(27,27,47,.07);
-  transition:transform .2s var(--ease-out),box-shadow .2s var(--ease-out),border-color .2s;}
-.card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--accent);opacity:.85;}
-.card:hover,.card:focus-within{transform:translateY(-3px);box-shadow:var(--sh);border-color:var(--gold);}
-.card-top{display:flex;align-items:center;justify-content:space-between;gap:10px;}
-/* El medallon se rellena con el acento, asi que su icono tiene que invertirse
-   con la polaridad: en claro el acento es OSCURO y una tinta oscura encima
-   desapareceria. */
-.card .medal{width:42px;height:42px;flex-shrink:0;border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;
-  font-size:1.05rem;background:var(--accent);color:var(--va-cream,#FBF8F1);}
-html.vesper-dark .card .medal{color:var(--va-ink,#1B1B2F);}
-.lvl{flex-shrink:0;font-size:var(--t-eyebrow);font-weight:600;letter-spacing:.14em;text-transform:uppercase;
-  padding:4px 10px;border-radius:var(--r-pill);background:none;color:var(--accent);border:1px solid var(--hair);white-space:nowrap;}
-.card h3{margin:2px 0 0;font-family:var(--va-font-display);font-size:var(--t-h3);font-weight:600;line-height:1.28;}
-.card p{margin:0;color:var(--muted);font-size:var(--t-small);line-height:1.5;flex:1;}
-.card .links{margin-top:8px;border-top:1px solid var(--hair);padding-top:12px;display:flex;flex-wrap:wrap;align-items:center;gap:8px;}
+/* La tarjeta se convierte en FILA. Aqui no puede ser un solo <a> como en el
+   catalogo del alumno: cada recurso tiene DOS destinos (el manual del profesor
+   y la version del alumno), asi que la fila es un contenedor y los enlaces
+   viven dentro. El nivel se va a la derecha, que es por donde el profesor
+   escanea. */
+.card{counter-increment:fila;position:static;overflow:visible;
+  background:none;border:0;border-radius:0;box-shadow:none;
+  display:grid;grid-template-columns:32px 1fr auto;gap:0 18px;
+  grid-template-areas:
+    "num titulo nivel"
+    "num desc   desc"
+    "num enlaces enlaces";
+  align-items:baseline;
+  border-top:1px solid var(--border);
+  border-top-color:color-mix(in srgb,var(--text) 24%,transparent);
+  padding:18px 0;transition:padding-left .3s var(--ease-out);}
+.card:first-child{border-top:0;padding-top:2px;}
+.card:hover,.card:focus-within{transform:none;box-shadow:none;padding-left:9px;}
+/* El filete de acento de la izquierda se recicla como folio de la fila: la
+   familia ya la dice el capitulo, asi que repetirla en cada tarjeta sobraba. */
+.card::before{content:counter(fila,decimal-leading-zero);grid-area:num;
+  position:static;width:auto;background:none;opacity:1;
+  font-size:var(--t-small);color:var(--muted);font-variant-numeric:tabular-nums;
+  transition:color .2s;}
+.card:hover::before,.card:focus-within::before{color:var(--accent);}
+/* display:contents disuelve la cabecera para que .medal y .lvl entren en la
+   retícula de la fila. */
+.card-top{display:contents;}
+.card .medal{display:none;}      /* el folio sustituye al medallon */
+.lvl{grid-area:nivel;justify-self:end;flex-shrink:0;
+  font-size:var(--t-eyebrow);font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+  padding:4px 10px;border-radius:var(--r-pill);background:none;color:var(--accent);
+  border:1px solid var(--hair);white-space:nowrap;}
+.card h3{grid-area:titulo;margin:0;font-family:var(--va-font-display);font-size:1.06rem;
+  font-weight:600;line-height:1.28;transition:color .2s;}
+.card:hover h3,.card:focus-within h3{color:var(--gold-lt);}
+.card p{grid-area:desc;margin:4px 0 0;color:var(--muted);font-size:var(--t-small);
+  line-height:1.5;max-width:56ch;}
+.card .links{grid-area:enlaces;margin-top:11px;border-top:0;padding-top:0;
+  display:flex;flex-wrap:wrap;align-items:center;gap:8px;}
 .card a.go{font-size:var(--t-small);font-weight:600;text-decoration:none;display:inline-flex;align-items:center;gap:7px;
   padding:9px 14px;border-radius:var(--r-sm);transition:background .18s,color .18s,border-color .18s;}
 .card a.primary{background:var(--gold);color:var(--navy);font-weight:700;}
@@ -312,6 +365,29 @@ html.vesper-dark .card .medal{color:var(--va-ink,#1B1B2F);}
 .card a.primary:hover .i{transform:translateX(3px);}
 .card a.alt{color:var(--gold-ink);border:1px solid var(--hair);}
 .card a.alt:hover,.card a.alt:focus-visible{border-color:var(--gold);color:var(--gold-lt);}
+
+/* En un indice los filetes SON la estructura: no hay cajas que separen nada.
+   Sobre papel hace falta mas tinta que sobre noche para el mismo peso optico,
+   porque los filetes de oro dependen de un suelo oscuro. Medido en el portal
+   del alumno: con tokens fijos caian a 1.16:1 en los cinco temas claros. */
+html:not(.vesper-dark) .card{
+  border-top-color:color-mix(in srgb,var(--text) 34%,transparent);}
+html:not(.vesper-dark) section.grp{
+  border-top-color:color-mix(in srgb,var(--gold-ink) 70%,transparent);}
+/* La lamina si es una superficie, asi que puede llevar sombra sobre papel. */
+html:not(.vesper-dark) h2.sec .sec-ln{box-shadow:var(--sh);}
+
+@media(max-width:860px){
+  section.grp{grid-template-columns:1fr;gap:20px;}
+  h2.sec{position:static;}
+  h2.sec .sec-ln{display:none;}
+  h2.sec::before{font-size:2.2rem;margin-bottom:8px;}
+}
+@media(max-width:520px){
+  .card{grid-template-columns:26px 1fr;
+    grid-template-areas:"num titulo" "num nivel" "num desc" "num enlaces";}
+  .lvl{justify-self:start;margin-top:6px;}
+}
 
 /* ── Recientes, busqueda profunda y tarjeta admin condicional ── */
 #recent{display:none;flex-wrap:wrap;align-items:center;gap:8px;margin:18px 0 0;}
@@ -627,7 +703,14 @@ footer a:hover{color:var(--gold);text-decoration:underline;}
   document.getElementById('stat-tools').textContent = toolCards;
   document.querySelectorAll('section.grp').forEach(function (sec) {
     var ct = sec.querySelector('.sec-ct');
-    if (ct) ct.textContent = sec.querySelectorAll('.card').length;
+    /* Antes escribia solo el numero dentro de una pildora. Ahora que la cuenta
+       vive bajo el nombre del capitulo, dice de QUE son. */
+    if (ct) {
+      var n = sec.querySelectorAll('.card').length;
+      ct.textContent = n + (sec.classList.contains('tools')
+        ? (n === 1 ? ' herramienta' : ' herramientas')
+        : (n === 1 ? ' manual' : ' manuales'));
+    }
   });
 
   /* ── Filtro: búsqueda de texto + píldoras de familia ── */
@@ -840,6 +923,26 @@ footer a:hover{color:var(--gold);text-decoration:underline;}
         .catch(function(){});
     });
   }).catch(function(){});
+})();
+</script>
+
+<script>
+/* La barra de filtro es sticky y su altura cambia (las 7 píldoras se envuelven
+   a dos filas en pantallas medianas). La cabecera de capítulo se fija debajo,
+   así que necesita ese alto como variable en vez de un número inventado: con
+   150px fijos el número de capítulo quedaba tapado por la barra. */
+(function () {
+  var filtro = document.getElementById('filter');
+  if (!filtro) return;
+  var t;
+  function medir() {
+    document.documentElement.style.setProperty(
+      '--filtro-h', Math.round(filtro.getBoundingClientRect().height) + 'px');
+  }
+  medir();
+  addEventListener('resize', function () { clearTimeout(t); t = setTimeout(medir, 120); });
+  /* Las píldoras cambian de estado y pueden reordenar el envoltorio. */
+  filtro.addEventListener('click', function () { setTimeout(medir, 0); });
 })();
 </script>
 
