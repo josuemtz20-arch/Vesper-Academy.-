@@ -192,6 +192,28 @@
        2) allowlist en Firestore  -> fuente de verdad, efecto inmediato;
        3) respaldo: lista de hashes legada (si Firestore no responde).
      Cachea el "sí" en sessionStorage para no repetir la consulta al navegar. */
+  /* Publica QUIÉN ha entrado, para el resto de la app. Hoy lo usa
+     vesper_cosmetics.js: al admin le abre el guardarropa entero para que pueda
+     probar los 6 pelajes y los 7 accesorios sin completar 100 lecciones.
+     Se refleja en sessionStorage porque vesper_cosmetics.js se evalúa ANTES de
+     que Firebase resuelva la sesión: en la primera carga el dato llega por el
+     evento, y en las siguientes ya está disponible de forma síncrona.
+     No es una barrera de seguridad y no pretende serlo: es cosmético, y el
+     acceso real al contenido lo gobiernan las reglas de Firestore. */
+  function publishIdentity(user) {
+    var email = String(user.email || "").trim().toLowerCase();
+    var admin = !!email && email === String(CONFIG.adminEmail).trim().toLowerCase();
+    window.VESPER_AUTH = { email: email, isAdmin: admin };
+    try { sessionStorage.setItem("vesper_is_admin", admin ? "1" : "0"); } catch (e) {}
+    try {
+      window.dispatchEvent(new CustomEvent("vesper:auth", { detail: { email: email, isAdmin: admin } }));
+    } catch (e) {}
+  }
+  function forgetIdentity() {
+    window.VESPER_AUTH = null;
+    try { sessionStorage.removeItem("vesper_is_admin"); } catch (e) {}
+  }
+
   function isApprovedUser(user) {
     var email = String(user.email || "").trim().toLowerCase();
     if (email && email === String(CONFIG.adminEmail).trim().toLowerCase()) {
@@ -350,8 +372,9 @@
 
   initFirebase().then(function (auth) {
     auth.onAuthStateChanged(function (user) {
-      if (!user) { redirectToLogin(); return; }
+      if (!user) { forgetIdentity(); redirectToLogin(); return; }
       if (!user.emailVerified) { redirectToLogin("verify"); return; }
+      publishIdentity(user);
       isApprovedUser(user).then(function (ok) {
         if (ok) {
           reveal();

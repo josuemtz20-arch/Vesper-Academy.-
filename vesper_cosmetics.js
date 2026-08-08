@@ -91,7 +91,26 @@ window.VESPER_COSMETICS = (function () {
 
   function state() { try { return P() ? P().getState() : null; } catch (e) { return null; } }
 
+  /* ---- Modo admin: el guardarropa entero abierto para poder probar ----
+     El admin necesita ver los 6 pelajes y los 7 accesorios sin completar 100
+     lecciones ni mantener una racha de 30 días. Se abre el CANDADO; NO se
+     inventa progreso: su XP, su racha y sus lecciones siguen siendo las de
+     verdad (falsear el progreso le ensuciaría la boleta y la racha, que salen
+     del mismo sitio).
+     Quién es admin lo publica vesper_auth.js (window.VESPER_AUTH, con espejo en
+     sessionStorage porque este archivo se evalúa ANTES de que Firebase resuelva
+     la sesión). Es cosmético: no abre ningún contenido — eso lo gobiernan las
+     reglas de Firestore, que no se tocan. */
+  function isAdmin() {
+    try {
+      if (window.VESPER_AUTH && typeof window.VESPER_AUTH.isAdmin === "boolean") return window.VESPER_AUTH.isAdmin;
+    } catch (e) {}
+    try { return sessionStorage.getItem("vesper_is_admin") === "1"; } catch (e) {}
+    return false;
+  }
+
   function isUnlocked(kind, id) {
+    if (isAdmin()) return true;            // admin: todo abierto para testear
     var req = reqsFor(kind)[id];
     if (!req) return true;                 // sin requisito conocido -> libre
     var s = state();
@@ -100,11 +119,12 @@ window.VESPER_COSMETICS = (function () {
   }
 
   function unlocked() {
+    var admin = isAdmin();
     var s = state();
     var out = { skins: [], accessories: [], pelajes: [] };
-    for (var sk in SKIN_REQS) { if (!s || meets(SKIN_REQS[sk], s)) out.skins.push(sk); }
-    for (var ac in ACC_REQS) { if (!s || meets(ACC_REQS[ac], s)) out.accessories.push(ac); }
-    for (var pl in PELAJE_REQS) { if (!s || meets(PELAJE_REQS[pl], s)) out.pelajes.push(pl); }
+    for (var sk in SKIN_REQS) { if (admin || !s || meets(SKIN_REQS[sk], s)) out.skins.push(sk); }
+    for (var ac in ACC_REQS) { if (admin || !s || meets(ACC_REQS[ac], s)) out.accessories.push(ac); }
+    for (var pl in PELAJE_REQS) { if (admin || !s || meets(PELAJE_REQS[pl], s)) out.pelajes.push(pl); }
     return out;
   }
 
@@ -144,6 +164,10 @@ window.VESPER_COSMETICS = (function () {
 
   function pending() {
     var cur = currentKeys();
+    /* Al admin se le abre todo de golpe: sin esto, la primera pantalla le
+       dispararía la celebración de los 19 cosméticos a la vez. No ha
+       "desbloqueado" nada, así que no hay nada que celebrar. */
+    if (isAdmin()) { saveSeen(cur); return []; }
     var seen = loadSeen();
     if (seen === null) { saveSeen(cur); return []; }  // siembra silenciosa
     var set = {}; seen.forEach(function (k) { set[k] = true; });
@@ -162,6 +186,6 @@ window.VESPER_COSMETICS = (function () {
   return {
     skinReqs: SKIN_REQS, accessoryReqs: ACC_REQS, pelajeReqs: PELAJE_REQS,
     isUnlocked: isUnlocked, unlocked: unlocked, reqLabel: reqLabel,
-    pending: pending, markSeen: markSeen
+    pending: pending, markSeen: markSeen, isAdmin: isAdmin
   };
 })();

@@ -487,10 +487,16 @@
   decorateDescriptions();
 
   /* apariencia: reutiliza el picker de temas/skins existente */
-  if (window.VESPER_THEME && VESPER_THEME.renderPicker) {
+  function mountPicker() {
+    if (!window.VESPER_THEME || !VESPER_THEME.renderPicker) return;
     $("picker-host").innerHTML = VESPER_THEME.renderPicker();
     VESPER_THEME.wirePicker($("picker-host"));
   }
+  mountPicker();
+  /* El selector se pinta antes de que Firebase resuelva la sesión, así que en el
+     primer ingreso todavía no se sabe si eres el admin (a quien se le abre el
+     guardarropa entero). Cuando llega la identidad, se repinta. */
+  window.addEventListener("vesper:auth", function () { mountPicker(); paint(); });
 
   /* metas y recordatorios */
   var goalVal = $("goal-val");
