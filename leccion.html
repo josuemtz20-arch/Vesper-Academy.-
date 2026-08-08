@@ -1421,6 +1421,11 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
 .hub-ic svg{width:19px;height:19px}
 .hub-ic:hover{background:rgba(197,160,89,.32);border-color:var(--gold)}
 .hub-ic:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+/* botón del guardarropa: lleva su Vesper real en vez de un glifo, para que se
+   entienda de un vistazo que ahí se le cambia el aspecto */
+.hub-ic--cat{overflow:hidden;padding:0;background:rgba(245,242,235,.14)}
+.hub-ic--cat img{width:112%;height:112%;object-fit:contain}
+.hub-ic--cat img.is-tinted{filter:var(--vc-filter,none)}
 .hub-stats3{position:relative;z-index:1;display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
 .hstat{flex:1 1 92px;display:flex;align-items:center;gap:9px;background:rgba(245,242,235,.07);
   border:1px solid rgba(245,242,235,.14);border-radius:13px;padding:9px 11px;min-width:0}
@@ -2446,6 +2451,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     var idLine = info.band
       ? '<span class="hub-rank">Tu nivel · ' + esc(info.band) + (info.bandTag ? ' ' + esc(info.bandTag) : '') + '</span>'
       : '<p class="hub-sub">Elige tu aventura, paso a paso.</p>';
+    var hv = currentLook();   /* su Vesper de verdad, para el botón del guardarropa */
     return '<header class="hub-hero">'
       + '<div class="hub-hero__top">'
       + '<div class="hub-hero__greet">' + mascot("welcome", false, "sm")
@@ -2453,6 +2459,11 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       + '<div class="hub-actions">'
       + '<button class="hub-ic" id="searchToggle" type="button" aria-label="Buscar lecciones" aria-controls="hubSearch" aria-expanded="false" title="Buscar">' + HUB_ICN.search + '</button>'
       + '<a class="hub-ic" href="chat.html" aria-label="Habla con Vesper" title="Habla con Vesper">' + HUB_ICN.chat + '</a>'
+      /* Vestir a Vesper tenía UNA sola puerta: este engranaje rotulado
+         "Configuración", que nadie asocia con vestir al gato. Ahora hay un
+         botón propio con su retrato de verdad, justo donde el alumno lo mira. */
+      + '<a class="hub-ic hub-ic--cat" href="configuracion.html#apariencia" aria-label="Vestir a Vesper" title="Vestir a Vesper">'
+      + '<img src="' + hv.src + '" alt="" decoding="async"' + (hv.animal ? '' : ' class="is-tinted"') + '></a>'
       + '<a class="hub-ic" href="configuracion.html" aria-label="Configuración" title="Configuración">' + HUB_ICN.gear + '</a>'
       + '</div></div>'
       + '<div class="hub-stats3">' + tiles + '</div>'
@@ -5419,7 +5430,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
           var lab = cosmeticLabel(c);
           return '<div class="ach-badge"><span class="ab-ic">' + lab.ic + '</span><span class="ab-tx"><b>Nuevo aspecto de Vesper</b><span>' + esc(lab.name) + '</span></span></div>';
         }).join("")
-        + '<a class="cos-cta" href="configuracion.html">Pruébalo en Configuración &rarr;</a></div>';
+        + '<a class="cos-cta" href="configuracion.html#apariencia">Póntelo ahora &rarr;</a></div>';
         VESPER_COSMETICS.markSeen();
       }
     } catch (e) {}

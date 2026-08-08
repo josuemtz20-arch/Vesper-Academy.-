@@ -290,7 +290,7 @@ html.js-anim .reveal.in-view{opacity:1;animation:rise .6s var(--ease-out) backwa
    Es el motivo estructural de la portada (.statrail): la retícula se dibuja
    con filetes de 1px y los :first-child los ponen a cero. */
 #quicknav{margin:calc(var(--s-section) * .8) 0 0;}
-.qn-grid{display:grid;grid-template-columns:repeat(4,1fr);border-top:1px solid var(--hair);}
+.qn-grid{display:grid;grid-template-columns:repeat(5,1fr);border-top:1px solid var(--hair);}
 a.qn{display:flex;flex-direction:column;align-items:flex-start;gap:9px;text-decoration:none;color:var(--text);
   padding:22px 20px 20px;border-left:1px solid var(--hair);
   transition:background .2s var(--ease-out);}
@@ -299,6 +299,11 @@ a.qn:hover,a.qn:focus-visible{background:var(--hair);outline:none;}
 a.qn .qn-ic{width:38px;height:38px;flex-shrink:0;border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;
   font-size:1rem;border:1px solid var(--hair);color:var(--gold);transition:color .2s,border-color .2s;}
 a.qn:hover .qn-ic,a.qn:focus-visible .qn-ic{color:var(--gold-lt);border-color:var(--gold);}
+/* el icono de "Vestir a Vesper" lleva el retrato real del alumno: fondo navy
+   para que el PNG con alfa se lea, y el gato desbordando un poco la caja */
+a.qn .qn-ic--cat{overflow:hidden;background:radial-gradient(115% 100% at 50% 2%,#2f2f52,#1B1B2F);}
+a.qn .qn-ic--cat img{width:100%;height:100%;object-fit:contain;display:block;}
+a.qn .qn-ic--cat.is-tinted img{filter:var(--vc-filter,none);}
 a.qn .qn-t{font-weight:600;font-size:var(--t-h3);line-height:1.2;}
 a.qn .qn-d{font-size:var(--t-small);color:var(--muted);line-height:1.4;max-width:22ch;}
 a.qn .qn-live{font-size:var(--t-small);font-weight:700;color:var(--gold-ink);font-variant-numeric:tabular-nums;}
@@ -748,6 +753,11 @@ html:not(.vesper-dark) .vtour-back{border-color:var(--border);}
         <span class="qn-d">Tus calificaciones y avance</span>
         <span class="qn-live" id="qn-boleta-live" hidden></span>
       </a>
+      <a class="qn" href="configuracion.html#apariencia">
+        <span class="qn-ic qn-ic--cat" id="qn-vesper-ic"><svg class="i" aria-hidden="true"><use href="#i-palette"/></svg></span>
+        <span class="qn-t">Vestir a Vesper</span>
+        <span class="qn-d">Su pelaje y lo que lleva puesto</span>
+      </a>
       <a class="qn" href="perfil.html">
         <span class="qn-ic"><svg class="i" aria-hidden="true"><use href="#i-user"/></svg></span>
         <span class="qn-t">Mi perfil</span>
@@ -755,6 +765,25 @@ html:not(.vesper-dark) .vtour-back{border-color:var(--border);}
       </a>
     </div>
   </nav>
+  <script>
+  /* El icono de "Vestir a Vesper" es el Vesper REAL del alumno (pelaje +
+     accesorio ya horneados). Un glifo genérico no invita a entrar; verse a uno
+     mismo, sí — y de paso el portal enseña que eso se puede cambiar. */
+  (function () {
+    var host = document.getElementById("qn-vesper-ic");
+    if (!host || !window.VESPER_THEME || !VESPER_THEME.look) return;
+    function paint() {
+      try {
+        var st = VESPER_THEME.get();
+        var lk = VESPER_THEME.look(st.pelaje, st.accessory);
+        host.innerHTML = '<img src="' + lk.img + '" alt="" decoding="async">';
+        host.classList.toggle("is-tinted", !!lk.tint);
+      } catch (e) {}
+    }
+    paint();
+    window.addEventListener("vesper:appearance", paint);
+  })();
+  </script>
 
   <!-- Buscador de temas y libros -->
   <section id="search" class="reveal" aria-labelledby="search-title">

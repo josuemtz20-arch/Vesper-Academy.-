@@ -439,7 +439,13 @@ window.VESPER_THEME = (function () {
     if (document.getElementById("vesper-theme-css")) return;
     var css = [
       ".vt-panel{font-family:Inter,system-ui,sans-serif;color:var(--ink,#1B1B2F)}",
-      ".vt-h{font-weight:700;font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted,#6b6b76);margin:14px 0 8px}",
+      ".vt-h{font-weight:700;font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted,#6b6b76);margin:18px 0 2px}",
+      /* una línea que explica qué hace el bloque: los cuatro se llamaban casi
+         igual y el alumno no sabía cuál tocar */
+      ".vt-sub{margin:0 0 9px;font-size:.83rem;line-height:1.35;color:var(--muted,#6b6b76);max-width:46ch}",
+      /* requisito VISIBLE en la tarjeta bloqueada: antes sólo estaba en el
+         title, que en móvil no existe */
+      ".vt-req{margin-top:3px;font-size:.68rem;line-height:1.25;font-weight:600;color:var(--gold-ink,#7a5e12)}",
       ".vt-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:10px}",
       ".vt-card{cursor:pointer;border:2px solid var(--line,#ece7da);border-radius:14px;padding:8px;background:var(--paper,#fff);text-align:center;transition:transform .15s ease,border-color .15s ease}",
       ".vt-card:active{transform:scale(.96)}",
@@ -467,7 +473,13 @@ window.VESPER_THEME = (function () {
       ".vt-pelsw{height:60px;display:flex;align-items:center;justify-content:center;margin-bottom:6px;border-radius:9px;background:var(--cream,#FBF8F1);overflow:hidden}",
       ".vt-pelsw img{height:58px;width:auto;object-fit:contain}",
       /* estado bloqueado (skins y accesorios) */
-      ".vt-card.locked,.vt-skin.locked{opacity:.5;cursor:not-allowed}",
+      /* "Bloqueado" lo dice la IMAGEN apagada, no el texto: al atenuar la tarjeta
+         entera, el requisito heredaba la opacidad y caía a 3,6:1 en 5 de los 8
+         temas. Ahora se apagan la miniatura y el nombre, y la instrucción de qué
+         hacer para conseguirlo se lee a pleno contraste. */
+      ".vt-skin.locked{opacity:.5;cursor:not-allowed}",
+      ".vt-card.locked{cursor:not-allowed}",
+      ".vt-card.locked .vt-accsw,.vt-card.locked .vt-pelsw,.vt-card.locked .vt-nm{opacity:.5}",
       ".vt-card{position:relative}.vt-skin{position:relative}",
       ".vt-lock{position:absolute;top:3px;right:5px;font-size:.82rem;line-height:1;filter:grayscale(.2)}",
       ".vt-skin .vt-lock{top:-2px;right:-2px}",
@@ -524,7 +536,8 @@ window.VESPER_THEME = (function () {
       return '<div class="vt-card' + (cur.accessory === id ? " on" : "") + (locked ? " locked" : "")
         + '" data-acc="' + id + '"' + (locked ? ' title="' + reqLabelFor("acc", id) + '" aria-disabled="true"' : "") + '>'
         + '<div class="vt-accsw">' + sw + '</div><div class="vt-nm">' + a.name + '</div>'
-        + (locked ? '<span class="vt-lock" aria-hidden="true">&#128274;</span>' : "") + '</div>';
+        + (locked ? '<div class="vt-req">' + reqLabelFor("acc", id) + '</div>'
+                  + '<span class="vt-lock" aria-hidden="true">&#128274;</span>' : "") + '</div>';
     }).join("");
     var pelCards = PELAJE_ORDER.map(function (id) {
       var p = PELAJES[id];
@@ -532,13 +545,25 @@ window.VESPER_THEME = (function () {
       return '<div class="vt-card' + (cur.pelaje === id ? " on" : "") + (locked ? " locked" : "")
         + '" data-pelaje="' + id + '"' + (locked ? ' title="' + reqLabelFor("pelaje", id) + '" aria-disabled="true"' : "") + '>'
         + '<div class="vt-pelsw"><img src="' + p.img + '" alt="" loading="lazy"></div><div class="vt-nm">' + p.name + '</div>'
-        + (locked ? '<span class="vt-lock" aria-hidden="true">&#128274;</span>' : "") + '</div>';
+        + (locked ? '<div class="vt-req">' + reqLabelFor("pelaje", id) + '</div>'
+                  + '<span class="vt-lock" aria-hidden="true">&#128274;</span>' : "") + '</div>';
     }).join("");
+    /* Los tres bloques de Vesper se llamaban "Aspecto", "Color" y "Accesorios":
+       tres nombres casi iguales que no decían qué hacía cada uno. Sobre todo,
+       nadie entendía por qué el color no hacía nada al elegir el león — porque
+       sólo tiñe al gato original. Cada bloque lleva ahora una línea que lo dice. */
+    function head(title, sub) {
+      return '<div class="vt-h">' + title + '</div><p class="vt-sub">' + sub + '</p>';
+    }
     return '<div class="vt-panel">'
-      + '<div class="vt-h">Tema de la app</div><div class="vt-grid" data-vt-themes>' + themeCards + '</div>'
-      + '<div class="vt-h">Aspecto de Vesper</div><div class="vt-grid" data-vt-pelajes>' + pelCards + '</div>'
-      + '<div class="vt-h">Color de Vesper</div><div class="vt-skins" data-vt-skins>' + skinDots + '</div>'
-      + '<div class="vt-h">Accesorios de Vesper</div><div class="vt-grid" data-vt-accs>' + accCards + '</div>'
+      + head("El pelaje de Vesper", "Quién es tu gato. Cada pelaje trae sus propios colores.")
+      + '<div class="vt-grid" data-vt-pelajes>' + pelCards + '</div>'
+      + head("Lo que lleva puesto", "Se le dibuja sobre su pelaje: el sombrero se apoya de verdad en la melena.")
+      + '<div class="vt-grid" data-vt-accs>' + accCards + '</div>'
+      + head("El color de Vesper", "Sólo tiñe al Vesper original. Con león, dragón o cósmico no cambia nada.")
+      + '<div class="vt-skins" data-vt-skins>' + skinDots + '</div>'
+      + head("Tema de la app", "Los colores de toda la web, no los de Vesper.")
+      + '<div class="vt-grid" data-vt-themes>' + themeCards + '</div>'
       + '<p class="vt-note" data-vt-note aria-live="polite"></p>'
       + '</div>';
   }
@@ -602,12 +627,14 @@ window.VESPER_THEME = (function () {
     injectPickerCSS();
     var fab = document.createElement("button");
     fab.id = "vt-fab"; fab.className = "vt-fab"; fab.type = "button";
-    fab.setAttribute("aria-label", "Apariencia"); fab.innerHTML = "🎨";
+    fab.setAttribute("aria-label", "Vestir a Vesper"); fab.innerHTML = "🎨";
     var modal = document.createElement("div");
     modal.className = "vt-modal"; modal.id = "vt-modal";
-    modal.innerHTML = '<div class="vt-sheet"><div class="vt-top"><h3>Apariencia</h3>'
+    /* "Apariencia" y "el modelo visual y el skin" no le decían a un alumno que
+       aquí es donde le cambia el pelaje y le pone cosas a su gato. */
+    modal.innerHTML = '<div class="vt-sheet"><div class="vt-top"><h3>Vestir a Vesper</h3>'
       + '<button class="vt-x" aria-label="Cerrar">&times;</button></div>'
-      + '<p style="margin:.2em 0 .4em;color:var(--muted,#6b6b76);font-size:.9rem">Elige el modelo visual y el skin de Vesper. Se guarda en este dispositivo.</p>'
+      + '<p style="margin:.2em 0 .4em;color:var(--muted,#6b6b76);font-size:.9rem">Cámbiale el pelaje, ponle algo y elige el tema de la web. Se guarda en este dispositivo.</p>'
       + renderPicker() + '</div>';
     document.body.appendChild(fab); document.body.appendChild(modal);
     function open() { modal.classList.add("show"); }
