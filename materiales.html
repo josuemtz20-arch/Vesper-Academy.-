@@ -124,10 +124,12 @@
 html.vesper-hc.vesper-dark{--muted:#d9d5e4;--border:#6d6da0;--line:#6d6da0;}
 
 html{scroll-behavior:smooth;}
+/* Campo PLANO. Antes llevaba el resplandor dorado radial de la esquina
+   (--va-glow-gold). Se va: ese degradado no comunicaba nada y es la firma
+   visual del dark UI generado. El color solo, sin efecto, se sostiene mejor. */
 body{margin:0;font-family:var(--va-font-text,Inter,system-ui,sans-serif);
   color:var(--text);min-height:100vh;line-height:1.62;letter-spacing:-0.011em;
-  background:var(--va-glow-gold,radial-gradient(900px 420px at 80% -10%,rgba(201,168,76,.22),transparent 60%)),var(--cream);
-  background-attachment:fixed,scroll;}
+  background:var(--cream);}
 
 /* Salto al contenido (a11y) */
 .skip-link{position:absolute;left:-999px;top:0;z-index:200;background:var(--navy);color:var(--on-night);padding:10px 16px;border-radius:0 0 8px 0;text-decoration:none;font-weight:600;}
@@ -160,11 +162,71 @@ header a.back:hover,header a.back:focus-visible{color:var(--navy);background:var
 
 .wrap{max-width:var(--maxw);margin:0 auto;padding:var(--s-section) var(--gutter) calc(var(--s-section) + 12px);}
 
-/* ── Saludo ── */
-.intro{margin-bottom:6px;}
-.intro h1{font-family:var(--va-font-display);font-size:var(--t-display);line-height:1.08;font-weight:600;
-  margin:10px 0 10px;letter-spacing:-.012em;text-wrap:balance;}
-.intro p{color:var(--muted);max-width:52ch;margin:0;font-size:var(--t-lead);text-wrap:pretty;}
+/* ── Masthead ──
+   Asimétrico, con la tipografía haciendo el trabajo: rótulo, título a escala
+   de portada y UNA línea de estado en prosa. A la derecha, Vesper. */
+.intro{margin-bottom:6px;display:grid;grid-template-columns:1fr auto;
+  gap:32px;align-items:end;padding-bottom:clamp(18px,3vw,30px);}
+.intro > .in-txt{min-width:0;}
+.intro h1{font-family:var(--va-font-display);font-size:clamp(2.6rem,7vw,4.6rem);
+  line-height:.96;font-weight:600;margin:12px 0 0;letter-spacing:-.025em;text-wrap:balance;}
+.intro p{color:var(--muted);max-width:48ch;margin:20px 0 0;font-size:var(--t-lead);text-wrap:pretty;}
+.intro p b{color:var(--text);font-weight:500;}
+@media(max-width:760px){.intro{grid-template-columns:1fr;gap:10px;}}
+
+/* ══════════════════════════════════════════════════════════════
+   VESPER — la mascota
+   Una sola aparición protagónica que REACCIONA al estado del alumno,
+   más una despedida pequeña en el pie. Tres gatos repartidos serían
+   calcomanías; uno que responde es un personaje.
+   El arte tiene alfa real, así que va directo sobre el campo.
+   Vocabulario heredado de vesper_mascot.js: float, wave, tilt, llama.
+   ══════════════════════════════════════════════════════════════ */
+.mast-cat{padding-bottom:4px;}
+.vesper{position:relative;width:clamp(132px,15vw,190px);aspect-ratio:1;margin-left:auto;}
+/* Órbita: dos arcos girando muy despacio. Vesper es el lucero del atardecer,
+   así que la órbita es marca — no el resplandor de relleno que quitamos. */
+.v-halo{position:absolute;inset:-9%;pointer-events:none;opacity:.5;
+  animation:v-orbit 64s linear infinite;}
+.v-halo circle{fill:none;stroke:var(--gold);stroke-width:.7;stroke-linecap:round;}
+/* Dos capas: el envoltorio flota siempre, el interior saluda UNA vez al
+   llegar. Encadenarlas en el mismo elemento haría que la segunda pisara a
+   la primera. */
+.v-art{position:absolute;inset:0;animation:v-float 5s ease-in-out infinite;}
+.v-swing{position:absolute;inset:0;transform-origin:60% 92%;
+  animation:v-wave 1.15s cubic-bezier(.36,.07,.19,.97) 2;}
+.v-face{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;
+  opacity:0;transition:opacity .45s ease;filter:drop-shadow(0 16px 26px rgba(0,0,0,.45));}
+.v-face.is-on{opacity:1;}
+.v-flame{position:absolute;right:4%;bottom:8%;width:22%;aspect-ratio:1;opacity:0;
+  transition:opacity .5s ease;pointer-events:none;filter:blur(1px);
+  background:radial-gradient(circle at 50% 62%,rgba(255,196,92,.95),rgba(226,124,42,.5) 45%,transparent 72%);}
+.vesper[data-state="streak"] .v-flame{opacity:1;animation:v-soft 1.5s ease-in-out infinite;}
+.vesper:hover .v-art{animation-play-state:paused;}
+.vesper:hover .v-swing{transform:rotate(-3deg) scale(1.015);
+  transition:transform .5s var(--ease-out);}
+@keyframes v-float{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
+@keyframes v-wave{0%,100%{transform:rotate(0);}22%{transform:rotate(-7deg);}62%{transform:rotate(4.5deg);}}
+@keyframes v-orbit{to{transform:rotate(360deg);}}
+@keyframes v-soft{0%,100%{opacity:.75;transform:scale(1);}50%{opacity:1;transform:scale(1.1);}}
+/* La voz de Vesper: un pie de foto editorial, no un globo de diálogo. */
+.v-say{margin:14px 0 0;text-align:right;max-width:23ch;margin-left:auto;}
+.v-say .q{font-family:var(--va-font-display);font-style:italic;font-weight:400;
+  font-size:1rem;line-height:1.35;color:var(--text);display:block;}
+.v-say .n{display:block;margin-top:8px;font-size:.62rem;letter-spacing:.26em;
+  text-transform:uppercase;color:var(--gold-ink);font-weight:600;}
+.v-bye{width:52px;height:52px;flex:0 0 auto;object-fit:contain;
+  transition:transform .5s var(--ease-out);}
+.v-bye:hover{transform:rotate(-6deg) translateY(-3px);}
+@media(max-width:760px){
+  .vesper{width:104px;margin-left:0;}
+  .v-say{text-align:left;margin-left:0;}
+}
+/* Quien pidió menos movimiento no ve nada de esto moverse. */
+@media(prefers-reduced-motion:reduce){
+  .v-halo,.v-art,.v-swing,.vesper[data-state="streak"] .v-flame{animation:none;}
+  .v-face,.v-bye,.v-swing{transition:none;}
+}
 .tour-replay{display:inline-flex;align-items:center;gap:8px;margin-top:12px;background:none;border:none;padding:4px 0;
   font-family:inherit;font-size:var(--t-small);font-weight:600;color:var(--gold-ink);cursor:pointer;border-bottom:1px dashed transparent;transition:border-color .16s;}
 /* El hover NO cambia el color del texto: --gold es un tono medio en algunos
@@ -278,50 +340,109 @@ a.res:hover .res-go,a.res:focus-visible .res-go,a.res.active .res-go{opacity:1;t
 .s-empty{margin-top:14px;padding:18px;text-align:center;color:var(--muted);font-size:var(--t-body);background:var(--white);border:1px dashed var(--border);border-radius:var(--r-sm);}
 .s-empty b{color:var(--text);}
 
-/* ── Catálogo por curso ──
-   Cada grupo abre con una cubierta grabada (mismo tratamiento que .ctile de la
-   portada: 16/9, degradado que oscurece, título encima de la imagen). Es lo que
-   da identidad a los 6 grupos: antes los 6 iconos iban en el mismo cuadrado
-   navy y eran indistinguibles de un vistazo. */
-.cat-sec{margin-top:var(--s-section);}
-.grp{position:relative;display:block;border-radius:var(--r-md);overflow:hidden;
-  border:1px solid var(--hair);margin-bottom:20px;background:var(--navy);}
-.grp-cvr{position:relative;aspect-ratio:16/5;overflow:hidden;}
-.grp-cvr img{width:100%;height:100%;object-fit:cover;display:block;opacity:.92;}
-/* Mosaico para los dos grupos sin emblema propio: se compone con las
-   miniaturas de rail/ que la portada ya sirve a 176px. */
-.grp-cvr.mosaic{display:grid;grid-template-columns:repeat(3,1fr);gap:0;}
-.grp-cvr.mosaic img{opacity:.6;}
-.grp-cvr::after{content:"";position:absolute;inset:0;
-  background:linear-gradient(to top,var(--navy) 12%,rgba(20,18,42,.55) 55%,rgba(20,18,42,.15));}
-.grp-txt{position:absolute;left:0;right:0;bottom:0;z-index:1;padding:18px 20px;display:flex;align-items:flex-end;gap:12px;}
-.grp-txt .grp-ic{color:var(--gold);font-size:1.15rem;flex-shrink:0;margin-bottom:2px;}
-.grp-txt h2{margin:0;font-family:var(--va-font-display);font-size:var(--t-h2);font-weight:600;
-  line-height:1.1;color:var(--on-night);text-wrap:balance;}
-.grp-txt .grp-n{margin-left:auto;flex-shrink:0;font-size:var(--t-eyebrow);font-weight:600;letter-spacing:.16em;
-  text-transform:uppercase;color:var(--gold-lt);border:1px solid var(--hair);border-radius:var(--r-pill);padding:5px 11px;
-  font-variant-numeric:tabular-nums;background:rgba(20,18,42,.55);}
-@media(max-width:640px){
-  .grp-cvr{aspect-ratio:16/7;}
-  .grp-txt{padding:14px 15px;}
-  .grp-txt .grp-n{display:none;}
-}
+/* ── Catálogo: un ÍNDICE, no una retícula ──
+   Veinticuatro tarjetas idénticas se leen como salida de plantilla. Esto es el
+   movimiento de la maqueta 66nord traído aquí: capítulos numerados con la
+   lámina grabada a la izquierda y los libros como FILAS tipográficas a la
+   derecha, como el índice de un libro impreso.
 
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(258px,1fr));gap:14px;}
+   Los números 01–06 y las filas 01–06 salen de CONTADORES CSS. Es deliberado:
+   el catálogo lo consumen cuatro scripts (el parche del índice de libros, el
+   filtro, el buscador y el paseo guiado), todos apoyados en `#catalog a.card`
+   y `.cat-sec`. Numerar con ::before no toca el marcado, así que ninguno se
+   entera del cambio. */
+#catalog{counter-reset:cap;}
+/* ── Los filetes SON la estructura ──
+   En un índice no hay cajas: la única división entre capítulos y entre libros
+   es la regla de 1px. Medido con var(--hair)/var(--border) fijos, en los cinco
+   temas CLAROS caía a 1.12–1.23 contra el fondo, o sea el índice se deshacía
+   en un muro de texto. color-mix contra --text/--gold-ink lo resuelve solo por
+   polaridad: sobre noche mezcla crema, sobre papel mezcla tinta. La primera
+   declaración es el respaldo para quien no entienda color-mix. */
+.cat-sec{counter-increment:cap;margin-top:0;
+  display:grid;grid-template-columns:250px 1fr;gap:clamp(26px,4.5vw,60px);
+  padding:clamp(30px,4.5vw,50px) 0;
+  border-top:1px solid var(--hair);
+  border-top-color:color-mix(in srgb,var(--gold-ink) 55%,transparent);}
+.cat-sec:first-child{border-top:0;}
 
-/* Tarjeta de libro */
-a.card{display:flex;gap:14px;align-items:flex-start;background:var(--white);border:1px solid var(--border);border-radius:var(--r-md);padding:17px;text-decoration:none;color:inherit;
-  transition:transform .2s var(--ease-out),box-shadow .2s var(--ease-out),border-color .2s;}
-a.card:hover,a.card:focus-visible{transform:translateY(-3px);box-shadow:var(--sh);border-color:var(--gold);}
-a.card .cic{width:42px;height:42px;flex-shrink:0;border-radius:var(--r-sm);border:1px solid var(--hair);color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:1.05rem;transition:color .2s,border-color .2s;}
-a.card:hover .cic,a.card:focus-visible .cic{color:var(--gold-lt);border-color:var(--gold);}
-a.card .cbody{flex:1;min-width:0;display:flex;flex-direction:column;gap:5px;}
-a.card h3{margin:0;font-family:var(--va-font-display);font-size:var(--t-h3);font-weight:600;line-height:1.25;}
-a.card p{margin:0;color:var(--muted);font-size:var(--t-small);line-height:1.5;max-width:34ch;}
-a.card .go{margin-top:4px;font-size:var(--t-eyebrow);font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-ink);display:inline-flex;align-items:center;gap:7px;}
-a.card .go .i{transition:transform .2s var(--ease-out);}
-a.card:hover .go .i,a.card:focus-visible .go .i{transform:translateX(3px);}
+/* Columna izquierda: número, nombre, cuenta y lámina. Se queda fija mientras
+   se recorren los libros del capítulo. */
+.grp{position:sticky;top:26px;align-self:start;display:block;
+  background:none;border:0;border-radius:0;overflow:visible;margin:0;}
+.grp-txt{position:static;display:block;padding:0;}
+/* --gold-ink, NO --gold. El número es TEXTO, y --gold es el oro de marca:
+   sobre crema da 2.15:1. El motor de temas calcula --gold-ink accesible por
+   tema (#7a5e12 en los claros), que es para lo que existe. Medido: los cinco
+   temas claros suspendían aquí incluso con el umbral de texto grande. */
+.grp-txt::before{content:counter(cap,decimal-leading-zero);
+  display:block;font-family:var(--va-font-display);font-weight:400;
+  font-size:clamp(2.6rem,5vw,3.9rem);line-height:.82;color:var(--gold-ink);
+  font-variant-numeric:lining-nums;margin-bottom:14px;}
+.grp-txt .grp-ic{display:none;}   /* el número sustituye al icono */
+.grp-txt h2{margin:0;font-family:var(--va-font-display);font-size:1.3rem;font-weight:600;
+  line-height:1.15;color:var(--text);letter-spacing:-.01em;text-wrap:balance;}
+.grp-txt .grp-n{display:block;margin:7px 0 0;padding:0;background:none;border:0;
+  font-size:var(--t-small);font-weight:400;letter-spacing:0;text-transform:none;
+  color:var(--muted);font-variant-numeric:tabular-nums;}
+
+.grp-cvr{position:relative;margin-top:18px;aspect-ratio:16/10;overflow:hidden;
+  border:1px solid var(--border);}
+.grp-cvr img{width:100%;height:100%;object-fit:cover;display:block;
+  filter:saturate(.72) contrast(1.05) brightness(.92);}
+/* En una lámina de 250px un mosaico de tres se vuelve confeti: se queda la
+   primera, que es la que da el tema. */
+.grp-cvr.mosaic{display:block;}
+.grp-cvr.mosaic img:nth-child(n+2){display:none;}
+.grp-cvr::after{content:none;}   /* sin velo: ya no hay texto encima */
+
+/* Columna derecha: las filas. */
+.grid{display:flex;flex-direction:column;counter-reset:fila;}
+
+a.card{counter-increment:fila;
+  display:grid;grid-template-columns:32px 1fr auto;gap:18px;align-items:baseline;
+  background:none;border:0;border-radius:0;
+  border-top:1px solid var(--border);
+  border-top-color:color-mix(in srgb,var(--text) 24%,transparent);
+  padding:16px 0;text-decoration:none;color:inherit;box-shadow:none;
+  transition:padding-left .3s var(--ease-out);}
+a.card:first-child{border-top:0;padding-top:2px;}
+a.card:hover,a.card:focus-visible{transform:none;box-shadow:none;padding-left:9px;}
+
+/* El medallón se convierte en el folio de la fila. */
+a.card .cic{width:auto;height:auto;border:0;border-radius:0;display:block;
+  font-size:var(--t-small);color:var(--muted);font-variant-numeric:tabular-nums;
+  transition:color .2s;}
+a.card .cic .i{display:none;}
+a.card .cic::before{content:counter(fila,decimal-leading-zero);}
+a.card:hover .cic,a.card:focus-visible .cic{color:var(--gold-ink);border:0;}
+
+a.card .cbody{display:block;min-width:0;}
+a.card h3{margin:0;font-family:var(--va-font-display);font-size:1.06rem;font-weight:600;
+  line-height:1.28;transition:color .2s;}
+a.card:hover h3,a.card:focus-visible h3{color:var(--gold-lt);}
+a.card p{margin:4px 0 0;color:var(--muted);font-size:var(--t-small);line-height:1.5;max-width:52ch;}
+/* "Abrir libro →" repetido en las 24 filas ES la uniformidad que quitamos.
+   En su lugar, a la derecha va un dato REAL que varía: cuántas lecciones trae.
+   Lo escribe el parche del índice en data-lessons; si el índice no carga, el
+   atributo no existe y no se pinta nada. */
+a.card .go{display:none;}
+a.card[data-lessons]::after{content:attr(data-lessons) " lecciones";
+  font-size:var(--t-eyebrow);letter-spacing:.14em;text-transform:uppercase;
+  color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums;}
+
 .cat-sec.hidden,a.card.hidden{display:none;}
+
+@media(max-width:860px){
+  .cat-sec{grid-template-columns:1fr;gap:20px;}
+  .grp{position:static;}
+  .grp-cvr{display:none;}
+  .grp-txt::before{font-size:2.2rem;margin-bottom:8px;}
+}
+@media(max-width:520px){
+  a.card{grid-template-columns:26px 1fr;gap:14px;}
+  a.card[data-lessons]::after{grid-column:2;padding-top:5px;}
+}
 
 /* ── Filtro por curso ──
    Mismas píldoras que el portal del profesor, para que las dos superficies se
@@ -427,10 +548,20 @@ html:not(.vesper-dark){
   /* Sobre papel el borde tiene que ser un borde, no un destello de oro. */
   --hair:var(--va-line,#e4e0d8);
 }
-/* Tarjetas de libro: vuelven a ser tarjetas. */
+/* El catálogo ya NO son tarjetas, es un índice: aquí no hay superficie que
+   despegar del papel, sólo un filete que tiene que verse. Esta regla le daba
+   borde de caja y sombra a una fila transparente — y de paso su
+   `border-color` ganaba en especificidad al color-mix de arriba, así que en
+   los cinco temas claros el filete se quedaba en 1.16:1 y el índice se
+   deshacía en un muro de texto. Sobre papel hace falta más tinta que sobre
+   noche para el mismo peso óptico: 34% frente a 24%. */
 html:not(.vesper-dark) a.card{
-  border-color:var(--border);
-  box-shadow:var(--sh);
+  border-top-color:color-mix(in srgb,var(--text) 34%,transparent);
+  box-shadow:none;
+}
+/* Y el capítulo se separa con su propio filete, más presente sobre papel. */
+html:not(.vesper-dark) .cat-sec{
+  border-top-color:color-mix(in srgb,var(--gold-ink) 70%,transparent);
 }
 /* Herramientas: en claro NO es un riel dividido, son cuatro tarjetas. */
 html:not(.vesper-dark) .qn-grid{
@@ -473,9 +604,10 @@ html:not(.vesper-dark) a.res{
   border-color:var(--border);
   box-shadow:var(--sh);
 }
-/* La cubierta de cada grupo ya trae su propio velo oscuro, pero el bloque
-   necesita separarse del papel. */
-html:not(.vesper-dark) .grp{
+/* .grp ya no es un bloque con fondo: es la columna del capítulo, transparente.
+   Una sombra ahí flotaría sin superficie que la justifique. La lleva la lámina,
+   que sí es una superficie. */
+html:not(.vesper-dark) .grp-cvr{
   box-shadow:var(--sh);
 }
 html:not(.vesper-dark) .vtour-back{border-color:var(--border);}
@@ -540,11 +672,38 @@ html:not(.vesper-dark) .vtour-back{border-color:var(--border);}
 
 <main class="wrap" id="main">
   <div class="intro reveal">
-    <span class="rule" aria-hidden="true"></span>
-    <span class="eyebrow">Portal del alumno</span>
-    <h1 class="va-display" id="intro-title">Tu material de estudio</h1>
-    <p>Aquí encuentras los libros del estudiante de tu curso y la biblioteca de audio para entrenar el oído. Tu profesor te indica qué libro y lección corresponde a tu clase.</p>
-    <button type="button" class="tour-replay" id="tour-replay"><svg class="i" aria-hidden="true"><use href="#i-compass"/></svg> Ver guía rápida</button>
+    <div class="in-txt">
+      <span class="rule" aria-hidden="true"></span>
+      <span class="eyebrow">Portal del alumno</span>
+      <h1 class="va-display" id="intro-title">Tu material de estudio</h1>
+      <p>Aquí encuentras los libros de tu curso y la biblioteca de audio para entrenar el oído. Tu profesor te indica qué libro y lección corresponde a tu clase.</p>
+      <button type="button" class="tour-replay" id="tour-replay"><svg class="i" aria-hidden="true"><use href="#i-compass"/></svg> Ver guía rápida</button>
+    </div>
+
+    <div class="mast-cat">
+      <!-- data-state lo fija el JS del final: "welcome" al llegar, "streak" si
+           la racha sigue viva. El gato reacciona al alumno; no es un adorno.
+           La cara de bienvenida viene pintada desde el HTML, así que si el
+           script falla el gato sigue ahí. -->
+      <div class="vesper" id="vesper" data-state="welcome">
+        <svg class="v-halo" viewBox="0 0 100 100" aria-hidden="true">
+          <circle cx="50" cy="50" r="48" stroke-dasharray="66 210"/>
+          <circle cx="50" cy="50" r="48" stroke-dasharray="26 210" stroke-dashoffset="-150"/>
+        </svg>
+        <div class="v-art">
+          <div class="v-swing">
+            <img class="v-face is-on" data-face="welcome" src="assets/images/mascot/vesper_cat_welcome.webp"
+                 alt="Vesper, el gato de la academia, saludando" width="600" height="600" decoding="async">
+            <img class="v-face" data-face="explaining" src="assets/images/mascot/vesper_cat_explaining.webp"
+                 alt="" aria-hidden="true" width="600" height="600" loading="lazy" decoding="async">
+            <img class="v-face" data-face="streak" src="assets/images/mascot/vesper_cat_streak.webp"
+                 alt="" aria-hidden="true" width="600" height="600" loading="lazy" decoding="async">
+          </div>
+        </div>
+        <span class="v-flame" aria-hidden="true"></span>
+      </div>
+      <p class="v-say"><span class="q" id="v-line">Qué bueno verte. Sigue por donde ibas.</span><span class="n">Vesper</span></p>
+    </div>
   </div>
 
   <!-- Tu clase en vivo (Google Meet) — se llena desde students/{correo}.
@@ -799,7 +958,7 @@ var VIcon = (function(){
 
   /* ── 1) Saludo personalizado (el perfil del cuestionario sigue dando el nombre) ── */
   if(profile && profile.name){
-    document.getElementById("intro-title").textContent = "Hola, "+profile.name+" 👋";
+    document.getElementById("intro-title").textContent = "Hola, "+profile.name;
   }
 
   /* ── 2) Héroe "Hoy" — continúa / empieza por aquí ── */
@@ -848,9 +1007,10 @@ var VIcon = (function(){
       if(st.count >= 2){
         var el = document.getElementById("today-streak");
         if(el){
-          /* vesper_cat_streak.webp existía en el repo sin usarse en ninguna
-             parte. Este es su sitio: la racha es justo el momento de premio. */
-          el.innerHTML = '<img src="assets/images/mascot/vesper_cat_streak.webp" alt="" role="presentation" width="24" height="24" decoding="async">'+
+          /* Aquí iba un gato de 24px. Se fue: ahora Vesper celebra la racha
+             desde el masthead, a tamaño de verdad, y dos gatos en la misma
+             pantalla se leen como calcomanías. Queda la llama del sprite. */
+          el.innerHTML = '<svg class="i" aria-hidden="true"><use href="#i-flame"/></svg>'+
                          '<span>'+st.count+' días seguidos — ¡sigue así!</span>';
           el.hidden = false;
         }
@@ -1316,7 +1476,7 @@ var VIcon = (function(){
             if(nm){
               var h1 = document.getElementById("intro-title");
               if(h1 && h1.textContent.indexOf("Hola") !== 0){
-                h1.textContent = "Hola, "+nm+" 👋";
+                h1.textContent = "Hola, "+nm;
               }
               if(!localStorage.getItem("vesper_profile")){
                 localStorage.setItem("vesper_profile",
@@ -1445,6 +1605,71 @@ var VIcon = (function(){
     var saved = sessionStorage.getItem(KEY);
     if(saved && saved !== 'all' && defs.some(function(d){ return d.fam === saved; })) apply(saved, false);
   }catch(e){}
+})();
+</script>
+
+<script>
+/* ── Vesper reacciona al estado del alumno ─────────────────────────────────
+   El sistema de mascota (vesper_mascot.js) ya define expresiones y frases por
+   estado; aquí sólo se elige cuál toca y se cruza la imagen. La racha sale de
+   la MISMA fuente que usa el bloque "Hoy" (localStorage.vesper_streak), para
+   que las dos cosas nunca se contradigan.
+   Contrato: si algo falla queda la cara de bienvenida, que ya viene pintada en
+   el HTML — el gato nunca desaparece. */
+(function () {
+  var box = document.getElementById('vesper');
+  var line = document.getElementById('v-line');
+  if (!box || !line) return;
+
+  var faces = {};
+  Array.prototype.forEach.call(box.querySelectorAll('.v-face'), function (im) {
+    faces[im.getAttribute('data-face')] = im;
+  });
+
+  var LINES = {
+    welcome: ['Qué bueno verte. Sigue por donde ibas.',
+              'Una lección corta y vamos creciendo.',
+              'Aquí estoy cuando me necesites.'],
+    streak: ['Tu racha sigue viva. Un día más sumado.',
+             'La constancia es tu superpoder.'],
+    explaining: ['Cualquier libro de abajo te lo explico con calma.',
+                 'Si te atoras, el audio ayuda más de lo que parece.']
+  };
+
+  function show(face) {
+    Object.keys(faces).forEach(function (k) {
+      faces[k].classList.toggle('is-on', k === face);
+    });
+  }
+  function say(state) {
+    var opts = LINES[state] || LINES.welcome;
+    /* Sin Math.random: la frase depende del día, así que es estable durante la
+       sesión y no cambia sola al volver a la página. */
+    line.textContent = opts[new Date().getDate() % opts.length];
+  }
+
+  /* Misma regla que el bloque "Hoy": la racha cuenta a partir de 2 días. */
+  var enRacha = false;
+  try {
+    var st = JSON.parse(localStorage.getItem('vesper_streak') || 'null');
+    enRacha = !!(st && st.count >= 2);
+  } catch (e) {}
+
+  var base = enRacha ? 'streak' : 'welcome';
+  box.setAttribute('data-state', base);
+  show(base);
+  say(base);
+
+  /* Al pasar el ratón ofrece ayuda y vuelve al salir. Es la única interacción:
+     un gato que hace cinco cosas distintas cansa. */
+  var t;
+  box.addEventListener('mouseenter', function () {
+    clearTimeout(t); show('explaining'); say('explaining');
+  });
+  box.addEventListener('mouseleave', function () {
+    clearTimeout(t);
+    t = setTimeout(function () { show(base); say(base); }, 120);
+  });
 })();
 </script>
 
