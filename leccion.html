@@ -518,6 +518,48 @@
   .wavatar .wacc svg{width:100%;height:100%;display:block;overflow:visible;
     filter:drop-shadow(0 1px 1px rgba(20,18,42,.45))}
   @keyframes wbob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+  /* ---- vida propia del avatar ---------------------------------------
+     El pelaje es un PNG plano, así que lo único animable es la capa que lo
+     envuelve: .wcat respira (escala mínima con el origen en las patas, para
+     que suba el pecho y no flote entero) y .wfx añade el detalle propio de
+     cada pelaje. Cero bytes y cero peticiones: no hay fotogramas ni vídeo.
+     Coordenadas medidas sobre la caja de 50px del avatar (orejas y≈7-10,
+     coronilla y≈13,5, ojos y≈24, hocico y≈28, cuello y≈31). */
+  .wavatar .wcat{transform-origin:50% 94%;animation:wbreathe 3.6s ease-in-out infinite}
+  @keyframes wbreathe{0%,100%{transform:scale(1,1)}50%{transform:scale(.987,1.015)}}
+  .wavatar .wfx{position:absolute;inset:0;pointer-events:none}
+  .wavatar .wfx::before,.wavatar .wfx::after{content:"";position:absolute;opacity:0}
+  /* gato original / gris / multicolor: un destello breve junto a la oreja */
+  .wavatar[data-pelaje="classic"] .wfx::before,
+  .wavatar[data-pelaje="gray"] .wfx::before,
+  .wavatar[data-pelaje="calico"] .wfx::before{left:33px;top:8px;width:6px;height:6px;
+    background:radial-gradient(circle,rgba(255,255,255,.95) 0 18%,rgba(201,168,76,.85) 30%,transparent 70%);
+    animation:wsparkle 5.2s ease-in-out infinite}
+  .wavatar[data-pelaje="gray"] .wfx::before{left:12px;
+    background:radial-gradient(circle,rgba(255,255,255,.95) 0 18%,rgba(198,205,214,.9) 30%,transparent 70%)}
+  @keyframes wsparkle{0%,72%,100%{opacity:0;transform:scale(.4) rotate(0deg)}
+    82%{opacity:1;transform:scale(1) rotate(45deg)}92%{opacity:0;transform:scale(.5) rotate(90deg)}}
+  /* león: la melena late en oro */
+  .wavatar[data-pelaje="lion"] .wfx::before{left:6px;top:4px;width:38px;height:34px;border-radius:50%;
+    background:radial-gradient(closest-side,rgba(232,183,74,.42),transparent 72%);
+    animation:wglow 3.9s ease-in-out infinite}
+  @keyframes wglow{0%,100%{opacity:.18;transform:scale(.94)}50%{opacity:.62;transform:scale(1.06)}}
+  /* cósmico: dos estrellas que titilan sobre la cabeza */
+  .wavatar[data-pelaje="cosmic"] .wfx::before,
+  .wavatar[data-pelaje="cosmic"] .wfx::after{width:5px;height:5px;
+    background:radial-gradient(circle,#fff 0 20%,rgba(126,232,240,.9) 34%,transparent 72%);
+    animation:wtwinkle 2.9s ease-in-out infinite}
+  .wavatar[data-pelaje="cosmic"] .wfx::before{left:12px;top:11px}
+  .wavatar[data-pelaje="cosmic"] .wfx::after{left:35px;top:7px;animation-delay:1.35s}
+  @keyframes wtwinkle{0%,100%{opacity:.15;transform:scale(.6)}50%{opacity:1;transform:scale(1.2)}}
+  /* dragón: dos volutas de humo que suben del hocico */
+  .wavatar[data-pelaje="dragon"] .wfx::before,
+  .wavatar[data-pelaje="dragon"] .wfx::after{left:20px;top:27px;width:5px;height:5px;border-radius:50%;
+    background:radial-gradient(circle,rgba(222,245,232,.9),rgba(150,205,180,0) 72%);
+    animation:wsmoke 3.4s ease-out infinite}
+  .wavatar[data-pelaje="dragon"] .wfx::after{left:27px;animation-delay:1.7s}
+  @keyframes wsmoke{0%{opacity:0;transform:translate(0,0) scale(.45)}
+    18%{opacity:.8}100%{opacity:0;transform:translate(-5px,-17px) scale(2)}}
   /* títulos/etiquetas legibles sobre la isla oscura */
   .wisland .wtitle{color:var(--cream,#f5f2eb)}
   .wisland .wnode.locked .wtitle{color:rgba(245,242,235,.55)}
@@ -553,9 +595,14 @@
   /* reduce-motion: sin caminar del avatar, sin haz del faro, sin titileo del cielo */
   @media(prefers-reduced-motion:reduce){
     .wavatar{animation:none}
+    .wavatar .wcat{animation:none}
+    .wavatar .wfx::before,.wavatar .wfx::after{animation:none;opacity:0}
     .wbtn.boss.ready .beam,.wbtn.boss.conquered .beam{animation:none;opacity:1}
   }
   .vesper-reduce-motion .wavatar{animation:none}
+  .vesper-reduce-motion .wavatar .wcat{animation:none}
+  .vesper-reduce-motion .wavatar .wfx::before,
+  .vesper-reduce-motion .wavatar .wfx::after{animation:none;opacity:0}
   .vesper-reduce-motion .wbtn.boss .beam{animation:none;opacity:1}
   .vesper-reduce-motion .wamb i,.vesper-reduce-motion .wisland::before,.vesper-reduce-motion .wisland::after{animation:none}
   /* ===== Pantallas del Guardián (portada / medidor / resultado) ===== */
@@ -2465,33 +2512,31 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
   }
   var WORLD_UMBRAL = { A1: "Umbral del Hogar", A2: "Mojón del Sendero", B1: "Arco del Horizonte", B2: "Pórtico de la Torre", C1: "Portal del Firmamento", C2: "Sello del Castillo" };
   var BOSS_AVATAR = "assets/images/mascot/vesper_cat.png";
-  /* SVG del accesorio de Vesper elegido (vacío = ninguno). De vesper_theme.js. */
-  function currentAccessorySvg() {
+  /* ¿está desbloqueado este cosmético? (fail-open si no hay VESPER_COSMETICS) */
+  function unlockedCos(kind, id) {
     try {
-      if (window.VESPER_THEME && VESPER_THEME.get) {
-        var id = VESPER_THEME.get().accessory;
-        if (id && id !== "none" && window.VESPER_COSMETICS && VESPER_COSMETICS.isUnlocked
-            && !VESPER_COSMETICS.isUnlocked("acc", id)) return "";   // no mostrar accesorios bloqueados
-        var acc = VESPER_THEME.accessories && VESPER_THEME.accessories[id];
-        return (acc && acc.svg) || "";
-      }
+      if (window.VESPER_COSMETICS && VESPER_COSMETICS.isUnlocked) return !!VESPER_COSMETICS.isUnlocked(kind, id);
     } catch (e) {}
-    return "";
+    return true;
   }
-  /* Pelaje (apariencia completa) activo del gato del mapa, con guard de desbloqueo.
-     Devuelve {src, animal}: animal=true cuando NO es el Vesper clásico. */
-  function currentPelaje() {
+  /* Aspecto del gato del mapa: pelaje + accesorio en UNA sola imagen ya
+     horneada (VESPER_THEME.look). Antes se superponía el SVG del accesorio
+     sobre el PNG y, por bien calibrado que estuviera, se leía pegado encima:
+     el sombrero flotaba sobre la melena del león en vez de hundirse en ella.
+     Devuelve {src, svg, animal, pelaje}: animal=true cuando NO es el Vesper
+     clásico, que es lo que decide si recibe el tinte de color (--vc-filter).
+     Respeta los bloqueos: lo no desbloqueado no se pinta. */
+  function currentLook() {
     try {
-      if (window.VESPER_THEME && VESPER_THEME.get) {
-        var id = VESPER_THEME.get().pelaje;
-        if (id && id !== "classic") {
-          var locked = window.VESPER_COSMETICS && VESPER_COSMETICS.isUnlocked && !VESPER_COSMETICS.isUnlocked("pelaje", id);
-          var p = VESPER_THEME.pelajes && VESPER_THEME.pelajes[id];
-          if (!locked && p && p.img) return { src: p.img, animal: true };
-        }
+      if (window.VESPER_THEME && VESPER_THEME.get && VESPER_THEME.look) {
+        var st = VESPER_THEME.get();
+        var pel = (st.pelaje && st.pelaje !== "classic" && unlockedCos("pelaje", st.pelaje)) ? st.pelaje : "classic";
+        var acc = (st.accessory && st.accessory !== "none" && unlockedCos("acc", st.accessory)) ? st.accessory : "none";
+        var lk = VESPER_THEME.look(pel, acc);
+        return { src: lk.img, svg: lk.svg, animal: pel !== "classic", pelaje: pel };
       }
     } catch (e) {}
-    return { src: BOSS_AVATAR, animal: false };
+    return { src: BOSS_AVATAR, svg: "", animal: false, pelaje: "classic" };
   }
   /* etiqueta visual para un cosmético recién desbloqueado {kind:"skin"|"acc"|"pelaje",id} */
   function cosmeticLabel(c) {
@@ -3161,7 +3206,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     var t = WORLD_THEME[selLevel] || {};
     var terrain = t.file ? (";--w-terrain:url(" + t.file + ")") : "";
     var startPennant = '<div class="wstart" aria-hidden="true"><span>' + (WORLD_UMBRAL[selLevel] || ('Mundo ' + worldNo)) + '</span></div>';
-    var pj = currentPelaje();
+    var pj = currentLook();
     /* worldVars también en .wsky: el resplandor del horizonte y el color de
        la noche viven ahí, y .wsky es PADRE de .wisland, así que no heredaba
        el acento del mundo (se quedaba en el oro por defecto en los 6). */
@@ -3171,8 +3216,9 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       + '<div class="wmap" id="wmap" data-world="' + selLevel + '" data-cur="' + curStop + '" style="' + worldVars(t) + '">'
       + '<svg class="wterrain terr" aria-hidden="true" focusable="false" preserveAspectRatio="none"></svg>'
       + '<svg class="wtrail" aria-hidden="true" focusable="false" preserveAspectRatio="none"><path class="wtrail-base"/><path class="wtrail-road"/><path class="wtrail-tex"/><path class="wtrail-glow"/><path class="wtrail-done"/><path class="wtrail-line"/><path class="wtrail-comet"/></svg>'
-      + '<div class="wavatar' + (pj.animal ? ' has-pelaje' : '') + '" aria-hidden="true"><img class="wcat" src="' + pj.src + '" alt="" decoding="async">'
-      + '<span class="wacc">' + currentAccessorySvg() + '</span></div>'
+      + '<div class="wavatar' + (pj.animal ? ' has-pelaje' : '') + '" data-pelaje="' + pj.pelaje + '" aria-hidden="true">'
+      + '<img class="wcat" src="' + pj.src + '" alt="" decoding="async">'
+      + '<span class="wacc">' + pj.svg + '</span><span class="wfx" aria-hidden="true"></span></div>'
       + ambLayer(t.mapN || 3, true) + startPennant + parts
       + '</div></div></div>';
     /* el botón vive FUERA de .wmap: no lleva data-stop y no entra en la medición */

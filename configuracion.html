@@ -55,6 +55,9 @@
   .pv-acc{position:absolute;left:0;top:0;width:96px;height:96px;pointer-events:none}
   .pv-acc svg{width:100%;height:100%;display:block;overflow:visible;filter:drop-shadow(0 1px 1px rgba(20,18,42,.4))}
   .pv-pel{width:96px;height:96px;object-fit:contain;display:block}
+  /* el tinte de color sólo lo lleva el gato original; los pelajes de animal
+     traen sus propios colores y el accesorio va horneado en la misma imagen */
+  .pv-pel.pv-tint{filter:var(--vc-filter,none)}
   .pv-text{min-width:0;flex:1}
   .pv-meta{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:6px}
   .pill{background:var(--ink);color:var(--cream);font-weight:600;font-size:.72rem;padding:3px 10px;border-radius:999px}
@@ -590,24 +593,27 @@
     if (window.VESPER_MASCOT) {
       var state = TONE_STATE[cur.tone] || "welcome";
       var appr = (window.VESPER_THEME && VESPER_THEME.get) ? VESPER_THEME.get() : null;
-      /* aspecto (pelaje) completo: muestra la imagen del animal si está desbloqueado */
+      /* Aspecto = pelaje + accesorio ya HORNEADOS en una sola imagen
+         (VESPER_THEME.look): el accesorio va dibujado sobre ese pelaje, no
+         superpuesto. Sólo se cae a la mascota de expresiones cuando lleva el
+         gato original SIN accesorio, que es cuando el gesto aporta algo. */
+      var unlockedCos = function (kind, id) {
+        try {
+          if (window.VESPER_COSMETICS && VESPER_COSMETICS.isUnlocked) return !!VESPER_COSMETICS.isUnlocked(kind, id);
+        } catch (e) {}
+        return true;
+      };
       var pelId = appr ? appr.pelaje : "classic";
-      var pelLocked = pelId && pelId !== "classic" && window.VESPER_COSMETICS && VESPER_COSMETICS.isUnlocked && !VESPER_COSMETICS.isUnlocked("pelaje", pelId);
-      var pel = appr && VESPER_THEME.pelajes && VESPER_THEME.pelajes[pelId];
-      if (pelId !== "classic" && !pelLocked && pel && pel.img) {
-        $("pv-mascot").innerHTML = '<img class="pv-pel" src="' + pel.img + '" alt="Vesper">';
+      var accId = appr ? appr.accessory : "none";
+      if (pelId !== "classic" && !unlockedCos("pelaje", pelId)) pelId = "classic";
+      if (accId !== "none" && !unlockedCos("acc", accId)) accId = "none";
+      var lk = (appr && VESPER_THEME.look) ? VESPER_THEME.look(pelId, accId) : null;
+      if (lk && (pelId !== "classic" || accId !== "none")) {
+        $("pv-mascot").innerHTML = '<img class="pv-pel' + (lk.tint ? " pv-tint" : "") + '" src="' + lk.img + '" alt="Vesper">'
+          + (lk.svg ? '<span class="pv-acc" aria-hidden="true">' + lk.svg + '</span>' : "");
       } else {
         $("pv-mascot").innerHTML = VESPER_MASCOT.render(state, { size: "lg" });
       }
-      /* superpone el accesorio elegido sobre la mascota de la vista previa */
-      try {
-        if (appr) {
-          var accId = appr.accessory;
-          var accOk = !(accId && accId !== "none" && window.VESPER_COSMETICS && VESPER_COSMETICS.isUnlocked && !VESPER_COSMETICS.isUnlocked("acc", accId));
-          var acc = VESPER_THEME.accessories && VESPER_THEME.accessories[accId];
-          if (accOk && acc && acc.svg) $("pv-mascot").insertAdjacentHTML("beforeend", '<span class="pv-acc" aria-hidden="true">' + acc.svg + '</span>');
-        }
-      } catch (e) {}
     }
   }
   paint();

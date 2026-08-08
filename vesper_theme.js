@@ -237,6 +237,43 @@ window.VESPER_THEME = (function () {
   };
   var PELAJE_ORDER = ["classic", "gray", "calico", "lion", "cosmic", "dragon"];
 
+  /* ---- Accesorios HORNEADOS en el modelo ----------------------------------
+     Cada combinación pelaje + accesorio tiene su PROPIA imagen, con el
+     accesorio dibujado sobre ese pelaje concreto: la corona se apoya dentro
+     de la melena del león, el birrete esquiva los cuernos del dragón y la
+     patilla de las gafas pasa por detrás de la oreja. Antes se superponía el
+     SVG sobre el PNG del gato y, hiciera lo que hiciera con las coordenadas,
+     siempre se leía como una calcomanía encima: el sombrero flotaba sobre la
+     melena en vez de hundirse en ella.
+
+     Existen los 42 archivos (6 pelajes x 7 accesorios) en
+     assets/images/mascot/skins/<pelaje>_<accesorio>.png. El SVG de
+     ACCESSORIES queda como ICONO y como respaldo si algún día falta uno. */
+  function bakedSrc(pelaje, acc) {
+    if (!acc || acc === "none") return null;
+    if (!PELAJES[pelaje] || !ACCESSORIES[acc]) return null;
+    return MASCOT_DIR + "skins/" + pelaje + "_" + acc + ".png";
+  }
+
+  /* Qué hay que pintar para una combinación. Devuelve una sola imagen cuando
+     está horneada; si no, la del pelaje y el SVG para superponer.
+     `tint`: sólo el gato original recibe el tinte de color (--vc-filter);
+     los pelajes de animal traen sus propios colores. */
+  function look(pelaje, acc) {
+    pelaje = PELAJES[pelaje] ? pelaje : "classic";
+    acc = ACCESSORIES[acc] ? acc : "none";
+    var baked = bakedSrc(pelaje, acc);
+    return {
+      img: baked || PELAJES[pelaje].img,
+      fallback: PELAJES[pelaje].img,
+      svg: baked ? "" : ((ACCESSORIES[acc] && ACCESSORIES[acc].svg) || ""),
+      baked: !!baked,
+      pelaje: pelaje,
+      accessory: acc,
+      tint: pelaje === "classic"
+    };
+  }
+
   /* ---- helpers de color ---- */
   function clampHex(h) { return /^#([0-9a-f]{6})$/i.test(h) ? h : "#000000"; }
   function rgba(hex, a) {
@@ -391,15 +428,10 @@ window.VESPER_THEME = (function () {
      retrato debajo se ve exactamente lo que te vas a poner. Usa el pelaje
      activo para que la prueba sea la de tu gato. */
   function accessoryPreview(id) {
-    var a = ACCESSORIES[id] || {};
     var st = read();
-    var pel = PELAJES[st.pelaje] || PELAJES.classic;
-    if (id === "none") {
-      return '<span class="vt-accfig"><img src="' + pel.img + '" alt="" loading="lazy"'
-        + (st.pelaje === "classic" ? ' class="vt-tint"' : "") + '></span>';
-    }
-    return '<span class="vt-accfig"><img src="' + pel.img + '" alt="" loading="lazy"'
-      + (st.pelaje === "classic" ? ' class="vt-tint"' : "") + '>' + (a.svg || "") + '</span>';
+    var lk = look(st.pelaje, id);
+    return '<span class="vt-accfig"><img src="' + lk.img + '" alt="" loading="lazy"'
+      + (lk.tint ? ' class="vt-tint"' : "") + '>' + lk.svg + '</span>';
   }
 
   /* ---------- UI: panel de eleccion ---------- */
@@ -600,6 +632,7 @@ window.VESPER_THEME = (function () {
     setPelaje: function (id) { if (!PELAJES[id]) return; var s = read(); s.pelaje = id; write(s); apply(s); },
     set: function (theme, skin) { var s = read(); s.theme = theme; s.skin = skin; write(s); apply(s); },
     accessoryPreview: accessoryPreview,
+    look: look, bakedSrc: bakedSrc,
     renderPicker: renderPicker, wirePicker: wirePicker, mountFloat: mountFloat
   };
 
