@@ -172,7 +172,7 @@ body{margin:0;font-family:var(--va-font-text,Inter,system-ui,sans-serif);display
                  '<div class="muted">Avisa a la academia para que lo vuelva a subir.</div>');
             return;
           }
-          render(html);
+          render(html, token, base);
         });
       }).catch(function () {
         fail('<div class="err">No hay conexi&oacute;n con el servidor de libros.</div>' +
@@ -186,9 +186,25 @@ body{margin:0;font-family:var(--va-font-text,Inter,system-ui,sans-serif);display
 
   /* ── 4. Renderizar: el libro sustituye a esta página por completo,
          así su CSS de impresión y sus scripts funcionan tal cual ── */
-  function render(html) {
+  function render(html, token, base) {
     /* el candado ya se pasó aquí: quita su <script> del documento del libro */
     html = html.replace(/<script[^>]*src=["']vesper_auth\.js["'][^>]*>\s*<\/script>/gi, "");
+
+    /* ── Libros paginados (páginas reales de Canva como imagen) ──
+       Estos libros no traen su contenido dentro del HTML: el trozo 0 es solo
+       una carcasa y cada página vive en su propio documento de Firestore, que
+       la carcasa pide bajo demanda según el alumno baja. Como document.write
+       crea un documento NUEVO, el SDK de Firebase de esta página desaparece;
+       hay que pasarle a la carcasa el idToken y la ruta base para que pueda
+       leer. El token de Firebase dura ~1 h: la carcasa avisa si caduca. */
+    if (/VESPER_PAGED_BOOK/.test(html)) {
+      var boot = "<script>window.VESPER_BOOK=" + JSON.stringify({
+        token: token, base: base
+      }).replace(/</g, "\\u003c") + ";<\/script>";
+      html = /<head[^>]*>/i.test(html)
+        ? html.replace(/<head[^>]*>/i, function (m) { return m + boot; })
+        : boot + html;
+    }
 
     /* arreglo móvil: los libros se generan con ancho de papel A4 (210mm),
        así que en el teléfono se ven apretados. Se inyecta un viewport (si
@@ -223,6 +239,29 @@ body{margin:0;font-family:var(--va-font-text,Inter,system-ui,sans-serif);display
         'table{display:block!important;overflow-x:auto!important;max-width:100%!important;-webkit-overflow-scrolling:touch;}' +
         'pre{white-space:pre-wrap!important;max-width:100%!important;}' +
         '[style*="width"]{max-width:100%!important;}' +
+        /* ── el arreglo clave: los libros usan .page A4 con 12mm (~45px) de
+           relleno lateral en móvil, que se come ~24% del ancho y aprieta todo.
+           Bajarlo a 16px y re-ajustar los elementos "a sangre" (que salen al
+           borde con margen negativo = al relleno de la página) para que no se
+           desborden. Aplica a TODAS las pieles (base/premium2/basics/bespoke). ── */
+        '.page:not(.cover-page){padding:16px 16px 30px!important;}' +
+        '.cover-page{padding-left:18px!important;padding-right:18px!important;}' +
+        '.module-header{margin-left:-16px!important;margin-right:-16px!important;margin-top:-16px!important;padding-left:16px!important;padding-right:16px!important;}' +
+        '.lesson-title{margin-left:-16px!important;margin-right:-16px!important;padding-left:18px!important;padding-right:18px!important;}' +
+        '.toolkit-divider{margin-left:-16px!important;margin-right:-16px!important;padding-left:16px!important;padding-right:16px!important;}' +
+        '.lesson-block{padding:15px 15px 16px!important;}' +
+        '.vesper-hero{padding:13px 14px!important;gap:12px!important;}' +
+        '.vesper-hero .vh-cat{flex:0 0 44px!important;width:44px!important;height:44px!important;}' +
+        '.lesson-block .lb-header{gap:11px!important;}' +
+        '.lesson-block .lb-header i{flex:0 0 34px!important;width:34px!important;height:34px!important;}' +
+        '.lesson-block .lb-header::before{left:46px!important;}' +
+        '.tier,.yourturn{padding:11px 13px!important;}' +
+        '.vcard{padding:10px 12px!important;gap:9px!important;}' +
+        '.page-num{left:16px!important;right:16px!important;}' +
+        /* índice (TOC): en móvil pasa de 2 columnas apretadas a 1 sola,
+           y los títulos largos ya pueden encoger/envolver sin desbordar. */
+        '.toc-grid{grid-template-columns:1fr!important;gap:8px 0!important;}' +
+        '.toc-item,.toc-item a{min-width:0!important;}' +
       '}' +
       '</style>';
     if (/<\/head>/i.test(html)) {
@@ -254,7 +293,45 @@ body{margin:0;font-family:var(--va-font-text,Inter,system-ui,sans-serif);display
       'a.vm-chip{position:fixed!important;top:auto!important;width:auto!important;height:auto!important;display:inline-block!important;}' +
       'a.vm-chip-l{left:14px!important;right:auto!important;bottom:calc(14px + env(safe-area-inset-bottom))!important;}' +
       'a.vm-chip-r{right:14px!important;left:auto!important;bottom:calc(14px + env(safe-area-inset-bottom))!important;}' +
+      '@keyframes vmFlash{0%,100%{box-shadow:0 0 0 0 rgba(197,160,89,0);}18%{box-shadow:0 0 0 4px rgba(197,160,89,.7),0 0 26px 6px rgba(197,160,89,.45);}}' +
+      '.vm-jump{animation:vmFlash 2.4s ease-out 1;}' +
       '@media print{a.no-print{display:none!important}}</style>';
+
+    /* Vesper Player: mejora cada <audio> del libro con retroceso 5s (para
+       shadowing), velocidad 0.75x/1x/1.25x y bucle. Sin dependencias. */
+    chip += '<style>' +
+      '.vxa-bar{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 10px;}' +
+      '.vxa-bar button{font:700 11px/1 sans-serif;padding:7px 11px;border-radius:14px;border:1px solid #c5a059;background:#fff;color:#1B1B2F;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.15);}' +
+      '.vxa-bar button.on{background:#1B1B2F;color:#e8c987;}' +
+      'audio[data-vxa]{width:100%!important;max-width:430px!important;height:34px!important;}' +
+      '@media print{.vxa-bar{display:none!important}}</style>';
+    chip += '<script>(function(){function up(){' +
+      'var list=document.querySelectorAll("audio:not([data-vxa])");' +
+      'Array.prototype.forEach.call(list,function(a){a.setAttribute("data-vxa","1");' +
+      'var bar=document.createElement("div");bar.className="vxa-bar no-print";' +
+      'function mk(t,tip,fn){var b=document.createElement("button");b.type="button";b.textContent=t;b.title=tip;' +
+      'b.addEventListener("click",function(){fn(b);});bar.appendChild(b);return b;}' +
+      'mk("\\u27F2 5s","Retroceder 5 segundos",function(){a.currentTime=Math.max(0,a.currentTime-5);});' +
+      'var sp=[1,0.75,1.25],si=0;' +
+      'mk("1\\u00D7","Velocidad: 0.75\\u00D7 para aprender, 1.25\\u00D7 para reto",function(b){' +
+      'si=(si+1)%sp.length;a.playbackRate=sp[si];b.textContent=sp[si]+"\\u00D7";b.classList.toggle("on",sp[si]!==1);});' +
+      'a.addEventListener("play",function(){a.playbackRate=sp[si];});' +
+      'mk("\\uD83D\\uDD01","Repetir en bucle",function(b){a.loop=!a.loop;b.classList.toggle("on",a.loop);});' +
+      'if(a.parentNode){a.parentNode.insertBefore(bar,a.nextSibling);}});}' +
+      'if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",up);}else{up();}' +
+      'window.addEventListener("load",up);})();<\/script>';
+
+    /* Enlace profundo a una lección: si la URL trae #anchor (desde el buscador
+       de temas del portal), lleva el scroll a esa lección y la resalta. Como el
+       libro reemplaza el documento con document.write, el navegador no aplica
+       el fragmento solo; lo hacemos a mano tras pintar. */
+    chip += '<script>(function(){var h=(location.hash||"").replace(/^#/,"");' +
+      'if(!/^[a-z0-9_]{1,40}$/i.test(h))return;' +
+      'function jump(){var el=document.getElementById(h);if(!el)return;' +
+      'try{el.scrollIntoView({behavior:"smooth",block:"start"});}catch(e){el.scrollIntoView();}' +
+      'el.classList.add("vm-jump");setTimeout(function(){el.classList.remove("vm-jump");},2500);}' +
+      'if(document.readyState==="complete"){setTimeout(jump,120);}' +
+      'else{window.addEventListener("load",function(){setTimeout(jump,120);});}})();<\/script>';
     if (/<\/body>/i.test(html)) {
       html = html.replace(/<\/body>(?![\s\S]*<\/body>)/i, chip + "</body>");
     } else {
@@ -267,5 +344,6 @@ body{margin:0;font-family:var(--va-font-text,Inter,system-ui,sans-serif);display
   }
 })();
 </script>
+<script src="vesper_nav.js"></script>
 </body>
 </html>
