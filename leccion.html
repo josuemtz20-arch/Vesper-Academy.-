@@ -1881,8 +1881,8 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     } catch (e) {}
   }
 
-  function feedbackBox(ok, explanation, wrongFallback) {
-    playFx(ok);
+  function feedbackBox(ok, explanation, wrongFallback, noFx) {
+    if (!noFx) playFx(ok);
     var state = ok ? "correct" : "incorrect";
     var line = (PERS && PERS.line) ? PERS.line(state) : "";
     if (!line) line = (window.VESPER_MASCOT ? VESPER_MASCOT.get(state).line : (ok ? "Bien!" : "Casi..."));
@@ -2721,15 +2721,40 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     "C1-dome":1,"C1-telescope":1,"C1-archive":1,"C1-aurora":1,"C1-nebula":1,"C1-comet":1,
     "C2-gate":1,"C2-throne":1,"C2-vault":1,"C2-spire":1,"C2-sanctum":1,"C2-courtyard":1
   };
+  /* emblemas de las salas de DESBORDE ("Más …", auto-generadas por cubo temático).
+     El id de la sala es "more-<cubo>" o "more-<cubo>-<n>"; todos los trozos del mismo
+     cubo comparten emblema. Dos capas: (1) por CUBO (uno por tema, reusado en todos los
+     mundos — archivo more_<cubo>.webp); (2) override por NIVEL para los mundos más
+     inmersivos (more_<nivel>_<cubo>.webp). Sin archivo -> glifo SVG. */
+  var MORE_BUCKET_EMBLEM = {
+    verbs:1, phrases:1, food:1, nature:1, travel:1, work:1,
+    tech:1, people:1, body:1, time:1, other:1
+  };
+  var MORE_LEVEL_EMBLEM = { "C1-phrases":1, "C1-other":1, "A2-nature":1 };
+  /* cubo temático de una sala de desborde: "more-other-2" -> "other" */
+  function moreBucket(branchId) { return String(branchId).replace(/^more-/, "").replace(/-\d+$/, ""); }
   /* onerror en scope global (IIFE): respaldo = glifo SVG de la rama */
   window.__vbranchFallback = function (img, iconKey) {
     try { if (img) { var p = img.parentNode; img.outerHTML = (BRANCH_ICN[iconKey] || BRANCH_ICN.spark);
       if (p) { p.classList.remove("has-img"); p.classList.add("is-svg"); } } } catch (e) {}
   };
-  function branchHasImg(level, branchId) { return !!BRANCH_EMBLEM[level + "-" + branchId]; }
+  /* archivo webp del emblema de una sala (curada o de desborde), o "" si no hay */
+  function branchEmblemSrc(level, branchId) {
+    if (BRANCH_EMBLEM[level + "-" + branchId])
+      return "assets/images/vocab/branch_" + String(level).toLowerCase() + "_" + branchId + ".webp";
+    if (/^more-/.test(branchId)) {
+      var b = moreBucket(branchId);
+      if (MORE_LEVEL_EMBLEM[level + "-" + b])
+        return "assets/images/vocab/more_" + String(level).toLowerCase() + "_" + b + ".webp";
+      if (MORE_BUCKET_EMBLEM[b])
+        return "assets/images/vocab/more_" + b + ".webp";
+    }
+    return "";
+  }
+  function branchHasImg(level, branchId) { return !!branchEmblemSrc(level, branchId); }
   function branchEmblemHtml(level, branchId, iconKey) {
-    if (!branchHasImg(level, branchId)) return branchIcon(iconKey);
-    var src = "assets/images/vocab/branch_" + String(level).toLowerCase() + "_" + branchId + ".webp";
+    var src = branchEmblemSrc(level, branchId);
+    if (!src) return branchIcon(iconKey);
     return '<img class="branch-emblem__img" src="' + src + '" alt="" loading="lazy" decoding="async"'
       + ' onerror="window.__vbranchFallback(this,\'' + iconKey + '\')">';
   }
@@ -3372,7 +3397,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
         + '<span class="hc-cta">Repasar &rarr;</span></button>'
       : "";
     var examBanner = '<button class="hub-card" id="examGo" type="button">'
-      + '<span class="hc-ic" aria-hidden="true">🎓</span>'
+      + '<span class="hc-ic" aria-hidden="true">' + CTA_ICON + '</span>'
       + '<span class="hc-tx"><b>Examen de nivel</b><span>Evalúa tu dominio de A1 a C2</span></span>'
       + '<span class="hc-cta">Presentar &rarr;</span></button>';
     show('<div class="wrap">'
@@ -3705,19 +3730,21 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
   function advance() {
     /* punto único: results[exIdx] ya está fijado por el renderer. Actualiza combo
        y dispara un pequeño festejo cada 3 aciertos seguidos. */
-    var wasOk = !!results[exIdx];
-    if (wasOk) { combo++; if (combo > maxCombo) maxCombo = combo; if (combo >= 3 && combo % 3 === 0) { burstConfetti(14); sfx("combo", combo); } }
+    var ungraded = results[exIdx] === "na";   /* speaking saltado/autoevaluado: neutro de verdad */
+    var wasOk = results[exIdx] === true;
+    if (ungraded) { /* no toca combo, SRS ni vidas */ }
+    else if (wasOk) { combo++; if (combo > maxCombo) maxCombo = combo; if (combo >= 3 && combo % 3 === 0) { burstConfetti(14); sfx("combo", combo); } }
     else combo = 0;
     /* SRS: en repaso, califica el ítem; en lecciones normales, registra el fallo. */
     try {
-      if (window.VESPER_SRS) {
+      if (!ungraded && window.VESPER_SRS) {
         if (lesson.srsReview && lesson.srsIds) VESPER_SRS.grade(lesson.srsIds[exIdx], wasOk);
         else if (!wasOk && !lesson.isBoss) VESPER_SRS.record(lesson.lessonId, lesson.exercises[exIdx], { level: lesson.level });
       }
     } catch (e) {}
     /* Vidas (modo desafío, opcional): un fallo resta corazón. */
     var blocked = false;
-    if (!wasOk && window.VESPER_ECONOMY && VESPER_ECONOMY.livesActive && VESPER_ECONOMY.livesActive()) {
+    if (!ungraded && !wasOk && window.VESPER_ECONOMY && VESPER_ECONOMY.livesActive && VESPER_ECONOMY.livesActive()) {
       VESPER_ECONOMY.loseHeart();
       sfx("heartloss");
       if (VESPER_ECONOMY.hearts() <= 0) blocked = true;
@@ -3770,7 +3797,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
   }
   /* medidor del Guardián: su escudo se rompe con cada acierto previo */
   function bossMeterHtml(total) {
-    var hit = 0, i; for (i = 0; i < exIdx; i++) { if (results[i]) hit++; }
+    var hit = 0, i; for (i = 0; i < exIdx; i++) { if (results[i] === true) hit++; }
     var remain = Math.max(0, Math.round(100 * (1 - hit / Math.max(1, total))));
     var bm = bossMeta(lesson.bossLevel);
     return '<div class="boss-meter" style="' + worldVars(WORLD_THEME[lesson.bossLevel] || {}) + '">'
@@ -3946,8 +3973,11 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       try {
         var a = new Audio(audioPath);
         a.playbackRate = rate ? Math.max(0.5, Math.min(1, rate / 0.92)) : 1;
-        a.play().catch(function () { speakTTS(text, rate); });
-        a.onerror = function () { speakTTS(text, rate); };
+        /* si el mp3 falta, play() rechaza Y dispara onerror: caer a TTS una sola vez */
+        var fell = false;
+        var fallback = function () { if (fell) return; fell = true; speakTTS(text, rate); };
+        a.play().catch(fallback);
+        a.onerror = fallback;
         return;
       } catch (e) { /* cae a TTS */ }
     }
@@ -4005,22 +4035,27 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       + '<button class="btn btn-ghost" id="slow">' + ic('rewind') + ' Más lento</button></div>'
       + (SR
           ? '<button class="btn mic-btn" id="mic">' + ic('mic') + ' Toca y habla</button><div class="heard" id="heard"></div>'
-          : '<p class="hint">' + ic('bulb') + 'Tu navegador no reconoce voz. Escucha y repite en voz alta; luego confírmalo tú.</p>')
+          : '<p class="hint">' + ic('bulb') + 'Tu navegador no reconoce voz. Escucha y repítela en voz alta para practicar; no cuenta para tu calificación.</p>')
       + '<div id="fb"></div>'
-      + '<button class="btn" id="verify"' + (SR ? ' disabled' : '') + '>' + (SR ? 'Verificar' : 'Lo dije bien') + '</button>'
+      + '<button class="btn" id="verify"' + (SR ? ' disabled' : '') + '>' + (SR ? 'Verificar' : 'Ya lo practiqué') + '</button>'
       + (SR ? '<button class="btn btn-ghost" id="skip">No puedo hablar ahora</button>' : '')
       + '</div></div>');
     byId("hear").onclick = function () { speak(target, ex.audio, 0.92); };
     byId("slow").onclick = function () { speak(target, ex.audio, 0.62); };
 
     var done = false, ok = false;
+    /* result: true/false (calificado por el micrófono) o "na" (saltado o
+       autoevaluado sin reconocimiento de voz). "na" NO cuenta en el puntaje:
+       sumarlo como acierto inflaba el % y podía aprobar lecciones reprobadas. */
     function settle(result, heardTxt) {
       if (done) return; done = true;
       ok = result;
       results[exIdx] = ok;
       var h = byId("heard");
       if (h && heardTxt != null) h.innerHTML = '<span class="muted">Te escuché:</span> “' + esc(heardTxt) + '”';
-      byId("fb").innerHTML = feedbackBox(ok, ex.explanation || ("Modelo: " + target), "Inténtalo: " + target);
+      byId("fb").innerHTML = (ok === "na")
+        ? '<div class="fbbox ok"><div><b>Práctica libre</b><div class="muted">Este ejercicio no cuenta para tu calificación. Lo importante es soltarte.</div></div></div>'
+        : feedbackBox(ok, ex.explanation || ("Modelo: " + target), "Inténtalo: " + target);
       var v = byId("verify"); v.disabled = false;
       v.textContent = (exIdx + 1 < total) ? "Siguiente" : "Ver resultados";
       v.onclick = function () { advance(); };
@@ -4049,11 +4084,11 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
         rec.onend = function () { listening = false; if (!done) { self.classList.remove("rec"); self.innerHTML = ic('mic') + ' Reintentar'; } };
         try { rec.start(); } catch (e) { settle(false, null); }
       };
-      byId("skip").onclick = function () { settle(true, null); };   /* sin penalizar: autoevaluación honesta */
+      byId("skip").onclick = function () { settle("na", null); };   /* saltar = sin calificar, no un acierto gratis */
       byId("verify").onclick = function () { if (done) advance(); };
     } else {
-      /* sin reconocimiento: autoevaluación */
-      byId("verify").onclick = function () { settle(true, null); byId("verify").onclick = function () { advance(); }; };
+      /* sin reconocimiento: práctica libre, sin calificar */
+      byId("verify").onclick = function () { settle("na", null); byId("verify").onclick = function () { advance(); }; };
     }
   }
 
@@ -4339,8 +4374,9 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
           if (i === q.correctIndex) group[x].classList.add("correct");
           if (i === picks[qi] && !ok) group[x].classList.add("wrong");
         }
-        byId("rfb-" + qi).innerHTML = feedbackBox(ok, q.explanation || "", "Era: " + (q.options[q.correctIndex] || ""));
+        byId("rfb-" + qi).innerHTML = feedbackBox(ok, q.explanation || "", "Era: " + (q.options[q.correctIndex] || ""), true);
       });
+      playFx(allOk);   /* un solo sonido/háptico por Verificar, no uno por pregunta */
       results[exIdx] = allOk;
       setVerifyNext(this, total);
     };
@@ -4352,18 +4388,26 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
   /* Detalle por pregunta para el registro central de calificaciones:
      texto + tipo + acierto. Reusa lesson.exercises[] + results[]. */
   function examDetail() {
-    return (lesson.exercises || []).map(function (ex, i) {
+    var out = [];
+    (lesson.exercises || []).forEach(function (ex, i) {
+      if (results[i] === "na") return;   /* speaking sin calificar: fuera, para que el detalle cuadre con score/total */
       ex = ex || {};
       var q = ex.question || ex.sentence || ex.statement || ex.prompt || ex.title
               || (ex.words ? ex.words.join(" ") : "") || "";
-      return { q: q, type: ex.type || "", skill: ex.skill || "", correct: !!results[i] };
+      out.push({ q: q, type: ex.type || "", skill: ex.skill || "", correct: !!results[i] });
     });
+    return out;
   }
 
   function renderFeedback() {
-    var total = lesson.exercises.length;
-    var correct = results.filter(Boolean).length;
-    var pct = Math.round(100 * correct / Math.max(1, total));
+    /* Solo cuentan los ejercicios calificados: el speaking saltado/autoevaluado
+       ("na") queda fuera de correct Y de total, para no inflar ni castigar. */
+    var total = 0, correct = 0, gi;
+    for (gi = 0; gi < lesson.exercises.length; gi++) {
+      if (results[gi] === "na") continue;
+      total++; if (results[gi]) correct++;
+    }
+    var pct = total ? Math.round(100 * correct / total) : 100;
     var perfect = correct === total;
     lastPerfect = perfect;
     if (lesson.isBoss) { renderBossResult(correct, total, pct); return; }
@@ -4406,7 +4450,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       + mascot((perfect || (lesson.isReview && pct >= 80)) ? "milestone" : "correct", head)
       + '<h1>+' + earnedXp + ' XP</h1>'
       + (comboBonus > 0 ? '<div class="xp-bonus">' + ic('flame') + ' +' + comboBonus + ' XP por combo de x' + maxCombo + '</div>' : '')
-      + '<p class="muted">' + correct + ' de ' + total + ' correctos &middot; ' + pct + '%</p>'
+      + '<p class="muted">' + (total ? (correct + ' de ' + total + ' correctos &middot; ' + pct + '%') : 'Práctica completada') + '</p>'
       + '<div class="xpbar"><div class="xpfill" style="width:' + pct + '%"></div></div>'
       + '<button class="btn btn-gold" id="cont">Continuar</button></div></div>');
     byId("cont").onclick = renderStreak;
@@ -4501,9 +4545,10 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     /* desglose preliminar por destreza */
     var bySkill = {};
     (lesson.exercises || []).forEach(function (ex, i) {
+      if (results[i] === "na") return;   /* sin calificar: no entra al desglose */
       var sk = (ex && ex.skill) || "otro";
       if (!bySkill[sk]) bySkill[sk] = { c: 0, t: 0 };
-      bySkill[sk].t++; if (results[i]) bySkill[sk].c++;
+      bySkill[sk].t++; if (results[i] === true) bySkill[sk].c++;
     });
     var SK_LABEL = { grammar: "Gramática", vocab: "Vocabulario", use: "Uso del inglés", reading: "Lectura", listening: "Listening", otro: "Otros" };
     var rows = ["grammar", "vocab", "use", "reading", "listening", "otro"].filter(function (s) { return bySkill[s]; }).map(function (s) {
