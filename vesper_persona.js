@@ -149,9 +149,16 @@ window.VESPER_PERSONA = (function () {
 
   /* Nivel CEFR (modo manual). El motor adaptativo usa level 0-5; aqui
      guardamos tambien la etiqueta CEFR para el prompt y la UI. */
-  var CEFR = ["A0", "A1", "A2", "B1", "B2", "C1", "C2"];
-  /* CEFR -> level 0-5 del onboarding (C2 cae en 5, como C1, para compat) */
-  function cefrToLevel(c) { var i = CEFR.indexOf(("" + c).toUpperCase()); return i < 0 ? 1 : Math.min(5, i); }
+  var CEFR = ["Pre-A1", "A1", "A2", "B1", "B2", "C1", "C2"];
+  /* CEFR -> level 0-5 del onboarding (C2 cae en 5, como C1, para compat).
+     Comparacion case-insensitive: "Pre-A1" no es todo mayusculas, y ademas
+     toleramos el antiguo "A0" de perfiles ya guardados (== nivel 0). */
+  function cefrToLevel(c) {
+    var u = ("" + c).toUpperCase();
+    if (u === "A0") return 0;
+    for (var i = 0; i < CEFR.length; i++) { if (CEFR[i].toUpperCase() === u) return Math.min(5, i); }
+    return 1;
+  }
   function levelToCefr(n) { n = Math.max(0, Math.min(6, n | 0)); return CEFR[n] || "A1"; }
   /* nota: level 0->A1 segun BANDS adaptativo; mantenemos esa correspondencia
      en modo adaptativo y dejamos que el modo manual fije un CEFR explicito. */
@@ -201,7 +208,7 @@ window.VESPER_PERSONA = (function () {
     correction: "instant",
     focus: [],                  /* areas de enfoque (ids de FOCUS) */
     levelMode: "adaptive",      /* 'manual' | 'adaptive' */
-    cefr: "",                   /* solo en modo manual: A0..C2 */
+    cefr: "",                   /* solo en modo manual: Pre-A1..C2 */
     dailyGoal: { type: "lessons", value: 1 },  /* type: 'lessons' | 'min' */
     reminders: { on: false, time: "19:00" },
     /* --- accesibilidad (las aplica vesper_prefs.js en todo el sitio) --- */
