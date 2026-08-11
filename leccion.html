@@ -486,22 +486,25 @@
   .terr .flag{fill:none;stroke:var(--gold,#c5a059);stroke-width:1.2}
   .biome-motif{flex:none;display:block}
   .biome-motif .prop{opacity:1}
-  /* ===== Camino temático (calzada en capas, trazado por JS sobre los nodos) =====
-     Orden DOM = profundidad. paintTrail pone el MISMO "d" medido en todas las
-     <path>; .wtrail-line queda penúltima (el avatar mide su longitud) y
-     .wtrail-comet última (cuenta de luz que recorre la ruta). El carácter de
-     cada mundo se afina en .wmap[data-world="XX"] más abajo. */
+  /* ===== El sendero: DOS trazos ==============================================
+     Era una calzada de siete <path> apilados con la misma "d" (arcén, firme,
+     textura, resplandor, veta y una cuenta-cometa con drop-shadow animado en
+     bucle) sobre un SVG de ~2.400px de alto: siete rasterizaciones a pantalla
+     completa y un filtro repintándose cada fotograma.
+
+     Ahora es lo que el sistema de diseño llama un filete: una línea grabada.
+     .wtrail-line = lo que queda por andar (y es la que MIDE el avatar);
+     .wtrail-done = lo andado, en oro. El oro es acento, nunca relleno. */
   .wtrail{position:absolute;left:0;top:0;z-index:1;overflow:visible;pointer-events:none}
   .wtrail path{fill:none;stroke-linecap:round;stroke-linejoin:round}
-  .wtrail-base{stroke:var(--w-accent,#c5a059);stroke-width:26;opacity:.16;stroke-linecap:round}   /* arcén/terreno bajo la calzada */
-  .wtrail-road{stroke:var(--w-accent,#c5a059);stroke-width:16;opacity:.30}                          /* superficie de la calzada */
-  .wtrail-tex{stroke:var(--w-accent,#c5a059);stroke-width:19;opacity:.34;stroke-dasharray:1.5 8}    /* textura: adoquín/tabla/peldaño/estrella */
-  .wtrail-glow{stroke:var(--w-glow,rgba(197,160,89,.4));stroke-width:10;opacity:.55}
-  .wtrail-line{stroke:var(--gold,#c5a059);stroke-width:3.5;stroke-dasharray:2 12;opacity:.95}        /* veta dorada = ruta recorrida (PENÚLTIMA) */
-  .wtrail-comet{stroke:var(--gold,#c5a059);stroke-width:7;stroke-linecap:round;stroke-dasharray:16 99999;  /* cuenta de luz dorada (ÚLTIMA) */
-    filter:drop-shadow(0 0 6px var(--gold,#c5a059));opacity:.95;
-    will-change:stroke-dashoffset;animation:g-comet 13s linear infinite;animation-play-state:paused}  /* paintTrail la reanuda con --total ya medido */
-  @keyframes g-comet{from{stroke-dashoffset:0}to{stroke-dashoffset:calc(-1 * var(--total,4000px))}}
+  /* La CALZADA: ancha y casi transparente, en el acento del mundo. Es lo
+     que devuelve el cuerpo al camino — con sólo el hilo punteado, el
+     sendero dejaba de leerse como algo que se anda. Va en el acento, que
+     es donde el color del mundo sí funciona: extendido y suave, no en un
+     hilo fino (ahí varios acentos naranjas se leían oxidados). */
+  .wtrail-bed{stroke:var(--w-accent,#C9A84C);stroke-width:14;opacity:.105;stroke-linecap:round}
+  /* El tramo pendiente, en el filete del sistema */
+  .wtrail-line{stroke:rgba(201,168,76,.55);stroke-width:2;stroke-dasharray:2 7}
   /* nodos/carteles por encima del terreno y el camino */
   .wisland .wnode{z-index:2}
   .wisland .wstart{z-index:2}
@@ -2083,9 +2086,9 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
    de la lección caía a 1,08:1.
    ============================================================ */
 
-/* -- 1) trecho recorrido ------------------------------------- */
-.wtrail-done{stroke:var(--gold,#c5a059);stroke-width:6;opacity:.95;stroke-linecap:round;
-  filter:drop-shadow(0 0 5px var(--w-glow,rgba(197,160,89,.5)))}
+/* -- 1) trecho recorrido: oro macizo, sin el drop-shadow que obligaba a
+   repintar un filtro sobre un trazo de 2.400px ---------------- */
+.wtrail-done{stroke:var(--gold,#C9A84C);stroke-width:2.5;opacity:1;stroke-linecap:round}
 
 /* -- niebla baja de la isla ---------------------------------- */
 .wisland::after{background:
@@ -2166,6 +2169,297 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
 .wbtn.boss.conquered .boss-node-photo{filter:none}
 @media(prefers-reduced-motion:reduce){ .wbtn.boss.ready .boss-node-photo{animation:none} }
 .vesper-reduce-motion .wbtn.boss.ready .boss-node-photo{animation:none}
+
+/* ================================================================
+   EL MAPA GRABADO  ·  pasada de aligerado y acabado
+
+   QUÉ FALLABA, medido en el navegador sobre el mundo A1:
+
+     · 834 formas SVG y 52 KB de marcado que el generador de terreno
+       creaba de cero en cada trazado Y en cada resize. Al 20 % de
+       opacidad no se leían como paisaje: eran casitas y pinos a
+       medio recortar por los dos márgenes, o sea ruido.
+     · El sendero eran SIETE <path> con la misma "d" sobre un SVG de
+       2.400 px, uno de ellos con un drop-shadow animado en bucle.
+     · Los iconos venían de otra familia (grosor 1.9/2/3, el play
+       macizo) que la del sprite del sistema de diseño.
+     · El oro se usaba como RELLENO de los nodos completados. El
+       fundamento de color dice lo contrario: "el oro es acento,
+       nunca relleno".
+
+   LA IDEA: las láminas de la marca (assets/images/lessons/theme_*)
+   son grabados crema sobre navy con MUCHO aire. El mapa era lo
+   único del sitio que no hablaba ese idioma. Ahora sí: una sola
+   lámina por mundo de fondo, un filete por sendero, medallones de
+   línea y aire. Menos piezas y más presencia.
+   ================================================================ */
+
+/* -- 1. El escenario: se va la caja, queda la noche --------------
+   .wisland llevaba un borde de 1px del acento del mundo alrededor
+   de TODO: un rectángulo de color que leía "widget", no "mapa". */
+.wisland{border-color:rgba(201,168,76,.14)}
+/* el lavado a pantalla completa de la lámina (opacity .20, cover)
+   era el causante de la neblina parda: lo sustituye .wmotif */
+.wisland::before{content:none}
+
+/* -- 2. El paisaje del mundo ------------------------------------
+   Tres hitos grabados repartidos por el recorrido: uno grande de
+   cabecera y dos que asoman por los márgenes según bajas. Son las
+   mismas láminas que ya ilustran el mundo, recortadas a máscara
+   alfa, así que el color lo pone el acento y no el archivo.
+
+   La profundidad la dan tres cosas: escala (el de cabecera manda),
+   posición (los otros dos sangran por lados opuestos, como algo que
+   dejas atrás) y opacidad (el de más abajo pisa un poco más fuerte,
+   perspectiva atmosférica al revés porque viene "hacia ti"). */
+.wscape{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.wscape i{position:absolute;display:block;background:var(--w-accent,#C9A84C);
+  -webkit-mask-image:var(--m);mask-image:var(--m);
+  -webkit-mask-size:contain;mask-size:contain;
+  -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
+  -webkit-mask-position:center;mask-position:center}
+.wscape i:nth-child(1){left:50%;transform:translateX(-50%);top:0;width:82%;max-width:300px}
+/* Los dos hitos laterales se retiran: ahora los márgenes los llenan los props
+   ilustrados (.wprops), que son piezas de verdad y a plena opacidad. Dejar
+   además las láminas al 12 % devolvía la neblina que costó quitar. La lámina
+   grande de cabecera sí se queda: es la que presenta el mundo. */
+.wscape i:nth-child(2),
+.wscape i:nth-child(3){display:none}
+
+/* -- 2b. El decorado: piezas ilustradas a lo largo del camino ----
+   Van DETRÁS del sendero y de los nodos (z-index 0 contra 1 y 2) y
+   no reciben puntero. Nada de opacidad fantasma: se ven. */
+.wprops{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.wprops img{position:absolute;width:auto;height:auto;display:block;
+  filter:drop-shadow(0 6px 10px rgba(8,7,20,.55))}
+
+/* La opacidad va hito por hito, no una para todos: la densidad del
+   grabado cambia muchísimo. El castillo de C2 es una mancha compacta y
+   a .13 era un borrón; el cohete de C1 y la ribera de B1 son cuatro
+   líneas finísimas y al mismo valor desaparecían. Calibrado a ojo con
+   los seis mundos delante. */
+.wmap[data-world="A1"] .wscape i:nth-child(1){--m:url(assets/images/map/lm_a1_1.png);aspect-ratio:360/396;opacity:.13}
+.wmap[data-world="A1"] .wscape i:nth-child(2){--m:url(assets/images/map/lm_a1_2.png);aspect-ratio:300/330;opacity:.10}
+.wmap[data-world="A1"] .wscape i:nth-child(3){--m:url(assets/images/map/lm_a1_3.png);aspect-ratio:300/323;opacity:.13}
+.wmap[data-world="A2"] .wscape i:nth-child(1){--m:url(assets/images/map/lm_a2_1.png);aspect-ratio:360/456;opacity:.16}
+.wmap[data-world="A2"] .wscape i:nth-child(2){--m:url(assets/images/map/lm_a2_2.png);aspect-ratio:300/506;opacity:.13}
+.wmap[data-world="A2"] .wscape i:nth-child(3){--m:url(assets/images/map/lm_a2_3.png);aspect-ratio:300/260;opacity:.15}
+.wmap[data-world="B1"] .wscape i:nth-child(1){--m:url(assets/images/map/lm_b1_1.png);aspect-ratio:360/218;opacity:.22;width:96%;max-width:340px}
+.wmap[data-world="B1"] .wscape i:nth-child(2){--m:url(assets/images/map/lm_b1_2.png);aspect-ratio:300/410;opacity:.13}
+.wmap[data-world="B1"] .wscape i:nth-child(3){--m:url(assets/images/map/lm_b1_3.png);aspect-ratio:300/466;opacity:.15}
+.wmap[data-world="B2"] .wscape i:nth-child(1){--m:url(assets/images/map/lm_b2_1.png);aspect-ratio:360/551;opacity:.13}
+.wmap[data-world="B2"] .wscape i:nth-child(2){--m:url(assets/images/map/lm_b2_2.png);aspect-ratio:300/386;opacity:.11}
+.wmap[data-world="B2"] .wscape i:nth-child(3){--m:url(assets/images/map/lm_b2_3.png);aspect-ratio:300/258;opacity:.15}
+.wmap[data-world="C1"] .wscape i:nth-child(1){--m:url(assets/images/map/lm_c1_1.png);aspect-ratio:360/464;opacity:.20}
+.wmap[data-world="C1"] .wscape i:nth-child(2){--m:url(assets/images/map/lm_c1_2.png);aspect-ratio:300/375;opacity:.15}
+.wmap[data-world="C1"] .wscape i:nth-child(3){--m:url(assets/images/map/lm_c1_3.png);aspect-ratio:300/350;opacity:.16}
+.wmap[data-world="C2"] .wscape i:nth-child(1){--m:url(assets/images/map/lm_c2_1.png);aspect-ratio:360/780;opacity:.085}
+.wmap[data-world="C2"] .wscape i:nth-child(2){--m:url(assets/images/map/lm_c2_2.png);aspect-ratio:300/277;opacity:.13}
+.wmap[data-world="C2"] .wscape i:nth-child(3){--m:url(assets/images/map/lm_c2_3.png);aspect-ratio:300/421;opacity:.12}
+
+/* -- 2b. El resplandor del mundo, a su sitio ---------------------
+   Medido sobre A1: la mitad superior del mapa estaba en rgb(74,57,54)
+   —un gris cálido— contra los rgb(27,29,49) de la mitad inferior. El
+   culpable era este halo: --w-glow llega con alfa .34-.42 y en varios
+   mundos es NARANJA, así que teñía de sepia media escena y devolvía
+   justo la neblina que quitamos con el terreno. La noche es la del
+   token; el mundo sólo la matiza. */
+.wsky::after{background:
+    radial-gradient(115% 30% at 50% 0%, var(--w-glow,rgba(201,168,76,.30)) 0%, transparent 64%),
+    radial-gradient(130% 72% at 50% 106%, rgba(0,0,0,.5) 0%, transparent 62%);
+  opacity:.4}
+
+/* -- 3. Los medallones ------------------------------------------
+   Más pequeños (74→60) y con el glifo pedido en em, como manda el
+   sistema, para que llene el disco en vez de flotar en el centro.
+   Fuera el escalón macizo de 5px: era lo que los hacía parecer
+   fichas de juego pegadas sobre la escena. */
+.wbtn{width:60px;height:60px;font-size:1rem;border-width:1.5px;
+  border-color:rgba(201,168,76,.30);
+  background:linear-gradient(180deg,#272a4d,#181a33);
+  /* materia de medallón ACUÑADO, no disco plano: filete interior con su
+     hueco (el doble aro de una moneda), luz arriba, sombra abajo y una
+     caída suave que lo despega del paisaje. Todo con inset: cero capas
+     nuevas y cero elementos. */
+  box-shadow:inset 0 1px 0 rgba(243,226,171,.16),
+             inset 0 -2px 4px rgba(8,7,20,.55),
+             inset 0 0 0 4px rgba(8,7,20,.28),
+             inset 0 0 0 5px rgba(201,168,76,.16),
+             0 7px 18px rgba(8,7,20,.5)}
+.wbtn:active:not(.locked){transform:translateY(1px);
+  box-shadow:inset 0 1px 0 rgba(243,226,171,.16),
+             inset 0 -2px 4px rgba(8,7,20,.55),
+             inset 0 0 0 4px rgba(8,7,20,.28),
+             inset 0 0 0 5px rgba(201,168,76,.16),
+             0 3px 9px rgba(8,7,20,.5)}
+/* el glifo se pide en em (contrato del sistema) y el em lo fija el nodo.
+   Ojo: .wbtn.is-current y .wbtn.castle traían font-size propio (2rem y
+   1.8rem), así que su glifo salía a 56px dentro de un disco de 72. */
+.wbtn,
+.wbtn.is-current,
+.wbtn.castle{font-size:1rem}
+.wbtn .wglyph,
+.wbtn.completed .wglyph,
+.wbtn.is-current .wglyph{width:1.75em;height:1.75em}
+
+/* los nodos flotaban en bucle (g-node-bob) con will-change:transform cada
+   uno: una capa de composición permanente por nodo, y el sendero NO
+   flotaba con ellos, así que la línea se despegaba del disco al que
+   entra. Con un trazo fino se nota; quieto se lee como grabado. */
+.wbtn:not(.is-current):not(.locked):not(.castle){animation:none;will-change:auto}
+
+/* disponible: la puerta abierta. Filete de oro dentro y fuera. */
+.wbtn.open:not(.is-current){background:linear-gradient(180deg,#2a2e56,#1a1d3a);
+  border-color:var(--gold,#C9A84C);color:var(--gold,#C9A84C);
+  box-shadow:inset 0 1px 0 rgba(243,226,171,.22),
+             inset 0 -2px 5px rgba(8,7,20,.5),
+             inset 0 0 0 4px rgba(8,7,20,.3),
+             inset 0 0 0 5px rgba(201,168,76,.34),
+             0 7px 18px rgba(8,7,20,.5),0 0 16px rgba(201,168,76,.10)}
+
+/* completada: doble aro de oro y un velo al 14 %. El oro es acento,
+   nunca relleno — antes el disco iba macizo en oro y pesaba más que
+   el nodo actual. */
+/* El velo dorado va sobre una base OPACA: con el fondo translúcido, el
+   sendero de oro que pasa por detrás se veía cruzando la cara del
+   medallón y por encima del glifo. Un medallón acuñado no es traslúcido. */
+.wbtn.completed{background:
+    linear-gradient(180deg,rgba(201,168,76,.20),rgba(201,168,76,.06)),
+    linear-gradient(180deg,#272a4d,#181a33);
+  border-color:var(--gold,#C9A84C);color:var(--va-star,#f3e2ab);
+  box-shadow:inset 0 1px 0 rgba(243,226,171,.3),
+             inset 0 -2px 5px rgba(8,7,20,.45),
+             inset 0 0 0 4px rgba(8,7,20,.22),
+             inset 0 0 0 5px rgba(201,168,76,.42),
+             0 7px 18px rgba(8,7,20,.5)}
+
+/* bloqueada: "todavía no", no "avería". Filete continuo (el
+   discontinuo se leía como marcador de posición sin cargar) y la
+   piedra hundida: la luz de arriba casi no llega. */
+.wbtn.locked{background:linear-gradient(180deg,#1d1f3a,#14162c);
+  border-style:solid;border-color:#3a3a63;color:#b3b0c9;
+  box-shadow:inset 0 1px 0 rgba(179,176,201,.10),
+             inset 0 3px 7px rgba(8,7,20,.6),
+             inset 0 0 0 4px rgba(8,7,20,.3),
+             inset 0 0 0 5px rgba(58,58,99,.5),
+             0 5px 14px rgba(8,7,20,.45)}
+.wbtn.locked .wglyph{opacity:1}
+
+/* aquí estás: el retrato del gato, doble aro y un solo pulso */
+.wbtn.is-current{width:72px;height:72px;border-width:2px;
+  background:linear-gradient(180deg,#2a2e55,#1d203c);
+  border-color:var(--gold,#C9A84C);color:var(--va-star,#f3e2ab);
+  box-shadow:0 0 0 4px #14122a,0 0 0 5.5px rgba(201,168,76,.55),
+             0 10px 24px rgba(8,7,20,.55)}
+.wbtn.is-current::after{inset:-5px;
+  box-shadow:0 0 0 0 rgba(201,168,76,.45);animation:wpulse 2.4s ease-in-out infinite}
+@keyframes wpulse{0%,100%{box-shadow:0 0 0 0 rgba(201,168,76,.42)}50%{box-shadow:0 0 0 11px rgba(201,168,76,0)}}
+
+/* mini-reto y Guardián, al mismo compás que los nodos */
+.wbtn.castle.mini{width:50px;height:48px;border-radius:12px;border-width:1.5px;
+  background:linear-gradient(180deg,#242747,#1a1c36);border-color:rgba(201,168,76,.30)}
+.wbtn.castle.mini.completed{background:linear-gradient(180deg,rgba(201,168,76,.16),rgba(201,168,76,.07));
+  border-color:var(--gold,#C9A84C);color:var(--va-star,#f3e2ab)}
+.wbtn .wcrest{width:22px;height:24px;display:block}
+.wbtn .wbeacon{width:30px;height:32px;display:block}
+.wbtn.boss{width:82px;height:80px;border-width:2px;border-radius:41px 41px 14px 14px;
+  box-shadow:0 8px 22px rgba(8,7,20,.5)}
+.wbtn.boss.locked{border-style:solid;border-color:#3a3a63}
+
+/* -- 4. Los rótulos, legibles ESTÉN DONDE ESTÉN ------------------
+   El sendero pasaba por encima del nombre de la lección ("Plural
+   Nouns", "Can: habilidad y permiso" quedaban tachados). Halo de
+   noche alrededor del texto: la línea pasa por detrás y se lee
+   como una etiqueta de carta náutica, que es justo lo que es. */
+.wisland .wtitle{margin-top:8px;font-size:.78rem;font-weight:600;max-width:126px;
+  color:#EDE7D6;
+  text-shadow:0 0 5px #14122a,0 0 5px #14122a,0 1px 2px #14122a,0 0 10px rgba(20,18,42,.9)}
+.wisland .wnode.locked .wtitle{color:#b3b0c9;font-weight:500}
+.wstars{margin-top:4px;font-size:.74rem;text-shadow:0 0 5px #14122a,0 0 5px #14122a}
+
+/* la píldora "Empieza"/"Continuar" */
+.wnode .wlabel{background:var(--gold,#C9A84C);color:#1B1B2F;font-size:.66rem;
+  font-weight:700;letter-spacing:.1em;padding:4px 12px;top:-26px;box-shadow:0 4px 12px rgba(8,7,20,.5)}
+.wnode .wlabel::after{border-top-color:var(--gold,#C9A84C)}
+.wboss-node .wlabel.boss-lb{background:transparent;color:var(--va-star,#f3e2ab);
+  border:1px solid rgba(201,168,76,.45);box-shadow:none}
+.wboss-node .wlabel.boss-lb::after{border-top-color:rgba(201,168,76,.45)}
+.wnode.mini .wlabel.mini-lb{background:transparent;color:#b3b0c9;
+  border:1px solid #3a3a63;box-shadow:none}
+.wnode.mini .wlabel.mini-lb::after{border-top-color:#3a3a63}
+/* la píldora va en position:absolute a -26px, o sea SALE del nodo: con
+   18px de hueco se comía el nombre de la lección anterior cuando éste
+   ocupaba dos líneas ("Can: habilidad y permiso" tachado por "EL
+   GUARDIÁN", "There is / There are" por "CONTINUAR"). Todo nodo que
+   lleve píldora reserva su propio aire. La regla con :has() cubre
+   también el nodo actual, que es el tercer caso y no tiene clase
+   propia en el contenedor; las dos de arriba quedan de respaldo para
+   navegadores sin :has(). */
+.wnode.mini,
+.wboss-node{margin-top:22px}
+.wnode:has(> .wlabel){margin-top:22px}
+
+/* -- 5. La destreza, como filete divisor -------------------------
+   Era una tarjeta de ancho completo con borde y fondo: un trozo de
+   interfaz caído dentro de un mapa. El sistema ya tiene la pieza
+   correcta para separar — el filete. El propio filete hace de
+   barra de avance, así que se mide sin añadir un widget. */
+.wisland .wcheck,
+.wcheck{align-self:stretch;display:flex;align-items:center;gap:9px;flex-wrap:nowrap;
+  margin:14px 6px 6px;padding:0;background:none;border:0;border-radius:0;
+  font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  color:#EDE7D6;box-shadow:none;
+  /* el filete cruza el mapa de lado a lado, así que tarde o temprano le cae
+     un prop detrás (el farol justo sobre el "0/2"). Mismo halo de noche que
+     los títulos: el decorado pasa por detrás y el cartel se sigue leyendo. */
+  text-shadow:0 0 5px #14122a,0 0 5px #14122a,0 1px 2px #14122a}
+.wcheck .ck-ic svg{width:15px;height:15px}
+.wisland .wcheck .ck-ic{color:var(--w-accent,#C9A84C)}
+/* El conteo va en #dcc173, el tono que el fundamento de color define
+   como "adorno sobre noche". Con el oro de marca (#C9A84C) medía 6,2:1
+   sobre la banda alta del mapa — AA, pero no AAA, y esto es texto
+   pequeño. Va literal a propósito: en esta página --gold2 sigue siendo
+   el #a8843d de la paleta vieja, bastante más oscuro. */
+.wisland .wcheck .ct,
+.wcheck .ct{order:3;margin-left:0;font-size:.68rem;font-weight:700;letter-spacing:.06em;
+  font-variant-numeric:tabular-nums;color:#dcc173;
+  text-shadow:0 0 5px #14122a,0 0 5px #14122a,0 1px 2px #14122a}
+.wcheck .ck-bar{order:2;flex:1 1 auto;min-width:24px;height:1px;margin:0;border-radius:0;
+  background:rgba(201,168,76,.35)}
+.wcheck .ck-bar > i{background:var(--gold,#C9A84C);height:1px}
+
+/* -- 6. El umbral del mundo --------------------------------------
+   Selector con [data-world]: cada mundo redefinía .wstart con
+   (0,3,0) — un .wstart pelado no los gana. */
+.wmap[data-world] .wstart{background:none;border:0;
+  border-top:1px solid rgba(201,168,76,.35);
+  border-bottom:1px solid rgba(201,168,76,.35);clip-path:none;border-radius:0;
+  padding:5px 20px;margin:0 0 4px;color:var(--va-star,#f3e2ab);
+  font-family:"Inria Serif",Georgia,serif;font-variant:small-caps;
+  letter-spacing:.1em;font-size:.82rem;font-weight:600;box-shadow:none}
+
+/* -- 7. Ritmo vertical -------------------------------------------
+   60px de nodo + 18px de hueco deja ~7 paradas por pantalla donde
+   antes cabían 5, sin apelmazar: el aire lo pone el mapa, no el
+   espaciado entre fichas. */
+.wmap{gap:18px;padding:16px 0 6px}
+
+/* -- 8. Se retiran los adornos por mundo que sobraban -------------
+   Cada mundo pegaba banderines, hojas, chispas y remates sobre los
+   nodos ya completados y sobre el umbral. Con el nuevo juego de
+   iconos se leían como pegatinas traídas de otro sitio.
+   Misma especificidad que los originales y van después: ganan. */
+.wmap[data-world] .wbtn.completed:not(.castle)::before,
+.wmap[data-world] .wbtn.completed:not(.castle)::after,
+.wmap[data-world] .wbtn.castle::before,
+.wmap[data-world] .wbtn.castle::after,
+.wmap[data-world] .wstart::before,
+.wmap[data-world] .wstart::after{content:none}
+/* y el escalón macizo que cada mundo le devolvía al mini-reto */
+.wmap[data-world] .wbtn.castle{box-shadow:0 6px 16px rgba(8,7,20,.45);border-radius:12px}
+
+@media(prefers-reduced-motion:reduce){.wbtn.is-current::after{animation:none}}
+.vesper-reduce-motion .wbtn.is-current::after{animation:none}
 </style>
 </head>
 <body>
@@ -2473,12 +2767,20 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
   /* cada mundo (nivel) = ilustración + nombre + identidad temática (acento, atmósfera, partículas)
      + jefe (Guardián del mundo: examen mixto que abre el siguiente nivel). */
   var WORLD_THEME = {
-    A1: { file: "assets/images/lessons/theme_home.jpg",      worldName: "El Hogar",             accent:"#C07A33", accentInk:"#8f5722", accentSoft:"rgba(192,122,51,.15)", glow:"rgba(192,122,51,.40)", ambientName:"hearth",    ambientN:7,  mapN:3, boss:{ name:"El Centinela del Hogar",  pass:85 }, biome:["cottage","bush","lantern","pine","bush"] },
-    A2: { file: "assets/images/lessons/theme_nature.jpg",    worldName: "El Sendero",           accent:"#5E8A4E", accentInk:"#3f6234", accentSoft:"rgba(94,138,78,.15)",  glow:"rgba(94,138,78,.38)",  ambientName:"trail",     ambientN:7,  mapN:4, boss:{ name:"El Guardián del Sendero", pass:85 }, biome:["pine","pine","bush","mushroom","fern"] },
-    B1: { file: "assets/images/lessons/theme_city.jpg",      worldName: "El Horizonte",         accent:"#3D86B0", accentInk:"#2b607f", accentSoft:"rgba(61,134,176,.15)", glow:"rgba(61,134,176,.34)", ambientName:"skyline",   ambientN:9,  mapN:3, boss:{ name:"El Vigía del Horizonte",  pass:85 }, biome:["building","building","lamp","tower","rock"] },
-    B2: { file: "assets/images/lessons/theme_business.jpg",  worldName: "La Torre",             accent:"#A8762E", accentInk:"#7a5520", accentSoft:"rgba(168,118,46,.15)", glow:"rgba(168,118,46,.42)", ambientName:"ascent",    ambientN:6,  mapN:3, boss:{ name:"El Heraldo de la Torre",  pass:88 }, biome:["crag","rock","crag","banner","pine"] },
-    C1: { file: "assets/images/lessons/theme_space.jpg",     worldName: "El Firmamento",        accent:"#6A5FA8", accentInk:"#4c4383", accentSoft:"rgba(106,95,168,.16)", glow:"rgba(106,95,168,.40)", ambientName:"starfield", ambientN:10, mapN:6, boss:{ name:"El Custodio del Firmamento", pass:90 }, biome:["star4","planet","crystal","star4"] },
-    C2: { file: "assets/images/lessons/theme_fantasy.jpg",   worldName: "El Castillo del Saber",accent:"#3FA08A", accentInk:"#2b7061", accentSoft:"rgba(63,160,138,.16)", glow:"rgba(63,160,138,.36)", ambientName:"aurora",    ambientN:7,  mapN:2, boss:{ name:"El Soberano del Saber",   pass:92 }, biome:["spire","banner","crystal","pine"] }
+    A1: { file: "assets/images/map/banner_a1.jpg",           worldName: "El Hogar",             accent:"#C07A33", accentInk:"#8f5722", accentSoft:"rgba(192,122,51,.15)", glow:"rgba(192,122,51,.40)", ambientName:"hearth",    ambientN:7,  mapN:3, boss:{ name:"El Centinela del Hogar",  pass:85 }, biome:["cottage","bush","lantern","pine","bush"] },
+    A2: { file: "assets/images/map/banner_a2.jpg",           worldName: "El Sendero",           accent:"#5E8A4E", accentInk:"#3f6234", accentSoft:"rgba(94,138,78,.15)",  glow:"rgba(94,138,78,.38)",  ambientName:"trail",     ambientN:7,  mapN:4, boss:{ name:"El Guardián del Sendero", pass:85 }, biome:["pine","pine","bush","mushroom","fern"] },
+    B1: { file: "assets/images/map/banner_b1.jpg",           worldName: "El Horizonte",         accent:"#3D86B0", accentInk:"#2b607f", accentSoft:"rgba(61,134,176,.15)", glow:"rgba(61,134,176,.34)", ambientName:"skyline",   ambientN:9,  mapN:3, boss:{ name:"El Vigía del Horizonte",  pass:85 }, biome:["building","building","lamp","tower","rock"] },
+    B2: { file: "assets/images/map/banner_b2.jpg",           worldName: "La Torre",             accent:"#A8762E", accentInk:"#7a5520", accentSoft:"rgba(168,118,46,.15)", glow:"rgba(168,118,46,.42)", ambientName:"ascent",    ambientN:6,  mapN:3, boss:{ name:"El Heraldo de la Torre",  pass:88 }, biome:["crag","rock","crag","banner","pine"] },
+    C1: { file: "assets/images/map/banner_c1.jpg",           worldName: "El Firmamento",        accent:"#6A5FA8", accentInk:"#4c4383", accentSoft:"rgba(106,95,168,.16)", glow:"rgba(106,95,168,.40)", ambientName:"starfield", ambientN:10, mapN:6, boss:{ name:"El Custodio del Firmamento", pass:90 }, biome:["star4","planet","crystal","star4"] },
+    C2: { file: "assets/images/map/banner_c2.jpg",           worldName: "El Castillo del Saber",accent:"#3FA08A", accentInk:"#2b7061", accentSoft:"rgba(63,160,138,.16)", glow:"rgba(63,160,138,.36)", ambientName:"aurora",    ambientN:7,  mapN:2, boss:{ name:"El Soberano del Saber",   pass:92 }, biome:["spire","banner","crystal","pine"] }
+  };
+  /* Fondo del relieve de la isla. Es la lámina de tema (una foto suave que sólo
+     se ve al 20 % y enmascarada), NO el banner: si ambos comparten archivo, la
+     misma imagen sale dos veces en la pantalla. */
+  var WORLD_TERRAIN = {
+    A1: "assets/images/lessons/theme_home.jpg",   A2: "assets/images/lessons/theme_nature.jpg",
+    B1: "assets/images/lessons/theme_city.jpg",   B2: "assets/images/lessons/theme_business.jpg",
+    C1: "assets/images/lessons/theme_space.jpg",  C2: "assets/images/lessons/theme_fantasy.jpg"
   };
   var WORLD_TAG = { A1: "Principiante", A2: "Básico", B1: "Intermedio", B2: "Intermedio alto", C1: "Avanzado", C2: "Maestría" };
   /* nombre corto de mundo para la cinta selectora (C2 abreviado para no desbordar) */
@@ -2573,23 +2875,52 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
   /* metadatos del jefe de un nivel, con defaults si el mundo no declara boss */
   function bossMeta(lv) { var t = WORLD_THEME[lv] || {}; var b = t.boss || {}; return { name: b.name || "El Guardián", subtitle: t.worldName || lv, pass: b.pass || 85 }; }
 
-  /* ===== Iconos de marca (SVG nítidos en lugar de emojis) ===== */
+  /* ===== Iconos de marca =====================================================
+     CONTRATO DEL SISTEMA DE DISEÑO (claude.ai/design › Componentes › Iconos):
+     trazo y NO relleno, stroke-width 1.5, currentColor, viewBox 24, y el
+     tamaño se pide en em para que escale con el texto.
+
+     Antes cada icono del mapa iba por libre — 1.9, 2 y hasta 3 de grosor, y
+     el "play" era un triángulo MACIZO — así que al lado de los iconos del
+     resto del sitio se leían toscos y de otra familia. Ahora los cinco
+     glifos comparten el mismo pulso de línea que el sprite del sistema.
+     ========================================================================= */
   var SKILL_ICONS = {
-    grammar:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.4C9.7 5 7.2 4.7 4.4 5.3v12.5c2.8-.6 5.3-.3 7.6 1.1 2.3-1.4 4.8-1.7 7.6-1.1V5.3C16.8 4.7 14.3 5 12 6.4z"/><path d="M12 6.4V19"/></svg>',
-    vocab:     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3.4" y="8" width="12.6" height="10" rx="2"/><path d="M7.6 8V6.4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2V14a2 2 0 0 1-2 2"/><path d="M6.4 12.4h6M6.4 15h4"/></svg>',
-    reading:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 3.5h7l4 4v13h-11z"/><path d="M13.5 3.5v4h4"/><path d="M9 12h6M9 15.2h6M9 8.8h3"/></svg>',
-    listening: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5 14v-2a7 7 0 0 1 14 0v2"/><rect x="3.4" y="13.4" width="3.8" height="6.2" rx="1.7"/><rect x="16.8" y="13.4" width="3.8" height="6.2" rx="1.7"/></svg>',
-    use:       '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 6.4a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v6.8a2 2 0 0 1-2 2H10l-4 3.4v-3.4H6.5a2 2 0 0 1-2-2z"/><path d="M8 8.8h8M8 11.8h5"/></svg>'
+    /* libro abierto (i-book del sistema) */
+    grammar:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5.2A1.7 1.7 0 0 1 4.7 3.5h5.6A1.7 1.7 0 0 1 12 5.2v14a1.4 1.4 0 0 0-1.4-1.4H3z"/><path d="M21 5.2a1.7 1.7 0 0 0-1.7-1.7h-5.6A1.7 1.7 0 0 0 12 5.2v14a1.4 1.4 0 0 1 1.4-1.4H21z"/></svg>',
+    /* fichas de vocabulario (i-grid del sistema) */
+    vocab:     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="7" height="7" rx="1.6"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.6"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.6"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.6"/></svg>',
+    /* pliego con renglones */
+    reading:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3.5h7.6L18 7.9V20.5H6z"/><path d="M13.4 3.5v4.6H18"/><path d="M9 12.4h6M9 15.6h6"/></svg>',
+    /* auriculares (i-audio del sistema) */
+    listening: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14v-2a8 8 0 0 1 16 0v2"/><rect x="2.5" y="13.5" width="4" height="7" rx="1.6"/><rect x="17.5" y="13.5" width="4" height="7" rx="1.6"/><path d="M9.5 9.5v5M12 7.5v9M14.5 10.5v3"/></svg>',
+    /* dos bocadillos (i-speech del sistema) */
+    use:       '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6.5A2.5 2.5 0 0 1 5.5 4h7A2.5 2.5 0 0 1 15 6.5v3A2.5 2.5 0 0 1 12.5 12H8l-3.2 2.6a.4.4 0 0 1-.65-.31V12H5.5A2.5 2.5 0 0 1 3 9.5z"/><path d="M9 15.2a2.5 2.5 0 0 0 2.4 1.8h4.1l3.2 2.6a.4.4 0 0 0 .65-.31V17h.15A2.5 2.5 0 0 0 22 14.5v-3A2.5 2.5 0 0 0 19.5 9H18"/></svg>'
   };
   function skillIcon(sk) { return '<span class="skill-ic" aria-hidden="true">' + (SKILL_ICONS[sk] || "") + '</span>'; }
-  /* glifo de estado del nodo de lección (check / play / candado) en SVG */
+  /* glifo de estado del nodo de lección.
+     - completada: la palomita entre dos ramas de laurel (sello de conquista,
+       no un simple tic suelto perdido dentro del medallón);
+     - disponible: el play EN CONTORNO (i-play), no macizo;
+     - bloqueada: candado grabado, sin el punto relleno que lo emborronaba. */
   function nodeGlyph(state) {
-    if (state === "completed") return '<svg class="wglyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.6l4.6 4.6L19 7.4"/></svg>';
-    if (state === "locked")    return '<svg class="wglyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="10.5" width="14" height="9.5" rx="2.3"/><path d="M8 10.5V7.6a4 4 0 0 1 8 0v2.9"/><circle cx="12" cy="15" r="1.4" fill="currentColor" stroke="none"/></svg>';
-    return '<svg class="wglyph" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8.5 5.5v13l10.5-6.5z"/></svg>';
+    var o = '<svg class="wglyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">';
+    if (state === "completed") {
+      /* Sólo la palomita, bien plantada. Probé a rodearla de dos ramas de
+         laurel y a 28px las ramas se leían como un par de paréntesis: "(v)".
+         El medallón ya es un aro, y el aro de oro con su velo es lo que dice
+         "conquistada"; al glifo le basta con confirmarlo. */
+      return o + '<path d="m6.6 12.3 3.5 3.6 7.3-7.8"/></svg>';
+    }
+    if (state === "locked") {
+      return o + '<rect x="5.6" y="10.8" width="12.8" height="9" rx="2.2"/>'
+        + '<path d="M8.8 10.8V8.2a3.2 3.2 0 0 1 6.4 0v2.6"/>'
+        + '<path d="M12 14.2v2.2"/></svg>';
+    }
+    return o + '<path d="M8 5.4v13.2l11-6.6z"/></svg>';
   }
-  /* escudo SVG (jefe) — reemplaza el emoji 🛡️ */
-  function shieldSvg(cls) { return '<svg class="' + (cls || "") + '" viewBox="0 0 24 26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.5l8 3v6c0 5.4-3.6 8.6-8 10.6C7.6 20.1 4 16.9 4 11.5v-6z"/><path d="M8.4 12.2l2.7 2.7 4.5-4.9"/></svg>'; }
+  /* escudo SVG (jefe) — reemplaza el emoji 🛡️ (i-shield del sistema) */
+  function shieldSvg(cls) { return '<svg class="' + (cls || "") + '" viewBox="0 0 24 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.8l8 3v6.2c0 4.5-3.3 8.5-8 9.8-4.7-1.3-8-5.3-8-9.8V5.8z"/><path d="m8.8 12.4 2.6 2.6 4.4-4.8"/></svg>'; }
 
   /* Retrato temático del guardián de cada mundo (SVG, hereda el color del
      acento del mundo via .boss-emblem). C2 es un caballero, como el resto
@@ -2684,44 +3015,6 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
   }
   /* pseudo-aleatorio determinista (estable entre re-medidas/resize) */
   function trnd(i) { var x = Math.sin(i * 127.1 + 17.3) * 43758.5453; return x - Math.floor(x); }
-  /* héroe (gran motivo firmado) y estilo de silueta lateral por mundo */
-  var HERO_KIND = { A1: "hero_cottage", A2: "hero_oak", B1: "hero_lighthouse", B2: "hero_tower", C1: "hero_planet", C2: "hero_castle" };
-  function silStyle(world) {
-    switch (world) {
-      case "A1": return { segH: 64, amp: 16, baseW: 24, mode: "smooth" };  // colinas
-      case "A2": return { segH: 30, amp: 30, baseW: 22, mode: "spiky" };   // copas de bosque
-      case "B1": return { segH: 52, amp: 24, baseW: 26, mode: "step" };    // tejados de ciudad
-      case "B2": return { segH: 64, amp: 34, baseW: 24, mode: "jag" };     // picos
-      case "C1": return { mode: "none" };                                   // espacio: sin masas
-      case "C2": return { segH: 44, amp: 32, baseW: 24, mode: "spiky" };   // almenas/agujas
-      default:   return { segH: 60, amp: 20, baseW: 24, mode: "smooth" };
-    }
-  }
-  /* masa de terreno continua a lo largo de un borde (banco/treeline/skyline).
-     Dibuja 2 capas (atrás/oscura + frente) + filo de acento para dar profundidad. */
-  function sideMass(side, W, H, SIL) {
-    if (!SIL || SIL.mode === "none") return "";
-    var L = (side === "L"), n = Math.ceil((H + 40) / SIL.segH), sd = L ? 311 : 417;
-    function inset(i, lay) {
-      var t = trnd(sd + i * 1.7 + lay * 23), base = SIL.baseW + lay * 9;
-      if (SIL.mode === "spiky") return base + (i % 2 ? SIL.amp : SIL.amp * 0.12);
-      if (SIL.mode === "step")  return base + (Math.floor(i / 2) % 2 ? SIL.amp : 2);
-      if (SIL.mode === "jag")   return base + t * SIL.amp;
-      return base + (0.5 + 0.5 * Math.sin(i * 0.9)) * SIL.amp * 0.7 + t * 4;   // smooth
-    }
-    function body(lay, cls) {
-      var outX = L ? -30 : W + 30, i, x, ins = inset(0, lay);
-      x = L ? ins : W - ins;
-      var d = "M " + outX + " -30 L " + x.toFixed(1) + " -20";
-      for (i = 1; i <= n; i++) { ins = inset(i, lay); x = L ? ins : W - ins; d += " L " + x.toFixed(1) + " " + (-20 + i * SIL.segH); }
-      d += " L " + outX + " " + (H + 30) + " Z";
-      return '<path class="' + cls + '" d="' + d + '"/>';
-    }
-    var i, x, ins, rim = "";                                  // filo de acento sobre el contorno del frente
-    for (i = 0; i <= n; i++) { ins = inset(i, 0); x = L ? ins : W - ins; rim += (i ? " L " : "M ") + x.toFixed(1) + " " + (-20 + i * SIL.segH); }
-    return body(1, "sil2") + body(0, "sil") + '<path class="sil-rim" d="' + rim + '"/>';
-  }
-
   /* una pieza de paisaje (kind) como <g> SVG escalado/posicionado. La parte viva
      (follaje, banderas, humo, haz) va en sub-grupos con clase (.sway/.flag/.smoke/
      .beam) para animarse SIN tocar el transform de colocación. depth='far'|'near'
@@ -2769,61 +3062,12 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     }
   }
 
-  /* genera el paisaje en CAPAS alrededor del camino (evita los nodos):
-     masas laterales continuas (atrás) + héroe del mundo + grupos de props
-     "asentados" en repisas de suelo, ordenados por Y para solaparse con
-     profundidad. trnd(seed) mantiene todo estable entre re-medidas/resize. */
-  function terrainSvgInner(pts, W, H, biome, world, firstY) {
-    biome = (biome && biome.length) ? biome : ["pine", "bush", "rock"];
-    function pick(seed) { return biome[Math.floor(trnd(seed) * biome.length) % biome.length]; }
-    function near(px, py) { for (var j = 0; j < pts.length; j++) { var dx = pts[j][0] - px, dy = pts[j][1] - py; if (dx * dx + dy * dy < 72 * 72) return true; } return false; }
-    var SIL = silStyle(world);
-    var masses = sideMass("L", W, H, SIL) + sideMass("R", W, H, SIL);   // masas continuas (fondo)
-    var ground = "", arr = [];
-
-    /* héroe del mundo: una vez, arriba, en el margen, sin pisar nodos */
-    var heroK = HERO_KIND[world];
-    if (heroK) {
-      var hy = Math.max(64, (firstY || 80) + 46), hx = 48;   // 48 >= rx(25)*scale(1.75) ≈ 44 => no se sale del borde
-      if (near(hx, hy)) hx = W - 48;
-      if (!near(hx, hy)) {
-        ground += '<ellipse class="ground" cx="' + hx + '" cy="' + (hy + 7) + '" rx="24" ry="5"/>';
-        arr.push({ y: hy, svg: terrainProp(hx, hy, 1.75, heroK, "", null) });
-      }
-    }
-
-    /* grupos (clusters) a cada margen, asentados en una repisa de suelo */
-    var y, k = 0, step = 64;
-    for (y = 48; y < H - 26; y += step) {
-      k++;
-      var sides = [["L", y, k], ["R", y + 26, k + 90]];
-      for (var si = 0; si < sides.length; si++) {
-        var sideL = sides[si][0] === "L", baseY = sides[si][1], seed = sides[si][2];
-        var dmode = (seed % 3 === 0) ? "far" : (seed % 3 === 1 ? "near" : "mid");
-        var nprops = 1 + (trnd(seed * 1.3) > 0.58 ? 1 : 0);     // 1–2 piezas
-        var margin = 9, cx = 0, cn = 0;
-        for (var c = 0; c < nprops; c++) {
-          var off = c * 14;
-          var x = sideL ? (margin + off + trnd(seed + c) * 5) : (W - margin - off - trnd(seed + c) * 5);
-          var yy = baseY - c * 3;
-          if (near(x, yy)) continue;
-          var kind = pick(seed * 5 + c * 7);
-          var sc = (dmode === "far") ? (0.5 + trnd(seed + c) * 0.22)
-                 : (dmode === "near") ? (1.05 + trnd(seed + c) * 0.4)
-                 : (0.78 + trnd(seed + c) * 0.4);
-          var delay = trnd(seed * 3 + c) * 6;
-          arr.push({ y: yy + (dmode === "near" ? 6 : 0), svg: terrainProp(x, yy, sc, kind, dmode, delay) });
-          cx += x; cn++;
-        }
-        if (cn) ground += '<ellipse class="ground" cx="' + (cx / cn).toFixed(1) + '" cy="' + (baseY + 4) + '" rx="' + (12 + nprops * 6) + '" ry="4"/>';
-      }
-    }
-    arr.sort(function (a, b) { return a.y - b.y; });               // cerca (Y mayor) se pinta encima
-    var props = "";
-    for (var i = 0; i < arr.length; i++) props += arr[i].svg;
-    /* .wsil envuelve las masas (fondo) para poder rezagarlas con parallax al hacer scroll */
-    return '<g class="wsil">' + masses + '</g>' + ground + props;  // z: masas < suelo < props
-  }
+  /* El generador de terreno (terrainSvgInner + sideMass + silStyle +
+     HERO_KIND) se retiró: sembraba ~834 formas SVG y 52 KB de marcado
+     por trazado, y a la opacidad a la que se pintaba no se leía como
+     paisaje sino como ruido recortado en los márgenes. Lo sustituye la
+     lámina grabada del mundo (.wmotif). terrainProp SIGUE vivo: de él
+     cuelga biomeMotif, la miniatura que recibe al entrar en la lección. */
   /* mini-escena del bioma (3 piezas) para recibirte al empezar una lección del mundo */
   function biomeMotif(lv) {
     var th = WORLD_THEME[lv]; var b = (th && th.biome && th.biome.length) ? th.biome : ["pine", "bush", "rock"];
@@ -2889,14 +3133,6 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     svg.setAttribute("width", W); svg.setAttribute("height", H);
     var paths = svg.querySelectorAll("path");
     for (i = 0; i < paths.length; i++) paths[i].setAttribute("d", d);
-    /* capa de terreno: paisaje (árboles/rocas) alrededor del camino */
-    var terr = map.querySelector(".wterrain");
-    if (terr) {
-      terr.setAttribute("viewBox", "0 0 " + W + " " + H);
-      terr.setAttribute("width", W); terr.setAttribute("height", H);
-      var bw = WORLD_THEME[map.getAttribute("data-world")];
-      terr.innerHTML = terrainSvgInner(pts, W, H, bw && bw.biome, map.getAttribute("data-world"), pts[0] ? pts[0][1] : 0);
-    }
     if (!avatar) return;
 
     /* longitud de arco acumulada en cada nodo => offset-distance exacto.
@@ -2914,14 +3150,6 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
 
     var cur = parseInt(map.getAttribute("data-cur"), 10); if (isNaN(cur)) cur = 0;
     var prev = parseInt(map.getAttribute("data-prev"), 10);
-    /* cuenta-cometa: longitud total del trazo (para el bucle) + posición de
-       reposo = nodo actual (para prefers-reduced-motion: el haz se aparca ahí). */
-    var comet = svg.querySelector(".wtrail-comet");
-    if (comet) {
-      comet.style.setProperty("--total", total.toFixed(1) + "px");
-      comet.style.setProperty("--rest", pctAt(cur).toFixed(1));
-      comet.style.setProperty("animation-play-state", "running");   // arranca con --total ya medido (evita el salto del primer ciclo)
-    }
     /* trecho ANDADO en oro macizo: mismo "d" que el resto, pero el trazo se
        corta con dasharray a la longitud de arco del nodo actual. Antes la veta
        dorada cubría el camino entero y no distinguías lo hecho de lo que falta.
@@ -3111,8 +3339,8 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     var mastered = !!((stt.achievements || {})["master:" + selLevel + ":" + sk]);
     var rsc = PATH.getScore(rid);
     var aria = "Mini-reto de " + meta.label + (mastered ? ", superado" + (rsc != null ? ", mejor " + rsc + " por ciento" : "") : ", desafío de destreza disponible");
-    var crest = '<svg viewBox="0 0 28 30" width="26" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true">'
-      + '<path d="M14 2l10 4v8c0 7-5 11-10 14C9 25 4 21 4 14V6z"/><path d="M10 14l3 3 6-6"/></svg>';
+    var crest = '<svg class="wcrest" viewBox="0 0 28 30" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true">'
+      + '<path d="M14 2.4l9.6 3.7v7.7c0 6.6-4.8 10.6-9.6 13.4-4.8-2.8-9.6-6.8-9.6-13.4V6.1z"/><path d="m10.2 14.4 3 3 5.6-5.8"/></svg>';
     return '<div class="wnode mini' + (mastered ? " done" : "") + '" data-stop="' + stop + '" style="--dx:' + dx + 'px">'
       + '<span class="wlabel mini-lb">Mini-reto</span>'
       + '<button class="wbtn castle mini' + (mastered ? " completed" : "") + '" data-go="' + esc(rid) + '" aria-label="' + esc(aria) + '">' + crest + '</button>'
@@ -3125,9 +3353,9 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     var available = PATH.bossUnlocked(selLevel, built);   // el jefe siempre se puede enfrentar
     var passed = !!(P && P.bossPassed && P.bossPassed(selLevel));
     var bid = "boss:" + selLevel;
-    var beacon = '<svg viewBox="0 0 32 34" width="34" height="36" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true">'
-      + '<path class="beam" d="M16 6.4 19 1.6M16 6.4 13 1.6M16 6.4l6-1.4M16 6.4l-6-1.4"/>'
-      + '<circle cx="16" cy="7.2" r="2.4" fill="currentColor" stroke="none"/>'
+    var beacon = '<svg class="wbeacon" viewBox="0 0 32 34" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true">'
+      + '<path class="beam" d="M16 5.6 18.8 1.4M16 5.6 13.2 1.4M16 5.6l5.6-1.2M16 5.6l-5.6-1.2"/>'
+      + '<circle cx="16" cy="7.4" r="2.2"/>'
       + '<path d="M12 31h8M12.8 31l1.4-12h3.6l1.4 12M12 19h8l-1-4.4h-6z"/></svg>';
     var cls = "wbtn boss", attr, label, title, aria;
     if (passed) {
@@ -3149,6 +3377,57 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       + '</button>'
       + '<span class="wtitle">' + esc(title) + '</span>'
       + (passed ? '<span class="wbridge" aria-hidden="true"></span>' : '') + '</div>';
+  }
+
+  /* ===== El decorado del mundo ==============================================
+     Piezas ilustradas (casa, farol, pino, torre, cristal…) generadas en el
+     estilo grabado de la marca —navy con filete de oro— y recortadas a WEBP
+     transparente por _scripts/slice_map_props.py.
+
+     Vienen a sustituir a las ~834 formas que el generador de terreno sembraba
+     por los márgenes: aquéllas se pintaban al 20 % de opacidad y salían medio
+     recortadas por el borde, así que no leían como paisaje sino como ruido.
+     Éstas son DOCE, van a tamaño real y a plena opacidad, y están colocadas a
+     mano para que no pisen ni el sendero ni los rótulos.
+     ========================================================================= */
+  var WORLD_PROPS = {
+    A1: ["p_a1_1", "p_a1_2", "p_a1_3", "p_a1_4", "p_a1_5"],   /* casa, farol, seto, árbol, pozo */
+    A2: ["p_a2_1", "p_a2_2", "p_a2_3", "p_a2_4", "p_a2_5"],   /* pino, setas, roca, poste, helecho */
+    B1: ["p_b1_1", "p_b1_2", "p_b1_4", "p_b1_5"],             /* casa, reloj, torre, topiario */
+    B2: ["p_b2_1", "p_b2_2", "p_b2_3", "p_b2_4"],             /* rascacielos, obelisco, cima, arco */
+    C1: ["p_c1_1", "p_c1_2", "p_c1_4", "p_c1_5"],             /* planeta, cristales, estrella, rosa */
+    C2: ["p_c2_1", "p_c2_2", "p_c2_3", "p_c2_4"]              /* torreón, arco, cristal, cofre */
+  };
+  /* Los huecos: alto en % del mapa, margen, sangrado en % y CAJA en px.
+     La caja se da como máximo de ancho Y de alto, no como ancho a secas: las
+     piezas van de 52x200 (el farol) a 200x110 (el banco), así que fijando sólo
+     el ancho el farol salía de 220px de alto y se comía la pantalla. Con una
+     caja, cada pieza se ajusta dentro conservando su proporción y todas pesan
+     lo mismo en la composición.
+
+     El mapa mide 340 y los nodos vagan ±64 desde el centro, así que a cada
+     lado queda una franja de ~76px: de ahí que ninguna caja pase de 84. */
+  var PROP_SLOTS = [
+    { t:  7, s: "L", o: 0, w: 84, h: 78 }, { t: 14, s: "R", o: 1, w: 62, h: 88 },
+    { t: 21, s: "L", o: 2, w: 58, h: 58 }, { t: 29, s: "R", o: 0, w: 78, h: 76 },
+    { t: 37, s: "L", o: 1, w: 72, h: 82 }, { t: 45, s: "R", o: 3, w: 54, h: 56 },
+    { t: 53, s: "L", o: 0, w: 82, h: 80 }, { t: 61, s: "R", o: 1, w: 66, h: 70 },
+    { t: 69, s: "L", o: 3, w: 56, h: 58 }, { t: 77, s: "R", o: 0, w: 76, h: 78 },
+    { t: 85, s: "L", o: 1, w: 62, h: 66 }, { t: 93, s: "R", o: 2, w: 58, h: 62 }
+  ];
+  function propsLayer(lv) {
+    var set = WORLD_PROPS[lv];
+    if (!set || !set.length) return "";
+    var h = '<div class="wprops" aria-hidden="true">';
+    for (var i = 0; i < PROP_SLOTS.length; i++) {
+      var s = PROP_SLOTS[i];
+      /* el desfase evita que la misma pieza caiga siempre en el mismo lado */
+      var f = set[(i + (i > 5 ? 2 : 0)) % set.length];
+      h += '<img src="assets/images/map/' + f + '.webp" alt="" loading="lazy" decoding="async"'
+        + ' style="top:' + s.t + '%;' + (s.s === "L" ? "left" : "right") + ':' + s.o + '%;'
+        + 'max-width:' + s.w + 'px;max-height:' + s.h + 'px">';
+    }
+    return h + '</div>';
   }
 
   function worldMap(selLevel, built) {
@@ -3215,7 +3494,11 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     if (curStop < 0) curStop = bossStop;            // mundo completo => el gato espera junto al jefe
     AVATAR_LESSON = localCurId || ("boss:" + selLevel);
     var t = WORLD_THEME[selLevel] || {};
-    var terrain = t.file ? (";--w-terrain:url(" + t.file + ")") : "";
+    /* El terreno de la isla NO puede ser el mismo archivo que el banner: al
+       repetir la misma lámina arriba (cabecera) y abajo (fondo de la isla) se
+       veía como dos imágenes encimadas. Cada superficie lleva la suya. */
+    var terrainSrc = WORLD_TERRAIN[selLevel] || "";
+    var terrain = terrainSrc ? (";--w-terrain:url(" + terrainSrc + ")") : "";
     var startPennant = '<div class="wstart" aria-hidden="true"><span>' + (WORLD_UMBRAL[selLevel] || ('Mundo ' + worldNo)) + '</span></div>';
     var pj = currentLook();
     /* worldVars también en .wsky: el resplandor del horizonte y el color de
@@ -3225,8 +3508,20 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       + '<div class="wisland" data-world="' + selLevel + '" style="' + worldVars(t) + terrain + '">'
       + '<div class="watmo" aria-hidden="true"></div>'
       + '<div class="wmap" id="wmap" data-world="' + selLevel + '" data-cur="' + curStop + '" style="' + worldVars(t) + '">'
-      + '<svg class="wterrain terr" aria-hidden="true" focusable="false" preserveAspectRatio="none"></svg>'
-      + '<svg class="wtrail" aria-hidden="true" focusable="false" preserveAspectRatio="none"><path class="wtrail-base"/><path class="wtrail-road"/><path class="wtrail-tex"/><path class="wtrail-glow"/><path class="wtrail-done"/><path class="wtrail-line"/><path class="wtrail-comet"/></svg>'
+      /* El paisaje: TRES hitos grabados repartidos a lo largo del recorrido,
+         sacados de las láminas que ya ilustran ese mundo y recortados a
+         máscara alfa, así que el color lo pone el acento y no el archivo.
+         Sustituye a las ~834 formas SVG que el generador sembraba por los
+         márgenes: allí eran casitas a medio recortar, aquí son lugares por
+         los que pasas. Tres elementos en lugar de ochocientos. */
+      + '<div class="wscape" aria-hidden="true"><i></i><i></i><i></i></div>'
+      + propsLayer(selLevel)
+      /* Sendero: tres trazos, no siete. .wtrail-bed es la calzada (le da
+         cuerpo al camino), .wtrail-line la ruta que falta —y la que MIDE el
+         avatar con offset-path—, .wtrail-done la pisa en oro hasta el nodo
+         actual. Se fueron road/tex/glow (la misma "d" pintada tres veces más)
+         y la cuenta-cometa, que animaba un drop-shadow en bucle infinito. */
+      + '<svg class="wtrail" aria-hidden="true" focusable="false" preserveAspectRatio="none"><path class="wtrail-bed"/><path class="wtrail-line"/><path class="wtrail-done"/></svg>'
       + '<div class="wavatar' + (pj.animal ? ' has-pelaje' : '') + '" data-pelaje="' + pj.pelaje + '" aria-hidden="true">'
       + '<img class="wcat" src="' + pj.src + '" alt="" decoding="async">'
       + '<span class="wacc">' + pj.svg + '</span><span class="wfx" aria-hidden="true"></span></div>'
