@@ -71,6 +71,24 @@ nav{display:flex;align-items:center;justify-content:space-between;height:72px;ga
 .chip{display:inline-block;padding:7px 16px;border-radius:var(--r-pill);background:var(--gold);color:var(--navy);font-weight:700;font-size:.82rem;letter-spacing:.5px;}
 .chero-cta{display:flex;gap:14px;flex-wrap:wrap;margin-top:28px;}
 
+/* Portada del curso junto al texto del hero: la misma imagen que ya
+   identifica al curso en la fila de la portada (index.html). */
+.chero-grid{display:grid;grid-template-columns:1fr;align-items:center;gap:34px;}
+.chero-art{position:relative;max-width:420px;width:100%;margin:0 auto 8px;border-radius:var(--r-lg);}
+/* 16/9: es la proporción nativa de las portadas (900x502), así que
+   la imagen se ve completa en lugar de recortada por los lados. */
+.chero-art img{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:cover;border-radius:var(--r-lg);
+  border:1px solid rgba(197,160,89,.4);box-shadow:var(--sh-lg);background:var(--navy3);}
+.chero-art .art-chip{position:absolute;left:14px;bottom:14px;display:inline-flex;align-items:center;gap:8px;
+  padding:8px 15px;border-radius:var(--r-pill);background:rgba(20,26,46,.82);color:var(--gold-lt);
+  font-size:.74rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+  border:1px solid rgba(197,160,89,.4);backdrop-filter:blur(6px);}
+@media(min-width:981px){
+  .chero-grid{grid-template-columns:minmax(0,1fr) minmax(0,400px);gap:56px;}
+  .chero-inner{max-width:none;}
+  .chero-art{margin:0;}
+}
+
 /* Secciones de contenido */
 .sec{padding:76px 0;}
 .sec.alt{background:var(--cream);}
@@ -99,11 +117,102 @@ nav{display:flex;align-items:center;justify-content:space-between;height:72px;ga
 .route .step .lv{font-size:.72rem;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--tag);}
 .route .step p{color:var(--muted);font-size:var(--t-small);margin:8px 0 0;}
 
-/* Bloque de precio (planes.html) */
-.priceblock{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin:6px 0 4px;}
-.priceblock .amt{font-family:'Inria Serif',serif;font-size:2.1rem;font-weight:700;color:var(--navy);}
-.priceblock .unit{color:var(--muted);font-size:.9rem;}
-.ribbon-inline{display:inline-block;background:var(--gold);color:var(--navy);font-size:.66rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:5px 14px;border-radius:var(--r-pill);margin-bottom:12px;}
+/* ============================================================
+   Tarjetas de plan comparables lado a lado (planes.html).
+   Sustituyen a las secciones apiladas: el visitante compara de
+   un vistazo en lugar de recorrer tres pantallas.
+   ============================================================ */
+.pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;align-items:stretch;margin-top:8px;}
+.pcard{position:relative;display:flex;flex-direction:column;background:#fff;border:1px solid var(--border);
+  border-radius:var(--r-lg);padding:34px 30px 30px;scroll-margin-top:104px;
+  transition:transform .4s var(--ease-std),box-shadow .4s,border-color .3s;}
+.pcard:hover{transform:translateY(-4px);box-shadow:var(--sh-md);border-color:var(--gold);}
+.pcard.feat{border:2px solid var(--gold);box-shadow:0 18px 44px rgba(197,160,89,.22);}
+.pcard.feat:hover{box-shadow:0 24px 54px rgba(197,160,89,.3);}
+.pcard .ribbon{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:var(--gold);color:var(--navy);
+  font-size:.68rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;padding:5px 16px;border-radius:var(--r-pill);
+  white-space:nowrap;}
+.pcard .ic{width:56px;height:56px;border-radius:var(--r-md);display:flex;align-items:center;justify-content:center;
+  font-size:1.4rem;color:var(--gold);background:linear-gradient(135deg,var(--navy2),var(--navy3));margin-bottom:18px;}
+.pcard h2{font-family:'Inria Serif',serif;font-size:1.3rem;font-weight:700;margin:0 0 6px;}
+.pcard .p-for{color:var(--muted);font-size:var(--t-small);margin:0 0 18px;min-height:2.6em;}
+.pcard .p-price{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;padding-bottom:20px;margin-bottom:20px;
+  border-bottom:1px solid var(--border);}
+.pcard .p-price .amt{font-family:'Inria Serif',serif;font-size:2rem;font-weight:700;color:var(--navy);line-height:1;}
+.pcard .p-price .unit{color:var(--muted);font-size:.86rem;}
+.pcard ul{list-style:none;padding:0;margin:0 0 26px;display:grid;gap:12px;flex:1;}
+.pcard ul li{display:flex;gap:11px;align-items:flex-start;font-size:var(--t-body);line-height:1.45;}
+.pcard ul li i{color:var(--gold2);margin-top:4px;flex:0 0 auto;}
+.pcard .btn{width:100%;justify-content:center;margin-top:auto;}
+.pcard .btn-outline{background:transparent;color:var(--navy);border:1.5px solid var(--border);}
+.pcard .btn-outline:hover{border-color:var(--gold);background:var(--cream);transform:translateY(-2px);}
+
+/* Tabla comparativa: el detalle fino, para quien ya está decidiendo. */
+.ctable-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;margin-top:8px;
+  border:1px solid var(--border);border-radius:var(--r-lg);background:#fff;}
+.ctable{width:100%;min-width:620px;border-collapse:collapse;font-size:var(--t-body);}
+/* El aviso de "desliza" solo tiene sentido donde la tabla no cabe. */
+.ctable caption{display:none;text-align:left;padding:16px 20px 0;color:var(--muted);font-size:var(--t-small);caption-side:top;}
+@media(max-width:719px){.ctable caption{display:table-caption;}}
+.ctable th,.ctable td{padding:15px 20px;text-align:left;border-bottom:1px solid var(--border);}
+.ctable thead th{background:var(--cream);font-size:.76rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;
+  color:var(--navy);white-space:nowrap;}
+.ctable thead th:first-child{border-top-left-radius:var(--r-lg);}
+.ctable thead th:last-child{border-top-right-radius:var(--r-lg);}
+.ctable tbody th{font-weight:600;color:var(--navy);}
+.ctable td{text-align:center;color:var(--muted);}
+.ctable thead th:not(:first-child){text-align:center;}
+.ctable .yes{color:var(--gold2);}
+.ctable .no{color:#b9b2a2;}
+.ctable tbody tr:last-child th,.ctable tbody tr:last-child td{border-bottom:0;}
+.ctable tbody tr:hover{background:#fffdf7;}
+.ctable .col-feat{background:rgba(197,160,89,.07);}
+
+@media(max-width:940px){
+  .pgrid{grid-template-columns:1fr;max-width:460px;margin-left:auto;margin-right:auto;gap:28px;}
+  .pcard .p-for{min-height:0;}
+}
+
+/* ============================================================
+   FAQ en <details> nativo: sin JS, accesible por teclado y
+   plegable por el propio navegador.
+   ============================================================ */
+.faq{max-width:760px;}
+.qitem{border:1px solid var(--border);border-radius:var(--r-md);background:#fff;margin-bottom:14px;overflow:hidden;
+  transition:border-color .3s,box-shadow .3s;}
+.qitem:hover{border-color:var(--gold);}
+.qitem[open]{border-color:var(--gold);box-shadow:var(--sh-md);}
+.qitem summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:14px;
+  padding:19px 22px;font-family:inherit;font-size:1rem;font-weight:600;color:var(--navy);}
+.qitem summary::-webkit-details-marker{display:none;}
+.qitem summary::after{content:"\f078";font-family:"Font Awesome 6 Free";font-weight:900;font-size:.8rem;
+  color:var(--gold2);flex:0 0 auto;transition:transform .35s var(--ease-std);}
+.qitem[open] summary::after{transform:rotate(180deg);}
+.qitem summary:focus-visible{outline:3px solid var(--gold2);outline-offset:-3px;}
+.qitem .ans{padding:0 22px 20px;color:var(--muted);font-size:var(--t-body);}
+.qitem .ans p{margin:0;}
+
+/* ============================================================
+   "Otros cursos": evita que la página de detalle sea un callejón
+   sin salida. Mismo lenguaje que las fichas de la portada.
+   ============================================================ */
+.rel-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;}
+.rel{display:flex;flex-direction:column;border:1px solid var(--border);border-radius:var(--r-md);overflow:hidden;
+  background:#fff;color:inherit;box-shadow:0 1px 4px rgba(27,27,47,.06);
+  transition:transform .3s var(--ease-std),box-shadow .3s,border-color .3s;}
+.rel:hover,.rel:focus-visible{transform:translateY(-6px);box-shadow:var(--sh-md);border-color:var(--gold);}
+.rel .cvr{position:relative;height:124px;overflow:hidden;border-bottom:3px solid var(--gold);
+  background:linear-gradient(135deg,var(--navy2),var(--navy3));}
+.rel .cvr img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .5s var(--ease-std);}
+.rel:hover .cvr img{transform:scale(1.05);}
+.rel .rbody{display:flex;flex-direction:column;align-items:flex-start;gap:8px;padding:18px 20px 20px;flex:1;}
+.rel h3{font-size:1.02rem;margin:0;}
+.rel p{color:var(--muted);font-size:.85rem;line-height:1.45;margin:0;flex:1;}
+.rel .more{margin-top:6px;color:var(--gold2);font-weight:700;font-size:.8rem;display:inline-flex;align-items:center;gap:7px;}
+.rel .more i{transition:transform .3s var(--ease-std);}
+.rel:hover .more i{transform:translateX(4px);}
+@media(max-width:860px){.rel-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:520px){.rel-grid{grid-template-columns:1fr;}}
 
 /* CTA band */
 .cband{background:linear-gradient(160deg,var(--navy2),var(--navy3));color:#fff;text-align:center;padding:88px 0;}
