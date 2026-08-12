@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Lecciones gratis · Vesper Academy</title>
 <meta name="description" content="Aprende ingles gratis, sin cuenta. Lecciones cortas con ejercicios, racha diaria y XP.">
-<link rel="icon" href="assets/images/favicon_32.png" type="image/png" sizes="32x32">
+<link rel="icon" href="assets/images/favicon_32.png" sizes="32x32">
 <link rel="manifest" href="manifest_lecciones.webmanifest">
 <meta name="theme-color" content="#1B1B2F">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -21,8 +21,8 @@
 <script src="vesper_icons.js"></script>
 <style>
   :root{
-    --ink:var(--va-ink,#1B1B2F); --gold:var(--va-gold,#c5a059); --gold2:#a8843d; --success:#2D9E75; --error:#C0392B;
-    --cream:var(--va-cream,#f5f2eb); --paper:var(--va-paper,#ffffff); --muted:#6b6b76; --line:#ece7da;
+    --ink:#1B1B2F; --gold:#c5a059; --gold2:#a8843d; --success:#2D9E75; --error:#C0392B;
+    --cream:#f5f2eb; --paper:#ffffff; --muted:#6b6b76; --line:#ece7da;
     --gold-tint:rgba(197,160,89,.14); --ok-tint:rgba(45,158,117,.12); --no-tint:rgba(192,57,43,.10);
     --radius:16px; --shadow:0 6px 22px rgba(27,27,47,.08);
   }
@@ -122,7 +122,7 @@
   .speak-target .es{display:block;font-size:.92rem;color:var(--muted);margin-top:6px}
   .speak-row{display:flex;gap:10px;justify-content:center;margin-bottom:12px}
   .speak-row .btn{margin-top:0;width:auto;min-height:44px;padding:10px 16px;font-size:.92rem;border-radius:999px}
-  .mic-btn{width:100%;background:linear-gradient(180deg,#fff,#f5ead0);border:1.5px solid var(--gold);color:var(--ink)}
+  .mic-btn{width:100%;background:linear-gradient(180deg,var(--paper,#fff),var(--gold-tint,#f5ead0));border:1.5px solid var(--gold);color:var(--ink)}
   .mic-btn.rec{background:linear-gradient(180deg,#ffe6e6,#ffcccc);border-color:#e88;animation:mic-pulse 1.1s ease infinite}
   @keyframes mic-pulse{0%,100%{box-shadow:0 0 0 0 rgba(192,57,43,.38)}50%{box-shadow:0 0 0 12px rgba(192,57,43,0)}}
   .heard{text-align:center;min-height:1.2em;margin:10px 0 2px;font-size:.95rem;color:var(--muted)}
@@ -486,22 +486,25 @@
   .terr .flag{fill:none;stroke:var(--gold,#c5a059);stroke-width:1.2}
   .biome-motif{flex:none;display:block}
   .biome-motif .prop{opacity:1}
-  /* ===== Camino temático (calzada en capas, trazado por JS sobre los nodos) =====
-     Orden DOM = profundidad. paintTrail pone el MISMO "d" medido en todas las
-     <path>; .wtrail-line queda penúltima (el avatar mide su longitud) y
-     .wtrail-comet última (cuenta de luz que recorre la ruta). El carácter de
-     cada mundo se afina en .wmap[data-world="XX"] más abajo. */
+  /* ===== El sendero: DOS trazos ==============================================
+     Era una calzada de siete <path> apilados con la misma "d" (arcén, firme,
+     textura, resplandor, veta y una cuenta-cometa con drop-shadow animado en
+     bucle) sobre un SVG de ~2.400px de alto: siete rasterizaciones a pantalla
+     completa y un filtro repintándose cada fotograma.
+
+     Ahora es lo que el sistema de diseño llama un filete: una línea grabada.
+     .wtrail-line = lo que queda por andar (y es la que MIDE el avatar);
+     .wtrail-done = lo andado, en oro. El oro es acento, nunca relleno. */
   .wtrail{position:absolute;left:0;top:0;z-index:1;overflow:visible;pointer-events:none}
   .wtrail path{fill:none;stroke-linecap:round;stroke-linejoin:round}
-  .wtrail-base{stroke:var(--w-accent,#c5a059);stroke-width:26;opacity:.16;stroke-linecap:round}   /* arcén/terreno bajo la calzada */
-  .wtrail-road{stroke:var(--w-accent,#c5a059);stroke-width:16;opacity:.30}                          /* superficie de la calzada */
-  .wtrail-tex{stroke:var(--w-accent,#c5a059);stroke-width:19;opacity:.34;stroke-dasharray:1.5 8}    /* textura: adoquín/tabla/peldaño/estrella */
-  .wtrail-glow{stroke:var(--w-glow,rgba(197,160,89,.4));stroke-width:10;opacity:.55}
-  .wtrail-line{stroke:var(--gold,#c5a059);stroke-width:3.5;stroke-dasharray:2 12;opacity:.95}        /* veta dorada = ruta recorrida (PENÚLTIMA) */
-  .wtrail-comet{stroke:var(--gold,#c5a059);stroke-width:7;stroke-linecap:round;stroke-dasharray:16 99999;  /* cuenta de luz dorada (ÚLTIMA) */
-    filter:drop-shadow(0 0 6px var(--gold,#c5a059));opacity:.95;
-    will-change:stroke-dashoffset;animation:g-comet 13s linear infinite;animation-play-state:paused}  /* paintTrail la reanuda con --total ya medido */
-  @keyframes g-comet{from{stroke-dashoffset:0}to{stroke-dashoffset:calc(-1 * var(--total,4000px))}}
+  /* La CALZADA: ancha y casi transparente, en el acento del mundo. Es lo
+     que devuelve el cuerpo al camino — con sólo el hilo punteado, el
+     sendero dejaba de leerse como algo que se anda. Va en el acento, que
+     es donde el color del mundo sí funciona: extendido y suave, no en un
+     hilo fino (ahí varios acentos naranjas se leían oxidados). */
+  .wtrail-bed{stroke:var(--w-accent,#C9A84C);stroke-width:14;opacity:.105;stroke-linecap:round}
+  /* El tramo pendiente, en el filete del sistema */
+  .wtrail-line{stroke:rgba(201,168,76,.55);stroke-width:2;stroke-dasharray:2 7}
   /* nodos/carteles por encima del terreno y el camino */
   .wisland .wnode{z-index:2}
   .wisland .wstart{z-index:2}
@@ -518,6 +521,48 @@
   .wavatar .wacc svg{width:100%;height:100%;display:block;overflow:visible;
     filter:drop-shadow(0 1px 1px rgba(20,18,42,.45))}
   @keyframes wbob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+  /* ---- vida propia del avatar ---------------------------------------
+     El pelaje es un PNG plano, así que lo único animable es la capa que lo
+     envuelve: .wcat respira (escala mínima con el origen en las patas, para
+     que suba el pecho y no flote entero) y .wfx añade el detalle propio de
+     cada pelaje. Cero bytes y cero peticiones: no hay fotogramas ni vídeo.
+     Coordenadas medidas sobre la caja de 50px del avatar (orejas y≈7-10,
+     coronilla y≈13,5, ojos y≈24, hocico y≈28, cuello y≈31). */
+  .wavatar .wcat{transform-origin:50% 94%;animation:wbreathe 3.6s ease-in-out infinite}
+  @keyframes wbreathe{0%,100%{transform:scale(1,1)}50%{transform:scale(.987,1.015)}}
+  .wavatar .wfx{position:absolute;inset:0;pointer-events:none}
+  .wavatar .wfx::before,.wavatar .wfx::after{content:"";position:absolute;opacity:0}
+  /* gato original / gris / multicolor: un destello breve junto a la oreja */
+  .wavatar[data-pelaje="classic"] .wfx::before,
+  .wavatar[data-pelaje="gray"] .wfx::before,
+  .wavatar[data-pelaje="calico"] .wfx::before{left:33px;top:8px;width:6px;height:6px;
+    background:radial-gradient(circle,rgba(255,255,255,.95) 0 18%,rgba(201,168,76,.85) 30%,transparent 70%);
+    animation:wsparkle 5.2s ease-in-out infinite}
+  .wavatar[data-pelaje="gray"] .wfx::before{left:12px;
+    background:radial-gradient(circle,rgba(255,255,255,.95) 0 18%,rgba(198,205,214,.9) 30%,transparent 70%)}
+  @keyframes wsparkle{0%,72%,100%{opacity:0;transform:scale(.4) rotate(0deg)}
+    82%{opacity:1;transform:scale(1) rotate(45deg)}92%{opacity:0;transform:scale(.5) rotate(90deg)}}
+  /* león: la melena late en oro */
+  .wavatar[data-pelaje="lion"] .wfx::before{left:6px;top:4px;width:38px;height:34px;border-radius:50%;
+    background:radial-gradient(closest-side,rgba(232,183,74,.42),transparent 72%);
+    animation:wglow 3.9s ease-in-out infinite}
+  @keyframes wglow{0%,100%{opacity:.18;transform:scale(.94)}50%{opacity:.62;transform:scale(1.06)}}
+  /* cósmico: dos estrellas que titilan sobre la cabeza */
+  .wavatar[data-pelaje="cosmic"] .wfx::before,
+  .wavatar[data-pelaje="cosmic"] .wfx::after{width:5px;height:5px;
+    background:radial-gradient(circle,#fff 0 20%,rgba(126,232,240,.9) 34%,transparent 72%);
+    animation:wtwinkle 2.9s ease-in-out infinite}
+  .wavatar[data-pelaje="cosmic"] .wfx::before{left:12px;top:11px}
+  .wavatar[data-pelaje="cosmic"] .wfx::after{left:35px;top:7px;animation-delay:1.35s}
+  @keyframes wtwinkle{0%,100%{opacity:.15;transform:scale(.6)}50%{opacity:1;transform:scale(1.2)}}
+  /* dragón: dos volutas de humo que suben del hocico */
+  .wavatar[data-pelaje="dragon"] .wfx::before,
+  .wavatar[data-pelaje="dragon"] .wfx::after{left:20px;top:27px;width:5px;height:5px;border-radius:50%;
+    background:radial-gradient(circle,rgba(222,245,232,.9),rgba(150,205,180,0) 72%);
+    animation:wsmoke 3.4s ease-out infinite}
+  .wavatar[data-pelaje="dragon"] .wfx::after{left:27px;animation-delay:1.7s}
+  @keyframes wsmoke{0%{opacity:0;transform:translate(0,0) scale(.45)}
+    18%{opacity:.8}100%{opacity:0;transform:translate(-5px,-17px) scale(2)}}
   /* títulos/etiquetas legibles sobre la isla oscura */
   .wisland .wtitle{color:var(--cream,#f5f2eb)}
   .wisland .wnode.locked .wtitle{color:rgba(245,242,235,.55)}
@@ -553,9 +598,14 @@
   /* reduce-motion: sin caminar del avatar, sin haz del faro, sin titileo del cielo */
   @media(prefers-reduced-motion:reduce){
     .wavatar{animation:none}
+    .wavatar .wcat{animation:none}
+    .wavatar .wfx::before,.wavatar .wfx::after{animation:none;opacity:0}
     .wbtn.boss.ready .beam,.wbtn.boss.conquered .beam{animation:none;opacity:1}
   }
   .vesper-reduce-motion .wavatar{animation:none}
+  .vesper-reduce-motion .wavatar .wcat{animation:none}
+  .vesper-reduce-motion .wavatar .wfx::before,
+  .vesper-reduce-motion .wavatar .wfx::after{animation:none;opacity:0}
   .vesper-reduce-motion .wbtn.boss .beam{animation:none;opacity:1}
   .vesper-reduce-motion .wamb i,.vesper-reduce-motion .wisland::before,.vesper-reduce-motion .wisland::after{animation:none}
   /* ===== Pantallas del Guardián (portada / medidor / resultado) ===== */
@@ -675,7 +725,7 @@
   .world-banner__title{font-family:"Inria Serif",Georgia,serif;font-size:1.5rem;line-height:1.05;font-weight:700;
     color:var(--cream,#f5f2eb);text-shadow:0 1px 8px rgba(27,27,47,.6);margin:0}
   .world-banner__meta{display:flex;align-items:center;gap:10px;font-size:.72rem;font-weight:600;color:rgba(245,242,235,.82)}
-  .world-banner__badge{font-weight:800;color:var(--ink,#1B1B2F);background:var(--gold,#c5a059);
+  .world-banner__badge{font-weight:800;color:var(--on-gold,#1B1B2F);background:var(--gold,#c5a059);
     padding:2px 8px;border-radius:999px;font-size:.66rem;letter-spacing:.04em}
   .world-banner__bar{flex:1;max-width:120px;height:5px;border-radius:999px;background:rgba(245,242,235,.18);overflow:hidden}
   .world-banner__bar > i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,#dcc08a,var(--gold,#c5a059))}
@@ -1551,7 +1601,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
   background:var(--w-accent-soft,var(--gold-tint));color:var(--w-accent,#a8843d)}
 .branch__ic svg{width:26px;height:26px}
 /* emblema temático por sala (gato de Vesper) en lugar del glifo */
-.branch__ic.has-img{width:54px;height:54px;border-radius:50%;padding:0;overflow:hidden;background:#fff;
+.branch__ic.has-img{width:54px;height:54px;border-radius:50%;padding:0;overflow:hidden;background:var(--paper,#fff);
   box-shadow:0 3px 10px rgba(27,27,47,.18);border:2px solid var(--w-accent,#c5a059)}
 .branch__ic.has-img.is-svg{background:var(--w-accent-soft,var(--gold-tint));border:0;box-shadow:none}
 .branch-emblem__img{width:100%;height:100%;object-fit:cover;display:block}
@@ -1690,12 +1740,731 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
   .dc-back{transform:none}
   .branch:hover,.branch:active{transform:none}
 }
+
+/* ============================================================
+   CAPA DE LEGIBILIDAD  (va al final a propósito: corrige por
+   selector lo que quedó demasiado pequeño o con poco contraste
+   sin tener que tocar las ~45 reglas originales una por una)
+
+   Dos problemas medidos en el móvil real (375px):
+   1) 97 nodos de texto por debajo de 14px, el peor a 9.28px, y
+      justamente los títulos de lección (.wtitle) a 12.8px.
+   2) El oro de marca (--va-gold #C9A84C) sobre cream da 2.15:1.
+      Sirve como color decorativo o sobre navy, pero NO como texto
+      pequeño sobre fondo claro. Para eso está --gold-ink (5.5:1).
+   ============================================================ */
+:root{
+  /* OJO: --gold-ink NO se define aquí. Lo publica vesper_theme.js en su
+     buildVars() y depende del modo (`t.dark ? t.gold : "#7a5e12"`): oro
+     oscuro en temas claros, oro CLARO en los oscuros. Fijarlo en la página
+     rompería el modo noche, que desde el tema "Vespertina" es el de por
+     defecto. El fallback de cada uso cubre el caso de que el motor no cargue. */
+  /* tamaño mínimo de etiqueta: nada informativo por debajo de esto */
+  --fs-label:.78rem;   /* 12.5px */
+  --fs-meta:.82rem;    /* 13.1px */
+}
+
+/* -- el foco programático de show() no debe pintar un anillo; el
+      anillo de :focus-visible (vesper_tokens.css) se conserva -- */
+[tabindex="-1"]:focus{outline:none}
+
+/* -- 1. piso de legibilidad -------------------------------- */
+.wtitle{font-size:.875rem;max-width:150px}          /* 12.8 -> 14px: es el nombre de la lección */
+.wnode.mini .wtitle{font-size:.82rem}
+.wisland .wnode.locked .wtitle{color:rgba(245,242,235,.75)}   /* .55 era demasiado tenue */
+.wnode.locked .wtitle{font-weight:600}
+.hstat__l{font-size:.72rem;color:rgba(245,242,235,.85)}
+@media(max-width:430px){ .hstat__l{font-size:.7rem} }         /* antes encogía a .58rem (9.28px) */
+.world-banner__eyebrow{font-size:.7rem;letter-spacing:.14em}
+.world-banner__badge{font-size:.72rem}
+.world .w-pc{font-size:var(--fs-label)}
+.worlds-sec__small{font-size:var(--fs-label)}
+.worlds-sec__sub{font-size:var(--fs-meta)}
+.wcheck .ct,.skill-h .ct{font-size:var(--fs-meta)}
+.branch__ct{font-size:var(--fs-label)}
+.branch__hint{font-size:var(--fs-meta)}
+.medal__nm{font-size:var(--fs-label)}
+.wlabel{font-size:.7rem}
+.wnode.mini .wlabel.mini-lb{font-size:.66rem}
+.lesson-world .lw-ey{font-size:.68rem}
+.boss-eyebrow{font-size:.7rem}
+.dc-tag{font-size:.72rem;opacity:.72}
+.den-stat span{font-size:var(--fs-label)}
+.den-head__eyebrow{font-size:.72rem}
+.branch__no{font-size:.72rem}
+.search-results .lc-lvl{font-size:var(--fs-label)}
+.ach-badge .ab-tx b{font-size:var(--fs-label)}
+.rq-num,.cat-bucket h4,.trophy-shelf .t-count{font-size:var(--fs-meta)}
+
+/* -- 2. oro legible donde el texto va sobre fondo CLARO -----
+      Ojo: sólo aquí. Sobre navy (.pcta, .wcheck dentro del mapa,
+      el hero) el oro claro es el que contrasta, y oscurecerlo lo
+      empeoraría — por eso la lista es explícita y no un `*`. */
+.skill-h .ct,
+.branch__no,
+.search-results .lc-lvl,
+.ach-badge .ab-tx b,
+.cos-cta,
+.srs-banner .hc-cta,
+.hub-card .hc-cta{color:var(--gold-ink,#7a5e12)}
+
+/* -- 3. chips de etiqueta sobre acento de mundo -------------
+      #fff sobre los acentos daba 3.2-4.0:1. Se oscurece el fondo
+      del chip en vez de aclarar el texto, para no perder el color. */
+.wlabel,
+.wboss-node .wlabel.boss-lb{background:var(--w-accent-ink,#1B1B2F);color:#fff;font-weight:800}
+
+/* -- 4. el objetivo táctil mínimo de los iconos del HUD ----- */
+.hub-ic{min-width:44px;min-height:44px}
+
+/* -- 5. el velo del banner del mundo -------------------------
+      El texto del banner vive sobre una FOTO. El velo bajaba a
+      .30 al 62% del ancho, justo donde termina la fila de meta
+      ("A1 · Principiante · 0/47"), así que su contraste dependía
+      de lo clara que fuera la foto de cada mundo. Se mantiene
+      oscuro a lo largo de toda la caja de texto (max-width 60%). */
+.world-banner::before{
+  background:radial-gradient(125% 150% at 100% 50%,rgba(27,27,47,.62) 0%,rgba(27,27,47,0) 46%),
+             linear-gradient(90deg,rgba(27,27,47,.94) 0%,rgba(27,27,47,.88) 40%,rgba(27,27,47,.62) 68%,rgba(27,27,47,.10) 100%),
+             linear-gradient(180deg,rgba(27,27,47,.14) 0%,rgba(27,27,47,.44) 100%);
+}
+
+/* ============================================================
+   "¿QUÉ SIGUE?" — la tarjeta de acción principal del hub.
+   Es deliberadamente la pieza con más peso visual de la página:
+   fondo oscuro contra el cream, tipografía display grande y un
+   único botón. Todo lo demás del hub es secundario respecto a
+   esto, y así debe leerse de un vistazo.
+   ============================================================ */
+.nextstep{
+  position:relative;overflow:hidden;
+  margin:16px 0 18px;padding:20px 20px 18px;
+  border-radius:var(--va-r-lg,18px);
+  background:var(--va-grad-dusk,linear-gradient(160deg,#1f2342,#14122a 60%,#0e0c1f));
+  box-shadow:var(--va-shadow-dusk,0 18px 44px rgba(20,18,42,.22));
+  border:1px solid rgba(201,168,76,.28);
+}
+/* halo del color del mundo, para que la tarjeta pertenezca al mundo activo */
+.nextstep::before{
+  content:"";position:absolute;inset:-40% -20% auto auto;width:70%;height:170%;
+  background:radial-gradient(closest-side,var(--w-glow,rgba(201,168,76,.4)),transparent 70%);
+  opacity:.55;pointer-events:none;
+}
+.nextstep > *{position:relative}
+.nextstep__ey{
+  display:block;font-size:.78rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--va-star,#f3e2ab);margin-bottom:6px;
+}
+.nextstep__t{
+  font-family:var(--va-font-display,"Inria Serif",Georgia,serif);
+  font-size:1.6rem;line-height:1.15;margin:0 0 8px;color:#fff;
+}
+.nextstep__meta{
+  margin:0 0 16px;font-size:.85rem;color:rgba(245,242,235,.86);
+  display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+}
+.nextstep__sk{
+  display:inline-block;padding:3px 10px;border-radius:999px;
+  background:rgba(201,168,76,.18);border:1px solid rgba(201,168,76,.42);
+  color:var(--va-star,#f3e2ab);font-weight:700;font-size:.75rem;
+}
+.nextstep__go{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  width:100%;min-height:54px;padding:14px 18px;
+  border:0;border-radius:14px;cursor:pointer;
+  background:linear-gradient(180deg,#d8b968,#bb9740);
+  color:#241d07;font:inherit;font-size:1.02rem;font-weight:800;letter-spacing:.01em;
+  box-shadow:0 6px 18px rgba(0,0,0,.28);
+  transition:transform .14s ease,filter .14s ease;
+}
+.nextstep__go svg{width:20px;height:20px;flex:0 0 auto}
+.nextstep__go:hover{filter:brightness(1.05)}
+.nextstep__go:active{transform:translateY(1px)}
+@media(max-width:380px){ .nextstep__t{font-size:1.4rem} }
+@media(prefers-reduced-motion:reduce){ .nextstep__go{transition:none} }
+
+/* -- "ver los mundos que faltan", bajo la cinta ------------- */
+.worlds-more{
+  display:block;width:100%;margin:10px 0 0;padding:11px 14px;min-height:44px;
+  background:transparent;border:1px dashed var(--line);border-radius:12px;
+  color:var(--muted);font:inherit;font-size:var(--fs-meta);font-weight:600;cursor:pointer;
+  transition:border-color .14s ease,color .14s ease;
+}
+.worlds-more:hover{border-color:var(--gold-ink,#7a5e12);color:var(--ink)}
+@media(prefers-reduced-motion:reduce){ .worlds-more{transition:none} }
+
+/* -- lanzadera del paseo guiado ------------------------------
+   Sustituye a la tarjeta .primer de viñetas. Es una fila discreta
+   y PERMANENTE: el primer sólo se veía una vez y al cerrarlo no
+   había manera de recuperar la explicación. */
+.tourbar{margin:0 0 14px}
+.tourbar__btn{
+  width:100%;display:flex;align-items:center;gap:11px;
+  min-height:52px;padding:10px 14px;
+  background:var(--paper);border:1px dashed var(--line);border-radius:var(--va-r-md,14px);
+  color:var(--ink);font:inherit;text-align:left;cursor:pointer;
+  transition:border-color .14s ease,background .14s ease;
+}
+.tourbar__btn:hover{border-color:var(--gold-ink,#7a5e12);background:var(--gold-tint)}
+.tourbar__ic{flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;
+  width:34px;height:34px;border-radius:50%;background:var(--gold-tint);color:var(--gold-ink,#7a5e12)}
+.tourbar__ic svg{width:19px;height:19px}
+.tourbar__tx{display:flex;flex-direction:column;line-height:1.3}
+.tourbar__tx b{font-size:.95rem}
+.tourbar__tx span{font-size:var(--fs-label);color:var(--muted)}
+@media(prefers-reduced-motion:reduce){ .tourbar__btn{transition:none} }
+
+/* ============================================================
+   EL SENDERO: jerarquía de los nodos
+
+   Medido sobre el mapa real, el relleno de cada estado era:
+     completada  gradiente oro claro   (#e6cd97 -> #C9A84C)  brillante
+     ACTUAL      gradiente navy        (#1B1B2F -> #2c2c4a)  OSCURO
+     disponible  gradiente crema       (#fffdf7 -> #f4eede)  brillante
+     bloqueada   gradiente navy        (#2b2b44 -> #1f1f34)  oscuro
+
+   O sea: el nodo que hay que tocar compartía paleta con los
+   BLOQUEADOS y quedaba más apagado que las lecciones normales de
+   al lado, sobre un mapa que ya es oscuro. La jerarquía estaba
+   invertida justo en el punto que más importa. Se distinguía por
+   tamaño, doble anillo y pulso, pero el relleno decía "inactivo".
+
+   Ahora el nodo actual es el más luminoso del sendero. Se sigue
+   diferenciando de una lección ya completada por tamaño (88 vs 74),
+   el doble anillo blanco+oro, el pulso, el glifo de play (vs palomita)
+   y las estrellas que sólo llevan las completadas.
+   ============================================================ */
+.wbtn.is-current{
+  background:linear-gradient(150deg,#fff3cf,#e3bd63 55%,#c69a35);
+  color:var(--on-gold,#231b06);
+  border-color:#fff6df;
+  box-shadow:0 0 0 4px var(--on-gold,#1B1B2F),0 0 0 8px var(--gold,#C9A84C),
+             0 10px 26px rgba(0,0,0,.42),
+             inset 0 2px 0 rgba(255,255,255,.6);
+}
+/* el glifo: sobre oro claro va oscuro, no dorado */
+.wbtn.is-current .wglyph{color:var(--on-gold,#231b06)}
+/* Las lecciones normales disponibles eran BLANCO PURO (#fffdf7), más
+   luminosas que el propio nodo actual. Bajan a una crema cálida: se
+   siguen leyendo como "puedes entrar" contra el mapa oscuro (~13:1)
+   pero ya no compiten con el nodo actual. */
+.wbtn.open:not(.is-current){background:linear-gradient(150deg,#f4ecda,#e4dbc2)}
+/* las completadas también bajan un punto para que la actual mande */
+.wbtn.completed{background:linear-gradient(150deg,#dcc492,#c2a259)}
+
+/* la píldora "Empieza"/"Continuar": es el rótulo de "estás aquí" */
+.wnode .wlabel{font-size:.74rem;padding:5px 13px;letter-spacing:.06em}
+
+/* ritmo vertical: 30px de gap daban 166px por nodo y sólo ~5 nodos
+   por pantalla; 24px acerca el sendero sin apelmazarlo */
+.wmap{gap:24px}
+
+/* ============================================================
+   MODO NOCHE: superficies que SIEMPRE son oscuras
+
+   El tema por defecto pasó a ser "Vespertina" (dark). El motor de
+   temas invierte --ink y --cream, pero el escenario del mapa
+   (.wsky/.wisland/.wmap/.wcheck) pinta sus PROPIOS degradados navy
+   y no se invierte nunca. Las reglas que ponían texto con
+   var(--cream) sobre esas superficies quedaron con texto casi negro
+   sobre fondo casi negro:
+
+     .wtitle  (el nombre de la lección)   1,08:1
+     .wcheck  (la destreza y su conteo)   1,27:1
+
+   Sobre una superficie que no cambia con el tema, el color del texto
+   tampoco puede cambiar: van fijos y claros.
+   ============================================================ */
+/* nota de especificidad: los originales son `.wisland .wtitle` y
+   `.wisland .wcheck` (0,2,0), así que un `.wcheck` pelado (0,1,0) NO
+   los gana — hay que igualar el descendiente. */
+.wisland .wtitle,
+.wboss-node .wtitle,
+.wisland .wcheck,
+.wcheck{color:#EDE7D6}
+.wisland .wcheck .ct{color:var(--gold,#C9A84C)}
+
+/* El CTA del examen usaba var(--ink) como primera parada del
+   degradado: en tema oscuro --ink es CLARO, así que la tarjeta se
+   volvía medio beige y su texto dorado caía a 1,85:1. --navy sí es
+   oscuro en los dos modos (t.dark ? t.paper : t.ink). */
+.pcta{background:linear-gradient(135deg,var(--navy,#1B1B2F),var(--navy2,#2c2c4a));color:#EDE7D6}
+
+/* .hub-card es un <button> que nunca declaró fondo: heredaba el gris
+   del navegador, y con color-scheme:dark ese gris pasó a #6b6b6b. */
+.hub-card{background:var(--paper,#fff);border:1px solid var(--line,#ece7da);color:var(--ink,#1B1B2F)}
+
+/* ============================================================
+   LA ESCENA DEL MAPA, TEMA POR TEMA
+
+   El escenario se pintaba con un navy fijo en los 8 temas, así que
+   bajo "Bosque" o "Atardecer" era un bloque azul pegado encima de
+   una página cálida, y bajo "Nebulosa" o "Medianoche" no se notaba
+   que hubieras cambiado de tema.
+
+   Peor: dos superficies usaban var(--ink) como parada de degradado,
+   y --ink es CLARO en los temas oscuros. Medido en producción con el
+   tema por defecto: el "cielo nocturno" tenía una banda de luminancia
+   0,80 (casi blanca) por el medio, y el nodo del Guardián otra igual.
+
+   La regla: la escena SIEMPRE es de noche, pero la noche la pone el
+   tema. --navy y --navy2 sirven porque el motor los deriva como
+   `t.dark ? t.paper : t.ink` y `t.dark ? t.line : "#2c2c4a"`, o sea
+   son oscuros en los ocho temas.
+   ============================================================ */
+.wsky{background:radial-gradient(120% 90% at 50% -10%,
+      var(--navy2,#2c2c4a) 0%, var(--navy,#1B1B2F) 58%, #0e0c1f 100%)}
+
+/* El velo de la isla pasa de navy a negro neutro: así el color de la
+   noche lo decide el cielo del tema y no un azul fijo por encima. */
+.wisland{background:linear-gradient(180deg,rgba(0,0,0,.22),rgba(0,0,0,.52))}
+
+/* Profundidad: resplandor del mundo en el horizonte + viñeta abajo,
+   para que el sendero se hunda en la distancia en vez de flotar. */
+.wsky::after{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(140% 55% at 50% 6%, var(--w-glow,rgba(201,168,76,.30)) 0%, transparent 60%),
+    radial-gradient(130% 75% at 50% 106%, rgba(0,0,0,.55) 0%, transparent 62%);
+}
+
+/* El Guardián y los nodos bloqueados también siguen la noche del tema */
+.wbtn.boss{background:linear-gradient(160deg,var(--navy2,#23234a),var(--navy,#1B1B2F))}
+.wbtn.locked{background:linear-gradient(150deg,var(--navy2,#2b2b44),var(--navy,#1f1f34))}
+.wisland .wcheck{background:linear-gradient(180deg,var(--navy2,#262649),var(--navy,#191930))}
+
+/* La skin elegida (Dorado/Rosa/Menta/Cielo/Violeta/Brasa) ya teñía al
+   gato con --vc-filter, pero en el mapa no se notaba. Un halo con su
+   color hace que la elección se vea también aquí. */
+.wavatar::after{content:"";position:absolute;inset:-9px;z-index:-1;border-radius:50%;pointer-events:none;
+  background:radial-gradient(closest-side,var(--vc-glow,rgba(201,168,76,.45)),transparent 72%);
+  opacity:.5}
+
+/* -- botón de "ver el resto del mundo", bajo el sendero ----- */
+.wmore{margin:-6px 0 18px;padding:0 2px}
+.wmore__btn{
+  width:100%;display:flex;flex-direction:column;align-items:center;gap:3px;
+  padding:14px 16px;min-height:56px;
+  background:var(--paper);border:1px dashed var(--line);border-radius:14px;
+  color:var(--ink);font:inherit;font-size:.9rem;font-weight:700;cursor:pointer;
+  transition:border-color .14s ease,background .14s ease;
+}
+.wmore__btn:hover{border-color:var(--gold-ink,#7a5e12);background:var(--gold-tint)}
+.wmore__sub{font-size:var(--fs-label);font-weight:500;color:var(--muted)}
+@media(prefers-reduced-motion:reduce){ .wmore__btn{transition:none} }
+
+/* ============================================================
+   EL MAPA, PASADA DE APARIENCIA
+
+   Cuatro cosas que el escenario no contaba:
+
+   1) CUÁNTO LLEVAS ANDADO. El sendero se pintaba igual de punta a
+      punta: la veta dorada recorría TODO el camino, incluida la
+      parte que aún no has pisado. Ahora .wtrail-done dibuja en oro
+      macizo sólo hasta el nodo actual (paintTrail le pone el
+      dasharray con la longitud de arco ya medida), así que de un
+      vistazo ves el trecho hecho y el que falta.
+
+   2) LOS CANDADOS PARECÍAN AVERÍAS. Un nodo bloqueado era un disco
+      navy casi negro con el glifo a #73738f (2,4:1): leía "roto",
+      no "todavía no". Pasa a aro discontinuo + glifo legible: la
+      forma dice "futuro" y el color ya no grita error.
+
+   3) LAS DESTREZAS NO SE MEDÍAN. El cartel de destreza decía "3/8"
+      en texto y nada más. Le ponemos su propia barra.
+
+   4) LA ISLA FLOTABA. Se le añade una niebla baja para que el
+      terreno se asiente en la noche en vez de cortarse en seco.
+
+   Recordatorio de la casa: esta superficie es SIEMPRE oscura, así
+   que el texto va en claro LITERAL (#EDE7D6), nunca var(--cream)
+   — el motor de temas invierte --cream y en modo noche el nombre
+   de la lección caía a 1,08:1.
+   ============================================================ */
+
+/* -- 1) trecho recorrido: oro macizo, sin el drop-shadow que obligaba a
+   repintar un filtro sobre un trazo de 2.400px ---------------- */
+.wtrail-done{stroke:var(--gold,#C9A84C);stroke-width:2.5;opacity:1;stroke-linecap:round}
+
+/* -- niebla baja de la isla ---------------------------------- */
+.wisland::after{background:
+  radial-gradient(80% 50% at 50% 0%,var(--w-glow,rgba(197,160,89,.25)) 0%,transparent 60%),
+  linear-gradient(180deg,transparent 78%,rgba(12,10,26,.55) 100%)}
+
+/* -- 2) el candado como "todavía no", no como avería --------- */
+.wbtn.locked{border-style:dashed;border-color:#565478;color:#A9A4C4;
+  box-shadow:0 4px 0 rgba(8,7,20,.45),inset 0 2px 7px rgba(0,0,0,.32)}
+.wbtn.locked .wglyph{opacity:.9}
+/* el nombre de una lección bloqueada estaba a .55 de alfa (~4,3:1 sobre la
+   isla): sube a .72 para que el texto pequeño pase AA cómodo */
+.wisland .wnode.locked .wtitle{color:rgba(237,231,214,.72)}
+
+/* -- 3) barra de la destreza --------------------------------- */
+.wcheck{flex-wrap:wrap}
+.wcheck .ck-bar{flex:0 0 100%;height:4px;margin:6px 0 0;border-radius:999px;
+  background:rgba(237,231,214,.16);overflow:hidden}
+.wcheck .ck-bar > i{display:block;height:100%;border-radius:999px;
+  background:linear-gradient(90deg,var(--w-accent,#c5a059),var(--gold,#c5a059));
+  transition:width .5s ease}
+@media(prefers-reduced-motion:reduce){ .wcheck .ck-bar > i{transition:none} }
+
+/* ============================================================
+   LOS GUARDIANES (las otras mascotas)
+
+   El retrato del guardián se pintaba como una foto redonda con un
+   borde de 3px, igual en los tres estados: bloqueado sólo bajaba
+   el brillo. No se leía como personaje ni como puerta del mundo.
+
+   Ahora es un MEDALLÓN: aro doble (acento del mundo + filete de
+   oro), aura del mundo detrás y tres estados distintos —
+   sellado (bloqueado), despierto (disponible) y vencido.
+   Los PNG son opacos con fondo navy horneado (29,34,53), así que
+   el recorte circular casa con la noche del mapa sin halo blanco.
+   ============================================================ */
+
+/* -- medallón de la portada / resultado --------------------- */
+.boss-emblem{position:relative}
+.boss-emblem img.boss-photo{
+  width:124px;height:124px;border-width:2px;
+  box-shadow:0 0 0 5px rgba(12,10,26,.85),0 0 0 6.5px var(--w-accent,#c5a059),
+             0 0 26px var(--w-glow,rgba(197,160,89,.45)),0 10px 24px rgba(20,18,42,.6)}
+.boss-emblem.lit img.boss-photo{
+  box-shadow:0 0 0 5px rgba(12,10,26,.85),0 0 0 7px var(--gold,#c5a059),
+             0 0 34px var(--gold,#c5a059),0 10px 24px rgba(20,18,42,.6)}
+/* sellado: la piedra aún no despierta */
+.boss-emblem.dim img.boss-photo{filter:grayscale(.72) brightness(.62) contrast(.95);
+  box-shadow:0 0 0 5px rgba(12,10,26,.85),0 0 0 6.5px #4A4866,0 8px 20px rgba(20,18,42,.55)}
+
+/* -- el nodo del mapa: un portal, no una foto recortada -----
+   OJO con overflow:hidden aquí: .wbtn.boss.ready::after es el aro que late
+   y vive en inset:-7px, o sea FUERA de la caja. Recortar el botón para
+   encajar el retrato apagaba ese pulso, que es justo la señal de "ya puedes
+   entrar". Por eso el retrato conserva el radio del arco (no se recorta con
+   overflow) y el latido del despierto va por filter, que no desborda. */
+.wbtn.boss{padding:0}
+/* velo interior: hunde el retrato en el arco y separa cara de borde */
+.wbtn.boss::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+  border-radius:42px 42px 12px 12px;
+  background:radial-gradient(115% 85% at 50% 22%,transparent 40%,rgba(10,9,24,.55) 100%),
+             linear-gradient(180deg,transparent 55%,rgba(10,9,24,.72) 100%)}
+.wboss-node .wbtn.boss::after{z-index:2}      /* el aro del pulso, por encima del velo */
+
+/* sellado: gris y cerrado */
+.wbtn.boss.locked{border-style:dashed}
+.wbtn.boss.locked .boss-node-photo{filter:grayscale(.8) brightness(.5)}
+.wbtn.boss.locked::before{background:linear-gradient(180deg,rgba(10,9,24,.5),rgba(10,9,24,.8))}
+/* despierto: el aura del mundo alrededor y el retrato respirando */
+.wbtn.boss.ready{box-shadow:0 7px 0 rgba(20,18,42,.45),0 10px 24px rgba(20,18,42,.5),
+  0 0 22px var(--w-glow,rgba(197,160,89,.5))}
+.wbtn.boss.ready .boss-node-photo{animation:g-boss-breathe 5.2s ease-in-out infinite}
+@keyframes g-boss-breathe{0%,100%{filter:brightness(1)}50%{filter:brightness(1.15) saturate(1.07)}}
+/* vencido: filete de oro y el retrato ya a plena luz */
+.wbtn.boss.conquered{background:linear-gradient(160deg,#23234a,var(--ink,#1B1B2F));
+  border-color:var(--gold,#c5a059);
+  box-shadow:0 7px 0 rgba(120,86,20,.45),0 10px 24px rgba(20,18,42,.5),inset 0 0 0 2px rgba(230,205,151,.45)}
+.wbtn.boss.conquered .boss-node-photo{filter:none}
+@media(prefers-reduced-motion:reduce){ .wbtn.boss.ready .boss-node-photo{animation:none} }
+.vesper-reduce-motion .wbtn.boss.ready .boss-node-photo{animation:none}
+
+/* ================================================================
+   EL MAPA GRABADO  ·  pasada de aligerado y acabado
+
+   QUÉ FALLABA, medido en el navegador sobre el mundo A1:
+
+     · 834 formas SVG y 52 KB de marcado que el generador de terreno
+       creaba de cero en cada trazado Y en cada resize. Al 20 % de
+       opacidad no se leían como paisaje: eran casitas y pinos a
+       medio recortar por los dos márgenes, o sea ruido.
+     · El sendero eran SIETE <path> con la misma "d" sobre un SVG de
+       2.400 px, uno de ellos con un drop-shadow animado en bucle.
+     · Los iconos venían de otra familia (grosor 1.9/2/3, el play
+       macizo) que la del sprite del sistema de diseño.
+     · El oro se usaba como RELLENO de los nodos completados. El
+       fundamento de color dice lo contrario: "el oro es acento,
+       nunca relleno".
+
+   LA IDEA: las láminas de la marca (assets/images/lessons/theme_*)
+   son grabados crema sobre navy con MUCHO aire. El mapa era lo
+   único del sitio que no hablaba ese idioma. Ahora sí: una sola
+   lámina por mundo de fondo, un filete por sendero, medallones de
+   línea y aire. Menos piezas y más presencia.
+   ================================================================ */
+
+/* -- 1. El escenario: se va la caja, queda la noche --------------
+   .wisland llevaba un borde de 1px del acento del mundo alrededor
+   de TODO: un rectángulo de color que leía "widget", no "mapa". */
+.wisland{border-color:rgba(201,168,76,.14)}
+/* el lavado a pantalla completa de la lámina (opacity .20, cover)
+   era el causante de la neblina parda: lo sustituye .wmotif */
+.wisland::before{content:none}
+
+/* -- 2. El paisaje del mundo ------------------------------------
+   Tres hitos grabados repartidos por el recorrido: uno grande de
+   cabecera y dos que asoman por los márgenes según bajas. Son las
+   mismas láminas que ya ilustran el mundo, recortadas a máscara
+   alfa, así que el color lo pone el acento y no el archivo.
+
+   La profundidad la dan tres cosas: escala (el de cabecera manda),
+   posición (los otros dos sangran por lados opuestos, como algo que
+   dejas atrás) y opacidad (el de más abajo pisa un poco más fuerte,
+   perspectiva atmosférica al revés porque viene "hacia ti"). */
+.wscape{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.wscape i{position:absolute;display:block;background:var(--w-accent,#C9A84C);
+  -webkit-mask-image:var(--m);mask-image:var(--m);
+  -webkit-mask-size:contain;mask-size:contain;
+  -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
+  -webkit-mask-position:center;mask-position:center}
+.wscape i:nth-child(1){left:50%;transform:translateX(-50%);top:0;width:82%;max-width:300px}
+/* Los dos hitos laterales se retiran: ahora los márgenes los llenan los props
+   ilustrados (.wprops), que son piezas de verdad y a plena opacidad. Dejar
+   además las láminas al 12 % devolvía la neblina que costó quitar. La lámina
+   grande de cabecera sí se queda: es la que presenta el mundo. */
+.wscape i:nth-child(2),
+.wscape i:nth-child(3){display:none}
+
+/* -- 2b. El decorado: piezas ilustradas a lo largo del camino ----
+   Van DETRÁS del sendero y de los nodos (z-index 0 contra 1 y 2) y
+   no reciben puntero. Nada de opacidad fantasma: se ven. */
+.wprops{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.wprops img{position:absolute;width:auto;height:auto;display:block;
+  filter:drop-shadow(0 6px 10px rgba(8,7,20,.55))}
+
+/* La opacidad va hito por hito, no una para todos: la densidad del
+   grabado cambia muchísimo. El castillo de C2 es una mancha compacta y
+   a .13 era un borrón; el cohete de C1 y la ribera de B1 son cuatro
+   líneas finísimas y al mismo valor desaparecían. Calibrado a ojo con
+   los seis mundos delante. */
+.wmap[data-world="A1"] .wscape i:nth-child(1){--m:url(assets/images/map/lm_a1_1.png);aspect-ratio:360/396;opacity:.13}
+.wmap[data-world="A1"] .wscape i:nth-child(2){--m:url(assets/images/map/lm_a1_2.png);aspect-ratio:300/330;opacity:.10}
+.wmap[data-world="A1"] .wscape i:nth-child(3){--m:url(assets/images/map/lm_a1_3.png);aspect-ratio:300/323;opacity:.13}
+.wmap[data-world="A2"] .wscape i:nth-child(1){--m:url(assets/images/map/lm_a2_1.png);aspect-ratio:360/456;opacity:.16}
+.wmap[data-world="A2"] .wscape i:nth-child(2){--m:url(assets/images/map/lm_a2_2.png);aspect-ratio:300/506;opacity:.13}
+.wmap[data-world="A2"] .wscape i:nth-child(3){--m:url(assets/images/map/lm_a2_3.png);aspect-ratio:300/260;opacity:.15}
+.wmap[data-world="B1"] .wscape i:nth-child(1){--m:url(assets/images/map/lm_b1_1.png);aspect-ratio:360/218;opacity:.22;width:96%;max-width:340px}
+.wmap[data-world="B1"] .wscape i:nth-child(2){--m:url(assets/images/map/lm_b1_2.png);aspect-ratio:300/410;opacity:.13}
+.wmap[data-world="B1"] .wscape i:nth-child(3){--m:url(assets/images/map/lm_b1_3.png);aspect-ratio:300/466;opacity:.15}
+.wmap[data-world="B2"] .wscape i:nth-child(1){--m:url(assets/images/map/lm_b2_1.png);aspect-ratio:360/551;opacity:.13}
+.wmap[data-world="B2"] .wscape i:nth-child(2){--m:url(assets/images/map/lm_b2_2.png);aspect-ratio:300/386;opacity:.11}
+.wmap[data-world="B2"] .wscape i:nth-child(3){--m:url(assets/images/map/lm_b2_3.png);aspect-ratio:300/258;opacity:.15}
+.wmap[data-world="C1"] .wscape i:nth-child(1){--m:url(assets/images/map/lm_c1_1.png);aspect-ratio:360/464;opacity:.20}
+.wmap[data-world="C1"] .wscape i:nth-child(2){--m:url(assets/images/map/lm_c1_2.png);aspect-ratio:300/375;opacity:.15}
+.wmap[data-world="C1"] .wscape i:nth-child(3){--m:url(assets/images/map/lm_c1_3.png);aspect-ratio:300/350;opacity:.16}
+.wmap[data-world="C2"] .wscape i:nth-child(1){--m:url(assets/images/map/lm_c2_1.png);aspect-ratio:360/780;opacity:.085}
+.wmap[data-world="C2"] .wscape i:nth-child(2){--m:url(assets/images/map/lm_c2_2.png);aspect-ratio:300/277;opacity:.13}
+.wmap[data-world="C2"] .wscape i:nth-child(3){--m:url(assets/images/map/lm_c2_3.png);aspect-ratio:300/421;opacity:.12}
+
+/* -- 2b. El resplandor del mundo, a su sitio ---------------------
+   Medido sobre A1: la mitad superior del mapa estaba en rgb(74,57,54)
+   —un gris cálido— contra los rgb(27,29,49) de la mitad inferior. El
+   culpable era este halo: --w-glow llega con alfa .34-.42 y en varios
+   mundos es NARANJA, así que teñía de sepia media escena y devolvía
+   justo la neblina que quitamos con el terreno. La noche es la del
+   token; el mundo sólo la matiza. */
+.wsky::after{background:
+    radial-gradient(115% 30% at 50% 0%, var(--w-glow,rgba(201,168,76,.30)) 0%, transparent 64%),
+    radial-gradient(130% 72% at 50% 106%, rgba(0,0,0,.5) 0%, transparent 62%);
+  opacity:.4}
+
+/* -- 3. Los medallones ------------------------------------------
+   Más pequeños (74→60) y con el glifo pedido en em, como manda el
+   sistema, para que llene el disco en vez de flotar en el centro.
+   Fuera el escalón macizo de 5px: era lo que los hacía parecer
+   fichas de juego pegadas sobre la escena. */
+.wbtn{width:60px;height:60px;font-size:1rem;border-width:1.5px;
+  border-color:rgba(201,168,76,.30);
+  background:linear-gradient(180deg,#272a4d,#181a33);
+  /* materia de medallón ACUÑADO, no disco plano: filete interior con su
+     hueco (el doble aro de una moneda), luz arriba, sombra abajo y una
+     caída suave que lo despega del paisaje. Todo con inset: cero capas
+     nuevas y cero elementos. */
+  box-shadow:inset 0 1px 0 rgba(243,226,171,.16),
+             inset 0 -2px 4px rgba(8,7,20,.55),
+             inset 0 0 0 4px rgba(8,7,20,.28),
+             inset 0 0 0 5px rgba(201,168,76,.16),
+             0 7px 18px rgba(8,7,20,.5)}
+.wbtn:active:not(.locked){transform:translateY(1px);
+  box-shadow:inset 0 1px 0 rgba(243,226,171,.16),
+             inset 0 -2px 4px rgba(8,7,20,.55),
+             inset 0 0 0 4px rgba(8,7,20,.28),
+             inset 0 0 0 5px rgba(201,168,76,.16),
+             0 3px 9px rgba(8,7,20,.5)}
+/* el glifo se pide en em (contrato del sistema) y el em lo fija el nodo.
+   Ojo: .wbtn.is-current y .wbtn.castle traían font-size propio (2rem y
+   1.8rem), así que su glifo salía a 56px dentro de un disco de 72. */
+.wbtn,
+.wbtn.is-current,
+.wbtn.castle{font-size:1rem}
+.wbtn .wglyph,
+.wbtn.completed .wglyph,
+.wbtn.is-current .wglyph{width:1.75em;height:1.75em}
+
+/* los nodos flotaban en bucle (g-node-bob) con will-change:transform cada
+   uno: una capa de composición permanente por nodo, y el sendero NO
+   flotaba con ellos, así que la línea se despegaba del disco al que
+   entra. Con un trazo fino se nota; quieto se lee como grabado. */
+.wbtn:not(.is-current):not(.locked):not(.castle){animation:none;will-change:auto}
+
+/* disponible: la puerta abierta. Filete de oro dentro y fuera. */
+.wbtn.open:not(.is-current){background:linear-gradient(180deg,#2a2e56,#1a1d3a);
+  border-color:var(--gold,#C9A84C);color:var(--gold,#C9A84C);
+  box-shadow:inset 0 1px 0 rgba(243,226,171,.22),
+             inset 0 -2px 5px rgba(8,7,20,.5),
+             inset 0 0 0 4px rgba(8,7,20,.3),
+             inset 0 0 0 5px rgba(201,168,76,.34),
+             0 7px 18px rgba(8,7,20,.5),0 0 16px rgba(201,168,76,.10)}
+
+/* completada: doble aro de oro y un velo al 14 %. El oro es acento,
+   nunca relleno — antes el disco iba macizo en oro y pesaba más que
+   el nodo actual. */
+/* El velo dorado va sobre una base OPACA: con el fondo translúcido, el
+   sendero de oro que pasa por detrás se veía cruzando la cara del
+   medallón y por encima del glifo. Un medallón acuñado no es traslúcido. */
+.wbtn.completed{background:
+    linear-gradient(180deg,rgba(201,168,76,.20),rgba(201,168,76,.06)),
+    linear-gradient(180deg,#272a4d,#181a33);
+  border-color:var(--gold,#C9A84C);color:var(--va-star,#f3e2ab);
+  box-shadow:inset 0 1px 0 rgba(243,226,171,.3),
+             inset 0 -2px 5px rgba(8,7,20,.45),
+             inset 0 0 0 4px rgba(8,7,20,.22),
+             inset 0 0 0 5px rgba(201,168,76,.42),
+             0 7px 18px rgba(8,7,20,.5)}
+
+/* bloqueada: "todavía no", no "avería". Filete continuo (el
+   discontinuo se leía como marcador de posición sin cargar) y la
+   piedra hundida: la luz de arriba casi no llega. */
+.wbtn.locked{background:linear-gradient(180deg,#1d1f3a,#14162c);
+  border-style:solid;border-color:#3a3a63;color:#b3b0c9;
+  box-shadow:inset 0 1px 0 rgba(179,176,201,.10),
+             inset 0 3px 7px rgba(8,7,20,.6),
+             inset 0 0 0 4px rgba(8,7,20,.3),
+             inset 0 0 0 5px rgba(58,58,99,.5),
+             0 5px 14px rgba(8,7,20,.45)}
+.wbtn.locked .wglyph{opacity:1}
+
+/* aquí estás: el retrato del gato, doble aro y un solo pulso */
+.wbtn.is-current{width:72px;height:72px;border-width:2px;
+  background:linear-gradient(180deg,#2a2e55,#1d203c);
+  border-color:var(--gold,#C9A84C);color:var(--va-star,#f3e2ab);
+  box-shadow:0 0 0 4px #14122a,0 0 0 5.5px rgba(201,168,76,.55),
+             0 10px 24px rgba(8,7,20,.55)}
+.wbtn.is-current::after{inset:-5px;
+  box-shadow:0 0 0 0 rgba(201,168,76,.45);animation:wpulse 2.4s ease-in-out infinite}
+@keyframes wpulse{0%,100%{box-shadow:0 0 0 0 rgba(201,168,76,.42)}50%{box-shadow:0 0 0 11px rgba(201,168,76,0)}}
+
+/* mini-reto y Guardián, al mismo compás que los nodos */
+.wbtn.castle.mini{width:50px;height:48px;border-radius:12px;border-width:1.5px;
+  background:linear-gradient(180deg,#242747,#1a1c36);border-color:rgba(201,168,76,.30)}
+.wbtn.castle.mini.completed{background:linear-gradient(180deg,rgba(201,168,76,.16),rgba(201,168,76,.07));
+  border-color:var(--gold,#C9A84C);color:var(--va-star,#f3e2ab)}
+.wbtn .wcrest{width:22px;height:24px;display:block}
+.wbtn .wbeacon{width:30px;height:32px;display:block}
+.wbtn.boss{width:82px;height:80px;border-width:2px;border-radius:41px 41px 14px 14px;
+  box-shadow:0 8px 22px rgba(8,7,20,.5)}
+.wbtn.boss.locked{border-style:solid;border-color:#3a3a63}
+
+/* -- 4. Los rótulos, legibles ESTÉN DONDE ESTÉN ------------------
+   El sendero pasaba por encima del nombre de la lección ("Plural
+   Nouns", "Can: habilidad y permiso" quedaban tachados). Halo de
+   noche alrededor del texto: la línea pasa por detrás y se lee
+   como una etiqueta de carta náutica, que es justo lo que es. */
+.wisland .wtitle{margin-top:8px;font-size:.78rem;font-weight:600;max-width:126px;
+  color:#EDE7D6;
+  text-shadow:0 0 5px #14122a,0 0 5px #14122a,0 1px 2px #14122a,0 0 10px rgba(20,18,42,.9)}
+.wisland .wnode.locked .wtitle{color:#b3b0c9;font-weight:500}
+.wstars{margin-top:4px;font-size:.74rem;text-shadow:0 0 5px #14122a,0 0 5px #14122a}
+
+/* la píldora "Empieza"/"Continuar" */
+.wnode .wlabel{background:var(--gold,#C9A84C);color:#1B1B2F;font-size:.66rem;
+  font-weight:700;letter-spacing:.1em;padding:4px 12px;top:-26px;box-shadow:0 4px 12px rgba(8,7,20,.5)}
+.wnode .wlabel::after{border-top-color:var(--gold,#C9A84C)}
+.wboss-node .wlabel.boss-lb{background:transparent;color:var(--va-star,#f3e2ab);
+  border:1px solid rgba(201,168,76,.45);box-shadow:none}
+.wboss-node .wlabel.boss-lb::after{border-top-color:rgba(201,168,76,.45)}
+.wnode.mini .wlabel.mini-lb{background:transparent;color:#b3b0c9;
+  border:1px solid #3a3a63;box-shadow:none}
+.wnode.mini .wlabel.mini-lb::after{border-top-color:#3a3a63}
+/* la píldora va en position:absolute a -26px, o sea SALE del nodo: con
+   18px de hueco se comía el nombre de la lección anterior cuando éste
+   ocupaba dos líneas ("Can: habilidad y permiso" tachado por "EL
+   GUARDIÁN", "There is / There are" por "CONTINUAR"). Todo nodo que
+   lleve píldora reserva su propio aire. La regla con :has() cubre
+   también el nodo actual, que es el tercer caso y no tiene clase
+   propia en el contenedor; las dos de arriba quedan de respaldo para
+   navegadores sin :has(). */
+.wnode.mini,
+.wboss-node{margin-top:22px}
+.wnode:has(> .wlabel){margin-top:22px}
+
+/* -- 5. La destreza, como filete divisor -------------------------
+   Era una tarjeta de ancho completo con borde y fondo: un trozo de
+   interfaz caído dentro de un mapa. El sistema ya tiene la pieza
+   correcta para separar — el filete. El propio filete hace de
+   barra de avance, así que se mide sin añadir un widget. */
+.wisland .wcheck,
+.wcheck{align-self:stretch;display:flex;align-items:center;gap:9px;flex-wrap:nowrap;
+  margin:14px 6px 6px;padding:0;background:none;border:0;border-radius:0;
+  font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  color:#EDE7D6;box-shadow:none;
+  /* el filete cruza el mapa de lado a lado, así que tarde o temprano le cae
+     un prop detrás (el farol justo sobre el "0/2"). Mismo halo de noche que
+     los títulos: el decorado pasa por detrás y el cartel se sigue leyendo. */
+  text-shadow:0 0 5px #14122a,0 0 5px #14122a,0 1px 2px #14122a}
+.wcheck .ck-ic svg{width:15px;height:15px}
+.wisland .wcheck .ck-ic{color:var(--w-accent,#C9A84C)}
+/* El conteo va en #dcc173, el tono que el fundamento de color define
+   como "adorno sobre noche". Con el oro de marca (#C9A84C) medía 6,2:1
+   sobre la banda alta del mapa — AA, pero no AAA, y esto es texto
+   pequeño. Va literal a propósito: en esta página --gold2 sigue siendo
+   el #a8843d de la paleta vieja, bastante más oscuro. */
+.wisland .wcheck .ct,
+.wcheck .ct{order:3;margin-left:0;font-size:.68rem;font-weight:700;letter-spacing:.06em;
+  font-variant-numeric:tabular-nums;color:#dcc173;
+  text-shadow:0 0 5px #14122a,0 0 5px #14122a,0 1px 2px #14122a}
+.wcheck .ck-bar{order:2;flex:1 1 auto;min-width:24px;height:1px;margin:0;border-radius:0;
+  background:rgba(201,168,76,.35)}
+.wcheck .ck-bar > i{background:var(--gold,#C9A84C);height:1px}
+
+/* -- 6. El umbral del mundo --------------------------------------
+   Selector con [data-world]: cada mundo redefinía .wstart con
+   (0,3,0) — un .wstart pelado no los gana. */
+.wmap[data-world] .wstart{background:none;border:0;
+  border-top:1px solid rgba(201,168,76,.35);
+  border-bottom:1px solid rgba(201,168,76,.35);clip-path:none;border-radius:0;
+  padding:5px 20px;margin:0 0 4px;color:var(--va-star,#f3e2ab);
+  font-family:"Inria Serif",Georgia,serif;font-variant:small-caps;
+  letter-spacing:.1em;font-size:.82rem;font-weight:600;box-shadow:none}
+
+/* -- 7. Ritmo vertical -------------------------------------------
+   60px de nodo + 18px de hueco deja ~7 paradas por pantalla donde
+   antes cabían 5, sin apelmazar: el aire lo pone el mapa, no el
+   espaciado entre fichas. */
+.wmap{gap:18px;padding:16px 0 6px}
+
+/* -- 8. Se retiran los adornos por mundo que sobraban -------------
+   Cada mundo pegaba banderines, hojas, chispas y remates sobre los
+   nodos ya completados y sobre el umbral. Con el nuevo juego de
+   iconos se leían como pegatinas traídas de otro sitio.
+   Misma especificidad que los originales y van después: ganan. */
+.wmap[data-world] .wbtn.completed:not(.castle)::before,
+.wmap[data-world] .wbtn.completed:not(.castle)::after,
+.wmap[data-world] .wbtn.castle::before,
+.wmap[data-world] .wbtn.castle::after,
+.wmap[data-world] .wstart::before,
+.wmap[data-world] .wstart::after{content:none}
+/* y el escalón macizo que cada mundo le devolvía al mini-reto */
+.wmap[data-world] .wbtn.castle{box-shadow:0 6px 16px rgba(8,7,20,.45);border-radius:12px}
+
+@media(prefers-reduced-motion:reduce){.wbtn.is-current::after{animation:none}}
+.vesper-reduce-motion .wbtn.is-current::after{animation:none}
 </style>
 </head>
 <body>
 <a class="va-skip-link" href="#app">Saltar al contenido</a>
-<h2 class="sr-only">Lecciones gratis de Vesper Academy: lee la explicacion, resuelve los ejercicios y manten tu racha diaria.</h2>
-<main id="app" aria-live="polite"></main>
+<p class="sr-only">Lecciones gratis de Vesper Academy: lee la explicacion, resuelve los ejercicios y manten tu racha diaria.</p>
+<!-- #app ya NO es aria-live: envolver toda la pantalla en una región viva hacía que
+     cada re-render releyera la pantalla completa. Ahora show() mueve el foco al título
+     de la pantalla nueva (eso la anuncia) y los avisos puntuales van a #sr-announce. -->
+<main id="app"></main>
+<div id="sr-announce" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
 
 <!-- Boton para descargar/instalar las lecciones como app (PWA). Solo se muestra cuando el navegador lo permite -->
 <button id="install-btn" type="button" aria-label="Instalar la app de lecciones">
@@ -1720,6 +2489,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
 <script src="vesper_level_exams.js"></script>
 <script src="vesper_mascot.js"></script>
 <script src="vesper_theme.js"></script>
+<script src="vesper_tour.js"></script>
 <script src="vesper_adaptive.js"></script>
 <script src="vesper_persona.js"></script>
 <script src="vesper_progress.js"></script>
@@ -1770,7 +2540,37 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
     });
   }
-  function show(html) { app.innerHTML = html; window.scrollTo(0, 0); }
+  /* ---- anuncios para lectores de pantalla ----
+     Región viva pequeña y dedicada. Se limpia antes de escribir para que dos
+     mensajes iguales seguidos ("Correcto" dos veces) sí se vuelvan a anunciar. */
+  var _srEl = null;
+  function announce(msg) {
+    if (!msg) return;
+    if (!_srEl) _srEl = document.getElementById("sr-announce");
+    if (!_srEl) return;
+    _srEl.textContent = "";
+    setTimeout(function () { if (_srEl) _srEl.textContent = msg; }, 60);
+  }
+
+  /* show(html) es el ÚNICO punto donde se escribe la pantalla.
+     Al reemplazar innerHTML el foco caía a <body>: quien usa teclado volvía al
+     principio del documento en cada paso y quien usa lector de pantalla no se
+     enteraba de que la pantalla había cambiado. Ahora movemos el foco al título
+     de la pantalla nueva, que es lo que la anuncia. */
+  function show(html) {
+    app.innerHTML = html;
+    window.scrollTo(0, 0);
+    focusScreen();
+  }
+  function focusScreen() {
+    var h = app.querySelector("h1, h2, [data-screen-title]");
+    if (!h) h = app.querySelector(".card, .wrap") || app;
+    try {
+      if (!h.hasAttribute("tabindex")) h.setAttribute("tabindex", "-1");
+      h.focus({ preventScroll: true });
+    } catch (e) { try { h.focus(); } catch (e2) {} }
+    window.scrollTo(0, 0);
+  }
 
   /* tipo de lección: "aprende" (enseña con secciones ricas) o "practica"
      (ejercita). Campo opcional en los datos: sin campo = práctica, así las
@@ -1814,8 +2614,13 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       + (line ? '<div class="bubble">' + esc(line) + '</div>' : '') + '</div>';
   }
   function topbar(pct) {
-    return '<div class="topbar"><a class="back" href="' + (id ? 'leccion.html' : 'index.html') + '" aria-label="Salir">&#8592;</a>'
-      + '<div class="progress"><div class="bar" style="width:' + pct + '%"></div></div></div>';
+    /* la barra era un div decorativo: sin role ni valor, quien no la ve no
+       sabía cuánto le falta. Y "Salir" no decía a dónde. */
+    var back = id ? "Salir de la lección y volver al mapa" : "Volver al inicio";
+    return '<div class="topbar"><a class="back" href="' + (id ? 'leccion.html' : 'index.html') + '" aria-label="' + back + '">&#8592;</a>'
+      + '<div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + Math.round(pct) + '"'
+      + ' aria-label="Progreso de la lección">'
+      + '<div class="bar" style="width:' + pct + '%"></div></div></div>';
   }
   /* feedbackBox(ok, explanation, wrongFallback)
      - explanation: el "por que" del ejercicio (se muestra al fallar siempre y
@@ -1881,8 +2686,8 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     } catch (e) {}
   }
 
-  function feedbackBox(ok, explanation, wrongFallback, noFx) {
-    if (!noFx) playFx(ok);
+  function feedbackBox(ok, explanation, wrongFallback) {
+    playFx(ok);
     var state = ok ? "correct" : "incorrect";
     var line = (PERS && PERS.line) ? PERS.line(state) : "";
     if (!line) line = (window.VESPER_MASCOT ? VESPER_MASCOT.get(state).line : (ok ? "Bien!" : "Casi..."));
@@ -1951,12 +2756,20 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
   /* cada mundo (nivel) = ilustración + nombre + identidad temática (acento, atmósfera, partículas)
      + jefe (Guardián del mundo: examen mixto que abre el siguiente nivel). */
   var WORLD_THEME = {
-    A1: { file: "assets/images/lessons/theme_home.jpg",      worldName: "El Hogar",             accent:"#C07A33", accentSoft:"rgba(192,122,51,.15)", glow:"rgba(192,122,51,.40)", ambientName:"hearth",    ambientN:7,  mapN:3, boss:{ name:"El Centinela del Hogar",  pass:85 }, biome:["cottage","bush","lantern","pine","bush"] },
-    A2: { file: "assets/images/lessons/theme_nature.jpg",    worldName: "El Sendero",           accent:"#5E8A4E", accentSoft:"rgba(94,138,78,.15)",  glow:"rgba(94,138,78,.38)",  ambientName:"trail",     ambientN:7,  mapN:4, boss:{ name:"El Guardián del Sendero", pass:85 }, biome:["pine","pine","bush","mushroom","fern"] },
-    B1: { file: "assets/images/lessons/theme_city.jpg",      worldName: "El Horizonte",         accent:"#3D86B0", accentSoft:"rgba(61,134,176,.15)", glow:"rgba(61,134,176,.34)", ambientName:"skyline",   ambientN:9,  mapN:3, boss:{ name:"El Vigía del Horizonte",  pass:85 }, biome:["building","building","lamp","tower","rock"] },
-    B2: { file: "assets/images/lessons/theme_business.jpg",  worldName: "La Torre",             accent:"#A8762E", accentSoft:"rgba(168,118,46,.15)", glow:"rgba(168,118,46,.42)", ambientName:"ascent",    ambientN:6,  mapN:3, boss:{ name:"El Heraldo de la Torre",  pass:88 }, biome:["crag","rock","crag","banner","pine"] },
-    C1: { file: "assets/images/lessons/theme_space.jpg",     worldName: "El Firmamento",        accent:"#6A5FA8", accentSoft:"rgba(106,95,168,.16)", glow:"rgba(106,95,168,.40)", ambientName:"starfield", ambientN:10, mapN:6, boss:{ name:"El Custodio del Firmamento", pass:90 }, biome:["star4","planet","crystal","star4"] },
-    C2: { file: "assets/images/lessons/theme_fantasy.jpg",   worldName: "El Castillo del Saber",accent:"#3FA08A", accentSoft:"rgba(63,160,138,.16)", glow:"rgba(63,160,138,.36)", ambientName:"aurora",    ambientN:7,  mapN:2, boss:{ name:"El Soberano del Saber",   pass:92 }, biome:["spire","banner","crystal","pine"] }
+    A1: { file: "assets/images/map/banner_a1.jpg",           worldName: "El Hogar",             accent:"#C07A33", accentInk:"#8f5722", accentSoft:"rgba(192,122,51,.15)", glow:"rgba(192,122,51,.40)", ambientName:"hearth",    ambientN:7,  mapN:3, boss:{ name:"El Centinela del Hogar",  pass:85 }, biome:["cottage","bush","lantern","pine","bush"] },
+    A2: { file: "assets/images/map/banner_a2.jpg",           worldName: "El Sendero",           accent:"#5E8A4E", accentInk:"#3f6234", accentSoft:"rgba(94,138,78,.15)",  glow:"rgba(94,138,78,.38)",  ambientName:"trail",     ambientN:7,  mapN:4, boss:{ name:"El Guardián del Sendero", pass:85 }, biome:["pine","pine","bush","mushroom","fern"] },
+    B1: { file: "assets/images/map/banner_b1.jpg",           worldName: "El Horizonte",         accent:"#3D86B0", accentInk:"#2b607f", accentSoft:"rgba(61,134,176,.15)", glow:"rgba(61,134,176,.34)", ambientName:"skyline",   ambientN:9,  mapN:3, boss:{ name:"El Vigía del Horizonte",  pass:85 }, biome:["building","building","lamp","tower","rock"] },
+    B2: { file: "assets/images/map/banner_b2.jpg",           worldName: "La Torre",             accent:"#A8762E", accentInk:"#7a5520", accentSoft:"rgba(168,118,46,.15)", glow:"rgba(168,118,46,.42)", ambientName:"ascent",    ambientN:6,  mapN:3, boss:{ name:"El Heraldo de la Torre",  pass:88 }, biome:["crag","rock","crag","banner","pine"] },
+    C1: { file: "assets/images/map/banner_c1.jpg",           worldName: "El Firmamento",        accent:"#6A5FA8", accentInk:"#4c4383", accentSoft:"rgba(106,95,168,.16)", glow:"rgba(106,95,168,.40)", ambientName:"starfield", ambientN:10, mapN:6, boss:{ name:"El Custodio del Firmamento", pass:90 }, biome:["star4","planet","crystal","star4"] },
+    C2: { file: "assets/images/map/banner_c2.jpg",           worldName: "El Castillo del Saber",accent:"#3FA08A", accentInk:"#2b7061", accentSoft:"rgba(63,160,138,.16)", glow:"rgba(63,160,138,.36)", ambientName:"aurora",    ambientN:7,  mapN:2, boss:{ name:"El Soberano del Saber",   pass:92 }, biome:["spire","banner","crystal","pine"] }
+  };
+  /* Fondo del relieve de la isla. Es la lámina de tema (una foto suave que sólo
+     se ve al 20 % y enmascarada), NO el banner: si ambos comparten archivo, la
+     misma imagen sale dos veces en la pantalla. */
+  var WORLD_TERRAIN = {
+    A1: "assets/images/lessons/theme_home.jpg",   A2: "assets/images/lessons/theme_nature.jpg",
+    B1: "assets/images/lessons/theme_city.jpg",   B2: "assets/images/lessons/theme_business.jpg",
+    C1: "assets/images/lessons/theme_space.jpg",  C2: "assets/images/lessons/theme_fantasy.jpg"
   };
   var WORLD_TAG = { A1: "Principiante", A2: "Básico", B1: "Intermedio", B2: "Intermedio alto", C1: "Avanzado", C2: "Maestría" };
   /* nombre corto de mundo para la cinta selectora (C2 abreviado para no desbordar) */
@@ -2001,33 +2814,31 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
   }
   var WORLD_UMBRAL = { A1: "Umbral del Hogar", A2: "Mojón del Sendero", B1: "Arco del Horizonte", B2: "Pórtico de la Torre", C1: "Portal del Firmamento", C2: "Sello del Castillo" };
   var BOSS_AVATAR = "assets/images/mascot/vesper_cat.png";
-  /* SVG del accesorio de Vesper elegido (vacío = ninguno). De vesper_theme.js. */
-  function currentAccessorySvg() {
+  /* ¿está desbloqueado este cosmético? (fail-open si no hay VESPER_COSMETICS) */
+  function unlockedCos(kind, id) {
     try {
-      if (window.VESPER_THEME && VESPER_THEME.get) {
-        var id = VESPER_THEME.get().accessory;
-        if (id && id !== "none" && window.VESPER_COSMETICS && VESPER_COSMETICS.isUnlocked
-            && !VESPER_COSMETICS.isUnlocked("acc", id)) return "";   // no mostrar accesorios bloqueados
-        var acc = VESPER_THEME.accessories && VESPER_THEME.accessories[id];
-        return (acc && acc.svg) || "";
-      }
+      if (window.VESPER_COSMETICS && VESPER_COSMETICS.isUnlocked) return !!VESPER_COSMETICS.isUnlocked(kind, id);
     } catch (e) {}
-    return "";
+    return true;
   }
-  /* Pelaje (apariencia completa) activo del gato del mapa, con guard de desbloqueo.
-     Devuelve {src, animal}: animal=true cuando NO es el Vesper clásico. */
-  function currentPelaje() {
+  /* Aspecto del gato del mapa: pelaje + accesorio en UNA sola imagen ya
+     horneada (VESPER_THEME.look). Antes se superponía el SVG del accesorio
+     sobre el PNG y, por bien calibrado que estuviera, se leía pegado encima:
+     el sombrero flotaba sobre la melena del león en vez de hundirse en ella.
+     Devuelve {src, svg, animal, pelaje}: animal=true cuando NO es el Vesper
+     clásico, que es lo que decide si recibe el tinte de color (--vc-filter).
+     Respeta los bloqueos: lo no desbloqueado no se pinta. */
+  function currentLook() {
     try {
-      if (window.VESPER_THEME && VESPER_THEME.get) {
-        var id = VESPER_THEME.get().pelaje;
-        if (id && id !== "classic") {
-          var locked = window.VESPER_COSMETICS && VESPER_COSMETICS.isUnlocked && !VESPER_COSMETICS.isUnlocked("pelaje", id);
-          var p = VESPER_THEME.pelajes && VESPER_THEME.pelajes[id];
-          if (!locked && p && p.img) return { src: p.img, animal: true };
-        }
+      if (window.VESPER_THEME && VESPER_THEME.get && VESPER_THEME.look) {
+        var st = VESPER_THEME.get();
+        var pel = (st.pelaje && st.pelaje !== "classic" && unlockedCos("pelaje", st.pelaje)) ? st.pelaje : "classic";
+        var acc = (st.accessory && st.accessory !== "none" && unlockedCos("acc", st.accessory)) ? st.accessory : "none";
+        var lk = VESPER_THEME.look(pel, acc);
+        return { src: lk.img, svg: lk.svg, animal: pel !== "classic", pelaje: pel };
       }
     } catch (e) {}
-    return { src: BOSS_AVATAR, animal: false };
+    return { src: BOSS_AVATAR, svg: "", animal: false, pelaje: "classic" };
   }
   /* etiqueta visual para un cosmético recién desbloqueado {kind:"skin"|"acc"|"pelaje",id} */
   function cosmeticLabel(c) {
@@ -2053,23 +2864,52 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
   /* metadatos del jefe de un nivel, con defaults si el mundo no declara boss */
   function bossMeta(lv) { var t = WORLD_THEME[lv] || {}; var b = t.boss || {}; return { name: b.name || "El Guardián", subtitle: t.worldName || lv, pass: b.pass || 85 }; }
 
-  /* ===== Iconos de marca (SVG nítidos en lugar de emojis) ===== */
+  /* ===== Iconos de marca =====================================================
+     CONTRATO DEL SISTEMA DE DISEÑO (claude.ai/design › Componentes › Iconos):
+     trazo y NO relleno, stroke-width 1.5, currentColor, viewBox 24, y el
+     tamaño se pide en em para que escale con el texto.
+
+     Antes cada icono del mapa iba por libre — 1.9, 2 y hasta 3 de grosor, y
+     el "play" era un triángulo MACIZO — así que al lado de los iconos del
+     resto del sitio se leían toscos y de otra familia. Ahora los cinco
+     glifos comparten el mismo pulso de línea que el sprite del sistema.
+     ========================================================================= */
   var SKILL_ICONS = {
-    grammar:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 6.4C9.7 5 7.2 4.7 4.4 5.3v12.5c2.8-.6 5.3-.3 7.6 1.1 2.3-1.4 4.8-1.7 7.6-1.1V5.3C16.8 4.7 14.3 5 12 6.4z"/><path d="M12 6.4V19"/></svg>',
-    vocab:     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3.4" y="8" width="12.6" height="10" rx="2"/><path d="M7.6 8V6.4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2V14a2 2 0 0 1-2 2"/><path d="M6.4 12.4h6M6.4 15h4"/></svg>',
-    reading:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 3.5h7l4 4v13h-11z"/><path d="M13.5 3.5v4h4"/><path d="M9 12h6M9 15.2h6M9 8.8h3"/></svg>',
-    listening: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5 14v-2a7 7 0 0 1 14 0v2"/><rect x="3.4" y="13.4" width="3.8" height="6.2" rx="1.7"/><rect x="16.8" y="13.4" width="3.8" height="6.2" rx="1.7"/></svg>',
-    use:       '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 6.4a2 2 0 0 1 2-2h11a2 2 0 0 1 2 2v6.8a2 2 0 0 1-2 2H10l-4 3.4v-3.4H6.5a2 2 0 0 1-2-2z"/><path d="M8 8.8h8M8 11.8h5"/></svg>'
+    /* libro abierto (i-book del sistema) */
+    grammar:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5.2A1.7 1.7 0 0 1 4.7 3.5h5.6A1.7 1.7 0 0 1 12 5.2v14a1.4 1.4 0 0 0-1.4-1.4H3z"/><path d="M21 5.2a1.7 1.7 0 0 0-1.7-1.7h-5.6A1.7 1.7 0 0 0 12 5.2v14a1.4 1.4 0 0 1 1.4-1.4H21z"/></svg>',
+    /* fichas de vocabulario (i-grid del sistema) */
+    vocab:     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="3.5" width="7" height="7" rx="1.6"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.6"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.6"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.6"/></svg>',
+    /* pliego con renglones */
+    reading:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3.5h7.6L18 7.9V20.5H6z"/><path d="M13.4 3.5v4.6H18"/><path d="M9 12.4h6M9 15.6h6"/></svg>',
+    /* auriculares (i-audio del sistema) */
+    listening: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14v-2a8 8 0 0 1 16 0v2"/><rect x="2.5" y="13.5" width="4" height="7" rx="1.6"/><rect x="17.5" y="13.5" width="4" height="7" rx="1.6"/><path d="M9.5 9.5v5M12 7.5v9M14.5 10.5v3"/></svg>',
+    /* dos bocadillos (i-speech del sistema) */
+    use:       '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6.5A2.5 2.5 0 0 1 5.5 4h7A2.5 2.5 0 0 1 15 6.5v3A2.5 2.5 0 0 1 12.5 12H8l-3.2 2.6a.4.4 0 0 1-.65-.31V12H5.5A2.5 2.5 0 0 1 3 9.5z"/><path d="M9 15.2a2.5 2.5 0 0 0 2.4 1.8h4.1l3.2 2.6a.4.4 0 0 0 .65-.31V17h.15A2.5 2.5 0 0 0 22 14.5v-3A2.5 2.5 0 0 0 19.5 9H18"/></svg>'
   };
   function skillIcon(sk) { return '<span class="skill-ic" aria-hidden="true">' + (SKILL_ICONS[sk] || "") + '</span>'; }
-  /* glifo de estado del nodo de lección (check / play / candado) en SVG */
+  /* glifo de estado del nodo de lección.
+     - completada: la palomita entre dos ramas de laurel (sello de conquista,
+       no un simple tic suelto perdido dentro del medallón);
+     - disponible: el play EN CONTORNO (i-play), no macizo;
+     - bloqueada: candado grabado, sin el punto relleno que lo emborronaba. */
   function nodeGlyph(state) {
-    if (state === "completed") return '<svg class="wglyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.6l4.6 4.6L19 7.4"/></svg>';
-    if (state === "locked")    return '<svg class="wglyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="10.5" width="14" height="9.5" rx="2.3"/><path d="M8 10.5V7.6a4 4 0 0 1 8 0v2.9"/><circle cx="12" cy="15" r="1.4" fill="currentColor" stroke="none"/></svg>';
-    return '<svg class="wglyph" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M8.5 5.5v13l10.5-6.5z"/></svg>';
+    var o = '<svg class="wglyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">';
+    if (state === "completed") {
+      /* Sólo la palomita, bien plantada. Probé a rodearla de dos ramas de
+         laurel y a 28px las ramas se leían como un par de paréntesis: "(v)".
+         El medallón ya es un aro, y el aro de oro con su velo es lo que dice
+         "conquistada"; al glifo le basta con confirmarlo. */
+      return o + '<path d="m6.6 12.3 3.5 3.6 7.3-7.8"/></svg>';
+    }
+    if (state === "locked") {
+      return o + '<rect x="5.6" y="10.8" width="12.8" height="9" rx="2.2"/>'
+        + '<path d="M8.8 10.8V8.2a3.2 3.2 0 0 1 6.4 0v2.6"/>'
+        + '<path d="M12 14.2v2.2"/></svg>';
+    }
+    return o + '<path d="M8 5.4v13.2l11-6.6z"/></svg>';
   }
-  /* escudo SVG (jefe) — reemplaza el emoji 🛡️ */
-  function shieldSvg(cls) { return '<svg class="' + (cls || "") + '" viewBox="0 0 24 26" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.5l8 3v6c0 5.4-3.6 8.6-8 10.6C7.6 20.1 4 16.9 4 11.5v-6z"/><path d="M8.4 12.2l2.7 2.7 4.5-4.9"/></svg>'; }
+  /* escudo SVG (jefe) — reemplaza el emoji 🛡️ (i-shield del sistema) */
+  function shieldSvg(cls) { return '<svg class="' + (cls || "") + '" viewBox="0 0 24 26" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.8l8 3v6.2c0 4.5-3.3 8.5-8 9.8-4.7-1.3-8-5.3-8-9.8V5.8z"/><path d="m8.8 12.4 2.6 2.6 4.4-4.8"/></svg>'; }
 
   /* Retrato temático del guardián de cada mundo (SVG, hereda el color del
      acento del mundo via .boss-emblem). C2 es un caballero, como el resto
@@ -2146,7 +2986,10 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     return '<img class="boss-photo" src="' + src + '" alt="" loading="lazy" decoding="async" onerror="window.__vbossFallback(this,\'' + lv + '\')">';
   }
   /* style inline con las 3 variables del mundo (acento/soft/glow) */
-  function worldVars(t) { return '--w-accent:' + t.accent + ';--w-accent-soft:' + t.accentSoft + ';--w-glow:' + t.glow; }
+  /* accentInk = variante oscura del acento, legible como TEXTO o como fondo
+     de chip con texto blanco (>=5.5:1). El acento normal solo vale para
+     trazos, glows y superficies grandes. */
+  function worldVars(t) { return '--w-accent:' + t.accent + ';--w-accent-soft:' + t.accentSoft + ';--w-glow:' + t.glow + ';--w-accent-ink:' + (t.accentInk || t.accent) + ';'; }
   /* capa ambiental reutilizable (N partículas <i>); mapMod=true para la del mapa */
   function ambLayer(n, mapMod) { var dots = ""; for (var i = 0; i < n; i++) dots += "<i></i>"; return '<div class="wamb' + (mapMod ? ' wamb--map' : '') + '" aria-hidden="true">' + dots + '</div>'; }
 
@@ -2161,44 +3004,6 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
   }
   /* pseudo-aleatorio determinista (estable entre re-medidas/resize) */
   function trnd(i) { var x = Math.sin(i * 127.1 + 17.3) * 43758.5453; return x - Math.floor(x); }
-  /* héroe (gran motivo firmado) y estilo de silueta lateral por mundo */
-  var HERO_KIND = { A1: "hero_cottage", A2: "hero_oak", B1: "hero_lighthouse", B2: "hero_tower", C1: "hero_planet", C2: "hero_castle" };
-  function silStyle(world) {
-    switch (world) {
-      case "A1": return { segH: 64, amp: 16, baseW: 24, mode: "smooth" };  // colinas
-      case "A2": return { segH: 30, amp: 30, baseW: 22, mode: "spiky" };   // copas de bosque
-      case "B1": return { segH: 52, amp: 24, baseW: 26, mode: "step" };    // tejados de ciudad
-      case "B2": return { segH: 64, amp: 34, baseW: 24, mode: "jag" };     // picos
-      case "C1": return { mode: "none" };                                   // espacio: sin masas
-      case "C2": return { segH: 44, amp: 32, baseW: 24, mode: "spiky" };   // almenas/agujas
-      default:   return { segH: 60, amp: 20, baseW: 24, mode: "smooth" };
-    }
-  }
-  /* masa de terreno continua a lo largo de un borde (banco/treeline/skyline).
-     Dibuja 2 capas (atrás/oscura + frente) + filo de acento para dar profundidad. */
-  function sideMass(side, W, H, SIL) {
-    if (!SIL || SIL.mode === "none") return "";
-    var L = (side === "L"), n = Math.ceil((H + 40) / SIL.segH), sd = L ? 311 : 417;
-    function inset(i, lay) {
-      var t = trnd(sd + i * 1.7 + lay * 23), base = SIL.baseW + lay * 9;
-      if (SIL.mode === "spiky") return base + (i % 2 ? SIL.amp : SIL.amp * 0.12);
-      if (SIL.mode === "step")  return base + (Math.floor(i / 2) % 2 ? SIL.amp : 2);
-      if (SIL.mode === "jag")   return base + t * SIL.amp;
-      return base + (0.5 + 0.5 * Math.sin(i * 0.9)) * SIL.amp * 0.7 + t * 4;   // smooth
-    }
-    function body(lay, cls) {
-      var outX = L ? -30 : W + 30, i, x, ins = inset(0, lay);
-      x = L ? ins : W - ins;
-      var d = "M " + outX + " -30 L " + x.toFixed(1) + " -20";
-      for (i = 1; i <= n; i++) { ins = inset(i, lay); x = L ? ins : W - ins; d += " L " + x.toFixed(1) + " " + (-20 + i * SIL.segH); }
-      d += " L " + outX + " " + (H + 30) + " Z";
-      return '<path class="' + cls + '" d="' + d + '"/>';
-    }
-    var i, x, ins, rim = "";                                  // filo de acento sobre el contorno del frente
-    for (i = 0; i <= n; i++) { ins = inset(i, 0); x = L ? ins : W - ins; rim += (i ? " L " : "M ") + x.toFixed(1) + " " + (-20 + i * SIL.segH); }
-    return body(1, "sil2") + body(0, "sil") + '<path class="sil-rim" d="' + rim + '"/>';
-  }
-
   /* una pieza de paisaje (kind) como <g> SVG escalado/posicionado. La parte viva
      (follaje, banderas, humo, haz) va en sub-grupos con clase (.sway/.flag/.smoke/
      .beam) para animarse SIN tocar el transform de colocación. depth='far'|'near'
@@ -2246,61 +3051,12 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     }
   }
 
-  /* genera el paisaje en CAPAS alrededor del camino (evita los nodos):
-     masas laterales continuas (atrás) + héroe del mundo + grupos de props
-     "asentados" en repisas de suelo, ordenados por Y para solaparse con
-     profundidad. trnd(seed) mantiene todo estable entre re-medidas/resize. */
-  function terrainSvgInner(pts, W, H, biome, world, firstY) {
-    biome = (biome && biome.length) ? biome : ["pine", "bush", "rock"];
-    function pick(seed) { return biome[Math.floor(trnd(seed) * biome.length) % biome.length]; }
-    function near(px, py) { for (var j = 0; j < pts.length; j++) { var dx = pts[j][0] - px, dy = pts[j][1] - py; if (dx * dx + dy * dy < 72 * 72) return true; } return false; }
-    var SIL = silStyle(world);
-    var masses = sideMass("L", W, H, SIL) + sideMass("R", W, H, SIL);   // masas continuas (fondo)
-    var ground = "", arr = [];
-
-    /* héroe del mundo: una vez, arriba, en el margen, sin pisar nodos */
-    var heroK = HERO_KIND[world];
-    if (heroK) {
-      var hy = Math.max(64, (firstY || 80) + 46), hx = 48;   // 48 >= rx(25)*scale(1.75) ≈ 44 => no se sale del borde
-      if (near(hx, hy)) hx = W - 48;
-      if (!near(hx, hy)) {
-        ground += '<ellipse class="ground" cx="' + hx + '" cy="' + (hy + 7) + '" rx="24" ry="5"/>';
-        arr.push({ y: hy, svg: terrainProp(hx, hy, 1.75, heroK, "", null) });
-      }
-    }
-
-    /* grupos (clusters) a cada margen, asentados en una repisa de suelo */
-    var y, k = 0, step = 64;
-    for (y = 48; y < H - 26; y += step) {
-      k++;
-      var sides = [["L", y, k], ["R", y + 26, k + 90]];
-      for (var si = 0; si < sides.length; si++) {
-        var sideL = sides[si][0] === "L", baseY = sides[si][1], seed = sides[si][2];
-        var dmode = (seed % 3 === 0) ? "far" : (seed % 3 === 1 ? "near" : "mid");
-        var nprops = 1 + (trnd(seed * 1.3) > 0.58 ? 1 : 0);     // 1–2 piezas
-        var margin = 9, cx = 0, cn = 0;
-        for (var c = 0; c < nprops; c++) {
-          var off = c * 14;
-          var x = sideL ? (margin + off + trnd(seed + c) * 5) : (W - margin - off - trnd(seed + c) * 5);
-          var yy = baseY - c * 3;
-          if (near(x, yy)) continue;
-          var kind = pick(seed * 5 + c * 7);
-          var sc = (dmode === "far") ? (0.5 + trnd(seed + c) * 0.22)
-                 : (dmode === "near") ? (1.05 + trnd(seed + c) * 0.4)
-                 : (0.78 + trnd(seed + c) * 0.4);
-          var delay = trnd(seed * 3 + c) * 6;
-          arr.push({ y: yy + (dmode === "near" ? 6 : 0), svg: terrainProp(x, yy, sc, kind, dmode, delay) });
-          cx += x; cn++;
-        }
-        if (cn) ground += '<ellipse class="ground" cx="' + (cx / cn).toFixed(1) + '" cy="' + (baseY + 4) + '" rx="' + (12 + nprops * 6) + '" ry="4"/>';
-      }
-    }
-    arr.sort(function (a, b) { return a.y - b.y; });               // cerca (Y mayor) se pinta encima
-    var props = "";
-    for (var i = 0; i < arr.length; i++) props += arr[i].svg;
-    /* .wsil envuelve las masas (fondo) para poder rezagarlas con parallax al hacer scroll */
-    return '<g class="wsil">' + masses + '</g>' + ground + props;  // z: masas < suelo < props
-  }
+  /* El generador de terreno (terrainSvgInner + sideMass + silStyle +
+     HERO_KIND) se retiró: sembraba ~834 formas SVG y 52 KB de marcado
+     por trazado, y a la opacidad a la que se pintaba no se leía como
+     paisaje sino como ruido recortado en los márgenes. Lo sustituye la
+     lámina grabada del mundo (.wmotif). terrainProp SIGUE vivo: de él
+     cuelga biomeMotif, la miniatura que recibe al entrar en la lección. */
   /* mini-escena del bioma (3 piezas) para recibirte al empezar una lección del mundo */
   function biomeMotif(lv) {
     var th = WORLD_THEME[lv]; var b = (th && th.biome && th.biome.length) ? th.biome : ["pine", "bush", "rock"];
@@ -2366,14 +3122,6 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     svg.setAttribute("width", W); svg.setAttribute("height", H);
     var paths = svg.querySelectorAll("path");
     for (i = 0; i < paths.length; i++) paths[i].setAttribute("d", d);
-    /* capa de terreno: paisaje (árboles/rocas) alrededor del camino */
-    var terr = map.querySelector(".wterrain");
-    if (terr) {
-      terr.setAttribute("viewBox", "0 0 " + W + " " + H);
-      terr.setAttribute("width", W); terr.setAttribute("height", H);
-      var bw = WORLD_THEME[map.getAttribute("data-world")];
-      terr.innerHTML = terrainSvgInner(pts, W, H, bw && bw.biome, map.getAttribute("data-world"), pts[0] ? pts[0][1] : 0);
-    }
     if (!avatar) return;
 
     /* longitud de arco acumulada en cada nodo => offset-distance exacto.
@@ -2391,13 +3139,16 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
 
     var cur = parseInt(map.getAttribute("data-cur"), 10); if (isNaN(cur)) cur = 0;
     var prev = parseInt(map.getAttribute("data-prev"), 10);
-    /* cuenta-cometa: longitud total del trazo (para el bucle) + posición de
-       reposo = nodo actual (para prefers-reduced-motion: el haz se aparca ahí). */
-    var comet = svg.querySelector(".wtrail-comet");
-    if (comet) {
-      comet.style.setProperty("--total", total.toFixed(1) + "px");
-      comet.style.setProperty("--rest", pctAt(cur).toFixed(1));
-      comet.style.setProperty("animation-play-state", "running");   // arranca con --total ya medido (evita el salto del primer ciclo)
+    /* trecho ANDADO en oro macizo: mismo "d" que el resto, pero el trazo se
+       corta con dasharray a la longitud de arco del nodo actual. Antes la veta
+       dorada cubría el camino entero y no distinguías lo hecho de lo que falta.
+       Si el gato está en la primera parada no hay nada recorrido: se oculta
+       (un dash de 0 con linecap:round pintaría un punto suelto). */
+    var done = svg.querySelector(".wtrail-done");
+    if (done) {
+      var travelled = lens[Math.max(0, Math.min(lens.length - 1, cur))] || 0;
+      done.setAttribute("stroke-dasharray", travelled.toFixed(1) + " 99999");
+      done.style.display = travelled > 1 ? "" : "none";
     }
     var canOffset = !!(window.CSS && CSS.supports && CSS.supports("offset-path", 'path("M0 0")'));
     var animate = !isNaN(prev) && prev !== cur && !reduceMotion();
@@ -2477,7 +3228,14 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
   function worldsRibbon(built, selLevel) {
     var lockSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="10.7" width="14" height="9" rx="2.2"/><path d="M8 10.7V7.7a4 4 0 0 1 8 0v3"/></svg>';
     var chkSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.6l4.6 4.6L19 7.4"/></svg>';
-    var html = PATH.LEVELS.map(function (lv) {
+    /* Quien empieza veía SEIS mundos de los que CINCO decían "Bloqueado",
+       antes siquiera de ver algo que pudiera tocar. Por defecto mostramos
+       sólo los mundos a los que ya puede entrar; el resto, tras un botón. */
+    var levels = PATH.LEVELS.filter(function (lv) {
+      return _worldsExpanded || PATH.regionUnlocked(lv, built) || lv === selLevel;
+    });
+    _worldsLockedN = PATH.LEVELS.length - levels.length;
+    var html = levels.map(function (lv) {
       var pr = PATH.levelProgress(lv, built), t = WORLD_THEME[lv] || {};
       var nm = WORLD_SHORT[lv] || t.worldName || lv, tag = WORLD_TAG[lv] || "";
       var done = pr.done, total = pr.total, pct = pr.pct, complete = total > 0 && done >= total;
@@ -2514,18 +3272,27 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
   function worldsSection(built, selLevel) {
     var totalDone = Object.keys(built.completed || {}).length;
     var totalAll = (built.order || []).length;
+    var ribbon = worldsRibbon(built, selLevel);   /* fija _worldsLockedN */
+    var moreWorlds = (_worldsLockedN > 0)
+      ? '<button class="worlds-more" type="button" id="worldsMore" aria-expanded="false">'
+        + 'Ver los ' + _worldsLockedN + ' mundos que faltan</button>'
+      : "";
     return '<section class="worlds-sec" aria-label="Selección de mundo">'
       + '<div class="worlds-sec__head"><div>'
-      + '<h2 class="worlds-sec__ttl">Elige tu mundo</h2>'
-      + '<p class="worlds-sec__sub">Tu travesía de A1 a C2</p></div>'
+      + '<h2 class="worlds-sec__ttl">Tu travesía</h2>'
+      + '<p class="worlds-sec__sub">Seis mundos, de principiante a maestría</p></div>'
       + '<span class="worlds-sec__meta"><span class="worlds-sec__big">' + totalDone + '</span>'
       + '<span class="worlds-sec__small">/ ' + totalAll + ' lecciones</span></span></div>'
-      + worldsRibbon(built, selLevel) + '</section>';
+      + ribbon + moreWorlds + '</section>';
   }
 
   /* mapa: id de lección -> índice de parada en el render actual (para animar al avatar);
      AVATAR_LESSON = id de la lección donde descansa el gato (o "boss:NIVEL" si el mundo está listo). */
   var TRAIL_STOPS = {}, _indexFirst = true, AVATAR_LESSON = null;
+  /* ¿el sendero muestra el mundo entero o sólo hasta donde llega la persona? */
+  var _mapExpanded = false;
+  /* ¿la cinta muestra los seis mundos o sólo los alcanzables? */
+  var _worldsExpanded = false, _worldsLockedN = 0;
 
   function nodeHtml(lid, built, currentId, dx, stop) {
     var l = L[lid]; if (!l) return "";
@@ -2561,8 +3328,8 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     var mastered = !!((stt.achievements || {})["master:" + selLevel + ":" + sk]);
     var rsc = PATH.getScore(rid);
     var aria = "Mini-reto de " + meta.label + (mastered ? ", superado" + (rsc != null ? ", mejor " + rsc + " por ciento" : "") : ", desafío de destreza disponible");
-    var crest = '<svg viewBox="0 0 28 30" width="26" height="28" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true">'
-      + '<path d="M14 2l10 4v8c0 7-5 11-10 14C9 25 4 21 4 14V6z"/><path d="M10 14l3 3 6-6"/></svg>';
+    var crest = '<svg class="wcrest" viewBox="0 0 28 30" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true">'
+      + '<path d="M14 2.4l9.6 3.7v7.7c0 6.6-4.8 10.6-9.6 13.4-4.8-2.8-9.6-6.8-9.6-13.4V6.1z"/><path d="m10.2 14.4 3 3 5.6-5.8"/></svg>';
     return '<div class="wnode mini' + (mastered ? " done" : "") + '" data-stop="' + stop + '" style="--dx:' + dx + 'px">'
       + '<span class="wlabel mini-lb">Mini-reto</span>'
       + '<button class="wbtn castle mini' + (mastered ? " completed" : "") + '" data-go="' + esc(rid) + '" aria-label="' + esc(aria) + '">' + crest + '</button>'
@@ -2575,9 +3342,9 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     var available = PATH.bossUnlocked(selLevel, built);   // el jefe siempre se puede enfrentar
     var passed = !!(P && P.bossPassed && P.bossPassed(selLevel));
     var bid = "boss:" + selLevel;
-    var beacon = '<svg viewBox="0 0 32 34" width="34" height="36" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true">'
-      + '<path class="beam" d="M16 6.4 19 1.6M16 6.4 13 1.6M16 6.4l6-1.4M16 6.4l-6-1.4"/>'
-      + '<circle cx="16" cy="7.2" r="2.4" fill="currentColor" stroke="none"/>'
+    var beacon = '<svg class="wbeacon" viewBox="0 0 32 34" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true">'
+      + '<path class="beam" d="M16 5.6 18.8 1.4M16 5.6 13.2 1.4M16 5.6l5.6-1.2M16 5.6l-5.6-1.2"/>'
+      + '<circle cx="16" cy="7.4" r="2.2"/>'
       + '<path d="M12 31h8M12.8 31l1.4-12h3.6l1.4 12M12 19h8l-1-4.4h-6z"/></svg>';
     var cls = "wbtn boss", attr, label, title, aria;
     if (passed) {
@@ -2601,6 +3368,57 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       + (passed ? '<span class="wbridge" aria-hidden="true"></span>' : '') + '</div>';
   }
 
+  /* ===== El decorado del mundo ==============================================
+     Piezas ilustradas (casa, farol, pino, torre, cristal…) generadas en el
+     estilo grabado de la marca —navy con filete de oro— y recortadas a WEBP
+     transparente por _scripts/slice_map_props.py.
+
+     Vienen a sustituir a las ~834 formas que el generador de terreno sembraba
+     por los márgenes: aquéllas se pintaban al 20 % de opacidad y salían medio
+     recortadas por el borde, así que no leían como paisaje sino como ruido.
+     Éstas son DOCE, van a tamaño real y a plena opacidad, y están colocadas a
+     mano para que no pisen ni el sendero ni los rótulos.
+     ========================================================================= */
+  var WORLD_PROPS = {
+    A1: ["p_a1_1", "p_a1_2", "p_a1_3", "p_a1_4", "p_a1_5"],   /* casa, farol, seto, árbol, pozo */
+    A2: ["p_a2_1", "p_a2_2", "p_a2_3", "p_a2_4", "p_a2_5"],   /* pino, setas, roca, poste, helecho */
+    B1: ["p_b1_1", "p_b1_2", "p_b1_4", "p_b1_5"],             /* casa, reloj, torre, topiario */
+    B2: ["p_b2_1", "p_b2_2", "p_b2_3", "p_b2_4"],             /* rascacielos, obelisco, cima, arco */
+    C1: ["p_c1_1", "p_c1_2", "p_c1_4", "p_c1_5"],             /* planeta, cristales, estrella, rosa */
+    C2: ["p_c2_1", "p_c2_2", "p_c2_3", "p_c2_4"]              /* torreón, arco, cristal, cofre */
+  };
+  /* Los huecos: alto en % del mapa, margen, sangrado en % y CAJA en px.
+     La caja se da como máximo de ancho Y de alto, no como ancho a secas: las
+     piezas van de 52x200 (el farol) a 200x110 (el banco), así que fijando sólo
+     el ancho el farol salía de 220px de alto y se comía la pantalla. Con una
+     caja, cada pieza se ajusta dentro conservando su proporción y todas pesan
+     lo mismo en la composición.
+
+     El mapa mide 340 y los nodos vagan ±64 desde el centro, así que a cada
+     lado queda una franja de ~76px: de ahí que ninguna caja pase de 84. */
+  var PROP_SLOTS = [
+    { t:  7, s: "L", o: 0, w: 84, h: 78 }, { t: 14, s: "R", o: 1, w: 62, h: 88 },
+    { t: 21, s: "L", o: 2, w: 58, h: 58 }, { t: 29, s: "R", o: 0, w: 78, h: 76 },
+    { t: 37, s: "L", o: 1, w: 72, h: 82 }, { t: 45, s: "R", o: 3, w: 54, h: 56 },
+    { t: 53, s: "L", o: 0, w: 82, h: 80 }, { t: 61, s: "R", o: 1, w: 66, h: 70 },
+    { t: 69, s: "L", o: 3, w: 56, h: 58 }, { t: 77, s: "R", o: 0, w: 76, h: 78 },
+    { t: 85, s: "L", o: 1, w: 62, h: 66 }, { t: 93, s: "R", o: 2, w: 58, h: 62 }
+  ];
+  function propsLayer(lv) {
+    var set = WORLD_PROPS[lv];
+    if (!set || !set.length) return "";
+    var h = '<div class="wprops" aria-hidden="true">';
+    for (var i = 0; i < PROP_SLOTS.length; i++) {
+      var s = PROP_SLOTS[i];
+      /* el desfase evita que la misma pieza caiga siempre en el mismo lado */
+      var f = set[(i + (i > 5 ? 2 : 0)) % set.length];
+      h += '<img src="assets/images/map/' + f + '.webp" alt="" loading="lazy" decoding="async"'
+        + ' style="top:' + s.t + '%;' + (s.s === "L" ? "left" : "right") + ':' + s.o + '%;'
+        + 'max-width:' + s.w + 'px;max-height:' + s.h + 'px">';
+    }
+    return h + '</div>';
+  }
+
   function worldMap(selLevel, built) {
     var g = built.levels[selLevel];
     var banner = worldBanner(selLevel, built);
@@ -2614,16 +3432,43 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       var ids = g.bySkill[sk]; if (!ids) return;
       ids.forEach(function (id) { if (!localCurId && PATH.status(id, built) === "open") localCurId = id; });
     });
+    /* ---- pliegue del sendero ----------------------------------------
+       Un mundo trae hasta 47 lecciones y para quien empieza 42 están
+       bloqueadas: el mapa medía 7.300px y la única lección jugable caía
+       fuera de pantalla. Por defecto dibujamos sólo hasta el grupo de
+       destreza donde está la persona; el resto se ofrece con un botón.
+
+       Se pliega ANTES de generar, no con CSS: paintTrail() mide el rect
+       de cada [data-stop] y data-cur es un índice dentro de esa lista,
+       así que ocultar nodos ya renderizados descuadraría sendero y gato.
+       Al generar menos paradas, si/curStop/TRAIL_STOPS siguen cuadrando. */
+    /* Dentro de cada destreza sólo dibujamos hasta un poco más allá de donde
+       llega la persona: lo alcanzado + LOOKAHEAD candados como zanahoria. Una
+       destreza totalmente bloqueada no se dibuja. Así el sendero pasa de 47
+       paradas a ~15 sin dejar de ser continuo. */
+    var LOOKAHEAD = 2, hiddenN = 0;
     var si = 0, curStop = -1, parts = "";
     TRAIL_STOPS = {};
     PATH.SKILL_ORDER.forEach(function (sk) {
       var ids = g.bySkill[sk]; if (!ids || !ids.length) return;
       var meta = PATH.SKILLS[sk];
       var doneN = ids.filter(function (id) { return built.completed[id]; }).length;
+
+      var vis = ids;
+      if (!_mapExpanded) {
+        var lastReach = -1, k;
+        for (k = 0; k < ids.length; k++) if (PATH.status(ids[k], built) !== "locked") lastReach = k;
+        if (lastReach < 0) { hiddenN += ids.length; return; }   /* destreza aún fuera de alcance */
+        vis = ids.slice(0, Math.min(ids.length, lastReach + 1 + LOOKAHEAD));
+        hiddenN += ids.length - vis.length;
+      }
+
+      var ckPct = ids.length ? Math.round((doneN / ids.length) * 100) : 0;
       parts += '<div class="wcheck" role="separator" aria-label="' + esc(meta.label) + ', ' + doneN + ' de ' + ids.length + ' completadas">'
         + '<span class="ck-ic" aria-hidden="true">' + (SKILL_ICONS[sk] || "") + '</span>' + esc(meta.label)
-        + '<span class="ct">' + doneN + '/' + ids.length + '</span></div>';
-      ids.forEach(function (id) {
+        + '<span class="ct">' + doneN + '/' + ids.length + '</span>'
+        + '<span class="ck-bar" aria-hidden="true"><i style="width:' + ckPct + '%"></i></span></div>';
+      vis.forEach(function (id) {
         if (id === localCurId) curStop = si;
         TRAIL_STOPS[id] = si;
         parts += nodeHtml(id, built, localCurId, dxFor(si), si); si++;
@@ -2638,20 +3483,46 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     if (curStop < 0) curStop = bossStop;            // mundo completo => el gato espera junto al jefe
     AVATAR_LESSON = localCurId || ("boss:" + selLevel);
     var t = WORLD_THEME[selLevel] || {};
-    var terrain = t.file ? (";--w-terrain:url(" + t.file + ")") : "";
+    /* El terreno de la isla NO puede ser el mismo archivo que el banner: al
+       repetir la misma lámina arriba (cabecera) y abajo (fondo de la isla) se
+       veía como dos imágenes encimadas. Cada superficie lleva la suya. */
+    var terrainSrc = WORLD_TERRAIN[selLevel] || "";
+    var terrain = terrainSrc ? (";--w-terrain:url(" + terrainSrc + ")") : "";
     var startPennant = '<div class="wstart" aria-hidden="true"><span>' + (WORLD_UMBRAL[selLevel] || ('Mundo ' + worldNo)) + '</span></div>';
-    var pj = currentPelaje();
-    var scene = '<div class="wsky">'
+    var pj = currentLook();
+    /* worldVars también en .wsky: el resplandor del horizonte y el color de
+       la noche viven ahí, y .wsky es PADRE de .wisland, así que no heredaba
+       el acento del mundo (se quedaba en el oro por defecto en los 6). */
+    var scene = '<div class="wsky" style="' + worldVars(t) + '">'
       + '<div class="wisland" data-world="' + selLevel + '" style="' + worldVars(t) + terrain + '">'
       + '<div class="watmo" aria-hidden="true"></div>'
       + '<div class="wmap" id="wmap" data-world="' + selLevel + '" data-cur="' + curStop + '" style="' + worldVars(t) + '">'
-      + '<svg class="wterrain terr" aria-hidden="true" focusable="false" preserveAspectRatio="none"></svg>'
-      + '<svg class="wtrail" aria-hidden="true" focusable="false" preserveAspectRatio="none"><path class="wtrail-base"/><path class="wtrail-road"/><path class="wtrail-tex"/><path class="wtrail-glow"/><path class="wtrail-line"/><path class="wtrail-comet"/></svg>'
-      + '<div class="wavatar' + (pj.animal ? ' has-pelaje' : '') + '" aria-hidden="true"><img class="wcat" src="' + pj.src + '" alt="" decoding="async">'
-      + '<span class="wacc">' + currentAccessorySvg() + '</span></div>'
+      /* El paisaje: TRES hitos grabados repartidos a lo largo del recorrido,
+         sacados de las láminas que ya ilustran ese mundo y recortados a
+         máscara alfa, así que el color lo pone el acento y no el archivo.
+         Sustituye a las ~834 formas SVG que el generador sembraba por los
+         márgenes: allí eran casitas a medio recortar, aquí son lugares por
+         los que pasas. Tres elementos en lugar de ochocientos. */
+      + '<div class="wscape" aria-hidden="true"><i></i><i></i><i></i></div>'
+      + propsLayer(selLevel)
+      /* Sendero: tres trazos, no siete. .wtrail-bed es la calzada (le da
+         cuerpo al camino), .wtrail-line la ruta que falta —y la que MIDE el
+         avatar con offset-path—, .wtrail-done la pisa en oro hasta el nodo
+         actual. Se fueron road/tex/glow (la misma "d" pintada tres veces más)
+         y la cuenta-cometa, que animaba un drop-shadow en bucle infinito. */
+      + '<svg class="wtrail" aria-hidden="true" focusable="false" preserveAspectRatio="none"><path class="wtrail-bed"/><path class="wtrail-line"/><path class="wtrail-done"/></svg>'
+      + '<div class="wavatar' + (pj.animal ? ' has-pelaje' : '') + '" data-pelaje="' + pj.pelaje + '" aria-hidden="true">'
+      + '<img class="wcat" src="' + pj.src + '" alt="" decoding="async">'
+      + '<span class="wacc">' + pj.svg + '</span><span class="wfx" aria-hidden="true"></span></div>'
       + ambLayer(t.mapN || 3, true) + startPennant + parts
       + '</div></div></div>';
-    return banner + denEntryHtml(selLevel) + scene;
+    /* el botón vive FUERA de .wmap: no lleva data-stop y no entra en la medición */
+    var moreBtn = hiddenN > 0
+      ? '<div class="wmore"><button class="wmore__btn" type="button" id="mapMore">'
+        + 'Ver las ' + hiddenN + ' lecciones restantes de este mundo'
+        + '<span class="wmore__sub">Se desbloquean conforme avanzas</span></button></div>'
+      : "";
+    return banner + denEntryHtml(selLevel) + scene + moreBtn;
   }
 
   /* ============================================================
@@ -3325,8 +4196,159 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     each("[data-exam]", function (b) { b.onclick = function () { location.search = "?id=exam:" + encodeURIComponent(b.getAttribute("data-exam")); }; });
   }
 
+  /* ---- ¿qué sigue? ------------------------------------------------
+     Antes el hub abría con un saludo, tres ceros, un anuncio y seis
+     mundos de los que cinco decían "Bloqueado"; la única lección que
+     se podía tocar quedaba a 1.068px de scroll, fuera de pantalla.
+     nextUp() resuelve la siguiente acción real y nextStepCard() la
+     pone arriba del todo, que es la respuesta a "¿y ahora qué hago?". */
+  function nextUp(built, selLevel) {
+    var g = built.levels[selLevel];
+    if (!g || !g.total) return null;
+    var found = null;
+    PATH.SKILL_ORDER.forEach(function (sk) {
+      var ids = g.bySkill[sk]; if (!ids || found) return;
+      ids.forEach(function (id) {
+        if (found) return;
+        if (PATH.status(id, built) === "open") found = { id: id, skill: sk };
+      });
+    });
+    if (found) {
+      var l = L[found.id] || {};
+      return {
+        id: found.id,
+        title: l.title || found.id,
+        n: l.exercises ? l.exercises.length : 0,
+        xp: l.xpReward || 0,
+        tipo: tipoOf(l),
+        skill: (PATH.SKILLS[found.skill] || {}).label || "",
+        isBoss: false,
+        fresh: !Object.keys(built.completed || {}).length
+      };
+    }
+    /* mundo terminado: lo que sigue es el Guardián */
+    var bm = bossMeta(selLevel);
+    return { id: "boss:" + selLevel, title: bm.name, n: 0, xp: 0, tipo: "practica", skill: "", isBoss: true, pass: bm.pass, fresh: false };
+  }
+
+  function nextStepCard(built, selLevel) {
+    var nx = nextUp(built, selLevel);
+    if (!nx) return "";
+    var t = WORLD_THEME[selLevel] || {};
+    var verb = nx.isBoss ? "Enfrentar al Guardián" : (nx.fresh ? "Empezar" : "Continuar");
+    var eyebrow = nx.fresh ? "Tu primera lección" : (nx.isBoss ? "Prueba final del mundo" : "Continúa donde te quedaste");
+    var meta = nx.isBoss
+      ? 'Necesitas ' + nx.pass + '% para vencerlo'
+      : (nx.n + ' ejercicio' + (nx.n === 1 ? "" : "s") + ' &middot; unos ' + Math.max(2, Math.round(nx.n * 0.7)) + ' min &middot; +' + nx.xp + ' XP');
+    return '<section class="nextstep" style="' + worldVars(t) + '" aria-labelledby="nextstep-t">'
+      + '<span class="nextstep__ey">' + esc(eyebrow) + '</span>'
+      + '<h2 class="nextstep__t" id="nextstep-t">' + esc(nx.title) + '</h2>'
+      + '<p class="nextstep__meta">' + (nx.skill ? '<span class="nextstep__sk">' + esc(nx.skill) + '</span>' : "") + meta + '</p>'
+      + '<button class="nextstep__go" type="button" data-go="' + esc(nx.id) + '">' + verb
+      + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13"/><path d="m12 5 7 7-7 7"/></svg></button>'
+      + '</section>';
+  }
+
+  /* ---- primera visita: traducir el mundo temático ------------------
+     El hub habla de mundos, guardianes, senderos, rachas y XP sin
+     explicar ninguno. Para quien llega nuevo eso es ruido, no tema.
+     Se muestra una vez y se puede cerrar. */
+  /* ---- el paseo guiado ("cómo funciona esto") ----------------------
+     Antes esto era una tarjeta de viñetas: explicaba mundo / sendero /
+     Guardián / XP en texto, ANTES de que vieras la pantalla y sin
+     señalar nada. Había que emparejar cada palabra con un dibujo a
+     ojo. Ahora las mismas cuatro ideas se cuentan encima de los
+     elementos de verdad, con el foco de luz sobre cada uno
+     (vesper_tour.js). Se lanza solo la primera vez y queda un botón
+     para repetirlo, que antes no existía: si cerrabas el primer, no
+     había forma de volver a leerlo. */
+  var TOUR_KEY = "leccion-hub-v1";
+  var PRIMER_KEY = "vesper_leccion_primer";        /* legado: quien ya cerró el primer no recibe el paseo automático */
+  function tourSeen() {
+    try {
+      if (window.VESPER_TOUR && VESPER_TOUR.seen(TOUR_KEY)) return true;
+      return localStorage.getItem(PRIMER_KEY) === "1";
+    } catch (e) { return true; }
+  }
+  function tourSteps(selLevel) {
+    var wt = WORLD_THEME[selLevel] || {};
+    var wname = wt.worldName || "este mundo";
+    return [
+      { el: null,
+        title: "Te enseño esto en un minuto",
+        text: "Soy Vesper. Voy a señalarte una por una las cosas que necesitas para moverte por aquí. Puedes salir cuando quieras." },
+      { el: ".nextstep", pad: 10,
+        title: "Empieza siempre por aquí",
+        text: "Esta tarjeta es tu siguiente paso. Si algún día no sabes qué hacer, pulsa este botón y ya está: te lleva a la lección que te toca." },
+      { el: ".hub-stats3", pad: 10,
+        title: "Tu racha y tu XP",
+        text: "La racha son los días seguidos que practicas; el XP, los puntos que ganas en cada lección. No desbloquean el curso: miden tu constancia (y te consiguen accesorios)." },
+      /* el icono del HUD, no el botón flotante: ese se monta con retardo y
+         entra a opacity:0, así que el foco podría caer sobre un hueco */
+      { el: '.hub-ic[href="chat.html"]', shape: "circle", pad: 10,
+        title: "Puedes hablar conmigo",
+        text: "Aquí se abre el chat. Escríbeme o háblame en voz alta y practicamos inglés de verdad: preguntas, dudas de gramática o una conversación suelta. No hay lección que aprobar." },
+      { el: ".world-banner", pad: 8,
+        title: "Un mundo = un nivel",
+        text: "Ahora estás en " + wname + ". Hay seis mundos, del más básico al más avanzado, y cada uno tiene su propio paisaje y su color." },
+      { el: ".den-enter", pad: 8,
+        title: "Y el vocabulario, aparte",
+        text: "Además del sendero, cada mundo guarda su vocabulario agrupado por temas, con tarjetas y actividades para repasar palabras. Entra cuando quieras: no hace falta seguir ningún orden." },
+      { el: ".wbtn.is-current", shape: "circle", pad: 12,
+        title: "Aquí estás tú",
+        text: "El círculo grande y luminoso es tu lección de ahora. El camino dorado que llega hasta él es lo que ya llevas andado; lo que sigue en gris con el borde punteado todavía no está abierto." },
+      { el: ".wcheck", pad: 8,
+        title: "El sendero va por destrezas",
+        text: "Estos carteles agrupan las lecciones por lo que entrenan: vocabulario, gramática, escucha… La barra te dice cuánto llevas de ese grupo." },
+      { el: ".wbtn.boss", pad: 12,
+        title: "El Guardián del mundo",
+        text: "Al final de cada mundo hay un examen con su propio personaje. Vencerlo abre el mundo siguiente — y no hace falta terminar todas las lecciones para intentarlo." },
+      { el: ".wavatar", shape: "circle", pad: 14,
+        title: "Y este soy yo, contigo",
+        text: "Camino por el sendero hasta donde te has quedado. Según avanzas vas soltando colores, aspectos y accesorios para mí: puedes cambiármelos cuando quieras." },
+      { el: null,
+        title: "Listo, ya sabes leer el mapa",
+        text: "Si se te olvida algo, el botón «Cómo funciona» te trae otra vez este paseo. ¡Vamos a tu lección!" }
+    ];
+  }
+  function tourBarHtml() {
+    return '<div class="tourbar">'
+      + '<button class="tourbar__btn" type="button" id="tourGo">'
+      + '<span class="tourbar__ic" aria-hidden="true">' + (window.VESPER_ICN ? (VESPER_ICN.compass || VESPER_ICN.star || "") : "") + '</span>'
+      + '<span class="tourbar__tx"><b>Cómo funciona</b>'
+      + '<span>' + (tourSeen() ? "Repite el paseo guiado del mapa" : "Un paseo de un minuto por el mapa") + '</span></span>'
+      + '</button></div>';
+  }
+  /* No arranques el paseo encima de otra puerta bloqueante: la del nombre
+     obligatorio (vesper_name_gate.js) y el velo de la sesión (vsp-splash)
+     tapan la pantalla, así que el foco de luz señalaría a ciegas y los dos
+     diálogos se pelearían por el foco del teclado. En ese caso el paseo
+     espera: sigue sin marcarse como visto y saldrá en la siguiente carga.  */
+  function prefersNoTour() {
+    return !!(document.getElementById("vesper-name-gate") || document.getElementById("vsp-splash"));
+  }
+  /* lanza el paseo; devuelve false si no hay nada que señalar todavía */
+  var _tourLevel = null;                            /* mundo pintado ahora mismo (lo fija renderIndex) */
+  function startTour() {
+    if (!window.VESPER_TOUR) return false;
+    return VESPER_TOUR.start(tourSteps(_tourLevel), {
+      key: TOUR_KEY,
+      onEnd: function () {
+        try { localStorage.setItem(PRIMER_KEY, "1"); } catch (e) {}
+        var go = document.querySelector(".nextstep__go");
+        if (go && go.focus) go.focus();
+        var bar = byId("tourGo");
+        if (bar) {
+          var sub = bar.querySelector(".tourbar__tx span");
+          if (sub) sub.textContent = "Repite el paseo guiado del mapa";
+        }
+      }
+    });
+  }
+
   function renderIndex(selLevel) {
     clearLessonTheme();
+    _tourLevel = selLevel;                          /* el paseo nombra el mundo que estás viendo */
     var st = P ? P.getState() : { streak: 0, xp: 0, shields: 0 };
     var dg = (P && P.dailyGoal) ? P.dailyGoal() : null;
     var trophyHtml = buildTrophyShelf();
@@ -3397,31 +4419,54 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
         + '<span class="hc-cta">Repasar &rarr;</span></button>'
       : "";
     var examBanner = '<button class="hub-card" id="examGo" type="button">'
-      + '<span class="hc-ic" aria-hidden="true">' + CTA_ICON + '</span>'
+      + '<span class="hc-ic" aria-hidden="true">🎓</span>'
       + '<span class="hc-tx"><b>Examen de nivel</b><span>Evalúa tu dominio de A1 a C2</span></span>'
       + '<span class="hc-cta">Presentar &rarr;</span></button>';
+    /* Orden del hub, de más a menos urgente para quien aprende:
+       1) qué hago ahora  2) repaso pendiente  3) dónde estoy (mundos)
+       4) el mapa  5) todo lo demás. El anuncio del examen de nivel baja
+       al final: es venta, no aprendizaje, y antes era lo segundo que se
+       veía al abrir la página. */
     show('<div class="wrap">'
       + hudHtml(st, dg, hello, heroInfo)
-      + placementCard("leccion-hub")
-      + worldsSection(built, selLevel)
+      + nextStepCard(built, selLevel)
+      + tourBarHtml()
       + srsBanner
-      + examBanner
+      + worldsSection(built, selLevel)
       + searchUI
       + '<div id="searchResults" class="search-results" aria-live="polite" hidden></div>'
       + '<div id="levelView">' + worldMap(selLevel, built) + '</div>'
       + trophyHtml
+      + examBanner
+      + placementCard("leccion-hub")
       + '<div class="hub-toast" id="toast"></div>');
 
     bindCta();
     if (_indexFirst) track("hub_view", { level: selLevel });
     var srsGo = byId("srsGo"); if (srsGo) srsGo.onclick = function () { location.search = "?id=review:srs"; };
     var examGo = byId("examGo"); if (examGo) examGo.onclick = function () { location.search = "?id=exams"; };
-    each(".world[data-lvl]", function (b) { b.onclick = function () { renderIndex(b.getAttribute("data-lvl")); }; });
+    each(".world[data-lvl]", function (b) { b.onclick = function () { _mapExpanded = false; renderIndex(b.getAttribute("data-lvl")); }; });
     each(".world[data-locked-world]", function (b) { b.onclick = function () { toast("Vence al guardián del mundo anterior para desbloquearlo"); }; });
     each(".den-enter[data-den]", function (b) { b.onclick = function () { renderDen(b.getAttribute("data-den")); }; });
     each("[data-go]", function (b) { b.onclick = function () { location.search = "?id=" + encodeURIComponent(b.getAttribute("data-go")); }; });
     each("[data-locked]", function (b) { b.onclick = function () { toast("Completa la lección anterior para desbloquear"); }; });
     each("[data-locked-boss]", function (b) { b.onclick = function () { toast("Completa todas las lecciones del mundo para enfrentar al guardián"); }; });
+    var mapMore = byId("mapMore");
+    if (mapMore) mapMore.onclick = function () {
+      _mapExpanded = true;
+      renderIndex(selLevel);
+      announce("Mostrando el mundo completo");
+    };
+    var worldsMore = byId("worldsMore");
+    if (worldsMore) worldsMore.onclick = function () {
+      _worldsExpanded = true;
+      renderIndex(selLevel);
+      announce("Mostrando los seis mundos");
+    };
+    var tourGo = byId("tourGo");
+    if (tourGo) tourGo.onclick = function () {
+      if (!startTour()) toast("El paseo necesita el mapa cargado");
+    };
 
     /* ---- avatar: traza el sendero y decide si "camina" tras completar una lección ---- */
     (function () {
@@ -3438,6 +4483,15 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       bindTrailResize();
       bindParallax();
     })();
+    /* ---- paseo guiado la primera vez ----
+       Va DESPUÉS de paintTrail: el foco de luz mide el rect de los nodos, y
+       antes de trazar el sendero el gato y el Guardián aún no están en su
+       sitio. El margen extra deja además que asiente el scroll restaurado. */
+    if (_indexFirst && !tourSeen() && !prefersNoTour()) {
+      setTimeout(function () {
+        if (window.VESPER_TOUR && !VESPER_TOUR.active()) startTour();
+      }, 620);
+    }
     _indexFirst = false;
     gateAnims();
 
@@ -3730,21 +4784,19 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
   function advance() {
     /* punto único: results[exIdx] ya está fijado por el renderer. Actualiza combo
        y dispara un pequeño festejo cada 3 aciertos seguidos. */
-    var ungraded = results[exIdx] === "na";   /* speaking saltado/autoevaluado: neutro de verdad */
-    var wasOk = results[exIdx] === true;
-    if (ungraded) { /* no toca combo, SRS ni vidas */ }
-    else if (wasOk) { combo++; if (combo > maxCombo) maxCombo = combo; if (combo >= 3 && combo % 3 === 0) { burstConfetti(14); sfx("combo", combo); } }
+    var wasOk = !!results[exIdx];
+    if (wasOk) { combo++; if (combo > maxCombo) maxCombo = combo; if (combo >= 3 && combo % 3 === 0) { burstConfetti(14); sfx("combo", combo); } }
     else combo = 0;
     /* SRS: en repaso, califica el ítem; en lecciones normales, registra el fallo. */
     try {
-      if (!ungraded && window.VESPER_SRS) {
+      if (window.VESPER_SRS) {
         if (lesson.srsReview && lesson.srsIds) VESPER_SRS.grade(lesson.srsIds[exIdx], wasOk);
         else if (!wasOk && !lesson.isBoss) VESPER_SRS.record(lesson.lessonId, lesson.exercises[exIdx], { level: lesson.level });
       }
     } catch (e) {}
     /* Vidas (modo desafío, opcional): un fallo resta corazón. */
     var blocked = false;
-    if (!ungraded && !wasOk && window.VESPER_ECONOMY && VESPER_ECONOMY.livesActive && VESPER_ECONOMY.livesActive()) {
+    if (!wasOk && window.VESPER_ECONOMY && VESPER_ECONOMY.livesActive && VESPER_ECONOMY.livesActive()) {
       VESPER_ECONOMY.loseHeart();
       sfx("heartloss");
       if (VESPER_ECONOMY.hearts() <= 0) blocked = true;
@@ -3797,7 +4849,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
   }
   /* medidor del Guardián: su escudo se rompe con cada acierto previo */
   function bossMeterHtml(total) {
-    var hit = 0, i; for (i = 0; i < exIdx; i++) { if (results[i] === true) hit++; }
+    var hit = 0, i; for (i = 0; i < exIdx; i++) { if (results[i]) hit++; }
     var remain = Math.max(0, Math.round(100 * (1 - hit / Math.max(1, total))));
     var bm = bossMeta(lesson.bossLevel);
     return '<div class="boss-meter" style="' + worldVars(WORLD_THEME[lesson.bossLevel] || {}) + '">'
@@ -3807,19 +4859,21 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
   }
 
   function renderMCQ(ex, pct, total) {
-    var opts = ex.options.map(function (o, i) { return '<button class="opt" data-i="' + i + '">' + esc(o) + '</button>'; }).join("");
+    var opts = ex.options.map(function (o, i) {
+      return '<button class="opt" type="button" aria-pressed="false" data-i="' + i + '" lang="en">' + esc(o) + '</button>';
+    }).join("");
     show('<div class="wrap">' + exHeader(pct, total) + '<div class="card">'
-      + '<h2>' + esc(ex.question || "Elige la opcion correcta") + '</h2>'
-      + '<div class="opts">' + opts + '</div><div id="fb"></div>'
-      + '<button class="btn" id="verify" disabled>Verificar</button></div></div>');
+      + '<h2 lang="en">' + esc(ex.question || "Elige la opcion correcta") + '</h2>'
+      + '<div class="opts" role="group" aria-label="Opciones de respuesta">' + opts + '</div><div id="fb"></div>'
+      + '<button class="btn" id="verify" disabled aria-describedby="verify-hint">Verificar</button>'
+      + '<span class="sr-only" id="verify-hint">Elige una opción para poder verificar.</span></div></div>');
     var sel = -1, done = false;
     var optEls = document.querySelectorAll(".opt");
     each(".opt", function (b) {
       b.onclick = function () {
         if (done) return;
         sel = +b.getAttribute("data-i");
-        for (var x = 0; x < optEls.length; x++) optEls[x].classList.remove("sel");
-        b.classList.add("sel");
+        pickOne(optEls, b);
         byId("verify").disabled = false;
       };
     });
@@ -3827,14 +4881,12 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       if (done) { advance(); return; }
       done = true;
       var ok = sel === ex.correctIndex;
-      for (var x = 0; x < optEls.length; x++) {
-        var i = +optEls[x].getAttribute("data-i");
-        optEls[x].classList.add("locked");
-        if (i === ex.correctIndex) optEls[x].classList.add("correct");
-        if (i === sel && !ok) optEls[x].classList.add("wrong");
-      }
+      lockChoices(optEls,
+        function (el) { return +el.getAttribute("data-i") === ex.correctIndex; },
+        function (el) { return +el.getAttribute("data-i") === sel; });
       results[exIdx] = ok;
       byId("fb").innerHTML = feedbackBox(ok, ex.explanation || "", "Era: " + ex.options[ex.correctIndex]);
+      announceResult(ok, ok ? "" : "La respuesta era " + ex.options[ex.correctIndex]);
       setVerifyNext(this, total);
     };
   }
@@ -3973,11 +5025,8 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       try {
         var a = new Audio(audioPath);
         a.playbackRate = rate ? Math.max(0.5, Math.min(1, rate / 0.92)) : 1;
-        /* si el mp3 falta, play() rechaza Y dispara onerror: caer a TTS una sola vez */
-        var fell = false;
-        var fallback = function () { if (fell) return; fell = true; speakTTS(text, rate); };
-        a.play().catch(fallback);
-        a.onerror = fallback;
+        a.play().catch(function () { speakTTS(text, rate); });
+        a.onerror = function () { speakTTS(text, rate); };
         return;
       } catch (e) { /* cae a TTS */ }
     }
@@ -3997,6 +5046,44 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
   }
   function setVerifyNext(btn, total) {
     btn.textContent = (exIdx + 1 < total) ? "Siguiente" : "Ver resultados";
+  }
+
+  /* ============================================================
+     SEMÁNTICA COMPARTIDA DE LOS EJERCICIOS
+
+     Las opciones eran <button class="opt"> cuyo único estado era una
+     clase CSS: quien usa lector de pantalla no oía que había elegido
+     una opción, ni cuál era la correcta al verificar — el resultado
+     se comunicaba SOLO por color. Estos tres helpers lo arreglan de
+     una vez para todos los renderers.
+     ============================================================ */
+
+  /* selección exclusiva dentro de un grupo (elegir != confirmar, por eso
+     aria-pressed de botón y no radio: no cambiamos el modelo de teclado) */
+  function pickOne(els, chosen) {
+    for (var i = 0; i < els.length; i++) {
+      var on = els[i] === chosen;
+      els[i].classList.toggle("sel", on);
+      els[i].setAttribute("aria-pressed", on ? "true" : "false");
+    }
+  }
+
+  /* tras verificar: congela el grupo y dice en palabras qué fue cada opción */
+  function lockChoices(els, isCorrectFn, isChosenFn) {
+    for (var i = 0; i < els.length; i++) {
+      var el = els[i], good = isCorrectFn(el, i), mine = isChosenFn(el, i);
+      el.classList.add("locked");
+      el.setAttribute("aria-disabled", "true");
+      if (good) el.classList.add("correct");
+      if (mine && !good) el.classList.add("wrong");
+      var tag = good ? "Respuesta correcta" : (mine ? "Tu respuesta, incorrecta" : null);
+      if (tag) el.insertAdjacentHTML("beforeend", '<span class="sr-only"> (' + tag + ')</span>');
+    }
+  }
+
+  /* el veredicto, dicho en voz alta para quien no ve el color */
+  function announceResult(ok, detail) {
+    announce((ok ? "Correcto. " : "Incorrecto. ") + (detail || ""));
   }
 
   /* ---------- SPEAKING (reconocimiento de voz) ----------
@@ -4035,27 +5122,22 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       + '<button class="btn btn-ghost" id="slow">' + ic('rewind') + ' Más lento</button></div>'
       + (SR
           ? '<button class="btn mic-btn" id="mic">' + ic('mic') + ' Toca y habla</button><div class="heard" id="heard"></div>'
-          : '<p class="hint">' + ic('bulb') + 'Tu navegador no reconoce voz. Escucha y repítela en voz alta para practicar; no cuenta para tu calificación.</p>')
+          : '<p class="hint">' + ic('bulb') + 'Tu navegador no reconoce voz. Escucha y repite en voz alta; luego confírmalo tú.</p>')
       + '<div id="fb"></div>'
-      + '<button class="btn" id="verify"' + (SR ? ' disabled' : '') + '>' + (SR ? 'Verificar' : 'Ya lo practiqué') + '</button>'
+      + '<button class="btn" id="verify"' + (SR ? ' disabled' : '') + '>' + (SR ? 'Verificar' : 'Lo dije bien') + '</button>'
       + (SR ? '<button class="btn btn-ghost" id="skip">No puedo hablar ahora</button>' : '')
       + '</div></div>');
     byId("hear").onclick = function () { speak(target, ex.audio, 0.92); };
     byId("slow").onclick = function () { speak(target, ex.audio, 0.62); };
 
     var done = false, ok = false;
-    /* result: true/false (calificado por el micrófono) o "na" (saltado o
-       autoevaluado sin reconocimiento de voz). "na" NO cuenta en el puntaje:
-       sumarlo como acierto inflaba el % y podía aprobar lecciones reprobadas. */
     function settle(result, heardTxt) {
       if (done) return; done = true;
       ok = result;
       results[exIdx] = ok;
       var h = byId("heard");
       if (h && heardTxt != null) h.innerHTML = '<span class="muted">Te escuché:</span> “' + esc(heardTxt) + '”';
-      byId("fb").innerHTML = (ok === "na")
-        ? '<div class="fbbox ok"><div><b>Práctica libre</b><div class="muted">Este ejercicio no cuenta para tu calificación. Lo importante es soltarte.</div></div></div>'
-        : feedbackBox(ok, ex.explanation || ("Modelo: " + target), "Inténtalo: " + target);
+      byId("fb").innerHTML = feedbackBox(ok, ex.explanation || ("Modelo: " + target), "Inténtalo: " + target);
       var v = byId("verify"); v.disabled = false;
       v.textContent = (exIdx + 1 < total) ? "Siguiente" : "Ver resultados";
       v.onclick = function () { advance(); };
@@ -4084,11 +5166,11 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
         rec.onend = function () { listening = false; if (!done) { self.classList.remove("rec"); self.innerHTML = ic('mic') + ' Reintentar'; } };
         try { rec.start(); } catch (e) { settle(false, null); }
       };
-      byId("skip").onclick = function () { settle("na", null); };   /* saltar = sin calificar, no un acierto gratis */
+      byId("skip").onclick = function () { settle(true, null); };   /* sin penalizar: autoevaluación honesta */
       byId("verify").onclick = function () { if (done) advance(); };
     } else {
-      /* sin reconocimiento: práctica libre, sin calificar */
-      byId("verify").onclick = function () { settle("na", null); byId("verify").onclick = function () { advance(); }; };
+      /* sin reconocimiento: autoevaluación */
+      byId("verify").onclick = function () { settle(true, null); byId("verify").onclick = function () { advance(); }; };
     }
   }
 
@@ -4096,30 +5178,32 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
   function renderTrueFalse(ex, pct, total) {
     show('<div class="wrap">' + exHeader(pct, total) + '<div class="card">'
       + '<h2>Verdadero o falso?</h2>'
-      + '<div class="statement">' + esc(ex.statement) + '</div>'
-      + '<div class="tf-row"><button class="tf-btn" data-v="1">Verdadero</button><button class="tf-btn" data-v="0">Falso</button></div>'
-      + '<div id="fb"></div><button class="btn" id="verify" disabled>Verificar</button></div></div>');
+      + '<div class="statement" lang="en">' + esc(ex.statement) + '</div>'
+      + '<div class="tf-row" role="group" aria-label="Verdadero o falso">'
+      + '<button class="tf-btn" type="button" aria-pressed="false" data-v="1">Verdadero</button>'
+      + '<button class="tf-btn" type="button" aria-pressed="false" data-v="0">Falso</button></div>'
+      + '<div id="fb"></div><button class="btn" id="verify" disabled aria-describedby="verify-hint">Verificar</button>'
+      + '<span class="sr-only" id="verify-hint">Elige verdadero o falso para poder verificar.</span></div></div>');
     var sel = -1, done = false;
     var btns = document.querySelectorAll(".tf-btn");
     each(".tf-btn", function (b) {
       b.onclick = function () {
         if (done) return;
         sel = +b.getAttribute("data-v");
-        for (var x = 0; x < btns.length; x++) btns[x].classList.remove("sel");
-        b.classList.add("sel"); byId("verify").disabled = false;
+        pickOne(btns, b);
+        byId("verify").disabled = false;
       };
     });
     byId("verify").onclick = function () {
       if (done) { advance(); return; }
       done = true;
       var ok = (sel === 1) === (!!ex.answer);
-      for (var x = 0; x < btns.length; x++) {
-        var v = +btns[x].getAttribute("data-v"); btns[x].classList.add("locked");
-        if ((v === 1) === (!!ex.answer)) btns[x].classList.add("correct");
-        if (v === sel && !ok) btns[x].classList.add("wrong");
-      }
+      lockChoices(btns,
+        function (el) { return (+el.getAttribute("data-v") === 1) === (!!ex.answer); },
+        function (el) { return +el.getAttribute("data-v") === sel; });
       results[exIdx] = ok;
       byId("fb").innerHTML = feedbackBox(ok, ex.explanation || "", "Respuesta: " + (ex.answer ? "Verdadero" : "Falso"));
+      announceResult(ok, ok ? "" : "Era " + (ex.answer ? "verdadero" : "falso"));
       setVerifyNext(this, total);
     };
   }
@@ -4374,9 +5458,8 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
           if (i === q.correctIndex) group[x].classList.add("correct");
           if (i === picks[qi] && !ok) group[x].classList.add("wrong");
         }
-        byId("rfb-" + qi).innerHTML = feedbackBox(ok, q.explanation || "", "Era: " + (q.options[q.correctIndex] || ""), true);
+        byId("rfb-" + qi).innerHTML = feedbackBox(ok, q.explanation || "", "Era: " + (q.options[q.correctIndex] || ""));
       });
-      playFx(allOk);   /* un solo sonido/háptico por Verificar, no uno por pregunta */
       results[exIdx] = allOk;
       setVerifyNext(this, total);
     };
@@ -4388,26 +5471,18 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
   /* Detalle por pregunta para el registro central de calificaciones:
      texto + tipo + acierto. Reusa lesson.exercises[] + results[]. */
   function examDetail() {
-    var out = [];
-    (lesson.exercises || []).forEach(function (ex, i) {
-      if (results[i] === "na") return;   /* speaking sin calificar: fuera, para que el detalle cuadre con score/total */
+    return (lesson.exercises || []).map(function (ex, i) {
       ex = ex || {};
       var q = ex.question || ex.sentence || ex.statement || ex.prompt || ex.title
               || (ex.words ? ex.words.join(" ") : "") || "";
-      out.push({ q: q, type: ex.type || "", skill: ex.skill || "", correct: !!results[i] });
+      return { q: q, type: ex.type || "", skill: ex.skill || "", correct: !!results[i] };
     });
-    return out;
   }
 
   function renderFeedback() {
-    /* Solo cuentan los ejercicios calificados: el speaking saltado/autoevaluado
-       ("na") queda fuera de correct Y de total, para no inflar ni castigar. */
-    var total = 0, correct = 0, gi;
-    for (gi = 0; gi < lesson.exercises.length; gi++) {
-      if (results[gi] === "na") continue;
-      total++; if (results[gi]) correct++;
-    }
-    var pct = total ? Math.round(100 * correct / total) : 100;
+    var total = lesson.exercises.length;
+    var correct = results.filter(Boolean).length;
+    var pct = Math.round(100 * correct / Math.max(1, total));
     var perfect = correct === total;
     lastPerfect = perfect;
     if (lesson.isBoss) { renderBossResult(correct, total, pct); return; }
@@ -4450,7 +5525,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       + mascot((perfect || (lesson.isReview && pct >= 80)) ? "milestone" : "correct", head)
       + '<h1>+' + earnedXp + ' XP</h1>'
       + (comboBonus > 0 ? '<div class="xp-bonus">' + ic('flame') + ' +' + comboBonus + ' XP por combo de x' + maxCombo + '</div>' : '')
-      + '<p class="muted">' + (total ? (correct + ' de ' + total + ' correctos &middot; ' + pct + '%') : 'Práctica completada') + '</p>'
+      + '<p class="muted">' + correct + ' de ' + total + ' correctos &middot; ' + pct + '%</p>'
       + '<div class="xpbar"><div class="xpfill" style="width:' + pct + '%"></div></div>'
       + '<button class="btn btn-gold" id="cont">Continuar</button></div></div>');
     byId("cont").onclick = renderStreak;
@@ -4545,10 +5620,9 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     /* desglose preliminar por destreza */
     var bySkill = {};
     (lesson.exercises || []).forEach(function (ex, i) {
-      if (results[i] === "na") return;   /* sin calificar: no entra al desglose */
       var sk = (ex && ex.skill) || "otro";
       if (!bySkill[sk]) bySkill[sk] = { c: 0, t: 0 };
-      bySkill[sk].t++; if (results[i] === true) bySkill[sk].c++;
+      bySkill[sk].t++; if (results[i]) bySkill[sk].c++;
     });
     var SK_LABEL = { grammar: "Gramática", vocab: "Vocabulario", use: "Uso del inglés", reading: "Lectura", listening: "Listening", otro: "Otros" };
     var rows = ["grammar", "vocab", "use", "reading", "listening", "otro"].filter(function (s) { return bySkill[s]; }).map(function (s) {
@@ -4984,7 +6058,10 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
   baseLesson = L[id];
   if (!baseLesson) {
     show('<div class="wrap"><div class="card center">' + mascot("incorrect", "No encuentro esa leccion.")
-      + '<h1>Leccion no encontrada</h1><a class="btn btn-gold" href="leccion.html">Ver lecciones</a></div></div>');
+      + '<h1>Leccion no encontrada</h1>'
+      + '<p class="muted">Puede que este tema viva en tu libro. Ábrelo desde tus materiales y busca la lección ahí.</p>'
+      + '<a class="btn btn-gold" href="materiales.html">Ir a mis materiales</a>'
+      + '<a class="btn btn-ghost" href="leccion.html">Ver lecciones</a></div></div>');
     return;
   }
   lesson = baseLesson;
