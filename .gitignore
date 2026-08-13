@@ -194,6 +194,12 @@
 # recintos tematicos de vocabulario (ramas) — datos publicos, sin claves
 !/vesper_vocab_dens.js
 !/apariencia.html
+# La Forja: practica sin final. NO es un generador local como los *.py de
+# _scripts/ — es cliente puro que leccion.html carga en el navegador, asi que
+# tiene que publicarse. No lleva claves ni respuestas propias: arma los
+# ejercicios en tiempo de ejecucion desde los paquetes de lecciones que ya
+# estan publicados aqui arriba.
+!/vesper_forja.js
 
 # Expansion 2026-06-15 (Front 2): Vesper personalization. The "Configuracion"
 # panel + the persona engine that turns prefs into a dynamic system prompt,

@@ -144,6 +144,12 @@
   .srs-banner .hc-ic{background:var(--gold-tint);color:var(--gold2)}
   .srs-banner .hc-tx span{color:var(--muted)}
   .srs-banner .hc-cta{color:var(--gold2)}
+  /* La Forja: práctica infinita. Sólo tokens, para sobrevivir a los 7 temas
+     (dos de ellos oscuros) que redefinen :root en vesper_theme.js. */
+  .forja-card{border:1px solid var(--w-accent,var(--gold2));
+    background:var(--card,#fff);box-shadow:0 6px 20px rgba(27,27,47,.10)}
+  .forja-card .hc-ic{background:var(--gold-tint);color:var(--gold2);font-size:20px;line-height:1}
+  .forja-card .hc-tx span{color:var(--muted)}
   /* liga: premium crepúsculo (índigo + oro) */
   .league-widget{border:1px solid #2c2c4a;color:var(--cream);
     background:linear-gradient(160deg,#2a2c50,#1B1B2F 65%,#14122a);box-shadow:0 12px 30px rgba(20,18,42,.32)}
@@ -2504,6 +2510,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
 <script src="vesper_economy.js"></script>
 <script src="vesper_league.js"></script>
 <script src="vesper_vocab_dens.js"></script>
+<script src="vesper_forja.js"></script>
 <script src="vesper_auth.js"></script>
 <script src="vesper_identity.js"></script>
 <script src="vesper_sync.js"></script>
@@ -4433,6 +4440,23 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       + '<span class="hc-ic" aria-hidden="true">🎓</span>'
       + '<span class="hc-tx"><b>Examen de nivel</b><span>Evalúa tu dominio de A1 a C2</span></span>'
       + '<span class="hc-cta">Presentar &rarr;</span></button>';
+    /* La Forja: práctica sin final. El subtítulo sale sólo de lecturas
+       baratas de localStorage — construir el corpus aquí costaría un
+       segundo recorrido del banco en cada pintado del hub. */
+    var forjaBanner = "";
+    if (window.VESPER_FORJA) {
+      var fjDue = VESPER_FORJA.dueCount();
+      var fjRounds = VESPER_FORJA.roundsToday();
+      var fjSub = fjDue > 0
+        ? ("Tienes " + fjDue + " ejercicio" + (fjDue === 1 ? "" : "s") + " listo" + (fjDue === 1 ? "" : "s") + " para volver")
+        : (fjRounds > 0
+            ? ("Llevas " + fjRounds + " ronda" + (fjRounds === 1 ? "" : "s") + " hoy · récord " + VESPER_FORJA.bestToday() + " aciertos")
+            : "Rondas nuevas cada vez, sin final");
+      forjaBanner = '<button class="hub-card forja-card" id="forjaGo" type="button" aria-label="La Forja: práctica infinita">'
+        + '<span class="hc-ic" aria-hidden="true">⚒️</span>'
+        + '<span class="hc-tx"><b>La Forja</b><span>' + esc(fjSub) + '</span></span>'
+        + '<span class="hc-cta">Practicar &rarr;</span></button>';
+    }
     /* Orden del hub, de más a menos urgente para quien aprende:
        1) qué hago ahora  2) repaso pendiente  3) dónde estoy (mundos)
        4) el mapa  5) todo lo demás. El anuncio del examen de nivel baja
@@ -4443,6 +4467,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       + nextStepCard(built, selLevel)
       + tourBarHtml()
       + srsBanner
+      + forjaBanner
       + worldsSection(built, selLevel)
       + searchUI
       + '<div id="searchResults" class="search-results" aria-live="polite" hidden></div>'
@@ -4455,6 +4480,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     bindCta();
     if (_indexFirst) track("hub_view", { level: selLevel });
     var srsGo = byId("srsGo"); if (srsGo) srsGo.onclick = function () { location.search = "?id=review:srs"; };
+    var forjaGo = byId("forjaGo"); if (forjaGo) forjaGo.onclick = function () { location.search = "?id=forja"; };
     var examGo = byId("examGo"); if (examGo) examGo.onclick = function () { location.search = "?id=exams"; };
     each(".world[data-lvl]", function (b) { b.onclick = function () { _mapExpanded = false; renderIndex(b.getAttribute("data-lvl")); }; });
     each(".world[data-locked-world]", function (b) { b.onclick = function () { toast("Vence al guardián del mundo anterior para desbloquearlo"); }; });
@@ -4798,6 +4824,12 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     var wasOk = !!results[exIdx];
     if (wasOk) { combo++; if (combo > maxCombo) maxCombo = combo; if (combo >= 3 && combo % 3 === 0) { burstConfetti(14); sfx("combo", combo); } }
     else combo = 0;
+    /* La Forja: califica el ítem generado (Leitner propio). No toca el bloque
+       SRS de abajo a propósito: como la Forja no es isBoss ni srsReview, los
+       fallos también entran en VESPER_SRS.record() y se repasan gratis. */
+    try {
+      if (window.VESPER_FORJA && lesson.forjaIds) VESPER_FORJA.grade(lesson.forjaIds[exIdx], wasOk);
+    } catch (e) {}
     /* SRS: en repaso, califica el ítem; en lecciones normales, registra el fallo. */
     try {
       if (window.VESPER_SRS) {
@@ -5498,6 +5530,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     lastPerfect = perfect;
     if (lesson.isBoss) { renderBossResult(correct, total, pct); return; }
     if (lesson.isExam) { renderExamResult(correct, total, pct); return; }
+    if (lesson.isForja) { renderForjaResult(correct, total, pct); return; }
     /* Lecciones normales: hay que acertar >=70% para superarlas, ganar XP y
        desbloquear la siguiente. Por debajo se ofrece reintentar (no completa).
        Los repasos ("boss") conservan su lógica propia (>=80% = maestría). */
@@ -5841,6 +5874,87 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     };
   }
 
+  /* ============================================================
+   * LA FORJA — práctica sin final (vesper_forja.js)
+   * Las rondas se arman en tiempo de ejecución, así que "Otra ronda"
+   * reconstruye EN LA PÁGINA: navegar con location.search volvería a
+   * parsear los once paquetes de lecciones en cada ronda.
+   * ============================================================ */
+  var _forjaOpts = null;
+
+  var FORJA_MODES = {
+    mixto:     { title: "La Forja",             gens: null,                          body: "Práctica sin final: cada ronda se arma con ejercicios distintos, sacados de todo lo que has visto. Lo que fallas vuelve pronto; lo que dominas se espacia." },
+    escucha:   { title: "La Forja · Escucha",   gens: ["b4"],                        body: "Sólo oído: escucha la palabra y elige cuál era. Puedes repetir el audio las veces que quieras." },
+    vocab:     { title: "La Forja · Vocabulario", gens: ["b1", "b2", "b3", "b4", "a3", "a6"], body: "Vocabulario en las dos direcciones: reconocerlo y también producirlo de memoria." },
+    gramatica: { title: "La Forja · Gramática", gens: ["a1", "a2", "a4", "a5", "a7"], body: "Estructura y uso: elige, juzga si la frase está bien escrita y ordena las palabras." }
+  };
+
+  function forjaBuild() {
+    if (!window.VESPER_FORJA) return null;
+    try { return VESPER_FORJA.buildSession(_forjaOpts || {}); } catch (e) { return null; }
+  }
+
+  function forjaEmpty() {
+    show('<div class="wrap"><div class="card center">' + mascot("thinking", "La Forja aún no tiene material.")
+      + '<h1>Forja no disponible</h1>'
+      + '<p class="muted">Necesito algo de contenido para forjar ejercicios nuevos. Prueba con otro modo o vuelve tras un par de lecciones.</p>'
+      + '<a class="btn btn-gold" href="leccion.html">Ver lecciones</a></div></div>');
+  }
+
+  /* arranca una ronda nueva sin recargar la página */
+  function forjaRound(withCover) {
+    var built = forjaBuild();
+    if (!built || !built.exercises || !built.exercises.length) { forjaEmpty(); return; }
+    baseLesson = built; lesson = built;
+    exIdx = 0; results = []; earnedXp = 0; combo = 0; maxCombo = 0;
+    if (withCover) renderCover(); else renderExercise();
+  }
+
+  function renderForjaResult(correct, total, pct) {
+    /* XP: proporcional a los aciertos, con el mismo bonus de combo del
+       motor y un decaimiento por ronda para que la liga no se pueda
+       farmear repitiendo rondas toda la tarde. */
+    var rounds = VESPER_FORJA.roundsToday();          /* rondas YA cerradas hoy */
+    var decay = rounds < 3 ? 1 : (rounds < 6 ? 0.6 : 0.3);
+    var baseXp = Math.max(5, correct * 2);
+    var comboBonus = maxCombo >= 3 ? Math.round(baseXp * Math.min(0.5, (maxCombo - 2) * 0.05)) : 0;
+    earnedXp = Math.round((baseXp + comboBonus) * decay);
+    var boost = (window.VESPER_ECONOMY && VESPER_ECONOMY.consumeXpBoost) ? VESPER_ECONOMY.consumeXpBoost() : 0;
+    if (boost > 1) earnedXp = Math.round(earnedXp * boost);
+
+    var perfect = correct === total;
+    var info = null;
+    /* La PRIMERA ronda del día cuenta como lección para la racha; las
+       siguientes sólo suman XP. Nunca las dos cosas por la misma ronda. */
+    try {
+      if (P && rounds === 0) info = P.completeLesson("review:forja", earnedXp, { perfect: perfect });
+      else if (P) P.addXp(earnedXp);
+    } catch (e) {}
+    try { if (window.VESPER_LEAGUE && VESPER_LEAGUE.addXp) VESPER_LEAGUE.addXp(earnedXp || 0); } catch (e) {}
+    try { if (window.VESPER_ECONOMY && VESPER_ECONOMY.award) VESPER_ECONOMY.award(Math.max(1, Math.round(earnedXp / 10))); } catch (e) {}
+
+    var tally = VESPER_FORJA.noteRound(correct);      /* cierra la ronda */
+    track("forja_round", { mode: lesson.forjaMode, pct: pct, round: tally.rounds });
+    if (perfect) { burstConfetti(40); sfx("fanfare"); } else { sfx("complete"); }
+
+    var head = perfect ? "¡Ronda perfecta!" : (pct >= 70 ? "¡Buena ronda!" : "Ronda terminada");
+    var due = VESPER_FORJA.dueCount();
+    show('<div class="wrap">' + topbar(86) + '<div class="card center">'
+      + mascot(perfect ? "milestone" : "correct", head)
+      + '<h1>+' + earnedXp + ' XP</h1>'
+      + (comboBonus > 0 && decay === 1 ? '<div class="xp-bonus">' + ic('flame') + ' +' + comboBonus + ' XP por combo de x' + maxCombo + '</div>' : "")
+      + '<p class="muted">' + correct + ' de ' + total + ' correctos &middot; ' + pct + '%</p>'
+      + '<div class="xpbar"><div class="xpfill" style="width:' + pct + '%"></div></div>'
+      + '<p class="muted">Ronda ' + tally.rounds + ' de hoy &middot; tu récord hoy: ' + tally.best + ' aciertos</p>'
+      + (info && info.streak ? '<p class="muted">' + ic('flame') + ' Racha de ' + info.streak + ' día' + (info.streak === 1 ? "" : "s") + '</p>' : "")
+      + (decay < 1 ? '<p class="muted">Las rondas extra de hoy dan menos XP, pero cuentan igual para tu repaso.</p>' : "")
+      + (due > 0 ? '<p class="muted">' + due + ' ejercicio' + (due === 1 ? "" : "s") + ' te esperan para volver a repasar.</p>' : "")
+      + '<button class="btn btn-gold" id="forjaAgain">Otra ronda</button>'
+      + '<button class="btn btn-ghost" id="backHome">Volver al inicio</button></div></div>');
+    byId("forjaAgain").onclick = function () { forjaRound(false); };
+    byId("backHome").onclick = function () { location.search = ""; };
+  }
+
   /* ---------- BOSS ("Guardián del mundo"): examen mixto de TODAS las destrezas ---------- */
   function buildBossExam(level) {
     if (!PATH) return null;
@@ -6052,6 +6166,30 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     }
     lesson = baseLesson;
     renderCover();
+    return;
+  }
+  /* La Forja: ?id=forja[:<modo>][:<NIVEL>]  ·  ?id=forja:audit (autotest) */
+  if (id === "forja" || id.indexOf("forja:") === 0) {
+    if (!window.VESPER_FORJA) { forjaEmpty(); return; }
+    var fparts = id.split(":");
+    if (fparts[1] === "audit") {
+      var rep;
+      try { rep = VESPER_FORJA.audit(400); } catch (e) { rep = { error: e.message, stack: e.stack }; }
+      show('<div class="wrap"><div class="card"><h1>Forja · auditoría</h1>'
+        + '<pre id="auditOut" style="white-space:pre-wrap;font-size:12px;line-height:1.5;overflow-x:auto">'
+        + esc(JSON.stringify(rep, null, 1)) + '</pre></div></div>');
+      window.__forjaAudit = rep;
+      return;
+    }
+    var fmode = "mixto", flevel = null, fi;
+    for (fi = 1; fi < fparts.length; fi++) {
+      if (FORJA_MODES[fparts[fi]]) fmode = fparts[fi];
+      else if (/^[ABC][12]$/i.test(fparts[fi])) flevel = fparts[fi].toUpperCase();
+    }
+    var fcfg = FORJA_MODES[fmode];
+    _forjaOpts = { mode: fmode, gens: fcfg.gens, level: flevel,
+                   title: fcfg.title + (flevel ? (" · " + flevel) : ""), body: fcfg.body };
+    forjaRound(true);
     return;
   }
   if (id.indexOf("exam:") === 0) {
