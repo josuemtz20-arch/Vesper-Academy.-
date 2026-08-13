@@ -49,8 +49,54 @@ header{background:var(--navy);padding:0 32px;height:64px;display:flex;align-item
   letter-spacing:1px;text-transform:uppercase;margin:1.1em 0 .2em;}
 .passage .first{margin-top:0;}
 .audio-wrap{margin-bottom:18px;}
-.audio-wrap audio{width:100%;max-width:420px;height:42px;}
-.audio-note{font-size:.8rem;color:var(--muted);margin-top:6px;}
+.audio-note{font-size:.8rem;color:var(--muted);margin-top:8px;}
+/* ---- Exam player: same vocabulary as the book player (5s back, 0.75/1/1.25
+       speed) but built for the exam, where a dead native control tells the
+       student nothing about what went wrong. ---- */
+.vplayer{background:var(--white);border:1px solid var(--border);border-left:4px solid var(--gold);
+  border-radius:12px;padding:15px 18px 13px;max-width:540px;box-shadow:0 1px 4px rgba(0,0,0,.05);}
+.vplayer audio{display:none;}
+.vp-main{display:flex;align-items:center;gap:15px;}
+.vp-play{width:52px;height:52px;flex:0 0 52px;border-radius:50%;border:none;cursor:pointer;background:var(--navy);
+  color:var(--gold);font-size:1rem;display:flex;align-items:center;justify-content:center;padding:0;
+  transition:background .16s,transform .16s;}
+.vp-play:hover{background:var(--navy2);}
+.vp-play:active{transform:scale(.95);}
+.vp-play i{pointer-events:none;margin-left:2px;}
+.vp-play.playing i{margin-left:0;}
+.vp-body{flex:1;min-width:0;}
+.vp-seek{position:relative;height:9px;border-radius:6px;background:var(--cream);border:1px solid var(--border);
+  cursor:pointer;touch-action:none;}
+.vp-seek::before{content:"";position:absolute;left:0;right:0;top:-9px;bottom:-9px;}
+.vp-fill{position:absolute;top:0;bottom:0;left:0;width:0;border-radius:6px;
+  background:linear-gradient(90deg,var(--gold2),var(--gold));}
+.vp-knob{position:absolute;top:50%;left:0;width:15px;height:15px;border-radius:50%;background:var(--white);
+  border:2px solid var(--gold2);transform:translate(-50%,-50%);box-shadow:0 1px 3px rgba(0,0,0,.28);
+  opacity:0;transition:opacity .16s;}
+.vp-seek:hover .vp-knob,.vp-seek:focus-visible .vp-knob,.vp-seek.dragging .vp-knob{opacity:1;}
+.vp-times{display:flex;justify-content:space-between;margin-top:7px;font-size:.72rem;color:var(--muted);
+  font-variant-numeric:tabular-nums;letter-spacing:.3px;}
+.vp-tools{display:flex;flex-wrap:wrap;gap:7px;align-items:center;margin-top:13px;padding-top:12px;
+  border-top:1px solid var(--border);}
+.vp-tools button{font:700 .68rem/1 'Inter',sans-serif;letter-spacing:.5px;padding:8px 12px;border-radius:15px;
+  border:1px solid var(--gold);background:var(--white);color:var(--navy);cursor:pointer;
+  transition:background .15s,color .15s,border-color .15s;}
+.vp-tools button:hover{background:var(--cream);}
+.vp-tools button.on{background:var(--navy);color:var(--gold-lt);border-color:var(--navy);}
+.vp-count{margin-left:auto;font-size:.7rem;color:var(--muted);font-variant-numeric:tabular-nums;}
+.vplayer button:focus-visible,.vp-seek:focus-visible{outline:2px solid var(--gold2);outline-offset:3px;}
+.vp-dead{border-left-color:var(--red);display:flex;gap:13px;align-items:flex-start;}
+.vp-dead i{color:var(--red);font-size:1.15rem;margin-top:2px;}
+.vp-dead b{display:block;color:var(--navy);font-size:.9rem;margin-bottom:3px;}
+.vp-dead span{font-size:.8rem;color:var(--muted);}
+@media (max-width:520px){
+  .vplayer{padding:13px 14px 11px;}
+  .vp-play{width:46px;height:46px;flex-basis:46px;}
+  /* fingers, not cursors: keep the pills at a comfortable tap height */
+  .vp-tools button{padding:12px 15px;}
+  .vp-count{margin-left:0;width:100%;margin-top:2px;}
+}
+@media (prefers-reduced-motion:reduce){.vplayer *{transition:none!important;}}
 
 .qcard{background:var(--white);border:1px solid var(--border);border-radius:12px;padding:18px 20px;margin-bottom:14px;
   box-shadow:0 1px 4px rgba(0,0,0,.05);transition:border-color .15s;}
@@ -247,6 +293,125 @@ footer img{height:30px;width:30px;object-fit:contain;vertical-align:middle;margi
       `<span class="chip"><i class="fas fa-clock"></i> ~45 min</span>` +
       `<span class="chip"><i class="fas fa-award"></i> Auto-scored + teacher section</span>`;
 
+    /* ---- Audio player -------------------------------------------------
+       Replaces the bare <audio controls>. Keeps the book player's tools
+       (5s back, 0.75/1/1.25 speed) so it feels like the same product, and
+       adds a play counter, because in an exam how many times a clip was
+       heard is part of the result. If the file cannot load it says so,
+       instead of leaving a control that silently does nothing. */
+    function buildPlayer(src) {
+      const wrap = document.createElement("div");
+      wrap.className = "audio-wrap";
+      wrap.innerHTML =
+        '<div class="vplayer">' +
+          '<audio preload="metadata" src="' + src + '"></audio>' +
+          '<div class="vp-main">' +
+            '<button type="button" class="vp-play" aria-label="Play"><i class="fas fa-play"></i></button>' +
+            '<div class="vp-body">' +
+              '<div class="vp-seek" role="slider" tabindex="0" aria-label="Audio position" ' +
+                   'aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" aria-valuetext="0:00">' +
+                '<div class="vp-fill"></div><div class="vp-knob"></div>' +
+              '</div>' +
+              '<div class="vp-times"><span class="vp-cur">0:00</span><span class="vp-dur">--:--</span></div>' +
+            '</div>' +
+          '</div>' +
+          '<div class="vp-tools">' +
+            '<button type="button" class="vp-back" title="Go back 5 seconds">&#10226; 5s</button>' +
+            '<button type="button" class="vp-rate" title="0.75x to catch every word, 1.25x for a challenge">1&times;</button>' +
+            '<span class="vp-count">Not played yet</span>' +
+          '</div>' +
+        '</div>' +
+        '<div class="audio-note"><i class="fas fa-headphones"></i> Listen as many times as you need before answering.</div>';
+
+      const el = wrap.querySelector("audio"),  play = wrap.querySelector(".vp-play"),
+            icon = play.querySelector("i"),    seek = wrap.querySelector(".vp-seek"),
+            fill = wrap.querySelector(".vp-fill"), knob = wrap.querySelector(".vp-knob"),
+            cur = wrap.querySelector(".vp-cur"),   dur = wrap.querySelector(".vp-dur"),
+            back = wrap.querySelector(".vp-back"), rate = wrap.querySelector(".vp-rate"),
+            count = wrap.querySelector(".vp-count");
+      const SPEEDS = [1, 0.75, 1.25];
+      let si = 0, plays = 0, broken = false;
+
+      const fmt = s => (!isFinite(s) || s < 0) ? "--:--"
+        : Math.floor(s / 60) + ":" + String(Math.floor(s % 60)).padStart(2, "0");
+
+      function paint() {
+        const pct = (el.duration && isFinite(el.duration)) ? (el.currentTime / el.duration) * 100 : 0;
+        fill.style.width = pct + "%";
+        knob.style.left = pct + "%";
+        cur.textContent = fmt(el.currentTime);
+        seek.setAttribute("aria-valuenow", Math.round(pct));
+        seek.setAttribute("aria-valuetext", fmt(el.currentTime));
+      }
+      function setIcon(on) {
+        icon.className = on ? "fas fa-pause" : "fas fa-play";
+        play.classList.toggle("playing", on);
+        play.setAttribute("aria-label", on ? "Pause" : "Play");
+      }
+      function dead() {
+        if (broken) return;
+        broken = true;
+        const note = wrap.querySelector(".audio-note"); if (note) note.remove();
+        const box = wrap.querySelector(".vplayer"); if (!box) return;
+        box.outerHTML =
+          '<div class="vplayer vp-dead"><i class="fas fa-triangle-exclamation"></i><div>' +
+          '<b>This recording could not be loaded.</b>' +
+          '<span>Tell your teacher before you continue &mdash; do not guess the listening answers.</span>' +
+          '</div></div>';
+      }
+
+      el.addEventListener("loadedmetadata", () => { dur.textContent = fmt(el.duration); paint(); });
+      el.addEventListener("timeupdate", paint);
+      el.addEventListener("play", () => {
+        setIcon(true);
+        el.playbackRate = SPEEDS[si];
+        if (el.currentTime < 0.5) {
+          plays++;
+          count.textContent = plays === 1 ? "Played once" : "Played " + plays + " times";
+        }
+      });
+      el.addEventListener("pause", () => setIcon(false));
+      el.addEventListener("ended", () => { setIcon(false); el.currentTime = 0; paint(); });
+      el.addEventListener("error", dead);
+
+      play.addEventListener("click", () => {
+        if (el.paused) { const p = el.play(); if (p && p.catch) p.catch(dead); } else { el.pause(); }
+      });
+      back.addEventListener("click", () => { el.currentTime = Math.max(0, el.currentTime - 5); paint(); });
+      rate.addEventListener("click", () => {
+        si = (si + 1) % SPEEDS.length;
+        el.playbackRate = SPEEDS[si];
+        rate.innerHTML = SPEEDS[si] + "&times;";
+        rate.classList.toggle("on", SPEEDS[si] !== 1);
+      });
+
+      function seekTo(clientX) {
+        if (!el.duration || !isFinite(el.duration)) return;
+        const r = seek.getBoundingClientRect();
+        el.currentTime = Math.min(1, Math.max(0, (clientX - r.left) / r.width)) * el.duration;
+        paint();
+      }
+      seek.addEventListener("pointerdown", e => {
+        seek.classList.add("dragging");
+        try { seek.setPointerCapture(e.pointerId); } catch (_) {}
+        seekTo(e.clientX);
+      });
+      seek.addEventListener("pointermove", e => { if (seek.classList.contains("dragging")) seekTo(e.clientX); });
+      seek.addEventListener("pointerup", e => {
+        seek.classList.remove("dragging");
+        try { seek.releasePointerCapture(e.pointerId); } catch (_) {}
+      });
+      seek.addEventListener("keydown", e => {
+        const step = e.key === "ArrowLeft" ? -5 : e.key === "ArrowRight" ? 5 : 0;
+        if (!step || !el.duration) return;
+        e.preventDefault();
+        el.currentTime = Math.min(el.duration, Math.max(0, el.currentTime + step));
+        paint();
+      });
+
+      return wrap;
+    }
+
     const LETTERS = ["A","B","C","D","E","F"];
     const responses = {};   // qid -> selected index
     const answers = {};     // qid -> correct index (kept in JS, NOT in the DOM, so it isn't visible before grading)
@@ -265,9 +430,7 @@ footer img{height:30px;width:30px;object-fit:contain;vertical-align:middle;margi
         secEl.appendChild(p);
       }
       if (sec.audio) {
-        const a = document.createElement("div"); a.className = "audio-wrap";
-        a.innerHTML = `<audio controls><source src="${sec.audio}" type="audio/mpeg"></audio>` +
-          `<div class="audio-note"><i class="fas fa-headphones"></i> Listen as many times as you need before answering.</div>`;
+        const a = buildPlayer(sec.audio);
         secEl.appendChild(a);
       }
 
