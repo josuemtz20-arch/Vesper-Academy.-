@@ -891,8 +891,20 @@ section{padding:var(--s-section) 0;}
 .marquee:hover .mtrack img{opacity:.78;}
 @keyframes marchL{from{transform:translateX(0);}to{transform:translateX(-50%);}}
 @keyframes marchR{from{transform:translateX(-50%);}to{transform:translateX(0);}}
-html.js-anim .marquee.l .mtrack{animation:marchL 60s linear infinite;}
-html.js-anim .marquee.r .mtrack{animation:marchR 75s linear infinite;}
+/* El rail NO se cuelga de .js-anim. Esa clase es la red de seguridad del
+   contenido que nace en opacity:0, y rescate() la retira entera en cuanto
+   sospecha que el motor de animación no arrancó (pestaña abierta en segundo
+   plano, renderizador sin composición). Las láminas del rail se ven igual
+   con animación o sin ella, así que ese rescate no las salvaba de nada: solo
+   las dejaba paradas para siempre, sin vuelta atrás. El rail se detiene
+   únicamente cuando alguien pide menos movimiento — el sistema (media query,
+   más abajo) o el alumno en su perfil. */
+.marquee.l .mtrack{animation:marchL 60s linear infinite;}
+.marquee.r .mtrack{animation:marchR 75s linear infinite;}
+/* Preferencia explícita del alumno (vesper_prefs.js). Igual que con el media
+   query: se para, pero la fila sigue explorable arrastrando. */
+html.vesper-reduce-motion .marquee .mtrack{animation:none;}
+html.vesper-reduce-motion .marquee{overflow-x:auto;scroll-snap-type:x proximity;}
 
 /* ============================================================
    CERTIFICACIÓN — expediente, pestañas y comparador de bandas
@@ -1276,8 +1288,10 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
   .const-sticky{position:static !important;}
   .cstep::before{transform:scaleY(1) !important;transition:none !important;}
   .cnode{color:var(--star) !important;border-color:var(--gold) !important;}
-  /* El rail se detiene pero sigue explorable arrastrando */
-  html.js-anim .marquee .mtrack{animation:none !important;}
+  /* El rail se detiene pero sigue explorable arrastrando. Sin el prefijo
+     .js-anim: ahora el rail marcha sin esa clase, así que exigirla aquí
+     dejaría el movimiento encendido justo a quien pidió que se apagara. */
+  .marquee .mtrack{animation:none !important;}
   .marquee{overflow-x:auto;scroll-snap-type:x proximity;}
   .ctile::before,.ctile::after{transition:none !important;}
   /* Vesper se queda quieto y entero: nada de flotar, parpadear, girar ni
@@ -2087,6 +2101,18 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
        contenido se quedaría invisible para siempre. A los 3 s, si no hubo
        ni una sola llamada, se revela todo y se acabó. */
     function rescate(){
+      /* Con la pestaña oculta no hay nada que rescatar y sí mucho que romper:
+         el navegador no ha pintado un solo fotograma, así que el h1 sigue en
+         opacity:0 no porque esté roto, sino porque nadie lo ha mirado todavía.
+         Juzgar ahí da un falso positivo que desarma las animaciones de toda la
+         portada para el resto de la sesión. Se espera a que se vea. */
+      if (document.hidden) {
+        document.addEventListener('visibilitychange', function reintento(){
+          document.removeEventListener('visibilitychange', reintento);
+          setTimeout(rescate, 3000);
+        });
+        return;
+      }
       /* La señal correcta NO es "¿disparó el observer?" — IntersectionObserver
          siempre entrega una tanda inicial, así que contarlas da un falso OK.
          La pregunta útil es: ¿hay algo YA en pantalla que debería haberse
