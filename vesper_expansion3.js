@@ -1473,7 +1473,7 @@ window.VESPER_EXPANSION3 = (function () {
         ]
       },
       exercises: [
-        { type: "multiple_choice", question: "Adverb of \"careful\":", options: ["carefuly", "carefully", "carefuly"], correctIndex: 1, explanation: "careful + -ly = carefully." },
+        { type: "multiple_choice", question: "Adverb of \"careful\":", options: ["carefuly", "carefully", "carefulely"], correctIndex: 1, explanation: "careful + -ly = carefully." },
         { type: "multiple_choice", question: "Adverb of \"good\":", options: ["goodly", "well", "gooder"], correctIndex: 1, explanation: "Irregular: good → well." },
         { type: "fill_blank", sentence: "Please speak ___ (slow); I don't understand.", answers: ["slowly"], hint: "slow + -ly.", explanation: "slowly = despacio." },
         { type: "find_error", question: "Encuentra el error.",

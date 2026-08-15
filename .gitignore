@@ -176,6 +176,9 @@
 # Ruleset completo de Firestore (base teachermanuals): allowlist, manuales,
 # libros, progreso, liga y exam_results. Referencia desplegable.
 !/firestore.rules
+# Reglas de la base (default): placement_results (leads del placement,
+# create anónimo validado, lectura cerrada).
+!/firestore.default.rules
 # Registro central de calificaciones (2026-06-26): los exámenes (boss/lección/
 # nivelación) guardan su resultado en exam_results (Firestore REST, reusa
 # VesperAuth) espejado a localStorage; el profesor los consulta en
@@ -270,6 +273,11 @@
 # is stored as a wrangler secret, never committed).
 !/chat.html
 !/worker/
+
+# La Forja (practica infinita): el banco se arma en el cliente desde los packs
+# ya publicados, sin datos propios ni claves. leccion.html lo carga y el
+# service worker lo guarda en el CORE, asi que tiene que viajar con el sitio.
+!/vesper_forja.js
 
 # css / images / audio used by all public pages
 !/assets/
