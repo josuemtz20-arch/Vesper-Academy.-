@@ -191,6 +191,14 @@
         .ver-badge { font-weight:600; font-size:0.66rem; letter-spacing:.3px; color:#a8843d;
             background:rgba(197,160,89,.16); padding:2px 8px; border-radius:10px; white-space:nowrap; vertical-align:middle; }
 
+        /* Practice result, read back from the score the player saved for this
+           track (same seed on both sides). Only shows once a student has tried. */
+        .pr-badge { display:inline-flex; align-items:center; gap:4px; font-weight:700; font-size:0.63rem;
+            letter-spacing:.3px; padding:2px 8px; border-radius:10px; white-space:nowrap; vertical-align:middle;
+            background:rgba(45,158,117,.14); color:#1d6d50; }
+        .pr-badge.part { background:rgba(197,160,89,.18); color:#a8843d; }
+        .pr-badge i { font-size:0.62rem; }
+
         .stat-level { display:inline-flex; align-items:center; gap:6px; background:rgba(197,160,89,0.18);
             border:1px solid rgba(197,160,89,0.45); color:var(--gold-lt); padding:3px 11px; border-radius:20px;
             font-weight:600; letter-spacing:0.3px; }
@@ -290,7 +298,7 @@
                 <div><div class="kicker">Vesper Academy</div><div>Core Practice · Listening Series</div></div>
             </div>
             <h2>Audio Library</h2>
-            <p class="lead">Choose a level, then a lesson. Each lesson opens its own page with the <strong>audio</strong>, a <strong>screen-ready reading</strong> (for lessons with no audio), an <strong>interactive whiteboard</strong>, and a <strong>visual vocabulary</strong> reference.</p>
+            <p class="lead">Choose a level, then a lesson. Each lesson opens its own page with the <strong>audio</strong>, the <strong>full transcript</strong> to read along, <strong>practice activities</strong> that are marked instantly, an <strong>interactive whiteboard</strong>, and a <strong>visual vocabulary</strong> reference.</p>
             <div class="hero-tools">
                 <div class="hero-search">
                     <i class="fas fa-magnifying-glass"></i>
@@ -357,6 +365,9 @@
     <script src="vesper_biz_path_audio_data.js"></script>
     <script src="vesper_lesson_images.js"></script>
     <script src="vesper_covers.js"></script>
+    <!-- loaded here only for getScore(): the cards read back the practice score
+         the player saved, so a student can see what they have already done. -->
+    <script src="vesper_audio_practice.js"></script>
     <script>
         const DATA = window.VESPER_DATA || {};
         const LEVEL_DESC = {
@@ -631,15 +642,26 @@
         document.getElementById("stat-collections").textContent = levelGrid.querySelectorAll(".level-card").length;
 
         // ── SHARED CARD RENDERER ──────────────────────────────────────
+        // Practice result for a track, if the student has already tried it.
+        // lesson.html saves under the SAME seed this hub uses for the cover art.
+        function practiceBadge(seed) {
+            const s = window.VesperAudioPractice ? VesperAudioPractice.getScore(seed) : null;
+            if (!s || !s.total) return "";
+            const pct = s.got / s.total;
+            const cls = pct >= 0.8 ? "" : " part";
+            const ico = pct >= 0.8 ? "fa-circle-check" : "fa-rotate-right";
+            return ` <span class="pr-badge${cls}" title="Your best practice score"><i class="fas ${ico}"></i>${s.got}/${s.total}</span>`;
+        }
         function cardHTML(it, i) {
             const versions = it.versions ? ` <span class="ver-badge">${it.versions} versions</span>` : "";
             const locked = isLocked(it.col);
             const lockOverlay = locked ? `<span class="vc-lock"><i class="fas fa-lock"></i></span>` : "";
+            const practice = locked ? "" : practiceBadge(it.seed);
             return `<a class="lesson-card${locked ? " locked" : ""}" href="${it.href}" data-href="${it.href}" data-col="${it.col}"${locked ? ' aria-disabled="true"' : ""} style="animation-delay:${(i * 0.015).toFixed(3)}s">
                 ${VesperCovers.coverHTML(it.seed, it.icon, it.badge)}
                 ${lockOverlay}
                 <div class="lz-body">
-                    <div class="lz-meta"><div class="num">${it.num}</div><h4>${it.title}${versions}</h4></div>
+                    <div class="lz-meta"><div class="num">${it.num}</div><h4>${it.title}${versions}${practice}</h4></div>
                     <i class="fas ${locked ? "fa-lock" : "fa-chevron-right"} lz-go"></i>
                 </div></a>`;
         }

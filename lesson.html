@@ -409,6 +409,7 @@
         <div class="tabs">
             <button class="tab active" data-panel="audio"><i class="fas fa-headphones"></i> Audio</button>
             <button class="tab" data-panel="reading"><i class="fas fa-book-open-reader"></i> Reading</button>
+            <button class="tab" data-panel="practice"><i class="fas fa-dumbbell"></i> Practice</button>
             <button class="tab" data-panel="board"><i class="fas fa-chalkboard"></i> Whiteboard</button>
             <button class="tab" data-panel="vocab"><i class="fas fa-book-open"></i> Vocabulary</button>
         </div>
@@ -464,6 +465,16 @@
                     <span class="rn-ind" id="r-page">Page 1 / 1</span>
                     <button class="rn-btn" id="r-next">Next <i class="fas fa-chevron-right"></i></button>
                 </div>
+            </div>
+        </div>
+
+        <!-- PRACTICE PANEL -->
+        <!-- Activities are generated at runtime by vesper_audio_practice.js from
+             this track's own transcript + vocabulary, so the answer key is always
+             correct and every track with a transcript gets exercises. -->
+        <div class="panel" id="panel-practice">
+            <div class="card-box">
+                <div id="practice-host"></div>
             </div>
         </div>
 
@@ -641,6 +652,7 @@
     <script src="vesper_custom_transcripts.js"></script>
     <script src="vesper_lesson_images.js"></script>
     <script src="vesper_covers.js"></script>
+    <script src="vesper_audio_practice.js"></script>
     <script>
         // ── PARAMS ────────────────────────────────────────────────────
         const params = new URLSearchParams(location.search);
@@ -813,6 +825,35 @@
             readingTab.style.display = hasReading ? "" : "none";
         }
         setupReading();
+
+        // ── PRACTICE (auto-generated activities) ──────────────────────
+        // Same three sources as setupReading(), but we hand the raw transcript
+        // HTML to the generator instead of paginating it. The dialogue is what
+        // the exercises are built from, so it wins over the reading article.
+        function currentTranscript(){
+            if (isBasics) return (basicsLesson && basicsLesson.transcript) || "";
+            if (isCustom) return (window.CUSTOM_TRANSCRIPTS || {})[curKey] || "";
+            if (isDiag)   return "";
+            const RD = window.VESPER_READING || {};
+            const entry = (RD[lvl] || RD[String(lvl)] || {})[les] || (RD[lvl] || {})[String(les)];
+            if (!entry) return "";
+            return entry.transcript || entry.reading || "";
+        }
+        const practiceTab = document.querySelector('.tab[data-panel="practice"]');
+        function setupPractice(){
+            const host = document.getElementById("practice-host");
+            if (!host || !window.VesperAudioPractice) {
+                if (practiceTab) practiceTab.style.display = "none";
+                return;
+            }
+            const n = VesperAudioPractice.mount(host, {
+                transcript: currentTranscript(),
+                vocab: vocab || [],
+                seed: coverSeed || crumbText || title
+            });
+            if (practiceTab) practiceTab.style.display = n > 0 ? "" : "none";
+        }
+        setupPractice();
 
         const renderChunk = c => c.type === "h" ? c.html : `<p>${c.html}</p>`;
         function paginate(){
