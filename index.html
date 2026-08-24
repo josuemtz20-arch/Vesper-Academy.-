@@ -23,7 +23,7 @@
 <link rel="manifest" href="manifest_lecciones.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,600;0,6..96,700;1,6..96,400;1,6..96,500&family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=Inter:wght@400;500;600;700&display=swap">
 
 <!-- Los tokens se cargan primero: la hoja propia de la pagina debe poder sobrescribirlos. -->
 <link rel="stylesheet" href="assets/css/vesper_tokens.css">
@@ -75,7 +75,7 @@
   --on-night-soft:rgba(245,242,235,.62);
 
   /* Tipografía */
-  --display:"Bodoni Moda",Didot,"Times New Roman",serif;
+  --display:"Fraunces",Georgia,"Times New Roman",serif;
   --text:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;
   /* Tercer registro: la versalita. 66nord la usa a 16px con 0.4em de
      tracking; aquí .78rem/.26em, que es lo que aguanta un rótulo español
@@ -185,36 +185,19 @@ section[id]{scroll-margin-top:86px;}
 .btn-lg{font-size:1rem;padding:16px 32px;}
 
 
-/* ---- Bodoni sobre fondo claro -------------------------------------------
-   Bodoni es un didone: sus trazos finos son casi un pelo. Sobre la crema se
-   perdían por dos motivos a la vez.
-     1) `-webkit-font-smoothing:antialiased` iba en el body. El suavizado en
-        escala de grises adelgaza el glifo: favorece al texto claro sobre
-        oscuro (que tiende a engordar) y castiga al oscuro sobre claro.
-     2) `font-optical-sizing:auto` pide un opsz ~= al tamaño en px (~43), o
-        sea el corte de DISPLAY de Bodoni, que es justo el de los finos más
-        finos de toda la familia.
-   Arreglo: suavizado del sistema sobre claro, eje óptico bajo (trazo mucho
-   más robusto) y un punto más de peso. Las bandas de noche se quedan como
-   estaban, que ahí el didone se ve como debe. */
+/* ---- La display, sobre claro y sobre noche --------------------------------
+   Esta familia era Bodoni Moda, un didone de contraste extremo: sus finos
+   quedaban en un pelo y se perdían contra el fondo, sobre todo a tamaño de
+   subtítulo y sobre la crema. Toda una capa de parches existía sólo para
+   taparlo: `font-optical-sizing:none` + `"opsz" 8,"wght" 700` forzados en las
+   bandas claras, que además pisaban el peso real de cada titular (los `.plan
+   h3` pedían 600 y salían en 700).
+   Fraunces es de contraste bajo y trazo grueso, así que ya no hace falta
+   nada de eso: se deja el eje óptico en `auto` en todas partes y cada
+   titular usa el peso que declara. Lo único que sobrevive es el suavizado,
+   que sigue siendo la elección correcta para el texto claro sobre noche. */
 .hero,.creds,#resultados,#ruta,.temas,#cursos,#contacto,footer,.dossier{
   -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
-}
-.band-cream .sec-title,
-.band-cream .mcell h3,
-/* La cifra de capítulo entra aquí por la MISMA razón que las demás: sobre
-   crema, con optical-sizing auto a 41px, Bodoni sirve su corte de DISPLAY —
-   los finos más finos de la familia— y encima el oro sólo da 3.28:1, así que
-   trazo delgado y contraste bajo se suman. Sobre noche NO se corrige: ahí el
-   didone se ve como debe, igual que el resto de las bandas oscuras. */
-.band-cream .chap-num,
-/* Los tres planes viven ahora sobre crema (ya no hay tarjeta de noche
-   destacada), así que TODO su didone entra en esta corrección, no sólo
-   el de las columnas no destacadas como antes. */
-.plan h3,
-.plan-price .amt{
-  font-optical-sizing:none;
-  font-variation-settings:"opsz" 8,"wght" 700;
 }
 
 /* ---------- NAV ---------- */
@@ -1354,7 +1337,7 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
     "name":"Cursos de inglés",
     "itemListElement":[
       {"@type":"Course","name":"Inglés General","description":"Ruta completa de A1 a C2 con las cuatro destrezas integradas.","url":"https://vesperacademy.com/curso-ingles-general.html","provider":{"@type":"EducationalOrganization","name":"Vesper Academy"}},
-      {"@type":"Course","name":"Club de Conversación","description":"Más de 120 temas de conversación en grupos reducidos.","url":"https://vesperacademy.com/curso-club-conversacion.html","provider":{"@type":"EducationalOrganization","name":"Vesper Academy"}},
+      {"@type":"Course","name":"Club de Conversación","description":"150 temas de conversación en grupos reducidos de hasta 9 alumnos.","url":"https://vesperacademy.com/curso-club-conversacion.html","provider":{"@type":"EducationalOrganization","name":"Vesper Academy"}},
       {"@type":"Course","name":"Inglés Corporativo","description":"Juntas, negociación, correos y presentaciones para equipos y profesionales.","url":"https://vesperacademy.com/curso-ingles-corporativo.html","provider":{"@type":"EducationalOrganization","name":"Vesper Academy"}},
       {"@type":"Course","name":"Preparación de Certificación","description":"IELTS, Cambridge y TOEFL con estrategia de examen y simulacros cronometrados.","url":"https://vesperacademy.com/curso-certificacion.html","provider":{"@type":"EducationalOrganization","name":"Vesper Academy"}}
     ]
@@ -1369,7 +1352,7 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
     {"@type":"Question","name":"¿Necesito saber algo de inglés para empezar?","acceptedAnswer":{"@type":"Answer","text":"No. El nivel A1 empieza desde cero absoluto: cómo se saluda, cómo te presentas y cómo se pronuncia. Si ya sabes algo, el examen diagnóstico te coloca en el peldaño correcto para que no repitas lo que ya dominas."}},
     {"@type":"Question","name":"¿Las clases son en vivo o grabadas?","acceptedAnswer":{"@type":"Answer","text":"Todas en vivo, con un profesor real. No vendemos videos pregrabados: hablar sólo se aprende hablando con alguien que te corrige en el momento."}},
     {"@type":"Question","name":"¿Qué pasa si falto a una clase?","acceptedAnswer":{"@type":"Answer","text":"Recibes el material de la sesión y, en los planes 1:1, se reprograma avisando con anticipación. En grupal puedes incorporarte a otro grupo del mismo nivel esa semana."}},
-    {"@type":"Question","name":"¿Cuánto tardo en subir de nivel?","acceptedAnswer":{"@type":"Answer","text":"Depende del nivel y de cuánto practiques fuera de clase. Como referencia, pasar de un peldaño al siguiente suele llevar entre cuatro y seis meses con dos sesiones por semana."}},
+    {"@type":"Question","name":"¿Cuánto tardo en subir de nivel?","acceptedAnswer":{"@type":"Answer","text":"Depende del nivel y de cuánto practiques fuera de clase. Como referencia, pasar de un peldaño al siguiente suele llevar entre cuatro y seis meses al ritmo de cinco clases por semana."}},
     {"@type":"Question","name":"¿Preparan para IELTS, Cambridge y TOEFL?","acceptedAnswer":{"@type":"Answer","text":"Sí, con estrategia específica por examen, simulacros cronometrados y meta de banda acordada desde el principio."}},
     {"@type":"Question","name":"¿Facturan a empresas?","acceptedAnswer":{"@type":"Answer","text":"Sí. Emitimos factura y armamos planes para equipos, con reporte de avance por participante."}}
   ]
@@ -1676,10 +1659,10 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
         </div>
         <div class="cbody">
           <h3>Inglés General</h3>
-          <span class="ccat">A1 – C2</span>
+          <span class="ccat">Pre-A1 – C2</span>
           <p>La ruta completa, de cero a dominio. Las cuatro destrezas en cada sesión y un salto de nivel medido.</p>
           <ul class="cfacts">
-            <li><svg class="i"><use href="#i-calendar"/></svg> 2 por semana</li>
+            <li><svg class="i"><use href="#i-calendar"/></svg> 5 por semana</li>
             <li><svg class="i"><use href="#i-gauge"/></svg> Grupo o 1 a 1</li>
           </ul>
           <p class="cfrom">Desde</p>
@@ -1693,8 +1676,8 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
         </div>
         <div class="cbody">
           <h3>Club de Conversación</h3>
-          <span class="ccat">A2 – C2</span>
-          <p>Más de 120 temas para soltar la lengua. Grupos reducidos, sin lectura en voz alta y sin turnos muertos.</p>
+          <span class="ccat">A1 – C2</span>
+          <p>150 temas para soltar la lengua. Grupos reducidos, sin lectura en voz alta y sin turnos muertos.</p>
           <ul class="cfacts">
             <li><svg class="i"><use href="#i-calendar"/></svg> 2 por semana</li>
             <li><svg class="i"><use href="#i-gauge"/></svg> Grupo reducido</li>
@@ -1713,7 +1696,7 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
           <span class="ccat">B1 – C1</span>
           <p>Juntas, negociación, correos y presentaciones. Para equipos y para quien ya trabaja en inglés.</p>
           <ul class="cfacts">
-            <li><svg class="i"><use href="#i-calendar"/></svg> 3 por semana</li>
+            <li><svg class="i"><use href="#i-calendar"/></svg> 5 por semana</li>
             <li><svg class="i"><use href="#i-gauge"/></svg> Equipos o 1 a 1</li>
           </ul>
           <p class="cfrom">Desde</p>
@@ -1727,10 +1710,10 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
         </div>
         <div class="cbody">
           <h3>Certificación</h3>
-          <span class="ccat">B1 – C1</span>
+          <span class="ccat">B1 – C2</span>
           <p>IELTS, Cambridge y TOEFL con estrategia de examen, simulacros cronometrados y meta de banda.</p>
           <ul class="cfacts">
-            <li><svg class="i"><use href="#i-calendar"/></svg> 3 por semana</li>
+            <li><svg class="i"><use href="#i-calendar"/></svg> 5 por semana</li>
             <li><svg class="i"><use href="#i-gauge"/></svg> Meta de banda</li>
           </ul>
           <p class="cfrom">Desde</p>
@@ -1851,12 +1834,12 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
 
     <div class="plans">
       <a class="plan reveal" href="planes.html#grupal">
-        <span class="plan-tag">Hasta 6 alumnos</span>
+        <span class="plan-tag">Hasta 9 alumnos</span>
         <h3>Grupal</h3>
         <p class="plan-desc">La energía de aprender acompañado, con la atención de un grupo pequeño.</p>
         <ul class="plan-spec">
-          <li>2 clases en vivo por semana</li>
-          <li>Club de conversación mensual</li>
+          <li>5 clases en vivo por semana</li>
+          <li>Examen de nivel y entrevista oral</li>
           <li>Material y audios incluidos</li>
         </ul>
         <p class="plan-price"><span class="amt">$2,500</span> <span class="unit">MXN / mes</span></p>
@@ -1867,9 +1850,9 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
         <h3>Profesional 1 a 1</h3>
         <p class="plan-desc">El profesor adapta cada actividad a tu meta y a tu ritmo. La vía más rápida.</p>
         <ul class="plan-spec">
-          <li>2 clases privadas por semana</li>
+          <li>Tú decides cuántas clases por semana</li>
           <li>Plan personalizado a tu meta</li>
-          <li>Entrevista oral de nivel incluida</li>
+          <li>Material y audios incluidos</li>
         </ul>
         <p class="plan-price"><span class="from">Desde</span> <span class="amt">$250</span> <span class="unit">MXN / hora</span></p>
         <span class="more">Ver el plan <svg class="i"><use href="#i-arrow"/></svg></span>
@@ -1879,9 +1862,9 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
         <h3>Especializados</h3>
         <p class="plan-desc">Para quien necesita un resultado concreto: una banda, un puesto, una certificación.</p>
         <ul class="plan-spec">
-          <li>3 sesiones intensivas por semana</li>
+          <li>5 sesiones intensivas por semana</li>
           <li>Simulacros cronometrados completos</li>
-          <li>Corrección con rúbrica de banda</li>
+          <li>Material y audios incluidos</li>
         </ul>
         <p class="plan-price"><span class="amt">$3,000</span> <span class="unit">MXN / mes</span></p>
         <span class="more">Ver el plan <svg class="i"><use href="#i-arrow"/></svg></span>
@@ -1990,7 +1973,7 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
       <details class="qitem"><summary>¿Qué pasa si falto a una clase? <svg class="i"><use href="#i-chevron"/></svg></summary>
         <div class="qbody">Recibes el material de la sesión y, en los planes 1:1, se reprograma avisando con anticipación. En grupal puedes incorporarte a otro grupo del mismo nivel esa semana.</div></details>
       <details class="qitem"><summary>¿Cuánto tardo en subir de nivel? <svg class="i"><use href="#i-chevron"/></svg></summary>
-        <div class="qbody">Depende del nivel y de cuánto practiques fuera de clase. Como referencia, pasar de un peldaño al siguiente suele llevar entre cuatro y seis meses con dos sesiones por semana. Te lo decimos con evidencia, no con una promesa.</div></details>
+        <div class="qbody">Depende del nivel y de cuánto practiques fuera de clase. Como referencia, pasar de un peldaño al siguiente suele llevar entre cuatro y seis meses al ritmo de cinco clases por semana. Te lo decimos con evidencia, no con una promesa.</div></details>
       <details class="qitem"><summary>¿Preparan para IELTS, Cambridge y TOEFL? <svg class="i"><use href="#i-chevron"/></svg></summary>
         <div class="qbody">Sí, con estrategia específica por examen, simulacros cronometrados y meta de banda acordada desde el principio. No es «inglés en general» con el nombre del examen encima.</div></details>
       <details class="qitem"><summary>¿Facturan a empresas? <svg class="i"><use href="#i-chevron"/></svg></summary>
@@ -2757,7 +2740,7 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
         <span class="m-course">
           <img src="assets/images/landing/course_general.webp" alt="" loading="lazy" decoding="async">
           <span class="m-course__shade"></span><span class="m-course__veil"></span>
-          <span class="m-badge">A1 – C2</span><span class="m-course__n">01</span>
+          <span class="m-badge">Pre-A1 – C2</span><span class="m-course__n">01</span>
           <b class="m-course__t">Inglés General</b>
           <span class="m-course__go" aria-hidden="true"><svg class="i"><use href="#i-arrow"/></svg></span>
         </span>
@@ -2766,7 +2749,7 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
         <span class="m-course">
           <img src="assets/images/landing/course_conversation.webp" alt="" loading="lazy" decoding="async">
           <span class="m-course__shade"></span><span class="m-course__veil"></span>
-          <span class="m-badge">B1 – C2</span><span class="m-course__n">02</span>
+          <span class="m-badge">A1 – C2</span><span class="m-course__n">02</span>
           <b class="m-course__t">Club de Conversación</b>
           <span class="m-course__go" aria-hidden="true"><svg class="i"><use href="#i-arrow"/></svg></span>
         </span>
@@ -2792,7 +2775,7 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
     </div>
     <div>
       <p class="m-lead" data-detail="0" style="min-height:39px">Tu base completa de inglés, de cero a C2, con las cuatro destrezas integradas.</p>
-      <p class="m-lead" data-detail="1" style="min-height:39px" hidden>+150 temas para soltar la lengua sin miedo, en grupos reducidos.</p>
+      <p class="m-lead" data-detail="1" style="min-height:39px" hidden>150 temas para soltar la lengua sin miedo, en grupos reducidos.</p>
       <p class="m-lead" data-detail="2" style="min-height:39px" hidden>Reuniones, correos y negociación: el inglés que mueve tu carrera.</p>
       <p class="m-lead" data-detail="3" style="min-height:39px" hidden>IELTS, Cambridge y TOEFL con estrategia y simulacros por banda.</p>
       <div class="m-deck-foot">
@@ -2840,7 +2823,7 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
             <span class="m-plan__rule"></span>
             <span class="m-plan__price"><span class="m-plan__cur">$</span><span class="m-plan__amt">2,500</span></span>
             <span class="m-plan__unit">MXN / mes</span>
-            <span class="m-plan__note">Grupos de hasta 6 alumnos</span>
+            <span class="m-plan__note">Grupos de hasta 9 alumnos</span>
           </span>
         </span>
       </button>
@@ -2873,7 +2856,7 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
     <div>
       <p class="m-includes"><span>Incluye</span><i></i></p>
       <ul class="m-perks" data-detail="0" hidden>
-        <li><svg class="i" aria-hidden="true"><use href="#i-check"/></svg>4 clases en vivo por semana</li>
+        <li><svg class="i" aria-hidden="true"><use href="#i-check"/></svg>5 clases en vivo por semana</li>
         <li><svg class="i" aria-hidden="true"><use href="#i-check"/></svg>Material y audio incluidos</li>
         <li><svg class="i" aria-hidden="true"><use href="#i-check"/></svg>Seguimiento mensual de nivel</li>
       </ul>

@@ -18,12 +18,13 @@
      del alumno y en la portada. -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<!-- Bodoni Moda (display, eje óptico variable) + Inter, en una sola petición y
+<!-- Fraunces (display, eje óptico variable) + Inter, en una sola petición y
      como enlace: antes iba en un @import dentro del bloque de estilos, que no
      arranca hasta que el CSS se parsea y dejaba los preconnect de adorno. Y
      pedía "Inria Serif", que es de donde salía la deriva tipográfica con el
-     resto del sitio. -->
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,600;0,6..96,700;1,6..96,400;1,6..96,500&family=Inter:wght@400;500;600;700&display=swap">
+     resto del sitio. La display fue Bodoni Moda hasta que se vio que sus
+     finos se perdían contra el fondo; Fraunces es de contraste bajo. -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=Inter:wght@400;500;600;700&display=swap">
 <!-- Tokens ANTES de los estilos de la página, como manda su cabecera. Estuvo
      después durante mucho tiempo, al revés del contrato. -->
 <link rel="stylesheet" href="assets/css/vesper_tokens.css">
@@ -107,21 +108,13 @@ body{margin:0;font-family:var(--va-font-text,Inter,system-ui,sans-serif);
 .i{width:1em;height:1em;flex:0 0 auto;stroke:currentColor;fill:none;
   stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;vertical-align:-.125em;}
 
-/* ── Didone legible en claro Y en oscuro ──
-   Mismo contrato que .va-display de vesper_tokens.css, aplicado por selector a
-   los titulares de esta pagina para no marcar cuarenta <h3> a mano. Bodoni
-   tiene trazos de un pelo: sobre fondo CLARO hay que pedir el corte de texto
-   (opsz 8) y peso 700, o los finos desaparecen. Sobre noche el texto claro
-   engorda y el corte display es el bonito, asi que se invierte. La senal es la
-   clase .vesper-dark que pone vesper_theme.js. */
-.hero h1,h2.sec,.card h3,.brand b,.gate-card .gh h2,.mc-card .mc-info b,#deep a b{
-  font-optical-sizing:none;font-variation-settings:"opsz" 8,"wght" 700;
-}
-html.vesper-dark .hero h1,html.vesper-dark h2.sec,html.vesper-dark .card h3,
-html.vesper-dark .brand b,html.vesper-dark .gate-card .gh h2,
-html.vesper-dark .mc-card .mc-info b,html.vesper-dark #deep a b{
-  font-optical-sizing:auto;font-variation-settings:normal;
-}
+/* La display de esta pagina ya no necesita correccion de eje optico.
+   Cuando era Bodoni Moda si: sus trazos de un pelo obligaban a clavar
+   "opsz" 8 y peso 700 sobre fondo claro para que los finos no se perdieran, y
+   a invertirlo bajo .vesper-dark. El precio era que los siete selectores de
+   abajo salian TODOS en 700, ignorando el peso 600 que declaran. Fraunces es
+   de contraste bajo, asi que se borro el parche entero: eje optico en auto
+   (el de por defecto) y cada titular con su peso real. */
 
 .skip-link{position:absolute;left:-999px;top:0;z-index:200;background:var(--navy);color:var(--on-night);padding:10px 16px;border-radius:0 0 8px 0;text-decoration:none;font-weight:600;}
 .skip-link:focus{left:0;}

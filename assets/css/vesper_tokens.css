@@ -59,12 +59,16 @@
   --va-grad-dusk: linear-gradient(160deg, var(--va-dusk), var(--va-night) 60%, #0e0c1f);
   --va-glow-gold: radial-gradient(900px 420px at 80% -10%, rgba(201, 168, 76, .22), transparent 60%);
 
-  /* Tipografía. El display es Bodoni Moda (didone) desde el rediseño de la
-     portada. Antes este token decía "Inria Serif" y la portada lo pisaba en
-     local, que es justo de donde salía la deriva: el resto del sitio seguía
-     en Inria. Ojo con los didones sobre fondo claro — ver la nota de
-     `font-optical-sizing` más abajo. */
-  --va-font-display: "Bodoni Moda", Didot, "Times New Roman", Georgia, serif;
+  /* Tipografía. El display es Fraunces, una serif variable de contraste bajo.
+     Sustituye a Bodoni Moda (didone), cuyos trazos finos quedaban en un pelo y
+     desaparecían contra el fondo. Fraunces mantiene el registro editorial pero
+     con trazo robusto, así que ya no necesita las correcciones de eje óptico
+     que llevaba la anterior.
+     El respaldo es Georgia y no Didot a propósito: las páginas que incluyen
+     esta hoja pero NO cargan Fraunces (leccion.html, por ejemplo) caen en el
+     primer respaldo, y Georgia se parece mucho más a Fraunces —y es mucho más
+     legible— que un didone del sistema. */
+  --va-font-display: "Fraunces", Georgia, "Times New Roman", serif;
   --va-font-text: Inter, system-ui, -apple-system, "Segoe UI", sans-serif;
 
   /* Anillo de foco accesible. */
@@ -88,27 +92,17 @@ summary:focus-visible,
   border-radius: 6px;
 }
 
-/* ---------- Didone (Bodoni Moda) legible en claro Y en oscuro ----------
-   Bodoni tiene trazos finos casi de un pelo. Sobre fondo claro se pierden por
-   dos motivos que se suman:
-     1) `-webkit-font-smoothing:antialiased` adelgaza el glifo. Favorece al
-        texto claro sobre oscuro (que engorda) y castiga al oscuro sobre claro.
-     2) `font-optical-sizing:auto` pide un `opsz` parecido al tamaño en px, o
-        sea el corte de DISPLAY, que es el de los finos más finos.
-   La portada resuelve esto por banda (`.band-cream`). Aquí no se puede: en las
-   páginas del alumno "claro u oscuro" lo decide el tema EN CALIENTE. Así que la
-   señal es la clase `.vesper-dark` que `vesper_theme.js` pone en <html>.
-   Marca los titulares con `.va-display` para acogerse a esto. Una página sin
-   motor de temas no lleva la clase y recibe el tratamiento de claro, que es el
-   correcto para las superficies crema. */
+/* ---------- La display de titulares ----------
+   Con Bodoni Moda esto era un campo de minas: había que apagar el eje óptico y
+   forzar `"opsz" 8, "wght" 700` sobre fondo claro para que los finos no se
+   evaporaran, y volver a encenderlo bajo `.vesper-dark`. El efecto secundario
+   era que TODO `.va-display` salía en 700, daba igual el peso que pidiera.
+   Fraunces no tiene ese problema —contraste bajo, trazo grueso— así que el eje
+   óptico se deja en `auto` en claro y en oscuro por igual, y cada titular
+   conserva su propio `font-weight`. */
 .va-display {
   font-family: var(--va-font-display);
-  font-optical-sizing: none;
-  font-variation-settings: "opsz" 8, "wght" 700;
-}
-html.vesper-dark .va-display {
   font-optical-sizing: auto;
-  font-variation-settings: normal;
 }
 html.vesper-dark {
   -webkit-font-smoothing: antialiased;

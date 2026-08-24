@@ -9,7 +9,7 @@
    nada y la portada de escritorio queda intacta.
 
    Paleta y tipos: los mismos que index.html — navy #1B1B2F, oro #c5a059
-   y #d9bd84, crema #f5f2eb, Bodoni Moda para cifras y títulos, Inter
+   y #d9bd84, crema #f5f2eb, Fraunces para cifras y títulos, Inter
    para el resto. Los iconos son el sprite SVG de la propia página
    (clase .i), no Font Awesome.
    ============================================================ */
@@ -48,18 +48,20 @@
   #m-app .i--solid { fill: currentColor; stroke: none; }
 
   /* --- Tipos de la edición móvil ---
-     Bodoni Moda a tamaño pequeño necesita opsz bajo, si no se va a peso
-     de pelo y desaparece; a tamaño de titular se deja el óptico automático. */
+     La display es Fraunces. La anterior era Bodoni Moda y toda esta sección
+     llevaba `font-optical-sizing:none` con un `opsz` bajo clavado a mano en
+     cada regla: era la única forma de que sus finos no se quedaran en un pelo
+     a 15-22px. Fraunces es de contraste bajo, así que el eje óptico va en
+     automático y a estos tamaños sirve por su cuenta el corte de texto, que
+     es el más robusto de la familia. */
   #m-app .m-eyebrow { display: inline-block; font: 700 11px 'Inter', sans-serif;
     letter-spacing: 1.6px; text-transform: uppercase; color: #7c5e22; }
   #m-app .m-eyebrow--dark { color: #d9bd84; }
-  #m-app .m-h1 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 29px; line-height: 1.14;
-    font-weight: 700; margin: 9px 0 10px; text-wrap: pretty;
-    font-optical-sizing: none; font-variation-settings: 'opsz' 14; }
+  #m-app .m-h1 { font-family: 'Fraunces', Georgia, serif; font-size: 29px; line-height: 1.14;
+    font-weight: 700; margin: 9px 0 10px; text-wrap: pretty; }
   #m-app .m-h1 span { color: #d9bd84; }
-  #m-app .m-h2 { font-family: 'Bodoni Moda', Georgia, serif; font-size: 22px; line-height: 1.22;
-    font-weight: 700; margin: 7px 0 0;
-    font-optical-sizing: none; font-variation-settings: 'opsz' 9; }
+  #m-app .m-h2 { font-family: 'Fraunces', Georgia, serif; font-size: 22px; line-height: 1.22;
+    font-weight: 700; margin: 7px 0 0; }
   #m-app .m-lead { font: 400 12.5px/1.5 'Inter', sans-serif; color: #5d6470; margin: 6px 0 0; }
 
   /* --- Botones (oro plano, radio 3, versalita) --- */
@@ -83,9 +85,8 @@
     background: #1B1B2F; border-bottom: 1px solid rgba(197,160,89,.28); }
   #m-app .m-brand { display: flex; align-items: center; gap: 9px; min-height: 44px; }
   #m-app .m-brand img { height: 26px; width: 26px; object-fit: contain; }
-  #m-app .m-brand b { font-family: 'Bodoni Moda', Georgia, serif; color: #fff; font-size: 15px;
-    font-weight: 700; letter-spacing: .3px;
-    font-optical-sizing: none; font-variation-settings: 'opsz' 8; }
+  #m-app .m-brand b { font-family: 'Fraunces', Georgia, serif; color: #fff; font-size: 15px;
+    font-weight: 700; letter-spacing: .3px; }
   #m-app .m-bar__cta { display: inline-flex; align-items: center; height: 40px; padding: 0 13px;
     border-radius: 3px; background: #c5a059; color: #1B1B2F;
     font: 700 11.5px 'Inter', sans-serif; letter-spacing: .1em; text-transform: uppercase; }
@@ -131,9 +132,8 @@
   #m-app .m-stats { display: flex; gap: 8px; margin-top: 18px; }
   #m-app .m-stats div { flex: 1; text-align: center; padding: 9px 4px; border-radius: 3px;
     background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1); }
-  #m-app .m-stats b { display: block; font-family: 'Bodoni Moda', Georgia, serif; font-size: 17px;
-    font-weight: 700; color: #d9bd84; line-height: 1.15;
-    font-optical-sizing: none; font-variation-settings: 'opsz' 8; }
+  #m-app .m-stats b { display: block; font-family: 'Fraunces', Georgia, serif; font-size: 17px;
+    font-weight: 700; color: #d9bd84; line-height: 1.15; }
   #m-app .m-stats small { font: 600 11px 'Inter', sans-serif; letter-spacing: .5px;
     text-transform: uppercase; color: rgba(255,255,255,.66); }
 
@@ -148,7 +148,7 @@
   /* 6. Método (banda navy, la cifra primero) ------------------ */
   #m-app .m-method { background: #1B1B2F; color: #fff; padding: 28px 20px 26px; }
   #m-app .m-method__claim { display: flex; align-items: flex-start; gap: 14px; margin-top: 12px; }
-  #m-app .m-method__num { font-family: 'Bodoni Moda', Georgia, serif; font-size: 58px;
+  #m-app .m-method__num { font-family: 'Fraunces', Georgia, serif; font-size: 58px;
     font-weight: 700; line-height: .9; color: #d9bd84; }
   #m-app .m-method__claim p { flex: 1; min-width: 0; font: 400 14px/1.45 'Inter', sans-serif;
     color: rgba(255,255,255,.82); padding-top: 4px; margin: 0; }
@@ -166,9 +166,8 @@
   #m-app .m-lvl { display: flex; align-items: center; gap: 12px; width: 100%; min-height: 48px;
     padding: 6px 0; background: none; border: none; border-bottom: 1px solid rgba(255,255,255,.09);
     text-align: left; cursor: pointer; font-family: inherit; }
-  #m-app .m-lvl__cefr { flex: none; width: 48px; font-family: 'Bodoni Moda', Georgia, serif;
-    font-size: 16px; font-weight: 700; color: #d9bd84;
-    font-optical-sizing: none; font-variation-settings: 'opsz' 8; }
+  #m-app .m-lvl__cefr { flex: none; width: 48px; font-family: 'Fraunces', Georgia, serif;
+    font-size: 16px; font-weight: 700; color: #d9bd84; }
   #m-app .m-lvl.is-open .m-lvl__cefr { color: #f3e2ab; }
   #m-app .m-lvl__body { flex: 1; min-width: 0; }
   #m-app .m-lvl__name { display: block; font: 600 13.5px 'Inter', sans-serif; color: #fff; }
@@ -205,12 +204,10 @@
     font: 700 11px 'Inter', sans-serif; letter-spacing: .1em; text-transform: uppercase;
     color: #1B1B2F; background: #c5a059; padding: 4px 8px; border-radius: 2px; }
   #m-app .m-course__n { position: absolute; top: 11px; right: 12px; z-index: 2;
-    font-family: 'Bodoni Moda', Georgia, serif; font-size: 15px; font-weight: 700; color: rgba(255,255,255,.78);
-    font-optical-sizing: none; font-variation-settings: 'opsz' 8; }
+    font-family: 'Fraunces', Georgia, serif; font-size: 15px; font-weight: 700; color: rgba(255,255,255,.78); }
   #m-app .m-course__t { position: absolute; left: 13px; right: 13px; bottom: 12px; z-index: 2;
-    font-family: 'Bodoni Moda', Georgia, serif; font-size: 18px; font-weight: 700; color: #fff;
-    line-height: 1.18; text-align: left;
-    font-optical-sizing: none; font-variation-settings: 'opsz' 8; }
+    font-family: 'Fraunces', Georgia, serif; font-size: 18px; font-weight: 700; color: #fff;
+    line-height: 1.18; text-align: left; }
   /* Pista de que la carta del frente sí lleva a algún sitio */
   #m-app .m-card.is-active .m-course__go { opacity: 1; }
   #m-app .m-course__go { position: absolute; right: 11px; bottom: 12px; z-index: 3; opacity: 0;
@@ -230,17 +227,15 @@
   #m-app .m-plan__kind { display: flex; align-items: center; gap: 7px;
     font: 700 11px 'Inter', sans-serif; letter-spacing: .12em; text-transform: uppercase; color: #7c5e22; }
   #m-app .m-plan__kind .i { font-size: 13px; color: #8a6a2a; }
-  #m-app .m-plan__name { display: block; font-family: 'Bodoni Moda', Georgia, serif; font-size: 18px;
-    font-weight: 700; line-height: 1.18; color: #4a4a5e; margin-top: 9px;
-    font-optical-sizing: none; font-variation-settings: 'opsz' 8; }
+  #m-app .m-plan__name { display: block; font-family: 'Fraunces', Georgia, serif; font-size: 18px;
+    font-weight: 700; line-height: 1.18; color: #4a4a5e; margin-top: 9px; }
   #m-app .m-card.is-active .m-plan__name { color: #1B1B2F; }
   #m-app .m-plan__rule { display: block; height: 1px; background: #e4e0d8; margin: 13px 0 12px; }
   #m-app .m-card.is-active .m-plan__rule { background: #c5a059; }
   #m-app .m-plan__price { display: flex; align-items: flex-start; gap: 2px; }
-  #m-app .m-plan__cur { font-family: 'Bodoni Moda', Georgia, serif; font-size: 15px;
-    font-weight: 700; color: #8a6a2a; padding-top: 5px;
-    font-optical-sizing: none; font-variation-settings: 'opsz' 8; }
-  #m-app .m-plan__amt { font-family: 'Bodoni Moda', Georgia, serif; font-size: 32px;
+  #m-app .m-plan__cur { font-family: 'Fraunces', Georgia, serif; font-size: 15px;
+    font-weight: 700; color: #8a6a2a; padding-top: 5px; }
+  #m-app .m-plan__amt { font-family: 'Fraunces', Georgia, serif; font-size: 32px;
     font-weight: 700; line-height: .98; color: #1B1B2F; letter-spacing: -.01em; }
   #m-app .m-plan__unit { display: block; font: 600 11px 'Inter', sans-serif; letter-spacing: .1em;
     text-transform: uppercase; color: #5d6470; margin-top: 7px; }
@@ -273,9 +268,8 @@
   #m-app .m-cert__row { display: flex; gap: 8px; }
   #m-app .m-cert__row div { flex: 1; background: #fff; border: 1px solid #ece7da; border-radius: 3px;
     padding: 12px 10px; text-align: center; }
-  #m-app .m-cert__row b { display: block; font-family: 'Bodoni Moda', Georgia, serif;
-    font-size: 16px; font-weight: 700; color: #1B1B2F;
-    font-optical-sizing: none; font-variation-settings: 'opsz' 8; }
+  #m-app .m-cert__row b { display: block; font-family: 'Fraunces', Georgia, serif;
+    font-size: 16px; font-weight: 700; color: #1B1B2F; }
   #m-app .m-cert__row small { font: 400 11.5px 'Inter', sans-serif; color: #5d6470; }
 
   /* 10. FAQ -------------------------------------------------- */
@@ -313,8 +307,8 @@
   #m-app .m-foot { background: #141a2e; color: rgba(255,255,255,.62); padding: 22px 20px 96px; }
   #m-app .m-foot__brand { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
   #m-app .m-foot__brand img { height: 30px; }
-  #m-app .m-foot__brand b { font-family: 'Bodoni Moda', Georgia, serif; color: #fff; font-size: 15px;
-    font-weight: 700; font-optical-sizing: none; font-variation-settings: 'opsz' 8; }
+  #m-app .m-foot__brand b { font-family: 'Fraunces', Georgia, serif; color: #fff; font-size: 15px;
+    font-weight: 700; }
   #m-app .m-foot__links { display: grid; grid-template-columns: 1fr 1fr; gap: 2px 14px; margin-bottom: 14px; }
   #m-app .m-foot__links a { display: flex; align-items: center; min-height: 44px;
     font: 500 12.5px 'Inter', sans-serif; color: rgba(255,255,255,.66); }

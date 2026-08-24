@@ -31,10 +31,13 @@
      Awesome se fue en favor del sprite SVG en línea, como en la portada. -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<!-- Bodoni Moda (display, eje óptico variable) + Inter, en una sola petición y
+<!-- Fraunces (display, eje óptico variable) + Inter, en una sola petición y
      como <link>: antes iba en un @import DENTRO del <style>, que no arranca
-     hasta que el CSS se parsea y dejaba los preconnect de adorno. -->
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,600;0,6..96,700;1,6..96,400;1,6..96,500&family=Inter:wght@400;500;600;700&display=swap">
+     hasta que el CSS se parsea y dejaba los preconnect de adorno.
+     La display era Bodoni Moda; se cambió porque sus trazos finos se perdían
+     contra el fondo. Fraunces es de contraste bajo y aguanta los titulares
+     pequeños de las tarjetas sin desaparecer. -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=Inter:wght@400;500;600;700&display=swap">
 <!-- Tokens ANTES del <style> de la página, como manda su cabecera. Estuvo
      después durante mucho tiempo, al revés del contrato. -->
 <link rel="stylesheet" href="assets/css/vesper_tokens.css">
