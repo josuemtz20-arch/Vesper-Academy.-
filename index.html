@@ -196,7 +196,7 @@ section[id]{scroll-margin-top:86px;}
    nada de eso: se deja el eje óptico en `auto` en todas partes y cada
    titular usa el peso que declara. Lo único que sobrevive es el suavizado,
    que sigue siendo la elección correcta para el texto claro sobre noche. */
-.hero,.creds,#resultados,#ruta,.temas,#cursos,#contacto,footer,.dossier{
+.hero,.creds,#ruta,.temas,#cursos,#contacto,footer,.dossier{
   -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
 }
 
@@ -365,8 +365,8 @@ section{padding:var(--s-section) 0;}
                copiamos de 66nord; el número es lo que da el ritmo.
                Además AHORRA alto: cifra y titular comparten fila en
                vez de apilarse.
-   .quiet-head Material de apoyo (resultados, clase, temas, Vesper,
-               FAQ). Sólo versalita y titular a --t-h4. Sin filete.
+   .quiet-head Material de apoyo (temas, Vesper, FAQ).
+               Sólo versalita y titular a --t-h4. Sin filete.
    El héroe y el cierre conservan el filete corto: son los dos extremos
    de la página y no forman parte de la numeración.
    ============================================================ */
@@ -435,48 +435,6 @@ section{padding:var(--s-section) 0;}
 .ratio-bar .teach{background:#cbbfa6;flex:0 0 20%;}
 .ratio-legend{display:flex;justify-content:space-between;margin-top:14px;font-size:var(--t-small);color:var(--muted);}
 .ratio-legend b{color:var(--ink);font-weight:600;}
-
-/* ---------- RESULTADOS: la lámina pasa a ser figura ----------
-   Las tres cifras flotaban sobre la noche y la lámina grabada era una banda
-   a sangre de 294px ENTRE secciones: al no tener marco ni pie se leía como
-   un hueco sin llenar, no como contenido. Aquí la lámina es la cabecera de
-   un pliego con filete y las cifras van dentro. El grabado mide 1600x450
-   (3.56:1) —proporción de banda ancha— así que corona el pliego a lo largo;
-   NO puede ir en columna al lado del texto sin recortarle la composición. */
-.rfig{
-  margin-top:40px;border:1px solid var(--hair);border-radius:var(--r-lg);
-  overflow:hidden;background:var(--dusk);
-}
-/* La figura toma la PROPORCION de la lamina (1600x450), no una altura sacada
-   del viewport. Con height fija la caja daba 1078x205 = 5.26:1 contra un
-   original de 3.556:1, asi que object-fit:cover tiraba el 32 % del grabado
-   (304 de 450 filas) y cortaba en plano las dos burbujas de dialogo por
-   arriba y por abajo: justo lo que hace que una lamina se lea como recorte
-   accidental. Con aspect-ratio, cover ya no recorta nada. */
-.rfig-art{margin:0;aspect-ratio:1600/450;border-bottom:1px solid var(--hair);}
-.rfig-art img{width:100%;height:100%;object-fit:cover;display:block;}
-.rgrid{display:grid;grid-template-columns:repeat(3,1fr);}
-.rgrid div{padding:32px clamp(20px,2.6vw,30px);border-left:1px solid var(--hair);}
-.rgrid div:first-child{border-left:0;}
-/* El techo baja de 3.5rem a 2.9rem (56 -> 46px a 1280). A 56 estas cifras
-   eran el segundo texto más grande de la página después del héroe y quedaban
-   a un pelo de los títulos de CAPÍTULO (59): una sección de apoyo pisando a
-   las cinco que sostienen la venta. Y dejaban a su propio h2 —32px, voz de
-   apoyo— dominado 1.75:1, o sea el encabezado leía como pie de foto de las
-   cifras que introduce. A 46 las cifras siguen mandando dentro de su pliego
-   (1.45:1 contra el h2) sin competir con los capítulos.
-   El SUELO va en 1.9rem y no en 2.1: el mínimo de --t-h2 es 2.05rem (32.8px),
-   así que un suelo de 2.1 (33.6) volvía a dejar las cifras de una sección de
-   apoyo por encima de los títulos de capítulo en pantallas estrechas. Con
-   1.9rem la cifra queda por debajo del capítulo en TODO el rango (comprobado
-   en los cruces de los clamp: 400, 700, 900, 1055, 1280 y 1500px) y mantiene
-   ~1.4:1 sobre su propio h2 en todo el rango. */
-.rgrid b{
-  display:block;font-family:var(--display);font-optical-sizing:auto;
-  font-size:clamp(1.9rem,4.4vw,2.9rem);font-weight:600;color:var(--star);
-  line-height:1;font-variant-numeric:tabular-nums;
-}
-.rgrid p{margin:14px 0 0;color:var(--on-night-soft);font-size:var(--t-body);max-width:26ch;}
 
 /* ============================================================
    LA CONSTELACIÓN — #ruta
@@ -1101,11 +1059,6 @@ footer{background:#0e0c1f;border-top:1px solid var(--hair);padding:60px 0 30px;c
   .mgrid{grid-template-columns:1fr;}
   .mcell{border-left:0;padding-left:0;padding-right:0;}
   .mcell:nth-child(2){border-top:1px solid var(--line);padding-top:38px;}
-  /* Apiladas, pero YA NO con padding-left:0: ahora viven dentro del pliego
-     de .rfig y pegarlas al filete izquierdo las dejaría sin margen. */
-  .rgrid{grid-template-columns:1fr;}
-  .rgrid div{border-left:0;border-top:1px solid var(--hair);}
-  .rgrid div:first-child{border-top:0;}
   /* Cinco credenciales en 900px quedan a ~150px cada una: se aprietan. A tres. */
   .creds-inner{grid-template-columns:repeat(3,1fr);}
   .creds-inner span:nth-child(4){border-left:0;}
@@ -1520,34 +1473,6 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
       <div class="ratio-legend">
         <span><b>80 %</b> hablas tú</span>
         <span><b>20 %</b> explica el profesor</span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ============ RESULTADOS ============ -->
-<!-- La lámina que estaba AQUÍ como banda a sangre de 294px ahora corona el
-     pliego de las cifras, unos renglones más abajo: sin marco ni pie, entre
-     dos secciones, se leía como un hueco en vez de como contenido. -->
-<section id="resultados">
-  <div class="container">
-    <div class="quiet-head reveal">
-      <span class="eyebrow">Lo que puedes esperar</span>
-      <h2 class="sec-title">Progreso que se mide, no que se promete.</h2>
-    </div>
-    <div class="rfig reveal">
-      <!-- div y alt="" a proposito: la lamina es ORNAMENTO que remata el
-           pliego. Como <figure> con alt descriptivo se anunciaba una
-           descripcion de 74 caracteres entre el encabezado y las tres cifras
-           que introduce; asi el adorno sale del arbol de accesibilidad y la
-           seccion se lee encabezado -> cifras. -->
-      <div class="rfig-art">
-        <img src="assets/images/landing/plate_conversacion.webp" alt="" width="1600" height="450" loading="lazy" decoding="async">
-      </div>
-      <div class="rgrid">
-        <div><b><span data-count="15">15</span> min</b><p>Es lo que tarda el examen diagnóstico en decirte tu nivel exacto.</p></div>
-        <div><b><span data-count="80">80</span> %</b><p>Del tiempo de clase lo ocupas hablando tú, no escuchando.</p></div>
-        <div><b>A1<span class="sr"> a </span>–C2</b><p>La escala completa del MCER, sin saltarte peldaños ni inventarlos.</p></div>
       </div>
     </div>
   </div>
@@ -2146,29 +2071,6 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
       els.forEach(function(el){ io.observe(el); });
     } else {
       els.forEach(function(el){ el.classList.add('in-view'); });
-    }
-
-    /* Conteo ascendente, es-MX, easeOutExpo */
-    var counted = new WeakSet();
-    function countUp(node){
-      if(counted.has(node)) return; counted.add(node);
-      var target = parseFloat(node.dataset.count), start = null, dur = 1000;
-      function step(ts){
-        if(!start) start = ts;
-        var p = Math.min((ts - start)/dur, 1);
-        var e = p === 1 ? 1 : 1 - Math.pow(2, -10*p);
-        node.textContent = Math.round(target*e).toLocaleString('es-MX');
-        if(p < 1) requestAnimationFrame(step);
-      }
-      node.textContent = '0';
-      setTimeout(function(){ requestAnimationFrame(step); }, 250);
-    }
-    var nums = document.querySelectorAll('[data-count]');
-    if ('IntersectionObserver' in window && !reduce){
-      var io2 = new IntersectionObserver(function(entries){
-        entries.forEach(function(e){ if(e.isIntersecting){ countUp(e.target); io2.unobserve(e.target); } });
-      },{threshold:.4});
-      nums.forEach(function(n){ io2.observe(n); });
     }
 
     /* Carrusel de cursos. Scroll nativo: el gesto tactil y el teclado ya
