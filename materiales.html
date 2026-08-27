@@ -660,6 +660,7 @@ html:not(.vesper-dark) .vtour-back{border-color:var(--border);}
   <symbol id="i-cap" viewBox="0 0 24 24"><path d="M2.5 8.6 12 4.2l9.5 4.4L12 13z"/><path d="M6.4 10.4v5.2c0 1.6 2.5 2.9 5.6 2.9s5.6-1.3 5.6-2.9v-5.2"/><path d="M21.5 8.6v5.6"/></symbol>
   <symbol id="i-user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4.5 20.5a7.5 7.5 0 0 1 15 0"/></symbol>
   <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.8" cy="10.8" r="7"/><path d="m16 16 5 5"/></symbol>
+  <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3.3 9.2h17.4M3.3 14.8h17.4"/><path d="M12 3a13.5 13.5 0 0 1 0 18 13.5 13.5 0 0 1 0-18z"/></symbol>
   <symbol id="i-video" viewBox="0 0 24 24"><rect x="2.5" y="6" width="13" height="12" rx="2.2"/><path d="m15.5 11 6-3.2v8.4l-6-3.2z"/></symbol>
   <symbol id="i-compass" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m15.6 8.4-2 5.2-5.2 2 2-5.2z"/></symbol>
   <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5.4v13.2l11-6.6z"/></symbol>
@@ -922,11 +923,12 @@ html:not(.vesper-dark) .vtour-back{border-color:var(--border);}
         <div class="grp-txt">
           <svg class="i grp-ic" aria-hidden="true"><use href="#i-star"/></svg>
           <h2>Otros cursos</h2>
-          <span class="grp-n">2 libros</span>
+          <span class="grp-n">3 libros</span>
         </div>
       </div>
       <div class="grid">
         <a class="card" href="libro.html?id=cci1"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-bolt"/></svg></span><span class="cbody"><h3 class="va-display">Curso Intensivo (CCI 1)</h3><p>Bootcamp de fluidez rápida — primer mes.</p><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
+        <a class="card" href="libro.html?id=political_english"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-globe"/></svg></span><span class="cbody"><h3 class="va-display">Political &amp; Global Affairs</h3><p>Diplomacia, política pública y debate civil (B2–C1).</p><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
         <a class="card" href="libro.html?id=diagnostic_advanced"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-search"/></svg></span><span class="cbody"><h3 class="va-display">Diagnóstico Avanzado</h3><p>Evaluación integral — se realiza con tu profesor.</p><span class="go">Abrir examen <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
       </div>
     </section>
@@ -1524,7 +1526,7 @@ var VIcon = (function(){
 
 <script>
 /* ── Catálogo: reconciliación contra vesper_book_index.js ──────────────────
-   Las 24 tarjetas están escritas a mano en el HTML y aquí se COMPARAN con el
+   Las 25 tarjetas están escritas a mano en el HTML y aquí se COMPARAN con el
    índice, que es la fuente canónica (autogenerado desde los libros del alumno).
    Reconciliar, y no construir desde cero, es deliberado: vesper_book_index.js
    no está en el CORE del service worker y los subrecursos se sirven de caché
