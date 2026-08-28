@@ -1,372 +1,695 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html>
+<!-- class="vesper-dark" va escrita a mano, igual que en materiales.html: la
+     biblioteca tiene que salir de noche ANTES de que corra un script. Si el
+     alumno tiene elegido un tema claro, vesper_theme.js la quita. -->
+<html lang="en" class="vesper-dark">
 
 <head>
 <script src="vesper_auth.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vesper Academy | Audio Library</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inria+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@300;400;500;600;700&display=swap');
-        *, *::before, *::after { box-sizing: border-box; }
-        :root {
-            --navy:#1B1B2F; --navy2:#2c2c4a; --navy3:#15152b;
-            --gold:#c5a059; --gold-lt:#d9bd84; --gold2:#a8843d;
-            --cream:var(--va-cream,#f5f2eb); --white:var(--va-paper,#fff); --border:#e4e0d8;
-            --text:#1B1B2F; --muted:#6b7a8d;
-        }
-        body { font-family:'Inter',sans-serif; background:var(--cream); color:var(--text); margin:0; min-height:100vh; display:flex; flex-direction:column; }
-
-        /* HEADER */
-        header {
-            background:var(--navy); padding:0 48px; height:72px;
-            display:flex; align-items:center; justify-content:space-between;
-            border-bottom:3px solid var(--gold); box-shadow:0 2px 16px rgba(0,0,0,0.18);
-            position:sticky; top:0; z-index:100;
-        }
-        .logo-area { display:flex; align-items:center; gap:14px; }
-        .logo-area img { height:48px; width:48px; object-fit:contain; }
-        .logo-text h1 { margin:0; font-family:'Inria Serif',serif; font-size:1.25rem; font-weight:700; color:#fff; letter-spacing:0.5px; }
-        .logo-text p { margin:2px 0 0; font-size:0.7rem; color:var(--gold); letter-spacing:2px; text-transform:uppercase; font-weight:500; }
-        .head-right { display:flex; align-items:center; gap:22px; }
-        .head-right a { font-size:0.72rem; font-weight:600; letter-spacing:1px; text-transform:uppercase; color:rgba(255,255,255,0.75); text-decoration:none; display:flex; align-items:center; gap:7px; transition:color .2s; }
-        .head-right a:hover { color:var(--gold); }
-        .head-right > i { font-size:1.3rem; color:var(--gold); }
-
-        /* HERO */
-        .hero { position:relative; overflow:hidden; border-bottom:3px solid var(--gold);
-            background:radial-gradient(900px 320px at 78% -40%, rgba(197,160,89,0.18), transparent 60%), linear-gradient(160deg,var(--navy2),var(--navy) 55%,var(--navy3));
-            padding:44px 24px 40px; }
-        .hero::before { content:""; position:absolute; right:-40px; top:50%; transform:translateY(-50%); width:340px; height:340px;
-            background:url('assets/images/vesper_logo_inverted.png') center/contain no-repeat; opacity:0.08; }
-        .hero-inner { max-width:1120px; margin:0 auto; position:relative; z-index:1; }
-        .hero-emblem { display:flex; align-items:center; gap:16px; margin-bottom:16px; }
-        .hero-emblem img { width:62px; height:62px; object-fit:contain; }
-        .hero-emblem .kicker { font-size:0.7rem; letter-spacing:4px; text-transform:uppercase; color:var(--gold); font-weight:600; }
-        .hero-emblem .kicker + div { font-family:'Inria Serif',serif; color:#fff; font-size:1rem; font-weight:600; margin-top:2px; }
-        .hero h2 { font-family:'Inria Serif',serif; font-weight:800; font-size:2.5rem; margin:0 0 10px; color:#fff; }
-        .hero .lead { margin:0; color:rgba(255,255,255,0.72); font-size:0.96rem; max-width:560px; }
-        .hero .lead strong { color:var(--gold-lt); }
-
-        /* MAIN */
-        .main { flex:1; max-width:1120px; margin:0 auto; width:100%; padding:36px 24px 60px; }
-        .crumbs { display:flex; align-items:center; gap:10px; margin-bottom:24px; font-size:0.82rem; color:var(--muted); }
-        .crumbs a { color:var(--gold2); text-decoration:none; font-weight:600; cursor:pointer; }
-        .crumbs a:hover { text-decoration:underline; }
-        .crumbs .sep { opacity:0.5; }
-        .crumbs b { color:var(--navy); }
-
-        .view { animation:fade 0.32s ease both; }
-        @keyframes fade { from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:translateY(0);} }
-
-        .section-title { display:flex; align-items:center; gap:14px; margin:0 0 22px; }
-        .section-title h3 { margin:0; font-family:'Inria Serif',serif; font-size:1.5rem; color:var(--navy); }
-        .section-title .line { flex:1; height:1px; background:var(--border); }
-
-        /* LEVEL GRID */
-        .level-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:18px; }
-        .level-card {
-            background:var(--white); border:1px solid var(--border); border-radius:14px; overflow:hidden;
-            cursor:pointer; text-decoration:none; color:inherit;
-            box-shadow:0 1px 4px rgba(0,0,0,0.06); transition:transform .2s, box-shadow .2s, border-color .2s;
-            display:flex; flex-direction:column;
-        }
-        .level-card:hover { transform:translateY(-5px); box-shadow:0 14px 34px rgba(26,43,66,0.16); border-color:var(--gold); }
-        .level-card .lc-top {
-            height:96px; background:linear-gradient(135deg,var(--navy2),var(--navy3)); position:relative;
-            display:flex; align-items:center; padding:0 22px; gap:16px; border-bottom:3px solid var(--gold);
-        }
-        .level-card .lc-top .num {
-            width:54px; height:54px; border-radius:13px; background:var(--gold); color:var(--navy);
-            display:flex; align-items:center; justify-content:center; font-family:'Inria Serif',serif; font-weight:800; font-size:1.5rem; flex-shrink:0;
-        }
-        .level-card .lc-top .bigicon { position:absolute; right:18px; font-size:2.6rem; color:rgba(197,160,89,0.28); }
-        .level-card .lc-top .lvl-name { color:#fff; }
-        .level-card .lc-top .lvl-name b { display:block; font-size:1.05rem; font-weight:700; }
-        .level-card .lc-top .lvl-name small { font-size:0.72rem; color:var(--gold-lt); letter-spacing:0.5px; }
-        .level-card .lc-body { padding:16px 22px 18px; flex:1; display:flex; flex-direction:column; }
-        .level-card .lc-body p { margin:0; font-size:0.83rem; color:var(--muted); flex:1; line-height:1.5; }
-        .level-card .lc-foot { margin-top:14px; display:flex; align-items:center; justify-content:space-between; font-size:0.72rem; font-weight:700; letter-spacing:0.8px; text-transform:uppercase; color:var(--gold2); border-top:1px solid var(--border); padding-top:12px; }
-
-        /* DIAGNOSTICS small card variant */
-        .level-card.diag .lc-top { background:linear-gradient(135deg,#3a2d4a,#241a33); }
-        .level-card.diag .lc-top .num { background:var(--gold); }
-        .level-card.biz .lc-top { background:linear-gradient(135deg,#1d4044,#10262b); }
-        .level-card.biz .lc-top .num { background:var(--gold); }
-        .level-card.basics .lc-top { background:linear-gradient(135deg,#235c3f,#12301f); }
-        .level-card.basics .lc-top .num { background:var(--gold); }
-
-        /* LESSON GRID — album-cover style cards */
-        .lesson-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(210px,1fr)); gap:16px; }
-        .lesson-card {
-            background:var(--white); border:1px solid var(--border); border-radius:14px; overflow:hidden;
-            cursor:pointer; text-decoration:none; color:inherit;
-            display:flex; flex-direction:column; box-shadow:0 1px 4px rgba(0,0,0,0.05);
-            transition:transform .16s, box-shadow .16s, border-color .16s; animation:fade .4s ease both;
-        }
-        .lesson-card:hover { transform:translateY(-4px); box-shadow:0 12px 28px rgba(26,43,66,0.15); border-color:var(--gold); }
-        .vc-cover { position:relative; height:112px; display:flex; align-items:center; justify-content:center; overflow:hidden; border-bottom:3px solid var(--gold); }
-        .vc-cover .vc-ghost { position:absolute; right:-14px; bottom:-20px; font-size:5.4rem; color:rgba(255,255,255,0.07); transform:rotate(-12deg); }
-        .vc-cover .vc-medal {
-            width:54px; height:54px; border-radius:50%; border:1.5px solid;
-            display:flex; align-items:center; justify-content:center; font-size:1.3rem;
-            background:rgba(255,255,255,0.06); box-shadow:0 6px 18px rgba(0,0,0,0.3);
-            transition:transform .2s;
-        }
-        .lesson-card:hover .vc-medal { transform:scale(1.1); }
-        .vc-cover .vc-img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; }
-        .vc-cover .vc-badge {
-            position:absolute; top:10px; left:10px; font-size:0.58rem; font-weight:700; letter-spacing:1.2px;
-            text-transform:uppercase; color:#fff; background:rgba(0,0,0,0.38); padding:3px 9px;
-            border-radius:12px; border:1px solid rgba(255,255,255,0.18); z-index:2; backdrop-filter:blur(2px);
-        }
-        .lesson-card .lz-body { display:flex; align-items:center; gap:10px; padding:13px 15px; flex:1; }
-        .lesson-card .lz-meta { min-width:0; flex:1; }
-        .lesson-card .lz-meta .num { font-size:0.66rem; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:var(--gold2); }
-        .lesson-card .lz-meta h4 { margin:2px 0 0; font-size:0.96rem; font-weight:700; color:var(--navy); line-height:1.25; }
-        .lesson-card .lz-go { color:var(--muted); font-size:0.9rem; flex-shrink:0; transition:transform .16s, color .16s; }
-        .lesson-card:hover .lz-go { color:var(--gold2); transform:translateX(3px); }
-
-        .back-btn {
-            display:inline-flex; align-items:center; gap:8px; cursor:pointer; border:1px solid var(--border);
-            background:var(--white); color:var(--navy); border-radius:10px; padding:9px 16px; font-family:'Inter',sans-serif;
-            font-size:0.82rem; font-weight:600; margin-bottom:22px; transition:all .16s;
-        }
-        .back-btn:hover { border-color:var(--gold); color:var(--gold2); }
-        .exam-btn { display:inline-flex; align-items:center; gap:8px; text-decoration:none; background:var(--navy); color:#fff;
-            border-radius:10px; padding:10px 18px; font-size:0.82rem; font-weight:700; letter-spacing:0.4px; transition:background .16s; }
-        .exam-btn:hover { background:var(--gold); color:var(--navy); }
-        .exam-btn.hidden { display:none; }
-
-        /* Tarjeta de acceso a la Pizarra Virtual */
-        .wb-card { display:flex; align-items:center; gap:16px; text-decoration:none; margin-bottom:26px;
-            background:linear-gradient(160deg,var(--navy2),var(--navy)); border:1px solid rgba(197,160,89,0.35);
-            border-left:5px solid var(--gold); border-radius:14px; padding:16px 20px; color:#fff;
-            box-shadow:0 8px 24px rgba(26,43,66,0.14); transition:transform .15s, box-shadow .15s; }
-        .wb-card:hover { transform:translateY(-2px); box-shadow:0 14px 32px rgba(26,43,66,0.20); }
-        .wb-card .wb-ico { width:50px; height:50px; border-radius:12px; background:var(--gold); color:var(--navy);
-            display:flex; align-items:center; justify-content:center; font-size:1.35rem; flex-shrink:0; }
-        .wb-card .wb-txt { display:flex; flex-direction:column; gap:3px; }
-        .wb-card .wb-kick { font-size:0.62rem; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; color:var(--gold); }
-        .wb-card .wb-title { font-size:1.08rem; font-weight:700; }
-        .wb-card .wb-desc { font-size:0.82rem; color:rgba(255,255,255,0.72); }
-        .wb-card .wb-arrow { margin-left:auto; color:var(--gold); font-size:1.05rem; }
-        @media (max-width:600px){ .wb-card .wb-arrow { display:none; } .wb-card .wb-desc { font-size:0.76rem; } }
-
-        footer { background:var(--navy); color:rgba(255,255,255,0.45); text-align:center; padding:30px 40px; font-size:0.78rem; letter-spacing:0.5px; border-top:3px solid var(--gold); }
-        footer .flogo { height:40px; width:40px; object-fit:contain; margin-bottom:10px; }
-        footer span { color:var(--gold); margin-left:16px; }
-        footer a { color:var(--gold); text-decoration:none; font-weight:600; }
-        footer .fnav { margin-top:14px; }
-
-        /* SEARCH + CONTINUE LISTENING (hub enhancements) */
-        .hero-tools { margin-top:24px; max-width:540px; }
-        .hero-search { display:flex; align-items:center; gap:12px; background:rgba(255,255,255,0.07);
-            border:1px solid rgba(197,160,89,0.4); border-radius:12px; padding:12px 16px;
-            transition:border-color .16s, background .16s; }
-        .hero-search:focus-within { border-color:var(--gold); background:rgba(255,255,255,0.12); }
-        .hero-search > i { color:var(--gold); font-size:0.95rem; }
-        .hero-search input { flex:1; background:transparent; border:none; outline:none; color:#fff;
-            font-family:'Inter',sans-serif; font-size:0.92rem; min-width:0; }
-        .hero-search input::placeholder { color:rgba(255,255,255,0.5); }
-        .hero-search input::-webkit-search-cancel-button { -webkit-appearance:none; }
-        .hero-search kbd { font-family:'Inter',sans-serif; font-size:0.62rem; font-weight:700; color:rgba(255,255,255,0.55);
-            border:1px solid rgba(255,255,255,0.25); border-radius:5px; padding:2px 7px; letter-spacing:0.5px; }
-        .hero-search:focus-within kbd { display:none; }
-        .hero-stats { margin-top:14px; display:flex; gap:22px; flex-wrap:wrap; font-size:0.74rem;
-            color:rgba(255,255,255,0.6); letter-spacing:0.3px; }
-        .hero-stats b { color:var(--gold-lt); font-weight:700; }
-
-        .recent-section { margin-bottom:40px; }
-        .recent-head { display:flex; align-items:center; gap:16px; margin:0 0 22px; }
-        .recent-title { margin:0; font-family:'Inria Serif',serif; font-size:1.3rem; color:var(--navy);
-            display:flex; align-items:center; gap:10px; white-space:nowrap; }
-        .recent-head .line { flex:1; height:1px; background:var(--border); }
-        .recent-clear { background:none; border:none; color:var(--muted); font-size:0.72rem; font-weight:700;
-            cursor:pointer; letter-spacing:0.6px; text-transform:uppercase; display:inline-flex; align-items:center;
-            gap:6px; transition:color .16s; flex-shrink:0; }
-        .recent-clear:hover { color:var(--gold2); }
-
-        .ver-badge { font-weight:600; font-size:0.66rem; letter-spacing:.3px; color:#a8843d;
-            background:rgba(197,160,89,.16); padding:2px 8px; border-radius:10px; white-space:nowrap; vertical-align:middle; }
-
-        /* Practice result, read back from the score the player saved for this
-           track (same seed on both sides). Only shows once a student has tried. */
-        .pr-badge { display:inline-flex; align-items:center; gap:4px; font-weight:700; font-size:0.63rem;
-            letter-spacing:.3px; padding:2px 8px; border-radius:10px; white-space:nowrap; vertical-align:middle;
-            background:rgba(45,158,117,.14); color:#1d6d50; }
-        .pr-badge.part { background:rgba(197,160,89,.18); color:#a8843d; }
-        .pr-badge i { font-size:0.62rem; }
-
-        .stat-level { display:inline-flex; align-items:center; gap:6px; background:rgba(197,160,89,0.18);
-            border:1px solid rgba(197,160,89,0.45); color:var(--gold-lt); padding:3px 11px; border-radius:20px;
-            font-weight:600; letter-spacing:0.3px; }
-        .stat-level b { color:#fff; }
-
-        /* GROUP HEADERS inside the level grid */
-        .grid-head { grid-column:1 / -1; display:flex; align-items:baseline; gap:12px; margin:18px 0 0; }
-        .grid-head:first-child { margin-top:0; }
-        .grid-head .gh-title { font-family:'Inria Serif',serif; font-size:1.1rem; font-weight:700; color:var(--navy); }
-        .grid-head .gh-kicker { font-size:0.6rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; color:var(--gold2); }
-        .grid-head .gh-line { flex:1; height:1px; background:var(--border); align-self:center; }
-
-        /* LOCKED collection cards */
-        .level-card.locked { cursor:not-allowed; opacity:0.72; filter:saturate(0.55); }
-        .level-card.locked:hover { transform:none; box-shadow:0 1px 4px rgba(0,0,0,0.06); border-color:var(--border); }
-        .level-card.locked .lc-top { filter:grayscale(0.35) brightness(0.82); }
-        .level-card.locked .lc-foot { color:var(--muted); }
-        .level-card .lock-flag { position:absolute; top:12px; right:16px; display:inline-flex; align-items:center; gap:6px;
-            background:rgba(0,0,0,0.5); color:var(--gold-lt); font-size:0.66rem; font-weight:700; letter-spacing:0.6px;
-            padding:4px 10px; border-radius:20px; border:1px solid rgba(197,160,89,0.4); backdrop-filter:blur(2px); }
-
-        /* LOCKED lesson cards */
-        .lesson-card.locked { cursor:not-allowed; }
-        .lesson-card.locked:hover { transform:none; box-shadow:0 1px 4px rgba(0,0,0,0.05); border-color:var(--border); }
-        .lesson-card.locked .vc-cover { filter:grayscale(0.6) brightness(0.7); }
-        .lesson-card.locked .lz-meta h4 { color:var(--muted); }
-        .lesson-card .vc-lock { position:absolute; top:10px; right:10px; z-index:3; width:26px; height:26px; border-radius:50%;
-            display:flex; align-items:center; justify-content:center; font-size:0.72rem; color:#fff;
-            background:rgba(0,0,0,0.55); border:1px solid rgba(255,255,255,0.25); }
-
-        /* LOCK modal */
-        .lock-modal { position:fixed; inset:0; z-index:2000; display:none; align-items:center; justify-content:center;
-            background:rgba(20,20,38,0.6); padding:22px; backdrop-filter:blur(3px); }
-        .lock-modal.open { display:flex; animation:fade 0.2s ease both; }
-        .lock-box { background:var(--white); border:1px solid var(--border); border-top:4px solid var(--gold);
-            border-radius:16px; max-width:400px; width:100%; padding:30px 28px 24px; text-align:center; position:relative;
-            box-shadow:0 24px 60px rgba(20,20,38,0.35); }
-        .lock-box .lock-x { position:absolute; top:12px; right:14px; background:none; border:none; font-size:1.5rem;
-            line-height:1; color:var(--muted); cursor:pointer; }
-        .lock-box .lock-x:hover { color:var(--navy); }
-        .lock-box .lock-ico { width:58px; height:58px; margin:0 auto 16px; border-radius:16px;
-            background:linear-gradient(135deg,var(--navy2),var(--navy3)); color:var(--gold);
-            display:flex; align-items:center; justify-content:center; font-size:1.5rem; border:1px solid rgba(197,160,89,0.4); }
-        .lock-box h3 { margin:0 0 10px; font-family:'Inria Serif',serif; font-size:1.35rem; color:var(--navy); }
-        .lock-box p { margin:0 0 8px; font-size:0.92rem; color:var(--text); line-height:1.5; }
-        .lock-box p b { color:var(--gold2); }
-        .lock-box .lock-sub { font-size:0.82rem; color:var(--muted); margin-bottom:20px; }
-        .lock-box .lock-actions { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
-        .lock-box .lock-cta { display:inline-flex; align-items:center; gap:8px; text-decoration:none; background:var(--navy);
-            color:#fff; border-radius:10px; padding:10px 18px; font-size:0.84rem; font-weight:700; transition:background .16s; }
-        .lock-box .lock-cta:hover { background:var(--gold); color:var(--navy); }
-        .lock-box .lock-dismiss { background:none; border:1px solid var(--border); color:var(--navy); border-radius:10px;
-            padding:10px 18px; font-size:0.84rem; font-weight:600; cursor:pointer; transition:border-color .16s; }
-        .lock-box .lock-dismiss:hover { border-color:var(--gold); color:var(--gold2); }
-
-        .result-count { font-size:0.82rem; color:var(--muted); margin:0 0 20px; }
-        .search-empty { text-align:center; padding:56px 20px; color:var(--muted); }
-        .search-empty i { font-size:2.4rem; color:var(--border); margin-bottom:14px; display:block; }
-        .search-empty b { display:block; color:var(--navy); font-size:1.05rem; margin-bottom:4px; }
-
-        @media (max-width:680px){
-            header,.hero,.main{ padding-left:16px; padding-right:16px; }
-            .hero h2{ font-size:2rem; }
-            .head-right a span{ display:none; }
-            .lesson-grid{ grid-template-columns:repeat(2,1fr); gap:12px; }
-            .vc-cover{ height:92px; }
-            .vc-cover .vc-medal{ width:46px; height:46px; font-size:1.1rem; }
-            .lesson-card .lz-body{ padding:11px 12px; }
-            .lesson-card .lz-meta h4{ font-size:0.85rem; }
-            .lesson-card .lz-go{ display:none; }
-            .level-grid{ gap:14px; }
-        }
-    /* Foco de teclado visible (WCAG 2.4.7) */
-:focus-visible{outline:3px solid var(--gold,#c5a059);outline-offset:2px}
-</style>
+    <meta name="description" content="Biblioteca de audio de Vesper Academy: escucha, lee la transcripcion y practica cada leccion.">
+    <meta name="theme-color" content="#14122a">
     <link rel="icon" href="assets/images/vesper_logo.png" type="image/png">
-<link rel="stylesheet" href="assets/css/vesper_tokens.css">
+
+    <!-- Fraunces (display) + Inter, la misma pareja del portal. Como <link> y
+         con preconnect, no como @import dentro del <style>: un @import no
+         arranca hasta que el CSS se parsea y deja los preconnect de adorno. -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=Inter:wght@400;500;600;700&display=swap">
+    <!-- Font Awesome se queda SOLO por los glifos de leccion: vesper_covers.js
+         guarda una clase fa- por pista y lo comparte con lesson.html, asi que
+         retirarlo aqui rompe la otra pagina. El resto de la interfaz ya no lo
+         usa: los iconos del chrome son el sprite SVG en linea del <body>. -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <!-- Tokens ANTES del <style> de la pagina, como manda su cabecera. -->
+    <link rel="stylesheet" href="assets/css/vesper_tokens.css">
+    <style>
+        *, *::before, *::after { box-sizing:border-box; }
+
+        /* ============================================================
+           Paleta: TODO resuelve a un token, con los MISMOS nombres que emite
+           buildVars() de vesper_theme.js, para que el tema elegido por el
+           alumno pise esta hoja en caliente sin una sola regla condicional.
+           Los valores sembrados aqui son los de "vespertina": el service
+           worker puede servir un vesper_theme.js viejo, y la biblioteca tiene
+           que salir de noche igual.
+
+           PROHIBIDO consumir --navy3: buildVars lo mapea a t.cream, que en un
+           tema CLARO es crema de verdad. La version anterior de esta pagina
+           pintaba las bandas con linear-gradient(--navy2,--navy3) y texto
+           blanco encima: con cualquier tema claro quedaban invisibles. Las
+           bandas de arte de aqui llevan su propio degradado oscuro literal
+           - son caratulas, no superficie de tema.
+           ============================================================ */
+        :root {
+            --navy:var(--va-dusk,#1f2342);
+            --navy2:var(--va-twilight,#3a3a63);
+            --gold:var(--va-gold,#C9A84C);
+            --gold-lt:var(--va-star,#f3e2ab);
+            --gold2:#dcc173;
+            /* Oro para TEXTO PEQUENO. El motor calcula el valor accesible por
+               tema (#7a5e12 en los claros); aqui sembramos el de noche. */
+            --gold-ink:var(--va-gold,#C9A84C);
+            --cream:var(--va-night,#14122a);
+            --white:var(--va-dusk,#1f2342);
+            --paper:var(--va-dusk,#1f2342);
+            --text:#EDE7D6;
+            --border:var(--va-twilight,#3a3a63);
+            --muted:#b3b0c9;
+            --hair:var(--va-hairline,rgba(201,168,76,.35));
+            --on-night:var(--va-on-night,rgba(245,242,235,.90));
+            --on-night-soft:var(--va-on-night-soft,rgba(245,242,235,.62));
+
+            --s-section:clamp(38px,5vw,64px);
+            --gutter:clamp(18px,4vw,32px);
+            --maxw:1160px;
+
+            --t-eyebrow:.7rem; --t-small:.83rem; --t-body:.95rem; --t-lead:1.05rem;
+            --t-h2:clamp(1.5rem,2.6vw,1.9rem);
+
+            --r-sm:var(--va-r-sm,10px); --r-md:var(--va-r-md,14px); --r-lg:var(--va-r-lg,18px); --r-pill:999px;
+            --sh-dusk:var(--va-shadow-dusk,0 18px 44px rgba(20,18,42,.22));
+            --ease-out:cubic-bezier(0.22,1,0.36,1);
+        }
+        /* Alto contraste sobre noche: --muted vive arriba como literal para
+           sobrevivir sin JS, asi que la rama de vesper_tokens.css no lo
+           alcanza y hay que reforzarlo tambien aqui. */
+        html.vesper-hc.vesper-dark { --muted:#d9d5e4; --border:#6d6da0; }
+
+        html { scroll-behavior:smooth; }
+        body {
+            margin:0; min-height:100vh; display:flex; flex-direction:column;
+            font-family:var(--va-font-text,Inter,system-ui,sans-serif);
+            background:var(--cream); color:var(--text);
+            line-height:1.62; letter-spacing:-0.011em;
+        }
+
+        /* Iconos del chrome: sprite SVG en linea, heredan currentColor. */
+        .i { width:1em; height:1em; flex:0 0 auto; stroke:currentColor; fill:none;
+             stroke-width:1.5; stroke-linecap:round; stroke-linejoin:round; vertical-align:-.125em; }
+
+        /* Marcas de seccion, compartidas con el portal. */
+        .rule { display:block; width:34px; height:1px; background:var(--gold); margin-bottom:16px; }
+        .eyebrow { display:inline-block; font-size:var(--t-eyebrow); font-weight:600;
+            letter-spacing:.22em; text-transform:uppercase; color:var(--gold-ink); }
+
+        /* -- CABECERA: noche con velo y filete de oro -------------------- */
+        header {
+            background:var(--navy); border-bottom:1px solid var(--hair);
+            padding:0 var(--gutter); min-height:66px;
+            display:flex; align-items:center; justify-content:space-between; gap:14px;
+            position:sticky; top:0; z-index:50;
+        }
+        @supports (backdrop-filter:blur(1px)) {
+            header { background:color-mix(in srgb,var(--navy) 92%,transparent); backdrop-filter:blur(14px); }
+        }
+        .brand { display:flex; align-items:center; gap:12px; color:var(--on-night); text-decoration:none; }
+        .brand img { height:38px; width:38px; object-fit:contain; }
+        .brand b { font-family:var(--va-font-display); font-size:1.08rem; font-weight:600; letter-spacing:.01em; }
+        .brand small { display:block; color:var(--gold); font-size:.58rem; letter-spacing:.24em; text-transform:uppercase; }
+        .head-right { display:flex; align-items:center; gap:10px; }
+        .head-right a {
+            display:inline-flex; align-items:center; gap:8px; text-decoration:none;
+            color:var(--on-night-soft); font-size:.72rem; font-weight:600;
+            letter-spacing:.14em; text-transform:uppercase;
+            padding:9px 13px; border-radius:var(--r-sm); border:1px solid var(--hair);
+            transition:color .16s, border-color .16s, background .16s;
+        }
+        .head-right a:hover, .head-right a:focus-visible {
+            color:var(--on-gold,#14122a); background:var(--gold); border-color:var(--gold); }
+
+        .wrap { flex:1; width:100%; max-width:var(--maxw); margin:0 auto;
+                padding:var(--s-section) var(--gutter) calc(var(--s-section) + 12px); }
+
+        /* -- MASTHEAD ----------------------------------------------------
+           Asimetrico y tipografico, como el portal: filete, rotulo, titulo a
+           escala de portada y las cifras a la derecha en un riel de filetes.
+           La caja "hero" con el logo en marca de agua se fue: era relleno. */
+        .mast { display:grid; grid-template-columns:1fr auto; gap:clamp(24px,4vw,56px);
+                align-items:end; padding-bottom:clamp(18px,3vw,26px); }
+        .mast-txt { min-width:0; }
+        .mast h1 { font-family:var(--va-font-display); font-weight:600; margin:12px 0 0;
+            font-size:clamp(2.6rem,7vw,4.6rem); line-height:.96; letter-spacing:-.025em; text-wrap:balance; }
+        .mast .lead { color:var(--muted); max-width:54ch; margin:18px 0 0;
+            font-size:var(--t-lead); text-wrap:pretty; }
+        .mast .lead b { color:var(--text); font-weight:500; }
+
+        /* Riel de cifras: la reticula la dibujan filetes de 1px, no cajas. */
+        .statrail { display:flex; flex-wrap:wrap; row-gap:6px; border-top:1px solid var(--hair); }
+        .statrail .st { padding:15px 0 2px 22px; margin-left:22px; border-left:1px solid var(--hair); }
+        .statrail .st:first-child { padding-left:0; margin-left:0; border-left:0; }
+        .statrail .st b { display:block; font-family:var(--va-font-display); font-weight:400;
+            font-size:clamp(1.7rem,3.4vw,2.3rem); line-height:1; color:var(--gold-ink);
+            font-variant-numeric:lining-nums tabular-nums; }
+        .statrail .st span { display:block; margin-top:7px; font-size:var(--t-eyebrow);
+            letter-spacing:.2em; text-transform:uppercase; color:var(--muted);
+            font-weight:600; white-space:nowrap; }
+
+        /* Ecualizador: la firma de la pagina. Barras deterministas y un pulso
+           corto (-12 %). No es un adorno generico - es lo que la seccion ES. */
+        .wave { display:flex; align-items:flex-end; gap:3px; height:36px; margin-top:4px;
+            opacity:.42; pointer-events:none;
+            -webkit-mask-image:linear-gradient(90deg,transparent,#000 9%,#000 70%,transparent);
+                    mask-image:linear-gradient(90deg,transparent,#000 9%,#000 70%,transparent); }
+        .wave b { flex:1 1 0; min-width:2px; border-radius:2px; transform-origin:bottom;
+            background:linear-gradient(180deg,var(--gold-lt),var(--gold));
+            animation:wv 3.6s var(--ease-out) infinite; }
+        @keyframes wv { 0%,100% { transform:scaleY(1); } 50% { transform:scaleY(.88); } }
+
+        /* -- BUSCADOR ---------------------------------------------------- */
+        .s-box { position:relative; display:flex; align-items:center; margin-top:22px; }
+        .s-box .s-ic { position:absolute; left:16px; color:var(--gold-ink); font-size:1rem; pointer-events:none; }
+        #search { width:100%; font-family:inherit; font-size:1rem; color:var(--text);
+            background:var(--white); border:1px solid var(--border); border-radius:var(--r-sm);
+            padding:15px 52px 15px 44px; transition:border-color .16s, box-shadow .16s; }
+        #search::placeholder { color:var(--muted); opacity:.85; }
+        #search:focus { outline:none; border-color:var(--gold); box-shadow:0 0 0 3px var(--hair); }
+        #search::-webkit-search-cancel-button { -webkit-appearance:none; display:none; }
+        .s-kbd { position:absolute; right:15px; font-family:inherit; font-size:.62rem; font-weight:700;
+            color:var(--muted); border:1px solid var(--border); border-radius:5px;
+            padding:2px 7px; letter-spacing:.5px; pointer-events:none; }
+        .s-clear { position:absolute; right:10px; width:32px; height:32px; border:none; background:none;
+            color:var(--muted); font-size:.85rem; cursor:pointer; border-radius:50%;
+            display:none; align-items:center; justify-content:center; transition:background .16s, color .16s; }
+        .s-clear:hover, .s-clear:focus-visible { background:var(--hair); color:var(--text); }
+        .s-box.has-val .s-clear { display:flex; }
+        .s-box.has-val .s-kbd, .s-box:focus-within .s-kbd { display:none; }
+
+        /* -- REANUDAR: la ultima pista, en grande ------------------------
+           "Continue listening" era un riel de caratulas pequenas como el
+           resto. La pista que el alumno dejo a medias no es una mas del
+           estante: es la razon por la que ha vuelto, asi que sale primero y
+           a otra escala. Las demas siguen en el riel, debajo. */
+        .resume { display:grid; grid-template-columns:auto 1fr auto; gap:clamp(16px,3vw,26px);
+            align-items:center; margin-top:14px; padding:16px;
+            border:1px solid var(--border); border-left:2px solid var(--gold);
+            border-radius:var(--r-lg); background:var(--white);
+            transition:border-color .18s, box-shadow .22s; }
+        .resume:hover { box-shadow:var(--sh-dusk); }
+        .resume .rs-art { width:112px; flex-shrink:0; border-radius:var(--r-md); overflow:hidden;
+            box-shadow:0 10px 26px rgba(0,0,0,.34); }
+        .resume .rs-txt { min-width:0; }
+        .resume .rs-kick { display:flex; align-items:center; gap:8px; font-size:var(--t-eyebrow);
+            font-weight:700; letter-spacing:.2em; text-transform:uppercase; color:var(--gold-ink); }
+        .resume .rs-kick .i { width:.95em; height:.95em; }
+        .resume h3 { margin:8px 0 0; font-family:var(--va-font-display); font-weight:600;
+            font-size:clamp(1.15rem,2.4vw,1.5rem); line-height:1.2; color:var(--text);
+            overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+        .resume .rs-sub { margin:6px 0 0; font-size:var(--t-small); color:var(--muted); }
+        .resume .rs-acts { display:flex; align-items:center; gap:9px; flex-shrink:0; }
+        @media (max-width:780px) {
+            .resume { grid-template-columns:auto 1fr; }
+            .resume .rs-acts { grid-column:1 / -1; }
+            .resume .rs-art { width:84px; }
+        }
+
+        /* -- Banda de clase (Pizarra Virtual) ---------------------------
+           Es la herramienta con la que se DA la clase, no un enlace mas: se
+           gana una lamina propia con una miniatura de pizarra a la derecha
+           y las tres cosas que ahora sabe hacer. Sigue siendo un <a>. */
+        .toolcard { display:grid; grid-template-columns:1fr auto; gap:22px; align-items:center;
+            margin-top:14px; padding:18px 20px; overflow:hidden; text-decoration:none; color:inherit;
+            border:1px solid var(--border); border-radius:var(--r-lg);
+            background:linear-gradient(122deg,#232244,#151329);
+            transition:border-color .18s, transform .18s var(--ease-out), box-shadow .22s; }
+        .toolcard:hover, .toolcard:focus-visible {
+            border-color:var(--gold); transform:translateY(-2px); box-shadow:var(--sh-dusk); outline:none; }
+        .toolcard .tc-kick { display:flex; align-items:center; gap:9px; font-size:var(--t-eyebrow);
+            font-weight:700; letter-spacing:.2em; text-transform:uppercase; color:#e0cb92; }
+        .toolcard h3 { margin:9px 0 0; font-family:var(--va-font-display); font-size:1.25rem;
+            font-weight:600; color:#fff; }
+        .toolcard p { margin:6px 0 0; font-size:var(--t-small); color:rgba(245,242,235,.66); max-width:52ch; }
+        .tc-feats { display:flex; flex-wrap:wrap; gap:7px; margin-top:13px; }
+        .tc-feats span { font-size:.63rem; font-weight:700; letter-spacing:.09em; text-transform:uppercase;
+            color:#e0cb92; background:rgba(201,168,76,.14); border:1px solid rgba(201,168,76,.34);
+            border-radius:var(--r-pill); padding:4px 10px; }
+        .tc-prev { width:168px; height:104px; flex-shrink:0; border-radius:var(--r-sm);
+            border:1px solid rgba(255,255,255,.14); background:#fbfaf6; overflow:hidden;
+            position:relative; transition:transform .24s var(--ease-out); }
+        .toolcard:hover .tc-prev { transform:translateY(-2px) rotate(-1.2deg); }
+        @media (max-width:720px) { .tc-prev { display:none; } .toolcard { grid-template-columns:1fr; } }
+
+        /* -- Filtros de la reticula --------------------------------------
+           Dieciseis colecciones en cuatro bloques son mucho scroll para
+           encontrar una. Los chips ocultan los bloques que no tocan; no
+           reordenan nada, asi que la ruta de aprendizaje se mantiene. */
+        .filters { display:flex; flex-wrap:wrap; gap:8px; margin:26px 0 -6px; }
+        .filters button { cursor:pointer; font-family:inherit; font-size:.72rem; font-weight:700;
+            letter-spacing:.1em; text-transform:uppercase; color:var(--muted);
+            background:transparent; border:1px solid var(--border); border-radius:var(--r-pill);
+            padding:9px 15px; transition:color .16s, border-color .16s, background .16s; }
+        .filters button:hover { color:var(--text); border-color:var(--gold); }
+        .filters button.on { color:var(--on-gold,#14122a); background:var(--gold); border-color:var(--gold); }
+        .filters button b { font-weight:700; opacity:.6; margin-left:6px; }
+        .filters button.on b { opacity:.75; }
+        /* .col-card y .grid-head traen display:flex, que le gana por
+           especificidad al display:none del atributo hidden del navegador. */
+        .col-grid > [hidden] { display:none !important; }
+
+        /* -- "Dar clase": abre la leccion con la Pizarra ya cargada ------- */
+        .tk-teach { position:absolute; top:10px; right:10px; z-index:5; width:30px; height:30px;
+            display:flex; align-items:center; justify-content:center; border-radius:50%;
+            color:#fff; background:rgba(9,8,20,.62); border:1px solid rgba(255,255,255,.24);
+            opacity:0; transition:opacity .2s, background .16s, color .16s; }
+        .track:hover .tk-teach, .track:focus-within .tk-teach { opacity:1; }
+        .tk-teach:hover { background:var(--gold); color:var(--on-gold,#14122a); border-color:var(--gold); }
+        .tk-teach .i { width:.95em; height:.95em; }
+
+        /* -- Migas -------------------------------------------------------- */
+        .crumbs { display:flex; align-items:center; gap:10px; margin:26px 0 0;
+            font-size:var(--t-small); color:var(--muted); }
+        .crumbs a { color:var(--gold-ink); text-decoration:none; font-weight:600; cursor:pointer;
+            border-bottom:1px dashed transparent; transition:border-color .16s; }
+        .crumbs a:hover, .crumbs a:focus-visible { border-bottom-color:var(--gold); }
+        .crumbs .sep { opacity:.45; }
+        .crumbs b { color:var(--text); font-weight:600; }
+
+        .view { animation:rise .38s var(--ease-out) both; }
+        @keyframes rise { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:none; } }
+
+        /* -- Cabecera de seccion ------------------------------------------ */
+        .shead { display:flex; align-items:baseline; gap:14px; margin:calc(var(--s-section) * .7) 0 24px; }
+        .shead h2 { margin:0; font-family:var(--va-font-display); font-size:var(--t-h2);
+            font-weight:600; line-height:1.1; white-space:nowrap; }
+        .shead .sh-line { flex:1; height:1px; background:var(--hair); align-self:center; }
+        .shead .sh-act { flex-shrink:0; background:none; border:none; cursor:pointer; padding:4px 0;
+            font-family:inherit; font-size:var(--t-eyebrow); font-weight:600; letter-spacing:.16em;
+            text-transform:uppercase; color:var(--muted);
+            display:inline-flex; align-items:center; gap:7px;
+            border-bottom:1px dashed transparent; transition:border-color .16s, color .16s; }
+        .shead .sh-act:hover, .shead .sh-act:focus-visible { color:var(--text); border-bottom-color:var(--gold); }
+
+        /* -- COLECCIONES --------------------------------------------------
+           La banda de arte es una caratula: degradado oscuro literal +
+           ecualizador en el acento de la coleccion + el numeral en Fraunces.
+           El chip dorado relleno que llevaba el numero se fue: un numeral
+           grabado se lee como indice de libro, no como plantilla. */
+        .col-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:18px; }
+
+        .grid-head { grid-column:1 / -1; display:flex; align-items:baseline; gap:14px; margin:30px 0 2px; }
+        .grid-head:first-child { margin-top:0; }
+        .gh-num { font-family:var(--va-font-display); font-weight:400; font-size:1.55rem;
+            line-height:1; color:var(--gold-ink); font-variant-numeric:lining-nums; }
+        .gh-title { font-family:var(--va-font-display); font-size:1.15rem; font-weight:600; color:var(--text); }
+        .gh-kicker { font-size:var(--t-eyebrow); font-weight:600; letter-spacing:.2em;
+            text-transform:uppercase; color:var(--muted); }
+        .gh-line { flex:1; height:1px; background:var(--hair); align-self:center; }
+
+        .col-card {
+            position:relative; display:flex; flex-direction:column; overflow:hidden;
+            width:100%; margin:0; padding:0; text-align:left; font:inherit; color:inherit; cursor:pointer;
+            background:var(--white); border:1px solid var(--border); border-radius:var(--r-lg);
+            transition:transform .24s var(--ease-out), border-color .24s, box-shadow .24s;
+            animation:rise .5s var(--ease-out) backwards;
+        }
+        .col-card:hover, .col-card:focus-visible {
+            transform:translateY(-4px); border-color:var(--gold); box-shadow:var(--sh-dusk); outline:none; }
+        .cc-art { position:relative; height:112px; display:flex; align-items:center; gap:16px;
+            padding:0 22px; overflow:hidden; border-bottom:1px solid var(--hair); }
+        .cc-num { position:relative; z-index:2; flex-shrink:0;
+            font-family:var(--va-font-display); font-weight:400; font-size:2.7rem; line-height:1;
+            color:var(--acc,#e0cb92); font-variant-numeric:lining-nums;
+            text-shadow:0 2px 14px rgba(0,0,0,.45); }
+        .cc-num .fas { font-size:1.7rem; }
+        .cc-name { position:relative; z-index:2; min-width:0; }
+        .cc-name b { display:block; font-family:var(--va-font-display); font-size:1.12rem;
+            font-weight:600; line-height:1.2; color:#fff; }
+        .cc-name small { display:block; margin-top:4px; font-size:var(--t-eyebrow); font-weight:600;
+            letter-spacing:.16em; text-transform:uppercase; color:var(--acc,#e0cb92); }
+        .cc-eq { position:absolute; right:0; bottom:0; z-index:1; width:58%; height:78px;
+            opacity:.30; pointer-events:none; }
+
+        .cc-body { flex:1; display:flex; flex-direction:column; gap:12px; padding:16px 22px 18px; }
+        .cc-body p { flex:1; margin:0; font-size:var(--t-small); color:var(--muted); line-height:1.55; }
+        .cc-prog { display:flex; flex-direction:column; gap:7px; }
+        .cc-meter { height:2px; border-radius:2px; background:var(--hair); overflow:hidden; }
+        .cc-meter i { display:block; height:100%; border-radius:2px;
+            background:linear-gradient(90deg,var(--gold),var(--gold-lt)); }
+        .cc-prog span { font-size:var(--t-eyebrow); font-weight:600; letter-spacing:.12em;
+            text-transform:uppercase; color:var(--muted); }
+        .cc-foot { display:flex; align-items:center; justify-content:space-between; gap:10px;
+            padding-top:12px; border-top:1px solid var(--hair); }
+        .cc-count { font-size:var(--t-eyebrow); font-weight:700; letter-spacing:.16em;
+            text-transform:uppercase; color:var(--gold-ink); }
+        .cc-go { flex-shrink:0; color:var(--gold-ink); font-size:1rem; transition:transform .2s var(--ease-out); }
+        .col-card:hover .cc-go, .col-card:focus-visible .cc-go { transform:translateX(4px); }
+
+        /* Colecciones bloqueadas. El distintivo cuelga de la TARJETA, no de la
+           banda: la banda lleva un filtro de gris y se lo comeria. */
+        .col-card.locked { cursor:not-allowed; }
+        .col-card.locked:hover, .col-card.locked:focus-visible {
+            transform:none; border-color:var(--border); box-shadow:none; }
+        .col-card.locked .cc-art { filter:grayscale(.72) brightness(.62); }
+        .col-card.locked .cc-body p, .col-card.locked .cc-count { color:var(--muted); }
+        .cc-lock { position:absolute; top:12px; right:14px; z-index:3;
+            display:inline-flex; align-items:center; gap:6px;
+            background:rgba(9,8,20,.62); color:var(--gold-lt);
+            font-size:.63rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase;
+            padding:5px 11px; border-radius:var(--r-pill); border:1px solid rgba(201,168,76,.45);
+            backdrop-filter:blur(2px); }
+
+        /* -- PISTAS -------------------------------------------------------
+           Sin caja: la caratula cuadrada ES la tarjeta y el texto vive debajo,
+           sobre el campo. Con borde y fondo, doce pistas se leian como doce
+           formularios; asi se leen como un estante de discos. */
+        .track-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(178px,1fr)); gap:26px 18px; }
+        .rail { display:flex; gap:18px; overflow-x:auto; padding-bottom:10px;
+            scroll-snap-type:x proximity; scrollbar-width:thin; }
+        .rail::-webkit-scrollbar { height:6px; }
+        .rail::-webkit-scrollbar-track { background:transparent; }
+        .rail::-webkit-scrollbar-thumb { background:var(--border); border-radius:3px; }
+        .rail .track { flex:0 0 168px; scroll-snap-align:start; }
+
+        .track { display:block; text-decoration:none; color:inherit;
+            animation:rise .45s var(--ease-out) backwards; }
+        .tk-art { position:relative; border-radius:var(--r-md); overflow:hidden;
+            box-shadow:0 10px 26px rgba(0,0,0,.34);
+            transition:transform .26s var(--ease-out), box-shadow .26s var(--ease-out); }
+        .track:hover .tk-art, .track:focus-visible .tk-art {
+            transform:translateY(-5px); box-shadow:0 18px 40px rgba(0,0,0,.46); }
+        .track:focus-visible { outline:none; }
+        .track:focus-visible .tk-art { outline:3px solid var(--gold); outline-offset:3px; }
+
+        /* .vc-cover lo emite vesper_covers.js; el estilo vive aqui. */
+        .vc-cover { position:relative; aspect-ratio:1 / 1; display:flex;
+            align-items:center; justify-content:center; overflow:hidden; }
+        .vc-cover::after { content:""; position:absolute; inset:0; z-index:2; pointer-events:none;
+            background:linear-gradient(180deg,rgba(9,8,20,.34),transparent 34%,transparent 58%,rgba(9,8,20,.5)); }
+        .vc-cover .vc-ghost { position:absolute; right:-16px; bottom:-24px;
+            font-size:6.6rem; color:rgba(255,255,255,.07); transform:rotate(-12deg); }
+        .vc-cover .vc-medal { width:58px; height:58px; border-radius:50%; border:1.5px solid;
+            display:flex; align-items:center; justify-content:center; font-size:1.4rem;
+            background:rgba(255,255,255,.06); box-shadow:0 6px 18px rgba(0,0,0,.34);
+            transition:transform .26s var(--ease-out); }
+        .track:hover .vc-medal { transform:scale(1.08); }
+        /* Antes se llamaba .vc-img - la MISMA clase que el retrato de la
+           mascota (vesper_mascot.js). En cuanto esta pagina carga el motor de
+           temas, su regla `.vc-img{filter:var(--vc-filter)}` giraba el tono de
+           todas las caratulas y les clavaba un aro dorado de 4px. */
+        .vc-cover .vcover-img { position:absolute; inset:0; z-index:1;
+            width:100%; height:100%; object-fit:cover; }
+        .vc-cover .vc-badge { position:absolute; top:10px; left:10px; z-index:3;
+            font-size:.58rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase;
+            color:#fff; background:rgba(9,8,20,.44); padding:4px 10px; border-radius:var(--r-pill);
+            border:1px solid rgba(255,255,255,.2); backdrop-filter:blur(3px); }
+
+        .tk-play { position:absolute; inset:0; z-index:4; display:flex; align-items:center;
+            justify-content:center; opacity:0; transition:opacity .22s; }
+        .tk-play b { width:54px; height:54px; border-radius:50%; padding-left:3px;
+            background:var(--gold); color:var(--on-gold,#14122a);
+            display:flex; align-items:center; justify-content:center; font-size:1.15rem;
+            box-shadow:0 10px 26px rgba(0,0,0,.5); transform:scale(.84);
+            transition:transform .26s var(--ease-out); }
+        .track:hover .tk-play, .track:focus-visible .tk-play { opacity:1; }
+        .track:hover .tk-play b, .track:focus-visible .tk-play b { transform:scale(1); }
+        /* El unico glifo RELLENO del sprite. `.i` pone fill:none en el <svg> y
+           eso se hereda al <path>, asi que el fill="currentColor" del simbolo
+           gana por los pelos (un atributo de presentacion le gana a un valor
+           heredado). Se declara aqui explicitamente para no depender de esa
+           regla de cascada: un triangulo de play hueco parece un error. */
+        .tk-play .i { fill:currentColor; stroke:none; }
+
+        .tk-txt { padding:13px 2px 0; }
+        .tk-num { font-size:var(--t-eyebrow); font-weight:700; letter-spacing:.18em;
+            text-transform:uppercase; color:var(--gold-ink); }
+        .tk-txt h3 { margin:5px 0 0; font-size:var(--t-body); font-weight:600;
+            line-height:1.32; color:var(--text); }
+        .tk-tags { display:flex; flex-wrap:wrap; gap:6px; margin-top:9px; }
+
+        /* Pistas bloqueadas */
+        .track.locked { cursor:not-allowed; }
+        .track.locked .tk-art { box-shadow:none; }
+        .track.locked:hover .tk-art { transform:none; box-shadow:none; }
+        .track.locked .vc-cover { filter:grayscale(.65) brightness(.62); }
+        .track.locked .tk-txt h3 { color:var(--muted); }
+        .tk-lock { position:absolute; top:10px; right:10px; z-index:4;
+            width:28px; height:28px; border-radius:50%; font-size:.72rem; color:#fff;
+            display:flex; align-items:center; justify-content:center;
+            background:rgba(9,8,20,.6); border:1px solid rgba(255,255,255,.24); }
+
+        /* -- Distintivos --------------------------------------------------
+           Un solo sistema de acento en vez de verde/ambar: --gold-ink y
+           --on-gold son los dos unicos pares que el motor garantiza
+           accesibles en los ocho temas. La diferencia entre "logrado" y
+           "vuelve a intentarlo" la marcan el relleno y el glifo. */
+        .chip { display:inline-flex; align-items:center; gap:5px; white-space:nowrap;
+            font-size:.63rem; font-weight:700; letter-spacing:.08em;
+            padding:3px 9px; border-radius:var(--r-pill); }
+        .chip-done { background:var(--gold); color:var(--on-gold,#14122a); }
+        .chip-part { background:var(--gold-tint,rgba(201,168,76,.18)); color:var(--gold-ink);
+            border:1px solid var(--hair); }
+        .chip-ver { background:transparent; color:var(--muted); border:1px solid var(--border);
+            letter-spacing:.1em; text-transform:uppercase; }
+        .chip .i { width:.85em; height:.85em; }
+
+        /* -- Barra de la vista de coleccion -------------------------------- */
+        .viewbar { display:flex; align-items:center; justify-content:space-between;
+            gap:12px; flex-wrap:wrap; }
+        .btn-ghost, .btn-gold { display:inline-flex; align-items:center; gap:9px;
+            font-family:inherit; font-size:var(--t-small); font-weight:600; cursor:pointer;
+            border-radius:var(--r-sm); text-decoration:none; transition:all .18s; }
+        .btn-ghost { padding:10px 16px; background:transparent; color:var(--text);
+            border:1px solid var(--border); }
+        .btn-ghost:hover, .btn-ghost:focus-visible { border-color:var(--gold); color:var(--gold-ink); }
+        .btn-gold { padding:11px 19px; font-weight:700; background:var(--gold);
+            color:var(--on-gold,#14122a); border:1px solid var(--gold); }
+        .btn-gold:hover, .btn-gold:focus-visible { background:var(--gold-lt); border-color:var(--gold-lt); }
+        .btn-gold.hidden { display:none; }
+
+        /* -- Buscar: recuento y vacio -------------------------------------- */
+        .result-count { margin:0 0 22px; font-size:var(--t-small); color:var(--muted); }
+        .search-empty { grid-column:1 / -1; padding:56px 20px; text-align:center; color:var(--muted);
+            border:1px dashed var(--border); border-radius:var(--r-md); }
+        .search-empty .i { width:2.2rem; height:2.2rem; color:var(--border); margin-bottom:14px; }
+        .search-empty b { display:block; color:var(--text); font-size:1.05rem;
+            font-family:var(--va-font-display); font-weight:600; margin-bottom:4px; }
+
+        /* -- Modal de bloqueo ---------------------------------------------- */
+        .lock-modal { position:fixed; inset:0; z-index:2000; display:none;
+            align-items:center; justify-content:center; padding:22px;
+            background:rgba(9,8,20,.68); backdrop-filter:blur(4px); }
+        .lock-modal.open { display:flex; animation:rise .22s var(--ease-out) both; }
+        .lock-box { position:relative; width:100%; max-width:400px; padding:32px 28px 26px;
+            text-align:center; background:var(--white); border:1px solid var(--border);
+            border-top:2px solid var(--gold); border-radius:var(--r-lg);
+            box-shadow:0 30px 70px rgba(0,0,0,.5); }
+        .lock-box .lock-x { position:absolute; top:12px; right:12px; width:34px; height:34px;
+            background:none; border:none; color:var(--muted); cursor:pointer; border-radius:50%;
+            display:flex; align-items:center; justify-content:center; transition:background .16s, color .16s; }
+        .lock-box .lock-x:hover { background:var(--hair); color:var(--text); }
+        .lock-box .lock-ico { width:56px; height:56px; margin:0 auto 18px; border-radius:var(--r-md);
+            border:1px solid var(--hair); color:var(--gold); font-size:1.4rem;
+            display:flex; align-items:center; justify-content:center; }
+        .lock-box h2 { margin:0 0 10px; font-family:var(--va-font-display);
+            font-size:1.4rem; font-weight:600; color:var(--text); }
+        .lock-box p { margin:0 0 8px; font-size:var(--t-body); color:var(--text); line-height:1.55; }
+        .lock-box p b { color:var(--gold-ink); }
+        .lock-box .lock-sub { margin-bottom:22px; font-size:var(--t-small); color:var(--muted); }
+        .lock-box .lock-actions { display:flex; gap:10px; justify-content:center; flex-wrap:wrap; }
+
+        /* -- Pie ------------------------------------------------------------ */
+        footer { background:var(--navy); border-top:1px solid var(--hair); padding:34px var(--gutter) 40px; }
+        .foot-in { max-width:var(--maxw); margin:0 auto; display:flex; align-items:center;
+            justify-content:space-between; gap:18px; flex-wrap:wrap; }
+        .foot-in p { margin:0; font-size:var(--t-small); color:var(--on-night-soft); }
+        .foot-in p b { color:var(--gold); font-weight:600; }
+        .foot-back { display:inline-flex; align-items:center; gap:8px; text-decoration:none;
+            color:var(--on-night-soft); font-size:var(--t-small); font-weight:600;
+            border-bottom:1px dashed transparent; transition:border-color .16s, color .16s; }
+        .foot-back:hover, .foot-back:focus-visible { color:var(--on-night); border-bottom-color:var(--gold); }
+
+        /* -- Responsive ----------------------------------------------------- */
+        @media (max-width:960px) {
+            .mast { grid-template-columns:1fr; gap:22px; align-items:start; }
+            .statrail { width:100%; }
+        }
+        /* Estrecho: el riel pasa a RETICULA de dos. En flex, la cifra que
+           envolvia a la segunda fila se quedaba con su filete y su sangria de
+           la izquierda, o sea colgando sola y desalineada. Las reglas de
+           :nth-child solo cuadran porque el JS BORRA las cifras que no aplican
+           en vez de ocultarlas: con `hidden` seguirian contando como hijos. */
+        @media (max-width:680px) {
+            .statrail { display:grid; grid-template-columns:repeat(2,1fr); }
+            .statrail .st { padding:14px 0 10px 16px; margin-left:0;
+                border-left:1px solid var(--hair); border-top:1px solid var(--hair); }
+            .statrail .st:nth-child(odd) { padding-left:0; border-left:0; }
+            .statrail .st:nth-child(-n+2) { border-top:0; }
+        }
+        @media (max-width:600px) {
+            .head-right a span { display:none; }
+            .head-right a { padding:9px 11px; }
+            .track-grid { grid-template-columns:repeat(2,1fr); gap:22px 14px; }
+            .rail .track { flex:0 0 146px; }
+            .vc-cover .vc-medal { width:46px; height:46px; font-size:1.1rem; }
+            .col-grid { grid-template-columns:1fr; gap:14px; }
+        }
+
+        /* Foco de teclado visible (WCAG 2.4.7) */
+        :focus-visible { outline:3px solid var(--gold); outline-offset:2px; }
+    </style>
+
+<!-- Preferencias del alumno (tamano de texto, alto contraste, menos
+     movimiento): sin esto las reglas html[data-text-scale] / .vesper-hc de
+     vesper_tokens.css quedan inertes en esta pagina. -->
+<script src="vesper_prefs.js"></script>
+<!-- ORDEN CARGADO DE SIGNIFICADO: vesper_theme.js tiene que ser el ULTIMO
+     elemento del <head>. apply() hace appendChild al <head> TAL COMO ESTA
+     PARSEADO en ese momento, asi que si va antes del <style> de la pagina su
+     :root queda ANTES, la pagina gana y el motor de temas se vuelve inerte
+     sin dar ningun error. -->
+<script src="vesper_theme.js"></script>
 </head>
 
 <body>
-    <header>
-        <div class="logo-area">
-            <img src="assets/images/vesper_logo_inverted.png" alt="Vesper Logo">
-            <div class="logo-text"><h1>Vesper Academy</h1><p>Audio Library</p></div>
-        </div>
-        <div class="head-right">
-            <a href="whiteboard/"><i class="fas fa-chalkboard"></i><span>Whiteboard</span></a>
-            <a href="materiales.html"><i class="fas fa-arrow-left"></i><span>Mi portal</span></a>
-            <i class="fas fa-headphones"></i>
-        </div>
-    </header>
+<a class="va-skip-link" href="#main">Skip to content</a>
 
-    <section class="hero">
-        <div class="hero-inner">
-            <div class="hero-emblem">
-                <img src="assets/images/vesper_logo_inverted.png" alt="Vesper Academy">
-                <div><div class="kicker">Vesper Academy</div><div>Core Practice · Listening Series</div></div>
-            </div>
-            <h2>Audio Library</h2>
-            <p class="lead">Choose a level, then a lesson. Each lesson opens its own page with the <strong>audio</strong>, the <strong>full transcript</strong> to read along, <strong>practice activities</strong> that are marked instantly, an <strong>interactive whiteboard</strong>, and a <strong>visual vocabulary</strong> reference.</p>
-            <div class="hero-tools">
-                <div class="hero-search">
-                    <i class="fas fa-magnifying-glass"></i>
-                    <input id="search" type="search" placeholder="Search every audio lesson…" aria-label="Search audio lessons" autocomplete="off">
-                    <kbd id="search-kbd">/</kbd>
-                </div>
-                <div class="hero-stats">
-                    <span id="stat-level" class="stat-level" style="display:none"></span>
-                    <span><b id="stat-lessons">0</b> lessons</span>
-                    <span><b id="stat-collections">0</b> collections</span>
-                    <span><b>6</b> levels · Pre-A1–C1</span>
-                </div>
-            </div>
+<!-- -- Sprite de iconos en linea ------------------------------------------
+     Los iconos del chrome (flechas, lupa, candado, play...) salen de aqui, no
+     de Font Awesome: trazo, no relleno, y heredan currentColor, asi que
+     cambian de color con el tema sin ayuda. Font Awesome sigue cargado por
+     los glifos de leccion, que vienen de los datos y comparte lesson.html. -->
+<svg width="0" height="0" aria-hidden="true" focusable="false" style="position:absolute;overflow:hidden">
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4 12h15m-6-6 6 6-6 6"/></symbol>
+  <symbol id="i-arrow-left" viewBox="0 0 24 24"><path d="M20 12H5m6-6-6 6 6 6"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.8" cy="10.8" r="7"/><path d="m16 16 5 5"/></symbol>
+  <symbol id="i-board" viewBox="0 0 24 24"><rect x="2.5" y="4" width="19" height="12.5" rx="2"/><path d="M12 16.5V20M8 20h8"/><path d="M6.5 8h7M6.5 11.5h4.5"/></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><rect x="4.5" y="10" width="15" height="10.5" rx="2.2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="m6.5 6.5 11 11M17.5 6.5l-11 11"/></symbol>
+  <symbol id="i-play" viewBox="0 0 24 24"><path d="M8 5.4v13.2l11-6.6z" fill="currentColor" stroke="none"/></symbol>
+  <symbol id="i-pen" viewBox="0 0 24 24"><path d="M4 20h4L20 8a2.55 2.55 0 0 0-3.6-3.6L4 16.8z"/><path d="m14.6 6.4 3.6 3.6"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12.6 4.6 4.6L19 7"/></symbol>
+  <symbol id="i-repeat" viewBox="0 0 24 24"><path d="M3.6 12a8.4 8.4 0 0 1 14.4-5.9M20.4 12a8.4 8.4 0 0 1-14.4 5.9"/><path d="M18.4 2.8v3.7h-3.7M5.6 21.2v-3.7h3.7"/></symbol>
+  <symbol id="i-clipboard" viewBox="0 0 24 24"><rect x="4.5" y="4" width="15" height="17" rx="2.2"/><path d="M9 4V2.8h6V4"/><path d="m8.8 13 2.3 2.3 4.2-4.4"/></symbol>
+  <symbol id="i-headphones" viewBox="0 0 24 24"><path d="M4 15v-2.6a8 8 0 0 1 16 0V15"/><rect x="2.6" y="14.4" width="4.6" height="6.4" rx="2.3"/><rect x="16.8" y="14.4" width="4.6" height="6.4" rx="2.3"/></symbol>
+</svg>
+
+<header>
+    <a class="brand" href="materiales.html">
+        <img src="assets/images/vesper_logo_inverted.png" alt="Vesper Academy" width="38" height="38">
+        <span><b>Vesper Academy</b><small>Audio Library</small></span>
+    </a>
+    <nav class="head-right" aria-label="Atajos">
+        <a href="whiteboard/"><svg class="i" aria-hidden="true"><use href="#i-board"/></svg><span>Whiteboard</span></a>
+        <a href="materiales.html"><svg class="i" aria-hidden="true"><use href="#i-arrow-left"/></svg><span>Mi portal</span></a>
+    </nav>
+</header>
+
+<main class="wrap" id="main">
+
+    <section class="mast">
+        <div class="mast-txt">
+            <span class="rule" aria-hidden="true"></span>
+            <span class="eyebrow">Core Practice &middot; Listening Series</span>
+            <h1>Audio Library</h1>
+            <p class="lead">Choose a level, then a lesson. Each one opens its own page with the
+                <b>audio</b>, the <b>full transcript</b> to read along, <b>practice activities</b>
+                marked instantly, an <b>interactive whiteboard</b> and a <b>visual vocabulary</b>.</p>
+        </div>
+        <div class="statrail" id="statrail">
+            <div class="st"><b id="stat-lessons">0</b><span>Lessons</span></div>
+            <div class="st"><b id="stat-collections">0</b><span>Collections</span></div>
+            <div class="st" id="st-practiced" hidden><b id="stat-practiced">0</b><span>Practiced</span></div>
+            <div class="st" id="st-level" hidden><b id="stat-level">&mdash;</b><span>Your level</span></div>
         </div>
     </section>
 
-    <div class="main">
-        <!-- Acceso a la Pizarra Virtual -->
-        <a class="wb-card" href="whiteboard/">
-            <span class="wb-ico"><i class="fas fa-chalkboard"></i></span>
-            <span class="wb-txt">
-                <span class="wb-kick">Herramienta</span>
-                <span class="wb-title">Pizarra Virtual</span>
-                <span class="wb-desc">Dibuja, escribe, inserta imágenes y exporta a PNG o JSON. Se abre en su propia página.</span>
-            </span>
-            <i class="fas fa-arrow-right wb-arrow"></i>
-        </a>
+    <div class="wave" id="wave" aria-hidden="true"></div>
 
-        <div class="crumbs" id="crumbs"></div>
-
-        <!-- VIEW: SEARCH RESULTS -->
-        <div class="view" id="view-search" style="display:none">
-            <div class="section-title"><h3><i class="fas fa-magnifying-glass" style="color:var(--gold2);font-size:1.1rem;margin-right:8px"></i>Search</h3><div class="line"></div></div>
-            <p class="result-count" id="search-count"></p>
-            <div class="lesson-grid" id="search-results"></div>
-        </div>
-
-        <!-- VIEW: LEVELS -->
-        <div class="view" id="view-levels">
-            <div class="recent-section" id="recent-section" style="display:none"></div>
-            <div class="section-title"><h3>Explore the Library</h3><div class="line"></div></div>
-            <div class="level-grid" id="level-grid"></div>
-        </div>
-
-        <!-- VIEW: LESSONS -->
-        <div class="view" id="view-lessons" style="display:none">
-            <div style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap; margin-bottom:22px;">
-                <button class="back-btn" id="back" style="margin-bottom:0"><i class="fas fa-arrow-left"></i> All levels</button>
-                <a class="exam-btn" id="exam-btn" href="#"><i class="fas fa-pen-to-square"></i> Take the Level Exam</a>
-            </div>
-            <div class="section-title"><h3 id="lessons-title">Lessons</h3><div class="line"></div></div>
-            <div class="lesson-grid" id="lesson-grid"></div>
-        </div>
+    <div class="s-box" id="s-box">
+        <svg class="i s-ic" aria-hidden="true"><use href="#i-search"/></svg>
+        <input id="search" type="search" placeholder="Search every audio lesson&hellip;"
+               aria-label="Search audio lessons" autocomplete="off">
+        <kbd class="s-kbd">/</kbd>
+        <button class="s-clear" id="s-clear" type="button" aria-label="Clear search">
+            <svg class="i" aria-hidden="true"><use href="#i-x"/></svg>
+        </button>
     </div>
 
-    <footer>
-        <img class="flogo" src="assets/images/vesper_logo_inverted.png" alt="Vesper"><br>
-        Vesper Academy — Audio Library <span>Core Practice · Levels 1–6</span>
-        <div class="fnav"><a href="materiales.html"><i class="fas fa-arrow-left"></i> Volver a mi portal</a></div>
-    </footer>
+    <!-- Reanudar: lo pinta renderRecent() cuando hay historial. -->
+    <div id="resume-host"></div>
+
+    <a class="toolcard" href="whiteboard/">
+        <span class="tc-txt">
+            <span class="tc-kick"><svg class="i" aria-hidden="true"><use href="#i-board"/></svg> Para dar clase</span>
+            <h3>Pizarra Virtual</h3>
+            <p>Escribe, resalta, arrastra plantillas de clase y llevatela a pantalla completa.
+               Guarda varias pizarras por sesi&oacute;n y se acuerda de ellas al volver.</p>
+            <span class="tc-feats">
+                <span>Plantillas de clase</span><span>Varias pizarras</span>
+                <span>Modo clase</span><span>PNG y JSON</span>
+            </span>
+        </span>
+        <!-- Miniatura: la pizarra con una cuadricula y dos trazos. Es SVG en
+             linea, asi que no pide un archivo mas ni se queda en blanco. -->
+        <span class="tc-prev" aria-hidden="true">
+            <svg viewBox="0 0 168 104" width="168" height="104">
+                <defs><pattern id="tcg" width="14" height="14" patternUnits="userSpaceOnUse">
+                    <path d="M14 0H0v14" fill="none" stroke="#e2e6ef" stroke-width="1"/></pattern></defs>
+                <rect width="168" height="104" fill="url(#tcg)"/>
+                <path d="M18 74c14-30 24-34 34-14s18 14 30-12 20-18 30 4" fill="none"
+                      stroke="#1f2342" stroke-width="3" stroke-linecap="round"/>
+                <path d="M20 40h48" stroke="#C9A84C" stroke-width="9" stroke-linecap="round" opacity=".45"/>
+                <rect x="104" y="18" width="46" height="30" rx="4" fill="none" stroke="#C0392B" stroke-width="2.4"/>
+            </svg>
+        </span>
+    </a>
+
+    <div class="crumbs" id="crumbs"></div>
+
+    <!-- VISTA: RESULTADOS DE BUSQUEDA -->
+    <div class="view" id="view-search" style="display:none">
+        <div class="shead"><h2>Search</h2><div class="sh-line"></div></div>
+        <p class="result-count" id="search-count"></p>
+        <div class="track-grid" id="search-results"></div>
+    </div>
+
+    <!-- VISTA: COLECCIONES -->
+    <div class="view" id="view-levels">
+        <section id="recent-section" style="display:none"></section>
+        <div class="shead"><h2>Explore the library</h2><div class="sh-line"></div></div>
+        <div class="filters" id="filters" role="group" aria-label="Filtrar colecciones"></div>
+        <div class="col-grid" id="col-grid"></div>
+    </div>
+
+    <!-- VISTA: PISTAS DE UNA COLECCION -->
+    <div class="view" id="view-lessons" style="display:none">
+        <div class="viewbar">
+            <button class="btn-ghost" id="back" type="button">
+                <svg class="i" aria-hidden="true"><use href="#i-arrow-left"/></svg> All collections
+            </button>
+            <a class="btn-gold" id="exam-btn" href="#"></a>
+        </div>
+        <div class="shead"><h2 id="lessons-title">Lessons</h2><div class="sh-line"></div></div>
+        <div class="track-grid" id="track-grid"></div>
+    </div>
+
+</main>
+
+<footer>
+    <div class="foot-in">
+        <a class="brand" href="materiales.html">
+            <img src="assets/images/vesper_logo_inverted.png" alt="" width="34" height="34">
+            <span><b>Vesper Academy</b><small>Audio Library</small></span>
+        </a>
+        <p>Core Practice &middot; <b>Levels 1&ndash;6</b></p>
+        <a class="foot-back" href="materiales.html">
+            <svg class="i" aria-hidden="true"><use href="#i-arrow-left"/></svg> Volver a mi portal
+        </a>
+    </div>
+</footer>
 
     <script src="vesper_audio_data.js"></script>
     <script src="vesper_basics_audio_data.js"></script>
     <script src="vesper_biz_path_audio_data.js"></script>
+    <script src="vesper_political_audio_data.js"></script>
     <script src="vesper_lesson_images.js"></script>
     <script src="vesper_covers.js"></script>
-    <!-- loaded here only for getScore(): the cards read back the practice score
-         the player saved, so a student can see what they have already done. -->
+    <!-- Se carga aqui solo por getScore(): las tarjetas leen de vuelta la nota
+         de practica que guardo el reproductor, para que el alumno vea que ya
+         ha hecho. -->
     <script src="vesper_audio_practice.js"></script>
     <script>
         const DATA = window.VESPER_DATA || {};
@@ -420,24 +743,70 @@
         // The button is hidden only if exam.html isn't reachable at all.
         let EXAM_AVAILABLE = true;
         fetch("exam.html", { method: "HEAD" }).then(r => { EXAM_AVAILABLE = r.ok; }).catch(() => { EXAM_AVAILABLE = false; });
+        const examBtn = document.getElementById("exam-btn");
         function setExamBtn(href, label) {
-            const eb = document.getElementById("exam-btn");
-            eb.href = href;
-            eb.innerHTML = '<i class="fas fa-pen-to-square"></i> ' + label;
-            eb.classList.toggle("hidden", !EXAM_AVAILABLE);
+            examBtn.href = href;
+            examBtn.innerHTML = '<svg class="i" aria-hidden="true"><use href="#i-pen"/></svg> ' + label;
+            examBtn.classList.toggle("hidden", !EXAM_AVAILABLE);
         }
 
-        const levelGrid = document.getElementById("level-grid");
-        const lessonGrid = document.getElementById("lesson-grid");
-        const viewLevels = document.getElementById("view-levels");
-        const viewLessons = document.getElementById("view-lessons");
-        const viewSearch = document.getElementById("view-search");
-        const crumbs = document.getElementById("crumbs");
+        const colGrid      = document.getElementById("col-grid");
+        const trackGrid    = document.getElementById("track-grid");
+        const viewLevels   = document.getElementById("view-levels");
+        const viewLessons  = document.getElementById("view-lessons");
+        const viewSearch   = document.getElementById("view-search");
+        const crumbs       = document.getElementById("crumbs");
         const lessonsTitle = document.getElementById("lessons-title");
-        const searchInput = document.getElementById("search");
-        const searchResults = document.getElementById("search-results");
-        const searchCount = document.getElementById("search-count");
-        const recentSection = document.getElementById("recent-section");
+        const searchInput  = document.getElementById("search");
+        const searchBox    = document.getElementById("s-box");
+        const searchResults= document.getElementById("search-results");
+        const searchCount  = document.getElementById("search-count");
+        const recentSection= document.getElementById("recent-section");
+        const icon = id => '<svg class="i" aria-hidden="true"><use href="#' + id + '"/></svg>';
+
+        // ── ARTE DE LAS BANDAS ────────────────────────────────────────
+        // Cada coleccion lleva su propio degradado OSCURO literal (from, to,
+        // acento claro). Son caratulas, no superficie de tema: por eso no
+        // salen de --navy/--navy2 y sobreviven a los ocho temas sin perder el
+        // contraste del texto blanco que llevan encima.
+        const BAND_DIAG  = ["#3a2d4a","#241a33","#dcc0f0"];
+        const BAND_CERT  = ["#5c3a23","#2e1c10","#f0d8a0"];
+        const BAND_BIZ   = ["#1d4044","#10262b","#9fd8d0"];
+        /* Political & Global Affairs. El ciruela (~320) es el unico tono
+           que no usa ninguna otra coleccion, asi que la tarjeta se separa
+           de un vistazo aunque comparta el acento dorado con los niveles. */
+        const BAND_POL   = ["#4a2348","#20101f","#e8cf9c"];
+        const BAND_LEVEL = [
+            ["#2c2c4a","#15152b","#e0cb92"], ["#23405c","#101f2e","#bcd6ef"],
+            ["#44285c","#1f1230","#dcc0f0"], ["#5c2330","#2e1018","#f0bcbc"],
+            ["#23565c","#102b2e","#a8dee5"], ["#5c4d23","#302810","#f0e3b8"]
+        ];
+        const BAND_BASICS = [
+            ["#235c3f","#12301f","#a8dcbb"], ["#2d5c5a","#10302e","#a9e0da"],
+            ["#3f5c23","#1f3010","#d3e8a8"], ["#235c50","#103028","#a8e0cc"]
+        ];
+        function hexA(hex, a) {
+            const n = parseInt(hex.slice(1), 16);
+            return "rgba(" + ((n >> 16) & 255) + "," + ((n >> 8) & 255) + "," + (n & 255) + "," + a + ")";
+        }
+        function bandStyle(p) {
+            return "--acc:" + p[2] + ";background:" +
+                "radial-gradient(120% 130% at 10% -35%," + hexA(p[2], .22) + ",transparent 58%)," +
+                "linear-gradient(122deg," + p[0] + "," + p[1] + ");";
+        }
+        /* Ecualizador de la banda: barras deterministas (sin Math.random, para
+           que una coleccion se vea siempre igual) en el acento de la tarjeta. */
+        function eqSVG(color) {
+            let bars = "", x = 0;
+            for (let i = 0; i < 26; i++) {
+                const h = 8 + Math.abs(Math.sin(i * 1.35)) * 60;
+                bars += '<rect x="' + x.toFixed(1) + '" y="' + (76 - h).toFixed(1) +
+                        '" width="3" height="' + h.toFixed(1) + '" rx="1.5"/>';
+                x += 6.2;
+            }
+            return '<svg class="cc-eq" viewBox="0 0 160 76" preserveAspectRatio="xMaxYMax meet" ' +
+                   'aria-hidden="true" fill="' + color + '">' + bars + '</svg>';
+        }
 
         // ── LEVEL AVAILABILITY MODEL ──────────────────────────────────
         // Each collection unlocks at a CEFR level. The student's own level
@@ -449,7 +818,7 @@
         const REQ = {
             "basics:1":0, "basics:2":1, "basics:3":2, "basics:4":2,
             "level:1":1, "level:2":2, "level:3":3, "level:4":4, "level:5":4, "level:6":5,
-            "bizpath:b1":3, "business":4, "cert":4, "bizpath:c1":5
+            "bizpath:b1":3, "business":4, "political":4, "cert":4, "bizpath:c1":5
             // "diag" is intentionally absent → placement tracks are always open.
         };
         function cefrLabel(n) { return CEFR[Math.max(0, Math.min(5, n | 0))]; }
@@ -462,27 +831,15 @@
         const STU = studentLevel();
         function isLocked(col) { const r = REQ[col]; return STU != null && r != null && r > STU; }
 
-        // Show the student's own level in the hero.
+        // El nivel del alumno vive en el riel de cifras del masthead. Las
+        // cifras que no aplican se BORRAN del DOM en vez de ocultarse: en
+        // pantalla estrecha el riel es una reticula y sus filetes se reparten
+        // con :nth-child, que cuenta tambien a los hijos con `hidden`.
         if (STU != null) {
-            const el = document.getElementById("stat-level");
-            el.innerHTML = `Your level <b>${cefrLabel(STU)}</b>`;
-            el.style.display = "";
-        }
-
-        // Grey out + flag a locked collection card on the landing grid.
-        function lockCard(card, col) {
-            const need = cefrLabel(REQ[col]);
-            card.classList.add("locked");
-            card.setAttribute("aria-disabled", "true");
-            const top = card.querySelector(".lc-top");
-            if (top) {
-                const flag = document.createElement("span");
-                flag.className = "lock-flag";
-                flag.innerHTML = `<i class="fas fa-lock"></i> ${need}`;
-                top.appendChild(flag);
-            }
-            const foot = card.querySelector(".lc-foot");
-            if (foot) foot.innerHTML = `<span><i class="fas fa-lock"></i> Unlocks at ${need}</span><i class="fas fa-lock"></i>`;
+            document.getElementById("stat-level").textContent = cefrLabel(STU);
+            document.getElementById("st-level").hidden = false;
+        } else {
+            document.getElementById("st-level").remove();
         }
 
         // Explain why a collection is locked and offer the placement test.
@@ -492,103 +849,36 @@
             let m = document.getElementById("lock-modal");
             if (!m) { m = document.createElement("div"); m.id = "lock-modal"; m.className = "lock-modal"; document.body.appendChild(m); }
             m.innerHTML =
-                `<div class="lock-box" role="dialog" aria-modal="true" aria-labelledby="lock-h">
-                    <button class="lock-x" aria-label="Close">&times;</button>
-                    <div class="lock-ico"><i class="fas fa-lock"></i></div>
-                    <h3 id="lock-h">Locked for now</h3>
-                    <p>This collection unlocks at level <b>${need}</b>.${yours ? ` Your level is <b>${yours}</b>.` : ""}</p>
-                    <p class="lock-sub">Keep progressing through your levels — or take the placement test if you think you should be placed higher.</p>
-                    <div class="lock-actions">
-                        <a class="lock-cta" href="book_placement.html"><i class="fas fa-clipboard-check"></i> Placement test</a>
-                        <button class="lock-dismiss">Got it</button>
-                    </div>
-                </div>`;
+                '<div class="lock-box" role="dialog" aria-modal="true" aria-labelledby="lock-h">' +
+                    '<button class="lock-x" type="button" aria-label="Close">' + icon("i-x") + '</button>' +
+                    '<div class="lock-ico">' + icon("i-lock") + '</div>' +
+                    '<h2 id="lock-h">Locked for now</h2>' +
+                    '<p>This collection unlocks at level <b>' + need + '</b>.' +
+                        (yours ? ' Your level is <b>' + yours + '</b>.' : '') + '</p>' +
+                    '<p class="lock-sub">Keep progressing through your levels — or take the placement test ' +
+                        'if you think you should be placed higher.</p>' +
+                    '<div class="lock-actions">' +
+                        '<a class="btn-gold" href="book_placement.html">' + icon("i-clipboard") + ' Placement test</a>' +
+                        '<button class="btn-ghost lock-dismiss" type="button">Got it</button>' +
+                    '</div>' +
+                '</div>';
             m.classList.add("open");
             const close = () => m.classList.remove("open");
             m.querySelector(".lock-x").onclick = close;
             m.querySelector(".lock-dismiss").onclick = close;
             m.onclick = e => { if (e.target === m) close(); };
+            m.querySelector(".lock-dismiss").focus();
         }
-
-        // ── BUILD LANDING GRID ────────────────────────────────────────
-        // Collections are grouped and ordered low→high by CEFR so the grid
-        // reads as a clear learning path: Placement → Core Basics → Main
-        // Levels → Business & Exams. One shared builder renders every card.
-        const BASICS = window.BASICS_DATA || {};
-        const BIZ_PATH = window.BIZ_PATH_DATA || {};
-
-        function renderCollectionCard(s) {
-            const card = document.createElement("div");
-            card.className = "level-card" + (s.cls ? " " + s.cls : "");
-            card.dataset.col = s.col;
-            card.innerHTML = `
-                <div class="lc-top">
-                    <div class="num">${s.numHTML}</div>
-                    <div class="lvl-name"><b>${s.name}</b><small>${s.sub}</small></div>
-                    <i class="fas ${s.bigicon} bigicon"></i>
-                </div>
-                <div class="lc-body">
-                    <p>${s.desc}</p>
-                    <div class="lc-foot"><span>${s.count} ${s.countLabel}</span><i class="fas fa-arrow-right"></i></div>
-                </div>`;
-            if (isLocked(s.col)) lockCard(card, s.col);
-            card.addEventListener("click", () => isLocked(s.col) ? showLock(s.col) : s.onOpen());
-            return card;
-        }
-
-        // ── Card specs, one factory per collection type ──
-        const levelSpec = n => { const lv = DATA[n]; return {
-            col:"level:"+n, cls:"", numHTML:n, name:`Level ${n}`, sub:lv.tag, bigicon:lv.icon,
-            desc:LEVEL_DESC[n] || "", count:lv.lessons.length, countLabel:"Lessons", onOpen:() => showLessons(n) }; };
-        const basicsSpec = n => { const lv = BASICS[n]; return {
-            col:"basics:"+n, cls:"basics", numHTML:"B"+n, name:`Basics ${n}`, sub:lv.tag, bigicon:lv.icon,
-            desc:`Core Basics ${lv.tag} — one short dialogue (~1 min) per lesson with Listen &amp; Answer questions.`,
-            count:lv.lessons.length, countLabel:"Tracks", onOpen:() => showBasics(n) }; };
-        const bizPathSpec = lvl => { const bp = BIZ_PATH[lvl]; return {
-            col:"bizpath:"+lvl, cls:"biz", numHTML:`<i class="fas ${bp.icon}" style="font-size:1.1rem"></i>`,
-            name:`Business Path ${lvl === "b1" ? "I" : "III"}`, sub:bp.tag, bigicon:"fa-building",
-            desc:`Audio models from ${bp.sub} — one native-voice model of the target skill per lesson, with transcript and vocabulary.`,
-            count:bp.lessons.length, countLabel:"Lessons", onOpen:() => showBizPath(lvl) }; };
-        const diagSpec = {
-            col:"diag", cls:"diag", numHTML:'<i class="fas fa-stethoscope" style="font-size:1.2rem"></i>',
-            name:"Diagnostics", sub:"Placement", bigicon:"fa-clipboard-check",
-            desc:"Placement & diagnostic listening tracks used to find a student's starting level.",
-            count:DIAG_TRACKS.length, countLabel:"Tracks", onOpen:showDiag };
-        const certSpec = {
-            col:"cert", cls:"diag", numHTML:'<i class="fas fa-stopwatch" style="font-size:1.1rem"></i>',
-            name:"Certification", sub:"IELTS · Cambridge · TOEFL", bigicon:"fa-award",
-            desc:"Timed listening drills from the Certification Prep course — real exam distractors included.",
-            count:CERT_TRACKS.length, countLabel:"Tracks", onOpen:showCert };
-        const businessSpec = {
-            col:"business", cls:"biz", numHTML:'<i class="fas fa-briefcase" style="font-size:1.1rem"></i>',
-            name:"Business English", sub:"Premium (B2)", bigicon:"fa-building",
-            desc:"Listening resources from the Business English Premium course — pitches, calls, meetings, data, negotiation, feedback and more.",
-            count:BUSINESS_LESSONS.length, countLabel:"Lessons", onOpen:showBusiness };
-
-        // Professional track ordered by unlock level (B1 → B2 → B2 → C1).
-        const proSpecs = [...Object.keys(BIZ_PATH).map(bizPathSpec), businessSpec, certSpec]
-            .sort((a, b) => (REQ[a.col] || 0) - (REQ[b.col] || 0));
-
-        const GROUPS = [
-            { kicker:"Start here",              title:"Placement",        specs:[diagSpec] },
-            { kicker:"Foundations · Pre-A1–A2",     title:"Core Basics",      specs:Object.keys(BASICS).map(basicsSpec) },
-            { kicker:"Core curriculum · A1–C1", title:"Main Levels",      specs:Object.keys(DATA).map(levelSpec) },
-            { kicker:"Professional · B1–C1",    title:"Business & Exams", specs:proSpecs }
-        ];
-
-        GROUPS.forEach(g => {
-            if (!g.specs.length) return;
-            const head = document.createElement("div");
-            head.className = "grid-head";
-            head.innerHTML = `<span class="gh-title">${g.title}</span><span class="gh-kicker">${g.kicker}</span><span class="gh-line"></span>`;
-            levelGrid.appendChild(head);
-            g.specs.forEach(s => levelGrid.appendChild(renderCollectionCard(s)));
-        });
 
         // ── UNIFIED INDEX ─────────────────────────────────────────────
         // One flat list of every playable item across all collections, so
-        // search, "Continue Listening" and the per-collection views all
-        // render from the same source instead of duplicating href logic.
+        // search, "Continue Listening", the per-collection views AND the new
+        // progress meters on the landing cards all render from the same
+        // source instead of duplicating href logic. Se construye ANTES de
+        // pintar las colecciones: cada tarjeta necesita contar sus pistas.
+        const BASICS = window.BASICS_DATA || {};
+        const BIZ_PATH = window.BIZ_PATH_DATA || {};
+        const POLITICAL = window.POLITICAL_AUDIO_DATA || null;
         const ITEMS = [];
         const push = o => ITEMS.push(o);
 
@@ -634,50 +924,259 @@
             });
         });
 
+        if (POLITICAL) POLITICAL.lessons.forEach(les => {
+            const q = new URLSearchParams({ audio:les.file, title:les.title, sub:POLITICAL.sub,
+                crumb:POLITICAL.crumb + " · Lesson " + les.n, icon:les.icon });
+            push({ col:"political", group:`${POLITICAL.crumb} · ${POLITICAL.tag}`,
+                badge:POLITICAL.crumb, num:`Lesson ${les.n}`, title:les.title, icon:les.icon,
+                seed:les.file, href:`lesson.html?${q.toString()}` });
+        });
+
         const ITEM_BY_HREF = {};
         ITEMS.forEach(it => { ITEM_BY_HREF[it.href] = it; });
+        function itemsFor(col) { return ITEMS.filter(it => it.col === col); }
 
-        // Hero stats
+        // Nota de practica de una pista, si el alumno ya la intento.
+        // lesson.html la guarda bajo la MISMA semilla que usa la caratula.
+        function scoreFor(seed) {
+            const s = window.VesperAudioPractice ? VesperAudioPractice.getScore(seed) : null;
+            return (s && s.total) ? s : null;
+        }
+        // Cuantas pistas de una coleccion tienen ya nota. Alimenta el medidor
+        // de la tarjeta: la biblioteca deja de ser un catalogo mudo y enseña
+        // por donde va el alumno.
+        function progressFor(col) {
+            const items = itemsFor(col);
+            if (!items.length) return null;
+            let done = 0;
+            items.forEach(it => { if (scoreFor(it.seed)) done++; });
+            return done ? { done, total:items.length } : null;
+        }
+
+        // ── LANDING GRID ──────────────────────────────────────────────
+        // Collections are grouped and ordered low→high by CEFR so the grid
+        // reads as a clear learning path: Placement → Core Basics → Main
+        // Levels → Business & Exams. One shared builder renders every card.
+        function renderCollectionCard(s) {
+            const locked = isLocked(s.col);
+            const prog = locked ? null : progressFor(s.col);
+            const card = document.createElement("button");
+            card.type = "button";
+            card.className = "col-card" + (locked ? " locked" : "");
+            card.dataset.col = s.col;
+            card.innerHTML =
+                '<div class="cc-art" style="' + bandStyle(s.band) + '">' +
+                    eqSVG(s.band[2]) +
+                    '<div class="cc-num">' + s.numHTML + '</div>' +
+                    '<div class="cc-name"><b>' + s.name + '</b><small>' + s.sub + '</small></div>' +
+                '</div>' +
+                (locked ? '<span class="cc-lock">' + icon("i-lock") + ' ' + cefrLabel(REQ[s.col]) + '</span>' : '') +
+                '<div class="cc-body">' +
+                    '<p>' + s.desc + '</p>' +
+                    (prog ? '<div class="cc-prog">' +
+                        '<div class="cc-meter"><i style="width:' +
+                            Math.round(prog.done / prog.total * 100) + '%"></i></div>' +
+                        '<span>' + prog.done + ' of ' + prog.total + ' practiced</span></div>' : '') +
+                    '<div class="cc-foot">' +
+                        '<span class="cc-count">' + (locked
+                            ? 'Unlocks at ' + cefrLabel(REQ[s.col])
+                            : s.count + ' ' + s.countLabel) + '</span>' +
+                        (locked ? icon("i-lock") : '<span class="cc-go">' + icon("i-arrow") + '</span>') +
+                    '</div>' +
+                '</div>';
+            if (locked) card.setAttribute("aria-disabled", "true");
+            card.addEventListener("click", () => locked ? showLock(s.col) : s.onOpen());
+            return card;
+        }
+
+        // ── Card specs, one factory per collection type ──
+        const levelSpec = n => { const lv = DATA[n]; return {
+            col:"level:"+n, band:BAND_LEVEL[(n - 1) % BAND_LEVEL.length], numHTML:n,
+            name:`Level ${n}`, sub:lv.tag, desc:LEVEL_DESC[n] || "",
+            count:lv.lessons.length, countLabel:"Lessons", onOpen:() => showLessons(n) }; };
+        const basicsSpec = n => { const lv = BASICS[n]; return {
+            col:"basics:"+n, band:BAND_BASICS[(n - 1) % BAND_BASICS.length], numHTML:"B"+n,
+            name:`Basics ${n}`, sub:lv.tag,
+            desc:`Core Basics ${lv.tag} — one short dialogue (~1 min) per lesson with Listen &amp; Answer questions.`,
+            count:lv.lessons.length, countLabel:"Tracks", onOpen:() => showBasics(n) }; };
+        const bizPathSpec = lvl => { const bp = BIZ_PATH[lvl]; return {
+            col:"bizpath:"+lvl, band:BAND_BIZ, numHTML:`<i class="fas ${bp.icon}"></i>`,
+            name:`Business Path ${lvl === "b1" ? "I" : "III"}`, sub:bp.tag,
+            desc:`Audio models from ${bp.sub} — one native-voice model of the target skill per lesson, with transcript and vocabulary.`,
+            count:bp.lessons.length, countLabel:"Lessons", onOpen:() => showBizPath(lvl) }; };
+        const diagSpec = {
+            col:"diag", band:BAND_DIAG, numHTML:'<i class="fas fa-stethoscope"></i>',
+            name:"Diagnostics", sub:"Placement",
+            desc:"Placement & diagnostic listening tracks used to find a student's starting level.",
+            count:DIAG_TRACKS.length, countLabel:"Tracks", onOpen:showDiag };
+        const certSpec = {
+            col:"cert", band:BAND_CERT, numHTML:'<i class="fas fa-stopwatch"></i>',
+            name:"Certification", sub:"IELTS · Cambridge · TOEFL",
+            desc:"Timed listening drills from the Certification Prep course — real exam distractors included.",
+            count:CERT_TRACKS.length, countLabel:"Tracks", onOpen:showCert };
+        const businessSpec = {
+            col:"business", band:BAND_BIZ, numHTML:'<i class="fas fa-briefcase"></i>',
+            name:"Business English", sub:"Premium (B2)",
+            desc:"Listening resources from the Business English Premium course — pitches, calls, meetings, data, negotiation, feedback and more.",
+            count:BUSINESS_LESSONS.length, countLabel:"Lessons", onOpen:showBusiness };
+
+        const politicalSpec = POLITICAL ? {
+            col:"political", band:BAND_POL, numHTML:'<i class="fas fa-landmark"></i>',
+            name:"Political English", sub:POLITICAL.tag,
+            desc:"Briefings and press conferences from Political &amp; Global Affairs — four voices a track and nobody is ever named, so you have to follow who is speaking by ear.",
+            count:POLITICAL.lessons.length, countLabel:"Lessons", onOpen:showPolitical } : null;
+
+        // Professional track ordered by unlock level (B1 → B2 → B2 → B2 → C1).
+        // Array.sort is stable, so the three B2 collections keep the order
+        // they are written in below.
+        const proSpecs = [...Object.keys(BIZ_PATH).map(bizPathSpec), businessSpec,
+                          politicalSpec, certSpec]
+            .filter(Boolean)
+            .sort((a, b) => (REQ[a.col] || 0) - (REQ[b.col] || 0));
+
+        const GROUPS = [
+            { kicker:"Start here",              title:"Placement",        specs:[diagSpec] },
+            { kicker:"Foundations · Pre-A1–A2", title:"Core Basics",      specs:Object.keys(BASICS).map(basicsSpec) },
+            { kicker:"Core curriculum · A1–C1", title:"Main Levels",      specs:Object.keys(DATA).map(levelSpec) },
+            { kicker:"Professional · B1–C1",    title:"Business, Politics & Exams", specs:proSpecs }
+        ];
+
+        let gn = 0;
+        GROUPS.forEach((g, gi) => {
+            if (!g.specs.length) return;
+            gn++;
+            const head = document.createElement("div");
+            head.className = "grid-head";
+            head.dataset.group = gi;
+            head.innerHTML = '<span class="gh-num">' + String(gn).padStart(2, "0") + '</span>' +
+                '<span class="gh-title">' + g.title + '</span>' +
+                '<span class="gh-kicker">' + g.kicker + '</span>' +
+                '<span class="gh-line"></span>';
+            colGrid.appendChild(head);
+            g.specs.forEach((s, i) => {
+                const card = renderCollectionCard(s);
+                card.dataset.group = gi;
+                card.style.animationDelay = (i * 0.035).toFixed(3) + "s";
+                colGrid.appendChild(card);
+            });
+        });
+
+        // ── FILTROS DE LA RETICULA ────────────────────────────────────
+        // Ocultan bloques enteros; no reordenan nada, asi que la ruta de
+        // aprendizaje (Placement → Basics → Levels → Profesional) se lee
+        // igual con "Todo" puesto. La cifra de cada chip sale del recuento
+        // real de tarjetas, no de una constante que se quede vieja.
+        (function buildFilters() {
+            const host = document.getElementById("filters");
+            const chips = [{ key:"all", label:"Todo", n:ITEMS.length }].concat(
+                GROUPS.map((g, gi) => ({
+                    key:String(gi), label:g.title,
+                    n:g.specs.reduce((t, s) => t + itemsFor(s.col).length, 0)
+                })).filter(c => c.n)
+            );
+            chips.forEach((c, i) => {
+                const b = document.createElement("button");
+                b.type = "button";
+                b.className = i === 0 ? "on" : "";
+                b.dataset.key = c.key;
+                b.setAttribute("aria-pressed", i === 0 ? "true" : "false");
+                b.innerHTML = c.label + '<b>' + c.n + '</b>';
+                b.addEventListener("click", () => applyFilter(c.key));
+                host.appendChild(b);
+            });
+        })();
+        function applyFilter(key) {
+            document.querySelectorAll("#filters button").forEach(b => {
+                const on = b.dataset.key === key;
+                b.classList.toggle("on", on);
+                b.setAttribute("aria-pressed", on ? "true" : "false");
+            });
+            colGrid.querySelectorAll("[data-group]").forEach(el => {
+                el.hidden = (key !== "all" && el.dataset.group !== key);
+            });
+        }
+
+        // ── Cifras del masthead ───────────────────────────────────────
         document.getElementById("stat-lessons").textContent = ITEMS.length;
-        document.getElementById("stat-collections").textContent = levelGrid.querySelectorAll(".level-card").length;
+        document.getElementById("stat-collections").textContent = colGrid.querySelectorAll(".col-card").length;
+        const doneAll = ITEMS.filter(it => scoreFor(it.seed)).length;
+        if (doneAll) {
+            document.getElementById("stat-practiced").textContent = doneAll;
+            document.getElementById("st-practiced").hidden = false;
+        } else {
+            document.getElementById("st-practiced").remove();
+        }
+
+        // Ecualizador del masthead: alturas deterministas, no aleatorias, para
+        // que la pagina se vea igual en cada carga.
+        (function () {
+            let html = "";
+            for (let i = 0; i < 46; i++) {
+                const h = 16 + Math.abs(Math.sin(i * 0.62)) * 62 + Math.abs(Math.sin(i * 1.9)) * 18;
+                html += '<b style="height:' + Math.min(100, h).toFixed(1) + '%;animation-delay:' +
+                        (i * 0.07).toFixed(2) + 's"></b>';
+            }
+            document.getElementById("wave").innerHTML = html;
+        })();
 
         // ── SHARED CARD RENDERER ──────────────────────────────────────
-        // Practice result for a track, if the student has already tried it.
-        // lesson.html saves under the SAME seed this hub uses for the cover art.
-        function practiceBadge(seed) {
-            const s = window.VesperAudioPractice ? VesperAudioPractice.getScore(seed) : null;
-            if (!s || !s.total) return "";
-            const pct = s.got / s.total;
-            const cls = pct >= 0.8 ? "" : " part";
-            const ico = pct >= 0.8 ? "fa-circle-check" : "fa-rotate-right";
-            return ` <span class="pr-badge${cls}" title="Your best practice score"><i class="fas ${ico}"></i>${s.got}/${s.total}</span>`;
+        function practiceChip(seed) {
+            const s = scoreFor(seed);
+            if (!s) return "";
+            const ok = s.got / s.total >= 0.8;
+            return '<span class="chip ' + (ok ? "chip-done" : "chip-part") +
+                '" title="Your best practice score">' + icon(ok ? "i-check" : "i-repeat") +
+                s.got + "/" + s.total + '</span>';
+        }
+        // "Dar clase": la MISMA leccion pero abierta en la pestana Whiteboard
+        // (lesson.html lee ?tab=). Va en pestana nueva para no perder la
+        // biblioteca, que es donde el profesor sigue eligiendo.
+        function teachHref(href) {
+            return href + (href.indexOf("?") < 0 ? "?" : "&") + "tab=board";
         }
         function cardHTML(it, i) {
-            const versions = it.versions ? ` <span class="ver-badge">${it.versions} versions</span>` : "";
             const locked = isLocked(it.col);
-            const lockOverlay = locked ? `<span class="vc-lock"><i class="fas fa-lock"></i></span>` : "";
-            const practice = locked ? "" : practiceBadge(it.seed);
-            return `<a class="lesson-card${locked ? " locked" : ""}" href="${it.href}" data-href="${it.href}" data-col="${it.col}"${locked ? ' aria-disabled="true"' : ""} style="animation-delay:${(i * 0.015).toFixed(3)}s">
-                ${VesperCovers.coverHTML(it.seed, it.icon, it.badge)}
-                ${lockOverlay}
-                <div class="lz-body">
-                    <div class="lz-meta"><div class="num">${it.num}</div><h4>${it.title}${versions}${practice}</h4></div>
-                    <i class="fas ${locked ? "fa-lock" : "fa-chevron-right"} lz-go"></i>
-                </div></a>`;
+            const tags =
+                (it.versions ? '<span class="chip chip-ver">' + it.versions + ' versions</span>' : "") +
+                (locked ? "" : practiceChip(it.seed));
+            return '<a class="track' + (locked ? " locked" : "") + '" href="' + it.href +
+                '" data-href="' + it.href + '" data-col="' + it.col + '"' +
+                (locked ? ' aria-disabled="true"' : "") +
+                ' style="animation-delay:' + (i * 0.018).toFixed(3) + 's">' +
+                '<div class="tk-art">' +
+                    VesperCovers.coverHTML(it.seed, it.icon, it.badge) +
+                    (locked
+                        ? '<span class="tk-lock">' + icon("i-lock") + '</span>'
+                        : '<span class="tk-play"><b>' + icon("i-play") + '</b></span>' +
+                          '<span class="tk-teach" data-teach="' + teachHref(it.href) + '" role="button" tabindex="0"' +
+                          ' title="Dar clase: abre la lecci&oacute;n con la Pizarra">' + icon("i-board") + '</span>') +
+                '</div>' +
+                '<div class="tk-txt">' +
+                    '<div class="tk-num">' + it.num + '</div>' +
+                    '<h3>' + it.title + '</h3>' +
+                    (tags ? '<div class="tk-tags">' + tags + '</div>' : "") +
+                '</div></a>';
         }
         function renderCards(container, items) { container.innerHTML = items.map(cardHTML).join(""); }
-        function itemsFor(col) { return ITEMS.filter(it => it.col === col); }
 
         // ── CONTINUE LISTENING (localStorage) ─────────────────────────
         const RECENT_KEY = "vesper_audio_recent";
         function getRecent() { try { return JSON.parse(localStorage.getItem(RECENT_KEY) || "[]"); } catch (e) { return []; } }
         function pushRecent(href) {
             let r = getRecent().filter(h => h !== href);
-            r.unshift(href); r = r.slice(0, 6);
+            r.unshift(href); r = r.slice(0, 8);
             try { localStorage.setItem(RECENT_KEY, JSON.stringify(r)); } catch (e) {}
         }
         document.addEventListener("click", e => {
-            const card = e.target.closest(".lesson-card");
+            // El chip de pizarra vive DENTRO del <a> de la pista: hay que
+            // atenderlo antes, o el navegador se lleva la leccion normal.
+            const teach = e.target.closest("[data-teach]");
+            if (teach) {
+                e.preventDefault(); e.stopPropagation();
+                window.open(teach.getAttribute("data-teach"), "_blank", "noopener");
+                return;
+            }
+            const card = e.target.closest(".track");
             if (!card) return;
             if (card.classList.contains("locked")) {   // locked lesson → block nav, explain
                 e.preventDefault();
@@ -686,17 +1185,56 @@
             }
             if (card.hasAttribute("data-href")) pushRecent(card.getAttribute("data-href"));
         });
+        document.addEventListener("keydown", e => {
+            if (e.key !== "Enter" && e.key !== " ") return;
+            const teach = e.target.closest && e.target.closest("[data-teach]");
+            if (!teach) return;
+            e.preventDefault();
+            window.open(teach.getAttribute("data-teach"), "_blank", "noopener");
+        });
+
+        // ── REANUDAR + CONTINUE LISTENING ─────────────────────────────
+        // La primera pista del historial sube a una lamina propia con dos
+        // acciones explicitas (seguir / dar clase); el resto se queda en el
+        // riel. Antes las nueve se veian iguales y la de "seguir" habia que
+        // buscarla.
+        const resumeHost = document.getElementById("resume-host");
         function renderRecent() {
             const items = getRecent().map(h => ITEM_BY_HREF[h]).filter(Boolean);
-            if (!items.length) { recentSection.style.display = "none"; recentSection.innerHTML = ""; return; }
+            const open = items.filter(it => !isLocked(it.col));
+            if (!open.length) {
+                resumeHost.innerHTML = "";
+                recentSection.style.display = "none"; recentSection.innerHTML = "";
+                return;
+            }
+            const top = open[0];
+            resumeHost.innerHTML =
+                '<div class="resume">' +
+                    '<div class="rs-art">' + VesperCovers.coverHTML(top.seed, top.icon, top.badge) + '</div>' +
+                    '<div class="rs-txt">' +
+                        '<span class="rs-kick">' + icon("i-headphones") + ' Continue where you left off</span>' +
+                        '<h3>' + top.title + '</h3>' +
+                        '<p class="rs-sub">' + top.group + ' &middot; ' + top.num + '</p>' +
+                    '</div>' +
+                    '<div class="rs-acts">' +
+                        '<a class="btn-gold" href="' + top.href + '" data-href="' + top.href + '">' +
+                            icon("i-play") + ' Resume</a>' +
+                        '<a class="btn-ghost" href="' + teachHref(top.href) + '" target="_blank" rel="noopener"' +
+                            ' title="Abre esta lecci&oacute;n con la Pizarra Virtual">' +
+                            icon("i-board") + ' Dar clase</a>' +
+                    '</div>' +
+                '</div>';
+
+            const rest = open.slice(1);
+            if (!rest.length) { recentSection.style.display = "none"; recentSection.innerHTML = ""; return; }
             recentSection.style.display = "block";
             recentSection.innerHTML =
-                `<div class="recent-head">
-                    <h3 class="recent-title"><i class="fas fa-clock-rotate-left" style="color:var(--gold2);font-size:1.05rem"></i> Continue Listening</h3>
-                    <div class="line"></div>
-                    <button class="recent-clear" id="recent-clear"><i class="fas fa-xmark"></i> Clear</button>
-                </div>
-                <div class="lesson-grid">${items.map(cardHTML).join("")}</div>`;
+                '<div class="shead">' +
+                    '<h2>Recently played</h2>' +
+                    '<div class="sh-line"></div>' +
+                    '<button class="sh-act" id="recent-clear" type="button">' + icon("i-x") + ' Clear</button>' +
+                '</div>' +
+                '<div class="rail">' + rest.map(cardHTML).join("") + '</div>';
             document.getElementById("recent-clear").addEventListener("click", () => {
                 try { localStorage.removeItem(RECENT_KEY); } catch (e) {}
                 renderRecent();
@@ -705,7 +1243,16 @@
 
         // ── SEARCH ────────────────────────────────────────────────────
         let searchTimer;
-        searchInput.addEventListener("input", () => { clearTimeout(searchTimer); searchTimer = setTimeout(runSearch, 110); });
+        searchInput.addEventListener("input", () => {
+            searchBox.classList.toggle("has-val", !!searchInput.value);
+            clearTimeout(searchTimer); searchTimer = setTimeout(runSearch, 110);
+        });
+        document.getElementById("s-clear").addEventListener("click", () => {
+            searchInput.value = "";
+            searchBox.classList.remove("has-val");
+            searchInput.focus();
+            showLevels();
+        });
         function runSearch() {
             const raw = searchInput.value.trim();
             if (!raw) { showLevels(); return; }
@@ -718,7 +1265,8 @@
             searchCount.textContent = `${results.length} result${results.length === 1 ? "" : "s"} for “${raw}”`;
             if (!results.length) {
                 searchResults.innerHTML =
-                    `<div class="search-empty"><i class="fas fa-magnifying-glass"></i><b>No matches</b>Try a lesson title, a topic, or a level name.</div>`;
+                    '<div class="search-empty">' + icon("i-search") +
+                    '<b>No matches</b>Try a lesson title, a topic, or a level name.</div>';
             } else {
                 renderCards(searchResults, results.slice(0, 60));
             }
@@ -732,7 +1280,8 @@
             if (e.key === "/" && document.activeElement !== searchInput && !/^(INPUT|TEXTAREA)$/.test(document.activeElement.tagName)) {
                 e.preventDefault(); searchInput.focus();
             } else if (e.key === "Escape" && document.activeElement === searchInput) {
-                searchInput.value = ""; searchInput.blur(); showLevels();
+                searchInput.value = ""; searchBox.classList.remove("has-val");
+                searchInput.blur(); showLevels();
             }
         });
 
@@ -740,23 +1289,30 @@
         renderRecent();
 
         // ── VIEWS ─────────────────────────────────────────────────────
-        function setCrumbsHome(){ crumbs.innerHTML = `<b>Audio Library</b>`; }
-        function setCrumbsLevel(label){ crumbs.innerHTML = `<a id="c-home">Audio Library</a><span class="sep">/</span><b>${label}</b>`;
-            document.getElementById("c-home").addEventListener("click", showLevels); }
+        function setCrumbsHome(){ crumbs.innerHTML = '<b>Audio Library</b>'; }
+        function setCrumbsLevel(label){
+            crumbs.innerHTML = '<a id="c-home" role="button" tabindex="0">Audio Library</a>' +
+                '<span class="sep">/</span><b>' + label + '</b>';
+            const home = document.getElementById("c-home");
+            home.addEventListener("click", showLevels);
+            home.addEventListener("keydown", e => {
+                if (e.key === "Enter" || e.key === " ") { e.preventDefault(); showLevels(); }
+            });
+        }
 
         // Open a collection's lesson view from the shared index.
         function openCollection(col, title, crumb, exam) {
             lessonsTitle.textContent = title;
             setCrumbsLevel(crumb);
             if (exam) setExamBtn(exam.href, exam.label);
-            else document.getElementById("exam-btn").classList.add("hidden");
-            renderCards(lessonGrid, itemsFor(col));
+            else examBtn.classList.add("hidden");
+            renderCards(trackGrid, itemsFor(col));
             viewSearch.style.display = "none"; viewLevels.style.display = "none"; viewLessons.style.display = "block";
             window.scrollTo({top:0, behavior:"smooth"});
         }
 
         function showLevels() {
-            if (searchInput) searchInput.value = "";
+            if (searchInput) { searchInput.value = ""; searchBox.classList.remove("has-val"); }
             viewSearch.style.display = "none"; viewLessons.style.display = "none"; viewLevels.style.display = "block";
             renderRecent();
             setCrumbsHome(); window.scrollTo({top:0, behavior:"smooth"});
@@ -783,6 +1339,12 @@
         function showBusiness() {
             openCollection("business", "Business English — Premium (B2)", "Business English",
                 { href:"exam.html?course=corporate_b2", label:"Take the Business Exam" });
+        }
+        function showPolitical() {
+            openCollection("political", `Political & Global Affairs — ${POLITICAL.tag}`,
+                POLITICAL.crumb,
+                { href:`exam.html?course=${POLITICAL.course}`,
+                  label:"Take the Political English Exam" });
         }
         function showBizPath(lvl) {
             const bp = BIZ_PATH[lvl];

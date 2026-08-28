@@ -77,6 +77,10 @@
 # student book viewer: downloads the books from Firestore, where
 # server-side rules only allow approved student/teacher accounts to read.
 !/libro.html
+# Pizarra sobre el libro: libro.html la inyecta en el documento del libro y le
+# da las herramientas de /whiteboard/ (resaltar, escribir a mano, notas) sobre
+# las propias hojas. Los apuntes viven en el navegador del alumno. Sin claves.
+!/vesper_book_board.js
 
 # Per-course end-of-level exams (login-gated: exam.html is NOT in publicPages).
 # One exam per teacher manual/level, self-graded MCQs + teacher-graded Writing &
@@ -117,6 +121,7 @@
 !/vesper_reading_data.js
 !/vesper_basics_audio_data.js
 !/vesper_biz_path_audio_data.js
+!/vesper_political_audio_data.js
 !/vesper_basics_lesson_data.js
 !/vesper_custom_transcripts.js
 !/vesper_covers.js

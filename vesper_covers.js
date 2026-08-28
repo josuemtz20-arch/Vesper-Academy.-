@@ -95,7 +95,11 @@ window.VesperCovers = (function () {
 
   /* cover block markup for the audio hub cards (CSS lives in audio_library.html).
      The themed image sits on top of the generated gradient art; if the image is
-     missing or fails to load it removes itself and the gradient shows through. */
+     missing or fails to load it removes itself and the gradient shows through.
+     The image class is `vcover-img`, NOT `vc-img`: vc-img is the mascot portrait
+     (vesper_mascot.js), and vesper_theme.js styles it globally with the student's
+     skin — `filter:hue-rotate(...)` plus a 4px gold ring. Sharing the name tinted
+     every lesson cover on any page that loads the theme engine. */
   function coverHTML(seed, iconClass, label) {
     var c = coverStyle(seed);
     var img = artFor(seed);
@@ -103,7 +107,7 @@ window.VesperCovers = (function () {
         '<i class="fas ' + iconClass + ' vc-ghost"></i>' +
         '<span class="vc-medal" style="color:' + c.accent + ';border-color:' + hexA(c.accent, 0.55) + '">' +
           '<i class="fas ' + iconClass + '"></i></span>' +
-        (img ? '<img class="vc-img" src="' + img + '" alt="" loading="lazy" onerror="this.remove()">' : '') +
+        (img ? '<img class="vcover-img" src="' + img + '" alt="" loading="lazy" onerror="this.remove()">' : '') +
         (label ? '<span class="vc-badge">' + label + '</span>' : '') +
       '</div>';
   }

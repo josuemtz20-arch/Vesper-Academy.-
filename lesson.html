@@ -778,6 +778,17 @@
         }
         document.querySelectorAll(".tab").forEach(tab =>
             tab.addEventListener("click", () => gotoTab(tab.dataset.panel)));
+        // ?tab=board abre la lección directamente en esa pestaña. Lo usa el
+        // botón "Dar clase" de la biblioteca de audio: el profesor llega con la
+        // Pizarra ya cargada en vez de buscarla delante de los alumnos.
+        // El setTimeout NO es cosmético: gotoTab() llama a fitBoard(), que lee
+        // el `const canvas` declarado más abajo en este mismo script. Llamarla
+        // aquí mismo lanza un ReferenceError de zona muerta y se lleva por
+        // delante TODO el resto del script de la lección.
+        setTimeout(function(){
+            const want = new URLSearchParams(location.search).get("tab");
+            if (want && document.querySelector('.tab[data-panel="' + want + '"]')) gotoTab(want);
+        }, 0);
         // hide the Vocabulary tab when this audio has no vocabulary list (diagnostics / business)
         if (!vocab.length) {
             const vt = document.querySelector('.tab[data-panel="vocab"]');
