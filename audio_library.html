@@ -248,6 +248,14 @@
         /* .col-card y .grid-head traen display:flex, que le gana por
            especificidad al display:none del atributo hidden del navegador. */
         .col-grid > [hidden] { display:none !important; }
+        /* En el movil los cinco chips se envuelven en tres filas y ocupan mas
+           que la primera tarjeta: mejor una fila que se desliza. */
+        @media (max-width:600px) {
+            .filters { flex-wrap:nowrap; overflow-x:auto; scrollbar-width:none;
+                margin-right:calc(var(--gutter) * -1); padding-right:var(--gutter); }
+            .filters::-webkit-scrollbar { display:none; }
+            .filters button { flex-shrink:0; }
+        }
 
         /* -- "Dar clase": abre la leccion con la Pizarra ya cargada ------- */
         .tk-teach { position:absolute; top:10px; right:10px; z-index:5; width:30px; height:30px;
@@ -1034,11 +1042,14 @@
             .filter(Boolean)
             .sort((a, b) => (REQ[a.col] || 0) - (REQ[b.col] || 0));
 
+        // `chip` es el rotulo corto del filtro: el titulo largo de un bloque
+        // ("Business, Politics & Exams") envuelve los chips a tres filas en el
+        // movil y se come la reticula que venia a ordenar.
         const GROUPS = [
-            { kicker:"Start here",              title:"Placement",        specs:[diagSpec] },
-            { kicker:"Foundations · Pre-A1–A2", title:"Core Basics",      specs:Object.keys(BASICS).map(basicsSpec) },
-            { kicker:"Core curriculum · A1–C1", title:"Main Levels",      specs:Object.keys(DATA).map(levelSpec) },
-            { kicker:"Professional · B1–C1",    title:"Business, Politics & Exams", specs:proSpecs }
+            { kicker:"Start here",              title:"Placement",        chip:"Placement",    specs:[diagSpec] },
+            { kicker:"Foundations · Pre-A1–A2", title:"Core Basics",      chip:"Basics",       specs:Object.keys(BASICS).map(basicsSpec) },
+            { kicker:"Core curriculum · A1–C1", title:"Main Levels",      chip:"Levels",       specs:Object.keys(DATA).map(levelSpec) },
+            { kicker:"Professional · B1–C1",    title:"Business, Politics & Exams", chip:"Professional", specs:proSpecs }
         ];
 
         let gn = 0;
@@ -1070,7 +1081,7 @@
             const host = document.getElementById("filters");
             const chips = [{ key:"all", label:"Todo", n:ITEMS.length }].concat(
                 GROUPS.map((g, gi) => ({
-                    key:String(gi), label:g.title,
+                    key:String(gi), label:g.chip || g.title,
                     n:g.specs.reduce((t, s) => t + itemsFor(s.col).length, 0)
                 })).filter(c => c.n)
             );
