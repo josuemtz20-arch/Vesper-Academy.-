@@ -172,7 +172,7 @@ body{margin:0;font-family:var(--va-font-text,Inter,system-ui,sans-serif);display
                  '<div class="muted">Avisa a la academia para que lo vuelva a subir.</div>');
             return;
           }
-          render(html, token, base);
+          render(html, token, base, user.email || "");
         });
       }).catch(function () {
         fail('<div class="err">No hay conexi&oacute;n con el servidor de libros.</div>' +
@@ -184,9 +184,21 @@ body{margin:0;font-family:var(--va-font-text,Inter,system-ui,sans-serif);display
     });
   }
 
+  /* Firma que se imprime al pie de cada pagina: identifica al alumno que
+     descargo el PDF. No es seguridad (se puede recortar), es trazabilidad:
+     un PDF reenviado dice de que cuenta salio. */
+  function signature(email) {
+    var who = String(email || "").toLowerCase().replace(/[<>"'&]/g, "").slice(0, 80);
+    var day;
+    try { day = new Date().toLocaleDateString("es-MX"); }
+    catch (e) { day = new Date().toISOString().slice(0, 10); }
+    return (who ? "Licencia personal de " + who : "Copia personal") +
+           "  \u00b7  Vesper Academy \u00b7 vesperacademy.com  \u00b7  " + day;
+  }
+
   /* ── 4. Renderizar: el libro sustituye a esta página por completo,
          así su CSS de impresión y sus scripts funcionan tal cual ── */
-  function render(html, token, base) {
+  function render(html, token, base, email) {
     /* el candado ya se pasó aquí: quita su <script> del documento del libro */
     html = html.replace(/<script[^>]*src=["']vesper_auth\.js["'][^>]*>\s*<\/script>/gi, "");
 
@@ -198,7 +210,8 @@ body{margin:0;font-family:var(--va-font-text,Inter,system-ui,sans-serif);display
        Como document.write crea un documento NUEVO, el SDK de Firebase de esta
        página desaparece: hay que pasarle a la carcasa el idToken y la ruta base
        para que pueda leer. El token dura ~1 h; la carcasa avisa si caduca. */
-    if (/VESPER_PAGED_BOOK/.test(html)) {
+    var isPaged = /VESPER_PAGED_BOOK/.test(html);
+    if (isPaged) {
       var boot = "<script>window.VESPER_BOOK=" +
         JSON.stringify({ token: token, base: base }).replace(/</g, "\\u003c") +
         ";<\/script>";
@@ -298,29 +311,149 @@ body{margin:0;font-family:var(--va-font-text,Inter,system-ui,sans-serif);display
       '.vm-jump{animation:vmFlash 2.4s ease-out 1;}' +
       '@media print{a.no-print{display:none!important}}</style>';
 
-    /* Vesper Player: mejora cada <audio> del libro con retroceso 5s (para
-       shadowing), velocidad 0.75x/1x/1.25x y bucle. Sin dependencias. */
+    /* --- Descargar PDF + marca de agua (solo libros HTML) ---------------
+       Los libros ya vienen listos para imprimir (@page letter/13mm y
+       page-break-after en cada .page), asi que "Guardar como PDF" del
+       navegador da el libro paginado tal cual: lo unico que faltaba era
+       el boton -- y la firma con el correo del alumno.
+
+       Se inyecta al CARGAR, no en beforeprint, para que Ctrl+P quede
+       firmado igual que el boton. La firma va EN FLUJO (no absolute)
+       porque al imprimir los libros ponen .page{padding:0}: es la misma
+       razon por la que ellos mismos pasan .page-num a position:static.
+
+       Los libros paginados (Canva) quedan fuera: sus paginas se cargan
+       segun bajas, asi que imprimir solo saldria lo ya visto. */
+    if (!isPaged) {
+      chip +=
+        '<a href="#" role="button" title="Guardar este libro en PDF" ' +
+        'style="position:fixed;bottom:calc(14px + env(safe-area-inset-bottom));left:50%;z-index:99999;' +
+        'background:#f5efe2;color:#1B1B2F;font:700 12px/1 sans-serif;padding:9px 13px;border-radius:20px;' +
+        'opacity:.92;box-shadow:0 2px 8px rgba(0,0,0,.3);text-decoration:none;" ' +
+        'onclick="window.print();return false;" ' +
+        'onmouseover="this.style.opacity=1" onmouseout="this.style.opacity=.92" ' +
+        'class="no-print vm-chip vm-chip-c">\u2193 PDF</a>';
+
+      chip += '<style>' +
+        'a.vm-chip-c{left:50%!important;right:auto!important;transform:translateX(-50%)!important;' +
+          'bottom:calc(14px + env(safe-area-inset-bottom))!important;}' +
+        /* en el movil los tres pills no caben en una fila (el de examen mide
+           147px): el de PDF sube a una segunda fila sobre "Mis materiales" */
+        '@media (max-width:430px){a.vm-chip-c{left:14px!important;transform:none!important;' +
+          'bottom:calc(52px + env(safe-area-inset-bottom))!important;}}' +
+        '.vwm,.vwm-run,.vwm-audio{display:none!important;}' +
+        '@media print{' +
+          /* el pie corrido se lleva 7mm del margen inferior: sin esa reserva
+             pisaria la ultima linea de las hojas que van llenas hasta abajo */
+          '@page{margin-bottom:20mm;}' +
+          '.vwm{display:block!important;margin-top:12px!important;padding-top:5px;' +
+            'border-top:1px solid #ded7c6;text-align:center;color:#a89e88!important;' +
+            'font:400 7.5pt/1.35 Arial,Helvetica,sans-serif;letter-spacing:.2px;' +
+            '-webkit-print-color-adjust:exact;print-color-adjust:exact;break-inside:avoid;}' +
+          /* fixed = Chrome/Edge lo repiten en TODAS las hojas; Firefox y Safari
+             solo en la primera, por eso se conserva ademas el sello en flujo */
+          '.vwm-run{display:block!important;position:fixed!important;left:0;right:0;bottom:0;z-index:2147483647;' +
+            /* un punto mas oscuro que el sello en flujo: el pie puede caer sobre
+               una tarjeta de color y ahi el tono crema se lava */
+            /* caja de linea ajustada (1.0 y no 1.35): el pie se apoya en el borde
+               inferior de la caja de contenido, asi que cada punto de alto de mas
+               es un punto que puede rozar la ultima linea de la hoja */
+            'text-align:center;color:#8f8674!important;font:400 7pt/1 Arial,Helvetica,sans-serif;' +
+            'letter-spacing:.2px;-webkit-print-color-adjust:exact;print-color-adjust:exact;}' +
+          '.vwm-audio{display:block!important;color:#6f6656!important;' +
+            'font:italic 400 8.5pt/1.4 Arial,Helvetica,sans-serif;margin:4px 0 10px;}' +
+          'audio{display:none!important;}' +
+          /* book_exam_prep trae su propio boton flotante al dashboard sin
+             clase .no-print: sin esto sale un circulo dorado en cada hoja */
+          '.nav-float{display:none!important;}' +
+          '.vwm-last{page-break-after:auto!important;}' +
+        '}</style>';
+
+      chip += '<script>(function(){' +
+        'var sign=' + JSON.stringify(signature(email)).replace(/</g, "\\u003c") + ';' +
+        'function mark(){' +
+          'var all=document.querySelectorAll(".page");' +
+          'if(all.length){' +
+            'var last=all[all.length-1];' +
+            'if(last.className.indexOf("vwm-last")<0){last.className+=" vwm-last";}' +
+            'Array.prototype.forEach.call(all,function(p){' +
+              'if(p.getAttribute("data-vwm")||/(^| )cover-page( |$)/.test(p.className))return;' +
+              'p.setAttribute("data-vwm","1");' +
+              'var d=document.createElement("div");d.className="vwm";d.textContent=sign;' +
+              'p.appendChild(d);});' +
+          '}' +
+          'if(!document.querySelector(".vwm-run")){' +
+            'var r=document.createElement("div");r.className="vwm-run";r.textContent=sign;' +
+            'document.body.appendChild(r);}' +
+          'Array.prototype.forEach.call(document.querySelectorAll("audio:not([data-vwm])"),function(a){' +
+            'a.setAttribute("data-vwm","1");' +
+            'var n=document.createElement("div");n.className="vwm-audio";' +
+            'n.textContent="\uD83D\uDD0A Audio disponible en la versi\u00f3n en l\u00ednea del libro.";' +
+            'if(a.parentNode)a.parentNode.insertBefore(n,a.nextSibling);});' +
+        '}' +
+        'if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",mark);}else{mark();}' +
+        'window.addEventListener("load",mark);' +
+        'window.addEventListener("beforeprint",mark);' +
+        '})();<\/script>';
+    }
+
+    /* Vesper Player: sustituye los controles nativos de cada <audio> del libro
+       por una barra propia -- retroceder / avanzar 10 s (imprescindible en el
+       movil, donde el <audio> nativo no deja mover el punto de escucha con
+       precision), velocidad 0.75x/1x/1.25x para shadowing, y bucle.
+
+       La barra NO lleva la clase no-print. Mas arriba el visor inyecta
+       .no-print:not(.vm-chip){display:none!important} para tapar la navegacion
+       propia del libro, y esa misma regla ocultaba esta barra entera: nadie la
+       ha visto nunca. La impresion ya la resuelve el @media print de abajo.
+       Sin dependencias. */
     chip += '<style>' +
-      '.vxa-bar{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 10px;}' +
+      '.vxa-bar{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:6px 0 10px;}' +
       '.vxa-bar button{font:700 11px/1 sans-serif;padding:7px 11px;border-radius:14px;border:1px solid #c5a059;background:#fff;color:#1B1B2F;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.15);}' +
+      '.vxa-bar button:hover{background:#faf6ea;}' +
       '.vxa-bar button.on{background:#1B1B2F;color:#e8c987;}' +
+      '.vxa-t{font:600 11px/1 sans-serif;color:#6f6656;font-variant-numeric:tabular-nums;margin-left:2px;}' +
       'audio[data-vxa]{width:100%!important;max-width:430px!important;height:34px!important;}' +
       '@media print{.vxa-bar{display:none!important}}</style>';
     chip += '<script>(function(){function up(){' +
       'var list=document.querySelectorAll("audio:not([data-vxa])");' +
       'Array.prototype.forEach.call(list,function(a){a.setAttribute("data-vxa","1");' +
-      'var bar=document.createElement("div");bar.className="vxa-bar no-print";' +
+      'var bar=document.createElement("div");bar.className="vxa-bar";' +
       'function mk(t,tip,fn){var b=document.createElement("button");b.type="button";b.textContent=t;b.title=tip;' +
       'b.addEventListener("click",function(){fn(b);});bar.appendChild(b);return b;}' +
-      'mk("\\u27F2 5s","Retroceder 5 segundos",function(){a.currentTime=Math.max(0,a.currentTime-5);});' +
+      'function seek(d){var t=a.currentTime+d;' +
+      'var end=isFinite(a.duration)?a.duration:t;' +
+      'a.currentTime=Math.max(0,Math.min(end,t));}' +
+      'mk("-10 s","Retroceder 10 segundos",function(){seek(-10);});' +
+      'mk("+10 s","Avanzar 10 segundos",function(){seek(10);});' +
       'var sp=[1,0.75,1.25],si=0;' +
-      'mk("1\\u00D7","Velocidad: 0.75\\u00D7 para aprender, 1.25\\u00D7 para reto",function(b){' +
-      'si=(si+1)%sp.length;a.playbackRate=sp[si];b.textContent=sp[si]+"\\u00D7";b.classList.toggle("on",sp[si]!==1);});' +
+      'mk("1x","Velocidad: 0.75x para aprender, 1.25x para reto",function(b){' +
+      'si=(si+1)%sp.length;a.playbackRate=sp[si];b.textContent=sp[si]+"x";b.classList.toggle("on",sp[si]!==1);});' +
       'a.addEventListener("play",function(){a.playbackRate=sp[si];});' +
-      'mk("\\uD83D\\uDD01","Repetir en bucle",function(b){a.loop=!a.loop;b.classList.toggle("on",a.loop);});' +
+      'mk("Bucle","Repetir en bucle",function(b){a.loop=!a.loop;b.classList.toggle("on",a.loop);});' +
+      'var tl=document.createElement("span");tl.className="vxa-t";bar.appendChild(tl);' +
+      'function two(n){return(n<10?"0":"")+n;}' +
+      'function fmt(s){if(!isFinite(s))return "--:--";s=Math.max(0,Math.floor(s));' +
+      'return Math.floor(s/60)+":"+two(s%60);}' +
+      'function tick(){tl.textContent=fmt(a.currentTime)+" / "+fmt(a.duration);}' +
+      'a.addEventListener("timeupdate",tick);a.addEventListener("loadedmetadata",tick);tick();' +
       'if(a.parentNode){a.parentNode.insertBefore(bar,a.nextSibling);}});}' +
       'if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",up);}else{up();}' +
       'window.addEventListener("load",up);})();<\/script>';
+
+    /* --- Pizarra sobre el libro ----------------------------------------
+       Las mismas herramientas de /whiteboard/ (resaltar, escribir a mano,
+       notas adhesivas) pero encima de las hojas del libro. Se inyecta aqui,
+       en el visor, y no en cada libro: los libros son documentos generados
+       -- unos por Python, otros exportados de Canva -- y esperar a
+       regenerarlos todos habria dejado la herramienta en la mitad.
+       Los apuntes viven en el navegador del alumno, por libro (id). */
+    chip += '<script src="vesper_book_board.js"><\/script>' +
+      '<script>(function(){function go(){' +
+      'if(window.VesperBookBoard)VesperBookBoard.init({bookId:' +
+        JSON.stringify(id).replace(/</g, "\\u003c") + '});}' +
+      'if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",go);}else{go();}' +
+      '})();<\/script>';
 
     /* Enlace profundo a una lección: si la URL trae #anchor (desde el buscador
        de temas del portal), lleva el scroll a esa lección y la resalta. Como el

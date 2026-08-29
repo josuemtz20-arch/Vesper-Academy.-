@@ -574,6 +574,11 @@
 
   function fit() {
     var r = stage.getBoundingClientRect();
+    // Medida de 0: la pagina esta en una pestana oculta o dentro de un
+    // contenedor todavia sin maquetar. Aplicarla dejaria el lienzo en 0 x 0
+    // para siempre, asi que se conserva el tamano bueno y se vuelve a medir
+    // cuando la pestana aparezca (visibilitychange / resize / load).
+    if (!r.width || !r.height) return;
     canvas.setDimensions({ width:r.width, height:r.height });
     var dpr = window.devicePixelRatio || 1;
     laserCv.width = Math.round(r.width * dpr);
@@ -592,6 +597,7 @@
   requestAnimationFrame(fit);
   window.addEventListener("load", fit);
   window.addEventListener("resize", fit);
+  document.addEventListener("visibilitychange", fit);
 
   /* -- avisos -- */
   var toastEl = document.getElementById("toast"), toastT;
@@ -955,12 +961,17 @@
     return new Group([shaft, tip], { objectCaching:false });
   }
 
+  // Tras colocar texto o nota se pasa a Seleccionar. Si no, el clic con el
+  // que sales de la caja para dar por escrito el texto crea OTRA caja detras,
+  // y la pizarra acaba sembrada de "Escribe aqui" vacios.
   function placeText(p) {
     var t = new Textbox("Escribe aqui", {
       left:p.x, top:p.y, width:Math.max(220, fontSize * 8),
       fontFamily:"Inter, system-ui, sans-serif", fontSize:fontSize, fill:color
     });
+    t.vbSeed = "Escribe aqui";
     canvas.add(t); canvas.setActiveObject(t);
+    setTool(TOOLS.SELECT);
     t.enterEditing(); t.selectAll();
     save(); refresh();
   }
@@ -973,7 +984,9 @@
       backgroundColor:"#ffe9a8", padding:14,
       shadow:new Shadow({ color:"rgba(20,18,42,.30)", blur:16, offsetX:0, offsetY:6 })
     });
+    t.vbSeed = "Nota";
     canvas.add(t); canvas.setActiveObject(t);
+    setTool(TOOLS.SELECT);
     t.enterEditing(); t.selectAll();
     save(); refresh();
   }
@@ -1097,7 +1110,16 @@
   canvas.on("object:modified", function () { save(); refresh(); });
   canvas.on("object:removed", refresh);
   canvas.on("text:changed", autosave);
-  canvas.on("text:editing:exited", save);
+  canvas.on("text:editing:exited", function (opt) {
+    // Una caja que se deja vacia (o con el texto de muestra intacto) se
+    // borra sola: si no, queda un rectangulo invisible que sigue estorbando
+    // al seleccionar.
+    var t = opt && opt.target;
+    if (t && (!String(t.text).trim() || t.text === t.vbSeed)) {
+      canvas.remove(t); canvas.discardActiveObject(); canvas.requestRenderAll();
+    }
+    save(); refresh();
+  });
 
   /* -- RIEL Y BARRA DE CONTEXTO -------------------------------------- */
   document.querySelectorAll(".tbtn[data-tool]").forEach(function (b) {

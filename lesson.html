@@ -284,18 +284,34 @@
         .vhead { display:flex; align-items:flex-start; justify-content:space-between; gap:10px; }
         .vcard .term { font-size:1.05rem; font-weight:700; color:var(--navy); margin:0 0 3px; transition:font-size .2s, color .2s; }
         .vcard.open .term { font-size:1.32rem; color:var(--gold2); }
-        .vcard .ipa { font-family:'Inter',sans-serif; font-size:0.85rem; color:var(--gold2); margin:0; min-height:1.1em; letter-spacing:0.3px; }
-        .vcard.open .ipa { font-size:1rem; color:var(--navy); }
-        .vcard .ipa.loading { color:var(--muted); font-style:italic; }
+        /* Categoria gramatical. Va en cursiva y minusculas, como en un
+           diccionario de papel: es una etiqueta, no un dato mas de la ficha.
+           Sin `min-height`: cuando no se puede determinar con certeza no se
+           imprime nada, y una linea vacia reservada delataria el hueco. */
+        .vcard .pos { font-family:'Inria Serif',Georgia,serif; font-style:italic;
+            font-size:0.85rem; color:var(--gold2); margin:0; letter-spacing:0.2px; }
+        .vcard.open .pos { font-size:0.95rem; color:var(--navy); }
         .vchev { color:var(--muted); font-size:0.8rem; margin-top:5px; transition:transform .28s ease, color .2s; flex-shrink:0; }
         .vcard.open .vchev { transform:rotate(180deg); color:var(--gold2); }
         .vbody { max-height:0; overflow:hidden; transition:max-height .3s ease; }
-        .vcard.open .vbody { max-height:260px; }
+        /* El max-height existe por la animacion de despliegue, asi que no puede
+           crecer sin limite. La mediana de las definiciones son 32 caracteres y
+           el percentil 99 son 279; solo 9 fichas de 3561 pasan de 400. Para esa
+           cola -- las notas de gramatica de Political, que llegan a 775 -- el
+           cuerpo hace scroll en vez de cortar el texto en seco, que es lo que
+           hacia antes sin avisar. */
+        .vcard.open .vbody { max-height:460px; overflow-y:auto; }
         .vcard .def { font-size:0.92rem; color:var(--text); line-height:1.6; margin:12px 0 2px; padding-top:12px; border-top:1px solid var(--border); }
         .vcard .def .deflabel { display:block; font-size:0.62rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; color:var(--muted); margin-bottom:5px; }
+        /* El ejemplo. Va DESPUES de la definicion y en cursiva porque no es
+           material que se memorice: es la frase que ensena a colocar la
+           palabra -- registro, preposicion, que va delante y que detras. Sin
+           borde propio ni fondo: cuelga de la definicion, no compite con ella. */
+        .vcard .ex { font-family:'Inria Serif',Georgia,serif; font-style:italic; font-size:0.9rem;
+            line-height:1.65; color:var(--navy); margin:10px 0 2px; padding-left:11px; border-left:2px solid var(--gold); }
+        .vcard .ex .exlabel { display:block; font-family:'Inter',sans-serif; font-style:normal; font-size:0.62rem; font-weight:700; letter-spacing:1.4px; text-transform:uppercase; color:var(--muted); margin-bottom:5px; }
         .vocab-empty { text-align:center; color:var(--muted); padding:40px 20px; }
         .vocab-empty i { font-size:2rem; color:var(--border); }
-        .vocab-note { font-size:0.72rem; color:var(--muted); margin-top:16px; text-align:center; }
         .vcount { font-family:'Inter',sans-serif; font-size:0.7rem; font-weight:600; color:var(--muted); background:var(--cream); border:1px solid var(--border); border-radius:14px; padding:3px 10px; vertical-align:middle; margin-left:10px; letter-spacing:0.5px; }
         .vocab-tools { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
         .vtool-btn { display:inline-flex; align-items:center; gap:7px; border:1px solid var(--border); background:var(--white); color:var(--navy); border-radius:8px; padding:9px 13px; font-family:'Inter',sans-serif; font-size:0.78rem; font-weight:600; cursor:pointer; transition:all .15s; }
@@ -309,17 +325,25 @@
         .flash-top .ft-btns { display:flex; gap:8px; flex-wrap:wrap; }
         .flash-progress { font-size:0.8rem; font-weight:600; color:var(--muted); letter-spacing:0.5px; }
         .flash-stage { perspective:1200px; max-width:560px; margin:0 auto; }
-        .flash-card { position:relative; height:280px; cursor:pointer; transform-style:preserve-3d; transition:transform .45s ease; }
+        .flash-card { position:relative; height:320px; cursor:pointer; transform-style:preserve-3d; transition:transform .45s ease; }
         .flash-card.flipped { transform:rotateY(180deg); }
         @media (prefers-reduced-motion: reduce){ .flash-card { transition:none; } }
         .flash-face { position:absolute; inset:0; backface-visibility:hidden; -webkit-backface-visibility:hidden; border-radius:16px; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:28px; overflow:hidden; }
         .flash-front { background:linear-gradient(150deg,var(--navy2),var(--navy3)); color:#fff; border:1px solid var(--navy); box-shadow:0 14px 34px rgba(26,43,66,0.25); }
-        .flash-back { background:var(--white); border:1.5px solid var(--gold); transform:rotateY(180deg); box-shadow:0 14px 34px rgba(26,43,66,0.15); }
+        .flash-back { background:var(--white); border:1.5px solid var(--gold); transform:rotateY(180deg); box-shadow:0 14px 34px rgba(26,43,66,0.15); overflow-y:auto; }
         .flash-label { font-size:0.6rem; font-weight:700; letter-spacing:2px; text-transform:uppercase; color:var(--gold); margin-bottom:14px; }
         .flash-back .flash-label { color:var(--gold2); }
         .flash-term { font-family:'Inria Serif',serif; font-size:2rem; font-weight:700; line-height:1.15; }
-        .flash-ipa { margin-top:8px; color:var(--gold-lt); font-size:1rem; min-height:1.2em; }
+        .flash-pos { margin-top:8px; color:var(--gold-lt); font-size:0.95rem; min-height:1.2em;
+            font-family:'Inria Serif',Georgia,serif; font-style:italic; }
         .flash-def { font-size:1.08rem; line-height:1.7; color:var(--text); }
+        /* En la ficha el ejemplo se separa con una regla fina en vez de un
+           borde lateral: la cara ya esta centrada, y una linea horizontal
+           lee como "y ademas", que es justo lo que es. Se oculta sola cuando
+           el termino todavia no tiene ejemplo escrito. */
+        .flash-ex { font-family:'Inria Serif',Georgia,serif; font-style:italic; font-size:0.98rem; line-height:1.6;
+            color:var(--navy); margin-top:16px; padding-top:14px; border-top:1px solid var(--border); max-width:38ch; }
+        .flash-ex .exlabel { display:block; font-family:'Inter',sans-serif; font-style:normal; font-size:0.58rem; font-weight:700; letter-spacing:1.6px; text-transform:uppercase; color:var(--gold2); margin-bottom:7px; }
         .flash-hint { position:absolute; bottom:14px; left:0; right:0; font-size:0.62rem; color:rgba(255,255,255,0.45); letter-spacing:1.5px; text-transform:uppercase; }
         .flash-nav { display:flex; align-items:center; justify-content:center; gap:10px; margin-top:22px; flex-wrap:wrap; }
         .flash-mark { display:inline-flex; align-items:center; gap:8px; border:none; border-radius:9px; padding:10px 18px; font-family:'Inter',sans-serif; font-size:0.82rem; font-weight:700; cursor:pointer; transition:transform .12s, filter .15s; color:#fff; }
@@ -355,9 +379,10 @@
             .wb-toolbar{ flex-wrap:nowrap; overflow-x:auto; -webkit-overflow-scrolling:touch; scrollbar-width:thin; }
             .wb-group{ flex-shrink:0; }
             .tool-btn{ width:44px; height:44px; }
-            .flash-card{ height:235px; }
+            .flash-card{ height:290px; }   /* +55px: la cara de atras ahora lleva definicion Y ejemplo */
             .flash-term{ font-size:1.55rem; }
             .flash-def{ font-size:0.96rem; }
+            .flash-ex{ font-size:0.9rem; margin-top:12px; padding-top:11px; }
             .vocab-head{ align-items:stretch; }
             .vocab-search input{ width:100%; }
         }
@@ -583,7 +608,7 @@
                 <div class="vocab-head">
                     <h3><i class="fas fa-book-open" style="color:var(--gold);margin-right:8px"></i>Vocabulary<span class="vcount" id="vocab-count"></span></h3>
                     <div class="vocab-tools">
-                        <div class="vocab-search"><i class="fas fa-search"></i><input id="vocab-search" placeholder="Filter words…"></div>
+                        <div class="vocab-search"><i class="fas fa-search"></i><input id="vocab-search" placeholder="Filter words, or type “phrasal”…"></div>
                         <button class="vtool-btn" id="v-expand" title="Expand all"><i class="fas fa-angles-down"></i> <span>Expand all</span></button>
                         <button class="vtool-btn" id="v-collapse" title="Collapse all"><i class="fas fa-angles-up"></i> <span>Collapse all</span></button>
                         <button class="vtool-btn study" id="v-study"><i class="fas fa-graduation-cap"></i> Study</button>
@@ -609,12 +634,13 @@
                             <div class="flash-face flash-front">
                                 <span class="flash-label">Term</span>
                                 <div class="flash-term" id="flash-term"></div>
-                                <div class="flash-ipa" id="flash-ipa"></div>
+                                <div class="flash-pos" id="flash-pos"></div>
                                 <span class="flash-hint">Tap the card (or press Space) to flip</span>
                             </div>
                             <div class="flash-face flash-back">
                                 <span class="flash-label">Definition</span>
                                 <div class="flash-def" id="flash-def"></div>
+                                <div class="flash-ex" id="flash-ex" style="display:none"></div>
                             </div>
                         </div>
                     </div>
@@ -637,7 +663,6 @@
                         </div>
                     </div>
                 </div>
-                <p class="vocab-note">Definitions are from the Vesper curriculum · IPA pronunciation is fetched live from an open dictionary (needs internet).</p>
             </div>
         </div>
     </div>
@@ -650,6 +675,7 @@
     <script src="vesper_reading_data.js"></script>
     <script src="vesper_basics_lesson_data.js"></script>
     <script src="vesper_custom_transcripts.js"></script>
+    <script src="vesper_vocab_examples.js"></script>
     <script src="vesper_lesson_images.js"></script>
     <script src="vesper_covers.js"></script>
     <script src="vesper_audio_practice.js"></script>
@@ -664,6 +690,11 @@
         const isBasics = params.get("basics") !== null;  // Core Basics dialogue lessons
         const isCustom = !isBasics && params.get("audio") !== null;   // generic audio (e.g. Business English)
         let title, bannerTag, icon, vocab, audioSrc, crumbText, aSub, coverSeed, showPhoto = false;
+        // Identifica la lista de vocabulario que se esta mostrando. Sirve para
+        // pedir el ejemplo correcto cuando un mismo termino aparece en dos
+        // cursos con sentidos distintos ("step down" en Basics no es el "step
+        // down" de un ministro). Vease vesper_vocab_examples.js.
+        let deckKey = "";
         let basicsLesson = null;
         let customVariants = [], curKey = "";
         if (isBasics) {
@@ -678,6 +709,7 @@
             icon = window.VesperCovers ? VesperCovers.iconFor(title, blv ? blv.icon : "fa-seedling") : (blv ? blv.icon : "fa-seedling");
             coverSeed = `B${bl}-${bn}`;
             vocab = basicsLesson ? (basicsLesson.vocab || []) : [];
+            deckKey = `bas${bl}-${bn}`;
             audioSrc = `assets/audio/core_basics_level_${bl}_lesson_${bn}.mp3`;
             crumbText = `Basics ${bl} · Lesson ${bn}`;
             aSub = `${blv ? blv.tag : "Core Basics"} · Lesson ${bn} — dialogue (~1 min)`;
@@ -691,6 +723,7 @@
             bannerTag = params.get("sub") || "Vesper Audio";
             icon = params.get("icon") || "fa-headphones";
             vocab = (window.BUSINESS_VOCAB || {})[curKey] || [];
+            deckKey = curKey;
             audioSrc = f.includes("/") ? f : `assets/audio/${f}`;
             crumbText = params.get("crumb") || bannerTag;
             aSub = bannerTag;
@@ -708,6 +741,7 @@
             const tag = lv ? lv.tag : "";
             icon = lesson ? lesson.icon : "fa-headphones";
             vocab = lesson ? (lesson.vocab || []) : [];
+            deckKey = `cp${lvl}-${les}`;
             audioSrc = `assets/audio/core_practice_level_${lvl}_lesson_${les}.mp3`;
             crumbText = `Level ${lvl} · ${tag} · Lesson ${les}`;
             bannerTag = `Level ${lvl} · ${tag}`;
@@ -1601,6 +1635,168 @@
             pedagogical_narration:"Presenta la regla: con he, she e it añadimos -s al verbo. Muestra los tres sujetos apuntando al verbo 'works'. Luego recuerda que I/you/we/they mantienen el verbo base. Pide al alumno 3 ejemplos propios con he/she/it."
         }, null, 2);
 
+        // ── CATEGORIA GRAMATICAL ──────────────────────────────────────
+        // Sustituye a la transcripcion fonetica, que se pedia palabra por
+        // palabra a api.dictionaryapi.dev: una peticion por termino, en serie,
+        // contra una API comunitaria sin garantia de CORS ni de servicio. En
+        // cuanto fallaba -- y fallaba -- las fichas se llenaban de guiones.
+        //
+        // Esto no consulta nada: deduce la categoria del propio material. Las
+        // definiciones de Vesper estan escritas con un patron muy marcado
+        // ("to establish a connection" / "a clock that makes a loud noise"), y
+        // el termino a menudo se marca solo ("to break the ice", "a key
+        // player"). Medido sobre las 2346 entradas del catalogo: etiqueta el
+        // 75 % con ~2 % de error.
+        //
+        // REGLA DE ORO: ante la duda NO se etiqueta. Una ficha sin categoria
+        // no le quita nada al alumno; una categoria equivocada le ensena algo
+        // falso. Por eso hay senales deliberadamente fuera: el sufijo -ish
+        // (embellish, publish, finish son verbos), -al (arrival, proposal), y
+        // la lista de verbos desnudos en terminos de una sola palabra ("open",
+        // "close", "near" encabezan tantas definiciones de adjetivo como de
+        // verbo). Si anades reglas, mide antes: mas cobertura no vale un error.
+        const POS = (function () {
+            const PARTICLES = new Set("up down out in off on over back away through around along across apart aside forward together".split(" "));
+            const PREPS = new Set("into onto for with at about from after as".split(" "));
+            // Verbos que encabezan definiciones. Solo se consultan en terminos
+            // de VARIAS palabras ("draft an email" -> "write an early version").
+            const VERBS = new Set(("stop start leave wash clean make take give get put keep let move say tell ask talk speak write " +
+                "read walk run buy sell pay send meet find look feel think know want need use show help work play watch listen " +
+                "open close turn call bring wear cook eat drink sleep wake travel drive fly arrive return begin finish choose " +
+                "decide agree refuse allow avoid prepare practise practice organize organise manage lead build create design " +
+                "plan check test fix repair share join follow reduce increase improve solve explain describe compare discuss " +
+                "report suggest recommend accept reject cancel confirm change become remain seem investigate introduce withdraw " +
+                "provide offer act deliver present announce request demand insist admit deny claim argue persuade convince " +
+                "negotiate arrange schedule postpone delay attend visit invite welcome greet thank apologise apologize complain " +
+                "praise blame warn remind teach learn study review revise repeat translate pronounce spell count measure " +
+                "calculate estimate predict assume expect hope wish prefer enjoy hate dislike love like miss forget remember " +
+                "recognise recognize notice observe realise realize understand clarify summarise summarize outline highlight " +
+                "emphasise emphasize stress support oppose defend attack protect prevent cause affect influence control limit " +
+                "expand grow shrink rise fall drop climb jump push pull carry lift hold catch throw hit break connect link " +
+                "separate divide combine mix add remove insert delete copy paste save load print upload download install " +
+                "update upgrade restart reset switch enable disable adjust set apply assign allocate distribute collect gather " +
+                "store record track monitor evaluate assess judge rank rate score grade mark correct edit publish release " +
+                "launch ship deploy sign approve authorise authorize register enrol enroll hire fire promote train coach " +
+                "mentor supervise delegate shut " +
+                "prioritise prioritize handle process complete achieve reach earn win lose spend invest borrow lend budget " +
+                "charge bill refund exchange order pack unpack lock unlock enter exit board land depart transfer wait queue " +
+                "book reserve " +
+                // Verbos de todos los dias. Encabezan las definiciones de los
+                // niveles basicos, que es justo donde la etiqueta hace mas falta.
+                "go come do put sit stand live wash brush comb dress cut tie fold carry hang pour fill boil fry bake knock " +
+                "wave smile laugh cry shout whisper breathe swim ride climb throw kick dance sing draw paint spell borrow " +
+                "lend owe earn waste mend sweep feed plant dig sew scan click type browse search").split(" "));
+            const SUBJ = new Set("i we you they he she it let's that's there's it's i'd i've i'm what how would could don't doesn't".split(" "));
+            const PREP_HEAD = new Set("on in at by under over with without from off out".split(" "));
+            const DET = new Set("a an the your his her their its one's most".split(" "));
+
+            // La definicion describe una FORMULA, no una cosa: "a polite way to
+            // say sorry". Solo cabeceras que siempre son formula -- "response",
+            // "comment" o "line" tambien son sustantivos (rebuttal, icebreaker).
+            const EXPR_DEF = /^(a|an|the) (\w+ )?(phrase|expression|formula|opener|saying|greeting|softener|hedge|closing)\b/;
+            const EXPR_WAY = /^(a|an|the) (\w+ )?way to (say|ask|tell|start|open|close|end|decline|agree|disagree|greet|apologi[sz]e|suggest|propose|request|answer|reply|introduce|interrupt|refuse|accept)\b/;
+            const ADJ_DEF  = /^(not|relating|able|willing|describes|describing|feeling|having|full of|used to describe|showing|providing|causing|lacking|involving|expressing|marked by|characteri[sz]ed by)/;
+            // Definicion que arranca en un sustantivo generico: "Things you do
+            // every day". Fuera "place", "part", "list" y "number": tambien son
+            // verbos corrientes ("Place or study in context" = contextualize).
+            const NOUN_DEF = /^(thing|things|person|people|amount|group|piece|period|member|worker|building|room|area|event|word|machine)\b/;
+            // Un verbo desnudo seguido de "to", "and" u "or" no esta tomando
+            // complemento directo: es un adjetivo disfrazado. "Close TO
+            // something" (near), "Open AND honest" (candor), "Open TO
+            // interpretation" (ambiguous). "Wash your body" si es un verbo.
+            const LOOSE = new Set(["to", "and", "or", "but"]);
+            // Participios sueltos: Tired, Bored, Excited -- salvo los -ed que
+            // son sustantivos de pleno derecho.
+            const ED_NOUNS = new Set("speed need seed bed red hundred thousand method period record shed weed feed breed creed".split(" "));
+            const NOUN_SUF = /(tion|sion|ment|ness|ity|ship|hood|ance|ence|ancy|ency|ism|ist|ology|acy|ure|dom)$/;
+            // -ive queda fuera tras r/v: arrive, derive, drive, thrive, revive.
+            const ADJ_SUF  = /(ous|ful|able|ible|less|ical)$|(?:[^rv])ive$/;
+            const VERB_SUF = /(ise|ize|ify)$/;
+            const ADV_NOT  = /(friend|dai|week|month|year|ear|love|like|ug|cost|light|si|on|ho)ly$/;
+
+            function of(term, def) {
+                const raw = String(term || "").trim().toLowerCase();
+                const d = String(def || "").trim().toLowerCase();
+                if (!raw) return "";
+                const t = raw.replace(/\([^)]*\)/g, " ").split("/")[0].replace(/[^a-z' \-]/g, " ").trim();
+                const w = t.split(/\s+/).filter(Boolean);
+                if (!w.length) return "";
+
+                if (raw.endsWith("?") || raw.indexOf("…") >= 0 || raw.indexOf("...") >= 0) return "expression";
+                if (SUBJ.has(w[0])) return "expression";
+                if (w.length >= 5) return "expression";
+                // "on the same page", "in the loop", "under pressure": locucion,
+                // no adjetivo, aunque su definicion empiece por gerundio.
+                if (w.length >= 3 && PREP_HEAD.has(w[0])) return "expression";
+                if (EXPR_DEF.test(d) || EXPR_WAY.test(d)) return "expression";
+
+                if (w[0] === "to") {
+                    const rest = w.slice(1);
+                    const last = rest[rest.length - 1];
+                    return (rest.length >= 2 && (PARTICLES.has(last) || PREPS.has(last)))
+                        ? "phrasal verb" : "verb";
+                }
+                if (w[0] === "a" || w[0] === "an" || w[0] === "the") return "noun";
+
+                const dw = d.split(/\s+/);
+                // "Set of rules in code": el "of" delata un sintagma nominal.
+                // Salvo tras participio ("Deserted of people"), que es adjetivo.
+                const nounPhrase = dw.length > 1 && dw[1] === "of" && !/ed$/.test(dw[0]);
+                const bare = dw.length ? VERBS.has(dw[0].replace(/[^a-z']/g, "")) : false;
+                const loose = dw.length > 1 && LOOSE.has(dw[1]);
+                const verbish = /^to /.test(d) ||
+                                (bare && !nounPhrase && (w.length > 1 || !loose));
+
+                const last = w[w.length - 1];
+                if ((w.length === 2 || w.length === 3) && (PARTICLES.has(last) || PREPS.has(last)) &&
+                    (verbish || VERBS.has(w[0]))) return "phrasal verb";
+                if (w.length >= 2 && VERBS.has(w[0]) && (verbish || DET.has(w[1]))) return "verb";
+
+                if (/^to /.test(d)) return "verb";
+                if (NOUN_DEF.test(d)) return "noun";
+                if (ADJ_DEF.test(d)) return "adjective";
+                if (/^(a|an|the) /.test(d)) return "noun";
+
+                if (w.length === 1) {
+                    const x = w[0];
+                    if (/ed$/.test(x) && !ED_NOUNS.has(x)) return "adjective";
+                    if (NOUN_SUF.test(x)) return "noun";
+                    if (ADJ_SUF.test(x)) return "adjective";
+                    if (VERB_SUF.test(x)) return "verb";
+                    if (/ly$/.test(x) && !ADV_NOT.test(x)) return "adverb";
+                }
+                if (nounPhrase) return "noun";
+                if (verbish) return "verb";
+                return "";                       // sin senal fiable: en blanco
+            }
+            return { of };
+        })();
+
+        // ── EJEMPLOS DE USO ───────────────────────────────────────────
+        // Una definicion dice que significa una palabra; no dice como se pone
+        // en una frase. Para un alumno eso es la mitad del trabajo: "fall
+        // within someone's remit" se entiende leyendola y aun asi se coloca
+        // mal en cuanto hay que decirla. Por eso cada ficha lleva una frase
+        // de ejemplo escrita a mano.
+        //
+        // Los ejemplos NO viven en los ficheros de datos: esos cuatro estan
+        // auto-generados desde cuatro fuentes distintas (HTML de los libros,
+        // .py de Core Practice, lessons.json de Political...) y meter el
+        // ejemplo en cada una obligaria a tocar cuatro build scripts. Viven
+        // aparte, en vesper_vocab_examples.js, indexados por termino.
+        //
+        // Dos capas, y la especifica gana: `byDeck[deckKey][termino]` para los
+        // 356 terminos que significan cosas distintas segun el curso, y
+        // `byTerm[termino]` para el resto. Si no hay ejemplo no se imprime
+        // nada -- misma regla de oro que la categoria gramatical.
+        const EXAMPLES = window.VOCAB_EXAMPLES || {};
+        const exKey = t => String(t).trim().toLowerCase().replace(/\s+/g, " ");
+        function exFor(term){
+            const k = exKey(term);
+            const scoped = (EXAMPLES.byDeck || {})[deckKey];
+            return (scoped && scoped[k]) || (EXAMPLES.byTerm || {})[k] || "";
+        }
+
         // ── VOCABULARY ────────────────────────────────────────────────
         const vgrid = document.getElementById("vocab-grid");
         const vempty = document.getElementById("vocab-empty");
@@ -1611,48 +1807,39 @@
         } else {
             document.getElementById("vocab-count").textContent = vocab.length + (vocab.length === 1 ? " word" : " words");
             vocab.forEach(v => {
+                const pos = POS.of(v.term, v.def);
+                const ex = exFor(v.term);
                 const card = document.createElement("div");
                 card.className = "vcard";
                 card.dataset.term = v.term.toLowerCase();
                 card.dataset.def = (v.def || "").toLowerCase();
+                card.dataset.pos = pos;
+                card.dataset.ex = ex.toLowerCase();
                 card.innerHTML = `
                     <div class="vhead">
                         <div class="vhead-main">
                             <p class="term">${v.term}</p>
-                            <p class="ipa loading" data-term="${v.term}">/…/</p>
+                            ${pos ? `<p class="pos">${pos}</p>` : ""}
                         </div>
                         <i class="fas fa-chevron-down vchev"></i>
                     </div>
-                    <div class="vbody"><p class="def"><span class="deflabel">Definition</span>${v.def || "—"}</p></div>`;
+                    <div class="vbody">
+                        <p class="def"><span class="deflabel">Definition</span>${v.def || "—"}</p>
+                        ${ex ? `<p class="ex"><span class="exlabel">In use</span>${esc(ex)}</p>` : ""}
+                    </div>`;
                 card.addEventListener("click", () => card.classList.toggle("open"));
                 vgrid.appendChild(card);
             });
-            loadIPA();
-        }
-        // fetch IPA lazily from the open dictionary API
-        async function loadIPA() {
-            const ipaEls = document.querySelectorAll(".vcard .ipa");
-            for (const el of ipaEls) {
-                const term = el.dataset.term;
-                const word = term.split(/\s+/)[0].replace(/[^a-zA-Z'-]/g, "");
-                try {
-                    const res = await fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${encodeURIComponent(word)}`);
-                    if (!res.ok) throw 0;
-                    const json = await res.json();
-                    let ph = "";
-                    if (Array.isArray(json)) {
-                        ph = json[0].phonetic || (json[0].phonetics || []).map(p => p.text).find(Boolean) || "";
-                    }
-                    el.textContent = ph ? ph : "—";
-                } catch(e) { el.textContent = "—"; }
-                el.classList.remove("loading");
-            }
         }
         document.getElementById("vocab-search").addEventListener("input", e => {
             const q = e.target.value.trim().toLowerCase();
             let shown = 0;
             document.querySelectorAll(".vcard").forEach(c => {
-                const hit = !q || c.dataset.term.includes(q) || c.dataset.def.includes(q);
+                // La categoria entra en la busqueda: "phrasal" o "adjective"
+                // dejan a la vista solo esas fichas, que es como un profesor
+                // arma una tanda de practica en clase.
+                const hit = !q || c.dataset.term.includes(q) || c.dataset.def.includes(q) ||
+                            (c.dataset.pos || "").includes(q) || (c.dataset.ex || "").includes(q);
                 c.style.display = hit ? "" : "none";
                 if (hit) shown++;
             });
@@ -1676,10 +1863,9 @@
         const flashTop = flashWrap.querySelector(".flash-top");
         let deck = [], deckPos = 0, marks = [];
 
-        function ipaFor(term){
-            const el = vgrid.querySelector(`.ipa[data-term="${CSS.escape(term)}"]`);
-            const t = el ? el.textContent.trim() : "";
-            return (t && t !== "—" && t !== "/…/") ? t : "";
+        function posFor(term){
+            const c = vgrid.querySelector(`.vcard[data-term="${CSS.escape(String(term).toLowerCase())}"]`);
+            return c ? (c.dataset.pos || "") : "";
         }
         function shuffleArr(a){
             for (let i = a.length - 1; i > 0; i--){ const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
@@ -1700,8 +1886,18 @@
             const c = deck[deckPos];
             const apply = () => {
                 document.getElementById("flash-term").textContent = c.term;
-                document.getElementById("flash-ipa").textContent = ipaFor(c.term);
+                document.getElementById("flash-pos").textContent = posFor(c.term);
                 document.getElementById("flash-def").textContent = c.def || "—";
+                const exEl = document.getElementById("flash-ex");
+                const ex = exFor(c.term);
+                exEl.style.display = ex ? "" : "none";
+                exEl.innerHTML = "";
+                if (ex){
+                    const lab = document.createElement("span");
+                    lab.className = "exlabel"; lab.textContent = "In use";
+                    exEl.appendChild(lab);
+                    exEl.appendChild(document.createTextNode(ex));
+                }
             };
             // if the card is flipped, let it rotate back before swapping content
             if (flashCardEl.classList.contains("flipped")){ flashCardEl.classList.remove("flipped"); setTimeout(apply, 240); }

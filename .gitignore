@@ -124,6 +124,7 @@
 !/vesper_political_audio_data.js
 !/vesper_basics_lesson_data.js
 !/vesper_custom_transcripts.js
+!/vesper_vocab_examples.js
 !/vesper_covers.js
 !/vesper_lesson_images.js
 # listening-practice engine for the audio player (lesson.html): generates the

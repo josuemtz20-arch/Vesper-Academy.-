@@ -270,26 +270,46 @@ body{margin:0;font-family:var(--va-font-text,Inter,system-ui,sans-serif);display
       'a.vm-chip-r{right:14px!important;left:auto!important;bottom:calc(14px + env(safe-area-inset-bottom))!important;}' +
       '@media print{a.no-print{display:none!important}}</style>';
 
-    /* Vesper Player: mejora cada <audio> del manual con retroceso 5s (para
-       shadowing), velocidad 0.75x/1x/1.25x y bucle. Sin dependencias. */
+    /* Vesper Player: sustituye los controles nativos de cada <audio> del manual
+       por una barra propia -- retroceder / avanzar 10 s (imprescindible en el
+       movil, donde el <audio> nativo no deja mover el punto de escucha con
+       precision), velocidad 0.75x/1x/1.25x para shadowing, y bucle.
+
+       La barra NO lleva la clase no-print. Mas arriba el visor inyecta
+       .no-print:not(.vm-chip){display:none!important} para tapar la navegacion
+       propia del libro, y esa misma regla ocultaba esta barra entera: nadie la
+       ha visto nunca. La impresion ya la resuelve el @media print de abajo.
+       Sin dependencias. */
     chip += '<style>' +
-      '.vxa-bar{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 10px;}' +
+      '.vxa-bar{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:6px 0 10px;}' +
       '.vxa-bar button{font:700 11px/1 sans-serif;padding:7px 11px;border-radius:14px;border:1px solid #c5a059;background:#fff;color:#1B1B2F;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.15);}' +
+      '.vxa-bar button:hover{background:#faf6ea;}' +
       '.vxa-bar button.on{background:#1B1B2F;color:#e8c987;}' +
+      '.vxa-t{font:600 11px/1 sans-serif;color:#6f6656;font-variant-numeric:tabular-nums;margin-left:2px;}' +
       'audio[data-vxa]{width:100%!important;max-width:430px!important;height:34px!important;}' +
       '@media print{.vxa-bar{display:none!important}}</style>';
     chip += '<script>(function(){function up(){' +
       'var list=document.querySelectorAll("audio:not([data-vxa])");' +
       'Array.prototype.forEach.call(list,function(a){a.setAttribute("data-vxa","1");' +
-      'var bar=document.createElement("div");bar.className="vxa-bar no-print";' +
+      'var bar=document.createElement("div");bar.className="vxa-bar";' +
       'function mk(t,tip,fn){var b=document.createElement("button");b.type="button";b.textContent=t;b.title=tip;' +
       'b.addEventListener("click",function(){fn(b);});bar.appendChild(b);return b;}' +
-      'mk("\\u27F2 5s","Retroceder 5 segundos",function(){a.currentTime=Math.max(0,a.currentTime-5);});' +
+      'function seek(d){var t=a.currentTime+d;' +
+      'var end=isFinite(a.duration)?a.duration:t;' +
+      'a.currentTime=Math.max(0,Math.min(end,t));}' +
+      'mk("-10 s","Retroceder 10 segundos",function(){seek(-10);});' +
+      'mk("+10 s","Avanzar 10 segundos",function(){seek(10);});' +
       'var sp=[1,0.75,1.25],si=0;' +
-      'mk("1\\u00D7","Velocidad: 0.75\\u00D7 para aprender, 1.25\\u00D7 para reto",function(b){' +
-      'si=(si+1)%sp.length;a.playbackRate=sp[si];b.textContent=sp[si]+"\\u00D7";b.classList.toggle("on",sp[si]!==1);});' +
+      'mk("1x","Velocidad: 0.75x para aprender, 1.25x para reto",function(b){' +
+      'si=(si+1)%sp.length;a.playbackRate=sp[si];b.textContent=sp[si]+"x";b.classList.toggle("on",sp[si]!==1);});' +
       'a.addEventListener("play",function(){a.playbackRate=sp[si];});' +
-      'mk("\\uD83D\\uDD01","Repetir en bucle",function(b){a.loop=!a.loop;b.classList.toggle("on",a.loop);});' +
+      'mk("Bucle","Repetir en bucle",function(b){a.loop=!a.loop;b.classList.toggle("on",a.loop);});' +
+      'var tl=document.createElement("span");tl.className="vxa-t";bar.appendChild(tl);' +
+      'function two(n){return(n<10?"0":"")+n;}' +
+      'function fmt(s){if(!isFinite(s))return "--:--";s=Math.max(0,Math.floor(s));' +
+      'return Math.floor(s/60)+":"+two(s%60);}' +
+      'function tick(){tl.textContent=fmt(a.currentTime)+" / "+fmt(a.duration);}' +
+      'a.addEventListener("timeupdate",tick);a.addEventListener("loadedmetadata",tick);tick();' +
       'if(a.parentNode){a.parentNode.insertBefore(bar,a.nextSibling);}});}' +
       'if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",up);}else{up();}' +
       'window.addEventListener("load",up);})();<\/script>';
