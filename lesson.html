@@ -143,15 +143,67 @@
         }
         .audio-card .big-play:hover { background:var(--gold-lt); }
         .audio-card .big-play:active { transform:scale(0.93); }
+        /* Skip buttons flank the play button. Listening practice is mostly
+           re-hearing the four seconds you missed, and on a phone that is a
+           tap — not a drag along a 7px groove. */
+        .a-transport { display:flex; align-items:center; justify-content:center; gap:18px; margin:0 auto 22px; }
+        .a-transport .big-play { margin:0; flex-shrink:0; }
+        .a-skip {
+            width:48px; height:48px; border-radius:50%; flex-shrink:0; cursor:pointer;
+            border:1px solid var(--border); background:var(--cream); color:var(--navy);
+            display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1px;
+            font-family:'Inter',sans-serif; transition:background .16s, border-color .16s, color .16s, transform .12s;
+        }
+        .a-skip i { font-size:0.92rem; }
+        .a-skip b { font-size:0.56rem; font-weight:700; letter-spacing:0.02em; }
+        .a-skip:hover { background:#fff; border-color:var(--gold); color:var(--gold2); }
+        .a-skip:active { transform:scale(0.9); }
         .audio-card .a-title { font-family:'Inria Serif',serif; font-size:1.3rem; color:var(--navy); margin:0 0 4px; }
         .audio-card .a-sub { color:var(--muted); font-size:0.82rem; margin-bottom:22px; }
-        .a-progress { display:flex; align-items:center; gap:12px; max-width:520px; margin:0 auto; }
+        /* `width:100%` is load-bearing, not belt-and-braces. .a-main is a COLUMN
+           flex container, so the horizontal axis is its cross axis, and the
+           `margin:0 auto` here is a pair of cross-axis auto margins — which per
+           spec cancel `align-items:stretch`. Without an explicit width the row
+           then shrank to fit-content, and .a-bar (flex:1, basis 0) contributed
+           nothing: the seek bar rendered 0px wide between the two timestamps,
+           so there was never anything to click. */
+        .a-progress { display:flex; align-items:center; gap:12px; width:100%; max-width:520px; margin:0 auto; }
         .a-time { font-size:0.74rem; color:var(--muted); font-variant-numeric:tabular-nums; width:40px; }
         .a-time.dur { text-align:right; }
-        .a-bar { flex:1; height:7px; border-radius:5px; background:var(--border); cursor:pointer; position:relative; }
+        /* The bar is a seek control, not a read-out: it takes clicks, drags and
+           the arrow keys. `touch-action:none` is load-bearing — without it the
+           browser claims the gesture for page scroll and the drag dies on the
+           first move. The groove stays 7px; ::before grows the hit area to 23px
+           so a thumb can land on it without hunting. */
+        .a-bar { flex:1; height:7px; border-radius:5px; background:var(--border); cursor:pointer;
+            position:relative; touch-action:none; }
+        .a-bar::before { content:''; position:absolute; inset:-8px 0; }
+        .a-bar:focus-visible { outline:2px solid var(--gold); outline-offset:6px; }
+        /* how much has actually downloaded, behind the played fill */
+        .a-buf { position:absolute; left:0; top:0; bottom:0; width:0%; border-radius:5px;
+            background:var(--navy2); opacity:0.32; }
         .a-fill { position:absolute; left:0; top:0; bottom:0; width:0%; background:var(--gold); border-radius:5px; }
-        .a-fill::after { content:''; position:absolute; right:-6px; top:50%; transform:translateY(-50%); width:14px; height:14px; border-radius:50%; background:var(--navy); opacity:0; transition:opacity .15s; }
-        .a-bar:hover .a-fill::after { opacity:1; }
+        .a-fill::after { content:''; position:absolute; right:-8px; top:50%; width:16px; height:16px;
+            border-radius:50%; background:var(--navy); box-shadow:0 1px 5px rgba(0,0,0,0.35);
+            transform:translateY(-50%) scale(0.5); transition:transform .15s; }
+        .a-bar:focus-visible .a-fill::after,
+        .a-bar.scrubbing .a-fill::after { transform:translateY(-50%) scale(1); }
+        .a-bar.scrubbing { cursor:grabbing; }
+        /* time under the pointer, so you can aim a drag before you commit to it */
+        .a-bubble { position:absolute; bottom:calc(100% + 12px); transform:translateX(-50%);
+            padding:3px 8px; border-radius:7px; background:var(--navy); color:#fff;
+            font-size:0.68rem; font-weight:600; font-variant-numeric:tabular-nums;
+            white-space:nowrap; pointer-events:none; opacity:0; transition:opacity .13s; }
+        .a-bubble::after { content:''; position:absolute; top:100%; left:50%; margin-left:-4px;
+            border:4px solid transparent; border-top-color:var(--navy); }
+        .a-bar.scrubbing .a-bubble { opacity:1; }
+        /* Hover previews only where hovering is a real gesture. On a phone a tap
+           leaves :hover stuck on the element, which would strand the bubble on
+           screen over the subtitle long after the finger has gone. */
+        @media (hover:hover) {
+            .a-bar:hover .a-fill::after { transform:translateY(-50%) scale(1); }
+            .a-bar:hover .a-bubble { opacity:1; }
+        }
         .a-error { color:#b02a2a; font-size:0.82rem; margin-top:16px; display:none; }
         .speed-row { margin-top:22px; display:flex; gap:8px; justify-content:center; align-items:center; }
         .speed-row span { font-size:0.72rem; color:var(--muted); text-transform:uppercase; letter-spacing:1px; }
@@ -375,6 +427,10 @@
             .a-art .a-art-medal{ width:76px; height:76px; font-size:1.8rem; }
             .a-art .a-art-ghost{ font-size:7rem; }
             .a-main{ padding:26px 18px; }
+            .a-transport{ gap:14px; }
+            .audio-card .big-play{ width:72px; height:72px; font-size:1.5rem; }
+            /* the groove itself stays 7px; its ::before hit area does the work */
+            .a-bar::before{ inset:-13px 0; }
             /* whiteboard toolbar: one scrollable row instead of a tall stack */
             .wb-toolbar{ flex-wrap:nowrap; overflow-x:auto; -webkit-overflow-scrolling:touch; scrollbar-width:thin; }
             .wb-group{ flex-shrink:0; }
@@ -450,13 +506,25 @@
                         <div class="a-eq" id="a-eq"><span></span><span></span><span></span><span></span><span></span></div>
                     </div>
                     <div class="a-main">
-                        <button class="big-play" id="big-play" aria-label="Play"><i class="fas fa-play"></i></button>
+                        <div class="a-transport">
+                            <button class="a-skip" type="button" id="a-back" aria-label="Back 10 seconds"
+                                    title="Back 10 seconds"><i class="fas fa-rotate-left"></i><b>10</b></button>
+                            <button class="big-play" id="big-play" aria-label="Play"><i class="fas fa-play"></i></button>
+                            <button class="a-skip" type="button" id="a-fwd" aria-label="Forward 10 seconds"
+                                    title="Forward 10 seconds"><i class="fas fa-rotate-right"></i><b>10</b></button>
+                        </div>
                         <h3 class="a-title" id="a-title">Lesson Audio</h3>
                         <p class="a-sub" id="a-sub">Full listening track</p>
                         <div class="speed-row variant-row" id="variant-row" style="display:none;flex-wrap:wrap"></div>
                         <div class="a-progress">
                             <span class="a-time" id="a-cur">0:00</span>
-                            <div class="a-bar" id="a-bar"><div class="a-fill" id="a-fill"></div></div>
+                            <div class="a-bar" id="a-bar" role="slider" tabindex="0"
+                                 aria-label="Seek" aria-valuemin="0" aria-valuemax="0"
+                                 aria-valuenow="0" aria-valuetext="0:00">
+                                <div class="a-buf" id="a-buf"></div>
+                                <div class="a-fill" id="a-fill"></div>
+                                <span class="a-bubble" id="a-bubble">0:00</span>
+                            </div>
                             <span class="a-time dur" id="a-dur">0:00</span>
                         </div>
                         <div class="speed-row">
@@ -1010,16 +1078,97 @@
         const aCur = document.getElementById("a-cur"), aDur = document.getElementById("a-dur");
         const aBar = document.getElementById("a-bar"), aFill = document.getElementById("a-fill");
         const fmt = s => { if(!isFinite(s)) return "0:00"; const m=Math.floor(s/60),x=Math.floor(s%60); return `${m}:${x.toString().padStart(2,"0")}`; };
+
+        // ── SEEK ──────────────────────────────────────────────────────
+        // The bar used to be a read-out that accepted one click. Listening
+        // practice is mostly going back over a clause you missed, so it is a
+        // real scrubber now: drag it, tap ±10 s, or hold an arrow key. Pointer
+        // events (not mouse) so a finger and a mouse take the same path, and
+        // pointer capture so a drag survives leaving the 7px groove.
+        const aBuf = document.getElementById("a-buf"), aBubble = document.getElementById("a-bubble");
+        let scrubbing = false;
+        // 0 until metadata lands, and Infinity on a live stream: every caller
+        // treats "no duration yet" as "there is nothing to seek".
+        const dur = () => (isFinite(audio.duration) && audio.duration > 0) ? audio.duration : 0;
+        function paint(t) {
+            const d = dur();
+            aFill.style.width = (d ? t / d * 100 : 0) + "%";
+            aCur.textContent = fmt(t);
+            aBar.setAttribute("aria-valuemax", Math.floor(d));
+            aBar.setAttribute("aria-valuenow", Math.floor(t));
+            aBar.setAttribute("aria-valuetext", `${fmt(t)} of ${fmt(d)}`);
+        }
+        function paintBuffered() {
+            const d = dur(); let end = 0;
+            for (let i = 0; i < audio.buffered.length; i++) {
+                // only the range the playhead actually sits in: after a seek
+                // the buffer is disjoint and the far island is not "loaded up to"
+                if (audio.buffered.start(i) <= audio.currentTime + 0.5) end = Math.max(end, audio.buffered.end(i));
+            }
+            aBuf.style.width = (d ? Math.min(1, end / d) * 100 : 0) + "%";
+        }
+        function seekTo(t) {
+            const d = dur(); if (!d) return;
+            audio.currentTime = Math.max(0, Math.min(d, t));
+            paint(audio.currentTime);
+        }
+        const skip = s => seekTo(audio.currentTime + s);
+        const timeAt = clientX => {
+            const r = aBar.getBoundingClientRect();
+            return dur() * Math.max(0, Math.min(1, (clientX - r.left) / r.width));
+        };
+        function bubbleAt(clientX, t) {
+            const r = aBar.getBoundingClientRect();
+            aBubble.style.left = Math.max(0, Math.min(r.width, clientX - r.left)) + "px";
+            aBubble.textContent = fmt(t);
+        }
+        aBar.addEventListener("pointerdown", e => {
+            if (!dur()) return;
+            scrubbing = true; aBar.classList.add("scrubbing");
+            try { aBar.setPointerCapture(e.pointerId); } catch (err) {}
+            const t = timeAt(e.clientX); seekTo(t); bubbleAt(e.clientX, t);
+            e.preventDefault();          // no text selection dragged along with it
+        });
+        aBar.addEventListener("pointermove", e => {
+            if (!dur()) return;
+            const t = timeAt(e.clientX);
+            bubbleAt(e.clientX, t);
+            if (scrubbing) seekTo(t);
+        });
+        const endScrub = e => {
+            if (!scrubbing) return;
+            scrubbing = false; aBar.classList.remove("scrubbing");
+            try { aBar.releasePointerCapture(e.pointerId); } catch (err) {}
+        };
+        aBar.addEventListener("pointerup", endScrub);
+        aBar.addEventListener("pointercancel", endScrub);
+        aBar.addEventListener("keydown", e => {
+            const step = { ArrowLeft:-5, ArrowRight:5, ArrowDown:-10, ArrowUp:10, PageDown:-30, PageUp:30 }[e.key];
+            if (step !== undefined) { skip(step); e.preventDefault(); return; }
+            if (e.key === "Home") { seekTo(0); e.preventDefault(); return; }
+            if (e.key === "End")  { seekTo(dur()); e.preventDefault(); return; }
+            if (e.key === " " || e.key === "Enter") {
+                if (audio.paused) audio.play().catch(()=>{}); else audio.pause();
+                e.preventDefault();
+            }
+        });
+        document.getElementById("a-back").addEventListener("click", () => skip(-10));
+        document.getElementById("a-fwd").addEventListener("click",  () => skip(10));
+
         bigPlay.addEventListener("click", () => { if (audio.paused) audio.play().catch(()=>{}); else audio.pause(); });
         const audioCard = document.getElementById("audio-card");
         audio.addEventListener("play",  () => { bpIc.className = "fas fa-pause"; audioCard.classList.add("playing"); });
         audio.addEventListener("pause", () => { bpIc.className = "fas fa-play"; audioCard.classList.remove("playing"); });
         audio.addEventListener("ended", () => { bpIc.className = "fas fa-play"; audioCard.classList.remove("playing"); });
-        audio.addEventListener("loadedmetadata", () => aDur.textContent = fmt(audio.duration));
-        audio.addEventListener("timeupdate", () => {
-            aCur.textContent = fmt(audio.currentTime);
-            aFill.style.width = (audio.duration ? audio.currentTime/audio.duration*100 : 0) + "%";
+        audio.addEventListener("loadedmetadata", () => {
+            aDur.textContent = fmt(audio.duration); paint(audio.currentTime); paintBuffered();
         });
+        audio.addEventListener("timeupdate", () => {
+            // while a drag is in flight the pointer owns the fill, not the clock
+            if (!scrubbing) paint(audio.currentTime);
+            paintBuffered();
+        });
+        audio.addEventListener("progress", paintBuffered);
         audio.addEventListener("error", () => {
             document.getElementById("a-error").style.display = "block";
             // no audio for this lesson — fall back to the Reading view automatically
@@ -1028,7 +1177,6 @@
                 gotoTab("reading");
             }
         });
-        aBar.addEventListener("click", e => { const r=aBar.getBoundingClientRect(); if(audio.duration) audio.currentTime=((e.clientX-r.left)/r.width)*audio.duration; });
         document.querySelectorAll(".speed-btn").forEach(b => b.addEventListener("click", () => {
             b.parentElement.querySelectorAll(".speed-btn").forEach(x => x.classList.remove("active"));
             b.classList.add("active"); audio.playbackRate = parseFloat(b.dataset.rate);
@@ -1043,7 +1191,10 @@
             audioSrc = `assets/audio/${curKey}`;
             const wasPlaying = !audio.paused;
             audio.pause(); audio.currentTime = 0; audio.src = audioSrc;
-            aFill.style.width = "0%"; aCur.textContent = "0:00"; aDur.textContent = "0:00";
+            aFill.style.width = "0%"; aBuf.style.width = "0%";
+            aCur.textContent = "0:00"; aDur.textContent = "0:00";
+            aBar.setAttribute("aria-valuemax", 0); aBar.setAttribute("aria-valuenow", 0);
+            aBar.setAttribute("aria-valuetext", "0:00");
             document.getElementById("a-error").style.display = "none";
             variantRow.querySelectorAll(".variant-btn").forEach(b =>
                 b.classList.toggle("active", b.dataset.file.split("/").pop() === curKey));

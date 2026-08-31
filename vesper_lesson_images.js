@@ -64,7 +64,35 @@ window.VESPER_LESSON_ART = {
   "achievement": "theme_achievement.jpg",
   "retro": "theme_retro.jpg",
   "business": "theme_business.jpg",
-  "diagnostic": "theme_diagnostic.jpg"
+  "diagnostic": "theme_diagnostic.jpg",
+  /* Political & Global Affairs ships its own engraved plate per lesson
+     (navy linen, cream engraving, gold rule) instead of borrowing from the
+     shared theme bank. These are the SQUARE derivatives from
+     _scripts/political/build_political_covers.py, not the 16:9 plates the book
+     puts at the top of each lesson: .vc-cover is 1/1 with object-fit:cover, so
+     a 16:9 plate would have its gold rule cropped off both sides. artFor()
+     concatenates dir + file, so the subpath needs no code change. */
+  "political_l01": "political/cover/l01.jpg",
+  "political_l02": "political/cover/l02.jpg",
+  "political_l03": "political/cover/l03.jpg",
+  "political_l04": "political/cover/l04.jpg",
+  "political_l05": "political/cover/l05.jpg",
+  "political_l06": "political/cover/l06.jpg",
+  "political_l07": "political/cover/l07.jpg",
+  "political_l08": "political/cover/l08.jpg",
+  "political_l09": "political/cover/l09.jpg",
+  "political_l10": "political/cover/l10.jpg",
+  "political_l11": "political/cover/l11.jpg",
+  "political_l12": "political/cover/l12.jpg",
+  "political_l13": "political/cover/l13.jpg",
+  "political_l14": "political/cover/l14.jpg",
+  "political_l15": "political/cover/l15.jpg",
+  "political_l16": "political/cover/l16.jpg",
+  "political_l17": "political/cover/l17.jpg",
+  "political_l18": "political/cover/l18.jpg",
+  "political_l19": "political/cover/l19.jpg",
+  "political_l20": "political/cover/l20.jpg",
+  "political_l21": "political/cover/l21.jpg"
 },
   map: {
   "L1-1": "morning",
@@ -330,6 +358,27 @@ window.VESPER_LESSON_ART = {
   "cert_path_b2_listening_3.mp3": "science",
   "cert_path_c1_listening_1.mp3": "conversation",
   "cert_path_c1_listening_2.mp3": "mind",
-  "cert_path_c1_listening_3.mp3": "science"
+  "cert_path_c1_listening_3.mp3": "science",
+  "political_english_l01.mp3": "political_l01",
+  "political_english_l02.mp3": "political_l02",
+  "political_english_l03.mp3": "political_l03",
+  "political_english_l04.mp3": "political_l04",
+  "political_english_l05.mp3": "political_l05",
+  "political_english_l06.mp3": "political_l06",
+  "political_english_l07.mp3": "political_l07",
+  "political_english_l08.mp3": "political_l08",
+  "political_english_l09.mp3": "political_l09",
+  "political_english_l10.mp3": "political_l10",
+  "political_english_l11.mp3": "political_l11",
+  "political_english_l12.mp3": "political_l12",
+  "political_english_l13.mp3": "political_l13",
+  "political_english_l14.mp3": "political_l14",
+  "political_english_l15.mp3": "political_l15",
+  "political_english_l16.mp3": "political_l16",
+  "political_english_l17.mp3": "political_l17",
+  "political_english_l18.mp3": "political_l18",
+  "political_english_l19.mp3": "political_l19",
+  "political_english_l20.mp3": "political_l20",
+  "political_english_l21.mp3": "political_l21"
 }
 };
