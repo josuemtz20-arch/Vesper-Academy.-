@@ -122,6 +122,9 @@
 !/vesper_basics_audio_data.js
 !/vesper_biz_path_audio_data.js
 !/vesper_political_audio_data.js
+# subtitulos sincronizados de Political: tiempos por turno recuperados de
+# los mp3 publicados (_scripts/political/build_political_cues.py).
+!/vesper_political_cues.js
 !/vesper_basics_lesson_data.js
 !/vesper_custom_transcripts.js
 !/vesper_vocab_examples.js
