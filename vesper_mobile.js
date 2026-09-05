@@ -64,29 +64,26 @@
     });
 
     /* ---------- 3. Barajas (cursos y planes) ---------- */
-    /* Geometría: la carta activa al frente; las vecinas desplazadas,
-       escaladas y giradas. Un solo cálculo para cualquier baraja. */
-    function layout(deck, idx) {
+    /* Carrusel nativo con scroll-snap (vesper_mobile.css). Aquí solo se
+       decide cuál es la carta del frente —la más cercana al margen
+       izquierdo— y se sincroniza el panel de detalle, los puntos, el
+       contador y el botón que sigue a la carta. Deslizar es del navegador. */
+    var reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+    function padStart(deck) { return parseFloat(getComputedStyle(deck).paddingLeft) || 0; }
+    function nearest(deck) {
+      var x = deck.scrollLeft + padStart(deck), best = 0, d = Infinity;
+      all(".m-card", deck).forEach(function (c, i) {
+        var k = Math.abs(c.offsetLeft - x);
+        if (k < d) { d = k; best = i; }
+      });
+      return best;
+    }
+    function mark(deck, idx) {
       var cards = all(".m-card", deck);
       if (!cards.length) return;
-      var cw = cards[0].offsetWidth || 196;
-      var plans = deck.dataset.kind === "plans";
-      /* margen izquierdo: 16px en un teléfono; centrado si la pantalla es ancha */
-      var gutter = Math.max(16, Math.round((deck.clientWidth - 560) / 2) + 16);
-      var strip = Math.max(46, Math.min(56, Math.round((deck.clientWidth - gutter * 2 - cw) / (cards.length - 1))));
-      var cur = gutter;
       cards.forEach(function (card, i) {
-        var a = Math.abs(i - idx), left = cur;
-        cur += (i === idx ? cw : strip);
-        card.style.left = left + "px";
-        card.style.transform = a === 0 ? "translateY(-6px) scale(1)"
-          : "scale(" + (plans ? ".86" : ".82") + ") rotate(" + (i < idx ? -3 : 3) + "deg)";
-        card.style.zIndex = a === 0 ? "60" : String(10 + i);
-        card.style.opacity = a === 0 ? "1"
-          : String(Math.max(plans ? 0.72 : 0.66, 1 - a * (plans ? 0.08 : 0.1)));
-        card.classList.toggle("is-active", a === 0);
-        card.setAttribute("aria-current", a === 0 ? "true" : "false");
-        card.tabIndex = 0;
+        card.classList.toggle("is-active", i === idx);
+        card.setAttribute("aria-current", i === idx ? "true" : "false");
       });
       /* panel de detalle asociado (descripción / ventajas / contador / puntos) */
       var host = deck.parentNode;
@@ -102,6 +99,14 @@
       if (follow && cards[idx].dataset.href) follow.setAttribute("href", cards[idx].dataset.href);
       deck.dataset.idx = String(idx);
     }
+    function goTo(deck, idx, instant) {
+      var card = all(".m-card", deck)[idx];
+      if (!card) return;
+      var left = card.offsetLeft - padStart(deck);
+      if (deck.scrollTo) deck.scrollTo({ left: left, behavior: (instant || reduce.matches) ? "auto" : "smooth" });
+      else deck.scrollLeft = left;
+      mark(deck, idx);
+    }
 
     var decks = all(".m-deck");
     decks.forEach(function (deck) {
@@ -111,30 +116,30 @@
           /* primer toque: traer la carta al frente. Segundo toque sobre la
              carta que ya está al frente: entrar. Así nadie navega sin querer. */
           if (Number(deck.dataset.idx) === i && card.dataset.href) { window.location.href = card.dataset.href; return; }
-          layout(deck, i);
+          goTo(deck, i);
         });
       });
       all(".m-dots button", deck.parentNode).forEach(function (b, i) {
-        on(b, "click", function () { layout(deck, i); });
+        on(b, "click", function () { goTo(deck, i); });
       });
-      /* deslizar con el dedo también mueve la baraja */
-      var x0 = null;
-      on(deck, "touchstart", function (e) { x0 = e.touches[0].clientX; }, { passive: true });
-      on(deck, "touchend", function (e) {
-        if (x0 === null) return;
-        var dx = e.changedTouches[0].clientX - x0, i = Number(deck.dataset.idx || 0);
-        if (Math.abs(dx) > 40) layout(deck, Math.min(cards.length - 1, Math.max(0, i + (dx < 0 ? 1 : -1))));
-        x0 = null;
-      });
-      layout(deck, Number(deck.dataset.start || 0));
+      /* al deslizar, cuando el scroll se asienta se marca la carta más cercana */
+      var st;
+      on(deck, "scroll", function () {
+        clearTimeout(st);
+        st = setTimeout(function () {
+          var n = nearest(deck);
+          if (n !== Number(deck.dataset.idx)) mark(deck, n);
+        }, 90);
+      }, { passive: true });
+      goTo(deck, Number(deck.dataset.start || 0), true);
     });
 
-    /* al girar la pantalla la geometría se recalcula */
+    /* al girar la pantalla la carta activa vuelve a su sitio */
     var rt;
     on(window, "resize", function () {
       clearTimeout(rt);
       rt = setTimeout(function () {
-        decks.forEach(function (d) { layout(d, Number(d.dataset.idx || 0)); });
+        decks.forEach(function (d) { goTo(d, Number(d.dataset.idx || 0), true); });
       }, 150);
     }, { passive: true });
 
