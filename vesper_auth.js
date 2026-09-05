@@ -42,10 +42,7 @@
       "liga.html",
       "tienda.html",
       "onboarding.html",
-      "perfil.html",
-      "vesper_landing.html",
-      "vesper_promo.html",
-      "vesper_web.html"
+      "perfil.html"
     ],
     /* SHA-256 de ("vesper-academy-v1|" + correo en minúsculas).
        Añade una línea por persona autorizada. */

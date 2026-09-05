@@ -64,7 +64,9 @@ Dos manifiestos, a propósito: `manifest_lecciones.webmanifest`
 `leccion/chat/liga/tienda/configuracion` y el TWA de `twa-manifest.json`) y
 `manifest.webmanifest` (`start_url: vesper_engine.html`, la herramienta del
 profesor). El service worker es `sw.js`: al cambiar cualquier archivo de su
-lista `CORE`, **sube `CACHE_VERSION`** para invalidar el cache.
+lista `CORE` hay que invalidar el cache, pero **eso ya no se hace a mano** —
+`python _scripts/preflight.py --fix` reescribe el sufijo de `CACHE_VERSION`
+(el sha256 del contenido de `CORE`) y el hook `pre-push` lo verifica.
 
 ## `.gitignore`
 

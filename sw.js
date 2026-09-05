@@ -5,11 +5,16 @@
    cachea ambos cascarones (HTML, datos, auth, mascota e iconos)
    para que abran sin conexión. El resto del sitio (manuales,
    audio, Firestore) sigue yendo siempre a la red.
-   Sube CACHE_VERSION al cambiar cualquiera de estos archivos.
+
+   CACHE_VERSION ya NO se sube a mano: el sufijo es el sha256 del contenido
+   de CORE y lo reescribe `python _scripts/preflight.py --fix`, que ademas
+   verifica que cada entrada de CORE exista y este publicada (el install de
+   abajo las traga en silencio si fallan). El prefijo "vesper-vNN" se queda
+   como etiqueta legible.
    ============================================================ */
 "use strict";
 
-var CACHE_VERSION = "vesper-v101";
+var CACHE_VERSION = "vesper-v101-79f05c8b";
 var CORE = [
   /* Vesper Engine shell */
   "vesper_engine.html",
@@ -127,6 +132,19 @@ self.addEventListener("fetch", function (event) {
      el alumno que ya usó la app vuelve a la portada con el SW mandando. */
   if (req.destination === "video" || req.headers.has("range") ||
       /\.(mp4|webm|m4v|mov)$/i.test(url.pathname)) return;
+
+  /* En desarrollo la red manda. El handler de abajo es stale-while-revalidate:
+     sirve el cache y refresca detrás, o sea que al editar un vesper_*.js en
+     local la recarga sigue mostrando el archivo viejo y el cambio parece "no
+     hacer nada" hasta desregistrar el SW a mano. Aquí eso se acaba. En
+     producción no cambia absolutamente nada: solo aplica a localhost. */
+  if (url.hostname === "localhost" || url.hostname === "127.0.0.1" ||
+      url.hostname === "[::1]" || url.hostname === "::1") {
+    event.respondWith(
+      fetch(req).catch(function () { return caches.match(req); })
+    );
+    return;
+  }
 
   /* Navegaciones (abrir la app): red primero, cae al cache. */
   if (req.mode === "navigate") {
