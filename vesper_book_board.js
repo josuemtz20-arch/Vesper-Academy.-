@@ -266,8 +266,10 @@
     ".vbb-note .vbb-note-grip{position:absolute;top:2px;left:5px;color:#b0a06a;font:700 13px/1 sans-serif;",
       "cursor:grab;touch-action:none}",
 
-    /* Boton flotante: dice lo que hace. */
-    ".vbb-fab{position:fixed!important;right:14px;bottom:22px;z-index:99999;",
+    /* Boton flotante: dice lo que hace. Va una fila ARRIBA de los botones
+       que libro.html pone abajo ("Mis materiales", "Presentar examen"): en
+       la esquina derecha tapaba el del examen. */
+    ".vbb-fab{position:fixed!important;right:14px;bottom:calc(56px + env(safe-area-inset-bottom));z-index:99999;",
       "display:flex;align-items:center;gap:8px;height:46px;padding:0 18px 0 14px;margin:0!important;",
       "background:#1B1B2F;color:#f3e2ab;border:1px solid rgba(201,168,76,.55);border-radius:999px;",
       "box-shadow:0 8px 24px rgba(0,0,0,.34);cursor:pointer;",
@@ -352,7 +354,7 @@
     ".vbb-pop .vbb-shapes svg{width:24px;height:24px}",
 
     /* Aviso */
-    ".vbb-flash{position:fixed!important;left:50%;bottom:80px;transform:translateX(-50%);z-index:100002;",
+    ".vbb-flash{position:fixed!important;left:50%;bottom:116px;transform:translateX(-50%);z-index:100002;",
       "background:rgba(27,27,47,.95);color:#f5f2eb;border:1px solid rgba(201,168,76,.4);",
       "border-radius:999px;padding:9px 16px;font:600 12px/1.3 Inter,system-ui,sans-serif;",
       "box-shadow:0 10px 30px rgba(0,0,0,.4);opacity:0;transition:opacity .2s;pointer-events:none;",
@@ -367,7 +369,7 @@
       ".vbb-shape{outline:none!important}",
       ".vbb-note{box-shadow:none!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}}",
 
-    "@media (max-width:600px){.vbb-fab{bottom:18px;right:12px}",
+    "@media (max-width:600px){.vbb-fab{right:14px}",
       ".vbb-bar{top:auto;bottom:10px;right:8px;left:8px;transform:none;flex-direction:row;flex-wrap:wrap;",
       "justify-content:center;max-width:none;max-height:none;overflow:visible}",
       ".vbb-bar button{width:36px;height:34px}",
@@ -469,8 +471,16 @@
     var w = layer.page.clientWidth, h = layer.page.clientHeight;
     var changed = (w !== layer.w || h !== layer.h);
     layer.w = w; layer.h = h;
-    // Letra y grosores escalan con el ancho de la hoja.
-    if (w) layer.page.style.setProperty("--vbb-k", String(w / REF_W));
+    // Letra y grosores escalan con el ancho de la hoja. En los de Canva la
+    // hoja es una imagen que se encoge entera, asi que la escala es exacta.
+    // Los libros HTML NO se encogen en el movil (el texto se re-maqueta a su
+    // tamano de siempre): escalar ahi dejaba la respuesta en 9 px junto a un
+    // libro en 14.5 px. Por eso llevan un minimo.
+    if (w) {
+      var k = w / REF_W;
+      if (!layer.page.classList.contains("vpb-page")) k = Math.max(k, .8);
+      layer.page.style.setProperty("--vbb-k", String(k));
+    }
     if (changed) {
       Object.keys(layer.tiles).forEach(function (t) { dropTile(layer, +t); });
       ownEls(layer, "vbb-shape").forEach(function (el) { layoutShape(layer, el); });
