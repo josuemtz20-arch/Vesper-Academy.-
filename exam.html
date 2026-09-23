@@ -412,7 +412,7 @@ footer img{height:30px;width:30px;object-fit:contain;vertical-align:middle;margi
       return wrap;
     }
 
-    const LETTERS = ["A","B","C","D","E","F"];
+    const LETTERS = "ABCDEFGHIJ".split("");   // section badges too: Practice 1 has 8 sections
     const responses = {};   // qid -> selected index
     const answers = {};     // qid -> correct index (kept in JS, NOT in the DOM, so it isn't visible before grading)
     let qIndex = 0;
