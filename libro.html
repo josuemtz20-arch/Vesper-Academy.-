@@ -441,9 +441,10 @@ body{margin:0;font-family:var(--va-font-text,Inter,system-ui,sans-serif);display
       'if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",up);}else{up();}' +
       'window.addEventListener("load",up);})();<\/script>';
 
-    /* --- Pizarra sobre el libro ----------------------------------------
-       Las mismas herramientas de /whiteboard/ (resaltar, escribir a mano,
-       notas adhesivas) pero encima de las hojas del libro. Se inyecta aqui,
+    /* --- Escribir sobre el libro ---------------------------------------
+       El alumno responde los ejercicios encima de la hoja (toca el hueco y
+       escribe con el teclado), escribe a mano, resalta o pega notas, sin
+       salir del libro ni abrir la pizarra aparte. Se inyecta aqui,
        en el visor, y no en cada libro: los libros son documentos generados
        -- unos por Python, otros exportados de Canva -- y esperar a
        regenerarlos todos habria dejado la herramienta en la mitad.
