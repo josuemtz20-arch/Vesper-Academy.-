@@ -95,9 +95,9 @@
   #m-app .m-brand { display: flex; align-items: center; gap: 9px; min-height: 44px; }
   #m-app .m-brand img { height: 26px; width: 26px; object-fit: contain; }
   #m-app .m-brand b { font-family: 'Fraunces', Georgia, serif; color: #fff; font-size: 15px;
-    font-weight: 700; letter-spacing: .3px; }
+    font-weight: 700; letter-spacing: .3px; white-space: nowrap; }
   #m-app .m-bar__cta { display: inline-flex; align-items: center; height: 40px; padding: 0 13px;
-    border-radius: 3px; background: #c5a059; color: #1B1B2F;
+    border-radius: 3px; background: #c5a059; color: #1B1B2F; white-space: nowrap;
     font: 700 11.5px 'Inter', sans-serif; letter-spacing: .1em; text-transform: uppercase; }
   #m-app .m-burger { width: 44px; height: 44px; display: flex; align-items: center;
     justify-content: center; background: none; border: none; color: #fff; font-size: 20px; cursor: pointer; }
@@ -357,6 +357,19 @@
   #m-app section { padding: 30px 20px 26px; }
   #m-app .m-flush { padding-left: 0; padding-right: 0; }
   #m-app .m-flush > *:not(.m-deck) { padding-left: 20px; padding-right: 20px; }
+
+  /* Teléfonos estrechos (360px): la barra no cabía con la marca y el botón
+     a tamaño normal y ambos se partían en dos líneas; el titular del hero
+     quedaba en tres al lado de la mascota de 96px. */
+  @media (max-width: 380px) {
+    #m-app .m-bar { padding: 0 10px 0 14px; }
+    #m-app .m-brand { gap: 7px; }
+    #m-app .m-brand b { font-size: 14px; }
+    #m-app .m-bar__cta { padding: 0 10px; font-size: 11px; letter-spacing: .06em; }
+    #m-app .m-hero__top { gap: 10px; }
+    #m-app .m-h1 { font-size: 27px; }
+    #m-app .m-cat img { width: 80px; height: 80px; }
+  }
 
   /* Táctiles anchos (tableta pequeña, teléfono acostado): el fondo sigue
      a sangre pero la columna de lectura no se estira. Se centra con el

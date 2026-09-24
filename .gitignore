@@ -206,6 +206,10 @@
 !/FIRESTORE_GRADEBOOK_RULES.md
 # ... y la vista del alumno: cada quien consulta SOLO su boleta (misma regla).
 !/mi_boleta.html
+# Modelo escolar (2026-09-04): roles/, courses/, periods/, groups/, enrollments/
+# y el rol coordinator. Solo el doc del modelo; la operación (school_admin.py)
+# y check_rules.py quedan en _scripts/ (privados).
+!/FIRESTORE_SCHOOL_RULES.md
 # recintos tematicos de vocabulario (ramas) — datos publicos, sin claves
 !/vesper_vocab_dens.js
 !/apariencia.html

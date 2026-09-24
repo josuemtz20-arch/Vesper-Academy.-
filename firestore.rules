@@ -6,177 +6,259 @@ rules_version = '2';
  * Estas reglas gobiernan TODAS las colecciones que las páginas del
  * sitio leen/escriben con el idToken del usuario (Firebase Auth).
  *
- * ⚠️  IMPORTANTE: este archivo es la referencia COMPLETA reconstruida a
- *     partir del comportamiento del cliente. Lo nuevo que la boleta de
- *     calificaciones necesita son los bloques `gradebook` y `daily_progress`
- *     (el panel de resultados ya usa `exam_results`). Si ya tienes reglas
- *     publicadas para manuals/studentbooks/students/teachers, compara antes
- *     de reemplazar: lo más seguro es solo AÑADIR esos bloques a tus reglas
- *     actuales.
- *
  * Publica en: consola de Firebase → Firestore → base "teachermanuals" →
- * pestaña Reglas → pegar → Publicar. (O `firebase deploy --only
- * firestore:rules` si tienes firebase-tools configurado.)
+ * pestaña Reglas → pegar COMPLETO → Publicar.
  *
  * El alta/baja de manuales, libros y de la allowlist (students/teachers)
- * lo hace `_scripts/upload_manuals.py`, que INICIA SESIÓN COMO EL ADMIN
- * (signInWithPassword → idToken) y escribe por REST con ese token. Por eso
- * NO ignora estas reglas: la escritura en esas colecciones debe permitir al
- * admin (`isAdmin()`), no `if false`. (Solo sería `if false` si las subidas
- * usaran una service account / Admin SDK, que aquí NO se usa.)
+ * lo hace `_scripts/upload_manuals.py`; la operación escolar (roles,
+ * cursos, periodos, grupos, inscripciones) la hace `_scripts/school_admin.py`.
+ * Ambos INICIAN SESIÓN COMO EL ADMIN (signInWithPassword → idToken) y
+ * escriben por REST con ese token, así que NO ignoran estas reglas. (Con
+ * VESPER_ADMIN_VIA_SA=1 escriben como service account y sí las saltan.)
+ *
+ * ── Roles (2026-09-04) ─────────────────────────────────────────────
+ * El correo fijo del admin deja de ser la única llave. Ahora:
+ *   roles/{correo} -> { role: "admin" | "coordinator" | "teacher" }
+ *   - admin:       todo (contenido + operación + roles).
+ *   - coordinator: operación escolar (alumnos, profesores, roster,
+ *                  cursos, periodos, grupos, inscripciones, boletas,
+ *                  resultados) pero NO contenido (manuales, libros,
+ *                  exámenes) ni roles.
+ *   - teacher:     informativo; lo que un profesor puede hacer lo sigue
+ *                  decidiendo teachers/{correo} (allowlist + groups).
+ * BOOTSTRAP: el correo del fundador sigue entrando como admin aunque no
+ * exista roles/{correo}. Es la red de seguridad para no quedarse fuera.
+ * Cuando roles/ ya tenga al menos un admin verificado, se puede borrar la
+ * función bootstrapAdmin() y dejar isAdmin() = hasRole("admin").
+ * Antes de publicar: python _scripts/check_rules.py (compila y prueba).
  * ============================================================ */
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // El admin sube manuales/libros/allowlists con SU idToken (no service account).
+    // ───────────── Identidad y roles ─────────────
+    function signedIn() {
+      return request.auth != null;
+    }
+    function myEmail() {
+      return request.auth.token.email;
+    }
+    // Red de seguridad: el fundador entra como admin aunque roles/ esté vacío.
+    function bootstrapAdmin() {
+      return signedIn() && myEmail() == "josuemtz20@gmail.com";
+    }
+    // ¿Tiene roles/{correo}.role == r? (false, sin error, si no hay doc)
+    function hasRole(r) {
+      return signedIn()
+             && exists(/databases/$(database)/documents/roles/$(request.auth.token.email))
+             && get(/databases/$(database)/documents/roles/$(request.auth.token.email)).data.role == r;
+    }
+    // Admin = fundador (bootstrap) o quien tenga roles/{correo}.role == "admin".
     function isAdmin() {
-      return request.auth != null
-             && request.auth.token.email == "josuemtz20@gmail.com";
+      return bootstrapAdmin() || hasRole("admin");
+    }
+    // Staff = admin o coordinador: operación escolar, sin tocar contenido.
+    function isStaff() {
+      return isAdmin() || hasRole("coordinator");
     }
 
-    // —— Allowlist de acceso: cada quien lee SOLO su propio doc (id = correo) ——
+    // —— Profesores (allowlist teachers/{correo}). Cada profesor tiene una
+    //    lista de grupos (teachers/{correo}.groups) y SOLO ve alumnos de esos
+    //    grupos; si su doc no tiene `groups`, no ve a nadie (deniega por
+    //    error de get). El id de grupo es la MISMA cadena en students.group,
+    //    roster.group, teachers.groups y groups/{id}. ——
+    function isTeacherUser() {
+      return signedIn()
+             && exists(/databases/$(database)/documents/teachers/$(request.auth.token.email));
+    }
+    function teacherSeesGroup(g) {
+      return isTeacherUser()
+             && g != ""
+             && g in get(/databases/$(database)/documents/teachers/$(request.auth.token.email)).data.groups;
+    }
+
+    // —— Alumnos (allowlist students/{correo}). Su sid (id opaco, hash del
+    //    correo) y su grupo actual los escribe el script admin. ——
+    function isStudentUser() {
+      return signedIn()
+             && exists(/databases/$(database)/documents/students/$(request.auth.token.email));
+    }
+    function ownSid() {
+      return get(/databases/$(database)/documents/students/$(request.auth.token.email)).data.sid;
+    }
+    function ownGroup() {
+      return get(/databases/$(database)/documents/students/$(request.auth.token.email)).data.group;
+    }
+    // Acceso por curso (opcional): si students/{correo}.books existe, SOLO
+    // puede abrir esos libros/exámenes; sin `books` conserva acceso a todo.
+    function studentBookAllowed(id) {
+      return isStudentUser()
+             && (
+               !("books" in get(/databases/$(database)/documents/students/$(request.auth.token.email)).data)
+               || id in get(/databases/$(database)/documents/students/$(request.auth.token.email)).data.books
+             );
+    }
+
+    // ───────────── Roles ─────────────
+    // Cada quien lee su propio rol (para que el portal sepa qué mostrar);
+    // solo el admin asigna roles. El rol debe ser uno de los tres conocidos.
+    match /roles/{email} {
+      allow read:   if isAdmin() || (signedIn() && myEmail() == email);
+      allow create, update: if isAdmin()
+                    && request.resource.data.role in ["admin", "coordinator", "teacher"];
+      allow delete: if isAdmin();
+    }
+
+    // ───────────── Allowlist de acceso ─────────────
     // vesper_auth.js consulta students/{correo} y teachers/{correo} con el
-    // token del propio usuario para decidir si tiene acceso.
+    // token del propio usuario para decidir si tiene acceso. El alta/baja
+    // es operación escolar (admin o coordinador).
     match /students/{email} {
-      allow read:  if request.auth != null && request.auth.token.email == email;
-      allow write: if isAdmin();   // alta/baja desde el script admin
+      allow read:  if isStaff() || (signedIn() && myEmail() == email);
+      allow write: if isStaff();
     }
     match /teachers/{email} {
-      allow read:  if request.auth != null && request.auth.token.email == email;
-      allow write: if isAdmin();
+      allow read:  if isStaff() || (signedIn() && myEmail() == email);
+      allow write: if isStaff();
     }
 
-    // —— Manuales del profesor: solo profesores autorizados o el admin ——
-    // (manual.html → /documents/manuals/{id})
+    // ───────────── Contenido (solo admin escribe) ─────────────
+    // Manuales del profesor (manual.html → manuals/{id} + chunks/{n})
     match /manuals/{id} {
-      allow read:  if request.auth != null && (
-                     exists(/databases/$(database)/documents/teachers/$(request.auth.token.email))
-                     || request.auth.token.email == "josuemtz20@gmail.com"
-                   );
+      allow read:  if isTeacherUser() || isAdmin();
       allow write: if isAdmin();
-      // el manual va troceado en la subcoleccion chunks/{n}: mismo permiso de lectura
       match /chunks/{n} {
-        allow read:  if request.auth != null && (
-                       exists(/databases/$(database)/documents/teachers/$(request.auth.token.email))
-                       || request.auth.token.email == "josuemtz20@gmail.com"
-                     );
+        allow read:  if isTeacherUser() || isAdmin();
         allow write: if isAdmin();
       }
     }
 
-    // —— Libros del alumno: alumnos autorizados, profesores o el admin ——
-    // (libro.html → /documents/studentbooks/{id})
+    // Libros del alumno (libro.html → studentbooks/{id} + chunks/{n})
     match /studentbooks/{id} {
-      allow read:  if request.auth != null && (
-                     exists(/databases/$(database)/documents/students/$(request.auth.token.email))
-                     || exists(/databases/$(database)/documents/teachers/$(request.auth.token.email))
-                     || request.auth.token.email == "josuemtz20@gmail.com"
-                   );
+      allow read:  if studentBookAllowed(id) || isTeacherUser() || isAdmin();
       allow write: if isAdmin();
-      // el libro va troceado en la subcoleccion chunks/{n}: mismo permiso de lectura
       match /chunks/{n} {
-        allow read:  if request.auth != null && (
-                       exists(/databases/$(database)/documents/students/$(request.auth.token.email))
-                       || exists(/databases/$(database)/documents/teachers/$(request.auth.token.email))
-                       || request.auth.token.email == "josuemtz20@gmail.com"
-                     );
+        allow read:  if studentBookAllowed(id) || isTeacherUser() || isAdmin();
         allow write: if isAdmin();
       }
     }
 
-    // —— Exámenes por curso/manual: alumnos autorizados, profesores o el admin ——
-    // (exam.html → /documents/exams/{id}). Guardan las claves de respuesta, por eso
-    // NO se publican como archivo estático; se leen con el idToken del alumno.
+    // Exámenes por curso (exam.html → exams/{id}). Guardan las claves de
+    // respuesta; por eso NO se publican como archivo estático.
     match /exams/{id} {
-      allow read:  if request.auth != null && (
-                     exists(/databases/$(database)/documents/students/$(request.auth.token.email))
-                     || exists(/databases/$(database)/documents/teachers/$(request.auth.token.email))
-                     || request.auth.token.email == "josuemtz20@gmail.com"
-                   );
-      // alta/actualizacion SOLO desde la cuenta admin (upload_manuals.py upload-exams,
-      // que inicia sesion como el admin y escribe con su idToken).
-      allow write: if request.auth != null
-                   && request.auth.token.email == "josuemtz20@gmail.com";
+      allow read:  if studentBookAllowed(id) || isTeacherUser() || isAdmin();
+      allow write: if isAdmin();
     }
 
-    // —— Progreso del alumno (racha + XP): self-scoped ——
-    // (vesper_sync.js → /documents/progress/{uid})
+    // ───────────── Catálogo escolar (NUEVO 2026-09-04) ─────────────
+    // courses/{courseId}: qué se enseña. Un curso por libro del alumno
+    // (mismo id que studentbooks/ y manuals/). Sin claves ni contenido:
+    // cualquier usuario con sesión puede leerlo (el portal arma el catálogo).
+    match /courses/{courseId} {
+      allow read:   if signedIn();
+      allow create, update: if isStaff()
+                    && request.resource.data.name is string
+                    && request.resource.data.name.size() > 0;
+      allow delete: if isAdmin();
+    }
+
+    // periods/{periodId}: cuándo (ciclo escolar / bimestre / cohorte).
+    // status: planned | active | closed.
+    match /periods/{periodId} {
+      allow read:   if signedIn();
+      allow create, update: if isStaff()
+                    && request.resource.data.name is string
+                    && request.resource.data.status in ["planned", "active", "closed"];
+      allow delete: if isAdmin();
+    }
+
+    // groups/{groupId}: un grupo concreto = curso + periodo + profesores +
+    // horario. El id es la misma cadena que students.group / teachers.groups,
+    // así los profesores y la boleta siguen funcionando sin cambios.
+    // Lee: staff, los profesores del grupo y los alumnos cuyo grupo actual es
+    // este (para ver horario y enlace de clase). Escribe: staff.
+    match /groups/{groupId} {
+      allow read:   if isStaff()
+                    || teacherSeesGroup(groupId)
+                    || (isStudentUser() && ownGroup() == groupId);
+      allow create, update: if isStaff()
+                    && request.resource.data.courseId is string
+                    && request.resource.data.periodId is string
+                    && request.resource.data.status in ["planned", "active", "closed"];
+      allow delete: if isAdmin();
+    }
+
+    // enrollments/{sid}__{groupId}: la inscripción de UN alumno en UN grupo.
+    // Es el historial académico: un doc por alumno×grupo, nunca se pisa al
+    // cambiar de grupo (el anterior queda como moved/completed/dropped).
+    // Identifica al alumno por sid (sin correo), como roster/ y gradebook/.
+    // Lee: staff, los profesores del grupo (query `groupId == <suyo>`) y el
+    // propio alumno (query `sid == <suyo>`). Escribe: staff. Borra: admin.
+    match /enrollments/{id} {
+      allow read:   if isStaff()
+                    || teacherSeesGroup(resource.data.groupId)
+                    || (isStudentUser() && resource.data.sid == ownSid());
+      allow create, update: if isStaff()
+                    && request.resource.data.sid is string
+                    && request.resource.data.sid.size() > 0
+                    && request.resource.data.groupId is string
+                    && request.resource.data.groupId.size() > 0
+                    && request.resource.data.status in ["active", "moved", "completed", "dropped"];
+      allow delete: if isAdmin();
+    }
+
+    // ───────────── Progreso y juego del alumno ─────────────
+    // Progreso (racha + XP): self-scoped (vesper_sync.js → progress/{uid})
     match /progress/{uid} {
-      allow read, write: if request.auth != null && request.auth.uid == uid;
+      allow read, write: if signedIn() && request.auth.uid == uid;
     }
 
-    // —— Liga semanal: lee cualquier autenticado; escribe SOLO su entrada ——
-    // (vesper_league_cloud.js → /documents/leagues/{week}/members/{uid})
+    // Liga semanal: lee cualquier autenticado; escribe SOLO su entrada
+    // (vesper_league_cloud.js → leagues/{week}/members/{uid})
     match /leagues/{week}/members/{uid} {
-      allow read:  if request.auth != null;
-      allow write: if request.auth != null
+      allow read:  if signedIn();
+      allow write: if signedIn()
                    && request.auth.uid == uid
                    && request.resource.data.xp is int;
     }
 
-    // —— Resultados de exámenes: el alumno CREA lo suyo; el dueño,
-    //    los profesores y el admin pueden LEER; intentos inmutables ——
-    // (vesper_results.js → /documents/exam_results/{autoId})
-    //
-    // ⚠️  IMPORTANTE (integridad de la boleta): estos intentos los ESCRIBE el
-    //     propio alumno (autocalificación en el navegador), así que NO son una
-    //     fuente de verdad confiable para la calificación oficial. Sirven como
-    //     PRÁCTICA/progreso; la nota de registro la confirma el profesor
-    //     (ver vesper_gradebook.js / portal_boleta.html). Aun así validamos la
-    //     coherencia interna del intento para bloquear las falsificaciones más
-    //     burdas (percent que no cuadra con score/total, score>total, tipos de
-    //     examen inventados).
+    // ───────────── Operación docente ─────────────
+    // Roster: espejo SIN CORREO de la allowlist de alumnos. Un doc por alumno
+    // con id = sid y campos name/level/levelName/group. Lo mantiene el script
+    // admin. El profesor consulta con filtro `group == <uno de sus grupos>`.
+    // (vesper_gradebook.js → roster/{sid})
+    match /roster/{sid} {
+      allow read:  if isStaff() || teacherSeesGroup(resource.data.group);
+      allow write: if isStaff();
+    }
+
+    // Resultados de exámenes: el alumno CREA lo suyo (autocalificación =
+    // práctica, no nota oficial); lo leen el dueño, el staff y los profesores
+    // DEL GRUPO del intento; inmutables. (vesper_results.js → exam_results)
     match /exam_results/{id} {
-      allow create: if request.auth != null
+      allow create: if signedIn()
                     && request.resource.data.studentUid == request.auth.uid
-                    && request.resource.data.score is int
-                    && request.resource.data.total is int
-                    && request.resource.data.percent is int
-                    && request.resource.data.score >= 0
-                    && request.resource.data.total >= 0
-                    && request.resource.data.score <= request.resource.data.total
-                    && request.resource.data.percent >= 0
-                    && request.resource.data.percent <= 100
-                    // percent debe cuadrar con score/total (±1 por redondeo);
-                    // si total==0 el percent debe ser 0.
-                    && (
-                         (request.resource.data.total == 0 && request.resource.data.percent == 0)
-                         || (request.resource.data.total > 0
-                             && request.resource.data.percent * request.resource.data.total
-                                >= (request.resource.data.score * 100) - request.resource.data.total
-                             && request.resource.data.percent * request.resource.data.total
-                                <= (request.resource.data.score * 100) + request.resource.data.total)
-                       )
-                    // solo tipos de examen conocidos
-                    && request.resource.data.examType in ["lesson", "exam", "boss", "placement"];
-      allow read:   if request.auth != null && (
+                    && request.resource.data.percent is int;
+      allow read:   if signedIn() && (
                        resource.data.studentUid == request.auth.uid
-                       || exists(/databases/$(database)/documents/teachers/$(request.auth.token.email))
-                       || request.auth.token.email == "josuemtz20@gmail.com"
+                       || isStaff()
+                       || teacherSeesGroup(resource.data.group)
                     );
       allow update, delete: if false;
     }
 
-    // —— Boleta de calificaciones (NUEVO): participación capturada por el
-    //    profesor. Un doc por alumno (id = correo en minúsculas). El alumno
-    //    lee SOLO su boleta; profes/admin leen y escriben todas ——
-    // (vesper_gradebook.js → /documents/gradebook/{correo};
-    //  ver FIRESTORE_GRADEBOOK_RULES.md)
-    match /gradebook/{email} {
-      allow read:  if request.auth != null && (
-                     request.auth.token.email == email
-                     || exists(/databases/$(database)/documents/teachers/$(request.auth.token.email))
-                     || request.auth.token.email == "josuemtz20@gmail.com"
+    // Boleta de calificaciones: notas capturadas por el profesor. Un doc por
+    // alumno con id = sid. El alumno lee SOLO la suya; el staff todas; cada
+    // profesor las de sus grupos (el grupo se resuelve contra roster/{sid}).
+    // (vesper_gradebook.js → gradebook/{sid}; ver FIRESTORE_GRADEBOOK_RULES.md)
+    match /gradebook/{sid} {
+      allow read:  if signedIn() && (
+                     ownSid() == sid
+                     || isStaff()
+                     || teacherSeesGroup(get(/databases/$(database)/documents/roster/$(sid)).data.group)
                    );
-      // escribe: SOLO profes/admin. Cada componente numérico (participacion,
-      // examsGrade, lessonsGrade) es OPCIONAL por escritura, pero si está
-      // presente debe ser int 0..100. examsGrade/lessonsGrade son la nota de
-      // registro de Exámenes/Lecciones confirmada por el profesor (la única que
-      // cuenta para la final; los promedios de práctica los escribe el alumno
-      // en exam_results y NO se usan para la nota).
-      allow write: if request.auth != null
-                   && (exists(/databases/$(database)/documents/teachers/$(request.auth.token.email))
-                       || request.auth.token.email == "josuemtz20@gmail.com")
+      allow write: if signedIn()
+                   && (isStaff()
+                       || teacherSeesGroup(get(/databases/$(database)/documents/roster/$(sid)).data.group))
                    && (!("participacion" in request.resource.data)
                        || (request.resource.data.participacion is int
                            && request.resource.data.participacion >= 0
@@ -191,21 +273,55 @@ service cloud.firestore {
                            && request.resource.data.lessonsGrade <= 100));
     }
 
-    // —— Progreso diario (NUEVO): rúbrica del curso (20 días × aspectos,
-    //    ✓/✗) capturada por el profesor. Un doc por alumno (id = correo en
-    //    minúsculas). El alumno lee SOLO su rúbrica; profes/admin leen y
-    //    escriben todas ——
-    // (vesper_gradebook.js → /documents/daily_progress/{correo};
-    //  ver FIRESTORE_GRADEBOOK_RULES.md)
-    match /daily_progress/{email} {
-      allow read:  if request.auth != null && (
-                     request.auth.token.email == email
-                     || exists(/databases/$(database)/documents/teachers/$(request.auth.token.email))
-                     || request.auth.token.email == "josuemtz20@gmail.com"
+    // Progreso diario: rúbrica del curso (20 días × aspectos) capturada por
+    // el profesor. Un doc por alumno con id = sid. Mismo acceso que gradebook.
+    // (vesper_gradebook.js → daily_progress/{sid})
+    match /daily_progress/{sid} {
+      allow read:  if signedIn() && (
+                     ownSid() == sid
+                     || isStaff()
+                     || teacherSeesGroup(get(/databases/$(database)/documents/roster/$(sid)).data.group)
                    );
-      allow write: if request.auth != null
-                   && (exists(/databases/$(database)/documents/teachers/$(request.auth.token.email))
-                       || request.auth.token.email == "josuemtz20@gmail.com");
+      allow write: if signedIn()
+                   && (isStaff()
+                       || teacherSeesGroup(get(/databases/$(database)/documents/roster/$(sid)).data.group));
+    }
+
+    // ───────────── Público / telemetría ─────────────
+    // Telemetría opcional (vesper_analytics.js con VA.cfg.cloud=true). El
+    // visitante escribe SIN sesión; se acota el esquema para limitar abuso.
+    match /app_events/{id} {
+      allow create: if request.resource.data.keys().hasOnly(['event','props','vid','sid','page','createdAt'])
+                    && request.resource.data.event is string && request.resource.data.event.size() <= 80
+                    && request.resource.data.props is string && request.resource.data.props.size() <= 2000
+                    && request.resource.data.vid   is string && request.resource.data.vid.size()   <= 64
+                    && request.resource.data.sid   is string && request.resource.data.sid.size()   <= 64
+                    && request.resource.data.page  is string && request.resource.data.page.size()  <= 200
+                    && request.resource.data.createdAt is timestamp;
+      allow read, update, delete: if isAdmin();
+    }
+
+    // Leads del examen diagnóstico (nivelación pública, SIN registro). Este
+    // bloque ya estaba PUBLICADO en producción (2026-07-14); se conserva.
+    match /placement_results/{id} {
+      allow create: if request.resource.data.name is string
+                    && request.resource.data.name.size() > 0
+                    && request.resource.data.name.size() <= 120
+                    && request.resource.data.level is string
+                    && request.resource.data.level.size() <= 20
+                    && request.resource.data.correct is int
+                    && request.resource.data.total is int
+                    && request.resource.data.correct >= 0
+                    && request.resource.data.total >= 0
+                    && request.resource.data.correct <= request.resource.data.total
+                    && request.resource.data.email is string
+                    && request.resource.data.email.size() <= 200
+                    && request.resource.data.phone is string
+                    && request.resource.data.phone.size() <= 60
+                    && (request.resource.data.email.size() > 0
+                        || request.resource.data.phone.size() > 0);
+      allow read:   if isStaff() || isTeacherUser();
+      allow update, delete: if false;
     }
 
   }

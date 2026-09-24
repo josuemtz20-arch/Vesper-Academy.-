@@ -33,6 +33,12 @@ La **fuente de verdad** del acceso es la allowlist en Firestore
 `vesper_auth.js` es solo **respaldo legado** si Firestore no responde. Ver
 `access_admin.html`.
 
+**Modelo escolar (2026-09-04):** además de la allowlist existen `roles/`
+(admin · coordinator · teacher), `courses/`, `periods/`, `groups/` y
+`enrollments/` (historial por alumno × grupo). El id de grupo es la misma
+cadena que `students.group`, así que boleta y portales no cambian. Modelo,
+permisos y orden de activación en `FIRESTORE_SCHOOL_RULES.md`.
+
 ## Páginas principales
 
 | Página | Qué es | Scripts / datos clave |
