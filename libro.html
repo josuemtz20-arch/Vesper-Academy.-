@@ -449,7 +449,10 @@ body{margin:0;font-family:var(--va-font-text,Inter,system-ui,sans-serif);display
        -- unos por Python, otros exportados de Canva -- y esperar a
        regenerarlos todos habria dejado la herramienta en la mitad.
        Los apuntes viven en el navegador del alumno, por libro (id). */
-    chip += '<script src="vesper_book_board.js"><\/script>' +
+    /* ?v= lo mantiene _scripts/preflight.py (E): el service worker sirve los
+       .js con stale-while-revalidate y, sin esto, la primera apertura tras
+       un deploy recibia el script viejo. */
+    chip += '<script src="vesper_book_board.js?v=872a6ddd"><\/script>' +
       '<script>(function(){function go(){' +
       'if(window.VesperBookBoard)VesperBookBoard.init({bookId:' +
         JSON.stringify(id).replace(/</g, "\\u003c") + '});}' +
