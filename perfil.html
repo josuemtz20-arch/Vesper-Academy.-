@@ -17,13 +17,23 @@
 body{margin:0;font-family:'Inter',sans-serif;background:var(--cream);color:var(--text,#1B1B2F);min-height:100vh;}
 .skip-link{position:absolute;left:-999px;top:0;z-index:200;background:var(--navy);color:#fff;padding:10px 16px;border-radius:0 0 8px 0;text-decoration:none;font-weight:600;}
 .skip-link:focus{left:0;}
-header{background:var(--navy);border-bottom:3px solid var(--gold);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:14px;position:sticky;top:0;z-index:50;}
+header{background:var(--navy);border-bottom:1px solid var(--va-hairline,rgba(201,168,76,.35));min-height:66px;padding:0 24px;display:flex;align-items:center;justify-content:space-between;gap:14px;position:sticky;top:0;z-index:50;}
 .brand{display:flex;align-items:center;gap:12px;color:#fff;text-decoration:none;}
 .brand img{height:42px;width:42px;object-fit:contain;}
 .brand b{font-family:'Inria Serif',serif;font-size:1.1rem;}
 .brand small{display:block;color:var(--gold);font-size:.6rem;letter-spacing:2px;text-transform:uppercase;}
 header a.back{color:rgba(255,255,255,.82);font-size:.78rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;text-decoration:none;}
 header a.back:hover,header a.back:focus-visible{color:var(--gold);}
+/* Teléfono: misma cabecera que Inicio, Audio y Boleta (una línea, volver
+   como botón solo-icono; el texto queda para lectores de pantalla). */
+@media(max-width:640px){
+  header{padding:0 16px;gap:10px;}
+  .brand img{height:34px;width:34px;}
+  .brand b{font-size:.98rem;}
+  .brand b,.brand small{white-space:nowrap;}
+  header a.back{font-size:0;padding:10px 12px;border:1px solid var(--va-hairline,rgba(201,168,76,.35));border-radius:10px;display:inline-flex;align-items:center;justify-content:center;}
+  header a.back i{font-size:1rem;margin:0;}
+}
 .wrap{max-width:760px;margin:0 auto;padding:30px 20px 40px;}
 
 /* Tarjeta de identidad */

@@ -162,6 +162,18 @@ header{background:var(--navy);
 .brand small{display:block;color:var(--gold);font-size:.58rem;letter-spacing:.24em;text-transform:uppercase;}
 header a.back{display:inline-flex;align-items:center;gap:8px;color:var(--on-night-soft);font-size:.72rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;padding:9px 13px;border-radius:var(--r-sm);border:1px solid var(--hair);transition:color .16s,border-color .16s,background .16s;}
 header a.back:hover,header a.back:focus-visible{color:var(--navy);background:var(--gold);border-color:var(--gold);}
+/* Teléfono: la misma cabecera de una línea que la Biblioteca de audio. Sin
+   esto la marca se partía en cuatro renglones y "Sitio principal" en dos, y
+   la barra medía el doble que en las otras pestañas. */
+@media(max-width:600px){
+  header{gap:10px;}
+  .brand{gap:10px;min-width:0;}
+  .brand img{height:34px;width:34px;}
+  .brand b,.brand small{white-space:nowrap;}
+  .brand b{font-size:1rem;}
+  header a.back{padding:9px 11px;flex-shrink:0;}
+  header a.back span{display:none;}
+}
 
 .wrap{max-width:var(--maxw);margin:0 auto;padding:var(--s-section) var(--gutter) calc(var(--s-section) + 12px);}
 
@@ -444,7 +456,9 @@ a.card[data-lessons]::after{content:attr(data-lessons) " lecciones";
 @media(max-width:860px){
   .cat-sec{grid-template-columns:1fr;gap:20px;}
   .grp{position:static;}
-  .grp-cvr{display:none;}
+  /* .mosaic incluido: su display:block le ganaba por especificidad y solo
+     dos de los seis capítulos salían con lámina en el teléfono. */
+  .grp-cvr,.grp-cvr.mosaic{display:none;}
   .grp-txt::before{font-size:2.2rem;margin-bottom:8px;}
 }
 @media(max-width:520px){
@@ -676,7 +690,7 @@ html:not(.vesper-dark) .vtour-back{border-color:var(--border);}
     <img src="assets/images/vesper_logo_inverted.png" alt="Vesper Academy — inicio" width="38" height="38">
     <span><b class="va-display">Vesper Academy</b><small>Portal del Alumno</small></span>
   </a>
-  <a class="back" href="index.html"><svg class="i" aria-hidden="true"><use href="#i-arrow-left"/></svg> Sitio principal</a>
+  <a class="back" href="index.html" aria-label="Sitio principal"><svg class="i" aria-hidden="true"><use href="#i-arrow-left"/></svg> <span>Sitio principal</span></a>
 </header>
 
 <main class="wrap" id="main">

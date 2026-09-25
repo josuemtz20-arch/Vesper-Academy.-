@@ -328,6 +328,29 @@ window.VESPER_THEME = (function () {
   }
   function write(state) { try { localStorage.setItem(STORE, JSON.stringify(state)); } catch (e) {} }
 
+  /* Contraste WCAG entre dos #rrggbb. */
+  function lum(hex) {
+    var n = parseInt(clampHex(hex).slice(1), 16), c = [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+    for (var i = 0; i < 3; i++) { var v = c[i] / 255; c[i] = v <= .03928 ? v / 12.92 : Math.pow((v + .055) / 1.055, 2.4); }
+    return .2126 * c[0] + .7152 * c[1] + .0722 * c[2];
+  }
+  function contrast(a, b) { var x = lum(a), y = lum(b); return (Math.max(x, y) + .05) / (Math.min(x, y) + .05); }
+  function darken(hex, f) {
+    var n = parseInt(clampHex(hex).slice(1), 16);
+    function ch(v) { v = Math.round(v * f).toString(16); return v.length < 2 ? "0" + v : v; }
+    return "#" + ch((n >> 16) & 255) + ch((n >> 8) & 255) + ch(n & 255);
+  }
+  /* Acento para TEXTO pequeño en temas claros: el goldDp del propio tema,
+     oscurecido lo justo para pasar 4.5:1 sobre cream y paper. Antes era un
+     #7a5e12 fijo para todos, así que en Océano, Bosque o Atardecer los
+     números de capítulo, los rótulos y "Practicar →" salían en café mientras
+     botones y pestañas iban en azul/verde/naranja. */
+  function inkAccent(t) {
+    var c = t.goldDp;
+    for (var i = 0; i < 40 && (contrast(c, t.cream) < 4.6 || contrast(c, t.paper) < 4.6); i++) c = darken(c, .94);
+    return c;
+  }
+
   function buildVars(t, sk) {
     var tintA = t.dark ? .20 : .14;
     var v = {
@@ -338,7 +361,7 @@ window.VESPER_THEME = (function () {
       "--no-tint": rgba(t.error, t.dark ? .18 : .10),
       /* a11y: oro-texto accesible sobre la superficie del tema (oscuro en temas claros,
          claro en temas oscuros) + anillo de foco visible por tema (WCAG 1.4.3/1.4.11/2.4.7) */
-      "--gold-ink": t.dark ? t.gold : "#7a5e12",
+      "--gold-ink": t.dark ? t.gold : inkAccent(t),
       /* Texto/glifo SOBRE una superficie de oro. Oscuro en los dos modos:
          --ink no vale, porque en tema oscuro es claro y claro-sobre-oro da
          ~1.8:1. En tema oscuro el tono mas oscuro del tema es su cream. */

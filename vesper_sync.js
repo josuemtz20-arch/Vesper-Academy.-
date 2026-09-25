@@ -108,6 +108,14 @@
       "color:#1B1B2F;box-shadow:0 4px 14px rgba(27,27,47,.12);cursor:pointer}",
       ".vsync-chip .dot{width:8px;height:8px;border-radius:50%;background:#C9A84C}",
       ".vsync-chip.ok .dot{background:#2D9E75}.vsync-chip.warn .dot{background:#C0392B}",
+      /* Teléfono: arriba a la derecha se montaba sobre el engrane y los iconos
+         del saludo. Abajo a la izquierda, encima de la barra de pestañas, no
+         tapa controles; y mientras sincroniza o ya sincronizó se reduce al
+         punto de color (el texto sigue en aria-label). "Guardar progreso" y los avisos sí conservan su
+         texto, porque piden una acción. */
+      "@media(max-width:600px){.vsync-chip{top:auto;right:auto;left:12px;bottom:calc(74px + env(safe-area-inset-bottom));",
+      "padding:6px 11px;font-size:11.5px}",
+      ".vsync-chip.quiet{width:30px;height:30px;padding:0;justify-content:center}.vsync-chip.quiet .lbl{display:none}}",
       ".vsync-overlay{position:fixed;inset:0;z-index:9001;background:rgba(27,27,47,.55);display:none;align-items:center;justify-content:center;padding:18px}",
       ".vsync-overlay.show{display:flex}",
       ".vsync-modal{background:#fff;border-radius:16px;max-width:380px;width:100%;padding:22px;box-shadow:0 20px 60px rgba(0,0,0,.3);font-family:Inter,system-ui,sans-serif;color:#1B1B2F}",
@@ -143,11 +151,14 @@
   function setChip(label, kind) {
     if (!chip) return;
     chip.querySelector(".lbl").textContent = label;
-    chip.className = "vsync-chip" + (kind === "ok" ? " ok" : (kind === "warn" ? " warn" : ""));
+    chip.className = "vsync-chip" + (kind === "ok" ? " ok" : (kind === "warn" ? " warn" : ""))
+      + (kind === "ok" || kind === "busy" ? " quiet" : "");
+    chip.setAttribute("aria-label", label);
+    chip.title = label;
   }
   function setStatus(s) {
     if (s === "synced") setChip("Sincronizado", "ok");
-    else if (s === "syncing") setChip("Sincronizando…", null);
+    else if (s === "syncing") setChip("Sincronizando…", "busy");
     else if (s === "rule") setChip("Activa la nube", "warn");
     else if (s === "offline") setChip("Sin conexión", "warn");
     else if (s === "error") setChip("Error de sync", "warn");

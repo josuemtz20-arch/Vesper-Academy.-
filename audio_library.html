@@ -255,6 +255,14 @@
                 margin-right:calc(var(--gutter) * -1); padding-right:var(--gutter); }
             .filters::-webkit-scrollbar { display:none; }
             .filters button { flex-shrink:0; }
+            /* El -6px de abajo metia el "01 Placement" debajo de los chips. */
+            .filters { margin-bottom:14px; padding-bottom:4px; }
+            /* Cabecera de bloque en dos renglones: numero + titulo arriba, el
+               rotulo debajo. En una sola fila el titulo se partia ("Core /
+               Basics") y el rotulo quedaba flotando a la derecha. */
+            .grid-head { flex-wrap:wrap; row-gap:4px; }
+            .gh-kicker { order:3; flex-basis:100%; line-height:1.5; }
+            .gh-line { order:2; }
         }
 
         /* -- "Dar clase": abre la leccion con la Pizarra ya cargada ------- */
@@ -528,6 +536,8 @@
         }
         @media (max-width:600px) {
             .head-right a span { display:none; }
+            .brand { gap:10px; min-width:0; }
+            .brand b, .brand small { white-space:nowrap; }
             .head-right a { padding:9px 11px; }
             .track-grid { grid-template-columns:repeat(2,1fr); gap:22px 14px; }
             .rail .track { flex:0 0 146px; }
@@ -580,8 +590,8 @@
         <span><b>Vesper Academy</b><small>Audio Library</small></span>
     </a>
     <nav class="head-right" aria-label="Atajos">
-        <a href="whiteboard/"><svg class="i" aria-hidden="true"><use href="#i-board"/></svg><span>Whiteboard</span></a>
-        <a href="materiales.html"><svg class="i" aria-hidden="true"><use href="#i-arrow-left"/></svg><span>Mi portal</span></a>
+        <a href="whiteboard/" aria-label="Whiteboard"><svg class="i" aria-hidden="true"><use href="#i-board"/></svg><span>Whiteboard</span></a>
+        <a href="materiales.html" aria-label="Mi portal"><svg class="i" aria-hidden="true"><use href="#i-arrow-left"/></svg><span>Mi portal</span></a>
     </nav>
 </header>
 

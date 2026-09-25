@@ -13,8 +13,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Inria+Serif:ital,wght@0,400;0,700&family=Inter:wght@300;400;500;600;700;800&display=swap');
 *,*::before,*::after{box-sizing:border-box;}
 :root{--navy:#1B1B2F;--navy2:#2c2c4a;--gold:#c5a059;--gold2:#a8843d;--cream:#f5f2eb;--border:#e4e0d8;--muted:#6b7a8d;--err:#b03a3a;--ok:#2d7a4f;--accent:#8a2f3b;}
-body{margin:0;font-family:'Inter',sans-serif;background:var(--cream);color:var(--navy);min-height:100vh;}
-header{background:var(--navy);border-bottom:3px solid var(--gold);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:14px;position:sticky;top:0;z-index:50;}
+body{margin:0;font-family:'Inter',sans-serif;background:var(--cream);color:var(--text,var(--navy));min-height:100vh;}
+header{background:var(--navy);border-bottom:1px solid var(--va-hairline,rgba(201,168,76,.35));min-height:66px;padding:0 24px;display:flex;align-items:center;justify-content:space-between;gap:14px;position:sticky;top:0;z-index:50;}
 .brand{display:flex;align-items:center;gap:12px;color:#fff;text-decoration:none;}
 .brand img{height:42px;width:42px;object-fit:contain;}
 .brand b{font-family:'Inria Serif',serif;font-size:1.1rem;}
@@ -25,12 +25,12 @@ header a.back:hover{color:var(--gold);}
 /* Móvil: header compacto — enlaces de nav como chips solo-icono para que no se
    amontonen (el texto sigue en el árbol de accesibilidad para lectores de pantalla). */
 @media(max-width:640px){
-  header{padding:10px 14px;gap:10px;}
+  header{padding:0 16px;gap:10px;}
   .brand img{height:34px;width:34px;}
   .brand b{font-size:.98rem;}
   .brand small{font-size:.55rem;letter-spacing:1.5px;}
   header .right{gap:7px;}
-  header a.back{font-size:0;padding:10px 12px;border:1px solid rgba(255,255,255,.2);border-radius:10px;display:inline-flex;align-items:center;justify-content:center;}
+  header a.back{font-size:0;padding:10px 12px;border:1px solid var(--va-hairline,rgba(201,168,76,.35));border-radius:10px;display:inline-flex;align-items:center;justify-content:center;}
   header a.back i{font-size:1rem;margin:0;}
 }
 .wrap{max-width:760px;margin:0 auto;padding:32px 20px 70px;}
@@ -45,9 +45,9 @@ header a.back:hover{color:var(--gold);}
 .bhead{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;border-bottom:1px solid var(--border);padding-bottom:16px;margin-bottom:6px;}
 .bhead .who b{font-family:'Inria Serif',serif;font-size:1.25rem;}
 .bhead .who small{display:block;color:var(--muted);font-size:.78rem;margin-top:2px;}
-.lvl{display:inline-block;font-size:.7rem;font-weight:800;letter-spacing:.6px;text-transform:uppercase;padding:4px 12px;border-radius:20px;background:#fff;border:1.5px solid currentColor;}
+.lvl{display:inline-block;font-size:.7rem;font-weight:800;letter-spacing:.6px;text-transform:uppercase;padding:4px 12px;border-radius:20px;background:var(--paper,#fff);border:1.5px solid currentColor;}
 
-.crit{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 2px;border-bottom:1px solid #f0ece3;}
+.crit{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 2px;border-bottom:1px solid var(--border);}
 .crit .lbl b{display:block;font-size:.92rem;}
 .crit .lbl small{color:var(--muted);font-size:.74rem;}
 .crit .val{font-weight:800;font-size:1.15rem;white-space:nowrap;}
@@ -77,6 +77,8 @@ header a.back:hover{color:var(--gold);}
 .pchart-legend{display:flex;flex-wrap:wrap;gap:18px;margin:2px 2px 8px;font-size:.78rem;color:var(--muted);}
 .pchart-legend span{display:inline-flex;align-items:center;gap:7px;}
 .pchart-legend i{width:18px;height:0;border-top:3px solid #ccc;border-radius:2px;display:inline-block;}
+.pchart-legend i.lg-d{border-top-color:#b5651d;}
+.pchart-legend i.lg-c{border-top-color:#1e5fa8;}
 .pchart .grid-l{stroke:#efeadf;stroke-width:1;}
 .pchart .thresh{stroke:#c9b58a;stroke-width:1;}
 .pchart .axis-t{fill:var(--muted);font-size:11px;font-family:'Inter',sans-serif;}
@@ -92,15 +94,36 @@ header a.back:hover{color:var(--gold);}
 .dwrap{overflow-x:auto;}
 table.dgrid{border-collapse:separate;border-spacing:3px;font-size:.72rem;margin-top:6px;}
 table.dgrid th{padding:2px 0;text-align:center;color:var(--muted);font-size:.62rem;min-width:26px;font-weight:600;}
-table.dgrid th.asp{text-align:left;padding-right:12px;font-size:.78rem;color:var(--navy);min-width:120px;white-space:nowrap;}
+table.dgrid th.asp{text-align:left;padding-right:12px;font-size:.78rem;color:var(--text,var(--navy));min-width:120px;white-space:nowrap;}
 table.dgrid td{width:26px;height:26px;min-width:26px;text-align:center;border:1px solid var(--border);border-radius:6px;background:var(--paper,#fff);font-size:.78rem;color:#c9c2b4;}
 table.dgrid td.on{background:#e7f4ec;border-color:#cfe9da;color:var(--ok);font-weight:800;}
 table.dgrid td.off{background:#f7e7e7;border-color:#e2bcbc;color:var(--err);font-weight:800;}
 
-footer{background:var(--navy);color:rgba(255,255,255,.5);text-align:center;padding:24px;font-size:.78rem;border-top:3px solid var(--gold);position:sticky;top:100vh;}
+footer{background:var(--navy);color:rgba(255,255,255,.5);text-align:center;padding:24px;font-size:.78rem;border-top:1px solid var(--va-hairline,rgba(201,168,76,.35));position:sticky;top:100vh;}
 footer a{color:var(--gold);text-decoration:none;}
 :focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+
+/* Temas oscuros (vesper_theme.js). Esta página nació clara y tenía verdes,
+   rojos, avisos y rejilla pensados para crema: sobre la noche de Vespertina
+   el verde de "aprobado" y el rojo quedaban por debajo de 3:1. */
+html.vesper-dark{--ok:var(--success,#41C595);--err:var(--error,#E07065);}
+html.vesper-dark .notice{background:var(--gold-tint,rgba(201,168,76,.14));border-color:var(--va-hairline,rgba(201,168,76,.35));color:var(--text);}
+html.vesper-dark .notice.bad{background:var(--no-tint,rgba(224,112,101,.16));border-color:rgba(224,112,101,.4);border-left-color:var(--err);color:var(--text);}
+/* El color del nivel (VESPER_PATH.levelColor) es oscuro: va sobre píldora clara. */
+html.vesper-dark .lvl{background:#f5f2eb;}
+html.vesper-dark .pchart .grid-l{stroke:rgba(255,255,255,.08);}
+html.vesper-dark .pchart-legend i.lg-d{border-top-color:#e29a5c;}
+html.vesper-dark .pchart-legend i.lg-c{border-top-color:#6aa9ec;}
+html.vesper-dark .pchart .thresh-t{fill:var(--gold-ink);}
+html.vesper-dark table.dgrid td{color:var(--muted);}
+html.vesper-dark table.dgrid td.on{background:var(--ok-tint,rgba(65,197,149,.18));border-color:transparent;}
+html.vesper-dark table.dgrid td.off{background:var(--no-tint,rgba(224,112,101,.18));border-color:transparent;}
 </style>
+
+<!-- Tema del alumno: sin esto la Boleta era la única pestaña que se quedaba
+     en crema cuando el resto de la app estaba en un tema oscuro. -->
+<script src="vesper_prefs.js"></script>
+<script src="vesper_theme.js"></script>
 <link rel="stylesheet" href="assets/css/vesper_tokens.css">
 </head>
 <body>
@@ -155,8 +178,8 @@ footer a{color:var(--gold);text-decoration:none;}
         <div class="who"><b>Tu progreso día a día</b><small id="pchart-sub"></small></div>
       </div>
       <div class="pchart-legend">
-        <span><i style="border-color:#b5651d"></i>Puntaje del día</span>
-        <span><i style="border-color:#1e5fa8"></i>Promedio acumulado</span>
+        <span><i class="lg-d"></i>Puntaje del día</span>
+        <span><i class="lg-c"></i>Promedio acumulado</span>
       </div>
       <div class="pchart-wrap">
         <div class="pchart" id="pchart"></div>
@@ -244,7 +267,8 @@ footer a{color:var(--gold);text-decoration:none;}
   }
 
   /* ── gráfica lineal de progreso día a día (SVG propio, sin librerías) ── */
-  var DAILY_COLOR = "#b5651d", CUM_COLOR = "#1e5fa8";
+  var DARK = document.documentElement.classList.contains("vesper-dark");
+  var DAILY_COLOR = DARK ? "#e29a5c" : "#b5651d", CUM_COLOR = DARK ? "#6aa9ec" : "#1e5fa8";
   var chartData = null; // { perDay, cum, aspText, first, last } para el hover
 
   function computeSeries(daily) {

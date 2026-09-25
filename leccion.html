@@ -1365,6 +1365,12 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
   background:var(--error);color:#fff;border:2px solid var(--paper);font-size:.7rem;font-weight:800;
   display:grid;place-items:center;padding:0 4px;box-shadow:0 0 0 0 rgba(192,57,43,.5)}
 .vchat-fab .vchat-dot[hidden]{display:none}
+/* Teléfono: 62px tapaban media tarjeta (el "0 / 250 lecciones" de Tu
+   travesía). 50px siguen dando un blanco de toque cómodo. */
+@media(max-width:480px){
+  .vchat-fab{width:50px;height:50px}
+  .vchat-fab img{width:43px;height:43px}
+}
 .vchat-pop{position:relative;max-width:236px;background:var(--paper);border:1px solid var(--line);
   border-radius:16px 16px 5px 16px;box-shadow:0 12px 32px rgba(27,27,47,.22);padding:12px 13px 12px;
   transform-origin:bottom right;opacity:0;transform:scale(.7) translateY(12px);
@@ -1422,8 +1428,11 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
 .hub-hero__id{min-width:0}
 .hub-hello{font-family:"Inria Serif",Georgia,serif;font-size:1.42rem;line-height:1.05;margin:0;color:#f5f2eb}
 .hub-sub{margin:4px 0 0;font-size:.82rem;color:rgba(245,242,235,.72)}
+/* Oro del TEMA, no #e9d39a fijo: en Océano/Bosque/Nebulosa el degradado iba
+   de oro a azul/verde/violeta. Texto con --on-gold, que el motor calcula
+   legible sobre el acento de cada tema. */
 .hub-rank{display:inline-block;margin-top:6px;font-size:.7rem;font-weight:800;letter-spacing:.03em;
-  color:#2b2410;background:linear-gradient(135deg,#e9d39a,var(--gold,#c5a059));border-radius:999px;padding:3px 11px}
+  color:var(--on-gold,#2b2410);background:linear-gradient(135deg,var(--gold-lt,#e9d39a),var(--gold,#c5a059));border-radius:999px;padding:3px 11px}
 .hub-actions{display:flex;align-items:center;gap:7px;flex:0 0 auto}
 .hub-ic{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:50%;
   background:rgba(245,242,235,.10);border:1px solid rgba(245,242,235,.20);color:#f5f2eb;text-decoration:none;cursor:pointer;font-family:inherit}
@@ -1455,6 +1464,15 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
 .hstat.met .hstat__ic{background:rgba(45,158,117,.28);color:#86e3c1}
 .hstat.met .hstat__ring{background:conic-gradient(#2D9E75 calc(var(--gp,0)*1%),rgba(245,242,235,.16) 0)}
 .hstat.met .hstat__ring i{color:#86e3c1}
+/* Teléfono: saludo y botones no caben en una fila. El nombre largo
+   ("Josuemtz!") se metía debajo de la lupa y "Tu nivel · B2 Intermedio alto"
+   se partía en cuatro renglones. Saludo a todo el ancho, botones debajo. */
+@media(max-width:480px){
+  .hub-hero__top{flex-wrap:wrap;row-gap:12px}
+  .hub-hero__greet{flex:1 1 100%}
+  .hub-hello{overflow-wrap:anywhere}
+  .hub-actions{flex:1 1 100%;justify-content:flex-start;gap:8px}
+}
 /* Móvil angosto: compactamos los tiles del héroe para que el número (XP/racha)
    no se corte con "…". Icono, padding y tipografía un punto más pequeños. */
 @media(max-width:430px){

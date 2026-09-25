@@ -91,6 +91,11 @@
       /* El FAB de apariencia (vesper_theme.js) va abajo-IZQUIERDA: así no se
          encima con la burbuja de chat ni con el chip de sesión (abajo-derecha). */
       ".vt-fab{bottom:calc(72px + env(safe-area-inset-bottom))!important;left:16px!important;right:auto!important}",
+      /* Teléfono: los flotantes tapaban texto y botones de las tarjetas (el
+         chip de sesión encima de las descripciones, la paleta encima de La
+         Forja). Los dos tienen ya su sitio fijo: "Cerrar sesión" vive en
+         Perfil y la apariencia en Perfil › Apariencia. */
+      "@media(max-width:767px){.vsp-logout-chip,.vt-fab{display:none!important}}",
       /* Escritorio: píldora flotante centrada. */
       "@media(min-width:768px){",
         "#vsp-tabbar{left:50%;right:auto;transform:translateX(-50%);bottom:18px;",
