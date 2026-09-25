@@ -894,7 +894,8 @@
             const lv = DATA[n];
             lv.lessons.forEach(les => push({ col:"level:"+n, group:`Level ${n} · ${lv.tag}`,
                 badge:`Level ${n}`, num:`Lesson ${les.n}`, title:les.title, icon:les.icon,
-                seed:`L${n}-${les.n}`, href:`lesson.html?level=${n}&lesson=${les.n}` }));
+                seed:`L${n}-${les.n}`, href:`lesson.html?level=${n}&lesson=${les.n}`,
+                versions: les.model ? 2 : 0 }));
         });
         DIAG_TRACKS.forEach(t => push({ col:"diag", group:"Diagnostics · Placement", badge:"Placement",
             num:`Track ${t.k}`, title:t.title, icon:t.k===1?"fa-stethoscope":"fa-wave-square",

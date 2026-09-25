@@ -57,7 +57,11 @@ window.VESPER_DATA = {
       "term": "Routine",
       "def": "Things you do every day"
      }
-    ]
+    ],
+    "model": {
+     "title": "The Late Employee",
+     "transcript": "<strong>Model dialogue: The Late Employee</strong><br><br><em>Sarah:</em> Mark, the meeting started an hour ago. Where were you?<br><em>Mark:</em> I'm so sorry, Sarah. My alarm didn't ring and I overslept.<br><em>Sarah:</em> What time did you wake up?<br><em>Mark:</em> At eight o'clock. I got ready in ten minutes. I skipped breakfast and grabbed a coffee.<br><em>Sarah:</em> Is this the first time this has happened?<br><em>Mark:</em> Yes, I promise. The traffic on my commute was terrible too.<br><em>Sarah:</em> I understand, but this meeting was important. Please set two alarms tomorrow.<br><em>Mark:</em> I will. It won't happen again.<br>"
+    }
    },
    {
     "n": 2,
@@ -112,7 +116,11 @@ window.VESPER_DATA = {
       "term": "Together",
       "def": "With another person"
      }
-    ]
+    ],
+    "model": {
+     "title": "The Perfect Weekend",
+     "transcript": "<strong>Model dialogue: The Perfect Weekend</strong><br><br><em>Anna:</em> What do you usually do on a normal weekend, Tom?<br><em>Tom:</em> On Saturdays I sleep in, then I do the housework. What about you?<br><em>Anna:</em> I usually go hiking if the weather is nice.<br><em>Tom:</em> Nice! Last weekend I stayed home and watched films all day.<br><em>Anna:</em> That sounds relaxing. My last weekend was busy. I visited my grandparents.<br><em>Tom:</em> If you could plan a perfect weekend, what would you do?<br><em>Anna:</em> A trip to the beach with friends, a barbecue, and no alarm clock!<br><em>Tom:</em> Perfect. Count me in!<br>"
+    }
    },
    {
     "n": 3,
@@ -167,7 +175,11 @@ window.VESPER_DATA = {
       "term": "Cheap",
       "def": "Costing little money"
      }
-    ]
+    ],
+    "model": {
+     "title": "The Box Office",
+     "transcript": "<strong>Model dialogue: The Box Office</strong><br><br><em>Jack:</em> Hi, two tickets for the rock concert on Friday, please.<br><em>Lisa:</em> I'm sorry, the cheap tickets are sold out. We only have VIP seats.<br><em>Jack:</em> Oh no. How much are the VIP tickets?<br><em>Lisa:</em> Ninety dollars each. They include a free poster.<br><em>Jack:</em> That's too expensive for me. Are there tickets for Saturday?<br><em>Lisa:</em> Yes! Saturday has standard seats for thirty dollars.<br><em>Jack:</em> Great, I'll take two for Saturday, please.<br><em>Lisa:</em> Perfect. That's sixty dollars. Enjoy the show!<br>"
+    }
    },
    {
     "n": 4,
@@ -222,7 +234,11 @@ window.VESPER_DATA = {
       "term": "Exciting",
       "def": "Causing great enthusiasm and eagerness"
      }
-    ]
+    ],
+    "model": {
+     "title": "Movie Critics",
+     "transcript": "<strong>Model dialogue: Movie Critics</strong><br><br><em>Emma:</em> What's your favourite film genre, Ben?<br><em>Ben:</em> I love science fiction. The special effects amaze me. And you?<br><em>Emma:</em> I prefer comedies. I watch films to laugh and relax.<br><em>Ben:</em> Have you seen any good films recently?<br><em>Emma:</em> Yes, I saw a great comedy last night. The main actor was hilarious.<br><em>Ben:</em> I don't usually like comedies. The stories are too simple.<br><em>Emma:</em> This one is different. The plot is really clever. You should watch it.<br><em>Ben:</em> Okay, you convinced me. I'll watch the trailer tonight.<br>"
+    }
    },
    {
     "n": 5,
@@ -277,7 +293,11 @@ window.VESPER_DATA = {
       "term": "Strong",
       "def": "Having physical power"
      }
-    ]
+    ],
+    "model": {
+     "title": "Half-Time Team Talk",
+     "transcript": "<strong>Model dialogue: Half-Time Team Talk</strong><br><br><em>Mia:</em> Listen, Leo. We're losing two to nil, but the match isn't over.<br><em>Leo:</em> I'm exhausted, Mia. Their defence is so strong.<br><em>Mia:</em> I know, but you're our best player. Run faster and shoot more.<br><em>Leo:</em> I only had one chance to score in the first half.<br><em>Mia:</em> In the second half, stay near the goal. We will pass you the ball.<br><em>Leo:</em> Okay. If I get the ball, I'll shoot immediately.<br><em>Mia:</em> That's the spirit! We can still win this game.<br><em>Leo:</em> You're right. Let's go and score some goals!<br>"
+    }
    },
    {
     "n": 6,
@@ -332,7 +352,11 @@ window.VESPER_DATA = {
       "term": "Cook",
       "def": "Prepare food with heat"
      }
-    ]
+    ],
+    "model": {
+     "title": "The Doctor's Office",
+     "transcript": "<strong>Model dialogue: The Doctor's Office</strong><br><br><em>Grace:</em> Good morning, Sam. What seems to be the problem?<br><em>Sam:</em> I feel tired all the time, doctor. I have no energy.<br><em>Grace:</em> I see. Tell me about your diet. What do you eat every day?<br><em>Sam:</em> Mostly fast food. Burgers, pizza, and lots of soda.<br><em>Grace:</em> Do you do any exercise?<br><em>Sam:</em> Not really. I sit at a computer all day and I sleep five hours a night.<br><em>Grace:</em> That's the problem. Eat more vegetables, walk thirty minutes a day, and sleep eight hours.<br><em>Sam:</em> Okay, doctor. I'll start this week, I promise.<br>"
+    }
    },
    {
     "n": 7,
@@ -387,7 +411,11 @@ window.VESPER_DATA = {
       "term": "Walk",
       "def": "Move on foot"
      }
-    ]
+    ],
+    "model": {
+     "title": "The Human GPS",
+     "transcript": "<strong>Model dialogue: The Human GPS</strong><br><br><em>Nina:</em> Excuse me! I'm lost. How do I get to the train station?<br><em>Carlos:</em> No problem. Go straight ahead for two blocks.<br><em>Nina:</em> Straight for two blocks. Then what?<br><em>Carlos:</em> Then turn left at the bank. You'll see a big park.<br><em>Nina:</em> Turn left at the bank. Okay.<br><em>Carlos:</em> Cross the park, and the station is on your right, next to the museum.<br><em>Nina:</em> Is it far? My train leaves in twenty minutes.<br><em>Carlos:</em> It's only ten minutes on foot. You have time. Good luck!<br>"
+    }
    },
    {
     "n": 8,
@@ -442,7 +470,11 @@ window.VESPER_DATA = {
       "term": "Breakfast",
       "def": "The morning meal"
      }
-    ]
+    ],
+    "model": {
+     "title": "Reception Desk",
+     "transcript": "<strong>Model dialogue: Reception Desk</strong><br><br><em>Elena:</em> Good evening! Welcome to the Grand Hotel. How can I help you?<br><em>Robert:</em> Hi, I'd like a room for two nights, please.<br><em>Elena:</em> Of course. A single or a double room?<br><em>Robert:</em> A double room with a sea view, if possible.<br><em>Elena:</em> Let me check. Yes, we have one on the fifth floor. It's one hundred dollars per night.<br><em>Robert:</em> Does the price include breakfast?<br><em>Elena:</em> Yes, breakfast is served from seven to ten in the restaurant.<br><em>Robert:</em> Perfect, I'll take it. Here's my passport.<br><em>Elena:</em> Thank you, sir. Here's your key card. Enjoy your stay!<br>"
+    }
    },
    {
     "n": 9,
@@ -497,7 +529,11 @@ window.VESPER_DATA = {
       "term": "Question",
       "def": "Something asked to get information"
      }
-    ]
+    ],
+    "model": {
+     "title": "The Interview",
+     "transcript": "<strong>Model dialogue: The Interview</strong><br><br><em>Diana:</em> Good morning, Peter. Please, have a seat. Tell me about yourself.<br><em>Peter:</em> Thank you. I'm a sales assistant with three years of experience, and I love working with people.<br><em>Diana:</em> Why do you want to work here?<br><em>Peter:</em> Your company is growing fast, and I want to grow with it.<br><em>Diana:</em> What is your biggest strength?<br><em>Peter:</em> I'm very organised, and I never miss a deadline.<br><em>Diana:</em> And your biggest weakness?<br><em>Peter:</em> Sometimes I work too much! But I'm learning to rest and manage my time.<br><em>Diana:</em> Do you have any questions for me?<br><em>Peter:</em> Yes. What does a normal day look like in this job?<br>"
+    }
    },
    {
     "n": 10,
@@ -552,7 +588,11 @@ window.VESPER_DATA = {
       "term": "Reply",
       "def": "To send an answer back"
      }
-    ]
+    ],
+    "model": {
+     "title": "The Phone Call Problem",
+     "transcript": "<strong>Model dialogue: The Phone Call Problem</strong><br><br><em>Maria:</em> Hello, David? It's Maria from the office. We have a problem.<br><em>David:</em> Hi Maria. What's wrong?<br><em>Maria:</em> The client meeting is at three o'clock, but the report isn't ready.<br><em>David:</em> Oh no. I sent you my part by email this morning. Did you get it?<br><em>Maria:</em> I got the attachment, but the numbers on page two are missing.<br><em>David:</em> I see. I can fix that and send it again in twenty minutes.<br><em>Maria:</em> Perfect. Please copy the boss, so she can check it.<br><em>David:</em> Will do. Call me if you need anything else.<br>"
+    }
    },
    {
     "n": 11,
@@ -607,7 +647,11 @@ window.VESPER_DATA = {
       "term": "Forecast",
       "def": "A prediction of future weather"
      }
-    ]
+    ],
+    "model": {
+     "title": "The Weather Presenter",
+     "transcript": "<strong>Model dialogue: The Weather Presenter</strong><br><br><em>Katie:</em> Good evening! Here is the weather for this week.<br><em>Nick:</em> Wait. You're speaking too fast. Start again, slowly.<br><em>Katie:</em> Okay. Tomorrow will be sunny, with a high of twenty-five degrees.<br><em>Nick:</em> Nice. And what about the weekend?<br><em>Katie:</em> On Saturday, it will be cloudy in the morning and rainy in the evening.<br><em>Nick:</em> So I should take my umbrella to the football match?<br><em>Katie:</em> Definitely! And on Sunday, there will be strong winds and a storm.<br><em>Nick:</em> A storm? Then let's stay home and watch films.<br><em>Katie:</em> Good plan! That was your weekend forecast.<br>"
+    }
    },
    {
     "n": 12,
@@ -662,7 +706,11 @@ window.VESPER_DATA = {
       "term": "Dangerous",
       "def": "Able to hurt you"
      }
-    ]
+    ],
+    "model": {
+     "title": "The Zoo Map",
+     "transcript": "<strong>Model dialogue: The Zoo Map</strong><br><br><em>Sofia:</em> Max, my map only shows the north of the zoo. Where are the lions?<br><em>Max:</em> The lions are in the south, next to the elephants. What's in the north?<br><em>Sofia:</em> The monkeys and the big cafe. I really want to see the penguins. Do you see them?<br><em>Max:</em> Yes! The penguins are in the west, behind the gift shop.<br><em>Sofia:</em> Great. Let's see the lions first. I hear feeding time is at noon.<br><em>Max:</em> Perfect. After that, we can have lunch at the cafe on your map.<br><em>Sofia:</em> Deal. Which way do we go?<br><em>Max:</em> Follow the yellow path and turn right at the fountain.<br>"
+    }
    },
    {
     "n": 13,
@@ -717,7 +765,11 @@ window.VESPER_DATA = {
       "term": "Broken",
       "def": "Damaged and not working"
      }
-    ]
+    ],
+    "model": {
+     "title": "The Phone Shop",
+     "transcript": "<strong>Model dialogue: The Phone Shop</strong><br><br><em>Julia:</em> Hi, I'm looking for a phone for my grandmother. Something simple.<br><em>Tom:</em> Of course! Does she need a big screen?<br><em>Julia:</em> Yes, a big screen and big buttons. Her eyes aren't so good.<br><em>Tom:</em> This model is perfect for that. The screen is huge and very bright.<br><em>Julia:</em> How is the battery? She always forgets to charge things.<br><em>Tom:</em> Excellent. It lasts three days. And it has a great camera for family photos.<br><em>Julia:</em> How much does it cost?<br><em>Tom:</em> Two hundred dollars, and it comes with a free case.<br><em>Julia:</em> Perfect. I'll take it!<br>"
+    }
    },
    {
     "n": 14,
@@ -772,7 +824,11 @@ window.VESPER_DATA = {
       "term": "Friend",
       "def": "A person you like and know well"
      }
-    ]
+    ],
+    "model": {
+     "title": "Screens: Good or Bad?",
+     "transcript": "<strong>Model dialogue: Screens: Good or Bad?</strong><br><br><em>Rosa:</em> I think smartphones make our lives better. I can talk to my family anywhere.<br><em>Alex:</em> I disagree. People look at screens all day and never talk face to face.<br><em>Rosa:</em> But apps help us! Maps, banks, learning English. Everything is easier.<br><em>Alex:</em> That's true, but many people can't stop scrolling. It's like an addiction.<br><em>Rosa:</em> So the problem isn't the phone. It's how we use it.<br><em>Alex:</em> Maybe. But children spend too many hours online.<br><em>Rosa:</em> I agree with that. Parents should give clear rules and screen-free time.<br><em>Alex:</em> Okay, we agree on one thing. The phone must be a tool, not a boss!<br>"
+    }
    },
    {
     "n": 15,
@@ -827,7 +883,11 @@ window.VESPER_DATA = {
       "term": "Single",
       "def": "Not married"
      }
-    ]
+    ],
+    "model": {
+     "title": "My Family Tree",
+     "transcript": "<strong>Model dialogue: My Family Tree</strong><br><br><em>Chloe:</em> This is my family tree. These are my grandparents, Rosa and Miguel.<br><em>Ben:</em> Is this your mother?<br><em>Chloe:</em> Yes, that's my mother, Elena. She has two brothers. They're my uncles.<br><em>Ben:</em> So you have a big family! Who is the youngest?<br><em>Chloe:</em> My little cousin, Leo. He's only two years old.<br><em>Ben:</em> And who are you closest to?<br><em>Chloe:</em> My older sister. We tell each other everything.<br><em>Ben:</em> You look alike! Do people say that?<br><em>Chloe:</em> All the time. But she's taller than me!<br>"
+    }
    },
    {
     "n": 16,
@@ -882,7 +942,11 @@ window.VESPER_DATA = {
       "term": "Crowded",
       "def": "Full of people"
      }
-    ]
+    ],
+    "model": {
+     "title": "Then and Now",
+     "transcript": "<strong>Model dialogue: Then and Now</strong><br><br><em>Nina:</em> Marcus, tell me about your hometown. Has it changed a lot?<br><em>Marcus:</em> Completely! When I was a child, it was a small, quiet town.<br><em>Nina:</em> And now?<br><em>Marcus:</em> Now it's a busy city. There's a new shopping centre where my school was.<br><em>Nina:</em> That's sad! Is anything still the same?<br><em>Marcus:</em> The old market in the main square. It still smells of fresh bread.<br><em>Nina:</em> What do you miss the most?<br><em>Marcus:</em> Playing football in the street with my neighbours. There was no traffic then!<br><em>Nina:</em> It sounds like a beautiful place to grow up.<br>"
+    }
    },
    {
     "n": 17,
@@ -937,7 +1001,11 @@ window.VESPER_DATA = {
       "term": "Look",
       "def": "To direct your eyes at something"
      }
-    ]
+    ],
+    "model": {
+     "title": "Describe and Draw",
+     "transcript": "<strong>Model dialogue: Describe and Draw</strong><br><br><em>Grace:</em> Okay Daniel, I can see the picture and you can't. Get your pencil ready!<br><em>Daniel:</em> Ready. What do I draw first?<br><em>Grace:</em> In the middle, there's a small house with a red roof.<br><em>Daniel:</em> A small house, red roof. Done. What else?<br><em>Grace:</em> On the left, there's a tall tree with a bird on top.<br><em>Daniel:</em> Is the bird big or small?<br><em>Grace:</em> Small, like a dot! And in front of the house, a dog is sleeping.<br><em>Daniel:</em> House, tree, bird, sleeping dog. Finished!<br><em>Grace:</em> Now show me. Ha! That dog looks like a potato!<br>"
+    }
    },
    {
     "n": 18,
@@ -992,7 +1060,11 @@ window.VESPER_DATA = {
       "term": "Afraid",
       "def": "Feeling fear"
      }
-    ]
+    ],
+    "model": {
+     "title": "Tell Me a Story",
+     "transcript": "<strong>Model dialogue: Tell Me a Story</strong><br><br><em>Emily:</em> Can you retell the story from the audio? I missed the class.<br><em>Jack:</em> Sure. Once upon a time, there was a poor fisherman who caught a golden fish.<br><em>Emily:</em> A golden fish? What happened next?<br><em>Jack:</em> The fish could speak! It said: let me go, and I will give you three wishes.<br><em>Emily:</em> What did the fisherman wish for?<br><em>Jack:</em> First a new house, then a big boat. But his wife wanted more and more.<br><em>Emily:</em> Let me guess. In the end, they lost everything?<br><em>Jack:</em> Exactly. The fish took everything back. The lesson is: don't be greedy.<br><em>Emily:</em> Great story! You told it really well.<br>"
+    }
    },
    {
     "n": 19,
@@ -1047,7 +1119,11 @@ window.VESPER_DATA = {
       "term": "Stay",
       "def": "To remain in a place"
      }
-    ]
+    ],
+    "model": {
+     "title": "The Calendar Clash",
+     "transcript": "<strong>Model dialogue: The Calendar Clash</strong><br><br><em>Laura:</em> Ben, we need to meet this week to plan the trip. When are you free?<br><em>Ben:</em> I work every morning. Are you free in the afternoons?<br><em>Laura:</em> No, my afternoons are full. I have classes until six.<br><em>Ben:</em> What about Wednesday evening? We could meet for dinner.<br><em>Laura:</em> I can't on Wednesday, I'm going to the gym. Thursday evening?<br><em>Ben:</em> Thursday I'm busy. Wait, Friday? I finish work early on Fridays.<br><em>Laura:</em> Friday at five o'clock works for me!<br><em>Ben:</em> Perfect. I'll book a table at the Italian place.<br>"
+    }
    },
    {
     "n": 20,
@@ -1102,7 +1178,11 @@ window.VESPER_DATA = {
       "term": "Fun",
       "def": "Enjoyable and happy"
      }
-    ]
+    ],
+    "model": {
+     "title": "You're Invited!",
+     "transcript": "<strong>Model dialogue: You're Invited!</strong><br><br><em>Sofia:</em> Hi Marcus! I'm calling to invite you to a party on Saturday.<br><em>Marcus:</em> A party? What's the occasion?<br><em>Sofia:</em> We finished Level One of our English course! We're celebrating.<br><em>Marcus:</em> That's a great reason. Where is it?<br><em>Sofia:</em> At my place, at seven o'clock. Bring something to share!<br><em>Marcus:</em> I make great pizza. Should I bring one?<br><em>Sofia:</em> Perfect! Can you also tell Nina? I can't reach her.<br><em>Marcus:</em> Of course. See you on Saturday at seven. Thanks for the invitation!<br>"
+    }
    }
   ]
  },
@@ -1163,7 +1243,11 @@ window.VESPER_DATA = {
       "term": "Mingle",
       "def": "Socialize at a party"
      }
-    ]
+    ],
+    "model": {
+     "title": "Small Talk at the Coffee Machine",
+     "transcript": "<strong>Model dialogue: Small Talk at the Coffee Machine</strong><br><br><em>Anna:</em> Morning, Tom! I haven't seen you around lately. How have you been?<br><em>Tom:</em> Pretty good, thanks. I was on holiday last week, actually. And you?<br><em>Anna:</em> Busy as always. Anywhere nice?<br><em>Tom:</em> The coast. The weather was perfect until the last day, of course.<br><em>Anna:</em> Typical! By the way, did you catch the game last night?<br><em>Tom:</em> I did. What a finish, right? I nearly fell off the sofa.<br><em>Anna:</em> Same here. Well, I'd better get back. Nice catching up!<br><em>Tom:</em> You too. Let's grab lunch sometime this week.<br>"
+    }
    },
    {
     "n": 2,
@@ -1218,7 +1302,11 @@ window.VESPER_DATA = {
       "term": "Acknowledge",
       "def": "Accept the truth of"
      }
-    ]
+    ],
+    "model": {
+     "title": "The Faulty Blender",
+     "transcript": "<strong>Model dialogue: The Faulty Blender</strong><br><br><em>Marcus:</em> Good afternoon. I'd like to return this blender. It stopped working after two days.<br><em>Elena:</em> I'm sorry to hear that. Do you have the receipt with you?<br><em>Marcus:</em> Yes, here it is. I bought it last Saturday.<br><em>Elena:</em> Thank you. Would you prefer a refund or a replacement?<br><em>Marcus:</em> Honestly, I'd rather have my money back. This is the second one that's failed.<br><em>Elena:</em> I completely understand. That must be frustrating.<br><em>Marcus:</em> It is. I expected better quality from this brand.<br><em>Elena:</em> I'll process the refund right away, and I apologise again for the trouble.<br>"
+    }
    },
    {
     "n": 3,
@@ -1273,7 +1361,11 @@ window.VESPER_DATA = {
       "term": "Handshake",
       "def": "Agreement symbol"
      }
-    ]
+    ],
+    "model": {
+     "title": "Negotiating the Rent",
+     "transcript": "<strong>Model dialogue: Negotiating the Rent</strong><br><br><em>Laura:</em> So, the rent is nine hundred a month. When could you move in?<br><em>David:</em> The flat is great, but nine hundred is above my budget. Would you consider eight hundred?<br><em>Laura:</em> Eight hundred is too low, I'm afraid. I have other people interested.<br><em>David:</em> I understand. What if I sign for two years instead of one?<br><em>Laura:</em> Two years? That does change things. I could do eight hundred and fifty.<br><em>David:</em> Eight hundred and fifty, with the parking space included?<br><em>Laura:</em> You drive a hard bargain. Fine, parking included.<br><em>David:</em> Then we have a deal. Shall we sign next week?<br>"
+    }
    },
    {
     "n": 4,
@@ -1328,7 +1420,11 @@ window.VESPER_DATA = {
       "term": "Compensation",
       "def": "Money given for trouble"
      }
-    ]
+    ],
+    "model": {
+     "title": "The Missed Connection",
+     "transcript": "<strong>Model dialogue: The Missed Connection</strong><br><br><em>Nina:</em> Excuse me, my flight from Madrid landed late and I've missed my connection to Dublin.<br><em>Sam:</em> Let me check, madam. Yes, the Dublin flight closed ten minutes ago.<br><em>Nina:</em> This is a disaster. I have a wedding tomorrow morning!<br><em>Sam:</em> Don't worry, there's another flight at nine tonight. I can rebook you for free.<br><em>Nina:</em> Nine tonight... that works. What about my suitcase?<br><em>Sam:</em> It will be transferred automatically. Here's a meal voucher for the wait.<br><em>Nina:</em> Thank you. Where can I find the new gate?<br><em>Sam:</em> Gate B12, boarding starts at eight fifteen. Enjoy the wedding!<br>"
+    }
    },
    {
     "n": 5,
@@ -1383,7 +1479,11 @@ window.VESPER_DATA = {
       "term": "Probation period",
       "def": "Trial phase at work"
      }
-    ]
+    ],
+    "model": {
+     "title": "Why Should We Hire You?",
+     "transcript": "<strong>Model dialogue: Why Should We Hire You?</strong><br><br><em>Diana:</em> Your CV says you led a small team in your last job. Tell me more.<br><em>Peter:</em> Sure. I managed three people in customer service, and we cut waiting times in half.<br><em>Diana:</em> Impressive. Why did you leave?<br><em>Peter:</em> I felt I'd stopped learning. I want a role that pushes me, like this one.<br><em>Diana:</em> Here's a classic question, then. Why should we hire you?<br><em>Peter:</em> Because I solve problems instead of reporting them. May I give an example?<br><em>Diana:</em> Please do.<br><em>Peter:</em> When our booking system crashed, I created a paper backup in one hour. We didn't lose a single client.<br><em>Diana:</em> That's exactly the attitude we're looking for.<br>"
+    }
    },
    {
     "n": 6,
@@ -1438,7 +1538,11 @@ window.VESPER_DATA = {
       "term": "Device dependency",
       "def": "Addiction to screens"
      }
-    ]
+    ],
+    "model": {
+     "title": "Grandma's New Tablet",
+     "transcript": "<strong>Model dialogue: Grandma's New Tablet</strong><br><br><em>Chloe:</em> Grandma bought a tablet, and guess who's the technical support? Me.<br><em>Ben:</em> Ha! How's she getting on with it?<br><em>Chloe:</em> Better than I expected. She video-calls me every morning at seven.<br><em>Ben:</em> That's sweet. My dad refuses to even update his phone.<br><em>Chloe:</em> The trick is patience. I wrote her step-by-step instructions with drawings.<br><em>Ben:</em> Smart. Maybe technology isn't the problem — our teaching is.<br><em>Chloe:</em> Exactly. Yesterday she sent me her first photo. It was of her thumb.<br><em>Ben:</em> A classic! Progress takes time.<br>"
+    }
    },
    {
     "n": 7,
@@ -1493,7 +1597,11 @@ window.VESPER_DATA = {
       "term": "Catalyst",
       "def": "Something causing change"
      }
-    ]
+    ],
+    "model": {
+     "title": "The Recycling Argument",
+     "transcript": "<strong>Model dialogue: The Recycling Argument</strong><br><br><em>Rosa:</em> Did you just throw that bottle in the normal bin?<br><em>Alex:</em> It's one bottle, Rosa. It won't change the planet.<br><em>Rosa:</em> That's what everyone says. Millions of people, millions of bottles.<br><em>Alex:</em> Fine, but recycling feels like a drop in the ocean.<br><em>Rosa:</em> Small habits lead to big ones. I started with bottles, now I compost too.<br><em>Alex:</em> Compost? In your tiny kitchen?<br><em>Rosa:</em> Yes! It's easier than you think, and my plants love it.<br><em>Alex:</em> Okay, okay. Give me the bottle. I'll start with this one.<br>"
+    }
    },
    {
     "n": 8,
@@ -1548,7 +1656,11 @@ window.VESPER_DATA = {
       "term": "Integrity",
       "def": "Honesty and morals"
      }
-    ]
+    ],
+    "model": {
+     "title": "Don't Believe Everything",
+     "transcript": "<strong>Model dialogue: Don't Believe Everything</strong><br><br><em>Jack:</em> Did you see this headline? Scientists say chocolate cures stress!<br><em>Emily:</em> Let me see... Jack, this website is famous for fake stories.<br><em>Jack:</em> But it has two million shares!<br><em>Emily:</em> Shares don't make it true. Who wrote it? Where's the study?<br><em>Jack:</em> Hmm... there's no author. And no link to any research.<br><em>Emily:</em> Exactly. Always check the source before you share.<br><em>Jack:</em> You sound like a journalist.<br><em>Emily:</em> I just don't want my friends spreading nonsense. Now put the chocolate down.<br>"
+    }
    },
    {
     "n": 9,
@@ -1603,7 +1715,11 @@ window.VESPER_DATA = {
       "term": "Regimen",
       "def": "Prescribed course of diet/exercise"
      }
-    ]
+    ],
+    "model": {
+     "title": "The Gym Resolution",
+     "transcript": "<strong>Model dialogue: The Gym Resolution</strong><br><br><em>Max:</em> I signed up for the gym again. This time it's serious.<br><em>Sofia:</em> You said that in January. And in March.<br><em>Max:</em> This time I have a plan. Three mornings a week, before work.<br><em>Sofia:</em> Mornings? You can't even find your keys before nine.<br><em>Max:</em> That's why I need it! Exercise gives you energy, they say.<br><em>Sofia:</em> True. I run twice a week and I sleep much better now.<br><em>Max:</em> See? Join me on Wednesdays, then. I need a witness.<br><em>Sofia:</em> Deal. But if you cancel, you're buying breakfast for a month.<br>"
+    }
    },
    {
     "n": 10,
@@ -1658,7 +1774,11 @@ window.VESPER_DATA = {
       "term": "Compound interest",
       "def": "Interest on interest"
      }
-    ]
+    ],
+    "model": {
+     "title": "The Budget Talk",
+     "transcript": "<strong>Model dialogue: The Budget Talk</strong><br><br><em>Julia:</em> I checked my bank app today. Where does my salary go, Nick?<br><em>Nick:</em> Let me guess. Coffee, taxis, and food delivery?<br><em>Julia:</em> ...Painfully accurate. Almost two hundred on delivery alone.<br><em>Nick:</em> I use a simple rule: fifty percent needs, thirty wants, twenty savings.<br><em>Julia:</em> Twenty percent savings? Every month?<br><em>Nick:</em> Every month, automatically, the day I get paid. I never see it, so I never miss it.<br><em>Julia:</em> That's clever. Maybe I'll start with ten percent.<br><em>Nick:</em> Ten is perfect. Start small, but start today.<br>"
+    }
    },
    {
     "n": 11,
@@ -1713,7 +1833,11 @@ window.VESPER_DATA = {
       "term": "FOMO",
       "def": "Fear Of Missing Out"
      }
-    ]
+    ],
+    "model": {
+     "title": "One Week Offline",
+     "transcript": "<strong>Model dialogue: One Week Offline</strong><br><br><em>Emma:</em> I did a one-week social media detox. No apps at all.<br><em>Leo:</em> A whole week? How did it feel?<br><em>Emma:</em> The first two days were horrible. I kept reaching for my phone.<br><em>Leo:</em> And after that?<br><em>Emma:</em> Honestly? Peaceful. I read two books and slept better.<br><em>Leo:</em> I spend about four hours a day scrolling. That's terrifying to admit.<br><em>Emma:</em> Try turning off notifications first. That alone changed everything.<br><em>Leo:</em> Maybe I'll try the weekend version. Baby steps.<br>"
+    }
    },
    {
     "n": 12,
@@ -1768,7 +1892,11 @@ window.VESPER_DATA = {
       "term": "Ethnocentrism",
       "def": "Judging other cultures by your own rules"
      }
-    ]
+    ],
+    "model": {
+     "title": "Culture Shock",
+     "transcript": "<strong>Model dialogue: Culture Shock</strong><br><br><em>Carlos:</em> My first week in Japan confused me completely. Nobody talks on the train!<br><em>Katie:</em> Really? Here everyone chats with strangers everywhere.<br><em>Carlos:</em> Exactly. I called my mum from the platform and people stared at me.<br><em>Katie:</em> Ha! What else surprised you?<br><em>Carlos:</em> Taking off shoes indoors. Now I actually prefer it.<br><em>Katie:</em> When I visited Spain, dinner at ten at night shocked me.<br><em>Carlos:</em> And for us that's normal! Culture is just... what you're used to.<br><em>Katie:</em> True. Travel breaks your habits in the best way.<br>"
+    }
    },
    {
     "n": 13,
@@ -1823,7 +1951,11 @@ window.VESPER_DATA = {
       "term": "Rote learning",
       "def": "Repetitive learning method"
      }
-    ]
+    ],
+    "model": {
+     "title": "Exams or Projects?",
+     "transcript": "<strong>Model dialogue: Exams or Projects?</strong><br><br><em>Grace:</em> If you could change one thing about school, what would it be?<br><em>Daniel:</em> Easy. Fewer exams, more projects. Exams test memory, not understanding.<br><em>Grace:</em> I half agree. But projects are hard to grade fairly.<br><em>Daniel:</em> Maybe. Yet in real jobs, nobody gives you a multiple-choice test.<br><em>Grace:</em> True. My best learning came from building things with a team.<br><em>Daniel:</em> Exactly my point. School should feel more like real life.<br><em>Grace:</em> So, presentations instead of finals?<br><em>Daniel:</em> Presentations, portfolios, real problems. I'd have loved that school.<br>"
+    }
    },
    {
     "n": 14,
@@ -1878,7 +2010,11 @@ window.VESPER_DATA = {
       "term": "Resentment",
       "def": "Bitter anger about unfairness"
      }
-    ]
+    ],
+    "model": {
+     "title": "The Forgotten Anniversary",
+     "transcript": "<strong>Model dialogue: The Forgotten Anniversary</strong><br><br><em>Maria:</em> You seem stressed. What happened?<br><em>Robert:</em> I forgot our anniversary. Completely. Lisa found me watching football.<br><em>Maria:</em> Oh no. What did you do?<br><em>Robert:</em> Apologised immediately. No excuses, just the truth: I messed up.<br><em>Maria:</em> Good. Excuses make it worse. Then what?<br><em>Robert:</em> I planned a surprise weekend for us. Her favourite town, her favourite restaurant.<br><em>Maria:</em> That's thoughtful. Did it work?<br><em>Robert:</em> She said the apology mattered more than the trip. Communication, right?<br><em>Maria:</em> Always. Now put the date in your phone with three alarms.<br>"
+    }
    },
    {
     "n": 15,
@@ -1933,7 +2069,11 @@ window.VESPER_DATA = {
       "term": "Renovation",
       "def": "Repairing/improving a building"
      }
-    ]
+    ],
+    "model": {
+     "title": "Flat with a View",
+     "transcript": "<strong>Model dialogue: Flat with a View</strong><br><br><em>Nina:</em> So, what do you think of this flat?<br><em>Mark:</em> The living room is bright, and that view is incredible.<br><em>Nina:</em> It is. But did you notice the kitchen? Tiny.<br><em>Mark:</em> True, but we eat out half the week anyway.<br><em>Nina:</em> Fair. The big problem is the price. It's fifteen percent over our budget.<br><em>Mark:</em> What if we drop the car? There's a metro station downstairs.<br><em>Nina:</em> You'd really give up your car for a view?<br><em>Mark:</em> For this view, and no traffic jams? Honestly, yes.<br><em>Nina:</em> Let's make an offer before someone else does.<br>"
+    }
    },
    {
     "n": 16,
@@ -1988,7 +2128,11 @@ window.VESPER_DATA = {
       "term": "Deterrent",
       "def": "Something that stops you from acting"
      }
-    ]
+    ],
+    "model": {
+     "title": "The Stolen Bicycle",
+     "transcript": "<strong>Model dialogue: The Stolen Bicycle</strong><br><br><em>Sam:</em> Officer, I'd like to report a stolen bicycle.<br><em>Laura:</em> Of course. When and where did it happen?<br><em>Sam:</em> This morning, outside the library. I locked it at nine, it was gone by eleven.<br><em>Laura:</em> Can you describe it?<br><em>Sam:</em> A blue mountain bike, white stripes, and a broken bell.<br><em>Laura:</em> Any witnesses or cameras nearby?<br><em>Sam:</em> There's a camera at the library entrance, actually.<br><em>Laura:</em> Perfect. We'll check the footage. Fill in this form, and we'll contact you.<br><em>Sam:</em> Thank you. I really hope you find it — it was a gift from my father.<br>"
+    }
    },
    {
     "n": 17,
@@ -2043,7 +2187,11 @@ window.VESPER_DATA = {
       "term": "Provocative",
       "def": "Causing anger or strong reaction"
      }
-    ]
+    ],
+    "model": {
+     "title": "Two Tickets, One Choice",
+     "transcript": "<strong>Model dialogue: Two Tickets, One Choice</strong><br><br><em>Sofia:</em> The jazz concert and the art exhibition are on the same night. Choose.<br><em>Marcus:</em> That's cruel. Why not both?<br><em>Sofia:</em> The concert starts at eight, the gallery closes at nine. Impossible.<br><em>Marcus:</em> Okay, argument time. The exhibition is here for a month. The band plays one night.<br><em>Sofia:</em> But I've waited a year for this painter!<br><em>Marcus:</em> The paintings will still hang there on Sunday morning. The music won't.<br><em>Sofia:</em> ...That's annoyingly logical.<br><em>Marcus:</em> Concert tonight, museum brunch on Sunday. Best of both.<br><em>Sofia:</em> Fine, you win. But you're buying the museum coffee.<br>"
+    }
    },
    {
     "n": 18,
@@ -2098,7 +2246,11 @@ window.VESPER_DATA = {
       "term": "Catalyst",
       "def": "A trigger for a reaction"
      }
-    ]
+    ],
+    "model": {
+     "title": "Why We Procrastinate",
+     "transcript": "<strong>Model dialogue: Why We Procrastinate</strong><br><br><em>Emily:</em> I read something interesting: procrastination isn't laziness, it's emotion management.<br><em>Jack:</em> Explain that, please. My essay is due tomorrow and I cleaned my whole flat instead.<br><em>Emily:</em> Exactly the example! The essay makes you anxious, cleaning gives quick relief.<br><em>Jack:</em> So my brain trades tomorrow's problem for today's comfort?<br><em>Emily:</em> Precisely. The fix is starting small — just five minutes on the task.<br><em>Jack:</em> Five minutes? That's nothing.<br><em>Emily:</em> That's the point. Starting kills the fear, and then you continue naturally.<br><em>Jack:</em> Alright. Five minutes on the essay, right after this coffee.<br><em>Emily:</em> No, Jack. Right now.<br>"
+    }
    },
    {
     "n": 19,
@@ -2153,7 +2305,11 @@ window.VESPER_DATA = {
       "term": "Unprecedented",
       "def": "Never done before"
      }
-    ]
+    ],
+    "model": {
+     "title": "The Robot Barista",
+     "transcript": "<strong>Model dialogue: The Robot Barista</strong><br><br><em>Ben:</em> They installed a robot barista at the station café. It remembers my order!<br><em>Diana:</em> Convenient. But what happened to Marco, the barista?<br><em>Ben:</em> He moved to the counter. Now he only handles complicated orders.<br><em>Diana:</em> So the robot didn't replace him — it changed his job.<br><em>Ben:</em> For now. Give it five years and it might do everything.<br><em>Diana:</em> Maybe. But people don't only pay for coffee. They pay for the chat, the smile.<br><em>Ben:</em> True. The robot's small talk is terrible.<br><em>Diana:</em> See? Your job is safe if a machine can't smile it away.<br>"
+    }
    },
    {
     "n": 20,
@@ -2208,7 +2364,11 @@ window.VESPER_DATA = {
       "term": "Horizon",
       "def": "The limit of knowledge or experience"
      }
-    ]
+    ],
+    "model": {
+     "title": "After Graduation",
+     "transcript": "<strong>Model dialogue: After Graduation</strong><br><br><em>Chloe:</em> So we finish the course next week. How do you feel?<br><em>Leo:</em> Proud, honestly. A year ago I couldn't order a pizza in English.<br><em>Chloe:</em> And now you argue about robots and recycling. What's next for you?<br><em>Leo:</em> A certification exam in autumn. I want it on my CV. You?<br><em>Chloe:</em> I'm aiming for the advanced course. And maybe a trip to test my English for real.<br><em>Leo:</em> Where to?<br><em>Chloe:</em> Ireland. Two weeks, no translator apps allowed.<br><em>Leo:</em> Brave! Let's keep practising together over the summer, then.<br><em>Chloe:</em> Deal. Same time, same coffee shop, but only English.<br>"
+    }
    }
   ]
  },
@@ -2269,7 +2429,11 @@ window.VESPER_DATA = {
       "term": "Rhetoric",
       "def": "The art of effective speaking"
      }
-    ]
+    ],
+    "model": {
+     "title": "Anatomy of an Argument",
+     "transcript": "<strong>Model dialogue: Anatomy of an Argument</strong><br><br><em>Diana:</em> You claim homework should be banned. Give me your strongest reason, not your loudest one.<br><em>Peter:</em> Fine. Studies show extra hours barely improve results, while stress rises sharply.<br><em>Diana:</em> Evidence, good. But correlation isn't causation, is it?<br><em>Peter:</em> Fair point. That's why I'd cite the schools that dropped homework and kept their scores.<br><em>Diana:</em> Now you're arguing properly. Notice you haven't insulted anyone yet.<br><em>Peter:</em> The night is young. What's your counter?<br><em>Diana:</em> Practice at home builds independence — the skill exams can't measure.<br><em>Peter:</em> Then we agree on the goal and disagree on the method. That's a debate worth having.<br>"
+    }
    },
    {
     "n": 2,
@@ -2324,7 +2488,11 @@ window.VESPER_DATA = {
       "term": "Ultimatum",
       "def": "Final demand with a threat"
      }
-    ]
+    ],
+    "model": {
+     "title": "The Shared River",
+     "transcript": "<strong>Model dialogue: The Shared River</strong><br><br><em>Elena:</em> Your country's new dam will cut our water supply by a third. That's unacceptable.<br><em>Marcus:</em> The dam powers two million homes. We can't simply switch it off.<br><em>Elena:</em> Nobody asks you to. We're asking for guaranteed minimum flow in the dry season.<br><em>Marcus:</em> If we guarantee flow, we lose energy in exactly the months we need it most.<br><em>Elena:</em> Then let's trade: we sell you solar power in summer at a fixed price.<br><em>Marcus:</em> Interesting. Energy security for water security.<br><em>Elena:</em> Precisely. Both sides give something, both sides sleep at night.<br><em>Marcus:</em> Draft the numbers. If they hold, we have the shape of an agreement.<br>"
+    }
    },
    {
     "n": 3,
@@ -2379,7 +2547,11 @@ window.VESPER_DATA = {
       "term": "Damage control",
       "def": "Action to limit negative consequences"
      }
-    ]
+    ],
+    "model": {
+     "title": "The Recall Decision",
+     "transcript": "<strong>Model dialogue: The Recall Decision</strong><br><br><em>Sam:</em> The lab found a fault in two percent of our batteries. Legal says a recall is optional.<br><em>Grace:</em> Optional legally, fatal reputationally. If one phone catches fire, we're the headline.<br><em>Sam:</em> A full recall costs forty million and admits guilt.<br><em>Grace:</em> And silence costs the brand. Ask airlines how cover-ups end.<br><em>Sam:</em> So we announce it ourselves, on our own terms?<br><em>Grace:</em> Today. Free replacements, a clear apology, and the CEO on camera.<br><em>Sam:</em> The board will hate the number.<br><em>Grace:</em> They'll hate the alternative more. Crises reward the fastest honest actor.<br>"
+    }
    },
    {
     "n": 4,
@@ -2434,7 +2606,11 @@ window.VESPER_DATA = {
       "term": "Altruism",
       "def": "Selfless concern for others"
      }
-    ]
+    ],
+    "model": {
+     "title": "The Trolley on the Table",
+     "transcript": "<strong>Model dialogue: The Trolley on the Table</strong><br><br><em>Emily:</em> So the classic dilemma: divert the trolley and one person dies, do nothing and five die.<br><em>Jack:</em> Divert, obviously. Five lives outweigh one.<br><em>Emily:</em> Then you'd also push a man off a bridge to stop it? Same maths.<br><em>Jack:</em> That feels completely different... though the numbers are identical.<br><em>Emily:</em> That feeling is the interesting part. Outcomes versus actions.<br><em>Jack:</em> So utilitarians count bodies, and deontologists count rules?<br><em>Emily:</em> Crudely, yes. Most of us are one until the bridge, then the other.<br><em>Jack:</em> Philosophy: ruining easy answers since Socrates.<br>"
+    }
    },
    {
     "n": 5,
@@ -2489,7 +2665,11 @@ window.VESPER_DATA = {
       "term": "Bubble",
       "def": "Unsustainable surge in prices"
      }
-    ]
+    ],
+    "model": {
+     "title": "Inflation for Breakfast",
+     "transcript": "<strong>Model dialogue: Inflation for Breakfast</strong><br><br><em>Laura:</em> My coffee costs forty percent more than last year. Explain, economist.<br><em>David:</em> Short version: too much money chasing too few beans.<br><em>Laura:</em> Be serious.<br><em>David:</em> I am! Demand recovered fast, supply chains didn't, and energy costs pushed every price up.<br><em>Laura:</em> So why does the central bank raise interest rates? How does that cheapen coffee?<br><em>David:</em> It doesn't, directly. Expensive credit cools spending, which slowly cools prices.<br><em>Laura:</em> Slowly being the key word.<br><em>David:</em> Economics has two speeds: too slow and too late. Enjoy the coffee.<br>"
+    }
    },
    {
     "n": 6,
@@ -2544,7 +2724,11 @@ window.VESPER_DATA = {
       "term": "Skepticism",
       "def": "Doubtful attitude"
      }
-    ]
+    ],
+    "model": {
+     "title": "Peer Review, Kitchen Edition",
+     "transcript": "<strong>Model dialogue: Peer Review, Kitchen Edition</strong><br><br><em>Nina:</em> My cousin shared a study proving chocolate extends life. Published and everything.<br><em>Ben:</em> Published where? A journal, or a chocolate company's blog?<br><em>Nina:</em> ...Let me check. A 'wellness institute'. Funded by, oh, a sweets manufacturer.<br><em>Ben:</em> There it is. Real science survives three questions: who paid, who reviewed, who replicated.<br><em>Nina:</em> Replicated?<br><em>Ben:</em> One study is an anecdote with graphs. Ten independent studies are evidence.<br><em>Nina:</em> So I shouldn't build my diet on one exciting headline.<br><em>Ben:</em> Build it on boring consensus. Sadly, broccoli keeps winning.<br>"
+    }
    },
    {
     "n": 7,
@@ -2599,7 +2783,11 @@ window.VESPER_DATA = {
       "term": "Masterpiece",
       "def": "Outstanding work of art"
      }
-    ]
+    ],
+    "model": {
+     "title": "Why Fiction Matters",
+     "transcript": "<strong>Model dialogue: Why Fiction Matters</strong><br><br><em>Sofia:</em> Be honest, Robert. Novels are entertainment. History and science teach; fiction decorates.<br><em>Robert:</em> Strong words. What does a history book tell you about grief?<br><em>Sofia:</em> The facts of it. Dates, causes, consequences.<br><em>Robert:</em> And a novel puts you inside a widow's kitchen at midnight. Which one do you remember?<br><em>Sofia:</em> The kitchen, admittedly.<br><em>Robert:</em> Fiction is a flight simulator for empathy. You crash safely and learn.<br><em>Sofia:</em> Yet simulators don't replace flying.<br><em>Robert:</em> No — but pilots who train in them fly better. So do readers.<br>"
+    }
    },
    {
     "n": 8,
@@ -2654,7 +2842,11 @@ window.VESPER_DATA = {
       "term": "Introversion",
       "def": "Focus on internal thoughts"
      }
-    ]
+    ],
+    "model": {
+     "title": "The Comfort Zone Myth",
+     "transcript": "<strong>Model dialogue: The Comfort Zone Myth</strong><br><br><em>Katie:</em> My coach says growth only happens outside the comfort zone. I say that's a poster, not a fact.<br><em>Alex:</em> Psychology half agrees with you. Moderate stress improves performance; panic destroys it.<br><em>Katie:</em> The famous inverted U curve.<br><em>Alex:</em> Exactly. Too comfortable, you're bored. Too stretched, you're paralysed.<br><em>Katie:</em> So the skill is finding the edge, not jumping off it.<br><em>Alex:</em> Right. Ask for a challenge that scares you five percent, not fifty.<br><em>Katie:</em> Five percent scary. That's a much better poster.<br><em>Alex:</em> Print it. We'll split the royalties.<br>"
+    }
    },
    {
     "n": 9,
@@ -2709,7 +2901,11 @@ window.VESPER_DATA = {
       "term": "Accountability",
       "def": "Being responsible/answerable"
      }
-    ]
+    ],
+    "model": {
+     "title": "Nuclear, the Awkward Ally",
+     "transcript": "<strong>Model dialogue: Nuclear, the Awkward Ally</strong><br><br><em>Carlos:</em> You call yourself an environmentalist and you defend nuclear power?<br><em>Emma:</em> Because I can count. It's low-carbon, always-on, and uses little land.<br><em>Carlos:</em> And produces waste that outlives civilisations.<br><em>Emma:</em> A small, contained amount — versus carbon we dump straight into the sky.<br><em>Carlos:</em> Solar and wind get cheaper every year, though.<br><em>Emma:</em> They do, and we need them. But the wind takes nights off. Ask the grid.<br><em>Carlos:</em> So your position is everything low-carbon, everywhere, now?<br><em>Emma:</em> Exactly. The climate doesn't care which clean electron saves it.<br>"
+    }
    },
    {
     "n": 10,
@@ -2764,7 +2960,11 @@ window.VESPER_DATA = {
       "term": "Corruption",
       "def": "Dishonest conduct by those in power"
      }
-    ]
+    ],
+    "model": {
+     "title": "Should Voting Be Mandatory?",
+     "transcript": "<strong>Model dialogue: Should Voting Be Mandatory?</strong><br><br><em>Julia:</em> Australia fines you for not voting. I think that's brilliant.<br><em>Nick:</em> Forcing participation? A vote you're pushed into isn't consent, it's attendance.<br><em>Julia:</em> Yet turnout above ninety percent means politicians must court everyone, not just the angry.<br><em>Nick:</em> Or millions scribble donkeys on ballots.<br><em>Julia:</em> Some do. Most, once standing there, actually choose.<br><em>Nick:</em> What about the freedom NOT to participate?<br><em>Julia:</em> You keep it — spoil the ballot. The duty is showing up, like jury service.<br><em>Nick:</em> Hmm. Democracy as a civic muscle you're required to exercise.<br><em>Julia:</em> Exactly. Muscles you never use disappear.<br>"
+    }
    },
    {
     "n": 11,
@@ -2819,7 +3019,11 @@ window.VESPER_DATA = {
       "term": "Tyrant",
       "def": "Cruel and oppressive ruler"
      }
-    ]
+    ],
+    "model": {
+     "title": "What the Textbook Left Out",
+     "transcript": "<strong>Model dialogue: What the Textbook Left Out</strong><br><br><em>Grace:</em> My school taught the explorers as pure heroes. Yours?<br><em>Daniel:</em> Same, until one teacher assigned us the diary of a sailor AND a letter from the colonised side.<br><em>Grace:</em> Two sources, two worlds, I imagine.<br><em>Daniel:</em> Completely. Same events, opposite meanings. That week changed how I read everything.<br><em>Grace:</em> That's the discipline, really — history is argument from evidence, not a list of dates.<br><em>Daniel:</em> And every generation re-argues it with new questions.<br><em>Grace:</em> Which upsets people who liked the old answers.<br><em>Daniel:</em> Progress usually does.<br>"
+    }
    },
    {
     "n": 12,
@@ -2874,7 +3078,11 @@ window.VESPER_DATA = {
       "term": "Exponential",
       "def": "Increasing rapidly"
      }
-    ]
+    ],
+    "model": {
+     "title": "The Algorithm Knows You're Sad",
+     "transcript": "<strong>Model dialogue: The Algorithm Knows You're Sad</strong><br><br><em>Mark:</em> My feed showed me gym ads an hour after I complained about my weight. Coincidence?<br><em>Rosa:</em> No mystery — your complaints, searches and pauses are all signals. The model just adds them up.<br><em>Mark:</em> It felt like being overheard.<br><em>Rosa:</em> You were, technically. You agreed on page forty-two of the terms.<br><em>Mark:</em> Nobody reads page forty-two!<br><em>Rosa:</em> Which is why regulation matters. Consent you can't understand isn't consent.<br><em>Mark:</em> So what do I do — leave the internet?<br><em>Rosa:</em> Start smaller: audit permissions, kill personalised ads, and starve the signal.<br><em>Mark:</em> The diet the algorithm never recommends.<br>"
+    }
    },
    {
     "n": 13,
@@ -2929,7 +3137,11 @@ window.VESPER_DATA = {
       "term": "Hostile takeover",
       "def": "Acquisition of a company against the wishes of its board"
      }
-    ]
+    ],
+    "model": {
+     "title": "The Pivot Meeting",
+     "transcript": "<strong>Model dialogue: The Pivot Meeting</strong><br><br><em>Elena:</em> Sales dropped forty percent, Sam. The product isn't the problem — the market moved.<br><em>Sam:</em> You want to pivot? We spent two years building this.<br><em>Elena:</em> And the data says our users love one feature: the scheduler. They ignore the rest.<br><em>Sam:</em> So we cut ninety percent of our product and bet on ten?<br><em>Elena:</em> We bet on the ten percent people actually pay for. That's not retreat, that's focus.<br><em>Sam:</em> The team will take it hard.<br><em>Elena:</em> Harder than layoffs in six months?<br><em>Sam:</em> ...Point taken. Draft the plan. We announce Monday.<br>"
+    }
    },
    {
     "n": 14,
@@ -2984,7 +3196,11 @@ window.VESPER_DATA = {
       "term": "Subpoena",
       "def": "A writ ordering a person to attend a court"
      }
-    ]
+    ],
+    "model": {
+     "title": "Intent on Trial",
+     "transcript": "<strong>Model dialogue: Intent on Trial</strong><br><br><em>Diana:</em> My client took the wrong suitcase — identical model, airport chaos. That's mistake, not theft.<br><em>Peter:</em> The suitcase contained a laptop he then sold, counsel.<br><em>Diana:</em> Panic, after he found no owner tag. Foolish, yes. Criminal intent, no.<br><em>Peter:</em> Intent is proved by actions. Selling is an action; reporting to security was the alternative.<br><em>Diana:</em> The law asks what he intended at the taking, not after.<br><em>Peter:</em> And juries ask what a reasonable person would do throughout.<br><em>Diana:</em> Then we agree the case turns on one word: intent.<br><em>Peter:</em> As most cases do. See you in court.<br>"
+    }
    },
    {
     "n": 15,
@@ -3039,7 +3255,11 @@ window.VESPER_DATA = {
       "term": "Narrative",
       "def": "The chosen way a story is presented"
      }
-    ]
+    ],
+    "model": {
+     "title": "Headline Versus Story",
+     "transcript": "<strong>Model dialogue: Headline Versus Story</strong><br><br><em>Nina:</em> Read this headline: 'Scientist admits climate models wrong'.<br><em>Leo:</em> Now read the article. One model, one variable, corrected upward — warming is faster.<br><em>Nina:</em> So the headline says the opposite of the story.<br><em>Leo:</em> The headline sells outrage; the correction lives in paragraph nine.<br><em>Nina:</em> Who has time for paragraph nine?<br><em>Leo:</em> Exactly the business model. My rule: never share what you haven't finished reading.<br><em>Nina:</em> That would silence half the internet.<br><em>Leo:</em> You say that like it's a problem.<br>"
+    }
    },
    {
     "n": 16,
@@ -3094,7 +3314,11 @@ window.VESPER_DATA = {
       "term": "Secular",
       "def": "Not subject to or bound by religious rule"
      }
-    ]
+    ],
+    "model": {
+     "title": "Whose Dish Is It Anyway?",
+     "transcript": "<strong>Model dialogue: Whose Dish Is It Anyway?</strong><br><br><em>Emma:</em> A famous chef just opened a 'reinvented' taco place, and people are furious. Appropriation or appreciation?<br><em>Marcus:</em> Depends. Did he credit the tradition, work with its cooks, or just cash in on it?<br><em>Emma:</em> The menu tells the story like he discovered tacos.<br><em>Marcus:</em> That's the offensive part — erasure, not the cooking itself.<br><em>Emma:</em> So the same dish, with credit and partnership, would be fine?<br><em>Marcus:</em> Cuisine has always travelled. The question is whether the source community shares the table.<br><em>Emma:</em> Credit, collaboration, compensation.<br><em>Marcus:</em> The three Cs. Cook anything, but pay the culture's bill.<br>"
+    }
    },
    {
     "n": 17,
@@ -3149,7 +3373,11 @@ window.VESPER_DATA = {
       "term": "Academia",
       "def": "The environment associated with research/learning"
      }
-    ]
+    ],
+    "model": {
+     "title": "The Grade Inflation Debate",
+     "transcript": "<strong>Model dialogue: The Grade Inflation Debate</strong><br><br><em>Sofia:</em> Half my class got top marks. I should be happy, but what is an A worth if everyone has one?<br><em>David:</em> Universities complain about exactly that — grades no longer separate applicants.<br><em>Sofia:</em> But harsh grading punishes students for their teacher's ego.<br><em>David:</em> There's a middle path: grade against clear criteria, not against classmates.<br><em>Sofia:</em> Standards-based grading. Everyone CAN excel, but only by meeting the bar.<br><em>David:</em> Right. The scandal isn't many As — it's As without the ability behind them.<br><em>Sofia:</em> So the fix is honest bars, not fewer rewards.<br><em>David:</em> And the courage to hold them.<br>"
+    }
    },
    {
     "n": 18,
@@ -3204,7 +3432,11 @@ window.VESPER_DATA = {
       "term": "Malpractice",
       "def": "Improper, illegal, or negligent professional activity"
      }
-    ]
+    ],
+    "model": {
+     "title": "The Sleep Deficit",
+     "transcript": "<strong>Model dialogue: The Sleep Deficit</strong><br><br><em>Katie:</em> You wear your four hours of sleep like a medal, Jack.<br><em>Jack:</em> Successful people grind. I'll sleep when the project ships.<br><em>Katie:</em> The research says you're shipping worse work slower. Sleep debt cuts focus like alcohol.<br><em>Jack:</em> Coffee disagrees.<br><em>Katie:</em> Coffee hides the signal; it doesn't repair the brain. Memory consolidates during sleep.<br><em>Jack:</em> So my all-nighter literally deletes what I studied?<br><em>Katie:</em> A good chunk, yes. Eight hours is performance enhancement, legally.<br><em>Jack:</em> Fine. Tonight I trial this radical productivity hack called bed.<br>"
+    }
    },
    {
     "n": 19,
@@ -3259,7 +3491,11 @@ window.VESPER_DATA = {
       "term": "Interstellar",
       "def": "Occurring or situated between stars"
      }
-    ]
+    ],
+    "model": {
+     "title": "Mars or the Ocean Floor?",
+     "transcript": "<strong>Model dialogue: Mars or the Ocean Floor?</strong><br><br><em>Ben:</em> Billions for Mars while our own oceans are ninety percent unexplored. Priorities, Laura.<br><em>Laura:</em> Why is it either-or? Exploration budgets aren't a single pie.<br><em>Ben:</em> Public money is finite. One rover equals a fleet of deep-sea submarines.<br><em>Laura:</em> And one Mars programme spins off tech that funds a thousand submarines. GPS, solar panels, water filters — space paid us back.<br><em>Ben:</em> The ocean regulates our climate today, though. It feels more urgent.<br><em>Laura:</em> Then fund it by inspiring people — and nothing inspires budgets like space.<br><em>Ben:</em> Use Mars to bankroll the ocean?<br><em>Laura:</em> Dreams finance homework. Always have.<br>"
+    }
    },
    {
     "n": 20,
@@ -3314,7 +3550,11 @@ window.VESPER_DATA = {
       "term": "Sentient",
       "def": "Able to perceive or feel things"
      }
-    ]
+    ],
+    "model": {
+     "title": "Letter to 2050",
+     "transcript": "<strong>Model dialogue: Letter to 2050</strong><br><br><em>Chloe:</em> If you could send one sentence to 2050, what would it say?<br><em>Robert:</em> 'We knew, and we tried.' Yours?<br><em>Chloe:</em> 'Sorry about the plastic; the recipes are in the cloud.'<br><em>Robert:</em> Ha! Do you think they'll judge us harshly?<br><em>Chloe:</em> The way we judge 1990 — kindly for what they didn't know, harshly for what they ignored.<br><em>Robert:</em> Then the real question is which of our habits is their horror story.<br><em>Chloe:</em> My money's on scrolling. Yours?<br><em>Robert:</em> Meetings that could have been emails. Some things deserve extinction.<br><em>Chloe:</em> On that, the future and I agree.<br>"
+    }
    }
   ]
  },
@@ -3375,7 +3615,11 @@ window.VESPER_DATA = {
       "term": "Catalyst",
       "def": "An event that sparks the main action"
      }
-    ]
+    ],
+    "model": {
+     "title": "Workshop: A Story in Five Beats",
+     "transcript": "<strong>Model dialogue: Workshop: A Story in Five Beats</strong><br><br><em>Elena:</em> Pitch me your story in five beats. Go.<br><em>Marcus:</em> A lighthouse keeper finds a message in a bottle — written in his own handwriting.<br><em>Elena:</em> Hook, good. Rising action?<br><em>Marcus:</em> Each new bottle predicts a storm, and each prediction comes true.<br><em>Elena:</em> Climax?<br><em>Marcus:</em> The final message says: tonight, save no one.<br><em>Elena:</em> Chilling. And he must choose between fate and duty — there's your conflict engine.<br><em>Marcus:</em> Resolution: he rows out anyway, and the handwriting changes.<br><em>Elena:</em> You had me at the second bottle. That's structure doing the selling.<br>"
+    }
    },
    {
     "n": 2,
@@ -3430,7 +3674,11 @@ window.VESPER_DATA = {
       "term": "Immerse",
       "def": "Involve oneself deeply in a particular activity or interest"
      }
-    ]
+    ],
+    "model": {
+     "title": "Show, Don't Tell",
+     "transcript": "<strong>Model dialogue: Show, Don't Tell</strong><br><br><em>Sofia:</em> Read your line again, the one about the sad kitchen.<br><em>David:</em> 'The kitchen was sad and empty.'<br><em>Sofia:</em> You told me the mood. Show me the evidence instead.<br><em>David:</em> 'Two chairs, one pushed in. A kettle scaled white from disuse. The calendar stopped in March.'<br><em>Sofia:</em> There! The calendar alone carries the whole grief.<br><em>David:</em> I didn't even name the feeling this time.<br><em>Sofia:</em> Exactly — the reader names it, and that's why they feel it.<br><em>David:</em> Show the artifacts, let the heart do the arithmetic.<br><em>Sofia:</em> Frame that. It's your new desk sign.<br>"
+    }
    },
    {
     "n": 3,
@@ -3485,7 +3733,11 @@ window.VESPER_DATA = {
       "term": "Imagery",
       "def": "Visually descriptive or figurative language"
      }
-    ]
+    ],
+    "model": {
+     "title": "The Open Mic",
+     "transcript": "<strong>Model dialogue: The Open Mic</strong><br><br><em>Nina:</em> Your poem reads beautifully on paper. Now perform it — the mic changes everything.<br><em>Jack:</em> The rhythm felt strong until I stood up. Then my breath ran out mid-line.<br><em>Nina:</em> Because you wrote for the eye. Spoken word breathes in phrases — mark your pauses.<br><em>Jack:</em> So I should break the line where the lungs break, not where the grammar does?<br><em>Nina:</em> Precisely. And repeat your anchor line; the ear needs landmarks the page doesn't.<br><em>Jack:</em> 'The city forgets us' — three times, each louder?<br><em>Nina:</em> Each softer. Make them lean in.<br><em>Jack:</em> Cruel technique.<br><em>Nina:</em> Performance is controlled generosity. Give, but make them reach.<br>"
+    }
    },
    {
     "n": 4,
@@ -3540,7 +3792,11 @@ window.VESPER_DATA = {
       "term": "Relatable",
       "def": "Enabling a person to feel that they can relate to someone or something"
      }
-    ]
+    ],
+    "model": {
+     "title": "Why Villains Believe They're Right",
+     "transcript": "<strong>Model dialogue: Why Villains Believe They're Right</strong><br><br><em>Grace:</em> Your villain kicks a dog in scene one. Why?<br><em>Sam:</em> So readers know he's evil?<br><em>Grace:</em> That's a costume, not a character. What does he want, in his own words?<br><em>Sam:</em> He wants... order. He grew up in chaos, and chaos ate his family.<br><em>Grace:</em> Now he's interesting. Every cruelty becomes a twisted mercy in his logic.<br><em>Sam:</em> The villain is the hero of a story we refuse to read.<br><em>Grace:</em> Write two pages of that story. Then delete the dog scene.<br><em>Sam:</em> The dog thanks you. So does the plot.<br>"
+    }
    },
    {
     "n": 5,
@@ -3595,7 +3851,11 @@ window.VESPER_DATA = {
       "term": "Aesthetic",
       "def": "Concerned with beauty or the appreciation of beauty"
      }
-    ]
+    ],
+    "model": {
+     "title": "The Map Before the Journey",
+     "transcript": "<strong>Model dialogue: The Map Before the Journey</strong><br><br><em>Laura:</em> Your fantasy city has flying trams, but your farmers still starve. Economy check!<br><em>Ben:</em> It's fantasy — must it balance the books?<br><em>Laura:</em> Worlds don't need to be real, they need to be consistent. Magic has a price or it has no drama.<br><em>Ben:</em> So if levitation is cheap, someone industrialised it, taxed it, smuggled it.<br><em>Laura:</em> Now THAT's a city. Who controls the tram lines?<br><em>Ben:</em> The mage guild... which explains the starving farmers. The guild hoards lift-stones.<br><em>Laura:</em> See? One rule, honestly followed, wrote your plot for you.<br><em>Ben:</em> World-building is just consequences with scenery.<br>"
+    }
    },
    {
     "n": 6,
@@ -3650,7 +3910,11 @@ window.VESPER_DATA = {
       "term": "Cliché",
       "def": "A phrase or opinion that is overused and betrays a lack of original thought"
      }
-    ]
+    ],
+    "model": {
+     "title": "Two People, One Secret",
+     "transcript": "<strong>Model dialogue: Two People, One Secret</strong><br><br><em>Emily:</em> Your dialogue explains too much. Real people talk around the wound, not into it.<br><em>Robert:</em> Give me an example.<br><em>Emily:</em> Two exes meet at a funeral. Bad version: 'I still resent your affair.' Good version: 'You came alone?'<br><em>Robert:</em> Ouch. Three words and the whole history surfaces.<br><em>Emily:</em> Subtext is the iceberg; dialogue is the ten percent above water.<br><em>Robert:</em> So what they DON'T say is my real script.<br><em>Emily:</em> Write the secret at the top of the page, then never mention it.<br><em>Robert:</em> And the reader feels it in every comma.<br><em>Emily:</em> Now you're writing conversation, not information.<br>"
+    }
    },
    {
     "n": 7,
@@ -3705,7 +3969,11 @@ window.VESPER_DATA = {
       "term": "Whodunit",
       "def": "A story or play about a murder in which the identity of the murderer is not revealed until the end"
      }
-    ]
+    ],
+    "model": {
+     "title": "Planting the Red Herring",
+     "transcript": "<strong>Model dialogue: Planting the Red Herring</strong><br><br><em>Diana:</em> Your detective solves it in chapter three. What do I read the other nine chapters for?<br><em>Peter:</em> The culprit is obvious? I hid him in plain sight!<br><em>Diana:</em> You hid him behind a spotlight. Every scene screams 'watch the butler'.<br><em>Peter:</em> How do the masters do it?<br><em>Diana:</em> Fair play: show every clue, but attach each to an innocent explanation.<br><em>Peter:</em> So the reader sees the glove and thinks gardening, not strangling.<br><em>Diana:</em> And your red herring needs his own guilty secret — smuggling, an affair — so his lies mislead honestly.<br><em>Peter:</em> Misdirection through genuine noise. The magician's method.<br><em>Diana:</em> Mystery IS stage magic in prose.<br>"
+    }
    },
    {
     "n": 8,
@@ -3760,7 +4028,11 @@ window.VESPER_DATA = {
       "term": "Citadel",
       "def": "A fortress, typically on high ground, protecting or dominating a city"
      }
-    ]
+    ],
+    "model": {
+     "title": "Dragons Are a Tax Problem",
+     "transcript": "<strong>Model dialogue: Dragons Are a Tax Problem</strong><br><br><em>Katie:</em> Your dragon burns the capital in chapter one. Bold. What does the kingdom eat in chapter two?<br><em>Alex:</em> I... hadn't billed the dragon for the granaries.<br><em>Katie:</em> High fantasy dies when consequences don't scale. Epic events need epic aftermath.<br><em>Alex:</em> So the war of succession happens during a famine.<br><em>Katie:</em> Better — because of one. Hunger picks sides faster than honour.<br><em>Alex:</em> And my farm-boy hero matters because he knows grain, not swords.<br><em>Katie:</em> The genre's secret: prophecy fills seats, logistics wins thrones.<br><em>Alex:</em> Tolkien with spreadsheets.<br><em>Katie:</em> You joke, but he counted the days of every march.<br>"
+    }
    },
    {
     "n": 9,
@@ -3815,7 +4087,11 @@ window.VESPER_DATA = {
       "term": "Sentient",
       "def": "Able to perceive or feel things"
      }
-    ]
+    ],
+    "model": {
+     "title": "The Physics of the Impossible",
+     "transcript": "<strong>Model dialogue: The Physics of the Impossible</strong><br><br><em>Carlos:</em> Hard sci-fi rule one: you get ONE impossible thing. Spend it wisely.<br><em>Emma:</em> Mine is the ansible — instant communication across light-years.<br><em>Carlos:</em> Fine. Now every other detail obeys physics, or the one lie stops being believable.<br><em>Emma:</em> So my ships still take decades, while messages arrive instantly.<br><em>Carlos:</em> And THERE's your novel — generations receive news from worlds they'll never reach.<br><em>Emma:</em> Grandchildren answering their grandparents' letters.<br><em>Carlos:</em> The tech premise was never the story. The loneliness it creates is.<br><em>Emma:</em> Hard sci-fi: strict physics, human consequences.<br><em>Carlos:</em> Rivets outside, heartbeat inside.<br>"
+    }
    },
    {
     "n": 10,
@@ -3870,7 +4146,11 @@ window.VESPER_DATA = {
       "term": "Archive",
       "def": "A collection of historical documents or records"
      }
-    ]
+    ],
+    "model": {
+     "title": "The Biographer's Dilemma",
+     "transcript": "<strong>Model dialogue: The Biographer's Dilemma</strong><br><br><em>Julia:</em> My subject's diary contradicts three eyewitnesses. Whose truth goes in the book?<br><em>Nick:</em> All four. The contradiction IS the chapter.<br><em>Julia:</em> Readers want the real story, not a shrug.<br><em>Nick:</em> They want honesty. 'The general claimed X; the sergeants remember Y' — now the reader judges character.<br><em>Julia:</em> So biography isn't a verdict, it's a trial transcript with style.<br><em>Nick:</em> The best ones, yes. Certainty is for novelists.<br><em>Julia:</em> And where the record is silent?<br><em>Nick:</em> Say so, beautifully. 'Here the letters stop, and we can only follow her to the harbour.'<br><em>Julia:</em> The gaps become atmosphere.<br><em>Nick:</em> The gaps were always the point.<br>"
+    }
    },
    {
     "n": 11,
@@ -3925,7 +4205,11 @@ window.VESPER_DATA = {
       "term": "Absurdism",
       "def": "Intentionally ridiculous or bizarre behavior or character"
      }
-    ]
+    ],
+    "model": {
+     "title": "Punching Up",
+     "transcript": "<strong>Model dialogue: Punching Up</strong><br><br><em>Grace:</em> Your satire roasts the unemployed. Watch the room go cold.<br><em>Daniel:</em> Comedy has no rules! Everything's a target.<br><em>Grace:</em> Everything CAN be — but jokes travel down like anvils and up like arrows.<br><em>Daniel:</em> Punching up versus punching down.<br><em>Grace:</em> Mock the minister, not the beggar; the algorithm, not the addict.<br><em>Daniel:</em> But my beggar joke is funnier.<br><em>Grace:</em> It's easier, not funnier. The laugh that costs the powerless is cheap fuel.<br><em>Daniel:</em> And the audience smells cheap.<br><em>Grace:</em> Satire's job is to comfort the afflicted and afflict the comfortable. Aim accordingly.<br>"
+    }
    },
    {
     "n": 12,
@@ -3980,7 +4264,11 @@ window.VESPER_DATA = {
       "term": "Enigma",
       "def": "A person or thing that is mysterious, puzzling, or difficult to understand"
      }
-    ]
+    ],
+    "model": {
+     "title": "The Grandmother Who Rains",
+     "transcript": "<strong>Model dialogue: The Grandmother Who Rains</strong><br><br><em>Sofia:</em> In my story, when the grandmother grieves, it rains indoors. My editor wants an explanation.<br><em>Mark:</em> Never explain! Magical realism dies the moment you show the wiring.<br><em>Sofia:</em> But readers will ask how.<br><em>Mark:</em> They won't — if everyone in the story treats it as Tuesday. The neighbours bring umbrellas, not questions.<br><em>Sofia:</em> The magic is ordinary and the ordinary is magic.<br><em>Mark:</em> Exactly. Márquez's trick: precise details, calm tone, impossible facts.<br><em>Sofia:</em> 'The rain lasted four years, eleven months and two days.'<br><em>Mark:</em> See? The decimal makes the miracle bureaucratic — and believable.<br><em>Sofia:</em> Umbrellas indoors it is. Let the editor bring a raincoat.<br>"
+    }
    },
    {
     "n": 13,
@@ -4035,7 +4323,11 @@ window.VESPER_DATA = {
       "term": "Masterpiece",
       "def": "A work of outstanding artistry, skill, or workmanship"
      }
-    ]
+    ],
+    "model": {
+     "title": "Standing Before the Canvas",
+     "transcript": "<strong>Model dialogue: Standing Before the Canvas</strong><br><br><em>Emma:</em> Ten million for three blue stripes. Defend that, critic.<br><em>Leo:</em> I won't defend the price — markets are theatre. I'll defend the painting.<br><em>Emma:</em> Please. My nephew could paint it.<br><em>Leo:</em> He could copy it. He couldn't have decided it in 1958, when it broke every rule about what a painting must be.<br><em>Emma:</em> So context is the artwork?<br><em>Leo:</em> Context is half of it. Stand closer — the edges vibrate where the blues meet. That's craft, not accident.<br><em>Emma:</em> I admit the vibration is... uncomfortable.<br><em>Leo:</em> Good discomfort is the review. Art that needs no defence usually needed no artist.<br><em>Emma:</em> You still overpaid by nine million.<br><em>Leo:</em> The market did. The painting is innocent.<br>"
+    }
    },
    {
     "n": 14,
@@ -4090,7 +4382,11 @@ window.VESPER_DATA = {
       "term": "Masterpiece",
       "def": "A work of outstanding artistry, skill, or workmanship"
      }
-    ]
+    ],
+    "model": {
+     "title": "The Long Take",
+     "transcript": "<strong>Model dialogue: The Long Take</strong><br><br><em>Nina:</em> The battle scene — one unbroken seven-minute shot. Genius or gimmick?<br><em>Robert:</em> Ask what the technique argues. No cuts means no escape; we're trapped in real time like the soldier.<br><em>Nina:</em> So form mirrors experience.<br><em>Robert:</em> When it's earned, yes. The same shot in a breakfast scene would be vanity.<br><em>Nina:</em> How do I tell ambition from decoration?<br><em>Robert:</em> Remove it mentally. If the meaning survives the removal, it was decoration.<br><em>Nina:</em> And here, cutting would let us breathe — which the film refuses.<br><em>Robert:</em> Exactly. The director isn't showing off; the suffocation IS the thesis.<br><em>Nina:</em> Form as argument. Now the seven minutes feel short.<br><em>Robert:</em> That's the trick working.<br>"
+    }
    },
    {
     "n": 15,
@@ -4145,7 +4441,11 @@ window.VESPER_DATA = {
       "term": "Legacy",
       "def": "The long-lasting impact of particular events, actions, etc. that took place in the past"
      }
-    ]
+    ],
+    "model": {
+     "title": "Reviewing the Comeback Album",
+     "transcript": "<strong>Model dialogue: Reviewing the Comeback Album</strong><br><br><em>Katie:</em> The band's first album in ten years. My draft says 'a triumphant return'. Too easy?<br><em>Ben:</em> Triumphant is a press release word. What does it actually sound like?<br><em>Katie:</em> Like they studied their old selves... and hired better lawyers than songwriters.<br><em>Ben:</em> NOW you're writing. Which track betrays that?<br><em>Katie:</em> Track four — the chorus begs for a stadium but the lyric was written for a bedroom.<br><em>Ben:</em> Put that sentence in the review. Specifics are the difference between criticism and marketing.<br><em>Katie:</em> Verdict: three stars, sincere nostalgia, rented emotion?<br><em>Ben:</em> Perfect — and quote the one line where the old fire survives, so fans know you listened.<br><em>Katie:</em> Fair and merciless.<br><em>Ben:</em> The only respectable combination.<br>"
+    }
    },
    {
     "n": 16,
@@ -4200,7 +4500,11 @@ window.VESPER_DATA = {
       "term": "Integrity",
       "def": "The quality of being honest and having strong moral principles"
      }
-    ]
+    ],
+    "model": {
+     "title": "Follow the Money",
+     "transcript": "<strong>Model dialogue: Follow the Money</strong><br><br><em>Diana:</em> Three sources confirm the mayor's charity paid his cousin's firm. Do we publish?<br><em>Sam:</em> Documents or voices?<br><em>Diana:</em> Two invoices, one insider on record, one anonymous.<br><em>Sam:</em> Solid. Now the boring heroics: give the mayor forty-eight hours to respond.<br><em>Diana:</em> He'll call it a witch hunt and leak a distraction.<br><em>Sam:</em> Let him — his response goes in paragraph four, verbatim. Fairness is armour.<br><em>Diana:</em> Legal wants every adjective removed.<br><em>Sam:</em> Legal is right. The invoices are the adjectives. 'Paid 1.2 million' needs no synonym for corrupt.<br><em>Diana:</em> Facts arranged so they testify.<br><em>Sam:</em> That's the whole craft. Publish Thursday.<br>"
+    }
    },
    {
     "n": 17,
@@ -4255,7 +4559,11 @@ window.VESPER_DATA = {
       "term": "Thespian",
       "def": "Relating to drama and the theater; an actor or actress"
      }
-    ]
+    ],
+    "model": {
+     "title": "The Empty Stage",
+     "transcript": "<strong>Model dialogue: The Empty Stage</strong><br><br><em>Laura:</em> My play has a storm, a shipwreck and a palace. The theatre has three chairs and a ladder.<br><em>Marcus:</em> Perfect. Theatre begins where budgets end.<br><em>Laura:</em> The audience will see chairs!<br><em>Marcus:</em> They'll see what the actors believe. A ladder climbed with terror is a mast in a hurricane.<br><em>Laura:</em> So the writing must do what the set can't.<br><em>Marcus:</em> The writing and the bodies. Film shows; the stage conjures.<br><em>Laura:</em> Then my stage directions should describe intention, not furniture.<br><em>Marcus:</em> 'She enters like an apology' beats 'red curtain, oak table' every night.<br><em>Laura:</em> Three chairs and a hurricane it is.<br><em>Marcus:</em> That's a season ticket, right there.<br>"
+    }
    },
    {
     "n": 18,
@@ -4310,7 +4618,11 @@ window.VESPER_DATA = {
       "term": "Splash page",
       "def": "A large, often full-page illustration which opens and introduces a story"
      }
-    ]
+    ],
+    "model": {
+     "title": "Reading the Gutter",
+     "transcript": "<strong>Model dialogue: Reading the Gutter</strong><br><br><em>Emily:</em> In this panel the hero falls; in the next he's crowned. Where did the battle go?<br><em>Jack:</em> Between the panels — the gutter. The reader fights it for us.<br><em>Emily:</em> So comics outsource their most important moment to imagination?<br><em>Jack:</em> Every medium does; comics are just honest about the seams.<br><em>Emily:</em> And the page turn?<br><em>Jack:</em> The page turn is a drumroll. Cliffhanger on the right page, revelation after the flip.<br><em>Emily:</em> Rhythm through architecture.<br><em>Jack:</em> Which is why comics scripts read like blueprints — panel size is volume, white space is silence.<br><em>Emily:</em> The empty gutter was the loudest panel all along.<br><em>Jack:</em> Welcome to the ninth art.<br>"
+    }
    },
    {
     "n": 19,
@@ -4365,7 +4677,11 @@ window.VESPER_DATA = {
       "term": "Saturation",
       "def": "The state or process that occurs when no more of something can be absorbed, combined with, or added"
      }
-    ]
+    ],
+    "model": {
+     "title": "The Story That Reads You",
+     "transcript": "<strong>Model dialogue: The Story That Reads You</strong><br><br><em>Sofia:</em> In my interactive fiction, players can betray the mentor. Eighty percent do. What does that say?<br><em>Nick:</em> That you priced loyalty wrong — betrayal unlocks the cooler sword.<br><em>Sofia:</em> So choices are only meaningful when the temptation is honest.<br><em>Nick:</em> Right. A moral choice with a mechanical bribe is just shopping.<br><em>Sofia:</em> Then my endings should reward different values, not different amounts.<br><em>Nick:</em> Branch the meaning, not the loot. Let the loyal ending be quieter but truer.<br><em>Sofia:</em> Digital narrative: the author proposes, the player confesses.<br><em>Nick:</em> And analytics is the confessional booth.<br><em>Sofia:</em> Slightly terrifying.<br><em>Nick:</em> All good mirrors are.<br>"
+    }
    },
    {
     "n": 20,
@@ -4420,7 +4736,11 @@ window.VESPER_DATA = {
       "term": "Canon",
       "def": "The list of works considered to be permanently established as being of the highest quality"
      }
-    ]
+    ],
+    "model": {
+     "title": "Death of the Author, Again",
+     "transcript": "<strong>Model dialogue: Death of the Author, Again</strong><br><br><em>Grace:</em> The poet says her poem is about her garden. I read it as war grief. Who's right?<br><em>Daniel:</em> Once published, the text outvotes the author. Evidence lives in the lines, not the interview.<br><em>Grace:</em> So intention counts for nothing?<br><em>Daniel:</em> It counts as ONE reading — often the least interesting. The garden has trenches, barbed 'roses', 'armistice of frost'. The war was in her vocabulary.<br><em>Grace:</em> Perhaps smuggled in without her noticing.<br><em>Daniel:</em> Exactly why criticism exists: texts know things their writers don't.<br><em>Grace:</em> And my job is to catch the text confessing.<br><em>Daniel:</em> With quotations as your witnesses. Never convict without them.<br><em>Grace:</em> Verdict: a garden poem, guilty of war.<br><em>Daniel:</em> Case law for the seminar.<br>"
+    }
    }
   ]
  },
@@ -4432,121 +4752,201 @@ window.VESPER_DATA = {
     "n": 1,
     "title": "The Internet of Things",
     "icon": "fa-wifi",
-    "vocab": []
+    "vocab": [],
+    "model": {
+     "title": "My Fridge Emails My Doctor",
+     "transcript": "<strong>Model dialogue: My Fridge Emails My Doctor</strong><br><br><em>Elena:</em> My new fridge tracks expiry dates, orders milk, and apparently 'shares wellness insights'.<br><em>Marcus:</em> Translation: it sells your eating habits to whoever pays.<br><em>Elena:</em> The convenience is real, though. It cut our food waste by half.<br><em>Marcus:</em> Sure — the Internet of Things trades intimacy for efficiency. The question is who audits the trade.<br><em>Elena:</em> I'd accept a data dashboard: see everything it sends, veto anything.<br><em>Marcus:</em> Transparency by design, not by scandal. Radical concept.<br><em>Elena:</em> Meanwhile my toaster just asked for a firmware update.<br><em>Marcus:</em> Refuse, and it probably burns your toast out of spite.<br>"
+    }
    },
    {
     "n": 2,
     "title": "Artificial Intelligence",
     "icon": "fa-brain",
-    "vocab": []
+    "vocab": [],
+    "model": {
+     "title": "The Intern That Never Sleeps",
+     "transcript": "<strong>Model dialogue: The Intern That Never Sleeps</strong><br><br><em>Sofia:</em> Our firm deployed an AI assistant. It drafts contracts in seconds. The juniors are terrified.<br><em>David:</em> Terrified of replacement, or of comparison?<br><em>Sofia:</em> Both. But here's the twist — the partners now spend MORE time reviewing, because the drafts are plausibly wrong.<br><em>David:</em> Plausible wrongness is the signature AI failure. Confidence without accountability.<br><em>Sofia:</em> So the junior's new job is professional scepticism.<br><em>David:</em> Which, ironically, is the senior skill we always struggled to teach.<br><em>Sofia:</em> AI didn't eliminate the ladder; it removed the bottom rung.<br><em>David:</em> Then the firms that survive will build new rungs — verification as a craft.<br><em>Sofia:</em> The machines draft, the humans doubt.<br><em>David:</em> Put that on the letterhead.<br>"
+    }
    },
    {
     "n": 3,
     "title": "Robotics",
     "icon": "fa-robot",
-    "vocab": []
+    "vocab": [],
+    "model": {
+     "title": "The Warehouse Ballet",
+     "transcript": "<strong>Model dialogue: The Warehouse Ballet</strong><br><br><em>Nina:</em> I toured the fulfilment centre. A thousand robots, waltzing pallets, zero collisions. Eerie beauty.<br><em>Jack:</em> And the humans?<br><em>Nina:</em> Stationed at the edges, doing what robots still fumble — the odd-shaped, the fragile, the unexpected.<br><em>Jack:</em> The 'last centimetre' problem. Grasping is genius we forgot we had.<br><em>Nina:</em> The plant manager said something striking: 'We don't buy robots to cut staff; we buy them because nobody applies.'<br><em>Jack:</em> Demographics as automation's quiet engine.<br><em>Nina:</em> The tension isn't man versus machine; it's wage versus maintenance contract.<br><em>Jack:</em> And safety? A swarm that size...<br><em>Nina:</em> The robots stop for humans. It's the schedules that don't.<br><em>Jack:</em> There's the headline: the algorithm is the new foreman.<br>"
+    }
    },
    {
     "n": 4,
     "title": "Space Exploration",
     "icon": "fa-rocket",
-    "vocab": []
+    "vocab": [],
+    "model": {
+     "title": "One-Way Ticket Volunteers",
+     "transcript": "<strong>Model dialogue: One-Way Ticket Volunteers</strong><br><br><em>Katie:</em> Two hundred thousand people volunteered for a one-way Mars mission. Explain that psychology.<br><em>Alex:</em> Meaning. A frontier promises significance that a cubicle can't.<br><em>Katie:</em> Dying of radiation forty million kilometres from a hospital is significant, certainly.<br><em>Alex:</em> You joke, but every age had its cathedral builders who never saw the spire finished.<br><em>Katie:</em> The engineering counter-argument: robots explore cheaper, safer, better.<br><em>Alex:</em> Robots collect data. Settlers collect stakes. Only one changes politics and law forever.<br><em>Katie:</em> Off-world property rights — now there's the real mission planning.<br><em>Alex:</em> The first Martian court case will matter more than the first footprint.<br><em>Katie:</em> Humanity exports its lawyers. The universe braces.<br>"
+    }
    },
    {
     "n": 5,
     "title": "Biotechnology",
     "icon": "fa-microchip",
-    "vocab": []
+    "vocab": [],
+    "model": {
+     "title": "Editing the Recipe of Life",
+     "transcript": "<strong>Model dialogue: Editing the Recipe of Life</strong><br><br><em>Laura:</em> Gene therapy just cured a child's blindness. The same tool could choose her children's eye colour. Where's your line?<br><em>Ben:</em> Treatment versus enhancement. Curing disease, yes; ordering traits, no.<br><em>Laura:</em> The line blurs fast. Is preventing a predisposition to depression treatment or design?<br><em>Ben:</em> Hard cases exist, but hard cases make bad ethics when they erase the easy ones.<br><em>Laura:</em> The access question worries me more — cures priced like yachts.<br><em>Ben:</em> Right. The dystopia isn't designer babies; it's a genetic class system by invoice.<br><em>Laura:</em> So regulate the market before the molecule.<br><em>Ben:</em> And publish every trial, especially the failures. Secrecy is how miracle turns to scandal.<br><em>Laura:</em> Biology moved faster than the law again.<br><em>Ben:</em> Biology always does. The law's job is to catch up honestly.<br>"
+    }
    },
    {
     "n": 6,
     "title": "Cybersecurity",
     "icon": "fa-shield-halved",
-    "vocab": []
+    "vocab": [],
+    "model": {
+     "title": "The Breach at 3 A.M.",
+     "transcript": "<strong>Model dialogue: The Breach at 3 A.M.</strong><br><br><em>Emily:</em> The alert fired at three a.m. — unusual exports from the client database. Walk me through your first hour.<br><em>Robert:</em> Isolate, don't obliterate. Kill the exfiltration path but preserve the evidence.<br><em>Emily:</em> Legal wants to know if we notify customers today.<br><em>Robert:</em> We confirm scope first — but the clock is legal, not optional. Seventy-two hours in most jurisdictions.<br><em>Emily:</em> The intruder used a contractor's password. No malware at all.<br><em>Robert:</em> As usual. We imagine hackers as burglars; mostly they're impostors with a key we mailed them.<br><em>Emily:</em> Multi-factor authentication would have stopped it cold.<br><em>Robert:</em> The cheapest defence we postponed for two years. Put THAT in the post-mortem.<br><em>Emily:</em> Blameless post-mortem?<br><em>Robert:</em> Blameless about people, merciless about decisions.<br>"
+    }
    },
    {
     "n": 7,
     "title": "Virtual Reality",
     "icon": "fa-vr-cardboard",
-    "vocab": []
+    "vocab": [],
+    "model": {
+     "title": "Headset Therapy",
+     "transcript": "<strong>Model dialogue: Headset Therapy</strong><br><br><em>Diana:</em> The clinic treats fear of flying with VR now. Full cabins, turbulence, the works. Success rates beat imagination-based therapy.<br><em>Peter:</em> Because presence isn't pretending. The amygdala believes the headset.<br><em>Diana:</em> A patient told me: 'I knew it wasn't real, but my hands sweated anyway.'<br><em>Peter:</em> That gap — knowing and feeling — is exactly where exposure therapy works.<br><em>Diana:</em> The ethical wrinkle: the same presence that heals phobias can train cruelty. Immersion is amoral.<br><em>Peter:</em> Every powerful medium is. Film propaganda predates film therapy.<br><em>Diana:</em> So the clinical question becomes dosage and consent, like any drug.<br><em>Peter:</em> A prescription headset. Insurance forms incoming.<br><em>Diana:</em> The future of medicine: side effects may include motion sickness.<br>"
+    }
    },
    {
     "n": 8,
     "title": "Renewable Energy",
     "icon": "fa-solar-panel",
-    "vocab": []
+    "vocab": [],
+    "model": {
+     "title": "The Night the Wind Stopped",
+     "transcript": "<strong>Model dialogue: The Night the Wind Stopped</strong><br><br><em>Sofia:</em> Last Tuesday, the wind died across the whole region for six hours. Walk me through the grid's evening.<br><em>Nick:</em> Batteries carried the first two hours. Then gas peakers, then imports through the interconnector.<br><em>Sofia:</em> So renewables failed?<br><em>Nick:</em> No — the PLAN worked. Variability isn't a flaw; it's a design parameter, like winter.<br><em>Sofia:</em> Critics say we need baseload, always-on plants.<br><em>Nick:</em> What we need is firm capacity: storage, interconnection, demand response. Baseload is one answer, not the definition.<br><em>Sofia:</em> The demand response part fascinates me — factories paid to pause.<br><em>Nick:</em> Cheaper than building a power station you use six hours a year.<br><em>Sofia:</em> The grid as an orchestra, not a fortress.<br><em>Nick:</em> And the conductor is a forecast.<br>"
+    }
    },
    {
     "n": 9,
     "title": "Smart Cities",
     "icon": "fa-palette",
-    "vocab": []
+    "vocab": [],
+    "model": {
+     "title": "The City That Watches Back",
+     "transcript": "<strong>Model dialogue: The City That Watches Back</strong><br><br><em>Emma:</em> Our 'smart city' pilot: adaptive traffic lights, air sensors, gunshot microphones. Council loves it. I have questions.<br><em>Leo:</em> Start with the classic: who owns the data?<br><em>Emma:</em> The vendor. The city licenses its own streets back.<br><em>Leo:</em> There's your scandal in embryo. Infrastructure with a subscription is not infrastructure.<br><em>Emma:</em> The traffic optimisation genuinely works, though — commutes down eighteen percent.<br><em>Leo:</em> Keep it! Just demand open data standards and local storage. Efficiency doesn't require surrender.<br><em>Emma:</em> And the microphones?<br><em>Leo:</em> Ask what problem they solve that streetlights and community trust don't. Not every sensor earns its pole.<br><em>Emma:</em> Smart city, sceptical citizens.<br><em>Leo:</em> The only kind that stays a democracy.<br>"
+    }
    },
    {
     "n": 10,
     "title": "Transportation",
     "icon": "fa-futbol",
-    "vocab": []
+    "vocab": [],
+    "model": {
+     "title": "Driver Not Included",
+     "transcript": "<strong>Model dialogue: Driver Not Included</strong><br><br><em>Carlos:</em> The robotaxi did fine until a traffic officer waved it through a red light. It froze. Hands beat sensors.<br><em>Katie:</em> Edge cases — the last ten percent that costs ninety percent of the effort.<br><em>Carlos:</em> Meanwhile the hype cycle sold 'next year' for a decade.<br><em>Katie:</em> And yet: highway autopilot, automatic braking, drowsiness alerts — the boring pieces already save lives.<br><em>Carlos:</em> So the revolution arrives as features, not as robots.<br><em>Katie:</em> Most do. The question I care about: when a machine and a human share the wheel, who's liable at the crash?<br><em>Carlos:</em> Currently? The lawyers are still drafting, the insurers are already pricing.<br><em>Katie:</em> Insurance as the real regulator of autonomy.<br><em>Carlos:</em> Follow the premiums and you'll see the future.<br>"
+    }
    },
    {
     "n": 11,
     "title": "Nanotechnology",
     "icon": "fa-microchip",
-    "vocab": []
+    "vocab": [],
+    "model": {
+     "title": "Small Machines, Big Claims",
+     "transcript": "<strong>Model dialogue: Small Machines, Big Claims</strong><br><br><em>Julia:</em> Nanotech headlines again: 'microscopic robots will scrub your arteries'. My inbox believes it's next Tuesday.<br><em>Nick:</em> The lab reality is humbler and more interesting — nanoparticles that deliver chemotherapy straight to the tumour.<br><em>Julia:</em> So the revolution is targeting, not tiny submarines.<br><em>Nick:</em> Exactly. At that scale you don't build machines; you design chemistry that behaves like intention.<br><em>Julia:</em> What separates breakthrough from press release, then?<br><em>Nick:</em> Three words: peer, review, replication. And watch for 'in mice' doing heavy lifting in the fine print.<br><em>Julia:</em> The most load-bearing phrase in science journalism.<br><em>Nick:</em> Meanwhile the quiet wins ship: stain-proof fabrics, better batteries, filtration membranes.<br><em>Julia:</em> Nanotech is already here; it's just wearing normal clothes.<br><em>Nick:</em> The best technology usually does.<br>"
+    }
    },
    {
     "n": 12,
     "title": "Big Data",
     "icon": "fa-database",
-    "vocab": []
+    "vocab": [],
+    "model": {
+     "title": "The Dataset Testifies",
+     "transcript": "<strong>Model dialogue: The Dataset Testifies</strong><br><br><em>Grace:</em> The model denied her loan in forty milliseconds. She asked why. The bank couldn't answer.<br><em>Daniel:</em> 'The computer says no' — now with statistics.<br><em>Grace:</em> The training data was twenty years of past approvals. Past prejudice, perfectly preserved.<br><em>Daniel:</em> Bias in, bias out, at scale and with a confidence score.<br><em>Grace:</em> The fix isn't deleting the algorithm; humans denied loans unfairly too — just slower.<br><em>Daniel:</em> The fix is contestability: explanations, appeals, audits. Due process for decisions by math.<br><em>Grace:</em> Regulators now demand 'explainable AI'. The vendors call it impossible.<br><em>Daniel:</em> Funny — they explained it fine to investors.<br><em>Grace:</em> Big data's maturity test: can the person in the data talk back?<br><em>Daniel:</em> When yes, it's a tool. When no, it's a verdict.<br>"
+    }
    },
    {
     "n": 13,
     "title": "Social Media Algorithms",
     "icon": "fa-tower-broadcast",
-    "vocab": []
+    "vocab": [],
+    "model": {
+     "title": "Engagement by Design",
+     "transcript": "<strong>Model dialogue: Engagement by Design</strong><br><br><em>Emily:</em> My nephew's screen time report: nine hours. He says the app 'won't let him leave'. He's not entirely wrong, is he?<br><em>Marcus:</em> No. Autoplay, streaks, variable rewards — the mechanics come from casinos, refined by A/B tests on billions.<br><em>Emily:</em> The engineers call it engagement.<br><em>Marcus:</em> The honest term is attention capture. The metric never asks if you're glad you stayed.<br><em>Emily:</em> Could the same machinery serve the user?<br><em>Marcus:</em> Easily — streaks for sleep, autoplay for audiobooks you chose. The tech is neutral; the objective function isn't.<br><em>Emily:</em> So regulation should target the incentive, not the feature.<br><em>Marcus:</em> Ban metrics that monetise regret. Watch the apps redesign themselves overnight.<br><em>Emily:</em> 'Time well spent' as a business model.<br><em>Marcus:</em> It exists. It's called a library card.<br>"
+    }
    },
    {
     "n": 14,
     "title": "Gaming Industry",
     "icon": "fa-headphones",
-    "vocab": []
+    "vocab": [],
+    "model": {
+     "title": "The Patch Day Economy",
+     "transcript": "<strong>Model dialogue: The Patch Day Economy</strong><br><br><em>Sofia:</em> The studio shipped the game broken, sold a season pass to fix it, and the players... thanked them?<br><em>Robert:</em> Live-service logic: the game is no longer a product, it's a subscription with a plot.<br><em>Sofia:</em> The craft argument first — games as art. Does perpetual patching kill the 'finished work'?<br><em>Robert:</em> Cathedrals were patched for centuries. The question is whether the vision survives the roadmap.<br><em>Sofia:</em> And the labour argument — crunch culture behind every content drop.<br><em>Robert:</em> The invisible cost. Players celebrate updates; nobody sees the weekends inside them.<br><em>Sofia:</em> Yet indie studios thrive on finished, single-vision games.<br><em>Robert:</em> Because scarcity of intent became a luxury good. 'Complete at launch' is now a marketing claim.<br><em>Sofia:</em> The industry sells worlds; the artists still smuggle in meaning.<br><em>Robert:</em> As they always have, one patch note at a time.<br>"
+    }
    },
    {
     "n": 15,
     "title": "Future of Work",
     "icon": "fa-forward",
-    "vocab": []
+    "vocab": [],
+    "model": {
+     "title": "The Office Is a Verb Now",
+     "transcript": "<strong>Model dialogue: The Office Is a Verb Now</strong><br><br><em>Nina:</em> Headline says remote work is dead; the data says hybrid won. Who do I believe?<br><em>Jack:</em> The commercial landlords wrote the headline. The badge-swipe data wrote the second.<br><em>Nina:</em> Our own team: productivity up, mentorship down. The juniors are drifting.<br><em>Jack:</em> The honest trade-off. Focus went home; osmosis stayed at the office.<br><em>Nina:</em> So the office's new job is deliberate collision — workshops, onboarding, arguments at whiteboards.<br><em>Jack:</em> Commute for what can't be scheduled. Stay home for what can.<br><em>Nina:</em> And the four-day week experiments?<br><em>Jack:</em> Same output, fewer meetings — which suggests the fifth day was mostly meetings.<br><em>Nina:</em> The future of work is subtraction.<br><em>Jack:</em> Always was. Tools change; the removals make history.<br>"
+    }
    },
    {
     "n": 16,
     "title": "Digital Nomads",
     "icon": "fa-earth-asia",
-    "vocab": []
+    "vocab": [],
+    "model": {
+     "title": "Time Zones and Tax Forms",
+     "transcript": "<strong>Model dialogue: Time Zones and Tax Forms</strong><br><br><em>Katie:</em> Bali one month, Lisbon the next — my cousin's 'office' is a backpack. I feel the envy and the doubt.<br><em>Alex:</em> The photos hide two spreadsheets: visas and taxes. Digital nomadism is paperwork with sunsets.<br><em>Katie:</em> Countries now compete for nomads — special visas, flat taxes.<br><em>Alex:</em> Because a laptop worker is a tourist who stays sixty times longer.<br><em>Katie:</em> The dark side: nomad salaries versus local rents. Lisbon's centre speaks more English than Portuguese now.<br><em>Alex:</em> Gentrification at fibre-optic speed. The guest economy needs guest ethics.<br><em>Katie:</em> Spend local, learn the language, pay the taxes where you actually live.<br><em>Alex:</em> And the loneliness question — every nomad forum's quiet thread.<br><em>Katie:</em> Freedom's fine print: community is a subscription you can't expense.<br><em>Alex:</em> Best sentence about the lifestyle I've heard yet.<br>"
+    }
    },
    {
     "n": 17,
     "title": "Blockchain & Crypto",
     "icon": "fa-bitcoin-sign",
-    "vocab": []
+    "vocab": [],
+    "model": {
+     "title": "After the Confetti",
+     "transcript": "<strong>Model dialogue: After the Confetti</strong><br><br><em>Laura:</em> My barber asked about crypto again. Last cycle he lost a month's income. What do I tell him this time?<br><em>Ben:</em> That the technology and the casino share a ticker symbol, and he's only ever been shown the casino.<br><em>Laura:</em> Is there a there, there? Honestly.<br><em>Ben:</em> Settlement without intermediaries is genuinely new. Cross-border remittances, programmable escrow — real uses, boring ones.<br><em>Laura:</em> Boring never trends.<br><em>Ben:</em> Exactly the problem. The speculation finances the infrastructure, then buries it in scandal headlines.<br><em>Laura:</em> And the environmental charge?<br><em>Ben:</em> Largely answered where proof-of-stake replaced mining — worth checking per chain, not per vibe.<br><em>Laura:</em> So my barber?<br><em>Ben:</em> If he can't explain it, he shouldn't own it. And never more than he'd lose with a shrug.<br><em>Laura:</em> Financial advice as haircut wisdom.<br><em>Ben:</em> The oldest blockchain is trust.<br>"
+    }
    },
    {
     "n": 18,
     "title": "E-Commerce",
     "icon": "fa-cart-shopping",
-    "vocab": []
+    "vocab": [],
+    "model": {
+     "title": "The Return Rate Problem",
+     "transcript": "<strong>Model dialogue: The Return Rate Problem</strong><br><br><em>Emma:</em> Our boutique went online. Sales tripled — and forty percent comes back in return boxes.<br><em>Leo:</em> The industry's open secret. Free returns turned bedrooms into fitting rooms.<br><em>Emma:</em> Each return is shipping, repackaging, sometimes landfill. The margin evaporates.<br><em>Leo:</em> And the platforms normalised it because growth mattered more than unit economics.<br><em>Emma:</em> My options? Charging for returns feels like punishing trust.<br><em>Leo:</em> Fix the cause: sizing tools, honest photos, reviews that mention fit. Returns are an information problem wearing a logistics costume.<br><em>Emma:</em> We added a 'fits small' tag — returns dropped nine percent in a month.<br><em>Leo:</em> Nine percent! Multiply that across the sector and it's a fleet of trucks not driving.<br><em>Emma:</em> E-commerce maturity: from moving boxes to moving information.<br><em>Leo:</em> The best parcel is the one that never ships twice.<br>"
+    }
    },
    {
     "n": 19,
     "title": "Tech Ethics",
     "icon": "fa-microchip",
-    "vocab": []
+    "vocab": [],
+    "model": {
+     "title": "The Ethics Review",
+     "transcript": "<strong>Model dialogue: The Ethics Review</strong><br><br><em>Sofia:</em> Our app can infer users' moods from typing speed. Product wants to ship it as a 'wellness feature'. I called this meeting.<br><em>David:</em> Good. First question: did users consent to mood inference, or to 'analytics'?<br><em>Sofia:</em> Page nineteen says analytics.<br><em>David:</em> Then legally grey and ethically red. Consent that requires archaeology isn't consent.<br><em>Sofia:</em> Product argues it could flag depression early. Genuine benefit.<br><em>David:</em> Possibly — in a clinical context, with opt-in, oversight, and a care pathway. As an engagement feature? It's surveillance in a lab coat.<br><em>Sofia:</em> So our test is: same capability, whose benefit, whose control?<br><em>David:</em> And the headline test: would we be proud if the feature described itself honestly on a billboard?<br><em>Sofia:</em> 'We read your sadness to time our notifications.'<br><em>David:</em> If the billboard makes you flinch, the feature ships broken.<br><em>Sofia:</em> Meeting adjourned. The mood detector can wait; the ethics one just shipped.<br>"
+    }
    },
    {
     "n": 20,
     "title": "Predictions 2050",
     "icon": "fa-headphones",
-    "vocab": []
+    "vocab": [],
+    "model": {
+     "title": "Postcards From 2050",
+     "transcript": "<strong>Model dialogue: Postcards From 2050</strong><br><br><em>Diana:</em> Close your eyes. It's 2050. What did we overestimate?<br><em>Peter:</em> Gadgets. The flying car obsession — mobility changed, but through booking screens, not jetpacks.<br><em>Diana:</em> And underestimate?<br><em>Peter:</em> Biology and boredom. Vaccines designed in days; also, humans still queueing for coffee.<br><em>Diana:</em> My bet: the biggest 2050 industry is repair — of grids, coasts, attention, trust.<br><em>Peter:</em> The maintenance century. Less 'move fast and break', more 'stay long and mend'.<br><em>Diana:</em> Will they envy us?<br><em>Peter:</em> Our cheap flights, maybe. Our inbox culture, never.<br><em>Diana:</em> Final prediction, one sentence.<br><em>Peter:</em> The future arrived unevenly, was argued about constantly, and somehow still needed good teachers.<br><em>Diana:</em> Some constants survive every forecast.<br><em>Peter:</em> Thankfully, so does coffee.<br>"
+    }
    }
   ]
  },
@@ -4558,121 +4958,201 @@ window.VESPER_DATA = {
     "n": 1,
     "title": "The Viral Phenomenon",
     "icon": "fa-fire",
-    "vocab": []
+    "vocab": [],
+    "model": {
+     "title": "Anatomy of a Viral Moment",
+     "transcript": "<strong>Model dialogue: Anatomy of a Viral Moment</strong><br><br><em>Elena:</em> A man ate a sandwich strangely on camera, and by Thursday he had a talent agent. Diagnose the mechanism.<br><em>Marcus:</em> Novelty, low stakes, infinite remixability. Virality favours content the audience can finish making.<br><em>Elena:</em> The participation is the product, then — the sandwich is merely the prompt.<br><em>Marcus:</em> Precisely. And note the half-life: fame by algorithm expires like dairy.<br><em>Elena:</em> Yet he's monetising the fifteen minutes with merchandise already.<br><em>Marcus:</em> The modern reflex: convert attention to revenue before the feed forgets you exist.<br><em>Elena:</em> There's something almost honest about how naked the machinery has become.<br><em>Marcus:</em> The machinery was always there. The internet just removed the curtain and sold tickets to the gears.<br>"
+    }
    },
    {
     "n": 2,
     "title": "Reality Television",
     "icon": "fa-headphones",
-    "vocab": []
+    "vocab": [],
+    "model": {
+     "title": "Authentically Scripted",
+     "transcript": "<strong>Model dialogue: Authentically Scripted</strong><br><br><em>Sofia:</em> The dating show swears it's unscripted, yet every episode lands a three-act structure. Coincidence?<br><em>Robert:</em> Producers don't write lines; they write situations. Cast for conflict, edit for arc — the 'reality' assembles itself.<br><em>Sofia:</em> Frankenbiting — stitching sentences from separate days into one confession.<br><em>Robert:</em> The dark art. The contestant said every word, just never that sentence.<br><em>Sofia:</em> Why do audiences stay when the artifice is common knowledge?<br><em>Robert:</em> Because the emotions leak through anyway. Fake premise, real tears — the genre's founding paradox.<br><em>Sofia:</em> So we watch actual humans inside invented circumstances.<br><em>Robert:</em> Which, one notes, is also the definition of an office job.<br><em>Sofia:</em> Reality TV as workplace documentary. That reframe will haunt me.<br><em>Robert:</em> The genre's true genius: it made surveillance feel like intimacy.<br>"
+    }
    },
    {
     "n": 3,
     "title": "Celebrity Worship",
     "icon": "fa-star",
-    "vocab": []
+    "vocab": [],
+    "model": {
+     "title": "The Parasocial Economy",
+     "transcript": "<strong>Model dialogue: The Parasocial Economy</strong><br><br><em>Nina:</em> A pop star cancelled a tour for her mental health, and fans reacted like a personal betrayal. Explore that entitlement.<br><em>Jack:</em> Parasocial relationships — intimacy rehearsed daily in one direction. The fan has spent years; the star has never met them.<br><em>Nina:</em> Social media industrialised it. The bedroom vlog feels like a friendship.<br><em>Jack:</em> Feels like, precisely. It's a broadcast wearing the costume of a confidence.<br><em>Nina:</em> And celebrity worship predates the app — we've merely upgraded the shrine.<br><em>Jack:</em> From marble busts to push notifications. The impulse is ancient; the delivery is frictionless.<br><em>Nina:</em> Is any of it healthy?<br><em>Jack:</em> In doses — role models scaffold identity. The pathology begins when the imaginary friendship starts issuing invoices.<br><em>Nina:</em> Emotional subscription fees.<br><em>Jack:</em> With no cancellation policy.<br>"
+    }
    },
    {
     "n": 4,
     "title": "Meme Culture",
     "icon": "fa-earth-americas",
-    "vocab": []
+    "vocab": [],
+    "model": {
+     "title": "The Meme as Folklore",
+     "transcript": "<strong>Model dialogue: The Meme as Folklore</strong><br><br><em>Katie:</em> My thesis: memes are folklore — anonymous, mutating, communal. My professor calls that generous.<br><em>Alex:</em> Your professor is fighting the last war. The frog, the distracted boyfriend — these are folk tales with version control.<br><em>Katie:</em> Each remix a retelling around a digital campfire.<br><em>Alex:</em> And like folklore, memes encode the mood of their moment better than any editorial.<br><em>Katie:</em> The compression is the genius — an entire critique of labour conditions in one image of a tired cat.<br><em>Alex:</em> Weaponised brevity. Which is also the danger: nuance doesn't survive the format.<br><em>Katie:</em> So memes are folklore AND propaganda's favourite delivery drone.<br><em>Alex:</em> Every folk medium was. Ballads started wars too; they just travelled slower.<br><em>Katie:</em> The campfire now has a global chimney.<br><em>Alex:</em> And everyone downwind breathes the smoke.<br>"
+    }
    },
    {
     "n": 5,
     "title": "Streaming Wars",
     "icon": "fa-play",
-    "vocab": []
+    "vocab": [],
+    "model": {
+     "title": "Too Much to Watch, Nothing On",
+     "transcript": "<strong>Model dialogue: Too Much to Watch, Nothing On</strong><br><br><em>Laura:</em> Five subscriptions, four hundred originals, and I rewatched a sitcom from 2005 again. Explain me to myself.<br><em>Ben:</em> Choice fatigue. The paradox where infinite options raise the cost of choosing beyond the value of the choice.<br><em>Laura:</em> The comfort rewatch as decision refusal.<br><em>Ben:</em> And the platforms know — why else licence old sitcoms for nine figures?<br><em>Laura:</em> The 'streaming wars' framing amuses me. The casualties are apparently the viewers.<br><em>Ben:</em> And the mid-budget film. War economies fund tentpoles and cancel the middle class of cinema.<br><em>Laura:</em> Meanwhile every service reinvents cable: bundles, ads, weekly episodes.<br><em>Ben:</em> The revolution completed its orbit. We disrupted television into... television.<br><em>Laura:</em> With worse discovery and better image quality.<br><em>Ben:</em> Progress, as usual, itemised.<br>"
+    }
    },
    {
     "n": 6,
     "title": "Cancel Culture",
     "icon": "fa-earth-americas",
-    "vocab": []
+    "vocab": [],
+    "model": {
+     "title": "The Apology Video Genre",
+     "transcript": "<strong>Model dialogue: The Apology Video Genre</strong><br><br><em>Emma:</em> Notice how every influencer apology uses the same grammar — the sigh, the 'accountability', the soft lighting?<br><em>Leo:</em> The genre calcified fast. Contrition as content format, complete with best practices.<br><em>Emma:</em> Which suggests the audience isn't seeking repair; it's grading a performance.<br><em>Leo:</em> Some cancellations are overdue consequence — powerful people finally billed. Others are coordinate harassment wearing justice's coat.<br><em>Emma:</em> The two get deliberately confused by whoever benefits.<br><em>Leo:</em> Right. 'Cancel culture' as a phrase now obscures more than it names.<br><em>Emma:</em> The better questions: was there harm, is there proportion, is there a road back?<br><em>Leo:</em> Consequence culture with due process. Less viral, more adult.<br><em>Emma:</em> Redemption doesn't trend.<br><em>Leo:</em> Neither does nuance, yet here we are attempting both.<br>"
+    }
    },
    {
     "n": 7,
     "title": "Nostalgia as a Product",
     "icon": "fa-clock-rotate-left",
-    "vocab": []
+    "vocab": [],
+    "model": {
+     "title": "Nostalgia, Now in Stores",
+     "transcript": "<strong>Model dialogue: Nostalgia, Now in Stores</strong><br><br><em>Sofia:</em> They rebooted the cartoon, re-released the console, and sold out the tour of a band whose members dislike each other. Nostalgia is a growth sector.<br><em>Nick:</em> The safest investment in entertainment: pre-sold emotion. The marketing was done decades ago, in childhoods.<br><em>Sofia:</em> What does the demand say about the buyers, though?<br><em>Nick:</em> That the present feels precarious. Nostalgia is homesickness for a time when someone else paid the bills.<br><em>Sofia:</em> Harsh. The comfort is real, surely.<br><em>Nick:</em> Real and engineered. Note the product: not the past itself, but the past with better resolution and none of the boredom.<br><em>Sofia:</em> A curated memory, sold to the person who lived the original.<br><em>Nick:</em> The final trick: making you rent back your own childhood.<br><em>Sofia:</em> At subscription prices.<br><em>Nick:</em> Memory as a service. The century's quiet business model.<br>"
+    }
    },
    {
     "n": 8,
     "title": "True Crime Obsession",
     "icon": "fa-handcuffs",
-    "vocab": []
+    "vocab": [],
+    "model": {
+     "title": "Murder as Bedtime Listening",
+     "transcript": "<strong>Model dialogue: Murder as Bedtime Listening</strong><br><br><em>Diana:</em> Half my podcast queue is dissections of real tragedies, narrated soothingly. At what point did I become the audience for that?<br><em>Peter:</em> You joined a lineage — public executions, penny dreadfuls, courtroom radio. True crime is the oldest genre wearing headphones.<br><em>Diana:</em> The psychology, then: why women, overwhelmingly?<br><em>Peter:</em> The leading theory: rehearsal. The genre is threat-modelling disguised as entertainment.<br><em>Diana:</em> Preparedness as pleasure. And yet the victims' families hear their worst day re-edited for a season arc.<br><em>Peter:</em> The ethical fault line. Some shows solve cold cases; others strip-mine grief for ad reads.<br><em>Diana:</em> The test being consent and consequence — did the family participate, did the story change anything?<br><em>Peter:</em> Journalism with a soundtrack versus voyeurism with citations.<br><em>Diana:</em> My queue contains both, if I'm honest.<br><em>Peter:</em> The honest audit is where the ethics start.<br>"
+    }
    },
    {
     "n": 9,
     "title": "Beauty Standards & Filters",
     "icon": "fa-wand-magic-sparkles",
-    "vocab": []
+    "vocab": [],
+    "model": {
+     "title": "The Face That Launched a Filter",
+     "transcript": "<strong>Model dialogue: The Face That Launched a Filter</strong><br><br><em>Emily:</em> Dermatologists report patients requesting their own filtered selfie. Not a celebrity — their digital self.<br><em>Marcus:</em> 'Snapchat dysmorphia'. The reference image is now a rendering.<br><em>Emily:</em> Beauty standards were always constructed — corsets, powdered wigs. What's structurally new?<br><em>Marcus:</em> The feedback loop's speed and intimacy. The mirror now edits itself and grades you hourly.<br><em>Emily:</em> And the standard is personalised. You compete with an optimised you.<br><em>Marcus:</em> An opponent with your face and none of your circumstances. Unbeatable by design.<br><em>Emily:</em> The platforms could label filtered images tomorrow.<br><em>Marcus:</em> Some jurisdictions force it in ads already. The resistance tells you the stakes — unreality is the engagement engine.<br><em>Emily:</em> Meanwhile the counter-trend: creators posting the unedited pore.<br><em>Marcus:</em> Authenticity as the newest filter. The dialectic never sleeps.<br><em>Emily:</em> Beauty remains a moving target — now with patch notes.<br><em>Marcus:</em> And a terms-of-service agreement.<br>"
+    }
    },
    {
     "n": 10,
     "title": "The Influencer Economy",
     "icon": "fa-chart-line",
-    "vocab": []
+    "vocab": [],
+    "model": {
+     "title": "The One-Person Media Empire",
+     "transcript": "<strong>Model dialogue: The One-Person Media Empire</strong><br><br><em>Katie:</em> My niece's career plan is 'influencer'. Before I lecture her, tell me the honest economics.<br><em>Alex:</em> A power law. The top one percent earn fortunes; the median creator makes less than minimum wage per hour invested.<br><em>Katie:</em> A lottery dressed as a labour market.<br><em>Alex:</em> With the platform as the house. It sets the algorithm, takes the cut, owns the audience relationship.<br><em>Katie:</em> Hence the smart creators diversify — newsletters, products, direct patronage.<br><em>Alex:</em> Owning the mailing list is the new owning the means of production.<br><em>Katie:</em> There's also the psychic wage: monetising your personality means your bad week is a business problem.<br><em>Alex:</em> The self as inventory. Burnout is the industry's occupational disease.<br><em>Katie:</em> So my advice to the niece?<br><em>Alex:</em> Learn the craft, own the audience, and keep a skill the algorithm can't deprecate.<br><em>Katie:</em> Sensible. She'll ignore all of it.<br><em>Alex:</em> As did every generation entering show business.<br>"
+    }
    },
    {
     "n": 11,
     "title": "Satire and Cynicism",
     "icon": "fa-headphones",
-    "vocab": []
+    "vocab": [],
+    "model": {
+     "title": "The Irony Fatigue",
+     "transcript": "<strong>Model dialogue: The Irony Fatigue</strong><br><br><em>Laura:</em> Every show winks now. Every ad mocks advertising. When did sincerity become the transgressive move?<br><em>Ben:</em> Irony was armour against manipulation; then it became the manipulation. The wink sells sneakers too.<br><em>Laura:</em> Post-irony, meta-irony — the nesting dolls exhaust me.<br><em>Ben:</em> The exhaustion is the tell. Permanent detachment is just cynicism with better lighting.<br><em>Laura:</em> Yet pure earnestness reads as naive, or worse, as content strategy.<br><em>Ben:</em> Hence the 'new sincerity' — irony-aware but commitment-forward. Feel things, knowingly.<br><em>Laura:</em> Satire still has work to do, surely.<br><em>Ben:</em> Vital work — aimed at power. Satire aimed at everything becomes a solvent that dissolves the satirist.<br><em>Laura:</em> Believe in something, mock precisely.<br><em>Ben:</em> The only sustainable ratio.<br>"
+    }
    },
    {
     "n": 12,
     "title": "Fandom and Toxicity",
     "icon": "fa-headphones",
-    "vocab": []
+    "vocab": [],
+    "model": {
+     "title": "Loving It to Death",
+     "transcript": "<strong>Model dialogue: Loving It to Death</strong><br><br><em>Emma:</em> The fandom crowdfunded a charity water well AND harassed an actress off the internet. Same fandom, same month.<br><em>Leo:</em> Fandom is organised intensity. The organisation is neutral; the intensity isn't.<br><em>Emma:</em> The possessive turn fascinates me — 'they ruined MY character'.<br><em>Leo:</em> Investment curdling into ownership. The love was always a licence, never a deed.<br><em>Emma:</em> Platforms accelerate the mob dynamics — outrage travels faster than moderation.<br><em>Leo:</em> And monetises better. An angry fandom is an engaged fandom, by every metric that pays.<br><em>Emma:</em> The healthiest fandoms I know self-police — elders modelling proportion.<br><em>Leo:</em> Community norms beat terms of service every time.<br><em>Emma:</em> So the fix is culture, not code.<br><em>Leo:</em> As usual. The software just decides which culture scales.<br>"
+    }
    },
    {
     "n": 13,
     "title": "Pop Music Anatomy",
     "icon": "fa-music",
-    "vocab": []
+    "vocab": [],
+    "model": {
+     "title": "Three Minutes, Four Chords",
+     "transcript": "<strong>Model dialogue: Three Minutes, Four Chords</strong><br><br><em>Sofia:</em> The hit song was written by nine people, tested on focus groups, and still sounds effortless. Discuss the paradox.<br><em>Nick:</em> Craft hides itself. The four-chord loop and the millisecond-tuned chorus are engineering wearing spontaneity's clothes.<br><em>Sofia:</em> Does the assembly line cheapen it?<br><em>Nick:</em> Motown was an assembly line. The question is never the process; it's whether anyone bled into the product.<br><em>Sofia:</em> The streaming era's fingerprints: shorter intros, front-loaded hooks.<br><em>Nick:</em> Thirty seconds decides the royalty. The skip button is the new A&amp;R executive.<br><em>Sofia:</em> And yet weird, five-minute songs still break through occasionally.<br><em>Nick:</em> The algorithm optimises the average; the exceptional routes around it. Always has.<br><em>Sofia:</em> Pop as the mirror of its delivery mechanism.<br><em>Nick:</em> Every era's music is the shape of its container.<br>"
+    }
    },
    {
     "n": 14,
     "title": "Video Games as Art",
     "icon": "fa-palette",
-    "vocab": []
+    "vocab": [],
+    "model": {
+     "title": "The Museum Buys a Video Game",
+     "transcript": "<strong>Model dialogue: The Museum Buys a Video Game</strong><br><br><em>Diana:</em> The modern art museum acquired a video game for its permanent collection. My uncle is furious. Adjudicate.<br><em>Peter:</em> Ask your uncle what art does: arranged experience producing meaning. Games arrange experience with a verb no other medium has — agency.<br><em>Diana:</em> The choice as brushstroke.<br><em>Peter:</em> A film shows you a moral dilemma; a game makes you commit it, then sit with your save file.<br><em>Diana:</em> The counterargument: most games are power fantasies with shopping.<br><em>Peter:</em> Most paintings were commissioned flattery. We judge mediums by their peaks, not their landfill.<br><em>Diana:</em> And the interactive canon's peaks?<br><em>Peter:</em> Games about grief, war's civilians, moral injury — experiences criticism struggles to even describe with film vocabulary.<br><em>Diana:</em> New medium, new grammar, familiar resistance.<br><em>Peter:</em> Photography heard the same sneers. The museum is just early to the obituary of the objection.<br><em>Diana:</em> My uncle will need decades.<br><em>Peter:</em> The canon can wait. It always does.<br>"
+    }
    },
    {
     "n": 15,
     "title": "The True Cost of Fast Fashion",
     "icon": "fa-shirt",
-    "vocab": []
+    "vocab": [],
+    "model": {
+     "title": "The Twelve-Cent Shirt",
+     "transcript": "<strong>Model dialogue: The Twelve-Cent Shirt</strong><br><br><em>Emily:</em> The haul video: forty garments, ninety euros, gleeful unboxing. The comments ask for links, not questions.<br><em>Robert:</em> The genius of ultra-fast fashion: the price hides in other people's air, water and wages.<br><em>Emily:</em> When the invoice arrives, it's addressed elsewhere — a river in one country, a seamstress in another.<br><em>Robert:</em> Externalities, the economist's polite word for 'someone else pays'.<br><em>Emily:</em> The industry counters with recycled lines and take-back bins.<br><em>Robert:</em> Examine the arithmetic: a green capsule collection atop ten thousand new designs a week is a press release, not a pivot.<br><em>Emily:</em> The consumer's actual power?<br><em>Robert:</em> Buy half, wear double, repair once — boring heroics without unboxing potential.<br><em>Emily:</em> And regulation for the rest.<br><em>Robert:</em> Because the twelve-cent shirt was never twelve cents. Someone, somewhere, holds the receipt.<br><em>Emily:</em> The wardrobe as a ledger.<br><em>Robert:</em> Audited by rivers.<br>"
+    }
    },
    {
     "n": 16,
     "title": "The Death of Print",
     "icon": "fa-print",
-    "vocab": []
+    "vocab": [],
+    "model": {
+     "title": "Obituary for the Front Page",
+     "transcript": "<strong>Model dialogue: Obituary for the Front Page</strong><br><br><em>Sofia:</em> The city's last daily printed its final edition, and I felt grief for an object I hadn't bought in years.<br><em>David:</em> The guilt of the eulogist. We mourn the institution while starving it — the reader's paradox.<br><em>Sofia:</em> What actually died with the print run?<br><em>David:</em> The bundle. Sport subsidised the war desk; classifieds funded the courthouse reporter. Unbundled, the boring essentials lost their patron.<br><em>Sofia:</em> Nobody clicks the zoning board story.<br><em>David:</em> Yet the zoning board is where the money moves. Democracy's plumbing lost its inspector.<br><em>Sofia:</em> The optimists point to newsletters, non-profits, reader-funded outlets.<br><em>David:</em> Genuine green shoots — funding accountability as a public good, like lighthouses.<br><em>Sofia:</em> From product to civic infrastructure.<br><em>David:</em> Where it always belonged. The paper was just the packaging.<br><em>Sofia:</em> The front page is dead; long live the front page.<br><em>David:</em> In whatever container tells the zoning board it's being watched.<br>"
+    }
    },
    {
     "n": 17,
     "title": "Superheroes and Modern Mythology",
     "icon": "fa-mask",
-    "vocab": []
+    "vocab": [],
+    "model": {
+     "title": "Gods in Spandex",
+     "transcript": "<strong>Model dialogue: Gods in Spandex</strong><br><br><em>Nina:</em> Twenty superhero films in, my claim: this is a mythology, functionally identical to the Greek pantheon. Challenge me.<br><em>Jack:</em> I'll refine rather than refute. Myths were public domain — every poet could reinvent Heracles. Our pantheon has a legal department.<br><em>Nina:</em> Copyrighted gods. The canon managed by shareholders.<br><em>Jack:</em> Which shapes the stories: eternal second acts, deaths reversed by sequel, morality calibrated for four quadrants.<br><em>Nina:</em> Still, the function holds — communal stories negotiating power, duty, identity.<br><em>Jack:</em> Agreed. The post-credit scene is a campfire ritual with better special effects.<br><em>Nina:</em> And the current fatigue?<br><em>Jack:</em> Pantheons overextend; audiences migrate. Ask Zeus about relevance cycles.<br><em>Nina:</em> So the genre won't die; it'll molt.<br><em>Jack:</em> Into whatever mythology the next anxiety requires.<br><em>Nina:</em> Gods follow the fear.<br><em>Jack:</em> They always have. The spandex is negotiable.<br>"
+    }
    },
    {
     "n": 18,
     "title": "Subculture vs Mainstream",
     "icon": "fa-brain",
-    "vocab": []
+    "vocab": [],
+    "model": {
+     "title": "The Underground, Now Boarding",
+     "transcript": "<strong>Model dialogue: The Underground, Now Boarding</strong><br><br><em>Katie:</em> The skate brand hangs in boutiques now; the punk anthem sells insurance. Does the mainstream kill subcultures or graduate them?<br><em>Alex:</em> Neither — it strip-mines them. The aesthetic ships; the ethic stays behind.<br><em>Katie:</em> Style without stakes.<br><em>Alex:</em> The subculture's whole point was cost — commitment, exclusion, risk. Retail removes the cost and thus the meaning.<br><em>Katie:</em> Yet subcultures keep regenerating underground anyway.<br><em>Alex:</em> Because the need is structural: somewhere to be illegible to power and legible to your own.<br><em>Katie:</em> The internet complicates the hiding, though. Scenes get discovered in weeks.<br><em>Alex:</em> The discovery pipeline is now industrial. TikTok is an ethnographer with a sales quota.<br><em>Katie:</em> So the next authentic underground...<br><em>Alex:</em> Is wherever the recommendation engine can't follow. Offline, encrypted, or deliberately boring.<br><em>Katie:</em> Obscurity as the new authenticity.<br><em>Alex:</em> It was always the price of entry.<br>"
+    }
    },
    {
     "n": 19,
     "title": "The Aesthetics of Dystopia",
     "icon": "fa-city",
-    "vocab": []
+    "vocab": [],
+    "model": {
+     "title": "Prettier Apocalypses",
+     "transcript": "<strong>Model dialogue: Prettier Apocalypses</strong><br><br><em>Laura:</em> The new dystopian series is gorgeous — ruined cities graded like perfume ads. Should the end of the world be this photogenic?<br><em>Ben:</em> The aestheticisation is the message: catastrophe as mood board. We've made peace with the ruins by lighting them well.<br><em>Laura:</em> Dystopia used to be warning; now it reads as interior design.<br><em>Ben:</em> Compare the classics: their ugliness was the argument. Today's collapse is a backdrop for well-dressed protagonists.<br><em>Laura:</em> What does the audience take home?<br><em>Ben:</em> Resignation, beautifully rendered. The genre risks teaching us to anticipate rather than prevent.<br><em>Laura:</em> The counter-current — hopepunk, solarpunk — insists imagination is a civic duty.<br><em>Ben:</em> Because the futures we can picture are the ones we build toward. Design fiction as policy.<br><em>Laura:</em> So the radical act is imagining the working sewage system.<br><em>Ben:</em> Nothing is harder to film than things going right.<br><em>Laura:</em> Cinema's final frontier: competent institutions.<br><em>Ben:</em> Now THAT's speculative fiction.<br>"
+    }
    },
    {
     "n": 20,
     "title": "Pop Culture as History",
     "icon": "fa-book-open",
-    "vocab": []
+    "vocab": [],
+    "model": {
+     "title": "The Archive of Us",
+     "transcript": "<strong>Model dialogue: The Archive of Us</strong><br><br><em>Emma:</em> Final session. The claim on the table: pop culture is the primary source future historians will trust most. Defend or demolish.<br><em>Marcus:</em> Defend, with an asterisk. The sitcom reveals the era's assumptions better than its speeches — what needed no explanation IS the history.<br><em>Emma:</em> The laugh track as anthropological data.<br><em>Marcus:</em> Precisely. What a culture finds funny, romantic or terrifying is its confession.<br><em>Emma:</em> The asterisk?<br><em>Marcus:</em> Survivorship. The archive keeps what was popular and platform-compatible. The formats rot; the licences expire.<br><em>Emma:</em> Digital culture, paradoxically fragile — a marble bust outlasts a dead server.<br><em>Marcus:</em> Future scholars may know 1920 better than 2020. The cloud is a terrible museum.<br><em>Emma:</em> Our assignment to the present, then: curate deliberately, preserve boringly.<br><em>Marcus:</em> And create the culture worth excavating.<br><em>Emma:</em> On that syllabus, this course ends.<br><em>Marcus:</em> Class dismissed — the future is taking notes.<br>"
+    }
    }
   ]
  }

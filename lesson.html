@@ -889,7 +889,7 @@
         // down" de un ministro). Vease vesper_vocab_examples.js.
         let deckKey = "";
         let basicsLesson = null;
-        let customVariants = [], curKey = "";
+        let customVariants = [], curKey = "", practiceModel = null;
         if (isBasics) {
             const bl = parseInt(params.get("basics") || "1", 10);
             const bn = parseInt(params.get("lesson") || "1", 10);
@@ -936,6 +936,15 @@
             vocab = lesson ? (lesson.vocab || []) : [];
             deckKey = `cp${lvl}-${les}`;
             audioSrc = `assets/audio/core_practice_level_${lvl}_lesson_${les}.mp3`;
+            curKey = audioSrc.split("/").pop();
+            // every Practice lesson ships a second audio: the model roleplay dialogue
+            if (lesson && lesson.model) {
+                practiceModel = lesson.model;
+                customVariants = [
+                    { label: "Listening",      file: curKey },
+                    { label: "Model dialogue", file: `core_practice_level_${lvl}_lesson_${les}_model.mp3` }
+                ];
+            }
             crumbText = `Level ${lvl} · ${tag} · Lesson ${les}`;
             bannerTag = `Level ${lvl} · ${tag}`;
             aSub = `Level ${lvl} · Lesson ${les} — full listening track`;
@@ -1058,6 +1067,8 @@
                 // Business / Certification tracks: transcript keyed by mp3 filename
                 const CT = window.CUSTOM_TRANSCRIPTS || {};
                 if (CT[curKey]) chunks = chunks.concat(buildChunks(CT[curKey], null));
+            } else if (practiceModel && /_model\.mp3$/.test(curKey)) {
+                chunks = chunks.concat(buildChunks(practiceModel.transcript, null));
             } else {
                 const RD = window.VESPER_READING || {};
                 const entry = (!isDiag) ? ((RD[lvl] || RD[String(lvl)] || {})[les] || (RD[lvl] || {})[String(les)]) : null;
