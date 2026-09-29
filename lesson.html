@@ -871,7 +871,10 @@
     <script src="vesper_vocab_examples.js"></script>
     <script src="vesper_lesson_images.js"></script>
     <script src="vesper_covers.js"></script>
-    <script src="vesper_audio_practice.js"></script>
+    <!-- Tiempos de cada linea (Practice 1): cada ejercicio toca solo su clip.
+         ?v= lo mantiene _scripts/preflight.py (E), igual que en libro.html. -->
+    <script src="vesper_practice_clips.js?v=193ad196"></script>
+    <script src="vesper_audio_practice.js?v=c783a526"></script>
     <script>
         // ── PARAMS ────────────────────────────────────────────────────
         const params = new URLSearchParams(location.search);
@@ -1008,6 +1011,7 @@
             document.querySelectorAll(".panel").forEach(p => p.classList.toggle("active", p.id === "panel-" + name));
             document.body.classList.toggle("reading-mode", name === "reading");
             try{ if(window.speechSynthesis) speechSynthesis.cancel(); }catch(e){}
+            if (name !== "practice" && window.VesperAudioPractice && VesperAudioPractice.stopClip) VesperAudioPractice.stopClip();
             var rsb = document.getElementById("r-speak");
             if(rsb){ rsb.classList.remove("speaking"); rsb.innerHTML = '<i class="fas fa-volume-high"></i> Escuchar'; }
             if (name === "board") {
@@ -1100,10 +1104,20 @@
                 if (practiceTab) practiceTab.style.display = "none";
                 return;
             }
+            // Tracks with per-line timings (vesper_practice_clips.js) get
+            // clip-based exercises: each question plays only its own line(s).
+            // Always the Listening track, whichever A/B version is selected.
+            const clipKey = (!isBasics && !isCustom && !isDiag)
+                ? `core_practice_level_${lvl}_lesson_${les}.mp3` : "";
+            const clips = clipKey ? (window.PRACTICE_CLIPS || {})[clipKey] : null;
             const n = VesperAudioPractice.mount(host, {
                 transcript: currentTranscript(),
                 vocab: vocab || [],
-                seed: coverSeed || crumbText || title
+                seed: coverSeed || crumbText || title,
+                clips: clips || null,
+                clipSrc: clips ? `assets/audio/${clipKey}` : "",
+                // a clip and the full track never talk over each other
+                onClipStart: () => { try { audio.pause(); } catch (e) {} }
             });
             if (practiceTab) practiceTab.style.display = n > 0 ? "" : "none";
         }
@@ -1371,7 +1385,10 @@
 
         bigPlay.addEventListener("click", () => { if (audio.paused) audio.play().catch(()=>{}); else audio.pause(); });
         const audioCard = document.getElementById("audio-card");
-        audio.addEventListener("play",  () => { bpIc.className = "fas fa-pause"; audioCard.classList.add("playing"); });
+        audio.addEventListener("play",  () => {
+            bpIc.className = "fas fa-pause"; audioCard.classList.add("playing");
+            if (window.VesperAudioPractice && VesperAudioPractice.stopClip) VesperAudioPractice.stopClip();
+        });
         audio.addEventListener("pause", () => { bpIc.className = "fas fa-play"; audioCard.classList.remove("playing"); });
         audio.addEventListener("ended", () => { bpIc.className = "fas fa-play"; audioCard.classList.remove("playing"); });
         audio.addEventListener("loadedmetadata", () => {
