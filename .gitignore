@@ -242,6 +242,8 @@
 # Edición móvil de la portada: la hoja va en assets/ (ya whitelisted),
 # este script vive en la raíz y hay que dejarlo pasar a mano.
 !/vesper_mobile.js
+# Botón flotante de WhatsApp (55 3569 9899) en las páginas públicas. Sin claves.
+!/vesper_contact.js
 
 # Expansion 3: 39 more lessons + vocabulary across all levels (A1-C2),
 # all skills (grammar, vocab, reading, listening, practical use). Vocabulary

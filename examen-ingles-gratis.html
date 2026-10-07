@@ -201,6 +201,7 @@ footer .flinks{display:flex;flex-wrap:wrap;gap:8px 18px;}
       <a href="book_placement.html?src=seo-examen">Examen de nivel</a>
       <a href="leccion.html?src=seo-examen">Lecciones gratis</a>
       <a href="ingles-para-call-center.html">Inglés para call center</a>
+      <a href="https://wa.me/525535699899" target="_blank" rel="noopener">WhatsApp 55 3569 9899</a>
       <a href="mailto:contacto@vesperacademy.com">Contacto</a>
     </nav>
   </div>
@@ -210,7 +211,7 @@ footer .flinks{display:flex;flex-wrap:wrap;gap:8px 18px;}
 {
   "@context":"https://schema.org",
   "@graph":[
-    {"@type":"EducationalOrganization","@id":"https://vesperacademy.com/#org","name":"Vesper Academy","url":"https://vesperacademy.com/","logo":"https://vesperacademy.com/assets/images/vesper_logo.png","sameAs":["https://www.instagram.com/vesper.academy/"],"areaServed":"MX","email":"contacto@vesperacademy.com"},
+    {"@type":"EducationalOrganization","@id":"https://vesperacademy.com/#org","name":"Vesper Academy","url":"https://vesperacademy.com/","logo":"https://vesperacademy.com/assets/images/vesper_logo.png","sameAs":["https://www.instagram.com/vesper.academy/"],"areaServed":"MX","email":"contacto@vesperacademy.com","telephone":"+52 55 3569 9899"},
     {"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Inicio","item":"https://vesperacademy.com/"},{"@type":"ListItem","position":2,"name":"Examen de inglés gratis","item":"https://vesperacademy.com/examen-ingles-gratis.html"}]},
     {"@type":"FAQPage","mainEntity":[
       {"@type":"Question","name":"¿De verdad es gratis y sin registro?","acceptedAnswer":{"@type":"Answer","text":"Sí. Son 30 preguntas, ~15 minutos, sin crear cuenta y con resultado al instante. Si quieres dejas tu correo o WhatsApp para recibir una copia, pero no es obligatorio para ver tu resultado."}},
@@ -231,5 +232,6 @@ footer .flinks{display:flex;flex-wrap:wrap;gap:8px 18px;}
     for(var i=0;i<btns.length;i++){ btns[i].addEventListener('click',function(){ if(window.VA) VA.track("seo_cta_click",{page:"examen",spot:this.getAttribute('data-cta')}); }); }
   })();
 </script>
+<script src="vesper_contact.js" defer></script>
 </body>
 </html>
