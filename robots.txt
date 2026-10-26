@@ -1,6 +1,4 @@
 User-agent: *
 Allow: /
-Disallow: /access_admin.html
-Disallow: /login.html
 
 Sitemap: https://vesperacademy.com/sitemap.xml
