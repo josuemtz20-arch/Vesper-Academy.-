@@ -92,16 +92,25 @@ window.VESPER_LEAGUE_CLOUD = (function () {
     }, 1200);
   }
 
-  /* GET de la tabla: ordena en cliente (evita índices) y marca tu fila por uid.
-     Resuelve null si no hay sesión, falta la regla (403) o hay error. */
+  /* Tabla de la semana: ordena en cliente (evita índices) y marca tu fila por uid.
+     Resuelve null si no hay sesión, falta la regla (403) o hay error.
+     Se lee con runQuery sobre leagues/{week} y NO con GET de la colección
+     (listDocuments): con las reglas publicadas el 2026-10-28 ese GET responde
+     403 aunque la regla permita leer, mientras que runQuery con la misma
+     sesión responde 200 (comprobado en producción). */
   function fetchBoard(weekId) {
     if (!signedIn() || !weekId) return Promise.resolve(null);
     return currentUser.getIdToken().then(function (token) {
-      return fetch(membersPath(weekId) + "?pageSize=100", { headers: { "Authorization": "Bearer " + token } })
+      return fetch(base() + "/leagues/" + encodeURIComponent(weekId) + ":runQuery", {
+        method: "POST",
+        headers: { "Authorization": "Bearer " + token, "Content-Type": "application/json" },
+        body: JSON.stringify({ structuredQuery: { from: [{ collectionId: "members" }], limit: 100 } })
+      })
         .then(function (r) {
           if (r.status !== 200) return null;
           return r.json().then(function (j) {
-            var docs = (j && j.documents) || [];
+            var docs = (j || []).filter(function (x) { return x && x.document; })
+                                .map(function (x) { return x.document; });
             var rows = docs.map(readDoc).filter(function (x) { return x.uid; });
             rows.sort(function (a, b) { return b.xp - a.xp; });
             rows = rows.slice(0, 50);
