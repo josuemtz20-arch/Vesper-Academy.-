@@ -76,17 +76,38 @@ window.VESPER_LEAGUE_CLOUD = (function () {
       xp: parseInt((f.xp || {}).integerValue || "0", 10) };
   }
 
+  /* Los mismos topes que firestore.rules (leagues/{week}/members): si se
+     mandara más, la regla rechazaría la escritura entera y la tabla del
+     alumno se quedaría congelada. Lo que no cabe en una escritura sube en
+     la siguiente. */
+  var LEAGUE_FIRST_MAX = 3000, LEAGUE_STEP = 600, LEAGUE_WEEK_MAX = 20000;
+  function sentKey(weekId) { return "vesper_league_sent_" + weekId; }
+  function lastSent(weekId) {
+    try { var v = parseInt(localStorage.getItem(sentKey(weekId)) || "", 10); return isNaN(v) ? -1 : v; }
+    catch (e) { return -1; }
+  }
+  function clampForRules(weekId, xp) {
+    var last = lastSent(weekId);
+    var cap = last < 0 ? LEAGUE_FIRST_MAX : last + LEAGUE_STEP;
+    return Math.max(0, Math.min(Math.round(xp || 0), cap, LEAGUE_WEEK_MAX));
+  }
+
   /* PATCH con rebote (~1.2s) para no escribir en cada ejercicio */
   function pushScore(weekId, xp) {
     if (!signedIn() || !weekId) return;
     clearTimeout(pushTimer);
     var alias = aliasOf();
     pushTimer = setTimeout(function () {
+      var send = clampForRules(weekId, xp);
       currentUser.getIdToken().then(function (token) {
         fetch(memberDoc(weekId, currentUser.uid), {
           method: "PATCH",
           headers: { "Authorization": "Bearer " + token, "Content-Type": "application/json" },
-          body: JSON.stringify(toFs(alias, xp))
+          body: JSON.stringify(toFs(alias, send))
+        }).then(function (res) {
+          if (!res.ok) return;
+          try { localStorage.setItem(sentKey(weekId), String(send)); } catch (e) {}
+          if (send < Math.min(Math.round(xp || 0), LEAGUE_WEEK_MAX)) pushScore(weekId, xp);
         }).catch(function () { /* nunca bloquees el progreso local por un fallo de red */ });
       }).catch(function () {});
     }, 1200);

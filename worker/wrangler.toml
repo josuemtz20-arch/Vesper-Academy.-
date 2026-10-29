@@ -1,13 +1,14 @@
 # Configuración del Cloudflare Worker que hace de proxy del chat de Vesper.
 # Despliegue: ver worker/README.md
 #
-# ⚠️ El chat (chat.html → PROXY_URL) apunta HOY a
+# El chat (chat.html → PROXY_URL) apunta a
 #    https://patient-feather-4364.josuemtz20.workers.dev/
-# y este archivo despliega un Worker llamado "vesper-chat-proxy". Si el Worker
-# en producción es "patient-feather-4364", cambia `name` a ese valor ANTES de
-# `wrangler deploy` (o cambia PROXY_URL a la URL nueva). Si no, se crea un
-# Worker NUEVO protegido y el viejo sigue abierto con tu API key. Ver README.
-name = "vesper-chat-proxy"
+# `wrangler deploy` publica con el `name` de aquí, así que el nombre ES el del
+# Worker vivo: el despliegue reemplaza su código (misma URL, mismos secretos)
+# en vez de crear un Worker nuevo y dejar el viejo abierto con la API key.
+# Antes se llamaba "vesper-chat-proxy"; si alguna vez se desplegó con ese
+# nombre, ese Worker sobra: bórralo en el panel. Ver README.
+name = "patient-feather-4364"
 main = "vesper-chat-proxy.js"
 compatibility_date = "2024-11-01"
 

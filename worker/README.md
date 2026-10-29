@@ -72,23 +72,18 @@ no responde, en cambio, **no** deja pasar (sería saltarse el reto).
 - Una API key de Anthropic — https://console.anthropic.com/
 - Node.js instalado.
 
-## ⚠️ Antes de desplegar: ¿qué Worker está en producción?
+## Qué Worker está en producción
 
-`chat.html` apunta hoy a `https://patient-feather-4364.josuemtz20.workers.dev/`,
-pero `wrangler.toml` dice `name = "vesper-chat-proxy"`. `wrangler deploy` publica
-el Worker **con el nombre de `wrangler.toml`**, así que con el nombre actual se
-crearía un Worker NUEVO (protegido) y el viejo seguiría abierto, con tu API key.
-Elige UNA:
+`chat.html` apunta a `https://patient-feather-4364.josuemtz20.workers.dev/`, y
+desde el 2026-10-29 `wrangler.toml` dice `name = "patient-feather-4364"`
+(antes decía `vesper-chat-proxy`). `wrangler deploy` publica con el nombre de
+`wrangler.toml`, así que ahora **reemplaza el código del Worker vivo**: la URL
+no cambia, los secretos que ya tenga se conservan y no hay que tocar
+`chat.html`.
 
-- **A (recomendada si `patient-feather-4364` es este mismo proxy):** cambia
-  `name = "patient-feather-4364"` en `wrangler.toml` y despliega. La URL no
-  cambia y no hay que tocar `chat.html`.
-- **B:** despliega como `vesper-chat-proxy`, pon la URL nueva en `PROXY_URL` de
-  `chat.html` y luego **borra** el Worker viejo en el panel (o al menos su
-  secreto `ANTHROPIC_API_KEY`).
-
-En el panel de Cloudflare → Workers & Pages puedes ver qué código corre en
-`patient-feather-4364` antes de decidir.
+Antes del primer despliegue, mira en el panel de Cloudflare → Workers & Pages
+qué código corre hoy en `patient-feather-4364` y si existe además un Worker
+`vesper-chat-proxy` (sobra: bórralo, o al menos su secreto `ANTHROPIC_API_KEY`).
 
 ## Despliegue (una vez)
 

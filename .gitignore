@@ -20,6 +20,8 @@
 # public site + auth gate (must stay at root)
 # (vesper_web/landing/promo stay local: index.html is the one canonical landing)
 !/index.html
+# Aviso de privacidad (LFPDPPP): enlazado en el pie de las paginas publicas y junto a cada formulario.
+!/aviso-de-privacidad.html
 !/login.html
 !/access_admin.html
 !/vesper_auth.js
