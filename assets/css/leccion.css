@@ -1,0 +1,2450 @@
+/* leccion.css — estilos de leccion.html (la app de lecciones gratis).
+ * Salieron del <style> en linea el 2026-10-29 para que el navegador los
+ * guarde en cache entre visitas. Las rutas url() son relativas a este
+ * archivo (assets/css/), por eso empiezan con ../ */
+  :root{
+    --ink:#1B1B2F; --gold:#c5a059; --gold2:#a8843d; --success:#2D9E75; --error:#C0392B;
+    --cream:#f5f2eb; --paper:#ffffff; --muted:#6b6b76; --line:#ece7da;
+    --gold-tint:rgba(197,160,89,.14); --ok-tint:rgba(45,158,117,.12); --no-tint:rgba(192,57,43,.10);
+    --radius:16px; --shadow:0 6px 22px rgba(27,27,47,.08);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{background:var(--cream);color:var(--ink);font-family:Inter,system-ui,-apple-system,sans-serif;line-height:1.5;-webkit-text-size-adjust:100%}
+  .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+  .wrap{max-width:600px;margin:0 auto;padding:14px 16px 40px;min-height:100vh}
+  h1{font-family:"Inria Serif",Georgia,serif;font-size:1.7rem;line-height:1.2;margin:.2em 0}
+  h2{font-family:"Inria Serif",Georgia,serif;font-size:1.25rem;margin:.1em 0 .5em}
+  p{margin:.4em 0}
+  .muted{color:var(--muted);font-size:.92rem}
+  /* top bar */
+  .topbar{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+  .back{flex:0 0 auto;width:40px;height:40px;display:flex;align-items:center;justify-content:center;border-radius:50%;
+    text-decoration:none;color:var(--ink);background:var(--paper);border:1px solid var(--line);font-size:1.2rem}
+  .progress{flex:1;height:10px;background:#eee6d4;border-radius:999px;overflow:hidden}
+  .bar{height:100%;background:var(--gold);border-radius:999px;transition:width .35s ease}
+  /* cards */
+  .card{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;margin-bottom:14px}
+  .center{text-align:center}
+  .center-row{justify-content:center}
+  /* mascot */
+  .mascot{display:flex;align-items:flex-start;gap:12px;margin-bottom:12px}
+  .center .mascot{flex-direction:column;align-items:center}
+  .mascot-img{width:72px;height:72px;border-radius:50%;object-fit:cover;background:var(--gold-tint);border:2px solid var(--gold);flex:0 0 auto}
+  .bubble{background:var(--gold-tint);border-radius:14px;padding:9px 13px;font-size:.95rem;position:relative}
+  /* meta pills */
+  .lcard-top{display:flex;align-items:center;gap:8px;margin:6px 0}
+  .pill{background:var(--ink);color:var(--cream);font-weight:600;font-size:.78rem;padding:3px 10px;border-radius:999px}
+  .track{color:var(--gold);font-weight:600;font-size:.85rem;text-transform:uppercase;letter-spacing:.04em}
+  /* body + examples */
+  .body{font-size:1.02rem}
+  .examples{list-style:none;padding:0;margin:14px 0 4px;display:grid;gap:8px}
+  .examples li{background:var(--cream);border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+  .examples .en{display:block;font-weight:600}
+  .examples .es{display:block;color:var(--muted);font-size:.9rem}
+  /* ---- tipo de lección (Aprende / Práctica) ---- */
+  .tipo-chip{display:inline-block;padding:3px 10px;border-radius:999px;font:700 .68rem/1.3 Inter,system-ui,sans-serif;letter-spacing:.8px;text-transform:uppercase}
+  .t-aprende{background:var(--gold-tint,rgba(197,160,89,.16));color:var(--ink);border:1px solid var(--gold,#c5a059)}
+  .t-practica{background:var(--cream);color:var(--muted);border:1px solid var(--line)}
+  /* ---- lección "Aprende": secciones ricas de enseñanza ---- */
+  .apr-sec{margin:18px 0 0;text-align:left}
+  .apr-ey{display:flex;align-items:center;gap:8px;font:700 .7rem/1 Inter,system-ui,sans-serif;letter-spacing:1.2px;text-transform:uppercase;color:var(--ink);margin:0 0 8px}
+  .apr-ey::after{content:"";flex:1;height:1px;background:var(--line)}
+  .apr-rule{background:var(--gold-tint,rgba(197,160,89,.14));border-left:4px solid var(--gold);border-radius:0 12px 12px 0;padding:12px 14px;font-size:1rem}
+  .apr-vocab{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+  .apr-vocab li{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px;background:var(--cream);border:1px solid var(--line);border-radius:10px;padding:8px 12px}
+  .apr-vocab .en{font-weight:700}
+  .apr-vocab .ipa{color:var(--muted);font-size:.85rem}
+  .apr-vocab .es{color:var(--muted);font-size:.9rem;margin-left:auto}
+  .apr-err{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+  .apr-err li{border:1px solid var(--line);border-radius:12px;padding:10px 12px}
+  .apr-err .no{display:block;color:var(--error);text-decoration:line-through;font-weight:600}
+  .apr-err .si{display:block;color:var(--ink);font-weight:700}
+  .apr-err .si::before{content:"\2713 ";color:var(--success);font-weight:800}
+  .apr-err .pq{display:block;color:var(--muted);font-size:.88rem;margin-top:3px}
+  .apr-sum{background:var(--cream);border:1px dashed var(--gold);border-radius:12px;padding:12px 14px}
+  .apr-bridge{display:flex;align-items:center;gap:10px;background:var(--ink);color:var(--paper,#fff);border-radius:12px;padding:12px 14px;font-weight:600}
+  /* buttons */
+  .btn{display:block;width:100%;min-height:50px;border:none;border-radius:13px;font-family:inherit;font-size:1.02rem;font-weight:600;
+    cursor:pointer;margin-top:14px;background:var(--ink);color:var(--cream);padding:12px 16px}
+  .btn:disabled{opacity:.45;cursor:default}
+  .btn-gold{background:var(--gold);color:var(--ink)}
+  .btn-ghost{background:transparent;color:var(--ink);border:1.5px solid var(--line)}
+  .btn:active:not(:disabled){transform:translateY(1px)}
+  /* MCQ */
+  .exnum{font-size:.82rem;color:var(--muted);font-weight:600;margin:-4px 0 10px}
+  /* icono SVG en línea (auto-escala con el texto) */
+  .ei{display:inline-flex;align-items:center;vertical-align:-.14em}
+  .ei svg{width:1.05em;height:1.05em;display:block}
+  .flame .ei svg{width:1em;height:1em}
+  .ach-badge .ab-ic svg{width:1.7rem;height:1.7rem}
+  .srch-ic svg{width:1rem;height:1rem;display:block}
+  .shields{color:var(--gold)}
+  .shields .ei{margin:0 1px}
+  /* combo dentro de la lección */
+  .combo-chip{display:inline-flex;align-items:center;gap:7px;font-size:.8rem;font-weight:700;letter-spacing:.01em;
+    color:var(--ink);background:linear-gradient(180deg,#fbe7b6,#f4d488);border:1px solid var(--gold2);
+    padding:5px 13px;border-radius:999px;margin:0 0 10px;box-shadow:0 4px 14px rgba(168,132,61,.28);
+    animation:combo-pop .35s cubic-bezier(.2,.8,.3,1.2)}
+  .combo-chip b{font-size:1rem;font-variant-numeric:tabular-nums}
+  @keyframes combo-pop{0%{transform:scale(.6) translateY(4px);opacity:0}60%{transform:scale(1.12)}100%{transform:scale(1);opacity:1}}
+  .xp-bonus{display:inline-block;font-size:.9rem;font-weight:700;color:var(--gold2);margin:8px 0 2px;
+    background:var(--gold-tint);padding:5px 12px;border-radius:999px}
+  /* confetti (lección perfecta / combos) */
+  .confetti{position:fixed;inset:0;pointer-events:none;z-index:60;overflow:hidden}
+  .confetti i{position:absolute;top:-12px;width:9px;height:14px;border-radius:2px;opacity:.95;
+    animation:confetti-fall var(--cf-dur,1900ms) cubic-bezier(.2,.7,.3,1) forwards}
+  @keyframes confetti-fall{0%{transform:translateY(-10vh) rotate(0);opacity:1}
+    100%{transform:translateY(110vh) rotate(720deg);opacity:.85}}
+  @media(prefers-reduced-motion:reduce){.combo-chip{animation:none}.confetti{display:none}}
+  /* speaking */
+  .speak-target{text-align:center;margin:8px 0 14px;padding:20px 16px;border-radius:16px;
+    background:linear-gradient(165deg,var(--gold-tint),rgba(197,160,89,.04));border:1px solid var(--gold2)}
+  .speak-target .en{display:block;font-family:"Inria Serif",Georgia,serif;font-size:1.5rem;line-height:1.25;color:var(--ink)}
+  .speak-target .es{display:block;font-size:.92rem;color:var(--muted);margin-top:6px}
+  .speak-row{display:flex;gap:10px;justify-content:center;margin-bottom:12px}
+  .speak-row .btn{margin-top:0;width:auto;min-height:44px;padding:10px 16px;font-size:.92rem;border-radius:999px}
+  .mic-btn{width:100%;background:linear-gradient(180deg,var(--paper,#fff),var(--gold-tint,#f5ead0));border:1.5px solid var(--gold);color:var(--ink)}
+  .mic-btn.rec{background:linear-gradient(180deg,#ffe6e6,#ffcccc);border-color:#e88;animation:mic-pulse 1.1s ease infinite}
+  @keyframes mic-pulse{0%,100%{box-shadow:0 0 0 0 rgba(192,57,43,.38)}50%{box-shadow:0 0 0 12px rgba(192,57,43,0)}}
+  .heard{text-align:center;min-height:1.2em;margin:10px 0 2px;font-size:.95rem;color:var(--muted)}
+  @media(prefers-reduced-motion:reduce){.mic-btn.rec{animation:none}}
+  /* tarjetas de acción del hub (repaso espaciado y liga) */
+  .hub-card{display:flex;align-items:center;gap:14px;width:100%;text-align:left;cursor:pointer;
+    padding:15px 16px;border-radius:16px;margin-bottom:14px;transition:transform .15s ease,box-shadow .15s ease}
+  .hub-card:hover{transform:translateY(-2px)}
+  .hub-card .hc-ic{flex:0 0 auto;width:46px;height:46px;border-radius:14px;display:flex;align-items:center;
+    justify-content:center;font-size:1.5rem}
+  .hub-card .hc-ic svg{width:24px;height:24px}
+  .hub-card .hc-tx{flex:1;min-width:0;display:flex;flex-direction:column;gap:1px}
+  .hub-card .hc-tx b{font-size:1.02rem}
+  .hub-card .hc-tx span{font-size:.86rem}
+  .hub-card .hc-cta{flex:0 0 auto;font-weight:700;font-size:.9rem;opacity:.9}
+  /* repaso espaciado: cálido crema-oro */
+  .srs-banner{border:1px solid var(--gold2);background:linear-gradient(180deg,#fffdf6,#f8edcf);
+    box-shadow:0 6px 20px rgba(168,132,61,.16)}
+  .srs-banner .hc-ic{background:var(--gold-tint);color:var(--gold2)}
+  .srs-banner .hc-tx span{color:var(--muted)}
+  .srs-banner .hc-cta{color:var(--gold2)}
+  /* La Forja: práctica infinita. Sólo tokens, para sobrevivir a los 7 temas
+     (dos de ellos oscuros) que redefinen :root en vesper_theme.js. */
+  .forja-card{border:1px solid var(--w-accent,var(--gold2));
+    background:var(--card,#fff);box-shadow:0 6px 20px rgba(27,27,47,.10)}
+  .forja-card .hc-ic{background:var(--gold-tint);color:var(--gold2);font-size:20px;line-height:1}
+  .forja-card .hc-tx span{color:var(--muted)}
+  /* liga: premium crepúsculo (índigo + oro) */
+  .league-widget{border:1px solid #2c2c4a;color:var(--cream);
+    background:linear-gradient(160deg,#2a2c50,#1B1B2F 65%,#14122a);box-shadow:0 12px 30px rgba(20,18,42,.32)}
+  .league-widget .hc-ic{background:rgba(201,168,76,.18);box-shadow:inset 0 0 0 1px rgba(243,226,171,.35)}
+  .league-widget .hc-tx b{color:#fff}
+  .league-widget .hc-tx span{color:#c8c6e0}
+  .league-widget .hc-cta{color:var(--gold)}
+  /* tira de gemas/vidas durante el ejercicio */
+  .econ-strip{display:flex;justify-content:flex-end;gap:8px;align-items:center;margin:2px 0 10px}
+  .econ-gems,.econ-hearts{display:inline-flex;align-items:center;gap:5px;font-weight:700;font-size:.86rem;
+    padding:4px 11px;border-radius:999px;border:1px solid var(--line);background:var(--paper)}
+  .econ-gems{color:#0f7c8a}
+  .econ-strip .ei{display:inline-flex}
+  .econ-strip .ei svg{width:15px;height:15px;display:block}
+  .econ-hearts .ei+.ei{margin-left:1px}
+  .opts{display:grid;gap:10px;margin:6px 0}
+  .opt{text-align:left;background:var(--paper);border:1.5px solid var(--line);border-radius:13px;padding:13px 15px;font-family:inherit;
+    font-size:1rem;color:var(--ink);cursor:pointer;min-height:50px}
+  .opt.sel{border-color:var(--gold);background:var(--gold-tint)}
+  .opt.correct{border-color:var(--success);background:var(--ok-tint)}
+  .opt.wrong{border-color:var(--error);background:var(--no-tint)}
+  .opt.locked{cursor:default}
+  /* find the error (TOEFL written expression) */
+  .fe-sentence{font-size:1.12rem;line-height:2.2;margin:6px 0 14px;color:var(--ink)}
+  .fe-seg{display:inline;border:none;background:none;font-family:inherit;font-size:inherit;color:var(--ink);cursor:pointer;
+    text-decoration:underline;text-decoration-color:var(--gold2);text-underline-offset:4px;text-decoration-thickness:2px;
+    padding:1px 3px;border-radius:7px}
+  .fe-seg .fe-lab{font-size:.62em;font-weight:800;color:var(--gold2);margin-right:1px;vertical-align:super}
+  .fe-seg.sel{background:var(--gold-tint)}
+  .fe-seg.correct{background:var(--ok-tint);text-decoration-color:var(--success)}
+  .fe-seg.correct .fe-lab{color:var(--success)}
+  .fe-seg.wrong{background:var(--no-tint);text-decoration-color:var(--error)}
+  .fe-seg.wrong .fe-lab{color:var(--error)}
+  .fe-seg.locked{cursor:default}
+  /* word order */
+  .hint{background:var(--gold-tint);border-radius:12px;padding:8px 12px;font-size:.9rem;margin:2px 0 12px}
+  .answer{min-height:56px;border:1.5px dashed var(--gold);border-radius:13px;padding:9px;display:flex;flex-wrap:wrap;gap:8px;align-items:center;background:var(--cream)}
+  .answer .ph{color:var(--muted);font-size:.92rem;padding:4px 6px}
+  .bank{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;min-height:44px}
+  .chip{background:var(--paper);border:1.5px solid var(--line);border-radius:999px;padding:9px 15px;font-family:inherit;font-size:1rem;
+    color:var(--ink);cursor:pointer;min-height:42px}
+  .chip.placed{background:var(--gold-tint);border-color:var(--gold)}
+  .chip.correct{background:var(--ok-tint);border-color:var(--success)}
+  .chip.wrong{background:var(--no-tint);border-color:var(--error)}
+  /* feedback */
+  .fbbox{display:flex;gap:12px;align-items:flex-start;border-radius:13px;padding:12px;margin-top:14px}
+  .fbbox.ok{background:var(--ok-tint)}
+  .fbbox.no{background:var(--no-tint)}
+  .fb-cat{width:46px;height:46px;border-radius:50%;object-fit:cover;flex:0 0 auto;border:2px solid var(--paper)}
+  .explain{margin-top:6px;font-size:.92rem}
+  /* feedback / xp screen */
+  .xpbar{height:14px;background:#eee6d4;border-radius:999px;overflow:hidden;margin:14px 0}
+  .xpfill{height:100%;background:var(--success);border-radius:999px;transition:width .6s ease}
+  /* streak */
+  .flame{font-size:2.6rem;line-height:1}
+  .week{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin:16px 0}
+  .day{background:var(--cream);border:1px solid var(--line);border-radius:11px;padding:8px 0;text-align:center;font-size:.8rem;color:var(--muted)}
+  .day i{display:block;font-style:normal;font-size:1.05rem;margin-top:3px}
+  .day.on{background:var(--gold-tint);border-color:var(--gold);color:var(--ink);font-weight:600}
+  .day.today{outline:2px solid var(--gold)}
+  .shields{font-size:1.4rem;margin:4px 0}
+  .milestone{background:var(--gold-tint);border-radius:12px;padding:10px;font-weight:600;margin:10px 0}
+  .stat-row{display:flex;gap:10px;justify-content:center;margin:12px 0}
+  .stat{background:var(--cream);border:1px solid var(--line);border-radius:12px;padding:8px 14px;font-size:.95rem}
+  /* index */
+  .hero{display:flex;justify-content:center;margin-top:6px}
+  .grid{display:grid;gap:12px;margin-top:8px}
+  .lcard{text-align:left;display:block;width:100%}
+  .lcard h2{margin:.2em 0}
+  /* soft account nudge */
+  .nudge{position:relative;background:var(--cream);border:1px dashed var(--gold);border-radius:12px;padding:11px 34px 11px 12px;font-size:.88rem;margin:14px 0;text-align:left}
+  .nudge a{color:var(--ink);font-weight:600}
+  .nudge .x{position:absolute;top:6px;right:8px;background:none;border:none;font-size:1.1rem;cursor:pointer;color:var(--muted)}
+  /* CTA de conversión: del avance gratis -> examen de nivel / clase con profesor */
+  .pcta{display:flex;align-items:center;gap:13px;width:100%;text-align:left;cursor:pointer;font-family:inherit;
+    background:linear-gradient(135deg,var(--ink),#2c2c4a);color:var(--cream);border:none;border-radius:16px;
+    padding:14px 16px;margin:12px 0 4px;box-shadow:var(--shadow)}
+  .pcta:active{transform:translateY(1px)}
+  .pcta__ic{flex:0 0 auto;width:42px;height:42px;border-radius:50%;background:var(--gold);color:var(--ink);
+    display:flex;align-items:center;justify-content:center}
+  .pcta__ic svg{width:23px;height:23px}
+  .pcta__tx{flex:1;min-width:0}
+  .pcta__t{display:block;font-weight:700;font-size:1rem;line-height:1.22}
+  .pcta__s{display:block;font-size:.82rem;opacity:.85;margin-top:2px}
+  .pcta__go{flex:0 0 auto;color:var(--gold);font-size:1.25rem;font-weight:700}
+  .pcta--mini{padding:11px 13px}
+  .pcta--mini .pcta__ic{width:34px;height:34px}
+  .pcta--mini .pcta__ic svg{width:19px;height:19px}
+  .pcta--mini .pcta__t{font-size:.93rem}
+  .pcta--mini .pcta__s{font-size:.77rem}
+  .streak-acct{display:block;text-align:center;margin:10px 0 0;font-size:.82rem;color:var(--muted)}
+  .streak-acct a{color:var(--ink);font-weight:600}
+  /* ===== Hub progresivo (estilo Test-English) ===== */
+  .hub-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:4px 0 6px}
+  .hub-hello{font-family:"Inria Serif",Georgia,serif;font-size:1.5rem;line-height:1.1;margin:0}
+  .hub-stats{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 4px}
+  .hub-stat{background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:5px 12px;font-size:.85rem;font-weight:600}
+  /* continue card */
+  .cont-card{display:flex;align-items:center;gap:14px;text-align:left;width:100%;background:linear-gradient(135deg,var(--ink),#2c2c4a);color:var(--cream);border:none;border-radius:18px;padding:16px 18px;cursor:pointer;margin:10px 0 6px;box-shadow:var(--shadow)}
+  .cont-ico{flex:0 0 auto;width:48px;height:48px;border-radius:50%;background:var(--gold);color:var(--ink);display:flex;align-items:center;justify-content:center;font-size:1.4rem}
+  .cont-card .lbl{font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;opacity:.8}
+  .cont-card .ttl{font-weight:700;font-size:1.05rem;margin:2px 0}
+  .cont-card .meta{font-size:.8rem;opacity:.85}
+  /* level tabs */
+  .lvl-tabs{display:flex;gap:8px;overflow-x:auto;padding:8px 2px 4px;margin:6px -2px 2px;-webkit-overflow-scrolling:touch}
+  .lvl-tab{flex:0 0 auto;display:flex;align-items:center;gap:8px;border:1.5px solid var(--line);background:var(--paper);border-radius:13px;padding:8px 12px;cursor:pointer;font-family:inherit;color:var(--ink)}
+  .lvl-tab.on{border-color:var(--gold);background:var(--gold-tint)}
+  .lvl-tab .nm{font-weight:700;font-size:.95rem}
+  .lvl-tab .pc{font-size:.72rem;color:var(--muted)}
+  .ring{width:30px;height:30px;border-radius:50%;flex:0 0 auto;display:flex;align-items:center;justify-content:center;font-size:.62rem;font-weight:700;color:var(--ink)}
+  .ring i{width:22px;height:22px;border-radius:50%;background:var(--paper);display:flex;align-items:center;justify-content:center;font-style:normal}
+  /* level header */
+  .lvl-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:14px 0 2px}
+  .lvl-head h2{margin:0;font-size:1.2rem}
+  .lvl-head .lvl-badge{font-size:.72rem;font-weight:700;color:#fff;border-radius:999px;padding:3px 10px}
+  .lvl-prog{height:8px;background:var(--line);border-radius:999px;overflow:hidden;margin:6px 0 2px}
+  .lvl-prog i{display:block;height:100%;border-radius:999px;transition:width .5s ease}
+  /* skill section */
+  .skill-sec{margin:14px 0 2px}
+  .skill-h{display:flex;align-items:center;gap:8px;font-weight:700;font-size:.95rem;margin:8px 0 8px;color:var(--ink)}
+  .skill-h .ic{font-size:1.1rem}
+  .skill-h .ct{margin-left:auto;font-size:.78rem;color:var(--muted);font-weight:600}
+  /* lesson cards */
+  .lgrid{display:grid;gap:10px}
+  .lcard2{display:flex;align-items:center;gap:12px;text-align:left;width:100%;background:var(--paper);border:1.5px solid var(--line);border-radius:14px;padding:13px 14px;cursor:pointer;font-family:inherit;color:var(--ink)}
+  .lcard2:active:not(.locked){transform:translateY(1px)}
+  .lcard2.completed{border-color:var(--success)}
+  .lcard2.locked{opacity:.6;cursor:not-allowed;background:var(--cream)}
+  .lc-badge{flex:0 0 auto;width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.15rem;background:var(--gold-tint);color:var(--ink)}
+  .lcard2.completed .lc-badge{background:var(--ok-tint)}
+  .lcard2.locked .lc-badge{background:#e9e6dd}
+  .lc-body{flex:1;min-width:0}
+  .lc-ttl{font-weight:600;font-size:1rem;line-height:1.25}
+  .lc-sub{font-size:.8rem;color:var(--muted);margin-top:2px}
+  .lc-stars{color:var(--gold);font-size:.95rem;letter-spacing:1px}
+  .lc-stars .off{color:var(--line)}
+  .lc-go{flex:0 0 auto;color:var(--muted);font-size:1.1rem}
+  .hub-toast{position:fixed;left:50%;bottom:84px;transform:translateX(-50%) translateY(10px);background:var(--ink);color:var(--cream);padding:10px 16px;border-radius:999px;font-size:.85rem;font-weight:600;opacity:0;pointer-events:none;transition:opacity .2s ease,transform .2s ease;z-index:9997}
+  .hub-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  /* adaptive badge + warm-up */
+  .adapt-badge{display:inline-flex;align-items:center;gap:6px;background:var(--gold-tint);color:var(--ink);border:1px solid var(--gold);border-radius:999px;padding:5px 12px;font-size:.78rem;font-weight:600;margin:8px 0 2px}
+  .warm-dot{display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--line);margin:0 3px}
+  .warm-dot.on{background:var(--gold)}
+  /* true / false */
+  .statement{font-size:1.08rem;background:var(--cream);border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin:6px 0 4px}
+  .tf-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0 4px}
+  .tf-btn{min-height:54px;border:1.5px solid var(--line);border-radius:13px;background:var(--paper);color:var(--ink);font-family:inherit;font-size:1.05rem;font-weight:600;cursor:pointer}
+  .tf-btn.sel{border-color:var(--gold);background:var(--gold-tint)}
+  .tf-btn.correct{border-color:var(--success);background:var(--ok-tint)}
+  .tf-btn.wrong{border-color:var(--error);background:var(--no-tint)}
+  .tf-btn.locked{cursor:default}
+  /* fill blank + translate input */
+  .type-input{width:100%;min-height:50px;border:1.5px solid var(--line);border-radius:13px;padding:12px 14px;font-family:inherit;font-size:1.05rem;color:var(--ink);background:var(--paper);-webkit-appearance:none}
+  .type-input:focus{outline:none;border-color:var(--gold)}
+  .type-input:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+  .type-input.correct{border-color:var(--success);background:var(--ok-tint)}
+  .type-input.wrong{border-color:var(--error);background:var(--no-tint)}
+  .fb-sentence{font-size:1.12rem;margin:8px 0 10px;line-height:2}
+  .fb-sentence input{display:inline-block;width:auto;min-width:108px;min-height:0;padding:6px 10px;vertical-align:baseline}
+  /* matching */
+  .match-cols{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:10px 0 4px}
+  .match-item{display:block;width:100%;text-align:center;border:1.5px solid var(--line);border-radius:12px;padding:12px 8px;margin-bottom:8px;background:var(--paper);color:var(--ink);font-family:inherit;font-size:.98rem;cursor:pointer;min-height:48px}
+  .match-item.sel{border-color:var(--gold);background:var(--gold-tint)}
+  .match-item.done{border-color:var(--success);background:var(--ok-tint);cursor:default;opacity:.7}
+  .match-item.bad{border-color:var(--error);background:var(--no-tint);animation:vc-shake .4s ease}
+  /* listening */
+  .listen-controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:4px 0 8px}
+  .listen-play{display:inline-flex;align-items:center;gap:10px;background:var(--ink);color:var(--cream);border:none;border-radius:14px;padding:14px 20px;font-family:inherit;font-size:1.05rem;font-weight:600;cursor:pointer}
+  .listen-play .ic{font-size:1.25rem}
+  .listen-slow{display:inline-flex;align-items:center;gap:8px;background:var(--paper);color:var(--ink);border:1.5px solid var(--line);border-radius:14px;padding:13px 16px;font-family:inherit;font-size:.95rem;font-weight:600;cursor:pointer}
+  .listen-slow:active{transform:translateY(1px)}
+  .listen-note{color:var(--muted);font-size:.85rem;margin:0 0 12px}
+  /* reading passage */
+  .passage{background:var(--cream);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:6px 0 14px;max-height:340px;overflow:auto;-webkit-overflow-scrolling:touch}
+  .passage h3{font-family:"Inria Serif",Georgia,serif;font-size:1.15rem;margin:0 0 8px}
+  .passage p{font-size:1.04rem;line-height:1.7;margin:0 0 10px}
+  .passage p:last-child{margin-bottom:0}
+  .read-tag{display:inline-flex;align-items:center;gap:6px;background:var(--gold-tint);color:var(--ink);border:1px solid var(--gold);border-radius:999px;padding:4px 11px;font-size:.76rem;font-weight:600;margin:0 0 8px}
+  .rq{border-top:1px solid var(--line);padding-top:14px;margin-top:14px}
+  .rq:first-of-type{border-top:none;padding-top:0;margin-top:0}
+  .rq .rq-q{font-weight:600;font-size:1rem;margin:0 0 8px}
+  .rq-num{font-size:.78rem;color:var(--muted);font-weight:600;margin-bottom:4px}
+  /* categorize */
+  .cat-pool{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0 14px;min-height:40px}
+  .cat-tk{background:var(--paper);border:1.5px solid var(--line);border-radius:999px;padding:8px 14px;font-family:inherit;font-size:.96rem;color:var(--ink);cursor:pointer}
+  .cat-tk.sel{border-color:var(--gold);background:var(--gold-tint)}
+  .cat-tk.correct{border-color:var(--success);background:var(--ok-tint)}
+  .cat-tk.wrong{border-color:var(--error);background:var(--no-tint)}
+  .cat-buckets{display:grid;gap:10px}
+  .cat-bucket{border:1.5px dashed var(--line);border-radius:13px;padding:10px 12px;min-height:60px;background:var(--cream)}
+  .cat-bucket.active{border-color:var(--gold)}
+  .cat-bucket h4{margin:0 0 4px;font-size:.78rem;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+  .cat-bucket .cat-tk{margin:4px 4px 0 0;display:inline-block}
+  /* gamificación: meta diaria, logros, repaso */
+  .hub-stat.met{background:var(--ok-tint);border-color:var(--success);color:var(--ink)}
+  .lcard2.review{background:linear-gradient(135deg,var(--gold-tint),var(--paper));border-color:var(--gold);border-style:dashed}
+  .lcard2.review .lc-badge{background:var(--gold);color:var(--ink)}
+  .trophy-shelf{margin:8px 0 2px;border:1px solid var(--line);border-radius:14px;background:var(--paper);padding:4px 12px}
+  .trophy-shelf summary{cursor:pointer;font-weight:700;font-size:.9rem;list-style:none;display:flex;align-items:center;gap:8px;padding:8px 0}
+  .trophy-shelf summary::-webkit-details-marker{display:none}
+  .trophy-shelf .t-count{margin-left:auto;font-size:.78rem;color:var(--muted)}
+  .trophy-grid{display:flex;flex-wrap:wrap;gap:8px;padding:4px 0 10px}
+  .trophy{display:flex;align-items:center;gap:7px;border:1px solid var(--line);border-radius:999px;padding:5px 11px;font-size:.82rem;background:var(--cream);opacity:.55}
+  .trophy.on{opacity:1;border-color:var(--gold);background:var(--gold-tint)}
+  .trophy .t-ic{font-size:1rem}
+  .trophy .t-nm{font-weight:600}
+  .goal-card{background:var(--cream);border:1px solid var(--line);border-radius:13px;padding:12px;margin:12px 0;font-weight:600}
+  .goal-card.met{background:var(--ok-tint);border-color:var(--success)}
+  .goal-bar{height:9px;background:#eee6d4;border-radius:999px;overflow:hidden;margin:8px 0 4px}
+  .goal-bar i{display:block;height:100%;background:var(--gold);border-radius:999px;transition:width .5s ease}
+  .goal-card.met .goal-bar i{background:var(--success)}
+  .goal-done{display:block;color:var(--success);font-size:.86rem}
+  .ach-pop{display:grid;gap:8px;margin:12px 0}
+  .ach-badge{display:flex;align-items:center;gap:11px;text-align:left;background:var(--gold-tint);border:1px solid var(--gold);border-radius:13px;padding:10px 13px}
+  .ach-badge .ab-ic{font-size:1.7rem;line-height:1}
+  .ach-badge .ab-tx{display:flex;flex-direction:column}
+  .ach-badge .ab-tx b{font-size:.72rem;text-transform:uppercase;letter-spacing:.05em;color:var(--gold)}
+  .ach-badge .ab-tx span{font-weight:700}
+  /* celebración de cosmético desbloqueado (reusa .ach-pop/.ach-badge) */
+  .ach-badge .cos-dot{display:inline-block;width:24px;height:24px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 2px var(--gold)}
+  .ach-badge .cos-svg{display:inline-flex;width:30px;height:30px}
+  .ach-badge .cos-svg svg{width:30px;height:30px}
+  .ach-badge .cos-pel img{width:34px;height:34px;object-fit:contain;display:block}
+  .cos-cta{display:inline-block;margin-top:2px;font-weight:700;color:var(--gold-ink,var(--gold));text-decoration:none;font-size:.86rem}
+  /* buscador + filtros del hub */
+  .hub-search{margin:12px 0 2px}
+  .srch{position:relative}
+  .srch-ic{position:absolute;left:13px;top:50%;transform:translateY(-50%);font-size:1rem;pointer-events:none;opacity:.7}
+  .srch input{width:100%;min-height:46px;border:1.5px solid var(--line);border-radius:13px;padding:11px 14px 11px 40px;
+    font-family:inherit;font-size:1rem;color:var(--ink);background:var(--paper);-webkit-appearance:none}
+  .srch input:focus{outline:none;border-color:var(--gold)}
+  .filter-row{display:flex;gap:8px;overflow-x:auto;padding:2px;margin:8px -2px 0;-webkit-overflow-scrolling:touch}
+  .filter-row + .filter-row{margin-top:6px}
+  .fchip{flex:0 0 auto;border:1.5px solid var(--line);background:var(--paper);border-radius:999px;padding:8px 13px;
+    font-family:inherit;font-size:.85rem;font-weight:600;color:var(--ink);cursor:pointer;min-height:40px;white-space:nowrap}
+  .fchip.on{border-color:var(--gold);background:var(--gold-tint)}
+  .fchip:active{transform:translateY(1px)}
+  .search-results{margin-top:12px}
+  .search-results .lc-lvl{display:inline-block;font-size:.7rem;font-weight:700;color:var(--gold);
+    letter-spacing:.04em;text-transform:uppercase;margin-right:6px}
+  .search-empty{padding:14px 4px;color:var(--muted)}
+  @media(min-width:640px){
+    h1{font-size:2rem}
+    .mascot-img{width:84px;height:84px}
+    .wrap{padding-top:22px}
+  }
+  /* tablet / desktop: aprovecha el ancho con tarjetas de lección en 2 columnas.
+     El reproductor (cover, explicación y ejercicios) se mantiene en 1 columna. */
+  @media(min-width:760px){
+    .wrap{max-width:720px}
+    .lgrid{grid-template-columns:1fr 1fr;align-items:stretch}
+    .grid{grid-template-columns:1fr 1fr}
+    .lcard2{height:100%}
+  }
+  /* ===== Mapa de mundos (HUB estilo videojuego) ===== */
+  .hub-strip{display:flex;flex-wrap:wrap;gap:7px;margin:10px 0 2px}
+  .hub-icon{display:inline-flex;align-items:center;justify-content:center;width:42px;height:42px;flex:none;border-radius:50%;
+    background:var(--paper);border:1px solid var(--line);text-decoration:none;color:var(--ink);font-size:1.2rem;cursor:pointer;font-family:inherit}
+  .hub-icon:active{transform:translateY(1px)}
+  /* cinta de mundos (selector de niveles A1–C2) — cada mundo lleva su acento temático */
+  .worlds{display:flex;gap:11px;overflow-x:auto;padding:12px 4px 14px;margin:12px -4px 4px;
+    scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .worlds::-webkit-scrollbar{display:none}
+  .world{flex:0 0 auto;position:relative;display:flex;flex-direction:column;align-items:center;gap:7px;min-width:98px;
+    border:1.5px solid var(--line);background:var(--paper);border-radius:18px;padding:14px 12px 11px;cursor:pointer;
+    font-family:inherit;color:var(--ink);scroll-snap-align:start;box-shadow:0 2px 9px rgba(27,27,47,.05)}
+  .world::before{content:"";position:absolute;left:14px;right:14px;top:0;height:4px;border-radius:0 0 4px 4px;
+    background:var(--w-accent,var(--gold));opacity:0;transition:opacity .18s ease}
+  .world.on::before{opacity:1}
+  /* anillo de progreso con la sigla del nivel al centro */
+  .world .w-ring{position:relative;width:54px;height:54px;border-radius:50%;display:grid;place-items:center;flex:0 0 auto;
+    background:conic-gradient(var(--w-accent,var(--gold)) calc(var(--pct,0)*1%),var(--line) 0)}
+  .world .w-ring-hole{position:relative;width:44px;height:44px;border-radius:50%;background:var(--paper);
+    display:grid;place-items:center;box-shadow:inset 0 0 0 1px rgba(27,27,47,.05)}
+  .world .w-code{font-weight:800;font-size:1.02rem;letter-spacing:.01em;color:var(--ink)}
+  .world .w-nm{font-weight:700;font-size:.82rem;line-height:1.16;text-align:center;color:var(--ink);max-width:86px}
+  .world .w-pc{font-size:.72rem;color:var(--muted);font-weight:600}
+  .world.on{border-color:var(--w-accent,var(--gold));background:var(--w-accent-soft,var(--gold-tint))}
+  .world.on .w-pc{color:var(--ink)}
+  /* mundo dominado (100%) */
+  .world.complete .w-done{position:absolute;top:8px;right:9px;width:20px;height:20px;border-radius:50%;
+    background:var(--success);color:#fff;display:grid;place-items:center;box-shadow:0 1px 4px rgba(45,158,117,.4)}
+  .world.complete .w-done svg{width:13px;height:13px}
+  /* mundo bloqueado: legible (sin opacity baja que rompe contraste) */
+  .world.locked{cursor:not-allowed;background:var(--cream);border-style:dashed}
+  .world.locked .w-ring{background:var(--line)}
+  .world.locked .w-ring-hole{background:var(--cream)}
+  .world.locked .w-code,.world.locked .w-nm{color:var(--muted)}
+  .world .w-lk{position:absolute;top:7px;right:9px;width:21px;height:21px;border-radius:50%;background:var(--ink);
+    color:var(--cream);display:grid;place-items:center;opacity:.92}
+  .world .w-lk svg{width:12px;height:12px}
+  .world:focus-visible{outline:3px solid var(--w-accent,var(--gold));outline-offset:2px}
+  /* ruta serpenteante */
+  /* ===== Escena 2D del mundo: cielo estrellado navy + isla de terreno ===== */
+  .wsky{position:relative;margin:14px 0 16px;border-radius:20px;overflow:hidden;
+    background:radial-gradient(120% 90% at 50% -10%,#20203c 0%,var(--ink,#1B1B2F) 55%,#14122a 100%);
+    box-shadow:inset 0 0 0 1px rgba(197,160,89,.18),0 14px 34px rgba(20,18,42,.30)}
+  .wsky::before{content:"";position:absolute;inset:0;pointer-events:none;z-index:0;opacity:.55;
+    background-repeat:no-repeat;background-image:
+      radial-gradient(1.5px 1.5px at 12% 16%,rgba(243,226,171,.9),transparent 60%),
+      radial-gradient(1.2px 1.2px at 78% 8%,rgba(255,255,255,.7),transparent 60%),
+      radial-gradient(1.6px 1.6px at 33% 60%,rgba(243,226,171,.7),transparent 60%),
+      radial-gradient(1.2px 1.2px at 88% 46%,rgba(255,255,255,.6),transparent 60%),
+      radial-gradient(1.3px 1.3px at 58% 82%,rgba(243,226,171,.65),transparent 60%),
+      radial-gradient(1.1px 1.1px at 22% 90%,rgba(255,255,255,.5),transparent 60%),
+      radial-gradient(1.4px 1.4px at 68% 70%,rgba(243,226,171,.6),transparent 60%)}
+  .wisland{position:relative;z-index:1;margin:10px;border-radius:18px;padding:8px 0 16px;
+    border:1px solid var(--w-accent,#c5a059);
+    box-shadow:0 10px 26px rgba(20,18,42,.42),inset 0 1px 0 rgba(255,255,255,.05);
+    background:linear-gradient(180deg,rgba(27,27,47,.28),rgba(27,27,47,.64))}
+  .wisland::before{content:"";position:absolute;inset:0;z-index:-1;border-radius:18px;pointer-events:none;
+    background-image:var(--w-terrain);background-size:cover;background-position:center;opacity:.20;
+    filter:saturate(.85) brightness(.8);
+    -webkit-mask-image:linear-gradient(180deg,rgba(0,0,0,.95),rgba(0,0,0,.35) 70%,transparent);
+            mask-image:linear-gradient(180deg,rgba(0,0,0,.95),rgba(0,0,0,.35) 70%,transparent)}
+  .wisland::after{content:"";position:absolute;inset:0;z-index:-1;border-radius:18px;pointer-events:none;opacity:.5;
+    background:radial-gradient(80% 50% at 50% 0%,var(--w-glow,rgba(197,160,89,.25)) 0%,transparent 60%)}
+  .wmap{position:relative;display:flex;flex-direction:column;align-items:center;gap:30px;margin:0 auto;padding:12px 0 6px;width:100%;max-width:340px}
+  /* capa de terreno: paisaje del bioma detrás del camino. Las piezas se pintan
+     con clases .terr (compartidas con el motivo de bioma de la portada de lección). */
+  .wterrain{position:absolute;left:0;top:0;z-index:0;overflow:visible;pointer-events:none}
+  .terr .prop{opacity:.92}
+  .terr .sh{fill:rgba(8,7,20,.45)}
+  .terr .lf{fill:var(--w-accent,#5E8A4E)}
+  .terr .lf2{fill:var(--w-accent,#5E8A4E);opacity:.7}
+  .terr .tk{fill:#3a2a1c}
+  .terr .stem{fill:#cabfa6}
+  .terr .rk{fill:#34344f;stroke:rgba(255,255,255,.07);stroke-width:.6}
+  .terr .rk2{fill:none;stroke:rgba(255,255,255,.12);stroke-width:.6}
+  .terr .bdy{fill:#23234a;stroke:rgba(255,255,255,.06);stroke-width:.5}
+  .terr .win{fill:var(--gold,#c5a059)}
+  .terr .glow{fill:var(--gold,#c5a059);opacity:.32}
+  .terr .dot{fill:#f5f2eb;opacity:.85}
+  .terr .ln{fill:none;stroke:var(--w-accent,#5E8A4E);stroke-width:1.4;stroke-linecap:round}
+  .terr .ln2{fill:none;stroke:var(--w-accent,#5E8A4E);stroke-width:1.2;opacity:.7}
+  .terr .spark{fill:var(--gold,#c5a059)}
+  .terr .ring{fill:none;stroke:var(--w-accent,#6A5FA8);stroke-width:1.4;opacity:.8}
+  .terr .gem{fill:var(--w-accent,#3FA08A);opacity:.85}
+  .terr .gem2{fill:none;stroke:rgba(255,255,255,.28);stroke-width:.5}
+  .terr .flag{fill:none;stroke:var(--gold,#c5a059);stroke-width:1.2}
+  .biome-motif{flex:none;display:block}
+  .biome-motif .prop{opacity:1}
+  /* ===== El sendero: DOS trazos ==============================================
+     Era una calzada de siete <path> apilados con la misma "d" (arcén, firme,
+     textura, resplandor, veta y una cuenta-cometa con drop-shadow animado en
+     bucle) sobre un SVG de ~2.400px de alto: siete rasterizaciones a pantalla
+     completa y un filtro repintándose cada fotograma.
+
+     Ahora es lo que el sistema de diseño llama un filete: una línea grabada.
+     .wtrail-line = lo que queda por andar (y es la que MIDE el avatar);
+     .wtrail-done = lo andado, en oro. El oro es acento, nunca relleno. */
+  .wtrail{position:absolute;left:0;top:0;z-index:1;overflow:visible;pointer-events:none}
+  .wtrail path{fill:none;stroke-linecap:round;stroke-linejoin:round}
+  /* La CALZADA: ancha y casi transparente, en el acento del mundo. Es lo
+     que devuelve el cuerpo al camino — con sólo el hilo punteado, el
+     sendero dejaba de leerse como algo que se anda. Va en el acento, que
+     es donde el color del mundo sí funciona: extendido y suave, no en un
+     hilo fino (ahí varios acentos naranjas se leían oxidados). */
+  .wtrail-bed{stroke:var(--w-accent,#C9A84C);stroke-width:14;opacity:.105;stroke-linecap:round}
+  /* El tramo pendiente, en el filete del sistema */
+  .wtrail-line{stroke:rgba(201,168,76,.55);stroke-width:2;stroke-dasharray:2 7}
+  /* nodos/carteles por encima del terreno y el camino */
+  .wisland .wnode{z-index:2}
+  .wisland .wstart{z-index:2}
+  /* avatar (gato Vesper) que recorre el sendero — contenedor animado;
+     el gato (.wcat) lleva el color del skin (--vc-filter); la capa .wacc
+     superpone el accesorio elegido sin recibir el tinte de color */
+  .wavatar{position:absolute;left:0;top:0;width:50px;height:50px;z-index:3;
+    offset-anchor:50% 50%;offset-rotate:0deg;pointer-events:none;animation:wbob 2.4s ease-in-out infinite}
+  .wavatar .wcat{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;
+    filter:drop-shadow(0 6px 7px rgba(20,18,42,.5)) var(--vc-filter,hue-rotate(0deg))}
+  /* pelaje (apariencia completa por imagen): conserva sus propios colores (sin tinte) */
+  .wavatar.has-pelaje .wcat{filter:drop-shadow(0 6px 7px rgba(20,18,42,.5))}
+  .wavatar .wacc{position:absolute;inset:0;pointer-events:none}
+  .wavatar .wacc svg{width:100%;height:100%;display:block;overflow:visible;
+    filter:drop-shadow(0 1px 1px rgba(20,18,42,.45))}
+  @keyframes wbob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+  /* ---- vida propia del avatar ---------------------------------------
+     El pelaje es un PNG plano, así que lo único animable es la capa que lo
+     envuelve: .wcat respira (escala mínima con el origen en las patas, para
+     que suba el pecho y no flote entero) y .wfx añade el detalle propio de
+     cada pelaje. Cero bytes y cero peticiones: no hay fotogramas ni vídeo.
+     Coordenadas medidas sobre la caja de 50px del avatar (orejas y≈7-10,
+     coronilla y≈13,5, ojos y≈24, hocico y≈28, cuello y≈31). */
+  .wavatar .wcat{transform-origin:50% 94%;animation:wbreathe 3.6s ease-in-out infinite}
+  @keyframes wbreathe{0%,100%{transform:scale(1,1)}50%{transform:scale(.987,1.015)}}
+  .wavatar .wfx{position:absolute;inset:0;pointer-events:none}
+  .wavatar .wfx::before,.wavatar .wfx::after{content:"";position:absolute;opacity:0}
+  /* gato original / gris / multicolor: un destello breve junto a la oreja */
+  .wavatar[data-pelaje="classic"] .wfx::before,
+  .wavatar[data-pelaje="gray"] .wfx::before,
+  .wavatar[data-pelaje="calico"] .wfx::before{left:33px;top:8px;width:6px;height:6px;
+    background:radial-gradient(circle,rgba(255,255,255,.95) 0 18%,rgba(201,168,76,.85) 30%,transparent 70%);
+    animation:wsparkle 5.2s ease-in-out infinite}
+  .wavatar[data-pelaje="gray"] .wfx::before{left:12px;
+    background:radial-gradient(circle,rgba(255,255,255,.95) 0 18%,rgba(198,205,214,.9) 30%,transparent 70%)}
+  @keyframes wsparkle{0%,72%,100%{opacity:0;transform:scale(.4) rotate(0deg)}
+    82%{opacity:1;transform:scale(1) rotate(45deg)}92%{opacity:0;transform:scale(.5) rotate(90deg)}}
+  /* león: la melena late en oro */
+  .wavatar[data-pelaje="lion"] .wfx::before{left:6px;top:4px;width:38px;height:34px;border-radius:50%;
+    background:radial-gradient(closest-side,rgba(232,183,74,.42),transparent 72%);
+    animation:wglow 3.9s ease-in-out infinite}
+  @keyframes wglow{0%,100%{opacity:.18;transform:scale(.94)}50%{opacity:.62;transform:scale(1.06)}}
+  /* cósmico: dos estrellas que titilan sobre la cabeza */
+  .wavatar[data-pelaje="cosmic"] .wfx::before,
+  .wavatar[data-pelaje="cosmic"] .wfx::after{width:5px;height:5px;
+    background:radial-gradient(circle,#fff 0 20%,rgba(126,232,240,.9) 34%,transparent 72%);
+    animation:wtwinkle 2.9s ease-in-out infinite}
+  .wavatar[data-pelaje="cosmic"] .wfx::before{left:12px;top:11px}
+  .wavatar[data-pelaje="cosmic"] .wfx::after{left:35px;top:7px;animation-delay:1.35s}
+  @keyframes wtwinkle{0%,100%{opacity:.15;transform:scale(.6)}50%{opacity:1;transform:scale(1.2)}}
+  /* dragón: dos volutas de humo que suben del hocico */
+  .wavatar[data-pelaje="dragon"] .wfx::before,
+  .wavatar[data-pelaje="dragon"] .wfx::after{left:20px;top:27px;width:5px;height:5px;border-radius:50%;
+    background:radial-gradient(circle,rgba(222,245,232,.9),rgba(150,205,180,0) 72%);
+    animation:wsmoke 3.4s ease-out infinite}
+  .wavatar[data-pelaje="dragon"] .wfx::after{left:27px;animation-delay:1.7s}
+  @keyframes wsmoke{0%{opacity:0;transform:translate(0,0) scale(.45)}
+    18%{opacity:.8}100%{opacity:0;transform:translate(-5px,-17px) scale(2)}}
+  /* títulos/etiquetas legibles sobre la isla oscura */
+  .wisland .wtitle{color:var(--cream,#f5f2eb)}
+  .wisland .wnode.locked .wtitle{color:rgba(245,242,235,.55)}
+  /* checkpoint de destreza = cartel de zona tallado en el terreno */
+  .wisland .wcheck{position:relative;z-index:2;background:linear-gradient(180deg,#262649,#191930);
+    border:1px solid var(--w-accent,#c5a059);border-left:1px solid var(--w-accent,#c5a059);border-radius:11px;
+    color:var(--cream,#f5f2eb);letter-spacing:.02em;
+    box-shadow:0 4px 0 rgba(8,7,20,.5),inset 0 1px 0 rgba(255,255,255,.06)}
+  .wisland .wcheck .ic::before{color:var(--w-accent,#c5a059)}
+  .wisland .wcheck .ct{color:var(--gold,#c5a059)}
+  /* Guardián del mundo (jefe): arco/portal — distinto del castillo */
+  .wbtn.boss{width:92px;height:90px;border-radius:46px 46px 16px 16px;border-width:4px;font-size:1.8rem;
+    background:linear-gradient(160deg,#23234a,var(--ink,#1B1B2F));border-color:var(--w-accent,#c5a059);
+    color:var(--w-accent,#c5a059);box-shadow:0 7px 0 rgba(20,18,42,.45),0 10px 24px rgba(20,18,42,.5)}
+  .wbtn.boss.locked{filter:grayscale(.65) brightness(.7);color:#8e8aa6;border-color:#3a3a55;cursor:not-allowed;box-shadow:none}
+  .wbtn.boss.ready{color:var(--gold,#c5a059);border-color:var(--gold,#c5a059)}
+  .wbtn.boss.ready::after{content:"";position:absolute;inset:-7px;border-radius:46px 46px 16px 16px;pointer-events:none;
+    box-shadow:0 0 0 0 rgba(197,160,89,.5);animation:wpulse 1.7s ease-in-out infinite}
+  .wbtn.boss.conquered{background:linear-gradient(160deg,#dcc08a,var(--gold,#c5a059));color:#1B1B2F;border-color:var(--gold2,#a8843d)}
+  .wbtn.boss .beam{opacity:0}
+  .wbtn.boss.ready .beam,.wbtn.boss.conquered .beam{opacity:1;animation:wbeam 2.6s ease-in-out infinite}
+  @keyframes wbeam{0%,100%{opacity:.5}50%{opacity:1}}
+  .wboss-node .wlabel.boss-lb{background:var(--w-accent,#1B1B2F);color:#fff}
+  .wboss-node .wtitle{font-weight:800;color:var(--cream,#f5f2eb)}
+  .wbridge{display:block;width:4px;height:26px;margin:9px auto 0;border-radius:3px;
+    background:repeating-linear-gradient(180deg,var(--gold,#c5a059) 0 5px,transparent 5px 10px)}
+  /* mini-reto (repaso por destreza): más pequeño y subordinado al Guardián */
+  .wbtn.castle.mini{width:58px;height:54px;border-radius:14px;border-width:3px;font-size:1.2rem;
+    background:linear-gradient(150deg,#2c2c4a,#1B1B2F);border-color:var(--w-accent,#c5a059);color:var(--w-accent,#c5a059)}
+  .wbtn.castle.mini.completed{background:linear-gradient(150deg,#dcc08a,var(--gold,#c5a059));border-color:var(--gold2,#a8843d);color:#1B1B2F}
+  .wnode.mini .wtitle{font-size:.74rem}
+  .wnode.mini .wlabel.mini-lb{font-size:.56rem;background:#2c2c4a;color:var(--gold,#c5a059)}
+  /* reduce-motion: sin caminar del avatar, sin haz del faro, sin titileo del cielo */
+  @media(prefers-reduced-motion:reduce){
+    .wavatar{animation:none}
+    .wavatar .wcat{animation:none}
+    .wavatar .wfx::before,.wavatar .wfx::after{animation:none;opacity:0}
+    .wbtn.boss.ready .beam,.wbtn.boss.conquered .beam{animation:none;opacity:1}
+  }
+  .vesper-reduce-motion .wavatar{animation:none}
+  .vesper-reduce-motion .wavatar .wcat{animation:none}
+  .vesper-reduce-motion .wavatar .wfx::before,
+  .vesper-reduce-motion .wavatar .wfx::after{animation:none;opacity:0}
+  .vesper-reduce-motion .wbtn.boss .beam{animation:none;opacity:1}
+  .vesper-reduce-motion .wamb i,.vesper-reduce-motion .wisland::before,.vesper-reduce-motion .wisland::after{animation:none}
+  /* ===== Pantallas del Guardián (portada / medidor / resultado) ===== */
+  .boss-cover{background:linear-gradient(170deg,#23234a,var(--ink,#1B1B2F));color:var(--cream,#f5f2eb);
+    border:1px solid var(--w-accent,#c5a059);box-shadow:0 14px 40px rgba(20,18,42,.4)}
+  .boss-cover h1{color:var(--cream,#f5f2eb)}
+  .boss-cover .muted{color:rgba(245,242,235,.72)}
+  .boss-eyebrow{display:inline-block;font-size:.66rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;
+    color:var(--w-accent,#c5a059);margin-bottom:4px}
+  .boss-warn{font-size:.86rem;color:var(--gold,#c5a059);font-weight:700;margin:2px 0 10px}
+  .boss-emblem{font-size:3.2rem;line-height:1;filter:drop-shadow(0 6px 10px rgba(20,18,42,.5));
+    animation:boss-throb 2.4s ease-in-out infinite}
+  .boss-emblem.dim{filter:grayscale(.6) brightness(.7);animation:none}
+  .boss-emblem.lit{animation:boss-pop .6s cubic-bezier(.2,.7,.3,1.3) both}
+  @keyframes boss-throb{0%,100%{transform:scale(1)}50%{transform:scale(1.08)}}
+  @keyframes boss-pop{0%{transform:scale(.4);opacity:0}100%{transform:scale(1);opacity:1}}
+  .boss-meter{display:flex;align-items:center;gap:8px;margin:8px 0 2px;padding:7px 12px;border-radius:999px;
+    background:rgba(20,18,42,.06);border:1px solid var(--w-accent,#c5a059)}
+  .bm-ic{font-size:1rem;flex:none}
+  .bm-nm{font-size:.78rem;font-weight:800;color:var(--ink,#1B1B2F);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .bm-bar{flex:1;min-width:60px;height:9px;border-radius:999px;background:rgba(27,27,47,.14);overflow:hidden}
+  .bm-bar > i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,var(--w-accent,#c5a059),#c0392b);
+    transition:width .5s ease}
+  .boss-unlock{margin:6px auto 2px;padding:8px 14px;border-radius:12px;font-weight:800;color:var(--ink,#1B1B2F);
+    background:var(--gold-tint,rgba(201,168,76,.16));border:1px solid var(--gold,#c5a059)}
+  @media(prefers-reduced-motion:reduce){.boss-emblem,.boss-emblem.lit{animation:none}}
+  .vesper-reduce-motion .boss-emblem{animation:none}
+  /* ===== Identidad del mundo al entrar a una lección ===== */
+  #app[data-world] .topbar .bar{background:linear-gradient(90deg,var(--w-accent,#c5a059),var(--gold,#c5a059))}
+  #app[data-world] .exnum{color:var(--w-accent,#c5a059)}
+  .lesson-world{display:flex;align-items:center;gap:12px;justify-content:center;margin:0 0 12px;padding:8px 14px;border-radius:14px;
+    background:linear-gradient(180deg,#23234a,#191930);border:1px solid var(--w-accent,#c5a059);box-shadow:0 4px 0 rgba(8,7,20,.4)}
+  .lesson-world .lw-tx{text-align:left}
+  .lesson-world .lw-ey{display:block;font-size:.6rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:var(--w-accent,#c5a059)}
+  .lesson-world .lw-nm{display:block;font-family:"Inria Serif",Georgia,serif;font-size:1.06rem;line-height:1.1;color:var(--cream,#f5f2eb)}
+  .wnode{position:relative;z-index:1;--dx:0px;transform:translateX(var(--dx));display:flex;flex-direction:column;align-items:center}
+  .wbtn{position:relative;width:74px;height:74px;border-radius:50%;border:3px solid var(--line);background:var(--paper);color:var(--ink);
+    font-size:1.6rem;display:flex;align-items:center;justify-content:center;cursor:pointer;font-family:inherit;
+    box-shadow:0 5px 0 rgba(27,27,47,.13),var(--shadow);transition:transform .12s ease}
+  .wbtn:active:not(.locked){transform:translateY(2px);box-shadow:0 2px 0 rgba(27,27,47,.13),var(--shadow)}
+  .wbtn.completed{background:linear-gradient(150deg,#e6cd97,var(--gold));border-color:var(--gold2,#a8843d);color:#1f1a0e;
+    box-shadow:0 5px 0 rgba(120,86,20,.5),var(--shadow),inset 0 0 0 2.5px rgba(255,255,255,.38),inset 0 0 0 4.5px rgba(168,132,61,.4)}
+  .wbtn.open{border-color:var(--gold);color:var(--gold2,#a8843d);background:linear-gradient(150deg,#fffdf7,#f4eede);
+    box-shadow:0 5px 0 rgba(27,27,47,.18),var(--shadow),inset 0 0 0 2px rgba(197,160,89,.22)}
+  .wbtn.locked{background:linear-gradient(150deg,#2b2b44,#1f1f34);border-color:#3c3c58;color:#73738f;cursor:not-allowed;
+    box-shadow:0 4px 0 rgba(8,7,20,.5),inset 0 2px 7px rgba(0,0,0,.4)}
+  /* iconos SVG de estado del nodo */
+  .wbtn .wglyph{width:30px;height:30px;display:block}
+  .wbtn.is-current .wglyph{width:36px;height:36px}
+  .wbtn.completed .wglyph{width:31px;height:31px}
+  .wbtn.is-current{width:88px;height:88px;font-size:2rem;border-color:var(--gold);
+    background:linear-gradient(150deg,var(--ink),#2c2c4a);color:var(--gold);
+    box-shadow:0 0 0 4px var(--paper),0 0 0 7px var(--gold),0 6px 18px rgba(27,27,47,.3)}
+  .wbtn.is-current::after{content:"";position:absolute;inset:-7px;border-radius:50%;pointer-events:none;
+    box-shadow:0 0 0 0 rgba(197,160,89,.55);animation:wpulse 1.7s ease-in-out infinite}
+  @keyframes wpulse{0%,100%{box-shadow:0 0 0 0 rgba(197,160,89,.5)}50%{box-shadow:0 0 0 13px rgba(197,160,89,0)}}
+  /* el marcador de "lección conquistada" y el remate del capstone los define cada mundo en su sección [data-world] */
+  @media(prefers-reduced-motion:reduce){.wbtn.is-current::after,.wbtn.completed::after,.wbtn.castle.completed svg path:last-child{animation:none}}
+  .wbtn.castle{width:90px;height:78px;border-radius:18px;border-width:4px;font-size:1.8rem;
+    background:linear-gradient(150deg,#dcc08a,var(--gold));border-color:var(--gold2,#a8843d);color:#fff}
+  .wlabel{position:absolute;top:-29px;left:50%;transform:translateX(-50%);white-space:nowrap;z-index:2;
+    background:var(--ink);color:var(--gold);font-size:.64rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;
+    padding:4px 11px;border-radius:999px;box-shadow:var(--shadow)}
+  .wlabel::after{content:"";position:absolute;left:50%;bottom:-4px;transform:translateX(-50%);width:0;height:0;
+    border:5px solid transparent;border-bottom:0;border-top-color:var(--ink)}
+  .wstars{display:block;margin-top:5px;color:var(--gold);font-size:.82rem;letter-spacing:1px;line-height:1}
+  .wstars .off{color:#cbbfa3}
+  .wnode.done .wstars{filter:drop-shadow(0 0 3px rgba(197,160,89,.45))}
+  .wtitle{margin-top:9px;font-size:.8rem;font-weight:600;color:var(--ink);text-align:center;max-width:135px;line-height:1.25}
+  .wnode.locked .wtitle{color:var(--muted);font-weight:500}
+  /* checkpoint de destreza */
+  .wcheck{position:relative;z-index:1;align-self:stretch;display:flex;align-items:center;gap:9px;margin:2px 4px -8px;padding:8px 14px;
+    background:var(--gold-tint);border:1px solid var(--gold);border-left:3px solid var(--gold);border-radius:999px;font-weight:700;font-size:.86rem;color:var(--ink)}
+  .wcheck .ic{position:relative;font-size:1.05rem}
+  .wcheck .ic::before{content:"\2691";color:var(--gold2,#a8843d);margin-right:4px;font-size:.95rem}
+  .wcheck .ct{margin-left:auto;font-size:.76rem;color:var(--gold2,#a8843d);font-weight:700}
+  .wcheck .ck-ic{display:inline-flex;align-items:center}
+  .wcheck .ck-ic svg{width:18px;height:18px}
+  .wisland .wcheck .ck-ic{color:var(--w-accent,#c5a059)}
+  /* iconos de destreza (chips de filtro + resultados de búsqueda) */
+  .skill-ic{display:inline-flex;align-items:center;vertical-align:-3px}
+  .skill-ic svg{width:15px;height:15px}
+  .lc-sub .skill-ic svg{width:13px;height:13px}
+  /* escudo del jefe en SVG (portada / medidor / resultado) */
+  .boss-emblem{color:var(--w-accent,#c5a059);line-height:0}
+  .boss-emblem svg{width:54px;height:58px}
+  .boss-emblem svg.boss-art{width:118px;height:118px}
+  /* retrato del guardián (IA) en portada / resultado y en el nodo del mapa; respaldo = bossArt SVG */
+  .boss-emblem img.boss-photo{display:block;margin:2px auto;width:120px;height:120px;border-radius:50%;
+    object-fit:cover;border:3px solid var(--w-accent,#c5a059);box-shadow:0 8px 20px rgba(20,18,42,.55)}
+  .boss-emblem.lit img.boss-photo{border-color:var(--gold,#c5a059)}
+  .wbtn.boss .boss-node-photo{display:block;width:100%;height:100%;object-fit:cover;border-radius:42px 42px 12px 12px}
+  .wbtn.boss .boss-art{width:100%;height:100%}
+  .boss-emblem.lit{color:var(--gold,#c5a059)}
+  .boss-emblem.dim{color:#8e8aa6}
+  .bm-ic{display:inline-flex;align-items:center;color:var(--w-accent,#c5a059)}
+  .bm-ic svg{width:16px;height:17px}
+  /* gallardete de inicio de mundo */
+  .wstart{position:relative;z-index:1;align-self:center;margin:2px 0 6px;padding:5px 26px;background:var(--ink,#1B1B2F);color:var(--gold,#c5a059);
+    font-family:Georgia,serif;font-variant:small-caps;letter-spacing:.06em;font-size:.78rem;font-weight:700;border:1px solid var(--gold,#c5a059);
+    clip-path:polygon(8px 0,calc(100% - 8px) 0,100% 50%,calc(100% - 8px) 100%,8px 100%,0 50%);box-shadow:var(--shadow)}
+  /* ===== Banner de mundo (cabecera del mapa) ===== */
+  .world-banner{position:relative;height:130px;margin:14px 0 20px;border-radius:16px;overflow:hidden;
+    border:1px solid var(--gold,#c5a059);box-shadow:0 6px 22px rgba(27,27,47,.18),inset 0 0 0 1px rgba(197,160,89,.28)}
+  .world-banner__img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;display:block;z-index:0}
+  .world-banner::before{content:"";position:absolute;inset:0;z-index:1;
+    background:radial-gradient(125% 150% at 100% 50%,rgba(27,27,47,.62) 0%,rgba(27,27,47,0) 46%),
+               linear-gradient(90deg,rgba(27,27,47,.92) 0%,rgba(27,27,47,.78) 34%,rgba(27,27,47,.30) 62%,rgba(27,27,47,.05) 100%),
+               linear-gradient(180deg,rgba(27,27,47,.12) 0%,rgba(27,27,47,.42) 100%)}
+  .world-banner__body{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;justify-content:center;
+    gap:6px;padding:0 18px;max-width:60%}
+  .world-banner__logo{position:absolute;z-index:2;right:16px;top:50%;transform:translateY(-50%);height:78px;width:auto;
+    object-fit:contain;filter:drop-shadow(0 2px 7px rgba(27,27,47,.65))}
+  .world-banner__eyebrow{font-size:.62rem;font-weight:800;letter-spacing:.18em;text-transform:uppercase;
+    color:var(--gold,#c5a059);display:flex;align-items:center;gap:8px}
+  .world-banner__eyebrow::after{content:"";flex:0 0 26px;height:1px;background:var(--gold,#c5a059);opacity:.7}
+  .world-banner__title{font-family:"Inria Serif",Georgia,serif;font-size:1.5rem;line-height:1.05;font-weight:700;
+    color:var(--cream,#f5f2eb);text-shadow:0 1px 8px rgba(27,27,47,.6);margin:0}
+  .world-banner__meta{display:flex;align-items:center;gap:10px;font-size:.72rem;font-weight:600;color:rgba(245,242,235,.82)}
+  .world-banner__badge{font-weight:800;color:var(--on-gold,#1B1B2F);background:var(--gold,#c5a059);
+    padding:2px 8px;border-radius:999px;font-size:.66rem;letter-spacing:.04em}
+  .world-banner__bar{flex:1;max-width:120px;height:5px;border-radius:999px;background:rgba(245,242,235,.18);overflow:hidden}
+  .world-banner__bar > i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,#dcc08a,var(--gold,#c5a059))}
+  @media(min-width:640px){.world-banner{height:160px}.world-banner__title{font-size:1.85rem}.world-banner__logo{height:104px;right:24px}}
+/* Foco de teclado visible (WCAG 2.4.7) */
+:focus-visible{outline:3px solid var(--gold,#c5a059);outline-offset:2px}
+
+
+/* =====================================================================
+   VESPER ACADEMY — Hub "Ascenso a la Maestria" · capa de mundos
+   Pegar al FINAL del <style> de leccion.html (despues de la linea ~362).
+   ---------------------------------------------------------------------
+   ORO INVARIANTE: #c5a059 / #a8843d / --gold-tint = logro/recompensa.
+   --w-accent / --w-accent-soft / --w-glow = ATMOSFERA del mundo
+   (heredados inline desde WORLD_THEME via style en .world-banner y .wmap).
+   Solo se animan transform/opacity/filter/background-position en bucles.
+   Keyframes: globales "g-*", por mundo "amb-<NIVEL>-*". wpulse intacto.
+   wflag QUEDA OBSOLETO (los gestos-Mario se reemplazan) — ver pasos.
+   ===================================================================== */
+
+/* =========================================================
+   0. BASE COMUN DE LA CAPA AMBIENTAL (coordinador, una vez)
+   ========================================================= */
+.wamb{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:1}
+.wamb i{position:absolute;display:block;will-change:transform,opacity}
+.wamb--map{z-index:0}                 /* en el mapa: debajo de .wnode (z1) */
+
+/* =========================================================
+   1. ANIMACIONES GLOBALES (solo selectores BASE, sin [data-world])
+   ========================================================= */
+
+/* 1a. Banner: ken-burns + parallax del scrim */
+.world-banner__img{transform-origin:50% 50%;will-change:transform;
+  animation:g-kenburns 34s ease-in-out infinite alternate}
+@keyframes g-kenburns{
+  0%{transform:scale(1.06) translate3d(-1.2%,-0.8%,0)}
+  50%{transform:scale(1.11) translate3d(1.0%,0.6%,0)}
+  100%{transform:scale(1.07) translate3d(-0.6%,1.0%,0)}}
+.world-banner::before{will-change:transform;
+  animation:g-banner-parallax 38s ease-in-out infinite alternate}
+@keyframes g-banner-parallax{
+  0%{transform:translate3d(0,0,0)}
+  100%{transform:translate3d(-1.1%,0.4%,0)}}
+
+/* 1b. (El sendero punteado animado se sustituyó por el SVG .wtrail medido en JS) */
+
+/* 1c. Nodos en reposo: bob sutil (no el actual / bloqueado / castillo) */
+.wbtn:not(.is-current):not(.locked):not(.castle){will-change:transform;
+  animation:g-node-bob 4.2s ease-in-out infinite}
+.wnode:nth-of-type(4n+1) .wbtn:not(.is-current):not(.locked):not(.castle){animation-delay:-0.4s}
+.wnode:nth-of-type(4n+2) .wbtn:not(.is-current):not(.locked):not(.castle){animation-delay:-1.3s}
+.wnode:nth-of-type(4n+3) .wbtn:not(.is-current):not(.locked):not(.castle){animation-delay:-2.2s;animation-duration:4.8s}
+.wnode:nth-of-type(4n)   .wbtn:not(.is-current):not(.locked):not(.castle){animation-delay:-3.1s;animation-duration:3.9s}
+@keyframes g-node-bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+.wbtn:active:not(.locked){animation:none}
+
+/* 1d. Cinta de mundos: entrada en cascada + lift en hover + halo "on" */
+.worlds .world{animation:g-world-in .5s cubic-bezier(.22,.61,.36,1) both}
+.worlds .world:nth-child(1){animation-delay:.02s}
+.worlds .world:nth-child(2){animation-delay:.08s}
+.worlds .world:nth-child(3){animation-delay:.14s}
+.worlds .world:nth-child(4){animation-delay:.20s}
+.worlds .world:nth-child(5){animation-delay:.26s}
+.worlds .world:nth-child(6){animation-delay:.32s}
+.worlds .world:nth-child(n+7){animation-delay:.38s}
+@keyframes g-world-in{from{opacity:0;transform:translateY(10px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+.world{transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease,background .18s ease}
+.world:not(.locked):hover,.world:not(.locked):focus-visible{transform:translateY(-3px);box-shadow:0 9px 22px var(--w-glow,rgba(27,27,47,.16))}
+.world.on{animation:g-world-onpulse 3.6s ease-in-out infinite}
+@keyframes g-world-onpulse{0%,100%{box-shadow:0 5px 16px rgba(27,27,47,.09)}50%{box-shadow:0 7px 22px var(--w-glow,rgba(197,160,89,.30))}}
+
+/* 1e. Barra de progreso: shimmer dorado (oro invariante, nunca acento) */
+.world-banner__bar > i{position:relative;overflow:hidden}
+.world-banner__bar > i::after{content:"";position:absolute;top:0;bottom:0;left:0;width:42%;
+  background:linear-gradient(100deg,rgba(255,255,255,0) 0%,rgba(255,255,255,.55) 50%,rgba(255,255,255,0) 100%);
+  transform:translateX(-160%);will-change:transform;
+  animation:g-bar-shimmer 3.4s ease-in-out infinite;pointer-events:none}
+@keyframes g-bar-shimmer{0%{transform:translateX(-160%)}60%{transform:translateX(320%)}100%{transform:translateX(320%)}}
+
+/* 1f. Estrellas ganadas: titileo dorado muy leve (recompensa) */
+.wnode.done .wstars{will-change:filter,opacity;animation:g-star-twinkle 5s ease-in-out infinite}
+.wnode:nth-of-type(3n+1).done .wstars{animation-delay:-1.7s}
+.wnode:nth-of-type(3n+2).done .wstars{animation-delay:-3.3s;animation-duration:5.6s}
+@keyframes g-star-twinkle{
+  0%,100%{filter:drop-shadow(0 0 3px rgba(197,160,89,.45)) brightness(1);opacity:1}
+  50%{filter:drop-shadow(0 0 6px rgba(197,160,89,.70)) brightness(1.12);opacity:.94}}
+
+/* =========================================================
+   2. MUNDO A1 — EL HOGAR · "brasas de amanecer" (acento #C07A33)
+   ========================================================= */
+.world-banner[data-world="A1"]::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:radial-gradient(78% 120% at 8% -6%,var(--w-accent-soft) 0%,rgba(192,122,51,0) 55%),
+             radial-gradient(40% 60% at 16% 4%,var(--w-glow) 0%,rgba(192,122,51,0) 60%);
+  mix-blend-mode:screen;opacity:.62;animation:amb-A1-glow 11s ease-in-out infinite}
+@keyframes amb-A1-glow{0%,100%{opacity:.5;filter:blur(.5px) saturate(1)}50%{opacity:.82;filter:blur(1.4px) saturate(1.18)}}
+.world-banner[data-world="A1"] .wamb i{bottom:6%;width:3px;height:3px;border-radius:50%;
+  background:var(--w-glow);filter:blur(.6px);opacity:0;box-shadow:0 0 4px var(--w-glow);
+  animation:amb-A1-rise 17s ease-in-out infinite}
+.world-banner[data-world="A1"] .wamb i:nth-child(1){left:12%;width:2px;height:2px;animation-duration:15s;animation-delay:2s}
+.world-banner[data-world="A1"] .wamb i:nth-child(2){left:26%;width:4px;height:4px;animation-duration:21s;animation-delay:5s}
+.world-banner[data-world="A1"] .wamb i:nth-child(3){left:39%;width:2px;height:2px;animation-duration:18s;animation-delay:7s}
+.world-banner[data-world="A1"] .wamb i:nth-child(4){left:52%;width:3px;height:3px;animation-duration:22s;animation-delay:11s}
+.world-banner[data-world="A1"] .wamb i:nth-child(5){left:64%;width:4px;height:4px;animation-duration:14s;animation-delay:13s}
+.world-banner[data-world="A1"] .wamb i:nth-child(6){left:77%;width:2px;height:2px;animation-duration:19s;animation-delay:3s}
+.world-banner[data-world="A1"] .wamb i:nth-child(7){left:88%;width:3px;height:3px;animation-duration:16s;animation-delay:19s}
+@keyframes amb-A1-rise{
+  0%{opacity:0;transform:translate3d(0,0,0) scale(.85)}
+  12%{opacity:.15}
+  46%{opacity:.5;transform:translate3d(5px,-30px,0) scale(1.05)}
+  72%{opacity:.34;transform:translate3d(2px,-48px,0) scale(.92)}
+  100%{opacity:0;transform:translate3d(8px,-64px,0) scale(.8)}}
+.wmap[data-world="A1"] .wamb--map i{bottom:4%;width:3px;height:3px;border-radius:50%;
+  background:var(--w-glow);filter:blur(.6px);opacity:0;animation:amb-A1-rise 20s ease-in-out infinite}
+.wmap[data-world="A1"] .wamb--map i:nth-child(1){left:18%;width:2px;height:2px;animation-duration:18s;animation-delay:2s}
+.wmap[data-world="A1"] .wamb--map i:nth-child(2){left:44%;width:3px;height:3px;animation-duration:22s;animation-delay:7s}
+.wmap[data-world="A1"] .wamb--map i:nth-child(3){left:70%;width:2px;height:2px;animation-duration:16s;animation-delay:13s}
+.wmap[data-world="A1"]::before{background-image:
+  linear-gradient(180deg,var(--w-accent-soft) 0%,rgba(192,122,51,0) 100%),
+  repeating-linear-gradient(180deg,rgba(197,160,89,.5) 0 9px,transparent 9px 20px)}
+.wmap[data-world="A1"] .wbtn.completed:not(.castle)::before{content:"";position:absolute;top:-13px;left:50%;
+  width:18px;height:9px;margin-left:-9px;background:transparent;border:1.5px solid var(--gold2,#a8843d);
+  border-bottom:0;border-radius:9px 9px 0 0;box-shadow:0 1px 0 0 var(--gold,#c5a059);
+  filter:drop-shadow(0 1px 1px rgba(27,27,47,.3))}
+.wmap[data-world="A1"] .wbtn.completed:not(.castle)::after{content:"";position:absolute;top:-19px;left:50%;
+  width:6px;height:10px;margin-left:-3px;background:var(--gold,#c5a059);
+  clip-path:polygon(50% 0%,100% 62%,82% 100%,18% 100%,0% 62%);transform-origin:50% 100%;
+  filter:drop-shadow(0 1px 1px rgba(27,27,47,.3));animation:amb-A1-settle .5s cubic-bezier(.34,1.32,.5,1) both}
+@keyframes amb-A1-settle{0%{opacity:0;transform:translateY(-3px) scale(1.08)}60%{opacity:1}100%{opacity:1;transform:translateY(0) scale(1)}}
+.wmap[data-world="A1"] .wstart{clip-path:none;border-radius:16px 16px 6px 6px;border-top-width:2px;padding-top:8px;
+  background:radial-gradient(8px 8px at 50% 2px,var(--w-glow) 0%,rgba(192,122,51,0) 70%),var(--ink,#1B1B2F)}
+.wmap[data-world="A1"] .wstart::before{content:"";position:absolute;top:-7px;left:50%;width:11px;height:13px;margin-left:-5.5px;
+  background:var(--gold,#c5a059);clip-path:polygon(50% 0%,78% 40%,72% 78%,50% 100%,28% 78%,22% 40%);
+  filter:drop-shadow(0 1px 2px rgba(27,27,47,.5))}
+.wmap[data-world="A1"] .wcheck .ic::before{content:"\1F525";color:var(--ink,#1B1B2F);margin-right:4px;font-size:.92rem;filter:saturate(.55) brightness(.62)}
+.wmap[data-world="A1"] .wbtn.castle{box-shadow:0 5px 0 rgba(27,27,47,.13),var(--shadow),0 0 14px var(--w-glow)}
+.world-banner[data-world="A1"] .world-banner__eyebrow{color:var(--w-accent)}
+
+/* =========================================================
+   3. MUNDO A2 — EL SENDERO · "deriva de hoja" (acento #5E8A4E)
+   ========================================================= */
+.world-banner[data-world="A2"] .wamb i{width:11px;height:11px;background:var(--w-glow);
+  border-radius:0 78% 12% 78% / 78% 12% 78% 12%;opacity:0;filter:drop-shadow(0 1px 1px rgba(27,27,47,.10));
+  animation:amb-A2-drift 14s ease-in-out infinite}
+.world-banner[data-world="A2"] .wamb i:nth-child(1){left:8%;top:-8%;width:12px;height:12px;animation-duration:13s;animation-delay:0s}
+.world-banner[data-world="A2"] .wamb i:nth-child(2){left:22%;top:-12%;width:9px;height:9px;animation-duration:16s;animation-delay:-3.2s}
+.world-banner[data-world="A2"] .wamb i:nth-child(3){left:37%;top:-6%;width:13px;height:13px;animation-duration:12s;animation-delay:-6.5s}
+.world-banner[data-world="A2"] .wamb i:nth-child(4){left:52%;top:-14%;width:8px;height:8px;animation-duration:18s;animation-delay:-1.6s}
+.world-banner[data-world="A2"] .wamb i:nth-child(5){left:67%;top:-7%;width:11px;height:11px;animation-duration:15s;animation-delay:-9s}
+.world-banner[data-world="A2"] .wamb i:nth-child(6){left:81%;top:-11%;width:10px;height:10px;animation-duration:17s;animation-delay:-4.8s}
+.world-banner[data-world="A2"] .wamb i:nth-child(7){left:93%;top:-9%;width:9px;height:9px;animation-duration:13.5s;animation-delay:-11s}
+@keyframes amb-A2-drift{
+  0%{transform:translate3d(0,0,0) rotate(-8deg);opacity:0}
+  12%{opacity:.34}
+  30%{transform:translate3d(-10px,8px,0) rotate(2deg);opacity:.35}
+  55%{transform:translate3d(8px,15px,0) rotate(-4deg);opacity:.30}
+  80%{transform:translate3d(-6px,22px,0) rotate(6deg);opacity:.16}
+  100%{transform:translate3d(4px,26px,0) rotate(8deg);opacity:0}}
+.world-banner[data-world="A2"]::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+  background:linear-gradient(0deg,var(--w-accent-soft) 0%,rgba(94,138,78,.06) 32%,transparent 60%)}
+.wmap[data-world="A2"] .wamb--map i{width:9px;height:9px;background:var(--w-glow);
+  border-radius:0 78% 12% 78% / 78% 12% 78% 12%;opacity:0;animation:amb-A2-drift 16s ease-in-out infinite}
+.wmap[data-world="A2"] .wamb--map i:nth-child(1){left:14%;top:6%;animation-duration:17s;animation-delay:-2s}
+.wmap[data-world="A2"] .wamb--map i:nth-child(2){left:74%;top:28%;animation-duration:14s;animation-delay:-7.5s;width:7px;height:7px}
+.wmap[data-world="A2"] .wamb--map i:nth-child(3){left:46%;top:58%;animation-duration:18s;animation-delay:-12s}
+.wmap[data-world="A2"] .wamb--map i:nth-child(4){left:88%;top:74%;animation-duration:15s;animation-delay:-4.5s;width:8px;height:8px}
+.wmap[data-world="A2"]::before{background-image:
+  repeating-linear-gradient(180deg,rgba(197,160,89,.5) 0 9px,transparent 9px 20px),
+  repeating-linear-gradient(180deg,var(--w-accent-soft) 0 14px,transparent 14px 30px)}
+.wmap[data-world="A2"] .wbtn.completed:not(.castle)::before{content:"";position:absolute;top:-13px;right:-3px;
+  width:1.6px;height:11px;background:var(--gold2,#a8843d);border-radius:1px;transform:none}
+.wmap[data-world="A2"] .wbtn.completed:not(.castle)::after{content:"";position:absolute;top:-16px;right:-9px;
+  width:15px;height:11px;background:var(--gold,#c5a059);clip-path:polygon(50% 100%,0 55%,14% 18%,50% 42%,86% 18%,100% 55%);
+  transform-origin:50% 100%;filter:drop-shadow(0 1px 1px rgba(27,27,47,.30));
+  animation:amb-A2-settle .9s cubic-bezier(.34,1.4,.5,1) both}
+@keyframes amb-A2-settle{
+  0%{transform:rotate(-3deg) scale(.6);opacity:0}
+  55%{transform:rotate(2deg) scale(1.06);opacity:1}
+  78%{transform:rotate(-1.5deg) scale(.97)}
+  100%{transform:rotate(0deg) scale(1);opacity:1}}
+.wmap[data-world="A2"] .wcheck .ic::before{content:"\1F343";color:var(--ink,#1B1B2F);margin-right:4px;font-size:.95rem;filter:saturate(.5) brightness(.6)}
+.wmap[data-world="A2"] .wstart{font-family:Georgia,serif;font-variant:small-caps;
+  clip-path:polygon(10% 0,90% 0,100% 78%,82% 100%,18% 100%,0 78%);border-color:var(--gold,#c5a059);
+  box-shadow:var(--shadow),inset 0 0 0 1px rgba(94,138,78,.22)}
+.wmap[data-world="A2"] .wstart::before{content:"";display:inline-block;vertical-align:middle;width:11px;height:11px;margin-right:7px;
+  background:var(--gold,#c5a059);clip-path:polygon(50% 0,82% 32%,100% 50%,68% 68%,50% 100%,32% 68%,0 50%,18% 32%);
+  filter:drop-shadow(0 1px 1px rgba(27,27,47,.4))}
+.wmap[data-world="A2"] .wbtn.castle::after{content:"";position:absolute;left:50%;bottom:-9px;transform:translateX(-50%);
+  width:18px;height:3px;border-radius:999px;background:var(--w-glow);opacity:.7;pointer-events:none}
+.world-banner[data-world="A2"] .world-banner__eyebrow{color:var(--w-accent)}
+.world-banner[data-world="A2"] .world-banner__title{text-shadow:0 1px 8px rgba(27,27,47,.6),0 0 18px var(--w-glow)}
+
+/* =========================================================
+   4. MUNDO B1 — EL HORIZONTE · "mediodia despejado" (acento #3D86B0)
+   ========================================================= */
+.world-banner[data-world="B1"] .wamb i{border-radius:50%;
+  background:radial-gradient(circle at 50% 50%,var(--w-glow) 0%,rgba(61,134,176,0) 70%);
+  filter:blur(4px);opacity:.22}
+.world-banner[data-world="B1"] .wamb i:nth-child(1){width:13px;height:13px;left:16%;top:30%;animation:amb-B1-breathe 7.5s ease-in-out infinite}
+.world-banner[data-world="B1"] .wamb i:nth-child(2){width:9px;height:9px;left:35%;top:62%;animation:amb-B1-breathe 8.8s ease-in-out infinite .9s}
+.world-banner[data-world="B1"] .wamb i:nth-child(3){width:14px;height:14px;left:54%;top:24%;animation:amb-B1-breathe 9.6s ease-in-out infinite 1.8s}
+.world-banner[data-world="B1"] .wamb i:nth-child(4){width:10px;height:10px;left:72%;top:58%;animation:amb-B1-breathe 8.1s ease-in-out infinite .4s}
+.world-banner[data-world="B1"] .wamb i:nth-child(5){width:11px;height:11px;left:88%;top:38%;animation:amb-B1-breathe 10.4s ease-in-out infinite 2.6s}
+.world-banner[data-world="B1"] .wamb i:nth-child(6),
+.world-banner[data-world="B1"] .wamb i:nth-child(7),
+.world-banner[data-world="B1"] .wamb i:nth-child(8){width:2px;height:2px;border-radius:1px;filter:none;
+  background:rgba(197,160,89,.9);box-shadow:0 0 4px rgba(197,160,89,.55)}
+.world-banner[data-world="B1"] .wamb i:nth-child(6){left:44%;top:46%;animation:amb-B1-twinkle 5.2s ease-in-out infinite}
+.world-banner[data-world="B1"] .wamb i:nth-child(7){left:63%;top:70%;animation:amb-B1-twinkle 6.4s ease-in-out infinite 1.3s}
+.world-banner[data-world="B1"] .wamb i:nth-child(8){left:80%;top:28%;animation:amb-B1-twinkle 5.8s ease-in-out infinite 2.4s}
+.world-banner[data-world="B1"] .wamb i:nth-child(9){top:-10%;left:0;width:42%;height:120%;border-radius:0;filter:none;opacity:1;
+  background:linear-gradient(105deg,rgba(61,134,176,0) 0%,var(--w-accent-soft) 42%,rgba(245,242,235,.10) 50%,var(--w-accent-soft) 58%,rgba(61,134,176,0) 100%);
+  transform:translateX(-120%);animation:amb-B1-sweep 20s linear infinite}
+@keyframes amb-B1-breathe{0%,100%{transform:scale(.9);opacity:.12}50%{transform:scale(1.08);opacity:.40}}
+@keyframes amb-B1-twinkle{0%,100%{opacity:.15;transform:scale(.85)}50%{opacity:.7;transform:scale(1.15)}}
+@keyframes amb-B1-sweep{0%{transform:translateX(-120%)}22%{transform:translateX(360%)}22.01%,100%{transform:translateX(-120%)}}
+.world-banner[data-world="B1"] .world-banner__eyebrow{color:var(--w-accent)}
+.world-banner[data-world="B1"] .world-banner__eyebrow::after{background:var(--w-accent);opacity:.7}
+.wmap[data-world="B1"] .wamb--map i{border-radius:50%;
+  background:radial-gradient(circle at 50% 50%,var(--w-glow) 0%,rgba(61,134,176,0) 72%);filter:blur(5px);opacity:.16}
+.wmap[data-world="B1"] .wamb--map i:nth-child(1){width:90px;height:90px;left:8%;top:14%;animation:amb-B1-breathe 11s ease-in-out infinite}
+.wmap[data-world="B1"] .wamb--map i:nth-child(2){width:70px;height:70px;left:74%;top:48%;animation:amb-B1-breathe 12.5s ease-in-out infinite 2.2s}
+.wmap[data-world="B1"] .wamb--map i:nth-child(3){width:80px;height:80px;left:30%;top:80%;animation:amb-B1-breathe 13s ease-in-out infinite 1.1s}
+.wmap[data-world="B1"]::before{background-image:
+  repeating-linear-gradient(180deg,rgba(197,160,89,.5) 0 9px,transparent 9px 20px),
+  linear-gradient(180deg,var(--w-accent-soft),rgba(61,134,176,.04))}
+.wmap[data-world="B1"] .wbtn.completed:not(.castle)::before{content:"";position:absolute;top:-13px;right:-9px;
+  width:13px;height:13px;border:1.5px solid var(--gold2,#a8843d);
+  background:linear-gradient(135deg,var(--gold,#c5a059),#dcc08a);transform:rotate(45deg);box-shadow:0 1px 2px rgba(27,27,47,.3)}
+.wmap[data-world="B1"] .wbtn.completed:not(.castle)::after{content:"";position:absolute;top:-9.5px;right:-5.5px;
+  width:5px;height:5px;border-radius:50%;background:#fff;transform-origin:center;
+  box-shadow:0 0 0 1px var(--gold2,#a8843d),0 0 6px rgba(197,160,89,.6);animation:amb-B1-settle 1.1s ease-out forwards}
+@keyframes amb-B1-settle{
+  0%{box-shadow:0 0 0 1px var(--gold2,#a8843d),0 0 0 0 rgba(197,160,89,.9)}
+  40%{box-shadow:0 0 0 1px var(--gold2,#a8843d),0 0 10px 3px rgba(197,160,89,.85)}
+  100%{box-shadow:0 0 0 1px var(--gold2,#a8843d),0 0 6px 0 rgba(197,160,89,.55)}}
+.wmap[data-world="B1"] .wcheck .ic::before{content:"";display:inline-block;width:13px;height:13px;margin-right:5px;vertical-align:-1px;
+  background:radial-gradient(circle at 50% 18%,var(--w-accent) 0 2.4px,transparent 2.8px),
+            linear-gradient(var(--w-accent),var(--w-accent)) 50% 60%/2px 8px no-repeat;background-repeat:no-repeat}
+.wmap[data-world="B1"] .wstart{background:var(--ink,#1B1B2F);border:1px solid var(--w-accent);clip-path:none;
+  border-radius:16px 16px 4px 4px;box-shadow:var(--shadow),inset 0 0 0 1px rgba(61,134,176,.22)}
+.wmap[data-world="B1"] .wstart::after{content:"";position:absolute;left:14%;right:14%;bottom:4px;height:2px;
+  background:linear-gradient(90deg,transparent,var(--gold,#c5a059),transparent);border-radius:2px}
+.wmap[data-world="B1"] .wbtn.castle{border-radius:22px 22px 8px 8px}
+.wmap[data-world="B1"] .wbtn.castle::after{content:"";position:absolute;left:18%;right:18%;bottom:7px;height:2px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.55),transparent);border-radius:2px;pointer-events:none}
+
+/* =========================================================
+   5. MUNDO B2 — LA TORRE · "hora dorada + ascenso" (acento #A8762E)
+   ========================================================= */
+.world-banner[data-world="B2"]::before{background-image:
+  linear-gradient(122deg,transparent 0%,transparent 42%,var(--w-accent-soft) 74%,color-mix(in srgb,var(--w-glow) 55%,transparent) 100%),
+  linear-gradient(180deg,transparent 55%,var(--w-accent-soft) 100%);mix-blend-mode:multiply}
+.world-banner[data-world="B2"] .wamb{z-index:1}
+.world-banner[data-world="B2"] .wamb::before{content:"";position:absolute;inset:-2% -1% -2% -1%;
+  background-image:repeating-linear-gradient(90deg,color-mix(in srgb,var(--w-accent) 6%,transparent) 0 1px,transparent 1px 46px);
+  opacity:.55;transform-origin:50% 100%;animation:amb-B2-grid 22s ease-in-out infinite;will-change:transform,opacity}
+.world-banner[data-world="B2"] .wamb i{width:4px;height:4px;border-radius:50%;
+  background:radial-gradient(circle at 50% 45%,var(--w-glow) 0%,color-mix(in srgb,var(--w-glow) 40%,transparent) 60%,transparent 100%);
+  filter:drop-shadow(0 0 3px var(--w-glow));bottom:-6px;opacity:0;
+  animation:amb-B2-ascend var(--d,17s) ease-in-out infinite;will-change:transform,opacity}
+.world-banner[data-world="B2"] .wamb i:nth-child(1){left:14%;width:3px;height:3px;--d:15s;animation-delay:-1s}
+.world-banner[data-world="B2"] .wamb i:nth-child(2){left:30%;width:5px;height:5px;--d:19s;animation-delay:-6s}
+.world-banner[data-world="B2"] .wamb i:nth-child(3){left:47%;width:4px;height:4px;--d:14s;animation-delay:-3s}
+.world-banner[data-world="B2"] .wamb i:nth-child(4){left:62%;width:3px;height:3px;--d:20s;animation-delay:-11s}
+.world-banner[data-world="B2"] .wamb i:nth-child(5){left:78%;width:5px;height:5px;--d:16s;animation-delay:-8s}
+.world-banner[data-world="B2"] .wamb i:nth-child(6){left:89%;width:4px;height:4px;--d:18s;animation-delay:-13s}
+@keyframes amb-B2-ascend{0%{transform:translateY(0) scale(.85);opacity:0}14%{opacity:.5}70%{opacity:.34}100%{transform:translateY(-22px) scale(1);opacity:0}}
+@keyframes amb-B2-grid{0%,100%{transform:translateY(0) scaleY(1);opacity:.5}50%{transform:translateY(-1.5px) scaleY(1.012);opacity:.62}}
+.world-banner[data-world="B2"] .world-banner__eyebrow{color:var(--w-accent);letter-spacing:1.4px}
+.wmap[data-world="B2"] .wamb--map{z-index:0}
+.wmap[data-world="B2"] .wamb--map::before{content:"";position:absolute;inset:0;
+  background-image:repeating-linear-gradient(90deg,color-mix(in srgb,var(--w-accent) 6%,transparent) 0 1px,transparent 1px 54px);
+  opacity:.5;animation:amb-B2-grid 26s ease-in-out infinite;will-change:transform,opacity}
+.wmap[data-world="B2"] .wamb--map i{width:4px;height:4px;border-radius:50%;bottom:-6px;opacity:0;
+  background:radial-gradient(circle at 50% 45%,var(--w-glow) 0%,transparent 70%);filter:drop-shadow(0 0 3px var(--w-glow));
+  animation:amb-B2-ascend var(--d,18s) ease-in-out infinite;will-change:transform,opacity}
+.wmap[data-world="B2"] .wamb--map i:nth-child(1){left:22%;--d:16s;animation-delay:-2s}
+.wmap[data-world="B2"] .wamb--map i:nth-child(2){left:50%;--d:20s;animation-delay:-9s}
+.wmap[data-world="B2"] .wamb--map i:nth-child(3){left:73%;--d:15s;animation-delay:-5s}
+.wmap[data-world="B2"]::before{background-image:
+  linear-gradient(180deg,color-mix(in srgb,var(--w-accent) 12%,transparent),color-mix(in srgb,var(--w-accent) 4%,transparent)),
+  repeating-linear-gradient(180deg,var(--gold,#c5a059) 0 10px,transparent 10px 22px)}
+.wmap[data-world="B2"] .wbtn.completed:not(.castle)::before,
+.wmap[data-world="B2"] .wbtn.completed:not(.castle)::after{content:"";position:absolute;left:50%;top:50%;width:15px;height:15px;
+  border-top:3px solid var(--gold,#c5a059);border-right:3px solid var(--gold,#c5a059);
+  transform:translate(-50%,-30%) rotate(-45deg);border-radius:1.5px;pointer-events:none}
+.wmap[data-world="B2"] .wbtn.completed:not(.castle)::after{transform:translate(-50%,5%) rotate(-45deg);opacity:.6;
+  transform-origin:50% 50%;animation:amb-B2-settle .42s cubic-bezier(.2,.7,.3,1) forwards}
+@keyframes amb-B2-settle{0%{transform:translate(-50%,-40%) rotate(-45deg) scale(1.18);opacity:0}100%{transform:translate(-50%,5%) rotate(-45deg) scale(1);opacity:.6}}
+.wmap[data-world="B2"] .wcheck{border-color:var(--w-accent)}
+.wmap[data-world="B2"] .wcheck .ic::before{content:"";display:inline-block;width:11px;height:12px;margin-right:5px;vertical-align:-1px;
+  background:linear-gradient(var(--ink,#1B1B2F),var(--ink,#1B1B2F)) 50% 0/2px 100% no-repeat,
+            linear-gradient(var(--ink,#1B1B2F),var(--ink,#1B1B2F)) 50% 30%/9px 2px no-repeat,
+            linear-gradient(var(--ink,#1B1B2F),var(--ink,#1B1B2F)) 50% 70%/9px 2px no-repeat}
+.wmap[data-world="B2"] .wbtn.castle{box-shadow:0 5px 0 rgba(27,27,47,.13),
+  0 0 0 4px color-mix(in srgb,var(--w-accent) 22%,transparent),0 6px 18px color-mix(in srgb,var(--w-glow) 50%,transparent)}
+.wmap[data-world="B2"] .wbtn.castle .wlabel{color:var(--w-accent);font-weight:700;letter-spacing:.4px}
+.wmap[data-world="B2"] .wstart{border:1px solid color-mix(in srgb,var(--w-accent) 45%,transparent);clip-path:none;
+  background:linear-gradient(180deg,var(--w-accent-soft),color-mix(in srgb,var(--w-accent) 4%,transparent));
+  color:var(--w-accent);border-radius:14px 14px 4px 4px}
+.wmap[data-world="B2"] .wstart::before{content:"";position:absolute;left:50%;top:-6px;width:11px;height:11px;
+  transform:translateX(-50%) rotate(45deg);background:var(--gold,#c5a059);border-radius:2px;
+  box-shadow:0 0 6px color-mix(in srgb,var(--gold,#c5a059) 60%,transparent)}
+
+/* =========================================================
+   6. MUNDO C1 — EL FIRMAMENTO · "starfield" (acento #6A5FA8)
+   ========================================================= */
+.world-banner[data-world="C1"]::before{background:
+  radial-gradient(135% 165% at 88% 42%,var(--w-accent-soft) 0%,rgba(106,95,168,0) 52%),
+  radial-gradient(125% 150% at 100% 50%,rgba(27,27,47,.60) 0%,rgba(27,27,47,0) 46%),
+  linear-gradient(90deg,rgba(31,28,58,.92) 0%,rgba(31,28,58,.78) 34%,rgba(31,28,58,.30) 62%,rgba(31,28,58,.05) 100%),
+  linear-gradient(180deg,rgba(27,27,47,.14) 0%,rgba(27,27,47,.44) 100%)}
+.world-banner[data-world="C1"] .wamb{z-index:1}
+.world-banner[data-world="C1"] .wamb::before{content:"";position:absolute;left:-25%;top:-40%;width:150%;height:180%;
+  background:radial-gradient(closest-side at 30% 38%,var(--w-accent-soft) 0%,rgba(106,95,168,.05) 46%,rgba(106,95,168,0) 70%),
+            radial-gradient(closest-side at 72% 64%,var(--w-glow) 0%,rgba(106,95,168,0) 55%);
+  opacity:.42;filter:blur(14px);transform-origin:55% 50%;will-change:transform;
+  animation:amb-C1-nebula 22s ease-in-out infinite alternate;pointer-events:none}
+@keyframes amb-C1-nebula{from{transform:rotate(0deg) scale(1)}to{transform:rotate(8deg) scale(1.04)}}
+.world-banner[data-world="C1"] .wamb i{width:2px;height:2px;border-radius:50%;
+  background:rgba(197,160,89,.9);box-shadow:0 0 4px 1px rgba(197,160,89,.55);opacity:.2;transform:scale(.9);
+  animation-name:amb-C1-twinkle;animation-timing-function:ease-in-out;animation-iteration-count:infinite;will-change:transform,opacity}
+.world-banner[data-world="C1"] .wamb i:nth-child(1){left:14%;top:30%;width:1.5px;height:1.5px;animation-duration:5s;animation-delay:-1s}
+.world-banner[data-world="C1"] .wamb i:nth-child(2){left:26%;top:64%;width:2px;height:2px;animation-duration:7s;animation-delay:-3s}
+.world-banner[data-world="C1"] .wamb i:nth-child(3){left:38%;top:22%;width:2.5px;height:2.5px;animation-duration:6s;animation-delay:-2s}
+.world-banner[data-world="C1"] .wamb i:nth-child(4){left:47%;top:52%;width:1.5px;height:1.5px;animation-duration:8s;animation-delay:-5s}
+.world-banner[data-world="C1"] .wamb i:nth-child(5){left:55%;top:34%;width:3px;height:3px;animation-duration:9s;animation-delay:-1s}
+.world-banner[data-world="C1"] .wamb i:nth-child(6){left:63%;top:70%;width:2px;height:2px;animation-duration:4s;animation-delay:-3s}
+.world-banner[data-world="C1"] .wamb i:nth-child(7){left:71%;top:26%;width:2px;height:2px;animation-duration:7s;animation-delay:-4s}
+.world-banner[data-world="C1"] .wamb i:nth-child(8){left:80%;top:58%;width:1.5px;height:1.5px;animation-duration:6s;animation-delay:-2s}
+.world-banner[data-world="C1"] .wamb i:nth-child(9){left:88%;top:38%;width:2.5px;height:2.5px;animation-duration:8s;animation-delay:-7s}
+.world-banner[data-world="C1"] .wamb i:nth-child(10){left:33%;top:46%;width:2px;height:2px;animation-duration:5s;animation-delay:-2s}
+.world-banner[data-world="C1"] .wamb i:nth-child(3),
+.world-banner[data-world="C1"] .wamb i:nth-child(7),
+.world-banner[data-world="C1"] .wamb i:nth-child(9){background:var(--w-accent);box-shadow:0 0 5px 1px var(--w-glow)}
+@keyframes amb-C1-twinkle{0%,100%{opacity:.12;transform:scale(.85)}50%{opacity:.6;transform:scale(1.1)}}
+.wmap[data-world="C1"] .wamb--map i{width:2px;height:2px;border-radius:50%;
+  background:rgba(197,160,89,.7);box-shadow:0 0 3px 1px rgba(197,160,89,.4);opacity:.16;transform:scale(.9);
+  animation-name:amb-C1-twinkle;animation-timing-function:ease-in-out;animation-iteration-count:infinite;will-change:transform,opacity}
+.wmap[data-world="C1"] .wamb--map i:nth-child(1){left:18%;top:12%;animation-duration:7s;animation-delay:-2s}
+.wmap[data-world="C1"] .wamb--map i:nth-child(2){left:78%;top:24%;width:2.5px;height:2.5px;background:var(--w-accent);box-shadow:0 0 4px 1px var(--w-glow);animation-duration:6s;animation-delay:-3s}
+.wmap[data-world="C1"] .wamb--map i:nth-child(3){left:30%;top:48%;animation-duration:9s;animation-delay:-1s}
+.wmap[data-world="C1"] .wamb--map i:nth-child(4){left:82%;top:62%;animation-duration:5s;animation-delay:-5s}
+.wmap[data-world="C1"] .wamb--map i:nth-child(5){left:14%;top:78%;width:2.5px;height:2.5px;background:var(--w-accent);box-shadow:0 0 4px 1px var(--w-glow);animation-duration:8s;animation-delay:-3s}
+.wmap[data-world="C1"] .wamb--map i:nth-child(6){left:66%;top:88%;animation-duration:7s;animation-delay:-7s}
+.world-banner[data-world="C1"] .world-banner__eyebrow{color:var(--w-accent)}
+.world-banner[data-world="C1"] .world-banner__eyebrow::after{background:var(--w-accent)}
+.wmap[data-world="C1"]::before{background-image:
+  repeating-linear-gradient(180deg,var(--w-accent-soft) 0 9px,transparent 9px 20px),
+  repeating-linear-gradient(180deg,rgba(197,160,89,.5) 0 9px,transparent 9px 20px)}
+.wmap[data-world="C1"]::after{background-image:
+  repeating-linear-gradient(180deg,var(--w-glow) 0 2px,transparent 2px 16px),
+  repeating-linear-gradient(180deg,rgba(197,160,89,.55) 0 3px,transparent 3px 16px)}
+.wmap[data-world="C1"] .wbtn.completed:not(.castle)::before{content:"";position:absolute;top:-13px;right:-3px;
+  width:1px;height:5px;background:var(--gold,#c5a059);border-radius:1px;transform:none;opacity:.7}
+.wmap[data-world="C1"] .wbtn.completed:not(.castle)::after{content:"";position:absolute;top:-14px;right:-9px;width:13px;height:13px;
+  background:var(--gold,#c5a059);clip-path:polygon(50% 0%,60% 40%,100% 50%,60% 60%,50% 100%,40% 60%,0% 50%,40% 40%);
+  transform-origin:50% 50%;filter:drop-shadow(0 1px 1px rgba(27,27,47,.3));animation:amb-C1-settle 1.1s ease-out 1 forwards}
+@keyframes amb-C1-settle{
+  0%{transform:scale(.4) rotate(-30deg);opacity:0}
+  55%{transform:scale(1.18) rotate(4deg);opacity:1;filter:drop-shadow(0 0 5px var(--w-glow)) drop-shadow(0 1px 1px rgba(27,27,47,.3))}
+  100%{transform:scale(1) rotate(0deg);opacity:1;filter:drop-shadow(0 1px 1px rgba(27,27,47,.3))}}
+.wmap[data-world="C1"] .wcheck .ic::before{content:"\2237";color:var(--w-accent);margin-right:4px;font-size:.95rem;letter-spacing:-1px}
+.wmap[data-world="C1"] .wstart{background:linear-gradient(180deg,rgba(31,28,58,.96),var(--ink,#1B1B2F));border-color:var(--w-accent);
+  box-shadow:0 0 0 1px var(--w-accent-soft),0 4px 14px rgba(31,28,58,.4),var(--shadow);
+  clip-path:polygon(0 100%,6% 28%,18% 8%,38% 0,62% 0,82% 8%,94% 28%,100% 100%);padding:7px 30px 5px}
+.wmap[data-world="C1"] .wbtn.castle{box-shadow:0 0 0 4px var(--paper,#fff),0 0 22px var(--w-glow),0 6px 18px rgba(31,28,58,.34)}
+
+/* =========================================================
+   7. MUNDO C2 — EL CASTILLO DEL SABER · "aurora" (acento #3FA08A)
+   ========================================================= */
+.world-banner[data-world="C2"]::before{background:
+  radial-gradient(135% 165% at 100% 50%,rgba(11,11,24,.78) 0%,rgba(11,11,24,0) 50%),
+  linear-gradient(90deg,rgba(11,11,24,.97) 0%,rgba(11,11,24,.90) 32%,rgba(13,13,30,.52) 62%,rgba(16,16,34,.18) 100%),
+  linear-gradient(180deg,rgba(11,11,24,.34) 0%,rgba(11,11,24,.62) 100%),
+  radial-gradient(120% 140% at 50% 110%,var(--w-accent-soft) 0%,rgba(63,160,138,0) 58%)}
+.world-banner[data-world="C2"] .world-banner__eyebrow{color:var(--w-accent)}
+.world-banner[data-world="C2"] .world-banner__eyebrow::after{background:linear-gradient(90deg,var(--w-accent),transparent);opacity:.85}
+.world-banner[data-world="C2"] .wamb{z-index:1}
+.world-banner[data-world="C2"] .wamb i:nth-child(-n+3){top:-22%;height:150%;width:46%;border-radius:50%;
+  background:linear-gradient(180deg,rgba(63,160,138,0) 0%,var(--w-glow) 30%,var(--w-accent-soft) 58%,rgba(63,160,138,0) 100%);
+  filter:blur(26px);opacity:.2;mix-blend-mode:screen;transform-origin:50% 50%}
+.world-banner[data-world="C2"] .wamb i:nth-child(1){left:6%;animation:amb-C2-aurora 19s ease-in-out infinite}
+.world-banner[data-world="C2"] .wamb i:nth-child(2){left:34%;width:40%;opacity:.16;filter:blur(30px);animation:amb-C2-aurora 22s ease-in-out -7s infinite}
+.world-banner[data-world="C2"] .wamb i:nth-child(3){left:60%;width:42%;opacity:.18;filter:blur(28px);animation:amb-C2-aurora 21s ease-in-out -13s infinite}
+.world-banner[data-world="C2"] .wamb i:nth-child(n+4){width:3px;height:3px;border-radius:50%;
+  background:radial-gradient(circle,#f0dca0 0%,#c5a059 55%,rgba(197,160,89,0) 100%);box-shadow:0 0 5px rgba(197,160,89,.7);opacity:.85}
+.world-banner[data-world="C2"] .wamb i:nth-child(4){top:24%;left:22%;animation:amb-C2-star 6.5s ease-in-out infinite}
+.world-banner[data-world="C2"] .wamb i:nth-child(5){top:18%;left:48%;width:2.5px;height:2.5px;animation:amb-C2-star 8s ease-in-out -2.4s infinite}
+.world-banner[data-world="C2"] .wamb i:nth-child(6){top:40%;left:71%;animation:amb-C2-star 7.2s ease-in-out -4.1s infinite}
+.world-banner[data-world="C2"] .wamb i:nth-child(7){top:30%;left:88%;width:2px;height:2px;animation:amb-C2-star 9s ease-in-out -5.6s infinite}
+@keyframes amb-C2-aurora{
+  0%{transform:translateX(-5%) scaleY(.96) skewX(-3deg);opacity:.14}
+  30%{transform:translateX(3%) scaleY(1.05) skewX(2deg);opacity:.22}
+  60%{transform:translateX(6%) scaleY(.98) skewX(4deg);opacity:.18}
+  100%{transform:translateX(-5%) scaleY(.96) skewX(-3deg);opacity:.14}}
+@keyframes amb-C2-star{0%,100%{opacity:.25;transform:scale(.85)}50%{opacity:.95;transform:scale(1.15)}}
+.wmap[data-world="C2"]::before{background-image:
+  repeating-linear-gradient(180deg,var(--w-accent-soft) 0 9px,transparent 9px 28px),
+  repeating-linear-gradient(180deg,rgba(197,160,89,.5) 0 9px,transparent 9px 20px)}
+.wmap[data-world="C2"]::after{background-image:
+  repeating-linear-gradient(180deg,rgba(63,160,138,.22) 0 3px,transparent 3px 16px),
+  repeating-linear-gradient(180deg,rgba(197,160,89,.55) 0 3px,transparent 3px 16px)}
+.wmap[data-world="C2"] .wamb--map{z-index:0}
+.wmap[data-world="C2"] .wamb--map i{top:-10%;height:120%;width:55%;border-radius:50%;
+  background:linear-gradient(180deg,rgba(63,160,138,0) 0%,var(--w-glow) 45%,rgba(63,160,138,0) 100%);
+  filter:blur(40px);opacity:.1;mix-blend-mode:screen;transform-origin:50% 50%}
+.wmap[data-world="C2"] .wamb--map i:nth-child(1){left:-8%;animation:amb-C2-aurora 22s ease-in-out infinite}
+.wmap[data-world="C2"] .wamb--map i:nth-child(2){left:52%;width:48%;opacity:.08;animation:amb-C2-aurora 20s ease-in-out -10s infinite}
+.wmap[data-world="C2"] .wbtn.completed:not(.castle)::before{content:"";position:absolute;top:-13px;left:50%;transform:translateX(-50%);
+  width:24px;height:9px;background:linear-gradient(180deg,var(--gold,#c5a059),var(--gold2,#a8843d));
+  -webkit-mask:radial-gradient(circle at 12% 100%,#000 1.4px,transparent 1.6px),radial-gradient(circle at 50% 100%,#000 1.4px,transparent 1.6px),radial-gradient(circle at 88% 100%,#000 1.4px,transparent 1.6px);
+          mask:radial-gradient(circle at 12% 100%,#000 1.4px,transparent 1.6px),radial-gradient(circle at 50% 100%,#000 1.4px,transparent 1.6px),radial-gradient(circle at 88% 100%,#000 1.4px,transparent 1.6px);
+  clip-path:polygon(0 100%,12% 8%,28% 68%,50% 0,72% 68%,88% 8%,100% 100%);filter:drop-shadow(0 1px 1px rgba(27,27,47,.3))}
+.wmap[data-world="C2"] .wbtn.completed:not(.castle)::after{content:"";position:absolute;top:-14px;left:50%;width:26px;height:11px;
+  transform:translateX(-50%);background:none;filter:none;
+  background-image:linear-gradient(105deg,transparent 35%,rgba(255,245,210,.85) 50%,transparent 65%);
+  background-size:220% 100%;background-repeat:no-repeat;
+  clip-path:polygon(0 100%,12% 8%,28% 68%,50% 0,72% 68%,88% 8%,100% 100%);animation:amb-C2-settle 1.4s ease-out forwards}
+@keyframes amb-C2-settle{
+  0%{transform:translateX(-50%) scale(1.1);background-position:140% 0;opacity:0}
+  18%{opacity:1}
+  100%{transform:translateX(-50%) scale(1);background-position:-40% 0;opacity:0}}
+.wmap[data-world="C2"] .wcheck{border-color:var(--w-accent);border-left-color:var(--w-accent);
+  background:linear-gradient(90deg,var(--w-accent-soft),var(--gold-tint))}
+.wmap[data-world="C2"] .wcheck .ic::before{content:"\16A8";color:var(--w-accent);margin-right:4px;font-size:1rem;text-shadow:0 0 4px var(--w-glow)}
+.wmap[data-world="C2"] .wbtn.castle{border-radius:14px 14px 18px 18px;
+  background:linear-gradient(165deg,#dcc08a,var(--gold,#c5a059));border-color:var(--gold2,#a8843d)}
+.wmap[data-world="C2"] .wbtn.castle::before{content:"";position:absolute;inset:-12px;border-radius:50%;pointer-events:none;z-index:-1;
+  background:radial-gradient(circle,rgba(197,160,89,.5) 0%,rgba(197,160,89,0) 68%);filter:blur(4px);animation:amb-C2-beacon 6.5s ease-in-out infinite}
+.wmap[data-world="C2"] .wbtn.castle::after{content:"";position:absolute;top:7px;left:50%;transform:translateX(-50%);
+  width:11px;height:13px;background:var(--w-accent);opacity:.42;
+  clip-path:polygon(50% 0,100% 22%,100% 64%,50% 100%,0 64%,0 22%);filter:drop-shadow(0 0 3px var(--w-glow))}
+.wmap[data-world="C2"] .wbtn.castle.completed svg path:last-child{transform-origin:23px 4px;animation:amb-C2-beacon 6.5s ease-in-out infinite}
+.wmap[data-world="C2"] .wlabel{letter-spacing:.1em}
+@keyframes amb-C2-beacon{0%,100%{opacity:.45;transform:scale(.97)}50%{opacity:.95;transform:scale(1.04)}}
+.wmap[data-world="C2"] .wstart{background:linear-gradient(160deg,#0b0b18,var(--ink,#1B1B2F));color:var(--gold,#c5a059);
+  border-color:var(--gold,#c5a059);box-shadow:0 0 0 1px var(--w-accent-soft),var(--shadow)}
+.wmap[data-world="C2"] .wstart > span{text-shadow:0 0 6px var(--w-glow)}
+
+/* =========================================================
+   8. PREFERS-REDUCED-MOTION — UN solo bloque que detiene/atenua TODO
+   (globales g-*, todos los amb-<NIVEL>-*, wpulse, capas .wamb).
+   Estado en reposo bello y legible; particulas congeladas como textura.
+   ========================================================= */
+@media (prefers-reduced-motion:reduce){
+  /* globales */
+  .world-banner__img,.world-banner::before,.wmap::before,.wmap::after,
+  .wbtn,.wbtn.is-current::after,.worlds .world,.world.on,
+  .world-banner__bar > i::after,.wnode.done .wstars,
+  /* capas ambientales (banner + mapa) y sus pseudos pintados */
+  .wamb i,.wamb::before,.wamb--map i,.wamb--map::before,
+  /* sellos de completado por mundo (settle) */
+  .wmap[data-world] .wbtn.completed:not(.castle)::after,
+  /* gestos del castillo por mundo */
+  .wmap[data-world] .wbtn.castle::before,
+  .wmap[data-world] .wbtn.castle.completed svg path:last-child,
+  /* scrim que respira (A1) */
+  .world-banner[data-world="A1"]::after{
+    animation:none !important;
+  }
+  .world-banner__img{transform:scale(1.06)}
+  .world:not(.locked):hover,.world:not(.locked):focus-visible{transform:none}
+  /* congelar particulas como textura tenue (no eliminarlas) */
+  .wamb i,.wamb--map i{opacity:.3;transform:none}
+  /* dejar sellos en su fotograma final, legibles */
+  .wmap[data-world] .wbtn.completed:not(.castle)::after{opacity:1;transform:none}
+  .wmap[data-world="B2"] .wbtn.completed:not(.castle)::after{transform:translate(-50%,5%) rotate(-45deg);opacity:.6}
+  .world-banner[data-world="A1"] .wamb i,.wmap[data-world="A1"] .wamb--map i{opacity:.32}
+  .world-banner[data-world="B1"] .wamb i:nth-child(9){opacity:0}
+}
+
+/* =====================================================================
+   VESPER ACADEMY — "El Sendero Vivo": camino temático + paisaje en capas
+   + vida (animación). Oro (#c5a059/#a8843d) = recompensa INVARIANTE; el
+   acento del mundo (--w-accent/-soft/--w-glow) lleva la atmósfera. Solo
+   se animan transform / opacity / filter / stroke-dashoffset. Todo se
+   congela bajo prefers-reduced-motion y .vesper-reduce-motion (al final).
+   ===================================================================== */
+
+/* ---- keyframes globales (g-*) ---- */
+@keyframes g-sway{0%,100%{transform:rotate(-1.5deg)}50%{transform:rotate(1.5deg)}}
+@keyframes g-flag{0%,100%{transform:skewX(-7deg) rotate(-1.5deg)}50%{transform:skewX(7deg) rotate(1.5deg)}}
+@keyframes g-flick{0%,100%{opacity:.6}42%{opacity:1}68%{opacity:.82}}
+@keyframes g-twinkle{0%,100%{opacity:.5;transform:scale(.8)}50%{opacity:1;transform:scale(1.14)}}
+@keyframes g-beam{0%,100%{transform:rotate(-20deg);opacity:.1}50%{transform:rotate(20deg);opacity:.3}}
+@keyframes g-smoke{0%{transform:translateY(0) scale(1);opacity:.55}100%{transform:translateY(-13px) scale(1.7);opacity:0}}
+@keyframes g-roadbreathe{0%,100%{opacity:.42}50%{opacity:.66}}   /* centrado en la base .55 del glow */
+@keyframes g-roadtwinkle{0%,100%{opacity:.7}50%{opacity:1}}
+
+/* ---- terreno: profundidad + suelo + vida ---- */
+.wterrain{overflow:visible}
+/* siluetas laterales = masas de terreno continuas (el camino atraviesa un lugar) */
+.terr .sil{fill:#23234a;opacity:.55}
+.terr .sil2{fill:#20203c;opacity:.6}                 /* capa trasera, más oscura/lejana */
+.terr .sil-rim{fill:none;stroke:var(--w-accent,#5E8A4E);stroke-width:1.1;opacity:.5}
+/* repisa de suelo bajo cada grupo de props (para que no "floten") */
+.terr .ground{fill:var(--w-accent-soft,rgba(197,160,89,.12));opacity:.85}
+/* perspectiva atmosférica: lejos = más claro/desaturado; cerca = más oscuro/saturado */
+.terr .far{opacity:.55;filter:saturate(.7)}
+.terr .near{filter:brightness(.92) saturate(1.12)}
+/* pivotes por elemento (SVG necesita transform-box:fill-box) */
+.terr .sway,.terr .lf,.terr .lf2,.terr .flag,.terr .ring,.terr .spark,.terr .gem,.terr .glow,.terr .win,.terr .beam,.terr .smoke{transform-box:fill-box}
+/* vida idle de props (global; el camino se afina por mundo más abajo) */
+.terr .sway{transform-origin:50% 100%;animation:g-sway 4.8s ease-in-out infinite}
+.terr .flag{transform-origin:0% 100%;animation:g-flag 3.4s ease-in-out infinite}
+.terr .glow,.terr .win{transform-origin:50% 50%;animation:g-flick 5s ease-in-out infinite}
+.terr .spark,.terr .gem{transform-origin:50% 50%;animation:g-twinkle 5.5s ease-in-out infinite}
+.terr .ring{fill:none;stroke:var(--w-accent,#6A5FA8);stroke-width:1.4;opacity:.8}          /* anillo estático (girar una elipse se ve mal) */
+.terr .beamray{fill:var(--w-glow,rgba(61,134,176,.5))}
+.terr .beam{transform-origin:0% 50%;opacity:.2;animation:g-beam 7s ease-in-out infinite}    /* faro: pivota en la lámpara */
+.terr .smoke{transform-origin:50% 100%;animation:g-smoke 4.6s ease-out infinite}
+/* desfase determinista por posición para que no titilen al unísono */
+.terr .prop:nth-of-type(2n) .glow,.terr .prop:nth-of-type(2n) .win{animation-delay:-2.3s}
+.terr .prop:nth-of-type(3n) .glow,.terr .prop:nth-of-type(3n) .win{animation-delay:-3.7s}
+.terr .prop:nth-of-type(3n) .spark,.terr .prop:nth-of-type(3n) .gem{animation-delay:-3.1s}
+.terr .prop:nth-of-type(3n+1) .spark,.terr .prop:nth-of-type(3n+1) .gem{animation-delay:-1.6s}
+.terr .prop:nth-of-type(4n) .sway{animation-duration:5.6s}
+.terr .prop:nth-of-type(5n) .sway{animation-duration:4.1s}
+/* solo animan las piezas de PRIMER PLANO (.near) + el héroe (sin clase de
+   profundidad); las capas lejana (.far) y media (.mid) descansan estáticas para
+   no tener ~150 animaciones simultáneas en un mapa de 4000px (la quietud del
+   fondo además refuerza la profundidad). */
+.terr .far .sway,.terr .far .glow,.terr .far .spark,.terr .far .win,.terr .far .gem,.terr .far .flag,
+.terr .mid .sway,.terr .mid .glow,.terr .mid .spark,.terr .mid .win,.terr .mid .gem,.terr .mid .flag{animation:none}
+
+/* ---- carácter del camino por mundo ----
+   La textura/veta son ESTÁTICAS (patrón labrado: adoquín/tabla/peldaño/estrella);
+   el único trazo en movimiento es .wtrail-comet (una cuenta de luz fina) para no
+   repintar toda la franja del mapa varias veces por fotograma. Los respiros de luz
+   usan opacity (compositor). */
+/* A1 — adoquín de hogar (cálido) */
+.wmap[data-world="A1"] .wtrail-tex{stroke-dasharray:2 7}
+.wmap[data-world="A1"] .wtrail-comet{animation-duration:12s}
+/* A2 — pasaderas de piedra en el bosque (dosel que respira) */
+.wmap[data-world="A2"] .wtrail-tex{stroke-dasharray:3 9}
+.wmap[data-world="A2"] .wtrail-glow{animation:g-roadbreathe 6s ease-in-out infinite}
+.wmap[data-world="A2"] .wtrail-comet{animation-duration:16s}
+/* B1 — paseo marítimo con farolas (vía guiada) */
+.wmap[data-world="B1"] .wtrail-tex{stroke-dasharray:2 7}
+.wmap[data-world="B1"] .wtrail-line{stroke-dasharray:1 14;stroke-width:4;filter:drop-shadow(0 0 4px var(--gold,#c5a059))}
+.wmap[data-world="B1"] .wtrail-comet{animation-duration:10s}
+/* B2 — escalinata de ascenso (peldaños fijos; el cometa SUBE) */
+.wmap[data-world="B2"] .wtrail-tex{stroke-dasharray:12 5;opacity:.5}
+.wmap[data-world="B2"] .wtrail-line{stroke-dasharray:3 10}
+.wmap[data-world="B2"] .wtrail-comet{animation-duration:13s;animation-direction:reverse}
+/* C1 — vía constelar (sin pavimento; la ruta ES luz) */
+.wmap[data-world="C1"] .wtrail-base{opacity:.1}
+.wmap[data-world="C1"] .wtrail-road{opacity:.16}
+.wmap[data-world="C1"] .wtrail-tex{opacity:0}
+.wmap[data-world="C1"] .wtrail-glow{stroke-width:13;opacity:.42;filter:blur(1px)}
+.wmap[data-world="C1"] .wtrail-line{stroke-dasharray:1 9;stroke-width:2.4;filter:drop-shadow(0 0 5px var(--gold,#c5a059));animation:g-roadtwinkle 6s ease-in-out infinite}
+.wmap[data-world="C1"] .wtrail-comet{animation-duration:18s}
+/* C2 — calzada de aurora hacia el castillo */
+.wmap[data-world="C2"] .wtrail-road{opacity:.26;filter:blur(1px)}
+.wmap[data-world="C2"] .wtrail-tex{opacity:0}
+.wmap[data-world="C2"] .wtrail-glow{stroke-width:12;animation:g-roadbreathe 8s ease-in-out infinite}
+.wmap[data-world="C2"] .wtrail-line{stroke-dasharray:3 11}
+.wmap[data-world="C2"] .wtrail-comet{animation-duration:15s}
+
+/* ---- profundidad al hacer scroll (parallax): las masas laterales (fondo)
+   se rezagan respecto a nodos/camino. JS (applyParallax) traslada .wsil ~0.12x
+   del scroll; se anula bajo reduced-motion. ---- */
+.wsil{will-change:transform}
+
+/* ---- atmósfera por mundo (.watmo): una capa de clima/niebla/nebulosa/aurora
+   detrás del camino y los nodos. Tokens de acento/glow; solo transform/opacity. ---- */
+.watmo{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.watmo::before,.watmo::after{content:"";position:absolute;pointer-events:none;will-change:transform,opacity}
+/* A1 — bruma cálida de hogar que sube del suelo */
+.wisland[data-world="A1"] .watmo::before{inset:auto 0 0 0;height:55%;
+  background:radial-gradient(120% 90% at 50% 120%,var(--w-glow) 0%,transparent 60%);opacity:.22;animation:g-atmo-breathe 9s ease-in-out infinite}
+/* A2 — niebla de bosque a la deriva en el tercio inferior */
+.wisland[data-world="A2"] .watmo::before{inset:auto -20% 5% -20%;height:42%;
+  background:linear-gradient(0deg,var(--w-accent-soft) 0%,transparent 82%);opacity:.55;filter:blur(2px);animation:g-atmo-drift 26s ease-in-out infinite alternate}
+/* B1 — calina costera que barre en horizontal */
+.wisland[data-world="B1"] .watmo::before{inset:28% -28% auto -28%;height:34%;
+  background:linear-gradient(90deg,transparent,var(--w-accent-soft) 44%,rgba(255,255,255,.06) 50%,var(--w-accent-soft) 56%,transparent);opacity:.5;filter:blur(3px);animation:g-atmo-sweep 30s linear infinite}
+/* B2 — polvo dorado que asciende */
+.wisland[data-world="B2"] .watmo::before{inset:auto 0 0 0;height:62%;
+  background:linear-gradient(0deg,var(--w-accent-soft) 0%,transparent 72%);opacity:.4;animation:g-atmo-breathe 11s ease-in-out infinite}
+/* C1 — nubes de nebulosa a la deriva */
+.wisland[data-world="C1"] .watmo::before{inset:-12% -15% auto -15%;height:72%;
+  background:radial-gradient(closest-side at 30% 40%,var(--w-accent-soft) 0%,transparent 70%),radial-gradient(closest-side at 75% 60%,var(--w-glow) 0%,transparent 65%);opacity:.5;filter:blur(8px);animation:g-atmo-float 34s ease-in-out infinite alternate}
+/* C2 — cortinas de aurora que ondean */
+.wisland[data-world="C2"] .watmo::before{inset:-12% 0 auto 0;height:82%;transform-origin:50% 0;
+  background:linear-gradient(95deg,transparent 0%,var(--w-glow) 35%,var(--w-accent-soft) 55%,transparent 100%);opacity:.28;filter:blur(10px);animation:g-atmo-aurora 16s ease-in-out infinite}
+.wisland[data-world="C2"] .watmo::after{inset:-8% 0 auto 0;height:62%;transform-origin:50% 0;
+  background:linear-gradient(85deg,transparent 12%,var(--w-accent-soft) 50%,transparent 88%);opacity:.2;filter:blur(14px);animation:g-atmo-aurora 22s ease-in-out -6s infinite}
+@keyframes g-atmo-breathe{0%,100%{opacity:.15;transform:translateY(7px)}50%{opacity:.3;transform:translateY(-5px)}}
+@keyframes g-atmo-drift{0%{transform:translateX(-6%)}100%{transform:translateX(6%)}}
+@keyframes g-atmo-sweep{0%{transform:translateX(-32%)}100%{transform:translateX(32%)}}
+@keyframes g-atmo-float{0%{transform:translate(-3%,0)}100%{transform:translate(4%,2%)}}
+@keyframes g-atmo-aurora{0%,100%{transform:skewX(-7deg) translateX(-4%);opacity:.16}50%{transform:skewX(7deg) translateX(4%);opacity:.32}}
+
+/* ---- reduced-motion: congela TODO lo nuevo en un cuadro bello y legible ---- */
+@media(prefers-reduced-motion:reduce){
+  /* !important: vence a los ajustes por mundo .wmap[data-world] .wtrail-* (0,3,0) */
+  .wtrail-comet,.wtrail-tex,.wtrail-line,.wtrail-glow,.wtrail-road{animation:none!important}
+  .wtrail-comet{stroke-dashoffset:calc(var(--total,0px) * (var(--rest,0) / -100))}
+  .terr .sway,.terr .flag,.terr .glow,.terr .win,.terr .spark,.terr .gem,.terr .ring,.terr .beam,.terr .smoke{animation:none}
+  .terr .glow,.terr .win,.terr .spark,.terr .gem{opacity:1;transform:none}
+  .terr .smoke{opacity:.28}.terr .beam{opacity:.2;transform:rotate(0deg)}
+  .watmo::before,.watmo::after{animation:none!important}
+  .wsil{transform:none!important}
+}
+.vesper-reduce-motion .wtrail-comet,.vesper-reduce-motion .wtrail-tex,.vesper-reduce-motion .wtrail-line,.vesper-reduce-motion .wtrail-glow,.vesper-reduce-motion .wtrail-road{animation:none!important}
+.vesper-reduce-motion .wtrail-comet{stroke-dashoffset:calc(var(--total,0px) * (var(--rest,0) / -100))}
+.vesper-reduce-motion .terr .sway,.vesper-reduce-motion .terr .flag,.vesper-reduce-motion .terr .glow,.vesper-reduce-motion .terr .win,.vesper-reduce-motion .terr .spark,.vesper-reduce-motion .terr .gem,.vesper-reduce-motion .terr .ring,.vesper-reduce-motion .terr .beam,.vesper-reduce-motion .terr .smoke{animation:none}
+.vesper-reduce-motion .terr .glow,.vesper-reduce-motion .terr .win,.vesper-reduce-motion .terr .spark,.vesper-reduce-motion .terr .gem{opacity:1;transform:none}
+.vesper-reduce-motion .terr .smoke{opacity:.28}.vesper-reduce-motion .terr .beam{opacity:.2;transform:rotate(0deg)}
+.vesper-reduce-motion .watmo::before,.vesper-reduce-motion .watmo::after{animation:none!important}
+.vesper-reduce-motion .wsil{transform:none!important}
+
+/* =====================================================================
+   "Vesper te escribe": burbuja de chat flotante (FAB + globo emergente).
+   Llama la atención hacia el chat con un mensaje y un punto de no leído.
+   Se congela bajo prefers-reduced-motion / .vesper-reduce-motion.
+   ===================================================================== */
+.vchat-nudge{position:fixed;right:14px;bottom:16px;z-index:9998;display:flex;flex-direction:column;
+  align-items:flex-end;gap:11px;pointer-events:none}
+.vchat-nudge > *{pointer-events:auto}
+/* deja sitio para que el botón flotante no tape el final del contenido */
+body.has-chat-nudge .wrap{padding-bottom:96px}
+.vchat-fab{position:relative;width:62px;height:62px;border-radius:50%;display:grid;place-items:center;flex:0 0 auto;
+  background:var(--paper);border:2px solid var(--gold);box-shadow:0 8px 22px rgba(27,27,47,.22);
+  text-decoration:none;cursor:pointer;-webkit-tap-highlight-color:transparent;
+  opacity:0;transform:scale(.55) translateY(10px);transition:opacity .3s ease,transform .38s cubic-bezier(.18,.89,.32,1.4)}
+.vchat-fab img{width:54px;height:54px;border-radius:50%;object-fit:cover;display:block;background:var(--gold-tint)}
+.vchat-fab .vchat-dot{position:absolute;top:-3px;right:-3px;min-width:20px;height:20px;border-radius:999px;
+  background:var(--error);color:#fff;border:2px solid var(--paper);font-size:.7rem;font-weight:800;
+  display:grid;place-items:center;padding:0 4px;box-shadow:0 0 0 0 rgba(192,57,43,.5)}
+.vchat-fab .vchat-dot[hidden]{display:none}
+.vchat-pop{position:relative;max-width:236px;background:var(--paper);border:1px solid var(--line);
+  border-radius:16px 16px 5px 16px;box-shadow:0 12px 32px rgba(27,27,47,.22);padding:12px 13px 12px;
+  transform-origin:bottom right;opacity:0;transform:scale(.7) translateY(12px);
+  transition:opacity .25s ease,transform .28s cubic-bezier(.18,.89,.32,1.32)}
+.vchat-pop[hidden]{display:none}
+.vchat-pop::after{content:"";position:absolute;right:19px;bottom:-7px;width:13px;height:13px;background:var(--paper);
+  border-right:1px solid var(--line);border-bottom:1px solid var(--line);transform:rotate(45deg)}
+.vchat-name{font-size:.68rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--gold2);
+  display:flex;align-items:center;gap:6px;margin:0 0 5px}
+.vchat-name i{width:7px;height:7px;border-radius:50%;background:var(--success);display:inline-block;flex:0 0 auto}
+.vchat-msg{margin:0;font-size:.92rem;line-height:1.42;color:var(--ink)}
+.vchat-cta{display:inline-flex;align-items:center;gap:6px;margin-top:10px;background:var(--ink);color:var(--cream);
+  text-decoration:none;font-size:.84rem;font-weight:700;border-radius:11px;padding:9px 14px}
+.vchat-cta:active{transform:translateY(1px)}
+.vchat-x{position:absolute;top:5px;right:5px;width:25px;height:25px;border:none;background:none;cursor:pointer;
+  color:var(--muted);font-size:1.15rem;line-height:1;border-radius:50%;display:grid;place-items:center}
+.vchat-x:hover{background:var(--cream)}
+.vchat-typing{display:flex;gap:5px;padding:6px 2px 4px}
+.vchat-typing i{width:8px;height:8px;border-radius:50%;background:var(--muted);opacity:.45;
+  animation:vchat-type 1s ease-in-out infinite}
+.vchat-typing i:nth-child(2){animation-delay:.16s}
+.vchat-typing i:nth-child(3){animation-delay:.32s}
+@keyframes vchat-type{0%,60%,100%{opacity:.35;transform:translateY(0)}30%{opacity:1;transform:translateY(-4px)}}
+.vchat-nudge.show-fab .vchat-fab{opacity:1;transform:none}
+.vchat-nudge.show-pop .vchat-pop{opacity:1;transform:none}
+.vchat-nudge.wiggle.show-fab .vchat-fab{animation:vchat-wiggle 3.2s ease-in-out 1.1s infinite}
+.vchat-nudge.show-fab .vchat-dot:not([hidden]){animation:vchat-pulse 1.9s ease-in-out infinite}
+@keyframes vchat-wiggle{0%,86%,100%{transform:rotate(0)}90%{transform:rotate(-8deg)}94%{transform:rotate(8deg)}98%{transform:rotate(-3deg)}}
+@keyframes vchat-pulse{0%{box-shadow:0 0 0 0 rgba(192,57,43,.5)}70%{box-shadow:0 0 0 8px rgba(192,57,43,0)}100%{box-shadow:0 0 0 0 rgba(192,57,43,0)}}
+@media(prefers-reduced-motion:reduce){
+  .vchat-fab,.vchat-pop{transition:none}
+  .vchat-nudge.wiggle.show-fab .vchat-fab{animation:none}
+  .vchat-fab .vchat-dot,.vchat-typing i{animation:none!important}
+}
+.vesper-reduce-motion .vchat-fab,.vesper-reduce-motion .vchat-pop{transition:none}
+.vesper-reduce-motion .vchat-nudge.wiggle.show-fab .vchat-fab{animation:none}
+.vesper-reduce-motion .vchat-fab .vchat-dot,.vesper-reduce-motion .vchat-typing i{animation:none!important}
+
+/* =====================================================================
+   Hub premium: hero (cabecera) + sección de niveles + vitrina de logros.
+   El hero es un panel SIEMPRE oscuro (como el banner del mundo) → usa
+   --navy/--navy2 (oscuros en todos los temas) con texto claro fijo;
+   los elementos sobre ORO llevan texto oscuro fijo (oro es claro en
+   todos los temas). Resto usa tokens que el motor de temas adapta.
+   ===================================================================== */
+.hub-hero{position:relative;overflow:hidden;border-radius:20px;margin:2px 0 12px;padding:15px 15px 14px;
+  background:linear-gradient(140deg,var(--navy,#1B1B2F),var(--navy2,#2c2c4a));color:#f5f2eb;
+  box-shadow:0 12px 30px rgba(20,18,42,.26)}
+.hub-hero::before{content:"";position:absolute;right:-46px;top:-58px;width:200px;height:200px;border-radius:50%;
+  background:radial-gradient(circle,rgba(197,160,89,.30),transparent 70%);pointer-events:none}
+.hub-hero__top{position:relative;z-index:1;display:flex;align-items:flex-start;justify-content:space-between;gap:10px}
+.hub-hero__greet{display:flex;align-items:center;gap:11px;min-width:0}
+.hub-hero__greet .vesper-mascot{flex:0 0 auto;gap:0}
+.hub-hero__greet .vc-img{width:52px;height:52px;border-color:var(--gold)}
+.hub-hero__id{min-width:0}
+.hub-hello{font-family:"Inria Serif",Georgia,serif;font-size:1.42rem;line-height:1.05;margin:0;color:#f5f2eb}
+.hub-sub{margin:4px 0 0;font-size:.82rem;color:rgba(245,242,235,.72)}
+.hub-rank{display:inline-block;margin-top:6px;font-size:.7rem;font-weight:800;letter-spacing:.03em;
+  color:#2b2410;background:linear-gradient(135deg,#e9d39a,var(--gold,#c5a059));border-radius:999px;padding:3px 11px}
+.hub-actions{display:flex;align-items:center;gap:7px;flex:0 0 auto}
+.hub-ic{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:50%;
+  background:rgba(245,242,235,.10);border:1px solid rgba(245,242,235,.20);color:#f5f2eb;text-decoration:none;cursor:pointer;font-family:inherit}
+.hub-ic svg{width:19px;height:19px}
+.hub-ic:hover{background:rgba(197,160,89,.32);border-color:var(--gold)}
+.hub-ic:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+/* botón del guardarropa: lleva su Vesper real en vez de un glifo, para que se
+   entienda de un vistazo que ahí se le cambia el aspecto */
+.hub-ic--cat{overflow:hidden;padding:0;background:rgba(245,242,235,.14)}
+.hub-ic--cat img{width:112%;height:112%;object-fit:contain}
+.hub-ic--cat img.is-tinted{filter:var(--vc-filter,none)}
+.hub-stats3{position:relative;z-index:1;display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.hstat{flex:1 1 92px;display:flex;align-items:center;gap:9px;background:rgba(245,242,235,.07);
+  border:1px solid rgba(245,242,235,.14);border-radius:13px;padding:9px 11px;min-width:0}
+.hstat__ic{width:30px;height:30px;flex:0 0 auto;border-radius:9px;display:grid;place-items:center;
+  background:rgba(197,160,89,.20);color:var(--gold,#c5a059)}
+.hstat__ic svg{width:17px;height:17px}
+.hstat--link{text-decoration:none;cursor:pointer;transition:background .15s ease}
+.hstat--link:hover{background:rgba(245,242,235,.12)}
+.hstat__ic--badge{background:rgba(245,242,235,.12)}
+.hstat__ic--badge svg{width:24px;height:24px}
+.hstat__tx{display:flex;flex-direction:column;min-width:0}
+.hstat__v{font-size:1.02rem;font-weight:800;line-height:1.05;color:#f5f2eb;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hstat__l{font-size:.62rem;text-transform:uppercase;letter-spacing:.05em;color:rgba(245,242,235,.62);font-weight:700;margin-top:2px;white-space:nowrap}
+.hstat__ring{width:30px;height:30px;flex:0 0 auto;border-radius:50%;display:grid;place-items:center;
+  background:conic-gradient(var(--gold,#c5a059) calc(var(--gp,0)*1%),rgba(245,242,235,.16) 0)}
+.hstat__ring i{width:22px;height:22px;border-radius:50%;background:#26243f;display:grid;place-items:center;
+  font-style:normal;font-size:.64rem;font-weight:800;color:var(--gold,#c5a059)}
+.hstat.met .hstat__ic{background:rgba(45,158,117,.28);color:#86e3c1}
+.hstat.met .hstat__ring{background:conic-gradient(#2D9E75 calc(var(--gp,0)*1%),rgba(245,242,235,.16) 0)}
+.hstat.met .hstat__ring i{color:#86e3c1}
+/* Móvil angosto: compactamos los tiles del héroe para que el número (XP/racha)
+   no se corte con "…". Icono, padding y tipografía un punto más pequeños. */
+@media(max-width:430px){
+  .hub-stats3{gap:6px}
+  .hstat{flex:1 1 84px;gap:7px;padding:8px 9px}
+  .hstat__ic,.hstat__ring{width:26px;height:26px}
+  .hstat__ic svg{width:15px;height:15px}
+  .hstat__v{font-size:.94rem}
+  .hstat__l{font-size:.58rem}
+}
+/* vida en los iconos de estadística: flameo, destello, gleam y respiración del anillo */
+.ic-flame{transform-origin:50% 85%;animation:ic-flame 1.5s ease-in-out infinite}
+.ic-flame__core{animation:ic-core 1.5s ease-in-out infinite}
+.ic-star{transform-origin:50% 50%;animation:ic-star 3.2s ease-in-out infinite}
+.ic-star__tw{animation:ic-twinkle 1.8s ease-in-out infinite}
+.ic-shield{transform-origin:50% 55%;animation:ic-shield 2.6s ease-in-out infinite}
+.ic-shield__gl{animation:ic-gleam 3.4s ease-in-out infinite}
+.hstat__ring{animation:ic-ring 3.6s ease-in-out infinite}
+.hstat.met .hstat__ring{animation:ic-ring-met 1.8s ease-in-out infinite}
+@keyframes ic-flame{0%,100%{transform:scale(1) rotate(0)}25%{transform:scale(1.06,1.13) rotate(-2.5deg)}55%{transform:scale(.96,1.02) rotate(1.5deg)}80%{transform:scale(1.05,1.09) rotate(2.5deg)}}
+@keyframes ic-core{0%,100%{opacity:.35}40%{opacity:.85}70%{opacity:.5}}
+@keyframes ic-star{0%,100%{transform:rotate(0) scale(1)}50%{transform:rotate(8deg) scale(1.12)}}
+@keyframes ic-twinkle{0%,100%{opacity:.15}45%{opacity:1}}
+@keyframes ic-shield{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
+@keyframes ic-gleam{0%,62%,100%{opacity:0}78%{opacity:.9}}
+@keyframes ic-ring{0%,100%{transform:scale(1)}50%{transform:scale(1.045)}}
+@keyframes ic-ring-met{0%,100%{transform:scale(1);box-shadow:0 0 0 0 rgba(45,158,117,.5)}50%{transform:scale(1.05);box-shadow:0 0 0 5px rgba(45,158,117,0)}}
+@media(prefers-reduced-motion:reduce){
+  .ic-flame,.ic-flame__core,.ic-star,.ic-star__tw,.ic-shield,.ic-shield__gl,.hstat__ring,.hstat.met .hstat__ring{animation:none!important}
+  .ic-star__tw,.ic-shield__gl{opacity:.55}
+}
+.vesper-reduce-motion .ic-flame,.vesper-reduce-motion .ic-flame__core,.vesper-reduce-motion .ic-star,.vesper-reduce-motion .ic-star__tw,.vesper-reduce-motion .ic-shield,.vesper-reduce-motion .ic-shield__gl,.vesper-reduce-motion .hstat__ring,.vesper-reduce-motion .hstat.met .hstat__ring{animation:none!important}
+/* sección "Elige tu mundo" (encabezado de la cinta) */
+.worlds-sec{margin:6px 0 2px}
+.worlds-sec__head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:0 2px}
+.worlds-sec__ttl{font-family:"Inria Serif",Georgia,serif;font-size:1.18rem;margin:0;line-height:1.1}
+.worlds-sec__sub{margin:2px 0 0;font-size:.78rem;color:var(--muted)}
+.worlds-sec__meta{flex:0 0 auto;display:inline-flex;align-items:baseline;gap:4px;background:var(--paper);
+  border:1px solid var(--line);border-radius:999px;padding:5px 12px;white-space:nowrap;box-shadow:0 2px 8px rgba(27,27,47,.05)}
+.worlds-sec__big{font-weight:800;font-size:1rem;color:var(--ink)}
+.worlds-sec__small{font-size:.72rem;color:var(--muted);font-weight:600}
+/* logros: vitrina premium */
+.logros{margin:18px 0 4px;border:1px solid var(--line);border-radius:16px;background:var(--paper);
+  box-shadow:0 4px 16px rgba(27,27,47,.05);overflow:hidden}
+.logros__sum{list-style:none;cursor:pointer;display:flex;align-items:center;gap:11px;padding:13px 14px}
+.logros__sum::-webkit-details-marker{display:none}
+.logros__sum:focus-visible{outline:2px solid var(--gold);outline-offset:-2px}
+.logros__ic{flex:0 0 auto;width:38px;height:38px;border-radius:11px;display:grid;place-items:center;
+  background:linear-gradient(135deg,#e9d39a,var(--gold,#c5a059));color:#2b2410}
+.logros__ic svg{width:21px;height:21px}
+.logros__h{display:flex;flex-direction:column;min-width:0;flex:1}
+.logros__ttl{font-weight:800;font-size:1rem;line-height:1.1;color:var(--ink)}
+.logros__bar{height:7px;border-radius:999px;background:var(--line);overflow:hidden;margin-top:6px;max-width:220px}
+.logros__bar i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,#dcc08a,var(--gold,#c5a059))}
+.logros__count{flex:0 0 auto;font-weight:800;font-size:.86rem;color:var(--ink);background:var(--gold-tint);
+  border:1px solid var(--gold);border-radius:999px;padding:3px 10px}
+.logros__chev{flex:0 0 auto;color:var(--muted);transition:transform .2s ease}
+.logros[open] .logros__chev{transform:rotate(180deg)}
+.logros__grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:12px 8px;padding:4px 14px 16px}
+.medal{display:flex;flex-direction:column;align-items:center;text-align:center;gap:7px}
+.medal__disc{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;line-height:1;
+  background:var(--cream);border:2px solid var(--line);position:relative;color:var(--muted)}
+.medal__disc svg{width:27px;height:27px}
+.medal.on .medal__disc{color:#2b2410;background:radial-gradient(circle at 50% 32%,#f5e3ad,var(--gold,#c5a059));border-color:var(--gold2,#a8843d);
+  box-shadow:0 5px 13px var(--gold-tint),inset 0 1px 2px rgba(255,255,255,.55);animation:medal-shine 4.5s ease-in-out infinite}
+.medal.on:nth-child(3n) .medal__disc{animation-delay:1.5s}
+.medal.on:nth-child(3n+1) .medal__disc{animation-delay:.8s}
+@keyframes medal-shine{0%,100%{box-shadow:0 5px 13px var(--gold-tint),inset 0 1px 2px rgba(255,255,255,.55)}
+  50%{box-shadow:0 6px 16px var(--gold-tint),0 0 11px rgba(197,160,89,.45),inset 0 1px 3px rgba(255,255,255,.75)}}
+.medal.on .medal__disc::after{content:"";position:absolute;inset:-4px;border-radius:50%;border:1px solid var(--gold);opacity:.35}
+.medal__lk{width:19px;height:19px;color:var(--muted)}
+.medal__nm{font-size:.72rem;font-weight:600;line-height:1.18;color:var(--ink)}
+.medal:not(.on) .medal__nm{color:var(--muted)}
+@media(prefers-reduced-motion:reduce){.logros__chev{transition:none}.medal.on .medal__disc{animation:none}}
+.vesper-reduce-motion .medal.on .medal__disc{animation:none}
+/* Boton flotante "Instalar app" (PWA / descarga como app). Oculto hasta que el navegador ofrece la instalacion */
+#install-btn{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom));z-index:60;
+  display:none;align-items:center;gap:8px;background:var(--gold);color:var(--ink);border:none;border-radius:999px;
+  padding:12px 20px;font-family:inherit;font-size:.95rem;font-weight:700;cursor:pointer;
+  box-shadow:0 8px 24px rgba(27,27,47,.22);max-width:calc(100% - 32px)}
+#install-btn.show{display:inline-flex}
+#install-btn:active{transform:translateX(-50%) translateY(1px)}
+#install-btn svg{width:18px;height:18px;flex:0 0 auto}
+@media(prefers-reduced-motion:reduce){#install-btn:active{transform:translateX(-50%)}}
+
+/* ============================================================
+   RENDIMIENTO · saltar pintado fuera de pantalla y pausar
+   animaciones de bloques que no se ven (mejor scroll/CPU).
+   ============================================================ */
+.va-cv{content-visibility:auto;contain-intrinsic-size:1px 520px}
+.logros{content-visibility:auto;contain-intrinsic-size:1px 240px}
+.search-results{content-visibility:auto;contain-intrinsic-size:1px 320px}
+.va-paused,.va-paused *{animation-play-state:paused!important}
+
+/* ============================================================
+   RECINTO TEMÁTICO DE VOCABULARIO ("ramas")
+   hereda --w-accent / --w-accent-soft / --w-glow del mundo.
+   ============================================================ */
+.den{margin-top:6px}
+.den-top{display:flex;align-items:center;gap:10px;margin:2px 0 12px}
+.den-back{flex:0 0 auto;width:40px;height:40px;display:flex;align-items:center;justify-content:center;border-radius:50%;
+  border:1px solid var(--line);background:var(--paper);color:var(--ink);cursor:pointer;transition:background .14s,border-color .14s}
+.den-back:hover{border-color:color-mix(in srgb,var(--w-accent,#c5a059) 50%,var(--line));background:var(--cream)}
+.den-back svg{width:20px;height:20px}
+
+/* cabecera del recinto: texto + medallón con emblema temático (IA) */
+.den-head{position:relative;overflow:hidden;border-radius:20px;padding:18px;color:#fff;
+  background:linear-gradient(145deg,#262644,#131328);box-shadow:0 14px 34px rgba(16,16,34,.28);
+  display:flex;align-items:center;gap:15px}
+.den-head::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(135% 100% at 88% -18%,var(--w-glow,rgba(197,160,89,.5)),transparent 58%)}
+.den-head::after{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--w-accent,#c5a059);opacity:.9}
+.den-emblem{position:relative;z-index:1;flex:0 0 auto;width:98px;height:98px;border-radius:50%;overflow:hidden;
+  border:3px solid var(--w-accent,#c5a059);
+  box-shadow:0 0 0 4px rgba(255,255,255,.05),0 8px 22px rgba(0,0,0,.42),0 0 24px var(--w-glow,rgba(197,160,89,.4))}
+.den-emblem__img{width:100%;height:100%;object-fit:cover;display:block}
+.den-emblem.is-svg{display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.06);color:var(--w-accent,#c5a059)}
+.den-emblem.is-svg svg{width:58%;height:58%}
+.den-head__in{position:relative;z-index:1;flex:1;min-width:0}
+.den-head__eyebrow{display:inline-flex;align-items:center;gap:6px;font-size:.68rem;letter-spacing:.13em;text-transform:uppercase;
+  font-weight:700;color:#fff;padding:4px 11px;border-radius:999px;
+  background:color-mix(in srgb,var(--w-accent,#c5a059) 30%,transparent);border:1px solid color-mix(in srgb,var(--w-accent,#c5a059) 55%,transparent)}
+.den-head__ttl{font-family:"Inria Serif",Georgia,serif;font-size:1.4rem;line-height:1.14;margin:.34em 0 .18em}
+.den-head__intro{font-size:.88rem;color:rgba(255,255,255,.82);margin:0}
+.den-head__stats{display:flex;gap:8px;margin-top:13px;flex-wrap:wrap}
+.den-stat{display:inline-flex;align-items:baseline;gap:5px;padding:5px 10px;border-radius:11px;
+  background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.12)}
+.den-stat b{font-size:1rem;font-weight:800;color:#fff;font-variant-numeric:tabular-nums}
+.den-stat span{font-size:.72rem;color:rgba(255,255,255,.66)}
+.den-head__bar{position:relative;margin-top:13px;height:9px;border-radius:999px;background:rgba(255,255,255,.16);overflow:hidden}
+@media(max-width:420px){.den-emblem{width:84px;height:84px}.den-head__intro{display:none}}
+.den-head__bar > i{display:block;height:100%;border-radius:999px;
+  background:linear-gradient(90deg,var(--w-accent,#c5a059),color-mix(in srgb,var(--w-accent,#c5a059) 55%,#fff));transition:width .45s ease}
+
+/* árbol de ramas: tronco a la izquierda, ramas-tarjeta a la derecha */
+.den-tree{position:relative;padding:8px 0 4px;margin-top:18px}
+.den-tree::before{content:"";position:absolute;left:27px;top:2px;bottom:24px;width:3px;border-radius:3px;
+  background:linear-gradient(180deg,var(--w-accent,#c5a059),color-mix(in srgb,var(--w-accent,#c5a059) 28%,transparent));opacity:.5}
+.branch{position:relative;margin:0 0 13px 58px;width:auto;display:flex;align-items:center;gap:13px;text-align:left;
+  background:var(--paper);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow);
+  padding:13px 14px;cursor:pointer;color:inherit;font:inherit;
+  transition:transform .15s ease,box-shadow .15s ease,border-color .15s ease}
+.branch:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(27,27,47,.13);
+  border-color:color-mix(in srgb,var(--w-accent,#c5a059) 42%,var(--line))}
+.branch:active{transform:translateY(0)}
+.branch.done{border-color:color-mix(in srgb,var(--w-accent,#c5a059) 48%,var(--line));
+  background:linear-gradient(180deg,var(--paper),var(--w-accent-soft,var(--gold-tint)))}
+/* conector tronco -> rama (línea + brote) */
+.branch::before{content:"";position:absolute;left:-31px;top:50%;width:31px;height:3px;
+  background:linear-gradient(90deg,transparent,var(--w-accent,#c5a059));opacity:.6}
+.branch::after{content:"";position:absolute;left:-37px;top:50%;width:14px;height:14px;margin-top:-7px;border-radius:50%;
+  background:var(--paper);border:3px solid var(--w-accent,#c5a059);box-shadow:0 0 0 3px var(--paper)}
+.branch.done::after{background:var(--w-accent,#c5a059);box-shadow:0 0 0 3px var(--paper),0 0 11px var(--w-glow,rgba(197,160,89,.5))}
+.branch__ic{position:relative;flex:0 0 auto;width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;
+  background:var(--w-accent-soft,var(--gold-tint));color:var(--w-accent,#a8843d)}
+.branch__ic svg{width:26px;height:26px}
+/* emblema temático por sala (gato de Vesper) en lugar del glifo */
+.branch__ic.has-img{width:54px;height:54px;border-radius:50%;padding:0;overflow:hidden;background:var(--paper,#fff);
+  box-shadow:0 3px 10px rgba(27,27,47,.18);border:2px solid var(--w-accent,#c5a059)}
+.branch__ic.has-img.is-svg{background:var(--w-accent-soft,var(--gold-tint));border:0;box-shadow:none}
+.branch-emblem__img{width:100%;height:100%;object-fit:cover;display:block}
+.branch.done .branch__ic{background:var(--w-accent,#c5a059);color:#1f1a0e}
+.branch__ic .bdone{position:absolute;right:-5px;bottom:-5px;width:19px;height:19px;border-radius:50%;
+  background:var(--success);color:#fff;display:flex;align-items:center;justify-content:center;border:2px solid var(--paper)}
+.branch__ic .bdone svg{width:12px;height:12px}
+.branch__bd{flex:1;min-width:0}
+.branch__nm{font-weight:700;font-size:1.02rem;line-height:1.2;display:flex;align-items:center;gap:7px}
+.branch__no{flex:0 0 auto;font-size:.66rem;font-weight:800;color:var(--w-accent,#a8843d);
+  background:var(--w-accent-soft,var(--gold-tint));border-radius:6px;padding:2px 6px;letter-spacing:.04em}
+.branch__hint{font-size:.8rem;color:var(--muted);margin-top:2px}
+.branch__meta{display:flex;align-items:center;gap:8px;margin-top:8px}
+.branch__bar{flex:1;height:6px;border-radius:999px;background:var(--cream);overflow:hidden}
+.branch__bar > i{display:block;height:100%;border-radius:999px;background:var(--w-accent,#c5a059);transition:width .4s ease}
+.branch__ct{font-size:.74rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.branch__go{flex:0 0 auto;width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  color:var(--muted);background:var(--cream);font-size:1.1rem;line-height:1}
+.branch:hover .branch__go{color:var(--w-accent,#a8843d)}
+.branch.done .branch__go{color:var(--success);background:var(--ok-tint)}
+/* el acceso al recinto va fuera del árbol: sin conectores ni tronco */
+.den-enter{margin:14px 0 4px;border-width:1.5px;border-color:color-mix(in srgb,var(--w-accent,#c5a059) 35%,var(--line))}
+.den-enter::before,.den-enter::after{display:none}
+.den-enter .branch__ic{overflow:hidden;padding:0;border-radius:50%;background:var(--w-accent,#c5a059);color:#1f1a0e;
+  border:2px solid color-mix(in srgb,var(--w-accent,#c5a059) 65%,#fff)}
+.den-enter .branch__ic .den-emblem__img{width:100%;height:100%;object-fit:cover;display:block}
+.den-enter .branch__ic.is-svg{display:flex;align-items:center;justify-content:center}
+.den-enter .branch__ic svg{width:30px;height:30px}
+
+/* mazo de tarjetas (sala abierta) */
+.deck{margin-top:4px}
+.deck-progress{display:flex;align-items:center;gap:8px;margin:4px 2px 14px}
+.deck-progress .dp-bar{flex:1;height:7px;border-radius:999px;background:var(--cream);overflow:hidden}
+.deck-progress .dp-bar > i{display:block;height:100%;background:var(--w-accent,#c5a059);border-radius:999px;transition:width .35s}
+.deck-progress .dp-ct{font-size:.78rem;color:var(--muted);font-variant-numeric:tabular-nums}
+.deck-card{perspective:1300px;margin:0 auto 16px;max-width:430px;cursor:pointer}
+.dc-inner{position:relative;width:100%;min-height:218px;transition:transform .55s cubic-bezier(.2,.74,.2,1);transform-style:preserve-3d}
+.deck-card.flipped .dc-inner{transform:rotateY(180deg)}
+.dc-face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;overflow:hidden;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:11px;text-align:center;
+  border-radius:20px;padding:24px;border:1px solid var(--line);box-shadow:0 12px 30px rgba(27,27,47,.12)}
+.dc-face::before{content:"";position:absolute;left:0;right:0;top:0;height:4px;background:var(--w-accent,#c5a059)}
+.dc-front{background:linear-gradient(160deg,#fffdf7,#f1ebdb)}
+.dc-back{background:linear-gradient(160deg,#26264a,#15152c);color:#fff;transform:rotateY(180deg)}
+.dc-tag{font-size:.68rem;letter-spacing:.16em;text-transform:uppercase;font-weight:700;opacity:.55}
+.dc-word{font-family:"Inria Serif",Georgia,serif;font-size:1.72rem;line-height:1.16;padding:0 6px}
+.dc-back .dc-word{color:var(--w-accent,#e6cd97)}
+/* categoría gramatical (cómo se usa la palabra) */
+.dc-pos{display:inline-block;font-size:.7rem;letter-spacing:.05em;font-style:italic;color:var(--muted);
+  background:var(--w-accent-soft,var(--gold-tint));border:1px solid color-mix(in srgb,var(--w-accent,#c5a059) 30%,var(--line));
+  border-radius:999px;padding:2px 11px}
+.deck-pos{color:var(--w-accent,#a8843d);font-style:italic}
+/* B1+: explicación en inglés en la cara trasera (frase, no palabra suelta) */
+.dc-word.is-def{font-family:inherit;font-size:1.06rem;line-height:1.4;font-weight:600;padding:0 4px}
+.dc-back .dc-word.is-def{color:#fff}
+.dc-trans{margin-top:2px;background:none;border:1px solid rgba(255,255,255,.32);color:rgba(255,255,255,.82);
+  border-radius:999px;padding:5px 13px;font:inherit;font-size:.76rem;cursor:pointer;transition:transform .12s,background .12s}
+.dc-trans:hover{background:rgba(255,255,255,.1)}
+.dc-trans:active{transform:scale(.95)}
+.dc-trans-es{font-size:.98rem;color:var(--w-accent,#e6cd97);font-weight:600}
+.dc-hint{display:inline-flex;align-items:center;gap:6px;font-size:.8rem;color:var(--muted)}
+.dc-hint svg{width:14px;height:14px}
+.dc-back .dc-hint{color:rgba(255,255,255,.62)}
+.dc-say{margin-top:2px;width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--paper);
+  display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--ink);transition:transform .12s}
+.dc-say:active{transform:scale(.92)}
+.dc-back .dc-say{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.2);color:#fff}
+.dc-say svg{width:20px;height:20px}
+.deck-ctrls{display:flex;align-items:center;gap:10px}
+.deck-ctrls .dnav{flex:0 0 auto;width:48px;height:48px;border-radius:50%;border:1px solid var(--line);background:var(--paper);
+  display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--ink)}
+.deck-ctrls .dnav[disabled]{opacity:.38;cursor:default}
+.deck-ctrls .dnav svg{width:22px;height:22px}
+.deck-ctrls .dknow{flex:1;height:48px;border-radius:999px;border:2px solid var(--w-accent,#c5a059);background:transparent;
+  color:var(--w-accent,#a8843d);font-weight:700;cursor:pointer;transition:background .14s,color .14s}
+.deck-ctrls .dknow.on{background:var(--w-accent,#c5a059);color:#1f1a0e;border-color:var(--w-accent,#c5a059)}
+.deck-actions{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}
+.deck-actions .btn{flex:1;min-width:140px}
+
+/* mini-actividad de la rama */
+.den-quiz{margin-top:4px}
+.dq-q{font-family:"Inria Serif",Georgia,serif;font-size:1.6rem;text-align:center;margin:10px 0 4px}
+.dq-sub{text-align:center;color:var(--muted);font-size:.85rem;margin-bottom:14px}
+.dq-opts{display:grid;gap:10px}
+.dq-opt{display:block;width:100%;text-align:left;padding:15px 16px;border-radius:13px;border:1.5px solid var(--line);
+  background:var(--paper);font:inherit;font-size:1.02rem;cursor:pointer;transition:border-color .12s,background .12s,transform .1s}
+.dq-opt:hover:not([disabled]){border-color:color-mix(in srgb,var(--w-accent,#c5a059) 45%,var(--line))}
+.dq-opt:active:not([disabled]){transform:scale(.99)}
+.dq-opt.right{border-color:var(--success);background:var(--ok-tint)}
+.dq-opt.wrong{border-color:var(--error);background:var(--no-tint)}
+.dq-opt[disabled]{cursor:default}
+.dq-bar{height:7px;border-radius:999px;background:var(--cream);overflow:hidden;margin:0 0 14px}
+.dq-bar > i{display:block;height:100%;background:var(--w-accent,#c5a059);border-radius:999px;transition:width .3s}
+/* reacción de Vesper a cada respuesta de la prueba */
+.dq-react{margin-top:16px}
+.dq-react:empty{display:none}
+.dq-react__in{display:flex;align-items:center;gap:11px;justify-content:center;border-radius:13px;padding:10px 14px}
+.dq-react__in.ok{background:var(--ok-tint)}
+.dq-react__in.no{background:var(--no-tint)}
+.dq-react__in .vesper-mascot{flex:0 0 auto}
+.dq-react__tx{text-align:left;line-height:1.25}
+.dq-react__tx b{display:block;font-size:.96rem}
+.dq-react__tx span{font-size:.84rem;color:var(--muted)}
+/* Vesper explica la palabra actual del mazo */
+.deck-explain{display:flex;align-items:center;gap:11px;margin:2px 2px 14px;padding:10px 13px;border-radius:14px;
+  background:var(--w-accent-soft,var(--gold-tint));border:1px solid color-mix(in srgb,var(--w-accent,#c5a059) 28%,var(--line))}
+.deck-explain .de-cat{flex:0 0 auto}
+.deck-explain__tip{margin:0;font-size:.88rem;line-height:1.4}
+.deck-explain__tip b{color:var(--w-accent,#a8843d)}
+/* actividad ESCRIBIR */
+.dtype-in{width:100%;padding:14px 16px;border-radius:13px;border:1.5px solid var(--line);background:var(--paper);color:var(--ink);
+  font:inherit;font-size:1.12rem;text-align:center;box-sizing:border-box}
+.dtype-in:focus{outline:none;border-color:var(--w-accent,#c5a059);box-shadow:0 0 0 3px var(--w-accent-soft,var(--gold-tint))}
+.dtype-in[disabled]{opacity:.7}
+.dtype-row{display:flex;gap:10px;margin-top:12px}
+.dtype-row .btn{flex:1}
+/* actividad EMPAREJAR */
+.dmatch{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}
+.dmatch__col{display:grid;gap:10px;align-content:start}
+.dm-item{display:block;width:100%;text-align:center;padding:14px 12px;border-radius:13px;border:1.5px solid var(--line);
+  background:var(--paper);font:inherit;font-size:1rem;cursor:pointer;transition:border-color .12s,background .12s,transform .1s,opacity .2s}
+.dm-item:hover:not(.matched){border-color:color-mix(in srgb,var(--w-accent,#c5a059) 45%,var(--line))}
+.dm-item:active:not(.matched){transform:scale(.98)}
+.dm-item.sel{border-color:var(--w-accent,#c5a059);background:var(--w-accent-soft,var(--gold-tint));font-weight:700}
+.dm-item.matched{opacity:.4;cursor:default;border-color:var(--success);background:var(--ok-tint)}
+.dm-item.wrong{border-color:var(--error);background:var(--no-tint)}
+/* botón de REPASO del mundo, bajo el árbol de salas */
+.den-review{margin:18px 0 4px}
+.den-review__btn{width:100%;display:flex;align-items:center;justify-content:center;gap:9px}
+.den-review__hint{margin:8px 2px 0;text-align:center;font-size:.8rem;color:rgba(255,255,255,.72)}
+
+@media(prefers-reduced-motion:reduce){
+  .dc-inner{transition:none}
+  .deck-card.flipped .dc-inner{transform:none}
+  .deck-card.flipped .dc-front{opacity:0;pointer-events:none}
+  .dc-back{transform:none}
+  .branch:hover,.branch:active{transform:none}
+}
+
+/* ============================================================
+   CAPA DE LEGIBILIDAD  (va al final a propósito: corrige por
+   selector lo que quedó demasiado pequeño o con poco contraste
+   sin tener que tocar las ~45 reglas originales una por una)
+
+   Dos problemas medidos en el móvil real (375px):
+   1) 97 nodos de texto por debajo de 14px, el peor a 9.28px, y
+      justamente los títulos de lección (.wtitle) a 12.8px.
+   2) El oro de marca (--va-gold #C9A84C) sobre cream da 2.15:1.
+      Sirve como color decorativo o sobre navy, pero NO como texto
+      pequeño sobre fondo claro. Para eso está --gold-ink (5.5:1).
+   ============================================================ */
+:root{
+  /* OJO: --gold-ink NO se define aquí. Lo publica vesper_theme.js en su
+     buildVars() y depende del modo (`t.dark ? t.gold : "#7a5e12"`): oro
+     oscuro en temas claros, oro CLARO en los oscuros. Fijarlo en la página
+     rompería el modo noche, que desde el tema "Vespertina" es el de por
+     defecto. El fallback de cada uso cubre el caso de que el motor no cargue. */
+  /* tamaño mínimo de etiqueta: nada informativo por debajo de esto */
+  --fs-label:.78rem;   /* 12.5px */
+  --fs-meta:.82rem;    /* 13.1px */
+}
+
+/* -- el foco programático de show() no debe pintar un anillo; el
+      anillo de :focus-visible (vesper_tokens.css) se conserva -- */
+[tabindex="-1"]:focus{outline:none}
+
+/* -- 1. piso de legibilidad -------------------------------- */
+.wtitle{font-size:.875rem;max-width:150px}          /* 12.8 -> 14px: es el nombre de la lección */
+.wnode.mini .wtitle{font-size:.82rem}
+.wisland .wnode.locked .wtitle{color:rgba(245,242,235,.75)}   /* .55 era demasiado tenue */
+.wnode.locked .wtitle{font-weight:600}
+.hstat__l{font-size:.72rem;color:rgba(245,242,235,.85)}
+@media(max-width:430px){ .hstat__l{font-size:.7rem} }         /* antes encogía a .58rem (9.28px) */
+.world-banner__eyebrow{font-size:.7rem;letter-spacing:.14em}
+.world-banner__badge{font-size:.72rem}
+.world .w-pc{font-size:var(--fs-label)}
+.worlds-sec__small{font-size:var(--fs-label)}
+.worlds-sec__sub{font-size:var(--fs-meta)}
+.wcheck .ct,.skill-h .ct{font-size:var(--fs-meta)}
+.branch__ct{font-size:var(--fs-label)}
+.branch__hint{font-size:var(--fs-meta)}
+.medal__nm{font-size:var(--fs-label)}
+.wlabel{font-size:.7rem}
+.wnode.mini .wlabel.mini-lb{font-size:.66rem}
+.lesson-world .lw-ey{font-size:.68rem}
+.boss-eyebrow{font-size:.7rem}
+.dc-tag{font-size:.72rem;opacity:.72}
+.den-stat span{font-size:var(--fs-label)}
+.den-head__eyebrow{font-size:.72rem}
+.branch__no{font-size:.72rem}
+.search-results .lc-lvl{font-size:var(--fs-label)}
+.ach-badge .ab-tx b{font-size:var(--fs-label)}
+.rq-num,.cat-bucket h4,.trophy-shelf .t-count{font-size:var(--fs-meta)}
+
+/* -- 2. oro legible donde el texto va sobre fondo CLARO -----
+      Ojo: sólo aquí. Sobre navy (.pcta, .wcheck dentro del mapa,
+      el hero) el oro claro es el que contrasta, y oscurecerlo lo
+      empeoraría — por eso la lista es explícita y no un `*`. */
+.skill-h .ct,
+.branch__no,
+.search-results .lc-lvl,
+.ach-badge .ab-tx b,
+.cos-cta,
+.srs-banner .hc-cta,
+.hub-card .hc-cta{color:var(--gold-ink,#7a5e12)}
+
+/* -- 3. chips de etiqueta sobre acento de mundo -------------
+      #fff sobre los acentos daba 3.2-4.0:1. Se oscurece el fondo
+      del chip en vez de aclarar el texto, para no perder el color. */
+.wlabel,
+.wboss-node .wlabel.boss-lb{background:var(--w-accent-ink,#1B1B2F);color:#fff;font-weight:800}
+
+/* -- 4. el objetivo táctil mínimo de los iconos del HUD ----- */
+.hub-ic{min-width:44px;min-height:44px}
+
+/* -- 5. el velo del banner del mundo -------------------------
+      El texto del banner vive sobre una FOTO. El velo bajaba a
+      .30 al 62% del ancho, justo donde termina la fila de meta
+      ("A1 · Principiante · 0/47"), así que su contraste dependía
+      de lo clara que fuera la foto de cada mundo. Se mantiene
+      oscuro a lo largo de toda la caja de texto (max-width 60%). */
+.world-banner::before{
+  background:radial-gradient(125% 150% at 100% 50%,rgba(27,27,47,.62) 0%,rgba(27,27,47,0) 46%),
+             linear-gradient(90deg,rgba(27,27,47,.94) 0%,rgba(27,27,47,.88) 40%,rgba(27,27,47,.62) 68%,rgba(27,27,47,.10) 100%),
+             linear-gradient(180deg,rgba(27,27,47,.14) 0%,rgba(27,27,47,.44) 100%);
+}
+
+/* ============================================================
+   "¿QUÉ SIGUE?" — la tarjeta de acción principal del hub.
+   Es deliberadamente la pieza con más peso visual de la página:
+   fondo oscuro contra el cream, tipografía display grande y un
+   único botón. Todo lo demás del hub es secundario respecto a
+   esto, y así debe leerse de un vistazo.
+   ============================================================ */
+.nextstep{
+  position:relative;overflow:hidden;
+  margin:16px 0 18px;padding:20px 20px 18px;
+  border-radius:var(--va-r-lg,18px);
+  background:var(--va-grad-dusk,linear-gradient(160deg,#1f2342,#14122a 60%,#0e0c1f));
+  box-shadow:var(--va-shadow-dusk,0 18px 44px rgba(20,18,42,.22));
+  border:1px solid rgba(201,168,76,.28);
+}
+/* halo del color del mundo, para que la tarjeta pertenezca al mundo activo */
+.nextstep::before{
+  content:"";position:absolute;inset:-40% -20% auto auto;width:70%;height:170%;
+  background:radial-gradient(closest-side,var(--w-glow,rgba(201,168,76,.4)),transparent 70%);
+  opacity:.55;pointer-events:none;
+}
+.nextstep > *{position:relative}
+.nextstep__ey{
+  display:block;font-size:.78rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--va-star,#f3e2ab);margin-bottom:6px;
+}
+.nextstep__t{
+  font-family:var(--va-font-display,"Inria Serif",Georgia,serif);
+  font-size:1.6rem;line-height:1.15;margin:0 0 8px;color:#fff;
+}
+.nextstep__meta{
+  margin:0 0 16px;font-size:.85rem;color:rgba(245,242,235,.86);
+  display:flex;align-items:center;gap:8px;flex-wrap:wrap;
+}
+.nextstep__sk{
+  display:inline-block;padding:3px 10px;border-radius:999px;
+  background:rgba(201,168,76,.18);border:1px solid rgba(201,168,76,.42);
+  color:var(--va-star,#f3e2ab);font-weight:700;font-size:.75rem;
+}
+.nextstep__go{
+  display:flex;align-items:center;justify-content:center;gap:10px;
+  width:100%;min-height:54px;padding:14px 18px;
+  border:0;border-radius:14px;cursor:pointer;
+  background:linear-gradient(180deg,#d8b968,#bb9740);
+  color:#241d07;font:inherit;font-size:1.02rem;font-weight:800;letter-spacing:.01em;
+  box-shadow:0 6px 18px rgba(0,0,0,.28);
+  transition:transform .14s ease,filter .14s ease;
+}
+.nextstep__go svg{width:20px;height:20px;flex:0 0 auto}
+.nextstep__go:hover{filter:brightness(1.05)}
+.nextstep__go:active{transform:translateY(1px)}
+@media(max-width:380px){ .nextstep__t{font-size:1.4rem} }
+@media(prefers-reduced-motion:reduce){ .nextstep__go{transition:none} }
+
+/* -- "ver los mundos que faltan", bajo la cinta ------------- */
+.worlds-more{
+  display:block;width:100%;margin:10px 0 0;padding:11px 14px;min-height:44px;
+  background:transparent;border:1px dashed var(--line);border-radius:12px;
+  color:var(--muted);font:inherit;font-size:var(--fs-meta);font-weight:600;cursor:pointer;
+  transition:border-color .14s ease,color .14s ease;
+}
+.worlds-more:hover{border-color:var(--gold-ink,#7a5e12);color:var(--ink)}
+@media(prefers-reduced-motion:reduce){ .worlds-more{transition:none} }
+
+/* -- lanzadera del paseo guiado ------------------------------
+   Sustituye a la tarjeta .primer de viñetas. Es una fila discreta
+   y PERMANENTE: el primer sólo se veía una vez y al cerrarlo no
+   había manera de recuperar la explicación. */
+.tourbar{margin:0 0 14px}
+.tourbar__btn{
+  width:100%;display:flex;align-items:center;gap:11px;
+  min-height:52px;padding:10px 14px;
+  background:var(--paper);border:1px dashed var(--line);border-radius:var(--va-r-md,14px);
+  color:var(--ink);font:inherit;text-align:left;cursor:pointer;
+  transition:border-color .14s ease,background .14s ease;
+}
+.tourbar__btn:hover{border-color:var(--gold-ink,#7a5e12);background:var(--gold-tint)}
+.tourbar__ic{flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;
+  width:34px;height:34px;border-radius:50%;background:var(--gold-tint);color:var(--gold-ink,#7a5e12)}
+.tourbar__ic svg{width:19px;height:19px}
+.tourbar__tx{display:flex;flex-direction:column;line-height:1.3}
+.tourbar__tx b{font-size:.95rem}
+.tourbar__tx span{font-size:var(--fs-label);color:var(--muted)}
+@media(prefers-reduced-motion:reduce){ .tourbar__btn{transition:none} }
+
+/* ============================================================
+   EL SENDERO: jerarquía de los nodos
+
+   Medido sobre el mapa real, el relleno de cada estado era:
+     completada  gradiente oro claro   (#e6cd97 -> #C9A84C)  brillante
+     ACTUAL      gradiente navy        (#1B1B2F -> #2c2c4a)  OSCURO
+     disponible  gradiente crema       (#fffdf7 -> #f4eede)  brillante
+     bloqueada   gradiente navy        (#2b2b44 -> #1f1f34)  oscuro
+
+   O sea: el nodo que hay que tocar compartía paleta con los
+   BLOQUEADOS y quedaba más apagado que las lecciones normales de
+   al lado, sobre un mapa que ya es oscuro. La jerarquía estaba
+   invertida justo en el punto que más importa. Se distinguía por
+   tamaño, doble anillo y pulso, pero el relleno decía "inactivo".
+
+   Ahora el nodo actual es el más luminoso del sendero. Se sigue
+   diferenciando de una lección ya completada por tamaño (88 vs 74),
+   el doble anillo blanco+oro, el pulso, el glifo de play (vs palomita)
+   y las estrellas que sólo llevan las completadas.
+   ============================================================ */
+.wbtn.is-current{
+  background:linear-gradient(150deg,#fff3cf,#e3bd63 55%,#c69a35);
+  color:var(--on-gold,#231b06);
+  border-color:#fff6df;
+  box-shadow:0 0 0 4px var(--on-gold,#1B1B2F),0 0 0 8px var(--gold,#C9A84C),
+             0 10px 26px rgba(0,0,0,.42),
+             inset 0 2px 0 rgba(255,255,255,.6);
+}
+/* el glifo: sobre oro claro va oscuro, no dorado */
+.wbtn.is-current .wglyph{color:var(--on-gold,#231b06)}
+/* Las lecciones normales disponibles eran BLANCO PURO (#fffdf7), más
+   luminosas que el propio nodo actual. Bajan a una crema cálida: se
+   siguen leyendo como "puedes entrar" contra el mapa oscuro (~13:1)
+   pero ya no compiten con el nodo actual. */
+.wbtn.open:not(.is-current){background:linear-gradient(150deg,#f4ecda,#e4dbc2)}
+/* las completadas también bajan un punto para que la actual mande */
+.wbtn.completed{background:linear-gradient(150deg,#dcc492,#c2a259)}
+
+/* la píldora "Empieza"/"Continuar": es el rótulo de "estás aquí" */
+.wnode .wlabel{font-size:.74rem;padding:5px 13px;letter-spacing:.06em}
+
+/* ritmo vertical: 30px de gap daban 166px por nodo y sólo ~5 nodos
+   por pantalla; 24px acerca el sendero sin apelmazarlo */
+.wmap{gap:24px}
+
+/* ============================================================
+   MODO NOCHE: superficies que SIEMPRE son oscuras
+
+   El tema por defecto pasó a ser "Vespertina" (dark). El motor de
+   temas invierte --ink y --cream, pero el escenario del mapa
+   (.wsky/.wisland/.wmap/.wcheck) pinta sus PROPIOS degradados navy
+   y no se invierte nunca. Las reglas que ponían texto con
+   var(--cream) sobre esas superficies quedaron con texto casi negro
+   sobre fondo casi negro:
+
+     .wtitle  (el nombre de la lección)   1,08:1
+     .wcheck  (la destreza y su conteo)   1,27:1
+
+   Sobre una superficie que no cambia con el tema, el color del texto
+   tampoco puede cambiar: van fijos y claros.
+   ============================================================ */
+/* nota de especificidad: los originales son `.wisland .wtitle` y
+   `.wisland .wcheck` (0,2,0), así que un `.wcheck` pelado (0,1,0) NO
+   los gana — hay que igualar el descendiente. */
+.wisland .wtitle,
+.wboss-node .wtitle,
+.wisland .wcheck,
+.wcheck{color:#EDE7D6}
+.wisland .wcheck .ct{color:var(--gold,#C9A84C)}
+
+/* El CTA del examen usaba var(--ink) como primera parada del
+   degradado: en tema oscuro --ink es CLARO, así que la tarjeta se
+   volvía medio beige y su texto dorado caía a 1,85:1. --navy sí es
+   oscuro en los dos modos (t.dark ? t.paper : t.ink). */
+.pcta{background:linear-gradient(135deg,var(--navy,#1B1B2F),var(--navy2,#2c2c4a));color:#EDE7D6}
+
+/* .hub-card es un <button> que nunca declaró fondo: heredaba el gris
+   del navegador, y con color-scheme:dark ese gris pasó a #6b6b6b. */
+.hub-card{background:var(--paper,#fff);border:1px solid var(--line,#ece7da);color:var(--ink,#1B1B2F)}
+
+/* ============================================================
+   LA ESCENA DEL MAPA, TEMA POR TEMA
+
+   El escenario se pintaba con un navy fijo en los 8 temas, así que
+   bajo "Bosque" o "Atardecer" era un bloque azul pegado encima de
+   una página cálida, y bajo "Nebulosa" o "Medianoche" no se notaba
+   que hubieras cambiado de tema.
+
+   Peor: dos superficies usaban var(--ink) como parada de degradado,
+   y --ink es CLARO en los temas oscuros. Medido en producción con el
+   tema por defecto: el "cielo nocturno" tenía una banda de luminancia
+   0,80 (casi blanca) por el medio, y el nodo del Guardián otra igual.
+
+   La regla: la escena SIEMPRE es de noche, pero la noche la pone el
+   tema. --navy y --navy2 sirven porque el motor los deriva como
+   `t.dark ? t.paper : t.ink` y `t.dark ? t.line : "#2c2c4a"`, o sea
+   son oscuros en los ocho temas.
+   ============================================================ */
+.wsky{background:radial-gradient(120% 90% at 50% -10%,
+      var(--navy2,#2c2c4a) 0%, var(--navy,#1B1B2F) 58%, #0e0c1f 100%)}
+
+/* El velo de la isla pasa de navy a negro neutro: así el color de la
+   noche lo decide el cielo del tema y no un azul fijo por encima. */
+.wisland{background:linear-gradient(180deg,rgba(0,0,0,.22),rgba(0,0,0,.52))}
+
+/* Profundidad: resplandor del mundo en el horizonte + viñeta abajo,
+   para que el sendero se hunda en la distancia en vez de flotar. */
+.wsky::after{content:"";position:absolute;inset:0;z-index:0;pointer-events:none;
+  background:
+    radial-gradient(140% 55% at 50% 6%, var(--w-glow,rgba(201,168,76,.30)) 0%, transparent 60%),
+    radial-gradient(130% 75% at 50% 106%, rgba(0,0,0,.55) 0%, transparent 62%);
+}
+
+/* El Guardián y los nodos bloqueados también siguen la noche del tema */
+.wbtn.boss{background:linear-gradient(160deg,var(--navy2,#23234a),var(--navy,#1B1B2F))}
+.wbtn.locked{background:linear-gradient(150deg,var(--navy2,#2b2b44),var(--navy,#1f1f34))}
+.wisland .wcheck{background:linear-gradient(180deg,var(--navy2,#262649),var(--navy,#191930))}
+
+/* La skin elegida (Dorado/Rosa/Menta/Cielo/Violeta/Brasa) ya teñía al
+   gato con --vc-filter, pero en el mapa no se notaba. Un halo con su
+   color hace que la elección se vea también aquí. */
+.wavatar::after{content:"";position:absolute;inset:-9px;z-index:-1;border-radius:50%;pointer-events:none;
+  background:radial-gradient(closest-side,var(--vc-glow,rgba(201,168,76,.45)),transparent 72%);
+  opacity:.5}
+
+/* -- botón de "ver el resto del mundo", bajo el sendero ----- */
+.wmore{margin:-6px 0 18px;padding:0 2px}
+.wmore__btn{
+  width:100%;display:flex;flex-direction:column;align-items:center;gap:3px;
+  padding:14px 16px;min-height:56px;
+  background:var(--paper);border:1px dashed var(--line);border-radius:14px;
+  color:var(--ink);font:inherit;font-size:.9rem;font-weight:700;cursor:pointer;
+  transition:border-color .14s ease,background .14s ease;
+}
+.wmore__btn:hover{border-color:var(--gold-ink,#7a5e12);background:var(--gold-tint)}
+.wmore__sub{font-size:var(--fs-label);font-weight:500;color:var(--muted)}
+@media(prefers-reduced-motion:reduce){ .wmore__btn{transition:none} }
+
+/* ============================================================
+   EL MAPA, PASADA DE APARIENCIA
+
+   Cuatro cosas que el escenario no contaba:
+
+   1) CUÁNTO LLEVAS ANDADO. El sendero se pintaba igual de punta a
+      punta: la veta dorada recorría TODO el camino, incluida la
+      parte que aún no has pisado. Ahora .wtrail-done dibuja en oro
+      macizo sólo hasta el nodo actual (paintTrail le pone el
+      dasharray con la longitud de arco ya medida), así que de un
+      vistazo ves el trecho hecho y el que falta.
+
+   2) LOS CANDADOS PARECÍAN AVERÍAS. Un nodo bloqueado era un disco
+      navy casi negro con el glifo a #73738f (2,4:1): leía "roto",
+      no "todavía no". Pasa a aro discontinuo + glifo legible: la
+      forma dice "futuro" y el color ya no grita error.
+
+   3) LAS DESTREZAS NO SE MEDÍAN. El cartel de destreza decía "3/8"
+      en texto y nada más. Le ponemos su propia barra.
+
+   4) LA ISLA FLOTABA. Se le añade una niebla baja para que el
+      terreno se asiente en la noche en vez de cortarse en seco.
+
+   Recordatorio de la casa: esta superficie es SIEMPRE oscura, así
+   que el texto va en claro LITERAL (#EDE7D6), nunca var(--cream)
+   — el motor de temas invierte --cream y en modo noche el nombre
+   de la lección caía a 1,08:1.
+   ============================================================ */
+
+/* -- 1) trecho recorrido: oro macizo, sin el drop-shadow que obligaba a
+   repintar un filtro sobre un trazo de 2.400px ---------------- */
+.wtrail-done{stroke:var(--gold,#C9A84C);stroke-width:2.5;opacity:1;stroke-linecap:round}
+
+/* -- niebla baja de la isla ---------------------------------- */
+.wisland::after{background:
+  radial-gradient(80% 50% at 50% 0%,var(--w-glow,rgba(197,160,89,.25)) 0%,transparent 60%),
+  linear-gradient(180deg,transparent 78%,rgba(12,10,26,.55) 100%)}
+
+/* -- 2) el candado como "todavía no", no como avería --------- */
+.wbtn.locked{border-style:dashed;border-color:#565478;color:#A9A4C4;
+  box-shadow:0 4px 0 rgba(8,7,20,.45),inset 0 2px 7px rgba(0,0,0,.32)}
+.wbtn.locked .wglyph{opacity:.9}
+/* el nombre de una lección bloqueada estaba a .55 de alfa (~4,3:1 sobre la
+   isla): sube a .72 para que el texto pequeño pase AA cómodo */
+.wisland .wnode.locked .wtitle{color:rgba(237,231,214,.72)}
+
+/* -- 3) barra de la destreza --------------------------------- */
+.wcheck{flex-wrap:wrap}
+.wcheck .ck-bar{flex:0 0 100%;height:4px;margin:6px 0 0;border-radius:999px;
+  background:rgba(237,231,214,.16);overflow:hidden}
+.wcheck .ck-bar > i{display:block;height:100%;border-radius:999px;
+  background:linear-gradient(90deg,var(--w-accent,#c5a059),var(--gold,#c5a059));
+  transition:width .5s ease}
+@media(prefers-reduced-motion:reduce){ .wcheck .ck-bar > i{transition:none} }
+
+/* ============================================================
+   LOS GUARDIANES (las otras mascotas)
+
+   El retrato del guardián se pintaba como una foto redonda con un
+   borde de 3px, igual en los tres estados: bloqueado sólo bajaba
+   el brillo. No se leía como personaje ni como puerta del mundo.
+
+   Ahora es un MEDALLÓN: aro doble (acento del mundo + filete de
+   oro), aura del mundo detrás y tres estados distintos —
+   sellado (bloqueado), despierto (disponible) y vencido.
+   Los PNG son opacos con fondo navy horneado (29,34,53), así que
+   el recorte circular casa con la noche del mapa sin halo blanco.
+   ============================================================ */
+
+/* -- medallón de la portada / resultado --------------------- */
+.boss-emblem{position:relative}
+.boss-emblem img.boss-photo{
+  width:124px;height:124px;border-width:2px;
+  box-shadow:0 0 0 5px rgba(12,10,26,.85),0 0 0 6.5px var(--w-accent,#c5a059),
+             0 0 26px var(--w-glow,rgba(197,160,89,.45)),0 10px 24px rgba(20,18,42,.6)}
+.boss-emblem.lit img.boss-photo{
+  box-shadow:0 0 0 5px rgba(12,10,26,.85),0 0 0 7px var(--gold,#c5a059),
+             0 0 34px var(--gold,#c5a059),0 10px 24px rgba(20,18,42,.6)}
+/* sellado: la piedra aún no despierta */
+.boss-emblem.dim img.boss-photo{filter:grayscale(.72) brightness(.62) contrast(.95);
+  box-shadow:0 0 0 5px rgba(12,10,26,.85),0 0 0 6.5px #4A4866,0 8px 20px rgba(20,18,42,.55)}
+
+/* -- el nodo del mapa: un portal, no una foto recortada -----
+   OJO con overflow:hidden aquí: .wbtn.boss.ready::after es el aro que late
+   y vive en inset:-7px, o sea FUERA de la caja. Recortar el botón para
+   encajar el retrato apagaba ese pulso, que es justo la señal de "ya puedes
+   entrar". Por eso el retrato conserva el radio del arco (no se recorta con
+   overflow) y el latido del despierto va por filter, que no desborda. */
+.wbtn.boss{padding:0}
+/* velo interior: hunde el retrato en el arco y separa cara de borde */
+.wbtn.boss::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;
+  border-radius:42px 42px 12px 12px;
+  background:radial-gradient(115% 85% at 50% 22%,transparent 40%,rgba(10,9,24,.55) 100%),
+             linear-gradient(180deg,transparent 55%,rgba(10,9,24,.72) 100%)}
+.wboss-node .wbtn.boss::after{z-index:2}      /* el aro del pulso, por encima del velo */
+
+/* sellado: gris y cerrado */
+.wbtn.boss.locked{border-style:dashed}
+.wbtn.boss.locked .boss-node-photo{filter:grayscale(.8) brightness(.5)}
+.wbtn.boss.locked::before{background:linear-gradient(180deg,rgba(10,9,24,.5),rgba(10,9,24,.8))}
+/* despierto: el aura del mundo alrededor y el retrato respirando */
+.wbtn.boss.ready{box-shadow:0 7px 0 rgba(20,18,42,.45),0 10px 24px rgba(20,18,42,.5),
+  0 0 22px var(--w-glow,rgba(197,160,89,.5))}
+.wbtn.boss.ready .boss-node-photo{animation:g-boss-breathe 5.2s ease-in-out infinite}
+@keyframes g-boss-breathe{0%,100%{filter:brightness(1)}50%{filter:brightness(1.15) saturate(1.07)}}
+/* vencido: filete de oro y el retrato ya a plena luz */
+.wbtn.boss.conquered{background:linear-gradient(160deg,#23234a,var(--ink,#1B1B2F));
+  border-color:var(--gold,#c5a059);
+  box-shadow:0 7px 0 rgba(120,86,20,.45),0 10px 24px rgba(20,18,42,.5),inset 0 0 0 2px rgba(230,205,151,.45)}
+.wbtn.boss.conquered .boss-node-photo{filter:none}
+@media(prefers-reduced-motion:reduce){ .wbtn.boss.ready .boss-node-photo{animation:none} }
+.vesper-reduce-motion .wbtn.boss.ready .boss-node-photo{animation:none}
+
+/* ================================================================
+   EL MAPA GRABADO  ·  pasada de aligerado y acabado
+
+   QUÉ FALLABA, medido en el navegador sobre el mundo A1:
+
+     · 834 formas SVG y 52 KB de marcado que el generador de terreno
+       creaba de cero en cada trazado Y en cada resize. Al 20 % de
+       opacidad no se leían como paisaje: eran casitas y pinos a
+       medio recortar por los dos márgenes, o sea ruido.
+     · El sendero eran SIETE <path> con la misma "d" sobre un SVG de
+       2.400 px, uno de ellos con un drop-shadow animado en bucle.
+     · Los iconos venían de otra familia (grosor 1.9/2/3, el play
+       macizo) que la del sprite del sistema de diseño.
+     · El oro se usaba como RELLENO de los nodos completados. El
+       fundamento de color dice lo contrario: "el oro es acento,
+       nunca relleno".
+
+   LA IDEA: las láminas de la marca (assets/images/lessons/theme_*)
+   son grabados crema sobre navy con MUCHO aire. El mapa era lo
+   único del sitio que no hablaba ese idioma. Ahora sí: una sola
+   lámina por mundo de fondo, un filete por sendero, medallones de
+   línea y aire. Menos piezas y más presencia.
+   ================================================================ */
+
+/* -- 1. El escenario: se va la caja, queda la noche --------------
+   .wisland llevaba un borde de 1px del acento del mundo alrededor
+   de TODO: un rectángulo de color que leía "widget", no "mapa". */
+.wisland{border-color:rgba(201,168,76,.14)}
+/* el lavado a pantalla completa de la lámina (opacity .20, cover)
+   era el causante de la neblina parda: lo sustituye .wmotif */
+.wisland::before{content:none}
+
+/* -- 2. El paisaje del mundo ------------------------------------
+   Tres hitos grabados repartidos por el recorrido: uno grande de
+   cabecera y dos que asoman por los márgenes según bajas. Son las
+   mismas láminas que ya ilustran el mundo, recortadas a máscara
+   alfa, así que el color lo pone el acento y no el archivo.
+
+   La profundidad la dan tres cosas: escala (el de cabecera manda),
+   posición (los otros dos sangran por lados opuestos, como algo que
+   dejas atrás) y opacidad (el de más abajo pisa un poco más fuerte,
+   perspectiva atmosférica al revés porque viene "hacia ti"). */
+.wscape{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.wscape i{position:absolute;display:block;background:var(--w-accent,#C9A84C);
+  -webkit-mask-image:var(--m);mask-image:var(--m);
+  -webkit-mask-size:contain;mask-size:contain;
+  -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
+  -webkit-mask-position:center;mask-position:center}
+.wscape i:nth-child(1){left:50%;transform:translateX(-50%);top:0;width:82%;max-width:300px}
+/* Los dos hitos laterales se retiran: ahora los márgenes los llenan los props
+   ilustrados (.wprops), que son piezas de verdad y a plena opacidad. Dejar
+   además las láminas al 12 % devolvía la neblina que costó quitar. La lámina
+   grande de cabecera sí se queda: es la que presenta el mundo. */
+.wscape i:nth-child(2),
+.wscape i:nth-child(3){display:none}
+
+/* -- 2b. El decorado: piezas ilustradas a lo largo del camino ----
+   Van DETRÁS del sendero y de los nodos (z-index 0 contra 1 y 2) y
+   no reciben puntero. Nada de opacidad fantasma: se ven. */
+.wprops{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.wprops img{position:absolute;width:auto;height:auto;display:block;
+  filter:drop-shadow(0 6px 10px rgba(8,7,20,.55))}
+
+/* La opacidad va hito por hito, no una para todos: la densidad del
+   grabado cambia muchísimo. El castillo de C2 es una mancha compacta y
+   a .13 era un borrón; el cohete de C1 y la ribera de B1 son cuatro
+   líneas finísimas y al mismo valor desaparecían. Calibrado a ojo con
+   los seis mundos delante. */
+.wmap[data-world="A1"] .wscape i:nth-child(1){--m:url(../images/map/lm_a1_1.png);aspect-ratio:360/396;opacity:.13}
+.wmap[data-world="A1"] .wscape i:nth-child(2){--m:url(../images/map/lm_a1_2.png);aspect-ratio:300/330;opacity:.10}
+.wmap[data-world="A1"] .wscape i:nth-child(3){--m:url(../images/map/lm_a1_3.png);aspect-ratio:300/323;opacity:.13}
+.wmap[data-world="A2"] .wscape i:nth-child(1){--m:url(../images/map/lm_a2_1.png);aspect-ratio:360/456;opacity:.16}
+.wmap[data-world="A2"] .wscape i:nth-child(2){--m:url(../images/map/lm_a2_2.png);aspect-ratio:300/506;opacity:.13}
+.wmap[data-world="A2"] .wscape i:nth-child(3){--m:url(../images/map/lm_a2_3.png);aspect-ratio:300/260;opacity:.15}
+.wmap[data-world="B1"] .wscape i:nth-child(1){--m:url(../images/map/lm_b1_1.png);aspect-ratio:360/218;opacity:.22;width:96%;max-width:340px}
+.wmap[data-world="B1"] .wscape i:nth-child(2){--m:url(../images/map/lm_b1_2.png);aspect-ratio:300/410;opacity:.13}
+.wmap[data-world="B1"] .wscape i:nth-child(3){--m:url(../images/map/lm_b1_3.png);aspect-ratio:300/466;opacity:.15}
+.wmap[data-world="B2"] .wscape i:nth-child(1){--m:url(../images/map/lm_b2_1.png);aspect-ratio:360/551;opacity:.13}
+.wmap[data-world="B2"] .wscape i:nth-child(2){--m:url(../images/map/lm_b2_2.png);aspect-ratio:300/386;opacity:.11}
+.wmap[data-world="B2"] .wscape i:nth-child(3){--m:url(../images/map/lm_b2_3.png);aspect-ratio:300/258;opacity:.15}
+.wmap[data-world="C1"] .wscape i:nth-child(1){--m:url(../images/map/lm_c1_1.png);aspect-ratio:360/464;opacity:.20}
+.wmap[data-world="C1"] .wscape i:nth-child(2){--m:url(../images/map/lm_c1_2.png);aspect-ratio:300/375;opacity:.15}
+.wmap[data-world="C1"] .wscape i:nth-child(3){--m:url(../images/map/lm_c1_3.png);aspect-ratio:300/350;opacity:.16}
+.wmap[data-world="C2"] .wscape i:nth-child(1){--m:url(../images/map/lm_c2_1.png);aspect-ratio:360/780;opacity:.085}
+.wmap[data-world="C2"] .wscape i:nth-child(2){--m:url(../images/map/lm_c2_2.png);aspect-ratio:300/277;opacity:.13}
+.wmap[data-world="C2"] .wscape i:nth-child(3){--m:url(../images/map/lm_c2_3.png);aspect-ratio:300/421;opacity:.12}
+
+/* -- 2b. El resplandor del mundo, a su sitio ---------------------
+   Medido sobre A1: la mitad superior del mapa estaba en rgb(74,57,54)
+   —un gris cálido— contra los rgb(27,29,49) de la mitad inferior. El
+   culpable era este halo: --w-glow llega con alfa .34-.42 y en varios
+   mundos es NARANJA, así que teñía de sepia media escena y devolvía
+   justo la neblina que quitamos con el terreno. La noche es la del
+   token; el mundo sólo la matiza. */
+.wsky::after{background:
+    radial-gradient(115% 30% at 50% 0%, var(--w-glow,rgba(201,168,76,.30)) 0%, transparent 64%),
+    radial-gradient(130% 72% at 50% 106%, rgba(0,0,0,.5) 0%, transparent 62%);
+  opacity:.4}
+
+/* -- 3. Los medallones ------------------------------------------
+   Más pequeños (74→60) y con el glifo pedido en em, como manda el
+   sistema, para que llene el disco en vez de flotar en el centro.
+   Fuera el escalón macizo de 5px: era lo que los hacía parecer
+   fichas de juego pegadas sobre la escena. */
+.wbtn{width:60px;height:60px;font-size:1rem;border-width:1.5px;
+  border-color:rgba(201,168,76,.30);
+  background:linear-gradient(180deg,#272a4d,#181a33);
+  /* materia de medallón ACUÑADO, no disco plano: filete interior con su
+     hueco (el doble aro de una moneda), luz arriba, sombra abajo y una
+     caída suave que lo despega del paisaje. Todo con inset: cero capas
+     nuevas y cero elementos. */
+  box-shadow:inset 0 1px 0 rgba(243,226,171,.16),
+             inset 0 -2px 4px rgba(8,7,20,.55),
+             inset 0 0 0 4px rgba(8,7,20,.28),
+             inset 0 0 0 5px rgba(201,168,76,.16),
+             0 7px 18px rgba(8,7,20,.5)}
+.wbtn:active:not(.locked){transform:translateY(1px);
+  box-shadow:inset 0 1px 0 rgba(243,226,171,.16),
+             inset 0 -2px 4px rgba(8,7,20,.55),
+             inset 0 0 0 4px rgba(8,7,20,.28),
+             inset 0 0 0 5px rgba(201,168,76,.16),
+             0 3px 9px rgba(8,7,20,.5)}
+/* el glifo se pide en em (contrato del sistema) y el em lo fija el nodo.
+   Ojo: .wbtn.is-current y .wbtn.castle traían font-size propio (2rem y
+   1.8rem), así que su glifo salía a 56px dentro de un disco de 72. */
+.wbtn,
+.wbtn.is-current,
+.wbtn.castle{font-size:1rem}
+.wbtn .wglyph,
+.wbtn.completed .wglyph,
+.wbtn.is-current .wglyph{width:1.75em;height:1.75em}
+
+/* los nodos flotaban en bucle (g-node-bob) con will-change:transform cada
+   uno: una capa de composición permanente por nodo, y el sendero NO
+   flotaba con ellos, así que la línea se despegaba del disco al que
+   entra. Con un trazo fino se nota; quieto se lee como grabado. */
+.wbtn:not(.is-current):not(.locked):not(.castle){animation:none;will-change:auto}
+
+/* disponible: la puerta abierta. Filete de oro dentro y fuera. */
+.wbtn.open:not(.is-current){background:linear-gradient(180deg,#2a2e56,#1a1d3a);
+  border-color:var(--gold,#C9A84C);color:var(--gold,#C9A84C);
+  box-shadow:inset 0 1px 0 rgba(243,226,171,.22),
+             inset 0 -2px 5px rgba(8,7,20,.5),
+             inset 0 0 0 4px rgba(8,7,20,.3),
+             inset 0 0 0 5px rgba(201,168,76,.34),
+             0 7px 18px rgba(8,7,20,.5),0 0 16px rgba(201,168,76,.10)}
+
+/* completada: doble aro de oro y un velo al 14 %. El oro es acento,
+   nunca relleno — antes el disco iba macizo en oro y pesaba más que
+   el nodo actual. */
+/* El velo dorado va sobre una base OPACA: con el fondo translúcido, el
+   sendero de oro que pasa por detrás se veía cruzando la cara del
+   medallón y por encima del glifo. Un medallón acuñado no es traslúcido. */
+.wbtn.completed{background:
+    linear-gradient(180deg,rgba(201,168,76,.20),rgba(201,168,76,.06)),
+    linear-gradient(180deg,#272a4d,#181a33);
+  border-color:var(--gold,#C9A84C);color:var(--va-star,#f3e2ab);
+  box-shadow:inset 0 1px 0 rgba(243,226,171,.3),
+             inset 0 -2px 5px rgba(8,7,20,.45),
+             inset 0 0 0 4px rgba(8,7,20,.22),
+             inset 0 0 0 5px rgba(201,168,76,.42),
+             0 7px 18px rgba(8,7,20,.5)}
+
+/* bloqueada: "todavía no", no "avería". Filete continuo (el
+   discontinuo se leía como marcador de posición sin cargar) y la
+   piedra hundida: la luz de arriba casi no llega. */
+.wbtn.locked{background:linear-gradient(180deg,#1d1f3a,#14162c);
+  border-style:solid;border-color:#3a3a63;color:#b3b0c9;
+  box-shadow:inset 0 1px 0 rgba(179,176,201,.10),
+             inset 0 3px 7px rgba(8,7,20,.6),
+             inset 0 0 0 4px rgba(8,7,20,.3),
+             inset 0 0 0 5px rgba(58,58,99,.5),
+             0 5px 14px rgba(8,7,20,.45)}
+.wbtn.locked .wglyph{opacity:1}
+
+/* aquí estás: el retrato del gato, doble aro y un solo pulso */
+.wbtn.is-current{width:72px;height:72px;border-width:2px;
+  background:linear-gradient(180deg,#2a2e55,#1d203c);
+  border-color:var(--gold,#C9A84C);color:var(--va-star,#f3e2ab);
+  box-shadow:0 0 0 4px #14122a,0 0 0 5.5px rgba(201,168,76,.55),
+             0 10px 24px rgba(8,7,20,.55)}
+.wbtn.is-current::after{inset:-5px;
+  box-shadow:0 0 0 0 rgba(201,168,76,.45);animation:wpulse 2.4s ease-in-out infinite}
+@keyframes wpulse{0%,100%{box-shadow:0 0 0 0 rgba(201,168,76,.42)}50%{box-shadow:0 0 0 11px rgba(201,168,76,0)}}
+
+/* mini-reto y Guardián, al mismo compás que los nodos */
+.wbtn.castle.mini{width:50px;height:48px;border-radius:12px;border-width:1.5px;
+  background:linear-gradient(180deg,#242747,#1a1c36);border-color:rgba(201,168,76,.30)}
+.wbtn.castle.mini.completed{background:linear-gradient(180deg,rgba(201,168,76,.16),rgba(201,168,76,.07));
+  border-color:var(--gold,#C9A84C);color:var(--va-star,#f3e2ab)}
+.wbtn .wcrest{width:22px;height:24px;display:block}
+.wbtn .wbeacon{width:30px;height:32px;display:block}
+.wbtn.boss{width:82px;height:80px;border-width:2px;border-radius:41px 41px 14px 14px;
+  box-shadow:0 8px 22px rgba(8,7,20,.5)}
+.wbtn.boss.locked{border-style:solid;border-color:#3a3a63}
+
+/* -- 4. Los rótulos, legibles ESTÉN DONDE ESTÉN ------------------
+   El sendero pasaba por encima del nombre de la lección ("Plural
+   Nouns", "Can: habilidad y permiso" quedaban tachados). Halo de
+   noche alrededor del texto: la línea pasa por detrás y se lee
+   como una etiqueta de carta náutica, que es justo lo que es. */
+.wisland .wtitle{margin-top:8px;font-size:.78rem;font-weight:600;max-width:126px;
+  color:#EDE7D6;
+  text-shadow:0 0 5px #14122a,0 0 5px #14122a,0 1px 2px #14122a,0 0 10px rgba(20,18,42,.9)}
+.wisland .wnode.locked .wtitle{color:#b3b0c9;font-weight:500}
+.wstars{margin-top:4px;font-size:.74rem;text-shadow:0 0 5px #14122a,0 0 5px #14122a}
+
+/* la píldora "Empieza"/"Continuar" */
+.wnode .wlabel{background:var(--gold,#C9A84C);color:#1B1B2F;font-size:.66rem;
+  font-weight:700;letter-spacing:.1em;padding:4px 12px;top:-26px;box-shadow:0 4px 12px rgba(8,7,20,.5)}
+.wnode .wlabel::after{border-top-color:var(--gold,#C9A84C)}
+.wboss-node .wlabel.boss-lb{background:transparent;color:var(--va-star,#f3e2ab);
+  border:1px solid rgba(201,168,76,.45);box-shadow:none}
+.wboss-node .wlabel.boss-lb::after{border-top-color:rgba(201,168,76,.45)}
+.wnode.mini .wlabel.mini-lb{background:transparent;color:#b3b0c9;
+  border:1px solid #3a3a63;box-shadow:none}
+.wnode.mini .wlabel.mini-lb::after{border-top-color:#3a3a63}
+/* la píldora va en position:absolute a -26px, o sea SALE del nodo: con
+   18px de hueco se comía el nombre de la lección anterior cuando éste
+   ocupaba dos líneas ("Can: habilidad y permiso" tachado por "EL
+   GUARDIÁN", "There is / There are" por "CONTINUAR"). Todo nodo que
+   lleve píldora reserva su propio aire. La regla con :has() cubre
+   también el nodo actual, que es el tercer caso y no tiene clase
+   propia en el contenedor; las dos de arriba quedan de respaldo para
+   navegadores sin :has(). */
+.wnode.mini,
+.wboss-node{margin-top:22px}
+.wnode:has(> .wlabel){margin-top:22px}
+
+/* -- 5. La destreza, como filete divisor -------------------------
+   Era una tarjeta de ancho completo con borde y fondo: un trozo de
+   interfaz caído dentro de un mapa. El sistema ya tiene la pieza
+   correcta para separar — el filete. El propio filete hace de
+   barra de avance, así que se mide sin añadir un widget. */
+.wisland .wcheck,
+.wcheck{align-self:stretch;display:flex;align-items:center;gap:9px;flex-wrap:nowrap;
+  margin:14px 6px 6px;padding:0;background:none;border:0;border-radius:0;
+  font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  color:#EDE7D6;box-shadow:none;
+  /* el filete cruza el mapa de lado a lado, así que tarde o temprano le cae
+     un prop detrás (el farol justo sobre el "0/2"). Mismo halo de noche que
+     los títulos: el decorado pasa por detrás y el cartel se sigue leyendo. */
+  text-shadow:0 0 5px #14122a,0 0 5px #14122a,0 1px 2px #14122a}
+.wcheck .ck-ic svg{width:15px;height:15px}
+.wisland .wcheck .ck-ic{color:var(--w-accent,#C9A84C)}
+/* El conteo va en #dcc173, el tono que el fundamento de color define
+   como "adorno sobre noche". Con el oro de marca (#C9A84C) medía 6,2:1
+   sobre la banda alta del mapa — AA, pero no AAA, y esto es texto
+   pequeño. Va literal a propósito: en esta página --gold2 sigue siendo
+   el #a8843d de la paleta vieja, bastante más oscuro. */
+.wisland .wcheck .ct,
+.wcheck .ct{order:3;margin-left:0;font-size:.68rem;font-weight:700;letter-spacing:.06em;
+  font-variant-numeric:tabular-nums;color:#dcc173;
+  text-shadow:0 0 5px #14122a,0 0 5px #14122a,0 1px 2px #14122a}
+.wcheck .ck-bar{order:2;flex:1 1 auto;min-width:24px;height:1px;margin:0;border-radius:0;
+  background:rgba(201,168,76,.35)}
+.wcheck .ck-bar > i{background:var(--gold,#C9A84C);height:1px}
+
+/* -- 6. El umbral del mundo --------------------------------------
+   Selector con [data-world]: cada mundo redefinía .wstart con
+   (0,3,0) — un .wstart pelado no los gana. */
+.wmap[data-world] .wstart{background:none;border:0;
+  border-top:1px solid rgba(201,168,76,.35);
+  border-bottom:1px solid rgba(201,168,76,.35);clip-path:none;border-radius:0;
+  padding:5px 20px;margin:0 0 4px;color:var(--va-star,#f3e2ab);
+  font-family:"Inria Serif",Georgia,serif;font-variant:small-caps;
+  letter-spacing:.1em;font-size:.82rem;font-weight:600;box-shadow:none}
+
+/* -- 7. Ritmo vertical -------------------------------------------
+   60px de nodo + 18px de hueco deja ~7 paradas por pantalla donde
+   antes cabían 5, sin apelmazar: el aire lo pone el mapa, no el
+   espaciado entre fichas. */
+.wmap{gap:18px;padding:16px 0 6px}
+
+/* -- 8. Se retiran los adornos por mundo que sobraban -------------
+   Cada mundo pegaba banderines, hojas, chispas y remates sobre los
+   nodos ya completados y sobre el umbral. Con el nuevo juego de
+   iconos se leían como pegatinas traídas de otro sitio.
+   Misma especificidad que los originales y van después: ganan. */
+.wmap[data-world] .wbtn.completed:not(.castle)::before,
+.wmap[data-world] .wbtn.completed:not(.castle)::after,
+.wmap[data-world] .wbtn.castle::before,
+.wmap[data-world] .wbtn.castle::after,
+.wmap[data-world] .wstart::before,
+.wmap[data-world] .wstart::after{content:none}
+/* y el escalón macizo que cada mundo le devolvía al mini-reto */
+.wmap[data-world] .wbtn.castle{box-shadow:0 6px 16px rgba(8,7,20,.45);border-radius:12px}
+
+@media(prefers-reduced-motion:reduce){.wbtn.is-current::after{animation:none}}
+.vesper-reduce-motion .wbtn.is-current::after{animation:none}

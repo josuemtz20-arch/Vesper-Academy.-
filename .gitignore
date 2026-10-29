@@ -36,6 +36,9 @@
 !/book_oral_interview.html
 !/audio_library.html
 !/lesson.html
+# El codigo del reproductor (antes en linea) y la lista de fotos de banner que existen.
+!/lesson_app.js
+!/vesper_lesson_photos.js
 # Pizarra Virtual autónoma (2026-07-08): app estática de whiteboard con Fabric.js
 # por CDN (sin build). Vive en /whiteboard/ (URL limpia vesperacademy.com/whiteboard).
 # Sin claves. El código fuente React/Vite (vesper-whiteboard/) queda local-only.
@@ -149,6 +152,8 @@
 # Account-free interactive lessons: player + content + mascot config + progress store.
 # leccion.html does NOT load vesper_auth.js, so it never hits the login gate.
 !/leccion.html
+# El codigo de la app de leccion.html (antes en linea; se separo para cachearlo).
+!/leccion_app.js
 !/vesper_lessons.js
 !/vesper_mascot.js
 !/vesper_progress.js

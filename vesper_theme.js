@@ -632,18 +632,26 @@ window.VESPER_THEME = (function () {
     modal.className = "vt-modal"; modal.id = "vt-modal";
     /* "Apariencia" y "el modelo visual y el skin" no le decían a un alumno que
        aquí es donde le cambia el pelaje y le pone cosas a su gato. */
-    modal.innerHTML = '<div class="vt-sheet"><div class="vt-top"><h3>Vestir a Vesper</h3>'
-      + '<button class="vt-x" aria-label="Cerrar">&times;</button></div>'
-      + '<p style="margin:.2em 0 .4em;color:var(--muted,#6b6b76);font-size:.9rem">Cámbiale el pelaje, ponle algo y elige el tema de la web. Se guarda en este dispositivo.</p>'
-      + renderPicker() + '</div>';
+    /* El panel se arma al abrirlo por primera vez: el modal oculto es
+       opacity:0 (no display:none), así que sus ~16 fotos de pelajes contaban
+       como "en pantalla" y se bajaban (~380 KB) en cada primera visita. */
+    var built = false;
+    function build() {
+      if (built) return;
+      built = true;
+      modal.innerHTML = '<div class="vt-sheet"><div class="vt-top"><h3>Vestir a Vesper</h3>'
+        + '<button class="vt-x" aria-label="Cerrar">&times;</button></div>'
+        + '<p style="margin:.2em 0 .4em;color:var(--muted,#6b6b76);font-size:.9rem">Cámbiale el pelaje, ponle algo y elige el tema de la web. Se guarda en este dispositivo.</p>'
+        + renderPicker() + '</div>';
+      wirePicker(modal);
+    }
     document.body.appendChild(fab); document.body.appendChild(modal);
-    function open() { modal.classList.add("show"); }
+    function open() { build(); modal.offsetWidth; modal.classList.add("show"); }
     function close() { modal.classList.remove("show"); }
     fab.onclick = open;
     modal.addEventListener("click", function (e) {
       if (e.target === modal || e.target.closest(".vt-x")) close();
     });
-    wirePicker(modal);
   }
 
   var api = {
