@@ -57,6 +57,24 @@
     return null;
   }
 
+  /* «Boleta» solo tiene sentido con sesión: mi_boleta.html está tras el login
+     y quien practica sin cuenta no tiene boleta (antes la pestaña le llevaba a
+     un login sin explicarle nada). En las páginas públicas sale oculta y
+     aparece cuando Firebase confirma una sesión con correo verificado; en las
+     del portal, que ya exigen sesión, se ve desde el principio. */
+  function boletaNeedsSession() {
+    var A = window.VesperAuth;
+    if (!A || !A.config) return true;
+    return (A.config.publicPages || []).indexOf(page) !== -1;
+  }
+  function revealBoletaWithSession(link) {
+    var A = window.VesperAuth;
+    if (!link || !A || !A.isConfigured || !A.initFirebase) return;
+    A.initFirebase().then(function (auth) {
+      auth.onAuthStateChanged(function (u) { link.hidden = !(u && u.emailVerified); });
+    }).catch(function () {});
+  }
+
   function injectStyles() {
     if (document.getElementById("vsp-nav-style")) return;
     var css = document.createElement("style");
@@ -78,6 +96,7 @@
       "#vsp-tabbar a svg{width:23px;height:23px;fill:none;stroke:currentColor;stroke-width:1.9;",
         "stroke-linecap:round;stroke-linejoin:round;display:block}",
       "#vsp-tabbar a:hover{color:rgba(245,242,235,.9)}",
+      "#vsp-tabbar a[hidden]{display:none}",
       "#vsp-tabbar a.on{color:var(--gold,#c5a059)}",
       "#vsp-tabbar a.on::before{content:'';position:absolute;top:0;width:26px;height:3px;border-radius:0 0 3px 3px;",
         "background:var(--gold,#c5a059)}",
@@ -115,9 +134,11 @@
     var nav = document.createElement("nav");
     nav.id = "vsp-tabbar";
     nav.setAttribute("aria-label", "Navegación del alumno");
+    var hideBoleta = boletaNeedsSession() && act !== "boleta";
     nav.innerHTML = TABS.map(function (t) {
       var on = t.id === act;
-      return '<a href="' + t.href + '"' + (on ? ' class="on" aria-current="page"' : "") + '>' +
+      return '<a href="' + t.href + '"' + (on ? ' class="on" aria-current="page"' : "") +
+        (t.id === "boleta" ? ' data-tab="boleta"' + (hideBoleta ? " hidden" : "") : "") + '>' +
         '<svg viewBox="0 0 24 24" aria-hidden="true">' + t.icon + '</svg>' +
         '<span>' + t.label + '</span></a>';
     }).join("");
@@ -128,6 +149,7 @@
 
     document.body.appendChild(spacer);
     document.body.appendChild(nav);
+    if (hideBoleta) revealBoletaWithSession(nav.querySelector('[data-tab="boleta"]'));
 
     /* Ocultar la barra al escribir: en móvil, un tab bar fijo pelea con el
        teclado y el compositor (chat) o los ejercicios de escribir.

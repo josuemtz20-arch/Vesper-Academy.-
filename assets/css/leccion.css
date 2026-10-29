@@ -2448,3 +2448,10 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
 
 @media(prefers-reduced-motion:reduce){.wbtn.is-current::after{animation:none}}
 .vesper-reduce-motion .wbtn.is-current::after{animation:none}
+/* chip de "Guardar progreso" (vesper_sync.js), dentro del encabezado del hub */
+.hub-sync{margin-top:10px}
+.hub-sync:empty{display:none}
+/* burbuja de chat: se aparta al desplazarse (ver mountChatNudge) */
+.vchat-nudge.away .vchat-fab,.vchat-nudge.away .vchat-pop{opacity:0!important;transform:translateY(14px)!important;pointer-events:none!important;transition:opacity .2s ease,transform .2s ease}
+/* la ficha de liga avisa que es de práctica (rivales simulados) */
+.hstat__sub{display:block;font-size:.62rem;line-height:1.1;color:rgba(245,242,235,.62);font-weight:600;margin-top:1px;white-space:nowrap}

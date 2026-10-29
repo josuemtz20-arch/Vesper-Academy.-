@@ -97,13 +97,16 @@
     }, 1200);
   }
 
-  window.VESPER_SYNC = { push: schedulePush, openAuth: openModal, signedIn: function () { return !!currentUser; } };
+  window.VESPER_SYNC = { push: schedulePush, openAuth: openModal, signedIn: function () { return !!currentUser; },
+    mountChip: function (slot) { if (chip && slot && chip.parentNode !== slot) slot.appendChild(chip); } };
 
   /* ============================ UI ============================ */
   function injectCSS() {
     if (document.getElementById("vsync-css")) return;
     var css = [
-      ".vsync-chip{position:fixed;top:10px;right:10px;z-index:9000;display:inline-flex;align-items:center;gap:6px;",
+      /* En el flujo, no fijo: arriba a la derecha tapaba un botón del
+         encabezado del hub y, al desplazarse, tarjetas y nodos del mapa. */
+      ".vsync-chip{position:static;display:inline-flex;align-items:center;gap:6px;",
       "background:#fff;border:1px solid #ece7da;border-radius:999px;padding:7px 13px;font:600 12px/1 Inter,system-ui,sans-serif;",
       "color:#1B1B2F;box-shadow:0 4px 14px rgba(27,27,47,.12);cursor:pointer}",
       ".vsync-chip .dot{width:8px;height:8px;border-radius:50%;background:#C9A84C}",
@@ -136,7 +139,9 @@
     modal.className = "vsync-modal";
     overlay.appendChild(modal);
     overlay.addEventListener("click", function (e) { if (e.target === overlay) closeModal(); });
-    function mount() { document.body.appendChild(chip); document.body.appendChild(overlay); }
+    /* El chip lo coloca la página con VESPER_SYNC.mountChip(hueco); sin
+       hueco (pantallas de lección) no se muestra. El modal sí va al body. */
+    function mount() { document.body.appendChild(overlay); }
     if (document.body) mount(); else document.addEventListener("DOMContentLoaded", mount);
   }
 

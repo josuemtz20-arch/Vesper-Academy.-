@@ -264,9 +264,11 @@
       var lic = (window.VESPER_ICN ? VESPER_ICN.tier(lt.id) : (lt.icon || ""));
       var a = document.createElement("a");
       a.className = "hstat hstat--link"; a.href = "liga.html";
-      a.setAttribute("aria-label", "Liga " + lt.name + ", puesto " + lr);
+      var tierName = lt.name.replace(/^Liga\s+/, "");
+      a.setAttribute("aria-label", "Liga de práctica " + tierName + " (rivales simulados), puesto " + lr);
+      a.title = "Liga semanal de práctica: compites con rivales simulados";
       a.innerHTML = '<span class="hstat__ic hstat__ic--badge">' + lic + '</span>'
-        + '<span class="hstat__tx"><span class="hstat__v">' + lr + 'º</span><span class="hstat__l">' + esc(lt.name.replace(/^Liga\s+/, "")) + '</span></span>';
+        + '<span class="hstat__tx"><span class="hstat__v">' + lr + 'º</span><span class="hstat__l">' + esc(tierName) + '</span><span class="hstat__sub">práctica</span></span>';
       slot.replaceWith(a);
     } catch (e) {}
   }
@@ -278,7 +280,9 @@
       + '<div class="hstat"><span class="hstat__ic">' + HUB_ICN.star + '</span>'
       + '<span class="hstat__tx"><span class="hstat__v">' + (st.xp || 0) + '</span><span class="hstat__l">XP</span></span></div>';
     /* en lugar de la meta diaria: la liga semanal (tier + tu puesto), tappable */
-    tiles += '<span id="leagueTile" hidden></span>';
+    /* La liga compite contra rivales simulados: antes de la primera lección
+       el "15º Bronce" solo confundía. Sale cuando ya hay XP. */
+    if ((st.xp || 0) > 0) tiles += '<span id="leagueTile" hidden></span>';
     if (st.shields || 0) {
       tiles += '<div class="hstat"><span class="hstat__ic">' + HUB_ICN.shield + '</span>'
         + '<span class="hstat__tx"><span class="hstat__v">' + st.shields + '</span><span class="hstat__l">Escudos</span></span></div>';
@@ -302,6 +306,7 @@
       + '<a class="hub-ic" href="configuracion.html" aria-label="Configuración" title="Configuración">' + HUB_ICN.gear + '</a>'
       + '</div></div>'
       + '<div class="hub-stats3">' + tiles + '</div>'
+      + '<div class="hub-sync" id="syncSlot"></div>'
       + '</header>';
   }
 
@@ -1824,6 +1829,24 @@
       return localStorage.getItem(PRIMER_KEY) === "1";
     } catch (e) { return true; }
   }
+  /* Paseo corto (3 pasos): lo que sale solo la primera vez. Antes eran los 11
+     del paseo completo, de entrada y antes de la primera lección; ahora el
+     completo queda en el botón «Cómo funciona», que el tercer paso señala. */
+  function tourStepsShort(selLevel) {
+    var wt = WORLD_THEME[selLevel] || {};
+    var wname = wt.worldName || "este mundo";
+    return [
+      { el: ".nextstep", pad: 10,
+        title: "Empieza siempre por aquí",
+        text: "Soy Vesper. Esta tarjeta es tu siguiente paso: púlsala y te llevo a la lección que te toca. Si algún día no sabes qué hacer, vuelve aquí." },
+      { el: ".wbtn.is-current", shape: "circle", pad: 12,
+        title: "Este es tu camino",
+        text: "Estás en " + wname + ", el mundo de tu nivel. El círculo luminoso es tu lección de ahora; al final del sendero te espera el Guardián, que abre el mundo siguiente." },
+      { el: "#tourGo", pad: 8,
+        title: "El resto, cuando quieras",
+        text: "La racha, el chat conmigo, el vocabulario y el Guardián: «Cómo funciona» te los enseña uno por uno. ¡Ahora vamos a tu lección!" }
+    ];
+  }
   function tourSteps(selLevel) {
     var wt = WORLD_THEME[selLevel] || {};
     var wname = wt.worldName || "este mundo";
@@ -1870,7 +1893,7 @@
       + '<button class="tourbar__btn" type="button" id="tourGo">'
       + '<span class="tourbar__ic" aria-hidden="true">' + (window.VESPER_ICN ? (VESPER_ICN.compass || VESPER_ICN.star || "") : "") + '</span>'
       + '<span class="tourbar__tx"><b>Cómo funciona</b>'
-      + '<span>' + (tourSeen() ? "Repite el paseo guiado del mapa" : "Un paseo de un minuto por el mapa") + '</span></span>'
+      + '<span>' + (tourSeen() ? "El paseo completo por el mapa" : "Un paseo de un minuto por el mapa") + '</span></span>'
       + '</button></div>';
   }
   /* No arranques el paseo encima de otra puerta bloqueante: la del nombre
@@ -1883,9 +1906,10 @@
   }
   /* lanza el paseo; devuelve false si no hay nada que señalar todavía */
   var _tourLevel = null;                            /* mundo pintado ahora mismo (lo fija renderIndex) */
-  function startTour() {
-    if (!window.VESPER_TOUR) { need("tour").then(startTour, function () {}); return true; }
-    return VESPER_TOUR.start(tourSteps(_tourLevel), {
+  /* full: el paseo completo (botón «Cómo funciona»); sin él, el corto */
+  function startTour(full) {
+    if (!window.VESPER_TOUR) { need("tour").then(function () { startTour(full); }, function () {}); return true; }
+    return VESPER_TOUR.start(full ? tourSteps(_tourLevel) : tourStepsShort(_tourLevel), {
       key: TOUR_KEY,
       onEnd: function () {
         try { localStorage.setItem(PRIMER_KEY, "1"); } catch (e) {}
@@ -1894,7 +1918,7 @@
         var bar = byId("tourGo");
         if (bar) {
           var sub = bar.querySelector(".tourbar__tx span");
-          if (sub) sub.textContent = "Repite el paseo guiado del mapa";
+          if (sub) sub.textContent = "El paseo completo por el mapa";
         }
       }
     });
@@ -2039,7 +2063,7 @@
     };
     var tourGo = byId("tourGo");
     if (tourGo) tourGo.onclick = function () {
-      if (!startTour()) toast("El paseo necesita el mapa cargado");
+      if (!startTour(true)) toast("El paseo necesita el mapa cargado");
     };
 
     /* ---- avatar: traza el sendero y decide si "camina" tras completar una lección ---- */
@@ -2067,6 +2091,9 @@
       }, 620);
     }
     _indexFirst = false;
+    /* el chip de la nube vive en el encabezado (no flota); la liga, si ya llegó */
+    if (window.VESPER_SYNC && VESPER_SYNC.mountChip) VESPER_SYNC.mountChip(byId("syncSlot"));
+    fillLeagueTile();
     gateAnims();
 
     /* ---- lógica de búsqueda/filtros (sólo actualiza #searchResults) ---- */
@@ -2229,6 +2256,12 @@
     var fab = n.querySelector(".vchat-fab");
     if (fab) fab.addEventListener("click", markSeen);
     if (pop) pop.addEventListener("click", function (ev) { if (ev.target.closest("a")) markSeen(); });
+    /* A 390 px la burbuja fija tapaba botones al desplazarse por el mapa
+       («Ver más lecciones», el banner del mundo). Solo se ve arriba del hub;
+       más abajo el chat sigue a un toque en el icono del encabezado. */
+    function onScroll() { n.classList.toggle("away", (window.scrollY || window.pageYOffset || 0) > 160); }
+    window.addEventListener("scroll", onScroll, { passive: true });
+    onScroll();
 
     if (rm) {                                       // sin animación: muestra botón y, si es nuevo, el mensaje estático
       n.classList.add("show-fab");
@@ -3672,7 +3705,9 @@
     byId("reloadL").onclick = function () { location.reload(); };
     return;
   }
-  if (window.VESPER_THEME && VESPER_THEME.mountFloat) VESPER_THEME.mountFloat();
+  /* Sin la paleta flotante (VESPER_THEME.mountFloat): a 390 px tapaba el
+     selector de mundos y el banner, y el encabezado del hub ya tiene su
+     propio botón «Vestir a Vesper». */
   var wants = [];
   if (id === "exams" || /^(boss|exam):/.test(id || "")) wants.push("exams");
   if (id === "forja" || (id || "").indexOf("forja:") === 0) wants.push("forja");
