@@ -12,16 +12,16 @@
     <meta property="og:locale" content="es_MX">
     <meta property="og:site_name" content="Vesper Academy">
     <meta property="og:title" content="Examen diagnóstico de inglés gratis — descubre tu nivel">
-    <meta property="og:description" content="30 preguntas, sin registro, resultado al instante con tu nivel CEFR (Pre-A1–B2+) y curso recomendado.">
+    <meta property="og:description" content="30 preguntas, sin crear cuenta, resultado al instante con tu nivel CEFR (Pre-A1–B2+) y curso recomendado.">
     <meta property="og:url" content="https://vesperacademy.com/book_placement.html">
     <meta property="og:image" content="https://vesperacademy.com/assets/images/lessons/theme_city.jpg">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Examen diagnóstico de inglés gratis — descubre tu nivel">
-    <meta name="twitter:description" content="30 preguntas, sin registro, resultado al instante con tu nivel CEFR y curso recomendado.">
+    <meta name="twitter:description" content="30 preguntas, sin crear cuenta, resultado al instante con tu nivel CEFR y curso recomendado.">
     <meta name="twitter:image" content="https://vesperacademy.com/assets/images/lessons/theme_city.jpg">
     <link rel="icon" href="assets/images/vesper_logo.png" type="image/png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inria+Serif:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -32,11 +32,11 @@
             --navy2: #2c2c4a;
             --navy3: #2c2c4a;
             --card: #1a2438;
-            --a0-color: #8d99a6;
-            --a1-color: #4aa3df;
-            --a2-color: #2ecc71;
-            --b1-color: #e67e22;
-            --b2-color: #a569bd;
+            --a0-color: #a9b1bd;
+            --a1-color: #e6d5ae;
+            --a2-color: #ddc28c;
+            --b1-color: #d0aa63;
+            --b2-color: #c5952f;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -70,8 +70,8 @@
             z-index: 50;
         }
         .top-bar img { height: 38px; border-radius: 8px; }
-        .top-bar .brand-txt b { font-family: 'Inria Serif', serif; font-size: 1.02rem; letter-spacing: .5px; display: block; line-height: 1.1; }
-        .top-bar .brand-txt small { font-size: 0.6rem; font-weight: 700; letter-spacing: 2.5px; color: var(--gold); text-transform: uppercase; }
+        .top-bar .brand-txt b { font-family: 'Fraunces', Georgia, serif; font-weight: 500; white-space: nowrap; font-size: 1.08rem; letter-spacing: .01em; display: block; line-height: 1.1; }
+        .top-bar .brand-txt small { white-space: nowrap; font-size: 0.6rem; font-weight: 700; letter-spacing: 2.5px; color: var(--gold); text-transform: uppercase; }
         .top-bar .home-link {
             margin-left: auto;
             color: rgba(255,255,255,0.75);
@@ -84,6 +84,7 @@
             padding: 8px 14px;
             border: 1px solid rgba(255,255,255,0.18);
             border-radius: 20px;
+            white-space: nowrap;
             transition: all .15s;
         }
         .top-bar .home-link:hover { color: var(--gold-light); border-color: var(--gold); }
@@ -96,7 +97,7 @@
         .screen.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
 
-        h1, h2 { font-family: 'Inria Serif', serif; }
+        h1, h2 { font-family: 'Fraunces', Georgia, serif; }
 
         /* ── INTRO ── */
         .intro-hero { text-align: center; padding: 14px 0 30px; }
@@ -104,9 +105,9 @@
             display: inline-flex;
             align-items: center;
             gap: 8px;
-            background: rgba(46,204,113,0.12);
-            border: 1px solid rgba(46,204,113,0.45);
-            color: #2ecc71;
+            background: rgba(197,160,89,0.12);
+            border: 1px solid rgba(197,160,89,0.45);
+            color: var(--gold-light);
             font-size: 0.72rem;
             font-weight: 800;
             letter-spacing: 2px;
@@ -126,17 +127,17 @@
             color: var(--gold-light);
             box-shadow: 0 14px 40px rgba(197,160,89,.18);
         }
-        .intro-hero h1 { font-size: 2.5rem; font-weight: 700; line-height: 1.15; margin-bottom: 14px; }
+        .intro-hero h1 { font-size: 2.5rem; font-weight: 600; line-height: 1.15; margin-bottom: 14px; }
         .intro-hero h1 span { color: var(--gold-light); font-style: italic; }
         .intro-hero p { color: rgba(255,255,255,.68); font-size: 1.02rem; line-height: 1.7; max-width: 580px; margin: 0 auto; }
 
         .level-pills { display: flex; gap: 8px; flex-wrap: wrap; justify-content: center; margin: 26px 0 8px; }
         .pill { padding: 6px 14px; border-radius: 20px; font-size: 0.76rem; font-weight: 700; letter-spacing: 1px; }
-        .pill.a0 { background: rgba(141,153,166,0.12); border: 1px solid var(--a0-color); color: var(--a0-color); }
-        .pill.a1 { background: rgba(74,163,223,0.12); border: 1px solid var(--a1-color); color: var(--a1-color); }
-        .pill.a2 { background: rgba(46,204,113,0.12); border: 1px solid var(--a2-color); color: var(--a2-color); }
-        .pill.b1 { background: rgba(230,126,34,0.12); border: 1px solid var(--b1-color); color: var(--b1-color); }
-        .pill.b2 { background: rgba(165,105,189,0.12); border: 1px solid var(--b2-color); color: var(--b2-color); }
+        .pill.a0 { background: rgba(197,160,89,0.08); border: 1px solid var(--a0-color); color: var(--a0-color); }
+        .pill.a1 { background: rgba(197,160,89,0.08); border: 1px solid var(--a1-color); color: var(--a1-color); }
+        .pill.a2 { background: rgba(197,160,89,0.08); border: 1px solid var(--a2-color); color: var(--a2-color); }
+        .pill.b1 { background: rgba(197,160,89,0.08); border: 1px solid var(--b1-color); color: var(--b1-color); }
+        .pill.b2 { background: rgba(197,160,89,0.08); border: 1px solid var(--b2-color); color: var(--b2-color); }
 
         .info-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 28px 0; }
         .info-card {
@@ -293,9 +294,9 @@
         .option-btn:disabled { cursor: default; }
 
         .option-btn.idk-btn { border-style: dashed; border-color: rgba(255,255,255,0.2); font-style: italic; opacity: 0.9; margin-top: 4px; }
-        .option-btn.idk-btn:hover:not(:disabled) { border-color: var(--a1-color); background: rgba(74,163,223,0.08); }
-        .option-btn.idk-btn.skipped { border-color: var(--a1-color); background: rgba(74,163,223,0.10); color: #fff; opacity: 1; }
-        .option-btn.idk-btn.skipped .opt-letter { background: var(--a1-color); color: #fff; }
+        .option-btn.idk-btn:hover:not(:disabled) { border-color: var(--a1-color); background: rgba(230,213,174,0.08); }
+        .option-btn.idk-btn.skipped { border-color: var(--a1-color); background: rgba(230,213,174,0.10); color: #fff; opacity: 1; }
+        .option-btn.idk-btn.skipped .opt-letter { background: var(--a1-color); color: #1B1B2F; }
 
         .feedback-bar {
             padding: 12px 16px; border-radius: 10px;
@@ -330,10 +331,10 @@
         }
         @keyframes badgePop { from { transform: scale(.6); opacity: 0; } to { transform: scale(1); opacity: 1; } }
         .result-badge::after { content: ''; position: absolute; inset: -11px; border-radius: 50%; border: 1px solid; opacity: 0.3; }
-        .result-badge .badge-level { font-family: 'Inria Serif', serif; font-size: 2.5rem; font-weight: 700; }
+        .result-badge .badge-level { font-family: 'Fraunces', Georgia, serif; font-size: 2.5rem; font-weight: 700; }
         .result-badge .badge-label { font-size: 0.62rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; opacity: 0.85; }
 
-        .result-name { font-family: 'Inria Serif', serif; font-size: 1.6rem; font-weight: 700; margin-bottom: 4px; }
+        .result-name { font-family: 'Fraunces', Georgia, serif; font-size: 1.6rem; font-weight: 700; margin-bottom: 4px; }
         .result-subtitle { color: rgba(255,255,255,.5); font-size: 0.92rem; margin-bottom: 6px; }
         .result-contact { color: rgba(255,255,255,.45); font-size: 0.82rem; margin-bottom: 22px; }
         .result-contact i { color: var(--gold); margin-right: 5px; }
@@ -427,7 +428,7 @@
             width: 58px; height: 58px; border-radius: 50%;
             border: 2.5px solid;
             display: flex; align-items: center; justify-content: center;
-            font-family: 'Inria Serif', serif; font-weight: 700; font-size: 1.05rem;
+            font-family: 'Fraunces', Georgia, serif; font-weight: 700; font-size: 1.05rem;
         }
         .history-item .h-name { font-weight: 700; font-size: 0.98rem; margin-bottom: 3px; }
         .history-item .h-meta { font-size: 0.78rem; color: rgba(255,255,255,.5); line-height: 1.5; }
@@ -478,9 +479,9 @@
 <body>
 
 <div class="top-bar">
-    <img src="assets/images/vesper_logo.jpg" alt="Vesper Academy">
+    <img src="assets/images/landing/brand_mark_96.webp" alt="Vesper Academy" width="38" height="38">
     <span class="brand-txt"><b>Vesper Academy</b><small>Examen Diagnóstico</small></span>
-    <a class="home-link" href="index.html"><i class="fas fa-arrow-left"></i> Página principal</a>
+    <a class="home-link" href="index.html"><i class="fas fa-arrow-left"></i> Inicio</a>
 </div>
 
 <div class="wrapper">
@@ -488,7 +489,7 @@
     <!-- ═══════════ INTRO ═══════════ -->
     <div class="screen active" id="screen-intro">
         <div class="intro-hero">
-            <span class="free-tag"><i class="fas fa-gift"></i> 100% Gratis · Sin registro</span>
+            <span class="free-tag"><i class="fas fa-gift"></i> 100% gratis · Sin crear cuenta</span>
             <div class="intro-icon"><i class="fas fa-graduation-cap"></i></div>
             <h1>Descubre tu <span>nivel de inglés</span> en 15 minutos</h1>
             <p>Responde 30 preguntas y conoce tu nivel real — de principiante absoluto (Pre-A1) a avanzado (B2+) — junto con el curso de Vesper Academy ideal para ti. Si no sabes una respuesta, pulsa <strong style="color:var(--gold-light);">"No estoy seguro/a"</strong>: ser honesto da el resultado más preciso.</p>
@@ -672,11 +673,11 @@ const QUESTIONS = [
 ];
 
 const LEVELS = {
-    "Pre-A1":  { color: "#8d99a6", name: "Starter" },
-    "A1":  { color: "#4aa3df", name: "Beginner" },
-    "A2":  { color: "#2ecc71", name: "Elementary" },
-    "B1":  { color: "#e67e22", name: "Intermediate" },
-    "B2+": { color: "#a569bd", name: "Upper Intermediate" }
+    "Pre-A1":  { color: "#a9b1bd", name: "Starter" },
+    "A1":  { color: "#e6d5ae", name: "Beginner" },
+    "A2":  { color: "#ddc28c", name: "Elementary" },
+    "B1":  { color: "#d0aa63", name: "Intermediate" },
+    "B2+": { color: "#c5952f", name: "Upper Intermediate" }
 };
 
 const COURSES = {
@@ -1223,7 +1224,7 @@ function renderHistory() {
     }
 
     items.forEach(function (r) {
-        const lvl = LEVELS[r.level] || { color: "#8d99a6", name: r.levelName || "" };
+        const lvl = LEVELS[r.level] || { color: "#a9b1bd", name: r.levelName || "" };
         const contact = [
             r.email ? "<i class='fas fa-envelope'></i>" + escapeHtml(maskEmail(r.email)) : "",
             r.phone ? "<i class='fab fa-whatsapp'></i>" + escapeHtml(maskPhone(r.phone)) : ""

@@ -830,9 +830,11 @@ section{padding:var(--s-section) 0;}
   mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);}
 .marquee+.marquee{margin-top:14px;}
 .mtrack{display:flex;gap:14px;width:max-content;}
+.mtile{display:flex;flex-direction:column;align-items:center;gap:9px;width:104px;flex:0 0 auto;}
 .mtrack img{width:88px;height:88px;object-fit:cover;border-radius:var(--r-sm);
-  border:1px solid rgba(197,160,89,.22);opacity:.55;flex:0 0 auto;transition:opacity .3s;}
-.marquee:hover .mtrack img{opacity:.78;}
+  border:1px solid rgba(197,160,89,.22);opacity:.72;flex:0 0 auto;transition:opacity .3s;}
+.mtile b{font:500 .78rem/1.2 'Inter',sans-serif;color:rgba(245,242,235,.72);text-align:center;}
+.marquee:hover .mtrack img{opacity:.9;}
 @keyframes marchL{from{transform:translateX(0);}to{transform:translateX(-50%);}}
 @keyframes marchR{from{transform:translateX(-50%);}to{transform:translateX(0);}}
 /* El rail NO se cuelga de .js-anim. Esa clase es la red de seguridad del
@@ -1377,10 +1379,10 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
       <h1>Habla inglés con <em>confianza real</em>, no solo en teoría.</h1>
       <p class="lead">Desde el primer «hello» hasta tu certificación internacional. Método comunicativo, profesores reales y un plan que se adapta a tu nivel y a tu meta profesional.</p>
       <div class="hero-cta">
-        <a href="book_placement.html" class="btn btn-gold"><svg class="i"><use href="#i-check-doc"/></svg> Examen diagnóstico gratis</a>
-        <a href="leccion.html" class="btn btn-ghost"><svg class="i"><use href="#i-bolt"/></svg> Prueba una lección</a>
+        <a href="book_placement.html" class="btn btn-gold"><svg class="i"><use href="#i-check-doc"/></svg> Examen de nivel gratis</a>
+        <a href="leccion.html?id=core-grammar-01-to-be" class="btn btn-ghost"><svg class="i"><use href="#i-bolt"/></svg> Prueba una lección</a>
       </div>
-      <p class="cta-note">Gratis · sin registro · 15 minutos · resultado al instante</p>
+      <p class="cta-note">Gratis · sin crear cuenta · 15 minutos · resultado al instante</p>
     </div>
 
     <div class="plate-wrap">
@@ -1758,6 +1760,7 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
       <div>
         <h2 class="sec-title">Invierte en tu inglés.</h2>
         <p class="sec-lead">Sin inscripción, sin permanencia y sin material extra que comprar. El precio que ves es el que pagas.</p>
+        <p class="sec-lead"><strong>¿Curso o plan?</strong> El curso es lo que aprendes; el plan, cómo lo tomas: en grupo, 1 a 1 o intensivo. Tu examen de nivel te dice qué curso te toca.</p>
       </div>
     </div>
 
@@ -1924,15 +1927,15 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
       <div class="reveal">
         <span class="rule"></span>
         <span class="eyebrow">Empieza hoy</span>
-        <h2 class="sec-title">Tu primer paso: el examen diagnóstico gratis.</h2>
-        <p class="sec-lead">Quince minutos, sin registro y sin compromiso. Sales sabiendo tu nivel y qué curso te toca.</p>
+        <h2 class="sec-title">Tu primer paso: el examen de nivel gratis.</h2>
+        <p class="sec-lead">Quince minutos, sin crear cuenta y sin compromiso. Sales sabiendo tu nivel y qué curso te toca.</p>
         <ol class="steps">
-          <li><b>Haces el diagnóstico</b><p>15 minutos, en línea, resultado inmediato.</p></li>
+          <li><b>Haces el examen de nivel</b><p>15 minutos, en línea, resultado inmediato.</p></li>
           <li><b>Te decimos tu peldaño</b><p>Con lo que ya dominas y lo que falta para el siguiente.</p></li>
           <li><b>Eliges horario y plan</b><p>Grupal o 1:1, según tu meta y tu agenda.</p></li>
           <li><b>Primera clase</b><p>Hablas inglés desde esa misma sesión.</p></li>
         </ol>
-        <p style="margin-top:28px"><a href="book_placement.html" class="btn btn-gold btn-lg"><svg class="i"><use href="#i-check-doc"/></svg> Empezar el examen gratis</a></p>
+        <p style="margin-top:28px"><a href="book_placement.html" class="btn btn-gold btn-lg"><svg class="i"><use href="#i-check-doc"/></svg> Examen de nivel gratis</a></p>
       </div>
 
       <div class="formcard reveal">
@@ -1980,7 +1983,7 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
       </div>
       <div>
         <h5>Gratis</h5>
-        <a href="book_placement.html">Examen diagnóstico</a>
+        <a href="book_placement.html">Examen de nivel</a>
         <a href="leccion.html">Lecciones interactivas</a>
         <a href="audio_library.html">Biblioteca de audio</a>
       </div>
@@ -2253,12 +2256,18 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
     var TEMAS = ['conversation','mind','question','business','negotiation','diplomacy','career',
                  'achievement','globe','finance','science','technology','travel','news','medicine',
                  'education','debate','writing','justice','future','city','music','food','nature'];
+    /* Sin nombre, el muro eran cuadros decorativos: el visitante no sabía qué temas eran. */
+    var TEMA_NOMBRE = {conversation:'Conversación',mind:'Mente y hábitos',question:'Curiosidades',business:'Negocios',
+                 negotiation:'Negociación',diplomacy:'Diplomacia',career:'Tu carrera',achievement:'Logros',globe:'Cultura global',
+                 finance:'Finanzas',science:'Ciencia',technology:'Tecnología',travel:'Viajes',news:'Noticias',medicine:'Salud',
+                 education:'Educación',debate:'Debate',writing:'Escritura',justice:'Leyes',future:'El futuro',city:'La ciudad',
+                 music:'Música',food:'Comida',nature:'Naturaleza'};
     function fillTrack(id, list){
       var el = document.getElementById(id); if(!el) return;
       /* Miniaturas propias a 176px (2x de 88). Servir los theme_*.jpg de
          900x1125 aquí costaba 2.8 MB para pintar cuadritos de 88 px. */
       var html = list.map(function(t){
-        return '<img src="assets/images/landing/rail/'+t+'.webp" alt="" width="88" height="88" loading="lazy" decoding="async">';
+        return '<span class="mtile"><img src="assets/images/landing/rail/'+t+'.webp" alt="" width="88" height="88" loading="lazy" decoding="async"><b>'+TEMA_NOMBRE[t]+'</b></span>';
       }).join('');
       el.innerHTML = html + html;   /* duplicado exacto = bucle sin salto */
     }
@@ -2574,9 +2583,9 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
 
     <div class="m-cta">
       <a class="m-btn" href="book_placement.html">Examen de nivel gratis</a>
-      <a class="m-link m-link--gold" href="leccion.html"><span>Probar una lección</span><svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+      <a class="m-link m-link--gold" href="leccion.html?id=core-grammar-01-to-be"><span>Probar una lección</span><svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a>
     </div>
-    <p class="m-hero__note">Sin registro · 15 min · resultado al instante</p>
+    <p class="m-hero__note">Sin crear cuenta · 15 min · resultado al instante</p>
 
     <div class="m-stats">
       <div><b>A1–C2</b><small>Niveles</small></div>
@@ -2724,7 +2733,7 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
     <div>
       <span class="m-eyebrow">Planes</span>
       <h2 class="m-h2">Invierte en tu inglés</h2>
-      <p class="m-lead">Toca una carta para verla al frente; tócala otra vez para entrar.</p>
+      <p class="m-lead"><b>¿Curso o plan?</b> El curso es lo que aprendes; el plan, cómo lo tomas. Toca una carta para verla al frente.</p>
     </div>
     <div class="m-deck m-deck--plans" data-kind="plans" data-start="0">
       <button class="m-card" type="button" aria-label="Plan grupal" data-href="planes.html#grupal">
@@ -2817,7 +2826,7 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
   <section class="m-close" id="m-contacto">
     <h2 class="m-h2">Tu primer paso es gratis</h2>
     <p>Descubre tu nivel real en 15 minutos y recibe tu curso recomendado al instante.</p>
-    <a class="m-btn" href="book_placement.html">Hacer mi examen</a>
+    <a class="m-btn" href="book_placement.html">Examen de nivel gratis</a>
     <button class="m-disclose" type="button" aria-expanded="false" aria-controls="m-form">¿Prefieres que te escribamos?</button>
     <form class="m-form" id="m-form" action="https://formsubmit.co/ajax/contacto@vesperacademy.com" method="POST">
       <input type="hidden" name="_subject" value="Nuevo prospecto desde vesperacademy.com (móvil)">
