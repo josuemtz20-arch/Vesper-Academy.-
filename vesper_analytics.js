@@ -17,6 +17,12 @@
  *
  * Para encender analítica por visitante (opcional): crea una propiedad
  * GA4 (gratis), copia tu "Measurement ID" (G-XXXXXXXXXX) y pégalo abajo.
+ *
+ * CONSENTIMIENTO (2026-10-29): con un ID pegado, GA4 NO se carga hasta que
+ * el visitante pulsa "Aceptar" en el aviso de cookies que este archivo
+ * muestra una sola vez (enlaza a aviso-de-privacidad.html#tecnologias).
+ * "Rechazar" se respeta para siempre en ese navegador. Sin ID no se muestra
+ * ningún aviso. VA.consent("granted"|"denied") cambia la decisión por código.
  * ============================================================ */
 (function () {
   "use strict";
@@ -29,6 +35,7 @@
   var LS_EVENTS = "vesper_events";
   var LS_VID = "vesper_vid";
   var LS_SRC = "vesper_cta_src";
+  var LS_CONSENT = "vesper_analytics_consent";   /* "granted" | "denied" */
   var MAX_EVENTS = 300;
 
   function uid(p) {
@@ -130,15 +137,26 @@
       return { total: a.length, counts: counts, events: a };
     },
     dump: function () { return this.funnel().events; },
+    /* decisión de cookies de analítica: VA.consent() la lee; con valor la fija */
+    consent: function (v) {
+      if (v === "granted" || v === "denied") {
+        try { localStorage.setItem(LS_CONSENT, v); } catch (e) {}
+        if (v === "granted") loadGa4();
+      }
+      try { return localStorage.getItem(LS_CONSENT) || ""; } catch (e) { return ""; }
+    },
     clear: function () { try { localStorage.removeItem(LS_EVENTS); } catch (e) {} }
   };
 
-  /* enciende GA4 si pegaste un Measurement ID válido */
-  (function initGa4() {
-    var g = VA.cfg.ga4;
-    if (!g || g.indexOf("G-") !== 0) return;
+  function gaIdOk() { var g = VA.cfg.ga4; return !!g && /^G-[A-Z0-9]{4,}$/.test(g); }
+
+  /* carga gtag.js: solo con ID válido Y consentimiento */
+  var _gaLoaded = false;
+  function loadGa4() {
+    if (_gaLoaded || !gaIdOk()) return;
+    _gaLoaded = true;
     try {
-      var s = document.createElement("script");
+      var g = VA.cfg.ga4, s = document.createElement("script");
       s.async = true;
       s.src = "https://www.googletagmanager.com/gtag/js?id=" + g;
       document.head.appendChild(s);
@@ -147,6 +165,42 @@
       window.gtag("js", new Date());
       window.gtag("config", g);
     } catch (e) {}
+  }
+
+  /* aviso de cookies: una vez por navegador, solo si hay ID de GA4 */
+  function consentBanner() {
+    if (document.getElementById("va-consent")) return;
+    var d = document.createElement("div");
+    d.id = "va-consent";
+    d.setAttribute("role", "dialog");
+    d.setAttribute("aria-label", "Cookies de analítica");
+    /* encima de la barra inferior del alumno (vesper_nav.js) si la hay */
+    var low = document.getElementById("vsp-tabbar") ? "calc(72px + env(safe-area-inset-bottom))" : "16px";
+    d.style.cssText = "position:fixed;left:12px;right:12px;bottom:" + low + ";z-index:10050;max-width:520px;margin:0 auto;" +
+      "background:#1B1B2F;color:#F5F2EB;border:1px solid rgba(201,168,76,.55);border-radius:14px;padding:14px 16px;" +
+      "font:400 14px/1.45 Inter,system-ui,sans-serif;box-shadow:0 10px 28px rgba(0,0,0,.3)";
+    d.innerHTML = '<p style="margin:0 0 10px">Usamos Google Analytics para saber qué partes del sitio sirven y mejorarlas. '
+      + 'Solo se activa si lo aceptas. <a href="aviso-de-privacidad.html#tecnologias" style="color:#E8C979">Aviso de privacidad</a></p>'
+      + '<div style="display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap">'
+      + '<button type="button" data-va="denied" style="font:600 14px Inter,system-ui,sans-serif;padding:9px 16px;border-radius:10px;border:1px solid rgba(245,242,235,.4);background:transparent;color:#F5F2EB;cursor:pointer">Rechazar</button>'
+      + '<button type="button" data-va="granted" style="font:600 14px Inter,system-ui,sans-serif;padding:9px 16px;border-radius:10px;border:0;background:#C9A84C;color:#1B1B2F;cursor:pointer">Aceptar</button>'
+      + '</div>';
+    d.addEventListener("click", function (e) {
+      var b = e.target.closest && e.target.closest("[data-va]");
+      if (!b) return;
+      VA.consent(b.getAttribute("data-va"));
+      d.remove();
+    });
+    document.body.appendChild(d);
+  }
+
+  (function initGa4() {
+    if (!gaIdOk()) return;
+    var c = VA.consent();
+    if (c === "granted") { loadGa4(); return; }
+    if (c === "denied") return;
+    if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", function () { setTimeout(consentBanner, 600); });
+    else setTimeout(consentBanner, 600);
   })();
 
   window.VA = VA;
