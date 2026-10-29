@@ -20,6 +20,12 @@ rules_version = '2';
  *     guardado en el dispositivo (el código ya degrada solo); la copia
  *     completa te sigue llegando por correo (FormSubmit) y puedes verla
  *     en la consola de Firebase cuando quieras.
+ *
+ * Revisión 2026-10-28 (correo verificado): en esta base NO hay ninguna
+ * regla con sesión — el único create es anónimo a propósito y todo lo
+ * demás está cerrado —, así que el requisito email_verified que se
+ * añadió a firestore.rules no aplica aquí. Sin cambios de reglas; no
+ * hace falta volver a publicar este archivo.
  * ============================================================ */
 service cloud.firestore {
   match /databases/{database}/documents {

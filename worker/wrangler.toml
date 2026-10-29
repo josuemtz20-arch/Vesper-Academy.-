@@ -1,8 +1,42 @@
 # Configuración del Cloudflare Worker que hace de proxy del chat de Vesper.
 # Despliegue: ver worker/README.md
+#
+# ⚠️ El chat (chat.html → PROXY_URL) apunta HOY a
+#    https://patient-feather-4364.josuemtz20.workers.dev/
+# y este archivo despliega un Worker llamado "vesper-chat-proxy". Si el Worker
+# en producción es "patient-feather-4364", cambia `name` a ese valor ANTES de
+# `wrangler deploy` (o cambia PROXY_URL a la URL nueva). Si no, se crea un
+# Worker NUEVO protegido y el viejo sigue abierto con tu API key. Ver README.
 name = "vesper-chat-proxy"
 main = "vesper-chat-proxy.js"
 compatibility_date = "2024-11-01"
 
 # La API key NO va aquí. Se guarda como secreto:
 #   wrangler secret put ANTHROPIC_API_KEY
+# Secretos opcionales (también con `wrangler secret put`):
+#   PRO_CODE          código del nivel Pro (Sonnet)
+#   TURNSTILE_SECRET  secret key de Cloudflare Turnstile (activa el reto)
+#   SESSION_SECRET    clave HMAC de la sesión post-Turnstile (si falta se
+#                     usa TURNSTILE_SECRET)
+
+# ── Límite de uso: contador en Durable Object ──
+# Una instancia por IP (y una "global"). No hay que crear nada a mano: el
+# primer `wrangler deploy` crea la clase con esta migración (backend SQLite,
+# disponible también en el plan gratuito de Workers).
+[[durable_objects.bindings]]
+name = "RATE_LIMITER"
+class_name = "RateLimiter"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["RateLimiter"]
+
+# ── Ajuste de límites sin tocar código (opcional) ──
+# Descomenta y cambia; 0 desactiva ese límite. Valores por defecto en
+# RATE_DEFAULTS de vesper-chat-proxy.js.
+# [vars]
+# RL_FREE_PER_MIN = "12"
+# RL_FREE_PER_DAY = "200"
+# RL_PRO_PER_MIN = "30"
+# RL_PRO_PER_DAY = "1000"
+# RL_GLOBAL_PER_DAY = "5000"

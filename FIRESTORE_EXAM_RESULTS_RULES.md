@@ -97,7 +97,20 @@ match /exam_results/{id} {
 
 > La versión canónica y completa (incluidos los helpers `teacherSeesGroup`,
 > `ownSid` y los bloques `roster`, `gradebook`, `daily_progress`) vive en
-> `_scripts/firestore.rules` — pega ESE archivo completo al publicar.
+> `firestore.rules` (copia de trabajo en `_scripts/firestore.rules`) — pega
+> ESE archivo completo al publicar.
+
+> **Endurecido el 2026-10-28** (el bloque de arriba es la versión anterior,
+> solo como referencia):
+> - `group` y `sid` deben coincidir con los del doc `students/{correo}` del
+>   propio alumno (`examIdentityOk`). Antes el alumno los elegía y podía
+>   etiquetar un intento con el grupo de otro profesor. Sin doc `students/`
+>   (admin o profesor probando) solo se acepta `group == ""` y `sid == ""`.
+>   `vesper_results.js` lee ese doc justo antes de subir.
+> - Forma cerrada (`examResultShapeOk`): solo los campos de `toFs()`, tipos y
+>   tamaños acotados, `0 <= score <= total <= 1000`, `percent` 0..100 y
+>   coherente, `examType` de la lista.
+> - `signedIn()` exige correo verificado (`token.email_verified`).
 
 Publica las reglas (consola de Firebase → Firestore → Reglas, o
 `firebase deploy --only firestore:rules`). Tiene efecto inmediato.

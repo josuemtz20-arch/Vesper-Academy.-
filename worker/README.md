@@ -12,22 +12,83 @@ chat.html  ──POST {system, messages}──►  Worker (key secreta)  ──�
 
 ## Qué hace
 
-- Recibe `POST` con `{ system, messages }` desde `chat.html`.
+- Recibe `POST` con `{ system, messages }` desde `chat.html` (más `proCode`,
+  `session` y `turnstileToken`, opcionales).
 - Añade `x-api-key` (secreto) y reenvía a `https://api.anthropic.com/v1/messages`
   en modo streaming.
-- **Fija** el modelo y `max_tokens` en el servidor (no confía en el cliente),
-  valida el origen (CORS) y acota el tamaño del historial.
+- **Fija** el modelo y `max_tokens` en el servidor (no confía en el cliente)
+  y acota el tamaño del historial.
+- **Frena el abuso** (cada mensaje cuesta saldo de Anthropic) — ver
+  [Control de abuso](#control-de-abuso).
 - **Añade siempre los guardrails** (constante `GUARDRAILS`) al final del system
   prompt: mantienen a Vesper dentro del aprendizaje de inglés y evitan contenido
   dañino o "cancelable", incluso si alguien manipula el navegador o llama al
   proxy directamente. Como se imponen del lado del servidor, no se pueden saltar.
 - Devuelve el stream SSE tal cual al navegador.
 
+## Control de abuso
+
+El header `Origin` (CORS) **no protege el saldo**: cualquiera lo escribe a mano
+con `curl -H "Origin: https://vesperacademy.com"`. Se conserva porque impide que
+otras webs usen el proxy desde el navegador de sus visitantes, pero las
+barreras reales son estas, en orden:
+
+| # | Barrera | Dónde | Respuesta si falla |
+|---|---------|-------|--------------------|
+| 1 | Límite **por IP** (`CF-Connecting-IP`) por minuto y por día UTC | Durable Object `RateLimiter` | `429` + `Retry-After`, `code: "rate_limited"` |
+| 2 | **Turnstile** (opcional): reto invisible validado contra `siteverify`; tras uno válido el Worker entrega una sesión firmada (HMAC, ligada a la IP, 1 h) en `X-Vesper-Session` | secreto `TURNSTILE_SECRET` | `401`, `code: "turnstile_required"` |
+| 3 | Tope **global** diario (todas las IPs juntas) | Durable Object `RateLimiter` ("global") | `503` + `Retry-After`, `code: "busy"` |
+
+Límites por defecto (constante `RATE_DEFAULTS`; se cambian sin tocar código con
+`[vars]` en `wrangler.toml` o en el panel; `0` desactiva ese límite):
+
+| Variable | Defecto | Qué cuenta |
+|----------|---------|------------|
+| `RL_FREE_PER_MIN` | 12 | mensajes/minuto por IP, nivel gratis |
+| `RL_FREE_PER_DAY` | 200 | mensajes/día por IP, nivel gratis |
+| `RL_PRO_PER_MIN` | 30 | mensajes/minuto por IP, con código Pro válido |
+| `RL_PRO_PER_DAY` | 1000 | mensajes/día por IP, con código Pro válido |
+| `RL_GLOBAL_PER_DAY` | 5000 | mensajes/día en total (freno de mano del costo) |
+
+> Un salón de clases detrás de un mismo router comparte **una** IP pública. Si
+> das clase con el chat a un grupo grande, sube `RL_FREE_PER_DAY` o da a esos
+> alumnos el código Pro (contador aparte y con más margen).
+
+**Por qué Durable Object y no KV:** KV es eventualmente consistente (dos
+peticiones simultáneas pueden leer el mismo contador) y en el plan gratuito
+solo admite ~1000 escrituras al día; contar cada mensaje lo agotaría. Un
+Durable Object procesa en serie las llamadas a una misma clave, así que el
+conteo es exacto. Las instancias se limpian solas al terminar el día (alarma).
+
+**Degradación:** si el Durable Object no responde (incidencia de Cloudflare),
+el Worker deja pasar y lo registra en los logs (`wrangler tail`), para no tumbar
+el chat; `max_tokens` fijo sigue acotando el costo por mensaje. Si `siteverify`
+no responde, en cambio, **no** deja pasar (sería saltarse el reto).
+
 ## Requisitos
 
-- Una cuenta de Cloudflare (el plan gratuito basta).
+- Una cuenta de Cloudflare (el plan gratuito basta; los Durable Objects con
+  backend SQLite están incluidos en él).
 - Una API key de Anthropic — https://console.anthropic.com/
 - Node.js instalado.
+
+## ⚠️ Antes de desplegar: ¿qué Worker está en producción?
+
+`chat.html` apunta hoy a `https://patient-feather-4364.josuemtz20.workers.dev/`,
+pero `wrangler.toml` dice `name = "vesper-chat-proxy"`. `wrangler deploy` publica
+el Worker **con el nombre de `wrangler.toml`**, así que con el nombre actual se
+crearía un Worker NUEVO (protegido) y el viejo seguiría abierto, con tu API key.
+Elige UNA:
+
+- **A (recomendada si `patient-feather-4364` es este mismo proxy):** cambia
+  `name = "patient-feather-4364"` en `wrangler.toml` y despliega. La URL no
+  cambia y no hay que tocar `chat.html`.
+- **B:** despliega como `vesper-chat-proxy`, pon la URL nueva en `PROXY_URL` de
+  `chat.html` y luego **borra** el Worker viejo en el panel (o al menos su
+  secreto `ANTHROPIC_API_KEY`).
+
+En el panel de Cloudflare → Workers & Pages puedes ver qué código corre en
+`patient-feather-4364` antes de decidir.
 
 ## Despliegue (una vez)
 
@@ -43,19 +104,52 @@ cd worker
 wrangler secret put ANTHROPIC_API_KEY
 #   -> pega tu key de Anthropic cuando lo pida (no se guarda en el repo)
 
-# 4. Despliega
+# 4. Despliega (crea también el Durable Object RateLimiter por la
+#    migración "v1" de wrangler.toml; no hay que crear nada más a mano)
 wrangler deploy
 #   -> copia la URL que imprime, p. ej.
 #      https://vesper-chat-proxy.<tu-subdominio>.workers.dev
 ```
 
+Si el Worker ya existía, el mismo `wrangler deploy` aplica la migración y
+activa los límites; los secretos que ya tenía se conservan.
+
+## Activar Turnstile (recomendado)
+
+1. Panel de Cloudflare → **Turnstile** → *Add widget*.
+   - Hostnames: `vesperacademy.com`, `www.vesperacademy.com` (y `localhost`
+     si quieres probar en local).
+   - Widget mode: **Invisible** o **Managed** (el chat usa
+     `appearance: "interaction-only"`: solo muestra una casilla si Cloudflare
+     duda).
+2. Copia la **site key** (pública) en `TURNSTILE_SITE_KEY` de `../chat.html`.
+3. Guarda la **secret key** como secreto del Worker:
+   ```bash
+   cd worker
+   wrangler secret put TURNSTILE_SECRET
+   # opcional: clave propia para firmar la sesión de 1 h (si no, usa TURNSTILE_SECRET)
+   wrangler secret put SESSION_SECRET
+   ```
+4. Publica `chat.html` (git push) **antes o a la vez** que el secreto: con
+   `TURNSTILE_SECRET` puesto y sin site key en la página, el chat responde
+   "Verificación de seguridad pendiente".
+
+La CSP de `chat.html` ya permite `https://challenges.cloudflare.com` (script,
+iframe y conexión). Sin `TURNSTILE_SECRET` el Worker no exige reto y el chat
+funciona como antes, solo con los límites de uso.
+
 ## Conectar el chat
 
-Pega esa URL en la constante `PROXY_URL` de `../chat.html`:
+Pega la URL del Worker en la constante `PROXY_URL` de `../chat.html`:
 
 ```js
 var PROXY_URL = "https://vesper-chat-proxy.<tu-subdominio>.workers.dev";
 ```
+
+Si cambias la URL, actualízala también en `connect-src` de la
+`Content-Security-Policy` de `chat.html` (la etiqueta `<meta>` al inicio del
+`<head>`; `_scripts/apply_csp.py` la regenera en todas las páginas), o el
+navegador bloqueará la conexión.
 
 Confirma también que tu dominio está en `ALLOWED_ORIGINS` dentro de
 `vesper-chat-proxy.js` (ya incluye `vesperacademy.com`).
@@ -67,7 +161,8 @@ wrangler dev          # levanta el Worker en http://localhost:8787
 ```
 
 Apunta temporalmente `PROXY_URL` a `http://localhost:8787` mientras pruebas.
-`localhost` y `127.0.0.1` ya están permitidos en CORS para desarrollo.
+`localhost` y `127.0.0.1` ya están permitidos en CORS para desarrollo. En
+`wrangler dev` los Durable Objects funcionan en local.
 
 ## Probar el proxy directamente
 
@@ -78,7 +173,12 @@ curl -N -X POST "https://vesper-chat-proxy.<tu-subdominio>.workers.dev" \
   -d '{"system":"You are Vesper, a friendly English tutor.","messages":[{"role":"user","content":"Hi"}]}'
 ```
 
-Debe devolver una secuencia de eventos `data: {...}` (SSE) con el texto.
+Sin Turnstile debe devolver una secuencia de eventos `data: {...}` (SSE). Con
+`TURNSTILE_SECRET` puesto debe devolver `401 {"code":"turnstile_required"}`:
+esa es la prueba de que un curl ya no gasta saldo. Repetido más de
+`RL_FREE_PER_MIN` veces en un minuto debe devolver `429`.
+
+Para ver los rechazos en vivo: `wrangler tail`.
 
 ## Ajustes
 
@@ -87,6 +187,13 @@ En `vesper-chat-proxy.js`:
 - `MODEL_FREE` — `claude-haiku-4-5` (nivel gratis, para todos).
 - `MODEL_PRO` — `claude-sonnet-4-6` (nivel Pro, con código).
 - `MAX_TOKENS_FREE` / `MAX_TOKENS_PRO` — `512` / `768` (respuestas más cortas = menos costo).
+- `MAX_MESSAGES` — turnos de historial que se conservan.
+- `RATE_DEFAULTS` — límites de uso (ver arriba; mejor cambiarlos con `[vars]`).
+- `SESSION_TTL_S` — vigencia de la sesión tras Turnstile (1 h).
+- `ALLOWED_ORIGINS` — dominios autorizados en CORS.
+- `GUARDRAILS` — límites de tema y seguridad de Vesper (ámbito = solo inglés,
+  sin contenido dañino, apto para todas las edades). Edítalo si quieres ajustar
+  la severidad.
 
 ## Nivel Pro (Sonnet con código) — opcional
 
@@ -109,17 +216,23 @@ O en el panel: tu Worker → **Settings → Variables and Secrets** → añade `
 - **Revocar a todos:** cambia el secreto `PRO_CODE` (rotación). Los códigos viejos
   dejan de funcionar y vuelven a Haiku.
 - **Si NO defines `PRO_CODE`:** no pasa nada — todo el mundo usa Haiku (gratis).
-- `MAX_TOKENS` — tope de salida por respuesta.
-- `MAX_MESSAGES` — turnos de historial que se conservan.
-- `ALLOWED_ORIGINS` — dominios autorizados a usar el proxy.
-- `GUARDRAILS` — límites de tema y seguridad de Vesper (ámbito = solo inglés,
-  sin contenido dañino, apto para todas las edades). Edítalo si quieres ajustar
-  la severidad.
+
+## Secretos y bindings (resumen)
+
+| Nombre | Tipo | Obligatorio | Cómo |
+|--------|------|-------------|------|
+| `ANTHROPIC_API_KEY` | secreto | sí | `wrangler secret put ANTHROPIC_API_KEY` |
+| `RATE_LIMITER` | Durable Object | sí (ya en `wrangler.toml`) | se crea con `wrangler deploy` |
+| `TURNSTILE_SECRET` | secreto | recomendado | `wrangler secret put TURNSTILE_SECRET` |
+| `SESSION_SECRET` | secreto | no | `wrangler secret put SESSION_SECRET` |
+| `PRO_CODE` | secreto | no | `wrangler secret put PRO_CODE` |
+| `RL_*` | variable | no | `[vars]` en `wrangler.toml` |
 
 ## Seguridad
 
 - La API key vive **solo** en el secreto del Worker. Nunca la pongas en el repo,
   en `chat.html`, ni en `wrangler.toml`.
-- CORS restringido a tu dominio evita que terceros usen tu proxy (y tu saldo).
-- Mejoras futuras recomendadas para tráfico público: rate limiting por IP y/o un
-  captcha (Cloudflare Turnstile).
+- CORS restringido a tu dominio solo frena el uso desde navegadores ajenos; el
+  saldo lo protegen los límites por IP, el tope global y Turnstile.
+- Pon además un **límite de gasto mensual** en la consola de Anthropic
+  (Settings → Limits): es la última red si algo falla aquí.

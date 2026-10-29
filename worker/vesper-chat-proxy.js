@@ -5,17 +5,36 @@
  * Claude (Anthropic) ocultando la API key, que vive como SECRETO
  * del Worker (nunca en el repo ni en el navegador).
  *
- * El front envía SOLO { system, messages }:
+ * El front envía { system, messages } (+ proCode / session /
+ * turnstileToken opcionales):
  *   - system   : el system prompt del tutor, generado por
  *                VESPER_PERSONA.systemPrompt() (personalizado por
  *                el perfil del alumno) — por eso viaja desde el cliente.
  *   - messages : el historial [{role, content}, ...].
- * El Worker FIJA el modelo, max_tokens y valida el origen para
- * evitar abuso; nunca confía en esos campos si el cliente los manda.
+ * El Worker FIJA el modelo y max_tokens; nunca confía en esos campos
+ * si el cliente los manda.
+ *
+ * ── Control de abuso (2026-10-28) ─────────────────────────────────
+ * Cada mensaje cuesta dinero (saldo de Anthropic), así que el Worker
+ * NO se fía del navegador. Barreras, en este orden:
+ *   1) Origin/CORS: útil para navegadores, pero NO es la barrera
+ *      principal — el header Origin se falsifica con un curl.
+ *   2) Límite por IP (CF-Connecting-IP) por minuto y por día, contado
+ *      en un Durable Object (RateLimiter): consistente, sin carreras.
+ *   3) Turnstile (opcional, si existe el secreto TURNSTILE_SECRET): el
+ *      navegador resuelve el reto invisible de Cloudflare y el Worker
+ *      lo valida contra siteverify; a cambio entrega una "sesión"
+ *      firmada (HMAC, ligada a la IP) que vale SESSION_TTL_S, así no
+ *      se pide un reto por cada mensaje.
+ *   4) Tope GLOBAL diario de mensajes (todas las IPs juntas): el freno
+ *      de mano contra un ataque repartido entre muchas IPs.
+ * Solo si pasa todo se reenvía a Anthropic.
  *
  * Despliegue: ver worker/README.md.
  * ============================================================ */
 "use strict";
+
+import { DurableObject } from "cloudflare:workers";
 
 /* ---------- Configuración (editable) ---------- */
 
@@ -41,6 +60,27 @@ const MAX_MESSAGES = 16;
 
 /* Tope defensivo del tamaño total del cuerpo (caracteres). */
 const MAX_BODY_CHARS = 100000;
+
+/* ---------- Límites de uso (anti-abuso / anti-costo) ----------
+ * Valores por defecto; se pueden cambiar SIN tocar código con variables del
+ * Worker ([vars] en wrangler.toml o el panel): RL_FREE_PER_MIN,
+ * RL_FREE_PER_DAY, RL_PRO_PER_MIN, RL_PRO_PER_DAY, RL_GLOBAL_PER_DAY.
+ * Un valor 0 desactiva ese límite concreto.
+ * OJO: un salón de clases detrás de un mismo router comparte UNA IP pública;
+ * por eso el tope por IP no es mínimo y el nivel Pro tiene más margen. */
+const RATE_DEFAULTS = {
+  RL_FREE_PER_MIN: 12,     // mensajes por minuto por IP (nivel gratis)
+  RL_FREE_PER_DAY: 200,    // mensajes por día (UTC) por IP (nivel gratis)
+  RL_PRO_PER_MIN: 30,      // con código Pro válido
+  RL_PRO_PER_DAY: 1000,
+  RL_GLOBAL_PER_DAY: 5000  // todas las IPs juntas, por día (UTC)
+};
+
+/* Turnstile: vigencia de la sesión firmada que el Worker entrega tras un
+ * reto válido (el token de Turnstile en sí es de un solo uso y caduca a
+ * los 5 min, por eso no se pide uno por mensaje). */
+const SESSION_TTL_S = 60 * 60;   // 1 hora
+const TURNSTILE_VERIFY_URL = "https://challenges.cloudflare.com/turnstile/v0/siteverify";
 
 /* ---------- Guardrails (límites de tema y seguridad) ----------
  * Se AÑADEN siempre del lado del servidor al system prompt, después de la
@@ -92,8 +132,9 @@ function corsHeaders(origin) {
   const h = {
     "Access-Control-Allow-Methods": "POST, OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type",
-    /* el front lee X-Vesper-Tier para mostrar la insignia Gratis/Pro */
-    "Access-Control-Expose-Headers": "X-Vesper-Tier",
+    /* el front lee X-Vesper-Tier (insignia Gratis/Pro), X-Vesper-Session
+       (sesión firmada tras Turnstile) y Retry-After (cuando hay 429) */
+    "Access-Control-Expose-Headers": "X-Vesper-Tier, X-Vesper-Session, Retry-After",
     "Access-Control-Max-Age": "86400",
     "Vary": "Origin"
   };
@@ -101,12 +142,17 @@ function corsHeaders(origin) {
   return h;
 }
 
-function jsonError(status, message, origin) {
-  return new Response(JSON.stringify({ error: message }), {
+/* `code` (opcional) es una etiqueta estable para que chat.html reaccione sin
+ * depender del texto: "rate_limited", "turnstile_required", "busy". */
+function jsonError(status, message, origin, code, extraHeaders) {
+  const payload = { error: message };
+  if (code) payload.code = code;
+  return new Response(JSON.stringify(payload), {
     status: status,
     headers: Object.assign(
       { "Content-Type": "application/json" },
-      corsHeaders(origin)
+      corsHeaders(origin),
+      extraHeaders || {}
     )
   });
 }
@@ -132,6 +178,140 @@ function sanitizeMessages(raw) {
   return trimmed.length ? trimmed : null;
 }
 
+/* Lee un límite numérico de env (string en [vars]) o usa el de RATE_DEFAULTS. */
+function limitOf(env, name) {
+  const v = env && env[name] != null ? parseInt(env[name], 10) : NaN;
+  return isNaN(v) || v < 0 ? RATE_DEFAULTS[name] : v;
+}
+
+/* comparación en tiempo constante (evita medir cuántos caracteres coinciden) */
+function safeEqual(a, b) {
+  if (typeof a !== "string" || typeof b !== "string" || a.length !== b.length) return false;
+  let diff = 0;
+  for (let i = 0; i < a.length; i++) diff |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  return diff === 0;
+}
+
+/* segundos hasta la medianoche UTC (fin de la ventana diaria) */
+function secondsToUtcMidnight(nowMs) {
+  return Math.max(1, Math.ceil((86400000 - (nowMs % 86400000)) / 1000));
+}
+
+/* ---------- Contador en Durable Object ----------
+ * Pide a la instancia de RateLimiter de `key` que cuente un mensaje.
+ * Devuelve { ok, retryAfter, scope }. Si el binding no existe o el DO falla
+ * (incidencia transitoria de Cloudflare), deja pasar y lo registra: es la
+ * misma degradación elegante del resto del sitio, y el max_tokens fijo sigue
+ * acotando el costo de cada mensaje. Tras `wrangler deploy` con el
+ * wrangler.toml de este repo el binding SIEMPRE existe. */
+async function rateHit(env, key, perMin, perDay) {
+  if (!env.RATE_LIMITER) {
+    console.warn("RATE_LIMITER no configurado: límite de uso desactivado.");
+    return { ok: true };
+  }
+  try {
+    const stub = env.RATE_LIMITER.get(env.RATE_LIMITER.idFromName(key));
+    return await stub.hit(perMin, perDay);
+  } catch (e) {
+    console.error("RateLimiter falló, se deja pasar:", e && e.message);
+    return { ok: true };
+  }
+}
+
+/* ---------- Sesión firmada (tras Turnstile) ----------
+ * Formato: "<exp>.<firma>", firma = HMAC-SHA256(clave, exp + "|" + IP).
+ * La IP NO viaja en el token: el Worker la vuelve a tomar de la petición,
+ * así un token copiado a otra IP no sirve (en móvil, si cambia la IP, el
+ * navegador simplemente resuelve otro reto invisible).
+ * Clave = secreto SESSION_SECRET o, si no existe, TURNSTILE_SECRET. */
+function b64url(buf) {
+  let bin = "";
+  const bytes = new Uint8Array(buf);
+  for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+  return btoa(bin).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+}
+
+async function hmac(secret, text) {
+  const key = await crypto.subtle.importKey(
+    "raw", new TextEncoder().encode(secret),
+    { name: "HMAC", hash: "SHA-256" }, false, ["sign"]
+  );
+  return b64url(await crypto.subtle.sign("HMAC", key, new TextEncoder().encode(text)));
+}
+
+function sessionSecret(env) {
+  return env.SESSION_SECRET || env.TURNSTILE_SECRET || "";
+}
+
+async function issueSession(env, ip) {
+  const exp = Math.floor(Date.now() / 1000) + SESSION_TTL_S;
+  return exp + "." + await hmac(sessionSecret(env), exp + "|" + ip);
+}
+
+async function sessionValid(env, token, ip) {
+  if (typeof token !== "string" || !token || token.length > 200) return false;
+  const dot = token.indexOf(".");
+  if (dot < 1) return false;
+  const exp = parseInt(token.slice(0, dot), 10);
+  if (!exp || exp < Math.floor(Date.now() / 1000)) return false;
+  const expected = await hmac(sessionSecret(env), exp + "|" + ip);
+  return safeEqual(token.slice(dot + 1), expected);
+}
+
+/* Valida el token del widget contra la API de Turnstile (servidor a servidor). */
+async function turnstileValid(env, token, ip) {
+  if (typeof token !== "string" || !token || token.length > 2048) return false;
+  const form = new FormData();
+  form.append("secret", env.TURNSTILE_SECRET);
+  form.append("response", token);
+  if (ip && ip !== "unknown") form.append("remoteip", ip);
+  try {
+    const r = await fetch(TURNSTILE_VERIFY_URL, { method: "POST", body: form });
+    const j = await r.json();
+    return !!(j && j.success);
+  } catch (e) {
+    /* siteverify caído: aquí NO dejamos pasar (sería saltarse el reto); el
+       alumno verá "vuelve a intentarlo". El límite por IP ya contó. */
+    console.error("siteverify falló:", e && e.message);
+    return false;
+  }
+}
+
+/* ---------- Durable Object: contador por clave ----------
+ * Una instancia por clave ("ip:<IP>", "ip-pro:<IP>" o "global"). Cloudflare
+ * ejecuta las llamadas a una misma instancia en serie, así que el conteo es
+ * exacto (KV, en cambio, es eventual y en el plan gratis solo permite ~1000
+ * escrituras al día: no sirve para contar cada mensaje).
+ * Ventanas fijas: minuto en curso y día UTC en curso. Al terminar el día una
+ * alarma borra el estado, para no acumular datos de IPs viejas. */
+export class RateLimiter extends DurableObject {
+  async hit(perMin, perDay) {
+    const now = Date.now();
+    const minute = Math.floor(now / 60000);
+    const day = Math.floor(now / 86400000);
+    const s = (await this.ctx.storage.get("s")) || {};
+    if (s.m !== minute) { s.m = minute; s.mc = 0; }
+    if (s.d !== day) { s.d = day; s.dc = 0; }
+
+    if (perMin > 0 && s.mc >= perMin) {
+      return { ok: false, scope: "minute", retryAfter: Math.max(1, 60 - Math.floor((now % 60000) / 1000)) };
+    }
+    if (perDay > 0 && s.dc >= perDay) {
+      return { ok: false, scope: "day", retryAfter: secondsToUtcMidnight(now) };
+    }
+    s.mc++; s.dc++;
+    await this.ctx.storage.put("s", s);
+    if ((await this.ctx.storage.getAlarm()) == null) {
+      await this.ctx.storage.setAlarm((day + 1) * 86400000 + 60000);
+    }
+    return { ok: true };
+  }
+
+  async alarm() {
+    await this.ctx.storage.deleteAll();
+  }
+}
+
 /* ---------- Worker ---------- */
 
 export default {
@@ -147,7 +327,11 @@ export default {
       return jsonError(405, "Método no permitido. Usa POST.", origin);
     }
 
-    /* Bloquea orígenes no autorizados (evita que terceros usen el proxy). */
+    /* Bloquea orígenes no autorizados. Sirve para que OTRAS webs no usen el
+     * proxy desde el navegador de sus visitantes, pero NO es la barrera
+     * principal: fuera de un navegador (curl, scripts) el header Origin se
+     * escribe a mano. Lo que de verdad frena el abuso viene después: límite
+     * por IP, Turnstile y tope global. */
     if (!origin) {
       return jsonError(403, "Origen no autorizado.", null);
     }
@@ -155,6 +339,10 @@ export default {
     if (!env.ANTHROPIC_API_KEY) {
       return jsonError(500, "El servidor no tiene configurada la API key.", origin);
     }
+
+    /* IP real del cliente según Cloudflare (la pone el borde de Cloudflare;
+     * el cliente no la elige). "unknown" solo en `wrangler dev` sin red. */
+    const ip = request.headers.get("CF-Connecting-IP") || "unknown";
 
     /* Lee y valida el cuerpo */
     let body;
@@ -167,6 +355,9 @@ export default {
     } catch (e) {
       return jsonError(400, "Cuerpo JSON inválido.", origin);
     }
+    if (!body || typeof body !== "object") {
+      return jsonError(400, "Cuerpo JSON inválido.", origin);
+    }
 
     const system = typeof body.system === "string" ? body.system : "";
     const messages = sanitizeMessages(body.messages);
@@ -177,8 +368,50 @@ export default {
     /* Nivel: PRO solo si el código recibido coincide con el secreto del Worker.
      * Se valida AQUÍ; el cliente no puede forzar Sonnet. */
     const proCode = typeof body.proCode === "string" ? body.proCode : "";
-    const isPro = !!env.PRO_CODE && proCode === env.PRO_CODE;
+    const isPro = !!env.PRO_CODE && safeEqual(proCode, env.PRO_CODE);
     const tier = isPro ? "pro" : "free";
+
+    /* ── Límite por IP (minuto + día) ──
+     * Pro usa su propio contador con más margen, para que un alumno con
+     * código no se quede sin chat por los que comparten su IP sin código. */
+    const perIp = await rateHit(
+      env,
+      (isPro ? "ip-pro:" : "ip:") + ip,
+      limitOf(env, isPro ? "RL_PRO_PER_MIN" : "RL_FREE_PER_MIN"),
+      limitOf(env, isPro ? "RL_PRO_PER_DAY" : "RL_FREE_PER_DAY")
+    );
+    if (!perIp.ok) {
+      const msg = perIp.scope === "day"
+        ? "Llegaste al límite de mensajes de hoy. Vuelve mañana para seguir practicando."
+        : "Vas muy rápido. Espera un momento y vuelve a intentarlo.";
+      return jsonError(429, msg, origin, "rate_limited",
+        { "Retry-After": String(perIp.retryAfter || 60) });
+    }
+
+    /* ── Turnstile (solo si TURNSTILE_SECRET está definido) ──
+     * Vale una sesión firmada vigente O un token nuevo del widget. Con token
+     * válido se entrega una sesión nueva en X-Vesper-Session. Sin el secreto
+     * el chat funciona como antes (sin reto) y siguen los límites de uso. */
+    let newSession = null;
+    if (env.TURNSTILE_SECRET) {
+      const hasSession = await sessionValid(env, body.session, ip);
+      if (!hasSession) {
+        if (!(await turnstileValid(env, body.turnstileToken, ip))) {
+          return jsonError(401, "Verificación de seguridad pendiente. Vuelve a intentarlo.",
+            origin, "turnstile_required");
+        }
+        newSession = await issueSession(env, ip);
+      }
+    }
+
+    /* ── Tope global diario (todas las IPs) ──
+     * Se cuenta al final, ya pasadas las demás barreras, para que el ruido
+     * rechazado no gaste el cupo de los alumnos reales. */
+    const global = await rateHit(env, "global", 0, limitOf(env, "RL_GLOBAL_PER_DAY"));
+    if (!global.ok) {
+      return jsonError(503, "Vesper está descansando por hoy (límite diario del servicio). Vuelve mañana.",
+        origin, "busy", { "Retry-After": String(global.retryAfter || 3600) });
+    }
 
     /* Construye la petición a Claude — modelo y max_tokens fijados aquí. */
     const payload = {
@@ -213,12 +446,14 @@ export default {
         status: upstream.status,
         headers: Object.assign(
           { "Content-Type": "application/json" },
+          newSession ? { "X-Vesper-Session": newSession } : {},
           corsHeaders(origin)
         )
       });
     }
 
-    /* Reenvía el stream SSE tal cual, con cabeceras CORS + el nivel servido. */
+    /* Reenvía el stream SSE tal cual, con cabeceras CORS + el nivel servido
+     * (+ la sesión firmada nueva, si se acaba de validar Turnstile). */
     return new Response(upstream.body, {
       status: 200,
       headers: Object.assign(
@@ -228,6 +463,7 @@ export default {
           "Connection": "keep-alive",
           "X-Vesper-Tier": tier
         },
+        newSession ? { "X-Vesper-Session": newSession } : {},
         corsHeaders(origin)
       )
     });

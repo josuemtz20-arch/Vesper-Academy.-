@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+<!-- CSP: generada por _scripts/apply_csp.py (edita alli, no aqui) -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://apis.google.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://cdn.tailwindcss.com https://challenges.cloudflare.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://maxcdn.bootstrapcdn.com; font-src 'self' data: https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: blob: https:; media-src 'self' data: blob:; connect-src 'self' https://firestore.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://vesper-academy.firebaseapp.com https://patient-feather-4364.josuemtz20.workers.dev https://formsubmit.co https://challenges.cloudflare.com https://www.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com; frame-src 'self' https://vesper-academy.firebaseapp.com https://www.youtube.com https://www.youtube-nocookie.com https://challenges.cloudflare.com; worker-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self' https://formsubmit.co; upgrade-insecure-requests">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content">
 <title>Habla con Vesper — Tutor IA | Vesper Academy</title>
@@ -208,6 +210,8 @@ body:has(.composer textarea:focus){padding-bottom:0;}
       <button class="send" id="send" type="button" aria-label="Enviar"><i class="fas fa-paper-plane"></i></button>
     </div>
     <p class="hint">🎙️ Toca el micrófono para hablar · Enter para enviar · practica sin miedo a equivocarte.</p>
+    <!-- Turnstile: queda vacío; solo aparece una casilla si Cloudflare la pide -->
+    <div id="ts-box"></div>
   </div>
 </div>
 
@@ -223,8 +227,19 @@ body:has(.composer textarea:focus){padding-bottom:0;}
      Mientras esté vacía, el chat muestra instrucciones en lugar de fallar. */
   var PROXY_URL = "https://patient-feather-4364.josuemtz20.workers.dev/";
 
+  /* Cloudflare Turnstile (anti-bots del chat). Pega aquí la SITE KEY pública
+     del widget (panel de Cloudflare → Turnstile). Es pública por diseño; la
+     secret key va SOLO en el Worker (secreto TURNSTILE_SECRET). Mientras esté
+     vacía no se carga nada y el chat funciona como antes; si el Worker ya
+     exige Turnstile y aquí falta la key, el chat responderá "verificación
+     pendiente". Ver worker/README.md. */
+  var TURNSTILE_SITE_KEY = "";
+
   var HISTORY_KEY = "vesper_chat_history";
   var PRO_KEY = "vesper_pro_code";
+  /* Sesión firmada que entrega el Worker tras un reto Turnstile válido (vale
+     ~1 h y está ligada a la IP). Solo esta pestaña: sessionStorage. */
+  var SESSION_KEY = "vesper_chat_session";
 
   var messagesEl = document.getElementById("messages");
   var inputEl = document.getElementById("input");
@@ -416,6 +431,82 @@ body:has(.composer textarea:focus){padding-bottom:0;}
     }
   }
 
+  /* ── Turnstile + sesión del Worker ──
+     El Worker acepta una sesión firmada vigente o, si no la hay, un token
+     nuevo del widget invisible. Cualquier fallo aquí (sin key, sin red al
+     script de Cloudflare) NO bloquea: se envía sin token y el Worker decide. */
+  function getSession() { try { return sessionStorage.getItem(SESSION_KEY) || ""; } catch (e) { return ""; } }
+  function setSession(v) { try { v ? sessionStorage.setItem(SESSION_KEY, v) : sessionStorage.removeItem(SESSION_KEY); } catch (e) {} }
+
+  var tsLoad = null, tsWidget = null, tsPending = null;
+  function loadTurnstile() {
+    if (tsLoad) return tsLoad;
+    tsLoad = new Promise(function (resolve, reject) {
+      var s = document.createElement("script");
+      s.src = "https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit";
+      s.async = true;
+      s.onload = function () { window.turnstile ? resolve(window.turnstile) : reject(new Error("turnstile")); };
+      s.onerror = function () { tsLoad = null; reject(new Error("turnstile")); };
+      document.head.appendChild(s);
+    });
+    return tsLoad;
+  }
+  /* Token nuevo del widget (de un solo uso). "interaction-only": invisible
+     salvo que Cloudflare necesite que la persona marque la casilla. */
+  function turnstileToken() {
+    if (!TURNSTILE_SITE_KEY) return Promise.resolve("");
+    return loadTurnstile().then(function (ts) {
+      return new Promise(function (resolve) {
+        var settle = function (t) { if (tsPending === settle) { tsPending = null; resolve(t || ""); } };
+        tsPending = settle;
+        if (tsWidget === null) {
+          tsWidget = ts.render("#ts-box", {
+            sitekey: TURNSTILE_SITE_KEY,
+            appearance: "interaction-only",
+            execution: "execute",
+            action: "chat",
+            callback: function (t) { if (tsPending) tsPending(t); },
+            "error-callback": function () { if (tsPending) tsPending(""); },
+            "expired-callback": function () { if (tsPending) tsPending(""); }
+          });
+        } else {
+          ts.reset(tsWidget);
+        }
+        ts.execute(tsWidget);
+        setTimeout(function () { settle(""); }, 30000);
+      });
+    }).catch(function () { return ""; });
+  }
+
+  /* POST al Worker. Guarda la sesión que devuelva y, si el Worker pide
+     Turnstile (401 turnstile_required), resuelve un reto y reintenta UNA vez. */
+  function postToProxy(payload) {
+    function attempt(extra) {
+      var b = {}, k;
+      for (k in payload) b[k] = payload[k];
+      for (k in extra) b[k] = extra[k];
+      return fetch(PROXY_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(b)
+      }).then(function (res) {
+        try { var sv = res.headers.get("X-Vesper-Session"); if (sv) setSession(sv); } catch (e) {}
+        return res;
+      });
+    }
+    var sess = getSession();
+    var first = sess ? Promise.resolve({ session: sess })
+                     : turnstileToken().then(function (t) { return t ? { turnstileToken: t } : {}; });
+    return first.then(attempt).then(function (res) {
+      if (res.status !== 401) return res;
+      return res.clone().json().then(function (j) {
+        if (!j || j.code !== "turnstile_required" || !TURNSTILE_SITE_KEY) return res;
+        setSession("");
+        return turnstileToken().then(function (t) { return t ? attempt({ turnstileToken: t }) : res; });
+      }, function () { return res; });
+    });
+  }
+
   /* ── Envío + streaming SSE ── */
   function send() {
     if (sending) return;
@@ -441,11 +532,7 @@ body:has(.composer textarea:focus){padding-bottom:0;}
     var body;        // nodo de texto de la burbuja de Vesper (se crea al primer token)
     var acc = "";    // texto acumulado
 
-    fetch(PROXY_URL, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ system: SYSTEM, messages: history, proCode: getProCode() })
-    }).then(function (res) {
+    postToProxy({ system: SYSTEM, messages: history, proCode: getProCode() }).then(function (res) {
       /* nivel que sirvió el servidor (Gratis/Pro) — actualiza la insignia */
       try { setTier(res.headers.get("X-Vesper-Tier")); } catch (e) {}
       if (!res.ok) {

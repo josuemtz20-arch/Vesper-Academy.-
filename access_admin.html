@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+<!-- CSP: generada por _scripts/apply_csp.py (edita alli, no aqui) -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://apis.google.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://cdn.tailwindcss.com https://challenges.cloudflare.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://maxcdn.bootstrapcdn.com; font-src 'self' data: https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: blob: https:; media-src 'self' data: blob:; connect-src 'self' https://firestore.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://vesper-academy.firebaseapp.com https://patient-feather-4364.josuemtz20.workers.dev https://formsubmit.co https://challenges.cloudflare.com https://www.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com; frame-src 'self' https://vesper-academy.firebaseapp.com https://www.youtube.com https://www.youtube-nocookie.com https://challenges.cloudflare.com; worker-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self' https://formsubmit.co; upgrade-insecure-requests">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Vesper Academy | Administrar accesos</title>
@@ -46,8 +48,7 @@
     <div style="margin-top:4px"><code>python3 _scripts/upload_manuals.py remove alguien@correo.com</code> &nbsp;(revocar)</div>
     <div style="margin-top:8px;font-size:12px">Esa herramienta vive <b>fuera</b> del repositorio público
       (la <code>.gitignore</code> mantiene privados los scripts de admin); pídesela al desarrollador
-      si no la tienes. Los generadores de abajo son el <b>respaldo legado</b> y la contraseña del
-      portal de profesores.</div>
+      si no la tienes. El generador de abajo es solo el <b>respaldo legado</b>.</div>
   </div>
 
   <h2>Respaldo legado: código de aprobación (hash)</h2>
@@ -75,36 +76,16 @@
      solo entra en juego como red de seguridad. Lo normal es autorizar con <code>upload_manuals.py</code>
      (arriba) y no tocar esta lista.</p>
 
-  <h2>Añadir / editar maestro en el portal</h2>
-  <p>El <a href="portal_profesores.html">Portal del Profesor</a> pide una <b>contraseña individual</b>
-     por maestro. Genera aquí la línea que debes pegar en el objeto <code>teachers</code> de
-     <code>vesper_auth.js</code>:</p>
-  <div class="note">
-    <b>Ojo — esto es solo una comodidad de la interfaz.</b> Esa contraseña se comprueba en el
-    navegador (hash público), así que <b>no</b> es lo que realmente protege manuales ni
-    calificaciones: eso lo protegen las reglas de Firestore, que exigen que el correo del maestro
-    esté en la allowlist <code>teachers/</code> (autorízalo con
-    <code>python3 _scripts/upload_manuals.py add-teacher …</code>). Sin ese doc en Firestore, el
-    maestro no puede leer/escribir datos aunque adivine la contraseña del portal.
-  </div>
+  <h2>Maestros en el portal</h2>
+  <p>El <a href="portal_profesores.html">Portal del Profesor</a> y el Vesper Engine <b>ya no piden
+     contraseña de profesor</b> (se retiró el 2026-10-28: era un hash público comprobado en el
+     navegador y no protegía nada). Ahora entra quien inicie sesión con su correo verificado y tenga
+     su doc en la allowlist <code>teachers/</code> (o un rol en <code>roles/</code>). Para dar o
+     quitar acceso a un maestro basta un comando, con efecto inmediato:</p>
   <div class="tool">
-    <label for="temail" style="font-size:13px;color:#6b6151">Correo del maestro</label>
-    <input type="email" id="temail" placeholder="maestro@ejemplo.com" style="margin-top:6px">
-    <label for="tpass" style="font-size:13px;color:#6b6151;display:block;margin-top:12px">Contraseña del maestro</label>
-    <input type="text" id="tpass" placeholder="contraseña individual" style="margin-top:6px">
-    <button id="tgo">Generar línea para vesper_auth.js</button>
-    <div class="out" id="tout">
-      <div class="hash" id="thash"></div>
-      <button id="tcopy" style="background:#2e7d4f">Copiar</button><span class="copied" id="tcopied">¡Copiado!</span>
-    </div>
+    <div><code>python3 _scripts/upload_manuals.py add-teacher maestro@correo.com</code></div>
+    <div style="margin-top:6px"><code>python3 _scripts/upload_manuals.py remove-teacher maestro@correo.com</code></div>
   </div>
-  <ol>
-    <li>Escribe el correo y la contraseña del maestro y genera la línea.</li>
-    <li>Abre <code>vesper_auth.js</code> y pega la línea dentro del objeto <code>teachers</code>.</li>
-    <li>Sube el cambio (<code>git push</code>). El maestro ya podrá entrar con ese correo y contraseña.</li>
-    <li>Para <b>cambiar la contraseña</b> de un maestro: genera una línea nueva con su correo y la nueva contraseña, y reemplaza la línea antigua.</li>
-    <li>Para <b>revocar</b> a un maestro: borra su línea del objeto <code>teachers</code> y sube el cambio.</li>
-  </ol>
 
   <div class="note">
     <b>Privacidad:</b> en el sitio solo se publica el código (hash SHA-256), nunca el correo.
@@ -128,27 +109,6 @@
   document.getElementById("copy").onclick = function () {
     navigator.clipboard.writeText(hashEl.textContent).then(function () {
       document.getElementById("copied").style.display = "inline";
-    });
-  };
-
-  var tout = document.getElementById("tout"), thashEl = document.getElementById("thash");
-  document.getElementById("tgo").onclick = function () {
-    var email = document.getElementById("temail").value.trim();
-    var pw = document.getElementById("tpass").value;
-    if (!email || email.indexOf("@") === -1) { alert("Escribe un correo válido."); return; }
-    if (!pw) { alert("Escribe una contraseña."); return; }
-    Promise.all([
-      VesperAuth.emailHash(email),
-      VesperAuth.teacherHash(pw)
-    ]).then(function (r) {
-      thashEl.textContent = '"' + r[0] + '": "' + r[1] + '"  /* ' + email + ' */';
-      tout.classList.add("show");
-      document.getElementById("tcopied").style.display = "none";
-    });
-  };
-  document.getElementById("tcopy").onclick = function () {
-    navigator.clipboard.writeText(thashEl.textContent).then(function () {
-      document.getElementById("tcopied").style.display = "inline";
     });
   };
 })();

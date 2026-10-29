@@ -58,6 +58,7 @@ window.VESPER_RESULTS = (function () {
         authInst = auth;
         auth.onAuthStateChanged(function (user) {
           currentUser = (user && user.emailVerified) ? user : null;
+          identityCache = null;   /* otro usuario: otra identidad */
         });
       }).catch(function () { /* sin red a Firebase: queda solo-local */ });
     } catch (e) {}
@@ -88,13 +89,36 @@ window.VESPER_RESULTS = (function () {
       }).catch(function () { return ""; });
   }
 
-  /* sid del usuario actual: el sembrado en el perfil o, si falta, se calcula. */
-  function mySid() {
-    var p = profileOf();
-    if (p.sid) return Promise.resolve(String(p.sid));
-    return computeSid(currentUser && currentUser.email);
+  /* group y sid AUTORITATIVOS para la nube: los del doc students/{correo}
+     del propio alumno (la regla de exam_results exige que coincidan; ver
+     firestore.rules, 2026-10-28). Se leen justo antes de subir porque el
+     perfil local puede estar viejo (cambio de grupo) o sin sembrar (las
+     páginas públicas, como leccion.html, no pasan por el gate que lo
+     siembra). Sin doc students/ (admin o profesor probando): "" y "", lo
+     único que la regla acepta en ese caso. Una lectura por página y usuario. */
+  var identityCache = null;
+  function myIdentity(token) {
+    if (identityCache) return identityCache;
+    var email = String(currentUser.email || "").trim().toLowerCase();
+    identityCache = fetch(base() + "/students/" + encodeURIComponent(email), {
+      headers: { "Authorization": "Bearer " + token }
+    }).then(function (r) {
+      if (r.status === 404) return { sid: "", group: "" };
+      if (r.status !== 200) throw new Error("students " + r.status);
+      return r.json().then(function (doc) {
+        var f = (doc && doc.fields) || {};
+        return {
+          sid: (f.sid && f.sid.stringValue) || "",
+          group: (f.group && f.group.stringValue) || ""
+        };
+      });
+    });
+    /* si falla (red), no se cachea: el siguiente intento vuelve a probar */
+    identityCache.catch(function () { identityCache = null; });
+    return identityCache;
   }
 
+  /* grupo del perfil local: solo para el espejo en este dispositivo */
   function myGroup() {
     var p = profileOf();
     return String(p.group || "");
@@ -116,7 +140,8 @@ window.VESPER_RESULTS = (function () {
   function normalize(r) {
     r = r || {};
     var total = Math.max(0, parseInt(r.total, 10) || 0);
-    var score = Math.max(0, parseInt(r.score, 10) || 0);
+    /* score <= total: la regla rechaza un intento incoherente */
+    var score = Math.min(total, Math.max(0, parseInt(r.score, 10) || 0));
     var percent = (r.percent != null)
       ? Math.max(0, Math.min(100, Math.round(r.percent)))
       : (total ? Math.round(100 * score / total) : 0);
@@ -137,10 +162,11 @@ window.VESPER_RESULTS = (function () {
       studentUid: (currentUser && currentUser.uid) ? currentUser.uid : "",
       alias: aliasOf(),
       sid: "",             // se resuelve en record() antes de subir
-      group: myGroup(),
+      group: myGroup(),    // en record() se sustituye por el de students/
+      /* tamaños dentro de los límites de la regla de exam_results */
       examType: String(r.examType || "lesson"),
-      examId: String(r.examId || ""),
-      level: String(r.level || ""),
+      examId: String(r.examId || "").slice(0, 120),
+      level: String(r.level || "").slice(0, 40),
       score: score,
       total: total,
       percent: percent,
@@ -228,15 +254,18 @@ window.VESPER_RESULTS = (function () {
     try { rec = normalize(result); } catch (e) { return Promise.resolve(false); }
     saveLocal(rec);
     if (!signedIn()) return Promise.resolve(false);
-    return mySid().then(function (sid) {
-      rec.sid = sid;
-      return currentUser.getIdToken();
-    }).then(function (token) {
-      return fetch(collPath(), {
-        method: "POST",
-        headers: { "Authorization": "Bearer " + token, "Content-Type": "application/json" },
-        body: JSON.stringify(toFs(rec))
-      }).then(function (r) { return r.status === 200; });
+    return currentUser.getIdToken().then(function (token) {
+      return myIdentity(token).then(function (id) {
+        /* copia para la nube: el espejo local ya se guardó tal cual */
+        var cloud = JSON.parse(JSON.stringify(rec));
+        cloud.sid = id.sid;
+        cloud.group = id.group;
+        return fetch(collPath(), {
+          method: "POST",
+          headers: { "Authorization": "Bearer " + token, "Content-Type": "application/json" },
+          body: JSON.stringify(toFs(cloud))
+        }).then(function (r) { return r.status === 200; });
+      });
     }).catch(function () { return false; });
   }
 

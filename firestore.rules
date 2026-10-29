@@ -31,13 +31,34 @@ rules_version = '2';
  * Cuando roles/ ya tenga al menos un admin verificado, se puede borrar la
  * función bootstrapAdmin() y dejar isAdmin() = hasRole("admin").
  * Antes de publicar: python _scripts/check_rules.py (compila y prueba).
+ *
+ * ── Endurecimiento (2026-10-28) ────────────────────────────────────
+ *  - signedIn() exige CORREO VERIFICADO (token.email_verified). Antes
+ *    bastaba request.auth != null: el gate del navegador sí pedía
+ *    emailVerified, pero alguien registrado SIN verificar podía usar su
+ *    idToken directo contra la API REST y saltarse el gate. Como todas
+ *    las funciones de identidad (isAdmin, isStaff, isTeacherUser,
+ *    isStudentUser, teacherSeesGroup…) parten de signedIn(), el criterio
+ *    se aplica a todas las reglas con sesión. app_events y
+ *    placement_results NO usan signedIn(): siguen siendo anónimos.
+ *  - exam_results: group y sid deben coincidir con students/{correo} del
+ *    propio alumno (ya no se pueden etiquetar intentos con el grupo de
+ *    otro profesor) y todos los campos tienen tipo y tamaño acotados.
+ *  - app_events: límites de tamaño más bajos y nombre de evento acotado.
+ *  - placement_results (leads con nombre/correo/teléfono): solo staff.
  * ============================================================ */
 service cloud.firestore {
   match /databases/{database}/documents {
 
     // ───────────── Identidad y roles ─────────────
+    // Sesión de Firebase Auth CON correo verificado. Es la base de toda la
+    // cadena de identidad: quien no verificó su correo no cuenta como
+    // alumno, profesor ni admin aunque tenga un idToken válido.
+    // (Los scripts admin entran con la cuenta del admin, que ya está
+    // verificada; con VESPER_ADMIN_VIA_SA=1 ni siquiera pasan por aquí.)
     function signedIn() {
-      return request.auth != null;
+      return request.auth != null
+             && request.auth.token.email_verified == true;
     }
     function myEmail() {
       return request.auth.token.email;
@@ -234,10 +255,57 @@ service cloud.firestore {
     // Resultados de exámenes: el alumno CREA lo suyo (autocalificación =
     // práctica, no nota oficial); lo leen el dueño, el staff y los profesores
     // DEL GRUPO del intento; inmutables. (vesper_results.js → exam_results)
+    //
+    // group/sid NO los elige el alumno: deben ser los de SU doc
+    // students/{correo} (los escribe el script admin). Así nadie puede
+    // etiquetar intentos con el grupo de otro profesor y ensuciar
+    // portal_calificaciones.html. Si el alumno aún no tiene `group` o `sid`
+    // en su doc, se compara contra "" (data.get con valor por defecto).
+    // Sin doc students/ (admin o profesor probando un examen): se acepta el
+    // intento solo con group == "" y sid == "", que ningún profesor ve
+    // (teacherSeesGroup exige grupo no vacío) y que no apunta a ningún
+    // alumno del roster. vesper_results.js lee ese mismo doc antes de subir.
+    function examIdentityOk(d) {
+      return (exists(/databases/$(database)/documents/students/$(request.auth.token.email))
+              && d.group == get(/databases/$(database)/documents/students/$(request.auth.token.email)).data.get("group", "")
+              && d.sid == get(/databases/$(database)/documents/students/$(request.auth.token.email)).data.get("sid", ""))
+          || (!exists(/databases/$(database)/documents/students/$(request.auth.token.email))
+              && d.group == "" && d.sid == "");
+    }
+    // Forma del intento: mismos campos que toFs() de vesper_results.js, con
+    // tipos y tamaños acotados y números coherentes. percent debe cuadrar con
+    // score/total (±1 punto por redondeo; todos los llamadores hoy usan
+    // Math.round(100*score/total)).
+    function examResultShapeOk(d) {
+      return d.keys().hasOnly(["studentUid", "alias", "sid", "group", "examType", "examId",
+                               "level", "score", "total", "percent", "passed", "threshold",
+                               "detail", "createdAt", "clientTs"])
+        && d.keys().hasAll(["studentUid", "sid", "group", "examType", "score", "total", "percent"])
+        && d.sid is string && d.sid.size() <= 64
+        && d.group is string && d.group.size() <= 80
+        && d.examType in ["lesson", "boss", "exam", "placement"]
+        && d.get("alias", "") is string && d.get("alias", "").size() <= 40
+        && d.get("examId", "") is string && d.get("examId", "").size() <= 120
+        && d.get("level", "") is string && d.get("level", "").size() <= 40
+        && d.get("clientTs", "") is string && d.get("clientTs", "").size() <= 40
+        && d.get("passed", false) is bool
+        && d.get("threshold", 0) is int && d.get("threshold", 0) >= 0 && d.get("threshold", 0) <= 100
+        && d.get("detail", []) is list && d.get("detail", []).size() <= 60
+        && (!("createdAt" in d) || d.createdAt is timestamp)
+        && d.score is int && d.total is int && d.percent is int
+        && d.total >= 0 && d.total <= 1000
+        && d.score >= 0 && d.score <= d.total
+        && d.percent >= 0 && d.percent <= 100
+        && ((d.total == 0 && d.percent == 0)
+            || (d.total > 0
+                && d.percent * d.total >= d.score * 100 - d.total
+                && d.percent * d.total <= d.score * 100 + d.total));
+    }
     match /exam_results/{id} {
       allow create: if signedIn()
                     && request.resource.data.studentUid == request.auth.uid
-                    && request.resource.data.percent is int;
+                    && examResultShapeOk(request.resource.data)
+                    && examIdentityOk(request.resource.data);
       allow read:   if signedIn() && (
                        resource.data.studentUid == request.auth.uid
                        || isStaff()
@@ -288,23 +356,45 @@ service cloud.firestore {
     }
 
     // ───────────── Público / telemetría ─────────────
-    // Telemetría opcional (vesper_analytics.js con VA.cfg.cloud=true). El
-    // visitante escribe SIN sesión; se acota el esquema para limitar abuso.
+    // Telemetría opcional (vesper_analytics.js con VA.cfg.cloud=true; hoy
+    // está APAGADA, cloud:false). El visitante escribe SIN sesión a propósito
+    // (embudo de la landing, antes de registrarse), así que no se exige
+    // sesión; se acota el esquema para que un spammer no pueda usarla de
+    // almacén gratis (2026-10-28: props 2000→600, page 200→100, vid/sid
+    // 64→32, y el nombre de evento solo letras minúsculas, dígitos y "_",
+    // como todos los track("...") del sitio; createdAt a ±1 día del reloj
+    // del servidor, para no aceptar fechas basura).
+    // Si algún día se enciende y aparece spam: el siguiente paso es App Check.
     match /app_events/{id} {
       allow create: if request.resource.data.keys().hasOnly(['event','props','vid','sid','page','createdAt'])
-                    && request.resource.data.event is string && request.resource.data.event.size() <= 80
-                    && request.resource.data.props is string && request.resource.data.props.size() <= 2000
-                    && request.resource.data.vid   is string && request.resource.data.vid.size()   <= 64
-                    && request.resource.data.sid   is string && request.resource.data.sid.size()   <= 64
-                    && request.resource.data.page  is string && request.resource.data.page.size()  <= 200
-                    && request.resource.data.createdAt is timestamp;
+                    && request.resource.data.event is string
+                    && request.resource.data.event.matches('^[a-z0-9_]{1,48}$')
+                    && request.resource.data.props is string && request.resource.data.props.size() <= 600
+                    && request.resource.data.vid   is string && request.resource.data.vid.size()   <= 32
+                    && request.resource.data.sid   is string && request.resource.data.sid.size()   <= 32
+                    && request.resource.data.page  is string && request.resource.data.page.size()  <= 100
+                    && request.resource.data.createdAt is timestamp
+                    && request.resource.data.createdAt > request.time - duration.value(1, 'd')
+                    && request.resource.data.createdAt < request.time + duration.value(1, 'd');
       allow read, update, delete: if isAdmin();
     }
 
     // Leads del examen diagnóstico (nivelación pública, SIN registro). Este
     // bloque ya estaba PUBLICADO en producción (2026-07-14); se conserva.
+    // Nota: book_placement.html hoy escribe sus leads en la base "(default)"
+    // (ver firestore.default.rules); esta copia queda por compatibilidad.
+    // 2026-10-28: el create solo admite los campos del formulario (hasOnly)
+    // y la LECTURA pasa a solo staff (admin/coordinación). Antes también la
+    // leía cualquier profesor (isTeacherUser) y son datos personales de
+    // prospectos (nombre, correo, teléfono) que ningún portal docente usa.
+    // Si el negocio decide que los profesores deben verlos, vuelve a añadir
+    // `|| isTeacherUser()` en el read.
     match /placement_results/{id} {
-      allow create: if request.resource.data.name is string
+      allow create: if request.resource.data.keys().hasOnly(
+                         ["name", "email", "phone", "level", "levelName",
+                          "correct", "total", "skipped", "scores",
+                          "origin", "createdAt"])
+                    && request.resource.data.name is string
                     && request.resource.data.name.size() > 0
                     && request.resource.data.name.size() <= 120
                     && request.resource.data.level is string
@@ -320,7 +410,7 @@ service cloud.firestore {
                     && request.resource.data.phone.size() <= 60
                     && (request.resource.data.email.size() > 0
                         || request.resource.data.phone.size() > 0);
-      allow read:   if isStaff() || isTeacherUser();
+      allow read:   if isStaff();
       allow update, delete: if false;
     }
 

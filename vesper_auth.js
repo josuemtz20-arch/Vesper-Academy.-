@@ -17,6 +17,14 @@
      no responde se usa esta lista de hashes SHA-256. Puede vaciarse
      cuando todos estén migrados a la allowlist de Firestore.
    - Las páginas de publicPages no requieren sesión.
+   - Áreas de profesor (portal_profesores.html, vesper_engine.html):
+     además de lo anterior, VesperAuth.teacherAccess() exige el doc
+     teachers/{correo} o roles/{correo}. Ya NO hay contraseña de
+     profesor (se retiró el 2026-10-28: era un hash público
+     comprobado en el navegador, sin valor de seguridad).
+   - Todo esto es la PUERTA de la interfaz. La seguridad real son
+     las reglas de Firestore (firestore.rules): el código de este
+     archivo es público y cualquiera puede leerlo o saltárselo.
    - Mientras firebase no esté configurado (valores PEGAR_*),
      el sitio queda ABIERTO y muestra un aviso. Pega aquí la
      configuración de tu proyecto Firebase para activar el candado.
@@ -51,15 +59,14 @@
       "f77b653bf19243e8d70722a5e50ea3e86d4347ddc489224e083439e2137714bc"   /* profesora 1 */
     ],
     salt: "vesper-academy-v1|",
-    /* Mapa de accesos al portal de profesores: contraseña INDIVIDUAL por maestro.
-       Clave  = SHA-256("vesper-academy-v1|" + correo en minúsculas).
-       Valor  = SHA-256("vesper-academy-v1|teacher|" + contraseña del maestro).
-       Genera ambos hashes en access_admin.html → "Añadir / editar maestro".
-       Para revocar a un maestro: borra su línea. */
-    teachers: {
-      "1181f429e6707d5b37cec24a77203cf30374fa337062d3f5d8c0abfe50b99dc9": "2c4227a42e5c7f6131a34e68e31cd6f9b78b2140ad789c7485e5d1ff76145ab1",  /* admin */
-      "f77b653bf19243e8d70722a5e50ea3e86d4347ddc489224e083439e2137714bc": "fe28e97393299e8fcf7322f6e02bdf91cc915ccd24007fd0c8f99b26e4288a00"   /* profesora 1 */
-    },
+    /* (2026-10-28) Aquí vivía `teachers`: una contraseña de profesor por
+       maestro, guardada como SHA-256 con sal pública en este archivo PÚBLICO
+       y comprobada en el navegador. No protegía nada en el servidor y un
+       SHA-256 plano se fuerza con diccionario en segundos, así que se
+       eliminó. Ahora el portal de profesores y el Vesper Engine solo exigen
+       la sesión de Firebase + el doc teachers/{correo} (o roles/{correo});
+       ver teacherAccess() abajo. Los datos los siguen protegiendo las
+       reglas de Firestore. */
     /* Base de Firestore donde vive la allowlist (debe coincidir con DB_ID en
        _scripts/upload_manuals.py y en manual.html / libro.html). */
     dbId: "teachermanuals",
@@ -85,21 +92,6 @@
 
   function emailHash(email) {
     return sha256Hex(CONFIG.salt + String(email).trim().toLowerCase());
-  }
-
-  function teacherHash(password) {
-    return sha256Hex(CONFIG.salt + "teacher|" + String(password));
-  }
-
-  /* Acceso al portal de profesores: correo + contraseña individual. */
-  function verifyTeacherLogin(email, password) {
-    return Promise.all([
-      emailHash(email),
-      teacherHash(password)
-    ]).then(function (r) {
-      var stored = CONFIG.teachers[r[0]];
-      return !!stored && stored === r[1];
-    });
   }
 
   function loadScript(src) {
@@ -287,7 +279,61 @@
     }).catch(function () { return false; });
   }
 
-  /* API compartida para login.html y access_admin.html */
+  /* ¿Existe MI doc en `collection`? true (200) / false (404 o 403) y lanza
+     error con cualquier otro estado o sin red, para distinguir "no eres" de
+     "no se pudo comprobar". */
+  function ownDocStatus(token, collection, email) {
+    var url = "https://firestore.googleapis.com/v1/projects/" +
+              CONFIG.firebase.projectId + "/databases/" + CONFIG.dbId +
+              "/documents/" + collection + "/" + encodeURIComponent(email);
+    return fetch(url, { headers: { "Authorization": "Bearer " + token } })
+      .then(function (r) {
+        if (r.status === 200) return true;
+        if (r.status === 404 || r.status === 403) return false;
+        throw new Error("HTTP " + r.status);
+      });
+  }
+
+  /* Puerta de las áreas de profesor (portal_profesores.html,
+     vesper_engine.html). Sustituye a la antigua contraseña de profesor.
+     Resuelve:
+       "ok"      -> admin, doc teachers/{correo} o cualquier roles/{correo}
+                    (coordinación también usa el portal);
+       "denied"  -> sesión verificada pero sin esos docs (p. ej. un alumno);
+       "offline" -> no se pudo comprobar (sin red a Firestore).
+     En localhost / file:// / sin configurar resuelve "ok", igual que la
+     puerta general (dormida en desarrollo).
+     OJO: esto decide solo qué PANTALLA se ve. Manuales, roster, boletas y
+     resultados los protegen las reglas de Firestore con el mismo criterio,
+     así que por eso la página degrada abierta ("offline") sin riesgo. */
+  function teacherAccess() {
+    if (isLocal || !isConfigured) return Promise.resolve("ok");
+    return initFirebase().then(function (auth) {
+      return new Promise(function (resolve) {
+        var seen = false, off = null;
+        off = auth.onAuthStateChanged(function (user) {
+          if (seen) return;
+          seen = true;
+          if (off) off();
+          if (!user || !user.emailVerified) { resolve("denied"); return; }
+          var email = String(user.email || "").trim().toLowerCase();
+          if (email && email === String(CONFIG.adminEmail).trim().toLowerCase()) {
+            resolve("ok"); return;
+          }
+          user.getIdToken().then(function (token) {
+            return ownDocStatus(token, "teachers", email).then(function (t) {
+              return t || ownDocStatus(token, "roles", email);
+            });
+          }).then(function (ok) { resolve(ok ? "ok" : "denied"); },
+                  function () { resolve("offline"); });
+        });
+      });
+    }).catch(function () { return "offline"; });
+  }
+
+  /* API compartida para login.html, access_admin.html y las áreas de
+     profesor. (teacherHash / verifyTeacherLogin se retiraron el 2026-10-28:
+     usa teacherAccess().) */
   window.VesperAuth = {
     config: CONFIG,
     isConfigured: isConfigured,
@@ -296,8 +342,7 @@
     isApproved: isApproved,
     isApprovedUser: isApprovedUser,
     isTeacher: isTeacher,
-    teacherHash: teacherHash,
-    verifyTeacherLogin: verifyTeacherLogin
+    teacherAccess: teacherAccess
   };
 
   /* ── Esqueleto de carga ──
