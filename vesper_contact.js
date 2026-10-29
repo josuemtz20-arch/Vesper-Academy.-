@@ -27,7 +27,7 @@
     if (document.querySelector(".v-wa-float")) return;
     var css =
       ".v-wa-float{position:fixed;right:20px;bottom:20px;z-index:900;display:flex;align-items:center;gap:10px;" +
-      "padding:12px 18px 12px 14px;border-radius:999px;background:#25D366;color:#fff !important;" +
+      "padding:12px 18px 12px 14px;border-radius:999px;background:#25D366;color:#0b3d1f !important;" +
       "font:600 15px/1.1 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;text-decoration:none !important;" +
       "box-shadow:0 6px 20px rgba(0,0,0,.22);transition:transform .15s ease,box-shadow .15s ease}" +
       ".v-wa-float:hover{transform:translateY(-2px);box-shadow:0 10px 26px rgba(0,0,0,.28)}" +

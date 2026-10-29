@@ -230,7 +230,8 @@ nav{display:flex;align-items:center;justify-content:space-between;height:78px;ga
 .nav-links a:hover::after{transform:scaleX(1);}
 /* Especificidad: `.nav-links a` (0,1,1) gana a `.btn-gold` (0,1,0) y dejaba
    el CTA con texto crema sobre oro (1.8:1). Hay que subir el selector. */
-.nav-links a.nav-cta{color:var(--night);}
+.nav-links a.nav-cta{color:var(--night);padding:10px 22px;}
+.nav-links a.nav-cta::after{display:none;}
 .nav-cta{padding:10px 22px;font-size:.86rem;}
 .nav-toggle{display:none;background:none;border:none;color:var(--cream);font-size:1.35rem;cursor:pointer;
   line-height:1;min-width:44px;min-height:44px;align-items:center;justify-content:center;}
@@ -1385,7 +1386,7 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
     <div class="plate-wrap">
       <!-- Un solo sujeto: Vesper. Detrás, el logotipo en filigrana; el
            grabado con acanto que ocupaba esta columna se retiró. -->
-      <img class="hero-brand" src="assets/images/vesper_logo_inverted.png" alt="" aria-hidden="true" width="534" height="515" decoding="async">
+      <img class="hero-brand" src="assets/images/vesper_logo_inverted.webp" alt="" aria-hidden="true" width="534" height="515" decoding="async">
 
       <a class="hero-vesper" href="leccion.html">
         <span class="medallion" data-vesper data-state="welcome">
@@ -1946,7 +1947,7 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
         <div class="formmsg" id="formMsg" role="status" hidden></div>
         <p style="margin:22px 0 0;padding-top:18px;border-top:1px solid rgba(255,255,255,.12);color:var(--on-night-soft);font-size:.88rem">¿Prefieres hablar ya? Escríbenos o llámanos:</p>
         <p style="margin:10px 0 0;display:flex;flex-wrap:wrap;gap:10px">
-          <a href="https://wa.me/525535699899?text=Hola%2C%20vengo%20de%20vesperacademy.com%20y%20quiero%20informaci%C3%B3n%20sobre%20los%20cursos%20de%20ingl%C3%A9s." target="_blank" rel="noopener" class="btn" style="background:#25D366;color:#fff;border-color:#25D366"><svg class="i i--solid" aria-hidden="true"><use href="#i-whatsapp"/></svg> WhatsApp 55 3569 9899</a>
+          <a href="https://wa.me/525535699899?text=Hola%2C%20vengo%20de%20vesperacademy.com%20y%20quiero%20informaci%C3%B3n%20sobre%20los%20cursos%20de%20ingl%C3%A9s." target="_blank" rel="noopener" class="btn" style="background:#25D366;color:#0b3d1f;border-color:#25D366"><svg class="i i--solid" aria-hidden="true"><use href="#i-whatsapp"/></svg> WhatsApp 55 3569 9899</a>
           <a href="tel:+525535699899" class="btn btn-ghost" style="color:var(--cream)">Llamar</a>
         </p>
       </div>
@@ -2535,7 +2536,7 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
   <!-- Barra superior -->
   <header class="m-bar">
     <a class="m-brand" href="#m-app" aria-label="Vesper Academy — inicio">
-      <img src="assets/images/vesper_logo_inverted.png" alt="" width="26" height="26" loading="lazy" decoding="async">
+      <img src="assets/images/landing/brand_mark_96.webp" alt="" width="26" height="26" loading="lazy" decoding="async">
       <b>Vesper Academy</b>
     </a>
     <div style="display:flex;align-items:center;gap:6px">
@@ -2579,7 +2580,7 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
 
     <div class="m-stats">
       <div><b>A1–C2</b><small>Niveles</small></div>
-      <div><b>1:1</b><small>o grupo ≤6</small></div>
+      <div><b>1:1</b><small>o grupo ≤9</small></div>
       <div><b>100%</b><small>En vivo</small></div>
     </div>
   </section>
@@ -2588,7 +2589,7 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
   <div class="m-chips m-sb">
     <span><svg class="i" aria-hidden="true"><use href="#i-check-doc"/></svg> MCER</span>
     <span><svg class="i" aria-hidden="true"><use href="#i-summit"/></svg> IELTS · Cambridge · TOEFL</span>
-    <span><svg class="i" aria-hidden="true"><use href="#i-star"/></svg> Profesores nativos</span>
+    <span><svg class="i" aria-hidden="true"><use href="#i-star"/></svg> Profesores certificados</span>
   </div>
 
   <!-- Método -->
@@ -2708,7 +2709,7 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
   <!-- Certificación -->
   <section class="m-cert" id="m-cert">
     <span class="m-eyebrow">Certificación</span>
-    <h2 class="m-h2">+0.5 a +1.0 banda por curso</h2>
+    <h2 class="m-h2">Estrategia real para tu banda</h2>
     <p>Simulacros cronometrados y respuestas modelo Banda 6 vs Banda 8, con la técnica que premian los examinadores.</p>
     <div class="m-cert__row">
       <div><b>IELTS</b><small>Academic · General</small></div>
@@ -2725,7 +2726,7 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
       <h2 class="m-h2">Invierte en tu inglés</h2>
       <p class="m-lead">Toca una carta para verla al frente; tócala otra vez para entrar.</p>
     </div>
-    <div class="m-deck m-deck--plans" data-kind="plans" data-start="1">
+    <div class="m-deck m-deck--plans" data-kind="plans" data-start="0">
       <button class="m-card" type="button" aria-label="Plan grupal" data-href="planes.html#grupal">
         <span class="m-plan">
           <span class="m-plan__body">
@@ -2832,7 +2833,7 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
   <!-- Pie -->
   <footer class="m-foot">
     <div class="m-foot__brand">
-      <img src="assets/images/vesper_logo_inverted.png" alt="Vesper Academy" width="30" height="29" loading="lazy" decoding="async">
+      <img src="assets/images/landing/brand_mark_96.webp" alt="Vesper Academy" width="30" height="30" loading="lazy" decoding="async">
       <b>Vesper Academy</b>
     </div>
     <div class="m-foot__links">
