@@ -21,6 +21,15 @@ rules_version = '2';
  *     completa te sigue llegando por correo (FormSubmit) y puedes verla
  *     en la consola de Firebase cuando quieras.
  *
+ * ⚠️ 2026-10-28: la base "(default)" NO EXISTE en el proyecto
+ * vesper-academy (la API de Firestore responde 404 y no hay release de
+ * reglas para ella). Por eso este archivo nunca ha estado publicado y los
+ * leads de book_placement.html nunca se guardaron en Firestore (solo
+ * llegaban por correo). Arreglo del 2026-10-28: la página ahora escribe en
+ * "teachermanuals" (bloque placement_results de firestore.rules). Este
+ * archivo queda SOLO como referencia; no hace falta crear la base ni
+ * publicarlo.
+ *
  * Revisión 2026-10-28 (correo verificado): en esta base NO hay ninguna
  * regla con sesión — el único create es anónimo a propósito y todo lo
  * demás está cerrado —, así que el requisito email_verified que se

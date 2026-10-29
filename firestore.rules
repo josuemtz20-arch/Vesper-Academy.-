@@ -32,6 +32,13 @@ rules_version = '2';
  * función bootstrapAdmin() y dejar isAdmin() = hasRole("admin").
  * Antes de publicar: python _scripts/check_rules.py (compila y prueba).
  *
+ * ⚠️ Lo que hay EN PRODUCCIÓN (revisado 2026-10-28 con la API de reglas)
+ * es la versión del 2026-07-14: sin roles/, courses/, periods/, groups/,
+ * enrollments/ ni el endurecimiento de abajo. Publicar este archivo activa
+ * TODO eso a la vez. Cada colección que hay en producción sigue aquí con
+ * el mismo acceso o uno más estricto; lo único que se amplía es que el
+ * staff (admin/coordinador) puede leer students/ y teachers/.
+ *
  * ── Endurecimiento (2026-10-28) ────────────────────────────────────
  *  - signedIn() exige CORREO VERIFICADO (token.email_verified). Antes
  *    bastaba request.auth != null: el gate del navegador sí pedía
@@ -265,11 +272,15 @@ service cloud.firestore {
     // intento solo con group == "" y sid == "", que ningún profesor ve
     // (teacherSeesGroup exige grupo no vacío) y que no apunta a ningún
     // alumno del roster. vesper_results.js lee ese mismo doc antes de subir.
+    // El correo se pasa a minúsculas (.lower()) igual que en vesper_results.js:
+    // si el token trajera mayúsculas, regla y cliente leerían docs distintos y
+    // el intento se rechazaría aunque fuera legítimo. (Hoy las 13 cuentas de
+    // Auth están en minúsculas; revisado 2026-10-28.)
     function examIdentityOk(d) {
-      return (exists(/databases/$(database)/documents/students/$(request.auth.token.email))
-              && d.group == get(/databases/$(database)/documents/students/$(request.auth.token.email)).data.get("group", "")
-              && d.sid == get(/databases/$(database)/documents/students/$(request.auth.token.email)).data.get("sid", ""))
-          || (!exists(/databases/$(database)/documents/students/$(request.auth.token.email))
+      return (exists(/databases/$(database)/documents/students/$(request.auth.token.email.lower()))
+              && d.group == get(/databases/$(database)/documents/students/$(request.auth.token.email.lower())).data.get("group", "")
+              && d.sid == get(/databases/$(database)/documents/students/$(request.auth.token.email.lower())).data.get("sid", ""))
+          || (!exists(/databases/$(database)/documents/students/$(request.auth.token.email.lower()))
               && d.group == "" && d.sid == "");
     }
     // Forma del intento: mismos campos que toFs() de vesper_results.js, con
@@ -381,8 +392,12 @@ service cloud.firestore {
 
     // Leads del examen diagnóstico (nivelación pública, SIN registro). Este
     // bloque ya estaba PUBLICADO en producción (2026-07-14); se conserva.
-    // Nota: book_placement.html hoy escribe sus leads en la base "(default)"
-    // (ver firestore.default.rules); esta copia queda por compatibilidad.
+    // Nota: hasta el 2026-10-28 book_placement.html apuntaba a la base
+    // "(default)", que NO EXISTE en el proyecto (404): ningún lead llegó a
+    // Firestore, solo por correo (FormSubmit). Desde esa fecha la página
+    // escribe AQUÍ (FS_DB = "teachermanuals"), así que este bloque es el
+    // que recibe los leads. Los campos de saveResultToFirestore() son
+    // exactamente los del hasOnly de abajo.
     // 2026-10-28: el create solo admite los campos del formulario (hasOnly)
     // y la LECTURA pasa a solo staff (admin/coordinación). Antes también la
     // leía cualquier profesor (isTeacherUser) y son datos personales de

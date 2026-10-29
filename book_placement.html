@@ -718,12 +718,18 @@ const COURSES = {
 const LS_KEY = "vesper_placement_history_v1";
 const NOTIFY_URL = "https://formsubmit.co/ajax/contacto@vesperacademy.com";
 const FS_COLLECTION = "placement_results";
+// Base "teachermanuals", la misma del resto del sitio. Hasta el 2026-10-28
+// apuntaba a "(default)", que NO EXISTE en el proyecto: cada lead recibía un
+// 404 y solo llegaba por correo. teachermanuals ya tiene el bloque
+// placement_results en firestore.rules (crear sin sesión con forma acotada;
+// leer solo staff, así que "Ver historial" sigue mostrando lo local).
+const FS_DB = "teachermanuals";
 
 function fsBase() {
     var pid = (window.VesperAuth && VesperAuth.config.firebase.projectId) || "vesper-academy";
     var key = (window.VesperAuth && VesperAuth.config.firebase.apiKey) || "";
     return {
-        docs: "https://firestore.googleapis.com/v1/projects/" + pid + "/databases/(default)/documents",
+        docs: "https://firestore.googleapis.com/v1/projects/" + pid + "/databases/" + FS_DB + "/documents",
         key: key
     };
 }
