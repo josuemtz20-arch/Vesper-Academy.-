@@ -60,10 +60,10 @@ window.VESPER_THEMES_PACK2 = (function () {
       exercises: [
         { type: "listening",
           text: "Welcome to my house! This is the living room. There is a big sofa and a television. My favourite room is the kitchen, because I love cooking.",
-          question: "What is the speaker's favourite room?", options: ["the living room", "the kitchen", "the bathroom"], correctIndex: 1, explanation: "\"My favourite room is the kitchen...\"" },
+          question: "What is the speaker's favourite room?", options: ["the bathroom", "the living room", "the kitchen"], correctIndex: 2, explanation: "\"My favourite room is the kitchen...\"" },
         { type: "listening",
           text: "There are two bedrooms upstairs and a small bathroom.",
-          question: "How many bedrooms are there?", options: ["one", "two", "three"], correctIndex: 1, explanation: "\"There are two bedrooms upstairs...\"" },
+          question: "How many bedrooms are there?", options: ["two", "three", "one"], correctIndex: 0, explanation: "\"There are two bedrooms upstairs...\"" },
         { type: "true_false", statement: "There is a television in the living room.", answer: true, explanation: "\"There is a big sofa and a television.\"" },
         { type: "multiple_choice", question: "Why does the speaker like the kitchen?", options: ["because it is big", "because they love cooking", "because it has a sofa"], correctIndex: 1, explanation: "\"...because I love cooking.\"" }
       ]
@@ -110,7 +110,7 @@ window.VESPER_THEMES_PACK2 = (function () {
       exercises: [
         { type: "listening",
           text: "Good morning, doctor. — What's the problem? — I don't feel well. I have a sore throat and a headache, and I'm very tired.",
-          question: "What's the matter with the patient?", options: ["a sore throat and a headache", "a broken leg", "a stomachache"], correctIndex: 0, explanation: "\"...a sore throat and a headache...\"" },
+          question: "What's the matter with the patient?", options: ["a stomachache", "a broken leg", "a sore throat and a headache"], correctIndex: 2, explanation: "\"...a sore throat and a headache...\"" },
         { type: "listening",
           text: "You have a cold. Drink lots of water, rest, and take this medicine twice a day.",
           question: "How often should the patient take the medicine?", options: ["once a day", "twice a day", "three times a day"], correctIndex: 1, explanation: "\"...take this medicine twice a day.\"" },
@@ -141,7 +141,7 @@ window.VESPER_THEMES_PACK2 = (function () {
           { t: "laptop", bucket: "d" }, { t: "download", bucket: "a" },
           { t: "smartphone", bucket: "d" }, { t: "upload", bucket: "a" },
           { t: "tablet", bucket: "d" }, { t: "install", bucket: "a" } ] },
-        { type: "multiple_choice", question: "A secret word to log in is a ___.", options: ["screen", "password", "browser"], correctIndex: 1, explanation: "password = contraseña." },
+        { type: "multiple_choice", question: "A secret word to log in is a ___.", options: ["browser", "screen", "password"], correctIndex: 2, explanation: "password = contraseña." },
         { type: "fill_blank", sentence: "Please ___ the app to the latest version.", answers: ["update"], hint: "Ponerlo al día.", explanation: "update = actualizar." },
         { type: "translate", prompt: "Traduce: \"Olvidé mi contraseña.\"", answers: ["i forgot my password"], explanation: "I forgot my password." }
       ]
@@ -160,11 +160,11 @@ window.VESPER_THEMES_PACK2 = (function () {
       exercises: [
         { type: "listening",
           text: "Hi and welcome to Tech Tips. Today's tip is about passwords. A strong password should be long and mix letters, numbers and symbols. Never use the same password for every account.",
-          question: "What is today's tip about?", options: ["buying a laptop", "creating strong passwords", "downloading apps"], correctIndex: 1, explanation: "El consejo de hoy trata sobre contraseñas seguras." },
+          question: "What is today's tip about?", options: ["buying a laptop", "creating strong passwords", "downloading apps safely onto a new phone"], correctIndex: 1, explanation: "El consejo de hoy trata sobre contraseñas seguras." },
         { type: "listening",
           text: "And here's a bonus tip: turn on two-factor authentication. It sends a code to your phone, so even if someone knows your password, they can't log in.",
-          question: "What does two-factor authentication do?", options: ["makes passwords shorter", "sends a code to your phone for extra security", "deletes your account"], correctIndex: 1, explanation: "\"It sends a code to your phone...\" para más seguridad." },
-        { type: "multiple_choice", question: "According to the podcast, a strong password should...", options: ["be short and simple", "mix letters, numbers and symbols", "be the same everywhere"], correctIndex: 1, explanation: "\"...mix letters, numbers and symbols.\"" },
+          question: "What does two-factor authentication do?", options: ["makes passwords shorter", "deletes your account", "sends a code to your phone for extra security"], correctIndex: 2, explanation: "\"It sends a code to your phone...\" para más seguridad." },
+        { type: "multiple_choice", question: "According to the podcast, a strong password should...", options: ["mix letters, numbers and symbols", "be short and simple", "be the same on every website and app you use"], correctIndex: 0, explanation: "\"...mix letters, numbers and symbols.\"" },
         { type: "true_false", statement: "The speaker recommends using the same password for every account.", answer: false, explanation: "\"Never use the same password for every account.\"" }
       ]
     },
@@ -184,12 +184,12 @@ window.VESPER_THEMES_PACK2 = (function () {
       exercises: [
         { type: "listening",
           text: "Thanks everyone for joining today's meeting. The main item on the agenda is the launch of our new app. Sales have been slower than expected, so we need to discuss how to improve our marketing.",
-          question: "What is the main topic of the meeting?", options: ["hiring new staff", "improving marketing for the new app", "moving to a new office"], correctIndex: 1, explanation: "El punto principal es mejorar el marketing de la nueva app." },
+          question: "What is the main topic of the meeting?", options: ["hiring new staff", "improving marketing for the new app", "moving the whole team to a new office building"], correctIndex: 1, explanation: "El punto principal es mejorar el marketing de la nueva app." },
         { type: "listening",
           text: "Marta will present the budget, and then we'll open the floor for suggestions. Please keep your comments brief, as we only have thirty minutes.",
-          question: "What does the speaker ask people to do?", options: ["speak for a long time", "keep their comments brief", "leave the meeting"], correctIndex: 1, explanation: "\"Please keep your comments brief...\"" },
-        { type: "multiple_choice", question: "Why are they discussing marketing?", options: ["sales were slower than expected", "the app is already finished", "the budget is too big"], correctIndex: 0, explanation: "\"Sales have been slower than expected...\"" },
-        { type: "multiple_choice", question: "What is the speaker's tone?", options: ["relaxed and informal", "focused and businesslike", "angry and rude"], correctIndex: 1, explanation: "Estructura la agenda y pide brevedad: tono profesional y centrado." },
+          question: "What does the speaker ask people to do?", options: ["speak for a long time about every detail", "leave the meeting", "keep their comments brief"], correctIndex: 2, explanation: "\"Please keep your comments brief...\"" },
+        { type: "multiple_choice", question: "Why are they discussing marketing?", options: ["sales were slower than expected", "the app is already finished and selling very well", "the budget is too big"], correctIndex: 0, explanation: "\"Sales have been slower than expected...\"" },
+        { type: "multiple_choice", question: "What is the speaker's tone?", options: ["sad and worried", "angry and rude", "relaxed and informal", "focused and businesslike"], correctIndex: 3, explanation: "Estructura la agenda y pide brevedad: tono profesional y centrado." },
         { type: "true_false", statement: "The meeting will last about thirty minutes.", answer: true, explanation: "\"...we only have thirty minutes.\"" }
       ]
     },
@@ -210,7 +210,7 @@ window.VESPER_THEMES_PACK2 = (function () {
           question: "What has the city council approved?", options: ["a new shopping centre", "an expansion of the cycling network", "higher taxes"], correctIndex: 1, explanation: "\"...a new plan to expand the cycling network.\"" },
         { type: "listening",
           text: "Supporters say the plan will reduce traffic and pollution, while some local businesses worry about losing parking spaces.",
-          question: "What concern do some local businesses have?", options: ["losing parking spaces", "higher rents", "fewer online customers"], correctIndex: 0, explanation: "\"...worry about losing parking spaces.\"" },
+          question: "What concern do some local businesses have?", options: ["fewer online customers", "higher rents", "losing parking spaces"], correctIndex: 2, explanation: "\"...worry about losing parking spaces.\"" },
         { type: "multiple_choice", question: "How long will the project take?", options: ["two years", "fifty years", "six months"], correctIndex: 0, explanation: "\"Over the next two years...\"" },
         { type: "true_false", statement: "Supporters believe the plan will reduce pollution.", answer: true, explanation: "\"Supporters say the plan will reduce traffic and pollution...\"" }
       ]
@@ -231,12 +231,12 @@ window.VESPER_THEMES_PACK2 = (function () {
       exercises: [
         { type: "listening",
           text: "Today we'll look at the concept of cognitive bias, the systematic ways in which our thinking deviates from rationality. A classic example is confirmation bias: our tendency to notice and remember information that supports what we already believe.",
-          question: "What is the lecture mainly about?", options: ["how human memory is stored", "cognitive bias, and confirmation bias in particular", "techniques for studying"], correctIndex: 1, explanation: "Define el sesgo cognitivo y se centra en el de confirmación." },
+          question: "What is the lecture mainly about?", options: ["how human memory is stored and later retrieved by the brain", "cognitive bias, and confirmation bias in particular", "techniques for studying"], correctIndex: 1, explanation: "Define el sesgo cognitivo y se centra en el de confirmación." },
         { type: "listening",
           text: "Importantly, being intelligent does not make you immune. In fact, clever people are often better at constructing arguments to justify conclusions they already hold.",
-          question: "What point does the professor make about intelligent people?", options: ["they never show bias", "they may be better at justifying their existing beliefs", "they have a worse memory"], correctIndex: 1, explanation: "\"...better at constructing arguments to justify conclusions they already hold.\"" },
-        { type: "multiple_choice", question: "'Confirmation bias' is the tendency to...", options: ["change your mind easily", "favour information that supports your existing beliefs", "forget important facts"], correctIndex: 1, explanation: "Es la tendencia a fijarnos en lo que confirma lo que ya creemos." },
-        { type: "multiple_choice", question: "What can be inferred from the lecture?", options: ["bias affects people regardless of intelligence", "only uneducated people are biased", "bias is always harmless"], correctIndex: 0, explanation: "Si la inteligencia no protege, el sesgo afecta a todos." },
+          question: "What point does the professor make about intelligent people?", options: ["they have a worse memory", "they never show bias because they reason more carefully than others", "they may be better at justifying their existing beliefs"], correctIndex: 2, explanation: "\"...better at constructing arguments to justify conclusions they already hold.\"" },
+        { type: "multiple_choice", question: "'Confirmation bias' is the tendency to...", options: ["forget important facts", "trust experts more than friends", "change your mind easily", "favour information that supports your existing beliefs"], correctIndex: 3, explanation: "Es la tendencia a fijarnos en lo que confirma lo que ya creemos." },
+        { type: "multiple_choice", question: "What can be inferred from the lecture?", options: ["bias affects people regardless of intelligence", "only uneducated people are biased, while experts are fully objective", "bias is always harmless"], correctIndex: 0, explanation: "Si la inteligencia no protege, el sesgo afecta a todos." },
         { type: "true_false", statement: "The professor says intelligence makes people immune to bias.", answer: false, explanation: "\"...being intelligent does not make you immune.\"" }
       ]
     },
@@ -254,12 +254,12 @@ window.VESPER_THEMES_PACK2 = (function () {
       exercises: [
         { type: "listening",
           text: "In this seminar we're debating remote work. Proponents argue it offers flexibility and cuts commuting time, which can improve both productivity and wellbeing.",
-          question: "What is one argument FOR remote work?", options: ["it increases commuting", "it offers flexibility and saves commuting time", "it reduces salaries"], correctIndex: 1, explanation: "\"...flexibility and cuts commuting time...\"" },
+          question: "What is one argument FOR remote work?", options: ["it increases commuting time for almost all employees", "it offers flexibility and saves commuting time", "it reduces salaries"], correctIndex: 1, explanation: "\"...flexibility and cuts commuting time...\"" },
         { type: "listening",
           text: "Critics, however, point to the erosion of team spirit and the difficulty of mentoring junior staff who never meet their colleagues in person.",
-          question: "What concern do critics raise?", options: ["higher office rents", "weaker team spirit and harder mentoring", "too many meetings"], correctIndex: 1, explanation: "\"...the erosion of team spirit and the difficulty of mentoring...\"" },
-        { type: "multiple_choice", question: "What is the seminar debating?", options: ["remote work", "office design", "salary levels"], correctIndex: 0, explanation: "El tema es el teletrabajo (remote work)." },
-        { type: "multiple_choice", question: "'Erosion of team spirit' means team spirit is...", options: ["growing stronger", "gradually weakening", "completely unchanged"], correctIndex: 1, explanation: "'Erosion' = desgaste/debilitamiento gradual." },
+          question: "What concern do critics raise?", options: ["too many meetings", "higher office rents", "weaker team spirit and harder mentoring"], correctIndex: 2, explanation: "\"...the erosion of team spirit and the difficulty of mentoring...\"" },
+        { type: "multiple_choice", question: "What is the seminar debating?", options: ["public transport", "salary levels", "office design", "remote work"], correctIndex: 3, explanation: "El tema es el teletrabajo (remote work)." },
+        { type: "multiple_choice", question: "'Erosion of team spirit' means team spirit is...", options: ["gradually weakening", "growing stronger", "completely unchanged"], correctIndex: 0, explanation: "'Erosion' = desgaste/debilitamiento gradual." },
         { type: "true_false", statement: "The speaker presents only the advantages of remote work.", answer: false, explanation: "Presenta argumentos a favor (proponents) y en contra (critics)." }
       ]
     },
@@ -279,12 +279,12 @@ window.VESPER_THEMES_PACK2 = (function () {
       exercises: [
         { type: "listening",
           text: "Consider the famous trolley problem. A runaway trolley will kill five people unless you divert it onto a side track, where it will kill one. Most people say they would pull the lever. Yet when asked to push a single person to their death to achieve the same outcome, most refuse.",
-          question: "What puzzle does the speaker describe?", options: ["the trolley problem", "the prisoner's dilemma", "a mathematical theorem"], correctIndex: 0, explanation: "Describe el clásico 'trolley problem'." },
+          question: "What puzzle does the speaker describe?", options: ["the prisoner's dilemma", "a mathematical theorem", "the trolley problem"], correctIndex: 2, explanation: "Describe el clásico 'trolley problem'." },
         { type: "listening",
           text: "This inconsistency fascinates philosophers, because the numerical outcome is identical. It suggests our moral judgments are driven not purely by consequences, but by intuitions about action, intention and physical contact.",
-          question: "What does the inconsistency suggest about moral judgments?", options: ["they depend only on the numbers", "they are shaped by intuitions, not just consequences", "they are always perfectly rational"], correctIndex: 1, explanation: "Sugiere que pesan intuiciones (acción, intención, contacto), no solo las consecuencias." },
-        { type: "multiple_choice", question: "The speaker's main point is that human morality...", options: ["is perfectly logical", "is influenced by factors beyond pure outcomes", "does not really exist"], correctIndex: 1, explanation: "La moral humana se ve influida por más que los resultados." },
-        { type: "multiple_choice", question: "An 'inconsistency' is...", options: ["a lack of logical agreement", "a strong proof", "a type of trolley"], correctIndex: 0, explanation: "Inconsistencia = falta de coherencia lógica." },
+          question: "What does the inconsistency suggest about moral judgments?", options: ["they depend only on the numbers", "they are shaped by intuitions, not just consequences", "they are always perfectly rational calculations of outcomes"], correctIndex: 1, explanation: "Sugiere que pesan intuiciones (acción, intención, contacto), no solo las consecuencias." },
+        { type: "multiple_choice", question: "The speaker's main point is that human morality...", options: ["is influenced by factors beyond pure outcomes", "does not really exist", "is perfectly logical"], correctIndex: 0, explanation: "La moral humana se ve influida por más que los resultados." },
+        { type: "multiple_choice", question: "An 'inconsistency' is...", options: ["a moral rule", "a type of trolley", "a strong proof that two ideas agree completely", "a lack of logical agreement"], correctIndex: 3, explanation: "Inconsistencia = falta de coherencia lógica." },
         { type: "true_false", statement: "According to the talk, most people would push a person to save five.", answer: false, explanation: "\"...most refuse\" cuando hay que empujar a alguien." }
       ]
     },
@@ -302,12 +302,12 @@ window.VESPER_THEMES_PACK2 = (function () {
       exercises: [
         { type: "listening",
           text: "Our topic today is foreign aid. Advocates contend that well-targeted aid has eradicated diseases and lifted millions out of poverty. Skeptics counter that poorly designed aid can foster dependency and prop up corrupt governments.",
-          question: "What is the debate about?", options: ["foreign aid", "the stock market", "international tourism"], correctIndex: 0, explanation: "El tema es la ayuda exterior (foreign aid)." },
+          question: "What is the debate about?", options: ["international tourism", "the stock market", "foreign aid"], correctIndex: 2, explanation: "El tema es la ayuda exterior (foreign aid)." },
         { type: "listening",
           text: "The truth, as so often, resists simple slogans. The evidence suggests that aid works best when it is transparent, locally led, and tied to measurable outcomes rather than political convenience.",
-          question: "According to the speaker, when does aid work best?", options: ["when it is secret and centralised", "when it is transparent, locally led and tied to measurable outcomes", "when it supports any government in power"], correctIndex: 1, explanation: "\"...transparent, locally led, and tied to measurable outcomes...\"" },
-        { type: "multiple_choice", question: "What is the speaker's overall stance?", options: ["aid is always beneficial", "aid is always harmful", "aid can work under the right conditions"], correctIndex: 2, explanation: "Postura matizada: funciona bajo ciertas condiciones." },
-        { type: "multiple_choice", question: "To 'foster dependency' means to...", options: ["encourage reliance on others", "put an end to all reliance", "reduce corruption"], correctIndex: 0, explanation: "'Foster dependency' = fomentar la dependencia." },
+          question: "According to the speaker, when does aid work best?", options: ["when it is secret and centralised", "when it is transparent, locally led and tied to measurable outcomes", "when it supports any government in power, without conditions or checks"], correctIndex: 1, explanation: "\"...transparent, locally led, and tied to measurable outcomes...\"" },
+        { type: "multiple_choice", question: "What is the speaker's overall stance?", options: ["aid can work under the right conditions", "aid is always beneficial, whatever the conditions on the ground", "aid is always harmful"], correctIndex: 0, explanation: "Postura matizada: funciona bajo ciertas condiciones." },
+        { type: "multiple_choice", question: "To 'foster dependency' means to...", options: ["reduce corruption", "share resources fairly", "put an end to all reliance", "encourage reliance on others"], correctIndex: 3, explanation: "'Foster dependency' = fomentar la dependencia." },
         { type: "true_false", statement: "The speaker says the issue can be summed up in a simple slogan.", answer: false, explanation: "\"The truth... resists simple slogans.\"" }
       ]
     }

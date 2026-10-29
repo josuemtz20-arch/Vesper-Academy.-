@@ -69,8 +69,8 @@ window.VESPER_EXPANSION = (function () {
         { type: "matching", instruction: "Une la palabra con su traducción.", pairs: [
           { l: "daughter", r: "hija" }, { l: "father", r: "padre" }, { l: "wife", r: "esposa" }, { l: "uncle", r: "tío" } ],
           explanation: "daughter = hija, father = padre, wife = esposa, uncle = tío." },
-        { type: "multiple_choice", question: "Your mother's mother is your...", options: ["aunt", "grandmother", "niece"],
-          correctIndex: 1, explanation: "La madre de tu madre es tu grandmother (abuela)." },
+        { type: "multiple_choice", question: "Your mother's mother is your...", options: ["grandmother", "aunt", "niece"],
+          correctIndex: 0, explanation: "La madre de tu madre es tu grandmother (abuela)." },
         { type: "fill_blank", sentence: "My ___ has two children: me and my brother. (mamá)",
           answers: ["mother", "mum", "mom"], hint: "mother / mum.", explanation: "mother (formal) o mum/mom (informal)." },
         { type: "word_order", words: ["This", "is", "my", "sister"], correctOrder: ["This", "is", "my", "sister"],
@@ -95,8 +95,8 @@ window.VESPER_EXPANSION = (function () {
         ]
       },
       exercises: [
-        { type: "multiple_choice", question: "Plural of 'box'?", options: ["boxs", "boxes", "boxies"],
-          correctIndex: 1, explanation: "Tras -x añadimos -es: boxes." },
+        { type: "multiple_choice", question: "Plural of 'box'?", options: ["boxs", "boxies", "boxes"],
+          correctIndex: 2, explanation: "Tras -x añadimos -es: boxes." },
         { type: "fill_blank", sentence: "I see three ___ in the park. (child)", answers: ["children"],
           hint: "Es irregular.", explanation: "child → children (irregular)." },
         { type: "categorize", instruction: "¿El plural lleva -s o -es?", buckets: [
@@ -132,8 +132,8 @@ window.VESPER_EXPANSION = (function () {
           hint: "En preguntas: Is there...?" },
         { type: "true_false", statement: "We say 'There are a problem'.", answer: false,
           explanation: "Singular → 'There is a problem'." },
-        { type: "multiple_choice", question: "Negative: '___ any milk.'", options: ["There isn't", "There aren't", "There not"],
-          correctIndex: 0, explanation: "milk es incontable → there isn't." },
+        { type: "multiple_choice", question: "Negative: '___ any milk.'", options: ["There aren't", "There not", "There isn't"],
+          correctIndex: 2, explanation: "milk es incontable → there isn't." },
         { type: "translate", prompt: "Traduce: \"Hay dos gatos en el jardín.\"",
           answers: ["there are two cats in the garden"], explanation: "There are two cats in the garden." }
       ]
@@ -190,8 +190,8 @@ window.VESPER_EXPANSION = (function () {
           correctIndex: 1, explanation: "Comparativo de adjetivo corto: fast → faster ... than." },
         { type: "fill_blank", sentence: "This is the ___ restaurant in town. (good, superlativo)", answers: ["best"],
           hint: "good es irregular.", explanation: "good → the best." },
-        { type: "multiple_choice", question: "Comparative of 'expensive'?", options: ["expensiver", "more expensive", "most expensive"],
-          correctIndex: 1, explanation: "Adjetivo largo → more expensive." },
+        { type: "multiple_choice", question: "Comparative of 'expensive'?", options: ["more expensive", "most expensive", "expensiver"],
+          correctIndex: 0, explanation: "Adjetivo largo → more expensive." },
         { type: "word_order", words: ["She", "is", "taller", "than", "me"], correctOrder: ["She", "is", "taller", "than", "me"],
           hint: "comparativo + than." },
         { type: "true_false", statement: "The comparative of 'bad' is 'badder'.", answer: false,
@@ -215,8 +215,8 @@ window.VESPER_EXPANSION = (function () {
         ]
       },
       exercises: [
-        { type: "multiple_choice", question: "I ___ going to call her later.", options: ["am", "is", "are"],
-          correctIndex: 0, explanation: "Con 'I' usamos am: I am going to." },
+        { type: "multiple_choice", question: "I ___ going to call her later.", options: ["is", "are", "am"],
+          correctIndex: 2, explanation: "Con 'I' usamos am: I am going to." },
         { type: "fill_blank", sentence: "They ___ going to move to London. (be)", answers: ["are"],
           hint: "they → are.", explanation: "They are going to move." },
         { type: "word_order", words: ["She", "is", "going", "to", "travel"], correctOrder: ["She", "is", "going", "to", "travel"],
@@ -249,10 +249,10 @@ window.VESPER_EXPANSION = (function () {
               correctIndex: 1, explanation: "\"next Saturday... It starts at 7 p.m.\"" },
             { q: "What does Lucy ask Sam to bring?", options: ["Pizza", "Music", "Some drinks"],
               correctIndex: 2, explanation: "\"Can you bring some drinks?\"" },
-            { q: "Where is the party?", options: ["At a restaurant", "At Lucy's house", "At the park"],
-              correctIndex: 1, explanation: "\"a small birthday party... at my house.\"" }
+            { q: "Where is the party?", options: ["At Lucy's house", "At a restaurant", "At the park"],
+              correctIndex: 0, explanation: "\"a small birthday party... at my house.\"" }
           ] },
-        { type: "multiple_choice", question: "How do you accept an invitation?", options: ["I'm afraid I can't.", "I'd love to, thanks!", "Maybe never."],
+        { type: "multiple_choice", question: "How do you accept an invitation?", options: ["I'm afraid I can't come.", "I'd love to, thanks!", "Maybe never."],
           correctIndex: 1, explanation: "\"I'd love to\" acepta con gusto." },
         { type: "fill_blank", sentence: "Let me ___ if you can come. (avisar)", answers: ["know"],
           hint: "Let me know.", explanation: "Let me know = avísame." }
@@ -283,8 +283,8 @@ window.VESPER_EXPANSION = (function () {
           correctOrder: ["The", "book", "was", "written", "by", "her"], hint: "sujeto + was + participio + by + agente." },
         { type: "true_false", statement: "In the passive we use 'by' to introduce who does the action.", answer: true,
           explanation: "Sí: ...was painted BY Picasso." },
-        { type: "multiple_choice", question: "Choose the passive: ...", options: ["Somebody stole my bike.", "My bike was stolen.", "My bike stole."],
-          correctIndex: 1, explanation: "My bike was stolen (be + participio)." },
+        { type: "multiple_choice", question: "Choose the passive: ...", options: ["Somebody stole my bike.", "My bike stole.", "My bike was stolen."],
+          correctIndex: 2, explanation: "My bike was stolen (be + participio)." },
         { type: "translate", prompt: "Traduce: \"Aquí se habla inglés.\"",
           answers: ["english is spoken here"], explanation: "English is spoken here." }
       ]
@@ -307,8 +307,8 @@ window.VESPER_EXPANSION = (function () {
           correctIndex: 1, explanation: "Personas → who." },
         { type: "fill_blank", sentence: "This is the house ___ I grew up. (lugar)", answers: ["where"],
           hint: "lugar → where.", explanation: "...the house where I grew up." },
-        { type: "multiple_choice", question: "The car ___ broke down was new.", options: ["who", "which", "whose"],
-          correctIndex: 1, explanation: "Cosas → which (o that)." },
+        { type: "multiple_choice", question: "The car ___ broke down was new.", options: ["which", "whose", "who"],
+          correctIndex: 0, explanation: "Cosas → which (o that)." },
         { type: "matching", instruction: "Une el relativo con su uso.", pairs: [
           { l: "who", r: "personas" }, { l: "which", r: "cosas" }, { l: "where", r: "lugares" }, { l: "whose", r: "posesión" } ],
           explanation: "who=personas, which=cosas, where=lugares, whose=posesión." },
@@ -338,8 +338,8 @@ window.VESPER_EXPANSION = (function () {
           { t: "a mistake", bucket: "make" }, { t: "the dishes", bucket: "do" }, { t: "money", bucket: "make" }, { t: "exercise", bucket: "do" }, { t: "a decision", bucket: "make" }, { t: "homework", bucket: "do" } ] },
         { type: "fill_blank", sentence: "Can you ___ me a favour? (hacer)", answers: ["do"],
           hint: "do a favour.", explanation: "do someone a favour (colocación fija)." },
-        { type: "multiple_choice", question: "I always ___ my best at work.", options: ["make", "do", "take"],
-          correctIndex: 1, explanation: "do your best (colocación)." },
+        { type: "multiple_choice", question: "I always ___ my best at work.", options: ["make", "take", "do"],
+          correctIndex: 2, explanation: "do your best (colocación)." },
         { type: "true_false", statement: "We say 'make a mistake', not 'do a mistake'.", answer: true,
           explanation: "Correcto: make a mistake." },
         { type: "multiple_choice", question: "They want to ___ progress.", options: ["do", "make", "give"],
@@ -366,10 +366,10 @@ window.VESPER_EXPANSION = (function () {
           questions: [
             { q: "How many nights is the reservation?", options: ["One", "Two", "Three"],
               correctIndex: 1, explanation: "\"for two nights, from 14 to 16 May\"." },
-            { q: "What time can guests check in?", options: ["From 12 p.m.", "From 2 p.m.", "From 6 p.m."],
-              correctIndex: 1, explanation: "\"check-in is from 2 p.m.\"" },
-            { q: "How early must you cancel?", options: ["24 hours", "48 hours", "1 week"],
-              correctIndex: 1, explanation: "\"at least 48 hours in advance\"." }
+            { q: "What time can guests check in?", options: ["From 2 p.m.", "From 12 p.m.", "From 6 p.m."],
+              correctIndex: 0, explanation: "\"check-in is from 2 p.m.\"" },
+            { q: "How early must you cancel?", options: ["24 hours", "1 week", "48 hours"],
+              correctIndex: 2, explanation: "\"at least 48 hours in advance\"." }
           ] },
         { type: "multiple_choice", question: "Which is a formal closing?", options: ["Cheers!", "Kind regards", "See ya"],
           correctIndex: 1, explanation: "'Kind regards' es formal." },
@@ -391,11 +391,11 @@ window.VESPER_EXPANSION = (function () {
       },
       exercises: [
         { type: "listening", text: "My best tip is simple: study a little every day instead of a lot once a week. Short, regular practice works much better for your memory.",
-          question: "What is the main tip?", options: ["Study a lot once a week", "Study a little every day", "Never study"],
-          correctIndex: 1, explanation: "\"study a little every day instead of a lot once a week\"." },
+          question: "What is the main tip?", options: ["Study a little every day", "Never study", "Study a lot once a week"],
+          correctIndex: 0, explanation: "\"study a little every day instead of a lot once a week\"." },
         { type: "listening", text: "Also, watch videos with subtitles in English, not in your language. It helps you connect sounds with words.",
-          question: "Which subtitles does the speaker recommend?", options: ["In your language", "In English", "No subtitles"],
-          correctIndex: 1, explanation: "\"subtitles in English, not in your language\"." },
+          question: "Which subtitles does the speaker recommend?", options: ["No subtitles", "In your language", "In English"],
+          correctIndex: 2, explanation: "\"subtitles in English, not in your language\"." },
         { type: "true_false", statement: "The speaker says you should be afraid of mistakes.", answer: false,
           explanation: "Recomienda lo contrario: practicar sin miedo a equivocarse." },
         { type: "fill_blank", sentence: "Short, regular ___ works better for memory. (práctica)", answers: ["practice", "practise"],
@@ -423,8 +423,8 @@ window.VESPER_EXPANSION = (function () {
           correctIndex: 1, explanation: "present → past: is → was." },
         { type: "fill_blank", sentence: "\"I will help.\" → He said he ___ help. (will → ?)", answers: ["would"],
           hint: "will retrocede a...", explanation: "will → would." },
-        { type: "multiple_choice", question: "\"I can drive.\" → She said she ___ drive.", options: ["can", "could", "will"],
-          correctIndex: 1, explanation: "can → could." },
+        { type: "multiple_choice", question: "\"I can drive.\" → She said she ___ drive.", options: ["could", "can", "will"],
+          correctIndex: 0, explanation: "can → could." },
         { type: "true_false", statement: "In reported speech, tenses usually move one step back.", answer: true,
           explanation: "Sí: el 'backshift' es la regla general." },
         { type: "word_order", words: ["He", "said", "he", "was", "hungry"],
@@ -457,8 +457,8 @@ window.VESPER_EXPANSION = (function () {
           hint: "despite + sustantivo.", explanation: "Despite the rain... (despite + sustantivo, sin 'of')." },
         { type: "true_false", statement: "'Although' and 'despite' are followed by the same structure.", answer: false,
           explanation: "although + oración (sujeto+verbo); despite + sustantivo/-ing." },
-        { type: "multiple_choice", question: "We had no map. ___, we got lost.", options: ["Moreover", "As a result", "For instance"],
-          correctIndex: 1, explanation: "Resultado → As a result." },
+        { type: "multiple_choice", question: "We had no map. ___, we got lost.", options: ["Moreover", "For instance", "As a result"],
+          correctIndex: 2, explanation: "Resultado → As a result." },
         { type: "translate", prompt: "Traduce: \"El plan es arriesgado. Por tanto, necesitamos un plan B.\"",
           answers: ["the plan is risky. therefore, we need a backup", "the plan is risky therefore we need a backup"],
           explanation: "The plan is risky. Therefore, we need a backup." }
@@ -510,12 +510,12 @@ window.VESPER_EXPANSION = (function () {
         { type: "reading", title: "Working from home",
           passage: "Remote work has changed how we live. On the one hand, employees save time and money by not commuting, and many feel more productive at home. On the other hand, some people miss the social contact of an office and find it hard to separate work from personal life.\n\nIn my view, the best solution is a hybrid model: a few days at home and a few in the office. This way, companies keep the benefits of both worlds.",
           questions: [
-            { q: "What is one advantage mentioned?", options: ["More commuting", "Saving time and money", "Less productivity"],
+            { q: "What is one advantage mentioned?", options: ["More commuting", "Saving time and money", "Less productivity at home"],
               correctIndex: 1, explanation: "\"save time and money by not commuting\"." },
-            { q: "What is a disadvantage mentioned?", options: ["Missing social contact", "Higher salaries", "Shorter weeks"],
-              correctIndex: 0, explanation: "\"some people miss the social contact\"." },
-            { q: "What does the writer prefer?", options: ["Only office", "Only home", "A hybrid model"],
-              correctIndex: 2, explanation: "\"the best solution is a hybrid model\"." }
+            { q: "What is a disadvantage mentioned?", options: ["Shorter weeks", "Higher salaries", "Missing social contact"],
+              correctIndex: 2, explanation: "\"some people miss the social contact\"." },
+            { q: "What does the writer prefer?", options: ["A hybrid model", "Only office", "Only home"],
+              correctIndex: 0, explanation: "\"the best solution is a hybrid model\"." }
           ] },
         { type: "multiple_choice", question: "\"The benefits outweigh the costs\" means the benefits are...", options: ["smaller", "greater", "equal"],
           correctIndex: 1, explanation: "outweigh = pesar más / ser mayores." },
@@ -549,8 +549,8 @@ window.VESPER_EXPANSION = (function () {
           hint: "succeed → ...", explanation: "succeed → success." },
         { type: "true_false", statement: "Nominalisation tends to make writing more formal and impersonal.", answer: true,
           explanation: "Sí: es típica del registro académico." },
-        { type: "multiple_choice", question: "Which is the noun form of 'improve'?", options: ["improvement", "improvation", "improval"],
-          correctIndex: 0, explanation: "improve → improvement." },
+        { type: "multiple_choice", question: "Which is the noun form of 'improve'?", options: ["improval", "improvation", "improvement"],
+          correctIndex: 2, explanation: "improve → improvement." },
         { type: "translate", prompt: "Nominaliza: \"Redujeron los costes.\" → \"La reducción de costes...\"",
           answers: ["the reduction of costs", "the reduction in costs"],
           explanation: "The reduction of/in costs." }
@@ -603,12 +603,12 @@ window.VESPER_EXPANSION = (function () {
         { type: "reading", title: "The limits of multitasking",
           passage: "Many people believe they can do several tasks at once, yet research tends to suggest otherwise. What we call 'multitasking' is often rapid switching between tasks, and each switch carries a small cost in time and accuracy. The effect may seem trivial, but across a working day these costs accumulate.\n\nThis does not mean multitasking is always harmful. For simple, automatic activities, the cost is negligible. The problem arises mainly with tasks that demand sustained attention.",
           questions: [
-            { q: "What does the writer say 'multitasking' usually is?", options: ["Doing tasks truly at once", "Rapid switching between tasks", "Avoiding tasks"],
+            { q: "What does the writer say 'multitasking' usually is?", options: ["Doing several tasks truly at the same time", "Rapid switching between tasks", "Avoiding tasks"],
               correctIndex: 1, explanation: "\"often rapid switching between tasks\"." },
-            { q: "When is the cost negligible?", options: ["For simple, automatic activities", "For complex tasks", "Never"],
-              correctIndex: 0, explanation: "\"For simple, automatic activities, the cost is negligible.\"" },
-            { q: "What is the writer's overall tone?", options: ["Absolutely certain", "Cautious and balanced", "Dismissive"],
-              correctIndex: 1, explanation: "Usa 'tends to', 'may' → tono cauto y matizado." }
+            { q: "When is the cost negligible?", options: ["For complex tasks", "Never", "For simple, automatic activities"],
+              correctIndex: 2, explanation: "\"For simple, automatic activities, the cost is negligible.\"" },
+            { q: "What is the writer's overall tone?", options: ["Cautious and balanced", "Dismissive", "Absolutely certain"],
+              correctIndex: 0, explanation: "Usa 'tends to', 'may' → tono cauto y matizado." }
           ] },
         { type: "multiple_choice", question: "\"Costs accumulate\" means they...", options: ["disappear", "add up over time", "stay the same"],
           correctIndex: 1, explanation: "accumulate = acumularse, sumarse." },
@@ -642,8 +642,8 @@ window.VESPER_EXPANSION = (function () {
           hint: "on the same ...", explanation: "on the same page = de acuerdo." },
         { type: "true_false", statement: "'The ball is in your court' means it's your turn to act.", answer: true,
           explanation: "Sí: te toca a ti decidir/actuar." },
-        { type: "multiple_choice", question: "'To bite the bullet' means to...", options: ["give up", "face something difficult", "eat quickly"],
-          correctIndex: 1, explanation: "Afrontar algo difícil o desagradable." },
+        { type: "multiple_choice", question: "'To bite the bullet' means to...", options: ["eat quickly", "give up", "face something difficult"],
+          correctIndex: 2, explanation: "Afrontar algo difícil o desagradable." },
         { type: "translate", prompt: "Traduce: \"Ahora te toca a ti decidir.\"",
           answers: ["the ball is in your court now", "the ball is in your court"],
           explanation: "The ball is in your court (now)." }
@@ -663,8 +663,8 @@ window.VESPER_EXPANSION = (function () {
         ]
       },
       exercises: [
-        { type: "multiple_choice", question: "Which sentence is more cautious (hedged)?", options: ["This proves the theory.", "This may support the theory.", "This is the theory."],
-          correctIndex: 1, explanation: "'may support' matiza; evita afirmar con rotundidad." },
+        { type: "multiple_choice", question: "Which sentence is more cautious (hedged)?", options: ["This may support the theory.", "This proves the theory.", "This is the theory."],
+          correctIndex: 0, explanation: "'may support' matiza; evita afirmar con rotundidad." },
         { type: "categorize", instruction: "¿Matizado (hedged) o categórico?", buckets: [
           { id: "h", label: "Matizado" }, { id: "c", label: "Categórico" } ], items: [
           { t: "It seems that...", bucket: "h" }, { t: "It is certain that...", bucket: "c" }, { t: "tends to...", bucket: "h" }, { t: "always proves...", bucket: "c" } ] },
@@ -695,14 +695,14 @@ window.VESPER_EXPANSION = (function () {
         { type: "reading", title: "A smarter world?",
           passage: "Our devices promise to make life simpler. We can order dinner, summon a car and answer a hundred messages without leaving the sofa. And yet, have we ever felt busier? Each tool that 'saves' time seems to fill the space it creates with new demands.\n\nNone of this is an argument against technology. It is, rather, an invitation to ask a harder question: not what our tools can do for us, but what we want them to do.",
           questions: [
-            { q: "What is the purpose of the question 'have we ever felt busier?'", options: ["To request information", "To make the reader reflect (rhetorical)", "To start a survey"],
-              correctIndex: 1, explanation: "Es una pregunta retórica para provocar reflexión." },
-            { q: "What is the writer's stance on technology?", options: ["Strongly against it", "Not against it, but questioning how we use it", "Indifferent"],
-              correctIndex: 1, explanation: "\"None of this is an argument against technology... an invitation to ask a harder question\"." },
+            { q: "What is the purpose of the question 'have we ever felt busier?'", options: ["To request information", "To start a survey", "To make the reader reflect (rhetorical)"],
+              correctIndex: 2, explanation: "Es una pregunta retórica para provocar reflexión." },
+            { q: "What is the writer's stance on technology?", options: ["Not against it, but questioning how we use it", "Strongly against it", "Indifferent"],
+              correctIndex: 0, explanation: "\"None of this is an argument against technology... an invitation to ask a harder question\"." },
             { q: "The phrase 'tools that save time' uses quotation marks to...", options: ["quote an expert", "signal irony/doubt about 'save'", "mark a title"],
               correctIndex: 1, explanation: "Las comillas marcan ironía/duda sobre el verbo 'save'." }
           ] },
-        { type: "multiple_choice", question: "A 'rhetorical question' is asked mainly to...", options: ["get a factual answer", "create an effect or make a point", "test memory"],
+        { type: "multiple_choice", question: "A 'rhetorical question' is asked mainly to...", options: ["get a precise, factual answer from the listener", "create an effect or make a point", "test memory"],
           correctIndex: 1, explanation: "Busca efecto/persuasión, no una respuesta literal." },
         { type: "fill_blank", sentence: "The writer's tone is gently ___. (crítico)", answers: ["critical"],
           hint: "critical.", explanation: "El tono es sutilmente crítico." }
@@ -725,8 +725,8 @@ window.VESPER_EXPANSION = (function () {
         ]
       },
       exercises: [
-        { type: "multiple_choice", question: "Polite request in an email:", options: ["Send me the file now.", "Could you please send me the file?", "I want the file."],
-          correctIndex: 1, explanation: "'Could you please...?' es cortés y profesional." },
+        { type: "multiple_choice", question: "Polite request in an email:", options: ["Send me the file now.", "I want the file.", "Could you please send me the file?"],
+          correctIndex: 2, explanation: "'Could you please...?' es cortés y profesional." },
         { type: "fill_blank", sentence: "Please find ___ the report. (adjunto)", answers: ["attached"],
           hint: "find attached.", explanation: "Please find attached = adjunto encontrará." },
         { type: "categorize", instruction: "¿Apertura o cierre de email?", buckets: [
@@ -734,8 +734,8 @@ window.VESPER_EXPANSION = (function () {
           { t: "I hope you're well", bucket: "o" }, { t: "Best regards", bucket: "c" }, { t: "I'm writing about", bucket: "o" }, { t: "Looking forward to your reply", bucket: "c" } ] },
         { type: "true_false", statement: "Long, vague emails are best in business.", answer: false,
           explanation: "No: lo mejor es claro y breve." },
-        { type: "multiple_choice", question: "Best subject line for a meeting request?", options: ["Hello", "Meeting request: Friday 10 a.m.", "Important!!!"],
-          correctIndex: 1, explanation: "Específico y claro: tema + cuándo." },
+        { type: "multiple_choice", question: "Best subject line for a meeting request?", options: ["Meeting request: Friday 10 a.m.", "Important!!!", "Hello"],
+          correctIndex: 0, explanation: "Específico y claro: tema + cuándo." },
         { type: "translate", prompt: "Traduce: \"Escribo para dar seguimiento a nuestra reunión.\"",
           answers: ["i'm writing to follow up on our meeting", "i am writing to follow up on our meeting"],
           explanation: "I'm writing to follow up on our meeting." }
@@ -764,8 +764,8 @@ window.VESPER_EXPANSION = (function () {
           hint: "speak to.", explanation: "Could I speak to...?" },
         { type: "true_false", statement: "'I'll put you through' means you will transfer the call.", answer: true,
           explanation: "Sí: pasar/transferir la llamada." },
-        { type: "multiple_choice", question: "The line is busy. You say:", options: ["The line is engaged, can you call back?", "Go away.", "I don't know."],
-          correctIndex: 0, explanation: "'engaged/busy' = ocupada; ofreces volver a llamar." },
+        { type: "multiple_choice", question: "The line is busy. You say:", options: ["I don't know.", "Go away.", "The line is engaged, can you call back?"],
+          correctIndex: 2, explanation: "'engaged/busy' = ocupada; ofreces volver a llamar." },
         { type: "translate", prompt: "Traduce: \"¿Podría hablar con el Sr. Lee, por favor?\"",
           answers: ["could i speak to mr lee, please", "could i speak to mr lee please"],
           explanation: "Could I speak to Mr Lee, please?" }
@@ -785,8 +785,8 @@ window.VESPER_EXPANSION = (function () {
         ]
       },
       exercises: [
-        { type: "multiple_choice", question: "Polite way to disagree:", options: ["You're wrong.", "I see your point, but...", "No way."],
-          correctIndex: 1, explanation: "'I see your point, but...' discrepa con tacto." },
+        { type: "multiple_choice", question: "Polite way to disagree:", options: ["I see your point, but...", "No way.", "You're wrong."],
+          correctIndex: 0, explanation: "'I see your point, but...' discrepa con tacto." },
         { type: "categorize", instruction: "¿De acuerdo o en desacuerdo?", buckets: [
           { id: "a", label: "De acuerdo" }, { id: "d", label: "En desacuerdo" } ], items: [
           { t: "Absolutely.", bucket: "a" }, { t: "I'm not so sure about that.", bucket: "d" }, { t: "Good point.", bucket: "a" }, { t: "I'm afraid I disagree.", bucket: "d" } ] },
@@ -794,8 +794,8 @@ window.VESPER_EXPANSION = (function () {
           hint: "move on.", explanation: "move on to = pasar a." },
         { type: "true_false", statement: "'Sorry to interrupt, but...' is a polite way to break in.", answer: true,
           explanation: "Sí: interrumpe educadamente." },
-        { type: "multiple_choice", question: "To suggest an idea you can say:", options: ["Why don't we try X?", "Do it.", "It's impossible."],
-          correctIndex: 0, explanation: "'Why don't we...?' propone con suavidad." },
+        { type: "multiple_choice", question: "To suggest an idea you can say:", options: ["It's impossible.", "Do it.", "Why don't we try X?"],
+          correctIndex: 2, explanation: "'Why don't we...?' propone con suavidad." },
         { type: "translate", prompt: "Traduce: \"¿Pasamos al siguiente punto?\"",
           answers: ["shall we move on to the next item", "shall we move on to the next point"],
           explanation: "Shall we move on to the next item?" }
@@ -818,8 +818,8 @@ window.VESPER_EXPANSION = (function () {
         { type: "matching", instruction: "Une la frase con su momento.", pairs: [
           { l: "Today I'll talk about", r: "introducción" }, { l: "Let's move on to", r: "transición" }, { l: "The key point is", r: "énfasis" }, { l: "To sum up", r: "conclusión" } ],
           explanation: "Frases de 'signposting' por fase." },
-        { type: "multiple_choice", question: "Which phrase closes a presentation?", options: ["To sum up,", "First of all,", "By the way,"],
-          correctIndex: 0, explanation: "'To sum up' resume y cierra." },
+        { type: "multiple_choice", question: "Which phrase closes a presentation?", options: ["First of all,", "To sum up,", "By the way,"],
+          correctIndex: 1, explanation: "'To sum up' resume y cierra." },
         { type: "fill_blank", sentence: "As you can ___ on this slide, sales rose. (ver)", answers: ["see"],
           hint: "As you can see.", explanation: "As you can see = como pueden ver." },
         { type: "true_false", statement: "Signposting helps the audience follow your structure.", answer: true,

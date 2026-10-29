@@ -69,7 +69,7 @@ window.VESPER_EXPANSION3 = (function () {
           { l: "head", r: "cabeza" }, { l: "hand", r: "mano" },
           { l: "eye", r: "ojo" }, { l: "foot", r: "pie" },
           { l: "mouth", r: "boca" }, { l: "ear", r: "oreja" } ] },
-        { type: "multiple_choice", question: "You see with your...", options: ["ears", "eyes", "feet"], correctIndex: 1, explanation: "Ves con los ojos (eyes)." },
+        { type: "multiple_choice", question: "You see with your...", options: ["eyes", "feet", "ears"], correctIndex: 0, explanation: "Ves con los ojos (eyes)." },
         { type: "fill_blank", sentence: "I walk with my two ___.", answers: ["feet", "legs"], hint: "Plural irregular de 'foot'.", explanation: "feet = pies (plural de foot)." },
         { type: "true_false", statement: "We hear with our ears.", answer: true, explanation: "Oímos con las orejas/oídos (ears)." },
         { type: "word_order", words: ["She", "has", "long", "hair"], correctOrder: ["She", "has", "long", "hair"], hint: "Sujeto + has + adjetivo + sustantivo." }
@@ -88,7 +88,7 @@ window.VESPER_EXPANSION3 = (function () {
         ]
       },
       exercises: [
-        { type: "multiple_choice", question: "Choose: \"___ a cat in the garden.\"", options: ["There is", "There are", "There be"], correctIndex: 0, explanation: "'a cat' es singular -> there is." },
+        { type: "multiple_choice", question: "Choose: \"___ a cat in the garden.\"", options: ["There are", "There be", "There is"], correctIndex: 2, explanation: "'a cat' es singular -> there is." },
         { type: "multiple_choice", question: "Choose: \"___ many people at the party.\"", options: ["There is", "There are", "There has"], correctIndex: 1, explanation: "'many people' es plural -> there are." },
         { type: "find_error", question: "Encuentra el error.",
           segments: ["There ", { u: "is" }, " four ", { u: "apples" }, " ", { u: "on" }, " the ", { u: "table" }, "."],
@@ -111,7 +111,7 @@ window.VESPER_EXPANSION3 = (function () {
         ]
       },
       exercises: [
-        { type: "multiple_choice", question: "Choose the correct sentence.", options: ["He can plays the guitar.", "He can play the guitar.", "He cans play the guitar."], correctIndex: 1, explanation: "Tras 'can' va el infinitivo sin 's' ni 'to': can play." },
+        { type: "multiple_choice", question: "Choose the correct sentence.", options: ["He can play the guitar.", "He can plays the guitar.", "He cans play the guitar."], correctIndex: 0, explanation: "Tras 'can' va el infinitivo sin 's' ni 'to': can play." },
         { type: "find_error", question: "Encuentra el error.",
           segments: ["My sister ", { u: "can" }, " ", { u: "to" }, " ", { u: "speak" }, " three ", { u: "languages" }, "."],
           correctIndex: 1, correction: "(quita 'to') can speak",
@@ -139,7 +139,7 @@ window.VESPER_EXPANSION3 = (function () {
           questions: [
             { q: "What is Tom's job?", options: ["a teacher", "a baker", "a driver"], correctIndex: 1, explanation: "\"Tom is a baker.\"" },
             { q: "How does Tom go to work?", options: ["by bus", "by car", "by bike"], correctIndex: 2, explanation: "\"...he goes to work by bike.\"" },
-            { q: "What time does Tom finish work?", options: ["at five o'clock", "at one o'clock", "in the afternoon"], correctIndex: 1, explanation: "\"He finishes work at one o'clock.\"" }
+            { q: "What time does Tom finish work?", options: ["at one o'clock", "at five o'clock", "in the afternoon"], correctIndex: 0, explanation: "\"He finishes work at one o'clock.\"" }
           ] },
         { type: "true_false", statement: "Tom drinks tea in the morning.", answer: false, explanation: "Bebe café (coffee), no té." },
         { type: "fill_blank", sentence: "Tom makes bread and ___ at the bakery.", answers: ["cakes"], hint: "Algo dulce.", explanation: "\"...makes bread and cakes.\"" },
@@ -163,9 +163,9 @@ window.VESPER_EXPANSION3 = (function () {
         { type: "listening", text: "Hello, my name is Sarah.", question: "¿Qué escuchaste?",
           options: ["Hello, my name is Sarah.", "Yellow, my name is Sarah.", "Hello, my game is Sarah."], correctIndex: 0, explanation: "Hello, my name is Sarah." },
         { type: "listening", text: "Nice to meet you.", question: "¿Qué escuchaste?",
-          options: ["Nice to meet you.", "Nice to eat you.", "Nice to see you."], correctIndex: 0, explanation: "Nice to meet you = Encantado de conocerte." },
+          options: ["Nice to eat you.", "Nice to meet you.", "Nice to see you."], correctIndex: 1, explanation: "Nice to meet you = Encantado de conocerte." },
         { type: "listening", text: "Where are you from?", question: "Escribe lo que escuchaste:", answers: ["where are you from", "where are you from?"], explanation: "Where are you from?" },
-        { type: "multiple_choice", question: "Someone says \"Nice to meet you.\" A good reply is...", options: ["Nice to meet you too.", "You are welcome.", "See you yesterday."], correctIndex: 0, explanation: "Se responde 'Nice to meet you too.'" },
+        { type: "multiple_choice", question: "Someone says \"Nice to meet you.\" A good reply is...", options: ["See you yesterday, my friend.", "You are welcome.", "Nice to meet you too."], correctIndex: 2, explanation: "Se responde 'Nice to meet you too.'" },
         { type: "fill_blank", sentence: "\"How are you?\" — \"I'm ___, thanks.\"", answers: ["fine", "good", "ok", "okay"], hint: "Respuesta positiva.", explanation: "I'm fine, thanks." }
       ]
     },
@@ -242,7 +242,7 @@ window.VESPER_EXPANSION3 = (function () {
           { id: "h", label: "Hot/Warm" }, { id: "c", label: "Cold" } ], items: [
           { t: "summer", bucket: "h" }, { t: "winter", bucket: "c" },
           { t: "beach", bucket: "h" }, { t: "snow", bucket: "c" } ] },
-        { type: "multiple_choice", question: "Choose: \"It ___ a lot in spring.\"", options: ["rain", "rains", "raining"], correctIndex: 1, explanation: "Presente simple con 'it': it rains." },
+        { type: "multiple_choice", question: "Choose: \"It ___ a lot in spring.\"", options: ["rains", "rain", "raining"], correctIndex: 0, explanation: "Presente simple con 'it': it rains." },
         { type: "fill_blank", sentence: "Take an umbrella, it's ___ today.", answers: ["raining", "rainy"], hint: "Llueve.", explanation: "It's raining = está lloviendo." },
         { type: "true_false", statement: "We say \"It's snow today.\"", answer: false, explanation: "Correcto: 'It's snowing' o 'It's snowy'." }
       ]
@@ -259,7 +259,7 @@ window.VESPER_EXPANSION3 = (function () {
         ]
       },
       exercises: [
-        { type: "multiple_choice", question: "Choose: \"She ___ going to study tonight.\"", options: ["am", "is", "are"], correctIndex: 1, explanation: "Con 'she' usamos 'is going to'." },
+        { type: "multiple_choice", question: "Choose: \"She ___ going to study tonight.\"", options: ["is", "am", "are"], correctIndex: 0, explanation: "Con 'she' usamos 'is going to'." },
         { type: "find_error", question: "Encuentra el error.",
           segments: ["We ", { u: "is" }, " going to ", { u: "watch" }, " a ", { u: "film" }, " ", { u: "tonight" }, "."],
           correctIndex: 0, correction: "are (we -> are)",
@@ -283,7 +283,7 @@ window.VESPER_EXPANSION3 = (function () {
       },
       exercises: [
         { type: "multiple_choice", question: "Choose the correct order.", options: ["I go always to the gym.", "I always go to the gym.", "Always I go to the gym."], correctIndex: 1, explanation: "El adverbio va antes del verbo principal: I always go." },
-        { type: "multiple_choice", question: "Choose: \"She ___ tired after work.\"", options: ["often is", "is often", "is oftens"], correctIndex: 1, explanation: "Con 'be' el adverbio va después: is often." },
+        { type: "multiple_choice", question: "Choose: \"She ___ tired after work.\"", options: ["is oftens", "often is", "is often"], correctIndex: 2, explanation: "Con 'be' el adverbio va después: is often." },
         { type: "find_error", question: "Encuentra el error.",
           segments: ["They ", { u: "watch" }, " ", { u: "never" }, " ", { u: "TV" }, " in the ", { u: "morning" }, "."],
           correctIndex: 1, correction: "never watch (adverbio antes del verbo)",
@@ -310,7 +310,7 @@ window.VESPER_EXPANSION3 = (function () {
         { type: "reading", title: "Saturday market",
           passage: "Every Saturday, Maria goes to the market in her town. She likes the market because the food is fresh and cheap. This morning she buys a kilo of tomatoes, some oranges and a loaf of bread. The tomatoes cost two euros and the oranges cost three euros. Maria pays the seller and puts everything in her bag. Then she walks home and makes a big salad for lunch.",
           questions: [
-            { q: "When does Maria go to the market?", options: ["every Sunday", "every Saturday", "every morning"], correctIndex: 1, explanation: "\"Every Saturday, Maria goes to the market...\"" },
+            { q: "When does Maria go to the market?", options: ["every Sunday", "every morning", "every Saturday"], correctIndex: 2, explanation: "\"Every Saturday, Maria goes to the market...\"" },
             { q: "Why does she like the market?", options: ["it is near her house", "the food is fresh and cheap", "her friends are there"], correctIndex: 1, explanation: "\"...the food is fresh and cheap.\"" },
             { q: "How much do the tomatoes cost?", options: ["two euros", "three euros", "five euros"], correctIndex: 0, explanation: "\"The tomatoes cost two euros...\"" }
           ] },
@@ -336,7 +336,7 @@ window.VESPER_EXPANSION3 = (function () {
         { type: "listening", text: "Go straight and turn left.", question: "¿Qué escuchaste?",
           options: ["Go straight and turn left.", "Go straight and turn right.", "Go back and turn left."], correctIndex: 0, explanation: "Go straight and turn left." },
         { type: "listening", text: "The station is next to the park.", question: "¿Qué escuchaste?",
-          options: ["The station is next to the park.", "The station is opposite the park.", "The station is near the bank."], correctIndex: 0, explanation: "next to = al lado de." },
+          options: ["The station is near the bank.", "The station is opposite the park.", "The station is next to the park."], correctIndex: 2, explanation: "next to = al lado de." },
         { type: "listening", text: "Excuse me, where is the bank?", question: "Escribe lo que escuchaste:", answers: ["excuse me where is the bank", "excuse me, where is the bank?"], explanation: "Excuse me, where is the bank?" },
         { type: "matching", instruction: "Une la instrucción con su traducción.", pairs: [
           { l: "turn right", r: "gira a la derecha" }, { l: "go straight", r: "sigue recto" },
@@ -386,7 +386,7 @@ window.VESPER_EXPANSION3 = (function () {
           { l: "headache", r: "dolor de cabeza" }, { l: "cough", r: "tos" },
           { l: "fever", r: "fiebre" }, { l: "sore throat", r: "dolor de garganta" },
           { l: "sneeze", r: "estornudar" }, { l: "rest", r: "descansar" } ] },
-        { type: "multiple_choice", question: "Best advice for a cold:", options: ["You should rest and drink fluids.", "You should run a marathon.", "You should not sleep."], correctIndex: 0, explanation: "'should' da un consejo razonable." },
+        { type: "multiple_choice", question: "Best advice for a cold:", options: ["You should not sleep.", "You should run a marathon.", "You should rest and drink fluids."], correctIndex: 2, explanation: "'should' da un consejo razonable." },
         { type: "categorize", instruction: "¿Hábito saludable o no saludable?", buckets: [
           { id: "h", label: "Healthy" }, { id: "u", label: "Unhealthy" } ], items: [
           { t: "exercise", bucket: "h" }, { t: "smoking", bucket: "u" },
@@ -456,13 +456,13 @@ window.VESPER_EXPANSION3 = (function () {
         ]
       },
       exercises: [
-        { type: "multiple_choice", question: "Choose the passive: \"The house ___ in 1990.\"", options: ["built", "was built", "is build"], correctIndex: 1, explanation: "Pasiva en pasado: was + participio (built)." },
+        { type: "multiple_choice", question: "Choose the passive: \"The house ___ in 1990.\"", options: ["was built", "built", "is build"], correctIndex: 0, explanation: "Pasiva en pasado: was + participio (built)." },
         { type: "find_error", question: "Encuentra el error.",
           segments: ["The ", { u: "windows" }, " ", { u: "are" }, " ", { u: "cleaned" }, " ", { u: "by" }, " a robot."],
           correctIndex: 3, correction: "(correcto) — el error sería 'cleaning'",
           explanation: "En realidad la frase es correcta: 'are cleaned by a robot' es pasiva válida." },
         { type: "fill_blank", sentence: "This book ___ (write) by a famous author.", answers: ["was written"], hint: "Pasiva en pasado.", explanation: "was written = fue escrito." },
-        { type: "multiple_choice", question: "Make passive: \"People speak English here.\"", options: ["English speaks here.", "English is spoken here.", "English is speak here."], correctIndex: 1, explanation: "is + participio (spoken)." },
+        { type: "multiple_choice", question: "Make passive: \"People speak English here.\"", options: ["English is speak here.", "English speaks here.", "English is spoken here."], correctIndex: 2, explanation: "is + participio (spoken)." },
         { type: "translate", prompt: "Traduce: \"El coche fue reparado ayer.\"", answers: ["the car was repaired yesterday", "the car was fixed yesterday"], explanation: "The car was repaired yesterday." },
         { type: "true_false", statement: "In the passive, the agent can be added with \"by\".", answer: true, explanation: "Sí: '...by Ana', '...by a robot'." }
       ]
@@ -483,8 +483,8 @@ window.VESPER_EXPANSION3 = (function () {
           passage: "Many people think that protecting the environment is the job of governments and big companies. While these have an important role, our daily choices also matter. Small actions, repeated by millions of people, can have a big effect.\n\nFor example, using a reusable bottle instead of buying plastic ones saves hundreds of bottles a year. Turning off lights, taking shorter showers and cycling instead of driving all reduce the energy we use. None of these actions is difficult, but together they make a real difference.",
           questions: [
             { q: "What is the main idea of the text?", options: ["Only governments can protect the environment.", "Individual daily choices can also make a real difference.", "Plastic bottles are cheap and useful."], correctIndex: 1, explanation: "El texto defiende que las decisiones diarias importan." },
-            { q: "What example does the text give to save plastic?", options: ["cycling to work", "using a reusable bottle", "turning off lights"], correctIndex: 1, explanation: "\"...using a reusable bottle instead of buying plastic ones...\"" },
-            { q: "In the text, \"reduce\" means...", options: ["to make smaller / use less", "to throw away", "to sell"], correctIndex: 0, explanation: "reduce = reducir, usar menos." },
+            { q: "What example does the text give to save plastic?", options: ["using a reusable bottle", "cycling to work", "turning off lights"], correctIndex: 0, explanation: "\"...using a reusable bottle instead of buying plastic ones...\"" },
+            { q: "In the text, \"reduce\" means...", options: ["to throw away", "to sell", "to make smaller / use less"], correctIndex: 2, explanation: "reduce = reducir, usar menos." },
             { q: "What can be inferred?", options: ["The author thinks personal effort is useless.", "The author believes small actions add up.", "The author wants to ban all cars."], correctIndex: 1, explanation: "\"...together they make a real difference.\"" }
           ] },
         { type: "matching", instruction: "Une la palabra con su traducción.", pairs: [
@@ -508,12 +508,12 @@ window.VESPER_EXPANSION3 = (function () {
         { type: "listening", text: "Why do you want this job?", question: "¿Qué escuchaste?",
           options: ["Why do you want this job?", "Where do you want this job?", "Why do you want this dog?"], correctIndex: 0, explanation: "Why do you want this job?" },
         { type: "listening", text: "I have three years of experience.", question: "¿Qué escuchaste?",
-          options: ["I have three years of experience.", "I have free years of experience.", "I have three years of experiments."], correctIndex: 0, explanation: "experience = experiencia." },
+          options: ["I have free years of experience.", "I have three years of experiments.", "I have three years of experience."], correctIndex: 2, explanation: "experience = experiencia." },
         { type: "listening", text: "Can you tell me about yourself?", question: "Escribe lo que escuchaste:", answers: ["can you tell me about yourself", "can you tell me about yourself?"], explanation: "Can you tell me about yourself?" },
         { type: "matching", instruction: "Une el término con su traducción.", pairs: [
           { l: "strengths", r: "fortalezas" }, { l: "weakness", r: "debilidad" },
           { l: "experience", r: "experiencia" }, { l: "skills", r: "habilidades" } ] },
-        { type: "multiple_choice", question: "Good answer to \"What are your strengths?\"", options: ["I am hardworking and organised.", "I don't know, maybe nothing.", "I am always late."], correctIndex: 0, explanation: "Destaca cualidades positivas." }
+        { type: "multiple_choice", question: "Good answer to \"What are your strengths?\"", options: ["I am always late.", "I am hardworking and organised.", "I don't know, maybe nothing."], correctIndex: 1, explanation: "Destaca cualidades positivas." }
       ]
     },
 
@@ -589,7 +589,7 @@ window.VESPER_EXPANSION3 = (function () {
           { id: "r", label: "Reliable" }, { id: "u", label: "Unreliable" } ], items: [
           { t: "verified source", bucket: "r" }, { t: "rumour", bucket: "u" },
           { t: "fact-checked", bucket: "r" }, { t: "clickbait", bucket: "u" } ] },
-        { type: "multiple_choice", question: "'Bias' in the news means...", options: ["a balanced view", "an unfair preference for one side", "breaking news"], correctIndex: 1, explanation: "bias = sesgo, parcialidad." },
+        { type: "multiple_choice", question: "'Bias' in the news means...", options: ["a balanced view", "breaking news", "an unfair preference for one side"], correctIndex: 2, explanation: "bias = sesgo, parcialidad." },
         { type: "fill_blank", sentence: "Before sharing news, you should check the ___.", answers: ["source", "sources", "facts"], hint: "De dónde viene la información.", explanation: "source = fuente." },
         { type: "true_false", statement: "'Misinformation' means false or inaccurate information.", answer: true, explanation: "misinformation = información falsa o inexacta." }
       ]
@@ -607,7 +607,7 @@ window.VESPER_EXPANSION3 = (function () {
       },
       exercises: [
         { type: "multiple_choice", question: "Report: \"I am busy.\" → She said she ___ busy.", options: ["is", "was", "will be"], correctIndex: 1, explanation: "present → past: is → was." },
-        { type: "multiple_choice", question: "Report: \"I will help.\" → He said he ___ help.", options: ["will", "would", "won't"], correctIndex: 1, explanation: "will → would." },
+        { type: "multiple_choice", question: "Report: \"I will help.\" → He said he ___ help.", options: ["won't", "will", "would"], correctIndex: 2, explanation: "will → would." },
         { type: "find_error", question: "Encuentra el error.",
           segments: ["She ", { u: "said" }, " ", { u: "me" }, " that she ", { u: "was" }, " ", { u: "leaving" }, "."],
           correctIndex: 1, correction: "told me / said to me",
@@ -656,9 +656,9 @@ window.VESPER_EXPANSION3 = (function () {
           passage: "Over the last few years, remote work has moved from being a rare privilege to a common arrangement. For many employees, the benefits are clear: no daily commute, more flexible hours and, often, a better work-life balance.\n\nHowever, remote work is something of a double-edged sword. Some workers report feeling isolated from their colleagues, and the line between professional and personal life can become blurred. Companies, meanwhile, worry about maintaining a strong team culture when staff rarely meet in person. The challenge for the future is not whether remote work will continue, but how to keep its advantages while reducing its drawbacks.",
           questions: [
             { q: "What is the main purpose of the text?", options: ["to argue that remote work should be banned", "to present both the benefits and the drawbacks of remote work", "to explain how to set up a home office"], correctIndex: 1, explanation: "Presenta ventajas y desventajas de forma equilibrada." },
-            { q: "In the text, \"a double-edged sword\" suggests that remote work...", options: ["is completely positive", "has both good and bad sides", "is very dangerous"], correctIndex: 1, explanation: "Idiom: tiene ventajas e inconvenientes." },
-            { q: "What worries companies according to the text?", options: ["the cost of office rent", "maintaining a strong team culture", "the price of computers"], correctIndex: 1, explanation: "\"...maintaining a strong team culture...\"" },
-            { q: "What does the author suggest about the future?", options: ["Remote work will probably disappear.", "The question is how to keep the benefits and reduce the problems.", "Everyone will return to the office full time."], correctIndex: 1, explanation: "\"...how to keep its advantages while reducing its drawbacks.\"" }
+            { q: "In the text, \"a double-edged sword\" suggests that remote work...", options: ["has both good and bad sides", "is very dangerous", "is completely positive"], correctIndex: 0, explanation: "Idiom: tiene ventajas e inconvenientes." },
+            { q: "What worries companies according to the text?", options: ["the price of computers", "the cost of office rent", "maintaining a strong team culture"], correctIndex: 2, explanation: "\"...maintaining a strong team culture...\"" },
+            { q: "What does the author suggest about the future?", options: ["The question is how to keep the benefits and reduce the problems.", "Remote work will probably disappear.", "Everyone will return to the office full time."], correctIndex: 0, explanation: "\"...how to keep its advantages while reducing its drawbacks.\"" }
           ] },
         { type: "matching", instruction: "Une la expresión con su traducción.", pairs: [
           { l: "commute", r: "desplazamiento al trabajo" }, { l: "drawback", r: "inconveniente" },
@@ -710,7 +710,7 @@ window.VESPER_EXPANSION3 = (function () {
           { l: "to highlight", r: "destacar" }, { l: "implication", r: "implicación" },
           { l: "to illustrate", r: "ilustrar" }, { l: "framework", r: "marco" },
           { l: "criteria", r: "criterios" }, { l: "to assess", r: "evaluar" } ] },
-        { type: "multiple_choice", question: "Choose the more formal verb for \"to show\".", options: ["demonstrate", "do", "get"], correctIndex: 0, explanation: "demonstrate eleva el registro frente a 'show'." },
+        { type: "multiple_choice", question: "Choose the more formal verb for \"to show\".", options: ["do", "get", "demonstrate"], correctIndex: 2, explanation: "demonstrate eleva el registro frente a 'show'." },
         { type: "multiple_choice", question: "What is the singular of \"criteria\"?", options: ["criterias", "criterion", "criteri"], correctIndex: 1, explanation: "criterion (sing.) → criteria (pl.)." },
         { type: "fill_blank", sentence: "The findings ___ a significant change in behaviour.", answers: ["highlight", "demonstrate", "reveal", "suggest"], hint: "Verbo académico para 'mostrar/indicar'.", explanation: "highlight/demonstrate/reveal son apropiados." },
         { type: "translate", prompt: "Traduce: \"Estos resultados tienen implicaciones importantes.\"", answers: ["these results have important implications", "these findings have important implications"], explanation: "These results have important implications." }
@@ -800,8 +800,8 @@ window.VESPER_EXPANSION3 = (function () {
           passage: "Debate about artificial intelligence often falls into two extremes: utopian promises that machines will solve all our problems, and dystopian fears that they will make human work obsolete. A more nuanced view, however, is gaining ground among researchers.\n\nAccording to this perspective, the most promising applications of AI are those that augment human capabilities rather than replace them. A doctor assisted by an algorithm that flags unusual scans, for instance, may reach more accurate diagnoses than either the doctor or the machine working alone. The key, advocates argue, lies not in automation for its own sake, but in thoughtful collaboration between human judgement and computational power.",
           questions: [
             { q: "What is the main argument of the text?", options: ["AI will inevitably replace human workers.", "AI is most valuable when it augments, rather than replaces, human abilities.", "AI is too dangerous to use at work."], correctIndex: 1, explanation: "La tesis es que la IA debe complementar al ser humano." },
-            { q: "The phrase \"a more nuanced view\" contrasts with...", options: ["the two extreme positions mentioned before", "the opinion of doctors", "the use of algorithms"], correctIndex: 0, explanation: "Se opone a los dos extremos (utópico y distópico)." },
-            { q: "In the text, \"augment\" most nearly means...", options: ["to replace completely", "to enhance or add to", "to ignore"], correctIndex: 1, explanation: "augment = mejorar, ampliar." },
+            { q: "The phrase \"a more nuanced view\" contrasts with...", options: ["the opinion of doctors", "the use of algorithms", "the two extreme positions mentioned before"], correctIndex: 2, explanation: "Se opone a los dos extremos (utópico y distópico)." },
+            { q: "In the text, \"augment\" most nearly means...", options: ["to enhance or add to", "to ignore", "to replace completely"], correctIndex: 0, explanation: "augment = mejorar, ampliar." },
             { q: "What does the doctor example illustrate?", options: ["that machines are always right", "that humans and AI together can outperform either alone", "that doctors should not use technology"], correctIndex: 1, explanation: "Ilustra la colaboración humano-máquina." }
           ] },
         { type: "matching", instruction: "Une la expresión con su traducción.", pairs: [
@@ -823,14 +823,14 @@ window.VESPER_EXPANSION3 = (function () {
       },
       exercises: [
         { type: "listening", text: "To begin with, let me outline the main idea.", question: "¿Qué escuchaste?",
-          options: ["To begin with, let me outline the main idea.", "To begin with, let me outline the main aim.", "To begin width, let me outline the main idea."], correctIndex: 0, explanation: "To begin with = para empezar." },
+          options: ["To begin with, let me outline the main aim.", "To begin width, let me outline the main idea.", "To begin with, let me outline the main idea."], correctIndex: 2, explanation: "To begin with = para empezar." },
         { type: "listening", text: "In other words, the results were inconclusive.", question: "¿Qué escuchaste?",
           options: ["In other words, the results were inconclusive.", "In other words, the results were conclusive.", "In other worlds, the results were inconclusive."], correctIndex: 0, explanation: "inconclusive = no concluyente." },
         { type: "listening", text: "To sum up, further research is needed.", question: "Escribe lo que escuchaste:", answers: ["to sum up further research is needed", "to sum up, further research is needed"], explanation: "To sum up, further research is needed." },
         { type: "matching", instruction: "Une la señal del discurso con su función.", pairs: [
           { l: "to begin with", r: "introducir" }, { l: "in other words", r: "reformular" },
           { l: "to sum up", r: "resumir" }, { l: "for instance", r: "ejemplificar" } ] },
-        { type: "multiple_choice", question: "Which phrase introduces a summary?", options: ["to sum up", "for instance", "to begin with"], correctIndex: 0, explanation: "to sum up = en resumen." }
+        { type: "multiple_choice", question: "Which phrase introduces a summary?", options: ["to begin with", "to sum up", "for instance"], correctIndex: 1, explanation: "to sum up = en resumen." }
       ]
     },
 
@@ -854,7 +854,7 @@ window.VESPER_EXPANSION3 = (function () {
           { l: "ephemeral", r: "efímero" }, { l: "candid", r: "franco" },
           { l: "tenacious", r: "tenaz" }, { l: "scrupulous", r: "escrupuloso" } ] },
         { type: "multiple_choice", question: "Which word best fits: \"a ___ remark\" (brutally honest)?", options: ["candid", "ubiquitous", "ephemeral"], correctIndex: 0, explanation: "candid = franco, sincero." },
-        { type: "multiple_choice", question: "\"Ephemeral\" describes something that...", options: ["lasts forever", "lasts a very short time", "is extremely large"], correctIndex: 1, explanation: "ephemeral = efímero, breve." },
+        { type: "multiple_choice", question: "\"Ephemeral\" describes something that...", options: ["lasts forever", "is extremely large", "lasts a very short time"], correctIndex: 2, explanation: "ephemeral = efímero, breve." },
         { type: "fill_blank", sentence: "Plastic waste has become almost ___ in the oceans.", answers: ["ubiquitous"], hint: "Está por todas partes.", explanation: "ubiquitous = omnipresente." },
         { type: "translate", prompt: "Traduce: \"Hizo un trabajo meticuloso.\"", answers: ["she did a meticulous job", "he did a meticulous job", "they did a meticulous job"], explanation: "She/He did a meticulous job." }
       ]
@@ -877,7 +877,7 @@ window.VESPER_EXPANSION3 = (function () {
           { l: "to jump on the bandwagon", r: "sumarse a la moda" }, { l: "to be on thin ice", r: "estar en terreno peligroso" } ] },
         { type: "multiple_choice", question: "\"To bite the bullet\" means to...", options: ["avoid a problem forever", "face something difficult with courage", "eat very quickly"], correctIndex: 1, explanation: "Significa afrontar algo difícil con decisión." },
         { type: "fill_blank", sentence: "Nobody wanted to mention it, but it was the ___ in the room.", answers: ["elephant"], hint: "El tema evidente que nadie menciona.", explanation: "the elephant in the room." },
-        { type: "multiple_choice", question: "If a company \"cuts corners\", it...", options: ["does careful, thorough work", "saves time or money by lowering quality", "expands quickly"], correctIndex: 1, explanation: "cut corners = ahorrar a costa de la calidad." },
+        { type: "multiple_choice", question: "If a company \"cuts corners\", it...", options: ["does careful, thorough work and never rushes a job", "expands quickly", "saves time or money by lowering quality"], correctIndex: 2, explanation: "cut corners = ahorrar a costa de la calidad." },
         { type: "true_false", statement: "Highly idiomatic expressions are usually best avoided in very formal academic writing.", answer: true, explanation: "En registro muy formal conviene moderarlos." }
       ]
     },
@@ -942,10 +942,10 @@ window.VESPER_EXPANSION3 = (function () {
         { type: "reading", title: "When more is less",
           passage: "We tend to assume that more choice is always better: the wider the range of options, the more likely we are to find what suits us, and the freer we feel. Yet a body of research in psychology suggests a more counterintuitive conclusion. Beyond a certain point, an abundance of options can paralyse rather than liberate.\n\nWhen confronted with dozens of nearly identical alternatives, consumers often experience what has been termed 'choice overload': they postpone deciding, feel less satisfied with whatever they eventually pick, and are more prone to regret. This is not an argument for abolishing choice, but a reminder that freedom and well-being do not increase indefinitely with the number of options. There are, it seems, diminishing returns even to liberty.",
           questions: [
-            { q: "Which statement best captures the author's thesis?", options: ["More choice always makes people happier.", "Beyond a point, more choice can reduce satisfaction and well-being.", "Choice should be abolished entirely."], correctIndex: 1, explanation: "La tesis es que el exceso de opciones puede reducir el bienestar." },
+            { q: "Which statement best captures the author's thesis?", options: ["More choice always makes people happier.", "Choice should be abolished entirely.", "Beyond a point, more choice can reduce satisfaction and well-being."], correctIndex: 2, explanation: "La tesis es que el exceso de opciones puede reducir el bienestar." },
             { q: "The word \"counterintuitive\" signals that the conclusion...", options: ["confirms what we expect", "goes against our usual assumptions", "is impossible to prove"], correctIndex: 1, explanation: "counterintuitive = contrario a la intuición." },
-            { q: "What is 'choice overload' according to the text?", options: ["the joy of having many options", "a state where too many options hinder decision and satisfaction", "a lack of any options at all"], correctIndex: 1, explanation: "Es la parálisis y menor satisfacción ante demasiadas opciones." },
-            { q: "The phrase \"diminishing returns even to liberty\" implies that...", options: ["liberty has no value", "the benefits of more freedom eventually level off or decline", "liberty always increases happiness"], correctIndex: 1, explanation: "Los beneficios adicionales de más libertad decrecen." }
+            { q: "What is 'choice overload' according to the text?", options: ["a state where too many options hinder decision and satisfaction", "the joy of having many options", "a lack of any options at all"], correctIndex: 0, explanation: "Es la parálisis y menor satisfacción ante demasiadas opciones." },
+            { q: "The phrase \"diminishing returns even to liberty\" implies that...", options: ["liberty always increases happiness", "liberty has no value", "the benefits of more freedom eventually level off or decline"], correctIndex: 2, explanation: "Los beneficios adicionales de más libertad decrecen." }
           ] },
         { type: "matching", instruction: "Une la expresión con su traducción.", pairs: [
           { l: "counterintuitive", r: "contraintuitivo" }, { l: "to paralyse", r: "paralizar" },
@@ -1033,7 +1033,7 @@ window.VESPER_EXPANSION3 = (function () {
           { l: "Wow!", r: "asombro" }, { l: "Ouch!", r: "dolor" },
           { l: "Oops!", r: "error pequeño" }, { l: "Yuck!", r: "asco" },
           { l: "Hooray!", r: "alegría" }, { l: "Shh!", r: "silencio" } ] },
-        { type: "multiple_choice", question: "You hit your finger. You say:", options: ["Hooray!", "Ouch!", "Yuck!"], correctIndex: 1, explanation: "'Ouch!' expresa dolor (¡Ay!)." },
+        { type: "multiple_choice", question: "You hit your finger. You say:", options: ["Hooray!", "Yuck!", "Ouch!"], correctIndex: 2, explanation: "'Ouch!' expresa dolor (¡Ay!)." },
         { type: "multiple_choice", question: "You see something disgusting. You say:", options: ["Yuck!", "Wow!", "Shh!"], correctIndex: 0, explanation: "'Yuck!' expresa asco (¡Puaj!)." },
         { type: "fill_blank", sentence: "___! I forgot my keys. (small mistake)", answers: ["oops", "oops!"], hint: "Reacción a un error pequeño.", explanation: "Oops! = ¡Uy!" },
         { type: "categorize", instruction: "¿Emoción positiva o negativa?", buckets: [
@@ -1091,7 +1091,7 @@ window.VESPER_EXPANSION3 = (function () {
           { l: "or", r: "alternativa" }, { l: "so", r: "consecuencia" },
           { l: "because", r: "causa" } ] },
         { type: "multiple_choice", question: "Choose: \"She is small ___ very strong.\"", options: ["and", "but", "or"], correctIndex: 1, explanation: "Hay contraste (pequeña pero fuerte): 'but'." },
-        { type: "multiple_choice", question: "Choose: \"I was hungry, ___ I made a sandwich.\"", options: ["because", "but", "so"], correctIndex: 2, explanation: "Consecuencia: tenía hambre, por eso (so) hice un sándwich." },
+        { type: "multiple_choice", question: "Choose: \"I was hungry, ___ I made a sandwich.\"", options: ["so", "because", "but"], correctIndex: 0, explanation: "Consecuencia: tenía hambre, por eso (so) hice un sándwich." },
         { type: "fill_blank", sentence: "We didn't go out ___ it was raining.", answers: ["because"], hint: "Indica la causa.", explanation: "because = porque (introduce la causa)." },
         { type: "find_error", question: "Encuentra el error.",
           segments: ["I ", { u: "stayed" }, " ", { u: "home" }, " ", { u: "so" }, " I was ", { u: "tired" }, "."],
@@ -1119,7 +1119,7 @@ window.VESPER_EXPANSION3 = (function () {
           { l: "while", r: "mientras" }, { l: "since", r: "ya que" },
           { l: "so that", r: "para que" }, { l: "as soon as", r: "en cuanto" } ] },
         { type: "multiple_choice", question: "Choose: \"___ he was tired, he finished the report.\"", options: ["Although", "So that", "Unless"], correctIndex: 0, explanation: "Contraste: aunque estaba cansado (Although)." },
-        { type: "multiple_choice", question: "Choose: \"You'll miss the bus ___ you hurry.\"", options: ["although", "unless", "since"], correctIndex: 1, explanation: "unless = a menos que (condición negativa)." },
+        { type: "multiple_choice", question: "Choose: \"You'll miss the bus ___ you hurry.\"", options: ["since", "although", "unless"], correctIndex: 2, explanation: "unless = a menos que (condición negativa)." },
         { type: "fill_blank", sentence: "She spoke slowly ___ everyone could understand.", answers: ["so that"], hint: "Indica propósito (para que).", explanation: "so that = para que (propósito)." },
         { type: "find_error", question: "Encuentra el error.",
           segments: ["Although ", { u: "it" }, " ", { u: "was" }, " expensive, ", { u: "but" }, " he ", { u: "bought" }, " it."],
@@ -1147,7 +1147,7 @@ window.VESPER_EXPANSION3 = (function () {
           { l: "afraid ___", r: "of" }, { l: "depend ___", r: "on" },
           { l: "listen ___", r: "to" }, { l: "married ___", r: "to" } ] },
         { type: "multiple_choice", question: "Choose: \"He is afraid ___ spiders.\"", options: ["of", "to", "at"], correctIndex: 0, explanation: "afraid of = tener miedo de." },
-        { type: "multiple_choice", question: "Choose: \"I'm interested ___ history.\"", options: ["on", "in", "at"], correctIndex: 1, explanation: "interested in = interesado en." },
+        { type: "multiple_choice", question: "Choose: \"I'm interested ___ history.\"", options: ["at", "on", "in"], correctIndex: 2, explanation: "interested in = interesado en." },
         { type: "fill_blank", sentence: "Are you good ___ playing the guitar?", answers: ["at"], hint: "good ___ (habilidad).", explanation: "good at + -ing = bueno en hacer algo." },
         { type: "find_error", question: "Encuentra el error.",
           segments: ["Success ", { u: "depends" }, " ", { u: "of" }, " ", { u: "hard" }, " ", { u: "work" }, "."],
@@ -1174,8 +1174,8 @@ window.VESPER_EXPANSION3 = (function () {
           { l: "No way!", r: "¡No me digas!" }, { l: "Phew!", r: "alivio (¡uf!)" },
           { l: "Yikes!", r: "susto" }, { l: "Ugh!", r: "fastidio/asco" },
           { l: "Oh well", r: "resignación" }, { l: "You're kidding!", r: "¡es broma!" } ] },
-        { type: "multiple_choice", question: "You just avoided an accident. You say:", options: ["Phew!", "Hooray!", "Ugh!"], correctIndex: 0, explanation: "'Phew!' expresa alivio." },
-        { type: "multiple_choice", question: "A friend shares shocking news. You react:", options: ["Oh well.", "No way!", "Shh!"], correctIndex: 1, explanation: "'No way!' expresa sorpresa o incredulidad." },
+        { type: "multiple_choice", question: "You just avoided an accident. You say:", options: ["Hooray!", "Phew!", "Ugh!"], correctIndex: 1, explanation: "'Phew!' expresa alivio." },
+        { type: "multiple_choice", question: "A friend shares shocking news. You react:", options: ["Oh well.", "Shh!", "No way!"], correctIndex: 2, explanation: "'No way!' expresa sorpresa o incredulidad." },
         { type: "fill_blank", sentence: "___ well, we can try again tomorrow.", answers: ["oh"], hint: "Resignación: '___ well'.", explanation: "Oh well = expresa resignación ('qué le vamos a hacer')." },
         { type: "categorize", instruction: "¿Reacción de sorpresa o de alivio/resignación?", buckets: [
           { id: "s", label: "Surprise" }, { id: "r", label: "Relief/Resignation" } ], items: [
@@ -1205,7 +1205,7 @@ window.VESPER_EXPANSION3 = (function () {
       },
       exercises: [
         { type: "multiple_choice", question: "What is the plural of \"box\"?", options: ["boxs", "boxes", "boxies"], correctIndex: 1, explanation: "Tras -x se añade -es: boxes." },
-        { type: "multiple_choice", question: "What is the plural of \"city\"?", options: ["citys", "cityes", "cities"], correctIndex: 2, explanation: "Consonante + y → -ies: cities." },
+        { type: "multiple_choice", question: "What is the plural of \"city\"?", options: ["cities", "citys", "cityes"], correctIndex: 0, explanation: "Consonante + y → -ies: cities." },
         { type: "categorize", instruction: "¿Plural regular o irregular?", buckets: [
           { id: "r", label: "Regular" }, { id: "i", label: "Irregular" } ], items: [
           { t: "dogs", bucket: "r" }, { t: "children", bucket: "i" },
@@ -1239,7 +1239,7 @@ window.VESPER_EXPANSION3 = (function () {
           { t: "book", bucket: "c" }, { t: "money", bucket: "u" },
           { t: "chair", bucket: "c" }, { t: "rice", bucket: "u" } ] },
         { type: "multiple_choice", question: "Choose: \"How ___ sugar do you want?\"", options: ["many", "much", "any"], correctIndex: 1, explanation: "'sugar' es incontable → much." },
-        { type: "multiple_choice", question: "Choose: \"There aren't ___ chairs.\"", options: ["much", "many", "a"], correctIndex: 1, explanation: "'chairs' es contable plural → many." },
+        { type: "multiple_choice", question: "Choose: \"There aren't ___ chairs.\"", options: ["many", "a", "much"], correctIndex: 0, explanation: "'chairs' es contable plural → many." },
         { type: "find_error", question: "Encuentra el error.",
           segments: ["I ", { u: "need" }, " ", { u: "an" }, " ", { u: "information" }, " ", { u: "please" }, "."],
           correctIndex: 1, correction: "(quita 'an') some information",
@@ -1261,7 +1261,7 @@ window.VESPER_EXPANSION3 = (function () {
         ]
       },
       exercises: [
-        { type: "multiple_choice", question: "How do you say \"the dog of Maria\"?", options: ["the Maria's dog", "Maria's dog", "Maria dog's"], correctIndex: 1, explanation: "Persona + 's + objeto: Maria's dog." },
+        { type: "multiple_choice", question: "How do you say \"the dog of Maria\"?", options: ["the Maria's dog", "Maria dog's", "Maria's dog"], correctIndex: 2, explanation: "Persona + 's + objeto: Maria's dog." },
         { type: "multiple_choice", question: "Plural ending in -s: \"my friends ___ party\".", options: ["'s", "'", "s'"], correctIndex: 1, explanation: "Plural en -s: solo apóstrofo → friends' party." },
         { type: "fill_blank", sentence: "Where is ___ (the office of the manager)?", answers: ["the manager's office"], hint: "persona + 's + cosa.", explanation: "the manager's office." },
         { type: "find_error", question: "Encuentra el error.",
@@ -1289,7 +1289,7 @@ window.VESPER_EXPANSION3 = (function () {
           { l: "I", r: "me" }, { l: "he", r: "him" },
           { l: "she", r: "her" }, { l: "we", r: "us" },
           { l: "they", r: "them" } ] },
-        { type: "multiple_choice", question: "Choose: \"Can you help ___?\" (a mí)", options: ["I", "me", "my"], correctIndex: 1, explanation: "Tras el verbo va el pronombre objeto: me." },
+        { type: "multiple_choice", question: "Choose: \"Can you help ___?\" (a mí)", options: ["my", "I", "me"], correctIndex: 2, explanation: "Tras el verbo va el pronombre objeto: me." },
         { type: "multiple_choice", question: "Choose: \"___ are my friends.\"", options: ["Them", "They", "Their"], correctIndex: 1, explanation: "Sujeto → They." },
         { type: "find_error", question: "Encuentra el error.",
           segments: ["My sister and ", { u: "me" }, " ", { u: "like" }, " ", { u: "pizza" }, " ", { u: "together" }, "."],
@@ -1316,8 +1316,8 @@ window.VESPER_EXPANSION3 = (function () {
           { l: "my", r: "mine" }, { l: "your", r: "yours" },
           { l: "her", r: "hers" }, { l: "our", r: "ours" },
           { l: "their", r: "theirs" } ] },
-        { type: "multiple_choice", question: "Choose: \"This pen is ___.\" (de mí, solo)", options: ["my", "mine", "me"], correctIndex: 1, explanation: "Pronombre posesivo (va solo): mine." },
-        { type: "multiple_choice", question: "Choose: \"___ house is very big.\"", options: ["Their", "Theirs", "Them"], correctIndex: 0, explanation: "Antes del sustantivo va el adjetivo: Their house." },
+        { type: "multiple_choice", question: "Choose: \"This pen is ___.\" (de mí, solo)", options: ["mine", "my", "me"], correctIndex: 0, explanation: "Pronombre posesivo (va solo): mine." },
+        { type: "multiple_choice", question: "Choose: \"___ house is very big.\"", options: ["Theirs", "Them", "Their"], correctIndex: 2, explanation: "Antes del sustantivo va el adjetivo: Their house." },
         { type: "find_error", question: "Encuentra el error.",
           segments: ["Is ", { u: "this" }, " bag ", { u: "your" }, " or ", { u: "hers" }, "?"],
           correctIndex: 1, correction: "yours (pronombre, va solo)",
@@ -1344,7 +1344,7 @@ window.VESPER_EXPANSION3 = (function () {
           { l: "I", r: "myself" }, { l: "he", r: "himself" },
           { l: "they", r: "themselves" }, { l: "we", r: "ourselves" },
           { l: "you (sing.)", r: "yourself" } ] },
-        { type: "multiple_choice", question: "Choose: \"The children dressed ___.\"", options: ["themself", "themselves", "theirselves"], correctIndex: 1, explanation: "Plural: themselves (forma correcta)." },
+        { type: "multiple_choice", question: "Choose: \"The children dressed ___.\"", options: ["themselves", "theirselves", "themself"], correctIndex: 0, explanation: "Plural: themselves (forma correcta)." },
         { type: "fill_blank", sentence: "Be careful with the knife or you'll hurt ___.", answers: ["yourself"], hint: "Reflexivo de 'you' singular.", explanation: "yourself." },
         { type: "find_error", question: "Encuentra el error.",
           segments: ["She ", { u: "lives" }, " ", { u: "by" }, " ", { u: "herselves" }, " in the ", { u: "city" }, "."],
@@ -1422,7 +1422,7 @@ window.VESPER_EXPANSION3 = (function () {
       },
       exercises: [
         { type: "multiple_choice", question: "Comparative of \"big\": \"An elephant is ___ a dog.\"", options: ["bigger than", "more big than", "the biggest"], correctIndex: 0, explanation: "Adjetivo corto: bigger than (se dobla la g)." },
-        { type: "multiple_choice", question: "Superlative of \"interesting\":", options: ["the interestingest", "the most interesting", "more interesting"], correctIndex: 1, explanation: "Adjetivo largo: the most interesting." },
+        { type: "multiple_choice", question: "Superlative of \"interesting\":", options: ["more interesting", "the interestingest", "the most interesting"], correctIndex: 2, explanation: "Adjetivo largo: the most interesting." },
         { type: "fill_blank", sentence: "Today is ___ (good) than yesterday.", answers: ["better"], hint: "Comparativo irregular de 'good'.", explanation: "good → better." },
         { type: "find_error", question: "Encuentra el error.",
           segments: ["This ", { u: "book" }, " is ", { u: "more" }, " ", { u: "cheap" }, " ", { u: "than" }, " that one."],
@@ -1448,7 +1448,7 @@ window.VESPER_EXPANSION3 = (function () {
         ]
       },
       exercises: [
-        { type: "multiple_choice", question: "Choose the natural order.", options: ["a red big car", "a big red car", "a car big red"], correctIndex: 1, explanation: "Tamaño antes que color: big (size) + red (colour)." },
+        { type: "multiple_choice", question: "Choose the natural order.", options: ["a big red car", "a car big red", "a red big car"], correctIndex: 0, explanation: "Tamaño antes que color: big (size) + red (colour)." },
         { type: "multiple_choice", question: "Choose the natural order.", options: ["an old lovely house", "a lovely old house", "a house lovely old"], correctIndex: 1, explanation: "Opinión (lovely) antes que edad (old)." },
         { type: "word_order", words: ["a", "small", "black", "bag"], correctOrder: ["a", "small", "black", "bag"], hint: "tamaño + color + sustantivo." },
         { type: "find_error", question: "Encuentra el error de orden.",
@@ -1474,7 +1474,7 @@ window.VESPER_EXPANSION3 = (function () {
       },
       exercises: [
         { type: "multiple_choice", question: "Adverb of \"careful\":", options: ["carefuly", "carefully", "carefulely"], correctIndex: 1, explanation: "careful + -ly = carefully." },
-        { type: "multiple_choice", question: "Adverb of \"good\":", options: ["goodly", "well", "gooder"], correctIndex: 1, explanation: "Irregular: good → well." },
+        { type: "multiple_choice", question: "Adverb of \"good\":", options: ["goodly", "gooder", "well"], correctIndex: 2, explanation: "Irregular: good → well." },
         { type: "fill_blank", sentence: "Please speak ___ (slow); I don't understand.", answers: ["slowly"], hint: "slow + -ly.", explanation: "slowly = despacio." },
         { type: "find_error", question: "Encuentra el error.",
           segments: ["She ", { u: "sings" }, " ", { u: "very" }, " ", { u: "good" }, " ", { u: "today" }, "."],
@@ -1528,8 +1528,8 @@ window.VESPER_EXPANSION3 = (function () {
         ]
       },
       exercises: [
-        { type: "multiple_choice", question: "Choose: \"I want ___ orange.\"", options: ["a", "an", "the"], correctIndex: 1, explanation: "'orange' empieza por sonido vocálico → an." },
-        { type: "multiple_choice", question: "Choose: \"She plays ___ guitar very well.\"", options: ["a", "an", "the"], correctIndex: 2, explanation: "Con instrumentos: the guitar." },
+        { type: "multiple_choice", question: "Choose: \"I want ___ orange.\"", options: ["a", "the", "an"], correctIndex: 2, explanation: "'orange' empieza por sonido vocálico → an." },
+        { type: "multiple_choice", question: "Choose: \"She plays ___ guitar very well.\"", options: ["the", "a", "an"], correctIndex: 0, explanation: "Con instrumentos: the guitar." },
         { type: "categorize", instruction: "¿'a' o 'an'?", buckets: [
           { id: "a", label: "a" }, { id: "an", label: "an" } ], items: [
           { t: "house", bucket: "a" }, { t: "apple", bucket: "an" },
@@ -1585,8 +1585,8 @@ window.VESPER_EXPANSION3 = (function () {
       },
       exercises: [
         { type: "multiple_choice", question: "Choose: \"Is there ___ sugar?\"", options: ["some", "any", "many"], correctIndex: 1, explanation: "En preguntas se usa 'any'." },
-        { type: "multiple_choice", question: "Choose: \"How ___ people came?\"", options: ["much", "many", "a little"], correctIndex: 1, explanation: "'people' es contable → many." },
-        { type: "multiple_choice", question: "Choose: \"I have ___ time before the train. (un poco)\"", options: ["a few", "a little", "many"], correctIndex: 1, explanation: "'time' es incontable → a little." },
+        { type: "multiple_choice", question: "Choose: \"How ___ people came?\"", options: ["a little", "much", "many"], correctIndex: 2, explanation: "'people' es contable → many." },
+        { type: "multiple_choice", question: "Choose: \"I have ___ time before the train. (un poco)\"", options: ["a little", "many", "a few"], correctIndex: 0, explanation: "'time' es incontable → a little." },
         { type: "fill_blank", sentence: "There aren't ___ eggs left.", answers: ["any", "many"], hint: "Negativa, contable.", explanation: "any/many con negativa + contable." },
         { type: "categorize", instruction: "¿Con contables o incontables?", buckets: [
           { id: "c", label: "Countable (many)" }, { id: "u", label: "Uncountable (much)" } ], items: [

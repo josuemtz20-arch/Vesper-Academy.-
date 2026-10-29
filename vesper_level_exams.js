@@ -81,11 +81,11 @@ window.VESPER_LEVEL_EXAMS = {
       "skill": "grammar",
       "question": "___ you speak English?",
       "options": [
-        "Do",
         "Does",
-        "Are"
+        "Are",
+        "Do"
       ],
-      "correctIndex": 0,
+      "correctIndex": 2,
       "explanation": "Para preguntar con 'you' en presente simple usamos 'Do'."
     },
     {
@@ -141,11 +141,11 @@ window.VESPER_LEVEL_EXAMS = {
       "skill": "grammar",
       "question": "Look! The children ___ in the garden.",
       "options": [
-        "plays",
         "are playing",
+        "plays",
         "play"
       ],
-      "correctIndex": 1,
+      "correctIndex": 0,
       "explanation": "La palabra 'Look!' y la accion en este momento piden presente continuo: 'are playing'."
     },
     {
@@ -163,11 +163,11 @@ window.VESPER_LEVEL_EXAMS = {
       "skill": "grammar",
       "question": "I ___ swim very well.",
       "options": [
-        "can",
         "cans",
+        "can",
         "am"
       ],
-      "correctIndex": 0,
+      "correctIndex": 1,
       "explanation": "'can' expresa habilidad y nunca lleva -s: 'I can swim'."
     },
     {
@@ -187,11 +187,11 @@ window.VESPER_LEVEL_EXAMS = {
       "skill": "vocab",
       "question": "Which one is a drink?",
       "options": [
-        "bread",
         "milk",
-        "cheese"
+        "cheese",
+        "bread"
       ],
-      "correctIndex": 1,
+      "correctIndex": 0,
       "explanation": "'milk' (leche) es una bebida; 'bread' y 'cheese' son comida."
     },
     {
@@ -219,10 +219,10 @@ window.VESPER_LEVEL_EXAMS = {
       "question": "Which number is a 'teen'?",
       "options": [
         "thirty",
-        "fifteen",
-        "fifty"
+        "fifty",
+        "fifteen"
       ],
-      "correctIndex": 1,
+      "correctIndex": 2,
       "explanation": "'fifteen' (15) termina en -teen; 'thirty' y 'fifty' son decenas (30, 50)."
     },
     {
@@ -260,10 +260,10 @@ window.VESPER_LEVEL_EXAMS = {
       "question": "We have one child, and they have two ___.",
       "options": [
         "childs",
-        "children",
-        "childes"
+        "childes",
+        "children"
       ],
-      "correctIndex": 1,
+      "correctIndex": 2,
       "explanation": "El plural irregular de 'child' es 'children'."
     },
     {
@@ -325,22 +325,22 @@ window.VESPER_LEVEL_EXAMS = {
           "q": "How old is Anna?",
           "options": [
             "Seven",
-            "Twenty",
             "Twelve",
-            "Thirty"
+            "Thirty",
+            "Twenty"
           ],
-          "correctIndex": 1,
+          "correctIndex": 3,
           "explanation": "El texto dice 'Anna is twenty years old'."
         },
         {
           "q": "Where does Anna live?",
           "options": [
+            "In a shop",
             "In Paris",
             "In a big house",
-            "In London",
-            "In a shop"
+            "In London"
           ],
-          "correctIndex": 2,
+          "correctIndex": 3,
           "explanation": "El texto dice que vive en una casa pequena en Londres ('in London')."
         },
         {
@@ -357,23 +357,23 @@ window.VESPER_LEVEL_EXAMS = {
         {
           "q": "Where does Anna work?",
           "options": [
-            "In a shop",
-            "In a park",
             "At home",
-            "In a school"
+            "In a park",
+            "In a school",
+            "In a shop"
           ],
-          "correctIndex": 0,
+          "correctIndex": 3,
           "explanation": "El texto dice 'Anna works in a shop'."
         },
         {
           "q": "What does Anna do on Sundays?",
           "options": [
-            "She works",
-            "She watches TV",
             "She plays with her dog",
-            "She drinks tea"
+            "She drinks tea",
+            "She works",
+            "She watches TV"
           ],
-          "correctIndex": 2,
+          "correctIndex": 0,
           "explanation": "El texto dice 'On Sundays she plays with her dog in the park'."
         }
       ]
@@ -397,11 +397,11 @@ window.VESPER_LEVEL_EXAMS = {
       "text": "Excuse me. Go straight on and turn left. The supermarket is next to the bank. It is open today.",
       "question": "Where is the supermarket?",
       "options": [
+        "In front of the school",
         "Behind the bank",
-        "Next to the bank",
-        "In front of the school"
+        "Next to the bank"
       ],
-      "correctIndex": 1,
+      "correctIndex": 2,
       "explanation": "La persona dice 'The supermarket is next to the bank' (al lado del banco)."
     }
   ] },
@@ -411,12 +411,12 @@ window.VESPER_LEVEL_EXAMS = {
       "skill": "grammar",
       "question": "Last summer we ___ to Italy on holiday.",
       "options": [
-        "go",
         "went",
+        "going",
         "goed",
-        "going"
+        "go"
       ],
-      "correctIndex": 1,
+      "correctIndex": 0,
       "explanation": "El pasado simple del verbo irregular 'go' es 'went'."
     },
     {
@@ -424,12 +424,12 @@ window.VESPER_LEVEL_EXAMS = {
       "skill": "grammar",
       "question": "Yesterday she ___ a new dress at the shopping centre.",
       "options": [
+        "buyed",
         "buy",
         "buys",
-        "bought",
-        "buyed"
+        "bought"
       ],
-      "correctIndex": 2,
+      "correctIndex": 3,
       "explanation": "El pasado simple irregular de 'buy' es 'bought'."
     },
     {
@@ -470,12 +470,12 @@ window.VESPER_LEVEL_EXAMS = {
       "skill": "grammar",
       "question": "This is ___ restaurant in the city.",
       "options": [
-        "the best",
+        "the goodest",
         "the better",
-        "best",
-        "the goodest"
+        "the best",
+        "best"
       ],
-      "correctIndex": 0,
+      "correctIndex": 2,
       "explanation": "El superlativo irregular de 'good' es 'the best'."
     },
     {
@@ -494,12 +494,12 @@ window.VESPER_LEVEL_EXAMS = {
       "skill": "grammar",
       "question": "How ___ water do you drink every day?",
       "options": [
-        "many",
         "much",
         "any",
-        "some"
+        "some",
+        "many"
       ],
-      "correctIndex": 1,
+      "correctIndex": 0,
       "explanation": "'Water' es incontable, por eso usamos 'much'."
     },
     {
@@ -558,12 +558,12 @@ window.VESPER_LEVEL_EXAMS = {
       "skill": "grammar",
       "question": "She ___ lived in London for two years.",
       "options": [
-        "has",
         "have",
+        "was",
         "is",
-        "was"
+        "has"
       ],
-      "correctIndex": 0,
+      "correctIndex": 3,
       "explanation": "Presente perfecto con 'she': has + participio ('lived')."
     },
     {
@@ -601,12 +601,12 @@ window.VESPER_LEVEL_EXAMS = {
       "skill": "use",
       "question": "I have an English class ___ Monday.",
       "options": [
-        "in",
-        "at",
+        "of",
         "on",
-        "of"
+        "in",
+        "at"
       ],
-      "correctIndex": 2,
+      "correctIndex": 1,
       "explanation": "Con días de la semana usamos 'on': 'on Monday'."
     },
     {
@@ -614,12 +614,12 @@ window.VESPER_LEVEL_EXAMS = {
       "skill": "grammar",
       "question": "He ___ takes the bus to work; he prefers walking.",
       "options": [
+        "often",
         "always",
         "usually",
-        "never",
-        "often"
+        "never"
       ],
-      "correctIndex": 2,
+      "correctIndex": 3,
       "explanation": "Si prefiere caminar, 'never' (nunca) toma el autobús. Los adverbios de frecuencia van antes del verbo principal."
     },
     {
@@ -701,12 +701,12 @@ window.VESPER_LEVEL_EXAMS = {
       "skill": "vocab",
       "question": "It's raining a lot today, so take your ___.",
       "options": [
-        "sunglasses",
-        "umbrella",
+        "hat",
         "swimsuit",
-        "hat"
+        "umbrella",
+        "sunglasses"
       ],
-      "correctIndex": 1,
+      "correctIndex": 2,
       "explanation": "Si llueve mucho necesitas un paraguas ('umbrella')."
     },
     {
@@ -733,8 +733,8 @@ window.VESPER_LEVEL_EXAMS = {
       "options": [
         "bill",
         "ticket",
-        "money",
-        "card"
+        "card",
+        "money"
       ],
       "correctIndex": 0,
       "explanation": "En un café o restaurante, la cuenta se llama 'the bill'."
@@ -767,10 +767,10 @@ window.VESPER_LEVEL_EXAMS = {
         {
           "q": "How did the family travel to the town?",
           "options": [
-            "By plane",
+            "By bus",
             "By train",
-            "By car",
-            "By bus"
+            "By plane",
+            "By car"
           ],
           "correctIndex": 1,
           "explanation": "El texto dice 'We travelled by train'."
@@ -778,45 +778,45 @@ window.VESPER_LEVEL_EXAMS = {
         {
           "q": "What did they do every morning?",
           "options": [
-            "They visited a castle",
+            "They stayed at the hotel",
             "They went shopping",
-            "They had breakfast and walked to the sea",
-            "They stayed at the hotel"
+            "They visited a castle",
+            "They had breakfast and walked to the sea"
           ],
-          "correctIndex": 2,
+          "correctIndex": 3,
           "explanation": "El texto dice que cada mañana desayunaban y caminaban hasta el mar."
         },
         {
           "q": "Why did the little brother stay at the hotel?",
           "options": [
-            "He was tired",
             "He was ill",
-            "He didn't like castles",
-            "He wanted to swim"
+            "He was tired",
+            "He wanted to swim",
+            "He didn't like castles"
           ],
-          "correctIndex": 0,
+          "correctIndex": 1,
           "explanation": "El texto dice 'he was tired' (estaba cansado)."
         },
         {
           "q": "What did the writer buy on the last day?",
           "options": [
+            "Train tickets",
             "Photos",
             "A castle",
-            "Gifts for friends",
-            "Train tickets"
+            "Gifts for friends"
           ],
-          "correctIndex": 2,
+          "correctIndex": 3,
           "explanation": "El texto dice 'I bought some small gifts for my friends'."
         },
         {
           "q": "How did the writer feel about the holiday?",
           "options": [
-            "It was boring",
             "It was the best holiday of their life",
-            "It was too short",
-            "It was very expensive"
+            "It was very expensive",
+            "It was boring",
+            "It was too short"
           ],
-          "correctIndex": 1,
+          "correctIndex": 0,
           "explanation": "El texto termina diciendo que fue 'the best holiday of my life'."
         }
       ]
@@ -841,10 +841,10 @@ window.VESPER_LEVEL_EXAMS = {
       "question": "What is the patient's problem?",
       "options": [
         "A broken leg",
-        "A headache and a sore throat",
-        "A stomach ache"
+        "A stomach ache",
+        "A headache and a sore throat"
       ],
-      "correctIndex": 1,
+      "correctIndex": 2,
       "explanation": "El paciente dice que tiene dolor de cabeza ('headache') y dolor de garganta ('sore throat')."
     }
   ] },
@@ -854,12 +854,12 @@ window.VESPER_LEVEL_EXAMS = {
       "skill": "grammar",
       "question": "I ___ my homework, so I can go out now.",
       "options": [
-        "have already finished",
-        "already finished",
         "am finishing",
-        "finish"
+        "have already finished",
+        "finish",
+        "already finished"
       ],
-      "correctIndex": 0,
+      "correctIndex": 1,
       "explanation": "El presente perfecto (have finished) conecta una accion pasada con el presente; 'already' refuerza que la tarea ya esta hecha ahora."
     },
     {
@@ -867,12 +867,12 @@ window.VESPER_LEVEL_EXAMS = {
       "skill": "grammar",
       "question": "We ___ to Italy last summer; it was wonderful.",
       "options": [
-        "have gone",
         "go",
-        "went",
-        "have been going"
+        "have gone",
+        "have been going",
+        "went"
       ],
-      "correctIndex": 2,
+      "correctIndex": 3,
       "explanation": "Con un tiempo pasado concreto (last summer) se usa el pasado simple: 'went'."
     },
     {
@@ -913,12 +913,12 @@ window.VESPER_LEVEL_EXAMS = {
       "skill": "grammar",
       "question": "If it rains tomorrow, we ___ the meeting online.",
       "options": [
-        "have",
-        "will have",
         "would have",
-        "had"
+        "had",
+        "have",
+        "will have"
       ],
-      "correctIndex": 1,
+      "correctIndex": 3,
       "explanation": "Primer condicional para situaciones reales futuras: If + presente, will + verbo base."
     },
     {
@@ -955,10 +955,10 @@ window.VESPER_LEVEL_EXAMS = {
       "skill": "grammar",
       "question": "This is the restaurant ___ we had dinner last night.",
       "options": [
+        "what",
         "which",
-        "who",
         "where",
-        "what"
+        "who"
       ],
       "correctIndex": 2,
       "explanation": "'where' es el relativo para lugares (the restaurant = un lugar)."
@@ -999,12 +999,12 @@ window.VESPER_LEVEL_EXAMS = {
       "skill": "grammar",
       "question": "You look tired. You ___ go to bed earlier.",
       "options": [
-        "must",
         "should",
-        "can't",
-        "might"
+        "must",
+        "might",
+        "can't"
       ],
-      "correctIndex": 1,
+      "correctIndex": 0,
       "explanation": "'should' se usa para dar consejos. 'must' seria obligacion fuerte y 'might' solo posibilidad."
     },
     {
@@ -1069,8 +1069,8 @@ window.VESPER_LEVEL_EXAMS = {
       "options": [
         "turn off",
         "look after",
-        "set up",
-        "get up"
+        "get up",
+        "set up"
       ],
       "correctIndex": 1,
       "explanation": "'look after' significa cuidar de alguien o algo."
@@ -1105,11 +1105,11 @@ window.VESPER_LEVEL_EXAMS = {
       "question": "After the interview, the company offered her the ___.",
       "options": [
         "salary",
-        "position",
         "colleague",
-        "deadline"
+        "deadline",
+        "position"
       ],
-      "correctIndex": 1,
+      "correctIndex": 3,
       "explanation": "'position' significa puesto de trabajo, lo que una empresa ofrece tras una entrevista."
     },
     {
@@ -1117,12 +1117,12 @@ window.VESPER_LEVEL_EXAMS = {
       "skill": "vocab",
       "question": "Climate change is partly caused by greenhouse ___ from cars and factories.",
       "options": [
-        "gases",
         "wildlife",
+        "habits",
         "recycling",
-        "habits"
+        "gases"
       ],
-      "correctIndex": 0,
+      "correctIndex": 3,
       "explanation": "'greenhouse gases' (gases de efecto invernadero) son una causa del cambio climatico."
     },
     {
@@ -1226,34 +1226,34 @@ window.VESPER_LEVEL_EXAMS = {
         {
           "q": "What is the main idea of the text?",
           "options": [
-            "Offices will soon disappear completely.",
-            "Working from home has both benefits and problems, and a mix may be best.",
+            "Companies do not trust their employees.",
             "Everyone prefers working from home.",
-            "Companies do not trust their employees."
+            "Working from home has both benefits and problems, and a mix may be best.",
+            "Offices will soon disappear completely."
           ],
-          "correctIndex": 1,
+          "correctIndex": 2,
           "explanation": "El texto presenta ventajas y desventajas y concluye que el modelo hibrido puede ser la mejor solucion."
         },
         {
           "q": "According to the text, why do workers save money when working from home?",
           "options": [
-            "They earn higher salaries.",
             "They do not pay for the internet.",
             "They do not have to travel to an office.",
+            "They earn higher salaries.",
             "They work fewer hours."
           ],
-          "correctIndex": 2,
+          "correctIndex": 1,
           "explanation": "El texto dice que ahorran tiempo y dinero porque no tienen que viajar a la oficina."
         },
         {
           "q": "What problem do younger employees mention?",
           "options": [
-            "They earn less money.",
             "They learn more quickly next to experienced colleagues.",
+            "They earn less money.",
             "They cannot use computers.",
             "They never feel lonely."
           ],
-          "correctIndex": 1,
+          "correctIndex": 0,
           "explanation": "El texto indica que los empleados mas jovenes dicen que aprenden mas rapido junto a colegas con experiencia."
         },
         {
@@ -1270,12 +1270,12 @@ window.VESPER_LEVEL_EXAMS = {
         {
           "q": "What can we infer about the author's opinion?",
           "options": [
-            "The author thinks home working is always bad.",
             "The author sees the hybrid model as a reasonable balance.",
-            "The author dislikes offices.",
-            "The author thinks productivity always falls at home."
+            "The author thinks productivity always falls at home.",
+            "The author thinks home working is always bad.",
+            "The author dislikes offices."
           ],
-          "correctIndex": 1,
+          "correctIndex": 0,
           "explanation": "El tono y la conclusion sugieren que el autor ve el modelo hibrido como una solucion equilibrada."
         }
       ]
@@ -1287,10 +1287,10 @@ window.VESPER_LEVEL_EXAMS = {
       "question": "Why is Sarah calling?",
       "options": [
         "To cancel the clinic permanently.",
-        "To change the time of an appointment.",
-        "To confirm that Thursday at three is fine."
+        "To confirm that Thursday at three is fine.",
+        "To change the time of an appointment."
       ],
-      "correctIndex": 1,
+      "correctIndex": 2,
       "explanation": "Sarah explica que la cita debe moverse porque el dentista no esta disponible, por eso pide que llamen para elegir otra hora."
     },
     {
@@ -1299,11 +1299,11 @@ window.VESPER_LEVEL_EXAMS = {
       "text": "Honestly, I was a bit disappointed with the new phone. Everyone said the camera was amazing, and yes, the photos are good. But the battery only lasts half a day, and for that price I really expected more. I'm not sure I would recommend it to a friend.",
       "question": "What is the speaker's attitude towards the phone?",
       "options": [
-        "Completely satisfied and enthusiastic.",
         "Disappointed, mainly because of the battery and price.",
-        "Angry because the camera is terrible."
+        "Angry because the camera is terrible.",
+        "Completely satisfied and enthusiastic."
       ],
-      "correctIndex": 1,
+      "correctIndex": 0,
       "explanation": "El hablante reconoce que la camara es buena pero se muestra decepcionado por la bateria y el precio, por eso duda en recomendarlo."
     }
   ] },
@@ -1314,11 +1314,11 @@ window.VESPER_LEVEL_EXAMS = {
       "question": "I'm exhausted because I ___ for the final exam since early this morning.",
       "options": [
         "studied",
-        "have been studying",
         "had studied",
-        "am studying"
+        "am studying",
+        "have been studying"
       ],
-      "correctIndex": 1,
+      "correctIndex": 3,
       "explanation": "El present perfect continuous (have been studying) expresa una accion que comenzo en el pasado y continua, con enfasis en la duracion ('since early this morning')."
     },
     {
@@ -1326,12 +1326,12 @@ window.VESPER_LEVEL_EXAMS = {
       "skill": "grammar",
       "question": "By the time the manager arrived, the team ___ the entire report.",
       "options": [
-        "finished",
-        "has finished",
         "had finished",
-        "was finishing"
+        "was finishing",
+        "has finished",
+        "finished"
       ],
-      "correctIndex": 2,
+      "correctIndex": 0,
       "explanation": "El past perfect (had finished) marca una accion anterior a otra accion pasada ('arrived')."
     },
     {
@@ -1353,11 +1353,11 @@ window.VESPER_LEVEL_EXAMS = {
       "question": "If she had taken that job, she ___ in London now.",
       "options": [
         "would have lived",
+        "lives",
         "would live",
-        "had lived",
-        "lives"
+        "had lived"
       ],
-      "correctIndex": 1,
+      "correctIndex": 2,
       "explanation": "Condicional mixto: condicion pasada irreal ('had taken') con resultado presente ('would live now')."
     },
     {
@@ -1365,12 +1365,12 @@ window.VESPER_LEVEL_EXAMS = {
       "skill": "grammar",
       "question": "We're getting the kitchen repainted next week because we ___ to do it ourselves.",
       "options": [
-        "don't have the time",
-        "aren't have time",
         "won't doing it",
-        "not have time"
+        "aren't have time",
+        "not have time",
+        "don't have the time"
       ],
-      "correctIndex": 0,
+      "correctIndex": 3,
       "explanation": "Tras la causativa 'getting the kitchen repainted' (otra persona lo hace), la razon logica es que no se hace uno mismo; 'don't have the time to do it ourselves' es la unica opcion gramaticalmente correcta."
     },
     {
@@ -1440,12 +1440,12 @@ window.VESPER_LEVEL_EXAMS = {
       "skill": "vocab",
       "question": "In a formal email, which word best replaces 'get' in 'We need to get permission first.'?",
       "options": [
-        "grab",
         "obtain",
         "catch",
-        "fetch"
+        "fetch",
+        "grab"
       ],
-      "correctIndex": 1,
+      "correctIndex": 0,
       "explanation": "'Obtain' es el sinonimo de registro formal de 'get' (conseguir/obtener) adecuado en un correo profesional."
     },
     {
@@ -1453,12 +1453,12 @@ window.VESPER_LEVEL_EXAMS = {
       "skill": "vocab",
       "question": "Choose the most formal synonym: 'Could you ___ me with this task?'",
       "options": [
-        "assist",
         "help out",
         "give a hand to",
+        "assist",
         "back up"
       ],
-      "correctIndex": 0,
+      "correctIndex": 2,
       "explanation": "'Assist' es la opcion de registro formal equivalente a 'help'."
     },
     {
@@ -1466,12 +1466,12 @@ window.VESPER_LEVEL_EXAMS = {
       "skill": "vocab",
       "question": "She remained ___ about the new proposal, feeling both attracted to and worried about it at the same time.",
       "options": [
-        "dismissive",
-        "ambivalent",
         "compelling",
-        "skeptical"
+        "skeptical",
+        "dismissive",
+        "ambivalent"
       ],
-      "correctIndex": 1,
+      "correctIndex": 3,
       "explanation": "'Ambivalent' describe tener sentimientos mezclados o contradictorios simultaneamente."
     },
     {
@@ -1479,12 +1479,12 @@ window.VESPER_LEVEL_EXAMS = {
       "skill": "vocab",
       "question": "The lawyer presented a ___ argument that convinced the entire jury.",
       "options": [
-        "dismissive",
-        "skeptical",
+        "ambivalent",
         "compelling",
-        "ambivalent"
+        "dismissive",
+        "skeptical"
       ],
-      "correctIndex": 2,
+      "correctIndex": 1,
       "explanation": "'Compelling' significa convincente o persuasivo, lo que encaja con convencer al jurado."
     },
     {
@@ -1521,12 +1521,12 @@ window.VESPER_LEVEL_EXAMS = {
       "skill": "use",
       "question": "___ the heavy rain, the outdoor concert went ahead as planned.",
       "options": [
-        "Although",
         "Despite",
+        "Although",
         "However",
         "Whereas"
       ],
-      "correctIndex": 1,
+      "correctIndex": 0,
       "explanation": "'Despite' va seguido de un sustantivo o gerundio ('the heavy rain'), no de una oracion completa; por eso no se usa 'Although'."
     },
     {
@@ -1534,10 +1534,10 @@ window.VESPER_LEVEL_EXAMS = {
       "skill": "use",
       "question": "The first design was bold and colourful, ___ the second was minimalist and grey.",
       "options": [
+        "although",
         "despite",
-        "however",
         "whereas",
-        "although"
+        "however"
       ],
       "correctIndex": 2,
       "explanation": "'Whereas' contrasta dos ideas paralelas dentro de la misma oracion (uno frente al otro)."
@@ -1629,56 +1629,56 @@ window.VESPER_LEVEL_EXAMS = {
         {
           "q": "What is the main idea of the passage?",
           "options": [
+            "Public trust in science has declined because of citizen science.",
             "Citizen science has become a respected and valuable approach despite concerns about data reliability.",
             "Professional scientists are being replaced by untrained volunteers.",
-            "Online games are the most effective form of scientific research.",
-            "Public trust in science has declined because of citizen science."
+            "Online games are the most effective form of scientific research."
           ],
-          "correctIndex": 0,
+          "correctIndex": 1,
           "explanation": "El texto explica el auge, las ventajas y las criticas de la ciencia ciudadana, concluyendo que es un enfoque valioso y respetado."
         },
         {
           "q": "According to the passage, citizen science offers all of the following benefits EXCEPT:",
           "options": [
-            "the ability to process tasks at a large scale",
-            "guaranteed error-free data without any safeguards",
+            "a sense of shared ownership of research",
             "greater public understanding of how knowledge is created",
-            "a sense of shared ownership of research"
+            "the ability to process tasks at a large scale",
+            "guaranteed error-free data without any safeguards"
           ],
-          "correctIndex": 1,
+          "correctIndex": 3,
           "explanation": "El texto reconoce que pueden colarse errores y que se necesitan salvaguardas; nunca afirma que los datos esten libres de errores de forma garantizada."
         },
         {
           "q": "In the third paragraph, what does 'such measures' refer to?",
           "options": [
+            "the safeguards like independent checking and statistical filtering",
             "the concerns raised by critics",
             "the different levels of volunteer training",
-            "the safeguards like independent checking and statistical filtering",
             "the tasks completed by professional teams"
           ],
-          "correctIndex": 2,
+          "correctIndex": 0,
           "explanation": "'Such measures' remite a las salvaguardas mencionadas justo antes: verificacion por varios participantes y metodos estadisticos para filtrar anomalias."
         },
         {
           "q": "What can be inferred about the author's attitude toward citizen science?",
           "options": [
-            "It is broadly positive but acknowledges real limitations.",
-            "It is entirely dismissive of its scientific value.",
             "It is uncritically enthusiastic with no reservations.",
-            "It is convinced citizen science will soon disappear."
+            "It is convinced citizen science will soon disappear.",
+            "It is broadly positive but acknowledges real limitations.",
+            "It is entirely dismissive of its scientific value."
           ],
-          "correctIndex": 0,
+          "correctIndex": 2,
           "explanation": "El autor destaca beneficios pero tambien expone criticas legitimas y como se abordan, mostrando una postura positiva pero matizada."
         },
         {
           "q": "Which sentence best paraphrases 'this sense of shared ownership may prove just as valuable as the data itself'?",
           "options": [
-            "The feeling of collective involvement could be as important as the scientific results.",
             "Owning data is more profitable than sharing it.",
             "Volunteers should be paid for the data they produce.",
-            "The data is worthless without expert supervision."
+            "The data is worthless without expert supervision.",
+            "The feeling of collective involvement could be as important as the scientific results."
           ],
-          "correctIndex": 0,
+          "correctIndex": 3,
           "explanation": "La frase significa que el sentido de participacion colectiva puede ser tan importante como los propios datos cientificos."
         }
       ]
@@ -1702,11 +1702,11 @@ window.VESPER_LEVEL_EXAMS = {
       "text": "So, Professor, are you confident this new battery technology will reach the market soon? Well, the laboratory results are certainly promising. But I'd be cautious about making predictions. We've seen plenty of breakthroughs that never made it out of the lab.",
       "question": "What is the professor's attitude toward the new technology?",
       "options": [
+        "Convinced the technology will fail.",
         "Completely certain it will succeed commercially.",
-        "Cautiously optimistic but reluctant to make firm predictions.",
-        "Convinced the technology will fail."
+        "Cautiously optimistic but reluctant to make firm predictions."
       ],
-      "correctIndex": 1,
+      "correctIndex": 2,
       "explanation": "La profesora dice que los resultados son prometedores ('promising') pero se muestra cauta ('cautious') sobre hacer predicciones, lo que refleja un optimismo prudente."
     }
   ] },
@@ -1716,12 +1716,12 @@ window.VESPER_LEVEL_EXAMS = {
       "skill": "grammar",
       "question": "Seldom ___ such a thorough refutation of a long-accepted hypothesis.",
       "options": [
+        "we encountered",
         "we have encountered",
         "have we encountered",
-        "we encountered",
         "did encountered we"
       ],
-      "correctIndex": 1,
+      "correctIndex": 2,
       "explanation": "Cuando una oracion empieza con un adverbio negativo como 'Seldom', se aplica la inversion: auxiliar + sujeto ('have we encountered')."
     },
     {
@@ -1729,12 +1729,12 @@ window.VESPER_LEVEL_EXAMS = {
       "skill": "grammar",
       "question": "___ most about her argument is the rigour of its underlying methodology.",
       "options": [
-        "What impresses me",
-        "That impresses me",
+        "It impresses me",
         "Which impresses me",
-        "It impresses me"
+        "That impresses me",
+        "What impresses me"
       ],
-      "correctIndex": 0,
+      "correctIndex": 3,
       "explanation": "Es una oracion hendida (cleft) con 'What': 'What impresses me most is...'. 'What' introduce la clausula nominal sujeto."
     },
     {
@@ -1830,11 +1830,11 @@ window.VESPER_LEVEL_EXAMS = {
       "question": "The findings ___ in the latest report contradict several earlier assumptions.",
       "options": [
         "presenting",
-        "presented",
         "which presenting",
+        "presented",
         "were presented"
       ],
-      "correctIndex": 1,
+      "correctIndex": 2,
       "explanation": "Es una clausula relativa reducida en pasiva: 'the findings (that were) presented'. Se omite 'that were' y queda el participio 'presented'."
     },
     {
@@ -1863,11 +1863,11 @@ window.VESPER_LEVEL_EXAMS = {
       "question": "Auditors were appointed to ___ the firm's accounts after the discrepancies came to light.",
       "options": [
         "glance at",
-        "scrutinize",
         "overlook",
-        "skim"
+        "skim",
+        "scrutinize"
       ],
-      "correctIndex": 1,
+      "correctIndex": 3,
       "explanation": "'Scrutinize' significa examinar minuciosamente, el sentido formal apropiado para auditores que revisan cuentas."
     },
     {
@@ -1906,12 +1906,12 @@ window.VESPER_LEVEL_EXAMS = {
       "skill": "vocab",
       "question": "Complete the collocation: 'Given the polls, his re-election seemed a ___ conclusion.'",
       "options": [
-        "foregone",
+        "former",
         "forgotten",
-        "forward",
-        "former"
+        "foregone",
+        "forward"
       ],
-      "correctIndex": 0,
+      "correctIndex": 2,
       "explanation": "'A foregone conclusion' es una colocacion fija que significa un resultado que se da por seguro de antemano."
     },
     {
@@ -1970,12 +1970,12 @@ window.VESPER_LEVEL_EXAMS = {
       "skill": "use",
       "question": "Which sentence best shifts the informal statement 'We can't really back this up' into formal academic register?",
       "options": [
-        "This claim cannot be adequately substantiated.",
-        "We totally can't prove this one.",
+        "This is something we can't really show.",
         "There's no way to back this up at all.",
-        "This is something we can't really show."
+        "We totally can't prove this one.",
+        "This claim cannot be adequately substantiated."
       ],
-      "correctIndex": 0,
+      "correctIndex": 3,
       "explanation": "'This claim cannot be adequately substantiated' usa vocabulario formal y voz pasiva impersonal, propios del registro academico."
     },
     {
@@ -2045,23 +2045,23 @@ window.VESPER_LEVEL_EXAMS = {
         {
           "q": "What is the primary purpose of the passage?",
           "options": [
-            "To present the replication crisis and the competing interpretations it has provoked",
-            "To prove that most published psychology research is fraudulent",
+            "To provide step-by-step instructions for pre-registering a study",
             "To advocate exclusively for the immediate abolition of academic journals",
-            "To provide step-by-step instructions for pre-registering a study"
+            "To present the replication crisis and the competing interpretations it has provoked",
+            "To prove that most published psychology research is fraudulent"
           ],
-          "correctIndex": 0,
+          "correctIndex": 2,
           "explanation": "El texto expone la crisis de replicacion y las distintas interpretaciones (alarmistas y criticas), sin defender una sola postura ni dar instrucciones."
         },
         {
           "q": "According to the passage, the academic publishing system contributes to the crisis mainly because it",
           "options": [
+            "pays researchers directly for each experiment",
             "favours novel significant results over replications and null findings",
-            "refuses to publish any new research at all",
             "requires all data to be shared before publication",
-            "pays researchers directly for each experiment"
+            "refuses to publish any new research at all"
           ],
-          "correctIndex": 0,
+          "correctIndex": 1,
           "explanation": "El segundo parrafo dice que el sistema premia resultados novedosos y significativos mostrando poco interes en replicaciones o resultados nulos."
         },
         {
@@ -2078,23 +2078,23 @@ window.VESPER_LEVEL_EXAMS = {
         {
           "q": "In the final paragraph, the phrase 'gained considerable traction' most nearly means that pre-registration has",
           "options": [
-            "become increasingly adopted",
             "been firmly rejected by researchers",
             "lost all of its earlier support",
-            "remained entirely theoretical"
+            "remained entirely theoretical",
+            "become increasingly adopted"
           ],
-          "correctIndex": 0,
+          "correctIndex": 3,
           "explanation": "'Gain traction' significa ganar aceptacion o impulso; aqui indica que el preregistro se ha adoptado cada vez mas."
         },
         {
           "q": "The closing sentence implies that the author's overall stance is",
           "options": [
-            "cautiously optimistic about science's capacity for self-correction",
             "convinced that the sciences are beyond repair",
-            "indifferent to the outcome of the reforms",
-            "certain that the reforms have already failed"
+            "certain that the reforms have already failed",
+            "cautiously optimistic about science's capacity for self-correction",
+            "indifferent to the outcome of the reforms"
           ],
-          "correctIndex": 0,
+          "correctIndex": 2,
           "explanation": "La ultima frase sugiere una 'resiliencia' subestimada por los pesimistas, lo que revela un tono de optimismo cauteloso del autor."
         }
       ]
@@ -2118,11 +2118,11 @@ window.VESPER_LEVEL_EXAMS = {
       "text": "Now, the second study we'll examine had a much larger sample, and on the surface its conclusions look compelling. But I have reservations. Notice that the authors never specify how participants were recruited, and that omission, frankly, undermines my confidence in the generalisability of their findings. A larger sample does not, in itself, guarantee a representative one.",
       "question": "What is the speaker's attitude toward the second study?",
       "options": [
-        "Fully convinced by its conclusions because of the large sample.",
         "Sceptical, because the recruitment method is unspecified despite the large sample.",
+        "Fully convinced by its conclusions because of the large sample.",
         "Completely dismissive, considering the study fraudulent."
       ],
-      "correctIndex": 1,
+      "correctIndex": 0,
       "explanation": "El ponente expresa reservas: la falta de informacion sobre el reclutamiento mina su confianza, aunque la muestra sea grande. No lo descarta por fraude."
     }
   ] },
@@ -2132,12 +2132,12 @@ window.VESPER_LEVEL_EXAMS = {
       "skill": "grammar",
       "question": "___ a more persuasive case for institutional reform been articulated in recent memory.",
       "options": [
-        "Never has",
-        "Never have",
+        "Hardly never has",
         "Not never has",
-        "Hardly never has"
+        "Never have",
+        "Never has"
       ],
-      "correctIndex": 0,
+      "correctIndex": 3,
       "explanation": "Con inversion enfatica y sujeto singular ('a more persuasive case'), el auxiliar concuerda en singular: 'Never has... been articulated'. La negacion adelantada exige inversion sujeto-auxiliar."
     },
     {
@@ -2145,12 +2145,12 @@ window.VESPER_LEVEL_EXAMS = {
       "skill": "grammar",
       "question": "So ___ was the testimony that the jury reached its verdict within the hour.",
       "options": [
-        "compelling",
         "compellingly",
-        "the compelling",
-        "compelled"
+        "compelled",
+        "compelling",
+        "the compelling"
       ],
-      "correctIndex": 0,
+      "correctIndex": 2,
       "explanation": "La estructura enfatica 'So + adjetivo + was/were + sujeto + that...' requiere el adjetivo 'compelling' tras 'So', con inversion del verbo copulativo."
     },
     {
@@ -2171,12 +2171,12 @@ window.VESPER_LEVEL_EXAMS = {
       "skill": "grammar",
       "question": "Neither the data nor the underlying methodology ___ able to withstand peer scrutiny.",
       "options": [
-        "were",
-        "have been",
         "was",
+        "have been",
+        "were",
         "are"
       ],
-      "correctIndex": 2,
+      "correctIndex": 0,
       "explanation": "Con 'neither... nor...' el verbo concuerda con el elemento mas proximo. Aqui 'the underlying methodology' es singular, por lo que corresponde 'was'."
     },
     {
@@ -2289,11 +2289,11 @@ window.VESPER_LEVEL_EXAMS = {
       "question": "The new subsidy was intended to ameliorate rural poverty, but it inadvertently ___ existing inequalities.",
       "options": [
         "corroborated",
-        "exacerbated",
         "discerned",
-        "inhibited"
+        "inhibited",
+        "exacerbated"
       ],
-      "correctIndex": 1,
+      "correctIndex": 3,
       "explanation": "'Ameliorate' (mejorar) contrasta con 'exacerbate' (agravar), que es lo que ocurrio de forma involuntaria. 'Corroborate' = confirmar, 'discern' = percibir, 'inhibit' = frenar, no encajan."
     },
     {
@@ -2314,12 +2314,12 @@ window.VESPER_LEVEL_EXAMS = {
       "skill": "vocab",
       "question": "Her argument rested on a false ___ between liberty and security, as though one necessarily excluded the other.",
       "options": [
-        "catalyst",
         "nexus",
         "dichotomy",
-        "paradigm"
+        "paradigm",
+        "catalyst"
       ],
-      "correctIndex": 2,
+      "correctIndex": 1,
       "explanation": "Una 'dichotomy' es una division en dos categorias presentadas como opuestas y excluyentes, justo lo que describe el enunciado. 'Catalyst', 'nexus' y 'paradigm' no expresan esa oposicion binaria."
     },
     {
@@ -2327,12 +2327,12 @@ window.VESPER_LEVEL_EXAMS = {
       "skill": "vocab",
       "question": "The evidence remains largely ___; we should therefore treat any firm conclusion with caution.",
       "options": [
-        "ubiquitous",
         "speculative",
         "intractable",
+        "ubiquitous",
         "plausible"
       ],
-      "correctIndex": 1,
+      "correctIndex": 0,
       "explanation": "'Speculative' (especulativo, basado en conjeturas) justifica la cautela ante conclusiones firmes. 'Ubiquitous' = omnipresente, 'intractable' = irresoluble, 'plausible' = verosimil, no encajan con la peticion de prudencia."
     },
     {
@@ -2371,12 +2371,12 @@ window.VESPER_LEVEL_EXAMS = {
       "skill": "use",
       "question": "Which sentence uses the cohesion device most precisely? 'The funding was approved; ___, implementation was repeatedly delayed by bureaucratic inertia.'",
       "options": [
-        "nevertheless",
-        "therefore",
         "moreover",
-        "likewise"
+        "therefore",
+        "likewise",
+        "nevertheless"
       ],
-      "correctIndex": 0,
+      "correctIndex": 3,
       "explanation": "Se necesita un conector de contraste: pese a aprobarse la financiacion, hubo retrasos. 'Nevertheless' (no obstante) lo expresa. 'Therefore' (por tanto), 'moreover' (ademas) y 'likewise' (igualmente) no marcan contraste."
     },
     {
@@ -2384,12 +2384,12 @@ window.VESPER_LEVEL_EXAMS = {
       "skill": "use",
       "question": "Select the most register-appropriate rewrite for an academic abstract: 'We didn't find any link between the two things.'",
       "options": [
-        "We found no discernible correlation between the two variables.",
-        "We couldn't really find a connection between the stuff.",
+        "There wasn't anything linking the two things up.",
         "No way was there a link between them.",
-        "There wasn't anything linking the two things up."
+        "We found no discernible correlation between the two variables.",
+        "We couldn't really find a connection between the stuff."
       ],
-      "correctIndex": 0,
+      "correctIndex": 2,
       "explanation": "El registro academico exige precision lexica y formalidad: 'no discernible correlation between the two variables'. Las demas opciones son coloquiales o imprecisas ('stuff', 'No way', 'linking up')."
     },
     {
@@ -2474,10 +2474,10 @@ window.VESPER_LEVEL_EXAMS = {
         {
           "q": "Which statement best captures the author's central thesis?",
           "options": [
-            "Measurement should be abandoned because it always distorts the goals it tracks.",
-            "Measurement is a useful tool whose authority has been over-extended beyond what it can legitimately assess.",
             "Better-designed metrics would eliminate the problems associated with measurement.",
-            "Objective numbers are the only defensible basis for sound governance."
+            "Measurement is a useful tool whose authority has been over-extended beyond what it can legitimately assess.",
+            "Objective numbers are the only defensible basis for sound governance.",
+            "Measurement should be abandoned because it always distorts the goals it tracks."
           ],
           "correctIndex": 1,
           "explanation": "La tesis central es matizada: la medicion es util pero se le ha concedido una autoridad que excede su competencia (ultimo parrafo). No aboga por abolirla (rechaza esa postura como 'dogmatism') ni por mas metricas."
@@ -2497,33 +2497,33 @@ window.VESPER_LEVEL_EXAMS = {
           "q": "What does the author imply with the rhetorical question 'Who, after all, would argue against evidence?'",
           "options": [
             "That opposing evidence is genuinely indefensible.",
-            "That the appeal of measurement is rhetorically disarming, which is precisely why it warrants suspicion.",
             "That readers should accept metrics without further question.",
-            "That evidence and measurement are entirely unrelated concepts."
+            "That evidence and measurement are entirely unrelated concepts.",
+            "That the appeal of measurement is rhetorically disarming, which is precisely why it warrants suspicion."
           ],
-          "correctIndex": 1,
+          "correctIndex": 3,
           "explanation": "La pregunta retorica es ironica: el autor la usa para exponer que el atractivo de la medicion es desarmante, y enseguida advierte que 'esa misma persuasion deberia hacernos detenernos'. No es una aceptacion literal."
         },
         {
           "q": "The hospital example is used primarily to illustrate which idea?",
           "options": [
             "That hospitals are inefficient institutions.",
-            "That discharging patients quickly is always harmful.",
             "That a metric designed to capture quality can come to displace the quality it was meant to measure.",
+            "That discharging patients quickly is always harmful.",
             "That clinicians routinely act in bad faith."
           ],
-          "correctIndex": 2,
+          "correctIndex": 1,
           "explanation": "El ejemplo ilustra que el indicador suplanta al objetivo: la metrica disenada para medir calidad acaba desplazandola ('the indicator becomes the objective, and the objective quietly evaporates'). No generaliza sobre la mala fe ni sobre la ineficiencia."
         },
         {
           "q": "What is the author's overall purpose in the essay?",
           "options": [
-            "To persuade readers to reject all forms of quantification in public life.",
-            "To provide a neutral, purely descriptive survey of measurement practices.",
             "To advocate a discerning middle position that values judgement alongside, and as a check on, measurement.",
+            "To provide a neutral, purely descriptive survey of measurement practices.",
+            "To persuade readers to reject all forms of quantification in public life.",
             "To promote the adoption of more sophisticated statistical techniques."
           ],
-          "correctIndex": 2,
+          "correctIndex": 0,
           "explanation": "El proposito es defender una postura intermedia y reflexiva: contar lo que conviene contar pero conservar el juicio para detectar cuando 'el conteo ha empezado a mentir'. No es ni rechazo total ni mera descripcion neutral."
         }
       ]
@@ -2547,11 +2547,11 @@ window.VESPER_LEVEL_EXAMS = {
       "text": "Proponents of the carbon tax frame it as a neutral, technocratic fix, as if pricing emissions were merely an accounting adjustment. But every choice of price embeds a judgement about whose welfare counts and over what horizon. To present such a tax as apolitical is not to transcend politics; it is to smuggle one's politics in unexamined.",
       "question": "What is the speaker's main point about the carbon tax?",
       "options": [
-        "That a carbon tax is too costly to implement effectively.",
         "That presenting the tax as a neutral technical measure conceals the value judgements it necessarily contains.",
+        "That a carbon tax is too costly to implement effectively.",
         "That carbon taxes are the most apolitical solution available to policymakers."
       ],
-      "correctIndex": 1,
+      "correctIndex": 0,
       "explanation": "El hablante sostiene que presentar el impuesto como neutral y tecnocratico oculta juicios de valor inevitables ('whose welfare counts and over what horizon'). Califica esa neutralidad aparente de 'contrabando' de politica, no discute el coste ni acepta que sea apolitico."
     }
   ] }
@@ -2698,12 +2698,12 @@ window.VESPER_LEVEL_EXAMS = {
         "skill": "grammar",
         "question": "Last summer we ___ to Greece for two weeks.",
         "options": [
-          "go",
-          "went",
           "goed",
-          "gone"
+          "gone",
+          "go",
+          "went"
         ],
-        "correctIndex": 1,
+        "correctIndex": 3,
         "explanation": "El pasado simple irregular de 'go' es 'went'."
       },
       {
@@ -2779,12 +2779,12 @@ window.VESPER_LEVEL_EXAMS = {
         "skill": "grammar",
         "question": "My birthday is ___ December.",
         "options": [
-          "at",
           "on",
-          "in",
-          "to"
+          "at",
+          "to",
+          "in"
         ],
-        "correctIndex": 2,
+        "correctIndex": 3,
         "explanation": "Con meses usamos la preposicion 'in': 'in December'."
       },
       {
@@ -2809,10 +2809,10 @@ window.VESPER_LEVEL_EXAMS = {
         "skill": "grammar",
         "question": "There aren't ___ apples in the basket.",
         "options": [
-          "much",
+          "some",
           "many",
-          "a lot",
-          "some"
+          "much",
+          "a lot"
         ],
         "correctIndex": 1,
         "explanation": "'apples' es contable plural, asi que en negativo usamos 'many': 'aren't many'."
@@ -2848,11 +2848,11 @@ window.VESPER_LEVEL_EXAMS = {
         "question": "The new recycling plant ___ since the council approved the budget last spring.",
         "options": [
           "is built",
-          "has been built",
           "was building",
+          "has been built",
           "builds"
         ],
-        "correctIndex": 1,
+        "correctIndex": 2,
         "explanation": "Pasiva en present perfect ('has been built') porque 'since' marca una conexión con el presente y un resultado actual."
       },
       {
@@ -2860,12 +2860,12 @@ window.VESPER_LEVEL_EXAMS = {
         "skill": "grammar",
         "question": "If our streaming service ___ its prices again, a lot of subscribers will cancel.",
         "options": [
-          "will raise",
           "raises",
+          "raised",
           "would raise",
-          "raised"
+          "will raise"
         ],
-        "correctIndex": 1,
+        "correctIndex": 0,
         "explanation": "Primer condicional: 'if' + presente simple ('raises'), y la consecuencia con 'will'."
       },
       {
@@ -2964,12 +2964,12 @@ window.VESPER_LEVEL_EXAMS = {
         "skill": "grammar",
         "question": "Lucy isn't answering her phone, so she ___ be in the meeting right now.",
         "options": [
-          "can't",
           "must",
+          "can't",
           "should",
           "would"
         ],
-        "correctIndex": 1,
+        "correctIndex": 0,
         "explanation": "Deducción lógica con bastante certeza: 'must' (debe de estar en la reunión)."
       },
       {
@@ -2998,12 +2998,12 @@ window.VESPER_LEVEL_EXAMS = {
         "skill": "grammar",
         "question": "By the time the auditors arrived, the firm ___ all the incriminating files.",
         "options": [
-          "had already shredded",
-          "has already shredded",
+          "was already shredding",
           "already shredded",
-          "was already shredding"
+          "had already shredded",
+          "has already shredded"
         ],
-        "correctIndex": 0,
+        "correctIndex": 2,
         "explanation": "El past perfect (had + participio) describe una accion terminada antes de otro momento pasado ('arrived')."
       },
       {
@@ -3011,12 +3011,12 @@ window.VESPER_LEVEL_EXAMS = {
         "skill": "grammar",
         "question": "___ had the conductor raised his baton than a phone began to ring in the audience.",
         "options": [
+          "Scarcely than",
           "No sooner",
-          "Hardly when",
           "As soon",
-          "Scarcely than"
+          "Hardly when"
         ],
-        "correctIndex": 0,
+        "correctIndex": 1,
         "explanation": "La inversion 'No sooner... than' indica que una accion ocurrio inmediatamente despues de otra."
       },
       {
@@ -3142,12 +3142,12 @@ window.VESPER_LEVEL_EXAMS = {
         "skill": "use",
         "question": "Choose the best formal-register rewrite: 'The researchers got a lot of useful data from the survey.'",
         "options": [
-          "The researchers obtained numerous useful data from the survey.",
-          "The researchers obtained a substantial amount of useful data from the survey.",
           "The researchers grabbed loads of useful data from the survey.",
-          "The researchers picked up tons of useful data from the survey."
+          "The researchers picked up tons of useful data from the survey.",
+          "The researchers obtained numerous useful data from the survey.",
+          "The researchers obtained a substantial amount of useful data from the survey."
         ],
-        "correctIndex": 1,
+        "correctIndex": 3,
         "explanation": "'Obtained' y 'a substantial amount of' son de registro formal y correctos; 'numerous' no concuerda con el incontable 'data', y las otras opciones son informales."
       }
     ],
@@ -3170,12 +3170,12 @@ window.VESPER_LEVEL_EXAMS = {
         "skill": "use",
         "question": "Which sentence is a correctly formed cleft that emphasises the cause?",
         "options": [
-          "What undermined the report was its reliance on outdated data.",
           "It was undermined the report by relying on outdated data.",
+          "The thing undermines the report that outdated data.",
           "What was undermined the report its outdated data.",
-          "The thing undermines the report that outdated data."
+          "What undermined the report was its reliance on outdated data."
         ],
-        "correctIndex": 0,
+        "correctIndex": 3,
         "explanation": "Una oracion hendida (cleft) con 'What' usa el patron 'What + clausula + was/is + complemento': 'What undermined the report was its reliance on outdated data.'"
       },
       {
@@ -3205,12 +3205,12 @@ window.VESPER_LEVEL_EXAMS = {
         "skill": "vocab",
         "question": "The peer reviewers asked the authors to ___ their central claim with additional empirical evidence.",
         "options": [
-          "substantiate",
-          "speculate",
+          "alleviate",
           "fluctuate",
-          "alleviate"
+          "substantiate",
+          "speculate"
         ],
-        "correctIndex": 0,
+        "correctIndex": 2,
         "explanation": "'Substantiate' significa respaldar o demostrar una afirmacion con pruebas, exactamente lo que piden los revisores."
       },
       {
@@ -3291,12 +3291,12 @@ window.VESPER_LEVEL_EXAMS = {
           {
             "q": "What is the main idea of the passage?",
             "options": [
-              "Cities have become measurably noisier over the past century.",
               "An emerging field argues that the acoustic character of cities, not just their loudness, shapes urban experience and demands new methods.",
               "Noise above sixty-five decibels should be banned in residential areas.",
-              "Visual planning has always been more important than auditory planning."
+              "Visual planning has always been more important than auditory planning.",
+              "Cities have become measurably noisier over the past century."
             ],
-            "correctIndex": 1,
+            "correctIndex": 0,
             "explanation": "El texto presenta la ecologia del paisaje sonoro y su tesis de que el caracter acustico (no solo el volumen) configura la experiencia urbana y exige metodos nuevos."
           },
           {
@@ -3324,23 +3324,23 @@ window.VESPER_LEVEL_EXAMS = {
           {
             "q": "In the final paragraph, the phrase 'composing cities as much as constructing them' is used to suggest that planners may need to",
             "options": [
-              "build cities more cheaply than before.",
               "treat the design of urban sound with the deliberate, artistic care of a composer.",
+              "rely solely on musicians for city planning.",
               "abandon physical construction altogether.",
-              "rely solely on musicians for city planning."
+              "build cities more cheaply than before."
             ],
-            "correctIndex": 1,
+            "correctIndex": 0,
             "explanation": "'Composing' (componer, como musica) frente a 'constructing' sugiere que disenar el sonido urbano requerira un cuidado artistico y deliberado, no solo construccion fisica."
           },
           {
             "q": "What is the author's overall tone toward soundscape ecology?",
             "options": [
-              "Dismissive and mocking.",
-              "Cautiously favourable, presenting its arguments seriously while acknowledging the critics.",
               "Openly hostile to any new methodology.",
-              "Indifferent and detached from the debate."
+              "Indifferent and detached from the debate.",
+              "Dismissive and mocking.",
+              "Cautiously favourable, presenting its arguments seriously while acknowledging the critics."
             ],
-            "correctIndex": 1,
+            "correctIndex": 3,
             "explanation": "El autor expone con seriedad los argumentos del campo y reconoce a los criticos sin ridiculizarlos; el tono es cautelosamente favorable."
           }
         ]
@@ -3351,10 +3351,10 @@ window.VESPER_LEVEL_EXAMS = {
         "text": "In today's seminar I want to challenge a comfortable assumption, namely that bilingual children inevitably lag behind their monolingual peers in early vocabulary. The raw counts do show a smaller word list in each single language. But when researchers tally the child's total vocabulary across both languages, the so-called deficit largely disappears. So I'd urge you to be sceptical of any study that measures only one language and then declares a delay.",
         "question": "What is the speaker's main point about bilingual children's vocabulary?",
         "options": [
-          "Bilingual children are permanently behind monolingual children in every language.",
+          "Vocabulary size is irrelevant to a child's development.",
           "The apparent vocabulary gap mostly vanishes once both languages are counted together, so single-language studies can be misleading.",
           "Monolingual children should be taught a second language as early as possible.",
-          "Vocabulary size is irrelevant to a child's development."
+          "Bilingual children are permanently behind monolingual children in every language."
         ],
         "correctIndex": 1,
         "explanation": "El ponente sostiene que el supuesto retraso desaparece al sumar el vocabulario de ambos idiomas, por lo que los estudios de una sola lengua pueden inducir a error."
@@ -3366,12 +3366,12 @@ window.VESPER_LEVEL_EXAMS = {
         "skill": "grammar",
         "question": "___ the committee anticipated such a vehement backlash, the policy would surely have been redrafted before its premature unveiling.",
         "options": [
-          "Had",
-          "If",
           "Should",
-          "Were"
+          "Were",
+          "If",
+          "Had"
         ],
-        "correctIndex": 0,
+        "correctIndex": 3,
         "explanation": "Es una condicional de tercer tipo con inversion: 'Had the committee anticipated...' equivale a 'If the committee had anticipated...'. Las demas opciones no encajan con el participio pasado 'anticipated' ni con el resultado hipotetico pasado."
       },
       {
@@ -3380,9 +3380,9 @@ window.VESPER_LEVEL_EXAMS = {
         "question": "Far from ameliorating the crisis, the emergency subsidies merely ___ the underlying fiscal imbalances they were meant to redress.",
         "options": [
           "corroborated",
-          "discerned",
+          "posited",
           "exacerbated",
-          "posited"
+          "discerned"
         ],
         "correctIndex": 2,
         "explanation": "'Exacerbate' significa agravar o empeorar, lo opuesto a 'ameliorate' (mejorar), coherente con 'Far from...'. 'Corroborate' es confirmar, 'discern' percibir y 'posit' postular, ninguno encaja."
@@ -3427,12 +3427,12 @@ window.VESPER_LEVEL_EXAMS = {
         "skill": "use",
         "question": "Which sentence best expresses tentative, hedged academic register appropriate for a research abstract?",
         "options": [
-          "These findings prove beyond doubt that the intervention works.",
           "These findings tentatively suggest that the intervention may confer modest benefits, though further corroboration is warranted.",
-          "Honestly, the intervention totally works, no question about it.",
-          "The intervention works and anyone who disagrees is simply wrong."
+          "The intervention works and anyone who disagrees is simply wrong.",
+          "These findings prove beyond doubt that the intervention works.",
+          "Honestly, the intervention totally works, no question about it."
         ],
-        "correctIndex": 1,
+        "correctIndex": 0,
         "explanation": "El registro academico C2 favorece la cautela: 'tentatively suggest', 'may confer' y 'further corroboration is warranted' marcan provisionalidad. Las otras opciones son categoricas o coloquiales, impropias de un abstract."
       },
       {
@@ -3488,11 +3488,11 @@ window.VESPER_LEVEL_EXAMS = {
         "question": "The journalist framed the reform as a ___ for systemic change, the single event that set an entire cascade of consequences in motion.",
         "options": [
           "dichotomy",
-          "catalyst",
           "nexus",
+          "catalyst",
           "paradigm"
         ],
-        "correctIndex": 1,
+        "correctIndex": 2,
         "explanation": "Un 'catalyst' es lo que desencadena o acelera un proceso, justo lo que describe la frase. 'Dichotomy' es una division en dos, 'nexus' un punto de conexion y 'paradigm' un modelo, ninguno encaja."
       },
       {
@@ -3515,12 +3515,12 @@ window.VESPER_LEVEL_EXAMS = {
           {
             "q": "The phrase 'a performance of concern that conveniently absolves its performers of any complicity' is best described as",
             "options": [
-              "sincere praise for the commentators",
-              "ironic criticism of those who lament public credulity",
+              "an endorsement of relativism",
               "a neutral factual observation",
-              "an endorsement of relativism"
+              "sincere praise for the commentators",
+              "ironic criticism of those who lament public credulity"
             ],
-            "correctIndex": 1,
+            "correctIndex": 3,
             "explanation": "La frase es ironica y critica: tacha la preocupacion de los comentaristas de mera 'actuacion' que los exime de su propia responsabilidad."
           },
           {
@@ -3537,10 +3537,10 @@ window.VESPER_LEVEL_EXAMS = {
           {
             "q": "What does the author imply is the real solution to the problem?",
             "options": [
-              "Simply urging people to be more humble",
-              "Reforming the incentive structures that reward stridency over caution",
               "Accepting that nothing can be done",
-              "Punishing the public for its credulity"
+              "Reforming the incentive structures that reward stridency over caution",
+              "Punishing the public for its credulity",
+              "Simply urging people to be more humble"
             ],
             "correctIndex": 1,
             "explanation": "El autor descarta la mera exhortacion ('exhortation is cheap') y propone atender a los incentivos que premian la estridencia, es decir, reformar las estructuras."
@@ -3549,11 +3549,11 @@ window.VESPER_LEVEL_EXAMS = {
             "q": "The overall tone of the passage can best be characterized as",
             "options": [
               "indignant and exhortatory",
-              "measured but pointedly critical",
+              "celebratory and optimistic",
               "detached and indifferent",
-              "celebratory and optimistic"
+              "measured but pointedly critical"
             ],
-            "correctIndex": 1,
+            "correctIndex": 3,
             "explanation": "El tono es mesurado y matizado (hace concesiones, distingue grados) pero a la vez incisivamente critico hacia los comentaristas hipocritas."
           }
         ]
@@ -3564,9 +3564,9 @@ window.VESPER_LEVEL_EXAMS = {
         "text": "In this debate, my opponent insists that economic growth and environmental stewardship are fundamentally irreconcilable. But that framing smuggles in an assumption I simply cannot grant: that our current modes of production are the only conceivable ones. Strip away that premise, and the so-called dilemma dissolves into a mere failure of imagination.",
         "question": "What is the speaker primarily doing in this argument?",
         "options": [
-          "Conceding that growth and the environment cannot coexist",
+          "Proposing a specific new technology to solve the dilemma",
           "Challenging an unstated assumption underlying the opponent's claim",
-          "Proposing a specific new technology to solve the dilemma"
+          "Conceding that growth and the environment cannot coexist"
         ],
         "correctIndex": 1,
         "explanation": "El orador no concede ni propone tecnologia; identifica y refuta una suposicion implicita ('smuggles in an assumption') del oponente: que los modos actuales de produccion son los unicos posibles."

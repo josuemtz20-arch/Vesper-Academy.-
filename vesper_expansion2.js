@@ -65,8 +65,8 @@ window.VESPER_EXPANSION2 = (function () {
         { type: "matching", instruction: "Une la parte del cuerpo con su traducción.", pairs: [
           { l: "hand", r: "mano" }, { l: "eye", r: "ojo" }, { l: "leg", r: "pierna" }, { l: "mouth", r: "boca" } ],
           explanation: "hand = mano, eye = ojo, leg = pierna, mouth = boca." },
-        { type: "multiple_choice", question: "Plural of 'foot'?", options: ["foots", "feet", "feets"],
-          correctIndex: 1, explanation: "foot → feet (irregular)." },
+        { type: "multiple_choice", question: "Plural of 'foot'?", options: ["feet", "foots", "feets"],
+          correctIndex: 0, explanation: "foot → feet (irregular)." },
         { type: "fill_blank", sentence: "I brush my ___ every morning. (dientes)", answers: ["teeth"],
           hint: "tooth → ?", explanation: "tooth → teeth (irregular)." },
         { type: "true_false", statement: "'Hair' usually takes a plural -s in English (hairs).", answer: false,
@@ -92,8 +92,8 @@ window.VESPER_EXPANSION2 = (function () {
         { type: "matching", instruction: "Une la prenda con su traducción.", pairs: [
           { l: "shirt", r: "camisa" }, { l: "shoes", r: "zapatos" }, { l: "dress", r: "vestido" }, { l: "hat", r: "sombrero" } ],
           explanation: "shirt = camisa, shoes = zapatos, dress = vestido, hat = sombrero." },
-        { type: "multiple_choice", question: "She ___ a red dress today.", options: ["is wearing", "wears on", "is putting"],
-          correctIndex: 0, explanation: "'is wearing' = lleva puesto ahora mismo." },
+        { type: "multiple_choice", question: "She ___ a red dress today.", options: ["is putting", "wears on", "is wearing"],
+          correctIndex: 2, explanation: "'is wearing' = lleva puesto ahora mismo." },
         { type: "true_false", statement: "'Trousers' is always plural in English.", answer: true,
           explanation: "Sí: trousers, jeans, glasses van en plural." },
         { type: "fill_blank", sentence: "It's cold. Put ___ your coat.", answers: ["on"],
@@ -142,8 +142,8 @@ window.VESPER_EXPANSION2 = (function () {
         ]
       },
       exercises: [
-        { type: "multiple_choice", question: "The book is ___ the table (surface).", options: ["in", "on", "under"],
-          correctIndex: 1, explanation: "Sobre una superficie → on the table." },
+        { type: "multiple_choice", question: "The book is ___ the table (surface).", options: ["on", "in", "under"],
+          correctIndex: 0, explanation: "Sobre una superficie → on the table." },
         { type: "fill_blank", sentence: "The shop is ___ the bank and the café. (entre)", answers: ["between"],
           hint: "entre dos cosas.", explanation: "between = entre (dos)." },
         { type: "matching", instruction: "Une la preposición con su significado.", pairs: [
@@ -171,8 +171,8 @@ window.VESPER_EXPANSION2 = (function () {
       exercises: [
         { type: "word_order", words: ["She", "always", "reads", "at", "night"],
           correctOrder: ["She", "always", "reads", "at", "night"], hint: "adverbio antes del verbo principal." },
-        { type: "multiple_choice", question: "Correct order with 'to be'?", options: ["He always is happy", "He is always happy", "Always he is happy"],
-          correctIndex: 1, explanation: "Tras 'be' el adverbio va después: He is always happy." },
+        { type: "multiple_choice", question: "Correct order with 'to be'?", options: ["He always is happy", "Always he is happy", "He is always happy"],
+          correctIndex: 2, explanation: "Tras 'be' el adverbio va después: He is always happy." },
         { type: "fill_blank", sentence: "I ___ eat meat; I'm vegetarian. (0%)", answers: ["never"],
           hint: "0% de frecuencia.", explanation: "never = nunca (0%)." },
         { type: "categorize", instruction: "¿Frecuencia alta o baja?", buckets: [
@@ -226,8 +226,8 @@ window.VESPER_EXPANSION2 = (function () {
           passage: "Daniel has a new job in a bookshop in the city centre. He starts work at nine o'clock and finishes at five.\n\nEvery morning he takes the bus because there is no parking near the shop. At work, he helps customers find books and puts new books on the shelves.\n\nDaniel likes his job, but he is always tired on Friday. At the weekend he sleeps late and meets his friends.",
           questions: [
             { q: "Where does Daniel work?", options: ["In an office", "In a bookshop", "In a café"], correctIndex: 1, explanation: "\"a new job in a bookshop\"." },
-            { q: "How does he go to work?", options: ["By car", "By bike", "By bus"], correctIndex: 2, explanation: "\"he takes the bus\"." },
-            { q: "When is he always tired?", options: ["On Monday", "On Friday", "At the weekend"], correctIndex: 1, explanation: "\"he is always tired on Friday\"." }
+            { q: "How does he go to work?", options: ["By bus", "By bike", "By car"], correctIndex: 0, explanation: "\"he takes the bus\"." },
+            { q: "When is he always tired?", options: ["At the weekend", "On Monday", "On Friday"], correctIndex: 2, explanation: "\"he is always tired on Friday\"." }
           ] },
         { type: "true_false", statement: "Daniel finishes work at nine o'clock.", answer: false,
           explanation: "Empieza a las nueve y termina a las cinco." },
@@ -252,8 +252,8 @@ window.VESPER_EXPANSION2 = (function () {
         ]
       },
       exercises: [
-        { type: "multiple_choice", question: "If I ___ rich, I would travel.", options: ["am", "were", "will be"],
-          correctIndex: 1, explanation: "2º condicional: If + past (were)." },
+        { type: "multiple_choice", question: "If I ___ rich, I would travel.", options: ["were", "am", "will be"],
+          correctIndex: 0, explanation: "2º condicional: If + past (were)." },
         { type: "fill_blank", sentence: "If she had time, she ___ help. (would)", answers: ["would help"],
           hint: "would + infinitivo.", explanation: "would help." },
         { type: "word_order", words: ["If", "I", "were", "you,", "I", "would", "wait"],
@@ -278,8 +278,8 @@ window.VESPER_EXPANSION2 = (function () {
         ]
       },
       exercises: [
-        { type: "multiple_choice", question: "Negative form?", options: ["I didn't used to", "I didn't use to", "I usedn't"],
-          correctIndex: 1, explanation: "En negativo se pierde la -d: didn't use to." },
+        { type: "multiple_choice", question: "Negative form?", options: ["I didn't used to", "I usedn't", "I didn't use to"],
+          correctIndex: 2, explanation: "En negativo se pierde la -d: didn't use to." },
         { type: "fill_blank", sentence: "I ___ play tennis, but I stopped years ago.", answers: ["used to"],
           hint: "hábito pasado.", explanation: "used to play." },
         { type: "true_false", statement: "'I used to live there' means I live there now.", answer: false,
@@ -332,9 +332,9 @@ window.VESPER_EXPANSION2 = (function () {
         { type: "reading", title: "Slow travel",
           passage: "More and more people are choosing 'slow travel'. Instead of visiting five cities in a week, they stay in one place for several days.\n\nSlow travellers often rent a flat, cook their own food, and talk to local people. They say this helps them understand a culture better than a quick tour.\n\nIt is also cheaper and better for the planet, because they take fewer flights. For many, the goal is not to see everything, but to feel at home in a new place.",
           questions: [
-            { q: "What do slow travellers do?", options: ["Visit many cities fast", "Stay longer in one place", "Only take guided tours"], correctIndex: 1, explanation: "\"they stay in one place for several days\"." },
+            { q: "What do slow travellers do?", options: ["Visit many cities fast", "Stay longer in one place", "Only take guided tours of famous sights"], correctIndex: 1, explanation: "\"they stay in one place for several days\"." },
             { q: "Why is slow travel better for the planet?", options: ["They take fewer flights", "They walk everywhere", "They never eat out"], correctIndex: 0, explanation: "\"they take fewer flights\"." },
-            { q: "What is the main goal for many slow travellers?", options: ["To see everything", "To feel at home in a new place", "To save time"], correctIndex: 1, explanation: "\"to feel at home in a new place\"." }
+            { q: "What is the main goal for many slow travellers?", options: ["To see everything", "To save time", "To feel at home in a new place"], correctIndex: 2, explanation: "\"to feel at home in a new place\"." }
           ] },
         { type: "true_false", statement: "Slow travel is more expensive than fast tourism, according to the text.", answer: false,
           explanation: "El texto dice que es más barato (\"cheaper\")." },
@@ -382,8 +382,8 @@ window.VESPER_EXPANSION2 = (function () {
         ]
       },
       exercises: [
-        { type: "multiple_choice", question: "This time tomorrow, I ___ to London.", options: ["will fly", "will be flying", "am flying"],
-          correctIndex: 1, explanation: "Acción en curso en el futuro → will be flying." },
+        { type: "multiple_choice", question: "This time tomorrow, I ___ to London.", options: ["will fly", "am flying", "will be flying"],
+          correctIndex: 2, explanation: "Acción en curso en el futuro → will be flying." },
         { type: "fill_blank", sentence: "Don't call at 9 — I ___ (have) dinner then.", answers: ["will be having", "'ll be having"],
           hint: "will be + -ing.", explanation: "I'll be having dinner." },
         { type: "true_false", statement: "'Will you be using the car?' is a polite way to ask about plans.", answer: true,
@@ -463,14 +463,14 @@ window.VESPER_EXPANSION2 = (function () {
         { type: "reading", title: "Gardens in the city",
           passage: "In many crowded cities, empty rooftops and small plots are being turned into community gardens. Local residents grow vegetables, herbs and flowers together.\n\nThese gardens do more than provide food. They cool the air in summer, support bees and other insects, and give people a green space to relax and meet neighbours.\n\nSome city councils now support the idea, offering tools and water. Critics argue the gardens are too small to feed a city, but supporters say their real value is social and environmental, not just agricultural.",
           questions: [
-            { q: "What is the main topic?", options: ["Building skyscrapers", "Community gardens in cities", "Selling vegetables abroad"], correctIndex: 1, explanation: "El texto trata de huertos comunitarios urbanos." },
-            { q: "According to the text, the gardens...", options: ["only provide food", "do more than provide food", "harm insects"], correctIndex: 1, explanation: "\"These gardens do more than provide food\"." },
+            { q: "What is the main topic?", options: ["Community gardens in cities", "Building skyscrapers", "Selling vegetables abroad"], correctIndex: 0, explanation: "El texto trata de huertos comunitarios urbanos." },
+            { q: "According to the text, the gardens...", options: ["harm insects", "only provide food", "do more than provide food"], correctIndex: 2, explanation: "\"These gardens do more than provide food\"." },
             { q: "What do supporters say is the real value?", options: ["Feeding the whole city", "Social and environmental value", "Making money"], correctIndex: 1, explanation: "\"their real value is social and environmental\"." }
           ] },
         { type: "true_false", statement: "Everyone in the text agrees the gardens can feed an entire city.", answer: false,
           explanation: "Los críticos dicen que son demasiado pequeños para alimentar una ciudad." },
-        { type: "multiple_choice", question: "Which is an OPINION from the text?", options: ["Gardens cool the air", "Their real value is social", "Residents grow vegetables"],
-          correctIndex: 1, explanation: "\"their real value is social\" es una opinión de los partidarios." }
+        { type: "multiple_choice", question: "Which is an OPINION from the text?", options: ["Their real value is social", "Residents grow vegetables in shared plots", "Gardens cool the air"],
+          correctIndex: 0, explanation: "\"their real value is social\" es una opinión de los partidarios." }
       ]
     },
 
@@ -486,13 +486,13 @@ window.VESPER_EXPANSION2 = (function () {
       },
       exercises: [
         { type: "listening", text: "Good morning, everyone. Quick update: sales are up by ten percent this month, mainly thanks to the new website. Marketing will share the full report on Friday, and I'd like each team to send me their goals by Wednesday.",
-          question: "By how much are sales up?", options: ["Five percent", "Ten percent", "Twenty percent"], correctIndex: 1,
+          question: "By how much are sales up?", options: ["Twenty percent", "Five percent", "Ten percent"], correctIndex: 2,
           explanation: "\"sales are up by ten percent\"." },
         { type: "listening", text: "Good morning, everyone. Quick update: sales are up by ten percent this month, mainly thanks to the new website. Marketing will share the full report on Friday, and I'd like each team to send me their goals by Wednesday.",
           question: "When should teams send their goals?", options: ["By Wednesday", "On Friday", "Today"], correctIndex: 0,
           explanation: "\"send me their goals by Wednesday\"." },
-        { type: "multiple_choice", question: "What helped sales grow?", options: ["A new website", "A new office", "Lower prices"],
-          correctIndex: 0, explanation: "\"thanks to the new website\"." },
+        { type: "multiple_choice", question: "What helped sales grow?", options: ["A new office", "A new website", "Lower prices on every product"],
+          correctIndex: 1, explanation: "\"thanks to the new website\"." },
         { type: "true_false", statement: "Marketing will share the report on Monday.", answer: false,
           explanation: "Será el viernes (\"on Friday\")." }
       ]
@@ -595,8 +595,8 @@ window.VESPER_EXPANSION2 = (function () {
         ]
       },
       exercises: [
-        { type: "multiple_choice", question: "Which marker introduces a CONTRAST?", options: ["as a result", "on the other hand", "in addition"],
-          correctIndex: 1, explanation: "'on the other hand' presenta un contraste." },
+        { type: "multiple_choice", question: "Which marker introduces a CONTRAST?", options: ["on the other hand", "in addition", "as a result"],
+          correctIndex: 0, explanation: "'on the other hand' presenta un contraste." },
         { type: "fill_blank", sentence: "It rained all day. ___, the match was cancelled. (resultado)", answers: ["As a result", "Consequently"],
           hint: "consecuencia.", explanation: "As a result / Consequently = como resultado." },
         { type: "categorize", instruction: "¿El marcador añade, contrasta o concluye?", buckets: [
@@ -623,8 +623,8 @@ window.VESPER_EXPANSION2 = (function () {
         { type: "reading", title: "The attention economy",
           passage: "We often assume that free apps are gifts from generous companies. In reality, when a service is free, our attention is the product being sold.\n\nEvery notification, autoplay video and infinite scroll is carefully designed to keep us looking a little longer, because more time means more advertising revenue. The technology is not neutral; it is engineered to be hard to put down.\n\nNone of this makes the apps useless. The point is simply that we should use them deliberately, deciding when and why we open them, rather than letting their design decide for us.",
           questions: [
-            { q: "What is the author's main claim?", options: ["Free apps are pure gifts", "Our attention is the real product", "Technology is completely neutral"], correctIndex: 1, explanation: "\"our attention is the product being sold\"." },
-            { q: "The author's tone is best described as...", options: ["Alarmed and hopeless", "Critical but balanced", "Completely enthusiastic"], correctIndex: 1, explanation: "Critica el diseño pero reconoce utilidad: tono crítico pero equilibrado." },
+            { q: "What is the author's main claim?", options: ["Free apps are pure gifts", "Technology is completely neutral", "Our attention is the real product"], correctIndex: 2, explanation: "\"our attention is the product being sold\"." },
+            { q: "The author's tone is best described as...", options: ["Critical but balanced", "Completely enthusiastic", "Alarmed and hopeless"], correctIndex: 0, explanation: "Critica el diseño pero reconoce utilidad: tono crítico pero equilibrado." },
             { q: "What does the author recommend?", options: ["Deleting all apps", "Using apps deliberately", "Ignoring the problem"], correctIndex: 1, explanation: "\"we should use them deliberately\"." }
           ] },
         { type: "true_false", statement: "The author thinks the apps are useless.", answer: false,
@@ -646,13 +646,13 @@ window.VESPER_EXPANSION2 = (function () {
       },
       exercises: [
         { type: "listening", text: "Good afternoon. Today I'll focus on sleep. First, sleep is not wasted time: the brain uses it to store memories and repair itself. However, modern habits, especially screens at night, delay sleep and reduce its quality. The main message is that protecting your sleep is one of the cheapest ways to improve your health.",
-          question: "What is the lecture mainly about?", options: ["Exercise", "Sleep and health", "Healthy food"], correctIndex: 1,
+          question: "What is the lecture mainly about?", options: ["Healthy food and balanced diets", "Exercise", "Sleep and health"], correctIndex: 2,
           explanation: "\"Today I'll focus on sleep\"." },
         { type: "listening", text: "Good afternoon. Today I'll focus on sleep. First, sleep is not wasted time: the brain uses it to store memories and repair itself. However, modern habits, especially screens at night, delay sleep and reduce its quality. The main message is that protecting your sleep is one of the cheapest ways to improve your health.",
           question: "According to the speaker, what harms sleep?", options: ["Reading books", "Screens at night", "Morning coffee"], correctIndex: 1,
           explanation: "\"especially screens at night\"." },
-        { type: "multiple_choice", question: "The word 'however' signals...", options: ["an example", "a contrast", "a conclusion"],
-          correctIndex: 1, explanation: "'however' introduce un contraste." },
+        { type: "multiple_choice", question: "The word 'however' signals...", options: ["a contrast", "an example", "a conclusion"],
+          correctIndex: 0, explanation: "'however' introduce un contraste." },
         { type: "true_false", statement: "The speaker says sleep is wasted time.", answer: false,
           explanation: "\"sleep is not wasted time\"." }
       ]
@@ -671,8 +671,8 @@ window.VESPER_EXPANSION2 = (function () {
         ]
       },
       exercises: [
-        { type: "multiple_choice", question: "Which verb collocates with 'a decision'?", options: ["do", "make", "take a"],
-          correctIndex: 1, explanation: "'make a decision' es la collocation correcta." },
+        { type: "multiple_choice", question: "Which verb collocates with 'a decision'?", options: ["do", "take a", "make"],
+          correctIndex: 2, explanation: "'make a decision' es la collocation correcta." },
         { type: "matching", instruction: "Une para formar collocations naturales.", pairs: [
           { l: "pose", r: "a threat" }, { l: "bear", r: "in mind" }, { l: "draw", r: "a conclusion" }, { l: "meet", r: "a deadline" } ],
           explanation: "pose a threat, bear in mind, draw a conclusion, meet a deadline." },
@@ -700,8 +700,8 @@ window.VESPER_EXPANSION2 = (function () {
         { type: "matching", instruction: "Une el verbo informal con su equivalente formal.", pairs: [
           { l: "get", r: "obtain" }, { l: "ask for", r: "request" }, { l: "help", r: "assist" }, { l: "need", r: "require" } ],
           explanation: "Versiones formales de verbos cotidianos." },
-        { type: "multiple_choice", question: "Which sentence is the most formal?", options: ["Can you send it ASAP?", "Could you please send it at your earliest convenience?", "Send it now!"],
-          correctIndex: 1, explanation: "Educada, sin abreviaturas ni imperativos secos." },
+        { type: "multiple_choice", question: "Which sentence is the most formal?", options: ["Could you please send it at your earliest convenience?", "Can you send it ASAP?", "Send it now!"],
+          correctIndex: 0, explanation: "Educada, sin abreviaturas ni imperativos secos." },
         { type: "categorize", instruction: "¿Registro formal o informal?", buckets: [
           { id: "f", label: "Formal" }, { id: "i", label: "Informal" } ], items: [
           { t: "I regret to inform you", bucket: "f" }, { t: "gonna", bucket: "i" }, { t: "furthermore", bucket: "f" }, { t: "kinda", bucket: "i" } ] },
@@ -754,12 +754,12 @@ window.VESPER_EXPANSION2 = (function () {
           passage: "It is tempting to treat progress as an unstoppable force that always leaves us better off. Yet history suggests a more uncomfortable truth: change and improvement are not synonyms.\n\nEvery new technology solves certain problems while quietly creating others, and the people who benefit are rarely the same as those who pay the price. To question progress is not to long for the past; it is to insist that we choose our future rather than stumble into it.\n\nThe sceptic, then, is not the enemy of progress but its most useful ally — the one who asks, before we celebrate, what exactly we have gained, and at whose expense.",
           questions: [
             { q: "What is the author's central thesis?", options: ["Progress always improves life", "Change and improvement are not the same", "The past was better"], correctIndex: 1, explanation: "\"change and improvement are not synonyms\"." },
-            { q: "How does the author view the sceptic?", options: ["As an enemy of progress", "As its most useful ally", "As irrelevant"], correctIndex: 1, explanation: "\"not the enemy of progress but its most useful ally\"." },
+            { q: "How does the author view the sceptic?", options: ["As an enemy of progress", "As irrelevant", "As its most useful ally"], correctIndex: 2, explanation: "\"not the enemy of progress but its most useful ally\"." },
             { q: "'At whose expense' invites the reader to consider...", options: ["who pays the cost of progress", "how fast progress is", "where progress happens"], correctIndex: 0, explanation: "Pregunta quién paga el precio del progreso." }
           ] },
         { type: "true_false", statement: "The author argues we should return to the past.", answer: false,
           explanation: "\"To question progress is not to long for the past\"." },
-        { type: "multiple_choice", question: "The author's attitude to 'progress' is best described as...", options: ["uncritical praise", "thoughtful scepticism", "total rejection"],
+        { type: "multiple_choice", question: "The author's attitude to 'progress' is best described as...", options: ["uncritical praise of every new idea", "thoughtful scepticism", "total rejection"],
           correctIndex: 1, explanation: "Cuestiona el progreso sin rechazarlo: escepticismo reflexivo." }
       ]
     },
@@ -780,8 +780,8 @@ window.VESPER_EXPANSION2 = (function () {
         ]
       },
       exercises: [
-        { type: "multiple_choice", question: "Best answer to 'What are your strengths?'", options: ["I don't know.", "I'm good at teamwork and meeting deadlines.", "Nothing special."],
-          correctIndex: 1, explanation: "Concreto y positivo, con ejemplos de fortalezas." },
+        { type: "multiple_choice", question: "Best answer to 'What are your strengths?'", options: ["Nothing special.", "I don't know.", "I'm good at teamwork and meeting deadlines."],
+          correctIndex: 2, explanation: "Concreto y positivo, con ejemplos de fortalezas." },
         { type: "matching", instruction: "Une la pregunta con una buena respuesta.", pairs: [
           { l: "Tell me about yourself", r: "I'm a designer with 4 years' experience." },
           { l: "Why this job?", r: "Your company's values match mine." },
@@ -810,8 +810,8 @@ window.VESPER_EXPANSION2 = (function () {
         ]
       },
       exercises: [
-        { type: "multiple_choice", question: "Which is GOOD small talk at work?", options: ["How much do you earn?", "How was your weekend?", "Why are you single?"],
-          correctIndex: 1, explanation: "El fin de semana es un tema seguro y amable." },
+        { type: "multiple_choice", question: "Which is GOOD small talk at work?", options: ["How was your weekend?", "How much do you earn?", "Why are you single?"],
+          correctIndex: 0, explanation: "El fin de semana es un tema seguro y amable." },
         { type: "categorize", instruction: "¿Tema seguro o tema a evitar en el trabajo?", buckets: [
           { id: "ok", label: "Seguro" }, { id: "no", label: "Evitar" } ], items: [
           { t: "the weather", bucket: "ok" }, { t: "your salary", bucket: "no" }, { t: "weekend plans", bucket: "ok" }, { t: "politics", bucket: "no" } ] },

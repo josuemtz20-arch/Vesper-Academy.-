@@ -63,9 +63,9 @@ window.VESPER_THEMES_PACK3 = (function () {
           question: "Where is the supermarket?", options: ["next to the park", "inside the school", "far away"], correctIndex: 0, explanation: "\"...next to the park...\"" },
         { type: "listening",
           text: "The library is open from nine to five, Monday to Friday.",
-          question: "When does the library close?", options: ["at nine", "at five", "on Sunday"], correctIndex: 1, explanation: "\"...from nine to five...\": cierra a las cinco." },
+          question: "When does the library close?", options: ["at nine", "on Sunday", "at five"], correctIndex: 2, explanation: "\"...from nine to five...\": cierra a las cinco." },
         { type: "true_false", statement: "There is a supermarket near the park.", answer: true, explanation: "\"...there's one next to the park...\"" },
-        { type: "multiple_choice", question: "How far is the supermarket?", options: ["two minutes", "two hours", "two days"], correctIndex: 0, explanation: "\"...just two minutes away.\"" }
+        { type: "multiple_choice", question: "How far is the supermarket?", options: ["two hours", "two minutes", "two days"], correctIndex: 1, explanation: "\"...just two minutes away.\"" }
       ]
     },
 
@@ -110,11 +110,11 @@ window.VESPER_THEMES_PACK3 = (function () {
       exercises: [
         { type: "listening",
           text: "Hi, I'm Sara. I work in a hospital. I help doctors and take care of patients. I usually work at night.",
-          question: "What is Sara's job?", options: ["she is a teacher", "she is a nurse", "she is a chef"], correctIndex: 1, explanation: "Ayuda a los médicos y cuida pacientes: es enfermera." },
+          question: "What is Sara's job?", options: ["she is a teacher", "she is a chef", "she is a nurse"], correctIndex: 2, explanation: "Ayuda a los médicos y cuida pacientes: es enfermera." },
         { type: "listening",
           text: "I love my job, but the hours are difficult because I often work at night.",
           question: "Why does Sara find her job difficult?", options: ["the pay is low", "she works at night", "it is far from home"], correctIndex: 1, explanation: "\"...the hours are difficult because I often work at night.\"" },
-        { type: "multiple_choice", question: "Where does Sara work?", options: ["in a school", "in a hospital", "in a restaurant"], correctIndex: 1, explanation: "\"I work in a hospital.\"" },
+        { type: "multiple_choice", question: "Where does Sara work?", options: ["in a hospital", "in a school", "in a restaurant"], correctIndex: 0, explanation: "\"I work in a hospital.\"" },
         { type: "true_false", statement: "Sara works during the day.", answer: false, explanation: "Trabaja de noche ('at night')." }
       ]
     },
@@ -160,11 +160,11 @@ window.VESPER_THEMES_PACK3 = (function () {
       exercises: [
         { type: "listening",
           text: "So, what do you do in your free time? — I'm really into rock climbing. I go to an indoor climbing centre twice a week, and once a month I climb outdoors if the weather is good.",
-          question: "What is the speaker's hobby?", options: ["swimming", "rock climbing", "painting"], correctIndex: 1, explanation: "\"I'm really into rock climbing.\"" },
+          question: "What is the speaker's hobby?", options: ["swimming", "painting", "rock climbing"], correctIndex: 2, explanation: "\"I'm really into rock climbing.\"" },
         { type: "listening",
           text: "It keeps me fit, and I love the feeling of reaching the top. The only downside is that good equipment is quite expensive.",
-          question: "What does the speaker say is the only downside?", options: ["it is dangerous", "the equipment is expensive", "it takes too much time"], correctIndex: 1, explanation: "\"The only downside is that good equipment is quite expensive.\"" },
-        { type: "multiple_choice", question: "How often does the speaker climb indoors?", options: ["once a month", "twice a week", "every day"], correctIndex: 1, explanation: "\"...twice a week...\" en el centro cubierto." },
+          question: "What does the speaker say is the only downside?", options: ["it is dangerous", "the equipment is expensive", "it takes too much time every single weekend"], correctIndex: 1, explanation: "\"The only downside is that good equipment is quite expensive.\"" },
+        { type: "multiple_choice", question: "How often does the speaker climb indoors?", options: ["twice a week", "once a month", "every day"], correctIndex: 0, explanation: "\"...twice a week...\" en el centro cubierto." },
         { type: "true_false", statement: "The speaker thinks the equipment is cheap.", answer: false, explanation: "Dice que el buen equipo es bastante caro ('quite expensive')." }
       ]
     },
@@ -185,17 +185,17 @@ window.VESPER_THEMES_PACK3 = (function () {
         { type: "reading", title: "Working in the Gig Economy",
           passage: "The 'gig economy' refers to a labour market based on short-term contracts and freelance work rather than permanent jobs. Driven by digital platforms, it allows people to work as drivers, delivery riders or online freelancers whenever they choose.\n\nSupporters praise the flexibility: workers can set their own hours and combine several sources of income. For students, parents and people seeking extra cash, this freedom can be genuinely valuable.\n\nCritics, however, warn that flexibility often comes at the cost of security. Gig workers rarely receive paid holidays, sick pay or pensions, and their income can be unpredictable. As the sector grows, governments are under increasing pressure to decide whether these workers should be treated as employees or as independent contractors.",
           questions: [
-            { q: "What is the passage mainly about?", options: ["how to start a delivery company", "the gig economy and its advantages and drawbacks", "why permanent jobs no longer exist", "how digital platforms make money"], correctIndex: 1, explanation: "Define la gig economy y contrasta ventajas e inconvenientes." },
+            { q: "What is the passage mainly about?", options: ["how to start a delivery company", "why permanent jobs no longer exist", "how digital platforms make money", "the gig economy and its advantages and drawbacks"], correctIndex: 3, explanation: "Define la gig economy y contrasta ventajas e inconvenientes." },
             { q: "According to the passage, what do gig workers rarely receive?", options: ["any income at all", "paid holidays, sick pay or pensions", "access to digital platforms", "short-term contracts"], correctIndex: 1, explanation: "\"...rarely receive paid holidays, sick pay or pensions...\"" },
-            { q: "In context, \"flexibility comes at the cost of security\" means flexibility...", options: ["is always free", "is gained by giving up security", "increases job security", "has no disadvantages"], correctIndex: 1, explanation: "Se gana flexibilidad pero se pierde seguridad." },
-            { q: "Why does the author mention students and parents?", options: ["to prove the gig economy is bad", "as examples of people for whom flexibility can be valuable", "to criticise digital platforms", "to explain how pensions work"], correctIndex: 1, explanation: "Son ejemplos de quienes valoran esa flexibilidad (función retórica)." },
-            { q: "What can be inferred about governments?", options: ["they ignore the gig economy", "they face growing pressure to regulate the status of gig workers", "they have already solved the problem", "they want to ban digital platforms"], correctIndex: 1, explanation: "\"...under increasing pressure to decide whether these workers should be treated as employees...\"" }
+            { q: "In context, \"flexibility comes at the cost of security\" means flexibility...", options: ["has no disadvantages", "increases job security", "is gained by giving up security", "is always free"], correctIndex: 2, explanation: "Se gana flexibilidad pero se pierde seguridad." },
+            { q: "Why does the author mention students and parents?", options: ["as examples of people for whom flexibility can be valuable", "to explain how pensions work", "to criticise digital platforms", "to prove the gig economy is bad"], correctIndex: 0, explanation: "Son ejemplos de quienes valoran esa flexibilidad (función retórica)." },
+            { q: "What can be inferred about governments?", options: ["they have already solved the problem", "they want to ban digital platforms", "they ignore the gig economy", "they face growing pressure to regulate the status of gig workers"], correctIndex: 3, explanation: "\"...under increasing pressure to decide whether these workers should be treated as employees...\"" }
           ] },
         { type: "find_error", question: "Encuentra el error.",
           segments: ["Gig workers ", { u: "rarely" }, " ", { u: "receives" }, " ", { u: "paid" }, " ", { u: "holidays" }, "."],
           correctIndex: 1, correction: "receive (workers = plural)",
           explanation: "El sujeto 'workers' es plural: el verbo es 'receive', no 'receives'." },
-        { type: "multiple_choice", question: "In the text, an \"independent contractor\" is someone who...", options: ["is a permanent employee", "works for themselves rather than as an employee", "owns a digital platform", "never gets paid"], correctIndex: 1, explanation: "Un autónomo/contratista independiente trabaja por su cuenta, no como empleado." },
+        { type: "multiple_choice", question: "In the text, an \"independent contractor\" is someone who...", options: ["is a permanent employee with a long-term company contract", "works for themselves rather than as an employee", "owns a digital platform", "never gets paid"], correctIndex: 1, explanation: "Un autónomo/contratista independiente trabaja por su cuenta, no como empleado." },
         { type: "true_false", statement: "According to the passage, gig workers always have a predictable income.", answer: false, explanation: "\"...their income can be unpredictable.\"" }
       ]
     },
@@ -242,17 +242,17 @@ window.VESPER_THEMES_PACK3 = (function () {
         { type: "reading", title: "The Promise and Peril of AI",
           passage: "Artificial intelligence has moved from science fiction into everyday life. Systems that recommend films, translate languages or detect diseases in medical scans now rely on machine learning, in which algorithms improve by analysing vast amounts of data.\n\nYet this power raises difficult questions. Because such systems learn from historical data, they can absorb and even amplify the biases contained in it; a hiring algorithm trained on past decisions may quietly reproduce old prejudices. Moreover, the most advanced models are so complex that even their designers cannot always explain why a particular decision was made.\n\nFor this reason, many researchers argue that progress in AI must be matched by progress in transparency and accountability. The challenge is not merely to build systems that work, but systems whose reasoning we can trust and, when necessary, contest.",
           questions: [
-            { q: "What is the main purpose of the passage?", options: ["to explain how to program an algorithm", "to discuss both the power and the risks of AI", "to argue that AI should be banned", "to describe the history of science fiction"], correctIndex: 1, explanation: "Presenta capacidades y riesgos, y aboga por transparencia." },
+            { q: "What is the main purpose of the passage?", options: ["to argue that AI should be banned", "to explain how to program an algorithm", "to discuss both the power and the risks of AI", "to describe the history of science fiction"], correctIndex: 2, explanation: "Presenta capacidades y riesgos, y aboga por transparencia." },
             { q: "According to the passage, how do machine-learning systems improve?", options: ["by following fixed rules", "by analysing vast amounts of data", "by copying science fiction", "by reducing their complexity"], correctIndex: 1, explanation: "\"...algorithms improve by analysing vast amounts of data.\"" },
-            { q: "In context, \"amplify\" the biases means to...", options: ["remove the biases", "make the biases stronger", "hide the biases", "measure the biases"], correctIndex: 1, explanation: "'Amplify' = aumentar/intensificar." },
-            { q: "Why does the author mention a hiring algorithm?", options: ["to recommend it to companies", "to give an example of how AI can reproduce old prejudices", "to prove AI is always fair", "to explain how to get a job"], correctIndex: 1, explanation: "Ejemplifica cómo la IA puede reproducir prejuicios pasados." },
-            { q: "Which best paraphrases: \"systems whose reasoning we can trust and, when necessary, contest\"?", options: ["systems we must obey without question", "systems whose decisions we can rely on and also challenge when needed", "systems that never make decisions", "systems that cannot be understood"], correctIndex: 1, explanation: "Sistemas fiables que además podamos cuestionar cuando haga falta." }
+            { q: "In context, \"amplify\" the biases means to...", options: ["measure the biases", "remove the biases", "hide the biases", "make the biases stronger"], correctIndex: 3, explanation: "'Amplify' = aumentar/intensificar." },
+            { q: "Why does the author mention a hiring algorithm?", options: ["to give an example of how AI can reproduce old prejudices", "to prove AI is always fair", "to recommend it to companies", "to explain how to get a job"], correctIndex: 0, explanation: "Ejemplifica cómo la IA puede reproducir prejuicios pasados." },
+            { q: "Which best paraphrases: \"systems whose reasoning we can trust and, when necessary, contest\"?", options: ["systems that cannot be understood", "systems we must obey without question", "systems whose decisions we can rely on and also challenge when needed", "systems that never make decisions"], correctIndex: 2, explanation: "Sistemas fiables que además podamos cuestionar cuando haga falta." }
           ] },
         { type: "find_error", question: "Encuentra el error.",
           segments: ["The most advanced models are so complex that even their designers ", { u: "cannot" }, " always ", { u: "explains" }, " ", { u: "why" }, " a decision ", { u: "was made" }, "."],
           correctIndex: 1, correction: "explain (tras 'cannot', forma base)",
           explanation: "Tras un modal como 'cannot' el verbo va en forma base: 'explain'." },
-        { type: "multiple_choice", question: "In the passage, \"accountability\" is closest in meaning to...", options: ["speed", "responsibility for one's actions", "complexity", "profit"], correctIndex: 1, explanation: "'Accountability' = rendición de cuentas, responsabilidad." },
+        { type: "multiple_choice", question: "In the passage, \"accountability\" is closest in meaning to...", options: ["speed", "responsibility for one's actions", "the complexity of a modern computer system", "profit"], correctIndex: 1, explanation: "'Accountability' = rendición de cuentas, responsabilidad." },
         { type: "true_false", statement: "According to the passage, designers can always explain every decision made by advanced AI models.", answer: false, explanation: "\"...cannot always explain why a particular decision was made.\"" }
       ]
     },
@@ -299,17 +299,17 @@ window.VESPER_THEMES_PACK3 = (function () {
         { type: "reading", title: "What Makes a Good Life?",
           passage: "For centuries, philosophers have debated what it means to live a good life. The ancient Greeks distinguished between hedonia, the pleasure of feeling good, and eudaimonia, a deeper sense of flourishing that comes from living in accordance with one's values.\n\nModern psychology has revived this distinction. Studies suggest that the relentless pursuit of pleasure often proves self-defeating: the more people chase momentary happiness, the more elusive it becomes. By contrast, those who devote themselves to meaningful goals, even difficult ones, frequently report greater long-term satisfaction.\n\nThis does not mean that pleasure is worthless or that suffering is noble. Rather, it suggests that a life organised solely around feeling good may be less fulfilling than one that also makes room for purpose, connection and the occasional discomfort that growth requires.",
           questions: [
-            { q: "What is the central idea of the passage?", options: ["pleasure should always be avoided", "a meaningful life may be more fulfilling than one aimed only at pleasure", "the ancient Greeks were always right", "happiness is impossible to achieve"], correctIndex: 1, explanation: "Distingue placer y sentido, y sugiere que el sentido aporta más satisfacción duradera." },
+            { q: "What is the central idea of the passage?", options: ["pleasure should always be avoided", "happiness is impossible to achieve", "a meaningful life may be more fulfilling than one aimed only at pleasure", "the ancient Greeks were always right"], correctIndex: 2, explanation: "Distingue placer y sentido, y sugiere que el sentido aporta más satisfacción duradera." },
             { q: "According to the passage, what is the difference between hedonia and eudaimonia?", options: ["they are exactly the same", "hedonia is feeling good; eudaimonia is flourishing through living by one's values", "hedonia is suffering; eudaimonia is pleasure", "both refer only to wealth"], correctIndex: 1, explanation: "Hedonia = placer; eudaimonia = florecer viviendo conforme a los valores." },
-            { q: "In context, \"self-defeating\" means the pursuit of pleasure...", options: ["always succeeds", "undermines its own goal", "is morally wrong", "is very cheap"], correctIndex: 1, explanation: "'Self-defeating' = contraproducente: socava su propio objetivo." },
-            { q: "What does the author concede in the final paragraph?", options: ["that pleasure is worthless", "that pleasure is not worthless and suffering is not noble", "that growth never requires discomfort", "that purpose does not matter"], correctIndex: 1, explanation: "Matiza: ni el placer es inútil ni el sufrimiento es noble." },
-            { q: "Which can be inferred from the passage?", options: ["chasing momentary happiness guarantees it", "meaning and purpose contribute to long-term satisfaction", "discomfort should always be avoided", "values are irrelevant to happiness"], correctIndex: 1, explanation: "Quienes persiguen metas con sentido reportan mayor satisfacción duradera." }
+            { q: "In context, \"self-defeating\" means the pursuit of pleasure...", options: ["is morally wrong", "always succeeds", "is very cheap", "undermines its own goal"], correctIndex: 3, explanation: "'Self-defeating' = contraproducente: socava su propio objetivo." },
+            { q: "What does the author concede in the final paragraph?", options: ["that pleasure is not worthless and suffering is not noble", "that growth never requires discomfort", "that purpose does not matter", "that pleasure is worthless"], correctIndex: 0, explanation: "Matiza: ni el placer es inútil ni el sufrimiento es noble." },
+            { q: "Which can be inferred from the passage?", options: ["chasing momentary happiness guarantees it", "discomfort should always be avoided", "values are irrelevant to happiness", "meaning and purpose contribute to long-term satisfaction"], correctIndex: 3, explanation: "Quienes persiguen metas con sentido reportan mayor satisfacción duradera." }
           ] },
         { type: "find_error", question: "Encuentra el error.",
           segments: ["The more people ", { u: "chase" }, " momentary happiness, the more ", { u: "elusive" }, " ", { u: "it" }, " ", { u: "become" }, "."],
           correctIndex: 3, correction: "becomes ('it' es singular)",
           explanation: "El sujeto 'it' es singular: el verbo es 'becomes', no 'become'." },
-        { type: "multiple_choice", question: "In the passage, \"elusive\" describes something that is...", options: ["easy to catch", "hard to achieve or grasp", "extremely cheap", "clearly visible"], correctIndex: 1, explanation: "'Elusive' = esquivo, difícil de alcanzar." },
+        { type: "multiple_choice", question: "In the passage, \"elusive\" describes something that is...", options: ["easy to catch, see and hold onto at any time", "hard to achieve or grasp", "extremely cheap", "clearly visible"], correctIndex: 1, explanation: "'Elusive' = esquivo, difícil de alcanzar." },
         { type: "true_false", statement: "The author claims that suffering is noble and pleasure is worthless.", answer: false, explanation: "Dice explícitamente lo contrario: ni el placer es inútil ni el sufrimiento es noble." }
       ]
     },

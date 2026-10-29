@@ -2721,6 +2721,11 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     }
     return arr;
   }
+  /* Orden en pantalla de las opciones, barajado en cada intento: sin esto,
+     "toca siempre la segunda" aprobaba lecciones. Cada botón conserva su
+     índice original en data-i, así que calificar (correctIndex) y mostrar
+     "Era: ..." no cambian. */
+  function optOrder(n) { var a = []; for (var i = 0; i < n; i++) a.push(i); return shuffle(a); }
 
   /* ---------- INDEX / HUB progresivo (no ?id=) ---------- */
   function toast(msg) {
@@ -4904,8 +4909,8 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
   }
 
   function renderMCQ(ex, pct, total) {
-    var opts = ex.options.map(function (o, i) {
-      return '<button class="opt" type="button" aria-pressed="false" data-i="' + i + '" lang="en">' + esc(o) + '</button>';
+    var opts = optOrder(ex.options.length).map(function (i) {
+      return '<button class="opt" type="button" aria-pressed="false" data-i="' + i + '" lang="en">' + esc(ex.options[i]) + '</button>';
     }).join("");
     show('<div class="wrap">' + exHeader(pct, total) + '<div class="card">'
       + '<h2 lang="en">' + esc(ex.question || "Elige la opcion correcta") + '</h2>'
@@ -5353,7 +5358,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     var qHtml;
     if (hasOpts) {
       qHtml = '<p class="body">' + esc(ex.question || "Que escuchaste?") + '</p>'
-        + '<div class="opts">' + ex.options.map(function (o, i) { return '<button class="opt" data-i="' + i + '">' + esc(o) + '</button>'; }).join("") + '</div>';
+        + '<div class="opts">' + optOrder(ex.options.length).map(function (i) { return '<button class="opt" data-i="' + i + '">' + esc(ex.options[i]) + '</button>'; }).join("") + '</div>';
     } else {
       qHtml = '<p class="body">' + esc(ex.question || "Escribe lo que escuchaste") + '</p>'
         + '<input id="ltype" class="type-input" placeholder="Escribe en ingles..." autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false">';
@@ -5461,8 +5466,8 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
     var passageHtml = paras.filter(function (p) { return ("" + p).trim(); })
       .map(function (p) { return '<p>' + esc(p) + '</p>'; }).join("");
     var qHtml = qs2.map(function (q, qi) {
-      var opts = (q.options || []).map(function (o, i) {
-        return '<button class="opt" data-q="' + qi + '" data-i="' + i + '">' + esc(o) + '</button>';
+      var opts = optOrder((q.options || []).length).map(function (i) {
+        return '<button class="opt" data-q="' + qi + '" data-i="' + i + '">' + esc(q.options[i]) + '</button>';
       }).join("");
       return '<div class="rq" data-qwrap="' + qi + '">'
         + '<div class="rq-num">Pregunta ' + (qi + 1) + ' de ' + qs2.length + '</div>'
@@ -6088,7 +6093,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
       if (idx >= qs2.length) { finishWarm(); return; }
       var q = qs2[idx];
       var dots = qs2.map(function (_, i) { return '<span class="warm-dot' + (i <= idx ? " on" : "") + '"></span>'; }).join("");
-      var opts = q.options.map(function (o, i) { return '<button class="opt" data-i="' + i + '">' + esc(o) + '</button>'; }).join("");
+      var opts = optOrder(q.options.length).map(function (i) { return '<button class="opt" data-i="' + i + '">' + esc(q.options[i]) + '</button>'; }).join("");
       show('<div class="wrap">' + topbar(6 + idx * 4) + '<div class="card center">'
         + mascot("thinking", A.greeting() + " Calibremos la sesion en 3 toques.") + '</div>'
         + '<div class="card"><div class="exnum">Calibracion &middot; ' + (idx + 1) + ' de ' + qs2.length + '</div>'

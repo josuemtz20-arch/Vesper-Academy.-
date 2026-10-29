@@ -38,7 +38,7 @@ window.VESPER_ACTIVITIES = (function () {
           { l: "go to bed", r: "ir a la cama" }, { l: "take a shower", r: "ducharse" }
         ], explanation: "Verbos de rutina muy comunes." },
         { type: "listening", text: "I have lunch at noon.", question: "Que escuchaste?",
-          options: ["I have lunch at noon.", "I had lunch at nine.", "I love lunch and moon."], correctIndex: 0 },
+          options: ["I love lunch and moon.", "I had lunch at nine.", "I have lunch at noon."], correctIndex: 2 },
         { type: "categorize", instruction: "Clasifica: manana o noche?", buckets: [
           { id: "am", label: "Manana" }, { id: "pm", label: "Noche" }
         ], items: [
@@ -104,7 +104,7 @@ window.VESPER_ACTIVITIES = (function () {
         { type: "multiple_choice", question: "8:45 in English is...", options: ["a quarter past nine", "a quarter to nine", "half past eight"], correctIndex: 1, explanation: "Quarter to nine = nueve menos cuarto." },
         { type: "true_false", statement: "\"o'clock\" is used for exact hours (3:00, 5:00).", answer: true, explanation: "o'clock solo en horas en punto." },
         { type: "listening", text: "It's a quarter past seven.", question: "Que hora es?",
-          options: ["7:15", "7:45", "6:15"], correctIndex: 0 },
+          options: ["6:15", "7:45", "7:15"], correctIndex: 2 },
         { type: "translate", prompt: "Traduce: \"Son las tres.\"",
           answers: ["it's three o'clock", "its three o'clock", "it is three o'clock"], explanation: "It's three o'clock." }
       ]
@@ -131,7 +131,7 @@ window.VESPER_ACTIVITIES = (function () {
         { type: "multiple_choice", question: "At check-in they give you a...", options: ["boarding pass", "menu", "ticket office"], correctIndex: 0, explanation: "Boarding pass = pase de abordar." },
         { type: "true_false", statement: "\"Delayed\" means the flight is on time.", answer: false, explanation: "Delayed = retrasado, no a tiempo." },
         { type: "listening", text: "Your flight is delayed by two hours.", question: "Que pasa con el vuelo?",
-          options: ["Esta retrasado dos horas", "Sale a tiempo", "Fue cancelado"], correctIndex: 0 },
+          options: ["Fue cancelado", "Esta retrasado dos horas", "Sale a tiempo"], correctIndex: 1 },
         { type: "categorize", instruction: "Salida o llegada?", buckets: [
           { id: "dep", label: "Salida" }, { id: "arr", label: "Llegada" }
         ], items: [
@@ -156,7 +156,7 @@ window.VESPER_ACTIVITIES = (function () {
         ]
       },
       exercises: [
-        { type: "multiple_choice", question: "Ask the price: \"___ is it?\"", options: ["How many", "How much", "How long"], correctIndex: 1, explanation: "How much = cuanto (precio)." },
+        { type: "multiple_choice", question: "Ask the price: \"___ is it?\"", options: ["How many", "How long", "How much"], correctIndex: 2, explanation: "How much = cuanto (precio)." },
         { type: "fill_blank", sentence: "Can I try ___ shoes on? (lejos)", answers: ["those"], hint: "plural + lejos = those.", explanation: "Those = esos/aquellos (plural, lejos)." },
         { type: "matching", instruction: "Une el adjetivo con su opuesto.", pairs: [
           { l: "cheap", r: "expensive" }, { l: "big", r: "small" },
@@ -195,7 +195,7 @@ window.VESPER_ACTIVITIES = (function () {
         { type: "multiple_choice", question: "Opposite of \"tall\":", options: ["short", "long", "small"], correctIndex: 0, explanation: "Short = bajo (personas)." },
         { type: "true_false", statement: "\"Friendly\" describes personality, not height.", answer: true, explanation: "Friendly = amable (personalidad)." },
         { type: "listening", text: "My brother is tall and friendly.", question: "Como es el hermano?",
-          options: ["Alto y amable", "Bajo y serio", "Alto y enojado"], correctIndex: 0 },
+          options: ["Bajo y serio", "Alto y enojado", "Alto y amable"], correctIndex: 2 },
         { type: "translate", prompt: "Traduce: \"Tengo dos hermanas.\"",
           answers: ["i have got two sisters", "i have two sisters", "i've got two sisters"], explanation: "I have got two sisters." }
       ]
@@ -219,7 +219,7 @@ window.VESPER_ACTIVITIES = (function () {
           { l: "salary", r: "salario" }, { l: "skills", r: "habilidades" }
         ] },
         { type: "fill_blank", sentence: "I have worked here ___ three years.", answers: ["for"], hint: "for + periodo de tiempo.", explanation: "for + duracion (three years)." },
-        { type: "multiple_choice", question: "Choose: She has ___ for the manager position.", options: ["applied", "apply", "applying"], correctIndex: 0, explanation: "Present perfect: has + participio (applied)." },
+        { type: "multiple_choice", question: "Choose: She has ___ for the manager position.", options: ["applying", "applied", "apply"], correctIndex: 1, explanation: "Present perfect: has + participio (applied)." },
         { type: "true_false", statement: "\"Meet a deadline\" means to finish on time.", answer: true, explanation: "Meet a deadline = cumplir el plazo." },
         { type: "listening", text: "We have a meeting at nine tomorrow.", question: "Cuando es la reunion?",
           options: ["Manana a las nueve", "Hoy a las nueve", "Manana a las cinco"], correctIndex: 0 },
@@ -255,7 +255,7 @@ window.VESPER_ACTIVITIES = (function () {
         { type: "multiple_choice", question: "Opposite of \"download\":", options: ["upload", "update", "unplug"], correctIndex: 0, explanation: "Upload = subir; download = descargar." },
         { type: "true_false", statement: "\"Update\" means to make software newer.", answer: true, explanation: "Update = actualizar a una version nueva." },
         { type: "listening", text: "Please update the app before you log in.", question: "Que debes hacer primero?",
-          options: ["Actualizar la app", "Borrar la app", "Apagar el telefono"], correctIndex: 0 },
+          options: ["Borrar la app", "Actualizar la app", "Apagar el telefono"], correctIndex: 1 },
         { type: "categorize", instruction: "Hardware o software?", buckets: [
           { id: "hw", label: "Hardware" }, { id: "sw", label: "Software" }
         ], items: [
@@ -285,7 +285,7 @@ window.VESPER_ACTIVITIES = (function () {
           { l: "I totally agree", r: "acuerdo fuerte" }, { l: "I'm not so sure", r: "duda" }
         ] },
         { type: "fill_blank", sentence: "I see your ___, but I disagree.", answers: ["point"], hint: "see your point = entender tu punto.", explanation: "\"See your point\" = entender tu argumento." },
-        { type: "multiple_choice", question: "Most formal way to introduce an opinion:", options: ["As far as I'm concerned", "I reckon", "I guess"], correctIndex: 0, explanation: "\"As far as I'm concerned\" es la mas formal." },
+        { type: "multiple_choice", question: "Most formal way to introduce an opinion:", options: ["I guess", "I reckon", "As far as I'm concerned"], correctIndex: 2, explanation: "\"As far as I'm concerned\" es la mas formal." },
         { type: "true_false", statement: "\"On the other hand\" introduces a contrasting idea.", answer: true, explanation: "Introduce un contraste/otra perspectiva." },
         { type: "categorize", instruction: "Acuerdo o desacuerdo?", buckets: [
           { id: "agree", label: "Acuerdo" }, { id: "disagree", label: "Desacuerdo" }
@@ -313,9 +313,9 @@ window.VESPER_ACTIVITIES = (function () {
         { type: "listening", text: "My name is Anna.", question: "Que escuchaste?",
           options: ["My name is Anna.", "My game is honor.", "My name is Hannah."], correctIndex: 0 },
         { type: "listening", text: "I live in a small town.", question: "Donde vive?",
-          options: ["En un pueblo pequeño", "En una ciudad grande", "En una granja"], correctIndex: 0 },
+          options: ["En una ciudad grande", "En una granja", "En un pueblo pequeño"], correctIndex: 2 },
         { type: "listening", text: "She has two children.", question: "Cuantos hijos tiene?",
-          options: ["Dos", "Tres", "Ninguno"], correctIndex: 0 },
+          options: ["Ninguno", "Dos", "Tres"], correctIndex: 1 },
         { type: "true_false", statement: "El audio decía: \"She has two children.\"", answer: true, explanation: "Asi es: two children = dos hijos." },
         { type: "listening", text: "I get up at six.", question: "Escribe lo que escuchaste:",
           answers: ["i get up at six"], explanation: "I get up at six." },
@@ -339,9 +339,9 @@ window.VESPER_ACTIVITIES = (function () {
         { type: "listening", text: "We are going to the beach on Saturday.", question: "Cuando van a la playa?",
           options: ["El sábado", "El domingo", "El viernes"], correctIndex: 0 },
         { type: "listening", text: "The train leaves at half past ten.", question: "A que hora sale el tren?",
-          options: ["10:30", "10:15", "11:30"], correctIndex: 0 },
+          options: ["10:15", "10:30", "11:30"], correctIndex: 1 },
         { type: "listening", text: "Can you help me, please?", question: "Que escuchaste?",
-          options: ["Can you help me, please?", "Can you call me, please?", "Can you tell me, please?"], correctIndex: 0 },
+          options: ["Can you call me, please?", "Can you tell me, please?", "Can you help me, please?"], correctIndex: 2 },
         { type: "listening", text: "I would like a table for two.", question: "Escribe lo que escuchaste:",
           answers: ["i would like a table for two", "i'd like a table for two"], explanation: "I would like a table for two." },
         { type: "true_false", statement: "El audio pedía una mesa para cuatro personas.", answer: false, explanation: "Era \"a table for two\" = para dos." },
@@ -363,9 +363,9 @@ window.VESPER_ACTIVITIES = (function () {
       },
       exercises: [
         { type: "listening", text: "The flight to London has been delayed by one hour.", question: "Que pasa con el vuelo a Londres?",
-          options: ["Se retrasó una hora", "Fue cancelado", "Salió antes"], correctIndex: 0 },
+          options: ["Fue cancelado por la tormenta", "Salió antes", "Se retrasó una hora"], correctIndex: 2 },
         { type: "listening", text: "Please remember to bring your passport tomorrow.", question: "Que debes recordar?",
-          options: ["Traer el pasaporte", "Traer dinero", "Llegar tarde"], correctIndex: 0 },
+          options: ["Traer dinero", "Traer el pasaporte", "Llegar tarde"], correctIndex: 1 },
         { type: "listening", text: "The meeting has been moved to Friday morning.", question: "Cuando es la reunion ahora?",
           options: ["Viernes por la mañana", "Lunes por la tarde", "Jueves por la noche"], correctIndex: 0 },
         { type: "listening", text: "Could you call me back later, please?", question: "Escribe lo que escuchaste:",

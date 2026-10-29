@@ -60,11 +60,11 @@ window.VESPER_THEMES_PACK = (function () {
       exercises: [
         { type: "listening",
           text: "Hello! Can I have a coffee and a sandwich, please?",
-          question: "What does the customer order?", options: ["a tea and a cake", "a coffee and a sandwich", "a juice and a salad"], correctIndex: 1, explanation: "\"...a coffee and a sandwich, please.\"" },
+          question: "What does the customer order?", options: ["a coffee and a sandwich", "a juice and a salad", "a tea and a cake"], correctIndex: 0, explanation: "\"...a coffee and a sandwich, please.\"" },
         { type: "listening",
           text: "That's five dollars, please.",
-          question: "How much is it?", options: ["four dollars", "five dollars", "fifteen dollars"], correctIndex: 1, explanation: "\"That's five dollars...\"" },
-        { type: "multiple_choice", question: "Where are they?", options: ["at a café", "at a hospital", "at school"], correctIndex: 0, explanation: "Se pide café y un sándwich: están en una cafetería." },
+          question: "How much is it?", options: ["four dollars", "fifteen dollars", "five dollars"], correctIndex: 2, explanation: "\"That's five dollars...\"" },
+        { type: "multiple_choice", question: "Where are they?", options: ["at school", "at a café", "at a hospital"], correctIndex: 1, explanation: "Se pide café y un sándwich: están en una cafetería." },
         { type: "true_false", statement: "The customer wants a sandwich.", answer: true, explanation: "\"...a coffee and a sandwich...\"" }
       ]
     },
@@ -91,7 +91,7 @@ window.VESPER_THEMES_PACK = (function () {
           { t: "cat", bucket: "p" }, { t: "cow", bucket: "f" },
           { t: "dog", bucket: "p" }, { t: "horse", bucket: "f" },
           { t: "hamster", bucket: "p" }, { t: "sheep", bucket: "f" } ] },
-        { type: "multiple_choice", question: "Which animal can fly?", options: ["dog", "bird", "fish"], correctIndex: 1, explanation: "El pájaro (bird) puede volar." },
+        { type: "multiple_choice", question: "Which animal can fly?", options: ["fish", "dog", "bird"], correctIndex: 2, explanation: "El pájaro (bird) puede volar." },
         { type: "fill_blank", sentence: "A baby dog is a ___.", answers: ["puppy"], hint: "La cría del perro.", explanation: "puppy = cachorro." },
         { type: "translate", prompt: "Traduce: \"Tengo dos gatos.\"", answers: ["i have two cats"], explanation: "I have two cats." }
       ]
@@ -110,12 +110,12 @@ window.VESPER_THEMES_PACK = (function () {
       exercises: [
         { type: "listening",
           text: "Look! This is my favourite animal at the zoo. It is big and grey, and it has a long nose. It is an elephant!",
-          question: "Which animal is it?", options: ["a lion", "an elephant", "a monkey"], correctIndex: 1, explanation: "Grande, gris y con nariz larga: un elefante." },
+          question: "Which animal is it?", options: ["an elephant", "a lion", "a monkey"], correctIndex: 0, explanation: "Grande, gris y con nariz larga: un elefante." },
         { type: "listening",
           text: "The monkeys are very funny. They are small and brown, and they climb the trees all day.",
-          question: "What do the monkeys do all day?", options: ["sleep", "climb trees", "swim"], correctIndex: 1, explanation: "\"...they climb the trees all day.\"" },
+          question: "What do the monkeys do all day?", options: ["sleep", "climb trees", "swim in the water"], correctIndex: 1, explanation: "\"...they climb the trees all day.\"" },
         { type: "true_false", statement: "The elephant has a long nose.", answer: true, explanation: "\"...it has a long nose.\"" },
-        { type: "multiple_choice", question: "What colour is the elephant?", options: ["grey", "green", "yellow"], correctIndex: 0, explanation: "\"It is big and grey...\"" }
+        { type: "multiple_choice", question: "What colour is the elephant?", options: ["green", "yellow", "grey"], correctIndex: 2, explanation: "\"It is big and grey...\"" }
       ]
     },
 
@@ -141,7 +141,7 @@ window.VESPER_THEMES_PACK = (function () {
           { t: "station", bucket: "pl" }, { t: "bus", bucket: "tr" },
           { t: "hotel", bucket: "pl" }, { t: "train", bucket: "tr" },
           { t: "airport", bucket: "pl" }, { t: "taxi", bucket: "tr" } ] },
-        { type: "multiple_choice", question: "You sleep here when you travel:", options: ["station", "hotel", "map"], correctIndex: 1, explanation: "Duermes en el hotel." },
+        { type: "multiple_choice", question: "You sleep here when you travel:", options: ["hotel", "map", "station"], correctIndex: 0, explanation: "Duermes en el hotel." },
         { type: "fill_blank", sentence: "Go straight on, then turn ___ at the lights. (izquierda o derecha)", answers: ["left", "right"], hint: "Una dirección.", explanation: "turn left/right = gira a la izquierda/derecha." },
         { type: "translate", prompt: "Traduce: \"¿Dónde está la estación?\"", answers: ["where is the station"], explanation: "Where is the station?" }
       ]
@@ -164,7 +164,7 @@ window.VESPER_THEMES_PACK = (function () {
         { type: "listening",
           text: "It's about ten minutes on foot.",
           question: "How long does it take?", options: ["ten minutes by car", "ten minutes on foot", "one hour"], correctIndex: 1, explanation: "\"...ten minutes on foot.\"" },
-        { type: "multiple_choice", question: "Which street should you take?", options: ["the first on the right", "the second on the left", "the third on the left"], correctIndex: 1, explanation: "\"...take the second street on the left.\"" },
+        { type: "multiple_choice", question: "Which street should you take?", options: ["the first on the right", "the third on the left", "the second on the left"], correctIndex: 2, explanation: "\"...take the second street on the left.\"" },
         { type: "true_false", statement: "You can walk to the museum.", answer: true, explanation: "Está a diez minutos a pie ('on foot')." }
       ]
     },
@@ -210,11 +210,11 @@ window.VESPER_THEMES_PACK = (function () {
       exercises: [
         { type: "listening",
           text: "Hi, can I help you? — Yes, I'm looking for a blue jacket, size medium. — Here you are. The changing room is over there.",
-          question: "What is the customer looking for?", options: ["a red dress", "a blue jacket", "black shoes"], correctIndex: 1, explanation: "\"...a blue jacket, size medium.\"" },
+          question: "What is the customer looking for?", options: ["a red dress", "a blue jacket", "black running shoes"], correctIndex: 1, explanation: "\"...a blue jacket, size medium.\"" },
         { type: "listening",
           text: "It's thirty euros, but today there is a discount: twenty-five euros.",
           question: "How much does it cost today?", options: ["thirty euros", "twenty euros", "twenty-five euros"], correctIndex: 2, explanation: "Con el descuento de hoy: 25 euros." },
-        { type: "multiple_choice", question: "What size does the customer want?", options: ["small", "medium", "large"], correctIndex: 1, explanation: "\"...size medium.\"" },
+        { type: "multiple_choice", question: "What size does the customer want?", options: ["medium", "extra small", "large"], correctIndex: 0, explanation: "\"...size medium.\"" },
         { type: "true_false", statement: "There is a discount today.", answer: true, explanation: "\"...today there is a discount...\"" }
       ]
     },
@@ -260,14 +260,14 @@ window.VESPER_THEMES_PACK = (function () {
       exercises: [
         { type: "listening",
           text: "Good morning. Today I want to give you three simple tips to help the environment. First, try to use less plastic: carry your own bag and a reusable bottle.",
-          question: "What is the first tip?", options: ["use less plastic", "drive more", "buy more bags"], correctIndex: 0, explanation: "\"First, try to use less plastic...\"" },
+          question: "What is the first tip?", options: ["use less plastic", "drive more", "buy more plastic bags"], correctIndex: 0, explanation: "\"First, try to use less plastic...\"" },
         { type: "listening",
           text: "Second, save energy at home by switching off lights and devices when you don't need them.",
-          question: "How can you save energy at home?", options: ["leave the lights on", "switch off lights and devices", "use more devices"], correctIndex: 1, explanation: "\"...switching off lights and devices when you don't need them.\"" },
+          question: "How can you save energy at home?", options: ["use more devices", "leave the lights on all night long", "switch off lights and devices"], correctIndex: 2, explanation: "\"...switching off lights and devices when you don't need them.\"" },
         { type: "listening",
           text: "Finally, whenever you can, walk or cycle instead of taking the car. It's good for the planet and for your health.",
-          question: "What does the speaker recommend instead of driving?", options: ["walking or cycling", "taking taxis", "staying at home"], correctIndex: 0, explanation: "\"...walk or cycle instead of taking the car.\"" },
-        { type: "multiple_choice", question: "What is the talk mainly about?", options: ["how to save money", "simple ways to help the environment", "how to cook"], correctIndex: 1, explanation: "Son tres consejos para ayudar al medio ambiente." },
+          question: "What does the speaker recommend instead of driving?", options: ["taking the car for short trips", "walking or cycling", "taking taxis"], correctIndex: 1, explanation: "\"...walk or cycle instead of taking the car.\"" },
+        { type: "multiple_choice", question: "What is the talk mainly about?", options: ["how to cook", "how to save money", "how to plant a garden", "simple ways to help the environment"], correctIndex: 3, explanation: "Son tres consejos para ayudar al medio ambiente." },
         { type: "true_false", statement: "The speaker gives three tips.", answer: true, explanation: "\"...three simple tips...\"" }
       ]
     },
@@ -296,7 +296,7 @@ window.VESPER_THEMES_PACK = (function () {
           { t: "passport", bucket: "d" }, { t: "sightseeing", bucket: "a" },
           { t: "visa", bucket: "d" }, { t: "trying local food", bucket: "a" },
           { t: "boarding pass", bucket: "d" }, { t: "taking photos", bucket: "a" } ] },
-        { type: "multiple_choice", question: "A place where you stay on holiday:", options: ["accommodation", "departure", "currency"], correctIndex: 0, explanation: "accommodation = alojamiento." },
+        { type: "multiple_choice", question: "A place where you stay on holiday:", options: ["departure", "currency", "accommodation"], correctIndex: 2, explanation: "accommodation = alojamiento." },
         { type: "fill_blank", sentence: "Don't forget your ___; you can't travel abroad without it.", answers: ["passport"], hint: "Documento para viajar.", explanation: "passport = pasaporte." },
         { type: "translate", prompt: "Traduce: \"Voy a viajar al extranjero el año que viene.\"", answers: ["i'm going to travel abroad next year", "i am going to travel abroad next year"], explanation: "I'm going to travel abroad next year." }
       ]
@@ -315,11 +315,11 @@ window.VESPER_THEMES_PACK = (function () {
       exercises: [
         { type: "listening",
           text: "Good afternoon. This is the final boarding call for flight BA245 to Madrid. Please proceed to gate 12 immediately.",
-          question: "Where is the flight going?", options: ["to Madrid", "to Paris", "to Rome"], correctIndex: 0, explanation: "\"...flight BA245 to Madrid.\"" },
+          question: "Where is the flight going?", options: ["to Paris", "to Madrid", "to Rome"], correctIndex: 1, explanation: "\"...flight BA245 to Madrid.\"" },
         { type: "listening",
           text: "Passengers are reminded that the gate closes ten minutes before departure.",
-          question: "When does the gate close?", options: ["ten minutes before departure", "at departure time", "one hour before"], correctIndex: 0, explanation: "\"...the gate closes ten minutes before departure.\"" },
-        { type: "multiple_choice", question: "Which gate should passengers go to?", options: ["gate 2", "gate 12", "gate 20"], correctIndex: 1, explanation: "\"...proceed to gate 12...\"" },
+          question: "When does the gate close?", options: ["ten minutes before departure", "at departure time", "one hour before the flight leaves"], correctIndex: 0, explanation: "\"...the gate closes ten minutes before departure.\"" },
+        { type: "multiple_choice", question: "Which gate should passengers go to?", options: ["gate 20", "gate 2", "gate 12"], correctIndex: 2, explanation: "\"...proceed to gate 12...\"" },
         { type: "true_false", statement: "This is the first boarding call.", answer: false, explanation: "Es el ÚLTIMO aviso ('final boarding call')." }
       ]
     }

@@ -141,11 +141,11 @@ window.VESPER_LESSONS = {
                                                         "type":  "multiple_choice",
                                                         "question":  "Choose the correct negative: He ___ at work.",
                                                         "options":  [
-                                                                        "isn\u0027t",
+                                                                        "not is",
                                                                         "aren\u0027t",
-                                                                        "not is"
+                                                                        "isn\u0027t"
                                                                     ],
-                                                        "correctIndex":  0,
+                                                        "correctIndex":  2,
                                                         "explanation":  "With \"he\" the negative is \"isn\u0027t\" (is + not)."
                                                     }
                                                 ],
@@ -238,11 +238,11 @@ window.VESPER_LESSONS = {
                                                            "type":  "multiple_choice",
                                                            "question":  "Choose the correct article: He is ___ teacher.",
                                                            "options":  [
-                                                                           "an",
                                                                            "a",
-                                                                           "the"
+                                                                           "the",
+                                                                           "an"
                                                                        ],
-                                                           "correctIndex":  1,
+                                                           "correctIndex":  0,
                                                            "explanation":  "We use a before a consonant sound, and teacher starts with a consonant sound."
                                                        }
                                                    ],
@@ -309,10 +309,10 @@ window.VESPER_LESSONS = {
                                                           "question":  "Choose the correct plural: She has three ___.",
                                                           "options":  [
                                                                           "babys",
-                                                                          "babies",
-                                                                          "babyes"
+                                                                          "babyes",
+                                                                          "babies"
                                                                       ],
-                                                          "correctIndex":  1,
+                                                          "correctIndex":  2,
                                                           "explanation":  "Consonant + y becomes -ies, so \u0027baby\u0027 becomes \u0027babies\u0027."
                                                       },
                                                       {
@@ -335,11 +335,11 @@ window.VESPER_LESSONS = {
                                                           "type":  "multiple_choice",
                                                           "question":  "Choose the correct plural: I have two ___.",
                                                           "options":  [
-                                                                          "foots",
                                                                           "feet",
+                                                                          "foots",
                                                                           "feets"
                                                                       ],
-                                                          "correctIndex":  1,
+                                                          "correctIndex":  0,
                                                           "explanation":  "\u0027Foot\u0027 is irregular; its plural is \u0027feet\u0027, not \u0027foots\u0027."
                                                       }
                                                   ],
@@ -407,11 +407,11 @@ window.VESPER_LESSONS = {
                                                                  "type":  "multiple_choice",
                                                                  "question":  "Complete: \"He ___ like fish.\"",
                                                                  "options":  [
-                                                                                 "don\u0027t",
                                                                                  "doesn\u0027t",
-                                                                                 "not"
+                                                                                 "doesn't to",
+                                                                                 "don\u0027t"
                                                                              ],
-                                                                 "correctIndex":  1,
+                                                                 "correctIndex":  0,
                                                                  "explanation":  "For he, she, or it we use \"doesn\u0027t\" plus the base verb."
                                                              },
                                                              {
@@ -437,10 +437,10 @@ window.VESPER_LESSONS = {
                                                                  "question":  "Complete: \"___ she live here?\"",
                                                                  "options":  [
                                                                                  "Do",
-                                                                                 "Does",
-                                                                                 "Is"
+                                                                                 "Is",
+                                                                                 "Does"
                                                                              ],
-                                                                 "correctIndex":  1,
+                                                                 "correctIndex":  2,
                                                                  "explanation":  "For he, she, or it, questions begin with \"Does\" plus the base verb."
                                                              }
                                                          ],
@@ -535,11 +535,11 @@ window.VESPER_LESSONS = {
                                                                "type":  "multiple_choice",
                                                                "question":  "There ____ some eggs in the box.",
                                                                "options":  [
+                                                                               "am",
                                                                                "is",
-                                                                               "are",
-                                                                               "am"
+                                                                               "are"
                                                                            ],
-                                                               "correctIndex":  1,
+                                                               "correctIndex":  2,
                                                                "explanation":  "\"Some eggs\" is plural, so we use \"are.\""
                                                            }
                                                        ],
@@ -607,7 +607,7 @@ window.VESPER_LESSONS = {
                                                                      "options":  [
                                                                                      "are playing",
                                                                                      "is playing",
-                                                                                     "are play"
+                                                                                     "are be playing"
                                                                                  ],
                                                                      "correctIndex":  0,
                                                                      "explanation":  "\"Children\" is plural, so we use \"are\" + the -ing form \"playing\"."
@@ -634,11 +634,11 @@ window.VESPER_LESSONS = {
                                                                      "type":  "multiple_choice",
                                                                      "question":  "Which spelling of the -ing form is correct?",
                                                                      "options":  [
+                                                                                     "runnning",
                                                                                      "runing",
-                                                                                     "running",
-                                                                                     "runng"
+                                                                                     "running"
                                                                                  ],
-                                                                     "correctIndex":  1,
+                                                                     "correctIndex":  2,
                                                                      "explanation":  "After a short vowel we double the final consonant, so \"run\" becomes \"running\"."
                                                                  }
                                                              ],
@@ -737,11 +737,11 @@ window.VESPER_LESSONS = {
                                                               "type":  "multiple_choice",
                                                               "question":  "They ____ a big house in 2010.",
                                                               "options":  [
+                                                                              "did had",
                                                                               "haved",
-                                                                              "had",
-                                                                              "did had"
+                                                                              "had"
                                                                           ],
-                                                              "correctIndex":  1,
+                                                              "correctIndex":  2,
                                                               "explanation":  "\"Have\" is irregular; its past simple form is \"had.\""
                                                           }
                                                       ],
@@ -842,11 +842,11 @@ window.VESPER_LESSONS = {
                                                                "type":  "multiple_choice",
                                                                "question":  "My phone is _____ than yours.",
                                                                "options":  [
-                                                                               "worse",
+                                                                               "more bad",
                                                                                "worst",
-                                                                               "more bad"
+                                                                               "worse"
                                                                            ],
-                                                               "correctIndex":  0,
+                                                               "correctIndex":  2,
                                                                "explanation":  "The comparative of \"bad\" is the irregular form \"worse\" (not \"worst\" or \"more bad\")."
                                                            }
                                                        ],
@@ -945,11 +945,11 @@ window.VESPER_LESSONS = {
                                                              "type":  "multiple_choice",
                                                              "question":  "We have ___ bread on the table.",
                                                              "options":  [
-                                                                             "a lot of",
                                                                              "many",
-                                                                             "how much"
+                                                                             "how much",
+                                                                             "a lot of"
                                                                          ],
-                                                             "correctIndex":  0,
+                                                             "correctIndex":  2,
                                                              "explanation":  "A lot of works with uncountable nouns like bread; many is only for countable nouns and how much is a question word."
                                                          }
                                                      ],
@@ -1019,11 +1019,11 @@ window.VESPER_LESSONS = {
                                                                  "type":  "multiple_choice",
                                                                  "question":  "When I was five, I ___ read.",
                                                                  "options":  [
-                                                                                 "couldn\u0027t",
                                                                                  "can\u0027t",
+                                                                                 "couldn\u0027t",
                                                                                  "not could"
                                                                              ],
-                                                                 "correctIndex":  0,
+                                                                 "correctIndex":  1,
                                                                  "explanation":  "We use \u0027could/couldn\u0027t\u0027 to talk about ability in the past, so \u0027couldn\u0027t read\u0027 is correct."
                                                              },
                                                              {
@@ -1048,11 +1048,11 @@ window.VESPER_LESSONS = {
                                                                  "type":  "multiple_choice",
                                                                  "question":  "___ use your phone, please?",
                                                                  "options":  [
-                                                                                 "Can I",
+                                                                                 "Can I to",
                                                                                  "I can",
-                                                                                 "Can I to"
+                                                                                 "Can I"
                                                                              ],
-                                                                 "correctIndex":  0,
+                                                                 "correctIndex":  2,
                                                                  "explanation":  "To ask for permission we put the modal first: \u0027Can I...?\u0027 followed by the base verb."
                                                              }
                                                          ],
@@ -1122,11 +1122,11 @@ window.VESPER_LESSONS = {
                                                            "type":  "multiple_choice",
                                                            "question":  "Complete the question: \"___ you going to call him?\"",
                                                            "options":  [
-                                                                           "Are",
                                                                            "Do",
+                                                                           "Are",
                                                                            "Is"
                                                                        ],
-                                                           "correctIndex":  0,
+                                                           "correctIndex":  1,
                                                            "explanation":  "For questions with \"be going to\" and \"you\", we use the auxiliary \"Are\"."
                                                        },
                                                        {
@@ -1155,11 +1155,11 @@ window.VESPER_LESSONS = {
                                                            "type":  "multiple_choice",
                                                            "question":  "Which sentence describes a fixed arrangement (present continuous)?",
                                                            "options":  [
-                                                                           "I am meeting Ana at six.",
                                                                            "I am going to meet maybe.",
-                                                                           "I meet Ana at six going."
+                                                                           "I meet Ana at six going.",
+                                                                           "I am meeting Ana at six."
                                                                        ],
-                                                           "correctIndex":  0,
+                                                           "correctIndex":  2,
                                                            "explanation":  "Present continuous (am meeting) shows a fixed arrangement with a time and a person."
                                                        }
                                                    ],
@@ -1229,11 +1229,11 @@ window.VESPER_LESSONS = {
                                                                   "type":  "multiple_choice",
                                                                   "question":  "Which option is correct? We finished the project ___.",
                                                                   "options":  [
-                                                                                  "last week",
                                                                                   "yet",
+                                                                                  "last week",
                                                                                   "since Monday"
                                                                               ],
-                                                                  "correctIndex":  0,
+                                                                  "correctIndex":  1,
                                                                   "explanation":  "\u0027Finished\u0027 is past simple, so it needs a finished time expression like \u0027last week\u0027, not present perfect words."
                                                               },
                                                               {
@@ -1262,11 +1262,11 @@ window.VESPER_LESSONS = {
                                                                   "type":  "multiple_choice",
                                                                   "question":  "Complete the question: ___ you ever tried Thai food?",
                                                                   "options":  [
-                                                                                  "Have",
+                                                                                  "Has",
                                                                                   "Did",
-                                                                                  "Has"
+                                                                                  "Have"
                                                                               ],
-                                                                  "correctIndex":  0,
+                                                                  "correctIndex":  2,
                                                                   "explanation":  "For experiences with \u0027ever\u0027 and the subject \u0027you\u0027, we use the auxiliary \u0027Have\u0027."
                                                               }
                                                           ],
@@ -1338,11 +1338,11 @@ window.VESPER_LESSONS = {
                                                                     "type":  "multiple_choice",
                                                                     "question":  "Unless he ___ now, he will be late.",
                                                                     "options":  [
-                                                                                    "leaves",
                                                                                     "leave",
-                                                                                    "will leave"
+                                                                                    "will leave",
+                                                                                    "leaves"
                                                                                 ],
-                                                                    "correctIndex":  0,
+                                                                    "correctIndex":  2,
                                                                     "explanation":  "After \"unless\" we use the present simple, and with \"he\" the verb needs an -s, so \"leaves\" is correct."
                                                                 },
                                                                 {
@@ -1369,11 +1369,11 @@ window.VESPER_LESSONS = {
                                                                     "type":  "multiple_choice",
                                                                     "question":  "If she ___ early, she will catch the train.",
                                                                     "options":  [
-                                                                                    "wakes up",
                                                                                     "wake up",
+                                                                                    "wakes up",
                                                                                     "will wake up"
                                                                                 ],
-                                                                    "correctIndex":  0,
+                                                                    "correctIndex":  1,
                                                                     "explanation":  "The if-clause uses the present simple, and with \"she\" we add -s, so \"wakes up\" is correct."
                                                                 }
                                                             ],
@@ -1441,11 +1441,11 @@ window.VESPER_LESSONS = {
                                                                   "type":  "multiple_choice",
                                                                   "question":  "Complete: While we ___ lunch, our friends arrived.",
                                                                   "options":  [
-                                                                                  "were having",
                                                                                   "was having",
-                                                                                  "were have"
+                                                                                  "were have",
+                                                                                  "were having"
                                                                               ],
-                                                                  "correctIndex":  0,
+                                                                  "correctIndex":  2,
                                                                   "explanation":  "With we we use were, plus the -ing form having, for the background action."
                                                               },
                                                               {
@@ -1472,11 +1472,11 @@ window.VESPER_LESSONS = {
                                                                   "type":  "multiple_choice",
                                                                   "question":  "Choose the correct question about a past action in progress.",
                                                                   "options":  [
+                                                                                  "What were you do then?",
                                                                                   "What were you doing then?",
-                                                                                  "What you were doing then?",
-                                                                                  "What were you do then?"
+                                                                                  "What you were doing then?"
                                                                               ],
-                                                                  "correctIndex":  0,
+                                                                  "correctIndex":  1,
                                                                   "explanation":  "In questions the auxiliary were comes before the subject, followed by the -ing form doing."
                                                               }
                                                           ],
@@ -1548,11 +1548,11 @@ window.VESPER_LESSONS = {
                                                                    "type":  "multiple_choice",
                                                                    "question":  "Look at the sky! It ___ snow soon.",
                                                                    "options":  [
+                                                                                   "going to",
                                                                                    "is going to",
-                                                                                   "will to",
-                                                                                   "going to"
+                                                                                   "will going to"
                                                                                ],
-                                                                   "correctIndex":  0,
+                                                                   "correctIndex":  1,
                                                                    "explanation":  "There is present evidence (the dark sky), so we use \"be going to\" for the prediction."
                                                                },
                                                                {
@@ -1577,11 +1577,11 @@ window.VESPER_LESSONS = {
                                                                    "type":  "multiple_choice",
                                                                    "question":  "I\u0027ve already decided. I ___ study medicine.",
                                                                    "options":  [
-                                                                                   "am going to",
                                                                                    "will to",
-                                                                                   "going to"
+                                                                                   "going to",
+                                                                                   "am going to"
                                                                                ],
-                                                                   "correctIndex":  0,
+                                                                   "correctIndex":  2,
                                                                    "explanation":  "The decision was made before now, so we use \"be going to\" for the plan."
                                                                }
                                                            ],
@@ -1653,11 +1653,11 @@ window.VESPER_LESSONS = {
                                                                              "type":  "multiple_choice",
                                                                              "question":  "Which sentence focuses on the completed result rather than the ongoing activity?",
                                                                              "options":  [
-                                                                                             "I\u0027ve read three books this week.",
+                                                                                             "I\u0027ve been reading the same chapter for an hour.",
                                                                                              "I\u0027ve been reading all afternoon.",
-                                                                                             "I\u0027ve been reading the same chapter for an hour."
+                                                                                             "I\u0027ve read three books this week."
                                                                                          ],
-                                                                             "correctIndex":  0,
+                                                                             "correctIndex":  2,
                                                                              "explanation":  "The present perfect simple emphasises the finished quantity (three books), not the duration of the activity. The other two use the continuous to stress how long the reading has gone on."
                                                                          },
                                                                          {
@@ -1686,11 +1686,11 @@ window.VESPER_LESSONS = {
                                                                              "type":  "multiple_choice",
                                                                              "question":  "How long ___ you waiting for the doctor? You look exhausted.",
                                                                              "options":  [
+                                                                                             "have you being",
                                                                                              "have you been",
-                                                                                             "did you been",
-                                                                                             "are you been"
+                                                                                             "did you been"
                                                                                          ],
-                                                                             "correctIndex":  0,
+                                                                             "correctIndex":  1,
                                                                              "explanation":  "With \u0027How long\u0027 and an action that is still going on with a present result (looking exhausted), the present perfect continuous is formed with \u0027have/has been + verb-ing\u0027: \u0027How long have you been waiting?\u0027. \u0027Did you been\u0027 and \u0027are you been\u0027 are not possible verb forms in English."
                                                                          }
                                                                      ],
@@ -1764,11 +1764,11 @@ window.VESPER_LESSONS = {
                                                                "type":  "multiple_choice",
                                                                "question":  "Choose the sentence that correctly contrasts the two past actions.",
                                                                "options":  [
-                                                                               "After he had locked the door, he realised he didn\u0027t have his keys.",
                                                                                "After he locked the door, he had realised he didn\u0027t have his keys.",
-                                                                               "After he had locked the door, he had realised he didn\u0027t have his keys."
+                                                                               "After he had locked the door, he had realised he didn\u0027t have his keys.",
+                                                                               "After he had locked the door, he realised he didn\u0027t have his keys."
                                                                            ],
-                                                               "correctIndex":  0,
+                                                               "correctIndex":  2,
                                                                "explanation":  "The earlier action takes the past perfect (had locked) and the later one takes the past simple (realised). Putting the past perfect on the later action (options 2 and 3) reverses or confuses the time order."
                                                            },
                                                            {
@@ -1801,11 +1801,11 @@ window.VESPER_LESSONS = {
                                                                "type":  "multiple_choice",
                                                                "question":  "We couldn\u0027t get in because we ___ the tickets at home.",
                                                                "options":  [
+                                                                               "were forgetting",
                                                                                "had forgotten",
-                                                                               "forgot had",
-                                                                               "were forgetting"
+                                                                               "forgot had"
                                                                            ],
-                                                               "correctIndex":  0,
+                                                               "correctIndex":  1,
                                                                "explanation":  "The forgetting happened before \u0027we couldn\u0027t get in\u0027, so the past perfect (had forgotten) shows the earlier cause. \u0027Forgot had\u0027 is ungrammatical word order and \u0027were forgetting\u0027 (past continuous) does not express a completed earlier action."
                                                            }
                                                        ],
@@ -1877,11 +1877,11 @@ window.VESPER_LESSONS = {
                                                                      "type":  "multiple_choice",
                                                                      "question":  "If she had more confidence, she _____ apply for the manager role.",
                                                                      "options":  [
-                                                                                     "might",
                                                                                      "must",
+                                                                                     "might",
                                                                                      "should have"
                                                                                  ],
-                                                                     "correctIndex":  0,
+                                                                     "correctIndex":  1,
                                                                      "explanation":  "In the second conditional, \u0027might\u0027 can replace \u0027would\u0027 in the result to express possibility."
                                                                  },
                                                                  {
@@ -1914,11 +1914,11 @@ window.VESPER_LESSONS = {
                                                                      "type":  "multiple_choice",
                                                                      "question":  "What would you do if you _____ your job tomorrow?",
                                                                      "options":  [
-                                                                                     "lost",
+                                                                                     "lose",
                                                                                      "would lose",
-                                                                                     "lose"
+                                                                                     "lost"
                                                                                  ],
-                                                                     "correctIndex":  0,
+                                                                     "correctIndex":  2,
                                                                      "explanation":  "The if-clause of a second conditional takes the past simple (\u0027lost\u0027), never \u0027would\u0027 or the present."
                                                                  }
                                                              ],
@@ -1959,7 +1959,7 @@ window.VESPER_LESSONS = {
                                                                 "options":  [
                                                                                 "was built",
                                                                                 "is built",
-                                                                                "built"
+                                                                                "was builded"
                                                                             ],
                                                                 "correctIndex":  0,
                                                                 "explanation":  "A finished past action needs the past simple passive: was/were + past participle."
@@ -1986,11 +1986,11 @@ window.VESPER_LESSONS = {
                                                                 "type":  "multiple_choice",
                                                                 "question":  "Complete: \"The novel ___ by a famous writer.\"",
                                                                 "options":  [
-                                                                                "was written",
+                                                                                "wrote",
                                                                                 "was wrote",
-                                                                                "wrote"
+                                                                                "was written"
                                                                             ],
-                                                                "correctIndex":  0,
+                                                                "correctIndex":  2,
                                                                 "explanation":  "The passive uses the past participle (written), not the past simple form (wrote)."
                                                             },
                                                             {
@@ -2017,11 +2017,11 @@ window.VESPER_LESSONS = {
                                                                 "type":  "multiple_choice",
                                                                 "question":  "Which sentence correctly introduces the agent?",
                                                                 "options":  [
-                                                                                "The cake was made by my grandmother.",
                                                                                 "The cake was made for my grandmother.",
+                                                                                "The cake was made by my grandmother.",
                                                                                 "The cake made by my grandmother."
                                                                             ],
-                                                                "correctIndex":  0,
+                                                                "correctIndex":  1,
                                                                 "explanation":  "We use \"by\" to introduce the agent, and the passive needs the verb \"to be\" (was)."
                                                             }
                                                         ],
@@ -2089,11 +2089,11 @@ window.VESPER_LESSONS = {
                                                                   "type":  "multiple_choice",
                                                                   "question":  "Choose the correct reporting verb: She ____ me that she was leaving.",
                                                                   "options":  [
-                                                                                  "said",
                                                                                   "told",
+                                                                                  "said",
                                                                                   "spoke"
                                                                               ],
-                                                                  "correctIndex":  1,
+                                                                  "correctIndex":  0,
                                                                   "explanation":  "\u0027Tell\u0027 is followed directly by a person (\u0027told me\u0027), whereas \u0027say\u0027 is not."
                                                               },
                                                               {
@@ -2120,11 +2120,11 @@ window.VESPER_LESSONS = {
                                                                   "type":  "multiple_choice",
                                                                   "question":  "\"I am studying English,\" she said. -\u003e She said she ____ English.",
                                                                   "options":  [
+                                                                                  "studies",
                                                                                   "is studying",
-                                                                                  "was studying",
-                                                                                  "studies"
+                                                                                  "was studying"
                                                                               ],
-                                                                  "correctIndex":  1,
+                                                                  "correctIndex":  2,
                                                                   "explanation":  "The present continuous \u0027am studying\u0027 backshifts to the past continuous \u0027was studying\u0027."
                                                               }
                                                           ],
@@ -2174,11 +2174,11 @@ window.VESPER_LESSONS = {
                                                                    "type":  "multiple_choice",
                                                                    "question":  "Choose the correctly punctuated sentence.",
                                                                    "options":  [
-                                                                                   "The book that I borrowed, was excellent.",
+                                                                                   "The book that I borrowed was excellent.",
                                                                                    "The book, that I borrowed was excellent.",
-                                                                                   "The book that I borrowed was excellent."
+                                                                                   "The book that I borrowed, was excellent."
                                                                                ],
-                                                                   "correctIndex":  2,
+                                                                   "correctIndex":  0,
                                                                    "explanation":  "It is a defining clause identifying which book, so no commas are used."
                                                                },
                                                                {
@@ -2235,11 +2235,11 @@ window.VESPER_LESSONS = {
                                                                    "type":  "multiple_choice",
                                                                    "question":  "Paris, ___ I visited last summer, is full of museums.",
                                                                    "options":  [
-                                                                                   "which",
+                                                                                   "where",
                                                                                    "that",
-                                                                                   "where"
+                                                                                   "which"
                                                                                ],
-                                                                   "correctIndex":  0,
+                                                                   "correctIndex":  2,
                                                                    "explanation":  "In a non-defining clause, \u0027that\u0027 is never used; here Paris is the object of \u0027visited\u0027, so we use \u0027which\u0027 (not \u0027where\u0027, which would need an intransitive verb like \u0027went\u0027)."
                                                                }
                                                            ],
@@ -2310,10 +2310,10 @@ window.VESPER_LESSONS = {
                                                                       "question":  "Remember ____ the door before you leave the office.",
                                                                       "options":  [
                                                                                       "locking",
-                                                                                      "to lock",
-                                                                                      "lock"
+                                                                                      "lock",
+                                                                                      "to lock"
                                                                                   ],
-                                                                      "correctIndex":  1,
+                                                                      "correctIndex":  2,
                                                                       "explanation":  "\u0027Remember + to-infinitive\u0027 refers to a task you must not forget to do in the future."
                                                                   },
                                                                   {
@@ -2420,11 +2420,11 @@ window.VESPER_LESSONS = {
                                                                     "type":  "multiple_choice",
                                                                     "question":  "Which sentence correctly uses \u0027might have\u0027 to show an uncertain past outcome?",
                                                                     "options":  [
-                                                                                    "If he had asked, she might have agreed.",
                                                                                     "If he had asked, she might agree.",
+                                                                                    "If he had asked, she might have agreed.",
                                                                                     "If he would have asked, she might have agreed."
                                                                                 ],
-                                                                    "correctIndex":  0,
+                                                                    "correctIndex":  1,
                                                                     "explanation":  "The condition takes \u0027had + past participle\u0027 and the uncertain result takes \u0027might have + past participle\u0027. \u0027Might agree\u0027 is not a past form, and \u0027would have\u0027 must never appear in the if-clause."
                                                                 },
                                                                 {
@@ -2457,11 +2457,11 @@ window.VESPER_LESSONS = {
                                                                     "type":  "multiple_choice",
                                                                     "question":  "Find the error: \"If you had listened, you wouldn\u0027t have made that mistake.\"",
                                                                     "options":  [
-                                                                                    "There is no error; the sentence is correct.",
+                                                                                    "It should be \u0027you wouldn\u0027t made that mistake\u0027.",
                                                                                     "It should be \u0027If you would have listened\u0027.",
-                                                                                    "It should be \u0027you wouldn\u0027t made that mistake\u0027."
+                                                                                    "There is no error; the sentence is correct."
                                                                                 ],
-                                                                    "correctIndex":  0,
+                                                                    "correctIndex":  2,
                                                                     "explanation":  "The if-clause correctly uses the past perfect (\u0027had listened\u0027) and the result correctly uses \u0027wouldn\u0027t have + past participle\u0027 (\u0027wouldn\u0027t have made\u0027). The other options introduce errors."
                                                                 }
                                                             ],
@@ -2533,11 +2533,11 @@ window.VESPER_LESSONS = {
                                                                    "type":  "multiple_choice",
                                                                    "question":  "I\u0027m not sure who called. It ___ been my sister, but I didn\u0027t recognise the voice.",
                                                                    "options":  [
+                                                                                   "can\u0027t have",
                                                                                    "could have",
-                                                                                   "must have",
-                                                                                   "can\u0027t have"
+                                                                                   "must have"
                                                                                ],
-                                                                   "correctIndex":  0,
+                                                                   "correctIndex":  1,
                                                                    "explanation":  "The uncertainty (\u0027I\u0027m not sure\u0027) calls for the tentative \u0027could have\u0027, not the certainty of \u0027must have\u0027 or \u0027can\u0027t have\u0027."
                                                                },
                                                                {
@@ -2623,10 +2623,10 @@ window.VESPER_LESSONS = {
                                                             "question":  "Choose the correctly inverted sentence.",
                                                             "options":  [
                                                                             "Never I have seen such a mess.",
-                                                                            "Never have I seen such a mess.",
-                                                                            "Never I had seen such a mess."
+                                                                            "Never I had seen such a mess.",
+                                                                            "Never have I seen such a mess."
                                                                         ],
-                                                            "correctIndex":  1,
+                                                            "correctIndex":  2,
                                                             "explanation":  "After the negative adverbial \u0027Never\u0027, the auxiliary (have) must come before the subject (I)."
                                                         },
                                                         {
@@ -2686,11 +2686,11 @@ window.VESPER_LESSONS = {
                                                             "type":  "multiple_choice",
                                                             "question":  "Which sentence uses inversion correctly?",
                                                             "options":  [
+                                                                            "Little knew they the truth.",
                                                                             "Little did they know the truth.",
-                                                                            "Little they did know the truth.",
-                                                                            "Little knew they the truth."
+                                                                            "Little they did know the truth."
                                                                         ],
-                                                            "correctIndex":  0,
+                                                            "correctIndex":  1,
                                                             "explanation":  "\u0027Little\u0027 is a negative adverbial, so the auxiliary \u0027did\u0027 precedes the subject \u0027they\u0027."
                                                         }
                                                     ],

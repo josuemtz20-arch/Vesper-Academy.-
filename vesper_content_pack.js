@@ -68,8 +68,8 @@ window.VESPER_CONTENT_PACK = (function () {
         { type: "reading", title: "An email from Laura",
           passage: "Hi Sam,\n\nThank you for your message! I'm having a great time in Madrid. The weather is sunny and the food is amazing.\n\nYesterday I visited a famous museum and walked around the old city. Tomorrow I'm going to take a day trip to Toledo with my cousin.\n\nI'll be back on Sunday. Do you want to meet for coffee next week?\n\nSee you soon,\nLaura",
           questions: [
-            { q: "Where is Laura?", options: ["In Toledo", "In Madrid", "At home"], correctIndex: 1, explanation: "\"I'm having a great time in Madrid.\"" },
-            { q: "What did she do yesterday?", options: ["She visited a museum.", "She went to Toledo.", "She met Sam."], correctIndex: 0, explanation: "\"Yesterday I visited a famous museum...\"" },
+            { q: "Where is Laura?", options: ["In Madrid", "In Toledo", "At home"], correctIndex: 0, explanation: "\"I'm having a great time in Madrid.\"" },
+            { q: "What did she do yesterday?", options: ["She went to Toledo.", "She met Sam.", "She visited a museum."], correctIndex: 2, explanation: "\"Yesterday I visited a famous museum...\"" },
             { q: "When will she be back?", options: ["On Saturday", "On Sunday", "Next week"], correctIndex: 1, explanation: "\"I'll be back on Sunday.\"" }
           ] },
         { type: "multiple_choice", question: "Laura is going to Toledo with her...", options: ["friend", "sister", "cousin"], correctIndex: 2, explanation: "\"...a day trip to Toledo with my cousin.\"" },
@@ -97,7 +97,7 @@ window.VESPER_CONTENT_PACK = (function () {
           passage: "Ten years ago, almost everyone travelled to an office every day. Today, millions of people work from home, at least part of the week.\n\nThere are clear advantages. Workers save time and money because they don't commute, and many say they feel more relaxed. Companies can also save money on big offices.\n\nHowever, working from home is not perfect. Some people feel lonely, and it can be hard to switch off at the end of the day. Experts say the best solution may be a mix: a few days at home and a few days in the office.",
           questions: [
             { q: "What is the main topic of the article?", options: ["How to find a job", "The good and bad sides of working from home", "Why offices are closing"], correctIndex: 1, explanation: "The text discusses advantages and disadvantages of remote work." },
-            { q: "According to the text, one advantage is that workers...", options: ["earn more money", "save time on commuting", "never feel lonely"], correctIndex: 1, explanation: "\"Workers save time and money because they don't commute.\"" },
+            { q: "According to the text, one advantage is that workers...", options: ["save time on commuting", "never feel lonely", "earn more money"], correctIndex: 0, explanation: "\"Workers save time and money because they don't commute.\"" },
             { q: "What solution do experts suggest?", options: ["Always work in the office", "Always work from home", "A mix of home and office"], correctIndex: 2, explanation: "\"...the best solution may be a mix.\"" }
           ] },
         { type: "matching", instruction: "Une la palabra con su significado.", pairs: [
@@ -158,9 +158,9 @@ window.VESPER_CONTENT_PACK = (function () {
         { type: "listening", text: "Hello, my name is David.", question: "¿Qué escuchaste?",
           options: ["Hello, my name is David.", "Hello, my game is David.", "Yellow, my name is David."], correctIndex: 0 },
         { type: "listening", text: "I am from Mexico.", question: "¿De dónde es la persona?",
-          options: ["De México", "De Brasil", "De España"], correctIndex: 0 },
+          options: ["De España", "De Brasil", "De México"], correctIndex: 2 },
         { type: "listening", text: "I am a teacher.", question: "¿Cuál es su trabajo?",
-          options: ["Profesor/a", "Doctor/a", "Estudiante"], correctIndex: 0 },
+          options: ["Estudiante", "Profesor/a", "Doctor/a"], correctIndex: 1 },
         { type: "listening", text: "Nice to meet you.", question: "¿Qué significa lo que oíste?",
           options: ["Mucho gusto", "Hasta luego", "Lo siento"], correctIndex: 0 },
         { type: "true_false", statement: "El audio decía: \"I am a teacher.\"", answer: true, explanation: "Sí: teacher = profesor/a." },
@@ -182,11 +182,11 @@ window.VESPER_CONTENT_PACK = (function () {
       },
       exercises: [
         { type: "listening", text: "Turn left at the traffic lights.", question: "¿Qué debes hacer?",
-          options: ["Girar a la izquierda", "Girar a la derecha", "Seguir recto"], correctIndex: 0 },
+          options: ["Girar a la derecha", "Seguir recto", "Girar a la izquierda"], correctIndex: 2 },
         { type: "listening", text: "The bank is next to the supermarket.", question: "¿Dónde está el banco?",
           options: ["Al lado del supermercado", "Enfrente del parque", "Detrás de la escuela"], correctIndex: 0 },
         { type: "listening", text: "Go straight on for two blocks.", question: "¿Cuántas cuadras sigues recto?",
-          options: ["Dos", "Tres", "Cinco"], correctIndex: 0 },
+          options: ["Tres", "Dos", "Cinco"], correctIndex: 1 },
         { type: "listening", text: "It's on your right.", question: "¿Dónde está?",
           options: ["A tu derecha", "A tu izquierda", "Detrás de ti"], correctIndex: 0 },
         { type: "matching", instruction: "Une la instrucción con su traducción.", pairs: [
@@ -211,13 +211,13 @@ window.VESPER_CONTENT_PACK = (function () {
       },
       exercises: [
         { type: "listening", text: "Hi, this is Anna. I'm calling about tomorrow's meeting.", question: "¿Por qué llama Anna?",
-          options: ["Por la reunión de mañana", "Por una factura", "Por un viaje"], correctIndex: 0 },
+          options: ["Por una factura", "Por un viaje", "Por la reunión de mañana"], correctIndex: 2 },
         { type: "listening", text: "The meeting has been moved to three o'clock.", question: "¿A qué hora es ahora la reunión?",
-          options: ["A las tres", "A las dos", "A las cinco"], correctIndex: 0 },
+          options: ["A las dos", "A las tres", "A las cinco"], correctIndex: 1 },
         { type: "listening", text: "Please bring the sales report with you.", question: "¿Qué debes llevar?",
           options: ["El informe de ventas", "Tu pasaporte", "El almuerzo"], correctIndex: 0 },
         { type: "listening", text: "Could you call me back before five, please?", question: "¿Antes de qué hora debes llamar?",
-          options: ["Antes de las cinco", "Antes de las nueve", "Después de las cinco"], correctIndex: 0 },
+          options: ["Después de las cinco", "Antes de las nueve", "Antes de las cinco"], correctIndex: 2 },
         { type: "true_false", statement: "Anna pidió que lleves el informe de ventas.", answer: true, explanation: "\"Please bring the sales report.\"" },
         { type: "listening", text: "Thanks, talk to you soon.", question: "Escribe lo que escuchaste:",
           answers: ["thanks talk to you soon"], explanation: "Thanks, talk to you soon." }
@@ -236,11 +236,11 @@ window.VESPER_CONTENT_PACK = (function () {
       },
       exercises: [
         { type: "listening", text: "I'd say my main strength is solving problems under pressure.", question: "¿Cuál es su mayor fortaleza?",
-          options: ["Resolver problemas bajo presión", "Hablar idiomas", "Llegar temprano"], correctIndex: 0 },
+          options: ["Resolver problemas bajo presión", "Hablar varios idiomas con fluidez", "Llegar temprano"], correctIndex: 0 },
         { type: "listening", text: "In my previous job, I led a team of eight people.", question: "¿A cuántas personas dirigía?",
-          options: ["A ocho", "A dos", "A dieciocho"], correctIndex: 0 },
+          options: ["A dieciocho", "A ocho", "A dos"], correctIndex: 1 },
         { type: "listening", text: "I'm looking for a role with more responsibility.", question: "¿Qué busca la persona?",
-          options: ["Un puesto con más responsabilidad", "Un salario menor", "Menos horas"], correctIndex: 0 },
+          options: ["Menos horas", "Un salario menor", "Un puesto con más responsabilidad"], correctIndex: 2 },
         { type: "listening", text: "Honestly, I sometimes take on too much work.", question: "¿Qué admite como debilidad?",
           options: ["Que a veces asume demasiado trabajo", "Que llega tarde", "Que no habla inglés"], correctIndex: 0 },
         { type: "matching", instruction: "Une la expresión con su significado.", pairs: [
@@ -295,7 +295,7 @@ window.VESPER_CONTENT_PACK = (function () {
         ]
       },
       exercises: [
-        { type: "multiple_choice", question: "Past of \"go\":", options: ["goed", "went", "gone"], correctIndex: 1, explanation: "\"go\" es irregular -> went." },
+        { type: "multiple_choice", question: "Past of \"go\":", options: ["goed", "gone", "went"], correctIndex: 2, explanation: "\"go\" es irregular -> went." },
         { type: "fill_blank", sentence: "Yesterday I ___ (watch) a great film.", answers: ["watched"], hint: "Regular: + -ed.", explanation: "watch -> watched." },
         { type: "multiple_choice", question: "Choose the negative: \"She ___ come to the party.\"", options: ["didn't", "doesn't", "isn't"], correctIndex: 0, explanation: "Pasado negativo: didn't + verbo base." },
         { type: "word_order", words: ["Did", "you", "call", "her", "?"], correctOrder: ["Did", "you", "call", "her", "?"], hint: "Pregunta en pasado: Did + sujeto + verbo." },
@@ -325,9 +325,9 @@ window.VESPER_CONTENT_PACK = (function () {
       },
       exercises: [
         { type: "multiple_choice", question: "Choose: I have known him ___ ten years.", options: ["since", "for", "ago"], correctIndex: 1, explanation: "for + periodo de tiempo (ten years)." },
-        { type: "multiple_choice", question: "Choose: She has lived here ___ 2019.", options: ["for", "since", "during"], correctIndex: 1, explanation: "since + punto de inicio (2019)." },
+        { type: "multiple_choice", question: "Choose: She has lived here ___ 2019.", options: ["for", "during", "since"], correctIndex: 2, explanation: "since + punto de inicio (2019)." },
         { type: "fill_blank", sentence: "Have you ___ eaten sushi? (alguna vez)", answers: ["ever"], hint: "experiencia: Have you ever...?", explanation: "Have you ever eaten...?" },
-        { type: "multiple_choice", question: "Participle of \"see\":", options: ["saw", "seen", "seed"], correctIndex: 1, explanation: "see - saw - seen." },
+        { type: "multiple_choice", question: "Participle of \"see\":", options: ["seen", "seed", "saw"], correctIndex: 0, explanation: "see - saw - seen." },
         { type: "categorize", instruction: "¿for o since?", buckets: [
           { id: "for", label: "for" }, { id: "since", label: "since" }
         ], items: [
@@ -353,7 +353,7 @@ window.VESPER_CONTENT_PACK = (function () {
       },
       exercises: [
         { type: "multiple_choice", question: "First conditional: \"If it rains, I ___ at home.\"", options: ["stay", "will stay", "would stay"], correctIndex: 1, explanation: "First conditional: if + presente, will + verbo." },
-        { type: "multiple_choice", question: "Second conditional: \"If I ___ you, I would say no.\"", options: ["am", "were", "will be"], correctIndex: 1, explanation: "Second conditional usa \"were\" para todas las personas." },
+        { type: "multiple_choice", question: "Second conditional: \"If I ___ you, I would say no.\"", options: ["were", "am", "will be"], correctIndex: 0, explanation: "Second conditional usa \"were\" para todas las personas." },
         { type: "fill_blank", sentence: "If you mix blue and yellow, you ___ green. (hecho)", answers: ["get", "make"], hint: "Zero conditional: presente + presente.", explanation: "Zero conditional: ...you get green." },
         { type: "categorize", instruction: "¿Real (1st) o hipotético (2nd)?", buckets: [
           { id: "first", label: "1st (real)" }, { id: "second", label: "2nd (hipotético)" }
@@ -391,7 +391,7 @@ window.VESPER_CONTENT_PACK = (function () {
           { l: "red", r: "rojo" }, { l: "blue", r: "azul" },
           { l: "green", r: "verde" }, { l: "black", r: "negro" }
         ] },
-        { type: "multiple_choice", question: "We see with our...", options: ["ears", "eyes", "nose"], correctIndex: 1, explanation: "eyes = ojos (para ver)." },
+        { type: "multiple_choice", question: "We see with our...", options: ["ears", "nose", "eyes"], correctIndex: 2, explanation: "eyes = ojos (para ver)." },
         { type: "fill_blank", sentence: "Grass is ___.", answers: ["green"], hint: "Color del césped.", explanation: "Grass is green." },
         { type: "categorize", instruction: "¿Parte del cuerpo o color?", buckets: [
           { id: "body", label: "Cuerpo" }, { id: "color", label: "Color" }
@@ -446,7 +446,7 @@ window.VESPER_CONTENT_PACK = (function () {
           { l: "save", r: "ahorrar" }, { l: "spend", r: "gastar" },
           { l: "borrow", r: "pedir prestado" }, { l: "lend", r: "prestar" }
         ] },
-        { type: "multiple_choice", question: "Choose: I can't ___ a holiday this year.", options: ["afford", "spend", "save"], correctIndex: 0, explanation: "afford = poder permitirse." },
+        { type: "multiple_choice", question: "Choose: I can't ___ a holiday this year.", options: ["save", "spend", "afford"], correctIndex: 2, explanation: "afford = poder permitirse." },
         { type: "fill_blank", sentence: "Can I ___ your pen? (pedirte prestado)", answers: ["borrow"], hint: "borrow = pedir prestado.", explanation: "borrow (from someone)." },
         { type: "true_false", statement: "\"Lend\" means to give something for a short time.", answer: true, explanation: "lend = prestar (algo por un tiempo)." },
         { type: "categorize", instruction: "¿Entra o sale el dinero?", buckets: [
@@ -504,7 +504,7 @@ window.VESPER_CONTENT_PACK = (function () {
       },
       exercises: [
         { type: "multiple_choice", question: "Choose: The meeting is ___ Monday.", options: ["in", "on", "at"], correctIndex: 1, explanation: "on + días de la semana." },
-        { type: "multiple_choice", question: "Choose: I get up ___ 6:30.", options: ["in", "on", "at"], correctIndex: 2, explanation: "at + hora." },
+        { type: "multiple_choice", question: "Choose: I get up ___ 6:30.", options: ["at", "in", "on"], correctIndex: 0, explanation: "at + hora." },
         { type: "fill_blank", sentence: "My birthday is ___ June.", answers: ["in"], hint: "in + meses.", explanation: "in June." },
         { type: "categorize", instruction: "¿in, on o at?", buckets: [
           { id: "in", label: "in" }, { id: "on", label: "on" }, { id: "at", label: "at" }
@@ -534,7 +534,7 @@ window.VESPER_CONTENT_PACK = (function () {
           { l: "get up", r: "levantarse" }, { l: "turn on", r: "encender" },
           { l: "give up", r: "rendirse" }, { l: "look for", r: "buscar" }
         ] },
-        { type: "multiple_choice", question: "Choose: Can you ___ the TV? It's too loud.", options: ["turn off", "turn up", "look after"], correctIndex: 0, explanation: "turn off = apagar." },
+        { type: "multiple_choice", question: "Choose: Can you ___ the TV? It's too loud.", options: ["look after", "turn up", "turn off"], correctIndex: 2, explanation: "turn off = apagar." },
         { type: "fill_blank", sentence: "I'm ___ for my keys. I can't find them.", answers: ["looking"], hint: "look for = buscar.", explanation: "I'm looking for my keys." },
         { type: "true_false", statement: "\"Give up\" means to continue trying.", answer: false, explanation: "give up = rendirse, dejar de intentar." },
         { type: "categorize", instruction: "¿Separable (turn it on) o no?", buckets: [
@@ -584,7 +584,7 @@ window.VESPER_CONTENT_PACK = (function () {
         { type: "reading", title: "Saturday market",
           passage: "Every Saturday, Ben goes to the market in the main square. He likes it because the fruit is fresh and cheap.\n\nThis morning he bought apples, two big tomatoes and some bread. The baker, an old friend, gave him a free cookie.\n\nBen doesn't have a car, so he carries everything in a green bag. On the way home, he always stops to feed the birds in the park.",
           questions: [
-            { q: "When does Ben go to the market?", options: ["Every Sunday", "Every Saturday", "Every morning"], correctIndex: 1, explanation: "\"Every Saturday, Ben goes to the market.\"" },
+            { q: "When does Ben go to the market?", options: ["Every morning", "Every Sunday", "Every Saturday"], correctIndex: 2, explanation: "\"Every Saturday, Ben goes to the market.\"" },
             { q: "Why does he like the market?", options: ["It is far away", "The fruit is fresh and cheap", "It is very big"], correctIndex: 1, explanation: "\"...the fruit is fresh and cheap.\"" },
             { q: "What does he do on the way home?", options: ["He feeds the birds.", "He buys a car.", "He calls the baker."], correctIndex: 0, explanation: "\"...he always stops to feed the birds.\"" }
           ] },
@@ -604,10 +604,10 @@ window.VESPER_CONTENT_PACK = (function () {
       explanation: { body: "Usamos \"can\" para habilidad (I can swim) y permiso (Can I go?). El negativo es can't. Tras can va el verbo en base, sin 'to'. (can = poder/saber hacer / pedir permiso.)",
         examples: [{ en: "I can speak English.", es: "Sé hablar inglés." }, { en: "Can I open the window?", es: "¿Puedo abrir la ventana?" }] },
       exercises: [
-        { type: "multiple_choice", question: "Choose: She ___ swim very well.", options: ["can", "cans", "can to"], correctIndex: 0, explanation: "can + verbo base, sin -s ni 'to'." },
+        { type: "multiple_choice", question: "Choose: She ___ swim very well.", options: ["cans", "can to", "can"], correctIndex: 2, explanation: "can + verbo base, sin -s ni 'to'." },
         { type: "fill_blank", sentence: "___ I use your phone, please?", answers: ["can", "could"], hint: "Pedir permiso.", explanation: "Can/Could I...? = ¿Puedo...?" },
         { type: "true_false", statement: "The negative of \"can\" is \"can't\".", answer: true, explanation: "can -> can't (cannot)." },
-        { type: "multiple_choice", question: "Choose: We ___ find the keys. (no es posible)", options: ["can", "can't", "can to"], correctIndex: 1, explanation: "can't = no poder." },
+        { type: "multiple_choice", question: "Choose: We ___ find the keys. (no es posible)", options: ["can't", "can", "can to"], correctIndex: 0, explanation: "can't = no poder." },
         { type: "word_order", words: ["I", "can", "play", "guitar"], correctOrder: ["I", "can", "play", "guitar"], hint: "Sujeto + can + verbo." },
         { type: "translate", prompt: "Traduce: \"¿Puedo abrir la ventana?\"",
           answers: ["can i open the window", "could i open the window"], explanation: "Can I open the window?" }
@@ -646,8 +646,8 @@ window.VESPER_CONTENT_PACK = (function () {
           passage: "I've just come back from three amazing days in Lisbon, and I can't wait to share my experience.\n\nOn the first day, I got lost in the narrow streets of the old town, which was actually the best part. The local food is fantastic and surprisingly affordable. I especially loved the little pastry shops on every corner.\n\nMy top tip is to buy a public transport card. The famous yellow trams get very crowded, so try to travel early in the morning. Don't forget comfortable shoes — the city is full of hills!",
           questions: [
             { q: "How long was the writer's trip?", options: ["One week", "Three days", "Three weeks"], correctIndex: 1, explanation: "\"...three amazing days in Lisbon.\"" },
-            { q: "What does the writer say was the best part?", options: ["The hotels", "Getting lost in the old town", "The airport"], correctIndex: 1, explanation: "\"...I got lost in the narrow streets... the best part.\"" },
-            { q: "What is the writer's top tip?", options: ["Buy a transport card", "Travel at night", "Avoid the food"], correctIndex: 0, explanation: "\"My top tip is to buy a public transport card.\"" }
+            { q: "What does the writer say was the best part?", options: ["Getting lost in the old town", "The hotels", "The airport"], correctIndex: 0, explanation: "\"...I got lost in the narrow streets... the best part.\"" },
+            { q: "What is the writer's top tip?", options: ["Travel at night", "Avoid the food", "Buy a transport card"], correctIndex: 2, explanation: "\"My top tip is to buy a public transport card.\"" }
           ] },
         { type: "true_false", statement: "The writer says the food was very expensive.", answer: false, explanation: "\"...surprisingly affordable.\"" },
         { type: "matching", instruction: "Une la palabra con su significado.", pairs: [
@@ -687,8 +687,8 @@ window.VESPER_CONTENT_PACK = (function () {
           passage: "We spend about a third of our lives asleep, yet many of us treat sleep as a luxury rather than a necessity. Scientists now agree that this is a serious mistake.\n\nDuring deep sleep, the brain clears out waste products and strengthens new memories. People who sleep badly for long periods are more likely to suffer from poor concentration and a weaker immune system.\n\nExperts recommend keeping a regular schedule and avoiding screens before bed. The blue light from phones can trick the brain into thinking it is still daytime, making it harder to fall asleep.",
           questions: [
             { q: "What is the main message of the text?", options: ["Sleep is a luxury we can skip", "Sleep is a necessity, not a luxury", "Screens improve sleep"], correctIndex: 1, explanation: "\"...a serious mistake\" to treat sleep as a luxury." },
-            { q: "According to the text, what happens during deep sleep?", options: ["The brain clears waste and strengthens memories", "The body grows taller", "Nothing important"], correctIndex: 0, explanation: "\"...the brain clears out waste products and strengthens new memories.\"" },
-            { q: "Why is blue light a problem?", options: ["It is too dim", "It tricks the brain into thinking it is daytime", "It saves battery"], correctIndex: 1, explanation: "\"...trick the brain into thinking it is still daytime.\"" }
+            { q: "According to the text, what happens during deep sleep?", options: ["The body grows taller", "Nothing important", "The brain clears waste and strengthens memories"], correctIndex: 2, explanation: "\"...the brain clears out waste products and strengthens new memories.\"" },
+            { q: "Why is blue light a problem?", options: ["It tricks the brain into thinking it is daytime", "It saves battery", "It is too dim"], correctIndex: 0, explanation: "\"...trick the brain into thinking it is still daytime.\"" }
           ] },
         { type: "true_false", statement: "The text says poor sleep can weaken the immune system.", answer: true, explanation: "\"...a weaker immune system.\"" },
         { type: "matching", instruction: "Une la palabra con su significado.", pairs: [
@@ -706,13 +706,13 @@ window.VESPER_CONTENT_PACK = (function () {
         examples: [{ en: "In today's episode...", es: "En el episodio de hoy..." }] },
       exercises: [
         { type: "listening", text: "In today's episode, we explore why cities are getting greener.", question: "¿De qué trata el episodio?",
-          options: ["De por qué las ciudades son más verdes", "De cocina", "De deportes"], correctIndex: 0 },
+          options: ["De recetas de cocina para toda la familia", "De por qué las ciudades son más verdes", "De deportes"], correctIndex: 1 },
         { type: "listening", text: "Studies suggest that parks improve people's mental health.", question: "¿Qué sugieren los estudios?",
           options: ["Que los parques mejoran la salud mental", "Que los parques son caros", "Que la gente odia los parques"], correctIndex: 0 },
         { type: "listening", text: "However, not everyone has equal access to green spaces.", question: "¿Qué problema se menciona?",
-          options: ["El acceso desigual a las zonas verdes", "La falta de árboles", "El precio del transporte"], correctIndex: 0 },
+          options: ["La falta de árboles", "El precio del transporte", "El acceso desigual a las zonas verdes"], correctIndex: 2 },
         { type: "listening", text: "We'll be back next week with another episode.", question: "¿Cuándo vuelve el podcast?",
-          options: ["La próxima semana", "Mañana", "Nunca"], correctIndex: 0 },
+          options: ["La próxima semana", "Mañana a la misma hora", "Nunca"], correctIndex: 0 },
         { type: "true_false", statement: "El podcast dice que todos tienen el mismo acceso a parques.", answer: false, explanation: "\"...not everyone has equal access.\"" },
         { type: "listening", text: "Thanks for listening, and see you next time.", question: "Escribe lo que escuchaste:",
           answers: ["thanks for listening and see you next time"], explanation: "Thanks for listening, and see you next time." }
@@ -731,14 +731,14 @@ window.VESPER_CONTENT_PACK = (function () {
           passage: "It is widely assumed that willpower is the key to changing our behaviour. In reality, research increasingly suggests that habits — not sheer determination — shape most of what we do.\n\nA habit is essentially a loop: a cue triggers a routine, which delivers a reward. Once this loop is firmly established, the brain stops making conscious decisions and runs on autopilot. This is why breaking a bad habit by willpower alone so often fails.\n\nThe most effective approach, paradoxically, is not to fight the habit but to redesign it. By keeping the same cue and reward while deliberately swapping the routine, people stand a far better chance of lasting change.",
           questions: [
             { q: "What is the writer's main claim?", options: ["Willpower alone explains behaviour", "Habits, more than willpower, shape behaviour", "Behaviour cannot be changed"], correctIndex: 1, explanation: "\"...habits — not sheer determination — shape most of what we do.\"" },
-            { q: "According to the text, a habit loop consists of...", options: ["cue, routine, reward", "thought, word, action", "morning, noon, night"], correctIndex: 0, explanation: "\"...a cue triggers a routine, which delivers a reward.\"" },
-            { q: "What does the writer recommend?", options: ["Fighting habits with pure willpower", "Redesigning the routine while keeping cue and reward", "Ignoring habits completely"], correctIndex: 1, explanation: "\"...redesign it... swapping the routine.\"" }
+            { q: "According to the text, a habit loop consists of...", options: ["thought, word, action", "morning, noon, night", "cue, routine, reward"], correctIndex: 2, explanation: "\"...a cue triggers a routine, which delivers a reward.\"" },
+            { q: "What does the writer recommend?", options: ["Redesigning the routine while keeping cue and reward", "Ignoring habits completely", "Fighting habits with pure willpower"], correctIndex: 0, explanation: "\"...redesign it... swapping the routine.\"" }
           ] },
         { type: "true_false", statement: "The writer believes willpower alone reliably breaks habits.", answer: false, explanation: "\"...breaking a bad habit by willpower alone so often fails.\"" },
         { type: "matching", instruction: "Une la palabra con su significado.", pairs: [
           { l: "willpower", r: "fuerza de voluntad" }, { l: "cue", r: "señal/estímulo" }, { l: "routine", r: "rutina" }, { l: "reward", r: "recompensa" } ] },
         { type: "fill_blank", sentence: "Once the loop is established, the brain runs on ___.", answers: ["autopilot"], hint: "Sin decisión consciente.", explanation: "\"...runs on autopilot.\"" },
-        { type: "multiple_choice", question: "\"Sheer determination\" is closest in meaning to...", options: ["pure willpower", "mild interest", "good luck"], correctIndex: 0, explanation: "sheer = puro/absoluto." },
+        { type: "multiple_choice", question: "\"Sheer determination\" is closest in meaning to...", options: ["mild interest", "pure willpower", "good luck"], correctIndex: 1, explanation: "sheer = puro/absoluto." },
         { type: "translate", prompt: "Traduce: \"Se asume ampliamente que la fuerza de voluntad es la clave.\"",
           answers: ["it is widely assumed that willpower is the key", "it's widely assumed that willpower is the key"], explanation: "It is widely assumed that willpower is the key." }
       ]
@@ -754,8 +754,8 @@ window.VESPER_CONTENT_PACK = (function () {
           passage: "The idea of a four-day working week, once dismissed as wishful thinking, is gaining serious traction. Several large-scale trials have reported that employees are happier and, crucially, no less productive.\n\nCritics argue that the model cannot be applied universally; a hospital or a factory cannot simply close for an extra day. There is some truth to this. Yet supporters counter that flexibility, rather than a rigid template, is the real lesson.\n\nWhatever the outcome, the debate has forced organisations to ask a long-overdue question: are we measuring work by hours logged, or by results delivered?",
           questions: [
             { q: "How is the four-day week described now?", options: ["As wishful thinking only", "As gaining serious traction", "As already universal"], correctIndex: 1, explanation: "\"...is gaining serious traction.\"" },
-            { q: "What do critics argue?", options: ["It cannot apply to every workplace", "It always lowers productivity", "It is illegal"], correctIndex: 0, explanation: "\"...cannot be applied universally...\"" },
-            { q: "What question has the debate raised?", options: ["How to close hospitals", "Whether to measure work by hours or by results", "How to pay less"], correctIndex: 1, explanation: "\"...by hours logged, or by results delivered?\"" }
+            { q: "What do critics argue?", options: ["It is illegal", "It always lowers productivity", "It cannot apply to every workplace"], correctIndex: 2, explanation: "\"...cannot be applied universally...\"" },
+            { q: "What question has the debate raised?", options: ["Whether to measure work by hours or by results", "How to pay less", "How to close hospitals"], correctIndex: 0, explanation: "\"...by hours logged, or by results delivered?\"" }
           ] },
         { type: "true_false", statement: "The trials found employees were much less productive.", answer: false, explanation: "\"...no less productive.\"" },
         { type: "matching", instruction: "Une la expresión con su significado.", pairs: [
@@ -776,11 +776,11 @@ window.VESPER_CONTENT_PACK = (function () {
         { type: "listening", text: "Let me begin by challenging a common assumption.", question: "¿Cómo empieza la charla?",
           options: ["Cuestionando una suposición común", "Pidiendo disculpas", "Contando un chiste"], correctIndex: 0 },
         { type: "listening", text: "Contrary to popular belief, multitasking actually reduces our efficiency.", question: "¿Qué dice sobre la multitarea?",
-          options: ["Que reduce la eficiencia", "Que la mejora", "Que no cambia nada"], correctIndex: 0 },
+          options: ["Que no cambia nada en la productividad", "Que la mejora", "Que reduce la eficiencia"], correctIndex: 2 },
         { type: "listening", text: "The evidence, while not conclusive, is certainly compelling.", question: "¿Cómo describe la evidencia?",
-          options: ["Convincente aunque no concluyente", "Falsa", "Aburrida"], correctIndex: 0 },
+          options: ["Aburrida", "Convincente aunque no concluyente", "Falsa"], correctIndex: 1 },
         { type: "listening", text: "I'll come back to that point in a moment.", question: "¿Qué hará con ese punto?",
-          options: ["Volverá a él en un momento", "Lo ignorará", "Lo repetirá tres veces"], correctIndex: 0 },
+          options: ["Volverá a él en un momento", "Lo ignorará", "Lo repetirá tres veces al final de la clase"], correctIndex: 0 },
         { type: "true_false", statement: "El ponente dice que la multitarea mejora la eficiencia.", answer: false, explanation: "\"...multitasking actually reduces our efficiency.\"" },
         { type: "listening", text: "To sum up, our priorities shape our attention.", question: "Escribe lo que escuchaste:",
           answers: ["to sum up our priorities shape our attention"], explanation: "To sum up, our priorities shape our attention." }
@@ -794,9 +794,9 @@ window.VESPER_CONTENT_PACK = (function () {
         examples: [{ en: "With all due respect, I have to disagree.", es: "Con todo respeto, debo discrepar." }] },
       exercises: [
         { type: "listening", text: "With all due respect, I have to disagree with the previous speaker.", question: "¿Qué hace la persona?",
-          options: ["Discrepa cortésmente", "Está de acuerdo", "Hace una pregunta"], correctIndex: 0 },
+          options: ["Hace una pregunta sobre el tema anterior", "Discrepa cortésmente", "Está de acuerdo"], correctIndex: 1 },
         { type: "listening", text: "You raise a valid point, but you're overlooking the cost.", question: "¿Qué dice que se pasa por alto?",
-          options: ["El coste", "El tiempo", "El lugar"], correctIndex: 0 },
+          options: ["El tiempo", "El lugar", "El coste"], correctIndex: 2 },
         { type: "listening", text: "Let's not lose sight of the bigger picture here.", question: "¿Qué pide no perder de vista?",
           options: ["El panorama general", "El reloj", "El micrófono"], correctIndex: 0 },
         { type: "listening", text: "I'm inclined to agree, up to a point.", question: "¿Cuál es su postura?",
@@ -815,8 +815,8 @@ window.VESPER_CONTENT_PACK = (function () {
       explanation: { body: "Las colocaciones son palabras que suelen ir juntas: make a decision, take responsibility, raise awareness, meet a deadline. Sonar natural depende de ellas. (Combinaciones naturales de palabras.)",
         examples: [{ en: "We need to raise awareness.", es: "Necesitamos concienciar." }, { en: "She took full responsibility.", es: "Asumió toda la responsabilidad." }] },
       exercises: [
-        { type: "multiple_choice", question: "Choose: We have to ___ a decision today.", options: ["make", "do", "take"], correctIndex: 0, explanation: "make a decision (no 'do/take')." },
-        { type: "multiple_choice", question: "Choose: The campaign aims to ___ awareness.", options: ["raise", "rise", "grow"], correctIndex: 0, explanation: "raise awareness = concienciar." },
+        { type: "multiple_choice", question: "Choose: We have to ___ a decision today.", options: ["take", "do", "make"], correctIndex: 2, explanation: "make a decision (no 'do/take')." },
+        { type: "multiple_choice", question: "Choose: The campaign aims to ___ awareness.", options: ["rise", "raise", "grow"], correctIndex: 1, explanation: "raise awareness = concienciar." },
         { type: "matching", instruction: "Une el verbo con su colocación.", pairs: [
           { l: "make", r: "a decision" }, { l: "take", r: "responsibility" }, { l: "meet", r: "a deadline" }, { l: "pay", r: "attention" } ] },
         { type: "fill_blank", sentence: "Please ___ attention to the details.", answers: ["pay"], hint: "pay attention.", explanation: "pay attention = prestar atención." },
@@ -839,7 +839,7 @@ window.VESPER_CONTENT_PACK = (function () {
         { type: "multiple_choice", question: "\"It's a piece of cake\" means it is...", options: ["very easy", "very tasty", "very hard"], correctIndex: 0, explanation: "a piece of cake = muy fácil." },
         { type: "fill_blank", sentence: "I feel a bit under the ___ today. (indispuesto)", answers: ["weather"], hint: "under the weather.", explanation: "under the weather = indispuesto." },
         { type: "true_false", statement: "\"Break the ice\" means to start a conversation comfortably.", answer: true, explanation: "Romper el hielo = facilitar el inicio social." },
-        { type: "multiple_choice", question: "If you \"hit the books\", you...", options: ["study hard", "go to sleep", "throw books"], correctIndex: 0, explanation: "hit the books = ponerse a estudiar." },
+        { type: "multiple_choice", question: "If you \"hit the books\", you...", options: ["throw books", "study hard", "go to sleep"], correctIndex: 1, explanation: "hit the books = ponerse a estudiar." },
         { type: "translate", prompt: "Traduce: \"El examen fue pan comido.\"",
           answers: ["the exam was a piece of cake", "the test was a piece of cake"], explanation: "The exam was a piece of cake." }
       ]
@@ -852,7 +852,7 @@ window.VESPER_CONTENT_PACK = (function () {
       explanation: { body: "Tras adverbios negativos al inicio, el orden se invierte como en pregunta: \"Never have I seen...\", \"Not only did she..., but...\", \"Rarely do we...\". Da énfasis y formalidad. (Inversión para enfatizar.)",
         examples: [{ en: "Never have I seen such a mess.", es: "Nunca he visto tal desorden." }, { en: "Not only did he apologise, but he also paid.", es: "No solo se disculpó, sino que también pagó." }] },
       exercises: [
-        { type: "multiple_choice", question: "Choose: Never ___ such a beautiful view.", options: ["I have seen", "have I seen", "I saw"], correctIndex: 1, explanation: "Tras 'Never' al inicio se invierte: have I seen." },
+        { type: "multiple_choice", question: "Choose: Never ___ such a beautiful view.", options: ["I have seen", "I saw", "have I seen"], correctIndex: 2, explanation: "Tras 'Never' al inicio se invierte: have I seen." },
         { type: "multiple_choice", question: "Choose: Not only ___ late, but he forgot the keys.", options: ["he was", "was he", "he is"], correctIndex: 1, explanation: "Not only + inversión: was he late." },
         { type: "fill_blank", sentence: "Rarely ___ we see such talent. (inversión con 'do')", answers: ["do"], hint: "Rarely do we...", explanation: "Rarely do we see..." },
         { type: "true_false", statement: "After a negative adverb at the start, English uses inversion.", answer: true, explanation: "Es la regla de la inversión enfática." },
@@ -868,11 +868,11 @@ window.VESPER_CONTENT_PACK = (function () {
       explanation: { body: "El registro es el grado de formalidad. Formal: \"I would be grateful if you could...\". Informal: \"Can you...?\". Elegir bien el registro es clave en C1. (Formal vs. informal.)",
         examples: [{ en: "I would be grateful if you could reply soon.", es: "Le agradecería que respondiera pronto." }, { en: "Drop me a line when you can.", es: "Escríbeme cuando puedas." }] },
       exercises: [
-        { type: "multiple_choice", question: "Which is the most formal request?", options: ["Send it now.", "Can you send it?", "I would be grateful if you could send it."], correctIndex: 2, explanation: "\"I would be grateful if you could...\" es la más formal." },
+        { type: "multiple_choice", question: "Which is the most formal request?", options: ["I would be grateful if you could send it.", "Send it now.", "Can you send it?"], correctIndex: 0, explanation: "\"I would be grateful if you could...\" es la más formal." },
         { type: "categorize", instruction: "¿Formal o informal?", buckets: [
           { id: "f", label: "Formal" }, { id: "i", label: "Informal" } ], items: [
           { t: "I look forward to hearing from you", bucket: "f" }, { t: "Cheers!", bucket: "i" }, { t: "Please find attached", bucket: "f" }, { t: "Gonna be late", bucket: "i" } ] },
-        { type: "multiple_choice", question: "\"Drop me a line\" is...", options: ["formal", "informal", "rude"], correctIndex: 1, explanation: "Es informal: escríbeme." },
+        { type: "multiple_choice", question: "\"Drop me a line\" is...", options: ["rude", "formal", "informal"], correctIndex: 2, explanation: "Es informal: escríbeme." },
         { type: "fill_blank", sentence: "I would be ___ if you could help. (formal)", answers: ["grateful"], hint: "I'd be grateful if...", explanation: "I would be grateful if you could..." },
         { type: "true_false", statement: "\"Please find attached\" is appropriate in a formal email.", answer: true, explanation: "Es una fórmula formal estándar." },
         { type: "translate", prompt: "Traduce (formal): \"Le agradecería que respondiera pronto.\"",

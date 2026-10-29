@@ -37,7 +37,7 @@ window.VESPER_LEVELS_PACK = (function () {
       },
       exercises: [
         { type: "multiple_choice", question: "Choose the correct form: \"She ___ my teacher.\"", options: ["am", "is", "are"], correctIndex: 1, explanation: "Con he/she/it usamos 'is'." },
-        { type: "multiple_choice", question: "Choose the correct article: \"I have ___ apple.\"", options: ["a", "an", "the"], correctIndex: 1, explanation: "'apple' empieza por sonido vocálico: 'an apple'." },
+        { type: "multiple_choice", question: "Choose the correct article: \"I have ___ apple.\"", options: ["an", "a", "the"], correctIndex: 0, explanation: "'apple' empieza por sonido vocálico: 'an apple'." },
         { type: "find_error", question: "Encuentra el error.",
           segments: ["My sister ", { u: "have" }, " a ", { u: "small" }, " ", { u: "dog" }, " at ", { u: "home" }, "."],
           correctIndex: 0, correction: "has (he/she/it -> has)",
@@ -72,7 +72,7 @@ window.VESPER_LEVELS_PACK = (function () {
           { t: "sister", bucket: "f" }, { t: "green", bucket: "c" },
           { t: "father", bucket: "f" }, { t: "yellow", bucket: "c" },
           { t: "uncle", bucket: "f" }, { t: "purple", bucket: "c" } ] },
-        { type: "multiple_choice", question: "What colour do you get from blue + yellow?", options: ["red", "green", "black"], correctIndex: 1, explanation: "Azul + amarillo = verde (green)." },
+        { type: "multiple_choice", question: "What colour do you get from blue + yellow?", options: ["red", "black", "green"], correctIndex: 2, explanation: "Azul + amarillo = verde (green)." },
         { type: "fill_blank", sentence: "My father's father is my ___.", answers: ["grandfather", "grandpa"], hint: "El padre de tu padre.", explanation: "grandfather = abuelo." },
         { type: "translate", prompt: "Traduce: \"Mi hermana tiene un gato negro.\"", answers: ["my sister has a black cat"], explanation: "My sister has a black cat." }
       ]
@@ -93,7 +93,7 @@ window.VESPER_LEVELS_PACK = (function () {
           passage: "My name is Ana. I am ten years old. I live in a small house with my mother, my father and my brother. We have a cat. Its name is Luna. Luna is white and very friendly. Every evening, I play with Luna in the garden.",
           questions: [
             { q: "How old is Ana?", options: ["eight", "ten", "twelve"], correctIndex: 1, explanation: "\"I am ten years old.\"" },
-            { q: "Who does Ana live with?", options: ["her friends", "her family", "alone"], correctIndex: 1, explanation: "\"...with my mother, my father and my brother.\"" },
+            { q: "Who does Ana live with?", options: ["her family", "her friends", "alone"], correctIndex: 0, explanation: "\"...with my mother, my father and my brother.\"" },
             { q: "What colour is the cat?", options: ["black", "grey", "white"], correctIndex: 2, explanation: "\"Luna is white...\"" }
           ] },
         { type: "find_error", question: "Encuentra el error.",
@@ -120,7 +120,7 @@ window.VESPER_LEVELS_PACK = (function () {
       },
       exercises: [
         { type: "multiple_choice", question: "Choose the past simple: \"Yesterday I ___ to the cinema.\"", options: ["go", "went", "gone"], correctIndex: 1, explanation: "Pasado de 'go' = 'went'." },
-        { type: "multiple_choice", question: "Choose the comparative: \"She is ___ than her brother.\"", options: ["tall", "taller", "tallest"], correctIndex: 1, explanation: "Comparativo: 'taller than'." },
+        { type: "multiple_choice", question: "Choose the comparative: \"She is ___ than her brother.\"", options: ["taller", "tall", "tallest"], correctIndex: 0, explanation: "Comparativo: 'taller than'." },
         { type: "find_error", question: "Encuentra el error.",
           segments: ["Last weekend we ", { u: "goed" }, " to the ", { u: "beach" }, " and ", { u: "swam" }, " in the ", { u: "sea" }, "."],
           correctIndex: 0, correction: "went ('go' es irregular)",
@@ -175,7 +175,7 @@ window.VESPER_LEVELS_PACK = (function () {
         { type: "reading", title: "Our trip to the mountains",
           passage: "Last summer, my family went to the mountains for a week. The weather was sunny and warm. We stayed in a small wooden cabin near a lake. Every morning we walked in the forest, and in the afternoon we swam in the cold lake. One day, we saw a family of deer. It was the best holiday of my life.",
           questions: [
-            { q: "Where did the family go?", options: ["to the beach", "to the mountains", "to the city"], correctIndex: 1, explanation: "\"...went to the mountains for a week.\"" },
+            { q: "Where did the family go?", options: ["to the city", "to the beach", "to the mountains"], correctIndex: 2, explanation: "\"...went to the mountains for a week.\"" },
             { q: "How was the weather?", options: ["cold and rainy", "sunny and warm", "windy"], correctIndex: 1, explanation: "\"The weather was sunny and warm.\"" },
             { q: "What did they see one day?", options: ["a family of deer", "a bear", "a boat"], correctIndex: 0, explanation: "\"...we saw a family of deer.\"" }
           ] },
@@ -183,7 +183,7 @@ window.VESPER_LEVELS_PACK = (function () {
           segments: ["Last summer my family ", { u: "go" }, " to the ", { u: "mountains" }, " for a ", { u: "week" }, " in ", { u: "July" }, "."],
           correctIndex: 0, correction: "went (acción terminada en el pasado)",
           explanation: "'Last summer' indica pasado: el verbo debe ir en pasado ('went')." },
-        { type: "multiple_choice", question: "In the text, \"cabin\" means...", options: ["a small simple house", "a big hotel", "a tent"], correctIndex: 0, explanation: "'cabin' = cabaña, casa pequeña y sencilla." },
+        { type: "multiple_choice", question: "In the text, \"cabin\" means...", options: ["a big hotel", "a tent", "a small simple house"], correctIndex: 2, explanation: "'cabin' = cabaña, casa pequeña y sencilla." },
         { type: "true_false", statement: "The family swam in the lake in the afternoon.", answer: true, explanation: "\"...in the afternoon we swam in the cold lake.\"" }
       ]
     },
@@ -259,10 +259,10 @@ window.VESPER_LEVELS_PACK = (function () {
         { type: "reading", title: "Smartphones and us",
           passage: "Smartphones have changed the way we communicate. Twenty years ago, most people used their phones only to make calls or send short messages. Today, a single device lets us read the news, take photos, pay for shopping and talk to friends on the other side of the world.\n\nHowever, this convenience has a downside. Many people now find it difficult to spend even a few hours without checking their screens, and some experts worry that constant notifications make it harder to concentrate.",
           questions: [
-            { q: "What is the text mainly about?", options: ["how to repair a phone", "how smartphones have changed communication, with both benefits and problems", "why old phones were better"], correctIndex: 1, explanation: "Habla del cambio que trajeron, con ventajas y un inconveniente." },
+            { q: "What is the text mainly about?", options: ["why old phones were better", "how to repair a phone", "how smartphones have changed communication, with both benefits and problems"], correctIndex: 2, explanation: "Habla del cambio que trajeron, con ventajas y un inconveniente." },
             { q: "According to the text, what could people do with phones twenty years ago?", options: ["read the news and pay for shopping", "only make calls and send short messages", "take photos and talk to people abroad"], correctIndex: 1, explanation: "\"...used their phones only to make calls or send short messages.\"" },
-            { q: "In the text, \"downside\" means...", options: ["an advantage", "a disadvantage", "a price"], correctIndex: 1, explanation: "'downside' = inconveniente, desventaja." },
-            { q: "What can be inferred from the text?", options: ["Phones have no effect on concentration.", "Spending too long on phones may be a problem for some people.", "Everyone should stop using phones."], correctIndex: 1, explanation: "Se infiere de la preocupación de los expertos por las notificaciones y la concentración." }
+            { q: "In the text, \"downside\" means...", options: ["a disadvantage", "a price", "an advantage"], correctIndex: 0, explanation: "'downside' = inconveniente, desventaja." },
+            { q: "What can be inferred from the text?", options: ["Phones have no effect on concentration.", "Everyone should stop using phones.", "Spending too long on phones may be a problem for some people."], correctIndex: 2, explanation: "Se infiere de la preocupación de los expertos por las notificaciones y la concentración." }
           ] },
         { type: "find_error", question: "Encuentra el error.",
           segments: ["Many people ", { u: "finds" }, " it ", { u: "difficult" }, " to ", { u: "concentrate" }, " with constant ", { u: "notifications" }, "."],
