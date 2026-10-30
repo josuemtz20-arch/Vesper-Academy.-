@@ -167,11 +167,12 @@ window.VesperProgress = (function () {
     if (s.achievements[id]) return false;
     s.achievements[id] = dayKey();
     save(s);
+    syncIfLoggedIn(s);
     return true;
   }
 
   function dailyGoal() { var s = load(); return goalInfo(s, dayKey()); }
-  function setGoal(n) { var s = load(); s.goalTarget = Math.max(1, Math.min(20, parseInt(n, 10) || DEFAULT_GOAL)); save(s); return s.goalTarget; }
+  function setGoal(n) { var s = load(); s.goalTarget = Math.max(1, Math.min(20, parseInt(n, 10) || DEFAULT_GOAL)); save(s); syncIfLoggedIn(s); return s.goalTarget; }
 
   /* ---- Jefes de nivel ("boss") ----
      Registra que el jefe de un mundo (NIVEL CEFR) fue superado y desbloquea el
@@ -182,7 +183,7 @@ window.VesperProgress = (function () {
     if (!s.bosses) s.bosses = {};
     pct = Math.max(0, Math.min(100, Math.round(pct || 0)));
     var cur = s.bosses[level];
-    if (!cur || pct > cur.pct) { s.bosses[level] = { pct: pct, date: dayKey() }; save(s); }
+    if (!cur || pct > cur.pct) { s.bosses[level] = { pct: pct, date: dayKey() }; save(s); syncIfLoggedIn(s); }
     return true;
   }
   function bossPassed(level) { var s = load(); return !!(s.bosses && s.bosses[level]); }

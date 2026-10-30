@@ -24,33 +24,75 @@
            "/databases/" + DB_ID + "/documents/progress/" + uid;
   }
 
-  /* ---- codificacion tipada de Firestore REST para nuestro estado ---- */
+  /* Estrellas por lección: viven aparte (vesper_path.js) pero viajan en el
+     mismo documento para que el mapa se vea igual en todos los dispositivos. */
+  var SCORE_KEY = "vesper_lesson_scores";
+  function loadScores() { try { return JSON.parse(localStorage.getItem(SCORE_KEY) || "{}") || {}; } catch (e) { return {}; } }
+  /* une puntuaciones remotas con las locales (gana la mejor) */
+  function mergeScores(remote) {
+    var s = loadScores(), changed = false;
+    for (var k in (remote || {})) { if (typeof s[k] !== "number" || remote[k] > s[k]) { s[k] = remote[k]; changed = true; } }
+    if (changed) { try { localStorage.setItem(SCORE_KEY, JSON.stringify(s)); } catch (e) {} }
+  }
+
+  /* ---- codificacion tipada de Firestore REST para nuestro estado ----
+     OJO: el PATCH sin updateMask REEMPLAZA el documento entero; todo lo que
+     no se escriba aquí se borra de la nube. Por eso van todos los campos. */
   function toFs(s) {
     s = s || {};
     function mapBool(o) { var f = {}; for (var k in o) { if (o[k]) f[k] = { booleanValue: true }; } return { mapValue: { fields: f } }; }
     function mapStr(o) { var f = {}; for (var k in o) { f[k] = { stringValue: String(o[k]) }; } return { mapValue: { fields: f } }; }
+    function mapInt(o) { var f = {}; for (var k in o) { f[k] = { integerValue: String(Math.round(o[k] || 0)) }; } return { mapValue: { fields: f } }; }
+    function mapBoss(o) {
+      var f = {};
+      for (var k in o) {
+        var b = o[k] || {};
+        f[k] = { mapValue: { fields: { pct: { integerValue: String(Math.round(b.pct || 0)) },
+                                        date: b.date ? { stringValue: String(b.date) } : { nullValue: null } } } };
+      }
+      return { mapValue: { fields: f } };
+    }
     return { fields: {
       xp: { integerValue: String(s.xp || 0) },
       streak: { integerValue: String(s.streak || 0) },
       shields: { integerValue: String(s.shields || 0) },
       lastDay: s.lastDay ? { stringValue: s.lastDay } : { nullValue: null },
       days: mapBool(s.days || {}),
-      completed: mapStr(s.completed || {})
+      completed: mapStr(s.completed || {}),
+      bosses: mapBoss(s.bosses || {}),            // jefes vencidos = mundos A2–C2 abiertos
+      achievements: mapStr(s.achievements || {}),
+      dayCounts: mapInt(s.dayCounts || {}),
+      goalTarget: { integerValue: String(s.goalTarget || 0) },
+      scores: mapInt(loadScores())
     } };
   }
   function fromFs(fields) {
     fields = fields || {};
-    function readBool(v) { var o = {}, f = (v && v.mapValue && v.mapValue.fields) || {}; for (var k in f) { if (f[k].booleanValue) o[k] = true; } return o; }
-    function readStr(v) { var o = {}, f = (v && v.mapValue && v.mapValue.fields) || {}; for (var k in f) { o[k] = f[k].stringValue || ""; } return o; }
+    function mapOf(v) { return (v && v.mapValue && v.mapValue.fields) || {}; }
+    function readBool(v) { var o = {}, f = mapOf(v); for (var k in f) { if (f[k].booleanValue) o[k] = true; } return o; }
+    function readStr(v) { var o = {}, f = mapOf(v); for (var k in f) { o[k] = f[k].stringValue || ""; } return o; }
+    function readInt(v) { var o = {}, f = mapOf(v); for (var k in f) { o[k] = parseInt(f[k].integerValue || "0", 10); } return o; }
+    function readBoss(v) {
+      var o = {}, f = mapOf(v);
+      for (var k in f) { var b = mapOf(f[k]); o[k] = { pct: parseInt((b.pct || {}).integerValue || "0", 10), date: (b.date || {}).stringValue || null }; }
+      return o;
+    }
     return {
       xp: parseInt((fields.xp || {}).integerValue || "0", 10),
       streak: parseInt((fields.streak || {}).integerValue || "0", 10),
       shields: parseInt((fields.shields || {}).integerValue || "0", 10),
       lastDay: (fields.lastDay || {}).stringValue || null,
       days: readBool(fields.days),
-      completed: readStr(fields.completed)
+      completed: readStr(fields.completed),
+      bosses: readBoss(fields.bosses),
+      achievements: readStr(fields.achievements),
+      dayCounts: readInt(fields.dayCounts),
+      goalTarget: parseInt((fields.goalTarget || {}).integerValue || "0", 10) || 0,
+      scores: readInt(fields.scores)
     };
   }
+  /* estado local completo y actual (nunca el que pasó el llamador: puede venir vacío) */
+  function localState() { return (window.VesperProgress && VesperProgress.getState) ? VesperProgress.getState() : {}; }
 
   /* ---- REST ---- */
   function pull(uid, token) {
@@ -72,12 +114,12 @@
       pull(user.uid, token).then(function (res) {
         if (res.status === 200) {
           var remote = fromFs((res.body || {}).fields);
+          mergeScores(remote.scores);
           var merged = (window.VesperProgress && VesperProgress.merge) ? VesperProgress.merge(remote) : remote;
           refreshUI();
           pushDoc(user.uid, token, merged).then(function (st) { setStatus(st === 200 ? "synced" : (st === 403 ? "rule" : "error")); });
         } else if (res.status === 404) {
-          var local = (window.VesperProgress && VesperProgress.getState) ? VesperProgress.getState() : {};
-          pushDoc(user.uid, token, local).then(function (st) { setStatus(st === 200 ? "synced" : (st === 403 ? "rule" : "error")); });
+          pushDoc(user.uid, token, localState()).then(function (st) { setStatus(st === 200 ? "synced" : (st === 403 ? "rule" : "error")); });
         } else if (res.status === 403) {
           setStatus("rule");
         } else { setStatus("error"); }
@@ -85,14 +127,16 @@
     }).catch(function () { setStatus("error"); });
   }
 
-  /* push con rebote: lo llama vesper_progress.completeLesson via window.VESPER_SYNC.push */
-  function schedulePush(state) {
+  /* push con rebote: lo llaman vesper_progress (lección, jefe, logro, meta) y
+     vesper_persona. Ignora el argumento y lee el estado local al disparar: así
+     un push() sin estado no vacía la nube y siempre va lo más reciente. */
+  function schedulePush() {
     if (!currentUser) return;
     clearTimeout(pushTimer);
     setStatus("syncing");
     pushTimer = setTimeout(function () {
       currentUser.getIdToken().then(function (token) {
-        pushDoc(currentUser.uid, token, state).then(function (st) { setStatus(st === 200 ? "synced" : (st === 403 ? "rule" : "error")); });
+        pushDoc(currentUser.uid, token, localState()).then(function (st) { setStatus(st === 200 ? "synced" : (st === 403 ? "rule" : "error")); });
       }).catch(function () { setStatus("error"); });
     }, 1200);
   }
@@ -168,7 +212,7 @@
       modal.innerHTML = '<button class="vsync-x" aria-label="Cerrar">&times;</button>'
         + '<h3>Progreso en la nube</h3>'
         + '<p>Sesión: <b>' + esc(u.email) + '</b></p>'
-        + '<p>Tu racha y XP se sincronizan automáticamente en todos tus dispositivos.</p>'
+        + '<p>Tus mundos desbloqueados, lecciones, racha y XP se sincronizan automáticamente en todos tus dispositivos.</p>'
         + '<button class="vsync-btn ghost" data-act="signout">Cerrar sesión</button>';
     } else if (u && !u.emailVerified) {
       modal.innerHTML = '<button class="vsync-x" aria-label="Cerrar">&times;</button>'
