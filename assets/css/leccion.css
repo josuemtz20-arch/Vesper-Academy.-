@@ -2455,3 +2455,137 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
 .vchat-nudge.away .vchat-fab,.vchat-nudge.away .vchat-pop{opacity:0!important;transform:translateY(14px)!important;pointer-events:none!important;transition:opacity .2s ease,transform .2s ease}
 /* la ficha de liga avisa que es de práctica (rivales simulados) */
 .hstat__sub{display:block;font-size:.62rem;line-height:1.1;color:rgba(245,242,235,.62);font-weight:600;margin-top:1px;white-space:nowrap}
+
+/* ================================================================
+   TACTO — rediseño 2026-10-29 (prompt "estilo Duolingo, alma Vesper")
+   Copia el CÓMO de Duolingo (botones con suelo, un solo botón fijo
+   abajo, hoja de respuesta que sube) y nunca el QUÉ: aquí la acción
+   es oro, el verde y el rojo sólo significan acierto y error.
+
+   Todos los tonos nuevos se DERIVAN de los tokens del tema con
+   color-mix(), así cada uno de los 8 temas de vesper_theme.js trae
+   sus sombras y tintes sin tocar el motor. Sin color-mix (navegador
+   viejo) la sombra queda inválida y el botón sale plano: degrada,
+   no se rompe.
+   ================================================================ */
+
+/* -- 1. Tokens ---------------------------------------------------- */
+:root{
+  --press:4px;                                  /* alto del "suelo" */
+  --gold-shadow:color-mix(in srgb,var(--gold) 70%,#000);
+  --success-shadow:color-mix(in srgb,var(--success) 70%,#000);
+  --error-shadow:color-mix(in srgb,var(--error) 70%,#000);
+  --ink-shadow:color-mix(in srgb,var(--ink) 62%,#000);
+  --line-shadow:color-mix(in srgb,var(--line) 78%,var(--ink));
+  /* superficie de la hoja de respuesta: opaca, teñida del color del veredicto */
+  --ok-sheet:color-mix(in srgb,var(--success) 16%,var(--paper));
+  --no-sheet:color-mix(in srgb,var(--error) 16%,var(--paper));
+  --ok-ink:color-mix(in srgb,var(--success) 70%,var(--ink));
+  --no-ink:color-mix(in srgb,var(--error) 70%,var(--ink));
+  /* texto que va SIEMPRE sobre una superficie de noche (fotos, bandas
+     oscuras). No puede ser --cream: en los temas oscuros cream es el
+     tono más oscuro y el título del mundo desaparecía. */
+  --on-night:#f5f2eb;
+  /* escala de texto (5 pasos), radios y movimiento */
+  --t-xs:.8125rem; --t-sm:.9375rem; --t-md:1.0625rem; --t-lg:1.375rem; --t-xl:1.875rem;
+  --r-sm:12px; --r-md:16px; --r-pill:999px;
+  --ease:cubic-bezier(.2,.8,.2,1);
+}
+
+/* -- 2. Botones con suelo ------------------------------------------
+   El suelo es una sombra sólida, no un borde: al presionar el botón
+   baja exactamente lo que medía la sombra y nada alrededor se mueve. */
+.btn{border-radius:var(--r-md);font-weight:800;letter-spacing:.01em;
+  box-shadow:0 var(--press) 0 var(--ink-shadow);margin-bottom:var(--press);
+  transition:transform .09s var(--ease),box-shadow .09s var(--ease),background-color .2s var(--ease),filter .15s}
+.btn:active:not(:disabled){transform:translateY(var(--press));box-shadow:0 0 0 var(--ink-shadow)}
+@media(hover:hover){.btn:hover:not(:disabled){filter:brightness(1.06)}}
+/* oro: el texto va con --on-gold (oscuro en los dos modos). Con --ink
+   el tema oscuro pintaba crema sobre oro, ~1.8:1. */
+.btn-gold{color:var(--on-gold);box-shadow:0 var(--press) 0 var(--gold-shadow)}
+.btn-gold:active:not(:disabled){box-shadow:0 0 0 var(--gold-shadow)}
+.btn-ghost{border:2px solid var(--line);box-shadow:0 var(--press) 0 var(--line)}
+.btn-ghost:active:not(:disabled){box-shadow:0 0 0 var(--line)}
+/* deshabilitado: plano y gris, se nota que "todavía no" sin depender de la opacidad */
+.btn:disabled{opacity:1;background:var(--line);color:var(--muted);box-shadow:none;transform:none}
+/* la acción de los ejercicios es oro, como el resto de llamadas principales */
+#verify:not(:disabled){background:var(--gold);color:var(--on-gold);box-shadow:0 var(--press) 0 var(--gold-shadow)}
+#verify:active:not(:disabled){box-shadow:0 0 0 var(--gold-shadow)}
+.speak-row .btn{box-shadow:0 3px 0 var(--line);margin-bottom:3px}
+
+/* -- 3. Opciones, fichas y verdadero/falso -------------------------
+   Todo lo tocable tiene el mismo suelo de 3px; elegido = oro. */
+.opt,.tf-btn,.chip,.match-item{border-width:2px;box-shadow:0 3px 0 var(--line);
+  transition:transform .08s var(--ease),box-shadow .08s var(--ease),border-color .15s,background-color .15s}
+.opt,.tf-btn{border-radius:var(--r-md);font-weight:600}
+.opt:active:not(.locked),.tf-btn:active:not(.locked),.chip:active,.match-item:active{transform:translateY(3px);box-shadow:0 0 0 var(--line)}
+.opt.sel,.tf-btn.sel,.chip.placed{box-shadow:0 3px 0 var(--gold-shadow)}
+.opt.correct,.tf-btn.correct,.chip.correct{box-shadow:0 3px 0 var(--success-shadow);border-color:var(--success)}
+.opt.wrong,.tf-btn.wrong,.chip.wrong{box-shadow:0 3px 0 var(--error-shadow);border-color:var(--error)}
+.opt.locked,.tf-btn.locked{transform:none}
+@media(hover:hover){.opt:hover:not(.locked):not(.sel),.tf-btn:hover:not(.locked):not(.sel){border-color:color-mix(in srgb,var(--gold) 45%,var(--line))}}
+
+/* -- 4. Textos sobre noche y burbuja de la mascota -----------------
+   Superficies que son oscuras en CUALQUIER tema llevan --on-night. */
+.world-banner__title,.lesson-world .lw-nm,.boss-cover,.boss-cover h1{color:var(--on-night)}
+/* vesper_mascot.js fija #1B1B2F en la burbuja: oscuro sobre oscuro en
+   los temas de noche. Más específico que su regla inyectada. */
+.vesper-mascot .vc-bubble{color:var(--ink);background:var(--gold-tint);border:1px solid color-mix(in srgb,var(--gold) 30%,transparent)}
+/* el contador de gemas era teal fijo (#0f7c8a): 2.6:1 sobre papel oscuro */
+.econ-gems{color:var(--ink)}
+
+/* -- 5. Pantalla de ejercicio --------------------------------------
+   Toda pantalla de ejercicio trae #verify (los 11 renderers), así que
+   :has(#verify) la reconoce sin tocar ningún renderer. Sin :has (Firefox
+   < 121) la pantalla queda como antes: el botón dentro de la tarjeta. */
+/* arriba: X · barra gruesa · gemas, en una sola fila */
+.topbar .econ-strip{margin:0;flex:0 0 auto}
+.topbar .back{width:44px;height:44px}
+.progress{height:16px;background:var(--line)}
+.progress .bar{position:relative;min-width:16px;transition:width .45s var(--ease),box-shadow .3s}
+/* el brillo de arriba es lo que hace que la barra se vea "llena" y no plana */
+.progress .bar::after{content:"";position:absolute;left:7px;right:7px;top:3px;height:4px;border-radius:999px;background:rgba(255,255,255,.38)}
+/* 3+ seguidas: la barra se enciende */
+.wrap:has(.combo-chip) .progress .bar{box-shadow:0 0 12px color-mix(in srgb,var(--gold) 70%,transparent)}
+
+/* dentro de una lección (?id=, leccion_app.js pone .in-lesson) no hay pestañas */
+body.in-lesson #vsp-tabbar,
+body.in-lesson .va-legal-foot,
+body:has(#app #verify) #vsp-tabbar,
+body:has(#app #verify) .va-legal-foot{display:none}
+.mic-btn{box-shadow:0 var(--press) 0 var(--gold-shadow)}
+/* el ejercicio respira sobre el fondo: sin marco de tarjeta */
+body:has(#app #verify) #app .card{background:none;border:0;box-shadow:none;padding:6px 2px 0}
+body:has(#app #verify) #app .card > h2:first-child{font-size:var(--t-lg);line-height:1.3;margin-bottom:.8em}
+body:has(#app #verify) #app .wrap{padding-bottom:calc(120px + env(safe-area-inset-bottom))}
+/* abajo: UN botón, siempre en el mismo sitio */
+body:has(#app #verify) #verify{position:fixed;z-index:41;left:0;right:0;margin:0 auto;
+  bottom:calc(18px + env(safe-area-inset-bottom));width:calc(100% - 32px);max-width:568px;min-height:54px}
+/* una franja del color del fondo detrás del botón, para que el
+   contenido que pasa por debajo no se lea a través */
+body:has(#app #verify)::after{content:"";position:fixed;z-index:39;left:0;right:0;bottom:0;pointer-events:none;
+  height:calc(96px + env(safe-area-inset-bottom));background:linear-gradient(to top,var(--cream) 70%,transparent)}
+
+/* la hoja de respuesta: sube desde abajo con el veredicto, la mascota
+   y la explicación; el botón de abajo toma su color */
+#fb:has(.fbbox){position:fixed;z-index:40;left:0;right:0;bottom:0;
+  padding:18px 16px calc(96px + env(safe-area-inset-bottom));border-top:2px solid transparent;
+  box-shadow:0 -10px 30px rgba(0,0,0,.12);animation:vx-sheet .24s var(--ease) both}
+#fb:has(.fbbox.ok){background:var(--ok-sheet);border-top-color:color-mix(in srgb,var(--success) 45%,transparent)}
+#fb:has(.fbbox.no){background:var(--no-sheet);border-top-color:color-mix(in srgb,var(--error) 45%,transparent)}
+#fb .fbbox{max-width:568px;margin:0 auto;padding:0;background:none;align-items:center}
+#fb .fbbox b{display:block;font-size:var(--t-lg);line-height:1.2;font-weight:800}
+#fb .fbbox.ok b{color:var(--ok-ink)}
+#fb .fbbox.no b{color:var(--no-ink)}
+#fb .fbbox .muted{color:var(--ink);opacity:.82}
+#fb .fbbox .explain{font-size:var(--t-sm);color:var(--ink)}
+body:has(#fb .fbbox) #app .wrap{padding-bottom:calc(330px + env(safe-area-inset-bottom))}
+body:has(#fb .fbbox)::after{display:none}
+/* texto --paper sobre verde/rojo: blanco en los temas claros, noche en
+   los oscuros; a 18.7px en 800 cumple AA de texto grande en los dos */
+body:has(#fb .fbbox.ok) #verify{background:var(--success);color:var(--paper);box-shadow:0 var(--press) 0 var(--success-shadow);font-size:1.17rem}
+body:has(#fb .fbbox.no) #verify{background:var(--error);color:var(--paper);box-shadow:0 var(--press) 0 var(--error-shadow);font-size:1.17rem}
+body:has(#fb .fbbox) #verify:active{box-shadow:none}
+@keyframes vx-sheet{from{transform:translateY(100%)}to{transform:none}}
+@media(prefers-reduced-motion:reduce){#fb:has(.fbbox){animation:none}}
+.vesper-reduce-motion #fb:has(.fbbox){animation:none}

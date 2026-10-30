@@ -26,6 +26,8 @@
   var M = window.VESPER_MASCOT;
   var P = window.VesperProgress;
   var app = document.getElementById("app");
+  /* dentro de una lección no hay pestañas: sólo la lección (ver leccion.css, TACTO) */
+  if (id) document.body.classList.add("in-lesson");
 
   /* ---- modulos bajo demanda ----
      Para pintar el inicio y el mapa no hacen falta los examenes, la Forja, el
@@ -146,14 +148,18 @@
     return '<div class="mascot"><img class="mascot-img" src="assets/images/virtual_class_happy_cat.png" alt="Vesper Cat">'
       + (line ? '<div class="bubble">' + esc(line) + '</div>' : '') + '</div>';
   }
-  function topbar(pct) {
+  function topbar(pct, extra) {
     /* la barra era un div decorativo: sin role ni valor, quien no la ve no
        sabía cuánto le falta. Y "Salir" no decía a dónde. */
     var back = id ? "Salir de la lección y volver al mapa" : "Volver al inicio";
-    return '<div class="topbar"><a class="back" href="' + (id ? 'leccion.html' : 'index.html') + '" aria-label="' + back + '">&#8592;</a>'
+    /* dentro de una lección se SALE (X), fuera se vuelve (flecha) */
+    var glyph = id
+      ? '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>'
+      : '&#8592;';
+    return '<div class="topbar"><a class="back" href="' + (id ? 'leccion.html' : 'index.html') + '" aria-label="' + back + '">' + glyph + '</a>'
       + '<div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + Math.round(pct) + '"'
       + ' aria-label="Progreso de la lección">'
-      + '<div class="bar" style="width:' + pct + '%"></div></div></div>';
+      + '<div class="bar" style="width:' + pct + '%"></div></div>' + (extra || '') + '</div>';
   }
   /* feedbackBox(ok, explanation, wrongFallback)
      - explanation: el "por que" del ejercicio (se muestra al fallar siempre y
@@ -230,7 +236,7 @@
       ? VESPER_MASCOT.render(state, { size: "sm", line: false })
       : '<img class="fb-cat" src="assets/images/virtual_class_happy_cat.png" alt="">';
     return '<div class="fbbox ' + (ok ? "ok" : "no") + '">' + cat
-      + '<div><b>' + (ok ? "Correcto!" : "Incorrecto") + '</b><div class="muted">' + esc(line) + '</div>'
+      + '<div><b>' + (ok ? "¡Correcto!" : "Incorrecto") + '</b><div class="muted">' + esc(line) + '</div>'
       + (detail ? '<div class="explain">' + esc(detail) + '</div>' : '') + '</div></div>';
   }
   function shuffle(arr, avoid) {
@@ -2443,7 +2449,7 @@
   function toast2(msg) { try { alert(msg); } catch (e) {} }
   function comboChip() {
     if (combo < 2) return "";
-    return '<div class="combo-chip" role="status" aria-label="Combo de ' + combo + ' aciertos">' + ic('flame') + ' <b>x' + combo + '</b> combo</div>';
+    return '<div class="combo-chip" role="status" aria-label="' + combo + ' aciertos seguidos">' + ic('flame') + ' <b>' + combo + '</b> seguidas</div>';
   }
   function econStrip() {
     var E = window.VESPER_ECONOMY; if (!E) return "";
@@ -2458,7 +2464,8 @@
     return '<div class="econ-strip">' + html + '</div>';
   }
   function exHeader(pct, total) {
-    return topbar(pct) + econStrip() + (lesson.isBoss ? bossMeterHtml(total) : "") + comboChip() + '<div class="exnum">Ejercicio ' + (exIdx + 1) + ' de ' + total + '</div>';
+    /* las gemas/vidas viven en la misma fila que la barra (X · barra · gemas) */
+    return topbar(pct, econStrip()) + (lesson.isBoss ? bossMeterHtml(total) : "") + comboChip() + '<div class="exnum">Ejercicio ' + (exIdx + 1) + ' de ' + total + '</div>';
   }
   /* medidor del Guardián: su escudo se rompe con cada acierto previo */
   function bossMeterHtml(total) {
