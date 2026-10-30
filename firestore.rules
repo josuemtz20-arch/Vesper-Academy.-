@@ -33,12 +33,10 @@ rules_version = '2';
  * Antes de publicar: python _scripts/check_rules.py (compila y prueba).
  *
  * ── Qué hay EN PRODUCCIÓN ──────────────────────────────────────────
- * Publicadas por el dueño el 2026-10-29 01:03 UTC: el ruleset vivo es,
- * byte por byte, el de 65a0b7f (roles/, courses/, periods/, groups/,
- * enrollments/ y el endurecimiento del 2026-10-28 ya rigen).
- * Pendiente de publicar: el endurecimiento de leagues/ (2026-10-29, ver el
- * bloque de la liga). Hasta publicarlo, producción sigue aceptando
- * cualquier xp entero en la liga.
+ * Publicadas por el dueño el 2026-10-30 03:02 UTC: el ruleset vivo es
+ * este archivo con el endurecimiento de leagues/ (2026-10-29), además de
+ * roles/, courses/, periods/, groups/, enrollments/ y el endurecimiento del
+ * 2026-10-28 (publicados el 2026-10-29 01:03 UTC, 65a0b7f).
  * Antes de afirmar qué está vivo, compáralo con la API de reglas
  * (releases.list + rulesets.get), no con este comentario.
  *
