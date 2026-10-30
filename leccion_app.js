@@ -2459,19 +2459,136 @@
     byId("start").onclick = renderExplanation;
   }
 
-  /* portada dramática del Guardián del mundo */
+  /* ============================================================
+     EL DUELO — el examen del Guardián se juega como pelea de jefe.
+
+     La regla de siempre (pass% para vencerlo) traducida a vida:
+       · el Guardián aguanta `need` golpes = aciertos que exige el pass%;
+       · Vesper aguanta `lives` = errores que aún dejan aprobar + 1.
+     En cuanto uno de los dos cae, la pelea termina: con need aciertos
+     ya está aprobado, y con lives errores ya no se puede. Por eso el
+     resultado se califica sobre lo contestado (renderFeedback): el
+     veredicto es el mismo que habría dado el examen completo.
+     El estado se DERIVA de results[], así reintentar lo reinicia solo.
+     ============================================================ */
+  var BOSS_LINES = {
+    A1: { intro: "Nadie cruza este umbral sin saber decir quién es. ¿Tú sí?", hurt: "¡Uf! Esa sí la sabías.", hit: "Esa no. Mi farol sigue encendido.", low: "Mi farol… se apaga…", win: "Pasa. Este hogar ya es tuyo.", lose: "Vuelve cuando tu inglés tenga más luz." },
+    A2: { intro: "El sendero es largo. ¿Tienes piernas para él?", hurt: "Buen paso. No me lo esperaba.", hit: "Tropezaste. El camino no perdona.", low: "Me… desvío…", win: "El sendero es tuyo. Sigue caminando.", lose: "Descansa y vuelve. El camino espera." },
+    B1: { intro: "Desde aquí veo tus errores antes de que los cometas.", hurt: "Esa no la vi venir.", hit: "Esa la vi venir de lejos.", low: "Se me nubla el horizonte…", win: "Mira lejos: el horizonte ya es tuyo.", lose: "Aún no ves tan lejos como yo." },
+    B2: { intro: "Cada piso de esta torre es una regla. ¿Subes?", hurt: "Un piso menos.", hit: "Te resbalaste en la escalera.", low: "La torre… tiembla…", win: "Proclamo tu nombre desde lo alto.", lose: "La torre sigue en pie. Tú también: vuelve." },
+    C1: { intro: "Las estrellas no se le dan a cualquiera.", hurt: "Brillas más de lo que esperaba.", hit: "Una estrella menos para ti.", low: "Mi cielo… se apaga…", win: "El firmamento te reconoce.", lose: "Aún te falta cielo. Vuelve de noche." },
+    C2: { intro: "Llegaste lejos. Demuestra que mereces quedarte.", hurt: "Impresionante. Otra vez.", hit: "Un soberano no perdona imprecisiones.", low: "¿Será… que sabes más que yo?", win: "Toma la corona. El saber es tuyo.", lose: "El trono sigue ocupado. Por ahora." }
+  };
+  function bossLine(k) { var L = BOSS_LINES[lesson.bossLevel] || BOSS_LINES.A1; return L[k] || ""; }
+  function battleState() {
+    var total = lesson.exercises.length, pass = bossMeta(lesson.bossLevel).pass;
+    var need = Math.max(1, Math.ceil(total * pass / 100 - 1e-9));
+    var lives = Math.max(1, total - need + 1), hits = 0, misses = 0, i;
+    for (i = 0; i < results.length; i++) { if (results[i] === true) hits++; else if (results[i] === false) misses++; }
+    return { total: total, need: need, lives: lives, hits: hits, misses: misses,
+      over: hits >= need ? "win" : (misses >= lives ? "lose" : "") };
+  }
+  var HEART_SVG = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-7.5-4.6-9.3-9.4C1.4 7.6 3.6 4.5 6.9 4.5c2 0 3.6 1.1 5.1 3 1.5-1.9 3.1-3 5.1-3 3.3 0 5.5 3.1 4.2 6.6-1.8 4.8-9.3 9.4-9.3 9.4z"/></svg>';
+  function duelHearts(b) {
+    var h = "", i;
+    for (i = 0; i < b.lives; i++) h += '<i class="dh-heart' + (i >= b.lives - b.misses ? " lost" : "") + '">' + HEART_SVG + '</i>';
+    return h;
+  }
+  function duelSay(b) {
+    if (exIdx === 0) return bossLine("intro");
+    if (b.need - b.hits <= 1) return bossLine("low");
+    return results[exIdx - 1] ? bossLine("hurt") : bossLine("hit");
+  }
+  /* la arena: HUD (corazones de Vesper · vida del Guardián) + escenario
+     con el paisaje del mundo de fondo. Se pinta en cada ejercicio con el
+     estado previo a contestar; battleStrike() la anima al verificar. */
+  function duelHtml() {
+    var lv = lesson.bossLevel, b = battleState(), t = WORLD_THEME[lv] || {}, bm = bossMeta(lv);
+    var hp = Math.round(100 * (b.need - b.hits) / b.need);
+    var me = currentLook();
+    var bg = t.file ? 'background-image:linear-gradient(180deg,rgba(14,12,31,.2),rgba(14,12,31,.78)),url(' + t.file + ');' : "";
+    return '<section class="duel" id="duel" data-lv="' + lv + '" style="' + worldVars(t) + '" aria-label="Duelo contra ' + esc(bm.name) + '">'
+      + '<div class="duel-hud">'
+      +   '<div class="dh dh-me"><span class="dh-nm">Vesper</span><span class="dh-hearts" role="img" aria-label="Vesper aguanta ' + (b.lives - b.misses) + ' errores más">' + duelHearts(b) + '</span></div>'
+      +   '<div class="dh dh-foe"><span class="dh-nm">' + esc(bm.name) + '</span>'
+      +     '<span class="dh-hp" role="img" aria-label="Al guardián le quedan ' + (b.need - b.hits) + ' golpes"><i style="width:' + hp + '%"></i><b>' + (b.need - b.hits) + '</b></span></div>'
+      + '</div>'
+      + '<div class="duel-stage" style="' + bg + '">'
+      +   '<div class="duel-fighter duel-me" aria-hidden="true"><img src="' + esc(me.src || BOSS_AVATAR) + '" alt="" decoding="async" onerror="this.onerror=null;this.src=\'' + BOSS_AVATAR + '\'"></div>'
+      +   '<div class="duel-bolt" aria-hidden="true"></div><div class="duel-wave" aria-hidden="true"></div>'
+      +   '<div class="duel-fighter duel-foe" aria-hidden="true">' + bossPortrait(lv) + '</div>'
+      +   '<p class="duel-say" aria-hidden="true">' + esc(duelSay(b)) + '</p>'
+      +   '<div class="duel-dmg" aria-hidden="true"></div><div class="duel-stamp" aria-hidden="true"></div>'
+      + '</div></section>';
+  }
+  /* el golpe: lo dispara setVerifyNext (el punto común de los 11 renderers).
+     struckAt evita que un renderer que verifique dos veces golpee dos veces. */
+  var struckAt = -1;
+  function battleStrike() {
+    if (!lesson || !lesson.isBoss || struckAt === exIdx || typeof results[exIdx] !== "boolean") return;
+    struckAt = exIdx;
+    var d = byId("duel"); if (!d) return;
+    var ok = results[exIdx], b = battleState(), rm = reduceMotion();
+    var q = function (sel) { return d.querySelector(sel); };
+    var say = q(".duel-say"), dmg = q(".duel-dmg"), stamp = q(".duel-stamp");
+    d.classList.remove("strike-me", "strike-foe");
+    void d.offsetWidth;                                  /* reinicia la animación */
+    d.classList.add(ok ? "strike-me" : "strike-foe");
+    setTimeout(function () {
+      if (ok) {
+        var bar = q(".dh-hp i"), num = q(".dh-hp b");
+        if (bar) bar.style.width = Math.round(100 * (b.need - b.hits) / b.need) + "%";
+        if (num) num.textContent = b.need - b.hits;
+        if (dmg) { dmg.textContent = combo >= 2 ? "¡Combo ×" + (combo + 1) + "!" : "¡Golpe!"; dmg.className = "duel-dmg on foe"; }
+        sfx("combo", b.hits);
+      } else {
+        var hs = d.querySelectorAll(".dh-heart:not(.lost)");
+        if (hs.length) hs[hs.length - 1].classList.add("lost", "breaking");
+        if (dmg) { dmg.textContent = "¡Auch!"; dmg.className = "duel-dmg on me"; }
+      }
+      if (say) {
+        say.textContent = b.over === "win" ? bossLine("win") : (b.over === "lose" ? bossLine("lose")
+          : (ok ? (b.need - b.hits <= 1 ? bossLine("low") : bossLine("hurt")) : bossLine("hit")));
+        say.classList.remove("pop"); void say.offsetWidth; say.classList.add("pop");
+      }
+      if (b.over) {
+        d.classList.add(b.over === "win" ? "ko-foe" : "ko-me");
+        if (stamp) stamp.textContent = b.over === "win" ? "¡Vencido!" : "Vesper cayó";
+        announce(b.over === "win" ? "¡Guardián vencido!" : "Vesper cayó. El guardián gana esta vez.");
+        if (b.over === "win") burstConfetti(30);
+      }
+    }, rm ? 0 : 330);
+  }
+
+  /* "Vesper cayó en la pregunta 2 de 8: 0 golpes de los 7 que pedía" */
+  function duelLoseNote(correct, answered) {
+    var b = battleState();
+    return 'Vesper cayó en la pregunta ' + answered + ' de ' + b.total + ' &middot; acertaste '
+      + correct + ' de los ' + b.need + ' golpes que pedía (' + bossMeta(lesson.bossLevel).pass + '%)';
+  }
+  /* portada del Guardián: un "VS" de videojuego con las reglas dichas en vida */
   function renderBossCover() {
-    var bm = bossMeta(lesson.bossLevel), t = WORLD_THEME[lesson.bossLevel] || {};
-    show('<div class="wrap">' + topbar(6) + '<div class="card center boss-cover" style="' + worldVars(t) + '">'
-      + '<div class="boss-emblem" aria-hidden="true">' + bossPortrait(lesson.bossLevel) + '</div>'
-      + biomeMotif(lesson.bossLevel)
+    var lv = lesson.bossLevel, bm = bossMeta(lv), t = WORLD_THEME[lv] || {}, b = battleState(), me = currentLook();
+    var bg = t.file ? 'background-image:linear-gradient(180deg,rgba(14,12,31,.3),rgba(14,12,31,.93) 62%),url(' + t.file + ');' : "";
+    show('<div class="wrap">' + topbar(6) + '<div class="card center boss-cover vs-cover" style="' + worldVars(t) + bg + '">'
       + '<span class="boss-eyebrow">Examen del mundo &middot; ' + esc(lesson.level) + '</span>'
+      + '<div class="vs-row" aria-hidden="true">'
+      +   '<div class="vs-side vs-me"><img src="' + esc(me.src || BOSS_AVATAR) + '" alt="" onerror="this.onerror=null;this.src=\'' + BOSS_AVATAR + '\'"><span class="vs-nm">Vesper</span></div>'
+      +   '<div class="vs-mark">VS</div>'
+      +   '<div class="vs-side vs-foe">' + bossPortrait(lv) + '<span class="vs-nm">' + esc(t.worldName || lv) + '</span></div>'
+      + '</div>'
       + '<h1>' + esc(bm.name) + '</h1>'
-      + '<p class="muted">' + lesson.exercises.length + ' preguntas mezcladas de todas las destrezas &middot; necesitas ' + bm.pass + '% para vencerlo</p>'
-      + '<p class="boss-warn">Vence al guardián para abrir el mundo siguiente.</p>'
-      + '<button class="btn btn-gold" id="start">Enfrentar al Guardián</button>'
+      + '<p class="vs-say">«' + esc(bossLine("intro")) + '»</p>'
+      + '<ul class="vs-rules">'
+      +   '<li><b>' + b.need + '</b><span>aciertos lo derriban</span></li>'
+      +   '<li><b>' + b.lives + '</b><span>' + (b.lives === 1 ? 'error y Vesper cae' : 'errores y Vesper cae') + '</span></li>'
+      +   '<li><b>' + b.total + '</b><span>preguntas de todo el mundo</span></li>'
+      + '</ul>'
+      + '<p class="sr-only">Necesitas ' + bm.pass + '% para vencerlo y abrir el mundo siguiente.</p>'
+      + '<button class="btn btn-gold" id="start">¡A pelear!</button>'
       + '<button class="btn btn-ghost" id="bk">Volver al mapa</button></div></div>');
-    byId("start").onclick = renderExplanation;
+    /* el briefing ya está en la portada: directo a la pelea */
+    byId("start").onclick = function () { exIdx = 0; results = []; renderExercise(); };
     byId("bk").onclick = function () { location.search = ""; };
   }
 
@@ -2533,7 +2650,7 @@
 
   /* ---------- EXERCISES ---------- */
   function renderExercise() {
-    if (exIdx === 0) { combo = 0; maxCombo = 0; runT0 = Date.now(); }   /* arranque/reintento: combo y reloj a cero */
+    if (exIdx === 0) { combo = 0; maxCombo = 0; runT0 = Date.now(); struckAt = -1; }   /* arranque/reintento: combo y reloj a cero */
     var total = lesson.exercises.length;
     var pct = 22 + Math.round(58 * (exIdx / total));
     var ex = lesson.exercises[exIdx];
@@ -2608,6 +2725,7 @@
     }
     exIdx++;
     if (blocked) { renderNoHearts(); return; }
+    if (lesson.isBoss && battleState().over) { renderFeedback(); return; }
     if (exIdx < lesson.exercises.length) renderExercise(); else renderFeedback();
   }
   function resumeRun() {
@@ -2651,19 +2769,18 @@
   }
   function exHeader(pct, total) {
     /* las gemas/vidas viven en la misma fila que la barra (X · barra · gemas) */
-    return topbar(pct, econStrip()) + (lesson.isBoss ? bossMeterHtml(total) : "") + comboChip() + '<div class="exnum">Ejercicio ' + (exIdx + 1) + ' de ' + total + '</div>';
+    return topbar(pct, econStrip()) + (lesson.isBoss ? duelHtml() : "") + comboChip() + exNum(total);
   }
-  /* medidor del Guardián: su escudo se rompe con cada acierto previo */
-  function bossMeterHtml(total) {
-    var hit = 0, i; for (i = 0; i < exIdx; i++) { if (results[i]) hit++; }
-    var remain = Math.max(0, Math.round(100 * (1 - hit / Math.max(1, total))));
-    var bm = bossMeta(lesson.bossLevel);
-    return '<div class="boss-meter" style="' + worldVars(WORLD_THEME[lesson.bossLevel] || {}) + '">'
-      + '<span class="bm-ic" aria-hidden="true">' + shieldSvg() + '</span>'
-      + '<span class="bm-nm">' + esc(bm.name) + '</span>'
-      + '<span class="bm-bar" role="img" aria-label="Escudo del guardián: ' + remain + '%"><i style="width:' + remain + '%"></i></span></div>';
+  /* "Ejercicio 3 de 8" como constelación: una estrella por ejercicio que se
+     enciende (oro) o se queda rota (error) — el lucero que da nombre a Vesper. */
+  function exNum(total) {
+    var st = "", i;
+    if (total <= 16) for (i = 0; i < total; i++) {
+      st += '<i class="' + (i < exIdx ? (results[i] ? "ok" : "no") : (i === exIdx ? "now" : "")) + '"></i>';
+    }
+    return '<div class="exnum">' + (st ? '<span class="constel" aria-hidden="true">' + st + '</span>' : '')
+      + '<span>Ejercicio ' + (exIdx + 1) + ' de ' + total + '</span></div>';
   }
-
   function renderMCQ(ex, pct, total) {
     var opts = optOrder(ex.options.length).map(function (i) {
       return '<button class="opt" type="button" aria-pressed="false" data-i="' + i + '" lang="en">' + esc(ex.options[i]) + '</button>';
@@ -2781,7 +2898,7 @@
       results[exIdx] = ok;
       draw();
       byId("fb").innerHTML = feedbackBox(ok, "", "Orden correcto: " + ex.correctOrder.join(" "));
-      this.textContent = (exIdx + 1 < total) ? "Siguiente" : "Ver resultados";
+      setVerifyNext(this, total);
     };
   }
 
@@ -2851,7 +2968,9 @@
     } catch (e) {}
   }
   function setVerifyNext(btn, total) {
-    btn.textContent = (exIdx + 1 < total) ? "Siguiente" : "Ver resultados";
+    var over = "";
+    if (lesson && lesson.isBoss) { battleStrike(); over = battleState().over; }
+    btn.textContent = over === "win" ? "¡Reclamar la victoria!" : (over ? "Ver resultados" : ((exIdx + 1 < total) ? "Siguiente" : "Ver resultados"));
   }
 
   /* ============================================================
@@ -2945,7 +3064,7 @@
       if (h && heardTxt != null) h.innerHTML = '<span class="muted">Te escuché:</span> “' + esc(heardTxt) + '”';
       byId("fb").innerHTML = feedbackBox(ok, ex.explanation || ("Modelo: " + target), "Inténtalo: " + target);
       var v = byId("verify"); v.disabled = false;
-      v.textContent = (exIdx + 1 < total) ? "Siguiente" : "Ver resultados";
+      setVerifyNext(v, total);
       v.onclick = function () { advance(); };
       var mic = byId("mic"); if (mic) { mic.disabled = true; mic.classList.remove("rec"); }
       var sk = byId("skip"); if (sk) sk.style.display = "none";
@@ -3277,7 +3396,7 @@
   /* Detalle por pregunta para el registro central de calificaciones:
      texto + tipo + acierto. Reusa lesson.exercises[] + results[]. */
   function examDetail() {
-    return (lesson.exercises || []).map(function (ex, i) {
+    return (lesson.exercises || []).slice(0, lesson.isBoss ? results.length : undefined).map(function (ex, i) {
       ex = ex || {};
       var q = ex.question || ex.sentence || ex.statement || ex.prompt || ex.title
               || (ex.words ? ex.words.join(" ") : "") || "";
@@ -3286,7 +3405,8 @@
   }
 
   function renderFeedback() {
-    var total = lesson.exercises.length;
+    /* el duelo puede terminar antes: se califica lo contestado (ver EL DUELO) */
+    var total = lesson.isBoss ? Math.max(1, Math.min(lesson.exercises.length, results.length)) : lesson.exercises.length;
     var correct = results.filter(Boolean).length;
     var pct = Math.round(100 * correct / Math.max(1, total));
     var perfect = correct === total;
@@ -3371,14 +3491,14 @@
       earnedXp = 0;
       track("boss_fail", { level: lesson.bossLevel, pct: pct });
       show('<div class="wrap">' + topbar(86) + '<div class="card center">'
-        + mascot("incorrect", "El guardián resiste. ¡Reagrúpate y vuelve!")
-        + '<div class="boss-emblem dim" aria-hidden="true">' + bossPortrait(lesson.bossLevel) + '</div>'
-        + '<h1>' + pct + '%</h1>'
-        + '<p class="muted">' + correct + ' de ' + total + ' correctos &middot; necesitas ' + bm.pass + '% para vencerlo</p>'
-        + '<div class="xpbar"><div class="xpfill" style="width:' + pct + '%;background:var(--error)"></div></div>'
-        + '<button class="btn btn-gold" id="retry">Reintentar examen</button>'
+        + '<div class="boss-emblem boss-gloat" aria-hidden="true">' + bossPortrait(lesson.bossLevel) + '<span class="duel-seal lose">Ganó él</span></div>'
+        + '<p class="vs-say">«' + esc(bossLine("lose")) + '»</p>'
+        + '<h1 class="lc-title">Esta vez no</h1>'
+        + '<p class="muted">' + duelLoseNote(correct, total) + '</p>'
+        + mascot("incorrect", "Lo vi todo. La próxima lo tumbamos juntos.", "sm")
+        + '<button class="btn btn-gold" id="retry">Revancha</button>'
         + '<button class="btn btn-ghost" id="backHome">Ver lecciones</button></div></div>');
-      byId("retry").onclick = function () { track("boss_retry", { level: lesson.bossLevel, pct: pct }); exIdx = 0; results = []; earnedXp = 0; renderExercise(); };
+      byId("retry").onclick = function () { track("boss_retry", { level: lesson.bossLevel, pct: pct }); exIdx = 0; results = []; earnedXp = 0; renderBossCover(); };
       byId("backHome").onclick = function () { location.search = ""; };
       return;
     }
@@ -3392,12 +3512,12 @@
     var unlockHtml = nextLv
       ? '<div class="boss-unlock">' + ic('unlock') + ' ¡Mundo ' + nextLv + ' desbloqueado!</div>'
       : '<div class="boss-unlock">' + ic('crown') + ' ¡Has dominado el último mundo!</div>';
-    show('<div class="wrap">' + topbar(92) + '<div class="card center">'
-      + mascot("milestone", "¡Guardián vencido!")
-      + '<div class="boss-emblem lit" aria-hidden="true">' + bossPortrait(lesson.bossLevel) + '</div>'
-      + '<h1>+' + earnedXp + ' XP</h1>'
-      + '<p class="muted">' + correct + ' de ' + total + ' correctos &middot; ' + pct + '%</p>'
-      + '<div class="xpbar"><div class="xpfill" style="width:' + pct + '%"></div></div>'
+    show('<div class="wrap lc-done">' + topbar(100) + '<div class="card center">'
+      + '<div class="boss-emblem boss-beaten" aria-hidden="true">' + bossPortrait(lesson.bossLevel) + '<span class="duel-seal">Vencido</span></div>'
+      + '<p class="vs-say">«' + esc(bossLine("win")) + '»</p>'
+      + '<h1 class="lc-title">¡Guardián vencido!</h1>'
+      + statTiles(earnedXp, pct)
+      + '<p class="muted">' + correct + ' de ' + total + ' golpes acertados</p>'
       + unlockHtml
       + placementCard("leccion-boss-" + lesson.bossLevel, {
           title: "Vas en serio. ¿Lo llevas a una clase real?",
@@ -3405,6 +3525,7 @@
         })
       + '<button class="btn btn-gold" id="cont">Continuar</button></div></div>');
     bindCta();
+    countUp();
     byId("cont").onclick = renderStreak;
   }
 
