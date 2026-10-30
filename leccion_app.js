@@ -739,7 +739,55 @@
       } else { avatar.style.transition = "none"; place(cur); }
     }
     map.removeAttribute("data-prev");
+    placeProps(map);
     applyParallax();                                  // estado inicial de la profundidad por scroll
+  }
+  /* ---- el decorado no pisa rótulos ----
+     Los huecos de PROP_SLOTS van en % del alto del mapa, y el mapa cambia de
+     alto según cuántas lecciones se despliegan: con 15 paradas el pozo caía
+     encima de "Listening 0/7" y el seto sobre "Vocabulario". Aquí, ya con el
+     layout real, cada pieza que choca con un rótulo, un nodo o el gato se
+     desliza arriba/abajo hasta un hueco libre; si no hay ninguno cerca, se
+     retira. Mide cajas fijas (ver propsLayer), así que no espera a las imágenes. */
+  var _propsFontsHooked = false;
+  function placeProps(map) {
+    var imgs = map.querySelectorAll(".wprops img");
+    if (!imgs.length) return;
+    /* Inter/Inria llegan después del primer pintado y los rótulos cambian
+       de alto al llegar: se recoloca una vez más con las fuentes ya puestas. */
+    if (!_propsFontsHooked && document.fonts && document.fonts.ready) {
+      _propsFontsHooked = true;
+      document.fonts.ready.then(function () { var m = byId("wmap"); if (m) placeProps(m); });
+    }
+    var mb = map.getBoundingClientRect(), H = map.clientHeight, PAD = 8, i, j;
+    function rel(el) {
+      var r = el.getBoundingClientRect();
+      return { l: r.left - mb.left - PAD, t: r.top - mb.top - PAD, r: r.right - mb.left + PAD, b: r.bottom - mb.top + PAD };
+    }
+    function hit(a, b) { return a.l < b.r && a.r > b.l && a.t < b.b && a.b > b.t; }
+    var obst = [];
+    var els = map.querySelectorAll(".wtitle, .wlabel, .wcheck, .wbtn, .wstars, .wstart, .wavatar");
+    for (i = 0; i < els.length; i++) if (els[i].offsetParent) obst.push(rel(els[i]));
+    var placed = [];
+    var STEPS = [0, 14, -14, 28, -28, 42, -42, 56, -56, 70, -70, 84, -84, 100, -100, 120, -120, 140, -140];
+    for (i = 0; i < imgs.length; i++) {
+      var im = imgs[i];
+      im.style.display = "";
+      if (im.dataset.top) im.style.top = im.dataset.top; else im.dataset.top = im.style.top;
+      var base = rel(im), hgt = base.b - base.t, ok = false;
+      for (j = 0; j < STEPS.length && !ok; j++) {
+        var c = { l: base.l, r: base.r, t: base.t + STEPS[j], b: base.b + STEPS[j] };
+        if (c.t + PAD < 0 || c.b - PAD > H) continue;
+        var free = true, k;
+        for (k = 0; k < obst.length && free; k++) if (hit(c, obst[k])) free = false;
+        for (k = 0; k < placed.length && free; k++) if (hit(c, placed[k])) free = false;
+        if (free) {
+          ok = true; placed.push(c);
+          if (STEPS[j]) im.style.top = (c.t + PAD) + "px";
+        }
+      }
+      if (!ok) im.style.display = "none";
+    }
   }
   var _trailResizeBound = false;
   function bindTrailResize() {
@@ -975,9 +1023,12 @@
       var s = PROP_SLOTS[i];
       /* el desfase evita que la misma pieza caiga siempre en el mismo lado */
       var f = set[(i + (i > 5 ? 2 : 0)) % set.length];
+      /* La caja va FIJA (width/height + object-fit:contain), no como máximo:
+         así mide lo mismo antes de que la imagen lazy llegue, el mapa no salta
+         al cargar y placeProps() puede esquivar rótulos desde el primer pintado. */
       h += '<img src="assets/images/map/' + f + '.webp" alt="" loading="lazy" decoding="async"'
         + ' style="top:' + s.t + '%;' + (s.s === "L" ? "left" : "right") + ':' + s.o + '%;'
-        + 'max-width:' + s.w + 'px;max-height:' + s.h + 'px">';
+        + 'width:' + s.w + 'px;height:' + s.h + 'px;object-position:' + (s.s === "L" ? "left" : "right") + ' center">';
     }
     return h + '</div>';
   }
@@ -2086,6 +2137,14 @@
       requestAnimationFrame(function () { requestAnimationFrame(paintTrail); });
       bindTrailResize();
       bindParallax();
+    })();
+    /* la cinta de mundos abre con el mundo elegido a la vista (centrado),
+       no siempre con A1 pegado a la izquierda */
+    (function () {
+      var strip = app.querySelector(".worlds"), on = strip && strip.querySelector(".world.on");
+      if (!on || strip.scrollWidth <= strip.clientWidth) return;
+      var d = on.getBoundingClientRect().left - strip.getBoundingClientRect().left;
+      strip.scrollLeft = Math.max(0, strip.scrollLeft + d - (strip.clientWidth - on.offsetWidth) / 2);
     })();
     /* ---- paseo guiado la primera vez ----
        Va DESPUÉS de paintTrail: el foco de luz mide el rect de los nodos, y

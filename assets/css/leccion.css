@@ -2218,7 +2218,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
    Van DETRÁS del sendero y de los nodos (z-index 0 contra 1 y 2) y
    no reciben puntero. Nada de opacidad fantasma: se ven. */
 .wprops{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
-.wprops img{position:absolute;width:auto;height:auto;display:block;
+.wprops img{position:absolute;width:auto;height:auto;display:block;object-fit:contain;
   filter:drop-shadow(0 6px 10px rgba(8,7,20,.55))}
 
 /* La opacidad va hito por hito, no una para todos: la densidad del
@@ -2589,3 +2589,39 @@ body:has(#fb .fbbox) #verify:active{box-shadow:none}
 @keyframes vx-sheet{from{transform:translateY(100%)}to{transform:none}}
 @media(prefers-reduced-motion:reduce){#fb:has(.fbbox){animation:none}}
 .vesper-reduce-motion #fb:has(.fbbox){animation:none}
+
+/* -- 6. Mapa: acabado -----------------------------------------------
+   El esqueleto de carga tiene la forma real del hub (cabecera, tarjeta
+   de siguiente paso, sendero) en vez de un "Preparando tu mapa…": la
+   pantalla no salta cuando llega el contenido de verdad. */
+.boot-shell .sk{display:block;border-radius:20px;
+  --sk:color-mix(in srgb,var(--line) 50%,var(--cream));
+  background:linear-gradient(100deg,var(--sk) 30%,color-mix(in srgb,var(--line) 80%,var(--paper)) 50%,var(--sk) 70%);
+  background-size:300% 100%;animation:sk-shimmer 1.5s linear infinite}
+.boot-shell .sk-hero{height:206px;margin:2px 0 12px}
+.boot-shell .sk-card{height:184px;margin-bottom:14px}
+.boot-shell .sk-path{display:flex;flex-direction:column;align-items:center;gap:30px;margin-top:30px}
+.boot-shell .sk-node{width:64px;height:64px;border-radius:50%}
+.boot-shell .sk-node:nth-child(2){transform:translateX(-52px)}
+.boot-shell .sk-node:nth-child(3){transform:translateX(-14px)}
+.boot-shell .sk-node:nth-child(4){transform:translateX(44px)}
+@keyframes sk-shimmer{from{background-position:100% 0}to{background-position:0 0}}
+@media(prefers-reduced-motion:reduce){.boot-shell .sk{animation:none}}
+
+/* Cabecera del hub en el celular: con el saludo y los cuatro botones en
+   una fila, "Elige tu aventura, paso a paso." quedaba en una columna de
+   65px partida en cuatro renglones. Ahora: gato · saludo · botones arriba
+   y la frase a todo el ancho debajo. */
+@media(max-width:520px){
+  .hub-hero__top{display:grid;grid-template-columns:auto minmax(0,1fr) auto;
+    grid-template-areas:"m h a" "s s s";align-items:center;column-gap:11px;row-gap:9px}
+  .hub-hero__greet,.hub-hero__id{display:contents}
+  .hub-hero__greet .vesper-mascot{grid-area:m}
+  .hub-hello{grid-area:h;overflow-wrap:anywhere}
+  .hub-sub,.hub-rank{grid-area:s;margin:0;justify-self:start}
+  .hub-actions{grid-area:a;gap:6px}
+  .hub-ic{width:38px;height:38px}
+}
+/* la cinta de mundos se desvanece en los bordes: se lee que sigue */
+.worlds{-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 12px,#000 calc(100% - 24px),transparent);
+        mask-image:linear-gradient(90deg,transparent 0,#000 12px,#000 calc(100% - 24px),transparent)}

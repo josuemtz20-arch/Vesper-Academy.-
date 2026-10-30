@@ -29,7 +29,7 @@
 <!-- #app ya NO es aria-live: envolver toda la pantalla en una región viva hacía que
      cada re-render releyera la pantalla completa. Ahora show() mueve el foco al título
      de la pantalla nueva (eso la anuncia) y los avisos puntuales van a #sr-announce. -->
-<main id="app"><div class="wrap boot-shell" aria-busy="true"><div class="card center"><p class="boot-brand">Vesper</p><h1>Tus lecciones</h1><p class="muted">Preparando tu mapa&hellip;</p><noscript><p>Activa JavaScript para usar las lecciones.</p></noscript></div></div></main>
+<main id="app"><div class="wrap boot-shell" aria-busy="true"><h1 class="sr-only">Tus lecciones</h1><p class="sr-only">Preparando tu mapa&hellip;</p><div class="sk sk-hero"></div><div class="sk sk-card"></div><div class="sk-path" aria-hidden="true"><i class="sk sk-node"></i><i class="sk sk-node"></i><i class="sk sk-node"></i><i class="sk sk-node"></i></div><noscript><div class="card center"><p>Activa JavaScript para usar las lecciones.</p></div></noscript></div></main>
 <div id="sr-announce" class="sr-only" role="status" aria-live="polite" aria-atomic="true"></div>
 
 <!-- Boton para descargar/instalar las lecciones como app (PWA). Solo se muestra cuando el navegador lo permite -->
