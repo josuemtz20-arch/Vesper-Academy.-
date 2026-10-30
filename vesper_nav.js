@@ -89,20 +89,24 @@
         "box-shadow:0 -6px 22px rgba(0,0,0,.22);transition:opacity .2s ease}",
       /* Oculta la barra mientras se escribe (no pelear con el teclado). */
       "#vsp-tabbar.vsp-hidden{opacity:0;pointer-events:none}",
-      "#vsp-tabbar a{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;",
-        "padding:9px 4px 8px;text-decoration:none;color:rgba(245,242,235,.62);",
+      "#vsp-tabbar a{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;",
+        "padding:6px 4px 7px;text-decoration:none;color:rgba(245,242,235,.62);",
         "font-size:.66rem;font-weight:600;letter-spacing:.02em;line-height:1;",
         "-webkit-tap-highlight-color:transparent;transition:color .16s,transform .16s;position:relative}",
-      "#vsp-tabbar a svg{width:23px;height:23px;fill:none;stroke:currentColor;stroke-width:1.9;",
-        "stroke-linecap:round;stroke-linejoin:round;display:block}",
+      /* El icono vive en una cápsula: la pestaña activa la rellena de oro
+         con borde, en vez de una rayita arriba que casi no se veía. */
+      "#vsp-tabbar a svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.9;",
+        "stroke-linecap:round;stroke-linejoin:round;display:block;box-sizing:content-box;",
+        "padding:4px 14px;border-radius:12px;border:2px solid transparent;",
+        "transition:background-color .16s,border-color .16s,transform .1s}",
+      "#vsp-tabbar a:active svg{transform:scale(.9)}",
       "#vsp-tabbar a:hover{color:rgba(245,242,235,.9)}",
       "#vsp-tabbar a[hidden]{display:none}",
       "#vsp-tabbar a.on{color:var(--gold,#c5a059)}",
-      "#vsp-tabbar a.on::before{content:'';position:absolute;top:0;width:26px;height:3px;border-radius:0 0 3px 3px;",
-        "background:var(--gold,#c5a059)}",
+      "#vsp-tabbar a.on svg{background:rgba(197,160,89,.16);border-color:rgba(197,160,89,.6)}",
       "#vsp-tabbar a.on span{font-weight:700}",
       /* Espacio al final para que el contenido no quede tapado. */
-      "#vsp-nav-spacer{height:calc(60px + env(safe-area-inset-bottom));width:100%}",
+      "#vsp-nav-spacer{height:calc(64px + env(safe-area-inset-bottom));width:100%}",
       /* Sube los flotantes conocidos por encima de la barra:
          FAB de chat, botón instalar PWA y el chip de cerrar sesión. */
       ".vchat-nudge,#install-btn{bottom:calc(72px + env(safe-area-inset-bottom))!important}",
@@ -116,7 +120,6 @@
           "width:min(540px,92vw);border:1px solid rgba(197,160,89,.4);border-radius:18px;",
           "padding-bottom:0;box-shadow:0 12px 34px rgba(0,0,0,.34)}",
         "#vsp-tabbar a{padding:11px 4px}",
-        "#vsp-tabbar a.on::before{top:0;border-radius:0 0 3px 3px}",
         /* La píldora de escritorio es más alta; sube un poco los flotantes para
            que la burbuja de chat no roce su esquina. */
         ".vchat-nudge,.vt-fab,#install-btn,.vsp-logout-chip{bottom:88px!important}",

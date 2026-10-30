@@ -2480,8 +2480,8 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
   /* superficie de la hoja de respuesta: opaca, teñida del color del veredicto */
   --ok-sheet:color-mix(in srgb,var(--success) 16%,var(--paper));
   --no-sheet:color-mix(in srgb,var(--error) 16%,var(--paper));
-  --ok-ink:color-mix(in srgb,var(--success) 70%,var(--ink));
-  --no-ink:color-mix(in srgb,var(--error) 70%,var(--ink));
+  --ok-ink:color-mix(in srgb,var(--success) 58%,var(--ink));
+  --no-ink:color-mix(in srgb,var(--error) 62%,var(--ink));
   /* texto que va SIEMPRE sobre una superficie de noche (fotos, bandas
      oscuras). No puede ser --cream: en los temas oscuros cream es el
      tono más oscuro y el título del mundo desaparecía. */
@@ -2550,6 +2550,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
 
 /* dentro de una lección (?id=, leccion_app.js pone .in-lesson) no hay pestañas */
 body.in-lesson #vsp-tabbar,
+body.in-lesson #vsp-nav-spacer,
 body.in-lesson .va-legal-foot,
 body:has(#app #verify) #vsp-tabbar,
 body:has(#app #verify) .va-legal-foot{display:none}
@@ -2581,9 +2582,10 @@ body:has(#app #verify)::after{content:"";position:fixed;z-index:39;left:0;right:
 #fb .fbbox .explain{font-size:var(--t-sm);color:var(--ink)}
 body:has(#fb .fbbox) #app .wrap{padding-bottom:calc(330px + env(safe-area-inset-bottom))}
 body:has(#fb .fbbox)::after{display:none}
-/* texto --paper sobre verde/rojo: blanco en los temas claros, noche en
-   los oscuros; a 18.7px en 800 cumple AA de texto grande en los dos */
-body:has(#fb .fbbox.ok) #verify{background:var(--success);color:var(--paper);box-shadow:0 var(--press) 0 var(--success-shadow);font-size:1.17rem}
+/* sobre verde, texto oscuro (--on-gold): 4.8-8.8:1 en los 8 temas; con
+   blanco los claros se quedaban en 3.1. Sobre rojo, --paper: blanco en los
+   temas claros y noche en los oscuros, 4.9-5.4:1. */
+body:has(#fb .fbbox.ok) #verify{background:var(--success);color:var(--on-gold);box-shadow:0 var(--press) 0 var(--success-shadow);font-size:1.17rem}
 body:has(#fb .fbbox.no) #verify{background:var(--error);color:var(--paper);box-shadow:0 var(--press) 0 var(--error-shadow);font-size:1.17rem}
 body:has(#fb .fbbox) #verify:active{box-shadow:none}
 @keyframes vx-sheet{from{transform:translateY(100%)}to{transform:none}}
@@ -2652,3 +2654,7 @@ body:has(#fb .fbbox) #verify:active{box-shadow:none}
 @keyframes lc-flame{0%{transform:scale(.2);opacity:0}60%{transform:scale(1.35);opacity:1}100%{transform:none}}
 @media(prefers-reduced-motion:reduce){.lc-stat,.day.today.on i{animation:none}}
 .vesper-reduce-motion .lc-stat,.vesper-reduce-motion .day.today.on i{animation:none}
+/* "Ejercicio N de M" iba con el acento del mundo tal cual: ~3.2:1 sobre
+   los fondos claros. Mezclado hacia --ink se oscurece en los temas claros
+   y se aclara en los oscuros, y conserva el color del mundo. */
+#app[data-world] .exnum{color:color-mix(in srgb,var(--w-accent,#c5a059) 62%,var(--ink))}
