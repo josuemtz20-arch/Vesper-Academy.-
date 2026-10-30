@@ -2610,19 +2610,23 @@ body:has(#fb .fbbox) #verify:active{box-shadow:none}
 @keyframes sk-shimmer{from{background-position:100% 0}to{background-position:0 0}}
 @media(prefers-reduced-motion:reduce){.boot-shell .sk{animation:none}}
 
-/* Cabecera del hub en el celular: con el saludo y los cuatro botones en
-   una fila, "Elige tu aventura, paso a paso." quedaba en una columna de
-   65px partida en cuatro renglones. Ahora: gato · saludo · botones arriba
-   y la frase a todo el ancho debajo. */
+/* Cabecera del hub en el celular. Con el saludo y los cuatro botones en
+   una fila, el nombre quedaba en una columna de ~78px: "Hola, Josue mtz!"
+   salía en tres renglones. Los botones miden 44px (objetivo táctil, ver
+   arriba), así que no caben junto al nombre ni junto al chip de
+   sincronización: suben a una barra propia arriba a la derecha, y debajo
+   va el gato con el saludo, el nivel y el estado de sincronía a su lado. */
 @media(max-width:520px){
-  .hub-hero__top{display:grid;grid-template-columns:auto minmax(0,1fr) auto;
-    grid-template-areas:"m h a" "s s s";align-items:center;column-gap:11px;row-gap:9px}
-  .hub-hero__greet,.hub-hero__id{display:contents}
-  .hub-hero__greet .vesper-mascot{grid-area:m}
-  .hub-hello{grid-area:h;overflow-wrap:anywhere}
-  .hub-sub,.hub-rank{grid-area:s;margin:0;justify-self:start}
-  .hub-actions{grid-area:a;gap:6px}
-  .hub-ic{width:38px;height:38px}
+  .hub-hero{display:grid;grid-template-columns:auto minmax(0,1fr);
+    grid-template-areas:"a a" "m h" "m s" "m sy" "st st";align-items:center;column-gap:12px}
+  .hub-hero__top,.hub-hero__greet,.hub-hero__id{display:contents}
+  .hub-hero > *,.hub-hero__greet > *,.hub-hero__id > *{position:relative;z-index:1}
+  .hub-actions{grid-area:a;justify-self:end;gap:6px;margin-bottom:6px}
+  .hub-hero__greet .vesper-mascot{grid-area:m;align-self:center}
+  .hub-hello{grid-area:h;overflow-wrap:anywhere;align-self:end}
+  .hub-sub,.hub-rank{grid-area:s;margin:6px 0 0;justify-self:start}
+  .hub-sync{grid-area:sy;margin-top:8px;justify-self:start}
+  .hub-stats3{grid-area:st}
 }
 /* la cinta de mundos se desvanece en los bordes: se lee que sigue */
 .worlds{-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 12px,#000 calc(100% - 24px),transparent);
@@ -2658,3 +2662,25 @@ body:has(#fb .fbbox) #verify:active{box-shadow:none}
    los fondos claros. Mezclado hacia --ink se oscurece en los temas claros
    y se aclara en los oscuros, y conserva el color del mundo. */
 #app[data-world] .exnum{color:color-mix(in srgb,var(--w-accent,#c5a059) 62%,var(--ink))}
+
+/* -- 8. Los medallones del mapa también tienen suelo ----------------
+   Un escalón de 4px del tono del filete (oro hundido o noche), debajo
+   de la caída suave que ya tenían. Más fino que el de 5px que se quitó
+   en su día por parecer "ficha pegada": aquí es la cara del canto de la
+   moneda. Al tocar, la moneda baja lo que medía el canto. */
+.wmap .wbtn:not(.boss):not(.castle){transition:transform .09s var(--ease),box-shadow .09s var(--ease)}
+.wmap .wbtn.open:not(.is-current),.wmap .wbtn.completed:not(.castle){
+  box-shadow:inset 0 1px 0 rgba(243,226,171,.26),inset 0 -2px 5px rgba(8,7,20,.45),
+             inset 0 0 0 4px rgba(8,7,20,.24),inset 0 0 0 5px rgba(201,168,76,.4),
+             0 4px 0 #6f5a22,0 9px 18px rgba(8,7,20,.5)}
+.wmap .wbtn.locked:not(.boss){
+  box-shadow:inset 0 1px 0 rgba(179,176,201,.10),inset 0 3px 7px rgba(8,7,20,.6),
+             inset 0 0 0 4px rgba(8,7,20,.3),inset 0 0 0 5px rgba(58,58,99,.5),
+             0 4px 0 #0d0c1f,0 8px 14px rgba(8,7,20,.45)}
+.wmap .wbtn.is-current{
+  box-shadow:0 0 0 4px #14122a,0 0 0 5.5px rgba(201,168,76,.55),
+             0 5px 0 4px #14122a,0 5px 0 5.5px #8a6f2a,0 14px 24px rgba(8,7,20,.55)}
+.wmap .wbtn.open:not(.is-current):active,.wmap .wbtn.completed:not(.castle):active{transform:translateY(4px);
+  box-shadow:inset 0 1px 0 rgba(243,226,171,.26),inset 0 -2px 5px rgba(8,7,20,.45),
+             inset 0 0 0 4px rgba(8,7,20,.24),inset 0 0 0 5px rgba(201,168,76,.4),0 0 0 #6f5a22,0 3px 8px rgba(8,7,20,.5)}
+.wmap .wbtn.is-current:active{transform:translateY(4px)}

@@ -781,7 +781,9 @@
         if (c.t + PAD < 0 || c.b - PAD > H) continue;
         var free = true, k;
         for (k = 0; k < obst.length && free; k++) if (hit(c, obst[k])) free = false;
-        for (k = 0; k < placed.length && free; k++) if (hit(c, placed[k])) free = false;
+        /* entre piezas, aire de sobra: dos planetas a 20px uno del otro
+           se leían como un montón, no como paisaje */
+        for (k = 0; k < placed.length && free; k++) if (hit({ l: c.l - 20, r: c.r + 20, t: c.t - 44, b: c.b + 44 }, placed[k])) free = false;
         if (free) {
           ok = true; placed.push(c);
           if (STEPS[j]) im.style.top = (c.t + PAD) + "px";
