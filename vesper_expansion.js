@@ -390,10 +390,10 @@ window.VESPER_EXPANSION = (function () {
         ]
       },
       exercises: [
-        { type: "listening", text: "My best tip is simple: study a little every day instead of a lot once a week. Short, regular practice works much better for your memory.",
+        { type: "listening", text: "My best tip is simple: study a little every day instead of a lot once a week. Short, regular practice works much better for your memory.", "audio": "assets/audio/app/b1_0f7af12197.mp3",
           question: "What is the main tip?", options: ["Study a little every day", "Never study", "Study a lot once a week"],
           correctIndex: 0, explanation: "\"study a little every day instead of a lot once a week\"." },
-        { type: "listening", text: "Also, watch videos with subtitles in English, not in your language. It helps you connect sounds with words.",
+        { type: "listening", text: "Also, watch videos with subtitles in English, not in your language. It helps you connect sounds with words.", "audio": "assets/audio/app/b1_33c7d0c7be.mp3",
           question: "Which subtitles does the speaker recommend?", options: ["No subtitles", "In your language", "In English"],
           correctIndex: 2, explanation: "\"subtitles in English, not in your language\"." },
         { type: "true_false", statement: "The speaker says you should be afraid of mistakes.", answer: false,
@@ -624,12 +624,128 @@ window.VESPER_EXPANSION = (function () {
       lessonId: "voc-c2-idioms", level: "C2", track: "Vocabulario", topic: "idioms", skill: "vocab",
       title: "Modismos avanzados", xpReward: 65, mascotState: "explaining",
       nextLessonId: "use-c2-hedging",
+      tipo: "aprende",
       explanation: {
         body: "Los modismos dan naturalidad nativa. to bite the bullet (afrontar algo difícil), to cut corners (hacer las cosas mal por ahorrar), the ball is in your court (te toca a ti decidir), to be on the same page (estar de acuerdo). No se traducen literalmente. (Expresiones idiomáticas.)",
         examples: [
           { en: "Let's bite the bullet and start.", es: "Afrontémoslo y empecemos." },
           { en: "Don't cut corners on safety.", es: "No escatimes en seguridad." },
           { en: "The ball is in your court now.", es: "Ahora te toca a ti decidir." }
+        ],
+        sections: [
+          {
+            "kind": "intro",
+            "body": "En C2 ya no basta con decir algo correcto: hay que sonar natural. Los modismos (idioms) son frases fijas cuyo sentido no sale palabra por palabra; usarlos bien, y en el contexto adecuado, es una de las marcas del inglés de nivel experto."
+          },
+          {
+            "kind": "regla",
+            "body": "Apréndelos como bloques, con su preposición y su registro. Casi todos son informales o neutros: en un correo formal o un ensayo, mejor la palabra directa (to bite the bullet → to face the problem). No los traduzcas literalmente ni los mezcles: un modismo a medias suena peor que no usarlo."
+          },
+          {
+            "kind": "vocab",
+            "items": [
+              {
+                "en": "to bite the bullet",
+                "es": "afrontar algo difícil o desagradable"
+              },
+              {
+                "en": "to cut corners",
+                "es": "hacer algo a medias para ahorrar tiempo o dinero"
+              },
+              {
+                "en": "the ball is in your court",
+                "es": "te toca a ti decidir o actuar"
+              },
+              {
+                "en": "to be on the same page",
+                "es": "estar de acuerdo, entenderse"
+              },
+              {
+                "en": "to go the extra mile",
+                "es": "esforzarse más de lo que se pide"
+              },
+              {
+                "en": "to call it a day",
+                "es": "dejarlo por hoy"
+              }
+            ]
+          },
+          {
+            "kind": "expresiones",
+            "items": [
+              {
+                "en": "Let's bite the bullet and tell the client.",
+                "es": "Hay que afrontarlo y decírselo al cliente."
+              },
+              {
+                "en": "Before we start, let's make sure we're on the same page.",
+                "es": "Antes de empezar, asegurémonos de que estamos de acuerdo."
+              },
+              {
+                "en": "I've sent my offer — the ball is in your court.",
+                "es": "Ya mandé mi oferta: te toca decidir."
+              },
+              {
+                "en": "It's late; let's call it a day.",
+                "es": "Es tarde; dejémoslo por hoy."
+              }
+            ]
+          },
+          {
+            "kind": "ejemplos",
+            "items": [
+              {
+                "en": "They cut corners on the renovation, and now the roof leaks.",
+                "es": "Ahorraron donde no debían en la remodelación y ahora el techo gotea."
+              },
+              {
+                "en": "She always goes the extra mile for her students.",
+                "es": "Ella siempre da más de lo que se le pide por sus alumnos."
+              },
+              {
+                "en": "We disagreed at first, but now we're on the same page.",
+                "es": "Al principio no coincidíamos, pero ahora estamos de acuerdo."
+              }
+            ]
+          },
+          {
+            "kind": "errores",
+            "items": [
+              {
+                "no": "Let's bite the ball.",
+                "si": "Let's bite the bullet.",
+                "pq": "Los modismos son fijos: cambiar una palabra los rompe."
+              },
+              {
+                "no": "He cut the corners.",
+                "si": "He cut corners.",
+                "pq": "Sin artículo: to cut corners."
+              },
+              {
+                "no": "The ball is in your side.",
+                "si": "The ball is in your court.",
+                "pq": "Es court (la cancha de tenis), no side."
+              },
+              {
+                "no": "We are in the same page.",
+                "si": "We are on the same page.",
+                "pq": "La preposición es on."
+              },
+              {
+                "no": "In conclusion, the government should bite the bullet.",
+                "si": "In conclusion, the government should confront the issue.",
+                "pq": "En un ensayo formal el modismo suena demasiado coloquial."
+              }
+            ]
+          },
+          {
+            "kind": "resumen",
+            "body": "Aprende el modismo entero, con su preposición y su contexto, y guárdalo para registros informales o neutros. Si dudas, la palabra directa nunca falla."
+          },
+          {
+            "kind": "puente",
+            "body": "Ahora te toca a ti: unos ejercicios para fijarlos."
+          }
         ]
       },
       exercises: [

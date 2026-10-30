@@ -381,7 +381,7 @@ window.VESPER_LEVEL_EXAMS = {
     {
       "type": "listening",
       "skill": "listening",
-      "text": "Hello! My name is David. I am from Spain and I am eleven years old. I have one sister and a small dog. I like football and pizza.",
+      "text": "Hello! My name is David. I am from Spain and I am eleven years old. I have one sister and a small dog. I like football and pizza.", "audio": "assets/audio/app/a1_a694190f81.mp3",
       "question": "Where is David from?",
       "options": [
         "Italy",
@@ -394,7 +394,7 @@ window.VESPER_LEVEL_EXAMS = {
     {
       "type": "listening",
       "skill": "listening",
-      "text": "Excuse me. Go straight on and turn left. The supermarket is next to the bank. It is open today.",
+      "text": "Excuse me. Go straight on and turn left. The supermarket is next to the bank. It is open today.", "audio": "assets/audio/app/a1_b79375b055.mp3",
       "question": "Where is the supermarket?",
       "options": [
         "In front of the school",
@@ -824,7 +824,7 @@ window.VESPER_LEVEL_EXAMS = {
     {
       "type": "listening",
       "skill": "listening",
-      "text": "Excuse me, how do I get to the train station? Go straight on for two hundred metres. Then turn left at the supermarket. The station is on your right, next to the bank.",
+      "text": "Excuse me, how do I get to the train station? Go straight on for two hundred metres. Then turn left at the supermarket. The station is on your right, next to the bank.", "audio": "assets/audio/app/a2_00e68c9a5e.mp3",
       "question": "Where is the train station?",
       "options": [
         "On the left, next to the supermarket",
@@ -837,7 +837,7 @@ window.VESPER_LEVEL_EXAMS = {
     {
       "type": "listening",
       "skill": "listening",
-      "text": "Good morning, doctor. I don't feel well. I have a headache and a sore throat. I think I have a cold. You should drink hot water and rest at home for two days.",
+      "text": "Good morning, doctor. I don't feel well. I have a headache and a sore throat. I think I have a cold. You should drink hot water and rest at home for two days.", "audio": "assets/audio/app/a2_4a7621bfc2.mp3",
       "question": "What is the patient's problem?",
       "options": [
         "A broken leg",
@@ -1283,7 +1283,7 @@ window.VESPER_LEVEL_EXAMS = {
     {
       "type": "listening",
       "skill": "listening",
-      "text": "Hi, this is a message for Mr Daniels. This is Sarah from City Dental Clinic. I'm calling to let you know that your appointment on Thursday at three o'clock has to be moved. The dentist is not available that afternoon. Please call us back to choose a new time. Thank you.",
+      "text": "Hi, this is a message for Mr Daniels. This is Sarah from City Dental Clinic. I'm calling to let you know that your appointment on Thursday at three o'clock has to be moved. The dentist is not available that afternoon. Please call us back to choose a new time. Thank you.", "audio": "assets/audio/app/b1_ec15f21943.mp3",
       "question": "Why is Sarah calling?",
       "options": [
         "To cancel the clinic permanently.",
@@ -1296,7 +1296,7 @@ window.VESPER_LEVEL_EXAMS = {
     {
       "type": "listening",
       "skill": "listening",
-      "text": "Honestly, I was a bit disappointed with the new phone. Everyone said the camera was amazing, and yes, the photos are good. But the battery only lasts half a day, and for that price I really expected more. I'm not sure I would recommend it to a friend.",
+      "text": "Honestly, I was a bit disappointed with the new phone. Everyone said the camera was amazing, and yes, the photos are good. But the battery only lasts half a day, and for that price I really expected more. I'm not sure I would recommend it to a friend.", "audio": "assets/audio/app/b1_7dcc5d8e0e.mp3",
       "question": "What is the speaker's attitude towards the phone?",
       "options": [
         "Disappointed, mainly because of the battery and price.",
@@ -1686,7 +1686,7 @@ window.VESPER_LEVEL_EXAMS = {
     {
       "type": "listening",
       "skill": "listening",
-      "text": "Right, before we wrap up the meeting, I just want to flag the budget. I'm not saying we should cancel the marketing campaign, but if sales don't pick up next month, we'll have no choice but to scale it back significantly. Let's revisit this in two weeks.",
+      "text": "Right, before we wrap up the meeting, I just want to flag the budget. I'm not saying we should cancel the marketing campaign, but if sales don't pick up next month, we'll have no choice but to scale it back significantly. Let's revisit this in two weeks.", "audio": "assets/audio/app/b2_ab13679418.mp3",
       "question": "What is the speaker's main point?",
       "options": [
         "The marketing campaign will definitely be cancelled.",
@@ -1699,7 +1699,7 @@ window.VESPER_LEVEL_EXAMS = {
     {
       "type": "listening",
       "skill": "listening",
-      "text": "So, Professor, are you confident this new battery technology will reach the market soon? Well, the laboratory results are certainly promising. But I'd be cautious about making predictions. We've seen plenty of breakthroughs that never made it out of the lab.",
+      "text": "So, Professor, are you confident this new battery technology will reach the market soon? Well, the laboratory results are certainly promising. But I'd be cautious about making predictions. We've seen plenty of breakthroughs that never made it out of the lab.", "audio": "assets/audio/app/b2_b0f60934cb.mp3",
       "question": "What is the professor's attitude toward the new technology?",
       "options": [
         "Convinced the technology will fail.",
@@ -2102,7 +2102,7 @@ window.VESPER_LEVEL_EXAMS = {
     {
       "type": "listening",
       "skill": "listening",
-      "text": "In today's seminar I want to challenge a common assumption: that economic growth and environmental sustainability are necessarily at odds. The evidence is, at best, mixed. While some decoupling of emissions from output has occurred in advanced economies, the data suggest it is far too slow to meet our climate targets. So I would urge you to treat claims of effortless 'green growth' with a healthy measure of skepticism.",
+      "text": "In today's seminar I want to challenge a common assumption: that economic growth and environmental sustainability are necessarily at odds. The evidence is, at best, mixed. While some decoupling of emissions from output has occurred in advanced economies, the data suggest it is far too slow to meet our climate targets. So I would urge you to treat claims of effortless 'green growth' with a healthy measure of skepticism.", "audio": "assets/audio/app/c1_12ef2f11dd.mp3",
       "question": "What is the speaker's main point?",
       "options": [
         "Economic growth and sustainability are completely incompatible.",
@@ -2115,7 +2115,7 @@ window.VESPER_LEVEL_EXAMS = {
     {
       "type": "listening",
       "skill": "listening",
-      "text": "Now, the second study we'll examine had a much larger sample, and on the surface its conclusions look compelling. But I have reservations. Notice that the authors never specify how participants were recruited, and that omission, frankly, undermines my confidence in the generalisability of their findings. A larger sample does not, in itself, guarantee a representative one.",
+      "text": "Now, the second study we'll examine had a much larger sample, and on the surface its conclusions look compelling. But I have reservations. Notice that the authors never specify how participants were recruited, and that omission, frankly, undermines my confidence in the generalisability of their findings. A larger sample does not, in itself, guarantee a representative one.", "audio": "assets/audio/app/c1_7e029c1e08.mp3",
       "question": "What is the speaker's attitude toward the second study?",
       "options": [
         "Sceptical, because the recruitment method is unspecified despite the large sample.",
@@ -2531,7 +2531,7 @@ window.VESPER_LEVEL_EXAMS = {
     {
       "type": "listening",
       "skill": "listening",
-      "text": "I won't deny that markets allocate resources with remarkable efficiency. My quarrel is with the unspoken leap from that observation to the claim that whatever a market produces is therefore just. Efficiency and justice are simply different questions, and conflating them is precisely how we end up defending outcomes that no one would choose on reflection.",
+      "text": "I won't deny that markets allocate resources with remarkable efficiency. My quarrel is with the unspoken leap from that observation to the claim that whatever a market produces is therefore just. Efficiency and justice are simply different questions, and conflating them is precisely how we end up defending outcomes that no one would choose on reflection.", "audio": "assets/audio/app/c2_8998edd02e.mp3",
       "question": "What unstated assumption is the speaker primarily challenging?",
       "options": [
         "That markets are inefficient at allocating resources.",
@@ -2544,7 +2544,7 @@ window.VESPER_LEVEL_EXAMS = {
     {
       "type": "listening",
       "skill": "listening",
-      "text": "Proponents of the carbon tax frame it as a neutral, technocratic fix, as if pricing emissions were merely an accounting adjustment. But every choice of price embeds a judgement about whose welfare counts and over what horizon. To present such a tax as apolitical is not to transcend politics; it is to smuggle one's politics in unexamined.",
+      "text": "Proponents of the carbon tax frame it as a neutral, technocratic fix, as if pricing emissions were merely an accounting adjustment. But every choice of price embeds a judgement about whose welfare counts and over what horizon. To present such a tax as apolitical is not to transcend politics; it is to smuggle one's politics in unexamined.", "audio": "assets/audio/app/c2_034eb18481.mp3",
       "question": "What is the speaker's main point about the carbon tax?",
       "options": [
         "That presenting the tax as a neutral technical measure conceals the value judgements it necessarily contains.",
@@ -3348,7 +3348,7 @@ window.VESPER_LEVEL_EXAMS = {
       {
         "type": "listening",
         "skill": "listening",
-        "text": "In today's seminar I want to challenge a comfortable assumption, namely that bilingual children inevitably lag behind their monolingual peers in early vocabulary. The raw counts do show a smaller word list in each single language. But when researchers tally the child's total vocabulary across both languages, the so-called deficit largely disappears. So I'd urge you to be sceptical of any study that measures only one language and then declares a delay.",
+        "text": "In today's seminar I want to challenge a comfortable assumption, namely that bilingual children inevitably lag behind their monolingual peers in early vocabulary. The raw counts do show a smaller word list in each single language. But when researchers tally the child's total vocabulary across both languages, the so-called deficit largely disappears. So I'd urge you to be sceptical of any study that measures only one language and then declares a delay.", "audio": "assets/audio/app/c1_aa5f66fdcf.mp3",
         "question": "What is the speaker's main point about bilingual children's vocabulary?",
         "options": [
           "Vocabulary size is irrelevant to a child's development.",
@@ -3561,7 +3561,7 @@ window.VESPER_LEVEL_EXAMS = {
       {
         "type": "listening",
         "skill": "listening",
-        "text": "In this debate, my opponent insists that economic growth and environmental stewardship are fundamentally irreconcilable. But that framing smuggles in an assumption I simply cannot grant: that our current modes of production are the only conceivable ones. Strip away that premise, and the so-called dilemma dissolves into a mere failure of imagination.",
+        "text": "In this debate, my opponent insists that economic growth and environmental stewardship are fundamentally irreconcilable. But that framing smuggles in an assumption I simply cannot grant: that our current modes of production are the only conceivable ones. Strip away that premise, and the so-called dilemma dissolves into a mere failure of imagination.", "audio": "assets/audio/app/c2_e3bb3bb293.mp3",
         "question": "What is the speaker primarily doing in this argument?",
         "options": [
           "Proposing a specific new technology to solve the dilemma",

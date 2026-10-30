@@ -551,6 +551,7 @@ window.VESPER_LESSONS = {
                                                "lessonId":  "core-grammar-06-present-continuous",
                                                "level":  "A2",
                                                "track":  "Core Grammar",
+                                               "tipo":  "aprende",
                                                "title":  "Present Continuous",
                                                "explanation":  {
                                                                    "body":  "We use the present continuous to talk about actions happening now. We make it with am, is, or are + verb-ing (for example: I am reading, she is working). For most verbs we just add -ing, but we drop a final -e (make - making) and we double a final consonant after a short vowel (run - running). We use the present simple for habits and routines, but the present continuous for things right now. (En espanol, usamos esta forma para acciones que pasan en este momento, como \"estoy leyendo\".)",
@@ -571,7 +572,127 @@ window.VESPER_LESSONS = {
                                                                                         "en":  "He usually walks to work, but today he is taking the bus.",
                                                                                         "es":  "El normalmente camina al trabajo, pero hoy esta tomando el autobus."
                                                                                     }
-                                                                                ]
+                                                                                ],
+                                                                   "sections":  [
+                                                                     {
+                                                                       "kind": "intro",
+                                                                       "body": "El presente continuo cuenta lo que está pasando ahora mismo: «estoy estudiando», «está lloviendo». En español lo dices sin pensar; en inglés tiene su propia forma, y si usas el presente simple en su lugar se nota enseguida."
+                                                                     },
+                                                                     {
+                                                                       "kind": "regla",
+                                                                       "body": "Se forma con am / is / are + el verbo con -ing: I am reading, she is working, they are playing. Negativo: añade not (I'm not, isn't, aren't). Pregunta: to be va primero (Are you working? Is it raining?). Ortografía del -ing: casi siempre se añade tal cual (read → reading); si el verbo acaba en -e, se quita (make → making); si acaba en vocal corta + consonante, se duplica la consonante (run → running, sit → sitting)."
+                                                                     },
+                                                                     {
+                                                                       "kind": "vocab",
+                                                                       "items": [
+                                                                         {
+                                                                           "en": "now",
+                                                                           "ipa": "naʊ",
+                                                                           "es": "ahora"
+                                                                         },
+                                                                         {
+                                                                           "en": "right now",
+                                                                           "ipa": "raɪt naʊ",
+                                                                           "es": "ahora mismo"
+                                                                         },
+                                                                         {
+                                                                           "en": "at the moment",
+                                                                           "ipa": "æt ðə ˈmoʊmənt",
+                                                                           "es": "en este momento"
+                                                                         },
+                                                                         {
+                                                                           "en": "today / this week",
+                                                                           "ipa": "təˈdeɪ / ðɪs wiːk",
+                                                                           "es": "hoy / esta semana"
+                                                                         },
+                                                                         {
+                                                                           "en": "Look! / Listen!",
+                                                                           "ipa": "lʊk / ˈlɪsən",
+                                                                           "es": "¡Mira! / ¡Escucha!"
+                                                                         }
+                                                                       ]
+                                                                     },
+                                                                     {
+                                                                       "kind": "expresiones",
+                                                                       "items": [
+                                                                         {
+                                                                           "en": "What are you doing?",
+                                                                           "es": "¿Qué estás haciendo?"
+                                                                         },
+                                                                         {
+                                                                           "en": "I'm working from home today.",
+                                                                           "es": "Hoy estoy trabajando desde casa."
+                                                                         },
+                                                                         {
+                                                                           "en": "I'm on my way!",
+                                                                           "es": "¡Ya voy en camino!"
+                                                                         },
+                                                                         {
+                                                                           "en": "Sorry, I'm driving. I'll call you later.",
+                                                                           "es": "Perdón, voy manejando. Te llamo luego."
+                                                                         }
+                                                                       ]
+                                                                     },
+                                                                     {
+                                                                       "kind": "ejemplos",
+                                                                       "items": [
+                                                                         {
+                                                                           "en": "I'm learning English with Vesper right now.",
+                                                                           "es": "Ahora mismo estoy aprendiendo inglés con Vesper."
+                                                                         },
+                                                                         {
+                                                                           "en": "She isn't working today; she's at the doctor's.",
+                                                                           "es": "Hoy no está trabajando; está en el médico."
+                                                                         },
+                                                                         {
+                                                                           "en": "Are the kids playing in the garden?",
+                                                                           "es": "¿Los niños están jugando en el jardín?"
+                                                                         },
+                                                                         {
+                                                                           "en": "Look! It's raining again.",
+                                                                           "es": "¡Mira! Está lloviendo otra vez."
+                                                                         }
+                                                                       ]
+                                                                     },
+                                                                     {
+                                                                       "kind": "errores",
+                                                                       "items": [
+                                                                         {
+                                                                           "no": "I reading a book.",
+                                                                           "si": "I'm reading a book.",
+                                                                           "pq": "El -ing solo no basta: siempre va con am, is o are."
+                                                                         },
+                                                                         {
+                                                                           "no": "She is work now.",
+                                                                           "si": "She is working now.",
+                                                                           "pq": "Después de is va el verbo con -ing, no la forma base."
+                                                                         },
+                                                                         {
+                                                                           "no": "I'm study English every day.",
+                                                                           "si": "I study English every day.",
+                                                                           "pq": "Para rutinas y costumbres se usa el presente simple; el continuo es para lo de ahora."
+                                                                         },
+                                                                         {
+                                                                           "no": "I'm knowing the answer.",
+                                                                           "si": "I know the answer.",
+                                                                           "pq": "Los verbos de estado (know, like, want, understand) casi nunca van en continuo."
+                                                                         },
+                                                                         {
+                                                                           "no": "He is runing.",
+                                                                           "si": "He is running.",
+                                                                           "pq": "Vocal corta + consonante: la consonante se duplica (run → running)."
+                                                                         }
+                                                                       ]
+                                                                     },
+                                                                     {
+                                                                       "kind": "resumen",
+                                                                       "body": "am / is / are + -ing para lo que pasa ahora. Rutinas, en presente simple. Cuidado con la ortografía del -ing y con los verbos de estado (know, like, want), que se quedan en presente simple."
+                                                                     },
+                                                                     {
+                                                                       "kind": "puente",
+                                                                       "body": "Ahora te toca a ti: unos ejercicios rápidos para dominarlo."
+                                                                     }
+                                                                   ]
                                                                },
                                                "exercises":  [
                                                                  {
@@ -1172,6 +1293,7 @@ window.VESPER_LESSONS = {
                                             "level":  "B1",
                                             "track":  "Core Grammar",
                                             "title":  "Present Perfect",
+                                            "tipo":  "aprende",
                                             "explanation":  {
                                                                 "body":  "We use the present perfect (have/has + past participle) to talk about life experiences without saying when, and about situations that started in the past and are still true now. We often use it with ever and never (experiences), already and yet (recent actions), and for and since (duration). Use the past simple instead when you say a finished time, like yesterday or in 2019. (En espanol: el presente perfecto conecta el pasado con el presente; el pasado simple se usa para tiempos terminados y concretos.)",
                                                                 "examples":  [
@@ -1191,8 +1313,133 @@ window.VESPER_LESSONS = {
                                                                                      "en":  "We saw that film yesterday.",
                                                                                      "es":  "Vimos esa pelicula ayer."
                                                                                  }
-                                                                             ]
-                                                            },
+                                                                             ],
+                                              "sections":  [
+                                                {
+                                                  "kind": "intro",
+                                                  "body": "El present perfect une el pasado con el ahora: tus experiencias («he estado en Cancún»), lo que acaba de pasar y lo que empezó antes y sigue hoy. En español lo usamos parecido, pero en inglés manda una regla clara: si dices CUÁNDO pasó, ya no va."
+                                                },
+                                                {
+                                                  "kind": "regla",
+                                                  "body": "Se forma con have / has + participio: I have visited, she has lived. Negativo: haven't / hasn't. Pregunta: Have you…? Has she…? Úsalo para experiencias sin fecha (ever, never), resultados recientes (already, just, yet) y situaciones que empezaron y siguen (for, since). Si nombras un momento terminado —yesterday, last year, in 2019, two days ago— usa el pasado simple."
+                                                },
+                                                {
+                                                  "kind": "vocab",
+                                                  "items": [
+                                                    {
+                                                      "en": "ever",
+                                                      "ipa": "ˈevər",
+                                                      "es": "alguna vez"
+                                                    },
+                                                    {
+                                                      "en": "never",
+                                                      "ipa": "ˈnevər",
+                                                      "es": "nunca"
+                                                    },
+                                                    {
+                                                      "en": "already",
+                                                      "ipa": "ɔːlˈredi",
+                                                      "es": "ya"
+                                                    },
+                                                    {
+                                                      "en": "yet",
+                                                      "ipa": "jet",
+                                                      "es": "todavía (neg.) / ya (preg.)"
+                                                    },
+                                                    {
+                                                      "en": "just",
+                                                      "ipa": "dʒʌst",
+                                                      "es": "acabar de"
+                                                    },
+                                                    {
+                                                      "en": "for / since",
+                                                      "ipa": "fɔːr / sɪns",
+                                                      "es": "durante / desde"
+                                                    }
+                                                  ]
+                                                },
+                                                {
+                                                  "kind": "expresiones",
+                                                  "items": [
+                                                    {
+                                                      "en": "Have you ever been to…?",
+                                                      "es": "¿Alguna vez has ido a…?"
+                                                    },
+                                                    {
+                                                      "en": "I've never tried it.",
+                                                      "es": "Nunca lo he probado."
+                                                    },
+                                                    {
+                                                      "en": "I've just finished.",
+                                                      "es": "Acabo de terminar."
+                                                    },
+                                                    {
+                                                      "en": "I haven't decided yet.",
+                                                      "es": "Todavía no lo he decidido."
+                                                    }
+                                                  ]
+                                                },
+                                                {
+                                                  "kind": "ejemplos",
+                                                  "items": [
+                                                    {
+                                                      "en": "I've studied English for three years.",
+                                                      "es": "Llevo tres años estudiando inglés."
+                                                    },
+                                                    {
+                                                      "en": "She has lived in Monterrey since 2020.",
+                                                      "es": "Vive en Monterrey desde 2020."
+                                                    },
+                                                    {
+                                                      "en": "Have you ever travelled abroad for work?",
+                                                      "es": "¿Alguna vez has viajado al extranjero por trabajo?"
+                                                    },
+                                                    {
+                                                      "en": "We saw that film yesterday.",
+                                                      "es": "Vimos esa película ayer. (fecha terminada → pasado simple)"
+                                                    }
+                                                  ]
+                                                },
+                                                {
+                                                  "kind": "errores",
+                                                  "items": [
+                                                    {
+                                                      "no": "I have seen him yesterday.",
+                                                      "si": "I saw him yesterday.",
+                                                      "pq": "Con un momento terminado (yesterday) va el pasado simple."
+                                                    },
+                                                    {
+                                                      "no": "I live here since 2020.",
+                                                      "si": "I have lived here since 2020.",
+                                                      "pq": "Lo que empezó y sigue hasta hoy va en present perfect, no en presente."
+                                                    },
+                                                    {
+                                                      "no": "She have finished.",
+                                                      "si": "She has finished.",
+                                                      "pq": "he, she e it usan has."
+                                                    },
+                                                    {
+                                                      "no": "I have went to Mexico City.",
+                                                      "si": "I have been to Mexico City.",
+                                                      "pq": "Después de have va el participio (been, gone), no el pasado (went)."
+                                                    },
+                                                    {
+                                                      "no": "Did you ever eat sushi?",
+                                                      "si": "Have you ever eaten sushi?",
+                                                      "pq": "Para experiencias de toda la vida: Have you ever + participio."
+                                                    }
+                                                  ]
+                                                },
+                                                {
+                                                  "kind": "resumen",
+                                                  "body": "have / has + participio para experiencias, resultados recientes y lo que sigue hasta hoy. ¿Dices cuándo (yesterday, in 2019, ago)? Entonces, pasado simple."
+                                                },
+                                                {
+                                                  "kind": "puente",
+                                                  "body": "Ahora te toca a ti: unos ejercicios rápidos para dominarlo."
+                                                }
+                                              ]
+                                            },
                                             "exercises":  [
                                                               {
                                                                   "type":  "multiple_choice",
@@ -1594,6 +1841,7 @@ window.VESPER_LESSONS = {
                                                        "level":  "B2",
                                                        "track":  "Core Grammar",
                                                        "title":  "Present Perfect Continuous",
+                                                       "tipo":  "aprende",
                                                        "explanation":  {
                                                                            "body":  "We use the present perfect continuous (have/has been + verb-ing) to talk about an activity that started in the past and is still happening now, or that has just stopped but leaves a visible result in the present. It often goes with \u0027for\u0027, \u0027since\u0027, \u0027lately\u0027 and \u0027recently\u0027 and stresses the duration or repetition of the activity. The present perfect simple, by contrast, focuses on a completed result or a finished number of things (\u0027I\u0027ve written three emails\u0027). (Usa el continuo para la duracion o el efecto reciente de una actividad; usa el simple para el resultado terminado.)",
                                                                            "examples":  [
@@ -1613,8 +1861,127 @@ window.VESPER_LESSONS = {
                                                                                                 "en":  "He has written two reports today, but I\u0027ve been writing one all day.",
                                                                                                 "es":  "El ha escrito dos informes hoy, pero yo llevo todo el dia escribiendo uno."
                                                                                             }
-                                                                                        ]
-                                                                       },
+                                                                                        ],
+                                                         "sections":  [
+                                                           {
+                                                             "kind": "intro",
+                                                             "body": "El present perfect continuous pone la lupa en la actividad: cuánto tiempo llevas haciendo algo o por qué se nota que lo estabas haciendo («llevo una hora esperando», «tengo las manos sucias porque he estado en el jardín»)."
+                                                           },
+                                                           {
+                                                             "kind": "regla",
+                                                             "body": "Se forma con have / has been + verbo -ing: I've been waiting, she's been running. Negativo: haven't / hasn't been + -ing. Pregunta: How long have you been…? Va con for, since, all day, lately y recently. Frente al present perfect simple: el continuo cuenta la actividad y su duración; el simple, el resultado terminado o cuántas veces (I've written three emails)."
+                                                           },
+                                                           {
+                                                             "kind": "vocab",
+                                                             "items": [
+                                                               {
+                                                                 "en": "lately",
+                                                                 "ipa": "ˈleɪtli",
+                                                                 "es": "últimamente"
+                                                               },
+                                                               {
+                                                                 "en": "recently",
+                                                                 "ipa": "ˈriːsəntli",
+                                                                 "es": "recientemente"
+                                                               },
+                                                               {
+                                                                 "en": "all morning / all day",
+                                                                 "es": "toda la mañana / todo el día"
+                                                               },
+                                                               {
+                                                                 "en": "How long…?",
+                                                                 "ipa": "haʊ lɔːŋ",
+                                                                 "es": "¿Cuánto tiempo…?"
+                                                               },
+                                                               {
+                                                                 "en": "for ages",
+                                                                 "ipa": "fər ˈeɪdʒɪz",
+                                                                 "es": "desde hace siglos"
+                                                               }
+                                                             ]
+                                                           },
+                                                           {
+                                                             "kind": "expresiones",
+                                                             "items": [
+                                                               {
+                                                                 "en": "How long have you been waiting?",
+                                                                 "es": "¿Cuánto llevas esperando?"
+                                                               },
+                                                               {
+                                                                 "en": "I've been meaning to call you.",
+                                                                 "es": "Llevo tiempo queriendo llamarte."
+                                                               },
+                                                               {
+                                                                 "en": "What have you been up to?",
+                                                                 "es": "¿Qué has estado haciendo?"
+                                                               },
+                                                               {
+                                                                 "en": "Sorry, I've been working all day.",
+                                                                 "es": "Perdón, llevo todo el día trabajando."
+                                                               }
+                                                             ]
+                                                           },
+                                                           {
+                                                             "kind": "ejemplos",
+                                                             "items": [
+                                                               {
+                                                                 "en": "I've been learning English for two years, and it's starting to feel natural.",
+                                                                 "es": "Llevo dos años aprendiendo inglés y ya empieza a sentirse natural."
+                                                               },
+                                                               {
+                                                                 "en": "She's out of breath because she's been running.",
+                                                                 "es": "Le falta el aire porque ha estado corriendo."
+                                                               },
+                                                               {
+                                                                 "en": "We've been living in Guadalajara since 2019.",
+                                                                 "es": "Vivimos en Guadalajara desde 2019."
+                                                               },
+                                                               {
+                                                                 "en": "He has written two reports today, but I've been writing this one all day.",
+                                                                 "es": "Él ha escrito dos informes hoy; yo llevo todo el día con este."
+                                                               }
+                                                             ]
+                                                           },
+                                                           {
+                                                             "kind": "errores",
+                                                             "items": [
+                                                               {
+                                                                 "no": "I am waiting here for an hour.",
+                                                                 "si": "I've been waiting here for an hour.",
+                                                                 "pq": "Duración hasta ahora: have been + -ing, no el presente continuo."
+                                                               },
+                                                               {
+                                                                 "no": "I've been knowing her for years.",
+                                                                 "si": "I've known her for years.",
+                                                                 "pq": "Los verbos de estado (know, have, like) van en present perfect simple."
+                                                               },
+                                                               {
+                                                                 "no": "I've been reading three books this month.",
+                                                                 "si": "I've read three books this month.",
+                                                                 "pq": "Si cuentas resultados terminados, usa el simple."
+                                                               },
+                                                               {
+                                                                 "no": "How long are you living here?",
+                                                                 "si": "How long have you been living here?",
+                                                                 "pq": "«¿Cuánto tiempo…?» hasta hoy pide present perfect."
+                                                               },
+                                                               {
+                                                                 "no": "She has been work all day.",
+                                                                 "si": "She has been working all day.",
+                                                                 "pq": "Después de been, el verbo va con -ing."
+                                                               }
+                                                             ]
+                                                           },
+                                                           {
+                                                             "kind": "resumen",
+                                                             "body": "have / has been + -ing para la duración o el rastro de una actividad. Resultados y conteos, en simple; los verbos de estado, siempre en simple."
+                                                           },
+                                                           {
+                                                             "kind": "puente",
+                                                             "body": "Ahora te toca a ti: unos ejercicios rápidos para dominarlo."
+                                                           }
+                                                         ]
+                                                       },
                                                        "exercises":  [
                                                                          {
                                                                              "type":  "multiple_choice",
@@ -2357,6 +2724,7 @@ window.VESPER_LESSONS = {
                                               "level":  "C1",
                                               "track":  "Core Grammar",
                                               "title":  "Third Conditional",
+                                              "tipo":  "aprende",
                                               "explanation":  {
                                                                   "body":  "The third conditional describes unreal or hypothetical situations in the past: things that did not actually happen. We form it with \u0027if + past perfect\u0027 in the condition and \u0027would have + past participle\u0027 in the result, and we often use it to express regret or to imagine a different outcome. To soften the result or show uncertainty, we replace \u0027would have\u0027 with \u0027could have\u0027 (possibility/ability) or \u0027might have\u0027 (a less certain outcome). (En espanol, equivale al condicional compuesto: \u0027si hubiera... habria/podria/quiza habria...\u0027, para hablar de algo irreal en el pasado.)",
                                                                   "examples":  [
@@ -2376,8 +2744,128 @@ window.VESPER_LESSONS = {
                                                                                        "en":  "If they hadn\u0027t ignored the warnings, the accident wouldn\u0027t have happened.",
                                                                                        "es":  "Si no hubieran ignorado las advertencias, el accidente no habria ocurrido."
                                                                                    }
-                                                                               ]
-                                                              },
+                                                                               ],
+                                                "sections":  [
+                                                  {
+                                                    "kind": "intro",
+                                                    "body": "El third conditional imagina un pasado distinto: lo que habría pasado si algo hubiera sido de otra forma. Sirve para lamentarse, para analizar decisiones y para explicar un resultado sin señalar a nadie de frente."
+                                                  },
+                                                  {
+                                                    "kind": "regla",
+                                                    "body": "If + past perfect, would have + participio: If I had known, I would have called. Cambia would por could (posibilidad) o might (menos seguro). La parte con if puede ir al final, y entonces sin coma. Negativo: hadn't / wouldn't have. Al hablar se contrae: If I'd known, I'd have called (ojo: 'd es had en la parte del if y would en la otra)."
+                                                  },
+                                                  {
+                                                    "kind": "vocab",
+                                                    "items": [
+                                                      {
+                                                        "en": "if I had known",
+                                                        "es": "si hubiera sabido"
+                                                      },
+                                                      {
+                                                        "en": "would have + participio",
+                                                        "es": "habría…"
+                                                      },
+                                                      {
+                                                        "en": "could have",
+                                                        "es": "habría podido"
+                                                      },
+                                                      {
+                                                        "en": "might have",
+                                                        "es": "quizá habría"
+                                                      },
+                                                      {
+                                                        "en": "I wish I had…",
+                                                        "es": "ojalá hubiera…"
+                                                      },
+                                                      {
+                                                        "en": "to regret",
+                                                        "ipa": "rɪˈɡret",
+                                                        "es": "arrepentirse"
+                                                      }
+                                                    ]
+                                                  },
+                                                  {
+                                                    "kind": "expresiones",
+                                                    "items": [
+                                                      {
+                                                        "en": "If I'd known, I would have told you.",
+                                                        "es": "Si lo hubiera sabido, te lo habría dicho."
+                                                      },
+                                                      {
+                                                        "en": "We could have avoided this.",
+                                                        "es": "Pudimos haber evitado esto."
+                                                      },
+                                                      {
+                                                        "en": "Looking back, I might have handled it differently.",
+                                                        "es": "Visto en retrospectiva, quizá lo habría manejado distinto."
+                                                      },
+                                                      {
+                                                        "en": "I wish I had listened.",
+                                                        "es": "Ojalá hubiera escuchado."
+                                                      }
+                                                    ]
+                                                  },
+                                                  {
+                                                    "kind": "ejemplos",
+                                                    "items": [
+                                                      {
+                                                        "en": "If I had started English earlier, I would have applied for that job.",
+                                                        "es": "Si hubiera empezado inglés antes, habría solicitado ese trabajo."
+                                                      },
+                                                      {
+                                                        "en": "If we had left on time, we might have caught the flight.",
+                                                        "es": "Si hubiéramos salido a tiempo, quizá habríamos alcanzado el vuelo."
+                                                      },
+                                                      {
+                                                        "en": "If you had told me, I could have helped.",
+                                                        "es": "Si me lo hubieras dicho, habría podido ayudarte."
+                                                      },
+                                                      {
+                                                        "en": "The project wouldn't have failed if the team had tested it.",
+                                                        "es": "El proyecto no habría fallado si el equipo lo hubiera probado."
+                                                      }
+                                                    ]
+                                                  },
+                                                  {
+                                                    "kind": "errores",
+                                                    "items": [
+                                                      {
+                                                        "no": "If I would have known, I would have come.",
+                                                        "si": "If I had known, I would have come.",
+                                                        "pq": "En la parte del if no va would: va had + participio."
+                                                      },
+                                                      {
+                                                        "no": "If she had studied, she would pass.",
+                                                        "si": "If she had studied, she would have passed.",
+                                                        "pq": "Pasado irreal en las dos partes: would have + participio."
+                                                      },
+                                                      {
+                                                        "no": "If I knew, I would have told you.",
+                                                        "si": "If I had known, I would have told you.",
+                                                        "pq": "Para el pasado, past perfect (had known), no past simple."
+                                                      },
+                                                      {
+                                                        "no": "I would have went.",
+                                                        "si": "I would have gone.",
+                                                        "pq": "Después de have va el participio."
+                                                      },
+                                                      {
+                                                        "no": "If I'd have known…",
+                                                        "si": "If I'd known…",
+                                                        "pq": "Muchos nativos lo dicen, pero en un examen o un texto formal es If I had known."
+                                                      }
+                                                    ]
+                                                  },
+                                                  {
+                                                    "kind": "resumen",
+                                                    "body": "If + had + participio, would / could / might have + participio. Nada de would en la parte del if. Úsalo para hablar con matiz de decisiones pasadas."
+                                                  },
+                                                  {
+                                                    "kind": "puente",
+                                                    "body": "Ahora te toca a ti: unos ejercicios rápidos para dominarlo."
+                                                  }
+                                                ]
+                                              },
                                               "exercises":  [
                                                                 {
                                                                     "type":  "multiple_choice",

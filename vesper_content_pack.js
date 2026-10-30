@@ -155,16 +155,16 @@ window.VESPER_CONTENT_PACK = (function () {
         ]
       },
       exercises: [
-        { type: "listening", text: "Hello, my name is David.", question: "¿Qué escuchaste?",
+        { type: "listening", text: "Hello, my name is David.", "audio": "assets/audio/app/a1_ad6aa879c6.mp3", question: "¿Qué escuchaste?",
           options: ["Hello, my name is David.", "Hello, my game is David.", "Yellow, my name is David."], correctIndex: 0 },
-        { type: "listening", text: "I am from Mexico.", question: "¿De dónde es la persona?",
+        { type: "listening", text: "I am from Mexico.", "audio": "assets/audio/app/a1_a8a45ca3c6.mp3", question: "¿De dónde es la persona?",
           options: ["De España", "De Brasil", "De México"], correctIndex: 2 },
-        { type: "listening", text: "I am a teacher.", question: "¿Cuál es su trabajo?",
+        { type: "listening", text: "I am a teacher.", "audio": "assets/audio/app/a1_baf17ebd14.mp3", question: "¿Cuál es su trabajo?",
           options: ["Estudiante", "Profesor/a", "Doctor/a"], correctIndex: 1 },
-        { type: "listening", text: "Nice to meet you.", question: "¿Qué significa lo que oíste?",
+        { type: "listening", text: "Nice to meet you.", "audio": "assets/audio/app/a1_5f3519c078.mp3", question: "¿Qué significa lo que oíste?",
           options: ["Mucho gusto", "Hasta luego", "Lo siento"], correctIndex: 0 },
         { type: "true_false", statement: "El audio decía: \"I am a teacher.\"", answer: true, explanation: "Sí: teacher = profesor/a." },
-        { type: "listening", text: "Where are you from?", question: "Escribe lo que escuchaste:",
+        { type: "listening", text: "Where are you from?", "audio": "assets/audio/app/a1_7f3ae9f273.mp3", question: "Escribe lo que escuchaste:",
           answers: ["where are you from"], explanation: "Where are you from?" }
       ]
     },
@@ -181,19 +181,19 @@ window.VESPER_CONTENT_PACK = (function () {
         ]
       },
       exercises: [
-        { type: "listening", text: "Turn left at the traffic lights.", question: "¿Qué debes hacer?",
+        { type: "listening", text: "Turn left at the traffic lights.", "audio": "assets/audio/app/a2_111e2395f9.mp3", question: "¿Qué debes hacer?",
           options: ["Girar a la derecha", "Seguir recto", "Girar a la izquierda"], correctIndex: 2 },
-        { type: "listening", text: "The bank is next to the supermarket.", question: "¿Dónde está el banco?",
+        { type: "listening", text: "The bank is next to the supermarket.", "audio": "assets/audio/app/a2_5514bd3ff1.mp3", question: "¿Dónde está el banco?",
           options: ["Al lado del supermercado", "Enfrente del parque", "Detrás de la escuela"], correctIndex: 0 },
-        { type: "listening", text: "Go straight on for two blocks.", question: "¿Cuántas cuadras sigues recto?",
+        { type: "listening", text: "Go straight on for two blocks.", "audio": "assets/audio/app/a2_c71ef865c8.mp3", question: "¿Cuántas cuadras sigues recto?",
           options: ["Tres", "Dos", "Cinco"], correctIndex: 1 },
-        { type: "listening", text: "It's on your right.", question: "¿Dónde está?",
+        { type: "listening", text: "It's on your right.", "audio": "assets/audio/app/a2_e480d5faf6.mp3", question: "¿Dónde está?",
           options: ["A tu derecha", "A tu izquierda", "Detrás de ti"], correctIndex: 0 },
         { type: "matching", instruction: "Une la instrucción con su traducción.", pairs: [
           { l: "turn right", r: "gira a la derecha" }, { l: "go straight", r: "sigue recto" },
           { l: "next to", r: "al lado de" }, { l: "opposite", r: "enfrente de" }
         ] },
-        { type: "listening", text: "Excuse me, how do I get to the station?", question: "Escribe lo que escuchaste:",
+        { type: "listening", text: "Excuse me, how do I get to the station?", "audio": "assets/audio/app/a2_dc7773f912.mp3", question: "Escribe lo que escuchaste:",
           answers: ["excuse me how do i get to the station"], explanation: "Excuse me, how do I get to the station?" }
       ]
     },
@@ -210,16 +210,16 @@ window.VESPER_CONTENT_PACK = (function () {
         ]
       },
       exercises: [
-        { type: "listening", text: "Hi, this is Anna. I'm calling about tomorrow's meeting.", question: "¿Por qué llama Anna?",
+        { type: "listening", text: "Hi, this is Anna. I'm calling about tomorrow's meeting.", "audio": "assets/audio/app/b1_64520496be.mp3", question: "¿Por qué llama Anna?",
           options: ["Por una factura", "Por un viaje", "Por la reunión de mañana"], correctIndex: 2 },
-        { type: "listening", text: "The meeting has been moved to three o'clock.", question: "¿A qué hora es ahora la reunión?",
+        { type: "listening", text: "The meeting has been moved to three o'clock.", "audio": "assets/audio/app/b1_8c6355d8fa.mp3", question: "¿A qué hora es ahora la reunión?",
           options: ["A las dos", "A las tres", "A las cinco"], correctIndex: 1 },
-        { type: "listening", text: "Please bring the sales report with you.", question: "¿Qué debes llevar?",
+        { type: "listening", text: "Please bring the sales report with you.", "audio": "assets/audio/app/b1_47f6725655.mp3", question: "¿Qué debes llevar?",
           options: ["El informe de ventas", "Tu pasaporte", "El almuerzo"], correctIndex: 0 },
-        { type: "listening", text: "Could you call me back before five, please?", question: "¿Antes de qué hora debes llamar?",
+        { type: "listening", text: "Could you call me back before five, please?", "audio": "assets/audio/app/b1_08f76abb7a.mp3", question: "¿Antes de qué hora debes llamar?",
           options: ["Después de las cinco", "Antes de las nueve", "Antes de las cinco"], correctIndex: 2 },
         { type: "true_false", statement: "Anna pidió que lleves el informe de ventas.", answer: true, explanation: "\"Please bring the sales report.\"" },
-        { type: "listening", text: "Thanks, talk to you soon.", question: "Escribe lo que escuchaste:",
+        { type: "listening", text: "Thanks, talk to you soon.", "audio": "assets/audio/app/b1_04550cfc6c.mp3", question: "Escribe lo que escuchaste:",
           answers: ["thanks talk to you soon"], explanation: "Thanks, talk to you soon." }
       ]
     },
@@ -235,19 +235,19 @@ window.VESPER_CONTENT_PACK = (function () {
         ]
       },
       exercises: [
-        { type: "listening", text: "I'd say my main strength is solving problems under pressure.", question: "¿Cuál es su mayor fortaleza?",
+        { type: "listening", text: "I'd say my main strength is solving problems under pressure.", "audio": "assets/audio/app/b2_f9d9284495.mp3", question: "¿Cuál es su mayor fortaleza?",
           options: ["Resolver problemas bajo presión", "Hablar varios idiomas con fluidez", "Llegar temprano"], correctIndex: 0 },
-        { type: "listening", text: "In my previous job, I led a team of eight people.", question: "¿A cuántas personas dirigía?",
+        { type: "listening", text: "In my previous job, I led a team of eight people.", "audio": "assets/audio/app/b2_d47112c317.mp3", question: "¿A cuántas personas dirigía?",
           options: ["A dieciocho", "A ocho", "A dos"], correctIndex: 1 },
-        { type: "listening", text: "I'm looking for a role with more responsibility.", question: "¿Qué busca la persona?",
+        { type: "listening", text: "I'm looking for a role with more responsibility.", "audio": "assets/audio/app/b2_2dbec279f6.mp3", question: "¿Qué busca la persona?",
           options: ["Menos horas", "Un salario menor", "Un puesto con más responsabilidad"], correctIndex: 2 },
-        { type: "listening", text: "Honestly, I sometimes take on too much work.", question: "¿Qué admite como debilidad?",
+        { type: "listening", text: "Honestly, I sometimes take on too much work.", "audio": "assets/audio/app/b2_9b6472731d.mp3", question: "¿Qué admite como debilidad?",
           options: ["Que a veces asume demasiado trabajo", "Que llega tarde", "Que no habla inglés"], correctIndex: 0 },
         { type: "matching", instruction: "Une la expresión con su significado.", pairs: [
           { l: "strength", r: "fortaleza" }, { l: "weakness", r: "debilidad" },
           { l: "take on", r: "asumir" }, { l: "role", r: "puesto/rol" }
         ] },
-        { type: "listening", text: "Could you tell me about the team I would join?", question: "Escribe lo que escuchaste:",
+        { type: "listening", text: "Could you tell me about the team I would join?", "audio": "assets/audio/app/b2_a5585fb70a.mp3", question: "Escribe lo que escuchaste:",
           answers: ["could you tell me about the team i would join"], explanation: "Could you tell me about the team I would join?" }
       ]
     },
@@ -423,7 +423,7 @@ window.VESPER_CONTENT_PACK = (function () {
         { type: "fill_blank", sentence: "You ___ see a doctor. (consejo)", answers: ["should"], hint: "consejo = should + verbo.", explanation: "You should see a doctor." },
         { type: "multiple_choice", question: "\"I have a cold\" means...", options: ["Tengo frío", "Estoy resfriado", "Tengo hambre"], correctIndex: 1, explanation: "have a cold = estar resfriado." },
         { type: "true_false", statement: "\"You shouldn't smoke\" is good health advice.", answer: true, explanation: "shouldn't = no deberías." },
-        { type: "listening", text: "I have a terrible headache.", question: "¿Qué le pasa?",
+        { type: "listening", text: "I have a terrible headache.", "audio": "assets/audio/app/a2_623d8de483.mp3", question: "¿Qué le pasa?",
           options: ["Dolor de cabeza", "Dolor de pies", "Tos"], correctIndex: 0 },
         { type: "translate", prompt: "Traduce: \"Deberías descansar.\"",
           answers: ["you should rest", "you should take a rest"], explanation: "You should rest." }
@@ -705,16 +705,16 @@ window.VESPER_CONTENT_PACK = (function () {
       explanation: { body: "Escucha fragmentos de un podcast con opiniones y datos. Usa \"Más lento\" si lo necesitas. (Comprensión auditiva B2.)",
         examples: [{ en: "In today's episode...", es: "En el episodio de hoy..." }] },
       exercises: [
-        { type: "listening", text: "In today's episode, we explore why cities are getting greener.", question: "¿De qué trata el episodio?",
+        { type: "listening", text: "In today's episode, we explore why cities are getting greener.", "audio": "assets/audio/app/b2_78b4239d01.mp3", question: "¿De qué trata el episodio?",
           options: ["De recetas de cocina para toda la familia", "De por qué las ciudades son más verdes", "De deportes"], correctIndex: 1 },
-        { type: "listening", text: "Studies suggest that parks improve people's mental health.", question: "¿Qué sugieren los estudios?",
+        { type: "listening", text: "Studies suggest that parks improve people's mental health.", "audio": "assets/audio/app/b2_3987c1ee0b.mp3", question: "¿Qué sugieren los estudios?",
           options: ["Que los parques mejoran la salud mental", "Que los parques son caros", "Que la gente odia los parques"], correctIndex: 0 },
-        { type: "listening", text: "However, not everyone has equal access to green spaces.", question: "¿Qué problema se menciona?",
+        { type: "listening", text: "However, not everyone has equal access to green spaces.", "audio": "assets/audio/app/b2_fe5b2a011d.mp3", question: "¿Qué problema se menciona?",
           options: ["La falta de árboles", "El precio del transporte", "El acceso desigual a las zonas verdes"], correctIndex: 2 },
-        { type: "listening", text: "We'll be back next week with another episode.", question: "¿Cuándo vuelve el podcast?",
+        { type: "listening", text: "We'll be back next week with another episode.", "audio": "assets/audio/app/b2_2b12da6ce3.mp3", question: "¿Cuándo vuelve el podcast?",
           options: ["La próxima semana", "Mañana a la misma hora", "Nunca"], correctIndex: 0 },
         { type: "true_false", statement: "El podcast dice que todos tienen el mismo acceso a parques.", answer: false, explanation: "\"...not everyone has equal access.\"" },
-        { type: "listening", text: "Thanks for listening, and see you next time.", question: "Escribe lo que escuchaste:",
+        { type: "listening", text: "Thanks for listening, and see you next time.", "audio": "assets/audio/app/b2_35eace2eb8.mp3", question: "Escribe lo que escuchaste:",
           answers: ["thanks for listening and see you next time"], explanation: "Thanks for listening, and see you next time." }
       ]
     },
@@ -773,16 +773,16 @@ window.VESPER_CONTENT_PACK = (function () {
       explanation: { body: "Escucha fragmentos de una charla académica con ideas abstractas. (Comprensión auditiva C1.)",
         examples: [{ en: "Let me begin by challenging a common assumption.", es: "Permítanme empezar cuestionando una suposición común." }] },
       exercises: [
-        { type: "listening", text: "Let me begin by challenging a common assumption.", question: "¿Cómo empieza la charla?",
+        { type: "listening", text: "Let me begin by challenging a common assumption.", "audio": "assets/audio/app/c1_7ca4dabcc1.mp3", question: "¿Cómo empieza la charla?",
           options: ["Cuestionando una suposición común", "Pidiendo disculpas", "Contando un chiste"], correctIndex: 0 },
-        { type: "listening", text: "Contrary to popular belief, multitasking actually reduces our efficiency.", question: "¿Qué dice sobre la multitarea?",
+        { type: "listening", text: "Contrary to popular belief, multitasking actually reduces our efficiency.", "audio": "assets/audio/app/c1_2ddc7b69f3.mp3", question: "¿Qué dice sobre la multitarea?",
           options: ["Que no cambia nada en la productividad", "Que la mejora", "Que reduce la eficiencia"], correctIndex: 2 },
-        { type: "listening", text: "The evidence, while not conclusive, is certainly compelling.", question: "¿Cómo describe la evidencia?",
+        { type: "listening", text: "The evidence, while not conclusive, is certainly compelling.", "audio": "assets/audio/app/c1_b578c87bf3.mp3", question: "¿Cómo describe la evidencia?",
           options: ["Aburrida", "Convincente aunque no concluyente", "Falsa"], correctIndex: 1 },
-        { type: "listening", text: "I'll come back to that point in a moment.", question: "¿Qué hará con ese punto?",
+        { type: "listening", text: "I'll come back to that point in a moment.", "audio": "assets/audio/app/c1_deae96e756.mp3", question: "¿Qué hará con ese punto?",
           options: ["Volverá a él en un momento", "Lo ignorará", "Lo repetirá tres veces al final de la clase"], correctIndex: 0 },
         { type: "true_false", statement: "El ponente dice que la multitarea mejora la eficiencia.", answer: false, explanation: "\"...multitasking actually reduces our efficiency.\"" },
-        { type: "listening", text: "To sum up, our priorities shape our attention.", question: "Escribe lo que escuchaste:",
+        { type: "listening", text: "To sum up, our priorities shape our attention.", "audio": "assets/audio/app/c1_69b3a015f2.mp3", question: "Escribe lo que escuchaste:",
           answers: ["to sum up our priorities shape our attention"], explanation: "To sum up, our priorities shape our attention." }
       ]
     },
@@ -793,17 +793,17 @@ window.VESPER_CONTENT_PACK = (function () {
       explanation: { body: "Escucha intervenciones de un debate con acuerdo, desacuerdo y matices. (Comprensión auditiva C1.)",
         examples: [{ en: "With all due respect, I have to disagree.", es: "Con todo respeto, debo discrepar." }] },
       exercises: [
-        { type: "listening", text: "With all due respect, I have to disagree with the previous speaker.", question: "¿Qué hace la persona?",
+        { type: "listening", text: "With all due respect, I have to disagree with the previous speaker.", "audio": "assets/audio/app/c1_ba3e1512bd.mp3", question: "¿Qué hace la persona?",
           options: ["Hace una pregunta sobre el tema anterior", "Discrepa cortésmente", "Está de acuerdo"], correctIndex: 1 },
-        { type: "listening", text: "You raise a valid point, but you're overlooking the cost.", question: "¿Qué dice que se pasa por alto?",
+        { type: "listening", text: "You raise a valid point, but you're overlooking the cost.", "audio": "assets/audio/app/c1_5ca76168d7.mp3", question: "¿Qué dice que se pasa por alto?",
           options: ["El tiempo", "El lugar", "El coste"], correctIndex: 2 },
-        { type: "listening", text: "Let's not lose sight of the bigger picture here.", question: "¿Qué pide no perder de vista?",
+        { type: "listening", text: "Let's not lose sight of the bigger picture here.", "audio": "assets/audio/app/c1_6c67874dfe.mp3", question: "¿Qué pide no perder de vista?",
           options: ["El panorama general", "El reloj", "El micrófono"], correctIndex: 0 },
-        { type: "listening", text: "I'm inclined to agree, up to a point.", question: "¿Cuál es su postura?",
+        { type: "listening", text: "I'm inclined to agree, up to a point.", "audio": "assets/audio/app/c1_fa458b8034.mp3", question: "¿Cuál es su postura?",
           options: ["Está de acuerdo, hasta cierto punto", "Está totalmente en contra", "No tiene opinión"], correctIndex: 0 },
         { type: "matching", instruction: "Une la expresión con su función.", pairs: [
           { l: "I have to disagree", r: "desacuerdo" }, { l: "You raise a valid point", r: "concesión" }, { l: "the bigger picture", r: "panorama general" }, { l: "up to a point", r: "hasta cierto punto" } ] },
-        { type: "listening", text: "Could we please return to the main issue?", question: "Escribe lo que escuchaste:",
+        { type: "listening", text: "Could we please return to the main issue?", "audio": "assets/audio/app/c1_60c10a8c83.mp3", question: "Escribe lo que escuchaste:",
           answers: ["could we please return to the main issue"], explanation: "Could we please return to the main issue?" }
       ]
     },

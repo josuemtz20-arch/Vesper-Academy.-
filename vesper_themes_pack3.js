@@ -59,10 +59,10 @@ window.VESPER_THEMES_PACK3 = (function () {
       },
       exercises: [
         { type: "listening",
-          text: "Excuse me, is there a supermarket near here? — Yes, there's one next to the park, just two minutes away.",
+          text: "Excuse me, is there a supermarket near here? — Yes, there's one next to the park, just two minutes away.", "audio": "assets/audio/app/a1_623c0f53db.mp3",
           question: "Where is the supermarket?", options: ["next to the park", "inside the school", "far away"], correctIndex: 0, explanation: "\"...next to the park...\"" },
         { type: "listening",
-          text: "The library is open from nine to five, Monday to Friday.",
+          text: "The library is open from nine to five, Monday to Friday.", "audio": "assets/audio/app/a1_491446f65f.mp3",
           question: "When does the library close?", options: ["at nine", "on Sunday", "at five"], correctIndex: 2, explanation: "\"...from nine to five...\": cierra a las cinco." },
         { type: "true_false", statement: "There is a supermarket near the park.", answer: true, explanation: "\"...there's one next to the park...\"" },
         { type: "multiple_choice", question: "How far is the supermarket?", options: ["two hours", "two minutes", "two days"], correctIndex: 1, explanation: "\"...just two minutes away.\"" }
@@ -109,10 +109,10 @@ window.VESPER_THEMES_PACK3 = (function () {
       },
       exercises: [
         { type: "listening",
-          text: "Hi, I'm Sara. I work in a hospital. I help doctors and take care of patients. I usually work at night.",
+          text: "Hi, I'm Sara. I work in a hospital. I help doctors and take care of patients. I usually work at night.", "audio": "assets/audio/app/a2_e7b669767a.mp3",
           question: "What is Sara's job?", options: ["she is a teacher", "she is a chef", "she is a nurse"], correctIndex: 2, explanation: "Ayuda a los médicos y cuida pacientes: es enfermera." },
         { type: "listening",
-          text: "I love my job, but the hours are difficult because I often work at night.",
+          text: "I love my job, but the hours are difficult because I often work at night.", "audio": "assets/audio/app/a2_c68f6b0e20.mp3",
           question: "Why does Sara find her job difficult?", options: ["the pay is low", "she works at night", "it is far from home"], correctIndex: 1, explanation: "\"...the hours are difficult because I often work at night.\"" },
         { type: "multiple_choice", question: "Where does Sara work?", options: ["in a hospital", "in a school", "in a restaurant"], correctIndex: 0, explanation: "\"I work in a hospital.\"" },
         { type: "true_false", statement: "Sara works during the day.", answer: false, explanation: "Trabaja de noche ('at night')." }
@@ -159,10 +159,10 @@ window.VESPER_THEMES_PACK3 = (function () {
       },
       exercises: [
         { type: "listening",
-          text: "So, what do you do in your free time? — I'm really into rock climbing. I go to an indoor climbing centre twice a week, and once a month I climb outdoors if the weather is good.",
+          text: "So, what do you do in your free time? — I'm really into rock climbing. I go to an indoor climbing centre twice a week, and once a month I climb outdoors if the weather is good.", "audio": "assets/audio/app/b1_28b1b56dc8.mp3",
           question: "What is the speaker's hobby?", options: ["swimming", "painting", "rock climbing"], correctIndex: 2, explanation: "\"I'm really into rock climbing.\"" },
         { type: "listening",
-          text: "It keeps me fit, and I love the feeling of reaching the top. The only downside is that good equipment is quite expensive.",
+          text: "It keeps me fit, and I love the feeling of reaching the top. The only downside is that good equipment is quite expensive.", "audio": "assets/audio/app/b1_2c8852eaa1.mp3",
           question: "What does the speaker say is the only downside?", options: ["it is dangerous", "the equipment is expensive", "it takes too much time every single weekend"], correctIndex: 1, explanation: "\"The only downside is that good equipment is quite expensive.\"" },
         { type: "multiple_choice", question: "How often does the speaker climb indoors?", options: ["twice a week", "once a month", "every day"], correctIndex: 0, explanation: "\"...twice a week...\" en el centro cubierto." },
         { type: "true_false", statement: "The speaker thinks the equipment is cheap.", answer: false, explanation: "Dice que el buen equipo es bastante caro ('quite expensive')." }

@@ -160,11 +160,11 @@ window.VESPER_EXPANSION3 = (function () {
         ]
       },
       exercises: [
-        { type: "listening", text: "Hello, my name is Sarah.", question: "¿Qué escuchaste?",
+        { type: "listening", text: "Hello, my name is Sarah.", "audio": "assets/audio/app/a1_742968ebfb.mp3", question: "¿Qué escuchaste?",
           options: ["Hello, my name is Sarah.", "Yellow, my name is Sarah.", "Hello, my game is Sarah."], correctIndex: 0, explanation: "Hello, my name is Sarah." },
-        { type: "listening", text: "Nice to meet you.", question: "¿Qué escuchaste?",
+        { type: "listening", text: "Nice to meet you.", "audio": "assets/audio/app/a1_5f3519c078.mp3", question: "¿Qué escuchaste?",
           options: ["Nice to eat you.", "Nice to meet you.", "Nice to see you."], correctIndex: 1, explanation: "Nice to meet you = Encantado de conocerte." },
-        { type: "listening", text: "Where are you from?", question: "Escribe lo que escuchaste:", answers: ["where are you from", "where are you from?"], explanation: "Where are you from?" },
+        { type: "listening", text: "Where are you from?", "audio": "assets/audio/app/a1_7f3ae9f273.mp3", question: "Escribe lo que escuchaste:", answers: ["where are you from", "where are you from?"], explanation: "Where are you from?" },
         { type: "multiple_choice", question: "Someone says \"Nice to meet you.\" A good reply is...", options: ["See you yesterday, my friend.", "You are welcome.", "Nice to meet you too."], correctIndex: 2, explanation: "Se responde 'Nice to meet you too.'" },
         { type: "fill_blank", sentence: "\"How are you?\" — \"I'm ___, thanks.\"", answers: ["fine", "good", "ok", "okay"], hint: "Respuesta positiva.", explanation: "I'm fine, thanks." }
       ]
@@ -333,11 +333,11 @@ window.VESPER_EXPANSION3 = (function () {
         ]
       },
       exercises: [
-        { type: "listening", text: "Go straight and turn left.", question: "¿Qué escuchaste?",
+        { type: "listening", text: "Go straight and turn left.", "audio": "assets/audio/app/a2_c00363eb03.mp3", question: "¿Qué escuchaste?",
           options: ["Go straight and turn left.", "Go straight and turn right.", "Go back and turn left."], correctIndex: 0, explanation: "Go straight and turn left." },
-        { type: "listening", text: "The station is next to the park.", question: "¿Qué escuchaste?",
+        { type: "listening", text: "The station is next to the park.", "audio": "assets/audio/app/a2_e383b455a2.mp3", question: "¿Qué escuchaste?",
           options: ["The station is near the bank.", "The station is opposite the park.", "The station is next to the park."], correctIndex: 2, explanation: "next to = al lado de." },
-        { type: "listening", text: "Excuse me, where is the bank?", question: "Escribe lo que escuchaste:", answers: ["excuse me where is the bank", "excuse me, where is the bank?"], explanation: "Excuse me, where is the bank?" },
+        { type: "listening", text: "Excuse me, where is the bank?", "audio": "assets/audio/app/a2_a7bf4c8a78.mp3", question: "Escribe lo que escuchaste:", answers: ["excuse me where is the bank", "excuse me, where is the bank?"], explanation: "Excuse me, where is the bank?" },
         { type: "matching", instruction: "Une la instrucción con su traducción.", pairs: [
           { l: "turn right", r: "gira a la derecha" }, { l: "go straight", r: "sigue recto" },
           { l: "opposite", r: "enfrente de" }, { l: "next to", r: "al lado de" } ] },
@@ -505,11 +505,11 @@ window.VESPER_EXPANSION3 = (function () {
         ]
       },
       exercises: [
-        { type: "listening", text: "Why do you want this job?", question: "¿Qué escuchaste?",
+        { type: "listening", text: "Why do you want this job?", "audio": "assets/audio/app/b1_7aea1c96a6.mp3", question: "¿Qué escuchaste?",
           options: ["Why do you want this job?", "Where do you want this job?", "Why do you want this dog?"], correctIndex: 0, explanation: "Why do you want this job?" },
-        { type: "listening", text: "I have three years of experience.", question: "¿Qué escuchaste?",
+        { type: "listening", text: "I have three years of experience.", "audio": "assets/audio/app/b1_64a0b75bba.mp3", question: "¿Qué escuchaste?",
           options: ["I have free years of experience.", "I have three years of experiments.", "I have three years of experience."], correctIndex: 2, explanation: "experience = experiencia." },
-        { type: "listening", text: "Can you tell me about yourself?", question: "Escribe lo que escuchaste:", answers: ["can you tell me about yourself", "can you tell me about yourself?"], explanation: "Can you tell me about yourself?" },
+        { type: "listening", text: "Can you tell me about yourself?", "audio": "assets/audio/app/b1_c5ca84c64c.mp3", question: "Escribe lo que escuchaste:", answers: ["can you tell me about yourself", "can you tell me about yourself?"], explanation: "Can you tell me about yourself?" },
         { type: "matching", instruction: "Une el término con su traducción.", pairs: [
           { l: "strengths", r: "fortalezas" }, { l: "weakness", r: "debilidad" },
           { l: "experience", r: "experiencia" }, { l: "skills", r: "habilidades" } ] },
@@ -822,11 +822,11 @@ window.VESPER_EXPANSION3 = (function () {
         ]
       },
       exercises: [
-        { type: "listening", text: "To begin with, let me outline the main idea.", question: "¿Qué escuchaste?",
+        { type: "listening", text: "To begin with, let me outline the main idea.", "audio": "assets/audio/app/c1_455e26172e.mp3", question: "¿Qué escuchaste?",
           options: ["To begin with, let me outline the main aim.", "To begin width, let me outline the main idea.", "To begin with, let me outline the main idea."], correctIndex: 2, explanation: "To begin with = para empezar." },
-        { type: "listening", text: "In other words, the results were inconclusive.", question: "¿Qué escuchaste?",
+        { type: "listening", text: "In other words, the results were inconclusive.", "audio": "assets/audio/app/c1_1b2bfaf495.mp3", question: "¿Qué escuchaste?",
           options: ["In other words, the results were inconclusive.", "In other words, the results were conclusive.", "In other worlds, the results were inconclusive."], correctIndex: 0, explanation: "inconclusive = no concluyente." },
-        { type: "listening", text: "To sum up, further research is needed.", question: "Escribe lo que escuchaste:", answers: ["to sum up further research is needed", "to sum up, further research is needed"], explanation: "To sum up, further research is needed." },
+        { type: "listening", text: "To sum up, further research is needed.", "audio": "assets/audio/app/c1_af8115fba1.mp3", question: "Escribe lo que escuchaste:", answers: ["to sum up further research is needed", "to sum up, further research is needed"], explanation: "To sum up, further research is needed." },
         { type: "matching", instruction: "Une la señal del discurso con su función.", pairs: [
           { l: "to begin with", r: "introducir" }, { l: "in other words", r: "reformular" },
           { l: "to sum up", r: "resumir" }, { l: "for instance", r: "ejemplificar" } ] },

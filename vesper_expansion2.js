@@ -485,10 +485,10 @@ window.VESPER_EXPANSION2 = (function () {
         ]
       },
       exercises: [
-        { type: "listening", text: "Good morning, everyone. Quick update: sales are up by ten percent this month, mainly thanks to the new website. Marketing will share the full report on Friday, and I'd like each team to send me their goals by Wednesday.",
+        { type: "listening", text: "Good morning, everyone. Quick update: sales are up by ten percent this month, mainly thanks to the new website. Marketing will share the full report on Friday, and I'd like each team to send me their goals by Wednesday.", "audio": "assets/audio/app/b2_6932f3aac4.mp3",
           question: "By how much are sales up?", options: ["Twenty percent", "Five percent", "Ten percent"], correctIndex: 2,
           explanation: "\"sales are up by ten percent\"." },
-        { type: "listening", text: "Good morning, everyone. Quick update: sales are up by ten percent this month, mainly thanks to the new website. Marketing will share the full report on Friday, and I'd like each team to send me their goals by Wednesday.",
+        { type: "listening", text: "Good morning, everyone. Quick update: sales are up by ten percent this month, mainly thanks to the new website. Marketing will share the full report on Friday, and I'd like each team to send me their goals by Wednesday.", "audio": "assets/audio/app/b2_6932f3aac4.mp3",
           question: "When should teams send their goals?", options: ["By Wednesday", "On Friday", "Today"], correctIndex: 0,
           explanation: "\"send me their goals by Wednesday\"." },
         { type: "multiple_choice", question: "What helped sales grow?", options: ["A new office", "A new website", "Lower prices on every product"],
@@ -645,10 +645,10 @@ window.VESPER_EXPANSION2 = (function () {
         ]
       },
       exercises: [
-        { type: "listening", text: "Good afternoon. Today I'll focus on sleep. First, sleep is not wasted time: the brain uses it to store memories and repair itself. However, modern habits, especially screens at night, delay sleep and reduce its quality. The main message is that protecting your sleep is one of the cheapest ways to improve your health.",
+        { type: "listening", text: "Good afternoon. Today I'll focus on sleep. First, sleep is not wasted time: the brain uses it to store memories and repair itself. However, modern habits, especially screens at night, delay sleep and reduce its quality. The main message is that protecting your sleep is one of the cheapest ways to improve your health.", "audio": "assets/audio/app/c1_8ab9bbe1a6.mp3",
           question: "What is the lecture mainly about?", options: ["Healthy food and balanced diets", "Exercise", "Sleep and health"], correctIndex: 2,
           explanation: "\"Today I'll focus on sleep\"." },
-        { type: "listening", text: "Good afternoon. Today I'll focus on sleep. First, sleep is not wasted time: the brain uses it to store memories and repair itself. However, modern habits, especially screens at night, delay sleep and reduce its quality. The main message is that protecting your sleep is one of the cheapest ways to improve your health.",
+        { type: "listening", text: "Good afternoon. Today I'll focus on sleep. First, sleep is not wasted time: the brain uses it to store memories and repair itself. However, modern habits, especially screens at night, delay sleep and reduce its quality. The main message is that protecting your sleep is one of the cheapest ways to improve your health.", "audio": "assets/audio/app/c1_8ab9bbe1a6.mp3",
           question: "According to the speaker, what harms sleep?", options: ["Reading books", "Screens at night", "Morning coffee"], correctIndex: 1,
           explanation: "\"especially screens at night\"." },
         { type: "multiple_choice", question: "The word 'however' signals...", options: ["a contrast", "an example", "a conclusion"],
