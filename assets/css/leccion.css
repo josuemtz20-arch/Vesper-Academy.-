@@ -2728,9 +2728,11 @@ body:has(#fb .fbbox) #verify:active{box-shadow:none}
 /* ============================================================
    Dock de atajos sobre la barra de pestañas
    ------------------------------------------------------------
-   Aparece cuando las tarjetas de arriba ya salieron de pantalla y el
-   mapa está a la vista (updateDock en leccion_app.js). Va sobre la
-   barra (72px + safe-area), centrado, y nunca más ancho que la columna.
+   Siempre visible en el hub (dockHtml en leccion_app.js): Vocabulario,
+   Forja, Repaso, Mi lección y Ajustes. Va sobre la barra (72px +
+   safe-area), centrado, y nunca más ancho que la columna; en pantallas
+   estrechas los botones se reparten el ancho en vez de desbordar.
+   .wdock-spacer reserva su alto al final para que no tape el contenido.
    ============================================================ */
 .wdock{position:fixed;left:50%;bottom:calc(74px + env(safe-area-inset-bottom));z-index:9990;
   display:flex;gap:6px;padding:6px;max-width:calc(100vw - 24px);
@@ -2752,5 +2754,13 @@ body:has(#fb .fbbox) #verify:active{box-shadow:none}
 .wdock button[data-dock="vocab"]{background:rgba(201,168,76,.16);color:#ffe9a8}
 .wdock button em{position:absolute;top:2px;right:6px;min-width:16px;height:16px;padding:0 4px;border-radius:8px;
   background:#e0623c;color:#fff;font:700 .6rem/16px 'Inter',sans-serif;font-style:normal;text-align:center}
-@media (min-width:768px){.wdock{bottom:96px}}
+.wdock-spacer{height:72px}
+/* el dock ya no se esconde: el aviso sube por encima de él en vez de taparlo */
+.wdock ~ .hub-toast{bottom:calc(150px + env(safe-area-inset-bottom))}
+@media (max-width:420px){
+  .wdock{left:12px;right:12px;max-width:none;gap:2px;padding:5px;transform:translate(0,24px)}
+  .wdock.on{transform:none}
+  .wdock button{flex:1 1 0;min-width:0;padding:6px 2px;font-size:.62rem}
+}
+@media (min-width:768px){.wdock{bottom:96px}.wdock ~ .hub-toast{bottom:172px}}
 @media (prefers-reduced-motion:reduce){.wdock{transition:opacity .15s}}

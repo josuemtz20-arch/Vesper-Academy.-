@@ -1336,13 +1336,13 @@
       + '<span class="branch__go">' + arrow + '</span></button>';
   }
 
-  /* ---- dock flotante del mapa ----
+  /* ---- dock fijo del mapa ----
      Vocabulario, la Forja y el repaso viven ARRIBA del sendero: quien iba
      por la lección 12 tenía que subir media página para practicar y volver
-     a bajar. Cuando esas tarjetas salen de pantalla y el mapa está a la
-     vista, una fila compacta de atajos flota sobre la barra de pestañas.
-     Se mide con scroll + getBoundingClientRect, no con IntersectionObserver
-     (en algunos WebViews no dispara). */
+     a bajar. Antes el dock sólo salía con el mapa a la vista y se escondía
+     al volver arriba; ahora está SIEMPRE sobre la barra de pestañas, con
+     Ajustes incluido (el engranaje del saludo quedaba fuera de pantalla
+     en cuanto el hub abre sobre la lección actual, ver jumpToCurrent). */
   var DOCK_ICN = {
     vocab: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="12" height="15" rx="2"/><path d="M8.5 5V4a1.5 1.5 0 0 1 1.5-1.5h8A1.5 1.5 0 0 1 19.5 4v13a1.5 1.5 0 0 1-1.5 1.5h-2.5M7 10h5M7 14h3"/></svg>',
     forja: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9h11l3-2h2v4h-2l-3 1v2a3 3 0 0 1-3 3H9a3 3 0 0 1-3-3v-1H4z"/><path d="M8 20h8M12 17v3"/></svg>',
@@ -1357,25 +1357,30 @@
     if (srsDue > 0)
       b += '<button type="button" data-dock="srs" aria-label="Repaso de errores, ' + srsDue + ' pendientes">' + DOCK_ICN.srs + '<span>Repaso</span><em>' + srsDue + '</em></button>';
     b += '<button type="button" data-dock="me" aria-label="Ir a mi lección actual en el mapa">' + DOCK_ICN.me + '<span>Mi lección</span></button>';
-    return '<nav class="wdock" id="wdock" aria-label="Atajos de práctica" data-world="' + esc(selLevel) + '">' + b + '</nav>';
+    b += '<button type="button" data-dock="cfg" aria-label="Configuración">' + HUB_ICN.gear + '<span>Ajustes</span></button>';
+    return '<nav class="wdock on" id="wdock" aria-label="Atajos de práctica" data-world="' + esc(selLevel) + '">' + b + '</nav>'
+      + '<div class="wdock-spacer" aria-hidden="true"></div>';
   }
-  var _dockRaf = 0, _dockBound = false;
-  function updateDock() {
-    var dock = byId("wdock"), map = byId("wmap"); if (!dock) return;
-    var on = false;
-    if (map) {
-      var vh = window.innerHeight || document.documentElement.clientHeight;
-      var mr = map.getBoundingClientRect();
-      var top = document.querySelector(".den-enter") || document.querySelector(".world-banner");
-      var past = top ? top.getBoundingClientRect().bottom < 56 : true;
-      on = past && mr.top < vh * 0.6 && mr.bottom > vh * 0.35;
-    }
-    if (on !== dock.classList.contains("on")) {
-      dock.classList.toggle("on", on);
-      dock.setAttribute("aria-hidden", on ? "false" : "true");
-      var bs = dock.querySelectorAll("button");
-      for (var i = 0; i < bs.length; i++) bs[i].tabIndex = on ? 0 : -1;
-    }
+  /* centra la lección actual. smooth=false para la entrada: el alumno
+     aterriza ya en su sitio, sin ver pasar el saludo. */
+  function jumpToCurrent(smooth) {
+    var a = document.querySelector("#wmap .wbtn.is-current") || document.querySelector("#wmap .wavatar");
+    if (!a) return false;
+    a.scrollIntoView({ behavior: smooth && !reduceMotion() ? "smooth" : "auto", block: "center" });
+    return true;
+  }
+  /* Al abrir el hub: tras trazar el sendero, salta a la lección actual.
+     Fuentes e imágenes que llegan después mueven el layout; se re-centra
+     cuando terminan, salvo que el alumno ya se haya movido por su cuenta. */
+  function landOnCurrent() {
+    if (!jumpToCurrent(false)) return;
+    var moved = false, evs = ["wheel", "touchstart", "keydown", "mousedown"];
+    var stop = function () { moved = true; evs.forEach(function (e) { window.removeEventListener(e, stop, true); }); };
+    evs.forEach(function (e) { window.addEventListener(e, stop, { capture: true, passive: true }); });
+    var again = function () { if (!moved) jumpToCurrent(false); };
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(again, function () {});
+    if (document.readyState !== "complete") window.addEventListener("load", again, { once: true });
+    setTimeout(stop, 4000);
   }
   function bindDock(selLevel) {
     var dock = byId("wdock"); if (!dock) return;
@@ -1385,20 +1390,13 @@
         if (k === "vocab") renderDen(selLevel);
         else if (k === "forja") location.search = "?id=forja";
         else if (k === "srs") location.search = "?id=review:srs";
+        else if (k === "cfg") location.href = "configuracion.html";
         else {
-          var a = document.querySelector("#wmap .wavatar") || document.querySelector("#wmap .is-current");
-          if (a) a.scrollIntoView({ behavior: reduceMotion() ? "auto" : "smooth", block: "center" });
+          jumpToCurrent(true);
           var cur = document.querySelector("#wmap .wbtn.is-current"); if (cur) try { cur.focus({ preventScroll: true }); } catch (e) {}
         }
       };
     });
-    dock.classList.remove("on"); dock.setAttribute("aria-hidden", "true");
-    each("#wdock button", function (b) { b.tabIndex = -1; });
-    updateDock();
-    if (_dockBound) return; _dockBound = true;
-    var tick = function () { if (_dockRaf) return; _dockRaf = requestAnimationFrame(function () { _dockRaf = 0; updateDock(); }); };
-    window.addEventListener("scroll", tick, { passive: true });
-    window.addEventListener("resize", tick);
   }
 
   /* vista principal del recinto: cabecera temática + ramas */
@@ -2229,7 +2227,11 @@
       try { sessionStorage.setItem("vesper_last_continue", curId || ""); } catch (e) {}
       /* mide tras el layout (doble rAF): evita medir el sendero antes de tiempo.
          El guardia W<80 en paintTrail reintenta solo si aún no hay layout. */
-      requestAnimationFrame(function () { requestAnimationFrame(paintTrail); });
+      var land = _indexFirst && (tourSeen() || prefersNoTour());   // el paseo guiado arranca arriba
+      requestAnimationFrame(function () { requestAnimationFrame(function () {
+        paintTrail();
+        if (land) landOnCurrent();
+      }); });
       bindTrailResize();
       bindParallax();
     })();
