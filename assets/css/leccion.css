@@ -2684,3 +2684,73 @@ body:has(#fb .fbbox) #verify:active{box-shadow:none}
   box-shadow:inset 0 1px 0 rgba(243,226,171,.26),inset 0 -2px 5px rgba(8,7,20,.45),
              inset 0 0 0 4px rgba(8,7,20,.24),inset 0 0 0 5px rgba(201,168,76,.4),0 0 0 #6f5a22,0 3px 8px rgba(8,7,20,.5)}
 .wmap .wbtn.is-current:active{transform:translateY(4px)}
+
+/* ============================================================
+   Vida en el mapa (2026-10-29): polvo de estrellas + luciérnagas
+   ------------------------------------------------------------
+   .wglow va DETRÁS de props, sendero y nodos. Las estrellas son dos
+   capas de fondo (b) con mosaicos de distinto tamaño para que el patrón
+   no se note; la segunda titila. Las luciérnagas (i) flotan en los
+   márgenes con el resplandor del mundo.
+   ============================================================ */
+.wglow{position:absolute;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+.wglow b{position:absolute;inset:0;display:block}
+.wglow b:nth-of-type(1){opacity:.55;background:
+  radial-gradient(1px 1px at 18px 24px,rgba(255,244,214,.9),transparent 60%),
+  radial-gradient(1.4px 1.4px at 96px 70px,rgba(255,244,214,.8),transparent 60%),
+  radial-gradient(1px 1px at 150px 132px,rgba(255,244,214,.7),transparent 60%),
+  radial-gradient(1.2px 1.2px at 52px 168px,rgba(255,244,214,.75),transparent 60%);
+  background-size:190px 210px}
+.wglow b:nth-of-type(2){opacity:.35;background:
+  radial-gradient(1.6px 1.6px at 40px 40px,var(--w-accent,#C9A84C),transparent 60%),
+  radial-gradient(1.2px 1.2px at 210px 150px,rgba(255,244,214,.9),transparent 60%),
+  radial-gradient(1.8px 1.8px at 130px 260px,var(--w-accent,#C9A84C),transparent 60%);
+  background-size:260px 330px;animation:wglow-twinkle 6s ease-in-out infinite}
+.wglow i{position:absolute;display:block;width:5px;height:5px;border-radius:50%;
+  background:var(--w-accent,#C9A84C);
+  box-shadow:0 0 6px 2px var(--w-glow,rgba(201,168,76,.45)),0 0 14px 4px var(--w-glow,rgba(201,168,76,.25));
+  opacity:0;animation:wglow-fly 9s ease-in-out infinite}
+@keyframes wglow-twinkle{0%,100%{opacity:.18}50%{opacity:.5}}
+@keyframes wglow-fly{
+  0%{opacity:0;transform:translate(0,0)}
+  20%{opacity:.85}
+  50%{opacity:.55;transform:translate(10px,-18px)}
+  80%{opacity:.8;transform:translate(-6px,-34px)}
+  100%{opacity:0;transform:translate(4px,-46px)}}
+@media (prefers-reduced-motion:reduce){.wglow b,.wglow i{animation:none}.wglow i{opacity:.5}}
+.vesper-reduce-motion .wglow b,.vesper-reduce-motion .wglow i{animation:none}
+.vesper-reduce-motion .wglow i{opacity:.5}
+
+/* Los props llevan un halo tenue del color del mundo: sobre el negro
+   de la isla se recortaban como pegatinas. */
+.wprops img{filter:drop-shadow(0 6px 10px rgba(8,7,20,.55)) drop-shadow(0 0 12px var(--w-glow,rgba(201,168,76,.18)))}
+
+/* ============================================================
+   Dock de atajos sobre la barra de pestañas
+   ------------------------------------------------------------
+   Aparece cuando las tarjetas de arriba ya salieron de pantalla y el
+   mapa está a la vista (updateDock en leccion_app.js). Va sobre la
+   barra (72px + safe-area), centrado, y nunca más ancho que la columna.
+   ============================================================ */
+.wdock{position:fixed;left:50%;bottom:calc(74px + env(safe-area-inset-bottom));z-index:9990;
+  display:flex;gap:6px;padding:6px;max-width:calc(100vw - 24px);
+  background:rgba(20,18,42,.9);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  border:1px solid rgba(201,168,76,.45);border-radius:18px;
+  box-shadow:0 10px 28px rgba(8,7,20,.55);
+  transform:translate(-50%,24px);opacity:0;pointer-events:none;
+  transition:transform .25s ease,opacity .2s ease}
+.wdock.on{transform:translate(-50%,0);opacity:1;pointer-events:auto}
+.wdock button{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;
+  min-width:64px;min-height:48px;padding:6px 8px;border:0;border-radius:12px;cursor:pointer;
+  background:transparent;color:#f3e2ab;font:600 .66rem/1 'Inter',system-ui,sans-serif;letter-spacing:.02em;
+  -webkit-tap-highlight-color:transparent;transition:background-color .15s,transform .1s}
+.wdock button svg{width:22px;height:22px}
+.wdock button span{white-space:nowrap}
+.wdock button:hover{background:rgba(201,168,76,.14)}
+.wdock button:active{transform:scale(.94)}
+.wdock button:focus-visible{outline:2px solid #f3e2ab;outline-offset:1px}
+.wdock button[data-dock="vocab"]{background:rgba(201,168,76,.16);color:#ffe9a8}
+.wdock button em{position:absolute;top:2px;right:6px;min-width:16px;height:16px;padding:0 4px;border-radius:8px;
+  background:#e0623c;color:#fff;font:700 .6rem/16px 'Inter',sans-serif;font-style:normal;text-align:center}
+@media (min-width:768px){.wdock{bottom:96px}}
+@media (prefers-reduced-motion:reduce){.wdock{transition:opacity .15s}}

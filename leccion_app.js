@@ -1018,20 +1018,44 @@
     { t: 69, s: "L", o: 3, w: 56, h: 58 }, { t: 77, s: "R", o: 0, w: 76, h: 78 },
     { t: 85, s: "L", o: 1, w: 62, h: 66 }, { t: 93, s: "R", o: 2, w: 58, h: 62 }
   ];
-  function propsLayer(lv) {
+  /* Doce huecos fijos alcanzaban para un mapa corto, pero el sendero mide
+     de 15 a 50 paradas: con el mundo desplegado quedaban tramos de una
+     pantalla entera sin nada. Ahora los huecos salen del largo real —una
+     pieza cada ~1,15 paradas, alternando lados— y las tallas recorren
+     PROP_SLOTS. Las piezas repetidas se reflejan una sí y otra no para que
+     el mismo farol no se lea como un sello. */
+  function propsLayer(lv, nStops) {
     var set = WORLD_PROPS[lv];
     if (!set || !set.length) return "";
+    var N = Math.max(PROP_SLOTS.length, Math.round((nStops || 0) * 1.15));
     var h = '<div class="wprops" aria-hidden="true">';
-    for (var i = 0; i < PROP_SLOTS.length; i++) {
-      var s = PROP_SLOTS[i];
+    for (var i = 0; i < N; i++) {
+      var s = PROP_SLOTS[i % PROP_SLOTS.length];
+      var side = (i % 2) ? "R" : "L";
+      var top = ((i + 0.5) / N) * 100 + (trnd(i + 3) - 0.5) * (60 / N);
+      top = Math.max(1, Math.min(95, top));
       /* el desfase evita que la misma pieza caiga siempre en el mismo lado */
-      var f = set[(i + (i > 5 ? 2 : 0)) % set.length];
+      var f = set[(i + Math.floor(i / set.length)) % set.length];
+      var flip = (Math.floor(i / set.length) % 2) ? "transform:scaleX(-1);" : "";
       /* La caja va FIJA (width/height + object-fit:contain), no como máximo:
          así mide lo mismo antes de que la imagen lazy llegue, el mapa no salta
          al cargar y placeProps() puede esquivar rótulos desde el primer pintado. */
       h += '<img src="assets/images/map/' + f + '.webp" alt="" loading="lazy" decoding="async"'
-        + ' style="top:' + s.t + '%;' + (s.s === "L" ? "left" : "right") + ':' + s.o + '%;'
-        + 'width:' + s.w + 'px;height:' + s.h + 'px;object-position:' + (s.s === "L" ? "left" : "right") + ' center">';
+        + ' style="top:' + top.toFixed(2) + '%;' + (side === "L" ? "left" : "right") + ':' + s.o + '%;' + flip
+        + 'width:' + s.w + 'px;height:' + s.h + 'px;object-position:' + (side === "L" ? "left" : "right") + ' center">';
+    }
+    return h + '</div>';
+  }
+  /* Vida entre las piezas: un polvo de estrellas que titila (dos capas de
+     fondo, cero nodos) y luciérnagas del color del mundo, tantas como pida
+     el largo del sendero, con posición determinista para que no bailen
+     entre re-pintados. */
+  function glowLayer(nStops) {
+    var n = Math.max(6, Math.round((nStops || 0) * 0.7)), h = '<div class="wglow" aria-hidden="true"><b></b><b></b>';
+    for (var i = 0; i < n; i++) {
+      var side = trnd(i * 2 + 1) < 0.5, x = side ? 2 + trnd(i + 11) * 20 : 78 + trnd(i + 11) * 20;
+      h += '<i style="top:' + (((i + trnd(i + 5)) / n) * 100).toFixed(1) + '%;left:' + x.toFixed(1) + '%;'
+        + 'animation-delay:-' + (trnd(i + 7) * 9).toFixed(1) + 's;animation-duration:' + (7 + trnd(i + 9) * 6).toFixed(1) + 's"></i>';
     }
     return h + '</div>';
   }
@@ -1063,7 +1087,7 @@
        llega la persona: lo alcanzado + LOOKAHEAD candados como zanahoria. Una
        destreza totalmente bloqueada no se dibuja. Así el sendero pasa de 47
        paradas a ~15 sin dejar de ser continuo. */
-    var LOOKAHEAD = 2, hiddenN = 0;
+    var LOOKAHEAD = 2, hiddenN = 0, nChecks = 0;
     var si = 0, curStop = -1, parts = "";
     TRAIL_STOPS = {};
     PATH.SKILL_ORDER.forEach(function (sk) {
@@ -1080,6 +1104,7 @@
         hiddenN += ids.length - vis.length;
       }
 
+      nChecks++;
       var ckPct = ids.length ? Math.round((doneN / ids.length) * 100) : 0;
       parts += '<div class="wcheck" role="separator" aria-label="' + esc(meta.label) + ', ' + doneN + ' de ' + ids.length + ' completadas">'
         + '<span class="ck-ic" aria-hidden="true">' + (SKILL_ICONS[sk] || "") + '</span>' + esc(meta.label)
@@ -1123,7 +1148,7 @@
          márgenes: allí eran casitas a medio recortar, aquí son lugares por
          los que pasas. Tres elementos en lugar de ochocientos. */
       + '<div class="wscape" aria-hidden="true"><i></i><i></i><i></i></div>'
-      + propsLayer(selLevel)
+      + glowLayer(si + nChecks) + propsLayer(selLevel, si + nChecks)
       /* Sendero: tres trazos, no siete. .wtrail-bed es la calzada (le da
          cuerpo al camino), .wtrail-line la ruta que falta —y la que MIDE el
          avatar con offset-path—, .wtrail-done la pisa en oro hasta el nodo
@@ -1309,6 +1334,71 @@
       + '<span class="branch__meta"><span class="branch__bar"><i style="width:' + pr.pct + '%"></i></span>'
       + '<span class="branch__ct">' + pr.done + '/' + pr.total + '</span></span></span>'
       + '<span class="branch__go">' + arrow + '</span></button>';
+  }
+
+  /* ---- dock flotante del mapa ----
+     Vocabulario, la Forja y el repaso viven ARRIBA del sendero: quien iba
+     por la lección 12 tenía que subir media página para practicar y volver
+     a bajar. Cuando esas tarjetas salen de pantalla y el mapa está a la
+     vista, una fila compacta de atajos flota sobre la barra de pestañas.
+     Se mide con scroll + getBoundingClientRect, no con IntersectionObserver
+     (en algunos WebViews no dispara). */
+  var DOCK_ICN = {
+    vocab: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="12" height="15" rx="2"/><path d="M8.5 5V4a1.5 1.5 0 0 1 1.5-1.5h8A1.5 1.5 0 0 1 19.5 4v13a1.5 1.5 0 0 1-1.5 1.5h-2.5M7 10h5M7 14h3"/></svg>',
+    forja: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9h11l3-2h2v4h-2l-3 1v2a3 3 0 0 1-3 3H9a3 3 0 0 1-3-3v-1H4z"/><path d="M8 20h8M12 17v3"/></svg>',
+    srs: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.4-5.7L4 8.6"/><path d="M4 4v4.6h4.6M12 8v4l3 2"/></svg>',
+    me: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.4"/></svg>'
+  };
+  function dockHtml(selLevel, srsDue) {
+    var d = densData()[selLevel], b = "";
+    if (d && d.branches && d.branches.length)
+      b += '<button type="button" data-dock="vocab" aria-label="Explorar vocabulario">' + DOCK_ICN.vocab + '<span>Vocabulario</span></button>';
+    b += '<button type="button" data-dock="forja" aria-label="La Forja: práctica infinita">' + DOCK_ICN.forja + '<span>Forja</span></button>';
+    if (srsDue > 0)
+      b += '<button type="button" data-dock="srs" aria-label="Repaso de errores, ' + srsDue + ' pendientes">' + DOCK_ICN.srs + '<span>Repaso</span><em>' + srsDue + '</em></button>';
+    b += '<button type="button" data-dock="me" aria-label="Ir a mi lección actual en el mapa">' + DOCK_ICN.me + '<span>Mi lección</span></button>';
+    return '<nav class="wdock" id="wdock" aria-label="Atajos de práctica" data-world="' + esc(selLevel) + '">' + b + '</nav>';
+  }
+  var _dockRaf = 0, _dockBound = false;
+  function updateDock() {
+    var dock = byId("wdock"), map = byId("wmap"); if (!dock) return;
+    var on = false;
+    if (map) {
+      var vh = window.innerHeight || document.documentElement.clientHeight;
+      var mr = map.getBoundingClientRect();
+      var top = document.querySelector(".den-enter") || document.querySelector(".world-banner");
+      var past = top ? top.getBoundingClientRect().bottom < 56 : true;
+      on = past && mr.top < vh * 0.6 && mr.bottom > vh * 0.35;
+    }
+    if (on !== dock.classList.contains("on")) {
+      dock.classList.toggle("on", on);
+      dock.setAttribute("aria-hidden", on ? "false" : "true");
+      var bs = dock.querySelectorAll("button");
+      for (var i = 0; i < bs.length; i++) bs[i].tabIndex = on ? 0 : -1;
+    }
+  }
+  function bindDock(selLevel) {
+    var dock = byId("wdock"); if (!dock) return;
+    each("#wdock [data-dock]", function (b) {
+      b.onclick = function () {
+        var k = b.getAttribute("data-dock");
+        if (k === "vocab") renderDen(selLevel);
+        else if (k === "forja") location.search = "?id=forja";
+        else if (k === "srs") location.search = "?id=review:srs";
+        else {
+          var a = document.querySelector("#wmap .wavatar") || document.querySelector("#wmap .is-current");
+          if (a) a.scrollIntoView({ behavior: reduceMotion() ? "auto" : "smooth", block: "center" });
+          var cur = document.querySelector("#wmap .wbtn.is-current"); if (cur) try { cur.focus({ preventScroll: true }); } catch (e) {}
+        }
+      };
+    });
+    dock.classList.remove("on"); dock.setAttribute("aria-hidden", "true");
+    each("#wdock button", function (b) { b.tabIndex = -1; });
+    updateDock();
+    if (_dockBound) return; _dockBound = true;
+    var tick = function () { if (_dockRaf) return; _dockRaf = requestAnimationFrame(function () { _dockRaf = 0; updateDock(); }); };
+    window.addEventListener("scroll", tick, { passive: true });
+    window.addEventListener("resize", tick);
   }
 
   /* vista principal del recinto: cabecera temática + ramas */
@@ -2096,6 +2186,7 @@
       + trophyHtml
       + examBanner
       + placementCard("leccion-hub")
+      + dockHtml(selLevel, srsDue)
       + '<div class="hub-toast" id="toast"></div>');
 
     bindCta();
@@ -2106,6 +2197,7 @@
     each(".world[data-lvl]", function (b) { b.onclick = function () { _mapExpanded = false; renderIndex(b.getAttribute("data-lvl")); }; });
     each(".world[data-locked-world]", function (b) { b.onclick = function () { toast("Vence al guardián del mundo anterior para desbloquearlo"); }; });
     each(".den-enter[data-den]", function (b) { b.onclick = function () { renderDen(b.getAttribute("data-den")); }; });
+    bindDock(selLevel);
     each("[data-go]", function (b) { b.onclick = function () { location.search = "?id=" + encodeURIComponent(b.getAttribute("data-go")); }; });
     each("[data-locked]", function (b) { b.onclick = function () { toast("Completa la lección anterior para desbloquear"); }; });
     each("[data-locked-boss]", function (b) { b.onclick = function () { toast("Completa todas las lecciones del mundo para enfrentar al guardián"); }; });
