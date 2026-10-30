@@ -2625,3 +2625,30 @@ body:has(#fb .fbbox) #verify:active{box-shadow:none}
 /* la cinta de mundos se desvanece en los bordes: se lee que sigue */
 .worlds{-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 12px,#000 calc(100% - 24px),transparent);
         mask-image:linear-gradient(90deg,transparent 0,#000 12px,#000 calc(100% - 24px),transparent)}
+
+/* -- 7. Celebraciones -----------------------------------------------
+   Final de lección: título serif grande, el gato y tres tarjetas
+   (XP · tiempo · precisión), cada una con su color y el mismo suelo
+   que los botones. El rótulo va sobre el color con texto que pasa AA
+   en los dos modos: --on-gold (oscuro siempre) sobre oro y verde,
+   --paper sobre ink y rojo. */
+.lc-done .lc-title{font-size:var(--t-xl);line-height:1.15;margin:.2em 0 .1em}
+.lc-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:16px 0 8px}
+.lc-stat{--c:var(--gold);--on-c:var(--on-gold);border:2px solid var(--c);border-radius:var(--r-md);overflow:hidden;
+  background:var(--paper);box-shadow:0 3px 0 var(--c);animation:lc-pop .42s var(--ease) both}
+.lc-stat:nth-child(2){animation-delay:.08s}
+.lc-stat:nth-child(3){animation-delay:.16s}
+.lc-k{display:block;background:var(--c);color:var(--on-c);font-size:.7rem;font-weight:800;letter-spacing:.12em;
+  text-transform:uppercase;padding:5px 4px}
+.lc-v{display:block;padding:10px 4px 12px;font-size:1.4rem;font-weight:800;line-height:1.1;color:var(--ink);font-variant-numeric:tabular-nums}
+.lc-time{--c:var(--ink);--on-c:var(--paper)}
+.lc-acc{--c:var(--success)}
+.lc-miss .lc-xp{--c:var(--line);--on-c:var(--ink)}
+.lc-miss .lc-xp .lc-v{color:var(--muted)}
+.lc-miss .lc-acc{--c:var(--error);--on-c:var(--paper)}
+@keyframes lc-pop{from{opacity:0;transform:translateY(10px) scale(.96)}to{opacity:1;transform:none}}
+/* racha: el día de hoy "se enciende" al llegar */
+.day.today.on i{display:block;animation:lc-flame .7s var(--ease) .25s both}
+@keyframes lc-flame{0%{transform:scale(.2);opacity:0}60%{transform:scale(1.35);opacity:1}100%{transform:none}}
+@media(prefers-reduced-motion:reduce){.lc-stat,.day.today.on i{animation:none}}
+.vesper-reduce-motion .lc-stat,.vesper-reduce-motion .day.today.on i{animation:none}

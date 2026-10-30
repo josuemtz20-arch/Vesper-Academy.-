@@ -208,7 +208,8 @@
     try {
       if (window.matchMedia && matchMedia("(prefers-reduced-motion:reduce)").matches) return;
       n = n || 24;
-      var cols = ["#C9A84C", "#4aa3df", "#2ecc71", "#e67e22", "#a569bd", "#ff6b6b"];
+      /* la paleta de la marca: oros y cremas del lucero, no arcoíris */
+      var cols = ["#C9A84C", "#f3e2ab", "#dcc173", "#f5f2eb", "#a8843d", "#e9d39a"];
       var box = document.createElement("div"); box.className = "confetti";
       var html = "", i;
       for (i = 0; i < n; i++) {
@@ -2436,7 +2437,7 @@
 
   /* ---------- EXERCISES ---------- */
   function renderExercise() {
-    if (exIdx === 0) { combo = 0; maxCombo = 0; }   /* arranque/reintento: combo a cero */
+    if (exIdx === 0) { combo = 0; maxCombo = 0; runT0 = Date.now(); }   /* arranque/reintento: combo y reloj a cero */
     var total = lesson.exercises.length;
     var pct = 22 + Math.round(58 * (exIdx / total));
     var ex = lesson.exercises[exIdx];
@@ -2452,6 +2453,36 @@
     else if (ex.type === "find_error") renderFindError(ex, pct, total);
     else if (ex.type === "speak") renderSpeak(ex, pct, total);
     else advance();
+  }
+  /* la tarjeta "Tiempo" del final mide la ronda desde el primer ejercicio */
+  var runT0 = 0;
+  function fmtRun() {
+    var secs = runT0 ? Math.max(1, Math.round((Date.now() - runT0) / 1000)) : 0;
+    return Math.floor(secs / 60) + ":" + ("0" + (secs % 60)).slice(-2);
+  }
+  /* las tres tarjetas del final: XP · tiempo · precisión. Los números se
+     cuentan hacia arriba (countUp) salvo con movimiento reducido. */
+  function statTiles(xp, pct) {
+    return '<div class="lc-stats' + (xp == null ? ' lc-miss' : '') + '">'
+      + '<div class="lc-stat lc-xp"><span class="lc-k">XP</span><b class="lc-v"' + (xp != null ? ' data-count="' + xp + '" data-pre="+"' : '') + '>' + (xp != null ? '+' + xp : '&mdash;') + '</b></div>'
+      + '<div class="lc-stat lc-time"><span class="lc-k">Tiempo</span><b class="lc-v">' + fmtRun() + '</b></div>'
+      + '<div class="lc-stat lc-acc"><span class="lc-k">Precisión</span><b class="lc-v" data-count="' + pct + '" data-post="%">' + pct + '%</b></div>'
+      + '</div>';
+  }
+  function countUp() {
+    if (reduceMotion()) return;
+    each(".lc-v[data-count]", function (el) {
+      var to = +el.getAttribute("data-count"), pre = el.getAttribute("data-pre") || "", post = el.getAttribute("data-post") || "";
+      var t0 = null, dur = 700;
+      function step(t) {
+        if (t0 == null) t0 = t;
+        var k = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - k, 3);
+        el.textContent = pre + Math.round(to * e) + post;
+        if (k < 1) requestAnimationFrame(step);
+      }
+      el.textContent = pre + "0" + post;
+      requestAnimationFrame(step);
+    });
   }
   function advance() {
     /* punto único: results[exIdx] ya está fijado por el renderer. Actualiza combo
@@ -3179,7 +3210,8 @@
     var boost = (window.VESPER_ECONOMY && VESPER_ECONOMY.consumeXpBoost) ? VESPER_ECONOMY.consumeXpBoost() : 0;
     if (boost > 1) earnedXp = Math.round(earnedXp * boost);
     track("lesson_complete", { id: lesson.lessonId, level: lesson.level, pct: pct, type: lesson.srsReview ? "srs" : (lesson.isReview ? "review" : "lesson") });
-    if (perfect) { burstConfetti(40); sfx("fanfare"); } else { sfx("complete"); }
+    /* toda lección superada se celebra; la perfecta, con más */
+    if (perfect) { burstConfetti(44); sfx("fanfare"); } else { burstConfetti(22); sfx("complete"); }
     if (PATH && PATH.setScore && lesson.lessonId) PATH.setScore(lesson.lessonId, pct);
     /* Registro central de la calificación de la lección (solo superadas, para
        no llenar el panel de intentos abandonados). No debe romper la pantalla.
@@ -3199,26 +3231,28 @@
     var head = lesson.srsReview
       ? "Repaso completado"
       : (lesson.isReview
-          ? (pct >= 80 ? "Repaso superado!" : "Sigue practicando")
-          : (perfect ? "Leccion perfecta!" : "Buen trabajo!"));
-    show('<div class="wrap">' + topbar(86) + '<div class="card center">'
-      + mascot((perfect || (lesson.isReview && pct >= 80)) ? "milestone" : "correct", head)
-      + '<h1>+' + earnedXp + ' XP</h1>'
-      + (comboBonus > 0 ? '<div class="xp-bonus">' + ic('flame') + ' +' + comboBonus + ' XP por combo de x' + maxCombo + '</div>' : '')
-      + '<p class="muted">' + correct + ' de ' + total + ' correctos &middot; ' + pct + '%</p>'
-      + '<div class="xpbar"><div class="xpfill" style="width:' + pct + '%"></div></div>'
+          ? (pct >= 80 ? "¡Repaso superado!" : "Sigue practicando")
+          : (perfect ? "¡Lección perfecta!" : "¡Lección completada!"));
+    var cheer = perfect ? "Ni un solo error. Brillas." : "Un paso más en tu camino.";
+    show('<div class="wrap lc-done">' + topbar(100) + '<div class="card center">'
+      + mascot((perfect || (lesson.isReview && pct >= 80)) ? "milestone" : "correct", cheer)
+      + '<h1 class="lc-title">' + head + '</h1>'
+      + statTiles(earnedXp, pct)
+      + (comboBonus > 0 ? '<div class="xp-bonus">' + ic('flame') + ' +' + comboBonus + ' XP por ' + maxCombo + ' seguidas</div>' : '')
+      + '<p class="muted">' + correct + ' de ' + total + ' correctos</p>'
       + '<button class="btn btn-gold" id="cont">Continuar</button></div></div>');
+    countUp();
     byId("cont").onclick = renderStreak;
   }
 
   /* No alcanzó el umbral: no cuenta como superada (sin XP ni desbloqueo).
      Ofrece reintentar la misma lección desde el primer ejercicio. */
   function renderRetry(correct, total, pct) {
-    show('<div class="wrap">' + topbar(86) + '<div class="card center">'
-      + mascot("incorrect", "Casi! Repasa y vuelve a intentarlo.")
-      + '<h1>' + pct + '%</h1>'
+    show('<div class="wrap lc-done">' + topbar(86) + '<div class="card center">'
+      + mascot("incorrect", "¡Casi! Repasa y vuelve a intentarlo.")
+      + '<h1 class="lc-title">Te faltó poco</h1>'
+      + statTiles(null, pct)
       + '<p class="muted">' + correct + ' de ' + total + ' correctos &middot; necesitas ' + PASS_PCT + '% para continuar</p>'
-      + '<div class="xpbar"><div class="xpfill" style="width:' + pct + '%;background:var(--error)"></div></div>'
       + '<button class="btn btn-gold" id="retry">Reintentar</button>'
       + '<button class="btn btn-ghost" id="backHome">Ver todas las lecciones</button></div></div>');
     byId("retry").onclick = function () { track("lesson_retry", { id: lesson.lessonId, level: lesson.level, pct: pct }); exIdx = 0; results = []; earnedXp = 0; renderExercise(); };
