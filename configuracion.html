@@ -82,6 +82,16 @@
   .seg button[aria-checked="true"],.seg button[aria-pressed="true"]{border-color:var(--gold-deep,#a8843d);border-width:2px;background:var(--gold-tint)}
   .seg button[aria-checked="true"] .chk,.seg button[aria-pressed="true"] .chk{opacity:1}
   .seg button .chk{margin-left:auto;color:var(--success);opacity:0;font-weight:700;flex:none}
+  /* Tono: tarjeta vertical con el retrato de Vesper arriba */
+  #seg-tone{grid-template-columns:repeat(2,minmax(0,1fr))}
+  #seg-tone button{position:relative;flex-direction:column;align-items:center;text-align:center;gap:8px;padding:14px 10px 13px}
+  #seg-tone button .em{width:64px;height:64px}
+  #seg-tone button .em img{width:64px;height:64px;border-radius:50%;display:block;box-shadow:0 3px 10px rgba(27,27,47,.18);transition:transform .15s ease}
+  #seg-tone button[aria-checked="true"] .em img{box-shadow:0 0 0 3px var(--paper),0 0 0 5px var(--gold-deep,#a8843d),0 4px 12px rgba(27,27,47,.2);transform:scale(1.05)}
+  #seg-tone button .chk{position:absolute;top:8px;right:11px;margin:0}
+  #seg-tone button .d{margin-top:2px}
+  #seg-tone button:last-child:nth-child(odd){grid-column:1/-1;justify-self:center;width:calc(50% - 4px)}
+  @media(prefers-reduced-motion:reduce){#seg-tone button .em img{transition:none}}
 
   /* compact chips (focus areas) */
   .chips{display:flex;flex-wrap:wrap;gap:9px}
@@ -354,6 +364,11 @@
 
   /* ---------- builders de controles ---------- */
   function optIc(id) { return (window.VESPER_OPT && VESPER_OPT.get) ? VESPER_OPT.get(id) : ""; }
+  /* Tono: retratos de Vesper en vez de iconos de línea (2026-10-30). El dueño
+     veía los glifos "demasiado simples"; eligió la propuesta A de Higgsfield:
+     el mismo gato, con un gesto y un objeto por personalidad. */
+  var TONE_ART = { friendly: 1, professional: 1, motivating: 1, fun: 1, strict: 1, socratic: 1, zen: 1 };
+  function toneArt(id) { return '<img src="assets/images/persona/tone_' + id + '.webp" alt="" width="64" height="64" decoding="async">'; }
   function radioGroup(hostId, order, dict, current, onPick) {
     var host = $(hostId); if (!host) return;
     var hasCurrent = order.indexOf(current) >= 0;
@@ -363,7 +378,7 @@
       /* roving tabindex: solo un radio por grupo es tabbable (el activo, o el 1ro) */
       var tab = (on || (!hasCurrent && i === 0)) ? "0" : "-1";
       return '<button type="button" role="radio" aria-checked="' + on + '" tabindex="' + tab + '" data-id="' + id + '">'
-        + '<span class="em" aria-hidden="true">' + optIc(id) + '</span>'
+        + '<span class="em" aria-hidden="true">' + ((hostId === "seg-tone" && TONE_ART[id]) ? toneArt(id) : optIc(id)) + '</span>'
         + '<span class="t">' + o.label + '</span>'
         + '<span class="chk" aria-hidden="true">✓</span></button>';
     }).join("");
@@ -465,7 +480,8 @@
   var DESC = {
     tone: { friendly: "Cálido y cercano, como un buen amigo.", professional: "Claro, preciso y enfocado.",
       motivating: "Te empuja a dar lo mejor con energía.", fun: "Con humor y un aire de juego.",
-      strict: "Exigente; no deja pasar errores." },
+      strict: "No te deja pasar ni un error.", socratic: "Te guía con preguntas hasta que lo descubres.",
+      zen: "Calmado y paciente; sin prisa ni presión." },
     teaching: { stepbystep: "En pasos pequeños y ordenados.", immersive: "Casi todo en inglés, por contexto.",
       conversational: "Aprendes conversando, no con teoría.", errorbased: "Corrige y practica tus errores típicos." },
     langMix: { en: "Vesper habla solo en inglés.", en_es: "Inglés, con apoyo en español cuando cueste.",

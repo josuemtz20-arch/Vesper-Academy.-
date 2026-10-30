@@ -295,25 +295,26 @@
         + '<span class="hstat__tx"><span class="hstat__v">' + st.shields + '</span><span class="hstat__l">Escudos</span></span></div>';
     }
     var idLine = info.band
-      ? '<span class="hub-rank">Tu nivel · ' + esc(info.band) + (info.bandTag ? ' ' + esc(info.bandTag) : '') + '</span>'
+      ? '<span class="hub-lvl">Nivel ' + esc(info.band) + (info.bandTag ? ' · ' + esc(info.bandTag) : '') + '</span>'
       : '<p class="hub-sub">Elige tu aventura, paso a paso.</p>';
     var hv = currentLook();   /* su Vesper de verdad, para el botón del guardarropa */
-    return '<header class="hub-hero">'
+    /* Cabecera ligera (2026-10-30). El dueño: "está muy cargada, la gente no
+       va a entender cómo funciona". Tenía saludo + gato + cuatro botones +
+       píldora de nivel + chip de nube + tres tarjetas: diez cosas antes de la
+       lección. Ahora son tres renglones. Lo que se fue no se perdió:
+       el chat ya flota abajo a la derecha, Ajustes vive en el dock, y el
+       guardarropa ES el retrato (con su pincel, para que se lea que se toca).
+       La nube calla cuando todo va bien: el chip sólo se ve si hay problema. */
+    return '<header class="hub-hero hub-hero--lite">'
       + '<div class="hub-hero__top">'
-      + '<div class="hub-hero__greet">' + mascot("welcome", false, "sm")
-      + '<div class="hub-hero__id"><h1 class="hub-hello">' + esc(hello) + '</h1>' + idLine + '</div></div>'
-      + '<div class="hub-actions">'
+      + '<a class="hub-me" href="configuracion.html#apariencia" aria-label="Vestir a Vesper" title="Vestir a Vesper">'
+      + '<img src="' + hv.src + '" alt="" decoding="async"' + (hv.animal ? '' : ' class="is-tinted"') + '>'
+      + '<span class="hub-me__pen" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="m13.5 6.5 4 4"/></svg></span></a>'
+      + '<div class="hub-hero__id"><h1 class="hub-hello">' + esc(hello) + '</h1>'
+      + '<div class="hub-idrow">' + idLine + '<span class="hub-sync" id="syncSlot"></span></div></div>'
       + '<button class="hub-ic" id="searchToggle" type="button" aria-label="Buscar lecciones" aria-controls="hubSearch" aria-expanded="false" title="Buscar">' + HUB_ICN.search + '</button>'
-      + '<a class="hub-ic" href="chat.html" aria-label="Habla con Vesper" title="Habla con Vesper">' + HUB_ICN.chat + '</a>'
-      /* Vestir a Vesper tenía UNA sola puerta: este engranaje rotulado
-         "Configuración", que nadie asocia con vestir al gato. Ahora hay un
-         botón propio con su retrato de verdad, justo donde el alumno lo mira. */
-      + '<a class="hub-ic hub-ic--cat" href="configuracion.html#apariencia" aria-label="Vestir a Vesper" title="Vestir a Vesper">'
-      + '<img src="' + hv.src + '" alt="" decoding="async"' + (hv.animal ? '' : ' class="is-tinted"') + '></a>'
-      + '<a class="hub-ic" href="configuracion.html" aria-label="Configuración" title="Configuración">' + HUB_ICN.gear + '</a>'
-      + '</div></div>'
+      + '</div>'
       + '<div class="hub-stats3">' + tiles + '</div>'
-      + '<div class="hub-sync" id="syncSlot"></div>'
       + '</header>';
   }
 
@@ -740,6 +741,7 @@
       } else { avatar.style.transition = "none"; place(cur); }
     }
     map.removeAttribute("data-prev");
+    placeSideTabs(map, pts);
     placeProps(map);
     applyParallax();                                  // estado inicial de la profundidad por scroll
   }
@@ -767,7 +769,7 @@
     }
     function hit(a, b) { return a.l < b.r && a.r > b.l && a.t < b.b && a.b > b.t; }
     var obst = [];
-    var els = map.querySelectorAll(".wtitle, .wlabel, .wcheck, .wbtn, .wstars, .wstart, .wavatar");
+    var els = map.querySelectorAll(".wtitle, .wlabel, .wcheck, .wbtn, .wstars, .wstart, .wavatar, .wtab");
     for (i = 0; i < els.length; i++) if (els[i].offsetParent) obst.push(rel(els[i]));
     var placed = [];
     var STEPS = [0, 14, -14, 28, -28, 42, -42, 56, -56, 70, -70, 84, -84, 100, -100, 120, -120, 140, -140];
@@ -839,24 +841,23 @@
       + '</section>';
   }
 
+  /* Selector de mundos en UNA fila de seis fichas (2026-10-30). Antes era
+     encabezado + subtítulo + contador + cinta con scroll lateral + botón
+     "Ver los N mundos que faltan", y justo debajo el banner repetía el
+     nombre del mundo. El dueño: "tiene demasiadas cosas, la gente se va a
+     confundir". Ahora cada ficha es sólo su código y su avance; el nombre
+     lo dice el banner, y los bloqueados son un candado pequeño, no una
+     tarjeta que grita "Bloqueado" cinco veces. */
   function worldsRibbon(built, selLevel) {
-    var lockSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="10.7" width="14" height="9" rx="2.2"/><path d="M8 10.7V7.7a4 4 0 0 1 8 0v3"/></svg>';
+    var lockSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="10.7" width="14" height="9" rx="2.2"/><path d="M8 10.7V7.7a4 4 0 0 1 8 0v3"/></svg>';
     var chkSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.6l4.6 4.6L19 7.4"/></svg>';
-    /* Quien empieza veía SEIS mundos de los que CINCO decían "Bloqueado",
-       antes siquiera de ver algo que pudiera tocar. Por defecto mostramos
-       sólo los mundos a los que ya puede entrar; el resto, tras un botón. */
-    var levels = PATH.LEVELS.filter(function (lv) {
-      return _worldsExpanded || PATH.regionUnlocked(lv, built) || lv === selLevel;
-    });
-    _worldsLockedN = PATH.LEVELS.length - levels.length;
-    var html = levels.map(function (lv) {
+    var html = PATH.LEVELS.map(function (lv) {
       var pr = PATH.levelProgress(lv, built), t = WORLD_THEME[lv] || {};
       var nm = WORLD_SHORT[lv] || t.worldName || lv, tag = WORLD_TAG[lv] || "";
       var done = pr.done, total = pr.total, pct = pr.pct, complete = total > 0 && done >= total;
       /* desbloqueado si: A1, ya venciste al jefe del mundo anterior, este mundo ya
          tiene avance propio (desbloqueo suave), o es el mundo seleccionado. */
       var reachable = PATH.regionUnlocked(lv, built) || lv === selLevel;
-      /* el acento del mundo (igual que banner/mapa) da identidad a cada tarjeta */
       var vars = '--w-accent:' + (t.accent || '#c5a059')
         + ';--w-accent-soft:' + (t.accentSoft || 'var(--gold-tint)')
         + ';--w-glow:' + (t.glow || 'rgba(197,160,89,.30)')
@@ -865,39 +866,24 @@
       if (!reachable) {
         return '<button class="world locked" type="button" data-locked-world="1" style="' + vars + '"'
           + ' aria-label="Mundo ' + lv + ', ' + esc(nm) + ', ' + esc(tag) + '. Bloqueado: vence al guardián del mundo anterior para entrar.">'
-          + ring + '<span class="w-nm">' + esc(nm) + '</span><span class="w-pc">Bloqueado</span>'
-          + '<span class="w-lk">' + lockSvg + '</span></button>';
+          + ring + '<span class="w-lk">' + lockSvg + '</span></button>';
       }
       var sel = lv === selLevel;
       var stateTxt = complete ? 'Dominado, 100% completado'
         : (done > 0 ? done + ' de ' + total + ' lecciones, ' + pct + ' por ciento'
                     : total + ' lecciones, sin empezar');
-      var pcLine = complete ? '<span class="w-pc">Dominado</span>' : '<span class="w-pc">' + done + '/' + total + '</span>';
-      var doneBadge = complete ? '<span class="w-done">' + chkSvg + '</span>' : '';
+      var pcLine = complete ? '<span class="w-done">' + chkSvg + '</span>' : '<span class="w-pc">' + done + '/' + total + '</span>';
       return '<button class="world' + (sel ? ' on' : '') + (complete ? ' complete' : '') + '" type="button" data-lvl="' + lv + '" style="' + vars + '"'
         + (sel ? ' aria-current="true"' : '')
         + ' aria-label="Mundo ' + lv + ', ' + esc(nm) + ', ' + esc(tag) + '. ' + stateTxt + (sel ? '. Seleccionado' : '') + '.">'
-        + ring + '<span class="w-nm">' + esc(nm) + '</span>' + pcLine + doneBadge + '</button>';
+        + ring + pcLine + '</button>';
     }).join("");
-    return '<div class="worlds" role="group" aria-label="Mundos: niveles A1 a C2">' + html + '</div>';
+    return '<div class="worlds worlds--lite" role="group" aria-label="Mundos: niveles A1 a C2">' + html + '</div>';
   }
 
-  /* envoltura con encabezado de sección para la cinta de mundos */
   function worldsSection(built, selLevel) {
-    var totalDone = Object.keys(built.completed || {}).length;
-    var totalAll = (built.order || []).length;
-    var ribbon = worldsRibbon(built, selLevel);   /* fija _worldsLockedN */
-    var moreWorlds = (_worldsLockedN > 0)
-      ? '<button class="worlds-more" type="button" id="worldsMore" aria-expanded="false">'
-        + 'Ver los ' + _worldsLockedN + ' mundos que faltan</button>'
-      : "";
-    return '<section class="worlds-sec" aria-label="Selección de mundo">'
-      + '<div class="worlds-sec__head"><div>'
-      + '<h2 class="worlds-sec__ttl">Tu travesía</h2>'
-      + '<p class="worlds-sec__sub">Seis mundos, de principiante a maestría</p></div>'
-      + '<span class="worlds-sec__meta"><span class="worlds-sec__big">' + totalDone + '</span>'
-      + '<span class="worlds-sec__small">/ ' + totalAll + ' lecciones</span></span></div>'
-      + ribbon + moreWorlds + '</section>';
+    return '<section class="worlds-sec worlds-sec--lite" aria-label="Selección de mundo">'
+      + worldsRibbon(built, selLevel) + '</section>';
   }
 
   /* mapa: id de lección -> índice de parada en el render actual (para animar al avatar);
@@ -905,8 +891,6 @@
   var TRAIL_STOPS = {}, _indexFirst = true, AVATAR_LESSON = null;
   /* ¿el sendero muestra el mundo entero o sólo hasta donde llega la persona? */
   var _mapExpanded = false;
-  /* ¿la cinta muestra los seis mundos o sólo los alcanzables? */
-  var _worldsExpanded = false, _worldsLockedN = 0;
 
   function nodeHtml(lid, built, currentId, dx, stop) {
     var l = L[lid]; if (!l) return "";
@@ -1158,7 +1142,7 @@
       + '<div class="wavatar' + (pj.animal ? ' has-pelaje' : '') + '" data-pelaje="' + pj.pelaje + '" aria-hidden="true">'
       + '<img class="wcat" src="' + pj.src + '" alt="" decoding="async">'
       + '<span class="wacc">' + pj.svg + '</span><span class="wfx" aria-hidden="true"></span></div>'
-      + ambLayer(t.mapN || 3, true) + startPennant + parts
+      + ambLayer(t.mapN || 3, true) + startPennant + parts + sideTabsHtml(selLevel, si)
       + '</div></div></div>';
     /* el botón vive FUERA de .wmap: no lleva data-stop y no entra en la medición */
     var moreBtn = hiddenN > 0
@@ -1166,7 +1150,7 @@
         + 'Ver las ' + hiddenN + ' lecciones restantes de este mundo'
         + '<span class="wmore__sub">Se desbloquean conforme avanzas</span></button></div>'
       : "";
-    return banner + denEntryHtml(selLevel) + scene + moreBtn;
+    return banner + scene + moreBtn;
   }
 
   /* ============================================================
@@ -1321,39 +1305,152 @@
     return { done: done, total: total, pct: total ? Math.round(100 * done / total) : 0 };
   }
 
-  /* botón de acceso al recinto, bajo el banner del mundo */
-  function denEntryHtml(selLevel) {
-    var d = densData()[selLevel]; if (!d || !d.branches || !d.branches.length) return "";
-    var pr = denProgress(d);
-    var arrow = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6l6 6-6 6"/></svg>';
-    return '<button class="branch den-enter" type="button" data-den="' + esc(selLevel) + '" style="margin-left:0;width:100%"'
-      + ' aria-label="Explorar el vocabulario de ' + esc(d.name) + '">'
-      + '<span class="branch__ic">' + denEmblemImg(selLevel, d.structure) + '</span>'
-      + '<span class="branch__bd"><span class="branch__nm">Explorar vocabulario</span>'
-      + '<span class="branch__hint">' + esc(d.name) + ' · tarjetas y actividades</span>'
-      + '<span class="branch__meta"><span class="branch__bar"><i style="width:' + pr.pct + '%"></i></span>'
-      + '<span class="branch__ct">' + pr.done + '/' + pr.total + '</span></span></span>'
-      + '<span class="branch__go">' + arrow + '</span></button>';
+  /* ===== Pestañas a los lados del sendero (2026-10-30) ======================
+     El dueño: Vocabulario y Forja "no siempre ahí", sino como pestañas que se
+     abren a los lados, alojadas en los huecos que deja el camino al curvarse,
+     para que se vean mientras bajas. Antes eran dos botones fijos del dock,
+     más una tarjeta de la Forja y otra de vocabulario arriba del mapa.
+
+     Dónde van: dxFor() hace serpentear el sendero ±64px. Donde un nodo se va
+     lejos a un lado (|dx| ≥ 52) queda libre el borde contrario; ahí se ancla
+     la pestaña, a la altura de ese nodo (paintTrail la coloca con la medida
+     real). Alternan Vocabulario / Forja, con al menos cinco paradas de aire,
+     y placeProps las trata como obstáculo para que el decorado se aparte.
+     Al tocarlas no navegan: abren un cajón desde ese mismo lado con lo que
+     hay dentro, y desde ahí se entra. */
+  var TAB_ART = { forja: "assets/images/map/tab_forja.webp" };
+  function sideTabSlots(nStops) {
+    var out = [], last = -9;
+    for (var k = 1; k < nStops; k++) {
+      var dx = dxFor(k);
+      if (Math.abs(dx) < 52 || k - last < 5) continue;
+      out.push({ at: k, side: dx > 0 ? "l" : "r" }); last = k;
+    }
+    /* sendero corto (mundo recién abierto): una sola parada con algo de curva */
+    if (!out.length && nStops > 1) out.push({ at: 1, side: dxFor(1) > 0 ? "l" : "r" });
+    return out;
+  }
+  function sideTabsHtml(selLevel, nStops) {
+    var d = densData()[selLevel], hasDen = !!(d && d.branches && d.branches.length);
+    var kinds = hasDen ? ["vocab", "forja"] : ["forja"];
+    return sideTabSlots(nStops).map(function (s, i) {
+      var k = kinds[i % kinds.length];
+      var art = k === "vocab" ? denEmblemImg(selLevel, d.structure)
+        : '<img src="' + TAB_ART.forja + '" alt="" loading="lazy" decoding="async" onerror="this.outerHTML=window.__vforjaGlyph">';
+      var lb = k === "vocab" ? "Vocabulario" : "Forja";
+      var aria = k === "vocab" ? "Vocabulario de " + d.name : "La Forja: práctica sin final";
+      return '<button class="wtab wtab--' + s.side + '" type="button" data-tab="' + k + '" data-at="' + s.at + '"'
+        + ' aria-haspopup="dialog" aria-label="' + esc(aria) + '">'
+        + '<span class="wtab__ic">' + art + '</span><span class="wtab__lb">' + lb + '</span></button>';
+    }).join("");
+  }
+  window.__vforjaGlyph = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9h11l3-2h2v4h-2l-3 1v2a3 3 0 0 1-3 3H9a3 3 0 0 1-3-3v-1H4z"/><path d="M8 20h8M12 17v3"/></svg>';
+  /* la pestaña sigue al nodo que la ancla (se llama desde paintTrail) */
+  function placeSideTabs(map, pts) {
+    var tabs = map.querySelectorAll(".wtab[data-at]");
+    for (var i = 0; i < tabs.length; i++) {
+      var p = pts[+tabs[i].getAttribute("data-at")];
+      if (p) tabs[i].style.top = Math.max(0, p[1] - tabs[i].offsetHeight / 2) + "px";
+    }
+  }
+  function forjaSubline() {
+    var FJ = window.VESPER_FORJA;
+    if (!FJ) return "Rondas nuevas cada vez, sin final";
+    var due = FJ.dueCount(), rounds = FJ.roundsToday();
+    if (due > 0) return "Tienes " + due + " ejercicio" + (due === 1 ? "" : "s") + " listo" + (due === 1 ? "" : "s") + " para volver";
+    if (rounds > 0) return "Llevas " + rounds + " ronda" + (rounds === 1 ? "" : "s") + " hoy · récord " + FJ.bestToday() + " aciertos";
+    return "Rondas nuevas cada vez, sin final";
+  }
+  function drawerBody(kind, selLevel) {
+    var go = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13"/><path d="m12 5 7 7-7 7"/></svg>';
+    if (kind === "vocab") {
+      var d = densData()[selLevel], pr = denProgress(d);
+      return '<div class="wdrawer__art">' + denEmblemImg(selLevel, d.structure) + '</div>'
+        + '<span class="wdrawer__ey">Vocabulario</span>'
+        + '<h2 class="wdrawer__t" id="wdrawerT">' + esc(d.name) + '</h2>'
+        + '<p class="wdrawer__p">' + d.branches.length + ' salas con tarjetas y actividades, agrupadas por tema. Entra a la que quieras: no hace falta seguir un orden.</p>'
+        + '<div class="wdrawer__bar" role="img" aria-label="' + pr.done + ' de ' + pr.total + ' tarjetas dominadas"><i style="width:' + pr.pct + '%"></i></div>'
+        + '<p class="wdrawer__ct"><b>' + pr.done + '</b> de ' + pr.total + ' tarjetas dominadas</p>'
+        + '<button class="wdrawer__go" type="button" data-drawer-go="vocab">Explorar vocabulario' + go + '</button>';
+    }
+    var modes = [["escucha", "Escucha"], ["vocab", "Vocabulario"], ["gramatica", "Gramática"]];
+    return '<div class="wdrawer__art"><img src="' + TAB_ART.forja + '" alt="" decoding="async" onerror="this.outerHTML=window.__vforjaGlyph"></div>'
+      + '<span class="wdrawer__ey">Práctica sin final</span>'
+      + '<h2 class="wdrawer__t" id="wdrawerT">La Forja</h2>'
+      + '<p class="wdrawer__p">Cada ronda se arma con ejercicios distintos de todo lo que ya viste. Lo que fallas vuelve pronto; lo que dominas se espacia.</p>'
+      + '<p class="wdrawer__ct">' + esc(forjaSubline()) + '</p>'
+      + '<button class="wdrawer__go" type="button" data-drawer-go="forja">Practicar' + go + '</button>'
+      + '<p class="wdrawer__or">o sólo una destreza:</p>'
+      + '<div class="wdrawer__modes">' + modes.map(function (m) {
+          return '<button type="button" data-drawer-go="forja:' + m[0] + '">' + m[1] + '</button>';
+        }).join("") + '</div>';
+  }
+  var _drawerFrom = null;
+  function openDrawer(kind, side, selLevel, from) {
+    closeDrawer(true);
+    _drawerFrom = from || null;
+    var x = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>';
+    var wrap = document.createElement("div");
+    wrap.className = "wdrawer-veil"; wrap.id = "wdrawer";
+    wrap.setAttribute("style", worldVars(WORLD_THEME[selLevel] || {}));
+    wrap.innerHTML = '<aside class="wdrawer wdrawer--' + side + '" role="dialog" aria-modal="true" aria-labelledby="wdrawerT" data-kind="' + kind + '">'
+      + '<button class="wdrawer__x" type="button" aria-label="Cerrar">' + x + '</button>'
+      + drawerBody(kind, selLevel) + '</aside>';
+    document.body.appendChild(wrap);
+    void wrap.offsetWidth;
+    wrap.classList.add("on");
+    wrap.onclick = function (e) { if (e.target === wrap) closeDrawer(); };
+    wrap.querySelector(".wdrawer__x").onclick = function () { closeDrawer(); };
+    each("#wdrawer [data-drawer-go]", function (b) {
+      b.onclick = function () {
+        var g = b.getAttribute("data-drawer-go");
+        if (g === "vocab") { closeDrawer(true); renderDen(selLevel); }
+        else location.search = "?id=" + encodeURIComponent(g);
+      };
+    });
+    document.addEventListener("keydown", drawerKeys, true);
+    try { wrap.querySelector(".wdrawer__go").focus({ preventScroll: true }); } catch (e) {}
+    track("side_tab_open", { tab: kind, level: selLevel });
+  }
+  function drawerKeys(e) {
+    var w = byId("wdrawer"); if (!w) return;
+    if (e.key === "Escape") { e.preventDefault(); closeDrawer(); return; }
+    if (e.key !== "Tab") return;
+    var f = w.querySelectorAll("button"); if (!f.length) return;
+    var first = f[0], last = f[f.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  }
+  function closeDrawer(instant) {
+    var w = byId("wdrawer"); if (!w) return;
+    document.removeEventListener("keydown", drawerKeys, true);
+    w.id = ""; w.classList.remove("on");
+    if (instant || reduceMotion()) w.remove(); else setTimeout(function () { w.remove(); }, 280);
+    if (_drawerFrom && !instant) try { _drawerFrom.focus({ preventScroll: true }); } catch (e) {}
+    _drawerFrom = null;
+  }
+  function bindSideTabs(selLevel) {
+    each("#wmap .wtab", function (b) {
+      b.onclick = function () {
+        openDrawer(b.getAttribute("data-tab"), b.classList.contains("wtab--r") ? "r" : "l", selLevel, b);
+      };
+    });
   }
 
   /* ---- dock fijo del mapa ----
-     Vocabulario, la Forja y el repaso viven ARRIBA del sendero: quien iba
-     por la lección 12 tenía que subir media página para practicar y volver
-     a bajar. Antes el dock sólo salía con el mapa a la vista y se escondía
-     al volver arriba; ahora está SIEMPRE sobre la barra de pestañas, con
-     Ajustes incluido (el engranaje del saludo quedaba fuera de pantalla
-     en cuanto el hub abre sobre la lección actual, ver jumpToCurrent). */
+     Siempre sobre la barra de pestañas: el repaso (si hay pendientes), volver
+     a mi lección y Ajustes (el engranaje del saludo quedaba fuera de pantalla
+     en cuanto el hub abre sobre la lección actual, ver jumpToCurrent).
+     Vocabulario y Forja salieron de aquí el 2026-10-30: ahora son pestañas
+     en los huecos del sendero (sideTabsHtml). Con tres botones el dock va a
+     la izquierda y deja libre la esquina de la burbuja del chat, que antes
+     tapaba "Ajustes". */
   var DOCK_ICN = {
-    vocab: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3.5" y="5" width="12" height="15" rx="2"/><path d="M8.5 5V4a1.5 1.5 0 0 1 1.5-1.5h8A1.5 1.5 0 0 1 19.5 4v13a1.5 1.5 0 0 1-1.5 1.5h-2.5M7 10h5M7 14h3"/></svg>',
-    forja: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9h11l3-2h2v4h-2l-3 1v2a3 3 0 0 1-3 3H9a3 3 0 0 1-3-3v-1H4z"/><path d="M8 20h8M12 17v3"/></svg>',
     srs: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.4-5.7L4 8.6"/><path d="M4 4v4.6h4.6M12 8v4l3 2"/></svg>',
     me: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.4"/></svg>'
   };
   function dockHtml(selLevel, srsDue) {
-    var d = densData()[selLevel], b = "";
-    if (d && d.branches && d.branches.length)
-      b += '<button type="button" data-dock="vocab" aria-label="Explorar vocabulario">' + DOCK_ICN.vocab + '<span>Vocabulario</span></button>';
-    b += '<button type="button" data-dock="forja" aria-label="La Forja: práctica infinita">' + DOCK_ICN.forja + '<span>Forja</span></button>';
+    var b = "";
     if (srsDue > 0)
       b += '<button type="button" data-dock="srs" aria-label="Repaso de errores, ' + srsDue + ' pendientes">' + DOCK_ICN.srs + '<span>Repaso</span><em>' + srsDue + '</em></button>';
     b += '<button type="button" data-dock="me" aria-label="Ir a mi lección actual en el mapa">' + DOCK_ICN.me + '<span>Mi lección</span></button>';
@@ -1387,9 +1484,7 @@
     each("#wdock [data-dock]", function (b) {
       b.onclick = function () {
         var k = b.getAttribute("data-dock");
-        if (k === "vocab") renderDen(selLevel);
-        else if (k === "forja") location.search = "?id=forja";
-        else if (k === "srs") location.search = "?id=review:srs";
+        if (k === "srs") location.search = "?id=review:srs";
         else if (k === "cfg") location.href = "configuracion.html";
         else {
           jumpToCurrent(true);
@@ -2008,17 +2103,18 @@
       { el: ".hub-stats3", pad: 10,
         title: "Tu racha y tu XP",
         text: "La racha son los días seguidos que practicas; el XP, los puntos que ganas en cada lección. No desbloquean el curso: miden tu constancia (y te consiguen accesorios)." },
-      /* el icono del HUD, no el botón flotante: ese se monta con retardo y
-         entra a opacity:0, así que el foco podría caer sobre un hueco */
-      { el: '.hub-ic[href="chat.html"]', shape: "circle", pad: 10,
+      /* La cabecera ya no tiene icono de chat: queda el botón flotante. Este
+         paseo sólo sale desde «Cómo funciona», mucho después de que el botón
+         haya entrado; si aun así no está, el paso sale centrado. */
+      { el: ".vchat-fab", shape: "circle", pad: 10,
         title: "Puedes hablar conmigo",
-        text: "Aquí se abre el chat. Escríbeme o háblame en voz alta y practicamos inglés de verdad: preguntas, dudas de gramática o una conversación suelta. No hay lección que aprobar." },
-      { el: ".world-banner", pad: 8,
+        text: "Este botón abre el chat. Escríbeme o háblame en voz alta y practicamos inglés de verdad: preguntas, dudas de gramática o una conversación suelta. No hay lección que aprobar." },
+      { el: ".worlds", pad: 8,
         title: "Un mundo = un nivel",
-        text: "Ahora estás en " + wname + ". Hay seis mundos, del más básico al más avanzado, y cada uno tiene su propio paisaje y su color." },
-      { el: ".den-enter", pad: 8,
-        title: "Y el vocabulario, aparte",
-        text: "Además del sendero, cada mundo guarda su vocabulario agrupado por temas, con tarjetas y actividades para repasar palabras. Entra cuando quieras: no hace falta seguir ningún orden." },
+        text: "Ahora estás en " + wname + ". Hay seis mundos, del más básico (A1) al más avanzado (C2); tócalos aquí para cambiar de uno a otro." },
+      { el: ".wtab", pad: 8,
+        title: "Pestañas a los lados del camino",
+        text: "En los huecos del sendero asoman pestañas: Vocabulario (tarjetas por temas) y la Forja (práctica sin final con lo que ya viste). Tócalas cuando quieras; no hace falta seguir ningún orden." },
       { el: ".wbtn.is-current", shape: "circle", pad: 12,
         title: "Aquí estás tú",
         text: "El círculo grande y luminoso es tu lección de ahora. El camino dorado que llega hasta él es lo que ya llevas andado; lo que sigue en gris con el borde punteado todavía no está abierto." },
@@ -2040,8 +2136,7 @@
     return '<div class="tourbar">'
       + '<button class="tourbar__btn" type="button" id="tourGo">'
       + '<span class="tourbar__ic" aria-hidden="true">' + (window.VESPER_ICN ? (VESPER_ICN.compass || VESPER_ICN.star || "") : "") + '</span>'
-      + '<span class="tourbar__tx"><b>Cómo funciona</b>'
-      + '<span>' + (tourSeen() ? "El paseo completo por el mapa" : "Un paseo de un minuto por el mapa") + '</span></span>'
+      + '<span class="tourbar__tx"><b>¿Cómo funciona el mapa?</b></span>'
       + '</button></div>';
   }
   /* No arranques el paseo encima de otra puerta bloqueante: la del nombre
@@ -2137,47 +2232,21 @@
     var heroInfo = { band: heroBand, bandTag: heroBand ? (WORLD_TAG[heroBand] || "") : "" };
     /* la liga ahora vive en el HUD (en lugar de la meta diaria); aquí solo el repaso */
     var srsDue = (window.VESPER_SRS && VESPER_SRS.dueCount) ? VESPER_SRS.dueCount() : 0;
-    var srsIcon = (window.VESPER_ICN ? VESPER_ICN.repaso : "");
-    var srsBanner = srsDue > 0
-      ? '<button class="hub-card srs-banner" id="srsGo" type="button">'
-        + '<span class="hc-ic" aria-hidden="true">' + srsIcon + '</span>'
-        + '<span class="hc-tx"><b>Repaso de errores</b><span>Tienes ' + srsDue + ' ejercicio' + (srsDue === 1 ? "" : "s") + ' por repasar</span></span>'
-        + '<span class="hc-cta">Repasar &rarr;</span></button>'
-      : "";
     var examBanner = '<button class="hub-card" id="examGo" type="button">'
       + '<span class="hc-ic" aria-hidden="true">🎓</span>'
       + '<span class="hc-tx"><b>Examen de nivel</b><span>Evalúa tu dominio de A1 a C2</span></span>'
       + '<span class="hc-cta">Presentar &rarr;</span></button>';
-    /* La Forja: práctica sin final. El subtítulo sale sólo de lecturas
-       baratas de localStorage — construir el corpus aquí costaría un
-       segundo recorrido del banco en cada pintado del hub. */
-    var forjaBanner = "";
-    {
-      var FJ = window.VESPER_FORJA;
-      var fjDue = FJ ? FJ.dueCount() : 0;
-      var fjRounds = FJ ? FJ.roundsToday() : 0;
-      var fjSub = fjDue > 0
-        ? ("Tienes " + fjDue + " ejercicio" + (fjDue === 1 ? "" : "s") + " listo" + (fjDue === 1 ? "" : "s") + " para volver")
-        : (fjRounds > 0
-            ? ("Llevas " + fjRounds + " ronda" + (fjRounds === 1 ? "" : "s") + " hoy · récord " + FJ.bestToday() + " aciertos")
-            : "Rondas nuevas cada vez, sin final");
-      forjaBanner = '<button class="hub-card forja-card" id="forjaGo" type="button" aria-label="La Forja: práctica infinita">'
-        + '<span class="hc-ic" aria-hidden="true">⚒️</span>'
-        + '<span class="hc-tx"><b>La Forja</b><span>' + esc(fjSub) + '</span></span>'
-        + '<span class="hc-cta">Practicar &rarr;</span></button>';
-    }
     /* Orden del hub, de más a menos urgente para quien aprende:
-       1) qué hago ahora  2) repaso pendiente  3) dónde estoy (mundos)
-       4) el mapa  5) todo lo demás. El anuncio del examen de nivel baja
-       al final: es venta, no aprendizaje, y antes era lo segundo que se
-       veía al abrir la página. */
+       1) qué hago ahora  2) dónde estoy (mundos)  3) el mapa  4) todo lo
+       demás. El anuncio del examen de nivel baja al final: es venta, no
+       aprendizaje. Las tarjetas de Repaso y Forja que iban aquí se fueron
+       (2026-10-30): el repaso ya está en el dock con su contador, y la Forja
+       y el vocabulario asoman como pestañas en los huecos del sendero. */
     show('<div class="wrap">'
       + hudHtml(st, dg, hello, heroInfo)
       + nextStepCard(built, selLevel)
-      + tourBarHtml()
-      + srsBanner
-      + forjaBanner
       + worldsSection(built, selLevel)
+      + tourBarHtml()
       + searchUI
       + '<div id="searchResults" class="search-results" aria-live="polite" hidden></div>'
       + '<div id="levelView">' + worldMap(selLevel, built) + '</div>'
@@ -2189,13 +2258,11 @@
 
     bindCta();
     if (_indexFirst) track("hub_view", { level: selLevel });
-    var srsGo = byId("srsGo"); if (srsGo) srsGo.onclick = function () { location.search = "?id=review:srs"; };
-    var forjaGo = byId("forjaGo"); if (forjaGo) forjaGo.onclick = function () { location.search = "?id=forja"; };
     var examGo = byId("examGo"); if (examGo) examGo.onclick = function () { location.search = "?id=exams"; };
     each(".world[data-lvl]", function (b) { b.onclick = function () { _mapExpanded = false; renderIndex(b.getAttribute("data-lvl")); }; });
     each(".world[data-locked-world]", function (b) { b.onclick = function () { toast("Vence al guardián del mundo anterior para desbloquearlo"); }; });
-    each(".den-enter[data-den]", function (b) { b.onclick = function () { renderDen(b.getAttribute("data-den")); }; });
     bindDock(selLevel);
+    bindSideTabs(selLevel);
     each("[data-go]", function (b) { b.onclick = function () { location.search = "?id=" + encodeURIComponent(b.getAttribute("data-go")); }; });
     each("[data-locked]", function (b) { b.onclick = function () { toast("Completa la lección anterior para desbloquear"); }; });
     each("[data-locked-boss]", function (b) { b.onclick = function () { toast("Completa todas las lecciones del mundo para enfrentar al guardián"); }; });
@@ -2204,12 +2271,6 @@
       _mapExpanded = true;
       renderIndex(selLevel);
       announce("Mostrando el mundo completo");
-    };
-    var worldsMore = byId("worldsMore");
-    if (worldsMore) worldsMore.onclick = function () {
-      _worldsExpanded = true;
-      renderIndex(selLevel);
-      announce("Mostrando los seis mundos");
     };
     var tourGo = byId("tourGo");
     if (tourGo) tourGo.onclick = function () {

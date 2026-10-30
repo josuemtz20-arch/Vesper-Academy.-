@@ -2988,3 +2988,156 @@ body:has(#app #verify) #app .card.center{background-image:none}
 
 /* el saludo del mapa, también de puño y letra de Vesper */
 #app .hub-sub{font:700 1.3rem/1.1 var(--hand);color:#f3e2ab;letter-spacing:.005em}
+
+
+/* ================================================================
+   HUB LIGERO (2026-10-30)
+   El dueño, con capturas del celular: la cabecera "está muy cargada,
+   la gente no va a entender cómo funciona"; el selector de mundos
+   "tiene demasiadas cosas"; Vocabulario y Forja no deben estar
+   siempre en el dock sino como pestañas a los lados del sendero.
+   ================================================================ */
+
+/* -- 1. Cabecera: retrato · saludo · buscar, y una tira de cifras -- */
+.hub-hero.hub-hero--lite{display:block;padding:12px 14px}
+.hub-hero--lite .hub-hero__top{display:flex;align-items:center;justify-content:flex-start;gap:12px}
+.hub-me{position:relative;z-index:1;flex:0 0 auto;width:54px;height:54px;border-radius:50%;
+  display:grid;place-items:center;background:rgba(245,242,235,.12);border:2px solid var(--gold,#c5a059);text-decoration:none}
+.hub-me img{width:112%;height:112%;object-fit:contain;border-radius:50%}
+.hub-me img.is-tinted{filter:var(--vc-filter,none)}
+.hub-me__pen{position:absolute;right:-4px;bottom:-4px;width:22px;height:22px;border-radius:50%;
+  display:grid;place-items:center;background:var(--gold,#c5a059);color:#2b2410;box-shadow:0 0 0 2px var(--navy,#1B1B2F)}
+.hub-me__pen svg{width:12px;height:12px}
+.hub-me:focus-visible{outline:2px solid var(--gold);outline-offset:3px}
+.hub-hero--lite .hub-hero__id{display:block;flex:1 1 auto;min-width:0}
+.hub-hero--lite .hub-hello{font-size:1.32rem;overflow-wrap:anywhere}
+.hub-idrow{display:flex;align-items:center;flex-wrap:wrap;gap:2px 10px;margin-top:5px}
+.hub-lvl{font-size:.8rem;font-weight:600;color:rgba(245,242,235,.78)}
+.hub-hero--lite .hub-sub{margin:0}
+.hub-hero--lite .hub-ic{flex:0 0 auto;align-self:flex-start}
+/* la nube calla cuando va bien: sólo avisa si hay algo que hacer */
+.hub-hero--lite .hub-sync{display:inline-flex;margin:0}
+.hub-hero--lite .vsync-chip{background:none;border:0;box-shadow:none;padding:0;min-height:0;
+  color:rgba(245,242,235,.8);font-size:.74rem}
+.hub-hero--lite .vsync-chip.ok{display:none}
+/* cifras en un renglón, sin cajas: icono + número + palabra */
+.hub-hero--lite .hub-stats3{flex-wrap:wrap;gap:6px 0;margin-top:12px;padding-top:10px;border-top:1px solid rgba(245,242,235,.12)}
+.hub-hero--lite .hstat{flex:0 1 auto;gap:6px;padding:0 12px 0 0;background:none;border:0;border-radius:0}
+.hub-hero--lite .hstat ~ .hstat{padding-left:12px;border-left:1px solid rgba(245,242,235,.14)}
+.hub-hero--lite .hstat__ic{width:24px;height:24px;border-radius:50%}
+.hub-hero--lite .hstat__ic svg{width:14px;height:14px}
+.hub-hero--lite .hstat__ic--badge svg{width:20px;height:20px}
+.hub-hero--lite .hstat__tx{flex-direction:row;align-items:baseline;gap:4px}
+.hub-hero--lite .hstat__v{font-size:.98rem}
+.hub-hero--lite .hstat__l{margin:0;font-size:.76rem;font-weight:600;letter-spacing:0;text-transform:none;color:rgba(245,242,235,.72)}
+.hub-hero--lite .hstat__sub{display:none}
+
+/* -- 2. Mundos: seis fichas en una fila, sin scroll ni encabezado -- */
+.worlds-sec--lite{margin:2px 0 0}
+.worlds.worlds--lite{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:6px;
+  overflow:visible;padding:2px 0;margin:0 0 2px;scroll-snap-type:none;-webkit-mask-image:none;mask-image:none}
+.worlds--lite .world{min-width:0;gap:4px;padding:7px 0 6px;border-radius:14px;box-shadow:none}
+.worlds--lite .world::before{left:10px;right:10px;height:3px}
+.worlds--lite .world .w-ring{width:40px;height:40px}
+.worlds--lite .world .w-ring-hole{width:32px;height:32px}
+.worlds--lite .world .w-code{font-size:.8rem}
+.worlds--lite .world .w-pc{font-size:.64rem;line-height:14px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.worlds--lite .world.complete .w-done{position:static;width:14px;height:14px;box-shadow:none}
+.worlds--lite .world.complete .w-done svg{width:9px;height:9px}
+.worlds--lite .world.locked{background:transparent;border-color:transparent}
+.worlds--lite .world.locked .w-ring{opacity:.6}
+.worlds--lite .world .w-lk{position:static;width:14px;height:14px;background:none;color:var(--muted);opacity:1}
+.worlds--lite .world .w-lk svg{width:12px;height:12px}
+
+/* -- 3. "¿Cómo funciona el mapa?": un enlace, no una tarjeta -- */
+.tourbar{display:flex;justify-content:center;margin:0 0 2px}
+.tourbar__btn{width:auto;min-height:44px;gap:8px;padding:6px 12px;background:none;border:0;color:var(--muted)}
+.tourbar__btn:hover{background:none;color:var(--ink)}
+.tourbar__ic{width:26px;height:26px}
+.tourbar__ic svg{width:16px;height:16px}
+.tourbar__tx b{font-size:.86rem;font-weight:600;text-decoration:underline dotted;text-underline-offset:3px}
+
+/* -- 4. Pestañas en los huecos del sendero ----------------------
+   paintTrail fija el top a la altura del nodo que las ancla. En el
+   celular se pegan al borde de la isla como un separador de libro y
+   salen de él al entrar en pantalla (scroll-driven, sin JS); donde
+   el navegador no sabe hacerlo, simplemente ya están fuera. */
+.wmap .wtab{position:absolute;z-index:3;top:0;display:flex;flex-direction:column;align-items:center;gap:5px;
+  width:78px;padding:9px 4px 8px;border:1px solid color-mix(in srgb,var(--w-accent,#c9a84c) 70%,transparent);border-radius:16px;
+  background:linear-gradient(180deg,rgba(40,36,76,.97),rgba(20,18,42,.97));color:#f3e2ab;cursor:pointer;
+  font:700 .62rem/1.1 Inter,system-ui,sans-serif;letter-spacing:.02em;text-align:center;
+  box-shadow:0 8px 22px rgba(8,7,20,.55),0 0 18px var(--w-glow,rgba(201,168,76,.25));
+  -webkit-tap-highlight-color:transparent;transition:filter .15s ease}
+.wmap .wtab--l{left:0}
+.wmap .wtab--r{right:0}
+.wtab__ic{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;overflow:hidden;
+  background:rgba(245,242,235,.08);box-shadow:0 0 0 2px var(--w-accent,#c9a84c),0 0 0 4px rgba(20,18,42,.9)}
+.wtab__ic img{width:100%;height:100%;object-fit:cover}
+.wtab__ic svg{width:26px;height:26px;color:#f3e2ab}
+.wtab__ic.is-svg svg{width:26px;height:26px}
+.wtab__lb{white-space:nowrap}
+.wmap .wtab:hover{filter:brightness(1.12)}
+.wmap .wtab:active{transform:scale(.96)}
+.wmap .wtab:focus-visible{outline:2px solid #f3e2ab;outline-offset:2px}
+@media(max-width:520px){
+  .wmap .wtab--l{left:-11px;border-left:0;border-radius:0 18px 18px 0;padding-left:8px}
+  .wmap .wtab--r{right:-11px;border-right:0;border-radius:18px 0 0 18px;padding-right:8px}
+}
+@supports (animation-timeline: view()){
+  @media (prefers-reduced-motion:no-preference){
+    .wmap .wtab--l{animation:wtab-out-l linear both;animation-timeline:view();animation-range:entry 5% cover 35%}
+    .wmap .wtab--r{animation:wtab-out-r linear both;animation-timeline:view();animation-range:entry 5% cover 35%}
+  }
+}
+@keyframes wtab-out-l{from{transform:translateX(-72%)}to{transform:none}}
+@keyframes wtab-out-r{from{transform:translateX(72%)}to{transform:none}}
+.vesper-reduce-motion .wmap .wtab{animation:none!important}
+
+/* -- 5. El cajón que abre cada pestaña, desde su mismo lado -- */
+.wdrawer-veil{position:fixed;inset:0;z-index:10001;background:rgba(10,9,24,0);transition:background .25s ease}
+.wdrawer-veil.on{background:rgba(10,9,24,.58)}
+.wdrawer{position:absolute;top:0;bottom:0;width:min(340px,86vw);overflow-y:auto;overscroll-behavior:contain;
+  display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:10px;
+  padding:24px 22px calc(28px + env(safe-area-inset-bottom));
+  background:radial-gradient(120% 60% at 50% 0%,color-mix(in srgb,var(--w-accent,#c9a84c) 22%,#232045),#14122a 70%);
+  color:var(--on-night,#f5f2eb);box-shadow:0 0 44px rgba(0,0,0,.55);
+  transition:transform .28s cubic-bezier(.22,.61,.36,1)}
+.wdrawer--l{left:0;border-right:1px solid var(--w-accent,#c9a84c);border-radius:0 24px 24px 0;transform:translateX(-104%)}
+.wdrawer--r{right:0;border-left:1px solid var(--w-accent,#c9a84c);border-radius:24px 0 0 24px;transform:translateX(104%)}
+.wdrawer-veil.on .wdrawer{transform:none}
+.wdrawer__x{position:absolute;top:calc(12px + env(safe-area-inset-top));right:12px;width:44px;height:44px;border-radius:50%;
+  display:grid;place-items:center;border:1px solid rgba(245,242,235,.22);background:rgba(245,242,235,.08);color:#f5f2eb;cursor:pointer}
+.wdrawer--r .wdrawer__x{right:auto;left:12px}
+.wdrawer__x svg{width:18px;height:18px}
+.wdrawer__art{width:112px;height:112px;border-radius:50%;overflow:hidden;display:grid;place-items:center;margin-bottom:6px;
+  background:rgba(245,242,235,.08);box-shadow:0 0 0 3px var(--w-accent,#c9a84c),0 0 0 7px rgba(20,18,42,.85),0 0 34px var(--w-glow,rgba(201,168,76,.35))}
+.wdrawer__art img{width:100%;height:100%;object-fit:cover}
+.wdrawer__art svg{width:56px;height:56px;color:#f3e2ab}
+.wdrawer__ey{font:800 .7rem/1 Inter,system-ui,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:#f3e2ab}
+.wdrawer__t{margin:0;font:700 1.55rem/1.12 "Inria Serif",Georgia,serif;color:#fff}
+.wdrawer__p{margin:0;font-size:.92rem;line-height:1.45;color:rgba(245,242,235,.8)}
+.wdrawer__ct{margin:0;font-size:.84rem;color:rgba(245,242,235,.86)}
+.wdrawer__ct b{color:#f3e2ab}
+.wdrawer__bar{width:100%;height:8px;border-radius:99px;background:rgba(245,242,235,.14);overflow:hidden;margin-top:4px}
+.wdrawer__bar i{display:block;height:100%;min-width:6px;border-radius:inherit;background:linear-gradient(90deg,var(--w-accent,#c9a84c),#f3e2ab)}
+.wdrawer__go{width:100%;min-height:52px;margin-top:8px;display:flex;align-items:center;justify-content:center;gap:8px;
+  border:0;border-radius:14px;cursor:pointer;background:linear-gradient(180deg,#e2c46f,var(--gold,#c5a059));color:var(--on-gold,#2b2410);
+  font:800 1rem/1 Inter,system-ui,sans-serif;box-shadow:0 4px 0 var(--gold-shadow,#8a6d2c)}
+.wdrawer__go svg{width:18px;height:18px}
+.wdrawer__go:active{transform:translateY(3px);box-shadow:0 1px 0 var(--gold-shadow,#8a6d2c)}
+.wdrawer__or{margin:6px 0 0;font-size:.8rem;color:rgba(245,242,235,.65)}
+.wdrawer__modes{display:flex;flex-wrap:wrap;gap:8px}
+.wdrawer__modes button{min-height:44px;padding:0 14px;border-radius:999px;cursor:pointer;
+  border:1px solid rgba(245,242,235,.24);background:rgba(245,242,235,.07);color:#f5f2eb;font:600 .86rem/1 Inter,system-ui,sans-serif}
+.wdrawer__modes button:hover{border-color:var(--w-accent,#c9a84c)}
+.wdrawer button:focus-visible{outline:2px solid #f3e2ab;outline-offset:2px}
+@media(prefers-reduced-motion:reduce){.wdrawer,.wdrawer-veil{transition:none}}
+.vesper-reduce-motion .wdrawer,.vesper-reduce-motion .wdrawer-veil{transition:none}
+
+/* -- 6. Dock con tres botones, a la izquierda: la esquina derecha
+   es de la burbuja del chat, que antes tapaba "Ajustes" -- */
+@media(max-width:767px){
+  .wdock{left:12px;right:auto;max-width:calc(100vw - 100px);transform:translate(0,24px)}
+  .wdock.on{transform:none}
+  .wdock button{flex:0 0 auto;min-width:66px;padding:6px 8px}
+}
