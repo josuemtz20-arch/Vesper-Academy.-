@@ -14,7 +14,7 @@
    ============================================================ */
 "use strict";
 
-var CACHE_VERSION = "vesper-v101-5f6e57ac";
+var CACHE_VERSION = "vesper-v101-5e14f831";
 var CORE = [
   /* Vesper Engine shell */
   "vesper_engine.html",
@@ -86,7 +86,7 @@ var CORE = [
   "assets/images/mascot/skins/calico.png",
   "assets/images/mascot/skins/lion.png",
   "assets/images/mascot/skins/cosmic.png",
-  "assets/images/mascot/skins/dragon.png",
+  "assets/images/mascot/skins/flame.png",
   /* iconos compartidos */
   "assets/images/va_isotype.svg",
   "assets/images/app_icon_192.png",

@@ -57,7 +57,7 @@ window.VESPER_COSMETICS = (function () {
     calico:  { type: "lessons", n: 50 },
     lion:    { type: "lessons", n: 100 },
     cosmic:  { type: "xp", n: 3000 },
-    dragon:  { type: "achievement", id: "streak-30" }
+    flame:   { type: "achievement", id: "streak-30" }
   };
 
   /* nombres cortos de mundo para los textos de requisito */
