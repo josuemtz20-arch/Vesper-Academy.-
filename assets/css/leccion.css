@@ -2930,6 +2930,8 @@ body:has(#app #verify) #app .card.center{background-image:none}
 /* K.O. */
 .duel-foe,.duel-me{transition:transform .7s .45s cubic-bezier(.5,0,.7,1),filter .7s .45s,opacity .7s .45s}
 .ko-foe .duel-foe{animation:none;transform:translateY(34px) rotate(24deg) scale(.86);filter:grayscale(1) brightness(.55);opacity:.75}
+/* guardián animado: el clip ya muestra la caída; solo se hunde un poco al final */
+.ko-foe .duel-foe.g-anim{transform:translateY(10px) scale(.94);filter:brightness(.8);opacity:1;transition-delay:1.2s}
 .ko-me .duel-me{animation:none;transform:translateY(16px) rotate(-82deg);filter:grayscale(1) brightness(.6);opacity:.8}
 .ko-foe .duel-say,.ko-me .duel-say{z-index:6}
 .duel-stamp{position:absolute;z-index:6;left:50%;top:54%;opacity:0;pointer-events:none;white-space:nowrap;

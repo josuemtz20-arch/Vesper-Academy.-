@@ -545,9 +545,50 @@
   };
   /* el onerror corre en scope global (este script es un IIFE): se expone en window; respaldo = bossArt */
   window.__vbossFallback = function (img, lv) { try { if (img) img.outerHTML = bossArt(lv); } catch (e) {} };
-  function bossPortrait(lv) {
+  /* guardianes animados (IA → WebP en assets/images/guardians/anim/): reposo en
+     bucle; ataque/golpe/caída duran GUARD_CLIP_MS y luego vuelven al reposo (o
+     al cuadro fijo "down" tras caer). Si el WebP falla, cae al PNG fijo. */
+  var GUARD_ANIM = { A1: 1, A2: 1, B1: 1, B2: 1, C1: 1, C2: 1 };
+  var GUARD_CLIP_MS = 1500;
+  function guardSrc(lv, act) { return "assets/images/guardians/anim/" + lv.toLowerCase() + "_" + act + ".webp"; }
+  function guardAnimated(lv) { return !!GUARD_ANIM[lv] && !reduceMotion(); }
+  window.__vguardFallback = function (img, lv) {
+    try { img.onerror = function () { window.__vbossFallback(img, lv); }; img.removeAttribute("data-anim"); img.src = BOSS_PORTRAIT[lv]; } catch (e) {}
+  };
+  /* Chrome comparte la animación entre todos los <img> con la misma URL, así
+     que reasignar el src no la reinicia: cada clip se baja una vez como blob y
+     se reproduce con un blob: URL nuevo, que siempre arranca en el cuadro 1. */
+  var guardBlobs = {};
+  function guardPreload(lv) {
+    if (!guardAnimated(lv) || !window.fetch || !window.URL || !URL.createObjectURL) return;
+    ["attack", "hurt", "fall"].forEach(function (act) {
+      var u = guardSrc(lv, act);
+      if (guardBlobs[u]) return;
+      guardBlobs[u] = "pending";
+      fetch(u).then(function (r) { if (!r.ok) throw new Error(r.status); return r.blob(); })
+        .then(function (b) { guardBlobs[u] = b; })
+        .catch(function () { delete guardBlobs[u]; });
+    });
+  }
+  var guardTimer = 0, guardUrl = "";
+  function guardPlay(img, lv, act) {
+    var blob = guardBlobs[guardSrc(lv, act)];
+    if (!img || !img.hasAttribute("data-anim") || !blob || blob === "pending") return;
+    clearTimeout(guardTimer);
+    if (guardUrl) URL.revokeObjectURL(guardUrl);
+    guardUrl = URL.createObjectURL(blob);
+    img.src = guardUrl;
+    guardTimer = setTimeout(function () {
+      if (img.isConnected) img.src = guardSrc(lv, act === "fall" ? "down" : "idle");
+    }, GUARD_CLIP_MS);
+  }
+  /* anim=true: el duelo y la portada VS usan el reposo animado; el mapa no */
+  function bossPortrait(lv, anim) {
     var src = BOSS_PORTRAIT[lv];
     if (!src) return bossArt(lv);
+    if (anim && guardAnimated(lv)) {
+      return '<img class="boss-photo" data-anim src="' + guardSrc(lv, "idle") + '" alt="" decoding="async" onerror="window.__vguardFallback(this,\'' + lv + '\')">';
+    }
     return '<img class="boss-photo" src="' + src + '" alt="" loading="lazy" decoding="async" onerror="window.__vbossFallback(this,\'' + lv + '\')">';
   }
   /* style inline con las 3 variables del mundo (acento/soft/glow) */
@@ -2613,6 +2654,8 @@
     var hp = Math.round(100 * (b.need - b.hits) / b.need);
     var me = currentLook();
     var bg = t.file ? 'background-image:linear-gradient(180deg,rgba(14,12,31,.2),rgba(14,12,31,.78)),url(' + t.file + ');' : "";
+    var anim = guardAnimated(lv);
+    guardPreload(lv);
     return '<section class="duel" id="duel" data-lv="' + lv + '" style="' + worldVars(t) + '" aria-label="Duelo contra ' + esc(bm.name) + '">'
       + '<div class="duel-hud">'
       +   '<div class="dh dh-me"><span class="dh-nm">Vesper</span><span class="dh-hearts" role="img" aria-label="Vesper aguanta ' + (b.lives - b.misses) + ' errores más">' + duelHearts(b) + '</span></div>'
@@ -2622,7 +2665,7 @@
       + '<div class="duel-stage" style="' + bg + '">'
       +   '<div class="duel-fighter duel-me" aria-hidden="true"><img src="' + esc(me.src || BOSS_AVATAR) + '" alt="" decoding="async" onerror="this.onerror=null;this.src=\'' + BOSS_AVATAR + '\'"></div>'
       +   '<div class="duel-bolt" aria-hidden="true"></div><div class="duel-wave" aria-hidden="true"></div>'
-      +   '<div class="duel-fighter duel-foe" aria-hidden="true">' + bossPortrait(lv) + '</div>'
+      +   '<div class="duel-fighter duel-foe' + (anim ? ' g-anim' : '') + '" aria-hidden="true">' + bossPortrait(lv, true) + '</div>'
       +   '<p class="duel-say" aria-hidden="true">' + esc(duelSay(b)) + '</p>'
       +   '<div class="duel-dmg" aria-hidden="true"></div><div class="duel-stamp" aria-hidden="true"></div>'
       + '</div></section>';
@@ -2637,10 +2680,13 @@
     var ok = results[exIdx], b = battleState(), rm = reduceMotion();
     var q = function (sel) { return d.querySelector(sel); };
     var say = q(".duel-say"), dmg = q(".duel-dmg"), stamp = q(".duel-stamp");
+    var foeImg = q(".duel-foe img[data-anim]"), lv = lesson.bossLevel;
     d.classList.remove("strike-me", "strike-foe");
     void d.offsetWidth;                                  /* reinicia la animación */
     d.classList.add(ok ? "strike-me" : "strike-foe");
+    if (!ok) guardPlay(foeImg, lv, "attack");
     setTimeout(function () {
+      if (ok) guardPlay(foeImg, lv, b.over === "win" ? "fall" : "hurt");
       if (ok) {
         var bar = q(".dh-hp i"), num = q(".dh-hp b");
         if (bar) bar.style.width = Math.round(100 * (b.need - b.hits) / b.need) + "%";
@@ -2681,7 +2727,7 @@
       + '<div class="vs-row" aria-hidden="true">'
       +   '<div class="vs-side vs-me"><img src="' + esc(me.src || BOSS_AVATAR) + '" alt="" onerror="this.onerror=null;this.src=\'' + BOSS_AVATAR + '\'"><span class="vs-nm">Vesper</span></div>'
       +   '<div class="vs-mark">VS</div>'
-      +   '<div class="vs-side vs-foe">' + bossPortrait(lv) + '<span class="vs-nm">' + esc(t.worldName || lv) + '</span></div>'
+      +   '<div class="vs-side vs-foe">' + bossPortrait(lv, true) + '<span class="vs-nm">' + esc(t.worldName || lv) + '</span></div>'
       + '</div>'
       + '<h1>' + esc(bm.name) + '</h1>'
       + '<p class="vs-say">«' + esc(bossLine("intro")) + '»</p>'
