@@ -741,7 +741,6 @@
       } else { avatar.style.transition = "none"; place(cur); }
     }
     map.removeAttribute("data-prev");
-    placeSideTabs(map, pts);
     placeProps(map);
     applyParallax();                                  // estado inicial de la profundidad por scroll
   }
@@ -769,7 +768,7 @@
     }
     function hit(a, b) { return a.l < b.r && a.r > b.l && a.t < b.b && a.b > b.t; }
     var obst = [];
-    var els = map.querySelectorAll(".wtitle, .wlabel, .wcheck, .wbtn, .wstars, .wstart, .wavatar, .wtab");
+    var els = map.querySelectorAll(".wtitle, .wlabel, .wcheck, .wbtn, .wstars, .wstart, .wavatar");
     for (i = 0; i < els.length; i++) if (els[i].offsetParent) obst.push(rel(els[i]));
     var placed = [];
     var STEPS = [0, 14, -14, 28, -28, 42, -42, 56, -56, 70, -70, 84, -84, 100, -100, 120, -120, 140, -140];
@@ -1142,7 +1141,7 @@
       + '<div class="wavatar' + (pj.animal ? ' has-pelaje' : '') + '" data-pelaje="' + pj.pelaje + '" aria-hidden="true">'
       + '<img class="wcat" src="' + pj.src + '" alt="" decoding="async">'
       + '<span class="wacc">' + pj.svg + '</span><span class="wfx" aria-hidden="true"></span></div>'
-      + ambLayer(t.mapN || 3, true) + startPennant + parts + sideTabsHtml(selLevel, si)
+      + ambLayer(t.mapN || 3, true) + startPennant + parts
       + '</div></div></div>';
     /* el botón vive FUERA de .wmap: no lleva data-stop y no entra en la medición */
     var moreBtn = hiddenN > 0
@@ -1305,53 +1304,103 @@
     return { done: done, total: total, pct: total ? Math.round(100 * done / total) : 0 };
   }
 
-  /* ===== Pestañas a los lados del sendero (2026-10-30) ======================
-     El dueño: Vocabulario y Forja "no siempre ahí", sino como pestañas que se
-     abren a los lados, alojadas en los huecos que deja el camino al curvarse,
-     para que se vean mientras bajas. Antes eran dos botones fijos del dock,
-     más una tarjeta de la Forja y otra de vocabulario arriba del mapa.
-
-     Dónde van: dxFor() hace serpentear el sendero ±64px. Donde un nodo se va
-     lejos a un lado (|dx| ≥ 52) queda libre el borde contrario; ahí se ancla
-     la pestaña, a la altura de ese nodo (paintTrail la coloca con la medida
-     real). Alternan Vocabulario / Forja, con al menos cinco paradas de aire,
-     y placeProps las trata como obstáculo para que el decorado se aparte.
-     Al tocarlas no navegan: abren un cajón desde ese mismo lado con lo que
-     hay dentro, y desde ahí se entra. */
+  /* ===== Burbujas flotantes de Vocabulario y Forja (2026-10-30) ===========
+     Primero fueron botones fijos del dock; luego pestañas ancladas a las
+     curvas del sendero. El dueño: que "vayan junto con el scrolleo", como
+     las burbujas de chat de Messenger. Así que son dos burbujas fijas a un
+     borde de la pantalla: salen con un pop cuando el mapa entra a la vista
+     y se esconden al volver arriba (no tapan el saludo ni la lección).
+     Se arrastran y, al soltarlas, se pegan al borde más cercano; la posición
+     se recuerda en este dispositivo. La Forja lleva su contador de
+     pendientes como globito rojo. Al tocarlas abren el cajón desde su lado. */
   var TAB_ART = { forja: "assets/images/map/tab_forja.webp" };
-  function sideTabSlots(nStops) {
-    var out = [], last = -9;
-    for (var k = 1; k < nStops; k++) {
-      var dx = dxFor(k);
-      if (Math.abs(dx) < 52 || k - last < 5) continue;
-      out.push({ at: k, side: dx > 0 ? "l" : "r" }); last = k;
-    }
-    /* sendero corto (mundo recién abierto): una sola parada con algo de curva */
-    if (!out.length && nStops > 1) out.push({ at: 1, side: dxFor(1) > 0 ? "l" : "r" });
-    return out;
-  }
-  function sideTabsHtml(selLevel, nStops) {
-    var d = densData()[selLevel], hasDen = !!(d && d.branches && d.branches.length);
-    var kinds = hasDen ? ["vocab", "forja"] : ["forja"];
-    return sideTabSlots(nStops).map(function (s, i) {
-      var k = kinds[i % kinds.length];
-      var art = k === "vocab" ? denEmblemImg(selLevel, d.structure)
-        : '<img src="' + TAB_ART.forja + '" alt="" loading="lazy" decoding="async" onerror="this.outerHTML=window.__vforjaGlyph">';
-      var lb = k === "vocab" ? "Vocabulario" : "Forja";
-      var aria = k === "vocab" ? "Vocabulario de " + d.name : "La Forja: práctica sin final";
-      return '<button class="wtab wtab--' + s.side + '" type="button" data-tab="' + k + '" data-at="' + s.at + '"'
-        + ' aria-haspopup="dialog" aria-label="' + esc(aria) + '">'
-        + '<span class="wtab__ic">' + art + '</span><span class="wtab__lb">' + lb + '</span></button>';
-    }).join("");
-  }
+  var HEADS_KEY = "vesper_heads";
   window.__vforjaGlyph = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9h11l3-2h2v4h-2l-3 1v2a3 3 0 0 1-3 3H9a3 3 0 0 1-3-3v-1H4z"/><path d="M8 20h8M12 17v3"/></svg>';
-  /* la pestaña sigue al nodo que la ancla (se llama desde paintTrail) */
-  function placeSideTabs(map, pts) {
-    var tabs = map.querySelectorAll(".wtab[data-at]");
-    for (var i = 0; i < tabs.length; i++) {
-      var p = pts[+tabs[i].getAttribute("data-at")];
-      if (p) tabs[i].style.top = Math.max(0, p[1] - tabs[i].offsetHeight / 2) + "px";
+  function headsHtml(selLevel) {
+    var d = densData()[selLevel], hasDen = !!(d && d.branches && d.branches.length);
+    var FJ = window.VESPER_FORJA, due = FJ ? FJ.dueCount() : 0;
+    var h = "";
+    if (hasDen) h += '<button class="vhead" type="button" data-tab="vocab" aria-haspopup="dialog" aria-label="' + esc("Vocabulario de " + d.name) + '">'
+      + '<span class="vhead__ic">' + denEmblemImg(selLevel, d.structure) + '</span><span class="vhead__lb">Vocabulario</span></button>';
+    h += '<button class="vhead" type="button" data-tab="forja" aria-haspopup="dialog" aria-label="La Forja: práctica sin final' + (due ? ", " + due + " pendientes" : "") + '">'
+      + '<span class="vhead__ic"><img src="' + TAB_ART.forja + '" alt="" decoding="async" onerror="this.outerHTML=window.__vforjaGlyph"></span>'
+      + '<span class="vhead__lb">Forja</span>' + (due ? '<em>' + (due > 99 ? "99+" : due) + '</em>' : "") + '</button>';
+    return '<div class="vheads" id="vheads" role="group" aria-label="Práctica extra" style="' + worldVars(WORLD_THEME[selLevel] || {}) + '">' + h + '</div>';
+  }
+  function headsPos() {
+    try { var o = JSON.parse(localStorage.getItem(HEADS_KEY) || "null"); if (o && (o.side === "l" || o.side === "r")) return o; } catch (e) {}
+    return { side: "r", y: 0.42 };
+  }
+  /* coloca la pila contra su borde; y es fracción del alto útil */
+  function headsPlace(el, pos) {
+    var M = 16, top = 76, bottom = 160;                  /* margen: el rótulo es más ancho que la burbuja */
+    var W = window.innerWidth, H = window.innerHeight, w = el.offsetWidth, h = el.offsetHeight;
+    var span = Math.max(0, H - top - bottom - h);
+    el.style.left = (pos.side === "l" ? M : W - w - M) + "px";
+    el.style.top = Math.round(top + span * Math.max(0, Math.min(1, pos.y))) + "px";
+    el.setAttribute("data-side", pos.side);
+  }
+  /* visibles sólo con el mapa en pantalla */
+  function headsSync() {
+    var el = byId("vheads"), sky = document.querySelector(".wsky");
+    if (!el) return;
+    var on = false;
+    if (sky && !byId("wdrawer")) {
+      var r = sky.getBoundingClientRect(), H = window.innerHeight;
+      on = r.top < H * 0.55 && r.bottom > H * 0.45;
     }
+    if (on !== el.classList.contains("on")) el.classList.toggle("on", on);
+  }
+  var _headsBound = false, _headsRaf = 0;
+  function bindHeads(selLevel) {
+    var el = byId("vheads"); if (!el) return;
+    var pos = headsPos();
+    el.classList.add("still");                          /* sin animar la primera colocación */
+    headsPlace(el, pos);
+    requestAnimationFrame(function () { el.classList.remove("still"); });
+    var drag = null, moved = false;
+    el.addEventListener("pointerdown", function (e) {
+      if (e.button) return;
+      var r = el.getBoundingClientRect();
+      drag = { id: e.pointerId, dx: e.clientX - r.left, dy: e.clientY - r.top, x0: e.clientX, y0: e.clientY };
+      moved = false;
+    });
+    el.addEventListener("pointermove", function (e) {
+      if (!drag || e.pointerId !== drag.id) return;
+      if (!moved && Math.abs(e.clientX - drag.x0) + Math.abs(e.clientY - drag.y0) < 8) return;
+      if (!moved) { moved = true; el.classList.add("drag"); try { el.setPointerCapture(e.pointerId); } catch (x) {} }
+      el.style.left = (e.clientX - drag.dx) + "px";
+      el.style.top = (e.clientY - drag.dy) + "px";
+    });
+    function drop(e) {
+      if (!drag || e.pointerId !== drag.id) return;
+      drag = null;
+      if (!moved) return;
+      el.classList.remove("drag");
+      var r = el.getBoundingClientRect(), H = window.innerHeight;
+      var span = Math.max(1, H - 76 - 160 - r.height);
+      pos = { side: (r.left + r.width / 2) < window.innerWidth / 2 ? "l" : "r", y: Math.max(0, Math.min(1, (r.top - 76) / span)) };
+      try { localStorage.setItem(HEADS_KEY, JSON.stringify(pos)); } catch (x) {}
+      headsPlace(el, pos);
+    }
+    el.addEventListener("pointerup", drop);
+    el.addEventListener("pointercancel", drop);
+    each("#vheads .vhead", function (b) {
+      b.onclick = function (e) {
+        if (moved) { moved = false; e.preventDefault(); return; }   /* fue un arrastre, no un toque */
+        el.classList.remove("on");
+        openDrawer(b.getAttribute("data-tab"), pos.side, selLevel, b);
+      };
+    });
+    headsSync();
+    if (_headsBound) return; _headsBound = true;
+    window.addEventListener("scroll", function () {
+      if (_headsRaf) return;
+      _headsRaf = requestAnimationFrame(function () { _headsRaf = 0; headsSync(); });
+    }, { passive: true });
+    window.addEventListener("resize", function () {
+      var h = byId("vheads"); if (h) { h.classList.add("still"); headsPlace(h, headsPos()); h.classList.remove("still"); headsSync(); }
+    });
   }
   function forjaSubline() {
     var FJ = window.VESPER_FORJA;
@@ -1425,24 +1474,19 @@
     var w = byId("wdrawer"); if (!w) return;
     document.removeEventListener("keydown", drawerKeys, true);
     w.id = ""; w.classList.remove("on");
-    if (instant || reduceMotion()) w.remove(); else setTimeout(function () { w.remove(); }, 280);
+    if (instant || reduceMotion()) { w.remove(); headsSync(); }
+    else setTimeout(function () { w.remove(); headsSync(); }, 280);
     if (_drawerFrom && !instant) try { _drawerFrom.focus({ preventScroll: true }); } catch (e) {}
     _drawerFrom = null;
   }
-  function bindSideTabs(selLevel) {
-    each("#wmap .wtab", function (b) {
-      b.onclick = function () {
-        openDrawer(b.getAttribute("data-tab"), b.classList.contains("wtab--r") ? "r" : "l", selLevel, b);
-      };
-    });
-  }
+
 
   /* ---- dock fijo del mapa ----
      Siempre sobre la barra de pestañas: el repaso (si hay pendientes), volver
      a mi lección y Ajustes (el engranaje del saludo quedaba fuera de pantalla
      en cuanto el hub abre sobre la lección actual, ver jumpToCurrent).
      Vocabulario y Forja salieron de aquí el 2026-10-30: ahora son pestañas
-     en los huecos del sendero (sideTabsHtml). Con tres botones el dock va a
+     flotantes que siguen el scroll (headsHtml). Con tres botones el dock va a
      la izquierda y deja libre la esquina de la burbuja del chat, que antes
      tapaba "Ajustes". */
   var DOCK_ICN = {
@@ -2112,9 +2156,9 @@
       { el: ".worlds", pad: 8,
         title: "Un mundo = un nivel",
         text: "Ahora estás en " + wname + ". Hay seis mundos, del más básico (A1) al más avanzado (C2); tócalos aquí para cambiar de uno a otro." },
-      { el: ".wtab", pad: 8,
-        title: "Pestañas a los lados del camino",
-        text: "En los huecos del sendero asoman pestañas: Vocabulario (tarjetas por temas) y la Forja (práctica sin final con lo que ya viste). Tócalas cuando quieras; no hace falta seguir ningún orden." },
+      { el: ".vheads.on", pad: 10,
+        title: "Dos burbujas que te acompañan",
+        text: "Mientras recorres el mapa flotan a un lado: Vocabulario (tarjetas por temas) y la Forja (práctica sin final con lo que ya viste). Tócalas cuando quieras, o arrástralas al otro borde si te estorban." },
       { el: ".wbtn.is-current", shape: "circle", pad: 12,
         title: "Aquí estás tú",
         text: "El círculo grande y luminoso es tu lección de ahora. El camino dorado que llega hasta él es lo que ya llevas andado; lo que sigue en gris con el borde punteado todavía no está abierto." },
@@ -2254,6 +2298,7 @@
       + examBanner
       + placementCard("leccion-hub")
       + dockHtml(selLevel, srsDue)
+      + headsHtml(selLevel)
       + '<div class="hub-toast" id="toast"></div>');
 
     bindCta();
@@ -2262,7 +2307,7 @@
     each(".world[data-lvl]", function (b) { b.onclick = function () { _mapExpanded = false; renderIndex(b.getAttribute("data-lvl")); }; });
     each(".world[data-locked-world]", function (b) { b.onclick = function () { toast("Vence al guardián del mundo anterior para desbloquearlo"); }; });
     bindDock(selLevel);
-    bindSideTabs(selLevel);
+    bindHeads(selLevel);
     each("[data-go]", function (b) { b.onclick = function () { location.search = "?id=" + encodeURIComponent(b.getAttribute("data-go")); }; });
     each("[data-locked]", function (b) { b.onclick = function () { toast("Completa la lección anterior para desbloquear"); }; });
     each("[data-locked-boss]", function (b) { b.onclick = function () { toast("Completa todas las lecciones del mundo para enfrentar al guardián"); }; });
