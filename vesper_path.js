@@ -93,8 +93,21 @@ window.VESPER_PATH = (function () {
 
   function isCompleted(id, b) { return !!(b && b.completed && b.completed[id]); }
 
+  /* Admin (josuemtz20@gmail.com, ver vesper_auth.js): todo el sendero y todos
+     los mundos abiertos para poder probar. Igual que el guardarropa en
+     vesper_cosmetics.js: abre el CANDADO, no inventa progreso (sus lecciones,
+     estrellas y guardianes vencidos siguen siendo los de verdad). */
+  function adminOpen() {
+    try {
+      if (window.VESPER_AUTH && typeof window.VESPER_AUTH.isAdmin === "boolean") return window.VESPER_AUTH.isAdmin;
+    } catch (e) {}
+    try { return sessionStorage.getItem("vesper_is_admin") === "1"; } catch (e) {}
+    return false;
+  }
+
   function isUnlocked(id, b) {
     if (!b) return true;
+    if (adminOpen()) return true;
     if (b.completed[id]) return true;
     var key = b.seqKey[id]; if (!key) return true;
     var seq = b.seqIndex[key] || [];
@@ -162,6 +175,7 @@ window.VESPER_PATH = (function () {
     lv = normLevel(lv);
     var i = LEVELS.indexOf(lv);
     if (i <= 0) return true;                       // A1 siempre abierto
+    if (adminOpen()) return true;
     var prev = LEVELS[i - 1];
     return !!(window.VesperProgress && window.VesperProgress.bossPassed && window.VesperProgress.bossPassed(prev));
   }

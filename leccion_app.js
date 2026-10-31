@@ -594,7 +594,7 @@
      margen alrededor para que el zarpazo/la caída no se corten: el CSS lo
      agranda (.me-anim) para que el gato mida lo mismo que la foto fija. */
   var ME_ANIM = { classic: 1, gray: 1, calico: 1, lion: 1, cosmic: 1, flame: 1 };
-  var ME_CLIP_MS = { attack: 1670, hurt: 1580, fall: 2000 };
+  var ME_CLIP_MS = { attack: 1100, hurt: 1580, fall: 2000 };
   function meSrc(pel, act) { return "assets/images/mascot/anim/" + pel + "_" + act + ".webp"; }
   function meAnimated(me) { return !!(me && ME_ANIM[me.pelaje]) && !reduceMotion(); }
   function meImg(me) {
@@ -4228,6 +4228,16 @@
     if (due > 0) sub.textContent = "Tienes " + due + " ejercicio" + (due === 1 ? "" : "s") + " listo" + (due === 1 ? "" : "s") + " para volver";
     else if (rounds > 0) sub.textContent = "Llevas " + rounds + " ronda" + (rounds === 1 ? "" : "s") + " hoy · récord " + FJ.bestToday() + " aciertos";
   }
+
+  /* el admin se conoce cuando Firebase resuelve la sesión, a veces DESPUÉS de
+     pintar el mapa: si acaba de resultar admin, se repinta ya abierto */
+  var adminSeen = false;
+  try { adminSeen = sessionStorage.getItem("vesper_is_admin") === "1"; } catch (e) {}
+  window.addEventListener("vesper:auth", function (e) {
+    if (!e.detail || !e.detail.isAdmin || adminSeen) return;
+    adminSeen = true;
+    if (!id && byId("app") && !byId("app").querySelector(".boot-shell")) renderIndex();
+  });
 
   function route() {
   if (!id) { renderIndex(); return; }
