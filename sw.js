@@ -98,9 +98,12 @@ var CORE = [
 self.addEventListener("install", function (event) {
   event.waitUntil(
     caches.open(CACHE_VERSION).then(function (cache) {
-      /* addAll falla en bloque si un recurso falla; lo hacemos tolerante */
+      /* addAll falla en bloque si un recurso falla; lo hacemos tolerante.
+         cache:"reload" salta el caché HTTP del navegador (GitHub Pages manda
+         max-age=600): sin eso, un alumno que abrió la app hace <10 min
+         precachea el JS VIEJO bajo la versión nueva y no ve el cambio. */
       return Promise.all(CORE.map(function (url) {
-        return cache.add(url).catch(function () { /* ignora recursos ausentes */ });
+        return cache.add(new Request(url, { cache: "reload" })).catch(function () { /* ignora recursos ausentes */ });
       }));
     }).then(function () { return self.skipWaiting(); })
   );
