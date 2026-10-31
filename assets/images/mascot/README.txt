@@ -30,3 +30,11 @@ NIVELES DE ANIMACION (ver respuesta del asistente):
   2. Multiples PNG por expresion (los de arriba): se cruzan/intercambian por estado.
   3. Animacion vectorial real (estilo Duolingo): archivo Lottie (.json) o Rive (.riv)
      + su runtime. Requiere un disenador de movimiento (After Effects/LottieFiles o Rive).
+
+ANIMACIONES DEL DUELO (anim/):
+  <pelaje>_{idle,attack,hurt,fall}.webp + <pelaje>_down.webp (cuadro fijo
+  tras caer), pelajes: classic, gray, calico, lion, cosmic, flame.
+  Clips IA (Seedance, cuadro inicial = el PNG del pelaje sobre croma verde
+  con 10 % de margen a los lados y 20 % arriba), recortados, acelerados y
+  convertidos a WebP transparente de 216 px. leccion_app.js (ME_ANIM) los
+  usa en el duelo y la portada VS; con accesorio se ve el del pelaje base.

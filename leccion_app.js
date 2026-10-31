@@ -558,29 +558,59 @@
   /* Chrome comparte la animación entre todos los <img> con la misma URL, así
      que reasignar el src no la reinicia: cada clip se baja una vez como blob y
      se reproduce con un blob: URL nuevo, que siempre arranca en el cuadro 1. */
-  var guardBlobs = {};
-  function guardPreload(lv) {
-    if (!guardAnimated(lv) || !window.fetch || !window.URL || !URL.createObjectURL) return;
-    ["attack", "hurt", "fall"].forEach(function (act) {
-      var u = guardSrc(lv, act);
-      if (guardBlobs[u]) return;
-      guardBlobs[u] = "pending";
+  var clipBlobs = {};
+  function clipPreload(urls) {
+    if (!window.fetch || !window.URL || !URL.createObjectURL) return;
+    urls.forEach(function (u) {
+      if (clipBlobs[u]) return;
+      clipBlobs[u] = "pending";
       fetch(u).then(function (r) { if (!r.ok) throw new Error(r.status); return r.blob(); })
-        .then(function (b) { guardBlobs[u] = b; })
-        .catch(function () { delete guardBlobs[u]; });
+        .then(function (b) { clipBlobs[u] = b; })
+        .catch(function () { delete clipBlobs[u]; });
     });
   }
-  var guardTimer = 0, guardUrl = "";
-  function guardPlay(img, lv, act) {
-    var blob = guardBlobs[guardSrc(lv, act)];
+  /* un "actor" por lado del duelo: cada uno lleva su timer y su blob: URL */
+  function clipActor() { return { timer: 0, url: "" }; }
+  function clipPlay(actor, img, src, rest, ms) {
+    var blob = clipBlobs[src];
     if (!img || !img.hasAttribute("data-anim") || !blob || blob === "pending") return;
-    clearTimeout(guardTimer);
-    if (guardUrl) URL.revokeObjectURL(guardUrl);
-    guardUrl = URL.createObjectURL(blob);
-    img.src = guardUrl;
-    guardTimer = setTimeout(function () {
-      if (img.isConnected) img.src = guardSrc(lv, act === "fall" ? "down" : "idle");
-    }, GUARD_CLIP_MS);
+    clearTimeout(actor.timer);
+    if (actor.url) URL.revokeObjectURL(actor.url);
+    actor.url = URL.createObjectURL(blob);
+    img.src = actor.url;
+    actor.timer = setTimeout(function () { if (img.isConnected) img.src = rest; }, ms);
+  }
+  function guardPreload(lv) {
+    if (!guardAnimated(lv)) return;
+    clipPreload(["attack", "hurt", "fall"].map(function (act) { return guardSrc(lv, act); }));
+  }
+  var guardActor = clipActor();
+  function guardPlay(img, lv, act) {
+    clipPlay(guardActor, img, guardSrc(lv, act), guardSrc(lv, act === "fall" ? "down" : "idle"), GUARD_CLIP_MS);
+  }
+  /* el gato del alumno, animado igual (IA → WebP en assets/images/mascot/anim/):
+     uno por PELAJE base; con accesorio también se usa el del pelaje (los 7
+     accesorios × 6 pelajes × 4 clips no compensan). Fondo transparente y
+     margen alrededor para que el zarpazo/la caída no se corten: el CSS lo
+     agranda (.me-anim) para que el gato mida lo mismo que la foto fija. */
+  var ME_ANIM = { classic: 1, gray: 1, calico: 1, lion: 1, cosmic: 1, flame: 1 };
+  var ME_CLIP_MS = { attack: 1670, hurt: 1580, fall: 2000 };
+  function meSrc(pel, act) { return "assets/images/mascot/anim/" + pel + "_" + act + ".webp"; }
+  function meAnimated(me) { return !!(me && ME_ANIM[me.pelaje]) && !reduceMotion(); }
+  function meImg(me) {
+    var still = esc(me.src || BOSS_AVATAR);
+    if (!meAnimated(me)) return '<img src="' + still + '" alt="" decoding="async" onerror="this.onerror=null;this.src=\'' + BOSS_AVATAR + '\'">';
+    /* si el WebP falla: la foto fija de su look (con accesorio), sin la clase que la agranda */
+    return '<img class="me-anim" data-anim src="' + meSrc(me.pelaje, "idle") + '" alt="" decoding="async"'
+      + ' onerror="this.onerror=null;this.removeAttribute(\'data-anim\');this.className=\'\';this.src=\'' + still + '\'">';
+  }
+  function mePreload(me) {
+    if (!meAnimated(me)) return;
+    clipPreload(["attack", "hurt", "fall"].map(function (act) { return meSrc(me.pelaje, act); }));
+  }
+  var meActor = clipActor();
+  function mePlay(img, pel, act) {
+    clipPlay(meActor, img, meSrc(pel, act), meSrc(pel, act === "fall" ? "down" : "idle"), ME_CLIP_MS[act] || 1500);
   }
   /* anim=true: el duelo y la portada VS usan el reposo animado; el mapa no */
   function bossPortrait(lv, anim) {
@@ -2656,6 +2686,7 @@
     var bg = t.file ? 'background-image:linear-gradient(180deg,rgba(14,12,31,.2),rgba(14,12,31,.78)),url(' + t.file + ');' : "";
     var anim = guardAnimated(lv);
     guardPreload(lv);
+    mePreload(me);
     return '<section class="duel" id="duel" data-lv="' + lv + '" style="' + worldVars(t) + '" aria-label="Duelo contra ' + esc(bm.name) + '">'
       + '<div class="duel-hud">'
       +   '<div class="dh dh-me"><span class="dh-nm">Vesper</span><span class="dh-hearts" role="img" aria-label="Vesper aguanta ' + (b.lives - b.misses) + ' errores más">' + duelHearts(b) + '</span></div>'
@@ -2663,7 +2694,7 @@
       +     '<span class="dh-hp" role="img" aria-label="Al guardián le quedan ' + (b.need - b.hits) + ' golpes"><i style="width:' + hp + '%"></i><b>' + (b.need - b.hits) + '</b></span></div>'
       + '</div>'
       + '<div class="duel-stage" style="' + bg + '">'
-      +   '<div class="duel-fighter duel-me" aria-hidden="true"><img src="' + esc(me.src || BOSS_AVATAR) + '" alt="" decoding="async" onerror="this.onerror=null;this.src=\'' + BOSS_AVATAR + '\'"></div>'
+      +   '<div class="duel-fighter duel-me' + (meAnimated(me) ? ' me-anim' : '') + '" aria-hidden="true">' + meImg(me) + '</div>'
       +   '<div class="duel-bolt" aria-hidden="true"></div><div class="duel-wave" aria-hidden="true"></div>'
       +   '<div class="duel-fighter duel-foe' + (anim ? ' g-anim' : '') + '" aria-hidden="true">' + bossPortrait(lv, true) + '</div>'
       +   '<p class="duel-say" aria-hidden="true">' + esc(duelSay(b)) + '</p>'
@@ -2681,12 +2712,14 @@
     var q = function (sel) { return d.querySelector(sel); };
     var say = q(".duel-say"), dmg = q(".duel-dmg"), stamp = q(".duel-stamp");
     var foeImg = q(".duel-foe img[data-anim]"), lv = lesson.bossLevel;
+    var meEl = q(".duel-me img[data-anim]"), pel = currentLook().pelaje;
     d.classList.remove("strike-me", "strike-foe");
     void d.offsetWidth;                                  /* reinicia la animación */
     d.classList.add(ok ? "strike-me" : "strike-foe");
-    if (!ok) guardPlay(foeImg, lv, "attack");
+    if (ok) mePlay(meEl, pel, "attack"); else guardPlay(foeImg, lv, "attack");
     setTimeout(function () {
       if (ok) guardPlay(foeImg, lv, b.over === "win" ? "fall" : "hurt");
+      else mePlay(meEl, pel, b.over === "lose" ? "fall" : "hurt");
       if (ok) {
         var bar = q(".dh-hp i"), num = q(".dh-hp b");
         if (bar) bar.style.width = Math.round(100 * (b.need - b.hits) / b.need) + "%";
@@ -2725,7 +2758,7 @@
     show('<div class="wrap">' + topbar(6) + '<div class="card center boss-cover vs-cover" style="' + worldVars(t) + bg + '">'
       + '<span class="boss-eyebrow">Examen del mundo &middot; ' + esc(lesson.level) + '</span>'
       + '<div class="vs-row" aria-hidden="true">'
-      +   '<div class="vs-side vs-me"><img src="' + esc(me.src || BOSS_AVATAR) + '" alt="" onerror="this.onerror=null;this.src=\'' + BOSS_AVATAR + '\'"><span class="vs-nm">Vesper</span></div>'
+      +   '<div class="vs-side vs-me">' + meImg(me) + '<span class="vs-nm">Vesper</span></div>'
       +   '<div class="vs-mark">VS</div>'
       +   '<div class="vs-side vs-foe">' + bossPortrait(lv, true) + '<span class="vs-nm">' + esc(t.worldName || lv) + '</span></div>'
       + '</div>'

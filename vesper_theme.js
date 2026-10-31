@@ -233,14 +233,14 @@ window.VESPER_THEME = (function () {
     calico:  { name: "Multicolor", img: MASCOT_DIR + "skins/calico.png" },
     lion:    { name: "León",       img: MASCOT_DIR + "skins/lion.png" },
     cosmic:  { name: "Cósmico",    img: MASCOT_DIR + "skins/cosmic.png" },
-    dragon:  { name: "Dragón",     img: MASCOT_DIR + "skins/dragon.png" }
+    flame:   { name: "Llama",      img: MASCOT_DIR + "skins/flame.png" }
   };
-  var PELAJE_ORDER = ["classic", "gray", "calico", "lion", "cosmic", "dragon"];
+  var PELAJE_ORDER = ["classic", "gray", "calico", "lion", "cosmic", "flame"];
 
   /* ---- Accesorios HORNEADOS en el modelo ----------------------------------
      Cada combinación pelaje + accesorio tiene su PROPIA imagen, con el
      accesorio dibujado sobre ese pelaje concreto: la corona se apoya dentro
-     de la melena del león, el birrete esquiva los cuernos del dragón y la
+     de la melena del león, el birrete deja asomar las llamas de las orejas y la
      patilla de las gafas pasa por detrás de la oreja. Antes se superponía el
      SVG sobre el PNG del gato y, hiciera lo que hiciera con las coordenadas,
      siempre se leía como una calcomanía encima: el sombrero flotaba sobre la
@@ -321,7 +321,8 @@ window.VESPER_THEME = (function () {
         theme: THEMES[s.theme] ? s.theme : DEFAULT_THEME,
         skin: SKINS[s.skin] ? s.skin : "gold",
         accessory: ACCESSORIES[s.accessory] ? s.accessory : "none",
-        pelaje: PELAJES[s.pelaje] ? s.pelaje : "classic",
+        /* "dragon" se retiró: su sitio (premio de racha 30) lo ocupa "flame" */
+        pelaje: PELAJES[s.pelaje] ? s.pelaje : (s.pelaje === "dragon" ? "flame" : "classic"),
         v: STATE_V
       };
     } catch (e) { return { theme: DEFAULT_THEME, skin: "gold", accessory: "none", pelaje: "classic", v: STATE_V }; }
@@ -560,7 +561,7 @@ window.VESPER_THEME = (function () {
       + '<div class="vt-grid" data-vt-pelajes>' + pelCards + '</div>'
       + head("Lo que lleva puesto", "Se le dibuja sobre su pelaje: el sombrero se apoya de verdad en la melena.")
       + '<div class="vt-grid" data-vt-accs>' + accCards + '</div>'
-      + head("El color de Vesper", "Sólo tiñe al Vesper original. Con león, dragón o cósmico no cambia nada.")
+      + head("El color de Vesper", "Sólo tiñe al Vesper original. Con león, llama o cósmico no cambia nada.")
       + '<div class="vt-skins" data-vt-skins>' + skinDots + '</div>'
       + head("Tema de la app", "Los colores de toda la web, no los de Vesper.")
       + '<div class="vt-grid" data-vt-themes>' + themeCards + '</div>'
