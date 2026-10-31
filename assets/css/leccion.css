@@ -2937,6 +2937,13 @@ body:has(#app #verify) #app .card.center{background-image:none}
 .ko-foe .duel-foe.g-anim{transform:translateY(10px) scale(.94);filter:brightness(.8);opacity:1;transition-delay:1.2s}
 .ko-me .duel-me{animation:none;transform:translateY(16px) rotate(-82deg);filter:grayscale(1) brightness(.6);opacity:.8}
 /* gato animado: el clip ya lo tumba; al final solo se apaga un poco */
+/* gato animado: el zarpazo y el golpe ya vienen en el clip. Sin el embiste
+   CSS (movía el busto y dejaba ver el corte del torso flotando y llegaba
+   antes que el puñetazo); del golpe solo queda el destello de color. */
+.strike-me .duel-me.me-anim{animation:none}
+.strike-foe .duel-me.me-anim{animation:duel-hurt-flash .5s .34s both}
+@keyframes duel-hurt-flash{0%,100%{filter:none}15%{filter:brightness(2.4) saturate(0)}
+  35%{filter:brightness(1.4) sepia(.6) hue-rotate(-30deg) saturate(3)}}
 .ko-me .duel-me.me-anim{transform:translateY(4px);filter:brightness(.8);opacity:1;transition-delay:1.6s}
 .ko-foe .duel-say,.ko-me .duel-say{z-index:6}
 .duel-stamp{position:absolute;z-index:6;left:50%;top:54%;opacity:0;pointer-events:none;white-space:nowrap;
