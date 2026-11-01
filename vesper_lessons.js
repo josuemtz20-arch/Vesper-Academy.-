@@ -1295,33 +1295,29 @@ window.VESPER_LESSONS = {
                                             "title":  "Present Perfect",
                                             "tipo":  "aprende",
                                             "explanation":  {
-                                                                "body":  "We use the present perfect (have/has + past participle) to talk about life experiences without saying when, and about situations that started in the past and are still true now. We often use it with ever and never (experiences), already and yet (recent actions), and for and since (duration). Use the past simple instead when you say a finished time, like yesterday or in 2019. (En espanol: el presente perfecto conecta el pasado con el presente; el pasado simple se usa para tiempos terminados y concretos.)",
+                                                                "body":  "We use the present perfect (have/has + past participle) to talk about life experiences without saying when, and about situations that started in the past and are still true now. We often use it with ever and never (experiences), already and yet (recent actions), and for and since (duration). Use the past simple instead when you say a finished time, like yesterday or in 2019.",
                                                                 "examples":  [
                                                                                  {
-                                                                                     "en":  "I have visited London twice.",
-                                                                                     "es":  "He visitado Londres dos veces."
+                                                                                     "en":  "I have visited London twice."
                                                                                  },
                                                                                  {
-                                                                                     "en":  "She has lived here since 2020.",
-                                                                                     "es":  "Ella ha vivido aqui desde 2020."
+                                                                                     "en":  "She has lived here since 2020."
                                                                                  },
                                                                                  {
-                                                                                     "en":  "Have you ever eaten sushi?",
-                                                                                     "es":  "Alguna vez has comido sushi?"
+                                                                                     "en":  "Have you ever eaten sushi?"
                                                                                  },
                                                                                  {
-                                                                                     "en":  "We saw that film yesterday.",
-                                                                                     "es":  "Vimos esa pelicula ayer."
+                                                                                     "en":  "We saw that film yesterday."
                                                                                  }
                                                                              ],
                                               "sections":  [
                                                 {
                                                   "kind": "intro",
-                                                  "body": "El present perfect une el pasado con el ahora: tus experiencias («he estado en Cancún»), lo que acaba de pasar y lo que empezó antes y sigue hoy. En español lo usamos parecido, pero en inglés manda una regla clara: si dices CUÁNDO pasó, ya no va."
+                                                  "body": "The present perfect connects the past with now: your experiences (\"I've been to Cancún\"), things that have just happened, and situations that started before and continue today. The golden rule: if you say WHEN it happened, you can't use it."
                                                 },
                                                 {
                                                   "kind": "regla",
-                                                  "body": "Se forma con have / has + participio: I have visited, she has lived. Negativo: haven't / hasn't. Pregunta: Have you…? Has she…? Úsalo para experiencias sin fecha (ever, never), resultados recientes (already, just, yet) y situaciones que empezaron y siguen (for, since). Si nombras un momento terminado —yesterday, last year, in 2019, two days ago— usa el pasado simple."
+                                                  "body": "Form: have / has + past participle: I have visited, she has lived. Negative: haven't / hasn't. Question: Have you…? Has she…? Use it for experiences with no date (ever, never), recent results (already, just, yet) and situations that started and continue (for, since). If you name a finished time (yesterday, last year, in 2019, two days ago), use the past simple."
                                                 },
                                                 {
                                                   "kind": "vocab",
@@ -1329,32 +1325,32 @@ window.VESPER_LESSONS = {
                                                     {
                                                       "en": "ever",
                                                       "ipa": "ˈevər",
-                                                      "es": "alguna vez"
+                                                      "es": "at any time in your life (questions)"
                                                     },
                                                     {
                                                       "en": "never",
                                                       "ipa": "ˈnevər",
-                                                      "es": "nunca"
+                                                      "es": "at no time in your life"
                                                     },
                                                     {
                                                       "en": "already",
                                                       "ipa": "ɔːlˈredi",
-                                                      "es": "ya"
+                                                      "es": "sooner than expected"
                                                     },
                                                     {
                                                       "en": "yet",
                                                       "ipa": "jet",
-                                                      "es": "todavía (neg.) / ya (preg.)"
+                                                      "es": "until now (negatives & questions)"
                                                     },
                                                     {
                                                       "en": "just",
                                                       "ipa": "dʒʌst",
-                                                      "es": "acabar de"
+                                                      "es": "a very short time ago"
                                                     },
                                                     {
                                                       "en": "for / since",
                                                       "ipa": "fɔːr / sɪns",
-                                                      "es": "durante / desde"
+                                                      "es": "a period of time / a starting point"
                                                     }
                                                   ]
                                                 },
@@ -1363,19 +1359,19 @@ window.VESPER_LESSONS = {
                                                   "items": [
                                                     {
                                                       "en": "Have you ever been to…?",
-                                                      "es": "¿Alguna vez has ido a…?"
+                                                      "es": "ask about someone's experiences"
                                                     },
                                                     {
                                                       "en": "I've never tried it.",
-                                                      "es": "Nunca lo he probado."
+                                                      "es": "a lifetime experience you don't have"
                                                     },
                                                     {
                                                       "en": "I've just finished.",
-                                                      "es": "Acabo de terminar."
+                                                      "es": "a result a moment ago"
                                                     },
                                                     {
                                                       "en": "I haven't decided yet.",
-                                                      "es": "Todavía no lo he decidido."
+                                                      "es": "something still pending"
                                                     }
                                                   ]
                                                 },
@@ -1383,20 +1379,16 @@ window.VESPER_LESSONS = {
                                                   "kind": "ejemplos",
                                                   "items": [
                                                     {
-                                                      "en": "I've studied English for three years.",
-                                                      "es": "Llevo tres años estudiando inglés."
+                                                      "en": "I've studied English for three years."
                                                     },
                                                     {
-                                                      "en": "She has lived in Monterrey since 2020.",
-                                                      "es": "Vive en Monterrey desde 2020."
+                                                      "en": "She has lived in Monterrey since 2020."
                                                     },
                                                     {
-                                                      "en": "Have you ever travelled abroad for work?",
-                                                      "es": "¿Alguna vez has viajado al extranjero por trabajo?"
+                                                      "en": "Have you ever travelled abroad for work?"
                                                     },
                                                     {
-                                                      "en": "We saw that film yesterday.",
-                                                      "es": "Vimos esa película ayer. (fecha terminada → pasado simple)"
+                                                      "en": "We saw that film yesterday."
                                                     }
                                                   ]
                                                 },
@@ -1406,37 +1398,37 @@ window.VESPER_LESSONS = {
                                                     {
                                                       "no": "I have seen him yesterday.",
                                                       "si": "I saw him yesterday.",
-                                                      "pq": "Con un momento terminado (yesterday) va el pasado simple."
+                                                      "pq": "A finished time (yesterday) needs the past simple."
                                                     },
                                                     {
                                                       "no": "I live here since 2020.",
                                                       "si": "I have lived here since 2020.",
-                                                      "pq": "Lo que empezó y sigue hasta hoy va en present perfect, no en presente."
+                                                      "pq": "Something that started in the past and continues today takes the present perfect, not the present simple."
                                                     },
                                                     {
                                                       "no": "She have finished.",
                                                       "si": "She has finished.",
-                                                      "pq": "he, she e it usan has."
+                                                      "pq": "He, she and it take has."
                                                     },
                                                     {
                                                       "no": "I have went to Mexico City.",
                                                       "si": "I have been to Mexico City.",
-                                                      "pq": "Después de have va el participio (been, gone), no el pasado (went)."
+                                                      "pq": "After have we use the past participle (been, gone), not the past simple (went)."
                                                     },
                                                     {
                                                       "no": "Did you ever eat sushi?",
                                                       "si": "Have you ever eaten sushi?",
-                                                      "pq": "Para experiencias de toda la vida: Have you ever + participio."
+                                                      "pq": "For lifetime experiences: Have you ever + past participle."
                                                     }
                                                   ]
                                                 },
                                                 {
                                                   "kind": "resumen",
-                                                  "body": "have / has + participio para experiencias, resultados recientes y lo que sigue hasta hoy. ¿Dices cuándo (yesterday, in 2019, ago)? Entonces, pasado simple."
+                                                  "body": "have / has + past participle for experiences, recent results and things that continue until now. Are you saying when (yesterday, in 2019, ago)? Then use the past simple."
                                                 },
                                                 {
                                                   "kind": "puente",
-                                                  "body": "Ahora te toca a ti: unos ejercicios rápidos para dominarlo."
+                                                  "body": "Your turn: a few quick exercises to master it."
                                                 }
                                               ]
                                             },
@@ -1470,7 +1462,7 @@ window.VESPER_LESSONS = {
                                                                                        "to",
                                                                                        "Japan"
                                                                                    ],
-                                                                  "hint":  "Habla de una experiencia que nunca has tenido. Empieza con \u0027I\u0027."
+                                                                  "hint":  "Talk about an experience you have never had. Start with 'I'."
                                                               },
                                                               {
                                                                   "type":  "multiple_choice",
@@ -1503,7 +1495,7 @@ window.VESPER_LESSONS = {
                                                                                        "yet",
                                                                                        "?"
                                                                                    ],
-                                                                  "hint":  "Es una pregunta con \u0027yet\u0027 al final. Usa el auxiliar \u0027Have\u0027 al principio."
+                                                                  "hint":  "It's a question with 'yet' at the end. Start with the auxiliary 'Have'."
                                                               },
                                                               {
                                                                   "type":  "multiple_choice",
@@ -1527,23 +1519,19 @@ window.VESPER_LESSONS = {
                                               "track":  "Core Grammar",
                                               "title":  "First Conditional",
                                               "explanation":  {
-                                                                  "body":  "Use the first conditional to talk about real possibilities in the future. The structure is: If + present simple, ... will + base verb. When the if-clause comes first, put a comma after it; when it comes second, no comma is needed. You can also use \"unless\" to mean \"if not.\" (\"Unless\" significa \"si no\" y reemplaza a \"if ... not\".)",
+                                                                  "body":  "Use the first conditional to talk about real possibilities in the future. The structure is: If + present simple, ... will + base verb. When the if-clause comes first, put a comma after it; when it comes second, no comma is needed. You can also use \"unless\" to mean \"if not.\"",
                                                                   "examples":  [
                                                                                    {
-                                                                                       "en":  "If it rains tomorrow, we will stay at home.",
-                                                                                       "es":  "Si llueve mañana, nos quedaremos en casa."
+                                                                                       "en":  "If it rains tomorrow, we will stay at home."
                                                                                    },
                                                                                    {
-                                                                                       "en":  "She will pass the exam if she studies hard.",
-                                                                                       "es":  "Aprobará el examen si estudia mucho."
+                                                                                       "en":  "She will pass the exam if she studies hard."
                                                                                    },
                                                                                    {
-                                                                                       "en":  "Unless you hurry, you will miss the bus.",
-                                                                                       "es":  "Si no te apuras, perderás el autobús."
+                                                                                       "en":  "Unless you hurry, you will miss the bus."
                                                                                    },
                                                                                    {
-                                                                                       "en":  "If I have time, I will call you tonight.",
-                                                                                       "es":  "Si tengo tiempo, te llamaré esta noche."
+                                                                                       "en":  "If I have time, I will call you tonight."
                                                                                    }
                                                                                ]
                                                               },
@@ -1579,7 +1567,7 @@ window.VESPER_LESSONS = {
                                                                                          "will",
                                                                                          "answer."
                                                                                      ],
-                                                                    "hint":  "Empieza con la cláusula \"if\" y recuerda la coma."
+                                                                    "hint":  "Start with the \"if\" clause and remember the comma."
                                                                 },
                                                                 {
                                                                     "type":  "multiple_choice",
@@ -1610,7 +1598,7 @@ window.VESPER_LESSONS = {
                                                                                          "we",
                                                                                          "practise."
                                                                                      ],
-                                                                    "hint":  "Aquí la cláusula \"if\" va al final, sin coma."
+                                                                    "hint":  "Here the \"if\" clause goes at the end, with no comma."
                                                                 },
                                                                 {
                                                                     "type":  "multiple_choice",
@@ -1634,23 +1622,19 @@ window.VESPER_LESSONS = {
                                             "track":  "Core Grammar",
                                             "title":  "Past Continuous",
                                             "explanation":  {
-                                                                "body":  "We use the past continuous to talk about an action that was in progress at a moment in the past. We form it with was or were plus the -ing form of the verb (for example, I was reading, they were playing). We often combine it with the past simple using when and while: the past continuous shows the longer background action, and the past simple shows the shorter action that interrupted it. (Usamos el pasado continuo para una accion en progreso en el pasado, y lo contrastamos con el pasado simple usando when y while.)",
+                                                                "body":  "We use the past continuous to talk about an action that was in progress at a moment in the past. We form it with was or were plus the -ing form of the verb (for example, I was reading, they were playing). We often combine it with the past simple using when and while: the past continuous shows the longer background action, and the past simple shows the shorter action that interrupted it.",
                                                                 "examples":  [
                                                                                  {
-                                                                                     "en":  "I was cooking dinner when she called me.",
-                                                                                     "es":  "Estaba cocinando la cena cuando ella me llamo."
+                                                                                     "en":  "I was cooking dinner when she called me."
                                                                                  },
                                                                                  {
-                                                                                     "en":  "While we were watching the film, the lights went out.",
-                                                                                     "es":  "Mientras veiamos la pelicula, se fueron las luces."
+                                                                                     "en":  "While we were watching the film, the lights went out."
                                                                                  },
                                                                                  {
-                                                                                     "en":  "They were studying at eight o\u0027clock last night.",
-                                                                                     "es":  "Ellos estaban estudiando a las ocho de la noche anoche."
+                                                                                     "en":  "They were studying at eight o\u0027clock last night."
                                                                                  },
                                                                                  {
-                                                                                     "en":  "What were you doing when it started to rain?",
-                                                                                     "es":  "Que estabas haciendo cuando empezo a llover?"
+                                                                                     "en":  "What were you doing when it started to rain?"
                                                                                  }
                                                                              ]
                                                             },
@@ -1682,7 +1666,7 @@ window.VESPER_LESSONS = {
                                                                                        "a",
                                                                                        "book"
                                                                                    ],
-                                                                  "hint":  "Sujeto + was + verbo en -ing (accion en progreso)."
+                                                                  "hint":  "Subject + was + verb-ing (an action in progress)."
                                                               },
                                                               {
                                                                   "type":  "multiple_choice",
@@ -1713,7 +1697,7 @@ window.VESPER_LESSONS = {
                                                                                        "the",
                                                                                        "garden"
                                                                                    ],
-                                                                  "hint":  "Usa were + verbo en -ing para una accion en progreso."
+                                                                  "hint":  "Use were + verb-ing for an action in progress."
                                                               },
                                                               {
                                                                   "type":  "multiple_choice",
@@ -1737,23 +1721,19 @@ window.VESPER_LESSONS = {
                                              "track":  "Core Grammar",
                                              "title":  "will vs be going to",
                                              "explanation":  {
-                                                                 "body":  "Use will for instant decisions made at the moment of speaking, for predictions about the future, and for offers and promises. Use be going to for plans and intentions you decided before now, and for predictions based on present evidence you can see. Both talk about the future, but the speaker\u0027s reason for choosing each one is different. (En espanol: usamos \"will\" para decisiones del momento, predicciones, ofertas y promesas; usamos \"be going to\" para planes ya decididos e intenciones.)",
+                                                                 "body":  "Use will for instant decisions made at the moment of speaking, for predictions about the future, and for offers and promises. Use be going to for plans and intentions you decided before now, and for predictions based on present evidence you can see. Both talk about the future, but the speaker's reason for choosing each one is different.",
                                                                  "examples":  [
                                                                                   {
-                                                                                      "en":  "The phone is ringing. I\u0027ll answer it.",
-                                                                                      "es":  "El telefono esta sonando. Yo lo contesto."
+                                                                                      "en":  "The phone is ringing. I\u0027ll answer it."
                                                                                   },
                                                                                   {
-                                                                                      "en":  "We are going to visit my grandma next weekend.",
-                                                                                      "es":  "Vamos a visitar a mi abuela el proximo fin de semana."
+                                                                                      "en":  "We are going to visit my grandma next weekend."
                                                                                   },
                                                                                   {
-                                                                                      "en":  "Look at those dark clouds. It\u0027s going to rain.",
-                                                                                      "es":  "Mira esas nubes oscuras. Va a llover."
+                                                                                      "en":  "Look at those dark clouds. It\u0027s going to rain."
                                                                                   },
                                                                                   {
-                                                                                      "en":  "Don\u0027t worry, I\u0027ll help you with your homework.",
-                                                                                      "es":  "No te preocupes, te ayudare con tu tarea."
+                                                                                      "en":  "Don\u0027t worry, I\u0027ll help you with your homework."
                                                                                   }
                                                                               ]
                                                              },
@@ -1789,7 +1769,7 @@ window.VESPER_LESSONS = {
                                                                                         "a",
                                                                                         "house"
                                                                                     ],
-                                                                   "hint":  "Plan ya decidido: usa \"be going to\"."
+                                                                   "hint":  "A plan you have already decided: use \"be going to\"."
                                                                },
                                                                {
                                                                    "type":  "multiple_choice",
@@ -1818,7 +1798,7 @@ window.VESPER_LESSONS = {
                                                                                         "will",
                                                                                         "win"
                                                                                     ],
-                                                                   "hint":  "Prediccion con opinion (I think): usa \"will\"."
+                                                                   "hint":  "A prediction based on opinion (I think): use \"will\"."
                                                                },
                                                                {
                                                                    "type":  "multiple_choice",
@@ -1843,33 +1823,29 @@ window.VESPER_LESSONS = {
                                                        "title":  "Present Perfect Continuous",
                                                        "tipo":  "aprende",
                                                        "explanation":  {
-                                                                           "body":  "We use the present perfect continuous (have/has been + verb-ing) to talk about an activity that started in the past and is still happening now, or that has just stopped but leaves a visible result in the present. It often goes with \u0027for\u0027, \u0027since\u0027, \u0027lately\u0027 and \u0027recently\u0027 and stresses the duration or repetition of the activity. The present perfect simple, by contrast, focuses on a completed result or a finished number of things (\u0027I\u0027ve written three emails\u0027). (Usa el continuo para la duracion o el efecto reciente de una actividad; usa el simple para el resultado terminado.)",
+                                                                           "body":  "We use the present perfect continuous (have/has been + verb-ing) to talk about an activity that started in the past and is still happening now, or that has just stopped but leaves a visible result in the present. It often goes with 'for', 'since', 'lately' and 'recently' and stresses the duration or repetition of the activity. The present perfect simple, by contrast, focuses on a completed result or a finished number of things ('I've written three emails').",
                                                                            "examples":  [
                                                                                             {
-                                                                                                "en":  "I\u0027ve been waiting for the bus for twenty minutes.",
-                                                                                                "es":  "Llevo veinte minutos esperando el autobus."
+                                                                                                "en":  "I\u0027ve been waiting for the bus for twenty minutes."
                                                                                             },
                                                                                             {
-                                                                                                "en":  "She\u0027s tired because she has been running.",
-                                                                                                "es":  "Esta cansada porque ha estado corriendo."
+                                                                                                "en":  "She\u0027s tired because she has been running."
                                                                                             },
                                                                                             {
-                                                                                                "en":  "We\u0027ve been living in Madrid since 2019.",
-                                                                                                "es":  "Vivimos en Madrid desde 2019."
+                                                                                                "en":  "We\u0027ve been living in Madrid since 2019."
                                                                                             },
                                                                                             {
-                                                                                                "en":  "He has written two reports today, but I\u0027ve been writing one all day.",
-                                                                                                "es":  "El ha escrito dos informes hoy, pero yo llevo todo el dia escribiendo uno."
+                                                                                                "en":  "He has written two reports today, but I\u0027ve been writing one all day."
                                                                                             }
                                                                                         ],
                                                          "sections":  [
                                                            {
                                                              "kind": "intro",
-                                                             "body": "El present perfect continuous pone la lupa en la actividad: cuánto tiempo llevas haciendo algo o por qué se nota que lo estabas haciendo («llevo una hora esperando», «tengo las manos sucias porque he estado en el jardín»)."
+                                                             "body": "The present perfect continuous zooms in on the activity: how long you've been doing something, or why it's obvious you were doing it (\"I've been waiting for an hour\", \"my hands are dirty because I've been gardening\")."
                                                            },
                                                            {
                                                              "kind": "regla",
-                                                             "body": "Se forma con have / has been + verbo -ing: I've been waiting, she's been running. Negativo: haven't / hasn't been + -ing. Pregunta: How long have you been…? Va con for, since, all day, lately y recently. Frente al present perfect simple: el continuo cuenta la actividad y su duración; el simple, el resultado terminado o cuántas veces (I've written three emails)."
+                                                             "body": "Form: have / has been + verb-ing: I've been waiting, she's been running. Negative: haven't / hasn't been + -ing. Question: How long have you been…? It goes with for, since, all day, lately and recently. Compared with the present perfect simple: the continuous focuses on the activity and its duration; the simple focuses on the finished result or how many times (I've written three emails)."
                                                            },
                                                            {
                                                              "kind": "vocab",
@@ -1877,26 +1853,26 @@ window.VESPER_LESSONS = {
                                                                {
                                                                  "en": "lately",
                                                                  "ipa": "ˈleɪtli",
-                                                                 "es": "últimamente"
+                                                                 "es": "in the last few days or weeks"
                                                                },
                                                                {
                                                                  "en": "recently",
                                                                  "ipa": "ˈriːsəntli",
-                                                                 "es": "recientemente"
+                                                                 "es": "not long ago"
                                                                },
                                                                {
                                                                  "en": "all morning / all day",
-                                                                 "es": "toda la mañana / todo el día"
+                                                                 "es": "the whole morning / the whole day"
                                                                },
                                                                {
                                                                  "en": "How long…?",
                                                                  "ipa": "haʊ lɔːŋ",
-                                                                 "es": "¿Cuánto tiempo…?"
+                                                                 "es": "ask about duration"
                                                                },
                                                                {
                                                                  "en": "for ages",
                                                                  "ipa": "fər ˈeɪdʒɪz",
-                                                                 "es": "desde hace siglos"
+                                                                 "es": "(informal) for a very long time"
                                                                }
                                                              ]
                                                            },
@@ -1905,19 +1881,19 @@ window.VESPER_LESSONS = {
                                                              "items": [
                                                                {
                                                                  "en": "How long have you been waiting?",
-                                                                 "es": "¿Cuánto llevas esperando?"
+                                                                 "es": "ask about duration until now"
                                                                },
                                                                {
                                                                  "en": "I've been meaning to call you.",
-                                                                 "es": "Llevo tiempo queriendo llamarte."
+                                                                 "es": "you've wanted to do it for a while"
                                                                },
                                                                {
                                                                  "en": "What have you been up to?",
-                                                                 "es": "¿Qué has estado haciendo?"
+                                                                 "es": "a friendly 'what's new?'"
                                                                },
                                                                {
                                                                  "en": "Sorry, I've been working all day.",
-                                                                 "es": "Perdón, llevo todo el día trabajando."
+                                                                 "es": "explain why you're tired / late to reply"
                                                                }
                                                              ]
                                                            },
@@ -1925,20 +1901,16 @@ window.VESPER_LESSONS = {
                                                              "kind": "ejemplos",
                                                              "items": [
                                                                {
-                                                                 "en": "I've been learning English for two years, and it's starting to feel natural.",
-                                                                 "es": "Llevo dos años aprendiendo inglés y ya empieza a sentirse natural."
+                                                                 "en": "I've been learning English for two years, and it's starting to feel natural."
                                                                },
                                                                {
-                                                                 "en": "She's out of breath because she's been running.",
-                                                                 "es": "Le falta el aire porque ha estado corriendo."
+                                                                 "en": "She's out of breath because she's been running."
                                                                },
                                                                {
-                                                                 "en": "We've been living in Guadalajara since 2019.",
-                                                                 "es": "Vivimos en Guadalajara desde 2019."
+                                                                 "en": "We've been living in Guadalajara since 2019."
                                                                },
                                                                {
-                                                                 "en": "He has written two reports today, but I've been writing this one all day.",
-                                                                 "es": "Él ha escrito dos informes hoy; yo llevo todo el día con este."
+                                                                 "en": "He has written two reports today, but I've been writing this one all day."
                                                                }
                                                              ]
                                                            },
@@ -1948,37 +1920,37 @@ window.VESPER_LESSONS = {
                                                                {
                                                                  "no": "I am waiting here for an hour.",
                                                                  "si": "I've been waiting here for an hour.",
-                                                                 "pq": "Duración hasta ahora: have been + -ing, no el presente continuo."
+                                                                 "pq": "Duration until now: have been + -ing, not the present continuous."
                                                                },
                                                                {
                                                                  "no": "I've been knowing her for years.",
                                                                  "si": "I've known her for years.",
-                                                                 "pq": "Los verbos de estado (know, have, like) van en present perfect simple."
+                                                                 "pq": "State verbs (know, have, like) take the present perfect simple."
                                                                },
                                                                {
                                                                  "no": "I've been reading three books this month.",
                                                                  "si": "I've read three books this month.",
-                                                                 "pq": "Si cuentas resultados terminados, usa el simple."
+                                                                 "pq": "If you count finished results, use the simple form."
                                                                },
                                                                {
                                                                  "no": "How long are you living here?",
                                                                  "si": "How long have you been living here?",
-                                                                 "pq": "«¿Cuánto tiempo…?» hasta hoy pide present perfect."
+                                                                 "pq": "\"How long…?\" up to now needs the present perfect."
                                                                },
                                                                {
                                                                  "no": "She has been work all day.",
                                                                  "si": "She has been working all day.",
-                                                                 "pq": "Después de been, el verbo va con -ing."
+                                                                 "pq": "After been, the verb takes -ing."
                                                                }
                                                              ]
                                                            },
                                                            {
                                                              "kind": "resumen",
-                                                             "body": "have / has been + -ing para la duración o el rastro de una actividad. Resultados y conteos, en simple; los verbos de estado, siempre en simple."
+                                                             "body": "have / has been + -ing for the duration or the visible traces of an activity. Results and counts go in the simple form; state verbs always go in the simple form."
                                                            },
                                                            {
                                                              "kind": "puente",
-                                                             "body": "Ahora te toca a ti: unos ejercicios rápidos para dominarlo."
+                                                             "body": "Your turn: a few quick exercises to master it."
                                                            }
                                                          ]
                                                        },
@@ -2014,7 +1986,7 @@ window.VESPER_LESSONS = {
                                                                                                   "since",
                                                                                                   "January"
                                                                                               ],
-                                                                             "hint":  "Usa el present perfect continuous con \u0027since\u0027 para una accion que continua hasta ahora."
+                                                                             "hint":  "Use the present perfect continuous with 'since' for an action that continues until now."
                                                                          },
                                                                          {
                                                                              "type":  "multiple_choice",
@@ -2047,7 +2019,7 @@ window.VESPER_LESSONS = {
                                                                                                   "lot",
                                                                                                   "lately"
                                                                                               ],
-                                                                             "hint":  "Coloca \u0027lately\u0027 al final para hablar de una tendencia reciente y repetida."
+                                                                             "hint":  "Put 'lately' at the end to talk about a recent, repeated trend."
                                                                          },
                                                                          {
                                                                              "type":  "multiple_choice",
@@ -2071,23 +2043,19 @@ window.VESPER_LESSONS = {
                                          "track":  "Core Grammar",
                                          "title":  "Past Perfect",
                                          "explanation":  {
-                                                             "body":  "We use the past perfect (had + past participle) to talk about an action that was already completed before another moment or action in the past. The more recent past action is usually in the past simple, while the earlier one takes the past perfect. Linking words like before, after, when and by the time often signal which action came first. (En español suele corresponder al pluscuamperfecto: \u0027había\u0027 + participio, p. ej. \u0027había terminado\u0027.)",
+                                                             "body":  "We use the past perfect (had + past participle) to talk about an action that was already completed before another moment or action in the past. The more recent past action is usually in the past simple, while the earlier one takes the past perfect. Linking words like before, after, when and by the time often signal which action came first.",
                                                              "examples":  [
                                                                               {
-                                                                                  "en":  "When I got home, my family had already eaten dinner.",
-                                                                                  "es":  "Cuando llegué a casa, mi familia ya había cenado."
+                                                                                  "en":  "When I got home, my family had already eaten dinner."
                                                                               },
                                                                               {
-                                                                                  "en":  "She felt nervous because she had never spoken in public before.",
-                                                                                  "es":  "Estaba nerviosa porque nunca había hablado en público antes."
+                                                                                  "en":  "She felt nervous because she had never spoken in public before."
                                                                               },
                                                                               {
-                                                                                  "en":  "By the time the film started, we had bought our popcorn.",
-                                                                                  "es":  "Para cuando empezó la película, ya habíamos comprado nuestras palomitas."
+                                                                                  "en":  "By the time the film started, we had bought our popcorn."
                                                                               },
                                                                               {
-                                                                                  "en":  "After the guests had left, he cleaned the whole kitchen.",
-                                                                                  "es":  "Después de que los invitados se habían ido, limpió toda la cocina."
+                                                                                  "en":  "After the guests had left, he cleaned the whole kitchen."
                                                                               }
                                                                           ]
                                                          },
@@ -2125,7 +2093,7 @@ window.VESPER_LESSONS = {
                                                                                     "had",
                                                                                     "finished"
                                                                                 ],
-                                                               "hint":  "Usa \u0027By the time\u0027 + pasado simple, y el past perfect para lo que ya estaba terminado."
+                                                               "hint":  "Use 'By the time' + past simple, and the past perfect for what was already finished."
                                                            },
                                                            {
                                                                "type":  "multiple_choice",
@@ -2162,7 +2130,7 @@ window.VESPER_LESSONS = {
                                                                                     "moved",
                                                                                     "north"
                                                                                 ],
-                                                               "hint":  "El past perfect describe la experiencia anterior a mudarse; \u0027before\u0027 introduce la acción más reciente."
+                                                               "hint":  "The past perfect describes the experience before moving; 'before' introduces the more recent action."
                                                            },
                                                            {
                                                                "type":  "multiple_choice",
@@ -2186,23 +2154,19 @@ window.VESPER_LESSONS = {
                                                "track":  "Core Grammar",
                                                "title":  "Second Conditional",
                                                "explanation":  {
-                                                                   "body":  "We use the second conditional to talk about unreal or hypothetical situations in the present or future. The structure is: If + past simple, ... would + base verb (e.g. \"If I had more time, I would travel more\"). With the verb \u0027to be\u0027, we often use \u0027were\u0027 for all subjects, especially in the fixed advice phrase \u0027If I were you...\u0027. You can replace \u0027would\u0027 with \u0027could\u0027 or \u0027might\u0027 to suggest ability or possibility in the result. (En espanol: hablamos de situaciones imaginarias o poco probables, no de hechos reales.)",
+                                                                   "body":  "We use the second conditional to talk about unreal or hypothetical situations in the present or future. The structure is: If + past simple, ... would + base verb (e.g. \"If I had more time, I would travel more\"). With the verb 'to be', we often use 'were' for all subjects, especially in the fixed advice phrase 'If I were you...'. You can replace 'would' with 'could' or 'might' to suggest ability or possibility in the result.",
                                                                    "examples":  [
                                                                                     {
-                                                                                        "en":  "If I had more money, I would buy a house by the sea.",
-                                                                                        "es":  "Si tuviera mas dinero, compraria una casa junto al mar."
+                                                                                        "en":  "If I had more money, I would buy a house by the sea."
                                                                                     },
                                                                                     {
-                                                                                        "en":  "If I were you, I would talk to her before deciding.",
-                                                                                        "es":  "Si yo fuera tu, hablaria con ella antes de decidir."
+                                                                                        "en":  "If I were you, I would talk to her before deciding."
                                                                                     },
                                                                                     {
-                                                                                        "en":  "If she studied harder, she could pass the exam easily.",
-                                                                                        "es":  "Si estudiara mas, podria aprobar el examen facilmente."
+                                                                                        "en":  "If she studied harder, she could pass the exam easily."
                                                                                     },
                                                                                     {
-                                                                                        "en":  "We might travel more if we didn\u0027t have such busy jobs.",
-                                                                                        "es":  "Viajariamos mas si no tuvieramos trabajos tan ocupados."
+                                                                                        "en":  "We might travel more if we didn\u0027t have such busy jobs."
                                                                                     }
                                                                                 ]
                                                                },
@@ -2238,7 +2202,7 @@ window.VESPER_LESSONS = {
                                                                                           "would",
                                                                                           "apologise"
                                                                                       ],
-                                                                     "hint":  "Empieza con \u0027If\u0027 y usa la frase para dar consejos (\u0027si yo fuera tu...\u0027)."
+                                                                     "hint":  "Start with 'If' and use the sentence to give advice ('If I were you...')."
                                                                  },
                                                                  {
                                                                      "type":  "multiple_choice",
@@ -2275,7 +2239,7 @@ window.VESPER_LESSONS = {
                                                                                           "the",
                                                                                           "train"
                                                                                       ],
-                                                                     "hint":  "El resultado usa \u0027could\u0027 para expresar posibilidad o capacidad."
+                                                                     "hint":  "The result uses 'could' to express possibility or ability."
                                                                  },
                                                                  {
                                                                      "type":  "multiple_choice",
@@ -2299,23 +2263,19 @@ window.VESPER_LESSONS = {
                                           "track":  "Core Grammar",
                                           "title":  "The Passive Voice",
                                           "explanation":  {
-                                                              "body":  "We form the passive voice with the verb \"to be\" plus the past participle: \"is/are made\" in the present simple and \"was/were made\" in the past simple. We use the passive when the action or the object is more important than who does it, or when the agent is unknown or unimportant. If we want to mention who performs the action, we add it with \"by\" + agent. (En español el agente se introduce con \"por\".)",
+                                                              "body":  "We form the passive voice with the verb \"to be\" plus the past participle: \"is/are made\" in the present simple and \"was/were made\" in the past simple. We use the passive when the action or the object is more important than who does it, or when the agent is unknown or unimportant. If we want to mention who performs the action, we add it with \"by\" + agent.",
                                                               "examples":  [
                                                                                {
-                                                                                   "en":  "English is spoken all over the world.",
-                                                                                   "es":  "El inglés se habla en todo el mundo."
+                                                                                   "en":  "English is spoken all over the world."
                                                                                },
                                                                                {
-                                                                                   "en":  "The letters were delivered yesterday.",
-                                                                                   "es":  "Las cartas fueron entregadas ayer."
+                                                                                   "en":  "The letters were delivered yesterday."
                                                                                },
                                                                                {
-                                                                                   "en":  "This painting was created by a local artist.",
-                                                                                   "es":  "Este cuadro fue creado por un artista local."
+                                                                                   "en":  "This painting was created by a local artist."
                                                                                },
                                                                                {
-                                                                                   "en":  "The office is cleaned every morning.",
-                                                                                   "es":  "La oficina se limpia todas las mañanas."
+                                                                                   "en":  "The office is cleaned every morning."
                                                                                }
                                                                            ]
                                                           },
@@ -2347,7 +2307,7 @@ window.VESPER_LESSONS = {
                                                                                      "in",
                                                                                      "Colombia"
                                                                                  ],
-                                                                "hint":  "Presente simple pasivo: el agente no importa."
+                                                                "hint":  "Present simple passive: the agent is not important."
                                                             },
                                                             {
                                                                 "type":  "multiple_choice",
@@ -2378,7 +2338,7 @@ window.VESPER_LESSONS = {
                                                                                      "every",
                                                                                      "week"
                                                                                  ],
-                                                                "hint":  "Presente simple pasivo para una rutina; el agente no se menciona."
+                                                                "hint":  "Present simple passive for a routine; the agent is not mentioned."
                                                             },
                                                             {
                                                                 "type":  "multiple_choice",
@@ -2402,23 +2362,19 @@ window.VESPER_LESSONS = {
                                             "track":  "Core Grammar",
                                             "title":  "Reported Speech",
                                             "explanation":  {
-                                                                "body":  "When we report what someone said, we usually move the verb one step back into the past: present tenses become past, \u0027will\u0027 becomes \u0027would\u0027, and \u0027can\u0027 becomes \u0027could\u0027. Pronouns and time words also shift to match the new point of view (for example, \u0027I\u0027 may become \u0027he\u0027, and \u0027tomorrow\u0027 becomes \u0027the next day\u0027). Remember that \u0027tell\u0027 needs a person as its object (tell me, tell her), while \u0027say\u0027 does not (say that...). (En espanol: al pasar al estilo indirecto, el verbo retrocede un tiempo y cambian los pronombres y las palabras de tiempo.)",
+                                                                "body":  "When we report what someone said, we usually move the verb one step back into the past: present tenses become past, 'will' becomes 'would', and 'can' becomes 'could'. Pronouns and time words also shift to match the new point of view (for example, 'I' may become 'he', and 'tomorrow' becomes 'the next day'). Remember that 'tell' needs a person as its object (tell me, tell her), while 'say' does not (say that...).",
                                                                 "examples":  [
                                                                                  {
-                                                                                     "en":  "\"I am tired,\" she said. -\u003e She said that she was tired.",
-                                                                                     "es":  "\"Estoy cansada\", dijo. -\u003e Dijo que estaba cansada."
+                                                                                     "en":  "\"I am tired,\" she said. -\u003e She said that she was tired."
                                                                                  },
                                                                                  {
-                                                                                     "en":  "\"We will call you tomorrow.\" -\u003e They said they would call me the next day.",
-                                                                                     "es":  "\"Te llamaremos manana.\" -\u003e Dijeron que me llamarian al dia siguiente."
+                                                                                     "en":  "\"We will call you tomorrow.\" -\u003e They said they would call me the next day."
                                                                                  },
                                                                                  {
-                                                                                     "en":  "\"I can\u0027t swim,\" he told me. -\u003e He told me he couldn\u0027t swim.",
-                                                                                     "es":  "\"No se nadar\", me dijo. -\u003e Me dijo que no sabia nadar."
+                                                                                     "en":  "\"I can\u0027t swim,\" he told me. -\u003e He told me he couldn\u0027t swim."
                                                                                  },
                                                                                  {
-                                                                                     "en":  "\"I work here now.\" -\u003e She said she worked there then.",
-                                                                                     "es":  "\"Trabajo aqui ahora.\" -\u003e Dijo que trabajaba alli en ese momento."
+                                                                                     "en":  "\"I work here now.\" -\u003e She said she worked there then."
                                                                                  }
                                                                              ]
                                                             },
@@ -2450,7 +2406,7 @@ window.VESPER_LESSONS = {
                                                                                        "lived",
                                                                                        "there"
                                                                                    ],
-                                                                  "hint":  "Estilo indirecto: \u0027live\u0027 retrocede a pasado y \u0027here\u0027 cambia a \u0027there\u0027."
+                                                                  "hint":  "Reported speech: 'live' moves back to the past and 'here' changes to 'there'."
                                                               },
                                                               {
                                                                   "type":  "multiple_choice",
@@ -2481,7 +2437,7 @@ window.VESPER_LESSONS = {
                                                                                        "couldn\u0027t",
                                                                                        "come"
                                                                                    ],
-                                                                  "hint":  "Recuerda: \u0027tell\u0027 lleva persona (us) y \u0027can\u0027t\u0027 retrocede a \u0027couldn\u0027t\u0027."
+                                                                  "hint":  "Remember: 'tell' needs a person (us) and 'can't' moves back to 'couldn't'."
                                                               },
                                                               {
                                                                   "type":  "multiple_choice",
@@ -2505,23 +2461,19 @@ window.VESPER_LESSONS = {
                                              "track":  "Core Grammar",
                                              "title":  "Relative Clauses",
                                              "explanation":  {
-                                                                 "body":  "Relative clauses add information about a noun. Defining relative clauses identify exactly which person or thing we mean and take no commas; we use who/that for people, which/that for things, whose for possession, and where for places. Non-defining relative clauses add extra, non-essential information and are always separated by commas, and in these clauses \u0027that\u0027 is never used. Note also that you cannot use \u0027that\u0027 immediately after a preposition (say \u0027in which\u0027, not \u0027in that\u0027). (En las explicativas, separadas por comas, nunca se usa \u0027that\u0027.)",
+                                                                 "body":  "Relative clauses add information about a noun. Defining relative clauses identify exactly which person or thing we mean and take no commas; we use who/that for people, which/that for things, whose for possession, and where for places. Non-defining relative clauses add extra, non-essential information and are always separated by commas, and in these clauses 'that' is never used. Note also that you cannot use 'that' immediately after a preposition (say 'in which', not 'in that').",
                                                                  "examples":  [
                                                                                   {
-                                                                                      "en":  "The woman who lives next door is a doctor.",
-                                                                                      "es":  "La mujer que vive al lado es medica."
+                                                                                      "en":  "The woman who lives next door is a doctor."
                                                                                   },
                                                                                   {
-                                                                                      "en":  "My brother, who lives in Madrid, is visiting us.",
-                                                                                      "es":  "Mi hermano, que vive en Madrid, viene a visitarnos."
+                                                                                      "en":  "My brother, who lives in Madrid, is visiting us."
                                                                                   },
                                                                                   {
-                                                                                      "en":  "This is the school where I learned English.",
-                                                                                      "es":  "Esta es la escuela donde aprendi ingles."
+                                                                                      "en":  "This is the school where I learned English."
                                                                                   },
                                                                                   {
-                                                                                      "en":  "She\u0027s the colleague whose car broke down yesterday.",
-                                                                                      "es":  "Es la companera cuyo coche se averio ayer."
+                                                                                      "en":  "She\u0027s the colleague whose car broke down yesterday."
                                                                                   }
                                                                               ]
                                                              },
@@ -2570,7 +2522,7 @@ window.VESPER_LESSONS = {
                                                                                         "grew",
                                                                                         "up"
                                                                                     ],
-                                                                   "hint":  "Usa \u0027where\u0027 para referirte a un lugar (la casa)."
+                                                                   "hint":  "Use 'where' to refer to a place (the house)."
                                                                },
                                                                {
                                                                    "type":  "word_order",
@@ -2596,7 +2548,7 @@ window.VESPER_LESSONS = {
                                                                                         "the",
                                                                                         "police"
                                                                                     ],
-                                                                   "hint":  "Usa \u0027whose\u0027 para indicar posesion (la cartera del hombre)."
+                                                                   "hint":  "Use 'whose' to show possession (the man's wallet)."
                                                                },
                                                                {
                                                                    "type":  "multiple_choice",
@@ -2620,23 +2572,19 @@ window.VESPER_LESSONS = {
                                                 "track":  "Core Grammar",
                                                 "title":  "Gerunds \u0026 Infinitives",
                                                 "explanation":  {
-                                                                    "body":  "After certain verbs we use the gerund (-ing), and after others we use the to-infinitive. Verbs like enjoy, avoid, finish and mind are followed by -ing, while want, decide, hope and agree take a to-infinitive. We always use -ing after a preposition, and a few verbs such as stop and remember change meaning depending on which form follows. (En espanol no existe esta diferencia, asi que hay que memorizar que verbo pide cada forma.)",
+                                                                    "body":  "After certain verbs we use the gerund (-ing), and after others we use the to-infinitive. Verbs like enjoy, avoid, finish and mind are followed by -ing, while want, decide, hope and agree take a to-infinitive. We always use -ing after a preposition, and a few verbs such as stop and remember change meaning depending on which form follows.",
                                                                     "examples":  [
                                                                                      {
-                                                                                         "en":  "She enjoys learning new languages.",
-                                                                                         "es":  "A ella le gusta aprender idiomas nuevos."
+                                                                                         "en":  "She enjoys learning new languages."
                                                                                      },
                                                                                      {
-                                                                                         "en":  "We decided to leave early.",
-                                                                                         "es":  "Decidimos salir temprano."
+                                                                                         "en":  "We decided to leave early."
                                                                                      },
                                                                                      {
-                                                                                         "en":  "I\u0027m interested in working abroad.",
-                                                                                         "es":  "Me interesa trabajar en el extranjero."
+                                                                                         "en":  "I\u0027m interested in working abroad."
                                                                                      },
                                                                                      {
-                                                                                         "en":  "He stopped smoking last year.",
-                                                                                         "es":  "Dejo de fumar el ano pasado."
+                                                                                         "en":  "He stopped smoking last year."
                                                                                      }
                                                                                  ]
                                                                 },
@@ -2670,7 +2618,7 @@ window.VESPER_LESSONS = {
                                                                                            "the",
                                                                                            "meeting"
                                                                                        ],
-                                                                      "hint":  "El verbo \u0027decide\u0027 va seguido del infinitivo con \u0027to\u0027."
+                                                                      "hint":  "The verb 'decide' is followed by the infinitive with 'to'."
                                                                   },
                                                                   {
                                                                       "type":  "multiple_choice",
@@ -2701,7 +2649,7 @@ window.VESPER_LESSONS = {
                                                                                            "to",
                                                                                            "Canada"
                                                                                        ],
-                                                                      "hint":  "Despues de una preposicion como \u0027about\u0027 siempre se usa la forma -ing."
+                                                                      "hint":  "After a preposition like 'about' we always use the -ing form."
                                                                   },
                                                                   {
                                                                       "type":  "multiple_choice",
@@ -2726,61 +2674,57 @@ window.VESPER_LESSONS = {
                                               "title":  "Third Conditional",
                                               "tipo":  "aprende",
                                               "explanation":  {
-                                                                  "body":  "The third conditional describes unreal or hypothetical situations in the past: things that did not actually happen. We form it with \u0027if + past perfect\u0027 in the condition and \u0027would have + past participle\u0027 in the result, and we often use it to express regret or to imagine a different outcome. To soften the result or show uncertainty, we replace \u0027would have\u0027 with \u0027could have\u0027 (possibility/ability) or \u0027might have\u0027 (a less certain outcome). (En espanol, equivale al condicional compuesto: \u0027si hubiera... habria/podria/quiza habria...\u0027, para hablar de algo irreal en el pasado.)",
+                                                                  "body":  "The third conditional describes unreal or hypothetical situations in the past: things that did not actually happen. We form it with 'if + past perfect' in the condition and 'would have + past participle' in the result, and we often use it to express regret or to imagine a different outcome. To soften the result or show uncertainty, we replace 'would have' with 'could have' (possibility/ability) or 'might have' (a less certain outcome).",
                                                                   "examples":  [
                                                                                    {
-                                                                                       "en":  "If she had studied harder, she would have passed the exam.",
-                                                                                       "es":  "Si ella hubiera estudiado mas, habria aprobado el examen."
+                                                                                       "en":  "If she had studied harder, she would have passed the exam."
                                                                                    },
                                                                                    {
-                                                                                       "en":  "If we had left earlier, we might have caught the train.",
-                                                                                       "es":  "Si hubieramos salido antes, quiza habriamos cogido el tren."
+                                                                                       "en":  "If we had left earlier, we might have caught the train."
                                                                                    },
                                                                                    {
-                                                                                       "en":  "If you had told me the truth, I could have helped you.",
-                                                                                       "es":  "Si me hubieras dicho la verdad, te habria podido ayudar."
+                                                                                       "en":  "If you had told me the truth, I could have helped you."
                                                                                    },
                                                                                    {
-                                                                                       "en":  "If they hadn\u0027t ignored the warnings, the accident wouldn\u0027t have happened.",
-                                                                                       "es":  "Si no hubieran ignorado las advertencias, el accidente no habria ocurrido."
+                                                                                       "en":  "If they hadn\u0027t ignored the warnings, the accident wouldn\u0027t have happened."
                                                                                    }
                                                                                ],
                                                 "sections":  [
                                                   {
                                                     "kind": "intro",
-                                                    "body": "El third conditional imagina un pasado distinto: lo que habría pasado si algo hubiera sido de otra forma. Sirve para lamentarse, para analizar decisiones y para explicar un resultado sin señalar a nadie de frente."
+                                                    "body": "The third conditional imagines a different past: what would have happened if something had been different. Use it to express regret, to analyse decisions and to explain a result without directly blaming anyone."
                                                   },
                                                   {
                                                     "kind": "regla",
-                                                    "body": "If + past perfect, would have + participio: If I had known, I would have called. Cambia would por could (posibilidad) o might (menos seguro). La parte con if puede ir al final, y entonces sin coma. Negativo: hadn't / wouldn't have. Al hablar se contrae: If I'd known, I'd have called (ojo: 'd es had en la parte del if y would en la otra)."
+                                                    "body": "If + past perfect, would have + past participle: If I had known, I would have called. Change would to could (possibility) or might (less certain). The if-clause can go at the end, and then there's no comma. Negative: hadn't / wouldn't have. In speech we contract: If I'd known, I'd have called (careful: 'd is had in the if-clause and would in the result)."
                                                   },
                                                   {
                                                     "kind": "vocab",
                                                     "items": [
                                                       {
                                                         "en": "if I had known",
-                                                        "es": "si hubiera sabido"
+                                                        "es": "the unreal past condition"
                                                       },
                                                       {
-                                                        "en": "would have + participio",
-                                                        "es": "habría…"
+                                                        "en": "would have + past participle",
+                                                        "es": "the imagined past result"
                                                       },
                                                       {
                                                         "en": "could have",
-                                                        "es": "habría podido"
+                                                        "es": "it was possible, but it didn't happen"
                                                       },
                                                       {
                                                         "en": "might have",
-                                                        "es": "quizá habría"
+                                                        "es": "a less certain past result"
                                                       },
                                                       {
                                                         "en": "I wish I had…",
-                                                        "es": "ojalá hubiera…"
+                                                        "es": "express regret about the past"
                                                       },
                                                       {
                                                         "en": "to regret",
                                                         "ipa": "rɪˈɡret",
-                                                        "es": "arrepentirse"
+                                                        "es": "to feel sorry about something you did"
                                                       }
                                                     ]
                                                   },
@@ -2789,19 +2733,19 @@ window.VESPER_LESSONS = {
                                                     "items": [
                                                       {
                                                         "en": "If I'd known, I would have told you.",
-                                                        "es": "Si lo hubiera sabido, te lo habría dicho."
+                                                        "es": "you didn't know, so you didn't tell"
                                                       },
                                                       {
                                                         "en": "We could have avoided this.",
-                                                        "es": "Pudimos haber evitado esto."
+                                                        "es": "it was avoidable"
                                                       },
                                                       {
                                                         "en": "Looking back, I might have handled it differently.",
-                                                        "es": "Visto en retrospectiva, quizá lo habría manejado distinto."
+                                                        "es": "reflect calmly on a decision"
                                                       },
                                                       {
                                                         "en": "I wish I had listened.",
-                                                        "es": "Ojalá hubiera escuchado."
+                                                        "es": "regret"
                                                       }
                                                     ]
                                                   },
@@ -2809,20 +2753,16 @@ window.VESPER_LESSONS = {
                                                     "kind": "ejemplos",
                                                     "items": [
                                                       {
-                                                        "en": "If I had started English earlier, I would have applied for that job.",
-                                                        "es": "Si hubiera empezado inglés antes, habría solicitado ese trabajo."
+                                                        "en": "If I had started English earlier, I would have applied for that job."
                                                       },
                                                       {
-                                                        "en": "If we had left on time, we might have caught the flight.",
-                                                        "es": "Si hubiéramos salido a tiempo, quizá habríamos alcanzado el vuelo."
+                                                        "en": "If we had left on time, we might have caught the flight."
                                                       },
                                                       {
-                                                        "en": "If you had told me, I could have helped.",
-                                                        "es": "Si me lo hubieras dicho, habría podido ayudarte."
+                                                        "en": "If you had told me, I could have helped."
                                                       },
                                                       {
-                                                        "en": "The project wouldn't have failed if the team had tested it.",
-                                                        "es": "El proyecto no habría fallado si el equipo lo hubiera probado."
+                                                        "en": "The project wouldn't have failed if the team had tested it."
                                                       }
                                                     ]
                                                   },
@@ -2832,37 +2772,37 @@ window.VESPER_LESSONS = {
                                                       {
                                                         "no": "If I would have known, I would have come.",
                                                         "si": "If I had known, I would have come.",
-                                                        "pq": "En la parte del if no va would: va had + participio."
+                                                        "pq": "No would in the if-clause: use had + past participle."
                                                       },
                                                       {
                                                         "no": "If she had studied, she would pass.",
                                                         "si": "If she had studied, she would have passed.",
-                                                        "pq": "Pasado irreal en las dos partes: would have + participio."
+                                                        "pq": "Unreal past in both parts: would have + past participle."
                                                       },
                                                       {
                                                         "no": "If I knew, I would have told you.",
                                                         "si": "If I had known, I would have told you.",
-                                                        "pq": "Para el pasado, past perfect (had known), no past simple."
+                                                        "pq": "For the past, use the past perfect (had known), not the past simple."
                                                       },
                                                       {
                                                         "no": "I would have went.",
                                                         "si": "I would have gone.",
-                                                        "pq": "Después de have va el participio."
+                                                        "pq": "After have we use the past participle."
                                                       },
                                                       {
                                                         "no": "If I'd have known…",
                                                         "si": "If I'd known…",
-                                                        "pq": "Muchos nativos lo dicen, pero en un examen o un texto formal es If I had known."
+                                                        "pq": "Many native speakers say it, but in an exam or a formal text it's If I had known."
                                                       }
                                                     ]
                                                   },
                                                   {
                                                     "kind": "resumen",
-                                                    "body": "If + had + participio, would / could / might have + participio. Nada de would en la parte del if. Úsalo para hablar con matiz de decisiones pasadas."
+                                                    "body": "If + had + past participle, would / could / might have + past participle. Never would in the if-clause. Use it to talk about past decisions with nuance."
                                                   },
                                                   {
                                                     "kind": "puente",
-                                                    "body": "Ahora te toca a ti: unos ejercicios rápidos para dominarlo."
+                                                    "body": "Your turn: a few quick exercises to master it."
                                                   }
                                                 ]
                                               },
@@ -2902,7 +2842,7 @@ window.VESPER_LESSONS = {
                                                                                          "have",
                                                                                          "evacuated"
                                                                                      ],
-                                                                    "hint":  "Empieza con la oracion condicional \u0027If + pasado perfecto\u0027 y luego el resultado con \u0027would have + participio\u0027."
+                                                                    "hint":  "Start with the condition 'If + past perfect', then the result with 'would have + past participle'."
                                                                 },
                                                                 {
                                                                     "type":  "multiple_choice",
@@ -2939,7 +2879,7 @@ window.VESPER_LESSONS = {
                                                                                          "have",
                                                                                          "profited"
                                                                                      ],
-                                                                    "hint":  "Usa \u0027could have\u0027 en el resultado para expresar una posibilidad o capacidad en el pasado."
+                                                                    "hint":  "Use 'could have' in the result to express a past possibility or ability."
                                                                 },
                                                                 {
                                                                     "type":  "multiple_choice",
@@ -2963,23 +2903,19 @@ window.VESPER_LESSONS = {
                                              "track":  "Core Grammar",
                                              "title":  "Modals of Deduction (Past)",
                                              "explanation":  {
-                                                                 "body":  "To speculate about the past, we use a modal verb followed by \u0027have\u0027 + past participle. \u0027Must have\u0027 expresses near-certainty that something happened, while \u0027can\u0027t have\u0027 or \u0027couldn\u0027t have\u0027 expresses near-certainty that it did not. For genuine uncertainty, we use \u0027might have\u0027, \u0027may have\u0027, or \u0027could have\u0027 to suggest one of several possibilities. (Estos modales expresan deducciones o conjeturas sobre hechos pasados, no sobre el presente.)",
+                                                                 "body":  "To speculate about the past, we use a modal verb followed by 'have' + past participle. 'Must have' expresses near-certainty that something happened, while 'can't have' or 'couldn't have' expresses near-certainty that it did not. For genuine uncertainty, we use 'might have', 'may have', or 'could have' to suggest one of several possibilities.",
                                                                  "examples":  [
                                                                                   {
-                                                                                      "en":  "She must have left already; her coat isn\u0027t on the hook.",
-                                                                                      "es":  "Debe de haberse ido ya; su abrigo no está en el perchero."
+                                                                                      "en":  "She must have left already; her coat isn\u0027t on the hook."
                                                                                   },
                                                                                   {
-                                                                                      "en":  "He can\u0027t have read the whole report in ten minutes.",
-                                                                                      "es":  "No puede haber leído todo el informe en diez minutos."
+                                                                                      "en":  "He can\u0027t have read the whole report in ten minutes."
                                                                                   },
                                                                                   {
-                                                                                      "en":  "They might have missed the train, or they may have got lost.",
-                                                                                      "es":  "Puede que hayan perdido el tren, o quizá se hayan perdido."
+                                                                                      "en":  "They might have missed the train, or they may have got lost."
                                                                                   },
                                                                                   {
-                                                                                      "en":  "I couldn\u0027t have offended her, since I never even mentioned it.",
-                                                                                      "es":  "No pude haberla ofendido, ya que ni siquiera lo mencioné."
+                                                                                      "en":  "I couldn\u0027t have offended her, since I never even mentioned it."
                                                                                   }
                                                                               ]
                                                              },
@@ -3015,7 +2951,7 @@ window.VESPER_LESSONS = {
                                                                                         "warning",
                                                                                         "sign"
                                                                                     ],
-                                                                   "hint":  "Casi certeza de que algo NO ocurrió en el pasado. Empieza con el sujeto."
+                                                                   "hint":  "You're almost sure something did NOT happen in the past. Start with the subject."
                                                                },
                                                                {
                                                                    "type":  "multiple_choice",
@@ -3048,7 +2984,7 @@ window.VESPER_LESSONS = {
                                                                                         "the",
                                                                                         "meeting"
                                                                                     ],
-                                                                   "hint":  "Una posibilidad incierta en el pasado. Empieza con el sujeto."
+                                                                   "hint":  "An uncertain possibility in the past. Start with the subject."
                                                                },
                                                                {
                                                                    "type":  "word_order",
@@ -3072,7 +3008,7 @@ window.VESPER_LESSONS = {
                                                                                         "the",
                                                                                         "storm"
                                                                                     ],
-                                                                   "hint":  "Deducción casi segura sobre un hecho pasado, en voz pasiva. Empieza con el sujeto."
+                                                                   "hint":  "An almost certain deduction about a past fact, in the passive voice. Start with the subject."
                                                                }
                                                            ],
                                              "xpReward":  70,
@@ -3085,23 +3021,19 @@ window.VESPER_LESSONS = {
                                       "track":  "Core Grammar",
                                       "title":  "Inversion for Emphasis",
                                       "explanation":  {
-                                                          "body":  "When a sentence begins with a negative or limiting adverbial for emphasis, English inverts the normal word order so that an auxiliary verb comes before the subject, exactly as in a question. This formal device follows expressions such as \u0027Never\u0027, \u0027Rarely\u0027, \u0027Not only\u0027, \u0027Hardly... when\u0027, \u0027Seldom\u0027, and \u0027Little\u0027. If there is no auxiliary, you add \u0027do\u0027, \u0027does\u0027, or \u0027did\u0027 to carry the inversion. (En español no existe esta inversión: simplemente se enfatiza con la entonación o el orden, sin invertir el auxiliar.)",
+                                                          "body":  "When a sentence begins with a negative or limiting adverbial for emphasis, English inverts the normal word order so that an auxiliary verb comes before the subject, exactly as in a question. This formal device follows expressions such as 'Never', 'Rarely', 'Not only', 'Hardly... when', 'Seldom', and 'Little'. If there is no auxiliary, you add 'do', 'does', or 'did' to carry the inversion.",
                                                           "examples":  [
                                                                            {
-                                                                               "en":  "Never have I encountered such generosity.",
-                                                                               "es":  "Nunca he encontrado tanta generosidad."
+                                                                               "en":  "Never have I encountered such generosity."
                                                                            },
                                                                            {
-                                                                               "en":  "Rarely does the committee reach a decision so quickly.",
-                                                                               "es":  "Rara vez el comité toma una decisión tan rápido."
+                                                                               "en":  "Rarely does the committee reach a decision so quickly."
                                                                            },
                                                                            {
-                                                                               "en":  "Not only did she win the prize, but she also broke the record.",
-                                                                               "es":  "No solo ganó el premio, sino que también batió el récord."
+                                                                               "en":  "Not only did she win the prize, but she also broke the record."
                                                                            },
                                                                            {
-                                                                               "en":  "Hardly had the meeting begun when the lights went out.",
-                                                                               "es":  "Apenas había empezado la reunión cuando se fue la luz."
+                                                                               "en":  "Hardly had the meeting begun when the lights went out."
                                                                            }
                                                                        ]
                                                       },
@@ -3133,7 +3065,7 @@ window.VESPER_LESSONS = {
                                                                                  "arrive",
                                                                                  "late"
                                                                              ],
-                                                            "hint":  "Empieza con el adverbio limitante y usa \u0027does\u0027 antes del sujeto."
+                                                            "hint":  "Start with the limiting adverb and put 'does' before the subject."
                                                         },
                                                         {
                                                             "type":  "multiple_choice",
@@ -3168,7 +3100,7 @@ window.VESPER_LESSONS = {
                                                                                  "it",
                                                                                  "started"
                                                                              ],
-                                                            "hint":  "Tras \u0027Hardly\u0027 invierte \u0027had\u0027 y el sujeto; la segunda parte empieza con \u0027when\u0027."
+                                                            "hint":  "After 'Hardly', invert 'had' and the subject; the second part starts with 'when'."
                                                         },
                                                         {
                                                             "type":  "multiple_choice",

@@ -203,97 +203,84 @@ window.VESPER_ACTIVITIES = (function () {
 
     /* ---------------- B1 · Trabajo ---------------- */
     "act-b1-work": {
-      lessonId: "act-b1-work", level: "B1", track: "Practica", topic: "business", skill: "use",
-      title: "Trabajo y carrera", xpReward: 45, mascotState: "explaining",
+      lessonId: "act-b1-work", level: "B1", track: "Practice", topic: "business", skill: "use",
+      title: "Work and careers", xpReward: 45, mascotState: "explaining",
       explanation: {
-        body: "En contextos laborales: apply for a job, attend a meeting, meet a deadline, give feedback. Para experiencia usamos present perfect: I have worked here for three years. (Vocabulario y present perfect para experiencia laboral.)",
+        body: "Useful work collocations: apply for a job, attend a meeting, meet a deadline, give feedback. To talk about work experience we use the present perfect: I have worked here for three years.",
         examples: [
-          { en: "I have worked here for three years.", es: "He trabajado aqui tres anos." },
-          { en: "We need to meet the deadline.", es: "Necesitamos cumplir el plazo." },
-          { en: "She applied for a new job.", es: "Ella solicito un nuevo empleo." }
+          { en: "I have worked here for three years." },
+          { en: "We need to meet the deadline." },
+          { en: "She applied for a new job." }
         ]
       },
       exercises: [
-        { type: "matching", instruction: "Une la expresion con su significado.", pairs: [
-          { l: "deadline", r: "fecha limite" }, { l: "meeting", r: "reunion" },
-          { l: "salary", r: "salario" }, { l: "skills", r: "habilidades" }
-        ] },
-        { type: "fill_blank", sentence: "I have worked here ___ three years.", answers: ["for"], hint: "for + periodo de tiempo.", explanation: "for + duracion (three years)." },
-        { type: "multiple_choice", question: "Choose: She has ___ for the manager position.", options: ["applying", "applied", "apply"], correctIndex: 1, explanation: "Present perfect: has + participio (applied)." },
-        { type: "true_false", statement: "\"Meet a deadline\" means to finish on time.", answer: true, explanation: "Meet a deadline = cumplir el plazo." },
-        { type: "listening", text: "We have a meeting at nine tomorrow.", "audio": "assets/audio/app/b1_2c0756b24d.mp3", question: "Cuando es la reunion?",
-          options: ["Manana a las nueve", "Hoy a las nueve", "Manana a las cinco"], correctIndex: 0 },
-        { type: "categorize", instruction: "Positivo o negativo en el trabajo?", buckets: [
-          { id: "pos", label: "Positivo" }, { id: "neg", label: "Negativo" }
-        ], items: [
+        { type: "matching", instruction: "Match each word with its meaning.", pairs: [{"l":"deadline","r":"the latest time to finish something"},{"l":"meeting","r":"people getting together to discuss"},{"l":"salary","r":"money you earn every month"},{"l":"skills","r":"things you are good at doing"}] },
+        { type: "fill_blank", sentence: "I have worked here ___ three years.", answers: ["for"], hint: "for + a period of time.", explanation: "for + duration (three years)." },
+        { type: "multiple_choice", question: "Choose: She has ___ for the manager position.", options: ["applying", "applied", "apply"], correctIndex: 1, explanation: "Present perfect: has + past participle (applied)." },
+        { type: "true_false", statement: "\"Meet a deadline\" means to finish on time.", answer: true, explanation: "To meet a deadline = to finish something on time." },
+        { type: "listening", text: "We have a meeting at nine tomorrow.", "audio": "assets/audio/app/b1_2c0756b24d.mp3", question: "When is the meeting?",
+          options: ["Tomorrow at nine","Today at nine","Tomorrow at five"], correctIndex: 0 },
+        { type: "categorize", instruction: "Good news or bad news at work?", buckets: [{"id":"pos","label":"Good news"},{"id":"neg","label":"Bad news"}], items: [
           { t: "get a promotion", bucket: "pos" }, { t: "meet the deadline", bucket: "pos" },
           { t: "miss a deadline", bucket: "neg" }, { t: "get fired", bucket: "neg" }
         ] },
-        { type: "translate", prompt: "Traduce: \"He trabajado aqui tres anos.\"",
+        { type: "translate", prompt: "Rewrite using 'for': I started working here three years ago, and I still work here.",
           answers: ["i have worked here for three years", "i've worked here for three years"], explanation: "I have worked here for three years." }
       ]
     },
 
     /* ---------------- B1 · Tecnologia ---------------- */
     "act-b1-tech": {
-      lessonId: "act-b1-tech", level: "B1", track: "Practica", topic: "tech", skill: "vocab",
-      title: "Tecnologia e internet", xpReward: 44, mascotState: "explaining",
+      lessonId: "act-b1-tech", level: "B1", track: "Practice", topic: "tech", skill: "vocab",
+      title: "Technology and the internet", xpReward: 44, mascotState: "explaining",
       explanation: {
-        body: "Verbos de tecnologia: download, upload, install, update, log in. Usa used to para habitos del pasado: I used to use a flip phone. (Vocabulario tech y 'used to' para el pasado.)",
+        body: "Tech verbs: download, upload, install, update, log in. Use used to for past habits that have stopped: I used to use a flip phone.",
         examples: [
-          { en: "I need to update the app.", es: "Necesito actualizar la app." },
-          { en: "She uploaded the file.", es: "Ella subio el archivo." },
-          { en: "We used to use maps on paper.", es: "Antes usabamos mapas en papel." }
+          { en: "I need to update the app." },
+          { en: "She uploaded the file." },
+          { en: "We used to use maps on paper." }
         ]
       },
       exercises: [
-        { type: "matching", instruction: "Une el verbo con su accion.", pairs: [
-          { l: "download", r: "descargar" }, { l: "upload", r: "subir" },
-          { l: "install", r: "instalar" }, { l: "log in", r: "iniciar sesion" }
-        ] },
-        { type: "fill_blank", sentence: "I ___ to use a flip phone years ago.", answers: ["used"], hint: "used to + verbo = solia.", explanation: "used to = habito pasado." },
-        { type: "multiple_choice", question: "Opposite of \"download\":", options: ["upload", "update", "unplug"], correctIndex: 0, explanation: "Upload = subir; download = descargar." },
-        { type: "true_false", statement: "\"Update\" means to make software newer.", answer: true, explanation: "Update = actualizar a una version nueva." },
-        { type: "listening", text: "Please update the app before you log in.", "audio": "assets/audio/app/b1_62911b52fc.mp3", question: "Que debes hacer primero?",
-          options: ["Borrar la app", "Actualizar la app", "Apagar el telefono"], correctIndex: 1 },
-        { type: "categorize", instruction: "Hardware o software?", buckets: [
+        { type: "matching", instruction: "Match each verb with what it means.", pairs: [{"l":"download","r":"copy a file from the internet"},{"l":"upload","r":"send a file to the internet"},{"l":"install","r":"put a program on a device"},{"l":"log in","r":"enter your account"}] },
+        { type: "fill_blank", sentence: "I ___ to use a flip phone years ago.", answers: ["used"], hint: "used to + verb = a past habit.", explanation: "used to = a habit in the past that is not true now." },
+        { type: "multiple_choice", question: "Opposite of \"download\":", options: ["upload", "update", "unplug"], correctIndex: 0, explanation: "Upload = send to the internet; download = get from the internet." },
+        { type: "true_false", statement: "\"Update\" means to make software newer.", answer: true, explanation: "To update = to install the newest version." },
+        { type: "listening", text: "Please update the app before you log in.", "audio": "assets/audio/app/b1_62911b52fc.mp3", question: "What should you do first?",
+          options: ["Delete the app","Update the app","Turn off the phone"], correctIndex: 1 },
+        { type: "categorize", instruction: "Hardware or software?", buckets: [
           { id: "hw", label: "Hardware" }, { id: "sw", label: "Software" }
         ], items: [
           { t: "keyboard", bucket: "hw" }, { t: "screen", bucket: "hw" },
           { t: "browser", bucket: "sw" }, { t: "operating system", bucket: "sw" }
         ] },
-        { type: "translate", prompt: "Traduce: \"Necesito actualizar la app.\"",
+        { type: "translate", prompt: "Rewrite using 'need': It's necessary for me to update the app.",
           answers: ["i need to update the app", "i have to update the app"], explanation: "I need to update the app." }
       ]
     },
 
     /* ---------------- B2 · Conversacion y opinion ---------------- */
     "act-b2-opinion": {
-      lessonId: "act-b2-opinion", level: "B2", track: "Practica", topic: "society", skill: "use",
-      title: "Dar tu opinion", xpReward: 50, mascotState: "explaining",
+      lessonId: "act-b2-opinion", level: "B2", track: "Practice", topic: "society", skill: "use",
+      title: "Giving your opinion", xpReward: 50, mascotState: "explaining",
       explanation: {
-        body: "Para opinar con matices: \"I reckon...\", \"As far as I'm concerned...\", \"I'd argue that...\". Para acuerdo/desacuerdo: \"I see your point, but...\". (Conectores y expresiones para debatir con naturalidad.)",
+        body: "To give a nuanced opinion: \"I reckon...\", \"As far as I'm concerned...\", \"I'd argue that...\". To agree or disagree politely: \"I see your point, but...\". These expressions help you debate naturally.",
         examples: [
-          { en: "As far as I'm concerned, it's worth it.", es: "En lo que a mi respecta, vale la pena." },
-          { en: "I see your point, but I disagree.", es: "Entiendo tu punto, pero no estoy de acuerdo." },
-          { en: "I'd argue that it's too risky.", es: "Yo diria que es demasiado arriesgado." }
+          { en: "As far as I'm concerned, it's worth it." },
+          { en: "I see your point, but I disagree." },
+          { en: "I'd argue that it's too risky." }
         ]
       },
       exercises: [
-        { type: "matching", instruction: "Une la expresion con su funcion.", pairs: [
-          { l: "I reckon...", r: "dar opinion" }, { l: "On the other hand...", r: "contraste" },
-          { l: "I totally agree", r: "acuerdo fuerte" }, { l: "I'm not so sure", r: "duda" }
-        ] },
-        { type: "fill_blank", sentence: "I see your ___, but I disagree.", answers: ["point"], hint: "see your point = entender tu punto.", explanation: "\"See your point\" = entender tu argumento." },
-        { type: "multiple_choice", question: "Most formal way to introduce an opinion:", options: ["I guess", "I reckon", "As far as I'm concerned"], correctIndex: 2, explanation: "\"As far as I'm concerned\" es la mas formal." },
-        { type: "true_false", statement: "\"On the other hand\" introduces a contrasting idea.", answer: true, explanation: "Introduce un contraste/otra perspectiva." },
-        { type: "categorize", instruction: "Acuerdo o desacuerdo?", buckets: [
-          { id: "agree", label: "Acuerdo" }, { id: "disagree", label: "Desacuerdo" }
-        ], items: [
+        { type: "matching", instruction: "Match each expression with its function.", pairs: [{"l":"I reckon...","r":"giving an opinion"},{"l":"On the other hand...","r":"contrasting"},{"l":"I totally agree","r":"strong agreement"},{"l":"I'm not so sure","r":"doubt"}] },
+        { type: "fill_blank", sentence: "I see your ___, but I disagree.", answers: ["point"], hint: "see your point = understand your argument.", explanation: "\"I see your point\" = I understand your argument." },
+        { type: "multiple_choice", question: "Most formal way to introduce an opinion:", options: ["I guess", "I reckon", "As far as I'm concerned"], correctIndex: 2, explanation: "\"As far as I'm concerned\" is the most formal option." },
+        { type: "true_false", statement: "\"On the other hand\" introduces a contrasting idea.", answer: true, explanation: "It introduces a contrast or another perspective." },
+        { type: "categorize", instruction: "Agreeing or disagreeing?", buckets: [{"id":"agree","label":"Agreeing"},{"id":"disagree","label":"Disagreeing"}], items: [
           { t: "I couldn't agree more", bucket: "agree" }, { t: "Absolutely", bucket: "agree" },
           { t: "I'm afraid I disagree", bucket: "disagree" }, { t: "That's not how I see it", bucket: "disagree" }
         ] },
-        { type: "translate", prompt: "Traduce: \"Entiendo tu punto, pero no estoy de acuerdo.\"",
+        { type: "translate", prompt: "Say it more politely, using 'see' and 'point': \"You're wrong. I disagree.\"",
           answers: ["i see your point but i disagree", "i see your point, but i disagree", "i understand your point but i disagree"], explanation: "I see your point, but I disagree." }
       ]
     },
@@ -353,26 +340,26 @@ window.VESPER_ACTIVITIES = (function () {
     /* ---------------- B1 · Listening ---------------- */
     "lis-b1-news": {
       lessonId: "lis-b1-news", level: "B1", track: "Listening", topic: "society", skill: "listening",
-      title: "Escucha: anuncios e instrucciones", xpReward: 45, mascotState: "explaining",
+      title: "Listening: announcements and instructions", xpReward: 45, mascotState: "explaining",
       explanation: {
-        body: "Escucha anuncios e instrucciones más largos y responde. Fíjate en los detalles: horas, lugares y acciones. (Comprensión auditiva nivel B1.)",
+        body: "Listen to longer announcements and instructions and answer. Pay attention to the details: times, places and actions.",
         examples: [
-          { en: "The meeting has been moved to Friday.", es: "La reunión se cambió al viernes." },
-          { en: "Please turn off your phones.", es: "Por favor, apaguen sus teléfonos." }
+          { en: "The meeting has been moved to Friday." },
+          { en: "Please turn off your phones." }
         ]
       },
       exercises: [
-        { type: "listening", text: "The flight to London has been delayed by one hour.", "audio": "assets/audio/app/b1_a71685cffe.mp3", question: "Que pasa con el vuelo a Londres?",
-          options: ["Fue cancelado por la tormenta", "Salió antes", "Se retrasó una hora"], correctIndex: 2 },
-        { type: "listening", text: "Please remember to bring your passport tomorrow.", "audio": "assets/audio/app/b1_b188e315b5.mp3", question: "Que debes recordar?",
-          options: ["Traer dinero", "Traer el pasaporte", "Llegar tarde"], correctIndex: 1 },
-        { type: "listening", text: "The meeting has been moved to Friday morning.", "audio": "assets/audio/app/b1_022f548bed.mp3", question: "Cuando es la reunion ahora?",
-          options: ["Viernes por la mañana", "Lunes por la tarde", "Jueves por la noche"], correctIndex: 0 },
-        { type: "listening", text: "Could you call me back later, please?", "audio": "assets/audio/app/b1_5caaccb985.mp3", question: "Escribe lo que escuchaste:",
+        { type: "listening", text: "The flight to London has been delayed by one hour.", "audio": "assets/audio/app/b1_a71685cffe.mp3", question: "What happened to the flight to London?",
+          options: ["It was cancelled because of the storm","It left early","It was delayed by an hour"], correctIndex: 2 },
+        { type: "listening", text: "Please remember to bring your passport tomorrow.", "audio": "assets/audio/app/b1_b188e315b5.mp3", question: "What must you remember?",
+          options: ["To bring money","To bring your passport","To arrive late"], correctIndex: 1 },
+        { type: "listening", text: "The meeting has been moved to Friday morning.", "audio": "assets/audio/app/b1_022f548bed.mp3", question: "When is the meeting now?",
+          options: ["Friday morning","Monday afternoon","Thursday evening"], correctIndex: 0 },
+        { type: "listening", text: "Could you call me back later, please?", "audio": "assets/audio/app/b1_5caaccb985.mp3", question: "Write what you heard:",
           answers: ["could you call me back later please"], explanation: "Could you call me back later, please?" },
-        { type: "true_false", statement: "El anuncio pedía apagar los teléfonos.", answer: false, explanation: "Ese ejemplo era de la explicación, no del audio anterior." },
-        { type: "listening", text: "Tickets are available online from Monday.", "audio": "assets/audio/app/b1_37bb865102.mp3", question: "Desde cuando hay entradas online?",
-          options: ["Desde el lunes", "Desde el viernes", "Solo en taquilla"], correctIndex: 0 }
+        { type: "true_false", statement: "In the previous audio, the speaker asked you to call back later.", answer: true, explanation: "Yes: \"Could you call me back later, please?\"" },
+        { type: "listening", text: "Tickets are available online from Monday.", "audio": "assets/audio/app/b1_37bb865102.mp3", question: "Since when have tickets been available online?",
+          options: ["Since Monday","Since Friday","Only at the box office"], correctIndex: 0 }
       ]
     }
   };

@@ -67,6 +67,26 @@
   }
 
   var lesson = null, baseLesson = null, profile = (A && A.getProfile) ? A.getProfile() : null;
+  /* Inmersión: a partir de B1 la lección entera (contenido Y la interfaz del
+     reproductor) va en inglés. El contenido B1+ de los packs ya está escrito en
+     inglés; T(es, en) elige el texto de la interfaz según el nivel de la lección. */
+  var EN_UI_LEVELS = { B1: 1, B2: 1, C1: 1, C2: 1 };
+  function enUI() {
+    if (!lesson) return false;
+    return !!EN_UI_LEVELS[String(lesson.bossLevel || lesson.examLevel || lesson.level || "").toUpperCase()];
+  }
+  function T(es, en) { return enUI() ? en : es; }
+  var MASCOT_EN = {
+    welcome: ["Ready? Let's go!", "Good to see you. Let's start!", "One short lesson and you keep growing."],
+    explaining: ["Read it calmly and look at the examples.", "This is easier than it looks.", "Notice the pattern in the rule."],
+    correct: ["Perfect!", "Excellent, well done!", "You've got it!"],
+    incorrect: ["Almost! Read the explanation.", "Mistakes help you learn too.", "You'll get the next one."],
+    milestone: ["Amazing! That's a big step.", "Brilliant work. Keep shining!"]
+  };
+  function enLine(state) {
+    var a = MASCOT_EN[state] || MASCOT_EN.explaining;
+    return a[Math.floor(Math.random() * a.length)];
+  }
   var exIdx = 0, results = [], earnedXp = 0;
   var combo = 0, maxCombo = 0;   /* aciertos consecutivos dentro de la lección (Fase A) */
 
@@ -113,7 +133,7 @@
   function tipoOf(l) { return (l && l.tipo === "aprende") ? "aprende" : "practica"; }
   function tipoChip(l) {
     var ap = tipoOf(l) === "aprende";
-    return '<span class="tipo-chip ' + (ap ? "t-aprende" : "t-practica") + '">' + (ap ? "Aprende" : "Pr&aacute;ctica") + '</span>';
+    return '<span class="tipo-chip ' + (ap ? "t-aprende" : "t-practica") + '">' + (ap ? T("Aprende", "Learn") : T("Pr&aacute;ctica", "Practice")) + '</span>';
   }
 
   /* ---- Embudo: medición + CTA al examen de nivel (book_placement.html) ---- */
@@ -229,7 +249,7 @@
   function feedbackBox(ok, explanation, wrongFallback) {
     playFx(ok);
     var state = ok ? "correct" : "incorrect";
-    var line = (PERS && PERS.line) ? PERS.line(state) : "";
+    var line = enUI() ? enLine(state) : ((PERS && PERS.line) ? PERS.line(state) : "");
     if (!line) line = (window.VESPER_MASCOT ? VESPER_MASCOT.get(state).line : (ok ? "Bien!" : "Casi..."));
     var showExp = (PERS && PERS.explainOnCorrect) ? (!ok || PERS.explainOnCorrect()) : !ok;
     var detail = ok ? (showExp ? (explanation || "") : "") : (explanation || wrongFallback || "");
@@ -237,7 +257,7 @@
       ? VESPER_MASCOT.render(state, { size: "sm", line: false })
       : '<img class="fb-cat" src="assets/images/virtual_class_happy_cat.png" alt="">';
     return '<div class="fbbox ' + (ok ? "ok" : "no") + '">' + cat
-      + '<div><b>' + (ok ? "¡Correcto!" : "Incorrecto") + '</b><div class="muted">' + esc(line) + '</div>'
+      + '<div><b>' + (ok ? T("¡Correcto!", "Correct!") : T("Incorrecto", "Not quite")) + '</b><div class="muted">' + esc(line) + '</div>'
       + (detail ? '<div class="explain">' + esc(detail) + '</div>' : '') + '</div></div>';
   }
   function shuffle(arr, avoid) {
@@ -1343,6 +1363,9 @@
   ];
   /* a partir de B1 la tarjeta se explica en inglés en vez de traducirse */
   var ENG_LEVELS = { B1: 1, B2: 1, C1: 1, C2: 1 };
+  /* en B1+ los mini-juegos del recinto preguntan por la definición en inglés
+     (si la tarjeta la tiene) en lugar de la traducción */
+  function cardMeaning(c, lv) { return (ENG_LEVELS[lv] && c.def) ? c.def : c.es; }
   /* etiqueta de categoría gramatical (cómo se usa la palabra) */
   var POS_LABEL = {
     noun:   { es: "sustantivo", en: "noun" },
@@ -1719,7 +1742,7 @@
       if (useEng) {
         dcEs.textContent = c.def; dcEs.classList.add("is-def");
         if (backTag) backTag.textContent = "In English";
-        if (trans) { trans.hidden = false; trans.textContent = "ver traducción"; }
+        if (trans) { trans.hidden = !c.es || c.es === c.def; trans.textContent = "ver traducción"; }
         if (transEs) { transEs.hidden = true; transEs.textContent = c.es; }
       } else {
         dcEs.textContent = c.es; dcEs.classList.remove("is-def");
@@ -1776,7 +1799,7 @@
     /* baraja y limita a 8 preguntas */
     for (var i = qs.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var tmp = qs[i]; qs[i] = qs[j]; qs[j] = tmp; }
     qs = qs.slice(0, Math.min(8, qs.length));
-    var allEs = pool.map(function (c) { return c.es; });
+    var allEs = pool.map(function (c) { return cardMeaning(c, selLevel); });
     var qi = 0, correct = 0;
     var t = WORLD_THEME[selLevel] || {};
     var back = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>';
@@ -1791,7 +1814,7 @@
       if (qi >= qs.length) return finish();
       var c = qs[qi];
       /* 3 distractores + la correcta */
-      var opts = [c.es], guard = 0;
+      var opts = [cardMeaning(c, selLevel)], guard = 0;
       while (opts.length < Math.min(4, allEs.length) && guard < 50) {
         var cand = allEs[Math.floor(Math.random() * allEs.length)];
         if (opts.indexOf(cand) < 0) opts.push(cand);
@@ -1809,10 +1832,10 @@
         + '<div class="dq-react" id="dqReact" aria-live="polite"></div>');
       each(".dq-opt", function (b) {
         b.onclick = function () {
-          var chosen = b.getAttribute("data-es"), good = chosen === c.es;
+          var chosen = b.getAttribute("data-es"), good = chosen === cardMeaning(c, selLevel);
           each(".dq-opt", function (x) {
             x.disabled = true;
-            if (x.getAttribute("data-es") === c.es) x.classList.add("right");
+            if (x.getAttribute("data-es") === cardMeaning(c, selLevel)) x.classList.add("right");
             else if (x === b) x.classList.add("wrong");
           });
           /* Vesper reacciona: acierto -> "correct"; error -> "correcting" (te corrige) */
@@ -1820,7 +1843,7 @@
           if (rc) rc.innerHTML = '<div class="dq-react__in ' + (good ? "ok" : "no") + '">'
             + mascot(good ? "correct" : "correcting", false, "sm")
             + '<div class="dq-react__tx"><b>' + (good ? "¡Correcto!" : "Te corrijo") + '</b>'
-            + '<span>«' + esc(c.en) + '» = «' + esc(c.es) + '»</span></div></div>';
+            + '<span>«' + esc(c.en) + '» = «' + esc(cardMeaning(c, selLevel)) + '»</span></div></div>';
           if (good) { correct++; var m = knownMap(); m[cardKey(selLevel, c.en)] = 1; saveKnown(m); }
           setTimeout(function () { qi++; step(); }, good ? 760 : 1500);
         };
@@ -1865,7 +1888,7 @@
       var hint = norm(c.en).charAt(0).toUpperCase();
       shell('<div class="dq-bar"><i style="width:' + pct + '%"></i></div>'
         + '<div class="dq-sub">Palabra ' + (qi + 1) + ' de ' + qs.length + '</div>'
-        + '<div class="dq-q">' + esc(c.es) + '</div>'
+        + '<div class="dq-q">' + esc(cardMeaning(c, selLevel)) + '</div>'
         + '<div class="dq-sub">Escríbela en inglés (empieza por «' + esc(hint) + '»)</div>'
         + '<input class="dtype-in" id="dtIn" type="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="tu respuesta…">'
         + '<div class="dtype-row"><button class="btn btn-ghost" id="dtSkip" type="button">No la sé</button>'
@@ -1881,7 +1904,7 @@
         if (rc) rc.innerHTML = '<div class="dq-react__in ' + (good ? "ok" : "no") + '">'
           + mascot(good ? "correct" : "correcting", false, "sm")
           + '<div class="dq-react__tx"><b>' + (good ? "¡Correcto!" : "Te corrijo") + '</b>'
-          + '<span>«' + esc(c.es) + '» = «' + esc(c.en) + '»</span></div></div>';
+          + '<span>«' + esc(cardMeaning(c, selLevel)) + '» = «' + esc(c.en) + '»</span></div></div>';
         if (good) { correct++; var m = knownMap(); m[cardKey(selLevel, c.en)] = 1; saveKnown(m); }
         speak(c.en);
         setTimeout(function () { qi++; step(); }, good ? 900 : 1700);
@@ -1914,7 +1937,7 @@
     var t = WORLD_THEME[selLevel] || {};
     var back = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>';
     var left = shuffle(rounds.map(function (c, ix) { return { k: ix, txt: c.en }; }));
-    var right = shuffle(rounds.map(function (c, ix) { return { k: ix, txt: c.es }; }));
+    var right = shuffle(rounds.map(function (c, ix) { return { k: ix, txt: cardMeaning(c, selLevel) }; }));
     var matched = 0, mistakes = 0, selEn = null;
     function render() {
       var lhtml = left.map(function (o) { return '<button class="dm-item" type="button" data-side="en" data-k="' + o.k + '">' + esc(o.txt) + '</button>'; }).join("");
@@ -1986,7 +2009,7 @@
     var qs = pool.slice();
     for (var i = qs.length - 1; i > 0; i--) { var j = Math.floor(Math.random() * (i + 1)); var tmp = qs[i]; qs[i] = qs[j]; qs[j] = tmp; }
     qs = qs.slice(0, Math.min(12, qs.length));
-    var allEs = pool.map(function (c) { return c.es; });
+    var allEs = pool.map(function (c) { return cardMeaning(c, selLevel); });
     var qi = 0, correct = 0;
     var t = WORLD_THEME[selLevel] || {};
     var back = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>';
@@ -2000,7 +2023,7 @@
     function step() {
       if (qi >= qs.length) return finish();
       var c = qs[qi];
-      var opts = [c.es], guard = 0;
+      var opts = [cardMeaning(c, selLevel)], guard = 0;
       while (opts.length < Math.min(4, allEs.length) && guard < 80) {
         var cand = allEs[Math.floor(Math.random() * allEs.length)];
         if (opts.indexOf(cand) < 0) opts.push(cand); guard++;
@@ -2017,17 +2040,17 @@
         + '<div class="dq-react" id="dqReact" aria-live="polite"></div>');
       each(".dq-opt", function (b) {
         b.onclick = function () {
-          var chosen = b.getAttribute("data-es"), good = chosen === c.es;
+          var chosen = b.getAttribute("data-es"), good = chosen === cardMeaning(c, selLevel);
           each(".dq-opt", function (x) {
             x.disabled = true;
-            if (x.getAttribute("data-es") === c.es) x.classList.add("right");
+            if (x.getAttribute("data-es") === cardMeaning(c, selLevel)) x.classList.add("right");
             else if (x === b) x.classList.add("wrong");
           });
           var rc = byId("dqReact");
           if (rc) rc.innerHTML = '<div class="dq-react__in ' + (good ? "ok" : "no") + '">'
             + mascot(good ? "correct" : "correcting", false, "sm")
             + '<div class="dq-react__tx"><b>' + (good ? "¡Correcto!" : "Te corrijo") + '</b>'
-            + '<span>«' + esc(c.en) + '» = «' + esc(c.es) + '»</span></div></div>';
+            + '<span>«' + esc(c.en) + '» = «' + esc(cardMeaning(c, selLevel)) + '»</span></div></div>';
           if (good) { correct++; var m = knownMap(); m[cardKey(selLevel, c.en)] = 1; saveKnown(m); }
           setTimeout(function () { qi++; step(); }, good ? 700 : 1400);
         };
@@ -2623,7 +2646,7 @@
     applyLessonTheme(lesson.level);
     track("lesson_start", { id: lesson.lessonId, level: lesson.level, type: lesson.isBoss ? "boss" : (lesson.isReview ? "review" : "lesson") });
     if (lesson.isBoss) { renderBossCover(); return; }
-    var line = (A ? A.personalize("Vamos con: " + lesson.title) : "Vamos con: " + lesson.title);
+    var line = enUI() ? "Let's go: " + lesson.title : (A ? A.personalize("Vamos con: " + lesson.title) : "Vamos con: " + lesson.title);
     show('<div class="wrap">' + topbar(6) + '<div class="card center">'
       + lessonWorldBanner(lesson.level)
       + mascot("welcome", line)
@@ -2631,8 +2654,8 @@
       + ((lesson.isExam || lesson.isReview || lesson.srsReview) ? '' : tipoChip(lesson)) + '</div>'
       + '<h1>' + esc(lesson.title) + '</h1>'
       + (lesson.adapted ? '<div class="adapt-badge">' + ic('sparkle') + ' ' + esc(lesson.adaptNote) + '</div>' : '')
-      + '<p class="muted">' + lesson.exercises.length + ' ejercicios &middot; +' + (lesson.xpReward || 0) + ' XP</p>'
-      + '<button class="btn btn-gold" id="start">Empezar</button></div></div>');
+      + '<p class="muted">' + lesson.exercises.length + T(' ejercicios', ' exercises') + ' &middot; +' + (lesson.xpReward || 0) + ' XP</p>'
+      + '<button class="btn btn-gold" id="start">' + T('Empezar', 'Start') + '</button></div></div>');
     byId("start").onclick = renderExplanation;
   }
 
@@ -2651,10 +2674,10 @@
   var BOSS_LINES = {
     A1: { intro: "Nadie cruza este umbral sin saber decir quién es. ¿Tú sí?", hurt: "¡Uf! Esa sí la sabías.", hit: "Esa no. Mi farol sigue encendido.", low: "Mi farol… se apaga…", win: "Pasa. Este hogar ya es tuyo.", lose: "Vuelve cuando tu inglés tenga más luz." },
     A2: { intro: "El sendero es largo. ¿Tienes piernas para él?", hurt: "Buen paso. No me lo esperaba.", hit: "Tropezaste. El camino no perdona.", low: "Me… desvío…", win: "El sendero es tuyo. Sigue caminando.", lose: "Descansa y vuelve. El camino espera." },
-    B1: { intro: "Desde aquí veo tus errores antes de que los cometas.", hurt: "Esa no la vi venir.", hit: "Esa la vi venir de lejos.", low: "Se me nubla el horizonte…", win: "Mira lejos: el horizonte ya es tuyo.", lose: "Aún no ves tan lejos como yo." },
-    B2: { intro: "Cada piso de esta torre es una regla. ¿Subes?", hurt: "Un piso menos.", hit: "Te resbalaste en la escalera.", low: "La torre… tiembla…", win: "Proclamo tu nombre desde lo alto.", lose: "La torre sigue en pie. Tú también: vuelve." },
-    C1: { intro: "Las estrellas no se le dan a cualquiera.", hurt: "Brillas más de lo que esperaba.", hit: "Una estrella menos para ti.", low: "Mi cielo… se apaga…", win: "El firmamento te reconoce.", lose: "Aún te falta cielo. Vuelve de noche." },
-    C2: { intro: "Llegaste lejos. Demuestra que mereces quedarte.", hurt: "Impresionante. Otra vez.", hit: "Un soberano no perdona imprecisiones.", low: "¿Será… que sabes más que yo?", win: "Toma la corona. El saber es tuyo.", lose: "El trono sigue ocupado. Por ahora." }
+    B1: { intro: "From up here I see your mistakes before you make them.", hurt: "I didn't see that one coming.", hit: "I saw that one coming from miles away.", low: "My horizon… is getting cloudy…", win: "Look far: the horizon is yours now.", lose: "You can't see as far as I can. Yet." },
+    B2: { intro: "Every floor of this tower is a rule. Are you climbing?", hurt: "One floor down.", hit: "You slipped on the stairs.", low: "The tower… is shaking…", win: "I proclaim your name from the top.", lose: "The tower still stands. So do you: come back." },
+    C1: { intro: "The stars aren't given to just anyone.", hurt: "You shine brighter than I expected.", hit: "One star less for you.", low: "My sky… is going dark…", win: "The heavens recognise you.", lose: "You still need more sky. Come back tonight." },
+    C2: { intro: "You've come far. Prove you deserve to stay.", hurt: "Impressive. Again.", hit: "A sovereign forgives no imprecision.", low: "Could it be… that you know more than I do?", win: "Take the crown. The knowledge is yours.", lose: "The throne is still taken. For now." }
   };
   function bossLine(k) { var L = BOSS_LINES[lesson.bossLevel] || BOSS_LINES.A1; return L[k] || ""; }
   function battleState() {
@@ -2724,12 +2747,12 @@
         var bar = q(".dh-hp i"), num = q(".dh-hp b");
         if (bar) bar.style.width = Math.round(100 * (b.need - b.hits) / b.need) + "%";
         if (num) num.textContent = b.need - b.hits;
-        if (dmg) { dmg.textContent = combo >= 2 ? "¡Combo ×" + (combo + 1) + "!" : "¡Golpe!"; dmg.className = "duel-dmg on foe"; }
+        if (dmg) { dmg.textContent = combo >= 2 ? T("¡Combo ×", "Combo ×") + (combo + 1) + "!" : T("¡Golpe!", "Hit!"); dmg.className = "duel-dmg on foe"; }
         sfx("combo", b.hits);
       } else {
         var hs = d.querySelectorAll(".dh-heart:not(.lost)");
         if (hs.length) hs[hs.length - 1].classList.add("lost", "breaking");
-        if (dmg) { dmg.textContent = "¡Auch!"; dmg.className = "duel-dmg on me"; }
+        if (dmg) { dmg.textContent = T("¡Auch!", "Ouch!"); dmg.className = "duel-dmg on me"; }
       }
       if (say) {
         say.textContent = b.over === "win" ? bossLine("win") : (b.over === "lose" ? bossLine("lose")
@@ -2738,8 +2761,8 @@
       }
       if (b.over) {
         d.classList.add(b.over === "win" ? "ko-foe" : "ko-me");
-        if (stamp) stamp.textContent = b.over === "win" ? "¡Vencido!" : "Vesper cayó";
-        announce(b.over === "win" ? "¡Guardián vencido!" : "Vesper cayó. El guardián gana esta vez.");
+        if (stamp) stamp.textContent = b.over === "win" ? T("¡Vencido!", "Defeated!") : T("Vesper cayó", "Vesper fell");
+        announce(b.over === "win" ? T("¡Guardián vencido!", "Guardian defeated!") : T("Vesper cayó. El guardián gana esta vez.", "Vesper fell. The guardian wins this time."));
         if (b.over === "win") burstConfetti(30);
       }
     }, rm ? 0 : 330);
@@ -2748,6 +2771,8 @@
   /* "Vesper cayó en la pregunta 2 de 8: 0 golpes de los 7 que pedía" */
   function duelLoseNote(correct, answered) {
     var b = battleState();
+    if (enUI()) return 'Vesper fell on question ' + answered + ' of ' + b.total + ' &middot; you landed '
+      + correct + ' of the ' + b.need + ' hits needed (' + bossMeta(lesson.bossLevel).pass + '%)';
     return 'Vesper cayó en la pregunta ' + answered + ' de ' + b.total + ' &middot; acertaste '
       + correct + ' de los ' + b.need + ' golpes que pedía (' + bossMeta(lesson.bossLevel).pass + '%)';
   }
@@ -2756,7 +2781,7 @@
     var lv = lesson.bossLevel, bm = bossMeta(lv), t = WORLD_THEME[lv] || {}, b = battleState(), me = currentLook();
     var bg = t.file ? 'background-image:linear-gradient(180deg,rgba(14,12,31,.3),rgba(14,12,31,.93) 62%),url(' + t.file + ');' : "";
     show('<div class="wrap">' + topbar(6) + '<div class="card center boss-cover vs-cover" style="' + worldVars(t) + bg + '">'
-      + '<span class="boss-eyebrow">Examen del mundo &middot; ' + esc(lesson.level) + '</span>'
+      + '<span class="boss-eyebrow">' + T('Examen del mundo', 'World exam') + ' &middot; ' + esc(lesson.level) + '</span>'
       + '<div class="vs-row" aria-hidden="true">'
       +   '<div class="vs-side vs-me">' + meImg(me) + '<span class="vs-nm">Vesper</span></div>'
       +   '<div class="vs-mark">VS</div>'
@@ -2765,13 +2790,13 @@
       + '<h1>' + esc(bm.name) + '</h1>'
       + '<p class="vs-say">«' + esc(bossLine("intro")) + '»</p>'
       + '<ul class="vs-rules">'
-      +   '<li><b>' + b.need + '</b><span>aciertos lo derriban</span></li>'
-      +   '<li><b>' + b.lives + '</b><span>' + (b.lives === 1 ? 'error y Vesper cae' : 'errores y Vesper cae') + '</span></li>'
-      +   '<li><b>' + b.total + '</b><span>preguntas de todo el mundo</span></li>'
+      +   '<li><b>' + b.need + '</b><span>' + T('aciertos lo derriban', 'correct answers knock it down') + '</span></li>'
+      +   '<li><b>' + b.lives + '</b><span>' + (b.lives === 1 ? T('error y Vesper cae', 'mistake and Vesper falls') : T('errores y Vesper cae', 'mistakes and Vesper falls')) + '</span></li>'
+      +   '<li><b>' + b.total + '</b><span>' + T('preguntas de todo el mundo', 'questions from the whole world') + '</span></li>'
       + '</ul>'
       + '<p class="sr-only">Necesitas ' + bm.pass + '% para vencerlo y abrir el mundo siguiente.</p>'
-      + '<button class="btn btn-gold" id="start">¡A pelear!</button>'
-      + '<button class="btn btn-ghost" id="bk">Volver al mapa</button></div></div>');
+      + '<button class="btn btn-gold" id="start">' + T('¡A pelear!', 'Fight!') + '</button>'
+      + '<button class="btn btn-ghost" id="bk">' + T('Volver al mapa', 'Back to the map') + '</button></div></div>');
     /* el briefing ya está en la portada: directo a la pelea */
     byId("start").onclick = function () { exIdx = 0; results = []; renderExercise(); };
     byId("bk").onclick = function () { location.search = ""; };
@@ -2790,10 +2815,12 @@
      desconocido cae a párrafo simple (los datos nunca rompen la pantalla). */
   var APR_TITLE = { regla: "La regla", vocab: "Vocabulario clave", expresiones: "Expresiones útiles",
                     ejemplos: "Ejemplos", errores: "Errores comunes", resumen: "En resumen" };
+  var APR_TITLE_EN = { regla: "The rule", vocab: "Key vocabulary", expresiones: "Useful expressions",
+                       ejemplos: "Examples", errores: "Common mistakes", resumen: "In short" };
   function aprSection(s, showEs) {
     var k = s.kind || "intro";
     var ey = (k !== "intro" && k !== "puente")
-      ? '<div class="apr-ey">' + esc(s.title || APR_TITLE[k] || "") + '</div>' : "";
+      ? '<div class="apr-ey">' + esc(s.title || (enUI() ? APR_TITLE_EN[k] : APR_TITLE[k]) || "") + '</div>' : "";
     var inner;
     if (k === "regla") inner = '<div class="apr-rule">' + esc(s.body || "") + '</div>';
     else if (k === "vocab") inner = '<ul class="apr-vocab">' + (s.items || []).map(function (w) {
@@ -2807,28 +2834,30 @@
         + (showEs && e.pq ? '<span class="pq">' + esc(e.pq) + '</span>' : '') + '</li>';
     }).join("") + '</ul>';
     else if (k === "resumen") inner = '<div class="apr-sum">' + esc(s.body || "") + '</div>';
-    else if (k === "puente") inner = '<div class="apr-bridge">' + ic('sparkle') + esc(s.body || "Ahora practícalo tú. ¡Vamos a los ejercicios!") + '</div>';
+    else if (k === "puente") inner = '<div class="apr-bridge">' + ic('sparkle') + esc(s.body || T("Ahora practícalo tú. ¡Vamos a los ejercicios!", "Your turn: let's practise!")) + '</div>';
     else inner = '<p class="body">' + esc(s.body || "") + '</p>';
     return '<div class="apr-sec">' + ey + inner + '</div>';
   }
   function renderExplanation() {
     var ex = lesson.explanation || {};
-    var showEs = !PERS || PERS.showSpanish();   /* mezcla de idioma: oculta el ES si eligio "Solo ingles" */
+    /* mezcla de idioma: oculta el ES si eligio "Solo ingles". En B1+ esos campos
+       ya son glosas en inglés (definiciones, por qué del error), así que se muestran. */
+    var showEs = enUI() || !PERS || PERS.showSpanish();
     var secs = ex.sections;
     if (secs && secs.length) {
       /* lección "Aprende": páginas de enseñanza por secciones ricas */
       show('<div class="wrap">' + topbar(22) + '<div class="card">'
-        + mascot(lesson.mascotState || "explaining")
+        + mascot(lesson.mascotState || "explaining", enUI() ? enLine("explaining") : undefined)
         + '<div class="lcard-top">' + tipoChip(lesson) + '</div>'
         + '<h2>' + esc(lesson.title) + '</h2>'
         + secs.map(function (s) { return aprSection(s, showEs); }).join("")
-        + '<button class="btn btn-gold" id="cont" style="margin-top:18px">Practicar &rarr;</button></div></div>');
+        + '<button class="btn btn-gold" id="cont" style="margin-top:18px">' + T('Practicar', 'Practise') + ' &rarr;</button></div></div>');
     } else {
       show('<div class="wrap">' + topbar(22) + '<div class="card">'
-        + mascot(lesson.mascotState || "explaining")
-        + '<h2>Explicacion</h2><p class="body">' + esc(ex.body || "") + '</p>'
+        + mascot(lesson.mascotState || "explaining", enUI() ? enLine("explaining") : undefined)
+        + '<h2>' + T('Explicacion', 'Explanation') + '</h2><p class="body">' + esc(ex.body || "") + '</p>'
         + ((ex.examples || []).length ? enEsList(ex.examples, showEs) : '')
-        + '<button class="btn btn-gold" id="cont">Continuar</button></div></div>');
+        + '<button class="btn btn-gold" id="cont">' + T('Continuar', 'Continue') + '</button></div></div>');
     }
     byId("cont").onclick = function () { exIdx = 0; results = []; renderExercise(); };
   }
@@ -2863,8 +2892,8 @@
   function statTiles(xp, pct) {
     return '<div class="lc-stats' + (xp == null ? ' lc-miss' : '') + '">'
       + '<div class="lc-stat lc-xp"><span class="lc-k">XP</span><b class="lc-v"' + (xp != null ? ' data-count="' + xp + '" data-pre="+"' : '') + '>' + (xp != null ? '+' + xp : '&mdash;') + '</b></div>'
-      + '<div class="lc-stat lc-time"><span class="lc-k">Tiempo</span><b class="lc-v">' + fmtRun() + '</b></div>'
-      + '<div class="lc-stat lc-acc"><span class="lc-k">Precisión</span><b class="lc-v" data-count="' + pct + '" data-post="%">' + pct + '%</b></div>'
+      + '<div class="lc-stat lc-time"><span class="lc-k">' + T('Tiempo', 'Time') + '</span><b class="lc-v">' + fmtRun() + '</b></div>'
+      + '<div class="lc-stat lc-acc"><span class="lc-k">' + T('Precisión', 'Accuracy') + '</span><b class="lc-v" data-count="' + pct + '" data-post="%">' + pct + '%</b></div>'
       + '</div>';
   }
   function countUp() {
@@ -2938,7 +2967,7 @@
   function toast2(msg) { try { alert(msg); } catch (e) {} }
   function comboChip() {
     if (combo < 2) return "";
-    return '<div class="combo-chip" role="status" aria-label="' + combo + ' aciertos seguidos">' + ic('flame') + ' <b>' + combo + '</b> seguidas</div>';
+    return '<div class="combo-chip" role="status" aria-label="' + combo + ' aciertos seguidos">' + ic('flame') + ' <b>' + combo + '</b> ' + T('seguidas', 'in a row') + '</div>';
   }
   function econStrip() {
     var E = window.VESPER_ECONOMY; if (!E) return "";
@@ -2964,16 +2993,16 @@
       st += '<i class="' + (i < exIdx ? (results[i] ? "ok" : "no") : (i === exIdx ? "now" : "")) + '"></i>';
     }
     return '<div class="exnum">' + (st ? '<span class="constel" aria-hidden="true">' + st + '</span>' : '')
-      + '<span>Ejercicio ' + (exIdx + 1) + ' de ' + total + '</span></div>';
+      + '<span>' + T('Ejercicio ', 'Exercise ') + (exIdx + 1) + T(' de ', ' of ') + total + '</span></div>';
   }
   function renderMCQ(ex, pct, total) {
     var opts = optOrder(ex.options.length).map(function (i) {
       return '<button class="opt" type="button" aria-pressed="false" data-i="' + i + '" lang="en">' + esc(ex.options[i]) + '</button>';
     }).join("");
     show('<div class="wrap">' + exHeader(pct, total) + '<div class="card">'
-      + '<h2 lang="en">' + esc(ex.question || "Elige la opcion correcta") + '</h2>'
+      + '<h2 lang="en">' + esc(ex.question || T("Elige la opcion correcta", "Choose the correct option")) + '</h2>'
       + '<div class="opts" role="group" aria-label="Opciones de respuesta">' + opts + '</div><div id="fb"></div>'
-      + '<button class="btn" id="verify" disabled aria-describedby="verify-hint">Verificar</button>'
+      + '<button class="btn" id="verify" disabled aria-describedby="verify-hint">' + T('Verificar', 'Check') + '</button>'
       + '<span class="sr-only" id="verify-hint">Elige una opción para poder verificar.</span></div></div>');
     var sel = -1, done = false;
     var optEls = document.querySelectorAll(".opt");
@@ -2993,8 +3022,8 @@
         function (el) { return +el.getAttribute("data-i") === ex.correctIndex; },
         function (el) { return +el.getAttribute("data-i") === sel; });
       results[exIdx] = ok;
-      byId("fb").innerHTML = feedbackBox(ok, ex.explanation || "", "Era: " + ex.options[ex.correctIndex]);
-      announceResult(ok, ok ? "" : "La respuesta era " + ex.options[ex.correctIndex]);
+      byId("fb").innerHTML = feedbackBox(ok, ex.explanation || "", T("Era: ", "Answer: ") + ex.options[ex.correctIndex]);
+      announceResult(ok, ok ? "" : T("La respuesta era ", "The answer was ") + ex.options[ex.correctIndex]);
       setVerifyNext(this, total);
     };
   }
@@ -3014,10 +3043,10 @@
         + '<sup class="fe-lab" aria-hidden="true">' + letters[i] + '</sup>' + esc(seg.u) + '</button>';
     }).join("");
     show('<div class="wrap">' + exHeader(pct, total) + '<div class="card">'
-      + '<h2>' + esc(ex.question || "Encuentra el error") + '</h2>'
-      + '<p class="hint">' + ic('bulb') + '' + esc(ex.hint || "Toca la parte subrayada que contiene el error gramatical.") + '</p>'
+      + '<h2>' + esc(ex.question || T("Encuentra el error", "Find the mistake")) + '</h2>'
+      + '<p class="hint">' + ic('bulb') + '' + esc(ex.hint || T("Toca la parte subrayada que contiene el error gramatical.", "Tap the underlined part that contains the mistake.")) + '</p>'
       + '<div class="fe-sentence">' + html + '</div><div id="fb"></div>'
-      + '<button class="btn" id="verify" disabled>Verificar</button></div></div>');
+      + '<button class="btn" id="verify" disabled>' + T('Verificar', 'Check') + '</button></div></div>');
     var sel = -1, done = false;
     var segEls = document.querySelectorAll(".fe-seg");
     each(".fe-seg", function (b) {
@@ -3040,9 +3069,9 @@
         if (i === sel && !ok) segEls[x].classList.add("wrong");
       }
       results[exIdx] = ok;
-      var fix = ex.correction ? ("Corrección: " + ex.correction) : "";
+      var fix = ex.correction ? (T("Corrección: ", "Correction: ") + ex.correction) : "";
       var detail = ex.explanation ? (ex.explanation + (fix ? " — " + fix : "")) : fix;
-      byId("fb").innerHTML = feedbackBox(ok, detail, "El error estaba en la opción " + letters[ex.correctIndex] + ".");
+      byId("fb").innerHTML = feedbackBox(ok, detail, T("El error estaba en la opción ", "The mistake was in option ") + letters[ex.correctIndex] + ".");
       setVerifyNext(this, total);
     };
   }
@@ -3052,17 +3081,17 @@
     var answer = [];
     var done = false;
     show('<div class="wrap">' + exHeader(pct, total) + '<div class="card">'
-      + '<h2>Ordena las palabras</h2>'
+      + '<h2>' + T('Ordena las palabras', 'Put the words in order') + '</h2>'
       + (ex.hint ? '<p class="hint">' + ic('bulb') + '' + esc(ex.hint) + '</p>' : '')
       + '<div class="answer" id="answer" aria-label="Tu respuesta"></div>'
       + '<div class="bank" id="bank"></div><div id="fb"></div>'
-      + '<button class="btn" id="verify" disabled>Verificar</button></div></div>');
+      + '<button class="btn" id="verify" disabled>' + T('Verificar', 'Check') + '</button></div></div>');
 
     function draw() {
       var ans = byId("answer"), bk = byId("bank");
       ans.innerHTML = answer.length
         ? answer.map(function (w, i) { return '<button class="chip placed' + (w.cls || "") + '" data-a="' + i + '">' + esc(w.t) + '</button>'; }).join("")
-        : '<span class="ph">Toca las palabras en orden...</span>';
+        : '<span class="ph">' + T('Toca las palabras en orden...', 'Tap the words in order...') + '</span>';
       bk.innerHTML = bank.map(function (w, i) { return '<button class="chip" data-b="' + i + '">' + esc(w.t) + '</button>'; }).join("");
       if (!done) {
         each("#answer [data-a]", function (c) { c.onclick = function () { var i = +c.getAttribute("data-a"); bank.push(answer[i]); answer.splice(i, 1); draw(); }; });
@@ -3082,7 +3111,7 @@
       }
       results[exIdx] = ok;
       draw();
-      byId("fb").innerHTML = feedbackBox(ok, "", "Orden correcto: " + ex.correctOrder.join(" "));
+      byId("fb").innerHTML = feedbackBox(ok, "", T("Orden correcto: ", "Correct order: ") + ex.correctOrder.join(" "));
       setVerifyNext(this, total);
     };
   }
@@ -3155,7 +3184,7 @@
   function setVerifyNext(btn, total) {
     var over = "";
     if (lesson && lesson.isBoss) { battleStrike(); over = battleState().over; }
-    btn.textContent = over === "win" ? "¡Reclamar la victoria!" : (over ? "Ver resultados" : ((exIdx + 1 < total) ? "Siguiente" : "Ver resultados"));
+    btn.textContent = over === "win" ? T("¡Reclamar la victoria!", "Claim victory!") : (over ? T("Ver resultados", "See results") : ((exIdx + 1 < total) ? T("Siguiente", "Next") : T("Ver resultados", "See results")));
   }
 
   /* ============================================================
@@ -3193,7 +3222,7 @@
 
   /* el veredicto, dicho en voz alta para quien no ve el color */
   function announceResult(ok, detail) {
-    announce((ok ? "Correcto. " : "Incorrecto. ") + (detail || ""));
+    announce((ok ? T("Correcto. ", "Correct. ") : T("Incorrecto. ", "Incorrect. ")) + (detail || ""));
   }
 
   /* ---------- SPEAKING (reconocimiento de voz) ----------
@@ -3224,18 +3253,18 @@
     var showEs = (!PERS || PERS.showSpanish()) && ex.es;
     var SR = window.SpeechRecognition || window.webkitSpeechRecognition;
     show('<div class="wrap">' + exHeader(pct, total) + '<div class="card">'
-      + '<h2>Dilo en voz alta</h2>'
+      + '<h2>' + T('Dilo en voz alta', 'Say it out loud') + '</h2>'
       + '<div class="speak-target"><span class="en">' + esc(target) + '</span>'
       + (showEs ? '<span class="es">' + esc(ex.es) + '</span>' : '') + '</div>'
       + '<div class="speak-row">'
-      + '<button class="btn btn-ghost" id="hear">' + ic('speaker') + ' Escuchar</button>'
-      + '<button class="btn btn-ghost" id="slow">' + ic('rewind') + ' Más lento</button></div>'
+      + '<button class="btn btn-ghost" id="hear">' + ic('speaker') + ' ' + T('Escuchar', 'Listen') + '</button>'
+      + '<button class="btn btn-ghost" id="slow">' + ic('rewind') + ' ' + T('Más lento', 'Slower') + '</button></div>'
       + (SR
-          ? '<button class="btn mic-btn" id="mic">' + ic('mic') + ' Toca y habla</button><div class="heard" id="heard"></div>'
-          : '<p class="hint">' + ic('bulb') + 'Tu navegador no reconoce voz. Escucha y repite en voz alta; luego confírmalo tú.</p>')
+          ? '<button class="btn mic-btn" id="mic">' + ic('mic') + ' ' + T('Toca y habla', 'Tap and speak') + '</button><div class="heard" id="heard"></div>'
+          : '<p class="hint">' + ic('bulb') + T('Tu navegador no reconoce voz. Escucha y repite en voz alta; luego confírmalo tú.', "Your browser can't recognise speech. Listen, repeat it out loud, then confirm it yourself.") + '</p>')
       + '<div id="fb"></div>'
-      + '<button class="btn" id="verify"' + (SR ? ' disabled' : '') + '>' + (SR ? 'Verificar' : 'Lo dije bien') + '</button>'
-      + (SR ? '<button class="btn btn-ghost" id="skip">No puedo hablar ahora</button>' : '')
+      + '<button class="btn" id="verify"' + (SR ? ' disabled' : '') + '>' + (SR ? T('Verificar', 'Check') : T('Lo dije bien', 'I said it right')) + '</button>'
+      + (SR ? '<button class="btn btn-ghost" id="skip">' + T('No puedo hablar ahora', "I can't speak now") + '</button>' : '')
       + '</div></div>');
     byId("hear").onclick = function () { speak(target, ex.audio, 0.92); };
     byId("slow").onclick = function () { speak(target, ex.audio, 0.62); };
@@ -3246,8 +3275,8 @@
       ok = result;
       results[exIdx] = ok;
       var h = byId("heard");
-      if (h && heardTxt != null) h.innerHTML = '<span class="muted">Te escuché:</span> “' + esc(heardTxt) + '”';
-      byId("fb").innerHTML = feedbackBox(ok, ex.explanation || ("Modelo: " + target), "Inténtalo: " + target);
+      if (h && heardTxt != null) h.innerHTML = '<span class="muted">' + T('Te escuché:', 'I heard:') + '</span> “' + esc(heardTxt) + '”';
+      byId("fb").innerHTML = feedbackBox(ok, ex.explanation || (T("Modelo: ", "Model: ") + target), T("Inténtalo: ", "Try: ") + target);
       var v = byId("verify"); v.disabled = false;
       setVerifyNext(v, total);
       v.onclick = function () { advance(); };
@@ -3287,12 +3316,12 @@
   /* ---------- TRUE / FALSE ---------- */
   function renderTrueFalse(ex, pct, total) {
     show('<div class="wrap">' + exHeader(pct, total) + '<div class="card">'
-      + '<h2>Verdadero o falso?</h2>'
+      + '<h2>' + T('Verdadero o falso?', 'True or false?') + '</h2>'
       + '<div class="statement" lang="en">' + esc(ex.statement) + '</div>'
       + '<div class="tf-row" role="group" aria-label="Verdadero o falso">'
-      + '<button class="tf-btn" type="button" aria-pressed="false" data-v="1">Verdadero</button>'
-      + '<button class="tf-btn" type="button" aria-pressed="false" data-v="0">Falso</button></div>'
-      + '<div id="fb"></div><button class="btn" id="verify" disabled aria-describedby="verify-hint">Verificar</button>'
+      + '<button class="tf-btn" type="button" aria-pressed="false" data-v="1">' + T('Verdadero', 'True') + '</button>'
+      + '<button class="tf-btn" type="button" aria-pressed="false" data-v="0">' + T('Falso', 'False') + '</button></div>'
+      + '<div id="fb"></div><button class="btn" id="verify" disabled aria-describedby="verify-hint">' + T('Verificar', 'Check') + '</button>'
       + '<span class="sr-only" id="verify-hint">Elige verdadero o falso para poder verificar.</span></div></div>');
     var sel = -1, done = false;
     var btns = document.querySelectorAll(".tf-btn");
@@ -3312,8 +3341,8 @@
         function (el) { return (+el.getAttribute("data-v") === 1) === (!!ex.answer); },
         function (el) { return +el.getAttribute("data-v") === sel; });
       results[exIdx] = ok;
-      byId("fb").innerHTML = feedbackBox(ok, ex.explanation || "", "Respuesta: " + (ex.answer ? "Verdadero" : "Falso"));
-      announceResult(ok, ok ? "" : "Era " + (ex.answer ? "verdadero" : "falso"));
+      byId("fb").innerHTML = feedbackBox(ok, ex.explanation || "", T("Respuesta: ", "Answer: ") + (ex.answer ? T("Verdadero", "True") : T("Falso", "False")));
+      announceResult(ok, ok ? "" : T("Era ", "It was ") + (ex.answer ? T("verdadero", "true") : T("falso", "false")));
       setVerifyNext(this, total);
     };
   }
@@ -3323,12 +3352,12 @@
     var parts = ("" + (ex.sentence || "___")).split("___");
     var answers = ex.answers || (ex.answer != null ? [ex.answer] : []);
     show('<div class="wrap">' + exHeader(pct, total) + '<div class="card">'
-      + '<h2>Completa la frase</h2>'
+      + '<h2>' + T('Completa la frase', 'Complete the sentence') + '</h2>'
       + (ex.hint ? '<p class="hint">' + ic('bulb') + '' + esc(ex.hint) + '</p>' : '')
       + '<p class="fb-sentence">' + esc(parts[0])
       + '<input id="blank" class="type-input" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" inputmode="text"> '
       + esc(parts.slice(1).join("___")) + '</p>'
-      + '<div id="fb"></div><button class="btn" id="verify" disabled>Verificar</button></div></div>');
+      + '<div id="fb"></div><button class="btn" id="verify" disabled>' + T('Verificar', 'Check') + '</button></div></div>');
     var done = false, inp = byId("blank");
     inp.oninput = function () { byId("verify").disabled = !inp.value.trim(); };
     inp.onkeydown = function (e) { if (e.key === "Enter" && !byId("verify").disabled) byId("verify").click(); };
@@ -3340,7 +3369,7 @@
       var ok = answers.some(function (a) { return norm(a) === val; });
       inp.classList.add(ok ? "correct" : "wrong");
       results[exIdx] = ok;
-      byId("fb").innerHTML = feedbackBox(ok, ex.explanation || "", "Respuesta: " + (answers[0] || ""));
+      byId("fb").innerHTML = feedbackBox(ok, ex.explanation || "", T("Respuesta: ", "Answer: ") + (answers[0] || ""));
       setVerifyNext(this, total);
     };
   }
@@ -3349,9 +3378,9 @@
   function renderTranslate(ex, pct, total) {
     var answers = ex.answers || [];
     show('<div class="wrap">' + exHeader(pct, total) + '<div class="card">'
-      + '<h2>Tu turno</h2><p class="body">' + esc(ex.prompt || "Traduce la frase") + '</p>'
-      + '<input id="trans" class="type-input" placeholder="Escribe en ingles..." autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false">'
-      + '<div id="fb"></div><button class="btn" id="verify" disabled>Verificar</button></div></div>');
+      + '<h2>' + T('Tu turno', 'Your turn') + '</h2><p class="body">' + esc(ex.prompt || T("Traduce la frase", "Write the sentence")) + '</p>'
+      + '<input id="trans" class="type-input" placeholder="' + T('Escribe en ingles...', 'Write in English...') + '" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false">'
+      + '<div id="fb"></div><button class="btn" id="verify" disabled>' + T('Verificar', 'Check') + '</button></div></div>');
     var done = false, inp = byId("trans");
     inp.oninput = function () { byId("verify").disabled = !inp.value.trim(); };
     inp.onkeydown = function (e) { if (e.key === "Enter" && !byId("verify").disabled) byId("verify").click(); };
@@ -3363,7 +3392,7 @@
       var ok = answers.some(function (a) { return norm(a) === val; });
       inp.classList.add(ok ? "correct" : "wrong");
       results[exIdx] = ok;
-      byId("fb").innerHTML = feedbackBox(ok, ex.explanation || "", "Sugerencia: " + (answers[0] || ""));
+      byId("fb").innerHTML = feedbackBox(ok, ex.explanation || "", T("Sugerencia: ", "Model answer: ") + (answers[0] || ""));
       setVerifyNext(this, total);
     };
   }
@@ -3376,10 +3405,10 @@
     var leftHtml = lefts.map(function (o) { return '<button class="match-item" data-side="l" data-p="' + o.p + '">' + esc(o.t) + '</button>'; }).join("");
     var rightHtml = rights.map(function (o) { return '<button class="match-item" data-side="r" data-p="' + o.p + '">' + esc(o.t) + '</button>'; }).join("");
     show('<div class="wrap">' + exHeader(pct, total) + '<div class="card">'
-      + '<h2>Emparejar</h2>'
-      + '<p class="hint">' + ic('bulb') + '' + esc(ex.instruction || "Toca una palabra y luego su pareja.") + '</p>'
+      + '<h2>' + T('Emparejar', 'Match') + '</h2>'
+      + '<p class="hint">' + ic('bulb') + '' + esc(ex.instruction || T("Toca una palabra y luego su pareja.", "Tap a word and then its match.")) + '</p>'
       + '<div class="match-cols"><div>' + leftHtml + '</div><div>' + rightHtml + '</div></div>'
-      + '<div id="fb"></div><button class="btn" id="verify" disabled>Empareja todo</button></div></div>');
+      + '<div id="fb"></div><button class="btn" id="verify" disabled>' + T('Empareja todo', 'Match them all') + '</button></div></div>');
     var selEl = null, matched = 0, errors = 0, done = false;
     function clearSel() { if (selEl) selEl.classList.remove("sel"); selEl = null; }
     each(".match-item", function (b) {
@@ -3398,7 +3427,7 @@
           if (matched === pairs.length) {
             done = true;
             results[exIdx] = errors === 0;
-            byId("fb").innerHTML = feedbackBox(errors === 0, "", "Lo lograste con " + errors + " intento(s) de mas.");
+            byId("fb").innerHTML = feedbackBox(errors === 0, "", T("Lo lograste con " + errors + " intento(s) de mas.", "Done, with " + errors + " extra attempt(s)."));
             var v = byId("verify"); v.disabled = false; setVerifyNext(v, total);
           }
         } else {
@@ -3417,18 +3446,18 @@
     var hasOpts = Array.isArray(ex.options);
     var qHtml;
     if (hasOpts) {
-      qHtml = '<p class="body">' + esc(ex.question || "Que escuchaste?") + '</p>'
+      qHtml = '<p class="body">' + esc(ex.question || T("Que escuchaste?", "What did you hear?")) + '</p>'
         + '<div class="opts">' + optOrder(ex.options.length).map(function (i) { return '<button class="opt" data-i="' + i + '">' + esc(ex.options[i]) + '</button>'; }).join("") + '</div>';
     } else {
-      qHtml = '<p class="body">' + esc(ex.question || "Escribe lo que escuchaste") + '</p>'
-        + '<input id="ltype" class="type-input" placeholder="Escribe en ingles..." autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false">';
+      qHtml = '<p class="body">' + esc(ex.question || T("Escribe lo que escuchaste", "Write what you heard")) + '</p>'
+        + '<input id="ltype" class="type-input" placeholder="' + T('Escribe en ingles...', 'Write in English...') + '" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false">';
     }
     show('<div class="wrap">' + exHeader(pct, total) + '<div class="card">'
-      + '<h2>Escucha</h2>'
-      + '<div class="listen-controls"><button class="listen-play" id="play"><span class="ic">' + ic('speaker') + '</span> Reproducir</button>'
-      + '<button class="listen-slow" id="playslow">' + ic('rewind') + ' Más lento</button></div>'
-      + '<div class="listen-note">Toca para escuchar. Puedes repetir las veces que quieras.</div>'
-      + qHtml + '<div id="fb"></div><button class="btn" id="verify" disabled>Verificar</button></div></div>');
+      + '<h2>' + T('Escucha', 'Listen') + '</h2>'
+      + '<div class="listen-controls"><button class="listen-play" id="play"><span class="ic">' + ic('speaker') + '</span> ' + T('Reproducir', 'Play') + '</button>'
+      + '<button class="listen-slow" id="playslow">' + ic('rewind') + ' ' + T('Más lento', 'Slower') + '</button></div>'
+      + '<div class="listen-note">' + T('Toca para escuchar. Puedes repetir las veces que quieras.', 'Tap to listen. You can replay it as many times as you like.') + '</div>'
+      + qHtml + '<div id="fb"></div><button class="btn" id="verify" disabled>' + T('Verificar', 'Check') + '</button></div></div>');
     byId("play").onclick = function () { speak(ex.text, ex.audio); };
     byId("playslow").onclick = function () { speak(ex.text, ex.audio, 0.62); };
     /* autoplay del audio si la preferencia está activa (Configuración → Sonido) */
@@ -3456,7 +3485,7 @@
           if (i === sel && !ok) optEls[x].classList.add("wrong");
         }
         results[exIdx] = ok;
-        byId("fb").innerHTML = feedbackBox(ok, ex.explanation || "", "Era: " + ex.options[ex.correctIndex]);
+        byId("fb").innerHTML = feedbackBox(ok, ex.explanation || "", T("Era: ", "Answer: ") + ex.options[ex.correctIndex]);
         setVerifyNext(this, total);
       };
     } else {
@@ -3471,7 +3500,7 @@
         var ok = answers.some(function (a) { return norm(a) === val; });
         inp.classList.add(ok ? "correct" : "wrong");
         results[exIdx] = ok;
-        byId("fb").innerHTML = feedbackBox(ok, "", "Era: " + (ex.text || answers[0] || ""));
+        byId("fb").innerHTML = feedbackBox(ok, "", T("Era: ", "It was: ") + (ex.text || answers[0] || ""));
         setVerifyNext(this, total);
       };
     }
@@ -3483,18 +3512,18 @@
     var items = (ex.items || []).map(function (it, i) { return { t: it.t, bucket: it.bucket, i: i, at: null }; });
     var sel = null, done = false;
     show('<div class="wrap">' + exHeader(pct, total) + '<div class="card">'
-      + '<h2>Clasifica</h2>'
-      + '<p class="hint">' + ic('bulb') + '' + esc(ex.instruction || "Toca una palabra y luego su grupo.") + '</p>'
+      + '<h2>' + T('Clasifica', 'Sort') + '</h2>'
+      + '<p class="hint">' + ic('bulb') + '' + esc(ex.instruction || T("Toca una palabra y luego su grupo.", "Tap a word and then its group.")) + '</p>'
       + '<div class="cat-pool" id="pool"></div>'
       + '<div class="cat-buckets" id="buckets"></div>'
-      + '<div id="fb"></div><button class="btn" id="verify" disabled>Verificar</button></div></div>');
+      + '<div id="fb"></div><button class="btn" id="verify" disabled>' + T('Verificar', 'Check') + '</button></div></div>');
 
     function tk(it, cls) { return '<button class="cat-tk' + (cls || "") + '" data-i="' + it.i + '">' + esc(it.t) + '</button>'; }
     function draw() {
       var pool = byId("pool"), bx = byId("buckets");
       var loose = items.filter(function (o) { return o.at === null; });
       pool.innerHTML = loose.length ? loose.map(function (o) { return tk(o, sel === o.i ? " sel" : ""); }).join("")
-        : '<span class="muted" style="font-size:.85rem">Todo clasificado ' + ic('checkCircle') + '</span>';
+        : '<span class="muted" style="font-size:.85rem">' + T('Todo clasificado ', 'All sorted ') + ic('checkCircle') + '</span>';
       bx.innerHTML = buckets.map(function (b) {
         var inside = items.filter(function (o) { return o.at === b.id; }).map(function (o) { return tk(o, o.cls || ""); }).join("");
         return '<div class="cat-bucket' + (sel !== null ? " active" : "") + '" data-b="' + b.id + '"><h4>' + esc(b.label) + '</h4>' + inside + '</div>';
@@ -3514,7 +3543,7 @@
       items.forEach(function (o) { if (o.at === o.bucket) o.cls = " correct"; else { o.cls = " wrong"; ok = false; } });
       draw();
       results[exIdx] = ok;
-      byId("fb").innerHTML = feedbackBox(ok, "", "Revisa los que estan en rojo.");
+      byId("fb").innerHTML = feedbackBox(ok, "", T("Revisa los que estan en rojo.", "Check the ones in red."));
       setVerifyNext(this, total);
     };
   }
@@ -3530,16 +3559,16 @@
         return '<button class="opt" data-q="' + qi + '" data-i="' + i + '">' + esc(q.options[i]) + '</button>';
       }).join("");
       return '<div class="rq" data-qwrap="' + qi + '">'
-        + '<div class="rq-num">Pregunta ' + (qi + 1) + ' de ' + qs2.length + '</div>'
-        + '<div class="rq-q">' + esc(q.q || "Elige la opcion correcta") + '</div>'
+        + '<div class="rq-num">' + T('Pregunta ', 'Question ') + (qi + 1) + T(' de ', ' of ') + qs2.length + '</div>'
+        + '<div class="rq-q">' + esc(q.q || T("Elige la opcion correcta", "Choose the correct option")) + '</div>'
         + '<div class="opts">' + opts + '</div><div class="rq-fb" id="rfb-' + qi + '"></div></div>';
     }).join("");
     show('<div class="wrap">' + exHeader(pct, total) + '<div class="card">'
-      + '<span class="read-tag">' + ic('book') + ' Lectura</span>'
-      + (ex.title ? '<h2>' + esc(ex.title) + '</h2>' : '<h2>Lee y responde</h2>')
+      + '<span class="read-tag">' + ic('book') + ' ' + T('Lectura', 'Reading') + '</span>'
+      + (ex.title ? '<h2>' + esc(ex.title) + '</h2>' : '<h2>' + T('Lee y responde', 'Read and answer') + '</h2>')
       + '<div class="passage">' + passageHtml + '</div>'
       + qHtml + '<div id="fb"></div>'
-      + '<button class="btn" id="verify" disabled>Verificar</button></div></div>');
+      + '<button class="btn" id="verify" disabled>' + T('Verificar', 'Check') + '</button></div></div>');
 
     var picks = qs2.map(function () { return -1; });
     var done = false;
@@ -3568,7 +3597,7 @@
           if (i === q.correctIndex) group[x].classList.add("correct");
           if (i === picks[qi] && !ok) group[x].classList.add("wrong");
         }
-        byId("rfb-" + qi).innerHTML = feedbackBox(ok, q.explanation || "", "Era: " + (q.options[q.correctIndex] || ""));
+        byId("rfb-" + qi).innerHTML = feedbackBox(ok, q.explanation || "", T("Era: ", "Answer: ") + (q.options[q.correctIndex] || ""));
       });
       results[exIdx] = allOk;
       setVerifyNext(this, total);
@@ -3630,18 +3659,18 @@
       masteryUnlocked = P.unlock("master:" + lesson.reviewLevel + ":" + lesson.reviewSkill);
     }
     var head = lesson.srsReview
-      ? "Repaso completado"
+      ? T("Repaso completado", "Review complete")
       : (lesson.isReview
-          ? (pct >= 80 ? "¡Repaso superado!" : "Sigue practicando")
-          : (perfect ? "¡Lección perfecta!" : "¡Lección completada!"));
-    var cheer = perfect ? "Ni un solo error. Brillas." : "Un paso más en tu camino.";
+          ? (pct >= 80 ? T("¡Repaso superado!", "Review passed!") : T("Sigue practicando", "Keep practising"))
+          : (perfect ? T("¡Lección perfecta!", "Perfect lesson!") : T("¡Lección completada!", "Lesson complete!")));
+    var cheer = perfect ? T("Ni un solo error. Brillas.", "Not a single mistake. You shine.") : T("Un paso más en tu camino.", "One more step on your path.");
     show('<div class="wrap lc-done">' + topbar(100) + '<div class="card center">'
       + mascot((perfect || (lesson.isReview && pct >= 80)) ? "milestone" : "correct", cheer)
       + '<h1 class="lc-title">' + head + '</h1>'
       + statTiles(earnedXp, pct)
-      + (comboBonus > 0 ? '<div class="xp-bonus">' + ic('flame') + ' +' + comboBonus + ' XP por ' + maxCombo + ' seguidas</div>' : '')
-      + '<p class="muted">' + correct + ' de ' + total + ' correctos</p>'
-      + '<button class="btn btn-gold" id="cont">Continuar</button></div></div>');
+      + (comboBonus > 0 ? '<div class="xp-bonus">' + ic('flame') + ' +' + comboBonus + T(' XP por ', ' XP for ') + maxCombo + T(' seguidas', ' in a row') + '</div>' : '')
+      + '<p class="muted">' + correct + T(' de ', ' of ') + total + T(' correctos', ' correct') + '</p>'
+      + '<button class="btn btn-gold" id="cont">' + T('Continuar', 'Continue') + '</button></div></div>');
     countUp();
     byId("cont").onclick = renderStreak;
   }
@@ -3650,12 +3679,12 @@
      Ofrece reintentar la misma lección desde el primer ejercicio. */
   function renderRetry(correct, total, pct) {
     show('<div class="wrap lc-done">' + topbar(86) + '<div class="card center">'
-      + mascot("incorrect", "¡Casi! Repasa y vuelve a intentarlo.")
-      + '<h1 class="lc-title">Te faltó poco</h1>'
+      + mascot("incorrect", T("¡Casi! Repasa y vuelve a intentarlo.", "Almost! Review it and try again."))
+      + '<h1 class="lc-title">' + T('Te faltó poco', 'So close') + '</h1>'
       + statTiles(null, pct)
-      + '<p class="muted">' + correct + ' de ' + total + ' correctos &middot; necesitas ' + PASS_PCT + '% para continuar</p>'
-      + '<button class="btn btn-gold" id="retry">Reintentar</button>'
-      + '<button class="btn btn-ghost" id="backHome">Ver todas las lecciones</button></div></div>');
+      + '<p class="muted">' + correct + T(' de ', ' of ') + total + T(' correctos &middot; necesitas ', ' correct &middot; you need ') + PASS_PCT + T('% para continuar', '% to continue') + '</p>'
+      + '<button class="btn btn-gold" id="retry">' + T('Reintentar', 'Try again') + '</button>'
+      + '<button class="btn btn-ghost" id="backHome">' + T('Ver todas las lecciones', 'See all lessons') + '</button></div></div>');
     byId("retry").onclick = function () { track("lesson_retry", { id: lesson.lessonId, level: lesson.level, pct: pct }); exIdx = 0; results = []; earnedXp = 0; renderExercise(); };
     byId("backHome").onclick = function () { location.search = ""; };
   }
@@ -3676,13 +3705,13 @@
       earnedXp = 0;
       track("boss_fail", { level: lesson.bossLevel, pct: pct });
       show('<div class="wrap">' + topbar(86) + '<div class="card center">'
-        + '<div class="boss-emblem boss-gloat" aria-hidden="true">' + bossPortrait(lesson.bossLevel) + '<span class="duel-seal lose">Ganó él</span></div>'
+        + '<div class="boss-emblem boss-gloat" aria-hidden="true">' + bossPortrait(lesson.bossLevel) + '<span class="duel-seal lose">' + T('Ganó él', 'It won') + '</span></div>'
         + '<p class="vs-say">«' + esc(bossLine("lose")) + '»</p>'
-        + '<h1 class="lc-title">Esta vez no</h1>'
+        + '<h1 class="lc-title">' + T('Esta vez no', 'Not this time') + '</h1>'
         + '<p class="muted">' + duelLoseNote(correct, total) + '</p>'
-        + mascot("incorrect", "Lo vi todo. La próxima lo tumbamos juntos.", "sm")
-        + '<button class="btn btn-gold" id="retry">Revancha</button>'
-        + '<button class="btn btn-ghost" id="backHome">Ver lecciones</button></div></div>');
+        + mascot("incorrect", T("Lo vi todo. La próxima lo tumbamos juntos.", "I saw it all. Next time we'll beat it together."), "sm")
+        + '<button class="btn btn-gold" id="retry">' + T('Revancha', 'Rematch') + '</button>'
+        + '<button class="btn btn-ghost" id="backHome">' + T('Ver lecciones', 'See lessons') + '</button></div></div>');
       byId("retry").onclick = function () { track("boss_retry", { level: lesson.bossLevel, pct: pct }); exIdx = 0; results = []; earnedXp = 0; renderBossCover(); };
       byId("backHome").onclick = function () { location.search = ""; };
       return;
@@ -3695,14 +3724,14 @@
     var idxLv = PATH.LEVELS.indexOf(lesson.bossLevel);
     var nextLv = (idxLv >= 0 && idxLv + 1 < PATH.LEVELS.length) ? PATH.LEVELS[idxLv + 1] : null;
     var unlockHtml = nextLv
-      ? '<div class="boss-unlock">' + ic('unlock') + ' ¡Mundo ' + nextLv + ' desbloqueado!</div>'
-      : '<div class="boss-unlock">' + ic('crown') + ' ¡Has dominado el último mundo!</div>';
+      ? '<div class="boss-unlock">' + ic('unlock') + T(' ¡Mundo ', ' World ') + nextLv + T(' desbloqueado!', ' unlocked!') + '</div>'
+      : '<div class="boss-unlock">' + ic('crown') + T(' ¡Has dominado el último mundo!', " You've mastered the last world!") + '</div>';
     show('<div class="wrap lc-done">' + topbar(100) + '<div class="card center">'
-      + '<div class="boss-emblem boss-beaten" aria-hidden="true">' + bossPortrait(lesson.bossLevel) + '<span class="duel-seal">Vencido</span></div>'
+      + '<div class="boss-emblem boss-beaten" aria-hidden="true">' + bossPortrait(lesson.bossLevel) + '<span class="duel-seal">' + T('Vencido', 'Defeated') + '</span></div>'
       + '<p class="vs-say">«' + esc(bossLine("win")) + '»</p>'
-      + '<h1 class="lc-title">¡Guardián vencido!</h1>'
+      + '<h1 class="lc-title">' + T('¡Guardián vencido!', 'Guardian defeated!') + '</h1>'
       + statTiles(earnedXp, pct)
-      + '<p class="muted">' + correct + ' de ' + total + ' golpes acertados</p>'
+      + '<p class="muted">' + correct + T(' de ', ' of ') + total + T(' golpes acertados', ' hits landed') + '</p>'
       + unlockHtml
       + placementCard("leccion-boss-" + lesson.bossLevel, {
           title: "Vas en serio. ¿Lo llevas a una clase real?",
@@ -3740,31 +3769,33 @@
       if (!bySkill[sk]) bySkill[sk] = { c: 0, t: 0 };
       bySkill[sk].t++; if (results[i]) bySkill[sk].c++;
     });
-    var SK_LABEL = { grammar: "Gramática", vocab: "Vocabulario", use: "Uso del inglés", reading: "Lectura", listening: "Listening", otro: "Otros" };
+    var SK_LABEL = enUI()
+      ? { grammar: "Grammar", vocab: "Vocabulary", use: "Use of English", reading: "Reading", listening: "Listening", otro: "Other" }
+      : { grammar: "Gramática", vocab: "Vocabulario", use: "Uso del inglés", reading: "Lectura", listening: "Listening", otro: "Otros" };
     var rows = ["grammar", "vocab", "use", "reading", "listening", "otro"].filter(function (s) { return bySkill[s]; }).map(function (s) {
       var b = bySkill[s], p = Math.round(100 * b.c / Math.max(1, b.t));
       return '<div style="display:flex;justify-content:space-between;gap:12px;padding:7px 2px;border-bottom:1px solid var(--line,#ece7da);font-size:.9rem">'
         + '<span>' + SK_LABEL[s] + '</span><span style="color:var(--muted,#6b6b76)"><b style="color:var(--ink,#1B1B2F)">' + b.c + '/' + b.t + '</b> &middot; ' + p + '%</span></div>';
     }).join("");
-    var verdict = passed ? "Aprobado" : "Reprobado";
+    var verdict = passed ? T("Aprobado", "Passed") : T("Reprobado", "Not passed");
     var vStyle = passed
       ? "background:#e7f4ec;color:#2d7a4f;border:2px solid #2d7a4f"
       : "background:#f7e7e7;color:#b03a3a;border:2px solid #b03a3a";
     if (passed) { burstConfetti(40); sfx("fanfare"); } else { sfx("complete"); }
     show('<div class="wrap">' + topbar(92) + '<div class="card center">'
-      + mascot(passed ? "milestone" : "incorrect", passed ? "¡Examen de nivel aprobado!" : "Aún no alcanzas el nivel. ¡Sigue practicando!")
+      + mascot(passed ? "milestone" : "incorrect", passed ? T("¡Examen de nivel aprobado!", "Level exam passed!") : T("Aún no alcanzas el nivel. ¡Sigue practicando!", "You're not at this level yet. Keep practising!"))
       + '<div style="display:inline-block;margin:6px auto 4px;padding:8px 22px;border-radius:999px;font:800 1.05rem/1 Inter,system-ui,sans-serif;letter-spacing:1.5px;text-transform:uppercase;' + vStyle + '">' + verdict + '</div>'
       + '<h1>' + pct + '%</h1>'
-      + '<p class="muted">' + correct + ' de ' + total + ' correctos &middot; necesitas ' + pass + '% para aprobar</p>'
+      + '<p class="muted">' + correct + T(' de ', ' of ') + total + T(' correctos &middot; necesitas ', ' correct &middot; you need ') + pass + T('% para aprobar', '% to pass') + '</p>'
       + '<div class="xpbar"><div class="xpfill" style="width:' + pct + '%' + (passed ? '' : ';background:var(--error)') + '"></div></div>'
       + (passed ? '<div class="xp-bonus" style="margin-top:8px">' + ic('flame') + ' +' + earnedXp + ' XP</div>' : '')
       + '<div style="margin:16px auto 4px;text-align:left;max-width:300px">'
-        + '<div style="font:700 .72rem/1 Inter,system-ui,sans-serif;letter-spacing:1px;text-transform:uppercase;color:var(--muted,#6b6b76);margin-bottom:4px">Desglose por destreza</div>'
+        + '<div style="font:700 .72rem/1 Inter,system-ui,sans-serif;letter-spacing:1px;text-transform:uppercase;color:var(--muted,#6b6b76);margin-bottom:4px">' + T('Desglose por destreza', 'Breakdown by skill') + '</div>'
         + rows + '</div>'
-      + '<p class="muted" style="font-size:.76rem;margin-top:12px">Resultado preliminar automático. Tu profesor puede confirmarlo con una evaluación oral.</p>'
+      + '<p class="muted" style="font-size:.76rem;margin-top:12px">' + T('Resultado preliminar automático. Tu profesor puede confirmarlo con una evaluación oral.', 'Preliminary automatic result. Your teacher can confirm it with an oral assessment.') + '</p>'
       + (passed
-          ? '<button class="btn btn-gold" id="cont">Continuar</button>'
-          : '<button class="btn btn-gold" id="retry">Reintentar examen</button><button class="btn btn-ghost" id="backHome">Ver lecciones</button>')
+          ? '<button class="btn btn-gold" id="cont">' + T('Continuar', 'Continue') + '</button>'
+          : '<button class="btn btn-gold" id="retry">' + T('Reintentar examen', 'Retake the exam') + '</button><button class="btn btn-ghost" id="backHome">' + T('Ver lecciones', 'See lessons') + '</button>')
       + '</div></div>');
     if (passed) {
       byId("cont").onclick = renderStreak;

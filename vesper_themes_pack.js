@@ -222,39 +222,36 @@ window.VESPER_THEMES_PACK = (function () {
     /* ==================== B1 · MEDIO AMBIENTE ==================== */
 
     "lvl-b1-vocab-environment": {
-      lessonId: "lvl-b1-vocab-environment", level: "B1", track: "Vocabulario", topic: "society", skill: "vocab",
-      title: "Tema: el medio ambiente", xpReward: 52, mascotState: "explaining",
+      lessonId: "lvl-b1-vocab-environment", level: "B1", track: "Vocabulary", topic: "society", skill: "vocab",
+      title: "Topic: the environment", xpReward: 52, mascotState: "explaining",
       explanation: {
-        body: "Vocabulario B1 sobre el medio ambiente: reciclaje, contaminación, energía. Distingue lo que ayuda al planeta de lo que lo daña. (Asocia, clasifica y traduce.)",
+        body: "B1 vocabulary about the environment: recycling, pollution, energy. Tell apart what helps the planet and what harms it.",
         examples: [
-          { en: "We should recycle and save energy.", es: "Deberíamos reciclar y ahorrar energía." },
-          { en: "pollution, waste, energy, climate", es: "contaminación, residuos, energía, clima" }
+          { en: "We should recycle and save energy." },
+          { en: "pollution, waste, energy, climate" }
         ]
       },
       exercises: [
-        { type: "matching", instruction: "Une la palabra con su traducción.", pairs: [
-          { l: "recycle", r: "reciclar" }, { l: "pollution", r: "contaminación" },
-          { l: "waste", r: "residuos" }, { l: "energy", r: "energía" }
-        ] },
-        { type: "categorize", instruction: "¿Bueno o malo para el planeta?", buckets: [
+        { type: "matching", instruction: "Match each word with its meaning.", pairs: [{"l":"recycle","r":"process materials to use again"},{"l":"pollution","r":"dirty air, water or land"},{"l":"waste","r":"things we throw away"},{"l":"energy","r":"power for lights and machines"}] },
+        { type: "categorize", instruction: "Good or bad for the planet?", buckets: [
           { id: "g", label: "Good for the planet" }, { id: "b", label: "Harmful" } ], items: [
           { t: "recycling", bucket: "g" }, { t: "plastic waste", bucket: "b" },
           { t: "solar power", bucket: "g" }, { t: "air pollution", bucket: "b" },
           { t: "planting trees", bucket: "g" }, { t: "oil spills", bucket: "b" } ] },
-        { type: "multiple_choice", question: "Using buses and bikes instead of cars helps reduce ___.", options: ["pollution", "recycling", "energy"], correctIndex: 0, explanation: "Menos coches = menos contaminación (pollution)." },
-        { type: "fill_blank", sentence: "We should ___ paper and glass instead of throwing them away.", answers: ["recycle"], hint: "Volver a usar los materiales.", explanation: "recycle = reciclar." },
-        { type: "translate", prompt: "Traduce: \"Debemos ahorrar energía.\"", answers: ["we should save energy", "we must save energy"], explanation: "We should save energy." }
+        { type: "multiple_choice", question: "Using buses and bikes instead of cars helps reduce ___.", options: ["pollution", "recycling", "energy"], correctIndex: 0, explanation: "Fewer cars = less pollution." },
+        { type: "fill_blank", sentence: "We should ___ paper and glass instead of throwing them away.", answers: ["recycle"], hint: "Use the materials again.", explanation: "recycle = process materials so they can be used again." },
+        { type: "translate", prompt: "Give advice with 'should' and 'save': We use too much electricity.", answers: ["we should save energy","we must save energy","we should save electricity","we need to save energy"], explanation: "We should save energy." }
       ]
     },
 
     "lvl-b1-listen-climate": {
       lessonId: "lvl-b1-listen-climate", level: "B1", track: "Listening", topic: "society", skill: "listening",
-      title: "Tema: cuidar el planeta", xpReward: 54, mascotState: "explaining",
+      title: "Topic: caring for the planet", xpReward: 54, mascotState: "explaining",
       explanation: {
-        body: "Escucha B1: una breve charla con consejos para ayudar al medio ambiente. Sigue la estructura (first, second, finally) y capta la idea principal y los detalles. (Toma nota mental de cada consejo.)",
+        body: "B1 listening: a short talk with tips to help the environment. Follow the structure (first, second, finally) and catch the main idea and the details. Make a mental note of each tip.",
         examples: [
-          { en: "First, try to use less plastic.", es: "Primero, intenta usar menos plástico." },
-          { en: "Switch off lights when you don't need them.", es: "Apaga las luces cuando no las necesites." }
+          { en: "First, try to use less plastic." },
+          { en: "Switch off lights when you don't need them." }
         ]
       },
       exercises: [
@@ -267,7 +264,7 @@ window.VESPER_THEMES_PACK = (function () {
         { type: "listening",
           text: "Finally, whenever you can, walk or cycle instead of taking the car. It's good for the planet and for your health.", "audio": "assets/audio/app/b1_34ca2f74e7.mp3",
           question: "What does the speaker recommend instead of driving?", options: ["taking the car for short trips", "walking or cycling", "taking taxis"], correctIndex: 1, explanation: "\"...walk or cycle instead of taking the car.\"" },
-        { type: "multiple_choice", question: "What is the talk mainly about?", options: ["how to cook", "how to save money", "how to plant a garden", "simple ways to help the environment"], correctIndex: 3, explanation: "Son tres consejos para ayudar al medio ambiente." },
+        { type: "multiple_choice", question: "What is the talk mainly about?", options: ["how to cook", "how to save money", "how to plant a garden", "simple ways to help the environment"], correctIndex: 3, explanation: "They are three tips to help the environment." },
         { type: "true_false", statement: "The speaker gives three tips.", answer: true, explanation: "\"...three simple tips...\"" }
       ]
     },
@@ -275,41 +272,41 @@ window.VESPER_THEMES_PACK = (function () {
     /* =================== B1 · VIAJES Y CULTURA =================== */
 
     "lvl-b1-vocab-travel": {
-      lessonId: "lvl-b1-vocab-travel", level: "B1", track: "Vocabulario", topic: "travel", skill: "vocab",
-      title: "Tema: viajar al extranjero", xpReward: 52, mascotState: "explaining",
+      lessonId: "lvl-b1-vocab-travel", level: "B1", track: "Vocabulary", topic: "travel", skill: "vocab",
+      title: "Topic: travelling abroad", xpReward: 52, mascotState: "explaining",
       explanation: {
-        body: "Vocabulario B1 de viajes: documentos, alojamiento y actividades. Aprende términos como abroad, sightseeing o accommodation. (Asocia, clasifica y traduce.)",
+        body: "B1 travel vocabulary: documents, accommodation and activities. Learn words like abroad, sightseeing and accommodation.",
         examples: [
-          { en: "I'm going to travel abroad next year.", es: "Voy a viajar al extranjero el año que viene." },
-          { en: "passport, accommodation, sightseeing, souvenir", es: "pasaporte, alojamiento, turismo, recuerdo" }
+          { en: "I'm going to travel abroad next year." },
+          { en: "passport, accommodation, sightseeing, souvenir" }
         ]
       },
       exercises: [
-        { type: "matching", instruction: "Une la palabra con su significado.", pairs: [
+        { type: "matching", instruction: "Match each word with its meaning.", pairs: [
           { l: "abroad", r: "in another country" },
           { l: "accommodation", r: "a place to stay" },
           { l: "sightseeing", r: "visiting interesting places" },
           { l: "souvenir", r: "a thing you buy to remember a trip" }
         ] },
-        { type: "categorize", instruction: "¿Es un documento o una actividad del viaje?", buckets: [
+        { type: "categorize", instruction: "Is it a travel document or a travel activity?", buckets: [
           { id: "d", label: "Document" }, { id: "a", label: "Activity" } ], items: [
           { t: "passport", bucket: "d" }, { t: "sightseeing", bucket: "a" },
           { t: "visa", bucket: "d" }, { t: "trying local food", bucket: "a" },
           { t: "boarding pass", bucket: "d" }, { t: "taking photos", bucket: "a" } ] },
-        { type: "multiple_choice", question: "A place where you stay on holiday:", options: ["departure", "currency", "accommodation"], correctIndex: 2, explanation: "accommodation = alojamiento." },
-        { type: "fill_blank", sentence: "Don't forget your ___; you can't travel abroad without it.", answers: ["passport"], hint: "Documento para viajar.", explanation: "passport = pasaporte." },
-        { type: "translate", prompt: "Traduce: \"Voy a viajar al extranjero el año que viene.\"", answers: ["i'm going to travel abroad next year", "i am going to travel abroad next year"], explanation: "I'm going to travel abroad next year." }
+        { type: "multiple_choice", question: "A place where you stay on holiday:", options: ["departure", "currency", "accommodation"], correctIndex: 2, explanation: "accommodation = a place to stay (hotel, hostel, apartment)." },
+        { type: "fill_blank", sentence: "Don't forget your ___; you can't travel abroad without it.", answers: ["passport"], hint: "A document for travelling.", explanation: "passport = the official document you need to travel." },
+        { type: "translate", prompt: "Talk about your plan with 'going to' and 'abroad': Next year I plan to visit another country.", answers: ["i'm going to travel abroad next year","i am going to travel abroad next year","next year i'm going to travel abroad","next year i am going to travel abroad","i'm going to go abroad next year","i am going to go abroad next year"], explanation: "I'm going to travel abroad next year." }
       ]
     },
 
     "lvl-b1-listen-airport": {
       lessonId: "lvl-b1-listen-airport", level: "B1", track: "Listening", topic: "travel", skill: "listening",
-      title: "Tema: anuncios del aeropuerto", xpReward: 54, mascotState: "explaining",
+      title: "Topic: airport announcements", xpReward: 54, mascotState: "explaining",
       explanation: {
-        body: "Escucha B1: anuncios típicos de aeropuerto. Capta el destino, la puerta y la información importante. Cuidado con palabras clave como 'final' o 'gate closes'. (Escucha los datos concretos.)",
+        body: "B1 listening: typical airport announcements. Catch the destination, the gate and the important information. Watch out for key words like 'final' or 'gate closes'.",
         examples: [
-          { en: "This is the final boarding call for flight BA245.", es: "Último aviso de embarque del vuelo BA245." },
-          { en: "Please proceed to gate 12.", es: "Diríjanse a la puerta 12." }
+          { en: "This is the final boarding call for flight BA245." },
+          { en: "Please proceed to gate 12." }
         ]
       },
       exercises: [
@@ -320,7 +317,7 @@ window.VESPER_THEMES_PACK = (function () {
           text: "Passengers are reminded that the gate closes ten minutes before departure.", "audio": "assets/audio/app/b1_59ef7cf442.mp3",
           question: "When does the gate close?", options: ["ten minutes before departure", "at departure time", "one hour before the flight leaves"], correctIndex: 0, explanation: "\"...the gate closes ten minutes before departure.\"" },
         { type: "multiple_choice", question: "Which gate should passengers go to?", options: ["gate 20", "gate 2", "gate 12"], correctIndex: 2, explanation: "\"...proceed to gate 12...\"" },
-        { type: "true_false", statement: "This is the first boarding call.", answer: false, explanation: "Es el ÚLTIMO aviso ('final boarding call')." }
+        { type: "true_false", statement: "This is the first boarding call.", answer: false, explanation: "It's the LAST call ('final boarding call')." }
       ]
     }
 

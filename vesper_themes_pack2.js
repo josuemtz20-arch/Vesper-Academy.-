@@ -122,48 +122,45 @@ window.VESPER_THEMES_PACK2 = (function () {
     /* ================== B1 · TECNOLOGÍA Y MEDIOS ================== */
 
     "lvl-b1-vocab-tech": {
-      lessonId: "lvl-b1-vocab-tech", level: "B1", track: "Vocabulario", topic: "tech", skill: "vocab",
-      title: "Tema: tecnología y medios", xpReward: 52, mascotState: "explaining",
+      lessonId: "lvl-b1-vocab-tech", level: "B1", track: "Vocabulary", topic: "tech", skill: "vocab",
+      title: "Topic: technology and media", xpReward: 52, mascotState: "explaining",
       explanation: {
-        body: "Vocabulario B1 de tecnología: dispositivos y acciones (download, upload, install). Distingue el aparato de lo que haces con él. (Asocia, clasifica y traduce.)",
+        body: "B1 technology vocabulary: devices and actions (download, upload, install). Tell apart the device and what you do with it.",
         examples: [
-          { en: "I forgot my password.", es: "Olvidé mi contraseña." },
-          { en: "download, upload, screen, update", es: "descargar, subir, pantalla, actualizar" }
+          { en: "I forgot my password." },
+          { en: "download, upload, screen, update" }
         ]
       },
       exercises: [
-        { type: "matching", instruction: "Une la palabra con su traducción.", pairs: [
-          { l: "download", r: "descargar" }, { l: "password", r: "contraseña" },
-          { l: "screen", r: "pantalla" }, { l: "update", r: "actualizar" }
-        ] },
-        { type: "categorize", instruction: "¿Es un dispositivo o una acción?", buckets: [
+        { type: "matching", instruction: "Match each word with its meaning.", pairs: [{"l":"download","r":"copy a file from the internet"},{"l":"password","r":"a secret word to log in"},{"l":"screen","r":"the part of a device you look at"},{"l":"update","r":"install the newest version"}] },
+        { type: "categorize", instruction: "Is it a device or an action?", buckets: [
           { id: "d", label: "Device" }, { id: "a", label: "Action" } ], items: [
           { t: "laptop", bucket: "d" }, { t: "download", bucket: "a" },
           { t: "smartphone", bucket: "d" }, { t: "upload", bucket: "a" },
           { t: "tablet", bucket: "d" }, { t: "install", bucket: "a" } ] },
-        { type: "multiple_choice", question: "A secret word to log in is a ___.", options: ["browser", "screen", "password"], correctIndex: 2, explanation: "password = contraseña." },
-        { type: "fill_blank", sentence: "Please ___ the app to the latest version.", answers: ["update"], hint: "Ponerlo al día.", explanation: "update = actualizar." },
-        { type: "translate", prompt: "Traduce: \"Olvidé mi contraseña.\"", answers: ["i forgot my password"], explanation: "I forgot my password." }
+        { type: "multiple_choice", question: "A secret word to log in is a ___.", options: ["browser", "screen", "password"], correctIndex: 2, explanation: "password = a secret word to enter an account." },
+        { type: "fill_blank", sentence: "Please ___ the app to the latest version.", answers: ["update"], hint: "Bring it up to date.", explanation: "update = install the newest version." },
+        { type: "translate", prompt: "You can't log in. Explain the problem with 'forget' (past simple) and 'password'.", answers: ["i forgot my password","i've forgotten my password","i have forgotten my password"], explanation: "I forgot my password." }
       ]
     },
 
     "lvl-b1-listen-podcast": {
       lessonId: "lvl-b1-listen-podcast", level: "B1", track: "Listening", topic: "tech", skill: "listening",
-      title: "Tema: podcast de tecnología", xpReward: 54, mascotState: "explaining",
+      title: "Topic: a technology podcast", xpReward: 54, mascotState: "explaining",
       explanation: {
-        body: "Escucha B1: un podcast con consejos sobre seguridad digital. Sigue el tema, capta los detalles y el consejo extra. (Atiende a las recomendaciones del presentador.)",
+        body: "B1 listening: a podcast with tips about online safety. Follow the topic, catch the details and the bonus tip. Pay attention to the host's recommendations.",
         examples: [
-          { en: "A strong password should be long.", es: "Una contraseña segura debe ser larga." },
-          { en: "Turn on two-factor authentication.", es: "Activa la verificación en dos pasos." }
+          { en: "A strong password should be long." },
+          { en: "Turn on two-factor authentication." }
         ]
       },
       exercises: [
         { type: "listening",
           text: "Hi and welcome to Tech Tips. Today's tip is about passwords. A strong password should be long and mix letters, numbers and symbols. Never use the same password for every account.", "audio": "assets/audio/app/b1_d22abde701.mp3",
-          question: "What is today's tip about?", options: ["buying a laptop", "creating strong passwords", "downloading apps safely onto a new phone"], correctIndex: 1, explanation: "El consejo de hoy trata sobre contraseñas seguras." },
+          question: "What is today's tip about?", options: ["buying a laptop", "creating strong passwords", "downloading apps safely onto a new phone"], correctIndex: 1, explanation: "Today's tip is about strong passwords." },
         { type: "listening",
           text: "And here's a bonus tip: turn on two-factor authentication. It sends a code to your phone, so even if someone knows your password, they can't log in.", "audio": "assets/audio/app/b1_8a3922da5d.mp3",
-          question: "What does two-factor authentication do?", options: ["makes passwords shorter", "deletes your account", "sends a code to your phone for extra security"], correctIndex: 2, explanation: "\"It sends a code to your phone...\" para más seguridad." },
+          question: "What does two-factor authentication do?", options: ["makes passwords shorter", "deletes your account", "sends a code to your phone for extra security"], correctIndex: 2, explanation: "\"It sends a code to your phone...\" for extra security." },
         { type: "multiple_choice", question: "According to the podcast, a strong password should...", options: ["mix letters, numbers and symbols", "be short and simple", "be the same on every website and app you use"], correctIndex: 0, explanation: "\"...mix letters, numbers and symbols.\"" },
         { type: "true_false", statement: "The speaker recommends using the same password for every account.", answer: false, explanation: "\"Never use the same password for every account.\"" }
       ]
@@ -173,35 +170,35 @@ window.VESPER_THEMES_PACK2 = (function () {
 
     "lvl-b2-listen-meeting": {
       lessonId: "lvl-b2-listen-meeting", level: "B2", track: "TOEFL · Listening", topic: "work", skill: "listening",
-      title: "Listening: reunión de trabajo", xpReward: 62, mascotState: "explaining",
+      title: "Listening: a work meeting", xpReward: 62, mascotState: "explaining",
       explanation: {
-        body: "Escucha B2 en una reunión de trabajo. Capta el tema de la agenda, las instrucciones y el tono. En este nivel también se evalúa la actitud del ponente. (Distingue el dato de la intención.)",
+        body: "B2 listening in a work meeting. Catch the agenda topic, the instructions and the tone. At this level the speaker's attitude is also tested. Distinguish facts from intentions.",
         examples: [
-          { en: "The main item on the agenda is...", es: "El punto principal del orden del día es..." },
-          { en: "Please keep your comments brief.", es: "Por favor, sean breves en sus comentarios." }
+          { en: "The main item on the agenda is..." },
+          { en: "Please keep your comments brief." }
         ]
       },
       exercises: [
         { type: "listening",
           text: "Thanks everyone for joining today's meeting. The main item on the agenda is the launch of our new app. Sales have been slower than expected, so we need to discuss how to improve our marketing.", "audio": "assets/audio/app/b2_c50ff667ce.mp3",
-          question: "What is the main topic of the meeting?", options: ["hiring new staff", "improving marketing for the new app", "moving the whole team to a new office building"], correctIndex: 1, explanation: "El punto principal es mejorar el marketing de la nueva app." },
+          question: "What is the main topic of the meeting?", options: ["hiring new staff", "improving marketing for the new app", "moving the whole team to a new office building"], correctIndex: 1, explanation: "The main point is improving marketing for the new app." },
         { type: "listening",
           text: "Marta will present the budget, and then we'll open the floor for suggestions. Please keep your comments brief, as we only have thirty minutes.", "audio": "assets/audio/app/b2_59ba75fe2b.mp3",
           question: "What does the speaker ask people to do?", options: ["speak for a long time about every detail", "leave the meeting", "keep their comments brief"], correctIndex: 2, explanation: "\"Please keep your comments brief...\"" },
         { type: "multiple_choice", question: "Why are they discussing marketing?", options: ["sales were slower than expected", "the app is already finished and selling very well", "the budget is too big"], correctIndex: 0, explanation: "\"Sales have been slower than expected...\"" },
-        { type: "multiple_choice", question: "What is the speaker's tone?", options: ["sad and worried", "angry and rude", "relaxed and informal", "focused and businesslike"], correctIndex: 3, explanation: "Estructura la agenda y pide brevedad: tono profesional y centrado." },
+        { type: "multiple_choice", question: "What is the speaker's tone?", options: ["sad and worried", "angry and rude", "relaxed and informal", "focused and businesslike"], correctIndex: 3, explanation: "The speaker structures the agenda and asks people to be brief: a professional, focused tone." },
         { type: "true_false", statement: "The meeting will last about thirty minutes.", answer: true, explanation: "\"...we only have thirty minutes.\"" }
       ]
     },
 
     "lvl-b2-listen-news": {
       lessonId: "lvl-b2-listen-news", level: "B2", track: "TOEFL · Listening", topic: "society", skill: "listening",
-      title: "Listening: informativo de noticias", xpReward: 62, mascotState: "explaining",
+      title: "Listening: a news report", xpReward: 62, mascotState: "explaining",
       explanation: {
-        body: "Escucha B2 de un informativo. Capta la noticia principal, los puntos de vista a favor y en contra, y los datos concretos. (Identifica quién apoya y quién se preocupa.)",
+        body: "B2 listening from a news bulletin. Catch the main story, the points of view for and against, and the specific facts. Identify who supports it and who is worried.",
         examples: [
-          { en: "In tonight's headlines...", es: "En los titulares de esta noche..." },
-          { en: "Supporters say... while critics worry...", es: "Los partidarios dicen... mientras los críticos temen..." }
+          { en: "In tonight's headlines..." },
+          { en: "Supporters say... while critics worry..." }
         ]
       },
       exercises: [
@@ -220,35 +217,35 @@ window.VESPER_THEMES_PACK2 = (function () {
 
     "lvl-c1-listen-psychology": {
       lessonId: "lvl-c1-listen-psychology", level: "C1", track: "TOEFL · Listening", topic: "study", skill: "listening",
-      title: "Listening: psicología (sesgos)", xpReward: 66, mascotState: "explaining",
+      title: "Listening: psychology (biases)", xpReward: 66, mascotState: "explaining",
       explanation: {
-        body: "Escucha C1: una lecture de psicología sobre los sesgos cognitivos. Capta la definición, el ejemplo y el matiz crítico del profesor. (Distingue el concepto del comentario.)",
+        body: "C1 listening: a psychology lecture on cognitive biases. Catch the definition, the example and the professor's critical nuance. Distinguish the concept from the commentary.",
         examples: [
-          { en: "a systematic deviation from rationality", es: "una desviación sistemática de la racionalidad" },
-          { en: "being intelligent does not make you immune", es: "ser inteligente no te hace inmune" }
+          { en: "a systematic deviation from rationality" },
+          { en: "being intelligent does not make you immune" }
         ]
       },
       exercises: [
         { type: "listening",
           text: "Today we'll look at the concept of cognitive bias, the systematic ways in which our thinking deviates from rationality. A classic example is confirmation bias: our tendency to notice and remember information that supports what we already believe.", "audio": "assets/audio/app/c1_16f994942b.mp3",
-          question: "What is the lecture mainly about?", options: ["how human memory is stored and later retrieved by the brain", "cognitive bias, and confirmation bias in particular", "techniques for studying"], correctIndex: 1, explanation: "Define el sesgo cognitivo y se centra en el de confirmación." },
+          question: "What is the lecture mainly about?", options: ["how human memory is stored and later retrieved by the brain", "cognitive bias, and confirmation bias in particular", "techniques for studying"], correctIndex: 1, explanation: "It defines cognitive bias and focuses on confirmation bias." },
         { type: "listening",
           text: "Importantly, being intelligent does not make you immune. In fact, clever people are often better at constructing arguments to justify conclusions they already hold.", "audio": "assets/audio/app/c1_93dbcc7aef.mp3",
           question: "What point does the professor make about intelligent people?", options: ["they have a worse memory", "they never show bias because they reason more carefully than others", "they may be better at justifying their existing beliefs"], correctIndex: 2, explanation: "\"...better at constructing arguments to justify conclusions they already hold.\"" },
-        { type: "multiple_choice", question: "'Confirmation bias' is the tendency to...", options: ["forget important facts", "trust experts more than friends", "change your mind easily", "favour information that supports your existing beliefs"], correctIndex: 3, explanation: "Es la tendencia a fijarnos en lo que confirma lo que ya creemos." },
-        { type: "multiple_choice", question: "What can be inferred from the lecture?", options: ["bias affects people regardless of intelligence", "only uneducated people are biased, while experts are fully objective", "bias is always harmless"], correctIndex: 0, explanation: "Si la inteligencia no protege, el sesgo afecta a todos." },
+        { type: "multiple_choice", question: "'Confirmation bias' is the tendency to...", options: ["forget important facts", "trust experts more than friends", "change your mind easily", "favour information that supports your existing beliefs"], correctIndex: 3, explanation: "It is the tendency to notice what confirms what we already believe." },
+        { type: "multiple_choice", question: "What can be inferred from the lecture?", options: ["bias affects people regardless of intelligence", "only uneducated people are biased, while experts are fully objective", "bias is always harmless"], correctIndex: 0, explanation: "If intelligence does not protect you, bias affects everyone." },
         { type: "true_false", statement: "The professor says intelligence makes people immune to bias.", answer: false, explanation: "\"...being intelligent does not make you immune.\"" }
       ]
     },
 
     "lvl-c1-listen-tech-society": {
       lessonId: "lvl-c1-listen-tech-society", level: "C1", track: "TOEFL · Listening", topic: "society", skill: "listening",
-      title: "Listening: debate sobre teletrabajo", xpReward: 66, mascotState: "explaining",
+      title: "Listening: a debate on remote work", xpReward: 66, mascotState: "explaining",
       explanation: {
-        body: "Escucha C1: un seminario que debate el teletrabajo. Capta los argumentos a favor y en contra y reconoce que el ponente presenta ambas caras. (Distingue ventaja de inconveniente.)",
+        body: "C1 listening: a seminar debating remote work. Catch the arguments for and against and notice that the speaker presents both sides. Distinguish advantages from drawbacks.",
         examples: [
-          { en: "Proponents argue that...", es: "Los partidarios sostienen que..." },
-          { en: "Critics point to the erosion of team spirit.", es: "Los críticos señalan la erosión del espíritu de equipo." }
+          { en: "Proponents argue that..." },
+          { en: "Critics point to the erosion of team spirit." }
         ]
       },
       exercises: [
@@ -258,9 +255,9 @@ window.VESPER_THEMES_PACK2 = (function () {
         { type: "listening",
           text: "Critics, however, point to the erosion of team spirit and the difficulty of mentoring junior staff who never meet their colleagues in person.", "audio": "assets/audio/app/c1_32b454c80d.mp3",
           question: "What concern do critics raise?", options: ["too many meetings", "higher office rents", "weaker team spirit and harder mentoring"], correctIndex: 2, explanation: "\"...the erosion of team spirit and the difficulty of mentoring...\"" },
-        { type: "multiple_choice", question: "What is the seminar debating?", options: ["public transport", "salary levels", "office design", "remote work"], correctIndex: 3, explanation: "El tema es el teletrabajo (remote work)." },
-        { type: "multiple_choice", question: "'Erosion of team spirit' means team spirit is...", options: ["gradually weakening", "growing stronger", "completely unchanged"], correctIndex: 0, explanation: "'Erosion' = desgaste/debilitamiento gradual." },
-        { type: "true_false", statement: "The speaker presents only the advantages of remote work.", answer: false, explanation: "Presenta argumentos a favor (proponents) y en contra (critics)." }
+        { type: "multiple_choice", question: "What is the seminar debating?", options: ["public transport", "salary levels", "office design", "remote work"], correctIndex: 3, explanation: "The topic is remote work." },
+        { type: "multiple_choice", question: "'Erosion of team spirit' means team spirit is...", options: ["gradually weakening", "growing stronger", "completely unchanged"], correctIndex: 0, explanation: "'Erosion' = gradual weakening." },
+        { type: "true_false", statement: "The speaker presents only the advantages of remote work.", answer: false, explanation: "The speaker presents arguments for (proponents) and against (critics)." }
       ]
     },
 
@@ -268,46 +265,46 @@ window.VESPER_THEMES_PACK2 = (function () {
 
     "lvl-c2-listen-ethics": {
       lessonId: "lvl-c2-listen-ethics", level: "C2", track: "TOEFL · Listening", topic: "study", skill: "listening",
-      title: "Listening: ética (el dilema del tranvía)", xpReward: 74, mascotState: "explaining",
+      title: "Listening: ethics (the trolley problem)", xpReward: 74, mascotState: "explaining",
       explanation: {
-        body: "Escucha C2: un seminario de filosofía moral. El ponente plantea un dilema, señala una inconsistencia y extrae una conclusión sutil. Capta el argumento, no solo los hechos. (Sigue el razonamiento hasta la tesis.)",
+        body: "C2 listening: a moral philosophy seminar. The speaker presents a dilemma, points out an inconsistency and draws a subtle conclusion. Catch the argument, not just the facts. Follow the reasoning to the thesis.",
         examples: [
-          { en: "Most people say they would pull the lever.", es: "La mayoría dice que tiraría de la palanca." },
-          { en: "This inconsistency fascinates philosophers.", es: "Esta inconsistencia fascina a los filósofos." }
+          { en: "Most people say they would pull the lever." },
+          { en: "This inconsistency fascinates philosophers." }
         ]
       },
       exercises: [
         { type: "listening",
           text: "Consider the famous trolley problem. A runaway trolley will kill five people unless you divert it onto a side track, where it will kill one. Most people say they would pull the lever. Yet when asked to push a single person to their death to achieve the same outcome, most refuse.", "audio": "assets/audio/app/c2_5fc2d09b7f.mp3",
-          question: "What puzzle does the speaker describe?", options: ["the prisoner's dilemma", "a mathematical theorem", "the trolley problem"], correctIndex: 2, explanation: "Describe el clásico 'trolley problem'." },
+          question: "What puzzle does the speaker describe?", options: ["the prisoner's dilemma", "a mathematical theorem", "the trolley problem"], correctIndex: 2, explanation: "It describes the classic 'trolley problem'." },
         { type: "listening",
           text: "This inconsistency fascinates philosophers, because the numerical outcome is identical. It suggests our moral judgments are driven not purely by consequences, but by intuitions about action, intention and physical contact.", "audio": "assets/audio/app/c2_f8c4c5ee1a.mp3",
-          question: "What does the inconsistency suggest about moral judgments?", options: ["they depend only on the numbers", "they are shaped by intuitions, not just consequences", "they are always perfectly rational calculations of outcomes"], correctIndex: 1, explanation: "Sugiere que pesan intuiciones (acción, intención, contacto), no solo las consecuencias." },
-        { type: "multiple_choice", question: "The speaker's main point is that human morality...", options: ["is influenced by factors beyond pure outcomes", "does not really exist", "is perfectly logical"], correctIndex: 0, explanation: "La moral humana se ve influida por más que los resultados." },
-        { type: "multiple_choice", question: "An 'inconsistency' is...", options: ["a moral rule", "a type of trolley", "a strong proof that two ideas agree completely", "a lack of logical agreement"], correctIndex: 3, explanation: "Inconsistencia = falta de coherencia lógica." },
-        { type: "true_false", statement: "According to the talk, most people would push a person to save five.", answer: false, explanation: "\"...most refuse\" cuando hay que empujar a alguien." }
+          question: "What does the inconsistency suggest about moral judgments?", options: ["they depend only on the numbers", "they are shaped by intuitions, not just consequences", "they are always perfectly rational calculations of outcomes"], correctIndex: 1, explanation: "It suggests that intuitions (action, intention, physical contact) matter, not just the consequences." },
+        { type: "multiple_choice", question: "The speaker's main point is that human morality...", options: ["is influenced by factors beyond pure outcomes", "does not really exist", "is perfectly logical"], correctIndex: 0, explanation: "Human morality is influenced by more than outcomes." },
+        { type: "multiple_choice", question: "An 'inconsistency' is...", options: ["a moral rule", "a type of trolley", "a strong proof that two ideas agree completely", "a lack of logical agreement"], correctIndex: 3, explanation: "Inconsistency = a lack of logical agreement." },
+        { type: "true_false", statement: "According to the talk, most people would push a person to save five.", answer: false, explanation: "\"...most refuse\" when they have to push someone." }
       ]
     },
 
     "lvl-c2-listen-development": {
       lessonId: "lvl-c2-listen-development", level: "C2", track: "TOEFL · Listening", topic: "society", skill: "listening",
-      title: "Listening: debate sobre la ayuda al desarrollo", xpReward: 74, mascotState: "explaining",
+      title: "Listening: a debate on development aid", xpReward: 74, mascotState: "explaining",
       explanation: {
-        body: "Escucha C2: un debate sobre la ayuda exterior. El ponente contrasta posturas, resiste los eslóganes simples y matiza cuándo funciona la ayuda. Capta la postura y los matices. (No confundas el ejemplo con la tesis.)",
+        body: "C2 listening: a debate about foreign aid. The speaker contrasts positions, resists simple slogans and qualifies when aid works. Catch the position and the nuances. Don't confuse the example with the thesis.",
         examples: [
-          { en: "Advocates contend that... Skeptics counter that...", es: "Los defensores sostienen que... Los escépticos replican que..." },
-          { en: "The truth resists simple slogans.", es: "La verdad se resiste a los eslóganes simples." }
+          { en: "Advocates contend that... Skeptics counter that..." },
+          { en: "The truth resists simple slogans." }
         ]
       },
       exercises: [
         { type: "listening",
           text: "Our topic today is foreign aid. Advocates contend that well-targeted aid has eradicated diseases and lifted millions out of poverty. Skeptics counter that poorly designed aid can foster dependency and prop up corrupt governments.", "audio": "assets/audio/app/c2_12f02599da.mp3",
-          question: "What is the debate about?", options: ["international tourism", "the stock market", "foreign aid"], correctIndex: 2, explanation: "El tema es la ayuda exterior (foreign aid)." },
+          question: "What is the debate about?", options: ["international tourism", "the stock market", "foreign aid"], correctIndex: 2, explanation: "The topic is foreign aid." },
         { type: "listening",
           text: "The truth, as so often, resists simple slogans. The evidence suggests that aid works best when it is transparent, locally led, and tied to measurable outcomes rather than political convenience.", "audio": "assets/audio/app/c2_dcfbc0fd4b.mp3",
           question: "According to the speaker, when does aid work best?", options: ["when it is secret and centralised", "when it is transparent, locally led and tied to measurable outcomes", "when it supports any government in power, without conditions or checks"], correctIndex: 1, explanation: "\"...transparent, locally led, and tied to measurable outcomes...\"" },
-        { type: "multiple_choice", question: "What is the speaker's overall stance?", options: ["aid can work under the right conditions", "aid is always beneficial, whatever the conditions on the ground", "aid is always harmful"], correctIndex: 0, explanation: "Postura matizada: funciona bajo ciertas condiciones." },
-        { type: "multiple_choice", question: "To 'foster dependency' means to...", options: ["reduce corruption", "share resources fairly", "put an end to all reliance", "encourage reliance on others"], correctIndex: 3, explanation: "'Foster dependency' = fomentar la dependencia." },
+        { type: "multiple_choice", question: "What is the speaker's overall stance?", options: ["aid can work under the right conditions", "aid is always beneficial, whatever the conditions on the ground", "aid is always harmful"], correctIndex: 0, explanation: "A nuanced position: aid works under certain conditions." },
+        { type: "multiple_choice", question: "To 'foster dependency' means to...", options: ["reduce corruption", "share resources fairly", "put an end to all reliance", "encourage reliance on others"], correctIndex: 3, explanation: "'Foster dependency' = encourage people to rely on others." },
         { type: "true_false", statement: "The speaker says the issue can be summed up in a simple slogan.", answer: false, explanation: "\"The truth... resists simple slogans.\"" }
       ]
     }

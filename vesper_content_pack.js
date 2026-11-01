@@ -82,14 +82,14 @@ window.VESPER_CONTENT_PACK = (function () {
     },
 
     "read-b1-article": {
-      lessonId: "read-b1-article", level: "B1", track: "Lectura", topic: "tech", skill: "reading",
-      title: "Lectura: Working from home", xpReward: 48, mascotState: "explaining",
+      lessonId: "read-b1-article", level: "B1", track: "Reading", topic: "tech", skill: "reading",
+      title: "Reading: Working from home", xpReward: 48, mascotState: "explaining",
       nextLessonId: "read-b2-story",
       explanation: {
-        body: "Vas a leer un artículo corto con una idea principal y detalles. Busca pros y contras y la opinión del autor. (Lee el artículo y responde.)",
+        body: "You will read a short article with a main idea and supporting details. Look for the pros and cons and the writer's opinion.",
         examples: [
-          { en: "the main idea", es: "la idea principal" },
-          { en: "pros and cons", es: "ventajas y desventajas" }
+          { en: "the main idea" },
+          { en: "pros and cons" }
         ]
       },
       exercises: [
@@ -100,26 +100,23 @@ window.VESPER_CONTENT_PACK = (function () {
             { q: "According to the text, one advantage is that workers...", options: ["save time on commuting", "never feel lonely", "earn more money"], correctIndex: 0, explanation: "\"Workers save time and money because they don't commute.\"" },
             { q: "What solution do experts suggest?", options: ["Always work in the office", "Always work from home", "A mix of home and office"], correctIndex: 2, explanation: "\"...the best solution may be a mix.\"" }
           ] },
-        { type: "matching", instruction: "Une la palabra con su significado.", pairs: [
-          { l: "commute", r: "viajar al trabajo" }, { l: "advantage", r: "ventaja" },
-          { l: "lonely", r: "solo/a" }, { l: "switch off", r: "desconectar" }
-        ] },
+        { type: "matching", instruction: "Match each word with its meaning.", pairs: [{"l":"commute","r":"travel to and from work"},{"l":"advantage","r":"a good point"},{"l":"lonely","r":"sad because you are alone"},{"l":"switch off","r":"stop thinking about work"}] },
         { type: "true_false", statement: "The article says working from home is perfect.", answer: false, explanation: "\"...working from home is not perfect.\"" },
-        { type: "fill_blank", sentence: "Some people feel ___ when they work alone at home.", answers: ["lonely"], hint: "Adjetivo del texto.", explanation: "\"Some people feel lonely...\"" },
+        { type: "fill_blank", sentence: "Some people feel ___ when they work alone at home.", answers: ["lonely"], hint: "An adjective from the text.", explanation: "\"Some people feel lonely...\"" },
         { type: "multiple_choice", question: "Who can also save money, according to the text?", options: ["Companies", "Governments", "Schools"], correctIndex: 0, explanation: "\"Companies can also save money on big offices.\"" },
-        { type: "translate", prompt: "Traduce: \"Yo trabajo desde casa dos días a la semana.\"",
+        { type: "translate", prompt: "Say how often, starting 'I work from home…': I work at home on Mondays and Thursdays.",
           answers: ["i work from home two days a week", "i work from home twice a week"], explanation: "I work from home two days a week." }
       ]
     },
 
     "read-b2-story": {
-      lessonId: "read-b2-story", level: "B2", track: "Lectura", topic: "society", skill: "reading",
-      title: "Lectura: The lost wallet", xpReward: 52, mascotState: "explaining",
+      lessonId: "read-b2-story", level: "B2", track: "Reading", topic: "society", skill: "reading",
+      title: "Reading: The lost wallet", xpReward: 52, mascotState: "explaining",
       explanation: {
-        body: "Un texto narrativo con un pequeño giro. Fíjate en el orden de los hechos y en cómo se siente el personaje. (Lee la historia y responde.)",
+        body: "A short story with a small twist. Pay attention to the order of events and to how the character feels.",
         examples: [
-          { en: "the twist", es: "el giro" },
-          { en: "how the character feels", es: "cómo se siente el personaje" }
+          { en: "the twist" },
+          { en: "how the character feels" }
         ]
       },
       exercises: [
@@ -130,14 +127,11 @@ window.VESPER_CONTENT_PACK = (function () {
             { q: "What did Carla do with the wallet?", options: ["She kept the money.", "She left it there.", "She handed it in at a police station."], correctIndex: 2, explanation: "\"...decided to hand the wallet in at the nearest police station.\"" },
             { q: "What was the surprise at the end?", options: ["The owner was her upstairs neighbour.", "The wallet was empty.", "The owner was a police officer."], correctIndex: 0, explanation: "\"...he turned out to be her neighbour from the flat upstairs.\"" }
           ] },
-        { type: "multiple_choice", question: "The phrase \"in a hurry\" means...", options: ["with a lot of time", "in a rush", "feeling sad"], correctIndex: 1, explanation: "\"In a hurry\" = con prisa." },
+        { type: "multiple_choice", question: "The phrase \"in a hurry\" means...", options: ["with a lot of time", "in a rush", "feeling sad"], correctIndex: 1, explanation: "\"In a hurry\" = rushing, without much time." },
         { type: "true_false", statement: "Carla expected a reward for returning the wallet.", answer: false, explanation: "\"She didn't expect anything in return.\"" },
-        { type: "matching", instruction: "Une la expresión con su significado.", pairs: [
-          { l: "hand in", r: "entregar" }, { l: "in return", r: "a cambio" },
-          { l: "turn out", r: "resultar (ser)" }, { l: "retired", r: "jubilado/a" }
-        ] },
-        { type: "fill_blank", sentence: "The owner was a ___ teacher.", answers: ["retired"], hint: "Ya no trabaja.", explanation: "\"The owner, a retired teacher...\"" },
-        { type: "translate", prompt: "Traduce: \"Ella decidió entregar la cartera.\"",
+        { type: "matching", instruction: "Match each expression with its meaning.", pairs: [{"l":"hand in","r":"give to someone in authority"},{"l":"in return","r":"as an exchange"},{"l":"turn out","r":"prove to be in the end"},{"l":"retired","r":"no longer working because of age"}] },
+        { type: "fill_blank", sentence: "The owner was a ___ teacher.", answers: ["retired"], hint: "He doesn't work any more.", explanation: "\"The owner, a retired teacher...\"" },
+        { type: "translate", prompt: "Rewrite with the phrasal verb 'hand in': She decided to take the wallet to the police station and give it to them.",
           answers: ["she decided to hand in the wallet", "she decided to hand the wallet in"], explanation: "She decided to hand in the wallet." }
       ]
     },
@@ -200,54 +194,51 @@ window.VESPER_CONTENT_PACK = (function () {
 
     "lis-b1-voicemail": {
       lessonId: "lis-b1-voicemail", level: "B1", track: "Listening", topic: "business", skill: "listening",
-      title: "Escucha: un mensaje de voz", xpReward: 46, mascotState: "explaining",
+      title: "Listening: a voicemail", xpReward: 46, mascotState: "explaining",
       nextLessonId: "lis-b2-interview",
       explanation: {
-        body: "Escucha mensajes más largos con varios datos: hora, lugar y motivo. Usa \"Más lento\" si lo necesitas. (Comprensión auditiva B1.)",
+        body: "Listen to longer messages with several details: time, place and reason. Use \"Slower\" if you need it.",
         examples: [
-          { en: "I'm calling about the meeting.", es: "Llamo por la reunión." },
-          { en: "Could you call me back?", es: "¿Podrías devolverme la llamada?" }
+          { en: "I'm calling about the meeting." },
+          { en: "Could you call me back?" }
         ]
       },
       exercises: [
-        { type: "listening", text: "Hi, this is Anna. I'm calling about tomorrow's meeting.", "audio": "assets/audio/app/b1_64520496be.mp3", question: "¿Por qué llama Anna?",
-          options: ["Por una factura", "Por un viaje", "Por la reunión de mañana"], correctIndex: 2 },
-        { type: "listening", text: "The meeting has been moved to three o'clock.", "audio": "assets/audio/app/b1_8c6355d8fa.mp3", question: "¿A qué hora es ahora la reunión?",
-          options: ["A las dos", "A las tres", "A las cinco"], correctIndex: 1 },
-        { type: "listening", text: "Please bring the sales report with you.", "audio": "assets/audio/app/b1_47f6725655.mp3", question: "¿Qué debes llevar?",
-          options: ["El informe de ventas", "Tu pasaporte", "El almuerzo"], correctIndex: 0 },
-        { type: "listening", text: "Could you call me back before five, please?", "audio": "assets/audio/app/b1_08f76abb7a.mp3", question: "¿Antes de qué hora debes llamar?",
-          options: ["Después de las cinco", "Antes de las nueve", "Antes de las cinco"], correctIndex: 2 },
-        { type: "true_false", statement: "Anna pidió que lleves el informe de ventas.", answer: true, explanation: "\"Please bring the sales report.\"" },
-        { type: "listening", text: "Thanks, talk to you soon.", "audio": "assets/audio/app/b1_04550cfc6c.mp3", question: "Escribe lo que escuchaste:",
+        { type: "listening", text: "Hi, this is Anna. I'm calling about tomorrow's meeting.", "audio": "assets/audio/app/b1_64520496be.mp3", question: "Why is Anna calling?",
+          options: ["About a bill","About a trip","About tomorrow's meeting"], correctIndex: 2 },
+        { type: "listening", text: "The meeting has been moved to three o'clock.", "audio": "assets/audio/app/b1_8c6355d8fa.mp3", question: "What time is the meeting now?",
+          options: ["At two","At three","At five"], correctIndex: 1 },
+        { type: "listening", text: "Please bring the sales report with you.", "audio": "assets/audio/app/b1_47f6725655.mp3", question: "What should you bring?",
+          options: ["The sales report","Your passport","Lunch"], correctIndex: 0 },
+        { type: "listening", text: "Could you call me back before five, please?", "audio": "assets/audio/app/b1_08f76abb7a.mp3", question: "You should call back before what time?",
+          options: ["After five","Before nine","Before five"], correctIndex: 2 },
+        { type: "true_false", statement: "Anna asked you to bring the sales report.", answer: true, explanation: "\"Please bring the sales report.\"" },
+        { type: "listening", text: "Thanks, talk to you soon.", "audio": "assets/audio/app/b1_04550cfc6c.mp3", question: "Write what you heard:",
           answers: ["thanks talk to you soon"], explanation: "Thanks, talk to you soon." }
       ]
     },
 
     "lis-b2-interview": {
       lessonId: "lis-b2-interview", level: "B2", track: "Listening", topic: "business", skill: "listening",
-      title: "Escucha: una entrevista", xpReward: 50, mascotState: "explaining",
+      title: "Listening: a job interview", xpReward: 50, mascotState: "explaining",
       explanation: {
-        body: "Escucha fragmentos de una entrevista de trabajo. Atiende a opiniones, razones y matices. (Comprensión auditiva B2.)",
+        body: "Listen to parts of a job interview. Focus on opinions, reasons and nuance.",
         examples: [
-          { en: "What are your strengths?", es: "¿Cuáles son tus fortalezas?" },
-          { en: "I'd say my main strength is teamwork.", es: "Diría que mi mayor fortaleza es el trabajo en equipo." }
+          { en: "What are your strengths?" },
+          { en: "I'd say my main strength is teamwork." }
         ]
       },
       exercises: [
-        { type: "listening", text: "I'd say my main strength is solving problems under pressure.", "audio": "assets/audio/app/b2_f9d9284495.mp3", question: "¿Cuál es su mayor fortaleza?",
-          options: ["Resolver problemas bajo presión", "Hablar varios idiomas con fluidez", "Llegar temprano"], correctIndex: 0 },
-        { type: "listening", text: "In my previous job, I led a team of eight people.", "audio": "assets/audio/app/b2_d47112c317.mp3", question: "¿A cuántas personas dirigía?",
-          options: ["A dieciocho", "A ocho", "A dos"], correctIndex: 1 },
-        { type: "listening", text: "I'm looking for a role with more responsibility.", "audio": "assets/audio/app/b2_2dbec279f6.mp3", question: "¿Qué busca la persona?",
-          options: ["Menos horas", "Un salario menor", "Un puesto con más responsabilidad"], correctIndex: 2 },
-        { type: "listening", text: "Honestly, I sometimes take on too much work.", "audio": "assets/audio/app/b2_9b6472731d.mp3", question: "¿Qué admite como debilidad?",
-          options: ["Que a veces asume demasiado trabajo", "Que llega tarde", "Que no habla inglés"], correctIndex: 0 },
-        { type: "matching", instruction: "Une la expresión con su significado.", pairs: [
-          { l: "strength", r: "fortaleza" }, { l: "weakness", r: "debilidad" },
-          { l: "take on", r: "asumir" }, { l: "role", r: "puesto/rol" }
-        ] },
-        { type: "listening", text: "Could you tell me about the team I would join?", "audio": "assets/audio/app/b2_a5585fb70a.mp3", question: "Escribe lo que escuchaste:",
+        { type: "listening", text: "I'd say my main strength is solving problems under pressure.", "audio": "assets/audio/app/b2_f9d9284495.mp3", question: "What is the candidate's main strength?",
+          options: ["Solving problems under pressure","Speaking several languages fluently","Arriving early"], correctIndex: 0 },
+        { type: "listening", text: "In my previous job, I led a team of eight people.", "audio": "assets/audio/app/b2_d47112c317.mp3", question: "How many people did they lead?",
+          options: ["Eighteen","Eight","Two"], correctIndex: 1 },
+        { type: "listening", text: "I'm looking for a role with more responsibility.", "audio": "assets/audio/app/b2_2dbec279f6.mp3", question: "What is the candidate looking for?",
+          options: ["Fewer hours","A lower salary","A role with more responsibility"], correctIndex: 2 },
+        { type: "listening", text: "Honestly, I sometimes take on too much work.", "audio": "assets/audio/app/b2_9b6472731d.mp3", question: "What weakness do they admit?",
+          options: ["They sometimes take on too much work","They arrive late","They don't speak English"], correctIndex: 0 },
+        { type: "matching", instruction: "Match each word with its meaning.", pairs: [{"l":"strength","r":"something you are very good at"},{"l":"weakness","r":"something you need to improve"},{"l":"take on","r":"accept a task or responsibility"},{"l":"role","r":"a job or position"}] },
+        { type: "listening", text: "Could you tell me about the team I would join?", "audio": "assets/audio/app/b2_a5585fb70a.mp3", question: "Write what you heard:",
           answers: ["could you tell me about the team i would join"], explanation: "Could you tell me about the team I would join?" }
       ]
     },
@@ -316,56 +307,56 @@ window.VESPER_CONTENT_PACK = (function () {
       title: "Present perfect: for / since / ever", xpReward: 48, mascotState: "explaining",
       nextLessonId: "gram-b2-conditionals",
       explanation: {
-        body: "Present perfect = have/has + participio. Lo usamos para experiencias (Have you ever...?) y para algo que empezó en el pasado y sigue ahora. Usa for + periodo y since + punto de inicio. (Conecta pasado y presente.)",
+        body: "Present perfect = have/has + past participle. We use it for experiences (Have you ever...?) and for something that started in the past and continues now. Use for + a period of time and since + a starting point.",
         examples: [
-          { en: "I have lived here for five years.", es: "He vivido aquí cinco años." },
-          { en: "She has worked here since 2020.", es: "Ella trabaja aquí desde 2020." },
-          { en: "Have you ever been to Japan?", es: "¿Alguna vez has estado en Japón?" }
+          { en: "I have lived here for five years." },
+          { en: "She has worked here since 2020." },
+          { en: "Have you ever been to Japan?" }
         ]
       },
       exercises: [
-        { type: "multiple_choice", question: "Choose: I have known him ___ ten years.", options: ["since", "for", "ago"], correctIndex: 1, explanation: "for + periodo de tiempo (ten years)." },
-        { type: "multiple_choice", question: "Choose: She has lived here ___ 2019.", options: ["for", "during", "since"], correctIndex: 2, explanation: "since + punto de inicio (2019)." },
-        { type: "fill_blank", sentence: "Have you ___ eaten sushi? (alguna vez)", answers: ["ever"], hint: "experiencia: Have you ever...?", explanation: "Have you ever eaten...?" },
+        { type: "multiple_choice", question: "Choose: I have known him ___ ten years.", options: ["since", "for", "ago"], correctIndex: 1, explanation: "for + a period of time (ten years)." },
+        { type: "multiple_choice", question: "Choose: She has lived here ___ 2019.", options: ["for", "during", "since"], correctIndex: 2, explanation: "since + a starting point (2019)." },
+        { type: "fill_blank", sentence: "Have you ___ eaten sushi? (alguna vez)", answers: ["ever"], hint: "experience: Have you ever...?", explanation: "Have you ever eaten...?" },
         { type: "multiple_choice", question: "Participle of \"see\":", options: ["seen", "seed", "saw"], correctIndex: 0, explanation: "see - saw - seen." },
-        { type: "categorize", instruction: "¿for o since?", buckets: [
+        { type: "categorize", instruction: "for or since?", buckets: [
           { id: "for", label: "for" }, { id: "since", label: "since" }
         ], items: [
           { t: "three weeks", bucket: "for" }, { t: "Monday", bucket: "since" },
           { t: "a long time", bucket: "for" }, { t: "2010", bucket: "since" }
         ] },
-        { type: "true_false", statement: "\"I have finished\" describes a completed action with a present result.", answer: true, explanation: "El present perfect conecta la acción con el ahora." },
-        { type: "translate", prompt: "Traduce: \"He vivido aquí cinco años.\"",
+        { type: "true_false", statement: "\"I have finished\" describes a completed action with a present result.", answer: true, explanation: "The present perfect connects a past action with now." },
+        { type: "translate", prompt: "Rewrite using 'for': I moved here five years ago and I still live here.",
           answers: ["i have lived here for five years", "i've lived here for five years"], explanation: "I have lived here for five years." }
       ]
     },
 
     "gram-b2-conditionals": {
       lessonId: "gram-b2-conditionals", level: "B2", track: "Core Grammar", topic: "grammar", skill: "grammar",
-      title: "Condicionales (0, 1 y 2)", xpReward: 54, mascotState: "explaining",
+      title: "Conditionals (0, 1 and 2)", xpReward: 54, mascotState: "explaining",
       explanation: {
-        body: "Zero: hechos (If you heat ice, it melts). First: futuro real (If it rains, I'll stay home). Second: hipotético (If I had money, I would travel). El second usa pasado + would. (If + condición, resultado.)",
+        body: "Zero: general facts (If you heat ice, it melts). First: a real future possibility (If it rains, I'll stay home). Second: an imaginary situation (If I had money, I would travel). The second conditional uses the past simple + would.",
         examples: [
-          { en: "If you heat ice, it melts.", es: "Si calientas hielo, se derrite." },
-          { en: "If it rains, I will stay home.", es: "Si llueve, me quedaré en casa." },
-          { en: "If I were rich, I would travel.", es: "Si fuera rico, viajaría." }
+          { en: "If you heat ice, it melts." },
+          { en: "If it rains, I will stay home." },
+          { en: "If I were rich, I would travel." }
         ]
       },
       exercises: [
-        { type: "multiple_choice", question: "First conditional: \"If it rains, I ___ at home.\"", options: ["stay", "will stay", "would stay"], correctIndex: 1, explanation: "First conditional: if + presente, will + verbo." },
-        { type: "multiple_choice", question: "Second conditional: \"If I ___ you, I would say no.\"", options: ["were", "am", "will be"], correctIndex: 0, explanation: "Second conditional usa \"were\" para todas las personas." },
-        { type: "fill_blank", sentence: "If you mix blue and yellow, you ___ green. (hecho)", answers: ["get", "make"], hint: "Zero conditional: presente + presente.", explanation: "Zero conditional: ...you get green." },
-        { type: "categorize", instruction: "¿Real (1st) o hipotético (2nd)?", buckets: [
-          { id: "first", label: "1st (real)" }, { id: "second", label: "2nd (hipotético)" }
+        { type: "multiple_choice", question: "First conditional: \"If it rains, I ___ at home.\"", options: ["stay", "will stay", "would stay"], correctIndex: 1, explanation: "First conditional: if + present simple, will + verb." },
+        { type: "multiple_choice", question: "Second conditional: \"If I ___ you, I would say no.\"", options: ["were", "am", "will be"], correctIndex: 0, explanation: "The second conditional uses \"were\" for all persons." },
+        { type: "fill_blank", sentence: "If you mix blue and yellow, you ___ green. (hecho)", answers: ["get", "make"], hint: "Zero conditional: present + present.", explanation: "Zero conditional: ...you get green." },
+        { type: "categorize", instruction: "Real (1st) or imaginary (2nd)?", buckets: [
+          { id: "first", label: "1st (real)" }, { id: "second", label: "2nd (imaginary)" }
         ], items: [
           { t: "If I have time, I'll call you.", bucket: "first" },
           { t: "If I won the lottery, I'd buy a house.", bucket: "second" },
           { t: "If she studies, she'll pass.", bucket: "first" },
           { t: "If I were taller, I'd play basketball.", bucket: "second" }
         ] },
-        { type: "true_false", statement: "En el second conditional usamos \"will\" en la parte del resultado.", answer: false, explanation: "Usamos \"would\", no \"will\": I would travel." },
-        { type: "word_order", words: ["If", "I", "had", "time,", "I", "would", "help"], correctOrder: ["If", "I", "had", "time,", "I", "would", "help"], hint: "Second conditional: If + pasado, would + verbo." },
-        { type: "translate", prompt: "Traduce: \"Si llueve, me quedaré en casa.\"",
+        { type: "true_false", statement: "In the second conditional we use \"will\" in the result clause.", answer: false, explanation: "We use \"would\", not \"will\": I would travel." },
+        { type: "word_order", words: ["If", "I", "had", "time,", "I", "would", "help"], correctOrder: ["If", "I", "had", "time,", "I", "would", "help"], hint: "Second conditional: If + past simple, would + verb." },
+        { type: "translate", prompt: "Join the ideas with 'If' (first conditional): It might rain. In that case, I will stay at home.",
           answers: ["if it rains i will stay home", "if it rains i'll stay home", "if it rains i will stay at home", "if it rains i'll stay at home"], explanation: "If it rains, I'll stay home." }
       ]
     },
@@ -431,60 +422,54 @@ window.VESPER_CONTENT_PACK = (function () {
     },
 
     "voc-b1-money": {
-      lessonId: "voc-b1-money", level: "B1", track: "Vocabulario", topic: "business", skill: "vocab",
-      title: "Dinero y banco", xpReward: 46, mascotState: "explaining",
+      lessonId: "voc-b1-money", level: "B1", track: "Vocabulary", topic: "business", skill: "vocab",
+      title: "Money and banking", xpReward: 46, mascotState: "explaining",
       nextLessonId: "voc-b2-environment",
       explanation: {
-        body: "Vocabulario de dinero: save (ahorrar), spend (gastar), borrow (pedir prestado), lend (prestar), afford (poder permitirse). (Verbos clave para hablar de dinero.)",
+        body: "Money verbs: save (keep money for later), spend (use money to buy things), borrow (take something you will give back), lend (give something that will come back to you), afford (have enough money for something).",
         examples: [
-          { en: "I save 10% of my salary.", es: "Ahorro el 10% de mi salario." },
-          { en: "I can't afford a new car.", es: "No puedo permitirme un coche nuevo." }
+          { en: "I save 10% of my salary." },
+          { en: "I can't afford a new car." }
         ]
       },
       exercises: [
-        { type: "matching", instruction: "Une el verbo con su significado.", pairs: [
-          { l: "save", r: "ahorrar" }, { l: "spend", r: "gastar" },
-          { l: "borrow", r: "pedir prestado" }, { l: "lend", r: "prestar" }
-        ] },
-        { type: "multiple_choice", question: "Choose: I can't ___ a holiday this year.", options: ["save", "spend", "afford"], correctIndex: 2, explanation: "afford = poder permitirse." },
+        { type: "matching", instruction: "Match each verb with its meaning.", pairs: [{"l":"save","r":"keep money for the future"},{"l":"spend","r":"use money to buy things"},{"l":"borrow","r":"take something and give it back later"},{"l":"lend","r":"give something that will be returned"}] },
+        { type: "multiple_choice", question: "Choose: I can't ___ a holiday this year.", options: ["save", "spend", "afford"], correctIndex: 2, explanation: "afford = have enough money for something." },
         { type: "fill_blank", sentence: "Can I ___ your pen? (pedirte prestado)", answers: ["borrow"], hint: "borrow = pedir prestado.", explanation: "borrow (from someone)." },
-        { type: "true_false", statement: "\"Lend\" means to give something for a short time.", answer: true, explanation: "lend = prestar (algo por un tiempo)." },
-        { type: "categorize", instruction: "¿Entra o sale el dinero?", buckets: [
-          { id: "in", label: "Entra (income)" }, { id: "out", label: "Sale (expense)" }
+        { type: "true_false", statement: "\"Lend\" means to give something for a short time.", answer: true, explanation: "lend = give something to someone for a period of time." },
+        { type: "categorize", instruction: "Money in or money out?", buckets: [
+          { id: "in", label: "Money in (income)" }, { id: "out", label: "Money out (expense)" }
         ], items: [
           { t: "salary", bucket: "in" }, { t: "rent", bucket: "out" },
           { t: "bonus", bucket: "in" }, { t: "bills", bucket: "out" }
         ] },
-        { type: "translate", prompt: "Traduce: \"Ahorro dinero cada mes.\"",
+        { type: "translate", prompt: "Rewrite using 'save': Every month, I keep some of my money instead of spending it.",
           answers: ["i save money every month", "i save money each month"], explanation: "I save money every month." }
       ]
     },
 
     "voc-b2-environment": {
-      lessonId: "voc-b2-environment", level: "B2", track: "Vocabulario", topic: "society", skill: "vocab",
-      title: "Medio ambiente", xpReward: 50, mascotState: "explaining",
+      lessonId: "voc-b2-environment", level: "B2", track: "Vocabulary", topic: "society", skill: "vocab",
+      title: "The environment", xpReward: 50, mascotState: "explaining",
       explanation: {
-        body: "Vocabulario ambiental: pollution (contaminación), recycle (reciclar), waste (residuos/desperdiciar), renewable (renovable), climate change (cambio climático). (Habla del medio ambiente con naturalidad.)",
+        body: "Environmental vocabulary: pollution (dirty air, water or land), recycle (use materials again), waste (rubbish; or to use something badly), renewable (that never runs out), climate change (long-term change in the planet's weather).",
         examples: [
-          { en: "We should reduce plastic waste.", es: "Deberíamos reducir los residuos plásticos." },
-          { en: "Solar power is renewable.", es: "La energía solar es renovable." }
+          { en: "We should reduce plastic waste." },
+          { en: "Solar power is renewable." }
         ]
       },
       exercises: [
-        { type: "matching", instruction: "Une la palabra con su significado.", pairs: [
-          { l: "pollution", r: "contaminación" }, { l: "waste", r: "residuos" },
-          { l: "renewable", r: "renovable" }, { l: "recycle", r: "reciclar" }
-        ] },
-        { type: "multiple_choice", question: "Opposite of \"renewable\":", options: ["reusable", "non-renewable", "recyclable"], correctIndex: 1, explanation: "non-renewable = no renovable." },
-        { type: "fill_blank", sentence: "We must ___ paper, glass and plastic.", answers: ["recycle"], hint: "Separar para reusar.", explanation: "recycle = reciclar." },
-        { type: "true_false", statement: "Wind power is a renewable energy source.", answer: true, explanation: "La energía eólica es renovable." },
-        { type: "categorize", instruction: "¿Renovable o no renovable?", buckets: [
-          { id: "ren", label: "Renovable" }, { id: "non", label: "No renovable" }
+        { type: "matching", instruction: "Match each word with its meaning.", pairs: [{"l":"pollution","r":"harmful substances in air or water"},{"l":"waste","r":"things we throw away"},{"l":"renewable","r":"naturally replaced, never runs out"},{"l":"recycle","r":"process materials to use again"}] },
+        { type: "multiple_choice", question: "Opposite of \"renewable\":", options: ["reusable", "non-renewable", "recyclable"], correctIndex: 1, explanation: "non-renewable = it will run out one day." },
+        { type: "fill_blank", sentence: "We must ___ paper, glass and plastic.", answers: ["recycle"], hint: "Separate it so it can be used again.", explanation: "recycle = process materials so they can be used again." },
+        { type: "true_false", statement: "Wind power is a renewable energy source.", answer: true, explanation: "Wind energy is renewable: it never runs out." },
+        { type: "categorize", instruction: "Renewable or non-renewable?", buckets: [
+          { id: "ren", label: "Renewable" }, { id: "non", label: "Non-renewable" }
         ], items: [
           { t: "solar", bucket: "ren" }, { t: "coal", bucket: "non" },
           { t: "wind", bucket: "ren" }, { t: "oil", bucket: "non" }
         ] },
-        { type: "translate", prompt: "Traduce: \"Deberíamos reducir los residuos plásticos.\"",
+        { type: "translate", prompt: "Give advice with 'should' and 'reduce': There is far too much plastic waste.",
           answers: ["we should reduce plastic waste"], explanation: "We should reduce plastic waste." }
       ]
     },
@@ -519,57 +504,54 @@ window.VESPER_CONTENT_PACK = (function () {
     },
 
     "use-b1-phrasal-verbs": {
-      lessonId: "use-b1-phrasal-verbs", level: "B1", track: "Uso del inglés", topic: "dailylife", skill: "use",
-      title: "Phrasal verbs comunes", xpReward: 46, mascotState: "explaining",
+      lessonId: "use-b1-phrasal-verbs", level: "B1", track: "Use of English", topic: "dailylife", skill: "use",
+      title: "Common phrasal verbs", xpReward: 46, mascotState: "explaining",
       nextLessonId: "use-b2-linkers",
       explanation: {
-        body: "Los phrasal verbs combinan verbo + partícula y cambian de sentido: get up (levantarse), turn on (encender), give up (rendirse), look for (buscar). (verbo + partícula = nuevo significado.)",
+        body: "Phrasal verbs combine a verb + a particle, and the meaning changes: get up (leave your bed), turn on (start a device), give up (stop trying), look for (try to find).",
         examples: [
-          { en: "Please turn off the lights.", es: "Por favor apaga las luces." },
-          { en: "Don't give up!", es: "¡No te rindas!" }
+          { en: "Please turn off the lights." },
+          { en: "Don't give up!" }
         ]
       },
       exercises: [
-        { type: "matching", instruction: "Une el phrasal verb con su significado.", pairs: [
-          { l: "get up", r: "levantarse" }, { l: "turn on", r: "encender" },
-          { l: "give up", r: "rendirse" }, { l: "look for", r: "buscar" }
-        ] },
+        { type: "matching", instruction: "Match each phrasal verb with its meaning.", pairs: [{"l":"get up","r":"leave your bed"},{"l":"turn on","r":"start a machine or light"},{"l":"give up","r":"stop trying"},{"l":"look for","r":"try to find"}] },
         { type: "multiple_choice", question: "Choose: Can you ___ the TV? It's too loud.", options: ["look after", "turn up", "turn off"], correctIndex: 2, explanation: "turn off = apagar." },
         { type: "fill_blank", sentence: "I'm ___ for my keys. I can't find them.", answers: ["looking"], hint: "look for = buscar.", explanation: "I'm looking for my keys." },
-        { type: "true_false", statement: "\"Give up\" means to continue trying.", answer: false, explanation: "give up = rendirse, dejar de intentar." },
-        { type: "categorize", instruction: "¿Separable (turn it on) o no?", buckets: [
+        { type: "true_false", statement: "\"Give up\" means to continue trying.", answer: false, explanation: "give up = stop trying." },
+        { type: "categorize", instruction: "Separable (turn it on) or not?", buckets: [
           { id: "sep", label: "Separable" }, { id: "insep", label: "Inseparable" }
         ], items: [
           { t: "turn on", bucket: "sep" }, { t: "look for", bucket: "insep" },
           { t: "switch off", bucket: "sep" }, { t: "look after", bucket: "insep" }
         ] },
-        { type: "translate", prompt: "Traduce: \"No te rindas.\"",
+        { type: "translate", prompt: "Encourage a friend with a negative command and a phrasal verb that means 'stop trying'.",
           answers: ["don't give up", "do not give up"], explanation: "Don't give up." }
       ]
     },
 
     "use-b2-linkers": {
-      lessonId: "use-b2-linkers", level: "B2", track: "Uso del inglés", topic: "society", skill: "use",
-      title: "Conectores: although, however, despite", xpReward: 52, mascotState: "explaining",
+      lessonId: "use-b2-linkers", level: "B2", track: "Use of English", topic: "society", skill: "use",
+      title: "Linkers: although, however, despite", xpReward: 52, mascotState: "explaining",
       explanation: {
-        body: "Para contraste: although + frase (Although it was late, we went out). however va con punto/punto y coma (... . However, ...). despite + sustantivo o -ing (Despite the rain, ...). (Conectores de contraste.)",
+        body: "For contrast: although + clause (Although it was late, we went out). However starts a new sentence or follows a semicolon (... . However, ...). Despite + noun or -ing (Despite the rain, ...).",
         examples: [
-          { en: "Although it was cold, we walked.", es: "Aunque hacía frío, caminamos." },
-          { en: "Despite the rain, the match continued.", es: "A pesar de la lluvia, el partido siguió." }
+          { en: "Although it was cold, we walked." },
+          { en: "Despite the rain, the match continued." }
         ]
       },
       exercises: [
-        { type: "multiple_choice", question: "Choose: ___ it was raining, we went for a walk.", options: ["Although", "Despite", "However"], correctIndex: 0, explanation: "Although + frase completa (sujeto + verbo)." },
-        { type: "multiple_choice", question: "Choose: ___ the rain, we went for a walk.", options: ["Although", "Despite", "Because"], correctIndex: 1, explanation: "Despite + sustantivo (the rain)." },
-        { type: "fill_blank", sentence: "The plan was risky. ___, we decided to try it.", answers: ["however"], hint: "Va al inicio, tras punto.", explanation: "However, we decided to try it." },
-        { type: "true_false", statement: "We can say \"Despite of the rain...\".", answer: false, explanation: "Es \"despite the rain\" (sin 'of'); con 'of' sería \"in spite of\"." },
-        { type: "categorize", instruction: "¿Va seguido de frase o de sustantivo/-ing?", buckets: [
-          { id: "clause", label: "+ frase" }, { id: "noun", label: "+ sustantivo/-ing" }
+        { type: "multiple_choice", question: "Choose: ___ it was raining, we went for a walk.", options: ["Although", "Despite", "However"], correctIndex: 0, explanation: "Although + a full clause (subject + verb)." },
+        { type: "multiple_choice", question: "Choose: ___ the rain, we went for a walk.", options: ["Although", "Despite", "Because"], correctIndex: 1, explanation: "Despite + noun (the rain)." },
+        { type: "fill_blank", sentence: "The plan was risky. ___, we decided to try it.", answers: ["however"], hint: "It goes at the start, after a full stop.", explanation: "However, we decided to try it." },
+        { type: "true_false", statement: "We can say \"Despite of the rain...\".", answer: false, explanation: "It's \"despite the rain\" (no 'of'); with 'of' it would be \"in spite of\"." },
+        { type: "categorize", instruction: "Followed by a clause or by a noun/-ing?", buckets: [
+          { id: "clause", label: "+ clause" }, { id: "noun", label: "+ noun / -ing" }
         ], items: [
           { t: "although", bucket: "clause" }, { t: "despite", bucket: "noun" },
           { t: "even though", bucket: "clause" }, { t: "in spite of", bucket: "noun" }
         ] },
-        { type: "translate", prompt: "Traduce: \"Aunque estaba cansado, terminó el trabajo.\"",
+        { type: "translate", prompt: "Join the sentences with 'Although': He was tired. He finished the work.",
           answers: ["although he was tired he finished the work", "even though he was tired he finished the work", "although he was tired, he finished the work"], explanation: "Although he was tired, he finished the work." }
       ]
     },
@@ -637,10 +619,10 @@ window.VESPER_CONTENT_PACK = (function () {
     },
 
     "read-b1-blog": {
-      lessonId: "read-b1-blog", level: "B1", track: "Lectura", topic: "travel", skill: "reading",
-      title: "Lectura: A travel blog", xpReward: 46, mascotState: "explaining",
-      explanation: { body: "Una entrada de blog de viajes con experiencias y consejos. Fíjate en los detalles y en la recomendación. (Lee el blog.)",
-        examples: [{ en: "My top tip is...", es: "Mi mejor consejo es..." }] },
+      lessonId: "read-b1-blog", level: "B1", track: "Reading", topic: "travel", skill: "reading",
+      title: "Reading: A travel blog", xpReward: 46, mascotState: "explaining",
+      explanation: { body: "A travel blog post with experiences and tips. Pay attention to the details and to the writer's recommendation.",
+        examples: [{ en: "My top tip is..." }] },
       exercises: [
         { type: "reading", title: "Three days in Lisbon",
           passage: "I've just come back from three amazing days in Lisbon, and I can't wait to share my experience.\n\nOn the first day, I got lost in the narrow streets of the old town, which was actually the best part. The local food is fantastic and surprisingly affordable. I especially loved the little pastry shops on every corner.\n\nMy top tip is to buy a public transport card. The famous yellow trams get very crowded, so try to travel early in the morning. Don't forget comfortable shoes — the city is full of hills!",
@@ -650,38 +632,36 @@ window.VESPER_CONTENT_PACK = (function () {
             { q: "What is the writer's top tip?", options: ["Travel at night", "Avoid the food", "Buy a transport card"], correctIndex: 2, explanation: "\"My top tip is to buy a public transport card.\"" }
           ] },
         { type: "true_false", statement: "The writer says the food was very expensive.", answer: false, explanation: "\"...surprisingly affordable.\"" },
-        { type: "matching", instruction: "Une la palabra con su significado.", pairs: [
-          { l: "crowded", r: "lleno de gente" }, { l: "affordable", r: "asequible" }, { l: "narrow", r: "estrecho" }, { l: "tip", r: "consejo" } ] },
-        { type: "fill_blank", sentence: "The yellow trams get very ___ in the day.", answers: ["crowded"], hint: "Mucha gente.", explanation: "\"...trams get very crowded.\"" },
-        { type: "translate", prompt: "Traduce: \"No olvides zapatos cómodos.\"",
+        { type: "matching", instruction: "Match each word with its meaning.", pairs: [{"l":"crowded","r":"full of people"},{"l":"affordable","r":"not too expensive"},{"l":"narrow","r":"not wide"},{"l":"tip","r":"a useful piece of advice"}] },
+        { type: "fill_blank", sentence: "The yellow trams get very ___ in the day.", answers: ["crowded"], hint: "Lots of people.", explanation: "\"...trams get very crowded.\"" },
+        { type: "translate", prompt: "Rewrite as a negative command with 'forget': Remember to bring comfortable shoes.",
           answers: ["don't forget comfortable shoes", "do not forget comfortable shoes"], explanation: "Don't forget comfortable shoes." }
       ]
     },
 
     "voc-b2-feelings": {
-      lessonId: "voc-b2-feelings", level: "B2", track: "Vocabulario", topic: "society", skill: "vocab",
-      title: "Emociones y matices", xpReward: 48, mascotState: "explaining",
-      explanation: { body: "Adjetivos de emoción más precisos: thrilled (encantadísimo), anxious (ansioso), frustrated (frustrado), relieved (aliviado). Suben el nivel de tu vocabulario. (Adjetivos de emoción avanzados.)",
-        examples: [{ en: "I was thrilled with the news.", es: "Estaba encantadísimo con la noticia." }, { en: "She felt relieved after the exam.", es: "Se sintió aliviada tras el examen." }] },
+      lessonId: "voc-b2-feelings", level: "B2", track: "Vocabulary", topic: "society", skill: "vocab",
+      title: "Emotions and nuance", xpReward: 48, mascotState: "explaining",
+      explanation: { body: "More precise adjectives of emotion: thrilled (extremely happy and excited), anxious (worried and nervous), frustrated (annoyed because you can't do something), relieved (happy because a worry has gone). They raise the level of your vocabulary.",
+        examples: [{ en: "I was thrilled with the news." }, { en: "She felt relieved after the exam." }] },
       exercises: [
-        { type: "matching", instruction: "Une el adjetivo con su significado.", pairs: [
-          { l: "thrilled", r: "encantadísimo" }, { l: "anxious", r: "ansioso" }, { l: "frustrated", r: "frustrado" }, { l: "relieved", r: "aliviado" } ] },
-        { type: "multiple_choice", question: "After passing the test, she felt...", options: ["relieved", "anxious", "frustrated"], correctIndex: 0, explanation: "relieved = aliviada (tras una preocupación)." },
-        { type: "fill_blank", sentence: "I was absolutely ___ to win the prize. (muy feliz)", answers: ["thrilled", "delighted"], hint: "Más fuerte que 'happy'.", explanation: "thrilled/delighted = encantadísimo." },
-        { type: "true_false", statement: "\"Frustrated\" describes a positive feeling.", answer: false, explanation: "frustrated = frustrado (negativo)." },
-        { type: "categorize", instruction: "¿Emoción positiva o negativa?", buckets: [
-          { id: "pos", label: "Positiva" }, { id: "neg", label: "Negativa" } ], items: [
+        { type: "matching", instruction: "Match each adjective with its meaning.", pairs: [{"l":"thrilled","r":"extremely happy and excited"},{"l":"anxious","r":"worried and nervous"},{"l":"frustrated","r":"annoyed because you can't succeed"},{"l":"relieved","r":"calm because a worry has gone"}] },
+        { type: "multiple_choice", question: "After passing the test, she felt...", options: ["relieved", "anxious", "frustrated"], correctIndex: 0, explanation: "relieved = calm again after a worry has gone." },
+        { type: "fill_blank", sentence: "I was absolutely ___ to win the prize. (very happy)", answers: ["thrilled", "delighted"], hint: "Stronger than 'happy'.", explanation: "thrilled / delighted = extremely happy." },
+        { type: "true_false", statement: "\"Frustrated\" describes a positive feeling.", answer: false, explanation: "frustrated = annoyed because you can't succeed (negative)." },
+        { type: "categorize", instruction: "Positive or negative emotion?", buckets: [
+          { id: "pos", label: "Positive" }, { id: "neg", label: "Negative" } ], items: [
           { t: "thrilled", bucket: "pos" }, { t: "delighted", bucket: "pos" }, { t: "anxious", bucket: "neg" }, { t: "frustrated", bucket: "neg" } ] },
-        { type: "translate", prompt: "Traduce: \"Se sintió aliviada tras el examen.\"",
+        { type: "translate", prompt: "Rewrite with a precise adjective, starting 'She felt…': After the exam, her worry finally disappeared.",
           answers: ["she felt relieved after the exam", "she felt relieved after the test"], explanation: "She felt relieved after the exam." }
       ]
     },
 
     "read-b2-science": {
-      lessonId: "read-b2-science", level: "B2", track: "Lectura", topic: "tech", skill: "reading",
-      title: "Lectura: The science of sleep", xpReward: 52, mascotState: "explaining",
-      explanation: { body: "Un texto divulgativo con datos y una conclusión. Distingue hechos de recomendaciones. (Lee el artículo.)",
-        examples: [{ en: "Experts recommend...", es: "Los expertos recomiendan..." }] },
+      lessonId: "read-b2-science", level: "B2", track: "Reading", topic: "tech", skill: "reading",
+      title: "Reading: The science of sleep", xpReward: 52, mascotState: "explaining",
+      explanation: { body: "A popular-science article with facts and a conclusion. Distinguish facts from recommendations.",
+        examples: [{ en: "Experts recommend..." }] },
       exercises: [
         { type: "reading", title: "The science of sleep",
           passage: "We spend about a third of our lives asleep, yet many of us treat sleep as a luxury rather than a necessity. Scientists now agree that this is a serious mistake.\n\nDuring deep sleep, the brain clears out waste products and strengthens new memories. People who sleep badly for long periods are more likely to suffer from poor concentration and a weaker immune system.\n\nExperts recommend keeping a regular schedule and avoiding screens before bed. The blue light from phones can trick the brain into thinking it is still daytime, making it harder to fall asleep.",
@@ -691,41 +671,40 @@ window.VESPER_CONTENT_PACK = (function () {
             { q: "Why is blue light a problem?", options: ["It tricks the brain into thinking it is daytime", "It saves battery", "It is too dim"], correctIndex: 0, explanation: "\"...trick the brain into thinking it is still daytime.\"" }
           ] },
         { type: "true_false", statement: "The text says poor sleep can weaken the immune system.", answer: true, explanation: "\"...a weaker immune system.\"" },
-        { type: "matching", instruction: "Une la palabra con su significado.", pairs: [
-          { l: "necessity", r: "necesidad" }, { l: "waste", r: "desecho" }, { l: "schedule", r: "horario" }, { l: "immune", r: "inmunitario" } ] },
-        { type: "fill_blank", sentence: "Experts recommend keeping a regular ___.", answers: ["schedule"], hint: "Horario fijo.", explanation: "\"...a regular schedule.\"" },
-        { type: "translate", prompt: "Traduce: \"Pasamos un tercio de nuestra vida durmiendo.\"",
+        { type: "matching", instruction: "Match each word with its meaning.", pairs: [{"l":"necessity","r":"something you need"},{"l":"waste","r":"material that is no longer useful"},{"l":"schedule","r":"a plan of times"},{"l":"immune","r":"protected from disease"}] },
+        { type: "fill_blank", sentence: "Experts recommend keeping a regular ___.", answers: ["schedule"], hint: "A fixed timetable.", explanation: "\"...a regular schedule.\"" },
+        { type: "translate", prompt: "Rewrite using 'spend' and 'a third': One out of every three hours of our lives, we are asleep.",
           answers: ["we spend a third of our lives asleep", "we spend a third of our life sleeping", "we spend a third of our lives sleeping"], explanation: "We spend a third of our lives asleep." }
       ]
     },
 
     "lis-b2-podcast": {
       lessonId: "lis-b2-podcast", level: "B2", track: "Listening", topic: "society", skill: "listening",
-      title: "Escucha: un podcast", xpReward: 50, mascotState: "explaining",
-      explanation: { body: "Escucha fragmentos de un podcast con opiniones y datos. Usa \"Más lento\" si lo necesitas. (Comprensión auditiva B2.)",
-        examples: [{ en: "In today's episode...", es: "En el episodio de hoy..." }] },
+      title: "Listening: a podcast", xpReward: 50, mascotState: "explaining",
+      explanation: { body: "Listen to parts of a podcast with opinions and data. Use \"Slower\" if you need it.",
+        examples: [{ en: "In today's episode..." }] },
       exercises: [
-        { type: "listening", text: "In today's episode, we explore why cities are getting greener.", "audio": "assets/audio/app/b2_78b4239d01.mp3", question: "¿De qué trata el episodio?",
-          options: ["De recetas de cocina para toda la familia", "De por qué las ciudades son más verdes", "De deportes"], correctIndex: 1 },
-        { type: "listening", text: "Studies suggest that parks improve people's mental health.", "audio": "assets/audio/app/b2_3987c1ee0b.mp3", question: "¿Qué sugieren los estudios?",
-          options: ["Que los parques mejoran la salud mental", "Que los parques son caros", "Que la gente odia los parques"], correctIndex: 0 },
-        { type: "listening", text: "However, not everyone has equal access to green spaces.", "audio": "assets/audio/app/b2_fe5b2a011d.mp3", question: "¿Qué problema se menciona?",
-          options: ["La falta de árboles", "El precio del transporte", "El acceso desigual a las zonas verdes"], correctIndex: 2 },
-        { type: "listening", text: "We'll be back next week with another episode.", "audio": "assets/audio/app/b2_2b12da6ce3.mp3", question: "¿Cuándo vuelve el podcast?",
-          options: ["La próxima semana", "Mañana a la misma hora", "Nunca"], correctIndex: 0 },
-        { type: "true_false", statement: "El podcast dice que todos tienen el mismo acceso a parques.", answer: false, explanation: "\"...not everyone has equal access.\"" },
-        { type: "listening", text: "Thanks for listening, and see you next time.", "audio": "assets/audio/app/b2_35eace2eb8.mp3", question: "Escribe lo que escuchaste:",
+        { type: "listening", text: "In today's episode, we explore why cities are getting greener.", "audio": "assets/audio/app/b2_78b4239d01.mp3", question: "What is the episode about?",
+          options: ["Family recipes","Why cities are becoming greener","Sports"], correctIndex: 1 },
+        { type: "listening", text: "Studies suggest that parks improve people's mental health.", "audio": "assets/audio/app/b2_3987c1ee0b.mp3", question: "What do studies suggest?",
+          options: ["Parks improve people's mental health","Parks are expensive","People hate parks"], correctIndex: 0 },
+        { type: "listening", text: "However, not everyone has equal access to green spaces.", "audio": "assets/audio/app/b2_fe5b2a011d.mp3", question: "What problem is mentioned?",
+          options: ["A lack of trees","The price of transport","Unequal access to green spaces"], correctIndex: 2 },
+        { type: "listening", text: "We'll be back next week with another episode.", "audio": "assets/audio/app/b2_2b12da6ce3.mp3", question: "When will the podcast be back?",
+          options: ["Next week","Tomorrow at the same time","Never"], correctIndex: 0 },
+        { type: "true_false", statement: "The podcast says everyone has equal access to parks.", answer: false, explanation: "\"...not everyone has equal access.\"" },
+        { type: "listening", text: "Thanks for listening, and see you next time.", "audio": "assets/audio/app/b2_35eace2eb8.mp3", question: "Write what you heard:",
           answers: ["thanks for listening and see you next time"], explanation: "Thanks for listening, and see you next time." }
       ]
     },
 
     /* ===================== C1 (avanzado) ===================== */
     "read-c1-habits": {
-      lessonId: "read-c1-habits", level: "C1", track: "Lectura", topic: "society", skill: "reading",
-      title: "Lectura: The power of habits", xpReward: 56, mascotState: "explaining",
+      lessonId: "read-c1-habits", level: "C1", track: "Reading", topic: "society", skill: "reading",
+      title: "Reading: The power of habits", xpReward: 56, mascotState: "explaining",
       nextLessonId: "read-c1-work",
-      explanation: { body: "Texto argumentativo con vocabulario abstracto. Identifica tesis, evidencia y matiz. (Lectura nivel C1.)",
-        examples: [{ en: "It is widely assumed that...", es: "Se asume ampliamente que..." }] },
+      explanation: { body: "An argumentative text with abstract vocabulary. Identify the thesis, the evidence and the nuance.",
+        examples: [{ en: "It is widely assumed that..." }] },
       exercises: [
         { type: "reading", title: "The power of habits",
           passage: "It is widely assumed that willpower is the key to changing our behaviour. In reality, research increasingly suggests that habits — not sheer determination — shape most of what we do.\n\nA habit is essentially a loop: a cue triggers a routine, which delivers a reward. Once this loop is firmly established, the brain stops making conscious decisions and runs on autopilot. This is why breaking a bad habit by willpower alone so often fails.\n\nThe most effective approach, paradoxically, is not to fight the habit but to redesign it. By keeping the same cue and reward while deliberately swapping the routine, people stand a far better chance of lasting change.",
@@ -735,20 +714,19 @@ window.VESPER_CONTENT_PACK = (function () {
             { q: "What does the writer recommend?", options: ["Redesigning the routine while keeping cue and reward", "Ignoring habits completely", "Fighting habits with pure willpower"], correctIndex: 0, explanation: "\"...redesign it... swapping the routine.\"" }
           ] },
         { type: "true_false", statement: "The writer believes willpower alone reliably breaks habits.", answer: false, explanation: "\"...breaking a bad habit by willpower alone so often fails.\"" },
-        { type: "matching", instruction: "Une la palabra con su significado.", pairs: [
-          { l: "willpower", r: "fuerza de voluntad" }, { l: "cue", r: "señal/estímulo" }, { l: "routine", r: "rutina" }, { l: "reward", r: "recompensa" } ] },
-        { type: "fill_blank", sentence: "Once the loop is established, the brain runs on ___.", answers: ["autopilot"], hint: "Sin decisión consciente.", explanation: "\"...runs on autopilot.\"" },
-        { type: "multiple_choice", question: "\"Sheer determination\" is closest in meaning to...", options: ["mild interest", "pure willpower", "good luck"], correctIndex: 1, explanation: "sheer = puro/absoluto." },
-        { type: "translate", prompt: "Traduce: \"Se asume ampliamente que la fuerza de voluntad es la clave.\"",
+        { type: "matching", instruction: "Match each word with its meaning.", pairs: [{"l":"willpower","r":"the ability to control yourself"},{"l":"cue","r":"a signal that triggers an action"},{"l":"routine","r":"the usual sequence of actions"},{"l":"reward","r":"something good you get for doing something"}] },
+        { type: "fill_blank", sentence: "Once the loop is established, the brain runs on ___.", answers: ["autopilot"], hint: "Without conscious decisions.", explanation: "\"...runs on autopilot.\"" },
+        { type: "multiple_choice", question: "\"Sheer determination\" is closest in meaning to...", options: ["mild interest", "pure willpower", "good luck"], correctIndex: 1, explanation: "sheer = pure, nothing but." },
+        { type: "translate", prompt: "Rewrite impersonally, starting 'It is widely assumed…': Most people assume that willpower is the key.",
           answers: ["it is widely assumed that willpower is the key", "it's widely assumed that willpower is the key"], explanation: "It is widely assumed that willpower is the key." }
       ]
     },
 
     "read-c1-work": {
-      lessonId: "read-c1-work", level: "C1", track: "Lectura", topic: "business", skill: "reading",
-      title: "Lectura: The four-day week", xpReward: 56, mascotState: "explaining",
-      explanation: { body: "Texto de opinión con contraargumentos. Distingue afirmación, concesión y conclusión. (Lectura nivel C1.)",
-        examples: [{ en: "Critics argue that...", es: "Los críticos sostienen que..." }] },
+      lessonId: "read-c1-work", level: "C1", track: "Reading", topic: "business", skill: "reading",
+      title: "Reading: The four-day week", xpReward: 56, mascotState: "explaining",
+      explanation: { body: "An opinion text with counter-arguments. Distinguish the claim, the concession and the conclusion.",
+        examples: [{ en: "Critics argue that..." }] },
       exercises: [
         { type: "reading", title: "The four-day week",
           passage: "The idea of a four-day working week, once dismissed as wishful thinking, is gaining serious traction. Several large-scale trials have reported that employees are happier and, crucially, no less productive.\n\nCritics argue that the model cannot be applied universally; a hospital or a factory cannot simply close for an extra day. There is some truth to this. Yet supporters counter that flexibility, rather than a rigid template, is the real lesson.\n\nWhatever the outcome, the debate has forced organisations to ask a long-overdue question: are we measuring work by hours logged, or by results delivered?",
@@ -758,124 +736,120 @@ window.VESPER_CONTENT_PACK = (function () {
             { q: "What question has the debate raised?", options: ["Whether to measure work by hours or by results", "How to pay less", "How to close hospitals"], correctIndex: 0, explanation: "\"...by hours logged, or by results delivered?\"" }
           ] },
         { type: "true_false", statement: "The trials found employees were much less productive.", answer: false, explanation: "\"...no less productive.\"" },
-        { type: "matching", instruction: "Une la expresión con su significado.", pairs: [
-          { l: "gain traction", r: "ganar fuerza" }, { l: "wishful thinking", r: "ilusiones" }, { l: "trial", r: "prueba/ensayo" }, { l: "long-overdue", r: "que ya tocaba" } ] },
-        { type: "fill_blank", sentence: "Supporters say ___, not a rigid template, is the real lesson.", answers: ["flexibility"], hint: "Lo contrario a rígido.", explanation: "\"...flexibility... is the real lesson.\"" },
-        { type: "translate", prompt: "Traduce: \"Los críticos sostienen que el modelo no puede aplicarse de forma universal.\"",
+        { type: "matching", instruction: "Match each expression with its meaning.", pairs: [{"l":"gain traction","r":"become more popular or accepted"},{"l":"wishful thinking","r":"believing what you want to be true"},{"l":"trial","r":"a test of how well something works"},{"l":"long-overdue","r":"should have happened much earlier"}] },
+        { type: "fill_blank", sentence: "Supporters say ___, not a rigid template, is the real lesson.", answers: ["flexibility"], hint: "The opposite of rigid.", explanation: "\"...flexibility... is the real lesson.\"" },
+        { type: "translate", prompt: "Rewrite in the passive: Critics argue that companies cannot apply the model universally. (Critics argue that the model…)",
           answers: ["critics argue that the model cannot be applied universally", "critics argue the model cannot be applied universally"], explanation: "Critics argue that the model cannot be applied universally." }
       ]
     },
 
     "lis-c1-lecture": {
       lessonId: "lis-c1-lecture", level: "C1", track: "Listening", topic: "society", skill: "listening",
-      title: "Escucha: una charla", xpReward: 54, mascotState: "explaining",
+      title: "Listening: a talk", xpReward: 54, mascotState: "explaining",
       nextLessonId: "lis-c1-debate",
-      explanation: { body: "Escucha fragmentos de una charla académica con ideas abstractas. (Comprensión auditiva C1.)",
-        examples: [{ en: "Let me begin by challenging a common assumption.", es: "Permítanme empezar cuestionando una suposición común." }] },
+      explanation: { body: "Listen to parts of an academic talk with abstract ideas.",
+        examples: [{ en: "Let me begin by challenging a common assumption." }] },
       exercises: [
-        { type: "listening", text: "Let me begin by challenging a common assumption.", "audio": "assets/audio/app/c1_7ca4dabcc1.mp3", question: "¿Cómo empieza la charla?",
-          options: ["Cuestionando una suposición común", "Pidiendo disculpas", "Contando un chiste"], correctIndex: 0 },
-        { type: "listening", text: "Contrary to popular belief, multitasking actually reduces our efficiency.", "audio": "assets/audio/app/c1_2ddc7b69f3.mp3", question: "¿Qué dice sobre la multitarea?",
-          options: ["Que no cambia nada en la productividad", "Que la mejora", "Que reduce la eficiencia"], correctIndex: 2 },
-        { type: "listening", text: "The evidence, while not conclusive, is certainly compelling.", "audio": "assets/audio/app/c1_b578c87bf3.mp3", question: "¿Cómo describe la evidencia?",
-          options: ["Aburrida", "Convincente aunque no concluyente", "Falsa"], correctIndex: 1 },
-        { type: "listening", text: "I'll come back to that point in a moment.", "audio": "assets/audio/app/c1_deae96e756.mp3", question: "¿Qué hará con ese punto?",
-          options: ["Volverá a él en un momento", "Lo ignorará", "Lo repetirá tres veces al final de la clase"], correctIndex: 0 },
-        { type: "true_false", statement: "El ponente dice que la multitarea mejora la eficiencia.", answer: false, explanation: "\"...multitasking actually reduces our efficiency.\"" },
-        { type: "listening", text: "To sum up, our priorities shape our attention.", "audio": "assets/audio/app/c1_69b3a015f2.mp3", question: "Escribe lo que escuchaste:",
+        { type: "listening", text: "Let me begin by challenging a common assumption.", "audio": "assets/audio/app/c1_7ca4dabcc1.mp3", question: "How does the talk begin?",
+          options: ["By challenging a common assumption","With an apology","With a joke"], correctIndex: 0 },
+        { type: "listening", text: "Contrary to popular belief, multitasking actually reduces our efficiency.", "audio": "assets/audio/app/c1_2ddc7b69f3.mp3", question: "What does the speaker say about multitasking?",
+          options: ["It doesn't change productivity","It improves efficiency","It reduces efficiency"], correctIndex: 2 },
+        { type: "listening", text: "The evidence, while not conclusive, is certainly compelling.", "audio": "assets/audio/app/c1_b578c87bf3.mp3", question: "How does the speaker describe the evidence?",
+          options: ["Boring","Convincing, though not conclusive","False"], correctIndex: 1 },
+        { type: "listening", text: "I'll come back to that point in a moment.", "audio": "assets/audio/app/c1_deae96e756.mp3", question: "What will the speaker do with that point?",
+          options: ["Come back to it in a moment","Ignore it","Repeat it three times at the end of the class"], correctIndex: 0 },
+        { type: "true_false", statement: "The speaker says multitasking improves efficiency.", answer: false, explanation: "\"...multitasking actually reduces our efficiency.\"" },
+        { type: "listening", text: "To sum up, our priorities shape our attention.", "audio": "assets/audio/app/c1_69b3a015f2.mp3", question: "Write what you heard:",
           answers: ["to sum up our priorities shape our attention"], explanation: "To sum up, our priorities shape our attention." }
       ]
     },
 
     "lis-c1-debate": {
       lessonId: "lis-c1-debate", level: "C1", track: "Listening", topic: "society", skill: "listening",
-      title: "Escucha: un debate", xpReward: 54, mascotState: "explaining",
-      explanation: { body: "Escucha intervenciones de un debate con acuerdo, desacuerdo y matices. (Comprensión auditiva C1.)",
-        examples: [{ en: "With all due respect, I have to disagree.", es: "Con todo respeto, debo discrepar." }] },
+      title: "Listening: a debate", xpReward: 54, mascotState: "explaining",
+      explanation: { body: "Listen to contributions to a debate with agreement, disagreement and nuance.",
+        examples: [{ en: "With all due respect, I have to disagree." }] },
       exercises: [
-        { type: "listening", text: "With all due respect, I have to disagree with the previous speaker.", "audio": "assets/audio/app/c1_ba3e1512bd.mp3", question: "¿Qué hace la persona?",
-          options: ["Hace una pregunta sobre el tema anterior", "Discrepa cortésmente", "Está de acuerdo"], correctIndex: 1 },
-        { type: "listening", text: "You raise a valid point, but you're overlooking the cost.", "audio": "assets/audio/app/c1_5ca76168d7.mp3", question: "¿Qué dice que se pasa por alto?",
-          options: ["El tiempo", "El lugar", "El coste"], correctIndex: 2 },
-        { type: "listening", text: "Let's not lose sight of the bigger picture here.", "audio": "assets/audio/app/c1_6c67874dfe.mp3", question: "¿Qué pide no perder de vista?",
-          options: ["El panorama general", "El reloj", "El micrófono"], correctIndex: 0 },
-        { type: "listening", text: "I'm inclined to agree, up to a point.", "audio": "assets/audio/app/c1_fa458b8034.mp3", question: "¿Cuál es su postura?",
-          options: ["Está de acuerdo, hasta cierto punto", "Está totalmente en contra", "No tiene opinión"], correctIndex: 0 },
-        { type: "matching", instruction: "Une la expresión con su función.", pairs: [
-          { l: "I have to disagree", r: "desacuerdo" }, { l: "You raise a valid point", r: "concesión" }, { l: "the bigger picture", r: "panorama general" }, { l: "up to a point", r: "hasta cierto punto" } ] },
-        { type: "listening", text: "Could we please return to the main issue?", "audio": "assets/audio/app/c1_60c10a8c83.mp3", question: "Escribe lo que escuchaste:",
+        { type: "listening", text: "With all due respect, I have to disagree with the previous speaker.", "audio": "assets/audio/app/c1_ba3e1512bd.mp3", question: "What is the speaker doing?",
+          options: ["Asking about the previous topic","Politely disagreeing","Agreeing"], correctIndex: 1 },
+        { type: "listening", text: "You raise a valid point, but you're overlooking the cost.", "audio": "assets/audio/app/c1_5ca76168d7.mp3", question: "What does the speaker say is being overlooked?",
+          options: ["Time","Place","Cost"], correctIndex: 2 },
+        { type: "listening", text: "Let's not lose sight of the bigger picture here.", "audio": "assets/audio/app/c1_6c67874dfe.mp3", question: "What should we not lose sight of?",
+          options: ["The bigger picture","The clock","The microphone"], correctIndex: 0 },
+        { type: "listening", text: "I'm inclined to agree, up to a point.", "audio": "assets/audio/app/c1_fa458b8034.mp3", question: "What is the speaker's position?",
+          options: ["Agrees, up to a point","Completely against","Has no opinion"], correctIndex: 0 },
+        { type: "matching", instruction: "Match each expression with its function or meaning.", pairs: [{"l":"I have to disagree","r":"disagreeing"},{"l":"You raise a valid point","r":"conceding"},{"l":"the bigger picture","r":"the overall situation"},{"l":"up to a point","r":"partly, not completely"}] },
+        { type: "listening", text: "Could we please return to the main issue?", "audio": "assets/audio/app/c1_60c10a8c83.mp3", question: "Write what you heard:",
           answers: ["could we please return to the main issue"], explanation: "Could we please return to the main issue?" }
       ]
     },
 
     "voc-c1-collocations": {
-      lessonId: "voc-c1-collocations", level: "C1", track: "Vocabulario", topic: "business", skill: "vocab",
-      title: "Colocaciones frecuentes", xpReward: 54, mascotState: "explaining",
+      lessonId: "voc-c1-collocations", level: "C1", track: "Vocabulary", topic: "business", skill: "vocab",
+      title: "Common collocations", xpReward: 54, mascotState: "explaining",
       nextLessonId: "voc-c1-idioms",
-      explanation: { body: "Las colocaciones son palabras que suelen ir juntas: make a decision, take responsibility, raise awareness, meet a deadline. Sonar natural depende de ellas. (Combinaciones naturales de palabras.)",
-        examples: [{ en: "We need to raise awareness.", es: "Necesitamos concienciar." }, { en: "She took full responsibility.", es: "Asumió toda la responsabilidad." }] },
+      explanation: { body: "Collocations are words that naturally go together: make a decision, take responsibility, raise awareness, meet a deadline. Sounding natural depends on them.",
+        examples: [{ en: "We need to raise awareness." }, { en: "She took full responsibility." }] },
       exercises: [
         { type: "multiple_choice", question: "Choose: We have to ___ a decision today.", options: ["take", "do", "make"], correctIndex: 2, explanation: "make a decision (no 'do/take')." },
-        { type: "multiple_choice", question: "Choose: The campaign aims to ___ awareness.", options: ["rise", "raise", "grow"], correctIndex: 1, explanation: "raise awareness = concienciar." },
-        { type: "matching", instruction: "Une el verbo con su colocación.", pairs: [
-          { l: "make", r: "a decision" }, { l: "take", r: "responsibility" }, { l: "meet", r: "a deadline" }, { l: "pay", r: "attention" } ] },
-        { type: "fill_blank", sentence: "Please ___ attention to the details.", answers: ["pay"], hint: "pay attention.", explanation: "pay attention = prestar atención." },
-        { type: "categorize", instruction: "¿make o do?", buckets: [
+        { type: "multiple_choice", question: "Choose: The campaign aims to ___ awareness.", options: ["rise", "raise", "grow"], correctIndex: 1, explanation: "raise awareness = make people know more about an issue." },
+        { type: "matching", instruction: "Match each verb with its collocation.", pairs: [{"l":"make","r":"a decision"},{"l":"take","r":"responsibility"},{"l":"meet","r":"a deadline"},{"l":"pay","r":"attention"}] },
+        { type: "fill_blank", sentence: "Please ___ attention to the details.", answers: ["pay"], hint: "pay attention.", explanation: "pay attention = concentrate on something." },
+        { type: "categorize", instruction: "make or do?", buckets: [
           { id: "make", label: "make" }, { id: "do", label: "do" } ], items: [
           { t: "a mistake", bucket: "make" }, { t: "progress", bucket: "make" }, { t: "homework", bucket: "do" }, { t: "research", bucket: "do" } ] },
-        { type: "translate", prompt: "Traduce: \"Asumió toda la responsabilidad.\"",
+        { type: "translate", prompt: "Rewrite with a collocation using 'take': She accepted that the whole problem was her fault and dealt with it.",
           answers: ["she took full responsibility", "he took full responsibility"], explanation: "She took full responsibility." }
       ]
     },
 
     "voc-c1-idioms": {
-      lessonId: "voc-c1-idioms", level: "C1", track: "Vocabulario", topic: "society", skill: "vocab",
-      title: "Modismos comunes", xpReward: 54, mascotState: "explaining",
-      explanation: { body: "Los modismos no se traducen literalmente: \"break the ice\" (romper el hielo), \"a piece of cake\" (pan comido), \"hit the books\" (ponerse a estudiar). (Expresiones idiomáticas.)",
-        examples: [{ en: "The exam was a piece of cake.", es: "El examen fue pan comido." }] },
+      lessonId: "voc-c1-idioms", level: "C1", track: "Vocabulary", topic: "society", skill: "vocab",
+      title: "Common idioms", xpReward: 54, mascotState: "explaining",
+      explanation: { body: "Idioms can't be translated word for word: \"break the ice\" (make people feel relaxed at the start), \"a piece of cake\" (very easy), \"hit the books\" (start studying hard).",
+        examples: [{ en: "The exam was a piece of cake." }] },
       exercises: [
-        { type: "matching", instruction: "Une el modismo con su significado.", pairs: [
-          { l: "break the ice", r: "romper el hielo" }, { l: "a piece of cake", r: "muy fácil" }, { l: "hit the books", r: "ponerse a estudiar" }, { l: "under the weather", r: "indispuesto" } ] },
-        { type: "multiple_choice", question: "\"It's a piece of cake\" means it is...", options: ["very easy", "very tasty", "very hard"], correctIndex: 0, explanation: "a piece of cake = muy fácil." },
+        { type: "matching", instruction: "Match each idiom with its meaning.", pairs: [{"l":"break the ice","r":"make people relax at the start"},{"l":"a piece of cake","r":"very easy"},{"l":"hit the books","r":"start studying hard"},{"l":"under the weather","r":"feeling a bit ill"}] },
+        { type: "multiple_choice", question: "\"It's a piece of cake\" means it is...", options: ["very easy", "very tasty", "very hard"], correctIndex: 0, explanation: "a piece of cake = very easy." },
         { type: "fill_blank", sentence: "I feel a bit under the ___ today. (indispuesto)", answers: ["weather"], hint: "under the weather.", explanation: "under the weather = indispuesto." },
-        { type: "true_false", statement: "\"Break the ice\" means to start a conversation comfortably.", answer: true, explanation: "Romper el hielo = facilitar el inicio social." },
-        { type: "multiple_choice", question: "If you \"hit the books\", you...", options: ["throw books", "study hard", "go to sleep"], correctIndex: 1, explanation: "hit the books = ponerse a estudiar." },
-        { type: "translate", prompt: "Traduce: \"El examen fue pan comido.\"",
+        { type: "true_false", statement: "\"Break the ice\" means to start a conversation comfortably.", answer: true, explanation: "Breaking the ice makes the start of a social situation easier." },
+        { type: "multiple_choice", question: "If you \"hit the books\", you...", options: ["throw books", "study hard", "go to sleep"], correctIndex: 1, explanation: "hit the books = start studying hard." },
+        { type: "translate", prompt: "Rewrite with an idiom: The exam was extremely easy.",
           answers: ["the exam was a piece of cake", "the test was a piece of cake"], explanation: "The exam was a piece of cake." }
       ]
     },
 
     "use-c1-inversion": {
-      lessonId: "use-c1-inversion", level: "C1", track: "Uso del inglés", topic: "society", skill: "use",
-      title: "Inversión enfática", xpReward: 56, mascotState: "explaining",
+      lessonId: "use-c1-inversion", level: "C1", track: "Use of English", topic: "society", skill: "use",
+      title: "Emphatic inversion", xpReward: 56, mascotState: "explaining",
       nextLessonId: "use-c1-register",
-      explanation: { body: "Tras adverbios negativos al inicio, el orden se invierte como en pregunta: \"Never have I seen...\", \"Not only did she..., but...\", \"Rarely do we...\". Da énfasis y formalidad. (Inversión para enfatizar.)",
-        examples: [{ en: "Never have I seen such a mess.", es: "Nunca he visto tal desorden." }, { en: "Not only did he apologise, but he also paid.", es: "No solo se disculpó, sino que también pagó." }] },
+      explanation: { body: "After a negative adverbial at the start, word order is inverted as in a question: \"Never have I seen...\", \"Not only did she..., but...\", \"Rarely do we...\". It adds emphasis and formality.",
+        examples: [{ en: "Never have I seen such a mess." }, { en: "Not only did he apologise, but he also paid." }] },
       exercises: [
-        { type: "multiple_choice", question: "Choose: Never ___ such a beautiful view.", options: ["I have seen", "I saw", "have I seen"], correctIndex: 2, explanation: "Tras 'Never' al inicio se invierte: have I seen." },
-        { type: "multiple_choice", question: "Choose: Not only ___ late, but he forgot the keys.", options: ["he was", "was he", "he is"], correctIndex: 1, explanation: "Not only + inversión: was he late." },
-        { type: "fill_blank", sentence: "Rarely ___ we see such talent. (inversión con 'do')", answers: ["do"], hint: "Rarely do we...", explanation: "Rarely do we see..." },
-        { type: "true_false", statement: "After a negative adverb at the start, English uses inversion.", answer: true, explanation: "Es la regla de la inversión enfática." },
-        { type: "word_order", words: ["Never", "have", "I", "been", "so", "happy"], correctOrder: ["Never", "have", "I", "been", "so", "happy"], hint: "Never + have + sujeto + participio." },
-        { type: "translate", prompt: "Traduce con inversión: \"Nunca he visto tal desorden.\"",
+        { type: "multiple_choice", question: "Choose: Never ___ such a beautiful view.", options: ["I have seen", "I saw", "have I seen"], correctIndex: 2, explanation: "After 'Never' at the start, we invert: have I seen." },
+        { type: "multiple_choice", question: "Choose: Not only ___ late, but he forgot the keys.", options: ["he was", "was he", "he is"], correctIndex: 1, explanation: "Not only + inversion: was he late." },
+        { type: "fill_blank", sentence: "Rarely ___ we see such talent. (inversion with 'do')", answers: ["do"], hint: "Rarely do we...", explanation: "Rarely do we see..." },
+        { type: "true_false", statement: "After a negative adverb at the start, English uses inversion.", answer: true, explanation: "That is the rule of emphatic inversion." },
+        { type: "word_order", words: ["Never", "have", "I", "been", "so", "happy"], correctOrder: ["Never", "have", "I", "been", "so", "happy"], hint: "Never + have + subject + past participle." },
+        { type: "translate", prompt: "Rewrite with inversion, starting 'Never…': I have never seen such a mess.",
           answers: ["never have i seen such a mess", "never have i seen such a mess."], explanation: "Never have I seen such a mess." }
       ]
     },
 
     "use-c1-register": {
-      lessonId: "use-c1-register", level: "C1", track: "Uso del inglés", topic: "business", skill: "use",
-      title: "Registro: formal e informal", xpReward: 56, mascotState: "explaining",
-      explanation: { body: "El registro es el grado de formalidad. Formal: \"I would be grateful if you could...\". Informal: \"Can you...?\". Elegir bien el registro es clave en C1. (Formal vs. informal.)",
-        examples: [{ en: "I would be grateful if you could reply soon.", es: "Le agradecería que respondiera pronto." }, { en: "Drop me a line when you can.", es: "Escríbeme cuando puedas." }] },
+      lessonId: "use-c1-register", level: "C1", track: "Use of English", topic: "business", skill: "use",
+      title: "Register: formal and informal", xpReward: 56, mascotState: "explaining",
+      explanation: { body: "Register is the level of formality. Formal: \"I would be grateful if you could...\". Informal: \"Can you...?\". Choosing the right register is key at C1.",
+        examples: [{ en: "I would be grateful if you could reply soon." }, { en: "Drop me a line when you can." }] },
       exercises: [
-        { type: "multiple_choice", question: "Which is the most formal request?", options: ["I would be grateful if you could send it.", "Send it now.", "Can you send it?"], correctIndex: 0, explanation: "\"I would be grateful if you could...\" es la más formal." },
-        { type: "categorize", instruction: "¿Formal o informal?", buckets: [
+        { type: "multiple_choice", question: "Which is the most formal request?", options: ["I would be grateful if you could send it.", "Send it now.", "Can you send it?"], correctIndex: 0, explanation: "\"I would be grateful if you could...\" is the most formal." },
+        { type: "categorize", instruction: "Formal or informal?", buckets: [
           { id: "f", label: "Formal" }, { id: "i", label: "Informal" } ], items: [
           { t: "I look forward to hearing from you", bucket: "f" }, { t: "Cheers!", bucket: "i" }, { t: "Please find attached", bucket: "f" }, { t: "Gonna be late", bucket: "i" } ] },
-        { type: "multiple_choice", question: "\"Drop me a line\" is...", options: ["rude", "formal", "informal"], correctIndex: 2, explanation: "Es informal: escríbeme." },
+        { type: "multiple_choice", question: "\"Drop me a line\" is...", options: ["rude", "formal", "informal"], correctIndex: 2, explanation: "It's informal: it means \"write to me\"." },
         { type: "fill_blank", sentence: "I would be ___ if you could help. (formal)", answers: ["grateful"], hint: "I'd be grateful if...", explanation: "I would be grateful if you could..." },
-        { type: "true_false", statement: "\"Please find attached\" is appropriate in a formal email.", answer: true, explanation: "Es una fórmula formal estándar." },
-        { type: "translate", prompt: "Traduce (formal): \"Le agradecería que respondiera pronto.\"",
+        { type: "true_false", statement: "\"Please find attached\" is appropriate in a formal email.", answer: true, explanation: "It is a standard formal phrase." },
+        { type: "translate", prompt: "Make this request formal, starting 'I would be grateful if…': Reply soon, please.",
           answers: ["i would be grateful if you could reply soon", "i'd be grateful if you could reply soon"], explanation: "I would be grateful if you could reply soon." }
       ]
     }

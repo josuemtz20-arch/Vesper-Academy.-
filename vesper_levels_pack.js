@@ -191,85 +191,85 @@ window.VESPER_LEVELS_PACK = (function () {
     /* ============================ B1 ============================ */
 
     "lvl-b1-grammar-perfect": {
-      lessonId: "lvl-b1-grammar-perfect", level: "B1", track: "Uso del inglés", topic: "grammar", skill: "use",
-      title: "Present perfect y primer condicional", xpReward: 54, mascotState: "explaining",
+      lessonId: "lvl-b1-grammar-perfect", level: "B1", track: "Use of English", topic: "grammar", skill: "use",
+      title: "Present perfect and the first conditional", xpReward: 54, mascotState: "explaining",
       explanation: {
-        body: "B1: el present perfect (have/has + participio) con since/for, y el primer condicional (If + presente, ... will + verbo). Recuerda: 'since' + momento concreto (since 2019), 'for' + periodo (for five years). (Atiende a la concordancia y a la forma del 'if'.)",
+        body: "B1: the present perfect (have/has + past participle) with since/for, and the first conditional (If + present simple, ... will + verb). Remember: 'since' + a specific point in time (since 2019), 'for' + a period (for five years). Pay attention to agreement and to the form of the 'if' clause.",
         examples: [
-          { en: "I have lived here for five years.", es: "He vivido aquí cinco años." },
-          { en: "If it rains, we will stay at home.", es: "Si llueve, nos quedaremos en casa." }
+          { en: "I have lived here for five years." },
+          { en: "If it rains, we will stay at home." }
         ]
       },
       exercises: [
-        { type: "multiple_choice", question: "Choose the correct form: \"I ___ never ___ sushi.\"", options: ["have / eaten", "has / ate", "have / ate"], correctIndex: 0, explanation: "Present perfect: have + participio ('eaten')." },
-        { type: "find_error", question: "Encuentra el error.",
+        { type: "multiple_choice", question: "Choose the correct form: \"I ___ never ___ sushi.\"", options: ["have / eaten", "has / ate", "have / ate"], correctIndex: 0, explanation: "Present perfect: have + past participle ('eaten')." },
+        { type: "find_error", question: "Find the mistake.",
           segments: ["I ", { u: "have lived" }, " in this city ", { u: "since" }, " five ", { u: "years" }, " and I ", { u: "love" }, " it."],
-          correctIndex: 1, correction: "for ('for five years': periodo de tiempo)",
-          explanation: "Con una duración se usa 'for'; 'since' es para un momento concreto." },
-        { type: "find_error", question: "Encuentra el error.",
+          correctIndex: 1, correction: "for ('for five years': a period of time)",
+          explanation: "With a duration we use 'for'; 'since' is for a specific point in time." },
+        { type: "find_error", question: "Find the mistake.",
           segments: ["If it ", { u: "will rain" }, " tomorrow, we ", { u: "will" }, " ", { u: "stay" }, " at ", { u: "home" }, "."],
-          correctIndex: 0, correction: "rains (en la cláusula 'if' va el presente)",
-          explanation: "Primer condicional: If + presente simple, ... will + verbo. El 'if' no lleva 'will'." },
-        { type: "fill_blank", sentence: "She has ___ (finish) her homework already.", answers: ["finished"], hint: "have/has + participio.", explanation: "Participio regular: 'finished'." },
-        { type: "multiple_choice", question: "Complete: \"We've known each other ___ 2015.\"", options: ["for", "since", "during"], correctIndex: 1, explanation: "2015 es un momento concreto: 'since 2015'." },
-        { type: "true_false", statement: "In a first conditional, the 'if' clause uses 'will' (e.g. \"If it will rain...\").", answer: false, explanation: "El 'if' va en presente: 'If it rains...'." },
-        { type: "word_order", words: ["I", "have", "never", "been", "to", "Japan"], correctOrder: ["I", "have", "never", "been", "to", "Japan"], hint: "Present perfect con 'never'." }
+          correctIndex: 0, correction: "rains (the 'if' clause takes the present simple)",
+          explanation: "First conditional: If + present simple, ... will + verb. The 'if' clause has no 'will'." },
+        { type: "fill_blank", sentence: "She has ___ (finish) her homework already.", answers: ["finished"], hint: "have/has + past participle.", explanation: "Regular past participle: 'finished'." },
+        { type: "multiple_choice", question: "Complete: \"We've known each other ___ 2015.\"", options: ["for", "since", "during"], correctIndex: 1, explanation: "2015 is a specific point in time: 'since 2015'." },
+        { type: "true_false", statement: "In a first conditional, the 'if' clause uses 'will' (e.g. \"If it will rain...\").", answer: false, explanation: "The 'if' clause is in the present: 'If it rains...'." },
+        { type: "word_order", words: ["I", "have", "never", "been", "to", "Japan"], correctOrder: ["I", "have", "never", "been", "to", "Japan"], hint: "Present perfect with 'never'." }
       ]
     },
 
     "lvl-b1-vocab-money": {
-      lessonId: "lvl-b1-vocab-money", level: "B1", track: "Vocabulario", topic: "business", skill: "vocab",
-      title: "Vocabulario: dinero y trabajo", xpReward: 52, mascotState: "explaining",
+      lessonId: "lvl-b1-vocab-money", level: "B1", track: "Vocabulary", topic: "business", skill: "vocab",
+      title: "Vocabulary: money and work", xpReward: 52, mascotState: "explaining",
       explanation: {
-        body: "Vocabulario de B1 sobre dinero y trabajo, con colocaciones frecuentes (earn money, save up, apply for a job). Distingue matices como 'borrow' (pedir prestado) vs 'lend' (prestar). (Asocia, clasifica y traduce con precisión.)",
+        body: "B1 vocabulary about money and work, with frequent collocations (earn money, save up, apply for a job). Distinguish nuances like 'borrow' (take something and return it) vs 'lend' (give something that will come back).",
         examples: [
-          { en: "She applied for a new job.", es: "Solicitó un nuevo empleo." },
-          { en: "Can you lend me ten euros?", es: "¿Me puedes prestar diez euros?" }
+          { en: "She applied for a new job." },
+          { en: "Can you lend me ten euros?" }
         ]
       },
       exercises: [
-        { type: "matching", instruction: "Une el verbo con su significado.", pairs: [
+        { type: "matching", instruction: "Match each verb with its meaning.", pairs: [
           { l: "earn", r: "to get money for work" },
           { l: "save", r: "to keep money for later" },
           { l: "lend", r: "to give money temporarily" },
           { l: "borrow", r: "to take money temporarily" }
         ] },
-        { type: "categorize", instruction: "¿La palabra se relaciona con el dinero o con el empleo?", buckets: [
+        { type: "categorize", instruction: "Is the word about money or about jobs?", buckets: [
           { id: "m", label: "Money" }, { id: "j", label: "Job" } ], items: [
           { t: "salary", bucket: "j" }, { t: "discount", bucket: "m" },
           { t: "interview", bucket: "j" }, { t: "budget", bucket: "m" },
           { t: "colleague", bucket: "j" }, { t: "currency", bucket: "m" } ] },
-        { type: "multiple_choice", question: "Choose the correct word: \"Can you ___ me your pen? I'll give it back.\"", options: ["borrow", "lend", "earn"], correctIndex: 1, explanation: "Tú das algo temporalmente: 'lend' (prestar)." },
-        { type: "fill_blank", sentence: "I want to ___ for that job; I'll send my CV tomorrow.", answers: ["apply"], hint: "apply ___ a job.", explanation: "'apply for a job' = solicitar un empleo." },
-        { type: "translate", prompt: "Traduce: \"Ella ahorra dinero cada mes.\"", answers: ["she saves money every month"], explanation: "She saves money every month." }
+        { type: "multiple_choice", question: "Choose the correct word: \"Can you ___ me your pen? I'll give it back.\"", options: ["borrow", "lend", "earn"], correctIndex: 1, explanation: "You give something temporarily: 'lend'." },
+        { type: "fill_blank", sentence: "I want to ___ for that job; I'll send my CV tomorrow.", answers: ["apply"], hint: "apply ___ a job.", explanation: "'apply for a job' = formally ask for a job." },
+        { type: "translate", prompt: "Rewrite with 'save': Every month, she keeps part of her salary instead of spending it.", answers: ["she saves money every month","she saves money each month","she saves some money every month","every month she saves money"], explanation: "She saves money every month." }
       ]
     },
 
     "lvl-b1-read-smartphones": {
-      lessonId: "lvl-b1-read-smartphones", level: "B1", track: "Lectura", topic: "tech", skill: "reading",
-      title: "Lectura: How phones changed us", xpReward: 54, mascotState: "explaining",
+      lessonId: "lvl-b1-read-smartphones", level: "B1", track: "Reading", topic: "tech", skill: "reading",
+      title: "Reading: How phones changed us", xpReward: 54, mascotState: "explaining",
       explanation: {
-        body: "Lectura de B1 de longitud media. Identifica la idea principal, un detalle, el significado de una palabra por contexto y una pequeña inferencia. (No confundas tu opinión con lo que dice el texto.)",
+        body: "A medium-length B1 reading. Identify the main idea, a detail, the meaning of a word from context and a small inference. Don't confuse your opinion with what the text says.",
         examples: [
-          { en: "convenience has a downside", es: "la comodidad tiene un inconveniente" },
-          { en: "It is difficult to concentrate.", es: "Es difícil concentrarse." }
+          { en: "convenience has a downside" },
+          { en: "It is difficult to concentrate." }
         ]
       },
       exercises: [
         { type: "reading", title: "Smartphones and us",
           passage: "Smartphones have changed the way we communicate. Twenty years ago, most people used their phones only to make calls or send short messages. Today, a single device lets us read the news, take photos, pay for shopping and talk to friends on the other side of the world.\n\nHowever, this convenience has a downside. Many people now find it difficult to spend even a few hours without checking their screens, and some experts worry that constant notifications make it harder to concentrate.",
           questions: [
-            { q: "What is the text mainly about?", options: ["why old phones were better", "how to repair a phone", "how smartphones have changed communication, with both benefits and problems"], correctIndex: 2, explanation: "Habla del cambio que trajeron, con ventajas y un inconveniente." },
+            { q: "What is the text mainly about?", options: ["why old phones were better", "how to repair a phone", "how smartphones have changed communication, with both benefits and problems"], correctIndex: 2, explanation: "It talks about the change smartphones brought, with advantages and one drawback." },
             { q: "According to the text, what could people do with phones twenty years ago?", options: ["read the news and pay for shopping", "only make calls and send short messages", "take photos and talk to people abroad"], correctIndex: 1, explanation: "\"...used their phones only to make calls or send short messages.\"" },
-            { q: "In the text, \"downside\" means...", options: ["a disadvantage", "a price", "an advantage"], correctIndex: 0, explanation: "'downside' = inconveniente, desventaja." },
-            { q: "What can be inferred from the text?", options: ["Phones have no effect on concentration.", "Everyone should stop using phones.", "Spending too long on phones may be a problem for some people."], correctIndex: 2, explanation: "Se infiere de la preocupación de los expertos por las notificaciones y la concentración." }
+            { q: "In the text, \"downside\" means...", options: ["a disadvantage", "a price", "an advantage"], correctIndex: 0, explanation: "'downside' = a disadvantage." },
+            { q: "What can be inferred from the text?", options: ["Phones have no effect on concentration.", "Everyone should stop using phones.", "Spending too long on phones may be a problem for some people."], correctIndex: 2, explanation: "It can be inferred from the experts' concern about notifications and concentration." }
           ] },
-        { type: "find_error", question: "Encuentra el error.",
+        { type: "find_error", question: "Find the mistake.",
           segments: ["Many people ", { u: "finds" }, " it ", { u: "difficult" }, " to ", { u: "concentrate" }, " with constant ", { u: "notifications" }, "."],
           correctIndex: 0, correction: "find (people = plural)",
-          explanation: "'people' es plural, así que el verbo es 'find', no 'finds'." },
+          explanation: "'people' is plural, so the verb is 'find', not 'finds'." },
         { type: "true_false", statement: "According to the text, today a smartphone can be used to pay for shopping.", answer: true, explanation: "\"...pay for shopping...\"" },
-        { type: "fill_blank", sentence: "Some experts worry that constant ___ make it harder to concentrate.", answers: ["notifications"], hint: "Los avisos del teléfono.", explanation: "\"...constant notifications make it harder to concentrate.\"" }
+        { type: "fill_blank", sentence: "Some experts worry that constant ___ make it harder to concentrate.", answers: ["notifications"], hint: "The alerts on your phone.", explanation: "\"...constant notifications make it harder to concentrate.\"" }
       ]
     }
 

@@ -860,7 +860,7 @@ window.VESPER_LEVEL_EXAMS = {
         "already finished"
       ],
       "correctIndex": 1,
-      "explanation": "El presente perfecto (have finished) conecta una accion pasada con el presente; 'already' refuerza que la tarea ya esta hecha ahora."
+      "explanation": "The present perfect (have finished) connects a past action with the present; 'already' stresses that the homework is done now."
     },
     {
       "type": "multiple_choice",
@@ -873,7 +873,7 @@ window.VESPER_LEVEL_EXAMS = {
         "went"
       ],
       "correctIndex": 3,
-      "explanation": "Con un tiempo pasado concreto (last summer) se usa el pasado simple: 'went'."
+      "explanation": "With a specific past time (last summer) we use the past simple: 'went'."
     },
     {
       "type": "fill_blank",
@@ -882,8 +882,8 @@ window.VESPER_LEVEL_EXAMS = {
       "answers": [
         "since"
       ],
-      "hint": "Punto de inicio en el tiempo.",
-      "explanation": "Usamos 'since' con un momento concreto de inicio (2015); 'for' se usa con periodos de duracion."
+      "hint": "A starting point in time.",
+      "explanation": "We use 'since' with a specific starting point (2015); 'for' is used with periods of time."
     },
     {
       "type": "fill_blank",
@@ -892,8 +892,8 @@ window.VESPER_LEVEL_EXAMS = {
       "answers": [
         "for"
       ],
-      "hint": "Duracion, no punto de inicio.",
-      "explanation": "Usamos 'for' con periodos de tiempo (three years); 'since' seria con una fecha o momento."
+      "hint": "A duration, not a starting point.",
+      "explanation": "We use 'for' with periods of time (three years); 'since' would be used with a date or moment."
     },
     {
       "type": "multiple_choice",
@@ -906,7 +906,7 @@ window.VESPER_LEVEL_EXAMS = {
         "melted"
       ],
       "correctIndex": 1,
-      "explanation": "Condicional cero: para hechos generales se usa presente simple en ambas partes (If + presente, presente)."
+      "explanation": "Zero conditional: for general facts we use the present simple in both parts (If + present, present)."
     },
     {
       "type": "multiple_choice",
@@ -919,7 +919,7 @@ window.VESPER_LEVEL_EXAMS = {
         "will have"
       ],
       "correctIndex": 3,
-      "explanation": "Primer condicional para situaciones reales futuras: If + presente, will + verbo base."
+      "explanation": "First conditional for real future situations: If + present simple, will + base verb."
     },
     {
       "type": "fill_blank",
@@ -928,13 +928,13 @@ window.VESPER_LEVEL_EXAMS = {
       "answers": [
         "would"
       ],
-      "hint": "Segundo condicional, situacion hipotetica.",
-      "explanation": "Segundo condicional para situaciones imaginarias: If + pasado simple, would + verbo base."
+      "hint": "Second conditional, an imaginary situation.",
+      "explanation": "Second conditional for imaginary situations: If + past simple, would + base verb."
     },
     {
       "type": "find_error",
       "skill": "grammar",
-      "question": "Encuentra el error.",
+      "question": "Find the mistake.",
       "segments": [
         "The man ",
         {
@@ -948,7 +948,7 @@ window.VESPER_LEVEL_EXAMS = {
       ],
       "correctIndex": 0,
       "correction": "who (which -> who)",
-      "explanation": "Para personas se usa el pronombre relativo 'who' (o 'that'), no 'which', que es para cosas."
+      "explanation": "For people we use the relative pronoun 'who' (or 'that'), not 'which', which is for things."
     },
     {
       "type": "multiple_choice",
@@ -961,7 +961,7 @@ window.VESPER_LEVEL_EXAMS = {
         "who"
       ],
       "correctIndex": 2,
-      "explanation": "'where' es el relativo para lugares (the restaurant = un lugar)."
+      "explanation": "'where' is the relative pronoun for places (the restaurant = a place)."
     },
     {
       "type": "word_order",
@@ -982,7 +982,7 @@ window.VESPER_LEVEL_EXAMS = {
         "in",
         "1990"
       ],
-      "hint": "Voz pasiva en pasado: was + participio."
+      "hint": "Past passive: was + past participle."
     },
     {
       "type": "fill_blank",
@@ -991,8 +991,8 @@ window.VESPER_LEVEL_EXAMS = {
       "answers": [
         "is"
       ],
-      "hint": "Voz pasiva en presente, sujeto singular.",
-      "explanation": "Pasiva en presente: 'is' + participio (grown). El cafe recibe la accion, no la hace."
+      "hint": "Present passive, singular subject.",
+      "explanation": "Present passive: 'is' + past participle (grown). The coffee receives the action; it doesn't do it."
     },
     {
       "type": "multiple_choice",
@@ -1005,7 +1005,7 @@ window.VESPER_LEVEL_EXAMS = {
         "can't"
       ],
       "correctIndex": 0,
-      "explanation": "'should' se usa para dar consejos. 'must' seria obligacion fuerte y 'might' solo posibilidad."
+      "explanation": "'should' is used to give advice. 'must' would be a strong obligation and 'might' only a possibility."
     },
     {
       "type": "multiple_choice",
@@ -1018,7 +1018,7 @@ window.VESPER_LEVEL_EXAMS = {
         "could"
       ],
       "correctIndex": 2,
-      "explanation": "'can't' expresa deduccion de que algo es imposible segun la evidencia (no pueden estar en casa)."
+      "explanation": "'can't' expresses a deduction that something is impossible, based on the evidence (they can't be at home)."
     },
     {
       "type": "fill_blank",
@@ -1027,13 +1027,13 @@ window.VESPER_LEVEL_EXAMS = {
       "answers": [
         "reading"
       ],
-      "hint": "Tras 'enjoy' se usa gerundio.",
-      "explanation": "Despues de verbos como enjoy, stop o avoid se usa la forma en -ing: 'reading'."
+      "hint": "After 'enjoy' we use the -ing form.",
+      "explanation": "After verbs like enjoy, stop or avoid we use the -ing form: 'reading'."
     },
     {
       "type": "find_error",
       "skill": "grammar",
-      "question": "Encuentra el error.",
+      "question": "Find the mistake.",
       "segments": [
         "I ",
         {
@@ -1047,7 +1047,7 @@ window.VESPER_LEVEL_EXAMS = {
       ],
       "correctIndex": 1,
       "correction": "eating (to eat -> eating)",
-      "explanation": "Tras 'avoid' se usa el gerundio: 'avoid eating', no el infinitivo."
+      "explanation": "After 'avoid' we use the -ing form: 'avoid eating', not the infinitive."
     },
     {
       "type": "multiple_choice",
@@ -1060,7 +1060,7 @@ window.VESPER_LEVEL_EXAMS = {
         "get up"
       ],
       "correctIndex": 0,
-      "explanation": "'turn off' significa apagar (un aparato o las luces)."
+      "explanation": "'turn off' means to stop a device or switch off the lights."
     },
     {
       "type": "multiple_choice",
@@ -1073,7 +1073,7 @@ window.VESPER_LEVEL_EXAMS = {
         "set up"
       ],
       "correctIndex": 1,
-      "explanation": "'look after' significa cuidar de alguien o algo."
+      "explanation": "'look after' means to take care of someone or something."
     },
     {
       "type": "fill_blank",
@@ -1082,22 +1082,22 @@ window.VESPER_LEVEL_EXAMS = {
       "answers": [
         "set"
       ],
-      "hint": "Phrasal verb que significa crear o fundar.",
-      "explanation": "'set up' significa montar o fundar (un negocio, una empresa)."
+      "hint": "A phrasal verb that means to create or start.",
+      "explanation": "'set up' means to start (a business, a company)."
     },
     {
       "type": "true_false",
       "skill": "vocab",
       "statement": "If you 'download' a file, you save it from the internet to your device.",
       "answer": true,
-      "explanation": "'download' significa descargar: traer un archivo de internet a tu dispositivo."
+      "explanation": "'download' means to bring a file from the internet to your device."
     },
     {
       "type": "true_false",
       "skill": "vocab",
       "statement": "Recycling and renewable energy are ways to harm the environment.",
       "answer": false,
-      "explanation": "Reciclar y usar energias renovables ayudan a proteger el medio ambiente, no a danarlo."
+      "explanation": "Recycling and using renewable energy help to protect the environment, not harm it."
     },
     {
       "type": "multiple_choice",
@@ -1110,7 +1110,7 @@ window.VESPER_LEVEL_EXAMS = {
         "position"
       ],
       "correctIndex": 3,
-      "explanation": "'position' significa puesto de trabajo, lo que una empresa ofrece tras una entrevista."
+      "explanation": "'position' means a job, which a company offers after an interview."
     },
     {
       "type": "multiple_choice",
@@ -1123,22 +1123,22 @@ window.VESPER_LEVEL_EXAMS = {
         "gases"
       ],
       "correctIndex": 3,
-      "explanation": "'greenhouse gases' (gases de efecto invernadero) son una causa del cambio climatico."
+      "explanation": "'greenhouse gases' are one cause of climate change."
     },
     {
       "type": "translate",
       "skill": "use",
-      "prompt": "Traduce: \"He vivido aqui durante cinco anos.\"",
+      "prompt": "Rewrite with the present perfect and 'for': I came to live here five years ago and I still live here.",
       "answers": [
         "i have lived here for five years",
         "i've lived here for five years"
       ],
-      "explanation": "I have lived here for five years. Presente perfecto + 'for' para duracion."
+      "explanation": "I have lived here for five years. Present perfect + 'for' for duration."
     },
     {
       "type": "translate",
       "skill": "use",
-      "prompt": "Traduce: \"Si tuviera mas dinero, viajaria por el mundo.\"",
+      "prompt": "Make a second conditional: I don't have much money, so I don't travel around the world. (If I had more money…)",
       "answers": [
         "if i had more money, i would travel around the world",
         "if i had more money i would travel around the world",
@@ -1147,7 +1147,7 @@ window.VESPER_LEVEL_EXAMS = {
         "if i had more money, i would travel the world",
         "if i had more money i would travel the world"
       ],
-      "explanation": "If I had more money, I would travel around the world. Segundo condicional."
+      "explanation": "If I had more money, I would travel around the world. Second conditional."
     },
     {
       "type": "word_order",
@@ -1170,7 +1170,7 @@ window.VESPER_LEVEL_EXAMS = {
         "Japan",
         "?"
       ],
-      "hint": "Pregunta en presente perfecto con 'ever'."
+      "hint": "A present perfect question with 'ever'."
     },
     {
       "type": "fill_blank",
@@ -1181,13 +1181,13 @@ window.VESPER_LEVEL_EXAMS = {
         "could",
         "may"
       ],
-      "hint": "Modal de posibilidad (quizas).",
-      "explanation": "'might', 'could' o 'may' expresan posibilidad cuando no estamos seguros."
+      "hint": "A modal of possibility (perhaps).",
+      "explanation": "'might', 'could' or 'may' express possibility when we aren't sure."
     },
     {
       "type": "translate",
       "skill": "use",
-      "prompt": "Traduce: \"Apaga la television antes de irte a la cama.\"",
+      "prompt": "Give the instruction with the phrasal verb 'turn off': The TV must not be on when you go to bed. (… before going to bed)",
       "answers": [
         "turn off the tv before going to bed",
         "turn off the television before going to bed",
@@ -1196,12 +1196,12 @@ window.VESPER_LEVEL_EXAMS = {
         "switch off the tv before going to bed",
         "switch off the television before going to bed"
       ],
-      "explanation": "Turn off the TV before going to bed. 'turn off' + gerundio tras 'before'."
+      "explanation": "Turn off the TV before going to bed. 'turn off' + -ing after 'before'."
     },
     {
       "type": "find_error",
       "skill": "use",
-      "question": "Encuentra el error.",
+      "question": "Find the mistake.",
       "segments": [
         "I ",
         {
@@ -1215,7 +1215,7 @@ window.VESPER_LEVEL_EXAMS = {
       ],
       "correctIndex": 0,
       "correction": "saw (have seen -> saw)",
-      "explanation": "Con 'yesterday' (tiempo pasado concreto) se usa el pasado simple 'saw', no el presente perfecto."
+      "explanation": "With 'yesterday' (a specific past time) we use the past simple 'saw', not the present perfect."
     },
     {
       "type": "reading",
@@ -1232,7 +1232,7 @@ window.VESPER_LEVEL_EXAMS = {
             "Offices will soon disappear completely."
           ],
           "correctIndex": 2,
-          "explanation": "El texto presenta ventajas y desventajas y concluye que el modelo hibrido puede ser la mejor solucion."
+          "explanation": "The text presents advantages and disadvantages and concludes that the hybrid model may be the best solution."
         },
         {
           "q": "According to the text, why do workers save money when working from home?",
@@ -1243,7 +1243,7 @@ window.VESPER_LEVEL_EXAMS = {
             "They work fewer hours."
           ],
           "correctIndex": 1,
-          "explanation": "El texto dice que ahorran tiempo y dinero porque no tienen que viajar a la oficina."
+          "explanation": "The text says they save time and money because they don't have to travel to the office."
         },
         {
           "q": "What problem do younger employees mention?",
@@ -1254,7 +1254,7 @@ window.VESPER_LEVEL_EXAMS = {
             "They never feel lonely."
           ],
           "correctIndex": 0,
-          "explanation": "El texto indica que los empleados mas jovenes dicen que aprenden mas rapido junto a colegas con experiencia."
+          "explanation": "The text says younger employees learn faster next to experienced colleagues."
         },
         {
           "q": "What does the 'hybrid' model mean in the text?",
@@ -1265,7 +1265,7 @@ window.VESPER_LEVEL_EXAMS = {
             "Working at night."
           ],
           "correctIndex": 2,
-          "explanation": "El modelo 'hibrido' combina dias en la oficina con dias trabajando desde casa, como explica el texto."
+          "explanation": "The 'hybrid' model combines office days with days working from home, as the text explains."
         },
         {
           "q": "What can we infer about the author's opinion?",
@@ -1276,7 +1276,7 @@ window.VESPER_LEVEL_EXAMS = {
             "The author dislikes offices."
           ],
           "correctIndex": 0,
-          "explanation": "El tono y la conclusion sugieren que el autor ve el modelo hibrido como una solucion equilibrada."
+          "explanation": "The tone and the conclusion suggest the writer sees the hybrid model as a balanced solution."
         }
       ]
     },
@@ -1291,7 +1291,7 @@ window.VESPER_LEVEL_EXAMS = {
         "To change the time of an appointment."
       ],
       "correctIndex": 2,
-      "explanation": "Sarah explica que la cita debe moverse porque el dentista no esta disponible, por eso pide que llamen para elegir otra hora."
+      "explanation": "Sarah explains that the appointment must be moved because the dentist is not available, so she asks them to call back to choose another time."
     },
     {
       "type": "listening",
@@ -1304,7 +1304,7 @@ window.VESPER_LEVEL_EXAMS = {
         "Completely satisfied and enthusiastic."
       ],
       "correctIndex": 0,
-      "explanation": "El hablante reconoce que la camara es buena pero se muestra decepcionado por la bateria y el precio, por eso duda en recomendarlo."
+      "explanation": "The speaker admits the camera is good but is disappointed by the battery and the price, so hesitates to recommend it."
     }
   ] },
   "B2": { "pass": 72, "exercises": [
@@ -1319,7 +1319,7 @@ window.VESPER_LEVEL_EXAMS = {
         "have been studying"
       ],
       "correctIndex": 3,
-      "explanation": "El present perfect continuous (have been studying) expresa una accion que comenzo en el pasado y continua, con enfasis en la duracion ('since early this morning')."
+      "explanation": "The present perfect continuous (have been studying) expresses an action that started in the past and continues, with emphasis on duration ('since early this morning')."
     },
     {
       "type": "multiple_choice",
@@ -1332,7 +1332,7 @@ window.VESPER_LEVEL_EXAMS = {
         "finished"
       ],
       "correctIndex": 0,
-      "explanation": "El past perfect (had finished) marca una accion anterior a otra accion pasada ('arrived')."
+      "explanation": "The past perfect (had finished) marks an action before another past action ('arrived')."
     },
     {
       "type": "multiple_choice",
@@ -1345,7 +1345,7 @@ window.VESPER_LEVEL_EXAMS = {
         "have known"
       ],
       "correctIndex": 1,
-      "explanation": "Tercer condicional: 'if + past perfect' (had known) + 'would have + participio' para una situacion irreal del pasado."
+      "explanation": "Third conditional: 'if + past perfect' (had known) + 'would have + past participle' for an unreal past situation."
     },
     {
       "type": "multiple_choice",
@@ -1358,7 +1358,7 @@ window.VESPER_LEVEL_EXAMS = {
         "had lived"
       ],
       "correctIndex": 2,
-      "explanation": "Condicional mixto: condicion pasada irreal ('had taken') con resultado presente ('would live now')."
+      "explanation": "Mixed conditional: an unreal past condition ('had taken') with a present result ('would live now')."
     },
     {
       "type": "multiple_choice",
@@ -1371,7 +1371,7 @@ window.VESPER_LEVEL_EXAMS = {
         "don't have the time"
       ],
       "correctIndex": 3,
-      "explanation": "Tras la causativa 'getting the kitchen repainted' (otra persona lo hace), la razon logica es que no se hace uno mismo; 'don't have the time to do it ourselves' es la unica opcion gramaticalmente correcta."
+      "explanation": "After the causative 'getting the kitchen repainted' (someone else does it), the logical reason is that we don't do it ourselves; 'don't have the time to do it ourselves' is the only grammatically correct option."
     },
     {
       "type": "fill_blank",
@@ -1380,8 +1380,8 @@ window.VESPER_LEVEL_EXAMS = {
       "answers": [
         "did"
       ],
-      "hint": "Inversion tras 'Not only' con verbo en pasado simple.",
-      "explanation": "Tras 'Not only' al inicio de la oracion se invierte el orden: auxiliar 'did' + sujeto + verbo base."
+      "hint": "Inversion after 'Not only' with a past simple verb.",
+      "explanation": "After 'Not only' at the start of a sentence the order is inverted: auxiliary 'did' + subject + base verb."
     },
     {
       "type": "fill_blank",
@@ -1390,8 +1390,8 @@ window.VESPER_LEVEL_EXAMS = {
       "answers": [
         "be"
       ],
-      "hint": "Subjuntivo tras 'insisted that'.",
-      "explanation": "El subjuntivo en ingles usa la forma base del verbo ('be') tras verbos como insist/suggest/demand, sin importar el sujeto."
+      "hint": "Subjunctive after 'insisted that'.",
+      "explanation": "The English subjunctive uses the base form of the verb ('be') after verbs like insist/suggest/demand, whatever the subject."
     },
     {
       "type": "word_order",
@@ -1414,12 +1414,12 @@ window.VESPER_LEVEL_EXAMS = {
         "before",
         "noon"
       ],
-      "hint": "Subjuntivo: forma base 'arrive' aunque el sujeto sea 'he'."
+      "hint": "Subjunctive: base form 'arrive' even though the subject is 'he'."
     },
     {
       "type": "find_error",
       "skill": "grammar",
-      "question": "Encuentra el error en la oracion (estilo reportado).",
+      "question": "Find the mistake (reported speech).",
       "segments": [
         "She told me that she ",
         {
@@ -1433,7 +1433,7 @@ window.VESPER_LEVEL_EXAMS = {
       ],
       "correctIndex": 0,
       "correction": "would (will -> would)",
-      "explanation": "En estilo indirecto con verbo introductorio en pasado ('told'), 'will' cambia a 'would'."
+      "explanation": "In reported speech with a past reporting verb ('told'), 'will' changes to 'would'."
     },
     {
       "type": "multiple_choice",
@@ -1446,7 +1446,7 @@ window.VESPER_LEVEL_EXAMS = {
         "grab"
       ],
       "correctIndex": 0,
-      "explanation": "'Obtain' es el sinonimo de registro formal de 'get' (conseguir/obtener) adecuado en un correo profesional."
+      "explanation": "'Obtain' is the formal synonym of 'get', suitable in a professional email."
     },
     {
       "type": "multiple_choice",
@@ -1459,7 +1459,7 @@ window.VESPER_LEVEL_EXAMS = {
         "back up"
       ],
       "correctIndex": 2,
-      "explanation": "'Assist' es la opcion de registro formal equivalente a 'help'."
+      "explanation": "'Assist' is the formal equivalent of 'help'."
     },
     {
       "type": "multiple_choice",
@@ -1472,7 +1472,7 @@ window.VESPER_LEVEL_EXAMS = {
         "ambivalent"
       ],
       "correctIndex": 3,
-      "explanation": "'Ambivalent' describe tener sentimientos mezclados o contradictorios simultaneamente."
+      "explanation": "'Ambivalent' describes having mixed or contradictory feelings at the same time."
     },
     {
       "type": "multiple_choice",
@@ -1485,14 +1485,14 @@ window.VESPER_LEVEL_EXAMS = {
         "skeptical"
       ],
       "correctIndex": 1,
-      "explanation": "'Compelling' significa convincente o persuasivo, lo que encaja con convencer al jurado."
+      "explanation": "'Compelling' means convincing or persuasive, which fits convincing the jury."
     },
     {
       "type": "true_false",
       "skill": "vocab",
       "statement": "If someone is 'skeptical' about a claim, they tend to doubt that it is true.",
       "answer": true,
-      "explanation": "'Skeptical' (esceptico) describe a quien duda o no se convence facilmente de algo."
+      "explanation": "'Skeptical' describes someone who doubts or is not easily convinced."
     },
     {
       "type": "fill_blank",
@@ -1501,20 +1501,20 @@ window.VESPER_LEVEL_EXAMS = {
       "answers": [
         "commence"
       ],
-      "hint": "Verbo formal que significa 'empezar'.",
-      "explanation": "'Commence' es el sinonimo de registro formal de 'begin/start'."
+      "hint": "A formal verb meaning 'start'.",
+      "explanation": "'Commence' is the formal synonym of 'begin/start'."
     },
     {
       "type": "translate",
       "skill": "vocab",
-      "prompt": "Traduce con registro formal: \"Recibimos numerosas solicitudes.\"",
+      "prompt": "Rewrite in a formal register: \"We got lots of requests.\"",
       "answers": [
         "we received numerous requests",
         "we received numerous applications",
         "we have received numerous requests",
         "we have received numerous applications"
       ],
-      "explanation": "'Numerous' (numerosas) y 'requests/applications' (solicitudes) son las opciones de registro formal frente a 'many' o 'lots of'."
+      "explanation": "'Numerous' and 'requests/applications' are the formal choices instead of 'many' or 'lots of'."
     },
     {
       "type": "multiple_choice",
@@ -1527,7 +1527,7 @@ window.VESPER_LEVEL_EXAMS = {
         "Whereas"
       ],
       "correctIndex": 0,
-      "explanation": "'Despite' va seguido de un sustantivo o gerundio ('the heavy rain'), no de una oracion completa; por eso no se usa 'Although'."
+      "explanation": "'Despite' is followed by a noun or -ing form ('the heavy rain'), not a full clause; that's why we don't use 'Although'."
     },
     {
       "type": "multiple_choice",
@@ -1540,7 +1540,7 @@ window.VESPER_LEVEL_EXAMS = {
         "however"
       ],
       "correctIndex": 2,
-      "explanation": "'Whereas' contrasta dos ideas paralelas dentro de la misma oracion (uno frente al otro)."
+      "explanation": "'Whereas' contrasts two parallel ideas within the same sentence (one against the other)."
     },
     {
       "type": "fill_blank",
@@ -1549,23 +1549,23 @@ window.VESPER_LEVEL_EXAMS = {
       "answers": [
         "however"
       ],
-      "hint": "Conector que enlaza dos oraciones separadas y suele ir seguido de coma.",
-      "explanation": "'However' enlaza dos oraciones independientes para expresar contraste y va seguido de coma."
+      "hint": "A linker that connects two separate sentences and is usually followed by a comma.",
+      "explanation": "'However' links two independent sentences to express contrast and is followed by a comma."
     },
     {
       "type": "translate",
       "skill": "use",
-      "prompt": "Traduce: \"Llevo dos horas esperando el autobus.\"",
+      "prompt": "Rewrite with the present perfect continuous and 'for': I started waiting for the bus two hours ago, and I'm still waiting.",
       "answers": [
         "i have been waiting for the bus for two hours",
         "i've been waiting for the bus for two hours"
       ],
-      "explanation": "El present perfect continuous ('have been waiting ... for two hours') expresa una accion que continua desde hace dos horas."
+      "explanation": "The present perfect continuous ('have been waiting ... for two hours') expresses an action that has continued for two hours."
     },
     {
       "type": "translate",
       "skill": "use",
-      "prompt": "Traduce usando causativa: \"Voy a arreglar mi coche (que me lo arreglen).\"",
+      "prompt": "Rewrite with a causative (have/get something done): A mechanic is going to repair my car for me. (I'm going to…)",
       "answers": [
         "i am going to have my car repaired",
         "i'm going to have my car repaired",
@@ -1576,12 +1576,12 @@ window.VESPER_LEVEL_EXAMS = {
         "i am going to get my car fixed",
         "i'm going to get my car fixed"
       ],
-      "explanation": "La causativa 'have/get something done' (have my car repaired) indica que otra persona realiza la accion por ti."
+      "explanation": "The causative 'have/get something done' (have my car repaired) shows that someone else does the action for you."
     },
     {
       "type": "find_error",
       "skill": "use",
-      "question": "Encuentra el error en el uso del conector.",
+      "question": "Find the mistake in the use of the linker.",
       "segments": [
         "Despite ",
         {
@@ -1594,8 +1594,8 @@ window.VESPER_LEVEL_EXAMS = {
         " completed the climb."
       ],
       "correctIndex": 0,
-      "correction": "(elimina 'of': Despite of -> Despite)",
-      "explanation": "'Despite' va seguido directamente de un sustantivo, sin 'of'. Lo correcto es 'Despite the difficult conditions' (o 'In spite of the difficult conditions')."
+      "correction": "(remove 'of': Despite of -> Despite)",
+      "explanation": "'Despite' is followed directly by a noun, with no 'of'. The correct form is 'Despite the difficult conditions' (or 'In spite of the difficult conditions')."
     },
     {
       "type": "word_order",
@@ -1618,7 +1618,7 @@ window.VESPER_LEVEL_EXAMS = {
         "had",
         "been"
       ],
-      "hint": "Pregunta reportada: orden de afirmacion (sujeto + verbo), sin inversion."
+      "hint": "A reported question: statement word order (subject + verb), no inversion."
     },
     {
       "type": "reading",
@@ -1635,7 +1635,7 @@ window.VESPER_LEVEL_EXAMS = {
             "Online games are the most effective form of scientific research."
           ],
           "correctIndex": 1,
-          "explanation": "El texto explica el auge, las ventajas y las criticas de la ciencia ciudadana, concluyendo que es un enfoque valioso y respetado."
+          "explanation": "The text explains the rise, the advantages and the criticisms of citizen science, concluding that it is a valuable, respected approach."
         },
         {
           "q": "According to the passage, citizen science offers all of the following benefits EXCEPT:",
@@ -1646,7 +1646,7 @@ window.VESPER_LEVEL_EXAMS = {
             "guaranteed error-free data without any safeguards"
           ],
           "correctIndex": 3,
-          "explanation": "El texto reconoce que pueden colarse errores y que se necesitan salvaguardas; nunca afirma que los datos esten libres de errores de forma garantizada."
+          "explanation": "The text admits that errors can slip in and that safeguards are needed; it never claims the data are guaranteed error-free."
         },
         {
           "q": "In the third paragraph, what does 'such measures' refer to?",
@@ -1657,7 +1657,7 @@ window.VESPER_LEVEL_EXAMS = {
             "the tasks completed by professional teams"
           ],
           "correctIndex": 0,
-          "explanation": "'Such measures' remite a las salvaguardas mencionadas justo antes: verificacion por varios participantes y metodos estadisticos para filtrar anomalias."
+          "explanation": "'Such measures' refers to the safeguards mentioned just before: checking by several participants and statistical methods to filter out anomalies."
         },
         {
           "q": "What can be inferred about the author's attitude toward citizen science?",
@@ -1668,7 +1668,7 @@ window.VESPER_LEVEL_EXAMS = {
             "It is entirely dismissive of its scientific value."
           ],
           "correctIndex": 2,
-          "explanation": "El autor destaca beneficios pero tambien expone criticas legitimas y como se abordan, mostrando una postura positiva pero matizada."
+          "explanation": "The writer highlights benefits but also sets out legitimate criticisms and how they are addressed: a positive but nuanced position."
         },
         {
           "q": "Which sentence best paraphrases 'this sense of shared ownership may prove just as valuable as the data itself'?",
@@ -1679,7 +1679,7 @@ window.VESPER_LEVEL_EXAMS = {
             "The feeling of collective involvement could be as important as the scientific results."
           ],
           "correctIndex": 3,
-          "explanation": "La frase significa que el sentido de participacion colectiva puede ser tan importante como los propios datos cientificos."
+          "explanation": "The sentence means that the feeling of collective participation can be as important as the scientific data themselves."
         }
       ]
     },
@@ -1694,7 +1694,7 @@ window.VESPER_LEVEL_EXAMS = {
         "Sales have already increased this month."
       ],
       "correctIndex": 1,
-      "explanation": "El hablante advierte que, si las ventas no mejoran, tendran que reducir la campana; no afirma que vaya a cancelarse con seguridad."
+      "explanation": "The speaker warns that if sales don't improve they will have to reduce the campaign; they don't say it will definitely be cancelled."
     },
     {
       "type": "listening",
@@ -1707,7 +1707,7 @@ window.VESPER_LEVEL_EXAMS = {
         "Cautiously optimistic but reluctant to make firm predictions."
       ],
       "correctIndex": 2,
-      "explanation": "La profesora dice que los resultados son prometedores ('promising') pero se muestra cauta ('cautious') sobre hacer predicciones, lo que refleja un optimismo prudente."
+      "explanation": "The professor says the results are 'promising' but is 'cautious' about making predictions, which reflects careful optimism."
     }
   ] },
   "C1": { "pass": 75, "exercises": [
@@ -1722,7 +1722,7 @@ window.VESPER_LEVEL_EXAMS = {
         "did encountered we"
       ],
       "correctIndex": 2,
-      "explanation": "Cuando una oracion empieza con un adverbio negativo como 'Seldom', se aplica la inversion: auxiliar + sujeto ('have we encountered')."
+      "explanation": "When a sentence starts with a negative adverb like 'Seldom', we use inversion: auxiliary + subject ('have we encountered')."
     },
     {
       "type": "multiple_choice",
@@ -1735,7 +1735,7 @@ window.VESPER_LEVEL_EXAMS = {
         "What impresses me"
       ],
       "correctIndex": 3,
-      "explanation": "Es una oracion hendida (cleft) con 'What': 'What impresses me most is...'. 'What' introduce la clausula nominal sujeto."
+      "explanation": "It's a cleft sentence with 'What': 'What impresses me most is...'. 'What' introduces the noun clause that acts as subject."
     },
     {
       "type": "fill_blank",
@@ -1744,8 +1744,8 @@ window.VESPER_LEVEL_EXAMS = {
       "answers": [
         "be"
       ],
-      "hint": "Subjuntivo en registro formal tras 'recommend that'.",
-      "explanation": "Tras verbos como 'recommend that' se usa el subjuntivo: la forma base 'be' sin conjugar, valida para todos los sujetos."
+      "hint": "Formal subjunctive after 'recommend that'.",
+      "explanation": "After verbs like 'recommend that' we use the subjunctive: the base form 'be', the same for all subjects."
     },
     {
       "type": "fill_blank",
@@ -1754,8 +1754,8 @@ window.VESPER_LEVEL_EXAMS = {
       "answers": [
         "would"
       ],
-      "hint": "Condicional invertido del tercer tipo: 'Had + sujeto...'.",
-      "explanation": "'Had the authorities acted' es la inversion de 'If the authorities had acted'. La oracion principal del condicional irreal usa 'would not have spread'."
+      "hint": "An inverted third conditional: 'Had + subject...'.",
+      "explanation": "'Had the authorities acted' is the inversion of 'If the authorities had acted'. The main clause of the unreal conditional uses 'would not have spread'."
     },
     {
       "type": "multiple_choice",
@@ -1768,12 +1768,12 @@ window.VESPER_LEVEL_EXAMS = {
         "had been"
       ],
       "correctIndex": 1,
-      "explanation": "Es un condicional mixto: condicion pasada ('had studied') con resultado presente ('by now'), por lo que se usa 'would be'."
+      "explanation": "It's a mixed conditional: a past condition ('had studied') with a present result ('by now'), so we use 'would be'."
     },
     {
       "type": "find_error",
       "skill": "grammar",
-      "question": "Encuentra el error en esta oracion de registro formal.",
+      "question": "Find the mistake in this formal sentence.",
       "segments": [
         "It is imperative that every applicant ",
         {
@@ -1787,7 +1787,7 @@ window.VESPER_LEVEL_EXAMS = {
       ],
       "correctIndex": 0,
       "correction": "submit (submits -> submit)",
-      "explanation": "Tras 'It is imperative that' se usa el subjuntivo: la forma base 'submit', no 'submits'."
+      "explanation": "After 'It is imperative that' we use the subjunctive: the base form 'submit', not 'submits'."
     },
     {
       "type": "word_order",
@@ -1822,7 +1822,7 @@ window.VESPER_LEVEL_EXAMS = {
         "key",
         "data"
       ],
-      "hint": "Inversion tras 'Not only' al inicio: auxiliar 'did' antes del sujeto."
+      "hint": "Inversion after an initial 'Not only': the auxiliary 'did' comes before the subject."
     },
     {
       "type": "multiple_choice",
@@ -1835,14 +1835,14 @@ window.VESPER_LEVEL_EXAMS = {
         "were presented"
       ],
       "correctIndex": 2,
-      "explanation": "Es una clausula relativa reducida en pasiva: 'the findings (that were) presented'. Se omite 'that were' y queda el participio 'presented'."
+      "explanation": "It's a reduced passive relative clause: 'the findings (that were) presented'. 'that were' is omitted, leaving the participle 'presented'."
     },
     {
       "type": "true_false",
       "skill": "grammar",
       "statement": "The sentence 'Rarely has a single discovery so transformed a discipline' is grammatically correct.",
       "answer": true,
-      "explanation": "Es correcta: tras el adverbio negativo 'Rarely' al inicio se aplica la inversion 'has a single discovery'."
+      "explanation": "It's correct: after the negative adverb 'Rarely' at the start, we use the inversion 'has a single discovery'."
     },
     {
       "type": "multiple_choice",
@@ -1855,7 +1855,7 @@ window.VESPER_LEVEL_EXAMS = {
         "improvise"
       ],
       "correctIndex": 0,
-      "explanation": "'Substantiate' significa respaldar o demostrar algo con evidencia, exactamente lo que piden los revisores."
+      "explanation": "'Substantiate' means to support or prove something with evidence, exactly what the reviewers are asking for."
     },
     {
       "type": "multiple_choice",
@@ -1868,7 +1868,7 @@ window.VESPER_LEVEL_EXAMS = {
         "scrutinize"
       ],
       "correctIndex": 3,
-      "explanation": "'Scrutinize' significa examinar minuciosamente, el sentido formal apropiado para auditores que revisan cuentas."
+      "explanation": "'Scrutinize' means to examine very carefully, the right formal meaning for auditors checking accounts."
     },
     {
       "type": "fill_blank",
@@ -1878,8 +1878,8 @@ window.VESPER_LEVEL_EXAMS = {
         "ambiguous",
         "equivocal"
       ],
-      "hint": "Adjetivo que describe algo con mas de un significado posible.",
-      "explanation": "'Ambiguous' (o el mas formal 'equivocal') describe algo abierto a multiples interpretaciones, lo que explica las lecturas opuestas."
+      "hint": "An adjective describing something with more than one possible meaning.",
+      "explanation": "'Ambiguous' (or the more formal 'equivocal') describes something open to several interpretations, which explains the opposite readings."
     },
     {
       "type": "multiple_choice",
@@ -1892,14 +1892,14 @@ window.VESPER_LEVEL_EXAMS = {
         "start up"
       ],
       "correctIndex": 1,
-      "explanation": "'Commence' es el sinonimo formal de 'begin', el unico apropiado para el registro academico."
+      "explanation": "'Commence' is the formal synonym of 'begin', the only one suitable for academic register."
     },
     {
       "type": "true_false",
       "skill": "vocab",
       "statement": "In formal English, 'pose a threat' is a correct collocation, as in 'Rising sea levels pose a threat to coastal cities.'",
       "answer": true,
-      "explanation": "'Pose a threat' es una colocacion correcta y formal que significa representar una amenaza."
+      "explanation": "'Pose a threat' is a correct, formal collocation meaning to be a danger."
     },
     {
       "type": "multiple_choice",
@@ -1912,12 +1912,12 @@ window.VESPER_LEVEL_EXAMS = {
         "forward"
       ],
       "correctIndex": 2,
-      "explanation": "'A foregone conclusion' es una colocacion fija que significa un resultado que se da por seguro de antemano."
+      "explanation": "'A foregone conclusion' is a fixed collocation meaning a result that is certain in advance."
     },
     {
       "type": "find_error",
       "skill": "vocab",
-      "question": "Encuentra el error de colocacion.",
+      "question": "Find the collocation mistake.",
       "segments": [
         "Please ",
         {
@@ -1931,7 +1931,7 @@ window.VESPER_LEVEL_EXAMS = {
       ],
       "correctIndex": 0,
       "correction": "bear in mind (keep in brain -> bear in mind)",
-      "explanation": "La colocacion correcta es 'bear in mind' (tener en cuenta), no 'keep in brain', que no existe en ingles."
+      "explanation": "The correct collocation is 'bear in mind' (remember, take into account), not 'keep in brain', which doesn't exist in English."
     },
     {
       "type": "multiple_choice",
@@ -1944,26 +1944,26 @@ window.VESPER_LEVEL_EXAMS = {
         "The system, improving it, surprised."
       ],
       "correctIndex": 0,
-      "explanation": "La nominalizacion convierte el verbo 'improve' en el sustantivo 'improvement', dando un estilo mas formal: 'The improvement of the system...'."
+      "explanation": "Nominalisation turns the verb 'improve' into the noun 'improvement', giving a more formal style: 'The improvement of the system...'."
     },
     {
       "type": "translate",
       "skill": "use",
-      "prompt": "Traduce a un ingles formal con cleft sentence: \"Lo que necesitamos es mas evidencia.\"",
+      "prompt": "Rewrite as a 'What' cleft sentence: We need more evidence.",
       "answers": [
         "what we need is more evidence"
       ],
-      "explanation": "La oracion hendida 'What we need is more evidence' enfatiza el objeto y corresponde al registro formal pedido."
+      "explanation": "The cleft sentence 'What we need is more evidence' emphasises the object, as required in formal register."
     },
     {
       "type": "translate",
       "skill": "use",
-      "prompt": "Traduce a un ingles formal e impersonal: \"Rara vez hemos visto resultados tan consistentes.\"",
+      "prompt": "Rewrite with inversion, starting 'Rarely…': We have rarely seen such consistent results.",
       "answers": [
         "rarely have we seen such consistent results",
         "seldom have we seen such consistent results"
       ],
-      "explanation": "Con 'Rarely/Seldom' al inicio se aplica la inversion: 'Rarely have we seen such consistent results'."
+      "explanation": "With 'Rarely/Seldom' at the start we use inversion: 'Rarely have we seen such consistent results'."
     },
     {
       "type": "multiple_choice",
@@ -1976,7 +1976,7 @@ window.VESPER_LEVEL_EXAMS = {
         "This claim cannot be adequately substantiated."
       ],
       "correctIndex": 3,
-      "explanation": "'This claim cannot be adequately substantiated' usa vocabulario formal y voz pasiva impersonal, propios del registro academico."
+      "explanation": "'This claim cannot be adequately substantiated' uses formal vocabulary and the impersonal passive, typical of academic register."
     },
     {
       "type": "fill_blank",
@@ -1985,13 +1985,13 @@ window.VESPER_LEVEL_EXAMS = {
       "answers": [
         "analysis"
       ],
-      "hint": "Nominalizacion del verbo 'analyse'.",
-      "explanation": "El sustantivo derivado de 'analyse' es 'analysis', necesario para la nominalizacion en registro formal."
+      "hint": "The nominalisation of the verb 'analyse'.",
+      "explanation": "The noun derived from 'analyse' is 'analysis', needed for nominalisation in formal register."
     },
     {
       "type": "find_error",
       "skill": "use",
-      "question": "Encuentra el desliz de registro: una palabra rompe el tono formal.",
+      "question": "Find the register slip: one phrase breaks the formal tone.",
       "segments": [
         "The methodology was robust, the sample representative, and the conclusions ",
         {
@@ -2005,7 +2005,7 @@ window.VESPER_LEVEL_EXAMS = {
       ],
       "correctIndex": 0,
       "correction": "well-founded / sound (pretty solid -> well-founded)",
-      "explanation": "'Pretty solid' es coloquial y rompe el registro formal; una opcion adecuada seria 'well-founded' o 'sound'. 'Lends credibility' si es formal y correcto."
+      "explanation": "'Pretty solid' is colloquial and breaks the formal register; a suitable option would be 'well-founded' or 'sound'. 'Lends credibility' is formal and correct."
     },
     {
       "type": "word_order",
@@ -2034,7 +2034,7 @@ window.VESPER_LEVEL_EXAMS = {
         "remain",
         "unpublished"
       ],
-      "hint": "Clausula relativa formal con preposicion adelantada: 'from which'."
+      "hint": "A formal relative clause with a fronted preposition: 'from which'."
     },
     {
       "type": "reading",
@@ -2051,7 +2051,7 @@ window.VESPER_LEVEL_EXAMS = {
             "To prove that most published psychology research is fraudulent"
           ],
           "correctIndex": 2,
-          "explanation": "El texto expone la crisis de replicacion y las distintas interpretaciones (alarmistas y criticas), sin defender una sola postura ni dar instrucciones."
+          "explanation": "The text presents the replication crisis and the different interpretations (alarmist and critical), without defending a single position or giving instructions."
         },
         {
           "q": "According to the passage, the academic publishing system contributes to the crisis mainly because it",
@@ -2062,7 +2062,7 @@ window.VESPER_LEVEL_EXAMS = {
             "refuses to publish any new research at all"
           ],
           "correctIndex": 1,
-          "explanation": "El segundo parrafo dice que el sistema premia resultados novedosos y significativos mostrando poco interes en replicaciones o resultados nulos."
+          "explanation": "The second paragraph says the system rewards new, significant results and shows little interest in replications or null results."
         },
         {
           "q": "What attitude do the 'critics of the alarmist framing' adopt toward replication failures?",
@@ -2073,7 +2073,7 @@ window.VESPER_LEVEL_EXAMS = {
             "They think they prove that science cannot self-correct"
           ],
           "correctIndex": 0,
-          "explanation": "El tercer parrafo explica que estos criticos ven los fallos de replicacion como variacion legitima, no como prueba de error."
+          "explanation": "The third paragraph explains that these critics see replication failures as legitimate variation, not proof of error."
         },
         {
           "q": "In the final paragraph, the phrase 'gained considerable traction' most nearly means that pre-registration has",
@@ -2084,7 +2084,7 @@ window.VESPER_LEVEL_EXAMS = {
             "become increasingly adopted"
           ],
           "correctIndex": 3,
-          "explanation": "'Gain traction' significa ganar aceptacion o impulso; aqui indica que el preregistro se ha adoptado cada vez mas."
+          "explanation": "'Gain traction' means to gain acceptance or momentum; here it shows that pre-registration has been increasingly adopted."
         },
         {
           "q": "The closing sentence implies that the author's overall stance is",
@@ -2095,7 +2095,7 @@ window.VESPER_LEVEL_EXAMS = {
             "indifferent to the outcome of the reforms"
           ],
           "correctIndex": 2,
-          "explanation": "La ultima frase sugiere una 'resiliencia' subestimada por los pesimistas, lo que revela un tono de optimismo cauteloso del autor."
+          "explanation": "The final sentence suggests a 'resilience' underestimated by pessimists, which reveals the writer's cautious optimism."
         }
       ]
     },
@@ -2110,7 +2110,7 @@ window.VESPER_LEVEL_EXAMS = {
         "Advanced economies have already solved the problem of emissions."
       ],
       "correctIndex": 1,
-      "explanation": "El ponente sostiene que, aunque existe cierto desacoplamiento, es demasiado lento, por lo que pide escepticismo ante el 'crecimiento verde' sin esfuerzo."
+      "explanation": "The speaker argues that, although some decoupling exists, it is too slow, so they call for scepticism about effortless 'green growth'."
     },
     {
       "type": "listening",
@@ -2123,7 +2123,7 @@ window.VESPER_LEVEL_EXAMS = {
         "Completely dismissive, considering the study fraudulent."
       ],
       "correctIndex": 0,
-      "explanation": "El ponente expresa reservas: la falta de informacion sobre el reclutamiento mina su confianza, aunque la muestra sea grande. No lo descarta por fraude."
+      "explanation": "The speaker has reservations: the lack of information about recruitment undermines their confidence, even though the sample is large. They don't reject it as fraud."
     }
   ] },
   "C2": { "pass": 78, "exercises": [
@@ -2138,7 +2138,7 @@ window.VESPER_LEVEL_EXAMS = {
         "Never has"
       ],
       "correctIndex": 3,
-      "explanation": "Con inversion enfatica y sujeto singular ('a more persuasive case'), el auxiliar concuerda en singular: 'Never has... been articulated'. La negacion adelantada exige inversion sujeto-auxiliar."
+      "explanation": "With emphatic inversion and a singular subject ('a more persuasive case'), the auxiliary is singular: 'Never has... been articulated'. A fronted negative requires subject–auxiliary inversion."
     },
     {
       "type": "multiple_choice",
@@ -2151,7 +2151,7 @@ window.VESPER_LEVEL_EXAMS = {
         "the compelling"
       ],
       "correctIndex": 2,
-      "explanation": "La estructura enfatica 'So + adjetivo + was/were + sujeto + that...' requiere el adjetivo 'compelling' tras 'So', con inversion del verbo copulativo."
+      "explanation": "The emphatic structure 'So + adjective + was/were + subject + that...' needs the adjective 'compelling' after 'So', with the linking verb inverted."
     },
     {
       "type": "multiple_choice",
@@ -2164,7 +2164,7 @@ window.VESPER_LEVEL_EXAMS = {
         "would be"
       ],
       "correctIndex": 1,
-      "explanation": "Tras verbos de propuesta o mocion ('move that') se usa el subjuntivo en ingles: la forma base 'be', sin concordancia ni tiempo: 'that the clause be struck'."
+      "explanation": "After verbs of proposal ('move that') English uses the subjunctive: the base form 'be', with no agreement or tense: 'that the clause be struck'."
     },
     {
       "type": "multiple_choice",
@@ -2177,7 +2177,7 @@ window.VESPER_LEVEL_EXAMS = {
         "are"
       ],
       "correctIndex": 0,
-      "explanation": "Con 'neither... nor...' el verbo concuerda con el elemento mas proximo. Aqui 'the underlying methodology' es singular, por lo que corresponde 'was'."
+      "explanation": "With 'neither... nor...' the verb agrees with the nearest element. Here 'the underlying methodology' is singular, so 'was' is correct."
     },
     {
       "type": "fill_blank",
@@ -2189,8 +2189,8 @@ window.VESPER_LEVEL_EXAMS = {
         "have we seen",
         "did we encounter"
       ],
-      "hint": "Adverbio negativo al inicio: exige inversion sujeto-auxiliar.",
-      "explanation": "Tras 'Rarely' en posicion inicial la oracion invierte auxiliar y sujeto, p. ej. 'have we encountered / do we encounter'. No se admite el orden normal 'we have encountered'."
+      "hint": "A negative adverb at the start requires subject–auxiliary inversion.",
+      "explanation": "After an initial 'Rarely' the sentence inverts the auxiliary and subject, e.g. 'have we encountered / do we encounter'. The normal order 'we have encountered' is not accepted."
     },
     {
       "type": "fill_blank",
@@ -2199,13 +2199,13 @@ window.VESPER_LEVEL_EXAMS = {
       "answers": [
         "be"
       ],
-      "hint": "Subjuntivo tras 'It is imperative that...'.",
-      "explanation": "Las construcciones con adjetivos de necesidad ('imperative', 'essential') seguidas de 'that' rigen subjuntivo: forma base 'be', sin '-s' aunque el sujeto sea singular ('every delegate be')."
+      "hint": "Subjunctive after 'It is imperative that...'.",
+      "explanation": "Adjectives of necessity ('imperative', 'essential') followed by 'that' take the subjunctive: the base form 'be', with no '-s' even with a singular subject ('every delegate be')."
     },
     {
       "type": "find_error",
       "skill": "grammar",
-      "question": "Encuentra el error en el uso de la inversion enfatica.",
+      "question": "Find the mistake in the use of emphatic inversion.",
       "segments": [
         "Not only ",
         {
@@ -2223,12 +2223,12 @@ window.VESPER_LEVEL_EXAMS = {
       ],
       "correctIndex": 0,
       "correction": "did the minister deny (Not only did the minister deny...)",
-      "explanation": "Tras 'Not only' en posicion inicial debe haber inversion con auxiliar: 'Not only did the minister deny...'. Mantener el orden normal 'the minister denied' es incorrecto."
+      "explanation": "After an initial 'Not only' there must be inversion with an auxiliary: 'Not only did the minister deny...'. Keeping the normal order 'the minister denied' is wrong."
     },
     {
       "type": "find_error",
       "skill": "grammar",
-      "question": "Encuentra el error de concordancia con sujeto complejo.",
+      "question": "Find the agreement mistake with a complex subject.",
       "segments": [
         "The proliferation ",
         {
@@ -2246,7 +2246,7 @@ window.VESPER_LEVEL_EXAMS = {
       ],
       "correctIndex": 1,
       "correction": "has (The proliferation ... has done)",
-      "explanation": "El nucleo del sujeto es 'The proliferation' (singular); 'of conflicting reports' es un complemento que no altera la concordancia. El verbo debe ser 'has done', no 'have done'."
+      "explanation": "The head of the subject is 'The proliferation' (singular); 'of conflicting reports' is a modifier that doesn't change agreement. The verb must be 'has done', not 'have done'."
     },
     {
       "type": "word_order",
@@ -2273,15 +2273,15 @@ window.VESPER_LEVEL_EXAMS = {
         "proved",
         "impossible"
       ],
-      "hint": "Estructura enfatica: So + adjetivo + verbo invertido + sujeto + that...",
-      "explanation": "La inversion enfatica con 'So + adjetivo' antepone el adjetivo y mueve el verbo copulativo delante del sujeto: 'So entrenched were the prejudices that...'."
+      "hint": "Emphatic structure: So + adjective + inverted verb + subject + that...",
+      "explanation": "Emphatic inversion with 'So + adjective' fronts the adjective and moves the linking verb before the subject: 'So entrenched were the prejudices that...'."
     },
     {
       "type": "true_false",
       "skill": "grammar",
       "statement": "In 'Under no circumstances should the files be released', the inversion of subject and auxiliary is grammatically required.",
       "answer": true,
-      "explanation": "Verdadero. Cuando una expresion negativa o restrictiva ('Under no circumstances') ocupa la posicion inicial, la inversion sujeto-auxiliar es obligatoria: 'should the files be released'."
+      "explanation": "True. When a negative or restrictive expression ('Under no circumstances') comes first, subject–auxiliary inversion is required: 'should the files be released'."
     },
     {
       "type": "multiple_choice",
@@ -2294,7 +2294,7 @@ window.VESPER_LEVEL_EXAMS = {
         "exacerbated"
       ],
       "correctIndex": 3,
-      "explanation": "'Ameliorate' (mejorar) contrasta con 'exacerbate' (agravar), que es lo que ocurrio de forma involuntaria. 'Corroborate' = confirmar, 'discern' = percibir, 'inhibit' = frenar, no encajan."
+      "explanation": "'Ameliorate' (improve) contrasts with 'exacerbate' (make worse), which is what happened unintentionally. 'Corroborate' = confirm, 'discern' = perceive, 'inhibit' = hold back; they don't fit."
     },
     {
       "type": "multiple_choice",
@@ -2307,7 +2307,7 @@ window.VESPER_LEVEL_EXAMS = {
         "inhibit"
       ],
       "correctIndex": 2,
-      "explanation": "'Corroborate' significa respaldar o confirmar con evidencia, exactamente lo que aportarian resultados independientes. 'Precipitate' = desencadenar, 'posit' = postular, 'inhibit' = inhibir."
+      "explanation": "'Corroborate' means to support or confirm with evidence, exactly what independent results would do. 'Precipitate' = trigger, 'posit' = propose, 'inhibit' = hold back."
     },
     {
       "type": "multiple_choice",
@@ -2320,7 +2320,7 @@ window.VESPER_LEVEL_EXAMS = {
         "catalyst"
       ],
       "correctIndex": 1,
-      "explanation": "Una 'dichotomy' es una division en dos categorias presentadas como opuestas y excluyentes, justo lo que describe el enunciado. 'Catalyst', 'nexus' y 'paradigm' no expresan esa oposicion binaria."
+      "explanation": "A 'dichotomy' is a division into two categories presented as opposite and mutually exclusive, exactly what the sentence describes. 'Catalyst', 'nexus' and 'paradigm' don't express that binary opposition."
     },
     {
       "type": "multiple_choice",
@@ -2333,14 +2333,14 @@ window.VESPER_LEVEL_EXAMS = {
         "plausible"
       ],
       "correctIndex": 0,
-      "explanation": "'Speculative' (especulativo, basado en conjeturas) justifica la cautela ante conclusiones firmes. 'Ubiquitous' = omnipresente, 'intractable' = irresoluble, 'plausible' = verosimil, no encajan con la peticion de prudencia."
+      "explanation": "'Speculative' (based on guesswork) justifies caution about firm conclusions. 'Ubiquitous' = everywhere, 'intractable' = unsolvable, 'plausible' = believable; they don't fit the call for caution."
     },
     {
       "type": "true_false",
       "skill": "vocab",
       "statement": "To say that a problem is 'intractable' implies that it can be resolved quickly and with little effort.",
       "answer": false,
-      "explanation": "Falso. 'Intractable' describe un problema dificil de manejar o resolver, persistente y resistente a soluciones; es lo contrario de algo facil y rapido de solucionar."
+      "explanation": "False. 'Intractable' describes a problem that is hard to manage or solve, persistent and resistant to solutions; the opposite of something quick and easy to fix."
     },
     {
       "type": "fill_blank",
@@ -2349,13 +2349,13 @@ window.VESPER_LEVEL_EXAMS = {
       "answers": [
         "catalyst"
       ],
-      "hint": "Abstracto: el agente que desencadena o acelera un proceso.",
-      "explanation": "Un 'catalyst' es el elemento que desencadena o acelera un proceso, encajando con 'precipitated a war'. El uso metaforico procede de la quimica."
+      "hint": "Abstract: the agent that triggers or speeds up a process.",
+      "explanation": "A 'catalyst' is the element that triggers or speeds up a process, which fits 'precipitated a war'. The metaphorical use comes from chemistry."
     },
     {
       "type": "translate",
       "skill": "vocab",
-      "prompt": "Traduce al ingles con registro academico: \"Sus conclusiones son, en el mejor de los casos, tentativas.\"",
+      "prompt": "Rewrite in academic register with 'tentative' and 'at best': Her conclusions are, if we are generous, only provisional.",
       "answers": [
         "her conclusions are tentative at best",
         "his conclusions are tentative at best",
@@ -2364,7 +2364,7 @@ window.VESPER_LEVEL_EXAMS = {
         "his findings are tentative at best",
         "their findings are tentative at best"
       ],
-      "explanation": "El marcador de matiz 'tentative' (provisional, no concluyente) y la locucion 'at best' (en el mejor de los casos) reproducen el registro academico del original."
+      "explanation": "The hedging word 'tentative' (provisional, not conclusive) and the phrase 'at best' (even in the most favourable view) create academic register."
     },
     {
       "type": "multiple_choice",
@@ -2377,7 +2377,7 @@ window.VESPER_LEVEL_EXAMS = {
         "nevertheless"
       ],
       "correctIndex": 3,
-      "explanation": "Se necesita un conector de contraste: pese a aprobarse la financiacion, hubo retrasos. 'Nevertheless' (no obstante) lo expresa. 'Therefore' (por tanto), 'moreover' (ademas) y 'likewise' (igualmente) no marcan contraste."
+      "explanation": "We need a linker of contrast: although the funding was approved, there were delays. 'Nevertheless' expresses this. 'Therefore', 'moreover' and 'likewise' don't signal contrast."
     },
     {
       "type": "multiple_choice",
@@ -2390,7 +2390,7 @@ window.VESPER_LEVEL_EXAMS = {
         "We couldn't really find a connection between the stuff."
       ],
       "correctIndex": 2,
-      "explanation": "El registro academico exige precision lexica y formalidad: 'no discernible correlation between the two variables'. Las demas opciones son coloquiales o imprecisas ('stuff', 'No way', 'linking up')."
+      "explanation": "Academic register requires lexical precision and formality: 'no discernible correlation between the two variables'. The other options are colloquial or imprecise ('stuff', 'No way', 'linking up')."
     },
     {
       "type": "multiple_choice",
@@ -2403,7 +2403,7 @@ window.VESPER_LEVEL_EXAMS = {
         "The crisis erupted after people dismantled safeguards."
       ],
       "correctIndex": 0,
-      "explanation": "La pasiva 'was dismantled' pone el foco en el resultado (los mecanismos de seguridad) y relega al agente, efecto estilistico buscado. Las activas destacan al agente ('someone', 'they', 'people')."
+      "explanation": "The passive 'was dismantled' puts the focus on the result (the safeguards) and backgrounds the agent, the intended stylistic effect. The active versions highlight the agent ('someone', 'they', 'people')."
     },
     {
       "type": "fill_blank",
@@ -2413,8 +2413,8 @@ window.VESPER_LEVEL_EXAMS = {
         "by contrast",
         "conversely"
       ],
-      "hint": "Conector que introduce una contraposicion directa entre dos casos paralelos.",
-      "explanation": "Para contraponer dos casos paralelos se usa 'by contrast' o 'conversely' (por el contrario / a la inversa). Ambos marcan oposicion directa entre las dos regiones."
+      "hint": "A linker that introduces a direct contrast between two parallel cases.",
+      "explanation": "To contrast two parallel cases we use 'by contrast' or 'conversely'. Both mark a direct opposition between the two regions."
     },
     {
       "type": "fill_blank",
@@ -2425,13 +2425,13 @@ window.VESPER_LEVEL_EXAMS = {
         "despite",
         "in spite of"
       ],
-      "hint": "Preposicion formal equivalente a 'despite' / 'a pesar de'.",
-      "explanation": "'Notwithstanding' es una preposicion de registro formal que significa 'a pesar de', equivalente a 'despite' o 'in spite of'. Las tres encajan con la idea concesiva del enunciado ('a pesar de las objeciones, la fusion siguio adelante')."
+      "hint": "A formal preposition equivalent to 'despite'.",
+      "explanation": "'Notwithstanding' is a formal preposition meaning 'despite', equivalent to 'despite' or 'in spite of'. All three fit the concessive idea of the sentence."
     },
     {
       "type": "translate",
       "skill": "use",
-      "prompt": "Traduce con registro formal: \"A pesar de las pruebas, el consejo se nego a reconsiderar su postura.\"",
+      "prompt": "Rewrite formally with 'Notwithstanding', 'Despite' or 'In spite of': The board had the evidence, but it refused to reconsider its position.",
       "answers": [
         "notwithstanding the evidence, the board refused to reconsider its position",
         "despite the evidence, the board refused to reconsider its position",
@@ -2440,12 +2440,12 @@ window.VESPER_LEVEL_EXAMS = {
         "despite the evidence, the council refused to reconsider its position",
         "in spite of the evidence, the council refused to reconsider its position"
       ],
-      "explanation": "El registro formal admite 'Notwithstanding / Despite / In spite of the evidence' seguido de 'the board/council refused to reconsider its position'."
+      "explanation": "Formal register accepts 'Notwithstanding / Despite / In spite of the evidence' followed by 'the board refused to reconsider its position'."
     },
     {
       "type": "find_error",
       "skill": "use",
-      "question": "Encuentra el error de coherencia logica en el uso del conector.",
+      "question": "Find the logical coherence mistake in the use of the linker.",
       "segments": [
         "The treatment showed no measurable benefit; ",
         {
@@ -2463,7 +2463,7 @@ window.VESPER_LEVEL_EXAMS = {
       ],
       "correctIndex": 0,
       "correction": "nevertheless (... benefit; nevertheless, the researchers remained convinced ...)",
-      "explanation": "'Consequently' (en consecuencia) implica causa-efecto coherente, pero aqui el resultado contradice la conviccion: corresponderia un conector de contraste como 'nevertheless'. El conector causal es el error."
+      "explanation": "'Consequently' implies a coherent cause–effect link, but here the result contradicts the belief: a linker of contrast like 'nevertheless' is needed. The causal linker is the mistake."
     },
     {
       "type": "reading",
@@ -2480,7 +2480,7 @@ window.VESPER_LEVEL_EXAMS = {
             "Measurement should be abandoned because it always distorts the goals it tracks."
           ],
           "correctIndex": 1,
-          "explanation": "La tesis central es matizada: la medicion es util pero se le ha concedido una autoridad que excede su competencia (ultimo parrafo). No aboga por abolirla (rechaza esa postura como 'dogmatism') ni por mas metricas."
+          "explanation": "The central thesis is nuanced: measurement is useful but has been given authority beyond its competence (last paragraph). The writer doesn't argue for abolishing it (rejecting that as 'dogmatism') or for more metrics."
         },
         {
           "q": "In the third paragraph, how does the author treat the view that the solution is 'better metrics rather than fewer of them'?",
@@ -2491,7 +2491,7 @@ window.VESPER_LEVEL_EXAMS = {
             "He ignores it in favour of his own proposal."
           ],
           "correctIndex": 2,
-          "explanation": "Es una concesion ('There is something to this') seguida de refutacion: el autor reconoce parte de razon pero sostiene que el fallo no es tecnico sino filosofico, dejando intacta la suposicion mas profunda."
+          "explanation": "It's a concession ('There is something to this') followed by a rebuttal: the writer partly agrees but argues the failure is philosophical, not technical, leaving the deeper assumption untouched."
         },
         {
           "q": "What does the author imply with the rhetorical question 'Who, after all, would argue against evidence?'",
@@ -2502,7 +2502,7 @@ window.VESPER_LEVEL_EXAMS = {
             "That the appeal of measurement is rhetorically disarming, which is precisely why it warrants suspicion."
           ],
           "correctIndex": 3,
-          "explanation": "La pregunta retorica es ironica: el autor la usa para exponer que el atractivo de la medicion es desarmante, y enseguida advierte que 'esa misma persuasion deberia hacernos detenernos'. No es una aceptacion literal."
+          "explanation": "The rhetorical question is ironic: the writer uses it to show that the appeal of measurement is disarming, and immediately warns that 'that very persuasiveness should give us pause'. It is not literal acceptance."
         },
         {
           "q": "The hospital example is used primarily to illustrate which idea?",
@@ -2513,7 +2513,7 @@ window.VESPER_LEVEL_EXAMS = {
             "That clinicians routinely act in bad faith."
           ],
           "correctIndex": 1,
-          "explanation": "El ejemplo ilustra que el indicador suplanta al objetivo: la metrica disenada para medir calidad acaba desplazandola ('the indicator becomes the objective, and the objective quietly evaporates'). No generaliza sobre la mala fe ni sobre la ineficiencia."
+          "explanation": "The example shows the indicator replacing the goal: the metric designed to measure quality ends up displacing it ('the indicator becomes the objective, and the objective quietly evaporates'). It doesn't generalise about bad faith or inefficiency."
         },
         {
           "q": "What is the author's overall purpose in the essay?",
@@ -2524,7 +2524,7 @@ window.VESPER_LEVEL_EXAMS = {
             "To promote the adoption of more sophisticated statistical techniques."
           ],
           "correctIndex": 0,
-          "explanation": "El proposito es defender una postura intermedia y reflexiva: contar lo que conviene contar pero conservar el juicio para detectar cuando 'el conteo ha empezado a mentir'. No es ni rechazo total ni mera descripcion neutral."
+          "explanation": "The purpose is to defend a thoughtful middle position: count what is worth counting, but keep the judgement to notice when 'the counting has begun to lie'. It is neither total rejection nor a neutral description."
         }
       ]
     },
@@ -2539,7 +2539,7 @@ window.VESPER_LEVEL_EXAMS = {
         "That justice is a more important goal than efficiency in all cases."
       ],
       "correctIndex": 1,
-      "explanation": "El hablante concede la eficiencia del mercado y ataca el salto implicito de 'eficiente' a 'justo'. Cuestiona la suposicion de que la eficiencia baste para legitimar moralmente los resultados, no niega la eficiencia ni jerarquiza los dos valores en general."
+      "explanation": "The speaker concedes market efficiency and attacks the implicit jump from 'efficient' to 'just'. They question the assumption that efficiency is enough to justify outcomes morally; they don't deny efficiency or rank the two values in general."
     },
     {
       "type": "listening",
@@ -2552,7 +2552,7 @@ window.VESPER_LEVEL_EXAMS = {
         "That carbon taxes are the most apolitical solution available to policymakers."
       ],
       "correctIndex": 0,
-      "explanation": "El hablante sostiene que presentar el impuesto como neutral y tecnocratico oculta juicios de valor inevitables ('whose welfare counts and over what horizon'). Califica esa neutralidad aparente de 'contrabando' de politica, no discute el coste ni acepta que sea apolitico."
+      "explanation": "The speaker argues that presenting the tax as neutral and technocratic hides unavoidable value judgements ('whose welfare counts and over what horizon'). They call that apparent neutrality a way of smuggling in politics; they don't discuss cost or accept that it is apolitical."
     }
   ] }
 };
@@ -2853,7 +2853,7 @@ window.VESPER_LEVEL_EXAMS = {
           "builds"
         ],
         "correctIndex": 2,
-        "explanation": "Pasiva en present perfect ('has been built') porque 'since' marca una conexión con el presente y un resultado actual."
+        "explanation": "Present perfect passive ('has been built') because 'since' links to the present and a current result."
       },
       {
         "type": "multiple_choice",
@@ -2866,7 +2866,7 @@ window.VESPER_LEVEL_EXAMS = {
           "will raise"
         ],
         "correctIndex": 0,
-        "explanation": "Primer condicional: 'if' + presente simple ('raises'), y la consecuencia con 'will'."
+        "explanation": "First conditional: 'if' + present simple ('raises'), and the result with 'will'."
       },
       {
         "type": "fill_blank",
@@ -2876,8 +2876,8 @@ window.VESPER_LEVEL_EXAMS = {
           "who",
           "that"
         ],
-        "hint": "Pronombre relativo para una persona.",
-        "explanation": "Para personas usamos 'who' (o 'that'): 'The engineer who/that designed...'."
+        "hint": "A relative pronoun for a person.",
+        "explanation": "For people we use 'who' (or 'that'): 'The engineer who/that designed...'."
       },
       {
         "type": "fill_blank",
@@ -2886,22 +2886,22 @@ window.VESPER_LEVEL_EXAMS = {
         "answers": [
           "since"
         ],
-        "hint": "Un punto de inicio en el tiempo (un año).",
-        "explanation": "Con un momento concreto de inicio usamos 'since' (since 2019)."
+        "hint": "A starting point in time (a year).",
+        "explanation": "With a specific starting point we use 'since' (since 2019)."
       },
       {
         "type": "true_false",
         "skill": "vocab",
         "statement": "If you 'set up' a company, you start or establish it.",
         "answer": true,
-        "explanation": "'Set up' significa crear/establecer algo, como una empresa."
+        "explanation": "'Set up' means to create or establish something, like a company."
       },
       {
         "type": "true_false",
         "skill": "vocab",
         "statement": "To 'look after' a pet means to ignore it completely.",
         "answer": false,
-        "explanation": "'Look after' significa cuidar de algo o alguien, no ignorarlo."
+        "explanation": "'Look after' means to take care of something or someone, not to ignore it."
       },
       {
         "type": "word_order",
@@ -2924,12 +2924,12 @@ window.VESPER_LEVEL_EXAMS = {
           "two",
           "researchers"
         ],
-        "hint": "Voz pasiva en pasado: sujeto + was + participio + by + agente."
+        "hint": "Past passive: subject + was + past participle + by + agent."
       },
       {
         "type": "translate",
         "skill": "use",
-        "prompt": "Traduce: \"Si tuviera más tiempo, aprendería a programar.\"",
+        "prompt": "Make a second conditional: I don't have much free time, so I don't learn to code. (If I had more time…)",
         "answers": [
           "if i had more time i would learn to code",
           "if i had more time, i would learn to code",
@@ -2938,12 +2938,12 @@ window.VESPER_LEVEL_EXAMS = {
           "if i had more time i would learn to program",
           "if i had more time, i would learn to program"
         ],
-        "explanation": "Segundo condicional: 'if' + pasado simple ('had'), consecuencia con 'would'."
+        "explanation": "Second conditional: 'if' + past simple ('had'), result with 'would'."
       },
       {
         "type": "find_error",
         "skill": "grammar",
-        "question": "Encuentra el error.",
+        "question": "Find the mistake.",
         "segments": [
           "You ",
           {
@@ -2956,8 +2956,8 @@ window.VESPER_LEVEL_EXAMS = {
           " the office."
         ],
         "correctIndex": 0,
-        "correction": "should turn off (sin 'to')",
-        "explanation": "Después de un modal como 'should' usamos el infinitivo sin 'to': 'should turn off'."
+        "correction": "should turn off (no 'to')",
+        "explanation": "After a modal like 'should' we use the infinitive without 'to': 'should turn off'."
       },
       {
         "type": "multiple_choice",
@@ -2970,12 +2970,12 @@ window.VESPER_LEVEL_EXAMS = {
           "would"
         ],
         "correctIndex": 0,
-        "explanation": "Deducción lógica con bastante certeza: 'must' (debe de estar en la reunión)."
+        "explanation": "A logical deduction with strong certainty: 'must' (she is very probably in the meeting)."
       },
       {
         "type": "find_error",
         "skill": "grammar",
-        "question": "Encuentra el error.",
+        "question": "Find the mistake.",
         "segments": [
           "My colleagues ",
           {
@@ -2989,7 +2989,7 @@ window.VESPER_LEVEL_EXAMS = {
         ],
         "correctIndex": 1,
         "correction": "using (avoid + -ing)",
-        "explanation": "Después de 'avoid' se usa gerundio: 'avoid using'."
+        "explanation": "After 'avoid' we use the -ing form: 'avoid using'."
       }
     ],
     "B2": [
@@ -3004,7 +3004,7 @@ window.VESPER_LEVEL_EXAMS = {
           "has already shredded"
         ],
         "correctIndex": 2,
-        "explanation": "El past perfect (had + participio) describe una accion terminada antes de otro momento pasado ('arrived')."
+        "explanation": "The past perfect (had + past participle) describes an action finished before another past moment ('arrived')."
       },
       {
         "type": "multiple_choice",
@@ -3017,7 +3017,7 @@ window.VESPER_LEVEL_EXAMS = {
           "Hardly when"
         ],
         "correctIndex": 1,
-        "explanation": "La inversion 'No sooner... than' indica que una accion ocurrio inmediatamente despues de otra."
+        "explanation": "The inversion 'No sooner... than' shows that one action happened immediately after another."
       },
       {
         "type": "fill_blank",
@@ -3026,8 +3026,8 @@ window.VESPER_LEVEL_EXAMS = {
         "answers": [
           "be"
         ],
-        "hint": "Subjuntivo tras 'insist that'.",
-        "explanation": "Tras verbos como 'insist/suggest/demand that', se usa el subjuntivo: forma base 'be', sin importar el sujeto."
+        "hint": "Subjunctive after 'insist that'.",
+        "explanation": "After verbs like 'insist/suggest/demand that', we use the subjunctive: the base form 'be', whatever the subject."
       },
       {
         "type": "fill_blank",
@@ -3037,22 +3037,22 @@ window.VESPER_LEVEL_EXAMS = {
           "painted",
           "done"
         ],
-        "hint": "Causativo: have + objeto + participio.",
-        "explanation": "El causativo 'have something done' usa el participio pasado para indicar que otra persona realiza la accion."
+        "hint": "Causative: have + object + past participle.",
+        "explanation": "The causative 'have something done' uses the past participle to show that someone else does the action."
       },
       {
         "type": "true_false",
         "skill": "vocab",
         "statement": "If you are 'ambivalent' about a proposal, it means you firmly support it.",
         "answer": false,
-        "explanation": "'Ambivalent' significa tener sentimientos encontrados o estar indeciso, no apoyar firmemente algo."
+        "explanation": "'Ambivalent' means having mixed feelings or being undecided, not firmly supporting something."
       },
       {
         "type": "true_false",
         "skill": "vocab",
         "statement": "In a formal register, 'commence' is a suitable synonym for 'begin'.",
         "answer": true,
-        "explanation": "'Commence' es un sinonimo de registro formal de 'begin' (empezar/comenzar)."
+        "explanation": "'Commence' is a formal synonym of 'begin'."
       },
       {
         "type": "word_order",
@@ -3085,24 +3085,24 @@ window.VESPER_LEVEL_EXAMS = {
           "it",
           "earlier"
         ],
-        "hint": "Tercer condicional con inversion (sin 'if')."
+        "hint": "Third conditional with inversion (no 'if')."
       },
       {
         "type": "translate",
         "skill": "use",
-        "prompt": "Traduce al ingles (registro formal): \"Le agradeceriamos que nos proporcionara los documentos solicitados.\"",
+        "prompt": "Rewrite this request formally, starting 'We would appreciate it if…' or 'We would be grateful if…': Send us the documents we asked for.",
         "answers": [
           "we would appreciate it if you could provide the requested documents",
           "we would appreciate it if you could provide us with the requested documents",
           "we would be grateful if you could provide the requested documents",
           "we would be grateful if you could provide us with the requested documents"
         ],
-        "explanation": "Se usa un condicional cortes ('we would appreciate/be grateful if you could') y vocabulario formal ('provide', 'requested documents')."
+        "explanation": "We use a polite conditional ('we would appreciate/be grateful if you could') and formal vocabulary ('provide', 'requested documents')."
       },
       {
         "type": "find_error",
         "skill": "grammar",
-        "question": "Encuentra el error.",
+        "question": "Find the mistake.",
         "segments": [
           "Despite ",
           {
@@ -3115,13 +3115,13 @@ window.VESPER_LEVEL_EXAMS = {
           " open to the public."
         ],
         "correctIndex": 0,
-        "correction": "Despite (sin 'of')",
-        "explanation": "'Despite' va seguido directamente de un sustantivo, sin 'of'. 'In spite of' si lleva 'of', pero 'despite of' es incorrecto."
+        "correction": "Despite (no 'of')",
+        "explanation": "'Despite' is followed directly by a noun, with no 'of'. 'In spite of' does take 'of', but 'despite of' is wrong."
       },
       {
         "type": "find_error",
         "skill": "grammar",
-        "question": "Encuentra el error.",
+        "question": "Find the mistake.",
         "segments": [
           "She ",
           {
@@ -3135,7 +3135,7 @@ window.VESPER_LEVEL_EXAMS = {
         ],
         "correctIndex": 1,
         "correction": "for (since -> for)",
-        "explanation": "Con un periodo de duracion ('three years') se usa 'for'; 'since' se usa con un punto de inicio concreto en el tiempo."
+        "explanation": "With a period of time ('three years') we use 'for'; 'since' is used with a specific starting point."
       },
       {
         "type": "multiple_choice",
@@ -3148,7 +3148,7 @@ window.VESPER_LEVEL_EXAMS = {
           "The researchers obtained a substantial amount of useful data from the survey."
         ],
         "correctIndex": 3,
-        "explanation": "'Obtained' y 'a substantial amount of' son de registro formal y correctos; 'numerous' no concuerda con el incontable 'data', y las otras opciones son informales."
+        "explanation": "'Obtained' and 'a substantial amount of' are formal and correct; 'numerous' doesn't agree with the uncountable 'data', and the other options are informal."
       }
     ],
     "C1": [
@@ -3163,7 +3163,7 @@ window.VESPER_LEVEL_EXAMS = {
           "does the board approved"
         ],
         "correctIndex": 1,
-        "explanation": "Tras un adverbio negativo en posicion inicial (Seldom) se requiere inversion: auxiliar + sujeto. La forma correcta es 'has the board approved'."
+        "explanation": "After an initial negative adverb (Seldom) we need inversion: auxiliary + subject. The correct form is 'has the board approved'."
       },
       {
         "type": "multiple_choice",
@@ -3176,7 +3176,7 @@ window.VESPER_LEVEL_EXAMS = {
           "What undermined the report was its reliance on outdated data."
         ],
         "correctIndex": 3,
-        "explanation": "Una oracion hendida (cleft) con 'What' usa el patron 'What + clausula + was/is + complemento': 'What undermined the report was its reliance on outdated data.'"
+        "explanation": "A cleft sentence with 'What' follows the pattern 'What + clause + was/is + complement': 'What undermined the report was its reliance on outdated data.'"
       },
       {
         "type": "fill_blank",
@@ -3187,8 +3187,8 @@ window.VESPER_LEVEL_EXAMS = {
           "could",
           "might"
         ],
-        "hint": "Condicional perfecto en la oracion principal tras inversion de 'Had'.",
-        "explanation": "Con la inversion del tercer condicional (Had + sujeto + participio), la principal lleva un modal + 'have' + participio: would/could/might have been avoided."
+        "hint": "A perfect conditional in the main clause after the inversion with 'Had'.",
+        "explanation": "With the inverted third conditional (Had + subject + past participle), the main clause takes a modal + 'have' + past participle: would/could/might have been avoided."
       },
       {
         "type": "fill_blank",
@@ -3197,8 +3197,8 @@ window.VESPER_LEVEL_EXAMS = {
         "answers": [
           "submit"
         ],
-        "hint": "Subjuntivo en registro formal tras 'insist that'.",
-        "explanation": "Tras verbos de mandato/insistencia (insist that) el ingles formal usa el subjuntivo: la forma base 'submit' sin -s, para cualquier sujeto."
+        "hint": "Formal subjunctive after 'insist that'.",
+        "explanation": "After verbs of command or insistence (insist that), formal English uses the subjunctive: the base form 'submit' with no -s, for any subject."
       },
       {
         "type": "multiple_choice",
@@ -3211,14 +3211,14 @@ window.VESPER_LEVEL_EXAMS = {
           "speculate"
         ],
         "correctIndex": 2,
-        "explanation": "'Substantiate' significa respaldar o demostrar una afirmacion con pruebas, exactamente lo que piden los revisores."
+        "explanation": "'Substantiate' means to support or prove a claim with evidence, exactly what the reviewers are asking for."
       },
       {
         "type": "true_false",
         "skill": "vocab",
         "statement": "In academic English, 'an ambiguous finding' is one that can be interpreted in more than one way.",
         "answer": true,
-        "explanation": "'Ambiguous' describe algo que admite mas de una interpretacion, por lo que la afirmacion es verdadera."
+        "explanation": "'Ambiguous' describes something that allows more than one interpretation, so the statement is true."
       },
       {
         "type": "word_order",
@@ -3241,12 +3241,12 @@ window.VESPER_LEVEL_EXAMS = {
           "remain",
           "inconclusive"
         ],
-        "hint": "Clausula de relativo reducida ('which was collected' -> 'collected'); recuerda que 'data' suele tomar verbo plural en registro academico."
+        "hint": "A reduced relative clause ('which was collected' -> 'collected'); remember that 'data' often takes a plural verb in academic register."
       },
       {
         "type": "find_error",
         "skill": "grammar",
-        "question": "Encuentra el error de registro/gramatica en esta oracion academica formal.",
+        "question": "Find the register/grammar mistake in this formal academic sentence.",
         "segments": [
           "Not only ",
           {
@@ -3263,13 +3263,13 @@ window.VESPER_LEVEL_EXAMS = {
           " overstated."
         ],
         "correctIndex": 0,
-        "correction": "was the methodology flawed (inversion tras 'Not only')",
-        "explanation": "Tras 'Not only' en posicion inicial se requiere inversion sujeto-auxiliar: 'Not only was the methodology flawed'."
+        "correction": "was the methodology flawed (inversion after 'Not only')",
+        "explanation": "After an initial 'Not only', subject–auxiliary inversion is required: 'Not only was the methodology flawed'."
       },
       {
         "type": "translate",
         "skill": "use",
-        "prompt": "Traduce al ingles en registro formal: \"Lo que mas me impresiona es el rigor de su metodologia.\"",
+        "prompt": "Rewrite as a formal 'What' cleft sentence: The rigour of her methodology impresses me most.",
         "answers": [
           "what impresses me most is the rigour of his methodology",
           "what impresses me most is the rigour of her methodology",
@@ -3280,7 +3280,7 @@ window.VESPER_LEVEL_EXAMS = {
           "what impresses me the most is the rigor of his methodology",
           "what impresses me the most is the rigor of her methodology"
         ],
-        "explanation": "Oracion hendida con 'What': 'What impresses me most is the rigour of his/her methodology.' Se aceptan grafias britanica (rigour) y americana (rigor)."
+        "explanation": "A cleft sentence with 'What': 'What impresses me most is the rigour of his/her methodology.' Both British (rigour) and American (rigor) spellings are accepted."
       },
       {
         "type": "reading",
@@ -3297,7 +3297,7 @@ window.VESPER_LEVEL_EXAMS = {
               "Cities have become measurably noisier over the past century."
             ],
             "correctIndex": 0,
-            "explanation": "El texto presenta la ecologia del paisaje sonoro y su tesis de que el caracter acustico (no solo el volumen) configura la experiencia urbana y exige metodos nuevos."
+            "explanation": "The text presents soundscape ecology and its thesis that acoustic character (not just volume) shapes urban experience and requires new methods."
           },
           {
             "q": "Why do soundscape researchers consider traditional noise mapping inadequate?",
@@ -3308,7 +3308,7 @@ window.VESPER_LEVEL_EXAMS = {
               "It overstates the dangers of quiet environments."
             ],
             "correctIndex": 2,
-            "explanation": "El parrafo dos explica que dos calles con identicos decibeles pueden vivirse de modo opuesto; el mapeo tradicional no capta esa diferencia cualitativa."
+            "explanation": "Paragraph two explains that two streets with identical decibel levels can be experienced in opposite ways; traditional mapping misses that qualitative difference."
           },
           {
             "q": "How do soundscape advocates respond to the charge that their criteria are too subjective?",
@@ -3319,7 +3319,7 @@ window.VESPER_LEVEL_EXAMS = {
               "They claim subjectivity is irrelevant to urban planning."
             ],
             "correctIndex": 1,
-            "explanation": "En el tercer parrafo los defensores conceden la subjetividad pero replican que el estandar cuantitativo tambien esconde juicios de valor tras una apariencia de objetividad."
+            "explanation": "In the third paragraph supporters concede subjectivity but reply that the quantitative standard also hides value judgements behind an appearance of objectivity."
           },
           {
             "q": "In the final paragraph, the phrase 'composing cities as much as constructing them' is used to suggest that planners may need to",
@@ -3330,7 +3330,7 @@ window.VESPER_LEVEL_EXAMS = {
               "build cities more cheaply than before."
             ],
             "correctIndex": 0,
-            "explanation": "'Composing' (componer, como musica) frente a 'constructing' sugiere que disenar el sonido urbano requerira un cuidado artistico y deliberado, no solo construccion fisica."
+            "explanation": "'Composing' (as in music) rather than 'constructing' suggests that designing urban sound will require deliberate, artistic care, not just physical construction."
           },
           {
             "q": "What is the author's overall tone toward soundscape ecology?",
@@ -3341,7 +3341,7 @@ window.VESPER_LEVEL_EXAMS = {
               "Cautiously favourable, presenting its arguments seriously while acknowledging the critics."
             ],
             "correctIndex": 3,
-            "explanation": "El autor expone con seriedad los argumentos del campo y reconoce a los criticos sin ridiculizarlos; el tono es cautelosamente favorable."
+            "explanation": "The writer presents the field's arguments seriously and acknowledges the critics without ridiculing them; the tone is cautiously favourable."
           }
         ]
       },
@@ -3357,7 +3357,7 @@ window.VESPER_LEVEL_EXAMS = {
           "Bilingual children are permanently behind monolingual children in every language."
         ],
         "correctIndex": 1,
-        "explanation": "El ponente sostiene que el supuesto retraso desaparece al sumar el vocabulario de ambos idiomas, por lo que los estudios de una sola lengua pueden inducir a error."
+        "explanation": "The speaker argues that the supposed delay disappears when you add the vocabulary of both languages, so single-language studies can be misleading."
       }
     ],
     "C2": [
@@ -3372,7 +3372,7 @@ window.VESPER_LEVEL_EXAMS = {
           "Had"
         ],
         "correctIndex": 3,
-        "explanation": "Es una condicional de tercer tipo con inversion: 'Had the committee anticipated...' equivale a 'If the committee had anticipated...'. Las demas opciones no encajan con el participio pasado 'anticipated' ni con el resultado hipotetico pasado."
+        "explanation": "It's a third conditional with inversion: 'Had the committee anticipated...' = 'If the committee had anticipated...'. The other options don't fit the past participle 'anticipated' or the hypothetical past result."
       },
       {
         "type": "multiple_choice",
@@ -3385,7 +3385,7 @@ window.VESPER_LEVEL_EXAMS = {
           "discerned"
         ],
         "correctIndex": 2,
-        "explanation": "'Exacerbate' significa agravar o empeorar, lo opuesto a 'ameliorate' (mejorar), coherente con 'Far from...'. 'Corroborate' es confirmar, 'discern' percibir y 'posit' postular, ninguno encaja."
+        "explanation": "'Exacerbate' means to make worse, the opposite of 'ameliorate' (improve), consistent with 'Far from...'. 'Corroborate' = confirm, 'discern' = perceive and 'posit' = propose; none fits."
       },
       {
         "type": "fill_blank",
@@ -3396,13 +3396,13 @@ window.VESPER_LEVEL_EXAMS = {
           "persuasive",
           "eloquent"
         ],
-        "hint": "Inversion enfatica: 'So + adjetivo + was...'. Necesitas un adjetivo que describa una retorica irresistible.",
-        "explanation": "La estructura 'So compelling was X that...' antepone el adjetivo para dar enfasis. Adjetivos como 'compelling', 'persuasive' o 'eloquent' completan el sentido de un discurso que convence hasta a los criticos."
+        "hint": "Emphatic inversion: 'So + adjective + was...'. You need an adjective describing irresistible rhetoric.",
+        "explanation": "The structure 'So compelling was X that...' fronts the adjective for emphasis. Adjectives like 'compelling', 'persuasive' or 'eloquent' complete the idea of a speech that convinces even the critics."
       },
       {
         "type": "find_error",
         "skill": "grammar",
-        "question": "Encuentra el error de concordancia con sujeto complejo.",
+        "question": "Find the agreement mistake with a complex subject.",
         "segments": [
           "Neither the senator nor her aides ",
           {
@@ -3419,8 +3419,8 @@ window.VESPER_LEVEL_EXAMS = {
           " misconstrued."
         ],
         "correctIndex": 0,
-        "correction": "were (neither...nor: el verbo concuerda con 'aides', plural)",
-        "explanation": "Con 'neither...nor', el verbo concuerda con el sujeto mas cercano; aqui 'aides' es plural, asi que corresponde 'were'. 'Concede' y 'had been' son correctos."
+        "correction": "were (neither...nor: the verb agrees with 'aides', plural)",
+        "explanation": "With 'neither...nor', the verb agrees with the nearest subject; here 'aides' is plural, so 'were' is needed. 'Concede' and 'had been' are correct."
       },
       {
         "type": "multiple_choice",
@@ -3433,7 +3433,7 @@ window.VESPER_LEVEL_EXAMS = {
           "Honestly, the intervention totally works, no question about it."
         ],
         "correctIndex": 0,
-        "explanation": "El registro academico C2 favorece la cautela: 'tentatively suggest', 'may confer' y 'further corroboration is warranted' marcan provisionalidad. Las otras opciones son categoricas o coloquiales, impropias de un abstract."
+        "explanation": "C2 academic register favours caution: 'tentatively suggest', 'may confer' and 'further corroboration is warranted' signal provisionality. The other options are categorical or colloquial, unsuitable for an abstract."
       },
       {
         "type": "word_order",
@@ -3460,27 +3460,27 @@ window.VESPER_LEVEL_EXAMS = {
           "the",
           "tribunal"
         ],
-        "hint": "Inversion negativa enfatica: 'Never before had + sujeto + participio...'.",
-        "explanation": "Tras un adverbio negativo inicial ('Never before') se invierte el auxiliar y el sujeto: 'had such a paradox confronted the tribunal'. Es la estructura de enfasis tipica del C2."
+        "hint": "Emphatic negative inversion: 'Never before had + subject + past participle...'.",
+        "explanation": "After an initial negative adverb ('Never before') the auxiliary and subject are inverted: 'had such a paradox confronted the tribunal'. It's the typical C2 emphatic structure."
       },
       {
         "type": "translate",
         "skill": "use",
-        "prompt": "Traduce al ingles con registro formal: \"Propongo que la mocion sea aplazada hasta nuevo aviso.\"",
+        "prompt": "Rewrite formally with the subjunctive, starting 'I move that…' or 'I propose that…': Let's postpone the motion until further notice.",
         "answers": [
           "i move that the motion be postponed until further notice",
           "i propose that the motion be postponed until further notice",
           "i move that the motion be deferred until further notice",
           "i propose that the motion be deferred until further notice"
         ],
-        "explanation": "Tras verbos de propuesta como 'move' o 'propose', el ingles formal usa el subjuntivo base ('be postponed', no 'is postponed'). 'Until further notice' traduce 'hasta nuevo aviso'."
+        "explanation": "After verbs of proposal like 'move' or 'propose', formal English uses the base subjunctive ('be postponed', not 'is postponed'). 'Until further notice' = until you are told otherwise."
       },
       {
         "type": "true_false",
         "skill": "vocab",
         "statement": "If a phenomenon is described as 'ubiquitous', it is found almost everywhere.",
         "answer": true,
-        "explanation": "'Ubiquitous' significa omnipresente, que aparece en todas partes. Por tanto la afirmacion es verdadera."
+        "explanation": "'Ubiquitous' means present everywhere. So the statement is true."
       },
       {
         "type": "multiple_choice",
@@ -3493,7 +3493,7 @@ window.VESPER_LEVEL_EXAMS = {
           "paradigm"
         ],
         "correctIndex": 2,
-        "explanation": "Un 'catalyst' es lo que desencadena o acelera un proceso, justo lo que describe la frase. 'Dichotomy' es una division en dos, 'nexus' un punto de conexion y 'paradigm' un modelo, ninguno encaja."
+        "explanation": "A 'catalyst' is what triggers or speeds up a process, exactly what the sentence describes. 'Dichotomy' is a division into two, 'nexus' a connection point and 'paradigm' a model; none fits."
       },
       {
         "type": "reading",
@@ -3510,7 +3510,7 @@ window.VESPER_LEVEL_EXAMS = {
               "Humility can be successfully legislated through reform."
             ],
             "correctIndex": 1,
-            "explanation": "El autor sostiene que las instituciones que critican la credulidad publica son quienes fabrican la certeza; culpar solo al publico es una 'conveniente evasion'."
+            "explanation": "The writer argues that the institutions that criticise public credulity are the ones manufacturing certainty; blaming only the public is a 'convenient evasion'."
           },
           {
             "q": "The phrase 'a performance of concern that conveniently absolves its performers of any complicity' is best described as",
@@ -3521,7 +3521,7 @@ window.VESPER_LEVEL_EXAMS = {
               "ironic criticism of those who lament public credulity"
             ],
             "correctIndex": 3,
-            "explanation": "La frase es ironica y critica: tacha la preocupacion de los comentaristas de mera 'actuacion' que los exime de su propia responsabilidad."
+            "explanation": "The sentence is ironic and critical: it dismisses the commentators' concern as a mere 'performance' that excuses them from their own responsibility."
           },
           {
             "q": "Why does the author mention 'A scientist who refuses ever to commit is not admirably humble but merely useless'?",
@@ -3532,7 +3532,7 @@ window.VESPER_LEVEL_EXAMS = {
               "To abandon the main argument entirely"
             ],
             "correctIndex": 0,
-            "explanation": "Es una concesion: el autor matiza su tesis admitiendo que la indecision perpetua tambien es un defecto, para evitar caer en el relativismo absoluto."
+            "explanation": "It's a concession: the writer qualifies the thesis by admitting that endless indecision is also a flaw, to avoid falling into total relativism."
           },
           {
             "q": "What does the author imply is the real solution to the problem?",
@@ -3543,7 +3543,7 @@ window.VESPER_LEVEL_EXAMS = {
               "Simply urging people to be more humble"
             ],
             "correctIndex": 1,
-            "explanation": "El autor descarta la mera exhortacion ('exhortation is cheap') y propone atender a los incentivos que premian la estridencia, es decir, reformar las estructuras."
+            "explanation": "The writer rejects mere exhortation ('exhortation is cheap') and proposes addressing the incentives that reward stridency, i.e. reforming the structures."
           },
           {
             "q": "The overall tone of the passage can best be characterized as",
@@ -3554,7 +3554,7 @@ window.VESPER_LEVEL_EXAMS = {
               "measured but pointedly critical"
             ],
             "correctIndex": 3,
-            "explanation": "El tono es mesurado y matizado (hace concesiones, distingue grados) pero a la vez incisivamente critico hacia los comentaristas hipocritas."
+            "explanation": "The tone is measured and nuanced (it makes concessions and distinguishes degrees) but also sharply critical of hypocritical commentators."
           }
         ]
       },
@@ -3569,7 +3569,7 @@ window.VESPER_LEVEL_EXAMS = {
           "Conceding that growth and the environment cannot coexist"
         ],
         "correctIndex": 1,
-        "explanation": "El orador no concede ni propone tecnologia; identifica y refuta una suposicion implicita ('smuggles in an assumption') del oponente: que los modos actuales de produccion son los unicos posibles."
+        "explanation": "The speaker neither concedes nor proposes a technology; they identify and refute the opponent's implicit assumption ('smuggles in an assumption'): that current modes of production are the only possible ones."
       }
     ]
   };

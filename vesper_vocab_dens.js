@@ -550,15 +550,18 @@ window.VESPER_VOCAB_DENS = (function () {
   function clean(s) { return ("" + (s == null ? "" : s)).trim(); }
   function keyOf(en) { return clean(en).toLowerCase().replace(/^to\s+/, ""); }
 
-  /* extrae pares EN→ES de los ejercicios "matching" de una lección */
+  /* extrae pares EN→ES de los ejercicios "matching" de una lección.
+     Desde B1 las lecciones van en inglés: el lado derecho ya es una
+     definición en inglés, así que se guarda también como `def` (la tarjeta
+     y los mini-juegos del recinto la muestran en vez de una traducción). */
   function pairsFrom(l) {
-    var out = [];
+    var out = [], engLv = /^[BC]/i.test("" + (l.level || ""));
     (l.exercises || []).forEach(function (ex) {
       if (ex && ex.type === "matching" && ex.pairs) {
         ex.pairs.forEach(function (p) {
           var en = clean(p.l), es = clean(p.r);
           /* el lado inglés casi siempre es ASCII; descarta pares invertidos o vacíos */
-          if (en && es && /[a-z]/i.test(en)) out.push({ en: en, es: es });
+          if (en && es && /[a-z]/i.test(en)) out.push(engLv ? { en: en, es: es, def: es } : { en: en, es: es });
         });
       }
     });
@@ -681,7 +684,7 @@ window.VESPER_VOCAB_DENS = (function () {
             id: "more-" + k + (part > 1 ? ("-" + part) : ""),
             name: meta[k].name + (nChunks > 1 ? (" · " + part) : ""),
             icon: meta[k].icon, hint: "Del mundo " + lv, curated: false,
-            cards: arr.slice(i, i + chunk).map(function (c) { return { en: c.en, es: c.es, pos: vocabPos(c, null) }; })
+            cards: arr.slice(i, i + chunk).map(function (c) { return { en: c.en, es: c.es, def: c.def, pos: vocabPos(c, null) }; })
           });
           part++;
         }
