@@ -52,34 +52,95 @@ window.VESPER_ACTIVITIES = (function () {
 
     /* ---------------- A1 · Comida ---------------- */
     "act-a1-food": {
-      lessonId: "act-a1-food", level: "A1", track: "Practica", topic: "dailylife", skill: "vocab",
-      title: "Comida y restaurante", xpReward: 35, mascotState: "explaining",
+      lessonId: "act-a1-food", level: "A1", track: "Expresiones", topic: "food", skill: "use", tipo: "aprende", title: "En la cafetería: pedir algo", rev: 2, xpReward: 35, mascotState: "explaining",
       explanation: {
-        body: "Para pedir usamos \"I'd like...\" (me gustaria) y \"Can I have...?\". Contamos comida con a/an y some. (Para pedir comida con cortesia se usa I'd like o Can I have.)",
+        body: "Episodio 1 · Sam es el nuevo compañero de piso de Mia. Hoy ella lo lleva a su cafetería favorita. Aprende a pedir comida y bebida con educación. Para pedir: I'd like + cosa (I'd like a tea) o Can I have + cosa? (Can I have a sandwich, please?). Agrega please. El mesero pregunta: Anything else? Para pagar: How much is it? Can I pay by card?",
         examples: [
-          { en: "I'd like a coffee, please.", es: "Quisiera un cafe, por favor." },
-          { en: "Can I have the menu?", es: "Me da el menu?" },
-          { en: "We have some water.", es: "Tenemos un poco de agua." }
+          { en: "Hi! What can I get you?", es: "¡Hola! ¿Qué les sirvo?" },
+          { en: "I'd like a tea and a muffin, please.", es: "Quisiera un té y un panquecito, por favor." },
+          { en: "Can I have a coffee and a sandwich?", es: "¿Me da un café y un sándwich?" },
+          { en: "Sure. Anything else?", es: "Claro. ¿Algo más?" }
+        ],
+        sections: [
+          { kind: "intro", body: "Episodio 1 · Sam es el nuevo compañero de piso de Mia. Hoy ella lo lleva a su cafetería favorita. Aprende a pedir comida y bebida con educación." },
+          {
+            kind: "regla",
+            body: "Para pedir: I'd like + cosa (I'd like a tea) o Can I have + cosa? (Can I have a sandwich, please?). Agrega please. El mesero pregunta: Anything else? Para pagar: How much is it? Can I pay by card?"
+          },
+          {
+            kind: "vocab",
+            items: [
+              { en: "a coffee", ipa: "ə ˈkɒfi", es: "un café" },
+              { en: "a tea", ipa: "ə tiː", es: "un té" },
+              { en: "orange juice", ipa: "ˈɒrɪndʒ dʒuːs", es: "jugo de naranja" },
+              { en: "a sandwich", ipa: "ə ˈsænwɪdʒ", es: "un sándwich" },
+              { en: "a muffin", ipa: "ə ˈmʌfɪn", es: "un panquecito / una magdalena" },
+              { en: "water", ipa: "ˈwɔːtə", es: "agua" },
+              { en: "the bill", ipa: "ðə bɪl", es: "la cuenta" },
+              { en: "a table for two", ipa: "ə ˈteɪbəl fə tuː", es: "una mesa para dos" }
+            ]
+          },
+          {
+            kind: "expresiones",
+            items: [
+              { en: "I'd like a coffee, please.", es: "Quisiera un café, por favor." },
+              { en: "Can I have...?", es: "¿Me da...?" },
+              { en: "Anything else?", es: "¿Algo más?" },
+              { en: "How much is it?", es: "¿Cuánto es?" }
+            ]
+          },
+          {
+            kind: "ejemplos",
+            items: [
+              { en: "Waiter: Hi! What can I get you?", es: "Mesero: ¡Hola! ¿Qué les sirvo?" },
+              { en: "Mia: I'd like a tea and a muffin, please.", es: "Mia: Quisiera un té y un panquecito, por favor." },
+              { en: "Sam: Can I have a coffee and a sandwich?", es: "Sam: ¿Me da un café y un sándwich?" },
+              { en: "Waiter: Sure. Anything else?", es: "Mesero: Claro. ¿Algo más?" },
+              { en: "Sam: No, thanks. How much is it?", es: "Sam: No, gracias. ¿Cuánto es?" }
+            ]
+          },
+          {
+            kind: "errores",
+            items: [
+              { no: "I want a coffee.", si: "I'd like a coffee, please.", pq: "I want suena brusco al pedir; I'd like es más amable." },
+              { no: "Give me a water.", si: "Can I have a water, please?", pq: "Pide con Can I have...? y please." },
+              { no: "How much costs?", si: "How much is it?", pq: "Para preguntar el precio: How much is it?" }
+            ]
+          },
+          { kind: "resumen", body: "Pedir: I'd like... / Can I have...? + please. Te preguntan: Anything else? Pagar: How much is it? / Can I pay by card?" },
+          { kind: "puente", body: "Ahora te toca pedir en la cafetería con Mia y Sam." }
         ]
       },
       exercises: [
-        { type: "matching", instruction: "Une la comida con su traduccion.", pairs: [
-          { l: "apple", r: "manzana" }, { l: "bread", r: "pan" },
-          { l: "egg", r: "huevo" }, { l: "water", r: "agua" }
-        ] },
-        { type: "multiple_choice", question: "Polite order: \"___ a tea, please.\"", options: ["I want", "I'd like", "Give"], correctIndex: 1, explanation: "\"I'd like\" es la forma cortes." },
-        { type: "fill_blank", sentence: "Can I ___ the bill, please?", answers: ["have"], hint: "Can I have...?", explanation: "\"Can I have the bill?\" = la cuenta, por favor." },
-        { type: "true_false", statement: "\"The bill\" means \"la cuenta\" in a restaurant.", answer: true, explanation: "The bill / the check = la cuenta." },
-        { type: "categorize", instruction: "Bebida o comida?", buckets: [
-          { id: "drink", label: "Bebida" }, { id: "food", label: "Comida" }
-        ], items: [
-          { t: "coffee", bucket: "drink" }, { t: "juice", bucket: "drink" },
-          { t: "sandwich", bucket: "food" }, { t: "salad", bucket: "food" }
-        ] },
-        { type: "listening", text: "Can I have the menu, please?", "audio": "assets/audio/app/a1_432743da53.mp3", question: "Que pidio la persona?",
-          options: ["El menu", "La cuenta", "Un cafe"], correctIndex: 0 },
-        { type: "translate", prompt: "Traduce: \"Quisiera un cafe, por favor.\"",
-          answers: ["i'd like a coffee please", "i would like a coffee please", "id like a coffee please"], explanation: "I'd like a coffee, please." }
+        {
+          type: "reading", title: "At the café",
+          passage: "Waiter: Hi! What can I get you?\nMia: I'd like a tea and a muffin, please.\nSam: Can I have a coffee and a sandwich?\nWaiter: Sure. Anything else?\nSam: No, thanks. How much is it?\nWaiter: That's eleven dollars, please.",
+          questions: [
+            { q: "¿Qué pide Mia?", options: ["Un té y un panquecito", "Un café y un sándwich", "Un jugo de naranja"], correctIndex: 0, explanation: "Mia: I'd like a tea and a muffin." },
+            { q: "¿Cuánto pagan?", options: ["11 dólares", "7 dólares", "12 dólares"], correctIndex: 0, explanation: "That's eleven dollars = son once dólares." }
+          ]
+        },
+        {
+          type: "multiple_choice", question: "Para pedir con educación dices:", options: ["I'd like a tea, please.", "Give me tea.", "I want tea now."], correctIndex: 0,
+          explanation: "I'd like... please es la forma amable."
+        },
+        { type: "fill_blank", sentence: "Can I ___ a sandwich, please?", answers: ["have", "get"], hint: "¿Me da...? = Can I ___...?", explanation: "Can I have a sandwich, please?" },
+        {
+          type: "matching", instruction: "Une cada frase con su significado.",
+          pairs: [
+            { l: "Anything else?", r: "¿Algo más?" },
+            { l: "How much is it?", r: "¿Cuánto es?" },
+            { l: "The bill, please.", r: "La cuenta, por favor." },
+            { l: "A table for two, please.", r: "Una mesa para dos, por favor." }
+          ]
+        },
+        { type: "word_order", words: ["please", "I'd", "juice", "like", "orange", "an"], correctOrder: ["I'd", "like", "an", "orange", "juice", "please"], hint: "Empieza con I'd like." },
+        { type: "listening", text: "That's six dollars fifty, please.", question: "¿Cuánto es?", options: ["$6.50", "$7.50", "$16.50"], correctIndex: 0 },
+        { type: "speak", text: "I'd like a coffee, please.", es: "Quisiera un café, por favor.", explanation: "Di la frase con tono amable. Please al final suena natural." },
+        {
+          type: "translate", prompt: "Traduce: \"¿Me da un agua, por favor?\"",
+          answers: ["can i have a water please", "can i have some water please", "can i get a water please", "could i have a water please"], explanation: "Can I have a water, please?"
+        }
       ]
     },
 

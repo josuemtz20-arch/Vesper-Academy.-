@@ -154,199 +154,172 @@ window.VESPER_LESSONS = {
                                   "nextLessonId":  "core-grammar-02-articles"
                               },
     "core-grammar-02-articles":  {
-                                     "lessonId":  "core-grammar-02-articles",
-                                     "level":  "A1",
-                                     "track":  "Core Grammar",
-                                     "title":  "Articles: a, an, the",
-                                     "explanation":  {
-                                                         "body":  "Use a and an for one thing that is not specific. Use a before a consonant sound (a cat) and an before a vowel sound (an apple). Use the for a specific thing when we both know which one (the sun, the book on the table). (En espanol: a/an son como \"un/una\" y the es como \"el/la/los/las\".)",
-                                                         "examples":  [
-                                                                          {
-                                                                              "en":  "I have a dog.",
-                                                                              "es":  "Tengo un perro."
-                                                                          },
-                                                                          {
-                                                                              "en":  "She eats an orange.",
-                                                                              "es":  "Ella come una naranja."
-                                                                          },
-                                                                          {
-                                                                              "en":  "The teacher is here.",
-                                                                              "es":  "El profesor esta aqui."
-                                                                          },
-                                                                          {
-                                                                              "en":  "I see an elephant.",
-                                                                              "es":  "Veo un elefante."
-                                                                          }
-                                                                      ]
-                                                     },
-                                     "exercises":  [
-                                                       {
-                                                           "type":  "multiple_choice",
-                                                           "question":  "Choose the correct article: I want ___ apple.",
-                                                           "options":  [
-                                                                           "a",
-                                                                           "an",
-                                                                           "the"
-                                                                       ],
-                                                           "correctIndex":  1,
-                                                           "explanation":  "We use an before a vowel sound, and apple starts with a vowel sound."
-                                                       },
-                                                       {
-                                                           "type":  "word_order",
-                                                           "words":  [
-                                                                         "I",
-                                                                         "have",
-                                                                         "a",
-                                                                         "cat"
-                                                                     ],
-                                                           "correctOrder":  [
-                                                                                "I",
-                                                                                "have",
-                                                                                "a",
-                                                                                "cat"
-                                                                            ],
-                                                           "hint":  "Sujeto + verbo + articulo + sustantivo."
-                                                       },
-                                                       {
-                                                           "type":  "multiple_choice",
-                                                           "question":  "Choose the correct article: ___ sun is hot.",
-                                                           "options":  [
-                                                                           "A",
-                                                                           "An",
-                                                                           "The"
-                                                                       ],
-                                                           "correctIndex":  2,
-                                                           "explanation":  "We use the for a specific, unique thing that we both know, like the sun."
-                                                       },
-                                                       {
-                                                           "type":  "word_order",
-                                                           "words":  [
-                                                                         "She",
-                                                                         "eats",
-                                                                         "an",
-                                                                         "egg"
-                                                                     ],
-                                                           "correctOrder":  [
-                                                                                "She",
-                                                                                "eats",
-                                                                                "an",
-                                                                                "egg"
-                                                                            ],
-                                                           "hint":  "Usa an antes de un sonido de vocal (egg)."
-                                                       },
-                                                       {
-                                                           "type":  "multiple_choice",
-                                                           "question":  "Choose the correct article: He is ___ teacher.",
-                                                           "options":  [
-                                                                           "a",
-                                                                           "the",
-                                                                           "an"
-                                                                       ],
-                                                           "correctIndex":  0,
-                                                           "explanation":  "We use a before a consonant sound, and teacher starts with a consonant sound."
-                                                       }
-                                                   ],
-                                     "xpReward":  30,
-                                     "mascotState":  "explaining",
-                                     "nextLessonId":  "core-grammar-03-plurals"
-                                 },
+      lessonId: "core-grammar-02-articles", level: "A1", track: "Core Grammar", topic: "grammar", skill: "grammar", tipo: "aprende", title: "Preguntas wh- con to be", rev: 2, xpReward: 30,
+      mascotState: "explaining", nextLessonId: "core-grammar-03-plurals",
+      explanation: {
+        body: "Para conocer a alguien necesitas preguntar: ¿cómo te llamas?, ¿de dónde eres?, ¿cuántos años tienes? En inglés estas preguntas empiezan con una palabra wh- y después va el verbo to be. Orden: palabra wh- + am/is/are + sujeto. What is your name? Where are you from? How old is she? Contracciones muy comunes: What's, Where's, Who's. Respuesta corta: I'm 25. / She's from Peru.",
+        examples: [
+          { en: "Hi! What's your name?", es: "¡Hola! ¿Cómo te llamas?" },
+          { en: "I'm Sam. Where are you from?", es: "Soy Sam. ¿De dónde eres?" },
+          { en: "I'm from Puebla, in Mexico.", es: "Soy de Puebla, en México." },
+          { en: "Who's that? — Mia: That's Coco, my dog!", es: "¿Quién es ese? — Mia: ¡Es Coco, mi perro!" }
+        ],
+        sections: [
+          {
+            kind: "intro",
+            body: "Para conocer a alguien necesitas preguntar: ¿cómo te llamas?, ¿de dónde eres?, ¿cuántos años tienes? En inglés estas preguntas empiezan con una palabra wh- y después va el verbo to be."
+          },
+          {
+            kind: "regla",
+            body: "Orden: palabra wh- + am/is/are + sujeto. What is your name? Where are you from? How old is she? Contracciones muy comunes: What's, Where's, Who's. Respuesta corta: I'm 25. / She's from Peru."
+          },
+          {
+            kind: "vocab",
+            items: [
+              { en: "what", ipa: "wɒt", es: "qué / cuál" },
+              { en: "where", ipa: "weər", es: "dónde" },
+              { en: "who", ipa: "huː", es: "quién" },
+              { en: "when", ipa: "wen", es: "cuándo" },
+              { en: "how", ipa: "haʊ", es: "cómo" },
+              { en: "how old", ipa: "haʊ əʊld", es: "cuántos años" },
+              { en: "why", ipa: "waɪ", es: "por qué" }
+            ]
+          },
+          {
+            kind: "expresiones",
+            items: [
+              { en: "What's your name?", es: "¿Cómo te llamas?" },
+              { en: "Where are you from?", es: "¿De dónde eres?" },
+              { en: "How old are you?", es: "¿Cuántos años tienes?" },
+              { en: "Who's that?", es: "¿Quién es esa persona?" }
+            ]
+          },
+          {
+            kind: "ejemplos",
+            items: [
+              { en: "Mia: Hi! What's your name?", es: "Mia: ¡Hola! ¿Cómo te llamas?" },
+              { en: "Sam: I'm Sam. Where are you from?", es: "Sam: Soy Sam. ¿De dónde eres?" },
+              { en: "Mia: I'm from Puebla, in Mexico.", es: "Mia: Soy de Puebla, en México." },
+              { en: "Sam: Who's that? — Mia: That's Coco, my dog!", es: "Sam: ¿Quién es ese? — Mia: ¡Es Coco, mi perro!" }
+            ]
+          },
+          {
+            kind: "errores",
+            items: [
+              { no: "Where you are from?", si: "Where are you from?", pq: "En preguntas, el verbo to be va antes del sujeto." },
+              { no: "How many years have you?", si: "How old are you?", pq: "La edad se pregunta con How old + be." },
+              { no: "What is you name?", si: "What is your name?", pq: "your = tu (posesivo); you = tú." }
+            ]
+          },
+          { kind: "resumen", body: "Palabra wh- + be + sujeto + ? → What's your name? Where are you from? How old is he? What's, Where's y Who's son contracciones normales." },
+          { kind: "puente", body: "Ahora practica las preguntas que Mia y Sam se hacen el primer día." }
+        ]
+      },
+      exercises: [
+        {
+          type: "matching", instruction: "Une cada palabra con su significado.",
+          pairs: [{ l: "what", r: "qué" }, { l: "where", r: "dónde" }, { l: "who", r: "quién" }, { l: "when", r: "cuándo" }, { l: "how old", r: "cuántos años" }]
+        },
+        { type: "multiple_choice", question: "___ are you from? — I'm from Canada.", options: ["Where", "What", "Who"], correctIndex: 0, explanation: "Where = dónde (lugar de origen)." },
+        { type: "word_order", words: ["name", "What", "your", "is"], correctOrder: ["What", "is", "your", "name"], hint: "Empieza con What." },
+        { type: "fill_blank", sentence: "How old ___ your sister?", answers: ["is"], hint: "sister = she → ¿am, is o are?", explanation: "Con he/she/it usamos is: How old is your sister?" },
+        {
+          type: "find_error",
+          segments: [{ u: "Where" }, " ", { u: "you are" }, " ", { u: "from" }, "?"],
+          correctIndex: 1, correction: "are you", explanation: "En preguntas el verbo va antes del sujeto: Where are you from?", question: "Encuentra el error"
+        },
+        { type: "listening", text: "Hi, I'm Sam. I'm from Canada.", question: "¿De dónde es Sam?", options: ["De Canadá", "De México", "De Inglaterra"], correctIndex: 0 },
+        { type: "true_false", statement: "\"How old are you?\" pregunta por la edad.", answer: true, explanation: "Sí: How old = cuántos años." },
+        { type: "translate", prompt: "Traduce: \"¿Cuántos años tienes?\"", answers: ["how old are you", "what is your age"], explanation: "How old are you?" }
+      ]
+    },
     "core-grammar-03-plurals":  {
-                                    "lessonId":  "core-grammar-03-plurals",
-                                    "level":  "A1",
-                                    "track":  "Core Grammar",
-                                    "title":  "Plural Nouns",
-                                    "explanation":  {
-                                                        "body":  "To make most nouns plural, we add -s (cat → cats). After s, x, ch, or sh, we add -es (box → boxes). When a word ends in a consonant + y, we change y to -ies (city → cities). Some plurals are irregular and we must learn them: man → men, child → children, foot → feet. (En español normalmente solo agregamos -s o -es, pero el inglés tiene plurales irregulares que debes memorizar.)",
-                                                        "examples":  [
-                                                                         {
-                                                                             "en":  "I have two cats.",
-                                                                             "es":  "Tengo dos gatos."
-                                                                         },
-                                                                         {
-                                                                             "en":  "There are three boxes.",
-                                                                             "es":  "Hay tres cajas."
-                                                                         },
-                                                                         {
-                                                                             "en":  "We visit two cities.",
-                                                                             "es":  "Visitamos dos ciudades."
-                                                                         },
-                                                                         {
-                                                                             "en":  "The children play.",
-                                                                             "es":  "Los niños juegan."
-                                                                         }
-                                                                     ]
-                                                    },
-                                    "exercises":  [
-                                                      {
-                                                          "type":  "multiple_choice",
-                                                          "question":  "Choose the correct plural: I have two ___.",
-                                                          "options":  [
-                                                                          "dog",
-                                                                          "dogs",
-                                                                          "doges"
-                                                                      ],
-                                                          "correctIndex":  1,
-                                                          "explanation":  "Most nouns just add -s, so \u0027dog\u0027 becomes \u0027dogs\u0027."
-                                                      },
-                                                      {
-                                                          "type":  "word_order",
-                                                          "words":  [
-                                                                        "I",
-                                                                        "have",
-                                                                        "two",
-                                                                        "boxes"
-                                                                    ],
-                                                          "correctOrder":  [
-                                                                               "I",
-                                                                               "have",
-                                                                               "two",
-                                                                               "boxes"
-                                                                           ],
-                                                          "hint":  "Subject + verbo + número + sustantivo. \u0027Box\u0027 termina en -x, así que el plural es \u0027boxes\u0027."
-                                                      },
-                                                      {
-                                                          "type":  "multiple_choice",
-                                                          "question":  "Choose the correct plural: She has three ___.",
-                                                          "options":  [
-                                                                          "babys",
-                                                                          "babyes",
-                                                                          "babies"
-                                                                      ],
-                                                          "correctIndex":  2,
-                                                          "explanation":  "Consonant + y becomes -ies, so \u0027baby\u0027 becomes \u0027babies\u0027."
-                                                      },
-                                                      {
-                                                          "type":  "word_order",
-                                                          "words":  [
-                                                                        "The",
-                                                                        "children",
-                                                                        "are",
-                                                                        "here"
-                                                                    ],
-                                                          "correctOrder":  [
-                                                                               "The",
-                                                                               "children",
-                                                                               "are",
-                                                                               "here"
-                                                                           ],
-                                                          "hint":  "El plural irregular de \u0027child\u0027 es \u0027children\u0027."
-                                                      },
-                                                      {
-                                                          "type":  "multiple_choice",
-                                                          "question":  "Choose the correct plural: I have two ___.",
-                                                          "options":  [
-                                                                          "feet",
-                                                                          "foots",
-                                                                          "feets"
-                                                                      ],
-                                                          "correctIndex":  0,
-                                                          "explanation":  "\u0027Foot\u0027 is irregular; its plural is \u0027feet\u0027, not \u0027foots\u0027."
-                                                      }
-                                                  ],
-                                    "xpReward":  30,
-                                    "mascotState":  "explaining",
-                                    "nextLessonId":  "core-grammar-04-present-simple"
-                                },
+      lessonId: "core-grammar-03-plurals", level: "A1", track: "Core Grammar", topic: "grammar", skill: "grammar", tipo: "aprende", title: "Imperativos: dar instrucciones", rev: 2, xpReward: 30,
+      mascotState: "explaining", nextLessonId: "core-grammar-04-present-simple",
+      explanation: {
+        body: "Los imperativos sirven para dar instrucciones, consejos y avisos: Open the door. Don't run. En clase, en una receta o en un letrero los vas a ver todo el tiempo. Afirmativo: verbo en forma base, sin sujeto: Sit down. Negativo: Don't + verbo: Don't touch. Para incluirte a ti: Let's + verbo: Let's go. Agrega please para sonar amable: Please close the window.",
+        examples: [
+          { en: "Come in, Sam! Put your bags here.", es: "¡Pasa, Sam! Pon tus maletas aquí." },
+          { en: "Don't open that door. Coco is sleeping!", es: "No abras esa puerta. ¡Coco está durmiendo!" },
+          { en: "OK. Let's have a coffee.", es: "Vale. Tomemos un café." },
+          { en: "Please turn off the lights at night.", es: "Por favor, apaga las luces en la noche." }
+        ],
+        sections: [
+          { kind: "intro", body: "Los imperativos sirven para dar instrucciones, consejos y avisos: Open the door. Don't run. En clase, en una receta o en un letrero los vas a ver todo el tiempo." },
+          {
+            kind: "regla",
+            body: "Afirmativo: verbo en forma base, sin sujeto: Sit down. Negativo: Don't + verbo: Don't touch. Para incluirte a ti: Let's + verbo: Let's go. Agrega please para sonar amable: Please close the window."
+          },
+          {
+            kind: "vocab",
+            items: [
+              { en: "open", ipa: "ˈəʊpən", es: "abrir" },
+              { en: "close", ipa: "kləʊz", es: "cerrar" },
+              { en: "sit down", ipa: "sɪt daʊn", es: "sentarse" },
+              { en: "stand up", ipa: "stænd ʌp", es: "ponerse de pie" },
+              { en: "listen", ipa: "ˈlɪsən", es: "escuchar" },
+              { en: "look", ipa: "lʊk", es: "mirar" },
+              { en: "turn off", ipa: "tɜːn ɒf", es: "apagar" },
+              { en: "wait", ipa: "weɪt", es: "esperar" }
+            ]
+          },
+          {
+            kind: "expresiones",
+            items: [{ en: "Come in!", es: "¡Pasa! / ¡Adelante!" }, { en: "Be careful!", es: "¡Ten cuidado!" }, { en: "Don't worry.", es: "No te preocupes." }, { en: "Let's go!", es: "¡Vamos!" }]
+          },
+          {
+            kind: "ejemplos",
+            items: [
+              { en: "Mia: Come in, Sam! Put your bags here.", es: "Mia: ¡Pasa, Sam! Pon tus maletas aquí." },
+              { en: "Mia: Don't open that door. Coco is sleeping!", es: "Mia: No abras esa puerta. ¡Coco está durmiendo!" },
+              { en: "Sam: OK. Let's have a coffee.", es: "Sam: Vale. Tomemos un café." },
+              { en: "Mia: Please turn off the lights at night.", es: "Mia: Por favor, apaga las luces en la noche." }
+            ]
+          },
+          {
+            kind: "errores",
+            items: [
+              { no: "You open the door.", si: "Open the door.", pq: "Para dar una instrucción, el imperativo no lleva sujeto." },
+              { no: "No run!", si: "Don't run!", pq: "El negativo es Don't + verbo." },
+              { no: "Let's to go.", si: "Let's go.", pq: "Después de Let's va el verbo sin to." }
+            ]
+          },
+          { kind: "resumen", body: "Verbo solo = instrucción (Sit down). Don't + verbo = prohibición (Don't run). Let's + verbo = propuesta para los dos (Let's go). Please = más amable." },
+          { kind: "puente", body: "Ahora da instrucciones como Mia el primer día de Sam en el piso." }
+        ]
+      },
+      exercises: [
+        {
+          type: "categorize", instruction: "¿Es una instrucción para hacer algo o para NO hacerlo?",
+          buckets: [{ id: "do", label: "Hazlo" }, { id: "dont", label: "No lo hagas" }],
+          items: [
+            { t: "Sit down.", bucket: "do" },
+            { t: "Don't shout.", bucket: "dont" },
+            { t: "Close the window.", bucket: "do" },
+            { t: "Don't be late.", bucket: "dont" },
+            { t: "Listen, please.", bucket: "do" },
+            { t: "Don't touch that.", bucket: "dont" }
+          ]
+        },
+        {
+          type: "multiple_choice", question: "En la biblioteca. ¿Cuál es correcto?", options: ["Don't talk, please.", "No talk, please.", "Not talk, please."], correctIndex: 0,
+          explanation: "El negativo del imperativo es Don't + verbo."
+        },
+        { type: "word_order", words: ["lights", "Please", "the", "turn", "off"], correctOrder: ["Please", "turn", "off", "the", "lights"], hint: "Empieza con Please." },
+        { type: "fill_blank", sentence: "___ worry, it's OK.", answers: ["Don't", "Do not"], hint: "Negativo del imperativo.", explanation: "Don't worry = no te preocupes." },
+        {
+          type: "find_error",
+          segments: [{ u: "Let's" }, " ", { u: "to go" }, " to ", { u: "the" }, " park!"],
+          correctIndex: 1, correction: "go", explanation: "Después de Let's va el verbo sin to: Let's go to the park!", question: "Encuentra el error"
+        },
+        { type: "listening", text: "Sit down, please. Open your books at page ten.", question: "¿Qué tienes que abrir?", options: ["El libro", "La ventana", "La puerta"], correctIndex: 0 },
+        {
+          type: "matching", instruction: "Une cada instrucción con su significado.",
+          pairs: [{ l: "Come in!", r: "¡Pasa!" }, { l: "Be careful!", r: "¡Ten cuidado!" }, { l: "Wait here.", r: "Espera aquí." }, { l: "Stand up.", r: "Ponte de pie." }]
+        },
+        { type: "translate", prompt: "Traduce: \"No abras la puerta.\"", answers: ["don't open the door", "do not open the door"], explanation: "Don't open the door." }
+      ]
+    },
     "core-grammar-04-present-simple":  {
                                            "lessonId":  "core-grammar-04-present-simple",
                                            "level":  "A1",
@@ -449,104 +422,87 @@ window.VESPER_LESSONS = {
                                            "nextLessonId":  "core-grammar-05-there-is-are"
                                        },
     "core-grammar-05-there-is-are":  {
-                                         "lessonId":  "core-grammar-05-there-is-are",
-                                         "level":  "A1",
-                                         "track":  "Core Grammar",
-                                         "title":  "There is / There are",
-                                         "explanation":  {
-                                                             "body":  "Use there is for one thing (singular) and there are for many things (plural). For negatives, use there isn\u0027t and there aren\u0027t; for questions, use Is there...? and Are there...? We use a/an with singular nouns, and some in positive sentences with plurals or any in negatives and questions. (Usamos \"there is\" para una cosa y \"there are\" para varias cosas; el verbo cambia segun el numero.)",
-                                                             "examples":  [
-                                                                              {
-                                                                                  "en":  "There is a book on the table.",
-                                                                                  "es":  "Hay un libro en la mesa."
-                                                                              },
-                                                                              {
-                                                                                  "en":  "There are some apples in the bag.",
-                                                                                  "es":  "Hay algunas manzanas en la bolsa."
-                                                                              },
-                                                                              {
-                                                                                  "en":  "There isn\u0027t any milk in the fridge.",
-                                                                                  "es":  "No hay leche en el refrigerador."
-                                                                              },
-                                                                              {
-                                                                                  "en":  "Is there a bank near here?",
-                                                                                  "es":  "Hay un banco cerca de aqui?"
-                                                                              }
-                                                                          ]
-                                                         },
-                                         "exercises":  [
-                                                           {
-                                                               "type":  "multiple_choice",
-                                                               "question":  "____ a cat in the garden.",
-                                                               "options":  [
-                                                                               "There is",
-                                                                               "There are",
-                                                                               "There be"
-                                                                           ],
-                                                               "correctIndex":  0,
-                                                               "explanation":  "We use \"There is\" with a singular noun like \"a cat.\""
-                                                           },
-                                                           {
-                                                               "type":  "word_order",
-                                                               "words":  [
-                                                                             "There",
-                                                                             "are",
-                                                                             "three",
-                                                                             "books",
-                                                                             "here"
-                                                                         ],
-                                                               "correctOrder":  [
-                                                                                    "There",
-                                                                                    "are",
-                                                                                    "three",
-                                                                                    "books",
-                                                                                    "here"
-                                                                                ],
-                                                               "hint":  "Habla de varios libros (plural)."
-                                                           },
-                                                           {
-                                                               "type":  "multiple_choice",
-                                                               "question":  "____ any chairs in the room?",
-                                                               "options":  [
-                                                                               "Is there",
-                                                                               "Are there",
-                                                                               "There are"
-                                                                           ],
-                                                               "correctIndex":  1,
-                                                               "explanation":  "Questions with a plural noun use \"Are there\" at the start."
-                                                           },
-                                                           {
-                                                               "type":  "word_order",
-                                                               "words":  [
-                                                                             "There",
-                                                                             "isn\u0027t",
-                                                                             "any",
-                                                                             "water"
-                                                                         ],
-                                                               "correctOrder":  [
-                                                                                    "There",
-                                                                                    "isn\u0027t",
-                                                                                    "any",
-                                                                                    "water"
-                                                                                ],
-                                                               "hint":  "Frase negativa con algo que no se cuenta (singular)."
-                                                           },
-                                                           {
-                                                               "type":  "multiple_choice",
-                                                               "question":  "There ____ some eggs in the box.",
-                                                               "options":  [
-                                                                               "am",
-                                                                               "is",
-                                                                               "are"
-                                                                           ],
-                                                               "correctIndex":  2,
-                                                               "explanation":  "\"Some eggs\" is plural, so we use \"are.\""
-                                                           }
-                                                       ],
-                                         "xpReward":  30,
-                                         "mascotState":  "explaining",
-                                         "nextLessonId":  "core-grammar-06-present-continuous"
-                                     },
+      lessonId: "core-grammar-05-there-is-are", level: "A1", track: "Core Grammar", topic: "grammar", skill: "grammar", tipo: "aprende", title: "Do / Does: preguntas y negativas", rev: 2, xpReward: 30,
+      mascotState: "explaining", nextLessonId: "core-grammar-06-present-continuous",
+      explanation: {
+        body: "Ya sabes decir lo que haces (I work, she lives). Ahora aprende a preguntar y a negar en presente simple: Do you like coffee? She doesn't eat meat. Pregunta: Do + I/you/we/they + verbo. Does + he/she/it + verbo. Negativo: don't / doesn't + verbo. ¡Ojo! Con does y doesn't el verbo NO lleva -s: Does she work? (no works). Con palabra wh-: Where do you live? What does he do?",
+        examples: [
+          { en: "What do you do, Mia?", es: "¿A qué te dedicas, Mia?" },
+          { en: "I'm a nurse. I work at the hospital.", es: "Soy enfermera. Trabajo en el hospital." },
+          { en: "Does Coco eat a lot?", es: "¿Coco come mucho?" },
+          { en: "Yes! But Coco doesn't like fish.", es: "¡Sí! Pero a Coco no le gusta el pescado." }
+        ],
+        sections: [
+          { kind: "intro", body: "Ya sabes decir lo que haces (I work, she lives). Ahora aprende a preguntar y a negar en presente simple: Do you like coffee? She doesn't eat meat." },
+          {
+            kind: "regla",
+            body: "Pregunta: Do + I/you/we/they + verbo. Does + he/she/it + verbo. Negativo: don't / doesn't + verbo. ¡Ojo! Con does y doesn't el verbo NO lleva -s: Does she work? (no works). Con palabra wh-: Where do you live? What does he do?"
+          },
+          {
+            kind: "vocab",
+            items: [
+              { en: "do / does", ipa: "duː / dʌz", es: "auxiliar para preguntar" },
+              { en: "don't (do not)", ipa: "dəʊnt", es: "no (I, you, we, they)" },
+              { en: "doesn't (does not)", ipa: "ˈdʌzənt", es: "no (he, she, it)" },
+              { en: "live", ipa: "lɪv", es: "vivir" },
+              { en: "work", ipa: "wɜːk", es: "trabajar" },
+              { en: "like", ipa: "laɪk", es: "gustar" },
+              { en: "eat", ipa: "iːt", es: "comer" },
+              { en: "speak", ipa: "spiːk", es: "hablar" }
+            ]
+          },
+          {
+            kind: "expresiones",
+            items: [
+              { en: "What do you do?", es: "¿A qué te dedicas?" },
+              { en: "Where do you live?", es: "¿Dónde vives?" },
+              { en: "Do you speak English?", es: "¿Hablas inglés?" },
+              { en: "Yes, I do. / No, I don't.", es: "Sí. / No. (respuesta corta)" }
+            ]
+          },
+          {
+            kind: "ejemplos",
+            items: [
+              { en: "Sam: What do you do, Mia?", es: "Sam: ¿A qué te dedicas, Mia?" },
+              { en: "Mia: I'm a nurse. I work at the hospital.", es: "Mia: Soy enfermera. Trabajo en el hospital." },
+              { en: "Sam: Does Coco eat a lot?", es: "Sam: ¿Coco come mucho?" },
+              { en: "Mia: Yes! But Coco doesn't like fish.", es: "Mia: ¡Sí! Pero a Coco no le gusta el pescado." }
+            ]
+          },
+          {
+            kind: "errores",
+            items: [
+              { no: "Does she works here?", si: "Does she work here?", pq: "Con does, el verbo va sin -s." },
+              { no: "He don't like tea.", si: "He doesn't like tea.", pq: "he / she / it usan doesn't." },
+              { no: "You like pizza?", si: "Do you like pizza?", pq: "La pregunta necesita do o does al inicio." }
+            ]
+          },
+          { kind: "resumen", body: "do / don't con I, you, we, they. does / doesn't con he, she, it. Después de do o does, el verbo va sin -s." },
+          { kind: "puente", body: "Practica haciendo preguntas a Sam y a Mia." }
+        ]
+      },
+      exercises: [
+        { type: "multiple_choice", question: "___ Sam speak French?", options: ["Does", "Do", "Is"], correctIndex: 0, explanation: "Sam = he → Does + verbo." },
+        { type: "fill_blank", sentence: "Mia ___ like fish.", answers: ["doesn't", "does not"], hint: "Negativo con she.", explanation: "She doesn't like fish." },
+        {
+          type: "categorize", instruction: "¿Do o does?",
+          buckets: [{ id: "do", label: "do" }, { id: "does", label: "does" }],
+          items: [{ t: "you", bucket: "do" }, { t: "they", bucket: "do" }, { t: "we", bucket: "do" }, { t: "Mia", bucket: "does" }, { t: "the dog", bucket: "does" }, { t: "he", bucket: "does" }]
+        },
+        {
+          type: "find_error",
+          segments: [{ u: "Does" }, " your brother ", { u: "works" }, " ", { u: "in" }, " a bank?"],
+          correctIndex: 1, correction: "work", explanation: "Con does el verbo va sin -s: Does your brother work in a bank?", question: "Encuentra el error"
+        },
+        { type: "word_order", words: ["live", "Where", "you", "do"], correctOrder: ["Where", "do", "you", "live"], hint: "Empieza con la palabra wh-." },
+        {
+          type: "listening", text: "Do you like coffee? Yes, I do. I drink it every morning.", question: "¿Le gusta el café?", options: ["Sí, lo toma cada mañana", "No, prefiere té", "Solo los fines de semana"],
+          correctIndex: 0
+        },
+        { type: "true_false", statement: "\"What do you do?\" pregunta por tu trabajo.", answer: true, explanation: "Sí: es la forma normal de preguntar a qué te dedicas." },
+        { type: "translate", prompt: "Traduce: \"¿Dónde trabaja ella?\"", answers: ["where does she work", "where does she work at"], explanation: "Where does she work?" }
+      ]
+    },
     "core-grammar-06-present-continuous":  {
                                                "lessonId":  "core-grammar-06-present-continuous",
                                                "level":  "A2",
@@ -871,110 +827,91 @@ window.VESPER_LESSONS = {
                                         "nextLessonId":  "core-grammar-08-comparatives"
                                     },
     "core-grammar-08-comparatives":  {
-                                         "lessonId":  "core-grammar-08-comparatives",
-                                         "level":  "A2",
-                                         "track":  "Core Grammar",
-                                         "title":  "Comparatives \u0026 Superlatives",
-                                         "explanation":  {
-                                                             "body":  "To compare two things, use the comparative. For short adjectives, add -er and use \"than\" (cheap → cheaper than). For long adjectives, use \"more ... than\" (more expensive than). To say something is number one in a group, use the superlative: \"the\" + -est for short adjectives (the cheapest), or \"the most ...\" for long adjectives (the most expensive). Some words are irregular: good/better/the best, bad/worse/the worst. (Recuerda: -er/than para comparar dos cosas; the -est o the most para el superlativo; good y bad son irregulares.)",
-                                                             "examples":  [
-                                                                              {
-                                                                                  "en":  "My brother is taller than me.",
-                                                                                  "es":  "Mi hermano es más alto que yo."
-                                                                              },
-                                                                              {
-                                                                                  "en":  "This book is more interesting than that one.",
-                                                                                  "es":  "Este libro es más interesante que ese."
-                                                                              },
-                                                                              {
-                                                                                  "en":  "She is the best student in the class.",
-                                                                                  "es":  "Ella es la mejor estudiante de la clase."
-                                                                              },
-                                                                              {
-                                                                                  "en":  "Today is the worst day of the week.",
-                                                                                  "es":  "Hoy es el peor día de la semana."
-                                                                              }
-                                                                          ]
-                                                         },
-                                         "exercises":  [
-                                                           {
-                                                               "type":  "multiple_choice",
-                                                               "question":  "A train is _____ a bicycle.",
-                                                               "options":  [
-                                                                               "faster than",
-                                                                               "more fast than",
-                                                                               "fast than"
-                                                                           ],
-                                                               "correctIndex":  0,
-                                                               "explanation":  "\"Fast\" is a short adjective, so we add -er and use \"than\": faster than."
-                                                           },
-                                                           {
-                                                               "type":  "multiple_choice",
-                                                               "question":  "This is _____ restaurant in the city.",
-                                                               "options":  [
-                                                                               "the more expensive",
-                                                                               "the most expensive",
-                                                                               "the expensivest"
-                                                                           ],
-                                                               "correctIndex":  1,
-                                                               "explanation":  "\"Expensive\" is a long adjective, so the superlative is \"the most expensive.\""
-                                                           },
-                                                           {
-                                                               "type":  "word_order",
-                                                               "words":  [
-                                                                             "My",
-                                                                             "sister",
-                                                                             "is",
-                                                                             "older",
-                                                                             "than",
-                                                                             "me"
-                                                                         ],
-                                                               "correctOrder":  [
-                                                                                    "My",
-                                                                                    "sister",
-                                                                                    "is",
-                                                                                    "older",
-                                                                                    "than",
-                                                                                    "me"
-                                                                                ],
-                                                               "hint":  "Compara dos personas: usa -er + than."
-                                                           },
-                                                           {
-                                                               "type":  "word_order",
-                                                               "words":  [
-                                                                             "This",
-                                                                             "is",
-                                                                             "the",
-                                                                             "best",
-                                                                             "song",
-                                                                             "ever"
-                                                                         ],
-                                                               "correctOrder":  [
-                                                                                    "This",
-                                                                                    "is",
-                                                                                    "the",
-                                                                                    "best",
-                                                                                    "song",
-                                                                                    "ever"
-                                                                                ],
-                                                               "hint":  "Superlativo irregular de \"good\": the best."
-                                                           },
-                                                           {
-                                                               "type":  "multiple_choice",
-                                                               "question":  "My phone is _____ than yours.",
-                                                               "options":  [
-                                                                               "more bad",
-                                                                               "worst",
-                                                                               "worse"
-                                                                           ],
-                                                               "correctIndex":  2,
-                                                               "explanation":  "The comparative of \"bad\" is the irregular form \"worse\" (not \"worst\" or \"more bad\")."
-                                                           }
-                                                       ],
-                                         "xpReward":  40,
-                                         "mascotState":  "explaining",
-                                         "nextLessonId":  "core-grammar-09-countables"
-                                     },
+      lessonId: "core-grammar-08-comparatives", level: "A2", track: "Core Grammar", topic: "grammar", skill: "grammar", tipo: "aprende", title: "Have to, must y mustn't", rev: 2, xpReward: 40,
+      mascotState: "explaining", nextLessonId: "core-grammar-09-countables",
+      explanation: {
+        body: "Mia y Sam escriben las reglas del piso. Para hablar de obligaciones y prohibiciones usas have to, must y mustn't. have to / has to + verbo = obligación (muchas veces por una regla externa): I have to work on Saturday. don't have to = no es necesario: You don't have to pay. must + verbo = obligación fuerte, típica de reglas escritas: You must wear a helmet. mustn't = está prohibido: You mustn't smoke here. ¡Ojo! don't have to y mustn't NO significan lo mismo.",
+        examples: [
+          { en: "We have to clean the kitchen every Sunday.", es: "Tenemos que limpiar la cocina cada domingo." },
+          { en: "Do I have to pay for the internet?", es: "¿Tengo que pagar el internet?" },
+          { en: "No, you don't have to. It's free in this building.", es: "No, no hace falta. Es gratis en este edificio." },
+          { en: "But you mustn't play the guitar after 11 p.m.!", es: "¡Pero no debes tocar la guitarra después de las 11!" }
+        ],
+        sections: [
+          { kind: "intro", body: "Mia y Sam escriben las reglas del piso. Para hablar de obligaciones y prohibiciones usas have to, must y mustn't." },
+          {
+            kind: "regla",
+            body: "have to / has to + verbo = obligación (muchas veces por una regla externa): I have to work on Saturday. don't have to = no es necesario: You don't have to pay. must + verbo = obligación fuerte, típica de reglas escritas: You must wear a helmet. mustn't = está prohibido: You mustn't smoke here. ¡Ojo! don't have to y mustn't NO significan lo mismo."
+          },
+          {
+            kind: "vocab",
+            items: [
+              { en: "have to", ipa: "ˈhæv tə", es: "tener que" },
+              { en: "has to", ipa: "ˈhæz tə", es: "tiene que" },
+              { en: "don't have to", ipa: "dəʊnt ˈhæv tə", es: "no hace falta" },
+              { en: "must", ipa: "mʌst", es: "deber (obligación fuerte)" },
+              { en: "mustn't", ipa: "ˈmʌsənt", es: "no deber (está prohibido)" },
+              { en: "rule", ipa: "ruːl", es: "regla" },
+              { en: "allowed", ipa: "əˈlaʊd", es: "permitido" },
+              { en: "noise", ipa: "nɔɪz", es: "ruido" }
+            ]
+          },
+          {
+            kind: "expresiones",
+            items: [
+              { en: "Do I have to...?", es: "¿Tengo que...?" },
+              { en: "You don't have to.", es: "No hace falta." },
+              { en: "You mustn't...", es: "No debes... / Está prohibido..." },
+              { en: "I have to go.", es: "Me tengo que ir." }
+            ]
+          },
+          {
+            kind: "ejemplos",
+            items: [
+              { en: "Mia: We have to clean the kitchen every Sunday.", es: "Mia: Tenemos que limpiar la cocina cada domingo." },
+              { en: "Sam: Do I have to pay for the internet?", es: "Sam: ¿Tengo que pagar el internet?" },
+              { en: "Mia: No, you don't have to. It's free in this building.", es: "Mia: No, no hace falta. Es gratis en este edificio." },
+              { en: "Mia: But you mustn't play the guitar after 11 p.m.!", es: "Mia: ¡Pero no debes tocar la guitarra después de las 11!" }
+            ]
+          },
+          {
+            kind: "errores",
+            items: [
+              { no: "She have to work.", si: "She has to work.", pq: "Con he / she / it: has to." },
+              { no: "You don't have to smoke here. (prohibición)", si: "You mustn't smoke here.", pq: "Prohibido = mustn't. Don't have to = no es necesario." },
+              { no: "I must to go.", si: "I must go.", pq: "Después de must no va to." }
+            ]
+          },
+          { kind: "resumen", body: "have to / has to = obligación. must = obligación fuerte. don't have to = no es necesario. mustn't = prohibido." },
+          { kind: "puente", body: "Ahora ayuda a Mia y Sam con las reglas del piso." }
+        ]
+      },
+      exercises: [
+        {
+          type: "categorize", instruction: "¿Está prohibido o simplemente no es necesario?",
+          buckets: [{ id: "mustnt", label: "Prohibido (mustn't)" }, { id: "donthave", label: "No es necesario (don't have to)" }],
+          items: [
+            { t: "You ___ use your phone in the exam.", bucket: "mustnt" },
+            { t: "You ___ shout in a hospital.", bucket: "mustnt" },
+            { t: "You ___ touch the paintings in the museum.", bucket: "mustnt" },
+            { t: "It's Sunday! You ___ get up early.", bucket: "donthave" },
+            { t: "The museum is free. You ___ pay.", bucket: "donthave" },
+            { t: "I can drive you. You ___ take a taxi.", bucket: "donthave" }
+          ]
+        },
+        { type: "multiple_choice", question: "Sam ___ work on Saturdays. It's a rule at his job.", options: ["has to", "have to", "must to"], correctIndex: 0, explanation: "Sam = he → has to." },
+        {
+          type: "find_error",
+          segments: [{ u: "You" }, " ", { u: "must to" }, " wear ", { u: "a" }, " helmet."],
+          correctIndex: 1, correction: "must", explanation: "Después de must va el verbo sin to: You must wear a helmet.", question: "Encuentra el error"
+        },
+        { type: "fill_blank", sentence: "Do I ___ to bring food to the party? — No, you don't.", answers: ["have"], hint: "¿Tengo que...?", explanation: "Do I have to bring food?" },
+        { type: "listening", text: "You mustn't park here. It's for ambulances.", question: "¿Qué está prohibido?", options: ["Estacionarse ahí", "Llamar a una ambulancia", "Caminar por ahí"], correctIndex: 0 },
+        { type: "word_order", words: ["uniform", "We", "a", "don't", "wear", "have", "to"], correctOrder: ["We", "don't", "have", "to", "wear", "a", "uniform"], hint: "No es necesario llevar uniforme." },
+        { type: "true_false", statement: "\"You don't have to come\" significa que está prohibido venir.", answer: false, explanation: "Significa que no es necesario venir. Prohibido sería You mustn't come." },
+        { type: "translate", prompt: "Traduce: \"Me tengo que ir.\"", answers: ["i have to go", "i've got to go", "i have got to go", "i must go"], explanation: "I have to go." }
+      ]
+    },
     "core-grammar-09-countables":  {
                                        "lessonId":  "core-grammar-09-countables",
                                        "level":  "A2",
@@ -1182,112 +1119,104 @@ window.VESPER_LESSONS = {
                                            "nextLessonId":  "core-grammar-11-going-to"
                                        },
     "core-grammar-11-going-to":  {
-                                     "lessonId":  "core-grammar-11-going-to",
-                                     "level":  "A2",
-                                     "track":  "Core Grammar",
-                                     "title":  "Future: be going to",
-                                     "explanation":  {
-                                                         "body":  "We use \"be going to\" + base verb to talk about plans and intentions for the future. Use am/is/are with the subject, then \"going to\" and the base verb (for example: I am going to travel). For negatives, add \"not\" after the verb \"be\", and for questions, put am/is/are before the subject. We can also use the present continuous (I am meeting Ana) for fixed arrangements with a clear time. (\"Be going to\" expresa planes e intenciones; el presente continuo se usa para citas o planes ya organizados.)",
-                                                         "examples":  [
-                                                                          {
-                                                                              "en":  "I am going to buy a new phone.",
-                                                                              "es":  "Voy a comprar un teléfono nuevo."
-                                                                          },
-                                                                          {
-                                                                              "en":  "They are not going to come to the party.",
-                                                                              "es":  "Ellos no van a venir a la fiesta."
-                                                                          },
-                                                                          {
-                                                                              "en":  "Are you going to study English tonight?",
-                                                                              "es":  "¿Vas a estudiar inglés esta noche?"
-                                                                          },
-                                                                          {
-                                                                              "en":  "We are having dinner with Tom on Friday.",
-                                                                              "es":  "Vamos a cenar con Tom el viernes."
-                                                                          }
-                                                                      ]
-                                                     },
-                                     "exercises":  [
-                                                       {
-                                                           "type":  "multiple_choice",
-                                                           "question":  "Choose the correct sentence about a future plan.",
-                                                           "options":  [
-                                                                           "She is going to visit her family.",
-                                                                           "She is going to visits her family.",
-                                                                           "She going to visit her family."
-                                                                       ],
-                                                           "correctIndex":  0,
-                                                           "explanation":  "After \"be going to\" we use the base verb (visit), and we need the verb \"is\"."
-                                                       },
-                                                       {
-                                                           "type":  "word_order",
-                                                           "words":  [
-                                                                         "I",
-                                                                         "am",
-                                                                         "going",
-                                                                         "to",
-                                                                         "study",
-                                                                         "tonight"
-                                                                     ],
-                                                           "correctOrder":  [
-                                                                                "I",
-                                                                                "am",
-                                                                                "going",
-                                                                                "to",
-                                                                                "study",
-                                                                                "tonight"
-                                                                            ],
-                                                           "hint":  "Habla de un plan para esta noche (afirmativo)."
-                                                       },
-                                                       {
-                                                           "type":  "multiple_choice",
-                                                           "question":  "Complete the question: \"___ you going to call him?\"",
-                                                           "options":  [
-                                                                           "Do",
-                                                                           "Are",
-                                                                           "Is"
-                                                                       ],
-                                                           "correctIndex":  1,
-                                                           "explanation":  "For questions with \"be going to\" and \"you\", we use the auxiliary \"Are\"."
-                                                       },
-                                                       {
-                                                           "type":  "word_order",
-                                                           "words":  [
-                                                                         "We",
-                                                                         "are",
-                                                                         "not",
-                                                                         "going",
-                                                                         "to",
-                                                                         "work",
-                                                                         "today"
-                                                                     ],
-                                                           "correctOrder":  [
-                                                                                "We",
-                                                                                "are",
-                                                                                "not",
-                                                                                "going",
-                                                                                "to",
-                                                                                "work",
-                                                                                "today"
-                                                                            ],
-                                                           "hint":  "Frase negativa sobre hoy (usa \"not\")."
-                                                       },
-                                                       {
-                                                           "type":  "multiple_choice",
-                                                           "question":  "Which sentence describes a fixed arrangement (present continuous)?",
-                                                           "options":  [
-                                                                           "I am going to meet maybe.",
-                                                                           "I meet Ana at six going.",
-                                                                           "I am meeting Ana at six."
-                                                                       ],
-                                                           "correctIndex":  2,
-                                                           "explanation":  "Present continuous (am meeting) shows a fixed arrangement with a time and a person."
-                                                       }
-                                                   ],
-                                     "xpReward":  40,
-                                     "mascotState":  "explaining",
-                                     "nextLessonId":  "core-grammar-12-present-perfect"
-                                 },
+      lessonId: "core-grammar-11-going-to", level: "A2", track: "Core Grammar", topic: "grammar", skill: "grammar", tipo: "aprende", title: "Will: decisiones del momento y ofrecimientos", rev: 2, xpReward: 40,
+      mascotState: "explaining", nextLessonId: "core-grammar-12-present-perfect",
+      explanation: {
+        body: "Suena el timbre y dices: I'll get it! Usamos will cuando decidimos algo en ese momento, para ofrecer ayuda y para prometer. will + verbo (igual para todas las personas): I will help. Contracción: I'll, you'll, she'll. Negativo: won't (will not). Usos: decisión en el momento (I'll have the soup), ofrecimiento (I'll carry that), promesa (I won't tell anyone). Si el plan ya estaba decidido antes, usa going to.",
+        examples: [
+          { en: "The doorbell! I'll get it!", es: "¡El timbre! ¡Yo abro!" },
+          { en: "Thanks! Oh, these bags are heavy.", es: "¡Gracias! Uf, estas bolsas pesan." },
+          { en: "Give them to me. I'll carry them.", es: "Dámelas. Yo las llevo." },
+          { en: "You're the best. I promise I'll cook dinner tonight.", es: "Eres el mejor. Te prometo que hoy hago la cena." }
+        ],
+        sections: [
+          { kind: "intro", body: "Suena el timbre y dices: I'll get it! Usamos will cuando decidimos algo en ese momento, para ofrecer ayuda y para prometer." },
+          {
+            kind: "regla",
+            body: "will + verbo (igual para todas las personas): I will help. Contracción: I'll, you'll, she'll. Negativo: won't (will not). Usos: decisión en el momento (I'll have the soup), ofrecimiento (I'll carry that), promesa (I won't tell anyone). Si el plan ya estaba decidido antes, usa going to."
+          },
+          {
+            kind: "vocab",
+            items: [
+              { en: "I'll (I will)", ipa: "aɪl", es: "yo + futuro (lo haré)" },
+              { en: "won't (will not)", ipa: "wəʊnt", es: "no + futuro (no lo haré)" },
+              { en: "promise", ipa: "ˈprɒmɪs", es: "prometer" },
+              { en: "offer", ipa: "ˈɒfə", es: "ofrecer" },
+              { en: "carry", ipa: "ˈkæri", es: "cargar / llevar" },
+              { en: "answer", ipa: "ˈɑːnsə", es: "contestar" },
+              { en: "forget", ipa: "fəˈɡet", es: "olvidar" },
+              { en: "heavy", ipa: "ˈhevi", es: "pesado" }
+            ]
+          },
+          {
+            kind: "expresiones",
+            items: [
+              { en: "I'll get it!", es: "¡Yo abro! / ¡Yo contesto!" },
+              { en: "I'll have the...", es: "Para mí, el... (al pedir)" },
+              { en: "I promise I won't...", es: "Te prometo que no..." },
+              { en: "Don't worry, I'll do it.", es: "Tranquilo, yo lo hago." }
+            ]
+          },
+          {
+            kind: "ejemplos",
+            items: [
+              { en: "Sam: The doorbell! I'll get it!", es: "Sam: ¡El timbre! ¡Yo abro!" },
+              { en: "Mia: Thanks! Oh, these bags are heavy.", es: "Mia: ¡Gracias! Uf, estas bolsas pesan." },
+              { en: "Sam: Give them to me. I'll carry them.", es: "Sam: Dámelas. Yo las llevo." },
+              { en: "Mia: You're the best. I promise I'll cook dinner tonight.", es: "Mia: Eres el mejor. Te prometo que hoy hago la cena." }
+            ]
+          },
+          {
+            kind: "errores",
+            items: [
+              { no: "I help you with that. (ofrecimiento)", si: "I'll help you with that.", pq: "Para ofrecer algo en el momento usa will." },
+              { no: "I will to call you.", si: "I will call you.", pq: "will + verbo sin to." },
+              { no: "I willn't forget.", si: "I won't forget.", pq: "will not = won't." }
+            ]
+          },
+          { kind: "resumen", body: "will / 'll + verbo: decisiones en el momento, ofrecimientos y promesas. won't = will not. Planes ya decididos: going to." },
+          { kind: "puente", body: "Practica: decide, ofrece y promete como Sam." }
+        ]
+      },
+      exercises: [
+        {
+          type: "listening", text: "It's cold in here. — OK, I'll close the window.", question: "¿Qué va a hacer?", options: ["Cerrar la ventana", "Abrir la puerta", "Encender la calefacción"], correctIndex: 0
+        },
+        {
+          type: "multiple_choice", question: "The phone is ringing! — ___", options: ["I'll answer it!", "I answer it!", "I'm answer it!"], correctIndex: 0,
+          explanation: "Decisión en el momento: I'll answer it."
+        },
+        {
+          type: "matching", instruction: "Une cada situación con el ofrecimiento lógico.",
+          pairs: [
+            { l: "These bags are heavy.", r: "I'll carry one." },
+            { l: "I'm thirsty.", r: "I'll get you some water." },
+            { l: "I don't understand this.", r: "I'll explain it." },
+            { l: "It's dark in here.", r: "I'll turn on the light." }
+          ]
+        },
+        {
+          type: "find_error",
+          segments: ["I ", { u: "will" }, " ", { u: "to call" }, " you ", { u: "tomorrow" }, "."],
+          correctIndex: 1, correction: "call", explanation: "will + verbo sin to: I will call you tomorrow.", question: "Encuentra el error"
+        },
+        { type: "fill_blank", sentence: "Don't worry, I ___ tell anyone. I promise!", answers: ["won't", "will not"], hint: "Promesa en negativo.", explanation: "I won't tell anyone." },
+        {
+          type: "categorize", instruction: "¿Decisión del momento (will) o plan ya decidido (going to)?",
+          buckets: [{ id: "will", label: "will" }, { id: "going", label: "going to" }],
+          items: [
+            { t: "Oh, it's raining! I'll take an umbrella.", bucket: "will" },
+            { t: "The phone! I'll get it.", bucket: "will" },
+            { t: "I'll have the chicken, please.", bucket: "will" },
+            { t: "We're going to visit Spain in July. We have the tickets.", bucket: "going" },
+            { t: "I'm going to study medicine next year.", bucket: "going" },
+            { t: "She's going to start a new job on Monday.", bucket: "going" }
+          ]
+        },
+        { type: "word_order", words: ["bags", "I'll", "your", "carry"], correctOrder: ["I'll", "carry", "your", "bags"], hint: "Un ofrecimiento con I'll." },
+        { type: "translate", prompt: "Traduce: \"Yo te ayudo.\" (ofrecimiento en el momento)", answers: ["i'll help you", "i will help you"], explanation: "I'll help you." }
+      ]
+    },
     "core-grammar-12-present-perfect":  {
                                             "lessonId":  "core-grammar-12-present-perfect",
                                             "level":  "B1",
@@ -2149,312 +2078,323 @@ window.VESPER_LESSONS = {
                                          "nextLessonId":  "core-grammar-18-second-conditional"
                                      },
     "core-grammar-18-second-conditional":  {
-                                               "lessonId":  "core-grammar-18-second-conditional",
-                                               "level":  "B2",
-                                               "track":  "Core Grammar",
-                                               "title":  "Second Conditional",
-                                               "explanation":  {
-                                                                   "body":  "We use the second conditional to talk about unreal or hypothetical situations in the present or future. The structure is: If + past simple, ... would + base verb (e.g. \"If I had more time, I would travel more\"). With the verb 'to be', we often use 'were' for all subjects, especially in the fixed advice phrase 'If I were you...'. You can replace 'would' with 'could' or 'might' to suggest ability or possibility in the result.",
-                                                                   "examples":  [
-                                                                                    {
-                                                                                        "en":  "If I had more money, I would buy a house by the sea."
-                                                                                    },
-                                                                                    {
-                                                                                        "en":  "If I were you, I would talk to her before deciding."
-                                                                                    },
-                                                                                    {
-                                                                                        "en":  "If she studied harder, she could pass the exam easily."
-                                                                                    },
-                                                                                    {
-                                                                                        "en":  "We might travel more if we didn\u0027t have such busy jobs."
-                                                                                    }
-                                                                                ]
-                                                               },
-                                               "exercises":  [
-                                                                 {
-                                                                     "type":  "multiple_choice",
-                                                                     "question":  "If I _____ rich, I would travel around the world.",
-                                                                     "options":  [
-                                                                                     "were",
-                                                                                     "am",
-                                                                                     "will be"
-                                                                                 ],
-                                                                     "correctIndex":  0,
-                                                                     "explanation":  "The second conditional needs the past simple in the if-clause, and \u0027were\u0027 is standard for hypothetical situations with \u0027to be\u0027."
-                                                                 },
-                                                                 {
-                                                                     "type":  "word_order",
-                                                                     "words":  [
-                                                                                   "If",
-                                                                                   "I",
-                                                                                   "were",
-                                                                                   "you",
-                                                                                   "I",
-                                                                                   "would",
-                                                                                   "apologise"
-                                                                               ],
-                                                                     "correctOrder":  [
-                                                                                          "If",
-                                                                                          "I",
-                                                                                          "were",
-                                                                                          "you",
-                                                                                          "I",
-                                                                                          "would",
-                                                                                          "apologise"
-                                                                                      ],
-                                                                     "hint":  "Start with 'If' and use the sentence to give advice ('If I were you...')."
-                                                                 },
-                                                                 {
-                                                                     "type":  "multiple_choice",
-                                                                     "question":  "If she had more confidence, she _____ apply for the manager role.",
-                                                                     "options":  [
-                                                                                     "must",
-                                                                                     "might",
-                                                                                     "should have"
-                                                                                 ],
-                                                                     "correctIndex":  1,
-                                                                     "explanation":  "In the second conditional, \u0027might\u0027 can replace \u0027would\u0027 in the result to express possibility."
-                                                                 },
-                                                                 {
-                                                                     "type":  "word_order",
-                                                                     "words":  [
-                                                                                   "If",
-                                                                                   "we",
-                                                                                   "left",
-                                                                                   "now",
-                                                                                   "we",
-                                                                                   "could",
-                                                                                   "catch",
-                                                                                   "the",
-                                                                                   "train"
-                                                                               ],
-                                                                     "correctOrder":  [
-                                                                                          "If",
-                                                                                          "we",
-                                                                                          "left",
-                                                                                          "now",
-                                                                                          "we",
-                                                                                          "could",
-                                                                                          "catch",
-                                                                                          "the",
-                                                                                          "train"
-                                                                                      ],
-                                                                     "hint":  "The result uses 'could' to express possibility or ability."
-                                                                 },
-                                                                 {
-                                                                     "type":  "multiple_choice",
-                                                                     "question":  "What would you do if you _____ your job tomorrow?",
-                                                                     "options":  [
-                                                                                     "lose",
-                                                                                     "would lose",
-                                                                                     "lost"
-                                                                                 ],
-                                                                     "correctIndex":  2,
-                                                                     "explanation":  "The if-clause of a second conditional takes the past simple (\u0027lost\u0027), never \u0027would\u0027 or the present."
-                                                                 }
-                                                             ],
-                                               "xpReward":  60,
-                                               "mascotState":  "explaining",
-                                               "nextLessonId":  "core-grammar-19-passive-voice"
-                                           },
+      lessonId: "core-grammar-18-second-conditional", level: "B2", track: "Core Grammar", topic: "grammar", skill: "grammar", tipo: "aprende", title: "Wish and if only", rev: 2, xpReward: 60,
+      mascotState: "explaining", nextLessonId: "core-grammar-19-passive-voice",
+      explanation: {
+        body: "Carmen's project is behind schedule, Daniel is stuck in a meeting he hates, and Tom has just spilled coffee on his laptop. Everyone at Lumen Travel is wishing for something different. Use wish and if only to talk about regrets and unreal situations. Present wishes (unreal now): wish / if only + past simple: I wish I had more time (but I don't). With be, 'were' is common in careful English: I wish I were taller ('was' is fine in conversation). Past regrets: wish / if only + past perfect: I wish I hadn't said that. Annoying behaviour you want to change: wish + would: I wish he would stop interrupting. Don't use would about yourself: I wish I could..., not I wish I would... If only is stronger and more emotional than I wish.",
+        examples: [
+          { en: "I wish we had another week for this project." },
+          { en: "If only I hadn't agreed to join this meeting! It's been two hours." },
+          { en: "I wish I hadn't put my coffee next to my laptop." },
+          { en: "And I wish people would stop interrupting each other in meetings!" }
+        ],
+        sections: [
+          {
+            kind: "intro",
+            body: "Carmen's project is behind schedule, Daniel is stuck in a meeting he hates, and Tom has just spilled coffee on his laptop. Everyone at Lumen Travel is wishing for something different. Use wish and if only to talk about regrets and unreal situations."
+          },
+          {
+            kind: "regla",
+            body: "Present wishes (unreal now): wish / if only + past simple: I wish I had more time (but I don't). With be, 'were' is common in careful English: I wish I were taller ('was' is fine in conversation). Past regrets: wish / if only + past perfect: I wish I hadn't said that. Annoying behaviour you want to change: wish + would: I wish he would stop interrupting. Don't use would about yourself: I wish I could..., not I wish I would... If only is stronger and more emotional than I wish."
+          },
+          {
+            kind: "vocab",
+            items: [
+              { en: "wish", ipa: "wɪʃ", es: "want something that is impossible or unlikely" },
+              { en: "regret", ipa: "rɪˈɡret", es: "feel sorry about something you did or didn't do" },
+              { en: "if only", es: "used for a strong wish or regret" },
+              { en: "behind schedule", es: "later than planned" },
+              { en: "deadline", ipa: "ˈdedlaɪn", es: "the time by which something must be finished" },
+              { en: "spill", ipa: "spɪl", es: "accidentally let liquid fall out of a container" },
+              { en: "interrupt", ipa: "ˌɪntəˈrʌpt", es: "stop someone while they are speaking" },
+              { en: "hindsight", ipa: "ˈhaɪndsaɪt", es: "understanding a situation only after it has happened" }
+            ]
+          },
+          {
+            kind: "expresiones",
+            items: [
+              { en: "I wish I had more time.", es: "a present wish" },
+              { en: "If only I'd known!", es: "a strong past regret" },
+              { en: "I wish you wouldn't do that.", es: "complain about someone's habit" },
+              { en: "With hindsight, ...", es: "looking back with knowledge you have now" }
+            ]
+          },
+          {
+            kind: "ejemplos",
+            items: [
+              { en: "Carmen: I wish we had another week for this project." },
+              { en: "Daniel: If only I hadn't agreed to join this meeting! It's been two hours." },
+              { en: "Tom: I wish I hadn't put my coffee next to my laptop." },
+              { en: "Priya: And I wish people would stop interrupting each other in meetings!" }
+            ]
+          },
+          {
+            kind: "errores",
+            items: [
+              { no: "I wish I have a car.", si: "I wish I had a car.", pq: "For a present wish, go one tense back: past simple." },
+              { no: "I wish I didn't say that yesterday.", si: "I wish I hadn't said that yesterday.", pq: "Past regrets need the past perfect." },
+              { no: "I wish I would be rich.", si: "I wish I were rich.", pq: "Don't use would for wishes about yourself." }
+            ]
+          },
+          { kind: "resumen", body: "Present wish: wish + past simple. Past regret: wish + past perfect. Someone else's annoying habit: wish + would. If only = stronger." },
+          { kind: "puente", body: "What does everyone at Lumen Travel wish? Practise." }
+        ]
+      },
+      exercises: [
+        {
+          type: "categorize", instruction: "Present wish or past regret?",
+          buckets: [{ id: "present", label: "Present wish" }, { id: "past", label: "Past regret" }],
+          items: [
+            { t: "I wish I lived by the sea.", bucket: "present" },
+            { t: "If only I knew the answer.", bucket: "present" },
+            { t: "I wish I were taller.", bucket: "present" },
+            { t: "I wish I hadn't eaten so much.", bucket: "past" },
+            { t: "If only we'd left earlier.", bucket: "past" },
+            { t: "I wish I'd studied harder.", bucket: "past" }
+          ]
+        },
+        {
+          type: "multiple_choice", question: "I'm so tired. I wish I ___ to bed earlier last night.", options: ["had gone", "went", "would go"], correctIndex: 0,
+          explanation: "A past regret: wish + past perfect."
+        },
+        {
+          type: "find_error",
+          segments: ["I wish ", { u: "I" }, " ", { u: "would have" }, " more free time ", { u: "these days" }, "."],
+          correctIndex: 1, correction: "had",
+          explanation: "Present wish about yourself: wish + past simple: I wish I had more free time.", question: "Find the mistake"
+        },
+        {
+          type: "fill_blank", sentence: "My flatmate never washes the dishes. I wish she ___ do them sometimes!", answers: ["would"], hint: "Someone else's annoying habit.",
+          explanation: "wish + would for behaviour you want to change."
+        },
+        {
+          type: "listening", text: "If only I hadn't missed the train, I'd be at the interview now.", question: "What does the speaker regret?",
+          options: ["Missing the train", "Going to the interview", "Taking the train"], correctIndex: 0
+        },
+        { type: "word_order", words: ["that", "I", "said", "wish", "hadn't", "I"], correctOrder: ["I", "wish", "I", "hadn't", "said", "that"], hint: "A past regret." },
+        { type: "true_false", statement: "\"I wish I could speak Japanese\" is correct.", answer: true, explanation: "could is fine for abilities: I wish I could swim / speak Japanese." },
+        {
+          type: "translate", prompt: "Rewrite using \"If only\": \"I regret telling him the secret.\"",
+          answers: ["if only i hadn't told him the secret", "if only i had not told him the secret", "if only i had never told him the secret", "if only i'd never told him the secret"],
+          explanation: "If only I hadn't told him the secret."
+        }
+      ]
+    },
     "core-grammar-19-passive-voice":  {
-                                          "lessonId":  "core-grammar-19-passive-voice",
-                                          "level":  "B2",
-                                          "track":  "Core Grammar",
-                                          "title":  "The Passive Voice",
-                                          "explanation":  {
-                                                              "body":  "We form the passive voice with the verb \"to be\" plus the past participle: \"is/are made\" in the present simple and \"was/were made\" in the past simple. We use the passive when the action or the object is more important than who does it, or when the agent is unknown or unimportant. If we want to mention who performs the action, we add it with \"by\" + agent.",
-                                                              "examples":  [
-                                                                               {
-                                                                                   "en":  "English is spoken all over the world."
-                                                                               },
-                                                                               {
-                                                                                   "en":  "The letters were delivered yesterday."
-                                                                               },
-                                                                               {
-                                                                                   "en":  "This painting was created by a local artist."
-                                                                               },
-                                                                               {
-                                                                                   "en":  "The office is cleaned every morning."
-                                                                               }
-                                                                           ]
-                                                          },
-                                          "exercises":  [
-                                                            {
-                                                                "type":  "multiple_choice",
-                                                                "question":  "Choose the correct passive form: \"This bridge ___ in 1932.\"",
-                                                                "options":  [
-                                                                                "was built",
-                                                                                "is built",
-                                                                                "was builded"
-                                                                            ],
-                                                                "correctIndex":  0,
-                                                                "explanation":  "A finished past action needs the past simple passive: was/were + past participle."
-                                                            },
-                                                            {
-                                                                "type":  "word_order",
-                                                                "words":  [
-                                                                              "Coffee",
-                                                                              "is",
-                                                                              "grown",
-                                                                              "in",
-                                                                              "Colombia"
-                                                                          ],
-                                                                "correctOrder":  [
-                                                                                     "Coffee",
-                                                                                     "is",
-                                                                                     "grown",
-                                                                                     "in",
-                                                                                     "Colombia"
-                                                                                 ],
-                                                                "hint":  "Present simple passive: the agent is not important."
-                                                            },
-                                                            {
-                                                                "type":  "multiple_choice",
-                                                                "question":  "Complete: \"The novel ___ by a famous writer.\"",
-                                                                "options":  [
-                                                                                "wrote",
-                                                                                "was wrote",
-                                                                                "was written"
-                                                                            ],
-                                                                "correctIndex":  2,
-                                                                "explanation":  "The passive uses the past participle (written), not the past simple form (wrote)."
-                                                            },
-                                                            {
-                                                                "type":  "word_order",
-                                                                "words":  [
-                                                                              "The",
-                                                                              "windows",
-                                                                              "are",
-                                                                              "cleaned",
-                                                                              "every",
-                                                                              "week"
-                                                                          ],
-                                                                "correctOrder":  [
-                                                                                     "The",
-                                                                                     "windows",
-                                                                                     "are",
-                                                                                     "cleaned",
-                                                                                     "every",
-                                                                                     "week"
-                                                                                 ],
-                                                                "hint":  "Present simple passive for a routine; the agent is not mentioned."
-                                                            },
-                                                            {
-                                                                "type":  "multiple_choice",
-                                                                "question":  "Which sentence correctly introduces the agent?",
-                                                                "options":  [
-                                                                                "The cake was made for my grandmother.",
-                                                                                "The cake was made by my grandmother.",
-                                                                                "The cake made by my grandmother."
-                                                                            ],
-                                                                "correctIndex":  1,
-                                                                "explanation":  "We use \"by\" to introduce the agent, and the passive needs the verb \"to be\" (was)."
-                                                            }
-                                                        ],
-                                          "xpReward":  60,
-                                          "mascotState":  "explaining",
-                                          "nextLessonId":  "core-grammar-20-reported-speech"
-                                      },
+      lessonId: "core-grammar-19-passive-voice", level: "B2", track: "Core Grammar", topic: "grammar", skill: "grammar", tipo: "aprende", title: "The causative: have / get something done", rev: 2, xpReward: 60,
+      mascotState: "explaining", nextLessonId: "core-grammar-20-reported-speech",
+      explanation: {
+        body: "Carmen's boiler is broken, her hair needs cutting and her laptop screen is cracked. She isn't going to fix any of these herself; she's going to have them done. Use the causative when someone else does a job for you. have + object + past participle: I'm having my boiler repaired. She had her hair cut yesterday. get + object + past participle means the same but is more informal: I need to get my screen fixed. All tenses are possible: I've just had my car serviced. It is also used for bad experiences: He had his phone stolen. Compare: I repaired my bike (I did it) vs I had my bike repaired (someone did it for me).",
+        examples: [
+          { en: "Nice haircut, Carmen! — Carmen: Thanks, I had it cut on Saturday." },
+          { en: "Your screen is cracked! — Carmen: I know. I'm getting it fixed tomorrow." },
+          { en: "Did you get your boiler sorted? — Carmen: Yes, I had a new one installed last week." },
+          { en: "Lucky you. I had my bike stolen last month." }
+        ],
+        sections: [
+          {
+            kind: "intro",
+            body: "Carmen's boiler is broken, her hair needs cutting and her laptop screen is cracked. She isn't going to fix any of these herself; she's going to have them done. Use the causative when someone else does a job for you."
+          },
+          {
+            kind: "regla",
+            body: "have + object + past participle: I'm having my boiler repaired. She had her hair cut yesterday. get + object + past participle means the same but is more informal: I need to get my screen fixed. All tenses are possible: I've just had my car serviced. It is also used for bad experiences: He had his phone stolen. Compare: I repaired my bike (I did it) vs I had my bike repaired (someone did it for me)."
+          },
+          {
+            kind: "vocab",
+            items: [
+              { en: "causative", ipa: "ˈkɔːzətɪv", es: "a structure showing that someone else does an action for you" },
+              { en: "repair", ipa: "rɪˈpeə", es: "fix something broken" },
+              { en: "service (a car)", es: "check and maintain a machine" },
+              { en: "cut", ipa: "kʌt", es: "shorten with scissors" },
+              { en: "deliver", ipa: "dɪˈlɪvə", es: "take goods to a place" },
+              { en: "install", ipa: "ɪnˈstɔːl", es: "put equipment in place so it works" },
+              { en: "boiler", ipa: "ˈbɔɪlə", es: "a machine that heats water for a home" },
+              { en: "cracked", ipa: "krækt", es: "broken, with lines on the surface" }
+            ]
+          },
+          {
+            kind: "expresiones",
+            items: [
+              { en: "I'm getting it fixed.", es: "someone will repair it" },
+              { en: "I had my hair cut.", es: "a hairdresser did it" },
+              { en: "Where do you get your ... done?", es: "ask for a recommendation" },
+              { en: "I had my phone stolen.", es: "something bad happened to you" }
+            ]
+          },
+          {
+            kind: "ejemplos",
+            items: [
+              { en: "Tom: Nice haircut, Carmen! — Carmen: Thanks, I had it cut on Saturday." },
+              { en: "Daniel: Your screen is cracked! — Carmen: I know. I'm getting it fixed tomorrow." },
+              { en: "Priya: Did you get your boiler sorted? — Carmen: Yes, I had a new one installed last week." },
+              { en: "Tom: Lucky you. I had my bike stolen last month." }
+            ]
+          },
+          {
+            kind: "errores",
+            items: [
+              { no: "I cut my hair at the hairdresser's.", si: "I had my hair cut at the hairdresser's.", pq: "If someone else did it, use have + object + past participle." },
+              { no: "I had repaired my car. (a mechanic did it)", si: "I had my car repaired.", pq: "Word order: have + object + past participle." },
+              { no: "She's getting her nails do.", si: "She's getting her nails done.", pq: "Use the past participle (done), not the base form." }
+            ]
+          },
+          { kind: "resumen", body: "have / get + object + past participle = someone does it for you. Works in all tenses. Also for bad experiences: I had my wallet stolen." },
+          { kind: "puente", body: "Help Carmen organise all her repairs." }
+        ]
+      },
+      exercises: [
+        {
+          type: "multiple_choice", question: "Carmen didn't cut her hair herself. She ___.", options: ["had it cut", "cut it", "had cut it"], correctIndex: 0,
+          explanation: "have + object + past participle: had it cut."
+        },
+        {
+          type: "find_error",
+          segments: ["We ", { u: "are having" }, " ", { u: "installed a new kitchen" }, " next ", { u: "month" }, "."],
+          correctIndex: 1, correction: "a new kitchen installed", explanation: "Object before the past participle: We're having a new kitchen installed.", question: "Find the mistake"
+        },
+        { type: "fill_blank", sentence: "I need to get my eyes ___ (test). I can't read the board.", answers: ["tested"], hint: "get + object + past participle", explanation: "get my eyes tested" },
+        {
+          type: "listening", text: "My car broke down, so I'm having it repaired at a garage near the office.", question: "Who is fixing the car?",
+          options: ["A mechanic at a garage", "The speaker", "A colleague"], correctIndex: 0
+        },
+        {
+          type: "categorize", instruction: "Did they do it themselves, or did someone else do it?",
+          buckets: [{ id: "self", label: "Did it themselves" }, { id: "other", label: "Someone else did it" }],
+          items: [
+            { t: "I painted my room.", bucket: "self" },
+            { t: "She fixed her bike.", bucket: "self" },
+            { t: "We cooked dinner.", bucket: "self" },
+            { t: "I had my room painted.", bucket: "other" },
+            { t: "She got her bike fixed.", bucket: "other" },
+            { t: "We had dinner delivered.", bucket: "other" }
+          ]
+        },
+        { type: "word_order", words: ["painted", "She's", "flat", "having", "her"], correctOrder: ["She's", "having", "her", "flat", "painted"], hint: "have + object + past participle" },
+        {
+          type: "matching", instruction: "Match each word with its meaning.",
+          pairs: [
+            { l: "install", r: "put equipment in place so it works" },
+            { l: "deliver", r: "take goods to a place" },
+            { l: "service", r: "check and maintain a machine" },
+            { l: "cracked", r: "broken, with lines on the surface" },
+            { l: "boiler", r: "a machine that heats water for a home" }
+          ]
+        },
+        {
+          type: "translate", prompt: "Rewrite using the causative with HAVE: \"A mechanic is checking my car today.\"", answers: ["i'm having my car checked today", "i am having my car checked today"],
+          explanation: "I'm having my car checked today."
+        }
+      ]
+    },
     "core-grammar-20-reported-speech":  {
-                                            "lessonId":  "core-grammar-20-reported-speech",
-                                            "level":  "B2",
-                                            "track":  "Core Grammar",
-                                            "title":  "Reported Speech",
-                                            "explanation":  {
-                                                                "body":  "When we report what someone said, we usually move the verb one step back into the past: present tenses become past, 'will' becomes 'would', and 'can' becomes 'could'. Pronouns and time words also shift to match the new point of view (for example, 'I' may become 'he', and 'tomorrow' becomes 'the next day'). Remember that 'tell' needs a person as its object (tell me, tell her), while 'say' does not (say that...).",
-                                                                "examples":  [
-                                                                                 {
-                                                                                     "en":  "\"I am tired,\" she said. -\u003e She said that she was tired."
-                                                                                 },
-                                                                                 {
-                                                                                     "en":  "\"We will call you tomorrow.\" -\u003e They said they would call me the next day."
-                                                                                 },
-                                                                                 {
-                                                                                     "en":  "\"I can\u0027t swim,\" he told me. -\u003e He told me he couldn\u0027t swim."
-                                                                                 },
-                                                                                 {
-                                                                                     "en":  "\"I work here now.\" -\u003e She said she worked there then."
-                                                                                 }
-                                                                             ]
-                                                            },
-                                            "exercises":  [
-                                                              {
-                                                                  "type":  "multiple_choice",
-                                                                  "question":  "\"I will help you,\" he said. -\u003e He said he ____ help me.",
-                                                                  "options":  [
-                                                                                  "will",
-                                                                                  "would",
-                                                                                  "would have"
-                                                                              ],
-                                                                  "correctIndex":  1,
-                                                                  "explanation":  "In reported speech, \u0027will\u0027 backshifts to \u0027would\u0027."
-                                                              },
-                                                              {
-                                                                  "type":  "word_order",
-                                                                  "words":  [
-                                                                                "she",
-                                                                                "said",
-                                                                                "she",
-                                                                                "lived",
-                                                                                "there"
-                                                                            ],
-                                                                  "correctOrder":  [
-                                                                                       "she",
-                                                                                       "said",
-                                                                                       "she",
-                                                                                       "lived",
-                                                                                       "there"
-                                                                                   ],
-                                                                  "hint":  "Reported speech: 'live' moves back to the past and 'here' changes to 'there'."
-                                                              },
-                                                              {
-                                                                  "type":  "multiple_choice",
-                                                                  "question":  "Choose the correct reporting verb: She ____ me that she was leaving.",
-                                                                  "options":  [
-                                                                                  "told",
-                                                                                  "said",
-                                                                                  "spoke"
-                                                                              ],
-                                                                  "correctIndex":  0,
-                                                                  "explanation":  "\u0027Tell\u0027 is followed directly by a person (\u0027told me\u0027), whereas \u0027say\u0027 is not."
-                                                              },
-                                                              {
-                                                                  "type":  "word_order",
-                                                                  "words":  [
-                                                                                "he",
-                                                                                "told",
-                                                                                "us",
-                                                                                "he",
-                                                                                "couldn\u0027t",
-                                                                                "come"
-                                                                            ],
-                                                                  "correctOrder":  [
-                                                                                       "he",
-                                                                                       "told",
-                                                                                       "us",
-                                                                                       "he",
-                                                                                       "couldn\u0027t",
-                                                                                       "come"
-                                                                                   ],
-                                                                  "hint":  "Remember: 'tell' needs a person (us) and 'can't' moves back to 'couldn't'."
-                                                              },
-                                                              {
-                                                                  "type":  "multiple_choice",
-                                                                  "question":  "\"I am studying English,\" she said. -\u003e She said she ____ English.",
-                                                                  "options":  [
-                                                                                  "studies",
-                                                                                  "is studying",
-                                                                                  "was studying"
-                                                                              ],
-                                                                  "correctIndex":  2,
-                                                                  "explanation":  "The present continuous \u0027am studying\u0027 backshifts to the past continuous \u0027was studying\u0027."
-                                                              }
-                                                          ],
-                                            "xpReward":  60,
-                                            "mascotState":  "explaining",
-                                            "nextLessonId":  "core-grammar-21-relative-clauses"
-                                        },
+      lessonId: "core-grammar-20-reported-speech", level: "B2", track: "Core Grammar", topic: "grammar", skill: "grammar", tipo: "aprende", title: "Reporting verbs: advise, refuse, suggest...", rev: 2,
+      xpReward: 60, mascotState: "explaining", nextLessonId: "core-grammar-21-relative-clauses",
+      explanation: {
+        body: "In the weekly meeting, Priya advised the team to test the app again, Daniel refused to work at the weekend, and Tom suggested having a party. When we report what people said, verbs like advise, refuse and suggest are more precise than 'said'. Each reporting verb has its own pattern. verb + to-infinitive: agree, offer, promise, refuse (He refused to help). verb + object + to-infinitive: advise, ask, encourage, remind, tell, warn (She advised me to rest). verb + -ing: admit, deny, recommend, suggest (He admitted breaking it / Tom suggested having a party). verb + that-clause: explain, claim, insist (She explained that she was busy). Negative: warn someone not to do something.",
+        examples: [{ en: "Priya advised us to test it again." }, { en: "Daniel refused to work at the weekend." }, { en: "Tom suggested having a party." }, { en: "Priya reminded us not to forget the deadline." }],
+        sections: [
+          {
+            kind: "intro",
+            body: "In the weekly meeting, Priya advised the team to test the app again, Daniel refused to work at the weekend, and Tom suggested having a party. When we report what people said, verbs like advise, refuse and suggest are more precise than 'said'."
+          },
+          {
+            kind: "regla",
+            body: "Each reporting verb has its own pattern. verb + to-infinitive: agree, offer, promise, refuse (He refused to help). verb + object + to-infinitive: advise, ask, encourage, remind, tell, warn (She advised me to rest). verb + -ing: admit, deny, recommend, suggest (He admitted breaking it / Tom suggested having a party). verb + that-clause: explain, claim, insist (She explained that she was busy). Negative: warn someone not to do something."
+          },
+          {
+            kind: "vocab",
+            items: [
+              { en: "advise", ipa: "ədˈvaɪz", es: "tell someone what you think they should do" },
+              { en: "refuse", ipa: "rɪˈfjuːz", es: "say you will not do something" },
+              { en: "suggest", ipa: "səˈdʒest", es: "put forward an idea for others to consider" },
+              { en: "admit", ipa: "ədˈmɪt", es: "agree that something bad is true" },
+              { en: "deny", ipa: "dɪˈnaɪ", es: "say that something is not true" },
+              { en: "remind", ipa: "rɪˈmaɪnd", es: "help someone remember" },
+              { en: "warn", ipa: "wɔːn", es: "tell someone about a danger or problem" },
+              { en: "insist", ipa: "ɪnˈsɪst", es: "say firmly that something must happen or is true" }
+            ]
+          },
+          {
+            kind: "expresiones",
+            items: [
+              { en: "She advised me to...", es: "report advice" },
+              { en: "He refused to...", es: "report a strong 'no'" },
+              { en: "They suggested -ing...", es: "report an idea" },
+              { en: "He admitted -ing...", es: "report a confession" }
+            ]
+          },
+          {
+            kind: "ejemplos",
+            items: [
+              { en: "\"You should test it again,\" said Priya. → Priya advised us to test it again." },
+              { en: "\"I won't work this weekend,\" said Daniel. → Daniel refused to work at the weekend." },
+              { en: "\"Let's have a party,\" said Tom. → Tom suggested having a party." },
+              { en: "\"Don't forget the deadline,\" said Priya. → Priya reminded us not to forget the deadline." }
+            ]
+          },
+          {
+            kind: "errores",
+            items: [
+              { no: "He suggested me to go.", si: "He suggested that I go. / He suggested going.", pq: "suggest is not followed by object + to-infinitive." },
+              { no: "She denied to take the money.", si: "She denied taking the money.", pq: "deny + -ing." },
+              { no: "They advised to me that I rest.", si: "They advised me to rest.", pq: "advise + object + to-infinitive." }
+            ]
+          },
+          { kind: "resumen", body: "+ to: agree, offer, promise, refuse. + object + to: advise, ask, remind, tell, warn. + -ing: admit, deny, recommend, suggest. + that: explain, claim, insist." },
+          { kind: "puente", body: "Report what happened in the Lumen Travel meeting." }
+        ]
+      },
+      exercises: [
+        {
+          type: "listening", text: "Don't touch the screen. It's still wet.", question: "Which report is correct?",
+          options: ["The technician warned us not to touch the screen.", "The technician refused to touch the screen.", "The technician admitted touching the screen."], correctIndex: 0
+        },
+        {
+          type: "categorize", instruction: "Which pattern does each verb take?",
+          buckets: [{ id: "inf", label: "+ to-infinitive" }, { id: "obj", label: "+ object + to-infinitive" }, { id: "ing", label: "+ -ing" }],
+          items: [
+            { t: "refuse", bucket: "inf" },
+            { t: "promise", bucket: "inf" },
+            { t: "advise", bucket: "obj" },
+            { t: "remind", bucket: "obj" },
+            { t: "warn", bucket: "obj" },
+            { t: "deny", bucket: "ing" },
+            { t: "suggest", bucket: "ing" },
+            { t: "admit", bucket: "ing" }
+          ]
+        },
+        {
+          type: "multiple_choice", question: "\"I didn't break the printer,\" said Tom. → Tom ___ the printer.", options: ["denied breaking", "refused to break", "admitted to break"], correctIndex: 0,
+          explanation: "deny + -ing = say you didn't do it."
+        },
+        {
+          type: "find_error",
+          segments: ["Priya ", { u: "suggested" }, " ", { u: "us to meet" }, " ", { u: "on" }, " Monday."],
+          correctIndex: 1, correction: "meeting (or: that we meet)", explanation: "suggest + -ing or suggest + that-clause, never + object + to-infinitive.", question: "Find the mistake"
+        },
+        { type: "fill_blank", sentence: "The doctor advised me ___ more water.", answers: ["to drink"], hint: "advise + object + ...", explanation: "The doctor advised me to drink more water." },
+        {
+          type: "matching", instruction: "Match each verb with its meaning.",
+          pairs: [
+            { l: "deny", r: "say that something is not true" },
+            { l: "admit", r: "agree that something bad is true" },
+            { l: "warn", r: "tell someone about a danger or problem" },
+            { l: "remind", r: "help someone remember" },
+            { l: "insist", r: "say firmly that something must happen" }
+          ]
+        },
+        { type: "word_order", words: ["today", "Daniel", "file", "promised", "the", "to", "send"], correctOrder: ["Daniel", "promised", "to", "send", "the", "file", "today"], hint: "promise + to-infinitive" },
+        {
+          type: "translate", prompt: "Report using REFUSE: \"I won't sign the contract,\" said the client.", answers: ["the client refused to sign the contract", "the client refused to sign it"],
+          explanation: "The client refused to sign the contract."
+        },
+        {
+          type: "translate", prompt: "Report using REMIND: \"Don't forget to lock the door,\" Priya told Tom.",
+          answers: ["priya reminded tom to lock the door", "priya reminded tom not to forget to lock the door"], explanation: "Priya reminded Tom to lock the door."
+        }
+      ]
+    },
     "core-grammar-21-relative-clauses":  {
                                              "lessonId":  "core-grammar-21-relative-clauses",
                                              "level":  "B2",
@@ -2668,235 +2608,114 @@ window.VESPER_LESSONS = {
                                                 "nextLessonId":  "core-grammar-23-third-conditional"
                                             },
     "core-grammar-23-third-conditional":  {
-                                              "lessonId":  "core-grammar-23-third-conditional",
-                                              "level":  "C1",
-                                              "track":  "Core Grammar",
-                                              "title":  "Third Conditional",
-                                              "tipo":  "aprende",
-                                              "explanation":  {
-                                                                  "body":  "The third conditional describes unreal or hypothetical situations in the past: things that did not actually happen. We form it with 'if + past perfect' in the condition and 'would have + past participle' in the result, and we often use it to express regret or to imagine a different outcome. To soften the result or show uncertainty, we replace 'would have' with 'could have' (possibility/ability) or 'might have' (a less certain outcome).",
-                                                                  "examples":  [
-                                                                                   {
-                                                                                       "en":  "If she had studied harder, she would have passed the exam."
-                                                                                   },
-                                                                                   {
-                                                                                       "en":  "If we had left earlier, we might have caught the train."
-                                                                                   },
-                                                                                   {
-                                                                                       "en":  "If you had told me the truth, I could have helped you."
-                                                                                   },
-                                                                                   {
-                                                                                       "en":  "If they hadn\u0027t ignored the warnings, the accident wouldn\u0027t have happened."
-                                                                                   }
-                                                                               ],
-                                                "sections":  [
-                                                  {
-                                                    "kind": "intro",
-                                                    "body": "The third conditional imagines a different past: what would have happened if something had been different. Use it to express regret, to analyse decisions and to explain a result without directly blaming anyone."
-                                                  },
-                                                  {
-                                                    "kind": "regla",
-                                                    "body": "If + past perfect, would have + past participle: If I had known, I would have called. Change would to could (possibility) or might (less certain). The if-clause can go at the end, and then there's no comma. Negative: hadn't / wouldn't have. In speech we contract: If I'd known, I'd have called (careful: 'd is had in the if-clause and would in the result)."
-                                                  },
-                                                  {
-                                                    "kind": "vocab",
-                                                    "items": [
-                                                      {
-                                                        "en": "if I had known",
-                                                        "es": "the unreal past condition"
-                                                      },
-                                                      {
-                                                        "en": "would have + past participle",
-                                                        "es": "the imagined past result"
-                                                      },
-                                                      {
-                                                        "en": "could have",
-                                                        "es": "it was possible, but it didn't happen"
-                                                      },
-                                                      {
-                                                        "en": "might have",
-                                                        "es": "a less certain past result"
-                                                      },
-                                                      {
-                                                        "en": "I wish I had…",
-                                                        "es": "express regret about the past"
-                                                      },
-                                                      {
-                                                        "en": "to regret",
-                                                        "ipa": "rɪˈɡret",
-                                                        "es": "to feel sorry about something you did"
-                                                      }
-                                                    ]
-                                                  },
-                                                  {
-                                                    "kind": "expresiones",
-                                                    "items": [
-                                                      {
-                                                        "en": "If I'd known, I would have told you.",
-                                                        "es": "you didn't know, so you didn't tell"
-                                                      },
-                                                      {
-                                                        "en": "We could have avoided this.",
-                                                        "es": "it was avoidable"
-                                                      },
-                                                      {
-                                                        "en": "Looking back, I might have handled it differently.",
-                                                        "es": "reflect calmly on a decision"
-                                                      },
-                                                      {
-                                                        "en": "I wish I had listened.",
-                                                        "es": "regret"
-                                                      }
-                                                    ]
-                                                  },
-                                                  {
-                                                    "kind": "ejemplos",
-                                                    "items": [
-                                                      {
-                                                        "en": "If I had started English earlier, I would have applied for that job."
-                                                      },
-                                                      {
-                                                        "en": "If we had left on time, we might have caught the flight."
-                                                      },
-                                                      {
-                                                        "en": "If you had told me, I could have helped."
-                                                      },
-                                                      {
-                                                        "en": "The project wouldn't have failed if the team had tested it."
-                                                      }
-                                                    ]
-                                                  },
-                                                  {
-                                                    "kind": "errores",
-                                                    "items": [
-                                                      {
-                                                        "no": "If I would have known, I would have come.",
-                                                        "si": "If I had known, I would have come.",
-                                                        "pq": "No would in the if-clause: use had + past participle."
-                                                      },
-                                                      {
-                                                        "no": "If she had studied, she would pass.",
-                                                        "si": "If she had studied, she would have passed.",
-                                                        "pq": "Unreal past in both parts: would have + past participle."
-                                                      },
-                                                      {
-                                                        "no": "If I knew, I would have told you.",
-                                                        "si": "If I had known, I would have told you.",
-                                                        "pq": "For the past, use the past perfect (had known), not the past simple."
-                                                      },
-                                                      {
-                                                        "no": "I would have went.",
-                                                        "si": "I would have gone.",
-                                                        "pq": "After have we use the past participle."
-                                                      },
-                                                      {
-                                                        "no": "If I'd have known…",
-                                                        "si": "If I'd known…",
-                                                        "pq": "Many native speakers say it, but in an exam or a formal text it's If I had known."
-                                                      }
-                                                    ]
-                                                  },
-                                                  {
-                                                    "kind": "resumen",
-                                                    "body": "If + had + past participle, would / could / might have + past participle. Never would in the if-clause. Use it to talk about past decisions with nuance."
-                                                  },
-                                                  {
-                                                    "kind": "puente",
-                                                    "body": "Your turn: a few quick exercises to master it."
-                                                  }
-                                                ]
-                                              },
-                                              "exercises":  [
-                                                                {
-                                                                    "type":  "multiple_choice",
-                                                                    "question":  "Choose the correct third conditional: \"If I had known about the delay, I ____ at home.\"",
-                                                                    "options":  [
-                                                                                    "would have stayed",
-                                                                                    "would stay",
-                                                                                    "had stayed"
-                                                                                ],
-                                                                    "correctIndex":  0,
-                                                                    "explanation":  "The third conditional result clause needs \u0027would have + past participle\u0027 to describe an unreal past outcome. \u0027Would stay\u0027 is the second conditional, and \u0027had stayed\u0027 is the past perfect used in the if-clause, not the result."
-                                                                },
-                                                                {
-                                                                    "type":  "word_order",
-                                                                    "words":  [
-                                                                                  "If",
-                                                                                  "they",
-                                                                                  "had",
-                                                                                  "warned",
-                                                                                  "us",
-                                                                                  "we",
-                                                                                  "would",
-                                                                                  "have",
-                                                                                  "evacuated"
-                                                                              ],
-                                                                    "correctOrder":  [
-                                                                                         "If",
-                                                                                         "they",
-                                                                                         "had",
-                                                                                         "warned",
-                                                                                         "us",
-                                                                                         "we",
-                                                                                         "would",
-                                                                                         "have",
-                                                                                         "evacuated"
-                                                                                     ],
-                                                                    "hint":  "Start with the condition 'If + past perfect', then the result with 'would have + past participle'."
-                                                                },
-                                                                {
-                                                                    "type":  "multiple_choice",
-                                                                    "question":  "Which sentence correctly uses \u0027might have\u0027 to show an uncertain past outcome?",
-                                                                    "options":  [
-                                                                                    "If he had asked, she might agree.",
-                                                                                    "If he had asked, she might have agreed.",
-                                                                                    "If he would have asked, she might have agreed."
-                                                                                ],
-                                                                    "correctIndex":  1,
-                                                                    "explanation":  "The condition takes \u0027had + past participle\u0027 and the uncertain result takes \u0027might have + past participle\u0027. \u0027Might agree\u0027 is not a past form, and \u0027would have\u0027 must never appear in the if-clause."
-                                                                },
-                                                                {
-                                                                    "type":  "word_order",
-                                                                    "words":  [
-                                                                                  "If",
-                                                                                  "we",
-                                                                                  "had",
-                                                                                  "invested",
-                                                                                  "earlier",
-                                                                                  "we",
-                                                                                  "could",
-                                                                                  "have",
-                                                                                  "profited"
-                                                                              ],
-                                                                    "correctOrder":  [
-                                                                                         "If",
-                                                                                         "we",
-                                                                                         "had",
-                                                                                         "invested",
-                                                                                         "earlier",
-                                                                                         "we",
-                                                                                         "could",
-                                                                                         "have",
-                                                                                         "profited"
-                                                                                     ],
-                                                                    "hint":  "Use 'could have' in the result to express a past possibility or ability."
-                                                                },
-                                                                {
-                                                                    "type":  "multiple_choice",
-                                                                    "question":  "Find the error: \"If you had listened, you wouldn\u0027t have made that mistake.\"",
-                                                                    "options":  [
-                                                                                    "It should be \u0027you wouldn\u0027t made that mistake\u0027.",
-                                                                                    "It should be \u0027If you would have listened\u0027.",
-                                                                                    "There is no error; the sentence is correct."
-                                                                                ],
-                                                                    "correctIndex":  2,
-                                                                    "explanation":  "The if-clause correctly uses the past perfect (\u0027had listened\u0027) and the result correctly uses \u0027wouldn\u0027t have + past participle\u0027 (\u0027wouldn\u0027t have made\u0027). The other options introduce errors."
-                                                                }
-                                                            ],
-                                              "xpReward":  70,
-                                              "mascotState":  "explaining",
-                                              "nextLessonId":  "core-grammar-24-modals-deduction"
-                                          },
+      lessonId: "core-grammar-23-third-conditional", level: "C1", track: "Core Grammar", topic: "grammar", skill: "grammar", tipo: "aprende", title: "Mixed conditionals", rev: 2, xpReward: 70,
+      mascotState: "explaining", nextLessonId: "core-grammar-24-modals-deduction",
+      explanation: {
+        body: "Real life rarely fits neatly into first, second or third conditionals. \"If I had taken that job in Singapore, I would be living there now.\" A past action, a present result. Mixed conditionals connect different times. Past condition → present result: If + past perfect, would + base verb: If I had studied medicine, I would be a doctor now. Present (or permanent) condition → past result: If + past simple, would have + past participle: If I were more organised, I wouldn't have missed the deadline. Time signals help: now, today, still (present result); yesterday, last year (past event). could and might also work: If she hadn't moved abroad, she might not speak three languages.",
+        examples: [
+          { en: "If I hadn't turned down that job in Singapore, I would be living there now." },
+          { en: "If she weren't so stubborn, she would have accepted the compromise." },
+          { en: "We wouldn't be lost if you had brought the map." },
+          { en: "If he spoke Mandarin, he would have got the job in Shanghai." }
+        ],
+        sections: [
+          {
+            kind: "intro",
+            body: "Real life rarely fits neatly into first, second or third conditionals. \"If I had taken that job in Singapore, I would be living there now.\" A past action, a present result. Mixed conditionals connect different times."
+          },
+          {
+            kind: "regla",
+            body: "Past condition → present result: If + past perfect, would + base verb: If I had studied medicine, I would be a doctor now. Present (or permanent) condition → past result: If + past simple, would have + past participle: If I were more organised, I wouldn't have missed the deadline. Time signals help: now, today, still (present result); yesterday, last year (past event). could and might also work: If she hadn't moved abroad, she might not speak three languages."
+          },
+          {
+            kind: "vocab",
+            items: [
+              { en: "hypothetical", ipa: "ˌhaɪpəˈθetɪkəl", es: "based on an imagined situation" },
+              { en: "consequence", ipa: "ˈkɒnsɪkwəns", es: "a result of an action" },
+              { en: "counterfactual", ipa: "ˌkaʊntəˈfæktʃuəl", es: "describing something that did not happen" },
+              { en: "in retrospect", es: "when looking back on a past event" },
+              { en: "turn down", es: "refuse an offer" },
+              { en: "outcome", ipa: "ˈaʊtkʌm", es: "the final result" },
+              { en: "trajectory", ipa: "trəˈdʒektəri", es: "the path or direction of development" },
+              { en: "contingent on", es: "depending on" }
+            ]
+          },
+          {
+            kind: "expresiones",
+            items: [
+              { en: "If I'd known then what I know now, ...", es: "reflect on past choices" },
+              { en: "I wouldn't be here today if...", es: "link a past event to the present" },
+              { en: "Had it not been for..., ...", es: "formal, inverted past condition" },
+              { en: "Things might have turned out differently if...", es: "speculate about a past outcome" }
+            ]
+          },
+          {
+            kind: "ejemplos",
+            items: [
+              { en: "If I hadn't turned down that job in Singapore, I would be living there now." },
+              { en: "If she weren't so stubborn, she would have accepted the compromise." },
+              { en: "We wouldn't be lost if you had brought the map." },
+              { en: "If he spoke Mandarin, he would have got the job in Shanghai." }
+            ]
+          },
+          {
+            kind: "errores",
+            items: [
+              { no: "If I would have studied, I would be a doctor.", si: "If I had studied, I would be a doctor.", pq: "No 'would' in the if-clause; use the past perfect for the past condition." },
+              {
+                no: "If she wasn't so shy, she would speak at the meeting yesterday.", si: "If she weren't so shy, she would have spoken at the meeting yesterday.",
+                pq: "A past result needs would have + past participle."
+              },
+              { no: "If I had had breakfast, I wouldn't have been hungry now.", si: "If I had had breakfast, I wouldn't be hungry now.", pq: "'now' signals a present result: would + base verb." }
+            ]
+          },
+          { kind: "resumen", body: "Past → present: If + had done, would do. Present → past: If + did, would have done. Let the time words guide you." },
+          { kind: "puente", body: "Mix the times and see how one decision changes everything." }
+        ]
+      },
+      exercises: [
+        {
+          type: "categorize", instruction: "Does the result refer to the present or the past?",
+          buckets: [{ id: "now", label: "Present result" }, { id: "past", label: "Past result" }],
+          items: [
+            { t: "...I would be fluent now.", bucket: "now" },
+            { t: "...she wouldn't be so tired today.", bucket: "now" },
+            { t: "...we would still be friends.", bucket: "now" },
+            { t: "...I would have called you.", bucket: "past" },
+            { t: "...he wouldn't have missed the flight.", bucket: "past" },
+            { t: "...they would have won the match.", bucket: "past" }
+          ]
+        },
+        {
+          type: "multiple_choice", question: "If I had saved more money last year, I ___ on holiday now.", options: ["would be", "would have been", "will be"], correctIndex: 0,
+          explanation: "Past condition (last year) → present result (now): would be."
+        },
+        {
+          type: "find_error",
+          segments: ["If she ", { u: "weren't" }, " so impatient, she ", { u: "wouldn't leave" }, " the meeting ", { u: "early yesterday" }, "."],
+          correctIndex: 1, correction: "wouldn't have left", explanation: "Permanent present trait → past result: would have + past participle.", question: "Find the mistake"
+        },
+        {
+          type: "fill_blank", sentence: "If he hadn't missed the train, he ___ be here by now.", answers: ["would", "could", "might"], hint: "Past condition → present result.",
+          explanation: "...he would be here by now."
+        },
+        {
+          type: "listening", text: "If I hadn't met Ana at that conference, I wouldn't be working in Lisbon today.", question: "What is true about the speaker?",
+          options: ["They met Ana and now work in Lisbon.", "They never met Ana.", "They are leaving Lisbon."], correctIndex: 0
+        },
+        {
+          type: "word_order", words: ["her", "If", "asked", "I", "have", "were", "would", "braver", "I"], correctOrder: ["If", "I", "were", "braver", "I", "would", "have", "asked", "her"],
+          hint: "Permanent present condition → past result."
+        },
+        { type: "true_false", statement: "\"If I had studied law, I would be a lawyer now\" combines a past condition with a present result.", answer: true, explanation: "had studied (past) → would be (now)." },
+        {
+          type: "translate",
+          prompt: "Combine into one mixed conditional: \"I didn't learn to drive. I can't drive to work now.\"",
+          answers: ["if i had learned to drive i could drive to work now", "if i had learnt to drive i could drive to work now", "if i had learned to drive i would be able to drive to work now", "if i had learnt to drive i would be able to drive to work now", "if i'd learned to drive i could drive to work now", "if i'd learnt to drive i could drive to work now"],
+          explanation: "If I had learned to drive, I could drive to work now."
+        }
+      ]
+    },
     "core-grammar-24-modals-deduction":  {
                                              "lessonId":  "core-grammar-24-modals-deduction",
                                              "level":  "C1",
@@ -3016,108 +2835,130 @@ window.VESPER_LESSONS = {
                                              "nextLessonId":  "core-grammar-25-inversion"
                                          },
     "core-grammar-25-inversion":  {
-                                      "lessonId":  "core-grammar-25-inversion",
-                                      "level":  "C1",
-                                      "track":  "Core Grammar",
-                                      "title":  "Inversion for Emphasis",
-                                      "explanation":  {
-                                                          "body":  "When a sentence begins with a negative or limiting adverbial for emphasis, English inverts the normal word order so that an auxiliary verb comes before the subject, exactly as in a question. This formal device follows expressions such as 'Never', 'Rarely', 'Not only', 'Hardly... when', 'Seldom', and 'Little'. If there is no auxiliary, you add 'do', 'does', or 'did' to carry the inversion.",
-                                                          "examples":  [
-                                                                           {
-                                                                               "en":  "Never have I encountered such generosity."
-                                                                           },
-                                                                           {
-                                                                               "en":  "Rarely does the committee reach a decision so quickly."
-                                                                           },
-                                                                           {
-                                                                               "en":  "Not only did she win the prize, but she also broke the record."
-                                                                           },
-                                                                           {
-                                                                               "en":  "Hardly had the meeting begun when the lights went out."
-                                                                           }
-                                                                       ]
-                                                      },
-                                      "exercises":  [
-                                                        {
-                                                            "type":  "multiple_choice",
-                                                            "question":  "Choose the correctly inverted sentence.",
-                                                            "options":  [
-                                                                            "Never I have seen such a mess.",
-                                                                            "Never I had seen such a mess.",
-                                                                            "Never have I seen such a mess."
-                                                                        ],
-                                                            "correctIndex":  2,
-                                                            "explanation":  "After the negative adverbial \u0027Never\u0027, the auxiliary (have) must come before the subject (I)."
-                                                        },
-                                                        {
-                                                            "type":  "word_order",
-                                                            "words":  [
-                                                                          "Rarely",
-                                                                          "does",
-                                                                          "she",
-                                                                          "arrive",
-                                                                          "late"
-                                                                      ],
-                                                            "correctOrder":  [
-                                                                                 "Rarely",
-                                                                                 "does",
-                                                                                 "she",
-                                                                                 "arrive",
-                                                                                 "late"
-                                                                             ],
-                                                            "hint":  "Start with the limiting adverb and put 'does' before the subject."
-                                                        },
-                                                        {
-                                                            "type":  "multiple_choice",
-                                                            "question":  "Complete: \u0027Not only did he apologise, ___ he offered to pay.\u0027",
-                                                            "options":  [
-                                                                            "but also",
-                                                                            "and also",
-                                                                            "so also"
-                                                                        ],
-                                                            "correctIndex":  0,
-                                                            "explanation":  "The \u0027Not only... but also...\u0027 structure requires \u0027but also\u0027 to introduce the second clause."
-                                                        },
-                                                        {
-                                                            "type":  "word_order",
-                                                            "words":  [
-                                                                          "Hardly",
-                                                                          "had",
-                                                                          "we",
-                                                                          "sat",
-                                                                          "down",
-                                                                          "when",
-                                                                          "it",
-                                                                          "started"
-                                                                      ],
-                                                            "correctOrder":  [
-                                                                                 "Hardly",
-                                                                                 "had",
-                                                                                 "we",
-                                                                                 "sat",
-                                                                                 "down",
-                                                                                 "when",
-                                                                                 "it",
-                                                                                 "started"
-                                                                             ],
-                                                            "hint":  "After 'Hardly', invert 'had' and the subject; the second part starts with 'when'."
-                                                        },
-                                                        {
-                                                            "type":  "multiple_choice",
-                                                            "question":  "Which sentence uses inversion correctly?",
-                                                            "options":  [
-                                                                            "Little knew they the truth.",
-                                                                            "Little did they know the truth.",
-                                                                            "Little they did know the truth."
-                                                                        ],
-                                                            "correctIndex":  1,
-                                                            "explanation":  "\u0027Little\u0027 is a negative adverbial, so the auxiliary \u0027did\u0027 precedes the subject \u0027they\u0027."
-                                                        }
-                                                    ],
-                                      "xpReward":  70,
-                                      "mascotState":  "explaining",
-                                      "nextLessonId":  null
-                                  }
+      lessonId: "core-grammar-25-inversion", level: "C1", track: "Core Grammar", topic: "grammar", skill: "grammar", tipo: "aprende", title: "Participle clauses", rev: 2, xpReward: 70, mascotState: "explaining",
+      nextLessonId: null,
+      explanation: {
+        body: "\"Having finished the report, she left early.\" \"Written in 1949, the novel still feels modern.\" Participle clauses let you pack information into fewer words. They are typical of good written English and formal speech. Present participle (-ing) = active meaning, often at the same time or giving a reason: Walking home, I saw an accident. Feeling tired, he went to bed. Past participle = passive meaning: Built in 1900, the bridge needs repairs. Perfect participle (having + past participle) = one action completed before another: Having read the email, she called the client. Negative: Not knowing what to do, I waited. The subject of the participle clause must be the subject of the main clause; otherwise you get a 'dangling participle': ✗ Walking home, the rain started.",
+        examples: [
+          { en: "Having reviewed the data, the committee approved the proposal." },
+          { en: "Founded in 1998, the company now employs 4,000 people." },
+          { en: "Not wanting to disturb anyone, she worked from home." },
+          { en: "Looking out of the window, he noticed the first snow of the year." }
+        ],
+        sections: [
+          {
+            kind: "intro",
+            body: "\"Having finished the report, she left early.\" \"Written in 1949, the novel still feels modern.\" Participle clauses let you pack information into fewer words. They are typical of good written English and formal speech."
+          },
+          {
+            kind: "regla",
+            body: "Present participle (-ing) = active meaning, often at the same time or giving a reason: Walking home, I saw an accident. Feeling tired, he went to bed. Past participle = passive meaning: Built in 1900, the bridge needs repairs. Perfect participle (having + past participle) = one action completed before another: Having read the email, she called the client. Negative: Not knowing what to do, I waited. The subject of the participle clause must be the subject of the main clause; otherwise you get a 'dangling participle': ✗ Walking home, the rain started."
+          },
+          {
+            kind: "vocab",
+            items: [
+              { en: "participle", ipa: "ˈpɑːtɪsɪpəl", es: "a verb form ending in -ing, or the third form (written, built)" },
+              { en: "clause", ipa: "klɔːz", es: "a group of words containing a verb" },
+              { en: "concise", ipa: "kənˈsaɪs", es: "short and clear" },
+              { en: "dangling participle", es: "a participle clause with the wrong subject, or none" },
+              { en: "subsequently", ipa: "ˈsʌbsɪkwəntli", es: "after something else" },
+              { en: "secure (funding)", ipa: "sɪˈkjʊə", es: "succeed in getting something" },
+              { en: "draft", ipa: "drɑːft", es: "an early version of a text" },
+              { en: "unanticipated", ipa: "ˌʌnænˈtɪsɪpeɪtɪd", es: "not expected" }
+            ]
+          },
+          {
+            kind: "expresiones",
+            items: [
+              { en: "Having said that, ...", es: "nevertheless (fixed phrase)" },
+              { en: "Generally speaking, ...", es: "in most cases" },
+              { en: "Considering the circumstances, ...", es: "taking the situation into account" },
+              { en: "Given the time constraints, ...", es: "because time is limited" }
+            ]
+          },
+          {
+            kind: "ejemplos",
+            items: [
+              { en: "Having reviewed the data, the committee approved the proposal." },
+              { en: "Founded in 1998, the company now employs 4,000 people." },
+              { en: "Not wanting to disturb anyone, she worked from home." },
+              { en: "Looking out of the window, he noticed the first snow of the year." }
+            ]
+          },
+          {
+            kind: "errores",
+            items: [
+              { no: "Walking into the office, the lights were off.", si: "Walking into the office, I noticed the lights were off.", pq: "The subject must be the same in both clauses (dangling participle)." },
+              { no: "Wrote in 1949, the novel is still popular.", si: "Written in 1949, the novel is still popular.", pq: "A passive meaning needs the past participle." },
+              { no: "Having finish the report, she left.", si: "Having finished the report, she left.", pq: "having + past participle." }
+            ]
+          },
+          { kind: "resumen", body: "-ing = active / simultaneous / reason. Past participle = passive. Having + past participle = earlier action. Same subject in both clauses." },
+          { kind: "puente", body: "Make your sentences shorter and sharper." }
+        ]
+      },
+      exercises: [
+        {
+          type: "multiple_choice", question: "___ the instructions carefully, he assembled the desk in ten minutes.", options: ["Having read", "Read", "Having reading"], correctIndex: 0,
+          explanation: "having + past participle: he read first, then assembled."
+        },
+        {
+          type: "categorize", instruction: "Active or passive meaning?",
+          buckets: [{ id: "active", label: "-ing (active)" }, { id: "passive", label: "Past participle (passive)" }],
+          items: [
+            { t: "Walking along the beach, ...", bucket: "active" },
+            { t: "Feeling unwell, ...", bucket: "active" },
+            { t: "Knowing the risks, ...", bucket: "active" },
+            { t: "Built in 1890, ...", bucket: "passive" },
+            { t: "Seen from above, ...", bucket: "passive" },
+            { t: "Written by an expert, ...", bucket: "passive" }
+          ]
+        },
+        {
+          type: "find_error",
+          segments: [{ u: "Arriving" }, " at the airport, ", { u: "my flight" }, " ", { u: "had" }, " already left."],
+          correctIndex: 1, correction: "I discovered that my flight",
+          explanation: "Dangling participle: the flight didn't arrive at the airport, I did. Arriving at the airport, I discovered that my flight had already left.", question: "Find the mistake"
+        },
+        {
+          type: "fill_blank", sentence: "___ (not / know) anyone at the party, Carmen stood near the door.", answers: ["not knowing"], hint: "Negative participle clause.", explanation: "Not knowing anyone, ..."
+        },
+        {
+          type: "reading", title: "A short company history",
+          passage: "Founded in a small garage in 2009, the company grew quickly. Having secured funding from two investors, it opened offices in Berlin and Toronto within three years.\n\nHowever, expanding too fast, it soon ran into financial trouble. Forced to cut costs, the board closed the Toronto office in 2014. Having learned from this experience, the company now grows more slowly.",
+          questions: [
+            {
+              q: "What happened first?",
+              options: ["The company secured funding.", "The company opened an office in Berlin.", "The board closed the Toronto office."], correctIndex: 0,
+              explanation: "Having secured funding, it opened offices: the perfect participle marks the earlier action."
+            },
+            {
+              q: "Why did the company run into trouble?",
+              options: ["It was expanding too fast.", "It was founded in a garage.", "It closed an office."], correctIndex: 0, explanation: "\"expanding too fast\" gives the reason."
+            },
+            {
+              q: "\"Forced to cut costs\" means:",
+              options: ["Because the board was forced to cut costs", "Although the board wanted to cut costs", "Before the board cut costs"], correctIndex: 0,
+              explanation: "Past participle with a passive, causal meaning."
+            }
+          ]
+        },
+        {
+          type: "word_order", words: ["home", "Having", "went", "finished", "she", "the", "report"], correctOrder: ["Having", "finished", "the", "report", "she", "went", "home"],
+          hint: "having + past participle first."
+        },
+        {
+          type: "translate",
+          prompt: "Rewrite with a participle clause: \"Because she felt nervous, she practised her speech again.\"",
+          answers: ["feeling nervous she practised her speech again", "feeling nervous she practiced her speech again"], explanation: "Feeling nervous, she practised her speech again."
+        },
+        {
+          type: "translate",
+          prompt: "Rewrite with a perfect participle: \"After he had checked the figures, he sent the report.\"",
+          answers: ["having checked the figures he sent the report", "having checked the numbers he sent the report"], explanation: "Having checked the figures, he sent the report."
+        }
+      ]
+    }
 };
 
 window.VESPER_LESSONS_ORDER = [

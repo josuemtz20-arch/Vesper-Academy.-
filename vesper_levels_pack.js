@@ -53,28 +53,98 @@ window.VESPER_LEVELS_PACK = (function () {
     },
 
     "lvl-a1-vocab-everyday": {
-      lessonId: "lvl-a1-vocab-everyday", level: "A1", track: "Vocabulario", topic: "dailylife", skill: "vocab",
-      title: "Vocabulario: familia y colores", xpReward: 32, mascotState: "explaining",
+      lessonId: "lvl-a1-vocab-everyday", level: "A1", track: "Vocabulario", topic: "countries", skill: "vocab", tipo: "aprende", title: "Países y nacionalidades", rev: 2, xpReward: 32, mascotState: "explaining",
       explanation: {
-        body: "Vocabulario cotidiano de A1: la familia y los colores. Practica reconocer las palabras y agruparlas. (Asocia, clasifica y completa.)",
+        body: "Cuando conoces a alguien, una de las primeras preguntas es: Where are you from? Aprende países y nacionalidades. En inglés las dos se escriben con mayúscula. País: I'm from Mexico. Nacionalidad (adjetivo): I'm Mexican. Siempre con mayúscula: Spain, Spanish. Terminaciones comunes: -an (Mexican), -ish (British, Spanish), -ese (Japanese, Chinese).",
         examples: [
-          { en: "mother, father, brother, sister", es: "madre, padre, hermano, hermana" },
-          { en: "red, blue, green, yellow", es: "rojo, azul, verde, amarillo" }
+          { en: "Where are you from, Mia?", es: "¿De dónde eres, Mia?" },
+          { en: "I'm Mexican. I'm from Puebla.", es: "Soy mexicana. Soy de Puebla." },
+          { en: "Cool! I'm Canadian, from Toronto.", es: "¡Genial! Soy canadiense, de Toronto." },
+          { en: "My friend Yuki is Japanese.", es: "Mi amiga Yuki es japonesa." }
+        ],
+        sections: [
+          { kind: "intro", body: "Cuando conoces a alguien, una de las primeras preguntas es: Where are you from? Aprende países y nacionalidades. En inglés las dos se escriben con mayúscula." },
+          {
+            kind: "regla",
+            body: "País: I'm from Mexico. Nacionalidad (adjetivo): I'm Mexican. Siempre con mayúscula: Spain, Spanish. Terminaciones comunes: -an (Mexican), -ish (British, Spanish), -ese (Japanese, Chinese)."
+          },
+          {
+            kind: "vocab",
+            items: [
+              { en: "Mexico / Mexican", es: "México / mexicano" },
+              { en: "Spain / Spanish", es: "España / español" },
+              { en: "the USA / American", es: "Estados Unidos / estadounidense" },
+              { en: "Canada / Canadian", es: "Canadá / canadiense" },
+              { en: "Brazil / Brazilian", es: "Brasil / brasileño" },
+              { en: "Japan / Japanese", es: "Japón / japonés" },
+              { en: "the UK / British", es: "Reino Unido / británico" },
+              { en: "Colombia / Colombian", es: "Colombia / colombiano" }
+            ]
+          },
+          {
+            kind: "expresiones",
+            items: [
+              { en: "Where are you from?", es: "¿De dónde eres?" },
+              { en: "I'm from...", es: "Soy de..." },
+              { en: "What nationality are you?", es: "¿Qué nacionalidad tienes?" },
+              { en: "Where in Mexico?", es: "¿De qué parte de México?" }
+            ]
+          },
+          {
+            kind: "ejemplos",
+            items: [
+              { en: "Sam: Where are you from, Mia?", es: "Sam: ¿De dónde eres, Mia?" },
+              { en: "Mia: I'm Mexican. I'm from Puebla.", es: "Mia: Soy mexicana. Soy de Puebla." },
+              { en: "Sam: Cool! I'm Canadian, from Toronto.", es: "Sam: ¡Genial! Soy canadiense, de Toronto." },
+              { en: "Mia: My friend Yuki is Japanese.", es: "Mia: Mi amiga Yuki es japonesa." }
+            ]
+          },
+          {
+            kind: "errores",
+            items: [
+              { no: "I'm from Mexican.", si: "I'm Mexican. / I'm from Mexico.", pq: "from + país; la nacionalidad va sin from." },
+              { no: "She is spanish.", si: "She is Spanish.", pq: "Las nacionalidades se escriben con mayúscula." },
+              { no: "I'm of Colombia.", si: "I'm from Colombia.", pq: "El origen se dice con from." }
+            ]
+          },
+          { kind: "resumen", body: "I'm from + país (I'm from Brazil). I'm + nacionalidad (I'm Brazilian). Países y nacionalidades siempre con mayúscula." },
+          { kind: "puente", body: "Practica con los amigos de Mia y Sam de todo el mundo." }
         ]
       },
       exercises: [
-        { type: "matching", instruction: "Une la palabra con su traducción.", pairs: [
-          { l: "mother", r: "madre" }, { l: "brother", r: "hermano" },
-          { l: "daughter", r: "hija" }, { l: "grandfather", r: "abuelo" }
-        ] },
-        { type: "categorize", instruction: "¿Es una persona de la familia o un color?", buckets: [
-          { id: "f", label: "Family" }, { id: "c", label: "Colour" } ], items: [
-          { t: "sister", bucket: "f" }, { t: "green", bucket: "c" },
-          { t: "father", bucket: "f" }, { t: "yellow", bucket: "c" },
-          { t: "uncle", bucket: "f" }, { t: "purple", bucket: "c" } ] },
-        { type: "multiple_choice", question: "What colour do you get from blue + yellow?", options: ["red", "black", "green"], correctIndex: 2, explanation: "Azul + amarillo = verde (green)." },
-        { type: "fill_blank", sentence: "My father's father is my ___.", answers: ["grandfather", "grandpa"], hint: "El padre de tu padre.", explanation: "grandfather = abuelo." },
-        { type: "translate", prompt: "Traduce: \"Mi hermana tiene un gato negro.\"", answers: ["my sister has a black cat"], explanation: "My sister has a black cat." }
+        {
+          type: "matching", instruction: "Une cada nacionalidad con su significado.",
+          pairs: [
+            { l: "Mexican", r: "mexicano/a" },
+            { l: "Spanish", r: "español/a" },
+            { l: "Canadian", r: "canadiense" },
+            { l: "Brazilian", r: "brasileño/a" },
+            { l: "Japanese", r: "japonés/japonesa" },
+            { l: "British", r: "británico/a" }
+          ]
+        },
+        {
+          type: "categorize", instruction: "¿País o nacionalidad?",
+          buckets: [{ id: "country", label: "País" }, { id: "nat", label: "Nacionalidad" }],
+          items: [
+            { t: "Brazil", bucket: "country" },
+            { t: "Japan", bucket: "country" },
+            { t: "Canada", bucket: "country" },
+            { t: "Brazilian", bucket: "nat" },
+            { t: "Japanese", bucket: "nat" },
+            { t: "Canadian", bucket: "nat" }
+          ]
+        },
+        { type: "multiple_choice", question: "Yuki is from Japan. She is ___.", options: ["Japanese", "Japan", "Japanish"], correctIndex: 0, explanation: "Japan → Japanese." },
+        { type: "listening", text: "Hi, I'm Lucas. I'm from Brazil, but I live in Spain.", question: "¿Dónde vive Lucas?", options: ["En España", "En Brasil", "En México"], correctIndex: 0 },
+        {
+          type: "find_error",
+          segments: ["Emma ", { u: "is" }, " from London. She ", { u: "is" }, " ", { u: "british" }, "."],
+          correctIndex: 2, correction: "British", explanation: "Las nacionalidades van con mayúscula: British.", question: "Encuentra el error"
+        },
+        { type: "fill_blank", sentence: "Where ___ you from?", answers: ["are"], hint: "you → are", explanation: "Where are you from?" },
+        { type: "true_false", statement: "\"I'm from Mexican\" es correcto.", answer: false, explanation: "Se dice I'm from Mexico o I'm Mexican." },
+        { type: "translate", prompt: "Traduce: \"Soy de Colombia.\"", answers: ["i'm from colombia", "i am from colombia"], explanation: "I'm from Colombia." }
       ]
     },
 
@@ -136,28 +206,101 @@ window.VESPER_LEVELS_PACK = (function () {
     },
 
     "lvl-a2-vocab-routines": {
-      lessonId: "lvl-a2-vocab-routines", level: "A2", track: "Vocabulario", topic: "dailylife", skill: "vocab",
-      title: "Vocabulario: rutina y comida", xpReward: 42, mascotState: "explaining",
+      lessonId: "lvl-a2-vocab-routines", level: "A2", track: "Expresiones", topic: "social", skill: "use", tipo: "aprende", title: "Dar tu opinión y estar de acuerdo", rev: 2, xpReward: 42,
+      mascotState: "explaining",
       explanation: {
-        body: "Vocabulario de A2: la rutina diaria y la comida. Aprende colocaciones útiles como 'have breakfast' o 'go to bed'. (Asocia, clasifica y traduce.)",
+        body: "Episodio 8 · Mia y Sam ven una película y no piensan igual. Aprende a dar tu opinión y a decir si estás de acuerdo o no. Opinar: I think (that)... / I don't think... / In my opinion... Preguntar: What do you think? Estar de acuerdo: I agree. / Me too. (con una frase afirmativa) / Me neither. (con una negativa). No estar de acuerdo con amabilidad: I don't agree. / I'm not sure about that. ¡Ojo! Se dice I agree, no \"I am agree\".",
         examples: [
-          { en: "I have breakfast at seven.", es: "Desayuno a las siete." },
-          { en: "She goes to bed late.", es: "Ella se acuesta tarde." }
+          { en: "What do you think of the film?", es: "¿Qué opinas de la película?" },
+          { en: "I think it's boring. The ending is terrible.", es: "Creo que es aburrida. El final es terrible." },
+          { en: "I don't agree. I think it's exciting!", es: "No estoy de acuerdo. ¡Creo que es emocionante!" },
+          { en: "Well, I don't like scary films. — Sam: Me neither!", es: "Bueno, no me gustan las películas de miedo. — Sam: ¡A mí tampoco!" }
+        ],
+        sections: [
+          { kind: "intro", body: "Episodio 8 · Mia y Sam ven una película y no piensan igual. Aprende a dar tu opinión y a decir si estás de acuerdo o no." },
+          {
+            kind: "regla",
+            body: "Opinar: I think (that)... / I don't think... / In my opinion... Preguntar: What do you think? Estar de acuerdo: I agree. / Me too. (con una frase afirmativa) / Me neither. (con una negativa). No estar de acuerdo con amabilidad: I don't agree. / I'm not sure about that. ¡Ojo! Se dice I agree, no \"I am agree\"."
+          },
+          {
+            kind: "vocab",
+            items: [
+              { en: "opinion", ipa: "əˈpɪnjən", es: "opinión" },
+              { en: "agree", ipa: "əˈɡriː", es: "estar de acuerdo" },
+              { en: "disagree", ipa: "ˌdɪsəˈɡriː", es: "no estar de acuerdo" },
+              { en: "boring", ipa: "ˈbɔːrɪŋ", es: "aburrido" },
+              { en: "exciting", ipa: "ɪkˈsaɪtɪŋ", es: "emocionante" },
+              { en: "funny", ipa: "ˈfʌni", es: "gracioso" },
+              { en: "scary", ipa: "ˈskeəri", es: "de miedo" },
+              { en: "ending", ipa: "ˈendɪŋ", es: "final" }
+            ]
+          },
+          {
+            kind: "expresiones",
+            items: [
+              { en: "What do you think?", es: "¿Qué opinas?" },
+              { en: "I think it's great.", es: "Creo que es genial." },
+              { en: "Me too. / Me neither.", es: "Yo también. / Yo tampoco." },
+              { en: "I don't agree.", es: "No estoy de acuerdo." }
+            ]
+          },
+          {
+            kind: "ejemplos",
+            items: [
+              { en: "Sam: What do you think of the film?", es: "Sam: ¿Qué opinas de la película?" },
+              { en: "Mia: I think it's boring. The ending is terrible.", es: "Mia: Creo que es aburrida. El final es terrible." },
+              { en: "Sam: I don't agree. I think it's exciting!", es: "Sam: No estoy de acuerdo. ¡Creo que es emocionante!" },
+              { en: "Mia: Well, I don't like scary films. — Sam: Me neither!", es: "Mia: Bueno, no me gustan las películas de miedo. — Sam: ¡A mí tampoco!" }
+            ]
+          },
+          {
+            kind: "errores",
+            items: [
+              { no: "I am agree.", si: "I agree.", pq: "agree es un verbo; no lleva am." },
+              { no: "I don't like it. — Me too.", si: "I don't like it. — Me neither.", pq: "Para coincidir con una frase negativa: Me neither." },
+              { no: "I think that no.", si: "I don't think so.", pq: "Para opinar en negativo: I don't think so." }
+            ]
+          },
+          { kind: "resumen", body: "I think... / I don't think... / In my opinion... · What do you think? · I agree / I don't agree · Me too (afirmativo) / Me neither (negativo)." },
+          { kind: "puente", body: "¿Quién tiene razón, Mia o Sam? Da tu opinión." }
         ]
       },
       exercises: [
-        { type: "matching", instruction: "Une el verbo con la palabra que lo acompaña.", pairs: [
-          { l: "have", r: "breakfast" }, { l: "brush", r: "your teeth" },
-          { l: "go", r: "to bed" }, { l: "take", r: "a shower" }
-        ] },
-        { type: "categorize", instruction: "¿Es comida o una actividad diaria?", buckets: [
-          { id: "fd", label: "Food" }, { id: "ac", label: "Daily activity" } ], items: [
-          { t: "rice", bucket: "fd" }, { t: "get up", bucket: "ac" },
-          { t: "cheese", bucket: "fd" }, { t: "wash the dishes", bucket: "ac" },
-          { t: "bread", bucket: "fd" }, { t: "go to work", bucket: "ac" } ] },
-        { type: "multiple_choice", question: "Which verb fits: \"I ___ a shower in the morning.\"", options: ["do", "take", "make"], correctIndex: 1, explanation: "Colocación: 'take a shower'." },
-        { type: "fill_blank", sentence: "We have ___ at 8 a.m. before work. (la primera comida del día)", answers: ["breakfast"], hint: "El desayuno.", explanation: "'have breakfast' = desayunar." },
-        { type: "translate", prompt: "Traduce: \"Ella se acuesta tarde.\"", answers: ["she goes to bed late"], explanation: "She goes to bed late." }
+        {
+          type: "multiple_choice", question: "I don't like horror films. — ___ They're too scary.", options: ["Me neither.", "Me too.", "I agree not."], correctIndex: 0,
+          explanation: "Con una frase negativa: Me neither."
+        },
+        {
+          type: "find_error",
+          segments: [{ u: "I" }, " ", { u: "am agree" }, " ", { u: "with" }, " you."],
+          correctIndex: 1, correction: "agree", explanation: "agree es verbo: I agree with you.", question: "Encuentra el error"
+        },
+        {
+          type: "listening", text: "I think the book is better than the film.", question: "¿Qué opina?",
+          options: ["El libro es mejor que la película", "La película es mejor que el libro", "Los dos son malos"], correctIndex: 0
+        },
+        {
+          type: "categorize", instruction: "¿Está de acuerdo o no?",
+          buckets: [{ id: "yes", label: "De acuerdo" }, { id: "no", label: "No está de acuerdo" }],
+          items: [
+            { t: "I agree.", bucket: "yes" },
+            { t: "Me too.", bucket: "yes" },
+            { t: "You're right.", bucket: "yes" },
+            { t: "I don't agree.", bucket: "no" },
+            { t: "I'm not sure about that.", bucket: "no" },
+            { t: "I don't think so.", bucket: "no" }
+          ]
+        },
+        { type: "fill_blank", sentence: "What do you ___ of the new café? — It's great!", answers: ["think"], hint: "¿Qué opinas de...?", explanation: "What do you think of...?" },
+        {
+          type: "matching", instruction: "Une cada adjetivo con su significado.",
+          pairs: [{ l: "boring", r: "aburrido/a" }, { l: "exciting", r: "emocionante" }, { l: "funny", r: "gracioso/a" }, { l: "scary", r: "de miedo" }]
+        },
+        { type: "speak", text: "I don't agree. I think it's exciting!", es: "No estoy de acuerdo. ¡Creo que es emocionante!" },
+        {
+          type: "translate", prompt: "Traduce: \"Creo que es aburrido.\"",
+          answers: ["i think it's boring", "i think it is boring", "i think that it's boring", "i think that it is boring"], explanation: "I think it's boring."
+        }
       ]
     },
 
@@ -218,30 +361,111 @@ window.VESPER_LEVELS_PACK = (function () {
     },
 
     "lvl-b1-vocab-money": {
-      lessonId: "lvl-b1-vocab-money", level: "B1", track: "Vocabulary", topic: "business", skill: "vocab",
-      title: "Vocabulary: money and work", xpReward: 52, mascotState: "explaining",
+      lessonId: "lvl-b1-vocab-money", level: "B1", track: "Functional English", topic: "communication", skill: "use", tipo: "aprende", title: "Asking for clarification", rev: 2, xpReward: 52,
+      mascotState: "explaining",
       explanation: {
-        body: "B1 vocabulary about money and work, with frequent collocations (earn money, save up, apply for a job). Distinguish nuances like 'borrow' (take something and return it) vs 'lend' (give something that will come back).",
+        body: "Episode 3 · Carmen has her first video call with a hotel partner in Glasgow. The connection is bad and he speaks very fast. Learn how to ask for clarification and check that you've understood. If you didn't hear: Sorry, I didn't catch that. / Could you say that again, please? If you didn't understand a word: What do you mean by...? / Sorry, what does ... mean? To check, paraphrase: So, you're saying that... / Just to confirm, ... / Let me make sure I've got this right. To slow someone down: Could you speak a bit more slowly?",
         examples: [
-          { en: "She applied for a new job." },
-          { en: "Can you lend me ten euros?" }
+          { en: "We can offer twenty rooms from the fifteenth, but only on a B&B basis." },
+          { en: "Sorry, I didn't catch that. Could you say it again? The line is breaking up." },
+          { en: "Twenty rooms, from the fifteenth. Bed and breakfast." },
+          { en: "Just to confirm: twenty rooms from the fifteenth, with breakfast included. Is that right?" }
+        ],
+        sections: [
+          {
+            kind: "intro",
+            body: "Episode 3 · Carmen has her first video call with a hotel partner in Glasgow. The connection is bad and he speaks very fast. Learn how to ask for clarification and check that you've understood."
+          },
+          {
+            kind: "regla",
+            body: "If you didn't hear: Sorry, I didn't catch that. / Could you say that again, please? If you didn't understand a word: What do you mean by...? / Sorry, what does ... mean? To check, paraphrase: So, you're saying that... / Just to confirm, ... / Let me make sure I've got this right. To slow someone down: Could you speak a bit more slowly?"
+          },
+          {
+            kind: "vocab",
+            items: [
+              { en: "clarify", ipa: "ˈklærəfaɪ", es: "make something easier to understand" },
+              { en: "catch", ipa: "kætʃ", es: "hear and understand (informal)" },
+              { en: "confirm", ipa: "kənˈfɜːm", es: "say that something is definitely true" },
+              { en: "paraphrase", ipa: "ˈpærəfreɪz", es: "say the same thing in different words" },
+              { en: "the line is breaking up", es: "the call connection is bad" },
+              { en: "mean by", es: "intend to say with a word" },
+              { en: "get (something)", es: "understand" },
+              { en: "detail", ipa: "ˈdiːteɪl", es: "a small piece of information" }
+            ]
+          },
+          {
+            kind: "expresiones",
+            items: [
+              { en: "Sorry, I didn't catch that.", es: "you didn't hear clearly" },
+              { en: "What do you mean by...?", es: "ask about a word or idea" },
+              { en: "So, you're saying that...?", es: "check understanding by paraphrasing" },
+              { en: "Just to confirm, ...", es: "make sure the details are right" }
+            ]
+          },
+          {
+            kind: "ejemplos",
+            items: [
+              { en: "Mr Reid: We can offer twenty rooms from the fifteenth, but only on a B&B basis." },
+              { en: "Carmen: Sorry, I didn't catch that. Could you say it again? The line is breaking up." },
+              { en: "Mr Reid: Twenty rooms, from the fifteenth. Bed and breakfast." },
+              { en: "Carmen: Just to confirm: twenty rooms from the fifteenth, with breakfast included. Is that right?" }
+            ]
+          },
+          {
+            kind: "errores",
+            items: [
+              { no: "Repeat, please.", si: "Could you say that again, please?", pq: "A bare imperative can sound rude; use Could you...?" },
+              { no: "What means 'B&B'?", si: "What does 'B&B' mean?", pq: "Use does + mean in the question." },
+              { no: "I didn't catch.", si: "I didn't catch that.", pq: "catch needs an object: catch that / catch your name." }
+            ]
+          },
+          { kind: "resumen", body: "Didn't hear → Sorry, I didn't catch that. Didn't understand → What do you mean by...? Check → So, you're saying...? / Just to confirm..." },
+          { kind: "puente", body: "Help Carmen get the details right on her call." }
         ]
       },
       exercises: [
-        { type: "matching", instruction: "Match each verb with its meaning.", pairs: [
-          { l: "earn", r: "to get money for work" },
-          { l: "save", r: "to keep money for later" },
-          { l: "lend", r: "to give money temporarily" },
-          { l: "borrow", r: "to take money temporarily" }
-        ] },
-        { type: "categorize", instruction: "Is the word about money or about jobs?", buckets: [
-          { id: "m", label: "Money" }, { id: "j", label: "Job" } ], items: [
-          { t: "salary", bucket: "j" }, { t: "discount", bucket: "m" },
-          { t: "interview", bucket: "j" }, { t: "budget", bucket: "m" },
-          { t: "colleague", bucket: "j" }, { t: "currency", bucket: "m" } ] },
-        { type: "multiple_choice", question: "Choose the correct word: \"Can you ___ me your pen? I'll give it back.\"", options: ["borrow", "lend", "earn"], correctIndex: 1, explanation: "You give something temporarily: 'lend'." },
-        { type: "fill_blank", sentence: "I want to ___ for that job; I'll send my CV tomorrow.", answers: ["apply"], hint: "apply ___ a job.", explanation: "'apply for a job' = formally ask for a job." },
-        { type: "translate", prompt: "Rewrite with 'save': Every month, she keeps part of her salary instead of spending it.", answers: ["she saves money every month","she saves money each month","she saves some money every month","every month she saves money"], explanation: "She saves money every month." }
+        {
+          type: "listening", text: "So, you're saying that the meeting has moved to Thursday?", question: "What is the speaker doing?",
+          options: ["Checking their understanding", "Disagreeing", "Cancelling the meeting"], correctIndex: 0
+        },
+        {
+          type: "multiple_choice", question: "You didn't hear the client's name on the phone. You say:", options: ["Sorry, I didn't catch your name.", "What is you name?", "Your name again!"], correctIndex: 0,
+          explanation: "I didn't catch + object is natural and polite."
+        },
+        {
+          type: "matching", instruction: "Match each word with its meaning.",
+          pairs: [
+            { l: "clarify", r: "make something easier to understand" },
+            { l: "confirm", r: "say that something is definitely true" },
+            { l: "paraphrase", r: "say the same thing in different words" },
+            { l: "catch", r: "hear and understand (informal)" },
+            { l: "detail", r: "a small piece of information" }
+          ]
+        },
+        {
+          type: "find_error",
+          segments: ["Sorry, what ", { u: "does" }, " 'deadline' ", { u: "means" }, " in ", { u: "this" }, " context?"],
+          correctIndex: 1, correction: "mean", explanation: "After does, use the base verb: What does 'deadline' mean?", question: "Find the mistake"
+        },
+        {
+          type: "categorize", instruction: "What is the speaker doing?",
+          buckets: [{ id: "hear", label: "Didn't hear" }, { id: "meaning", label: "Didn't understand a word" }, { id: "check", label: "Checking understanding" }],
+          items: [
+            { t: "Sorry, I didn't catch that.", bucket: "hear" },
+            { t: "Could you say that again?", bucket: "hear" },
+            { t: "What do you mean by 'B&B'?", bucket: "meaning" },
+            { t: "What does 'upgrade' mean?", bucket: "meaning" },
+            { t: "So, you're saying that...?", bucket: "check" },
+            { t: "Just to confirm, ...", bucket: "check" }
+          ]
+        },
+        { type: "fill_blank", sentence: "Just to ___: the meeting is at three, not two?", answers: ["confirm", "check", "clarify"], hint: "Make sure the detail is right.", explanation: "Just to confirm..." },
+        { type: "speak", text: "Sorry, I didn't catch that. Could you say it again?" },
+        {
+          type: "translate",
+          prompt: "Turn this into a clarification question, starting with \"What do you mean\": \"I don't understand the word 'flexible'.\"",
+          answers: ["what do you mean by flexible", "what do you mean when you say flexible"], explanation: "What do you mean by 'flexible'?"
+        }
       ]
     },
 
@@ -269,7 +493,20 @@ window.VESPER_LEVELS_PACK = (function () {
           correctIndex: 0, correction: "find (people = plural)",
           explanation: "'people' is plural, so the verb is 'find', not 'finds'." },
         { type: "true_false", statement: "According to the text, today a smartphone can be used to pay for shopping.", answer: true, explanation: "\"...pay for shopping...\"" },
-        { type: "fill_blank", sentence: "Some experts worry that constant ___ make it harder to concentrate.", answers: ["notifications"], hint: "The alerts on your phone.", explanation: "\"...constant notifications make it harder to concentrate.\"" }
+        { type: "fill_blank", sentence: "Some experts worry that constant ___ make it harder to concentrate.", answers: ["notifications"], hint: "The alerts on your phone.", explanation: "\"...constant notifications make it harder to concentrate.\"" },
+        {
+          type: "multiple_choice", question: "What is the writer's attitude to smartphones?",
+          options: ["Positive, but aware of a problem", "Completely negative", "Completely positive"], correctIndex: 0, explanation: "Convenience, but also a downside."
+        },
+        {
+          type: "matching", instruction: "Match each word from the text with its meaning.",
+          pairs: [
+            { l: "device", r: "a piece of equipment such as a phone" },
+            { l: "convenience", r: "something that makes life easier" },
+            { l: "concentrate", r: "give all your attention to something" },
+            { l: "notification", r: "an alert on your phone" }
+          ]
+        }
       ]
     }
 

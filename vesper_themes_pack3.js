@@ -72,28 +72,105 @@ window.VESPER_THEMES_PACK3 = (function () {
     /* ===================== A2 · LOS TRABAJOS ===================== */
 
     "lvl-a2-vocab-jobs": {
-      lessonId: "lvl-a2-vocab-jobs", level: "A2", track: "Vocabulario", topic: "work", skill: "vocab",
-      title: "Tema: los trabajos", xpReward: 42, mascotState: "explaining",
+      lessonId: "lvl-a2-vocab-jobs", level: "A2", track: "Expresiones", topic: "social", skill: "use", tipo: "aprende", title: "Pedir y ofrecer ayuda", rev: 2, xpReward: 42, mascotState: "explaining",
       explanation: {
-        body: "Vocabulario A2 de profesiones. Aprende nombres de trabajos y dónde se realizan. (Asocia, clasifica y traduce.)",
+        body: "Episodio 10 · La señora Park llega con muchas bolsas y Sam le ofrece ayuda. Más tarde, Sam necesita a Mia en la cocina. Aprende a pedir y ofrecer ayuda. Pedir ayuda: Can you help me, please? / Could you + verbo? (más cortés) / Can you give me a hand? Ofrecer ayuda: Can I help you? / Do you need a hand? / Shall I + verbo? (Shall I carry that?) / I'll + verbo. Responder: Yes, please. That's very kind of you. / No, thanks. I'm fine.",
         examples: [
-          { en: "My brother is a teacher.", es: "Mi hermano es profesor." },
-          { en: "teacher, nurse, chef, driver", es: "profesor, enfermero, cocinero, conductor" }
+          { en: "Good morning, Mrs Park! Do you need a hand?", es: "¡Buenos días, señora Park! ¿Necesita ayuda?" },
+          { en: "Oh yes, please. These bags are very heavy.", es: "Ay, sí, por favor. Estas bolsas pesan mucho." },
+          { en: "Shall I carry them upstairs for you?", es: "¿Se las subo?" },
+          { en: "That's very kind of you, Sam. Thank you!", es: "Es muy amable de tu parte, Sam. ¡Gracias!" }
+        ],
+        sections: [
+          { kind: "intro", body: "Episodio 10 · La señora Park llega con muchas bolsas y Sam le ofrece ayuda. Más tarde, Sam necesita a Mia en la cocina. Aprende a pedir y ofrecer ayuda." },
+          {
+            kind: "regla",
+            body: "Pedir ayuda: Can you help me, please? / Could you + verbo? (más cortés) / Can you give me a hand? Ofrecer ayuda: Can I help you? / Do you need a hand? / Shall I + verbo? (Shall I carry that?) / I'll + verbo. Responder: Yes, please. That's very kind of you. / No, thanks. I'm fine."
+          },
+          {
+            kind: "vocab",
+            items: [
+              { en: "help", ipa: "help", es: "ayudar" },
+              { en: "need", ipa: "niːd", es: "necesitar" },
+              { en: "carry", ipa: "ˈkæri", es: "cargar" },
+              { en: "lift", ipa: "lɪft", es: "levantar" },
+              { en: "kind", ipa: "kaɪnd", es: "amable" },
+              { en: "upstairs", ipa: "ˌʌpˈsteəz", es: "arriba (en otro piso)" },
+              { en: "recipe", ipa: "ˈresəpi", es: "receta" },
+              { en: "give someone a hand", es: "echarle una mano a alguien" }
+            ]
+          },
+          {
+            kind: "expresiones",
+            items: [
+              { en: "Do you need a hand?", es: "¿Necesitas ayuda?" },
+              { en: "Shall I carry that for you?", es: "¿Te lo llevo?" },
+              { en: "Could you help me with...?", es: "¿Me podrías ayudar con...?" },
+              { en: "That's very kind of you.", es: "Es muy amable de tu parte." }
+            ]
+          },
+          {
+            kind: "ejemplos",
+            items: [
+              { en: "Sam: Good morning, Mrs Park! Do you need a hand?", es: "Sam: ¡Buenos días, señora Park! ¿Necesita ayuda?" },
+              { en: "Mrs Park: Oh yes, please. These bags are very heavy.", es: "Sra. Park: Ay, sí, por favor. Estas bolsas pesan mucho." },
+              { en: "Sam: Shall I carry them upstairs for you?", es: "Sam: ¿Se las subo?" },
+              { en: "Mrs Park: That's very kind of you, Sam. Thank you!", es: "Sra. Park: Es muy amable de tu parte, Sam. ¡Gracias!" }
+            ]
+          },
+          {
+            kind: "errores",
+            items: [
+              { no: "Shall I to carry it?", si: "Shall I carry it?", pq: "Shall I + verbo sin to." },
+              { no: "Do you need hand?", si: "Do you need a hand?", pq: "La expresión es need / give a hand." },
+              { no: "You can help me?", si: "Can you help me?", pq: "En preguntas, can va primero." }
+            ]
+          },
+          { kind: "resumen", body: "Pedir: Can / Could you help me? · Can you give me a hand? Ofrecer: Can I help you? · Do you need a hand? · Shall I...? · I'll... Responder: Yes, please / No, thanks." },
+          { kind: "puente", body: "Ofrece y pide ayuda como Sam y la señora Park." }
         ]
       },
       exercises: [
-        { type: "matching", instruction: "Une el trabajo con su traducción.", pairs: [
-          { l: "teacher", r: "profesor" }, { l: "nurse", r: "enfermero" },
-          { l: "chef", r: "cocinero" }, { l: "driver", r: "conductor" }
-        ] },
-        { type: "categorize", instruction: "¿Trabaja normalmente dentro o fuera?", buckets: [
-          { id: "in", label: "Works indoors" }, { id: "out", label: "Works outdoors" } ], items: [
-          { t: "teacher", bucket: "in" }, { t: "farmer", bucket: "out" },
-          { t: "nurse", bucket: "in" }, { t: "builder", bucket: "out" },
-          { t: "waiter", bucket: "in" }, { t: "gardener", bucket: "out" } ] },
-        { type: "multiple_choice", question: "A person who cooks in a restaurant is a ___.", options: ["chef", "doctor", "pilot"], correctIndex: 0, explanation: "chef = cocinero." },
-        { type: "fill_blank", sentence: "A ___ helps sick people in a hospital.", answers: ["nurse", "doctor"], hint: "Trabaja en el hospital.", explanation: "nurse/doctor = enfermero/médico." },
-        { type: "translate", prompt: "Traduce: \"Mi hermana es médica.\"", answers: ["my sister is a doctor"], explanation: "My sister is a doctor." }
+        {
+          type: "matching", instruction: "Une cada pregunta con la respuesta lógica.",
+          pairs: [
+            { l: "Can I help you? (en una tienda)", r: "No, thanks. I'm just looking." },
+            { l: "Could you pass the salt, please?", r: "Here you are." },
+            { l: "Shall I open the window?", r: "Yes, please. It's hot in here." },
+            { l: "Could you help me with this recipe?", r: "Sure. What do you need?" }
+          ]
+        },
+        {
+          type: "listening", text: "Excuse me, could you help me? I can't find the train station.", question: "¿Qué necesita?",
+          options: ["Encontrar la estación de tren", "Comprar un boleto", "Cargar su maleta"], correctIndex: 0
+        },
+        {
+          type: "multiple_choice", question: "Ves a una persona con una maleta muy pesada. Dices:", options: ["Shall I carry that for you?", "Carry that for me!", "Do you carry that?"], correctIndex: 0,
+          explanation: "Shall I...? sirve para ofrecer ayuda."
+        },
+        {
+          type: "find_error",
+          segments: [{ u: "Shall" }, " I ", { u: "to help" }, " you with ", { u: "the" }, " bags?"],
+          correctIndex: 1, correction: "help", explanation: "Shall I + verbo sin to: Shall I help you?", question: "Encuentra el error"
+        },
+        { type: "fill_blank", sentence: "That's very ___ of you. Thank you!", answers: ["kind", "nice"], hint: "amable", explanation: "That's very kind of you." },
+        {
+          type: "categorize", instruction: "¿Pide ayuda u ofrece ayuda?",
+          buckets: [{ id: "ask", label: "Pide ayuda" }, { id: "offer", label: "Ofrece ayuda" }],
+          items: [
+            { t: "Could you help me?", bucket: "ask" },
+            { t: "Can you give me a hand?", bucket: "ask" },
+            { t: "I need some help.", bucket: "ask" },
+            { t: "Shall I do it?", bucket: "offer" },
+            { t: "Do you need a hand?", bucket: "offer" },
+            { t: "Can I help you?", bucket: "offer" }
+          ]
+        },
+        { type: "speak", text: "Do you need a hand? Shall I carry that?", es: "¿Necesitas ayuda? ¿Te lo llevo?" },
+        {
+          type: "translate", prompt: "Traduce: \"¿Me podrías ayudar, por favor?\"",
+          answers: ["could you help me please", "can you help me please", "could you help me", "can you help me"], explanation: "Could you help me, please?"
+        }
       ]
     },
 
@@ -193,7 +270,15 @@ window.VESPER_THEMES_PACK3 = (function () {
           correctIndex: 1, correction: "receive (workers = plural)",
           explanation: "The subject 'workers' is plural: the verb is 'receive', not 'receives'." },
         { type: "multiple_choice", question: "In the text, an \"independent contractor\" is someone who...", options: ["is a permanent employee with a long-term company contract", "works for themselves rather than as an employee", "owns a digital platform", "never gets paid"], correctIndex: 1, explanation: "An independent contractor works for themselves, not as an employee." },
-        { type: "true_false", statement: "According to the passage, gig workers always have a predictable income.", answer: false, explanation: "\"...their income can be unpredictable.\"" }
+        { type: "true_false", statement: "According to the passage, gig workers always have a predictable income.", answer: false, explanation: "\"...their income can be unpredictable.\"" },
+        {
+          type: "fill_blank", sentence: "Gig workers' income can be ___, so it is hard to plan ahead.", answers: ["unpredictable"], hint: "The opposite of 'predictable'.",
+          explanation: "...their income can be unpredictable."
+        },
+        {
+          type: "translate", prompt: "Rewrite using \"at the cost of\": \"Flexibility often means less security.\"",
+          answers: ["flexibility often comes at the cost of security", "flexibility often comes at the cost of job security"], explanation: "Flexibility often comes at the cost of security."
+        }
       ]
     },
 
@@ -250,7 +335,20 @@ window.VESPER_THEMES_PACK3 = (function () {
           correctIndex: 1, correction: "explain (base form after 'cannot')",
           explanation: "After a modal like 'cannot' the verb is in the base form: 'explain'." },
         { type: "multiple_choice", question: "In the passage, \"accountability\" is closest in meaning to...", options: ["speed", "responsibility for one's actions", "the complexity of a modern computer system", "profit"], correctIndex: 1, explanation: "'Accountability' = being responsible for your actions and decisions." },
-        { type: "true_false", statement: "According to the passage, designers can always explain every decision made by advanced AI models.", answer: false, explanation: "\"...cannot always explain why a particular decision was made.\"" }
+        { type: "true_false", statement: "According to the passage, designers can always explain every decision made by advanced AI models.", answer: false, explanation: "\"...cannot always explain why a particular decision was made.\"" },
+        {
+          type: "matching", instruction: "Match each word from the passage with its meaning.",
+          pairs: [
+            { l: "bias", r: "an unfair preference for or against something" },
+            { l: "transparency", r: "being open so others can see how something works" },
+            { l: "contest", r: "formally challenge a decision" },
+            { l: "vast", r: "extremely large" }
+          ]
+        },
+        {
+          type: "fill_blank", sentence: "Progress in AI must be matched by progress in transparency and ___.", answers: ["accountability"], hint: "Responsibility for one's actions.",
+          explanation: "...transparency and accountability."
+        }
       ]
     },
 
@@ -304,7 +402,22 @@ window.VESPER_THEMES_PACK3 = (function () {
           correctIndex: 3, correction: "becomes ('it' is singular)",
           explanation: "The subject 'it' is singular: the verb is 'becomes', not 'become'." },
         { type: "multiple_choice", question: "In the passage, \"elusive\" describes something that is...", options: ["easy to catch, see and hold onto at any time", "hard to achieve or grasp", "extremely cheap", "clearly visible"], correctIndex: 1, explanation: "'Elusive' = hard to find, catch or achieve." },
-        { type: "true_false", statement: "The author claims that suffering is noble and pleasure is worthless.", answer: false, explanation: "The writer explicitly says the opposite: pleasure is not worthless and suffering is not noble." }
+        { type: "true_false", statement: "The author claims that suffering is noble and pleasure is worthless.", answer: false, explanation: "The writer explicitly says the opposite: pleasure is not worthless and suffering is not noble." },
+        {
+          type: "matching", instruction: "Match each word from the passage with its meaning.",
+          pairs: [
+            { l: "flourishing", r: "growing and living well" },
+            { l: "relentless", r: "continuous and never stopping" },
+            { l: "noble", r: "morally good and admirable" },
+            { l: "fulfilling", r: "making you feel satisfied and useful" }
+          ]
+        },
+        {
+          type: "translate",
+          prompt: "Rewrite using \"the more ... the more\": \"As people chase happiness more, it becomes more elusive.\"",
+          answers: ["the more people chase happiness the more elusive it becomes", "the more people chase happiness the more elusive happiness becomes"],
+          explanation: "The more people chase happiness, the more elusive it becomes."
+        }
       ]
     },
 

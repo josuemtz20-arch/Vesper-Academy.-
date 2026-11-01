@@ -16,10 +16,15 @@
  *   VESPER_PATH.getScore(id) / stars(pct)
  *
  * localStorage: "vesper_lesson_scores" = { lessonId: bestPct }
+ *               "vesper_lesson_rev"    = { lessonId: rev vista }. Una leccion
+ *   reescrita (campo rev > 1) que el alumno completo en su version anterior
+ *   se muestra otra vez como "abierta" (sin estrellas) hasta que la supere de
+ *   nuevo. No toca el desbloqueo: este sigue usando el mapa de completadas.
  * ============================================================ */
 window.VESPER_PATH = (function () {
   var LEVELS = ["A1", "A2", "B1", "B2", "C1", "C2"];
   var SCORE_KEY = "vesper_lesson_scores";
+  var REV_KEY = "vesper_lesson_rev";
 
   var SKILLS = {
     grammar:   { label: "Gramática",        icon: "📘", order: 0 },
@@ -88,7 +93,7 @@ window.VESPER_PATH = (function () {
       levels[lv].total = levels[lv].lessons.length;
       levels[lv].done = levels[lv].lessons.filter(function (id) { return comp[id]; }).length;
     });
-    return { levels: levels, seqIndex: seqIndex, seqKey: seqKey, order: order, completed: comp };
+    return { levels: levels, seqIndex: seqIndex, seqKey: seqKey, order: order, completed: comp, revs: loadRevs() };
   }
 
   function isCompleted(id, b) { return !!(b && b.completed && b.completed[id]); }
@@ -116,8 +121,23 @@ window.VESPER_PATH = (function () {
     return !!b.completed[seq[pos - 1]];       // se abre al completar la anterior
   }
 
+  /* ---- revisiones de contenido (rev) ---- */
+  function loadRevs() {
+    try { return JSON.parse(localStorage.getItem(REV_KEY) || "{}") || {}; } catch (e) { return {}; }
+  }
+  function lessonRev(id) {
+    try { var l = window.VESPER_LESSONS && window.VESPER_LESSONS[id]; return (l && +l.rev) || 1; } catch (e) { return 1; }
+  }
+  /* completada en una version anterior del contenido y aun no repetida */
+  function isRevised(id, b) {
+    var r = lessonRev(id);
+    if (r <= 1 || !isCompleted(id, b)) return false;
+    return ((b.revs || loadRevs())[id] || 1) < r;
+  }
+
   function status(id, b) {
-    return isCompleted(id, b) ? "completed" : (isUnlocked(id, b) ? "open" : "locked");
+    if (isCompleted(id, b)) return isRevised(id, b) ? "open" : "completed";
+    return isUnlocked(id, b) ? "open" : "locked";
   }
 
   /* primera leccion abierta y sin completar (continuar donde lo dejaste) */
@@ -149,6 +169,12 @@ window.VESPER_PATH = (function () {
     if (typeof s[id] !== "number" || pct > s[id]) {
       s[id] = pct;
       try { localStorage.setItem(SCORE_KEY, JSON.stringify(s)); } catch (e) {}
+    }
+    /* superar la leccion marca vista su version actual del contenido */
+    var r = lessonRev(id);
+    if (r > 1) {
+      var rv = loadRevs();
+      if ((rv[id] || 1) < r) { rv[id] = r; try { localStorage.setItem(REV_KEY, JSON.stringify(rv)); } catch (e) {} }
     }
   }
   function stars(pct) {
@@ -183,7 +209,7 @@ window.VESPER_PATH = (function () {
   return {
     LEVELS: LEVELS, SKILLS: SKILLS, SKILL_ORDER: SKILL_ORDER,
     levelColor: levelColor, normLevel: normLevel, skillOf: skillOf,
-    build: build, isCompleted: isCompleted, isUnlocked: isUnlocked, status: status,
+    build: build, isCompleted: isCompleted, isUnlocked: isUnlocked, isRevised: isRevised, status: status,
     continueLesson: continueLesson, levelProgress: levelProgress,
     regionComplete: regionComplete, bossUnlocked: bossUnlocked, regionUnlocked: regionUnlocked,
     getScore: getScore, setScore: setScore, stars: stars

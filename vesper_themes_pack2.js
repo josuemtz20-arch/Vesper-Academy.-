@@ -72,28 +72,102 @@ window.VESPER_THEMES_PACK2 = (function () {
     /* ==================== A2 · SALUD Y EL CUERPO ==================== */
 
     "lvl-a2-vocab-health": {
-      lessonId: "lvl-a2-vocab-health", level: "A2", track: "Vocabulario", topic: "health", skill: "vocab",
-      title: "Tema: salud y el cuerpo", xpReward: 42, mascotState: "explaining",
+      lessonId: "lvl-a2-vocab-health", level: "A2", track: "Expresiones", topic: "food", skill: "use", tipo: "aprende", title: "Quejarse con cortesía", rev: 2, xpReward: 42, mascotState: "explaining",
       explanation: {
-        body: "Vocabulario A2 del cuerpo y la salud. Aprende partes del cuerpo y síntomas (fever, cough, headache) para ir al médico. (Asocia, clasifica y completa.)",
+        body: "Episodio 9 · ¡Sam consiguió el trabajo en Luigi's! Para celebrarlo, Mia y Sam cenan en otro restaurante, pero la sopa está fría y el plato no es el correcto. Aprende a quejarte sin ser grosero. Llama la atención: Excuse me... Explica el problema con suavidad: I'm sorry, but my soup is cold. / I think there's a mistake. I ordered the fish. Pide una solución: Could you bring me another one, please? Could you...? es más cortés que Can you...?",
         examples: [
-          { en: "I have a headache.", es: "Me duele la cabeza." },
-          { en: "head, stomach, fever, medicine", es: "cabeza, estómago, fiebre, medicina" }
+          { en: "Excuse me. I'm sorry, but my soup is cold.", es: "Disculpe. Perdone, pero mi sopa está fría." },
+          { en: "Oh, I'm very sorry. I'll bring you another one.", es: "Ay, lo siento mucho. Le traigo otra." },
+          { en: "And I think there's a mistake. I ordered the fish, not the chicken.", es: "Y creo que hay un error. Pedí el pescado, no el pollo." },
+          { en: "You're right. I'm so sorry about that.", es: "Tiene razón. Disculpe." }
+        ],
+        sections: [
+          {
+            kind: "intro",
+            body: "Episodio 9 · ¡Sam consiguió el trabajo en Luigi's! Para celebrarlo, Mia y Sam cenan en otro restaurante, pero la sopa está fría y el plato no es el correcto. Aprende a quejarte sin ser grosero."
+          },
+          {
+            kind: "regla",
+            body: "Llama la atención: Excuse me... Explica el problema con suavidad: I'm sorry, but my soup is cold. / I think there's a mistake. I ordered the fish. Pide una solución: Could you bring me another one, please? Could you...? es más cortés que Can you...?"
+          },
+          {
+            kind: "vocab",
+            items: [
+              { en: "complain", ipa: "kəmˈpleɪn", es: "quejarse" },
+              { en: "problem", ipa: "ˈprɒbləm", es: "problema" },
+              { en: "cold", ipa: "kəʊld", es: "frío" },
+              { en: "dirty", ipa: "ˈdɜːti", es: "sucio" },
+              { en: "wrong", ipa: "rɒŋ", es: "equivocado / incorrecto" },
+              { en: "order", ipa: "ˈɔːdə", es: "pedir (en un restaurante)" },
+              { en: "waiter", ipa: "ˈweɪtə", es: "mesero" },
+              { en: "manager", ipa: "ˈmænɪdʒə", es: "gerente" }
+            ]
+          },
+          {
+            kind: "expresiones",
+            items: [
+              { en: "Excuse me, there's a problem with...", es: "Disculpe, hay un problema con..." },
+              { en: "I'm sorry, but...", es: "Perdone, pero..." },
+              { en: "I think there's a mistake.", es: "Creo que hay un error." },
+              { en: "Could you...?", es: "¿Podría...?" }
+            ]
+          },
+          {
+            kind: "ejemplos",
+            items: [
+              { en: "Sam: Excuse me. I'm sorry, but my soup is cold.", es: "Sam: Disculpe. Perdone, pero mi sopa está fría." },
+              { en: "Waiter: Oh, I'm very sorry. I'll bring you another one.", es: "Mesero: Ay, lo siento mucho. Le traigo otra." },
+              { en: "Mia: And I think there's a mistake. I ordered the fish, not the chicken.", es: "Mia: Y creo que hay un error. Pedí el pescado, no el pollo." },
+              { en: "Waiter: You're right. I'm so sorry about that.", es: "Mesero: Tiene razón. Disculpe." }
+            ]
+          },
+          {
+            kind: "errores",
+            items: [
+              { no: "Hey! My soup is cold!", si: "Excuse me. I'm sorry, but my soup is cold.", pq: "Empieza con Excuse me y suaviza con I'm sorry, but..." },
+              { no: "Bring me other soup.", si: "Could you bring me another soup, please?", pq: "Pide con Could you...? Otro/a = another." },
+              { no: "This glass is dirt.", si: "This glass is dirty.", pq: "El adjetivo es dirty." }
+            ]
+          },
+          { kind: "resumen", body: "Excuse me... · I'm sorry, but... · I think there's a mistake · Could you...? Explica el problema con calma y pide una solución." },
+          { kind: "puente", body: "Ayuda a Mia y Sam a salvar su cena de celebración." }
         ]
       },
       exercises: [
-        { type: "matching", instruction: "Une la palabra con su traducción.", pairs: [
-          { l: "head", r: "cabeza" }, { l: "stomach", r: "estómago" },
-          { l: "fever", r: "fiebre" }, { l: "medicine", r: "medicina" }
-        ] },
-        { type: "categorize", instruction: "¿Es una parte del cuerpo o un síntoma?", buckets: [
-          { id: "b", label: "Body part" }, { id: "s", label: "Symptom" } ], items: [
-          { t: "arm", bucket: "b" }, { t: "headache", bucket: "s" },
-          { t: "leg", bucket: "b" }, { t: "cough", bucket: "s" },
-          { t: "hand", bucket: "b" }, { t: "sore throat", bucket: "s" } ] },
-        { type: "multiple_choice", question: "You have a high temperature. You have a ___.", options: ["fever", "leg", "hand"], correctIndex: 0, explanation: "Temperatura alta = fiebre (fever)." },
-        { type: "fill_blank", sentence: "The doctor gave me some ___ for my cough.", answers: ["medicine"], hint: "Lo que tomas cuando estás enfermo.", explanation: "medicine = medicina." },
-        { type: "translate", prompt: "Traduce: \"Me duele la cabeza.\"", answers: ["i have a headache", "my head hurts"], explanation: "I have a headache." }
+        {
+          type: "reading", title: "At the restaurant",
+          passage: "Sam: Excuse me. I'm sorry, but my soup is cold.\nWaiter: Oh, I'm very sorry. I'll bring you another one.\nMia: And I think there's a mistake. I ordered the fish, not the chicken.\nWaiter: You're right. I'm so sorry about that.\nWaiter: Here you are. And the manager says dessert is free tonight.\nSam: Thank you! That's very kind.",
+          questions: [
+            { q: "¿Cuál es el problema de Sam?", options: ["Su sopa está fría", "Su vaso está sucio", "No hay mesa"], correctIndex: 0, explanation: "My soup is cold." },
+            { q: "¿Qué les regala el restaurante?", options: ["El postre", "La sopa", "Las bebidas"], correctIndex: 0, explanation: "Dessert is free tonight." }
+          ]
+        },
+        {
+          type: "multiple_choice", question: "¿Cuál es la queja más cortés?",
+          options: ["Excuse me, I'm sorry, but this glass is dirty.", "This glass is dirty! Change it!", "Your glasses are terrible."], correctIndex: 0,
+          explanation: "Excuse me + I'm sorry, but... suaviza la queja."
+        },
+        { type: "fill_blank", sentence: "Could you bring me ___ fork, please? This one is dirty.", answers: ["another"], hint: "otro / otra", explanation: "another = otro / otra (uno más o uno distinto)." },
+        {
+          type: "categorize", instruction: "¿Cortés o grosero?",
+          buckets: [{ id: "polite", label: "Cortés" }, { id: "rude", label: "Grosero" }],
+          items: [
+            { t: "Could you check the bill, please?", bucket: "polite" },
+            { t: "I think there's a mistake.", bucket: "polite" },
+            { t: "Excuse me, my coffee is cold.", bucket: "polite" },
+            { t: "This is wrong!", bucket: "rude" },
+            { t: "Bring me the manager now!", bucket: "rude" },
+            { t: "Your food is terrible.", bucket: "rude" }
+          ]
+        },
+        { type: "listening", text: "I'm sorry, but I ordered a small pizza, not a large one.", question: "¿Qué pidió?", options: ["Una pizza pequeña", "Una pizza grande", "Dos pizzas"], correctIndex: 0 },
+        { type: "word_order", words: ["mistake", "I", "a", "think", "there's"], correctOrder: ["I", "think", "there's", "a", "mistake"], hint: "Creo que hay un error." },
+        { type: "speak", text: "Excuse me. I'm sorry, but my soup is cold.", es: "Disculpe. Perdone, pero mi sopa está fría." },
+        {
+          type: "translate", prompt: "Traduce: \"¿Podría traernos la cuenta, por favor?\"",
+          answers: ["could you bring us the bill please", "could we have the bill please", "could you bring the bill please", "could you bring us the check please", "could we have the check please"],
+          explanation: "Could you bring us the bill, please?"
+        }
       ]
     },
 
@@ -122,25 +196,120 @@ window.VESPER_THEMES_PACK2 = (function () {
     /* ================== B1 · TECNOLOGÍA Y MEDIOS ================== */
 
     "lvl-b1-vocab-tech": {
-      lessonId: "lvl-b1-vocab-tech", level: "B1", track: "Vocabulary", topic: "tech", skill: "vocab",
-      title: "Topic: technology and media", xpReward: 52, mascotState: "explaining",
+      lessonId: "lvl-b1-vocab-tech", level: "B1", track: "Functional English", topic: "social", skill: "use", tipo: "aprende", title: "Giving and asking for opinions", rev: 2, xpReward: 52,
+      mascotState: "explaining",
       explanation: {
-        body: "B1 technology vocabulary: devices and actions (download, upload, install). Tell apart the device and what you do with it.",
+        body: "Episode 4 · At lunch, Carmen suggests something surprising: Lumen Travel should allow dogs in the office. Everyone has an opinion! Learn to ask for and give opinions naturally. Ask: What do you think about...? / How do you feel about...? / What's your take on...? (informal). Give: I think / I feel / In my opinion... / If you ask me, ... (informal) / Personally, I... Soften your opinion: I'd say... / It seems to me that... Give a reason with because or since.",
         examples: [
-          { en: "I forgot my password." },
-          { en: "download, upload, screen, update" }
+          { en: "What's your take on having dogs in the office?" },
+          { en: "If you ask me, it's a brilliant idea. It would reduce stress." },
+          { en: "Personally, I'm not convinced. Some people are allergic." },
+          { en: "It seems to me there are benefits and drawbacks. Why don't we try it for one day?" }
+        ],
+        sections: [
+          {
+            kind: "intro",
+            body: "Episode 4 · At lunch, Carmen suggests something surprising: Lumen Travel should allow dogs in the office. Everyone has an opinion! Learn to ask for and give opinions naturally."
+          },
+          {
+            kind: "regla",
+            body: "Ask: What do you think about...? / How do you feel about...? / What's your take on...? (informal). Give: I think / I feel / In my opinion... / If you ask me, ... (informal) / Personally, I... Soften your opinion: I'd say... / It seems to me that... Give a reason with because or since."
+          },
+          {
+            kind: "vocab",
+            items: [
+              { en: "opinion", ipa: "əˈpɪnjən", es: "what you think about something" },
+              { en: "personally", ipa: "ˈpɜːsənəli", es: "used to give your own view" },
+              { en: "take (on something)", es: "an opinion or way of seeing something (informal)" },
+              { en: "view", ipa: "vjuː", es: "an opinion" },
+              { en: "point of view", es: "a way of thinking about a subject" },
+              { en: "convinced", ipa: "kənˈvɪnst", es: "completely sure" },
+              { en: "benefit", ipa: "ˈbenɪfɪt", es: "an advantage" },
+              { en: "drawback", ipa: "ˈdrɔːbæk", es: "a disadvantage" }
+            ]
+          },
+          {
+            kind: "expresiones",
+            items: [
+              { en: "What's your take on...?", es: "an informal way to ask for an opinion" },
+              { en: "If you ask me, ...", es: "an informal way to give an opinion" },
+              { en: "Personally, I think...", es: "stress that it's your own view" },
+              { en: "I'm not convinced.", es: "you're not sure it's a good idea" }
+            ]
+          },
+          {
+            kind: "ejemplos",
+            items: [
+              { en: "Carmen: What's your take on having dogs in the office?" },
+              { en: "Tom: If you ask me, it's a brilliant idea. It would reduce stress." },
+              { en: "Priya: Personally, I'm not convinced. Some people are allergic." },
+              { en: "Daniel: It seems to me there are benefits and drawbacks. Why don't we try it for one day?" }
+            ]
+          },
+          {
+            kind: "errores",
+            items: [
+              { no: "According to me, ...", si: "In my opinion, ...", pq: "\"According to\" is for other people's views, not your own." },
+              { no: "What do you think? — I think yes.", si: "I think so.", pq: "The short answer is I think so / I don't think so." },
+              { no: "In my opinion, I think that...", si: "In my opinion, ... / I think that...", pq: "Both phrases mean the same; using both is repetitive." }
+            ]
+          },
+          { kind: "resumen", body: "Ask: What do you think about / How do you feel about / What's your take on...? Give: I think / Personally / If you ask me / It seems to me... + a reason." },
+          { kind: "puente", body: "Should Lumen Travel have an office dog? Join the discussion." }
         ]
       },
       exercises: [
-        { type: "matching", instruction: "Match each word with its meaning.", pairs: [{"l":"download","r":"copy a file from the internet"},{"l":"password","r":"a secret word to log in"},{"l":"screen","r":"the part of a device you look at"},{"l":"update","r":"install the newest version"}] },
-        { type: "categorize", instruction: "Is it a device or an action?", buckets: [
-          { id: "d", label: "Device" }, { id: "a", label: "Action" } ], items: [
-          { t: "laptop", bucket: "d" }, { t: "download", bucket: "a" },
-          { t: "smartphone", bucket: "d" }, { t: "upload", bucket: "a" },
-          { t: "tablet", bucket: "d" }, { t: "install", bucket: "a" } ] },
-        { type: "multiple_choice", question: "A secret word to log in is a ___.", options: ["browser", "screen", "password"], correctIndex: 2, explanation: "password = a secret word to enter an account." },
-        { type: "fill_blank", sentence: "Please ___ the app to the latest version.", answers: ["update"], hint: "Bring it up to date.", explanation: "update = install the newest version." },
-        { type: "translate", prompt: "You can't log in. Explain the problem with 'forget' (past simple) and 'password'.", answers: ["i forgot my password","i've forgotten my password","i have forgotten my password"], explanation: "I forgot my password." }
+        {
+          type: "multiple_choice", question: "Which phrase is NOT used to give your own opinion?", options: ["According to me, ...", "In my opinion, ...", "Personally, I think ..."], correctIndex: 0,
+          explanation: "According to + another person or source: According to the report..."
+        },
+        {
+          type: "listening", text: "Personally, I'm not convinced. It sounds expensive and complicated.", question: "What is the speaker's opinion?",
+          options: ["They doubt it's a good idea", "They love the idea", "They have no opinion"], correctIndex: 0
+        },
+        {
+          type: "matching", instruction: "Match each word with its meaning.",
+          pairs: [
+            { l: "drawback", r: "a disadvantage" },
+            { l: "benefit", r: "an advantage" },
+            { l: "convinced", r: "completely sure" },
+            { l: "take", r: "an opinion (informal)" },
+            { l: "point of view", r: "a way of thinking about a subject" }
+          ]
+        },
+        {
+          type: "categorize", instruction: "Asking for or giving an opinion?",
+          buckets: [{ id: "ask", label: "Asking" }, { id: "give", label: "Giving" }],
+          items: [
+            { t: "What's your take on this?", bucket: "ask" },
+            { t: "How do you feel about it?", bucket: "ask" },
+            { t: "What do you think?", bucket: "ask" },
+            { t: "If you ask me, ...", bucket: "give" },
+            { t: "Personally, I feel ...", bucket: "give" },
+            { t: "It seems to me that ...", bucket: "give" }
+          ]
+        },
+        { type: "fill_blank", sentence: "If you ___ me, it's a great idea.", answers: ["ask"], hint: "An informal way to give your opinion.", explanation: "If you ask me, ..." },
+        {
+          type: "reading", title: "Team chat",
+          passage: "Priya: Quick poll: what's everyone's take on an office dog day next Friday?\nTom: Count me in! If you ask me, it'll be great for team spirit.\nDaniel: I'm in, as long as the dogs stay out of the meeting room.\nCarmen: Personally, I think it's a great idea, but we should check that nobody is allergic first.\nPriya: Good point, Carmen. I'll send a quick survey.",
+          questions: [
+            {
+              q: "What is Priya asking about?", options: ["Opinions on an office dog day", "Who owns a dog", "Where to have a meeting"], correctIndex: 0,
+              explanation: "\"What's everyone's take on...\" asks for opinions."
+            },
+            {
+              q: "What does Carmen suggest before the dog day?",
+              options: ["Checking whether anyone is allergic", "Buying a dog for the office", "Cancelling the meeting"], correctIndex: 0, explanation: "...check that nobody is allergic first."
+            },
+            { q: "What does \"Count me in\" mean?", options: ["I want to take part.", "Please count the people.", "I'm not sure yet."], correctIndex: 0, explanation: "Count me in = include me." }
+          ]
+        },
+        { type: "speak", text: "Personally, I'm not convinced. Some people are allergic." },
+        {
+          type: "translate", prompt: "Rewrite using \"If you ask me\": \"I think the idea is brilliant.\"",
+          answers: ["if you ask me the idea is brilliant", "if you ask me it's a brilliant idea", "if you ask me it is a brilliant idea"], explanation: "If you ask me, the idea is brilliant."
+        }
       ]
     },
 

@@ -83,59 +83,176 @@ window.VESPER_EXPANSION = (function () {
     },
 
     "gram-a1-plurals": {
-      lessonId: "gram-a1-plurals", level: "A1", track: "Gramática", topic: "grammar", skill: "grammar",
-      title: "El plural de los sustantivos", xpReward: 45, mascotState: "explaining",
+      lessonId: "gram-a1-plurals", level: "A1", track: "Expresiones", topic: "social", skill: "use", tipo: "aprende", title: "Disculparse: sorry y excuse me", rev: 2, xpReward: 45, mascotState: "explaining",
       nextLessonId: "gram-a1-there-is",
       explanation: {
-        body: "La mayoría de plurales se forman con -s: book → books. Tras -s, -ss, -sh, -ch, -x añadimos -es: box → boxes. La -y tras consonante cambia a -ies: city → cities. Hay irregulares: man → men, child → children. (Cómo formar plurales.)",
+        body: "Episodio 2 · Sam rompe la taza favorita de Mia. ¡Uy! Aprende a pedir perdón y a responder cuando alguien se disculpa. Sorry = perdón / lo siento (cuando haces algo mal): I'm sorry, I'm so sorry. Excuse me = disculpe / con permiso (para llamar la atención o para pasar): Excuse me, where is the bank? Para responder: That's OK. / No problem. / Don't worry.",
         examples: [
-          { en: "one car, two cars", es: "un coche, dos coches" },
-          { en: "one watch, two watches", es: "un reloj, dos relojes" },
-          { en: "one child, three children", es: "un niño, tres niños" }
+          { en: "Oh no! I'm so sorry, Mia. I broke your mug.", es: "¡Ay, no! Lo siento mucho, Mia. Rompí tu taza." },
+          { en: "Don't worry. It's OK.", es: "No te preocupes. Está bien." },
+          { en: "I can buy a new one.", es: "Puedo comprar una nueva." },
+          { en: "No problem, Sam. Accidents happen!", es: "No pasa nada, Sam. ¡Los accidentes pasan!" }
+        ],
+        sections: [
+          { kind: "intro", body: "Episodio 2 · Sam rompe la taza favorita de Mia. ¡Uy! Aprende a pedir perdón y a responder cuando alguien se disculpa." },
+          {
+            kind: "regla",
+            body: "Sorry = perdón / lo siento (cuando haces algo mal): I'm sorry, I'm so sorry. Excuse me = disculpe / con permiso (para llamar la atención o para pasar): Excuse me, where is the bank? Para responder: That's OK. / No problem. / Don't worry."
+          },
+          {
+            kind: "vocab",
+            items: [
+              { en: "sorry", ipa: "ˈsɒri", es: "perdón / lo siento" },
+              { en: "excuse me", ipa: "ɪkˈskjuːz miː", es: "disculpe / con permiso" },
+              { en: "late", ipa: "leɪt", es: "tarde" },
+              { en: "break (broke)", ipa: "breɪk", es: "romper (rompí)" },
+              { en: "mistake", ipa: "mɪˈsteɪk", es: "error" },
+              { en: "accident", ipa: "ˈæksɪdənt", es: "accidente" },
+              { en: "mug", ipa: "mʌɡ", es: "taza (grande)" },
+              { en: "again", ipa: "əˈɡen", es: "otra vez" }
+            ]
+          },
+          {
+            kind: "expresiones",
+            items: [
+              { en: "I'm so sorry!", es: "¡Lo siento mucho!" },
+              { en: "That's OK.", es: "Está bien. / No pasa nada." },
+              { en: "Don't worry.", es: "No te preocupes." },
+              { en: "Sorry I'm late.", es: "Perdón por llegar tarde." }
+            ]
+          },
+          {
+            kind: "ejemplos",
+            items: [
+              { en: "Sam: Oh no! I'm so sorry, Mia. I broke your mug.", es: "Sam: ¡Ay, no! Lo siento mucho, Mia. Rompí tu taza." },
+              { en: "Mia: Don't worry. It's OK.", es: "Mia: No te preocupes. Está bien." },
+              { en: "Sam: I can buy a new one.", es: "Sam: Puedo comprar una nueva." },
+              { en: "Mia: No problem, Sam. Accidents happen!", es: "Mia: No pasa nada, Sam. ¡Los accidentes pasan!" }
+            ]
+          },
+          {
+            kind: "errores",
+            items: [
+              { no: "Excuse me, I broke your mug.", si: "Sorry, I broke your mug.", pq: "Para pedir perdón por algo malo usa sorry." },
+              { no: "I'm sorry for late.", si: "Sorry I'm late.", pq: "Se dice Sorry I'm late." },
+              { no: "No worry.", si: "Don't worry.", pq: "La frase correcta es Don't worry." }
+            ]
+          },
+          { kind: "resumen", body: "Sorry: cuando haces algo mal. Excuse me: para llamar la atención o pasar. Respuestas: That's OK. / No problem. / Don't worry." },
+          { kind: "puente", body: "Ayuda a Sam a disculparse... ¡y a Mia a responder!" }
         ]
       },
       exercises: [
-        { type: "multiple_choice", question: "Plural of 'box'?", options: ["boxs", "boxies", "boxes"],
-          correctIndex: 2, explanation: "Tras -x añadimos -es: boxes." },
-        { type: "fill_blank", sentence: "I see three ___ in the park. (child)", answers: ["children"],
-          hint: "Es irregular.", explanation: "child → children (irregular)." },
-        { type: "categorize", instruction: "¿El plural lleva -s o -es?", buckets: [
-          { id: "s", label: "+ -s" }, { id: "es", label: "+ -es" } ], items: [
-          { t: "dog", bucket: "s" }, { t: "dish", bucket: "es" }, { t: "table", bucket: "s" }, { t: "glass", bucket: "es" } ] },
-        { type: "multiple_choice", question: "Plural of 'city'?", options: ["citys", "cities", "cityes"],
-          correctIndex: 1, explanation: "-y tras consonante → -ies: cities." },
-        { type: "true_false", statement: "The plural of 'man' is 'mans'.", answer: false,
-          explanation: "Es irregular: man → men." },
-        { type: "translate", prompt: "Traduce: \"Tengo dos relojes.\"",
-          answers: ["i have two watches"], explanation: "watch → watches. I have two watches." }
+        {
+          type: "categorize", instruction: "¿Qué dices: sorry o excuse me?",
+          buckets: [{ id: "sorry", label: "Sorry" }, { id: "excuse", label: "Excuse me" }],
+          items: [
+            { t: "Rompes un vaso.", bucket: "sorry" },
+            { t: "Llegas tarde.", bucket: "sorry" },
+            { t: "Pisas a alguien.", bucket: "sorry" },
+            { t: "Quieres pasar por una puerta llena de gente.", bucket: "excuse" },
+            { t: "Preguntas una dirección a un desconocido.", bucket: "excuse" },
+            { t: "Llamas al mesero.", bucket: "excuse" }
+          ]
+        },
+        { type: "listening", text: "Excuse me, is this your bag?", question: "¿Qué pregunta?", options: ["Si la bolsa es suya", "Dónde está el banco", "Qué hora es"], correctIndex: 0 },
+        {
+          type: "multiple_choice", question: "Tu amigo dice: \"Sorry I'm late.\" Respondes:", options: ["That's OK.", "You're welcome.", "Nice to meet you."], correctIndex: 0,
+          explanation: "That's OK = no pasa nada."
+        },
+        { type: "fill_blank", sentence: "Don't ___. It's OK.", answers: ["worry"], hint: "No te preocupes.", explanation: "Don't worry. It's OK." },
+        { type: "word_order", words: ["late", "Sorry", "I'm"], correctOrder: ["Sorry", "I'm", "late"], hint: "Perdón por llegar tarde." },
+        { type: "true_false", statement: "\"Excuse me\" sirve para llamar la atención de alguien.", answer: true, explanation: "Sí: Excuse me, where is the station?" },
+        { type: "speak", text: "I'm so sorry! I broke your mug.", es: "¡Lo siento mucho! Rompí tu taza." },
+        { type: "translate", prompt: "Traduce: \"No te preocupes.\"", answers: ["don't worry", "do not worry"], explanation: "Don't worry." }
       ]
     },
 
     "gram-a1-there-is": {
-      lessonId: "gram-a1-there-is", level: "A1", track: "Gramática", topic: "grammar", skill: "grammar",
-      title: "There is / There are", xpReward: 45, mascotState: "explaining",
+      lessonId: "gram-a1-there-is", level: "A1", track: "Expresiones", topic: "social", skill: "use", tipo: "aprende", title: "¿Perdón? Pedir que repitan", rev: 2, xpReward: 45, mascotState: "explaining",
       nextLessonId: "voc-a2-weather",
       explanation: {
-        body: "Usamos there is (singular) y there are (plural) para decir que algo existe. Negativo: there isn't / there aren't. Pregunta: Is there...? / Are there...? Con incontables usamos there is: \"There is some water.\" (Expresar existencia.)",
+        body: "Episodio 3 · La vecina, la señora Park, habla muy rápido y Sam no entiende nada. Aprende a pedir que repitan, que hablen más despacio o que deletreen una palabra. Pide con amabilidad: Sorry? / Can you repeat that, please? / Can you speak more slowly, please? Para una palabra: How do you spell that? / What does \"bin\" mean? Para decir que no entiendes: Sorry, I don't understand.",
         examples: [
-          { en: "There is a book on the table.", es: "Hay un libro en la mesa." },
-          { en: "There are two cats in the garden.", es: "Hay dos gatos en el jardín." },
-          { en: "Is there a bank near here?", es: "¿Hay un banco cerca de aquí?" }
+          { en: "The bins go out on Tuesday night, OK?", es: "Los botes salen el martes en la noche, ¿vale?" },
+          { en: "Sorry, can you speak more slowly, please?", es: "Perdón, ¿puede hablar más despacio, por favor?" },
+          { en: "The bins. On Tuesday.", es: "Los botes. El martes." },
+          { en: "What does \"bins\" mean?", es: "¿Qué significa \"bins\"?" }
+        ],
+        sections: [
+          { kind: "intro", body: "Episodio 3 · La vecina, la señora Park, habla muy rápido y Sam no entiende nada. Aprende a pedir que repitan, que hablen más despacio o que deletreen una palabra." },
+          {
+            kind: "regla",
+            body: "Pide con amabilidad: Sorry? / Can you repeat that, please? / Can you speak more slowly, please? Para una palabra: How do you spell that? / What does \"bin\" mean? Para decir que no entiendes: Sorry, I don't understand."
+          },
+          {
+            kind: "vocab",
+            items: [
+              { en: "repeat", ipa: "rɪˈpiːt", es: "repetir" },
+              { en: "slowly", ipa: "ˈsləʊli", es: "despacio" },
+              { en: "spell", ipa: "spel", es: "deletrear" },
+              { en: "mean", ipa: "miːn", es: "significar" },
+              { en: "understand", ipa: "ˌʌndəˈstænd", es: "entender" },
+              { en: "word", ipa: "wɜːd", es: "palabra" },
+              { en: "neighbour", ipa: "ˈneɪbə", es: "vecino/a" },
+              { en: "bin", ipa: "bɪn", es: "bote de basura" }
+            ]
+          },
+          {
+            kind: "expresiones",
+            items: [
+              { en: "Sorry, can you repeat that?", es: "Perdón, ¿puede repetirlo?" },
+              { en: "Can you speak more slowly, please?", es: "¿Puede hablar más despacio, por favor?" },
+              { en: "How do you spell it?", es: "¿Cómo se escribe?" },
+              { en: "What does it mean?", es: "¿Qué significa?" }
+            ]
+          },
+          {
+            kind: "ejemplos",
+            items: [
+              { en: "Mrs Park: The bins go out on Tuesday night, OK?", es: "Sra. Park: Los botes salen el martes en la noche, ¿vale?" },
+              { en: "Sam: Sorry, can you speak more slowly, please?", es: "Sam: Perdón, ¿puede hablar más despacio, por favor?" },
+              { en: "Mrs Park: The bins. On Tuesday.", es: "Sra. Park: Los botes. El martes." },
+              { en: "Sam: What does \"bins\" mean?", es: "Sam: ¿Qué significa \"bins\"?" },
+              { en: "Mrs Park: Rubbish bins! For the rubbish!", es: "Sra. Park: ¡Los botes de basura! ¡Para la basura!" }
+            ]
+          },
+          {
+            kind: "errores",
+            items: [
+              { no: "Repeat!", si: "Can you repeat that, please?", pq: "Solo \"Repeat!\" suena a orden." },
+              { no: "What means \"bin\"?", si: "What does \"bin\" mean?", pq: "La pregunta lleva does + mean." },
+              { no: "I don't understand nothing.", si: "Sorry, I don't understand.", pq: "En inglés no se usa doble negación." }
+            ]
+          },
+          { kind: "resumen", body: "Sorry? / Can you repeat that? / Can you speak more slowly? / How do you spell it? / What does ... mean? Siempre con please y tono amable." },
+          { kind: "puente", body: "Ayuda a Sam a entender a la señora Park." }
         ]
       },
       exercises: [
-        { type: "multiple_choice", question: "___ a cat under the chair.", options: ["There is", "There are", "There be"],
-          correctIndex: 0, explanation: "Singular (a cat) → there is." },
-        { type: "fill_blank", sentence: "___ three apples in the bowl.", answers: ["there are", "There are"],
-          hint: "Plural → there are.", explanation: "Plural (three apples) → there are." },
-        { type: "word_order", words: ["Is", "there", "a", "bank", "here"], correctOrder: ["Is", "there", "a", "bank", "here"],
-          hint: "En preguntas: Is there...?" },
-        { type: "true_false", statement: "We say 'There are a problem'.", answer: false,
-          explanation: "Singular → 'There is a problem'." },
-        { type: "multiple_choice", question: "Negative: '___ any milk.'", options: ["There aren't", "There not", "There isn't"],
-          correctIndex: 2, explanation: "milk es incontable → there isn't." },
-        { type: "translate", prompt: "Traduce: \"Hay dos gatos en el jardín.\"",
-          answers: ["there are two cats in the garden"], explanation: "There are two cats in the garden." }
+        {
+          type: "matching", instruction: "Une cada frase con su significado.",
+          pairs: [
+            { l: "Can you repeat that?", r: "¿Puede repetirlo?" },
+            { l: "How do you spell it?", r: "¿Cómo se escribe?" },
+            { l: "What does it mean?", r: "¿Qué significa?" },
+            { l: "I don't understand.", r: "No entiendo." }
+          ]
+        },
+        { type: "listening", text: "My name is Ngozi. N, G, O, Z, I.", question: "¿Cómo se escribe su nombre?", options: ["Ngozi", "Ngosi", "Nkozi"], correctIndex: 0 },
+        {
+          type: "find_error",
+          segments: [{ u: "What" }, " ", { u: "does" }, " \"bin\" ", { u: "means" }, "?"],
+          correctIndex: 2, correction: "mean", explanation: "Después de does, el verbo va sin -s: What does \"bin\" mean?", question: "Encuentra el error"
+        },
+        {
+          type: "multiple_choice", question: "El mesero habla muy rápido y no entiendes. Dices:",
+          options: ["Can you speak more slowly, please?", "Can you speak more quickly, please?", "Speak, please!"], correctIndex: 0, explanation: "slowly = despacio."
+        },
+        { type: "fill_blank", sentence: "Sorry, can you ___ that, please?", answers: ["repeat"], hint: "repetir", explanation: "Can you repeat that, please?" },
+        { type: "word_order", words: ["name", "How", "your", "do", "spell", "you"], correctOrder: ["How", "do", "you", "spell", "your", "name"], hint: "¿Cómo se escribe tu nombre?" },
+        { type: "speak", text: "Sorry, can you speak more slowly, please?", es: "Perdón, ¿puede hablar más despacio, por favor?" },
+        { type: "true_false", statement: "\"What does it mean?\" significa \"¿Qué significa?\".", answer: true, explanation: "mean = significar." }
       ]
     },
 
@@ -174,59 +291,181 @@ window.VESPER_EXPANSION = (function () {
     },
 
     "gram-a2-comparatives": {
-      lessonId: "gram-a2-comparatives", level: "A2", track: "Gramática", topic: "grammar", skill: "grammar",
-      title: "Comparativos y superlativos", xpReward: 50, mascotState: "explaining",
+      lessonId: "gram-a2-comparatives", level: "A2", track: "Gramática", topic: "grammar", skill: "grammar", tipo: "aprende", title: "Too y enough", rev: 2, xpReward: 50, mascotState: "explaining",
       nextLessonId: "gram-a2-going-to",
       explanation: {
-        body: "Adjetivos cortos: + -er (comparativo) y the + -est (superlativo): big → bigger → the biggest. Adjetivos largos: more / the most: expensive → more expensive → the most expensive. Irregulares: good → better → the best; bad → worse → the worst. Comparamos con 'than'. (Comparar cosas.)",
+        body: "Mia y Sam buscan un sofá para el piso. Este es demasiado caro, aquel no es lo bastante grande... Para decir que algo es excesivo o suficiente usas too y enough. too + adjetivo = demasiado (hay un problema): It's too expensive. adjetivo + enough = lo bastante / suficientemente: It's big enough. not + adjetivo + enough: It isn't big enough. Con sustantivos, enough va antes: We have enough money. ¡Cuidado con el orden!",
         examples: [
-          { en: "A train is faster than a bike.", es: "Un tren es más rápido que una bici." },
-          { en: "This is the most interesting book.", es: "Este es el libro más interesante." },
-          { en: "Her English is better than mine.", es: "Su inglés es mejor que el mío." }
+          { en: "Look at this sofa! — Mia: It's too expensive.", es: "¡Mira este sofá! — Mia: Es demasiado caro." },
+          { en: "And this one? — Mia: It isn't big enough for three people.", es: "¿Y este? — Mia: No es lo bastante grande para tres personas." },
+          { en: "This one is cheap and comfortable.", es: "Este es barato y cómodo." },
+          { en: "Perfect! But do we have enough space?", es: "¡Perfecto! Pero, ¿tenemos suficiente espacio?" }
+        ],
+        sections: [
+          { kind: "intro", body: "Mia y Sam buscan un sofá para el piso. Este es demasiado caro, aquel no es lo bastante grande... Para decir que algo es excesivo o suficiente usas too y enough." },
+          {
+            kind: "regla",
+            body: "too + adjetivo = demasiado (hay un problema): It's too expensive. adjetivo + enough = lo bastante / suficientemente: It's big enough. not + adjetivo + enough: It isn't big enough. Con sustantivos, enough va antes: We have enough money. ¡Cuidado con el orden!"
+          },
+          {
+            kind: "vocab",
+            items: [
+              { en: "too", ipa: "tuː", es: "demasiado" },
+              { en: "enough", ipa: "ɪˈnʌf", es: "suficiente / lo bastante" },
+              { en: "expensive", ipa: "ɪkˈspensɪv", es: "caro" },
+              { en: "cheap", ipa: "tʃiːp", es: "barato" },
+              { en: "big", ipa: "bɪɡ", es: "grande" },
+              { en: "small", ipa: "smɔːl", es: "pequeño" },
+              { en: "comfortable", ipa: "ˈkʌmftəbəl", es: "cómodo" },
+              { en: "space", ipa: "speɪs", es: "espacio" }
+            ]
+          },
+          {
+            kind: "expresiones",
+            items: [
+              { en: "It's too expensive for me.", es: "Es demasiado caro para mí." },
+              { en: "Is it big enough?", es: "¿Es lo bastante grande?" },
+              { en: "We don't have enough space.", es: "No tenemos suficiente espacio." },
+              { en: "That's perfect!", es: "¡Es perfecto!" }
+            ]
+          },
+          {
+            kind: "ejemplos",
+            items: [
+              { en: "Sam: Look at this sofa! — Mia: It's too expensive.", es: "Sam: ¡Mira este sofá! — Mia: Es demasiado caro." },
+              { en: "Sam: And this one? — Mia: It isn't big enough for three people.", es: "Sam: ¿Y este? — Mia: No es lo bastante grande para tres personas." },
+              { en: "Sam: This one is cheap and comfortable.", es: "Sam: Este es barato y cómodo." },
+              { en: "Mia: Perfect! But do we have enough space?", es: "Mia: ¡Perfecto! Pero, ¿tenemos suficiente espacio?" }
+            ]
+          },
+          {
+            kind: "errores",
+            items: [
+              { no: "It's enough big.", si: "It's big enough.", pq: "enough va después del adjetivo." },
+              { no: "It's too much expensive.", si: "It's too expensive.", pq: "Con adjetivos se usa solo too." },
+              { no: "We don't have money enough.", si: "We don't have enough money.", pq: "enough va antes del sustantivo." }
+            ]
+          },
+          { kind: "resumen", body: "too + adjetivo (demasiado). adjetivo + enough (lo bastante). enough + sustantivo (suficiente). Not ... enough = no lo bastante." },
+          { kind: "puente", body: "Ayuda a Mia y Sam a elegir su sofá." }
         ]
       },
       exercises: [
-        { type: "multiple_choice", question: "A car is ___ than a bike.", options: ["fast", "faster", "the fastest"],
-          correctIndex: 1, explanation: "Comparativo de adjetivo corto: fast → faster ... than." },
-        { type: "fill_blank", sentence: "This is the ___ restaurant in town. (good, superlativo)", answers: ["best"],
-          hint: "good es irregular.", explanation: "good → the best." },
-        { type: "multiple_choice", question: "Comparative of 'expensive'?", options: ["more expensive", "most expensive", "expensiver"],
-          correctIndex: 0, explanation: "Adjetivo largo → more expensive." },
-        { type: "word_order", words: ["She", "is", "taller", "than", "me"], correctOrder: ["She", "is", "taller", "than", "me"],
-          hint: "comparativo + than." },
-        { type: "true_false", statement: "The comparative of 'bad' is 'badder'.", answer: false,
-          explanation: "Es irregular: bad → worse." },
-        { type: "translate", prompt: "Traduce: \"Su inglés es mejor que el mío.\"",
-          answers: ["her english is better than mine", "his english is better than mine"],
-          explanation: "Her/His English is better than mine." }
+        {
+          type: "multiple_choice", question: "I can't buy it. It's ___.", options: ["too expensive", "expensive enough", "enough expensive"], correctIndex: 0,
+          explanation: "Hay un problema (el precio): too expensive."
+        },
+        { type: "fill_blank", sentence: "I can't reach the top shelf. I'm not tall ___.", answers: ["enough"], hint: "adjetivo + ___", explanation: "I'm not tall enough." },
+        {
+          type: "find_error",
+          segments: ["This room ", { u: "is" }, " ", { u: "enough big" }, " ", { u: "for" }, " two beds."],
+          correctIndex: 1, correction: "big enough", explanation: "enough va después del adjetivo: big enough.", question: "Encuentra el error"
+        },
+        {
+          type: "listening", text: "These shoes are too small. Do you have a bigger size?", question: "¿Cuál es el problema?", options: ["Los zapatos son muy pequeños", "Son muy caros", "No le gusta el color"],
+          correctIndex: 0
+        },
+        {
+          type: "categorize", instruction: "¿Hay un problema o está bien?",
+          buckets: [{ id: "problem", label: "Hay un problema" }, { id: "ok", label: "Está bien" }],
+          items: [
+            { t: "too hot", bucket: "problem" },
+            { t: "too late", bucket: "problem" },
+            { t: "not big enough", bucket: "problem" },
+            { t: "warm enough", bucket: "ok" },
+            { t: "big enough", bucket: "ok" },
+            { t: "cheap enough", bucket: "ok" }
+          ]
+        },
+        { type: "word_order", words: ["chairs", "We", "enough", "don't", "have"], correctOrder: ["We", "don't", "have", "enough", "chairs"], hint: "enough + sustantivo" },
+        {
+          type: "matching", instruction: "Une cada adjetivo con su opuesto.",
+          pairs: [{ l: "expensive", r: "cheap" }, { l: "big", r: "small" }, { l: "heavy", r: "light" }, { l: "comfortable", r: "uncomfortable" }]
+        },
+        { type: "translate", prompt: "Traduce: \"Es demasiado caro.\"", answers: ["it's too expensive", "it is too expensive"], explanation: "It's too expensive." }
       ]
     },
 
     "gram-a2-going-to": {
-      lessonId: "gram-a2-going-to", level: "A2", track: "Gramática", topic: "grammar", skill: "grammar",
-      title: "Futuro: 'going to'", xpReward: 50, mascotState: "explaining",
-      nextLessonId: "read-a2-invitation",
+      lessonId: "gram-a2-going-to", level: "A2", track: "Gramática", topic: "grammar", skill: "grammar", tipo: "aprende", title: "Pasado continuo: ¿qué estabas haciendo?", rev: 2, xpReward: 50,
+      mascotState: "explaining", nextLessonId: "read-a2-invitation",
       explanation: {
-        body: "Usamos be + going to + verbo para planes e intenciones futuras y predicciones con evidencia. \"I'm going to study tonight.\" Pregunta: Are you going to...? Negativo: I'm not going to... Con 'will' expresamos decisiones del momento; con 'going to', planes ya pensados. (Hablar del futuro.)",
+        body: "¿Qué estabas haciendo anoche a las ocho? Para describir una acción que estaba en progreso en un momento del pasado usas el pasado continuo. was / were + verbo-ing. I / he / she / it was working; you / we / they were working. Negativo: wasn't / weren't. Pregunta: What were you doing? Se usa mucho con at + hora (At 8 p.m. I was watching TV) y para describir una escena.",
         examples: [
-          { en: "I'm going to visit my aunt on Sunday.", es: "Voy a visitar a mi tía el domingo." },
-          { en: "Look at those clouds! It's going to rain.", es: "¡Mira esas nubes! Va a llover." },
-          { en: "Are you going to come to the party?", es: "¿Vas a venir a la fiesta?" }
+          { en: "What were you doing at midnight? It was very noisy!", es: "¿Qué estaban haciendo a medianoche? ¡Había mucho ruido!" },
+          { en: "Sorry! I was playing the guitar.", es: "¡Perdón! Estaba tocando la guitarra." },
+          { en: "I wasn't at home. I was working at the hospital.", es: "Yo no estaba en casa. Estaba trabajando en el hospital." },
+          { en: "Well, I was trying to sleep!", es: "¡Pues yo estaba intentando dormir!" }
+        ],
+        sections: [
+          { kind: "intro", body: "¿Qué estabas haciendo anoche a las ocho? Para describir una acción que estaba en progreso en un momento del pasado usas el pasado continuo." },
+          {
+            kind: "regla",
+            body: "was / were + verbo-ing. I / he / she / it was working; you / we / they were working. Negativo: wasn't / weren't. Pregunta: What were you doing? Se usa mucho con at + hora (At 8 p.m. I was watching TV) y para describir una escena."
+          },
+          {
+            kind: "vocab",
+            items: [
+              { en: "was", ipa: "wɒz", es: "estaba (I, he, she, it)" },
+              { en: "were", ipa: "wɜː", es: "estaba(n) (you, we, they)" },
+              { en: "wasn't", ipa: "ˈwɒzənt", es: "no estaba" },
+              { en: "weren't", ipa: "wɜːnt", es: "no estaban" },
+              { en: "at that time", ipa: "æt ðæt taɪm", es: "en ese momento" },
+              { en: "last night", ipa: "lɑːst naɪt", es: "anoche" },
+              { en: "midnight", ipa: "ˈmɪdnaɪt", es: "medianoche" },
+              { en: "noisy", ipa: "ˈnɔɪzi", es: "ruidoso" }
+            ]
+          },
+          {
+            kind: "expresiones",
+            items: [
+              { en: "What were you doing?", es: "¿Qué estabas haciendo?" },
+              { en: "I was just...", es: "Solo estaba..." },
+              { en: "At that time, I was...", es: "En ese momento, yo estaba..." },
+              { en: "Sorry, I was sleeping.", es: "Perdón, estaba durmiendo." }
+            ]
+          },
+          {
+            kind: "ejemplos",
+            items: [
+              { en: "Mrs Park: What were you doing at midnight? It was very noisy!", es: "Sra. Park: ¿Qué estaban haciendo a medianoche? ¡Había mucho ruido!" },
+              { en: "Sam: Sorry! I was playing the guitar.", es: "Sam: ¡Perdón! Estaba tocando la guitarra." },
+              { en: "Mia: I wasn't at home. I was working at the hospital.", es: "Mia: Yo no estaba en casa. Estaba trabajando en el hospital." },
+              { en: "Mrs Park: Well, I was trying to sleep!", es: "Sra. Park: ¡Pues yo estaba intentando dormir!" }
+            ]
+          },
+          {
+            kind: "errores",
+            items: [
+              { no: "I was watch TV.", si: "I was watching TV.", pq: "was / were + verbo-ing." },
+              { no: "They was sleeping.", si: "They were sleeping.", pq: "you / we / they usan were." },
+              { no: "What you were doing?", si: "What were you doing?", pq: "En preguntas, were va antes del sujeto." }
+            ]
+          },
+          { kind: "resumen", body: "was / were + -ing = acción en progreso en el pasado. I / he / she / it → was. you / we / they → were. Pregunta: What were you doing?" },
+          { kind: "puente", body: "¿Qué estaba haciendo cada uno? Practica." }
         ]
       },
       exercises: [
-        { type: "multiple_choice", question: "I ___ going to call her later.", options: ["is", "are", "am"],
-          correctIndex: 2, explanation: "Con 'I' usamos am: I am going to." },
-        { type: "fill_blank", sentence: "They ___ going to move to London. (be)", answers: ["are"],
-          hint: "they → are.", explanation: "They are going to move." },
-        { type: "word_order", words: ["She", "is", "going", "to", "travel"], correctOrder: ["She", "is", "going", "to", "travel"],
-          hint: "subject + be + going to + verbo." },
-        { type: "true_false", statement: "'Going to' is used for future plans and intentions.", answer: true,
-          explanation: "Correcto: planes, intenciones y predicciones con evidencia." },
-        { type: "multiple_choice", question: "Look at the sky! It ___ rain.", options: ["is going to", "going to", "will to"],
-          correctIndex: 0, explanation: "Predicción con evidencia → is going to rain." },
-        { type: "translate", prompt: "Traduce: \"¿Vas a venir a la fiesta?\"",
-          answers: ["are you going to come to the party"], explanation: "Are you going to come to the party?" }
+        { type: "fill_blank", sentence: "At 8 p.m. I ___ watching TV.", answers: ["was"], hint: "I → was / were", explanation: "I was watching TV." },
+        { type: "multiple_choice", question: "What ___ you doing at midnight?", options: ["were", "was", "did"], correctIndex: 0, explanation: "you → were: What were you doing?" },
+        {
+          type: "find_error",
+          segments: ["We ", { u: "was" }, " ", { u: "having" }, " dinner ", { u: "at" }, " nine."],
+          correctIndex: 0, correction: "were", explanation: "Con we se usa were: We were having dinner.", question: "Encuentra el error"
+        },
+        {
+          type: "listening", text: "Yesterday at five, I was cooking and my sister was doing her homework.", question: "¿Qué hacía la hermana?", options: ["Hacía su tarea", "Cocinaba", "Dormía"],
+          correctIndex: 0
+        },
+        { type: "word_order", words: ["guitar", "Sam", "the", "was", "playing"], correctOrder: ["Sam", "was", "playing", "the", "guitar"], hint: "was + -ing" },
+        {
+          type: "categorize", instruction: "¿Was o were?",
+          buckets: [{ id: "was", label: "was" }, { id: "were", label: "were" }],
+          items: [{ t: "I", bucket: "was" }, { t: "she", bucket: "was" }, { t: "the dog", bucket: "was" }, { t: "we", bucket: "were" }, { t: "they", bucket: "were" }, { t: "you", bucket: "were" }]
+        },
+        { type: "true_false", statement: "\"I was sleeping\" significa \"estaba durmiendo\".", answer: true, explanation: "was + sleeping = estaba durmiendo." },
+        { type: "translate", prompt: "Traduce: \"¿Qué estabas haciendo?\"", answers: ["what were you doing", "what were you up to"], explanation: "What were you doing?" }
       ]
     },
 
@@ -263,59 +502,197 @@ window.VESPER_EXPANSION = (function () {
      * B1 — independencia
      * ================================================================== */
     "gram-b1-passive": {
-      lessonId: "gram-b1-passive", level: "B1", track: "Grammar", topic: "grammar", skill: "grammar",
-      title: "The passive voice", xpReward: 55, mascotState: "explaining",
-      nextLessonId: "gram-b1-relative",
+      lessonId: "gram-b1-passive", level: "B1", track: "Grammar", topic: "grammar", skill: "grammar", tipo: "aprende", title: "Might, may, could: guessing about the present", rev: 2, xpReward: 55,
+      mascotState: "explaining", nextLessonId: "gram-b1-relative",
       explanation: {
-        body: "The passive puts the focus on the action, not on who does it: be + past participle. \"The letter was sent yesterday.\" We use 'by' to mention the agent: \"...was written by Ana.\" It's useful when the agent is obvious or unknown.",
+        body: "It's 9:30 and Daniel isn't at the office yet. Where is he? When we aren't sure about something in the present, we use might, may or could to speculate. might / may / could + base verb = it's possible: He might be in traffic. She may be ill. It could be the printer. Negative guess: might not / may not (NOT couldn't, which means 'impossible'): He might not know. For actions in progress: might + be + -ing: He might be sleeping. If you're sure, use must (sure it's true) or can't (sure it's false).",
         examples: [
-          { en: "English is spoken here." },
-          { en: "The house was built in 1990." },
-          { en: "The report will be finished tomorrow." }
+          { en: "It's 9:30. Where's Daniel?" },
+          { en: "He might be stuck in traffic. There's a train strike today." },
+          { en: "Or he may be ill. He looked tired yesterday." },
+          { en: "He could be working from home. Let me check the team chat." }
+        ],
+        sections: [
+          { kind: "intro", body: "It's 9:30 and Daniel isn't at the office yet. Where is he? When we aren't sure about something in the present, we use might, may or could to speculate." },
+          {
+            kind: "regla",
+            body: "might / may / could + base verb = it's possible: He might be in traffic. She may be ill. It could be the printer. Negative guess: might not / may not (NOT couldn't, which means 'impossible'): He might not know. For actions in progress: might + be + -ing: He might be sleeping. If you're sure, use must (sure it's true) or can't (sure it's false)."
+          },
+          {
+            kind: "vocab",
+            items: [
+              { en: "might", ipa: "maɪt", es: "possibly (we are not sure)" },
+              { en: "may", ipa: "meɪ", es: "possibly (a little more formal)" },
+              { en: "could", ipa: "kʊd", es: "it is one possibility" },
+              { en: "maybe / perhaps", ipa: "ˈmeɪbi / pəˈhæps", es: "possibly (adverb, often at the start)" },
+              { en: "probably", ipa: "ˈprɒbəbli", es: "very likely" },
+              { en: "stuck in traffic", es: "unable to move because of heavy traffic" },
+              { en: "run late", es: "be later than planned" },
+              { en: "I bet", es: "I'm fairly sure (informal)" }
+            ]
+          },
+          {
+            kind: "expresiones",
+            items: [
+              { en: "He might be stuck in traffic.", es: "a possible explanation" },
+              { en: "I'm not sure, but...", es: "introduce a guess" },
+              { en: "It could be...", es: "suggest one possibility" },
+              { en: "I bet he's...", es: "an informal, confident guess" }
+            ]
+          },
+          {
+            kind: "ejemplos",
+            items: [
+              { en: "Priya: It's 9:30. Where's Daniel?" },
+              { en: "Tom: He might be stuck in traffic. There's a train strike today." },
+              { en: "Carmen: Or he may be ill. He looked tired yesterday." },
+              { en: "Priya: He could be working from home. Let me check the team chat." }
+            ]
+          },
+          {
+            kind: "errores",
+            items: [
+              { no: "He might is late.", si: "He might be late.", pq: "might + base verb (be), never is." },
+              { no: "He maybe is in a meeting.", si: "Maybe he's in a meeting. / He may be in a meeting.", pq: "maybe (one word) is an adverb; may be (two words) is a verb." },
+              { no: "He couldn't know. (= possibly he doesn't know)", si: "He might not know.", pq: "couldn't means it's impossible; for a negative guess use might not / may not." }
+            ]
+          },
+          { kind: "resumen", body: "might / may / could + base verb for guesses about now. might not / may not for negative guesses. must = sure it's true; can't = sure it's false." },
+          { kind: "puente", body: "Help the team work out where Daniel is." }
         ]
       },
       exercises: [
-        { type: "multiple_choice", question: "Passive of 'They make cars here'?", options: ["Cars are made here.", "Cars make here.", "Cars is made here."],
-          correctIndex: 0, explanation: "be + past participle: cars ARE MADE here." },
-        { type: "fill_blank", sentence: "The window ___ broken last night. (be, past)", answers: ["was"],
-          hint: "singular, past.", explanation: "The window was broken." },
-        { type: "word_order", words: ["The", "book", "was", "written", "by", "her"],
-          correctOrder: ["The", "book", "was", "written", "by", "her"], hint: "subject + was + past participle + by + agent." },
-        { type: "true_false", statement: "In the passive we use 'by' to introduce who does the action.", answer: true,
-          explanation: "Yes: ...was painted BY Picasso." },
-        { type: "multiple_choice", question: "Choose the passive: ...", options: ["Somebody stole my bike.", "My bike stole.", "My bike was stolen."],
-          correctIndex: 2, explanation: "My bike was stolen (be + past participle)." },
-        { type: "translate", prompt: "Rewrite in the passive: People speak English here.",
-          answers: ["english is spoken here"], explanation: "English is spoken here." }
+        {
+          type: "multiple_choice", question: "Daniel isn't answering his phone. He ___ be in a meeting.", options: ["might", "maybe", "can"], correctIndex: 0,
+          explanation: "might + base verb for a present guess. Maybe is an adverb, so 'He maybe be' is wrong."
+        },
+        {
+          type: "categorize", instruction: "How sure is the speaker?",
+          buckets: [{ id: "sure", label: "Sure" }, { id: "possible", label: "Only possible" }],
+          items: [
+            { t: "She must be at home. Her car is outside.", bucket: "sure" },
+            { t: "That can't be Tom. He's in Madrid.", bucket: "sure" },
+            { t: "It's definitely the printer.", bucket: "sure" },
+            { t: "She might be at home.", bucket: "possible" },
+            { t: "It could be the printer.", bucket: "possible" },
+            { t: "He may not know yet.", bucket: "possible" }
+          ]
+        },
+        {
+          type: "find_error",
+          segments: ["Where's Priya? She ", { u: "might" }, " ", { u: "is" }, " in ", { u: "the" }, " kitchen."],
+          correctIndex: 1, correction: "be", explanation: "After might, use the base verb: She might be in the kitchen.", question: "Find the mistake"
+        },
+        { type: "fill_blank", sentence: "Take an umbrella. It ___ rain later.", answers: ["might", "may", "could"], hint: "A possibility, not a certainty.", explanation: "might / may / could all work here." },
+        {
+          type: "listening", text: "I'm not sure where the keys are. They might be in the car.", question: "Where are the keys?", options: ["Possibly in the car", "Definitely in the car", "Not in the car"],
+          correctIndex: 0
+        },
+        { type: "word_order", words: ["home", "He", "from", "might", "working", "be"], correctOrder: ["He", "might", "be", "working", "from", "home"], hint: "might + be + -ing" },
+        { type: "true_false", statement: "\"Maybe\" and \"may be\" are used in the same way.", answer: false, explanation: "Maybe is an adverb (Maybe he's ill). May be is modal + verb (He may be ill)." },
+        { type: "translate", prompt: "Rewrite using MIGHT: \"Perhaps she is at the gym.\"", answers: ["she might be at the gym", "she might be in the gym"], explanation: "She might be at the gym." }
       ]
     },
 
     "gram-b1-relative": {
-      lessonId: "gram-b1-relative", level: "B1", track: "Grammar", topic: "grammar", skill: "grammar",
-      title: "Relative clauses", xpReward: 55, mascotState: "explaining",
-      nextLessonId: "use-b1-collocations",
+      lessonId: "gram-b1-relative", level: "B1", track: "Grammar", topic: "grammar", skill: "grammar", tipo: "aprende", title: "Indirect questions: Could you tell me...?", rev: 2, xpReward: 55,
+      mascotState: "explaining", nextLessonId: "use-b1-collocations",
       explanation: {
-        body: "Relative pronouns join information: who (people), which (things), that (both), where (places), whose (possession). \"The man who lives here is a doctor.\" In defining (essential) relative clauses we don't use commas.",
+        body: "On her first day, Carmen needs a lot of information. Instead of asking \"Where is the meeting room?\", she asks \"Could you tell me where the meeting room is?\" Indirect questions sound more polite, especially with people you don't know well. Start with a polite phrase: Could you tell me... / Do you know... / I was wondering... Then use statement word order (subject + verb) and no do / does / did: Where is the printer? → Could you tell me where the printer is? What time does it start? → Do you know what time it starts? For yes/no questions, use if or whether: Is he in? → Do you know if he's in?",
         examples: [
-          { en: "That's the woman who helped me." },
-          { en: "This is the book which I told you about." },
-          { en: "It's the city where I was born." }
+          { en: "Sorry to bother you, but could you tell me where the meeting room is?" },
+          { en: "Of course. It's on the second floor, on the left." },
+          { en: "And do you know if Priya is in today?" },
+          { en: "I was also wondering when my badge will be ready." }
+        ],
+        sections: [
+          {
+            kind: "intro",
+            body: "On her first day, Carmen needs a lot of information. Instead of asking \"Where is the meeting room?\", she asks \"Could you tell me where the meeting room is?\" Indirect questions sound more polite, especially with people you don't know well."
+          },
+          {
+            kind: "regla",
+            body: "Start with a polite phrase: Could you tell me... / Do you know... / I was wondering... Then use statement word order (subject + verb) and no do / does / did: Where is the printer? → Could you tell me where the printer is? What time does it start? → Do you know what time it starts? For yes/no questions, use if or whether: Is he in? → Do you know if he's in?"
+          },
+          {
+            kind: "vocab",
+            items: [
+              { en: "indirect question", es: "a polite question inside another phrase" },
+              { en: "wonder", ipa: "ˈwʌndə", es: "want to know something" },
+              { en: "whether", ipa: "ˈweðə", es: "if (introduces two possibilities)" },
+              { en: "polite", ipa: "pəˈlaɪt", es: "showing good manners" },
+              { en: "direct", ipa: "daɪˈrekt", es: "going straight to the point" },
+              { en: "reception", ipa: "rɪˈsepʃən", es: "the front desk of a building" },
+              { en: "extension", ipa: "ɪkˈstenʃən", es: "an internal phone number in an office" },
+              { en: "badge", ipa: "bædʒ", es: "a card that shows who you are and lets you in" }
+            ]
+          },
+          {
+            kind: "expresiones",
+            items: [
+              { en: "Could you tell me where...?", es: "a polite request for information" },
+              { en: "Do you know if...?", es: "ask a yes/no question politely" },
+              { en: "I was wondering whether...", es: "very polite, slightly formal" },
+              { en: "Sorry to bother you, but...", es: "a polite opener before a question" }
+            ]
+          },
+          {
+            kind: "ejemplos",
+            items: [
+              { en: "Carmen: Sorry to bother you, but could you tell me where the meeting room is?" },
+              { en: "Receptionist: Of course. It's on the second floor, on the left." },
+              { en: "Carmen: And do you know if Priya is in today?" },
+              { en: "Carmen: I was also wondering when my badge will be ready." }
+            ]
+          },
+          {
+            kind: "errores",
+            items: [
+              { no: "Could you tell me where is the station?", si: "Could you tell me where the station is?", pq: "In indirect questions, the verb goes after the subject." },
+              { no: "Do you know what time does it start?", si: "Do you know what time it starts?", pq: "Don't use do / does / did in the indirect part." },
+              { no: "Do you know is he here?", si: "Do you know if he's here?", pq: "Yes/no questions need if or whether." }
+            ]
+          },
+          { kind: "resumen", body: "Polite opener + question word (or if / whether) + subject + verb. No do / does / did and no inversion: Do you know where she lives?" },
+          { kind: "puente", body: "Help Carmen find her way around on her first day." }
         ]
       },
       exercises: [
-        { type: "multiple_choice", question: "The person ___ called you is my boss.", options: ["which", "who", "where"],
-          correctIndex: 1, explanation: "People → who." },
-        { type: "fill_blank", sentence: "This is the house ___ I grew up. (lugar)", answers: ["where"],
-          hint: "lugar → where.", explanation: "...the house where I grew up." },
-        { type: "multiple_choice", question: "The car ___ broke down was new.", options: ["which", "whose", "who"],
-          correctIndex: 0, explanation: "Things → which (or that)." },
-        { type: "matching", instruction: "Match each relative pronoun with its use.", pairs: [{"l":"who","r":"people"},{"l":"which","r":"things"},{"l":"where","r":"places"},{"l":"whose","r":"possession"}],
-          explanation: "who = people, which = things, where = places, whose = possession." },
-        { type: "true_false", statement: "'Whose' shows possession.", answer: true,
-          explanation: "Yes: \"the girl whose dog ran away\" = the girl's dog ran away." },
-        { type: "translate", prompt: "Join with a relative pronoun: That's the woman. She helped me.",
-          answers: ["that's the woman who helped me","that is the woman who helped me","that's the woman that helped me","that is the woman that helped me"],
-          explanation: "That's the woman who helped me." }
+        {
+          type: "word_order", words: ["is", "Could", "lift", "you", "the", "tell", "where", "me"], correctOrder: ["Could", "you", "tell", "me", "where", "the", "lift", "is"],
+          hint: "Statement word order after 'where'."
+        },
+        {
+          type: "multiple_choice", question: "Do you know ___?",
+          options: ["what time the train leaves", "what time does the train leave", "what time leaves the train"], correctIndex: 0, explanation: "Statement order, no does: what time the train leaves."
+        },
+        {
+          type: "find_error",
+          segments: ["Could you ", { u: "tell" }, " me ", { u: "where" }, " ", { u: "is the station" }, "?"],
+          correctIndex: 2, correction: "the station is", explanation: "Subject before verb: where the station is.", question: "Find the mistake"
+        },
+        { type: "fill_blank", sentence: "Do you know ___ the shop is open on Sundays?", answers: ["if", "whether"], hint: "A yes/no question.", explanation: "if / whether introduce yes/no questions." },
+        {
+          type: "listening", text: "Excuse me, could you tell me how much this jacket costs?", question: "What does the customer want to know?",
+          options: ["The price of a jacket", "Where the jackets are", "If the shop is open"], correctIndex: 0
+        },
+        {
+          type: "categorize", instruction: "Direct or indirect question?",
+          buckets: [{ id: "direct", label: "Direct" }, { id: "indirect", label: "Indirect" }],
+          items: [
+            { t: "Where is reception?", bucket: "direct" },
+            { t: "What time does it start?", bucket: "direct" },
+            { t: "Is Priya in?", bucket: "direct" },
+            { t: "Do you know where reception is?", bucket: "indirect" },
+            { t: "Could you tell me what time it starts?", bucket: "indirect" },
+            { t: "I was wondering if Priya is in.", bucket: "indirect" }
+          ]
+        },
+        { type: "speak", text: "Sorry to bother you, but could you tell me where the meeting room is?" },
+        {
+          type: "translate", prompt: "Make it indirect, starting with \"Do you know\": \"Where does Daniel sit?\"", answers: ["do you know where daniel sits", "do you know where daniel's desk is"],
+          explanation: "Do you know where Daniel sits?"
+        }
       ]
     },
 
@@ -373,7 +750,17 @@ window.VESPER_EXPANSION = (function () {
         { type: "multiple_choice", question: "Which is a formal closing?", options: ["Cheers!", "Kind regards", "See ya"],
           correctIndex: 1, explanation: "'Kind regards' is formal." },
         { type: "fill_blank", sentence: "I look forward to ___ from you.", answers: ["hearing"],
-          hint: "look forward to + -ing.", explanation: "I look forward to hearing from you." }
+          hint: "look forward to + -ing.", explanation: "I look forward to hearing from you." },
+        {
+          type: "multiple_choice", question: "In the email, \"in advance\" means...", options: ["before the date", "after the date", "on the same day"], correctIndex: 0,
+          explanation: "in advance = before something happens."
+        },
+        { type: "true_false", statement: "Guests have to pay extra for breakfast.", answer: false, explanation: "\"Breakfast is included.\"" },
+        {
+          type: "find_error",
+          segments: ["I am ", { u: "writing" }, " to ", { u: "confirming" }, " ", { u: "your" }, " reservation."],
+          correctIndex: 1, correction: "confirm", explanation: "to + base verb: I am writing to confirm...", question: "Find the mistake"
+        }
       ]
     },
 
@@ -406,61 +793,234 @@ window.VESPER_EXPANSION = (function () {
      * B2 — fluidez
      * ================================================================== */
     "gram-b2-reported": {
-      lessonId: "gram-b2-reported", level: "B2", track: "Grammar", topic: "grammar", skill: "grammar",
-      title: "Reported speech", xpReward: 60, mascotState: "explaining",
-      nextLessonId: "use-b2-markers",
+      lessonId: "gram-b2-reported", level: "B2", track: "Functional English", topic: "customer", skill: "use", tipo: "aprende", title: "Handling formal complaints", rev: 2, xpReward: 60,
+      mascotState: "explaining", nextLessonId: "use-b2-markers",
       explanation: {
-        body: "To report what someone said, tenses usually move one step back: present simple → past simple; will → would; can → could. Pronouns and time expressions also change (today → that day). \"She said (that) she was tired.\"",
+        body: "Episode 5 · Carmen has been promoted to customer experience lead. Her first task: an angry email from a customer whose boat tour was cancelled without warning. Learn the language of formal complaints and how to respond professionally. A formal complaint: state the problem and the facts (I am writing to complain about...), describe the impact (As a result, ...), and request action (I would appreciate a full refund). A professional reply has four steps: thank and apologise (Thank you for bringing this to our attention. We sincerely apologise...), show you understand, explain what happened without making excuses, and offer a concrete solution (As a goodwill gesture, we would like to offer...).",
         examples: [
-          { en: "\"I am busy.\" → He said he was busy." },
-          { en: "\"I will call you.\" → She said she would call me." },
-          { en: "\"I can swim.\" → He said he could swim." }
+          { en: "I am writing to complain about the boat tour I booked for 12 June." },
+          { en: "The tour was cancelled without any warning, which I find unacceptable." },
+          { en: "Thank you for bringing this to our attention, and please accept our sincere apologies." },
+          { en: "As a goodwill gesture, we would like to offer you a full refund and a 20% discount on your next booking." }
+        ],
+        sections: [
+          {
+            kind: "intro",
+            body: "Episode 5 · Carmen has been promoted to customer experience lead. Her first task: an angry email from a customer whose boat tour was cancelled without warning. Learn the language of formal complaints and how to respond professionally."
+          },
+          {
+            kind: "regla",
+            body: "A formal complaint: state the problem and the facts (I am writing to complain about...), describe the impact (As a result, ...), and request action (I would appreciate a full refund). A professional reply has four steps: thank and apologise (Thank you for bringing this to our attention. We sincerely apologise...), show you understand, explain what happened without making excuses, and offer a concrete solution (As a goodwill gesture, we would like to offer...)."
+          },
+          {
+            kind: "vocab",
+            items: [
+              { en: "complain about", es: "say formally that something is wrong" },
+              { en: "compensation", ipa: "ˌkɒmpənˈseɪʃən", es: "something given to make up for a problem" },
+              { en: "unacceptable", ipa: "ˌʌnəkˈseptəbəl", es: "too bad to be allowed" },
+              { en: "appreciate", ipa: "əˈpriːʃieɪt", es: "be grateful for" },
+              { en: "resolve", ipa: "rɪˈzɒlv", es: "find a solution to a problem" },
+              { en: "goodwill gesture", es: "something offered to show good intentions, not because you must" },
+              { en: "escalate", ipa: "ˈeskəleɪt", es: "pass a problem to a higher level of authority" },
+              { en: "acknowledge", ipa: "əkˈnɒlɪdʒ", es: "accept that something is true or has happened" }
+            ]
+          },
+          {
+            kind: "expresiones",
+            items: [
+              { en: "I am writing to complain about...", es: "open a formal complaint" },
+              { en: "I would appreciate it if you could...", es: "make a formal request" },
+              { en: "Thank you for bringing this to our attention.", es: "a professional opening to a reply" },
+              { en: "As a goodwill gesture, we would like to offer...", es: "offer compensation" }
+            ]
+          },
+          {
+            kind: "ejemplos",
+            items: [
+              { en: "Customer: I am writing to complain about the boat tour I booked for 12 June." },
+              { en: "Customer: The tour was cancelled without any warning, which I find unacceptable." },
+              { en: "Carmen: Thank you for bringing this to our attention, and please accept our sincere apologies." },
+              { en: "Carmen: As a goodwill gesture, we would like to offer you a full refund and a 20% discount on your next booking." }
+            ]
+          },
+          {
+            kind: "errores",
+            items: [
+              { no: "I write to complain about...", si: "I am writing to complain about...", pq: "This fixed formal opening uses the present continuous." },
+              { no: "We apologise for the inconvenient.", si: "We apologise for the inconvenience.", pq: "inconvenience is the noun." },
+              { no: "I would appreciate if you could reply.", si: "I would appreciate it if you could reply.", pq: "appreciate needs the object 'it' here." }
+            ]
+          },
+          { kind: "resumen", body: "Complaint: problem + impact + request. Reply: thank + apologise → show understanding → explain (no excuses) → concrete solution." },
+          { kind: "puente", body: "Help Carmen deal with her first formal complaint." }
         ]
       },
       exercises: [
-        { type: "multiple_choice", question: "\"I am tired.\" → She said she ___ tired.", options: ["is", "was", "were"],
-          correctIndex: 1, explanation: "present → past: is → was." },
-        { type: "fill_blank", sentence: "\"I will help.\" → He said he ___ help. (will → ?)", answers: ["would"],
-          hint: "will moves back to...", explanation: "will → would." },
-        { type: "multiple_choice", question: "\"I can drive.\" → She said she ___ drive.", options: ["could", "can", "will"],
-          correctIndex: 0, explanation: "can → could." },
-        { type: "true_false", statement: "In reported speech, tenses usually move one step back.", answer: true,
-          explanation: "Yes: 'backshift' is the general rule." },
-        { type: "word_order", words: ["He", "said", "he", "was", "hungry"],
-          correctOrder: ["He", "said", "he", "was", "hungry"], hint: "He said (that) he was..." },
-        { type: "translate", prompt: "Report it: \"I'll call you,\" she told me. → She said…",
-          answers: ["she said she would call me","she said that she would call me","he said he would call me"],
-          explanation: "She/He said she/he would call me." }
+        {
+          type: "reading", title: "A complaint",
+          passage: "Dear Lumen Travel,\n\nI am writing to complain about the boat tour I booked through your app for 12 June. When my family and I arrived at the harbour, we were told that the tour had been cancelled the day before. Nobody had informed us.\n\nAs a result, we lost a whole morning of our holiday and had to pay for a taxi back to the hotel. I find this completely unacceptable.\n\nI would appreciate it if you could refund the full cost of the tour and the taxi. I look forward to your reply.\n\nYours faithfully,\nHelen Marsh",
+          questions: [
+            {
+              q: "What is Helen's main complaint?",
+              options: ["Nobody told her the tour was cancelled.", "The tour was too expensive.", "The boat was dirty."], correctIndex: 0,
+              explanation: "...the tour had been cancelled the day before. Nobody had informed us."
+            },
+            {
+              q: "What does she ask for?",
+              options: ["A refund for the tour and the taxi", "A new tour on another day", "An apology from the boat captain"], correctIndex: 0, explanation: "...refund the full cost of the tour and the taxi."
+            },
+            {
+              q: "What is the tone of the email?", options: ["Formal and firm", "Friendly and relaxed", "Rude and aggressive"], correctIndex: 0,
+              explanation: "Formal phrases (I am writing to..., Yours faithfully) and a clear demand."
+            }
+          ]
+        },
+        {
+          type: "categorize", instruction: "Which part of a professional reply is it?",
+          buckets: [{ id: "apol", label: "Apology" }, { id: "expl", label: "Explanation" }, { id: "sol", label: "Solution" }],
+          items: [
+            { t: "Please accept our sincere apologies.", bucket: "apol" },
+            { t: "We are very sorry for the trouble this caused.", bucket: "apol" },
+            { t: "The tour was cancelled due to high winds.", bucket: "expl" },
+            { t: "Unfortunately, our partner did not update the booking system.", bucket: "expl" },
+            { t: "We will refund the full amount within five days.", bucket: "sol" },
+            { t: "As a goodwill gesture, we would like to offer you a discount.", bucket: "sol" }
+          ]
+        },
+        {
+          type: "multiple_choice", question: "Which is the most appropriate opening for a reply to a complaint?",
+          options: ["Thank you for bringing this to our attention.", "Calm down, it wasn't our fault.", "Hi Helen! Sorry, these things happen."], correctIndex: 0,
+          explanation: "Professional, polite and neutral."
+        },
+        {
+          type: "matching", instruction: "Match each word with its meaning.",
+          pairs: [
+            { l: "compensation", r: "something given to make up for a problem" },
+            { l: "escalate", r: "pass a problem to a higher authority" },
+            { l: "resolve", r: "find a solution to a problem" },
+            { l: "acknowledge", r: "accept that something has happened" },
+            { l: "unacceptable", r: "too bad to be allowed" }
+          ]
+        },
+        {
+          type: "find_error",
+          segments: ["I would ", { u: "appreciate" }, " ", { u: "if" }, " you could ", { u: "reply" }, " by Friday."],
+          correctIndex: 1, correction: "it if", explanation: "appreciate it if...: I would appreciate it if you could reply by Friday.", question: "Find the mistake"
+        },
+        { type: "fill_blank", sentence: "I am ___ to complain about the service I received on Monday.", answers: ["writing"], hint: "A fixed formal opening.", explanation: "I am writing to complain about..." },
+        { type: "speak", text: "Thank you for bringing this to our attention. Please accept our sincere apologies." },
+        {
+          type: "translate",
+          prompt: "Make this formal, starting with \"I would appreciate it\": \"Give me my money back.\"",
+          answers: ["i would appreciate it if you could give me my money back", "i would appreciate it if you could refund my money", "i would appreciate it if you could give me a refund", "i would appreciate it if you could refund me"],
+          explanation: "I would appreciate it if you could give me a refund."
+        }
       ]
     },
 
     "use-b2-markers": {
-      lessonId: "use-b2-markers", level: "B2", track: "Use of English", topic: "writing", skill: "use",
-      title: "Discourse markers", xpReward: 55, mascotState: "explaining",
+      lessonId: "use-b2-markers", level: "B2", track: "Functional English", topic: "work", skill: "use", tipo: "aprende", title: "Disagreeing diplomatically", rev: 2, xpReward: 55, mascotState: "explaining",
       nextLessonId: "voc-b2-work",
       explanation: {
-        body: "Discourse markers organise ideas and make you sound fluent. Contrast: however, although, despite. Addition: moreover, in addition. Result: therefore, as a result. Example: for instance. 'However' and 'therefore' are followed by a comma.",
+        body: "Episode 6 · Lumen Travel's CEO wants to launch the new app in two weeks. Carmen and Daniel think it's too soon, but how do you disagree with your boss's boss? Learn to disagree diplomatically: soften, give reasons and suggest alternatives. Soften the disagreement: I'm not sure I agree... / I take your point, but... / I can see why you'd say that; however, ... Use tentative language: might, could, perhaps, a bit (It might be a bit risky). Focus on facts, not people: The data suggests... (not 'You're wrong'). Offer an alternative: Would it be possible to...? / What if we...? Show respect even when you disagree: That's an interesting idea, but...",
         examples: [
-          { en: "It was raining; however, we went out." },
-          { en: "The plan is risky. Therefore, we need a backup." },
-          { en: "Despite the cost, it's worth it." }
+          { en: "I want the app in the stores in two weeks." },
+          { en: "I take your point; speed matters. However, I have some reservations about the timing." },
+          { en: "The latest tests suggest there are still a few serious bugs. Launching now might be a bit risky." },
+          { en: "Would it be possible to launch a beta version first and the full version in a month?" }
+        ],
+        sections: [
+          {
+            kind: "intro",
+            body: "Episode 6 · Lumen Travel's CEO wants to launch the new app in two weeks. Carmen and Daniel think it's too soon, but how do you disagree with your boss's boss? Learn to disagree diplomatically: soften, give reasons and suggest alternatives."
+          },
+          {
+            kind: "regla",
+            body: "Soften the disagreement: I'm not sure I agree... / I take your point, but... / I can see why you'd say that; however, ... Use tentative language: might, could, perhaps, a bit (It might be a bit risky). Focus on facts, not people: The data suggests... (not 'You're wrong'). Offer an alternative: Would it be possible to...? / What if we...? Show respect even when you disagree: That's an interesting idea, but..."
+          },
+          {
+            kind: "vocab",
+            items: [
+              { en: "diplomatic", ipa: "ˌdɪpləˈmætɪk", es: "careful to avoid upsetting people" },
+              { en: "tentative", ipa: "ˈtentətɪv", es: "not certain or forceful" },
+              { en: "reservation", ipa: "ˌrezəˈveɪʃən", es: "a doubt about a plan" },
+              { en: "concern", ipa: "kənˈsɜːn", es: "a worry" },
+              { en: "alternative", ipa: "ɔːlˈtɜːnətɪv", es: "another possible choice" },
+              { en: "risky", ipa: "ˈrɪski", es: "involving a possibility of danger or failure" },
+              { en: "take someone's point", es: "accept that someone has a good argument" },
+              { en: "push back", es: "resist a plan or idea (informal, business)" }
+            ]
+          },
+          {
+            kind: "expresiones",
+            items: [
+              { en: "I take your point, but...", es: "accept the argument, then disagree" },
+              { en: "I have some reservations about...", es: "express doubt formally" },
+              { en: "Would it be possible to...?", es: "suggest an alternative politely" },
+              { en: "I'm not sure that's the best approach.", es: "soft disagreement" }
+            ]
+          },
+          {
+            kind: "ejemplos",
+            items: [
+              { en: "CEO: I want the app in the stores in two weeks." },
+              { en: "Carmen: I take your point; speed matters. However, I have some reservations about the timing." },
+              { en: "Daniel: The latest tests suggest there are still a few serious bugs. Launching now might be a bit risky." },
+              { en: "Carmen: Would it be possible to launch a beta version first and the full version in a month?" }
+            ]
+          },
+          {
+            kind: "errores",
+            items: [
+              { no: "You're wrong, that's a bad idea.", si: "I'm not sure that's the best approach.", pq: "Criticise the idea gently, not the person." },
+              { no: "I take your point, and I disagree completely.", si: "I take your point, but I see it slightly differently.", pq: "Use 'but' to contrast, and soften with 'slightly'." },
+              { no: "It will be a disaster.", si: "It might be a bit risky.", pq: "Tentative language (might, a bit) sounds more diplomatic." }
+            ]
+          },
+          { kind: "resumen", body: "Soften (I take your point, but...) + tentative language (might, a bit) + facts (the data suggests...) + alternative (Would it be possible to...?)." },
+          { kind: "puente", body: "Help Carmen and Daniel push back without upsetting the CEO." }
         ]
       },
       exercises: [
-        { type: "multiple_choice", question: "It's expensive; ___, the quality is great.", options: ["however", "because", "so that"],
-          correctIndex: 0, explanation: "Contrast → however." },
-        { type: "categorize", instruction: "Contrast or result?", buckets: [
-          { id: "c", label: "Contrast" }, { id: "r", label: "Result" } ], items: [
-          { t: "however", bucket: "c" }, { t: "therefore", bucket: "r" }, { t: "although", bucket: "c" }, { t: "as a result", bucket: "r" } ] },
-        { type: "fill_blank", sentence: "___ the rain, the match continued.", answers: ["despite", "Despite"],
-          hint: "despite + noun.", explanation: "Despite the rain... (despite + noun, no 'of')." },
-        { type: "true_false", statement: "'Although' and 'despite' are followed by the same structure.", answer: false,
-          explanation: "although + clause (subject + verb); despite + noun / -ing." },
-        { type: "multiple_choice", question: "We had no map. ___, we got lost.", options: ["Moreover", "For instance", "As a result"],
-          correctIndex: 2, explanation: "Result → As a result." },
-        { type: "translate", prompt: "Link the ideas with 'Therefore': The plan is risky. We need a backup.",
-          answers: ["the plan is risky. therefore, we need a backup","the plan is risky therefore we need a backup","the plan is risky therefore we need a backup plan","the plan is risky therefore we need a plan b"],
-          explanation: "The plan is risky. Therefore, we need a backup." }
+        {
+          type: "listening",
+          text: "I can see why you'd say that. However, the numbers suggest we might need more time.", question: "How does the speaker disagree?",
+          options: ["Politely, using data", "Angrily", "They don't disagree"], correctIndex: 0
+        },
+        {
+          type: "multiple_choice", question: "Which response is the most diplomatic?",
+          options: ["I have some reservations about the budget.", "This budget is ridiculous.", "No way. We can't do that."], correctIndex: 0, explanation: "Formal, tentative and focused on the issue."
+        },
+        {
+          type: "categorize", instruction: "Diplomatic or too direct?",
+          buckets: [{ id: "dip", label: "Diplomatic" }, { id: "direct", label: "Too direct" }],
+          items: [
+            { t: "I take your point, but...", bucket: "dip" },
+            { t: "It might be a bit risky.", bucket: "dip" },
+            { t: "Would it be possible to wait?", bucket: "dip" },
+            { t: "That's a terrible idea.", bucket: "direct" },
+            { t: "You don't understand.", bucket: "direct" },
+            { t: "We're definitely not doing that.", bucket: "direct" }
+          ]
+        },
+        {
+          type: "matching", instruction: "Match each word with its meaning.",
+          pairs: [
+            { l: "reservation", r: "a doubt about a plan" },
+            { l: "tentative", r: "not certain or forceful" },
+            { l: "alternative", r: "another possible choice" },
+            { l: "diplomatic", r: "careful to avoid upsetting people" },
+            { l: "push back", r: "resist a plan or idea" }
+          ]
+        },
+        { type: "fill_blank", sentence: "I take your ___, but I think we need more data.", answers: ["point"], hint: "accept someone's argument", explanation: "I take your point, but..." },
+        { type: "word_order", words: ["month", "Would", "a", "it", "wait", "be", "to", "possible"], correctOrder: ["Would", "it", "be", "possible", "to", "wait", "a", "month"], hint: "A polite alternative." },
+        { type: "true_false", statement: "In a business context, \"push back\" means to accept a plan immediately.", answer: false, explanation: "To push back means to resist or question a plan." },
+        { type: "speak", text: "I take your point. However, I have some reservations about the timing." },
+        {
+          type: "translate", prompt: "Make this more diplomatic using \"might\" and \"a bit\": \"This plan is risky.\"",
+          answers: ["this plan might be a bit risky", "the plan might be a bit risky", "this might be a bit risky"], explanation: "This plan might be a bit risky."
+        }
       ]
     },
 
@@ -518,7 +1078,16 @@ window.VESPER_EXPANSION = (function () {
         { type: "multiple_choice", question: "\"The benefits outweigh the costs\" means the benefits are...", options: ["smaller", "greater", "equal"],
           correctIndex: 1, explanation: "outweigh = be greater or more important than." },
         { type: "fill_blank", sentence: "On the one hand... on the ___ hand.", answers: ["other"],
-          hint: "A fixed expression.", explanation: "on the other hand = introduces the opposite point of view." }
+          hint: "A fixed expression.", explanation: "on the other hand = introduces the opposite point of view." },
+        {
+          type: "matching", instruction: "Match each word from the text with its meaning.",
+          pairs: [{ l: "commute", r: "travel regularly between home and work" }, { l: "productive", r: "achieving a lot" }, { l: "hybrid", r: "a mix of two different things" }, { l: "separate", r: "keep apart" }]
+        },
+        { type: "true_false", statement: "The writer thinks everyone should work from home every day.", answer: false, explanation: "The writer prefers a hybrid model." },
+        {
+          type: "translate", prompt: "Rewrite using \"In my view\": \"I think a hybrid model is the best solution.\"",
+          answers: ["in my view a hybrid model is the best solution", "in my view the best solution is a hybrid model"], explanation: "In my view, a hybrid model is the best solution."
+        }
       ]
     },
 
@@ -556,32 +1125,114 @@ window.VESPER_EXPANSION = (function () {
     },
 
     "voc-c1-academic": {
-      lessonId: "voc-c1-academic", level: "C1", track: "Vocabulary", topic: "academic", skill: "vocab",
-      title: "Academic vocabulary", xpReward: 60, mascotState: "explaining",
-      nextLessonId: "read-c1-analysis",
+      lessonId: "voc-c1-academic", level: "C1", track: "Vocabulary", topic: "personality", skill: "vocab", tipo: "aprende", title: "Describing personality with nuance", rev: 2, xpReward: 60,
+      mascotState: "explaining", nextLessonId: "read-c1-analysis",
       explanation: {
-        body: "Academic English prefers precise verbs: demonstrate (show with evidence), indicate (point to), highlight (draw attention to), undermine (weaken), comprise (consist of). Using the exact verb gives your writing authority.",
+        body: "'Nice', 'friendly' and 'bad' won't get you far in a reference letter or a character analysis. Learn adjectives that describe personality precisely, and notice their connotation: is the word positive, negative or neutral? Many adjectives come in pairs with a similar meaning but a different connotation: thrifty (positive) vs stingy (negative); assertive vs pushy; self-assured vs arrogant. Use modifiers to fine-tune: remarkably conscientious, slightly abrasive, at times overbearing. Useful collocations: deeply conscientious, painfully shy, refreshingly candid.",
         examples: [
-          { en: "The data demonstrate a clear trend." },
-          { en: "These results highlight a problem." },
-          { en: "This finding undermines the theory." }
+          { en: "She is remarkably conscientious and never misses a detail." },
+          { en: "He can come across as aloof, but he's just shy." },
+          { en: "Our new manager is assertive without being overbearing." },
+          { en: "To be fair to her, her candid feedback improved the project." }
+        ],
+        sections: [
+          {
+            kind: "intro",
+            body: "'Nice', 'friendly' and 'bad' won't get you far in a reference letter or a character analysis. Learn adjectives that describe personality precisely, and notice their connotation: is the word positive, negative or neutral?"
+          },
+          {
+            kind: "regla",
+            body: "Many adjectives come in pairs with a similar meaning but a different connotation: thrifty (positive) vs stingy (negative); assertive vs pushy; self-assured vs arrogant. Use modifiers to fine-tune: remarkably conscientious, slightly abrasive, at times overbearing. Useful collocations: deeply conscientious, painfully shy, refreshingly candid."
+          },
+          {
+            kind: "vocab",
+            items: [
+              { en: "conscientious", ipa: "ˌkɒnʃiˈenʃəs", es: "careful to do things well and thoroughly" },
+              { en: "meticulous", ipa: "məˈtɪkjələs", es: "paying great attention to detail" },
+              { en: "abrasive", ipa: "əˈbreɪsɪv", es: "rude and unkind in a way that upsets people" },
+              { en: "assertive", ipa: "əˈsɜːtɪv", es: "confident and direct about what you want" },
+              { en: "overbearing", ipa: "ˌəʊvəˈbeərɪŋ", es: "trying to control other people too much" },
+              { en: "candid", ipa: "ˈkændɪd", es: "honest and direct, even when it's uncomfortable" },
+              { en: "resilient", ipa: "rɪˈzɪliənt", es: "able to recover quickly from difficulties" },
+              { en: "aloof", ipa: "əˈluːf", es: "unfriendly and distant" }
+            ]
+          },
+          {
+            kind: "expresiones",
+            items: [
+              { en: "She's refreshingly candid.", es: "honest in a positive way" },
+              { en: "He can come across as a bit abrasive.", es: "soften a negative description" },
+              { en: "remarkably resilient", es: "a strong positive collocation" },
+              { en: "To be fair to him, ...", es: "balance a criticism" }
+            ]
+          },
+          {
+            kind: "ejemplos",
+            items: [
+              { en: "She is remarkably conscientious and never misses a detail." },
+              { en: "He can come across as aloof, but he's just shy." },
+              { en: "Our new manager is assertive without being overbearing." },
+              { en: "To be fair to her, her candid feedback improved the project." }
+            ]
+          },
+          {
+            kind: "errores",
+            items: [
+              { no: "He is very sympathetic: he always smiles and jokes.", si: "He is very friendly / likeable.", pq: "sympathetic means showing understanding of someone's problems, not 'nice'." },
+              { no: "She's sensible to criticism.", si: "She's sensitive to criticism.", pq: "sensitive = easily hurt; sensible = practical and reasonable." },
+              { no: "He is very educated: he always says please.", si: "He is very polite / well-mannered.", pq: "educated means having had a good education, not polite." }
+            ]
+          },
+          { kind: "resumen", body: "Choose the word with the right connotation (thrifty vs stingy), add a modifier (remarkably, slightly) and watch out for false friends (sympathetic, sensible, educated)." },
+          { kind: "puente", body: "Describe people precisely and fairly." }
         ]
       },
       exercises: [
-        { type: "matching", instruction: "Match each verb with its meaning.", pairs: [{"l":"demonstrate","r":"show with evidence"},{"l":"highlight","r":"draw attention to"},{"l":"undermine","r":"gradually weaken"},{"l":"comprise","r":"consist of"}],
-          explanation: "demonstrate, highlight, undermine, comprise: high-register verbs." },
-        { type: "multiple_choice", question: "The evidence ___ that the plan works.", options: ["indicates", "indicate", "indication"],
-          correctIndex: 0, explanation: "indicates (third person singular): shows / suggests." },
-        { type: "fill_blank", sentence: "The team ___ five researchers. (consists of)", answers: ["comprises"],
-          hint: "comprise (no 'of').", explanation: "The team comprises five researchers." },
-        { type: "categorize", instruction: "Formal or informal?", buckets: [
-          { id: "f", label: "Formal" }, { id: "i", label: "Informal" } ], items: [
-          { t: "demonstrate", bucket: "f" }, { t: "show off", bucket: "i" }, { t: "indicate", bucket: "f" }, { t: "kind of", bucket: "i" } ] },
-        { type: "true_false", statement: "'Undermine' has a negative meaning.", answer: true,
-          explanation: "Yes: it means to weaken something gradually." },
-        { type: "translate", prompt: "Make it academic with 'demonstrate': The data shows a clear trend.",
-          answers: ["the data demonstrate a clear trend", "the data demonstrates a clear trend"],
-          explanation: "The data demonstrate a clear trend." }
+        {
+          type: "matching", instruction: "Match each adjective with its meaning.",
+          pairs: [
+            { l: "conscientious", r: "careful to do things well and thoroughly" },
+            { l: "meticulous", r: "paying great attention to detail" },
+            { l: "abrasive", r: "rude in a way that upsets people" },
+            { l: "overbearing", r: "trying to control others too much" },
+            { l: "candid", r: "honest and direct" },
+            { l: "resilient", r: "able to recover quickly from difficulties" }
+          ]
+        },
+        {
+          type: "categorize", instruction: "Positive or negative connotation?",
+          buckets: [{ id: "pos", label: "Positive" }, { id: "neg", label: "Negative" }],
+          items: [
+            { t: "thrifty", bucket: "pos" },
+            { t: "assertive", bucket: "pos" },
+            { t: "self-assured", bucket: "pos" },
+            { t: "candid", bucket: "pos" },
+            { t: "stingy", bucket: "neg" },
+            { t: "pushy", bucket: "neg" },
+            { t: "arrogant", bucket: "neg" },
+            { t: "aloof", bucket: "neg" }
+          ]
+        },
+        {
+          type: "multiple_choice", question: "Ana checks every figure twice. She is extremely ___.", options: ["meticulous", "aloof", "abrasive"], correctIndex: 0,
+          explanation: "meticulous = paying great attention to detail."
+        },
+        { type: "fill_blank", sentence: "Despite losing her job twice, she bounced back quickly. She's very ___.", answers: ["resilient"], hint: "able to recover quickly", explanation: "resilient" },
+        {
+          type: "listening", text: "To be fair to him, he can come across as aloof, but he's actually just quite shy.", question: "What does the speaker think?",
+          options: ["He seems cold but isn't really.", "He is rude and unfriendly.", "He is very confident."], correctIndex: 0
+        },
+        {
+          type: "find_error",
+          segments: ["She is ", { u: "very" }, " ", { u: "sensible" }, " to criticism, so give feedback ", { u: "gently" }, "."],
+          correctIndex: 1, correction: "sensitive", explanation: "sensitive = easily hurt or upset.", question: "Find the mistake"
+        },
+        { type: "true_false", statement: "\"Sympathetic\" in English means \"nice and friendly\".", answer: false, explanation: "It means showing understanding of someone's problems." },
+        {
+          type: "translate", prompt: "Rewrite with a more positive word: \"He is stingy with money.\"",
+          answers: ["he is thrifty with money", "he's thrifty with money", "he is careful with money", "he's careful with money", "he is frugal with money", "he's frugal with money", "he is frugal", "he's frugal"],
+          explanation: "He is thrifty with money."
+        }
       ]
     },
 
@@ -610,7 +1261,17 @@ window.VESPER_EXPANSION = (function () {
         { type: "multiple_choice", question: "\"Costs accumulate\" means they...", options: ["disappear", "add up over time", "stay the same"],
           correctIndex: 1, explanation: "accumulate = build up, add up over time." },
         { type: "fill_blank", sentence: "The problem arises with tasks that demand ___ attention. (continuous, long-lasting)", answers: ["sustained"],
-          hint: "An adjective from the text.", explanation: "sustained attention = attention kept up over a long time." }
+          hint: "An adjective from the text.", explanation: "sustained attention = attention kept up over a long time." },
+        {
+          type: "multiple_choice", question: "In the text, \"trivial\" is closest in meaning to...", options: ["unimportant", "harmful", "complicated"], correctIndex: 0,
+          explanation: "trivial = small and unimportant."
+        },
+        { type: "true_false", statement: "The writer claims that multitasking is always harmful.", answer: false, explanation: "\"This does not mean multitasking is always harmful.\"" },
+        {
+          type: "find_error",
+          segments: ["Each switch ", { u: "carry" }, " a small cost in ", { u: "time" }, " and ", { u: "accuracy" }, "."],
+          correctIndex: 0, correction: "carries", explanation: "Each + singular verb: each switch carries.", question: "Find the mistake"
+        }
       ]
     },
 
@@ -618,144 +1279,126 @@ window.VESPER_EXPANSION = (function () {
      * C2 — maestría
      * ================================================================== */
     "voc-c2-idioms": {
-      lessonId: "voc-c2-idioms", level: "C2", track: "Vocabulary", topic: "idioms", skill: "vocab",
-      title: "Advanced idioms", xpReward: 65, mascotState: "explaining",
+      lessonId: "voc-c2-idioms", level: "C2", track: "Vocabulary", topic: "idioms", skill: "vocab", tipo: "aprende", title: "Advanced idioms for work and debate", rev: 2, xpReward: 65, mascotState: "explaining",
       nextLessonId: "use-c2-hedging",
-      tipo: "aprende",
       explanation: {
-        body: "Idioms give you native-like naturalness: to bite the bullet (face something difficult), to cut corners (do something badly to save time or money), the ball is in your court (it's your turn to decide), to be on the same page (agree, understand each other). They can't be translated word for word.",
+        body: "At C2, being correct is not enough: you need to sound natural. Idioms are fixed phrases whose meaning doesn't come from the individual words. This lesson gives you twelve idioms you will hear constantly in meetings, the news and opinion pieces. Learn them as chunks, with their preposition and their register. Almost all are informal or neutral: in a formal essay, the direct word is better (bite the bullet → confront the problem). Don't translate them literally or change a word: a half-remembered idiom sounds worse than none. Many are metaphors from sport (move the goalposts, the ball is in your court) and war (bite the bullet).",
         examples: [
-          { en: "Let's bite the bullet and start." },
-          { en: "Don't cut corners on safety." },
-          { en: "The ball is in your court now." }
+          { en: "Let's address the elephant in the room: the budget has run out." },
+          { en: "Every company seems to be jumping on the AI bandwagon." },
+          { en: "Just as we met the target, management moved the goalposts." },
+          { en: "The prototype failed the test, so it's back to the drawing board." }
         ],
         sections: [
           {
-            "kind": "intro",
-            "body": "At C2 being correct is not enough: you need to sound natural. Idioms are fixed phrases whose meaning doesn't come from the individual words; using them well, in the right context, is one of the hallmarks of expert-level English."
+            kind: "intro",
+            body: "At C2, being correct is not enough: you need to sound natural. Idioms are fixed phrases whose meaning doesn't come from the individual words. This lesson gives you twelve idioms you will hear constantly in meetings, the news and opinion pieces."
           },
           {
-            "kind": "regla",
-            "body": "Learn them as chunks, with their preposition and their register. Almost all are informal or neutral: in a formal email or an essay, the direct word is better (to bite the bullet → to face the problem). Don't translate them literally or change them: a half-remembered idiom sounds worse than not using one."
+            kind: "regla",
+            body: "Learn them as chunks, with their preposition and their register. Almost all are informal or neutral: in a formal essay, the direct word is better (bite the bullet → confront the problem). Don't translate them literally or change a word: a half-remembered idiom sounds worse than none. Many are metaphors from sport (move the goalposts, the ball is in your court) and war (bite the bullet)."
           },
           {
-            "kind": "vocab",
-            "items": [
-              {
-                "en": "to bite the bullet",
-                "es": "to face something difficult or unpleasant"
-              },
-              {
-                "en": "to cut corners",
-                "es": "to do something badly to save time or money"
-              },
-              {
-                "en": "the ball is in your court",
-                "es": "it's your turn to decide or act"
-              },
-              {
-                "en": "to be on the same page",
-                "es": "to agree, to understand each other"
-              },
-              {
-                "en": "to go the extra mile",
-                "es": "to make more effort than is expected"
-              },
-              {
-                "en": "to call it a day",
-                "es": "to stop working for today"
-              }
+            kind: "vocab",
+            items: [
+              { en: "bite the bullet", es: "face something difficult or unpleasant" },
+              { en: "cut corners", es: "do something badly to save time or money" },
+              { en: "the ball is in your court", es: "it's your turn to decide or act" },
+              { en: "be on the same page", es: "agree; understand each other" },
+              { en: "go the extra mile", es: "make more effort than is expected" },
+              { en: "the elephant in the room", es: "an obvious problem that nobody wants to discuss" },
+              { en: "jump on the bandwagon", es: "join something because it is popular" },
+              { en: "move the goalposts", es: "change the rules unfairly during a process" }
             ]
           },
           {
-            "kind": "expresiones",
-            "items": [
-              {
-                "en": "Let's bite the bullet and tell the client.",
-                "es": "face a hard conversation"
-              },
-              {
-                "en": "Before we start, let's make sure we're on the same page.",
-                "es": "check that everyone agrees"
-              },
-              {
-                "en": "I've sent my offer — the ball is in your court.",
-                "es": "now you decide"
-              },
-              {
-                "en": "It's late; let's call it a day.",
-                "es": "stop working for today"
-              }
+            kind: "expresiones",
+            items: [
+              { en: "It's a double-edged sword.", es: "it has both advantages and disadvantages" },
+              { en: "That's par for the course.", es: "that's normal and expected (often negative)" },
+              { en: "It's back to the drawing board.", es: "we have to start again" },
+              { en: "You have to read between the lines.", es: "find the hidden meaning" }
             ]
           },
           {
-            "kind": "ejemplos",
-            "items": [
-              {
-                "en": "They cut corners on the renovation, and now the roof leaks."
-              },
-              {
-                "en": "She always goes the extra mile for her students."
-              },
-              {
-                "en": "We disagreed at first, but now we're on the same page."
-              }
+            kind: "ejemplos",
+            items: [
+              { en: "Let's address the elephant in the room: the budget has run out." },
+              { en: "Every company seems to be jumping on the AI bandwagon." },
+              { en: "Just as we met the target, management moved the goalposts." },
+              { en: "The prototype failed the test, so it's back to the drawing board." }
             ]
           },
           {
-            "kind": "errores",
-            "items": [
-              {
-                "no": "Let's bite the ball.",
-                "si": "Let's bite the bullet.",
-                "pq": "Idioms are fixed: changing one word breaks them."
-              },
-              {
-                "no": "He cut the corners.",
-                "si": "He cut corners.",
-                "pq": "No article: to cut corners."
-              },
-              {
-                "no": "The ball is in your side.",
-                "si": "The ball is in your court.",
-                "pq": "It's court (as in a tennis court), not side."
-              },
-              {
-                "no": "We are in the same page.",
-                "si": "We are on the same page.",
-                "pq": "The preposition is on."
-              },
-              {
-                "no": "In conclusion, the government should bite the bullet.",
-                "si": "In conclusion, the government should confront the issue.",
-                "pq": "In a formal essay the idiom sounds too colloquial."
-              }
+            kind: "errores",
+            items: [
+              { no: "Let's bite the ball.", si: "Let's bite the bullet.", pq: "Idioms are fixed: changing one word breaks them." },
+              { no: "We are in the same page.", si: "We are on the same page.", pq: "The preposition is on." },
+              { no: "In conclusion, the government should bite the bullet.", si: "In conclusion, the government should confront the issue.", pq: "In a formal essay the idiom sounds too colloquial." }
             ]
           },
           {
-            "kind": "resumen",
-            "body": "Learn the whole idiom, with its preposition and its context, and keep it for informal or neutral registers. If in doubt, the direct word never fails."
+            kind: "resumen",
+            body: "12 idioms: bite the bullet, cut corners, the ball is in your court, on the same page, go the extra mile, the elephant in the room, jump on the bandwagon, move the goalposts, a double-edged sword, par for the course, back to the drawing board, read between the lines. Keep them for informal and neutral registers."
           },
-          {
-            "kind": "puente",
-            "body": "Your turn: a few exercises to fix them in your memory."
-          }
+          { kind: "puente", body: "Your turn: fix them in your memory." }
         ]
       },
       exercises: [
-        { type: "matching", instruction: "Match each idiom with its meaning.", pairs: [{"l":"bite the bullet","r":"face something unpleasant"},{"l":"cut corners","r":"do it badly to save time or money"},{"l":"on the same page","r":"in agreement"},{"l":"the ball is in your court","r":"it's your turn to act"}],
-          explanation: "Four frequent idioms in high-register English." },
-        { type: "multiple_choice", question: "If you 'cut corners', you...", options: ["do excellent work", "do something badly to save time/money", "turn left"],
-          correctIndex: 1, explanation: "cut corners = do a poor job to save time or money." },
-        { type: "fill_blank", sentence: "We're all on the same ___. (we agree)", answers: ["page"],
-          hint: "on the same ...", explanation: "on the same page = in agreement." },
-        { type: "true_false", statement: "'The ball is in your court' means it's your turn to act.", answer: true,
-          explanation: "Yes: it's your turn to decide or act." },
-        { type: "multiple_choice", question: "'To bite the bullet' means to...", options: ["eat quickly", "give up", "face something difficult"],
-          correctIndex: 2, explanation: "To face something difficult or unpleasant." },
-        { type: "translate", prompt: "Use an idiom: I've done my part. Now it's your turn to decide.",
-          answers: ["the ball is in your court now", "the ball is in your court"],
-          explanation: "The ball is in your court (now)." }
+        {
+          type: "matching", instruction: "Match each idiom with its meaning.",
+          pairs: [
+            { l: "bite the bullet", r: "face something unpleasant" },
+            { l: "cut corners", r: "do something badly to save time or money" },
+            { l: "the ball is in your court", r: "it's your turn to act" },
+            { l: "on the same page", r: "in agreement" },
+            { l: "the elephant in the room", r: "an obvious problem nobody mentions" },
+            { l: "move the goalposts", r: "change the rules unfairly" }
+          ]
+        },
+        {
+          type: "reading", title: "An email from the project lead",
+          passage: "Hi team,\n\nLet's address the elephant in the room: the launch date is no longer realistic. The client has moved the goalposts twice this month, and we've been working weekends to keep up. I know everyone has gone the extra mile, and I'm grateful.\n\nI'd rather bite the bullet now and ask for a new date than cut corners on testing. I've sent the client a proposal, so the ball is in their court.\n\nThanks,\nJo",
+          questions: [
+            {
+              q: "What is \"the elephant in the room\"?", options: ["The unrealistic launch date", "The client's new office", "Working at weekends"], correctIndex: 0,
+              explanation: "...the launch date is no longer realistic."
+            },
+            {
+              q: "What does Jo refuse to do?",
+              options: ["Reduce the quality of testing to save time", "Ask for a new date", "Thank the team"], correctIndex: 0, explanation: "I'd rather ... than cut corners on testing."
+            },
+            { q: "Who has to act next?", options: ["The client", "Jo", "The testing team"], correctIndex: 0, explanation: "the ball is in their court" }
+          ]
+        },
+        {
+          type: "matching", instruction: "More idioms: match each one with its meaning.",
+          pairs: [
+            { l: "go the extra mile", r: "make more effort than expected" },
+            { l: "jump on the bandwagon", r: "join something because it's popular" },
+            { l: "a double-edged sword", r: "something with advantages and disadvantages" },
+            { l: "par for the course", r: "normal and expected" },
+            { l: "back to the drawing board", r: "time to start again" },
+            { l: "read between the lines", r: "find the hidden meaning" }
+          ]
+        },
+        {
+          type: "multiple_choice", question: "Social media is a ___: it connects people, but it can also isolate them.", options: ["double-edged sword", "piece of cake", "blessing in disguise"], correctIndex: 0,
+          explanation: "advantages and disadvantages = a double-edged sword."
+        },
+        {
+          type: "find_error",
+          segments: ["We need to make sure we're all ", { u: "in" }, " ", { u: "the same" }, " ", { u: "page" }, " before the meeting."],
+          correctIndex: 0, correction: "on", explanation: "The idiom is 'on the same page'.", question: "Find the mistake"
+        },
+        { type: "fill_blank", sentence: "Delays on this kind of project are par for the ___, unfortunately.", answers: ["course"], hint: "normal and expected", explanation: "par for the course" },
+        {
+          type: "true_false", statement: "To \"move the goalposts\" means to make a task easier for everyone.", answer: false, explanation: "It means to change the rules unfairly, usually making things harder."
+        },
+        {
+          type: "translate", prompt: "Use an idiom: \"The plan failed, so we have to start again from the beginning.\"",
+          answers: ["it's back to the drawing board", "it is back to the drawing board", "we have to go back to the drawing board", "back to the drawing board"], explanation: "It's back to the drawing board."
+        }
       ]
     },
 
@@ -814,7 +1457,21 @@ window.VESPER_EXPANSION = (function () {
         { type: "multiple_choice", question: "A 'rhetorical question' is asked mainly to...", options: ["get a precise, factual answer from the listener", "create an effect or make a point", "test memory"],
           correctIndex: 1, explanation: "It aims for effect or persuasion, not a literal answer." },
         { type: "fill_blank", sentence: "The writer's tone is gently ___. (disapproving)", answers: ["critical"],
-          hint: "An adjective from the word \"criticism\".", explanation: "The tone is subtly critical." }
+          hint: "An adjective from the word \"criticism\".", explanation: "The tone is subtly critical." },
+        {
+          type: "multiple_choice", question: "In the text, \"summon a car\" most nearly means...", options: ["call for a car to come", "buy a car", "repair a car"], correctIndex: 0,
+          explanation: "summon = order someone or something to come."
+        },
+        {
+          type: "true_false",
+          statement: "The writer suggests that time-saving tools may actually create new demands on our time.", answer: true,
+          explanation: "\"Each tool that 'saves' time seems to fill the space it creates with new demands.\""
+        },
+        {
+          type: "fill_blank",
+          sentence: "Each tool that \"saves\" time seems to fill the ___ it creates with new demands.", answers: ["space"], hint: "A word from the first paragraph.",
+          explanation: "...fill the space it creates..."
+        }
       ]
     },
 

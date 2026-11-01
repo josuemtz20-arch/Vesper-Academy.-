@@ -22,28 +22,98 @@ window.VESPER_THEMES_PACK = (function () {
     /* ===================== A1 · COMIDA Y BEBIDA ===================== */
 
     "lvl-a1-vocab-food": {
-      lessonId: "lvl-a1-vocab-food", level: "A1", track: "Vocabulario", topic: "food", skill: "vocab",
-      title: "Tema: comida y bebida", xpReward: 32, mascotState: "explaining",
+      lessonId: "lvl-a1-vocab-food", level: "A1", track: "Expresiones", topic: "social", skill: "use", tipo: "aprende", title: "Invitar: aceptar o decir que no", rev: 2, xpReward: 32, mascotState: "explaining",
       explanation: {
-        body: "Vocabulario A1 de comida y bebida. Aprende a distinguir lo que se come de lo que se bebe y palabras básicas del día a día. (Asocia, clasifica y completa.)",
+        body: "Episodio 5 · Sam quiere invitar a Mia al cine, pero Mia trabaja mucho... Aprende a invitar y a aceptar o rechazar con amabilidad. Invitar: Do you want to + verbo? (Do you want to go to the cinema?) o Let's + verbo (Let's go!). Aceptar: Sure! / Great! / I'd love to. Rechazar con amabilidad: Sorry, I can't. + una razón (I'm busy). Proponer otro día: What about Saturday?",
         examples: [
-          { en: "I eat an apple. I drink water.", es: "Como una manzana. Bebo agua." },
-          { en: "bread, milk, cheese, juice", es: "pan, leche, queso, zumo" }
+          { en: "Do you want to go to the cinema on Friday?", es: "¿Quieres ir al cine el viernes?" },
+          { en: "Sorry, I can't. I work on Friday night.", es: "Lo siento, no puedo. Trabajo el viernes en la noche." },
+          { en: "What about Saturday?", es: "¿Qué tal el sábado?" },
+          { en: "Saturday is great. I'd love to!", es: "El sábado está perfecto. ¡Me encantaría!" }
+        ],
+        sections: [
+          { kind: "intro", body: "Episodio 5 · Sam quiere invitar a Mia al cine, pero Mia trabaja mucho... Aprende a invitar y a aceptar o rechazar con amabilidad." },
+          {
+            kind: "regla",
+            body: "Invitar: Do you want to + verbo? (Do you want to go to the cinema?) o Let's + verbo (Let's go!). Aceptar: Sure! / Great! / I'd love to. Rechazar con amabilidad: Sorry, I can't. + una razón (I'm busy). Proponer otro día: What about Saturday?"
+          },
+          {
+            kind: "vocab",
+            items: [
+              { en: "cinema", ipa: "ˈsɪnəmə", es: "cine" },
+              { en: "party", ipa: "ˈpɑːti", es: "fiesta" },
+              { en: "free", ipa: "friː", es: "libre" },
+              { en: "busy", ipa: "ˈbɪzi", es: "ocupado/a" },
+              { en: "tonight", ipa: "təˈnaɪt", es: "esta noche" },
+              { en: "tomorrow", ipa: "təˈmɒrəʊ", es: "mañana" },
+              { en: "weekend", ipa: "ˌwiːkˈend", es: "fin de semana" },
+              { en: "Saturday", ipa: "ˈsætədeɪ", es: "sábado" }
+            ]
+          },
+          {
+            kind: "expresiones",
+            items: [
+              { en: "Do you want to come?", es: "¿Quieres venir?" },
+              { en: "Sure! / I'd love to.", es: "¡Claro! / Me encantaría." },
+              { en: "Sorry, I can't. I'm busy.", es: "Lo siento, no puedo. Estoy ocupado/a." },
+              { en: "What about Saturday?", es: "¿Qué tal el sábado?" }
+            ]
+          },
+          {
+            kind: "ejemplos",
+            items: [
+              { en: "Sam: Do you want to go to the cinema on Friday?", es: "Sam: ¿Quieres ir al cine el viernes?" },
+              { en: "Mia: Sorry, I can't. I work on Friday night.", es: "Mia: Lo siento, no puedo. Trabajo el viernes en la noche." },
+              { en: "Sam: What about Saturday?", es: "Sam: ¿Qué tal el sábado?" },
+              { en: "Mia: Saturday is great. I'd love to!", es: "Mia: El sábado está perfecto. ¡Me encantaría!" }
+            ]
+          },
+          {
+            kind: "errores",
+            items: [
+              { no: "Do you want go?", si: "Do you want to go?", pq: "want + to + verbo." },
+              { no: "Sorry, I can't. I'm boring.", si: "Sorry, I can't. I'm busy.", pq: "Ocupado/a = busy. Boring = aburrido (algo que aburre)." },
+              { no: "Yes, I love.", si: "Yes, I'd love to.", pq: "Para aceptar una invitación: I'd love to." }
+            ]
+          },
+          { kind: "resumen", body: "Invitar: Do you want to...? / Let's... Aceptar: Sure! / I'd love to. Rechazar: Sorry, I can't + razón. Otro día: What about...?" },
+          { kind: "puente", body: "¿Aceptará Mia la invitación? Practica tú también." }
         ]
       },
       exercises: [
-        { type: "matching", instruction: "Une la palabra con su traducción.", pairs: [
-          { l: "apple", r: "manzana" }, { l: "bread", r: "pan" },
-          { l: "water", r: "agua" }, { l: "milk", r: "leche" }
-        ] },
-        { type: "categorize", instruction: "¿Se come o se bebe?", buckets: [
-          { id: "e", label: "Food (eat)" }, { id: "d", label: "Drink" } ], items: [
-          { t: "apple", bucket: "e" }, { t: "water", bucket: "d" },
-          { t: "cheese", bucket: "e" }, { t: "juice", bucket: "d" },
-          { t: "rice", bucket: "e" }, { t: "tea", bucket: "d" } ] },
-        { type: "multiple_choice", question: "Which one is a drink?", options: ["bread", "water", "cheese"], correctIndex: 1, explanation: "El agua (water) se bebe." },
-        { type: "fill_blank", sentence: "I'm thirsty. I want some ___.", answers: ["water"], hint: "Algo para beber.", explanation: "Si tienes sed, bebes agua (water)." },
-        { type: "translate", prompt: "Traduce: \"Me gusta el pan.\"", answers: ["i like bread"], explanation: "I like bread." }
+        {
+          type: "listening", text: "Do you want to come to my party on Saturday?", question: "¿A qué lo invitan?", options: ["A una fiesta el sábado", "Al cine el viernes", "A cenar esta noche"],
+          correctIndex: 0
+        },
+        {
+          type: "categorize", instruction: "¿Acepta o rechaza la invitación?",
+          buckets: [{ id: "yes", label: "Acepta" }, { id: "no", label: "Rechaza" }],
+          items: [
+            { t: "Sure!", bucket: "yes" },
+            { t: "I'd love to.", bucket: "yes" },
+            { t: "Great idea!", bucket: "yes" },
+            { t: "Sorry, I can't.", bucket: "no" },
+            { t: "I'm busy tonight.", bucket: "no" },
+            { t: "Maybe another day.", bucket: "no" }
+          ]
+        },
+        {
+          type: "multiple_choice", question: "Do you want to have dinner tonight? — ___ I have to work.", options: ["Sorry, I can't.", "Yes, I'd love to.", "Sure!"], correctIndex: 0,
+          explanation: "Si tienes que trabajar, rechazas: Sorry, I can't."
+        },
+        {
+          type: "find_error",
+          segments: ["Do ", { u: "you" }, " want ", { u: "go" }, " to ", { u: "the" }, " cinema?"],
+          correctIndex: 1, correction: "to go", explanation: "want + to + verbo: Do you want to go to the cinema?", question: "Encuentra el error"
+        },
+        { type: "fill_blank", sentence: "I'm ___ on Friday. What about Saturday?", answers: ["busy"], hint: "ocupado/a", explanation: "I'm busy = estoy ocupado/a." },
+        { type: "word_order", words: ["Saturday", "What", "about"], correctOrder: ["What", "about", "Saturday"], hint: "¿Qué tal el sábado?" },
+        { type: "speak", text: "Sorry, I can't. I'm busy tonight.", es: "Lo siento, no puedo. Estoy ocupado/a esta noche." },
+        {
+          type: "translate", prompt: "Traduce: \"¿Quieres ir al cine?\"",
+          answers: ["do you want to go to the cinema", "do you want to go to the movies", "would you like to go to the cinema", "would you like to go to the movies"],
+          explanation: "Do you want to go to the cinema?"
+        }
       ]
     },
 

@@ -22,57 +22,188 @@ window.VESPER_EXPANSION2 = (function () {
      * A1 / A2 — fundamentos
      * ================================================================== */
     "x2-voc-a1-food": {
-      lessonId: "x2-voc-a1-food", level: "A1", track: "Vocabulario", topic: "food", skill: "vocab",
-      title: "Comida y bebida", xpReward: 40, mascotState: "explaining",
+      lessonId: "x2-voc-a1-food", level: "A1", track: "Expresiones", topic: "social", skill: "use", tipo: "aprende", title: "Saludar y despedirse", rev: 2, xpReward: 40, mascotState: "explaining",
       nextLessonId: "x2-voc-a1-body",
       explanation: {
-        body: "Pedir comida es de lo más útil al viajar. Sustantivos contables: an apple, two eggs. Incontables: bread, water, rice (no llevan plural). Con incontables usamos some: \"some water\". (Vocabulario básico de comida.)",
+        body: "Episodio 4 · Es el cumpleaños de Mia y Sam conoce a sus amigos. Aprende a saludar, presentar a alguien y despedirte. Saludos: Hi / Hello (siempre), Good morning (mañana), Good afternoon (tarde), Good evening (noche, al llegar). Good night es solo para despedirse o antes de dormir. Presentar: This is Sam. Responder: Nice to meet you. — Nice to meet you too. Despedidas: Bye! / See you later! / See you tomorrow!",
         examples: [
-          { en: "I'd like some bread, please.", es: "Quisiera algo de pan, por favor." },
-          { en: "She eats two eggs for breakfast.", es: "Ella come dos huevos en el desayuno." },
-          { en: "Can I have a glass of water?", es: "¿Me das un vaso de agua?" }
+          { en: "Good evening, everyone! This is Sam, my new flatmate.", es: "¡Buenas noches a todos! Él es Sam, mi nuevo compañero de piso." },
+          { en: "Hi, Sam! Nice to meet you.", es: "¡Hola, Sam! Mucho gusto." },
+          { en: "Nice to meet you too.", es: "Igualmente." },
+          { en: "It's late. Good night, everyone!", es: "Es tarde. ¡Buenas noches a todos!" }
+        ],
+        sections: [
+          { kind: "intro", body: "Episodio 4 · Es el cumpleaños de Mia y Sam conoce a sus amigos. Aprende a saludar, presentar a alguien y despedirte." },
+          {
+            kind: "regla",
+            body: "Saludos: Hi / Hello (siempre), Good morning (mañana), Good afternoon (tarde), Good evening (noche, al llegar). Good night es solo para despedirse o antes de dormir. Presentar: This is Sam. Responder: Nice to meet you. — Nice to meet you too. Despedidas: Bye! / See you later! / See you tomorrow!"
+          },
+          {
+            kind: "vocab",
+            items: [
+              { en: "hello / hi", ipa: "həˈləʊ / haɪ", es: "hola" },
+              { en: "good morning", ipa: "ɡʊd ˈmɔːnɪŋ", es: "buenos días" },
+              { en: "good afternoon", ipa: "ɡʊd ˌɑːftəˈnuːn", es: "buenas tardes" },
+              { en: "good evening", ipa: "ɡʊd ˈiːvnɪŋ", es: "buenas noches (al llegar)" },
+              { en: "good night", ipa: "ɡʊd naɪt", es: "buenas noches (al irte)" },
+              { en: "goodbye / bye", ipa: "ɡʊdˈbaɪ / baɪ", es: "adiós" },
+              { en: "see you later", ipa: "siː juː ˈleɪtə", es: "nos vemos luego" },
+              { en: "nice to meet you", ipa: "naɪs tə miːt juː", es: "mucho gusto" }
+            ]
+          },
+          {
+            kind: "expresiones",
+            items: [
+              { en: "This is my friend...", es: "Te presento a mi amigo/a..." },
+              { en: "Nice to meet you too.", es: "Igualmente, mucho gusto." },
+              { en: "How are you? — Fine, thanks.", es: "¿Cómo estás? — Bien, gracias." },
+              { en: "See you soon!", es: "¡Nos vemos pronto!" }
+            ]
+          },
+          {
+            kind: "ejemplos",
+            items: [
+              { en: "Mia: Good evening, everyone! This is Sam, my new flatmate.", es: "Mia: ¡Buenas noches a todos! Él es Sam, mi nuevo compañero de piso." },
+              { en: "Ana: Hi, Sam! Nice to meet you.", es: "Ana: ¡Hola, Sam! Mucho gusto." },
+              { en: "Sam: Nice to meet you too.", es: "Sam: Igualmente." },
+              { en: "Sam: It's late. Good night, everyone!", es: "Sam: Es tarde. ¡Buenas noches a todos!" }
+            ]
+          },
+          {
+            kind: "errores",
+            items: [
+              { no: "Good night! (al llegar a una fiesta)", si: "Good evening! / Hi!", pq: "Good night solo se usa al despedirte." },
+              { no: "Nice to know you.", si: "Nice to meet you.", pq: "Al conocer a alguien se dice meet." },
+              { no: "I present you Sam.", si: "This is Sam.", pq: "Para presentar a alguien: This is..." }
+            ]
+          },
+          { kind: "resumen", body: "Llegar: Hi / Good morning / Good afternoon / Good evening. Presentar: This is... → Nice to meet you. Irte: Bye / See you later / Good night." },
+          { kind: "puente", body: "¡A la fiesta! Saluda, presenta y despídete." }
         ]
       },
       exercises: [
-        { type: "matching", instruction: "Une la comida con su traducción.", pairs: [
-          { l: "bread", r: "pan" }, { l: "cheese", r: "queso" }, { l: "apple", r: "manzana" }, { l: "water", r: "agua" } ],
-          explanation: "bread = pan, cheese = queso, apple = manzana, water = agua." },
-        { type: "categorize", instruction: "¿Contable (a/an, plural) o incontable (some)?", buckets: [
-          { id: "c", label: "Contable" }, { id: "u", label: "Incontable" } ], items: [
-          { t: "egg", bucket: "c" }, { t: "rice", bucket: "u" }, { t: "banana", bucket: "c" }, { t: "milk", bucket: "u" } ] },
-        { type: "fill_blank", sentence: "I'd like ___ water, please.", answers: ["some"],
-          hint: "incontable.", explanation: "Con incontables usamos 'some': some water." },
-        { type: "multiple_choice", question: "Which is countable?", options: ["sugar", "an orange", "rice"],
-          correctIndex: 1, explanation: "'an orange' es contable; sugar y rice son incontables." },
-        { type: "translate", prompt: "Traduce: \"Como dos huevos.\"",
-          answers: ["i eat two eggs"], explanation: "I eat two eggs." }
+        {
+          type: "categorize", instruction: "¿Saludo o despedida?",
+          buckets: [{ id: "greet", label: "Saludo" }, { id: "bye", label: "Despedida" }],
+          items: [
+            { t: "Hello!", bucket: "greet" },
+            { t: "Good morning!", bucket: "greet" },
+            { t: "Good evening!", bucket: "greet" },
+            { t: "Good night!", bucket: "bye" },
+            { t: "See you later!", bucket: "bye" },
+            { t: "Goodbye!", bucket: "bye" }
+          ]
+        },
+        {
+          type: "multiple_choice", question: "Llegas a una cena a las 8 de la noche. Dices:", options: ["Good evening!", "Good night!", "Goodbye!"], correctIndex: 0,
+          explanation: "Al llegar en la noche: Good evening."
+        },
+        { type: "listening", text: "Hi, I'm Ana. Nice to meet you!", question: "¿Qué respondes?", options: ["Nice to meet you too.", "Good night.", "See you later."], correctIndex: 0 },
+        { type: "word_order", words: ["Sam", "This", "friend", "is", "my"], correctOrder: ["This", "is", "my", "friend", "Sam"], hint: "Para presentar: This is..." },
+        { type: "fill_blank", sentence: "Nice to ___ you.", answers: ["meet"], hint: "conocer (a alguien por primera vez)", explanation: "Nice to meet you." },
+        {
+          type: "matching", instruction: "Une cada frase con su significado.",
+          pairs: [{ l: "Good morning", r: "Buenos días" }, { l: "See you later", r: "Nos vemos luego" }, { l: "Good night", r: "Buenas noches (al irte)" }, { l: "Nice to meet you", r: "Mucho gusto" }]
+        },
+        { type: "speak", text: "Nice to meet you too.", es: "Igualmente, mucho gusto." },
+        { type: "translate", prompt: "Traduce: \"Nos vemos mañana.\"", answers: ["see you tomorrow", "i'll see you tomorrow"], explanation: "See you tomorrow." }
       ]
     },
 
     "x2-voc-a1-body": {
-      lessonId: "x2-voc-a1-body", level: "A1", track: "Vocabulario", topic: "body", skill: "vocab",
-      title: "El cuerpo", xpReward: 40, mascotState: "explaining",
+      lessonId: "x2-voc-a1-body", level: "A1", track: "Vocabulario", topic: "freetime", skill: "vocab", tipo: "aprende", title: "Hobbies y tiempo libre", rev: 2, xpReward: 40, mascotState: "explaining",
       nextLessonId: "x2-voc-a1-clothes",
       explanation: {
-        body: "Las partes del cuerpo aparecen al ir al médico o describir a alguien. head, eyes, nose, mouth, hand, leg, foot. Plurales irregulares importantes: foot → feet, tooth → teeth. (Partes del cuerpo.)",
+        body: "¿Qué haces en tu tiempo libre? Con estas palabras puedes hablar de tus pasatiempos y preguntar por los de otras personas. Ojo con el verbo: play + deportes con pelota, videojuegos e instrumentos (play football, play the guitar); go + actividad en -ing (go swimming, go shopping); do + otras actividades (do yoga, do karate).",
         examples: [
-          { en: "My head hurts.", es: "Me duele la cabeza." },
-          { en: "She has blue eyes.", es: "Ella tiene los ojos azules." },
-          { en: "I have two feet.", es: "Tengo dos pies." }
+          { en: "What do you do in your free time?", es: "¿Qué haces en tu tiempo libre?" },
+          { en: "I take photos of the sea. And you?", es: "Tomo fotos del mar. ¿Y tú?" },
+          { en: "I play the guitar and I go swimming on Sundays.", es: "Toco la guitarra y voy a nadar los domingos." },
+          { en: "That sounds fun!", es: "¡Suena divertido!" }
+        ],
+        sections: [
+          { kind: "intro", body: "¿Qué haces en tu tiempo libre? Con estas palabras puedes hablar de tus pasatiempos y preguntar por los de otras personas." },
+          {
+            kind: "regla",
+            body: "Ojo con el verbo: play + deportes con pelota, videojuegos e instrumentos (play football, play the guitar); go + actividad en -ing (go swimming, go shopping); do + otras actividades (do yoga, do karate)."
+          },
+          {
+            kind: "vocab",
+            items: [
+              { en: "play football", ipa: "pleɪ ˈfʊtbɔːl", es: "jugar fútbol" },
+              { en: "go swimming", ipa: "gəʊ ˈswɪmɪŋ", es: "ir a nadar" },
+              { en: "read books", ipa: "riːd bʊks", es: "leer libros" },
+              { en: "watch films", ipa: "wɒtʃ fɪlmz", es: "ver películas" },
+              { en: "play the guitar", ipa: "pleɪ ðə ɡɪˈtɑː", es: "tocar la guitarra" },
+              { en: "do yoga", ipa: "duː ˈjəʊɡə", es: "hacer yoga" },
+              { en: "go shopping", ipa: "gəʊ ˈʃɒpɪŋ", es: "ir de compras" },
+              { en: "take photos", ipa: "teɪk ˈfəʊtəʊz", es: "tomar fotos" }
+            ]
+          },
+          {
+            kind: "expresiones",
+            items: [
+              { en: "What do you do in your free time?", es: "¿Qué haces en tu tiempo libre?" },
+              { en: "In my free time, I...", es: "En mi tiempo libre, yo..." },
+              { en: "Do you want to play?", es: "¿Quieres jugar?" },
+              { en: "That sounds fun!", es: "¡Suena divertido!" }
+            ]
+          },
+          {
+            kind: "ejemplos",
+            items: [
+              { en: "Sam: What do you do in your free time?", es: "Sam: ¿Qué haces en tu tiempo libre?" },
+              { en: "Mia: I take photos of the sea. And you?", es: "Mia: Tomo fotos del mar. ¿Y tú?" },
+              { en: "Sam: I play the guitar and I go swimming on Sundays.", es: "Sam: Toco la guitarra y voy a nadar los domingos." },
+              { en: "Mia: That sounds fun!", es: "Mia: ¡Suena divertido!" }
+            ]
+          },
+          {
+            kind: "errores",
+            items: [
+              { no: "I play yoga.", si: "I do yoga.", pq: "Con yoga se usa do." },
+              { no: "I go to swimming.", si: "I go swimming.", pq: "go + actividad en -ing, sin to." },
+              { no: "I make photos.", si: "I take photos.", pq: "Las fotos se toman con take, no con make." }
+            ]
+          },
+          { kind: "resumen", body: "play + pelota, videojuegos e instrumentos. go + -ing. do + yoga, karate y otras actividades. Fotos: take photos." },
+          { kind: "puente", body: "Ahora practica el vocabulario y cuenta qué haces tú en tu tiempo libre." }
         ]
       },
       exercises: [
-        { type: "matching", instruction: "Une la parte del cuerpo con su traducción.", pairs: [
-          { l: "hand", r: "mano" }, { l: "eye", r: "ojo" }, { l: "leg", r: "pierna" }, { l: "mouth", r: "boca" } ],
-          explanation: "hand = mano, eye = ojo, leg = pierna, mouth = boca." },
-        { type: "multiple_choice", question: "Plural of 'foot'?", options: ["feet", "foots", "feets"],
-          correctIndex: 0, explanation: "foot → feet (irregular)." },
-        { type: "fill_blank", sentence: "I brush my ___ every morning. (dientes)", answers: ["teeth"],
-          hint: "tooth → ?", explanation: "tooth → teeth (irregular)." },
-        { type: "true_false", statement: "'Hair' usually takes a plural -s in English (hairs).", answer: false,
-          explanation: "El pelo en general es incontable: 'my hair is long'." },
-        { type: "translate", prompt: "Traduce: \"Me duele la cabeza.\"",
-          answers: ["my head hurts", "i have a headache"], explanation: "My head hurts. / I have a headache." }
+        {
+          type: "matching", instruction: "Une cada actividad con su significado.",
+          pairs: [
+            { l: "play football", r: "jugar fútbol" },
+            { l: "go swimming", r: "ir a nadar" },
+            { l: "read books", r: "leer libros" },
+            { l: "watch films", r: "ver películas" },
+            { l: "take photos", r: "tomar fotos" },
+            { l: "do yoga", r: "hacer yoga" }
+          ]
+        },
+        {
+          type: "categorize", instruction: "¿Va con play, go o do?",
+          buckets: [{ id: "play", label: "play" }, { id: "go", label: "go" }, { id: "do", label: "do" }],
+          items: [
+            { t: "football", bucket: "play" },
+            { t: "video games", bucket: "play" },
+            { t: "the guitar", bucket: "play" },
+            { t: "swimming", bucket: "go" },
+            { t: "shopping", bucket: "go" },
+            { t: "yoga", bucket: "do" },
+            { t: "karate", bucket: "do" }
+          ]
+        },
+        { type: "multiple_choice", question: "I ___ photos of the beach.", options: ["take", "make", "do"], correctIndex: 0, explanation: "Fotos: take photos." },
+        {
+          type: "listening", text: "On Saturdays I go shopping with my sister, and on Sundays I read books.", question: "¿Qué hace los domingos?", options: ["Lee libros", "Va de compras", "Juega fútbol"],
+          correctIndex: 0
+        },
+        { type: "fill_blank", sentence: "Sam plays ___ guitar every evening.", answers: ["the"], hint: "Los instrumentos suelen llevar artículo.", explanation: "play the guitar" },
+        { type: "true_false", statement: "\"Go swimming\" significa \"ir a nadar\".", answer: true, explanation: "go + -ing = ir a hacer una actividad." },
+        { type: "speak", text: "What do you do in your free time?", es: "¿Qué haces en tu tiempo libre?" },
+        { type: "translate", prompt: "Traduce: \"Hago yoga los lunes.\"", answers: ["i do yoga on mondays", "i do yoga on monday", "i do yoga every monday"], explanation: "I do yoga on Mondays." }
       ]
     },
 
@@ -240,28 +371,107 @@ window.VESPER_EXPANSION2 = (function () {
      * B1 / B2 — intermedio
      * ================================================================== */
     "x2-gram-b1-second-conditional": {
-      lessonId: "x2-gram-b1-second-conditional", level: "B1", track: "Grammar", topic: "grammar", skill: "grammar",
-      title: "The second conditional", xpReward: 50, mascotState: "explaining",
-      nextLessonId: "x2-gram-b1-used-to",
+      lessonId: "x2-gram-b1-second-conditional", level: "B1", track: "Grammar", topic: "grammar", skill: "grammar", tipo: "aprende", title: "Question tags: You're new, aren't you?", rev: 2, xpReward: 50,
+      mascotState: "explaining", nextLessonId: "x2-gram-b1-used-to",
       explanation: {
-        body: "The second conditional talks about imaginary or unlikely situations: If + past simple, would + infinitive. \"If I had money, I would travel.\" With the verb be, we use 'were' for all persons: \"If I were you...\".",
+        body: "Carmen is new at Lumen Travel, and her colleagues keep saying things like \"You're from Mexico, aren't you?\" These short questions at the end of a sentence are question tags. They keep a conversation going. Positive sentence → negative tag: You're new, aren't you? Negative sentence → positive tag: You don't drink coffee, do you? Repeat the same auxiliary (be, do, have, can, will...). If there is no auxiliary, use do / does / did: She works here, doesn't she? Special cases: I'm late, aren't I? Let's go, shall we? Falling intonation = you expect agreement; rising intonation = a real question.",
         examples: [
-          { en: "If I won the lottery, I would buy a house." },
-          { en: "If I were you, I'd study more." },
-          { en: "She would help if she had time." }
+          { en: "You're the new designer, aren't you?" },
+          { en: "Yes, I am. I started on Monday." },
+          { en: "You're from Mexico, aren't you? — Carmen: That's right, from Guadalajara." },
+          { en: "You haven't met Priya yet, have you? Come on, I'll introduce you." }
+        ],
+        sections: [
+          {
+            kind: "intro",
+            body: "Carmen is new at Lumen Travel, and her colleagues keep saying things like \"You're from Mexico, aren't you?\" These short questions at the end of a sentence are question tags. They keep a conversation going."
+          },
+          {
+            kind: "regla",
+            body: "Positive sentence → negative tag: You're new, aren't you? Negative sentence → positive tag: You don't drink coffee, do you? Repeat the same auxiliary (be, do, have, can, will...). If there is no auxiliary, use do / does / did: She works here, doesn't she? Special cases: I'm late, aren't I? Let's go, shall we? Falling intonation = you expect agreement; rising intonation = a real question."
+          },
+          {
+            kind: "vocab",
+            items: [
+              { en: "question tag", es: "a short question added to the end of a sentence" },
+              { en: "auxiliary", ipa: "ɔːɡˈzɪliəri", es: "a helping verb such as be, do, have or will" },
+              { en: "intonation", ipa: "ˌɪntəˈneɪʃən", es: "the rise and fall of your voice" },
+              { en: "colleague", ipa: "ˈkɒliːɡ", es: "a person you work with" },
+              { en: "confirm", ipa: "kənˈfɜːm", es: "check that something is true" },
+              { en: "small talk", es: "light, friendly conversation" },
+              { en: "new starter", es: "someone who has just joined a company" },
+              { en: "introduce", ipa: "ˌɪntrəˈdjuːs", es: "tell people each other's names when they first meet" }
+            ]
+          },
+          {
+            kind: "expresiones",
+            items: [
+              { en: "You're new here, aren't you?", es: "start a friendly conversation" },
+              { en: "It's cold today, isn't it?", es: "classic small talk" },
+              { en: "You haven't met Priya, have you?", es: "offer to introduce someone" },
+              { en: "Let's grab a coffee, shall we?", es: "make a friendly suggestion" }
+            ]
+          },
+          {
+            kind: "ejemplos",
+            items: [
+              { en: "Tom: You're the new designer, aren't you?" },
+              { en: "Carmen: Yes, I am. I started on Monday." },
+              { en: "Tom: You're from Mexico, aren't you? — Carmen: That's right, from Guadalajara." },
+              { en: "Tom: You haven't met Priya yet, have you? Come on, I'll introduce you." }
+            ]
+          },
+          {
+            kind: "errores",
+            items: [
+              { no: "You're new, isn't it?", si: "You're new, aren't you?", pq: "The tag repeats the same verb and subject: you are → aren't you?" },
+              { no: "She works here, isn't she?", si: "She works here, doesn't she?", pq: "The present simple has no auxiliary, so use does / doesn't." },
+              { no: "You don't like tea, don't you?", si: "You don't like tea, do you?", pq: "Negative sentence → positive tag." }
+            ]
+          },
+          { kind: "resumen", body: "Positive sentence + negative tag; negative sentence + positive tag. Same auxiliary and subject. No auxiliary? Use do / does / did. I'm... → aren't I? Let's... → shall we?" },
+          { kind: "puente", body: "Try some small talk with Carmen's new colleagues." }
         ]
       },
       exercises: [
-        { type: "multiple_choice", question: "If I ___ rich, I would travel.", options: ["were", "am", "will be"],
-          correctIndex: 0, explanation: "Second conditional: If + past simple (were)." },
-        { type: "fill_blank", sentence: "If she had time, she ___ help. (would)", answers: ["would help"],
-          hint: "would + infinitive.", explanation: "would help." },
-        { type: "word_order", words: ["If", "I", "were", "you,", "I", "would", "wait"],
-          correctOrder: ["If", "I", "were", "you,", "I", "would", "wait"], hint: "If + past simple, would + infinitive." },
-        { type: "true_false", statement: "The 2nd conditional talks about real, likely situations.", answer: false,
-          explanation: "It talks about imaginary or unlikely situations." },
-        { type: "translate", prompt: "Make a second conditional: I don't have money, so I don't travel. (If I…)",
-          answers: ["if i had money, i would travel","if i had money i would travel","if i had money i'd travel","if i had money i would travel more"], explanation: "If I had money, I would travel." }
+        {
+          type: "matching", instruction: "Match each sentence with its tag.",
+          pairs: [
+            { l: "You're new,", r: "aren't you?" },
+            { l: "She can drive,", r: "can't she?" },
+            { l: "They didn't call,", r: "did they?" },
+            { l: "He works here,", r: "doesn't he?" },
+            { l: "We've met before,", r: "haven't we?" }
+          ]
+        },
+        { type: "multiple_choice", question: "Carmen speaks Spanish, ___?", options: ["doesn't she", "isn't she", "don't she"], correctIndex: 0, explanation: "Present simple with she → doesn't she?" },
+        {
+          type: "find_error",
+          segments: ["You ", { u: "don't" }, " like ", { u: "spicy" }, " food, ", { u: "don't you" }, "?"],
+          correctIndex: 2, correction: "do you", explanation: "Negative sentence → positive tag: You don't like spicy food, do you?", question: "Find the mistake"
+        },
+        { type: "fill_blank", sentence: "I'm late again, ___ I?", answers: ["aren't"], hint: "A special case with I am.", explanation: "I'm late, aren't I?" },
+        {
+          type: "listening", text: "It's a lovely day, isn't it?", question: "What is the speaker doing?",
+          options: ["Making small talk and expecting agreement", "Asking for the weather forecast", "Complaining about the weather"], correctIndex: 0
+        },
+        {
+          type: "categorize", instruction: "Which kind of tag does each sentence need?",
+          buckets: [{ id: "pos", label: "Positive tag (do you? / is it?)" }, { id: "neg", label: "Negative tag (don't you? / isn't it?)" }],
+          items: [
+            { t: "You don't eat meat, ...", bucket: "pos" },
+            { t: "It isn't far, ...", bucket: "pos" },
+            { t: "She hasn't finished, ...", bucket: "pos" },
+            { t: "You like jazz, ...", bucket: "neg" },
+            { t: "It's expensive, ...", bucket: "neg" },
+            { t: "They've left, ...", bucket: "neg" }
+          ]
+        },
+        { type: "speak", text: "You're from Mexico, aren't you?", explanation: "Use falling intonation on the tag: you're checking something you already believe." },
+        {
+          type: "translate", prompt: "Add a question tag: \"Daniel will be at the meeting.\"", answers: ["daniel will be at the meeting won't he", "he will be at the meeting won't he"],
+          explanation: "Daniel will be at the meeting, won't he?"
+        }
       ]
     },
 
@@ -292,79 +502,272 @@ window.VESPER_EXPANSION2 = (function () {
     },
 
     "x2-use-b1-phrasal-verbs-2": {
-      lessonId: "x2-use-b1-phrasal-verbs-2", level: "B1", track: "Use of English", topic: "grammar", skill: "use",
-      title: "Everyday phrasal verbs", xpReward: 50, mascotState: "explaining",
-      nextLessonId: "x2-read-b1-travel",
+      lessonId: "x2-use-b1-phrasal-verbs-2", level: "B1", track: "Functional English", topic: "customer", skill: "use", tipo: "aprende", title: "Complaining politely (and handling complaints)", rev: 2,
+      xpReward: 50, mascotState: "explaining", nextLessonId: "x2-read-b1-travel",
       explanation: {
-        body: "Phrasal verbs are a verb + a particle with their own meaning: get up (leave your bed), turn off (stop a device), look for (try to find), give up (stop trying), find out (discover information). They are very common in spoken English.",
+        body: "Episode 1 · It's Carmen's second week at Lumen Travel, and her new laptop keeps crashing. Later, she answers a call from an unhappy customer. Today you learn both sides: how to complain politely and how to respond. To complain: start softly (I'm afraid there's a problem with... / I'm sorry to say this, but...), explain the facts, then ask for action (Could you look into it? / I'd like a refund, please). To respond: apologise and show you understand (I'm really sorry about that. I can see why you're upset.), then offer a solution (I'll sort it out right away. / Let me check what happened.).",
         examples: [
-          { en: "I get up at seven." },
-          { en: "Turn off the light, please." },
-          { en: "Don't give up!" }
+          { en: "Hi, I'm afraid there's a problem with my laptop. It keeps crashing." },
+          { en: "Oh no, sorry about that. Let me look into it." },
+          { en: "I booked a hotel through your app, but the booking has disappeared!" },
+          { en: "I'm really sorry for the inconvenience. I'll sort it out right away." }
+        ],
+        sections: [
+          {
+            kind: "intro",
+            body: "Episode 1 · It's Carmen's second week at Lumen Travel, and her new laptop keeps crashing. Later, she answers a call from an unhappy customer. Today you learn both sides: how to complain politely and how to respond."
+          },
+          {
+            kind: "regla",
+            body: "To complain: start softly (I'm afraid there's a problem with... / I'm sorry to say this, but...), explain the facts, then ask for action (Could you look into it? / I'd like a refund, please). To respond: apologise and show you understand (I'm really sorry about that. I can see why you're upset.), then offer a solution (I'll sort it out right away. / Let me check what happened.)."
+          },
+          {
+            kind: "vocab",
+            items: [
+              { en: "complaint", ipa: "kəmˈpleɪnt", es: "a statement that something is wrong or not good enough" },
+              { en: "refund", ipa: "ˈriːfʌnd", es: "money given back to a customer" },
+              { en: "faulty", ipa: "ˈfɔːlti", es: "not working correctly" },
+              { en: "replace", ipa: "rɪˈpleɪs", es: "give a new one instead of a broken one" },
+              { en: "sort out", es: "solve a problem" },
+              { en: "look into", es: "investigate" },
+              { en: "inconvenience", ipa: "ˌɪnkənˈviːniəns", es: "trouble or difficulty caused to someone" },
+              { en: "keep (doing)", es: "continue to happen again and again" }
+            ]
+          },
+          {
+            kind: "expresiones",
+            items: [
+              { en: "I'm afraid there's a problem with...", es: "a polite way to start a complaint" },
+              { en: "It keeps crashing.", es: "describe a repeated problem" },
+              { en: "I'm really sorry about that.", es: "apologise sincerely" },
+              { en: "I'll sort it out right away.", es: "promise quick action" }
+            ]
+          },
+          {
+            kind: "ejemplos",
+            items: [
+              { en: "Carmen: Hi, I'm afraid there's a problem with my laptop. It keeps crashing." },
+              { en: "Technician: Oh no, sorry about that. Let me look into it." },
+              { en: "Customer: I booked a hotel through your app, but the booking has disappeared!" },
+              { en: "Carmen: I'm really sorry for the inconvenience. I'll sort it out right away." }
+            ]
+          },
+          {
+            kind: "errores",
+            items: [
+              { no: "I want my money back now!", si: "I'd like a refund, please.", pq: "Say clearly what you want, but politely." },
+              { no: "The laptop keeps to crash.", si: "The laptop keeps crashing.", pq: "keep + -ing describes a repeated action." },
+              { no: "Sorry for the inconvenient.", si: "Sorry for the inconvenience.", pq: "inconvenience is the noun; inconvenient is the adjective." }
+            ]
+          },
+          { kind: "resumen", body: "Complain: soft opener + facts + request. Respond: apologise + show understanding + solution. Useful verbs: sort out, look into, replace, refund." },
+          { kind: "puente", body: "Now you're on both sides of the counter." }
         ]
       },
       exercises: [
-        { type: "matching", instruction: "Match each phrasal verb with its meaning.", pairs: [{"l":"get up","r":"leave your bed"},{"l":"look for","r":"try to find"},{"l":"give up","r":"stop trying"},{"l":"find out","r":"discover information"}],
-          explanation: "get up = leave your bed, look for = try to find, give up = stop trying, find out = discover." },
-        { type: "multiple_choice", question: "Please ___ the TV; it's late. (apagar)", options: ["turn off", "turn on", "look after"],
-          correctIndex: 0, explanation: "turn off = apagar." },
-        { type: "fill_blank", sentence: "I'm ___ my keys. Have you seen them? (buscar)", answers: ["looking for"],
-          hint: "buscar.", explanation: "look for = buscar." },
-        { type: "true_false", statement: "'Give up' means to continue trying.", answer: false,
-          explanation: "give up = stop trying." },
-        { type: "translate", prompt: "Use a phrasal verb: I leave my bed at seven every morning.",
-          answers: ["i get up at seven","i get up at 7","i get up at seven every morning","i get up at 7 every morning","every morning i get up at seven"], explanation: "I get up at seven." }
+        {
+          type: "listening",
+          text: "I'm afraid the heating in my room isn't working. Could you send someone to look at it?", question: "What does the guest want?",
+          options: ["Someone to fix the heating", "A different hotel", "A refund"], correctIndex: 0
+        },
+        {
+          type: "categorize", instruction: "Who says it: the customer or the company?",
+          buckets: [{ id: "cust", label: "Customer" }, { id: "comp", label: "Company" }],
+          items: [
+            { t: "I'd like a refund, please.", bucket: "cust" },
+            { t: "It keeps crashing.", bucket: "cust" },
+            { t: "This isn't what I ordered.", bucket: "cust" },
+            { t: "Let me look into it.", bucket: "comp" },
+            { t: "I'll sort it out right away.", bucket: "comp" },
+            { t: "Sorry for the inconvenience.", bucket: "comp" }
+          ]
+        },
+        {
+          type: "multiple_choice", question: "Which is the most polite way to complain?",
+          options: ["I'm afraid my order hasn't arrived yet. Could you check it for me?", "Where's my order? This is ridiculous.", "You lost my order again."], correctIndex: 0,
+          explanation: "A soft opener + facts + a polite request."
+        },
+        {
+          type: "matching", instruction: "Match each word with its meaning.",
+          pairs: [
+            { l: "refund", r: "money given back to a customer" },
+            { l: "faulty", r: "not working correctly" },
+            { l: "replace", r: "give a new one instead of a broken one" },
+            { l: "look into", r: "investigate" },
+            { l: "sort out", r: "solve a problem" }
+          ]
+        },
+        {
+          type: "find_error",
+          segments: ["My phone ", { u: "keeps" }, " ", { u: "to switch" }, " off, so ", { u: "could" }, " you replace it?"],
+          correctIndex: 1, correction: "switching", explanation: "keep + -ing: My phone keeps switching off.", question: "Find the mistake"
+        },
+        {
+          type: "fill_blank", sentence: "I'm really sorry for the ___. We'll send you a new one today.", answers: ["inconvenience", "trouble", "delay"], hint: "A noun for the problem you caused.",
+          explanation: "Sorry for the inconvenience."
+        },
+        { type: "speak", text: "I'm afraid there's a problem with my laptop. It keeps crashing." },
+        {
+          type: "translate", prompt: "Make this request more polite, starting with \"Could\": \"Change my room.\"",
+          answers: ["could you change my room please", "could you change my room", "could i change my room please", "could i change rooms please", "could i change rooms"],
+          explanation: "Could you change my room, please?"
+        }
       ]
     },
 
     "x2-read-b1-travel": {
-      lessonId: "x2-read-b1-travel", level: "B1", track: "Reading", topic: "travel", skill: "reading",
-      title: "Reading: Slow travel", xpReward: 55, mascotState: "explaining",
+      lessonId: "x2-read-b1-travel", level: "B1", track: "Reading", topic: "travel", skill: "reading", title: "Reading: Slow travel", xpReward: 55, mascotState: "explaining",
       nextLessonId: "x2-gram-b2-third-conditional",
-      explanation: {
-        body: "A text about a calmer way to travel. Practise guessing meaning from context and finding specific information.",
-        examples: [
-          { en: "Instead of rushing, they stay longer." }
-        ]
-      },
+      explanation: { body: "A text about a calmer way to travel. Practise guessing meaning from context and finding specific information.", examples: [{ en: "Instead of rushing, they stay longer." }] },
       exercises: [
-        { type: "reading", title: "Slow travel",
+        {
+          type: "reading", title: "Slow travel",
           passage: "More and more people are choosing 'slow travel'. Instead of visiting five cities in a week, they stay in one place for several days.\n\nSlow travellers often rent a flat, cook their own food, and talk to local people. They say this helps them understand a culture better than a quick tour.\n\nIt is also cheaper and better for the planet, because they take fewer flights. For many, the goal is not to see everything, but to feel at home in a new place.",
           questions: [
-            { q: "What do slow travellers do?", options: ["Visit many cities fast", "Stay longer in one place", "Only take guided tours of famous sights"], correctIndex: 1, explanation: "\"they stay in one place for several days\"." },
+            {
+              q: "What do slow travellers do?",
+              options: ["Visit many cities fast", "Stay longer in one place", "Only take guided tours of famous sights"], correctIndex: 1, explanation: "\"they stay in one place for several days\"."
+            },
             { q: "Why is slow travel better for the planet?", options: ["They take fewer flights", "They walk everywhere", "They never eat out"], correctIndex: 0, explanation: "\"they take fewer flights\"." },
-            { q: "What is the main goal for many slow travellers?", options: ["To see everything", "To save time", "To feel at home in a new place"], correctIndex: 2, explanation: "\"to feel at home in a new place\"." }
-          ] },
-        { type: "true_false", statement: "Slow travel is more expensive than fast tourism, according to the text.", answer: false,
-          explanation: "The text says it is cheaper (\"cheaper\")." },
-        { type: "multiple_choice", question: "The word 'rush' in the text is closest to...", options: ["relax", "hurry", "pay"],
-          correctIndex: 1, explanation: "rush = hurry, move quickly." }
+            {
+              q: "What is the main goal for many slow travellers?", options: ["To see everything", "To save time", "To feel at home in a new place"], correctIndex: 2,
+              explanation: "\"to feel at home in a new place\"."
+            }
+          ]
+        },
+        { type: "true_false", statement: "Slow travel is more expensive than fast tourism, according to the text.", answer: false, explanation: "The text says it is cheaper (\"cheaper\")." },
+        {
+          type: "multiple_choice", question: "In the text, the word \"goal\" is closest in meaning to...", options: ["aim", "problem", "price"], correctIndex: 0,
+          explanation: "goal = aim, the thing you want to achieve."
+        },
+        { type: "fill_blank", sentence: "Slow travellers often rent a ___ and cook their own food.", answers: ["flat", "apartment"], hint: "A place to live for a few days.", explanation: "...rent a flat..." },
+        {
+          type: "matching", instruction: "Match each word from the text with its meaning.",
+          pairs: [{ l: "flat", r: "an apartment" }, { l: "local", r: "from the area where you are" }, { l: "culture", r: "the customs and way of life of a group" }, { l: "planet", r: "the Earth" }]
+        },
+        {
+          type: "listening", text: "For many, the goal is not to see everything, but to feel at home in a new place.", question: "What is the main idea?",
+          options: ["Feeling at home matters more than seeing everything", "Seeing everything is the goal", "Travelling is too expensive"], correctIndex: 0
+        }
       ]
     },
 
     "x2-gram-b2-third-conditional": {
-      lessonId: "x2-gram-b2-third-conditional", level: "B2", track: "Grammar", topic: "grammar", skill: "grammar",
-      title: "The third conditional", xpReward: 55, mascotState: "explaining",
-      nextLessonId: "x2-gram-b2-future-continuous",
+      lessonId: "x2-gram-b2-third-conditional", level: "B2", track: "Grammar", topic: "grammar", skill: "grammar", tipo: "aprende", title: "Past modals: should have, could have, must have", rev: 2, xpReward: 55,
+      mascotState: "explaining", nextLessonId: "x2-gram-b2-future-continuous",
       explanation: {
-        body: "The third conditional talks about an imaginary past (regrets): If + past perfect, would have + past participle. \"If I had studied, I would have passed.\" We are talking about something that did NOT happen.",
+        body: "The client presentation went badly. The projector failed, the slides had typos and the client left early. Now the team is looking back: what should they have done? What might have happened? Past modals help you criticise, regret and speculate about the past. modal + have + past participle. Criticism or regret: should have / shouldn't have (We should have tested the projector). An option you didn't take: could have (We could have used a laptop instead). Past speculation: might / may / could have (He might have missed the email); must have = almost sure it's true (She must have been tired); can't / couldn't have = almost sure it's not true (He can't have seen it; he was on holiday).",
         examples: [
-          { en: "If I had known, I would have called you." },
-          { en: "She would have come if you had asked." },
-          { en: "If we hadn't left early, we would have missed the train." }
+          { en: "We should have rehearsed the presentation at least once." },
+          { en: "And we could have brought a backup laptop." },
+          { en: "The client left early. He must have been bored." },
+          { en: "Or he might have had another meeting. Anyway, it could have been worse!" }
+        ],
+        sections: [
+          {
+            kind: "intro",
+            body: "The client presentation went badly. The projector failed, the slides had typos and the client left early. Now the team is looking back: what should they have done? What might have happened? Past modals help you criticise, regret and speculate about the past."
+          },
+          {
+            kind: "regla",
+            body: "modal + have + past participle. Criticism or regret: should have / shouldn't have (We should have tested the projector). An option you didn't take: could have (We could have used a laptop instead). Past speculation: might / may / could have (He might have missed the email); must have = almost sure it's true (She must have been tired); can't / couldn't have = almost sure it's not true (He can't have seen it; he was on holiday)."
+          },
+          {
+            kind: "vocab",
+            items: [
+              { en: "in hindsight", es: "looking back now, with more knowledge" },
+              { en: "typo", ipa: "ˈtaɪpəʊ", es: "a small mistake in typing" },
+              { en: "rehearse", ipa: "rɪˈhɜːs", es: "practise before a performance" },
+              { en: "backup", ipa: "ˈbækʌp", es: "an extra copy kept in case the first one fails" },
+              { en: "blame", ipa: "bleɪm", es: "say someone is responsible for something bad" },
+              { en: "let (someone) down", es: "disappoint someone" },
+              { en: "go wrong", es: "stop working or happening as planned" },
+              { en: "at least", es: "used to say something is less bad than it could be" }
+            ]
+          },
+          {
+            kind: "expresiones",
+            items: [
+              { en: "We should have checked.", es: "criticism of what you did" },
+              { en: "You shouldn't have worried.", es: "it wasn't necessary" },
+              { en: "It could have been worse.", es: "look on the positive side" },
+              { en: "She must have forgotten.", es: "a confident guess about the past" }
+            ]
+          },
+          {
+            kind: "ejemplos",
+            items: [
+              { en: "Priya: We should have rehearsed the presentation at least once." },
+              { en: "Daniel: And we could have brought a backup laptop." },
+              { en: "Tom: The client left early. He must have been bored." },
+              { en: "Carmen: Or he might have had another meeting. Anyway, it could have been worse!" }
+            ]
+          },
+          {
+            kind: "errores",
+            items: [
+              { no: "We should tested it.", si: "We should have tested it.", pq: "Past modals need have + past participle." },
+              { no: "He must have went home.", si: "He must have gone home.", pq: "Use the past participle (gone), not the past simple." },
+              { no: "She can't have be there.", si: "She can't have been there.", pq: "have + past participle (been)." }
+            ]
+          },
+          { kind: "resumen", body: "should(n't) have = criticism / regret. could have = an option you didn't take. might / may / could have = maybe. must have = almost sure yes. can't have = almost sure no." },
+          { kind: "puente", body: "Join the team's post-presentation review." }
         ]
       },
       exercises: [
-        { type: "multiple_choice", question: "If I had studied, I ___ passed.", options: ["would have", "would", "had"],
-          correctIndex: 0, explanation: "Third conditional: would have + past participle." },
-        { type: "fill_blank", sentence: "If you ___ told me, I would have helped. (past perfect)", answers: ["had"],
-          hint: "If + past perfect.", explanation: "If you had told me..." },
-        { type: "true_false", statement: "The 3rd conditional refers to things that really happened.", answer: false,
-          explanation: "It refers to an imaginary past that did NOT happen." },
-        { type: "word_order", words: ["If", "I", "had", "known,", "I", "would", "have", "stayed"],
-          correctOrder: ["If", "I", "had", "known,", "I", "would", "have", "stayed"], hint: "If + past perfect, would have + past participle." },
-        { type: "translate", prompt: "Make a third conditional: I didn't know, so I didn't call you. (If I had…)",
-          answers: ["if i had known, i would have called you","if i had known i would have called you","if i had known i'd have called you","if i'd known i would have called you","if i'd known i'd have called you"], explanation: "If I had known, I would have called you." }
+        {
+          type: "multiple_choice", question: "The lights are off and nobody answers the door. They ___ gone out.", options: ["must have", "should have", "can't have"], correctIndex: 0,
+          explanation: "Strong evidence → must have."
+        },
+        {
+          type: "categorize", instruction: "What is the speaker doing?",
+          buckets: [{ id: "crit", label: "Criticising / regretting" }, { id: "spec", label: "Speculating" }],
+          items: [
+            { t: "We should have left earlier.", bucket: "crit" },
+            { t: "You shouldn't have shouted.", bucket: "crit" },
+            { t: "I could have studied more.", bucket: "crit" },
+            { t: "She might have missed the bus.", bucket: "spec" },
+            { t: "He must have been tired.", bucket: "spec" },
+            { t: "They can't have finished already.", bucket: "spec" }
+          ]
+        },
+        {
+          type: "find_error",
+          segments: ["You ", { u: "should" }, " ", { u: "have tell" }, " me ", { u: "about" }, " the meeting!"],
+          correctIndex: 1, correction: "have told", explanation: "should have + past participle: You should have told me.", question: "Find the mistake"
+        },
+        {
+          type: "fill_blank", sentence: "Daniel can't ___ seen the email. He was on a plane all day.", answers: ["have"], hint: "can't + ___ + past participle",
+          explanation: "can't have seen = almost sure he didn't see it."
+        },
+        {
+          type: "listening", text: "I can't find my keys. I might have left them at the office.", question: "What does the speaker think?",
+          options: ["The keys are possibly at the office", "The keys are definitely at the office", "Someone stole the keys"], correctIndex: 0
+        },
+        {
+          type: "reading", title: "Presentation review",
+          passage: "What went wrong: The projector failed after five minutes, and there were three typos on the first slide. The client left before the Q&A.\n\nWhat we should have done: rehearsed the day before, brought a backup laptop and asked someone to proofread the slides.\n\nWhat went well: Carmen's demo of the app was clear, and the client asked for a follow-up email. It could have been much worse!",
+          questions: [
+            {
+              q: "Which action does the team regret NOT doing?", options: ["Rehearsing the presentation", "Inviting the client", "Showing the demo"], correctIndex: 0,
+              explanation: "We should have rehearsed the day before."
+            },
+            {
+              q: "What does \"It could have been much worse\" suggest?",
+              options: ["Some things went well despite the problems.", "The client was very angry.", "The presentation was cancelled."], correctIndex: 0,
+              explanation: "The demo was clear and the client wants a follow-up."
+            }
+          ]
+        },
+        {
+          type: "word_order", words: ["laptop", "We", "backup", "should", "a", "have", "brought"], correctOrder: ["We", "should", "have", "brought", "a", "backup", "laptop"],
+          hint: "should + have + past participle"
+        },
+        {
+          type: "translate", prompt: "Rewrite using \"must have\": \"I'm sure she forgot about the meeting.\"",
+          answers: ["she must have forgotten about the meeting", "she must have forgotten the meeting"], explanation: "She must have forgotten about the meeting."
+        }
       ]
     },
 
@@ -394,30 +797,111 @@ window.VESPER_EXPANSION2 = (function () {
     },
 
     "x2-use-b2-connectors": {
-      lessonId: "x2-use-b2-connectors", level: "B2", track: "Use of English", topic: "grammar", skill: "use",
-      title: "Linkers of contrast and cause", xpReward: 55, mascotState: "explaining",
-      nextLessonId: "x2-use-b2-word-formation",
+      lessonId: "x2-use-b2-connectors", level: "B2", track: "Functional English", topic: "work", skill: "use", tipo: "aprende", title: "Interrupting and holding the floor", rev: 2, xpReward: 55,
+      mascotState: "explaining", nextLessonId: "x2-use-b2-word-formation",
       explanation: {
-        body: "Linking ideas precisely raises your level. Contrast: although/though + clause, despite/in spite of + noun or -ing, however (between sentences). Cause: because + clause, because of + noun, due to. \"Despite the rain, we went out.\"",
+        body: "Episode 7 · In the brainstorming meeting, Tom talks non-stop, Daniel mumbles, and Carmen can't get a word in. Learn how to interrupt politely, ask people to expand on their ideas and keep your turn when others try to interrupt you. Interrupt politely: Sorry to interrupt, but... / Can I just come in here? / If I could just add something... Ask someone to expand: Could you elaborate on that? / What exactly do you mean by...? / Could you give us an example? Hold the floor: If I could just finish... / Bear with me for a second. Return to an earlier point: Going back to what Daniel said... / To get back to the main point...",
         examples: [
-          { en: "Although it was late, she kept working." },
-          { en: "Despite the noise, he slept well." },
-          { en: "The flight was cancelled due to the storm." }
+          { en: "...and then we could add music, and videos, and maybe a chatbot, and..." },
+          { en: "Sorry to interrupt, Tom, but can I just come in here?" },
+          { en: "Sure, go ahead." },
+          { en: "Going back to what Daniel said earlier, could you elaborate on the offline mode, Daniel?" }
+        ],
+        sections: [
+          {
+            kind: "intro",
+            body: "Episode 7 · In the brainstorming meeting, Tom talks non-stop, Daniel mumbles, and Carmen can't get a word in. Learn how to interrupt politely, ask people to expand on their ideas and keep your turn when others try to interrupt you."
+          },
+          {
+            kind: "regla",
+            body: "Interrupt politely: Sorry to interrupt, but... / Can I just come in here? / If I could just add something... Ask someone to expand: Could you elaborate on that? / What exactly do you mean by...? / Could you give us an example? Hold the floor: If I could just finish... / Bear with me for a second. Return to an earlier point: Going back to what Daniel said... / To get back to the main point..."
+          },
+          {
+            kind: "vocab",
+            items: [
+              { en: "interrupt", ipa: "ˌɪntəˈrʌpt", es: "stop someone while they are speaking" },
+              { en: "elaborate (on)", ipa: "ɪˈlæbəreɪt", es: "give more details" },
+              { en: "hold the floor", es: "keep the right to speak" },
+              { en: "get a word in", es: "manage to say something when others are talking a lot" },
+              { en: "bear with me", es: "be patient with me for a moment" },
+              { en: "digress", ipa: "daɪˈɡres", es: "move away from the main subject" },
+              { en: "brainstorm", ipa: "ˈbreɪnstɔːm", es: "a group discussion to produce ideas" },
+              { en: "on track", es: "following the planned direction" }
+            ]
+          },
+          {
+            kind: "expresiones",
+            items: [
+              { en: "Sorry to interrupt, but...", es: "a polite interruption" },
+              { en: "Could you elaborate on that?", es: "ask for more detail" },
+              { en: "If I could just finish...", es: "keep your turn" },
+              { en: "Going back to what you said...", es: "return to an earlier point" }
+            ]
+          },
+          {
+            kind: "ejemplos",
+            items: [
+              { en: "Tom: ...and then we could add music, and videos, and maybe a chatbot, and..." },
+              { en: "Carmen: Sorry to interrupt, Tom, but can I just come in here?" },
+              { en: "Tom: Sure, go ahead." },
+              { en: "Carmen: Going back to what Daniel said earlier, could you elaborate on the offline mode, Daniel?" }
+            ]
+          },
+          {
+            kind: "errores",
+            items: [
+              { no: "Stop, I want to talk.", si: "Sorry to interrupt, but could I add something?", pq: "Signal politely that you want to speak." },
+              { no: "Can you elaborate that?", si: "Can you elaborate on that?", pq: "elaborate needs 'on' before an object." },
+              { no: "Wait me, I didn't finish.", si: "If I could just finish...", pq: "Use a polite fixed phrase to hold the floor." }
+            ]
+          },
+          { kind: "resumen", body: "Interrupt: Sorry to interrupt, but... / Can I just come in here? Expand: Could you elaborate on that? Hold the floor: If I could just finish... Return: Going back to..." },
+          { kind: "puente", body: "Help Carmen get a word in at the brainstorm." }
         ]
       },
       exercises: [
-        { type: "multiple_choice", question: "___ the rain, we enjoyed the trip.", options: ["Although", "Despite", "Because"],
-          correctIndex: 1, explanation: "'Despite' + noun (the rain). 'Although' needs a clause." },
-        { type: "fill_blank", sentence: "___ it was expensive, we bought it.", answers: ["Although", "Though"],
-          hint: "+ a full clause.", explanation: "Although / Though + subject + verb." },
-        { type: "categorize", instruction: "Contrast or cause?", buckets: [
-          { id: "con", label: "Contrast" }, { id: "cau", label: "Cause" } ], items: [
-          { t: "however", bucket: "con" }, { t: "because of", bucket: "cau" }, { t: "although", bucket: "con" }, { t: "due to", bucket: "cau" } ] },
-        { type: "true_false", statement: "'Because of' is followed by a full sentence.", answer: false,
-          explanation: "'because of' goes with a noun; 'because' with a clause." },
-        { type: "translate", prompt: "Rewrite with 'Despite': It was noisy, but he slept well.",
-          answers: ["despite the noise, he slept well","despite the noise he slept well","in spite of the noise he slept well","despite the noise he slept very well"],
-          explanation: "Despite the noise, he slept well." }
+        {
+          type: "categorize", instruction: "What is the speaker doing?",
+          buckets: [{ id: "int", label: "Interrupting" }, { id: "exp", label: "Asking for more detail" }, { id: "hold", label: "Holding the floor" }],
+          items: [
+            { t: "Sorry to interrupt, but...", bucket: "int" },
+            { t: "Can I just come in here?", bucket: "int" },
+            { t: "Could you elaborate on that?", bucket: "exp" },
+            { t: "Could you give us an example?", bucket: "exp" },
+            { t: "If I could just finish...", bucket: "hold" },
+            { t: "Bear with me for a second.", bucket: "hold" }
+          ]
+        },
+        {
+          type: "listening", text: "Sorry, if I could just finish this point; it's important for the budget.", question: "What does the speaker want?",
+          options: ["To keep speaking", "To end the meeting", "To ask a question"], correctIndex: 0
+        },
+        {
+          type: "multiple_choice", question: "Your colleague's idea is interesting but vague. You say:", options: ["Could you elaborate on that?", "Can you elaborate that?", "Elaborate, please."],
+          correctIndex: 0, explanation: "elaborate on + object, inside a polite question."
+        },
+        {
+          type: "find_error",
+          segments: ["Could you ", { u: "elaborate" }, " that idea ", { u: "a little" }, " ", { u: "more" }, "?"],
+          correctIndex: 0, correction: "elaborate on", explanation: "elaborate needs 'on' before an object: elaborate on that idea.", question: "Find the mistake"
+        },
+        {
+          type: "matching", instruction: "Match each expression with its meaning.",
+          pairs: [
+            { l: "digress", r: "move away from the main subject" },
+            { l: "elaborate", r: "give more details" },
+            { l: "bear with me", r: "be patient with me for a moment" },
+            { l: "on track", r: "following the planned direction" },
+            { l: "get a word in", r: "manage to speak when others talk a lot" }
+          ]
+        },
+        { type: "fill_blank", sentence: "Sorry to ___, but I think we're running out of time.", answers: ["interrupt"], hint: "stop someone while they are speaking", explanation: "Sorry to interrupt, but..." },
+        { type: "speak", text: "Sorry to interrupt, but can I just come in here?" },
+        {
+          type: "translate",
+          prompt: "Rewrite to return to an earlier point, starting with \"Going back\": \"Let's talk about Daniel's idea again.\"",
+          answers: ["going back to daniel's idea", "going back to what daniel said", "going back to daniel's point"], explanation: "Going back to Daniel's idea..."
+        }
       ]
     },
 
@@ -469,7 +953,20 @@ window.VESPER_EXPANSION2 = (function () {
         { type: "true_false", statement: "Everyone in the text agrees the gardens can feed an entire city.", answer: false,
           explanation: "Critics say they are too small to feed a whole city." },
         { type: "multiple_choice", question: "Which is an OPINION from the text?", options: ["Their real value is social", "Residents grow vegetables in shared plots", "Gardens cool the air"],
-          correctIndex: 0, explanation: "\"Their real value is social\" is an opinion held by supporters." }
+          correctIndex: 0, explanation: "\"Their real value is social\" is an opinion held by supporters." },
+        {
+          type: "multiple_choice", question: "In the text, \"plots\" refers to...", options: ["small areas of land", "stories", "secret plans"], correctIndex: 0,
+          explanation: "A plot of land is a small piece of ground."
+        },
+        {
+          type: "find_error",
+          segments: ["Critics ", { u: "argues" }, " that the gardens ", { u: "are" }, " too small to ", { u: "feed" }, " a city."],
+          correctIndex: 0, correction: "argue", explanation: "Plural subject (critics) → argue.", question: "Find the mistake"
+        },
+        {
+          type: "fill_blank", sentence: "These gardens do more than ___ food.", answers: ["provide", "produce", "give"], hint: "A verb from the second paragraph.",
+          explanation: "These gardens do more than provide food."
+        }
       ]
     },
 
@@ -501,82 +998,363 @@ window.VESPER_EXPANSION2 = (function () {
      * C1 / C2 — avanzado
      * ================================================================== */
     "x2-voc-c1-idioms": {
-      lessonId: "x2-voc-c1-idioms", level: "C1", track: "Vocabulary", topic: "idioms", skill: "vocab",
-      title: "Idioms for fluency", xpReward: 60, mascotState: "explaining",
+      lessonId: "x2-voc-c1-idioms", level: "C1", track: "Functional English", topic: "work", skill: "use", tipo: "aprende", title: "Chairing a discussion", rev: 2, xpReward: 60, mascotState: "explaining",
       nextLessonId: "x2-voc-c1-awl",
       explanation: {
-        body: "Idioms make your English sound natural. 'Hit the books' (start studying hard), 'under the weather' (slightly ill), 'a piece of cake' (very easy), 'cost an arm and a leg' (be very expensive), 'on the same page' (in agreement). Their meaning is not literal.",
+        body: "You're chairing a meeting with eight people, two strong opinions and forty minutes. Your job is to open, keep everyone on track, bring in quiet voices, stop people talking over each other and close with clear actions. Here's the language good chairs use. Open: Shall we make a start? The aim of today's meeting is to... Manage turns: Let's hear from Ana first. / Raj, what's your view? / Let's not all talk at once. Keep on track: I'm afraid we're drifting off the point. / Can we park that for now? Move on: In the interest of time, let's move on to... Summarise and close: So, to sum up, we've agreed that... / Who's going to take that on? / Let's wrap up there.",
         examples: [
-          { en: "The exam was a piece of cake." },
-          { en: "I'm feeling under the weather today." },
-          { en: "That car cost an arm and a leg." }
+          { en: "Shall we make a start? The aim of today's meeting is to agree on the budget." },
+          { en: "Let's not all talk at once. Ana, you first, then Raj." },
+          { en: "That's an important issue, but can we park it for now and come back to it next week?" },
+          { en: "So, to sum up, we've reached a consensus on option B. Raj, can you take that action point?" }
+        ],
+        sections: [
+          {
+            kind: "intro",
+            body: "You're chairing a meeting with eight people, two strong opinions and forty minutes. Your job is to open, keep everyone on track, bring in quiet voices, stop people talking over each other and close with clear actions. Here's the language good chairs use."
+          },
+          {
+            kind: "regla",
+            body: "Open: Shall we make a start? The aim of today's meeting is to... Manage turns: Let's hear from Ana first. / Raj, what's your view? / Let's not all talk at once. Keep on track: I'm afraid we're drifting off the point. / Can we park that for now? Move on: In the interest of time, let's move on to... Summarise and close: So, to sum up, we've agreed that... / Who's going to take that on? / Let's wrap up there."
+          },
+          {
+            kind: "vocab",
+            items: [
+              { en: "chair", ipa: "tʃeə", es: "lead a meeting" },
+              { en: "agenda", ipa: "əˈdʒendə", es: "a list of points to discuss in a meeting" },
+              { en: "item", ipa: "ˈaɪtəm", es: "one point on an agenda" },
+              { en: "drift off the point", es: "move away from the topic" },
+              { en: "park (an issue)", es: "leave it to discuss later" },
+              { en: "wrap up", es: "finish" },
+              { en: "action point", es: "a task someone agrees to do after a meeting" },
+              { en: "consensus", ipa: "kənˈsensəs", es: "general agreement" }
+            ]
+          },
+          {
+            kind: "expresiones",
+            items: [
+              { en: "Shall we make a start?", es: "open the meeting" },
+              { en: "Can we park that for now?", es: "postpone a topic" },
+              { en: "Let's hear from... first.", es: "manage turns" },
+              { en: "So, to sum up, ...", es: "summarise decisions" }
+            ]
+          },
+          {
+            kind: "ejemplos",
+            items: [
+              { en: "Shall we make a start? The aim of today's meeting is to agree on the budget." },
+              { en: "Let's not all talk at once. Ana, you first, then Raj." },
+              { en: "That's an important issue, but can we park it for now and come back to it next week?" },
+              { en: "So, to sum up, we've reached a consensus on option B. Raj, can you take that action point?" }
+            ]
+          },
+          {
+            kind: "errores",
+            items: [
+              { no: "We begin? (to open)", si: "Shall we make a start?", pq: "Use a fixed, polite opening." },
+              { no: "Stop talking, Raj.", si: "Thanks, Raj. Let's hear from Ana now.", pq: "Thank the speaker before handing over the turn." },
+              { no: "We have a consensus agreement.", si: "We've reached a consensus.", pq: "consensus already means agreement; 'reach a consensus' is the collocation." }
+            ]
+          },
+          { kind: "resumen", body: "Open (Shall we make a start?) → manage turns (Let's hear from...) → keep on track (Can we park that?) → close (To sum up... / Who's taking that on?)." },
+          { kind: "puente", body: "Take the chair and keep the meeting moving." }
         ]
       },
       exercises: [
-        { type: "matching", instruction: "Match each idiom with its meaning.", pairs: [{"l":"a piece of cake","r":"very easy"},{"l":"under the weather","r":"slightly ill"},{"l":"hit the books","r":"start studying hard"},{"l":"cost an arm and a leg","r":"be extremely expensive"}],
-          explanation: "Figurative meanings, not literal ones." },
-        { type: "multiple_choice", question: "If something 'costs an arm and a leg', it is...", options: ["very cheap", "very expensive", "free"],
-          correctIndex: 1, explanation: "It means very expensive." },
-        { type: "fill_blank", sentence: "We finally agree — we're on the same ___.", answers: ["page"],
-          hint: "on the same ___.", explanation: "on the same page = in agreement." },
-        { type: "true_false", statement: "'Hit the books' means to throw your books away.", answer: false,
-          explanation: "It means to start studying seriously." },
-        { type: "translate", prompt: "Rewrite with an idiom: The test was really easy.",
-          answers: ["the exam was a piece of cake", "the test was a piece of cake"], explanation: "The exam was a piece of cake." }
+        {
+          type: "categorize", instruction: "Which stage of the meeting is it?",
+          buckets: [{ id: "open", label: "Opening" }, { id: "manage", label: "Managing" }, { id: "close", label: "Closing" }],
+          items: [
+            { t: "Shall we make a start?", bucket: "open" },
+            { t: "The aim of today's meeting is...", bucket: "open" },
+            { t: "Let's hear from Ana first.", bucket: "manage" },
+            { t: "Can we park that for now?", bucket: "manage" },
+            { t: "So, to sum up, ...", bucket: "close" },
+            { t: "Let's wrap up there.", bucket: "close" }
+          ]
+        },
+        {
+          type: "multiple_choice", question: "Two people are talking at the same time. As chair, you say:",
+          options: ["Let's not all talk at once. Ana first, then Raj.", "Be quiet, both of you!", "Whatever. Next item."], correctIndex: 0, explanation: "Firm but polite, with a clear order of turns."
+        },
+        {
+          type: "listening",
+          text: "I'm afraid we're drifting off the point. Can we park that and get back to the budget?", question: "What does the chair want?",
+          options: ["To return to the main topic", "To end the meeting", "To discuss the new topic in detail"], correctIndex: 0
+        },
+        {
+          type: "matching", instruction: "Match each word with its meaning.",
+          pairs: [
+            { l: "agenda", r: "a list of points to discuss in a meeting" },
+            { l: "consensus", r: "general agreement" },
+            { l: "action point", r: "a task someone agrees to do after a meeting" },
+            { l: "wrap up", r: "finish" },
+            { l: "park", r: "leave an issue to discuss later" }
+          ]
+        },
+        {
+          type: "find_error",
+          segments: ["We ", { u: "have" }, " ", { u: "reached" }, " ", { u: "a consensus agreement" }, " on the budget."],
+          correctIndex: 2, correction: "a consensus", explanation: "consensus already means agreement: We have reached a consensus.", question: "Find the mistake"
+        },
+        {
+          type: "word_order", words: ["on", "In", "move", "the", "let's", "interest", "time", "of"], correctOrder: ["In", "the", "interest", "of", "time", "let's", "move", "on"],
+          hint: "A chair's phrase for moving on."
+        },
+        { type: "speak", text: "Shall we make a start? The aim of today's meeting is to agree on the budget." },
+        {
+          type: "translate",
+          prompt: "Rephrase as a chair, starting with \"Can we park\": \"Let's talk about the office move another day.\"",
+          answers: ["can we park the office move for now", "can we park the office move", "can we park that for now", "can we park the office move until next week"],
+          explanation: "Can we park the office move for now?"
+        }
       ]
     },
 
     "x2-voc-c1-awl": {
-      lessonId: "x2-voc-c1-awl", level: "C1", track: "Vocabulary", topic: "academic", skill: "vocab",
-      title: "Academic vocabulary", xpReward: 60, mascotState: "explaining",
+      lessonId: "x2-voc-c1-awl", level: "C1", track: "Vocabulary", topic: "academic", skill: "vocab", tipo: "aprende", title: "Verbs of cause and change", rev: 2, xpReward: 60, mascotState: "explaining",
       nextLessonId: "x2-use-c1-cleft",
       explanation: {
-        body: "Academic English uses precise verbs and nouns: analyse, indicate, significant, approach, factor, consequently. \"The data indicate a significant trend.\" Learning them improves your formal writing and your exam results.",
+        body: "Reports, essays and news articles are full of cause and effect: a decision triggers a protest, a new tax curbs spending, a heatwave exacerbates a drought. Precise verbs like these make your writing sharper than 'cause', 'make worse' or 'reduce'. Make worse: exacerbate, aggravate, compound. Make less severe: alleviate, mitigate, ease. Start or cause: trigger, spark, prompt, give rise to. Limit or slow: curb, restrict, hinder. Rise or fall: soar, surge / plummet, dwindle. Watch the grammar: trigger something (no preposition), give rise to something, result in (= cause) vs result from (= be caused by).",
         examples: [
-          { en: "The results indicate a clear pattern." },
-          { en: "This factor is highly significant." },
-          { en: "We adopted a new approach." }
+          { en: "The price rise triggered a wave of protests." },
+          { en: "The new rules aim to curb air pollution in city centres." },
+          { en: "Cutting staff only exacerbated the delays." },
+          { en: "Planting trees can help mitigate the effects of heatwaves." }
+        ],
+        sections: [
+          {
+            kind: "intro",
+            body: "Reports, essays and news articles are full of cause and effect: a decision triggers a protest, a new tax curbs spending, a heatwave exacerbates a drought. Precise verbs like these make your writing sharper than 'cause', 'make worse' or 'reduce'."
+          },
+          {
+            kind: "regla",
+            body: "Make worse: exacerbate, aggravate, compound. Make less severe: alleviate, mitigate, ease. Start or cause: trigger, spark, prompt, give rise to. Limit or slow: curb, restrict, hinder. Rise or fall: soar, surge / plummet, dwindle. Watch the grammar: trigger something (no preposition), give rise to something, result in (= cause) vs result from (= be caused by)."
+          },
+          {
+            kind: "vocab",
+            items: [
+              { en: "trigger", ipa: "ˈtrɪɡə", es: "cause something to start suddenly" },
+              { en: "curb", ipa: "kɜːb", es: "control or limit something harmful" },
+              { en: "exacerbate", ipa: "ɪɡˈzæsəbeɪt", es: "make a bad situation worse" },
+              { en: "mitigate", ipa: "ˈmɪtɪɡeɪt", es: "make something less harmful or serious" },
+              { en: "alleviate", ipa: "əˈliːvieɪt", es: "make pain or a problem less severe" },
+              { en: "hinder", ipa: "ˈhɪndə", es: "make progress difficult" },
+              { en: "give rise to", es: "cause something to happen or exist" },
+              { en: "dwindle", ipa: "ˈdwɪndəl", es: "become gradually smaller in number or amount" }
+            ]
+          },
+          {
+            kind: "expresiones",
+            items: [
+              { en: "The decision sparked widespread protests.", es: "cause a sudden reaction" },
+              { en: "measures to curb inflation", es: "limit something harmful" },
+              { en: "This merely compounded the problem.", es: "made it even worse" },
+              { en: "to mitigate the risks", es: "reduce possible harm" }
+            ]
+          },
+          {
+            kind: "ejemplos",
+            items: [
+              { en: "The price rise triggered a wave of protests." },
+              { en: "The new rules aim to curb air pollution in city centres." },
+              { en: "Cutting staff only exacerbated the delays." },
+              { en: "Planting trees can help mitigate the effects of heatwaves." }
+            ]
+          },
+          {
+            kind: "errores",
+            items: [
+              { no: "The heat exacerbated the drought worse.", si: "The heat exacerbated the drought.", pq: "exacerbate already means 'make worse'." },
+              { no: "The policy resulted from higher prices. (= caused them)", si: "The policy resulted in higher prices.", pq: "result in = cause; result from = be caused by." },
+              { no: "The scandal triggered to a crisis.", si: "The scandal triggered a crisis.", pq: "trigger takes a direct object, with no preposition." }
+            ]
+          },
+          { kind: "resumen", body: "Worse: exacerbate, compound. Better: alleviate, mitigate. Start: trigger, spark, give rise to. Limit: curb, hinder. Fall: dwindle, plummet." },
+          { kind: "puente", body: "Describe causes and effects like a journalist." }
         ]
       },
       exercises: [
-        { type: "matching", instruction: "Match each academic word with its everyday synonym.", pairs: [
-          { l: "indicate", r: "show" }, { l: "significant", r: "important" }, { l: "sufficient", r: "enough" }, { l: "obtain", r: "get" } ],
-          explanation: "Formal versions of everyday words." },
-        { type: "fill_blank", sentence: "The study ___ that prices rose. (showed, formal)", answers: ["indicated", "showed"],
-          hint: "An academic verb.", explanation: "indicated = showed (formal)." },
-        { type: "multiple_choice", question: "Which is the most formal/academic?", options: ["a lot of", "loads of", "a significant amount of"],
-          correctIndex: 2, explanation: "'a significant amount of' is academic register." },
-        { type: "true_false", statement: "'Consequently' means 'for example'.", answer: false,
-          explanation: "consequently = as a result, not 'for example'." },
-        { type: "translate", prompt: "Make it academic with 'indicate': The results show a clear pattern.",
-          answers: ["the results indicate a clear pattern"], explanation: "The results indicate a clear pattern." }
+        {
+          type: "matching", instruction: "Match each verb with its meaning.",
+          pairs: [
+            { l: "trigger", r: "cause something to start suddenly" },
+            { l: "curb", r: "control or limit something harmful" },
+            { l: "exacerbate", r: "make a bad situation worse" },
+            { l: "mitigate", r: "make something less harmful" },
+            { l: "hinder", r: "make progress difficult" },
+            { l: "dwindle", r: "become gradually smaller" }
+          ]
+        },
+        {
+          type: "categorize", instruction: "Does the verb make the situation better or worse?",
+          buckets: [{ id: "better", label: "Better" }, { id: "worse", label: "Worse" }],
+          items: [
+            { t: "alleviate", bucket: "better" },
+            { t: "mitigate", bucket: "better" },
+            { t: "ease", bucket: "better" },
+            { t: "curb (pollution)", bucket: "better" },
+            { t: "exacerbate", bucket: "worse" },
+            { t: "aggravate", bucket: "worse" },
+            { t: "compound", bucket: "worse" },
+            { t: "hinder", bucket: "worse" }
+          ]
+        },
+        {
+          type: "multiple_choice", question: "Painkillers can ___ the symptoms, but they don't cure the disease.", options: ["alleviate", "exacerbate", "trigger"], correctIndex: 0,
+          explanation: "alleviate = make less severe."
+        },
+        {
+          type: "find_error",
+          segments: ["The new tax ", { u: "triggered" }, " ", { u: "to" }, " a wave of ", { u: "protests" }, "."],
+          correctIndex: 1, correction: "(delete 'to')", explanation: "trigger takes a direct object: The new tax triggered a wave of protests.", question: "Find the mistake"
+        },
+        {
+          type: "fill_blank", sentence: "Over the decades, the village population has ___ from 2,000 to just 300.", answers: ["dwindled", "fallen", "declined", "shrunk", "decreased"],
+          hint: "become gradually smaller", explanation: "has dwindled"
+        },
+        {
+          type: "reading", title: "Reservoir at record low",
+          passage: "Water levels in the reservoir have dwindled to their lowest point in thirty years. Experts say the crisis was triggered by an unusually dry winter and exacerbated by a sharp rise in demand from new housing.\n\nThe council has introduced measures to curb water use, including a hosepipe ban, and hopes that a new pipeline will help alleviate shortages by next summer.",
+          questions: [
+            {
+              q: "What made the crisis worse?", options: ["Higher demand from new housing", "The hosepipe ban", "The new pipeline"], correctIndex: 0,
+              explanation: "...exacerbated by a sharp rise in demand from new housing."
+            },
+            { q: "What is the purpose of the hosepipe ban?", options: ["To limit water use", "To start the crisis", "To build a pipeline"], correctIndex: 0, explanation: "measures to curb water use" },
+            { q: "\"Dwindled\" in the first sentence means:", options: ["gradually decreased", "suddenly increased", "stayed the same"], correctIndex: 0, explanation: "dwindle = become gradually smaller." }
+          ]
+        },
+        {
+          type: "listening", text: "Experts warn that cutting the budget could hinder progress on the project.", question: "What could happen?",
+          options: ["The project could slow down", "The project could finish early", "The budget could increase"], correctIndex: 0
+        },
+        {
+          type: "translate", prompt: "Rewrite using \"exacerbated\": \"The strike made the traffic problems worse.\"",
+          answers: ["the strike exacerbated the traffic problems", "the strike exacerbated traffic problems"], explanation: "The strike exacerbated the traffic problems."
+        }
       ]
     },
 
     "x2-use-c1-cleft": {
-      lessonId: "x2-use-c1-cleft", level: "C1", track: "Use of English", topic: "grammar", skill: "use",
-      title: "Cleft sentences (emphasis)", xpReward: 60, mascotState: "explaining",
-      nextLessonId: "x2-use-c1-discourse-markers",
+      lessonId: "x2-use-c1-cleft", level: "C1", track: "Functional English", topic: "work", skill: "use", tipo: "aprende", title: "Giving feedback and softening criticism", rev: 2, xpReward: 60,
+      mascotState: "explaining", nextLessonId: "x2-use-c1-discourse-markers",
       explanation: {
-        body: "Cleft sentences emphasise one part of a sentence. With 'It': \"It was John who broke it.\" With 'What': \"What I need is a holiday.\" They highlight information without changing the basic meaning.",
+        body: "You've been asked to review a colleague's report. It has good ideas, but it's far too long and the data is out of date. How do you say that without demoralising them? Constructive feedback is specific, balanced and focused on the work, not the person. Start with genuine positives (What works really well is... / I particularly liked...). Frame problems tentatively and specifically: I wonder if... / It might be worth... / One thing you could consider is... Focus on impact: The length may make it harder for the board to find the key points. End with support and next steps: Happy to talk it through. Avoid absolutes (always, never, terrible) and a 'but' straight after praise: 'and' or a new sentence works better.",
         examples: [
-          { en: "It was the rain that ruined the trip." },
-          { en: "What surprised me was her honesty." },
-          { en: "It's you that I trust." }
+          { en: "What works really well is the clear structure of your argument." },
+          { en: "It might be worth cutting the introduction to half a page." },
+          { en: "I wonder if the 2019 figures still reflect the market." },
+          { en: "Overall, it's a strong draft, and I'm happy to talk it through on Thursday." }
+        ],
+        sections: [
+          {
+            kind: "intro",
+            body: "You've been asked to review a colleague's report. It has good ideas, but it's far too long and the data is out of date. How do you say that without demoralising them? Constructive feedback is specific, balanced and focused on the work, not the person."
+          },
+          {
+            kind: "regla",
+            body: "Start with genuine positives (What works really well is... / I particularly liked...). Frame problems tentatively and specifically: I wonder if... / It might be worth... / One thing you could consider is... Focus on impact: The length may make it harder for the board to find the key points. End with support and next steps: Happy to talk it through. Avoid absolutes (always, never, terrible) and a 'but' straight after praise: 'and' or a new sentence works better."
+          },
+          {
+            kind: "vocab",
+            items: [
+              { en: "constructive", ipa: "kənˈstrʌktɪv", es: "intended to help or improve" },
+              { en: "feedback", ipa: "ˈfiːdbæk", es: "comments on how well someone has done something" },
+              { en: "demoralise", ipa: "dɪˈmɒrəlaɪz", es: "make someone lose confidence" },
+              { en: "specific", ipa: "spəˈsɪfɪk", es: "clear and exact" },
+              { en: "actionable", ipa: "ˈækʃənəbəl", es: "able to be acted on" },
+              { en: "overlook", ipa: "ˌəʊvəˈlʊk", es: "fail to notice" },
+              { en: "streamline", ipa: "ˈstriːmlaɪn", es: "make simpler and more efficient" },
+              { en: "digest", ipa: "daɪˈdʒest", es: "take in and understand information" }
+            ]
+          },
+          {
+            kind: "expresiones",
+            items: [
+              { en: "What works really well is...", es: "highlight a strength" },
+              { en: "It might be worth -ing...", es: "suggest an improvement" },
+              { en: "I wonder if we could...", es: "a soft, collaborative suggestion" },
+              { en: "Happy to talk it through.", es: "offer support" }
+            ]
+          },
+          {
+            kind: "ejemplos",
+            items: [
+              { en: "What works really well is the clear structure of your argument." },
+              { en: "It might be worth cutting the introduction to half a page." },
+              { en: "I wonder if the 2019 figures still reflect the market." },
+              { en: "Overall, it's a strong draft, and I'm happy to talk it through on Thursday." }
+            ]
+          },
+          {
+            kind: "errores",
+            items: [
+              { no: "Your report is terrible and too long.", si: "The report could be more concise.", pq: "Criticise the work, not the person, and avoid extreme words." },
+              {
+                no: "Good job, but the data is wrong.", si: "The analysis is strong, and updating the data would make it even more convincing.",
+                pq: "'But' cancels the praise; link with 'and' and make the point actionable."
+              },
+              { no: "You always miss deadlines.", si: "The last two reports arrived after the deadline. Is there anything that would help?", pq: "Be specific and avoid 'always' and 'never'." }
+            ]
+          },
+          { kind: "resumen", body: "Positive first → specific, tentative suggestion (It might be worth... / I wonder if...) → focus on impact → offer support." },
+          { kind: "puente", body: "Write feedback that people actually want to receive." }
         ]
       },
       exercises: [
-        { type: "multiple_choice", question: "Choose the cleft sentence emphasising 'Maria'.", options: ["Maria called me.", "It was Maria who called me.", "Maria, she called me."],
-          correctIndex: 1, explanation: "It + be + X + who/that... is the cleft structure." },
-        { type: "fill_blank", sentence: "___ I really want is some peace and quiet.", answers: ["What"],
-          hint: "A cleft with 'What'.", explanation: "What I want is... (a cleft with What)." },
-        { type: "word_order", words: ["It", "was", "music", "that", "saved", "me"],
-          correctOrder: ["It", "was", "music", "that", "saved", "me"], hint: "It + was + X + that..." },
-        { type: "true_false", statement: "Cleft sentences are used to add emphasis.", answer: true,
-          explanation: "Yes, they highlight a specific part of the sentence." },
-        { type: "translate", prompt: "Emphasise it with a 'What' cleft: I need a holiday.",
-          answers: ["what i need is a holiday", "what i need is a vacation", "what i need are holidays"],
-          explanation: "What I need is a holiday." }
+        {
+          type: "reading", title: "Feedback on a draft",
+          passage: "Hi Lena,\n\nThanks for sharing the draft. What works really well is the case study in section 2: it brings the problem to life.\n\nA couple of thoughts. At 30 pages, the report might be hard for the board to digest, so it might be worth moving the technical detail to an appendix. I also wonder if the 2019 market figures still reflect the current situation; updated numbers would make your argument even stronger.\n\nOverall, it's a strong piece of work. Happy to talk it through on Thursday if that helps.\n\nBest,\nMarco",
+          questions: [
+            { q: "What does Marco praise?", options: ["The case study", "The length of the report", "The 2019 figures"], correctIndex: 0, explanation: "What works really well is the case study in section 2." },
+            {
+              q: "What does Marco suggest about the technical detail?", options: ["Moving it to an appendix", "Deleting it completely", "Expanding it"], correctIndex: 0,
+              explanation: "...it might be worth moving the technical detail to an appendix."
+            },
+            { q: "What is the overall tone?", options: ["Supportive and constructive", "Angry and critical", "Indifferent"], correctIndex: 0, explanation: "Praise, tentative suggestions and an offer of help." }
+          ]
+        },
+        {
+          type: "categorize", instruction: "Constructive or destructive?",
+          buckets: [{ id: "con", label: "Constructive" }, { id: "des", label: "Destructive" }],
+          items: [
+            { t: "It might be worth adding a summary.", bucket: "con" },
+            { t: "What works really well is the opening.", bucket: "con" },
+            { t: "I wonder if the chart could be simpler.", bucket: "con" },
+            { t: "This is a mess.", bucket: "des" },
+            { t: "You never listen to feedback.", bucket: "des" },
+            { t: "Nice, but it's all wrong.", bucket: "des" }
+          ]
+        },
+        {
+          type: "multiple_choice", question: "Which is the best way to point out a problem?",
+          options: ["One thing you could consider is shortening section 3.", "Section 3 is far too long, as usual.", "Why is section 3 so boring?"], correctIndex: 0,
+          explanation: "Tentative, specific and actionable."
+        },
+        {
+          type: "matching", instruction: "Match each word with its meaning.",
+          pairs: [
+            { l: "constructive", r: "intended to help or improve" },
+            { l: "actionable", r: "able to be acted on" },
+            { l: "demoralise", r: "make someone lose confidence" },
+            { l: "overlook", r: "fail to notice" },
+            { l: "streamline", r: "make simpler and more efficient" }
+          ]
+        },
+        { type: "fill_blank", sentence: "It might be ___ moving the details to an appendix.", answers: ["worth"], hint: "It might be ___ + -ing", explanation: "It might be worth moving..." },
+        {
+          type: "listening",
+          text: "Overall, it's a strong draft, and I think a shorter introduction would make it even better.", question: "What does the speaker think?",
+          options: ["The draft is good but could be improved", "The draft should be rewritten", "The introduction is perfect"], correctIndex: 0
+        },
+        { type: "speak", text: "What works really well is the clear structure. It might be worth shortening the introduction." },
+        {
+          type: "translate",
+          prompt: "Soften this criticism, starting with \"It might be worth\": \"Cut the introduction.\"",
+          answers: ["it might be worth cutting the introduction", "it might be worth shortening the introduction", "it might be worth cutting down the introduction"],
+          explanation: "It might be worth cutting the introduction."
+        }
       ]
     },
 
@@ -628,7 +1406,26 @@ window.VESPER_EXPANSION2 = (function () {
         { type: "true_false", statement: "The author thinks the apps are useless.", answer: false,
           explanation: "\"None of this makes the apps useless.\"" },
         { type: "multiple_choice", question: "'Engineered to be hard to put down' suggests the design is...", options: ["accidental", "intentional", "broken"],
-          correctIndex: 1, explanation: "'engineered' implies it is intentional, designed on purpose." }
+          correctIndex: 1, explanation: "'engineered' implies it is intentional, designed on purpose." },
+        {
+          type: "multiple_choice", question: "\"Advertising revenue\" means...",
+          options: ["money earned from adverts", "the cost of making adverts", "a list of advertisers"], correctIndex: 0, explanation: "revenue = income."
+        },
+        {
+          type: "matching", instruction: "Match each word from the text with its meaning.",
+          pairs: [
+            { l: "deliberately", r: "intentionally, after thinking about it" },
+            { l: "neutral", r: "not supporting any side" },
+            { l: "infinite scroll", r: "content that keeps loading as you scroll" },
+            { l: "revenue", r: "income, especially of a company" }
+          ]
+        },
+        {
+          type: "translate",
+          prompt: "Combine using \"rather than\": \"We should decide when to open apps. We shouldn't let their design decide for us.\"",
+          answers: ["we should decide when to open apps rather than let their design decide for us", "we should decide when to open apps rather than letting their design decide for us"],
+          explanation: "We should decide when to open apps rather than let their design decide for us."
+        }
       ]
     },
 
@@ -684,56 +1481,254 @@ window.VESPER_EXPANSION2 = (function () {
     },
 
     "x2-use-c2-formality": {
-      lessonId: "x2-use-c2-formality", level: "C2", track: "Use of English", topic: "grammar", skill: "use",
-      title: "Register and formality", xpReward: 65, mascotState: "explaining",
-      nextLessonId: "x2-use-c2-inversion",
+      lessonId: "x2-use-c2-formality", level: "C2", track: "Grammar", topic: "grammar", skill: "grammar", tipo: "aprende", title: "Concessive clauses: much as, try as I might", rev: 2, xpReward: 65,
+      mascotState: "explaining", nextLessonId: "x2-use-c2-inversion",
       explanation: {
-        body: "Mastering register is key at C2: moving from informal to formal. 'get' → 'obtain/receive'; 'ask for' → 'request'; 'help' → 'assist'; 'a lot of problems' → 'numerous issues'. Formal register avoids phrasal verbs and contractions.",
+        body: "\"Much as I admire her work, I can't support this project.\" \"Strange as it may seem, the plan worked.\" \"Try as she might, she couldn't open the door.\" These elegant concessive structures express contrast with more style than 'although'. They belong to sophisticated writing and formal speech. Adjective / adverb + as (or though) + subject + verb: Strange as it may seem, ... / Tired though he was, he kept going. Much as + clause (= although ... very much): Much as I'd like to help, I can't. Verb + as + subject + might / may (= however hard...): Try as they might, they couldn't win. However + adjective / adverb + subject + verb: However hard she tried, ... No matter how / what: No matter how carefully you plan, something goes wrong. Don't add 'but' to the main clause: the structure already expresses contrast.",
         examples: [
-          { en: "Informal: I need to get the report.  Formal: I need to obtain the report." },
-          { en: "Informal: Can you help me?  Formal: Could you assist me?" }
+          { en: "Much as I admire her work, I can't support this project." },
+          { en: "Strange as it may seem, the cheaper model performed better." },
+          { en: "Try as he might, he couldn't remember her name." },
+          { en: "The plan was successful, albeit more expensive than expected." }
+        ],
+        sections: [
+          {
+            kind: "intro",
+            body: "\"Much as I admire her work, I can't support this project.\" \"Strange as it may seem, the plan worked.\" \"Try as she might, she couldn't open the door.\" These elegant concessive structures express contrast with more style than 'although'. They belong to sophisticated writing and formal speech."
+          },
+          {
+            kind: "regla",
+            body: "Adjective / adverb + as (or though) + subject + verb: Strange as it may seem, ... / Tired though he was, he kept going. Much as + clause (= although ... very much): Much as I'd like to help, I can't. Verb + as + subject + might / may (= however hard...): Try as they might, they couldn't win. However + adjective / adverb + subject + verb: However hard she tried, ... No matter how / what: No matter how carefully you plan, something goes wrong. Don't add 'but' to the main clause: the structure already expresses contrast."
+          },
+          {
+            kind: "vocab",
+            items: [
+              { en: "concessive", ipa: "kənˈsesɪv", es: "expressing contrast with what is expected" },
+              { en: "much as", es: "although (very much)" },
+              { en: "try as one might", es: "however hard one tries" },
+              { en: "strange as it may seem", es: "although it seems strange" },
+              { en: "notwithstanding", ipa: "ˌnɒtwɪθˈstændɪŋ", es: "despite (formal)" },
+              { en: "albeit", ipa: "ɔːlˈbiːɪt", es: "although (before an adjective or phrase)" },
+              { en: "for all (his faults)", es: "despite (all his faults)" },
+              { en: "no matter how", es: "however much; it makes no difference how" }
+            ]
+          },
+          {
+            kind: "expresiones",
+            items: [
+              { en: "Much as I'd like to, ...", es: "an emphatic, polite refusal" },
+              { en: "Strange as it may seem, ...", es: "introduce a surprising fact" },
+              { en: "Try as I might, ...", es: "describe a failed effort" },
+              { en: "However tempting it may be, ...", es: "resist a temptation" }
+            ]
+          },
+          {
+            kind: "ejemplos",
+            items: [
+              { en: "Much as I admire her work, I can't support this project." },
+              { en: "Strange as it may seem, the cheaper model performed better." },
+              { en: "Try as he might, he couldn't remember her name." },
+              { en: "The plan was successful, albeit more expensive than expected." }
+            ]
+          },
+          {
+            kind: "errores",
+            items: [
+              { no: "As strange it may seem, ...", si: "Strange as it may seem, ...", pq: "The adjective comes first, before as." },
+              { no: "Much as I like him, but I don't trust him.", si: "Much as I like him, I don't trust him.", pq: "Don't add but: much as already shows contrast." },
+              { no: "However I tried hard, I failed.", si: "However hard I tried, I failed.", pq: "However + adjective / adverb comes first." }
+            ]
+          },
+          { kind: "resumen", body: "Adj + as + clause · Much as + clause · Try as + subject + might · However + adj + clause · albeit + adj. Never add 'but' afterwards." },
+          { kind: "puente", body: "Add elegance to your contrasts." }
         ]
       },
       exercises: [
-        { type: "matching", instruction: "Match each informal verb with its formal equivalent.", pairs: [
-          { l: "get", r: "obtain" }, { l: "ask for", r: "request" }, { l: "help", r: "assist" }, { l: "need", r: "require" } ],
-          explanation: "Formal versions of everyday verbs." },
-        { type: "multiple_choice", question: "Which sentence is the most formal?", options: ["Could you please send it at your earliest convenience?", "Can you send it ASAP?", "Send it now!"],
-          correctIndex: 0, explanation: "Polite, with no abbreviations or blunt imperatives." },
-        { type: "categorize", instruction: "Formal or informal register?", buckets: [
-          { id: "f", label: "Formal" }, { id: "i", label: "Informal" } ], items: [
-          { t: "I regret to inform you", bucket: "f" }, { t: "gonna", bucket: "i" }, { t: "furthermore", bucket: "f" }, { t: "kinda", bucket: "i" } ] },
-        { type: "true_false", statement: "Formal English generally avoids contractions like 'don't'.", answer: true,
-          explanation: "Yes, formal register prefers 'do not'." },
-        { type: "translate", prompt: "Pasa a formal: \"Can you help me?\"",
-          answers: ["could you assist me", "could you please assist me", "would you assist me"], explanation: "Could you assist me?" }
+        {
+          type: "multiple_choice", question: "___ as it may seem, the experiment worked on the first attempt.", options: ["Strange", "Strangely", "However strange"], correctIndex: 0,
+          explanation: "Adjective + as + clause: Strange as it may seem."
+        },
+        {
+          type: "find_error",
+          segments: [{ u: "Much as" }, " I enjoy his company, ", { u: "but" }, " I find him ", { u: "exhausting" }, "."],
+          correctIndex: 1, correction: "(delete 'but')", explanation: "Much as already expresses the contrast.", question: "Find the mistake"
+        },
+        { type: "fill_blank", sentence: "Try as she ___, she couldn't persuade the board.", answers: ["might", "may"], hint: "however hard she tried", explanation: "Try as she might, ..." },
+        {
+          type: "categorize", instruction: "Correct or incorrect?",
+          buckets: [{ id: "ok", label: "Correct" }, { id: "wrong", label: "Incorrect" }],
+          items: [
+            { t: "Tired as she was, she kept working.", bucket: "ok" },
+            { t: "However hard I try, I can't do it.", bucket: "ok" },
+            { t: "Much as I'd like to come, I can't.", bucket: "ok" },
+            { t: "As tired she was, she kept working.", bucket: "wrong" },
+            { t: "However I try hard, I can't do it.", bucket: "wrong" },
+            { t: "Much as I'd like to come, but I can't.", bucket: "wrong" }
+          ]
+        },
+        { type: "word_order", words: ["disagree", "Much", "I", "as", "him", "I", "admire"], correctOrder: ["Much", "as", "I", "admire", "him", "I", "disagree"], hint: "Much as + clause, main clause." },
+        {
+          type: "listening", text: "Much as I'd love to join you, I'm afraid I have a deadline tomorrow.", question: "What does the speaker mean?",
+          options: ["They would like to join but can't.", "They don't want to join.", "They will join after the deadline."], correctIndex: 0
+        },
+        {
+          type: "matching", instruction: "Match each structure with its meaning.",
+          pairs: [
+            { l: "Much as I like it, ...", r: "Although I like it a lot, ..." },
+            { l: "Try as I might, ...", r: "However hard I tried, ..." },
+            { l: "Strange as it seems, ...", r: "Although it seems strange, ..." },
+            { l: "..., albeit slowly", r: "..., although slowly" }
+          ]
+        },
+        {
+          type: "translate",
+          prompt: "Rewrite starting with \"Much as\": \"Although I respect your opinion, I disagree.\"",
+          answers: ["much as i respect your opinion i disagree", "much as i respect your opinion i have to disagree", "much as i respect your opinion i must disagree"],
+          explanation: "Much as I respect your opinion, I disagree."
+        },
+        {
+          type: "translate",
+          prompt: "Rewrite starting with \"Try as\": \"However hard they tried, they couldn't find the error.\"",
+          answers: ["try as they might they couldn't find the error", "try as they might they could not find the error", "try as they may they couldn't find the error"],
+          explanation: "Try as they might, they couldn't find the error."
+        }
       ]
     },
 
     "x2-use-c2-inversion": {
-      lessonId: "x2-use-c2-inversion", level: "C2", track: "Use of English", topic: "grammar", skill: "use",
-      title: "Emphatic inversion", xpReward: 65, mascotState: "explaining",
-      nextLessonId: "x2-read-c2-argument",
+      lessonId: "x2-use-c2-inversion", level: "C2", track: "Functional English", topic: "debate", skill: "use", tipo: "aprende", title: "Conceding and countering in debate", rev: 2, xpReward: 65,
+      mascotState: "explaining", nextLessonId: "x2-read-c2-argument",
       explanation: {
-        body: "After negative expressions at the start of a sentence, we invert the subject and the auxiliary: 'Never have I seen...', 'Not only did she win, but...', 'Rarely do we find...'. It gives an emphatic, formal tone.",
+        body: "In a high-level debate, simply disagreeing isn't persuasive. Skilled speakers concede a point first, showing they've understood the other side, and then counter it: \"Granted, the policy is expensive. That said, the cost of doing nothing is far higher.\" This lesson gives you the moves. Concede: Granted, ... / Admittedly, ... / It's true that... / I'll grant you that... / There's some truth in... Counter: That said, ... / Even so, ... / Be that as it may, ... / Nonetheless, ... / This overlooks the fact that... Present the strongest form of the other view first: it makes your counterargument more credible. And don't concede too much: a concession is one step back before a step forward.",
         examples: [
-          { en: "Never have I seen such a mess." },
-          { en: "Not only did he apologise, but he also paid." },
-          { en: "Seldom do we get a second chance." }
+          { en: "Granted, a four-day week may not suit every industry. That said, the trials so far have been remarkably positive." },
+          { en: "Admittedly, the scheme is expensive; nonetheless, the long-term savings are considerable." },
+          { en: "I'll grant you that the data is limited, but it all points in the same direction." },
+          { en: "Be that as it may, the argument overlooks the impact on small businesses." }
+        ],
+        sections: [
+          {
+            kind: "intro",
+            body: "In a high-level debate, simply disagreeing isn't persuasive. Skilled speakers concede a point first, showing they've understood the other side, and then counter it: \"Granted, the policy is expensive. That said, the cost of doing nothing is far higher.\" This lesson gives you the moves."
+          },
+          {
+            kind: "regla",
+            body: "Concede: Granted, ... / Admittedly, ... / It's true that... / I'll grant you that... / There's some truth in... Counter: That said, ... / Even so, ... / Be that as it may, ... / Nonetheless, ... / This overlooks the fact that... Present the strongest form of the other view first: it makes your counterargument more credible. And don't concede too much: a concession is one step back before a step forward."
+          },
+          {
+            kind: "vocab",
+            items: [
+              { en: "concede", ipa: "kənˈsiːd", es: "accept that part of an argument is true" },
+              { en: "counter", ipa: "ˈkaʊntə", es: "reply with an opposing argument" },
+              { en: "granted", ipa: "ˈɡrɑːntɪd", es: "it is true (introducing a concession)" },
+              { en: "admittedly", ipa: "ədˈmɪtɪdli", es: "it must be admitted that" },
+              { en: "be that as it may", es: "even if that is true" },
+              { en: "nonetheless", ipa: "ˌnʌnðəˈles", es: "despite what has just been said" },
+              { en: "overlook", ipa: "ˌəʊvəˈlʊk", es: "fail to consider" },
+              { en: "steelman", ipa: "ˈstiːlmæn", es: "present the strongest version of an opposing view" }
+            ]
+          },
+          {
+            kind: "expresiones",
+            items: [
+              { en: "Granted, ... That said, ...", es: "a concession followed by a counterargument" },
+              { en: "I'll grant you that, but...", es: "a conversational concession" },
+              { en: "Be that as it may, ...", es: "a formal counter" },
+              { en: "That argument overlooks the fact that...", es: "expose a weakness" }
+            ]
+          },
+          {
+            kind: "ejemplos",
+            items: [
+              { en: "Granted, a four-day week may not suit every industry. That said, the trials so far have been remarkably positive." },
+              { en: "Admittedly, the scheme is expensive; nonetheless, the long-term savings are considerable." },
+              { en: "I'll grant you that the data is limited, but it all points in the same direction." },
+              { en: "Be that as it may, the argument overlooks the impact on small businesses." }
+            ]
+          },
+          {
+            kind: "errores",
+            items: [
+              {
+                no: "Granted that the plan is expensive.",
+                si: "Granted, the plan is expensive. / Granted that the plan is expensive, it is still worth it.", pq: "'Granted that...' needs a main clause after it."
+              },
+              { no: "Be that as it might, ...", si: "Be that as it may, ...", pq: "This is a fixed expression." },
+              {
+                no: "Admittedly, the data is limited. Admittedly, we should act.", si: "Admittedly, the data is limited. Nevertheless, we should act.",
+                pq: "Admittedly introduces a concession; you need a contrast word to counter."
+              }
+            ]
+          },
+          { kind: "resumen", body: "Concede (Granted / Admittedly / I'll grant you that) → counter (That said / Be that as it may / Nonetheless / This overlooks...). Steelman first, then strike." },
+          { kind: "puente", body: "Take the floor and win the argument fairly." }
         ]
       },
       exercises: [
-        { type: "multiple_choice", question: "Choose the correct inversion.", options: ["Never I have seen this", "Never have I seen this", "Never seen I have this"],
-          correctIndex: 1, explanation: "A negative at the start → auxiliary + subject: Never have I seen." },
-        { type: "fill_blank", sentence: "Not only ___ she sing, but she also dances. (auxiliar)", answers: ["does"],
-          hint: "present simple → does.", explanation: "Not only does she sing..." },
-        { type: "word_order", words: ["Rarely", "do", "we", "see", "such", "talent"],
-          correctOrder: ["Rarely", "do", "we", "see", "such", "talent"], hint: "Rarely + auxiliary + subject." },
-        { type: "true_false", statement: "Inversion after a negative adverbial makes the sentence more emphatic.", answer: true,
-          explanation: "Yes, it adds emphasis and formality." },
-        { type: "translate", prompt: "Rewrite with inversion, starting 'Never…': I have never seen anything like this.",
-          answers: ["never have i seen anything like this", "never had i seen anything like this", "never have i seen such a thing"],
-          explanation: "Never have I seen anything like this." }
+        {
+          type: "categorize", instruction: "Concession or counter?",
+          buckets: [{ id: "concede", label: "Concession" }, { id: "counter", label: "Counter" }],
+          items: [
+            { t: "Granted, ...", bucket: "concede" },
+            { t: "Admittedly, ...", bucket: "concede" },
+            { t: "I'll grant you that...", bucket: "concede" },
+            { t: "There's some truth in that.", bucket: "concede" },
+            { t: "That said, ...", bucket: "counter" },
+            { t: "Be that as it may, ...", bucket: "counter" },
+            { t: "Nonetheless, ...", bucket: "counter" },
+            { t: "This overlooks the fact that...", bucket: "counter" }
+          ]
+        },
+        {
+          type: "multiple_choice",
+          question: "Admittedly, nuclear power carries risks. ___, it produces almost no carbon emissions.", options: ["Nonetheless", "Granted", "Admittedly"], correctIndex: 0,
+          explanation: "After the concession, a counter word: nonetheless."
+        },
+        {
+          type: "listening",
+          text: "I'll grant you that the policy is unpopular. Even so, it's the only realistic option we have.", question: "What is the speaker's position?",
+          options: ["They support the policy despite its unpopularity.", "They oppose the policy.", "They think the policy is popular."], correctIndex: 0
+        },
+        {
+          type: "find_error",
+          segments: [{ u: "Be that as it might" }, ", the proposal ", { u: "overlooks" }, " ", { u: "several" }, " key risks."],
+          correctIndex: 0, correction: "Be that as it may", explanation: "The fixed expression is 'Be that as it may'.", question: "Find the mistake"
+        },
+        {
+          type: "matching", instruction: "Match each word with its meaning.",
+          pairs: [
+            { l: "concede", r: "accept that part of an argument is true" },
+            { l: "overlook", r: "fail to consider" },
+            { l: "steelman", r: "present the strongest version of an opposing view" },
+            { l: "nonetheless", r: "despite what has just been said" },
+            { l: "admittedly", r: "it must be admitted that" }
+          ]
+        },
+        {
+          type: "reading", title: "From a debate on remote work",
+          passage: "Granted, remote work has made some teams feel isolated, and admittedly, not every job can be done from a kitchen table. Be that as it may, the critics overlook the fact that commuting costs the average worker over two hundred hours a year.\n\nMoreover, several studies suggest that productivity has, if anything, increased. That said, I would not argue for a purely remote model; the strongest case is for flexibility.",
+          questions: [
+            {
+              q: "What does the speaker concede?",
+              options: ["Some remote teams feel isolated.", "Commuting is cheap.", "Productivity has fallen."], correctIndex: 0, explanation: "Granted, remote work has made some teams feel isolated."
+            },
+            {
+              q: "What is the speaker's final position?",
+              options: ["Flexible working is best.", "Everyone should work remotely.", "Everyone should return to the office."], correctIndex: 0, explanation: "...the strongest case is for flexibility."
+            },
+            {
+              q: "What is the function of \"Be that as it may\"?",
+              options: ["To introduce a counterargument", "To add another concession", "To conclude the speech"], correctIndex: 0, explanation: "It turns from the concessions to the counterargument."
+            }
+          ]
+        },
+        { type: "speak", text: "Granted, the plan is expensive. That said, the cost of doing nothing is far higher." },
+        {
+          type: "translate",
+          prompt: "Combine using \"Admittedly ... nonetheless\": \"The course is difficult. It is worth doing.\"",
+          answers: ["admittedly the course is difficult nonetheless it is worth doing", "admittedly the course is difficult but nonetheless it is worth doing", "admittedly the course is difficult nonetheless it's worth doing"],
+          explanation: "Admittedly, the course is difficult; nonetheless, it is worth doing."
+        }
       ]
     },
 
@@ -758,7 +1753,25 @@ window.VESPER_EXPANSION2 = (function () {
         { type: "true_false", statement: "The author argues we should return to the past.", answer: false,
           explanation: "\"To question progress is not to long for the past\"." },
         { type: "multiple_choice", question: "The author's attitude to 'progress' is best described as...", options: ["uncritical praise of every new idea", "thoughtful scepticism", "total rejection"],
-          correctIndex: 1, explanation: "The writer questions progress without rejecting it: thoughtful scepticism." }
+          correctIndex: 1, explanation: "The writer questions progress without rejecting it: thoughtful scepticism." },
+        {
+          type: "multiple_choice", question: "\"Change and improvement are not synonyms\" means...",
+          options: ["change does not always make things better", "change and improvement are opposites", "improvement is impossible"], correctIndex: 0, explanation: "Change can be neutral or even negative."
+        },
+        {
+          type: "matching", instruction: "Match each word from the text with its meaning.",
+          pairs: [
+            { l: "synonym", r: "a word with the same meaning as another" },
+            { l: "sceptic", r: "a person who questions accepted ideas" },
+            { l: "ally", r: "someone who supports you" },
+            { l: "stumble into", r: "arrive somewhere by accident, without planning" }
+          ]
+        },
+        {
+          type: "find_error",
+          segments: ["Every new technology ", { u: "solve" }, " certain problems while quietly ", { u: "creating" }, " ", { u: "others" }, "."],
+          correctIndex: 0, correction: "solves", explanation: "Every + singular verb: every technology solves.", question: "Find the mistake"
+        }
       ]
     },
 

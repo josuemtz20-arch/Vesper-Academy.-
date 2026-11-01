@@ -303,31 +303,115 @@ window.VESPER_CONTENT_PACK = (function () {
     },
 
     "gram-b1-present-perfect": {
-      lessonId: "gram-b1-present-perfect", level: "B1", track: "Core Grammar", topic: "grammar", skill: "grammar",
-      title: "Present perfect: for / since / ever", xpReward: 48, mascotState: "explaining",
-      nextLessonId: "gram-b2-conditionals",
+      lessonId: "gram-b1-present-perfect", level: "B1", track: "Grammar", topic: "grammar", skill: "grammar", tipo: "aprende", title: "Present perfect or past simple?", rev: 2, xpReward: 48,
+      mascotState: "explaining", nextLessonId: "gram-b2-conditionals",
       explanation: {
-        body: "Present perfect = have/has + past participle. We use it for experiences (Have you ever...?) and for something that started in the past and continues now. Use for + a period of time and since + a starting point.",
-        examples: [
-          { en: "I have lived here for five years." },
-          { en: "She has worked here since 2020." },
-          { en: "Have you ever been to Japan?" }
+        body: "Carmen has worked in three countries. She moved to Manchester in March. Why do these two sentences use different tenses? The key is time: is it finished, or connected to now? Past simple = a finished time, stated or clear from context: I moved here in March. I saw her yesterday. Present perfect (have / has + past participle) = no specific time, connected to now: I've worked in three countries (experience). I've lost my badge (result now). She's lived here since March (still true). yesterday, last week, in 2020, ago → past simple. ever, never, yet, already, just, so far, since → present perfect. Questions with When...? → past simple.",
+        examples: [{ en: "Have you ever been to Scotland, Carmen?" }, { en: "No, I haven't. But I went to London last weekend." }, { en: "Did you like it?" }, { en: "I loved it! I've already booked another trip." }],
+        sections: [
+          {
+            kind: "intro",
+            body: "Carmen has worked in three countries. She moved to Manchester in March. Why do these two sentences use different tenses? The key is time: is it finished, or connected to now?"
+          },
+          {
+            kind: "regla",
+            body: "Past simple = a finished time, stated or clear from context: I moved here in March. I saw her yesterday. Present perfect (have / has + past participle) = no specific time, connected to now: I've worked in three countries (experience). I've lost my badge (result now). She's lived here since March (still true). yesterday, last week, in 2020, ago → past simple. ever, never, yet, already, just, so far, since → present perfect. Questions with When...? → past simple."
+          },
+          {
+            kind: "vocab",
+            items: [
+              { en: "ever", ipa: "ˈevə", es: "at any time in your life" },
+              { en: "never", ipa: "ˈnevə", es: "at no time" },
+              { en: "already", ipa: "ɔːlˈredi", es: "before now, sooner than expected" },
+              { en: "yet", ipa: "jet", es: "up to now (in questions and negatives)" },
+              { en: "just", ipa: "dʒʌst", es: "a very short time ago" },
+              { en: "ago", ipa: "əˈɡəʊ", es: "before now (with a past time)" },
+              { en: "so far", es: "up to this moment" },
+              { en: "recently", ipa: "ˈriːsəntli", es: "not long ago" }
+            ]
+          },
+          {
+            kind: "expresiones",
+            items: [
+              { en: "Have you ever...?", es: "ask about life experiences" },
+              { en: "I've just...", es: "share very recent news" },
+              { en: "So far, so good.", es: "everything is fine up to now" },
+              { en: "When did you...?", es: "ask for the specific time (past simple)" }
+            ]
+          },
+          {
+            kind: "ejemplos",
+            items: [
+              { en: "Daniel: Have you ever been to Scotland, Carmen?" },
+              { en: "Carmen: No, I haven't. But I went to London last weekend." },
+              { en: "Daniel: Did you like it?" },
+              { en: "Carmen: I loved it! I've already booked another trip." }
+            ]
+          },
+          {
+            kind: "errores",
+            items: [
+              { no: "I have seen him yesterday.", si: "I saw him yesterday.", pq: "With a finished time (yesterday), use the past simple." },
+              { no: "When have you arrived?", si: "When did you arrive?", pq: "When asks for a specific time, so use the past simple." },
+              { no: "I live here since 2022.", si: "I've lived here since 2022.", pq: "For a situation that started in the past and continues, use the present perfect with since / for." }
+            ]
+          },
+          { kind: "resumen", body: "Finished time → past simple (yesterday, ago, in 2020). No time or connected to now → present perfect (ever, yet, already, just, since, for)." },
+          { kind: "puente", body: "Find out about Carmen's year in Manchester." }
         ]
       },
       exercises: [
-        { type: "multiple_choice", question: "Choose: I have known him ___ ten years.", options: ["since", "for", "ago"], correctIndex: 1, explanation: "for + a period of time (ten years)." },
-        { type: "multiple_choice", question: "Choose: She has lived here ___ 2019.", options: ["for", "during", "since"], correctIndex: 2, explanation: "since + a starting point (2019)." },
-        { type: "fill_blank", sentence: "Have you ___ eaten sushi? (alguna vez)", answers: ["ever"], hint: "experience: Have you ever...?", explanation: "Have you ever eaten...?" },
-        { type: "multiple_choice", question: "Participle of \"see\":", options: ["seen", "seed", "saw"], correctIndex: 0, explanation: "see - saw - seen." },
-        { type: "categorize", instruction: "for or since?", buckets: [
-          { id: "for", label: "for" }, { id: "since", label: "since" }
-        ], items: [
-          { t: "three weeks", bucket: "for" }, { t: "Monday", bucket: "since" },
-          { t: "a long time", bucket: "for" }, { t: "2010", bucket: "since" }
-        ] },
-        { type: "true_false", statement: "\"I have finished\" describes a completed action with a present result.", answer: true, explanation: "The present perfect connects a past action with now." },
-        { type: "translate", prompt: "Rewrite using 'for': I moved here five years ago and I still live here.",
-          answers: ["i have lived here for five years", "i've lived here for five years"], explanation: "I have lived here for five years." }
+        {
+          type: "reading", title: "Carmen's year",
+          passage: "Carmen moved to Manchester in March. Since then, she has made a lot of new friends, and she has learned to love the rain... almost.\n\nLast month she went to Edinburgh with Daniel and Tom. She hasn't been to Wales yet, but she has already planned a trip there for the spring.",
+          questions: [
+            { q: "When did Carmen move to Manchester?", options: ["In March", "Last month", "In the spring"], correctIndex: 0, explanation: "Carmen moved to Manchester in March (finished time → past simple)." },
+            {
+              q: "Which statement is true?",
+              options: ["She hasn't visited Wales so far.", "She went to Wales last month.", "She has never left Manchester."], correctIndex: 0, explanation: "She hasn't been to Wales yet."
+            },
+            {
+              q: "Why does the text say \"has made a lot of new friends\"?",
+              options: ["It's a result that continues up to now.", "It happened at a specific finished time.", "It's a future plan."], correctIndex: 0,
+              explanation: "Present perfect: connected to now (since March)."
+            }
+          ]
+        },
+        {
+          type: "categorize", instruction: "Which tense goes with each time expression?",
+          buckets: [{ id: "ps", label: "Past simple" }, { id: "pp", label: "Present perfect" }],
+          items: [
+            { t: "yesterday", bucket: "ps" },
+            { t: "two weeks ago", bucket: "ps" },
+            { t: "in 2019", bucket: "ps" },
+            { t: "last Friday", bucket: "ps" },
+            { t: "ever", bucket: "pp" },
+            { t: "yet", bucket: "pp" },
+            { t: "so far", bucket: "pp" },
+            { t: "since March", bucket: "pp" }
+          ]
+        },
+        {
+          type: "multiple_choice", question: "Oh no! I ___ my keys. I can't get into my flat!", options: ["'ve lost", "was losing", "have been lose"], correctIndex: 0,
+          explanation: "A past action with a result now: I've lost my keys."
+        },
+        {
+          type: "find_error",
+          segments: ["We ", { u: "have visited" }, " Rome ", { u: "two years ago" }, " and ", { u: "loved" }, " it."],
+          correctIndex: 0, correction: "visited",
+          explanation: "With 'two years ago' (a finished time), use the past simple: We visited Rome.", question: "Find the mistake"
+        },
+        { type: "fill_blank", sentence: "___ you ever tried Mexican street food?", answers: ["Have"], hint: "Life experience question.", explanation: "Have you ever tried...?" },
+        {
+          type: "listening", text: "I've just finished the report. I sent it to Priya five minutes ago.", question: "When did the speaker send the report?", options: ["Five minutes ago", "Yesterday", "Not yet"],
+          correctIndex: 0
+        },
+        { type: "word_order", words: ["yet", "Have", "report", "you", "the", "finished"], correctOrder: ["Have", "you", "finished", "the", "report", "yet"], hint: "yet goes at the end." },
+        {
+          type: "translate", prompt: "Rewrite using FOR: \"Carmen started working here six months ago.\"",
+          answers: ["carmen has worked here for six months", "carmen has been working here for six months", "carmen has worked here for 6 months", "carmen has been working here for 6 months"],
+          explanation: "Carmen has worked here for six months."
+        }
       ]
     },
 
@@ -476,30 +560,95 @@ window.VESPER_CONTENT_PACK = (function () {
 
     /* ===================== USE OF ENGLISH ===================== */
     "use-a2-prepositions": {
-      lessonId: "use-a2-prepositions", level: "A2", track: "Uso del inglés", topic: "dailylife", skill: "use",
-      title: "Preposiciones de tiempo: in / on / at", xpReward: 40, mascotState: "explaining",
+      lessonId: "use-a2-prepositions", level: "A2", track: "Expresiones", topic: "phone", skill: "use", tipo: "aprende", title: "Llamar por teléfono", rev: 2, xpReward: 40, mascotState: "explaining",
       nextLessonId: "use-b1-phrasal-verbs",
       explanation: {
-        body: "at para horas (at 7), on para días y fechas (on Monday), in para meses, años y partes del día (in July, in the morning). (in/on/at de tiempo.)",
+        body: "Episodio 6 · Sam llama al restaurante donde quiere trabajar, pero el gerente no está. Aprende las frases clave para hablar por teléfono. Al llamar te presentas con this is: Hello, this is Sam (no \"I am Sam\"). Para pedir a alguien: Can I speak to Mr Lee, please? Si no está: I'm afraid he isn't here. Can I take a message? Tú puedes decir: Can I leave a message? / Could you ask him to call me back?",
         examples: [
-          { en: "The class starts at nine.", es: "La clase empieza a las nueve." },
-          { en: "I was born in 1998.", es: "Nací en 1998." },
-          { en: "We meet on Friday.", es: "Nos vemos el viernes." }
+          { en: "Good morning, Luigi's Restaurant.", es: "Buenos días, Restaurante Luigi's." },
+          { en: "Hello, this is Sam Green. Can I speak to Mr Lee, please?", es: "Hola, habla Sam Green. ¿Puedo hablar con el señor Lee, por favor?" },
+          { en: "I'm afraid he isn't here. Can I take a message?", es: "Me temo que no está. ¿Quiere dejar un recado?" },
+          { en: "Yes, please. Can you ask him to call me back?", es: "Sí, por favor. ¿Le puede pedir que me devuelva la llamada?" }
+        ],
+        sections: [
+          { kind: "intro", body: "Episodio 6 · Sam llama al restaurante donde quiere trabajar, pero el gerente no está. Aprende las frases clave para hablar por teléfono." },
+          {
+            kind: "regla",
+            body: "Al llamar te presentas con this is: Hello, this is Sam (no \"I am Sam\"). Para pedir a alguien: Can I speak to Mr Lee, please? Si no está: I'm afraid he isn't here. Can I take a message? Tú puedes decir: Can I leave a message? / Could you ask him to call me back?"
+          },
+          {
+            kind: "vocab",
+            items: [
+              { en: "call", ipa: "kɔːl", es: "llamar" },
+              { en: "call back", ipa: "kɔːl bæk", es: "devolver la llamada" },
+              { en: "message", ipa: "ˈmesɪdʒ", es: "mensaje / recado" },
+              { en: "leave a message", es: "dejar un recado" },
+              { en: "take a message", es: "tomar un recado" },
+              { en: "hold on", ipa: "həʊld ɒn", es: "esperar (sin colgar)" },
+              { en: "hang up", ipa: "hæŋ ʌp", es: "colgar" },
+              { en: "phone number", ipa: "fəʊn ˈnʌmbə", es: "número de teléfono" }
+            ]
+          },
+          {
+            kind: "expresiones",
+            items: [
+              { en: "Hello, this is Sam.", es: "Hola, habla Sam." },
+              { en: "Can I speak to..., please?", es: "¿Puedo hablar con..., por favor?" },
+              { en: "Hold on a moment, please.", es: "Un momento, por favor." },
+              { en: "Can you ask him to call me back?", es: "¿Le puede pedir que me devuelva la llamada?" }
+            ]
+          },
+          {
+            kind: "ejemplos",
+            items: [
+              { en: "Waitress: Good morning, Luigi's Restaurant.", es: "Mesera: Buenos días, Restaurante Luigi's." },
+              { en: "Sam: Hello, this is Sam Green. Can I speak to Mr Lee, please?", es: "Sam: Hola, habla Sam Green. ¿Puedo hablar con el señor Lee, por favor?" },
+              { en: "Waitress: I'm afraid he isn't here. Can I take a message?", es: "Mesera: Me temo que no está. ¿Quiere dejar un recado?" },
+              { en: "Sam: Yes, please. Can you ask him to call me back?", es: "Sam: Sí, por favor. ¿Le puede pedir que me devuelva la llamada?" }
+            ]
+          },
+          {
+            kind: "errores",
+            items: [
+              { no: "Hello, I am Sam. (al teléfono)", si: "Hello, this is Sam.", pq: "Al teléfono te presentas con this is." },
+              { no: "Wait me a moment.", si: "Hold on a moment, please.", pq: "wait no lleva me; al teléfono se dice hold on." },
+              { no: "Can you call me again back?", si: "Can you call me back?", pq: "Devolver la llamada = call back." }
+            ]
+          },
+          { kind: "resumen", body: "Hello, this is... · Can I speak to...? · I'm afraid he / she isn't here · Can I take / leave a message? · Could you ask him / her to call me back?" },
+          { kind: "puente", body: "Ahora haz tú la llamada de Sam." }
         ]
       },
       exercises: [
-        { type: "multiple_choice", question: "Choose: The meeting is ___ Monday.", options: ["in", "on", "at"], correctIndex: 1, explanation: "on + días de la semana." },
-        { type: "multiple_choice", question: "Choose: I get up ___ 6:30.", options: ["at", "in", "on"], correctIndex: 0, explanation: "at + hora." },
-        { type: "fill_blank", sentence: "My birthday is ___ June.", answers: ["in"], hint: "in + meses.", explanation: "in June." },
-        { type: "categorize", instruction: "¿in, on o at?", buckets: [
-          { id: "in", label: "in" }, { id: "on", label: "on" }, { id: "at", label: "at" }
-        ], items: [
-          { t: "the morning", bucket: "in" }, { t: "Sunday", bucket: "on" },
-          { t: "night", bucket: "at" }, { t: "2025", bucket: "in" }
-        ] },
-        { type: "true_false", statement: "We say \"at the weekend\" (British English).", answer: true, explanation: "En inglés británico: at the weekend." },
-        { type: "translate", prompt: "Traduce: \"Nos vemos el viernes.\"",
-          answers: ["see you on friday", "we meet on friday", "i'll see you on friday"], explanation: "See you on Friday." }
+        {
+          type: "reading", title: "A phone call",
+          passage: "Waitress: Good morning, Luigi's Restaurant.\nSam: Hello, this is Sam Green. Can I speak to Mr Lee, please?\nWaitress: I'm afraid he isn't here. Can I take a message?\nSam: Yes, please. Can you ask him to call me back? It's about the job.\nWaitress: Of course. What's your number?\nSam: It's 555 0192. Thanks. Bye!",
+          questions: [
+            { q: "¿Con quién quiere hablar Sam?", options: ["Con el señor Lee", "Con la mesera", "Con Mia"], correctIndex: 0, explanation: "Can I speak to Mr Lee?" },
+            { q: "¿Por qué llama Sam?", options: ["Por un trabajo", "Para reservar una mesa", "Para quejarse"], correctIndex: 0, explanation: "It's about the job." }
+          ]
+        },
+        {
+          type: "multiple_choice", question: "Contestas el teléfono de la oficina y tu jefa no está. Dices:",
+          options: ["I'm afraid she isn't here. Can I take a message?", "She is not. Bye.", "Call later!"], correctIndex: 0, explanation: "Es la forma cortés y completa."
+        },
+        {
+          type: "matching", instruction: "Une cada frase con su significado.",
+          pairs: [
+            { l: "Hold on a moment.", r: "Un momento." },
+            { l: "Can I leave a message?", r: "¿Puedo dejar un recado?" },
+            { l: "I'll call you back.", r: "Te devuelvo la llamada." },
+            { l: "Who's calling, please?", r: "¿De parte de quién?" }
+          ]
+        },
+        { type: "fill_blank", sentence: "Hello, ___ is Sam. Can I speak to Mr Lee?", answers: ["this"], hint: "Al teléfono te presentas con...", explanation: "Hello, this is Sam." },
+        { type: "listening", text: "Hi, it's Ana. Please call me back on 555 0148.", question: "¿Cuál es su número?", options: ["555 0148", "555 0184", "555 1048"], correctIndex: 0 },
+        { type: "word_order", words: ["message", "Can", "a", "I", "leave"], correctOrder: ["Can", "I", "leave", "a", "message"], hint: "¿Puedo dejar un recado?" },
+        { type: "speak", text: "Hello, this is Sam. Can I speak to Mr Lee, please?", es: "Hola, habla Sam. ¿Puedo hablar con el señor Lee, por favor?" },
+        {
+          type: "translate", prompt: "Traduce: \"¿Puedo hablar con Ana, por favor?\"",
+          answers: ["can i speak to ana please", "could i speak to ana please", "can i talk to ana please", "may i speak to ana please"], explanation: "Can I speak to Ana, please?"
+        }
       ]
     },
 
@@ -804,53 +953,333 @@ window.VESPER_CONTENT_PACK = (function () {
     },
 
     "voc-c1-idioms": {
-      lessonId: "voc-c1-idioms", level: "C1", track: "Vocabulary", topic: "society", skill: "vocab",
-      title: "Common idioms", xpReward: 54, mascotState: "explaining",
-      explanation: { body: "Idioms can't be translated word for word: \"break the ice\" (make people feel relaxed at the start), \"a piece of cake\" (very easy), \"hit the books\" (start studying hard).",
-        examples: [{ en: "The exam was a piece of cake." }] },
+      lessonId: "voc-c1-idioms", level: "C1", track: "Vocabulary", topic: "work", skill: "vocab", tipo: "aprende", title: "Phrasal verbs for work and discussion", rev: 2, xpReward: 54, mascotState: "explaining",
+      explanation: {
+        body: "At C1, phrasal verbs move beyond 'get up' and 'turn on'. In meetings and emails you'll hear people iron out problems, come up against obstacles and brush up on their skills. These verbs are frequent, natural and often more vivid than their formal equivalents. Many have a formal synonym: iron out = resolve; come up against = encounter; brush up on = revise; put forward = propose; follow up on = pursue; play down = minimise; rule out = exclude; bring forward = move to an earlier date. Three-part verbs keep both particles together before the object: brush up on your French. Separable verbs can split with a noun but must split with a pronoun: rule it out (NOT rule out it).",
+        examples: [
+          { en: "We still need to iron out a few details before we sign." },
+          { en: "The project came up against strong local opposition." },
+          { en: "I'm brushing up on my German before the trip to Berlin." },
+          { en: "The meeting has been brought forward to Monday." }
+        ],
+        sections: [
+          {
+            kind: "intro",
+            body: "At C1, phrasal verbs move beyond 'get up' and 'turn on'. In meetings and emails you'll hear people iron out problems, come up against obstacles and brush up on their skills. These verbs are frequent, natural and often more vivid than their formal equivalents."
+          },
+          {
+            kind: "regla",
+            body: "Many have a formal synonym: iron out = resolve; come up against = encounter; brush up on = revise; put forward = propose; follow up on = pursue; play down = minimise; rule out = exclude; bring forward = move to an earlier date. Three-part verbs keep both particles together before the object: brush up on your French. Separable verbs can split with a noun but must split with a pronoun: rule it out (NOT rule out it)."
+          },
+          {
+            kind: "vocab",
+            items: [
+              { en: "iron out", es: "solve small problems or differences" },
+              { en: "come up against", es: "face a difficulty" },
+              { en: "brush up on", es: "improve a skill you haven't used for a while" },
+              { en: "put forward", es: "suggest an idea for discussion" },
+              { en: "follow up on", es: "take further action on something" },
+              { en: "play down", es: "make something seem less important" },
+              { en: "rule out", es: "decide that something is not possible" },
+              { en: "bring forward", es: "move to an earlier date or time" }
+            ]
+          },
+          {
+            kind: "expresiones",
+            items: [
+              { en: "We need to iron out a few details.", es: "solve minor problems" },
+              { en: "Let's not rule anything out yet.", es: "keep options open" },
+              { en: "I'll follow up on that tomorrow.", es: "promise further action" },
+              { en: "They're playing down the risks.", es: "someone is minimising a problem" }
+            ]
+          },
+          {
+            kind: "ejemplos",
+            items: [
+              { en: "We still need to iron out a few details before we sign." },
+              { en: "The project came up against strong local opposition." },
+              { en: "I'm brushing up on my German before the trip to Berlin." },
+              { en: "The meeting has been brought forward to Monday." }
+            ]
+          },
+          {
+            kind: "errores",
+            items: [
+              { no: "We need to rule out it.", si: "We need to rule it out.", pq: "With a pronoun, separable phrasal verbs must split." },
+              { no: "I need to brush up my skills on.", si: "I need to brush up on my skills.", pq: "In three-part verbs, keep both particles together before the object." },
+              { no: "The meeting was brought forward to Friday. (= later)", si: "The meeting was put back / postponed to Friday.", pq: "bring forward = earlier; put back = later." }
+            ]
+          },
+          { kind: "resumen", body: "iron out, come up against, brush up on, put forward, follow up on, play down, rule out, bring forward. Pronouns go in the middle of separable verbs: rule it out." },
+          { kind: "puente", body: "Sound natural in meetings and emails." }
+        ]
+      },
       exercises: [
-        { type: "matching", instruction: "Match each idiom with its meaning.", pairs: [{"l":"break the ice","r":"make people relax at the start"},{"l":"a piece of cake","r":"very easy"},{"l":"hit the books","r":"start studying hard"},{"l":"under the weather","r":"feeling a bit ill"}] },
-        { type: "multiple_choice", question: "\"It's a piece of cake\" means it is...", options: ["very easy", "very tasty", "very hard"], correctIndex: 0, explanation: "a piece of cake = very easy." },
-        { type: "fill_blank", sentence: "I feel a bit under the ___ today. (indispuesto)", answers: ["weather"], hint: "under the weather.", explanation: "under the weather = indispuesto." },
-        { type: "true_false", statement: "\"Break the ice\" means to start a conversation comfortably.", answer: true, explanation: "Breaking the ice makes the start of a social situation easier." },
-        { type: "multiple_choice", question: "If you \"hit the books\", you...", options: ["throw books", "study hard", "go to sleep"], correctIndex: 1, explanation: "hit the books = start studying hard." },
-        { type: "translate", prompt: "Rewrite with an idiom: The exam was extremely easy.",
-          answers: ["the exam was a piece of cake", "the test was a piece of cake"], explanation: "The exam was a piece of cake." }
+        {
+          type: "matching", instruction: "Match each phrasal verb with its meaning.",
+          pairs: [
+            { l: "iron out", r: "solve small problems or differences" },
+            { l: "come up against", r: "face a difficulty" },
+            { l: "brush up on", r: "improve a skill you haven't used for a while" },
+            { l: "play down", r: "make something seem less important" },
+            { l: "rule out", r: "decide that something is not possible" },
+            { l: "bring forward", r: "move to an earlier date" }
+          ]
+        },
+        {
+          type: "multiple_choice", question: "The police haven't ___ the possibility of foul play.", options: ["ruled out", "played down", "ironed out"], correctIndex: 0,
+          explanation: "rule out = decide something is not possible."
+        },
+        {
+          type: "word_order", words: ["details", "We", "few", "still", "a", "need", "out", "to", "iron"], correctOrder: ["We", "still", "need", "to", "iron", "out", "a", "few", "details"],
+          hint: "iron out + object"
+        },
+        {
+          type: "find_error",
+          segments: ["Before the interview, I ", { u: "brushed" }, " ", { u: "up my French on" }, " ", { u: "for a week" }, "."],
+          correctIndex: 1, correction: "up on my French", explanation: "Keep both particles together before the object: brushed up on my French.", question: "Find the mistake"
+        },
+        { type: "fill_blank", sentence: "Several ideas were put ___ at the meeting, but none was accepted.", answers: ["forward"], hint: "suggest an idea for discussion", explanation: "put forward" },
+        {
+          type: "listening", text: "The government is playing down the risks, but experts are worried.", question: "What is the government doing?",
+          options: ["Making the risks seem smaller", "Explaining the risks in detail", "Removing the risks"], correctIndex: 0
+        },
+        { type: "true_false", statement: "To \"bring forward\" a meeting means to move it to a later date.", answer: false, explanation: "bring forward = earlier; put back / postpone = later." },
+        {
+          type: "translate", prompt: "Rewrite using a phrasal verb and \"it\": \"We can't exclude that option.\"",
+          answers: ["we can't rule it out", "we cannot rule it out", "we can't rule that out", "we cannot rule that out"], explanation: "We can't rule it out."
+        }
       ]
     },
 
     "use-c1-inversion": {
-      lessonId: "use-c1-inversion", level: "C1", track: "Use of English", topic: "society", skill: "use",
-      title: "Emphatic inversion", xpReward: 56, mascotState: "explaining",
+      lessonId: "use-c1-inversion", level: "C1", track: "Grammar", topic: "grammar", skill: "grammar", tipo: "aprende", title: "Ellipsis and substitution", rev: 2, xpReward: 56, mascotState: "explaining",
       nextLessonId: "use-c1-register",
-      explanation: { body: "After a negative adverbial at the start, word order is inverted as in a question: \"Never have I seen...\", \"Not only did she..., but...\", \"Rarely do we...\". It adds emphasis and formality.",
-        examples: [{ en: "Never have I seen such a mess." }, { en: "Not only did he apologise, but he also paid." }] },
+      explanation: {
+        body: "Fluent speakers avoid repeating words. \"Are you coming tonight?\" \"I hope so.\" \"She can't swim, but her brother can.\" Ellipsis (leaving words out) and substitution (replacing them with so, one, do...) make your English cohesive and natural. Substitution: one / ones replace countable nouns (I prefer the blue one). do / does / did replace verb phrases (She works harder than I do). so / not replace whole clauses after think, hope, expect, suppose, be afraid: I hope so / I hope not / I'm afraid not. Ellipsis: leave out words after auxiliaries and modals (He said he'd call, and he did. / I can't come, but Tom can.), after to (I'd like to, but I can't) and in linked clauses (She cooked and cleaned). In casual speech, the start of a question often drops: (Have you) Seen Tom?",
+        examples: [
+          { en: "\"Will the meeting finish on time?\" \"I doubt it, but I hope so.\"" },
+          { en: "\"Which laptop do you want?\" \"The lighter one.\"" },
+          { en: "She said she would finish the report, and she did." },
+          { en: "\"Can you join us?\" \"I'd love to, but I'm afraid I can't.\"" }
+        ],
+        sections: [
+          {
+            kind: "intro",
+            body: "Fluent speakers avoid repeating words. \"Are you coming tonight?\" \"I hope so.\" \"She can't swim, but her brother can.\" Ellipsis (leaving words out) and substitution (replacing them with so, one, do...) make your English cohesive and natural."
+          },
+          {
+            kind: "regla",
+            body: "Substitution: one / ones replace countable nouns (I prefer the blue one). do / does / did replace verb phrases (She works harder than I do). so / not replace whole clauses after think, hope, expect, suppose, be afraid: I hope so / I hope not / I'm afraid not. Ellipsis: leave out words after auxiliaries and modals (He said he'd call, and he did. / I can't come, but Tom can.), after to (I'd like to, but I can't) and in linked clauses (She cooked and cleaned). In casual speech, the start of a question often drops: (Have you) Seen Tom?"
+          },
+          {
+            kind: "vocab",
+            items: [
+              { en: "ellipsis", ipa: "ɪˈlɪpsɪs", es: "leaving out words that are understood from context" },
+              { en: "substitution", ipa: "ˌsʌbstɪˈtjuːʃən", es: "replacing a word or phrase with a shorter one" },
+              { en: "cohesion", ipa: "kəʊˈhiːʒən", es: "the way the parts of a text are linked" },
+              { en: "redundant", ipa: "rɪˈdʌndənt", es: "unnecessary because already said" },
+              { en: "antecedent", ipa: "ˌæntɪˈsiːdənt", es: "the earlier word that a later word refers to" },
+              { en: "recoverable", ipa: "rɪˈkʌvərəbəl", es: "able to be understood from context" },
+              { en: "reference", ipa: "ˈrefərəns", es: "a link to something mentioned earlier" },
+              { en: "repetition", ipa: "ˌrepəˈtɪʃən", es: "saying the same thing again" }
+            ]
+          },
+          {
+            kind: "expresiones",
+            items: [
+              { en: "I hope so. / I hope not.", es: "replace a whole clause" },
+              { en: "I'm afraid not.", es: "a polite negative answer" },
+              { en: "I'd love to, but I can't.", es: "ellipsis after to" },
+              { en: "So do I. / Neither can she.", es: "short agreement with substitution" }
+            ]
+          },
+          {
+            kind: "ejemplos",
+            items: [
+              { en: "\"Will the meeting finish on time?\" \"I doubt it, but I hope so.\"" },
+              { en: "\"Which laptop do you want?\" \"The lighter one.\"" },
+              { en: "She said she would finish the report, and she did." },
+              { en: "\"Can you join us?\" \"I'd love to, but I'm afraid I can't.\"" }
+            ]
+          },
+          {
+            kind: "errores",
+            items: [
+              { no: "I think yes.", si: "I think so.", pq: "Use so to replace a clause after think, hope, expect." },
+              { no: "I don't hope so.", si: "I hope not.", pq: "With hope and be afraid, the negative is 'not'." },
+              { no: "I like the red car and the blue car one.", si: "I like the red car and the blue one.", pq: "one replaces the noun; don't repeat it." }
+            ]
+          },
+          { kind: "resumen", body: "one / ones for nouns; do / does / did for verb phrases; so / not for clauses. Leave out what the listener can recover from context." },
+          { kind: "puente", body: "Cut the repetition and sound more natural." }
+        ]
+      },
       exercises: [
-        { type: "multiple_choice", question: "Choose: Never ___ such a beautiful view.", options: ["I have seen", "I saw", "have I seen"], correctIndex: 2, explanation: "After 'Never' at the start, we invert: have I seen." },
-        { type: "multiple_choice", question: "Choose: Not only ___ late, but he forgot the keys.", options: ["he was", "was he", "he is"], correctIndex: 1, explanation: "Not only + inversion: was he late." },
-        { type: "fill_blank", sentence: "Rarely ___ we see such talent. (inversion with 'do')", answers: ["do"], hint: "Rarely do we...", explanation: "Rarely do we see..." },
-        { type: "true_false", statement: "After a negative adverb at the start, English uses inversion.", answer: true, explanation: "That is the rule of emphatic inversion." },
-        { type: "word_order", words: ["Never", "have", "I", "been", "so", "happy"], correctOrder: ["Never", "have", "I", "been", "so", "happy"], hint: "Never + have + subject + past participle." },
-        { type: "translate", prompt: "Rewrite with inversion, starting 'Never…': I have never seen such a mess.",
-          answers: ["never have i seen such a mess", "never have i seen such a mess."], explanation: "Never have I seen such a mess." }
+        {
+          type: "multiple_choice", question: "\"Is it going to rain tomorrow?\" \"I hope ___.\" (you don't want rain)", options: ["not", "no", "don't"], correctIndex: 0,
+          explanation: "hope + not for a negative: I hope not."
+        },
+        { type: "fill_blank", sentence: "These shoes are too small. Do you have any bigger ___?", answers: ["ones"], hint: "Replace a plural countable noun.", explanation: "bigger ones = bigger shoes" },
+        {
+          type: "find_error",
+          segments: ["\"Will he be late?\" \"I ", { u: "don't" }, " ", { u: "hope" }, " ", { u: "so" }, ".\""],
+          correctIndex: 0, correction: "I hope not.", explanation: "With hope, the negative is 'I hope not', not 'I don't hope so'.", question: "Find the mistake"
+        },
+        {
+          type: "categorize", instruction: "Substitution or ellipsis?",
+          buckets: [{ id: "sub", label: "Substitution (a word replaces others)" }, { id: "ell", label: "Ellipsis (words are left out)" }],
+          items: [
+            { t: "I think so.", bucket: "sub" },
+            { t: "The red one, please.", bucket: "sub" },
+            { t: "He works harder than I do.", bucket: "sub" },
+            { t: "I can't swim, but Tom can.", bucket: "ell" },
+            { t: "I'd like to, but I'm busy.", bucket: "ell" },
+            { t: "Seen my keys anywhere?", bucket: "ell" }
+          ]
+        },
+        {
+          type: "listening", text: "Are you coming to the party on Friday? I'm afraid not. I'm working.", question: "What does \"I'm afraid not\" mean here?",
+          options: ["I'm not coming.", "I'm scared of parties.", "I don't know yet."], correctIndex: 0
+        },
+        {
+          type: "matching", instruction: "Match each reply with its meaning.",
+          pairs: [
+            { l: "I hope so.", r: "I hope that will happen." },
+            { l: "I hope not.", r: "I hope that won't happen." },
+            { l: "So do I.", r: "I also do that." },
+            { l: "Neither do I.", r: "I don't do that either." }
+          ]
+        },
+        {
+          type: "translate",
+          prompt: "Shorten using substitution: \"Priya likes the new design, and Daniel likes the new design too.\"",
+          answers: ["priya likes the new design and so does daniel", "priya likes the new design and daniel does too", "priya likes the new design and daniel does as well"],
+          explanation: "Priya likes the new design, and so does Daniel."
+        },
+        {
+          type: "translate",
+          prompt: "Shorten using ellipsis: \"I wanted to go to the concert, but I couldn't go to the concert.\"",
+          answers: ["i wanted to go to the concert but i couldn't", "i wanted to go to the concert but i could not", "i wanted to go but i couldn't", "i wanted to go but i could not"],
+          explanation: "I wanted to go to the concert, but I couldn't."
+        }
       ]
     },
 
     "use-c1-register": {
-      lessonId: "use-c1-register", level: "C1", track: "Use of English", topic: "business", skill: "use",
-      title: "Register: formal and informal", xpReward: 56, mascotState: "explaining",
-      explanation: { body: "Register is the level of formality. Formal: \"I would be grateful if you could...\". Informal: \"Can you...?\". Choosing the right register is key at C1.",
-        examples: [{ en: "I would be grateful if you could reply soon." }, { en: "Drop me a line when you can." }] },
+      lessonId: "use-c1-register", level: "C1", track: "Functional English", topic: "work", skill: "use", tipo: "aprende", title: "Handling questions after a presentation", rev: 2, xpReward: 56,
+      mascotState: "explaining",
+      explanation: {
+        body: "Your presentation went well; now comes the Q&A. Some questions are easy, some are hostile and some you simply can't answer. Learn the language to welcome questions, check what is being asked, buy time and deal with difficult questions confidently. Welcome: That's a good question. / Thanks for raising that. Check: If I understand you correctly, you're asking whether... / Are you asking about X or Y? Buy time: That's an interesting point; let me think about that for a second. Don't know: I don't have the figures to hand, but I'll get back to you by Friday. Off-topic or hostile: That's slightly outside the scope of today's talk, but I'm happy to discuss it afterwards. / I can see why you might think that; however, the data shows... Close: Does that answer your question?",
+        examples: [
+          { en: "Thanks for raising that. If I understand you correctly, you're asking about the cost per user." },
+          { en: "I don't have the exact figures to hand, but I'll get back to you by Friday." },
+          { en: "That's slightly outside the scope of today's talk, but I'm happy to discuss it afterwards." },
+          { en: "I can see why you might think that; however, our trial showed the opposite. Does that answer your question?" }
+        ],
+        sections: [
+          {
+            kind: "intro",
+            body: "Your presentation went well; now comes the Q&A. Some questions are easy, some are hostile and some you simply can't answer. Learn the language to welcome questions, check what is being asked, buy time and deal with difficult questions confidently."
+          },
+          {
+            kind: "regla",
+            body: "Welcome: That's a good question. / Thanks for raising that. Check: If I understand you correctly, you're asking whether... / Are you asking about X or Y? Buy time: That's an interesting point; let me think about that for a second. Don't know: I don't have the figures to hand, but I'll get back to you by Friday. Off-topic or hostile: That's slightly outside the scope of today's talk, but I'm happy to discuss it afterwards. / I can see why you might think that; however, the data shows... Close: Does that answer your question?"
+          },
+          {
+            kind: "vocab",
+            items: [
+              { en: "Q&A", ipa: "ˌkjuː ən ˈeɪ", es: "a session for questions and answers" },
+              { en: "to hand", es: "available and close by" },
+              { en: "get back to someone", es: "reply later with information" },
+              { en: "scope", ipa: "skəʊp", es: "the range of things a subject covers" },
+              { en: "hostile", ipa: "ˈhɒstaɪl", es: "unfriendly and aggressive" },
+              { en: "raise (a point)", es: "mention something for discussion" },
+              { en: "follow-up", ipa: "ˈfɒləʊ ʌp", es: "an action that continues something earlier" },
+              { en: "rephrase", ipa: "ˌriːˈfreɪz", es: "say again in different words" }
+            ]
+          },
+          {
+            kind: "expresiones",
+            items: [
+              { en: "If I understand you correctly, ...", es: "check the question" },
+              { en: "That's slightly outside the scope of today's talk.", es: "deflect politely" },
+              { en: "I'll get back to you on that.", es: "promise to answer later" },
+              { en: "Does that answer your question?", es: "check the questioner is satisfied" }
+            ]
+          },
+          {
+            kind: "ejemplos",
+            items: [
+              { en: "Thanks for raising that. If I understand you correctly, you're asking about the cost per user." },
+              { en: "I don't have the exact figures to hand, but I'll get back to you by Friday." },
+              { en: "That's slightly outside the scope of today's talk, but I'm happy to discuss it afterwards." },
+              { en: "I can see why you might think that; however, our trial showed the opposite. Does that answer your question?" }
+            ]
+          },
+          {
+            kind: "errores",
+            items: [
+              { no: "I don't know. (and stop)", si: "I don't have that information to hand, but I'll get back to you.", pq: "Admit it, then promise a follow-up." },
+              { no: "Your question is wrong.", si: "I think the data tells a slightly different story.", pq: "Disagree with the idea, not the person." },
+              { no: "I'll get back to you about.", si: "I'll get back to you on that.", pq: "get back to someone on / about something needs an object." }
+            ]
+          },
+          { kind: "resumen", body: "Welcome → check → answer (or buy time / promise a follow-up / deflect politely) → check satisfaction." },
+          { kind: "puente", body: "Survive the Q&A with confidence." }
+        ]
+      },
       exercises: [
-        { type: "multiple_choice", question: "Which is the most formal request?", options: ["I would be grateful if you could send it.", "Send it now.", "Can you send it?"], correctIndex: 0, explanation: "\"I would be grateful if you could...\" is the most formal." },
-        { type: "categorize", instruction: "Formal or informal?", buckets: [
-          { id: "f", label: "Formal" }, { id: "i", label: "Informal" } ], items: [
-          { t: "I look forward to hearing from you", bucket: "f" }, { t: "Cheers!", bucket: "i" }, { t: "Please find attached", bucket: "f" }, { t: "Gonna be late", bucket: "i" } ] },
-        { type: "multiple_choice", question: "\"Drop me a line\" is...", options: ["rude", "formal", "informal"], correctIndex: 2, explanation: "It's informal: it means \"write to me\"." },
-        { type: "fill_blank", sentence: "I would be ___ if you could help. (formal)", answers: ["grateful"], hint: "I'd be grateful if...", explanation: "I would be grateful if you could..." },
-        { type: "true_false", statement: "\"Please find attached\" is appropriate in a formal email.", answer: true, explanation: "It is a standard formal phrase." },
-        { type: "translate", prompt: "Make this request formal, starting 'I would be grateful if…': Reply soon, please.",
-          answers: ["i would be grateful if you could reply soon", "i'd be grateful if you could reply soon"], explanation: "I would be grateful if you could reply soon." }
+        {
+          type: "categorize", instruction: "What is the presenter doing?",
+          buckets: [{ id: "check", label: "Checking the question" }, { id: "time", label: "Buying time" }, { id: "defer", label: "Promising a later answer" }, { id: "deflect", label: "Deflecting politely" }],
+          items: [
+            { t: "If I understand you correctly, ...", bucket: "check" },
+            { t: "Are you asking about the cost or the timeline?", bucket: "check" },
+            { t: "Let me think about that for a second.", bucket: "time" },
+            { t: "That's an interesting point. Let me just think.", bucket: "time" },
+            { t: "I'll get back to you on that by Friday.", bucket: "defer" },
+            { t: "I don't have the figures to hand, but I'll email them.", bucket: "defer" },
+            { t: "That's slightly outside the scope of today's talk.", bucket: "deflect" },
+            { t: "I'm happy to discuss that after the session.", bucket: "deflect" }
+          ]
+        },
+        {
+          type: "listening",
+          text: "That's a fair question. I don't have the numbers to hand, but I'll send them to everyone after the session.", question: "What will the presenter do?",
+          options: ["Send the numbers later", "Answer immediately", "Ignore the question"], correctIndex: 0
+        },
+        {
+          type: "multiple_choice", question: "Someone asks a question you don't understand. You say:",
+          options: ["Sorry, could you rephrase that? Are you asking about the cost or the timeline?", "That's a strange question.", "Next question, please."], correctIndex: 0,
+          explanation: "Ask for a rephrase and offer options to narrow it down."
+        },
+        {
+          type: "matching", instruction: "Match each word with its meaning.",
+          pairs: [
+            { l: "scope", r: "the range of things a subject covers" },
+            { l: "hostile", r: "unfriendly and aggressive" },
+            { l: "to hand", r: "available and close by" },
+            { l: "follow-up", r: "an action that continues something earlier" },
+            { l: "rephrase", r: "say again in different words" }
+          ]
+        },
+        {
+          type: "find_error",
+          segments: ["I ", { u: "will" }, " get back ", { u: "to you" }, " ", { u: "about" }, " by Friday."],
+          correctIndex: 2, correction: "about it / on that", explanation: "get back to someone about something: the phrase needs an object.", question: "Find the mistake"
+        },
+        {
+          type: "fill_blank", sentence: "Thanks for ___ that point. It's an important one.", answers: ["raising", "mentioning", "bringing up"], hint: "mention something for discussion",
+          explanation: "Thanks for raising that point."
+        },
+        { type: "speak", text: "That's a good question. If I understand you correctly, you're asking about the cost per user." },
+        {
+          type: "translate",
+          prompt: "Rephrase politely, starting with \"That's slightly outside\": \"Your question has nothing to do with my talk.\"",
+          answers: ["that's slightly outside the scope of my talk", "that's slightly outside the scope of today's talk", "that's slightly outside the scope of this talk", "that is slightly outside the scope of my talk", "that is slightly outside the scope of today's talk"],
+          explanation: "That's slightly outside the scope of today's talk."
+        }
       ]
     }
   };

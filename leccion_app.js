@@ -1145,7 +1145,7 @@
     var localCurId = null;
     PATH.SKILL_ORDER.forEach(function (sk) {
       var ids = g.bySkill[sk]; if (!ids) return;
-      ids.forEach(function (id) { if (!localCurId && PATH.status(id, built) === "open") localCurId = id; });
+      ids.forEach(function (id) { if (!localCurId && !built.completed[id] && PATH.status(id, built) === "open") localCurId = id; });
     });
     /* ---- pliegue del sendero ----------------------------------------
        Un mundo trae hasta 47 lecciones y para quien empieza 42 están
@@ -2150,7 +2150,7 @@
       var ids = g.bySkill[sk]; if (!ids || found) return;
       ids.forEach(function (id) {
         if (found) return;
-        if (PATH.status(id, built) === "open") found = { id: id, skill: sk };
+        if (!built.completed[id] && PATH.status(id, built) === "open") found = { id: id, skill: sk };   /* las reescritas (rev) ya completadas no cuentan como "siguiente" */
       });
     });
     if (found) {
@@ -3929,7 +3929,8 @@
       }
       if (!cand) return;
       ls.exercises = exs.concat([{ type: "speak", text: cand.en, es: cand.es || "",
-        explanation: "Practica la pronunciación repitiendo el modelo. Lo importante es soltarte." }]);
+        explanation: T("Practica la pronunciación repitiendo el modelo. Lo importante es soltarte.",
+                       "Practise your pronunciation by repeating the model. The key is to speak with confidence.") }]);
     } catch (e) {}
   }
 
