@@ -1478,12 +1478,18 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
   border:1px solid var(--line);border-radius:999px;padding:5px 12px;white-space:nowrap;box-shadow:0 2px 8px rgba(27,27,47,.05)}
 .worlds-sec__big{font-weight:800;font-size:1rem;color:var(--ink)}
 .worlds-sec__small{font-size:.72rem;color:var(--muted);font-weight:600}
-/* logros: vitrina premium */
+/* logros (2026-11): medallones por nivel — bronce, plata, oro y legendario
+   (noche de Vesper con glifo dorado). --m1/--m2 = metal, --mb = canto,
+   --mi = tinta del glifo. */
+.t-bronze{--m1:#f3cfaa;--m2:#b8733a;--mb:#8c5527;--mi:#3a1f0c;--mt:#b8733a}
+.t-silver{--m1:#fbfcfd;--m2:#a9b2bb;--mb:#7d868f;--mi:#232a33;--mt:#8a949e}
+.t-gold{--m1:#f5e3ad;--m2:#c5a059;--mb:#a8843d;--mi:#2b2410;--mt:#c5a059}
+.t-legend{--m1:#6a5cc0;--m2:#1f1942;--mb:#c5a059;--mi:#f1d48a;--mt:#7a6cd0}
+/* vitrina del mapa */
 .logros{margin:18px 0 4px;border:1px solid var(--line);border-radius:16px;background:var(--paper);
-  box-shadow:0 4px 16px rgba(27,27,47,.05);overflow:hidden}
-.logros__sum{list-style:none;cursor:pointer;display:flex;align-items:center;gap:11px;padding:13px 14px}
-.logros__sum::-webkit-details-marker{display:none}
-.logros__sum:focus-visible{outline:2px solid var(--gold);outline-offset:-2px}
+  box-shadow:0 4px 16px rgba(27,27,47,.05);overflow:hidden;padding-bottom:4px}
+.logros__head{display:flex;align-items:center;gap:11px;padding:13px 14px 10px;text-decoration:none;color:inherit}
+.logros__head:focus-visible,.logros__all:focus-visible,.logros__next:focus-visible{outline:2px solid var(--gold);outline-offset:-2px}
 .logros__ic{flex:0 0 auto;width:38px;height:38px;border-radius:11px;display:grid;place-items:center;
   background:linear-gradient(135deg,#e9d39a,var(--gold,#c5a059));color:#2b2410}
 .logros__ic svg{width:21px;height:21px}
@@ -1493,25 +1499,115 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
 .logros__bar i{display:block;height:100%;border-radius:999px;background:linear-gradient(90deg,#dcc08a,var(--gold,#c5a059))}
 .logros__count{flex:0 0 auto;font-weight:800;font-size:.86rem;color:var(--ink);background:var(--gold-tint);
   border:1px solid var(--gold);border-radius:999px;padding:3px 10px}
-.logros__chev{flex:0 0 auto;color:var(--muted);transition:transform .2s ease}
-.logros[open] .logros__chev{transform:rotate(180deg)}
-.logros__grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(84px,1fr));gap:12px 8px;padding:4px 14px 16px}
-.medal{display:flex;flex-direction:column;align-items:center;text-align:center;gap:7px}
-.medal__disc{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;line-height:1;
-  background:var(--cream);border:2px solid var(--line);position:relative;color:var(--muted)}
-.medal__disc svg{width:27px;height:27px}
-.medal.on .medal__disc{color:#2b2410;background:radial-gradient(circle at 50% 32%,#f5e3ad,var(--gold,#c5a059));border-color:var(--gold2,#a8843d);
-  box-shadow:0 5px 13px var(--gold-tint),inset 0 1px 2px rgba(255,255,255,.55);animation:medal-shine 4.5s ease-in-out infinite}
-.medal.on:nth-child(3n) .medal__disc{animation-delay:1.5s}
-.medal.on:nth-child(3n+1) .medal__disc{animation-delay:.8s}
-@keyframes medal-shine{0%,100%{box-shadow:0 5px 13px var(--gold-tint),inset 0 1px 2px rgba(255,255,255,.55)}
-  50%{box-shadow:0 6px 16px var(--gold-tint),0 0 11px rgba(197,160,89,.45),inset 0 1px 3px rgba(255,255,255,.75)}}
-.medal.on .medal__disc::after{content:"";position:absolute;inset:-4px;border-radius:50%;border:1px solid var(--gold);opacity:.35}
-.medal__lk{width:19px;height:19px;color:var(--muted)}
-.medal__nm{font-size:.72rem;font-weight:600;line-height:1.18;color:var(--ink)}
-.medal:not(.on) .medal__nm{color:var(--muted)}
-@media(prefers-reduced-motion:reduce){.logros__chev{transition:none}.medal.on .medal__disc{animation:none}}
-.vesper-reduce-motion .medal.on .medal__disc{animation:none}
+.logros__row{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;padding:2px 10px 6px}
+.logros__empty{margin:0 14px 8px;font-size:.86rem;color:var(--muted)}
+.logros__next{display:flex;align-items:center;gap:12px;width:calc(100% - 20px);margin:4px 10px 6px;padding:10px 12px;
+  border:1px dashed var(--line);border-radius:14px;background:var(--cream);color:inherit;font:inherit;text-align:left;cursor:pointer}
+.logros__next .medal__disc{width:46px;height:46px;flex:0 0 auto}
+.logros__next .medal__disc svg{width:24px;height:24px}
+.logros__nx{display:flex;flex-direction:column;min-width:0;flex:1;gap:1px}
+.logros__nxk{font-size:.68rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--mt)}
+.logros__nxn{font-weight:800;font-size:.95rem;line-height:1.2;color:var(--ink)}
+.logros__nxd{font-size:.8rem;color:var(--muted);line-height:1.3}
+.logros__nxbar{display:block;height:6px;border-radius:999px;background:var(--line);overflow:hidden;margin-top:5px}
+.logros__nxbar i{display:block;height:100%;border-radius:999px;background:var(--mt)}
+.logros__nxc{flex:0 0 auto;font-weight:800;font-size:.85rem;color:var(--ink)}
+.logros__all{display:block;text-align:center;padding:9px 14px 10px;font-weight:700;font-size:.9rem;color:var(--ink);text-decoration:none}
+.logros__all:hover{text-decoration:underline}
+/* medallón */
+.medal{display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;min-width:0;
+  background:none;border:0;padding:4px 2px;font:inherit;color:inherit;cursor:pointer;border-radius:12px;position:relative}
+.medal:focus-visible{outline:2px solid var(--gold);outline-offset:1px}
+.medal[hidden]{display:none}
+.medal__disc{width:56px;height:56px;border-radius:50%;display:grid;place-items:center;line-height:1;flex:0 0 auto;
+  background:var(--cream);border:2px dashed var(--line);position:relative;color:var(--muted)}
+.medal__disc svg{width:29px;height:29px}
+.medal:not(.on) .medal__disc svg{opacity:.42}
+.medal.is-secret .medal__disc svg{opacity:.7}
+.on .medal__disc,.medal.on .medal__disc{color:var(--mi);background:radial-gradient(circle at 50% 30%,var(--m1),var(--m2));
+  border:2px solid var(--mb);box-shadow:0 5px 13px rgba(27,27,47,.16),inset 0 1px 2px rgba(255,255,255,.5)}
+.medal.on .medal__disc::after{content:"";position:absolute;inset:-5px;border-radius:50%;border:1px solid var(--mb);opacity:.35}
+.medal.on.t-legend .medal__disc{box-shadow:0 0 0 2px rgba(197,160,89,.35),0 6px 18px rgba(74,60,160,.45),inset 0 1px 3px rgba(255,255,255,.25);
+  animation:medal-legend 3.6s ease-in-out infinite}
+@keyframes medal-legend{0%,100%{box-shadow:0 0 0 2px rgba(197,160,89,.35),0 6px 18px rgba(74,60,160,.45),inset 0 1px 3px rgba(255,255,255,.25)}
+  50%{box-shadow:0 0 0 3px rgba(197,160,89,.6),0 6px 22px rgba(120,100,220,.6),inset 0 1px 3px rgba(255,255,255,.35)}}
+.medal.on.t-gold .medal__disc{animation:medal-shine 4.5s ease-in-out infinite}
+@keyframes medal-shine{0%,100%{box-shadow:0 5px 13px rgba(27,27,47,.16),inset 0 1px 2px rgba(255,255,255,.55)}
+  50%{box-shadow:0 6px 16px rgba(27,27,47,.16),0 0 12px rgba(197,160,89,.55),inset 0 1px 3px rgba(255,255,255,.75)}}
+.medal__nm{font-size:.72rem;font-weight:700;line-height:1.18;color:var(--ink);max-width:100%;overflow-wrap:break-word;hyphens:auto}
+.medal:not(.on) .medal__nm{color:var(--muted);font-weight:600}
+.medal__prog{display:block;width:70%;height:4px;border-radius:999px;background:var(--line);overflow:hidden}
+.medal__prog i{display:block;height:100%;background:var(--mt);border-radius:999px}
+.medal.is-new::before{content:"Nuevo";position:absolute;top:-2px;right:50%;transform:translateX(34px);z-index:1;
+  font:800 .58rem/1 Inter,system-ui,sans-serif;letter-spacing:.04em;text-transform:uppercase;
+  background:var(--error,#C0392B);color:#fff;border-radius:999px;padding:3px 6px;box-shadow:0 2px 6px rgba(0,0,0,.2)}
+.medal.is-new .medal__disc{animation:medal-pop .7s cubic-bezier(.2,1.6,.4,1) both}
+@keyframes medal-pop{0%{transform:scale(.4) rotate(-20deg);opacity:0}100%{transform:none;opacity:1}}
+/* celebración (racha / Forja) */
+.ach-badge .medal{padding:0;cursor:default;flex:0 0 auto}
+.ach-badge .medal__disc{width:46px;height:46px}
+.ach-badge .medal__disc svg{width:24px;height:24px}
+.ach-badge.t-legend{background:linear-gradient(135deg,rgba(106,92,192,.18),var(--gold-tint));border-color:var(--mt)}
+/* pantalla completa */
+.ach-page .topbar{gap:12px}
+.ach-title{margin:0;font-size:1.6rem}
+.ach-hero{display:flex;align-items:center;gap:16px;background:linear-gradient(135deg,#262046,#15122b);color:#f5f2eb;
+  border-radius:18px;padding:16px;margin:4px 0 14px;box-shadow:0 10px 26px rgba(21,18,43,.25);position:relative;overflow:hidden}
+.ach-hero::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(1.5px 1.5px at 18% 22%,#fff8 50%,transparent 51%),radial-gradient(1px 1px at 72% 18%,#fff9 50%,transparent 51%),
+  radial-gradient(1.5px 1.5px at 88% 64%,#fff7 50%,transparent 51%),radial-gradient(1px 1px at 40% 80%,#fff6 50%,transparent 51%)}
+.ach-hero__ring{position:relative;flex:0 0 auto;width:92px;height:92px}
+.ach-ring{width:100%;height:100%;transform:rotate(-90deg)}
+.ach-ring circle{fill:none;stroke-width:8}
+.ach-ring__bg{stroke:rgba(245,242,235,.14)}
+.ach-ring__fg{stroke:#c5a059;stroke-linecap:round;transition:stroke-dashoffset .8s ease}
+.ach-hero__pct{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1}
+.ach-hero__pct b{font:700 1.7rem/1 "Inria Serif",Georgia,serif;color:#f1d48a}
+.ach-hero__pct span{font-size:.72rem;opacity:.8;margin-top:3px}
+.ach-hero__tx{min-width:0;position:relative;z-index:1}
+.ach-hero__k{margin:0;font-size:.7rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#c5a059}
+.ach-hero__msg{margin:3px 0 9px;font-weight:600;line-height:1.3}
+.ach-tiers{display:flex;flex-wrap:wrap;gap:6px}
+.ach-tc{display:inline-flex;align-items:center;gap:5px;font-size:.78rem;font-weight:800;background:rgba(245,242,235,.08);
+  border:1px solid rgba(245,242,235,.16);border-radius:999px;padding:3px 9px 3px 5px}
+.ach-tc span{font-weight:500;opacity:.8}
+.ach-tc i{width:14px;height:14px;border-radius:50%;background:radial-gradient(circle at 50% 30%,var(--m1),var(--m2));border:1px solid var(--mb)}
+.ach-filter{margin:0 0 6px}
+.ach-cat{margin:14px 0 4px}
+.ach-cat[hidden]{display:none}
+.ach-cat__h{display:flex;align-items:baseline;justify-content:space-between;gap:10px;font-size:1.15rem;margin:0 0 8px;
+  padding-bottom:6px;border-bottom:1px solid var(--line)}
+.ach-cat__h span{font:700 .82rem/1 Inter,system-ui,sans-serif;color:var(--muted)}
+.ach-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:12px 4px}
+.ach-back{display:block;text-align:center;margin-top:22px;text-decoration:none}
+/* ficha */
+.ach-sheet{position:fixed;inset:0;z-index:200;display:flex;align-items:flex-end;justify-content:center}
+.ach-sheet__back{position:absolute;inset:0;background:rgba(15,13,30,.55);opacity:0;transition:opacity .2s ease}
+.ach-sheet__card{position:relative;width:100%;max-width:440px;background:var(--paper);color:var(--ink);text-align:center;
+  border-radius:22px 22px 0 0;padding:26px 20px calc(24px + env(safe-area-inset-bottom));transform:translateY(100%);
+  transition:transform .26s cubic-bezier(.2,.9,.3,1);box-shadow:0 -10px 30px rgba(0,0,0,.25)}
+.ach-sheet.open .ach-sheet__back{opacity:1}
+.ach-sheet.open .ach-sheet__card{transform:none}
+@media(min-width:560px){.ach-sheet{align-items:center}.ach-sheet__card{border-radius:22px;padding-bottom:24px}}
+.ach-sheet__x{position:absolute;top:10px;right:12px;width:38px;height:38px;border-radius:50%;border:1px solid var(--line);
+  background:var(--cream);color:var(--ink);font-size:1.4rem;line-height:1;cursor:pointer}
+.ach-sheet h2{margin:8px 0 4px;font-size:1.4rem}
+.medal--xl{cursor:default;padding:0;margin:0 auto}
+.medal--xl .medal__disc{width:104px;height:104px}
+.medal--xl .medal__disc svg{width:54px;height:54px}
+.ach-tier{display:inline-block;margin-top:12px;font:800 .68rem/1 Inter,system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--mi);background:radial-gradient(circle at 50% 30%,var(--m1),var(--m2));border:1px solid var(--mb);border-radius:999px;padding:5px 11px}
+.ach-sheet__desc{color:var(--muted);margin:0 0 12px}
+.ach-sheet__ok{display:inline-flex;align-items:center;gap:6px;font-weight:700;color:var(--success,#2D9E75);margin:0}
+.ach-sheet__ok .ei svg{width:18px;height:18px}
+.ach-sheet__hint{font-style:italic;color:var(--ink);margin:0}
+.ach-sheet__todo{font-weight:700;color:var(--muted);margin:0}
+.ach-sheet__prog{display:flex;align-items:center;gap:10px;max-width:280px;margin:0 auto}
+.ach-sheet__bar{flex:1;height:9px;border-radius:999px;background:var(--line);overflow:hidden}
+.ach-sheet__bar i{display:block;height:100%;border-radius:999px;background:var(--mt)}
+@media(prefers-reduced-motion:reduce){.medal.on .medal__disc,.medal.is-new .medal__disc{animation:none!important}
+  .ach-sheet__card,.ach-sheet__back,.ach-ring__fg{transition:none}}
+.vesper-reduce-motion .medal.on .medal__disc,.vesper-reduce-motion .medal.is-new .medal__disc{animation:none!important}
 /* Boton flotante "Instalar app" (PWA / descarga como app). Oculto hasta que el navegador ofrece la instalacion */
 #install-btn{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom));z-index:60;
   display:none;align-items:center;gap:8px;background:var(--gold);color:var(--ink);border:none;border-radius:999px;
@@ -1527,7 +1623,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
    animaciones de bloques que no se ven (mejor scroll/CPU).
    ============================================================ */
 .va-cv{content-visibility:auto;contain-intrinsic-size:1px 520px}
-.logros{content-visibility:auto;contain-intrinsic-size:1px 240px}
+.logros{content-visibility:auto;contain-intrinsic-size:1px 330px}
 .search-results{content-visibility:auto;contain-intrinsic-size:1px 320px}
 .va-paused,.va-paused *{animation-play-state:paused!important}
 

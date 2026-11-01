@@ -63,6 +63,7 @@
       achievements: mapStr(s.achievements || {}),
       dayCounts: mapInt(s.dayCounts || {}),
       goalTarget: { integerValue: String(s.goalTarget || 0) },
+      stats: mapInt(s.stats || {}),               // contadores de logros (perfectas, Forja, combo…)
       scores: mapInt(loadScores())
     } };
   }
@@ -88,6 +89,7 @@
       achievements: readStr(fields.achievements),
       dayCounts: readInt(fields.dayCounts),
       goalTarget: parseInt((fields.goalTarget || {}).integerValue || "0", 10) || 0,
+      stats: readInt(fields.stats),
       scores: readInt(fields.scores)
     };
   }
