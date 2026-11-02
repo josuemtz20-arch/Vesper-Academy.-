@@ -212,6 +212,9 @@
 # para todos los niveles (A1–C2). Exámenes/lecciones automáticos (exam_results)
 # + participación manual del profe (colección gradebook; regla en su doc).
 !/portal_boleta.html
+# Calendario escolar 2027 (2026-11-02): 12 ciclos de 20 clases contadas;
+# festivos y vacaciones pausan el ciclo. Herramienta del portal de profesores.
+!/portal_calendario.html
 !/vesper_gradebook.js
 !/FIRESTORE_GRADEBOOK_RULES.md
 # ... y la vista del alumno: cada quien consulta SOLO su boleta (misma regla).

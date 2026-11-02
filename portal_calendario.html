@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<!-- CSP: generada por _scripts/apply_csp.py (edita alli, no aqui) -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://apis.google.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://cdn.tailwindcss.com https://challenges.cloudflare.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://maxcdn.bootstrapcdn.com; font-src 'self' data: https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: blob: https:; media-src 'self' data: blob:; connect-src 'self' https://firestore.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://vesper-academy.firebaseapp.com https://patient-feather-4364.josuemtz20.workers.dev https://formsubmit.co https://challenges.cloudflare.com https://www.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com; frame-src 'self' https://vesper-academy.firebaseapp.com https://www.youtube.com https://www.youtube-nocookie.com https://challenges.cloudflare.com; worker-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self' https://formsubmit.co; upgrade-insecure-requests">
+<script src="vesper_auth.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calendario escolar 2027 | Vesper Academy</title>
+<meta name="description" content="Calendario escolar 2027 de Vesper Academy: 12 ciclos de 20 clases, festivos y vacaciones. Acceso restringido al profesorado.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="assets/images/vesper_logo.png" type="image/png">
+<link rel="stylesheet" href="assets/css/vesper_tokens.css">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inria+Serif:ital,wght@0,400;0,700;1,400&family=Inter:wght@400;500;600;700;800&display=swap');
+/* VESPER-CAL-STYLE:START (se copia tal cual al artifact) */
+/* Layout: banda navy con filo dorado arriba, papel crema debajo; una columna de lectura y el año en rejilla de 12 meses. */
+*,*::before,*::after{box-sizing:border-box;}
+:root{
+  --navy:#1B1B2F; --navy2:#2c2c4a; --gold:#C9A84C; --gold2:#a8843d; --gold-tint:rgba(201,168,76,.16);
+  --cream:#FBF8F1; --paper:#ffffff; --line:#ece7da; --head:#f3eee2; --muted:#5d6470; --red:#C0392B;
+  --cyc-odd:#e6e6ef; --cyc-odd-ink:#1B1B2F; --cyc-even:#f3e7c6; --cyc-even-ink:#6f5418;
+  --vac:#d9cfe0; --vac-ink:#4b3a5c;
+  --serif:'Inria Serif',Georgia,'Times New Roman',serif; --sans:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+  color-scheme:light;
+}
+body{margin:0;font-family:var(--sans);background:var(--cream);color:var(--navy);font-size:15px;line-height:1.6;min-height:100vh;}
+header.vh{background:var(--navy);border-bottom:3px solid var(--gold);padding:14px max(16px,env(safe-area-inset-right,0px)) 14px max(16px,env(safe-area-inset-left,0px));display:flex;align-items:center;justify-content:space-between;gap:14px;position:sticky;top:env(safe-area-inset-top,0px);z-index:50;}
+.brand{display:flex;align-items:center;gap:12px;color:#fff;text-decoration:none;}
+.brand img{height:42px;width:42px;object-fit:contain;}
+.brand .mark{height:40px;width:40px;border:1.5px solid var(--gold);border-radius:50%;display:grid;place-items:center;font-family:var(--serif);font-weight:700;color:var(--gold);font-size:1.25rem;}
+.brand b{font-family:var(--serif);font-size:1.1rem;display:block;line-height:1.2;}
+.brand small{display:block;color:var(--gold);font-size:.6rem;letter-spacing:2px;text-transform:uppercase;font-weight:600;}
+.vh .right{display:flex;align-items:center;gap:18px;}
+.vh a.back{color:rgba(255,255,255,.78);font-size:.76rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;text-decoration:none;}
+.vh a.back:hover,.vh a.back:focus-visible{color:var(--gold);}
+
+.hero{background:linear-gradient(180deg,var(--navy) 0,var(--navy2) 100%);color:#fff;padding-block:44px 52px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));}
+.hero .in{max-width:1100px;margin:0 auto;display:grid;gap:14px;}
+.eyebrow{font-size:.7rem;font-weight:700;letter-spacing:2.4px;text-transform:uppercase;color:var(--gold);}
+h1,h2,h3{font-family:var(--serif);font-weight:700;margin:0;line-height:1.15;text-wrap:balance;}
+h1{font-size:clamp(2.1rem,5vw,3.2rem);}
+h1 em{font-style:italic;font-weight:400;color:var(--gold);}
+h2{font-size:1.7rem;}
+h3{font-size:1.14rem;}
+p{margin:0;}
+.hero p{color:rgba(255,255,255,.8);max-width:66ch;font-size:1.05rem;}
+
+.wrap{max-width:1100px;margin:0 auto;padding-block:0 72px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:grid;gap:56px;}
+.read{max-width:68ch;}
+.stack{display:grid;gap:14px;}
+.sec-h{display:grid;gap:8px;max-width:68ch;}
+.sec-h .eyebrow{color:var(--gold2);}
+.sec-h p{color:var(--muted);}
+strong{font-weight:600;}
+
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:-30px;}
+.stat{background:var(--paper);border:1px solid var(--line);border-top:4px solid var(--gold);border-radius:10px;padding:14px 18px;box-shadow:0 4px 18px rgba(27,27,47,.08);display:grid;gap:2px;align-content:start;}
+.stat b{font-family:var(--serif);font-size:2rem;line-height:1.1;font-variant-numeric:tabular-nums;}
+.stat span{font-size:.72rem;letter-spacing:.8px;text-transform:uppercase;color:var(--muted);font-weight:600;line-height:1.4;}
+
+.tablecard{background:var(--paper);border:1px solid var(--line);border-radius:12px;box-shadow:0 1px 4px rgba(0,0,0,.06);overflow-x:auto;}
+table{width:100%;border-collapse:collapse;font-size:.88rem;}
+thead th{text-align:left;background:var(--head);color:var(--navy);font-size:.68rem;letter-spacing:.9px;text-transform:uppercase;padding:11px 14px;border-bottom:1px solid var(--line);font-weight:700;}
+tbody td{padding:11px 14px;border-bottom:1px solid #f0ece3;vertical-align:top;}
+tbody tr:last-child td{border-bottom:0;}
+.compare{min-width:700px;}
+.compare td:first-child{color:var(--muted);font-weight:600;width:20%;}
+.compare .pick{background:var(--gold-tint);}
+.compare thead .pick{color:var(--gold2);}
+.good{color:#1f7a5a;font-weight:600;}
+.bad{color:var(--red);}
+
+.legend{display:flex;flex-wrap:wrap;gap:8px 20px;font-size:.84rem;color:var(--muted);}
+.legend i{display:inline-block;width:14px;height:14px;border-radius:3px;vertical-align:-2px;margin-right:7px;}
+.year{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;}
+.month{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:12px 12px 14px;min-width:0;box-shadow:0 1px 4px rgba(0,0,0,.04);}
+.month h3{font-size:1.02rem;margin-bottom:8px;display:flex;justify-content:space-between;align-items:baseline;gap:8px;}
+.month h3 small{font-family:var(--sans);font-size:.66rem;color:var(--muted);font-weight:600;letter-spacing:.5px;text-transform:uppercase;}
+.grid7{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:2px;font-size:.74rem;font-variant-numeric:tabular-nums;}
+.dow{text-align:center;color:var(--muted);font-weight:700;font-size:.66rem;padding-bottom:2px;}
+.d{position:relative;aspect-ratio:1;display:grid;place-items:center;border-radius:5px;color:#9aa0ab;outline:2px solid transparent;outline-offset:-2px;transition:outline-color .15s,opacity .15s;}
+.d.we{color:#c2c5cc;}
+.d.ca{background:var(--cyc-odd);color:var(--cyc-odd-ink);font-weight:600;}
+.d.cb{background:var(--cyc-even);color:var(--cyc-even-ink);font-weight:600;}
+.d.br{background:repeating-linear-gradient(135deg,var(--vac) 0 4px,transparent 4px 7px);color:var(--vac-ink);font-weight:700;}
+.d.hol{color:var(--red);font-weight:700;}
+.d.hol::after{content:"";position:absolute;inset:3px;border:1.5px solid var(--red);border-radius:50%;}
+.d.first::before{content:attr(data-c);position:absolute;top:0;left:2px;font-size:.52rem;font-weight:800;line-height:1;color:var(--gold2);}
+.year.focus .d[data-cy]:not(.on){opacity:.3;}
+.d.on{outline-color:var(--gold);}
+
+.cycles{min-width:680px;font-variant-numeric:tabular-nums;}
+.cycles tbody tr[data-row]{cursor:pointer;}
+.cycles tbody tr[data-row]:hover,.cycles tbody tr[data-row]:focus-visible,.cycles tbody tr.sel{background:var(--gold-tint);outline:none;}
+.cycles tr.brk td{color:var(--vac-ink);background:repeating-linear-gradient(135deg,rgba(217,207,224,.45) 0 6px,transparent 6px 12px);font-weight:600;cursor:default;}
+.num{display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--navy);color:var(--gold);font-family:var(--serif);font-weight:700;font-size:.95rem;}
+.chip{display:inline-block;font-size:.66rem;font-weight:800;letter-spacing:.4px;text-transform:uppercase;padding:3px 10px;border-radius:20px;border:1.5px solid currentColor;color:#1f7a5a;white-space:nowrap;}
+
+.sessions{display:grid;grid-template-columns:repeat(20,minmax(0,1fr));gap:3px;}
+.sessions span{height:30px;border-radius:4px;background:var(--cyc-odd);}
+.sessions span.rep{background:var(--cyc-even);}
+.sessions span.ex{background:var(--navy);box-shadow:inset 0 -3px 0 var(--gold);}
+.weeks{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;}
+.wk{background:var(--paper);border:1px solid var(--line);border-top:4px solid var(--navy);border-radius:10px;padding:14px 16px;display:grid;gap:7px;align-content:start;min-width:0;}
+.wk h3{font-size:1.02rem;}
+.wk p{font-size:.88rem;}
+.wk .who{font-size:.64rem;letter-spacing:1.2px;text-transform:uppercase;color:var(--gold2);font-weight:700;}
+
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px;}
+.two>*{min-width:0;}
+.panel{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:20px 22px;display:grid;gap:10px;align-content:start;}
+.panel.dark{background:var(--navy);border-color:var(--navy);color:#fff;}
+.panel.dark .eyebrow{color:var(--gold);}
+.panel.dark li::marker{color:var(--gold);}
+.notice{background:#fbf3df;border:1px solid #e7d8a8;border-left:4px solid var(--gold2);border-radius:8px;padding:18px 20px;display:grid;gap:10px;color:#4f4329;}
+ul{margin:0;padding-left:1.2em;display:grid;gap:6px;}
+li::marker{color:var(--gold2);}
+.foot{color:var(--muted);font-size:.84rem;border-top:1px solid var(--line);padding-top:18px;max-width:80ch;}
+
+@media(max-width:900px){.year{grid-template-columns:repeat(3,minmax(0,1fr));}.weeks{grid-template-columns:repeat(2,minmax(0,1fr));}}
+@media(max-width:640px){
+  header.vh{padding-block:10px;position:static;}
+  .brand img,.brand .mark{height:34px;width:34px;}
+  .vh .right{gap:8px;}
+  .vh a.back{font-size:.68rem;letter-spacing:.5px;}
+  .hero{padding-block:32px 44px;}
+  .wrap{gap:44px;}
+  .stats{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .year{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}
+  .month{padding:10px 8px 12px;}
+  .two,.weeks{grid-template-columns:minmax(0,1fr);}
+}
+@media(prefers-reduced-motion:reduce){.d{transition:none;}}
+/* VESPER-CAL-STYLE:END */
+#gate{position:fixed;inset:0;z-index:100;background:var(--cream);display:grid;place-items:center;padding:24px;}
+#gate.hidden{display:none;}
+#gate .card{background:var(--paper);border:1px solid var(--line);border-top:4px solid var(--gold);border-radius:12px;padding:26px 28px;max-width:420px;display:grid;gap:12px;text-align:center;}
+#gate a{color:var(--gold2);font-weight:600;}
+</style>
+</head>
+<body>
+
+<div id="gate" role="status" aria-live="polite">
+  <div class="card">
+    <span class="eyebrow">Área de profesores</span>
+    <p id="gate-msg">Comprobando tu acceso de profesor…</p>
+    <a id="gate-back" href="materiales.html" hidden>Ir a mis materiales</a>
+  </div>
+</div>
+
+<!-- VESPER-CAL-BODY:START -->
+<header class="vh">
+  <a class="brand" href="index.html">
+    <img src="assets/images/vesper_logo_inverted.png" alt="Vesper Academy">
+    <span><b>Vesper Academy</b><small>Calendario 2027</small></span>
+  </a>
+  <div class="right">
+    <a class="back" href="portal_profesores.html">Portal profesor</a>
+    <a class="back" href="index.html">Sitio principal</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="in">
+    <span class="eyebrow">Herramientas del profesor · Ciclo escolar 2027</span>
+    <h1>Calendario escolar <em>2027</em></h1>
+    <p>Doce ciclos, uno por curso, y cada uno dura 20 clases contadas. Los festivos y las vacaciones solo pausan el ciclo: la clase que no se dio se recorre al siguiente día hábil, así que nadie pierde clases. Se cobra igual que hoy, una vez por ciclo, 12 veces al año.</p>
+  </div>
+</section>
+
+<main class="wrap">
+
+  <section class="stats" aria-label="El calendario en cifras">
+    <div class="stat"><b>12</b><span>ciclos al año, uno por curso</span></div>
+    <div class="stat"><b>20</b><span>clases en todos los ciclos</span></div>
+    <div class="stat"><b>240</b><span>clases en vivo en el año</span></div>
+    <div class="stat"><b>3</b><span>semanas de vacaciones</span></div>
+  </section>
+
+  <section class="stack">
+    <div class="sec-h">
+      <span class="eyebrow">El año completo</span>
+      <h2>2027 de un vistazo</h2>
+      <p>Toca un ciclo en la tabla de fechas para resaltarlo aquí.</p>
+    </div>
+    <div class="legend">
+      <span><i style="background:var(--cyc-odd)"></i>Ciclo impar</span>
+      <span><i style="background:var(--cyc-even)"></i>Ciclo par</span>
+      <span><i style="background:repeating-linear-gradient(135deg,var(--vac) 0 4px,transparent 4px 7px);border:1px solid var(--vac-ink)"></i>Vacaciones</span>
+      <span><i style="border:1.5px solid var(--red);border-radius:50%"></i>Festivo</span>
+    </div>
+    <div class="year" id="year"></div>
+  </section>
+
+  <section class="stack">
+    <div class="sec-h">
+      <span class="eyebrow">Fechas</span>
+      <h2>Los 12 ciclos</h2>
+      <p>La inscripción cierra tres días de clase antes del inicio. El examen final es la clase 20.</p>
+    </div>
+    <div class="tablecard">
+      <table class="cycles">
+        <thead><tr><th>Ciclo</th><th>Inicia</th><th>Termina (examen)</th><th>Clases</th><th>Cierre de inscripción</th><th>Pausas dentro del ciclo</th></tr></thead>
+        <tbody id="cycleRows"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="stack">
+    <div class="sec-h">
+      <span class="eyebrow">Dentro de cada ciclo</span>
+      <h2>Se planea por número de clase, no por fecha</h2>
+      <p>Clase 1, clase 2… hasta la 20. Si el martes es festivo, la clase del martes se da el miércoles. Así ningún profesor tiene que comprimir lecciones ni dar clase en sábado.</p>
+    </div>
+    <div class="sessions" aria-label="Las 20 clases de un ciclo">
+      <span></span><span></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span><span></span><span></span>
+      <span></span><span></span><span></span><span class="rep" title="Repaso"></span><span class="ex" title="Examen final"></span>
+    </div>
+    <div class="legend">
+      <span><i style="background:var(--cyc-odd)"></i>Contenido (clases 1 a 18)</span>
+      <span><i style="background:var(--cyc-even)"></i>Repaso (clase 19)</span>
+      <span><i style="background:var(--navy)"></i>Examen final (clase 20)</span>
+    </div>
+    <div class="weeks">
+      <div class="wk"><h3>Clases 1 a 5</h3><p class="who">Alumnos</p><p>Bienvenida, acceso al libro y a la app. Si alguien se inscribe tarde, puede entrar a más tardar en la clase 3.</p><p class="who">Equipo</p><p>Lista de grupo cerrada en la clase 3. Seguimiento a quien faltó a la primera.</p></div>
+      <div class="wk"><h3>Clases 6 a 10</h3><p class="who">Alumnos</p><p>Contenido del curso.</p><p class="who">Equipo</p><p>Se confirman las fechas del siguiente ciclo y se abren exámenes de ubicación.</p></div>
+      <div class="wk"><h3>Clases 11 a 15</h3><p class="who">Alumnos</p><p>Contenido y aviso de renovación.</p><p class="who">Equipo</p><p>Cobro del siguiente ciclo. Se arman los grupos que abren, según quién renueva.</p></div>
+      <div class="wk"><h3>Clases 16 a 20</h3><p class="who">Alumnos</p><p>Repaso en la clase 19 y examen en la 20. Resultado y siguiente nivel ese mismo día.</p><p class="who">Equipo</p><p>La inscripción cierra en la clase 17. Calificaciones y constancias el día del examen.</p></div>
+    </div>
+  </section>
+
+  <section class="stack">
+    <div class="sec-h">
+      <span class="eyebrow">Por qué así</span>
+      <h2>Ciclos de 20 clases en vez de meses de calendario</h2>
+      <p>Un mes del calendario no siempre tiene las mismas clases. En 2027, febrero tiene 20 días hábiles y marzo 23. Así, el alumno paga lo mismo y recibe un curso distinto. Aquí el curso se mide en clases: cuando hay festivo o vacaciones el ciclo se detiene y sigue al regresar. Cada ciclo empieza el día hábil siguiente al examen del anterior, así que no siempre empieza en lunes, pero nunca hay huecos.</p>
+    </div>
+    <div class="tablecard">
+      <table class="compare">
+        <thead><tr><th></th><th>Mes de calendario</th><th>Inscripción abierta</th><th class="pick">Ciclos de 20 clases</th></tr></thead>
+        <tbody>
+          <tr><td>Clases por curso</td><td class="bad">Entre 19 y 23, cambia cada mes</td><td>Depende de cuándo entre</td><td class="pick good">Siempre 20</td></tr>
+          <tr><td>Festivos</td><td class="bad">Clase perdida</td><td class="bad">Clase perdida</td><td class="pick good">Se recorre al siguiente día hábil</td></tr>
+          <tr><td>Grupos</td><td>Parejos</td><td class="bad">Alumnos a mitad del libro junto a nuevos</td><td class="pick good">Parejos, avanzan juntos</td></tr>
+          <tr><td>Cobros al año</td><td>12</td><td>Irregular</td><td class="pick good">12, uno por ciclo</td></tr>
+          <tr><td>Trabajo del equipo</td><td>Cierre y arranque el día 1, caiga en lo que caiga</td><td class="bad">Ubicación y alta todo el tiempo</td><td class="pick good">Una ventana de inscripción por ciclo</td></tr>
+          <tr><td>Vacaciones</td><td>Cortan meses a la mitad</td><td>Difíciles de planear</td><td class="pick good">Pausan el ciclo y se avisan desde enero</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section class="two">
+    <div class="panel">
+      <span class="eyebrow" style="color:var(--gold2)">Para los alumnos</span>
+      <h3>Por qué les conviene</h3>
+      <ul>
+        <li>Siempre reciben las mismas 20 clases por el mismo precio, aunque haya festivos o vacaciones.</li>
+        <li>Nunca entran a un grupo a la mitad del libro.</li>
+        <li>Al terminar un ciclo pasan al siguiente nivel al día hábil siguiente, sin huecos.</li>
+        <li>Las vacaciones caen en Semana Santa, Navidad y Año Nuevo, cuando ellos también descansan.</li>
+      </ul>
+    </div>
+    <div class="panel dark">
+      <span class="eyebrow">Para el equipo</span>
+      <h3>Por qué nos conviene</h3>
+      <ul>
+        <li>Un solo arranque, un solo cierre y una sola cobranza por ciclo, para todos los grupos.</li>
+        <li>Los profesores preparan un plan fijo de 20 clases por curso.</li>
+        <li>El año cuadra exacto: 12 ciclos de 20 clases entre el 4 de enero y el 17 de diciembre.</li>
+        <li>Tres semanas de vacaciones fijas y conocidas, más festivos y el Día de Muertos.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="two">
+    <div class="stack">
+      <span class="eyebrow" style="color:var(--gold2)">Otros planes</span>
+      <h3>Cómo encajan en los ciclos</h3>
+      <ul>
+        <li><strong>Grupal y Especializados:</strong> siguen exactamente los 12 ciclos.</li>
+        <li><strong>Club de Conversación</strong> (2 clases por semana): 8 sesiones por ciclo, martes y jueves. Si una cae en festivo o vacaciones, se recorre a la siguiente fecha del club.</li>
+        <li><strong>1 a 1:</strong> horario libre, pero respeta festivos y vacaciones. Los cambios de plan se hacen al cierre de ciclo.</li>
+      </ul>
+    </div>
+    <div class="stack">
+      <span class="eyebrow" style="color:var(--gold2)">Horarios</span>
+      <h3>Pocas franjas, siempre a la misma hora</h3>
+      <ul>
+        <li>Un grupo conserva su hora durante todo el ciclo y, de preferencia, en los siguientes niveles.</li>
+        <li>Concentren los grupos en dos o tres franjas fijas (temprano en la mañana y después del trabajo) para llenar grupos en lugar de abrir muchos pequeños.</li>
+        <li>El nivel 1 debería abrir en cada ciclo, porque es la entrada de casi todos los alumnos nuevos. Los niveles altos pueden abrir cada dos ciclos si no hay alumnos suficientes.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="notice read">
+    <span class="eyebrow" style="color:var(--gold2)">Cómo empezar</span>
+    <h3>Transición desde noviembre de 2026</h3>
+    <ul>
+      <li>Los grupos que ya están en curso terminan su mes como estaba previsto.</li>
+      <li>Para quien termina a mediados de noviembre o quiere empezar ya, puede abrirse un ciclo puente del <strong>23 de noviembre al 18 de diciembre de 2026</strong>: son 20 clases sin festivos.</li>
+      <li>Vacaciones de Navidad y Año Nuevo del 21 de diciembre de 2026 al 1 de enero de 2027.</li>
+      <li>La inscripción del Ciclo 1 cierra el miércoles 16 de diciembre, antes de vacaciones. El Ciclo 1 arranca el lunes 4 de enero.</li>
+    </ul>
+  </section>
+
+  <p class="foot">Días sin clase en 2027. Festivos de la Ley Federal del Trabajo: 1 ene, 1 feb, 15 mar, 1 may (sábado), 16 sep, 15 nov y 25 dic (sábado). Además, Día de Muertos el martes 2 de noviembre. Vacaciones: Semana Santa del 22 al 26 de marzo (incluye Jueves y Viernes Santo) y Navidad y Año Nuevo del 20 al 31 de diciembre; se regresa el lunes 3 de enero de 2028. En 2028 la Pascua es el 16 de abril, así que las fechas cambian.</p>
+</main>
+<!-- VESPER-CAL-BODY:END -->
+
+<script>
+/* VESPER-CAL-SCRIPT:START */
+(function () {
+  var MONTHS = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
+  var MON_S = ["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];
+  var DOW_S = ["dom","lun","mar","mié","jue","vie","sáb"];
+
+  var FIRST_DAY = "2027-01-04", CYCLES = 12, CLASSES = 20;
+  var breaks = [
+    { from: "2026-12-21", to: "2027-01-01", label: "Vacaciones de Navidad y Año Nuevo", hide: true },
+    { from: "2027-03-22", to: "2027-03-26", label: "Vacaciones de Semana Santa" },
+    { from: "2027-12-20", to: "2027-12-31", label: "Vacaciones de Navidad y Año Nuevo (regreso el lunes 3 de enero de 2028)" }
+  ];
+  var holidays = {
+    "2027-01-01": "Año Nuevo", "2027-02-01": "Día de la Constitución", "2027-03-15": "Natalicio de Benito Juárez",
+    "2027-03-25": "Jueves Santo", "2027-03-26": "Viernes Santo", "2027-05-01": "Día del Trabajo",
+    "2027-09-16": "Independencia", "2027-11-02": "Día de Muertos", "2027-11-15": "Revolución Mexicana",
+    "2027-12-25": "Navidad"
+  };
+
+  function pad(n) { return n < 10 ? "0" + n : "" + n; }
+  function iso(d) { return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()); }
+  function parse(s) { var p = s.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
+  function addDays(d, n) { return new Date(d.getFullYear(), d.getMonth(), d.getDate() + n); }
+  function fmt(s) { var d = parse(s); return DOW_S[d.getDay()] + " " + d.getDate() + " " + MON_S[d.getMonth()]; }
+  function inBreak(s) { for (var i = 0; i < breaks.length; i++) if (s >= breaks[i].from && s <= breaks[i].to) return breaks[i]; return null; }
+  function isClassDay(d) { var s = iso(d), wd = d.getDay(); return wd !== 0 && wd !== 6 && !holidays[s] && !inBreak(s); }
+  function nextClassDay(d) { while (!isClassDay(d)) d = addDays(d, 1); return d; }
+  function classDaysBefore(d, n) { while (n > 0) { d = addDays(d, -1); if (isClassDay(d)) n--; } return d; }
+
+  /* Cada ciclo son 20 días de clase contados; festivos y vacaciones lo pausan */
+  var cycles = [], cur = nextClassDay(parse(FIRST_DAY));
+  for (var n = 1; n <= CYCLES; n++) {
+    var c = { n: n, start: iso(cur), classes: 0, pauses: [] }, d = cur, s;
+    for (;; d = addDays(d, 1)) {
+      s = iso(d);
+      if (isClassDay(d)) { if (++c.classes === CLASSES) break; continue; }
+      if (d.getDay() === 0 || d.getDay() === 6) continue;
+      var b = inBreak(s), why = b ? b.label.replace(/ \(.*\)/, "") : holidays[s];
+      var last = c.pauses[c.pauses.length - 1];
+      if (last && last.why === why) last.to = s; else c.pauses.push({ from: s, to: s, why: why });
+    }
+    c.end = s;
+    cycles.push(c);
+    cur = nextClassDay(addDays(d, 1));
+  }
+  function cycleOf(s) { for (var i = 0; i < cycles.length; i++) if (s >= cycles[i].start && s <= cycles[i].end) return cycles[i]; return null; }
+  function firstWeekday(m) {
+    for (var dd = 1; dd <= 7; dd++) { var w = new Date(2027, m, dd).getDay(); if (w !== 0 && w !== 6) return dd; }
+    return 1;
+  }
+
+  /* Rejilla de 12 meses */
+  var year = document.getElementById("year"), html = "";
+  for (var m = 0; m < 12; m++) {
+    var first = new Date(2027, m, 1), days = new Date(2027, m + 1, 0).getDate();
+    var lead = (first.getDay() + 6) % 7, teach = 0, cells = "";
+    ["L","M","M","J","V","S","D"].forEach(function (x) { cells += '<span class="dow">' + x + "</span>"; });
+    for (var k = 0; k < lead; k++) cells += "<span></span>";
+    for (var day = 1; day <= days; day++) {
+      var dt = new Date(2027, m, day), ds = iso(dt), wd = dt.getDay();
+      var cls = ["d"], attrs = "", title = "", cy = cycleOf(ds), br = inBreak(ds);
+      if (wd === 0 || wd === 6) cls.push("we");
+      else if (br) { cls.push("br"); title = br.label; }
+      else if (cy) {
+        cls.push(cy.n % 2 ? "ca" : "cb");
+        attrs = ' data-cy="' + cy.n + '"';
+        title = "Ciclo " + cy.n;
+        if (!holidays[ds]) teach++;
+        if (ds === cy.start || day === firstWeekday(m)) { cls.push("first"); attrs += ' data-c="C' + cy.n + '"'; }
+      }
+      if (holidays[ds]) { cls.push("hol"); title = holidays[ds] + (title ? " · " + title : ""); }
+      cells += '<span class="' + cls.join(" ") + '"' + attrs + (title ? ' title="' + title + '"' : "") + ">" + day + "</span>";
+    }
+    html += '<div class="month"><h3>' + MONTHS[m] + "<small>" + teach + " clases</small></h3>" +
+      '<div class="grid7">' + cells + "</div></div>";
+  }
+  year.innerHTML = html;
+
+  /* Tabla de ciclos, con las vacaciones intercaladas */
+  var rows = "", timeline = [];
+  cycles.forEach(function (c) { timeline.push({ at: c.start, c: c }); });
+  breaks.forEach(function (b) { if (!b.hide) timeline.push({ at: b.from, b: b }); });
+  timeline.sort(function (a, z) { return a.at < z.at ? -1 : 1; });
+  timeline.forEach(function (t) {
+    if (t.b) {
+      rows += '<tr class="brk"><td></td><td colspan="5">' + t.b.label + " · " + fmt(t.b.from) + " – " + fmt(t.b.to) + "</td></tr>";
+      return;
+    }
+    var c = t.c;
+    var notes = c.pauses.map(function (p) {
+      return p.why + " (" + (p.from === p.to ? fmt(p.from) : fmt(p.from) + " – " + fmt(p.to)) + ")";
+    });
+    var close = classDaysBefore(parse(c.start), 3);
+    rows += '<tr tabindex="0" data-row="' + c.n + '"><td><span class="num">' + c.n + "</span></td><td>" + fmt(c.start) +
+      "</td><td>" + fmt(c.end) + '</td><td><span class="chip">' + c.classes + " clases</span></td><td>" +
+      fmt(iso(close)) + (close.getFullYear() < 2027 ? " 2026" : "") + "</td><td>" + (notes.join(", ") || "Ninguna") + "</td></tr>";
+  });
+  var tbody = document.getElementById("cycleRows");
+  tbody.innerHTML = rows;
+
+  /* Resaltar un ciclo en el calendario */
+  var selected = null;
+  function highlight(num) {
+    selected = (selected === num) ? null : num;
+    year.classList.toggle("focus", selected !== null);
+    year.querySelectorAll(".d[data-cy]").forEach(function (el) { el.classList.toggle("on", el.getAttribute("data-cy") === String(selected)); });
+    tbody.querySelectorAll("tr[data-row]").forEach(function (tr) { tr.classList.toggle("sel", tr.getAttribute("data-row") === String(selected)); });
+  }
+  tbody.addEventListener("click", function (e) {
+    var tr = e.target.closest("tr[data-row]"); if (tr) highlight(+tr.getAttribute("data-row"));
+  });
+  tbody.addEventListener("keydown", function (e) {
+    if (e.key !== "Enter" && e.key !== " ") return;
+    var tr = e.target.closest("tr[data-row]"); if (tr) { e.preventDefault(); highlight(+tr.getAttribute("data-row")); }
+  });
+})();
+/* VESPER-CAL-SCRIPT:END */
+
+/* Puerta del área de profesores: misma que vesper_engine.html. Solo decide la pantalla. */
+(function () {
+  var gate = document.getElementById("gate");
+  if (!window.VesperAuth || !VesperAuth.teacherAccess) { gate.classList.add("hidden"); return; }
+  VesperAuth.teacherAccess().then(function (st) {
+    if (st === "denied") {
+      document.getElementById("gate-msg").textContent = "Esta área es solo para el profesorado de Vesper Academy. " +
+        "Si eres profesor y no puedes entrar, pide a la academia que active tu correo.";
+      document.getElementById("gate-back").hidden = false;
+    } else {
+      gate.classList.add("hidden");
+    }
+  });
+})();
+</script>
+</body>
+</html>
