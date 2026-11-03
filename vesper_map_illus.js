@@ -44,8 +44,10 @@ window.VESPER_MAPIL = (function () {
          ["b1_5", 296, 300, 62], ["b1_6", 257, 300, 70], ["b1_7", 201, 300, 54], ["b1_8", 189, 300, 64, 1]],
     B2: [["b2_1", 266, 300, 84], ["b2_2", 181, 300, 92], ["b2_3", 112, 300, 88], ["b2_4", 163, 300, 102, 1],
          ["b2_5", 300, 264, 54], ["b2_6", 300, 287, 56, 1], ["b2_7", 253, 300, 60], ["b2_8", 300, 204, 46]],
+    /* C1 sin la estrella (c1_6) ni la estrella fugaz (c1_8): sobre un suelo
+       que ya es cielo estrellado se perdían y sólo sumaban ruido */
     C1: [["c1_1", 300, 230, 60], ["c1_2", 202, 300, 86], ["c1_3", 265, 300, 62], ["c1_4", 225, 300, 66, 1],
-         ["c1_5", 252, 300, 80], ["c1_6", 265, 300, 46, 1], ["c1_7", 223, 300, 78], ["c1_8", 300, 287, 56]],
+         ["c1_5", 252, 300, 80], ["c1_7", 223, 300, 78]],
     C2: [["c2_1", 208, 300, 100, 1], ["c2_2", 126, 300, 88], ["c2_3", 188, 300, 72, 1], ["c2_4", 270, 300, 60],
          ["c2_5", 172, 300, 70], ["c2_6", 91, 300, 84, 1], ["c2_7", 222, 300, 66, 1], ["c2_8", 247, 300, 58, 1]]
   };
@@ -69,9 +71,12 @@ window.VESPER_MAPIL = (function () {
 
   /* Misma forma que la capa grabada (.wprops > img con top en %), para que
      placeProps() de leccion_app.js siga esquivando rótulos y nodos. */
+  /* piezas por parada: C1 va más espaciado porque sus piezas son oro
+     brillante sobre fondo oscuro y cada una pesa el doble en la vista */
+  var DENSITY = { C1: 1.05 };
   function propsLayer(lv, nStops, trnd) {
     var set = PROPS[lv] || PROPS.A1, wide = window.innerWidth >= 560;
-    var N = Math.max(12, Math.round((nStops || 0) * 1.7)), k = wide ? 1.25 : 1, maxW = wide ? 120 : 82;
+    var N = Math.max(10, Math.round((nStops || 0) * (DENSITY[lv] || 1.7))), k = wide ? 1.25 : 1, maxW = wide ? 120 : 82;
     var h = '<div class="wprops wil-props" aria-hidden="true">';
     for (var i = 0; i < N; i++) {
       var side = (i % 2) ? "R" : "L";
