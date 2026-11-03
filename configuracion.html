@@ -69,6 +69,8 @@
 
   /* ---- segmented / option groups ---- */
   .seg{display:grid;gap:8px}
+  .vol{width:100%;margin-top:10px;accent-color:var(--gold-deep,#a8843d);height:28px;cursor:pointer}
+  #snd-more[aria-disabled="true"]{opacity:.45;pointer-events:none}
   .seg.cols{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
   .seg button{display:flex;align-items:center;gap:10px;text-align:left;width:100%;cursor:pointer;
     border:1.5px solid var(--line);border-radius:13px;padding:11px 13px;background:var(--paper);color:var(--ink);
@@ -261,8 +263,29 @@
     <div class="field">
       <div class="row" style="justify-content:space-between">
         <span class="label" id="lab-snd" style="margin:0">Efectos de sonido
-          <span class="hint">Un pequeño sonido al acertar o fallar.</span></span>
+          <span class="hint">Sonidos cortos al acertar, fallar, terminar una lección y más.</span></span>
         <button class="switch" id="sw-snd" role="switch" aria-checked="true" aria-labelledby="lab-snd"></button>
+      </div>
+    </div>
+    <div id="snd-more">
+      <div class="field">
+        <span class="label" id="lab-sndpack">Estilo de sonido
+          <span class="hint">Toca uno para escucharlo.</span></span>
+        <div class="seg cols" id="seg-sndpack" role="radiogroup" aria-labelledby="lab-sndpack"></div>
+      </div>
+      <div class="field">
+        <div class="row" style="justify-content:space-between">
+          <label class="label" for="snd-vol" style="margin:0">Volumen de efectos</label>
+          <span class="muted" id="snd-vol-out" aria-hidden="true">60%</span>
+        </div>
+        <input type="range" id="snd-vol" class="vol" min="0" max="100" step="10" value="60" aria-valuetext="60 por ciento">
+      </div>
+      <div class="field">
+        <div class="row" style="justify-content:space-between">
+          <span class="label" id="lab-tap" style="margin:0">Sonido al tocar opciones
+            <span class="hint">Un clic muy suave al elegir una respuesta.</span></span>
+          <button class="switch" id="sw-tap" role="switch" aria-checked="false" aria-labelledby="lab-tap"></button>
+        </div>
       </div>
     </div>
     <div class="field">
@@ -348,6 +371,7 @@
 <script src="vesper_icons.js"></script>
 <script src="vesper_opticons.js"></script>
 <script src="vesper_economy.js"></script>
+<script src="vesper_sfx.js"></script>
 <script>
 /* rellena los iconos SVG de marca en los encabezados de sección (sin emojis) */
 (function () {
@@ -588,6 +612,38 @@
 
   /* ---------- sonido ---------- */
   wireSwitch("sw-snd", p.soundFx !== false, "soundFx");
+  (function () {
+    var SFX = window.VESPER_SFX;
+    var more = $("snd-more"), sw = $("sw-snd");
+    function syncMore() {
+      var on = sw && sw.getAttribute("aria-checked") === "true";
+      if (more) { more.setAttribute("aria-disabled", on ? "false" : "true"); try { more.inert = !on; } catch (e) {} }
+    }
+    if (sw) sw.addEventListener("click", syncMore);
+    syncMore();
+    /* estilo: guarda y deja escucharlo */
+    var PACK = { clasico: { label: "Clásico" }, suave: { label: "Suave" }, arcade: { label: "Arcade" } };
+    var curPack = PACK[p.sfxPack] ? p.sfxPack : "clasico";
+    radioGroup("seg-sndpack", ["clasico", "suave", "arcade"], PACK, curPack, function (id) {
+      P.set({ sfxPack: id }); flash();
+      if (SFX && SFX.preview) SFX.preview(id);
+    });
+    /* volumen: guarda al soltar y suena una muestra con el nivel nuevo */
+    var vol = $("snd-vol"), out = $("snd-vol-out");
+    var v0 = (p.sfxVolume != null && isFinite(+p.sfxVolume)) ? +p.sfxVolume : 60;
+    function paint(v) { if (out) out.textContent = v + "%"; if (vol) vol.setAttribute("aria-valuetext", v + " por ciento"); }
+    if (vol) {
+      vol.value = v0; paint(v0);
+      vol.addEventListener("input", function () { paint(+vol.value); });
+      vol.addEventListener("change", function () {
+        P.set({ sfxVolume: +vol.value }); flash();
+        if (SFX && SFX.preview) SFX.preview();
+      });
+    }
+    wireSwitch("sw-tap", !!p.sfxTap, "sfxTap");
+    var tapSw = $("sw-tap");
+    if (tapSw) tapSw.addEventListener("click", function () { if (SFX && SFX.tap) SFX.tap(); });
+  })();
   wireSwitch("sw-autoplay", p.autoplayAudio !== false, "autoplayAudio");
 
   /* ---------- congelar racha ---------- */

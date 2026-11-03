@@ -217,6 +217,9 @@ window.VESPER_PERSONA = (function () {
     reduceMotion: false,        /* forzar menos animacion (ademas de prefers-reduced-motion) */
     /* --- sonido --- */
     soundFx: true,              /* efectos de sonido en acierto/error */
+    sfxVolume: 60,              /* volumen de efectos 0..100 */
+    sfxPack: "clasico",         /* estilo: clasico | suave | arcade */
+    sfxTap: false,              /* clic suave al tocar opciones */
     autoplayAudio: true,        /* autoplay del audio en ejercicios de listening */
     /* --- metas --- */
     freezeStreak: false         /* congela la racha: no se rompe por dias sin practicar */

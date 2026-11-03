@@ -215,6 +215,17 @@
   }
   /* atajo seguro para disparar un cue con nombre del módulo de sonido */
   function sfx(name, arg) { try { if (window.VESPER_SFX && VESPER_SFX[name]) VESPER_SFX[name](arg); } catch (e) {} }
+  /* clic suave al elegir una opción (solo si el alumno lo activó en
+     Configuración → Sonido; VESPER_SFX.tap lo comprueba). La columna derecha
+     de "Emparejar" no cuenta: ahí suena pair()/miss(). */
+  try {
+    document.addEventListener("click", function (e) {
+      var b = e.target && e.target.closest
+        && e.target.closest('.opt, .tf-btn, .chip, .match-item[data-side="l"]');
+      if (!b || b.disabled || b.classList.contains("done")) return;
+      sfx("tap");
+    }, true);
+  } catch (e) {}
   /* icono SVG de marca por nombre, en línea (envuelto en .ei para alinear y
      escalar con el texto). "" si el set no cargó. */
   function ic(name) {
@@ -2888,7 +2899,12 @@
 
   /* ---------- EXERCISES ---------- */
   function renderExercise() {
-    if (exIdx === 0) { combo = 0; maxCombo = 0; runT0 = Date.now(); struckAt = -1; }   /* arranque/reintento: combo y reloj a cero */
+    if (exIdx === 0) {   /* arranque/reintento: combo y reloj a cero */
+      combo = 0; maxCombo = 0; runT0 = Date.now(); struckAt = -1;
+      /* sin cue si el 1er ejercicio es listening: chocaría con el autoplay */
+      var ex0 = lesson.exercises[0];
+      if (!(ex0 && ex0.type === "listening")) sfx("start");
+    }
     var total = lesson.exercises.length;
     var pct = 22 + Math.round(58 * (exIdx / total));
     var ex = lesson.exercises[exIdx];
@@ -2958,7 +2974,7 @@
     var blocked = false;
     if (!wasOk && window.VESPER_ECONOMY && VESPER_ECONOMY.livesActive && VESPER_ECONOMY.livesActive()) {
       VESPER_ECONOMY.loseHeart();
-      sfx("heartloss");
+      sfx(VESPER_ECONOMY.hearts() === 1 ? "lastheart" : "heartloss");
       if (VESPER_ECONOMY.hearts() <= 0) blocked = true;
     }
     exIdx++;
@@ -3448,6 +3464,7 @@
         if (lp === rp) {
           selEl.classList.remove("sel"); selEl.classList.add("done"); b.classList.add("done");
           selEl = null; matched++;
+          if (matched < pairs.length) sfx("pair");   /* el último lo celebra feedbackBox */
           if (matched === pairs.length) {
             done = true;
             results[exIdx] = errors === 0;
@@ -3455,7 +3472,7 @@
             var v = byId("verify"); v.disabled = false; setVerifyNext(v, total);
           }
         } else {
-          errors++;
+          errors++; sfx("miss");
           var bad = b; bad.classList.add("bad"); var ls = selEl; if (ls) ls.classList.add("bad");
           clearSel();
           setTimeout(function () { bad.classList.remove("bad"); if (ls) ls.classList.remove("bad"); }, 420);
@@ -3702,6 +3719,7 @@
   /* No alcanzó el umbral: no cuenta como superada (sin XP ni desbloqueo).
      Ofrece reintentar la misma lección desde el primer ejercicio. */
   function renderRetry(correct, total, pct) {
+    sfx("fail");
     show('<div class="wrap lc-done">' + topbar(86) + '<div class="card center">'
       + mascot("incorrect", T("¡Casi! Repasa y vuelve a intentarlo.", "Almost! Review it and try again."))
       + '<h1 class="lc-title">' + T('Te faltó poco', 'So close') + '</h1>'
@@ -3728,6 +3746,7 @@
     if (pct < bm.pass) {
       earnedXp = 0;
       track("boss_fail", { level: lesson.bossLevel, pct: pct });
+      sfx("fail");
       show('<div class="wrap">' + topbar(86) + '<div class="card center">'
         + '<div class="boss-emblem boss-gloat" aria-hidden="true">' + bossPortrait(lesson.bossLevel) + '<span class="duel-seal lose">' + T('Ganó él', 'It won') + '</span></div>'
         + '<p class="vs-say">«' + esc(bossLine("lose")) + '»</p>'
@@ -3805,7 +3824,7 @@
     var vStyle = passed
       ? "background:#e7f4ec;color:#2d7a4f;border:2px solid #2d7a4f"
       : "background:#f7e7e7;color:#b03a3a;border:2px solid #b03a3a";
-    if (passed) { burstConfetti(40); sfx("fanfare"); } else { sfx("complete"); }
+    if (passed) { burstConfetti(40); sfx("fanfare"); } else { sfx("fail"); }
     show('<div class="wrap">' + topbar(92) + '<div class="card center">'
       + mascot(passed ? "milestone" : "incorrect", passed ? T("¡Examen de nivel aprobado!", "Level exam passed!") : T("Aún no alcanzas el nivel. ¡Sigue practicando!", "You're not at this level yet. Keep practising!"))
       + '<div style="display:inline-block;margin:6px auto 4px;padding:8px 22px;border-radius:999px;font:800 1.05rem/1 Inter,system-ui,sans-serif;letter-spacing:1.5px;text-transform:uppercase;' + vStyle + '">' + verdict + '</div>'
@@ -3894,6 +3913,7 @@
        (cosHtml ya refleja los cosméticos recién desbloqueados) */
     if (info.milestone) sfx("levelup");
     else if (ach.length || cosHtml) sfx("achievement");
+    else if (info.isNewDay) sfx("streak");   /* primera lección del día: la racha sumó */
 
     show('<div class="wrap">' + topbar(100) + '<div class="card center">'
       + mascot(mstate)
