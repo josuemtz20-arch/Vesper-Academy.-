@@ -30,7 +30,7 @@
     reduceMotion: false,
     soundFx: true,
     sfxVolume: 60,       /* 0..100 */
-    sfxPack: "clasico",  /* clasico | suave | arcade (vesper_sfx.js) */
+    sfxPack: "lucero",   /* lucero | clasico | suave | arcade (vesper_sfx.js) */
     sfxTap: false,       /* clic al tocar opciones: apagado por defecto */
     autoplayAudio: true,
     freezeStreak: false

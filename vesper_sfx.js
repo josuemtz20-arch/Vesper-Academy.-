@@ -7,7 +7,7 @@
  * Preferencias (las guarda configuracion.html en el perfil, las lee VESPER_PREFS):
  *   soundFx   bool     interruptor general (también apaga la vibración)
  *   sfxVolume 0..100   volumen de los efectos (por defecto 60)
- *   sfxPack   "clasico" | "suave" | "arcade"   estilo de sonido
+ *   sfxPack   "lucero" | "clasico" | "suave" | "arcade"   estilo (por defecto lucero)
  *   sfxTap    bool     clic al tocar una opción (APAGADO por defecto)
  *
  * Reglas anti-molestia:
@@ -17,6 +17,12 @@
  *     rebotes de render) y no suena con la pestaña en segundo plano.
  *   - El tap está apagado por defecto y es casi subliminal.
  *   - Cada estilo tiene melodías y timbre propios (ver CUES), no solo un filtro.
+ *
+ * Lucero (el estilo de la marca) no usa osciladores puros: es una celesta
+ * MODELADA (síntesis modal con los modos reales de una barra de metal,
+ * 1 : 2.76 : 5.40 : 8.93, golpe de mazo y caída distinta por modo) en una sala
+ * con reverb. Cada toque varía un poco en afinación y fuerza. Todos los cues
+ * salen del motivo de Vesper: D5 A5 G5 D6.
  *   - La vibración se omite con "reducir movimiento".
  *
  * window.VESPER_SFX:
@@ -33,7 +39,7 @@
  *   PACKS                          ids de estilos disponibles
  * ============================================================ */
 window.VESPER_SFX = (function () {
-  var PACKS = ["clasico", "suave", "arcade"];
+  var PACKS = ["lucero", "clasico", "suave", "arcade"];
   var actx = null, master = null, lowpass = null, curPack = null;
 
   function prefs() {
@@ -48,7 +54,7 @@ window.VESPER_SFX = (function () {
   }
   function packOf(p) {
     var k = (p || prefs()).sfxPack;
-    return PACKS.indexOf(k) >= 0 ? k : "clasico";
+    return PACKS.indexOf(k) >= 0 ? k : "lucero";
   }
   function reduceMotion() {
     try { if (window.VESPER_PREFS && VESPER_PREFS.get && VESPER_PREFS.get().reduceMotion) return true; } catch (e) {}
@@ -182,11 +188,96 @@ window.VESPER_SFX = (function () {
     }
   };
 
+  /* ================= LUCERO: celesta modelada ================= */
+  var LSR = 32000;            /* los buffers de nota van a 32 kHz: el parcial más alto cabe y ocupan menos memoria */
+  var glockCache = {}, hall = null;
+  function hz(n) { return 440 * Math.pow(2, (n - 69) / 12); }
+  function rng(seed) { return function () { seed |= 0; seed = seed + 0x6D2B79F5 | 0; var t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+  /* [razón, amplitud, tau(s)] de una barra libre de metal; tau se acorta en el agudo */
+  var GLOCK = [[1, 1, 0.9], [2.76, 0.32, 0.32], [5.40, 0.13, 0.11], [8.93, 0.05, 0.05], [3.0, 0.04, 0.6]];
+  function glockBuf(ac, n, variant) {
+    var key = n + ":" + variant;
+    if (glockCache[key]) return glockCache[key];
+    var f = hz(n), rnd = rng(n * 131 + variant * 7919 + 1);
+    var len = Math.floor(LSR * 1.4), buf = ac.createBuffer(1, len, LSR), out = buf.getChannelData(0);
+    var reg = Math.pow(523 / f, 0.3);
+    GLOCK.forEach(function (p) {
+      var fr = f * p[0] * (1 + (rnd() - 0.5) * 0.003);
+      if (fr > LSR * 0.42) return;
+      var e = p[1] * (0.85 + rnd() * 0.3), k = Math.exp(-1 / (p[2] * reg * LSR));
+      var w = 2 * Math.PI * fr / LSR, c = 2 * Math.cos(w), ph = rnd() * 6.283;
+      var y1 = Math.sin(ph - w), y2 = Math.sin(ph - 2 * w);
+      for (var i = 0; i < len; i++) { var y = c * y1 - y2; y2 = y1; y1 = y; out[i] += e * y; e *= k; if (e < 1e-5) break; }
+    });
+    /* golpe del mazo: ráfaga de 4 ms de ruido */
+    var nl = Math.floor(LSR * 0.004), s = 0;
+    for (var j = 0; j < nl; j++) { s += 0.6 * ((rnd() * 2 - 1) - s); out[j] += s * 0.35 * Math.pow(1 - j / nl, 2); }
+    var atk = Math.floor(LSR * 0.0008); for (var a = 0; a < atk; a++) out[a] *= Math.sin((a / atk) * Math.PI / 2);
+    var fade = Math.floor(LSR * 0.05); for (var z = 0; z < fade; z++) out[len - 1 - z] *= z / fade;
+    return (glockCache[key] = buf);
+  }
+  /* sala: impulso estéreo con reflexiones tempranas y cola que se oscurece */
+  function hallNode(ac) {
+    if (hall) return hall;
+    var SR = ac.sampleRate, len = Math.floor(SR * 1.8), b = ac.createBuffer(2, len, SR), rnd = rng(4242);
+    for (var ch = 0; ch < 2; ch++) {
+      var d = b.getChannelData(ch), s = 0;
+      [0.011, 0.019, 0.027, 0.041].forEach(function (tt, k) { var i = Math.floor(SR * (tt + (ch ? 0.0013 * (k + 1) : 0))); d[i] += (ch ? -1 : 1) * (0.5 - k * 0.09); });
+      for (var i = Math.floor(SR * 0.018); i < len; i++) {
+        var x = i / len, a = 0.55 * Math.pow(1 - x, 1.5) + 0.04;
+        s += a * ((rnd() * 2 - 1) - s); d[i] += s * Math.pow(1 - x, 2.8) * 0.9;
+      }
+    }
+    hall = ac.createConvolver(); hall.buffer = b; hall.connect(master);
+    return hall;
+  }
+  /* una nota de celesta: v = fuerza 0..1 */
+  function G(ac, out, t, n, v) {
+    var src = ac.createBufferSource(); src.buffer = glockBuf(ac, n, Math.random() < 0.5 ? 0 : 1);
+    src.playbackRate.value = Math.pow(2, ((Math.random() - 0.5) * 8) / 1200);   /* ±4 cents */
+    var lp = ac.createBiquadFilter(); lp.type = "lowpass"; lp.frequency.value = 2500 + 9000 * v;   /* golpe suave = más oscuro */
+    var g = ac.createGain(); g.gain.value = 0.15 * v * (0.92 + Math.random() * 0.16);
+    src.connect(lp); lp.connect(g);
+    var dst = g;
+    if (ac.createStereoPanner) { var pn = ac.createStereoPanner(); pn.pan.value = Math.max(-0.4, Math.min(0.4, (n - 72) / 28)); g.connect(pn); dst = pn; }
+    dst.connect(out);
+    src.start(t + Math.random() * 0.006);
+  }
+  var M = [74, 81, 79, 86];   /* motivo de Vesper: D5 A5 G5 D6 */
+  var LUCERO = {
+    correct:   function (g, t) { g(t, M[0], 0.65); g(t + 0.085, M[1], 0.8); },
+    wrong:     function (g, t) { g(t, 69, 0.4); g(t + 0.14, 65, 0.36); },
+    tap:       function (g, t) { g(t, 98, 0.14); },
+    pair:      function (g, t) { g(t, 86, 0.4); },
+    miss:      function (g, t) { g(t, 69, 0.25); },
+    combo:     function (g, t, n) { var b = [74, 76, 78, 79, 81, 83, 86][comboStep(n)]; g(t, b, 0.6); g(t + 0.06, b + 12, 0.4); },
+    start:     function (g, t) { g(t, M[0], 0.5); g(t + 0.15, M[1], 0.5); },
+    heartloss: function (g, t) { g(t, 62, 0.55); g(t + 0.12, 57, 0.45); },
+    lastheart: function (g, t) { g(t, 62, 0.55); g(t + 0.34, 62, 0.45); },
+    complete:  function (g, t) { M.forEach(function (n, i) { g(t + [0, 0.11, 0.22, 0.35][i], n, i === 3 ? 0.85 : 0.68); }); },
+    fanfare:   function (g, t) {
+      M.forEach(function (n, i) { var tt = t + [0, 0.11, 0.22, 0.35][i]; g(tt, n, 0.72); g(tt + 0.01, n + 4, 0.3); });
+      [86, 88, 90, 93, 95, 98].forEach(function (n, i) { g(t + 0.6 + i * 0.05, n, 0.25); });
+    },
+    fail:      function (g, t) { [74, 81, 79, 77].forEach(function (n, i) { g(t + [0, 0.13, 0.28, 0.48][i], n, 0.45); }); },
+    streak:    function (g, t) { [86, 88, 90, 93, 95, 98].forEach(function (n, i) { g(t + i * 0.05, n, 0.3); }); },
+    achievement: function (g, t) { g(t, 86, 0.7); g(t + 0.05, 93, 0.5); g(t + 0.1, 98, 0.35); },
+    levelup:   function (g, t) { [74, 78, 81, 86, 90, 93].forEach(function (n, i) { g(t + i * 0.05, n, 0.45); }); g(t + 0.34, 98, 0.3); },
+    coin:      function (g, t) { g(t, 93, 0.45); g(t + 0.06, 98, 0.4); }
+  };
+  function playLucero(ac, name, arg) {
+    var def = LUCERO[name]; if (!def) return;
+    var out = ac.createGain(); out.connect(master);
+    var send = ac.createGain(); send.gain.value = 0.26; out.connect(send); send.connect(hallNode(ac));
+    def(function (t, n, v) { G(ac, out, t, n, v); }, ac.currentTime + 0.01, arg);
+  }
+
   /* reproduce un cue con el estilo activo (o el forzado por opt.pack) */
   function play(name, arg, opt) {
     opt = opt || {};
     if (throttled(name, opt.gap != null ? opt.gap : (GAP[name] || 110))) return;
     var ac = ctx(prefs(), opt.pack); if (!ac) return;
+    if (curPack === "lucero") { lowpass.frequency.value = 12000; try { playLucero(ac, name, arg); } catch (e) {} return; }
     var v = VOICE[curPack] || VOICE.clasico;
     lowpass.frequency.value = v.lp;
     var def = (CUES[curPack] && CUES[curPack][name]) || CUES.clasico[name];
