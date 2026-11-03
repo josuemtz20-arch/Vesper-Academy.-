@@ -3477,6 +3477,43 @@ body:has(#app #verify) #app .card.center{background-image:none}
 .dhouse__reset svg{width:15px;height:15px}
 .dhouse__reset:hover{border-color:var(--w-accent,#c5a059)}
 .dhouse__reset[hidden]{display:none}
+/* objetos tocables: solo activos con su habitación en foco. Medidas en px divididas
+   por --dz (zoom del escenario) para que el punto y la etiqueta no crezcan con el zoom. */
+.dobj{position:absolute;z-index:4;display:none;padding:0;margin:0;border:0;background:transparent;border-radius:6px;cursor:pointer;
+  font:inherit;color:inherit;-webkit-tap-highlight-color:transparent;transition:background .2s}
+.dobj.live{display:block}
+/* el punto se dibuja a tamaño fijo y se contraescala con --inv (=1/zoom): con medidas
+   fraccionarias (12px/2.6) el redondeo de subpíxeles lo deformaba en óvalo */
+.dobj.live::before{content:"";position:absolute;left:var(--px,50%);top:var(--py,50%);width:12px;height:12px;box-sizing:border-box;
+  transform:translate(-50%,-50%) scale(var(--inv,1));border-radius:50%;background:#fff8ec;
+  border:2px solid var(--w-accent,#c5a059);
+  box-shadow:0 0 0 0 rgba(255,248,236,.7);animation:dobjPulse 1.8s ease-out infinite;pointer-events:none}
+@keyframes dobjPulse{0%{box-shadow:0 0 0 0 rgba(255,248,236,.75)}100%{box-shadow:0 0 0 10px rgba(255,248,236,0)}}
+.dobj.live.found::before{animation:none;opacity:0;transform:translate(-50%,-50%) scale(calc(var(--inv,1) * .4));transition:opacity .3s,transform .3s}
+.dobj.live:hover,.dobj.live:focus-visible{background:rgba(255,236,200,.22);outline:calc(2px / var(--dz,1)) solid rgba(255,236,200,.85);outline-offset:0}
+.dobj.flash{animation:dobjFlash .9s ease}
+@keyframes dobjFlash{0%,100%{background:transparent}35%{background:rgba(255,226,170,.5)}}
+.dobj__tag{position:absolute;left:50%;bottom:100%;margin-bottom:.35em;transform:translateX(-50%) scale(.6);opacity:0;z-index:2;
+  display:flex;flex-direction:column;align-items:center;white-space:nowrap;padding:.35em .75em;border-radius:.8em;
+  background:#fff8ec;color:#2a1a0b;font:calc(.8rem / var(--dz,1))/1.15 Inter,system-ui,sans-serif;
+  box-shadow:0 .4em 1em rgba(0,0,0,.35);transition:opacity .18s,transform .25s cubic-bezier(.3,1.5,.6,1);pointer-events:none}
+.dobj__tag b{font-weight:800;font-size:1.05em}
+.dobj__tag span{font-size:.82em;color:#7a5a36}
+.dobj__tag::after{content:"";position:absolute;left:50%;top:100%;margin-left:-.45em;border:.45em solid transparent;border-top-color:#fff8ec}
+.dobj__tag.on{opacity:1;transform:translateX(-50%) scale(1)}
+/* objeto pegado al borde superior de la vista: la etiqueta va debajo */
+.dobj__tag.below{bottom:auto;top:100%;margin-bottom:0;margin-top:.35em}
+.dobj__tag.below::after{top:auto;bottom:100%;border-top-color:transparent;border-bottom-color:#fff8ec}
+/* progreso de la búsqueda de objetos */
+.dhp__hunt{display:flex;align-items:center;gap:10px;margin-top:10px}
+.dhp__huntbar{flex:1;height:7px;border-radius:999px;background:var(--cream);overflow:hidden}
+.dhp__huntbar > i{display:block;height:100%;width:0;border-radius:999px;background:var(--w-accent,#c5a059);transition:width .35s ease}
+.dhp__huntct{font-size:.76rem;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+.dword.inpic::before{content:"";position:absolute;left:7px;top:7px;width:6px;height:6px;border-radius:50%;background:var(--w-accent,#c5a059)}
+.dword.inpic.found{border-color:color-mix(in srgb,var(--w-accent,#c5a059) 60%,var(--line))}
+.dword.inpic.found::before{background:var(--success,#2e9d62)}
+.dword.flash{opacity:1;animation:dwordFlash .7s ease}
+@keyframes dwordFlash{0%,100%{transform:none}40%{transform:scale(1.05);background:var(--w-accent-soft,var(--gold-tint))}}
 /* panel de la habitación */
 .dhouse__panel{margin-top:12px}
 .dhp{background:var(--paper);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);padding:14px;
@@ -3488,7 +3525,7 @@ body:has(#app #verify) #app .card.center{background-image:none}
 .dhp__say{display:flex;align-items:center;gap:8px;margin:10px 0 0;font-size:.84rem;color:var(--muted)}
 .dhp__say img{flex:0 0 auto;width:34px;height:34px;object-fit:contain}
 /* Vesper dentro de la ilustración */
-.dvesper{position:absolute;z-index:3;padding:0;margin:0;border:0;background:transparent;border-radius:40% 40% 30% 30%;cursor:pointer;
+.dvesper{position:absolute;z-index:5;padding:0;margin:0;border:0;background:transparent;border-radius:40% 40% 30% 30%;cursor:pointer;
   -webkit-tap-highlight-color:transparent}
 .dvesper::after{content:"";position:absolute;left:50%;bottom:-2%;width:120%;height:14%;transform:translateX(-50%);border-radius:50%;
   background:radial-gradient(closest-side,var(--w-glow,rgba(255,190,110,.55)),transparent);animation:dvglow 2.4s ease-in-out infinite;pointer-events:none}
@@ -3534,6 +3571,6 @@ body:has(#app #verify) #app .card.center{background-image:none}
 }
 @media(prefers-reduced-motion:reduce){
   .dhouse__stage{transition:none}
-  .droom__pin,.dhp,.dword,.dvesper,.dvesper::after{animation:none}
+  .droom__pin,.dhp,.dword,.dvesper,.dvesper::after,.dobj.live::before,.dobj.flash,.dword.flash{animation:none}
   .dword{opacity:1}
 }

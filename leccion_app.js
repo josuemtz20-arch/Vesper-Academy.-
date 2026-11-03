@@ -1758,7 +1758,69 @@
       },
       /* Vesper dentro de la sala: tocable (saluda en inglés) */
       vesper: [23.3, 66.5, 9.2, 24.0], vesperRoom: "living",
-      greet: ["Welcome home!", "Hello! I'm Vesper.", "This is my house.", "Let's learn some words!"]
+      greet: ["Welcome home!", "Hello! I'm Vesper.", "This is my house.", "Let's learn some words!"],
+      /* objetos tocables dentro de cada habitación (solo activos con la habitación
+         en foco). Orden = apilado: los posteriores quedan encima de los anteriores,
+         así un objeto pequeño (cojín) gana sobre uno grande (sofá).
+         p (opcional) = posición del punto-pista dentro del objeto, en %, cuando el
+         centro queda tapado por otro objeto (el cuadro, bajo los retratos). */
+      objects: {
+        family: [
+          { en: "picture",  es: "cuadro",       r: [30.1, 10.2, 13.4, 12.6], p: [10, 20] },
+          { en: "father",   es: "padre",        r: [34.9, 12.0,  4.4,  9.5] },
+          { en: "son",      es: "hijo",         r: [31.8, 16.0,  3.1,  5.5] },
+          { en: "daughter", es: "hija",         r: [39.4, 15.9,  3.0,  5.6] },
+          { en: "armchair", es: "sillón",       r: [44.2, 15.8,  9.7, 10.9] }
+        ],
+        bedroom: [
+          { en: "window",   es: "ventana",      r: [ 6.2, 32.4,  3.9, 15.8], p: [50, 25] },
+          { en: "bed",      es: "cama",         r: [ 7.5, 40.2, 16.0, 16.6], p: [50, 94] },
+          { en: "blanket",  es: "manta",        r: [ 7.8, 48.0, 15.5,  6.5] },
+          { en: "pillow",   es: "almohada",     r: [12.2, 43.3,  8.3,  3.6] },
+          { en: "closet",   es: "armario",      r: [24.2, 33.6,  9.2, 20.3] },
+          { en: "mirror",   es: "espejo",       r: [34.5, 34.2,  4.2, 13.1] }
+        ],
+        bathroom: [
+          { en: "shower",   es: "ducha",        r: [42.8, 33.6,  4.5, 12.8] },
+          { en: "bath",     es: "bañera",       r: [42.0, 46.5, 14.3,  9.2] },
+          { en: "mirror",   es: "espejo",       r: [58.2, 34.2,  5.4,  8.2] },
+          { en: "sink",     es: "lavabo",       r: [57.1, 44.8,  7.3, 10.3] },
+          { en: "tap",      es: "grifo",        r: [59.2, 42.3,  3.1,  2.6] },
+          { en: "towel",    es: "toalla",       r: [65.5, 42.5,  3.8,  8.6] }
+        ],
+        living: [
+          { en: "curtain",  es: "cortina",      r: [11.7, 62.0,  3.3, 12.5] },
+          { en: "curtain",  es: "cortina",      r: [20.6, 62.0,  3.3, 12.5] },
+          { en: "window",   es: "ventana",      r: [15.0, 62.5,  5.6, 11.5] },
+          { en: "clock",    es: "reloj",        r: [31.2, 62.4,  4.6,  6.2] },
+          { en: "lamp",     es: "lámpara",      r: [ 6.8, 66.5,  4.4,  8.0] },
+          { en: "sofa",     es: "sofá",         r: [ 7.7, 74.8, 26.8, 11.0] },
+          { en: "cushion",  es: "cojín",        r: [11.1, 77.1,  4.7,  5.1] },
+          { en: "rug",      es: "alfombra",     r: [ 6.6, 89.2, 32.0,  3.6] },
+          { en: "table",    es: "mesa",         r: [14.3, 83.7,  9.9,  6.6] }
+        ],
+        kitchen: [
+          { en: "stove",    es: "estufa",       r: [42.8, 75.2,  7.3, 11.6] },
+          { en: "pot",      es: "olla",         r: [45.5, 71.2,  4.5,  4.0] },
+          { en: "fridge",   es: "refrigerador", r: [58.6, 65.6,  9.3, 12.4] },
+          { en: "table",    es: "mesa",         r: [51.2, 80.2, 18.6,  4.2] },
+          { en: "chair",    es: "silla",        r: [53.0, 84.5,  7.0,  7.5] },
+          { en: "apple",    es: "manzana",      r: [56.9, 78.0,  2.6,  3.6] },
+          { en: "bread",    es: "pan",          r: [59.2, 78.3,  4.1,  3.4] },
+          { en: "cup",      es: "taza",         r: [63.9, 78.0,  3.0,  3.6] }
+        ],
+        garden: [
+          { en: "sky",      es: "cielo",        r: [72.6, 33.0,  9.0, 13.0], p: [22, 75] },
+          { en: "tree",     es: "árbol",        r: [76.2, 36.0, 23.6, 30.0] },
+          { en: "tree",     es: "árbol",        r: [92.0, 66.0,  6.0, 20.0] },
+          { en: "bird",     es: "pájaro",       r: [92.1, 59.5,  4.0,  5.3] },
+          { en: "grass",    es: "hierba",       r: [72.5, 89.0, 17.0,  9.0] },
+          { en: "dog",      es: "perro",        r: [80.8, 74.6,  9.4, 14.0] },
+          { en: "flower",   es: "flor",         r: [74.4, 80.4,  3.8,  5.0] },
+          { en: "flower",   es: "flor",         r: [91.2, 90.9,  3.4,  5.8] },
+          { en: "flower",   es: "flor",         r: [93.6, 82.0,  2.4,  3.4] }
+        ]
+      }
     }
   };
   window.__vhouseFail = function () {
@@ -1781,7 +1843,7 @@
       + '<div class="dhouse__view" id="dhView" style="aspect-ratio:' + house.w + '/' + house.h + '">'
       + '<div class="dhouse__stage" id="dhStage">'
       + '<img class="dhouse__img" src="' + house.img + '" alt="' + esc(house.alt) + '" decoding="async" onerror="window.__vhouseFail()">'
-      + rooms
+      + rooms + denHouseObjectsHtml(house)
       + (house.vesper ? '<button class="dvesper" id="dhVesper" type="button" aria-label="Vesper: tócalo para que te salude"'
         + ' style="left:' + house.vesper[0] + '%;top:' + house.vesper[1] + '%;width:' + house.vesper[2] + '%;height:' + house.vesper[3] + '%">'
         + '<span class="dvesper__bub" id="dhBub" aria-hidden="true"></span></button>' : "")
@@ -1791,11 +1853,22 @@
       + 'Toda la casa</button></div>'
       + '<div class="dhouse__panel" id="dhPanel"></div></section>';
   }
+  function denHouseObjectsHtml(house) {
+    var h = "", objs = house.objects || {};
+    Object.keys(objs).forEach(function (room) {
+      objs[room].forEach(function (o) {
+        h += '<button class="dobj" type="button" tabindex="-1" data-room="' + esc(room) + '" data-en="' + esc(o.en) + '" data-es="' + esc(o.es) + '"'
+          + ' style="left:' + o.r[0] + '%;top:' + o.r[1] + '%;width:' + o.r[2] + '%;height:' + o.r[3] + '%' + (o.p ? ';--px:' + o.p[0] + '%;--py:' + o.p[1] + '%' : '') + '"'
+          + ' aria-label="' + esc(o.en + ", " + o.es) + '"><span class="dobj__tag" aria-hidden="true"></span></button>';
+      });
+    });
+    return h;
+  }
   function wireDenHouse(selLevel, d, house) {
     var view = byId("dhView"), stage = byId("dhStage"), panel = byId("dhPanel"), reset = byId("dhReset");
     if (!view || !stage || !panel) return;
     var order = d.branches.filter(function (br) { return !!house.rooms[br.id]; });
-    var cur = null;
+    var cur = null, foundBy = {};
     var sayIc = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5L6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/></svg>';
     var SHOW_N = 8;
     var VCAT = "assets/images/mascot/";
@@ -1825,6 +1898,7 @@
       var ty = Math.min(0, Math.max(100 - 100 * s, 50 - (r[1] + r[3] / 2) * s));
       stage.style.transform = "translate(" + tx + "%," + ty + "%) scale(" + s + ")";
       stage.style.setProperty("--dz", s);
+      stage.style.setProperty("--inv", 1 / s);
       view.classList.add("is-focus");
       each("#dhStage .droom", function (b) {
         var on = b.getAttribute("data-room") === id;
@@ -1834,37 +1908,109 @@
       // Vesper solo se puede tocar si su habitación está a la vista (si no, queda en la penumbra)
       if (vbtn) vbtn.hidden = !!house.vesperRoom && id !== house.vesperRoom;
       var m = knownMap(), bp = branchProgress(selLevel, br);
-      // primero las que aún no domina, para que lo nuevo salga al frente
-      var cards = br.cards.slice().sort(function (a, b) { return (m[cardKey(selLevel, a.en)] ? 1 : 0) - (m[cardKey(selLevel, b.en)] ? 1 : 0); });
-      var chips = cards.slice(0, SHOW_N).map(function (c, k) {
-        var known = !!m[cardKey(selLevel, c.en)];
-        return '<button class="dword' + (known ? ' known' : '') + '" type="button" data-en="' + esc(c.en) + '" style="--i:' + k + '"'
-          + ' aria-label="' + esc(c.en + ", " + c.es + ". Escuchar") + '">'
+      // objetos de esta habitación: se activan y se muestran como palabras "en el dibujo"
+      var picW = roomWords(id);
+      var found = foundBy[id] || (foundBy[id] = {});
+      each("#dhStage .dobj", function (o) {
+        var live = o.getAttribute("data-room") === id;
+        o.classList.toggle("live", live); o.tabIndex = live ? 0 : -1;
+        o.classList.toggle("found", live && !!found[o.getAttribute("data-en")]);
+      });
+      // chips: primero lo que se ve en el dibujo, luego el resto del mazo (lo no dominado antes)
+      var inPic = {}; picW.forEach(function (w) { inPic[w.en.toLowerCase()] = 1; });
+      var others = br.cards.filter(function (c) { return !inPic[c.en.toLowerCase()]; })
+        .sort(function (a, b) { return (m[cardKey(selLevel, a.en)] ? 1 : 0) - (m[cardKey(selLevel, b.en)] ? 1 : 0); });
+      var list = picW.map(function (w) { return { en: w.en, es: w.es, pic: true }; })
+        .concat(others.slice(0, Math.max(0, SHOW_N - picW.length)));
+      var chips = list.map(function (c, k) {
+        var known = !!m[cardKey(selLevel, c.en)], f = c.pic && !!found[c.en];
+        return '<button class="dword' + (known ? ' known' : '') + (c.pic ? ' inpic' : '') + (f ? ' found' : '') + '" type="button" data-en="' + esc(c.en) + '" style="--i:' + k + '"'
+          + ' aria-label="' + esc(c.en + ", " + c.es + (c.pic ? ", está en el dibujo" : "") + ". Escuchar") + '">'
           + '<span class="dword__en">' + esc(c.en) + '</span><span class="dword__es">' + esc(c.es) + '</span>'
           + '<span class="dword__say">' + (known ? "&#10003;" : sayIc) + '</span></button>';
       }).join("");
-      var rest = br.cards.length - SHOW_N;
+      var shownDeck = {}; list.forEach(function (c) { shownDeck[c.en.toLowerCase()] = 1; });
+      var rest = br.cards.filter(function (c) { return !shownDeck[c.en.toLowerCase()]; }).length;
       var nextBr = order[(order.indexOf(br) + 1) % order.length];
       panel.innerHTML = '<div class="dhp" data-room="' + esc(id) + '">'
         + '<div class="dhp__top"><span class="branch__ic' + (branchHasImg(selLevel, br.id) ? ' has-img' : '') + '">' + branchEmblemHtml(selLevel, br.id, br.icon) + '</span>'
         + '<div class="dhp__hd"><h2 class="dhp__nm" tabindex="-1" id="dhName">' + esc(br.name) + '</h2>'
         + '<div class="dhp__meta">' + (br.hint ? esc(br.hint) + ' · ' : "") + bp.done + '/' + bp.total + ' dominadas</div></div></div>'
-        + '<p class="dhp__say"><img src="' + VCAT + 'vesper_cat_explaining.webp" alt="" decoding="async"><span>Toca cada palabra para oírla. Cuando quieras, entra y practícalas.</span></p>'
+        + '<p class="dhp__say"><img src="' + VCAT + 'vesper_cat_explaining.webp" alt="" decoding="async"><span id="dhSay">'
+        + (picW.length ? 'Toca los objetos del dibujo para oír cómo se dicen.' : 'Toca cada palabra para oírla. Cuando quieras, entra y practícalas.') + '</span></p>'
+        + (picW.length ? '<div class="dhp__hunt"><span class="dhp__huntbar"><i id="dhHuntBar"></i></span><span class="dhp__huntct" id="dhHuntCt"></span></div>' : '')
         + '<div class="dhp__words">' + chips + '</div>'
         + (rest > 0 ? '<p class="dhp__rest">+' + rest + ' palabras más dentro</p>' : "")
         + '<div class="dhp__acts"><button class="btn btn-gold" id="dhEnter" type="button">Entrar ' + esc(br.name.replace(/^El\s+/, "al ").replace(/^(La|Los|Las)\s+/, function (m) { return "a " + m.toLowerCase(); })) + '</button>'
         + '<button class="btn btn-ghost" id="dhNext" type="button">' + esc(nextBr.name) + ' &#8250;</button></div></div>';
-      each("#dhPanel .dword", function (w) { w.onclick = function () { speak(w.getAttribute("data-en")); }; });
+      each("#dhPanel .dword", function (w) {
+        w.onclick = function () {
+          var en = w.getAttribute("data-en"); speak(en);
+          if (w.classList.contains("inpic")) flashObjects(en);
+        };
+      });
+      updateHunt();
       byId("dhEnter").onclick = function () { openBranch(selLevel, id); };
       byId("dhNext").onclick = function () { focusRoom(nextBr.id); };
       var nm = byId("dhName"); if (nm) try { nm.focus({ preventScroll: true }); } catch (e) {}
       // en móvil, que el panel quede a la vista sin perder la casa
       try { var pr = panel.getBoundingClientRect(); if (pr.top > window.innerHeight - 120) panel.scrollIntoView({ behavior: "smooth", block: "nearest" }); } catch (e) {}
     }
+    function roomWords(id) {
+      var seen = {}, out = [];
+      ((house.objects || {})[id] || []).forEach(function (o) { if (!seen[o.en]) { seen[o.en] = 1; out.push(o); } });
+      return out;
+    }
+    function updateHunt() {
+      if (!cur) return;
+      var words = roomWords(cur), f = foundBy[cur] || {}, n = 0;
+      words.forEach(function (w) { if (f[w.en]) n++; });
+      var bar = byId("dhHuntBar"), ct = byId("dhHuntCt"), say = byId("dhSay");
+      if (bar) bar.style.width = (words.length ? Math.round(100 * n / words.length) : 0) + "%";
+      if (ct) ct.textContent = n + "/" + words.length + " objetos encontrados";
+      if (say && words.length && n >= words.length) say.textContent = "¡Encontraste todo! Ahora entra a practicar estas palabras.";
+    }
+    // resalta en el dibujo los objetos de una palabra (al tocar su chip)
+    function flashObjects(en) {
+      each("#dhStage .dobj.live", function (o) {
+        if (o.getAttribute("data-en") !== en) return;
+        o.classList.remove("flash"); void o.offsetWidth; o.classList.add("flash");
+      });
+    }
+    var tagT = 0;
+    function tapObject(o) {
+      var en = o.getAttribute("data-en"), es = o.getAttribute("data-es");
+      speak(en);
+      each("#dhStage .dobj__tag.on", function (t) { t.classList.remove("on"); });
+      var tag = o.querySelector(".dobj__tag");
+      if (tag) {
+        tag.innerHTML = "<b>" + esc(en) + "</b><span>" + esc(es) + "</span>";
+        // sin sitio arriba (borde de la vista o botón "Toda la casa"): debajo
+        try { tag.classList.toggle("below", o.getBoundingClientRect().top - view.getBoundingClientRect().top < 64); } catch (e) {}
+        void tag.offsetWidth; tag.classList.add("on");
+        clearTimeout(tagT); tagT = setTimeout(function () { tag.classList.remove("on"); }, 2200);
+      }
+      var f = foundBy[cur] || (foundBy[cur] = {});
+      var first = !f[en];
+      f[en] = 1;
+      each("#dhStage .dobj.live", function (x) { if (x.getAttribute("data-en") === en) x.classList.add("found"); });
+      each("#dhPanel .dword.inpic", function (w) {
+        if (w.getAttribute("data-en") !== en) return;
+        w.classList.add("found"); w.classList.remove("flash"); void w.offsetWidth; w.classList.add("flash");
+      });
+      if (first) {
+        var words = roomWords(cur), n = 0; words.forEach(function (w) { if (f[w.en]) n++; });
+        if (n >= words.length) { sfx("correct"); var rb = null; order.forEach(function (x) { if (x.id === cur) rb = x; }); announce("¡Encontraste todos los objetos de " + (rb ? rb.name.toLowerCase() : "la habitación") + "!"); }
+        else sfx("tap");
+      }
+      updateHunt();
+    }
     function unfocus() {
       cur = null;
+      each("#dhStage .dobj", function (o) { o.classList.remove("live", "found"); o.tabIndex = -1; });
       stage.style.transform = "";
       stage.style.removeProperty("--dz");
+      stage.style.removeProperty("--inv");
       view.classList.remove("is-focus");
       each("#dhStage .droom", function (b) { b.classList.remove("on"); b.setAttribute("aria-pressed", "false"); });
       if (reset) reset.hidden = true;
@@ -1875,8 +2021,11 @@
       b.onclick = function (e) {
         e.stopPropagation();
         var id = b.getAttribute("data-room");
-        if (cur === id) openBranch(selLevel, id); else focusRoom(id);
+        if (cur !== id) focusRoom(id);
       };
+    });
+    each("#dhStage .dobj", function (o) {
+      o.onclick = function (e) { e.stopPropagation(); if (o.classList.contains("live")) tapObject(o); };
     });
     stage.onclick = function () { if (cur) unfocus(); };
     if (reset) reset.onclick = function (e) { e.stopPropagation(); unfocus(); };
