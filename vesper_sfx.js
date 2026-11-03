@@ -196,10 +196,12 @@ window.VESPER_SFX = (function () {
   function rng(seed) { return function () { seed |= 0; seed = seed + 0x6D2B79F5 | 0; var t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
 
   var INST = {
-    /* marimba de palo de rosa, mazos de fieltro: barra afinada 1 : 3.93 : 9.24 + resonador */
-    madera: { len: 1.2, atk: 0.0025, reg: 0.55, noise: [0.18, 0.012, 0.18], gain: 0.2,
-      partials: [[1, 1, 0.42], [3.93, 0.22, 0.07], [9.24, 0.05, 0.025], [1.002, 0.25, 0.6]],
-      room: { sec: 1.1, decay: 3.2, pre: 0.008, er: [0.006, 0.011, 0.017, 0.023], bright: 0.45 }, wet: 0.16 },
+    /* marimba de palo de rosa, mazos de fieltro: barra afinada 1 : 3.93 : 9.24 + resonador.
+       Va UNA OCTAVA ABAJO de Lucero (D4..D5): ahí la marimba suena a madera; en el
+       agudo se confunde con la celesta. Notas cortas, golpe marcado y poca sala. */
+    madera: { len: 0.9, atk: 0.003, reg: 0.55, noise: [0.45, 0.016, 0.12], gain: 0.17,
+      partials: [[1, 1, 0.3], [3.93, 0.3, 0.05], [9.24, 0.06, 0.018], [1.002, 0.18, 0.4]],
+      room: { sec: 0.7, decay: 3.5, pre: 0.006, er: [0.005, 0.009, 0.014, 0.02], bright: 0.35 }, wet: 0.08 },
     /* celesta / glockenspiel: barra libre de metal 1 : 2.76 : 5.40 : 8.93 */
     lucero: { len: 1.4, atk: 0.0008, reg: 0.3, noise: [0.35, 0.004, 0.6], gain: 0.15,
       partials: [[1, 1, 0.9], [2.76, 0.32, 0.32], [5.40, 0.13, 0.11], [8.93, 0.05, 0.05], [3.0, 0.04, 0.6]],
@@ -257,27 +259,28 @@ window.VESPER_SFX = (function () {
   }
 
   var M = [74, 81, 79, 86];   /* motivo de Vesper: D5 A5 G5 D6 */
+  var MW = [62, 69, 67, 74];  /* el mismo motivo una octava abajo (Madera) */
   var SCORES = {
-    madera: {
-      correct:   function (g, t) { g(t, M[0], 0.6); g(t + 0.09, M[1], 0.75); },
-      wrong:     function (g, t) { g(t, 57, 0.55); g(t + 0.13, 53, 0.5); },
-      tap:       function (g, t) { g(t, 91, 0.18); },
-      pair:      function (g, t) { g(t, 81, 0.45); },
-      miss:      function (g, t) { g(t, 57, 0.3); },
-      combo:     function (g, t, n) { var b = [74, 76, 78, 79, 81, 83, 86][comboStep(n)]; g(t, b, 0.55); g(t + 0.07, b + 5, 0.55); g(t + 0.14, b + 12, 0.5); },
-      start:     function (g, t) { g(t, M[0], 0.5); g(t + 0.13, M[1], 0.5); },
-      heartloss: function (g, t) { g(t, 50, 0.7); g(t + 0.12, 45, 0.6); },
-      lastheart: function (g, t) { g(t, 50, 0.75); g(t + 0.3, 50, 0.65); },
-      complete:  function (g, t) { M.forEach(function (n, i) { g(t + i * 0.12, n, 0.7); }); g(t + 0.36, 62, 0.45); },
+    madera: {   /* motivo una octava abajo: D4 A4 G4 D5 */
+      correct:   function (g, t) { g(t, MW[0], 0.6); g(t + 0.08, MW[1], 0.75); },
+      wrong:     function (g, t) { g(t, 50, 0.6); g(t + 0.12, 46, 0.55); },
+      tap:       function (g, t) { g(t, 79, 0.2); },
+      pair:      function (g, t) { g(t, 69, 0.45); },
+      miss:      function (g, t) { g(t, 50, 0.35); },
+      combo:     function (g, t, n) { var b = [62, 64, 66, 67, 69, 71, 74][comboStep(n)]; g(t, b, 0.55); g(t + 0.07, b + 5, 0.55); g(t + 0.14, b + 12, 0.5); },
+      start:     function (g, t) { g(t, MW[0], 0.5); g(t + 0.12, MW[1], 0.5); },
+      heartloss: function (g, t) { g(t, 50, 0.7); g(t + 0.11, 45, 0.65); },
+      lastheart: function (g, t) { g(t, 50, 0.75); g(t + 0.28, 50, 0.65); },
+      complete:  function (g, t) { MW.forEach(function (n, i) { g(t + i * 0.11, n, 0.7); }); g(t + 0.33, 50, 0.5); },
       fanfare:   function (g, t) {
-        M.forEach(function (n, i) { g(t + i * 0.11, n, 0.7); });
-        for (var k = 0; k < 8; k++) { g(t + 0.45 + k * 0.045, 86, 0.5 - k * 0.04); g(t + 0.47 + k * 0.045, 78, 0.35 - k * 0.03); }  /* trémolo de mazos */
+        MW.forEach(function (n, i) { g(t + i * 0.1, n, 0.7); });
+        for (var k = 0; k < 8; k++) { g(t + 0.42 + k * 0.045, 74, 0.5 - k * 0.035); g(t + 0.44 + k * 0.045, 66, 0.38 - k * 0.03); }  /* trémolo de mazos */
       },
-      fail:      function (g, t) { [74, 81, 79, 76].forEach(function (n, i) { g(t + [0, 0.14, 0.3, 0.54][i], n, 0.5); }); },
-      streak:    function (g, t) { [86, 90, 93].forEach(function (n, i) { g(t + i * 0.07, n, 0.5); }); },
-      achievement: function (g, t) { [74, 78, 81, 86, 90].forEach(function (n, i) { g(t + i * 0.04, n, 0.5); }); },
-      levelup:   function (g, t) { [74, 78, 81, 86, 90].forEach(function (n, i) { g(t + i * 0.05, n, 0.5); }); g(t + 0.3, 93, 0.4); },
-      coin:      function (g, t) { g(t, 88, 0.5); g(t + 0.06, 93, 0.45); }
+      fail:      function (g, t) { [62, 69, 67, 64].forEach(function (n, i) { g(t + [0, 0.13, 0.28, 0.5][i], n, 0.5); }); },
+      streak:    function (g, t) { [74, 78, 81].forEach(function (n, i) { g(t + i * 0.07, n, 0.5); }); },
+      achievement: function (g, t) { [62, 66, 69, 74, 78].forEach(function (n, i) { g(t + i * 0.04, n, 0.5); }); },
+      levelup:   function (g, t) { [62, 66, 69, 74, 78].forEach(function (n, i) { g(t + i * 0.05, n, 0.5); }); g(t + 0.28, 81, 0.4); },
+      coin:      function (g, t) { g(t, 76, 0.5); g(t + 0.06, 81, 0.45); }
     },
     lucero: {
       correct:   function (g, t) { g(t, M[0], 0.65); g(t + 0.085, M[1], 0.8); },
