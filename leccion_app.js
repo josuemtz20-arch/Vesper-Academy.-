@@ -3738,25 +3738,40 @@
       return _voiceCache;
     } catch (e) { return []; }
   }
+  /* Acento neutral: se busca SOLO inglés de EE. UU. antes que cualquier otra variante.
+     Antes la comparación era /en-?US/ y Android (y la app de Play, que es una TWA)
+     reporta "en_US" con guion bajo: no coincidía y se caía a en[0], que podía ser
+     inglés de India, Australia o Nigeria. Ahora el idioma se normaliza primero. */
+  var NOVELTY_VOICES = /\b(albert|bad news|bahh|bells|boing|bubbles|cellos|deranged|good news|hysterical|jester|organ|superstar|trinoids|whisper|wobble|zarvox|fred|junior|ralph|kathy|princess|grandma|grandpa|eddy|flo|reed|rocko|sandy|shelley)\b/i;
+  function vLang(v) { return String((v && v.lang) || "").replace(/_/g, "-").toLowerCase(); }
   function pickBestVoice(voices) {
     if (!voices || !voices.length) return null;
-    var en = voices.filter(function (v) { return /^en(-|_|$)/i.test(v.lang || ""); });
-    if (!en.length) en = voices;
-    /* Prioridad: voces neurales/naturales modernas (no roboticas) */
-    var prefs = [
-      /natural/i, /neural/i, /\bgoogle\b/i, /microsoft .*online/i, /\bsiri\b/i,
-      /\b(samantha|aria|jenny|guy|libby|sonia|ryan|emma|ava|allison|nathan)\b/i,
-      /\b(en-US|en-GB)\b/i
+    var en = voices.filter(function (v) { return /^en(-|$)/.test(vLang(v)) && !NOVELTY_VOICES.test(v.name || ""); });
+    if (!en.length) return null;   // sin voces en inglés: que el navegador use lang="en-US"
+    var tiers = [
+      /\b(natural|neural)\b|microsoft .*online/i,                        // neuronales (Edge, Windows 11)
+      /google us english/i,                                                // Chrome escritorio
+      /\b(samantha|ava|allison|susan|nathan|tom|evan|joelle|zoe|noelle)\b/i, // Apple, voces de EE. UU.
+      /\b(aria|jenny|guy|michelle|ana|christopher|eric|roger|steffan)\b/i,  // Microsoft en-US
+      /./                                                                  // cualquier otra en-US
     ];
-    for (var p = 0; p < prefs.length; p++) {
-      var m = en.filter(function (v) { return prefs[p].test(v.name || "") || prefs[p].test(v.voiceURI || ""); });
-      /* prefiere en-US/en-GB dentro del match */
-      var us = m.filter(function (v) { return /en-?US/i.test(v.lang || ""); });
-      if (us.length) return us[0];
-      if (m.length) return m[0];
+    var groups = [
+      en.filter(function (v) { return vLang(v) === "en-us"; }),
+      en.filter(function (v) { return vLang(v) === "en-ca"; }),  // canadiense: muy cercano al neutral
+      en.filter(function (v) { return vLang(v) === "en-gb"; }),  // británico estándar antes que otras variantes
+      en
+    ];
+    for (var g = 0; g < groups.length; g++) {
+      var list = groups[g];
+      if (!list.length) continue;
+      for (var t = 0; t < tiers.length; t++) {
+        var m = list.filter(function (v) { return tiers[t].test(v.name || "") || tiers[t].test(v.voiceURI || ""); });
+        if (!m.length) continue;
+        var local = m.filter(function (v) { return v.localService; });   // offline primero: sin cortes ni demoras
+        return (t === 0 ? m[0] : (local[0] || m[0]));
+      }
     }
-    var anyUS = en.filter(function (v) { return /en-?US/i.test(v.lang || ""); });
-    return anyUS[0] || en[0];
+    return en[0];
   }
   if (window.speechSynthesis) {
     loadVoices();
@@ -3779,7 +3794,7 @@
       if (window.speechSynthesis) {
         if (!_voiceCache) loadVoices();
         var u = new SpeechSynthesisUtterance(text);
-        if (_bestVoice) { u.voice = _bestVoice; u.lang = _bestVoice.lang || "en-US"; }
+        if (_bestVoice) { u.voice = _bestVoice; u.lang = (_bestVoice.lang || "en-US").replace(/_/g, "-"); }
         else { u.lang = "en-US"; }
         u.rate = rate || 0.92; u.pitch = 1;
         speechSynthesis.cancel(); speechSynthesis.speak(u);
