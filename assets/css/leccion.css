@@ -3599,16 +3599,18 @@ body:has(#app #verify) #app .card.center{background-image:none}
 .dobj.live:hover,.dobj.live:focus-visible{background:rgba(255,236,200,.22);outline:calc(2px / var(--dz,1)) solid rgba(255,236,200,.85);outline-offset:0}
 .dobj.flash{animation:dobjFlash .9s ease}
 @keyframes dobjFlash{0%,100%{background:transparent}35%{background:rgba(255,226,170,.5)}}
-.dobj__tag{position:absolute;left:50%;bottom:100%;margin-bottom:.35em;transform:translateX(-50%) scale(.6);opacity:0;z-index:2;
+/* etiqueta compartida: left/top = borde superior (o inferior) del objeto tocado */
+.dobj__tag{position:absolute;z-index:7;margin-top:-.35em;transform:translate(-50%,-100%) scale(.6);transform-origin:50% 100%;opacity:0;
   display:flex;flex-direction:column;align-items:center;white-space:nowrap;padding:.35em .75em;border-radius:.8em;
   background:#fff8ec;color:#2a1a0b;font:calc(.8rem / var(--dz,1))/1.15 Inter,system-ui,sans-serif;
   box-shadow:0 .4em 1em rgba(0,0,0,.35);transition:opacity .18s,transform .25s cubic-bezier(.3,1.5,.6,1);pointer-events:none}
 .dobj__tag b{font-weight:800;font-size:1.05em}
 .dobj__tag span{font-size:.82em;color:#7a5a36}
 .dobj__tag::after{content:"";position:absolute;left:50%;top:100%;margin-left:-.45em;border:.45em solid transparent;border-top-color:#fff8ec}
-.dobj__tag.on{opacity:1;transform:translateX(-50%) scale(1)}
+.dobj__tag.on{opacity:1;transform:translate(-50%,-100%) scale(1)}
 /* objeto pegado al borde superior de la vista: la etiqueta va debajo */
-.dobj__tag.below{bottom:auto;top:100%;margin-bottom:0;margin-top:.35em}
+.dobj__tag.below{margin-top:.35em;transform:translate(-50%,0) scale(.6);transform-origin:50% 0}
+.dobj__tag.below.on{transform:translate(-50%,0) scale(1)}
 .dobj__tag.below::after{top:auto;bottom:100%;border-top-color:transparent;border-bottom-color:#fff8ec}
 /* progreso de la búsqueda de objetos */
 .dhp__hunt{display:flex;align-items:center;gap:10px;margin-top:10px}
@@ -3620,6 +3622,15 @@ body:has(#app #verify) #app .card.center{background-image:none}
 .dword.inpic.found::before{background:var(--success,#2e9d62)}
 .dword.flash{opacity:1;animation:dwordFlash .7s ease}
 @keyframes dwordFlash{0%,100%{transform:none}40%{transform:scale(1.05);background:var(--w-accent-soft,var(--gold-tint))}}
+/* selector de voz (voces de estudio) sobre la ilustración */
+.dvoice{display:flex;align-items:center;gap:6px;margin:0 0 8px;flex-wrap:wrap}
+.dvoice__lb{display:inline-flex;align-items:center;gap:5px;font-size:.76rem;font-weight:700;color:var(--muted);margin-right:2px}
+.dvoice__lb svg{width:15px;height:15px}
+.dvoice__opt{padding:6px 14px;border-radius:999px;border:1px solid var(--line);background:var(--paper);color:var(--ink);
+  font:600 .82rem/1 Inter,system-ui,sans-serif;cursor:pointer;transition:background .15s,border-color .15s,color .15s}
+.dvoice__opt:hover{border-color:color-mix(in srgb,var(--w-accent,#c5a059) 55%,var(--line))}
+.dvoice__opt[aria-checked="true"]{background:var(--w-accent,#c5a059);border-color:var(--w-accent,#c5a059);color:#1f1a0e}
+.dvoice__opt:focus-visible{outline:3px solid var(--w-accent,#c5a059);outline-offset:2px}
 /* panel de la habitación */
 .dhouse__panel{margin-top:12px}
 .dhp{background:var(--paper);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);padding:14px;

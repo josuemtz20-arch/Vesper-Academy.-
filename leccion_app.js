@@ -1810,6 +1810,37 @@
      Al tocarla: la cámara hace zoom a esa habitación, el resto se oscurece y
      abajo aparecen sus palabras una a una (tocar = escuchar). "Entrar" abre el
      mazo de siempre. rooms[id] = [left, top, width, height] en % de la imagen. */
+  /* ===== Voces de estudio (Higgsfield) para la casa =====================
+     Palabras de la casa y saludos de Vesper grabados en dos voces de acento
+     estadounidense neutral. El alumno elige la voz en la casa; se recuerda en
+     este dispositivo. Lo que no esté grabado cae a la voz del dispositivo. */
+  var STUDIO_VOICES = { vesper: "Vesper", mark: "Mark" };
+  var STUDIO_WORDS = {};
+  ("picture father son daughter armchair window bed blanket pillow closet mirror shower bath sink tap towel "
+    + "curtain clock lamp sofa cushion rug table stove pot fridge chair apple bread cup sky tree bird grass dog flower")
+    .split(" ").forEach(function (w) { STUDIO_WORDS[w] = w; });
+  STUDIO_WORDS["welcome home!"] = "greet-1"; STUDIO_WORDS["hello! i'm vesper."] = "greet-2";
+  STUDIO_WORDS["this is my house."] = "greet-3"; STUDIO_WORDS["let's learn some words!"] = "greet-4";
+  var VOICE_KEY = "vesper_voice";
+  function studioVoice() { try { var v = localStorage.getItem(VOICE_KEY); if (STUDIO_VOICES[v]) return v; } catch (e) {} return "vesper"; }
+  function setStudioVoice(v) { try { localStorage.setItem(VOICE_KEY, v); } catch (e) {} }
+  function studioSrc(text) {
+    var slug = STUDIO_WORDS[String(text || "").toLowerCase().trim()];
+    return slug ? "assets/audio/vocab/" + studioVoice() + "/" + slug + ".mp3" : "";
+  }
+  var _studioAudio = null;
+  function sayWord(text) {
+    var src = studioSrc(text);
+    if (!src) { speak(text); return; }
+    try { if (_studioAudio) _studioAudio.pause(); if (window.speechSynthesis) speechSynthesis.cancel(); } catch (e) {}
+    var fell = false, fallback = function () { if (!fell) { fell = true; speakTTS(text); } };
+    try {
+      var a = _studioAudio = new Audio(src);
+      a.onerror = fallback;
+      var pr = a.play(); if (pr && pr.catch) pr.catch(fallback);
+    } catch (e) { fallback(); }
+  }
+
   var DEN_HOUSE = {
     A1: {
       img: "assets/images/vocab/house_a1.webp", w: 1500, h: 1120,
@@ -1905,11 +1936,17 @@
         + ' aria-label="' + esc(br.name + ": " + bp.done + " de " + bp.total + " palabras dominadas") + '">'
         + '<span class="droom__pin"><b>' + (done ? "&#10003;" : (i + 1)) + '</b>' + esc(br.name.replace(/^(La|El|Los|Las)\s+/, "")) + '</span></button>';
     });
+    var cv = studioVoice(), vsel = "";
+    Object.keys(STUDIO_VOICES).forEach(function (k) {
+      vsel += '<button type="button" class="dvoice__opt" role="radio" data-voice="' + k + '" aria-checked="' + (k === cv) + '">' + esc(STUDIO_VOICES[k]) + '</button>';
+    });
     return '<section class="dhouse" id="dhouse" aria-label="La casa: toca una habitación para ver sus palabras">'
+      + '<div class="dvoice" role="radiogroup" aria-label="Voz en inglés"><span class="dvoice__lb" aria-hidden="true">'
+      + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 5L6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/></svg>Voz</span>' + vsel + '</div>'
       + '<div class="dhouse__view" id="dhView" style="aspect-ratio:' + house.w + '/' + house.h + '">'
       + '<div class="dhouse__stage" id="dhStage">'
       + '<img class="dhouse__img" src="' + house.img + '" alt="' + esc(house.alt) + '" decoding="async" onerror="window.__vhouseFail()">'
-      + rooms + denHouseObjectsHtml(house)
+      + rooms + denHouseObjectsHtml(house) + '<span class="dobj__tag" id="dhTag" aria-hidden="true"></span>'
       + (house.vesper ? '<button class="dvesper" id="dhVesper" type="button" aria-label="Vesper: tócalo para que te salude"'
         + ' style="left:' + house.vesper[0] + '%;top:' + house.vesper[1] + '%;width:' + house.vesper[2] + '%;height:' + house.vesper[3] + '%">'
         + '<span class="dvesper__bub" id="dhBub" aria-hidden="true"></span></button>' : "")
@@ -1925,7 +1962,7 @@
       objs[room].forEach(function (o) {
         h += '<button class="dobj" type="button" tabindex="-1" data-room="' + esc(room) + '" data-en="' + esc(o.en) + '" data-es="' + esc(o.es) + '"'
           + ' style="left:' + o.r[0] + '%;top:' + o.r[1] + '%;width:' + o.r[2] + '%;height:' + o.r[3] + '%' + (o.p ? ';--px:' + o.p[0] + '%;--py:' + o.p[1] + '%' : '') + '"'
-          + ' aria-label="' + esc(o.en + ", " + o.es) + '"><span class="dobj__tag" aria-hidden="true"></span></button>';
+          + ' aria-label="' + esc(o.en + ", " + o.es) + '"></button>';
       });
     });
     return h;
@@ -1942,12 +1979,19 @@
       panel.innerHTML = '<div class="dhp dhp--idle"><img class="dhp__cat" src="' + VCAT + 'vesper_cat_welcome.webp" alt="" decoding="async">'
         + '<p><b>¡Esta es mi casa!</b> Toca una habitación y te enseño sus palabras. También puedes tocarme a mí.</p></div>';
     }
+    each("#dhouse .dvoice__opt", function (b) {
+      b.onclick = function () {
+        var v = b.getAttribute("data-voice"); setStudioVoice(v);
+        each("#dhouse .dvoice__opt", function (x) { x.setAttribute("aria-checked", x === b ? "true" : "false"); });
+        sayWord("Welcome home!");   // muestra inmediata de la voz elegida
+      };
+    });
     var greetIx = 0, bubT = 0;
     var vbtn = byId("dhVesper"), bub = byId("dhBub");
     if (vbtn) vbtn.onclick = function (e) {
       e.stopPropagation();
       var g = (house.greet || ["Hello!"])[greetIx++ % (house.greet || [1]).length];
-      speak(g);
+      sayWord(g);
       if (bub) {
         bub.textContent = g; bub.classList.remove("on"); void bub.offsetWidth; bub.classList.add("on");
         clearTimeout(bubT); bubT = setTimeout(function () { bub.classList.remove("on"); }, 2200);
@@ -2011,7 +2055,7 @@
         + '<button class="btn btn-ghost" id="dhNext" type="button">' + esc(nextBr.name) + ' &#8250;</button></div></div>';
       each("#dhPanel .dword", function (w) {
         w.onclick = function () {
-          var en = w.getAttribute("data-en"); speak(en);
+          var en = w.getAttribute("data-en"); sayWord(en);
           if (w.classList.contains("inpic")) flashObjects(en);
         };
       });
@@ -2046,13 +2090,21 @@
     var tagT = 0;
     function tapObject(o) {
       var en = o.getAttribute("data-en"), es = o.getAttribute("data-es");
-      speak(en);
-      each("#dhStage .dobj__tag.on", function (t) { t.classList.remove("on"); });
-      var tag = o.querySelector(".dobj__tag");
+      sayWord(en);
+      /* una sola etiqueta compartida, hermana de los objetos y por encima de todos:
+         si viviera dentro de cada objeto, subir su capa haría que un objeto grande
+         (el cuadro, la cama) tapara a los pequeños que tiene dentro */
+      var tag = byId("dhTag");
       if (tag) {
-        tag.innerHTML = "<b>" + esc(en) + "</b><span>" + esc(es) + "</span>";
+        var below = false;
         // sin sitio arriba (borde de la vista o botón "Toda la casa"): debajo
-        try { tag.classList.toggle("below", o.getBoundingClientRect().top - view.getBoundingClientRect().top < 64); } catch (e) {}
+        try { below = o.getBoundingClientRect().top - view.getBoundingClientRect().top < 64; } catch (e) {}
+        var L = parseFloat(o.style.left), T = parseFloat(o.style.top), W = parseFloat(o.style.width), H = parseFloat(o.style.height);
+        tag.classList.remove("on");
+        tag.innerHTML = "<b>" + esc(en) + "</b><span>" + esc(es) + "</span>";
+        tag.classList.toggle("below", below);
+        tag.style.left = (L + W / 2) + "%";
+        tag.style.top = (below ? T + H : T) + "%";
         void tag.offsetWidth; tag.classList.add("on");
         clearTimeout(tagT); tagT = setTimeout(function () { tag.classList.remove("on"); }, 2200);
       }
@@ -2074,6 +2126,7 @@
     function unfocus() {
       cur = null;
       each("#dhStage .dobj", function (o) { o.classList.remove("live", "found"); o.tabIndex = -1; });
+      var tg = byId("dhTag"); if (tg) tg.classList.remove("on");
       stage.style.transform = "";
       stage.style.removeProperty("--dz");
       stage.style.removeProperty("--inv");
@@ -2181,8 +2234,8 @@
       }
     }
     card.onclick = function (e) { if (e.target.closest(".dc-say") || e.target.closest(".dc-trans")) return; card.classList.toggle("flipped"); };
-    byId("sayEn").onclick = function (e) { e.stopPropagation(); speak(curCard().en); };
-    byId("sayEn2").onclick = function (e) { e.stopPropagation(); speak(curCard().en); };
+    byId("sayEn").onclick = function (e) { e.stopPropagation(); sayWord(curCard().en); };
+    byId("sayEn2").onclick = function (e) { e.stopPropagation(); sayWord(curCard().en); };
     var dcTransBtn = byId("dcTrans");
     if (dcTransBtn) dcTransBtn.onclick = function (e) {
       e.stopPropagation();
