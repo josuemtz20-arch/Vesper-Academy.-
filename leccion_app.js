@@ -1676,7 +1676,10 @@
     var pr = denProgress(d);
     var back = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>';
     var doneBadge = '<span class="bdone" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.6l4.6 4.6L19 7.4"/></svg></span>';
-    var branches = d.branches.map(function (br, i) {
+    var house = DEN_HOUSE[selLevel];
+    var inHouse = function (br) { return !!(house && house.rooms[br.id]); };
+    var useHouse = !!house && d.branches.some(inHouse);
+    var branchBtn = function (br, i) {
       var bp = branchProgress(selLevel, br), pct = bp.total ? Math.round(100 * bp.done / bp.total) : 0;
       var done = bp.total && bp.done >= bp.total;
       var hasImg = branchHasImg(selLevel, br.id);
@@ -1688,7 +1691,20 @@
         + '<span class="branch__meta"><span class="branch__bar"><i style="width:' + pct + '%"></i></span>'
         + '<span class="branch__ct">' + bp.done + '/' + bp.total + '</span></span></span>'
         + '<span class="branch__go">' + (done ? "&#10003;" : "&#8250;") + '</span></button>';
-    }).join("");
+    };
+    /* con casa: las salas curadas viven en la ilustración; la lista solo lleva las
+       de desborde ("Más …"). Las curadas quedan en un árbol oculto de respaldo por
+       si la imagen no carga (window.__vhouseFail lo destapa). */
+    var branches = "";
+    d.branches.forEach(function (br, i) { if (!useHouse || !inHouse(br)) branches += branchBtn(br, i); });
+    var houseBlock = "";
+    if (useHouse) {
+      var fb = "";
+      d.branches.forEach(function (br, i) { if (inHouse(br)) fb += branchBtn(br, i); });
+      houseBlock = denHouseHtml(selLevel, d, house)
+        + '<div class="den-tree" id="denTreeHouse" hidden>' + fb + '</div>'
+        + (branches ? '<h2 class="dhouse-more">Más salas del mundo</h2>' : "");
+    }
     show('<div class="wrap">'
       + '<div class="den" data-struct="' + esc(d.structure) + '" style="' + worldVars(t) + '">'
       + '<div class="den-top"><button class="den-back" id="denBack" type="button" aria-label="Volver al mapa">' + back + '</button>'
@@ -1706,7 +1722,8 @@
       + '</div>'
       + '<div class="den-emblem">' + denEmblemImg(selLevel, d.structure) + '</div>'
       + '</header>'
-      + '<div class="den-tree">' + branches + '</div>'
+      + houseBlock
+      + (branches ? '<div class="den-tree">' + branches + '</div>' : "")
       + '<div class="den-review"><button class="btn btn-gold den-review__btn" id="denMix" type="button" aria-label="Repaso mezclado de todo el mundo ' + esc(selLevel) + '">'
       + '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 3h5v5M4 20l16.5-16.5M21 16v5h-5M15 15l6 6M4 4l5 5"/></svg>'
       + 'Repaso mezclado del mundo</button>'
@@ -1717,7 +1734,129 @@
       b.onclick = function () { openBranch(selLevel, b.getAttribute("data-branch")); };
     });
     var mix = byId("denMix"); if (mix) mix.onclick = function () { denMixedReview(selLevel); };
+    if (useHouse) wireDenHouse(selLevel, d, house);
     gateAnims();
+  }
+
+  /* ===== Casa interactiva (experimento, solo A1 · El Hogar) ==============
+     La ilustración (Higgsfield) es un corte de la casa tipo casa de muñecas.
+     Cada sala curada del recinto es una zona tocable encima de su habitación.
+     Al tocarla: la cámara hace zoom a esa habitación, el resto se oscurece y
+     abajo aparecen sus palabras una a una (tocar = escuchar). "Entrar" abre el
+     mazo de siempre. rooms[id] = [left, top, width, height] en % de la imagen. */
+  var DEN_HOUSE = {
+    A1: {
+      img: "assets/images/vocab/house_a1.webp", w: 1168, h: 880,
+      alt: "Casa en corte: ático, dormitorio, baño, sala, cocina y jardín",
+      rooms: {
+        family:   [15.4,  8.5, 39.4, 21.3],
+        bedroom:  [ 6.8, 32.4, 35.0, 25.8],
+        bathroom: [43.8, 32.4, 25.4, 25.8],
+        living:   [ 6.8, 60.8, 35.2, 29.0],
+        kitchen:  [43.7, 60.8, 25.5, 29.0],
+        garden:   [71.9, 31.8, 26.5, 63.6]
+      }
+    }
+  };
+  window.__vhouseFail = function () {
+    try {
+      var h = document.getElementById("dhouse"); if (h) h.parentNode.removeChild(h);
+      var t = document.getElementById("denTreeHouse"); if (t) t.hidden = false;
+    } catch (e) {}
+  };
+  function denHouseHtml(selLevel, d, house) {
+    var rooms = "";
+    d.branches.forEach(function (br, i) {
+      var r = house.rooms[br.id]; if (!r) return;
+      var bp = branchProgress(selLevel, br), done = bp.total && bp.done >= bp.total;
+      rooms += '<button class="droom' + (done ? ' done' : '') + '" type="button" data-room="' + esc(br.id) + '" aria-pressed="false"'
+        + ' style="left:' + r[0] + '%;top:' + r[1] + '%;width:' + r[2] + '%;height:' + r[3] + '%"'
+        + ' aria-label="' + esc(br.name + ": " + bp.done + " de " + bp.total + " palabras dominadas") + '">'
+        + '<span class="droom__pin"><b>' + (done ? "&#10003;" : (i + 1)) + '</b>' + esc(br.name.replace(/^(La|El|Los|Las)\s+/, "")) + '</span></button>';
+    });
+    return '<section class="dhouse" id="dhouse" aria-label="La casa: toca una habitación para ver sus palabras">'
+      + '<div class="dhouse__view" id="dhView" style="aspect-ratio:' + house.w + '/' + house.h + '">'
+      + '<div class="dhouse__stage" id="dhStage">'
+      + '<img class="dhouse__img" src="' + house.img + '" alt="' + esc(house.alt) + '" decoding="async" onerror="window.__vhouseFail()">'
+      + rooms + '</div>'
+      + '<button class="dhouse__reset" id="dhReset" type="button" hidden>'
+      + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10l8-6 8 6v9a1 1 0 0 1-1 1h-5v-6h-4v6H5a1 1 0 0 1-1-1z"/></svg>'
+      + 'Toda la casa</button></div>'
+      + '<div class="dhouse__panel" id="dhPanel"></div></section>';
+  }
+  function wireDenHouse(selLevel, d, house) {
+    var view = byId("dhView"), stage = byId("dhStage"), panel = byId("dhPanel"), reset = byId("dhReset");
+    if (!view || !stage || !panel) return;
+    var order = d.branches.filter(function (br) { return !!house.rooms[br.id]; });
+    var cur = null;
+    var sayIc = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5L6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/></svg>';
+    var SHOW_N = 8;
+    function idle() {
+      panel.innerHTML = '<div class="dhp dhp--idle"><span class="dhp__tap" aria-hidden="true"></span>'
+        + '<p><b>Toca una habitación</b> para entrar a verla y descubrir sus palabras.</p></div>';
+    }
+    function focusRoom(id) {
+      var br = null; order.forEach(function (x) { if (x.id === id) br = x; });
+      if (!br) return;
+      cur = id;
+      var r = house.rooms[id];
+      var s = Math.max(1, Math.min(2.6, Math.min(100 / r[2], 100 / r[3]) * 0.9));
+      var tx = Math.min(0, Math.max(100 - 100 * s, 50 - (r[0] + r[2] / 2) * s));
+      var ty = Math.min(0, Math.max(100 - 100 * s, 50 - (r[1] + r[3] / 2) * s));
+      stage.style.transform = "translate(" + tx + "%," + ty + "%) scale(" + s + ")";
+      view.classList.add("is-focus");
+      each("#dhStage .droom", function (b) {
+        var on = b.getAttribute("data-room") === id;
+        b.classList.toggle("on", on); b.setAttribute("aria-pressed", on ? "true" : "false");
+      });
+      if (reset) reset.hidden = false;
+      var m = knownMap(), bp = branchProgress(selLevel, br);
+      // primero las que aún no domina, para que lo nuevo salga al frente
+      var cards = br.cards.slice().sort(function (a, b) { return (m[cardKey(selLevel, a.en)] ? 1 : 0) - (m[cardKey(selLevel, b.en)] ? 1 : 0); });
+      var chips = cards.slice(0, SHOW_N).map(function (c, k) {
+        var known = !!m[cardKey(selLevel, c.en)];
+        return '<button class="dword' + (known ? ' known' : '') + '" type="button" data-en="' + esc(c.en) + '" style="--i:' + k + '"'
+          + ' aria-label="' + esc(c.en + ", " + c.es + ". Escuchar") + '">'
+          + '<span class="dword__en">' + esc(c.en) + '</span><span class="dword__es">' + esc(c.es) + '</span>'
+          + '<span class="dword__say">' + (known ? "&#10003;" : sayIc) + '</span></button>';
+      }).join("");
+      var rest = br.cards.length - SHOW_N;
+      var nextBr = order[(order.indexOf(br) + 1) % order.length];
+      panel.innerHTML = '<div class="dhp" data-room="' + esc(id) + '">'
+        + '<div class="dhp__top"><span class="branch__ic' + (branchHasImg(selLevel, br.id) ? ' has-img' : '') + '">' + branchEmblemHtml(selLevel, br.id, br.icon) + '</span>'
+        + '<div class="dhp__hd"><h2 class="dhp__nm" tabindex="-1" id="dhName">' + esc(br.name) + '</h2>'
+        + '<div class="dhp__meta">' + (br.hint ? esc(br.hint) + ' · ' : "") + bp.done + '/' + bp.total + ' dominadas</div></div></div>'
+        + '<div class="dhp__words">' + chips + '</div>'
+        + (rest > 0 ? '<p class="dhp__rest">+' + rest + ' palabras más dentro</p>' : "")
+        + '<div class="dhp__acts"><button class="btn btn-gold" id="dhEnter" type="button">Entrar ' + esc(br.name.replace(/^El\s+/, "al ").replace(/^(La|Los|Las)\s+/, function (m) { return "a " + m.toLowerCase(); })) + '</button>'
+        + '<button class="btn btn-ghost" id="dhNext" type="button">' + esc(nextBr.name) + ' &#8250;</button></div></div>';
+      each("#dhPanel .dword", function (w) { w.onclick = function () { speak(w.getAttribute("data-en")); }; });
+      byId("dhEnter").onclick = function () { openBranch(selLevel, id); };
+      byId("dhNext").onclick = function () { focusRoom(nextBr.id); };
+      var nm = byId("dhName"); if (nm) try { nm.focus({ preventScroll: true }); } catch (e) {}
+      // en móvil, que el panel quede a la vista sin perder la casa
+      try { var pr = panel.getBoundingClientRect(); if (pr.top > window.innerHeight - 120) panel.scrollIntoView({ behavior: "smooth", block: "nearest" }); } catch (e) {}
+    }
+    function unfocus() {
+      cur = null;
+      stage.style.transform = "";
+      view.classList.remove("is-focus");
+      each("#dhStage .droom", function (b) { b.classList.remove("on"); b.setAttribute("aria-pressed", "false"); });
+      if (reset) reset.hidden = true;
+      idle();
+    }
+    each("#dhStage .droom", function (b) {
+      b.onclick = function (e) {
+        e.stopPropagation();
+        var id = b.getAttribute("data-room");
+        if (cur === id) openBranch(selLevel, id); else focusRoom(id);
+      };
+    });
+    stage.onclick = function () { if (cur) unfocus(); };
+    if (reset) reset.onclick = function (e) { e.stopPropagation(); unfocus(); };
+    view.onkeydown = function (e) { if (e.key === "Escape" && cur) { unfocus(); } };
+    panel.onkeydown = view.onkeydown;
+    idle();
   }
 
   /* sala abierta: mazo de tarjetas con volteo + audio + "ya la sé" */

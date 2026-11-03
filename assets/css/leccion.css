@@ -3442,3 +3442,81 @@ body:has(#app #verify) #app .card.center{background-image:none}
 }
 .vesper-reduce-motion .wsky.is-illus .wmap .wbtn.is-current,.vesper-reduce-motion .wsky.is-illus .wmap .wbtn.is-current::after,
 .vesper-reduce-motion .wsky.is-illus .wmap .wbtn.boss.ready,.vesper-reduce-motion .wsky.is-illus .wil-props img{animation:none}
+
+/* ===== Casa interactiva del recinto (experimento A1 · El Hogar) ===== */
+.dhouse{margin-top:18px}
+.dhouse__view{position:relative;width:100%;overflow:hidden;border-radius:20px;background:#1e1309;
+  box-shadow:0 14px 34px rgba(16,16,34,.28),inset 0 0 0 1px rgba(255,255,255,.06)}
+.dhouse__stage{position:absolute;inset:0;transform-origin:0 0;transition:transform .6s cubic-bezier(.22,.8,.24,1);cursor:pointer}
+.dhouse__img{width:100%;height:100%;display:block;object-fit:cover;user-select:none;-webkit-user-drag:none}
+.droom{position:absolute;padding:0;margin:0;border:0;background:transparent;border-radius:8px;cursor:pointer;
+  font:inherit;color:inherit;-webkit-tap-highlight-color:transparent;
+  outline:2px solid transparent;outline-offset:-2px;transition:outline-color .2s,box-shadow .45s,background .2s}
+.droom:hover{background:rgba(255,214,150,.10);outline-color:rgba(255,214,150,.55)}
+.droom:focus-visible{outline:3px solid var(--w-accent,#c5a059);outline-offset:-3px}
+.droom__pin{position:absolute;left:50%;top:6px;transform:translateX(-50%);display:inline-flex;align-items:center;gap:5px;
+  white-space:nowrap;padding:3px 9px 3px 3px;border-radius:999px;font-size:.7rem;font-weight:700;color:#fff;
+  background:rgba(24,15,7,.78);border:1px solid rgba(255,214,150,.35);box-shadow:0 4px 12px rgba(0,0,0,.35);
+  backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);transition:opacity .25s,transform .25s;pointer-events:none}
+.droom__pin b{display:inline-flex;align-items:center;justify-content:center;min-width:18px;height:18px;border-radius:50%;
+  font-size:.66rem;background:var(--w-accent,#c5a059);color:#1f1a0e}
+.droom.done .droom__pin b{background:var(--success,#2e9d62);color:#fff}
+.droom:not(.on) .droom__pin{animation:dpin 2.6s ease-in-out infinite}
+.droom:nth-of-type(2) .droom__pin{animation-delay:.3s}.droom:nth-of-type(3) .droom__pin{animation-delay:.6s}
+.droom:nth-of-type(4) .droom__pin{animation-delay:.9s}.droom:nth-of-type(5) .droom__pin{animation-delay:1.2s}
+.droom:nth-of-type(6) .droom__pin{animation-delay:1.5s}
+@keyframes dpin{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(-3px)}}
+/* foco: zoom + foco de luz sobre la habitación elegida, el resto en penumbra */
+.dhouse__view.is-focus .droom__pin{opacity:0;transform:translateX(-50%) scale(.8)}
+.dhouse__view.is-focus .droom:hover:not(.on){background:transparent;outline-color:rgba(255,214,150,.35)}
+.droom.on{z-index:2;outline:2px solid var(--w-accent,#c5a059);outline-offset:-1px;
+  box-shadow:0 0 0 200vmax rgba(14,9,4,.62),0 0 22px var(--w-glow,rgba(192,122,51,.5))}
+.dhouse__reset{position:absolute;right:10px;top:10px;z-index:3;display:inline-flex;align-items:center;gap:6px;
+  padding:7px 12px;border-radius:999px;border:1px solid rgba(255,214,150,.4);background:rgba(24,15,7,.82);color:#fff;
+  font:600 .78rem/1 Inter,system-ui,sans-serif;cursor:pointer;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+.dhouse__reset svg{width:15px;height:15px}
+.dhouse__reset:hover{border-color:var(--w-accent,#c5a059)}
+.dhouse__reset[hidden]{display:none}
+/* panel de la habitación */
+.dhouse__panel{margin-top:12px}
+.dhp{background:var(--paper);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);padding:14px;
+  animation:dhpIn .35s ease both}
+@keyframes dhpIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.dhp--idle{display:flex;align-items:center;gap:12px;padding:12px 14px;color:var(--muted);font-size:.9rem}
+.dhp--idle p{margin:0}.dhp--idle b{color:var(--ink)}
+.dhp__tap{flex:0 0 auto;width:30px;height:30px;border-radius:50%;background:var(--w-accent-soft,var(--gold-tint));position:relative}
+.dhp__tap::after{content:"";position:absolute;inset:9px;border-radius:50%;background:var(--w-accent,#c5a059);animation:dtap 1.6s ease-out infinite}
+@keyframes dtap{0%{box-shadow:0 0 0 0 var(--w-glow,rgba(192,122,51,.5))}100%{box-shadow:0 0 0 12px transparent}}
+.dhp__top{display:flex;align-items:center;gap:12px}
+.dhp__hd{min-width:0}
+.dhp__nm{margin:0;font-family:"Inria Serif",Georgia,serif;font-size:1.25rem;line-height:1.15;outline:none}
+.dhp__meta{font-size:.8rem;color:var(--muted);margin-top:2px}
+.dhp__words{display:grid;grid-template-columns:repeat(auto-fill,minmax(132px,1fr));gap:8px;margin-top:12px}
+.dword{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:1px;text-align:left;
+  padding:9px 34px 9px 11px;border-radius:12px;border:1px solid var(--line);background:var(--cream);color:inherit;
+  font:inherit;cursor:pointer;opacity:0;animation:dwordIn .38s ease forwards;animation-delay:calc(var(--i,0) * 70ms + 120ms);
+  transition:border-color .15s,background .15s,transform .15s}
+.dword:hover{border-color:color-mix(in srgb,var(--w-accent,#c5a059) 55%,var(--line));transform:translateY(-1px)}
+.dword:active{transform:scale(.97)}
+.dword__en{font-weight:700;font-size:.95rem;line-height:1.2}
+.dword__es{font-size:.78rem;color:var(--muted)}
+.dword__say{position:absolute;right:8px;top:50%;transform:translateY(-50%);width:20px;height:20px;color:var(--w-accent,#a8843d);
+  display:flex;align-items:center;justify-content:center;font-weight:800}
+.dword__say svg{width:18px;height:18px}
+.dword.known{background:var(--w-accent-soft,var(--gold-tint))}
+.dword.known .dword__say{color:var(--success,#2e9d62)}
+@keyframes dwordIn{from{opacity:0;transform:translateY(6px) scale(.96)}to{opacity:1;transform:none}}
+.dhp__rest{margin:10px 0 0;font-size:.8rem;color:var(--muted)}
+.dhp__acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.dhp__acts .btn{flex:1 1 150px}
+.dhouse-more{font-size:.78rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:22px 0 0;font-weight:700}
+@media(max-width:420px){
+  .droom__pin{font-size:.6rem;padding:2px 7px 2px 2px;top:3px;gap:3px}
+  .droom__pin b{min-width:15px;height:15px;font-size:.58rem}
+  .dhp__words{grid-template-columns:1fr 1fr}
+}
+@media(prefers-reduced-motion:reduce){
+  .dhouse__stage{transition:none}
+  .droom__pin,.dhp,.dword,.dhp__tap::after{animation:none}
+  .dword{opacity:1}
+}
