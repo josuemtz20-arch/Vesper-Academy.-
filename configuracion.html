@@ -622,9 +622,9 @@
     if (sw) sw.addEventListener("click", syncMore);
     syncMore();
     /* estilo: guarda y deja escucharlo */
-    var PACK = { clasico: { label: "Clásico" }, suave: { label: "Suave" }, arcade: { label: "Arcade" } };
-    var curPack = PACK[p.sfxPack] ? p.sfxPack : "clasico";
-    radioGroup("seg-sndpack", ["clasico", "suave", "arcade"], PACK, curPack, function (id) {
+    var PACK = { lucero: { label: "Lucero" }, clasico: { label: "Clásico" }, suave: { label: "Suave" }, arcade: { label: "Arcade" } };
+    var curPack = PACK[p.sfxPack] ? p.sfxPack : "lucero";
+    radioGroup("seg-sndpack", ["lucero", "clasico", "suave", "arcade"], PACK, curPack, function (id) {
       P.set({ sfxPack: id }); flash();
       if (SFX && SFX.preview) SFX.preview(id);
     });
