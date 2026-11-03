@@ -1,107 +1,152 @@
-# Publicar "Vesper Academy — Lecciones" en Google Play
+# Publicar Vesper Academy en Google Play
 
-Esta guía empaqueta la PWA de lecciones (`leccion.html`) como una app Android
-usando **TWA (Trusted Web Activity)** con **Bubblewrap**, y la sube a la
-Google Play Store. No se reescribe nada: la app Android abre directamente el
-sitio `https://vesperacademy.com/leccion.html` a pantalla completa, sin barra
-de navegador.
+La app Android es una **TWA (Trusted Web Activity)**: un envoltorio que abre
+`https://vesperacademy.com/leccion.html` a pantalla completa, sin barra de
+navegador. Todo el contenido sigue viviendo en el sitio, así que cada push a
+`main` actualiza la app sin pasar por Play. Solo hay que subir un `.aab` nuevo
+cuando cambia el envoltorio (ícono, nombre, versión, atajos).
 
-## 0. Qué ya está listo en este repo
+- Paquete Android: **`com.vesperacademy.lecciones`** (no se puede cambiar
+  después de la primera subida).
+- Configuración del envoltorio: `twa-manifest.json`.
+- Manifest web de la app: `manifest_lecciones.webmanifest`.
+- Textos de la ficha, respuestas de Seguridad de datos e imágenes:
+  `_marketing/play_store/` (local, no se publica).
 
-- `manifest_lecciones.webmanifest` — manifest PWA válido e instalable
-  (con `id`, `display: standalone`, iconos 192/512 + maskable).
-- `leccion.html` — registra el service worker (`sw.js`, offline) y muestra el
-  botón **"Instalar app"** cuando el navegador ofrece la instalación.
-- `twa-manifest.json` — configuración de Bubblewrap (raíz del repo).
-- `.well-known/assetlinks.json` — Digital Asset Links (falta pegar la huella
-  SHA-256 de tu clave de firma; ver paso 4).
+## Estado (2026-11-02)
 
-> El package Android configurado es **`com.vesperacademy.lecciones`**.
-> Si quieres otro, cámbialo en `twa-manifest.json` (`packageId`) y en
-> `.well-known/assetlinks.json` (`package_name`).
+Listo en el repo:
 
-## 1. Requisitos en tu máquina
+- [x] PWA instalable: manifest con `id`, íconos 192/512 + maskable, service worker.
+- [x] **Eliminar cuenta** dentro de la app y en la web: `eliminar-cuenta.html`
+      (enlazada desde el modal de cuenta y desde el aviso de privacidad).
+      Borra la cuenta de Firebase y `progress/{uid}`, quita el alias de la liga
+      y, si se marca, el progreso del dispositivo. Las calificaciones y los
+      resultados de examen se conservan como registro escolar (lo dice la página).
+- [x] **Reportar respuestas de la IA** en `chat.html` (requisito de Play para
+      apps con IA generativa). Cada reporte llega a Firestore `app_events`
+      con `event == "ai_report"`; revisarlos de vez en cuando.
+- [x] Atajos del ícono: Lecciones, Tutor IA, Liga.
+- [x] Ficha: ícono 512, gráfico 1024×500, 5 capturas 1080×1920, textos.
 
-- **Node.js 18+** y npm
-- **JDK 17** (Bubblewrap descarga el resto del Android SDK la primera vez)
-- Una cuenta de **Google Play Console** (pago único de 25 USD)
+Pendiente (lo tiene que hacer el dueño):
+
+- [ ] **Aviso de privacidad**: llenar los `[...]` en amarillo (nombre o razón
+      social, domicilio, responsable de datos, plazo de conservación). Play
+      revisa que la política esté completa.
+- [ ] **Cuenta de Play Console** (pago único de 25 USD). Si es cuenta
+      **personal** creada después de nov-2023, Google exige una **prueba
+      cerrada con al menos 12 testers durante 14 días seguidos** antes de dejar
+      publicar en Producción. Una cuenta de **organización** (necesita número
+      D-U-N-S) no tiene ese requisito.
+- [ ] Generar el `.aab` y la clave de firma (paso 1).
+- [ ] Pegar la huella SHA-256 en `.well-known/assetlinks.json` (paso 2).
+- [ ] Decidir el público objetivo (ver `ficha.md`).
+
+## 1. Generar el paquete Android
+
+Esta máquina no tiene Node ni Java, así que hay dos caminos:
+
+**A. PWABuilder (sin instalar nada, recomendado para la primera vez)**
+
+1. Abre https://www.pwabuilder.com y escribe `https://vesperacademy.com/leccion.html`.
+2. *Package for stores → Android → Google Play*.
+3. Opciones: Package ID `com.vesperacademy.lecciones`, nombre
+   `Vesper Academy — Inglés`, nombre corto `Vesper`, versión `1.0.0` / código `1`,
+   *Signing key: Create new*.
+4. Descarga el zip. Trae el `.aab`, un `.apk` de prueba, la **clave de firma**
+   (`signing.keystore` + `signing-key-info.txt`) y un `assetlinks.json`.
+
+**B. Bubblewrap en local (usa el `twa-manifest.json` del repo)**
+
+```bash
+winget install OpenJS.NodeJS.LTS Microsoft.OpenJDK.17
+```
 
 ```bash
 npm install -g @bubblewrap/cli
 ```
 
-## 2. Generar el proyecto Android
-
-Desde la raíz del repo (usa el `twa-manifest.json` ya incluido):
-
 ```bash
-bubblewrap init --manifest ./twa-manifest.json
+bubblewrap init --manifest https://vesperacademy.com/manifest_lecciones.webmanifest
 ```
-
-Acepta los valores que muestra (vienen de `twa-manifest.json`). Cuando pregunte
-por la **clave de firma (keystore)**, deja que cree una nueva
-`android.keystore` con alias `android`. **Guarda esa keystore y su contraseña
-en un lugar seguro: sin ella no podrás volver a actualizar la app.**
-
-## 3. Compilar el App Bundle (.aab)
 
 ```bash
 bubblewrap build
 ```
 
-Genera `app-release-bundle.aab` (lo que se sube a Play) y `app-release-signed.apk`
-(para probar en un teléfono con `adb install`).
+Usa siempre la versión más reciente de la herramienta: Play rechaza los
+paquetes cuyo `targetSdkVersion` se quedó atrás.
 
-## 4. Conectar la app con el dominio (Digital Asset Links)
+> **La clave de firma no se puede perder.** Guarda el keystore y su contraseña
+> fuera del repo (gestor de contraseñas + una copia en la nube privada). Con
+> Play App Signing Google puede reponer la clave de subida, pero cuesta días.
+> Nunca subas `*.keystore`, `*.aab` ni `*.apk` al repo.
 
-Para que la app abra **sin barra de URL**, el sitio debe declarar que confía en
-la app. Obtén la huella SHA-256 de tu clave de firma:
+## 2. Conectar la app con el dominio (Digital Asset Links)
 
-```bash
-keytool -list -v -keystore ./android.keystore -alias android
-```
+Sin esto la app se abre con una barra de URL arriba y Google la puede rechazar.
 
-Copia el valor `SHA256:` (ej. `AB:CD:...`) y pégalo en
-`.well-known/assetlinks.json`, reemplazando
-`REEMPLAZAR_CON_LA_HUELLA_SHA256_DE_TU_CLAVE_DE_FIRMA`.
+1. Sube el `.aab` a Play Console (pista de **Prueba interna**).
+2. Copia la huella de *Play Console → Prueba y lanzamiento → Configuración →
+   Integridad de la app → Firma de apps → Certificado de la clave de firma de
+   apps → SHA-256*.
+3. Pégala en `.well-known/assetlinks.json` en lugar de
+   `REEMPLAZAR_CON_LA_HUELLA_SHA256_DE_TU_CLAVE_DE_FIRMA`. Si también quieres
+   probar el `.apk` firmado por ti, añade la huella de tu clave de subida como
+   segundo elemento del array.
+4. Push a `main` y comprueba
+   https://vesperacademy.com/.well-known/assetlinks.json.
+5. Verifica con
+   https://developers.google.com/digital-asset-links/tools/generator.
 
-> **Importante:** Si activas **Play App Signing** (recomendado y por defecto),
-> Google re-firma la app con *su* clave. Entonces debes usar la huella SHA-256
-> que aparece en **Play Console → Configuración → Integridad de la app →
-> Firma de apps**, NO la de tu keystore local. Puedes incluir ambas huellas
-> en el array `sha256_cert_fingerprints`.
+## 3. Play Console
 
-Haz commit y push del `assetlinks.json` actualizado. Como el sitio se sirve por
-GitHub Pages con `.nojekyll`, la carpeta `.well-known/` se publica tal cual en
-`https://vesperacademy.com/.well-known/assetlinks.json`. Verifícalo abriendo esa
-URL en el navegador.
+1. **Crear app**: nombre `Vesper Academy — Inglés`, idioma español
+   (Latinoamérica), App, Gratis.
+2. **Ficha principal**: copia los textos e imágenes de `_marketing/play_store/`.
+3. **Contenido de la app** (Política → Contenido de la app):
+   - Política de privacidad: `https://vesperacademy.com/aviso-de-privacidad.html`
+   - Eliminación de cuenta: `https://vesperacademy.com/eliminar-cuenta.html`
+   - Seguridad de los datos, clasificación de contenido y público objetivo:
+     respuestas sugeridas en `ficha.md`.
+   - Anuncios: **No** contiene anuncios.
+   - Contenido generado por IA: **Sí** (el tutor Vesper).
+4. **Prueba interna** → instala desde el enlace de testers y revisa la lista
+   de abajo.
+5. **Prueba cerrada** (12+ testers, 14 días si la cuenta es personal).
+6. **Producción** → enviar a revisión.
 
-## 5. Subir a Google Play Console
+### Qué revisar en el teléfono antes de enviar
 
-1. Crea una app nueva en [Play Console](https://play.google.com/console).
-2. Sube `app-release-bundle.aab` en una pista (empieza por **Pruebas internas**).
-3. Completa la ficha de la tienda: nombre, descripción, **icono 512×512**
-   (`assets/images/app_icon_512.png`), **gráfico destacado 1024×500** y al menos
-   2 capturas de teléfono.
-4. Rellena los cuestionarios obligatorios: clasificación de contenido,
-   seguridad de datos, público objetivo, etc.
-5. Envía a revisión. Tras la aprobación, promueve de pruebas internas a
-   **Producción**.
+- Abre sin barra de URL (si sale, falla `assetlinks.json`).
+- Modo avión: las lecciones ya visitadas siguen abriendo (service worker).
+- Crear cuenta → verificar correo → **Eliminar mi cuenta** funciona de punta a punta.
+- El botón atrás de Android vuelve dentro de la app, no la cierra de golpe.
+- Audio de las lecciones y micrófono del chat (el primer uso pide permiso).
+- Los enlaces que salen del dominio (WhatsApp, YouTube) abren fuera de la app.
 
-## 6. Actualizaciones futuras
+## 4. Riesgos de revisión que conviene mirar
 
-1. Cambia el contenido web (se refleja al instante; la app sólo carga el sitio).
-2. Para subir una versión nueva del binario, incrementa `appVersionCode`
-   (y `appVersionName`) en `twa-manifest.json`, luego:
-   ```bash
-   bubblewrap update   # sincroniza con el twa-manifest
-   bubblewrap build
-   ```
-3. Sube el nuevo `.aab` a Play Console.
+- **Pagos**: `planes.html` muestra precios de los cursos y lleva a WhatsApp.
+  Son clases en vivo con profesor, que en principio no exigen la facturación
+  de Google Play, pero si un revisor lo ve como venta de contenido digital
+  puede pedir cambios. La salida segura es ocultar precios y botones de compra
+  cuando la página corre dentro de la app (`document.referrer` empieza por
+  `android-app://com.vesperacademy.lecciones`).
+- **Calidad de la TWA**: Play baja de calificación las apps que son "solo un
+  sitio web". Ayuda que la app abra directo en las lecciones (no en la
+  landing) y que todo lo de la barra inferior funcione dentro de la app.
+
+## 5. Actualizaciones
+
+- Contenido: push a `main`, como siempre. La app lo toma al abrirse.
+- Envoltorio: sube `appVersionCode` (+1) y `appVersionName` en
+  `twa-manifest.json`, regenera el `.aab` con la **misma clave** y súbelo.
 
 ## Notas
 
-- `android.keystore` y los `.aab`/`.apk` generados **no** deben subirse al
-  repo (ya están en `.gitignore`).
-- iOS no permite TWA: en iPhone/iPad los usuarios "instalan" la PWA con
-  *Compartir → Añadir a pantalla de inicio* (el sitio ya lo soporta).
+- iOS no admite TWA. En iPhone se instala la PWA con *Compartir → Añadir a
+  pantalla de inicio*.
+- El `.gitignore` es una whitelist: cualquier archivo nuevo en la raíz que deba
+  publicarse hay que nombrarlo ahí (`eliminar-cuenta.html` ya lo está).

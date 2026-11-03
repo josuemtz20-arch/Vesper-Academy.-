@@ -164,6 +164,7 @@
       ".vsync-btn{display:block;width:100%;margin-top:10px;padding:12px;border:none;border-radius:11px;font:600 1rem Inter,system-ui,sans-serif;cursor:pointer}",
       ".vsync-btn.gold{background:#C9A84C;color:#1B1B2F}.vsync-btn.ink{background:#1B1B2F;color:#fff}.vsync-btn.ghost{background:transparent;border:1.5px solid #ece7da;color:#1B1B2F}",
       ".vsync-msg{margin-top:10px;font-size:.85rem;min-height:1.1em}.vsync-msg.err{color:#C0392B}.vsync-msg.ok{color:#2D9E75}",
+      ".vsync-del{margin:12px 0 0;text-align:center;font-size:.8rem}.vsync-del a{color:#8a8578}",
       ".vsync-x{float:right;border:none;background:none;font-size:1.3rem;cursor:pointer;color:#6b6b76;line-height:1}"
     ].join("");
     var el = document.createElement("style"); el.id = "vsync-css"; el.textContent = css;
@@ -213,7 +214,8 @@
         + '<h3>Progreso en la nube</h3>'
         + '<p>Sesión: <b>' + esc(u.email) + '</b></p>'
         + '<p>Tus mundos desbloqueados, lecciones, racha y XP se sincronizan automáticamente en todos tus dispositivos.</p>'
-        + '<button class="vsync-btn ghost" data-act="signout">Cerrar sesión</button>';
+        + '<button class="vsync-btn ghost" data-act="signout">Cerrar sesión</button>'
+        + '<p class="vsync-del"><a href="eliminar-cuenta.html">Eliminar mi cuenta</a></p>';
     } else if (u && !u.emailVerified) {
       modal.innerHTML = '<button class="vsync-x" aria-label="Cerrar">&times;</button>'
         + '<h3>Verifica tu correo</h3>'

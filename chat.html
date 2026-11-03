@@ -61,6 +61,13 @@ header a.back:hover{color:var(--gold);}
 .msg.user .avatar i{color:#fff;}
 
 .bubble .name{display:block;font-size:.66rem;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:var(--gold2);margin-bottom:3px;}
+/* Reportar respuesta de la IA (requisito de Google Play para apps con IA generativa) */
+.msg.vesper .bubble-col{display:flex;flex-direction:column;align-items:flex-start;min-width:0;}
+.ai-report{margin:4px 0 0 4px;font:600 .72rem Inter,system-ui,sans-serif;color:#8a8578;background:none;border:0;padding:2px 4px;cursor:pointer;}
+.ai-report:hover{color:var(--navy);}
+.ai-report-row{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 0 4px;}
+.ai-report-row button{font:600 .74rem Inter,system-ui,sans-serif;padding:5px 10px;border-radius:999px;border:1px solid var(--border);background:#fff;color:var(--navy);cursor:pointer;}
+.ai-report-done{margin:6px 0 0 4px;font-size:.74rem;color:#2D9E75;}
 
 /* Indicador de escribiendo */
 .typing{display:inline-flex;gap:4px;align-items:center;padding:4px 2px;}
@@ -344,10 +351,66 @@ body:has(.composer textarea:focus){padding-bottom:0;}
     var body = el("span");
     body.textContent = text || "";
     bubble.appendChild(body);
-    wrap.appendChild(bubble);
+    if (role === "user") wrap.appendChild(bubble);
+    else {
+      var col = el("div", "bubble-col");
+      col.appendChild(bubble);
+      col.appendChild(reportControl(body));
+      wrap.appendChild(col);
+    }
     messagesEl.appendChild(wrap);
     scrollToBottom();
     return body;
+  }
+
+  /* "Reportar": cualquier respuesta de Vesper se puede marcar como ofensiva o
+     incorrecta. Va a Firestore app_events (event "ai_report", create abierto en
+     las reglas) para que el admin la revise; VA.cfg.cloud está apagado, así que
+     se envía directo y no por VA.track. */
+  var REPORT_REASONS = [["ofensiva", "Ofensiva o inapropiada"], ["incorrecta", "Incorrecta"], ["otro", "Otro problema"]];
+  function sendReport(text, reason) {
+    var rec = { vid: "", sid: "" };
+    try { if (window.VA) rec = VA.track("ai_report", { reason: reason }); } catch (e) {}
+    try {
+      /* chat.html no carga vesper_auth.js (activaría la puerta de login); la
+         apiKey es la misma, pública, de VesperAuth.config.firebase. */
+      var cfg = { projectId: "vesper-academy", apiKey: "AIzaSyAsCJW97LyNpmvey1Mo0wiGMufQIV7uxio" };
+      var props = JSON.stringify({ reason: reason, text: String(text || "").slice(0, 480) });
+      fetch("https://firestore.googleapis.com/v1/projects/" + cfg.projectId +
+            "/databases/teachermanuals/documents/app_events?key=" + encodeURIComponent(cfg.apiKey), {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ fields: {
+          event:     { stringValue: "ai_report" },
+          props:     { stringValue: props.slice(0, 600) },
+          vid:       { stringValue: String(rec.vid || "").slice(0, 32) },
+          sid:       { stringValue: String(rec.sid || "").slice(0, 32) },
+          page:      { stringValue: "chat.html" },
+          createdAt: { timestampValue: new Date().toISOString() }
+        } })
+      }).catch(function () {});
+    } catch (e) {}
+  }
+  function reportControl(body) {
+    var box = el("div");
+    var btn = el("button", "ai-report", '<i class="fas fa-flag"></i> Reportar');
+    btn.type = "button";
+    btn.setAttribute("aria-label", "Reportar esta respuesta");
+    btn.onclick = function () {
+      btn.remove();
+      var row = el("div", "ai-report-row");
+      REPORT_REASONS.forEach(function (r) {
+        var b = el("button"); b.type = "button"; b.textContent = r[1];
+        b.onclick = function () {
+          sendReport(body.textContent, r[0]);
+          row.replaceWith(el("div", "ai-report-done", "Gracias. Lo revisaremos."));
+        };
+        row.appendChild(b);
+      });
+      box.appendChild(row);
+    };
+    box.appendChild(btn);
+    return box;
   }
 
   function addTyping() {

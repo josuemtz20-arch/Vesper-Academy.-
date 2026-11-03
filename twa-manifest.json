@@ -1,8 +1,8 @@
 {
   "packageId": "com.vesperacademy.lecciones",
   "host": "vesperacademy.com",
-  "name": "Vesper Academy — Lecciones",
-  "launcherName": "Vesper Lecciones",
+  "name": "Vesper Academy — Inglés",
+  "launcherName": "Vesper",
   "display": "standalone",
   "orientation": "portrait",
   "themeColor": "#1B1B2F",
@@ -23,7 +23,26 @@
   },
   "appVersionName": "1.0.0",
   "appVersionCode": 1,
-  "shortcuts": [],
+  "shortcuts": [
+    {
+      "name": "Seguir aprendiendo",
+      "shortName": "Lecciones",
+      "url": "https://vesperacademy.com/leccion.html?src=shortcut",
+      "chosenIconUrl": "https://vesperacademy.com/assets/images/app_icon_192.png"
+    },
+    {
+      "name": "Hablar con Vesper",
+      "shortName": "Tutor IA",
+      "url": "https://vesperacademy.com/chat.html?src=shortcut",
+      "chosenIconUrl": "https://vesperacademy.com/assets/images/app_icon_192.png"
+    },
+    {
+      "name": "Liga semanal",
+      "shortName": "Liga",
+      "url": "https://vesperacademy.com/liga.html?src=shortcut",
+      "chosenIconUrl": "https://vesperacademy.com/assets/images/app_icon_192.png"
+    }
+  ],
   "generatorApp": "bubblewrap-cli",
   "webManifestUrl": "https://vesperacademy.com/manifest_lecciones.webmanifest",
   "fallbackType": "customtabs",

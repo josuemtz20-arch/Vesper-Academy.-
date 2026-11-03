@@ -50,7 +50,8 @@
       "liga.html",
       "tienda.html",
       "onboarding.html",
-      "perfil.html"
+      "perfil.html",
+      "eliminar-cuenta.html"
     ],
     /* SHA-256 de ("vesper-academy-v1|" + correo en minúsculas).
        Añade una línea por persona autorizada. */
