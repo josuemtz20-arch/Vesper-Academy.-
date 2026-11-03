@@ -1747,17 +1747,17 @@
   var DEN_HOUSE = {
     A1: {
       img: "assets/images/vocab/house_a1.webp", w: 1500, h: 1120,
-      alt: "Casa en corte: ático, dormitorio, baño, sala con Vesper, cocina y jardín",
+      alt: "Casa en corte: ático con el retrato de familia, dormitorio, baño, sala con Vesper, cocina y jardín",
       rooms: {
-        family:   [13.0,  6.0, 52.0, 21.0],
-        bedroom:  [ 6.3, 29.6, 37.5, 27.6],
-        bathroom: [45.4, 29.6, 23.6, 27.6],
-        living:   [ 6.3, 60.1, 37.5, 33.2],
-        kitchen:  [45.4, 60.1, 23.6, 33.2],
-        garden:   [71.7, 20.1, 28.0, 78.2]
+        family:   [12.5,  5.6, 50.0, 19.9],
+        bedroom:  [ 5.7, 29.3, 34.3, 27.5],
+        bathroom: [41.7, 29.3, 28.8, 27.5],
+        living:   [ 5.7, 59.8, 34.3, 34.1],
+        kitchen:  [41.7, 59.8, 28.8, 34.1],
+        garden:   [72.5, 32.4, 27.5, 65.9]
       },
       /* Vesper dentro de la sala: tocable (saluda en inglés) */
-      vesper: [25.6, 73.4, 7.6, 17.6], vesperRoom: "living",
+      vesper: [23.3, 66.5, 9.2, 24.0], vesperRoom: "living",
       greet: ["Welcome home!", "Hello! I'm Vesper.", "This is my house.", "Let's learn some words!"]
     }
   };

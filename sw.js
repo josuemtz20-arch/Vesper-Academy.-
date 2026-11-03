@@ -14,7 +14,7 @@
    ============================================================ */
 "use strict";
 
-var CACHE_VERSION = "vesper-v103-f793bdc6";
+var CACHE_VERSION = "vesper-v104-15a4d344";
 var CORE = [
   /* Vesper Engine shell */
   "vesper_engine.html",
