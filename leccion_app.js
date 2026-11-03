@@ -1746,16 +1746,19 @@
      mazo de siempre. rooms[id] = [left, top, width, height] en % de la imagen. */
   var DEN_HOUSE = {
     A1: {
-      img: "assets/images/vocab/house_a1.webp", w: 1168, h: 880,
-      alt: "Casa en corte: ático, dormitorio, baño, sala, cocina y jardín",
+      img: "assets/images/vocab/house_a1.webp", w: 1500, h: 1120,
+      alt: "Casa en corte: ático, dormitorio, baño, sala con Vesper, cocina y jardín",
       rooms: {
-        family:   [15.4,  8.5, 39.4, 21.3],
-        bedroom:  [ 6.8, 32.4, 35.0, 25.8],
-        bathroom: [43.8, 32.4, 25.4, 25.8],
-        living:   [ 6.8, 60.8, 35.2, 29.0],
-        kitchen:  [43.7, 60.8, 25.5, 29.0],
-        garden:   [71.9, 31.8, 26.5, 63.6]
-      }
+        family:   [13.0,  6.0, 52.0, 21.0],
+        bedroom:  [ 6.3, 29.6, 37.5, 27.6],
+        bathroom: [45.4, 29.6, 23.6, 27.6],
+        living:   [ 6.3, 60.1, 37.5, 33.2],
+        kitchen:  [45.4, 60.1, 23.6, 33.2],
+        garden:   [71.7, 20.1, 28.0, 78.2]
+      },
+      /* Vesper dentro de la sala: tocable (saluda en inglés) */
+      vesper: [25.6, 73.4, 7.6, 17.6], vesperRoom: "living",
+      greet: ["Welcome home!", "Hello! I'm Vesper.", "This is my house.", "Let's learn some words!"]
     }
   };
   window.__vhouseFail = function () {
@@ -1778,7 +1781,11 @@
       + '<div class="dhouse__view" id="dhView" style="aspect-ratio:' + house.w + '/' + house.h + '">'
       + '<div class="dhouse__stage" id="dhStage">'
       + '<img class="dhouse__img" src="' + house.img + '" alt="' + esc(house.alt) + '" decoding="async" onerror="window.__vhouseFail()">'
-      + rooms + '</div>'
+      + rooms
+      + (house.vesper ? '<button class="dvesper" id="dhVesper" type="button" aria-label="Vesper: tócalo para que te salude"'
+        + ' style="left:' + house.vesper[0] + '%;top:' + house.vesper[1] + '%;width:' + house.vesper[2] + '%;height:' + house.vesper[3] + '%">'
+        + '<span class="dvesper__bub" id="dhBub" aria-hidden="true"></span></button>' : "")
+      + '</div>'
       + '<button class="dhouse__reset" id="dhReset" type="button" hidden>'
       + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10l8-6 8 6v9a1 1 0 0 1-1 1h-5v-6h-4v6H5a1 1 0 0 1-1-1z"/></svg>'
       + 'Toda la casa</button></div>'
@@ -1791,10 +1798,23 @@
     var cur = null;
     var sayIc = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5L6 9H3v6h3l5 4z"/><path d="M15.5 8.5a5 5 0 0 1 0 7"/></svg>';
     var SHOW_N = 8;
+    var VCAT = "assets/images/mascot/";
     function idle() {
-      panel.innerHTML = '<div class="dhp dhp--idle"><span class="dhp__tap" aria-hidden="true"></span>'
-        + '<p><b>Toca una habitación</b> para entrar a verla y descubrir sus palabras.</p></div>';
+      panel.innerHTML = '<div class="dhp dhp--idle"><img class="dhp__cat" src="' + VCAT + 'vesper_cat_welcome.webp" alt="" decoding="async">'
+        + '<p><b>¡Esta es mi casa!</b> Toca una habitación y te enseño sus palabras. También puedes tocarme a mí.</p></div>';
     }
+    var greetIx = 0, bubT = 0;
+    var vbtn = byId("dhVesper"), bub = byId("dhBub");
+    if (vbtn) vbtn.onclick = function (e) {
+      e.stopPropagation();
+      var g = (house.greet || ["Hello!"])[greetIx++ % (house.greet || [1]).length];
+      speak(g);
+      if (bub) {
+        bub.textContent = g; bub.classList.remove("on"); void bub.offsetWidth; bub.classList.add("on");
+        clearTimeout(bubT); bubT = setTimeout(function () { bub.classList.remove("on"); }, 2200);
+      }
+      vbtn.classList.remove("hop"); void vbtn.offsetWidth; vbtn.classList.add("hop");
+    };
     function focusRoom(id) {
       var br = null; order.forEach(function (x) { if (x.id === id) br = x; });
       if (!br) return;
@@ -1804,12 +1824,15 @@
       var tx = Math.min(0, Math.max(100 - 100 * s, 50 - (r[0] + r[2] / 2) * s));
       var ty = Math.min(0, Math.max(100 - 100 * s, 50 - (r[1] + r[3] / 2) * s));
       stage.style.transform = "translate(" + tx + "%," + ty + "%) scale(" + s + ")";
+      stage.style.setProperty("--dz", s);
       view.classList.add("is-focus");
       each("#dhStage .droom", function (b) {
         var on = b.getAttribute("data-room") === id;
         b.classList.toggle("on", on); b.setAttribute("aria-pressed", on ? "true" : "false");
       });
       if (reset) reset.hidden = false;
+      // Vesper solo se puede tocar si su habitación está a la vista (si no, queda en la penumbra)
+      if (vbtn) vbtn.hidden = !!house.vesperRoom && id !== house.vesperRoom;
       var m = knownMap(), bp = branchProgress(selLevel, br);
       // primero las que aún no domina, para que lo nuevo salga al frente
       var cards = br.cards.slice().sort(function (a, b) { return (m[cardKey(selLevel, a.en)] ? 1 : 0) - (m[cardKey(selLevel, b.en)] ? 1 : 0); });
@@ -1826,6 +1849,7 @@
         + '<div class="dhp__top"><span class="branch__ic' + (branchHasImg(selLevel, br.id) ? ' has-img' : '') + '">' + branchEmblemHtml(selLevel, br.id, br.icon) + '</span>'
         + '<div class="dhp__hd"><h2 class="dhp__nm" tabindex="-1" id="dhName">' + esc(br.name) + '</h2>'
         + '<div class="dhp__meta">' + (br.hint ? esc(br.hint) + ' · ' : "") + bp.done + '/' + bp.total + ' dominadas</div></div></div>'
+        + '<p class="dhp__say"><img src="' + VCAT + 'vesper_cat_explaining.webp" alt="" decoding="async"><span>Toca cada palabra para oírla. Cuando quieras, entra y practícalas.</span></p>'
         + '<div class="dhp__words">' + chips + '</div>'
         + (rest > 0 ? '<p class="dhp__rest">+' + rest + ' palabras más dentro</p>' : "")
         + '<div class="dhp__acts"><button class="btn btn-gold" id="dhEnter" type="button">Entrar ' + esc(br.name.replace(/^El\s+/, "al ").replace(/^(La|Los|Las)\s+/, function (m) { return "a " + m.toLowerCase(); })) + '</button>'
@@ -1840,9 +1864,11 @@
     function unfocus() {
       cur = null;
       stage.style.transform = "";
+      stage.style.removeProperty("--dz");
       view.classList.remove("is-focus");
       each("#dhStage .droom", function (b) { b.classList.remove("on"); b.setAttribute("aria-pressed", "false"); });
       if (reset) reset.hidden = true;
+      if (vbtn) vbtn.hidden = false;
       idle();
     }
     each("#dhStage .droom", function (b) {
