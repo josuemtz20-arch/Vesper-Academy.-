@@ -218,7 +218,7 @@ window.VESPER_PERSONA = (function () {
     /* --- sonido --- */
     soundFx: true,              /* efectos de sonido en acierto/error */
     sfxVolume: 60,              /* volumen de efectos 0..100 */
-    sfxPack: "lucero",          /* estilo: lucero | clasico | suave | arcade */
+    sfxPack: "madera",          /* estilo: madera | lucero | clasico | suave | arcade */
     sfxTap: false,              /* clic suave al tocar opciones */
     autoplayAudio: true,        /* autoplay del audio en ejercicios de listening */
     /* --- metas --- */
