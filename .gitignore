@@ -170,6 +170,8 @@
 !/vesper_adaptive.js
 !/vesper_activities.js
 !/vesper_path.js
+!/vesper_map_pixel.js
+!/vesper_map_illus.js
 # Instrumentación del embudo gratis->lead (2026-06-23): eventos locales +
 # passthrough opcional a GA4 + atribución ?src=. Sin claves (reutiliza la
 # apiKey pública de vesper_auth.js). La usan leccion.html y book_placement.html.

@@ -228,6 +228,9 @@
       Los pelajes y accesorios se van abriendo según avanzas: debajo de cada uno bloqueado
       pone qué te falta para conseguirlo.</p>
     <div id="picker-host"></div>
+    <div class="field" style="margin-top:14px"><span class="label" id="lab-mapstyle">Estilo del mapa
+      <span class="hint">Cómo se dibuja tu mapa de lecciones. Tu avance es el mismo en los tres.</span></span>
+      <div class="seg cols" id="seg-mapstyle" role="radiogroup" aria-labelledby="lab-mapstyle"></div></div>
   </section>
 
   <!-- ===== ACCESIBILIDAD ===== -->
@@ -369,6 +372,13 @@
      el mismo gato, con un gesto y un objeto por personalidad. */
   var TONE_ART = { friendly: 1, professional: 1, motivating: 1, fun: 1, strict: 1, socratic: 1, zen: 1 };
   function toneArt(id) { return '<img src="assets/images/persona/tone_' + id + '.webp" alt="" width="64" height="64" decoding="async">'; }
+  /* Estilo del mapa: moneda grabada, el gato (ilustrado) o una placa de pixeles */
+  var MAP_ART = {
+    grabado: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="6" opacity=".5"/><path d="m8.8 12.2 2.2 2.3 4.3-4.6"/></svg>',
+    /* ilustrado: la carita del gato, que es de donde sale ese estilo */
+    ilustrado: '<img src="assets/images/mascot/vesper_cat_welcome.webp" alt="" width="24" height="24" style="width:24px;height:24px;border-radius:50%;object-fit:cover;object-position:50% 12%" decoding="async">',
+    pixel: '<svg viewBox="0 0 12 12" fill="currentColor" shape-rendering="crispEdges"><path d="M3 1h6v1h1v1h1v6h-1v1H9v1H3v-1H2V9H1V3h1V2h1z" opacity=".35"/><path d="M8 4h1v1H8zM7 5h1v1H7zM3 6h1v1H3zM6 6h1v1H6zM4 7h2v1H4z"/></svg>'
+  };
   function radioGroup(hostId, order, dict, current, onPick) {
     var host = $(hostId); if (!host) return;
     var hasCurrent = order.indexOf(current) >= 0;
@@ -378,7 +388,7 @@
       /* roving tabindex: solo un radio por grupo es tabbable (el activo, o el 1ro) */
       var tab = (on || (!hasCurrent && i === 0)) ? "0" : "-1";
       return '<button type="button" role="radio" aria-checked="' + on + '" tabindex="' + tab + '" data-id="' + id + '">'
-        + '<span class="em" aria-hidden="true">' + ((hostId === "seg-tone" && TONE_ART[id]) ? toneArt(id) : optIc(id)) + '</span>'
+        + '<span class="em" aria-hidden="true">' + ((hostId === "seg-tone" && TONE_ART[id]) ? toneArt(id) : (hostId === "seg-mapstyle" && MAP_ART[id]) ? MAP_ART[id] : optIc(id)) + '</span>'
         + '<span class="t">' + o.label + '</span>'
         + '<span class="chk" aria-hidden="true">✓</span></button>';
     }).join("");
@@ -564,6 +574,14 @@
   var TEXTSCALE = { md: { label: "Normal", emoji: "" }, lg: { label: "Grande", emoji: "" }, xl: { label: "Muy grande", emoji: "" } };
   radioGroup("seg-textscale", ["md", "lg", "xl"], TEXTSCALE, p.textScale || "md", function (id) {
     P.set({ textScale: id }); flash();
+  });
+  /* estilo del mapa (vesper_map_illus.js / vesper_map_pixel.js lo leen de aquí;
+     el base, sin elección guardada, es el ilustrado) */
+  var MAPSTYLE = { ilustrado: { label: "Ilustrado", emoji: "" }, grabado: { label: "Grabado", emoji: "" }, pixel: { label: "Pixel", emoji: "" } };
+  var curMap = "ilustrado"; try { var ms = localStorage.getItem("vesper_map_style"); if (MAPSTYLE[ms]) curMap = ms; } catch (e) {}
+  radioGroup("seg-mapstyle", ["ilustrado", "grabado", "pixel"], MAPSTYLE, curMap, function (id) {
+    try { localStorage.setItem("vesper_map_style", id); } catch (e) {}
+    flash();
   });
   wireSwitch("sw-hc", p.highContrast, "highContrast");
   wireSwitch("sw-rm", p.reduceMotion, "reduceMotion");

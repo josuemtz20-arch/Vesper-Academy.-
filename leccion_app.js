@@ -478,7 +478,8 @@
      - disponible: el play EN CONTORNO (i-play), no macizo;
      - bloqueada: candado grabado, sin el punto relleno que lo emborronaba. */
   function nodeGlyph(state) {
-    var o = '<svg class="wglyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">';
+    if (pxOn()) return VESPER_MAPPX.glyph(state);
+    var o ='<svg class="wglyph" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">';
     if (state === "completed") {
       /* Sólo la palomita, bien plantada. Probé a rodearla de dos ramas de
          laurel y a 28px las ramas se leían como un par de paréntesis: "(v)".
@@ -648,6 +649,11 @@
   function worldVars(t) { return '--w-accent:' + t.accent + ';--w-accent-soft:' + t.accentSoft + ';--w-glow:' + t.glow + ';--w-accent-ink:' + (t.accentInk || t.accent) + ';'; }
   /* capa ambiental reutilizable (N partículas <i>); mapMod=true para la del mapa */
   function ambLayer(n, mapMod) { var dots = ""; for (var i = 0; i < n; i++) dots += "<i></i>"; return '<div class="wamb' + (mapMod ? ' wamb--map' : '') + '" aria-hidden="true">' + dots + '</div>'; }
+
+  /* ¿mapa en pixel art? (vesper_map_pixel.js; ?mapa=grabado vuelve al grabado) */
+  function pxOn() { return !!(window.VESPER_MAPPX && VESPER_MAPPX.on()); }
+  /* ¿mapa ilustrado? (vesper_map_illus.js: el estilo de los gatos) */
+  function ilOn() { return !!(window.VESPER_MAPIL && VESPER_MAPIL.on()); }
 
   /* offset-x serpenteante por parada (da la curva al sendero) */
   function dxFor(k) { return Math.round(64 * Math.sin(k * 0.85)); }
@@ -832,6 +838,16 @@
       } else { avatar.style.transition = "none"; place(cur); }
     }
     map.removeAttribute("data-prev");
+    if (pxOn()) {
+      VESPER_MAPPX.paintRoad(map, lens[Math.max(0, Math.min(lens.length - 1, cur))] || 0);
+      VESPER_MAPPX.widen(map);
+      VESPER_MAPPX.pixelate(avatar.querySelector(".wcat"), 22, { outline: true });
+      var bimg = map.querySelector(".boss-node-photo");
+      if (bimg) VESPER_MAPPX.pixelate(bimg, 24, { cover: true, levels: 6 });
+      var ban = document.querySelector(".world-banner.is-pixel .world-banner__img");
+      if (ban) VESPER_MAPPX.pixelate(ban, Math.max(120, Math.round((ban.clientWidth || 360) / VESPER_MAPPX.PX)), { aspect: (ban.clientWidth || 360) / (ban.clientHeight || 130), levels: 9 });
+    }
+    else if (ilOn()) VESPER_MAPIL.widen(map);
     placeProps(map);
     applyParallax();                                  // estado inicial de la profundidad por scroll
   }
@@ -915,8 +931,9 @@
     var t = WORLD_THEME[selLevel]; if (!t) return "";
     var pr = PATH.levelProgress(selLevel, built);
     var n = PATH.LEVELS.indexOf(selLevel) + 1;
-    return '<section class="world-banner" data-world="' + selLevel + '" style="' + worldVars(t) + '" aria-label="Mundo ' + n + ': ' + esc(t.worldName) + '">'
-      + '<img class="world-banner__img" src="' + t.file + '" alt="" aria-hidden="true" decoding="async">'
+    var il = !pxOn() && ilOn();
+    return '<section class="world-banner' + (pxOn() ? ' is-pixel' : '') + (il ? ' is-illus' : '') + '" data-world="' + selLevel + '" style="' + worldVars(t) + '" aria-label="Mundo ' + n + ': ' + esc(t.worldName) + '">'
+      + '<img class="world-banner__img" src="' + (il ? VESPER_MAPIL.banner(selLevel) : t.file) + '" alt="" aria-hidden="true" decoding="async">'
       + ambLayer(t.ambientN)
       + '<div class="world-banner__body">'
       + '<span class="world-banner__eyebrow">Mundo ' + n + ' &middot; ' + selLevel + '</span>'
@@ -990,7 +1007,7 @@
     if (stt === "completed") {
       cls += " completed"; wrapCls += " done"; glyph = nodeGlyph("completed"); attr = 'data-go="' + esc(lid) + '"';
       var sc = PATH.getScore(lid), s = PATH.stars(sc != null ? sc : 70), sh = '<span class="wstars" aria-hidden="true">';
-      for (var i = 0; i < 3; i++) sh += (i < s ? "&#9733;" : '<span class="off">&#9733;</span>');
+      for (var i = 0; i < 3; i++) sh += (i < s ? '<i>&#9733;</i>' : '<span class="off">&#9733;</span>');
       stars = sh + "</span>";
       aria = l.title + " — completado" + (sc != null ? ", " + sc + " por ciento" : "");
     } else if (stt === "open") {
@@ -1016,7 +1033,7 @@
     var mastered = !!((stt.achievements || {})["master:" + selLevel + ":" + sk]);
     var rsc = PATH.getScore(rid);
     var aria = "Mini-reto de " + meta.label + (mastered ? ", superado" + (rsc != null ? ", mejor " + rsc + " por ciento" : "") : ", desafío de destreza disponible");
-    var crest = '<svg class="wcrest" viewBox="0 0 28 30" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true">'
+    var crest = pxOn() ? VESPER_MAPPX.glyph("crest") : '<svg class="wcrest" viewBox="0 0 28 30" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round" aria-hidden="true">'
       + '<path d="M14 2.4l9.6 3.7v7.7c0 6.6-4.8 10.6-9.6 13.4-4.8-2.8-9.6-6.8-9.6-13.4V6.1z"/><path d="m10.2 14.4 3 3 5.6-5.8"/></svg>';
     return '<div class="wnode mini' + (mastered ? " done" : "") + '" data-stop="' + stop + '" style="--dx:' + dx + 'px">'
       + '<span class="wlabel mini-lb">Mini-reto</span>'
@@ -1099,6 +1116,8 @@
      PROP_SLOTS. Las piezas repetidas se reflejan una sí y otra no para que
      el mismo farol no se lea como un sello. */
   function propsLayer(lv, nStops) {
+    if (pxOn()) return VESPER_MAPPX.propsLayer(lv, nStops, trnd);
+    if (ilOn()) return VESPER_MAPIL.propsLayer(lv, nStops, trnd);
     var set = WORLD_PROPS[lv];
     if (!set || !set.length) return "";
     var N = Math.max(PROP_SLOTS.length, Math.round((nStops || 0) * 1.15));
@@ -1211,8 +1230,11 @@
     /* worldVars también en .wsky: el resplandor del horizonte y el color de
        la noche viven ahí, y .wsky es PADRE de .wisland, así que no heredaba
        el acento del mundo (se quedaba en el oro por defecto en los 6). */
-    var scene = '<div class="wsky" style="' + worldVars(t) + '">'
+    var px = pxOn(), il = !px && ilOn();
+    var scene = '<div class="wsky' + (px ? ' is-pixel' : '') + (il ? ' is-illus' : '') + '" style="' + worldVars(t) + (px ? VESPER_MAPPX.vars(selLevel, t) : '') + (il ? VESPER_MAPIL.vars(selLevel) : '') + '">'
       + '<div class="wisland" data-world="' + selLevel + '" style="' + worldVars(t) + terrain + '">'
+      + (px ? '<div class="wpx-ground" aria-hidden="true"></div>' : '')
+      + (il ? '<div class="wil-ground" aria-hidden="true"></div>' : '')
       + '<div class="watmo" aria-hidden="true"></div>'
       + '<div class="wmap" id="wmap" data-world="' + selLevel + '" data-cur="' + curStop + '" style="' + worldVars(t) + '">'
       /* El paisaje: TRES hitos grabados repartidos a lo largo del recorrido,
@@ -1228,7 +1250,9 @@
          avatar con offset-path—, .wtrail-done la pisa en oro hasta el nodo
          actual. Se fueron road/tex/glow (la misma "d" pintada tres veces más)
          y la cuenta-cometa, que animaba un drop-shadow en bucle infinito. */
-      + '<svg class="wtrail" aria-hidden="true" focusable="false" preserveAspectRatio="none"><path class="wtrail-bed"/><path class="wtrail-line"/><path class="wtrail-done"/></svg>'
+      /* en el ilustrado, un trazo más DEBAJO de todo: el contorno navy del camino */
+      + '<svg class="wtrail" aria-hidden="true" focusable="false" preserveAspectRatio="none">' + (il ? '<path class="wil-edge"/>' : '') + '<path class="wtrail-bed"/><path class="wtrail-line"/><path class="wtrail-done"/></svg>'
+      + (px ? '<canvas class="wpx-road" aria-hidden="true"></canvas>' : '')
       + '<div class="wavatar' + (pj.animal ? ' has-pelaje' : '') + '" data-pelaje="' + pj.pelaje + '" aria-hidden="true">'
       + '<img class="wcat" src="' + pj.src + '" alt="" decoding="async">'
       + '<span class="wacc">' + pj.svg + '</span><span class="wfx" aria-hidden="true"></span></div>'
