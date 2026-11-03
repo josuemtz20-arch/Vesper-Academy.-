@@ -7,7 +7,7 @@
  * Preferencias (las guarda configuracion.html en el perfil, las lee VESPER_PREFS):
  *   soundFx   bool     interruptor general (también apaga la vibración)
  *   sfxVolume 0..100   volumen de los efectos (por defecto 60)
- *   sfxPack   "lucero" | "clasico" | "suave" | "arcade"   estilo (por defecto lucero)
+ *   sfxPack   "madera" | "lucero" | "clasico" | "suave" | "arcade"   estilo (por defecto madera)
  *   sfxTap    bool     clic al tocar una opción (APAGADO por defecto)
  *
  * Reglas anti-molestia:
@@ -18,10 +18,9 @@
  *   - El tap está apagado por defecto y es casi subliminal.
  *   - Cada estilo tiene melodías y timbre propios (ver CUES), no solo un filtro.
  *
- * Lucero (el estilo de la marca) no usa osciladores puros: es una celesta
- * MODELADA (síntesis modal con los modos reales de una barra de metal,
- * 1 : 2.76 : 5.40 : 8.93, golpe de mazo y caída distinta por modo) en una sala
- * con reverb. Cada toque varía un poco en afinación y fuerza. Todos los cues
+ * Madera (predeterminado) y Lucero no usan osciladores puros: son una marimba
+ * y una celesta MODELADAS (síntesis modal con los modos reales de cada barra,
+ * golpe de mazo y caída distinta por modo), cada una en su sala con reverb. Cada toque varía un poco en afinación y fuerza. Todos los cues
  * salen del motivo de Vesper: D5 A5 G5 D6.
  *   - La vibración se omite con "reducir movimiento".
  *
@@ -39,7 +38,7 @@
  *   PACKS                          ids de estilos disponibles
  * ============================================================ */
 window.VESPER_SFX = (function () {
-  var PACKS = ["lucero", "clasico", "suave", "arcade"];
+  var PACKS = ["madera", "lucero", "clasico", "suave", "arcade"];
   var actx = null, master = null, lowpass = null, curPack = null;
 
   function prefs() {
@@ -54,7 +53,7 @@ window.VESPER_SFX = (function () {
   }
   function packOf(p) {
     var k = (p || prefs()).sfxPack;
-    return PACKS.indexOf(k) >= 0 ? k : "lucero";
+    return PACKS.indexOf(k) >= 0 ? k : "madera";
   }
   function reduceMotion() {
     try { if (window.VESPER_PREFS && VESPER_PREFS.get && VESPER_PREFS.get().reduceMotion) return true; } catch (e) {}
@@ -188,20 +187,33 @@ window.VESPER_SFX = (function () {
     }
   };
 
-  /* ================= LUCERO: celesta modelada ================= */
-  var LSR = 32000;            /* los buffers de nota van a 32 kHz: el parcial más alto cabe y ocupan menos memoria */
-  var glockCache = {}, hall = null;
+  /* ============ INSTRUMENTOS MODELADOS: Madera (marimba) y Lucero (celesta) ============
+     Síntesis modal: cada nota suma los modos de vibración reales del
+     instrumento, cada uno con su propia caída (los agudos mueren antes), más el
+     golpe del mazo. Se generan una vez por nota (2 variantes) y se cachean. */
+  var LSR = 32000;            /* buffers de nota a 32 kHz: el parcial más alto cabe y ocupan menos memoria */
   function hz(n) { return 440 * Math.pow(2, (n - 69) / 12); }
   function rng(seed) { return function () { seed |= 0; seed = seed + 0x6D2B79F5 | 0; var t = Math.imul(seed ^ seed >>> 15, 1 | seed); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
-  /* [razón, amplitud, tau(s)] de una barra libre de metal; tau se acorta en el agudo */
-  var GLOCK = [[1, 1, 0.9], [2.76, 0.32, 0.32], [5.40, 0.13, 0.11], [8.93, 0.05, 0.05], [3.0, 0.04, 0.6]];
-  function glockBuf(ac, n, variant) {
-    var key = n + ":" + variant;
-    if (glockCache[key]) return glockCache[key];
-    var f = hz(n), rnd = rng(n * 131 + variant * 7919 + 1);
-    var len = Math.floor(LSR * 1.4), buf = ac.createBuffer(1, len, LSR), out = buf.getChannelData(0);
-    var reg = Math.pow(523 / f, 0.3);
-    GLOCK.forEach(function (p) {
+
+  var INST = {
+    /* marimba de palo de rosa, mazos de fieltro: barra afinada 1 : 3.93 : 9.24 + resonador */
+    madera: { len: 1.2, atk: 0.0025, reg: 0.55, noise: [0.18, 0.012, 0.18], gain: 0.2,
+      partials: [[1, 1, 0.42], [3.93, 0.22, 0.07], [9.24, 0.05, 0.025], [1.002, 0.25, 0.6]],
+      room: { sec: 1.1, decay: 3.2, pre: 0.008, er: [0.006, 0.011, 0.017, 0.023], bright: 0.45 }, wet: 0.16 },
+    /* celesta / glockenspiel: barra libre de metal 1 : 2.76 : 5.40 : 8.93 */
+    lucero: { len: 1.4, atk: 0.0008, reg: 0.3, noise: [0.35, 0.004, 0.6], gain: 0.15,
+      partials: [[1, 1, 0.9], [2.76, 0.32, 0.32], [5.40, 0.13, 0.11], [8.93, 0.05, 0.05], [3.0, 0.04, 0.6]],
+      room: { sec: 1.8, decay: 2.8, pre: 0.018, er: [0.011, 0.019, 0.027, 0.041], bright: 0.55 }, wet: 0.26 }
+  };
+  var noteCache = {}, roomCache = {};
+
+  function noteBuf(ac, id, n, variant) {
+    var key = id + ":" + n + ":" + variant;
+    if (noteCache[key]) return noteCache[key];
+    var I = INST[id], f = hz(n), rnd = rng(n * 131 + variant * 7919 + id.length);
+    var len = Math.floor(LSR * I.len), buf = ac.createBuffer(1, len, LSR), out = buf.getChannelData(0);
+    var reg = Math.pow(523 / f, I.reg);
+    I.partials.forEach(function (p) {
       var fr = f * p[0] * (1 + (rnd() - 0.5) * 0.003);
       if (fr > LSR * 0.42) return;
       var e = p[1] * (0.85 + rnd() * 0.3), k = Math.exp(-1 / (p[2] * reg * LSR));
@@ -209,67 +221,91 @@ window.VESPER_SFX = (function () {
       var y1 = Math.sin(ph - w), y2 = Math.sin(ph - 2 * w);
       for (var i = 0; i < len; i++) { var y = c * y1 - y2; y2 = y1; y1 = y; out[i] += e * y; e *= k; if (e < 1e-5) break; }
     });
-    /* golpe del mazo: ráfaga de 4 ms de ruido */
-    var nl = Math.floor(LSR * 0.004), s = 0;
-    for (var j = 0; j < nl; j++) { s += 0.6 * ((rnd() * 2 - 1) - s); out[j] += s * 0.35 * Math.pow(1 - j / nl, 2); }
-    var atk = Math.floor(LSR * 0.0008); for (var a = 0; a < atk; a++) out[a] *= Math.sin((a / atk) * Math.PI / 2);
+    /* golpe del mazo: ráfaga corta de ruido filtrado */
+    var nz = I.noise, nl = Math.floor(LSR * nz[1]), s = 0;
+    for (var j = 0; j < nl; j++) { s += nz[2] * ((rnd() * 2 - 1) - s); out[j] += s * nz[0] * Math.pow(1 - j / nl, 2); }
+    var atk = Math.max(1, Math.floor(LSR * I.atk)); for (var q = 0; q < atk; q++) out[q] *= Math.sin((q / atk) * Math.PI / 2);
     var fade = Math.floor(LSR * 0.05); for (var z = 0; z < fade; z++) out[len - 1 - z] *= z / fade;
-    return (glockCache[key] = buf);
+    return (noteCache[key] = buf);
   }
   /* sala: impulso estéreo con reflexiones tempranas y cola que se oscurece */
-  function hallNode(ac) {
-    if (hall) return hall;
-    var SR = ac.sampleRate, len = Math.floor(SR * 1.8), b = ac.createBuffer(2, len, SR), rnd = rng(4242);
+  function roomNode(ac, id) {
+    if (roomCache[id]) return roomCache[id];
+    var R = INST[id].room, SR = ac.sampleRate, len = Math.floor(SR * R.sec), b = ac.createBuffer(2, len, SR), rnd = rng(4242 + id.length);
     for (var ch = 0; ch < 2; ch++) {
       var d = b.getChannelData(ch), s = 0;
-      [0.011, 0.019, 0.027, 0.041].forEach(function (tt, k) { var i = Math.floor(SR * (tt + (ch ? 0.0013 * (k + 1) : 0))); d[i] += (ch ? -1 : 1) * (0.5 - k * 0.09); });
-      for (var i = Math.floor(SR * 0.018); i < len; i++) {
-        var x = i / len, a = 0.55 * Math.pow(1 - x, 1.5) + 0.04;
-        s += a * ((rnd() * 2 - 1) - s); d[i] += s * Math.pow(1 - x, 2.8) * 0.9;
+      R.er.forEach(function (tt, k) { var i = Math.floor(SR * (tt + (ch ? 0.0013 * (k + 1) : 0))); if (i < len) d[i] += (ch ? -1 : 1) * (0.5 - k * 0.09); });
+      for (var i = Math.floor(SR * R.pre); i < len; i++) {
+        var x = i / len, a = R.bright * Math.pow(1 - x, 1.5) + 0.04;
+        s += a * ((rnd() * 2 - 1) - s); d[i] += s * Math.pow(1 - x, R.decay) * 0.9;
       }
     }
-    hall = ac.createConvolver(); hall.buffer = b; hall.connect(master);
-    return hall;
+    var cv = ac.createConvolver(); cv.buffer = b; cv.connect(master);
+    return (roomCache[id] = cv);
   }
-  /* una nota de celesta: v = fuerza 0..1 */
-  function G(ac, out, t, n, v) {
-    var src = ac.createBufferSource(); src.buffer = glockBuf(ac, n, Math.random() < 0.5 ? 0 : 1);
-    src.playbackRate.value = Math.pow(2, ((Math.random() - 0.5) * 8) / 1200);   /* ±4 cents */
+  /* una nota: v = fuerza 0..1. Cada toque varía en afinación (±4 cents), fuerza y tiempo */
+  function strike(ac, id, out, t, n, v) {
+    var src = ac.createBufferSource(); src.buffer = noteBuf(ac, id, n, Math.random() < 0.5 ? 0 : 1);
+    src.playbackRate.value = Math.pow(2, ((Math.random() - 0.5) * 8) / 1200);
     var lp = ac.createBiquadFilter(); lp.type = "lowpass"; lp.frequency.value = 2500 + 9000 * v;   /* golpe suave = más oscuro */
-    var g = ac.createGain(); g.gain.value = 0.15 * v * (0.92 + Math.random() * 0.16);
+    var g = ac.createGain(); g.gain.value = INST[id].gain * v * (0.92 + Math.random() * 0.16);
     src.connect(lp); lp.connect(g);
     var dst = g;
     if (ac.createStereoPanner) { var pn = ac.createStereoPanner(); pn.pan.value = Math.max(-0.4, Math.min(0.4, (n - 72) / 28)); g.connect(pn); dst = pn; }
     dst.connect(out);
     src.start(t + Math.random() * 0.006);
   }
+
   var M = [74, 81, 79, 86];   /* motivo de Vesper: D5 A5 G5 D6 */
-  var LUCERO = {
-    correct:   function (g, t) { g(t, M[0], 0.65); g(t + 0.085, M[1], 0.8); },
-    wrong:     function (g, t) { g(t, 69, 0.4); g(t + 0.14, 65, 0.36); },
-    tap:       function (g, t) { g(t, 98, 0.14); },
-    pair:      function (g, t) { g(t, 86, 0.4); },
-    miss:      function (g, t) { g(t, 69, 0.25); },
-    combo:     function (g, t, n) { var b = [74, 76, 78, 79, 81, 83, 86][comboStep(n)]; g(t, b, 0.6); g(t + 0.06, b + 12, 0.4); },
-    start:     function (g, t) { g(t, M[0], 0.5); g(t + 0.15, M[1], 0.5); },
-    heartloss: function (g, t) { g(t, 62, 0.55); g(t + 0.12, 57, 0.45); },
-    lastheart: function (g, t) { g(t, 62, 0.55); g(t + 0.34, 62, 0.45); },
-    complete:  function (g, t) { M.forEach(function (n, i) { g(t + [0, 0.11, 0.22, 0.35][i], n, i === 3 ? 0.85 : 0.68); }); },
-    fanfare:   function (g, t) {
-      M.forEach(function (n, i) { var tt = t + [0, 0.11, 0.22, 0.35][i]; g(tt, n, 0.72); g(tt + 0.01, n + 4, 0.3); });
-      [86, 88, 90, 93, 95, 98].forEach(function (n, i) { g(t + 0.6 + i * 0.05, n, 0.25); });
+  var SCORES = {
+    madera: {
+      correct:   function (g, t) { g(t, M[0], 0.6); g(t + 0.09, M[1], 0.75); },
+      wrong:     function (g, t) { g(t, 57, 0.55); g(t + 0.13, 53, 0.5); },
+      tap:       function (g, t) { g(t, 91, 0.18); },
+      pair:      function (g, t) { g(t, 81, 0.45); },
+      miss:      function (g, t) { g(t, 57, 0.3); },
+      combo:     function (g, t, n) { var b = [74, 76, 78, 79, 81, 83, 86][comboStep(n)]; g(t, b, 0.55); g(t + 0.07, b + 5, 0.55); g(t + 0.14, b + 12, 0.5); },
+      start:     function (g, t) { g(t, M[0], 0.5); g(t + 0.13, M[1], 0.5); },
+      heartloss: function (g, t) { g(t, 50, 0.7); g(t + 0.12, 45, 0.6); },
+      lastheart: function (g, t) { g(t, 50, 0.75); g(t + 0.3, 50, 0.65); },
+      complete:  function (g, t) { M.forEach(function (n, i) { g(t + i * 0.12, n, 0.7); }); g(t + 0.36, 62, 0.45); },
+      fanfare:   function (g, t) {
+        M.forEach(function (n, i) { g(t + i * 0.11, n, 0.7); });
+        for (var k = 0; k < 8; k++) { g(t + 0.45 + k * 0.045, 86, 0.5 - k * 0.04); g(t + 0.47 + k * 0.045, 78, 0.35 - k * 0.03); }  /* trémolo de mazos */
+      },
+      fail:      function (g, t) { [74, 81, 79, 76].forEach(function (n, i) { g(t + [0, 0.14, 0.3, 0.54][i], n, 0.5); }); },
+      streak:    function (g, t) { [86, 90, 93].forEach(function (n, i) { g(t + i * 0.07, n, 0.5); }); },
+      achievement: function (g, t) { [74, 78, 81, 86, 90].forEach(function (n, i) { g(t + i * 0.04, n, 0.5); }); },
+      levelup:   function (g, t) { [74, 78, 81, 86, 90].forEach(function (n, i) { g(t + i * 0.05, n, 0.5); }); g(t + 0.3, 93, 0.4); },
+      coin:      function (g, t) { g(t, 88, 0.5); g(t + 0.06, 93, 0.45); }
     },
-    fail:      function (g, t) { [74, 81, 79, 77].forEach(function (n, i) { g(t + [0, 0.13, 0.28, 0.48][i], n, 0.45); }); },
-    streak:    function (g, t) { [86, 88, 90, 93, 95, 98].forEach(function (n, i) { g(t + i * 0.05, n, 0.3); }); },
-    achievement: function (g, t) { g(t, 86, 0.7); g(t + 0.05, 93, 0.5); g(t + 0.1, 98, 0.35); },
-    levelup:   function (g, t) { [74, 78, 81, 86, 90, 93].forEach(function (n, i) { g(t + i * 0.05, n, 0.45); }); g(t + 0.34, 98, 0.3); },
-    coin:      function (g, t) { g(t, 93, 0.45); g(t + 0.06, 98, 0.4); }
+    lucero: {
+      correct:   function (g, t) { g(t, M[0], 0.65); g(t + 0.085, M[1], 0.8); },
+      wrong:     function (g, t) { g(t, 69, 0.4); g(t + 0.14, 65, 0.36); },
+      tap:       function (g, t) { g(t, 98, 0.14); },
+      pair:      function (g, t) { g(t, 86, 0.4); },
+      miss:      function (g, t) { g(t, 69, 0.25); },
+      combo:     function (g, t, n) { var b = [74, 76, 78, 79, 81, 83, 86][comboStep(n)]; g(t, b, 0.6); g(t + 0.06, b + 12, 0.4); },
+      start:     function (g, t) { g(t, M[0], 0.5); g(t + 0.15, M[1], 0.5); },
+      heartloss: function (g, t) { g(t, 62, 0.55); g(t + 0.12, 57, 0.45); },
+      lastheart: function (g, t) { g(t, 62, 0.55); g(t + 0.34, 62, 0.45); },
+      complete:  function (g, t) { M.forEach(function (n, i) { g(t + [0, 0.11, 0.22, 0.35][i], n, i === 3 ? 0.85 : 0.68); }); },
+      fanfare:   function (g, t) {
+        M.forEach(function (n, i) { var tt = t + [0, 0.11, 0.22, 0.35][i]; g(tt, n, 0.72); g(tt + 0.01, n + 4, 0.3); });
+        [86, 88, 90, 93, 95, 98].forEach(function (n, i) { g(t + 0.6 + i * 0.05, n, 0.25); });
+      },
+      fail:      function (g, t) { [74, 81, 79, 77].forEach(function (n, i) { g(t + [0, 0.13, 0.28, 0.48][i], n, 0.45); }); },
+      streak:    function (g, t) { [86, 88, 90, 93, 95, 98].forEach(function (n, i) { g(t + i * 0.05, n, 0.3); }); },
+      achievement: function (g, t) { g(t, 86, 0.7); g(t + 0.05, 93, 0.5); g(t + 0.1, 98, 0.35); },
+      levelup:   function (g, t) { [74, 78, 81, 86, 90, 93].forEach(function (n, i) { g(t + i * 0.05, n, 0.45); }); g(t + 0.34, 98, 0.3); },
+      coin:      function (g, t) { g(t, 93, 0.45); g(t + 0.06, 98, 0.4); }
+    }
   };
-  function playLucero(ac, name, arg) {
-    var def = LUCERO[name]; if (!def) return;
+  function playModeled(ac, id, name, arg) {
+    var def = SCORES[id][name]; if (!def) return;
     var out = ac.createGain(); out.connect(master);
-    var send = ac.createGain(); send.gain.value = 0.26; out.connect(send); send.connect(hallNode(ac));
-    def(function (t, n, v) { G(ac, out, t, n, v); }, ac.currentTime + 0.01, arg);
+    var send = ac.createGain(); send.gain.value = INST[id].wet; out.connect(send); send.connect(roomNode(ac, id));
+    def(function (t, n, v) { strike(ac, id, out, t, n, v); }, ac.currentTime + 0.01, arg);
   }
 
   /* reproduce un cue con el estilo activo (o el forzado por opt.pack) */
@@ -277,7 +313,7 @@ window.VESPER_SFX = (function () {
     opt = opt || {};
     if (throttled(name, opt.gap != null ? opt.gap : (GAP[name] || 110))) return;
     var ac = ctx(prefs(), opt.pack); if (!ac) return;
-    if (curPack === "lucero") { lowpass.frequency.value = 12000; try { playLucero(ac, name, arg); } catch (e) {} return; }
+    if (INST[curPack]) { lowpass.frequency.value = 12000; try { playModeled(ac, curPack, name, arg); } catch (e) {} return; }
     var v = VOICE[curPack] || VOICE.clasico;
     lowpass.frequency.value = v.lp;
     var def = (CUES[curPack] && CUES[curPack][name]) || CUES.clasico[name];
