@@ -1343,6 +1343,8 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
   text-decoration:none;cursor:pointer;-webkit-tap-highlight-color:transparent;
   opacity:0;transform:scale(.55) translateY(10px);transition:opacity .3s ease,transform .38s cubic-bezier(.18,.89,.32,1.4)}
 .vchat-fab img{width:54px;height:54px;border-radius:50%;object-fit:cover;display:block;background:var(--gold-tint)}
+/* Teléfono: 62px tapaban media tarjeta; 50px siguen siendo un blanco de toque cómodo. */
+@media(max-width:480px){.vchat-fab{width:50px;height:50px}.vchat-fab img{width:43px;height:43px}}
 .vchat-fab .vchat-dot{position:absolute;top:-3px;right:-3px;min-width:20px;height:20px;border-radius:999px;
   background:var(--error);color:#fff;border:2px solid var(--paper);font-size:.7rem;font-weight:800;
   display:grid;place-items:center;padding:0 4px;box-shadow:0 0 0 0 rgba(192,57,43,.5)}
@@ -1405,7 +1407,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
 .hub-hello{font-family:"Inria Serif",Georgia,serif;font-size:1.42rem;line-height:1.05;margin:0;color:#f5f2eb}
 .hub-sub{margin:4px 0 0;font-size:.82rem;color:rgba(245,242,235,.72)}
 .hub-rank{display:inline-block;margin-top:6px;font-size:.7rem;font-weight:800;letter-spacing:.03em;
-  color:#2b2410;background:linear-gradient(135deg,#e9d39a,var(--gold,#c5a059));border-radius:999px;padding:3px 11px}
+  color:var(--on-gold,#2b2410);background:linear-gradient(135deg,var(--gold-lt,#e9d39a),var(--gold,#c5a059));border-radius:999px;padding:3px 11px}
 .hub-actions{display:flex;align-items:center;gap:7px;flex:0 0 auto}
 .hub-ic{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:50%;
   background:rgba(245,242,235,.10);border:1px solid rgba(245,242,235,.20);color:#f5f2eb;text-decoration:none;cursor:pointer;font-family:inherit}
