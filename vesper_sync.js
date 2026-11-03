@@ -63,6 +63,7 @@
       achievements: mapStr(s.achievements || {}),
       dayCounts: mapInt(s.dayCounts || {}),
       goalTarget: { integerValue: String(s.goalTarget || 0) },
+      stats: mapInt(s.stats || {}),               // contadores de logros (perfectas, Forja, combo…)
       scores: mapInt(loadScores())
     } };
   }
@@ -88,6 +89,7 @@
       achievements: readStr(fields.achievements),
       dayCounts: readInt(fields.dayCounts),
       goalTarget: parseInt((fields.goalTarget || {}).integerValue || "0", 10) || 0,
+      stats: readInt(fields.stats),
       scores: readInt(fields.scores)
     };
   }
@@ -107,9 +109,24 @@
     }).then(function (r) { return r.status; });
   }
 
-  /* ---- al iniciar sesion: traer -> fusionar -> guardar nube ---- */
-  function doSync(user) {
+  /* ---- al iniciar sesion: traer -> fusionar -> guardar nube ----
+     La regla de progress/{uid} (2026-11) rechaza un guardado que BAJE el XP
+     o pierda logros/jefes/lecciones de la nube. Por eso: (1) mientras la
+     primera fusión no termina, los push esperan (si no, el estado local sin
+     fusionar pisaba la nube); (2) si un push rebota con 403 —otro
+     dispositivo avanzó—, se vuelve a traer, fusionar y guardar una vez. */
+  var syncReady = false, pushPending = false, syncing = false;
+  function doSync(user, done) {
+    if (syncing) return;
+    syncing = true;
     setStatus("syncing");
+    function finish(st) {
+      syncing = false;
+      syncReady = true;
+      setStatus(st === 200 ? "synced" : (st === 403 ? "rule" : (st === "offline" ? "offline" : "error")));
+      if (done) done(st);
+      if (pushPending && st === 200) { pushPending = false; schedulePush(); }
+    }
     user.getIdToken().then(function (token) {
       pull(user.uid, token).then(function (res) {
         if (res.status === 200) {
@@ -117,14 +134,12 @@
           mergeScores(remote.scores);
           var merged = (window.VesperProgress && VesperProgress.merge) ? VesperProgress.merge(remote) : remote;
           refreshUI();
-          pushDoc(user.uid, token, merged).then(function (st) { setStatus(st === 200 ? "synced" : (st === 403 ? "rule" : "error")); });
+          pushDoc(user.uid, token, merged).then(finish, function () { finish("error"); });
         } else if (res.status === 404) {
-          pushDoc(user.uid, token, localState()).then(function (st) { setStatus(st === 200 ? "synced" : (st === 403 ? "rule" : "error")); });
-        } else if (res.status === 403) {
-          setStatus("rule");
-        } else { setStatus("error"); }
-      }).catch(function () { setStatus("offline"); });
-    }).catch(function () { setStatus("error"); });
+          pushDoc(user.uid, token, localState()).then(finish, function () { finish("error"); });
+        } else { finish(res.status === 403 ? 403 : "error"); }
+      }).catch(function () { finish("offline"); });
+    }).catch(function () { finish("error"); });
   }
 
   /* push con rebote: lo llaman vesper_progress (lección, jefe, logro, meta) y
@@ -132,11 +147,16 @@
      un push() sin estado no vacía la nube y siempre va lo más reciente. */
   function schedulePush() {
     if (!currentUser) return;
+    if (!syncReady || syncing) { pushPending = true; return; }
     clearTimeout(pushTimer);
     setStatus("syncing");
     pushTimer = setTimeout(function () {
-      currentUser.getIdToken().then(function (token) {
-        pushDoc(currentUser.uid, token, localState()).then(function (st) { setStatus(st === 200 ? "synced" : (st === 403 ? "rule" : "error")); });
+      var user = currentUser; if (!user) return;
+      user.getIdToken().then(function (token) {
+        pushDoc(user.uid, token, localState()).then(function (st) {
+          if (st === 403) { doSync(user); return; }   /* la nube va adelante: fusiona y reintenta */
+          setStatus(st === 200 ? "synced" : "error");
+        });
       }).catch(function () { setStatus("error"); });
     }, 1200);
   }
@@ -278,6 +298,7 @@
     authInst = auth;
     auth.onAuthStateChanged(function (user) {
       currentUser = (user && user.emailVerified) ? user : null;
+      syncReady = false;
       if (user && user.emailVerified) { setSignedIn(user); doSync(user); }
       else if (user && !user.emailVerified) { setUnverified(user); }
       else { setSignedOut(); }

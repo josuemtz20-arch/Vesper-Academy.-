@@ -236,9 +236,63 @@ service cloud.firestore {
     }
 
     // ───────────── Progreso y juego del alumno ─────────────
-    // Progreso (racha + XP): self-scoped (vesper_sync.js → progress/{uid})
+    // Progreso (racha + XP + logros): self-scoped (vesper_sync.js → progress/{uid})
+    //
+    // Endurecida 2026-11 (logros). Antes aceptaba cualquier documento. Ahora:
+    //  - solo los campos que escribe vesper_sync.js toFs(), con tipo y tamaño
+    //    acotados (un documento inflado ya no cabe);
+    //  - stats (contadores de logros) solo con sus claves conocidas y topes;
+    //  - un guardado NUNCA baja el XP/escudos ni borra logros, jefes,
+    //    lecciones o contadores ya guardados. El cliente fusiona antes de
+    //    guardar (merge = máximo/unión), así que esto no afecta al uso
+    //    normal; sí impide que un push sin fusionar borre la nube.
+    //  - nadie lo borra (ningún cliente lo hace).
+    // OJO: el progreso lo calcula el navegador; esto acota y protege, pero
+    // no puede probar que un logro se ganó jugando (eso pediría servidor).
+    // Si vesper_progress.js suma claves a s.stats, agrégalas aquí.
+    function progressShapeOk(d) {
+      let st = d.get('stats', {});
+      return d.keys().hasOnly(['xp', 'streak', 'shields', 'lastDay', 'days', 'completed',
+                               'bosses', 'achievements', 'dayCounts', 'goalTarget', 'stats', 'scores'])
+             && d.get('xp', 0) is int && d.get('xp', 0) >= 0 && d.get('xp', 0) <= 5000000
+             && d.get('streak', 0) is int && d.get('streak', 0) >= 0 && d.get('streak', 0) <= 4000
+             && d.get('shields', 0) is int && d.get('shields', 0) >= 0 && d.get('shields', 0) <= 600
+             && d.get('goalTarget', 0) is int && d.get('goalTarget', 0) >= 0 && d.get('goalTarget', 0) <= 20
+             && (d.get('lastDay', null) == null || (d.lastDay is string && d.lastDay.size() <= 10))
+             && d.get('days', {}) is map && d.get('days', {}).size() <= 4000
+             && d.get('dayCounts', {}) is map && d.get('dayCounts', {}).size() <= 4000
+             && d.get('completed', {}) is map && d.get('completed', {}).size() <= 3000
+             && d.get('scores', {}) is map && d.get('scores', {}).size() <= 3000
+             && d.get('achievements', {}) is map && d.get('achievements', {}).size() <= 150
+             && d.get('bosses', {}) is map && d.get('bosses', {}).size() <= 12
+             && st is map
+             && st.keys().hasOnly(['perfect', 'maxCombo', 'bestStreak', 'forja', 'night', 'early', 'comeback', 'styled'])
+             && st.get('perfect', 0) is int && st.get('perfect', 0) >= 0 && st.get('perfect', 0) <= 100000
+             && st.get('maxCombo', 0) is int && st.get('maxCombo', 0) >= 0 && st.get('maxCombo', 0) <= 500
+             && st.get('bestStreak', 0) is int && st.get('bestStreak', 0) >= 0 && st.get('bestStreak', 0) <= 4000
+             && st.get('forja', 0) is int && st.get('forja', 0) >= 0 && st.get('forja', 0) <= 100000
+             && st.get('night', 0) is int && st.get('night', 0) >= 0 && st.get('night', 0) <= 1
+             && st.get('early', 0) is int && st.get('early', 0) >= 0 && st.get('early', 0) <= 1
+             && st.get('comeback', 0) is int && st.get('comeback', 0) >= 0 && st.get('comeback', 0) <= 1
+             && st.get('styled', 0) is int && st.get('styled', 0) >= 0 && st.get('styled', 0) <= 1;
+    }
+    // o = lo guardado, d = lo nuevo: nada de lo ganado se pierde.
+    function progressNoLoss(o, d) {
+      return d.get('xp', 0) >= o.get('xp', 0)
+             && d.get('shields', 0) >= o.get('shields', 0)
+             && d.get('achievements', {}).keys().hasAll(o.get('achievements', {}).keys())
+             && d.get('bosses', {}).keys().hasAll(o.get('bosses', {}).keys())
+             && d.get('completed', {}).keys().hasAll(o.get('completed', {}).keys())
+             && d.get('stats', {}).keys().hasAll(o.get('stats', {}).keys());
+    }
     match /progress/{uid} {
-      allow read, write: if signedIn() && request.auth.uid == uid;
+      allow read: if signedIn() && request.auth.uid == uid;
+      allow create: if signedIn() && request.auth.uid == uid
+                    && progressShapeOk(request.resource.data);
+      allow update: if signedIn() && request.auth.uid == uid
+                    && progressShapeOk(request.resource.data)
+                    && progressNoLoss(resource.data, request.resource.data);
+      allow delete: if false;
     }
 
     // Liga semanal: lee cualquier autenticado; escribe SOLO su entrada
