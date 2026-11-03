@@ -379,31 +379,97 @@
     chat:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.5 8.5 0 0 1-12.2 7.7L3 21l1.9-5.6A8.5 8.5 0 1 1 21 11.5z"/></svg>',
     gear:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 13a7.7 7.7 0 0 0 0-2l2-1.5-2-3.4-2.3 1a7.7 7.7 0 0 0-1.7-1l-.4-2.5h-4l-.4 2.5a7.7 7.7 0 0 0-1.7 1l-2.3-1-2 3.4 2 1.5a7.7 7.7 0 0 0 0 2l-2 1.5 2 3.4 2.3-1a7.7 7.7 0 0 0 1.7 1l.4 2.5h4l.4-2.5a7.7 7.7 0 0 0 1.7-1l2.3 1 2-3.4z"/></svg>'
   };
-  /* iconos SVG de marca para los logros (reemplazan emojis); van oscuros sobre el medallón dorado */
-  var ACH_ICON = {
-    /* Primeros pasos — huella de gato */
-    "first-lesson": '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><ellipse cx="6.6" cy="11" rx="1.7" ry="2.2"/><ellipse cx="10" cy="8" rx="1.8" ry="2.4"/><ellipse cx="14" cy="8" rx="1.8" ry="2.4"/><ellipse cx="17.4" cy="11" rx="1.7" ry="2.2"/><path d="M12 12.4c-2.5 0-4.4 1.9-4.4 3.9 0 1.5 1.1 2.5 2.6 2.5.9 0 1.4-.4 1.8-.4s.9.4 1.8.4c1.5 0 2.6-1 2.6-2.5 0-2-1.9-3.9-4.4-3.9z"/></svg>',
-    /* Tomando ritmo — huellas (pasos) */
-    "lessons-5": '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M9 3.4c1.4 0 2.3 1.7 2.3 3.7 0 1.5-.6 2.7-1.7 2.9-1.1.2-2-.8-2.2-2.4C7.2 5.9 7.6 3.4 9 3.4z"/><path d="M7.5 12.1c1.3-.2 2 .6 2 1.6 0 .8-.6 1.3-1.6 1.3-.9 0-1.7-.5-1.7-1.3 0-.7.5-1.5 1.3-1.6z"/><path d="M15 9.3c1.4 0 2.3 1.7 2.3 3.7 0 1.5-.6 2.7-1.7 2.9-1.1.2-2-.8-2.2-2.4-.2-1.7.2-4.2 1.6-4.2z"/><path d="M13.5 18c1.3-.2 2 .6 2 1.6 0 .8-.6 1.3-1.6 1.3-.9 0-1.7-.5-1.7-1.3 0-.7.5-1.5 1.3-1.6z"/></svg>',
-    /* En marcha — figura corriendo */
-    "lessons-25": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="14.6" cy="4.4" r="1.9"/><path d="M13.9 7.3 10.4 9.2l1.8 3.1 3.3 1.4M12.4 12.3l-2.5 2.9L6.9 16.4M15.5 10.6l3.4 2.5M9.7 8.7 6.9 8.1"/></svg>',
-    /* Imparable — cohete */
-    "lessons-50": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.6c2.7 1.5 4.1 4.4 4.1 7.8 0 1.4-.3 2.6-.5 3.4H8.4c-.2-.8-.5-2-.5-3.4 0-3.4 1.4-6.3 4.1-7.8z"/><circle cx="12" cy="9.4" r="1.5"/><path d="M8.5 13.6 6.4 16.2l3 .3M15.5 13.6l2.1 2.6-3 .3M10.4 17.3v2.4M13.6 17.3v2.4"/></svg>',
-    /* Centurión — medalla con estrella y cintas */
-    "lessons-100": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8.6 3.5l2.2 5M15.4 3.5l-2.2 5"/><circle cx="12" cy="14.6" r="5.4"/><path d="M12 11.9l.9 1.9 2 .2-1.5 1.4.5 2-1.9-1-1.9 1 .5-2-1.5-1.4 2-.2z" fill="currentColor" stroke="none"/></svg>',
-    /* Sin errores — diana */
-    "perfect": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="8.4"/><circle cx="12" cy="12" r="4.7"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/></svg>',
-    /* Meta del día — check en círculo */
-    "goal-met": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.4"/><path d="M8 12.2l2.7 2.7L16 9.2"/></svg>',
-    /* Una semana — llama */
-    "streak-7": '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13 2c.4 2.9-1.1 4.4-2.6 5.9C9 9.3 8 10.9 8 13a4.5 4.5 0 0 0 9 0c0-1.4-.5-2.6-1.3-3.6-.3.9-1 1.5-1.9 1.7 1-2.3.3-4.9-1.8-7.1z"/></svg>',
-    /* Un mes entero — calendario */
-    "streak-30": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5.5" width="16" height="15" rx="2.5"/><path d="M4 9.6h16M8 3.4v4M16 3.4v4"/><path d="M8.4 13h2.2M13.4 13h2.2M8.4 16.6h2.2M13.4 16.6h2.2"/></svg>',
-    /* Maestría — trofeo */
-    "trophy": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4.5h10v4a5 5 0 0 1-10 0z"/><path d="M7 6.2H4.6v1.4A3.4 3.4 0 0 0 8 11M17 6.2h2.4v1.4A3.4 3.4 0 0 1 16 11"/><path d="M12 13.5v2.7M9 20h6M10.2 20l.5-3.8h2.6l.5 3.8"/></svg>',
-    /* respaldo — estrella */
-    "_default": '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 3.4l2.5 5 5.5.6-4.1 3.7 1.1 5.4L12 16.9l-5 2.6 1.1-5.4-4.1-3.7 5.5-.6z"/></svg>'
-  };
+  /* ===== Iconos de logros (2026-11) ==========================================
+     Glifos propios de Vesper: el gato (huella, cabeza, ojo, garra, corbata),
+     el lucero de la tarde (estrellas, luna) y los seis mundos del mapa. Van en
+     color de tinta sobre el medallón (bronce/plata/oro) y en oro sobre el
+     medallón legendario. Se arman con piezas reutilizables. */
+  var ACH_ICON = (function () {
+    var F = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">';
+    var S = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">';
+    var E = '</svg>';
+    var PAW = '<ellipse cx="6.6" cy="11" rx="1.7" ry="2.2"/><ellipse cx="10" cy="8" rx="1.8" ry="2.4"/><ellipse cx="14" cy="8" rx="1.8" ry="2.4"/><ellipse cx="17.4" cy="11" rx="1.7" ry="2.2"/><path d="M12 12.4c-2.5 0-4.4 1.9-4.4 3.9 0 1.5 1.1 2.5 2.6 2.5.9 0 1.4-.4 1.8-.4s.9.4 1.8.4c1.5 0 2.6-1 2.6-2.5 0-2-1.9-3.9-4.4-3.9z"/>';
+    var HEAD = 'M4.6 3.2l4 3.6a8.6 8.6 0 0 1 6.8 0l4-3.6.7 6.6c.5.9.8 2 .8 3.2 0 4.3-3.9 7.6-8.9 7.6S3.1 17.3 3.1 13c0-1.2.3-2.3.8-3.2z';
+    var FLAME = 'M13 2c.4 2.9-1.1 4.4-2.6 5.9C9 9.3 8 10.9 8 13a4.5 4.5 0 0 0 9 0c0-1.4-.5-2.6-1.3-3.6-.3.9-1 1.5-1.9 1.7 1-2.3.3-4.9-1.8-7.1z';
+    var CATFLAME = 'M12 21c-3.6 0-6.2-2.6-6.2-6 0-2.3 1-4 2.1-5.6L7.4 3.6l3.4 2.9h2.4l3.4-2.9-.5 5.8c1.1 1.6 2.1 3.3 2.1 5.6 0 3.4-2.6 6-6.2 6zM12 18.6c-1.5 0-2.6-1-2.6-2.4 0-1.3.9-2.3 2.6-4 1.7 1.7 2.6 2.7 2.6 4 0 1.4-1.1 2.4-2.6 2.4z';
+    var STAR5 = 'M12 3.4l2.5 5 5.5.6-4.1 3.7 1.1 5.4L12 16.9l-5 2.6 1.1-5.4-4.1-3.7 5.5-.6z';
+    var ANVIL = 'M4 7h14c.3 1.8 1.6 2.8 3 3v1.3c-3 .2-4.8 1.6-5.3 3.7H9.3C8.8 13 7.5 11.7 5.6 11.3V9.2H4zM10 15h4v2h-4zM8 17h8l1.2 3.2H6.8z';
+    var TROPHY = '<path d="M7 4.5h10v4a5 5 0 0 1-10 0z"/><path d="M7 6.2H4.6v1.4A3.4 3.4 0 0 0 8 11M17 6.2h2.4v1.4A3.4 3.4 0 0 1 16 11"/><path d="M12 13.5v2.7M9 20h6M10.2 20l.5-3.8h2.6l.5 3.8"/>';
+    /* pieza colocada: translate + escala (+giro) alrededor de su centro (cx,cy) */
+    function at(inner, x, y, sc, rot, cx, cy) {
+      return '<g transform="translate(' + x + ' ' + y + ')' + (rot ? ' rotate(' + rot + ')' : '') + ' scale(' + sc + ') translate(' + (-(cx == null ? 12 : cx)) + ' ' + (-(cy == null ? 12.2 : cy)) + ')">' + inner + '</g>';
+    }
+    function paw(x, y, sc, rot) { return at(PAW, x, y, sc, rot); }
+    function spark(x, y, r) {
+      var k = r * 0.32;
+      return '<path d="M' + x + ' ' + (y - r) + 'L' + (x + k) + ' ' + (y - k) + 'L' + (x + r) + ' ' + y + 'L' + (x + k) + ' ' + (y + k) + 'L' + x + ' ' + (y + r) + 'L' + (x - k) + ' ' + (y + k) + 'L' + (x - r) + ' ' + y + 'L' + (x - k) + ' ' + (y - k) + 'Z"/>';
+    }
+    var FILLED = ' fill="currentColor" stroke="none"';
+    function leaf(x, y, rot) { return '<ellipse cx="' + x + '" cy="' + y + '" rx="1.5" ry=".8" transform="rotate(' + rot + ' ' + x + ' ' + y + ')"/>'; }
+    return {
+      /* --- El sendero --- */
+      "first-lesson": F + PAW + E,
+      "lessons-5": F + paw(8.2, 16.2, .55, -18) + paw(15.6, 7.6, .55, 14) + E,
+      "lessons-10": F + '<path fill-rule="evenodd" d="' + HEAD + 'M7.3 12.6a1.7 1.7 0 1 0 3.4 0a1.7 1.7 0 1 0-3.4 0zM13.3 12.6a1.7 1.7 0 1 0 3.4 0a1.7 1.7 0 1 0-3.4 0zM11 15.4h2l-1 1.1z"/><ellipse cx="9.2" cy="12.9" rx=".6" ry=".95"/><ellipse cx="15.2" cy="12.9" rx=".6" ry=".95"/>' + E,
+      "lessons-25": S + '<path d="M4 20.6c4.2-.4 6.8-2.3 5.9-5.3-.9-3 2.4-4.6 5.3-5.1" stroke-dasharray="2.4 2.3"/><g' + FILLED + '>' + paw(17.8, 7, .52, 22) + '</g>' + E,
+      "lessons-50": S + '<path d="M12 2.6c2.7 1.5 4.1 4.4 4.1 7.8 0 1.4-.3 2.6-.5 3.4H8.4c-.2-.8-.5-2-.5-3.4 0-3.4 1.4-6.3 4.1-7.8z"/><path d="M8.5 13.6 6.4 16.2l3 .3M15.5 13.6l2.1 2.6-3 .3M10.4 17.3v2.4M13.6 17.3v2.4"/><g' + FILLED + '>' + at('<path d="' + HEAD + '"/>', 12, 9.4, .25) + '</g>' + E,
+      "lessons-100": F + '<path d="M7.2 19.8C3.9 17.4 2.9 12.8 4.9 8.4M16.8 19.8c3.3-2.4 4.3-7 2.3-11.4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>'
+        + leaf(5.4, 17.6, -55) + leaf(3.9, 14.4, -80) + leaf(3.7, 11.1, 75) + leaf(18.6, 17.6, 55) + leaf(20.1, 14.4, 80) + leaf(20.3, 11.1, -75)
+        + paw(12, 12.6, .56) + E,
+      "lessons-200": F + '<path d="M4.6 8.8l3 2.6L12 5.6l4.4 5.8 3-2.6-1.4 6.6H6z"/><circle cx="4.6" cy="7.9" r="1.2"/><circle cx="12" cy="4.6" r="1.2"/><circle cx="19.4" cy="7.9" r="1.2"/>' + paw(12, 19.1, .4) + E,
+      /* --- La llama --- */
+      "streak-3": F + at('<path d="' + FLAME + '"/>', 12, 13, 1.02, 0, 12.5, 10) + spark(5.4, 6.6, 2.2) + spark(18.8, 5.4, 1.7) + E,
+      "streak-7": F + at('<path fill-rule="evenodd" d="' + CATFLAME + '"/>', 12, 12, 1.12, 0, 12, 12.3) + E,
+      "streak-14": F + at('<path d="' + FLAME + '"/>', 7.4, 13.4, .84, 0, 12.5, 10) + at('<path d="' + FLAME + '"/>', 16.6, 11, .92, 0, 12.5, 10) + E,
+      "streak-30": S + '<rect x="4" y="5.5" width="16" height="15" rx="2.5"/><path d="M4 9.6h16M8 3.4v4M16 3.4v4"/><g' + FILLED + '>' + paw(12, 15.2, .44) + '</g>' + E,
+      "streak-100": F + at('<path fill-rule="evenodd" d="' + CATFLAME + '"/>', 12, 13.6, .82, 0, 12, 12.3) + spark(4.6, 5.6, 2.1) + spark(19.4, 5.6, 2.1) + spark(20, 15, 1.3) + spark(4, 15, 1.3) + E,
+      "shield-3": S + '<path d="M12 2.8l7 2.6v5.3c0 4.7-3.1 7.7-7 9.4-3.9-1.7-7-4.7-7-9.4V5.4z"/><g' + FILLED + '>' + paw(12, 11.4, .5) + '</g>' + E,
+      /* --- Garra precisa --- */
+      "perfect": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="8.4"/><circle cx="12" cy="12" r="4.7"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/></svg>',
+      "perfect-10": F + '<path fill-rule="evenodd" d="M2.5 12C5 7.6 8.3 5.5 12 5.5s7 2.1 9.5 6.5c-2.5 4.4-5.8 6.5-9.5 6.5S5 16.4 2.5 12zM7.9 12a4.1 4.1 0 1 0 8.2 0a4.1 4.1 0 1 0-8.2 0z"/><path d="M12 8.4c.9 1.1 1.3 2.3 1.3 3.6s-.4 2.5-1.3 3.6c-.9-1.1-1.3-2.3-1.3-3.6s.4-2.5 1.3-3.6z"/>' + E,
+      "perfect-50": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" aria-hidden="true"><path d="M5.4 4.4c2.6 3.4 4 7.8 4.3 14.6"/><path d="M10.6 3.4c2.5 3.6 3.8 8.2 3.8 16.2"/><path d="M15.8 4.6c2.2 3.3 3.2 7.2 3 13.2"/></svg>',
+      "combo-5": F + at('<path fill-rule="evenodd" d="' + HEAD + 'M7.3 12.6a1.7 1.7 0 1 0 3.4 0a1.7 1.7 0 1 0-3.4 0zM13.3 12.6a1.7 1.7 0 1 0 3.4 0a1.7 1.7 0 1 0-3.4 0z"/>', 9.4, 12.6, .7) + '<path d="M17.4 9.4a4.6 4.6 0 0 1 0 6.4M20 7.2a8 8 0 0 1 0 10.8" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>' + E,
+      "combo-10": F + '<path d="M13.8 2.5 5.6 13.6h5.3l-1.4 7.9 8.3-11.3h-5.3z"/>' + spark(19.2, 5, 1.8) + spark(5, 19.4, 1.4) + E,
+      /* --- Constancia --- */
+      "goal-met": S + '<path d="M6 21V3.5"/><path d="M6.6 4h11.2l-2.6 3.8 2.6 3.8H6.6z" fill="currentColor"/>' + E,
+      "goal-7": F + '<circle cx="12" cy="3.8" r="1.3"/><circle cx="18.4" cy="6.9" r="1.3"/><circle cx="20" cy="13.8" r="1.3"/><circle cx="15.6" cy="19.4" r="1.3"/><circle cx="8.4" cy="19.4" r="1.3"/><circle cx="4" cy="13.8" r="1.3"/><circle cx="5.6" cy="6.9" r="1.3"/><path d="M8.4 12.2l2.5 2.5 4.7-5" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>' + E,
+      "goal-30": F + at('<path d="' + HEAD + '"/>', 12, 6.9, .5) + '<path d="M8.3 21c-.6-3.6.3-7.2 2.5-9.6h2.4c2.2 2.4 3.1 6 2.5 9.6z"/><path d="M15.2 20.4c2.8.3 4.4-1.3 3.9-3.7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>' + E,
+      "day-5": S + '<circle cx="12" cy="13.6" r="7"/><path d="M10 2.8h4M12 2.8v3.8M18.2 6.6l1.4-1.4"/><path d="M12 13.6V9.6M12 13.6l2.6 1.6"/>' + E,
+      "days-15": F + '<path fill-rule="evenodd" d="M4.5 11.2 12 4.6l7.5 6.6V20a1 1 0 0 1-1 1h-13a1 1 0 0 1-1-1zM10.3 21v-4.4a1.7 1.7 0 0 1 3.4 0V21z"/><path d="M5.3 9.9 5.5 5.2l3.4 2.6zM18.7 9.9l-.2-4.7-3.4 2.6z"/>' + E,
+      /* --- Estrellas --- */
+      "xp-100": F + '<path d="M11 3.5c.7 4.8 3.2 7.3 8 8-4.8.7-7.3 3.2-8 8-.7-4.8-3.2-7.3-8-8 4.8-.7 7.3-3.2 8-8z"/>' + spark(19.2, 18.8, 1.7) + spark(19.4, 4.6, 1.2) + E,
+      "xp-1000": F + at('<path d="' + STAR5 + '"/>', 12, 9.4, .74, 0, 12, 11.5) + '<path d="M2.8 19.6c3-2.4 6.1-2.4 9.2 0s6.1 2.4 9.2 0" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>' + E,
+      "xp-5000": F + '<path d="M4.5 13 6 4l3.2 4h5.6L18 4l1.5 9-7.5 6.5z" fill="none" stroke="currentColor" stroke-width="1.1" stroke-linejoin="round" opacity=".75"/><circle cx="6" cy="4" r="1.6"/><circle cx="18" cy="4" r="1.6"/><circle cx="9.2" cy="8" r="1.1"/><circle cx="14.8" cy="8" r="1.1"/><circle cx="4.5" cy="13" r="1.3"/><circle cx="19.5" cy="13" r="1.3"/><circle cx="12" cy="19.5" r="1.5"/>' + spark(9.6, 12.6, 1.3) + spark(14.4, 12.6, 1.3) + E,
+      "xp-20000": F + '<path d="M19.6 15.2A8.4 8.4 0 1 1 9.4 3.6a6.8 6.8 0 0 0 10.2 11.6z"/>' + at('<path d="' + STAR5 + '"/>', 17.4, 6.4, .42, 0, 12, 11.5) + spark(21, 11, 1.2) + E,
+      /* --- Mundos y exámenes --- */
+      "boss-A1": F + '<path fill-rule="evenodd" d="M3.4 11.6 12 4l8.6 7.6h-2.2v8.9H5.6v-8.9zM12 18.3l-2.6-2.5a1.6 1.6 0 0 1 2.6-1.9 1.6 1.6 0 0 1 2.6 1.9z"/><path d="M15.4 5.2h2.4v3.6l-2.4-2.1z"/>' + E,
+      "boss-A2": F + '<path d="M11 3h2v17.2h-2zM13 5h6.4l2 2.1-2 2.1H13zM11 10.6H4.6l-2 2.1 2 2.1H11zM7 20h10v1.7H7z"/>' + E,
+      "boss-B1": F + '<path d="M6 16.2a6 6 0 0 1 12 0z"/><path d="M12 4.4V7M4.6 8.6l1.8 1.8M19.4 8.6l-1.8 1.8M2.5 16.2h2M19.5 16.2h2M3 19.6h18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>' + E,
+      "boss-B2": F + '<path fill-rule="evenodd" d="M6 3.6h2.4v1.8H10V3.6h4v1.8h1.6V3.6H18v4.2l-1.5 1.4V21h-9V9.2L6 7.8zM10.6 13.2a1.4 1.4 0 0 1 2.8 0v2.6h-2.8zM10.2 21v-2.4a1.8 1.8 0 0 1 3.6 0V21z"/>' + E,
+      "boss-C1": F + '<circle cx="12" cy="12" r="5"/><ellipse cx="12" cy="12" rx="9.6" ry="3" fill="none" stroke="currentColor" stroke-width="1.6" transform="rotate(-18 12 12)"/>' + spark(19.2, 4.4, 1.8) + spark(4.6, 19.2, 1.3) + E,
+      "boss-C2": F + '<path fill-rule="evenodd" d="M3 21V8.5h1.4V10h1.3V8.5h1.4V10h1.3V8.5h.4V12h.8V5.8h1v1.4h.8V5.8h1.2v1.4h.8V5.8h1V12h.8V8.5h.4V10h1.3V8.5h1.4V10h1.3V8.5H21V21zM10.3 21v-2.8a1.7 1.7 0 0 1 3.4 0V21zM5.2 13h1.4v2.4H5.2zM17.4 13h1.4v2.4h-1.4z"/><path d="M11.75 2h.5v3.8h-.5zM12.25 2.1h3.4l-1 1.15 1 1.15h-3.4z"/>' + E,
+      "boss-perfect": S + '<path d="M4.5 3.5l9.8 9.8M19.5 3.5l-9.8 9.8M12.6 16.2l3.6-3.6M7.8 12.6l3.6 3.6M15.3 15.3 19 19M8.7 15.3 5 19"/><circle cx="19.5" cy="19.5" r="1.1" fill="currentColor"/><circle cx="4.5" cy="19.5" r="1.1" fill="currentColor"/>' + E,
+      "exam-1": S + '<rect x="4" y="3.5" width="15" height="12.5" rx="1.6"/><path d="M7.5 7.4h8M7.5 10.4h5"/><g' + FILLED + '>' + at('<path d="' + HEAD + '"/>', 15.8, 16.6, .36) + '<path d="M13.6 19.2l-.7 2.6 2.1-1 2 1-.6-2.6z"/></g>' + E,
+      "exam-3": S + '<circle cx="12" cy="12" r="8.4"/><ellipse cx="12" cy="12" rx="3.6" ry="8.4"/><path d="M3.6 12h16.8M5 7.6h14M5 16.4h14"/>' + E,
+      "exam-adv": F + '<path d="M12 4 22 8.6 12 13.2 2 8.6z"/><path d="M6.4 10.9v3.9c0 1.7 2.5 3.1 5.6 3.1s5.6-1.4 5.6-3.1v-3.9L12 13.5z"/><path d="M20 9.4v5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="20" cy="15.4" r="1.1"/>' + E,
+      /* --- Forja y maestría --- */
+      "master-1": S + TROPHY + E,
+      "master-5": S + TROPHY + '<g' + FILLED + '>' + at('<path d="' + STAR5 + '"/>', 12, 8.4, .3, 0, 12, 11.5) + '</g>' + spark(3, 3.6, 1.4).replace('<path', '<path' + FILLED) + spark(21, 3.6, 1.4).replace('<path', '<path' + FILLED) + E,
+      "forja-1": F + '<path d="' + ANVIL + '"/>' + E,
+      "forja-10": F + '<rect x="3.6" y="5.6" width="10.4" height="5.2" rx="1.1" transform="rotate(-45 8.8 8.2)"/><path d="M11 10.6l8.6 8.6" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/>' + E,
+      "forja-50": F + at('<path d="' + ANVIL + '"/>', 12, 14.8, .86, 0, 12.5, 13.6) + '<path d="M12 2.6v2.6M7 3.8l1.4 2M17 3.8l-1.4 2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>' + E,
+      /* --- Secretos de Vesper --- */
+      "night-owl": F + '<path fill-rule="evenodd" d="M3 12a9 9 0 1 0 18 0a9 9 0 1 0-18 0zM6.6 12.6c.7-1.3 1.5-1.9 2.4-1.9s1.7.6 2.4 1.9c-.7 1.3-1.5 1.9-2.4 1.9s-1.7-.6-2.4-1.9zM12.6 12.6c.7-1.3 1.5-1.9 2.4-1.9s1.7.6 2.4 1.9c-.7 1.3-1.5 1.9-2.4 1.9s-1.7-.6-2.4-1.9zM8.5 6.6l.4.9.9.4-.9.4-.4.9-.4-.9-.9-.4.9-.4zM15.5 5.6l.3.7.7.3-.7.3-.3.7-.3-.7-.7-.3.7-.3z"/><path d="M9 11.3c.25.4.35.8.35 1.3s-.1.9-.35 1.3c-.25-.4-.35-.8-.35-1.3s.1-.9.35-1.3zM15 11.3c.25.4.35.8.35 1.3s-.1.9-.35 1.3c-.25-.4-.35-.8-.35-1.3s.1-.9.35-1.3z"/>' + E,
+      "early-bird": F + '<path d="M7 18.6a5 5 0 0 1 10 0z"/><path d="M3 18.6h18M12 9.6v1.8M6.6 11.8l1.2 1.2M17.4 11.8l-1.2 1.2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>' + spark(18.4, 5, 2.4) + E,
+      "weekend": F + at('<path d="' + HEAD + '"/>', 9, 14.4, .62) + '<path d="M14.4 3.6h4.4l-4.4 4.8h4.4M18.6 10.2h2.6l-2.6 2.8h2.6" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>' + E,
+      "comeback": F + '<path d="M12 20.6 4.6 13.4C2.5 11.3 2.6 8.1 4.9 6.4c2-1.5 4.8-1 6.3 1l.8.9.8-.9c1.5-2 4.3-2.5 6.3-1 2.3 1.7 2.4 4.9.3 7z"/><path d="M4.3 7.6 4 2.9l3.7 2.5zM19.7 7.6l.3-4.7-3.7 2.5z"/>' + E,
+      "styled": F + at('<path d="M10 3.4h4l-.6 2.7h-2.8zM10.6 6.1h2.8l1.8 10.4L12 20.6l-3.2-4.1z"/><path d="M6.6 3.2l3.2 2.8M17.4 3.2l-3.2 2.8" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>', 12, 12.2, 1.15, 0, 12, 12) + E,
+      /* maestría dinámica y respaldo */
+      "trophy": S + TROPHY + E,
+      "secret": S + '<path d="M9.2 9a2.9 2.9 0 1 1 4.3 2.5c-.9.5-1.5 1.2-1.5 2.2v.6"/><circle cx="12" cy="17.6" r="1.1" fill="currentColor" stroke="none"/>' + E,
+      "_default": F + '<path d="' + STAR5 + '"/>' + E
+    };
+  })();
   function achIcon(id) {
     if (id && id.indexOf("master:") === 0) return ACH_ICON.trophy;
     return ACH_ICON[id] || ACH_ICON._default;
@@ -2433,31 +2499,205 @@
     each(".wmap, .world-banner, .den-tree, .den-head", function (el) { _animObs.observe(el); });
   }
 
-  /* Vitrina de logros (ganados + bloqueados), plegable. */
-  function buildTrophyShelf() {
-    if (!P || !P.achievementsState) return "";
-    var list = P.achievementsState();
-    var total = list.length;
-    var earned = list.filter(function (a) { return a.unlocked; }).length;
-    var pct = total ? Math.round(100 * earned / total) : 0;
-    var lockSvg = '<svg class="medal__lk" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="10.7" width="14" height="9" rx="2.2"/><path d="M8 10.7V7.7a4 4 0 0 1 8 0v3"/></svg>';
-    var trophySvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4.5h10v4a5 5 0 0 1-10 0z"/><path d="M7 6.2H4.6v1.4A3.4 3.4 0 0 0 8 11M17 6.2h2.4v1.4A3.4 3.4 0 0 1 16 11"/><path d="M12 13.5v2.7M9 20h6M10.2 20l.5-3.8h2.6l.5 3.8"/></svg>';
-    var chev = '<svg class="logros__chev" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>';
-    /* desbloqueados primero (manteniendo el orden del catálogo) */
-    var sorted = list.slice().sort(function (a, b) { return (b.unlocked ? 1 : 0) - (a.unlocked ? 1 : 0); });
-    var medals = sorted.map(function (a) {
-      return '<div class="medal' + (a.unlocked ? ' on' : '') + '" title="' + esc(a.name + (a.desc ? ' — ' + a.desc : '')) + '">'
-        + '<span class="medal__disc" aria-hidden="true">' + (a.unlocked ? achIcon(a.id) : lockSvg) + '</span>'
-        + '<span class="medal__nm">' + esc(a.name) + '</span></div>';
+  /* ===== Logros: vitrina del mapa + pantalla completa (?id=logros) =========
+     El mapa enseña un adelanto (recientes + el próximo que tienes cerca) y
+     la pantalla completa los ordena por categoría con su progreso. Tocar un
+     medallón abre su ficha. */
+  var TIER_NAME = { bronze: "Bronce", silver: "Plata", gold: "Oro", legend: "Legendario" };
+  var TROPHY_SVG = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4.5h10v4a5 5 0 0 1-10 0z"/><path d="M7 6.2H4.6v1.4A3.4 3.4 0 0 0 8 11M17 6.2h2.4v1.4A3.4 3.4 0 0 1 16 11"/><path d="M12 13.5v2.7M9 20h6M10.2 20l.5-3.8h2.6l.5 3.8"/></svg>';
+  function achList() { try { return (P && P.achievementsState) ? P.achievementsState() : []; } catch (e) { return []; } }
+  function achCats() { return (P && P.CATEGORIES) ? P.CATEGORIES : []; }
+  function achHidden(a) { return a.secret && !a.unlocked; }
+  function achName(a) { return achHidden(a) ? "Logro secreto" : a.name; }
+  function achDate(k) {
+    if (!k) return "";
+    try { var p = k.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]).toLocaleDateString("es-MX", { day: "numeric", month: "long", year: "numeric" }); }
+    catch (e) { return k; }
+  }
+  /* disco del medallón (también lo usan la ficha y la celebración) */
+  function achDisc(a, cls) {
+    var glyph = achHidden(a) ? ACH_ICON.secret : achIcon(a.id);
+    return '<span class="medal__disc ' + (cls || "") + '" aria-hidden="true">' + glyph + '</span>';
+  }
+  function medalHtml(a, extraCls) {
+    var hid = achHidden(a);
+    var label = achName(a) + ". " + (a.unlocked ? "Ganado" : (hid ? "Por descubrir" : "Por ganar")) + ". " + TIER_NAME[a.tier] + ".";
+    var prog = "";
+    if (!a.unlocked && !hid && a.goal > 1 && a.cur > 0) {
+      prog = '<span class="medal__prog" aria-hidden="true"><i style="width:' + Math.round(100 * a.cur / a.goal) + '%"></i></span>';
+      label += " " + a.cur + " de " + a.goal + ".";
+    }
+    return '<button type="button" class="medal t-' + a.tier + (a.unlocked ? ' on' : '') + (hid ? ' is-secret' : '') + (extraCls || '') + '" data-ach="' + esc(a.id) + '" aria-label="' + esc(label) + '">'
+      + achDisc(a)
+      + '<span class="medal__nm">' + esc(achName(a)) + '</span>' + prog + '</button>';
+  }
+  /* el más cercano por ganar (no secreto): mayor avance relativo; empate, el más fácil */
+  function achNext(list) {
+    var best = null, br = -1;
+    list.forEach(function (a) {
+      if (a.unlocked || a.secret || a.dynamic) return;
+      var r = a.goal ? a.cur / a.goal : 0;
+      if (r > br || (r === br && best && a.goal < best.goal)) { best = a; br = r; }
+    });
+    return best;
+  }
+  function achCounts(list) {
+    var fixed = list.filter(function (a) { return !a.dynamic; });
+    var earned = fixed.filter(function (a) { return a.unlocked; }).length;
+    return { total: fixed.length, earned: earned, pct: fixed.length ? Math.round(100 * earned / fixed.length) : 0 };
+  }
+
+  /* Adelanto en el mapa. freshIds: recién ganados al abrir (llevan «Nuevo»). */
+  function buildTrophyShelf(freshIds) {
+    var list = achList();
+    if (!list.length) return "";
+    var fresh = {}; (freshIds || []).forEach(function (x) { fresh[x] = 1; });
+    var c = achCounts(list);
+    var recent = list.filter(function (a) { return a.unlocked; }).map(function (a, i) { return { a: a, i: i }; })
+      .sort(function (x, y) { return (x.a.date === y.a.date) ? y.i - x.i : (x.a.date < y.a.date ? 1 : -1); })
+      .slice(0, 4).map(function (o) { return o.a; });
+    var recentHtml = recent.length
+      ? '<div class="logros__row">' + recent.map(function (a) { return medalHtml(a, fresh[a.id] ? ' is-new' : ''); }).join("") + '</div>'
+      : '<p class="logros__empty">Termina tu primera lección y Vesper te dará tu primer medallón.</p>';
+    var nx = achNext(list), nextHtml = "";
+    if (nx) {
+      var np = Math.round(100 * nx.cur / Math.max(1, nx.goal));
+      nextHtml = '<button type="button" class="logros__next t-' + nx.tier + '" data-ach="' + esc(nx.id) + '">'
+        + achDisc(nx)
+        + '<span class="logros__nx"><span class="logros__nxk">Próximo logro</span>'
+        + '<span class="logros__nxn">' + esc(nx.name) + '</span>'
+        + '<span class="logros__nxd">' + esc(nx.desc) + '</span>'
+        + '<span class="logros__nxbar" aria-hidden="true"><i style="width:' + np + '%"></i></span></span>'
+        + '<span class="logros__nxc">' + nx.cur + '/' + nx.goal + '</span></button>';
+    }
+    return '<section class="logros" aria-labelledby="logrosTtl">'
+      + '<a class="logros__head" href="?id=logros">'
+      + '<span class="logros__ic">' + TROPHY_SVG + '</span>'
+      + '<span class="logros__h"><span class="logros__ttl" id="logrosTtl">Logros</span>'
+      + '<span class="logros__bar" aria-hidden="true"><i style="width:' + c.pct + '%"></i></span></span>'
+      + '<span class="logros__count" aria-label="' + c.earned + ' de ' + c.total + ' ganados">' + c.earned + '/' + c.total + '</span></a>'
+      + recentHtml + nextHtml
+      + '<a class="logros__all" href="?id=logros">Ver los ' + c.total + ' logros <span aria-hidden="true">&rarr;</span></a>'
+      + '</section>';
+  }
+
+  /* Ficha de un logro (diálogo modal ligero). */
+  function openAchSheet(achId, trigger) {
+    var a = null;
+    achList().forEach(function (x) { if (x.id === achId) a = x; });
+    if (!a) return;
+    closeAchSheet();
+    var hid = achHidden(a), status;
+    if (a.unlocked) status = '<p class="ach-sheet__ok">' + ic('checkCircle') + ' Ganado el ' + esc(achDate(a.date)) + '</p>';
+    else if (hid) status = '<p class="ach-sheet__hint">«' + esc(a.hint || "Sigue explorando Vesper…") + '»</p>';
+    else if (a.goal > 1) status = '<div class="ach-sheet__prog"><span class="ach-sheet__bar"><i style="width:' + Math.round(100 * a.cur / a.goal) + '%"></i></span><b>' + a.cur + ' / ' + a.goal + '</b></div>';
+    else status = '<p class="ach-sheet__todo">Aún por ganar</p>';
+    var el = document.createElement("div");
+    el.className = "ach-sheet"; el.id = "achSheet";
+    el.innerHTML = '<div class="ach-sheet__back" data-close="1"></div>'
+      + '<div class="ach-sheet__card t-' + a.tier + (a.unlocked ? ' on' : '') + '" role="dialog" aria-modal="true" aria-labelledby="achSheetT">'
+      + '<button type="button" class="ach-sheet__x" data-close="1" aria-label="Cerrar">&times;</button>'
+      + '<div class="medal medal--xl t-' + a.tier + (a.unlocked ? ' on' : '') + (hid ? ' is-secret' : '') + '">' + achDisc(a) + '</div>'
+      + '<span class="ach-tier t-' + a.tier + '">' + TIER_NAME[a.tier] + '</span>'
+      + '<h2 id="achSheetT">' + esc(achName(a)) + '</h2>'
+      + '<p class="ach-sheet__desc">' + esc(hid ? "Este logro se revela cuando lo consigues." : a.desc) + '</p>'
+      + status + '</div>';
+    document.body.appendChild(el);
+    el._trigger = trigger || null;
+    el.addEventListener("click", function (e) { if (e.target.closest("[data-close]")) closeAchSheet(); });
+    el._key = function (e) { if (e.key === "Escape") closeAchSheet(); };
+    document.addEventListener("keydown", el._key);
+    var x = el.querySelector(".ach-sheet__x"); if (x) x.focus();
+    requestAnimationFrame(function () { el.classList.add("open"); });
+  }
+  function closeAchSheet() {
+    var el = byId("achSheet"); if (!el) return;
+    document.removeEventListener("keydown", el._key);
+    var t = el._trigger;
+    el.parentNode.removeChild(el);
+    if (t && t.focus) try { t.focus(); } catch (e) {}
+  }
+  function bindAchMedals(root) {
+    (root || document).querySelectorAll("[data-ach]").forEach(function (b) {
+      b.addEventListener("click", function () { openAchSheet(b.getAttribute("data-ach"), b); });
+    });
+  }
+  /* ¿lleva Vesper un aspecto propio (y desbloqueado)? → logro «Gato elegante» */
+  function achStyled() {
+    try {
+      if (!window.VESPER_THEME || !VESPER_THEME.get) return false;
+      var st = VESPER_THEME.get();
+      return (st.skin && st.skin !== "gold" && unlockedCos("skin", st.skin))
+        || (st.accessory && st.accessory !== "none" && unlockedCos("acc", st.accessory))
+        || (st.pelaje && st.pelaje !== "classic" && unlockedCos("pelaje", st.pelaje));
+    } catch (e) { return false; }
+  }
+  function achCheck() { try { return (P && P.check) ? P.check({ styled: achStyled() }) : []; } catch (e) { return []; } }
+  /* celebración de logros recién ganados (racha, Forja) */
+  function achPopHtml(ids) {
+    if (!ids || !ids.length) return "";
+    var byId2 = {};
+    achList().forEach(function (a) { byId2[a.id] = a; });
+    return '<div class="ach-pop">' + ids.map(function (id) {
+      var a = byId2[id] || { id: id, tier: "gold", name: id };
+      return '<div class="ach-badge t-' + a.tier + '"><span class="medal on t-' + a.tier + '">' + achDisc(a) + '</span>'
+        + '<span class="ab-tx"><b>Logro ' + (TIER_NAME[a.tier] || "").toLowerCase() + ' desbloqueado</b><span>' + esc(a.name) + '</span></span></div>';
+    }).join("") + '<a class="cos-cta" href="leccion.html?id=logros">Ver mis logros &rarr;</a></div>';
+  }
+
+  /* Pantalla completa de logros. */
+  function renderAchievements() {
+    clearLessonTheme();
+    var fresh = achCheck();
+    var list = achList(), c = achCounts(list);
+    var tiers = { bronze: 0, silver: 0, gold: 0, legend: 0 };
+    list.forEach(function (a) { if (a.unlocked && !a.dynamic && tiers[a.tier] != null) tiers[a.tier]++; });
+    var R = 34, CIRC = 2 * Math.PI * R;
+    var ring = '<svg class="ach-ring" viewBox="0 0 80 80" aria-hidden="true"><circle cx="40" cy="40" r="' + R + '" class="ach-ring__bg"/>'
+      + '<circle cx="40" cy="40" r="' + R + '" class="ach-ring__fg" stroke-dasharray="' + CIRC.toFixed(1) + '" stroke-dashoffset="' + (CIRC * (1 - c.pct / 100)).toFixed(1) + '"/></svg>';
+    var tierChips = ["legend", "gold", "silver", "bronze"].map(function (t) {
+      return '<span class="ach-tc t-' + t + '"><i aria-hidden="true"></i>' + tiers[t] + ' <span>' + TIER_NAME[t] + '</span></span>';
     }).join("");
-    return '<details class="logros">'
-      + '<summary class="logros__sum" aria-label="Logros: ' + earned + ' de ' + total + ' desbloqueados">'
-      + '<span class="logros__ic">' + trophySvg + '</span>'
-      + '<span class="logros__h"><span class="logros__ttl">Logros</span>'
-      + '<span class="logros__bar" aria-hidden="true"><i style="width:' + pct + '%"></i></span></span>'
-      + '<span class="logros__count">' + earned + '/' + total + '</span>' + chev
-      + '</summary>'
-      + '<div class="logros__grid">' + medals + '</div></details>';
+    var freshMap = {}; fresh.forEach(function (x) { freshMap[x] = 1; });
+    var sections = achCats().map(function (cat) {
+      var items = list.filter(function (a) { return a.cat === cat.id; });
+      if (!items.length) return "";
+      var got = items.filter(function (a) { return a.unlocked && !a.dynamic; }).length;
+      var tot = items.filter(function (a) { return !a.dynamic; }).length;
+      return '<section class="ach-cat" data-cat="' + cat.id + '">'
+        + '<h2 class="ach-cat__h">' + esc(cat.name) + '<span>' + got + '/' + tot + '</span></h2>'
+        + '<div class="ach-grid">' + items.map(function (a) { return medalHtml(a, freshMap[a.id] ? ' is-new' : ''); }).join("") + '</div></section>';
+    }).join("");
+    var nx = achNext(list);
+    show('<div class="wrap ach-page">'
+      + '<div class="topbar"><a class="back" href="leccion.html" aria-label="Volver al mapa">&#8592;</a><h1 class="ach-title">Logros</h1></div>'
+      + '<section class="ach-hero">'
+      +   '<div class="ach-hero__ring">' + ring + '<span class="ach-hero__pct"><b>' + c.earned + '</b><span>de ' + c.total + '</span></span></div>'
+      +   '<div class="ach-hero__tx"><p class="ach-hero__k">Tu vitrina</p>'
+      +   '<p class="ach-hero__msg">' + (c.earned === 0 ? "Vesper guarda aquí cada medallón que ganes." : (c.earned === c.total ? "¡Los tienes todos! Eres leyenda de Vesper." : (nx ? "Te falta poco para «" + esc(nx.name) + "»." : "Sigue así."))) + '</p>'
+      +   '<div class="ach-tiers">' + tierChips + '</div></div>'
+      + '</section>'
+      + '<div class="filter-row ach-filter" role="group" aria-label="Filtrar logros">'
+      +   '<button class="fchip on" type="button" aria-pressed="true" data-af="all">Todos</button>'
+      +   '<button class="fchip" type="button" aria-pressed="false" data-af="on">Ganados</button>'
+      +   '<button class="fchip" type="button" aria-pressed="false" data-af="off">Por ganar</button></div>'
+      + '<div id="achList">' + sections + '</div>'
+      + '<a class="btn btn-gold ach-back" href="leccion.html">Seguir aprendiendo</a>'
+      + '</div>');
+    bindAchMedals(byId("app"));
+    each("[data-af]", function (b) {
+      b.onclick = function () {
+        var f = b.getAttribute("data-af");
+        each("[data-af]", function (x) { var on = x === b; x.classList.toggle("on", on); x.setAttribute("aria-pressed", on ? "true" : "false"); });
+        each("#achList .medal", function (m) {
+          var got = m.classList.contains("on");
+          m.hidden = (f === "on" && !got) || (f === "off" && got);
+        });
+        each("#achList .ach-cat", function (sec) { sec.hidden = !sec.querySelector(".medal:not([hidden])"); });
+      };
+    });
+    if (fresh.length) { sfx("achievement"); announce(fresh.length === 1 ? "Nuevo logro desbloqueado" : fresh.length + " logros nuevos desbloqueados"); }
+    track("achievements_view", { earned: c.earned, total: c.total });
   }
 
   /* Selector de exámenes de nivel (A1–C2). Se abre desde el hub (?id=exams). */
@@ -2659,7 +2899,8 @@
     _tourLevel = selLevel;                          /* el paseo nombra el mundo que estás viendo */
     var st = P ? P.getState() : { streak: 0, xp: 0, shields: 0 };
     var dg = (P && P.dailyGoal) ? P.dailyGoal() : null;
-    var trophyHtml = buildTrophyShelf();
+    var freshAch = achCheck();                      /* logros ya merecidos (retroactivos, aspecto nuevo…) */
+    var trophyHtml = buildTrophyShelf(freshAch);
     var hello = (A && profile) ? A.greeting() : "Hola!";
     /* fallback simple si no hay motor de ruta */
     if (!PATH) {
@@ -2745,6 +2986,16 @@
       + '<div class="hub-toast" id="toast"></div>');
 
     bindCta();
+    bindAchMedals(document.querySelector(".logros"));
+    if (freshAch.length) {
+      sfx("achievement");
+      /* otro aviso (p.ej. cosmético nuevo) puede estar en pantalla: espera su turno */
+      var achMsg = freshAch.length === 1 ? "¡Nuevo logro desbloqueado!" : "¡" + freshAch.length + " logros nuevos desbloqueados!";
+      setTimeout(function () {
+        var t = byId("toast");
+        if (t && t.classList.contains("show")) setTimeout(function () { toast(achMsg); }, 2000); else toast(achMsg);
+      }, 400);
+    }
     if (_indexFirst) track("hub_view", { level: selLevel });
     var examGo = byId("examGo"); if (examGo) examGo.onclick = function () { location.search = "?id=exams"; };
     each(".world[data-lvl]", function (b) { b.onclick = function () { _mapExpanded = false; renderIndex(b.getAttribute("data-lvl")); }; });
@@ -4164,7 +4415,7 @@
 
   /* ---------- STREAK ---------- */
   function renderStreak() {
-    var info = P ? P.completeLesson(lesson.lessonId, earnedXp, { perfect: lastPerfect })
+    var info = P ? P.completeLesson(lesson.lessonId, earnedXp, { perfect: lastPerfect, combo: maxCombo })
                  : { streak: 1, xp: earnedXp, milestone: false, shields: 0, newAchievements: [], dailyGoal: null };
     /* premio de gemas por avanzar (economía): proporcional al XP + extra por lección perfecta */
     var gemReward = 0;
@@ -4199,15 +4450,7 @@
     /* logros recién desbloqueados (incluye maestría de repaso) */
     var ach = (info.newAchievements || []).slice();
     if (masteryUnlocked) ach.push("master:" + lesson.reviewLevel + ":" + lesson.reviewSkill);
-    var achHtml = "";
-    if (ach.length && P && P.achievementsState) {
-      var all = P.achievementsState(), byId2 = {};
-      all.forEach(function (a) { byId2[a.id] = a; });
-      achHtml = '<div class="ach-pop">' + ach.map(function (id) {
-        var a = byId2[id] || { icon: "", name: id };
-        return '<div class="ach-badge"><span class="ab-ic">' + achIcon(a.id) + '</span><span class="ab-tx"><b>Logro desbloqueado</b><span>' + esc(a.name) + '</span></span></div>';
-      }).join("") + '</div>';
-    }
+    var achHtml = achPopHtml(ach);
 
     /* cosméticos recién desbloqueados (color/accesorio de Vesper por progreso) */
     var cosHtml = "";
@@ -4389,15 +4632,23 @@
     /* La PRIMERA ronda del día cuenta como lección para la racha; las
        siguientes sólo suman XP. Nunca las dos cosas por la misma ronda. */
     try {
-      if (P && rounds === 0) info = P.completeLesson("review:forja", earnedXp, { perfect: perfect });
+      if (P && rounds === 0) info = P.completeLesson("review:forja", earnedXp, { perfect: perfect, combo: maxCombo });
       else if (P) P.addXp(earnedXp);
+    } catch (e) {}
+    /* logros: rondas de Forja + combo (las rondas extra no pasan por completeLesson) */
+    var forjaAch = (info && info.newAchievements) ? info.newAchievements.slice() : [];
+    try {
+      if (P && P.bump) {
+        forjaAch = forjaAch.concat(P.bump("forja", 1));
+        if (maxCombo) forjaAch = forjaAch.concat(P.bump("maxCombo", maxCombo, "max"));
+      }
     } catch (e) {}
     leagueAddXp(earnedXp || 0);
     try { if (window.VESPER_ECONOMY && VESPER_ECONOMY.award) VESPER_ECONOMY.award(Math.max(1, Math.round(earnedXp / 10))); } catch (e) {}
 
     var tally = VESPER_FORJA.noteRound(correct);      /* cierra la ronda */
     track("forja_round", { mode: lesson.forjaMode, pct: pct, round: tally.rounds });
-    if (perfect) { burstConfetti(40); sfx("fanfare"); } else { sfx("complete"); }
+    if (perfect) { burstConfetti(40); sfx("fanfare"); } else if (forjaAch.length) { sfx("achievement"); } else { sfx("complete"); }
 
     var head = perfect ? "¡Ronda perfecta!" : (pct >= 70 ? "¡Buena ronda!" : "Ronda terminada");
     var due = VESPER_FORJA.dueCount();
@@ -4411,6 +4662,7 @@
       + (info && info.streak ? '<p class="muted">' + ic('flame') + ' Racha de ' + info.streak + ' día' + (info.streak === 1 ? "" : "s") + '</p>' : "")
       + (decay < 1 ? '<p class="muted">Las rondas extra de hoy dan menos XP, pero cuentan igual para tu repaso.</p>' : "")
       + (due > 0 ? '<p class="muted">' + due + ' ejercicio' + (due === 1 ? "" : "s") + ' te esperan para volver a repasar.</p>' : "")
+      + achPopHtml(forjaAch)
       + '<button class="btn btn-gold" id="forjaAgain">Otra ronda</button>'
       + '<button class="btn btn-ghost" id="backHome">Volver al inicio</button></div></div>');
     byId("forjaAgain").onclick = function () { forjaRound(false); };
@@ -4632,6 +4884,7 @@
   function route() {
   if (!id) { renderIndex(); return; }
   if (id === "exams") { renderExamPicker(); return; }
+  if (id === "logros") { renderAchievements(); return; }
   if (id === "review:srs") {
     baseLesson = (window.VESPER_SRS && VESPER_SRS.buildReviewLesson) ? VESPER_SRS.buildReviewLesson() : null;
     if (!baseLesson || !baseLesson.exercises.length) {
