@@ -5042,7 +5042,25 @@
   /* PWA: registra el service worker (offline) solo en http/https, no en file:// */
   if ("serviceWorker" in navigator && location.protocol.indexOf("http") === 0) {
     window.addEventListener("load", function () {
-      navigator.serviceWorker.register("sw.js").catch(function () { /* sin SW: sigue funcionando online */ });
+      navigator.serviceWorker.register("sw.js").then(function (reg) {
+        // al volver a la app (pestaña o TWA que estaba en segundo plano), buscar versión nueva
+        document.addEventListener("visibilitychange", function () {
+          if (document.visibilityState === "visible") { try { reg.update(); } catch (e) {} }
+        });
+      }).catch(function () { /* sin SW: sigue funcionando online */ });
+    });
+    /* Versión nueva publicada: el SW sirve el caché primero y refresca detrás, así
+       que la página abierta seguía con el JS viejo hasta recargar a mano (y parecía
+       que la publicación "no salió"). Cuando el SW nuevo toma el control, recargamos
+       una vez — salvo a mitad de una lección/examen (?id=…), donde se perdería el
+       avance: ahí se aplica en la siguiente navegación. Sin controlador previo es la
+       primera instalación: no hace falta recargar. */
+    var hadController = !!navigator.serviceWorker.controller, reloaded = false;
+    navigator.serviceWorker.addEventListener("controllerchange", function () {
+      if (!hadController || reloaded) { hadController = true; return; }
+      if (/[?&]id=/.test(location.search)) return;
+      reloaded = true;
+      location.reload();
     });
   }
 
