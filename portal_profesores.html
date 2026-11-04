@@ -301,12 +301,7 @@ h2.sec .sec-ct{order:1;margin:7px 0 0;padding:0;border:0;background:none;
 h2.sec .sec-ln{order:2;flex:none;height:auto;aspect-ratio:16/10;margin-top:18px;
   background:var(--navy) center/cover no-repeat;border:1px solid var(--border);
   filter:saturate(.72) contrast(1.05) brightness(.92);}
-.grp.tools    h2.sec .sec-ln{background-image:url("assets/images/landing/rail/education.webp");}
-.grp.basics   h2.sec .sec-ln{background-image:url("assets/images/landing/course_general.webp");}
-.grp.practice h2.sec .sec-ln{background-image:url("assets/images/landing/course_conversation.webp");}
-.grp.grammar  h2.sec .sec-ln{background-image:url("assets/images/landing/rail/writing.webp");}
-.grp.special  h2.sec .sec-ln{background-image:url("assets/images/landing/course_corporate.webp");}
-.grp.exam     h2.sec .sec-ln{background-image:url("assets/images/landing/course_certification.webp");}
+/* La lámina de cada familia la pone --art (ver PULIDO 2026-11 al final). */
 
 .grid{display:flex;flex-direction:column;counter-reset:fila;}
 
@@ -433,6 +428,157 @@ footer a:hover{color:var(--gold);text-decoration:underline;}
 .gate-card .gnote{font-size:var(--t-small);color:var(--muted);text-align:center;padding:0 30px 22px;line-height:1.6;}
 
 :focus-visible{outline:3px solid var(--gold);outline-offset:2px;}
+
+/* ============================================================
+   PULIDO 2026-11 — mismo idioma que leccion.html y el portal del alumno
+   ------------------------------------------------------------
+   · Héroe con lámina pintada del mapa (map/il/banner_*.jpg) y cifras en
+     mosaicos, no en un riel de filetes.
+   · El filtro deja de ser sticky: en el teléfono las 7 píldoras se
+     envolvían en 5 filas y la barra (260px) se quedaba flotando sobre un
+     tercio de la pantalla. Ahora es una tarjeta y las píldoras se deslizan.
+   · Cada familia es una tarjeta con su lámina; cada recurso es una ficha
+     con los botones ANCLADOS al pie (misma altura por fila), en vez de
+     botones sueltos debajo de cada renglón.
+   Va al final para ganar por orden; el marcado y los scripts no cambian.
+   ============================================================ */
+:root{
+  --press:4px;
+  --gold-shadow:color-mix(in srgb,var(--gold) 62%,#000);
+  --on-gold:var(--navy);
+  --r-card:22px;
+  --card-sh:0 14px 34px rgba(8,6,22,.28);
+  --veil:14,12,31;
+}
+html:not(.vesper-dark){--card-sh:0 10px 28px rgba(27,27,47,.10);}
+
+/* ── Héroe ── */
+.hero{margin-top:clamp(20px,3.4vw,40px);}
+.hero-in{isolation:isolate;min-height:clamp(320px,34vw,390px);display:flex;flex-direction:column;justify-content:flex-end;
+  padding:clamp(26px,4vw,44px) clamp(22px,4vw,46px) clamp(22px,3vw,30px);
+  border-radius:calc(var(--r-card) + 4px);color:#f5f2eb;
+  background:#14122a url("assets/images/map/il/banner_c2.jpg") 74% 40%/cover no-repeat;
+  box-shadow:0 0 0 5px color-mix(in srgb,var(--gold) 9%,transparent),0 22px 50px rgba(8,6,22,.38);}
+.hero-in::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
+  background:linear-gradient(90deg,rgba(var(--veil),.95) 0%,rgba(var(--veil),.85) 36%,rgba(var(--veil),.30) 64%,rgba(var(--veil),0) 84%),
+             linear-gradient(0deg,rgba(var(--veil),.75),rgba(var(--veil),0) 50%);}
+.hero .eyebrow{color:#f3e2ab;}
+.hero h1{color:#f5f2eb;font-size:clamp(2rem,4.4vw,3.1rem);max-width:16ch;text-shadow:0 2px 18px rgba(0,0,0,.45);}
+.hero p{color:rgba(245,242,235,.80);max-width:48ch;}
+.hero-stats{display:grid;grid-template-columns:repeat(3,minmax(0,150px));gap:10px;margin-top:24px;border:0;}
+.hero-stats .st,.hero-stats .st:first-child{padding:12px 14px;border:1px solid rgba(243,226,171,.24);border-radius:14px;
+  background:rgba(14,12,31,.42);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);}
+.hero-stats .st b{color:#f3e2ab;font-size:1.45rem;white-space:nowrap;}
+@media(max-width:1080px) and (min-width:761px){
+  /* Tableta: el gato queda más cerca del texto; velo más ancho y renglón corto. */
+  .hero-in{background-position:100% 40%;}
+  .hero-in::before{background:linear-gradient(90deg,rgba(var(--veil),.96) 0%,rgba(var(--veil),.88) 44%,rgba(var(--veil),.4) 68%,rgba(var(--veil),0) 88%),
+                              linear-gradient(0deg,rgba(var(--veil),.75),rgba(var(--veil),0) 50%);}
+  .hero p{max-width:38ch;}
+}
+.hero-stats .st span{color:rgba(245,242,235,.72);margin-top:6px;font-size:.62rem;}
+@media(max-width:760px){
+  .hero-in{min-height:0;padding:clamp(170px,46vw,230px) 20px 20px;
+    background-position:66% 0;background-size:auto clamp(250px,64vw,330px);}
+  .hero-in::before{background:linear-gradient(0deg,rgba(var(--veil),1) 0%,rgba(var(--veil),.96) 55%,rgba(var(--veil),.35) 76%,rgba(var(--veil),0) 92%);}
+  .hero-stats{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .hero-stats .st,.hero-stats .st:first-child{border-top:1px solid rgba(243,226,171,.24);padding:12px 14px;}
+  .hero-stats .st:last-child{grid-column:1 / -1;}
+}
+
+/* ── Aviso y "Mis clases" ── */
+.warn{border-radius:16px;border-left-width:1px;border-color:var(--border);padding:14px 18px;margin-top:18px;
+  background:color-mix(in srgb,var(--gold) 6%,var(--white));}
+.warn .i{flex:0 0 auto;width:32px;height:32px;padding:7px;margin:0;border-radius:10px;
+  background:color-mix(in srgb,var(--gold) 16%,transparent);}
+.mc-card{border-radius:var(--r-card);}
+.mc-join{border-radius:14px;font-weight:800;box-shadow:0 var(--press) 0 var(--gold-shadow);
+  background:linear-gradient(180deg,color-mix(in srgb,var(--gold-lt) 45%,var(--gold)),var(--gold));color:var(--on-gold);}
+
+/* ── Filtro: una tarjeta, no una barra flotante ── */
+#filter{position:static;margin:18px 0 0;padding:18px;border:1px solid var(--border);border-radius:var(--r-card);
+  background:var(--white);box-shadow:var(--card-sh);}
+@supports (backdrop-filter:blur(1px)){#filter{background:var(--white);backdrop-filter:none;}}
+.f-box{max-width:none;}
+#q{background:var(--cream);border-radius:14px;padding-top:14px;padding-bottom:14px;}
+.pills{margin-top:14px;}
+.pill{background:var(--cream);border-color:var(--border);color:var(--text);padding:9px 15px;}
+.pill[aria-pressed="true"]{background:linear-gradient(180deg,color-mix(in srgb,var(--gold-lt) 45%,var(--gold)),var(--gold));
+  color:var(--on-gold);border-color:var(--gold);box-shadow:0 3px 0 var(--gold-shadow);}
+@media(max-width:760px){
+  #filter{padding:14px;}
+  .pills{flex-wrap:nowrap;overflow-x:auto;margin:12px -14px 0;padding:2px 14px 6px;scrollbar-width:none;
+    scroll-snap-type:x proximity;
+    -webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 32px),transparent);
+            mask-image:linear-gradient(90deg,#000 calc(100% - 32px),transparent);}
+  .pills::-webkit-scrollbar{display:none;}
+  .pill{flex:0 0 auto;white-space:nowrap;scroll-snap-align:start;}
+}
+#recent a{border-radius:12px;}
+#deep{border-radius:16px;border-left-width:1px;}
+#deep a{border-radius:12px;}
+
+/* ── Familias: tarjeta con lámina ── */
+.grp.tools   {--art:url("assets/images/map/il/banner_c1.jpg");}
+.grp.basics  {--art:url("assets/images/map/il/banner_a1.jpg");}
+.grp.practice{--art:url("assets/images/map/il/banner_a2.jpg");}
+.grp.grammar {--art:url("assets/images/map/il/banner_b2.jpg");}
+.grp.special {--art:url("assets/images/map/il/banner_b1.jpg");}
+.grp.exam    {--art:url("assets/images/map/il/banner_c2.jpg");}
+section.grp,html:not(.vesper-dark) section.grp{display:block;margin-top:20px;padding:0;
+  border:1px solid var(--border);border-radius:var(--r-card);overflow:hidden;background:var(--white);box-shadow:var(--card-sh);}
+section.grp:first-of-type{margin-top:24px;}
+h2.sec{position:relative;top:auto;isolation:isolate;display:flex;flex-direction:column;justify-content:flex-end;
+  min-height:clamp(132px,15vw,164px);padding:22px clamp(18px,3vw,28px) 22px calc(clamp(18px,3vw,28px) + 60px);
+  color:#f5f2eb;font-size:clamp(1.25rem,2.2vw,1.55rem);text-shadow:0 2px 12px rgba(0,0,0,.5);}
+h2.sec::before{position:absolute;left:clamp(18px,3vw,28px);bottom:22px;display:grid;place-items:center;
+  width:46px;height:46px;margin:0;border-radius:14px;font-size:1.15rem;font-weight:600;line-height:1;text-shadow:none;
+  color:#14122a;background:var(--a-night);box-shadow:0 3px 0 color-mix(in srgb,var(--a-night) 58%,#000);}
+h2.sec .sec-ln,html:not(.vesper-dark) h2.sec .sec-ln{position:absolute;inset:0;z-index:-1;display:block;margin:0;aspect-ratio:auto;
+  border:0;box-shadow:none;filter:none;background-color:#14122a;
+  background-image:linear-gradient(90deg,rgba(var(--veil),.94) 0%,rgba(var(--veil),.78) 38%,rgba(var(--veil),.15) 72%,rgba(var(--veil),0)),
+                   linear-gradient(0deg,rgba(var(--veil),.55),rgba(var(--veil),0) 60%),var(--art);
+  background-size:cover;background-position:center,center,68% 42%;}
+h2.sec .sec-ct{margin-top:3px;color:rgba(245,242,235,.75);text-shadow:none;}
+
+/* ── Fichas ── */
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;padding:16px;}
+.grp.tools .grid{grid-template-columns:repeat(3,minmax(0,1fr));}
+.card,.card:first-child,html:not(.vesper-dark) .card{display:flex;flex-direction:column;align-items:stretch;padding:16px 16px 14px;
+  border:1px solid var(--border);border-radius:16px;background:var(--cream);
+  transition:border-color .18s,transform .2s var(--ease-out);}
+.card:hover,.card:focus-within{padding-left:16px;border-color:color-mix(in srgb,var(--accent) 70%,var(--border));transform:translateY(-2px);}
+.card::before{content:none;}
+.card-top{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px;}
+.card .medal{display:grid;place-items:center;width:40px;height:40px;flex:0 0 auto;border-radius:12px;font-size:1.1rem;
+  color:var(--accent);background:color-mix(in srgb,var(--accent) 14%,transparent);
+  border:1px solid color-mix(in srgb,var(--accent) 38%,transparent);}
+.lvl{justify-self:auto;margin:0;font-size:.64rem;letter-spacing:.1em;padding:4px 10px;
+  border-color:color-mix(in srgb,var(--accent) 40%,transparent);background:color-mix(in srgb,var(--accent) 8%,transparent);}
+.card h3{font-size:1.04rem;}
+.card:hover h3,.card:focus-within h3{color:var(--text);}
+.card p{margin-top:5px;max-width:none;}
+/* Los botones se anclan al pie de la ficha: en una fila de fichas todos
+   quedan a la misma altura, nunca colgando a media tarjeta. */
+.card .links{margin-top:auto;padding-top:14px;gap:8px;flex-wrap:wrap;}
+.card a.go{flex:1 1 auto;justify-content:center;padding:11px 14px;border-radius:12px;white-space:nowrap;}
+.card a.primary{background:linear-gradient(180deg,color-mix(in srgb,var(--gold-lt) 45%,var(--gold)),var(--gold));
+  color:var(--on-gold);font-weight:800;box-shadow:0 var(--press) 0 var(--gold-shadow);margin-bottom:var(--press);
+  transition:transform .09s ease,box-shadow .09s ease;}
+.card a.primary:hover,.card a.primary:focus-visible{background:linear-gradient(180deg,var(--gold-lt),var(--gold));}
+.card a.primary:active{transform:translateY(var(--press));box-shadow:0 0 0 var(--gold-shadow);}
+.card a.alt{border-color:var(--border);background:var(--white);color:var(--text);margin-bottom:var(--press);}
+.card a.alt:hover,.card a.alt:focus-visible{border-color:var(--gold);color:var(--text);}
+@media(max-width:980px){.grp.tools .grid{grid-template-columns:repeat(2,minmax(0,1fr));}}
+@media(max-width:640px){
+  .grid,.grp.tools .grid{grid-template-columns:1fr;padding:12px;gap:10px;}
+  h2.sec{min-height:164px;}
+  h2.sec .sec-ln,html:not(.vesper-dark) h2.sec .sec-ln{
+    background-image:linear-gradient(0deg,rgba(var(--veil),.96) 0%,rgba(var(--veil),.7) 42%,rgba(var(--veil),0) 80%),var(--art);
+    background-position:center,62% 30%;}
+  h2.sec::before{font-size:1.15rem;margin:0;}
+}
+footer{margin-top:clamp(36px,5vw,56px);}
 </style>
 
 <!-- Preferencias del profesor (tamaño de texto, alto contraste, menos
@@ -547,7 +693,7 @@ footer a:hover{color:var(--gold);text-decoration:underline;}
   <div id="filter">
     <div class="f-box">
       <svg class="i f-ic" aria-hidden="true"><use href="#i-search"/></svg>
-      <input type="search" id="q" placeholder="Buscar manual, curso o herramienta…" autocomplete="off" aria-label="Buscar en el portal">
+      <input type="search" id="q" placeholder="Buscar manual o herramienta…" autocomplete="off" aria-label="Buscar en el portal">
       <button class="f-clear" id="q-clear" type="button" aria-label="Borrar búsqueda">&times;</button>
     </div>
     <div class="pills" role="group" aria-label="Filtrar por familia">
