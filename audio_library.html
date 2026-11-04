@@ -550,6 +550,83 @@
 
         /* Foco de teclado visible (WCAG 2.4.7) */
         :focus-visible { outline:3px solid var(--gold); outline-offset:2px; }
+
+        /* ============================================================
+           PARA EL ALUMNO (2026-11-03)
+           La biblioteca es la pestaña "Audio" del alumno. Lo que es del
+           profesor (Pizarra, "Dar clase", Diagnóstico) lleva .t-only y solo
+           aparece con body.is-teacher, que pone el script del final cuando
+           teacherAccess() responde "ok".
+           ============================================================ */
+        body:not(.is-teacher) .t-only { display:none !important; }
+
+        /* -- Lámina del héroe (mismo idioma que el portal del alumno) -- */
+        .wrap { padding-top:clamp(20px,3.4vw,40px); }
+        .ahero { position:relative; isolation:isolate; overflow:hidden;
+            display:flex; flex-direction:column; justify-content:flex-end; gap:18px;
+            min-height:clamp(260px,28vw,330px);
+            padding:clamp(24px,4vw,40px) clamp(22px,4vw,44px) clamp(22px,3vw,28px);
+            border-radius:22px; border:1px solid var(--hair); color:#f5f2eb;
+            background:#14122a var(--hero-art,url("assets/images/map/il/banner_a1.jpg")) 74% 38%/cover no-repeat;
+            box-shadow:0 0 0 5px color-mix(in srgb,var(--gold) 9%,transparent),0 22px 50px rgba(8,6,22,.38); }
+        .ahero::before { content:""; position:absolute; inset:0; z-index:-1; pointer-events:none;
+            background:linear-gradient(90deg,rgba(14,12,31,.95) 0%,rgba(14,12,31,.85) 36%,rgba(14,12,31,.30) 64%,rgba(14,12,31,0) 84%),
+                       linear-gradient(0deg,rgba(14,12,31,.7),rgba(14,12,31,0) 50%); }
+        .ahero .eyebrow { color:#f3e2ab; }
+        .ahero h1 { font-family:var(--va-font-display); font-weight:600; margin:10px 0 0;
+            font-size:clamp(2.2rem,5vw,3.4rem); line-height:1; letter-spacing:-.02em;
+            color:#f5f2eb; text-shadow:0 2px 18px rgba(0,0,0,.45); }
+        .ahero .lead { color:rgba(245,242,235,.80); max-width:46ch; margin:12px 0 0; font-size:1rem; text-wrap:pretty; }
+        .ah-chips { display:flex; flex-wrap:wrap; gap:8px; }
+        .ah-chip { display:inline-flex; align-items:center; gap:7px; padding:7px 13px; border-radius:999px;
+            font-size:var(--t-small); color:rgba(245,242,235,.82);
+            background:rgba(14,12,31,.45); border:1px solid rgba(243,226,171,.28);
+            -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px); }
+        .ah-chip b { color:#f3e2ab; font-weight:700; }
+        .ah-chip .i { color:#f3e2ab; }
+        @media (max-width:1080px) and (min-width:761px) {
+            .ahero { background-position:98% 38%; }
+            .ahero::before { background:linear-gradient(90deg,rgba(14,12,31,.96) 0%,rgba(14,12,31,.88) 44%,rgba(14,12,31,.4) 68%,rgba(14,12,31,0) 88%),
+                                        linear-gradient(0deg,rgba(14,12,31,.7),rgba(14,12,31,0) 50%); }
+            .ahero .lead { max-width:36ch; }
+        }
+        @media (max-width:760px) {
+            .ahero { min-height:0; padding:clamp(160px,44vw,220px) 20px 20px;
+                background-position:64% 0; background-size:auto clamp(240px,62vw,320px); }
+            .ahero::before { background:linear-gradient(0deg,rgba(14,12,31,1) 0%,rgba(14,12,31,.95) 55%,rgba(14,12,31,.35) 76%,rgba(14,12,31,0) 92%); }
+            .ahero h1 { font-size:2.3rem; }
+        }
+        .s-box { margin-top:18px; }
+        #search { border-radius:14px; }
+
+        /* -- Encabezados de bloque sin numeral (ya no hay índice que contar) -- */
+        .grid-head { margin-top:34px; }
+        .grid-head:first-child { margin-top:18px; }
+        .gh-title { font-size:1.25rem; }
+
+        /* -- "Para tu nivel": la colección que le toca, marcada -- */
+        .col-card.mine { border-color:color-mix(in srgb,var(--gold) 70%,var(--border));
+            box-shadow:0 0 0 3px color-mix(in srgb,var(--gold) 14%,transparent); }
+        .cc-mine { position:absolute; top:12px; right:14px; z-index:3;
+            font-size:.63rem; font-weight:800; letter-spacing:.1em; text-transform:uppercase;
+            padding:5px 11px; border-radius:999px; color:var(--on-gold,#14122a); background:var(--gold);
+            box-shadow:0 2px 0 color-mix(in srgb,var(--gold) 60%,#000); }
+
+        /* -- "Más adelante": lo bloqueado, compacto y al final -- */
+        .gh-later .gh-title { color:var(--muted); }
+        .col-card.mini { flex-direction:row; align-items:center; min-height:0; }
+        .col-card.mini .cc-art { height:auto; align-self:stretch; width:86px; flex:0 0 86px; padding:0;
+            justify-content:center; border-bottom:0; border-right:1px solid var(--hair); }
+        .col-card.mini .cc-art .cc-name, .col-card.mini .cc-eq { display:none; }
+        .col-card.mini .cc-num { font-size:1.7rem; }
+        .col-card.mini .cc-num .fas { font-size:1.2rem; }
+        .col-card.mini .cc-lock { display:none; }
+        .col-card.mini .cc-body { padding:12px 16px; gap:4px; }
+        .col-card.mini .cc-body p { display:none; }
+        .col-card.mini .cc-foot { border-top:0; padding-top:0; }
+        .col-card.mini .mini-name { display:block; font-family:var(--va-font-display); font-weight:600;
+            font-size:1rem; color:var(--text); }
+        @media (min-width:601px) { .col-grid .col-card.mini { min-height:74px; } }
     </style>
 
 <!-- Preferencias del alumno (tamano de texto, alto contraste, menos
@@ -565,7 +642,7 @@
 </head>
 
 <body>
-<a class="va-skip-link" href="#main">Skip to content</a>
+<a class="va-skip-link" href="#main">Saltar al contenido</a>
 
 <!-- -- Sprite de iconos en linea ------------------------------------------
      Los iconos del chrome (flechas, lupa, candado, play...) salen de aqui, no
@@ -590,41 +667,35 @@
 <header>
     <a class="brand" href="materiales.html">
         <img src="assets/images/vesper_logo_inverted.png" alt="Vesper Academy" width="38" height="38">
-        <span><b>Vesper Academy</b><small>Audio Library</small></span>
+        <span><b>Vesper Academy</b><small>Biblioteca de audio</small></span>
     </a>
     <nav class="head-right" aria-label="Atajos">
-        <a href="whiteboard/" aria-label="Whiteboard"><svg class="i" aria-hidden="true"><use href="#i-board"/></svg><span>Whiteboard</span></a>
+        <a class="t-only" href="whiteboard/" aria-label="Pizarra"><svg class="i" aria-hidden="true"><use href="#i-board"/></svg><span>Pizarra</span></a>
         <a href="materiales.html" aria-label="Mi portal"><svg class="i" aria-hidden="true"><use href="#i-arrow-left"/></svg><span>Mi portal</span></a>
     </nav>
 </header>
 
 <main class="wrap" id="main">
 
-    <section class="mast">
-        <div class="mast-txt">
-            <span class="rule" aria-hidden="true"></span>
-            <span class="eyebrow">Core Practice &middot; Listening Series</span>
-            <h1>Audio Library</h1>
-            <p class="lead">Choose a level, then a lesson. Each one opens its own page with the
-                <b>audio</b>, the <b>full transcript</b> to read along, <b>practice activities</b>
-                marked instantly, an <b>interactive whiteboard</b> and a <b>visual vocabulary</b>.</p>
+    <!-- Lámina del alumno: el mundo del mapa que corresponde a su nivel (la
+         pinta el script del final), igual que en el portal. Sin cifras de
+         catálogo: al alumno le sirve su nivel y lo que ya practicó. -->
+    <section class="ahero" id="ahero">
+        <div class="ah-txt">
+            <span class="eyebrow">Escucha y practica</span>
+            <h1>Biblioteca de audio</h1>
+            <p class="lead">Elige una colección y luego una lección. Cada una trae el audio,
+                la transcripción para leer mientras escuchas y ejercicios que se califican al instante.</p>
         </div>
-        <div class="statrail" id="statrail">
-            <div class="st"><b id="stat-lessons">0</b><span>Lessons</span></div>
-            <div class="st"><b id="stat-collections">0</b><span>Collections</span></div>
-            <div class="st" id="st-practiced" hidden><b id="stat-practiced">0</b><span>Practiced</span></div>
-            <div class="st" id="st-level" hidden><b id="stat-level">&mdash;</b><span>Your level</span></div>
-        </div>
+        <div class="ah-chips" id="ah-chips"></div>
     </section>
-
-    <div class="wave" id="wave" aria-hidden="true"></div>
 
     <div class="s-box" id="s-box">
         <svg class="i s-ic" aria-hidden="true"><use href="#i-search"/></svg>
-        <input id="search" type="search" placeholder="Search every audio lesson&hellip;"
-               aria-label="Search audio lessons" autocomplete="off">
+        <input id="search" type="search" placeholder="Busca una lecci&oacute;n o un tema&hellip;"
+               aria-label="Buscar lecciones de audio" autocomplete="off">
         <kbd class="s-kbd">/</kbd>
-        <button class="s-clear" id="s-clear" type="button" aria-label="Clear search">
+        <button class="s-clear" id="s-clear" type="button" aria-label="Borrar b&uacute;squeda">
             <svg class="i" aria-hidden="true"><use href="#i-x"/></svg>
         </button>
     </div>
@@ -632,7 +703,7 @@
     <!-- Reanudar: lo pinta renderRecent() cuando hay historial. -->
     <div id="resume-host"></div>
 
-    <a class="toolcard" href="whiteboard/">
+    <a class="toolcard t-only" href="whiteboard/">
         <span class="tc-txt">
             <span class="tc-kick"><svg class="i" aria-hidden="true"><use href="#i-board"/></svg> Para dar clase</span>
             <h3>Pizarra Virtual</h3>
@@ -662,7 +733,7 @@
 
     <!-- VISTA: RESULTADOS DE BUSQUEDA -->
     <div class="view" id="view-search" style="display:none">
-        <div class="shead"><h2>Search</h2><div class="sh-line"></div></div>
+        <div class="shead"><h2>Resultados</h2><div class="sh-line"></div></div>
         <p class="result-count" id="search-count"></p>
         <div class="track-grid" id="search-results"></div>
     </div>
@@ -670,7 +741,7 @@
     <!-- VISTA: COLECCIONES -->
     <div class="view" id="view-levels">
         <section id="recent-section" style="display:none"></section>
-        <div class="shead"><h2>Explore the library</h2><div class="sh-line"></div></div>
+        <div class="shead"><h2>Colecciones</h2><div class="sh-line"></div></div>
         <div class="filters" id="filters" role="group" aria-label="Filtrar colecciones"></div>
         <div class="col-grid" id="col-grid"></div>
     </div>
@@ -679,11 +750,11 @@
     <div class="view" id="view-lessons" style="display:none">
         <div class="viewbar">
             <button class="btn-ghost" id="back" type="button">
-                <svg class="i" aria-hidden="true"><use href="#i-arrow-left"/></svg> All collections
+                <svg class="i" aria-hidden="true"><use href="#i-arrow-left"/></svg> Todas las colecciones
             </button>
             <a class="btn-gold" id="exam-btn" href="#"></a>
         </div>
-        <div class="shead"><h2 id="lessons-title">Lessons</h2><div class="sh-line"></div></div>
+        <div class="shead"><h2 id="lessons-title">Lecciones</h2><div class="sh-line"></div></div>
         <div class="track-grid" id="track-grid"></div>
     </div>
 
@@ -693,9 +764,9 @@
     <div class="foot-in">
         <a class="brand" href="materiales.html">
             <img src="assets/images/vesper_logo_inverted.png" alt="" width="34" height="34">
-            <span><b>Vesper Academy</b><small>Audio Library</small></span>
+            <span><b>Vesper Academy</b><small>Biblioteca de audio</small></span>
         </a>
-        <p>Core Practice &middot; <b>Levels 1&ndash;6</b></p>
+        <p>Escucha &middot; lee &middot; <b>practica</b></p>
         <a class="foot-back" href="materiales.html">
             <svg class="i" aria-hidden="true"><use href="#i-arrow-left"/></svg> Volver a mi portal
         </a>
@@ -715,12 +786,12 @@
     <script>
         const DATA = window.VESPER_DATA || {};
         const LEVEL_DESC = {
-            1:"Everyday English for absolute beginners — routines, hobbies, travel and first conversations.",
-            2:"Real-world communication — complaints, negotiation, interviews, media and culture.",
-            3:"Advanced discourse — debate, diplomacy, economics, science and global issues.",
-            4:"Creative writing & craft — storytelling, poetry, genre, criticism and the writer's voice.",
-            5:"Technology & the future — AI, robotics, space, cybersecurity and digital life.",
-            6:"Pop culture & society — virality, fandom, media, fashion and modern mythology."
+            1:"Inglés de todos los días — rutinas, pasatiempos, viajes y primeras conversaciones.",
+            2:"Comunicación real — quejas, negociación, entrevistas, medios y cultura.",
+            3:"Discurso avanzado — debate, diplomacia, economía, ciencia y temas globales.",
+            4:"Escritura creativa — narración, poesía, géneros, crítica y la voz del autor.",
+            5:"Tecnología y futuro — IA, robótica, espacio, ciberseguridad y vida digital.",
+            6:"Cultura pop y sociedad — viralidad, fandoms, medios, moda y mitos modernos."
         };
         const DIAG_TRACKS = [
             { k:1, title:"Diagnostic Track 1" },
@@ -852,16 +923,14 @@
         const STU = studentLevel();
         function isLocked(col) { const r = REQ[col]; return STU != null && r != null && r > STU; }
 
-        // El nivel del alumno vive en el riel de cifras del masthead. Las
-        // cifras que no aplican se BORRAN del DOM en vez de ocultarse: en
-        // pantalla estrecha el riel es una reticula y sus filetes se reparten
-        // con :nth-child, que cuenta tambien a los hijos con `hidden`.
-        if (STU != null) {
-            document.getElementById("stat-level").textContent = cefrLabel(STU);
-            document.getElementById("st-level").hidden = false;
-        } else {
-            document.getElementById("st-level").remove();
-        }
+        // Lamina del heroe: el mundo del mapa de su nivel (0..5 -> a1..c2),
+        // el mismo criterio que el portal del alumno.
+        (function () {
+            const W = ["a1", "a2", "b1", "b2", "c1", "c2"];
+            const w = W[Math.max(0, Math.min(5, STU == null ? 0 : Math.round(STU)))];
+            document.getElementById("ahero").style.setProperty("--hero-art",
+                'url("assets/images/map/il/banner_' + w + '.jpg")');
+        })();
 
         // Explain why a collection is locked and offer the placement test.
         function showLock(col) {
@@ -871,16 +940,16 @@
             if (!m) { m = document.createElement("div"); m.id = "lock-modal"; m.className = "lock-modal"; document.body.appendChild(m); }
             m.innerHTML =
                 '<div class="lock-box" role="dialog" aria-modal="true" aria-labelledby="lock-h">' +
-                    '<button class="lock-x" type="button" aria-label="Close">' + icon("i-x") + '</button>' +
+                    '<button class="lock-x" type="button" aria-label="Cerrar">' + icon("i-x") + '</button>' +
                     '<div class="lock-ico">' + icon("i-lock") + '</div>' +
-                    '<h2 id="lock-h">Locked for now</h2>' +
-                    '<p>This collection unlocks at level <b>' + need + '</b>.' +
-                        (yours ? ' Your level is <b>' + yours + '</b>.' : '') + '</p>' +
-                    '<p class="lock-sub">Keep progressing through your levels — or take the placement test ' +
-                        'if you think you should be placed higher.</p>' +
+                    '<h2 id="lock-h">Todav&iacute;a no</h2>' +
+                    '<p>Esta colecci&oacute;n se desbloquea en el nivel <b>' + need + '</b>.' +
+                        (yours ? ' Tu nivel es <b>' + yours + '</b>.' : '') + '</p>' +
+                    '<p class="lock-sub">Sigue avanzando en tus lecciones, o haz el examen de ubicaci&oacute;n ' +
+                        'si crees que te corresponde un nivel m&aacute;s alto.</p>' +
                     '<div class="lock-actions">' +
-                        '<a class="btn-gold" href="book_placement.html">' + icon("i-clipboard") + ' Placement test</a>' +
-                        '<button class="btn-ghost lock-dismiss" type="button">Got it</button>' +
+                        '<a class="btn-gold" href="book_placement.html">' + icon("i-clipboard") + ' Examen de ubicaci&oacute;n</a>' +
+                        '<button class="btn-ghost lock-dismiss" type="button">Entendido</button>' +
                     '</div>' +
                 '</div>';
             m.classList.add("open");
@@ -906,17 +975,17 @@
         Object.keys(DATA).forEach(n => {
             const lv = DATA[n];
             lv.lessons.forEach(les => push({ col:"level:"+n, group:`Level ${n} · ${lv.tag}`,
-                badge:`Level ${n}`, num:`Lesson ${les.n}`, title:les.title, icon:les.icon,
+                badge:`Level ${n}`, num:`Lección ${les.n}`, title:les.title, icon:les.icon,
                 seed:`L${n}-${les.n}`, href:`lesson.html?level=${n}&lesson=${les.n}`,
                 versions: les.model ? 2 : 0 }));
         });
         DIAG_TRACKS.forEach(t => push({ col:"diag", group:"Diagnostics · Placement", badge:"Placement",
-            num:`Track ${t.k}`, title:t.title, icon:t.k===1?"fa-stethoscope":"fa-wave-square",
+            num:`Pista ${t.k}`, title:t.title, icon:t.k===1?"fa-stethoscope":"fa-wave-square",
             seed:`DIAG-${t.k}`, href:`lesson.html?diag=${t.k}` }));
         Object.keys(BASICS).forEach(n => {
             const lv = BASICS[n];
             lv.lessons.forEach(les => push({ col:"basics:"+n, group:`Core Basics ${n} · ${lv.tag}`,
-                badge:`Basics ${n}`, num:`Lesson ${les.n}`, title:les.title,
+                badge:`Basics ${n}`, num:`Lección ${les.n}`, title:les.title,
                 icon:VesperCovers.iconFor(les.title, lv.icon), seed:`B${n}-${les.n}`,
                 href:`lesson.html?basics=${n}&lesson=${les.n}` }));
         });
@@ -941,7 +1010,7 @@
                 const q = new URLSearchParams({ audio:les.file, title:les.title, sub:bp.sub,
                     crumb:bp.crumb+" · Lesson "+les.n, icon:les.icon });
                 push({ col:"bizpath:"+lvl, group:`${bp.crumb} · ${bp.tag}`, badge:bp.crumb,
-                    num:`Lesson ${les.n}`, title:les.title, icon:les.icon, seed:les.file,
+                    num:`Lección ${les.n}`, title:les.title, icon:les.icon, seed:les.file,
                     href:`lesson.html?${q.toString()}` });
             });
         });
@@ -950,7 +1019,7 @@
             const q = new URLSearchParams({ audio:les.file, title:les.title, sub:POLITICAL.sub,
                 crumb:POLITICAL.crumb + " · Lesson " + les.n, icon:les.icon });
             push({ col:"political", group:`${POLITICAL.crumb} · ${POLITICAL.tag}`,
-                badge:POLITICAL.crumb, num:`Lesson ${les.n}`, title:les.title, icon:les.icon,
+                badge:POLITICAL.crumb, num:`Lección ${les.n}`, title:les.title, icon:les.icon,
                 seed:les.file, href:`lesson.html?${q.toString()}` });
         });
 
@@ -982,9 +1051,10 @@
         function renderCollectionCard(s) {
             const locked = isLocked(s.col);
             const prog = locked ? null : progressFor(s.col);
+            const mine = !locked && STU != null && REQ[s.col] === STU;
             const card = document.createElement("button");
             card.type = "button";
-            card.className = "col-card" + (locked ? " locked" : "");
+            card.className = "col-card" + (locked ? " locked" : "") + (mine ? " mine" : "");
             card.dataset.col = s.col;
             card.innerHTML =
                 '<div class="cc-art" style="' + bandStyle(s.band) + '">' +
@@ -993,15 +1063,16 @@
                     '<div class="cc-name"><b>' + s.name + '</b><small>' + s.sub + '</small></div>' +
                 '</div>' +
                 (locked ? '<span class="cc-lock">' + icon("i-lock") + ' ' + cefrLabel(REQ[s.col]) + '</span>' : '') +
+                (mine ? '<span class="cc-mine">Para tu nivel</span>' : '') +
                 '<div class="cc-body">' +
                     '<p>' + s.desc + '</p>' +
                     (prog ? '<div class="cc-prog">' +
                         '<div class="cc-meter"><i style="width:' +
                             Math.round(prog.done / prog.total * 100) + '%"></i></div>' +
-                        '<span>' + prog.done + ' of ' + prog.total + ' practiced</span></div>' : '') +
+                        '<span>' + prog.done + ' de ' + prog.total + ' practicadas</span></div>' : '') +
                     '<div class="cc-foot">' +
                         '<span class="cc-count">' + (locked
-                            ? 'Unlocks at ' + cefrLabel(REQ[s.col])
+                            ? 'Se desbloquea en ' + cefrLabel(REQ[s.col])
                             : s.count + ' ' + s.countLabel) + '</span>' +
                         (locked ? icon("i-lock") : '<span class="cc-go">' + icon("i-arrow") + '</span>') +
                     '</div>' +
@@ -1014,39 +1085,39 @@
         // ── Card specs, one factory per collection type ──
         const levelSpec = n => { const lv = DATA[n]; return {
             col:"level:"+n, band:BAND_LEVEL[(n - 1) % BAND_LEVEL.length], numHTML:n,
-            name:`Level ${n}`, sub:lv.tag, desc:LEVEL_DESC[n] || "",
-            count:lv.lessons.length, countLabel:"Lessons", onOpen:() => showLessons(n) }; };
+            name:`Nivel ${n}`, sub:lv.tag, desc:LEVEL_DESC[n] || "",
+            count:lv.lessons.length, countLabel:"lecciones", onOpen:() => showLessons(n) }; };
         const basicsSpec = n => { const lv = BASICS[n]; return {
             col:"basics:"+n, band:BAND_BASICS[(n - 1) % BAND_BASICS.length], numHTML:"B"+n,
             name:`Basics ${n}`, sub:lv.tag,
-            desc:`Core Basics ${lv.tag} — one short dialogue (~1 min) per lesson with Listen &amp; Answer questions.`,
-            count:lv.lessons.length, countLabel:"Tracks", onOpen:() => showBasics(n) }; };
+            desc:`Un diálogo corto (~1 min) por lección, con preguntas de escuchar y responder.`,
+            count:lv.lessons.length, countLabel:"pistas", onOpen:() => showBasics(n) }; };
         const bizPathSpec = lvl => { const bp = BIZ_PATH[lvl]; return {
             col:"bizpath:"+lvl, band:BAND_BIZ, numHTML:`<i class="fas ${bp.icon}"></i>`,
             name:`Business Path ${lvl === "b1" ? "I" : "III"}`, sub:bp.tag,
-            desc:`Audio models from ${bp.sub} — one native-voice model of the target skill per lesson, with transcript and vocabulary.`,
-            count:bp.lessons.length, countLabel:"Lessons", onOpen:() => showBizPath(lvl) }; };
+            desc:`Un modelo con voz nativa de la habilidad de cada lección, con transcripción y vocabulario.`,
+            count:bp.lessons.length, countLabel:"lecciones", onOpen:() => showBizPath(lvl) }; };
         const diagSpec = {
             col:"diag", band:BAND_DIAG, numHTML:'<i class="fas fa-stethoscope"></i>',
-            name:"Diagnostics", sub:"Placement",
-            desc:"Placement & diagnostic listening tracks used to find a student's starting level.",
-            count:DIAG_TRACKS.length, countLabel:"Tracks", onOpen:showDiag };
+            name:"Diagnóstico", sub:"Ubicación",
+            desc:"Pistas de diagnóstico para ubicar a un alumno nuevo (uso del profesor).",
+            count:DIAG_TRACKS.length, countLabel:"pistas", onOpen:showDiag };
         const certSpec = {
             col:"cert", band:BAND_CERT, numHTML:'<i class="fas fa-stopwatch"></i>',
-            name:"Certification", sub:"IELTS · Cambridge · TOEFL",
-            desc:"Timed listening drills from the Certification Prep course — real exam distractors included.",
-            count:CERT_TRACKS.length, countLabel:"Tracks", onOpen:showCert };
+            name:"Certificación", sub:"IELTS · Cambridge · TOEFL",
+            desc:"Prácticas de listening con tiempo, con distractores como los del examen real.",
+            count:CERT_TRACKS.length, countLabel:"pistas", onOpen:showCert };
         const businessSpec = {
             col:"business", band:BAND_BIZ, numHTML:'<i class="fas fa-briefcase"></i>',
             name:"Business English", sub:"Premium (B2)",
-            desc:"Listening resources from the Business English Premium course — pitches, calls, meetings, data, negotiation, feedback and more.",
-            count:BUSINESS_LESSONS.length, countLabel:"Lessons", onOpen:showBusiness };
+            desc:"Pitches, llamadas, juntas, datos, negociación y retroalimentación del curso Business English Premium.",
+            count:BUSINESS_LESSONS.length, countLabel:"lecciones", onOpen:showBusiness };
 
         const politicalSpec = POLITICAL ? {
             col:"political", band:BAND_POL, numHTML:'<i class="fas fa-landmark"></i>',
             name:"Political English", sub:POLITICAL.tag,
-            desc:"Briefings and press conferences from Political &amp; Global Affairs — four voices a track and nobody is ever named, so you have to follow who is speaking by ear.",
-            count:POLITICAL.lessons.length, countLabel:"Lessons", onOpen:showPolitical } : null;
+            desc:"Conferencias de prensa con cuatro voces y nadie dice su nombre: sigues quién habla sólo de oído.",
+            count:POLITICAL.lessons.length, countLabel:"lecciones", onOpen:showPolitical } : null;
 
         // Professional track ordered by unlock level (B1 → B2 → B2 → B2 → C1).
         // Array.sort is stable, so the three B2 collections keep the order
@@ -1059,32 +1130,59 @@
         // `chip` es el rotulo corto del filtro: el titulo largo de un bloque
         // ("Business, Politics & Exams") envuelve los chips a tres filas en el
         // movil y se come la reticula que venia a ordenar.
+        // `teacher`: el bloque solo lo ve el profesor (Diagnostico es material
+        // para ubicar a un alumno, no para que el alumno lo escuche).
         const GROUPS = [
-            { kicker:"Start here",              title:"Placement",        chip:"Placement",    specs:[diagSpec] },
-            { kicker:"Foundations · Pre-A1–A2", title:"Core Basics",      chip:"Basics",       specs:Object.keys(BASICS).map(basicsSpec) },
-            { kicker:"Core curriculum · A1–C1", title:"Main Levels",      chip:"Levels",       specs:Object.keys(DATA).map(levelSpec) },
-            { kicker:"Professional · B1–C1",    title:"Business, Politics & Exams", chip:"Professional", specs:proSpecs }
+            { kicker:"Para el profesor",          title:"Ubicación",   chip:"Ubicación",   specs:[diagSpec], teacher:true },
+            { kicker:"Fundamentos · Pre-A1–A2",   title:"Core Basics", chip:"Basics",      specs:Object.keys(BASICS).map(basicsSpec) },
+            { kicker:"Currículo principal · A1–C1", title:"Niveles",   chip:"Niveles",     specs:Object.keys(DATA).map(levelSpec) },
+            { kicker:"Profesional · B1–C1",       title:"Negocios, política y exámenes", chip:"Profesional", specs:proSpecs }
         ];
 
-        let gn = 0;
-        GROUPS.forEach((g, gi) => {
-            if (!g.specs.length) return;
-            gn++;
+        // Lo bloqueado no se mezcla con lo que el alumno ya puede abrir: va a
+        // un bloque final y compacto, "Más adelante", ordenado por nivel.
+        const lockedSpecs = [];
+        GROUPS.forEach(g => {
+            g.open = g.specs.filter(s => !isLocked(s.col));
+            g.specs.filter(s => isLocked(s.col)).forEach(s => lockedSpecs.push(s));
+        });
+        lockedSpecs.sort((a, b) => (REQ[a.col] || 0) - (REQ[b.col] || 0));
+
+        function groupHead(key, title, kicker, cls) {
             const head = document.createElement("div");
-            head.className = "grid-head";
-            head.dataset.group = gi;
-            head.innerHTML = '<span class="gh-num">' + String(gn).padStart(2, "0") + '</span>' +
-                '<span class="gh-title">' + g.title + '</span>' +
-                '<span class="gh-kicker">' + g.kicker + '</span>' +
+            head.className = "grid-head" + (cls ? " " + cls : "");
+            head.dataset.group = key;
+            head.innerHTML = '<span class="gh-title">' + title + '</span>' +
+                '<span class="gh-kicker">' + kicker + '</span>' +
                 '<span class="gh-line"></span>';
             colGrid.appendChild(head);
-            g.specs.forEach((s, i) => {
+        }
+        GROUPS.forEach((g, gi) => {
+            if (!g.open.length) return;
+            groupHead(gi, g.title, g.kicker, g.teacher ? "t-only" : "");
+            g.open.forEach((s, i) => {
                 const card = renderCollectionCard(s);
                 card.dataset.group = gi;
+                if (g.teacher) card.classList.add("t-only");
                 card.style.animationDelay = (i * 0.035).toFixed(3) + "s";
                 colGrid.appendChild(card);
             });
         });
+        if (lockedSpecs.length) {
+            groupHead("later", "Más adelante", "Se desbloquean al subir de nivel", "gh-later");
+            lockedSpecs.forEach(s => {
+                const card = renderCollectionCard(s);
+                card.dataset.group = "later";
+                card.classList.add("mini");
+                // En la ficha compacta la banda solo lleva el numeral: el
+                // nombre baja al cuerpo.
+                const nm = document.createElement("b");
+                nm.className = "mini-name";
+                nm.textContent = s.name;
+                card.querySelector(".cc-body").prepend(nm);
+                colGrid.appendChild(card);
+            });
+        }
 
         // ── FILTROS DE LA RETICULA ────────────────────────────────────
         // Ocultan bloques enteros; no reordenan nada, asi que la ruta de
@@ -1093,16 +1191,18 @@
         // real de tarjetas, no de una constante que se quede vieja.
         (function buildFilters() {
             const host = document.getElementById("filters");
-            const chips = [{ key:"all", label:"Todo", n:ITEMS.length }].concat(
+            // Las cifras cuentan solo lo que el alumno puede abrir.
+            const openN = g => g.open.reduce((t, s) => t + itemsFor(s.col).length, 0);
+            const chips = [{ key:"all", label:"Todo",
+                             n:GROUPS.reduce((t, g) => t + (g.teacher ? 0 : openN(g)), 0) }].concat(
                 GROUPS.map((g, gi) => ({
-                    key:String(gi), label:g.chip || g.title,
-                    n:g.specs.reduce((t, s) => t + itemsFor(s.col).length, 0)
+                    key:String(gi), label:g.chip || g.title, n:openN(g), teacher:g.teacher
                 })).filter(c => c.n)
             );
             chips.forEach((c, i) => {
                 const b = document.createElement("button");
                 b.type = "button";
-                b.className = i === 0 ? "on" : "";
+                b.className = (i === 0 ? "on" : "") + (c.teacher ? " t-only" : "");
                 b.dataset.key = c.key;
                 b.setAttribute("aria-pressed", i === 0 ? "true" : "false");
                 b.innerHTML = c.label + '<b>' + c.n + '</b>';
@@ -1121,27 +1221,15 @@
             });
         }
 
-        // ── Cifras del masthead ───────────────────────────────────────
-        document.getElementById("stat-lessons").textContent = ITEMS.length;
-        document.getElementById("stat-collections").textContent = colGrid.querySelectorAll(".col-card").length;
-        const doneAll = ITEMS.filter(it => scoreFor(it.seed)).length;
-        if (doneAll) {
-            document.getElementById("stat-practiced").textContent = doneAll;
-            document.getElementById("st-practiced").hidden = false;
-        } else {
-            document.getElementById("st-practiced").remove();
-        }
-
-        // Ecualizador del masthead: alturas deterministas, no aleatorias, para
-        // que la pagina se vea igual en cada carga.
+        // ── Distintivos del heroe: su nivel y lo que ya practico ──────────
         (function () {
+            const host = document.getElementById("ah-chips");
+            const doneAll = ITEMS.filter(it => scoreFor(it.seed)).length;
             let html = "";
-            for (let i = 0; i < 46; i++) {
-                const h = 16 + Math.abs(Math.sin(i * 0.62)) * 62 + Math.abs(Math.sin(i * 1.9)) * 18;
-                html += '<b style="height:' + Math.min(100, h).toFixed(1) + '%;animation-delay:' +
-                        (i * 0.07).toFixed(2) + 's"></b>';
-            }
-            document.getElementById("wave").innerHTML = html;
+            if (STU != null) html += '<span class="ah-chip">Tu nivel <b>' + cefrLabel(STU) + '</b></span>';
+            if (doneAll) html += '<span class="ah-chip">' + icon("i-check") + ' <b>' + doneAll + '</b> ' +
+                (doneAll === 1 ? 'practicada' : 'practicadas') + '</span>';
+            if (html) host.innerHTML = html; else host.remove();
         })();
 
         // ── SHARED CARD RENDERER ──────────────────────────────────────
@@ -1150,7 +1238,7 @@
             if (!s) return "";
             const ok = s.got / s.total >= 0.8;
             return '<span class="chip ' + (ok ? "chip-done" : "chip-part") +
-                '" title="Your best practice score">' + icon(ok ? "i-check" : "i-repeat") +
+                '" title="Tu mejor resultado">' + icon(ok ? "i-check" : "i-repeat") +
                 s.got + "/" + s.total + '</span>';
         }
         // "Dar clase": la MISMA leccion pero abierta en la pestana Whiteboard
@@ -1162,7 +1250,7 @@
         function cardHTML(it, i) {
             const locked = isLocked(it.col);
             const tags =
-                (it.versions ? '<span class="chip chip-ver">' + it.versions + ' versions</span>' : "") +
+                (it.versions ? '<span class="chip chip-ver">' + it.versions + ' versiones</span>' : "") +
                 (locked ? "" : practiceChip(it.seed));
             return '<a class="track' + (locked ? " locked" : "") + '" href="' + it.href +
                 '" data-href="' + it.href + '" data-col="' + it.col + '"' +
@@ -1173,7 +1261,7 @@
                     (locked
                         ? '<span class="tk-lock">' + icon("i-lock") + '</span>'
                         : '<span class="tk-play"><b>' + icon("i-play") + '</b></span>' +
-                          '<span class="tk-teach" data-teach="' + teachHref(it.href) + '" role="button" tabindex="0"' +
+                          '<span class="tk-teach t-only" data-teach="' + teachHref(it.href) + '" role="button" tabindex="0"' +
                           ' title="Dar clase: abre la lecci&oacute;n con la Pizarra">' + icon("i-board") + '</span>') +
                 '</div>' +
                 '<div class="tk-txt">' +
@@ -1237,14 +1325,14 @@
                 '<div class="resume">' +
                     '<div class="rs-art">' + VesperCovers.coverHTML(top.seed, top.icon, top.badge) + '</div>' +
                     '<div class="rs-txt">' +
-                        '<span class="rs-kick">' + icon("i-headphones") + ' Continue where you left off</span>' +
+                        '<span class="rs-kick">' + icon("i-headphones") + ' Sigue donde te quedaste</span>' +
                         '<h3>' + top.title + '</h3>' +
                         '<p class="rs-sub">' + top.group + ' &middot; ' + top.num + '</p>' +
                     '</div>' +
                     '<div class="rs-acts">' +
                         '<a class="btn-gold" href="' + top.href + '" data-href="' + top.href + '">' +
-                            icon("i-play") + ' Resume</a>' +
-                        '<a class="btn-ghost" href="' + teachHref(top.href) + '" target="_blank" rel="noopener"' +
+                            icon("i-play") + ' Continuar</a>' +
+                        '<a class="btn-ghost t-only" href="' + teachHref(top.href) + '" target="_blank" rel="noopener"' +
                             ' title="Abre esta lecci&oacute;n con la Pizarra Virtual">' +
                             icon("i-board") + ' Dar clase</a>' +
                     '</div>' +
@@ -1255,9 +1343,9 @@
             recentSection.style.display = "block";
             recentSection.innerHTML =
                 '<div class="shead">' +
-                    '<h2>Recently played</h2>' +
+                    '<h2>Escuchadas hace poco</h2>' +
                     '<div class="sh-line"></div>' +
-                    '<button class="sh-act" id="recent-clear" type="button">' + icon("i-x") + ' Clear</button>' +
+                    '<button class="sh-act" id="recent-clear" type="button">' + icon("i-x") + ' Borrar</button>' +
                 '</div>' +
                 '<div class="rail">' + rest.map(cardHTML).join("") + '</div>';
             document.getElementById("recent-clear").addEventListener("click", () => {
@@ -1286,12 +1374,12 @@
                 const hay = (it.title + " " + it.num + " " + it.group).toLowerCase();
                 return terms.every(t => hay.includes(t));
             });
-            setCrumbsLevel("Search");
-            searchCount.textContent = `${results.length} result${results.length === 1 ? "" : "s"} for “${raw}”`;
+            setCrumbsLevel("Búsqueda");
+            searchCount.textContent = `${results.length} resultado${results.length === 1 ? "" : "s"} para “${raw}”`;
             if (!results.length) {
                 searchResults.innerHTML =
                     '<div class="search-empty">' + icon("i-search") +
-                    '<b>No matches</b>Try a lesson title, a topic, or a level name.</div>';
+                    '<b>Sin resultados</b>Prueba con el t&iacute;tulo de una lecci&oacute;n, un tema o un nivel.</div>';
             } else {
                 renderCards(searchResults, results.slice(0, 60));
             }
@@ -1314,9 +1402,12 @@
         renderRecent();
 
         // ── VIEWS ─────────────────────────────────────────────────────
-        function setCrumbsHome(){ crumbs.innerHTML = '<b>Audio Library</b>'; }
+        // En la portada no hay miga: un rotulo suelto encima de "Colecciones"
+        // no lleva a ninguna parte.
+        function setCrumbsHome(){ crumbs.innerHTML = ''; crumbs.hidden = true; }
         function setCrumbsLevel(label){
-            crumbs.innerHTML = '<a id="c-home" role="button" tabindex="0">Audio Library</a>' +
+            crumbs.hidden = false;
+            crumbs.innerHTML = '<a id="c-home" role="button" tabindex="0">Biblioteca</a>' +
                 '<span class="sep">/</span><b>' + label + '</b>';
             const home = document.getElementById("c-home");
             home.addEventListener("click", showLevels);
@@ -1346,36 +1437,46 @@
 
         function showLessons(n) {
             const lv = DATA[n];
-            openCollection("level:"+n, `Level ${n} — ${lv.tag}`, `Level ${n} · ${lv.tag}`,
-                { href:`exam.html?level=${n}`, label:`Take the Level ${n} Exam` });
+            openCollection("level:"+n, `Nivel ${n} — ${lv.tag}`, `Nivel ${n} · ${lv.tag}`,
+                { href:`exam.html?level=${n}`, label:`Examen del Nivel ${n}` });
         }
         function showDiag() {
-            openCollection("diag", "Diagnostics — Placement", "Diagnostics", null);
+            openCollection("diag", "Diagnóstico — Ubicación", "Diagnóstico", null);
         }
         function showBasics(n) {
             const lv = BASICS[n];
             openCollection("basics:"+n, `Core Basics ${n} — ${lv.tag}`, `Basics ${n} · ${lv.tag}`,
-                { href:`exam.html?course=core_basics_lvl${n}`, label:`Take the Basics ${n} Exam` });
+                { href:`exam.html?course=core_basics_lvl${n}`, label:`Examen de Basics ${n}` });
         }
         function showCert() {
-            openCollection("cert", "Certification Prep — Listening Drills", "Certification",
-                { href:"exam.html?course=cert_prep", label:"Take the Certification Exam" });
+            openCollection("cert", "Certificación — Prácticas de listening", "Certificación",
+                { href:"exam.html?course=cert_prep", label:"Examen de Certificación" });
         }
         function showBusiness() {
             openCollection("business", "Business English — Premium (B2)", "Business English",
-                { href:"exam.html?course=corporate_b2", label:"Take the Business Exam" });
+                { href:"exam.html?course=corporate_b2", label:"Examen de Business English" });
         }
         function showPolitical() {
             openCollection("political", `Political & Global Affairs — ${POLITICAL.tag}`,
                 POLITICAL.crumb,
                 { href:`exam.html?course=${POLITICAL.course}`,
-                  label:"Take the Political English Exam" });
+                  label:"Examen de Political English" });
         }
         function showBizPath(lvl) {
             const bp = BIZ_PATH[lvl];
             const course = lvl === "b1" ? "corporate_b1" : "corporate_c1";
             openCollection("bizpath:"+lvl, `Business Path ${lvl === "b1" ? "I" : "III"} — ${bp.tag}`, bp.crumb,
-                { href:`exam.html?course=${course}`, label:"Take the Business Path Exam" });
+                { href:`exam.html?course=${course}`, label:"Examen de Business Path" });
+        }
+
+        // ── MODO PROFESOR ─────────────────────────────────────────────
+        // Pizarra, "Dar clase" y Diagnostico son herramientas del profesor:
+        // al alumno se le ocultan (.t-only). Solo "ok" las enciende; "offline"
+        // las deja ocultas, que es lo seguro para una pantalla de alumno.
+        if (window.VesperAuth && VesperAuth.teacherAccess) {
+            VesperAuth.teacherAccess().then(st => {
+                if (st === "ok") document.body.classList.add("is-teacher");
+            });
         }
     </script>
 <script>
