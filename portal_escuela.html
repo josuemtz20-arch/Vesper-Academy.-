@@ -471,34 +471,27 @@ footer a{color:var(--gold);text-decoration:none;}
       });
     }).then(function (r) { if (!r.ok) return fsErr(r, "Escribiendo " + col + "/" + id); });
   }
-  function listCol(col) {
-    var out = {};
-    function page(tk, pt) {
-      return fetch(base() + "/" + col + "?pageSize=300" + (pt ? "&pageToken=" + encodeURIComponent(pt) : ""),
-        { headers: { Authorization: "Bearer " + tk } })
-        .then(function (r) {
-          if (!r.ok) return fsErr(r, "Listando " + col);
-          return r.json().then(function (b) {
-            (b.documents || []).forEach(function (d) { out[idOf(d.name)] = decFields(d.fields); });
-            return b.nextPageToken ? page(tk, b.nextPageToken) : out;
-          });
-        });
-    }
-    return token().then(function (tk) { return page(tk, ""); });
-  }
+  /* Colección completa. OJO: en esta base listDocuments (GET .../col) da 403
+     aunque la regla permita leer; runQuery con el mismo token sí responde.
+     Por eso todo se lee con runQuery (igual que vesper_league_cloud.js). */
+  function listCol(col) { return query(col, []); }
   function query(col, filters) {
     var fl = filters.map(function (f) {
       return { fieldFilter: { field: { fieldPath: f[0] }, op: "EQUAL", value: enc(f[1]) } };
     });
-    var where = fl.length === 1 ? fl[0] : { compositeFilter: { op: "AND", filters: fl } };
+    var sq = { from: [{ collectionId: col }] };
+    if (fl.length) {
+      sq.where = fl.length === 1 ? fl[0] : { compositeFilter: { op: "AND", filters: fl } };
+      sq.limit = 1000;
+    }
     return token().then(function (tk) {
       return fetch(base() + ":runQuery", {
         method: "POST",
         headers: { Authorization: "Bearer " + tk, "Content-Type": "application/json" },
-        body: JSON.stringify({ structuredQuery: { from: [{ collectionId: col }], where: where, limit: 1000 } })
+        body: JSON.stringify({ structuredQuery: sq })
       });
     }).then(function (r) {
-      if (!r.ok) return fsErr(r, "Consultando " + col);
+      if (!r.ok) return fsErr(r, (fl.length ? "Consultando " : "Leyendo ") + col);
       return r.json().then(function (rows) {
         var out = {};
         rows.forEach(function (x) { if (x.document) out[idOf(x.document.name)] = decFields(x.document.fields); });
