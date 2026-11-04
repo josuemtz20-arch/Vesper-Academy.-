@@ -1482,11 +1482,12 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
 .worlds-sec__small{font-size:.72rem;color:var(--muted);font-weight:600}
 /* logros (2026-11): medallones por nivel — bronce, plata, oro y legendario
    (noche de Vesper con glifo dorado). --m1/--m2 = metal, --mb = canto,
-   --mi = tinta del glifo. */
-.t-bronze{--m1:#f3cfaa;--m2:#b8733a;--mb:#8c5527;--mi:#3a1f0c;--mt:#b8733a}
-.t-silver{--m1:#fbfcfd;--m2:#a9b2bb;--mb:#7d868f;--mi:#232a33;--mt:#8a949e}
-.t-gold{--m1:#f5e3ad;--m2:#c5a059;--mb:#a8843d;--mi:#2b2410;--mt:#c5a059}
-.t-legend{--m1:#6a5cc0;--m2:#1f1942;--mb:#c5a059;--mi:#f1d48a;--mt:#7a6cd0}
+   --mi = tinta del glifo, --mimg = la moneda pintada (Higgsfield, 2026-11-03:
+   aro de laurel con estrellas y campo liso donde se graba el glifo). */
+.t-bronze{--m1:#f3cfaa;--m2:#b8733a;--mb:#8c5527;--mi:#3a1f0c;--mt:#b8733a;--mimg:url(../images/achievements/medal_bronze.webp)}
+.t-silver{--m1:#fbfcfd;--m2:#a9b2bb;--mb:#7d868f;--mi:#232a33;--mt:#8a949e;--mimg:url(../images/achievements/medal_silver.webp)}
+.t-gold{--m1:#f5e3ad;--m2:#c5a059;--mb:#a8843d;--mi:#3b2c08;--mt:#c5a059;--mimg:url(../images/achievements/medal_gold.webp)}
+.t-legend{--m1:#6a5cc0;--m2:#1f1942;--mb:#c5a059;--mi:#f1d48a;--mt:#7a6cd0;--mimg:url(../images/achievements/medal_legend.webp)}
 /* vitrina del mapa */
 .logros{margin:18px 0 4px;border:1px solid var(--line);border-radius:16px;background:var(--paper);
   box-shadow:0 4px 16px rgba(27,27,47,.05);overflow:hidden;padding-bottom:4px}
@@ -1521,21 +1522,31 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
   background:none;border:0;padding:4px 2px;font:inherit;color:inherit;cursor:pointer;border-radius:12px;position:relative}
 .medal:focus-visible{outline:2px solid var(--gold);outline-offset:1px}
 .medal[hidden]{display:none}
+/* La moneda es la imagen pintada; el glifo SVG va «grabado» en su campo
+   liso (luz abajo, sombra arriba = hundido en el metal). Por ganar: la
+   misma moneda de su metal, en gris y apagada — se ve qué medalla será. */
 .medal__disc{width:56px;height:56px;border-radius:50%;display:grid;place-items:center;line-height:1;flex:0 0 auto;
-  background:var(--cream);border:2px dashed var(--line);position:relative;color:var(--muted)}
-.medal__disc svg{width:29px;height:29px}
-.medal:not(.on) .medal__disc svg{opacity:.42}
-.medal.is-secret .medal__disc svg{opacity:.7}
-.on .medal__disc,.medal.on .medal__disc{color:var(--mi);background:radial-gradient(circle at 50% 30%,var(--m1),var(--m2));
-  border:2px solid var(--mb);box-shadow:0 5px 13px rgba(27,27,47,.16),inset 0 1px 2px rgba(255,255,255,.5)}
-.medal.on .medal__disc::after{content:"";position:absolute;inset:-5px;border-radius:50%;border:1px solid var(--mb);opacity:.35}
-.medal.on.t-legend .medal__disc{box-shadow:0 0 0 2px rgba(197,160,89,.35),0 6px 18px rgba(74,60,160,.45),inset 0 1px 3px rgba(255,255,255,.25);
-  animation:medal-legend 3.6s ease-in-out infinite}
-@keyframes medal-legend{0%,100%{box-shadow:0 0 0 2px rgba(197,160,89,.35),0 6px 18px rgba(74,60,160,.45),inset 0 1px 3px rgba(255,255,255,.25)}
-  50%{box-shadow:0 0 0 3px rgba(197,160,89,.6),0 6px 22px rgba(120,100,220,.6),inset 0 1px 3px rgba(255,255,255,.35)}}
-.medal.on.t-gold .medal__disc{animation:medal-shine 4.5s ease-in-out infinite}
-@keyframes medal-shine{0%,100%{box-shadow:0 5px 13px rgba(27,27,47,.16),inset 0 1px 2px rgba(255,255,255,.55)}
-  50%{box-shadow:0 6px 16px rgba(27,27,47,.16),0 0 12px rgba(197,160,89,.55),inset 0 1px 3px rgba(255,255,255,.75)}}
+  background:var(--mimg,var(--cream)) center/cover no-repeat;position:relative;color:#2a2733;
+  filter:grayscale(1) brightness(.8) contrast(.9);opacity:.36}
+.medal__disc svg{width:29px;height:29px;position:relative;z-index:1}
+.medal:not(.on) .medal__disc svg{opacity:.75}
+.medal.is-secret .medal__disc{opacity:.5}
+/* la legendaria apagada: su campo de noche en gris quedaba como un agujero */
+.medal:not(.on).t-legend .medal__disc{filter:grayscale(1) brightness(1.35) contrast(.8);color:#ece8f4}
+.on .medal__disc,.medal.on .medal__disc{color:var(--mi);filter:none;opacity:1;overflow:hidden;
+  box-shadow:0 4px 11px rgba(15,12,30,.32)}
+.medal.on .medal__disc svg{filter:drop-shadow(0 1px 0 rgba(255,255,255,.55)) drop-shadow(0 -.6px 0 rgba(0,0,0,.4))}
+.medal.on.t-legend .medal__disc svg{filter:drop-shadow(0 0 3px rgba(241,212,138,.75)) drop-shadow(0 1px 0 rgba(0,0,0,.5))}
+/* destello: una franja de luz cruza la moneda de vez en cuando */
+.medal.on .medal__disc::after{content:"";position:absolute;inset:0;border-radius:50%;z-index:2;pointer-events:none;
+  background:linear-gradient(115deg,transparent 38%,rgba(255,255,255,.6) 50%,transparent 62%) no-repeat;
+  background-size:300% 100%;background-position:120% 0;animation:medal-glint 7s ease-in-out infinite}
+.medal.on:nth-child(3n) .medal__disc::after{animation-delay:2.3s}
+.medal.on:nth-child(3n+1) .medal__disc::after{animation-delay:4.6s}
+@keyframes medal-glint{0%,72%{background-position:120% 0}86%,100%{background-position:-20% 0}}
+.medal.on.t-legend .medal__disc{animation:medal-legend 3.6s ease-in-out infinite}
+@keyframes medal-legend{0%,100%{box-shadow:0 4px 11px rgba(15,12,30,.32),0 0 0 rgba(122,108,208,0)}
+  50%{box-shadow:0 4px 11px rgba(15,12,30,.32),0 0 16px rgba(122,108,208,.75)}}
 .medal__nm{font-size:.72rem;font-weight:700;line-height:1.18;color:var(--ink);max-width:100%;overflow-wrap:break-word;hyphens:auto}
 .medal:not(.on) .medal__nm{color:var(--muted);font-weight:600}
 .medal__prog{display:block;width:70%;height:4px;border-radius:999px;background:var(--line);overflow:hidden}
@@ -1573,7 +1584,7 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
 .ach-tc{display:inline-flex;align-items:center;gap:5px;font-size:.78rem;font-weight:800;background:rgba(245,242,235,.08);
   border:1px solid rgba(245,242,235,.16);border-radius:999px;padding:3px 9px 3px 5px}
 .ach-tc span{font-weight:500;opacity:.8}
-.ach-tc i{width:14px;height:14px;border-radius:50%;background:radial-gradient(circle at 50% 30%,var(--m1),var(--m2));border:1px solid var(--mb)}
+.ach-tc i{width:16px;height:16px;border-radius:50%;background:var(--mimg) center/cover no-repeat}
 .ach-filter{margin:0 0 6px}
 .ach-cat{margin:14px 0 4px}
 .ach-cat[hidden]{display:none}
@@ -1607,9 +1618,54 @@ body.has-chat-nudge .wrap{padding-bottom:96px}
 .ach-sheet__prog{display:flex;align-items:center;gap:10px;max-width:280px;margin:0 auto}
 .ach-sheet__bar{flex:1;height:9px;border-radius:999px;background:var(--line);overflow:hidden}
 .ach-sheet__bar i{display:block;height:100%;border-radius:999px;background:var(--mt)}
-@media(prefers-reduced-motion:reduce){.medal.on .medal__disc,.medal.is-new .medal__disc{animation:none!important}
-  .ach-sheet__card,.ach-sheet__back,.ach-ring__fg{transition:none}}
-.vesper-reduce-motion .medal.on .medal__disc,.vesper-reduce-motion .medal.is-new .medal__disc{animation:none!important}
+/* Ceremonia de logro (2026-11-03): al ganar un medallón ya no basta un toast.
+   La moneda entra girando sobre su canto, se asienta con un rebote, una
+   corona de rayos del color de su metal gira detrás y saltan destellos.
+   Siempre de noche (es el cielo de Vesper), sea cual sea el tema. */
+.ach-reveal{position:fixed;inset:0;z-index:10002;display:flex;align-items:center;justify-content:center;padding:20px;
+  background:radial-gradient(circle at 50% 38%,rgba(58,46,120,.94),rgba(10,8,24,.97) 70%);color:#f5f2eb;
+  opacity:0;transition:opacity .28s ease}
+.ach-reveal.open{opacity:1}
+.ach-reveal__stage{position:relative;width:100%;max-width:360px;text-align:center}
+.ach-reveal__coin{position:relative;width:176px;height:176px;margin:0 auto 18px;perspective:700px}
+.ach-reveal__rays{position:absolute;left:50%;top:50%;width:440px;height:440px;margin:-220px 0 0 -220px;border-radius:50%;pointer-events:none;
+  background:repeating-conic-gradient(from 0deg,color-mix(in srgb,var(--m1) 34%,transparent) 0deg 7deg,transparent 7deg 18deg);
+  -webkit-mask:radial-gradient(circle,#000 18%,transparent 66%);mask:radial-gradient(circle,#000 18%,transparent 66%);
+  animation:ach-rays 22s linear infinite;opacity:0;transition:opacity .6s ease .35s}
+.ach-reveal.open .ach-reveal__rays{opacity:1}
+.ach-reveal__halo{position:absolute;inset:-26px;border-radius:50%;pointer-events:none;
+  background:radial-gradient(circle,color-mix(in srgb,var(--m1) 55%,transparent),transparent 68%)}
+@keyframes ach-rays{to{transform:rotate(360deg)}}
+.ach-reveal .medal{padding:0;cursor:default}
+.ach-reveal .medal__disc{width:176px;height:176px;box-shadow:0 14px 34px rgba(0,0,0,.5)}
+.ach-reveal .medal__disc svg{width:88px;height:88px}
+.ach-reveal .medal.on .medal__disc{animation:ach-coin-in 1.05s cubic-bezier(.2,.8,.25,1) both}
+.ach-reveal .medal.on .medal__disc::after{animation:medal-glint 3.2s ease-in-out 1s infinite}
+@keyframes ach-coin-in{0%{transform:translateY(-40px) scale(.25) rotateY(720deg);opacity:0}
+  55%{opacity:1}75%{transform:scale(1.1) rotateY(0)}88%{transform:scale(.97)}100%{transform:none}}
+.ach-reveal__sp{position:absolute;width:var(--s,14px);height:var(--s,14px);left:var(--x);top:var(--y);pointer-events:none;
+  background:#fff6d8;clip-path:polygon(50% 0,62% 38%,100% 50%,62% 62%,50% 100%,38% 62%,0 50%,38% 38%);
+  filter:drop-shadow(0 0 4px rgba(255,236,170,.9));opacity:0;animation:ach-twinkle 2.4s ease-in-out var(--d,0s) infinite}
+@keyframes ach-twinkle{0%,100%{opacity:0;transform:scale(.3) rotate(0)}40%{opacity:1;transform:scale(1) rotate(45deg)}70%{opacity:.2;transform:scale(.6) rotate(90deg)}}
+.ach-reveal__k,.ach-reveal__nm,.ach-reveal__desc,.ach-reveal__acts{animation:ach-rise .5s ease both}
+.ach-reveal__k{display:inline-block;margin:0;font:800 .72rem/1 Inter,system-ui,sans-serif;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--mi);background:linear-gradient(180deg,var(--m1),var(--m2));border:1px solid var(--mb);border-radius:999px;
+  padding:6px 14px;animation-delay:.55s;box-shadow:0 2px 8px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.45)}
+.ach-reveal.t-legend .ach-reveal__k{color:#f1d48a;box-shadow:0 2px 8px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.2)}
+.ach-reveal__nm{margin:12px 0 6px;font:700 1.85rem/1.12 "Inria Serif",Georgia,serif;color:#fff;animation-delay:.68s}
+.ach-reveal__desc{margin:0 auto 22px;max-width:300px;color:rgba(245,242,235,.78);line-height:1.4;animation-delay:.8s}
+.ach-reveal__acts{display:grid;gap:8px;animation-delay:.92s}
+.ach-reveal__acts .btn{margin:0}
+.ach-reveal__more{color:#f1d48a;font-weight:700;text-decoration:none;padding:8px}
+.ach-reveal__more:hover{text-decoration:underline}
+.ach-reveal__n{position:absolute;top:-6px;right:0;font:700 .78rem/1 Inter,system-ui,sans-serif;color:rgba(245,242,235,.6)}
+@keyframes ach-rise{0%{opacity:0;transform:translateY(10px)}100%{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.medal.on .medal__disc,.medal.is-new .medal__disc,.medal.on .medal__disc::after,
+  .ach-reveal__rays,.ach-reveal__sp,.ach-reveal__k,.ach-reveal__nm,.ach-reveal__desc,.ach-reveal__acts{animation:none!important}
+  .ach-sheet__card,.ach-sheet__back,.ach-ring__fg,.ach-reveal{transition:none}}
+.vesper-reduce-motion .medal.on .medal__disc,.vesper-reduce-motion .medal.is-new .medal__disc,.vesper-reduce-motion .medal.on .medal__disc::after,
+.vesper-reduce-motion .ach-reveal__rays,.vesper-reduce-motion .ach-reveal__sp,.vesper-reduce-motion .ach-reveal__k,
+.vesper-reduce-motion .ach-reveal__nm,.vesper-reduce-motion .ach-reveal__desc,.vesper-reduce-motion .ach-reveal__acts{animation:none!important}
 /* Boton flotante "Instalar app" (PWA / descarga como app). Oculto hasta que el navegador ofrece la instalacion */
 #install-btn{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom));z-index:60;
   display:none;align-items:center;gap:8px;background:var(--gold);color:var(--ink);border:none;border-radius:999px;

@@ -2782,6 +2782,55 @@
         + '<span class="ab-tx"><b>Logro ' + (TIER_NAME[a.tier] || "").toLowerCase() + ' desbloqueado</b><span>' + esc(a.name) + '</span></span></div>';
     }).join("") + '<a class="cos-cta" href="leccion.html?id=logros">Ver mis logros &rarr;</a></div>';
   }
+  /* Ceremonia de logro: pantalla completa, una medalla a la vez (máximo 3;
+     si hay más, la última ofrece verlos todos — un alumno que vuelve puede
+     traer diez retroactivos de golpe y no queremos diez ceremonias). */
+  var MEDAL_KICKER = { bronze: "Medalla de bronce", silver: "Medalla de plata", gold: "Medalla de oro", legend: "Medalla legendaria" };
+  var REVEAL_SPARKS = [[8, 14, 16, 0], [86, 10, 12, .5], [94, 52, 10, 1.1], [4, 60, 11, 1.6], [70, 88, 14, .8], [22, 92, 9, 1.9], [50, -4, 10, 1.3]];
+  function achReveal(ids) {
+    if (!ids || !ids.length || byId("achReveal")) return;
+    var byId2 = {};
+    achList().forEach(function (a) { byId2[a.id] = a; });
+    var queue = ids.slice(0, 3), extra = ids.length - queue.length, i = 0;
+    var el = document.createElement("div");
+    el.id = "achReveal";
+    el.setAttribute("role", "dialog"); el.setAttribute("aria-modal", "true"); el.setAttribute("aria-labelledby", "achRevealT");
+    var prevFocus = document.activeElement;
+    function close() {
+      document.removeEventListener("keydown", onKey);
+      el.classList.remove("open");
+      setTimeout(function () { if (el.parentNode) el.parentNode.removeChild(el); }, 280);
+      if (prevFocus && prevFocus.focus) try { prevFocus.focus(); } catch (e) {}
+    }
+    function onKey(e) { if (e.key === "Escape") close(); }
+    function paint() {
+      var a = byId2[queue[i]] || { id: queue[i], tier: "gold", name: queue[i], desc: "" };
+      var last = i === queue.length - 1;
+      el.className = "ach-reveal open t-" + a.tier;
+      el.innerHTML = '<div class="ach-reveal__stage">'
+        + (queue.length > 1 ? '<span class="ach-reveal__n">' + (i + 1) + ' de ' + queue.length + '</span>' : '')
+        + '<div class="ach-reveal__coin"><span class="ach-reveal__rays" aria-hidden="true"></span><span class="ach-reveal__halo" aria-hidden="true"></span>'
+        + '<div class="medal on t-' + a.tier + '">' + achDisc(a) + '</div>'
+        + REVEAL_SPARKS.map(function (s) { return '<i class="ach-reveal__sp" aria-hidden="true" style="--x:' + s[0] + '%;--y:' + s[1] + '%;--s:' + s[2] + 'px;--d:' + s[3] + 's"></i>'; }).join("")
+        + '</div>'
+        + '<p class="ach-reveal__k">' + esc(MEDAL_KICKER[a.tier] || "Logro") + '</p>'
+        + '<h2 class="ach-reveal__nm" id="achRevealT">' + esc(a.name) + '</h2>'
+        + '<p class="ach-reveal__desc">' + esc(a.desc || "") + '</p>'
+        + '<div class="ach-reveal__acts">'
+        + '<button type="button" class="btn btn-gold" data-rv="next">' + (last ? "¡Genial!" : "Siguiente medalla") + '</button>'
+        + (last ? '<a class="ach-reveal__more" href="leccion.html?id=logros">' + (extra > 0 ? "Ver " + extra + " logro" + (extra === 1 ? "" : "s") + " más" : "Ver mis logros") + ' &rarr;</a>' : '')
+        + '</div></div>';
+      var b = el.querySelector('[data-rv="next"]');
+      b.onclick = function () { if (last) close(); else { i++; paint(); sfx("achievement"); } };
+      try { b.focus({ preventScroll: true }); } catch (e) { b.focus(); }
+      announce((MEDAL_KICKER[a.tier] || "Logro") + ": " + a.name);
+    }
+    document.body.appendChild(el);
+    document.addEventListener("keydown", onKey);
+    el.className = "ach-reveal t-gold";
+    void el.offsetWidth;                            /* fija opacity:0 para que el fundido corra */
+    requestAnimationFrame(function () { paint(); });
+  }
 
   /* Pantalla completa de logros. */
   function renderAchievements() {
@@ -3127,11 +3176,14 @@
     bindAchMedals(document.querySelector(".logros"));
     if (freshAch.length) {
       sfx("achievement");
-      /* otro aviso (p.ej. cosmético nuevo) puede estar en pantalla: espera su turno */
-      var achMsg = freshAch.length === 1 ? "¡Nuevo logro desbloqueado!" : "¡" + freshAch.length + " logros nuevos desbloqueados!";
+      /* ceremonia de medalla (antes era sólo un toast de texto). Si en esta
+         visita arranca el paseo guiado, no le pisamos el escenario: basta el
+         aviso corto y el «Nuevo» de la vitrina. */
+      var tourPending = _indexFirst && !tourSeen() && !prefersNoTour();
       setTimeout(function () {
-        var t = byId("toast");
-        if (t && t.classList.contains("show")) setTimeout(function () { toast(achMsg); }, 2000); else toast(achMsg);
+        if (tourPending || (window.VESPER_TOUR && VESPER_TOUR.active && VESPER_TOUR.active())) {
+          toast(freshAch.length === 1 ? "¡Nuevo logro desbloqueado!" : "¡" + freshAch.length + " logros nuevos desbloqueados!");
+        } else achReveal(freshAch);
       }, 400);
     }
     if (_indexFirst) track("hub_view", { level: selLevel });
@@ -4653,6 +4705,7 @@
     var nx = byId("nextL"); if (nx) nx.onclick = function () { location.search = "?id=" + encodeURIComponent(lesson.nextLessonId); };
     var ml = byId("moreL"); if (ml) ml.onclick = function () { location.search = ""; };
     var ml2 = byId("moreL2"); if (ml2) ml2.onclick = function () { location.search = ""; };
+    if (ach.length) setTimeout(function () { achReveal(ach); }, 650);
   }
 
   /* ---------- ADAPTIVE START (warm-up + personalizacion) ---------- */
@@ -4820,6 +4873,7 @@
       + '<button class="btn btn-ghost" id="backHome">Volver al inicio</button></div></div>');
     byId("forjaAgain").onclick = function () { forjaRound(false); };
     byId("backHome").onclick = function () { location.search = ""; };
+    if (forjaAch.length) setTimeout(function () { achReveal(forjaAch); }, 650);
   }
 
   /* ---------- BOSS ("Guardián del mundo"): examen mixto de TODAS las destrezas ---------- */
