@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<!-- CSP: generada por _scripts/apply_csp.py (edita alli, no aqui) -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://apis.google.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://cdn.tailwindcss.com https://challenges.cloudflare.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://maxcdn.bootstrapcdn.com; font-src 'self' data: https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: blob: https:; media-src 'self' data: blob:; connect-src 'self' https://firestore.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://vesper-academy.firebaseapp.com https://patient-feather-4364.josuemtz20.workers.dev https://formsubmit.co https://challenges.cloudflare.com https://www.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com; frame-src 'self' https://vesper-academy.firebaseapp.com https://www.youtube.com https://www.youtube-nocookie.com https://challenges.cloudflare.com; worker-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self' https://formsubmit.co; upgrade-insecure-requests">
+<script src="vesper_auth.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Escuela | Vesper Academy</title>
+<meta name="description" content="Grupos, ciclos e inscripciones de alumnos. Acceso restringido a dirección y coordinación.">
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="assets/images/vesper_logo.png" type="image/png">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inria+Serif:ital,wght@0,400;0,700&family=Inter:wght@300;400;500;600;700;800&display=swap');
+*,*::before,*::after{box-sizing:border-box;}
+:root{--navy:#1B1B2F;--navy2:#2c2c4a;--gold:#c5a059;--gold2:#a8843d;--cream:#f5f2eb;--border:#e4e0d8;--muted:#6b7a8d;--err:#b03a3a;--ok:#2d7a4f;--accent:#8a2f3b;--soft:#faf7f0;}
+body{margin:0;font-family:'Inter',sans-serif;background:var(--cream);color:var(--navy);min-height:100vh;}
+header{background:var(--navy);border-bottom:3px solid var(--gold);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:14px;position:sticky;top:0;z-index:50;}
+.brand{display:flex;align-items:center;gap:12px;color:#fff;text-decoration:none;}
+.brand img{height:42px;width:42px;object-fit:contain;}
+.brand b{font-family:'Inria Serif',serif;font-size:1.1rem;}
+.brand small{display:block;color:var(--gold);font-size:.6rem;letter-spacing:2px;text-transform:uppercase;}
+header .right{display:flex;align-items:center;gap:18px;}
+header a.back{color:rgba(255,255,255,.75);font-size:.78rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;text-decoration:none;}
+header a.back:hover{color:var(--gold);}
+@media(max-width:640px){
+  header{padding:10px 14px;gap:10px;}
+  .brand img{height:34px;width:34px;}
+  .brand b{font-size:.98rem;}
+  .brand small{font-size:.55rem;letter-spacing:1.5px;}
+  header .right{gap:7px;}
+  header a.back{font-size:0;padding:10px 12px;border:1px solid rgba(255,255,255,.2);border-radius:10px;display:inline-flex;align-items:center;justify-content:center;}
+  header a.back i{font-size:1rem;margin:0;}
+}
+.wrap{max-width:1180px;margin:0 auto;padding:28px 16px 70px;}
+.intro h1{font-family:'Inria Serif',serif;font-size:1.8rem;margin:0 0 6px;}
+.intro p{color:var(--muted);max-width:760px;margin:0;font-size:.92rem;line-height:1.55;}
+
+.notice{background:#fbf3df;border:1px solid #e7d8a8;border-left:4px solid var(--gold2);border-radius:8px;padding:14px 16px;margin:18px 0;font-size:.88rem;color:#5a4d2e;line-height:1.55;}
+.notice.bad{background:#f7e7e7;border-color:#e2bcbc;border-left-color:var(--err);color:#6a2a2a;}
+.notice i{margin-right:6px;}
+.notice button{margin-top:8px;}
+
+/* barra de ciclo */
+.cyclebar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;background:#fff;border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin:20px 0 14px;box-shadow:0 1px 4px rgba(0,0,0,.05);}
+.cyclebar label{font-size:.7rem;letter-spacing:1px;text-transform:uppercase;color:var(--muted);font-weight:700;}
+.cyclebar .dates{font-size:.84rem;color:var(--muted);}
+.cyclebar .spacer{flex:1;}
+select,input,textarea{padding:9px 11px;border:1px solid var(--border);border-radius:8px;font:inherit;font-size:.86rem;background:#fff;color:var(--navy);}
+select:focus,input:focus{border-color:var(--gold);outline:none;}
+.btn{display:inline-flex;align-items:center;gap:7px;padding:9px 14px;border:1px solid var(--border);background:#fff;border-radius:8px;font:inherit;font-size:.83rem;font-weight:600;cursor:pointer;color:var(--navy);text-decoration:none;}
+.btn:hover{border-color:var(--gold);}
+.btn.primary{background:var(--navy);border-color:var(--navy);color:#fff;}
+.btn.primary:hover{background:var(--navy2);}
+.btn.gold{background:var(--gold);border-color:var(--gold);color:var(--navy);}
+.btn.small{padding:5px 9px;font-size:.74rem;}
+.btn.danger{color:var(--err);}
+.btn[disabled]{opacity:.5;cursor:default;}
+
+.chip{display:inline-block;font-size:.66rem;font-weight:700;letter-spacing:.6px;text-transform:uppercase;padding:3px 8px;border-radius:999px;border:1px solid var(--border);background:#fff;color:var(--muted);white-space:nowrap;}
+.chip.active{background:#e7f4ec;border-color:#cfe9da;color:var(--ok);}
+.chip.planned{background:#e6f0fb;border-color:#cbe0f6;color:#1e5fa8;}
+.chip.closed{background:#f1efea;color:#7d7769;}
+.chip.warn{background:#fbf3df;border-color:#e7d8a8;color:#8a6a1f;}
+
+/* pestañas */
+.tabs{display:flex;gap:4px;border-bottom:2px solid var(--border);margin:6px 0 18px;overflow-x:auto;}
+.tabs button{background:none;border:none;border-bottom:3px solid transparent;margin-bottom:-2px;padding:10px 14px;font:inherit;font-weight:700;font-size:.85rem;color:var(--muted);cursor:pointer;white-space:nowrap;}
+.tabs button.on{color:var(--navy);border-bottom-color:var(--gold);}
+.tabs .ct{font-weight:600;color:var(--muted);margin-left:4px;}
+.pane{display:none;}
+.pane.on{display:block;}
+.panehead{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:14px;}
+.panehead .spacer{flex:1;}
+.panehead input[type=search]{min-width:200px;flex:1;max-width:340px;}
+
+/* tarjetas de grupo */
+.groups{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:14px;}
+.gcard{background:#fff;border:1px solid var(--border);border-top:4px solid var(--gold);border-radius:12px;box-shadow:0 1px 4px rgba(0,0,0,.06);display:flex;flex-direction:column;}
+.gcard.closed{border-top-color:#cfcabd;opacity:.85;}
+.gcard .gh{padding:14px 16px 10px;}
+.gcard h3{margin:0 0 3px;font-family:'Inria Serif',serif;font-size:1.12rem;line-height:1.25;}
+.gcard .gid{font-size:.7rem;color:var(--muted);font-family:ui-monospace,Consolas,monospace;}
+.gcard .meta{display:flex;flex-direction:column;gap:4px;margin-top:9px;font-size:.82rem;color:#3d4357;}
+.gcard .meta i{width:16px;color:var(--gold2);margin-right:4px;}
+.gcard .meta a{color:#1e5fa8;word-break:break-all;}
+.cap{margin-top:10px;}
+.cap .bar{height:7px;border-radius:99px;background:#eee9de;overflow:hidden;}
+.cap .bar span{display:block;height:100%;background:var(--ok);}
+.cap .bar span.full{background:var(--err);}
+.cap small{font-size:.74rem;color:var(--muted);}
+.roster{list-style:none;margin:0;padding:6px 8px;border-top:1px solid #f0ece3;flex:1;}
+.roster li{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:8px;font-size:.84rem;}
+.roster li:hover{background:var(--soft);}
+.roster li .nm{flex:1;min-width:0;}
+.roster li .nm b{font-weight:600;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.roster li .nm small{color:var(--muted);font-size:.7rem;}
+.roster li.empty{color:var(--muted);font-style:italic;}
+.roster select{padding:4px 6px;font-size:.74rem;max-width:130px;}
+.gcard .gf{display:flex;gap:8px;padding:10px 12px 12px;border-top:1px solid #f0ece3;flex-wrap:wrap;}
+.empty-state{background:#fff;border:1px dashed #d8d1c2;border-radius:12px;padding:30px 20px;text-align:center;color:var(--muted);font-size:.9rem;}
+
+/* tablas */
+.tablecard{background:#fff;border:1px solid var(--border);border-radius:12px;box-shadow:0 1px 4px rgba(0,0,0,.06);overflow-x:auto;}
+table{width:100%;border-collapse:collapse;font-size:.85rem;}
+thead th{text-align:left;background:#f3eee2;font-size:.68rem;letter-spacing:.8px;text-transform:uppercase;padding:10px 12px;border-bottom:1px solid var(--border);white-space:nowrap;}
+tbody td{padding:10px 12px;border-bottom:1px solid #f0ece3;vertical-align:middle;}
+tbody tr:hover{background:var(--soft);}
+td .sub{display:block;color:var(--muted);font-size:.72rem;}
+td.act{text-align:right;white-space:nowrap;}
+tr.hist td{background:#fbf9f4;font-size:.8rem;}
+@media(max-width:700px){.hide-sm{display:none;}}
+
+/* diálogos */
+dialog{border:none;border-radius:14px;padding:0;max-width:560px;width:calc(100% - 32px);box-shadow:0 20px 60px rgba(0,0,0,.3);color:var(--navy);}
+dialog::backdrop{background:rgba(27,27,47,.55);}
+dialog form{padding:20px 22px;}
+dialog h2{font-family:'Inria Serif',serif;margin:0 0 4px;font-size:1.35rem;}
+dialog .lead{color:var(--muted);font-size:.84rem;margin:0 0 14px;line-height:1.5;}
+.field{display:flex;flex-direction:column;gap:5px;margin-bottom:12px;}
+.field > span{font-size:.72rem;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);}
+.field small{color:var(--muted);font-size:.74rem;line-height:1.4;}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+@media(max-width:520px){.row2{grid-template-columns:1fr;}}
+.days{display:flex;flex-wrap:wrap;gap:6px;}
+.days label,.checks label{display:inline-flex;align-items:center;gap:5px;font-size:.84rem;border:1px solid var(--border);border-radius:8px;padding:6px 9px;cursor:pointer;background:#fff;}
+.checks{display:flex;flex-direction:column;gap:6px;max-height:170px;overflow:auto;}
+.checks label{border:none;padding:3px 0;}
+.lookup{font-size:.8rem;border-radius:8px;padding:8px 10px;background:var(--soft);border:1px solid var(--border);margin-top:4px;line-height:1.45;}
+.lookup.ok{background:#e7f4ec;border-color:#cfe9da;}
+.dlgfoot{display:flex;justify-content:flex-end;gap:8px;margin-top:16px;flex-wrap:wrap;}
+.formerr{color:var(--err);font-size:.82rem;margin-top:8px;min-height:1em;}
+
+#toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%) translateY(20px);background:var(--navy);color:#fff;padding:11px 18px;border-radius:10px;font-size:.86rem;box-shadow:0 6px 20px rgba(0,0,0,.25);opacity:0;pointer-events:none;transition:.25s;z-index:200;max-width:calc(100% - 32px);}
+#toast.on{opacity:1;transform:translateX(-50%) translateY(0);}
+#toast.bad{background:var(--err);}
+
+#loading{padding:50px 20px;text-align:center;color:var(--muted);}
+#loading .spin{display:inline-block;width:28px;height:28px;border:3px solid rgba(138,47,59,.2);border-top-color:var(--accent);border-radius:50%;animation:sp .8s linear infinite;margin-bottom:12px;}
+@keyframes sp{to{transform:rotate(360deg)}}
+footer{background:var(--navy);color:rgba(255,255,255,.5);text-align:center;padding:24px;font-size:.78rem;border-top:3px solid var(--gold);position:sticky;top:100vh;}
+footer a{color:var(--gold);text-decoration:none;}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+</style>
+<link rel="stylesheet" href="assets/css/vesper_tokens.css">
+</head>
+<body>
+
+<header>
+  <a class="brand" href="index.html">
+    <img src="assets/images/vesper_logo_inverted.png" alt="Vesper Academy">
+    <span><b>Vesper Academy</b><small>Escuela</small></span>
+  </a>
+  <div class="right">
+    <a class="back" href="portal_calendario.html"><i class="fas fa-calendar"></i> Calendario</a>
+    <a class="back" href="portal_profesores.html"><i class="fas fa-toolbox"></i> Portal profesor</a>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="intro">
+    <h1>Grupos e inscripciones</h1>
+    <p>Arma los grupos de cada ciclo e inscribe a los alumnos. Al inscribir a alguien
+       nuevo se le da acceso a la plataforma, se le pone en su grupo y su profesor lo
+       ve en la boleta. Cambiar de grupo nunca borra el historial.</p>
+  </div>
+
+  <div id="msg" class="notice" style="display:none"></div>
+  <div id="loading"><div class="spin"></div><div>Cargando la escuela…</div></div>
+
+  <div id="content" style="display:none">
+    <div id="setup" class="notice" style="display:none"></div>
+
+    <div class="cyclebar">
+      <label for="cycle">Ciclo</label>
+      <select id="cycle"></select>
+      <span class="dates" id="cycle-dates"></span>
+      <span id="cycle-chip"></span>
+      <span class="spacer"></span>
+      <button class="btn small" id="cycle-status" type="button"></button>
+    </div>
+
+    <nav class="tabs" role="tablist">
+      <button type="button" data-tab="grupos" class="on">Grupos<span class="ct" id="ct-grupos"></span></button>
+      <button type="button" data-tab="alumnos">Alumnos<span class="ct" id="ct-alumnos"></span></button>
+      <button type="button" data-tab="prospectos">Prospectos<span class="ct" id="ct-prospectos"></span></button>
+    </nav>
+
+    <section class="pane on" id="pane-grupos">
+      <div class="panehead">
+        <button class="btn primary" id="new-group" type="button"><i class="fas fa-plus"></i> Nuevo grupo</button>
+        <button class="btn gold" id="enroll-any" type="button"><i class="fas fa-user-plus"></i> Inscribir alumno</button>
+        <span class="spacer"></span>
+        <button class="btn" id="reload" type="button"><i class="fas fa-rotate"></i> Actualizar</button>
+      </div>
+      <div class="groups" id="groups"></div>
+    </section>
+
+    <section class="pane" id="pane-alumnos">
+      <div class="panehead">
+        <input type="search" id="st-q" placeholder="Buscar por nombre, correo o grupo…">
+        <select id="st-f">
+          <option value="">Todos</option>
+          <option value="nogroup">Sin grupo en este ciclo</option>
+          <option value="legacy">Con grupo antiguo (sin migrar)</option>
+        </select>
+        <span class="spacer"></span>
+        <button class="btn gold" id="enroll-any2" type="button"><i class="fas fa-user-plus"></i> Inscribir alumno</button>
+      </div>
+      <div class="tablecard"><table>
+        <thead><tr><th>Alumno</th><th class="hide-sm">Nivel</th><th>Grupo actual</th><th></th></tr></thead>
+        <tbody id="st-rows"></tbody>
+      </table></div>
+    </section>
+
+    <section class="pane" id="pane-prospectos">
+      <div class="panehead">
+        <input type="search" id="pr-q" placeholder="Buscar prospecto…">
+        <select id="pr-f">
+          <option value="pending">Sin inscribir</option>
+          <option value="">Todos</option>
+        </select>
+      </div>
+      <p class="lead" style="color:var(--muted);font-size:.84rem;margin:0 0 12px">Personas que hicieron el examen de ubicación gratuito. Inscribir a una abre el formulario con sus datos ya puestos.</p>
+      <div class="tablecard"><table>
+        <thead><tr><th>Prospecto</th><th>Nivel</th><th class="hide-sm">Contacto</th><th class="hide-sm">Fecha</th><th></th></tr></thead>
+        <tbody id="pr-rows"></tbody>
+      </table></div>
+    </section>
+  </div>
+</div>
+
+<!-- Diálogo: grupo -->
+<dialog id="dlg-group">
+  <form method="dialog" id="f-group">
+    <h2 id="g-title">Nuevo grupo</h2>
+    <p class="lead">Un grupo es un curso, en un ciclo, a una hora, con su profesor.</p>
+    <div class="field"><span>Curso</span><select id="g-course" required></select></div>
+    <div class="row2">
+      <div class="field"><span>Ciclo</span><select id="g-period" required></select></div>
+      <div class="field"><span>Estado</span>
+        <select id="g-status"><option value="planned">Planeado (abierto a inscripción)</option><option value="active">En curso</option><option value="closed">Cerrado</option></select></div>
+    </div>
+    <div class="field"><span>Días</span><div class="days" id="g-days"></div></div>
+    <div class="row2">
+      <div class="field"><span>Hora de inicio</span><input type="time" id="g-start" value="18:00" required></div>
+      <div class="field"><span>Hora de fin</span><input type="time" id="g-end" value="19:00" required></div>
+    </div>
+    <div class="field"><span>Profesor(es)</span><div class="checks" id="g-teachers"></div>
+      <small>Solo aparecen quienes ya tienen acceso de profesor. El profesor verá a este grupo en su boleta.</small></div>
+    <div class="row2">
+      <div class="field"><span>Cupo</span><input type="number" id="g-cap" min="1" max="60" value="8" required></div>
+      <div class="field"><span>Enlace de clase</span><input type="url" id="g-meet" placeholder="https://meet.google.com/…"></div>
+    </div>
+    <div class="field"><span>Nombre</span><input id="g-name" maxlength="80" required>
+      <small>Lo ven el profesor y el alumno. Se propone solo a partir del curso y la hora.</small></div>
+    <div class="field"><span>Clave del grupo</span><input id="g-id" maxlength="61" required>
+      <small id="g-id-help">Minúsculas, números y guiones. No se puede cambiar después.</small></div>
+    <div class="formerr" id="g-err"></div>
+    <div class="dlgfoot">
+      <button class="btn" value="cancel" formnovalidate>Cancelar</button>
+      <button class="btn primary" id="g-save" value="save">Guardar grupo</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- Diálogo: inscribir -->
+<dialog id="dlg-enroll">
+  <form method="dialog" id="f-enroll">
+    <h2>Inscribir alumno</h2>
+    <p class="lead">Si el correo es nuevo, se le da acceso y se le manda un correo para que elija su contraseña.</p>
+    <div class="field"><span>Correo</span><input type="email" id="e-email" required autocomplete="off">
+      <div id="e-lookup" class="lookup" style="display:none"></div></div>
+    <div class="row2">
+      <div class="field"><span>Nombre</span><input id="e-name" maxlength="120"></div>
+      <div class="field"><span>Nivel</span>
+        <select id="e-level"><option value="">— Sin cambiar —</option></select></div>
+    </div>
+    <div class="field"><span>Grupo</span><select id="e-group" required></select>
+      <small id="e-cap"></small></div>
+    <label class="field" style="flex-direction:row;align-items:center;gap:8px" id="e-acc-wrap">
+      <input type="checkbox" id="e-account" checked> <span style="text-transform:none;letter-spacing:0;font-size:.84rem;color:var(--navy);font-weight:500">Crear su cuenta y enviarle el correo para elegir contraseña</span></label>
+    <div class="formerr" id="e-err"></div>
+    <div class="dlgfoot">
+      <button class="btn" value="cancel" formnovalidate>Cancelar</button>
+      <button class="btn primary" id="e-save" value="save">Inscribir</button>
+    </div>
+  </form>
+</dialog>
+
+<div id="toast" role="status" aria-live="polite"></div>
+
+<footer>&copy; <span id="y"></span> Vesper Academy · <a href="portal_profesores.html">Portal del profesor</a></footer>
+
+<script>
+/* ============================================================
+   Panel Escuela — grupos, ciclos e inscripciones
+   ------------------------------------------------------------
+   Hace en el navegador lo mismo que _scripts/school_admin.py
+   (add-group / set-group / enroll / unenroll) y que
+   upload_manuals.py add-student, con el idToken de quien inicia
+   sesión. Las reglas de Firestore deciden: solo staff (admin o
+   coordinator) puede escribir students/, roster/, groups/,
+   periods/ y enrollments/; para cualquier otro esta página solo
+   muestra el aviso de acceso.
+   Modelo (ver FIRESTORE_SCHOOL_RULES.md):
+     periods/{id}      un ciclo de 20 clases (del calendario 2027)
+     groups/{id}       curso + ciclo + profesores + horario + cupo
+     enrollments/{sid}__{groupId}  historial; nunca se borra
+     students/{correo}.group y roster/{sid}.group = grupo actual
+   ============================================================ */
+(function () {
+  "use strict";
+  document.getElementById("y").textContent = new Date().getFullYear();
+
+  var CFG = window.VesperAuth && window.VesperAuth.config;
+  var DB = "teachermanuals";
+  var LEVELS = ["Principiante", "Inicial", "Básico", "Intermedio", "Avanzado", "Experto"];
+  var LEVEL_BY_CEFR = { A0: 0, A1: 1, A2: 2, B1: 3, B2: 4, C1: 5, C2: 5 };
+  var DAYS = [["lun", "Lun"], ["mar", "Mar"], ["mie", "Mié"], ["jue", "Jue"], ["vie", "Vie"], ["sab", "Sáb"]];
+  var STATUS_LABEL = { planned: "Planeado", active: "En curso", closed: "Cerrado" };
+  var ENR_LABEL = { active: "Activa", moved: "Cambió de grupo", completed: "Terminó", dropped: "Baja" };
+
+  var $ = function (id) { return document.getElementById(id); };
+  var S = { courses: {}, periods: {}, groups: {}, teachers: {}, students: {}, enrollments: {}, leads: [], period: "" };
+  var user = null;
+
+  /* ---------------- utilidades ---------------- */
+  function esc(t) {
+    return ("" + (t == null ? "" : t)).replace(/[&<>"']/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+    });
+  }
+  function toast(text, bad) {
+    var t = $("toast");
+    t.textContent = text;
+    t.className = "on" + (bad ? " bad" : "");
+    clearTimeout(toast._t);
+    toast._t = setTimeout(function () { t.className = ""; }, bad ? 6000 : 3200);
+  }
+  function showMsg(html, bad) {
+    $("loading").style.display = "none";
+    $("content").style.display = "none";
+    var m = $("msg");
+    m.style.display = "block";
+    m.className = "notice" + (bad ? " bad" : "");
+    m.innerHTML = html;
+  }
+  function nowIso() { return new Date().toISOString(); }
+  /* copia local de lo que se escribió: sin el prefijo "ts:" de enc(), como llega al leer */
+  function plain(o) {
+    var r = {};
+    Object.keys(o).forEach(function (k) {
+      r[k] = typeof o[k] === "string" && o[k].indexOf("ts:") === 0 ? o[k].slice(3) : o[k];
+    });
+    return r;
+  }
+  function todayIso() {
+    var d = new Date();
+    return d.getFullYear() + "-" + ("0" + (d.getMonth() + 1)).slice(-2) + "-" + ("0" + d.getDate()).slice(-2);
+  }
+  var MON_S = ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"];
+  function fmtDay(s) {
+    if (!s) return "?";
+    if (s.length > 10) { /* marca de tiempo UTC: la fecha local del navegador */
+      var d = new Date(s);
+      if (!isNaN(d)) return d.getDate() + " " + MON_S[d.getMonth()] + " " + d.getFullYear();
+    }
+    var p = s.slice(0, 10).split("-");
+    return (+p[2]) + " " + MON_S[+p[1] - 1] + " " + p[0];
+  }
+  function slugify(s) {
+    return String(s || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "")
+      .replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 61);
+  }
+  function normEmail(e) { return String(e || "").trim().toLowerCase(); }
+  /* sid = mismo hash que sid_of() en upload_manuals.py */
+  function sidOf(email) {
+    return crypto.subtle.digest("SHA-256", new TextEncoder().encode("vesper-sid-v1|" + normEmail(email)))
+      .then(function (buf) {
+        return Array.prototype.map.call(new Uint8Array(buf), function (b) {
+          return ("0" + b.toString(16)).slice(-2);
+        }).join("").slice(0, 20);
+      });
+  }
+  function parseLevel(raw) {
+    if (raw == null || raw === "") return null;
+    if (typeof raw === "number") return raw >= 0 && raw <= 5 ? raw : null;
+    var s = String(raw).trim().toUpperCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+    var m = s.match(/^(A0|A1|A2|B1|B2|C1|C2)/);
+    if (m) return LEVEL_BY_CEFR[m[1]];
+    for (var i = 0; i < LEVELS.length; i++) {
+      if (s === LEVELS[i].toUpperCase().normalize("NFD").replace(/[̀-ͯ]/g, "")) return i;
+    }
+    return /^[0-5]$/.test(s) ? +s : null;
+  }
+  function schedText(sched) {
+    if (!sched || !sched.length) return "Sin horario";
+    var days = sched.map(function (x) { return x.day; });
+    var same = sched.every(function (x) { return x.start === sched[0].start && x.end === sched[0].end; });
+    var label = days.join(",") === "lun,mar,mie,jue,vie" ? "Lun a Vie"
+      : days.map(function (d) { for (var i = 0; i < DAYS.length; i++) if (DAYS[i][0] === d) return DAYS[i][1]; return d; }).join(", ");
+    return same ? label + " · " + sched[0].start + "–" + sched[0].end
+      : sched.map(function (x) { return x.day + " " + x.start + "–" + x.end; }).join(", ");
+  }
+
+  /* ---------------- Firestore REST (mismo formato que school_admin.py) ---------------- */
+  function base() {
+    return "https://firestore.googleapis.com/v1/projects/" + CFG.firebase.projectId + "/databases/" + DB + "/documents";
+  }
+  function token() { return user.getIdToken(); }
+  function enc(v) {
+    if (v === null || v === undefined) return { nullValue: null };
+    if (typeof v === "boolean") return { booleanValue: v };
+    if (typeof v === "number") return Number.isInteger(v) ? { integerValue: String(v) } : { doubleValue: v };
+    if (Array.isArray(v)) return { arrayValue: { values: v.map(enc) } };
+    if (v instanceof Date) return { timestampValue: v.toISOString() };
+    if (typeof v === "object") {
+      var f = {};
+      Object.keys(v).forEach(function (k) { f[k] = enc(v[k]); });
+      return { mapValue: { fields: f } };
+    }
+    if (typeof v === "string" && v.indexOf("ts:") === 0) return { timestampValue: v.slice(3) };
+    return { stringValue: String(v) };
+  }
+  function dec(v) {
+    if (!v) return null;
+    if ("stringValue" in v) return v.stringValue;
+    if ("booleanValue" in v) return v.booleanValue;
+    if ("doubleValue" in v) return v.doubleValue;
+    if ("timestampValue" in v) return v.timestampValue;
+    if ("integerValue" in v) return parseInt(v.integerValue, 10);
+    if ("arrayValue" in v) return (v.arrayValue.values || []).map(dec);
+    if ("mapValue" in v) return decFields(v.mapValue.fields || {});
+    return null;
+  }
+  function decFields(f) {
+    var o = {};
+    Object.keys(f || {}).forEach(function (k) { o[k] = dec(f[k]); });
+    return o;
+  }
+  function docUrl(col, id) { return base() + "/" + col + "/" + encodeURIComponent(id); }
+  function idOf(name) { return decodeURIComponent(name.split("/").pop()); }
+  function fsErr(r, what) {
+    return r.text().then(function (t) {
+      var m = t;
+      try { m = JSON.parse(t).error.message; } catch (e) {}
+      if (r.status === 403) m = "sin permiso (" + m + ")";
+      throw new Error(what + ": " + m);
+    });
+  }
+  function getDoc(col, id) {
+    return token().then(function (tk) {
+      return fetch(docUrl(col, id), { headers: { Authorization: "Bearer " + tk } });
+    }).then(function (r) {
+      if (r.status === 404) return null;
+      if (!r.ok) return fsErr(r, "Leyendo " + col + "/" + id);
+      return r.json().then(function (d) { return decFields(d.fields); });
+    });
+  }
+  /* Upsert por campo (updateMask): no borra los campos que no se envían. */
+  function setDoc(col, id, data) {
+    var fields = {}, mask = [];
+    Object.keys(data).forEach(function (k) { fields[k] = enc(data[k]); mask.push("updateMask.fieldPaths=" + encodeURIComponent(k)); });
+    return token().then(function (tk) {
+      return fetch(docUrl(col, id) + "?" + mask.join("&"), {
+        method: "PATCH",
+        headers: { Authorization: "Bearer " + tk, "Content-Type": "application/json" },
+        body: JSON.stringify({ fields: fields })
+      });
+    }).then(function (r) { if (!r.ok) return fsErr(r, "Escribiendo " + col + "/" + id); });
+  }
+  function listCol(col) {
+    var out = {};
+    function page(tk, pt) {
+      return fetch(base() + "/" + col + "?pageSize=300" + (pt ? "&pageToken=" + encodeURIComponent(pt) : ""),
+        { headers: { Authorization: "Bearer " + tk } })
+        .then(function (r) {
+          if (!r.ok) return fsErr(r, "Listando " + col);
+          return r.json().then(function (b) {
+            (b.documents || []).forEach(function (d) { out[idOf(d.name)] = decFields(d.fields); });
+            return b.nextPageToken ? page(tk, b.nextPageToken) : out;
+          });
+        });
+    }
+    return token().then(function (tk) { return page(tk, ""); });
+  }
+  function query(col, filters) {
+    var fl = filters.map(function (f) {
+      return { fieldFilter: { field: { fieldPath: f[0] }, op: "EQUAL", value: enc(f[1]) } };
+    });
+    var where = fl.length === 1 ? fl[0] : { compositeFilter: { op: "AND", filters: fl } };
+    return token().then(function (tk) {
+      return fetch(base() + ":runQuery", {
+        method: "POST",
+        headers: { Authorization: "Bearer " + tk, "Content-Type": "application/json" },
+        body: JSON.stringify({ structuredQuery: { from: [{ collectionId: col }], where: where, limit: 1000 } })
+      });
+    }).then(function (r) {
+      if (!r.ok) return fsErr(r, "Consultando " + col);
+      return r.json().then(function (rows) {
+        var out = {};
+        rows.forEach(function (x) { if (x.document) out[idOf(x.document.name)] = decFields(x.document.fields); });
+        return out;
+      });
+    });
+  }
+
+  /* ---------------- cuentas de Firebase Auth (REST, no toca la sesión actual) ---------------- */
+  function idtk(path, body) {
+    return fetch("https://identitytoolkit.googleapis.com/v1/" + path + "?key=" + CFG.firebase.apiKey, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "X-Firebase-Locale": "es" },
+      body: JSON.stringify(body)
+    }).then(function (r) {
+      return r.json().then(function (b) { return { ok: r.ok, body: b }; });
+    });
+  }
+  function randomPassword() {
+    var a = new Uint8Array(24);
+    crypto.getRandomValues(a);
+    return Array.prototype.map.call(a, function (b) { return ("0" + b.toString(16)).slice(-2); }).join("");
+  }
+  /* "created" | "exists" | "error: …" — contraseña desechable; el alumno
+     elige la suya con el correo de restablecer (que además verifica su correo). */
+  function ensureAccount(email) {
+    return idtk("accounts:signUp", { email: email, password: randomPassword(), returnSecureToken: false })
+      .then(function (res) {
+        if (res.ok) return "created";
+        var m = (res.body.error || {}).message || "";
+        return m.indexOf("EMAIL_EXISTS") !== -1 ? "exists" : "error: " + m;
+      }, function (e) { return "error: " + e.message; });
+  }
+  function sendPasswordEmail(email) {
+    return idtk("accounts:sendOobCode", { requestType: "PASSWORD_RESET", email: email })
+      .then(function (res) { return res.ok; }, function () { return false; });
+  }
+
+  /* ---------------- ciclos del calendario 2027 ----------------
+     Misma regla que portal_calendario.html (fuente canónica): cada ciclo
+     son 20 días de clase L–V; festivos y vacaciones lo pausan. Solo se
+     usa para CREAR periods/ la primera vez; después periods/ manda. */
+  function calendarCycles() {
+    var FIRST_DAY = "2027-01-04", CYCLES = 12, CLASSES = 20;
+    var breaks = [["2026-12-21", "2027-01-01"], ["2027-03-22", "2027-03-26"], ["2027-12-20", "2027-12-31"]];
+    var holidays = ["2027-01-01", "2027-02-01", "2027-03-15", "2027-03-25", "2027-03-26", "2027-05-01",
+                    "2027-09-16", "2027-11-02", "2027-11-15", "2027-12-25"];
+    function pad(n) { return n < 10 ? "0" + n : "" + n; }
+    function iso(d) { return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()); }
+    function parse(s) { var p = s.split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
+    function add(d, n) { return new Date(d.getFullYear(), d.getMonth(), d.getDate() + n); }
+    function isClass(d) {
+      var s = iso(d), w = d.getDay();
+      if (w === 0 || w === 6 || holidays.indexOf(s) !== -1) return false;
+      for (var i = 0; i < breaks.length; i++) if (s >= breaks[i][0] && s <= breaks[i][1]) return false;
+      return true;
+    }
+    function next(d) { while (!isClass(d)) d = add(d, 1); return d; }
+    var out = [{ id: "2026-puente", name: "Ciclo puente 2026", startDate: "2026-11-23", endDate: "2026-12-18" }];
+    var cur = next(parse(FIRST_DAY));
+    for (var n = 1; n <= CYCLES; n++) {
+      var d = cur, c = 0;
+      for (;; d = add(d, 1)) if (isClass(d) && ++c === CLASSES) break;
+      out.push({ id: "2027-c" + pad(n), name: "Ciclo " + n + " · 2027", startDate: iso(cur), endDate: iso(d) });
+      cur = next(add(d, 1));
+    }
+    return out;
+  }
+  function statusByDate(p) {
+    var t = todayIso();
+    return t > p.endDate ? "closed" : (t >= p.startDate ? "active" : "planned");
+  }
+
+  /* ---------------- carga ---------------- */
+  function loadAll() {
+    return Promise.all([
+      listCol("courses"), listCol("periods"), listCol("groups"), listCol("teachers"),
+      listCol("students"), listCol("enrollments"),
+      listCol("placement_results").catch(function () { return {}; })
+    ]).then(function (r) {
+      S.courses = r[0]; S.periods = r[1]; S.groups = r[2]; S.teachers = r[3];
+      S.students = r[4]; S.enrollments = r[5];
+      S.leads = Object.keys(r[6]).map(function (k) { var x = r[6][k]; x._id = k; return x; })
+        .sort(function (a, b) { return String(b.createdAt || "").localeCompare(String(a.createdAt || "")); });
+      S.bySid = {};
+      Object.keys(S.students).forEach(function (e) {
+        var s = S.students[e];
+        if (s.sid) S.bySid[s.sid] = e;
+      });
+      if (!S.period || !S.periods[S.period]) S.period = defaultPeriod();
+      renderAll();
+    });
+  }
+  function sortedPeriods() {
+    return Object.keys(S.periods).sort(function (a, b) {
+      return String(S.periods[a].startDate || a).localeCompare(String(S.periods[b].startDate || b));
+    });
+  }
+  /* el ciclo en curso; si no hay, el siguiente planeado; si no, el último */
+  function defaultPeriod() {
+    var ids = sortedPeriods(), t = todayIso(), i;
+    for (i = 0; i < ids.length; i++) if (S.periods[ids[i]].status === "active") return ids[i];
+    for (i = 0; i < ids.length; i++) if ((S.periods[ids[i]].startDate || "") >= t) return ids[i];
+    return ids[ids.length - 1] || "";
+  }
+  function activeEnrollments(gid) {
+    return Object.keys(S.enrollments).filter(function (k) {
+      var e = S.enrollments[k];
+      return e.groupId === gid && e.status === "active";
+    }).map(function (k) { return S.enrollments[k]; });
+  }
+  function teacherLabel(email) {
+    var t = S.teachers[email];
+    return (t && t.name) || email;
+  }
+  function courseName(cid) { return (S.courses[cid] && S.courses[cid].name) || cid || "Sin curso"; }
+
+  /* ---------------- render ---------------- */
+  function renderAll() {
+    renderSetup();
+    renderCycleBar();
+    renderGroups();
+    renderStudents();
+    renderLeads();
+  }
+
+  function renderSetup() {
+    var box = $("setup");
+    var want = calendarCycles().filter(function (c) { return !S.periods[c.id]; });
+    if (!want.length) { box.style.display = "none"; return; }
+    box.style.display = "block";
+    box.innerHTML = '<i class="fas fa-calendar-plus"></i> <b>Faltan ' + want.length + ' ciclo(s) del calendario escolar.</b> ' +
+      'Se crean con las fechas de <a href="portal_calendario.html">Calendario escolar</a> (ciclo puente de noviembre y los 12 ciclos de 2027). ' +
+      'Los grupos se arman dentro de un ciclo.<br><button class="btn primary small" id="mk-cycles" type="button">Crear ciclos</button>';
+    $("mk-cycles").onclick = function () {
+      this.disabled = true;
+      var chain = Promise.resolve();
+      want.forEach(function (c) {
+        chain = chain.then(function () {
+          return setDoc("periods", c.id, { name: c.name, startDate: c.startDate, endDate: c.endDate,
+            status: statusByDate(c), createdAt: "ts:" + nowIso(), updatedAt: "ts:" + nowIso() });
+        });
+      });
+      chain.then(function () { toast(want.length + " ciclo(s) creados."); S.period = ""; return loadAll(); })
+        .catch(function (e) { toast(e.message, true); $("mk-cycles").disabled = false; });
+    };
+  }
+
+  function renderCycleBar() {
+    var sel = $("cycle"), ids = sortedPeriods();
+    sel.innerHTML = ids.length ? ids.map(function (id) {
+      var p = S.periods[id];
+      return '<option value="' + esc(id) + '"' + (id === S.period ? " selected" : "") + ">" + esc(p.name || id) + "</option>";
+    }).join("") : '<option value="">(sin ciclos)</option>';
+    var p = S.periods[S.period];
+    $("cycle-dates").textContent = p ? fmtDay(p.startDate) + " → " + fmtDay(p.endDate) : "";
+    $("cycle-chip").innerHTML = p ? '<span class="chip ' + esc(p.status) + '">' + esc(STATUS_LABEL[p.status] || p.status) + "</span>" : "";
+    var b = $("cycle-status");
+    if (!p) { b.style.display = "none"; return; }
+    b.style.display = "";
+    var nextSt = p.status === "planned" ? "active" : (p.status === "active" ? "closed" : "active");
+    b.innerHTML = p.status === "planned" ? '<i class="fas fa-play"></i> Marcar en curso'
+      : p.status === "active" ? '<i class="fas fa-flag-checkered"></i> Cerrar ciclo' : '<i class="fas fa-rotate-left"></i> Reabrir';
+    b.onclick = function () {
+      if (nextSt === "closed" && !confirm("¿Cerrar " + (p.name || S.period) + "? Los grupos no cambian; solo marca el ciclo como terminado.")) return;
+      setDoc("periods", S.period, { status: nextSt, updatedAt: "ts:" + nowIso() })
+        .then(function () { p.status = nextSt; renderCycleBar(); toast("Ciclo: " + STATUS_LABEL[nextSt]); })
+        .catch(function (e) { toast(e.message, true); });
+    };
+  }
+
+  function groupsOfPeriod(pid) {
+    return Object.keys(S.groups).filter(function (g) { return S.groups[g].periodId === pid; })
+      .sort(function (a, b) {
+        var A = S.groups[a], B = S.groups[b];
+        var ta = (A.schedule && A.schedule[0] && A.schedule[0].start) || "99", tb = (B.schedule && B.schedule[0] && B.schedule[0].start) || "99";
+        return ta.localeCompare(tb) || String(A.name).localeCompare(String(B.name));
+      });
+  }
+
+  function renderGroups() {
+    var box = $("groups"), ids = groupsOfPeriod(S.period);
+    $("ct-grupos").textContent = ids.length ? "(" + ids.length + ")" : "";
+    if (!S.period) { box.innerHTML = '<div class="empty-state">Primero crea los ciclos.</div>'; return; }
+    if (!ids.length) {
+      box.innerHTML = '<div class="empty-state"><i class="fas fa-users" style="font-size:1.6rem;color:var(--gold);display:block;margin-bottom:8px"></i>' +
+        "Este ciclo todavía no tiene grupos.<br>Crea uno con <b>Nuevo grupo</b>.</div>";
+      return;
+    }
+    var moveOpts = ids;
+    box.innerHTML = ids.map(function (gid) {
+      var g = S.groups[gid], act = activeEnrollments(gid), cap = g.capacity || 0;
+      var pct = cap ? Math.min(100, Math.round(100 * act.length / cap)) : 0;
+      var full = cap && act.length >= cap;
+      var roster = act.sort(function (a, b) { return String(a.name).localeCompare(String(b.name)); }).map(function (e) {
+        var email = S.bySid[e.sid] || "";
+        var opts = '<option value="">Acción…</option><optgroup label="Mover a">' +
+          moveOpts.filter(function (x) { return x !== gid; }).map(function (x) {
+            return '<option value="move:' + esc(x) + '">' + esc(S.groups[x].name || x) + "</option>";
+          }).join("") + '</optgroup><option value="completed">Terminó el curso</option><option value="dropped">Dar de baja</option>';
+        return '<li><span class="nm"><b>' + esc(e.name || email || e.sid) + "</b><small>" + esc(email) + "</small></span>" +
+          '<select data-act="' + esc(gid) + '" data-email="' + esc(email) + '" aria-label="Acción para ' + esc(e.name || email) + '">' + opts + "</select></li>";
+      }).join("") || '<li class="empty">Sin alumnos todavía</li>';
+      var teachers = (g.teachers || []).map(teacherLabel).join(", ");
+      return '<article class="gcard' + (g.status === "closed" ? " closed" : "") + '">' +
+        '<div class="gh"><div style="display:flex;justify-content:space-between;gap:8px;align-items:flex-start">' +
+        "<div><h3>" + esc(g.name || gid) + '</h3><span class="gid">' + esc(gid) + "</span></div>" +
+        '<span class="chip ' + esc(g.status) + '">' + esc(STATUS_LABEL[g.status] || g.status) + "</span></div>" +
+        '<div class="meta"><span><i class="fas fa-book"></i>' + esc(courseName(g.courseId)) + "</span>" +
+        '<span><i class="fas fa-clock"></i>' + esc(schedText(g.schedule)) + "</span>" +
+        '<span><i class="fas fa-chalkboard-user"></i>' + (teachers ? esc(teachers) : '<span class="chip warn">Sin profesor</span>') + "</span>" +
+        (g.meetUrl ? '<span><i class="fas fa-video"></i><a href="' + esc(g.meetUrl) + '" target="_blank" rel="noopener">' + esc(g.meetUrl.replace(/^https?:\/\//, "")) + "</a></span>" : "") +
+        "</div>" +
+        '<div class="cap"><div class="bar"><span class="' + (full ? "full" : "") + '" style="width:' + pct + '%"></span></div>' +
+        "<small>" + act.length + (cap ? " de " + cap + " lugares" + (full ? " · lleno" : "") : " alumnos") + "</small></div></div>" +
+        '<ul class="roster">' + roster + "</ul>" +
+        '<div class="gf"><button class="btn small gold" type="button" data-enroll="' + esc(gid) + '"' + (g.status === "closed" ? " disabled" : "") + '><i class="fas fa-user-plus"></i> Inscribir</button>' +
+        '<button class="btn small" type="button" data-edit="' + esc(gid) + '"><i class="fas fa-pen"></i> Editar</button></div></article>';
+    }).join("");
+  }
+
+  function studentRows() {
+    var q = normEmail($("st-q").value), f = $("st-f").value;
+    return Object.keys(S.students).sort(function (a, b) {
+      return String(S.students[a].name || a).localeCompare(String(S.students[b].name || b));
+    }).filter(function (email) {
+      var s = S.students[email], g = s.group || "";
+      var gdoc = S.groups[g];
+      if (f === "nogroup" && gdoc && gdoc.periodId === S.period) return false;
+      if (f === "legacy" && !(g && !gdoc)) return false;
+      if (!q) return true;
+      return (email + " " + (s.name || "") + " " + g + " " + ((gdoc && gdoc.name) || "")).toLowerCase().indexOf(q) !== -1;
+    });
+  }
+  function renderStudents() {
+    var rows = studentRows();
+    $("ct-alumnos").textContent = "(" + Object.keys(S.students).length + ")";
+    $("st-rows").innerHTML = rows.map(function (email) {
+      var s = S.students[email], g = s.group || "", gdoc = S.groups[g];
+      var where = !g ? '<span class="chip warn">Sin grupo</span>'
+        : gdoc ? esc(gdoc.name || g) + '<span class="sub">' + esc((S.periods[gdoc.periodId] || {}).name || gdoc.periodId) + "</span>"
+        : esc(g) + '<span class="sub">grupo antiguo · sin migrar</span>';
+      return '<tr><td><b>' + esc(s.name || "—") + '</b><span class="sub">' + esc(email) + "</span></td>" +
+        '<td class="hide-sm">' + esc(s.levelName || "—") + "</td><td>" + where + "</td>" +
+        '<td class="act"><button class="btn small" type="button" data-hist="' + esc(email) + '">Historial</button> ' +
+        '<button class="btn small gold" type="button" data-enroll-email="' + esc(email) + '">' + (gdoc && gdoc.periodId === S.period ? "Cambiar" : "Inscribir") + "</button></td></tr>";
+    }).join("") || '<tr><td colspan="4" style="color:var(--muted);text-align:center;padding:24px">Sin alumnos con ese filtro.</td></tr>';
+  }
+
+  function renderLeads() {
+    var q = normEmail($("pr-q").value), onlyPending = $("pr-f").value === "pending";
+    var rows = S.leads.filter(function (l) {
+      var em = normEmail(l.email);
+      if (onlyPending && em && S.students[em]) return false;
+      if (!q) return true;
+      return (em + " " + (l.name || "") + " " + (l.phone || "")).toLowerCase().indexOf(q) !== -1;
+    });
+    var pending = S.leads.filter(function (l) { return !(l.email && S.students[normEmail(l.email)]); }).length;
+    $("ct-prospectos").textContent = pending ? "(" + pending + ")" : "";
+    $("pr-rows").innerHTML = rows.map(function (l) {
+      var em = normEmail(l.email), done = em && S.students[em];
+      var phone = String(l.phone || "").replace(/[^\d+]/g, "");
+      return "<tr><td><b>" + esc(l.name || "—") + '</b><span class="sub">' + esc(em || "sin correo") + "</span></td>" +
+        "<td>" + esc(l.levelName || l.level || "—") + (l.total ? '<span class="sub">' + esc(l.correct) + "/" + esc(l.total) + "</span>" : "") + "</td>" +
+        '<td class="hide-sm">' + (phone ? '<a href="https://wa.me/' + esc(phone.replace(/^\+/, "")) + '" target="_blank" rel="noopener">' + esc(l.phone) + "</a>" : "—") + "</td>" +
+        '<td class="hide-sm">' + esc(l.createdAt ? fmtDay(String(l.createdAt)) : "—") + "</td>" +
+        '<td class="act">' + (done ? '<span class="chip active">Ya es alumno</span>'
+          : em ? '<button class="btn small gold" type="button" data-lead="' + esc(l._id) + '">Inscribir</button>' : "") + "</td></tr>";
+    }).join("") || '<tr><td colspan="5" style="color:var(--muted);text-align:center;padding:24px">No hay prospectos con ese filtro.</td></tr>';
+  }
+
+  /* ---------------- historial de un alumno ---------------- */
+  function toggleHistory(btn, email) {
+    var tr = btn.closest("tr"), nx = tr.nextElementSibling;
+    if (nx && nx.classList.contains("hist")) { nx.remove(); return; }
+    var s = S.students[email], sid = s.sid;
+    var list = Object.keys(S.enrollments).map(function (k) { return S.enrollments[k]; })
+      .filter(function (e) { return sid && e.sid === sid; })
+      .sort(function (a, b) { return String(b.enrolledAt || "").localeCompare(String(a.enrolledAt || "")); });
+    var html = list.length ? list.map(function (e) {
+      var g = S.groups[e.groupId];
+      return "<div>" + esc(fmtDay(String(e.enrolledAt || ""))) + " · <b>" + esc((g && g.name) || e.groupId) + "</b> · " +
+        esc(courseName(e.courseId)) + ' · <span class="chip ' + (e.status === "active" ? "active" : "closed") + '">' + esc(ENR_LABEL[e.status] || e.status) + "</span></div>";
+    }).join("") : "Sin inscripciones registradas todavía.";
+    var row = document.createElement("tr");
+    row.className = "hist";
+    row.innerHTML = '<td colspan="4">' + html + "</td>";
+    tr.after(row);
+  }
+
+  /* ---------------- grupos: crear / editar ---------------- */
+  var editing = null;
+  function fillSelect(sel, items, value) {
+    sel.innerHTML = items.map(function (it) {
+      return '<option value="' + esc(it[0]) + '"' + (it[0] === value ? " selected" : "") + ">" + esc(it[1]) + "</option>";
+    }).join("");
+  }
+  function courseItems() {
+    return Object.keys(S.courses).sort(function (a, b) {
+      var A = S.courses[a], B = S.courses[b];
+      return String(A.family || "").localeCompare(String(B.family || "")) || String(A.name).localeCompare(String(B.name));
+    }).map(function (id) {
+      var c = S.courses[id];
+      return [id, (c.name || id) + (c.level ? " (" + c.level + ")" : "")];
+    });
+  }
+  function suggestGroup() {
+    if (editing) return;
+    var c = S.courses[$("g-course").value] || {}, st = $("g-start").value || "";
+    var p = $("g-period").value;
+    $("g-name").value = (c.name || "Grupo") + " · " + st;
+    $("g-id").value = slugify(($("g-course").value || "grupo").replace(/^core_/, "") + "-" + st.replace(":", "") + "-" + p);
+  }
+  function openGroup(gid) {
+    editing = gid || null;
+    var g = gid ? S.groups[gid] : null;
+    $("g-title").textContent = g ? "Editar grupo" : "Nuevo grupo";
+    fillSelect($("g-course"), courseItems(), g ? g.courseId : "core_basics_lvl1");
+    fillSelect($("g-period"), sortedPeriods().map(function (id) { return [id, S.periods[id].name || id]; }), g ? g.periodId : S.period);
+    $("g-status").value = g ? g.status : "planned";
+    var sched = g && g.schedule && g.schedule.length ? g.schedule : null;
+    var on = sched ? sched.map(function (x) { return x.day; }) : ["lun", "mar", "mie", "jue", "vie"];
+    $("g-days").innerHTML = DAYS.map(function (d) {
+      return '<label><input type="checkbox" value="' + d[0] + '"' + (on.indexOf(d[0]) !== -1 ? " checked" : "") + "> " + d[1] + "</label>";
+    }).join("");
+    $("g-start").value = sched ? sched[0].start : "18:00";
+    $("g-end").value = sched ? sched[0].end : "19:00";
+    var tch = Object.keys(S.teachers).sort();
+    $("g-teachers").innerHTML = tch.length ? tch.map(function (e) {
+      var checked = g && (g.teachers || []).indexOf(e) !== -1;
+      return '<label><input type="checkbox" value="' + esc(e) + '"' + (checked ? " checked" : "") + "> " + esc(teacherLabel(e)) +
+        (S.teachers[e].name ? ' <small style="color:var(--muted)">' + esc(e) + "</small>" : "") + "</label>";
+    }).join("") : '<small>No hay profesores dados de alta.</small>';
+    $("g-cap").value = g && g.capacity ? g.capacity : 8;
+    $("g-meet").value = g ? g.meetUrl || "" : "";
+    $("g-id").readOnly = !!g;
+    $("g-id-help").textContent = g ? "La clave no cambia (es la que usan la boleta y los profesores)." : "Minúsculas, números y guiones. No se puede cambiar después.";
+    $("g-err").textContent = "";
+    if (g) { $("g-name").value = g.name || gid; $("g-id").value = gid; } else suggestGroup();
+    $("dlg-group").showModal();
+  }
+  ["g-course", "g-start", "g-period"].forEach(function (id) { $(id).addEventListener("change", suggestGroup); });
+
+  /* teachers/{correo}.groups es lo que las reglas consultan para decidir qué ve cada profesor */
+  function syncTeacherGroups(gid, now, before) {
+    var chain = Promise.resolve();
+    (before || []).filter(function (e) { return now.indexOf(e) === -1; }).forEach(function (e) {
+      chain = chain.then(function () {
+        var t = S.teachers[e];
+        if (t && (t.groups || []).indexOf(gid) !== -1) {
+          t.groups = t.groups.filter(function (x) { return x !== gid; });
+          return setDoc("teachers", e, { groups: t.groups });
+        }
+      });
+    });
+    now.forEach(function (e) {
+      chain = chain.then(function () {
+        var t = S.teachers[e];
+        if (t && (t.groups || []).indexOf(gid) === -1) {
+          t.groups = (t.groups || []).concat([gid]);
+          return setDoc("teachers", e, { groups: t.groups });
+        }
+      });
+    });
+    return chain;
+  }
+
+  $("f-group").addEventListener("submit", function (ev) {
+    if (ev.submitter && ev.submitter.value !== "save") return;
+    ev.preventDefault();
+    var err = $("g-err");
+    var gid = $("g-id").value.trim().toLowerCase();
+    if (!/^[a-z0-9][a-z0-9_-]{0,60}$/.test(gid)) { err.textContent = "Clave inválida: usa minúsculas, números y guiones."; return; }
+    if (!editing && S.groups[gid]) { err.textContent = "Ya existe un grupo con esa clave."; return; }
+    var days = Array.prototype.map.call($("g-days").querySelectorAll("input:checked"), function (i) { return i.value; });
+    var st = $("g-start").value, en = $("g-end").value;
+    if (!days.length) { err.textContent = "Elige al menos un día."; return; }
+    if (!st || !en || en <= st) { err.textContent = "La hora de fin debe ser después de la de inicio."; return; }
+    var teachers = Array.prototype.map.call($("g-teachers").querySelectorAll("input:checked"), function (i) { return i.value; });
+    var before = editing ? (S.groups[editing].teachers || []) : [];
+    var data = {
+      name: $("g-name").value.trim() || gid, courseId: $("g-course").value, periodId: $("g-period").value,
+      teachers: teachers, schedule: days.map(function (d) { return { day: d, start: st, end: en }; }),
+      meetUrl: $("g-meet").value.trim(), capacity: parseInt($("g-cap").value, 10) || 8,
+      status: $("g-status").value, updatedAt: "ts:" + nowIso()
+    };
+    if (!editing) data.createdAt = "ts:" + nowIso();
+    var btn = $("g-save");
+    btn.disabled = true;
+    err.textContent = "";
+    setDoc("groups", gid, data)
+      .then(function () { return syncTeacherGroups(gid, teachers, before); })
+      .then(function () {
+        S.groups[gid] = Object.assign({}, S.groups[gid] || {}, plain(data));
+        $("dlg-group").close();
+        S.period = data.periodId;
+        renderAll();
+        toast(editing ? "Grupo actualizado." : "Grupo creado. Ya puedes inscribir alumnos.");
+      })
+      .catch(function (e) { err.textContent = e.message; })
+      .then(function () { btn.disabled = false; });
+  });
+
+  /* ---------------- inscribir ---------------- */
+  function groupItems(selected) {
+    return groupsOfPeriod(S.period).filter(function (g) { return S.groups[g].status !== "closed" || g === selected; })
+      .map(function (g) {
+        var x = S.groups[g], n = activeEnrollments(g).length;
+        return [g, (x.name || g) + " — " + n + (x.capacity ? "/" + x.capacity : "") + (x.capacity && n >= x.capacity ? " (lleno)" : "")];
+      });
+  }
+  function showCap() {
+    var g = S.groups[$("e-group").value];
+    if (!g) { $("e-cap").textContent = ""; return; }
+    var n = activeEnrollments($("e-group").value).length;
+    $("e-cap").textContent = courseName(g.courseId) + " · " + schedText(g.schedule) +
+      (g.capacity ? " · " + Math.max(0, g.capacity - n) + " lugar(es) libre(s)" : "");
+  }
+  function lookupEmail() {
+    var email = normEmail($("e-email").value), box = $("e-lookup"), s = S.students[email];
+    if (!email || email.indexOf("@") === -1) { box.style.display = "none"; $("e-acc-wrap").style.display = ""; return; }
+    box.style.display = "block";
+    if (s) {
+      var g = S.groups[s.group];
+      box.className = "lookup ok";
+      box.innerHTML = '<i class="fas fa-circle-check"></i> Ya es alumno' + (s.name ? ": <b>" + esc(s.name) + "</b>" : "") +
+        ". Grupo actual: " + (s.group ? esc((g && g.name) || s.group) : "ninguno") + ". Si lo inscribes aquí, su grupo anterior queda en el historial.";
+      if (!$("e-name").value && s.name) $("e-name").value = s.name;
+      $("e-acc-wrap").style.display = "none";
+    } else {
+      box.className = "lookup";
+      box.innerHTML = '<i class="fas fa-user-plus"></i> Correo nuevo: se le dará acceso a la plataforma.';
+      $("e-acc-wrap").style.display = "";
+    }
+  }
+  function openEnroll(opts) {
+    opts = opts || {};
+    if (!groupsOfPeriod(S.period).length) { toast("Primero crea un grupo en este ciclo.", true); return; }
+    $("e-email").value = opts.email || "";
+    $("e-name").value = opts.name || "";
+    $("e-level").innerHTML = '<option value="">— Sin cambiar —</option>' + LEVELS.map(function (l, i) {
+      return '<option value="' + i + '"' + (opts.level === i ? " selected" : "") + ">" + l + "</option>";
+    }).join("");
+    fillSelect($("e-group"), groupItems(), opts.group || "");
+    $("e-account").checked = true;
+    $("e-err").textContent = "";
+    lookupEmail();
+    showCap();
+    $("dlg-enroll").showModal();
+    (opts.email ? $("e-group") : $("e-email")).focus();
+  }
+  $("e-email").addEventListener("input", lookupEmail);
+  $("e-group").addEventListener("change", showCap);
+
+  /* Port de cmd_enroll (school_admin.py) + cmd_add_student (upload_manuals.py). */
+  function enroll(email, gid, o) {
+    o = o || {};
+    var g = S.groups[gid], st, sid, report = [];
+    if (!g) return Promise.reject(new Error("El grupo no existe."));
+    if (g.status === "closed") return Promise.reject(new Error("El grupo está cerrado."));
+    return getDoc("students", email).then(function (doc) {
+      st = doc;
+      return sidOf(email);
+    }).then(function (h) {
+      sid = (st && st.sid) || h;
+      if (st) return;
+      /* alta nueva: allowlist + espejo roster (sin correo) */
+      var chain = o.account ? ensureAccount(email).then(function (r) {
+        if (r === "created") report.push("cuenta creada");
+        else if (r !== "exists") throw new Error("No pude crear la cuenta: " + r.slice(7));
+        o.created = r === "created";
+      }) : Promise.resolve();
+      return chain.then(function () {
+        var d = { addedAt: "ts:" + nowIso(), sid: sid };
+        if (o.name) d.name = o.name;
+        if (o.level != null) { d.level = o.level; d.levelName = LEVELS[o.level]; }
+        st = plain(d);
+        return setDoc("students", email, d);
+      }).then(function () {
+        var r = { updatedAt: "ts:" + nowIso() };
+        if (o.name) r.name = o.name;
+        if (o.level != null) { r.level = o.level; r.levelName = LEVELS[o.level]; }
+        return setDoc("roster", sid, r);
+      }).then(function () { report.push("acceso dado"); });
+    }).then(function () {
+      /* alumno existente: actualiza nombre / nivel si se escribieron */
+      if (st.addedAt && o.name == null && o.level == null) return;
+      var upd = {}, r = {};
+      if (o.name && o.name !== st.name) { upd.name = r.name = o.name; }
+      if (o.level != null && o.level !== st.level) { upd.level = r.level = o.level; upd.levelName = r.levelName = LEVELS[o.level]; }
+      if (!Object.keys(upd).length) return;
+      Object.assign(st, upd);
+      r.updatedAt = "ts:" + nowIso();
+      return setDoc("students", email, upd).then(function () { return setDoc("roster", sid, r); });
+    }).then(function () {
+      var eid = sid + "__" + gid, cur = S.enrollments[eid];
+      if (cur && cur.status === "active") { report.push("ya estaba en este grupo"); return; }
+      /* cierra otras inscripciones activas (cambio de grupo) */
+      return query("enrollments", [["sid", sid], ["status", "active"]]).then(function (act) {
+        var chain = Promise.resolve();
+        Object.keys(act).forEach(function (oid) {
+          if (oid === eid) return;
+          chain = chain.then(function () {
+            return setDoc("enrollments", oid, { status: "moved", endedAt: "ts:" + nowIso(), updatedAt: "ts:" + nowIso() });
+          }).then(function () {
+            if (S.enrollments[oid]) S.enrollments[oid].status = "moved";
+            report.push("sale de " + ((S.groups[act[oid].groupId] || {}).name || act[oid].groupId));
+          });
+        });
+        return chain;
+      }).then(function () {
+        var e = { sid: sid, groupId: gid, courseId: g.courseId || "", periodId: g.periodId || "",
+          name: o.name || st.name || "", status: "active", enrolledAt: "ts:" + nowIso(), endedAt: null, updatedAt: "ts:" + nowIso() };
+        return setDoc("enrollments", eid, e).then(function () { S.enrollments[eid] = plain(e); });
+      });
+    }).then(function () {
+      /* grupo actual: lo que ven las reglas, la boleta y los portales */
+      if (st.group === gid) return;
+      return setDoc("students", email, { group: gid, sid: sid })
+        .then(function () { return setDoc("roster", sid, { group: gid, updatedAt: "ts:" + nowIso() }); })
+        .then(function () { st.group = gid; });
+    }).then(function () {
+      /* acceso por curso: si el alumno tiene lista `books`, suma el libro del curso */
+      if (g.courseId && Array.isArray(st.books) && st.books.indexOf(g.courseId) === -1) {
+        st.books = st.books.concat([g.courseId]);
+        return setDoc("students", email, { books: st.books }).then(function () { report.push("libro del curso agregado"); });
+      }
+    }).then(function () {
+      st.sid = sid;
+      S.students[email] = Object.assign(S.students[email] || {}, st);
+      S.bySid[sid] = email;
+      if (o.created) {
+        return sendPasswordEmail(email).then(function (ok) {
+          report.push(ok ? "correo de contraseña enviado" : "NO salió el correo: que use «Olvidé mi contraseña» en login.html");
+        });
+      }
+    }).then(function () { return report; });
+  }
+
+  /* Port de cmd_unenroll: completed conserva su grupo actual; dropped lo deja sin grupo. */
+  function unenroll(email, gid, status) {
+    var st = S.students[email];
+    if (!st || !st.sid) return Promise.reject(new Error("No encuentro al alumno."));
+    var eid = st.sid + "__" + gid;
+    return setDoc("enrollments", eid, { status: status, endedAt: "ts:" + nowIso(), updatedAt: "ts:" + nowIso() })
+      .then(function () {
+        if (S.enrollments[eid]) S.enrollments[eid].status = status;
+        if (status === "dropped" && st.group === gid) {
+          return setDoc("students", email, { group: "" })
+            .then(function () { return setDoc("roster", st.sid, { group: "", updatedAt: "ts:" + nowIso() }); })
+            .then(function () { st.group = ""; });
+        }
+      });
+  }
+
+  $("f-enroll").addEventListener("submit", function (ev) {
+    if (ev.submitter && ev.submitter.value !== "save") return;
+    ev.preventDefault();
+    var err = $("e-err"), email = normEmail($("e-email").value), gid = $("e-group").value;
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { err.textContent = "Escribe un correo válido."; return; }
+    if (!gid) { err.textContent = "Elige un grupo."; return; }
+    var g = S.groups[gid], n = activeEnrollments(gid).length;
+    if (g.capacity && n >= g.capacity && !confirm("El grupo ya tiene " + n + " de " + g.capacity + " lugares. ¿Inscribir de todos modos?")) return;
+    var lv = $("e-level").value;
+    var btn = $("e-save");
+    btn.disabled = true;
+    err.textContent = "";
+    enroll(email, gid, {
+      name: $("e-name").value.trim() || null,
+      level: lv === "" ? null : +lv,
+      account: !S.students[email] && $("e-account").checked
+    }).then(function (report) {
+      $("dlg-enroll").close();
+      renderAll();
+      toast("Inscrito en " + (g.name || gid) + (report.length ? " · " + report.join(" · ") : "") + ".");
+    }).catch(function (e) { err.textContent = e.message; })
+      .then(function () { btn.disabled = false; });
+  });
+
+  /* ---------------- eventos ---------------- */
+  document.addEventListener("click", function (ev) {
+    var t = ev.target.closest("button");
+    if (!t) return;
+    if (t.dataset.tab) {
+      document.querySelectorAll(".tabs button").forEach(function (b) { b.classList.toggle("on", b === t); });
+      document.querySelectorAll(".pane").forEach(function (p) { p.classList.toggle("on", p.id === "pane-" + t.dataset.tab); });
+    } else if (t.dataset.enroll) openEnroll({ group: t.dataset.enroll });
+    else if (t.dataset.edit) openGroup(t.dataset.edit);
+    else if (t.dataset.hist) toggleHistory(t, t.dataset.hist);
+    else if (t.dataset.enrollEmail) {
+      var s = S.students[t.dataset.enrollEmail];
+      openEnroll({ email: t.dataset.enrollEmail, name: s.name || "" });
+    } else if (t.dataset.lead) {
+      var l = S.leads.filter(function (x) { return x._id === t.dataset.lead; })[0] || {};
+      openEnroll({ email: normEmail(l.email), name: l.name || "", level: parseLevel(l.level) });
+    }
+  });
+  document.addEventListener("change", function (ev) {
+    var sel = ev.target;
+    if (!sel.dataset || !sel.dataset.act) return;
+    var v = sel.value, gid = sel.dataset.act, email = sel.dataset.email;
+    sel.value = "";
+    if (!v) return;
+    if (!email) { toast("Este alumno no tiene doc en students/ (dato viejo); muévelo con school_admin.py.", true); return; }
+    var name = (S.students[email] && S.students[email].name) || email;
+    var job;
+    if (v.indexOf("move:") === 0) {
+      var to = v.slice(5);
+      if (!confirm("¿Mover a " + name + " a «" + (S.groups[to].name || to) + "»?")) return;
+      job = enroll(email, to, {}).then(function () { return "Movido a " + (S.groups[to].name || to) + "."; });
+    } else {
+      var txt = v === "completed" ? "marcar que " + name + " terminó el curso" : "dar de baja a " + name + " (pierde su grupo actual)";
+      if (!confirm("¿Seguro que quieres " + txt + "?")) return;
+      job = unenroll(email, gid, v).then(function () { return v === "completed" ? "Curso terminado." : "Baja registrada."; });
+    }
+    sel.disabled = true;
+    job.then(function (m) { renderAll(); toast(m); }, function (e) { sel.disabled = false; toast(e.message, true); });
+  });
+  $("cycle").addEventListener("change", function () { S.period = this.value; renderAll(); });
+  $("new-group").addEventListener("click", function () {
+    if (!S.period) { toast("Primero crea los ciclos.", true); return; }
+    openGroup(null);
+  });
+  $("enroll-any").addEventListener("click", function () { openEnroll({}); });
+  $("enroll-any2").addEventListener("click", function () { openEnroll({}); });
+  $("reload").addEventListener("click", function () {
+    loadAll().then(function () { toast("Actualizado."); }, function (e) { toast(e.message, true); });
+  });
+  $("st-q").addEventListener("input", renderStudents);
+  $("st-f").addEventListener("change", renderStudents);
+  $("pr-q").addEventListener("input", renderLeads);
+  $("pr-f").addEventListener("change", renderLeads);
+
+  /* ---------------- arranque: solo staff (admin o coordinación) ---------------- */
+  if (!window.VesperAuth || !window.VesperAuth.isConfigured) {
+    showMsg('<i class="fas fa-triangle-exclamation"></i> Firebase no está configurado.', true);
+    return;
+  }
+  window.VesperAuth.initFirebase().then(function (auth) {
+    var seen = false;
+    auth.onAuthStateChanged(function (u) {
+      if (seen) return;
+      seen = true;
+      if (!u || !u.emailVerified) {
+        showMsg('<i class="fas fa-lock"></i> Inicia sesión con tu cuenta de dirección o coordinación. <a href="login.html">Ir a iniciar sesión</a>', true);
+        return;
+      }
+      user = u;
+      var email = normEmail(u.email);
+      var isFounder = email === normEmail(CFG.adminEmail);
+      (isFounder ? Promise.resolve({ role: "admin" }) : getDoc("roles", email)).then(function (r) {
+        if (!r || (r.role !== "admin" && r.role !== "coordinator")) {
+          showMsg('<i class="fas fa-lock"></i> Este panel es solo para dirección y coordinación. Si deberías tener acceso, pide que te asignen el rol de coordinador.', true);
+          return;
+        }
+        return loadAll().then(function () {
+          $("loading").style.display = "none";
+          $("content").style.display = "block";
+        });
+      }).catch(function (e) {
+        showMsg('<i class="fas fa-triangle-exclamation"></i> No pude cargar la escuela: ' + esc(e.message), true);
+      });
+    });
+  }).catch(function () {
+    showMsg('<i class="fas fa-wifi"></i> Sin conexión con Firebase. Revisa tu internet y recarga.', true);
+  });
+})();
+</script>
+</body>
+</html>

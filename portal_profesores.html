@@ -591,6 +591,8 @@ footer a:hover{color:var(--gold);text-decoration:underline;}
         <div class="links"><a class="go primary" href="portal_boleta.html">Abrir boleta <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a></div></div>
       <div class="card"><div class="card-top"><div class="medal"><svg class="i" aria-hidden="true"><use href="#i-calendar"/></svg></div><span class="lvl">Ciclo 2027</span></div><h3>Calendario escolar</h3><p>Los 12 ciclos de 20 clases del año, con festivos, vacaciones de Semana Santa y fin de año, cierres de inscripción y qué toca en cada etapa del ciclo.</p>
         <div class="links"><a class="go primary" href="portal_calendario.html">Abrir calendario <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a></div></div>
+      <div class="card" id="card-escuela"><div class="card-top"><div class="medal"><svg class="i" aria-hidden="true"><use href="#i-calendar"/></svg></div><span class="lvl">Dirección</span></div><h3>Grupos e inscripciones</h3><p>Arma los grupos de cada ciclo e inscribe alumnos: acceso a la plataforma, grupo, profesor y cupo en un solo paso, con su historial.</p>
+        <div class="links"><a class="go primary" href="portal_escuela.html">Abrir panel <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a></div></div>
       <div class="card" id="card-admin"><div class="card-top"><div class="medal"><svg class="i" aria-hidden="true"><use href="#i-shield"/></svg></div><span class="lvl">Admin</span></div><h3>Administrar accesos</h3><p>Autoriza cuentas de alumnos y profesores y cambia la contraseña del portal.</p>
         <div class="links"><a class="go primary" href="access_admin.html">Abrir panel <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a></div></div>
     </div>
@@ -910,6 +912,19 @@ footer a:hover{color:var(--gold);text-decoration:underline;}
         if(adm && email && email!==adm){
           var cAdm=document.getElementById("card-admin");
           if(cAdm) cAdm.classList.add("admin-hidden");
+          /* "Grupos e inscripciones": admin y coordinación (roles/{correo}) */
+          var cEsc=document.getElementById("card-escuela");
+          if(cEsc){
+            cEsc.classList.add("admin-hidden");
+            user.getIdToken().then(function(token){
+              return fetch("https://firestore.googleapis.com/v1/projects/"+pid+"/databases/"+db+
+                "/documents/roles/"+encodeURIComponent(email),{headers:{Authorization:"Bearer "+token}});
+            }).then(function(r){ return r&&r.status===200 ? r.json() : null; })
+              .then(function(doc){
+                var role=doc&&doc.fields&&doc.fields.role&&doc.fields.role.stringValue;
+                if(role==="admin"||role==="coordinator") cEsc.classList.remove("admin-hidden");
+              }).catch(function(){});
+          }
         }
       }catch(e){}
       user.getIdToken().then(function(token){
