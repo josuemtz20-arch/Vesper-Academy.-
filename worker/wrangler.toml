@@ -10,7 +10,19 @@
 # nombre, ese Worker sobra: bórralo en el panel. Ver README.
 name = "patient-feather-4364"
 main = "vesper-chat-proxy.js"
-compatibility_date = "2024-11-01"
+# Igual a lo que tenía el Worker en el panel antes del despliegue del
+# 2026-11-04: `wrangler deploy` reemplaza la configuración remota con esta, así
+# que aquí debe quedar lo que de verdad queremos en vivo.
+compatibility_date = "2026-06-16"
+# Sin URLs de vista previa por versión: el chat solo usa la URL principal.
+preview_urls = false
+
+# Registros del Worker en el panel (sirven para ver abuso o errores 429/503).
+[observability]
+enabled = true
+
+[observability.logs]
+enabled = true
 
 # La API key NO va aquí. Se guarda como secreto:
 #   wrangler secret put ANTHROPIC_API_KEY
