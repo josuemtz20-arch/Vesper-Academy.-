@@ -138,6 +138,8 @@
 !/vesper_vocab_examples.js
 # frase del dia del hub (a mano); audio en assets/audio/phrase
 !/vesper_phrase_day.js
+# hora del dia, escenas de Vesper por el mundo y frase del dia (hub + audio)
+!/vesper_english_ui.js
 !/vesper_covers.js
 !/vesper_lesson_images.js
 # listening-practice engine for the audio player (lesson.html): generates the

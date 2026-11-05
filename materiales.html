@@ -937,6 +937,7 @@ html:not(.vesper-dark){--en:#2f6fb3;}
      inerte sin dar ningún error. Es exactamente lo que le pasa hoy a
      perfil.html y onboarding.html, que lo cargan al principio del <head>. -->
 <script src="vesper_theme.js"></script>
+<script src="vesper_english_ui.js"></script>
 </head>
 <body>
 
@@ -985,7 +986,7 @@ html:not(.vesper-dark){--en:#2f6fb3;}
 </header>
 
 <main class="wrap" id="main">
-  <div class="intro reveal">
+  <div class="intro reveal" data-world-bg="level">
     <div class="in-txt">
       <span class="rule" aria-hidden="true"></span>
       <span class="eyebrow" lang="en">Student portal</span>
@@ -1067,55 +1068,8 @@ html:not(.vesper-dark){--en:#2f6fb3;}
   </section>
   <script src="vesper_phrase_day.js"></script>
   <script>
-  (function(){
-    var D = window.VESPER_PHRASE_DAY, box = document.getElementById("phrase");
-    if(!D || !box) return;
-    var L = ["A1","A2","B1","B2","C1","C2"], lv = 0;
-    try{
-      var pr = JSON.parse(localStorage.getItem("vesper_profile") || "null");
-      if(pr && typeof pr.level === "number") lv = Math.max(0, Math.min(5, Math.round(pr.level)));
-    }catch(e){}
-    var lvl = L[lv], list = D[lvl] || D.A1;
-    if(!list || !list.length) return;
-    /* Una frase por día del año: estable todo el día, distinta mañana. */
-    var now = new Date(), start = new Date(now.getFullYear(), 0, 0);
-    var day = Math.floor((now - start) / 864e5);
-    var k = day % list.length, it = list[k];
-    function esc(t){ return String(t).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
-    var hl = it.hl || it.t, en = it.en, i = en.toLowerCase().indexOf(hl.toLowerCase());
-    document.getElementById("ph-term").textContent = it.t;
-    document.getElementById("ph-ex").innerHTML = i < 0 ? esc(en)
-      : esc(en.slice(0, i)) + "<mark>" + esc(en.slice(i, i + hl.length)) + "</mark>" + esc(en.slice(i + hl.length));
-    document.getElementById("ph-es").textContent = it.es;
-    var tip = document.getElementById("ph-tip");
-    if(it.tip) tip.textContent = it.tip; else tip.remove();
-    box.hidden = false;
-
-    var btn = document.getElementById("ph-play"), au = null;
-    var src = "assets/audio/phrase/" + lvl + "_" + (k + 1 < 10 ? "0" : "") + (k + 1) + ".mp3";
-    function on(v){ btn.classList.toggle("is-on", v); }
-    /* Si el MP3 no carga (sin red y sin caché), la voz del navegador lo lee:
-       peor sonido, pero el botón nunca queda mudo. */
-    function speak(){
-      try{
-        var s = window.speechSynthesis; if(!s) return on(false);
-        s.cancel(); var u = new SpeechSynthesisUtterance(en); u.lang = "en-US"; u.rate = .9;
-        u.onend = u.onerror = function(){ on(false); }; on(true); s.speak(u);
-      }catch(e){ on(false); }
-    }
-    btn.addEventListener("click", function(){
-      if(au && !au.paused){ au.pause(); au.currentTime = 0; return on(false); }
-      if(!au){
-        au = new Audio(src);
-        au.addEventListener("ended", function(){ on(false); });
-        au.addEventListener("pause", function(){ on(false); });
-      }
-      on(true);
-      var p = au.play();
-      if(p && p.catch) p.catch(function(){ au = null; speak(); });
-      try{ if(window.VA && VA.track) VA.track("hub_phrase_play", { level: lvl, n: k + 1 }); }catch(e){}
-    });
-  })();
+  /* El render vive en vesper_english_ui.js (lo comparte audio_library.html). */
+  if(window.VesperEN) VesperEN.renderPhrase(document.getElementById("phrase"));
   </script>
 
   <!-- Accesos rápidos: todas tus herramientas visibles desde el portal -->
@@ -1211,7 +1165,7 @@ html:not(.vesper-dark){--en:#2f6fb3;}
     <section class="cat-sec" data-group="basics" aria-label="Core Basics">
       <div class="grp">
         <div class="grp-cvr">
-          <img src="assets/images/hub/world_a1.jpg" alt="" role="presentation" loading="lazy" decoding="async" width="1600" height="686">
+          <img data-world="a1" src="assets/images/hub/world_a1.jpg" alt="" role="presentation" loading="lazy" decoding="async" width="1600" height="686">
         </div>
         <div class="grp-txt">
           <svg class="i grp-ic" aria-hidden="true"><use href="#i-book"/></svg>
@@ -1229,7 +1183,7 @@ html:not(.vesper-dark){--en:#2f6fb3;}
     <section class="cat-sec" data-group="practice" aria-label="Core Practice">
       <div class="grp">
         <div class="grp-cvr">
-          <img src="assets/images/hub/world_b2.jpg" alt="" role="presentation" loading="lazy" decoding="async" width="1600" height="686">
+          <img data-world="b2" src="assets/images/hub/world_b2.jpg" alt="" role="presentation" loading="lazy" decoding="async" width="1600" height="686">
         </div>
         <div class="grp-txt">
           <svg class="i grp-ic" aria-hidden="true"><use href="#i-speech"/></svg>
@@ -1249,7 +1203,7 @@ html:not(.vesper-dark){--en:#2f6fb3;}
     <section class="cat-sec" data-group="grammar" aria-label="Core Grammar">
       <div class="grp">
         <div class="grp-cvr">
-          <img src="assets/images/hub/world_c1.jpg" alt="" role="presentation" loading="lazy" decoding="async" width="1600" height="686">
+          <img data-world="c1" src="assets/images/hub/world_c1.jpg" alt="" role="presentation" loading="lazy" decoding="async" width="1600" height="686">
         </div>
         <div class="grp-txt">
           <svg class="i grp-ic" aria-hidden="true"><use href="#i-grid"/></svg>
@@ -1266,7 +1220,7 @@ html:not(.vesper-dark){--en:#2f6fb3;}
     <section class="cat-sec" data-group="cert" aria-label="Certification">
       <div class="grp">
         <div class="grp-cvr">
-          <img src="assets/images/hub/world_c2.jpg" alt="" role="presentation" loading="lazy" decoding="async" width="1600" height="686">
+          <img data-world="c2" src="assets/images/hub/world_c2.jpg" alt="" role="presentation" loading="lazy" decoding="async" width="1600" height="686">
         </div>
         <div class="grp-txt">
           <svg class="i grp-ic" aria-hidden="true"><use href="#i-summit"/></svg>
@@ -1286,7 +1240,7 @@ html:not(.vesper-dark){--en:#2f6fb3;}
     <section class="cat-sec" data-group="biz" aria-label="Business">
       <div class="grp">
         <div class="grp-cvr">
-          <img src="assets/images/hub/world_a2.jpg" alt="" role="presentation" loading="lazy" decoding="async" width="1600" height="686">
+          <img data-world="a2" src="assets/images/hub/world_a2.jpg" alt="" role="presentation" loading="lazy" decoding="async" width="1600" height="686">
         </div>
         <div class="grp-txt">
           <svg class="i grp-ic" aria-hidden="true"><use href="#i-case"/></svg>
@@ -1303,7 +1257,7 @@ html:not(.vesper-dark){--en:#2f6fb3;}
     <section class="cat-sec" data-group="otros" aria-label="Otros cursos">
       <div class="grp">
         <div class="grp-cvr">
-          <img src="assets/images/hub/world_b1.jpg" alt="" role="presentation" loading="lazy" decoding="async" width="1600" height="686">
+          <img data-world="b1" src="assets/images/hub/world_b1.jpg" alt="" role="presentation" loading="lazy" decoding="async" width="1600" height="686">
         </div>
         <div class="grp-txt">
           <svg class="i grp-ic" aria-hidden="true"><use href="#i-star"/></svg>
@@ -1388,7 +1342,8 @@ var VIcon = (function(){
     var h1 = document.getElementById("intro-title"), gl = document.getElementById("hello-gloss");
     if(!h1) return;
     var hr = new Date().getHours();
-    var g = hr >= 5 && hr < 12 ? ["Good morning","buenos días"]
+    var g = window.VesperEN ? VesperEN.greet()
+          : hr >= 5 && hr < 12 ? ["Good morning","buenos días"]
           : hr >= 12 && hr < 19 ? ["Good afternoon","buenas tardes"]
           : ["Good evening","buenas noches"];
     name = String(name||"").trim().split(/\s+/)[0];
@@ -1400,15 +1355,11 @@ var VIcon = (function(){
   if(profile && profile.name) window.vHello(profile.name);
 
   /* La lámina del héroe es la parada del viaje de Vesper que le toca a su
-     nivel (cuestionario: 0 = desde cero … 5 = domina). Sin perfil, Londres.
+     nivel (0 = desde cero … 5 = domina; sin perfil, Londres) y a la HORA:
+     mañana, tarde o noche, igual que el saludo. La pinta vesper_english_ui.js
+     sobre [data-world-bg]; aquí sólo se repite por si el perfil llegó tarde.
      Son archivos propios del hub: las láminas del mapa no se tocan. */
-  (function(){
-    var W = ["a1","a2","b1","b2","c1","c2"];
-    var lv = profile && typeof profile.level === "number" ? profile.level : 0;
-    var w = W[Math.max(0, Math.min(W.length-1, Math.round(lv)))];
-    var hero = document.querySelector(".intro");
-    if(hero) hero.style.setProperty("--hero-art", 'url("assets/images/hub/world_'+w+'.jpg")');
-  })();
+  if(window.VesperEN) VesperEN.applyArt();
 
   /* ── 2) Héroe "Hoy" — continúa / empieza por aquí ── */
   (function(){

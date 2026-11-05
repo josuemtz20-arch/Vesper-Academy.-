@@ -567,7 +567,7 @@
             min-height:clamp(260px,28vw,330px);
             padding:clamp(24px,4vw,40px) clamp(22px,4vw,44px) clamp(22px,3vw,28px);
             border-radius:22px; border:1px solid var(--hair); color:#f5f2eb;
-            background:#14122a var(--hero-art,url("assets/images/map/il/banner_a1.jpg")) 74% 38%/cover no-repeat;
+            background:#14122a var(--hero-art,url("assets/images/hub/world_a1.jpg")) 74% 38%/cover no-repeat;
             box-shadow:0 0 0 5px color-mix(in srgb,var(--gold) 9%,transparent),0 22px 50px rgba(8,6,22,.38); }
         .ahero::before { content:""; position:absolute; inset:0; z-index:-1; pointer-events:none;
             background:linear-gradient(90deg,rgba(14,12,31,.95) 0%,rgba(14,12,31,.85) 36%,rgba(14,12,31,.30) 64%,rgba(14,12,31,0) 84%),
@@ -597,6 +597,43 @@
             .ahero h1 { font-size:2.3rem; }
         }
         .s-box { margin-top:18px; }
+
+        /* ============================================================
+           INGLÉS AL FRENTE 2026-11 (igual que el portal del alumno)
+           El inglés es el contenido, el español la guía. Lámina = Vesper por
+           el mundo, por nivel y por hora (vesper_english_ui.js). --en marca
+           "esto es inglés".
+           ============================================================ */
+        .ahero .ah-gloss { margin:6px 0 0; font-size:.86rem; color:rgba(245,242,235,.66); }
+        .ahero .ah-gloss i { font-style:normal; color:#8fc6ff; font-weight:600; }
+        .phrase { display:grid; grid-template-columns:minmax(0,1fr) auto; align-items:center; gap:18px; margin-top:14px;
+            padding:20px 24px; border-radius:22px; border:1px solid var(--hair); color:#f5f2eb;
+            background-color:#1b1938;
+            background-image:radial-gradient(420px 180px at 100% 0%,rgba(143,198,255,.13),transparent 62%),
+                             linear-gradient(150deg,#232149,#16142e 70%);
+            box-shadow:0 0 0 4px color-mix(in srgb,var(--gold) 8%,transparent),0 14px 34px rgba(8,6,22,.28); }
+        .phrase[hidden] { display:none; }
+        .ph-main { display:flex; flex-direction:column; gap:5px; min-width:0; }
+        .ph-chip { align-self:flex-start; font-size:.64rem; font-weight:700; letter-spacing:.16em; text-transform:uppercase;
+            color:#8fc6ff; border:1px solid rgba(143,198,255,.45); border-radius:999px; padding:3px 10px; }
+        .phrase .ph-term { margin:4px 0 0; font-family:var(--va-font-display); font-size:clamp(1.45rem,3vw,1.85rem);
+            font-weight:600; line-height:1.15; color:#f3e2ab; }
+        .phrase .ph-ex { margin:0; font-size:1.04rem; color:#f5f2eb; }
+        .ph-ex mark { background:none; color:#f3e2ab; font-weight:700; }
+        .phrase .ph-es { margin:2px 0 0; font-size:.88rem; color:rgba(245,242,235,.72); }
+        .ph-tip::before { content:" · "; }
+        .ph-play { display:inline-flex; flex-direction:column; align-items:center; gap:6px; border:0; background:none; cursor:pointer;
+            color:#f3e2ab; font:inherit; font-size:.7rem; font-weight:700; letter-spacing:.12em; text-transform:uppercase; padding:0; }
+        .ph-play svg { box-sizing:content-box; width:22px; height:22px; padding:17px; border-radius:50%;
+            background:linear-gradient(180deg,#f3e2ab,var(--gold)); color:#1a1530; fill:currentColor;
+            box-shadow:0 4px 0 color-mix(in srgb,var(--gold) 62%,#000); transition:transform .09s ease,box-shadow .09s ease; }
+        .ph-play .ph-i-wave { display:none; fill:none; stroke:currentColor; stroke-width:2.4; stroke-linecap:round; }
+        .ph-play.is-on .ph-i-play { display:none; }
+        .ph-play.is-on .ph-i-wave { display:block; }
+        .ph-play:active svg { transform:translateY(4px); box-shadow:0 0 0 transparent; }
+        .ph-play:focus-visible { outline:none; }
+        .ph-play:focus-visible svg { outline:2px solid #f3e2ab; outline-offset:3px; }
+        @media (max-width:560px) { .phrase { padding:18px; gap:14px; } .ph-play svg { padding:14px; } }
         #search { border-radius:14px; }
 
         /* -- Encabezados de bloque sin numeral (ya no hay índice que contar) -- */
@@ -639,6 +676,7 @@
      :root queda ANTES, la pagina gana y el motor de temas se vuelve inerte
      sin dar ningun error. -->
 <script src="vesper_theme.js"></script>
+<script src="vesper_english_ui.js"></script>
 </head>
 
 <body>
@@ -680,10 +718,11 @@
     <!-- Lámina del alumno: el mundo del mapa que corresponde a su nivel (la
          pinta el script del final), igual que en el portal. Sin cifras de
          catálogo: al alumno le sirve su nivel y lo que ya practicó. -->
-    <section class="ahero" id="ahero">
+    <section class="ahero" id="ahero" data-world-bg="level">
         <div class="ah-txt">
-            <span class="eyebrow">Escucha y practica</span>
-            <h1>Biblioteca de audio</h1>
+            <span class="eyebrow" lang="en">Listen &amp; practice</span>
+            <h1 lang="en">Listening Library</h1>
+            <p class="ah-gloss"><i lang="en">Listening Library</i> = biblioteca de audio</p>
             <p class="lead">Elige una colección y luego una lección. Cada una trae el audio,
                 la transcripción para leer mientras escuchas y ejercicios que se califican al instante.</p>
         </div>
@@ -701,6 +740,24 @@
     </div>
 
     <!-- Reanudar: lo pinta renderRecent() cuando hay historial. -->
+    <!-- Frase del día: la misma del portal (vesper_english_ui.js +
+         vesper_phrase_day.js). Aquí cuadra doble: es una biblioteca de audio. -->
+    <section id="phrase" class="phrase" aria-labelledby="ph-term" hidden>
+        <div class="ph-main">
+            <span class="ph-chip" lang="en">Phrase of the day</span>
+            <p class="ph-term" id="ph-term" lang="en"></p>
+            <p class="ph-ex" id="ph-ex" lang="en"></p>
+            <p class="ph-es"><span id="ph-es"></span><span class="ph-tip" id="ph-tip"></span></p>
+        </div>
+        <button type="button" class="ph-play" id="ph-play" aria-label="Escuchar la frase en inglés">
+            <svg class="ph-i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.6v12.8a.8.8 0 0 0 1.2.7l10.2-6.4a.8.8 0 0 0 0-1.4L9.2 4.9A.8.8 0 0 0 8 5.6z"/></svg>
+            <svg class="ph-i-wave" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9v6M10 6v12M14 8v8M18 10v4"/></svg>
+            <span lang="en">Listen</span>
+        </button>
+    </section>
+    <script src="vesper_phrase_day.js"></script>
+    <script>if (window.VesperEN) VesperEN.renderPhrase(document.getElementById("phrase"));</script>
+
     <div id="resume-host"></div>
 
     <a class="toolcard t-only" href="whiteboard/">
@@ -923,14 +980,11 @@
         const STU = studentLevel();
         function isLocked(col) { const r = REQ[col]; return STU != null && r != null && r > STU; }
 
-        // Lamina del heroe: el mundo del mapa de su nivel (0..5 -> a1..c2),
-        // el mismo criterio que el portal del alumno.
-        (function () {
-            const W = ["a1", "a2", "b1", "b2", "c1", "c2"];
-            const w = W[Math.max(0, Math.min(5, STU == null ? 0 : Math.round(STU)))];
-            document.getElementById("ahero").style.setProperty("--hero-art",
-                'url("assets/images/map/il/banner_' + w + '.jpg")');
-        })();
+        // Lámina del héroe: Vesper por el mundo, por nivel (0..5 -> a1..c2) y
+        // por hora del día, el mismo criterio que el portal. La pinta
+        // vesper_english_ui.js sobre [data-world-bg]; aquí se repite por si
+        // el perfil llegó después de la carga.
+        if (window.VesperEN) VesperEN.applyArt();
 
         // Explain why a collection is locked and offer the placement test.
         function showLock(col) {
