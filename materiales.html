@@ -899,6 +899,11 @@ footer{margin-top:clamp(36px,5vw,56px);}
 /* ── Accesos bilingües: el nombre en inglés manda, el español lo acompaña ── */
 a.qn .qn-es{margin-top:-3px;font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--en);}
 
+/* ── Portadas de familia con las escenas del viaje: en escritorio la franja
+   es baja (≈160 px) y el 42 % de arriba dejaba al gato sin cara; las escenas
+   tienen la cabeza a un 20–35 % de alto. El teléfono ya encuadra bien. ── */
+@media(min-width:601px){.grp-cvr img[src*="hub/world_"]{object-position:70% 22%;}}
+
 /* ── Libros: el título en inglés al frente, el curso como etiqueta ── */
 a.card .ck{display:block;font-size:.66rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:2px;}
 a.card h3[lang="en"]{font-size:1.16rem;}
@@ -1198,11 +1203,15 @@ html:not(.vesper-dark){--en:#2f6fb3;}
   <!-- Catálogo por curso. Los 24 enlaces de aquí abajo son el RESPALDO:
        si vesper_book_index.js carga, el script del final los vuelve a pintar
        desde el índice (fuente única). Si no carga, esto es lo que se ve. -->
+  <!-- Portadas de familia = escenas de "Vesper por el mundo" (hub/world_*.jpg),
+       elegidas por tema: Basics Londres (el primer hello), Practice Toronto
+       (vida diaria), Grammar Edimburgo (lectura), Certification San Francisco
+       (la cima), Business Nueva York, Otros cursos Sídney (viajes). -->
   <div id="catalog">
     <section class="cat-sec" data-group="basics" aria-label="Core Basics">
       <div class="grp">
         <div class="grp-cvr">
-          <img src="assets/images/map/il/banner_a1.jpg" alt="" role="presentation" loading="lazy" decoding="async" width="1376" height="590">
+          <img src="assets/images/hub/world_a1.jpg" alt="" role="presentation" loading="lazy" decoding="async" width="1600" height="686">
         </div>
         <div class="grp-txt">
           <svg class="i grp-ic" aria-hidden="true"><use href="#i-book"/></svg>
@@ -1220,7 +1229,7 @@ html:not(.vesper-dark){--en:#2f6fb3;}
     <section class="cat-sec" data-group="practice" aria-label="Core Practice">
       <div class="grp">
         <div class="grp-cvr">
-          <img src="assets/images/map/il/banner_a2.jpg" alt="" role="presentation" loading="lazy" decoding="async" width="1376" height="590">
+          <img src="assets/images/hub/world_b2.jpg" alt="" role="presentation" loading="lazy" decoding="async" width="1600" height="686">
         </div>
         <div class="grp-txt">
           <svg class="i grp-ic" aria-hidden="true"><use href="#i-speech"/></svg>
@@ -1240,7 +1249,7 @@ html:not(.vesper-dark){--en:#2f6fb3;}
     <section class="cat-sec" data-group="grammar" aria-label="Core Grammar">
       <div class="grp">
         <div class="grp-cvr">
-          <img src="assets/images/map/il/banner_b2.jpg" alt="" role="presentation" loading="lazy" decoding="async" width="1376" height="590">
+          <img src="assets/images/hub/world_c1.jpg" alt="" role="presentation" loading="lazy" decoding="async" width="1600" height="686">
         </div>
         <div class="grp-txt">
           <svg class="i grp-ic" aria-hidden="true"><use href="#i-grid"/></svg>
@@ -1257,7 +1266,7 @@ html:not(.vesper-dark){--en:#2f6fb3;}
     <section class="cat-sec" data-group="cert" aria-label="Certification">
       <div class="grp">
         <div class="grp-cvr">
-          <img src="assets/images/map/il/banner_c1.jpg" alt="" role="presentation" loading="lazy" decoding="async" width="1376" height="590">
+          <img src="assets/images/hub/world_c2.jpg" alt="" role="presentation" loading="lazy" decoding="async" width="1600" height="686">
         </div>
         <div class="grp-txt">
           <svg class="i grp-ic" aria-hidden="true"><use href="#i-summit"/></svg>
@@ -1277,7 +1286,7 @@ html:not(.vesper-dark){--en:#2f6fb3;}
     <section class="cat-sec" data-group="biz" aria-label="Business">
       <div class="grp">
         <div class="grp-cvr">
-          <img src="assets/images/map/il/banner_b1.jpg" alt="" role="presentation" loading="lazy" decoding="async" width="1376" height="590">
+          <img src="assets/images/hub/world_a2.jpg" alt="" role="presentation" loading="lazy" decoding="async" width="1600" height="686">
         </div>
         <div class="grp-txt">
           <svg class="i grp-ic" aria-hidden="true"><use href="#i-case"/></svg>
@@ -1294,7 +1303,7 @@ html:not(.vesper-dark){--en:#2f6fb3;}
     <section class="cat-sec" data-group="otros" aria-label="Otros cursos">
       <div class="grp">
         <div class="grp-cvr">
-          <img src="assets/images/map/il/banner_c2.jpg" alt="" role="presentation" loading="lazy" decoding="async" width="1376" height="590">
+          <img src="assets/images/hub/world_b1.jpg" alt="" role="presentation" loading="lazy" decoding="async" width="1600" height="686">
         </div>
         <div class="grp-txt">
           <svg class="i grp-ic" aria-hidden="true"><use href="#i-star"/></svg>
