@@ -145,6 +145,7 @@
   .gem-count .gi svg{width:18px;height:18px;display:block}
 </style>
 <link rel="stylesheet" href="assets/css/vesper_tokens.css">
+<script src="vesper_app_mode.js"></script>
 <script src="vesper_prefs.js"></script>
 </head>
 <body>
@@ -372,6 +373,8 @@
 <script src="vesper_opticons.js"></script>
 <script src="vesper_economy.js"></script>
 <script src="vesper_sfx.js"></script>
+<!-- solo para el filtro del alias (aliasProblem); sin vesper_auth.js no conecta nada -->
+<script src="vesper_league_cloud.js"></script>
 <script>
 /* rellena los iconos SVG de marca en los encabezados de sección (sin emojis) */
 (function () {
@@ -677,8 +680,22 @@
         localStorage.setItem("vesper_profile", JSON.stringify(p));
       } catch (e) {}
     }
+    /* filtro de groserías y datos de contacto (vesper_league_cloud.js) */
+    var warn = document.createElement("span");
+    warn.className = "hint"; warn.setAttribute("role", "status");
+    warn.style.cssText = "display:block;margin-top:6px;color:#c0392b;font-weight:600";
+    inp.parentNode.appendChild(warn);
+    function problem(v) {
+      try { return (window.VESPER_LEAGUE_CLOUD && VESPER_LEAGUE_CLOUD.aliasProblem) ? VESPER_LEAGUE_CLOUD.aliasProblem(v) : ""; }
+      catch (e) { return ""; }
+    }
     inp.value = readAlias();
-    inp.addEventListener("input", function () { writeAlias(inp.value.trim().slice(0, 24)); flash(); });
+    inp.addEventListener("input", function () {
+      var v = inp.value.trim().slice(0, 24);
+      var bad = problem(v);
+      warn.textContent = bad ? bad + " Mientras tanto apareces con tu código anónimo." : "";
+      writeAlias(bad ? "" : v); flash();
+    });
   })();
 
   /* ---------- vista previa en vivo ---------- */

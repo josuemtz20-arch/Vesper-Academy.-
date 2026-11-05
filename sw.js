@@ -14,11 +14,12 @@
    ============================================================ */
 "use strict";
 
-var CACHE_VERSION = "vesper-v108-ceba505d";
+var CACHE_VERSION = "vesper-v108-2a2d0b78";
 var CORE = [
-  /* Vesper Engine shell */
-  "vesper_engine.html",
-  "vesper_engine_data.js",
+  /* Comunes. El Vesper Engine (herramienta del profesor) ya no se precarga
+     en el teléfono de cada alumno: se guarda la primera vez que el profesor
+     lo abre con red (ver la parte de navegaciones abajo) y desde ahí funciona sin conexión. */
+  "vesper_app_mode.js",
   "vesper_auth.js",
   "vesper_nav.js",
   "vesper_identity.js",
@@ -154,11 +155,18 @@ self.addEventListener("fetch", function (event) {
   /* Navegaciones (abrir la app): red primero, cae al cache. */
   if (req.mode === "navigate") {
     event.respondWith(
-      fetch(req).catch(function () {
+      fetch(req).then(function (res) {
+        /* el motor del profesor: se guarda al abrirlo, para usarlo sin red */
+        if (res && res.ok && /\/vesper_engine\.html$/.test(url.pathname)) {
+          var copy = res.clone();
+          caches.open(CACHE_VERSION).then(function (c) { c.put("vesper_engine.html", copy); });
+        }
+        return res;
+      }).catch(function () {
         /* sin conexión: sirve la página cacheada si la tenemos; si no, el hogar
            del alumno (lecciones), que es adonde llega la mayoría. Solo si eso
            tampoco está cacheado caemos al motor. */
-        return caches.match(req).then(function (c) {
+        return caches.match(req, { ignoreSearch: /\/vesper_engine\.html$/.test(url.pathname) }).then(function (c) {
           return c || caches.match("leccion.html").then(function (l) {
             return l || caches.match("vesper_engine.html");
           });

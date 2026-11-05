@@ -103,6 +103,17 @@
     });
   }
 
+  /* Lo personal que se borra del dispositivo al cerrar sesión: correo y uid
+     del perfil, la conversación con la IA y el código Pro. En una tableta
+     compartida, el siguiente alumno no lo ve. */
+  var PERSONAL_KEYS = ["vesper_profile", "vesper_chat_history", "vesper_pro_code"];
+  function clearPersonalData() {
+    for (var i = 0; i < PERSONAL_KEYS.length; i++) {
+      try { localStorage.removeItem(PERSONAL_KEYS[i]); } catch (e) {}
+    }
+    try { sessionStorage.removeItem("vesper_chat_session"); } catch (e) {}
+  }
+
   var firebaseReady = null;
   function initFirebase() {
     if (!firebaseReady) {
@@ -110,7 +121,19 @@
         .then(function () { return loadScript("https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"); })
         .then(function () {
           if (!firebase.apps.length) firebase.initializeApp(CONFIG.firebase);
-          return firebase.auth();
+          var auth = firebase.auth();
+          /* Hay tres botones de "Cerrar sesión" (perfil.html, el chip de esta
+             puerta y el modal de vesper_sync.js) y todos usan esta misma
+             instancia: se envuelve signOut() una vez y los tres limpian. */
+          if (!auth.__vesperSignOut) {
+            var plainSignOut = auth.signOut.bind(auth);
+            auth.__vesperSignOut = true;
+            auth.signOut = function () {
+              clearPersonalData();
+              return plainSignOut();
+            };
+          }
+          return auth;
         });
     }
     return firebaseReady;

@@ -176,7 +176,10 @@
     var glyph = id
       ? '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>'
       : '&#8592;';
-    return '<div class="topbar"><a class="back" href="' + (id ? 'leccion.html' : 'index.html') + '" aria-label="' + back + '">' + glyph + '</a>'
+    /* en la app de las tiendas no hay portada: la flecha vuelve al mapa */
+    var home = (window.VesperApp && VesperApp.isApp) ? 'leccion.html' : 'index.html';
+    if (!id && home === 'leccion.html') back = "Volver al mapa";
+    return '<div class="topbar"><a class="back" href="' + (id ? 'leccion.html' : home) + '" aria-label="' + back + '">' + glyph + '</a>'
       + '<div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="' + Math.round(pct) + '"'
       + ' aria-label="Progreso de la lección">'
       + '<div class="bar" style="width:' + pct + '%"></div></div>' + (extra || '') + '</div>';
@@ -5051,7 +5054,7 @@
     show('<div class="wrap"><div class="card center">' + mascot("thinking", "Algo falló al cargar tus lecciones.")
       + '<h1>Sin lecciones</h1><p class="muted">No se cargaron los datos. Suele ser un problema momentáneo de conexión.</p>'
       + '<button class="btn btn-gold" id="reloadL">Reintentar</button>'
-      + '<a class="btn btn-ghost" href="index.html">Ir al inicio</a></div></div>');
+      + ((window.VesperApp && VesperApp.isApp) ? '' : '<a class="btn btn-ghost" href="index.html">Ir al inicio</a>') + '</div></div>');
     track("lessons_load_fail", {});
     byId("reloadL").onclick = function () { location.reload(); };
     return;

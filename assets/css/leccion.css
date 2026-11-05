@@ -3191,6 +3191,10 @@ body:has(#app #verify) #app .card.center{background-image:none}
 .hub-hero--lite .hub-sync{display:inline-flex;margin:0}
 .hub-hero--lite .vsync-chip{background:none;border:0;box-shadow:none;padding:0;min-height:0;
   color:rgba(245,242,235,.8);font-size:.74rem}
+/* O7 (auditoría 2026-11): se ve igual de discreto, pero el dedo tiene 44 px
+   de alto para atinarle; el margen negativo evita que crezca el renglón. */
+.hub-hero--lite .vsync-chip{min-height:44px;padding:12px 4px 0;margin:-22px -4px -10px;box-sizing:border-box;
+  position:relative;inset:auto;z-index:2}   /* inset:auto: vesper_sync.js trae left/bottom para el chip fijo */
 .hub-hero--lite .vsync-chip.ok{display:none}
 /* cifras en un renglón, sin cajas: icono + número + palabra */
 .hub-hero--lite .hub-stats3{flex-wrap:wrap;gap:6px 0;margin-top:12px;padding-top:10px;border-top:1px solid rgba(245,242,235,.12)}

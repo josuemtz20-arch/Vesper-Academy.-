@@ -26,6 +26,8 @@
 !/login.html
 !/access_admin.html
 !/vesper_auth.js
+# Modo app (TWA de Android / envoltura iOS): sin admin, sin precios ni WhatsApp. Sin claves.
+!/vesper_app_mode.js
 
 # student portal + tools
 # (exam.html is PUBLISHED but login-gated; its DATA + answer keys stay LOCAL and

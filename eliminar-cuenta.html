@@ -15,6 +15,7 @@
      desde la app nunca queda "aprobado", y aun asi tiene que poder borrarse.
      Google Play exige este camino dentro de la app Y una URL web; esta pagina
      es las dos cosas (la app Android la abre a pantalla completa). -->
+<script src="vesper_app_mode.js"></script>
 <script src="vesper_auth.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -44,6 +45,9 @@
        border-radius:10px; background:#fff; color:var(--navy);}
   .check{display:flex; gap:10px; align-items:flex-start; font-weight:500; margin-top:14px;}
   .check input{margin-top:5px; flex:none;}
+  /* O7: casilla visible de 22 px; toda la etiqueta (44 px de alto) la marca */
+  .check{min-height:44px; cursor:pointer;}
+  .check input{width:22px; height:22px; margin-top:1px; accent-color:#1B1B2F; cursor:pointer;}
   button{width:100%; margin-top:18px; font:inherit; font-weight:700; padding:13px; border:0; border-radius:999px;
        background:var(--err); color:#fff; cursor:pointer;}
   button:disabled{opacity:.55; cursor:default;}

@@ -3,6 +3,7 @@
 <head>
 <!-- CSP: generada por _scripts/apply_csp.py (edita alli, no aqui) -->
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://apis.google.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://cdn.tailwindcss.com https://challenges.cloudflare.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://maxcdn.bootstrapcdn.com; font-src 'self' data: https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: blob: https:; media-src 'self' data: blob:; connect-src 'self' https://firestore.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://vesper-academy.firebaseapp.com https://patient-feather-4364.josuemtz20.workers.dev https://formsubmit.co https://challenges.cloudflare.com https://www.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com; frame-src 'self' https://vesper-academy.firebaseapp.com https://www.youtube.com https://www.youtube-nocookie.com https://challenges.cloudflare.com; worker-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self' https://formsubmit.co; upgrade-insecure-requests">
+<script src="vesper_app_mode.js"></script>
 <script src="vesper_auth.js"></script>
 <script src="vesper_identity.js"></script>
 <meta charset="UTF-8">
@@ -75,6 +76,7 @@ h2.sec{font-size:.74rem;font-weight:700;letter-spacing:1.6px;text-transform:uppe
 
 /* Acciones */
 .actions{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;}
+a.act[hidden],button.act[hidden]{display:none;}
 a.act,button.act{display:flex;align-items:center;gap:12px;background:var(--paper,#fff);border:1px solid var(--border);border-radius:12px;padding:15px 16px;text-decoration:none;color:inherit;font-family:inherit;font-size:.92rem;font-weight:600;cursor:pointer;text-align:left;width:100%;transition:border-color .15s,box-shadow .15s;}
 a.act:hover,a.act:focus-visible,button.act:hover,button.act:focus-visible{border-color:var(--gold);box-shadow:0 6px 16px rgba(26,43,66,.1);}
 a.act .ic,button.act .ic{width:38px;height:38px;flex-shrink:0;border-radius:10px;background:linear-gradient(135deg,var(--navy2),var(--navy));color:var(--gold);display:flex;align-items:center;justify-content:center;}
@@ -140,6 +142,8 @@ footer a{color:var(--gold);text-decoration:none;}
     <a class="act" href="onboarding.html"><span class="ic" aria-hidden="true"><i class="fas fa-wand-magic-sparkles"></i></span> Editar mi plan</a>
     <a class="act" href="apariencia.html"><span class="ic" aria-hidden="true"><i class="fas fa-palette"></i></span> Apariencia</a>
     <a class="act" href="configuracion.html"><span class="ic" aria-hidden="true"><i class="fas fa-robot"></i></span> Personalizar a Vesper</a>
+    <!-- Solo maestros (teacherAccess() = "ok"): la app de las tiendas no tiene otra entrada al portal -->
+    <a class="act" id="teacher-link" href="portal_profesores.html" hidden><span class="ic" aria-hidden="true"><i class="fas fa-chalkboard-user"></i></span> Portal del profesor</a>
     <button type="button" class="act danger" id="logout" hidden><span class="ic" aria-hidden="true"><i class="fas fa-arrow-right-from-bracket"></i></span> Cerrar sesión</button>
   </div>
 
@@ -219,6 +223,14 @@ footer a{color:var(--gold);text-decoration:none;}
         try{ auth.signOut(); }catch(e){}
       });
     }).catch(function(){ /* sin red: deja el estado local */ });
+  }
+
+  /* Acceso de maestro. Solo decide si se ve el botón: el portal y sus datos
+     los siguen protegiendo su propia puerta y las reglas de Firestore. */
+  if(window.VesperAuth && VesperAuth.teacherAccess){
+    VesperAuth.teacherAccess().then(function(r){
+      document.getElementById("teacher-link").hidden = (r !== "ok");
+    }, function(){});
   }
 })();
 </script>

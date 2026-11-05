@@ -6,6 +6,7 @@
 <head>
 <!-- CSP: generada por _scripts/apply_csp.py (edita alli, no aqui) -->
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://apis.google.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://cdn.tailwindcss.com https://challenges.cloudflare.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://maxcdn.bootstrapcdn.com; font-src 'self' data: https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: blob: https:; media-src 'self' data: blob:; connect-src 'self' https://firestore.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://vesper-academy.firebaseapp.com https://patient-feather-4364.josuemtz20.workers.dev https://formsubmit.co https://challenges.cloudflare.com https://www.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com; frame-src 'self' https://vesper-academy.firebaseapp.com https://www.youtube.com https://www.youtube-nocookie.com https://challenges.cloudflare.com; worker-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self' https://formsubmit.co; upgrade-insecure-requests">
+<script src="vesper_app_mode.js"></script>
 <script src="vesper_auth.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -373,7 +374,7 @@ footer a:hover{text-decoration:underline;}
   </a>
   <div class="right">
     <a class="back" href="materiales.html" aria-label="Portal del alumno"><svg class="i" aria-hidden="true"><use href="#i-cap"/></svg> Portal alumno</a>
-    <a class="back" href="index.html" aria-label="Sitio principal"><svg class="i" aria-hidden="true"><use href="#i-arrow-left"/></svg> Sitio</a>
+    <a class="back web-only" href="index.html" aria-label="Sitio principal"><svg class="i" aria-hidden="true"><use href="#i-arrow-left"/></svg> Sitio</a>
   </div>
 </header>
 
@@ -398,7 +399,7 @@ footer a:hover{text-decoration:underline;}
     <div class="quick">
     <a class="tile go primary" href="portal_calificaciones.html"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-chart"/></svg></span><b>Calificaciones</b><span>Exámenes y lecciones de tus alumnos</span></a>
     <a class="tile go primary" href="portal_boleta.html"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-list"/></svg></span><b>Boleta</b><span>Calificación final por alumno</span></a>
-    <a class="tile go primary" href="portal_calendario.html"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-calendar"/></svg></span><b>Calendario</b><span>Ciclos, festivos y cierres</span></a>
+    <a class="tile go primary web-only" href="portal_calendario.html"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-calendar"/></svg></span><b>Calendario</b><span>Ciclos, festivos y cierres</span></a>
     <a class="tile go primary" href="audio_library.html"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-audio"/></svg></span><b>Biblioteca de audio</b><span>Diálogos y lecturas para la clase</span></a>
     </div>
     <!-- Abiertos recientemente (memoria local del navegador, por dispositivo) -->
@@ -503,8 +504,8 @@ footer a:hover{text-decoration:underline;}
     <div class="list">
     <div class="row"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-case"/></svg></span><div class="txt"><b>Guion de venta</b><span>Pitch, objeciones y mensajes listos para WhatsApp y correo</span></div><div class="acts"><a class="btn btn-gold go primary" href="manual.html?id=guion_venta">Abrir</a></div></div>
     <div class="row"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-robot"/></svg></span><div class="txt"><b>Vesper Engine</b><span>Genera el prompt del tutor con el syllabus real de los manuales</span></div><div class="acts"><a class="btn btn-gold go primary" href="vesper_engine.html">Abrir</a></div></div>
-    <div class="row" id="card-escuela"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-calendar"/></svg></span><div class="txt"><b>Grupos e inscripciones</b><span>Dirección: arma grupos e inscribe alumnos</span></div><div class="acts"><a class="btn btn-gold go primary" href="portal_escuela.html">Abrir</a></div></div>
-    <div class="row" id="card-admin"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-shield"/></svg></span><div class="txt"><b>Administrar accesos</b><span>Admin: autoriza cuentas de alumnos y profesores</span></div><div class="acts"><a class="btn btn-gold go primary" href="access_admin.html">Abrir</a></div></div>
+    <div class="row web-only" id="card-escuela"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-calendar"/></svg></span><div class="txt"><b>Grupos e inscripciones</b><span>Dirección: arma grupos e inscribe alumnos</span></div><div class="acts"><a class="btn btn-gold go primary" href="portal_escuela.html">Abrir</a></div></div>
+    <div class="row web-only" id="card-admin"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-shield"/></svg></span><div class="txt"><b>Administrar accesos</b><span>Admin: autoriza cuentas de alumnos y profesores</span></div><div class="acts"><a class="btn btn-gold go primary" href="access_admin.html">Abrir</a></div></div>
     </div>
   </section>
 </main>
