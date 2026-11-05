@@ -178,7 +178,10 @@
     var ov = document.getElementById(OVERLAY_ID);
     if (ov) ov.parentNode.removeChild(ov);
     document.documentElement.classList.remove("vng-lock");
-    document.body.classList.remove("vng-lock");
+    /* Este script va en el <head>: si Firebase responde antes de que exista
+       <body> (sin sesión, con la caché caliente), aún no hay nada que quitar
+       ahí; la puerta solo pone vng-lock en body desde onDomReady. */
+    if (document.body) document.body.classList.remove("vng-lock");
   }
 
   /* ── Orquestación ──
