@@ -40,4 +40,4 @@ new_sqlite_classes = ["RateLimiter"]
 # RL_FREE_PER_DAY = "200"
 # RL_PRO_PER_MIN = "30"
 # RL_PRO_PER_DAY = "1000"
-# RL_GLOBAL_PER_DAY = "5000"
+# RL_GLOBAL_PER_DAY = "2000"

@@ -58,8 +58,25 @@ const MAX_TOKENS_PRO  = 768;
  * input que se reenvía en cada mensaje (= menos costo en charlas largas). */
 const MAX_MESSAGES = 16;
 
-/* Tope defensivo del tamaño total del cuerpo (caracteres). */
-const MAX_BODY_CHARS = 100000;
+/* ── Topes de ENTRADA (2026-11, auditoría R1) ──
+ * El costo de cada mensaje lo marca sobre todo lo que se reenvía a Claude,
+ * no lo que llega. chat.html guarda y manda TODO el historial (sin tope), así
+ * que rechazar por tamaño bruto castigaría a los alumnos con charlas largas;
+ * en vez de eso se recorta aquí, ANTES de llamar a Claude:
+ *  - MAX_BODY_CHARS: solo protege el parseo (cuerpos absurdos -> 413).
+ *  - MAX_SYSTEM_CHARS: la persona que arma el navegador mide ~1 100
+ *    caracteres (medido 2026-11-04); más que esto se corta. Sin el tope,
+ *    cualquiera podía mandar su propio system enorme y usar el proxy como
+ *    IA genérica pagada por la escuela.
+ *  - MAX_MESSAGE_CHARS: cada mensaje se corta a este largo (una respuesta Pro
+ *    de 768 tokens ronda los 3 000 caracteres).
+ *  - MAX_INPUT_CHARS: presupuesto total (system + historial); se descartan los
+ *    mensajes más viejos hasta caber. ~20 000 caracteres ≈ 5-6 mil tokens:
+ *    con Haiku 4.5, el peor caso queda en ~0.01 USD por mensaje. */
+const MAX_BODY_CHARS = 200000;
+const MAX_SYSTEM_CHARS = 4000;
+const MAX_MESSAGE_CHARS = 3000;
+const MAX_INPUT_CHARS = 20000;
 
 /* ---------- Límites de uso (anti-abuso / anti-costo) ----------
  * Valores por defecto; se pueden cambiar SIN tocar código con variables del
@@ -73,7 +90,12 @@ const RATE_DEFAULTS = {
   RL_FREE_PER_DAY: 200,    // mensajes por día (UTC) por IP (nivel gratis)
   RL_PRO_PER_MIN: 30,      // con código Pro válido
   RL_PRO_PER_DAY: 1000,
-  RL_GLOBAL_PER_DAY: 5000  // todas las IPs juntas, por día (UTC)
+  /* todas las IPs juntas, por día (UTC). Era 5000; con los topes de entrada
+     el peor caso es ~0.01 USD por mensaje, así que 2000 acota el abuso a
+     ~20 USD/día. Súbelo con RL_GLOBAL_PER_DAY en [vars] cuando crezca la
+     escuela (ver worker/README.md). El tope DURO es el límite de gasto en
+     la consola de Anthropic. */
+  RL_GLOBAL_PER_DAY: 2000
 };
 
 /* Turnstile: vigencia de la sesión firmada que el Worker entrega tras un
@@ -160,7 +182,7 @@ function jsonError(status, message, origin, code, extraHeaders) {
 /* Deja el historial en una forma segura: array de {role, content} con
  * roles válidos, recortado a MAX_MESSAGES (conservando los más recientes)
  * y empezando por un turno de usuario. */
-function sanitizeMessages(raw) {
+function sanitizeMessages(raw, budgetChars) {
   if (!Array.isArray(raw)) return null;
   const out = [];
   for (const m of raw) {
@@ -171,11 +193,29 @@ function sanitizeMessages(raw) {
     }
   }
   if (!out.length) return null;
-  /* recorta a los últimos MAX_MESSAGES */
-  let trimmed = out.slice(-MAX_MESSAGES);
+  /* recorta a los últimos MAX_MESSAGES y corta cada mensaje a MAX_MESSAGE_CHARS */
+  let trimmed = out.slice(-MAX_MESSAGES).map(function (m) {
+    return { role: m.role, content: clip(m.content, MAX_MESSAGE_CHARS) };
+  });
+  /* presupuesto total: descarta los más viejos hasta caber (el último, el
+     mensaje nuevo del alumno, siempre se queda) */
+  let total = trimmed.reduce(function (n, m) { return n + m.content.length; }, 0);
+  while (trimmed.length > 1 && total > budgetChars) {
+    total -= trimmed[0].content.length;
+    trimmed = trimmed.slice(1);
+  }
   /* la API exige que el primer mensaje sea de 'user' */
   while (trimmed.length && trimmed[0].role !== "user") trimmed = trimmed.slice(1);
   return trimmed.length ? trimmed : null;
+}
+
+/* Corta un texto a `max` caracteres (sin partir un par sustituto UTF-16). */
+function clip(text, max) {
+  if (typeof text !== "string" || text.length <= max) return text;
+  let end = max;
+  const c = text.charCodeAt(end - 1);
+  if (c >= 0xD800 && c <= 0xDBFF) end--;
+  return text.slice(0, end);
 }
 
 /* Lee un límite numérico de env (string en [vars]) o usa el de RATE_DEFAULTS. */
@@ -359,8 +399,8 @@ export default {
       return jsonError(400, "Cuerpo JSON inválido.", origin);
     }
 
-    const system = typeof body.system === "string" ? body.system : "";
-    const messages = sanitizeMessages(body.messages);
+    const system = clip(typeof body.system === "string" ? body.system : "", MAX_SYSTEM_CHARS);
+    const messages = sanitizeMessages(body.messages, MAX_INPUT_CHARS - system.length);
     if (!messages) {
       return jsonError(400, "Faltan mensajes válidos en la conversación.", origin);
     }

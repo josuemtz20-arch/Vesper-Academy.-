@@ -48,7 +48,13 @@ Límites por defecto (constante `RATE_DEFAULTS`; se cambian sin tocar código co
 | `RL_FREE_PER_DAY` | 200 | mensajes/día por IP, nivel gratis |
 | `RL_PRO_PER_MIN` | 30 | mensajes/minuto por IP, con código Pro válido |
 | `RL_PRO_PER_DAY` | 1000 | mensajes/día por IP, con código Pro válido |
-| `RL_GLOBAL_PER_DAY` | 5000 | mensajes/día en total (freno de mano del costo) |
+| `RL_GLOBAL_PER_DAY` | 2000 | mensajes/día en total (freno de mano del costo) |
+
+Además, antes de llamar a Claude el Worker recorta la entrada (2026-11):
+`MAX_SYSTEM_CHARS` 4000, `MAX_MESSAGE_CHARS` 3000 por mensaje y
+`MAX_INPUT_CHARS` 20000 en total (descarta los mensajes más viejos). Con
+Haiku 4.5 eso deja el peor caso en ~0.01 USD por mensaje. El tope **duro** de
+gasto no es este Worker: ponlo en la consola de Anthropic (*Settings → Limits*).
 
 > Un salón de clases detrás de un mismo router comparte **una** IP pública. Si
 > das clase con el chat a un grupo grande, sube `RL_FREE_PER_DAY` o da a esos
