@@ -5,7 +5,7 @@
    alumno. Reemplaza los headers "atrás" ad-hoc de cada página por
    una barra de pestañas inferior consistente:
 
-       Inicio · Aprender · Audio · Boleta · Perfil
+       Home · Learn · Listen · Grades · Profile (en inglés; el español va en title)
 
    Cómo se usa: añade  <script src="vesper_nav.js"></script>  a la
    página del alumno. El script se auto-inyecta al final del <body>,
@@ -26,19 +26,19 @@
   /* Destinos de la barra. href = archivo; match = archivos que
      marcan esta pestaña como activa. */
   var TABS = [
-    { id: "inicio",   label: "Inicio",   href: "materiales.html",
+    { id: "inicio",   label: "Home",     es: "Inicio",   href: "materiales.html",
       match: ["materiales.html", "libro.html"],
       icon: '<path d="M3 11l9-8 9 8"/><path d="M5 10v10h5v-6h4v6h5V10"/>' },
-    { id: "aprender", label: "Aprender", href: "leccion.html",
+    { id: "aprender", label: "Learn",    es: "Aprender", href: "leccion.html",
       match: ["leccion.html", "chat.html", "liga.html", "lesson.html"],
       icon: '<path d="M22 10L12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 1 2.7 3 6 3s6-2 6-3v-5"/>' },
-    { id: "audio",    label: "Audio",    href: "audio_library.html",
+    { id: "audio",    label: "Listen",   es: "Audio",    href: "audio_library.html",
       match: ["audio_library.html"],
       icon: '<path d="M4 14v-2a8 8 0 0 1 16 0v2"/><rect x="2.5" y="13.5" width="4" height="6.5" rx="1.3"/><rect x="17.5" y="13.5" width="4" height="6.5" rx="1.3"/>' },
-    { id: "boleta",   label: "Boleta",   href: "mi_boleta.html",
+    { id: "boleta",   label: "Grades",   es: "Boleta",   href: "mi_boleta.html",
       match: ["mi_boleta.html"],
       icon: '<rect x="5" y="3.5" width="14" height="17" rx="2.2"/><path d="M9 3.5V6h6V3.5"/><path d="M8.5 11h7M8.5 15h4.5"/>' },
-    { id: "perfil",   label: "Perfil",   href: "perfil.html",
+    { id: "perfil",   label: "Profile",  es: "Perfil",   href: "perfil.html",
       match: ["perfil.html", "configuracion.html", "apariencia.html", "tienda.html", "onboarding.html"],
       icon: '<circle cx="12" cy="8" r="3.6"/><path d="M4.5 20c0-3.7 3.4-5.6 7.5-5.6s7.5 1.9 7.5 5.6"/>' }
   ];
@@ -145,10 +145,12 @@
     var hideBoleta = boletaNeedsSession() && act !== "boleta";
     nav.innerHTML = TABS.map(function (t) {
       var on = t.id === act;
-      return '<a href="' + t.href + '"' + (on ? ' class="on" aria-current="page"' : "") +
+      /* La etiqueta va en INGLÉS (es lo que se enseña); el español queda en
+         title y aria-label para quien aún no la reconoce. */
+      return '<a href="' + t.href + '" title="' + t.es + '" aria-label="' + t.label + ' · ' + t.es + '"' + (on ? ' class="on" aria-current="page"' : "") +
         (t.id === "boleta" ? ' data-tab="boleta"' + (hideBoleta ? " hidden" : "") : "") + '>' +
         '<svg viewBox="0 0 24 24" aria-hidden="true">' + t.icon + '</svg>' +
-        '<span>' + t.label + '</span></a>';
+        '<span lang="en">' + t.label + '</span></a>';
     }).join("");
 
     var spacer = document.createElement("div");

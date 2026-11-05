@@ -136,6 +136,8 @@
 !/vesper_basics_lesson_data.js
 !/vesper_custom_transcripts.js
 !/vesper_vocab_examples.js
+# frase del dia del hub (a mano); audio en assets/audio/phrase
+!/vesper_phrase_day.js
 !/vesper_covers.js
 !/vesper_lesson_images.js
 # listening-practice engine for the audio player (lesson.html): generates the

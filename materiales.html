@@ -645,7 +645,10 @@ html:not(.vesper-dark) .vtour-back{border-color:var(--border);}
    al mapa: allá hay láminas pintadas, tarjetas enmarcadas y botones de oro
    con suelo. Esto lo trae aquí sin tocar el marcado que leen los scripts
    (#catalog a.card, .cat-sec, .grp-txt h2, #today, .qn):
-   · héroe = lámina pintada del mundo del alumno (map/il/banner_*.jpg),
+   · héroe = lámina pintada del mundo del alumno (hub/world_*.jpg desde
+     2026-11-05: Vesper en un lugar icónico de habla inglesa por nivel —
+     a1 Londres, a2 Nueva York, b1 Sídney, b2 Toronto, c1 Edimburgo,
+     c2 San Francisco; originales en _reportes/vesper_mundo/),
    · cada control vive DENTRO de una superficie — nada flota suelto,
    · el oro de acción lleva el mismo "suelo" que .btn-gold de TACTO.
    Va al final para ganar por orden a las reglas de arriba (incluidas las
@@ -669,7 +672,7 @@ html:not(.vesper-dark){--card-sh:0 10px 28px rgba(27,27,47,.10);}
   justify-content:flex-end;align-items:stretch;gap:22px;min-height:clamp(300px,34vw,380px);margin:0;
   padding:clamp(26px,4vw,44px) clamp(22px,4vw,46px) clamp(22px,3vw,30px);
   border-radius:calc(var(--r-card) + 4px);border:1px solid var(--hair);
-  background:#14122a var(--hero-art,url("assets/images/map/il/banner_a1.jpg")) 72% 38%/cover no-repeat;
+  background:#14122a var(--hero-art,url("assets/images/hub/world_a1.jpg")) 72% 38%/cover no-repeat;
   color:#f5f2eb;
   box-shadow:0 0 0 5px color-mix(in srgb,var(--gold) 9%,transparent),0 22px 50px rgba(8,6,22,.38);}
 .intro::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;
@@ -764,7 +767,10 @@ a.qn .qn-d{max-width:none;}
      quedarse colgando a la izquierda. */
   .qn-grid > a.qn:last-child:nth-child(odd){grid-column:1 / -1;display:grid;grid-template-columns:44px 1fr;
     column-gap:14px;row-gap:2px;align-items:center;}
-  .qn-grid > a.qn:last-child:nth-child(odd) .qn-ic{grid-row:1 / span 2;margin:0;}
+  /* Tres renglones de texto desde que el acceso lleva su nombre en español
+     (.qn-es): el ícono cubre los tres y el texto va siempre a la columna 2. */
+  .qn-grid > a.qn:last-child:nth-child(odd) .qn-ic{grid-row:1 / span 3;margin:0;}
+  .qn-grid > a.qn:last-child:nth-child(odd) > :not(.qn-ic){grid-column:2;}
   .qn-grid > a.qn:last-child:nth-child(odd)::after{top:50%;margin-top:-4px;}
 }
 
@@ -856,6 +862,63 @@ a.card:not([data-lessons])::after{content:"";grid-area:meta;width:8px;height:8px
 
 /* El pie deja de ser una banda pegada al último curso. */
 footer{margin-top:clamp(36px,5vw,56px);}
+
+/* ============================================================
+   INGLÉS AL FRENTE 2026-11 — el hub enseña lo que la escuela enseña
+   ------------------------------------------------------------
+   Regla: el inglés es el CONTENIDO (saludo, Vesper, frase del día, nombres de
+   accesos y títulos de libros) y el español es la GUÍA (traducciones pequeñas,
+   instrucciones). Un solo color nuevo, --en, marca "esto es inglés".
+   ============================================================ */
+:root{--en:#8fc6ff;}
+
+/* ── Frase del día: siempre lámina de noche, como "Empieza aquí" ── */
+.phrase{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:18px;margin-top:18px;
+  padding:20px 24px;border-radius:var(--r-card);border:1px solid var(--hair);color:#f5f2eb;
+  background-color:#1b1938;
+  background-image:radial-gradient(420px 180px at 100% 0%,rgba(143,198,255,.13),transparent 62%),
+                   linear-gradient(150deg,#232149,#16142e 70%);
+  box-shadow:0 0 0 4px color-mix(in srgb,var(--gold) 8%,transparent),var(--card-sh);}
+.phrase[hidden]{display:none;}
+.ph-main{display:flex;flex-direction:column;gap:5px;min-width:0;}
+.ph-chip{align-self:flex-start;font-size:.64rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;
+  color:#8fc6ff;border:1px solid rgba(143,198,255,.45);border-radius:999px;padding:3px 10px;}
+.phrase .ph-term{margin:4px 0 0;font-size:clamp(1.45rem,3vw,1.85rem);font-weight:600;line-height:1.15;color:#f3e2ab;}
+.phrase .ph-ex{margin:0;font-size:1.04rem;color:#f5f2eb;}
+.ph-ex mark{background:none;color:#f3e2ab;font-weight:700;}
+.phrase .ph-es{margin:2px 0 0;font-size:.88rem;color:rgba(245,242,235,.72);}
+.ph-tip::before{content:" · ";}
+.ph-play{display:inline-flex;flex-direction:column;align-items:center;gap:6px;border:0;background:none;cursor:pointer;
+  color:#f3e2ab;font:inherit;font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:0;}
+.ph-play svg{box-sizing:content-box;width:22px;height:22px;padding:17px;border-radius:50%;
+  background:linear-gradient(180deg,#f3e2ab,var(--gold));color:#1a1530;fill:currentColor;
+  box-shadow:0 var(--press) 0 var(--gold-shadow);transition:transform .09s ease,box-shadow .09s ease;}
+.ph-play .ph-i-wave{display:none;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;}
+.ph-play.is-on .ph-i-play{display:none;}
+
+/* ── Accesos bilingües: el nombre en inglés manda, el español lo acompaña ── */
+a.qn .qn-es{margin-top:-3px;font-size:.7rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--en);}
+
+/* ── Libros: el título en inglés al frente, el curso como etiqueta ── */
+a.card .ck{display:block;font-size:.66rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:2px;}
+a.card h3[lang="en"]{font-size:1.16rem;}
+a.card .sk-row{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px;}
+a.card .sk{font-size:.66rem;font-weight:600;letter-spacing:.02em;padding:2px 8px;border-radius:7px;
+  color:var(--en);border:1px solid color-mix(in srgb,var(--en) 42%,transparent);}
+.ph-play.is-on .ph-i-wave{display:block;}
+.ph-play:active svg{transform:translateY(var(--press));box-shadow:0 0 0 var(--gold-shadow);}
+.ph-play:focus-visible{outline:none;}
+.ph-play:focus-visible svg{outline:2px solid #f3e2ab;outline-offset:3px;}
+@media(max-width:560px){.phrase{padding:18px;gap:14px;}.ph-play svg{padding:14px;}}
+html:not(.vesper-dark){--en:#2f6fb3;}
+.intro .hello-gloss{margin-top:6px;font-size:.86rem;color:rgba(245,242,235,.66);}
+.intro .hello-gloss i{font-style:normal;color:#8fc6ff;font-weight:600;}
+.v-say .v-es{display:block;margin-top:2px;font-size:.84rem;color:rgba(245,242,235,.72);}
+.v-say .v-es[hidden]{display:none;}
+.v-say .n{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.v-tr{border:0;background:none;padding:0;font:inherit;font-size:.7rem;letter-spacing:.04em;text-transform:none;
+  color:#8fc6ff;font-weight:600;cursor:pointer;text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px;}
+.v-tr:hover,.v-tr:focus-visible{color:#cfe6ff;}
 </style>
 
 <!-- Preferencias del alumno (tamaño de texto, alto contraste, menos
@@ -920,8 +983,9 @@ footer{margin-top:clamp(36px,5vw,56px);}
   <div class="intro reveal">
     <div class="in-txt">
       <span class="rule" aria-hidden="true"></span>
-      <span class="eyebrow">Portal del alumno</span>
-      <h1 class="va-display" id="intro-title">Tu material de estudio</h1>
+      <span class="eyebrow" lang="en">Student portal</span>
+      <h1 class="va-display" id="intro-title" lang="en">Welcome!</h1>
+      <p class="hello-gloss" id="hello-gloss"><i lang="en">Welcome</i> = bienvenido</p>
       <p>Aquí encuentras los libros de tu curso y la biblioteca de audio para entrenar el oído. Tu profesor te indica qué libro y lección corresponde a tu clase.</p>
     </div>
 
@@ -950,7 +1014,7 @@ footer{margin-top:clamp(36px,5vw,56px);}
         </div>
         <span class="v-flame" aria-hidden="true"></span>
       </div>
-      <p class="v-say"><span class="q" id="v-line">Qué bueno verte. Sigue por donde ibas.</span><span class="n">Vesper</span></p>
+      <p class="v-say"><span class="q" id="v-line" lang="en">Good to see you! Pick up where you left off.</span><span class="v-es" id="v-es" hidden>¡Qué bueno verte! Sigue por donde ibas.</span><span class="n">Vesper <button type="button" class="v-tr" id="v-tr" aria-expanded="false" aria-controls="v-es">Ver en español</button></span></p>
     </div>
     <button type="button" class="tour-replay" id="tour-replay"><svg class="i" aria-hidden="true"><use href="#i-compass"/></svg> Ver guía rápida</button>
     </div>
@@ -979,33 +1043,108 @@ footer{margin-top:clamp(36px,5vw,56px);}
     <span class="t-go" id="today-go">Continuar <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span>
   </a>
 
+  <!-- Frase del día: una expresión real, con su audio, elegida por el nivel
+       del alumno. Es la prueba, en el primer vistazo, de que aquí se aprende
+       inglés. Datos: vesper_phrase_day.js (a mano); audio: assets/audio/phrase.
+       Sale oculta y la muestra el script: sin datos no hay tarjeta vacía. -->
+  <section id="phrase" class="phrase reveal" aria-labelledby="ph-term" hidden>
+    <div class="ph-main">
+      <span class="ph-chip" lang="en">Phrase of the day</span>
+      <p class="ph-term va-display" id="ph-term" lang="en"></p>
+      <p class="ph-ex" id="ph-ex" lang="en"></p>
+      <p class="ph-es"><span id="ph-es"></span><span class="ph-tip" id="ph-tip"></span></p>
+    </div>
+    <button type="button" class="ph-play" id="ph-play" aria-label="Escuchar la frase en inglés">
+      <svg class="ph-i-play" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.6v12.8a.8.8 0 0 0 1.2.7l10.2-6.4a.8.8 0 0 0 0-1.4L9.2 4.9A.8.8 0 0 0 8 5.6z"/></svg>
+      <svg class="ph-i-wave" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9v6M10 6v12M14 8v8M18 10v4"/></svg>
+      <span>Listen</span>
+    </button>
+  </section>
+  <script src="vesper_phrase_day.js"></script>
+  <script>
+  (function(){
+    var D = window.VESPER_PHRASE_DAY, box = document.getElementById("phrase");
+    if(!D || !box) return;
+    var L = ["A1","A2","B1","B2","C1","C2"], lv = 0;
+    try{
+      var pr = JSON.parse(localStorage.getItem("vesper_profile") || "null");
+      if(pr && typeof pr.level === "number") lv = Math.max(0, Math.min(5, Math.round(pr.level)));
+    }catch(e){}
+    var lvl = L[lv], list = D[lvl] || D.A1;
+    if(!list || !list.length) return;
+    /* Una frase por día del año: estable todo el día, distinta mañana. */
+    var now = new Date(), start = new Date(now.getFullYear(), 0, 0);
+    var day = Math.floor((now - start) / 864e5);
+    var k = day % list.length, it = list[k];
+    function esc(t){ return String(t).replace(/[&<>"]/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }); }
+    var hl = it.hl || it.t, en = it.en, i = en.toLowerCase().indexOf(hl.toLowerCase());
+    document.getElementById("ph-term").textContent = it.t;
+    document.getElementById("ph-ex").innerHTML = i < 0 ? esc(en)
+      : esc(en.slice(0, i)) + "<mark>" + esc(en.slice(i, i + hl.length)) + "</mark>" + esc(en.slice(i + hl.length));
+    document.getElementById("ph-es").textContent = it.es;
+    var tip = document.getElementById("ph-tip");
+    if(it.tip) tip.textContent = it.tip; else tip.remove();
+    box.hidden = false;
+
+    var btn = document.getElementById("ph-play"), au = null;
+    var src = "assets/audio/phrase/" + lvl + "_" + (k + 1 < 10 ? "0" : "") + (k + 1) + ".mp3";
+    function on(v){ btn.classList.toggle("is-on", v); }
+    /* Si el MP3 no carga (sin red y sin caché), la voz del navegador lo lee:
+       peor sonido, pero el botón nunca queda mudo. */
+    function speak(){
+      try{
+        var s = window.speechSynthesis; if(!s) return on(false);
+        s.cancel(); var u = new SpeechSynthesisUtterance(en); u.lang = "en-US"; u.rate = .9;
+        u.onend = u.onerror = function(){ on(false); }; on(true); s.speak(u);
+      }catch(e){ on(false); }
+    }
+    btn.addEventListener("click", function(){
+      if(au && !au.paused){ au.pause(); au.currentTime = 0; return on(false); }
+      if(!au){
+        au = new Audio(src);
+        au.addEventListener("ended", function(){ on(false); });
+        au.addEventListener("pause", function(){ on(false); });
+      }
+      on(true);
+      var p = au.play();
+      if(p && p.catch) p.catch(function(){ au = null; speak(); });
+      try{ if(window.VA && VA.track) VA.track("hub_phrase_play", { level: lvl, n: k + 1 }); }catch(e){}
+    });
+  })();
+  </script>
+
   <!-- Accesos rápidos: todas tus herramientas visibles desde el portal -->
   <nav id="quicknav" class="reveal" aria-label="Tus herramientas">
     <div class="qn-grid">
       <a class="qn" href="leccion.html">
         <span class="qn-ic"><svg class="i" aria-hidden="true"><use href="#i-cap"/></svg></span>
-        <span class="qn-t">Lecciones</span>
+        <span class="qn-t" lang="en">Lessons</span>
+        <span class="qn-es">Lecciones</span>
         <span class="qn-d">Practica por mundos, a tu ritmo</span>
       </a>
       <a class="qn" href="audio_library.html">
         <span class="qn-ic"><svg class="i" aria-hidden="true"><use href="#i-audio"/></svg></span>
-        <span class="qn-t">Audio</span>
+        <span class="qn-t" lang="en">Listening</span>
+        <span class="qn-es">Audio</span>
         <span class="qn-d">Entrena el oído con audios</span>
       </a>
       <a class="qn" href="mi_boleta.html">
         <span class="qn-ic"><svg class="i" aria-hidden="true"><use href="#i-check-doc"/></svg></span>
-        <span class="qn-t">Mi boleta</span>
+        <span class="qn-t" lang="en">Grades</span>
+        <span class="qn-es">Mi boleta</span>
         <span class="qn-d">Tus calificaciones y avance</span>
         <span class="qn-live" id="qn-boleta-live" hidden></span>
       </a>
       <a class="qn" href="configuracion.html#apariencia">
         <span class="qn-ic qn-ic--cat" id="qn-vesper-ic"><svg class="i" aria-hidden="true"><use href="#i-palette"/></svg></span>
-        <span class="qn-t">Vestir a Vesper</span>
+        <span class="qn-t" lang="en">Dress Vesper</span>
+        <span class="qn-es">Vestir a Vesper</span>
         <span class="qn-d">Su pelaje y lo que lleva puesto</span>
       </a>
       <a class="qn" href="perfil.html">
         <span class="qn-ic"><svg class="i" aria-hidden="true"><use href="#i-user"/></svg></span>
-        <span class="qn-t">Mi perfil</span>
+        <span class="qn-t" lang="en">My profile</span>
+        <span class="qn-es">Mi perfil</span>
         <span class="qn-d">Tu cuenta y preferencias</span>
       </a>
     </div>
@@ -1072,10 +1211,10 @@ footer{margin-top:clamp(36px,5vw,56px);}
         </div>
       </div>
       <div class="grid">
-        <a class="card" href="libro.html?id=core_basics_lvl1"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-book"/></svg></span><span class="cbody"><h3 class="va-display">Core Basics · Nivel 1</h3><p>To Be or Not To Be. Identidad, presentaciones y lo esencial.</p><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
-        <a class="card" href="libro.html?id=core_basics_lvl2"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-book"/></svg></span><span class="cbody"><h3 class="va-display">Core Basics · Nivel 2</h3><p>Do I Know? Rutinas, preguntas y presente simple.</p><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
-        <a class="card" href="libro.html?id=core_basics_lvl3"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-book"/></svg></span><span class="cbody"><h3 class="va-display">Core Basics · Nivel 3</h3><p>Have I Been? Pasado, experiencias e historias.</p><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
-        <a class="card" href="libro.html?id=core_basics_lvl4"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-book"/></svg></span><span class="cbody"><h3 class="va-display">Core Basics · Nivel 4</h3><p>Let's Write. Primeros textos y redacción guiada.</p><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
+        <a class="card" data-en="1" href="libro.html?id=core_basics_lvl1"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-book"/></svg></span><span class="cbody"><span class="ck">Core Basics · Nivel 1</span><h3 class="va-display" lang="en">To Be or Not To Be</h3><p>Identidad, presentaciones y lo esencial.</p><span class="sk-row" aria-label="Destrezas"><span class="sk" lang="en">Vocabulary</span><span class="sk" lang="en">Speaking</span></span><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
+        <a class="card" data-en="1" href="libro.html?id=core_basics_lvl2"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-book"/></svg></span><span class="cbody"><span class="ck">Core Basics · Nivel 2</span><h3 class="va-display" lang="en">Do I Know?</h3><p>Rutinas, preguntas y presente simple.</p><span class="sk-row" aria-label="Destrezas"><span class="sk" lang="en">Grammar</span><span class="sk" lang="en">Speaking</span></span><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
+        <a class="card" data-en="1" href="libro.html?id=core_basics_lvl3"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-book"/></svg></span><span class="cbody"><span class="ck">Core Basics · Nivel 3</span><h3 class="va-display" lang="en">Have I Been?</h3><p>Pasado, experiencias e historias.</p><span class="sk-row" aria-label="Destrezas"><span class="sk" lang="en">Grammar</span><span class="sk" lang="en">Speaking</span></span><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
+        <a class="card" data-en="1" href="libro.html?id=core_basics_lvl4"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-book"/></svg></span><span class="cbody"><span class="ck">Core Basics · Nivel 4</span><h3 class="va-display" lang="en">Let’s Write</h3><p>Primeros textos y redacción guiada.</p><span class="sk-row" aria-label="Destrezas"><span class="sk" lang="en">Writing</span><span class="sk" lang="en">Grammar</span></span><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
       </div>
     </section>
     <section class="cat-sec" data-group="practice" aria-label="Core Practice">
@@ -1090,12 +1229,12 @@ footer{margin-top:clamp(36px,5vw,56px);}
         </div>
       </div>
       <div class="grid">
-        <a class="card" href="libro.html?id=core_practice_lvl1"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-audio"/></svg></span><span class="cbody"><h3 class="va-display">Practice · Nivel 1</h3><p>Listening y speaking con audio en cada lección.</p><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
-        <a class="card" href="libro.html?id=core_practice_lvl2"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-palette"/></svg></span><span class="cbody"><h3 class="va-display">Practice · Nivel 2</h3><p>Lectura y escritura: leyendas, mitos y misterios.</p><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
-        <a class="card" href="libro.html?id=core_practice_lvl3"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-speech"/></svg></span><span class="cbody"><h3 class="va-display">Practice · Nivel 3</h3><p>Las 4 destrezas: debate y descubrimiento.</p><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
-        <a class="card" href="libro.html?id=core_practice_lvl4"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-palette"/></svg></span><span class="cbody"><h3 class="va-display">Practice · Nivel 4</h3><p>Arte y literatura: talleres orales.</p><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
-        <a class="card" href="libro.html?id=core_practice_lvl5"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-bolt"/></svg></span><span class="cbody"><h3 class="va-display">Practice · Nivel 5</h3><p>Futuro y tecnología: lectura y escritura.</p><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
-        <a class="card" href="libro.html?id=core_practice_lvl6"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-palette"/></svg></span><span class="cbody"><h3 class="va-display">Practice · Nivel 6</h3><p>Cultura pop y sociedad: dominio de las 4 destrezas.</p><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
+        <a class="card" data-en="1" href="libro.html?id=core_practice_lvl1"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-audio"/></svg></span><span class="cbody"><span class="ck">Core Practice · Nivel 1</span><h3 class="va-display" lang="en">Real-Life Talk</h3><p>Listening y speaking con audio en cada lección.</p><span class="sk-row" aria-label="Destrezas"><span class="sk" lang="en">Listening</span><span class="sk" lang="en">Speaking</span></span><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
+        <a class="card" data-en="1" href="libro.html?id=core_practice_lvl2"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-palette"/></svg></span><span class="cbody"><span class="ck">Core Practice · Nivel 2</span><h3 class="va-display" lang="en">Legends &amp; Mysteries</h3><p>Lectura y escritura: leyendas, mitos y misterios.</p><span class="sk-row" aria-label="Destrezas"><span class="sk" lang="en">Reading</span><span class="sk" lang="en">Writing</span></span><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
+        <a class="card" data-en="1" href="libro.html?id=core_practice_lvl3"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-speech"/></svg></span><span class="cbody"><span class="ck">Core Practice · Nivel 3</span><h3 class="va-display" lang="en">Debate &amp; Discovery</h3><p>Las 4 destrezas: debate y descubrimiento.</p><span class="sk-row" aria-label="Destrezas"><span class="sk" lang="en">Listening</span><span class="sk" lang="en">Speaking</span><span class="sk" lang="en">Reading</span><span class="sk" lang="en">Writing</span></span><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
+        <a class="card" data-en="1" href="libro.html?id=core_practice_lvl4"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-palette"/></svg></span><span class="cbody"><span class="ck">Core Practice · Nivel 4</span><h3 class="va-display" lang="en">Stories on Stage</h3><p>Arte y literatura: talleres orales.</p><span class="sk-row" aria-label="Destrezas"><span class="sk" lang="en">Speaking</span><span class="sk" lang="en">Writing</span></span><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
+        <a class="card" data-en="1" href="libro.html?id=core_practice_lvl5"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-bolt"/></svg></span><span class="cbody"><span class="ck">Core Practice · Nivel 5</span><h3 class="va-display" lang="en">Future Tech</h3><p>Futuro y tecnología: lectura y escritura.</p><span class="sk-row" aria-label="Destrezas"><span class="sk" lang="en">Reading</span><span class="sk" lang="en">Writing</span></span><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
+        <a class="card" data-en="1" href="libro.html?id=core_practice_lvl6"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-palette"/></svg></span><span class="cbody"><span class="ck">Core Practice · Nivel 6</span><h3 class="va-display" lang="en">Pop Culture</h3><p>Cultura pop y sociedad: dominio de las 4 destrezas.</p><span class="sk-row" aria-label="Destrezas"><span class="sk" lang="en">Listening</span><span class="sk" lang="en">Speaking</span><span class="sk" lang="en">Reading</span><span class="sk" lang="en">Writing</span></span><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
       </div>
     </section>
     <section class="cat-sec" data-group="grammar" aria-label="Core Grammar">
@@ -1110,9 +1249,9 @@ footer{margin-top:clamp(36px,5vw,56px);}
         </div>
       </div>
       <div class="grid">
-        <a class="card" href="libro.html?id=core_grammar_lvl1"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-grid"/></svg></span><span class="cbody"><h3 class="va-display">Grammar Foundations</h3><p>Drills fundamentales para consolidar la base.</p><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
-        <a class="card" href="libro.html?id=core_grammar_lvl2"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-grid"/></svg></span><span class="cbody"><h3 class="va-display">Grammar in Context</h3><p>Estructuras complejas aplicadas en contexto.</p><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
-        <a class="card" href="libro.html?id=core_grammar_lvl3"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-grid"/></svg></span><span class="cbody"><h3 class="va-display">Grammar Mastery</h3><p>Estilo, matices y excepciones del inglés avanzado.</p><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
+        <a class="card" data-en="1" href="libro.html?id=core_grammar_lvl1"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-grid"/></svg></span><span class="cbody"><span class="ck">Core Grammar · Nivel 1</span><h3 class="va-display" lang="en">Grammar Foundations</h3><p>Drills fundamentales para consolidar la base.</p><span class="sk-row" aria-label="Destrezas"><span class="sk" lang="en">Grammar</span></span><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
+        <a class="card" data-en="1" href="libro.html?id=core_grammar_lvl2"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-grid"/></svg></span><span class="cbody"><span class="ck">Core Grammar · Nivel 2</span><h3 class="va-display" lang="en">Grammar in Context</h3><p>Estructuras complejas aplicadas en contexto.</p><span class="sk-row" aria-label="Destrezas"><span class="sk" lang="en">Grammar</span><span class="sk" lang="en">Writing</span></span><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
+        <a class="card" data-en="1" href="libro.html?id=core_grammar_lvl3"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-grid"/></svg></span><span class="cbody"><span class="ck">Core Grammar · Nivel 3</span><h3 class="va-display" lang="en">Grammar Mastery</h3><p>Estilo, matices y excepciones del inglés avanzado.</p><span class="sk-row" aria-label="Destrezas"><span class="sk" lang="en">Grammar</span><span class="sk" lang="en">Writing</span></span><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
       </div>
     </section>
     <section class="cat-sec" data-group="cert" aria-label="Certification">
@@ -1127,12 +1266,12 @@ footer{margin-top:clamp(36px,5vw,56px);}
         </div>
       </div>
       <div class="grid">
-        <a class="card" href="libro.html?id=cert_prep_b1"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-check-doc"/></svg></span><span class="cbody"><h3 class="va-display">Certification Path I · Gateway</h3><p>Tu primera certificación: B1 Preliminary, IELTS 4.5–5.5 y TOEFL con drills cronometrados.</p><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
-        <a class="card" href="libro.html?id=cert_prep_b2"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-summit"/></svg></span><span class="cbody"><h3 class="va-display">Certification Path II · Ascent</h3><p>B2 First e IELTS 5.5–6.5: paráfrasis, distractores y escritura estructurada.</p><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
-        <a class="card" href="libro.html?id=cert_prep_c1"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-summit"/></svg></span><span class="cbody"><h3 class="va-display">Certification Path III · Summit</h3><p>CAE, CPE e IELTS 7.0+: matiz, registro y resistencia de examen.</p><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
-        <a class="card" href="libro.html?id=cert_prep"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-check-doc"/></svg></span><span class="cbody"><h3 class="va-display">Certification Prep · Intensivo</h3><p>Manual de bandas: drills cronometrados, modelos Band 6/8 y simulacro final.</p><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
-        <a class="card" href="libro.html?id=exam_prep"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-check-doc"/></svg></span><span class="cbody"><h3 class="va-display">Exam Prep · Vol. 1</h3><p>Sintaxis avanzada y estrategia de examen.</p><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
-        <a class="card" href="libro.html?id=exam_prep_vol2"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-check-doc"/></svg></span><span class="cbody"><h3 class="va-display">Exam Prep · Vol. 2</h3><p>Vocabulario temático y práctica aplicada.</p><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
+        <a class="card" data-en="1" href="libro.html?id=cert_prep_b1"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-check-doc"/></svg></span><span class="cbody"><span class="ck">Certification Path I · B1</span><h3 class="va-display" lang="en">Gateway</h3><p>Tu primera certificación: B1 Preliminary, IELTS 4.5–5.5 y TOEFL con drills cronometrados.</p><span class="sk-row" aria-label="Destrezas"><span class="sk" lang="en">Listening</span><span class="sk" lang="en">Speaking</span><span class="sk" lang="en">Reading</span><span class="sk" lang="en">Writing</span></span><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
+        <a class="card" data-en="1" href="libro.html?id=cert_prep_b2"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-summit"/></svg></span><span class="cbody"><span class="ck">Certification Path II · B2</span><h3 class="va-display" lang="en">Ascent</h3><p>B2 First e IELTS 5.5–6.5: paráfrasis, distractores y escritura estructurada.</p><span class="sk-row" aria-label="Destrezas"><span class="sk" lang="en">Listening</span><span class="sk" lang="en">Speaking</span><span class="sk" lang="en">Reading</span><span class="sk" lang="en">Writing</span></span><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
+        <a class="card" data-en="1" href="libro.html?id=cert_prep_c1"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-summit"/></svg></span><span class="cbody"><span class="ck">Certification Path III · C1–C2</span><h3 class="va-display" lang="en">Summit</h3><p>CAE, CPE e IELTS 7.0+: matiz, registro y resistencia de examen.</p><span class="sk-row" aria-label="Destrezas"><span class="sk" lang="en">Listening</span><span class="sk" lang="en">Speaking</span><span class="sk" lang="en">Reading</span><span class="sk" lang="en">Writing</span></span><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
+        <a class="card" data-en="1" href="libro.html?id=cert_prep"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-check-doc"/></svg></span><span class="cbody"><span class="ck">Certification Prep · Intensivo</span><h3 class="va-display" lang="en">Band Booster</h3><p>Manual de bandas: drills cronometrados, modelos Band 6/8 y simulacro final.</p><span class="sk-row" aria-label="Destrezas"><span class="sk" lang="en">Listening</span><span class="sk" lang="en">Speaking</span><span class="sk" lang="en">Reading</span><span class="sk" lang="en">Writing</span></span><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
+        <a class="card" data-en="1" href="libro.html?id=exam_prep"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-check-doc"/></svg></span><span class="cbody"><span class="ck">Exam Prep · Vol. 1</span><h3 class="va-display" lang="en">Syntax &amp; Strategy</h3><p>Sintaxis avanzada y estrategia de examen.</p><span class="sk-row" aria-label="Destrezas"><span class="sk" lang="en">Grammar</span><span class="sk" lang="en">Reading</span></span><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
+        <a class="card" data-en="1" href="libro.html?id=exam_prep_vol2"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-check-doc"/></svg></span><span class="cbody"><span class="ck">Exam Prep · Vol. 2</span><h3 class="va-display" lang="en">Words in Action</h3><p>Vocabulario temático y práctica aplicada.</p><span class="sk-row" aria-label="Destrezas"><span class="sk" lang="en">Vocabulary</span><span class="sk" lang="en">Reading</span></span><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
       </div>
     </section>
     <section class="cat-sec" data-group="biz" aria-label="Business">
@@ -1147,9 +1286,9 @@ footer{margin-top:clamp(36px,5vw,56px);}
         </div>
       </div>
       <div class="grid">
-        <a class="card" href="libro.html?id=corporate_b1"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-case"/></svg></span><span class="cbody"><h3 class="va-display">Business Path I · Foundations</h3><p>Inglés de oficina de supervivencia: llamadas, correos, juntas y clientes.</p><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
-        <a class="card" href="libro.html?id=corporate_b2"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-case"/></svg></span><span class="cbody"><h3 class="va-display">Business English Premium</h3><p>Comunicación corporativa efectiva: pitch, juntas y reportes con audio en cada lección.</p><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
-        <a class="card" href="libro.html?id=corporate_c1"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-speech"/></svg></span><span class="cbody"><h3 class="va-display">Business Path III · Influence</h3><p>Persuasión, negociación, liderazgo y el sales pitch final.</p><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
+        <a class="card" data-en="1" href="libro.html?id=corporate_b1"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-case"/></svg></span><span class="cbody"><span class="ck">Business Path I · B1</span><h3 class="va-display" lang="en">Office Survival</h3><p>Inglés de oficina de supervivencia: llamadas, correos, juntas y clientes.</p><span class="sk-row" aria-label="Destrezas"><span class="sk" lang="en">Speaking</span><span class="sk" lang="en">Writing</span></span><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
+        <a class="card" data-en="1" href="libro.html?id=corporate_b2"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-case"/></svg></span><span class="cbody"><span class="ck">Business English Premium · B2</span><h3 class="va-display" lang="en">Meetings &amp; Pitches</h3><p>Comunicación corporativa efectiva: pitch, juntas y reportes con audio en cada lección.</p><span class="sk-row" aria-label="Destrezas"><span class="sk" lang="en">Speaking</span><span class="sk" lang="en">Listening</span></span><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
+        <a class="card" data-en="1" href="libro.html?id=corporate_c1"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-speech"/></svg></span><span class="cbody"><span class="ck">Business Path III · C1</span><h3 class="va-display" lang="en">Influence</h3><p>Persuasión, negociación, liderazgo y el sales pitch final.</p><span class="sk-row" aria-label="Destrezas"><span class="sk" lang="en">Speaking</span><span class="sk" lang="en">Writing</span></span><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
       </div>
     </section>
     <section class="cat-sec" data-group="otros" aria-label="Otros cursos">
@@ -1164,13 +1303,13 @@ footer{margin-top:clamp(36px,5vw,56px);}
         </div>
       </div>
       <div class="grid">
-        <a class="card" href="libro.html?id=cci1"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-bolt"/></svg></span><span class="cbody"><h3 class="va-display">Curso Intensivo (CCI 1)</h3><p>Bootcamp de fluidez rápida — primer mes.</p><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
-        <a class="card" href="libro.html?id=daily_life_vol0"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-speech"/></svg></span><span class="cbody"><h3 class="va-display">Daily Life English · Vol. 0</h3><p>Club de conversación: las frases que un nativo usa todos los días (A0–A1).</p><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
-        <a class="card" href="libro.html?id=daily_life_vol1"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-speech"/></svg></span><span class="cbody"><h3 class="va-display">Daily Life English · Vol. 1</h3><p>Inglés social para el día a día: planes, restaurantes, viajes, compras y trámites sencillos (A2).</p><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
-        <a class="card" href="libro.html?id=daily_life_vol2"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-speech"/></svg></span><span class="cbody"><h3 class="va-display">Daily Life English · Vol. 2</h3><p>La vida adulta en inglés: renta, servicios, trabajo, banco, seguros y salud (B1).</p><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
-        <a class="card" href="libro.html?id=cabin_crew"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-compass"/></svg></span><span class="cbody"><h3 class="va-display">Aviation English · Cabin Crew</h3><p>Inglés para tripulación de cabina: seguridad, emergencias, primeros auxilios y servicio a bordo.</p><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
-        <a class="card" href="libro.html?id=political_english"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-globe"/></svg></span><span class="cbody"><h3 class="va-display">Political &amp; Global Affairs</h3><p>Diplomacia, política pública y debate civil (B2–C1).</p><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
-        <a class="card" href="libro.html?id=diagnostic_advanced"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-search"/></svg></span><span class="cbody"><h3 class="va-display">Diagnóstico Avanzado</h3><p>Evaluación integral — se realiza con tu profesor.</p><span class="go">Abrir examen <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
+        <a class="card" data-en="1" href="libro.html?id=cci1"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-bolt"/></svg></span><span class="cbody"><span class="ck">Curso Intensivo · CCI 1</span><h3 class="va-display" lang="en">Fluency Bootcamp</h3><p>Bootcamp de fluidez rápida: primer mes.</p><span class="sk-row" aria-label="Destrezas"><span class="sk" lang="en">Speaking</span><span class="sk" lang="en">Listening</span></span><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
+        <a class="card" data-en="1" href="libro.html?id=daily_life_vol0"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-speech"/></svg></span><span class="cbody"><span class="ck">Daily Life English · Vol. 0</span><h3 class="va-display" lang="en">Hi! How’s it going?</h3><p>Club de conversación: las frases que un nativo usa todos los días (A0–A1).</p><span class="sk-row" aria-label="Destrezas"><span class="sk" lang="en">Speaking</span><span class="sk" lang="en">Listening</span></span><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
+        <a class="card" data-en="1" href="libro.html?id=daily_life_vol1"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-speech"/></svg></span><span class="cbody"><span class="ck">Daily Life English · Vol. 1</span><h3 class="va-display" lang="en">Out and About</h3><p>Inglés social para el día a día: planes, restaurantes, viajes, compras y trámites sencillos (A2).</p><span class="sk-row" aria-label="Destrezas"><span class="sk" lang="en">Speaking</span><span class="sk" lang="en">Listening</span></span><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
+        <a class="card" data-en="1" href="libro.html?id=daily_life_vol2"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-speech"/></svg></span><span class="cbody"><span class="ck">Daily Life English · Vol. 2</span><h3 class="va-display" lang="en">Grown-Up Life</h3><p>La vida adulta en inglés: renta, servicios, trabajo, banco, seguros y salud (B1).</p><span class="sk-row" aria-label="Destrezas"><span class="sk" lang="en">Speaking</span><span class="sk" lang="en">Reading</span></span><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
+        <a class="card" data-en="1" href="libro.html?id=cabin_crew"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-compass"/></svg></span><span class="cbody"><span class="ck">Aviation English</span><h3 class="va-display" lang="en">Cabin Crew</h3><p>Inglés para tripulación de cabina: seguridad, emergencias, primeros auxilios y servicio a bordo.</p><span class="sk-row" aria-label="Destrezas"><span class="sk" lang="en">Speaking</span><span class="sk" lang="en">Listening</span></span><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
+        <a class="card" data-en="1" href="libro.html?id=political_english"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-globe"/></svg></span><span class="cbody"><span class="ck">Political English · B2–C1</span><h3 class="va-display" lang="en">Global Affairs</h3><p>Diplomacia, política pública y debate civil.</p><span class="sk-row" aria-label="Destrezas"><span class="sk" lang="en">Reading</span><span class="sk" lang="en">Speaking</span></span><span class="go">Abrir libro <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
+        <a class="card" data-en="1" href="libro.html?id=diagnostic_advanced"><span class="cic" aria-hidden="true"><svg class="i"><use href="#i-search"/></svg></span><span class="cbody"><span class="ck">Evaluación con tu profesor</span><h3 class="va-display" lang="en">Advanced Diagnostic</h3><p>Evaluación integral: se realiza con tu profesor.</p><span class="go">Abrir examen <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span></a>
       </div>
     </section>
   </div>
@@ -1232,18 +1371,34 @@ var VIcon = (function(){
   try{ var raw = localStorage.getItem("vesper_profile"); if(raw) profile = JSON.parse(raw); }catch(e){}
 
   /* ── 1) Saludo personalizado (el perfil del cuestionario sigue dando el nombre) ── */
-  if(profile && profile.name){
-    document.getElementById("intro-title").textContent = "Hola, "+profile.name;
-  }
+  /* El saludo va en INGLÉS (es lo que enseñamos) y cambia con la hora del día,
+     así el alumno aprende tres saludos reales sin estudiarlos. Debajo, la
+     traducción en pequeño: el español es la guía, nunca el contenido.
+     window.vHello lo reutiliza el bloque que trae el nombre desde la nube. */
+  window.vHello = function(name){
+    var h1 = document.getElementById("intro-title"), gl = document.getElementById("hello-gloss");
+    if(!h1) return;
+    var hr = new Date().getHours();
+    var g = hr >= 5 && hr < 12 ? ["Good morning","buenos días"]
+          : hr >= 12 && hr < 19 ? ["Good afternoon","buenas tardes"]
+          : ["Good evening","buenas noches"];
+    name = String(name||"").trim().split(/\s+/)[0];
+    if(!name) return;
+    h1.textContent = g[0] + ", " + name + "!";
+    h1.setAttribute("data-named","1");
+    if(gl) gl.innerHTML = '<i lang="en">' + g[0] + '</i> = ' + g[1];
+  };
+  if(profile && profile.name) window.vHello(profile.name);
 
-  /* La lámina del héroe es el mundo del mapa que le toca a su nivel
-     (cuestionario: 0 = desde cero … 5 = domina). Sin perfil, El Hogar. */
+  /* La lámina del héroe es la parada del viaje de Vesper que le toca a su
+     nivel (cuestionario: 0 = desde cero … 5 = domina). Sin perfil, Londres.
+     Son archivos propios del hub: las láminas del mapa no se tocan. */
   (function(){
     var W = ["a1","a2","b1","b2","c1","c2"];
     var lv = profile && typeof profile.level === "number" ? profile.level : 0;
     var w = W[Math.max(0, Math.min(W.length-1, Math.round(lv)))];
     var hero = document.querySelector(".intro");
-    if(hero) hero.style.setProperty("--hero-art", 'url("assets/images/map/il/banner_'+w+'.jpg")');
+    if(hero) hero.style.setProperty("--hero-art", 'url("assets/images/hub/world_'+w+'.jpg")');
   })();
 
   /* ── 2) Héroe "Hoy" — continúa / empieza por aquí ── */
@@ -1604,7 +1759,7 @@ var VIcon = (function(){
       desc:"Bienvenido/a a tu portal del alumno. En unos segundos te enseño todo lo que puedes hacer aquí — así nada te resulta confuso." },
     { fa:"fa-layer-group", where:"Barra inferior · Inicio",
       title:"Tus libros",
-      desc:"Todos los libros de tu curso viven aquí, en <b>Inicio</b>. Tu profe te dice cuál abrir en cada clase; el resto queda a un toque." },
+      desc:"Todos los libros de tu curso viven aquí, en <b>Home</b> (Inicio). Tu profe te dice cuál abrir en cada clase; el resto queda a un toque." },
     { fa:"fa-graduation-cap", where:"Barra inferior · Aprender",
       title:"Aprender y practicar",
       desc:"El <b>mapa de lecciones</b> interactivo: avanza mundo por mundo y gana experiencia. Ahí mismo puedes <b>chatear con Vesper</b> para practicar hablando." },
@@ -1760,8 +1915,8 @@ var VIcon = (function(){
             var nm = sv(f,"name");
             if(nm){
               var h1 = document.getElementById("intro-title");
-              if(h1 && h1.textContent.indexOf("Hola") !== 0){
-                h1.textContent = "Hola, "+nm;
+              if(h1 && !h1.getAttribute("data-named") && window.vHello){
+                window.vHello(nm);
               }
               if(!localStorage.getItem("vesper_profile")){
                 localStorage.setItem("vesper_profile",
@@ -1802,9 +1957,14 @@ var VIcon = (function(){
       return;
     }
     seen[b.id] = 1;
+    /* Tarjetas "inglés al frente" (data-en): el h3 es el título en inglés del
+       libro y la etiqueta .ck su nombre de curso, escritos a mano a propósito.
+       El índice no los conoce, así que aquí sólo se pone el conteo. */
     var h = el.querySelector('h3'), p = el.querySelector('p');
-    if(h && b.title && h.textContent.trim() !== b.title){ h.textContent = b.title; fixed++; }
-    if(p && b.desc  && p.textContent.trim() !== b.desc ){ p.textContent = b.desc;  fixed++; }
+    if(!el.hasAttribute('data-en')){
+      if(h && b.title && h.textContent.trim() !== b.title){ h.textContent = b.title; fixed++; }
+      if(p && b.desc  && p.textContent.trim() !== b.desc ){ p.textContent = b.desc;  fixed++; }
+    }
     if(b.lessons && b.lessons.length) el.setAttribute('data-lessons', b.lessons.length);
   });
 
@@ -1911,15 +2071,52 @@ var VIcon = (function(){
     faces[im.getAttribute('data-face')] = im;
   });
 
+  /* Vesper habla INGLÉS, graduado al nivel del alumno (vesper_profile.level:
+     0–1 → A, 2–3 → B, 4–5 → C). Cada frase lleva su traducción, que el alumno
+     abre con "Ver en español": la ayuda está a un toque, pero no estorba. */
   var LINES = {
-    welcome: ['Qué bueno verte. Sigue por donde ibas.',
-              'Una lección corta y vamos creciendo.',
-              'Aquí estoy cuando me necesites.'],
-    streak: ['Tu racha sigue viva. Un día más sumado.',
-             'La constancia es tu superpoder.'],
-    explaining: ['Cualquier libro de abajo te lo explico con calma.',
-                 'Si te atoras, el audio ayuda más de lo que parece.']
+    A: {
+      welcome: [['Hi! Let’s start.', '¡Hola! Empecemos.'],
+                ['Good to see you! One short lesson today?', '¡Qué bueno verte! ¿Una lección corta hoy?'],
+                ['I’m here to help you.', 'Estoy aquí para ayudarte.']],
+      streak: [['Your streak is alive! Great job.', '¡Tu racha sigue viva! Muy bien.'],
+               ['Every day counts. Keep going!', 'Cada día cuenta. ¡Sigue así!']],
+      explaining: [['Pick a book. I can help you.', 'Elige un libro. Yo te ayudo.'],
+                   ['Listen to the audio. It helps a lot!', 'Escucha el audio. ¡Ayuda mucho!']]
+    },
+    B: {
+      welcome: [['Good to see you! Pick up where you left off.', '¡Qué bueno verte! Sigue por donde ibas.'],
+                ['One short lesson a day goes a long way.', 'Una lección corta al día rinde mucho.'],
+                ['I’m here whenever you need me.', 'Aquí estoy cuando me necesites.']],
+      streak: [['Your streak is still going. One more day!', 'Tu racha sigue. ¡Un día más!'],
+               ['Consistency is your superpower.', 'La constancia es tu superpoder.']],
+      explaining: [['Choose any book below and I’ll walk you through it.', 'Elige cualquier libro de abajo y te lo explico con calma.'],
+                   ['Stuck? The audio helps more than you think.', '¿Te atoraste? El audio ayuda más de lo que parece.']]
+    },
+    C: {
+      welcome: [['Good to have you back. Shall we pick up where you left off?', 'Qué gusto verte. ¿Retomamos donde lo dejaste?'],
+                ['Little and often beats cramming.', 'Poco y seguido le gana a estudiar todo de golpe.'],
+                ['Need a hand? I’m all ears.', '¿Necesitas ayuda? Soy todo oídos.']],
+      streak: [['Look at that streak. You’re on a roll.', 'Mira esa racha. Vas con todo.'],
+               ['Consistency is what got you this far.', 'La constancia es lo que te trajo hasta aquí.']],
+      explaining: [['Pick any book and I’ll talk you through it.', 'Elige cualquier libro y te lo explico.'],
+                   ['Stuck? Give the audio a go. It works wonders.', '¿Te atoraste? Prueba el audio, hace maravillas.']]
+    }
   };
+  var band = 'A';
+  try {
+    var pr = JSON.parse(localStorage.getItem('vesper_profile') || 'null');
+    var lv = pr && typeof pr.level === 'number' ? pr.level : 0;
+    band = lv >= 4 ? 'C' : lv >= 2 ? 'B' : 'A';
+  } catch (e) {}
+
+  var es = document.getElementById('v-es'), tr = document.getElementById('v-tr');
+  if (tr && es) tr.addEventListener('click', function () {
+    var open = es.hidden;
+    es.hidden = !open;
+    tr.setAttribute('aria-expanded', open ? 'true' : 'false');
+    tr.textContent = open ? 'Ocultar español' : 'Ver en español';
+  });
 
   function show(face) {
     Object.keys(faces).forEach(function (k) {
@@ -1927,10 +2124,13 @@ var VIcon = (function(){
     });
   }
   function say(state) {
-    var opts = LINES[state] || LINES.welcome;
+    var set = LINES[band] || LINES.A;
+    var opts = set[state] || set.welcome;
     /* Sin Math.random: la frase depende del día, así que es estable durante la
        sesión y no cambia sola al volver a la página. */
-    line.textContent = opts[new Date().getDate() % opts.length];
+    var pick = opts[new Date().getDate() % opts.length];
+    line.textContent = pick[0];
+    if (es) es.textContent = pick[1];
   }
 
   /* Misma regla que el bloque "Hoy": la racha cuenta a partir de 2 días. */
