@@ -1475,6 +1475,43 @@ html.js-anim .ficha{opacity:0;animation:rise .9s var(--ease-out) .34s both;}
   #m-app .m-hero:focus{outline:none;}
 }
 
+/* ---- Recorrido de la app (video Higgsfield, 2026-11-05) ----
+   Un solo video vertical de 19 s recorre los seis mundos; cada tramo enseña
+   un paso. Los textos van en HTML (el video no lleva letras: los modelos las
+   deforman) y se sincronizan con data-t. Solo se reproduce en pantalla. */
+.tour-x{display:grid;grid-template-columns:minmax(0,300px) minmax(0,1fr);gap:clamp(28px,5vw,64px);
+  align-items:center;margin:48px 0 0;}
+.tour-phone{position:relative;aspect-ratio:9/16;border-radius:30px;overflow:hidden;background:#0d0b1f;
+  box-shadow:0 0 0 1px rgba(197,160,89,.45),0 0 0 8px #0d0b1f,0 0 0 9px rgba(245,242,235,.10),0 28px 60px rgba(0,0,0,.45);}
+.tour-phone video{display:block;width:100%;height:100%;object-fit:cover;}
+.tour-phone .tour-play{position:absolute;inset:auto 0 18px;margin:auto;width:max-content;display:none;
+  border:0;border-radius:999px;padding:10px 18px;font:600 14px 'Inter',sans-serif;cursor:pointer;
+  background:rgba(13,11,31,.78);color:#f3e2ab;box-shadow:0 0 0 1px rgba(197,160,89,.5);}
+.tour-x.is-paused .tour-play,.m-tour.is-paused .tour-play{display:block;}
+.tour-steps{list-style:none;margin:18px 0 0;padding:0;display:grid;gap:6px;counter-reset:tour;}
+.tour-steps li{counter-increment:tour;}
+.tour-steps button{all:unset;box-sizing:border-box;width:100%;cursor:pointer;display:grid;grid-template-columns:34px 1fr;
+  gap:14px;align-items:center;padding:12px 14px;border-radius:14px;color:var(--on-night-soft);
+  transition:background .3s,color .3s;}
+.tour-steps button::before{content:counter(tour);width:34px;height:34px;border-radius:50%;display:grid;place-items:center;
+  font:600 14px 'Inter',sans-serif;background:rgba(245,242,235,.07);color:var(--on-night-soft);transition:background .3s,color .3s;}
+.tour-steps button:hover{color:var(--on-night);}
+.tour-steps button:focus-visible{outline:2px solid var(--gold);outline-offset:2px;}
+.tour-steps li.is-on button{background:rgba(197,160,89,.12);color:var(--cream);}
+.tour-steps li.is-on button::before{background:var(--gold);color:#14122a;}
+.tour-steps b{display:block;font-weight:600;color:inherit;}
+@media (max-width:760px){.tour-x{grid-template-columns:1fr;justify-items:center;}.tour-x .tour-phone{width:min(300px,80vw);}}
+#m-app .m-tour{position:relative;margin:18px auto 0;width:min(300px,82vw);}
+#m-app .m-tour .tour-phone{border-radius:26px;}
+#m-app .m-tour__cap{position:absolute;left:12px;right:12px;bottom:12px;padding:10px 12px;border-radius:14px;
+  background:rgba(13,11,31,.72);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);
+  font:400 14px/1.4 'Inter',sans-serif;color:#fff;min-height:3.2em;}
+#m-app .m-tour__cap b{color:#f3e2ab;font-weight:600;margin-right:6px;}
+#m-app .m-tour.is-paused .m-tour__cap{bottom:66px;}
+#m-app .m-tour__dots{display:flex;justify-content:center;gap:6px;margin:10px 0 0;}
+#m-app .m-tour__dots i{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.25);transition:background .3s,width .3s;}
+#m-app .m-tour__dots i.is-on{background:#d9bd84;width:16px;border-radius:3px;}
+
 </style>
 <script src="vesper_prefs.js"></script>
 <script src="vesper_analytics.js"></script>
@@ -2134,6 +2171,28 @@ html.js-anim .ficha{opacity:0;animation:rise .9s var(--ease-out) .34s both;}
       <div>
         <h2 class="sec-title">Entre clase y clase, practicas en el mundo de <em>Vesper</em>.</h2>
         <p class="sec-lead">Tus clases son en vivo con un profesor. La app es el extra para los días sin clase: lecciones cortas, vocabulario y repaso, con Vesper, nuestro gato, como guía. Es gratis y no hace falta ser alumno para usarla.</p>
+      </div>
+    </div>
+
+    <div class="tour-x" data-tour>
+      <div class="tour-phone">
+        <video muted playsinline loop preload="none" poster="assets/images/landing/app/app_tour_poster.webp" width="540" height="960" aria-label="Recorrido animado por los seis mundos de la app de Vesper">
+          <source src="assets/video/app_tour.webm" type="video/webm">
+          <source src="assets/video/app_tour.mp4" type="video/mp4">
+        </video>
+        <button type="button" class="tour-play">▶ Ver el recorrido</button>
+      </div>
+      <div>
+        <h3 class="app-sub" style="margin-top:0">Así se usa, en 20 segundos</h3>
+        <p class="app-subp">Toca un paso para saltar a esa parte del recorrido.</p>
+        <ol class="tour-steps">
+          <li data-t="0"><button type="button"><span><b>Elige tu mundo</b>Empiezas en tu nivel y tocas la primera lección del mapa.</span></button></li>
+          <li data-t="2.5"><button type="button"><span><b>Escucha y responde</b>Ejercicios cortos; Vesper te corrige al instante.</span></button></li>
+          <li data-t="6"><button type="button"><span><b>Repasa vocabulario</b>Tarjetas en las burbujas y práctica sin final en La Forja.</span></button></li>
+          <li data-t="9.5"><button type="button"><span><b>Sube en la liga</b>Tu racha diaria suma puntos en la liga semanal.</span></button></li>
+          <li data-t="13"><button type="button"><span><b>Vence al guardián</b>El examen del mundo es un duelo; si lo ganas, pasas de nivel.</span></button></li>
+          <li data-t="16"><button type="button"><span><b>Gana tus medallas</b>Cada logro deja su medalla, mundo tras mundo hasta C2.</span></button></li>
+        </ol>
       </div>
     </div>
 
@@ -3197,6 +3256,26 @@ html.js-anim .ficha{opacity:0;animation:rise .9s var(--ease-out) .34s both;}
     <span class="m-eyebrow m-eyebrow--dark">Extra · incluido y gratis</span>
     <h2 class="m-h2">Entre clase y clase, practicas en el mundo de <em>Vesper</em></h2>
     <p class="m-appx__lead">Tus clases son en vivo con un profesor. La app es el extra para los días sin clase, con Vesper, nuestro gato, como guía. Gratis, aunque todavía no seas alumno.</p>
+    <h3 class="m-appx__sub">Así se usa, en 20 segundos</h3>
+    <div class="m-tour" data-tour>
+      <div class="tour-phone">
+        <video muted playsinline loop preload="none" poster="assets/images/landing/app/app_tour_poster.webp" width="540" height="960" aria-label="Recorrido animado por los seis mundos de la app de Vesper">
+          <source src="assets/video/app_tour.webm" type="video/webm">
+          <source src="assets/video/app_tour.mp4" type="video/mp4">
+        </video>
+        <button type="button" class="tour-play">▶ Ver el recorrido</button>
+      </div>
+      <p class="m-tour__cap" aria-live="polite"></p>
+      <ol class="tour-steps" hidden>
+        <li data-t="0"><b>1 · Elige tu mundo</b>y toca la primera lección del mapa.</li>
+        <li data-t="2.5"><b>2 · Escucha y responde</b>Vesper te corrige al instante.</li>
+        <li data-t="6"><b>3 · Repasa vocabulario</b>en las burbujas y en La Forja.</li>
+        <li data-t="9.5"><b>4 · Sube en la liga</b>con tu racha diaria.</li>
+        <li data-t="13"><b>5 · Vence al guardián</b>en un duelo para pasar de nivel.</li>
+        <li data-t="16"><b>6 · Gana tus medallas</b>mundo tras mundo hasta C2.</li>
+      </ol>
+      <div class="m-tour__dots" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    </div>
     <h3 class="m-appx__sub">Seis mundos, uno por nivel</h3>
     <p class="m-appx__hint">Desliza para recorrerlos. Al final de cada uno te espera su guardián.</p>
     <ol class="m-wdeck m-sb">
@@ -3445,6 +3524,62 @@ html.js-anim .ficha{opacity:0;animation:rise .9s var(--ease-out) .34s both;}
 
 <script src="vesper_mobile.js" defer></script>
 <script src="vesper_contact.js" defer></script>
+
+<!-- Recorrido de la app: sincroniza los pasos con el video y solo lo reproduce
+     cuando está en pantalla (preload="none": nada se descarga antes). Con
+     movimiento reducido no arranca solo; queda el botón "Ver el recorrido". -->
+<script>
+(function(){
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.querySelectorAll('[data-tour]').forEach(function(box){
+    var v = box.querySelector('video'), play = box.querySelector('.tour-play');
+    var items = [].slice.call(box.querySelectorAll('.tour-steps li'));
+    var cap = box.querySelector('.m-tour__cap'), dots = box.querySelectorAll('.m-tour__dots i');
+    var times = items.map(function(li){ return parseFloat(li.getAttribute('data-t')) || 0; });
+    var cur = -1, wantPlay = !reduce, visible = false;
+    function mark(i){
+      if (i === cur) return; cur = i;
+      items.forEach(function(li, k){ li.classList.toggle('is-on', k === i); });
+      [].forEach.call(dots, function(d, k){ d.classList.toggle('is-on', k === i); });
+      if (cap && items[i]) cap.innerHTML = items[i].innerHTML;
+    }
+    function sync(){
+      var t = v.currentTime || 0, i = 0;
+      for (var k = 0; k < times.length; k++) if (t >= times[k]) i = k;
+      mark(i);
+    }
+    function paused(p){ box.classList.toggle('is-paused', p); }
+    function go(){
+      var p = v.play();
+      if (p && p.catch) p.catch(function(){ paused(true); });
+      paused(false);
+    }
+    v.addEventListener('timeupdate', sync);
+    v.addEventListener('seeked', sync);
+    v.addEventListener('pause', function(){ if (visible) paused(true); });
+    play.addEventListener('click', function(){ wantPlay = true; go(); });
+    items.forEach(function(li, k){
+      var b = li.querySelector('button');
+      if (b) b.addEventListener('click', function(){
+        if (v.preload === 'none') v.preload = 'auto';
+        try { v.currentTime = times[k]; } catch(e){}
+        mark(k); wantPlay = true; go();
+      });
+    });
+    mark(0);
+    if (reduce) paused(true);
+    if ('IntersectionObserver' in window){
+      new IntersectionObserver(function(es){
+        es.forEach(function(e){
+          visible = e.isIntersecting;
+          if (visible && wantPlay) go();
+          else if (!visible && !v.paused) { v.pause(); paused(false); }
+        });
+      }, {threshold:0.35}).observe(v);
+    } else if (wantPlay) { visible = true; go(); }
+  });
+})();
+</script>
 
 </body>
 </html>
