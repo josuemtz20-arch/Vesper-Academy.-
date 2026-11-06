@@ -697,6 +697,38 @@ section{padding:var(--s-section) 0;}
 }
 
 /* ============================================================
+   EL RAIL TEMÁTICO — dos filas en marcha contraria
+   ============================================================ */
+.temas{padding:clamp(46px,6vw,74px) 0;border-top:1px solid var(--hair);border-bottom:1px solid var(--hair);
+  background:var(--night);overflow:hidden;contain:layout paint;}
+.temas-head{text-align:center;margin-bottom:34px;}
+.marquee{overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);
+  mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);}
+.marquee+.marquee{margin-top:14px;}
+.mtrack{display:flex;gap:14px;width:max-content;}
+.mtile{display:flex;flex-direction:column;align-items:center;gap:9px;width:104px;flex:0 0 auto;}
+.mtrack img{width:88px;height:88px;object-fit:cover;border-radius:var(--r-sm);
+  border:1px solid rgba(197,160,89,.22);opacity:.72;flex:0 0 auto;transition:opacity .3s;}
+.mtile b{font:500 .78rem/1.2 'Inter',sans-serif;color:rgba(245,242,235,.72);text-align:center;}
+.marquee:hover .mtrack img{opacity:.9;}
+@keyframes marchL{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+@keyframes marchR{from{transform:translateX(-50%);}to{transform:translateX(0);}}
+/* El rail NO se cuelga de .js-anim. Esa clase es la red de seguridad del
+   contenido que nace en opacity:0, y rescate() la retira entera en cuanto
+   sospecha que el motor de animación no arrancó (pestaña abierta en segundo
+   plano, renderizador sin composición). Las láminas del rail se ven igual
+   con animación o sin ella, así que ese rescate no las salvaba de nada: solo
+   las dejaba paradas para siempre, sin vuelta atrás. El rail se detiene
+   únicamente cuando alguien pide menos movimiento — el sistema (media query,
+   más abajo) o el alumno en su perfil. */
+.marquee.l .mtrack{animation:marchL 60s linear infinite;}
+.marquee.r .mtrack{animation:marchR 75s linear infinite;}
+/* Preferencia explícita del alumno (vesper_prefs.js). Igual que con el media
+   query: se para, pero la fila sigue explorable arrastrando. */
+html.vesper-reduce-motion .marquee .mtrack{animation:none;}
+html.vesper-reduce-motion .marquee{overflow-x:auto;scroll-snap-type:x proximity;}
+
+/* ============================================================
    CONTACTO
    ============================================================ */
 .cta-band{position:relative;overflow:hidden;background:var(--night);}
@@ -1058,6 +1090,53 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
 
 
 /* ============================================================
+   BOTONES CON SUELO (2026-11-06) — el mismo lenguaje que el hub del
+   alumno (materiales.html, «PULIDO 2026-11»): oro en degradado, letra
+   fuerte, esquina de 14 px y un «suelo» de oro oscuro que se hunde al
+   pulsar. El fantasma es una superficie translúcida, no un filete suelto.
+   ============================================================ */
+:root{--press:4px;--gold-shadow:color-mix(in srgb,var(--gold) 62%,#000);
+  --gold-face:linear-gradient(180deg,color-mix(in srgb,var(--star) 45%,var(--gold)),var(--gold));}
+.btn{border-radius:14px;font-weight:700;}
+.btn-gold{background:var(--gold-face);color:#14122a;box-shadow:0 var(--press) 0 var(--gold-shadow);
+  transition:transform .09s ease,box-shadow .09s ease,filter .2s;}
+.btn-gold:hover{transform:translateY(-2px);filter:brightness(1.05);
+  box-shadow:0 calc(var(--press) + 2px) 0 var(--gold-shadow),0 14px 28px rgba(197,160,89,.26);}
+.btn-gold:active{transform:translateY(var(--press));box-shadow:0 0 0 var(--gold-shadow);}
+.btn-ghost{background:rgba(245,242,235,.06);border:1px solid rgba(243,226,171,.32);color:var(--cream);
+  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);transition:background .16s,border-color .16s,transform .09s;}
+.btn-ghost:hover{background:rgba(245,242,235,.14);border-color:var(--star);color:var(--cream);}
+.btn-ghost:active{transform:translateY(2px);}
+.btn-wa{background:#25D366;color:#0b3d1f;box-shadow:0 var(--press) 0 #168a43;transition:transform .09s ease,box-shadow .09s ease;}
+.btn-wa:hover{transform:translateY(-2px);box-shadow:0 calc(var(--press) + 2px) 0 #168a43;}
+.btn-wa:active{transform:translateY(var(--press));box-shadow:0 0 0 #168a43;}
+.hero-app-chip{box-shadow:0 3px 0 rgba(0,0,0,.35);}
+.hero-app-chip b{box-shadow:0 2px 0 var(--gold-shadow);}
+.tour-btn{border-radius:14px;background:var(--gold-face);color:#14122a;box-shadow:0 var(--press) 0 var(--gold-shadow);}
+.tour-btn:active{transform:translate(-50%,var(--press));box-shadow:0 0 0 var(--gold-shadow);}
+@media (prefers-reduced-motion: reduce){.btn-gold,.btn-wa,.btn-ghost{transition:none;}}
+/* Teléfono (#m-app): sus botones eran oro plano en versalitas con radio 3 */
+@media (pointer: coarse) and (max-width: 820px){
+  #m-app .m-btn{border-radius:14px;text-transform:none;letter-spacing:0;font:800 16px 'Inter',sans-serif;
+    background:var(--gold-face);color:#14122a;box-shadow:0 var(--press) 0 var(--gold-shadow);
+    transition:transform .09s ease,box-shadow .09s ease;}
+  #m-app .m-btn:active{transform:translateY(var(--press));box-shadow:0 0 0 var(--gold-shadow);}
+  #m-app .m-btn--ghost,#m-app .m-cta .m-btn--wa{background:rgba(255,255,255,.06);color:#fff;font-size:15px;font-weight:700;
+    border:1px solid rgba(243,226,171,.34);box-shadow:none;}
+  #m-app .m-btn--ghost:active,#m-app .m-cta .m-btn--wa:active{transform:translateY(2px);}
+  #m-app .m-dock .m-btn{font-size:15px;}
+  #m-app .m-dock__wa{border-radius:14px;}
+  #m-app .m-bar__cta{border-radius:12px;text-transform:none;letter-spacing:0;font:800 13.5px 'Inter',sans-serif;
+    background:var(--gold-face);color:#14122a;box-shadow:0 3px 0 var(--gold-shadow);}
+  #m-app .m-bar__cta:active{transform:translateY(3px);box-shadow:0 0 0 var(--gold-shadow);}
+  #m-app .m-temas{padding:40px 0 34px;}
+  #m-app .m-temas .temas-head{padding:0 20px;margin-bottom:22px;}
+  #m-app .m-temas .m-h2{color:#fff;margin-top:6px;}
+  #m-app .m-temas .mtile{width:92px;}
+  #m-app .m-temas .mtrack img{width:76px;height:76px;}
+}
+
+/* ============================================================
    PORTADA SENCILLA (2026-11-06) — hero de una columna con tres
    razones, cursos en rejilla, franja de la app y cierre sin
    formulario. Lo que se fue vive en como-funciona.html, planes.html,
@@ -1364,6 +1443,19 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
   </div>
 </section>
 
+<!-- ============ EL RAIL TEMÁTICO ============ -->
+<!-- Volvió el 2026-11-06 a pedido del dueño: las clases «pasando de un lado al otro». -->
+<!-- aria-hidden va SÓLO en los rieles decorativos: el encabezado es copy real
+     y debe seguir en el árbol de accesibilidad y en el esquema de títulos. -->
+<div class="temas">
+  <div class="container temas-head quiet-head">
+    <span class="eyebrow"><span data-hecho="temas_club">150</span> temas de conversación</span>
+    <h2 class="sec-title" style="margin-bottom:0">De la cocina a la sala de juntas.</h2>
+  </div>
+  <div class="marquee l" aria-hidden="true"><div class="mtrack" data-temas="a"></div></div>
+  <div class="marquee r" aria-hidden="true"><div class="mtrack" data-temas="b"></div></div>
+</div>
+
 <!-- ============ LA APP (FRANJA) ============ -->
 <!-- La sección completa (recorrido, seis mundos, funciones) se mudó a
      app.html el 2026-11-06. Aquí queda una franja: qué es y a dónde ir. -->
@@ -1454,7 +1546,7 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
         <h3>¿Prefieres hablar con alguien?</h3>
         <p>Escríbenos por WhatsApp y te contestamos con horarios y precios para tu caso.</p>
         <p class="talk-btns">
-          <a href="https://wa.me/525535699899?text=Hola%2C%20vengo%20de%20vesperacademy.com%20y%20quiero%20informaci%C3%B3n%20sobre%20los%20cursos%20de%20ingl%C3%A9s." target="_blank" rel="noopener" class="btn" style="background:#25D366;color:#0b3d1f;border-color:#25D366"><svg class="i i--solid" aria-hidden="true"><use href="#i-whatsapp"/></svg> WhatsApp 55 3569 9899</a>
+          <a href="https://wa.me/525535699899?text=Hola%2C%20vengo%20de%20vesperacademy.com%20y%20quiero%20informaci%C3%B3n%20sobre%20los%20cursos%20de%20ingl%C3%A9s." target="_blank" rel="noopener" class="btn btn-wa"><svg class="i i--solid" aria-hidden="true"><use href="#i-whatsapp"/></svg> WhatsApp 55 3569 9899</a>
         </p>
         <p class="talk-alt"><a href="planes.html#contacto">O déjanos tu WhatsApp y te escribimos <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a></p>
       </div>
@@ -1619,6 +1711,36 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
 
     /* Año en el pie */
     var yr = document.getElementById('year'); if(yr) yr.textContent = new Date().getFullYear();
+
+    /* Rail temático: se llena desde JS y se duplica exacto para que el
+       bucle de -50% no dé tirones. Decorativo -> aria-hidden en el markup. */
+    var TEMAS = ['conversation','mind','question','business','negotiation','diplomacy','career',
+                 'achievement','globe','finance','science','technology','travel','news','medicine',
+                 'education','debate','writing','justice','future','city','music','food','nature'];
+    /* Sin nombre, el muro eran cuadros decorativos: el visitante no sabía qué temas eran. */
+    var TEMA_NOMBRE = {conversation:'Conversación',mind:'Mente y hábitos',question:'Curiosidades',business:'Negocios',
+                 negotiation:'Negociación',diplomacy:'Diplomacia',career:'Tu carrera',achievement:'Logros',globe:'Cultura global',
+                 finance:'Finanzas',science:'Ciencia',technology:'Tecnología',travel:'Viajes',news:'Noticias',medicine:'Salud',
+                 education:'Educación',debate:'Debate',writing:'Escritura',justice:'Leyes',future:'El futuro',city:'La ciudad',
+                 music:'Música',food:'Comida',nature:'Naturaleza'};
+    function fillTrack(el, list){
+      if(!el) return;
+      /* Miniaturas propias a 176px (2x de 88). Servir los theme_*.jpg de
+         900x1125 aquí costaba 2.8 MB para pintar cuadritos de 88 px. */
+      var html = list.map(function(t){
+        return '<span class="mtile"><img src="assets/images/landing/rail/'+t+'.webp" alt="" width="88" height="88" loading="lazy" decoding="async"><b>'+TEMA_NOMBRE[t]+'</b></span>';
+      }).join('');
+      el.innerHTML = html + html;   /* duplicado exacto = bucle sin salto */
+    }
+    /* Este guion va antes de #m-app: la tira del teléfono se llena cuando
+       el documento ya está completo. */
+    var llenarTiras = function(){
+      [].forEach.call(document.querySelectorAll('.mtrack[data-temas]'), function(el){
+        if (!el.children.length) fillTrack(el, el.getAttribute('data-temas') === 'a' ? TEMAS.slice(0,12) : TEMAS.slice(12));
+      });
+    };
+    llenarTiras();
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', llenarTiras);
 
     /* Foco que sigue al cursor — sólo puntero fino, nunca bajo reduce */
     var hero = document.getElementById('hero');
@@ -1954,6 +2076,16 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
       <a class="m-link" href="planes.html" style="margin-top:14px"><span>Compara planes y precios</span><svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a>
     </div>
   </section>
+
+  <!-- Tira de temas (2026-11-06): la misma de escritorio -->
+  <div class="temas m-temas">
+    <div class="temas-head">
+      <span class="m-eyebrow m-eyebrow--dark"><span data-hecho="temas_club">150</span> temas de conversación</span>
+      <h2 class="m-h2">De la cocina a la sala de juntas</h2>
+    </div>
+    <div class="marquee l" aria-hidden="true"><div class="mtrack" data-temas="a"></div></div>
+    <div class="marquee r" aria-hidden="true"><div class="mtrack" data-temas="b"></div></div>
+  </div>
 
   <!-- La app: franja corta; todo lo demás está en app.html (2026-11-06) -->
   <section class="m-appx" id="m-appx">
