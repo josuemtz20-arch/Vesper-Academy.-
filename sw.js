@@ -55,6 +55,7 @@ var CORE = [
   "vesper_mascot.js",
   "vesper_theme.js",
   "vesper_style.js",
+  "vesper_minimal_deco.js",
   "assets/css/vesper_minimal.css",
   "vesper_tour.js",
   "vesper_adaptive.js",

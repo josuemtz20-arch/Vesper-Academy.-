@@ -1023,8 +1023,9 @@
     var n = PATH.LEVELS.indexOf(selLevel) + 1;
     var il = !pxOn() && ilOn();
     return '<section class="world-banner' + (pxOn() ? ' is-pixel' : '') + (il ? ' is-illus' : '') + '" data-world="' + selLevel + '" style="' + worldVars(t) + '" aria-label="Mundo ' + n + ': ' + esc(t.worldName) + '">'
-      + '<img class="world-banner__img" src="' + (il ? VESPER_MAPIL.banner(selLevel) : t.file) + '" alt="" aria-hidden="true" decoding="async">'
-      + ambLayer(t.ambientN)
+      + (minOn() ? worldBand(selLevel)
+        : '<img class="world-banner__img" src="' + (il ? VESPER_MAPIL.banner(selLevel) : t.file) + '" alt="" aria-hidden="true" decoding="async">'
+          + ambLayer(t.ambientN))
       + '<div class="world-banner__body">'
       + '<span class="world-banner__eyebrow">Mundo ' + n + ' &middot; ' + selLevel + '</span>'
       + '<h2 class="world-banner__title">' + esc(t.worldName) + '</h2>'
@@ -1371,6 +1372,143 @@
     locked: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5.8" y="10.8" width="12.4" height="9" rx="2"/><path d="M8.8 10.8V8.3a3.2 3.2 0 0 1 6.4 0v2.5"/></svg>',
     go: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>'
   };
+
+  /* ---- Láminas (2026-11-06) ------------------------------------------------
+     El dueño: el minimalista "se ve demasiado blanco, demasiado vacío" y pidió
+     usar las imágenes sencillas que ya hicimos para las lecciones. Son las
+     láminas theme_*.jpg (grabado crema sobre lino navy). _scripts/minimal_marks/
+     make_line_marks.py las recorta como MÁSCARA (assets/images/lessons/line/
+     <tema>.webp) y aquí se pintan con el oro del tema sobre el tono más oscuro
+     del tema (--m-plate en vesper_minimal.css): una sola imagen sirve para los
+     ocho temas de color, claros u oscuros.
+     Cada lección recibe la lámina de su tema leyendo el título: la primera
+     regla que coincide gana; si ninguna, decide la pista (track). */
+  var MARK_DIR = "assets/images/lessons/line/";
+  var MARK_RULES = [
+    [/caf(e|eteria)\b|coffee/, "morning"],
+    [/restaurant|comida|\bfood|drink|bebida/, "food"],
+    [/market|mercado|shopping|compras|comprar/, "shopping"],
+    [/\bropa\b|cloth|fashion/, "fashion"],
+    [/famil/, "family"],
+    [/invit/, "celebration"],
+    [/color/, "art"],
+    [/artificial intelligence|inteligencia artificial/, "ai"],
+    [/phone|telefon|llamar|voicemail|calls\b/, "phone"],
+    [/technolog|tecnolog|internet|podcast/, "ai"],
+    [/negotiat|negocia/, "negotiation"],
+    [/meeting|presentation|business|pitch|team update|chairing/, "business"],
+    [/e-?mail|correo/, "mail"],
+    [/apolog|disculp|sorry|bad news/, "relationship"],
+    [/psycholog|bias|power of habits|attention|neuroplastic|\bmind\b/, "mind"],
+    [/trend/, "finance"],
+    [/money|bank|banco|econom|financ|dinero|development aid/, "finance"],
+    [/\bjob|trabaj|work\b|working|career|office|oficina|interview|entrevista|profession|remote|gig economy|four-day|customers|feedback/, "career"],
+    [/casa\b|house|\bhome|hogar|household/, "home"],
+    [/philosoph|happiness|ethic|trolley|paradox|progress and doubt/, "philosophy"],
+    [/rutina|routine|dia a dia|a day with|normal day|good morning/, "morning"],
+    [/hora\b|la hora|fechas|\bdias\b|days|calendar|numer|number/, "calendar"],
+    [/viaj|travel|airport|aeropuerto|holiday|\btrip|abroad|vacacion/, "travel"],
+    [/urbaniz/, "city"],
+    [/garden|jardin|environment|planet|planeta|nature|naturaleza|renewable|photosynth|mountain|montana/, "nature"],
+    [/direccion|direction|ciudad|\bcity|lugares|places/, "map"],
+    [/clima|weather|estaciones|season/, "weather"],
+    [/animal|\bzoo\b/, "animals"],
+    [/\bsalud\b|medic|health|doctor|sleep|placebo|well-being|cuerpo|\bbody/, "medicine"],
+    [/sport|deporte/, "sports"],
+    [/hobbies|tiempo libre|free time|pasatiempo/, "leisure"],
+    [/film|movie|pelicula/, "cinema"],
+    [/news|noticia|media\b|report(ed|ing)? (speech|verbs)|passive/, "news"],
+    [/debate|disagree|opinion|agree|counter|conced/, "debate"],
+    [/complain|quej|diplomat|tact\b|polite|cortes/, "diplomacy"],
+    [/siente|feeling|sentimiento|emotion|emocion|interjec|personality/, "relationship"],
+    [/lecture|campus|study|estudi|academic/, "education"],
+    [/histor/, "history"],
+    [/lost|wallet|myster/, "mystery"],
+    [/pais|countr|nacionalidad|nationalit/, "globe"],
+    [/saludar|saludo|greet|presentar|introduc|small talk|despedir|conversation|verb "to be"|to be y presente|preguntas wh/, "conversation"],
+    [/question|pregunta|clarification|repit|perdon/, "question"],
+    [/writ|escrib|report|cohesion|register|style/, "writing"],
+    [/imperativ|instruction/, "diagnostic"],
+    [/deduc|guessing/, "mystery"],
+    [/must|have to|should have|obligation/, "justice"],
+    [/\bcan\b|ability|habilidad/, "fitness"],
+    [/conditional|wish|if only/, "fantasy"],
+    [/compar|superlat/, "achievement"],
+    [/future|futuro|\bwill\b|going to/, "future"],
+    [/perfect|continuous|continuo/, "time"],
+    [/past|pasado|used to|regular/, "history"],
+    [/preposicion.*tiempo|in \/ on \/ at/, "calendar"],
+    [/preposi/, "map"],
+    [/present simple|do \/ does/, "morning"],
+    /* gramática pura: un tema por familia, para que la lista no repita
+       la misma lámina diez veces */
+    [/there is|there are|causative/, "home"],
+    [/countable|contable|cuantific|quantif/, "food"],
+    [/plural/, "animals"],
+    [/relative|conjunc|participle|ellipsis|substitut|nominal|sentence|article|articulo/, "writing"],
+    [/reflexiv/, "mind"],
+    [/pronoun|pronombre|posesiv|possess|genitiv/, "family"],
+    [/adjective|adjetivo/, "art"],
+    [/frecuenc|frequency/, "calendar"],
+    [/adverb|adverbio/, "sports"],
+    [/demostrativ|demonstrativ/, "shopping"],
+    [/like, love/, "relationship"],
+    [/gerund|infinitive/, "leisure"],
+    [/too y enough|too and enough/, "weather"],
+    [/subjunct|formal struct/, "justice"],
+    [/invers|cleft|emphas/, "literature"],
+    [/idiom|phrasal|collocation|word formation|vocabul|nuance|connotation|precision|rhetoric|tone|language change/, "literature"]
+  ];
+  var MARK_TRACK = [
+    [/listen|escucha/, "retro"], [/read|lectura/, "literature"], [/business/, "business"],
+    [/vocab/, "literature"], [/functional|expresion|uso|use of|practic/, "conversation"]
+  ];
+  /* cinco láminas por mundo para la cabecera: el teléfono muestra las tres
+     del centro (los mismos temas que el mapa grabado), la pantalla ancha
+     suma las de los extremos */
+  var WORLD_MARKS = {
+    A1: ["food", "home", "family", "morning", "celebration"],
+    A2: ["map", "weather", "nature", "animals", "leisure"],
+    B1: ["city", "map", "globe", "travel", "phone"],
+    B2: ["mail", "career", "business", "finance", "negotiation"],
+    C1: ["science", "time", "future", "mind", "space"],
+    C2: ["philosophy", "literature", "storybook", "fantasy", "history"]
+  };
+  function fold(s) {
+    s = String(s || "").toLowerCase();
+    return s.normalize ? s.normalize("NFD").replace(/[̀-ͯ]/g, "") : s;
+  }
+  var _marks = {};
+  function markFor(lid) {
+    if (_marks[lid]) return _marks[lid];
+    var l = L[lid] || {}, t = fold(l.title), tr = fold(l.track), k = "", i;
+    for (i = 0; i < MARK_RULES.length && !k; i++) if (MARK_RULES[i][0].test(t)) k = MARK_RULES[i][1];
+    for (i = 0; i < MARK_TRACK.length && !k; i++) if (MARK_TRACK[i][0].test(tr)) k = MARK_TRACK[i][1];
+    return (_marks[lid] = k || "education");
+  }
+  /* la máscara va EN LÍNEA (no en una variable CSS): un url() dentro de una
+     custom property se resolvería contra assets/css/, no contra la página */
+  function markEl(key, cls) {
+    var u = MARK_DIR + key + ".webp";
+    return '<i class="mk' + (cls ? " " + cls : "") + '" style="-webkit-mask-image:url(' + u + ');mask-image:url(' + u + ')"></i>';
+  }
+  function plate(key, cls) {
+    return '<span class="mplate' + (cls ? " " + cls : "") + '" aria-hidden="true">' + markEl(key) + '</span>';
+  }
+  /* cabecera del mundo: tres grabados sobre una línea de horizonte */
+  function worldBand(selLevel) {
+    var k = WORLD_MARKS[selLevel] || WORLD_MARKS.A1;
+    return '<div class="mband" aria-hidden="true">'
+      + markEl(k[0], "mband__x") + markEl(k[1], "mband__a") + markEl(k[2], "mband__b")
+      + markEl(k[3], "mband__c") + markEl(k[4], "mband__x")
+      + '<span class="mband__rule"></span>'
+      + '<span class="mband__st" style="left:9%;top:22%">&#10022;</span>'
+      + '<span class="mband__st is-sm" style="left:31%;top:12%">&#10022;</span>'
+      + '<span class="mband__st is-sm" style="right:27%;top:18%">&#10022;</span>'
+      + '<span class="mband__st" style="right:8%;top:30%">&#10022;</span>'
+      + '</div>';
+  }
+
   function lessonRow(lid, built, currentId) {
     var l = L[lid]; if (!l) return "";
     var stt = PATH.status(lid, built);
@@ -1395,8 +1533,13 @@
       meta = 'Se abre al completar la anterior';
       aria = l.title + " — bloqueado, completa la lección anterior";
     }
+    /* la lámina de la lección + una insignia de estado en su esquina: palomita
+       (hecha), play (la de ahora) o candado; las abiertas no llevan insignia */
+    var badge = stt === "completed" ? MROW_ICN.completed
+      : stt === "locked" ? MROW_ICN.locked
+      : (lid === currentId ? MROW_ICN.open : "");
     return '<li><button type="button" class="' + cls + '" ' + attr + dis + ' aria-label="' + esc(aria) + '">'
-      + '<span class="mrow__st">' + MROW_ICN[stt === "completed" ? "completed" : stt === "open" ? "open" : "locked"] + '</span>'
+      + '<span class="mrow__pl">' + plate(markFor(lid)) + (badge ? '<span class="mrow__bd">' + badge + '</span>' : '') + '</span>'
       + '<span class="mrow__tx"><span class="mrow__t">' + esc(l.title) + '</span><span class="mrow__m">' + meta + '</span></span>'
       + tag + '<span class="mrow__go">' + (stt === "locked" ? "" : MROW_ICN.go) + '</span></button></li>';
   }
@@ -1407,7 +1550,7 @@
     var rsc = PATH.getScore(rid);
     return '<li><button type="button" class="mrow mrow--review' + (mastered ? " is-done" : " is-open") + '" data-go="' + esc(rid) + '"'
       + ' aria-label="' + esc("Mini-reto de " + meta.label + (mastered ? ", superado" : ", disponible")) + '">'
-      + '<span class="mrow__st">' + shieldSvg("") + '</span>'
+      + '<span class="mrow__pl">' + plate("achievement") + '<span class="mrow__bd">' + (mastered ? MROW_ICN.completed : shieldSvg("")) + '</span></span>'
       + '<span class="mrow__tx"><span class="mrow__t">Mini-reto de ' + esc(meta.label) + '</span>'
       + '<span class="mrow__m">' + (mastered ? "Superado" + (rsc != null ? " · mejor " + rsc + "%" : "") : "Repaso de toda la destreza") + '</span></span>'
       + '<span class="mrow__go">' + MROW_ICN.go + '</span></button></li>';
@@ -1473,9 +1616,12 @@
     var d = densData()[selLevel], hasDen = !!(d && d.branches && d.branches.length);
     var FJ = window.VESPER_FORJA, due = FJ ? FJ.dueCount() : 0;
     var arrow = MROW_ICN.go, h = "";
+    /* cada ficha lleva su lámina: libros y pluma (palabras), pesas (la Forja
+       es entrenamiento sin final), copa (la Liga) */
+    var PRAC_MARK = { vocab: "literature", forja: "fitness", liga: "sports" };
     function card(tab, ic, title, sub, badge) {
       return '<button class="mprac__card" type="button" data-mtab="' + tab + '">'
-        + '<span class="mprac__ic" aria-hidden="true">' + ic + '</span>'
+        + (PRAC_MARK[tab] ? plate(PRAC_MARK[tab], "mprac__pl") : '<span class="mprac__ic" aria-hidden="true">' + ic + '</span>')
         + '<span class="mprac__tx"><b>' + title + '</b><span>' + sub + '</span></span>'
         + (badge ? '<em class="mprac__badge">' + badge + '</em>' : '') + '<span class="mprac__go">' + arrow + '</span></button>';
     }
@@ -3101,7 +3247,8 @@
     var meta = nx.isBoss
       ? 'Necesitas ' + nx.pass + '% para vencerlo'
       : (nx.n + ' ejercicio' + (nx.n === 1 ? "" : "s") + ' &middot; unos ' + Math.max(2, Math.round(nx.n * 0.7)) + ' min &middot; +' + nx.xp + ' XP');
-    return '<section class="nextstep" style="' + worldVars(t) + '" aria-labelledby="nextstep-t">'
+    return '<section class="nextstep' + (minOn() ? ' has-plate' : '') + '" style="' + worldVars(t) + '" aria-labelledby="nextstep-t">'
+      + (minOn() ? plate(nx.isBoss ? "heritage" : markFor(nx.id), "nextstep__pl") : "")
       + '<span class="nextstep__ey">' + esc(eyebrow) + '</span>'
       + '<h2 class="nextstep__t" id="nextstep-t">' + esc(nx.title) + '</h2>'
       + '<p class="nextstep__meta">' + (nx.skill ? '<span class="nextstep__sk">' + esc(nx.skill) + '</span>' : "") + meta + '</p>'
@@ -3611,8 +3758,12 @@
     track("lesson_start", { id: lesson.lessonId, level: lesson.level, type: lesson.isBoss ? "boss" : (lesson.isReview ? "review" : "lesson") });
     if (lesson.isBoss) { renderBossCover(); return; }
     var line = enUI() ? "Let's go: " + lesson.title : (A ? A.personalize("Vamos con: " + lesson.title) : "Vamos con: " + lesson.title);
-    show('<div class="wrap">' + topbar(6) + '<div class="card center">'
-      + lessonWorldBanner(lesson.level)
+    /* minimalista: la portada lleva la lámina de la lección en vez del
+       paisaje del mundo (el mismo grabado que su renglón en la lista) */
+    var coverPlate = minOn() && !lesson.isExam && !lesson.isReview && !lesson.srsReview && L[lesson.lessonId]
+      ? plate(markFor(lesson.lessonId), "lcover__pl") : "";
+    show('<div class="wrap">' + topbar(6) + '<div class="card center' + (coverPlate ? ' has-plate' : '') + '">'
+      + (coverPlate || lessonWorldBanner(lesson.level))
       + mascot("welcome", line)
       + '<div class="lcard-top center-row"><span class="pill">' + esc(lesson.level) + '</span><span class="track">' + esc(lesson.track) + '</span>'
       + ((lesson.isExam || lesson.isReview || lesson.srsReview) ? '' : tipoChip(lesson)) + '</div>'

@@ -177,6 +177,7 @@
 # listening, translate, categorize). All vanilla static, no-account.
 !/vesper_theme.js
 !/vesper_style.js
+!/vesper_minimal_deco.js
 !/vesper_adaptive.js
 !/vesper_activities.js
 !/vesper_path.js

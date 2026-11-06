@@ -407,3 +407,149 @@ html[data-vesper-style="minimal"] .v-tr{color:var(--m-accent-ink) !important}
 html[data-vesper-style="minimal"] .vtour-close{color:var(--m-ink) !important;background:transparent !important;border:1px solid var(--m-line) !important}
 /* chip activo de familias (su relleno era un degradado) */
 html[data-vesper-style="minimal"] .fam[aria-pressed="true"]{background-color:var(--m-accent) !important;color:var(--m-on-accent) !important;border-color:var(--m-accent) !important}
+
+/* ---------- 15. Láminas (2026-11-06) ----------
+   El dueño: "minimalista no quiere decir que no tenga ningún detalle; se ve
+   demasiado blanca, demasiado vacía". El detalle son las láminas de las
+   lecciones (theme_*.jpg, grabado crema sobre lino navy), recortadas como
+   máscara en assets/images/lessons/line/ y pintadas con los colores del TEMA:
+     --m-plate      el fondo de la lámina: la tinta del tema en los temas claros
+                    (navy, verde bosque, café…) y su tono más hondo (cream) en
+                    los oscuros, para que se despegue de la tarjeta.
+     --m-plate-ink  el trazo: el oro del tema.
+   .mk es la máscara (la url va en línea, en el style de cada elemento);
+   .mplate es el cuadro que la enmarca. */
+html[data-vesper-style="minimal"]{
+  --m-plate:var(--navy,var(--ink,#1B1B2F));
+  --m-plate-ink:var(--gold,#C9A84C);
+  --m-plate-soft:color-mix(in srgb,var(--m-line) 62%,var(--m-card));
+}
+html.vesper-dark[data-vesper-style="minimal"]{--m-plate:var(--cream,#14122a)}
+html[data-vesper-style="minimal"] .mk{
+  display:block;background-color:var(--m-plate-ink);
+  -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat;
+  -webkit-mask-position:center;mask-position:center;
+  -webkit-mask-size:contain;mask-size:contain;
+}
+html[data-vesper-style="minimal"] .mplate{
+  position:relative;flex:0 0 auto;display:grid;place-items:center;
+  width:48px;height:48px;border-radius:12px;background-color:var(--m-plate);overflow:hidden;
+}
+html[data-vesper-style="minimal"] .mplate > .mk{width:76%;height:76%}
+
+/* renglón de lección: lámina + insignia de estado en la esquina */
+html[data-vesper-style="minimal"] .mrow{min-height:74px;gap:14px}
+html[data-vesper-style="minimal"] .mrow__pl{position:relative;flex:0 0 50px;width:50px;height:50px}
+html[data-vesper-style="minimal"] .mrow__pl > .mplate{width:50px;height:50px}
+html[data-vesper-style="minimal"] .mrow__bd{
+  position:absolute;right:-6px;bottom:-6px;width:22px;height:22px;border-radius:50%;
+  display:grid;place-items:center;background-color:var(--m-accent);color:var(--m-on-accent);
+  border:2px solid var(--m-card);
+}
+html[data-vesper-style="minimal"] .mrow__bd svg{width:12px;height:12px}
+html[data-vesper-style="minimal"] .mrow.is-current .mrow__bd{border-color:var(--m-card)}
+/* bloqueada: la lámina "todavía no se imprime": papel tenue y trazo apagado */
+html[data-vesper-style="minimal"] .mrow.is-locked .mplate{background-color:var(--m-plate-soft)}
+html[data-vesper-style="minimal"] .mrow.is-locked .mplate > .mk{background-color:var(--m-muted);opacity:.5}
+html[data-vesper-style="minimal"] .mrow.is-locked .mrow__bd{background-color:var(--m-card);color:var(--m-muted);border:1.5px solid var(--m-line)}
+/* la de ahora: un filo de oro a la izquierda además del tinte */
+/* (sombra no: la regla global de la sección 2 las quita; un ::before con color sí pasa) */
+html[data-vesper-style="minimal"] .mrow{position:relative}
+html[data-vesper-style="minimal"] .mrow.is-current::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background-color:var(--m-accent)}
+html[data-vesper-style="minimal"] .mrow.is-current .mrow__t{font-weight:700}
+html[data-vesper-style="minimal"] .mrow:not(.is-locked):hover .mplate > .mk{opacity:.92}
+
+/* siguiente paso: la lámina de esa lección arriba a la derecha */
+html[data-vesper-style="minimal"] .nextstep.has-plate{position:relative}
+html[data-vesper-style="minimal"] .nextstep__pl{
+  position:absolute !important;top:18px;right:18px;width:78px;height:78px;border-radius:16px;
+}
+html[data-vesper-style="minimal"] .nextstep.has-plate .nextstep__ey,
+html[data-vesper-style="minimal"] .nextstep.has-plate .nextstep__t{padding-right:92px}
+html[data-vesper-style="minimal"] .nextstep.has-plate .nextstep__meta{min-height:28px}
+@media(max-width:380px){
+  html[data-vesper-style="minimal"] .nextstep__pl{width:64px;height:64px;border-radius:14px}
+  html[data-vesper-style="minimal"] .nextstep.has-plate .nextstep__ey,
+  html[data-vesper-style="minimal"] .nextstep.has-plate .nextstep__t{padding-right:76px}
+}
+
+/* cabecera del mundo: tres grabados sobre una línea de horizonte, a sangre */
+/* la tarjeta del mundo traía alto fijo (130/160 px) para la foto: aquí crece
+   con su contenido, si no la lámina empuja el título fuera del recorte */
+html[data-vesper-style="minimal"] .world-banner{overflow:hidden;height:auto !important}
+html[data-vesper-style="minimal"] .mband{
+  position:relative;display:flex;align-items:flex-end;justify-content:center;gap:5%;
+  height:128px;margin:-16px -18px 16px;padding:18px 22px 13px;background-color:var(--m-plate);
+}
+html[data-vesper-style="minimal"] .mband .mk{-webkit-mask-position:center bottom;mask-position:center bottom}
+html[data-vesper-style="minimal"] .mband__a,
+html[data-vesper-style="minimal"] .mband__c{width:24%;height:70%;opacity:.86}
+html[data-vesper-style="minimal"] .mband__b{width:32%;height:100%}
+html[data-vesper-style="minimal"] .mband__x{display:none}
+html[data-vesper-style="minimal"] .mband__rule{
+  position:absolute;left:22px;right:22px;bottom:12px;height:1px;
+  background-color:var(--m-plate-ink);opacity:.4;
+}
+html[data-vesper-style="minimal"] .mband__st{
+  position:absolute;color:var(--m-plate-ink);font-size:11px;line-height:1;opacity:.75;
+}
+html[data-vesper-style="minimal"] .mband__st.is-sm{font-size:7px;opacity:.55}
+@media(min-width:600px){
+  html[data-vesper-style="minimal"] .mband{height:150px;gap:3%}
+  html[data-vesper-style="minimal"] .mband__x{display:block;width:15%;height:52%;opacity:.62}
+  html[data-vesper-style="minimal"] .mband__a,
+  html[data-vesper-style="minimal"] .mband__c{width:18%}
+  html[data-vesper-style="minimal"] .mband__b{width:24%}
+}
+
+/* fichas de práctica (Vocabulario · Forja · Liga) con su lámina */
+html[data-vesper-style="minimal"] .mprac__card{min-height:70px}
+html[data-vesper-style="minimal"] .mprac__pl{width:44px;height:44px;border-radius:11px}
+html[data-vesper-style="minimal"] .mprac__badge{left:44px;top:6px}
+
+/* ---------- 16. Láminas en la biblioteca de audio y el portal ----------
+   Las pone vesper_minimal_deco.js (lo carga vesper_style.js sólo en
+   minimalista). Mismo lenguaje que el mapa:
+   cabecera con tres grabados y una lámina por colección / libro. */
+html[data-vesper-style="minimal"] .mband--hero{margin:0 0 20px;border-radius:16px;height:132px}
+@media(min-width:600px){html[data-vesper-style="minimal"] .mband--hero{height:168px;margin-bottom:24px}}
+html[data-vesper-style="minimal"] .ahero,
+html[data-vesper-style="minimal"] main .intro{overflow:visible !important}
+/* colecciones de audio: la lámina a la derecha de la cabecera de la ficha */
+html[data-vesper-style="minimal"] .col-card .cc-art{display:flex !important;align-items:center}
+html[data-vesper-style="minimal"] .cc-pl{margin-left:auto;width:58px;height:58px;flex:0 0 58px;border-radius:14px}
+html[data-vesper-style="minimal"] .col-card.locked .cc-pl{background-color:var(--m-plate-soft)}
+html[data-vesper-style="minimal"] .col-card.locked .cc-pl > .mk{background-color:var(--m-muted);opacity:.55}
+/* "Más adelante": la lámina pálida en lugar del número */
+html[data-vesper-style="minimal"] .col-card.mini.has-pl .cc-art{justify-content:center;opacity:1 !important}
+html[data-vesper-style="minimal"] .col-card.mini.has-pl .cc-num{display:none}
+html[data-vesper-style="minimal"] .col-card.mini .cc-pl{margin:0;width:46px;height:46px;flex-basis:46px;border-radius:12px}
+/* la ficha "Tu nivel" de la cabecera salía gris, como deshabilitada */
+html[data-vesper-style="minimal"] .ah-chip{background-color:var(--m-tint) !important;color:var(--m-ink) !important;border:0 !important}
+html[data-vesper-style="minimal"] .ah-chip b{color:var(--m-accent-ink) !important}
+/* "Para tu nivel" iba en la esquina, donde ahora vive la lámina */
+html[data-vesper-style="minimal"] .col-card .cc-mine{position:static !important;align-self:flex-start;margin:12px 18px 0 !important}
+/* libros del portal: la lámina en lugar del icono genérico */
+html[data-vesper-style="minimal"] a.card .cic.cic--pl{
+  width:54px !important;height:54px !important;border-radius:14px !important;
+  background-color:var(--m-plate) !important;border:0 !important;color:transparent !important;
+}
+html[data-vesper-style="minimal"] a.card .cic.cic--pl > .mk{width:80%;height:80%}
+html[data-vesper-style="minimal"] a.card{grid-template-columns:54px minmax(0,1fr) auto !important;column-gap:16px !important}
+@media(max-width:520px){
+  html[data-vesper-style="minimal"] a.card{grid-template-columns:54px minmax(0,1fr) !important}
+}
+html[data-vesper-style="minimal"] a.card:hover .cic.cic--pl > .mk{opacity:.9}
+
+/* portada de la lección: su lámina grande, arriba y al centro */
+html[data-vesper-style="minimal"] .card.has-plate{padding-top:28px}
+html[data-vesper-style="minimal"] .lcover__pl{width:132px;height:132px;border-radius:26px;margin:0 auto 16px}
+html[data-vesper-style="minimal"] .lcover__pl > .mk{width:78%;height:78%}
+html[data-vesper-style="minimal"] .card.has-plate .vesper-mascot{margin-top:4px}
+/* en los temas oscuros la página ya es el tono más hondo: la banda de la
+   cabecera sube a la superficie de tarjeta para seguir leyéndose como lámina */
+html.vesper-dark[data-vesper-style="minimal"] .mband--hero{background-color:var(--m-card)}
+/* salas de Vocabulario: su glifo sobre el mismo cuadro oscuro que las láminas */
+html[data-vesper-style="minimal"] .branch__ic{background-color:var(--m-plate) !important;color:var(--m-plate-ink) !important;border-radius:12px !important}
+html[data-vesper-style="minimal"] .branch.done .branch__ic{background-color:var(--m-plate) !important;color:var(--m-plate-ink) !important}
+html[data-vesper-style="minimal"] .qn-ic--cat .qn-mk{width:72%;height:72%;margin:auto;background-color:var(--m-accent-ink)}

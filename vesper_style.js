@@ -27,6 +27,8 @@ window.VESPER_STYLE = (function () {
   "use strict";
   var STORE = "vesper_appearance";
   var CSS_HREF = "assets/css/vesper_minimal.css";
+  /* láminas de la biblioteca de audio y del portal (el mapa pinta las suyas) */
+  var DECO_SRC = "vesper_minimal_deco.js";
 
   function write(patch) {
     try {
@@ -51,6 +53,12 @@ window.VESPER_STYLE = (function () {
     l.id = "vesper-minimal-css"; l.rel = "stylesheet"; l.href = CSS_HREF;
     (document.head || document.documentElement).appendChild(l);
   }
+  function ensureDeco() {
+    if (document.getElementById("vesper-minimal-deco")) return;
+    var s = document.createElement("script");
+    s.id = "vesper-minimal-deco"; s.src = DECO_SRC; s.async = true;
+    (document.head || document.documentElement).appendChild(s);
+  }
   /* las páginas declaran su <style> DESPUÉS de este script: la hoja se mueve
      al final del <head> para ganar también por orden de cascada. */
   function moveLast() {
@@ -61,7 +69,7 @@ window.VESPER_STYLE = (function () {
   function apply(state) {
     state = state || read();
     var root = document.documentElement;
-    if (state.style === "minimal") { root.setAttribute("data-vesper-style", "minimal"); ensureLink(); }
+    if (state.style === "minimal") { root.setAttribute("data-vesper-style", "minimal"); ensureLink(); ensureDeco(); }
     else root.removeAttribute("data-vesper-style");
     api.current = state;
     try { window.dispatchEvent(new CustomEvent("vesper:style", { detail: state })); } catch (e) {}
