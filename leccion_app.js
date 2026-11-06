@@ -1357,6 +1357,146 @@
     return banner + scene + moreBtn;
   }
 
+  /* ===== Estilo Minimalista (vesper_style.js): el mundo como LISTA ========
+     Mismo contenido y mismo orden que worldMap() (destrezas en PATH.SKILL_ORDER,
+     mini-reto al cerrar una destreza, Guardián al final) y el mismo pliegue
+     (lo alcanzado + LOOKAHEAD candados), pero en renglones: estado, título,
+     datos y flecha. Usa data-go / data-locked / data-locked-boss, así que
+     renderIndex() lo cablea igual que al mapa. Sin sendero ni avatar: no hay
+     #wmap, y paintTrail() / el gato se saltan solos. */
+  function minOn() { return document.documentElement.getAttribute("data-vesper-style") === "minimal"; }
+  var MROW_ICN = {
+    completed: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6.5 12.4 3.6 3.6 7.4-7.8"/></svg>',
+    open: '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M9 6.6v10.8l8.6-5.4z"/></svg>',
+    locked: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5.8" y="10.8" width="12.4" height="9" rx="2"/><path d="M8.8 10.8V8.3a3.2 3.2 0 0 1 6.4 0v2.5"/></svg>',
+    go: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>'
+  };
+  function lessonRow(lid, built, currentId) {
+    var l = L[lid]; if (!l) return "";
+    var stt = PATH.status(lid, built);
+    var n = l.exercises ? l.exercises.length : 0;
+    var cls = "mrow", attr, dis = "", meta, aria, tag = "";
+    if (stt === "completed") {
+      var sc = PATH.getScore(lid), s = PATH.stars(sc != null ? sc : 70), st = "";
+      for (var i = 0; i < 3; i++) st += i < s ? "&#9733;" : '<span class="off">&#9733;</span>';
+      cls += " is-done"; attr = 'data-go="' + esc(lid) + '"';
+      meta = '<span class="mrow__stars" aria-hidden="true">' + st + '</span>' + (sc != null ? ' · ' + sc + '%' : '') + ' · Repetir';
+      aria = l.title + " — completado" + (sc != null ? ", " + sc + " por ciento" : "");
+    } else if (stt === "open") {
+      cls += " is-open"; attr = 'data-go="' + esc(lid) + '"';
+      if (lid === currentId) {
+        cls += " is-current";
+        tag = '<span class="mrow__tag">' + (Object.keys(built.completed).length ? "Continuar" : "Empieza") + '</span>';
+      }
+      meta = n + ' ejercicios · +' + (l.xpReward || 0) + ' XP';
+      aria = l.title + " — desbloqueado, " + n + " ejercicios, " + (l.xpReward || 0) + " XP";
+    } else {
+      cls += " is-locked"; attr = 'data-locked="1"'; dis = ' aria-disabled="true"';
+      meta = 'Se abre al completar la anterior';
+      aria = l.title + " — bloqueado, completa la lección anterior";
+    }
+    return '<li><button type="button" class="' + cls + '" ' + attr + dis + ' aria-label="' + esc(aria) + '">'
+      + '<span class="mrow__st">' + MROW_ICN[stt === "completed" ? "completed" : stt === "open" ? "open" : "locked"] + '</span>'
+      + '<span class="mrow__tx"><span class="mrow__t">' + esc(l.title) + '</span><span class="mrow__m">' + meta + '</span></span>'
+      + tag + '<span class="mrow__go">' + (stt === "locked" ? "" : MROW_ICN.go) + '</span></button></li>';
+  }
+  function reviewRow(selLevel, sk) {
+    var meta = PATH.SKILLS[sk], rid = "review:" + selLevel + ":" + sk;
+    var stt = P ? P.getState() : {};
+    var mastered = !!((stt.achievements || {})["master:" + selLevel + ":" + sk]);
+    var rsc = PATH.getScore(rid);
+    return '<li><button type="button" class="mrow mrow--review' + (mastered ? " is-done" : " is-open") + '" data-go="' + esc(rid) + '"'
+      + ' aria-label="' + esc("Mini-reto de " + meta.label + (mastered ? ", superado" : ", disponible")) + '">'
+      + '<span class="mrow__st">' + shieldSvg("") + '</span>'
+      + '<span class="mrow__tx"><span class="mrow__t">Mini-reto de ' + esc(meta.label) + '</span>'
+      + '<span class="mrow__m">' + (mastered ? "Superado" + (rsc != null ? " · mejor " + rsc + "%" : "") : "Repaso de toda la destreza") + '</span></span>'
+      + '<span class="mrow__go">' + MROW_ICN.go + '</span></button></li>';
+  }
+  function bossRow(selLevel, built) {
+    var bm = bossMeta(selLevel);
+    var available = PATH.bossUnlocked(selLevel, built);
+    var passed = !!(P && P.bossPassed && P.bossPassed(selLevel));
+    var bid = "boss:" + selLevel, cls = "mrow mrow--boss", attr, sub, aria;
+    if (passed) { cls += " is-done"; attr = 'data-go="' + bid + '"'; sub = "Vencido · repetir el examen"; aria = bm.name + ", guardián vencido. Repetir el examen."; }
+    else if (available) { cls += " is-open"; attr = 'data-go="' + bid + '"'; sub = "Examen del mundo · abre el siguiente nivel"; aria = bm.name + ", examen del mundo disponible."; }
+    else { cls += " is-locked"; attr = 'data-locked-boss="1"'; sub = "Examen del mundo · bloqueado"; aria = bm.name + ", bloqueado."; }
+    var face = BOSS_PORTRAIT[selLevel]
+      ? '<img src="' + BOSS_PORTRAIT[selLevel] + '" alt="" loading="lazy" decoding="async" onerror="this.outerHTML=\'\'">' : shieldSvg("");
+    return '<button type="button" class="' + cls + '" ' + attr + ' aria-label="' + esc(aria) + '">'
+      + '<span class="mrow__st mrow__st--face">' + face + '</span>'
+      + '<span class="mrow__tx"><span class="mrow__ey">El Guardián</span><span class="mrow__t">' + esc(bm.name) + '</span><span class="mrow__m">' + sub + '</span></span>'
+      + '<span class="mrow__go">' + (passed || available ? MROW_ICN.go : "") + '</span></button>';
+  }
+  function worldList(selLevel, built) {
+    var g = built.levels[selLevel];
+    var banner = worldBanner(selLevel, built);
+    var empty = banner + '<p class="muted" style="text-align:center;margin:24px 0">Próximamente más lecciones en este mundo.</p>';
+    if (!g || !g.total) return empty;
+    var localCurId = null;
+    PATH.SKILL_ORDER.forEach(function (sk) {
+      (g.bySkill[sk] || []).forEach(function (id) { if (!localCurId && !built.completed[id] && PATH.status(id, built) === "open") localCurId = id; });
+    });
+    var LOOKAHEAD = 2, hiddenN = 0, out = "";
+    TRAIL_STOPS = {}; AVATAR_LESSON = localCurId || ("boss:" + selLevel);
+    PATH.SKILL_ORDER.forEach(function (sk) {
+      var ids = g.bySkill[sk]; if (!ids || !ids.length) return;
+      var meta = PATH.SKILLS[sk];
+      var doneN = ids.filter(function (id) { return built.completed[id]; }).length;
+      var vis = ids;
+      if (!_mapExpanded) {
+        var lastReach = -1, k;
+        for (k = 0; k < ids.length; k++) if (PATH.status(ids[k], built) !== "locked") lastReach = k;
+        if (lastReach < 0) { hiddenN += ids.length; return; }
+        vis = ids.slice(0, Math.min(ids.length, lastReach + 1 + LOOKAHEAD));
+        hiddenN += ids.length - vis.length;
+      }
+      var pct = Math.round((doneN / ids.length) * 100);
+      out += '<section class="mlist" aria-label="' + esc(meta.label + ", " + doneN + " de " + ids.length + " completadas") + '">'
+        + '<header class="mlist__head"><span class="mlist__ic" aria-hidden="true">' + (SKILL_ICONS[sk] || "") + '</span>'
+        + '<h2 class="mlist__h">' + esc(meta.label) + '</h2><span class="mlist__ct">' + doneN + '/' + ids.length + '</span></header>'
+        + '<div class="mlist__bar" aria-hidden="true"><i style="width:' + pct + '%"></i></div>'
+        + '<ol class="mlist__rows">';
+      vis.forEach(function (id) { out += lessonRow(id, built, localCurId); });
+      if (ids.length >= 2 && doneN === ids.length) out += reviewRow(selLevel, sk);
+      out += '</ol></section>';
+    });
+    if (!out) return empty;
+    var more = hiddenN > 0
+      ? '<div class="wmore"><button class="wmore__btn" type="button" id="mapMore">Ver las ' + hiddenN + ' lecciones restantes de este mundo'
+        + '<span class="wmore__sub">Se desbloquean conforme avanzas</span></button></div>' : "";
+    return banner + '<div class="mworld" style="' + worldVars(WORLD_THEME[selLevel] || {}) + '">' + out + more + bossRow(selLevel, built) + '</div>';
+  }
+  /* Vocabulario, Forja y Liga vuelven a ser FICHAS del hub en minimalista
+     (en el estilo con diseño son las burbujas flotantes de headsHtml). */
+  function practiceCards(selLevel, st) {
+    _hubLevel = selLevel;
+    var d = densData()[selLevel], hasDen = !!(d && d.branches && d.branches.length);
+    var FJ = window.VESPER_FORJA, due = FJ ? FJ.dueCount() : 0;
+    var arrow = MROW_ICN.go, h = "";
+    function card(tab, ic, title, sub, badge) {
+      return '<button class="mprac__card" type="button" data-mtab="' + tab + '">'
+        + '<span class="mprac__ic" aria-hidden="true">' + ic + '</span>'
+        + '<span class="mprac__tx"><b>' + title + '</b><span>' + sub + '</span></span>'
+        + (badge ? '<em class="mprac__badge">' + badge + '</em>' : '') + '<span class="mprac__go">' + arrow + '</span></button>';
+    }
+    if (hasDen) {
+      var pr = denProgress(d);
+      h += card("vocab", BRANCH_ICN.book, "Vocabulario", d.branches.length + " salas · " + pr.done + "/" + pr.total + " tarjetas", "");
+    }
+    h += card("forja", window.__vforjaGlyph, "La Forja", esc(forjaSubline()), due ? (due > 99 ? "99+" : String(due)) : "");
+    if (st && (st.xp || 0) > 0) h += card("liga", LIGA_GLYPH, "Liga semanal", "Tu posición de esta semana", "");
+    return '<section class="mprac" aria-label="Práctica extra">' + h + '</section>';
+  }
+  function bindPracticeCards(selLevel) {
+    each(".mprac__card[data-mtab]", function (b) {
+      b.onclick = function () {
+        var tab = b.getAttribute("data-mtab");
+        if (tab === "vocab") { renderDen(selLevel); return; }
+        openDrawer(tab, "r", selLevel, b);
+      };
+    });
+  }
+
   /* ============================================================
      RECINTO TEMÁTICO DE VOCABULARIO ("ramas")
      ============================================================ */
@@ -1832,14 +1972,16 @@
     var doneBadge = '<span class="bdone" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.6l4.6 4.6L19 7.4"/></svg></span>';
     var house = DEN_HOUSE[selLevel];
     var inHouse = function (br) { return !!(house && house.rooms[br.id]); };
-    var useHouse = !!house && d.branches.some(inHouse);
+    /* minimalista: sin casa ilustrada, las salas vuelven a ser fichas en lista */
+    var useHouse = !!house && !minOn() && d.branches.some(inHouse);
     var branchBtn = function (br, i) {
       var bp = branchProgress(selLevel, br), pct = bp.total ? Math.round(100 * bp.done / bp.total) : 0;
       var done = bp.total && bp.done >= bp.total;
-      var hasImg = branchHasImg(selLevel, br.id);
+      /* minimalista: la ficha lleva el glifo de la sala, no el retrato ilustrado */
+      var hasImg = !minOn() && branchHasImg(selLevel, br.id);
       return '<button class="branch' + (done ? ' done' : '') + '" type="button" data-branch="' + esc(br.id) + '"'
         + ' aria-label="Sala ' + (i + 1) + ': ' + esc(br.name) + ', ' + bp.done + ' de ' + bp.total + ' tarjetas dominadas">'
-        + '<span class="branch__ic' + (hasImg ? ' has-img' : '') + '">' + branchEmblemHtml(selLevel, br.id, br.icon) + (done ? doneBadge : "") + '</span>'
+        + '<span class="branch__ic' + (hasImg ? ' has-img' : '') + '">' + (hasImg ? branchEmblemHtml(selLevel, br.id, br.icon) : branchIcon(br.icon)) + (done ? doneBadge : "") + '</span>'
         + '<span class="branch__bd"><span class="branch__nm"><span class="branch__no">' + (i + 1) + '</span>' + esc(br.name) + '</span>'
         + '<span class="branch__hint">' + (br.hint ? esc(br.hint) + ' · ' : "") + br.cards.length + ' tarjetas</span>'
         + '<span class="branch__meta"><span class="branch__bar"><i style="width:' + pct + '%"></i></span>'
@@ -2999,7 +3141,11 @@
       { el: ".nextstep", pad: 10,
         title: "Empieza siempre por aquí",
         text: "Soy Vesper. Esta tarjeta es tu siguiente paso: púlsala y te llevo a la lección que te toca. Si algún día no sabes qué hacer, vuelve aquí." },
-      { el: ".wbtn.is-current", shape: "circle", pad: 12,
+      minOn()
+        ? { el: ".mrow.is-current", pad: 8,
+            title: "Este es tu camino",
+            text: "Estás en " + wname + ", el mundo de tu nivel. La lección marcada es la de ahora; al final de la lista te espera el Guardián, que abre el mundo siguiente." }
+        : { el: ".wbtn.is-current", shape: "circle", pad: 12,
         title: "Este es tu camino",
         text: "Estás en " + wname + ", el mundo de tu nivel. El círculo luminoso es tu lección de ahora; al final del sendero te espera el Guardián, que abre el mundo siguiente." },
       { el: "#tourGo", pad: 8,
@@ -3010,6 +3156,7 @@
   function tourSteps(selLevel) {
     var wt = WORLD_THEME[selLevel] || {};
     var wname = wt.worldName || "este mundo";
+    if (minOn()) return tourStepsList(wname);
     return [
       { el: null,
         title: "Te enseño esto en un minuto",
@@ -3049,11 +3196,34 @@
         text: "Si se te olvida algo, el botón «Cómo funciona» te trae otra vez este paseo. ¡Vamos a tu lección!" }
     ];
   }
+  /* el paseo completo, versión lista (estilo Minimalista) */
+  function tourStepsList(wname) {
+    return [
+      { el: null, title: "Te enseño esto en un minuto",
+        text: "Soy Vesper. Voy a señalarte una por una las cosas que necesitas para moverte por aquí. Puedes salir cuando quieras." },
+      { el: ".nextstep", pad: 10, title: "Empieza siempre por aquí",
+        text: "Esta tarjeta es tu siguiente paso. Si algún día no sabes qué hacer, pulsa este botón y te lleva a la lección que te toca." },
+      { el: ".hub-stats3", pad: 10, title: "Tu racha y tu XP",
+        text: "La racha son los días seguidos que practicas; el XP, los puntos que ganas en cada lección. Miden tu constancia." },
+      { el: ".worlds", pad: 8, title: "Un mundo = un nivel",
+        text: "Ahora estás en " + wname + ". Hay seis mundos, de A1 a C2; tócalos aquí para cambiar de uno a otro." },
+      { el: ".mprac", pad: 8, title: "Práctica extra",
+        text: "Vocabulario (tarjetas por temas) y la Forja (práctica sin final con lo que ya viste). Entra cuando quieras." },
+      { el: ".mlist__head", pad: 8, title: "Las lecciones van por destrezas",
+        text: "Cada grupo junta lo que entrena: gramática, lectura, escucha… El número te dice cuántas llevas." },
+      { el: ".mrow.is-current", pad: 8, title: "Aquí estás tú",
+        text: "La lección marcada es la de ahora. Las de candado se abren al completar la anterior." },
+      { el: ".mrow--boss", pad: 8, title: "El Guardián del mundo",
+        text: "Al final de cada mundo hay un examen. Vencerlo abre el mundo siguiente — y no hace falta terminar todas las lecciones para intentarlo." },
+      { el: null, title: "Listo",
+        text: "Si se te olvida algo, «Cómo funciona» te trae otra vez este paseo. ¡Vamos a tu lección!" }
+    ];
+  }
   function tourBarHtml() {
     return '<div class="tourbar">'
       + '<button class="tourbar__btn" type="button" id="tourGo">'
       + '<span class="tourbar__ic" aria-hidden="true">' + (window.VESPER_ICN ? (VESPER_ICN.compass || VESPER_ICN.star || "") : "") + '</span>'
-      + '<span class="tourbar__tx"><b>¿Cómo funciona el mapa?</b></span>'
+      + '<span class="tourbar__tx"><b>' + (minOn() ? "¿Cómo funciona?" : "¿Cómo funciona el mapa?") + '</b></span>'
       + '</button></div>';
   }
   /* No arranques el paseo encima de otra puerta bloqueante: la del nombre
@@ -3167,12 +3337,13 @@
       + tourBarHtml()
       + searchUI
       + '<div id="searchResults" class="search-results" aria-live="polite" hidden></div>'
-      + '<div id="levelView">' + worldMap(selLevel, built) + '</div>'
+      + (minOn() ? practiceCards(selLevel, st) : "")
+      + '<div id="levelView">' + (minOn() ? worldList(selLevel, built) : worldMap(selLevel, built)) + '</div>'
       + trophyHtml
       + examBanner
       + placementCard("leccion-hub")
       + dockHtml(selLevel, srsDue)
-      + headsHtml(selLevel, st)
+      + (minOn() ? "" : headsHtml(selLevel, st))
       + '<div class="hub-toast" id="toast"></div>');
 
     bindCta();
@@ -3194,7 +3365,7 @@
     each(".world[data-lvl]", function (b) { b.onclick = function () { _mapExpanded = false; renderIndex(b.getAttribute("data-lvl")); }; });
     each(".world[data-locked-world]", function (b) { b.onclick = function () { toast("Vence al guardián del mundo anterior para desbloquearlo"); }; });
     bindDock(selLevel);
-    bindHeads(selLevel);
+    if (minOn()) bindPracticeCards(selLevel); else bindHeads(selLevel);
     each("[data-go]", function (b) { b.onclick = function () { location.search = "?id=" + encodeURIComponent(b.getAttribute("data-go")); }; });
     each("[data-locked]", function (b) { b.onclick = function () { toast("Completa la lección anterior para desbloquear"); }; });
     each("[data-locked-boss]", function (b) { b.onclick = function () { toast("Completa todas las lecciones del mundo para enfrentar al guardián"); }; });

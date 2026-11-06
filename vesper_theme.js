@@ -327,7 +327,17 @@ window.VESPER_THEME = (function () {
       };
     } catch (e) { return { theme: DEFAULT_THEME, skin: "gold", accessory: "none", pelaje: "classic", v: STATE_V }; }
   }
-  function write(state) { try { localStorage.setItem(STORE, JSON.stringify(state)); } catch (e) {} }
+  /* Fusiona con lo guardado: el mismo objeto lleva claves de otros módulos
+     (p. ej. "style" de vesper_style.js) que read() no devuelve. Escribirlo
+     entero borraba el estilo Minimalista al cambiar de tema o de pelaje. */
+  function write(state) {
+    try {
+      var cur = {};
+      try { cur = JSON.parse(localStorage.getItem(STORE) || "{}") || {}; } catch (e) {}
+      for (var k in state) cur[k] = state[k];
+      localStorage.setItem(STORE, JSON.stringify(cur));
+    } catch (e) {}
+  }
 
   /* Contraste WCAG entre dos #rrggbb. */
   function lum(hex) {
@@ -405,13 +415,8 @@ window.VESPER_THEME = (function () {
     /* Señal claro/oscuro para CSS que no puede leer `dark` del tema. La usa
        `.va-display` en vesper_tokens.css: un didone necesita eje óptico bajo y
        más peso sobre fondo claro, y lo contrario sobre fondo oscuro. */
-    /* En estilo Minimalista (vesper_style.js) manda la variante, no el tema:
-       sus tokens van con !important y aquí sólo hay que no pisarle el
-       claro/oscuro ni el color de la barra del sistema. */
-    var minimal = !!(window.VESPER_STYLE && VESPER_STYLE.isMinimal());
-    var dark = minimal ? VESPER_STYLE.isDark() : t.dark;
-    if (root.classList) root.classList[dark ? "add" : "remove"]("vesper-dark");
-    if (window.matchMedia && !minimal) {
+    if (root.classList) root.classList[t.dark ? "add" : "remove"]("vesper-dark");
+    if (window.matchMedia) {
       var meta = document.querySelector('meta[name="theme-color"]');
       if (meta) meta.setAttribute("content", t.dark ? t.cream : t.ink);
     }
@@ -517,9 +522,8 @@ window.VESPER_THEME = (function () {
       ".vs-mini i{display:flex;flex-direction:column;gap:4px;width:66%;padding:7px 8px;border-radius:6px;border:1px solid transparent}",
       ".vs-mini b{display:block;height:4px;border-radius:2px}",
       ".vs-mini u{display:block;height:9px;border-radius:3px;margin-top:3px;text-decoration:none}",
-      ".vs-mini--d{background:radial-gradient(120% 120% at 80% 0%,#3a3a63,#14122a 70%)}",
-      ".vs-mini--d i{background:linear-gradient(160deg,#2a2e56,#1f2342);box-shadow:0 4px 10px rgba(0,0,0,.4)}",
-      ".vs-mini--d b{background:#EDE7D6}.vs-mini--d u{background:linear-gradient(#e6c977,#c9a84c)}",
+      ".vs-mini b.r{height:3px;opacity:.55}",
+      ".vs-mini--d i{box-shadow:0 4px 10px rgba(0,0,0,.35)}",
       ".vs-d{font-size:.7rem;line-height:1.3;color:var(--muted,#6b6b76);margin-top:2px}",
       ".vt-note{font-size:.8rem;color:var(--muted,#6b6b76);margin:10px 0 0;min-height:1.1em}",
       /* boton flotante + modal */
@@ -554,26 +558,29 @@ window.VESPER_THEME = (function () {
   function styleBlock() {
     var S = window.VESPER_STYLE;
     if (!S) return "";
-    var st = S.get();
-    function mini(bg, card, ink, acc, serif) {
-      return '<span class="vs-mini" style="background:' + bg + '">'
-        + '<i style="background:' + card + ';border-color:' + (bg === card ? "rgba(0,0,0,.1)" : "transparent") + '">'
-        + '<b style="background:' + ink + ';' + (serif ? "height:5px;border-radius:1px" : "") + '"></b>'
-        + '<b style="background:' + ink + ';opacity:.35;width:70%"></b>'
-        + '<u style="background:' + acc + '"></u></i></span>';
+    var st = S.get(), cur = THEMES[read().theme] || THEMES[DEFAULT_THEME];
+    /* las miniaturas se pintan con el tema activo: el minimalista NO cambia
+       los colores, sólo quita adornos y pasa el mapa a lista */
+    function mini(minimal) {
+      var bg = minimal ? cur.cream : "radial-gradient(120% 120% at 80% 0%," + cur.line + "," + cur.cream + " 70%)";
+      var card = minimal ? cur.paper : "linear-gradient(160deg," + cur.line + "," + cur.paper + ")";
+      var rows = minimal
+        ? '<b style="background:' + cur.ink + '"></b><b class="r" style="background:' + cur.muted + '"></b><b class="r" style="background:' + cur.muted + '"></b>'
+        : '<b style="background:' + cur.ink + '"></b><b style="background:' + cur.ink + ';opacity:.5;width:70%"></b>';
+      return '<span class="vs-mini' + (minimal ? "" : " vs-mini--d") + '" style="background:' + bg + '">'
+        + '<i style="background:' + card + ';border-color:' + cur.line + '">' + rows
+        + '<u style="background:' + cur.gold + '"></u></i></span>';
     }
-    var cards = '<div class="vt-card' + (st.style === "diseno" ? " on" : "") + '" data-vstyle="diseno" role="button" tabindex="0">'
-      + '<span class="vs-mini vs-mini--d"><i><b></b><b style="opacity:.5;width:70%"></b><u></u></i></span>'
-      + '<div class="vt-nm">Con diseño</div><div class="vs-d">Escenas, mapa ilustrado y color</div></div>';
-    S.order.forEach(function (id) {
-      var v = S.variants[id];
-      cards += '<div class="vt-card' + (st.style === "minimal" && st.minimal === id ? " on" : "") + '" data-vstyle="minimal" data-vmin="' + id + '" role="button" tabindex="0">'
-        + mini(v.cream, v.paper, v.ink, v.accent, id === "editorial")
-        + '<div class="vt-nm">Minimal · ' + v.name + '</div><div class="vs-d">' + v.desc + '</div></div>';
-    });
+    function card(id, name, desc) {
+      return '<div class="vt-card' + (st.style === id ? " on" : "") + '" data-vstyle="' + id + '" role="button" tabindex="0" aria-pressed="' + (st.style === id) + '">'
+        + mini(id === "minimal") + '<div class="vt-nm">' + name + '</div><div class="vs-d">' + desc + '</div></div>';
+    }
     return '<div class="vt-h">Estilo de la app</div>'
-      + '<p class="vt-sub">Con diseño es la app de siempre. Minimalista quita escenas, sombras y adornos y deja sólo lo que estudias. El tema de color no aplica en minimalista.</p>'
-      + '<div class="vt-grid vs-grid" data-vt-style>' + cards + '</div>';
+      + '<p class="vt-sub">Con diseño es la app de siempre. Minimalista quita escenas, sombras y adornos, pone las lecciones en lista y deja Vocabulario y Forja como fichas. Los colores siguen tu tema.</p>'
+      + '<div class="vt-grid vs-grid" data-vt-style>'
+      + card("diseno", "Con diseño", "Mapa ilustrado, escenas y burbujas")
+      + card("minimal", "Minimalista", "Lista de lecciones y fichas, sin adornos")
+      + '</div>';
   }
 
   function renderPicker() {
@@ -648,10 +655,10 @@ window.VESPER_THEME = (function () {
       if (e.type === "keydown" && e.key !== "Enter" && e.key !== " ") return;
       var c = e.target.closest("[data-vstyle]"); if (!c || !window.VESPER_STYLE) return;
       if (e.type === "keydown") e.preventDefault();
-      VESPER_STYLE.set(c.getAttribute("data-vstyle"), c.getAttribute("data-vmin"));
-      var on = styleBox.querySelector(".vt-card.on"); if (on) on.classList.remove("on");
-      c.classList.add("on");
-      say(c.getAttribute("data-vstyle") === "minimal" ? "Estilo minimalista activo. El mapa se ve como lista y sin escenas." : "");
+      VESPER_STYLE.set(c.getAttribute("data-vstyle"));
+      var on = styleBox.querySelector(".vt-card.on"); if (on) { on.classList.remove("on"); on.setAttribute("aria-pressed", "false"); }
+      c.classList.add("on"); c.setAttribute("aria-pressed", "true");
+      say(c.getAttribute("data-vstyle") === "minimal" ? "Estilo minimalista activo: las lecciones se ven en lista." : "");
     }
     if (styleBox) { styleBox.addEventListener("click", pickStyle); styleBox.addEventListener("keydown", pickStyle); }
     /* las miniaturas de accesorio llevan el gato DEBAJO: si cambias de
@@ -668,6 +675,7 @@ window.VESPER_THEME = (function () {
     if (themeBox) themeBox.addEventListener("click", function (e) {
       var c = e.target.closest("[data-theme]"); if (!c) return;
       api.setTheme(c.getAttribute("data-theme"));
+      if (styleBox) { var tmp = document.createElement("div"); tmp.innerHTML = styleBlock(); var ng = tmp.querySelector("[data-vt-style]"); if (ng) styleBox.innerHTML = ng.innerHTML; }
       var on = themeBox.querySelector(".vt-card.on"); if (on) on.classList.remove("on");
       c.classList.add("on"); say("");
     });
