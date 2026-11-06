@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<!-- CSP: generada por _scripts/apply_csp.py (edita alli, no aqui) -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://apis.google.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://cdn.tailwindcss.com https://challenges.cloudflare.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://maxcdn.bootstrapcdn.com; font-src 'self' data: https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: blob: https:; media-src 'self' data: blob:; connect-src 'self' https://firestore.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://vesper-academy.firebaseapp.com https://patient-feather-4364.josuemtz20.workers.dev https://formsubmit.co https://challenges.cloudflare.com https://www.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com; frame-src 'self' https://vesper-academy.firebaseapp.com https://www.youtube.com https://www.youtube-nocookie.com https://challenges.cloudflare.com; worker-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self' https://formsubmit.co; upgrade-insecure-requests">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#1B1B2F">
+<title>La app de Vesper | Vesper Academy</title>
+<meta name="description" content="La app de práctica gratis de Vesper Academy: seis mundos del A1 al C2, vocabulario por salas, La Forja, la liga semanal y el duelo con el guardián de cada nivel.">
+<link rel="canonical" href="https://vesperacademy.com/app.html">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="es_MX">
+<meta property="og:site_name" content="Vesper Academy">
+<meta property="og:title" content="La app de Vesper — Vesper Academy">
+<meta property="og:description" content="La app de práctica gratis de Vesper Academy: seis mundos del A1 al C2, vocabulario por salas, La Forja, la liga semanal y el duelo con el guardián de cada nivel.">
+<meta property="og:url" content="https://vesperacademy.com/app.html">
+<meta property="og:image" content="https://vesperacademy.com/assets/images/lessons/theme_achievement.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://vesperacademy.com/assets/images/lessons/theme_achievement.jpg">
+<link rel="icon" href="assets/images/favicon_32.png?v=2" type="image/png" sizes="32x32">
+<link rel="apple-touch-icon" href="assets/images/apple_touch_icon.png?v=2">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link rel="stylesheet" href="assets/css/vesper_course.css">
+<script src="vesper_app_mode.js"></script>
+<script>document.documentElement.classList.add('js-anim');</script>
+<style>
+/* app.html: la app de práctica, que antes ocupaba media portada. Los
+   nombres y cifras de los mundos salen de leccion_app.js (WORLD_ART) y de
+   vesper_vocab_dens.js: si cambian allá, se cambian aquí. Los tokens son
+   los de la portada, para que la sección oscura se vea igual que allá. */
+:root{
+  --night:#14122a; --dusk:#1f2342; --twilight:#3a3a63; --star:#f3e2ab;
+  --hair:rgba(197,160,89,.35); --on-night:rgba(245,242,235,.90); --on-night-soft:rgba(245,242,235,.62);
+  --gold-tint:rgba(197,160,89,.14); --display:'Fraunces',Georgia,serif; --t-h3:1.25rem;
+}
+.i{width:1em;height:1em;display:inline-block;vertical-align:-.125em;fill:none;stroke:currentColor;
+  stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;flex:none;}
+.app-x{padding:clamp(56px,7vw,88px) 0;color:var(--on-night);}
+.app-x .tour-x{margin-top:0;}
+.app-x .btn-ghost{color:var(--on-night);}
+.chero .lead em{font-style:italic;color:var(--gold-lt);}
+/* ---- La app (extra): mundos + funciones ----
+   Cada tarjeta toma el color de su mundo de WORLD_ART (leccion_app.js):
+   --wa es el acento (filetes), --wi su versión tinta (fondo del chip de
+   nivel, blanco encima >= 5:1). */
+.app-x{position:relative;background:
+  radial-gradient(900px 420px at 15% 0%,rgba(106,95,168,.18),transparent 60%),
+  radial-gradient(700px 380px at 90% 100%,rgba(197,160,89,.12),transparent 60%),
+  var(--night);-webkit-font-smoothing:antialiased;}
+.app-x .sec-title em{font-style:italic;font-weight:500;color:var(--star);}
+.app-sub{font-family:var(--display);font-size:var(--t-h3);font-weight:600;color:var(--cream);margin:56px 0 6px;}
+.app-subp{margin:0;color:var(--on-night-soft);font-size:.95rem;max-width:62ch;}
+.worlds-x{list-style:none;margin:26px 0 0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;}
+.wx{display:flex;flex-direction:column;background:var(--dusk);border:1px solid var(--hair);
+  border-top:3px solid var(--wa);border-radius:var(--r-lg);overflow:hidden;
+  transition:transform .35s var(--ease-out),box-shadow .35s var(--ease-out);}
+.wx:hover{transform:translateY(-4px);box-shadow:0 18px 40px rgba(0,0,0,.35);}
+.wx-art{position:relative;aspect-ratio:720/309;overflow:hidden;background:var(--twilight);}
+.wx-art img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .6s var(--ease-out);}
+.wx:hover .wx-art img{transform:scale(1.04);}
+.wx-art::after{content:"";position:absolute;inset:auto 0 0 0;height:45%;background:linear-gradient(transparent,rgba(31,35,66,.9));}
+.wx-lv{position:absolute;left:14px;top:12px;z-index:1;padding:4px 11px;border-radius:var(--r-pill);
+  background:var(--wi);color:#fff;font-family:var(--display);font-weight:600;font-size:.95rem;
+  box-shadow:0 0 0 1px rgba(255,255,255,.35);}
+.wx-body{position:relative;display:flex;flex-direction:column;gap:8px;padding:4px 20px 20px;}
+.wx h3{font-family:var(--display);font-size:1.3rem;font-weight:600;color:var(--cream);margin:0;}
+.wx-what{margin:0;color:var(--on-night-soft);font-size:.88rem;line-height:1.5;}
+.wx-guard{display:flex;align-items:center;gap:11px;margin:6px 0 0;color:var(--on-night);font-size:.88rem;font-weight:600;}
+.wx-guard img{width:46px;height:46px;border-radius:50%;border:2px solid var(--wa);flex:none;}
+.wx-guard small{display:block;font-weight:500;font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:rgba(245,242,235,.6);}
+.wx-den{margin:6px 0 0;padding-top:10px;border-top:1px solid rgba(197,160,89,.2);font-size:.82rem;color:var(--on-night-soft);}
+.wx-den b{color:var(--star);font-weight:600;}
+.wx-rooms{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px;}
+.wx-rooms li{font-size:.74rem;padding:3px 10px;border-radius:var(--r-pill);
+  border:1px solid rgba(245,242,235,.18);color:var(--on-night);}
+.feats-x{list-style:none;margin:22px 0 0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;
+  background:var(--hair);border:1px solid var(--hair);border-radius:var(--r-lg);overflow:hidden;}
+.fx{display:flex;flex-direction:column;gap:6px;padding:24px 24px 26px;background:var(--night);}
+.fx-ic{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;margin-bottom:6px;
+  background:var(--gold-tint);color:var(--star);font-size:1.15rem;}
+.fx b{color:var(--cream);font-size:1rem;}
+.fx span:last-child{color:var(--on-night-soft);font-size:.88rem;line-height:1.55;}
+.app-cta{display:flex;flex-wrap:wrap;align-items:center;gap:14px 26px;margin:34px 0 0;}
+.app-link{color:var(--star);font-weight:600;font-size:.9rem;display:inline-flex;align-items:center;gap:7px;}
+.app-link:hover{text-decoration:underline;text-underline-offset:3px;}
+@media(max-width:980px){
+  .worlds-x,.feats-x{grid-template-columns:repeat(2,minmax(0,1fr));}
+}
+@media(max-width:640px){
+  .worlds-x,.feats-x{grid-template-columns:1fr;}
+}
+@media (prefers-reduced-motion: reduce){
+  .wx,.wx-art img{transition:none !important;}
+  .wx:hover,.wx:hover .wx-art img{transform:none !important;}
+}
+
+/* ---- Recorrido de la app (video Higgsfield, 2026-11-05) ----
+   Un solo video vertical de 19 s recorre los seis mundos; cada tramo enseña
+   un paso. Los textos van en HTML (el video no lleva letras: los modelos las
+   deforman) y se sincronizan con data-t. Solo se reproduce en pantalla. */
+.tour-x{display:grid;grid-template-columns:minmax(0,300px) minmax(0,1fr);gap:clamp(28px,5vw,64px);
+  align-items:center;margin:48px 0 0;}
+.tour-phone{position:relative;aspect-ratio:9/16;border-radius:30px;overflow:hidden;background:#0d0b1f;
+  box-shadow:0 0 0 1px rgba(197,160,89,.45),0 0 0 8px #0d0b1f,0 0 0 9px rgba(245,242,235,.10),0 28px 60px rgba(0,0,0,.45);}
+.tour-phone video{display:block;width:100%;height:100%;object-fit:cover;}
+.tour-phone .tour-play{position:absolute;inset:auto 0 18px;margin:auto;width:max-content;display:none;
+  border:0;border-radius:999px;padding:10px 18px;font:600 14px 'Inter',sans-serif;cursor:pointer;
+  background:rgba(13,11,31,.78);color:#f3e2ab;box-shadow:0 0 0 1px rgba(197,160,89,.5);}
+.tour-x.is-paused .tour-play,.m-tour.is-paused .tour-play{display:block;}
+.tour-steps{list-style:none;margin:18px 0 0;padding:0;display:grid;gap:6px;counter-reset:tour;}
+.tour-steps li{counter-increment:tour;}
+.tour-steps button{all:unset;box-sizing:border-box;width:100%;cursor:pointer;display:grid;grid-template-columns:34px 1fr;
+  gap:14px;align-items:center;padding:12px 14px;border-radius:14px;color:var(--on-night-soft);
+  transition:background .3s,color .3s;}
+.tour-steps button::before{content:counter(tour);width:34px;height:34px;border-radius:50%;display:grid;place-items:center;
+  font:600 14px 'Inter',sans-serif;background:rgba(245,242,235,.07);color:var(--on-night-soft);transition:background .3s,color .3s;}
+.tour-steps button:hover{color:var(--on-night);}
+.tour-steps button:focus-visible{outline:2px solid var(--gold);outline-offset:2px;}
+.tour-steps li.is-on button{background:rgba(197,160,89,.12);color:var(--cream);}
+.tour-steps li.is-on button::before{background:var(--gold);color:#14122a;}
+.tour-steps b{display:block;font-weight:600;color:inherit;}
+@media (max-width:760px){.tour-x{grid-template-columns:1fr;justify-items:center;}.tour-x .tour-phone{width:min(300px,80vw);}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Saltar al contenido</a>
+<svg style="display:none" aria-hidden="true" focusable="false"><defs>
+  <symbol id="i-speech" viewBox="0 0 24 24"><path d="M3 6.5A2.5 2.5 0 0 1 5.5 4h7A2.5 2.5 0 0 1 15 6.5v3A2.5 2.5 0 0 1 12.5 12H8l-3.2 2.6a.4.4 0 0 1-.65-.31V12H5.5A2.5 2.5 0 0 1 3 9.5z"/><path d="M9 15.2a2.5 2.5 0 0 0 2.4 1.8h4.1l3.2 2.6a.4.4 0 0 0 .65-.31V17h.15A2.5 2.5 0 0 0 22 14.5v-3A2.5 2.5 0 0 0 19.5 9H18"/></symbol>
+  <symbol id="i-audio" viewBox="0 0 24 24"><path d="M4 14v-2a8 8 0 0 1 16 0v2"/><rect x="2.5" y="13.5" width="4" height="7" rx="1.6"/><rect x="17.5" y="13.5" width="4" height="7" rx="1.6"/><path d="M9.5 9.5v5M12 7.5v9M14.5 10.5v3"/></symbol>
+  <symbol id="i-summit" viewBox="0 0 24 24"><path d="M2 20h4v-4H2zM8.5 20h4v-7.5h-4zM15 20h4V8h-4z"/><path d="M19.6 4.2 20.3 2l.7 2.2 2.2.7-2.2.7-.7 2.2-.7-2.2-2.2-.7z"/></symbol>
+  <symbol id="i-case" viewBox="0 0 24 24"><rect x="2.5" y="7" width="19" height="13" rx="2.2"/><path d="M8.5 7V5.4A1.9 1.9 0 0 1 10.4 3.5h3.2A1.9 1.9 0 0 1 15.5 5.4V7"/><path d="M2.5 12h19M10.6 12v2.2h2.8V12"/></symbol>
+  <symbol id="i-check-doc" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="17" rx="2.2"/><path d="M9 4V2.8h6V4"/><path d="m8.6 13 2.4 2.4 4.4-4.6"/></symbol>
+  <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13.2 2.5 5 13.4h5.3L9.8 21.5 18 10.6h-5.3z"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4 12h15m-6-6 6 6-6 6"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M3.5 7h17M3.5 12h17M3.5 17h17"/></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 2.8 2.6 6.1 6.6.6-5 4.3 1.5 6.4L12 16.9l-5.7 3.3 1.5-6.4-5-4.3 6.6-.6z"/></symbol>
+  <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m6 9.5 6 6 6-6"/></symbol>
+  <!-- Los dos datos de la ficha de curso. Mismo trazo de 1.5 y esquinas
+       redondeadas que el resto del juego, para que no se noten añadidos. -->
+  <symbol id="i-calendar" viewBox="0 0 24 24"><rect x="3.4" y="5.2" width="17.2" height="15.4" rx="2.2"/><path d="M8 3.2v3.6M16 3.2v3.6M3.4 10.2h17.2"/><path d="M7.6 13.8h1.5M11.3 13.8h1.5M15 13.8h1.5M7.6 17.2h1.5M11.3 17.2h1.5"/></symbol>
+  <symbol id="i-gauge" viewBox="0 0 24 24"><path d="M3.2 18.4a9.4 9.4 0 1 1 17.6 0"/><path d="m12.9 15.1 3.7-4.6"/><circle cx="12" cy="16.6" r="1.35"/></symbol>
+  <!-- Los cinco que pedía la edición móvil. Mismo trazo de 1.5 salvo el
+       de WhatsApp, que es un glifo de marca y va de relleno (.i--solid). -->
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="m4.8 12.6 4.6 4.6L19.2 7"/></symbol>
+  <symbol id="i-people" viewBox="0 0 24 24"><circle cx="9" cy="8.2" r="3.3"/><path d="M2.9 19.8a6.1 6.1 0 0 1 12.2 0"/><path d="M16.4 5.6a3.1 3.1 0 0 1 0 6.1"/><path d="M17.6 14a5.7 5.7 0 0 1 3.5 5.4"/></symbol>
+  <symbol id="i-person" viewBox="0 0 24 24"><circle cx="12" cy="7.4" r="3.7"/><path d="M5.2 20.2a6.8 6.8 0 0 1 13.6 0"/></symbol>
+  <symbol id="i-instagram" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5.2"/><circle cx="12" cy="12" r="4.1"/><circle cx="17.3" cy="6.8" r="1.05"/></symbol>
+  <symbol id="i-whatsapp" viewBox="0 0 24 24"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2m0 18.15a8.2 8.2 0 0 1-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.19 8.19 0 0 1-1.26-4.38c0-4.54 3.7-8.23 8.25-8.23a8.2 8.2 0 0 1 8.24 8.24c0 4.54-3.7 8.23-8.24 8.23m4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.24-.64.8-.78.97-.15.16-.29.18-.54.06-.25-.13-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.01-.38.11-.51.11-.11.25-.29.37-.43.12-.15.16-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.4-.42-.56-.43h-.48c-.16 0-.43.06-.65.31-.22.25-.85.83-.85 2.03s.87 2.35.99 2.51c.12.17 1.71 2.61 4.15 3.66.58.25 1.03.4 1.39.51.58.19 1.11.16 1.53.1.47-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.15-1.18-.06-.11-.22-.17-.47-.29"/></symbol>
+</defs></svg>
+
+<header>
+  <div class="container">
+    <nav>
+      <a class="brand" href="index.html" aria-label="Vesper Academy — inicio">
+        <img src="assets/images/vesper_logo_inverted.png" alt="" width="42" height="42">
+        <span><b>Vesper Academy</b><small>English Excellence</small></span>
+      </a>
+      <div class="nav-links" id="navlinks">
+        <a href="index.html#cursos">Cursos</a>
+        <a href="como-funciona.html">Cómo funciona</a>
+        <a href="planes.html">Precios</a>
+        <a href="app.html" aria-current="page">La app</a>
+        <a href="login.html">Acceso alumnos</a>
+        <a href="book_placement.html" class="btn btn-gold nav-cta">Examen gratis</a>
+      </div>
+      <button class="nav-toggle" id="navToggle" aria-label="Abrir menú" aria-controls="navlinks" aria-expanded="false"><i class="fas fa-bars" aria-hidden="true"></i></button>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<section class="chero">
+  <div class="container">
+    <div class="chero-inner">
+      <div class="crumbs"><a href="index.html">Inicio</a> <i class="fas fa-chevron-right" aria-hidden="true"></i> <span>La app</span></div>
+      <span class="eyebrow">Extra · incluido y gratis</span>
+      <h1>Entre clase y clase, practicas en el mundo de Vesper</h1>
+      <p class="lead">Tus clases son en vivo con un profesor. La app es el extra para los días sin clase: lecciones cortas, vocabulario y repaso, con Vesper, nuestro gato, como guía. Es gratis y no hace falta ser alumno para usarla.</p>
+      <div class="chero-cta">
+        <a href="leccion.html" class="btn btn-gold btn-lg"><i class="fas fa-bolt" aria-hidden="true"></i> Abrir la app gratis</a>
+        <a href="audio_library.html" class="btn btn-ghost">Oír la biblioteca de audio</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="app" class="app-x" aria-label="Cómo es la app">
+  <div class="container">
+    <div class="tour-x" data-tour>
+      <div class="tour-phone">
+        <video muted playsinline loop preload="none" poster="assets/images/landing/app/app_tour_poster.webp" width="540" height="960" aria-label="Recorrido animado por los seis mundos de la app de Vesper">
+          <source src="assets/video/app_tour.webm" type="video/webm">
+          <source src="assets/video/app_tour.mp4" type="video/mp4">
+        </video>
+        <button type="button" class="tour-play">▶ Ver el recorrido</button>
+      </div>
+      <div>
+        <h2 class="app-sub" style="margin-top:0">Así se usa, en 20 segundos</h2>
+        <p class="app-subp">Toca un paso para saltar a esa parte del recorrido.</p>
+        <ol class="tour-steps">
+          <li data-t="0"><button type="button"><span><b>Elige tu mundo</b>Empiezas en tu nivel y tocas la primera lección del mapa.</span></button></li>
+          <li data-t="2.5"><button type="button"><span><b>Escucha y responde</b>Ejercicios cortos; Vesper te corrige al instante.</span></button></li>
+          <li data-t="6"><button type="button"><span><b>Repasa vocabulario</b>Tarjetas en las burbujas y práctica sin final en La Forja.</span></button></li>
+          <li data-t="9.5"><button type="button"><span><b>Sube en la liga</b>Tu racha diaria suma puntos en la liga semanal.</span></button></li>
+          <li data-t="13"><button type="button"><span><b>Vence al guardián</b>El examen del mundo es un duelo; si lo ganas, pasas de nivel.</span></button></li>
+          <li data-t="16"><button type="button"><span><b>Gana tus medallas</b>Cada logro deja su medalla, mundo tras mundo hasta C2.</span></button></li>
+        </ol>
+      </div>
+    </div>
+
+    <h2 class="app-sub reveal">Seis mundos, uno por nivel</h2>
+    <p class="app-subp reveal">Cada mundo es un nivel del MCER, con su mapa de lecciones, su recinto de vocabulario y un guardián al final. Para pasar al siguiente mundo, lo vences en un duelo.</p>
+    <ol class="worlds-x">
+      <li class="wx reveal" style="--wa:#C07A33;--wi:#8f5722">
+        <div class="wx-art"><img src="assets/images/landing/app/world_a1.webp" alt="" width="720" height="309" loading="lazy" decoding="async"><span class="wx-lv">A1</span></div>
+        <div class="wx-body">
+          <h3>El Hogar</h3>
+          <p class="wx-what">Lo de todos los días: la casa, la comida, la familia.</p>
+          <p class="wx-guard"><img src="assets/images/landing/app/guardian_a1.webp" alt="" width="144" height="144" loading="lazy" decoding="async"><span><small>Guardián · se vence con 85 %</small>El Centinela del Hogar</span></p>
+          <p class="wx-den"><b>La Casa del Hogar</b> · 123 palabras</p>
+          <ul class="wx-rooms" aria-label="Salas de vocabulario de El Hogar"><li>La cocina</li><li>La sala</li><li>El dormitorio</li><li>El baño</li><li>El jardín</li><li>La familia</li></ul>
+        </div>
+      </li>
+      <li class="wx reveal" style="--wa:#5E8A4E;--wi:#3f6234">
+        <div class="wx-art"><img src="assets/images/landing/app/world_a2.webp" alt="" width="720" height="309" loading="lazy" decoding="async"><span class="wx-lv">A2</span></div>
+        <div class="wx-body">
+          <h3>El Sendero</h3>
+          <p class="wx-what">Sales de casa: el mercado, los planes, lo que hiciste ayer.</p>
+          <p class="wx-guard"><img src="assets/images/landing/app/guardian_a2.webp" alt="" width="144" height="144" loading="lazy" decoding="async"><span><small>Guardián · se vence con 85 %</small>El Guardián del Sendero</span></p>
+          <p class="wx-den"><b>La Cueva del Sendero</b> · 118 palabras</p>
+          <ul class="wx-rooms" aria-label="Salas de vocabulario de El Sendero"><li>La entrada</li><li>El mercado</li><li>El manantial</li><li>Las profundidades</li><li>El campamento</li><li>Los ecos</li></ul>
+        </div>
+      </li>
+      <li class="wx reveal" style="--wa:#3D86B0;--wi:#2b607f">
+        <div class="wx-art"><img src="assets/images/landing/app/world_b1.webp" alt="" width="720" height="309" loading="lazy" decoding="async"><span class="wx-lv">B1</span></div>
+        <div class="wx-body">
+          <h3>El Horizonte</h3>
+          <p class="wx-what">Te defiendes solo: viajes, trabajo y opiniones propias.</p>
+          <p class="wx-guard"><img src="assets/images/landing/app/guardian_b1.webp" alt="" width="144" height="144" loading="lazy" decoding="async"><span><small>Guardián · se vence con 85 %</small>El Vigía del Horizonte</span></p>
+          <p class="wx-den"><b>El Puerto del Horizonte</b> · 102 palabras</p>
+          <ul class="wx-rooms" aria-label="Salas de vocabulario de El Horizonte"><li>El muelle</li><li>El faro</li><li>El almacén</li><li>La cubierta</li><li>El puente de mando</li><li>La bodega</li></ul>
+        </div>
+      </li>
+      <li class="wx reveal" style="--wa:#A8762E;--wi:#7a5520">
+        <div class="wx-art"><img src="assets/images/landing/app/world_b2.webp" alt="" width="720" height="309" loading="lazy" decoding="async"><span class="wx-lv">B2</span></div>
+        <div class="wx-body">
+          <h3>La Torre</h3>
+          <p class="wx-what">Trabajas en inglés: juntas, argumentos y negociación.</p>
+          <p class="wx-guard"><img src="assets/images/landing/app/guardian_b2.webp" alt="" width="144" height="144" loading="lazy" decoding="async"><span><small>Guardián · se vence con 88 %</small>El Heraldo de la Torre</span></p>
+          <p class="wx-den"><b>La Torre del Saber</b> · 102 palabras</p>
+          <ul class="wx-rooms" aria-label="Salas de vocabulario de La Torre"><li>El salón</li><li>La biblioteca</li><li>El taller</li><li>El balcón</li><li>La bóveda</li><li>El estudio</li></ul>
+        </div>
+      </li>
+      <li class="wx reveal" style="--wa:#6A5FA8;--wi:#4c4383">
+        <div class="wx-art"><img src="assets/images/landing/app/world_c1.webp" alt="" width="720" height="309" loading="lazy" decoding="async"><span class="wx-lv">C1</span></div>
+        <div class="wx-body">
+          <h3>El Firmamento</h3>
+          <p class="wx-what">Matiz y precisión: ideas abstractas, ironía, escritura seria.</p>
+          <p class="wx-guard"><img src="assets/images/landing/app/guardian_c1.webp" alt="" width="144" height="144" loading="lazy" decoding="async"><span><small>Guardián · se vence con 90 %</small>El Custodio del Firmamento</span></p>
+          <p class="wx-den"><b>El Observatorio del Firmamento</b> · 86 palabras</p>
+          <ul class="wx-rooms" aria-label="Salas de vocabulario de El Firmamento"><li>La cúpula</li><li>El telescopio</li><li>El archivo</li><li>La aurora</li><li>La nebulosa</li><li>El cometa</li></ul>
+        </div>
+      </li>
+      <li class="wx reveal" style="--wa:#3FA08A;--wi:#2b7061">
+        <div class="wx-art"><img src="assets/images/landing/app/world_c2.webp" alt="" width="720" height="309" loading="lazy" decoding="async"><span class="wx-lv">C2</span></div>
+        <div class="wx-body">
+          <h3>El Castillo del Saber</h3>
+          <p class="wx-what">Dominio: el idioma deja de ser el tema.</p>
+          <p class="wx-guard"><img src="assets/images/landing/app/guardian_c2.webp" alt="" width="144" height="144" loading="lazy" decoding="async"><span><small>Guardián · se vence con 92 %</small>El Soberano del Saber</span></p>
+          <p class="wx-den"><b>El Castillo del Saber</b> · 85 palabras</p>
+          <ul class="wx-rooms" aria-label="Salas de vocabulario de El Castillo del Saber"><li>El portón</li><li>El salón del trono</li><li>La bóveda</li><li>La aguja</li><li>El sagrario</li><li>El patio de armas</li></ul>
+        </div>
+      </li>
+    </ol>
+
+    <h2 class="app-sub reveal">Lo que hay dentro</h2>
+    <ul class="feats-x">
+      <li class="fx reveal"><span class="fx-ic" aria-hidden="true"><svg class="i"><use href="#i-bolt"/></svg></span><b>Lecciones interactivas</b><span>Ejercicios cortos con corrección al instante. Vesper te dice por qué estuvo mal, no solo que estuvo mal.</span></li>
+      <li class="fx reveal"><span class="fx-ic" aria-hidden="true"><svg class="i"><use href="#i-case"/></svg></span><b>Vocabulario por salas</b><span>Cada mundo tiene un recinto con seis salas temáticas: más de 600 palabras en tarjetas inglés–español y una actividad rápida por sala.</span></li>
+      <li class="fx reveal"><span class="fx-ic" aria-hidden="true"><svg class="i"><use href="#i-gauge"/></svg></span><b>La Forja</b><span>Práctica sin final con lo que ya viste. Lo que fallas vuelve pronto; lo que dominas se espacia. Cuatro modos: mixto, escucha, vocabulario y gramática.</span></li>
+      <li class="fx reveal"><span class="fx-ic" aria-hidden="true"><svg class="i"><use href="#i-summit"/></svg></span><b>El duelo del guardián</b><span>El examen de cada mundo es una batalla: cada acierto le quita vida al guardián y cada error, un corazón a Vesper. Se aprueba con 85 a 92 % según el nivel.</span></li>
+      <li class="fx reveal"><span class="fx-ic" aria-hidden="true"><svg class="i"><use href="#i-audio"/></svg></span><b>Biblioteca de audio</b><span>Diálogos por nivel con voces y acentos distintos, para que el oído se acostumbre al inglés de fuera del salón.</span></li>
+      <li class="fx reveal"><span class="fx-ic" aria-hidden="true"><svg class="i"><use href="#i-star"/></svg></span><b>Racha, liga y medallas</b><span>Un poco cada día suma más que una tarde al mes. La racha lo cuenta, la liga es semanal y las medallas marcan lo que logras.</span></li>
+    </ul>
+
+    <p class="app-cta reveal">
+      <a href="leccion.html" class="btn btn-ghost"><svg class="i" aria-hidden="true"><use href="#i-bolt"/></svg> Abrir la app gratis</a>
+    </p>
+  </div>
+</section>
+</main>
+
+<section class="cband">
+  <div class="container">
+    <span class="eyebrow">La app es el extra</span>
+    <h2 class="sec-title">Lo que te hace hablar son las clases en vivo</h2>
+    <p>Grupos de máximo 9 o 1 a 1, con un profesor. Empieza por saber tu nivel: 30 preguntas, unos 15 minutos.</p>
+    <a href="book_placement.html?src=app-page" class="btn btn-gold btn-lg"><i class="fas fa-arrow-right" aria-hidden="true"></i> Examen de nivel gratis</a>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="fgrid">
+      <div class="fbrand reveal">
+        <img src="assets/images/vesper_logo_inverted.png" alt="Vesper Academy" width="46" height="44" loading="lazy" decoding="async">
+        <p>Inglés en línea para profesionales del mundo real. Del primer "hello" a tu certificación internacional.</p>
+      </div>
+      <div class="reveal"><h5>Cursos</h5>
+        <a href="curso-ingles-general.html">Inglés General</a><a href="curso-club-conversacion.html">Club de Conversación</a><a href="curso-ingles-corporativo.html">Inglés Corporativo</a><a href="curso-certificacion.html">Certificación</a></div>
+      <div class="reveal"><h5>Academia</h5>
+        <a href="como-funciona.html">Cómo funciona</a><a href="planes.html">Planes y precios</a><a href="book_placement.html">Examen de nivel</a><a href="app.html">La app gratis</a></div>
+    </div>
+    <div class="fbottom">
+      <span>© <span id="year"></span> Vesper Academy. Todos los derechos reservados. · <a href="aviso-de-privacidad.html">Aviso de privacidad</a></span>
+      <span class="social">
+        <a href="https://wa.me/525535699899" target="_blank" rel="noopener"><i class="fab fa-whatsapp" aria-hidden="true"></i> 55 3569 9899</a>
+        <a href="https://www.instagram.com/vesper.academy/" target="_blank" rel="noopener" aria-label="Instagram"><i class="fab fa-instagram" aria-hidden="true"></i></a>
+      </span>
+    </div>
+  </div>
+</footer>
+
+<script>
+document.getElementById('year').textContent = new Date().getFullYear();
+(function(){
+  var t=document.getElementById('navToggle'),l=document.getElementById('navlinks');
+  if(t&&l)t.addEventListener('click',function(){var o=l.classList.toggle('show');t.setAttribute('aria-expanded',o);});
+  var root=document.documentElement;
+  if(root.classList.contains('js-anim')){
+    try{
+      var io=new IntersectionObserver(function(es){es.forEach(function(e){if(!e.isIntersecting)return;var el=e.target;try{var s=Array.prototype.filter.call(el.parentNode.children,function(c){return c.classList.contains('reveal');});el.style.setProperty('--i',Math.min(s.indexOf(el),5));}catch(x){}el.classList.add('in-view');io.unobserve(el);});},{threshold:.14,rootMargin:'0px 0px -8% 0px'});
+      document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
+    }catch(err){document.querySelectorAll('.reveal').forEach(function(el){el.classList.add('in-view');});}
+  }
+})();
+</script>
+<script src="vesper_contact.js" defer></script>
+
+<!-- Recorrido de la app: sincroniza los pasos con el video y solo lo reproduce
+     cuando está en pantalla (preload="none": nada se descarga antes). Con
+     movimiento reducido no arranca solo; queda el botón "Ver el recorrido". -->
+<script>
+(function(){
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.querySelectorAll('[data-tour]').forEach(function(box){
+    var v = box.querySelector('video'), play = box.querySelector('.tour-play');
+    var items = [].slice.call(box.querySelectorAll('.tour-steps li'));
+    var cap = box.querySelector('.m-tour__cap'), dots = box.querySelectorAll('.m-tour__dots i');
+    var times = items.map(function(li){ return parseFloat(li.getAttribute('data-t')) || 0; });
+    var cur = -1, wantPlay = !reduce, visible = false;
+    function mark(i){
+      if (i === cur) return; cur = i;
+      items.forEach(function(li, k){ li.classList.toggle('is-on', k === i); });
+      [].forEach.call(dots, function(d, k){ d.classList.toggle('is-on', k === i); });
+      if (cap && items[i]) cap.innerHTML = items[i].innerHTML;
+    }
+    function sync(){
+      var t = v.currentTime || 0, i = 0;
+      for (var k = 0; k < times.length; k++) if (t >= times[k]) i = k;
+      mark(i);
+    }
+    function paused(p){ box.classList.toggle('is-paused', p); }
+    function go(){
+      var p = v.play();
+      if (p && p.catch) p.catch(function(){ paused(true); });
+      paused(false);
+    }
+    v.addEventListener('timeupdate', sync);
+    v.addEventListener('seeked', sync);
+    v.addEventListener('pause', function(){ if (visible) paused(true); });
+    play.addEventListener('click', function(){ wantPlay = true; go(); });
+    items.forEach(function(li, k){
+      var b = li.querySelector('button');
+      if (b) b.addEventListener('click', function(){
+        if (v.preload === 'none') v.preload = 'auto';
+        try { v.currentTime = times[k]; } catch(e){}
+        mark(k); wantPlay = true; go();
+      });
+    });
+    mark(0);
+    if (reduce) paused(true);
+    if ('IntersectionObserver' in window){
+      new IntersectionObserver(function(es){
+        es.forEach(function(e){
+          visible = e.isIntersecting;
+          if (visible && wantPlay) go();
+          else if (!visible && !v.paused) { v.pause(); paused(false); }
+        });
+      }, {threshold:0.35}).observe(v);
+    } else if (wantPlay) { visible = true; go(); }
+  });
+})();
+</script>
+</body>
+</html>

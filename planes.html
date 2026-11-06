@@ -27,6 +27,31 @@
 <link rel="stylesheet" href="assets/css/vesper_course.css">
 <script src="vesper_app_mode.js"></script>
 <script>document.documentElement.classList.add('js-anim');</script>
+<style>
+/* Lo que llegó de la portada el 2026-11-06: nota de «todos incluyen»,
+   escalón para quien trabaja de 9 a 7 y el formulario de contacto. */
+.plans-all{margin:34px 0 0;padding:14px 18px;border-left:3px solid var(--gold);background:var(--cream);
+  border-radius:0 var(--r-sm) var(--r-sm) 0;font-size:var(--t-body);color:var(--muted);max-width:820px;}
+.plans-all b{color:var(--text);}
+.entry{margin-top:22px;display:grid;grid-template-columns:1.1fr 1fr 1fr;gap:24px;padding:22px 24px;
+  border:1px solid var(--border);border-radius:var(--r-lg);background:#fff;}
+.entry h3{font-family:'Fraunces',Georgia,serif;font-size:var(--t-h3);font-weight:600;margin:0 0 6px;}
+.entry p{margin:0;font-size:var(--t-body);color:var(--muted);line-height:1.55;}
+.entry b{color:var(--text);}
+.lead-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,440px);gap:48px;align-items:start;}
+.lead-card{background:#fff;border:1px solid var(--border);border-radius:var(--r-lg);padding:26px;box-shadow:var(--sh-md);}
+.lead-card form{display:grid;gap:6px;}
+.lead-card label{font-size:var(--t-small);font-weight:600;color:var(--text);margin-top:8px;}
+.lead-card label small{font-weight:400;color:var(--muted);margin-left:4px;}
+.lead-card input,.lead-card select,.lead-card textarea{width:100%;font:inherit;font-size:var(--t-body);padding:11px 13px;
+  border:1px solid var(--border);border-radius:var(--r-sm);background:#fff;color:var(--text);}
+.lead-card input:focus,.lead-card select:focus,.lead-card textarea:focus{outline:none;border-color:var(--gold2);box-shadow:0 0 0 3px rgba(197,160,89,.2);}
+.lead-legal{margin:10px 0 0;font-size:.78rem;color:var(--muted);}
+.lead-legal a{text-decoration:underline;}
+.lead-msg{font-size:var(--t-body);color:var(--text);padding:6px 0;}
+.lead-msg a{color:var(--gold2);text-decoration:underline;}
+@media(max-width:860px){.entry,.lead-grid{grid-template-columns:1fr;gap:18px;}}
+</style>
 </head>
 <body>
 <a class="skip" href="#main">Saltar al contenido</a>
@@ -39,11 +64,10 @@
         <span><b>Vesper Academy</b><small>English Excellence</small></span>
       </a>
       <div class="nav-links" id="navlinks">
-        <a href="index.html#metodo">Metodología</a>
         <a href="index.html#cursos">Cursos</a>
-        <a href="index.html#certificacion">Certificación</a>
-        <a href="index.html#precios">Precios</a>
-        <a href="leccion.html">Lecciones gratis</a>
+        <a href="como-funciona.html">Cómo funciona</a>
+        <a href="planes.html" aria-current="page">Precios</a>
+        <a href="app.html">La app</a>
         <a href="login.html">Acceso alumnos</a>
         <a href="book_placement.html" class="btn btn-gold nav-cta">Examen gratis</a>
       </div>
@@ -94,8 +118,9 @@
         <a href="book_placement.html" class="btn btn-outline">Elegir plan Grupal</a>
       </div>
 
-      <div class="pcard feat reveal" id="profesional">
-        <span class="ribbon">Más popular</span>
+      <!-- Sin listón «Más popular»: no hay dato que lo respalde (se quitó
+           también de la portada el 2026-11-05). -->
+      <div class="pcard reveal" id="profesional">
         <div class="ic"><i class="fas fa-user-tie" aria-hidden="true"></i></div>
         <h2>1 a 1 Profesional</h2>
         <p class="p-for">Para quien tiene una meta concreta y quiere avanzar lo más rápido posible.</p>
@@ -127,7 +152,16 @@
       </div>
     </div>
 
-    <p class="prose" style="margin-top:34px;font-size:var(--t-small)">Precios de referencia en pesos mexicanos (MXN). Escríbenos para un plan a tu medida.</p>
+    <!-- Lo que antes decía la sección de precios de la portada (2026-11-06:
+         la portada se simplificó y los precios viven solo aquí). Mismos
+         datos que la tabla #vesper-hechos de index.html. -->
+    <p class="plans-all reveal"><b>Todos los planes incluyen:</b> material del alumno, biblioteca de audio, examen de nivel y entrevista oral con un profesor, gratis y sin compromiso.</p>
+    <div class="entry reveal">
+      <div><h3>¿Trabajas de 9 a 7?</h3><p>Cinco clases por semana no es para todos. Hay dos formas de empezar con menos.</p></div>
+      <div><p><b>Club de Conversación:</b> 2 clases por semana, solo para hablar. Pregunta el precio por WhatsApp.</p></div>
+      <div><p><b>1 a 1, una hora por semana:</b> de $1,000 a $1,600 al mes según la tarifa por hora, en el horario que tú elijas.</p></div>
+    </div>
+    <p class="prose" style="margin-top:22px;font-size:var(--t-small)">Precios en pesos mexicanos (MXN), mes por mes, sin inscripción ni permanencia. Facturamos a empresas.</p>
   </div>
 </section>
 
@@ -194,13 +228,41 @@
   </div>
 </section>
 
-<section class="sec">
+<section class="sec" id="preguntas">
   <div class="container">
     <div class="sec-head reveal">
       <span class="eyebrow">Antes de elegir</span>
       <h2 class="sec-title">Preguntas frecuentes</h2>
+      <p class="sec-lead">Las preguntas sobre el método y los niveles están en <a href="como-funciona.html#preguntas" style="color:var(--gold2);text-decoration:underline">Cómo funciona</a>.</p>
     </div>
+    <!-- Orden = orden en que el visitante lo pregunta por WhatsApp: horario,
+         duración, plataforma, pago, salida. Las cinco primeras venían de la
+         FAQ de la portada. -->
     <div class="faq reveal">
+      <details class="qitem">
+        <summary>¿En qué horarios hay clases?</summary>
+        <div class="ans"><p>Hay grupos de 8 de la mañana a 10 de la noche. En 1 a 1 el horario lo eliges tú. Si trabajas de 9 a 7, mándanos tu horario por WhatsApp y te decimos qué grupo te queda.</p></div>
+      </details>
+      <details class="qitem">
+        <summary>¿Cuánto dura cada clase?</summary>
+        <div class="ans"><p>Cada clase dura 1 hora. El plan Grupal son 5 clases por semana y el Club de Conversación, 2.</p></div>
+      </details>
+      <details class="qitem">
+        <summary>¿Las clases son en vivo? ¿En qué plataforma?</summary>
+        <div class="ans"><p>Todas en vivo, con profesor, por Google Meet. No vendemos videos grabados. Solo necesitas micrófono y una conexión estable.</p></div>
+      </details>
+      <details class="qitem">
+        <summary>¿Cómo se paga?</summary>
+        <div class="ans"><p>Mes por mes, en pesos, sin cuota de inscripción. Para las formas de pago, pregúntanos por WhatsApp. Facturamos a empresas.</p></div>
+      </details>
+      <details class="qitem">
+        <summary>¿Puedo cancelar cuando quiera?</summary>
+        <div class="ans"><p>No hay permanencia: puedes dejarlo o cambiar de plan al terminar tu mes en curso.</p></div>
+      </details>
+      <details class="qitem">
+        <summary>¿Facturan a empresas?</summary>
+        <div class="ans"><p>Sí. Emitimos factura y armamos planes para equipos, con reporte de avance por participante. Escríbenos y te mandamos una propuesta.</p></div>
+      </details>
       <details class="qitem">
         <summary>¿Puedo cambiar de plan más adelante?</summary>
         <div class="ans"><p>Sí. Puedes pasar de Grupal a 1 a 1 (o al revés) al terminar tu mes en curso. Nos avisas y ajustamos tu horario.</p></div>
@@ -218,9 +280,40 @@
         <div class="ans"><p>Desde cero absoluto (Pre-A1) hasta C2. El examen de nivel gratis nos dice exactamente dónde estás para que no repitas lo que ya sabes.</p></div>
       </details>
       <details class="qitem">
-        <summary>¿Los precios incluyen el examen de nivel?</summary>
-        <div class="ans"><p>El examen de nivel y la entrevista oral son gratuitos y sin compromiso, incluso si al final decides no inscribirte.</p></div>
+        <summary>¿Puedo probar antes de pagar?</summary>
+        <div class="ans"><p>Sí. El examen de nivel y la entrevista oral con un profesor son gratis y sin compromiso, aunque al final no te inscribas.</p></div>
       </details>
+    </div>
+  </div>
+</section>
+
+<!-- Formulario: vivía en el cierre de la portada. Mismo envío a
+     formsubmit.co; el asunto dice de dónde llegó el prospecto. -->
+<section class="sec alt" id="contacto">
+  <div class="container lead-grid">
+    <div class="sec-head reveal" style="margin-bottom:0">
+      <span class="eyebrow">¿Prefieres que te escribamos?</span>
+      <h2 class="sec-title">Te mandamos horarios y precios para tu caso</h2>
+      <p class="sec-lead">Déjanos tu WhatsApp y un asesor te escribe en menos de 24 horas. O escríbenos tú: <a href="https://wa.me/525535699899?text=Hola%2C%20vengo%20de%20vesperacademy.com%20y%20quiero%20informaci%C3%B3n%20sobre%20los%20planes." target="_blank" rel="noopener" style="color:var(--gold2);text-decoration:underline">WhatsApp 55 3569 9899</a>.</p>
+    </div>
+    <div class="lead-card reveal">
+      <form id="contactForm" action="https://formsubmit.co/ajax/contacto@vesperacademy.com" method="POST">
+        <input type="hidden" name="_subject" value="Nuevo prospecto desde vesperacademy.com (planes)">
+        <input type="hidden" name="_template" value="table">
+        <label for="f-name">Tu nombre</label>
+        <input type="text" id="f-name" name="nombre" required autocomplete="name">
+        <label for="f-wa">Tu WhatsApp <small>10 dígitos, por ejemplo 55 1234 5678</small></label>
+        <input type="tel" id="f-wa" name="whatsapp" required autocomplete="tel" inputmode="tel" pattern="[0-9 +()\-]{10,}">
+        <label for="f-hora">¿Cuándo podrías tomar clase?</label>
+        <select id="f-hora" name="horario_preferido"><option value="">Me da igual</option><option>Mañana</option><option>Mediodía</option><option>Noche</option><option>Sábado</option></select>
+        <label for="f-mail">Tu correo <small>opcional</small></label>
+        <input type="email" id="f-mail" name="email" autocomplete="email">
+        <label for="f-msg">¿Para qué necesitas el inglés? <small>opcional</small></label>
+        <textarea id="f-msg" name="mensaje" rows="3"></textarea>
+        <button type="submit" class="btn btn-gold" style="width:100%;justify-content:center;margin-top:8px">Enviar <i class="fas fa-arrow-right" aria-hidden="true"></i></button>
+        <p class="lead-legal">Usamos tus datos solo para responderte. Lee nuestro <a href="aviso-de-privacidad.html">aviso de privacidad</a>.</p>
+      </form>
+      <div class="lead-msg" id="formMsg" role="status" hidden></div>
     </div>
   </div>
 </section>
@@ -245,7 +338,7 @@
       <div class="reveal"><h5>Cursos</h5>
         <a href="curso-ingles-general.html">Inglés General</a><a href="curso-club-conversacion.html">Club de Conversación</a><a href="curso-ingles-corporativo.html">Inglés Corporativo</a><a href="curso-certificacion.html">Certificación</a></div>
       <div class="reveal"><h5>Academia</h5>
-        <a href="index.html#metodo">Metodología</a><a href="planes.html">Planes y precios</a><a href="book_placement.html">Examen de nivel</a><a href="leccion.html">Lecciones gratis</a></div>
+        <a href="como-funciona.html">Cómo funciona</a><a href="planes.html">Planes y precios</a><a href="book_placement.html">Examen de nivel</a><a href="app.html">La app gratis</a></div>
     </div>
     <div class="fbottom">
       <span>© <span id="year"></span> Vesper Academy. Todos los derechos reservados. · <a href="aviso-de-privacidad.html">Aviso de privacidad</a></span>
@@ -269,6 +362,18 @@ document.getElementById('year').textContent = new Date().getFullYear();
       document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
     }catch(err){document.querySelectorAll('.reveal').forEach(function(el){el.classList.add('in-view');});}
   }
+  /* Formulario de contacto — mismo flujo formsubmit.co que tenía la portada */
+  var form=document.getElementById('contactForm'),msg=document.getElementById('formMsg');
+  if(form)form.addEventListener('submit',function(ev){
+    ev.preventDefault();
+    var btn=form.querySelector('button[type=submit]');
+    btn.disabled=true;btn.textContent='Enviando…';
+    fetch(form.action,{method:'POST',body:new FormData(form),headers:{'Accept':'application/json'}})
+      .then(function(r){if(!r.ok)throw new Error('http');return r.json();})
+      .then(function(){form.hidden=true;msg.hidden=false;msg.textContent='Listo. Te escribimos en menos de 24 horas.';})
+      .catch(function(){btn.disabled=false;btn.textContent='Enviar';msg.hidden=false;
+        msg.innerHTML='No se pudo enviar. Escríbenos a <a href="mailto:contacto@vesperacademy.com">contacto@vesperacademy.com</a>.';});
+  });
 })();
 </script>
 <script src="vesper_contact.js" defer></script>

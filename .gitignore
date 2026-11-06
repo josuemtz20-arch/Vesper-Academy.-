@@ -70,6 +70,9 @@
 !/curso-ingles-corporativo.html
 !/curso-certificacion.html
 !/planes.html
+# Portada sencilla (2026-11-06): el método y la app se mudaron a su página.
+!/como-funciona.html
+!/app.html
 !/robots.txt
 !/sitemap.xml
 # 404 con marca para GitHub Pages (estática, sin claves, noindex).

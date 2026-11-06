@@ -27,6 +27,21 @@
 <link rel="stylesheet" href="assets/css/vesper_course.css">
 <script src="vesper_app_mode.js"></script>
 <script>document.documentElement.classList.add('js-anim');</script>
+<style>
+/* Fichas por examen y comparador de bandas: llegaron de la portada el 2026-11-06. */
+.exam-dl{display:grid;grid-template-columns:max-content 1fr;margin:16px 0 0;font-size:var(--t-small);}
+.exam-dl dt,.exam-dl dd{padding:8px 0;border-top:1px solid var(--border);}
+.exam-dl dt{font-weight:700;color:var(--tag);padding-right:14px;}
+.exam-dl dd{margin:0;color:var(--text);}
+.bands{display:grid;grid-template-columns:1fr 1fr;gap:22px;max-width:960px;}
+.band{margin:0;border:1px solid var(--border);border-radius:var(--r-lg);padding:24px 26px;background:#fff;}
+.band figcaption{font-size:.72rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--muted);margin-bottom:10px;}
+.band p{margin:0;font-family:'Fraunces',Georgia,serif;font-size:1.05rem;line-height:1.6;color:var(--text);}
+.band8{border:2px solid var(--gold);}
+.band8 figcaption{color:var(--tag);}
+.band8 em{font-style:normal;background:rgba(197,160,89,.22);padding:0 3px;border-radius:3px;}
+@media(max-width:760px){.bands{grid-template-columns:1fr;}}
+</style>
 </head>
 <body>
 <a class="skip" href="#main">Saltar al contenido</a>
@@ -39,11 +54,10 @@
         <span><b>Vesper Academy</b><small>English Excellence</small></span>
       </a>
       <div class="nav-links" id="navlinks">
-        <a href="index.html#metodo">Metodología</a>
         <a href="index.html#cursos">Cursos</a>
-        <a href="index.html#certificacion">Certificación</a>
-        <a href="index.html#precios">Precios</a>
-        <a href="leccion.html">Lecciones gratis</a>
+        <a href="como-funciona.html">Cómo funciona</a>
+        <a href="planes.html">Precios</a>
+        <a href="app.html">La app</a>
         <a href="login.html">Acceso alumnos</a>
         <a href="book_placement.html" class="btn btn-gold nav-cta">Examen gratis</a>
       </div>
@@ -91,15 +105,37 @@
       <span class="eyebrow">Certificaciones</span>
       <h2 class="sec-title">Preparamos los tres exámenes clave</h2>
     </div>
+    <!-- Las fichas por examen venían de la sección de certificación de la
+         portada (2026-11-06), que se mudó aquí completa. -->
     <div class="fgrid3">
-      <div class="fcard reveal"><div class="ic"><i class="fas fa-certificate" aria-hidden="true"></i></div><h3>IELTS</h3><p>Academic &amp; General. Estrategia por sección y respuestas modelo por banda.</p></div>
-      <div class="fcard reveal"><div class="ic"><i class="fas fa-certificate" aria-hidden="true"></i></div><h3>Cambridge</h3><p>B2 First y C1 Advanced, con los formatos y trampas de cada parte.</p></div>
-      <div class="fcard reveal"><div class="ic"><i class="fas fa-certificate" aria-hidden="true"></i></div><h3>TOEFL iBT</h3><p>Práctica integrada de las cuatro destrezas al estilo del examen real.</p></div>
+      <div class="fcard reveal"><div class="ic"><i class="fas fa-certificate" aria-hidden="true"></i></div><h3>IELTS</h3><p>Academic &amp; General. Estrategia por sección y respuestas modelo por banda.</p>
+        <dl class="exam-dl"><dt>Meta típica</dt><dd><b>6.5 – 7.5</b> banda global</dd><dt>Formato</dt><dd>Listening, Reading, Writing y Speaking · 2 h 45 min</dd><dt>Se entrena</dt><dd>Task 1 y Task 2 de Writing, y el Speaking en tres partes</dd><dt>Vigencia</dt><dd>2 años</dd></dl></div>
+      <div class="fcard reveal"><div class="ic"><i class="fas fa-certificate" aria-hidden="true"></i></div><h3>Cambridge</h3><p>B2 First y C1 Advanced, con los formatos y trampas de cada parte.</p>
+        <dl class="exam-dl"><dt>Meta típica</dt><dd><b>B2 First</b> o <b>C1 Advanced</b></dd><dt>Formato</dt><dd>Reading &amp; Use of English, Writing, Listening y Speaking</dd><dt>Se entrena</dt><dd>Use of English, que es donde se cae la mayoría</dd><dt>Vigencia</dt><dd>No caduca</dd></dl></div>
+      <div class="fcard reveal"><div class="ic"><i class="fas fa-certificate" aria-hidden="true"></i></div><h3>TOEFL iBT</h3><p>Práctica integrada de las cuatro destrezas al estilo del examen real.</p>
+        <dl class="exam-dl"><dt>Meta típica</dt><dd><b>90 – 105</b> de 120</dd><dt>Formato</dt><dd>Cuatro secciones, todo por computadora · unas 2 h</dd><dt>Se entrena</dt><dd>Las tareas integradas: leer, escuchar y luego responder</dd><dt>Vigencia</dt><dd>2 años</dd></dl></div>
     </div>
+    <p class="prose reveal" style="margin-top:22px;font-size:var(--t-small)">Te preparamos; el examen oficial lo presentas en una sede autorizada.</p>
   </div>
 </section>
 
 <section class="sec">
+  <div class="container">
+    <div class="sec-head reveal">
+      <span class="eyebrow">Banda 6 contra banda 8</span>
+      <h2 class="sec-title">La diferencia casi nunca es vocabulario</h2>
+      <p class="sec-lead">La misma idea, escrita en dos bandas. Lo que sube la nota es cómo se arma el argumento.</p>
+    </div>
+    <div class="bands reveal">
+      <figure class="band band6"><figcaption>Banda 6</figcaption>
+        <p lang="en">Many people think that remote work is good. It has advantages and disadvantages. In my opinion, companies should let people work from home because it is better for them.</p></figure>
+      <figure class="band band8"><figcaption>Banda 8</figcaption>
+        <p lang="en">Remote work is often framed as a perk, but <em>the evidence points elsewhere</em>: firms that adopted it retained staff longer. The case for it rests less on comfort than on <em>retention</em>.</p></figure>
+    </div>
+  </div>
+</section>
+
+<section class="sec alt">
   <div class="container">
     <div class="sec-head reveal">
       <span class="eyebrow">Cómo entrenamos</span>
@@ -117,7 +153,7 @@
   </div>
 </section>
 
-<section class="sec alt">
+<section class="sec">
   <div class="container">
     <div class="sec-head reveal">
       <span class="eyebrow">La ruta</span>
@@ -152,7 +188,7 @@
       <div class="reveal"><h5>Cursos</h5>
         <a href="curso-ingles-general.html">Inglés General</a><a href="curso-club-conversacion.html">Club de Conversación</a><a href="curso-ingles-corporativo.html">Inglés Corporativo</a><a href="curso-certificacion.html">Certificación</a></div>
       <div class="reveal"><h5>Academia</h5>
-        <a href="index.html#metodo">Metodología</a><a href="index.html#precios">Precios</a><a href="book_placement.html">Examen de nivel</a><a href="leccion.html">Lecciones gratis</a></div>
+        <a href="como-funciona.html">Cómo funciona</a><a href="planes.html">Planes y precios</a><a href="book_placement.html">Examen de nivel</a><a href="app.html">La app gratis</a></div>
     </div>
     <div class="fbottom">
       <span>© <span id="year"></span> Vesper Academy. Todos los derechos reservados. · <a href="aviso-de-privacidad.html">Aviso de privacidad</a></span>
