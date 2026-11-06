@@ -271,3 +271,20 @@ html.js-anim .reveal.in-view{opacity:1;animation:cRise .7s var(--ease-out) backw
   html.js-anim .reveal.in-view{animation:none;}
   *{transition:none!important;}
 }
+
+/* ============================================================
+   BOTONES CON SUELO (2026-11-06) — igual que la portada y el hub del
+   alumno: oro en degradado, letra fuerte, esquina de 14 px y un suelo
+   de oro oscuro que se hunde al pulsar.
+   ============================================================ */
+:root{--press:4px;--gold-shadow:color-mix(in srgb,var(--gold) 62%,#000);
+  --gold-face:linear-gradient(180deg,color-mix(in srgb,#f3e2ab 45%,var(--gold)),var(--gold));}
+.btn{border-radius:14px;font-weight:700;}
+.btn-gold{background:var(--gold-face);box-shadow:0 var(--press) 0 var(--gold-shadow);transition:transform .09s ease,box-shadow .09s ease,filter .2s;}
+.btn-gold:hover{transform:translateY(-2px);filter:brightness(1.05);box-shadow:0 calc(var(--press) + 2px) 0 var(--gold-shadow),0 12px 24px rgba(197,160,89,.26);}
+.btn-gold:active{transform:translateY(var(--press));box-shadow:0 0 0 var(--gold-shadow);}
+.btn-ghost{background:rgba(255,255,255,.06);border:1px solid rgba(243,226,171,.34);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);}
+.btn-ghost:hover{background:rgba(255,255,255,.14);border-color:#f3e2ab;color:#fff;}
+.pcard .btn-outline{border-radius:14px;box-shadow:0 3px 0 var(--border);}
+.pcard .btn-outline:active{transform:translateY(3px);box-shadow:0 0 0 var(--border);}
+@media(prefers-reduced-motion:reduce){.btn-gold{transition:none;}}
