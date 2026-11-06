@@ -1,0 +1,549 @@
+/* ============================================================
+   VESPER · ESTILO MINIMALISTA
+   ------------------------------------------------------------
+   Sólo actúa con html[data-vesper-style="minimal"] (vesper_style.js la
+   carga sólo entonces). El estilo "Con diseño" no se toca.
+
+   Regla única: se queda lo que el alumno USA (texto, progreso, estado,
+   botones) y se va lo que sólo ambienta (escenas, ilustraciones, brillos,
+   degradados, sombras, texturas, decorado del mapa).
+
+   Tokens: los pone vesper_style.js (--m-bg, --m-card, --m-ink, --m-muted,
+   --m-line, --m-accent, --m-on-accent, --m-tint, --m-head) y además pisa
+   --ink/--gold/--paper/... para que el CSS de cada página ya salga en la
+   paleta minimal sin reglas extra.
+   ============================================================ */
+
+/* ---------- 1. Base ---------- */
+html[data-vesper-style="minimal"],
+html[data-vesper-style="minimal"] body{
+  background:var(--m-bg) !important;
+  color:var(--m-ink);
+}
+html[data-vesper-style="minimal"] body{
+  -webkit-font-smoothing:antialiased;
+  font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+
+/* ---------- 2. Fuera la atmósfera (global) ----------
+   Degradados, sombras, brillos y desenfoques. Se respetan:
+   - los anillos de progreso (conic-gradient = dato, no adorno),
+   - los fondos puestos en línea por JS (portadas, medallas),
+   - el selector de apariencia (sus miniaturas muestran el otro estilo). */
+html[data-vesper-style="minimal"] body *:not(.w-ring):not(.hstat__ring):not([style*="background"]):not(.vt-panel *),
+html[data-vesper-style="minimal"] body *::before,
+html[data-vesper-style="minimal"] body *::after{
+  background-image:none !important;
+  box-shadow:none !important;
+  text-shadow:none !important;
+  -webkit-backdrop-filter:none !important;
+  backdrop-filter:none !important;
+}
+html[data-vesper-style="minimal"] .vt-panel *{box-shadow:none !important}
+
+/* Tipografías de juego → texto normal */
+html[data-vesper-style="minimal"] body *{
+  font-variation-settings:normal;
+}
+html[data-vesper-style="minimal"] [class*="vc-bubble"],
+html[data-vesper-style="minimal"] .world-banner__title,
+html[data-vesper-style="minimal"] .wtitle,
+html[data-vesper-style="minimal"] .wstart,
+html[data-vesper-style="minimal"] .wcheck,
+html[data-vesper-style="minimal"] .boss-lb{
+  font-family:Inter,system-ui,sans-serif !important;
+  font-style:normal !important;
+  letter-spacing:normal;
+}
+
+/* Titulares: una sola voz por variante (sans en Papel/Grafito, serif en Editorial) */
+html[data-vesper-style="minimal"] h1,
+html[data-vesper-style="minimal"] h2,
+html[data-vesper-style="minimal"] h3,
+html[data-vesper-style="minimal"] .hub-hello,
+html[data-vesper-style="minimal"] .nextstep__t,
+html[data-vesper-style="minimal"] .world-banner__title,
+html[data-vesper-style="minimal"] .mycl-title,
+html[data-vesper-style="minimal"] .intro h1,
+html[data-vesper-style="minimal"] .ahero h1{
+  font-family:var(--m-head) !important;
+  font-weight:var(--m-head-w) !important;
+  letter-spacing:var(--m-head-ls) !important;
+  color:var(--m-ink) !important;
+}
+
+/* Animaciones decorativas en bucle: quietas */
+html[data-vesper-style="minimal"] .vc-img,
+html[data-vesper-style="minimal"] [class*="vc-anim"],
+html[data-vesper-style="minimal"] .wavatar,
+html[data-vesper-style="minimal"] .wcat,
+html[data-vesper-style="minimal"] .ic-flame,
+html[data-vesper-style="minimal"] .ic-flame *,
+html[data-vesper-style="minimal"] .ic-star,
+html[data-vesper-style="minimal"] .ic-star *,
+html[data-vesper-style="minimal"] .vchat-fab,
+html[data-vesper-style="minimal"] .wiggle,
+html[data-vesper-style="minimal"] [class*="vacc-"]{
+  animation:none !important;
+}
+
+/* ---------- 3. Superficies: tarjeta plana, línea fina ---------- */
+html[data-vesper-style="minimal"] .card,
+html[data-vesper-style="minimal"] .hub-hero,
+html[data-vesper-style="minimal"] .nextstep,
+html[data-vesper-style="minimal"] .hub-card,
+html[data-vesper-style="minimal"] .pcta,
+html[data-vesper-style="minimal"] .logros,
+html[data-vesper-style="minimal"] .wmore__btn,
+html[data-vesper-style="minimal"] .world-banner,
+html[data-vesper-style="minimal"] .lcard2,
+html[data-vesper-style="minimal"] .cont-card,
+html[data-vesper-style="minimal"] .srs-banner,
+html[data-vesper-style="minimal"] .league-widget,
+html[data-vesper-style="minimal"] .den-head,
+html[data-vesper-style="minimal"] .boss-cover,
+html[data-vesper-style="minimal"] .ach-hero,
+html[data-vesper-style="minimal"] .tourbar,
+html[data-vesper-style="minimal"] .myclass,
+html[data-vesper-style="minimal"] .phrase,
+html[data-vesper-style="minimal"] .qn,
+html[data-vesper-style="minimal"] .toolcard,
+html[data-vesper-style="minimal"] .col-card,
+html[data-vesper-style="minimal"] .wdrawer{
+  background-color:var(--m-card) !important;
+  border:1px solid var(--m-line) !important;
+  border-radius:12px !important;
+  color:var(--m-ink) !important;
+}
+/* adornos en pseudo-elementos de esas superficies */
+html[data-vesper-style="minimal"] .hub-hero::before,
+html[data-vesper-style="minimal"] .hub-hero::after,
+html[data-vesper-style="minimal"] .nextstep::before,
+html[data-vesper-style="minimal"] .nextstep::after,
+html[data-vesper-style="minimal"] .world-banner::before,
+html[data-vesper-style="minimal"] .world-banner::after,
+html[data-vesper-style="minimal"] .den-head::before,
+html[data-vesper-style="minimal"] .ach-hero::after,
+html[data-vesper-style="minimal"] .intro::before,
+html[data-vesper-style="minimal"] .ahero::before,
+html[data-vesper-style="minimal"] #app .card.center::before,
+html[data-vesper-style="minimal"] #app .card.center::after,
+html[data-vesper-style="minimal"] .card::before,
+html[data-vesper-style="minimal"] .card::after{
+  display:none !important;
+}
+/* textos que venían en claro fijo sobre escenas oscuras */
+html[data-vesper-style="minimal"] :is(.hub-hero,.nextstep,.pcta,.world-banner,.den-head,.boss-cover,.ach-hero,.intro,.ahero,.toolcard,.myclass,.phrase,.t-only) :is(p,span,small,b,strong,div,a,li,h1,h2,h3,h4){
+  color:inherit;
+}
+html[data-vesper-style="minimal"] :is(.hub-hero,.nextstep,.pcta,.world-banner,.intro,.ahero,.toolcard,.myclass,.phrase) :is(p,.lead,small,.nextstep__meta,.pcta__s,.world-banner__meta,.hello-gloss,.ah-gloss){
+  color:var(--m-muted) !important;
+}
+/* rótulos en versalitas: tinta de acento, sin oro */
+html[data-vesper-style="minimal"] .eyebrow,
+html[data-vesper-style="minimal"] .nextstep__ey,
+html[data-vesper-style="minimal"] .world-banner__eyebrow,
+html[data-vesper-style="minimal"] .mycl-kicker,
+html[data-vesper-style="minimal"] .tc-kick{
+  color:var(--m-muted) !important;
+  letter-spacing:.12em !important;
+}
+html[data-vesper-style="minimal"] .world-banner__eyebrow::after,
+html[data-vesper-style="minimal"] .rule{display:none !important}
+
+/* ---------- 4. Botones ---------- */
+html[data-vesper-style="minimal"] .btn,
+html[data-vesper-style="minimal"] .nextstep__go,
+html[data-vesper-style="minimal"] .mycl-go,
+html[data-vesper-style="minimal"] .t-go,
+html[data-vesper-style="minimal"] .wdrawer__go,
+html[data-vesper-style="minimal"] .wmore__btn.primary,
+html[data-vesper-style="minimal"] button.primary,
+html[data-vesper-style="minimal"] .btn-primary{
+  background-color:var(--m-accent) !important;
+  color:var(--m-on-accent) !important;
+  border:1px solid var(--m-accent) !important;
+  border-radius:10px !important;
+  font-weight:600 !important;
+  transform:none !important;
+}
+html[data-vesper-style="minimal"] .btn :is(svg,span,i),
+html[data-vesper-style="minimal"] .nextstep__go :is(svg,span,i){color:inherit !important}
+html[data-vesper-style="minimal"] .btn.ghost,
+html[data-vesper-style="minimal"] .btn.secondary,
+html[data-vesper-style="minimal"] .btn-ghost{
+  background-color:transparent !important;
+  color:var(--m-ink) !important;
+  border-color:var(--m-line) !important;
+}
+/* botón redondo de cerrar/volver y chips */
+html[data-vesper-style="minimal"] .back,
+html[data-vesper-style="minimal"] .fchip,
+html[data-vesper-style="minimal"] .fam,
+html[data-vesper-style="minimal"] .chip,
+html[data-vesper-style="minimal"] .pill,
+html[data-vesper-style="minimal"] .tag{
+  background-color:transparent !important;
+  border:1px solid var(--m-line) !important;
+  color:var(--m-ink) !important;
+}
+html[data-vesper-style="minimal"] .fchip.on,
+html[data-vesper-style="minimal"] .fam[aria-pressed="true"],
+html[data-vesper-style="minimal"] [aria-pressed="true"].chip{
+  background-color:var(--m-accent) !important;
+  border-color:var(--m-accent) !important;
+  color:var(--m-on-accent) !important;
+}
+
+/* ---------- 5. Progreso: barra fina, una tinta ---------- */
+html[data-vesper-style="minimal"] .progress,
+html[data-vesper-style="minimal"] [class*="__bar"],
+html[data-vesper-style="minimal"] .ck-bar,
+html[data-vesper-style="minimal"] .bm-bar{
+  background-color:var(--m-line) !important;
+  border:0 !important;
+}
+html[data-vesper-style="minimal"] .progress .bar,
+html[data-vesper-style="minimal"] .topbar .bar,
+html[data-vesper-style="minimal"] [class*="__bar"] > i,
+html[data-vesper-style="minimal"] [class*="__bar"] i,
+html[data-vesper-style="minimal"] .ck-bar > i,
+html[data-vesper-style="minimal"] .bm-bar > i,
+html[data-vesper-style="minimal"] .dh-hp i{
+  background-color:var(--m-accent) !important;
+  border-radius:999px !important;
+}
+html[data-vesper-style="minimal"] .progress .bar::after,
+html[data-vesper-style="minimal"] .progress .bar::before,
+html[data-vesper-style="minimal"] .world-banner__bar > i::after{display:none !important}
+
+/* ---------- 6. Ejercicios (leccion.html) ---------- */
+html[data-vesper-style="minimal"] .opt,
+html[data-vesper-style="minimal"] .opts > *{
+  background-color:var(--m-card) !important;
+  border:1px solid var(--m-line) !important;
+  border-bottom-width:1px !important;
+  border-radius:10px !important;
+  color:var(--m-ink) !important;
+  transform:none !important;
+}
+html[data-vesper-style="minimal"] .opt:hover{border-color:var(--m-muted) !important}
+html[data-vesper-style="minimal"] .opt.sel,
+html[data-vesper-style="minimal"] .opt.on,
+html[data-vesper-style="minimal"] .opt[aria-pressed="true"],
+html[data-vesper-style="minimal"] .opt[aria-checked="true"]{
+  border-color:var(--m-ink) !important;
+  background-color:var(--m-tint) !important;
+}
+html[data-vesper-style="minimal"] .opt.ok,
+html[data-vesper-style="minimal"] .opt.correct{
+  border-color:var(--success) !important;
+  background-color:var(--ok-tint) !important;
+}
+html[data-vesper-style="minimal"] .opt.bad,
+html[data-vesper-style="minimal"] .opt.wrong,
+html[data-vesper-style="minimal"] .opt.incorrect{
+  border-color:var(--error) !important;
+  background-color:var(--no-tint) !important;
+}
+/* La mascota de la lección: de escenario enmarcado a una línea con avatar */
+html[data-vesper-style="minimal"] .vesper-mascot{
+  display:flex !important;align-items:center;gap:12px;
+  background:transparent !important;border:0 !important;padding:0 !important;margin:0 0 14px !important;
+  min-height:0 !important;
+}
+html[data-vesper-style="minimal"] .vesper-mascot .vc-stage{
+  width:40px !important;height:40px !important;min-width:40px;flex:0 0 40px;margin:0 !important;
+}
+html[data-vesper-style="minimal"] .vesper-mascot .vc-img{
+  width:40px !important;height:40px !important;border:1px solid var(--m-line) !important;
+  box-shadow:none !important;transform:none !important;
+}
+html[data-vesper-style="minimal"] .vesper-mascot .vc-bubble{
+  background:transparent !important;border:0 !important;padding:0 !important;margin:0 !important;
+  transform:none !important;rotate:none !important;
+  font:500 .95rem/1.4 Inter,system-ui,sans-serif !important;color:var(--m-muted) !important;
+  text-align:left !important;max-width:none !important;
+}
+html[data-vesper-style="minimal"] .vesper-mascot .vc-bubble::before,
+html[data-vesper-style="minimal"] .vesper-mascot .vc-bubble::after,
+html[data-vesper-style="minimal"] .vesper-mascot::before,
+html[data-vesper-style="minimal"] .vesper-mascot::after{display:none !important}
+/* la tarjeta que envuelve a la mascota (esquinas doradas) */
+html[data-vesper-style="minimal"] #app .card:has(> .vesper-mascot:only-child){
+  background:transparent !important;border:0 !important;padding:0 !important;
+}
+html[data-vesper-style="minimal"] .warm-dot,
+html[data-vesper-style="minimal"] .dots > *{background-color:var(--m-line) !important}
+html[data-vesper-style="minimal"] .warm-dot.on,
+html[data-vesper-style="minimal"] .dots > .on{background-color:var(--m-ink) !important}
+
+/* ---------- 7. Hub de lecciones: el mapa como lista ---------- */
+/* fuera: escena, decorado, brillos, el gato caminante y el banner ilustrado */
+html[data-vesper-style="minimal"] .wprops,
+html[data-vesper-style="minimal"] .wglow,
+html[data-vesper-style="minimal"] .watmo,
+html[data-vesper-style="minimal"] .wamb,
+html[data-vesper-style="minimal"] .wscape,
+html[data-vesper-style="minimal"] .wfx,
+html[data-vesper-style="minimal"] .wavatar,
+html[data-vesper-style="minimal"] .wacc,
+html[data-vesper-style="minimal"] .wtrail-bed,
+html[data-vesper-style="minimal"] .world-banner__img,
+html[data-vesper-style="minimal"] .world-banner__logo,
+html[data-vesper-style="minimal"] .boss-node-photo,
+html[data-vesper-style="minimal"] .vheads,
+html[data-vesper-style="minimal"] .ic-flame__core,
+html[data-vesper-style="minimal"] .ic-star__tw,
+html[data-vesper-style="minimal"] .hub-me__pen{
+  display:none !important;
+}
+html[data-vesper-style="minimal"] .wsky,
+html[data-vesper-style="minimal"] .wisland,
+html[data-vesper-style="minimal"] .wmap{
+  background-color:transparent !important;
+  border:0 !important;
+}
+html[data-vesper-style="minimal"] .wisland::before,
+html[data-vesper-style="minimal"] .wisland::after,
+html[data-vesper-style="minimal"] .wsky::before,
+html[data-vesper-style="minimal"] .wsky::after,
+html[data-vesper-style="minimal"] .wmap::before,
+html[data-vesper-style="minimal"] .wmap::after{display:none !important}
+/* camino: una línea fina gris; lo andado, en tinta */
+html[data-vesper-style="minimal"] .wtrail-line{stroke:var(--m-line) !important;stroke-dasharray:none !important;stroke-width:2px !important;opacity:1 !important}
+html[data-vesper-style="minimal"] .wtrail-done{stroke:var(--m-ink) !important;stroke-dasharray:none !important;stroke-width:2px !important;filter:none !important}
+/* nodos: círculos planos */
+html[data-vesper-style="minimal"] .wbtn{
+  background-color:var(--m-card) !important;
+  border:1.5px solid var(--m-line) !important;
+  color:var(--m-muted) !important;
+  border-radius:50% !important;
+  transform:none !important;
+}
+html[data-vesper-style="minimal"] .wbtn::before,
+html[data-vesper-style="minimal"] .wbtn::after{display:none !important}
+html[data-vesper-style="minimal"] .wbtn.open{border-color:var(--m-ink) !important;color:var(--m-ink) !important}
+html[data-vesper-style="minimal"] .wbtn.is-current{
+  background-color:var(--m-accent) !important;border-color:var(--m-accent) !important;color:var(--m-on-accent) !important;
+}
+html[data-vesper-style="minimal"] .wbtn.completed{
+  background-color:var(--m-tint) !important;border-color:var(--m-ink) !important;color:var(--m-ink) !important;
+}
+html[data-vesper-style="minimal"] .wbtn.boss{border-radius:14px !important}
+html[data-vesper-style="minimal"] .wbtn :is(svg,i,span){color:inherit !important}
+html[data-vesper-style="minimal"] .wtitle,
+html[data-vesper-style="minimal"] .wlabel{
+  color:var(--m-ink) !important;font-weight:500 !important;font-size:.86rem !important;
+  background:transparent !important;-webkit-text-stroke:0 !important;paint-order:normal !important;
+}
+html[data-vesper-style="minimal"] .wnode.locked .wtitle{color:var(--m-muted) !important}
+/* etiquetas de tramo (Gramática, Lectura…) y la de inicio del mundo */
+html[data-vesper-style="minimal"] .wcheck,
+html[data-vesper-style="minimal"] .wisland .wcheck,
+html[data-vesper-style="minimal"] .wstart,
+html[data-vesper-style="minimal"] .boss-lb,
+html[data-vesper-style="minimal"] .wstart + *{
+  background-color:var(--m-bg) !important;
+  border:0 !important;border-bottom:1px solid var(--m-line) !important;border-radius:0 !important;
+  color:var(--m-ink) !important;clip-path:none !important;
+}
+html[data-vesper-style="minimal"] .wcheck *,
+html[data-vesper-style="minimal"] .wstart *{color:inherit !important}
+html[data-vesper-style="minimal"] .wcheck .ic::before{display:none !important}
+/* niveles A1–C2 */
+html[data-vesper-style="minimal"] .world{background:transparent !important;border-color:transparent !important}
+html[data-vesper-style="minimal"] .world.on{border:1px solid var(--m-ink) !important;border-radius:12px !important}
+html[data-vesper-style="minimal"] .world.locked{background:transparent !important;opacity:.55}
+html[data-vesper-style="minimal"] .w-ring-hole{background-color:var(--m-bg) !important}
+/* banner del mundo: título y progreso, sin escena */
+html[data-vesper-style="minimal"] .world-banner{min-height:0 !important;padding:16px 18px !important}
+html[data-vesper-style="minimal"] .world-banner__body{position:static !important;padding:0 !important;max-width:none !important}
+html[data-vesper-style="minimal"] .world-banner__badge,
+html[data-vesper-style="minimal"] .nextstep__sk{
+  background-color:transparent !important;border:1px solid var(--m-line) !important;color:var(--m-ink) !important;
+}
+/* hero del hub: avatar plano */
+html[data-vesper-style="minimal"] .hub-me{background:var(--m-tint) !important;border:1px solid var(--m-line) !important}
+html[data-vesper-style="minimal"] .hub-me img{filter:none !important}
+html[data-vesper-style="minimal"] .hstat__ic,
+html[data-vesper-style="minimal"] .logros__ic,
+html[data-vesper-style="minimal"] .pcta__ic,
+html[data-vesper-style="minimal"] .hc-ic{
+  background-color:var(--m-tint) !important;color:var(--m-ink) !important;border:0 !important;
+}
+html[data-vesper-style="minimal"] .hstat__ic *{color:var(--m-ink) !important;fill:currentColor}
+html[data-vesper-style="minimal"] .pcta__go,
+html[data-vesper-style="minimal"] .hc-cta{color:var(--m-ink) !important}
+html[data-vesper-style="minimal"] .medal__disc{filter:grayscale(1) contrast(1.05) !important;opacity:.85}
+/* dock flotante (Mi lección / Ajustes) y Vesper chat */
+html[data-vesper-style="minimal"] .wdock,
+html[data-vesper-style="minimal"] .vchat-fab,
+html[data-vesper-style="minimal"] .vchat-pop{
+  background-color:var(--m-card) !important;border:1px solid var(--m-line) !important;color:var(--m-ink) !important;
+}
+
+/* ---------- 8. Libros (materiales.html) ---------- */
+html[data-vesper-style="minimal"] .intro{
+  min-height:0 !important;padding:8px 0 4px !important;
+  background:transparent !important;border:0 !important;
+}
+html[data-vesper-style="minimal"] .intro .vesper,
+html[data-vesper-style="minimal"] .vesper .v-halo,
+html[data-vesper-style="minimal"] .vesper .v-flame,
+html[data-vesper-style="minimal"] .fcat,
+html[data-vesper-style="minimal"] .qn-ic--cat img{display:none !important}
+html[data-vesper-style="minimal"] .mycl-ic,
+html[data-vesper-style="minimal"] .t-ic,
+html[data-vesper-style="minimal"] .qn-ic,
+html[data-vesper-style="minimal"] .ph-i-play,
+html[data-vesper-style="minimal"] .ph-i-wave{
+  background-color:var(--m-tint) !important;color:var(--m-ink) !important;border:1px solid var(--m-line) !important;
+}
+html[data-vesper-style="minimal"] .ph-i-play{background-color:var(--m-accent) !important;color:var(--m-on-accent) !important;border-color:var(--m-accent) !important}
+html[data-vesper-style="minimal"] .ph-i-play *{color:inherit !important}
+html[data-vesper-style="minimal"] .vtour-top{background-color:var(--m-card) !important}
+html[data-vesper-style="minimal"] .vtour-media{filter:none !important;border:1px solid var(--m-line) !important}
+
+/* ---------- 9. Audios (audio_library.html) ---------- */
+html[data-vesper-style="minimal"] .ahero{
+  min-height:0 !important;padding:8px 0 4px !important;
+  background:transparent !important;border:0 !important;border-radius:0 !important;
+}
+html[data-vesper-style="minimal"] .ahero :is(img,picture,.ah-art,.ah-cat){display:none !important}
+html[data-vesper-style="minimal"] .ahero .ah-gloss i{color:var(--m-ink) !important}
+/* cabecera de colección: sin color ni ondas, número grande en tinta */
+html[data-vesper-style="minimal"] .cc-art{
+  height:auto !important;min-height:0 !important;padding:16px 18px 0 !important;
+  background-color:transparent !important;
+}
+html[data-vesper-style="minimal"] .cc-art > :not(.cc-num):not(.cc-title):not(.cc-head):not(h3):not(div){display:none !important}
+html[data-vesper-style="minimal"] .cc-art svg,
+html[data-vesper-style="minimal"] .cc-art canvas,
+html[data-vesper-style="minimal"] .cc-wave,
+html[data-vesper-style="minimal"] .cc-bars{display:none !important}
+html[data-vesper-style="minimal"] .cc-art *{color:var(--m-ink) !important}
+html[data-vesper-style="minimal"] .cc-num{color:var(--m-muted) !important}
+html[data-vesper-style="minimal"] .tc-prev{display:none !important}
+html[data-vesper-style="minimal"] .toolcard{grid-template-columns:1fr !important}
+html[data-vesper-style="minimal"] .toolcard p{color:var(--m-muted) !important}
+
+/* ---------- 10. Chrome compartido ---------- */
+html[data-vesper-style="minimal"] .topbar,
+html[data-vesper-style="minimal"] header.site,
+html[data-vesper-style="minimal"] .hdr,
+html[data-vesper-style="minimal"] .site-header{
+  background-color:var(--m-bg) !important;border-bottom:1px solid var(--m-line) !important;
+}
+html[data-vesper-style="minimal"] .va-nav,
+html[data-vesper-style="minimal"] .vnav,
+html[data-vesper-style="minimal"] nav[class*="nav"]{
+  background-color:var(--m-card) !important;border-color:var(--m-line) !important;
+}
+html[data-vesper-style="minimal"] :focus-visible{outline:2px solid var(--m-ink) !important;outline-offset:2px}
+html[data-vesper-style="minimal"] input,
+html[data-vesper-style="minimal"] textarea,
+html[data-vesper-style="minimal"] select{
+  background-color:var(--m-card) !important;border:1px solid var(--m-line) !important;color:var(--m-ink) !important;
+  border-radius:10px !important;
+}
+html[data-vesper-style="minimal"] a{text-underline-offset:3px}
+
+/* ---------- 11. Ajustes de la revisión ---------- */
+/* foco: el título al que show() mueve el foco no lleva anillo (tabindex=-1) */
+html[data-vesper-style="minimal"] [tabindex="-1"]:focus,
+html[data-vesper-style="minimal"] [tabindex="-1"]:focus-visible{outline:none !important}
+
+/* barra inferior (vesper_nav.js) */
+html[data-vesper-style="minimal"] #vsp-tabbar{
+  background:var(--m-card) !important;border-top:1px solid var(--m-line) !important;
+}
+html[data-vesper-style="minimal"] #vsp-tabbar a{color:var(--m-muted) !important}
+html[data-vesper-style="minimal"] #vsp-tabbar a.on{color:var(--m-ink) !important}
+html[data-vesper-style="minimal"] #vsp-tabbar a svg{background:transparent !important;border-color:transparent !important}
+html[data-vesper-style="minimal"] #vsp-tabbar a.on svg{background:var(--m-tint) !important;border-color:transparent !important}
+
+/* dock del mapa */
+html[data-vesper-style="minimal"] .wdock button{color:var(--m-ink) !important;background:transparent !important}
+html[data-vesper-style="minimal"] .wdock button:hover{background:var(--m-tint) !important}
+html[data-vesper-style="minimal"] .vsync-chip .lbl,
+html[data-vesper-style="minimal"] .hub-sync,
+html[data-vesper-style="minimal"] .hub-sync *{color:var(--m-muted) !important}
+html[data-vesper-style="minimal"] .vsync-chip .dot{background:var(--m-muted) !important}
+html[data-vesper-style="minimal"] .hub-search,
+html[data-vesper-style="minimal"] .hub-search *{color:var(--m-ink) !important}
+html[data-vesper-style="minimal"] .hub-search{background:transparent !important;border:1px solid var(--m-line) !important}
+
+/* guardián: se queda el retrato, sin marco */
+html[data-vesper-style="minimal"] .boss-node-photo{display:block !important;filter:grayscale(.15) !important}
+html[data-vesper-style="minimal"] .wbtn.boss{overflow:hidden;padding:0 !important}
+
+/* títulos de tramo y del arco en sans */
+html[data-vesper-style="minimal"] .wisland *{font-family:Inter,system-ui,sans-serif !important;font-variant:normal !important}
+html[data-vesper-style="minimal"] .wstart{text-transform:none !important;letter-spacing:0 !important;font-weight:600 !important}
+
+/* encabezados del sitio (materiales / audio) */
+html[data-vesper-style="minimal"] body > header{
+  background:var(--m-bg) !important;border-bottom:1px solid var(--m-line) !important;color:var(--m-ink) !important;
+}
+html[data-vesper-style="minimal"] body > header :is(b,small,span,a){color:var(--m-ink) !important}
+html[data-vesper-style="minimal"] body > header small{color:var(--m-muted) !important}
+html[data-vesper-style="minimal"] body > header a.back{border-color:var(--m-line) !important;background:transparent !important}
+/* el logo es la versión clara para fondo oscuro: en variantes claras va en tinta */
+html[data-vesper-style="minimal"]:not(.vesper-dark) img[src*="logo"]{filter:brightness(0) !important}
+html[data-vesper-style="minimal"].vesper-dark img[src*="logo"]{filter:grayscale(1) brightness(1.6) !important}
+
+/* frase del día (materiales y audio) */
+html[data-vesper-style="minimal"] .phrase mark,
+html[data-vesper-style="minimal"] .ph-ex mark{background:var(--m-tint) !important;color:var(--m-ink) !important;padding:0 .15em;border-radius:3px}
+html[data-vesper-style="minimal"] .ph-play,
+html[data-vesper-style="minimal"] .ph-play *:not(.ph-i-play):not(.ph-i-play *){color:var(--m-ink) !important}
+html[data-vesper-style="minimal"] .hello-gloss i,
+html[data-vesper-style="minimal"] .v-tr,
+html[data-vesper-style="minimal"] .ah-gloss i{color:var(--m-ink) !important;text-decoration:underline;text-decoration-color:var(--m-line)}
+html[data-vesper-style="minimal"] .tour-replay{color:var(--m-ink) !important;background:transparent !important;border:1px solid var(--m-line) !important}
+
+/* capítulos de libros (materiales.html): sin foto de portada */
+html[data-vesper-style="minimal"] .grp{min-height:0 !important;padding:18px !important;color:var(--m-ink) !important;
+  background:var(--m-card) !important;border-bottom:1px solid var(--m-line) !important}
+html[data-vesper-style="minimal"] .grp-cvr{display:none !important}
+html[data-vesper-style="minimal"] .grp-txt h2{color:var(--m-ink) !important}
+html[data-vesper-style="minimal"] .grp-txt .grp-n{color:var(--m-muted) !important}
+html[data-vesper-style="minimal"] .grp-txt::before{
+  background:transparent !important;color:var(--m-ink) !important;border:1px solid var(--m-ink) !important;
+  border-radius:50% !important;width:40px !important;height:40px !important;font-size:.95rem !important;
+}
+
+/* colecciones de audio: la banda de color viene en línea; se pisa */
+html[data-vesper-style="minimal"] .cc-art{background:transparent !important;border-bottom:0 !important}
+html[data-vesper-style="minimal"] .cc-art > svg,
+html[data-vesper-style="minimal"] .cc-eq{display:none !important}
+html[data-vesper-style="minimal"] .cc-name b{color:var(--m-ink) !important}
+html[data-vesper-style="minimal"] .cc-name small{color:var(--m-muted) !important}
+html[data-vesper-style="minimal"] .col-card.locked .cc-art{filter:none !important;opacity:.55}
+
+html[data-vesper-style="minimal"] .t-only{background-color:transparent !important;border:0 !important}
+html[data-vesper-style="minimal"] .hub-lvl{background:transparent !important;border:0 !important;padding:0 !important;color:var(--m-muted) !important}
+html[data-vesper-style="minimal"] .hub-ic{background:transparent !important;border:1px solid var(--m-line) !important;color:var(--m-ink) !important}
+html[data-vesper-style="minimal"] .phrase :is(h2,h3,.ph-t,.ph-phrase,strong){color:var(--m-ink) !important}
+html[data-vesper-style="minimal"] .vtour-top{background-color:var(--m-card) !important;border-bottom:1px solid var(--m-line)}
+html[data-vesper-style="minimal"] .phrase .ph-term{color:var(--m-ink) !important;font-family:var(--m-head) !important;font-weight:var(--m-head-w) !important}
+html[data-vesper-style="minimal"] .phrase .ph-ex{color:var(--m-ink) !important}
+
+/* ---------- 12. Lección: tipografía única y nota de la regla ---------- */
+/* Caveat / serif decorativa dentro de la lección → Inter. :where() deja la
+   especificidad baja para que los titulares (Editorial en serif) sigan mandando. */
+html[data-vesper-style="minimal"] :where(#app *){font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif !important;font-style:normal}
+html[data-vesper-style="minimal"] #app .card{padding:18px 16px !important}
+html[data-vesper-style="minimal"] #app .card.center:has(> .vesper-mascot){padding:18px 16px !important}
+html[data-vesper-style="minimal"] #app .apr-rule{
+  background:transparent !important;border:0 !important;border-left:2px solid var(--m-ink) !important;
+  border-radius:0 !important;padding:4px 0 4px 14px !important;
+}
+html[data-vesper-style="minimal"] #app .apr-rule::before,
+html[data-vesper-style="minimal"] #app .apr-rule::after{display:none !important}
+/* panel de respuesta: una línea de estado, sin manuscrita */
+html[data-vesper-style="minimal"] .fbbox > div > b{font:600 1.05rem/1.3 Inter,system-ui,sans-serif !important;font-style:normal !important;display:block}
+html[data-vesper-style="minimal"] .fbbox > div > .muted{font:500 .92rem/1.4 Inter,system-ui,sans-serif !important;font-style:normal !important;color:var(--m-ink) !important;opacity:.8}
+html[data-vesper-style="minimal"] .fbbox.ok > div > b{color:var(--success) !important}
+html[data-vesper-style="minimal"] .fbbox.no > div > b{color:var(--error) !important}

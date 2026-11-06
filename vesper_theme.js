@@ -405,8 +405,13 @@ window.VESPER_THEME = (function () {
     /* Señal claro/oscuro para CSS que no puede leer `dark` del tema. La usa
        `.va-display` en vesper_tokens.css: un didone necesita eje óptico bajo y
        más peso sobre fondo claro, y lo contrario sobre fondo oscuro. */
-    if (root.classList) root.classList[t.dark ? "add" : "remove"]("vesper-dark");
-    if (window.matchMedia) {
+    /* En estilo Minimalista (vesper_style.js) manda la variante, no el tema:
+       sus tokens van con !important y aquí sólo hay que no pisarle el
+       claro/oscuro ni el color de la barra del sistema. */
+    var minimal = !!(window.VESPER_STYLE && VESPER_STYLE.isMinimal());
+    var dark = minimal ? VESPER_STYLE.isDark() : t.dark;
+    if (root.classList) root.classList[dark ? "add" : "remove"]("vesper-dark");
+    if (window.matchMedia && !minimal) {
       var meta = document.querySelector('meta[name="theme-color"]');
       if (meta) meta.setAttribute("content", t.dark ? t.cream : t.ink);
     }
@@ -507,6 +512,15 @@ window.VESPER_THEME = (function () {
       ".vt-card{position:relative}.vt-skin{position:relative}",
       ".vt-lock{position:absolute;top:3px;right:5px;font-size:.82rem;line-height:1;filter:grayscale(.2)}",
       ".vt-skin .vt-lock{top:-2px;right:-2px}",
+      ".vs-grid{grid-template-columns:repeat(auto-fill,minmax(128px,1fr))}",
+      ".vs-mini{display:flex;align-items:center;justify-content:center;height:58px;border-radius:9px;margin-bottom:6px;border:1px solid rgba(0,0,0,.08)}",
+      ".vs-mini i{display:flex;flex-direction:column;gap:4px;width:66%;padding:7px 8px;border-radius:6px;border:1px solid transparent}",
+      ".vs-mini b{display:block;height:4px;border-radius:2px}",
+      ".vs-mini u{display:block;height:9px;border-radius:3px;margin-top:3px;text-decoration:none}",
+      ".vs-mini--d{background:radial-gradient(120% 120% at 80% 0%,#3a3a63,#14122a 70%)}",
+      ".vs-mini--d i{background:linear-gradient(160deg,#2a2e56,#1f2342);box-shadow:0 4px 10px rgba(0,0,0,.4)}",
+      ".vs-mini--d b{background:#EDE7D6}.vs-mini--d u{background:linear-gradient(#e6c977,#c9a84c)}",
+      ".vs-d{font-size:.7rem;line-height:1.3;color:var(--muted,#6b6b76);margin-top:2px}",
       ".vt-note{font-size:.8rem;color:var(--muted,#6b6b76);margin:10px 0 0;min-height:1.1em}",
       /* boton flotante + modal */
       ".vt-fab{position:fixed;right:16px;bottom:16px;z-index:9998;width:52px;height:52px;border-radius:50%;border:none;cursor:pointer;background:var(--gold,#C9A84C);color:var(--on-gold,#1B1B2F);font-size:1.3rem;box-shadow:0 6px 18px rgba(0,0,0,.22);display:flex;align-items:center;justify-content:center}",
@@ -532,6 +546,34 @@ window.VESPER_THEME = (function () {
   function reqLabelFor(kind, id) {
     try { if (window.VESPER_COSMETICS && VESPER_COSMETICS.reqLabel) return VESPER_COSMETICS.reqLabel(kind, id); } catch (e) {}
     return "Bloqueado";
+  }
+
+  /* ---------- Estilo de la app: Con diseño / Minimalista ----------
+     Vive en vesper_style.js; aquí sólo se pinta su selector, arriba de todo
+     porque cambia la app entera (más que un tema de color). */
+  function styleBlock() {
+    var S = window.VESPER_STYLE;
+    if (!S) return "";
+    var st = S.get();
+    function mini(bg, card, ink, acc, serif) {
+      return '<span class="vs-mini" style="background:' + bg + '">'
+        + '<i style="background:' + card + ';border-color:' + (bg === card ? "rgba(0,0,0,.1)" : "transparent") + '">'
+        + '<b style="background:' + ink + ';' + (serif ? "height:5px;border-radius:1px" : "") + '"></b>'
+        + '<b style="background:' + ink + ';opacity:.35;width:70%"></b>'
+        + '<u style="background:' + acc + '"></u></i></span>';
+    }
+    var cards = '<div class="vt-card' + (st.style === "diseno" ? " on" : "") + '" data-vstyle="diseno" role="button" tabindex="0">'
+      + '<span class="vs-mini vs-mini--d"><i><b></b><b style="opacity:.5;width:70%"></b><u></u></i></span>'
+      + '<div class="vt-nm">Con diseño</div><div class="vs-d">Escenas, mapa ilustrado y color</div></div>';
+    S.order.forEach(function (id) {
+      var v = S.variants[id];
+      cards += '<div class="vt-card' + (st.style === "minimal" && st.minimal === id ? " on" : "") + '" data-vstyle="minimal" data-vmin="' + id + '" role="button" tabindex="0">'
+        + mini(v.cream, v.paper, v.ink, v.accent, id === "editorial")
+        + '<div class="vt-nm">Minimal · ' + v.name + '</div><div class="vs-d">' + v.desc + '</div></div>';
+    });
+    return '<div class="vt-h">Estilo de la app</div>'
+      + '<p class="vt-sub">Con diseño es la app de siempre. Minimalista quita escenas, sombras y adornos y deja sólo lo que estudias. El tema de color no aplica en minimalista.</p>'
+      + '<div class="vt-grid vs-grid" data-vt-style>' + cards + '</div>';
   }
 
   function renderPicker() {
@@ -580,6 +622,7 @@ window.VESPER_THEME = (function () {
       return '<div class="vt-h">' + title + '</div><p class="vt-sub">' + sub + '</p>';
     }
     return '<div class="vt-panel">'
+      + styleBlock(cur)
       + head("El pelaje de Vesper", "Quién es tu gato. Cada pelaje trae sus propios colores.")
       + '<div class="vt-grid" data-vt-pelajes>' + pelCards + '</div>'
       + head("Lo que lleva puesto", "Se le dibuja sobre su pelaje: el sombrero se apoya de verdad en la melena.")
@@ -600,6 +643,17 @@ window.VESPER_THEME = (function () {
     var pelBox = scope.querySelector("[data-vt-pelajes]");
     var note = scope.querySelector("[data-vt-note]");
     function say(msg) { if (note) note.textContent = msg || ""; }
+    var styleBox = scope.querySelector("[data-vt-style]");
+    function pickStyle(e) {
+      if (e.type === "keydown" && e.key !== "Enter" && e.key !== " ") return;
+      var c = e.target.closest("[data-vstyle]"); if (!c || !window.VESPER_STYLE) return;
+      if (e.type === "keydown") e.preventDefault();
+      VESPER_STYLE.set(c.getAttribute("data-vstyle"), c.getAttribute("data-vmin"));
+      var on = styleBox.querySelector(".vt-card.on"); if (on) on.classList.remove("on");
+      c.classList.add("on");
+      say(c.getAttribute("data-vstyle") === "minimal" ? "Estilo minimalista activo. El mapa se ve como lista y sin escenas." : "");
+    }
+    if (styleBox) { styleBox.addEventListener("click", pickStyle); styleBox.addEventListener("keydown", pickStyle); }
     /* las miniaturas de accesorio llevan el gato DEBAJO: si cambias de
        aspecto (pelaje) hay que repintarlas o seguirían probándose sobre el
        gato anterior. */

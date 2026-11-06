@@ -22,6 +22,9 @@ window.VESPER_MAPIL = (function () {
   var KEY = "vesper_map_style", DIR = "assets/images/map/il/";
 
   function on() {
+    /* estilo Minimalista (vesper_style.js): el mapa va sin decorado, sobre la
+       piel base en CSS, que vesper_minimal.css aplana */
+    if (document.documentElement.getAttribute("data-vesper-style") === "minimal") return false;
     try {
       var q = /[?&]mapa=(ilustrado|pixel|grabado)\b/.exec(location.search);
       if (q) localStorage.setItem(KEY, q[1]);
