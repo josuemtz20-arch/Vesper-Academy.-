@@ -1050,6 +1050,9 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
   #m-app .m-appx__lead{font:400 16px/1.5 'Inter',sans-serif;color:rgba(255,255,255,.78);margin:8px 0 0;}
   #m-app .m-h1 em{font-style:italic;font-weight:500;color:#d9bd84;}
   #m-app .m-hero:focus{outline:none;}
+  #m-app .m-hero__top + p[data-ab="lead"]{margin-top:14px;}
+  #m-app .m-apptour{margin:18px auto 0;width:min(260px,72vw);aspect-ratio:9/16;border-radius:24px;overflow:hidden;background:#0d0b1f;
+    box-shadow:0 0 0 1px rgba(197,160,89,.45),0 0 0 6px #0d0b1f,0 0 0 7px rgba(255,255,255,.1),0 20px 44px rgba(0,0,0,.45);}
 }
 
 
@@ -1060,12 +1063,29 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
    formulario. Lo que se fue vive en como-funciona.html, planes.html,
    curso-certificacion.html y app.html.
    ============================================================ */
-.hero-grid--solo{grid-template-columns:1fr !important;}
 /* .hero es flex en columna a >=981px: sin esto cada .container se encoge a su
    contenido y se centra, y el hero quedaba corrido respecto al resto. */
 .hero > .container{width:100%;}
 .hero-grid--solo{padding-left:var(--gutter);padding-right:var(--gutter);}
-.hero-grid--solo .hero-copy{max-width:780px;}
+/* Vesper vuelve al hero (2026-11-06): el retrato lleva a la app, y el
+   botón de abajo dice qué es, para que no se lea como «app gratis en vez
+   de escuela». */
+.hero-app-chip{position:absolute;left:50%;bottom:0;transform:translateX(-50%);z-index:3;white-space:nowrap;
+  display:inline-flex;align-items:center;gap:9px;padding:10px 18px 10px 12px;border-radius:var(--r-pill);
+  background:rgba(20,18,42,.82);border:1px solid var(--hair);color:var(--cream);font-weight:600;font-size:.88rem;
+  backdrop-filter:blur(6px);transition:border-color .25s,background .25s;}
+.hero-app-chip:hover,.hero-app-chip:focus-visible{border-color:var(--gold);background:rgba(31,35,66,.92);}
+.hero-app-chip b{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;
+  background:var(--gold);color:#14122a;font-size:.7rem;padding-left:2px;}
+.hero-app-chip small{color:var(--on-night-soft);font-weight:500;font-size:.8rem;}
+/* El recorrido de la app se reproduce en la franja (y en #m-appx) */
+[data-apptour]{position:relative;}
+[data-apptour] video{display:block;width:100%;height:100%;object-fit:cover;cursor:pointer;}
+.tour-btn{position:absolute;left:50%;bottom:18px;transform:translateX(-50%);display:none;white-space:nowrap;
+  border:0;border-radius:999px;padding:10px 18px;font:600 14px Inter,sans-serif;cursor:pointer;
+  background:rgba(13,11,31,.8);color:#f3e2ab;box-shadow:0 0 0 1px rgba(197,160,89,.55);}
+[data-apptour].is-paused .tour-btn{display:block;}
+.tour-btn:focus-visible{outline:2px solid var(--gold);outline-offset:3px;}
 .statrail--3{list-style:none;margin:0;padding:0;grid-template-columns:repeat(3,1fr);}
 .statrail--3 li{padding:26px 0 30px 26px;border-left:1px solid var(--hair);}
 .statrail--3 li:first-child{border-left:0;padding-left:0;}
@@ -1082,7 +1102,7 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
   radial-gradient(900px 420px at 15% 0%,rgba(106,95,168,.18),transparent 60%),
   radial-gradient(700px 380px at 90% 100%,rgba(197,160,89,.12),transparent 60%),var(--dusk);
   border-top:1px solid var(--hair);border-bottom:1px solid var(--hair);}
-.app-strip__grid{display:grid;grid-template-columns:minmax(0,220px) minmax(0,1fr);gap:clamp(28px,5vw,64px);align-items:center;}
+.app-strip__grid{display:grid;grid-template-columns:minmax(0,280px) minmax(0,1fr);gap:clamp(28px,5vw,64px);align-items:center;}
 .app-strip__art{aspect-ratio:9/16;border-radius:26px;overflow:hidden;background:#0d0b1f;
   box-shadow:0 0 0 1px rgba(197,160,89,.45),0 0 0 7px #0d0b1f,0 0 0 8px rgba(245,242,235,.10),0 24px 50px rgba(0,0,0,.4);}
 .app-strip__art img{display:block;width:100%;height:100%;object-fit:cover;}
@@ -1101,7 +1121,7 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
   .statrail--3 li{border-left:0;padding:16px 0;border-top:1px solid var(--hair);}
   .statrail--3 li:first-child{border-top:0;}
   .app-strip__grid{grid-template-columns:1fr;}
-  .app-strip__art{width:min(200px,60vw);}
+  .app-strip__art{width:min(280px,78vw);}
 }
 @media(max-width:520px){.cgrid{grid-template-columns:1fr;}}
 </style>
@@ -1215,7 +1235,7 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
 <!-- ============ HERO ============ -->
 <section class="hero" id="hero">
   <div class="spot" aria-hidden="true"></div>
-  <div class="container hero-grid hero-grid--solo">
+  <div class="container hero-grid hero-grid--solo hero-grid--cat">
     <div class="hero-copy">
       <span class="rule"></span>
       <span class="eyebrow">Escuela de inglés en línea · clases en vivo con profesor</span>
@@ -1230,6 +1250,33 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
         <a href="https://wa.me/525535699899?text=Hola%2C%20vengo%20de%20vesperacademy.com%20y%20quiero%20informaci%C3%B3n%20sobre%20las%20clases%20de%20ingl%C3%A9s." target="_blank" rel="noopener" class="btn btn-ghost web-only"><svg class="i i--solid" aria-hidden="true" style="fill:currentColor;stroke:none"><use href="#i-whatsapp"/></svg> Pregunta por WhatsApp</a>
       </div>
       <p class="cta-note"><span data-hecho="examen_preguntas">30</span> preguntas · <span data-hecho="examen_min">15</span> minutos · resultado al instante · sin crear cuenta</p>
+    </div>
+
+    <!-- Vesper vuelve (2026-11-06, a pedido del dueño): el retrato y el
+         botón llevan a la franja de la app, donde corre el recorrido en
+         video. El parpadeo en video lo monta el guion del medallón. -->
+    <div class="plate-wrap">
+      <img class="hero-brand" src="assets/images/vesper_logo_inverted.webp" alt="" aria-hidden="true" width="534" height="515" decoding="async">
+      <a class="hero-vesper" href="#app" aria-label="Vesper, el gato de nuestra app de práctica: ver la app">
+        <span class="medallion" data-vesper data-state="welcome">
+          <span class="med-halo" aria-hidden="true"></span>
+          <span class="med-rays" aria-hidden="true"></span>
+          <span class="med-glass">
+            <span class="med-bust">
+              <img class="med-face on" data-face="welcome" src="assets/images/mascot/vesper_cat_welcome.webp" alt="" width="600" height="600" fetchpriority="high" decoding="async">
+              <span class="med-lid l" aria-hidden="true"></span>
+              <span class="med-lid r" aria-hidden="true"></span>
+              <span class="med-glint l" aria-hidden="true"></span>
+              <span class="med-glint r" aria-hidden="true"></span>
+            </span>
+          </span>
+          <span class="med-fillet" aria-hidden="true"></span>
+          <span class="med-spark s1" aria-hidden="true"></span>
+          <span class="med-spark s2" aria-hidden="true"></span>
+        </span>
+        <span class="seal-say" aria-hidden="true">Hola, soy Vesper.</span>
+      </a>
+      <a class="hero-app-chip" href="#app"><b aria-hidden="true">▶</b> Mira la app <small>· gratis</small></a>
     </div>
 
   </div>
@@ -1322,13 +1369,17 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
      app.html el 2026-11-06. Aquí queda una franja: qué es y a dónde ir. -->
 <section id="app" class="app-strip">
   <div class="container app-strip__grid">
-    <div class="app-strip__art reveal" aria-hidden="true">
-      <img src="assets/images/landing/app/app_tour_poster.webp" alt="" width="540" height="960" loading="lazy" decoding="async">
+    <div class="app-strip__art reveal" data-apptour>
+      <video muted playsinline loop preload="none" poster="assets/images/landing/app/app_tour_poster.webp" width="540" height="960" aria-label="Recorrido de 20 segundos por la app de Vesper">
+        <source src="assets/video/app_tour.webm" type="video/webm">
+        <source src="assets/video/app_tour.mp4" type="video/mp4">
+      </video>
+      <button type="button" class="tour-btn">▶ Ver el recorrido</button>
     </div>
     <div class="reveal">
       <span class="eyebrow">Extra · incluido y gratis</span>
       <h2 class="sec-title">Entre clase y clase, practicas con <em>Vesper</em>.</h2>
-      <p class="sec-lead">Nuestra app de práctica: lecciones cortas, vocabulario y repaso, del A1 al C2, con Vesper, nuestro gato, como guía. Es gratis aunque todavía no seas alumno.</p>
+      <p class="sec-lead">Nuestra app de práctica: lecciones cortas, vocabulario y repaso, del A1 al C2, con Vesper, nuestro gato, como guía. Es gratis aunque todavía no seas alumno. Mira el recorrido: 20 segundos por los seis mundos.</p>
       <p class="app-strip__cta"><a href="app.html" class="btn btn-ghost">Conoce la app <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a></p>
     </div>
   </div>
@@ -1814,9 +1865,13 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
       <div class="m-hero__copy">
         <span class="m-eyebrow m-eyebrow--dark">Escuela de inglés · clases en vivo con profesor</span>
         <h1 class="m-h1" data-ab="h1">Años de clases de inglés y te congelas en la junta. <em>Aquí lo hablas.</em></h1>
-        <p data-ab="lead">Clases en vivo con profesor, en grupos de máximo <span data-hecho="grupo_max">9</span> o 1 a 1, donde el 80&nbsp;% del tiempo hablas tú. Para la junta, la entrevista o la certificación que tienes enfrente.</p>
       </div>
+      <a class="m-cat" href="#m-appx" aria-label="Vesper, el gato de nuestra app de práctica: ver la app">
+        <img src="assets/images/mascot/vesper_cat_welcome.webp" alt="" width="96" height="96" decoding="async">
+        <i aria-hidden="true"></i><i aria-hidden="true"></i>
+      </a>
     </div>
+    <p data-ab="lead">Clases en vivo con profesor, en grupos de máximo <span data-hecho="grupo_max">9</span> o 1 a 1, donde el 80&nbsp;% del tiempo hablas tú. Para la junta, la entrevista o la certificación que tienes enfrente.</p>
 
     <div class="m-cta">
       <a class="m-btn" href="book_placement.html?src=landing-m-hero" data-ab-src>Haz tu examen de nivel gratis</a>
@@ -1905,6 +1960,13 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
     <span class="m-eyebrow m-eyebrow--dark">Extra · incluido y gratis</span>
     <h2 class="m-h2">Entre clase y clase, practicas con <em>Vesper</em></h2>
     <p class="m-appx__lead">Nuestra app de práctica: lecciones cortas, vocabulario y repaso, del A1 al C2. Gratis, aunque todavía no seas alumno.</p>
+    <div class="m-apptour" data-apptour>
+      <video muted playsinline loop preload="none" poster="assets/images/landing/app/app_tour_poster.webp" width="540" height="960" aria-label="Recorrido de 20 segundos por la app de Vesper">
+        <source src="assets/video/app_tour.webm" type="video/webm">
+        <source src="assets/video/app_tour.mp4" type="video/mp4">
+      </video>
+      <button type="button" class="tour-btn">▶ Ver el recorrido</button>
+    </div>
     <a class="m-btn m-btn--ghost" href="app.html" style="margin-top:18px;gap:8px">Conoce la app<svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a>
   </section>
 
@@ -2083,6 +2145,38 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
 })();
 </script>
 
+
+<!-- Recorrido de la app (franja #app y #m-appx). preload="none": no baja
+     nada hasta que la franja entra en pantalla. Con movimiento reducido no
+     arranca solo: queda el botón. Tocar el video lo pausa o lo reanuda. -->
+<script>
+(function(){
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  [].forEach.call(document.querySelectorAll('[data-apptour]'), function(box){
+    var v = box.querySelector('video'), btn = box.querySelector('.tour-btn');
+    if (!v) return;
+    var userStop = reduce, visible = false;
+    function paused(p){ box.classList.toggle('is-paused', p); }
+    function go(){ var p = v.play(); paused(false); if (p && p.catch) p.catch(function(){ paused(true); }); }
+    function stop(){ v.pause(); paused(true); }
+    paused(true);
+    if (btn) btn.addEventListener('click', function(){ userStop = false; go(); });
+    v.addEventListener('click', function(){ if (v.paused){ userStop = false; go(); } else { userStop = true; stop(); } });
+    if ('IntersectionObserver' in window){
+      new IntersectionObserver(function(es){
+        es.forEach(function(e){
+          visible = e.isIntersecting;
+          if (visible && !userStop) go();
+          else if (!visible && !v.paused){ v.pause(); }
+        });
+      }, {threshold:0.35}).observe(v);
+    }
+    document.addEventListener('visibilitychange', function(){
+      if (document.hidden) v.pause(); else if (visible && !userStop) go();
+    });
+  });
+})();
+</script>
 <script src="vesper_mobile.js" defer></script>
 <script src="vesper_contact.js" defer></script>
 
