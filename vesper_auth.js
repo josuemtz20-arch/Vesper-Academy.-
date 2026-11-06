@@ -57,7 +57,8 @@
        Añade una línea por persona autorizada. */
     approvedEmailHashes: [
       "1181f429e6707d5b37cec24a77203cf30374fa337062d3f5d8c0abfe50b99dc9",  /* admin */
-      "f77b653bf19243e8d70722a5e50ea3e86d4347ddc489224e083439e2137714bc"   /* profesora 1 */
+      "f77b653bf19243e8d70722a5e50ea3e86d4347ddc489224e083439e2137714bc",  /* profesora 1 */
+      "67ed57e8e3843a475e482313af9e327afa0a6657877fef6159ada045b51e546d"   /* alumno (2026-11-06) */
     ],
     salt: "vesper-academy-v1|",
     /* (2026-10-28) Aquí vivía `teachers`: una contraseña de profesor por
