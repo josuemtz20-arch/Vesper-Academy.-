@@ -7,13 +7,13 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#14122a">
 <title>Inglés en línea que te hace hablar | Vesper Academy</title>
-<meta name="description" content="Inglés en línea con clases en vivo y método comunicativo: hablas desde el día uno, de cero a tu certificación (IELTS, Cambridge, TOEFL). Prueba una lección gratis, sin registro.">
+<meta name="description" content="Escuela de inglés en línea con clases en vivo y profesor, en grupos de máximo 9 o 1 a 1. El 80 % de la clase hablas tú. Empieza con tu examen de nivel gratis: 15 minutos, resultado al instante.">
 <link rel="canonical" href="https://vesperacademy.com/">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="es_MX">
 <meta property="og:site_name" content="Vesper Academy">
 <meta property="og:title" content="Vesper Academy — Inglés en vivo que te hace hablar">
-<meta property="og:description" content="Método comunicativo, profesores reales y clases 100% en vivo. Hablas desde el día uno, de cero a tu certificación internacional. Prueba una lección gratis, sin registro.">
+<meta property="og:description" content="Clases de inglés en vivo con profesor, en grupos de máximo 9 o 1 a 1. Para la junta, la entrevista o la certificación. Empieza con tu examen de nivel gratis.">
 <meta property="og:url" content="https://vesperacademy.com/">
 <meta property="og:image" content="https://vesperacademy.com/assets/images/lessons/theme_city.jpg">
 <meta name="twitter:card" content="summary_large_image">
@@ -1274,6 +1274,207 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
   .med-spark,.med-glint,.med-lid,.seal-say,.med-motion{display:none !important;}
 }
 
+/* ============================================================
+   CRO 2026-11 — una sola verdad, ficha de decisión, prueba social
+   Los valores de negocio (grupo, precios, horarios…) NO se escriben a
+   mano en dos sitios: salen del JSON #vesper-hechos y los pinta el script
+   «hechos» en cada [data-hecho], en las dos ediciones.
+   ============================================================ */
+.skip--m{display:none;}
+
+/* Marcador de dato pendiente. Va a propósito en amarillo de imprenta y
+   monoespaciada: tiene que saltar a la vista del dueño y no confundirse
+   nunca con copy terminado. Contraste 10.9:1 sobre su propio fondo, así
+   que se lee igual sobre noche que sobre crema. */
+.dato-real{display:inline;font:600 .8em/1.4 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  letter-spacing:0;text-transform:none;background:#fff1bf;color:#4a3200;
+  outline:1px dashed #8a6a2a;outline-offset:1px;padding:1px 5px;border-radius:4px;
+  -webkit-box-decoration-break:clone;box-decoration-break:clone;}
+
+/* Ficha del hero: los datos que deciden la compra, arriba del pliegue */
+.ficha{position:relative;width:min(100%,430px);justify-self:center;
+  background:rgba(31,35,66,.74);border:1px solid var(--hair);border-radius:var(--r-lg);
+  padding:26px 26px 20px;backdrop-filter:blur(6px);}
+.ficha-title{font-family:var(--display);font-size:1.3rem;font-weight:600;color:var(--cream);margin:0 0 4px;}
+.ficha-sub{margin:0 0 14px;color:var(--on-night-soft);font-size:.86rem;}
+.ficha dl{margin:0;display:grid;grid-template-columns:max-content 1fr;}
+.ficha dt,.ficha dd{padding:11px 0;border-top:1px solid rgba(197,160,89,.22);font-size:.88rem;line-height:1.45;}
+.ficha dt{color:rgba(243,226,171,.86);font-weight:600;padding-right:18px;}
+.ficha dd{margin:0;color:var(--on-night);}
+.ficha dd b{color:var(--cream);}
+.ficha-foot{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:14px;padding-top:14px;
+  border-top:1px solid rgba(197,160,89,.22);font-size:.86rem;}
+.ficha-foot a{color:var(--star);font-weight:600;display:inline-flex;align-items:center;gap:7px;}
+.ficha-foot a:hover{text-decoration:underline;text-underline-offset:3px;}
+html.js-anim .ficha{opacity:0;animation:rise .9s var(--ease-out) .34s both;}
+
+/* Prueba social: hoy son huecos marcados; el dueño los llena */
+.proof-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;margin-top:40px;}
+.pcard{border:1px dashed rgba(124,94,34,.55);border-radius:var(--r-md);padding:22px;background:#fff;color:var(--ink);}
+.pcard .ph{width:60px;height:60px;border-radius:50%;background:var(--line);display:grid;place-items:center;
+  color:var(--muted);font-size:1.5rem;margin-bottom:14px;}
+.pcard h3{font-family:var(--display);font-size:1.12rem;font-weight:600;margin:0 0 8px;color:var(--ink);}
+.pcard p{margin:0 0 6px;font-size:.88rem;color:var(--muted);line-height:1.55;}
+.proof-sub{margin:52px 0 0;font-family:var(--display);font-size:var(--t-h3);font-weight:600;color:var(--ink);}
+
+/* Precios aclarados */
+.plans-all{margin:26px 0 0;padding:14px 18px;border-left:2px solid var(--gold);background:#fff;
+  color:var(--ink);font-size:.9rem;border-radius:0 var(--r-sm) var(--r-sm) 0;}
+.plan-math{margin:-4px 0 0;font-size:.78rem;color:var(--muted);}
+.entry{margin-top:34px;display:grid;grid-template-columns:1.1fr 1fr 1fr;gap:24px;
+  background:#fff;border:1px solid var(--line);border-radius:var(--r-md);padding:24px 26px;color:var(--ink);}
+.entry h3{font-family:var(--display);font-size:var(--t-h3);font-weight:600;margin:0 0 6px;}
+.entry p{margin:0;font-size:.88rem;color:var(--muted);line-height:1.55;}
+.entry b{color:var(--ink);}
+.entry a{color:var(--gold-ink);font-weight:600;text-decoration:underline;text-underline-offset:3px;}
+
+/* Formulario: WhatsApp primero y un desplegable de horario */
+.field select{width:100%;padding:19px 16px 8px;border-radius:var(--r-sm);
+  border:1px solid rgba(245,242,235,.22);background:rgba(14,12,31,.5);color:var(--cream);
+  font-family:inherit;font-size:.93rem;appearance:none;-webkit-appearance:none;
+  background-image:linear-gradient(45deg,transparent 50%,var(--star) 50%),linear-gradient(135deg,var(--star) 50%,transparent 50%);
+  background-position:calc(100% - 20px) 55%,calc(100% - 15px) 55%;background-size:5px 5px;background-repeat:no-repeat;}
+.field select:focus{border-color:var(--gold);outline:none;}
+.field select option{background:var(--night);color:var(--cream);}
+.field--fixed label{transform:translateY(-8px) scale(.76);color:var(--star);}
+.field small{display:block;margin:5px 2px 0;color:var(--on-night-soft);font-size:.76rem;}
+
+@media(max-width:980px){
+  .proof-grid{grid-template-columns:1fr;}
+  .entry{grid-template-columns:1fr;gap:16px;}
+}
+@media (prefers-reduced-motion: reduce){
+  html.js-anim .ficha{opacity:1 !important;animation:none !important;}
+}
+@media print{ html.js-anim .ficha{opacity:1 !important;animation:none !important;} }
+
+/* ---- La app (extra): mundos + funciones ----
+   Cada tarjeta toma el color de su mundo de WORLD_ART (leccion_app.js):
+   --wa es el acento (filetes), --wi su versión tinta (fondo del chip de
+   nivel, blanco encima >= 5:1). */
+.app-x{position:relative;background:
+  radial-gradient(900px 420px at 15% 0%,rgba(106,95,168,.18),transparent 60%),
+  radial-gradient(700px 380px at 90% 100%,rgba(197,160,89,.12),transparent 60%),
+  var(--night);-webkit-font-smoothing:antialiased;}
+.app-x .sec-title em{font-style:italic;font-weight:500;color:var(--star);}
+.app-sub{font-family:var(--display);font-size:var(--t-h3);font-weight:600;color:var(--cream);margin:56px 0 6px;}
+.app-subp{margin:0;color:var(--on-night-soft);font-size:.95rem;max-width:62ch;}
+.worlds-x{list-style:none;margin:26px 0 0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;}
+.wx{display:flex;flex-direction:column;background:var(--dusk);border:1px solid var(--hair);
+  border-top:3px solid var(--wa);border-radius:var(--r-lg);overflow:hidden;
+  transition:transform .35s var(--ease-out),box-shadow .35s var(--ease-out);}
+.wx:hover{transform:translateY(-4px);box-shadow:0 18px 40px rgba(0,0,0,.35);}
+.wx-art{position:relative;aspect-ratio:720/309;overflow:hidden;background:var(--twilight);}
+.wx-art img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .6s var(--ease-out);}
+.wx:hover .wx-art img{transform:scale(1.04);}
+.wx-art::after{content:"";position:absolute;inset:auto 0 0 0;height:45%;background:linear-gradient(transparent,rgba(31,35,66,.9));}
+.wx-lv{position:absolute;left:14px;top:12px;z-index:1;padding:4px 11px;border-radius:var(--r-pill);
+  background:var(--wi);color:#fff;font-family:var(--display);font-weight:600;font-size:.95rem;
+  box-shadow:0 0 0 1px rgba(255,255,255,.35);}
+.wx-body{position:relative;display:flex;flex-direction:column;gap:8px;padding:4px 20px 20px;}
+.wx h4{font-family:var(--display);font-size:1.3rem;font-weight:600;color:var(--cream);margin:0;}
+.wx-what{margin:0;color:var(--on-night-soft);font-size:.88rem;line-height:1.5;}
+.wx-guard{display:flex;align-items:center;gap:11px;margin:6px 0 0;color:var(--on-night);font-size:.88rem;font-weight:600;}
+.wx-guard img{width:46px;height:46px;border-radius:50%;border:2px solid var(--wa);flex:none;}
+.wx-guard small{display:block;font-weight:500;font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;color:rgba(245,242,235,.6);}
+.wx-den{margin:6px 0 0;padding-top:10px;border-top:1px solid rgba(197,160,89,.2);font-size:.82rem;color:var(--on-night-soft);}
+.wx-den b{color:var(--star);font-weight:600;}
+.wx-rooms{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px;}
+.wx-rooms li{font-size:.74rem;padding:3px 10px;border-radius:var(--r-pill);
+  border:1px solid rgba(245,242,235,.18);color:var(--on-night);}
+.feats-x{list-style:none;margin:22px 0 0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;
+  background:var(--hair);border:1px solid var(--hair);border-radius:var(--r-lg);overflow:hidden;}
+.fx{display:flex;flex-direction:column;gap:6px;padding:24px 24px 26px;background:var(--night);}
+.fx-ic{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;margin-bottom:6px;
+  background:var(--gold-tint);color:var(--star);font-size:1.15rem;}
+.fx b{color:var(--cream);font-size:1rem;}
+.fx span:last-child{color:var(--on-night-soft);font-size:.88rem;line-height:1.55;}
+.app-cta{display:flex;flex-wrap:wrap;align-items:center;gap:14px 26px;margin:34px 0 0;}
+.app-link{color:var(--star);font-weight:600;font-size:.9rem;display:inline-flex;align-items:center;gap:7px;}
+.app-link:hover{text-decoration:underline;text-underline-offset:3px;}
+@media(max-width:980px){
+  .worlds-x,.feats-x{grid-template-columns:repeat(2,minmax(0,1fr));}
+}
+@media(max-width:640px){
+  .worlds-x,.feats-x{grid-template-columns:1fr;}
+}
+@media (prefers-reduced-motion: reduce){
+  .wx,.wx-art img{transition:none !important;}
+  .wx:hover,.wx:hover .wx-art img{transform:none !important;}
+}
+
+/* ---- Edición de teléfono: añadidos con la misma puerta que vesper_mobile.css ---- */
+@media (pointer: coarse) and (max-width: 820px){
+  .skip--d{display:none !important;}
+  .skip--m{display:block;}
+  #m-app .m-cta .m-btn--wa{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.34);
+    gap:9px;height:48px;font-size:12px;}
+  #m-app .m-cta .m-btn--wa .i{font-size:18px;color:#25D366;}
+  #m-app .m-ficha{margin:18px 0 0;padding:0;list-style:none;border-top:1px solid rgba(255,255,255,.14);}
+  #m-app .m-ficha li{display:flex;gap:12px;justify-content:space-between;padding:10px 0;
+    border-bottom:1px solid rgba(255,255,255,.14);font:400 14.5px/1.4 'Inter',sans-serif;color:rgba(255,255,255,.86);}
+  /* `>`: sin él, :first-child alcanzaba también al marcador y a los
+     [data-hecho] anidados y los pintaba de oro sobre crema (ilegible). */
+  #m-app .m-ficha li > span:first-child{flex:none;color:#d9bd84;font-weight:600;}
+  #m-app .m-ficha li > span:last-child{text-align:right;}
+  #m-app .dato-real{color:#4a3200;background:#fff1bf;font-size:.8em;}
+  #m-app .m-cta + .m-hero__note{margin-top:10px !important;}
+  #m-app .m-proof{background:#f5f2eb;}
+  #m-app .m-proof .pcard{margin-top:12px;padding:18px;}
+  #m-app .m-proof .pcard h3{font-size:17px;}
+  #m-app .m-proof .pcard p{font-size:15px;}
+  #m-app .m-proof .pcard .ph{width:48px;height:48px;font-size:1.2rem;margin-bottom:10px;}
+  #m-app .m-allinc{font:400 15px/1.5 'Inter',sans-serif;color:#1B1B2F;background:#f5f2eb;
+    border-left:2px solid #c5a059;padding:10px 12px;margin:0 0 14px;}
+  #m-app .m-entry{margin-top:16px;border:1px solid #ece7da;border-radius:3px;padding:14px 15px;
+    font:400 15px/1.5 'Inter',sans-serif;color:#5d6470;}
+  #m-app .m-entry b{color:#1B1B2F;}
+  #m-app .m-steps{list-style:none;counter-reset:s;margin:0 0 18px;padding:0;text-align:left;}
+  #m-app .m-steps li{counter-increment:s;position:relative;padding:0 0 10px 34px;
+    font:400 15px/1.45 'Inter',sans-serif;color:rgba(255,255,255,.82);}
+  #m-app .m-steps li::before{content:counter(s);position:absolute;left:0;top:0;width:24px;height:24px;
+    border-radius:50%;border:1px solid rgba(217,189,132,.6);display:grid;place-items:center;
+    font:600 12px 'Inter',sans-serif;color:#f3e2ab;}
+  #m-app .m-form select{height:48px;padding:0 16px;border-radius:3px;border:1px solid rgba(255,255,255,.24);
+    background:rgba(255,255,255,.08);color:#fff;font:400 16px 'Inter',sans-serif;}
+  #m-app .m-form select option{color:#1B1B2F;}
+  #m-app .m-form label{font:600 12px 'Inter',sans-serif;color:rgba(255,255,255,.72);margin:4px 0 -4px;}
+  #m-app .m-lvl__when{display:none;font:400 14px/1.45 'Inter',sans-serif;color:#f3e2ab;margin-top:4px;}
+  #m-app .m-lvl.is-open .m-lvl__when{display:block;}
+  /* La app (extra) en teléfono: baraja deslizable de mundos + lista de funciones */
+  #m-app .m-appx{background:linear-gradient(168deg,#232847,#141a2e);color:#fff;}
+  #m-app .m-appx .m-h2{color:#fff;margin-top:4px;}
+  #m-app .m-appx .m-h2 em{font-style:italic;font-weight:500;color:#d9bd84;}
+  #m-app .m-appx__lead{font:400 16px/1.5 'Inter',sans-serif;color:rgba(255,255,255,.78);margin:8px 0 0;}
+  #m-app .m-appx__sub{font-family:'Fraunces',Georgia,serif;font-size:18px;font-weight:600;color:#fff;margin:24px 0 2px;}
+  #m-app .m-appx__hint{font:400 14px/1.45 'Inter',sans-serif;color:rgba(255,255,255,.62);margin:0;}
+  #m-app .m-wdeck{list-style:none;display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;
+    scroll-padding-left:20px;margin:14px -20px 0;padding:0 20px 6px;}
+  #m-app .m-wcard{flex:0 0 84%;scroll-snap-align:start;display:flex;flex-direction:column;
+    background:#1f2342;border:1px solid rgba(197,160,89,.32);border-top:3px solid var(--wa);border-radius:6px;overflow:hidden;}
+  #m-app .m-wcard__art{position:relative;display:block;aspect-ratio:720/309;background:#3a3a63;}
+  #m-app .m-wcard__art img{display:block;width:100%;height:100%;object-fit:cover;}
+  #m-app .m-wcard__lv{position:absolute;left:10px;top:9px;padding:3px 10px;border-radius:999px;background:var(--wi);
+    color:#fff;font:600 14px 'Fraunces',Georgia,serif;box-shadow:0 0 0 1px rgba(255,255,255,.35);}
+  #m-app .m-wcard__body{display:flex;flex-direction:column;gap:7px;padding:12px 14px 15px;}
+  #m-app .m-wcard__t{font:600 18px 'Fraunces',Georgia,serif;color:#fff;}
+  #m-app .m-wcard__what{font:400 14.5px/1.45 'Inter',sans-serif;color:rgba(255,255,255,.74);}
+  #m-app .m-wcard__guard{display:flex;align-items:center;gap:10px;font:600 14px 'Inter',sans-serif;color:#fff;}
+  #m-app .m-wcard__guard img{width:40px;height:40px;border-radius:50%;border:2px solid var(--wa);flex:none;}
+  #m-app .m-wcard__guard small{display:block;font:500 11px 'Inter',sans-serif;letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,.6);}
+  #m-app .m-wcard__den{font:400 13.5px/1.4 'Inter',sans-serif;color:rgba(255,255,255,.7);padding-top:8px;border-top:1px solid rgba(197,160,89,.22);}
+  #m-app .m-wcard__den b{color:#f3e2ab;font-weight:600;}
+  #m-app .m-wcard__rooms{font:400 13.5px/1.45 'Inter',sans-serif;color:rgba(255,255,255,.82);}
+  #m-app .m-fx{list-style:none;margin:12px 0 0;padding:0;display:flex;flex-direction:column;}
+  #m-app .m-fx li{display:flex;gap:12px;padding:12px 0;border-top:1px solid rgba(255,255,255,.12);
+    font:400 14.5px/1.5 'Inter',sans-serif;color:rgba(255,255,255,.74);}
+  #m-app .m-fx li b{display:block;color:#fff;font-weight:600;font-size:15px;}
+  #m-app .m-fx__ic{flex:none;width:36px;height:36px;border-radius:50%;display:grid;place-items:center;
+    background:rgba(197,160,89,.16);color:#f3e2ab;font-size:16px;}
+  #m-app .m-h1 em{font-style:italic;font-weight:500;color:#d9bd84;}
+  #m-app .m-hero:focus{outline:none;}
+}
+
 </style>
 <script src="vesper_prefs.js"></script>
 <script src="vesper_analytics.js"></script>
@@ -1311,15 +1512,24 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
   "mainEntity":[
     {"@type":"Question","name":"¿Necesito saber algo de inglés para empezar?","acceptedAnswer":{"@type":"Answer","text":"No. El nivel A1 empieza desde cero absoluto: cómo se saluda, cómo te presentas y cómo se pronuncia. Si ya sabes algo, el examen diagnóstico te coloca en el peldaño correcto para que no repitas lo que ya dominas."}},
     {"@type":"Question","name":"¿Las clases son en vivo o grabadas?","acceptedAnswer":{"@type":"Answer","text":"Todas en vivo, con un profesor real. No vendemos videos pregrabados: hablar sólo se aprende hablando con alguien que te corrige en el momento."}},
-    {"@type":"Question","name":"¿Qué pasa si falto a una clase?","acceptedAnswer":{"@type":"Answer","text":"Recibes el material de la sesión y, en los planes 1:1, se reprograma avisando con anticipación. En grupal puedes incorporarte a otro grupo del mismo nivel esa semana."}},
+    {"@type":"Question","name":"¿En qué horarios hay clases?","acceptedAnswer":{"@type":"Answer","text":"Hay grupos de 8 de la mañana a 10 de la noche. En 1 a 1 el horario lo eliges tú."}},
+    {"@type":"Question","name":"¿Cuánto dura cada clase?","acceptedAnswer":{"@type":"Answer","text":"Cada clase dura 1 hora. El plan Grupal son 5 clases por semana y el Club de Conversación, 2."}},
+    {"@type":"Question","name":"¿En qué plataforma son las clases?","acceptedAnswer":{"@type":"Answer","text":"Todas en vivo, con profesor, por Google Meet. Solo necesitas micrófono y una conexión estable."}},
+    {"@type":"Question","name":"¿Qué pasa si falto a una clase?","acceptedAnswer":{"@type":"Answer","text":"En 1 a 1 reprogramamos la clase si avisas con 24 horas de anticipación. En grupo te mandamos el material de la sesión y la repasas con los audios."}},
+    {"@type":"Question","name":"¿En qué se diferencia el Club de Conversación del plan Grupal?","acceptedAnswer":{"@type":"Answer","text":"El plan Grupal es el curso completo: 5 clases por semana con las cuatro destrezas: hablar, escuchar, leer y escribir. El Club son 2 clases por semana solo de conversación, sobre 150 temas; funciona como complemento o como primer paso si tienes poco tiempo."}},
+    {"@type":"Question","name":"¿Hay permanencia o cuota de inscripción?","acceptedAnswer":{"@type":"Answer","text":"No. Pagas mes por mes, sin inscripción, y puedes cambiar de plan o dejarlo al terminar tu mes en curso."}},
     {"@type":"Question","name":"¿Cuánto tardo en subir de nivel?","acceptedAnswer":{"@type":"Answer","text":"Depende del nivel y de cuánto practiques fuera de clase. Como referencia, pasar de un peldaño al siguiente suele llevar entre cuatro y seis meses al ritmo de cinco clases por semana."}},
-    {"@type":"Question","name":"¿Preparan para IELTS, Cambridge y TOEFL?","acceptedAnswer":{"@type":"Answer","text":"Sí, con estrategia específica por examen, simulacros cronometrados y meta de banda acordada desde el principio."}},
+    {"@type":"Question","name":"¿Preparan para IELTS, Cambridge y TOEFL?","acceptedAnswer":{"@type":"Answer","text":"Sí, con estrategia específica por examen, simulacros cronometrados y meta de banda acordada desde el principio. Te preparamos; el examen oficial lo presentas en una sede autorizada."}},
     {"@type":"Question","name":"¿Facturan a empresas?","acceptedAnswer":{"@type":"Answer","text":"Sí. Emitimos factura y armamos planes para equipos, con reporte de avance por participante."}}
   ]
 }
 </script>
 
-<a class="skip" href="#main">Saltar al contenido</a>
+<!-- Dos saltos: en teléfono <main> está en display:none, así que el de
+     escritorio llevaba el foco a un elemento oculto. Cada uno se ve solo en
+     su edición (la puerta está en el bloque CRO del <style>). -->
+<a class="skip skip--d" href="#main">Saltar al contenido</a>
+<a class="skip skip--m" href="#m-main">Saltar al contenido</a>
 
 <!-- Sprite de iconos: 3.5 KB, hereda currentColor, reemplaza Font Awesome -->
 <svg style="display:none" aria-hidden="true" focusable="false"><defs>
@@ -1356,13 +1566,16 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
       <svg class="i" style="font-size:1.35rem"><use href="#i-menu"/></svg>
     </button>
     <div class="nav-links" id="navLinks">
-      <a href="#metodo">Metodología</a>
+      <!-- UNA acción principal (examen) y nada más que compita con ella:
+           «Lecciones gratis» sacaba del embudo hacia la app antes de saber
+           que esto es una escuela de pago; ahora vive en el pie y en la
+           sección de la app, después del cierre. -->
+      <a href="#metodo">Cómo son las clases</a>
       <a href="#cursos">Cursos</a>
-      <a href="#certificacion">Certificación</a>
       <a href="#precios">Precios</a>
-      <a href="leccion.html">Lecciones gratis</a>
+      <a href="#faq">Preguntas</a>
       <a href="login.html">Acceso alumnos</a>
-      <a href="book_placement.html" class="btn btn-gold nav-cta">Examen gratis</a>
+      <a href="book_placement.html?src=landing-nav" class="btn btn-gold nav-cta">Examen gratis</a>
     </div>
   </nav>
 </header>
@@ -1376,64 +1589,62 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
   <div class="container hero-grid">
     <div class="hero-copy">
       <span class="rule"></span>
-      <span class="eyebrow">Inglés en línea · Clases en vivo</span>
-      <h1>Habla inglés con <em>confianza real</em>, no solo en teoría.</h1>
-      <p class="lead">Desde el primer «hello» hasta tu certificación internacional. Método comunicativo, profesores reales y un plan que se adapta a tu nivel y a tu meta profesional.</p>
+      <span class="eyebrow">Escuela de inglés en línea · clases en vivo con profesor</span>
+      <!-- Variante A/B: el texto por defecto es la A. El script «hero A/B»
+           cambia h1 + lead según ?h=a|b|c o un sorteo guardado, y añade la
+           variante al ?src= del examen, que book_placement.html ya manda
+           con cada lead. -->
+      <h1 data-ab="h1">Años de clases de inglés y te congelas en la junta. <em>Aquí lo hablas.</em></h1>
+      <p class="lead" data-ab="lead">Clases en vivo con profesor, en grupos de máximo <span data-hecho="grupo_max">9</span> o 1 a 1, donde el 80&nbsp;% del tiempo hablas tú. Para la junta, la entrevista o la certificación que tienes enfrente.</p>
       <div class="hero-cta">
-        <a href="book_placement.html" class="btn btn-gold"><svg class="i"><use href="#i-check-doc"/></svg> Examen de nivel gratis</a>
-        <a href="leccion.html?id=core-grammar-01-to-be" class="btn btn-ghost"><svg class="i"><use href="#i-bolt"/></svg> Prueba una lección</a>
+        <a href="book_placement.html?src=landing-hero" data-ab-src class="btn btn-gold"><svg class="i"><use href="#i-check-doc"/></svg> Haz tu examen de nivel gratis</a>
+        <a href="https://wa.me/525535699899?text=Hola%2C%20vengo%20de%20vesperacademy.com%20y%20quiero%20informaci%C3%B3n%20sobre%20las%20clases%20de%20ingl%C3%A9s." target="_blank" rel="noopener" class="btn btn-ghost web-only"><svg class="i i--solid" aria-hidden="true" style="fill:currentColor;stroke:none"><use href="#i-whatsapp"/></svg> Pregunta por WhatsApp</a>
       </div>
-      <p class="cta-note">Gratis · sin crear cuenta · 15 minutos · resultado al instante</p>
+      <p class="cta-note"><span data-hecho="examen_preguntas">30</span> preguntas · <span data-hecho="examen_min">15</span> minutos · resultado al instante · sin crear cuenta</p>
     </div>
 
-    <div class="plate-wrap">
-      <!-- Un solo sujeto: Vesper. Detrás, el logotipo en filigrana; el
-           grabado con acanto que ocupaba esta columna se retiró. -->
-      <img class="hero-brand" src="assets/images/vesper_logo_inverted.webp" alt="" aria-hidden="true" width="534" height="515" decoding="async">
-
-      <a class="hero-vesper" href="leccion.html">
-        <span class="medallion" data-vesper data-state="welcome">
-          <span class="med-halo" aria-hidden="true"></span>
-          <span class="med-rays" aria-hidden="true"></span>
-          <span class="med-glass">
-            <span class="med-bust">
-              <img class="med-face on" data-face="welcome" src="assets/images/mascot/vesper_cat_welcome.webp" alt="Vesper, el gato tutor de Vesper Academy, saludando con la pata" width="600" height="600" fetchpriority="high" decoding="async">
-              <span class="med-lid l" aria-hidden="true"></span>
-              <span class="med-lid r" aria-hidden="true"></span>
-              <span class="med-glint l" aria-hidden="true"></span>
-              <span class="med-glint r" aria-hidden="true"></span>
-            </span>
-          </span>
-          <span class="med-fillet" aria-hidden="true"></span>
-          <span class="med-spark s1" aria-hidden="true"></span>
-          <span class="med-spark s2" aria-hidden="true"></span>
-        </span>
-        <span class="seal-say" aria-hidden="true">Hola, soy Vesper.</span>
-        <span class="sr">Lecciones gratis con Vesper, nuestra app de práctica</span>
-      </a>
-    </div>
+    <!-- El gato salía aquí («Hola, soy Vesper») antes de que el visitante
+         supiera que esto es una escuela con profesores y de pago: parecía una
+         app gratuita. Ahora este lugar lo ocupa lo que decide la compra. El
+         gato sigue en su sección, al final, como la app de práctica que es. -->
+    <aside class="ficha" aria-labelledby="ficha-t">
+      <h2 class="ficha-title" id="ficha-t">Así son las clases</h2>
+      <p class="ficha-sub">Lo que preguntan todos antes de inscribirse.</p>
+      <dl>
+        <dt>Formato</dt><dd><b>En vivo</b> con profesor, por <span data-hecho="plataforma">Google Meet</span></dd>
+        <dt>Grupo</dt><dd>Máximo <b data-hecho="grupo_max">9</b> alumnos, o 1 a 1</dd>
+        <dt>Duración</dt><dd><span data-hecho="duracion_clase">1 hora</span> por clase</dd>
+        <dt>Horarios</dt><dd>Grupos <span data-hecho="horarios">de 8 de la mañana a 10 de la noche</span></dd>
+        <dt>Precio</dt><dd>Desde <b><span data-hecho="precio_grupal">$2,500</span> MXN al mes</b>, sin inscripción ni permanencia</dd>
+      </dl>
+      <p class="ficha-foot"><a href="#precios">Ver precios <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a><a href="#faq">Más preguntas <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a></p>
+    </aside>
   </div>
 
   <div class="container">
     <div class="statrail">
-      <div><b>A1–C2</b><small>Todos los niveles</small></div>
-      <div><b>4</b><small>Destrezas integradas</small></div>
-      <div><b>1:1</b><small>o grupos reducidos</small></div>
-      <div><b>100%</b><small>En vivo, no grabado</small></div>
+      <div><b>A1–C2</b><small>Desde cero hasta dominio</small></div>
+      <div><b>≤<span data-hecho="grupo_max">9</span></b><small>Alumnos por grupo</small></div>
+      <div><b>80&nbsp;%</b><small>Del tiempo hablas tú</small></div>
+      <div><b>$0</b><small>Inscripción</small></div>
     </div>
   </div>
 </section>
 
 
-<!-- ============ CREDENCIALES ============ -->
+<!-- ============ FRANJA DE CONFIANZA ============ -->
+<!-- Antes: «IELTS · Cambridge English · TOEFL iBT · Profesores certificados»
+     en fila, que se lee como afiliación oficial. Ahora cada marca va con su
+     verbo: preparamos para el examen, no lo aplicamos. -->
 <div class="creds">
   <div class="container">
     <div class="creds-inner">
-      <span>MCER · CEFR</span>
-      <span>IELTS</span>
-      <span>Cambridge English</span>
-      <span>TOEFL iBT</span>
-      <span>Profesores certificados</span>
+      <span>Niveles según el MCER</span>
+      <span>Preparación IELTS · Cambridge · TOEFL</span>
+      <span data-pend="profes_cert" hidden>Profesores <b data-hecho="profes_cert" style="font-weight:inherit"><span class="dato-real">[DATO REAL: certificación de los profesores]</span></b></span>
+      <span data-pend-alt="profes_cert">Clases por Google Meet</span>
+      <span>Factura para empresas</span>
+      <span>Sin inscripción ni permanencia</span>
     </div>
   </div>
 </div>
@@ -1558,6 +1769,47 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
   </div>
 </section>
 
+<!-- ============ PRUEBA SOCIAL ============ -->
+<!-- Justo después de la ruta: el visitante ya entendió el método y se
+     pregunta «¿y funciona? ¿quién me da clase?». Hasta que el dueño mande
+     datos reales esto son huecos marcados; NO se rellenan con ejemplos. -->
+<!-- OCULTA (2026-11-05, decisión del dueño) hasta tener profesores y
+     testimonios reales: quitar `hidden` aquí y en #m-alumnos. -->
+<section id="alumnos" class="band-cream" hidden>
+  <div class="container">
+    <div class="chap-head reveal">
+      <div class="chap-mark">
+        <span class="eyebrow">Quién te da clase</span>
+      </div>
+      <div>
+        <h2 class="sec-title">Profesores con nombre y cara.</h2>
+        <p class="sec-lead">Antes de pagar tienes derecho a saber con quién vas a hablar dos, tres o cinco veces por semana.</p>
+      </div>
+    </div>
+    <div class="proof-grid">
+      <article class="pcard reveal"><div class="ph" aria-hidden="true"><svg class="i"><use href="#i-person"/></svg></div>
+        <h3><span class="dato-real">[DATO REAL: nombre del profesor 1]</span></h3>
+        <p><span class="dato-real">[DATO REAL: foto, certificación (p. ej. CELTA, TKT), años dando clase y niveles que enseña]</span></p></article>
+      <article class="pcard reveal"><div class="ph" aria-hidden="true"><svg class="i"><use href="#i-person"/></svg></div>
+        <h3><span class="dato-real">[DATO REAL: nombre del profesor 2]</span></h3>
+        <p><span class="dato-real">[DATO REAL: foto, certificación, años dando clase y niveles que enseña]</span></p></article>
+      <article class="pcard reveal"><div class="ph" aria-hidden="true"><svg class="i"><use href="#i-person"/></svg></div>
+        <h3><span class="dato-real">[DATO REAL: nombre del profesor 3]</span></h3>
+        <p><span class="dato-real">[DATO REAL: foto, certificación, años dando clase y niveles que enseña]</span></p></article>
+    </div>
+
+    <h3 class="proof-sub reveal">Lo que cuentan los alumnos</h3>
+    <div class="proof-grid">
+      <article class="pcard reveal">
+        <p><span class="dato-real">[DATO REAL: testimonio 1 con nombre, puesto, ciudad y permiso por escrito. Mejor si dice qué logró: el ascenso, la entrevista o la banda]</span></p></article>
+      <article class="pcard reveal">
+        <p><span class="dato-real">[DATO REAL: testimonio 2, mismo formato]</span></p></article>
+      <article class="pcard reveal"><h3><span class="dato-real">[DATO REAL: cifra verificable]</span></h3>
+        <p><span class="dato-real">[DATO REAL: p. ej. alumnos que han tomado clase, o bandas IELTS obtenidas este año, con fecha de corte]</span></p></article>
+    </div>
+  </div>
+</section>
+
 <!-- ============ CURSOS ============ -->
 <section id="cursos">
   <div class="container">
@@ -1594,11 +1846,11 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
           <span class="ccat">Pre-A1 – C2</span>
           <p>La ruta completa, de cero a dominio. Las cuatro destrezas en cada sesión y un salto de nivel medido.</p>
           <ul class="cfacts">
-            <li><svg class="i"><use href="#i-calendar"/></svg> 5 por semana</li>
-            <li><svg class="i"><use href="#i-gauge"/></svg> Grupo o 1 a 1</li>
+            <li><svg class="i"><use href="#i-calendar"/></svg> <span data-hecho="clases_grupal">5</span> por semana</li>
+            <li><svg class="i"><use href="#i-gauge"/></svg> Plan Grupal o 1 a 1</li>
           </ul>
           <p class="cfrom">Desde</p>
-          <p class="cprice">$2,500 <span class="unit">MXN / mes</span></p>
+          <p class="cprice"><span data-hecho="precio_grupal">$2,500</span> <span class="unit">MXN / mes</span></p>
           <span class="more">Ver el curso <svg class="i"><use href="#i-arrow"/></svg></span>
         </div>
       </a>
@@ -1609,13 +1861,13 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
         <div class="cbody">
           <h3>Club de Conversación</h3>
           <span class="ccat">A1 – C2</span>
-          <p>150 temas para soltar la lengua. Grupos reducidos, sin lectura en voz alta y sin turnos muertos.</p>
+          <p><span data-hecho="temas_club">150</span> temas para soltar la lengua. Solo conversación: complemento de tu curso o primer paso si tienes poco tiempo.</p>
           <ul class="cfacts">
-            <li><svg class="i"><use href="#i-calendar"/></svg> 2 por semana</li>
-            <li><svg class="i"><use href="#i-gauge"/></svg> Grupo reducido</li>
+            <li><svg class="i"><use href="#i-calendar"/></svg> <span data-hecho="clases_club">2</span> por semana</li>
+            <li><svg class="i"><use href="#i-gauge"/></svg> Máximo <span data-hecho="grupo_max">9</span></li>
           </ul>
-          <p class="cfrom">Desde</p>
-          <p class="cprice">$2,500 <span class="unit">MXN / mes</span></p>
+          <p class="cfrom">Precio</p>
+          <p class="cprice"><span data-pend="precio_club" hidden><span data-hecho="precio_club"><span class="dato-real">[DATO REAL: precio del Club]</span></span> <span class="unit">MXN / mes</span></span><span data-pend-alt="precio_club" class="unit">Consúltalo por WhatsApp</span></p>
           <span class="more">Ver el curso <svg class="i"><use href="#i-arrow"/></svg></span>
         </div>
       </a>
@@ -1628,11 +1880,11 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
           <span class="ccat">B1 – C1</span>
           <p>Juntas, negociación, correos y presentaciones. Para equipos y para quien ya trabaja en inglés.</p>
           <ul class="cfacts">
-            <li><svg class="i"><use href="#i-calendar"/></svg> 5 por semana</li>
-            <li><svg class="i"><use href="#i-gauge"/></svg> Equipos o 1 a 1</li>
+            <li><svg class="i"><use href="#i-calendar"/></svg> <span data-hecho="clases_esp">5</span> por semana</li>
+            <li><svg class="i"><use href="#i-gauge"/></svg> Plan Especializado o 1 a 1</li>
           </ul>
           <p class="cfrom">Desde</p>
-          <p class="cprice">$3,000 <span class="unit">MXN / mes</span></p>
+          <p class="cprice"><span data-hecho="precio_esp">$3,000</span> <span class="unit">MXN / mes</span></p>
           <span class="more">Ver el curso <svg class="i"><use href="#i-arrow"/></svg></span>
         </div>
       </a>
@@ -1645,11 +1897,11 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
           <span class="ccat">B1 – C2</span>
           <p>IELTS, Cambridge y TOEFL con estrategia de examen, simulacros cronometrados y meta de banda.</p>
           <ul class="cfacts">
-            <li><svg class="i"><use href="#i-calendar"/></svg> 5 por semana</li>
-            <li><svg class="i"><use href="#i-gauge"/></svg> Meta de banda</li>
+            <li><svg class="i"><use href="#i-calendar"/></svg> <span data-hecho="clases_esp">5</span> por semana</li>
+            <li><svg class="i"><use href="#i-gauge"/></svg> Plan Especializado o 1 a 1</li>
           </ul>
           <p class="cfrom">Desde</p>
-          <p class="cprice">$3,000 <span class="unit">MXN / mes</span></p>
+          <p class="cprice"><span data-hecho="precio_esp">$3,000</span> <span class="unit">MXN / mes</span></p>
           <span class="more">Ver el curso <svg class="i"><use href="#i-arrow"/></svg></span>
         </div>
       </a>
@@ -1663,7 +1915,7 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
      y debe seguir en el árbol de accesibilidad y en el esquema de títulos. -->
 <div class="temas">
   <div class="container temas-head quiet-head">
-    <span class="eyebrow">Más de 200 temas</span>
+    <span class="eyebrow"><span data-hecho="temas_club">150</span> temas de conversación</span>
     <h2 class="sec-title" style="margin-bottom:0">De la cocina a la sala de juntas.</h2>
   </div>
   <div class="marquee l" aria-hidden="true"><div class="mtrack" id="mt1"></div></div>
@@ -1681,6 +1933,7 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
       <div>
         <h2 class="sec-title">Tu título de inglés, con estrategia real.</h2>
         <p class="sec-lead">Preparamos el examen que necesitas, no «inglés en general». La diferencia entre una banda 6 y una banda 8 casi nunca es vocabulario.</p>
+        <p class="sec-lead" style="margin-top:12px;font-size:.92rem">Te preparamos; el examen oficial lo presentas en una sede autorizada.</p>
       </div>
     </div>
 
@@ -1760,134 +2013,67 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
       </div>
       <div>
         <h2 class="sec-title">Invierte en tu inglés.</h2>
-        <p class="sec-lead">Sin inscripción, sin permanencia y sin material extra que comprar. El precio que ves es el que pagas.</p>
-        <p class="sec-lead"><strong>¿Curso o plan?</strong> El curso es lo que aprendes; el plan, cómo lo tomas: en grupo, 1 a 1 o intensivo. Tu examen de nivel te dice qué curso te toca.</p>
+        <p class="sec-lead">Pagas mes por mes, sin inscripción y sin permanencia. <strong>El curso</strong> es lo que aprendes (General, Corporativo, Certificación); <strong>el plan</strong> es cómo lo tomas. Tu examen de nivel te dice cuál te toca.</p>
       </div>
     </div>
+
+    <!-- «Material y audios incluidos» salía en las tres tarjetas: se dice UNA
+         vez aquí y las tarjetas quedan para lo que las distingue. -->
+    <p class="plans-all reveal"><b>Todos los planes incluyen:</b> material del alumno, biblioteca de audio, examen de nivel y entrevista oral con un profesor, gratis y sin compromiso.</p>
 
     <div class="plans">
       <a class="plan reveal" href="planes.html#grupal">
-        <span class="plan-tag">Hasta 9 alumnos</span>
+        <span class="plan-tag">Inglés General</span>
         <h3>Grupal</h3>
-        <p class="plan-desc">La energía de aprender acompañado, con la atención de un grupo pequeño.</p>
+        <p class="plan-desc">El curso completo en grupo: hablar, escuchar, leer y escribir en cada clase.</p>
         <ul class="plan-spec">
-          <li>5 clases en vivo por semana</li>
-          <li>Examen de nivel y entrevista oral</li>
-          <li>Material y audios incluidos</li>
+          <li><span data-hecho="clases_grupal">5</span> clases en vivo por semana</li>
+          <li>Máximo <span data-hecho="grupo_max">9</span> alumnos por grupo</li>
+          <li>Evaluación continua de tu nivel</li>
         </ul>
-        <p class="plan-price"><span class="amt">$2,500</span> <span class="unit">MXN / mes</span></p>
+        <p class="plan-price"><span class="amt" data-hecho="precio_grupal">$2,500</span> <span class="unit">MXN / mes</span></p>
+        <p class="plan-math">Unas <span data-hecho="clases_mes_grupal">20</span> clases al mes: alrededor de <span data-hecho="por_clase_grupal">$125</span> por clase.</p>
         <span class="more">Ver el plan <svg class="i"><use href="#i-arrow"/></svg></span>
       </a>
-      <a class="plan feat reveal" href="planes.html#profesional">
-        <span class="plan-tag">Más popular</span>
-        <h3>Profesional 1 a 1</h3>
-        <p class="plan-desc">El profesor adapta cada actividad a tu meta y a tu ritmo. La vía más rápida.</p>
+      <!-- El listón «Más popular» se quitó: no hay dato que lo respalde y
+           contradecía al resto de la página, que empuja el grupo. -->
+      <a class="plan reveal" href="planes.html#profesional">
+        <span class="plan-tag">Cualquier curso</span>
+        <h3>1 a 1</h3>
+        <p class="plan-desc">Solo tú y el profesor. Cada actividad se arma para tu meta y tu horario.</p>
         <ul class="plan-spec">
           <li>Tú decides cuántas clases por semana</li>
+          <li>Horario a tu medida</li>
           <li>Plan personalizado a tu meta</li>
-          <li>Material y audios incluidos</li>
         </ul>
-        <p class="plan-price"><span class="from">Desde</span> <span class="amt">$250</span> <span class="unit">MXN / hora</span></p>
+        <p class="plan-price"><span class="amt" data-hecho="precio_1a1">$250–400</span> <span class="unit">MXN / hora</span></p>
+        <p class="plan-math" data-pend="criterio_1a1" hidden>El precio por hora depende de <span data-hecho="criterio_1a1"><span class="dato-real">[DATO REAL: de qué depende: nivel, curso u horario]</span></span>.</p>
         <span class="more">Ver el plan <svg class="i"><use href="#i-arrow"/></svg></span>
       </a>
       <a class="plan reveal" href="planes.html#especializados">
-        <span class="plan-tag">Con meta de examen</span>
-        <h3>Especializados</h3>
-        <p class="plan-desc">Para quien necesita un resultado concreto: una banda, un puesto, una certificación.</p>
+        <span class="plan-tag">Corporativo · Certificación</span>
+        <h3>Especializado</h3>
+        <p class="plan-desc">Para un resultado concreto: una banda, un puesto, una negociación.</p>
         <ul class="plan-spec">
-          <li>5 sesiones intensivas por semana</li>
-          <li>Simulacros cronometrados completos</li>
-          <li>Material y audios incluidos</li>
+          <li><span data-hecho="clases_esp">5</span> sesiones intensivas por semana</li>
+          <li>Máximo <span data-hecho="grupo_max">9</span> alumnos por grupo</li>
+          <li>Simulacros cronometrados y corrección con rúbrica</li>
         </ul>
-        <p class="plan-price"><span class="amt">$3,000</span> <span class="unit">MXN / mes</span></p>
+        <p class="plan-price"><span class="amt" data-hecho="precio_esp">$3,000</span> <span class="unit">MXN / mes</span></p>
+        <p class="plan-math">Unas <span data-hecho="clases_mes_esp">20</span> sesiones al mes: alrededor de <span data-hecho="por_clase_esp">$150</span> por sesión.</p>
         <span class="more">Ver el plan <svg class="i"><use href="#i-arrow"/></svg></span>
       </a>
     </div>
-    <p class="pfoot">Precios en pesos mexicanos, sin inscripción ni permanencia. El plan 1 a 1 va de $250 a $400 por hora. Facturamos a empresas.</p>
-  </div>
-</section>
 
-<!-- ============ VESPER ============ -->
-<!-- Va DESPUÉS del precio a propósito: aquí la app gratis se lee como
-     regalo («ya viste los planes; esto además no cuesta»). Antes del
-     precio desviaría al visitante del embudo hacia la app. -->
-<section id="vesper">
-  <div class="container vesper-grid">
-
-    <div class="vesper-stage reveal">
-      <div class="medallion" data-vesper data-full data-state="welcome">
-        <span class="med-halo" aria-hidden="true"></span>
-        <span class="med-rays" aria-hidden="true"></span>
-        <span class="med-glass">
-          <span class="med-bust">
-            <img class="med-face on" data-face="welcome" src="assets/images/mascot/vesper_cat_welcome.webp" alt="Vesper, el gato tutor de Vesper Academy, con saco azul y filetes de oro" width="600" height="600" loading="lazy" decoding="async">
-            <img class="med-face" data-face="explaining" src="assets/images/mascot/vesper_cat_explaining.webp" alt="" aria-hidden="true" width="600" height="600" loading="lazy" decoding="async">
-            <img class="med-face" data-face="correct" src="assets/images/mascot/vesper_cat_correct.webp" alt="" aria-hidden="true" width="600" height="600" loading="lazy" decoding="async">
-            <img class="med-face" data-face="streak" src="assets/images/mascot/vesper_cat_streak.webp" alt="" aria-hidden="true" width="600" height="600" loading="lazy" decoding="async">
-            <span class="med-lid l" aria-hidden="true"></span>
-            <span class="med-lid r" aria-hidden="true"></span>
-            <span class="med-glint l" aria-hidden="true"></span>
-            <span class="med-glint r" aria-hidden="true"></span>
-          </span>
-        </span>
-        <span class="med-fillet" aria-hidden="true"></span>
-        <span class="med-spark s1" aria-hidden="true"></span>
-        <span class="med-spark s2" aria-hidden="true"></span>
-        <span class="med-spark s3" aria-hidden="true"></span>
-      </div>
-
-      <!-- Frase decorativa y rotatoria: aria-hidden, nunca aria-live. Un
-           lector de pantalla no necesita que le anuncien un guiño cada
-           siete segundos. -->
-      <p class="med-say" aria-hidden="true">Hola, soy Vesper. ¿Listo para aprender?</p>
-
-      <div class="med-strip" role="group" aria-label="Cómo reacciona Vesper">
-        <button type="button" data-face="welcome" aria-pressed="true">
-          <img src="assets/images/mascot/vesper_cat_welcome.webp" alt="" width="600" height="600" loading="lazy" decoding="async">
-          <span class="sr">Vesper saludando</span>
-        </button>
-        <button type="button" data-face="explaining" aria-pressed="false">
-          <img src="assets/images/mascot/vesper_cat_explaining.webp" alt="" width="600" height="600" loading="lazy" decoding="async">
-          <span class="sr">Vesper explicando</span>
-        </button>
-        <button type="button" data-face="correct" aria-pressed="false">
-          <img src="assets/images/mascot/vesper_cat_correct.webp" alt="" width="600" height="600" loading="lazy" decoding="async">
-          <span class="sr">Vesper celebrando un acierto</span>
-        </button>
-        <button type="button" data-face="streak" aria-pressed="false">
-          <img src="assets/images/mascot/vesper_cat_streak.webp" alt="" width="600" height="600" loading="lazy" decoding="async">
-          <span class="sr">Vesper con la racha encendida</span>
-        </button>
-      </div>
+    <!-- Escalón de entrada para quien trabaja de 9 a 7: casi todo era
+         5 clases por semana. No se inventa un plan: se señalan los dos
+         caminos ligeros que YA existen. -->
+    <div class="entry reveal">
+      <div><h3>¿Trabajas de 9 a 7?</h3><p>Cinco clases por semana no es para todos. Hay dos formas de empezar con menos.</p></div>
+      <div><p><b>Club de Conversación:</b> <span data-hecho="clases_club">2</span> clases por semana, solo para hablar.<span data-pend="precio_club" hidden> <span data-hecho="precio_club"><span class="dato-real">[DATO REAL: precio del Club]</span></span> MXN al mes.</span><span data-pend-alt="precio_club"> Pregunta el precio por WhatsApp.</span></p></div>
+      <div><p><b>1 a 1, una hora por semana:</b> de <span data-hecho="mes_1a1_1h">$1,000 a $1,600</span> al mes según la tarifa por hora, en el horario que tú elijas.</p></div>
     </div>
-
-    <div class="vesper-copy quiet-head reveal">
-      <span class="eyebrow">La app de práctica · sin costo</span>
-      <h2 class="sec-title">Y entre clase y clase, te espera <em>Vesper</em>.</h2>
-      <p class="sec-lead">Vesper es el gato que da clase cuando nosotros no estamos. Vive en nuestra app de práctica, se acuerda de lo que fallaste y te lo vuelve a poner enfrente hasta que deja de fallarte. Es gratis, y no hace falta ser alumno para usarlo.</p>
-      <ul class="vlist">
-        <li>
-          <svg class="i" aria-hidden="true"><use href="#i-bolt"/></svg>
-          <b>Lecciones interactivas</b>
-          <span>Ejercicios cortos con corrección al instante. Vesper te dice por qué, no sólo si estuvo bien.</span>
-        </li>
-        <li>
-          <svg class="i" aria-hidden="true"><use href="#i-audio"/></svg>
-          <b>Biblioteca de audio</b>
-          <span>Voces y acentos distintos para que el oído se acostumbre al inglés real, no al del salón.</span>
-        </li>
-        <li>
-          <svg class="i" aria-hidden="true"><use href="#i-star"/></svg>
-          <b>Racha y liga</b>
-          <span>Un poco cada día suma más que una tarde entera al mes. Vesper se encarga de recordártelo.</span>
-        </li>
-      </ul>
-      <div class="hero-cta">
-        <a href="leccion.html" class="btn btn-gold"><svg class="i" aria-hidden="true"><use href="#i-bolt"/></svg> Practicar con Vesper</a>
-        <a href="audio_library.html" class="btn btn-ghost"><svg class="i" aria-hidden="true"><use href="#i-audio"/></svg> Oír la biblioteca</a>
-      </div>
-    </div>
-
+    <p class="pfoot">Precios en pesos mexicanos.<span data-pend="formas_pago" hidden> <span data-hecho="formas_pago"><span class="dato-real">[DATO REAL: formas de pago y si el precio incluye IVA]</span></span>.</span> Facturamos a empresas.</p>
   </div>
 </section>
 
@@ -1898,20 +2084,138 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
       <span class="eyebrow">Preguntas frecuentes</span>
       <h2 class="sec-title">Todo lo que necesitas saber.</h2>
     </div>
+    <!-- Orden = orden en que el visitante lo pregunta por WhatsApp: horario,
+         duración, plataforma, pago, faltas, salida. Lo pedagógico va
+         después. El mismo contenido está en la edición de teléfono. -->
     <div class="faq">
-      <details class="qitem"><summary>¿Necesito saber algo de inglés para empezar? <svg class="i"><use href="#i-chevron"/></svg></summary>
-        <div class="qbody">No. El nivel A1 empieza desde cero absoluto: cómo se saluda, cómo te presentas y cómo se pronuncia. Si ya sabes algo, el examen diagnóstico te coloca en el peldaño correcto para que no repitas lo que ya dominas.</div></details>
-      <details class="qitem"><summary>¿Las clases son en vivo o grabadas? <svg class="i"><use href="#i-chevron"/></svg></summary>
-        <div class="qbody">Todas en vivo, con un profesor real. No vendemos videos pregrabados: hablar sólo se aprende hablando con alguien que te corrige en el momento.</div></details>
+      <details class="qitem"><summary>¿En qué horarios hay clases? <svg class="i"><use href="#i-chevron"/></svg></summary>
+        <div class="qbody">Hay grupos <span data-hecho="horarios">de 8 de la mañana a 10 de la noche</span>. En 1 a 1 el horario lo eliges tú. Si trabajas de 9 a 7, mándanos tu horario por WhatsApp y te decimos qué grupo te queda.</div></details>
+      <details class="qitem"><summary>¿Cuánto dura cada clase? <svg class="i"><use href="#i-chevron"/></svg></summary>
+        <div class="qbody">Cada clase dura <span data-hecho="duracion_clase">1 hora</span>. El plan Grupal son <span data-hecho="clases_grupal">5</span> clases por semana y el Club de Conversación, <span data-hecho="clases_club">2</span>.</div></details>
+      <details class="qitem"><summary>¿Las clases son en vivo? ¿En qué plataforma? <svg class="i"><use href="#i-chevron"/></svg></summary>
+        <div class="qbody">Todas en vivo, con profesor, por <span data-hecho="plataforma">Google Meet</span>. No vendemos videos grabados. Solo necesitas micrófono y una conexión estable.</div></details>
+      <details class="qitem"><summary>¿Cómo se paga? <svg class="i"><use href="#i-chevron"/></svg></summary>
+        <div class="qbody">Mes por mes, en pesos, sin cuota de inscripción.<span data-pend="formas_pago" hidden> <span data-hecho="formas_pago"><span class="dato-real">[DATO REAL: formas de pago y si el precio incluye IVA]</span></span>.</span><span data-pend-alt="formas_pago"> Para las formas de pago, pregúntanos por WhatsApp.</span> Facturamos a empresas.</div></details>
       <details class="qitem"><summary>¿Qué pasa si falto a una clase? <svg class="i"><use href="#i-chevron"/></svg></summary>
-        <div class="qbody">Recibes el material de la sesión y, en los planes 1:1, se reprograma avisando con anticipación. En grupal puedes incorporarte a otro grupo del mismo nivel esa semana.</div></details>
+        <div class="qbody">En 1 a 1 reprogramamos la clase si avisas con 24 horas de anticipación. En grupo te mandamos el material de la sesión y la repasas con los audios.</div></details>
+      <details class="qitem"><summary>¿Puedo cancelar cuando quiera?<span data-pend="reembolso" hidden> ¿Hay reembolso?</span> <svg class="i"><use href="#i-chevron"/></svg></summary>
+        <div class="qbody">No hay permanencia: puedes dejarlo o cambiar de plan al terminar tu mes en curso.<span data-pend="reembolso" hidden> <span data-hecho="reembolso"><span class="dato-real">[DATO REAL: política de reembolso del mes pagado]</span></span>.</span></div></details>
+      <details class="qitem"><summary>¿Puedo probar antes de pagar? <svg class="i"><use href="#i-chevron"/></svg></summary>
+        <div class="qbody">Sí. El examen de nivel y la entrevista oral con un profesor son gratis y sin compromiso, aunque al final no te inscribas.<span data-pend="clase_muestra" hidden> <span data-hecho="clase_muestra"><span class="dato-real">[DATO REAL: ¿hay clase muestra en vivo en un grupo real? Si sí, cómo se pide]</span></span></span></div></details>
+      <details class="qitem"><summary>¿En qué se diferencia el Club de Conversación del plan Grupal? <svg class="i"><use href="#i-chevron"/></svg></summary>
+        <div class="qbody">El plan Grupal es el curso completo: <span data-hecho="clases_grupal">5</span> clases por semana con las cuatro destrezas (hablar, escuchar, leer y escribir). El Club son <span data-hecho="clases_club">2</span> clases por semana solo de conversación, sobre <span data-hecho="temas_club">150</span> temas. Sirve como complemento o como primer paso si tienes poco tiempo.</div></details>
+      <details class="qitem"><summary>¿Necesito saber algo de inglés para empezar? <svg class="i"><use href="#i-chevron"/></svg></summary>
+        <div class="qbody">No. El nivel A1 empieza desde cero. Si ya sabes algo, el examen de nivel te coloca en el peldaño correcto para que no repitas lo que ya dominas.</div></details>
       <details class="qitem"><summary>¿Cuánto tardo en subir de nivel? <svg class="i"><use href="#i-chevron"/></svg></summary>
         <div class="qbody">Depende del nivel y de cuánto practiques fuera de clase. Como referencia, pasar de un peldaño al siguiente suele llevar entre cuatro y seis meses al ritmo de cinco clases por semana. Te lo decimos con evidencia, no con una promesa.</div></details>
-      <details class="qitem"><summary>¿Preparan para IELTS, Cambridge y TOEFL? <svg class="i"><use href="#i-chevron"/></svg></summary>
-        <div class="qbody">Sí, con estrategia específica por examen, simulacros cronometrados y meta de banda acordada desde el principio. No es «inglés en general» con el nombre del examen encima.</div></details>
+      <details class="qitem"><summary>¿Preparan para IELTS, Cambridge y TOEFL? ¿Ustedes aplican el examen? <svg class="i"><use href="#i-chevron"/></svg></summary>
+        <div class="qbody">Te preparamos con estrategia por sección, simulacros cronometrados y una meta de banda acordada desde el principio. El examen oficial lo presentas en una sede autorizada.</div></details>
       <details class="qitem"><summary>¿Facturan a empresas? <svg class="i"><use href="#i-chevron"/></svg></summary>
         <div class="qbody">Sí. Emitimos factura y armamos planes para equipos, con reporte de avance por participante. Escríbenos y te mandamos una propuesta.</div></details>
+      <details class="qitem"><summary>¿Quién es Vesper, el gato? <svg class="i"><use href="#i-chevron"/></svg></summary>
+        <div class="qbody">Vesper Academy es la escuela; Vesper, el gato, vive en nuestra <a href="#app" style="color:var(--star);text-decoration:underline">app de práctica</a>, que es gratis. Tus clases son en vivo con profesores; la app es para practicar entre una clase y otra.</div></details>
     </div>
+  </div>
+</section>
+
+<!-- ============ LA APP (EXTRA) ============ -->
+<!-- Antes de este bloque la app era un medallión con el gato y tres
+     líneas. Ahora explica lo que de verdad hay dentro (mundos, guardianes,
+     vocabulario por salas, Forja, audio, racha). Los nombres y cifras salen
+     de leccion_app.js (WORLD_ART) y vesper_vocab_dens.js: si cambian allá,
+     cambiar aquí y en #m-appx. Va entre la FAQ y el cierre: es el extra, y
+     después de él la página termina otra vez en el examen. -->
+<section id="app" class="app-x">
+  <div class="container">
+    <div class="chap-head reveal">
+      <div class="chap-mark">
+        <span class="eyebrow">Extra · incluido y gratis</span>
+      </div>
+      <div>
+        <h2 class="sec-title">Entre clase y clase, practicas en el mundo de <em>Vesper</em>.</h2>
+        <p class="sec-lead">Tus clases son en vivo con un profesor. La app es el extra para los días sin clase: lecciones cortas, vocabulario y repaso, con Vesper, nuestro gato, como guía. Es gratis y no hace falta ser alumno para usarla.</p>
+      </div>
+    </div>
+
+    <h3 class="app-sub reveal">Seis mundos, uno por nivel</h3>
+    <p class="app-subp reveal">Cada mundo es un nivel del MCER, con su mapa de lecciones, su recinto de vocabulario y un guardián al final. Para pasar al siguiente mundo, lo vences en un duelo.</p>
+    <ol class="worlds-x">
+      <li class="wx reveal" style="--wa:#C07A33;--wi:#8f5722">
+        <div class="wx-art"><img src="assets/images/landing/app/world_a1.webp" alt="" width="720" height="309" loading="lazy" decoding="async"><span class="wx-lv">A1</span></div>
+        <div class="wx-body">
+          <h4>El Hogar</h4>
+          <p class="wx-what">Lo de todos los días: la casa, la comida, la familia.</p>
+          <p class="wx-guard"><img src="assets/images/landing/app/guardian_a1.webp" alt="" width="144" height="144" loading="lazy" decoding="async"><span><small>Guardián · se vence con 85 %</small>El Centinela del Hogar</span></p>
+          <p class="wx-den"><b>La Casa del Hogar</b> · 123 palabras</p>
+          <ul class="wx-rooms" aria-label="Salas de vocabulario de El Hogar"><li>La cocina</li><li>La sala</li><li>El dormitorio</li><li>El baño</li><li>El jardín</li><li>La familia</li></ul>
+        </div>
+      </li>
+      <li class="wx reveal" style="--wa:#5E8A4E;--wi:#3f6234">
+        <div class="wx-art"><img src="assets/images/landing/app/world_a2.webp" alt="" width="720" height="309" loading="lazy" decoding="async"><span class="wx-lv">A2</span></div>
+        <div class="wx-body">
+          <h4>El Sendero</h4>
+          <p class="wx-what">Sales de casa: el mercado, los planes, lo que hiciste ayer.</p>
+          <p class="wx-guard"><img src="assets/images/landing/app/guardian_a2.webp" alt="" width="144" height="144" loading="lazy" decoding="async"><span><small>Guardián · se vence con 85 %</small>El Guardián del Sendero</span></p>
+          <p class="wx-den"><b>La Cueva del Sendero</b> · 118 palabras</p>
+          <ul class="wx-rooms" aria-label="Salas de vocabulario de El Sendero"><li>La entrada</li><li>El mercado</li><li>El manantial</li><li>Las profundidades</li><li>El campamento</li><li>Los ecos</li></ul>
+        </div>
+      </li>
+      <li class="wx reveal" style="--wa:#3D86B0;--wi:#2b607f">
+        <div class="wx-art"><img src="assets/images/landing/app/world_b1.webp" alt="" width="720" height="309" loading="lazy" decoding="async"><span class="wx-lv">B1</span></div>
+        <div class="wx-body">
+          <h4>El Horizonte</h4>
+          <p class="wx-what">Te defiendes solo: viajes, trabajo y opiniones propias.</p>
+          <p class="wx-guard"><img src="assets/images/landing/app/guardian_b1.webp" alt="" width="144" height="144" loading="lazy" decoding="async"><span><small>Guardián · se vence con 85 %</small>El Vigía del Horizonte</span></p>
+          <p class="wx-den"><b>El Puerto del Horizonte</b> · 102 palabras</p>
+          <ul class="wx-rooms" aria-label="Salas de vocabulario de El Horizonte"><li>El muelle</li><li>El faro</li><li>El almacén</li><li>La cubierta</li><li>El puente de mando</li><li>La bodega</li></ul>
+        </div>
+      </li>
+      <li class="wx reveal" style="--wa:#A8762E;--wi:#7a5520">
+        <div class="wx-art"><img src="assets/images/landing/app/world_b2.webp" alt="" width="720" height="309" loading="lazy" decoding="async"><span class="wx-lv">B2</span></div>
+        <div class="wx-body">
+          <h4>La Torre</h4>
+          <p class="wx-what">Trabajas en inglés: juntas, argumentos y negociación.</p>
+          <p class="wx-guard"><img src="assets/images/landing/app/guardian_b2.webp" alt="" width="144" height="144" loading="lazy" decoding="async"><span><small>Guardián · se vence con 88 %</small>El Heraldo de la Torre</span></p>
+          <p class="wx-den"><b>La Torre del Saber</b> · 102 palabras</p>
+          <ul class="wx-rooms" aria-label="Salas de vocabulario de La Torre"><li>El salón</li><li>La biblioteca</li><li>El taller</li><li>El balcón</li><li>La bóveda</li><li>El estudio</li></ul>
+        </div>
+      </li>
+      <li class="wx reveal" style="--wa:#6A5FA8;--wi:#4c4383">
+        <div class="wx-art"><img src="assets/images/landing/app/world_c1.webp" alt="" width="720" height="309" loading="lazy" decoding="async"><span class="wx-lv">C1</span></div>
+        <div class="wx-body">
+          <h4>El Firmamento</h4>
+          <p class="wx-what">Matiz y precisión: ideas abstractas, ironía, escritura seria.</p>
+          <p class="wx-guard"><img src="assets/images/landing/app/guardian_c1.webp" alt="" width="144" height="144" loading="lazy" decoding="async"><span><small>Guardián · se vence con 90 %</small>El Custodio del Firmamento</span></p>
+          <p class="wx-den"><b>El Observatorio del Firmamento</b> · 86 palabras</p>
+          <ul class="wx-rooms" aria-label="Salas de vocabulario de El Firmamento"><li>La cúpula</li><li>El telescopio</li><li>El archivo</li><li>La aurora</li><li>La nebulosa</li><li>El cometa</li></ul>
+        </div>
+      </li>
+      <li class="wx reveal" style="--wa:#3FA08A;--wi:#2b7061">
+        <div class="wx-art"><img src="assets/images/landing/app/world_c2.webp" alt="" width="720" height="309" loading="lazy" decoding="async"><span class="wx-lv">C2</span></div>
+        <div class="wx-body">
+          <h4>El Castillo del Saber</h4>
+          <p class="wx-what">Dominio: el idioma deja de ser el tema.</p>
+          <p class="wx-guard"><img src="assets/images/landing/app/guardian_c2.webp" alt="" width="144" height="144" loading="lazy" decoding="async"><span><small>Guardián · se vence con 92 %</small>El Soberano del Saber</span></p>
+          <p class="wx-den"><b>El Castillo del Saber</b> · 85 palabras</p>
+          <ul class="wx-rooms" aria-label="Salas de vocabulario de El Castillo del Saber"><li>El portón</li><li>El salón del trono</li><li>La bóveda</li><li>La aguja</li><li>El sagrario</li><li>El patio de armas</li></ul>
+        </div>
+      </li>
+    </ol>
+
+    <h3 class="app-sub reveal">Lo que hay dentro</h3>
+    <ul class="feats-x">
+      <li class="fx reveal"><span class="fx-ic" aria-hidden="true"><svg class="i"><use href="#i-bolt"/></svg></span><b>Lecciones interactivas</b><span>Ejercicios cortos con corrección al instante. Vesper te dice por qué estuvo mal, no solo que estuvo mal.</span></li>
+      <li class="fx reveal"><span class="fx-ic" aria-hidden="true"><svg class="i"><use href="#i-case"/></svg></span><b>Vocabulario por salas</b><span>Cada mundo tiene un recinto con seis salas temáticas: más de 600 palabras en tarjetas inglés–español y una actividad rápida por sala.</span></li>
+      <li class="fx reveal"><span class="fx-ic" aria-hidden="true"><svg class="i"><use href="#i-gauge"/></svg></span><b>La Forja</b><span>Práctica sin final con lo que ya viste. Lo que fallas vuelve pronto; lo que dominas se espacia. Cuatro modos: mixto, escucha, vocabulario y gramática.</span></li>
+      <li class="fx reveal"><span class="fx-ic" aria-hidden="true"><svg class="i"><use href="#i-summit"/></svg></span><b>El duelo del guardián</b><span>El examen de cada mundo es una batalla: cada acierto le quita vida al guardián y cada error, un corazón a Vesper. Se aprueba con 85 a 92 % según el nivel.</span></li>
+      <li class="fx reveal"><span class="fx-ic" aria-hidden="true"><svg class="i"><use href="#i-audio"/></svg></span><b>Biblioteca de audio</b><span>Diálogos por nivel con voces y acentos distintos, para que el oído se acostumbre al inglés de fuera del salón.</span></li>
+      <li class="fx reveal"><span class="fx-ic" aria-hidden="true"><svg class="i"><use href="#i-star"/></svg></span><b>Racha, liga y medallas</b><span>Un poco cada día suma más que una tarde al mes. La racha lo cuenta, la liga es semanal y las medallas marcan lo que logras.</span></li>
+    </ul>
+
+    <p class="app-cta reveal">
+      <a href="leccion.html" class="btn btn-ghost"><svg class="i" aria-hidden="true"><use href="#i-bolt"/></svg> Abrir la app gratis</a>
+      <a href="audio_library.html" class="app-link">Oír la biblioteca de audio <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+    </p>
   </div>
 </section>
 
@@ -1931,21 +2235,25 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
         <h2 class="sec-title">Tu primer paso: el examen de nivel gratis.</h2>
         <p class="sec-lead">Quince minutos, sin crear cuenta y sin compromiso. Sales sabiendo tu nivel y qué curso te toca.</p>
         <ol class="steps">
-          <li><b>Haces el examen de nivel</b><p>15 minutos, en línea, resultado inmediato.</p></li>
-          <li><b>Te decimos tu peldaño</b><p>Con lo que ya dominas y lo que falta para el siguiente.</p></li>
-          <li><b>Eliges horario y plan</b><p>Grupal o 1:1, según tu meta y tu agenda.</p></li>
-          <li><b>Primera clase</b><p>Hablas inglés desde esa misma sesión.</p></li>
+          <li><b>Haces el examen de nivel</b><p><span data-hecho="examen_preguntas">30</span> preguntas en línea, unos <span data-hecho="examen_min">15</span> minutos, resultado al instante. Te pide tu correo o tu WhatsApp para mandarte el resultado.</p></li>
+          <li><b>Un asesor te escribe</b><p>Con tu nivel, el curso que te toca y los horarios que hay.</p></li>
+          <li><b>Entrevista oral con un profesor</b><p>Gratis y sin compromiso: confirma tu nivel hablando, no solo con un test.</p></li>
+          <li><b>Eliges horario y plan, y empiezas</b><p>Hablas inglés desde la primera clase.</p></li>
         </ol>
-        <p style="margin-top:28px"><a href="book_placement.html" class="btn btn-gold btn-lg"><svg class="i"><use href="#i-check-doc"/></svg> Examen de nivel gratis</a></p>
+        <p style="margin-top:28px"><a href="book_placement.html?src=landing-cierre" class="btn btn-gold btn-lg"><svg class="i"><use href="#i-check-doc"/></svg> Haz tu examen de nivel gratis</a></p>
       </div>
 
       <div class="formcard reveal">
         <h3 style="font-family:var(--display);font-size:1.2rem;font-weight:600;color:var(--cream);margin-bottom:6px">¿Prefieres que te escribamos?</h3>
-        <p style="color:var(--on-night-soft);font-size:.88rem;margin:0 0 22px">Déjanos tus datos y te contactamos con una propuesta.</p>
+        <p style="color:var(--on-night-soft);font-size:.88rem;margin:0 0 22px">Déjanos tu WhatsApp y te escribimos con horarios y precios para tu caso.</p>
         <form id="contactForm" action="https://formsubmit.co/ajax/contacto@vesperacademy.com" method="POST">
+          <input type="hidden" name="_subject" value="Nuevo prospecto desde vesperacademy.com (escritorio)">
+          <input type="hidden" name="_template" value="table">
           <div class="field"><input type="text" id="f-name" name="nombre" placeholder=" " required autocomplete="name"><label for="f-name">Tu nombre</label></div>
-          <div class="field"><input type="email" id="f-mail" name="email" placeholder=" " required autocomplete="email"><label for="f-mail">Tu correo</label></div>
-          <div class="field"><textarea id="f-msg" name="mensaje" placeholder=" "></textarea><label for="f-msg">¿Qué necesitas? (opcional)</label></div>
+          <div class="field"><input type="tel" id="f-wa" name="whatsapp" placeholder=" " required autocomplete="tel" inputmode="tel" pattern="[0-9 +()\-]{10,}" aria-describedby="f-wa-h"><label for="f-wa">Tu WhatsApp</label><small id="f-wa-h">10 dígitos, por ejemplo 55 1234 5678.</small></div>
+          <div class="field field--fixed"><select id="f-hora" name="horario_preferido"><option value="">Me da igual</option><option>Mañana</option><option>Mediodía</option><option>Noche</option><option>Sábado</option></select><label for="f-hora">¿Cuándo podrías tomar clase?</label></div>
+          <div class="field"><input type="email" id="f-mail" name="email" placeholder=" " autocomplete="email"><label for="f-mail">Tu correo (opcional)</label></div>
+          <div class="field"><textarea id="f-msg" name="mensaje" placeholder=" "></textarea><label for="f-msg">¿Para qué necesitas el inglés? (opcional)</label></div>
           <button type="submit" class="btn btn-gold" style="width:100%;justify-content:center">Enviar <svg class="i"><use href="#i-arrow"/></svg></button>
         </form>
         <p style="margin:10px 0 0;color:var(--on-night-soft);font-size:.8rem">Usamos tus datos solo para responderte. Lee nuestro <a href="aviso-de-privacidad.html" style="color:inherit;text-decoration:underline">aviso de privacidad</a>.</p>
@@ -1967,12 +2275,15 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
     <div class="fgrid">
       <div class="fbrand">
         <b>Vesper Academy</b>
-        <p>Vesper: la estrella que aparece al atardecer. Empieza cuando termina tu día.</p>
+        <!-- Antes: «la estrella que aparece al atardecer. Empieza cuando
+             termina tu día», que sugería clases de noche sin decirlo y sumaba
+             un cuarto significado a «Vesper». -->
+        <p>Escuela de inglés en línea con clases en vivo y profesor.</p>
         <div class="vesp">
           <img src="assets/images/mascot/vesper_cat_welcome.webp" alt="" width="56" height="56" loading="lazy" decoding="async">
           <span>
-            <a href="leccion.html">Lecciones gratis con Vesper</a>
-            <small>Nuestra app de práctica, sin costo</small>
+            <a href="leccion.html">App de práctica gratis</a>
+            <small>Con Vesper, nuestro gato tutor</small>
           </span>
         </div>
       </div>
@@ -1985,7 +2296,7 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
       </div>
       <div>
         <h5>Gratis</h5>
-        <a href="book_placement.html">Examen de nivel</a>
+        <a href="book_placement.html?src=landing-pie">Examen de nivel</a>
         <a href="leccion.html">Lecciones interactivas</a>
         <a href="audio_library.html">Biblioteca de audio</a>
       </div>
@@ -2551,56 +2862,57 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
       <b>Vesper Academy</b>
     </a>
     <div style="display:flex;align-items:center;gap:6px">
-      <a class="m-bar__cta" href="book_placement.html">Examen gratis</a>
+      <a class="m-bar__cta" href="book_placement.html?src=landing-m-bar">Examen gratis</a>
       <button class="m-burger" type="button" id="m-burger" aria-label="Abrir menú" aria-controls="m-sheet" aria-expanded="false"><svg class="i" aria-hidden="true"><use href="#i-menu"/></svg></button>
     </div>
   </header>
 
   <div class="m-sheet" id="m-sheet">
     <div class="m-sheet__inner">
-      <a href="#m-metodo">Metodología</a>
+      <a href="#m-metodo">Cómo son las clases</a>
       <a href="#m-cursos">Cursos</a>
-      <a href="#m-cert">Certificación</a>
       <a href="#m-precios">Precios</a>
+      <a href="#m-faq">Preguntas</a>
       <a href="#m-contacto">Contacto</a>
-      <a class="is-gold" href="leccion.html">Lecciones gratis <svg class="i" aria-hidden="true"><use href="#i-bolt"/></svg></a>
       <a class="m-btn m-btn--ghost" href="login.html">Acceso alumnos</a>
     </div>
   </div>
 
   <!-- Hero -->
-  <section class="m-hero">
+  <!-- Hero. h1 real (antes h2): en teléfono el <main> de escritorio está
+       oculto y la página se quedaba sin h1. El gato salió de aquí por la
+       misma razón que en escritorio: parecía una app gratis. -->
+  <section class="m-hero" id="m-main" tabindex="-1">
     <div class="m-hero__top">
       <div class="m-hero__copy">
-        <span class="m-eyebrow m-eyebrow--dark">Clases 100% en vivo</span>
-        <h2 class="m-h1">Habla inglés con <span>confianza real</span></h2>
-        <p>Método comunicativo con profesores reales. Hablas desde el día uno.</p>
-      </div>
-      <div class="m-cat">
-        <img src="assets/images/mascot/vesper_cat_welcome.webp" alt="Vesper, la mascota de Vesper Academy"
-             width="96" height="96" loading="lazy" decoding="async">
-        <i aria-hidden="true"></i><i aria-hidden="true"></i>
+        <span class="m-eyebrow m-eyebrow--dark">Escuela de inglés · clases en vivo con profesor</span>
+        <h1 class="m-h1" data-ab="h1">Años de clases de inglés y te congelas en la junta. <em>Aquí lo hablas.</em></h1>
+        <p data-ab="lead">Clases en vivo con profesor, en grupos de máximo <span data-hecho="grupo_max">9</span> o 1 a 1, donde el 80&nbsp;% del tiempo hablas tú. Para la junta, la entrevista o la certificación que tienes enfrente.</p>
       </div>
     </div>
 
     <div class="m-cta">
-      <a class="m-btn" href="book_placement.html">Examen de nivel gratis</a>
-      <a class="m-link m-link--gold" href="leccion.html?id=core-grammar-01-to-be"><span>Probar una lección</span><svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+      <a class="m-btn" href="book_placement.html?src=landing-m-hero" data-ab-src>Haz tu examen de nivel gratis</a>
+      <a class="m-btn m-btn--wa web-only" href="https://wa.me/525535699899?text=Hola%2C%20vengo%20de%20vesperacademy.com%20y%20quiero%20informaci%C3%B3n%20sobre%20las%20clases%20de%20ingl%C3%A9s." target="_blank" rel="noopener"><svg class="i i--solid" aria-hidden="true"><use href="#i-whatsapp"/></svg>Pregunta por WhatsApp</a>
     </div>
-    <p class="m-hero__note">Sin crear cuenta · 15 min · resultado al instante</p>
+    <p class="m-hero__note"><span data-hecho="examen_preguntas">30</span> preguntas · <span data-hecho="examen_min">15</span> min · resultado al instante · sin crear cuenta</p>
 
-    <div class="m-stats">
-      <div><b>A1–C2</b><small>Niveles</small></div>
-      <div><b>1:1</b><small>o grupo ≤9</small></div>
-      <div><b>100%</b><small>En vivo</small></div>
-    </div>
+    <!-- La misma ficha de decisión que en escritorio, en lista. -->
+    <ul class="m-ficha" aria-label="Así son las clases">
+      <li><span>Formato</span><span>En vivo por <span data-hecho="plataforma">Google Meet</span></span></li>
+      <li><span>Grupo</span><span>Máximo <span data-hecho="grupo_max">9</span>, o 1 a 1</span></li>
+      <li><span>Duración</span><span><span data-hecho="duracion_clase">1 hora</span> por clase</span></li>
+      <li><span>Horarios</span><span>Grupos <span data-hecho="horarios">de 8 de la mañana a 10 de la noche</span></span></li>
+      <li><span>Precio</span><span>Desde <span data-hecho="precio_grupal">$2,500</span> al mes, sin inscripción</span></li>
+    </ul>
   </section>
 
-  <!-- Confianza -->
+  <!-- Confianza: cada marca con su verbo (preparamos, no aplicamos) -->
   <div class="m-chips m-sb">
-    <span><svg class="i" aria-hidden="true"><use href="#i-check-doc"/></svg> MCER</span>
-    <span><svg class="i" aria-hidden="true"><use href="#i-summit"/></svg> IELTS · Cambridge · TOEFL</span>
-    <span><svg class="i" aria-hidden="true"><use href="#i-star"/></svg> Profesores certificados</span>
+    <span><svg class="i" aria-hidden="true"><use href="#i-check-doc"/></svg> Niveles MCER</span>
+    <span><svg class="i" aria-hidden="true"><use href="#i-summit"/></svg> Preparación IELTS · Cambridge · TOEFL</span>
+    <span data-pend="profes_cert" hidden><svg class="i" aria-hidden="true"><use href="#i-star"/></svg> Profesores <b data-hecho="profes_cert" style="font-weight:inherit"><span class="dato-real">[DATO REAL: certificación de los profesores]</span></b></span>
+    <span><svg class="i" aria-hidden="true"><use href="#i-check"/></svg> Sin inscripción ni permanencia</span>
   </div>
 
   <!-- Método -->
@@ -2622,33 +2934,49 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
   <!-- Niveles -->
   <section class="m-levels">
     <span class="m-eyebrow m-eyebrow--dark">Tu ruta</span>
-    <h2 class="m-h2" style="color:#fff">De cero a dominio, nivel por nivel</h2>
+    <h2 class="m-h2" style="color:#fff">De principiante absoluto a dominio total</h2>
     <p>Toca un nivel para ver su meta.</p>
     <button class="m-lvl is-open" type="button" aria-expanded="true">
       <span class="m-lvl__cefr">A1</span>
-      <span class="m-lvl__body"><span class="m-lvl__name">Fundamentos</span><span class="m-lvl__goal">Sobrevivir y presentarte: identidad, rutinas, lo esencial.</span></span>
+      <span class="m-lvl__body"><span class="m-lvl__name">Principiante</span><span class="m-lvl__goal">Te presentas, pides lo que necesitas y entiendes instrucciones sencillas.</span><span class="m-lvl__when">Lo sabes cuando: puedes presentarte y pedir algo en una tienda sin ayuda.</span></span>
       <span class="m-lvl__bar"><i style="width:16%"></i></span>
     </button>
     <button class="m-lvl" type="button" aria-expanded="false">
       <span class="m-lvl__cefr">A2</span>
-      <span class="m-lvl__body"><span class="m-lvl__name">Confianza</span><span class="m-lvl__goal">Conversación cotidiana, pasado y futuro, primeras historias.</span></span>
+      <span class="m-lvl__body"><span class="m-lvl__name">Básico</span><span class="m-lvl__goal">Hablas de tu día, tu trabajo y tus planes, y resuelves situaciones cotidianas.</span><span class="m-lvl__when">Lo sabes cuando: puedes contar lo que hiciste ayer sin trabarte.</span></span>
       <span class="m-lvl__bar"><i style="width:34%"></i></span>
     </button>
     <button class="m-lvl" type="button" aria-expanded="false">
       <span class="m-lvl__cefr">B1</span>
-      <span class="m-lvl__body"><span class="m-lvl__name">Independencia</span><span class="m-lvl__goal">Opinar, narrar y manejar situaciones imprevistas.</span></span>
+      <span class="m-lvl__body"><span class="m-lvl__name">Intermedio</span><span class="m-lvl__goal">Sostienes una conversación, explicas tus razones y trabajas en inglés con apoyo.</span><span class="m-lvl__when">Lo sabes cuando: puedes discrepar y explicar tu razón.</span></span>
       <span class="m-lvl__bar"><i style="width:52%"></i></span>
     </button>
     <button class="m-lvl" type="button" aria-expanded="false">
       <span class="m-lvl__cefr">B2</span>
-      <span class="m-lvl__body"><span class="m-lvl__name">Fluidez</span><span class="m-lvl__goal">Debate, negociación y entornos corporativos globales.</span></span>
+      <span class="m-lvl__body"><span class="m-lvl__name">Intermedio alto</span><span class="m-lvl__goal">Negocias, presentas y sigues una junta al ritmo de los demás.</span><span class="m-lvl__when">Lo sabes cuando: puedes llevar una junta entera en inglés.</span></span>
       <span class="m-lvl__bar"><i style="width:72%"></i></span>
     </button>
     <button class="m-lvl" type="button" aria-expanded="false">
       <span class="m-lvl__cefr">C1–C2</span>
-      <span class="m-lvl__body"><span class="m-lvl__name">Dominio</span><span class="m-lvl__goal">Matiz, retórica y certificación internacional.</span></span>
+      <span class="m-lvl__body"><span class="m-lvl__name">Avanzado y Experto</span><span class="m-lvl__goal">Matizas, persuades y escribes con precisión profesional.</span><span class="m-lvl__when">Lo sabes cuando: el idioma deja de ser el tema y solo importa lo que dices.</span></span>
       <span class="m-lvl__bar"><i style="width:100%"></i></span>
     </button>
+  </section>
+
+  <!-- Prueba social: huecos marcados hasta tener datos reales -->
+  <section class="m-proof" id="m-alumnos" hidden>
+    <span class="m-eyebrow">Quién te da clase</span>
+    <h2 class="m-h2">Profesores con nombre y cara</h2>
+    <article class="pcard"><div class="ph" aria-hidden="true"><svg class="i"><use href="#i-person"/></svg></div>
+      <h3><span class="dato-real">[DATO REAL: nombre del profesor 1]</span></h3>
+      <p><span class="dato-real">[DATO REAL: foto, certificación, años dando clase y niveles que enseña]</span></p></article>
+    <article class="pcard"><div class="ph" aria-hidden="true"><svg class="i"><use href="#i-person"/></svg></div>
+      <h3><span class="dato-real">[DATO REAL: nombre del profesor 2]</span></h3>
+      <p><span class="dato-real">[DATO REAL: foto, certificación, años dando clase y niveles que enseña]</span></p></article>
+    <h2 class="m-h2" style="margin-top:22px">Lo que cuentan los alumnos</h2>
+    <article class="pcard"><p><span class="dato-real">[DATO REAL: testimonio con nombre, puesto, ciudad y permiso por escrito]</span></p></article>
+    <article class="pcard"><h3><span class="dato-real">[DATO REAL: cifra verificable]</span></h3>
+      <p><span class="dato-real">[DATO REAL: alumnos atendidos o bandas obtenidas, con fecha de corte]</span></p></article>
   </section>
 
   <!-- Programas (baraja) -->
@@ -2697,10 +3025,10 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
       </button>
     </div>
     <div>
-      <p class="m-lead" data-detail="0" style="min-height:42px">Tu base completa de inglés, de cero a C2, con las cuatro destrezas integradas.</p>
-      <p class="m-lead" data-detail="1" style="min-height:42px" hidden>150 temas para soltar la lengua sin miedo, en grupos reducidos.</p>
-      <p class="m-lead" data-detail="2" style="min-height:42px" hidden>Reuniones, correos y negociación: el inglés que mueve tu carrera.</p>
-      <p class="m-lead" data-detail="3" style="min-height:42px" hidden>IELTS, Cambridge y TOEFL con estrategia y simulacros por banda.</p>
+      <p class="m-lead" data-detail="0" style="min-height:42px">El curso completo, de cero a C2: hablar, escuchar, leer y escribir. Plan Grupal o 1 a 1.</p>
+      <p class="m-lead" data-detail="1" style="min-height:42px" hidden><span data-hecho="temas_club">150</span> temas, <span data-hecho="clases_club">2</span> clases por semana, solo conversación.<span data-pend="precio_club" hidden> <span data-hecho="precio_club"><span class="dato-real">[DATO REAL: precio del Club]</span></span> al mes.</span><span data-pend-alt="precio_club"> Pregunta el precio por WhatsApp.</span></p>
+      <p class="m-lead" data-detail="2" style="min-height:42px" hidden>Juntas, correos y negociación. Plan Especializado o 1 a 1.</p>
+      <p class="m-lead" data-detail="3" style="min-height:42px" hidden>IELTS, Cambridge y TOEFL con estrategia y simulacros. Plan Especializado o 1 a 1.</p>
       <div class="m-deck-foot">
         <a class="m-link" data-detail="0" href="curso-ingles-general.html"><span>Ver el curso</span><svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a>
         <a class="m-link" data-detail="1" href="curso-club-conversacion.html" hidden><span>Ver el curso</span><svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a>
@@ -2721,7 +3049,7 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
   <section class="m-cert" id="m-cert">
     <span class="m-eyebrow">Certificación</span>
     <h2 class="m-h2">Estrategia real para tu banda</h2>
-    <p>Simulacros cronometrados y respuestas modelo Banda 6 vs Banda 8, con la técnica que premian los examinadores.</p>
+    <p>Simulacros cronometrados y respuestas modelo Banda 6 vs Banda 8, con la técnica que premian los examinadores. Te preparamos; el examen oficial lo presentas en una sede autorizada.</p>
     <div class="m-cert__row">
       <div><b>IELTS</b><small>Academic · General</small></div>
       <div><b>Cambridge</b><small>B2 · C1</small></div>
@@ -2735,7 +3063,7 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
     <div>
       <span class="m-eyebrow">Planes</span>
       <h2 class="m-h2">Invierte en tu inglés</h2>
-      <p class="m-lead"><b>¿Curso o plan?</b> El curso es lo que aprendes; el plan, cómo lo tomas. Toca una carta para verla al frente.</p>
+      <p class="m-lead">Mes por mes, sin inscripción ni permanencia. El curso es lo que aprendes; el plan, cómo lo tomas.</p>
     </div>
     <div class="m-deck m-deck--plans" data-kind="plans" data-start="0">
       <button class="m-card" type="button" aria-label="Plan grupal" data-href="planes.html#grupal">
@@ -2744,22 +3072,21 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
             <span class="m-plan__kind"><svg class="i" aria-hidden="true"><use href="#i-people"/></svg>Grupal</span>
             <b class="m-plan__name">Grupal</b>
             <span class="m-plan__rule"></span>
-            <span class="m-plan__price"><span class="m-plan__cur">$</span><span class="m-plan__amt">2,500</span></span>
+            <span class="m-plan__price"><span class="m-plan__cur">$</span><span class="m-plan__amt" data-hecho="precio_grupal_n">2,500</span></span>
             <span class="m-plan__unit">MXN / mes</span>
-            <span class="m-plan__note">Grupos de hasta 9 alumnos</span>
+            <span class="m-plan__note"><span data-hecho="clases_grupal">5</span> clases por semana · máximo <span data-hecho="grupo_max">9</span></span>
           </span>
         </span>
       </button>
       <button class="m-card" type="button" aria-label="Plan 1 a 1 profesional" data-href="planes.html#profesional">
         <span class="m-plan">
-          <span class="m-plan__ribbon">Más popular</span>
           <span class="m-plan__body">
             <span class="m-plan__kind"><svg class="i" aria-hidden="true"><use href="#i-person"/></svg>1 a 1</span>
-            <b class="m-plan__name">1 a 1 Profesional</b>
+            <b class="m-plan__name">1 a 1</b>
             <span class="m-plan__rule"></span>
-            <span class="m-plan__price"><span class="m-plan__cur">$</span><span class="m-plan__amt">250–400</span></span>
+            <span class="m-plan__price"><span class="m-plan__cur">$</span><span class="m-plan__amt" data-hecho="precio_1a1_n">250–400</span></span>
             <span class="m-plan__unit">MXN / hora</span>
-            <span class="m-plan__note">A tu medida, horario flexible</span>
+            <span class="m-plan__note">Tú eliges cuántas clases y a qué hora</span>
           </span>
         </span>
       </button>
@@ -2767,76 +3094,206 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
         <span class="m-plan">
           <span class="m-plan__body">
             <span class="m-plan__kind"><svg class="i" aria-hidden="true"><use href="#i-star"/></svg>Especial</span>
-            <b class="m-plan__name">Especializados</b>
+            <b class="m-plan__name">Especializado</b>
             <span class="m-plan__rule"></span>
-            <span class="m-plan__price"><span class="m-plan__cur">$</span><span class="m-plan__amt">3,000</span></span>
+            <span class="m-plan__price"><span class="m-plan__cur">$</span><span class="m-plan__amt" data-hecho="precio_esp_n">3,000</span></span>
             <span class="m-plan__unit">MXN / mes</span>
-            <span class="m-plan__note">Certificación · corporativo · técnico</span>
+            <span class="m-plan__note">Corporativo o certificación · <span data-hecho="clases_esp">5</span> por semana</span>
           </span>
         </span>
       </button>
     </div>
     <div>
-      <p class="m-includes"><span>Incluye</span><i></i></p>
-      <ul class="m-perks" data-detail="0" hidden>
-        <li><svg class="i" aria-hidden="true"><use href="#i-check"/></svg>5 clases en vivo por semana</li>
-        <li><svg class="i" aria-hidden="true"><use href="#i-check"/></svg>Material y audio incluidos</li>
-        <li><svg class="i" aria-hidden="true"><use href="#i-check"/></svg>Seguimiento mensual de nivel</li>
+      <p class="m-allinc"><b>Todos incluyen:</b> material, biblioteca de audio, examen de nivel y entrevista oral con un profesor, gratis.</p>
+      <p class="m-includes"><span>Lo que lo distingue</span><i></i></p>
+      <ul class="m-perks" data-detail="0">
+        <li><svg class="i" aria-hidden="true"><use href="#i-check"/></svg><span>Curso completo, en grupo</span></li>
+        <li><svg class="i" aria-hidden="true"><use href="#i-check"/></svg><span>Unas <span data-hecho="clases_mes_grupal">20</span> clases al mes: alrededor de <span data-hecho="por_clase_grupal">$125</span> por clase</span></li>
+        <li><svg class="i" aria-hidden="true"><use href="#i-check"/></svg><span>Evaluación continua de tu nivel</span></li>
       </ul>
-      <ul class="m-perks" data-detail="1">
-        <li><svg class="i" aria-hidden="true"><use href="#i-check"/></svg>Horario y temario personalizados</li>
-        <li><svg class="i" aria-hidden="true"><use href="#i-check"/></svg>Corrección inmediata en cada clase</li>
-        <li><svg class="i" aria-hidden="true"><use href="#i-check"/></svg>Plan enfocado a tu meta profesional</li>
+      <ul class="m-perks" data-detail="1" hidden>
+        <li><svg class="i" aria-hidden="true"><use href="#i-check"/></svg><span>Solo tú y el profesor, en tu horario</span></li>
+        <li><svg class="i" aria-hidden="true"><use href="#i-check"/></svg><span>Una hora por semana: de <span data-hecho="mes_1a1_1h">$1,000 a $1,600</span> al mes</span></li>
+        <li data-pend="criterio_1a1" hidden><svg class="i" aria-hidden="true"><use href="#i-check"/></svg><span>La tarifa depende de <span data-hecho="criterio_1a1"><span class="dato-real">[DATO REAL: de qué depende: nivel, curso u horario]</span></span></span></li>
       </ul>
       <ul class="m-perks" data-detail="2" hidden>
-        <li><svg class="i" aria-hidden="true"><use href="#i-check"/></svg>Simulacros por banda (IELTS/TOEFL)</li>
-        <li><svg class="i" aria-hidden="true"><use href="#i-check"/></svg>Inglés corporativo y técnico</li>
-        <li><svg class="i" aria-hidden="true"><use href="#i-check"/></svg>Informe de progreso por banda</li>
+        <li><svg class="i" aria-hidden="true"><use href="#i-check"/></svg><span>Simulacros cronometrados y rúbrica de banda</span></li>
+        <li><svg class="i" aria-hidden="true"><use href="#i-check"/></svg><span>Meta de banda definida desde el primer día</span></li>
+        <li><svg class="i" aria-hidden="true"><use href="#i-check"/></svg><span>Unas <span data-hecho="clases_mes_esp">20</span> sesiones al mes: alrededor de <span data-hecho="por_clase_esp">$150</span> cada una</span></li>
       </ul>
-      <a class="m-btn m-btn--dark" data-follow href="planes.html#profesional" style="margin-top:16px">Ver este plan</a>
+      <a class="m-btn m-btn--dark" data-follow href="planes.html#grupal" style="margin-top:16px">Ver este plan</a>
       <div class="m-deck-foot" style="margin-top:12px">
         <div class="m-dots">
-          <button type="button" aria-label="Plan 1"></button>
-          <button type="button" class="is-on" aria-label="Plan 2"></button>
+          <button type="button" class="is-on" aria-label="Plan 1"></button>
+          <button type="button" aria-label="Plan 2"></button>
           <button type="button" aria-label="Plan 3"></button>
         </div>
-        <span class="m-count">02 / 03</span>
+        <span class="m-count">01 / 03</span>
       </div>
-      <p class="m-lead" style="margin-top:11px">Precios de referencia en MXN. Todos los planes empiezan con tu examen de nivel gratis.</p>
+      <p class="m-entry"><b>¿Trabajas de 9 a 7?</b> Empieza con menos: el Club de Conversación (<span data-hecho="clases_club">2</span> clases por semana<span data-pend="precio_club" hidden>, <span data-hecho="precio_club"><span class="dato-real">[DATO REAL: precio del Club]</span></span> al mes</span>) o 1 a 1 una hora por semana.</p>
+      <p class="m-lead" style="margin-top:11px">Precios en pesos (MXN).<span data-pend="formas_pago" hidden> <span data-hecho="formas_pago"><span class="dato-real">[DATO REAL: formas de pago y si el precio incluye IVA]</span></span>.</span></p>
     </div>
   </section>
 
-  <!-- FAQ -->
-  <section>
-    <h2 class="m-h2" style="margin-bottom:14px">Dudas frecuentes</h2>
+  <!-- FAQ: mismo contenido que escritorio -->
+  <section id="m-faq">
+    <h2 class="m-h2" style="margin-bottom:14px">Preguntas antes de inscribirte</h2>
+    <div class="m-faq">
+      <button type="button" aria-expanded="false"><span>¿En qué horarios hay clases?</span><svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></button>
+      <div class="m-faq__a">Hay grupos <span data-hecho="horarios">de 8 de la mañana a 10 de la noche</span>. En 1 a 1 el horario lo eliges tú. Si trabajas de 9 a 7, mándanos tu horario por WhatsApp y te decimos qué grupo te queda.</div>
+    </div>
+    <div class="m-faq">
+      <button type="button" aria-expanded="false"><span>¿Cuánto dura cada clase?</span><svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></button>
+      <div class="m-faq__a">Cada clase dura <span data-hecho="duracion_clase">1 hora</span>. El plan Grupal son <span data-hecho="clases_grupal">5</span> clases por semana y el Club de Conversación, <span data-hecho="clases_club">2</span>.</div>
+    </div>
+    <div class="m-faq">
+      <button type="button" aria-expanded="false"><span>¿Son en vivo? ¿En qué plataforma?</span><svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></button>
+      <div class="m-faq__a">Todas en vivo, con profesor, por <span data-hecho="plataforma">Google Meet</span>. No vendemos videos grabados. Solo necesitas micrófono y una conexión estable.</div>
+    </div>
+    <div class="m-faq">
+      <button type="button" aria-expanded="false"><span>¿Cómo se paga?</span><svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></button>
+      <div class="m-faq__a">Mes por mes, en pesos, sin cuota de inscripción.<span data-pend="formas_pago" hidden> <span data-hecho="formas_pago"><span class="dato-real">[DATO REAL: formas de pago y si el precio incluye IVA]</span></span>.</span><span data-pend-alt="formas_pago"> Para las formas de pago, pregúntanos por WhatsApp.</span> Facturamos a empresas.</div>
+    </div>
+    <div class="m-faq">
+      <button type="button" aria-expanded="false"><span>¿Qué pasa si falto a una clase?</span><svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></button>
+      <div class="m-faq__a">En 1 a 1 reprogramamos la clase si avisas con 24 horas de anticipación. En grupo te mandamos el material de la sesión y la repasas con los audios.</div>
+    </div>
+    <div class="m-faq">
+      <button type="button" aria-expanded="false"><span>¿Puedo cancelar cuando quiera?<span data-pend="reembolso" hidden> ¿Hay reembolso?</span></span><svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></button>
+      <div class="m-faq__a">No hay permanencia: puedes dejarlo o cambiar de plan al terminar tu mes en curso.<span data-pend="reembolso" hidden> <span data-hecho="reembolso"><span class="dato-real">[DATO REAL: política de reembolso del mes pagado]</span></span>.</span></div>
+    </div>
+    <div class="m-faq">
+      <button type="button" aria-expanded="false"><span>¿Puedo probar antes de pagar?</span><svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></button>
+      <div class="m-faq__a">Sí. El examen de nivel y la entrevista oral con un profesor son gratis y sin compromiso, aunque al final no te inscribas.<span data-pend="clase_muestra" hidden> <span data-hecho="clase_muestra"><span class="dato-real">[DATO REAL: ¿hay clase muestra en vivo en un grupo real? Si sí, cómo se pide]</span></span></span></div>
+    </div>
+    <div class="m-faq">
+      <button type="button" aria-expanded="false"><span>¿Club de Conversación o plan Grupal?</span><svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></button>
+      <div class="m-faq__a">El plan Grupal es el curso completo: <span data-hecho="clases_grupal">5</span> clases por semana con las cuatro destrezas (hablar, escuchar, leer y escribir). El Club son <span data-hecho="clases_club">2</span> clases por semana solo de conversación, sobre <span data-hecho="temas_club">150</span> temas. Sirve como complemento o como primer paso si tienes poco tiempo.</div>
+    </div>
     <div class="m-faq">
       <button type="button" aria-expanded="false"><span>¿Necesito saber algo de inglés?</span><svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></button>
-      <div class="m-faq__a">No. Tenemos niveles desde cero absoluto y hacemos una prueba de ubicación con entrevista oral para empezar justo donde estás.</div>
+      <div class="m-faq__a">No. El nivel A1 empieza desde cero. Si ya sabes algo, el examen de nivel te coloca en el peldaño correcto para que no repitas lo que ya dominas.</div>
     </div>
     <div class="m-faq">
-      <button type="button" aria-expanded="false"><span>¿Las clases son en vivo?</span><svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></button>
-      <div class="m-faq__a">100% en vivo con un profesor real. La interacción y la corrección inmediata son el corazón del método.</div>
+      <button type="button" aria-expanded="false"><span>¿Cuánto tardo en subir de nivel?</span><svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></button>
+      <div class="m-faq__a">Depende del nivel y de cuánto practiques fuera de clase. Como referencia, pasar de un peldaño al siguiente suele llevar entre cuatro y seis meses al ritmo de cinco clases por semana.</div>
     </div>
     <div class="m-faq">
-      <button type="button" aria-expanded="false"><span>¿Cómo mido mi progreso?</span><svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></button>
-      <div class="m-faq__a">Cada clase se evalúa por fluidez, precisión y profesionalismo, con simulacros de entrada, mitad y salida en los planes de certificación.</div>
+      <button type="button" aria-expanded="false"><span>¿Ustedes aplican el IELTS, Cambridge o TOEFL?</span><svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></button>
+      <div class="m-faq__a">Te preparamos con estrategia por sección, simulacros cronometrados y una meta de banda acordada desde el principio. El examen oficial lo presentas en una sede autorizada.</div>
     </div>
-    <a class="m-link" href="examen-ingles-gratis.html"><span>Ver las 5 preguntas</span><svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+    <div class="m-faq">
+      <button type="button" aria-expanded="false"><span>¿Facturan a empresas?</span><svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></button>
+      <div class="m-faq__a">Sí. Emitimos factura y armamos planes para equipos, con reporte de avance por participante.</div>
+    </div>
+    <div class="m-faq">
+      <button type="button" aria-expanded="false"><span>¿Quién es Vesper, el gato?</span><svg class="i" aria-hidden="true"><use href="#i-chevron"/></svg></button>
+      <div class="m-faq__a">Vesper Academy es la escuela; Vesper, el gato, vive en nuestra <a href="#m-appx" style="text-decoration:underline">app de práctica gratis</a>. Tus clases son en vivo con profesores; la app es para practicar entre una clase y otra.</div>
+    </div>
+  </section>
+
+  <!-- La app (extra): misma información que #app en escritorio -->
+  <section class="m-appx" id="m-appx">
+    <span class="m-eyebrow m-eyebrow--dark">Extra · incluido y gratis</span>
+    <h2 class="m-h2">Entre clase y clase, practicas en el mundo de <em>Vesper</em></h2>
+    <p class="m-appx__lead">Tus clases son en vivo con un profesor. La app es el extra para los días sin clase, con Vesper, nuestro gato, como guía. Gratis, aunque todavía no seas alumno.</p>
+    <h3 class="m-appx__sub">Seis mundos, uno por nivel</h3>
+    <p class="m-appx__hint">Desliza para recorrerlos. Al final de cada uno te espera su guardián.</p>
+    <ol class="m-wdeck m-sb">
+      <li class="m-wcard" style="--wa:#C07A33;--wi:#8f5722">
+        <span class="m-wcard__art"><img src="assets/images/landing/app/world_a1.webp" alt="" width="720" height="309" loading="lazy" decoding="async"><span class="m-wcard__lv">A1</span></span>
+        <span class="m-wcard__body">
+          <b class="m-wcard__t">El Hogar</b>
+          <span class="m-wcard__what">Lo de todos los días: la casa, la comida, la familia.</span>
+          <span class="m-wcard__guard"><img src="assets/images/landing/app/guardian_a1.webp" alt="" width="144" height="144" loading="lazy" decoding="async"><span><small>Guardián · 85 %</small>El Centinela del Hogar</span></span>
+          <span class="m-wcard__den"><b>La Casa del Hogar</b> · 123 palabras</span>
+          <span class="m-wcard__rooms">La cocina · La sala · El dormitorio · El baño · El jardín · La familia</span>
+        </span>
+      </li>
+      <li class="m-wcard" style="--wa:#5E8A4E;--wi:#3f6234">
+        <span class="m-wcard__art"><img src="assets/images/landing/app/world_a2.webp" alt="" width="720" height="309" loading="lazy" decoding="async"><span class="m-wcard__lv">A2</span></span>
+        <span class="m-wcard__body">
+          <b class="m-wcard__t">El Sendero</b>
+          <span class="m-wcard__what">Sales de casa: el mercado, los planes, lo que hiciste ayer.</span>
+          <span class="m-wcard__guard"><img src="assets/images/landing/app/guardian_a2.webp" alt="" width="144" height="144" loading="lazy" decoding="async"><span><small>Guardián · 85 %</small>El Guardián del Sendero</span></span>
+          <span class="m-wcard__den"><b>La Cueva del Sendero</b> · 118 palabras</span>
+          <span class="m-wcard__rooms">La entrada · El mercado · El manantial · Las profundidades · El campamento · Los ecos</span>
+        </span>
+      </li>
+      <li class="m-wcard" style="--wa:#3D86B0;--wi:#2b607f">
+        <span class="m-wcard__art"><img src="assets/images/landing/app/world_b1.webp" alt="" width="720" height="309" loading="lazy" decoding="async"><span class="m-wcard__lv">B1</span></span>
+        <span class="m-wcard__body">
+          <b class="m-wcard__t">El Horizonte</b>
+          <span class="m-wcard__what">Te defiendes solo: viajes, trabajo y opiniones propias.</span>
+          <span class="m-wcard__guard"><img src="assets/images/landing/app/guardian_b1.webp" alt="" width="144" height="144" loading="lazy" decoding="async"><span><small>Guardián · 85 %</small>El Vigía del Horizonte</span></span>
+          <span class="m-wcard__den"><b>El Puerto del Horizonte</b> · 102 palabras</span>
+          <span class="m-wcard__rooms">El muelle · El faro · El almacén · La cubierta · El puente de mando · La bodega</span>
+        </span>
+      </li>
+      <li class="m-wcard" style="--wa:#A8762E;--wi:#7a5520">
+        <span class="m-wcard__art"><img src="assets/images/landing/app/world_b2.webp" alt="" width="720" height="309" loading="lazy" decoding="async"><span class="m-wcard__lv">B2</span></span>
+        <span class="m-wcard__body">
+          <b class="m-wcard__t">La Torre</b>
+          <span class="m-wcard__what">Trabajas en inglés: juntas, argumentos y negociación.</span>
+          <span class="m-wcard__guard"><img src="assets/images/landing/app/guardian_b2.webp" alt="" width="144" height="144" loading="lazy" decoding="async"><span><small>Guardián · 88 %</small>El Heraldo de la Torre</span></span>
+          <span class="m-wcard__den"><b>La Torre del Saber</b> · 102 palabras</span>
+          <span class="m-wcard__rooms">El salón · La biblioteca · El taller · El balcón · La bóveda · El estudio</span>
+        </span>
+      </li>
+      <li class="m-wcard" style="--wa:#6A5FA8;--wi:#4c4383">
+        <span class="m-wcard__art"><img src="assets/images/landing/app/world_c1.webp" alt="" width="720" height="309" loading="lazy" decoding="async"><span class="m-wcard__lv">C1</span></span>
+        <span class="m-wcard__body">
+          <b class="m-wcard__t">El Firmamento</b>
+          <span class="m-wcard__what">Matiz y precisión: ideas abstractas, ironía, escritura seria.</span>
+          <span class="m-wcard__guard"><img src="assets/images/landing/app/guardian_c1.webp" alt="" width="144" height="144" loading="lazy" decoding="async"><span><small>Guardián · 90 %</small>El Custodio del Firmamento</span></span>
+          <span class="m-wcard__den"><b>El Observatorio del Firmamento</b> · 86 palabras</span>
+          <span class="m-wcard__rooms">La cúpula · El telescopio · El archivo · La aurora · La nebulosa · El cometa</span>
+        </span>
+      </li>
+      <li class="m-wcard" style="--wa:#3FA08A;--wi:#2b7061">
+        <span class="m-wcard__art"><img src="assets/images/landing/app/world_c2.webp" alt="" width="720" height="309" loading="lazy" decoding="async"><span class="m-wcard__lv">C2</span></span>
+        <span class="m-wcard__body">
+          <b class="m-wcard__t">El Castillo del Saber</b>
+          <span class="m-wcard__what">Dominio: el idioma deja de ser el tema.</span>
+          <span class="m-wcard__guard"><img src="assets/images/landing/app/guardian_c2.webp" alt="" width="144" height="144" loading="lazy" decoding="async"><span><small>Guardián · 92 %</small>El Soberano del Saber</span></span>
+          <span class="m-wcard__den"><b>El Castillo del Saber</b> · 85 palabras</span>
+          <span class="m-wcard__rooms">El portón · El salón del trono · La bóveda · La aguja · El sagrario · El patio de armas</span>
+        </span>
+      </li>
+    </ol>
+    <h3 class="m-appx__sub">Lo que hay dentro</h3>
+    <ul class="m-fx">
+      <li><span class="m-fx__ic" aria-hidden="true"><svg class="i"><use href="#i-bolt"/></svg></span><span><b>Lecciones interactivas</b>Ejercicios cortos con corrección al instante. Vesper te dice por qué estuvo mal, no solo que estuvo mal.</span></li>
+      <li><span class="m-fx__ic" aria-hidden="true"><svg class="i"><use href="#i-case"/></svg></span><span><b>Vocabulario por salas</b>Cada mundo tiene un recinto con seis salas temáticas: más de 600 palabras en tarjetas inglés–español y una actividad rápida por sala.</span></li>
+      <li><span class="m-fx__ic" aria-hidden="true"><svg class="i"><use href="#i-gauge"/></svg></span><span><b>La Forja</b>Práctica sin final con lo que ya viste. Lo que fallas vuelve pronto; lo que dominas se espacia. Cuatro modos: mixto, escucha, vocabulario y gramática.</span></li>
+      <li><span class="m-fx__ic" aria-hidden="true"><svg class="i"><use href="#i-summit"/></svg></span><span><b>El duelo del guardián</b>El examen de cada mundo es una batalla: cada acierto le quita vida al guardián y cada error, un corazón a Vesper. Se aprueba con 85 a 92 % según el nivel.</span></li>
+      <li><span class="m-fx__ic" aria-hidden="true"><svg class="i"><use href="#i-audio"/></svg></span><span><b>Biblioteca de audio</b>Diálogos por nivel con voces y acentos distintos, para que el oído se acostumbre al inglés de fuera del salón.</span></li>
+      <li><span class="m-fx__ic" aria-hidden="true"><svg class="i"><use href="#i-star"/></svg></span><span><b>Racha, liga y medallas</b>Un poco cada día suma más que una tarde al mes. La racha lo cuenta, la liga es semanal y las medallas marcan lo que logras.</span></li>
+    </ul>
+    <a class="m-btn m-btn--ghost" href="leccion.html" style="margin-top:18px;gap:8px"><svg class="i" aria-hidden="true"><use href="#i-bolt"/></svg>Abrir la app gratis</a>
   </section>
 
   <!-- Cierre -->
   <section class="m-close" id="m-contacto">
     <h2 class="m-h2">Tu primer paso es gratis</h2>
-    <p>Descubre tu nivel real en 15 minutos y recibe tu curso recomendado al instante.</p>
-    <a class="m-btn" href="book_placement.html">Examen de nivel gratis</a>
+    <ol class="m-steps">
+      <li>Examen de nivel: <span data-hecho="examen_preguntas">30</span> preguntas, unos <span data-hecho="examen_min">15</span> minutos.</li>
+      <li>Un asesor te escribe con tu nivel y tu curso.</li>
+      <li>Entrevista oral con un profesor, gratis y sin compromiso.</li>
+      <li>Eliges horario y plan, y empiezas.</li>
+    </ol>
+    <a class="m-btn" href="book_placement.html?src=landing-m-cierre">Haz tu examen de nivel gratis</a>
     <button class="m-disclose" type="button" aria-expanded="false" aria-controls="m-form">¿Prefieres que te escribamos?</button>
     <form class="m-form" id="m-form" action="https://formsubmit.co/ajax/contacto@vesperacademy.com" method="POST">
       <input type="hidden" name="_subject" value="Nuevo prospecto desde vesperacademy.com (móvil)">
       <input type="hidden" name="_template" value="table">
       <input type="hidden" name="_captcha" value="false">
-      <input type="email" name="email" placeholder="Tu correo" aria-label="Tu correo electrónico" autocomplete="email" required>
       <input type="text" name="nombre" placeholder="Tu nombre" aria-label="Tu nombre" autocomplete="name" required>
-      <button type="submit">Quiero que me contacten</button>
+      <input type="tel" name="whatsapp" placeholder="Tu WhatsApp (10 dígitos)" aria-label="Tu WhatsApp, 10 dígitos" autocomplete="tel" inputmode="tel" pattern="[0-9 +()\-]{10,}" required>
+      <label for="m-hora">¿Cuándo podrías tomar clase?</label>
+      <select id="m-hora" name="horario_preferido"><option value="">Me da igual</option><option>Mañana</option><option>Mediodía</option><option>Noche</option><option>Sábado</option></select>
+      <input type="email" name="email" placeholder="Tu correo (opcional)" aria-label="Tu correo electrónico, opcional" autocomplete="email">
+      <button type="submit">Quiero que me escriban</button>
       <p style="margin:6px 0 0;font-size:.76rem;opacity:.75">Usamos tus datos solo para contactarte. <a href="aviso-de-privacidad.html" style="color:inherit;text-decoration:underline">Aviso de privacidad</a></p>
     </form>
     <p class="m-formmsg" role="status" aria-live="polite"></p>
@@ -2849,8 +3306,8 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
       <b>Vesper Academy</b>
     </div>
     <div class="m-foot__links">
-      <a href="leccion.html">Lecciones gratis</a>
-      <a href="book_placement.html">Examen de nivel</a>
+      <a href="book_placement.html?src=landing-m-pie">Examen de nivel</a>
+      <a href="leccion.html">App de práctica gratis</a>
       <a href="materiales.html">Portal del alumno</a>
       <a href="portal_profesores.html">Profesores</a>
       <a href="aviso-de-privacidad.html">Aviso de privacidad</a>
@@ -2864,11 +3321,127 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
   <!-- Barra de acción fija -->
   <div class="m-dock">
     <div class="m-dock__row">
-      <a class="m-btn" href="book_placement.html">Examen de nivel gratis</a>
+      <a class="m-btn" href="book_placement.html?src=landing-m-dock">Haz tu examen de nivel gratis</a>
       <a class="m-dock__wa" href="https://wa.me/525535699899?text=Hola%2C%20vengo%20de%20vesperacademy.com%20y%20quiero%20informaci%C3%B3n%20sobre%20los%20cursos%20de%20ingl%C3%A9s." target="_blank" rel="noopener" aria-label="Escríbenos por WhatsApp"><svg class="i i--solid" aria-hidden="true"><use href="#i-whatsapp"/></svg></a>
     </div>
   </div>
 </div>
+
+<!-- ============================================================
+     UNA SOLA VERDAD — los datos de negocio de la portada.
+     Cada [data-hecho="clave"] de las DOS ediciones (escritorio y #m-app)
+     se pinta desde aquí. Para cambiar un precio, el tamaño de grupo o
+     llenar un dato pendiente, se edita SOLO este bloque.
+       · "v": el texto que se muestra. null = dato pendiente: se pinta el
+         marcador [DATO REAL: …] con el texto de "falta".
+       · "mxn": el número, para las cuentas derivadas (precio por clase…).
+     El HTML lleva el mismo texto escrito como respaldo (buscadores, sin
+     JS). Si alguien lo cambia a mano y no aquí, la consola lo avisa.
+     ============================================================ -->
+<script type="application/json" id="vesper-hechos">
+{
+  "grupo_max":        {"v": "9"},
+  "clases_grupal":    {"v": "5"},
+  "clases_club":      {"v": "2"},
+  "clases_esp":       {"v": "5"},
+  "temas_club":       {"v": "150"},
+  "examen_preguntas": {"v": "30"},
+  "examen_min":       {"v": "15"},
+  "precio_grupal":    {"v": "$2,500",   "mxn": 2500},
+  "precio_esp":       {"v": "$3,000",   "mxn": 3000},
+  "precio_1a1":       {"v": "$250–400", "mxn": [250, 400]},
+  "precio_club":      {"v": null, "falta": "precio del Club"},
+  "criterio_1a1":     {"v": null, "falta": "de qué depende: nivel, curso u horario"},
+  "duracion_clase":   {"v": "1 hora"},
+  "horarios":         {"v": "de 8 de la mañana a 10 de la noche"},
+  "plataforma":       {"v": "Google Meet"},
+  "formas_pago":      {"v": null, "falta": "formas de pago y si el precio incluye IVA"},
+  "reembolso":        {"v": null, "falta": "política de reembolso del mes pagado"},
+  "clase_muestra":    {"v": null, "falta": "¿hay clase muestra en vivo en un grupo real? Si sí, cómo se pide"},
+  "profes_cert":      {"v": null, "falta": "certificación de los profesores"}
+}
+</script>
+<script>
+/* Hero A/B + hechos. Va DESPUÉS de #m-app para alcanzar las dos ediciones.
+   Orden: primero el texto del hero (que trae sus propios [data-hecho]),
+   luego se pintan los hechos. Todo en try: si falla, se queda el HTML de
+   respaldo, que dice lo mismo. */
+(function(){
+  try{
+    /* ---------- 1. Hero A/B ----------
+       ?h=a|b|c fuerza una variante (y la recuerda); sin parámetro se sortea
+       una vez por navegador. La variante viaja en el ?src= del examen
+       (landing-hero-b…), y book_placement.html ya manda ese origen con cada
+       lead: se mide conversión real sin GA4. */
+    var G = '<span data-hecho="grupo_max">9</span>';
+    var HERO = {
+      a:{h1:'Años de clases de inglés y te congelas en la junta. <em>Aquí lo hablas.</em>',
+         lead:'Clases en vivo con profesor, en grupos de máximo '+G+' o 1 a 1, donde el 80&nbsp;% del tiempo hablas tú. Para la junta, la entrevista o la certificación que tienes enfrente.'},
+      b:{h1:'Entiendes inglés. Lo difícil es <em>contestar en voz alta.</em>',
+         lead:'Eso no se arregla con más gramática: se arregla hablando. En cada clase en vivo hablas tú el 80&nbsp;% del tiempo, con un profesor que te corrige en el momento y un grupo de máximo '+G+'.'},
+      c:{h1:'El inglés que te piden <em>el puesto, la entrevista o el examen.</em>',
+         lead:'Clases en vivo con profesor y una ruta por niveles del MCER donde siempre sabes qué ya puedes hacer y qué te falta. Empieza por saber tu nivel real.'}
+    };
+    var v = null, KEY = 'vesper_hero_v';
+    try{
+      var q = (new URLSearchParams(location.search).get('h') || '').toLowerCase();
+      if (HERO[q]) { v = q; localStorage.setItem(KEY, q); }
+      else { v = localStorage.getItem(KEY); }
+      if (!HERO[v]) { v = 'abc'.charAt(Math.floor(Math.random()*3)); localStorage.setItem(KEY, v); }
+    }catch(e){ v = v || 'a'; }
+    if (!HERO[v]) v = 'a';
+    if (v !== 'a'){
+      [].forEach.call(document.querySelectorAll('[data-ab="h1"]'), function(el){ el.innerHTML = HERO[v].h1; });
+      [].forEach.call(document.querySelectorAll('[data-ab="lead"]'), function(el){ el.innerHTML = HERO[v].lead; });
+    }
+    [].forEach.call(document.querySelectorAll('[data-ab-src]'), function(a){
+      a.href = a.getAttribute('href').replace(/(src=[\w-]+)/, '$1-' + v);
+    });
+    document.documentElement.setAttribute('data-hero', v);
+    if (window.VA && VA.track) VA.track('hero_variant', {v: v});
+
+    /* ---------- 2. Hechos ---------- */
+    var H = JSON.parse(document.getElementById('vesper-hechos').textContent);
+    var fmt = function(n){ return '$' + Math.round(n).toLocaleString('en-US'); };
+    /* Derivados: se calculan, no se escriben. 4 semanas por mes. */
+    var der = {};
+    if (H.precio_grupal.mxn) der.por_clase_grupal = fmt(H.precio_grupal.mxn / (H.clases_grupal.v * 4));
+    if (H.precio_esp.mxn)    der.por_clase_esp    = fmt(H.precio_esp.mxn / (H.clases_esp.v * 4));
+    if (H.precio_1a1.mxn)    der.mes_1a1_1h       = fmt(H.precio_1a1.mxn[0]*4) + ' a ' + fmt(H.precio_1a1.mxn[1]*4);
+    der.clases_mes_grupal = String(H.clases_grupal.v * 4);
+    der.clases_mes_esp    = String(H.clases_esp.v * 4);
+    var esc = function(t){ var d = document.createElement('span'); d.textContent = t; return d.innerHTML; };
+    var faltan = {};
+    /* EN ESPERA: lo que depende de un dato null va dentro de [data-pend="clave"]
+       (oculto de origen, con `hidden`) y, si hace falta, tiene un texto de
+       reemplazo en [data-pend-alt="clave"]. Al llenar el dato en la tabla,
+       el fragmento aparece y el reemplazo se va, sin tocar el HTML.
+       ?pendientes=1 es la vista del dueño: enseña los marcadores [DATO REAL]. */
+    var verPend = false;
+    try{ verPend = new URLSearchParams(location.search).get('pendientes') === '1'; }catch(e){}
+    Object.keys(H).forEach(function(k){
+      var on = H[k].v != null || verPend;
+      [].forEach.call(document.querySelectorAll('[data-pend="' + k + '"]'), function(el){ el.hidden = !on; });
+      [].forEach.call(document.querySelectorAll('[data-pend-alt="' + k + '"]'), function(el){ el.hidden = on; });
+    });
+    [].forEach.call(document.querySelectorAll('[data-hecho]'), function(el){
+      var k = el.getAttribute('data-hecho'), base = k.replace(/_n$/, ''), h = H[base], val;
+      if (der[k] != null) val = der[k];
+      else if (!h){ console.warn('[hechos] clave desconocida:', k); return; }
+      else if (h.v == null){
+        faltan[base] = h.falta;
+        el.innerHTML = '<span class="dato-real">[DATO REAL: ' + esc(h.falta) + ']</span>';
+        return;
+      }
+      else val = (k !== base) ? h.v.replace(/^\$/, '') : h.v;
+      if (el.textContent.trim() !== val) console.warn('[hechos] el HTML de respaldo dice «' + el.textContent.trim() + '» y la tabla «' + val + '»:', k);
+      el.textContent = val;
+    });
+    window.VESPER_HECHOS = H;
+    window.VESPER_FALTAN = faltan;
+  }catch(e){}
+})();
+</script>
 
 <script src="vesper_mobile.js" defer></script>
 <script src="vesper_contact.js" defer></script>

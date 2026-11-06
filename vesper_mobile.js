@@ -173,7 +173,7 @@
             if (msg) msg.textContent = "¡Gracias! Un asesor te contactará en menos de 24 horas.";
           })
           .catch(function () {
-            btn.disabled = false; btn.textContent = "Quiero que me contacten";
+            btn.disabled = false; btn.textContent = "Quiero que me escriban";
             if (msg) msg.textContent = "No pudimos enviarlo. Escríbenos a contacto@vesperacademy.com.";
           });
       });
