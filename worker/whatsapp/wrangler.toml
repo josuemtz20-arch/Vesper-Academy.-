@@ -1,0 +1,31 @@
+# Bot de WhatsApp de Vesper Academy (Worker APARTE del proxy del chat).
+# Despliegue: ver README.md de esta carpeta.
+name = "vesper-whatsapp-bot"
+main = "vesper-whatsapp-bot.js"
+compatibility_date = "2026-06-16"
+preview_urls = false
+
+[observability]
+enabled = true
+
+[observability.logs]
+enabled = true
+
+# Secretos (wrangler secret put <NOMBRE>), NUNCA aquí:
+#   ANTHROPIC_API_KEY  WA_TOKEN  WA_APP_SECRET  WA_VERIFY_TOKEN
+
+# Estado por número de cliente (historial, pausa por asesor, límites).
+[[durable_objects.bindings]]
+name = "CHAT"
+class_name = "Chat"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["Chat"]
+
+# Ajustes opcionales sin tocar código (valores por defecto entre paréntesis):
+# [vars]
+# PAUSE_HOURS = "24"        # horas que el bot calla tras pasar a un asesor
+# PER_USER_PER_DAY = "40"   # respuestas del bot por número al día
+# GLOBAL_PER_DAY = "1500"   # tope diario total (freno de costo)
+# WA_GRAPH_VERSION = "v23.0"

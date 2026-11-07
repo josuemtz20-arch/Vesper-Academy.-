@@ -237,3 +237,8 @@ O en el panel: tu Worker → **Settings → Variables and Secrets** → añade `
   saldo lo protegen los límites por IP, el tope global y Turnstile.
 - Pon además un **límite de gasto mensual** en la consola de Anthropic
   (Settings → Limits): es la última red si algo falla aquí.
+
+## Bot de WhatsApp
+
+Worker aparte en [`whatsapp/`](whatsapp/README.md): contesta el WhatsApp de la
+academia con Claude y pasa la charla a un asesor cuando hace falta.
