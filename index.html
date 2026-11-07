@@ -624,6 +624,32 @@ section{padding:var(--s-section) 0;}
 }
 .hero-vesper:hover .seal-say,.hero-vesper:focus-visible .seal-say{opacity:1;transform:translateX(-50%) scale(1);}
 
+/* Vesper te mira (2026-11-06). Con mouse, el retrato del hero voltea
+   hacia el cursor y las pupilas lo siguen; el guion de abajo pone .vm-on.
+   Se usan las propiedades sueltas translate/rotate para no pisar el
+   transform que .med-bust ya trae (escala y ladeo al hover). */
+.medallion.vm-on .med-glass{perspective:720px;}
+.medallion.vm-on .med-bust,
+.medallion.vm-on .med-motion{
+  translate:var(--vm-hx,0px) var(--vm-hy,0px);
+  rotate:var(--vm-rot,0 1 0 0deg);
+}
+/* El vídeo trae el fondo pintado: crece un poco para que al girar no
+   asome su orilla dentro del círculo. */
+.medallion.vm-on .med-motion{scale:1.1;}
+/* Paralaje: halo y rayos van al revés que la cabeza, y así se lee
+   profundidad aunque el gato sea una sola imagen plana. */
+.medallion.vm-on .med-rays,
+.medallion.vm-on .med-halo{translate:calc(var(--vm-hx,0px) * -.6) calc(var(--vm-hy,0px) * -.6);}
+/* Las pupilas: SVG entre el retrato (sin pupilas) y los párpados, así el
+   parpadeo de CSS las sigue tapando. Mismo filtro que .med-face, sin la
+   sombra, para que su café case con el del dibujo. */
+.med-eyes{
+  position:absolute;inset:0;width:100%;height:100%;z-index:1;pointer-events:none;
+  filter:saturate(.93) contrast(1.05) brightness(.98);display:none;
+}
+.medallion.vm-ojos .med-eyes{display:block;}
+
 /* ============================================================
    SECCIÓN VESPER — la banda de noche que cierra el bloque de venta
    ============================================================ */
@@ -1944,6 +1970,163 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
   } catch(e){
     document.documentElement.classList.remove('js-anim');
   }
+})();
+</script>
+
+<script>
+/* ============================================================
+   VESPER TE MIRA (2026-11-06). Con mouse, el gato del hero voltea hacia
+   el cursor (busto en 3D suave) y las pupilas lo siguen.
+   - El retrato se cambia por una copia SIN pupilas (iris rellenado; la
+     hace _scripts/vesper_mira/build_mira.py) y las pupilas se dibujan
+     encima en SVG, recortadas con la máscara del ojo. En reposo caen
+     exactamente donde estaban en el dibujo (fit_pupil.py).
+   - El vídeo en bucle (saludo + parpadeo) trae las pupilas pintadas: se
+     apaga mientras el cursor se mueve y vuelve tras 2.5 s quieto.
+   - Táctiles: nada (no hay cursor). Menos movimiento o ahorro de datos:
+     nada. Todo arranca después de load, así el LCP sigue siendo el still.
+   ============================================================ */
+(function(){
+  'use strict';
+  try {
+    var med = document.querySelector('.hero-vesper .medallion');
+    if (!med || !window.matchMedia) return;
+    var conn = navigator.connection || navigator.webkitConnection || {};
+    if (!matchMedia('(hover: hover) and (pointer: fine)').matches ||
+        matchMedia('(prefers-reduced-motion: reduce)').matches ||
+        document.documentElement.classList.contains('vesper-reduce-motion') ||
+        conn.saveData) return;
+
+    var glass = med.querySelector('.med-glass'),
+        bust  = med.querySelector('.med-bust'),
+        face  = bust && bust.querySelector('.med-face');
+    if (!glass || !face) return;
+    var SRC_SIN  = 'assets/images/mascot/vesper_cat_welcome_sinpupila.webp',
+        SRC_MASK = 'assets/images/mascot/vesper_cat_welcome_ojos.png';
+
+    /* Geometría medida sobre el lienzo de 600×600: elipse ajustada a cada
+       pupila del original y centro/radio del brillo blanco. */
+    var OJOS = [
+      {cx:233.3, cy:275.5, rx:12.1, ry:20.8, rot:6,   hx:222.8, hy:267.5, hr:5.4},
+      {cx:363.9, cy:287.1, rx:11.9, ry:23.1, rot:0.1, hx:355.0, hy:284.3, hr:5.2}
+    ];
+    var MAX_X = 12, MAX_Y = 7;         // recorrido de la pupila (px del lienzo)
+    var HEAD_DEG = 9, HEAD_PCT = .022; // giro máximo y desplazamiento del busto
+    var QUIETO = 2500;                 // ms sin mover el mouse = vuelve el vídeo
+
+    var mx = null, my = null, ultimo = 0, raf = 0, listo = false;
+    var head = {x:0, y:0, rx:0, ry:0};
+
+    function video(){ return med.dataset.motion === 'listo' ? med.querySelector('.med-motion') : null; }
+    function videoOn(on){
+      var v = video(); if (!v) return;
+      med.classList.toggle('motion-on', on);
+      if (on){ var p = v.play(); if (p && p.catch) p.catch(function(){}); } else v.pause();
+    }
+    function despertar(){ if (listo && !raf) raf = requestAnimationFrame(tick); }
+    function lerp(a, b, t){ return a + (b - a) * t; }
+
+    function montar(){
+      var NS = 'http://www.w3.org/2000/svg';
+      var el = function(tag, at){ var e = document.createElementNS(NS, tag); for (var k in at) e.setAttribute(k, at[k]); return e; };
+      var svg = el('svg', {'class':'med-eyes', viewBox:'0 0 600 600', 'aria-hidden':'true', focusable:'false'});
+      var defs = el('defs', {});
+      var mask = el('mask', {id:'vm-ojos', maskUnits:'userSpaceOnUse', x:0, y:0, width:600, height:600});
+      mask.appendChild(el('image', {href:SRC_MASK, x:0, y:0, width:600, height:600}));
+      var grad = el('linearGradient', {id:'vm-pup', x1:0, y1:0, x2:0, y2:1});
+      grad.appendChild(el('stop', {offset:0, 'stop-color':'rgb(50,32,12)'}));
+      grad.appendChild(el('stop', {offset:1, 'stop-color':'rgb(90,50,3)'}));
+      defs.appendChild(mask); defs.appendChild(grad); svg.appendChild(defs);
+      var capa = el('g', {mask:'url(#vm-ojos)'});
+      OJOS.forEach(function(o){
+        o.gp = el('g', {});
+        o.gp.appendChild(el('ellipse', {cx:o.cx, cy:o.cy, rx:o.rx, ry:o.ry, fill:'url(#vm-pup)',
+                                        transform:'rotate(' + o.rot + ' ' + o.cx + ' ' + o.cy + ')'}));
+        o.gh = el('g', {});
+        o.gh.appendChild(el('circle', {cx:o.hx, cy:o.hy, r:o.hr, fill:'#fbf3e0'}));
+        capa.appendChild(o.gp); capa.appendChild(o.gh);
+        o.x = 0; o.y = 0; o.s = 1;
+      });
+      svg.appendChild(capa);
+      bust.insertBefore(svg, face.nextSibling);
+      face.setAttribute('src', SRC_SIN);
+      med.classList.add('vm-on', 'vm-ojos');
+      listo = true;
+      despertar();
+    }
+
+    function tick(now){
+      raf = 0;
+      var r = glass.getBoundingClientRect(), size = r.width;
+      var fuera = r.bottom < 0 || r.top > innerHeight;
+      var activo = mx !== null && now - ultimo < QUIETO && !fuera;
+      /* Si el vídeo arrancó mientras el cursor se movía, se le gana. */
+      if (activo && med.classList.contains('motion-on')) videoOn(false);
+
+      /* Cabeza: apunta al cursor y satura a ~1.4 tamaños de distancia.
+         rotateY positivo = mira a la derecha; rotateX positivo = arriba. */
+      var tx = 0, ty = 0, trx = 0, tryy = 0;
+      if (activo){
+        var dx = mx - (r.left + size / 2), dy = my - (r.top + size * .46);
+        var d = Math.hypot(dx, dy) || 1, f = Math.min(1, d / (size * 1.4));
+        tx = dx / d * f * size * HEAD_PCT; ty = dy / d * f * size * HEAD_PCT;
+        tryy = dx / d * f * HEAD_DEG; trx = -dy / d * f * HEAD_DEG * .7;
+      }
+      head.x = lerp(head.x, tx, .08); head.y = lerp(head.y, ty, .08);
+      head.rx = lerp(head.rx, trx, .08); head.ry = lerp(head.ry, tryy, .08);
+      var ang = Math.hypot(head.rx, head.ry);
+      med.style.setProperty('--vm-hx', head.x.toFixed(2) + 'px');
+      med.style.setProperty('--vm-hy', head.y.toFixed(2) + 'px');
+      med.style.setProperty('--vm-rot', ang < .01 ? '0 1 0 0deg'
+        : (head.rx / ang).toFixed(4) + ' ' + (head.ry / ang).toFixed(4) + ' 0 ' + ang.toFixed(3) + 'deg');
+      var resto = Math.abs(head.x - tx) + Math.abs(head.y - ty) + Math.abs(head.rx - trx) + Math.abs(head.ry - tryy);
+
+      /* Ojos: cada uno mira desde su propio centro, así bizquea si el
+         cursor pasa entre los dos; con el cursor encima se dilatan. */
+      var k = size / 600;
+      var encima = activo && mx >= r.left && mx <= r.right && my >= r.top && my <= r.bottom;
+      OJOS.forEach(function(o){
+        var ox = 0, oy = 0;
+        if (activo){
+          var dx = mx - (r.left + o.cx * k), dy = my - (r.top + o.cy * k);
+          var d = Math.hypot(dx, dy) || 1, f = Math.min(1, d / (size * .9));
+          ox = dx / d * f * MAX_X; oy = dy / d * f * MAX_Y;
+        }
+        var ts = encima ? 1.16 : 1;
+        o.x = lerp(o.x, ox, .2); o.y = lerp(o.y, oy, .2); o.s = lerp(o.s, ts, .12);
+        o.gp.setAttribute('transform', 'translate(' + (o.x + o.cx).toFixed(2) + ' ' + (o.y + o.cy).toFixed(2) +
+                          ') scale(' + o.s.toFixed(3) + ') translate(' + (-o.cx) + ' ' + (-o.cy) + ')');
+        o.gh.setAttribute('transform', 'translate(' + (o.x * .5).toFixed(2) + ' ' + (o.y * .5).toFixed(2) + ')');
+        resto += Math.abs(o.x - ox) + Math.abs(o.y - oy) + Math.abs(o.s - ts);
+      });
+
+      /* Quieto y ya de frente: vuelve el saludo en vídeo. */
+      if (!activo && !fuera && resto < .3 && !med.classList.contains('motion-on')) videoOn(true);
+      /* Mientras siga activo (o falte acomodarse) se pide otro cuadro; así
+         también se nota el paso a "quieto" aunque no lleguen más eventos. */
+      if (activo || resto > .05) raf = requestAnimationFrame(tick);
+    }
+
+    function onMove(e){ mx = e.clientX; my = e.clientY; ultimo = performance.now(); despertar(); }
+    window.addEventListener('pointermove', onMove, {passive:true});
+    window.addEventListener('scroll', despertar, {passive:true});
+    document.addEventListener('mouseout', function(e){ if (!e.relatedTarget){ ultimo = 0; despertar(); } });
+
+    /* Después de load y en tiempo muerto, como el vídeo: se precarga la
+       copia sin pupilas y sólo cuando ya está se hace el cambio, que en
+       reposo es invisible. Si no carga, el gato se queda como estaba. */
+    var arrancar = function(){
+      var pre = new Image();
+      pre.onload = montar;
+      pre.src = SRC_SIN;
+    };
+    var trasLoad = function(){
+      if (window.requestIdleCallback) requestIdleCallback(arrancar, {timeout:2500});
+      else setTimeout(arrancar, 1200);
+    };
+    if (document.readyState === 'complete') trasLoad();
+    else window.addEventListener('load', trasLoad, {once:true});
+  } catch(e){}
 })();
 </script>
 
