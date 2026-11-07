@@ -15,6 +15,7 @@
   if (window.VESPER_THEMES_PACK && VESPER_THEMES_PACK.merge) VESPER_THEMES_PACK.merge(window.VESPER_LESSONS, window.VESPER_LESSONS_ORDER);
   if (window.VESPER_THEMES_PACK2 && VESPER_THEMES_PACK2.merge) VESPER_THEMES_PACK2.merge(window.VESPER_LESSONS, window.VESPER_LESSONS_ORDER);
   if (window.VESPER_THEMES_PACK3 && VESPER_THEMES_PACK3.merge) VESPER_THEMES_PACK3.merge(window.VESPER_LESSONS, window.VESPER_LESSONS_ORDER);
+  if (window.VESPER_ADVANCED_PACK && VESPER_ADVANCED_PACK.merge) VESPER_ADVANCED_PACK.merge(window.VESPER_LESSONS, window.VESPER_LESSONS_ORDER);
   var L = window.VESPER_LESSONS || {};
   var ORDER = window.VESPER_LESSONS_ORDER || Object.keys(L);
   var A = window.VESPER_ADAPTIVE || null;
@@ -38,7 +39,9 @@
     exams: ["vesper_boss_exams.js", "vesper_level_exams.js"],
     forja: ["vesper_forja.js"],
     tour: ["vesper_tour.js"],
-    league: ["vesper_league.js", "vesper_league_cloud.js"]
+    league: ["vesper_league.js", "vesper_league_cloud.js"],
+    /* verbos conjugados, salas avanzadas y frases de ejemplo del vocabulario */
+    vocab: ["vesper_vocab_more.js"]
   };
   var _lazy = {};
   function loadScript(src) {
@@ -64,6 +67,16 @@
   function afterLoad(fn) {
     if (document.readyState === "complete") whenIdle(fn);
     else window.addEventListener("load", function () { whenIdle(fn); });
+  }
+  /* El vocabulario extra (vesper_vocab_more.js) llega bajo demanda. Cuando llega,
+     el caché de recintos se rehace para que salgan la Sala de los verbos, las
+     salas nuevas y los ejemplos. Con red lenta no se cuelga: a los `wait` ms
+     sigue sin él (y lo usará la próxima vez). */
+  function withVocab(fn, wait) {
+    if (window.VESPER_VOCAB_MORE) { fn(); return; }
+    var done = false, go = function () { if (done) return; done = true; _denCache = null; fn(); };
+    need("vocab").then(go, go);
+    setTimeout(go, wait || 2500);
   }
 
   var lesson = null, baseLesson = null, profile = (A && A.getProfile) ? A.getProfile() : null;
@@ -1729,6 +1742,8 @@
   };
   /* archivo webp del emblema de una sala (curada o de desborde), o "" si no hay */
   function branchEmblemSrc(level, branchId) {
+    /* la Sala de los verbos de cada mundo usa el emblema de "Más verbos" */
+    if (branchId === "verbs") return "assets/images/vocab/more_verbs.webp";
     if (BRANCH_EMBLEM[level + "-" + branchId])
       return "assets/images/vocab/branch_" + String(level).toLowerCase() + "_" + branchId + ".webp";
     if (/^more-/.test(branchId)) {
@@ -1775,11 +1790,92 @@
     prep:   { es: "preposición", en: "preposition" },
     conn:   { es: "conector",   en: "connector" },
     phrase: { es: "expresión",  en: "phrase" },
-    idiom:  { es: "modismo",    en: "idiom" }
+    idiom:  { es: "modismo",    en: "idiom" },
+    phrasal: { es: "verbo frasal", en: "phrasal verb" },
+    interj: { es: "interjección", en: "interjection" }
   };
   function posLabel(pos, eng) {
     var p = POS_LABEL[pos]; if (!p) return "";
     return eng ? p.en : p.es;
+  }
+
+  /* ===== Verbos conjugados y frases de ejemplo (2026-11-06) =================
+     Con vesper_vocab_more.js cargado, cada tarjeta puede traer:
+       c.f    = [3.ª persona, pasado, participio, -ing]  (formas alternas con "/")
+       c.ex   = una frase de ejemplo que CONTIENE la palabra (o una de sus formas)
+       c.exEs = su traducción (A1-A2)
+     denFind() localiza la palabra en la frase igual que el validador de
+     _scripts/build_vocab_more.py (find_in): la forma más larga como palabra
+     completa; un sustantivo suelto admite plural en -s/-es. */
+  function vAlts(form) { return String(form || "").split("/").map(function (x) { return x.trim(); }).filter(Boolean); }
+  function vBase(c) { return String((c && c.en) || "").replace(/^to\s+/i, ""); }
+  function reEsc(s) { return String(s).replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); }
+  function denFind(sentence, c) {
+    if (!sentence || !c) return null;
+    var low = String(sentence).toLowerCase(), base = vBase(c).toLowerCase().trim();
+    var cands = [{ s: base, fi: -1 }];
+    (c.f || []).forEach(function (form, fi) {
+      vAlts(form).forEach(function (a) {
+        a = a.toLowerCase();
+        if (!cands.some(function (x) { return x.s === a; })) cands.push({ s: a, fi: fi });
+      });
+    });
+    cands.sort(function (a, b) { return b.s.length - a.s.length; });
+    for (var i = 0; i < cands.length; i++) {
+      var cd = cands[i];
+      var pat = reEsc(cd.s).replace("one's", "(?:my|your|his|her|its|our|their|one's)");
+      var plural = !c.f && cd.s.indexOf(" ") < 0;
+      var m = new RegExp("(^|[^a-z])(" + pat + ")" + (plural ? "((?:e?s)?)" : "()") + "(?=$|[^a-z])").exec(low);
+      if (m) {
+        var start = m.index + m[1].length;
+        return { start: start, len: m[2].length, suffix: m[3] || "", cand: cd.s, fi: cd.fi,
+                 word: String(sentence).substr(start, m[2].length) };
+      }
+    }
+    return null;
+  }
+  /* la frase con la palabra resaltada (o con un hueco, si blank) */
+  function exMarked(sentence, m, blank) {
+    var s = String(sentence);
+    if (!m) return esc(s);
+    var end = m.start + m.len + (blank ? 0 : m.suffix.length);
+    return esc(s.slice(0, m.start))
+      + (blank ? '<span class="dq-gap" aria-label="hueco">_____</span>' : '<mark>' + esc(s.slice(m.start, end)) + '</mark>')
+      + esc(s.slice(end));
+  }
+  /* "goed", "taked", "buyed": el error típico de regularizar un irregular */
+  function regPast(base) {
+    var p = String(base).split(" "), h = p[0].toLowerCase();
+    p[0] = /e$/.test(h) ? h + "d" : /[^aeiou]y$/.test(h) ? h.slice(0, -1) + "ied" : h + "ed";
+    return p.join(" ");
+  }
+  function isIrregular(base, f) {
+    var h = String(base).split(" ")[0].toLowerCase(), stem = h.replace(/[ey]$/, "");
+    if (h === "be") return true;
+    return [f[1], f[2]].some(function (form) {
+      return vAlts(form).some(function (a) { var x = a.split(" ")[0].toLowerCase(); return !/ed$/.test(x) || x.indexOf(stem) !== 0; });
+    });
+  }
+  /* tabla de conjugación de la tarjeta: cada forma se toca para escucharla */
+  function conjHtml(c, eng) {
+    var f = c.f, base = vBase(c), be = base.toLowerCase() === "be";
+    var K = eng ? ["Present", "He / she / it", "Past", "Past participle", "-ing form"]
+                : ["Presente", "Él / ella", "Pasado", "Participio", "Gerundio (-ing)"];
+    var slash = function (x) { return esc(String(x).replace(/\//g, " / ")); };
+    var cells = [
+      [K[0], be ? "I <b>am</b> · you <b>are</b>" : "I · you · we · they <b>" + esc(base) + "</b>", be ? "I am. You are." : base],
+      [K[1], "he · she · it <b>" + esc(f[0]) + "</b>", f[0]],
+      [K[2], "<b>" + slash(f[1]) + "</b>", vAlts(f[1]).join(", ")],
+      [K[3], "(have) <b>" + slash(f[2]) + "</b>", vAlts(f[2]).join(", ")],
+      [K[4], "<b>" + esc(f[3]) + "</b>", f[3]]
+    ];
+    var irr = isIrregular(base, f);
+    return '<div class="dcj-head"><span class="dcj-ttl">' + (eng ? "Conjugation" : "Conjugación") + '</span>'
+      + '<span class="dcj-tag' + (irr ? " is-irr" : "") + '">' + (irr ? "irregular" : "regular") + '</span></div>'
+      + '<div class="dcj-grid">' + cells.map(function (x) {
+          return '<button class="dcj-cell" type="button" data-say="' + esc(x[2]) + '" aria-label="' + esc(x[0] + ": " + x[2].replace(/<[^>]+>/g, "")) + '">'
+            + '<span class="dcj-k">' + esc(x[0]) + '</span><span class="dcj-v" lang="en">' + x[1] + '</span></button>';
+        }).join("") + '</div>';
   }
 
   /* tarjetas "ya las sé": persistencia local por nivel|palabra */
@@ -2108,7 +2204,9 @@
   }
 
   /* vista principal del recinto: cabecera temática + ramas */
-  function renderDen(selLevel) {
+  /* el recinto espera al vocabulario extra (verbos, salas nuevas, ejemplos) */
+  function renderDen(selLevel) { withVocab(function () { renderDenNow(selLevel); }); }
+  function renderDenNow(selLevel) {
     clearLessonTheme();
     var d = densData()[selLevel];
     if (!d) { renderIndex(selLevel); return; }
@@ -2543,6 +2641,10 @@
     var hasPractice = br.practice && L[br.practice];
     var hasImg = branchHasImg(selLevel, br.id);
     var t = WORLD_THEME[selLevel] || {};
+    /* juegos nuevos: Conjugar (sala con verbos) y En contexto (frases de ejemplo) */
+    var nVerb = br.cards.filter(function (c) { return c.f; }).length;
+    var nCtx = br.cards.filter(function (c) { return c.ex && denFind(c.ex, c); }).length;
+    var conjFirst = nVerb >= 3 && (br.kind === "verbs" || nVerb * 2 >= br.cards.length);
     show('<div class="wrap"><div class="den deck-wrap" data-struct="' + esc(d.structure) + '" style="' + worldVars(t) + '">'
       + '<div class="den-top"><button class="den-back" id="deckBack" type="button" aria-label="Volver a las ramas">' + back + '</button>'
       + (hasImg ? '<span class="branch__ic has-img" style="width:42px;height:42px">' + branchEmblemHtml(selLevel, br.id, br.icon) + '</span>' : '')
@@ -2560,12 +2662,22 @@
       + '<button class="dc-say" id="sayEn2" type="button" aria-label="Escuchar en inglés">' + sayIc + '</button>'
       + '<span class="dc-hint">' + flipIc + ' Toca para volver</span></div>'
       + '</div></div>'
+      /* conjugación (verbos) y frase de ejemplo: cómo se USA la palabra */
+      + '<div class="deck-conj" id="deckConj" hidden></div>'
+      + '<div class="deck-ex" id="deckEx" hidden><div class="dex-top"><span class="dex-k">' + (ENG_LEVELS[selLevel] ? "Example" : "Ejemplo") + '</span>'
+      + '<button class="dex-say" id="dexSay" type="button" aria-label="Escuchar la frase">' + sayIc + '</button></div>'
+      + '<p class="dex-en" id="dexEn" lang="en"></p><p class="dex-es" id="dexEs" hidden></p>'
+      + '<button class="dex-tr" id="dexTr" type="button" hidden>ver traducción</button></div>'
       + '<div class="deck-explain"><div class="de-cat">' + mascot("explaining", false, "sm") + '</div>'
       + '<p class="deck-explain__tip" id="deckTip"></p></div>'
       + '<div class="deck-ctrls"><button class="dnav" id="dPrev" type="button" aria-label="Anterior">' + prevIc + '</button>'
       + '<button class="dknow" id="dKnow" type="button"></button>'
       + '<button class="dnav" id="dNext" type="button" aria-label="Siguiente">' + nextIc + '</button></div>'
-      + '<div class="deck-actions"><button class="btn btn-gold" id="dQuiz" type="button">Poner a prueba</button>'
+      + '<div class="deck-actions">'
+      + (conjFirst ? '<button class="btn btn-gold" id="dConj" type="button">Conjugar</button>' : '')
+      + '<button class="btn ' + (conjFirst ? 'btn-ghost' : 'btn-gold') + '" id="dQuiz" type="button">Poner a prueba</button>'
+      + (nVerb >= 3 && !conjFirst ? '<button class="btn btn-ghost" id="dConj" type="button">Conjugar</button>' : '')
+      + (nCtx >= 3 ? '<button class="btn btn-ghost" id="dCtx" type="button">En contexto</button>' : '')
       + '<button class="btn btn-ghost" id="dType" type="button">Escribir</button>'
       + '<button class="btn btn-ghost" id="dMatch" type="button">Emparejar</button>'
       + (hasPractice ? '<button class="btn btn-ghost" id="dPractice" type="button">Practicar en la lección</button>' : "")
@@ -2608,7 +2720,34 @@
         if (useEng) tip.innerHTML = '<b>' + esc(c.en) + '</b>' + posNote + ' — ' + esc(c.def) + ' ' + DECK_TIPS_EN[idx % DECK_TIPS_EN.length];
         else tip.innerHTML = '<b>' + esc(c.en) + '</b>' + posNote + ' se dice <b>' + esc(c.es) + '</b>. ' + DECK_TIPS[idx % DECK_TIPS.length];
       }
+      /* verbo: su tabla de conjugación; cualquier tarjeta: su frase de ejemplo */
+      var cj = byId("deckConj");
+      if (cj) {
+        cj.hidden = !c.f;
+        cj.innerHTML = c.f ? conjHtml(c, engLvl) : "";
+        each("#deckConj [data-say]", function (b) { b.onclick = function () { speak(b.getAttribute("data-say")); }; });
+      }
+      var dx = byId("deckEx");
+      if (dx) {
+        dx.hidden = !c.ex;
+        if (c.ex) {
+          byId("dexEn").innerHTML = exMarked(c.ex, denFind(c.ex, c), false);
+          var dexEs = byId("dexEs"), dexTr = byId("dexTr");
+          dexEs.textContent = c.exEs || "";
+          /* A1-A2: traducción a la vista; si no hay traducción, nada que mostrar */
+          dexEs.hidden = !c.exEs || engLvl;
+          dexTr.hidden = !c.exEs || !engLvl;
+          dexTr.textContent = "ver traducción";
+        }
+      }
     }
+    var dexSay = byId("dexSay");
+    if (dexSay) dexSay.onclick = function () { var c = curCard(); if (c.ex) speak(c.ex); };
+    var dexTrBtn = byId("dexTr");
+    if (dexTrBtn) dexTrBtn.onclick = function () {
+      var e = byId("dexEs"); e.hidden = !e.hidden;
+      this.textContent = e.hidden ? "ver traducción" : "ocultar traducción";
+    };
     card.onclick = function (e) { if (e.target.closest(".dc-say") || e.target.closest(".dc-trans")) return; card.classList.toggle("flipped"); };
     byId("sayEn").onclick = function (e) { e.stopPropagation(); sayWord(curCard().en); };
     byId("sayEn2").onclick = function (e) { e.stopPropagation(); sayWord(curCard().en); };
@@ -2631,6 +2770,8 @@
     byId("dQuiz").onclick = function () { denQuiz(selLevel, br); };
     byId("dType").onclick = function () { denTyping(selLevel, br); };
     byId("dMatch").onclick = function () { denMatch(selLevel, br); };
+    var dConj = byId("dConj"); if (dConj) dConj.onclick = function () { denConj(selLevel, br); };
+    var dCtx = byId("dCtx"); if (dCtx) dCtx.onclick = function () { denContext(selLevel, br); };
     if (hasPractice) byId("dPractice").onclick = function () { location.search = "?id=" + encodeURIComponent(br.practice); };
     render();
   }
@@ -2837,6 +2978,203 @@
       byId("qDone").onclick = function () { openBranch(selLevel, br.id); };
     }
     render();
+  }
+
+  /* ===== Juegos nuevos del recinto (2026-11-06): CONJUGAR y EN CONTEXTO =====
+     Comparten un motor: qs = [{ prompt (html), sub (html), opts ([] o null =
+     escribir), answers, show (html de la corrección), key (tarjeta), say }].
+     Acierto: avanza solo. Error: Vesper corrige y el alumno sigue con
+     "Siguiente" cuando terminó de leer la frase correcta. */
+  function denRun(selLevel, br, label, qs, again) {
+    var d = densData()[selLevel];
+    if (!d || !qs.length) { openBranch(selLevel, br.id); return; }
+    var qi = 0, correct = 0, t = WORLD_THEME[selLevel] || {};
+    var back = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg>';
+    function normA(s) { return String(s || "").toLowerCase().replace(/[’‘`]/g, "'").replace(/[.!?¿¡,;:"]/g, "").replace(/\s+/g, " ").trim(); }
+    function isAns(q, v) { return q.answers.some(function (a) { return normA(a) === normA(v); }); }
+    function shell(inner) {
+      show('<div class="wrap"><div class="den" data-struct="' + esc(d.structure) + '" style="' + worldVars(t) + '">'
+        + '<div class="den-top"><button class="den-back" id="qBack" type="button" aria-label="Volver al mazo">' + back + '</button>'
+        + '<div style="font-weight:700">' + esc(br.name) + ' · ' + esc(label) + '</div></div>'
+        + '<div class="den-quiz">' + inner + '</div></div><div class="hub-toast" id="toast"></div></div>');
+      var qb = byId("qBack"); if (qb) qb.onclick = function () { openBranch(selLevel, br.id); };
+    }
+    function step() {
+      if (qi >= qs.length) return finish();
+      var q = qs[qi], pct = Math.round(100 * qi / qs.length);
+      var body = q.opts
+        ? '<div class="dq-opts">' + q.opts.map(function (o) {
+            return '<button class="dq-opt" type="button" lang="en" data-v="' + esc(o) + '">' + esc(o) + '</button>';
+          }).join("") + '</div>'
+        : '<input class="dtype-in" id="dtIn" type="text" lang="en" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="tu respuesta…" aria-label="Tu respuesta">'
+          + '<div class="dtype-row"><button class="btn btn-ghost" id="dtSkip" type="button">No lo sé</button>'
+          + '<button class="btn btn-gold" id="dtChk" type="button">Comprobar</button></div>';
+      shell('<div class="dq-bar"><i style="width:' + pct + '%"></i></div>'
+        + '<div class="dq-sub">Pregunta ' + (qi + 1) + ' de ' + qs.length + '</div>'
+        + '<div class="dq-q' + (q.sent ? ' dq-q--sent' : '') + '" lang="en">' + q.prompt + '</div>'
+        + (q.sub ? '<div class="dq-sub dq-sub--hint">' + q.sub + '</div>' : '')
+        + body + '<div class="dq-react" id="dqReact" aria-live="polite"></div>');
+      var answered = false;
+      function judge(val, skip) {
+        if (answered) return;
+        answered = true;
+        var good = !skip && isAns(q, val);
+        if (q.opts) each(".dq-opt", function (x) {
+          x.disabled = true;
+          var v = x.getAttribute("data-v");
+          if (isAns(q, v)) x.classList.add("right");
+          else if (v === val) x.classList.add("wrong");
+        });
+        else {
+          var ti = byId("dtIn"); if (ti) { ti.disabled = true; ti.classList.add(good ? "correct" : "wrong"); }
+          byId("dtChk").disabled = true; byId("dtSkip").disabled = true;
+        }
+        var rc = byId("dqReact");
+        if (rc) rc.innerHTML = '<div class="dq-react__in ' + (good ? "ok" : "no") + '">'
+          + mascot(good ? "correct" : "correcting", false, "sm")
+          + '<div class="dq-react__tx"><b>' + (good ? "¡Correcto!" : "Te corrijo") + '</b><span lang="en">' + q.show + '</span></div></div>'
+          + (good ? "" : '<button class="btn btn-gold dq-next" id="dqNext" type="button">Siguiente</button>');
+        if (good) { correct++; var m = knownMap(); m[cardKey(selLevel, q.key)] = 1; saveKnown(m); }
+        if (q.say) speak(q.say);
+        if (good) setTimeout(function () { qi++; step(); }, 1150);
+        else {
+          var nb = byId("dqNext");
+          if (nb) { nb.onclick = function () { qi++; step(); }; try { nb.focus({ preventScroll: true }); } catch (e) {} }
+        }
+      }
+      if (q.opts) each(".dq-opt", function (b) { b.onclick = function () { judge(b.getAttribute("data-v"), false); }; });
+      else {
+        var inp = byId("dtIn"); if (inp) inp.focus();
+        byId("dtChk").onclick = function () { judge(inp ? inp.value : "", false); };
+        byId("dtSkip").onclick = function () { judge("", true); };
+        if (inp) inp.addEventListener("keydown", function (e) { if (e.key === "Enter") { e.preventDefault(); judge(inp.value, false); } });
+      }
+    }
+    function finish() {
+      var pct = Math.round(100 * correct / qs.length);
+      var msg = pct >= 80 ? "¡Excelente! Ya lo usas con soltura." : pct >= 50 ? "¡Bien! Repasa las que fallaste." : "Mira otra vez las tarjetas y sus ejemplos.";
+      shell('<div style="text-align:center;padding:8px 4px">' + mascot(pct >= 80 ? "milestone" : "explaining", false, "md")
+        + '<h1 style="font-family:\'Inria Serif\',Georgia,serif">' + correct + ' / ' + qs.length + '</h1>'
+        + '<p class="muted">' + esc(msg) + '</p>'
+        + '<div class="deck-actions" style="justify-content:center">'
+        + '<button class="btn btn-ghost" id="qAgain" type="button">Otra vez</button>'
+        + '<button class="btn btn-gold" id="qDone" type="button">Volver a la sala</button></div></div>');
+      byId("qAgain").onclick = again;
+      byId("qDone").onclick = function () { openBranch(selLevel, br.id); };
+    }
+    step();
+  }
+
+  /* Formas que valen como opción falsa EN ESA FRASE. Sin una pista de tiempo,
+     "The report sets out…" y "The report set out…" son las dos correctas, igual
+     que "My sister is / was a doctor": si la respuesta es presente se quitan las
+     formas de pasado, y si es pasado se quitan la base y la 3.ª persona. El error
+     típico de regularizar (goed, seted out) sólo se ofrece en pasado/participio. */
+  /* con una pista de tiempo en la frase ya no hay duda: se vuelven a ofrecer */
+  var PAST_CUE = /\b(yesterday|ago|last|in (1[89]|20)\d\d|in the (1[89]|20)\d0s|this morning|in the end|at first|once)\b/i;
+  var PRES_CUE = /\b(every|always|usually|often|never|sometimes|nowadays|these days|currently|right now|at the moment)\b/i;
+  function conjDistractors(c, m, sentence) {
+    var f = c.f, fi = m ? m.fi : 1, s = String(sentence || "");
+    var past = vAlts(f[1]).map(function (x) { return x.toLowerCase(); });
+    var cand = [vBase(c), vAlts(f[0])[0], vAlts(f[1])[0], vAlts(f[2])[0], f[3]];
+    return cand.filter(function (x, i) {
+      var k = String(x).toLowerCase();
+      if (fi <= 0 && past.indexOf(k) >= 0 && !PRES_CUE.test(s)) return false;
+      if (fi === 1 && i <= 1 && past.indexOf(k) < 0 && !PAST_CUE.test(s)) return false;
+      return true;
+    });
+  }
+  function conjWrong(c, m) {
+    var base = vBase(c);
+    if (base.toLowerCase() === "be" || !isIrregular(base, c.f)) return null;
+    return (!m || m.fi === 1 || m.fi === 2) ? regPast(base) : null;
+  }
+  /* opciones: la correcta + hasta 3 más, sin repetir; `first` entra seguro */
+  function pickOpts(correct, pool, first) {
+    var seen = {}, rest = [];
+    seen[correct.toLowerCase()] = 1;
+    (first ? [first] : []).concat(shuffle(pool.slice())).forEach(function (x) {
+      if (!x) return;
+      var k = String(x).toLowerCase(); if (seen[k]) return;
+      seen[k] = 1; rest.push(x);
+    });
+    return shuffle([correct].concat(rest.slice(0, 3)));
+  }
+
+  /* una pregunta de conjugación sobre un verbo. kind: ctx (su frase, con la
+     forma que pide la pista de tiempo) · past · pp · third · type (escribir) */
+  function conjQuestion(c, kind, eng) {
+    var base = vBase(c), f = c.f;
+    var all = [base].concat(f.map(function (x) { return vAlts(x)[0]; }));
+    var irr = isIrregular(base, f);
+    var wrong = irr && base.toLowerCase() !== "be" ? regPast(base) : null;
+    var both = '«' + esc(base) + '» → <b>' + esc(vAlts(f[1]).join(" / ")) + '</b> · <b>' + esc(vAlts(f[2]).join(" / ")) + '</b>';
+    if (kind === "ctx") {
+      var m = c.ex ? denFind(c.ex, c) : null;
+      if (m) {
+        return { sent: true, key: c.en, say: c.ex,
+          prompt: exMarked(c.ex, m, true) + ' <span class="dq-cue">(' + esc(base) + ')</span>',
+          sub: c.exEs ? esc(c.exEs) : (eng ? "Use the right form of the verb." : "Usa la forma correcta del verbo."),
+          opts: pickOpts(m.cand, conjDistractors(c, m, c.ex), conjWrong(c, m)), answers: [m.cand], show: exMarked(c.ex, m, false) };
+      }
+      kind = "past";
+    }
+    var fi = kind === "pp" ? 2 : kind === "third" ? 0 : 1;
+    var label = fi === 2 ? (eng ? "past participle" : "participio") : fi === 0 ? (eng ? "he / she / it form" : "forma con he / she / it") : (eng ? "past simple" : "pasado");
+    var target = vAlts(f[fi]);
+    if (kind === "type") {
+      return { key: c.en, say: target[0],
+        prompt: '<b>' + esc(base) + '</b>',
+        sub: (eng ? "Write the " + label + "." : "Escribe el " + label + ".") + (c.es ? ' <i>(' + esc(c.es) + ')</i>' : ""),
+        opts: null, answers: target, show: both };
+    }
+    return { key: c.en, say: target[0],
+      prompt: '<b>' + esc(base) + '</b>',
+      sub: eng ? "Choose the " + label + "." : "Elige el " + label + ".",
+      opts: pickOpts(target[0], all, fi === 0 ? null : wrong), answers: target,
+      show: fi === 0 ? 'he · she · it <b>' + esc(f[0]) + '</b>' : both };
+  }
+  function denConj(selLevel, br) {
+    var eng = !!ENG_LEVELS[selLevel];
+    var verbs = shuffle(br.cards.filter(function (c) { return c.f && c.f.length === 4; }));
+    if (!verbs.length) { openBranch(selLevel, br.id); return; }
+    /* ronda de 8: frases (forma correcta en contexto), pasado/participio y dos para escribir */
+    var kinds = eng ? ["ctx", "past", "type", "ctx", "pp", "ctx", "type", "pp"]
+                    : ["ctx", "past", "third", "ctx", "type", "pp", "ctx", "past"];
+    var qs = [];
+    for (var i = 0; i < 8; i++) qs.push(conjQuestion(verbs[i % verbs.length], kinds[i], eng));
+    denRun(selLevel, br, "conjugar", qs, function () { denConj(selLevel, br); });
+  }
+
+  /* EN CONTEXTO: la frase de ejemplo con un hueco; eliges la palabra que va.
+     La pista desambigua: la traducción (A1-A2) o la definición (B1+). Las
+     opciones falsas salen del mismo recinto y son del mismo tipo de palabra
+     (en verbos, la MISMA forma: went / took / bought...). */
+  function denContext(selLevel, br) {
+    var d = densData()[selLevel], eng = !!ENG_LEVELS[selLevel];
+    var usable = br.cards.filter(function (c) { return c.ex && denFind(c.ex, c); });
+    if (!usable.length) { openBranch(selLevel, br.id); return; }
+    var den = [];
+    d.branches.forEach(function (b) { b.cards.forEach(function (c) { den.push(c); }); });
+    var qs = shuffle(usable.slice()).slice(0, 8).map(function (c) {
+      var m = denFind(c.ex, c), pool;
+      var answer = c.f ? m.cand : vBase(c);
+      if (c.f) {
+        var vs = den.filter(function (x) { return x.f && x !== c; });
+        var sp = vs.filter(function (x) { return x.pos === c.pos; });
+        pool = (sp.length >= 3 ? sp : vs).map(function (x) {
+          return m.fi < 0 ? vBase(x) : vAlts(x.f[m.fi])[0];
+        });
+      } else {
+        var same = den.filter(function (x) { return !x.f && x !== c && x.pos === c.pos; });
+        pool = (same.length >= 3 ? same : den.filter(function (x) { return !x.f && x !== c; })).map(vBase);
+      }
+      var hint = c.exEs ? esc(c.exEs) : (eng && c.def ? "Hint: " + esc(c.def) : esc(c.es || ""));
+      return { sent: true, key: c.en, say: c.ex,
+        prompt: exMarked(c.ex, m, true), sub: hint,
+        opts: pickOpts(answer, pool, null), answers: [answer], show: exMarked(c.ex, m, false) };
+    });
+    denRun(selLevel, br, "en contexto", qs, function () { denContext(selLevel, br); });
   }
 
   /* REPASO MEZCLADO: opción múltiple con palabras de TODAS las salas del mundo */
@@ -4103,7 +4441,16 @@
   }
   function exHeader(pct, total) {
     /* las gemas/vidas viven en la misma fila que la barra (X · barra · gemas) */
-    return topbar(pct, econStrip()) + (lesson.isBoss ? duelHtml() : "") + comboChip() + exNum(total);
+    return topbar(pct, econStrip()) + (lesson.isBoss ? duelHtml() : "") + comboChip() + exNum(total) + xTag();
+  }
+  /* ejercicios añadidos por injectPractice(): una etiqueta dice de dónde vienen */
+  function xTag() {
+    var ex = lesson && lesson.exercises && lesson.exercises[exIdx];
+    if (!ex || !ex._tag) return "";
+    var txt = ex._tag === "review"
+      ? T("Repaso", "Review") + (ex._from ? " · " + ex._from : "")
+      : T("Verbo del mundo: ponlo en su forma", "World verb: put it in the right form");
+    return '<div class="x-tag x-tag--' + ex._tag + '">' + ic(ex._tag === "review" ? "rewind" : "sparkle") + '<span>' + esc(txt) + '</span></div>';
   }
   /* "Ejercicio 3 de 8" como constelación: una estrella por ejercicio que se
      enciende (oro) o se queda rota (error) — el lucero que da nombre a Vesper. */
@@ -5041,6 +5388,85 @@
       lesson = baseLesson;
     }
     injectSpeaking(lesson);
+    injectPractice(lesson);
+  }
+
+  /* MÁS PRÁCTICA EN CADA LECCIÓN (2026-11-06). Además de sus ejercicios, cada
+     lección normal suma:
+       · hasta 2 de REPASO: ejercicios de lecciones YA COMPLETADAS del mismo
+         mundo, de dos lecciones distintas, a mitad de la lección. Lo aprendido
+         vuelve cuando ya no está fresco: así la estrella mide lo que de verdad
+         sabes, no sólo lo que acabas de leer.
+       · 1 VERBO DEL MUNDO: un verbo de la Sala de los verbos de su nivel, para
+         ponerlo en la forma correcta dentro de su frase (si vesper_vocab_more.js
+         ya llegó; el enrutador lo espera un momento antes de abrir la lección).
+     Cuentan como cualquier otro ejercicio. Nunca en jefes, exámenes, repasos
+     ni la Forja. Las lecciones de lectura/escucha no prestan ejercicios: sus
+     preguntas dependen de un texto o un audio que aquí no se ve. */
+  var REVIEW_TYPES = { multiple_choice: 1, fill_blank: 1, true_false: 1, find_error: 1, word_order: 1, translate: 1 };
+  var REVIEW_CTX = /\b(text|passage|article|writer|author|speaker|audio|recording|conversation|dialogue|according|texto|lectura|di[aá]logo)\b/i;
+  function reviewable(l) {
+    if (!l || l.isBoss) return false;
+    if (/read|listen|lectura|escucha/i.test(String(l.skill || "") + " " + String(l.track || ""))) return false;
+    return !(l.exercises || []).some(function (e) { return e.type === "reading" || e.type === "listening"; });
+  }
+  function verbPracticeEx(lv) {
+    var M = window.VESPER_VOCAB_MORE; if (!M || !M.verbs) return null;
+    var list = (M.verbs[lv] || []).filter(function (c) { return c.ex && c.f && c.f.length === 4; });
+    if (!list.length) return null;
+    var c = list[Math.floor(Math.random() * list.length)], m = denFind(c.ex, c);
+    if (!m) return null;
+    var base = vBase(c);
+    var opts = pickOpts(m.cand, conjDistractors(c, m, c.ex), conjWrong(c, m)), s = String(c.ex);
+    return { type: "multiple_choice", _tag: "verb",
+      question: s.slice(0, m.start) + "___" + s.slice(m.start + m.len) + "  (" + base + ")",
+      options: opts, correctIndex: opts.indexOf(m.cand),
+      explanation: c.ex + (c.exEs ? " — " + c.exEs : "") + "  ·  " + base + " → "
+        + vAlts(c.f[1]).join("/") + " · " + vAlts(c.f[2]).join("/") };
+  }
+  function injectPractice(ls) {
+    try {
+      if (!ls || ls._xPractice || ls.isBoss || ls.isReview || ls.srsReview || ls.isExam || ls.forjaIds) return;
+      var exs = ls.exercises || [];
+      if (exs.length < 3) return;
+      ls._xPractice = 1;
+      var lv = String(ls.level || "").toUpperCase(), rev = [];
+      var comp = {};
+      try { comp = (P && P.getState && P.getState().completed) || {}; } catch (e) {}
+      /* firma de un ejercicio: si la lección actual ya trae uno igual, no se repite */
+      var sig = function (e) {
+        return String(e.question || e.statement || e.sentence || e.prompt || (e.words || []).join(" "))
+          .toLowerCase().replace(/[^a-z]+/g, " ").trim();
+      };
+      var own = {};
+      exs.forEach(function (e) { own[sig(e)] = 1; });
+      var pool = [];
+      ORDER.forEach(function (lid) {
+        var l = L[lid];
+        if (!l || lid === ls.lessonId || !comp[lid] || String(l.level || "").toUpperCase() !== lv || !reviewable(l)) return;
+        (l.exercises || []).forEach(function (e) {
+          if (!REVIEW_TYPES[e.type] || e.audio || own[sig(e)]) return;
+          if (REVIEW_CTX.test([e.question, e.statement, e.sentence, e.prompt, e.hint].join(" "))) return;
+          pool.push({ e: e, id: lid, t: l.title });
+        });
+      });
+      shuffle(pool);
+      var from = {};
+      for (var i = 0; i < pool.length && rev.length < 2; i++) {
+        if (from[pool[i].id]) continue;
+        from[pool[i].id] = 1;
+        var cp = {}, k;
+        for (k in pool[i].e) if (Object.prototype.hasOwnProperty.call(pool[i].e, k)) cp[k] = pool[i].e[k];
+        cp._tag = "review"; cp._from = pool[i].t;
+        rev.push(cp);
+      }
+      var vx = verbPracticeEx(lv);
+      if (!rev.length && !vx) return;
+      var cut = exs[exs.length - 1].type === "speak" ? exs.length - 1 : exs.length;
+      var mid = Math.ceil(cut / 2);
+      ls.exercises = exs.slice(0, mid).concat(rev, exs.slice(mid, cut), vx ? [vx] : [], exs.slice(cut));
+      ls.xpReward = (ls.xpReward || 0) + 2 * (rev.length + (vx ? 1 : 0));
+    } catch (e) {}
   }
 
   /* Inserta UN ejercicio de speaking al final de las lecciones normales,
@@ -5391,6 +5817,8 @@
   if (!id) afterLoad(function () {
     need("league").then(fillLeagueTile, function () {});
     need("forja").then(function () { refreshForjaCard(); }, function () {});
+    /* el vocabulario extra, para que el recinto abra sin esperar */
+    need("vocab").then(function () { _denCache = null; }, function () {});
   });
 
   /* tras llegar vesper_forja.js: los conteos reales en la tarjeta del hub */
@@ -5499,7 +5927,9 @@
     return;
   }
   lesson = baseLesson;
-  startLesson();
+  /* el verbo del mundo (injectPractice) sale de vesper_vocab_more.js: se espera
+     un momento; con red lenta la lección arranca sin él */
+  withVocab(startLesson, 900);
   }
 })();
 

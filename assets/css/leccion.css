@@ -3777,3 +3777,57 @@ body:has(#app #verify) #app .card.center{background-image:none}
 .wlg__banner.up{background:rgba(95,191,122,.18);color:#bff0cc}
 .wlg__banner.down{background:rgba(224,98,60,.18);color:#ffd0c2}
 .wlg__note{font-size:.8rem}
+/* ---- VOCABULARIO EN USO (2026-11-06) ----
+   Sala de los verbos: tabla de conjugación bajo la tarjeta (cada forma se toca
+   para oírla); toda tarjeta: su frase de ejemplo con la palabra resaltada.
+   Juegos Conjugar / En contexto: la frase con hueco. En la lección: etiqueta
+   de los ejercicios añadidos (Repaso · Verbo del mundo). */
+.deck-conj,.deck-ex{max-width:430px;margin:0 auto 12px;padding:12px 13px;border-radius:14px;
+  background:var(--paper);border:1px solid var(--line);color:var(--ink)}
+.deck-conj[hidden],.deck-ex[hidden]{display:none}
+.dcj-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0 2px 9px}
+.dcj-ttl,.dex-k{font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--muted)}
+.dcj-tag{font-size:.72rem;font-weight:700;border-radius:999px;padding:2px 10px;
+  background:var(--ok-tint);color:var(--success);border:1px solid color-mix(in srgb,var(--success) 35%,transparent)}
+.dcj-tag.is-irr{background:var(--w-accent-soft,var(--gold-tint));color:var(--w-accent,#a8843d);
+  border-color:color-mix(in srgb,var(--w-accent,#c5a059) 45%,transparent)}
+.dcj-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.dcj-cell{display:flex;flex-direction:column;align-items:flex-start;gap:2px;min-height:52px;padding:8px 10px;border-radius:11px;
+  border:1px solid var(--line);background:var(--cream);color:var(--ink);font:inherit;text-align:left;cursor:pointer;
+  transition:border-color .12s,transform .1s}
+.dcj-cell:first-child{grid-column:1 / -1}
+.dcj-cell:hover{border-color:color-mix(in srgb,var(--w-accent,#c5a059) 50%,var(--line))}
+.dcj-cell:active{transform:scale(.98)}
+.dcj-k{font-size:.7rem;font-weight:700;color:var(--muted)}
+.dcj-v{font-size:.92rem;line-height:1.3}
+.dcj-v b{font-family:"Inria Serif",Georgia,serif;font-size:1.08rem;color:var(--w-accent,#a8843d)}
+.dex-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.dex-say{width:34px;height:34px;flex:0 0 auto;border-radius:50%;border:1px solid var(--line);background:var(--cream);
+  display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--ink)}
+.dex-say svg{width:17px;height:17px}
+.dex-en{margin:6px 0 0;font-family:"Inria Serif",Georgia,serif;font-size:1.08rem;line-height:1.42}
+.dex-en mark,.dq-react__tx mark{background:var(--w-accent-soft,var(--gold-tint));color:inherit;font-weight:700;
+  border-radius:4px;padding:0 3px;box-shadow:inset 0 -2px 0 var(--w-accent,#c5a059)}
+.dex-es{margin:5px 0 0;font-size:.88rem;color:var(--muted);line-height:1.4}
+.dex-es[hidden]{display:none}
+.dex-tr{margin-top:7px;background:none;border:1px solid var(--line);color:var(--muted);border-radius:999px;
+  padding:4px 12px;font:inherit;font-size:.76rem;cursor:pointer}
+.dex-tr[hidden]{display:none}
+/* juegos con frase */
+.dq-q--sent{font-size:1.22rem;line-height:1.5;text-align:left;margin:8px 2px 6px}
+.dq-gap{display:inline-block;min-width:3.4em;border-bottom:2px solid var(--w-accent,#c5a059);color:transparent;line-height:1.05}
+.dq-cue{font-family:Inter,system-ui,sans-serif;font-size:.86rem;font-weight:700;color:var(--w-accent,#a8843d)}
+.dq-sub--hint{text-align:left;margin:0 2px 14px;font-size:.86rem;line-height:1.4}
+.dq-react__tx span{display:block}
+.dq-next{display:block;width:100%;margin-top:12px}
+.dtype-in.correct{border-color:var(--success);background:var(--ok-tint)}
+.dtype-in.wrong{border-color:var(--error);background:var(--no-tint)}
+/* lección: de dónde viene el ejercicio añadido */
+.x-tag{display:inline-flex;align-items:center;gap:6px;max-width:100%;margin:-2px 0 10px;padding:4px 11px;border-radius:999px;
+  font-size:.76rem;font-weight:700;color:var(--ink);background:var(--gold-tint);border:1px solid color-mix(in srgb,var(--gold) 40%,transparent)}
+.x-tag span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.x-tag svg{width:14px;height:14px;flex:0 0 auto}
+.x-tag--verb{background:var(--ok-tint);border-color:color-mix(in srgb,var(--success) 40%,transparent)}
+/* reglas de varias líneas (lecciones C1/C2 del paquete avanzado) */
+#app .apr-rule{white-space:pre-line}
+@media(max-width:380px){.dcj-grid{grid-template-columns:1fr}}

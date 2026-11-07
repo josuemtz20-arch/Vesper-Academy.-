@@ -10,7 +10,10 @@
  *
  * El contenido se compone de:
  *   1. Listas CURADAS por tema (abajo, en DENS).
- *   2. Palabras AUTO-EXTRAÍDAS de las lecciones de vocabulario ya
+ *   2. Si ya cargó vesper_vocab_more.js (bajo demanda): la Sala de los
+ *      verbos (primera, conjugada), salas avanzadas nuevas y una frase
+ *      de ejemplo por tarjeta. Ver enrich().
+ *   3. Palabras AUTO-EXTRAÍDAS de las lecciones de vocabulario ya
  *      existentes (pares de "matching"), agrupadas en ramas extra
  *      "Más palabras del mundo" — sin duplicar las curadas.
  *
@@ -640,24 +643,82 @@ window.VESPER_VOCAB_DENS = (function () {
     return "noun";
   }
 
+  /* ---- CAPA EXTRA: vesper_vocab_more.js (generado por _scripts/build_vocab_more.py) ----
+     Llega bajo demanda; si aún no está, build() devuelve los recintos de siempre.
+     Aporta: la "Sala de los verbos" de cada mundo (conjugados), salas avanzadas
+     nuevas (B2-C2), una frase de ejemplo por tarjeta y arreglos a las palabras
+     cosechadas (categoría, traducción, pares de colocación que no son vocabulario). */
+  function more() { return window.VESPER_VOCAB_MORE || null; }
+  function exampleOf(M, lv, en, pos) {
+    var t = M && M.ex && M.ex[lv]; if (!t) return null;
+    var k = clean(en).toLowerCase(), b = k.replace(/^to\s+/, "");
+    return t[k + "#" + pos] || t[b + "#" + pos] || t[k] || t[b] || null;
+  }
+  /* tarjeta final: traducción/categoría corregidas, conjugación (f) y ejemplo */
+  function enrich(M, lv, c) {
+    var out = { en: c.en, es: c.es, def: c.def, pos: c.pos };
+    if (!M) return out;
+    var k = clean(c.en).toLowerCase(), base = k.replace(/^to\s+/, "");
+    var fx = M.fix && M.fix[lv] && M.fix[lv][k];
+    if (fx) { if (fx.es) out.es = fx.es; if (fx.def) out.def = fx.def; }
+    var pf = M.pos && M.pos[lv] && M.pos[lv][k];
+    if (pf) out.pos = pf;
+    var fs = c.f || (M.forms && M.forms[base]);
+    /* conjugación sólo si la tarjeta ES un verbo ("rest" de A2 es el sustantivo) */
+    if (fs && (c.f || out.pos === "verb" || out.pos === "phrasal" || /^to\s/.test(k) || /\s/.test(base))) {
+      out.f = fs;
+      out.pos = /\s/.test(base) ? "phrasal" : "verb";
+    }
+    if (c.ex) { out.ex = c.ex; if (c.exEs) out.exEs = c.exEs; }
+    else {
+      var e = exampleOf(M, lv, c.en, out.pos === "phrasal" ? "verb" : out.pos);
+      if (typeof e === "string") out.ex = e;
+      else if (e) { out.ex = e[0]; out.exEs = e[1]; }
+    }
+    return out;
+  }
+
   function build(L, ORDER) {
     L = L || {}; ORDER = ORDER || Object.keys(L);
     var harvested = harvest(L, ORDER);
+    var M = more();
     var dens = {};
     LEVELS.forEach(function (lv) {
       var src = DENS[lv]; if (!src) return;
       /* clona ramas curadas y reúne claves ya usadas para deduplicar */
       var used = {}, branches = src.branches.map(function (b) {
         var cards = b.cards.map(function (c) {
-          used[keyOf(c.en)] = 1; return { en: c.en, es: c.es, def: c.def, pos: vocabPos(c, b) };
+          used[keyOf(c.en)] = 1; return enrich(M, lv, { en: c.en, es: c.es, def: c.def, pos: vocabPos(c, b) });
         });
         return { id: b.id, name: b.name, icon: b.icon, hint: b.hint, practice: b.practice, curated: true, cards: cards };
       });
+      if (M) {
+        /* la Sala de los verbos va PRIMERO: es la que el alumno usa para hablar */
+        var vcards = ((M.verbs && M.verbs[lv]) || []).filter(function (c) {
+          var k = keyOf(c.en); if (used[k]) return false; used[k] = 1; return true;
+        }).map(function (c) {
+          return enrich(M, lv, { en: c.en, es: c.es, def: c.def, pos: /\s/.test(c.en) ? "phrasal" : "verb", f: c.f, ex: c.ex, exEs: c.exEs });
+        });
+        if (vcards.length) branches.unshift({ id: "verbs", name: "La sala de los verbos", icon: "bolt",
+          hint: "Verbos conjugados", curated: true, kind: "verbs", cards: vcards });
+        /* salas nuevas (B2-C2), detrás de las curadas de siempre */
+        ((M.rooms && M.rooms[lv]) || []).forEach(function (r) {
+          var cards = r.cards.filter(function (c) {
+            var k = keyOf(c.en); if (used[k]) return false; used[k] = 1; return true;
+          }).map(function (c) {
+            return enrich(M, lv, { en: c.en, es: c.es, def: c.def, pos: r.pos || vocabPos(c, r), ex: c.ex });
+          });
+          if (cards.length) branches.push({ id: r.id, name: r.name, icon: r.icon, hint: r.hint, curated: true, cards: cards });
+        });
+      }
+      /* pares de ejercicios de colocación ("make" -> "a decision"): no son vocabulario */
+      var skip = {};
+      ((M && M.skip && M.skip[lv]) || []).forEach(function (t) { skip[t] = 1; });
       /* añade palabras auto-extraídas no repetidas, en bloques de 12 */
       var extra = [], seen = {};
       harvested[lv].forEach(function (p) {
         var k = keyOf(p.en);
-        if (used[k] || seen[k]) return;
+        if (used[k] || seen[k] || skip[clean(p.en).toLowerCase()]) return;
         seen[k] = 1; extra.push(p);
       });
       /* agrupa las extra por contenido y nombra cada sala según su tema */
@@ -685,7 +746,7 @@ window.VESPER_VOCAB_DENS = (function () {
             id: "more-" + k + (part > 1 ? ("-" + part) : ""),
             name: meta[k].name + (nChunks > 1 ? (" · " + part) : ""),
             icon: meta[k].icon, hint: "Del mundo " + lv, curated: false,
-            cards: arr.slice(i, i + chunk).map(function (c) { return { en: c.en, es: c.es, def: c.def, pos: vocabPos(c, null) }; })
+            cards: arr.slice(i, i + chunk).map(function (c) { return enrich(M, lv, { en: c.en, es: c.es, def: c.def, pos: vocabPos(c, null) }); })
           });
           part++;
         }

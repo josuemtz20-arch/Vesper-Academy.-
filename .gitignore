@@ -242,6 +242,9 @@
 !/portal_escuela.html
 # recintos tematicos de vocabulario (ramas) — datos publicos, sin claves
 !/vesper_vocab_dens.js
+# verbos conjugados, salas avanzadas y frases de ejemplo de los recintos (lo genera
+# _scripts/build_vocab_more.py; leccion_app.js lo carga bajo demanda)
+!/vesper_vocab_more.js
 !/apariencia.html
 
 # Expansion 2026-06-15 (Front 2): Vesper personalization. The "Configuracion"
@@ -302,6 +305,8 @@
 # vocab + listening) and thematic reading + vocabulary for B2/C1/C2
 # (gig economy, AI, philosophy of happiness, collocations, trends, nuance).
 !/vesper_themes_pack3.js
+# 2026-11-06: 17 lecciones de estructuras y vocabulario C1/C2
+!/vesper_advanced_pack.js
 
 # Expansion 2026-06-20: dedicated boss exam banks (fresh wording/contexts,
 # sampled each attempt). C1/C2 are short TOEFL-style exams (reading +
