@@ -155,6 +155,8 @@ body{margin:0;font-family:var(--va-font-text,Inter,system-ui,sans-serif);display
         var f = meta.body.fields || {};
         var count = parseInt((f.chunkCount || {}).integerValue || "1", 10);
         var bookTitle = (f.title || {}).stringValue || id;
+        /* version del libro: la carcasa Canva guarda las paginas en cache con ella */
+        var ver = (f.updatedAt || {}).timestampValue || "";
         note("Abriendo: " + bookTitle);
 
         /* Rastreador ligero para el héroe "Hoy" del portal (materiales.html):
@@ -176,7 +178,7 @@ body{margin:0;font-family:var(--va-font-text,Inter,system-ui,sans-serif);display
                  '<div class="muted">Avisa a la academia para que lo vuelva a subir.</div>');
             return;
           }
-          render(html, token, base, user.email || "");
+          render(html, token, base, user.email || "", ver);
         });
       }).catch(function () {
         fail('<div class="err">No hay conexi&oacute;n con el servidor de libros.</div>' +
@@ -202,7 +204,7 @@ body{margin:0;font-family:var(--va-font-text,Inter,system-ui,sans-serif);display
 
   /* ── 4. Renderizar: el libro sustituye a esta página por completo,
          así su CSS de impresión y sus scripts funcionan tal cual ── */
-  function render(html, token, base, email) {
+  function render(html, token, base, email, ver) {
     /* el candado ya se pasó aquí: quita su <script> del documento del libro */
     html = html.replace(/<script[^>]*src=["']vesper_auth\.js["'][^>]*>\s*<\/script>/gi, "");
 
@@ -213,11 +215,13 @@ body{margin:0;font-family:var(--va-font-text,Inter,system-ui,sans-serif);display
        11 MB abre al instante en vez de descargarse entero.
        Como document.write crea un documento NUEVO, el SDK de Firebase de esta
        página desaparece: hay que pasarle a la carcasa el idToken y la ruta base
-       para que pueda leer. El token dura ~1 h; la carcasa avisa si caduca. */
+       para que pueda leer. El token dura ~1 h; la carcasa avisa si caduca.
+       `id` + `ver` (updatedAt de la meta) le dejan guardar las paginas en
+       Cache Storage: reabrir el libro no vuelve a gastar lecturas. */
     var isPaged = /VESPER_PAGED_BOOK/.test(html);
     if (isPaged) {
       var boot = "<script>window.VESPER_BOOK=" +
-        JSON.stringify({ token: token, base: base }).replace(/</g, "\\u003c") +
+        JSON.stringify({ token: token, base: base, id: id, ver: ver || "" }).replace(/</g, "\\u003c") +
         ";<\/script>";
       html = /<head[^>]*>/i.test(html)
         ? html.replace(/<head[^>]*>/i, function (m) { return m + boot; })
