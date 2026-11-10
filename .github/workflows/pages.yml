@@ -44,11 +44,9 @@ jobs:
         with:
           path: _site
 
-      # timeout: deploy-pages espera 10 min por defecto a que Pages procese el
-      # artefacto (~218 MB, casi todo audio) y, si se pasa, ABORTA y cancela el
-      # despliegue. El 2026-11-09 Pages tardó más de 10 min tres veces seguidas
-      # (#5, #6, #7 fallaron con "Timeout reached"). 30 min le da margen.
+      # deploy-pages espera a lo sumo 10 min (600000 ms es el MÁXIMO que permite
+      # GitHub; un timeout mayor se ignora) a que Pages procese el artefacto.
+      # Si Pages tarda más, falla con "Timeout reached": es lentitud de GitHub,
+      # no del sitio. Reintentar más tarde (Re-run jobs) basta.
       - id: deployment
         uses: actions/deploy-pages@v4
-        with:
-          timeout: 1800000
