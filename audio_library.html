@@ -21,7 +21,7 @@
          arranca hasta que el CSS se parsea y deja los preconnect de adorno. -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=Inter:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=Inter:wght@400;500;600;700&family=Caveat:wght@600;700&display=swap">
     <!-- Font Awesome se queda SOLO por los glifos de leccion: vesper_covers.js
          guarda una clase fa- por pista y lo comparte con lesson.html, asi que
          retirarlo aqui rompe la otra pagina. El resto de la interfaz ya no lo
@@ -668,6 +668,91 @@
         .col-card.mini .mini-name { display:block; font-family:var(--va-font-display); font-weight:600;
             font-size:1rem; color:var(--text); }
         @media (min-width:601px) { .col-grid .col-card.mini { min-height:74px; } }
+
+        /* ============================================================
+           LÁMINAS DE COLECCIÓN (2026-11-09)
+           El dueño: "se ve muy vacía… solo barras de audio, nada que
+           represente el nivel". Cada colección lleva ahora su escena
+           pintada (vesper_library_art.js): los niveles 1–6 son los mundos
+           del mapa y Basics/Profesional, escenas nuevas de Vesper. El
+           chip de la esquina dice el nivel real (A1, B2…): el viejo "B1"
+           de Basics 1 se leía como el nivel B1.
+           La lámina siempre es oscura, así que su texto es literal claro
+           (no --text), y sobrevive a los ocho temas.
+           ============================================================ */
+        .col-card.has-pic .cc-art { height:auto; aspect-ratio:21 / 9; padding:16px 18px;
+            align-items:flex-end; background:#14122a; }
+        .cc-pic { position:absolute; inset:0; z-index:0; width:100%; height:100%;
+            object-fit:cover; object-position:62% 50%;
+            transition:transform .5s var(--ease-out); }
+        .col-card.has-pic:hover .cc-pic, .col-card.has-pic:focus-visible .cc-pic { transform:scale(1.04); }
+        .col-card.has-pic .cc-art::after { content:""; position:absolute; inset:0; z-index:1; pointer-events:none;
+            background:linear-gradient(0deg,rgba(14,12,31,.9) 0%,rgba(14,12,31,.45) 38%,rgba(14,12,31,0) 66%),
+                       linear-gradient(90deg,rgba(14,12,31,.5),rgba(14,12,31,0) 58%); }
+        .col-card.has-pic .cc-name b { font-size:1.22rem; text-shadow:0 2px 12px rgba(0,0,0,.6); }
+        .col-card.has-pic .cc-name small { color:#f3e2ab; text-shadow:0 1px 8px rgba(0,0,0,.7); }
+        .cc-cefr { position:absolute; top:12px; left:14px; z-index:3;
+            font-family:var(--va-font-display); font-size:.95rem; font-weight:600; line-height:1;
+            color:#f3e2ab; padding:6px 11px 7px; border-radius:999px;
+            background:rgba(14,12,31,.55); border:1px solid rgba(243,226,171,.42);
+            -webkit-backdrop-filter:blur(4px); backdrop-filter:blur(4px); }
+        /* Bloqueada: la escena se apaga en gris, igual que antes la banda. */
+        .col-card.locked.has-pic .cc-art { filter:grayscale(.8) brightness(.6); }
+        /* Ficha compacta ("Más adelante"): la escena queda como miniatura
+           a la izquierda, con la cara de Vesper a la vista. */
+        .col-card.mini.has-pic .cc-art { aspect-ratio:auto; width:108px; flex:0 0 108px; padding:0; }
+        .col-card.mini .cc-pic { object-position:68% 40%; }
+        .col-card.mini .cc-cefr { display:none; }
+        .col-card.mini.has-pic .cc-art::after { background:linear-gradient(90deg,rgba(14,12,31,0) 60%,rgba(14,12,31,.35)); }
+
+        /* -- Banda de la colección abierta -- */
+        body.in-col .ahero, body.in-col #phrase, body.in-col #resume-host { display:none; }
+        .colhero { position:relative; isolation:isolate; overflow:hidden; margin-top:18px;
+            display:flex; align-items:flex-end; min-height:clamp(250px,30vw,340px);
+            padding:clamp(22px,3.6vw,38px) clamp(22px,4vw,42px);
+            border-radius:22px; border:1px solid var(--hair); color:#f5f2eb; background:#14122a;
+            box-shadow:0 0 0 5px color-mix(in srgb,var(--gold) 9%,transparent),0 22px 50px rgba(8,6,22,.34); }
+        .ch-pic { position:absolute; inset:0; z-index:-2; width:100%; height:100%;
+            object-fit:cover; object-position:70% 45%; }
+        .colhero::before { content:""; position:absolute; inset:0; z-index:-1; pointer-events:none;
+            background:linear-gradient(90deg,rgba(14,12,31,.94) 0%,rgba(14,12,31,.82) 34%,rgba(14,12,31,.25) 62%,rgba(14,12,31,0) 82%),
+                       linear-gradient(0deg,rgba(14,12,31,.6),rgba(14,12,31,0) 46%); }
+        .colhero:not(.has-pic)::before { background:none; }
+        .ch-txt { max-width:min(500px,100%); }
+        .ch-kick { display:flex; align-items:center; gap:10px; flex-wrap:wrap;
+            font-size:var(--t-eyebrow); font-weight:700; letter-spacing:.2em; text-transform:uppercase;
+            color:rgba(245,242,235,.78); }
+        .ch-kick b { font-family:var(--va-font-display); font-size:1rem; letter-spacing:0; text-transform:none;
+            color:#f3e2ab; padding:5px 11px 6px; border-radius:999px; border:1px solid rgba(243,226,171,.45);
+            background:rgba(14,12,31,.4); }
+        .colhero h2 { margin:12px 0 0; font-family:var(--va-font-display); font-weight:600;
+            font-size:clamp(2rem,4.6vw,3rem); line-height:1; letter-spacing:-.02em; color:#f5f2eb;
+            text-shadow:0 2px 18px rgba(0,0,0,.45); }
+        .colhero .ch-sub { margin:6px 0 0; font-size:.95rem; font-weight:600; color:#f3e2ab; }
+        .colhero .ch-desc { margin:12px 0 0; font-size:.98rem; line-height:1.55; color:rgba(245,242,235,.82); text-wrap:pretty; }
+        /* Vesper escribe a mano (FIRMA): inglés grande, la glosa debajo. */
+        .ch-hand { margin:14px 0 0; display:inline-flex; flex-direction:column; gap:2px;
+            transform:rotate(-1.2deg); transform-origin:left center; }
+        .ch-hand[hidden] { display:none; }
+        .ch-hand span { font-family:"Caveat","Segoe Print","Bradley Hand",cursive; font-weight:700;
+            font-size:1.55rem; line-height:1.05; color:#f3e2ab; }
+        .ch-hand small { font-size:.8rem; color:rgba(245,242,235,.66); }
+        .ch-prog { display:flex; flex-direction:column; gap:7px; margin-top:16px; max-width:280px; }
+        .ch-prog[hidden] { display:none; }
+        .ch-prog .cc-meter { background:rgba(243,226,171,.22); height:3px; }
+        .ch-prog span { font-size:var(--t-eyebrow); font-weight:600; letter-spacing:.12em; text-transform:uppercase;
+            color:rgba(245,242,235,.7); }
+        @media (max-width:760px) {
+            /* Teléfono: la escena arriba con Vesper a la vista, el texto
+               debajo sobre noche (el mismo patrón que la lámina del inicio). */
+            .colhero { flex-direction:column; align-items:stretch; min-height:0;
+                padding:calc((100vw - 2 * var(--gutter)) * .36) 20px 22px; }
+            .ch-pic { height:auto; aspect-ratio:21 / 9; inset:0 0 auto 0; object-position:66% 40%; }
+            .colhero::before { background:linear-gradient(0deg,rgba(20,18,42,1) 0%,rgba(20,18,42,.96) 50%,rgba(20,18,42,.2) 72%,rgba(20,18,42,0) 86%); }
+            .colhero h2 { font-size:2.1rem; }
+        }
+        @media (prefers-reduced-motion:reduce) { .cc-pic { transition:none; } }
+        html.vesper-reduce-motion .cc-pic { transition:none; }
     </style>
 
 <!-- Preferencias del alumno (tamano de texto, alto contraste, menos
@@ -815,7 +900,21 @@
             </button>
             <a class="btn-gold" id="exam-btn" href="#"></a>
         </div>
-        <div class="shead"><h2 id="lessons-title">Lecciones</h2><div class="sh-line"></div></div>
+        <!-- Banda de la colección abierta: su lámina (la misma de la tarjeta
+             y de la cabecera del reproductor), el nivel, de qué va y una línea
+             de Vesper a mano. La pinta openCollection(). -->
+        <section class="colhero" id="colhero" aria-labelledby="lessons-title">
+            <img class="ch-pic" id="ch-pic" alt="" width="1376" height="590" hidden>
+            <div class="ch-txt">
+                <span class="ch-kick" id="ch-kick"></span>
+                <h2 id="lessons-title">Lecciones</h2>
+                <p class="ch-sub" id="ch-sub" lang="en"></p>
+                <p class="ch-desc" id="ch-desc"></p>
+                <p class="ch-hand" id="ch-hand" hidden><span lang="en" id="ch-hand-en"></span><small id="ch-hand-es"></small></p>
+                <div class="ch-prog" id="ch-prog" hidden></div>
+            </div>
+        </section>
+        <div class="shead"><h2>Elige una lección</h2><div class="sh-line"></div></div>
         <div class="track-grid" id="track-grid"></div>
     </div>
 
@@ -840,6 +939,7 @@
     <script src="vesper_political_audio_data.js"></script>
     <script src="vesper_lesson_images.js"></script>
     <script src="vesper_covers.js"></script>
+    <script src="vesper_library_art.js"></script>
     <!-- Se carga aqui solo por getScore(): las tarjetas leen de vuelta la nota
          de practica que guardo el reproductor, para que el alumno vea que ya
          ha hecho. -->
@@ -1110,15 +1210,23 @@
             const locked = isLocked(s.col);
             const prog = locked ? null : progressFor(s.col);
             const mine = !locked && STU != null && REQ[s.col] === STU;
+            // Lámina pintada de la colección (vesper_library_art.js). Sin
+            // lámina (Diagnóstico) queda la banda de antes con su ecualizador.
+            const pic = window.VesperLibArt ? VesperLibArt.card(s.col) : null;
+            const cefr = REQ[s.col] != null ? cefrLabel(REQ[s.col]) : "";
             const card = document.createElement("button");
             card.type = "button";
-            card.className = "col-card" + (locked ? " locked" : "") + (mine ? " mine" : "");
+            card.className = "col-card" + (locked ? " locked" : "") + (mine ? " mine" : "") + (pic ? " has-pic" : "");
             card.dataset.col = s.col;
             card.innerHTML =
-                '<div class="cc-art" style="' + bandStyle(s.band) + '">' +
-                    eqSVG(s.band[2]) +
-                    '<div class="cc-num">' + s.numHTML + '</div>' +
-                    '<div class="cc-name"><b>' + s.name + '</b><small>' + s.sub + '</small></div>' +
+                (pic
+                    ? '<div class="cc-art">' +
+                        '<img class="cc-pic" src="' + pic + '" alt="" width="720" height="309" loading="lazy" decoding="async">' +
+                        (cefr ? '<span class="cc-cefr" title="Nivel del marco europeo">' + cefr + '</span>' : '')
+                    : '<div class="cc-art" style="' + bandStyle(s.band) + '">' +
+                        eqSVG(s.band[2]) +
+                        '<div class="cc-num">' + s.numHTML + '</div>') +
+                    '<div class="cc-name"><b>' + s.name + '</b><small lang="en">' + s.sub + '</small></div>' +
                 '</div>' +
                 (locked ? '<span class="cc-lock">' + icon("i-lock") + ' ' + cefrLabel(REQ[s.col]) + '</span>' : '') +
                 (mine ? '<span class="cc-mine">Para tu nivel</span>' : '') +
@@ -1153,7 +1261,7 @@
         const bizPathSpec = lvl => { const bp = BIZ_PATH[lvl]; return {
             col:"bizpath:"+lvl, band:BAND_BIZ, numHTML:`<i class="fas ${bp.icon}"></i>`,
             name:`Business Path ${lvl === "b1" ? "I" : "III"}`, sub:bp.tag,
-            desc:`Un modelo con voz nativa de la habilidad de cada lección, con transcripción y vocabulario.`,
+            desc:`Un modelo grabado de la habilidad de cada lección, con transcripción y vocabulario.`,
             count:bp.lessons.length, countLabel:"lecciones", onOpen:() => showBizPath(lvl) }; };
         const diagSpec = {
             col:"diag", band:BAND_DIAG, numHTML:'<i class="fas fa-stethoscope"></i>',
@@ -1433,6 +1541,7 @@
                 return terms.every(t => hay.includes(t));
             });
             setCrumbsLevel("Búsqueda");
+            document.body.classList.remove("in-col");
             searchCount.textContent = `${results.length} resultado${results.length === 1 ? "" : "s"} para “${raw}”`;
             if (!results.length) {
                 searchResults.innerHTML =
@@ -1474,19 +1583,66 @@
             });
         }
 
+        // La ficha de cada colección, por su clave: la banda de la colección
+        // abierta reutiliza lo que ya dice la tarjeta (nombre, nivel,
+        // descripción) en vez de repetirlo a mano.
+        const SPEC_BY_COL = {};
+        GROUPS.forEach(g => g.specs.forEach(s => { SPEC_BY_COL[s.col] = s; }));
+
+        function paintColHero(col) {
+            const s = SPEC_BY_COL[col] || {};
+            const hero = document.getElementById("colhero");
+            const pic = document.getElementById("ch-pic");
+            const wide = window.VesperLibArt ? VesperLibArt.wide(col) : null;
+            if (wide) {
+                pic.hidden = false; pic.src = wide; hero.removeAttribute("style");
+                hero.classList.add("has-pic");
+            } else {
+                // sin lámina: la banda de color de su tarjeta
+                pic.hidden = true; pic.removeAttribute("src");
+                hero.classList.remove("has-pic");
+                if (s.band) hero.setAttribute("style", bandStyle(s.band)); else hero.removeAttribute("style");
+            }
+            const n = itemsFor(col).length;
+            const cefr = REQ[col] != null ? cefrLabel(REQ[col]) : "";
+            document.getElementById("ch-kick").innerHTML =
+                (cefr ? '<b>' + cefr + '</b>' : '') +
+                '<span>' + n + ' ' + (s.countLabel || "pistas") + '</span>';
+            document.getElementById("ch-sub").textContent = s.sub || "";
+            document.getElementById("ch-desc").textContent = s.desc || "";
+            const line = window.VesperLibArt ? VesperLibArt.line(col) : null;
+            const hand = document.getElementById("ch-hand");
+            hand.hidden = !line;
+            if (line) {
+                document.getElementById("ch-hand-en").textContent = line[0];
+                document.getElementById("ch-hand-es").textContent = line[1];
+            }
+            const prog = progressFor(col), pb = document.getElementById("ch-prog");
+            pb.hidden = !prog;
+            if (prog) pb.innerHTML =
+                '<div class="cc-meter"><i style="width:' + Math.round(prog.done / prog.total * 100) + '%"></i></div>' +
+                '<span>' + prog.done + ' de ' + prog.total + ' practicadas</span>';
+        }
+
         // Open a collection's lesson view from the shared index.
         function openCollection(col, title, crumb, exam) {
-            lessonsTitle.textContent = title;
+            lessonsTitle.textContent = (SPEC_BY_COL[col] && SPEC_BY_COL[col].name) || title;
+            paintColHero(col);
             setCrumbsLevel(crumb);
             if (exam) setExamBtn(exam.href, exam.label);
             else examBtn.classList.add("hidden");
             renderCards(trackGrid, itemsFor(col));
+            // Una colección abierta es su propia portada: la lámina de la
+            // biblioteca y la frase del día se apartan para no apilar dos
+            // héroes (una pantalla, una decisión).
+            document.body.classList.add("in-col");
             viewSearch.style.display = "none"; viewLevels.style.display = "none"; viewLessons.style.display = "block";
             window.scrollTo({top:0, behavior:"smooth"});
         }
 
         function showLevels() {
             if (searchInput) { searchInput.value = ""; searchBox.classList.remove("has-val"); }
+            document.body.classList.remove("in-col");
             viewSearch.style.display = "none"; viewLessons.style.display = "none"; viewLevels.style.display = "block";
             renderRecent();
             setCrumbsHome(); window.scrollTo({top:0, behavior:"smooth"});

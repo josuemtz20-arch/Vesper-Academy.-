@@ -41,6 +41,7 @@
         <div class="banner-inner">
             <span class="tag" id="banner-tag"><i class="fas fa-layer-group"></i> Level</span>
             <h2 id="banner-title">Lesson</h2>
+            <p class="banner-hand" id="banner-hand" hidden><span lang="en"></span><small></small></p>
         </div>
     </div>
 
@@ -319,7 +320,7 @@
         else if (p.get("diag") !== null)  list = [];
         else list = ["vesper_audio_data.js", "vesper_reading_data.js", "vesper_vocab_examples.js",
                      "vesper_lesson_photos.js", "vesper_practice_clips.js?v=193ad196"];
-        list.concat(["vesper_lesson_images.js", "vesper_covers.js",
+        list.concat(["vesper_lesson_images.js", "vesper_covers.js", "vesper_library_art.js", "vesper_audio_vocab.js",
                      "vesper_audio_practice.js?v=c783a526", "lesson_app.js"]).forEach(function (src) {
             var el = document.createElement("script");
             el.src = src; el.async = false;

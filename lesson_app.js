@@ -106,6 +106,29 @@
         document.getElementById("a-art-ghost").className = `fas ${icon} a-art-ghost`;
         document.getElementById("a-art-medal").innerHTML = `<i class="fas ${icon}"></i>`;
         document.getElementById("a-art-label").textContent = bannerTag;
+        // Cabecera = la lámina pintada de la colección (2026-11-09): la misma
+        // escena de la tarjeta en la que el alumno hizo clic en la biblioteca
+        // (mundo del mapa para los niveles, escena de Vesper para Basics y
+        // Profesional). Antes era un azul liso con el logo en marca de agua.
+        // Una foto propia de la lección (VESPER_LESSON_PHOTOS) sigue ganando.
+        const libCol = window.VesperLibArt ? VesperLibArt.colFromParams(params) : null;
+        const libWide = libCol ? VesperLibArt.wide(libCol) : null;
+        if (libWide) {
+            const banner = document.getElementById("banner");
+            const art = document.createElement("img");
+            art.className = "banner-art"; art.alt = ""; art.decoding = "async";
+            art.width = 1376; art.height = 590;
+            art.onload = () => banner.classList.add("has-art");
+            art.onerror = () => art.remove();
+            art.src = libWide;
+            banner.insertBefore(art, banner.firstChild);
+            const line = VesperLibArt.line(libCol), hand = document.getElementById("banner-hand");
+            if (line && hand) {
+                hand.querySelector("span").textContent = line[0];
+                hand.querySelector("small").textContent = line[1];
+                hand.hidden = false;
+            }
+        }
         const themeArt = window.VesperCovers ? VesperCovers.artFor(coverSeed) : null;
         // optional real photo for the banner: assets/images/lessons/L{lvl}_lesson{les}.jpg
         // vesper_lesson_photos.js lista las que existen (lo genera
@@ -133,6 +156,77 @@
             im.src = themeArt;
             document.getElementById("a-art").insertBefore(im, document.getElementById("a-eq"));
         }
+
+        // ── PALABRAS QUE SE OYEN (2026-11-09) ─────────────────────────
+        // La lista de cada lección viene del LIBRO y casi nunca coincidía con
+        // el audio (35 % en Core Practice). Ahora la pestaña Vocabulary
+        // enseña primero lo que el alumno OYE: las palabras del libro que sí
+        // salen en la transcripción + las escritas a mano en
+        // vesper_audio_vocab.js, en el orden en que suenan y con la línea
+        // donde se oyen. Lo que el libro trae y el audio no dice queda en
+        // `fromBook` ("Más palabras de tu libro"). La práctica usa esta misma
+        // lista, así los huecos y el "Word Match" salen de lo que se oye.
+        const AV = window.AUDIO_VOCAB || {};
+        const bookVocab = (vocab || []).slice();
+        const heardLines = (function(){
+            const parts = [];
+            if (isBasics) parts.push(basicsLesson && basicsLesson.transcript);
+            else if (isCustom) {
+                const CT = window.CUSTOM_TRANSCRIPTS || {};
+                const files = customVariants.length
+                    ? customVariants.map(v => String(v.file || "").split("/").pop()) : [curKey];
+                files.forEach(f => parts.push(CT[f]));
+            } else if (!isDiag) {
+                const RD = window.VESPER_READING || {};
+                const entry = (RD[lvl] || RD[String(lvl)] || {})[les] || (RD[lvl] || {})[String(les)];
+                // noMain: el audio principal es otro (gTTS viejo); sólo vale el modelo
+                if (entry && entry.transcript && (AV.noMain || []).indexOf(deckKey) === -1) parts.push(entry.transcript);
+                if (practiceModel) parts.push(practiceModel.transcript);
+            }
+            const out = [];
+            parts.filter(Boolean).join("<br>").split(/<br\s*\/?>/i).forEach(raw => {
+                if (/^\s*<strong>[\s\S]*<\/strong>\s*$/i.test(raw)) return;      // "PART 1: …"
+                const t = raw.replace(/<[^>]+>/g, " ").replace(/&#x27;|&#39;/g, "'")
+                             .replace(/&amp;/g, "&").replace(/\s+/g, " ").trim();
+                if (t.length > 3) out.push(t);
+            });
+            return out;
+        })();
+        // Una palabra y sus formas comunes: "stare" → stared/staring,
+        // "study" → studies, "stop" → stopped. Para lo irregular, el archivo
+        // a mano trae la forma que se oye ("forget" → "forgot").
+        function termRx(t){
+            const alts = String(t).split(/\s*\/\s*/).map(p => {
+                const ws = p.replace(/\(.*?\)/g, "").replace(/[’]/g, "'").match(/[A-Za-z][A-Za-z'-]*/g) || [];
+                return ws.map(w => {
+                    const s = w.toLowerCase(), q = x => x.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+                    if (s.length > 3 && /[^aeiou]y$/.test(s)) return q(s.slice(0, -1)) + "(?:y|ies|ied|ying)";
+                    if (s.length > 3 && /e$/.test(s)) return q(s.slice(0, -1)) + "(?:e|es|ed|ing)";
+                    return q(s) + "(?:" + q(s.slice(-1)) + ")?(?:s|es|ed|d|ing|'s)?";
+                }).join("[\\s,]+");
+            }).filter(Boolean);
+            return alts.length ? new RegExp("\\b(?:" + alts.join("|") + ")\\b", "i") : null;
+        }
+        const heardSeen = {}, heard = [];
+        function addHeard(o){
+            const k = String(o.term).toLowerCase();
+            if (heardSeen[k]) return;
+            const rx = termRx(o.hear || o.term);
+            if (!rx) return;
+            for (let i = 0; i < heardLines.length; i++) {
+                const m = heardLines[i].match(rx);
+                if (m) { heardSeen[k] = 1; heard.push(Object.assign({}, o, { line: heardLines[i], lineIdx: i, hit: m[0] })); return; }
+            }
+        }
+        bookVocab.forEach(v => addHeard({ term: v.term, def: v.def, src: "book" }));
+        ((AV.decks || {})[deckKey] || []).forEach(a =>
+            addHeard({ term: a[0], pos: a[1], def: a[2], es: a[3], hear: a[4] || "", src: "audio" }));
+        heard.sort((a, b) => a.lineIdx - b.lineIdx);
+        const fromBook = bookVocab.filter(v => !heardSeen[String(v.term).toLowerCase()]);
+        // Con menos de 3 palabras oídas no hay lista que valga: se queda la del
+        // libro, rotulada con honestidad ("del tema, no todas salen").
+        const useHeard = heard.length >= 3;
+        if (useHeard) vocab = heard;
 
         // ── TABS ──────────────────────────────────────────────────────
         function gotoTab(name){
@@ -1314,34 +1408,81 @@
         const vempty = document.getElementById("vocab-empty");
         const vtools = document.querySelector(".vocab-tools");
         const vresults = document.getElementById("vocab-results");
+        // La línea del audio con la palabra marcada (texto escapado primero).
+        function heardHTML(v){
+            const s = esc(v.line), h = esc(v.hit || "");
+            const i = h ? s.toLowerCase().indexOf(h.toLowerCase()) : -1;
+            const body = i < 0 ? s : s.slice(0, i) + "<mark>" + s.slice(i, i + h.length) + "</mark>" + s.slice(i + h.length);
+            // "Nombre: texto" → el nombre en versalitas, como en la lectura
+            return body.replace(/^([A-Z][\w.]*(?: [A-Z][\w.]*){0,2}):\s/, '<b class="who">$1</b> ');
+        }
+        if (bookVocab.length || heard.length) {
+            const lead = document.createElement("p");
+            lead.className = "vocab-lead";
+            lead.innerHTML = useHeard
+                ? '<b lang="en">Words you’ll hear</b> · Palabras que vas a oír en este audio, en el orden en que salen. Toca una para ver la línea donde aparece.'
+                : '<b lang="en">Topic words</b> · Vocabulario del tema, de tu libro. No todas estas palabras salen en el audio.';
+            vgrid.parentNode.insertBefore(lead, vgrid);
+        }
         if (!vocab.length) {
             vgrid.style.display = "none"; vempty.style.display = "block"; vtools.style.display = "none";
         } else {
             document.getElementById("vocab-count").textContent = vocab.length + (vocab.length === 1 ? " word" : " words");
             vocab.forEach(v => {
-                const pos = POS.of(v.term, v.def);
-                const ex = exFor(v.term);
+                const pos = v.pos || POS.of(v.term, v.def);
+                const ex = v.line ? "" : exFor(v.term);
                 const card = document.createElement("div");
                 card.className = "vcard";
                 card.dataset.term = v.term.toLowerCase();
                 card.dataset.def = (v.def || "").toLowerCase();
                 card.dataset.pos = pos;
-                card.dataset.ex = ex.toLowerCase();
+                card.dataset.ex = (ex + " " + (v.line || "") + " " + (v.es || "")).toLowerCase();
+                if (v.line) card.classList.add("heard");
                 card.innerHTML = `
                     <div class="vhead">
                         <div class="vhead-main">
-                            <p class="term">${v.term}</p>
+                            <p class="term">${esc(v.term)}</p>
                             ${pos ? `<p class="pos">${pos}</p>` : ""}
                         </div>
                         <i class="fas fa-chevron-down vchev"></i>
                     </div>
                     <div class="vbody">
                         <p class="def"><span class="deflabel">Definition</span>${v.def || "—"}</p>
+                        ${v.es ? `<p class="es"><span class="eslabel">Español</span>${esc(v.es)}</p>` : ""}
+                        ${v.line ? `<p class="ex heard-line"><span class="exlabel">In the audio</span>${heardHTML(v)}</p>` : ""}
                         ${ex ? `<p class="ex"><span class="exlabel">In use</span>${esc(ex)}</p>` : ""}
                     </div>`;
                 card.addEventListener("click", () => card.classList.toggle("open"));
                 vgrid.appendChild(card);
             });
+            // Lo del libro que este audio no dice: aparte y plegado, para que
+            // no se lea como si fuera a sonar.
+            if (useHeard && fromBook.length) {
+                const box = document.createElement("details");
+                box.className = "vbook";
+                box.innerHTML = `<summary><span>Más palabras de tu libro</span><b>${fromBook.length}</b>
+                    <small>Son del tema de la lección, pero no salen en este audio.</small></summary>
+                    <div class="vocab-grid vbook-grid"></div>`;
+                const g = box.querySelector(".vbook-grid");
+                fromBook.forEach(v => {
+                    const c = document.createElement("div");
+                    c.className = "vcard book";
+                    c.dataset.term = String(v.term).toLowerCase();
+                    c.dataset.def = (v.def || "").toLowerCase();
+                    c.dataset.pos = POS.of(v.term, v.def);
+                    const bx = exFor(v.term);
+                    c.dataset.ex = bx.toLowerCase();
+                    c.innerHTML = `
+                        <div class="vhead"><div class="vhead-main"><p class="term">${esc(v.term)}</p>
+                            ${c.dataset.pos ? `<p class="pos">${c.dataset.pos}</p>` : ""}</div>
+                            <i class="fas fa-chevron-down vchev"></i></div>
+                        <div class="vbody"><p class="def"><span class="deflabel">Definition</span>${v.def || "—"}</p>
+                            ${bx ? `<p class="ex"><span class="exlabel">In use</span>${esc(bx)}</p>` : ""}</div>`;
+                    c.addEventListener("click", () => c.classList.toggle("open"));
+                    g.appendChild(c);
+                });
+                vgrid.parentNode.insertBefore(box, vgrid.nextSibling);
+            }
         }
         document.getElementById("vocab-search").addEventListener("input", e => {
             const q = e.target.value.trim().toLowerCase();
@@ -1399,14 +1540,14 @@
             const apply = () => {
                 document.getElementById("flash-term").textContent = c.term;
                 document.getElementById("flash-pos").textContent = posFor(c.term);
-                document.getElementById("flash-def").textContent = c.def || "—";
+                document.getElementById("flash-def").textContent = (c.def || "—") + (c.es ? "  ·  " + c.es : "");
                 const exEl = document.getElementById("flash-ex");
-                const ex = exFor(c.term);
+                const ex = c.line || exFor(c.term);
                 exEl.style.display = ex ? "" : "none";
                 exEl.innerHTML = "";
                 if (ex){
                     const lab = document.createElement("span");
-                    lab.className = "exlabel"; lab.textContent = "In use";
+                    lab.className = "exlabel"; lab.textContent = c.line ? "In the audio" : "In use";
                     exEl.appendChild(lab);
                     exEl.appendChild(document.createTextNode(ex));
                 }

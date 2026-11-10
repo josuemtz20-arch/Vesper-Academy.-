@@ -1,7 +1,7 @@
 /* lesson.css — estilos de lesson.html (el reproductor de la audioteca).
  * Salieron del <style> en linea el 2026-10-29 para que el navegador los
  * guarde en cache entre lecciones. */
-        @import url('https://fonts.googleapis.com/css2?family=Inria+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@300;400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Inria+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@300;400;500;600;700&family=Caveat:wght@700&display=swap');
         *, *::before, *::after { box-sizing: border-box; }
         :root {
             --navy:#1B1B2F; --navy2:#2c2c4a; --navy3:#15152b;
@@ -558,3 +558,61 @@
     font-size:0.8rem; font-weight:600; color:var(--navy); text-decoration:none; border:1px solid var(--border);
     background:var(--white); border-radius:8px; padding:8px 12px; transition:border-color .15s, color .15s; }
 .wb-open-full:hover { border-color:var(--gold); color:var(--gold2); }
+
+/* ===== CABECERA CON LÁMINA (2026-11-09) =====
+   El dueño: al abrir una pista "se ve muy simple… no hay imágenes". La
+   cabecera lleva ahora la escena pintada de su colección (la misma de la
+   tarjeta de la biblioteca, vesper_library_art.js) y la línea de Vesper a
+   mano. La lámina siempre es oscura: el texto va en claro literal. */
+.banner .banner-art { position:absolute; inset:0; width:100%; height:100%; object-fit:cover;
+    object-position:72% 16%; z-index:0; opacity:0; transition:opacity .35s ease; }
+.banner.has-art .banner-art { opacity:1; }
+.banner.has-art { height:clamp(230px,24vw,300px); background:#14122a; }
+.banner.has-art::before { z-index:1;
+    background:linear-gradient(90deg,rgba(14,12,31,.94) 0%,rgba(14,12,31,.8) 30%,rgba(14,12,31,.2) 58%,rgba(14,12,31,0) 78%),
+               linear-gradient(0deg,rgba(14,12,31,.7),rgba(14,12,31,0) 50%); }
+.banner.has-art .bg-logo, .banner.has-art .overlay { display:none; }
+.banner.has-art .banner-inner { padding-bottom:28px; }
+.banner.has-art h2 { max-width:16ch; text-shadow:0 2px 18px rgba(0,0,0,.5); color:#f5f2eb; }
+.banner-hand { margin:10px 0 0; display:inline-flex; flex-direction:column; gap:1px;
+    transform:rotate(-1.2deg); transform-origin:left center; }
+.banner-hand[hidden] { display:none; }
+.banner-hand span { font-family:"Caveat","Segoe Print","Bradley Hand",cursive; font-weight:700;
+    font-size:1.5rem; line-height:1.05; color:#f3e2ab; }
+.banner-hand small { font-size:.78rem; color:rgba(245,242,235,.68); }
+@media (max-width:680px){
+    /* Teléfono: Vesper a la derecha, el texto sobre el velo de abajo. */
+    .banner.has-art { height:250px; }
+    .banner.has-art .banner-art { object-position:70% 30%; }
+    .banner.has-art::before { background:linear-gradient(0deg,rgba(14,12,31,.96) 0%,rgba(14,12,31,.78) 40%,rgba(14,12,31,.1) 75%,rgba(14,12,31,0) 100%); }
+    .banner-hand span { font-size:1.3rem; }
+}
+@media (prefers-reduced-motion:reduce){ .banner .banner-art { transition:none; } }
+
+/* ===== PALABRAS QUE SE OYEN (2026-11-09) =====
+   La pestaña Vocabulary enseña primero lo que suena en el audio (con la
+   línea donde se oye) y pliega aparte lo que sólo trae el libro. */
+.vocab-lead { margin:-6px 0 18px; font-size:0.86rem; color:var(--muted); line-height:1.55; max-width:70ch; }
+.vocab-lead b { color:var(--navy); font-family:'Inria Serif',Georgia,serif; font-size:1rem; }
+.vcard .es { font-size:0.86rem; color:var(--muted); margin:8px 0 2px; }
+.vcard .es .eslabel { display:block; font-size:0.62rem; font-weight:700; letter-spacing:1.4px;
+    text-transform:uppercase; color:var(--muted); margin-bottom:3px; }
+.vcard .heard-line { font-style:normal; font-family:'Inter',sans-serif; font-size:0.88rem; }
+.vcard .heard-line .who { font-size:0.66rem; font-weight:700; letter-spacing:1px; text-transform:uppercase;
+    color:var(--muted); margin-right:2px; }
+.vcard .heard-line mark { background:rgba(197,160,89,0.24); color:var(--navy); font-weight:700;
+    border-radius:3px; padding:0 2px; }
+/* Libro: plegado, más quieto — no compite con lo que se oye. */
+.vbook { margin-top:22px; border-top:1px solid var(--border); padding-top:14px; }
+.vbook > summary { cursor:pointer; list-style:none; display:flex; align-items:baseline; flex-wrap:wrap;
+    gap:6px 10px; padding:6px 0; font-weight:700; color:var(--navy); font-size:0.92rem; }
+.vbook > summary::-webkit-details-marker { display:none; }
+.vbook > summary::before { content:"\25B8"; color:var(--gold2); transition:transform .2s; display:inline-block; }
+.vbook[open] > summary::before { transform:rotate(90deg); }
+.vbook > summary b { font-size:0.7rem; font-weight:600; color:var(--muted); background:var(--cream);
+    border:1px solid var(--border); border-radius:14px; padding:2px 9px; }
+.vbook > summary small { flex-basis:100%; font-weight:400; color:var(--muted); font-size:0.8rem; padding-left:18px; }
+.vbook-grid { margin-top:12px; }
+.vcard.book { border-left-color:var(--border); box-shadow:none; }
+.vcard.book .term { font-weight:600; }
+@media (prefers-reduced-motion:reduce){ .vbook > summary::before { transition:none; } }

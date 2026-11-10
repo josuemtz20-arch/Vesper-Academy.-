@@ -143,10 +143,15 @@
 !/vesper_basics_lesson_data.js
 !/vesper_custom_transcripts.js
 !/vesper_vocab_examples.js
+# palabras que se oyen en cada audio (a mano), pestaña Vocabulary de lesson.html
+!/vesper_audio_vocab.js
 # frase del dia del hub (a mano); audio en assets/audio/phrase
 !/vesper_phrase_day.js
 # hora del dia, escenas de Vesper por el mundo y frase del dia (hub + audio)
 !/vesper_english_ui.js
+# lámina pintada de cada colección de la biblioteca (tarjeta, banda y
+# cabecera del reproductor)
+!/vesper_library_art.js
 !/vesper_covers.js
 !/vesper_lesson_images.js
 # listening-practice engine for the audio player (lesson.html): generates the
