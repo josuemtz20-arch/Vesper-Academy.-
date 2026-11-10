@@ -254,9 +254,17 @@
 
   /* lluvia de confeti DOM, ligera y autolimpiable. Respeta prefers-reduced-motion
      (en ese caso el CSS la oculta). n = nº de piezas. */
+  /* iconos de la tarjeta de racha (mismos trazos que VESPER_ICN; en línea para
+     que la tarjeta no dependa de que el set haya cargado) */
+  var RS_FLAME = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13 2c.4 2.9-1.1 4.4-2.6 5.9C9 9.3 8 10.9 8 13a4.5 4.5 0 0 0 9 0c0-1.4-.5-2.6-1.3-3.6-.3.9-1 1.5-1.9 1.7 1-2.3.3-4.9-1.8-7.1z"/></svg>';
+  var RS_STAR = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 0l2.9 9.1L24 12l-9.1 2.9L12 24l-2.9-9.1L0 12l9.1-2.9z"/></svg>';
+  var RS_SHIELD = '<span class="rs-ei"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round" aria-hidden="true"><path d="M12 2.8l7 2.6v5.2c0 4.7-3.1 7.6-7 9.1-3.9-1.5-7-4.4-7-9.1V5.4z"/></svg></span>';
+  var RS_GEM = '<span class="rs-ei"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 3h10l4 6-9 12L3 9z"/></svg></span>';
+
   function burstConfetti(n) {
     try {
-      if (window.matchMedia && matchMedia("(prefers-reduced-motion:reduce)").matches) return;
+      /* el sistema O la opción "reducir movimiento" de la app (antes sólo el sistema) */
+      if (reduceMotion()) return;
       n = n || 24;
       /* la paleta de la marca: oros y cremas del lucero, no arcoíris */
       var cols = ["#C9A84C", "#f3e2ab", "#dcc173", "#f5f2eb", "#a8843d", "#e9d39a"];
@@ -1674,6 +1682,8 @@
   /* iconos SVG por rama (clave semántica -> glifo); respaldo genérico */
   var BRANCH_ICN = {
     pot:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10h16l-1.4 8.2a2 2 0 0 1-2 1.8H7.4a2 2 0 0 1-2-1.8z"/><path d="M3 10h18M9 6c0-1.2 1-1.6 1.5-2M14 6c0-1.2 1-1.6 1.5-2"/></svg>',
+    /* taza con plato y vapor (El café, A2; 2026-11-09) */
+    cup:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5 10h11v4a5 5 0 0 1-5 5h-1a5 5 0 0 1-5-5z"/><path d="M16 11h1.5a2.5 2.5 0 0 1 0 5H15.5M3 21h16M9 3.5c-.8.8-.8 1.7 0 2.5M12.5 3.5c-.8.8-.8 1.7 0 2.5"/></svg>',
     sofa:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11V8a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v3"/><path d="M3 12a2 2 0 0 1 2 2v3h14v-3a2 2 0 0 1 2-2 2 2 0 0 1 0 4v3H3v-3a2 2 0 0 1 0-4z"/></svg>',
     bed:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18V8M3 13h18v5M21 18v-4a2 2 0 0 0-2-2H9v3"/><circle cx="6.5" cy="10.5" r="1.6"/></svg>',
     leaf:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19c0-9 6-14 15-14 0 9-6 14-15 14z"/><path d="M5 19c3-5 6-7 11-9"/></svg>',
@@ -1720,7 +1730,7 @@
      clave = "NIVEL-idSala"; si falta el archivo, cae al glifo SVG de la rama. */
   var BRANCH_EMBLEM = {
     "A1-kitchen":1,"A1-living":1,"A1-bedroom":1,"A1-bathroom":1,"A1-garden":1,"A1-family":1,
-    "A2-entrance":1,"A2-market":1,"A2-spring":1,"A2-depths":1,"A2-camp":1,"A2-echoes":1,
+    "A2-entrance":1,"A2-market":1,"A2-spring":1,"A2-depths":1,"A2-camp":1,"A2-echoes":1,"A2-cafe":1,
     "B1-dock":1,"B1-lighthouse":1,"B1-warehouse":1,"B1-deck":1,"B1-bridge":1,"B1-galley":1,
     "B2-hall":1,"B2-library":1,"B2-workshop":1,"B2-balcony":1,"B2-vault":1,"B2-studio":1,
     "C1-dome":1,"C1-telescope":1,"C1-archive":1,"C1-aurora":1,"C1-nebula":1,"C1-comet":1,
@@ -5448,12 +5458,6 @@
     /* liga semanal: tu XP real cuenta para el ranking */
     leagueAddXp(earnedXp || 0);
     var grid = P ? P.weekGrid() : [];
-    var cells = grid.map(function (d) {
-      return '<div class="day' + (d.active ? " on" : "") + (d.isToday ? " today" : "") + '"><span>' + d.label + '</span><i>' + (d.active ? ic('flame') : "&middot;") + '</i></div>';
-    }).join("");
-    var shields = "";
-    for (var i = 0; i < (info.shields || 0); i++) shields += ic('shieldLn');
-    var mstate = info.milestone ? "milestone" : (info.streak > 0 ? "streak_alive" : "streak_broken");
     var hasNext = lesson.nextLessonId && L[lesson.nextLessonId];
 
     /* meta diaria */
@@ -5463,7 +5467,7 @@
       goalHtml = '<div class="goal-card' + (dg.met ? ' met' : '') + '">' + ic('target') + ' Meta diaria '
         + '<b>' + Math.min(dg.progress, dg.target) + '/' + dg.target + '</b>'
         + '<div class="goal-bar"><i style="width:' + gp + '%"></i></div>'
-        + (dg.met ? '<span class="goal-done">Meta cumplida! ' + ic('sparkle') + '</span>' : '<span class="muted" style="font-size:.82rem">Te falta ' + Math.max(0, dg.target - dg.progress) + '</span>')
+        + (dg.met ? '<span class="goal-done">¡Meta cumplida! ' + ic('sparkle') + '</span>' : '<span class="muted" style="font-size:.82rem">Te falta ' + Math.max(0, dg.target - dg.progress) + '</span>')
         + '</div>';
     }
 
@@ -5492,29 +5496,68 @@
     else if (ach.length || cosHtml) sfx("achievement");
     else if (info.isNewDay) sfx("streak");   /* primera lección del día: la racha sumó */
 
-    show('<div class="wrap">' + topbar(100) + '<div class="card center">'
-      + mascot(mstate)
-      + '<div class="flame">' + ic('flame') + '</div>'
-      + '<h1>' + info.streak + ' ' + (info.streak === 1 ? "dia" : "dias") + ' de racha</h1>'
-      + (shields ? '<div class="shields">' + shields + '</div>' : '')
-      + '<div class="week">' + cells + '</div>'
-      + goalHtml
+    /* RACHA SALVADA (2026-11-09): Vesper con el puño en alto en un medallón
+       de oro, su frase a mano, la semana como constelación y una sola tira de
+       datos. Estilos en la sección "RACHA SALVADA" al final de leccion.css. */
+    var streak = Math.max(1, info.streak || 1), first1 = streak === 1;
+    var numFmt = function (n) { try { return Number(n || 0).toLocaleString(T("es-MX", "en-US")); } catch (e) { return String(n || 0); } };
+    var LAB = T("DLMMJVS", "SMTWTFS"), WDAY = T(
+      ["domingo", "lunes", "martes", "miércoles", "jueves", "viernes", "sábado"],
+      ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]);
+    /* el hilo de la constelación va del primer día de esta racha a hoy (la
+       última casilla); si la racha viene de antes de la semana, entra desde el borde */
+    var n7 = grid.length || 7, startIx = Math.max(0, n7 - streak), fromEdge = streak > n7;
+    var x0 = fromEdge ? 0 : (startIx + 0.5) / n7 * 100, x1 = (n7 - 0.5) / n7 * 100;
+    var thread = (grid.length && x1 - x0 > 1) ? '<div class="rs-thread" style="left:' + x0.toFixed(2) + '%;width:' + (x1 - x0).toFixed(2) + '%"></div>' : '';
+    var cells = grid.map(function (d, i) {
+      var wd = 0; try { var p = String(d.key).split("-"); wd = new Date(+p[0], +p[1] - 1, +p[2]).getDay(); } catch (e) {}
+      var cls = d.isToday ? "on today" : (d.active ? "on" : "off");
+      var delay = d.active && !d.isToday ? ' style="animation-delay:' + (0.45 + i * 0.1).toFixed(2) + 's"' : '';
+      return '<li class="rs-day ' + cls + '"><span class="rs-dot" aria-hidden="true"' + delay + '>' + (d.isToday ? RS_FLAME : RS_STAR) + '</span>'
+        + '<span class="rs-lab" aria-hidden="true">' + (d.isToday ? T("Hoy", "Today") : LAB.charAt(wd)) + '</span>'
+        + '<span class="sr-only">' + (d.isToday ? T("hoy", "today") : WDAY[wd]) + (d.active ? T(": practicaste", ": you practised") : "") + '</span></li>';
+    }).join("");
+    var animNum = info.isNewDay && streak > 1 && !reduceMotion();
+    var unit = T(streak === 1 ? "día de racha" : "días de racha", "day streak");
+    var strip = '<div class="rs-strip">'
+      + '<div><b>' + RS_SHIELD + numFmt(info.shields || 0) + '</b><span>' + T("Escudos", "Shields") + '</span></div>'
+      + '<div><b>' + numFmt(info.xp) + '</b><span>' + T("XP total", "Total XP") + '</span></div>'
+      + (gemReward > 0 ? '<div><b>' + RS_GEM + '+' + numFmt(gemReward) + '</b><span>' + T("Gemas", "Gems") + '</span></div>' : '')
+      + '</div>';
+
+    show('<div class="wrap">' + topbar(100) + '<section class="card center rs' + (reduceMotion() ? '' : ' rs-anim') + (gemReward > 0 ? '' : ' rs-2col') + '" aria-labelledby="rs-h">'
+      + '<div class="rs-medal"><span class="rs-rays" aria-hidden="true"></span>'
+      + '<div class="rs-disc"><img src="assets/images/mascot/vesper_cat_streak.webp" width="128" height="128" alt="'
+      + T("Vesper levanta el puño, orgulloso", "Vesper raises a proud fist") + '"></div>'
+      + '<span class="rs-flame" aria-hidden="true">' + RS_FLAME + '</span></div>'
+      + '<p class="rs-ey">' + (first1 ? T("Racha nueva", "New streak") : T("Racha salvada", "Streak saved")) + '</p>'
+      + '<h1 id="rs-h"><span class="rs-num" id="rs-num" aria-hidden="true">' + (animNum ? streak - 1 : streak) + '</span>'
+      + '<span class="sr-only">' + streak + ' </span>' + unit + '</h1>'
+      + '<p class="rs-say">' + (first1 ? T("¡Empezaste tu racha!", "You started your streak!") : T("¡Tu racha sigue viva!", "Your streak is alive!")) + '</p>'
+      + (grid.length ? '<div class="rs-week" role="group" aria-label="' + T("Tu semana", "Your week") + '">' + thread
+          + '<ol class="rs-days">' + cells + '</ol>'
+          + '<p class="rs-week-note">' + T("Vuelve mañana y suma el día " + (streak + 1) + ".", "Come back tomorrow for day " + (streak + 1) + ".") + '</p></div>' : '')
+      + strip
+      + (info.milestone ? '<div class="milestone">' + ic('trophy') + ' ' + T("¡Nuevo escudo de racha!", "New streak shield!") + '</div>' : '')
       + achHtml
       + cosHtml
-      + '<div class="stat-row"><div class="stat">&#11088; <b>' + info.xp + '</b> XP total</div>'
-      + (gemReward > 0 ? '<div class="stat">' + ic('gem') + ' <b>+' + gemReward + '</b> gemas</div>' : '')
-      + '</div>'
-      + (info.milestone ? '<div class="milestone">' + ic('trophy') + ' Nuevo escudo de racha!</div>' : '')
+      + (hasNext ? '<button class="btn btn-gold" id="nextL">' + T("Siguiente lección", "Next lesson") + ' &rarr;</button>'
+                   + '<button class="btn btn-ghost" id="moreL2">' + T("Ver todas las lecciones", "See all lessons") + '</button>'
+                 : '<button class="btn btn-gold" id="moreL">' + T("Ver todas las lecciones", "See all lessons") + '</button>')
+      + '<p class="streak-acct rs-acct">' + T("o guarda tu progreso en todos tus dispositivos: ", "or keep your progress on all your devices: ")
+      + '<a href="#" id="nudge-account">' + T("crea una cuenta", "create an account") + '</a> ' + T("(opcional)", "(optional)") + '</p>'
+      /* PENDIENTE DEL DUEÑO (2026-11-09): la demo quitaba la meta diaria y la
+         tarjeta del examen de nivel. Mientras decide, viven aquí, debajo de
+         los botones; si dice que se van, se borra este bloque entero. */
+      + '<div class="rs-extra">' + goalHtml
       + placementCard("leccion-leccion", {
           compact: true,
           title: "¿Y si lo llevas a una clase real?",
           sub: "Tu examen de nivel es gratis. Un profesor te arma el plan."
-        })
-      + '<p class="streak-acct">o guarda tu progreso en todos tus dispositivos: <a href="#" id="nudge-account">crea una cuenta</a> (opcional)</p>'
-      + (hasNext ? '<button class="btn btn-gold" id="nextL">Siguiente leccion &rarr;</button>'
-                   + '<button class="btn btn-ghost" id="moreL2">Ver todas las lecciones</button>'
-                 : '<button class="btn btn-gold" id="moreL">Ver todas las lecciones</button>')
-      + '</div></div>');
+        }) + '</div>'
+      + '</section></div>');
+    if (animNum) setTimeout(function () { var el = byId("rs-num"); if (el) el.textContent = streak; }, 1250);
+    if (info.isNewDay) setTimeout(function () { burstConfetti(26); }, 1100);
     bindCta();
     var na = byId("nudge-account"); if (na) na.onclick = function (e) { e.preventDefault(); if (window.VESPER_SYNC && VESPER_SYNC.openAuth) VESPER_SYNC.openAuth(); else location.href = "login.html"; };
     var nx = byId("nextL"); if (nx) nx.onclick = function () { location.search = "?id=" + encodeURIComponent(lesson.nextLessonId); };

@@ -109,7 +109,15 @@ window.VESPER_VOCAB_DENS = (function () {
                    {en:"month",es:"mes"},{en:"hour",es:"hora"},{en:"early",es:"temprano"},{en:"late",es:"tarde"},
                    {en:"always",es:"siempre"},{en:"never",es:"nunca"},{en:"today",es:"hoy"},{en:"tomorrow",es:"mañana"},
                    {en:"often",es:"a menudo"},{en:"sometimes",es:"a veces"},{en:"year",es:"año"},{en:"minute",es:"minuto"},
-                   {en:"weekend",es:"fin de semana"},{en:"soon",es:"pronto"} ] }
+                   {en:"weekend",es:"fin de semana"},{en:"soon",es:"pronto"} ] },
+        /* 2026-11-09: pedir en un café. Sin coffee/tea/cup/plate: ya los
+           enseña La cocina de A1. Español de México (popote, botana, mesero). */
+        { id: "cafe", name: "El café", icon: "cup", hint: "Pedir en un café", practice: "x3-a2-use-restaurant",
+          cards: [ {en:"menu",es:"menú"},{en:"waiter",es:"mesero"},{en:"bill",es:"la cuenta"},{en:"tip",es:"propina"},
+                   {en:"to order",es:"pedir"},{en:"takeaway",es:"para llevar"},{en:"for here",es:"para comer aquí"},{en:"reservation",es:"reservación"},
+                   {en:"today's special",es:"especial del día"},{en:"dessert",es:"postre"},{en:"snack",es:"botana"},{en:"sandwich",es:"sándwich"},
+                   {en:"cake",es:"pastel"},{en:"pastry",es:"pan dulce"},{en:"napkin",es:"servilleta"},{en:"straw",es:"popote"},
+                   {en:"counter",es:"mostrador"},{en:"cashier",es:"cajero"},{en:"to recommend",es:"recomendar"},{en:"to share",es:"compartir"} ] }
       ]
     },
     B1: {

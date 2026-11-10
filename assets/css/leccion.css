@@ -3831,3 +3831,111 @@ body:has(#app #verify) #app .card.center{background-image:none}
 /* reglas de varias líneas (lecciones C1/C2 del paquete avanzado) */
 #app .apr-rule{white-space:pre-line}
 @media(max-width:380px){.dcj-grid{grid-template-columns:1fr}}
+
+/* ================================================================
+   RACHA SALVADA (2026-11-09)
+   La pantalla que sale tras la lección del día (renderStreak en
+   leccion_app.js), pasada de la demo aprobada con la skill de marca.
+   Antes: gato suelto, 7 cajitas iguales y "stats" sueltas, con
+   "dias" y "Siguiente leccion" sin acento. Ahora:
+   · Vesper con el puño en alto (vesper_cat_streak.webp) en un medallón
+     de oro con halo y la insignia de la llama.
+   · Su frase a mano (Caveat), como el globo de FIRMA.
+   · La semana es una CONSTELACIÓN: cada día practicado es una estrella
+     de oro unida por un hilo punteado; hoy se enciende con la llama.
+   · Una sola tira neutra de datos (escudos · XP total · gemas). El oro
+     marca sólo la recompensa y la acción; nada verde (verde = acierto).
+   · El subrayado de pluma del título y los esquineros vienen de FIRMA
+     (#app .card.center > h1). Todo sale de tokens: sirve en los 8 temas.
+   · Todo se congela con prefers-reduced-motion y .vesper-reduce-motion.
+   ================================================================ */
+#app .rs{position:relative;padding:26px 20px 22px;overflow:hidden}
+#app .rs::before{content:"";position:absolute;left:50%;top:-40px;width:340px;height:260px;transform:translateX(-50%);pointer-events:none;
+  background:radial-gradient(closest-side,color-mix(in srgb,var(--gold) 22%,transparent),transparent 72%)}
+#app .rs > *{position:relative}
+
+/* -- medallón de Vesper -- */
+.rs-medal{position:relative;width:136px;height:136px;margin:0 auto 6px}
+.rs-rays{position:absolute;inset:-22px;border-radius:50%;pointer-events:none;
+  background:repeating-conic-gradient(from 0deg,color-mix(in srgb,var(--gold) 26%,transparent) 0 2.5deg,transparent 2.5deg 15deg);
+  -webkit-mask:radial-gradient(closest-side,transparent 60%,#000 64%,#000 78%,transparent 100%);
+          mask:radial-gradient(closest-side,transparent 60%,#000 64%,#000 78%,transparent 100%)}
+.rs-disc{position:absolute;inset:0;border-radius:50%;overflow:hidden;
+  background:radial-gradient(circle at 50% 38%,color-mix(in srgb,var(--gold) 30%,var(--paper)),color-mix(in srgb,var(--gold) 8%,var(--paper)) 70%);
+  border:2.5px solid var(--gold);box-shadow:0 0 0 5px color-mix(in srgb,var(--gold) 14%,transparent),0 4px 0 var(--gold-shadow,var(--gold))}
+.rs-disc img{position:absolute;left:50%;bottom:-6px;width:128px;height:128px;transform:translateX(-46%);display:block;
+  filter:var(--vc-filter,none);border:0;box-shadow:none}
+.rs-flame{position:absolute;right:-4px;bottom:2px;width:44px;height:44px;border-radius:50%;
+  display:flex;align-items:center;justify-content:center;background:var(--gold);color:var(--on-gold);
+  border:3px solid var(--paper);box-shadow:0 3px 0 var(--gold-shadow,var(--gold))}
+.rs-flame svg{width:32px;height:32px;margin-top:-2px}
+
+/* -- rótulo y número (el subrayado de pluma lo pone FIRMA) -- */
+.rs-ey{margin:10px 0 0;font:800 .72rem/1 Inter,system-ui,sans-serif;letter-spacing:.16em;text-transform:uppercase;color:var(--gold-ink)}
+#app .rs > h1{margin:.15em 0 0;font-size:var(--t-xl,1.875rem);line-height:1.1}
+.rs-num{display:inline-block;font-size:3.1rem;line-height:1;vertical-align:-.08em;margin-right:.12em;color:var(--gold-ink);font-variant-numeric:tabular-nums}
+
+/* -- la voz de Vesper, a mano -- */
+.rs-say{display:inline-block;margin:14px auto 4px;max-width:30ch;font:700 1.38rem/1.12 var(--hand);color:var(--ink);
+  background:color-mix(in srgb,var(--gold) 12%,var(--paper));border:1.5px solid color-mix(in srgb,var(--gold) 42%,transparent);
+  border-radius:4px 18px 16px 18px;padding:7px 15px 9px;transform:rotate(-1.4deg);
+  box-shadow:2px 3px 0 color-mix(in srgb,var(--gold) 20%,transparent);letter-spacing:.005em}
+
+/* -- la semana como constelación -- */
+.rs-week{position:relative;margin:20px 0 4px;padding:0 2px}
+.rs-days{position:relative;display:grid;grid-template-columns:repeat(7,1fr);list-style:none;margin:0;padding:0}
+.rs-day{display:flex;flex-direction:column;align-items:center;gap:6px}
+.rs-dot{position:relative;z-index:1;width:40px;height:40px;display:flex;align-items:center;justify-content:center}
+.rs-dot svg{display:block}
+.rs-day.on .rs-dot svg{width:22px;height:22px;color:var(--gold);filter:drop-shadow(0 0 4px color-mix(in srgb,var(--gold) 70%,transparent))}
+.rs-day.off .rs-dot svg{width:12px;height:12px;color:color-mix(in srgb,var(--muted) 50%,transparent)}
+.rs-day.today .rs-dot{border-radius:50%;background:var(--gold);color:var(--on-gold);
+  box-shadow:0 3px 0 var(--gold-shadow,var(--gold)),0 0 0 5px color-mix(in srgb,var(--gold) 18%,transparent)}
+.rs-day.today .rs-dot svg{width:30px;height:30px;margin-top:-2px;color:var(--on-gold);filter:none}
+.rs-lab{font-size:var(--t-xs,.8125rem);font-weight:600;color:var(--muted);line-height:1}
+.rs-day.on .rs-lab{color:var(--ink)}
+.rs-day.today .rs-lab{color:var(--gold-ink);font-weight:800}
+.rs-thread{position:absolute;top:20px;height:2px;margin-top:-1px;transform-origin:left center;
+  background:repeating-linear-gradient(90deg,color-mix(in srgb,var(--gold) 70%,transparent) 0 4px,transparent 4px 8px)}
+.rs-week-note{margin:10px 0 0;font-size:var(--t-xs,.8125rem);color:var(--muted)}
+
+/* -- datos: una sola tira, sin cajas de colores -- */
+.rs-strip{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin:18px 0 4px;
+  border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.rs-2col .rs-strip{grid-template-columns:repeat(2,minmax(0,1fr))}
+.rs-strip > div{padding:11px 4px 10px}
+.rs-strip > div + div{border-left:1px solid var(--line)}
+.rs-strip b{display:block;font-size:var(--t-lg,1.375rem);font-weight:800;line-height:1.1;font-variant-numeric:tabular-nums}
+.rs-strip > div > span{display:block;margin-top:3px;font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.rs-ei{display:inline-flex;vertical-align:-.12em;color:var(--gold-ink);margin-right:3px}
+.rs-ei svg{width:.9em;height:.9em}
+#app .rs .milestone{margin:14px 0 0}
+#app .rs .rs-acct{margin:12px 0 0}
+/* meta diaria y examen de nivel: debajo de los botones (pendiente del dueño) */
+.rs-extra{margin-top:18px;text-align:left}
+.rs-extra .goal-card{margin:0 0 12px}
+
+/* -- entrada: el medallón sube, el hilo se tiende, hoy se enciende -- */
+.rs-anim{animation:rs-rise .6s var(--ease,ease) both}
+.rs-anim .rs-medal{animation:rs-pop .7s cubic-bezier(.2,1.5,.4,1) .15s both}
+.rs-anim .rs-rays{animation:rs-spin 30s linear infinite}
+.rs-anim .rs-thread{animation:rs-draw .7s var(--ease,ease) .5s both}
+.rs-anim .rs-day.on .rs-dot{animation:rs-twinkle .35s var(--ease,ease) both}
+.rs-anim .rs-day.today .rs-dot{animation:rs-ignite .7s var(--ease,ease) 1.15s both}
+.rs-anim .rs-flame{animation:rs-ignite .6s var(--ease,ease) 1.3s both}
+.rs-anim .rs-say{animation:rs-fade .5s var(--ease,ease) 1.5s both}
+@keyframes rs-rise{from{opacity:0;transform:translateY(22px)}to{opacity:1;transform:none}}
+@keyframes rs-pop{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:none}}
+@keyframes rs-spin{to{transform:rotate(360deg)}}
+@keyframes rs-draw{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes rs-twinkle{from{opacity:0;transform:scale(.3)}to{opacity:1;transform:none}}
+@keyframes rs-ignite{0%{transform:scale(.2);opacity:0}60%{transform:scale(1.3);opacity:1}100%{transform:none}}
+@keyframes rs-fade{from{opacity:0;transform:translateY(6px) rotate(-1.4deg)}to{opacity:1;transform:rotate(-1.4deg)}}
+
+/* movimiento reducido: el del sistema Y la opción de la app. El confeti
+   también: burstConfetti ya mira las dos, y si saliera, no se ve. */
+@media (prefers-reduced-motion:reduce){
+  .rs-anim,.rs-anim *{animation:none!important}
+}
+.vesper-reduce-motion .rs-anim,.vesper-reduce-motion .rs-anim *{animation:none!important}
+.vesper-reduce-motion .confetti{display:none}
