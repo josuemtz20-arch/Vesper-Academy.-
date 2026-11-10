@@ -21,16 +21,14 @@
  * ("put your foot in it" → "put my foot in it").
  *
  * noMain: lecciones cuyo audio principal NO es la transcripción que
- * guardamos (audios viejos y cortos de gTTS: niveles 2–4 pares, todo el 6).
- * Ahí sólo cuenta el diálogo modelo, que sí está bien transcrito.
- * Cuando se vuelvan a grabar esos audios, se quitan de esta lista.
+ * guardamos; ahí sólo cuenta el diálogo modelo. Vacía desde 2026-11-10:
+ * los 50 audios que no cuadraban (niveles 2 y 4 pares, todo el 6) se
+ * grabaron de nuevo leyendo la lectura del libro (_scripts/cp_reading_voice.py),
+ * y los del nivel 3 par ya eran los clips "View 2" del libro: sólo faltaba
+ * su transcripción. Si otro audio deja de cuadrar, va aquí.
  * ===================================================================== */
 window.AUDIO_VOCAB = {
-  noMain: ["cp2-2","cp2-4","cp2-6","cp2-8","cp2-10","cp2-12","cp2-14","cp2-16","cp2-18","cp2-20",
-           "cp3-2","cp3-4","cp3-6","cp3-8","cp3-10","cp3-12","cp3-14","cp3-16","cp3-18","cp3-20",
-           "cp4-2","cp4-4","cp4-6","cp4-8","cp4-10","cp4-12","cp4-14","cp4-16","cp4-18","cp4-20",
-           "cp6-1","cp6-2","cp6-3","cp6-4","cp6-5","cp6-6","cp6-7","cp6-8","cp6-9","cp6-10",
-           "cp6-11","cp6-12","cp6-13","cp6-14","cp6-15","cp6-16","cp6-17","cp6-18","cp6-19","cp6-20"],
+  noMain: [],
   decks: {
     /* ---------- Core Practice · Nivel 1 (huecos) ---------- */
     "cp1-9": [
