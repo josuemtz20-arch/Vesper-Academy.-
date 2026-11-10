@@ -29,7 +29,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+      url: ${{ steps.deployment.outputs.page_url || steps.deployment_retry.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
 
@@ -46,7 +46,19 @@ jobs:
 
       # deploy-pages espera a lo sumo 10 min (600000 ms es el MÁXIMO que permite
       # GitHub; un timeout mayor se ignora) a que Pages procese el artefacto.
-      # Si Pages tarda más, falla con "Timeout reached": es lentitud de GitHub,
-      # no del sitio. Reintentar más tarde (Re-run jobs) basta.
+      # Si Pages se queda en "syncing_files" más que eso, falla con "Timeout
+      # reached" y cancela el despliegue: es lentitud de GitHub, no del sitio
+      # (pasó 5 veces seguidas el 2026-11-09). Por eso el primer intento no
+      # tumba el job: se espera 1 min y se vuelve a desplegar el MISMO
+      # artefacto. Solo si el segundo también falla, el job sale en rojo.
       - id: deployment
+        uses: actions/deploy-pages@v4
+        continue-on-error: true
+
+      - name: Esperar antes de reintentar
+        if: steps.deployment.outcome == 'failure'
+        run: sleep 60
+
+      - id: deployment_retry
+        if: steps.deployment.outcome == 'failure'
         uses: actions/deploy-pages@v4
