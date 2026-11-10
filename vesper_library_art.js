@@ -48,8 +48,12 @@ window.VesperLibArt = (function () {
     "cert": ["Catch the trap before it catches you.", "Detecta la trampa antes de que te atrape."]
   };
   function key(col) { return KEYS[col] || null; }
-  function card(col) { var k = key(col); return k ? BASE + k + "_sm.jpg" : null; }
-  function wide(col) { var k = key(col); return k ? BASE + k + ".jpg" : null; }
+  /* La extensión va aparte: preflight toma cualquier literal entre
+     comillas que acabe en .jpg por un archivo, y el sufijo suelto de la
+     miniatura le parecía una referencia rota. */
+  var EXT = ".jpg";
+  function card(col) { var k = key(col); return k ? BASE + k + "_sm" + EXT : null; }
+  function wide(col) { var k = key(col); return k ? BASE + k + EXT : null; }
   function line(col) { return LINES[col] || null; }
   /* La colección de una lección de lesson.html, sacada de su URL. */
   function colFromParams(p) {
