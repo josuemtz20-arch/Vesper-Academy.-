@@ -44,6 +44,22 @@ class_name = "RateLimiter"
 tag = "v1"
 new_sqlite_classes = ["RateLimiter"]
 
+# ── Exámenes calificados en el servidor (exam_grader.js) ──
+# Un Durable Object por intento: guarda la PRIMERA respuesta de cada pregunta
+# y se borra solo a las 24 h. Las claves van empaquetadas desde
+# exam_keys.json (genéralo antes de desplegar:
+#   node ../_scripts/exams/split_exams.js
+# si falta, `wrangler deploy` falla a propósito).
+# Secreto necesario para guardar las notas en Firestore:
+#   FIREBASE_SA   JSON de la cuenta de servicio (ver README, "Exámenes")
+[[durable_objects.bindings]]
+name = "EXAM_ATTEMPTS"
+class_name = "ExamAttempt"
+
+[[migrations]]
+tag = "v2"
+new_sqlite_classes = ["ExamAttempt"]
+
 # ── Ajuste de límites sin tocar código (opcional) ──
 # Descomenta y cambia; 0 desactiva ese límite. Valores por defecto en
 # RATE_DEFAULTS de vesper-chat-proxy.js.

@@ -227,7 +227,46 @@ O en el panel: tu Worker → **Settings → Variables and Secrets** → añade `
 | `TURNSTILE_SECRET` | secreto | recomendado | `wrangler secret put TURNSTILE_SECRET` |
 | `SESSION_SECRET` | secreto | no | `wrangler secret put SESSION_SECRET` |
 | `PRO_CODE` | secreto | no | `wrangler secret put PRO_CODE` |
+| `FIREBASE_SA` | secreto | sí, para guardar notas de exámenes | ver "Exámenes" |
+| `EXAM_ATTEMPTS` | Durable Object | sí (ya en `wrangler.toml`) | se crea con `wrangler deploy` (migración v2) |
 | `RL_*` | variable | no | `[vars]` en `wrangler.toml` |
+
+## Exámenes calificados en el servidor (2026-11)
+
+Los exámenes de nivel (A1–C2) y los jefes de mundo de `leccion.html` ya no
+traen las respuestas en el sitio. Las califica este Worker (`exam_grader.js`,
+rutas `/exam/start`, `/exam/answer`, `/exam/finish`), que además guarda la nota
+en Firestore (`exam_results`, con `gradedBy: "worker"`). Las reglas rechazan
+esas notas si llegan desde el navegador.
+
+- **Fuente con claves (privada):** `_scripts/exams/vesper_*_exams.src.js`. Se
+  editan ahí; nunca los `vesper_*_exams.js` de la raíz, que son generados.
+- **Generar:** `node _scripts/exams/split_exams.js` escribe los dos archivos
+  públicos y `worker/exam_keys.json` (fuera de git; `wrangler deploy` lo
+  empaqueta y falla si no existe). Preflight (H) avisa si algo quedó viejo.
+- **Versión:** sitio y Worker deben llevar la misma `VESPER_EXAM_VERSION`; si
+  no, el examen pide recargar. Cada cambio de preguntas = generar, `wrangler
+  deploy` y luego `git push`, en ese orden.
+
+Despliegue (desde `worker/`, PowerShell):
+
+```powershell
+node ..\_scripts\exams\split_exams.js
+Get-Content ..\_scripts\service_account.json -Raw | wrangler secret put FIREBASE_SA
+wrangler deploy
+```
+
+`FIREBASE_SA` es el JSON de una cuenta de servicio con permiso de escribir en
+Firestore. Lo ideal es una cuenta SOLO para esto (rol "Cloud Datastore User"),
+no la de administración: si alguien la robara del Worker, no tendría más.
+
+Pruebas: `wrangler dev` con `EXAM_DEV=1` en `worker/.dev.vars` (no escribe en
+Firestore) y luego
+
+```bash
+node ../_scripts/exams/test_worker_exams.js --root ..
+python ../_scripts/exams/e2e_exams.py --root .. exam:A1 boss:C1
+```
 
 ## Seguridad
 

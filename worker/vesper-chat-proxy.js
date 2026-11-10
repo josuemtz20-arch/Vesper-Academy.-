@@ -35,6 +35,9 @@
 "use strict";
 
 import { DurableObject } from "cloudflare:workers";
+/* Exámenes calificados en el servidor (rutas /exam/*). Ver exam_grader.js. */
+import { handleExam, EXAM_RATE_DEFAULTS, ExamAttempt } from "./exam_grader.js";
+export { ExamAttempt };
 
 /* ---------- Configuración (editable) ---------- */
 
@@ -86,6 +89,8 @@ const MAX_INPUT_CHARS = 20000;
  * OJO: un salón de clases detrás de un mismo router comparte UNA IP pública;
  * por eso el tope por IP no es mínimo y el nivel Pro tiene más margen. */
 const RATE_DEFAULTS = {
+  /* exámenes: abrir intento y contestar, por IP (ver exam_grader.js) */
+  ...EXAM_RATE_DEFAULTS,
   RL_FREE_PER_MIN: 12,     // mensajes por minuto por IP (nivel gratis)
   RL_FREE_PER_DAY: 200,    // mensajes por día (UTC) por IP (nivel gratis)
   RL_PRO_PER_MIN: 30,      // con código Pro válido
@@ -374,6 +379,37 @@ export default {
      * por IP, Turnstile y tope global. */
     if (!origin) {
       return jsonError(403, "Origen no autorizado.", null);
+    }
+
+    /* ── Exámenes (/exam/start, /exam/answer, /exam/finish) ──
+     * No usan Claude ni la API key: califican con las claves que solo viven
+     * en el Worker. Comparten el contador por IP del chat. */
+    const path = new URL(request.url).pathname;
+    if (path.indexOf("/exam/") === 0) {
+      const ipE = request.headers.get("CF-Connecting-IP") || "unknown";
+      let eb;
+      try {
+        const t = await request.text();
+        if (t.length > 20000) return jsonError(413, "Petición demasiado grande.", origin);
+        eb = JSON.parse(t);
+      } catch (e) {
+        return jsonError(400, "Cuerpo JSON inválido.", origin);
+      }
+      if (!eb || typeof eb !== "object") return jsonError(400, "Cuerpo JSON inválido.", origin);
+      let out;
+      try {
+        out = await handleExam(path, eb, env,
+          (key, perMin, perDay) => rateHit(env, key + ":" + ipE, perMin, perDay),
+          (name) => limitOf(env, name));
+      } catch (e) {
+        console.error("exam:", e && e.message);
+        out = [500, { error: "Error del servidor de exámenes." }];
+      }
+      const extra = out[0] === 429 ? { "Retry-After": String(out[1].retryAfter || 60) } : {};
+      return new Response(JSON.stringify(out[1]), {
+        status: out[0],
+        headers: Object.assign({ "Content-Type": "application/json", "Cache-Control": "no-store" }, corsHeaders(origin), extra)
+      });
     }
 
     if (!env.ANTHROPIC_API_KEY) {

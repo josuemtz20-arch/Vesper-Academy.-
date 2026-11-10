@@ -36,7 +36,10 @@
      (el enrutador del final los pide antes de despachar) o en reposo, tras pintar
      el mapa. Cada grupo se carga en orden: level_exams completa a boss_exams. */
   var LAZY = {
-    exams: ["vesper_boss_exams.js", "vesper_level_exams.js"],
+    /* preguntas SIN respuestas (las califica el Worker). Nombres nuevos a
+       propósito: los viejos quedan vacíos para que una copia vieja de esta app
+       nunca califique contra bancos sin claves. */
+    exams: ["vesper_boss_questions.js", "vesper_level_questions.js"],
     forja: ["vesper_forja.js"],
     tour: ["vesper_tour.js"],
     league: ["vesper_league.js", "vesper_league_cloud.js"],
@@ -4326,6 +4329,7 @@
     var total = lesson.exercises.length;
     var pct = 22 + Math.round(58 * (exIdx / total));
     var ex = lesson.exercises[exIdx];
+    if (lesson.serverGraded && exIdx === 0) examNewRun();
     if (ex.type === "multiple_choice") renderMCQ(ex, pct, total);
     else if (ex.type === "word_order") renderWordOrder(ex, pct, total);
     else if (ex.type === "true_false") renderTrueFalse(ex, pct, total);
@@ -4337,8 +4341,142 @@
     else if (ex.type === "reading") renderReading(ex, pct, total);
     else if (ex.type === "find_error") renderFindError(ex, pct, total);
     else if (ex.type === "speak") renderSpeak(ex, pct, total);
-    else advance();
+    else { advance(); return; }
+    if (lesson.serverGraded && ex.id) examGateVerify(ex);
   }
+
+  /* ============================================================
+     EXÁMENES CALIFICADOS EN EL SERVIDOR (examen de nivel y jefes)
+
+     vesper_level_questions.js / vesper_boss_questions.js NO traen respuestas
+     (las genera _scripts/exams/split_exams.js). Al tocar "Verificar", la
+     respuesta va al Worker (worker/exam_grader.js), que la califica, guarda
+     la primera respuesta de cada pregunta y devuelve la clave ("reveal").
+     La clave se mezcla en el ejercicio y entonces corre el renderer de
+     siempre, que pinta el feedback igual que antes. La nota final la calcula
+     y la guarda el Worker (/exam/finish); aquí solo queda el espejo local.
+     ============================================================ */
+  var EXAM_API = String(window.VESPER_EXAM_API || "https://patient-feather-4364.josuemtz20.workers.dev").replace(/\/+$/, "") + "/exam/";
+  function examPost(path, body) {
+    return fetch(EXAM_API + path, {
+      method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body)
+    }).then(function (r) {
+      return r.json().catch(function () { return {}; }).then(function (j) {
+        if (!r.ok) { var e = new Error(j.error || T("El servidor del examen no respondió.", "The exam server did not answer.")); e.code = j.code; throw e; }
+        return j;
+      });
+    }, function () {
+      throw new Error(T("Sin conexión con el servidor del examen. Revisa tu internet y vuelve a tocar Verificar.",
+                        "No connection to the exam server. Check your internet and tap Check again."));
+    });
+  }
+  /* cada vuelta desde la primera pregunta es un intento nuevo en el servidor */
+  function examNewRun() {
+    lesson._att = null;
+    (lesson.exercises || []).forEach(function (e) { e._graded = false; e._pending = false; });
+    examAttempt().catch(function () {});   /* se abre ya, para que la 1.ª respuesta no espere */
+  }
+  function examAttempt() {
+    if (!lesson._att) {
+      var p = examPost("start", {
+        kind: lesson.examKind, level: lesson.isBoss ? lesson.bossLevel : lesson.examLevel,
+        version: window.VESPER_EXAM_VERSION || "",
+        ids: lesson.exercises.map(function (e) { return e.id; })
+      }).then(function (j) { return j.attemptId; });
+      p.catch(function () { if (lesson._att === p) lesson._att = null; });
+      lesson._att = p;
+    }
+    return lesson._att;
+  }
+  /* lee del DOM lo que el alumno eligió (los renderers lo guardan en closures) */
+  function examResponse(ex) {
+    function pickI(sel) { var el = document.querySelector(sel); return el ? +el.getAttribute("data-i") : null; }
+    function typed(id) { var el = byId(id); return el && el.value.trim() ? { text: el.value } : null; }
+    var c;
+    switch (ex.type) {
+      case "multiple_choice": c = pickI(".opt.sel"); return c == null ? null : { choice: c };
+      case "find_error": c = pickI(".fe-seg.sel"); return c == null ? null : { choice: c };
+      case "listening":
+        if (Array.isArray(ex.options)) { c = pickI(".opt.sel"); return c == null ? null : { choice: c }; }
+        return typed("ltype");
+      case "true_false": {
+        var tf = document.querySelector(".tf-btn.sel");
+        return tf ? { choice: +tf.getAttribute("data-v") } : null;
+      }
+      case "fill_blank": return typed("blank");
+      case "translate": case "type_answer": return typed("trans");
+      case "word_order": {
+        var words = [];
+        each("#answer [data-a]", function (el) { words.push(el.textContent); });
+        return words.length ? { words: words } : null;
+      }
+      case "reading": {
+        var picks = (ex.questions || []).map(function (q, qi) { return pickI('.opt.sel[data-q="' + qi + '"]'); });
+        return picks.some(function (p) { return p == null; }) ? null : { picks: picks };
+      }
+    }
+    return null;
+  }
+  /* mezcla la clave EN SITIO: algunos renderers capturaron `answers` al pintar */
+  function examReveal(ex, rv) {
+    if (!rv) return;
+    function into(dst, src) {
+      Object.keys(src).forEach(function (k) {
+        if (Array.isArray(dst[k]) && Array.isArray(src[k])) { dst[k].length = 0; Array.prototype.push.apply(dst[k], src[k]); }
+        else dst[k] = src[k];
+      });
+    }
+    if (ex.type === "reading" && rv.questions) {
+      rv.questions.forEach(function (q, i) { if (ex.questions && ex.questions[i]) into(ex.questions[i], q); });
+    } else into(ex, rv);
+  }
+  function examGateVerify(ex) {
+    var btn = byId("verify"), orig = btn && btn.onclick;
+    if (!orig) return;
+    btn.onclick = function (e) {
+      var self = this;
+      if (ex._graded) return orig.call(self, e);
+      if (ex._pending) return;
+      var resp = examResponse(ex);
+      if (!resp) return;
+      ex._pending = true;
+      var label = btn.innerHTML;
+      btn.disabled = true; btn.textContent = T("Calificando…", "Checking…");
+      var fb = byId("fb"); if (fb) fb.innerHTML = "";
+      examAttempt().then(function (att) {
+        return examPost("answer", { attemptId: att, id: ex.id, response: resp });
+      }).then(function (r) {
+        examReveal(ex, r.reveal);
+        ex._graded = true; ex._pending = false;
+        btn.disabled = false; btn.innerHTML = label;
+        orig.call(self, e);
+        /* la calificación local (con la clave ya revelada) debe coincidir con la
+           del servidor; si no, manda la del servidor, que es la que cuenta */
+        if (results[exIdx] !== r.correct) {
+          try { console.warn("[exam] veredicto local distinto al del servidor en " + ex.id); } catch (er) {}
+          results[exIdx] = !!r.correct;
+        }
+      }, function (err) {
+        ex._pending = false;
+        btn.disabled = false; btn.innerHTML = label;
+        if (fb) fb.innerHTML = '<p class="hint" role="alert">' + ic('bulb') + esc(err.message) + '</p>';
+      });
+    };
+  }
+  /* cierra el intento: el Worker calcula la nota y, con sesión, la guarda */
+  function examFinish() {
+    if (!lesson.serverGraded || !lesson._att) return;
+    var att = lesson._att; lesson._att = null;
+    var R = window.VESPER_RESULTS;
+    var tok = (R && R.idToken) ? R.idToken() : Promise.resolve(null);
+    Promise.all([att, tok]).then(function (v) {
+      return examPost("finish", { attemptId: v[0], idToken: v[1] || undefined, alias: (R && R.aliasOf) ? R.aliasOf() : "" });
+    }).then(function (j) {
+      try { if (window.VESPER_DEBUG_EXAM) console.log("[exam] finish", j); } catch (e) {}
+    }, function (e) { try { console.warn("[exam] finish:", e && e.message); } catch (er) {} });
+  }
+  /* copia profunda: revelar claves no debe tocar el banco compartido */
+  function examClone(list) { return JSON.parse(JSON.stringify(list)); }
   /* la tarjeta "Tiempo" del final mide la ronda desde el primer ejercicio */
   var runT0 = 0;
   function fmtRun() {
@@ -5182,9 +5320,12 @@
       if (window.VESPER_RESULTS) VESPER_RESULTS.record({
         examType: "boss", examId: lesson.lessonId, level: lesson.bossLevel,
         score: correct, total: total, percent: pct,
-        threshold: bm.pass, passed: pct >= bm.pass, detail: examDetail()
+        threshold: bm.pass, passed: pct >= bm.pass, detail: examDetail(),
+        /* con banco, la nota de la nube la escribe el Worker (examFinish) */
+        cloud: !lesson.serverGraded
       });
     } catch (e) {}
+    examFinish();
     if (pct < bm.pass) {
       earnedXp = 0;
       track("boss_fail", { level: lesson.bossLevel, pct: pct });
@@ -5244,9 +5385,11 @@
       if (window.VESPER_RESULTS) VESPER_RESULTS.record({
         examType: "exam", examId: "exam:" + lesson.examLevel, level: lesson.level,
         score: correct, total: total, percent: pct,
-        threshold: pass, passed: passed, detail: examDetail()
+        threshold: pass, passed: passed, detail: examDetail(),
+        cloud: !lesson.serverGraded   /* la nota de la nube la escribe el Worker */
       });
     } catch (e) {}
+    examFinish();
     /* desglose preliminar por destreza */
     var bySkill = {};
     (lesson.exercises || []).forEach(function (ex, i) {
@@ -5651,6 +5794,8 @@
       shuffle(pickedB);
       return {
         lessonId: "boss:" + level, level: level, track: "Examen del mundo", isBoss: true, bossLevel: level,
+        /* el banco no trae respuestas: califica el Worker (ver examGateVerify) */
+        serverGraded: true, examKind: "boss",
         title: bm.name + " · " + level,
         explanation: {
           body: "Demuestra tu dominio de " + level + ". "
@@ -5659,7 +5804,7 @@
             + "Necesitas " + bm.pass + "% para vencer al guardián y abrir el siguiente mundo.",
           examples: []
         },
-        exercises: pickedB, xpReward: 70, mascotState: "thinking", nextLessonId: null
+        exercises: examClone(pickedB), xpReward: 70, mascotState: "thinking", nextLessonId: null
       };
     }
     /* Fallback (sin banco): arma el examen desde las lecciones del mundo. */
@@ -5717,7 +5862,7 @@
 
   /* ---------- EXAMEN DE NIVEL: evaluación formal y completa de un nivel ----------
      A diferencia del jefe (corto y muestreado), el examen de nivel presenta TODO
-     el banco de ese nivel (vesper_level_exams.js), ordenado por destreza
+     el banco de ese nivel (vesper_level_questions.js), ordenado por destreza
      (gramática → vocabulario → uso → lectura → listening). No es isBoss: corre
      por la vía normal de renderFeedback y se registra como examType "exam". */
   function buildLevelExam(level) {
@@ -5738,6 +5883,7 @@
     return {
       lessonId: "exam:" + level, level: level, track: "Examen de nivel",
       isExam: true, examLevel: level, examPass: pass,
+      serverGraded: true, examKind: "exam",
       title: "Examen de nivel · " + level,
       explanation: {
         body: "Evaluación completa del nivel " + level + ": gramática, vocabulario, uso del inglés, "
@@ -5745,7 +5891,7 @@
           + "% para aprobar. Tu resultado queda registrado para tu profesor.",
         examples: []
       },
-      exercises: ordered, xpReward: 80, mascotState: "thinking", nextLessonId: null
+      exercises: examClone(ordered), xpReward: 80, mascotState: "thinking", nextLessonId: null
     };
   }
 

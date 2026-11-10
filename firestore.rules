@@ -390,10 +390,22 @@ service cloud.firestore {
                 && d.percent * d.total >= d.score * 100 - d.total
                 && d.percent * d.total <= d.score * 100 + d.total));
     }
+    // Exámenes que califica el SERVIDOR (2026-11): los jefes de mundo y los
+    // exámenes de nivel A1–C2 de leccion.html. Su nota la escribe el Worker
+    // (worker/exam_grader.js) con la cuenta de servicio, que no pasa por estas
+    // reglas, y lleva gradedBy "worker" (campo que el navegador no puede poner:
+    // examResultShapeOk no lo admite). Desde el navegador ya no se aceptan:
+    // antes un alumno podía subir el 100 que quisiera desde la consola.
+    // Los exámenes de los libros (exam.html, examId "exam:<curso>") siguen igual.
+    function serverGradedExam(d) {
+      return d.examType == "boss"
+          || (d.examType == "exam" && d.get("examId", "").matches("exam:(A1|A2|B1|B2|C1|C2)"));
+    }
     match /exam_results/{id} {
       allow create: if signedIn()
                     && request.resource.data.studentUid == request.auth.uid
                     && examResultShapeOk(request.resource.data)
+                    && !serverGradedExam(request.resource.data)
                     && examIdentityOk(request.resource.data);
       allow read:   if signedIn() && (
                        resource.data.studentUid == request.auth.uid

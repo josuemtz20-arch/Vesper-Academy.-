@@ -28,7 +28,9 @@
  *   available()        -> ¿hay Firebase configurado?
  *   signedIn()         -> ¿hay sesión verificada?
  *   aliasOf()          -> alias público actual (o código anónimo)
- *   record(result)     -> registra un intento (local + nube si hay sesión)
+ *   record(result)     -> registra un intento (local + nube si hay sesión;
+ *                         result.cloud === false: solo local)
+ *   idToken()          -> Promise<token|null> de la sesión verificada
  *   fetchAll({limit})  -> Promise<[fila]|null>  (profe: solo SUS grupos; admin: todo)
  *   fetchMine()        -> Promise<[fila]|null>  (el alumno lee SUS intentos)
  *   localAll()         -> intentos guardados en este dispositivo
@@ -65,6 +67,13 @@ window.VESPER_RESULTS = (function () {
   }
 
   function signedIn() { return !!currentUser; }
+
+  /* token de la sesión verificada (o null): lo manda leccion_app.js al Worker
+     para que ÉL guarde la nota de los exámenes que califica (examFinish). */
+  function idToken() {
+    if (!currentUser) return Promise.resolve(null);
+    return currentUser.getIdToken().catch(function () { return null; });
+  }
 
   /* ---- identidad opaca del alumno (sid + grupo) ----
      El sid es determinista (hash del correo, igual que sid_of() en
@@ -253,6 +262,9 @@ window.VESPER_RESULTS = (function () {
     var rec;
     try { rec = normalize(result); } catch (e) { return Promise.resolve(false); }
     saveLocal(rec);
+    /* cloud:false = la nota la escribe el servidor (exámenes de nivel y jefes);
+       las reglas ya no aceptan esas desde el navegador */
+    if (result && result.cloud === false) return Promise.resolve(false);
     if (!signedIn()) return Promise.resolve(false);
     return currentUser.getIdToken().then(function (token) {
       return myIdentity(token).then(function (id) {
@@ -382,7 +394,7 @@ window.VESPER_RESULTS = (function () {
 
   start();
   return {
-    available: available, signedIn: signedIn, aliasOf: aliasOf,
+    available: available, signedIn: signedIn, aliasOf: aliasOf, idToken: idToken,
     record: record, fetchAll: fetchAll, fetchMine: fetchMine, localAll: localAll,
     isAdminUser: isAdminUser, fetchMyGroups: fetchMyGroups, computeSid: computeSid
   };
