@@ -11,6 +11,10 @@
 !/.gitignore
 !/.nojekyll
 !/CNAME
+# publicación filtrada: .github/workflows/pages.yml arma el sitio SIN los
+# archivos internos (reglas, *.md, worker/, este .gitignore...). Lo que está
+# en git no es lo mismo que lo que se sirve; la lista vive en pages.yml.
+!/.github/
 # mapa del repo + modelo de seguridad (sin claves)
 !/README.md
 

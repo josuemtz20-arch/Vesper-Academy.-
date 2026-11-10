@@ -1,0 +1,48 @@
+# Publica vesperacademy.com desde main, SIN los archivos internos.
+#
+# Lo que está en git no se sirve tal cual: este flujo copia los archivos
+# rastreados a _site/ quitando los que coinciden con INTERNOS y publica eso.
+# Así las reglas, los documentos y el Worker siguen en git, pero ya no se
+# descargan desde el sitio (y tampoco si el repo pasa a privado).
+#
+# Requiere: Settings > Pages > Build and deployment > Source = "GitHub Actions".
+# Para probar la lista sin publicar:  bash .github/pages_filter.sh _site_prueba
+
+name: Publicar sitio
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Armar el sitio sin archivos internos
+        run: bash .github/pages_filter.sh _site
+
+      - uses: actions/configure-pages@v5
+
+      # v3 a propósito: incluye archivos ocultos (.well-known/assetlinks.json,
+      # que necesita la app de Play Store). v4 los quita.
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - id: deployment
+        uses: actions/deploy-pages@v4
