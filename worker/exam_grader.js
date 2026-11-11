@@ -165,6 +165,20 @@ function attemptStub(env, attemptId) {
   return env.EXAM_ATTEMPTS.get(env.EXAM_ATTEMPTS.idFromName("att:" + attemptId));
 }
 
+/* Reglas del duelo (espejo de battleState() en leccion_app.js): con `total`
+   preguntas y umbral `pass`, se gana al juntar need aciertos y se pierde al
+   agotar lives fallos. Devuelve en qué respuesta terminó (n) o over:false. */
+export function duelCut(verdicts, total, pass) {
+  const need = Math.max(1, Math.ceil(total * pass / 100 - 1e-9));
+  const lives = Math.max(1, total - need + 1);
+  let hits = 0, misses = 0;
+  for (let i = 0; i < verdicts.length; i++) {
+    if (verdicts[i]) hits++; else misses++;
+    if (hits >= need || misses >= lives) return { over: true, n: i + 1 };
+  }
+  return { over: false, n: verdicts.length };
+}
+
 function exText(ex) {
   return ex.question || ex.sentence || ex.statement || ex.prompt || ex.title
     || (ex.words ? (ex.correctOrder || ex.words).join(" ") : "") || "";
@@ -359,12 +373,25 @@ async function finish(env, body) {
   const bank = bankOf(at.kind, at.level);
   let res = a.result;
   if (!res) {
-    const answered = a.order.length;
-    const total = at.kind === "boss" ? Math.max(1, Math.min(a.ids.length, answered)) : a.ids.length;
-    const correct = a.order.filter((id) => a.answered[id] === true).length;
-    const percent = Math.round(100 * correct / Math.max(1, total));
     const threshold = bank.pass;
-    let ids = at.kind === "boss" ? a.order.slice() : a.ids.slice();
+    /* El total lo fija el intento, no cuántas preguntas quiso contestar el
+       cliente. En el jefe el duelo puede acabar antes (victoria al juntar
+       los golpes que pide el umbral, derrota al agotar las vidas): solo
+       entonces el total es lo contestado HASTA ese punto, y lo que llegue
+       después no cuenta. Un duelo abandonado a medias se califica sobre
+       todas las preguntas del intento. */
+    let counted = a.order, total = a.ids.length;
+    if (at.kind === "boss") {
+      const duel = duelCut(a.order.map((id) => a.answered[id] === true), a.ids.length, threshold);
+      if (duel.over) { counted = a.order.slice(0, duel.n); total = duel.n; }
+    }
+    const correct = counted.filter((id) => a.answered[id] === true).length;
+    const percent = Math.round(100 * correct / Math.max(1, total));
+    let ids = a.ids.slice();
+    if (at.kind === "boss") {
+      ids = counted.slice();
+      if (total > counted.length) a.ids.forEach((id) => { if (ids.indexOf(id) < 0) ids.push(id); });
+    }
     if (at.kind === "exam") {
       const pos = {}; a.ids.forEach((id, i) => { pos[id] = i; });
       const rk = (id) => { const s = bank.items[id].skill; return (s in SKILL_RANK) ? SKILL_RANK[s] : 9; };
