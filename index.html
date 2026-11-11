@@ -1438,7 +1438,7 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
           <span class="ccat">A1 – C2</span>
           <p>Solo hablar, <span data-hecho="clases_club">2</span> clases por semana.</p>
           <p class="cfrom">Precio</p>
-          <p class="cprice"><span data-pend="precio_club" hidden><span data-hecho="precio_club"><span class="dato-real">[DATO REAL: precio del Club]</span></span> <span class="unit">MXN / mes</span></span><span data-pend-alt="precio_club" class="unit">Consúltalo por WhatsApp</span></p>
+          <p class="cprice"><span data-pend="precio_club" hidden><span data-hecho="precio_club"></span> <span class="unit">MXN / mes</span></span><span data-pend-alt="precio_club" class="unit">Consúltalo por WhatsApp</span></p>
           <span class="more">Ver el curso <svg class="i"><use href="#i-arrow"/></svg></span>
         </div>
       </a>
@@ -1504,45 +1504,10 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
 </section>
 
 <!-- ============ PRUEBA SOCIAL ============ -->
-<!-- Justo después de la ruta: el visitante ya entendió el método y se
-     pregunta «¿y funciona? ¿quién me da clase?». Hasta que el dueño mande
-     datos reales esto son huecos marcados; NO se rellenan con ejemplos. -->
-<!-- OCULTA (2026-11-05, decisión del dueño) hasta tener profesores y
-     testimonios reales: quitar `hidden` aquí y en #m-alumnos. -->
-<section id="alumnos" class="band-cream" hidden>
-  <div class="container">
-    <div class="chap-head reveal">
-      <div class="chap-mark">
-        <span class="eyebrow">Quién te da clase</span>
-      </div>
-      <div>
-        <h2 class="sec-title">Profesores con nombre y cara.</h2>
-        <p class="sec-lead">Antes de pagar tienes derecho a saber con quién vas a hablar dos, tres o cinco veces por semana.</p>
-      </div>
-    </div>
-    <div class="proof-grid">
-      <article class="pcard reveal"><div class="ph" aria-hidden="true"><svg class="i"><use href="#i-person"/></svg></div>
-        <h3><span class="dato-real">[DATO REAL: nombre del profesor 1]</span></h3>
-        <p><span class="dato-real">[DATO REAL: foto, certificación (p. ej. CELTA, TKT), años dando clase y niveles que enseña]</span></p></article>
-      <article class="pcard reveal"><div class="ph" aria-hidden="true"><svg class="i"><use href="#i-person"/></svg></div>
-        <h3><span class="dato-real">[DATO REAL: nombre del profesor 2]</span></h3>
-        <p><span class="dato-real">[DATO REAL: foto, certificación, años dando clase y niveles que enseña]</span></p></article>
-      <article class="pcard reveal"><div class="ph" aria-hidden="true"><svg class="i"><use href="#i-person"/></svg></div>
-        <h3><span class="dato-real">[DATO REAL: nombre del profesor 3]</span></h3>
-        <p><span class="dato-real">[DATO REAL: foto, certificación, años dando clase y niveles que enseña]</span></p></article>
-    </div>
-
-    <h3 class="proof-sub reveal">Lo que cuentan los alumnos</h3>
-    <div class="proof-grid">
-      <article class="pcard reveal">
-        <p><span class="dato-real">[DATO REAL: testimonio 1 con nombre, puesto, ciudad y permiso por escrito. Mejor si dice qué logró: el ascenso, la entrevista o la banda]</span></p></article>
-      <article class="pcard reveal">
-        <p><span class="dato-real">[DATO REAL: testimonio 2, mismo formato]</span></p></article>
-      <article class="pcard reveal"><h3><span class="dato-real">[DATO REAL: cifra verificable]</span></h3>
-        <p><span class="dato-real">[DATO REAL: p. ej. alumnos que han tomado clase, o bandas IELTS obtenidas este año, con fecha de corte]</span></p></article>
-    </div>
-  </div>
-</section>
+<!-- Aquí va la sección «Quién te da clase / Lo que cuentan los alumnos»
+     (y su gemela #m-alumnos en la edición móvil). Se quitó del HTML publicado
+     el 2026-11-11: eran huecos sin datos. Vuelve cuando haya profesores,
+     testimonios y una cifra reales (con permiso por escrito). -->
 
 <!-- ============ CONTACTO ============ -->
 <!-- Aquí había una tercera lámina a sangre. Se retiró: el cierre ya trae su
@@ -2240,7 +2205,7 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
     </div>
     <div>
       <p class="m-lead" data-detail="0" style="min-height:42px">De cero a dominio, en grupo o 1 a 1. Desde <span data-hecho="precio_grupal">$2,500</span> al mes.</p>
-      <p class="m-lead" data-detail="1" style="min-height:42px" hidden><span data-hecho="temas_club">150</span> temas, <span data-hecho="clases_club">2</span> clases por semana, solo conversación.<span data-pend="precio_club" hidden> <span data-hecho="precio_club"><span class="dato-real">[DATO REAL: precio del Club]</span></span> al mes.</span><span data-pend-alt="precio_club"> Pregunta el precio por WhatsApp.</span></p>
+      <p class="m-lead" data-detail="1" style="min-height:42px" hidden><span data-hecho="temas_club">150</span> temas, <span data-hecho="clases_club">2</span> clases por semana, solo conversación.<span data-pend="precio_club" hidden> <span data-hecho="precio_club"></span> al mes.</span><span data-pend-alt="precio_club"> Pregunta el precio por WhatsApp.</span></p>
       <p class="m-lead" data-detail="2" style="min-height:42px" hidden>Juntas, correos y negociación. Desde <span data-hecho="precio_esp">$3,000</span> al mes.</p>
       <p class="m-lead" data-detail="3" style="min-height:42px" hidden>IELTS, Cambridge y TOEFL. Desde <span data-hecho="precio_esp">$3,000</span> al mes.</p>
       <div class="m-deck-foot">
@@ -2283,22 +2248,6 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
       <button type="button" class="tour-btn">▶ Ver el recorrido</button>
     </div>
     <a class="m-btn m-btn--ghost" href="app.html" style="margin-top:18px;gap:8px">Conoce la app<svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a>
-  </section>
-
-  <!-- Prueba social: huecos marcados hasta tener datos reales -->
-  <section class="m-proof" id="m-alumnos" hidden>
-    <span class="m-eyebrow">Quién te da clase</span>
-    <h2 class="m-h2">Profesores con nombre y cara</h2>
-    <article class="pcard"><div class="ph" aria-hidden="true"><svg class="i"><use href="#i-person"/></svg></div>
-      <h3><span class="dato-real">[DATO REAL: nombre del profesor 1]</span></h3>
-      <p><span class="dato-real">[DATO REAL: foto, certificación, años dando clase y niveles que enseña]</span></p></article>
-    <article class="pcard"><div class="ph" aria-hidden="true"><svg class="i"><use href="#i-person"/></svg></div>
-      <h3><span class="dato-real">[DATO REAL: nombre del profesor 2]</span></h3>
-      <p><span class="dato-real">[DATO REAL: foto, certificación, años dando clase y niveles que enseña]</span></p></article>
-    <h2 class="m-h2" style="margin-top:22px">Lo que cuentan los alumnos</h2>
-    <article class="pcard"><p><span class="dato-real">[DATO REAL: testimonio con nombre, puesto, ciudad y permiso por escrito]</span></p></article>
-    <article class="pcard"><h3><span class="dato-real">[DATO REAL: cifra verificable]</span></h3>
-      <p><span class="dato-real">[DATO REAL: alumnos atendidos o bandas obtenidas, con fecha de corte]</span></p></article>
   </section>
 
   <!-- Cierre -->
@@ -2349,8 +2298,8 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
      Cada [data-hecho="clave"] de las DOS ediciones (escritorio y #m-app)
      se pinta desde aquí. Para cambiar un precio, el tamaño de grupo o
      llenar un dato pendiente, se edita SOLO este bloque.
-       · "v": el texto que se muestra. null = dato pendiente: se pinta el
-         marcador [DATO REAL: …] con el texto de "falta".
+       · "v": el texto que se muestra. null = dato pendiente: lo que depende
+         de él queda oculto (data-pend) y se muestra su reemplazo.
        · "mxn": el número, para las cuentas derivadas (precio por clase…).
      El HTML lleva el mismo texto escrito como respaldo (buscadores, sin
      JS). Si alguien lo cambia a mano y no aquí, la consola lo avisa.
@@ -2367,15 +2316,15 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
   "precio_grupal":    {"v": "$2,500",   "mxn": 2500},
   "precio_esp":       {"v": "$3,000",   "mxn": 3000},
   "precio_1a1":       {"v": "$250–400", "mxn": [250, 400]},
-  "precio_club":      {"v": null, "falta": "precio del Club"},
-  "criterio_1a1":     {"v": null, "falta": "de qué depende: nivel, curso u horario"},
+  "precio_club":      {"v": null},
+  "criterio_1a1":     {"v": null},
   "duracion_clase":   {"v": "1 hora"},
   "horarios":         {"v": "de 8 de la mañana a 10 de la noche"},
   "plataforma":       {"v": "Google Meet"},
-  "formas_pago":      {"v": null, "falta": "formas de pago y si el precio incluye IVA"},
-  "reembolso":        {"v": null, "falta": "política de reembolso del mes pagado"},
-  "clase_muestra":    {"v": null, "falta": "¿hay clase muestra en vivo en un grupo real? Si sí, cómo se pide"},
-  "profes_cert":      {"v": null, "falta": "certificación de los profesores"}
+  "formas_pago":      {"v": null},
+  "reembolso":        {"v": null},
+  "clase_muestra":    {"v": null},
+  "profes_cert":      {"v": null}
 }
 </script>
 <script>
@@ -2433,7 +2382,7 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
        (oculto de origen, con `hidden`) y, si hace falta, tiene un texto de
        reemplazo en [data-pend-alt="clave"]. Al llenar el dato en la tabla,
        el fragmento aparece y el reemplazo se va, sin tocar el HTML.
-       ?pendientes=1 es la vista del dueño: enseña los marcadores [DATO REAL]. */
+       ?pendientes=1 es la vista del dueño: enseña dónde iría cada dato. */
     var verPend = false;
     try{ verPend = new URLSearchParams(location.search).get('pendientes') === '1'; }catch(e){}
     Object.keys(H).forEach(function(k){
@@ -2446,8 +2395,8 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
       if (der[k] != null) val = der[k];
       else if (!h){ console.warn('[hechos] clave desconocida:', k); return; }
       else if (h.v == null){
-        faltan[base] = h.falta;
-        el.innerHTML = '<span class="dato-real">[DATO REAL: ' + esc(h.falta) + ']</span>';
+        faltan[base] = true;
+        el.innerHTML = verPend ? '<span class="dato-real">[pendiente: ' + esc(base) + ']</span>' : '';
         return;
       }
       else val = (k !== base) ? h.v.replace(/^\$/, '') : h.v;
