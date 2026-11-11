@@ -534,6 +534,11 @@
                 </div>
             </div>
 
+            <label for="promo-ok" style="display:flex;gap:8px;align-items:flex-start;margin:4px 0 10px;font-size:.86rem;color:rgba(255,255,255,.82);cursor:pointer">
+                <input type="checkbox" id="promo-ok" style="width:auto;margin-top:3px">
+                <span>Quiero recibir información de cursos y promociones de Vesper Academy <small>(opcional)</small></span>
+            </label>
+
             <!-- Campo trampa: las personas no lo ven; un bot que lo rellene no envía nada. -->
             <div style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden" aria-hidden="true">
                 <label for="hp-website">No llenes este campo</label>
@@ -543,7 +548,7 @@
             <div class="form-error" id="form-error"><i class="fas fa-circle-exclamation" style="margin-top:2px;"></i><span id="form-error-text"></span></div>
 
             <button class="btn-start" onclick="startTest()"><i class="fas fa-play"></i> Comenzar examen diagnóstico</button>
-            <p class="privacy-note"><i class="fas fa-lock"></i> Tus datos solo se usan para enviarte tu resultado y recomendaciones de Vesper Academy. No los vendemos ni los compartimos para fines ajenos. <a href="aviso-de-privacidad.html" style="color:inherit;text-decoration:underline">Aviso de privacidad</a></p>
+            <p class="privacy-note"><i class="fas fa-lock"></i> Usamos tus datos para darte tu resultado y para que un asesor te contacte sobre tu plan; promociones solo si marcas la casilla. No los vendemos. <a href="aviso-de-privacidad.html" style="color:inherit;text-decoration:underline">Aviso de privacidad</a></p>
         </div>
 
         <div class="history-link-row">
@@ -770,57 +775,37 @@ function saveResultToFirestore(rec) {
             origin:    { stringValue: String(rec.origin || "").slice(0, 60) }
         }
     };
+    // Campos nuevos (2026-11): solo viajan si traen algo. Las reglas publicadas
+    // antes de esa fecha no los conocen; si el alta completa se rechaza se
+    // reintenta sin ellos (ver abajo) para no perder el lead.
+    var extra = {};
+    if (rec.promo) extra.promo = { booleanValue: true };
+    if (rec.plan) extra.plan = { stringValue: String(rec.plan).slice(0, 30) };
+    if (rec.src) extra.src = { stringValue: String(rec.src).slice(0, 120) };
     // createdAt lo pone el SERVIDOR (transform REQUEST_TIME): la regla exige
     // createdAt == request.time, así nadie manda leads con fecha inventada.
-    var idChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789", id = "", rnd = new Uint8Array(20);
-    crypto.getRandomValues(rnd);
-    for (var i = 0; i < 20; i++) id += idChars.charAt(rnd[i] % idChars.length);
-    var name = fs.docs.replace(/^https:\/\/[^/]+\/v1\//, "") + "/" + FS_COLLECTION + "/" + id;
-    return fetch(fs.docs + ":commit?key=" + encodeURIComponent(fs.key), {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ writes: [{
-            update: { name: name, fields: body.fields },
-            currentDocument: { exists: false },
-            updateTransforms: [{ fieldPath: "createdAt", setToServerValue: "REQUEST_TIME" }]
-        }] })
-    }).then(function (r) {
-        if (!r.ok) throw new Error("HTTP " + r.status);
-        return r.json();
-    });
-}
-
-function fetchFirestoreHistory() {
-    var fs = fsBase();
-    if (!fs.key) return Promise.reject(new Error("sin configuración"));
-    return fetch(fs.docs + ":runQuery?key=" + encodeURIComponent(fs.key), {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-            structuredQuery: {
-                from: [{ collectionId: FS_COLLECTION }],
-                orderBy: [{ field: { fieldPath: "createdAt" }, direction: "DESCENDING" }],
-                limit: 200
-            }
-        })
-    }).then(function (r) {
-        if (!r.ok) throw new Error("HTTP " + r.status);
-        return r.json();
-    }).then(function (rows) {
-        return (rows || []).filter(function (x) { return x.document; }).map(function (x) {
-            var f = x.document.fields || {};
-            function s(k) { return (f[k] && f[k].stringValue) || ""; }
-            function n(k) { return parseInt((f[k] && f[k].integerValue) || "0", 10); }
-            return {
-                name: s("name") || "Sin nombre",
-                email: s("email"), phone: s("phone"),
-                level: s("level") || "?", levelName: s("levelName"),
-                correct: n("correct"), total: n("total") || 30, skipped: n("skipped"),
-                origin: s("origin"),
-                date: (f.createdAt && f.createdAt.timestampValue) || "",
-                source: "remote"
-            };
+    function commit(fields) {
+        var idChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789", id = "", rnd = new Uint8Array(20);
+        crypto.getRandomValues(rnd);
+        for (var i = 0; i < 20; i++) id += idChars.charAt(rnd[i] % idChars.length);
+        var name = fs.docs.replace(/^https:\/\/[^/]+\/v1\//, "") + "/" + FS_COLLECTION + "/" + id;
+        return fetch(fs.docs + ":commit?key=" + encodeURIComponent(fs.key), {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ writes: [{
+                update: { name: name, fields: fields },
+                currentDocument: { exists: false },
+                updateTransforms: [{ fieldPath: "createdAt", setToServerValue: "REQUEST_TIME" }]
+            }] })
+        }).then(function (r) {
+            if (!r.ok) throw new Error("HTTP " + r.status);
+            return r.json();
         });
+    }
+    var full = Object.assign({}, body.fields, extra);
+    return commit(full).catch(function (e) {
+        if (!Object.keys(extra).length) throw e;
+        return commit(body.fields);
     });
 }
 
@@ -846,6 +831,7 @@ function sendResultEmails(rec) {
     fd.append("no_seguras", String(rec.skipped));
     fd.append("desglose", Object.keys(rec.scores).map(function (k) { return k + ": " + rec.scores[k] + "/6"; }).join(", "));
     fd.append("origen", rec.origin || "(directo / no especificado)");
+    fd.append("acepta_promociones", rec.promo ? "sí" : "no");
     fd.append("fecha", rec.date);
     return fetch(NOTIFY_URL, { method: "POST", body: fd, headers: { "Accept": "application/json" } })
         .then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return true; });
@@ -1095,6 +1081,7 @@ function showResults() {
         scores: Object.assign({}, scores),
         date: new Date().toISOString(),
         origin: leadOrigin,
+        promo: !!(document.getElementById("promo-ok") || {}).checked,   // consentimiento de promoción (casilla sin marcar por defecto)
         source: "local"
     };
 

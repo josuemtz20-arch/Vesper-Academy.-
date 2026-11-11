@@ -315,8 +315,12 @@
         <input type="email" id="f-mail" name="email" autocomplete="email">
         <label for="f-msg">¿Para qué necesitas el inglés? <small>opcional</small></label>
         <textarea id="f-msg" name="mensaje" rows="3"></textarea>
+        <label for="f-promo" style="display:flex;gap:8px;align-items:flex-start;font-weight:400;margin-top:10px">
+          <input type="checkbox" id="f-promo" name="acepta_promociones" value="sí" style="width:auto;margin-top:3px">
+          <span>Quiero recibir información de cursos y promociones de Vesper Academy <small>(opcional)</small></span>
+        </label>
         <button type="submit" class="btn btn-gold" style="width:100%;justify-content:center;margin-top:8px">Enviar <i class="fas fa-arrow-right" aria-hidden="true"></i></button>
-        <p class="lead-legal">Usamos tus datos solo para responderte. Lee nuestro <a href="aviso-de-privacidad.html">aviso de privacidad</a>.</p>
+        <p class="lead-legal">Usamos tus datos para responderte; promociones solo si marcas la casilla. Lee nuestro <a href="aviso-de-privacidad.html">aviso de privacidad</a>.</p>
       </form>
       <div class="lead-msg" id="formMsg" role="status" hidden></div>
     </div>
