@@ -57,10 +57,20 @@
       var nm = (user.displayName && user.displayName.trim()) || prettyFromEmail(email);
       if (nm) { p.name = nm; changed = true; }
     }
+    /* Alias de la liga: NO se rellena con el nombre ni con el correo. La
+       liga la ven todos los usuarios con sesión; el alias por defecto es el
+       código neutro "Estudiante#xxxx" (lo ponen vesper_league_cloud.js y
+       vesper_results.js cuando leagueAlias está vacío). Solo aparece un
+       nombre si el alumno lo escribe en Configuración (aliasChosen).
+       Limpieza: hasta 2026-11-11 el alias se copiaba solo del nombre real o
+       de la parte local del correo; esos se borran una vez. */
     p.vesper = p.vesper || {};
-    if (!p.vesper.leagueAlias) {
-      var alias = p.name || prettyFromEmail(email);
-      if (alias) { p.vesper.leagueAlias = alias.slice(0, 24); changed = true; }
+    var la = String(p.vesper.leagueAlias || "").trim().toLowerCase();
+    if (la && !p.vesper.aliasChosen) {
+      var auto = [String(p.name || "").slice(0, 24), prettyFromEmail(email).slice(0, 24),
+                  String(user.displayName || "").trim().slice(0, 24)]
+        .map(function (x) { return x.trim().toLowerCase(); }).filter(Boolean);
+      if (auto.indexOf(la) >= 0) { p.vesper.leagueAlias = ""; changed = true; }
     }
     if (changed) writeProfile(p);
     announce({ linked: true, email: email, uid: user.uid, name: p.name || null });

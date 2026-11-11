@@ -9,7 +9,7 @@
    único campo: el nombre. Al guardarlo:
      - vesper_profile.name        = nombre elegido
      - vesper_profile.nameChosen  = true   (marca que ya lo eligió)
-     - vesper_profile.vesper.leagueAlias = nombre (si no tenía)
+     (el alias de la liga NO se toca: por defecto es un código neutro)
 
    Reglas de aparición (todo debe cumplirse):
      - hay sesión de Firebase con correo verificado;
@@ -123,7 +123,7 @@
         'placeholder="Escribe tu nombre" />' +
         '<p class="vng-err" id="vng-err">Escribe tu nombre (al menos 2 letras) para continuar.</p>' +
         '<button type="button" class="vng-go" id="vng-go">Guardar y entrar</button>' +
-        '<p class="vng-hint">Podrás cambiarlo después en tu perfil.</p>' +
+        '<p class="vng-hint">Lo ven tu profesor y la academia. En la liga apareces con un alias neutro; puedes cambiar ambos después en tu perfil.</p>' +
         '<button type="button" class="vng-logout" id="vng-logout">No soy yo — cerrar sesión</button>';
       ov.appendChild(card);
       document.body.appendChild(ov);
@@ -150,8 +150,9 @@
         var prof = readProfile();
         prof.name = v.slice(0, MAX);
         prof.nameChosen = true;
-        prof.vesper = prof.vesper || {};
-        if (!prof.vesper.leagueAlias) prof.vesper.leagueAlias = prof.name.slice(0, 24);
+        /* el nombre NO se copia al alias de la liga (es público entre
+           usuarios): ahí sale "Estudiante#xxxx" hasta que el alumno elija
+           un alias en Configuración */
         writeProfile(prof);
         closeGate();
         /* refresca el saludo del portal si está presente */

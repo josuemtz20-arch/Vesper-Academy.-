@@ -678,6 +678,7 @@
         var p = JSON.parse(localStorage.getItem("vesper_profile") || "null") || {};
         p.vesper = p.vesper || {};
         p.vesper.leagueAlias = v;
+        p.vesper.aliasChosen = !!v;   /* lo escribió el alumno: no es el relleno automático */
         localStorage.setItem("vesper_profile", JSON.stringify(p));
       } catch (e) {}
     }
