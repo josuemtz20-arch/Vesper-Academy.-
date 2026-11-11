@@ -14,7 +14,7 @@
    ============================================================ */
 "use strict";
 
-var CACHE_VERSION = "vesper-v110-8b4b36cf";
+var CACHE_VERSION = "vesper-v110-d45b5b8e";
 var CORE = [
   /* Comunes. El Vesper Engine (herramienta del profesor) ya no se precarga
      en el teléfono de cada alumno: se guarda la primera vez que el profesor
@@ -58,6 +58,10 @@ var CORE = [
   "vesper_theme.js",
   "vesper_style.js",
   "vesper_minimal_deco.js",
+  /* los dos mapas de la portada de la app: sin ellos, sin conexión el mapa
+     no se pintaba */
+  "vesper_map_pixel.js",
+  "vesper_map_illus.js",
   "assets/css/vesper_minimal.css",
   "vesper_tour.js",
   "vesper_adaptive.js",

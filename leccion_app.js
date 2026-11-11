@@ -5251,7 +5251,20 @@
       + '<div class="cat-buckets" id="buckets"></div>'
       + '<div id="fb"></div><button class="btn" id="verify" disabled>' + T('Verificar', 'Check') + '</button></div></div>');
 
-    function tk(it, cls) { return '<button class="cat-tk' + (cls || "") + '" data-i="' + it.i + '">' + esc(it.t) + '</button>'; }
+    function tk(it, cls) {
+      return '<button type="button" class="cat-tk' + (cls || "") + '" data-i="' + it.i + '" aria-pressed="' + (sel === it.i ? "true" : "false") + '">' + esc(it.t)
+        + (/ correct/.test(cls || "") ? '<span class="sr-only"> (correcto)</span>' : (/ wrong/.test(cls || "") ? '<span class="sr-only"> (incorrecto)</span>' : '')) + '</button>';
+    }
+    /* Teclado: cada grupo es un control enfocable (Enter o Espacio colocan la
+       palabra elegida) y, como draw() repinta todo, el foco se devuelve a
+       mano: tras elegir una palabra va al primer grupo; tras colocarla, a la
+       siguiente palabra suelta o a Verificar. Antes los grupos eran <div>
+       sin tabindex: el ejercicio no se podía hacer sin ratón o dedo. */
+    function refocus(where) {
+      var el = where === "bucket" ? document.querySelector("#buckets [data-b]")
+        : (document.querySelector("#pool [data-i]") || byId("verify"));
+      if (el && el.focus) { try { el.focus(); } catch (e) {} }
+    }
     function draw() {
       var pool = byId("pool"), bx = byId("buckets");
       var loose = items.filter(function (o) { return o.at === null; });
@@ -5259,12 +5272,33 @@
         : '<span class="muted" style="font-size:.85rem">' + T('Todo clasificado ', 'All sorted ') + ic('checkCircle') + '</span>';
       bx.innerHTML = buckets.map(function (b) {
         var inside = items.filter(function (o) { return o.at === b.id; }).map(function (o) { return tk(o, o.cls || ""); }).join("");
-        return '<div class="cat-bucket' + (sel !== null ? " active" : "") + '" data-b="' + b.id + '"><h4>' + esc(b.label) + '</h4>' + inside + '</div>';
+        return '<div class="cat-bucket' + (sel !== null ? " active" : "") + '" data-b="' + b.id + '"'
+          + (done ? '' : ' tabindex="0" role="button" aria-label="' + esc(T("Grupo ", "Group ") + b.label + (sel !== null ? T(": colocar aquí la palabra elegida", ": put the chosen word here") : "")) + '"')
+          + '><h4>' + esc(b.label) + '</h4>' + inside + '</div>';
       }).join("");
       if (!done) {
-        each("#pool [data-i]", function (c) { c.onclick = function () { var i = +c.getAttribute("data-i"); sel = (sel === i ? null : i); draw(); }; });
-        each(".cat-bucket [data-i]", function (c) { c.onclick = function () { var i = +c.getAttribute("data-i"); items[i].at = null; sel = i; draw(); }; });
-        each("#buckets [data-b]", function (c) { c.onclick = function () { if (sel === null) return; items[sel].at = c.getAttribute("data-b"); sel = null; draw(); }; });
+        each("#pool [data-i]", function (c) { c.onclick = function () { var i = +c.getAttribute("data-i"); sel = (sel === i ? null : i); draw(); refocus(sel === null ? "pool" : "bucket"); }; });
+        /* sacar una palabra de su grupo: sin stopPropagation el clic subía al
+           grupo y la volvía a meter, así que no pasaba nada */
+        each(".cat-bucket [data-i]", function (c) { c.onclick = function (ev) { if (ev && ev.stopPropagation) ev.stopPropagation(); var i = +c.getAttribute("data-i"); items[i].at = null; sel = i; draw(); refocus("bucket"); }; });
+        each("#buckets [data-b]", function (c) {
+          var place = function () { if (sel === null) return; items[sel].at = c.getAttribute("data-b"); sel = null; draw(); refocus("pool"); };
+          c.onclick = place;
+          /* Se coloca al SOLTAR la tecla, y solo si se pulsó estando ya en el
+             grupo. Al elegir una palabra con Enter el foco salta al grupo a
+             media pulsación; sin esta guarda esa misma pulsación la colocaba
+             (o, al revés, colocar elegía la palabra siguiente). */
+          var armed = false;
+          c.onkeydown = function (ev) {
+            if (ev.target !== c) return;
+            if (ev.key === "Enter" || ev.key === " " || ev.key === "Spacebar") { ev.preventDefault(); armed = true; }
+          };
+          c.onkeyup = function (ev) {
+            if (ev.target !== c || !armed) return;
+            armed = false;
+            if (ev.key === "Enter" || ev.key === " " || ev.key === "Spacebar") { ev.preventDefault(); place(); }
+          };
+        });
       }
       byId("verify").disabled = done ? false : items.some(function (o) { return o.at === null; });
     }

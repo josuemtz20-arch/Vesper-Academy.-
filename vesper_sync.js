@@ -262,6 +262,10 @@
     overlay.className = "vsync-overlay";
     modal = document.createElement("div");
     modal.className = "vsync-modal";
+    modal.setAttribute("role", "dialog");
+    modal.setAttribute("aria-modal", "true");
+    modal.setAttribute("aria-labelledby", "vsync-title");
+    document.addEventListener("keydown", onModalKey, true);   /* en captura: antes que otros atajos de la página */
     overlay.appendChild(modal);
     overlay.addEventListener("click", function (e) { if (e.target === overlay) closeModal(); });
     /* El chip lo coloca la página con VESPER_SYNC.mountChip(hueco); sin
@@ -287,34 +291,62 @@
   }
 
   function esc(t) { return ("" + (t == null ? "" : t)).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
-  function openModal() { renderModal(); overlay.classList.add("show"); }
-  function closeModal() { overlay.classList.remove("show"); }
+  /* El modal es un diálogo de verdad: role="dialog" + aria-modal, título
+     enlazado, foco dentro al abrir, Tab atrapado, Esc cierra y el foco vuelve
+     a quien lo abrió. Antes era un <div> que un lector de pantalla no
+     anunciaba y del que el teclado se salía hacia la página de atrás. */
+  var lastFocus = null;
+  function focusables() {
+    return [].slice.call(modal.querySelectorAll("button, input, a[href]")).filter(function (el) { return !el.disabled && el.getClientRects().length > 0; });
+  }
+  function onModalKey(e) {
+    if (!overlay.classList.contains("show")) return;
+    if (e.key === "Escape" || e.key === "Esc") { e.preventDefault(); closeModal(); return; }
+    if (e.key !== "Tab") return;
+    var f = focusables(); if (!f.length) return;
+    var first = f[0], last = f[f.length - 1], act = document.activeElement;
+    if (e.shiftKey && (act === first || !modal.contains(act))) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && (act === last || !modal.contains(act))) { e.preventDefault(); first.focus(); }
+  }
+  function focusModal() {
+    var el = modal.querySelector("input") || modal.querySelector(".vsync-btn") || modal.querySelector(".vsync-x");
+    if (el) { try { el.focus(); } catch (e) {} }
+  }
+  function openModal() {
+    if (!overlay.classList.contains("show")) lastFocus = document.activeElement;
+    renderModal(); overlay.classList.add("show"); focusModal();
+  }
+  function closeModal() {
+    overlay.classList.remove("show");
+    if (lastFocus && lastFocus.focus) { try { lastFocus.focus(); } catch (e) {} }
+    lastFocus = null;
+  }
 
   function renderModal() {
     var u = authInst && authInst.currentUser;
     if (u && u.emailVerified) {
       modal.innerHTML = '<button class="vsync-x" aria-label="Cerrar">&times;</button>'
-        + '<h3>Progreso en la nube</h3>'
+        + '<h3 id="vsync-title">Progreso en la nube</h3>'
         + '<p>Sesión: <b>' + esc(u.email) + '</b></p>'
         + '<p>Tus mundos desbloqueados, lecciones, racha y XP se sincronizan automáticamente en todos tus dispositivos.</p>'
         + '<button class="vsync-btn ghost" data-act="signout">Cerrar sesión</button>'
         + '<p class="vsync-del"><a href="eliminar-cuenta.html">Eliminar mi cuenta</a></p>';
     } else if (u && !u.emailVerified) {
       modal.innerHTML = '<button class="vsync-x" aria-label="Cerrar">&times;</button>'
-        + '<h3>Verifica tu correo</h3>'
+        + '<h3 id="vsync-title">Verifica tu correo</h3>'
         + '<p>Te enviamos un enlace a <b>' + esc(u.email) + '</b>. Ábrelo para activar la sincronización.</p>'
         + '<button class="vsync-btn gold" data-act="resend">Reenviar verificación</button>'
         + '<button class="vsync-btn ghost" data-act="signout">Usar otra cuenta</button>'
-        + '<div class="vsync-msg"></div>';
+        + '<div class="vsync-msg" role="status" aria-live="polite"></div>';
     } else {
       modal.innerHTML = '<button class="vsync-x" aria-label="Cerrar">&times;</button>'
-        + '<h3>Guarda tu progreso</h3>'
+        + '<h3 id="vsync-title">Guarda tu progreso</h3>'
         + '<p>Crea una cuenta (opcional) para sincronizar tu racha y XP entre dispositivos. Las lecciones siguen siendo gratis y sin cuenta.</p>'
-        + '<input type="email" id="vsync-email" placeholder="tu@correo.com" autocomplete="email">'
-        + '<input type="password" id="vsync-pass" placeholder="Contraseña (mín. 8)" autocomplete="current-password">'
+        + '<input type="email" id="vsync-email" placeholder="tu@correo.com" autocomplete="email" aria-label="Correo electrónico">'
+        + '<input type="password" id="vsync-pass" placeholder="Contraseña (mín. 8)" autocomplete="current-password" aria-label="Contraseña, mínimo 8 caracteres">'
         + '<button class="vsync-btn ink" data-act="login">Entrar</button>'
         + '<button class="vsync-btn gold" data-act="register">Crear cuenta</button>'
-        + '<div class="vsync-msg"></div>';
+        + '<div class="vsync-msg" role="status" aria-live="polite"></div>';
     }
     modal.querySelector(".vsync-x").onclick = closeModal;
     var btns = modal.querySelectorAll("[data-act]");
