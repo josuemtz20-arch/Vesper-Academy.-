@@ -605,8 +605,12 @@
         </div>
 
         <div class="result-actions">
-            <a class="btn-solid" id="cta-create-account" href="login.html?tab=register&amp;next=materiales.html"><i class="fas fa-user-plus"></i> Crear mi cuenta y empezar</a>
-            <a class="btn-outline" data-wa-result href="https://wa.me/525535699899?text=Hola%2C%20acabo%20de%20hacer%20el%20examen%20de%20nivel%20en%20Vesper%20y%20quiero%20hablar%20con%20un%20asesor." target="_blank" rel="noopener"><i class="fab fa-whatsapp"></i> Hablar con un asesor</a>
+            <!-- Paso principal: agendar la entrevista oral con una persona. La cuenta
+                 es secundaria: registrarse solo deja una solicitud en espera de
+                 aprobación y no avisa a nadie. -->
+            <a class="btn-solid" id="cta-interview" data-wa-result href="https://wa.me/525535699899?text=Hola%2C%20hice%20el%20examen%20de%20nivel%20de%20Vesper%20Academy%20y%20quiero%20agendar%20mi%20entrevista%20oral%20gratuita." target="_blank" rel="noopener"><i class="fab fa-whatsapp"></i> Agendar mi entrevista oral por WhatsApp</a>
+            <a class="btn-outline" href="planes.html"><i class="fas fa-tags"></i> Ver planes y precios</a>
+            <a class="btn-outline" id="cta-create-account" href="login.html?tab=register&amp;next=materiales.html"><i class="fas fa-user-plus"></i> Crear una cuenta (opcional)</a>
             <button class="btn-outline" onclick="window.print()"><i class="fas fa-print"></i> Imprimir</button>
             <button class="btn-outline" onclick="openHistory()"><i class="fas fa-clock-rotate-left"></i> Ver historial</button>
             <button class="btn-outline" onclick="retakeTest()"><i class="fas fa-redo"></i> Repetir examen</button>
@@ -1090,7 +1094,7 @@ function showResults() {
 
     // Siempre recomendar la entrevista oral; señalar preguntas omitidas
     const note = document.getElementById("confirm-note");
-    let noteHtml = "<i class='fas fa-comments'></i> &nbsp;<strong>Siguiente paso: entrevista oral.</strong> Este examen escrito es solo un primer filtro. Tu profesor confirmará tu nivel real con una breve entrevista hablada.";
+    let noteHtml = "<i class='fas fa-comments'></i> &nbsp;<strong>Siguiente paso: entrevista oral gratuita.</strong> Este examen escrito es solo un primer filtro: un profesor confirma tu nivel real en una breve entrevista hablada. Agéndala por WhatsApp con el botón de abajo; el mensaje ya lleva tu nombre y tu nivel.";
     if (skipped > 0) {
         noteHtml += "<br><br>Marcaste <strong>'No estoy seguro/a'</strong> en " + skipped + " pregunta" + (skipped > 1 ? "s" : "") + " &mdash; la entrevista oral ayudará a confirmar tu nivel exacto.";
     }
