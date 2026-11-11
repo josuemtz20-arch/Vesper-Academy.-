@@ -586,6 +586,7 @@
             <div class="result-name" id="result-name">María López</div>
             <div class="result-subtitle">Tu nivel de inglés según Vesper Academy</div>
             <div class="result-contact" id="result-contact"></div>
+            <div class="result-contact" id="plan-note" style="display:none;color:var(--gold)"></div>
             <div class="save-status" id="save-status" style="display:none;"></div>
         </div>
 
@@ -605,7 +606,7 @@
 
         <div class="result-actions">
             <a class="btn-solid" id="cta-create-account" href="login.html?tab=register&amp;next=materiales.html"><i class="fas fa-user-plus"></i> Crear mi cuenta y empezar</a>
-            <a class="btn-outline" href="https://wa.me/525535699899?text=Hola%2C%20acabo%20de%20hacer%20el%20examen%20de%20nivel%20en%20Vesper%20y%20quiero%20hablar%20con%20un%20asesor." target="_blank" rel="noopener"><i class="fab fa-whatsapp"></i> Hablar con un asesor</a>
+            <a class="btn-outline" data-wa-result href="https://wa.me/525535699899?text=Hola%2C%20acabo%20de%20hacer%20el%20examen%20de%20nivel%20en%20Vesper%20y%20quiero%20hablar%20con%20un%20asesor." target="_blank" rel="noopener"><i class="fab fa-whatsapp"></i> Hablar con un asesor</a>
             <button class="btn-outline" onclick="window.print()"><i class="fas fa-print"></i> Imprimir</button>
             <button class="btn-outline" onclick="openHistory()"><i class="fas fa-clock-rotate-left"></i> Ver historial</button>
             <button class="btn-outline" onclick="retakeTest()"><i class="fas fa-redo"></i> Repetir examen</button>
@@ -818,7 +819,7 @@ function honeypotHit() {
 // Notifica SOLO a la academia. Sin _autoresponse (ver arriba).
 function sendResultEmails(rec) {
     var fd = new FormData();
-    fd.append("_subject", "Examen diagnóstico: " + rec.name + " — Nivel " + rec.level);
+    fd.append("_subject", "Examen de nivel: " + rec.name + " — Nivel " + rec.level + (rec.plan ? " — Plan " + (PLAN_NAMES[rec.plan] || rec.plan) : ""));
     fd.append("_template", "table");
     fd.append("_honey", "");
     if (rec.email) fd.append("email", rec.email);   // solo sirve de Responder-a para la academia
@@ -830,6 +831,7 @@ function sendResultEmails(rec) {
     fd.append("aciertos", rec.correct + " / " + rec.total);
     fd.append("no_seguras", String(rec.skipped));
     fd.append("desglose", Object.keys(rec.scores).map(function (k) { return k + ": " + rec.scores[k] + "/6"; }).join(", "));
+    fd.append("plan_de_interes", rec.plan ? (PLAN_NAMES[rec.plan] || rec.plan) : "(no eligió plan)");
     fd.append("origen", rec.origin || "(directo / no especificado)");
     fd.append("acepta_promociones", rec.promo ? "sí" : "no");
     fd.append("fecha", rec.date);
@@ -847,6 +849,26 @@ let answered = false;
 let skipped = 0;
 // Atribución: de qué momento de la app llegó este lead (?src= de leccion.html)
 let leadOrigin = (window.VA ? VA.readSource() : "");
+// Plan que el visitante eligió en planes.html (?plan=). Se recuerda durante la
+// visita para que llegue al lead y al mensaje de WhatsApp aunque recargue.
+const PLAN_NAMES = { grupal: "Grupal", "1a1": "1 a 1 Profesional", especializados: "Especializados" };
+let leadPlan = (function () {
+    try {
+        var p = new URLSearchParams(location.search).get("plan");
+        if (p && PLAN_NAMES[p]) { sessionStorage.setItem("vesper_plan", p); return p; }
+        p = sessionStorage.getItem("vesper_plan");
+        return PLAN_NAMES[p] ? p : "";
+    } catch (e) { return ""; }
+})();
+function planLabel() { return leadPlan ? PLAN_NAMES[leadPlan] : ""; }
+// Mensaje de WhatsApp con lo que ya sabemos: nombre, nivel y plan.
+function waUrl(rec) {
+    var t = "Hola, " + (rec && rec.name ? "soy " + rec.name + ". " : "") +
+        (rec && rec.level ? "Hice el examen de nivel de Vesper Academy y mi resultado fue " + rec.level + " (" + rec.levelName + "). " : "Vengo del examen de nivel de Vesper Academy. ") +
+        (planLabel() ? "Me interesa el plan " + planLabel() + ". " : "") +
+        "Quiero agendar mi entrevista oral gratuita.";
+    return "https://wa.me/525535699899?text=" + encodeURIComponent(t);
+}
 
 const OPTS = ["A", "B", "C", "D"];
 
@@ -1056,6 +1078,12 @@ function showResults() {
         breakdown.appendChild(div);
     });
 
+    // enlaces de WhatsApp de la pantalla: con nombre, nivel y plan ya escritos
+    var waRec = { name: studentName, level: placedLevel, levelName: lvlData.name };
+    document.querySelectorAll("[data-wa-result]").forEach(function (a) { a.href = waUrl(waRec); });
+    var planNote = document.getElementById("plan-note");
+    if (planNote) { planNote.textContent = planLabel() ? "Plan que te interesa: " + planLabel() : ""; planNote.style.display = planLabel() ? "" : "none"; }
+
     document.getElementById("course-title").textContent = courseData.title;
     document.getElementById("course-desc").textContent = courseData.desc;
     document.getElementById("next-steps").textContent = courseData.next;
@@ -1081,6 +1109,7 @@ function showResults() {
         scores: Object.assign({}, scores),
         date: new Date().toISOString(),
         origin: leadOrigin,
+        plan: leadPlan,                                                  // plan elegido en planes.html, si venía de ahí
         promo: !!(document.getElementById("promo-ok") || {}).checked,   // consentimiento de promoción (casilla sin marcar por defecto)
         source: "local"
     };
@@ -1093,11 +1122,11 @@ function showResults() {
     try {
         localStorage.setItem("vesper_lead", JSON.stringify({
             name: studentName, email: studentEmail,
-            level: placedLevel, levelName: lvlData.name, origin: leadOrigin
+            level: placedLevel, levelName: lvlData.name, origin: leadOrigin, plan: leadPlan
         }));
     } catch (e) {}
 
-    if (window.VA) VA.track("lead_submit", { src: leadOrigin, level: placedLevel });
+    if (window.VA) VA.track("lead_submit", { src: leadOrigin, level: placedLevel, plan: leadPlan });
 
     // Si es un alumno con sesión verificada, unifica la nivelación en el panel
     // central de calificaciones (además del lead anónimo en placement_results).
