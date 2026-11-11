@@ -4125,7 +4125,7 @@
       + ((lesson.isExam || lesson.isReview || lesson.srsReview) ? '' : tipoChip(lesson)) + '</div>'
       + '<h1>' + esc(lesson.title) + '</h1>'
       + (lesson.adapted ? '<div class="adapt-badge">' + ic('sparkle') + ' ' + esc(lesson.adaptNote) + '</div>' : '')
-      + '<p class="muted">' + lesson.exercises.length + T(' ejercicios', ' exercises') + ' &middot; +' + (lesson.xpReward || 0) + ' XP</p>'
+      + '<p class="muted">' + lessonCountText() + ' &middot; +' + (lesson.xpReward || 0) + ' XP</p>'
       + '<button class="btn btn-gold" id="start">' + T('Empezar', 'Start') + '</button></div></div>');
     byId("start").onclick = renderExplanation;
   }
@@ -5666,6 +5666,17 @@
     if (ach.length) setTimeout(function () { achReveal(ach); }, 650);
   }
 
+  /* "5 ejercicios + 2 de práctica extra": el primer número es el mismo que enseña la
+     tarjeta del mapa; el segundo, lo que se añade (repaso de lecciones ya
+     hechas, verbo del mundo y práctica de voz). */
+  function lessonCountText() {
+    var total = (lesson.exercises || []).length;
+    var own = (typeof lesson._ownCount === "number" && lesson._ownCount <= total) ? lesson._ownCount : total;
+    var extra = total - own;
+    return own + T(own === 1 ? ' ejercicio' : ' ejercicios', own === 1 ? ' exercise' : ' exercises')
+      + (extra > 0 ? T(' + ' + extra + ' de práctica extra', ' + ' + extra + ' extra') : '');
+  }
+
   /* ---------- ADAPTIVE START (warm-up + personalizacion) ---------- */
   function buildAdapted() {
     if (A && A.adaptLesson && profile) {
@@ -5673,6 +5684,10 @@
     } else {
       lesson = baseLesson;
     }
+    /* lo que anuncian las tarjetas del mapa: los ejercicios PROPIOS de la
+       lección. El repaso y la voz que se añaden abajo van aparte ("+ N de
+       repaso") y no cambian el XP, para que tarjeta y lección digan lo mismo. */
+    lesson._ownCount = (lesson.exercises || []).length;
     injectSpeaking(lesson);
     injectPractice(lesson);
   }
@@ -5751,7 +5766,6 @@
       var cut = exs[exs.length - 1].type === "speak" ? exs.length - 1 : exs.length;
       var mid = Math.ceil(cut / 2);
       ls.exercises = exs.slice(0, mid).concat(rev, exs.slice(mid, cut), vx ? [vx] : [], exs.slice(cut));
-      ls.xpReward = (ls.xpReward || 0) + 2 * (rev.length + (vx ? 1 : 0));
     } catch (e) {}
   }
 

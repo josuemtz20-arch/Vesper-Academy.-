@@ -5,7 +5,7 @@
    alumno. Reemplaza los headers "atrás" ad-hoc de cada página por
    una barra de pestañas inferior consistente:
 
-       Home · Learn · Listen · Grades · Profile (en inglés; el español va en title)
+       Inicio · Aprender · Audio · Boleta · Perfil (en español, como el resto de la app)
 
    Cómo se usa: añade  <script src="vesper_nav.js"></script>  a la
    página del alumno. El script se auto-inyecta al final del <body>,
@@ -26,16 +26,16 @@
   /* Destinos de la barra. href = archivo; match = archivos que
      marcan esta pestaña como activa. */
   var TABS = [
-    { id: "inicio",   label: "Home",     es: "Inicio",   href: "materiales.html",
+    { id: "inicio",   label: "Home",     es: "Inicio",   href: "materiales.html", session: true,
       match: ["materiales.html", "libro.html"],
       icon: '<path d="M3 11l9-8 9 8"/><path d="M5 10v10h5v-6h4v6h5V10"/>' },
     { id: "aprender", label: "Learn",    es: "Aprender", href: "leccion.html",
       match: ["leccion.html", "chat.html", "entrevista.html", "liga.html", "lesson.html"],
       icon: '<path d="M22 10L12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 1 2.7 3 6 3s6-2 6-3v-5"/>' },
-    { id: "audio",    label: "Listen",   es: "Audio",    href: "audio_library.html",
+    { id: "audio",    label: "Listen",   es: "Audio",    href: "audio_library.html", session: true,
       match: ["audio_library.html"],
       icon: '<path d="M4 14v-2a8 8 0 0 1 16 0v2"/><rect x="2.5" y="13.5" width="4" height="6.5" rx="1.3"/><rect x="17.5" y="13.5" width="4" height="6.5" rx="1.3"/>' },
-    { id: "boleta",   label: "Grades",   es: "Boleta",   href: "mi_boleta.html",
+    { id: "boleta",   label: "Grades",   es: "Boleta",   href: "mi_boleta.html", session: true,
       match: ["mi_boleta.html"],
       icon: '<rect x="5" y="3.5" width="14" height="17" rx="2.2"/><path d="M9 3.5V6h6V3.5"/><path d="M8.5 11h7M8.5 15h4.5"/>' },
     { id: "perfil",   label: "Profile",  es: "Perfil",   href: "perfil.html",
@@ -57,21 +57,25 @@
     return null;
   }
 
-  /* «Boleta» solo tiene sentido con sesión: mi_boleta.html está tras el login
-     y quien practica sin cuenta no tiene boleta (antes la pestaña le llevaba a
-     un login sin explicarle nada). En las páginas públicas sale oculta y
-     aparece cuando Firebase confirma una sesión con correo verificado; en las
-     del portal, que ya exigen sesión, se ve desde el principio. */
-  function boletaNeedsSession() {
+  /* Inicio (portal), Audio y Boleta están tras el login. La app de lecciones
+     se anuncia gratis y sin cuenta: a quien practica sin sesión esas pestañas
+     lo mandaban a un login sin explicarle nada. En las páginas públicas salen
+     ocultas y aparecen cuando Firebase confirma una sesión con correo
+     verificado; en las del portal, que ya exigen sesión, se ven desde el
+     principio. */
+  function onPublicPage() {
     var A = window.VesperAuth;
     if (!A || !A.config) return true;
     return (A.config.publicPages || []).indexOf(page) !== -1;
   }
-  function revealBoletaWithSession(link) {
+  function revealWithSession(links) {
     var A = window.VesperAuth;
-    if (!link || !A || !A.isConfigured || !A.initFirebase) return;
+    if (!links.length || !A || !A.isConfigured || !A.initFirebase) return;
     A.initFirebase().then(function (auth) {
-      auth.onAuthStateChanged(function (u) { link.hidden = !(u && u.emailVerified); });
+      auth.onAuthStateChanged(function (u) {
+        var ok = !!(u && u.emailVerified);
+        links.forEach(function (l) { l.hidden = !ok; });
+      });
     }).catch(function () {});
   }
 
@@ -142,15 +146,15 @@
     var nav = document.createElement("nav");
     nav.id = "vsp-tabbar";
     nav.setAttribute("aria-label", "Navegación del alumno");
-    var hideBoleta = boletaNeedsSession() && act !== "boleta";
+    var pub = onPublicPage();
     nav.innerHTML = TABS.map(function (t) {
       var on = t.id === act;
-      /* La etiqueta va en INGLÉS (es lo que se enseña); el español queda en
-         title y aria-label para quien aún no la reconoce. */
-      return '<a href="' + t.href + '" title="' + t.es + '" aria-label="' + t.label + ' · ' + t.es + '"' + (on ? ' class="on" aria-current="page"' : "") +
-        (t.id === "boleta" ? ' data-tab="boleta"' + (hideBoleta ? " hidden" : "") : "") + '>' +
+      var gated = !!t.session && pub && !on;
+      /* Etiquetas en español, como el resto de la interfaz. */
+      return '<a href="' + t.href + '"' + (on ? ' class="on" aria-current="page"' : "") +
+        (gated ? ' data-needs-session hidden' : "") + '>' +
         '<svg viewBox="0 0 24 24" aria-hidden="true">' + t.icon + '</svg>' +
-        '<span lang="en">' + t.label + '</span></a>';
+        '<span>' + t.es + '</span></a>';
     }).join("");
 
     var spacer = document.createElement("div");
@@ -159,7 +163,7 @@
 
     document.body.appendChild(spacer);
     document.body.appendChild(nav);
-    if (hideBoleta) revealBoletaWithSession(nav.querySelector('[data-tab="boleta"]'));
+    revealWithSession([].slice.call(nav.querySelectorAll("[data-needs-session]")));
 
     /* Ocultar la barra al escribir: en móvil, un tab bar fijo pelea con el
        teclado y el compositor (chat) o los ejercicios de escribir.
