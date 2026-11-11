@@ -235,6 +235,10 @@ body.iv-navwait #vsp-tabbar{opacity:0!important;pointer-events:none!important;}
 .note p{margin:0;font:700 1.3rem/1.2 var(--hand);}
 .acts{display:grid;gap:10px;margin-top:28px;}
 .acts .sub{margin:-2px 0 6px;text-align:center;color:var(--muted);font-size:.82rem;}
+/* "Enviar a mi profesor": solo aparece con sesión de alumno y grupo */
+.send-slot{display:grid;gap:10px;}
+.send-slot:empty{display:none;}
+.sent{margin:0 0 6px;padding:12px 14px;border-left:4px solid var(--gold);background:var(--gold-tint);border-radius:0 12px 12px 0;font-size:.92rem;font-weight:600;}
 .lead-cta{display:block;margin-top:18px;text-align:center;}
 details.talk{margin-top:22px;border-top:1px solid var(--line);}
 details.talk summary{cursor:pointer;min-height:48px;display:flex;align-items:center;font-weight:600;font-size:.92rem;color:var(--gold-ink);}

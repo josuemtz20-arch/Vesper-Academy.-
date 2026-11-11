@@ -51,7 +51,10 @@
       "tienda.html",
       "onboarding.html",
       "perfil.html",
-      "eliminar-cuenta.html"
+      "eliminar-cuenta.html",
+      /* simulador de entrevista: público; solo carga este script si el
+         alumno ya tiene sesión, para ofrecerle "Enviar a mi profesor" */
+      "entrevista.html"
     ],
     /* SHA-256 de ("vesper-academy-v1|" + correo en minúsculas).
        Añade una línea por persona autorizada. */

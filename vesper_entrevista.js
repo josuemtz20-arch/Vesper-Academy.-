@@ -19,8 +19,15 @@
  *  - La voz es la del navegador (Web Speech API): transcribe, no mide la
  *    pronunciación. Por eso el reporte califica lo que se dijo, nunca el acento.
  *  - Todo texto que viene de la IA se pinta con textContent (nunca innerHTML).
- *  - El reporte se guarda solo en este dispositivo (localStorage). El profesor
- *    lo recibe porque el alumno lo comparte; todavía no llega solo al portal.
+ *  - El reporte se guarda en este dispositivo (localStorage). Al profesor le
+ *    llega de dos maneras: el alumno lo comparte (texto), o, si tiene sesión
+ *    y grupo, toca "Enviar a mi profesor" y sube a exam_results como un
+ *    intento "placement" con examId "interview:<puesto>" (ver la nota en
+ *    vesper_results.js). El profesor lo lee en portal_calificaciones.html.
+ *    Nunca se sube solo: lleva las respuestas del alumno y él decide.
+ *  - vesper_auth.js y vesper_results.js (Firebase) se cargan SOLO si el
+ *    perfil local dice que hay una cuenta enlazada; un visitante sin cuenta
+ *    no descarga nada de eso.
  * ============================================================ */
 (function () {
   "use strict";
@@ -85,6 +92,7 @@
   var ICON = {
     speaker: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5H4z"/><path d="M15.5 9a4.2 4.2 0 0 1 0 6"/></svg>',
     share: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15V4M8 7.5L12 3.5l4 4M5 12.5v6.5h14v-6.5"/></svg>',
+    send: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 3L10.5 13.5M21 3l-6.5 18-4-7.5L3 9.5 21 3z"/></svg>',
     star: '<svg viewBox="0 0 24 24"><path d="M12 3l2.6 5.6 6.1.7-4.5 4.1 1.2 6-5.4-3-5.4 3 1.2-6L3.3 9.3l6.1-.7z"/></svg>'
   };
 
@@ -815,7 +823,7 @@
       var rep = {
         id: "e" + Date.now().toString(36),
         ts: Date.now(),
-        role: S.roleEs, n: S.n,
+        role: S.roleEs, roleId: S.roleId, n: S.n,
         level: r[0].level, headline: r[0].headline, summary: r[0].summary,
         scores: r[0].scores, strengths: r[0].strengths,
         fixes: r[1] ? r[1].fixes : [], drill: r[1] ? r[1].drill : "",
@@ -850,6 +858,81 @@
     all.unshift(rep);
     lsSet(STORE_KEY, JSON.stringify(all.slice(0, STORE_MAX)));
   }
+  function updateReport(rep) {
+    var all = loadReports(), found = false;
+    for (var i = 0; i < all.length; i++) if (all[i].id === rep.id) { all[i] = rep; found = true; }
+    if (found) lsSet(STORE_KEY, JSON.stringify(all));
+  }
+
+  /* ════════════════════════════════════════════════════════════
+     ENVIAR AL PROFESOR (solo alumnos con sesión y grupo)
+     ════════════════════════════════════════════════════════════ */
+  function hasAccountHint() {
+    try { var p = JSON.parse(lsGet("vesper_profile") || "{}"); return !!(p && p.account && p.account.email); }
+    catch (e) { return false; }
+  }
+  function loadScript(src) {
+    return new Promise(function (resolve, reject) {
+      var s = document.createElement("script");
+      s.src = src;
+      s.onload = function () { resolve(); };
+      s.onerror = function () { reject(new Error(src)); };
+      document.head.appendChild(s);
+    });
+  }
+  /* Resuelve {sid, group} si hay un alumno con sesión Y con grupo (alguien
+     verá el envío); null en cualquier otro caso. Una sola vez por página. */
+  var cloudPromise = null;
+  function cloudIdentity() {
+    if (cloudPromise) return cloudPromise;
+    if (!hasAccountHint()) { cloudPromise = Promise.resolve(null); return cloudPromise; }
+    cloudPromise = (window.VesperAuth ? Promise.resolve() : loadScript("vesper_auth.js"))
+      .then(function () { return window.VESPER_RESULTS ? null : loadScript("vesper_results.js"); })
+      .then(function () {
+        if (!window.VESPER_RESULTS || !VESPER_RESULTS.whenReady) return false;
+        return VESPER_RESULTS.whenReady();
+      })
+      .then(function (ok) { return ok ? VESPER_RESULTS.identity() : null; })
+      .then(function (id) { return (id && id.group) ? id : null; })
+      .catch(function () { return null; });
+    return cloudPromise;
+  }
+
+  /* El reporte en la forma de un intento de exam_results. El puntaje es la
+     suma de la rúbrica (4 criterios sobre 3 = 12). Cada parte del reporte es
+     un renglón de `detail`: `type` dice qué es ("iv:fix", "iv:rubric"…), `q`
+     lleva el texto corto y `skill` el contenido completo (texto o JSON). */
+  function cloudRecord(rep) {
+    var sum = 0, detail = [];
+    RUBRIC.forEach(function (r) { sum += rep.scores[r[0]] || 0; });
+    function push(kind, q, extra, ok) {
+      detail.push({
+        q: String(q || "").slice(0, 200),
+        type: "iv:" + kind,
+        skill: extra == null ? "" : (typeof extra === "string" ? extra : JSON.stringify(extra)),
+        correct: !!ok
+      });
+    }
+    push("meta", rep.role, { v: 1, n: rep.n, answers: rep.stats.answers, wpa: rep.stats.wpa, secs: rep.stats.secs }, true);
+    if (rep.headline) push("headline", rep.headline, rep.headline, true);
+    if (rep.summary) push("summary", rep.summary, rep.summary, true);
+    RUBRIC.forEach(function (r) { var v = rep.scores[r[0]] || 0; push("rubric", r[1], r[0] + ":" + v, v >= 2); });
+    rep.strengths.forEach(function (x) { push("strength", x, x, true); });
+    rep.fixes.forEach(function (f) { push("fix", f.q || "(pregunta)", { said: f.said, better: f.better, why: f.why }, false); });
+    if (rep.drill) push("drill", rep.drill, rep.drill, true);
+    /* la conversación en inglés (el primer turno es el calentamiento en español) */
+    (rep.turns || []).slice(1).forEach(function (t) {
+      push("turn", t.q, { q: String(t.q || "").slice(0, 600), a: String(t.a || "").slice(0, 800) }, true);
+    });
+    return {
+      examType: "placement",
+      examId: "interview:" + (rep.roleId || "otro"),
+      level: rep.level === "?" ? "" : rep.level,
+      score: sum, total: 12, threshold: 0, passed: false,
+      detail: detail
+    };
+  }
+
   var MESES = ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"];
   function fecha(ts) { var d = new Date(ts); return d.getDate() + " " + MESES[d.getMonth()] + " " + d.getFullYear(); }
   function dur(secs) { var m = Math.floor(secs / 60), x = secs % 60; return m + ":" + (x < 10 ? "0" : "") + x; }
@@ -1013,13 +1096,56 @@
       var note = el("div", "note"); note.appendChild(el("p", null, rep.drill)); R.appendChild(note);
     }
 
-    /* Acciones: UNA de oro */
+    /* Acciones: UNA de oro. Por defecto es "Compartir"; si el alumno tiene
+       sesión y grupo, el oro pasa a "Enviar a mi profesor" y compartir queda
+       de segunda. El envío nunca es automático: lleva sus respuestas. */
     var acts = el("div", "acts");
+    var sendSlot = el("div", "send-slot");
+    acts.appendChild(sendSlot);
     var bShare = el("button", "btn btn-gold"); bShare.type = "button";
     bShare.appendChild(icon("share")); bShare.appendChild(document.createTextNode("Compartir mi reporte"));
     bShare.addEventListener("click", function () { share(rep); });
     acts.appendChild(bShare);
-    acts.appendChild(el("p", "sub", "Mándaselo a tu profesor para trabajarlo en clase."));
+    var shareSub = el("p", "sub", "Mándaselo a tu profesor para trabajarlo en clase.");
+    acts.appendChild(shareSub);
+
+    function paintSend() {
+      sendSlot.textContent = "";
+      if (rep.sent) {
+        var done = el("p", "sent", "Enviado a tu profesor el " + fecha(rep.sent) + ". Ya puede verlo en su portal.");
+        done.setAttribute("role", "status");
+        sendSlot.appendChild(done);
+        return;
+      }
+      var b = el("button", "btn btn-gold"); b.type = "button";
+      var label = document.createTextNode("Enviar a mi profesor");
+      b.appendChild(icon("send")); b.appendChild(label);
+      b.addEventListener("click", function () {
+        b.disabled = true; label.nodeValue = "Enviando…";
+        VESPER_RESULTS.record(cloudRecord(rep)).then(function (ok) {
+          if (!ok) {
+            b.disabled = false; label.nodeValue = "Enviar a mi profesor";
+            toast("No se pudo enviar. Revisa tu conexión e inténtalo de nuevo.");
+            return;
+          }
+          rep.sent = Date.now();
+          updateReport(rep);
+          track("entrevista_sent", { level: rep.level });
+          paintSend();
+        });
+      });
+      sendSlot.appendChild(b);
+      sendSlot.appendChild(el("p", "sub", "Tu profesor verá este reporte y tus respuestas."));
+    }
+    R.dataset.rep = rep.id;
+    cloudIdentity().then(function (id) {
+      if (!id || R.dataset.rep !== rep.id) return;      /* sin grupo, o ya se abrió otro reporte */
+      bShare.className = "btn btn-line";
+      shareSub.textContent = "También puedes compartirlo como texto.";
+      /* ya es alumno: la invitación al examen de nivel sobra */
+      if (cta && cta.parentNode) cta.parentNode.removeChild(cta);
+      paintSend();
+    });
     var bAgain = el("button", "btn btn-line", "Hacer otra entrevista"); bAgain.type = "button";
     bAgain.addEventListener("click", function () { renderPast(); show("setup"); });
     acts.appendChild(bAgain);
@@ -1056,8 +1182,9 @@
   paintCats();
   renderPast();
   show("setup");
+  cloudIdentity();      /* si hay cuenta enlazada, va cargando la sesión para el envío */
   track("entrevista_view", { stt: canSTT, tts: canTTS });
 
   /* Ganchos para las pruebas automáticas (no los usa la página). */
-  window.VESPER_ENTREVISTA = { parseJson: parseJson, salvageFixes: salvageFixes, normScores: normScores, normFixes: normFixes, shareText: shareText };
+  window.VESPER_ENTREVISTA = { parseJson: parseJson, salvageFixes: salvageFixes, normScores: normScores, normFixes: normFixes, shareText: shareText, cloudRecord: cloudRecord };
 })();

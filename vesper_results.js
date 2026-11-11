@@ -37,6 +37,17 @@
  *   isAdminUser()      -> ¿la sesión es la cuenta admin?
  *   fetchMyGroups()    -> Promise<[grupo]> del profesor con sesión
  *   computeSid(email)  -> Promise<sid> (hash opaco, igual que el script admin)
+ *   whenReady()        -> Promise<bool>: resuelve cuando Firebase ya dijo si
+ *                         hay sesión verificada (true) o no (false)
+ *   identity()         -> Promise<{sid, group}|null> del alumno con sesión
+ *
+ * Simulacros de entrevista (entrevista.html, 2026-11-10): cuando el alumno
+ * elige "Enviar a mi profesor", el reporte se guarda AQUÍ como un intento con
+ * examType "placement" (el único tipo que no cuenta para la boleta) y examId
+ * "interview:<puesto>". El reporte va dentro de `detail`, con type "iv:...".
+ * No hizo falta tocar las reglas: la de exam_results ya deja que el alumno
+ * cree lo suyo y que solo lo lean él, el staff y los profesores de su grupo.
+ * portal_calificaciones.html los reconoce por el examId y los pinta aparte.
  * ============================================================ */
 window.VESPER_RESULTS = (function () {
   var DB_ID = "teachermanuals";
@@ -51,9 +62,15 @@ window.VESPER_RESULTS = (function () {
   function collPath() { return base() + "/" + COLLECTION; }
 
   var authInst = null, currentUser = null, started = false;
+  /* whenReady(): se resuelve UNA vez, con la primera respuesta de Firebase
+     sobre la sesión (o false si no hay Firebase o no hay red). */
+  var readyResolve = null;
+  var readyPromise = new Promise(function (resolve) { readyResolve = resolve; });
+  function whenReady() { return readyPromise; }
 
   function start() {
-    if (started || !available()) return;
+    if (started) return;
+    if (!available()) { readyResolve(false); return; }
     started = true;
     try {
       window.VesperAuth.initFirebase().then(function (auth) {
@@ -61,9 +78,10 @@ window.VESPER_RESULTS = (function () {
         auth.onAuthStateChanged(function (user) {
           currentUser = (user && user.emailVerified) ? user : null;
           identityCache = null;   /* otro usuario: otra identidad */
+          readyResolve(!!currentUser);
         });
-      }).catch(function () { /* sin red a Firebase: queda solo-local */ });
-    } catch (e) {}
+      }).catch(function () { readyResolve(false); /* sin red a Firebase: queda solo-local */ });
+    } catch (e) { readyResolve(false); }
   }
 
   function signedIn() { return !!currentUser; }
@@ -125,6 +143,15 @@ window.VESPER_RESULTS = (function () {
     /* si falla (red), no se cachea: el siguiente intento vuelve a probar */
     identityCache.catch(function () { identityCache = null; });
     return identityCache;
+  }
+
+  /* sid + grupo del alumno con sesión, o null (sin sesión o sin red). Para
+     quien necesita saber ANTES de subir si algún profesor verá el intento:
+     sin grupo, solo lo ven el propio alumno y el staff. */
+  function identity() {
+    if (!currentUser) return Promise.resolve(null);
+    return currentUser.getIdToken().then(function (token) { return myIdentity(token); })
+      .catch(function () { return null; });
   }
 
   /* grupo del perfil local: solo para el espejo en este dispositivo */
@@ -396,6 +423,7 @@ window.VESPER_RESULTS = (function () {
   return {
     available: available, signedIn: signedIn, aliasOf: aliasOf, idToken: idToken,
     record: record, fetchAll: fetchAll, fetchMine: fetchMine, localAll: localAll,
-    isAdminUser: isAdminUser, fetchMyGroups: fetchMyGroups, computeSid: computeSid
+    isAdminUser: isAdminUser, fetchMyGroups: fetchMyGroups, computeSid: computeSid,
+    whenReady: whenReady, identity: identity
   };
 })();

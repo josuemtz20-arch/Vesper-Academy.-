@@ -97,6 +97,29 @@ footer{background:var(--navy);color:rgba(255,255,255,.5);text-align:center;paddi
 footer a{color:var(--gold);text-decoration:none;}
 :focus-visible{outline:3px solid var(--gold);outline-offset:2px}
 @media(max-width:640px){.who small{font-size:.68rem}thead th:nth-child(3),tbody td:nth-child(3){display:none}}
+
+/* ===== SIMULACROS DE ENTREVISTA (2026-11-10) =====
+   El reporte que un alumno envía desde entrevista.html llega como un intento
+   "placement" con examId "interview:<puesto>" (no cuenta para la boleta) y
+   aquí se pinta como lo que es: un reporte para preparar la clase, no una
+   lista de preguntas acertadas o falladas. */
+.tag.interview{background:#fbf3df;color:#7c5e22;border-color:#e7d8a8;}
+.iv-meta{margin:0 0 12px;font-size:.8rem;color:var(--muted);}
+.iv-head{margin:0 0 4px;font-family:'Inria Serif',serif;font-size:1.1rem;font-weight:700;color:var(--navy);}
+.iv-sum{margin:0;font-size:.88rem;line-height:1.55;max-width:760px;}
+.iv-note{margin:8px 0 0;font-size:.76rem;color:var(--muted);max-width:760px;}
+.iv-list{margin:0;padding-left:18px;font-size:.86rem;line-height:1.55;max-width:760px;}
+.iv-fix{background:#fff;border:1px solid var(--border);border-left:4px solid var(--gold2);border-radius:8px;padding:10px 14px;margin-bottom:8px;max-width:760px;}
+.iv-fix .q{margin:0 0 6px;font-size:.78rem;font-weight:600;color:var(--muted);}
+.iv-fix p{margin:0 0 4px;font-size:.88rem;line-height:1.5;overflow-wrap:anywhere;}
+.iv-fix .lbl{display:inline-block;min-width:56px;font-size:.66rem;font-weight:800;letter-spacing:.4px;text-transform:uppercase;color:var(--muted);}
+.iv-fix .better{font-weight:700;}
+.iv-fix .why{color:var(--muted);font-size:.8rem;margin:6px 0 0;}
+.iv-talk{margin-top:14px;max-width:760px;}
+.iv-talk summary{cursor:pointer;font-size:.8rem;font-weight:700;color:#7c5e22;padding:10px 0;}
+.iv-talk p{margin:0 0 8px;font-size:.84rem;line-height:1.5;overflow-wrap:anywhere;}
+.iv-talk p b{display:block;font-size:.64rem;letter-spacing:.5px;text-transform:uppercase;color:var(--muted);}
+.iv-talk p.me{padding-left:10px;border-left:3px solid var(--border);}
 </style>
 <link rel="stylesheet" href="assets/css/vesper_tokens.css">
 </head>
@@ -120,6 +143,9 @@ footer a{color:var(--gold);text-decoration:none;}
     <p>Calificaciones de tus alumnos registradas dentro de la plataforma: exámenes
        de mundo (boss), nivelación y lecciones. Toca una fila para ver el detalle
        pregunta por pregunta. Todo vive aquí — sin recurrir a fuentes externas.</p>
+    <p>También llegan aquí los <b>simulacros de entrevista</b> que un alumno decide
+       enviarte: el reporte de Vesper con lo que conviene trabajar en clase. No
+       cuentan para la boleta.</p>
   </div>
 
   <div id="loading"><div class="spin"></div><div>Cargando calificaciones…</div></div>
@@ -133,6 +159,7 @@ footer a{color:var(--gold);text-decoration:none;}
         <option value="boss">Examen de mundo</option>
         <option value="placement">Nivelación</option>
         <option value="lesson">Lección</option>
+        <option value="interview">Simulacro de entrevista</option>
       </select>
       <input id="f-q" type="search" placeholder="Buscar alumno (nombre, alias o grupo)…">
       <span class="spacer"></span>
@@ -170,8 +197,82 @@ footer a{color:var(--gold);text-decoration:none;}
   var fType = document.getElementById("f-type");
   var fQ = document.getElementById("f-q");
 
-  var TYPE_LABEL = { exam: "Examen de nivel", boss: "Examen de mundo", placement: "Nivelación", lesson: "Lección" };
+  var TYPE_LABEL = { exam: "Examen de nivel", boss: "Examen de mundo", placement: "Nivelación", lesson: "Lección", interview: "Entrevista" };
   var allRows = [];
+
+  /* ── Simulacros de entrevista (entrevista.html) ──
+     Viajan como un intento "placement" con examId "interview:<puesto>" (ver
+     la nota en vesper_results.js). kindOf() los separa de la nivelación. */
+  function isInterview(r) { return r.examType === "placement" && /^interview:/.test(r.examId || ""); }
+  function kindOf(r) { return isInterview(r) ? "interview" : r.examType; }
+  /* Reconstruye el reporte a partir de `detail`: cada renglón dice qué es en
+     `type` ("iv:fix", "iv:rubric"…), el texto corto va en `q` y el contenido
+     completo (texto o JSON) en `skill`. */
+  function ivParse(r) {
+    var o = { role: "", meta: {}, headline: "", summary: "", rubric: [], strengths: [], fixes: [], drill: "", turns: [] };
+    (r.detail || []).forEach(function (d) {
+      var kind = String(d.type || "").replace(/^iv:/, ""), full = d.skill || "", j = null;
+      if (kind === "meta" || kind === "fix" || kind === "turn") { try { j = JSON.parse(full); } catch (e) { j = null; } }
+      j = (j && typeof j === "object") ? j : {};
+      if (kind === "meta") { o.role = d.q || ""; o.meta = j; }
+      else if (kind === "headline") o.headline = full || d.q;
+      else if (kind === "summary") o.summary = full || d.q;
+      else if (kind === "rubric") o.rubric.push({ label: d.q, value: parseInt(String(full).split(":")[1], 10) || 0 });
+      else if (kind === "strength") o.strengths.push(full || d.q);
+      else if (kind === "fix") o.fixes.push({ q: d.q, said: j.said || "", better: j.better || "", why: j.why || "" });
+      else if (kind === "drill") o.drill = full || d.q;
+      else if (kind === "turn") o.turns.push({ q: j.q || d.q, a: j.a || "" });
+    });
+    return o;
+  }
+  function ivDur(secs) {
+    secs = parseInt(secs, 10) || 0;
+    return Math.floor(secs / 60) + ":" + ("0" + (secs % 60)).slice(-2);
+  }
+  function interviewHtml(r) {
+    var v = ivParse(r), h = '<div class="detailbox">';
+    var meta = ["Simulacro con Vesper (IA)"];
+    if (v.role) meta.push("Puesto: " + v.role);
+    if (v.meta.n) meta.push(v.meta.n + " preguntas");
+    if (v.meta.wpa) meta.push(v.meta.wpa + " palabras por respuesta");
+    if (v.meta.secs) meta.push(ivDur(v.meta.secs) + " min");
+    h += '<p class="iv-meta">' + esc(meta.join(" · ")) + '</p>';
+    /* el reporte está escrito para el alumno ("te faltan…"): se avisa */
+    if (v.headline || v.summary) h += '<h4>Lo que Vesper le dijo al alumno</h4>';
+    if (v.headline) h += '<p class="iv-head">' + esc(v.headline) + '</p>';
+    if (v.summary) h += '<p class="iv-sum">' + esc(v.summary) + '</p>';
+    if (v.rubric.length) {
+      h += '<h4>Rúbrica de la entrevista oral (sobre 3)</h4><div class="skgrid">' + v.rubric.map(function (x) {
+        var col = x.value >= 3 ? "#2d7a4f" : (x.value === 2 ? "#7c5e22" : "#b03a3a");
+        return '<div class="skchip"><span class="sklbl">' + esc(x.label) + '</span>' +
+               '<span class="skval" style="color:' + col + '"><b>' + (x.value || "–") + ' / 3</b></span></div>';
+      }).join("") + '</div>';
+      h += '<p class="iv-note">El nivel' + (r.level ? " (" + esc(r.level) + ")" : "") + ' y estos puntajes son una estimación de la IA sobre lo que el alumno ' +
+           'dijo o escribió. La pronunciación no se evalúa: el simulador solo transcribe.</p>';
+    }
+    if (v.strengths.length) {
+      h += '<h4>Lo que hizo bien</h4><ul class="iv-list">' +
+           v.strengths.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join("") + '</ul>';
+    }
+    if (v.fixes.length) {
+      h += '<h4>Para trabajar en clase</h4>' + v.fixes.map(function (f) {
+        return '<div class="iv-fix">' +
+          (f.q ? '<p class="q" lang="en">' + esc(f.q) + '</p>' : '') +
+          (f.said ? '<p lang="en"><span class="lbl">Dijo</span> ' + esc(f.said) + '</p>' : '') +
+          '<p class="better" lang="en"><span class="lbl">Mejor</span> ' + esc(f.better) + '</p>' +
+          (f.why ? '<p class="why">' + esc(f.why) + '</p>' : '') + '</div>';
+      }).join("");
+    }
+    if (v.drill) h += '<h4>Práctica que Vesper le sugirió</h4><p class="iv-sum">' + esc(v.drill) + '</p>';
+    if (v.turns.length) {
+      h += '<details class="iv-talk"><summary>Ver la conversación (' + v.turns.length + ' preguntas)</summary>' +
+        v.turns.map(function (t) {
+          return '<p lang="en"><b>Vesper</b>' + esc(t.q) + '</p><p class="me" lang="en"><b>Alumno</b>' + esc(t.a) + '</p>';
+        }).join("") + '</details>';
+    }
+    if (!v.rubric.length && !v.fixes.length && !v.summary) h += '<p class="iv-sum">Este reporte llegó sin detalle.</p>';
+    return h + '</div>';
+  }
   var rosterMap = {};   // sid -> { name, group, levelName } (roster/, sin correos)
 
   /* nombre a mostrar: el del registro (roster) manda; luego el alias del
@@ -262,7 +363,7 @@ footer a{color:var(--gold);text-decoration:none;}
     var type = fType.value;
     var q = fQ.value.trim().toLowerCase();
     var rows = allRows.filter(function (r) {
-      if (type && r.examType !== type) return false;
+      if (type && kindOf(r) !== type) return false;
       if (q) {
         var hay = (nameOf(r) + " " + r.alias + " " + subOf(r)).toLowerCase();
         if (hay.indexOf(q) === -1) return false;
@@ -277,7 +378,9 @@ footer a{color:var(--gold);text-decoration:none;}
 
     var html = "";
     rows.forEach(function (r, i) {
-      var tcls = (r.examType === "exam" || r.examType === "boss" || r.examType === "placement" || r.examType === "lesson") ? r.examType : "";
+      var kind = kindOf(r);
+      var tcls = TYPE_LABEL[kind] ? kind : "";
+      var under = kind === "lesson" ? r.examId : (kind === "interview" ? ivParse(r).role : "");
       var state = r.examType === "placement"
         ? '<span class="state">—</span>'
         : '<span class="state ' + (r.passed ? "pass" : "fail") + '">' +
@@ -286,15 +389,16 @@ footer a{color:var(--gold);text-decoration:none;}
         '<tr class="row" data-i="' + i + '">' +
           '<td class="who"><b>' + esc(nameOf(r)) + '</b>' +
             (subOf(r) ? '<small>' + esc(subOf(r)) + '</small>' : '') + '</td>' +
-          '<td><span class="tag ' + tcls + '">' + esc(TYPE_LABEL[r.examType] || r.examType) + '</span>' +
-            (r.examId && r.examType === "lesson" ? '<small style="color:var(--muted)">' + esc(r.examId) + '</small>' : '') + '</td>' +
+          '<td><span class="tag ' + tcls + '">' + esc(TYPE_LABEL[kind] || r.examType) + '</span>' +
+            (under ? ' <small style="color:var(--muted)">' + esc(under) + '</small>' : '') + '</td>' +
           '<td>' + esc(r.level || "—") + '</td>' +
           '<td>' + r.score + ' / ' + r.total + '</td>' +
           '<td class="pct">' + r.percent + '%</td>' +
           '<td>' + state + '</td>' +
           '<td style="color:var(--muted);font-size:.78rem">' + esc(fmtDate(r.date)) + '</td>' +
         '</tr>' +
-        '<tr class="detailrow" data-d="' + i + '" style="display:none"><td colspan="7">' + detailHtml(r) + '</td></tr>';
+        '<tr class="detailrow" data-d="' + i + '" style="display:none"><td colspan="7">' +
+          (kind === "interview" ? interviewHtml(r) : detailHtml(r)) + '</td></tr>';
     });
     rowsEl.innerHTML = html;
     // guardamos el subconjunto filtrado para resolver clics por índice
@@ -311,6 +415,10 @@ footer a{color:var(--gold);text-decoration:none;}
 
   fType.addEventListener("change", render);
   fQ.addEventListener("input", render);
+  /* portal_profesores.html enlaza con ?tipo=entrevista para abrir ya filtrado */
+  try {
+    if (/[?&]tipo=entrevista\b/.test(location.search)) fType.value = "interview";
+  } catch (e) {}
 
   function load() {
     if (!window.VESPER_RESULTS || !VESPER_RESULTS.available()) {
