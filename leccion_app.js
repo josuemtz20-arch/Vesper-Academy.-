@@ -3545,13 +3545,13 @@
       if (!n) return "";
       var pass = (bank && bank.pass) ? bank.pass : 70;
       return '<button class="card lcard" data-exam="' + esc(lv) + '">'
-        + '<div class="lcard-top"><span class="pill">' + esc(lv) + '</span><span class="track">Examen de nivel</span></div>'
+        + '<div class="lcard-top"><span class="pill">' + esc(lv) + '</span><span class="track">Examen final</span></div>'
         + '<h2>Examen ' + esc(lv) + '</h2>'
         + '<div class="muted">' + n + ' ejercicios &middot; aprobar con ' + pass + '%</div></button>';
     }).join("");
     show('<div class="wrap">'
-      + '<div class="hero">' + mascot("welcome", "Elige el examen de nivel que quieres presentar.") + '</div>'
-      + '<h1>Examen de nivel</h1>'
+      + '<div class="hero">' + mascot("welcome", "Elige el examen final que quieres presentar.") + '</div>'
+      + '<h1>Examen final</h1>'
       + '<p class="muted" style="margin:-6px 0 14px">Evaluación completa por nivel: gramática, vocabulario, uso del inglés, lectura y listening. Tu resultado queda registrado para tu profesor.</p>'
       + '<div class="grid">' + cards + '</div>'
       + '<div style="margin-top:18px"><a class="btn btn-ghost" href="leccion.html">&larr; Volver a lecciones</a></div>'
@@ -3825,7 +3825,7 @@
     var srsDue = (window.VESPER_SRS && VESPER_SRS.dueCount) ? VESPER_SRS.dueCount() : 0;
     var examBanner = '<button class="hub-card" id="examGo" type="button">'
       + '<span class="hc-ic" aria-hidden="true">🎓</span>'
-      + '<span class="hc-tx"><b>Examen de nivel</b><span>Evalúa tu dominio de A1 a C2</span></span>'
+      + '<span class="hc-tx"><b>Examen final</b><span>Demuestra tu dominio de A1 a C2</span></span>'
       + '<span class="hc-cta">Presentar &rarr;</span></button>';
     /* Orden del hub, de más a menos urgente para quien aprende:
        1) qué hago ahora  2) dónde estoy (mundos)  3) el mapa  4) todo lo
@@ -5492,7 +5492,7 @@
       : "background:#f7e7e7;color:#b03a3a;border:2px solid #b03a3a";
     if (passed) { burstConfetti(40); sfx("fanfare"); } else { sfx("fail"); }
     show('<div class="wrap">' + topbar(92) + '<div class="card center">'
-      + mascot(passed ? "milestone" : "incorrect", passed ? T("¡Examen de nivel aprobado!", "Level exam passed!") : T("Aún no alcanzas el nivel. ¡Sigue practicando!", "You're not at this level yet. Keep practising!"))
+      + mascot(passed ? "milestone" : "incorrect", passed ? T("¡Examen final aprobado!", "Final exam passed!") : T("Aún no alcanzas el nivel. ¡Sigue practicando!", "You're not at this level yet. Keep practising!"))
       + '<div style="display:inline-block;margin:6px auto 4px;padding:8px 22px;border-radius:999px;font:800 1.05rem/1 Inter,system-ui,sans-serif;letter-spacing:1.5px;text-transform:uppercase;' + vStyle + '">' + verdict + '</div>'
       + '<h1>' + pct + '%</h1>'
       + '<p class="muted">' + correct + T(' de ', ' of ') + total + T(' correctos &middot; necesitas ', ' correct &middot; you need ') + pass + T('% para aprobar', '% to pass') + '</p>'
@@ -5995,10 +5995,10 @@
     });
     var ordered = exs.map(function (x) { return x.e; });
     return {
-      lessonId: "exam:" + level, level: level, track: "Examen de nivel",
+      lessonId: "exam:" + level, level: level, track: "Examen final",
       isExam: true, examLevel: level, examPass: pass,
       serverGraded: true, examKind: "exam",
-      title: "Examen de nivel · " + level,
+      title: "Examen final · " + level,
       explanation: {
         body: "Evaluación completa del nivel " + level + ": gramática, vocabulario, uso del inglés, "
           + "lectura y listening. Son " + ordered.length + " ejercicios. Necesitas " + pass
