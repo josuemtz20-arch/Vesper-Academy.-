@@ -230,10 +230,10 @@ async function saAccessToken(env) {
 const fsBase = () => "https://firestore.googleapis.com/v1/projects/" + PROJECT_ID + "/databases/" + FS_DB + "/documents";
 
 /* ¿quién es? Identity Toolkit valida el idToken (firma, caducidad, proyecto). */
+/* No hay atajo de desarrollo: la única identidad válida es un idToken real
+   de Firebase. (Antes EXAM_DEV=1 aceptaba "dev:<correo>"; una variable mal
+   puesta en producción habría permitido registrar notas a nombre de otro.) */
 async function lookupUser(env, idToken) {
-  if (env.EXAM_DEV === "1" && typeof idToken === "string" && idToken.indexOf("dev:") === 0) {
-    return { uid: "dev-uid", email: idToken.slice(4).toLowerCase(), verified: true };
-  }
   if (typeof idToken !== "string" || idToken.length < 20 || idToken.length > 4096) return null;
   const r = await fetch("https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=" + FIREBASE_API_KEY, {
     method: "POST", headers: { "Content-Type": "application/json" },

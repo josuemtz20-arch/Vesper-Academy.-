@@ -278,7 +278,10 @@ Firestore. Lo ideal es una cuenta SOLO para esto (rol "Cloud Datastore User"),
 no la de administración: si alguien la robara del Worker, no tendría más.
 
 Pruebas: `wrangler dev` con `EXAM_DEV=1` en `worker/.dev.vars` (no escribe en
-Firestore) y luego
+Firestore). `EXAM_DEV` ya **no** acepta tokens `dev:<correo>`: para probar un
+intento registrado hay que mandar el `idToken` de una cuenta real de prueba
+(si `_scripts/exams/test_worker_exams.js` usaba `dev:`, hay que cambiarlo).
+Luego
 
 ```bash
 node ../_scripts/exams/test_worker_exams.js --root ..
