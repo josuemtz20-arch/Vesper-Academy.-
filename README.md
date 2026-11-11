@@ -19,10 +19,13 @@ cualquiera puede ver el código fuente. La seguridad **real** vive en
 - Manuales, libros, exámenes y calificaciones están protegidos por reglas de
   Firestore, no por el gate del navegador.
 - **Integridad de calificaciones:** los intentos de examen (`exam_results`) los
-  escribe el propio alumno al autocalificarse, así que son **práctica**. La nota
-  de registro de Exámenes/Lecciones la **confirma el profesor**
-  (`gradebook.examsGrade` / `lessonsGrade`) y `computeFinal` usa solo datos del
-  profesor. Ver `FIRESTORE_EXAM_RESULTS_RULES.md` y `FIRESTORE_GRADEBOOK_RULES.md`.
+  escribe el propio alumno al autocalificarse, así que son **práctica** y no
+  cuentan. La calificación sale solo de lo que captura el profesor: pase de
+  lista, tareas y rúbrica por clase (`daily_progress`), parciales y examen final
+  (`gradebook.quiz1..3` / `finalExam`). La calcula `computeGrade` en
+  `vesper_gradebook.js`, donde también viven los pesos y la fecha de inicio del
+  curso (`COURSE_START`). Ver `FIRESTORE_EXAM_RESULTS_RULES.md` y
+  `FIRESTORE_GRADEBOOK_RULES.md`.
 
 ## Acceso / allowlist
 
@@ -54,7 +57,7 @@ permisos y orden de activación en `FIRESTORE_SCHOOL_RULES.md`.
 | `book_placement.html` | Examen de ubicación (sin cuenta) | inline |
 | `portal_profesores.html` | Portal del profesor | `vesper_auth.js` |
 | `portal_calificaciones.html` | Resultados de exámenes (profe) | `vesper_results.js` |
-| `portal_boleta.html` | Boleta / captura de notas (profe) | `vesper_gradebook.js` |
+| `portal_boleta.html` | Pase de lista, rúbrica por clase y boleta (profe) | `vesper_gradebook.js` |
 | `mi_boleta.html` | Boleta del alumno | `vesper_gradebook.js` |
 | `manual.html` / `libro.html` | Lector de manuales / libros (Firestore) | `vesper_auth.js` |
 | `access_admin.html` | Herramienta de administración de accesos | `vesper_auth.js` |

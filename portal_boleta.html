@@ -8,7 +8,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Boleta de calificaciones | Vesper Academy</title>
-<meta name="description" content="Boleta de calificaciones por alumno: una tabla genérica para todos los niveles. Acceso restringido al profesorado.">
+<meta name="description" content="Pase de lista, rúbrica de clase y boleta de calificaciones por alumno. Acceso restringido al profesorado.">
 <meta name="robots" content="noindex, nofollow">
 <link rel="icon" href="assets/images/favicon_32.png?v=2" type="image/png">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -36,89 +36,143 @@ header a.back:hover{color:var(--gold);}
   header a.back{font-size:0;padding:10px 12px;border:1px solid rgba(255,255,255,.2);border-radius:10px;display:inline-flex;align-items:center;justify-content:center;}
   header a.back i{font-size:1rem;margin:0;}
 }
-.wrap{max-width:1100px;margin:0 auto;padding:32px 20px 70px;}
+.wrap{max-width:1180px;margin:0 auto;padding:32px 20px 70px;}
 .intro h1{font-family:'Inria Serif',serif;font-size:1.8rem;margin:0 0 8px;}
-.intro p{color:var(--muted);max-width:760px;margin:0 0 6px;font-size:.92rem;line-height:1.55;}
+.intro p{color:var(--muted);max-width:780px;margin:0 0 6px;font-size:.92rem;line-height:1.55;}
+.intro p.cycle{color:var(--navy);font-weight:600;font-size:.86rem;margin-top:10px;}
+.intro p.cycle i{color:var(--gold2);margin-right:6px;}
 
 .notice{background:#fbf3df;border:1px solid #e7d8a8;border-left:4px solid var(--gold2);border-radius:8px;padding:14px 16px;margin:20px 0;font-size:.88rem;color:#5a4d2e;line-height:1.55;}
 .notice.bad{background:#f7e7e7;border-color:#e2bcbc;border-left-color:var(--err);color:#6a2a2a;}
 .notice i{margin-right:6px;}
 
-.stats{display:flex;flex-wrap:wrap;gap:12px;margin:22px 0 14px;}
+.stats{display:flex;flex-wrap:wrap;gap:12px;margin:22px 0 18px;}
 .stat{background:#fff;border:1px solid var(--border);border-top:4px solid var(--accent);border-radius:10px;padding:12px 18px;min-width:130px;box-shadow:0 1px 4px rgba(0,0,0,.06);}
-.stat b{display:block;font-size:1.5rem;line-height:1.1;font-family:'Inria Serif',serif;}
+.stat b{display:block;font-size:1.5rem;line-height:1.1;font-family:'Inria Serif',serif;font-variant-numeric:tabular-nums;}
 .stat span{font-size:.7rem;letter-spacing:1px;text-transform:uppercase;color:var(--muted);}
+.stat.alert{border-top-color:var(--err);}
+.stat.alert b{color:var(--err);}
 
-.toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:18px 0 14px;}
-.toolbar select,.toolbar input{padding:9px 11px;border:1px solid var(--border);border-radius:8px;font:inherit;font-size:.85rem;background:#fff;}
+/* pestañas: Clase del día / Boleta */
+.tabs{display:flex;gap:4px;border-bottom:2px solid var(--border);}
+.tab{appearance:none;border:0;background:none;font:inherit;font-size:.9rem;font-weight:700;color:var(--muted);padding:11px 18px;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;}
+.tab i{margin-right:7px;}
+.tab:hover{color:var(--navy);}
+.tab[aria-selected="true"]{color:var(--navy);border-bottom-color:var(--gold);}
+
+.toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:16px 0 14px;}
+.toolbar select,.toolbar input{padding:9px 11px;border:1px solid var(--border);border-radius:8px;font:inherit;font-size:.85rem;background:#fff;color:var(--navy);}
 .toolbar input{min-width:200px;flex:1;max-width:320px;}
 .toolbar .spacer{flex:1;}
-.toolbar button{padding:9px 14px;border:1px solid var(--border);background:#fff;border-radius:8px;font:inherit;font-size:.82rem;font-weight:600;cursor:pointer;color:var(--navy);}
-.toolbar button:hover{border-color:var(--gold);}
+.btn{padding:9px 14px;border:1px solid var(--border);background:#fff;border-radius:8px;font:inherit;font-size:.82rem;font-weight:600;cursor:pointer;color:var(--navy);}
+.btn:hover{border-color:var(--gold);}
+.btn i{margin-right:6px;color:var(--gold2);}
+.btn.primary{background:var(--navy);border-color:var(--navy);color:#fff;}
+.btn.primary i{color:var(--gold);}
+.btn.primary:hover{background:var(--navy2);}
+.btn.ghost{background:transparent;color:var(--muted);}
+.btn.ghost i{color:inherit;}
+.btn[disabled]{opacity:.5;cursor:not-allowed;}
 
-.tablecard{background:#fff;border:1px solid var(--border);border-radius:12px;box-shadow:0 1px 4px rgba(0,0,0,.06);overflow:hidden;}
-table{width:100%;border-collapse:collapse;font-size:.86rem;}
-thead th{text-align:left;background:#f3eee2;color:var(--navy);font-size:.7rem;letter-spacing:.8px;text-transform:uppercase;padding:11px 14px;border-bottom:1px solid var(--border);}
-tbody td{padding:11px 14px;border-bottom:1px solid #f0ece3;vertical-align:middle;}
-tbody tr:hover{background:#faf7f0;}
+.tablecard{background:#fff;border:1px solid var(--border);border-radius:12px;box-shadow:0 1px 4px rgba(0,0,0,.06);overflow-x:auto;}
+table.main{width:100%;border-collapse:collapse;font-size:.86rem;}
+table.main thead th{text-align:left;background:#f3eee2;color:var(--navy);font-size:.68rem;letter-spacing:.8px;text-transform:uppercase;padding:9px 12px;border-bottom:1px solid var(--border);white-space:nowrap;vertical-align:bottom;}
+table.main thead th small{display:block;font-weight:500;color:var(--muted);letter-spacing:.3px;text-transform:none;font-size:.66rem;}
+table.main thead th.grp{text-align:center;border-left:1px solid var(--border);border-right:1px solid var(--border);padding-bottom:4px;}
+table.main thead th.c{text-align:center;}
+table.main tbody td{padding:9px 12px;border-bottom:1px solid #f0ece3;vertical-align:middle;}
+table.main th.who,table.main td.who{position:sticky;left:0;z-index:2;}
+table.main td.who{background:#fff;min-width:170px;box-shadow:1px 0 0 #f0ece3;}
+table.main thead th.who{z-index:3;}
 .who b{font-weight:600;}
 .who small{display:block;color:var(--muted);font-size:.72rem;}
-.lvl{display:inline-block;font-size:.66rem;font-weight:800;letter-spacing:.4px;text-transform:uppercase;padding:3px 10px;border-radius:20px;background:#fff;border:1.5px solid currentColor;}
-.avg{font-weight:700;}
-.avg small{display:block;font-weight:400;color:var(--muted);font-size:.7rem;}
+.lvl{display:inline-block;font-size:.6rem;font-weight:800;letter-spacing:.4px;text-transform:uppercase;padding:2px 8px;border-radius:20px;background:#fff;border:1.5px solid currentColor;margin-top:3px;}
 .na{color:var(--muted);font-weight:400;}
-td.part{white-space:nowrap;}
-td.part input{width:74px;padding:7px 9px;border:1px solid var(--border);border-radius:8px;font:inherit;font-size:.86rem;text-align:center;background:#fff;}
-td.part input:focus{border-color:var(--gold);}
-td.part .sv{display:inline-block;width:18px;margin-left:6px;font-size:.85rem;text-align:center;}
-/* casillas de nota de registro (Exámenes / Lecciones) capturadas por el profe */
-td.grade{white-space:nowrap;}
-td.grade .row1{display:flex;align-items:center;gap:2px;}
-td.grade input{width:64px;padding:7px 9px;border:1px solid var(--border);border-radius:8px;font:inherit;font-size:.86rem;text-align:center;background:#fff;}
-td.grade input:focus{border-color:var(--gold);}
-td.grade .sv{display:inline-block;width:16px;font-size:.82rem;text-align:center;}
-td.grade .sv .fa-circle-check{color:var(--ok);}
-td.grade .sv .fa-circle-exclamation{color:var(--err);}
-td.grade .sv .fa-spinner{color:var(--muted);animation:sp .8s linear infinite;}
-td.grade .prac{display:block;margin-top:3px;font-size:.66rem;color:var(--muted);white-space:nowrap;}
-td.grade .prac button{border:0;background:none;padding:0;margin-left:4px;font:inherit;font-size:.66rem;color:var(--gold2);text-decoration:underline;cursor:pointer;}
-td.grade .prac button[disabled]{color:var(--muted);text-decoration:none;cursor:default;}
-td.part .sv .fa-circle-check{color:var(--ok);}
-td.part .sv .fa-circle-exclamation{color:var(--err);}
-td.part .sv .fa-spinner{color:var(--muted);animation:sp .8s linear infinite;}
-.final{font-weight:800;font-size:.95rem;}
-.final.pass{color:var(--ok);}
-.final.fail{color:var(--err);}
 .empty{padding:40px 20px;text-align:center;color:var(--muted);}
+.sv{display:inline-block;width:18px;text-align:center;font-size:.85rem;}
+.sv .fa-circle-check{color:var(--ok);}
+.sv .fa-circle-exclamation{color:var(--err);}
+.sv .fa-spinner{color:var(--muted);animation:sp .8s linear infinite;}
 
-/* ── rúbrica de progreso diario (20 días × aspectos, ✓/✗) ── */
-td.daily{white-space:nowrap;}
-.dbtn{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border:1px solid var(--border);background:#fff;border-radius:8px;font:inherit;font-size:.76rem;font-weight:600;cursor:pointer;color:var(--navy);}
+/* ── Clase del día ── */
+.daystrip{display:flex;gap:5px;overflow-x:auto;padding:4px 2px 10px;}
+.day{flex:0 0 auto;min-width:50px;appearance:none;border:1px solid var(--border);background:#fff;border-radius:10px;padding:6px 4px 5px;font:inherit;cursor:pointer;color:var(--navy);text-align:center;position:relative;}
+.day b{display:block;font-size:.98rem;line-height:1.1;font-variant-numeric:tabular-nums;}
+.day small{display:block;font-size:.6rem;color:var(--muted);white-space:nowrap;}
+.day:hover{border-color:var(--gold);}
+.day.wk{margin-left:9px;}
+.day.has{background:#eef6f1;border-color:#cfe5d8;}
+.day.has::after{content:"";position:absolute;top:5px;right:6px;width:6px;height:6px;border-radius:50%;background:var(--ok);}
+.day.part::after{background:var(--gold2);}
+.day.future{opacity:.6;}
+.day.today{border-color:var(--gold2);box-shadow:inset 0 -3px 0 var(--gold);}
+.day.sel{background:var(--navy);border-color:var(--navy);color:#fff;opacity:1;}
+.day.sel small{color:rgba(255,255,255,.7);}
+.classhead{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin:6px 0 12px;}
+.classhead h2{font-family:'Inria Serif',serif;font-size:1.35rem;margin:0;display:inline;}
+.classhead .when{color:var(--muted);font-size:.88rem;margin-left:8px;}
+.classhead .acts{display:flex;flex-wrap:wrap;gap:8px;}
+.chip{display:inline-block;font-size:.64rem;font-weight:800;letter-spacing:.5px;text-transform:uppercase;padding:3px 9px;border-radius:20px;margin-left:8px;vertical-align:2px;background:#f3eee2;color:var(--gold2);}
+.chip.now{background:var(--navy);color:var(--gold);}
+.chip.warn{background:#fbefd0;color:#8a6412;}
+.brush{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:0 0 10px;font-size:.8rem;color:var(--muted);}
+.brush .bl{appearance:none;border:2px solid transparent;border-radius:8px;padding:6px 11px;font:inherit;font-size:.8rem;font-weight:700;cursor:pointer;}
+.brush .bl.erase{background:#fff;border-color:var(--border);color:var(--muted);}
+.brush .bl[aria-pressed="true"]{border-color:var(--navy);box-shadow:0 0 0 2px rgba(27,27,47,.12);}
+table.ctable thead th{text-align:center;padding:9px 4px;letter-spacing:.3px;}
+table.ctable thead th.who{text-align:left;padding-left:12px;}
+table.ctable td.who{min-width:150px;}
+table.ctable tbody td{text-align:center;padding:6px 4px;}
+table.ctable tbody td.who{text-align:left;padding:8px 12px;}
+table.ctable th.gapl,table.ctable td.gapl{border-left:1px solid var(--border);}
+.colbtn{appearance:none;border:0;background:none;font:inherit;font-size:inherit;font-weight:inherit;letter-spacing:inherit;text-transform:inherit;color:inherit;cursor:pointer;padding:4px 4px;border-radius:6px;white-space:nowrap;}
+.colbtn:hover{background:#e7dfcb;}
+.colbtn i{font-size:.55rem;margin-left:3px;color:var(--gold2);}
+.cc{appearance:none;width:36px;height:36px;border:1px solid var(--border);border-radius:8px;font:inherit;font-size:.92rem;font-weight:700;cursor:pointer;font-variant-numeric:tabular-nums;padding:0;}
+.cc:hover{box-shadow:0 0 0 2px rgba(201,168,76,.55);}
+.cc.vgb-none{background:#fff;font-weight:400;}
+.cc[disabled]{cursor:not-allowed;opacity:.3;box-shadow:none;}
+tr.norec td.who{color:var(--muted);}
+.legend{color:var(--muted);font-size:.78rem;line-height:1.7;margin:12px 2px 0;}
+.legend b{color:var(--navy);}
+.legend .k{display:inline-block;min-width:20px;text-align:center;border-radius:5px;padding:0 5px;font-weight:700;border:1px solid transparent;margin-right:3px;}
+
+/* ── Boleta ── */
+td.comp{text-align:center;white-space:nowrap;}
+td.comp b{font-size:.95rem;font-variant-numeric:tabular-nums;}
+td.comp small{display:block;color:var(--muted);font-size:.66rem;}
+td.gcell{text-align:center;padding-left:5px!important;padding-right:5px!important;}
+.gin{width:58px;padding:7px 6px;border:1px solid var(--border);border-radius:8px;font:inherit;font-size:.86rem;text-align:center;background:#fff;color:var(--navy);}
+.gin.fin{border-color:#cdbb8f;background:#fdfaf2;font-weight:700;}
+.gin:focus{border-color:var(--gold);}
+.gin[disabled]{background:#f6f4ef;}
+td.fin{white-space:nowrap;}
+.gnum{font-family:'Inria Serif',serif;font-weight:700;font-size:1.35rem;line-height:1;font-variant-numeric:tabular-nums;}
+.gnum.pass{color:var(--ok);}
+.gnum.fail{color:var(--err);}
+.gst{display:block;font-size:.66rem;color:var(--muted);margin-top:2px;}
+.gst.pass{color:var(--ok);font-weight:700;}
+.gst.fail{color:var(--err);font-weight:700;}
+.risk{color:var(--err);margin-left:6px;font-size:.8rem;}
+.dbtn{appearance:none;border:1px solid var(--border);background:#fff;border-radius:8px;padding:6px 9px;font:inherit;font-size:.76rem;font-weight:600;cursor:pointer;color:var(--navy);white-space:nowrap;}
 .dbtn:hover{border-color:var(--gold);}
-.dbtn[disabled]{opacity:.5;cursor:not-allowed;}
-.dbtn i{color:var(--gold2);}
-.detailrow td{background:#fbf9f4;padding:0;border-bottom:1px solid #f0ece3;}
-.dbox{padding:14px 18px 18px;}
-.dbox h4{margin:0 0 4px;font-size:.78rem;letter-spacing:.6px;text-transform:uppercase;color:var(--muted);}
-.dbox .dnote{font-size:.74rem;color:var(--muted);margin:0 0 12px;line-height:1.5;}
-.dwrap{overflow-x:auto;}
-table.dgrid{width:auto;border-collapse:separate;border-spacing:3px;font-size:.72rem;}
-table.dgrid th{background:transparent;border:0;padding:2px 0;text-align:center;color:var(--muted);font-size:.62rem;min-width:26px;letter-spacing:0;}
-table.dgrid th.asp{text-align:left;padding-right:12px;font-size:.72rem;color:var(--navy);min-width:120px;white-space:nowrap;text-transform:none;letter-spacing:.2px;}
-table.dgrid th.dhead{cursor:pointer;border:1px solid transparent;border-radius:6px;padding:3px 0;min-width:26px;}
-table.dgrid th.dhead:hover{border-color:var(--gold);}
-table.dgrid th.dhead.on{background:#efe7d3;color:var(--navy);font-weight:800;border-color:#e0d2ad;}
-table.dgrid th.dhead.ro{cursor:default;}
-table.dgrid td.cell{width:26px;height:26px;min-width:26px;text-align:center;border:1px solid var(--border);border-radius:6px;background:#fff;cursor:pointer;padding:0;font-size:.78rem;color:#c9c2b4;user-select:-webkit-user-select;user-select:none;}
-table.dgrid td.cell:hover{border-color:var(--gold);}
-table.dgrid td.cell.on{background:#e7f4ec;border-color:#cfe9da;color:var(--ok);font-weight:800;}
-table.dgrid td.cell.off{background:#f7e7e7;border-color:#e2bcbc;color:var(--err);font-weight:800;}
-table.dgrid td.cell.idle{background:#f6f4ef;border-color:#efece4;color:#d3cdbf;cursor:default;}
-table.dgrid td.cell.idle:hover{border-color:#efece4;}
-table.dgrid td.cell.ro{cursor:default;}
-table.dgrid td.cell.ro:hover{border-color:var(--border);}
-table.dgrid td.cell.on.ro:hover{border-color:#cfe9da;}
-table.dgrid td.cell.off.ro:hover{border-color:#e2bcbc;}
+.dbtn i{color:var(--gold2);margin-left:5px;transition:transform .15s;}
+.dbtn[aria-expanded="true"] i{transform:rotate(180deg);}
+.detailrow td{background:#fbf9f4;padding:0!important;}
+.dbox{padding:16px 18px 20px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 28px;position:sticky;left:0;max-width:calc(100vw - 42px);}
+.dbox>.full{grid-column:1/-1;}
+.dbox h4{margin:0 0 8px;font-size:.72rem;letter-spacing:.7px;text-transform:uppercase;color:var(--muted);}
+.brow{display:grid;grid-template-columns:150px minmax(40px,1fr) 34px;align-items:center;gap:10px;font-size:.82rem;padding:4px 0;}
+.brow .bl small{color:var(--muted);margin-left:5px;font-size:.7rem;}
+.brow b{text-align:right;font-variant-numeric:tabular-nums;}
+.bar{height:8px;border-radius:5px;background:#ece7da;overflow:hidden;}
+.bar i{display:block;height:100%;border-radius:5px;background:var(--ok);}
+.bar i.mid{background:var(--gold2);}
+.bar i.low{background:var(--err);}
+.dnote{font-size:.76rem;color:var(--muted);line-height:1.55;margin:8px 0 0;}
+.dnote.alert{color:var(--err);font-weight:600;}
+.dnote button{border:0;background:none;padding:0;font:inherit;color:var(--gold2);text-decoration:underline;cursor:pointer;}
+textarea.notes{width:100%;min-height:66px;padding:9px 11px;border:1px solid var(--border);border-radius:8px;font:inherit;font-size:.85rem;resize:vertical;background:#fff;color:var(--navy);}
 
 #loading{padding:50px 20px;text-align:center;color:var(--muted);}
 #loading .spin{display:inline-block;width:28px;height:28px;border:3px solid rgba(138,47,59,.2);border-top-color:var(--accent);border-radius:50%;animation:sp .8s linear infinite;margin-bottom:12px;}
@@ -127,10 +181,13 @@ table.dgrid td.cell.off.ro:hover{border-color:#e2bcbc;}
 footer{background:var(--navy);color:rgba(255,255,255,.5);text-align:center;padding:24px;font-size:.78rem;border-top:3px solid var(--gold);position:sticky;top:100vh;}
 footer a{color:var(--gold);text-decoration:none;}
 :focus-visible{outline:3px solid var(--gold);outline-offset:2px}
-@media(max-width:640px){
-  .who small{font-size:.68rem}
-  thead th:nth-child(2),tbody td:nth-child(2){display:none}
-  .avg small{display:none}
+@media(max-width:720px){
+  .wrap{padding:22px 12px 60px;}
+  .dbox{grid-template-columns:minmax(0,1fr);max-width:calc(100vw - 26px);}
+  table.main td.who{min-width:128px;}
+  .cc{width:34px;height:34px;}
+  .tab{padding:10px 12px;font-size:.84rem;}
+  .classhead .when{display:block;margin:2px 0 0;}
 }
 </style>
 <link rel="stylesheet" href="assets/css/vesper_tokens.css">
@@ -152,12 +209,11 @@ footer a{color:var(--gold);text-decoration:none;}
 <div class="wrap">
   <div class="intro">
     <h1>Boleta de calificaciones</h1>
-    <p>Las columnas <b>Exámenes</b> y <b>Lecciones</b> son la <b>nota de
-       registro</b>: tú la confirmas. Debajo de cada casilla verás el promedio
-       de <i>práctica</i> del alumno (lo que sacó autocalificándose en la app) —
-       es solo una referencia y <b>no cuenta para la final</b> hasta que la
-       escribas aquí. Así la calificación depende de lo que el profesor valida,
-       no de lo que el alumno se pone a sí mismo.</p>
+    <p>En <b>Clase del día</b> pasas lista, marcas la tarea y calificas lo que
+       observaste. En <b>Boleta</b> capturas parciales y examen final. La
+       calificación se arma sola con lo que tú registras; la práctica del
+       alumno en la app es solo referencia y <b>no cuenta</b>.</p>
+    <p class="cycle" id="cycle"></p>
   </div>
 
   <div id="loading"><div class="spin"></div><div>Cargando boleta…</div></div>
@@ -165,26 +221,37 @@ footer a{color:var(--gold);text-decoration:none;}
   <div id="content" style="display:none">
     <div id="warn" class="notice" style="display:none"></div>
     <div class="stats" id="stats"></div>
+
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" id="tab-class" data-view="class" aria-controls="view-class"><i class="fas fa-user-check"></i>Clase del día</button>
+      <button class="tab" role="tab" id="tab-book" data-view="book" aria-controls="view-book"><i class="fas fa-clipboard-list"></i>Boleta</button>
+    </div>
+
     <div class="toolbar">
-      <input id="f-q" type="search" placeholder="Buscar alumno (nombre o alias)…">
-      <select id="f-group"><option value="">Todos mis grupos</option></select>
-      <select id="f-level"><option value="">Todos los niveles</option></select>
-      <select id="f-sort">
-        <option value="final">Ordenar: Final (mayor a menor)</option>
+      <input id="f-q" type="search" placeholder="Buscar alumno…" aria-label="Buscar alumno">
+      <select id="f-group" aria-label="Grupo"><option value="">Todos mis grupos</option></select>
+      <select id="f-level" aria-label="Nivel"><option value="">Todos los niveles</option></select>
+      <select id="f-sort" aria-label="Orden">
         <option value="name">Ordenar: Nombre (A–Z)</option>
-        <option value="level">Ordenar: Nivel (A1–C2)</option>
+        <option value="grade">Ordenar: Calificación (mayor a menor)</option>
+        <option value="risk">Ordenar: En riesgo primero</option>
       </select>
       <span class="spacer"></span>
-      <button id="f-reload"><i class="fas fa-rotate"></i> Actualizar</button>
+      <button class="btn" id="f-reload"><i class="fas fa-rotate"></i>Actualizar</button>
     </div>
-    <div class="tablecard">
-      <table>
-        <thead><tr>
-          <th>Alumno</th><th>Nivel</th><th>Exámenes</th><th>Lecciones</th><th>Diario</th><th>Participación</th><th>Final</th>
-        </tr></thead>
-        <tbody id="rows"></tbody>
-      </table>
-    </div>
+
+    <section id="view-class" role="tabpanel" aria-labelledby="tab-class">
+      <div class="daystrip" id="c-strip" role="group" aria-label="Clases del ciclo"></div>
+      <div class="classhead" id="c-head"></div>
+      <div class="brush" id="c-brush" role="group" aria-label="Nivel que se aplica al tocar una casilla"></div>
+      <div class="tablecard"><table class="main ctable" id="c-table"></table></div>
+      <p class="legend" id="c-legend"></p>
+    </section>
+
+    <section id="view-book" role="tabpanel" aria-labelledby="tab-book" style="display:none">
+      <div class="tablecard"><table class="main btable" id="b-table"></table></div>
+      <p class="legend" id="b-legend"></p>
+    </section>
   </div>
 
   <div id="msg" style="display:none"></div>
@@ -196,47 +263,55 @@ footer a{color:var(--gold);text-decoration:none;}
 
 <script src="vesper_path.js"></script>
 <script src="vesper_results.js"></script>
-<script src="vesper_gradebook.js"></script>
+<script src="vesper_gradebook.js?v=20261111"></script>
 <script>
 (function () {
   "use strict";
   document.getElementById("y").textContent = new Date().getFullYear();
 
-  var loadingEl = document.getElementById("loading");
-  var contentEl = document.getElementById("content");
-  var msgEl = document.getElementById("msg");
-  var warnEl = document.getElementById("warn");
-  var rowsEl = document.getElementById("rows");
-  var statsEl = document.getElementById("stats");
-  var fQ = document.getElementById("f-q");
-  var fGroup = document.getElementById("f-group");
-  var fLevel = document.getElementById("f-level");
-  var fSort = document.getElementById("f-sort");
-
   var GB = window.VESPER_GRADEBOOK;
+  GB.injectCss();
+
+  function $(id) { return document.getElementById(id); }
+  var loadingEl = $("loading"), contentEl = $("content"), msgEl = $("msg"), warnEl = $("warn");
+  var statsEl = $("stats"), fQ = $("f-q"), fGroup = $("f-group"), fLevel = $("f-level"), fSort = $("f-sort");
+  var viewClass = $("view-class"), viewBook = $("view-book");
+  var cStrip = $("c-strip"), cHead = $("c-head"), cBrush = $("c-brush"), cTable = $("c-table");
+  var bTable = $("b-table");
+
+  var DATES = GB.classDates();
+  var CLOCK = GB.courseClock();
+  var N = GB.COURSE_DAYS;
+
   var roster = [];          // filas de GB.buildRoster
-  var canSave = false;      // false mientras la regla de gradebook no responda
-  var dailyMap = {};        // sid -> { sid, alias, studentUid, days }
-  var canDaily = false;     // false mientras la regla de daily_progress no responda
-  var openDaily = {};       // key -> true (rúbricas expandidas, sobrevive al re-render)
+  var dailyMap = {};        // sid -> { sid, days }
+  var canSave = false;      // false si gradebook no respondió (regla sin publicar)
+  var canDaily = false;     // idem daily_progress
+  var view = (CLOCK.started && !CLOCK.ended) ? "class" : "book";
+  var selDay = Math.max(1, CLOCK.day);   // clase seleccionada en "Clase del día"
+  var brush = 3;            // nivel que se aplica al tocar una casilla (0 = borrar)
+  var openDetail = {};      // key -> true (detalles abiertos en la boleta)
 
   function esc(t) {
     return ("" + (t == null ? "" : t)).replace(/[&<>"]/g, function (c) {
       return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
     });
   }
+  function q(root, sel) { return root.querySelector(sel); }
+  function byKey(root, attr, key) { return root.querySelector("[" + attr + '="' + CSS.escape(key) + '"]'); }
 
   /* filtro de nivel con los 6 CEFR canónicos */
-  (window.VESPER_PATH ? VESPER_PATH.LEVELS : ["A1","A2","B1","B2","C1","C2"]).forEach(function (lv) {
+  (window.VESPER_PATH ? VESPER_PATH.LEVELS : ["A1", "A2", "B1", "B2", "C1", "C2"]).forEach(function (lv) {
     var o = document.createElement("option");
     o.value = lv; o.textContent = lv;
     fLevel.appendChild(o);
   });
-  function normLevel(lv) {
-    return (window.VESPER_PATH && lv) ? VESPER_PATH.normLevel(lv) : (lv || "");
-  }
-  function levelColor(lv) {
-    return window.VESPER_PATH ? VESPER_PATH.levelColor(lv) : "#a8843d";
+  function normLevel(lv) { return (window.VESPER_PATH && lv) ? VESPER_PATH.normLevel(lv) : (lv || ""); }
+  function levelColor(lv) { return window.VESPER_PATH ? VESPER_PATH.levelColor(lv) : "#a8843d"; }
+  function levelHtml(r) {
+    if (r.levelName) return '<span class="lvl" style="color:var(--gold2)">' + esc(r.levelName) + '</span>';
+    var lvN = normLevel(r.level);
+    return lvN ? '<span class="lvl" style="color:' + levelColor(lvN) + '">' + esc(lvN) + '</span>' : '';
   }
 
   function showMsg(html, bad) {
@@ -247,430 +322,595 @@ footer a{color:var(--gold);text-decoration:none;}
     msgEl.innerHTML = html;
   }
 
-  function renderStats() {
-    var finals = [];
-    roster.forEach(function (r) {
-      var f = GB.computeFinal(r).final;
-      if (f != null) finals.push(f);
-    });
-    var avg = finals.length
-      ? Math.round(finals.reduce(function (a, b) { return a + b; }, 0) / finals.length) : 0;
-    var passed = finals.filter(function (f) { return f >= GB.PASS_THRESHOLD; }).length;
-    statsEl.innerHTML =
-      '<div class="stat"><b>' + roster.length + '</b><span>Alumnos</span></div>' +
-      '<div class="stat"><b>' + (finals.length ? avg : "—") + '</b><span>Promedio general</span></div>' +
-      '<div class="stat"><b>' + passed + '</b><span>Aprobados (≥' + GB.PASS_THRESHOLD + ')</span></div>';
-  }
-
-  function avgCell(avg, count, unit) {
-    if (avg == null) return '<span class="na">—</span>';
-    return '<span class="avg">' + avg + '%<small>' + count + ' ' + unit + (count === 1 ? "" : "s") + '</small></span>';
-  }
-
-  /* casilla de nota de registro (Exámenes / Lecciones): input editable por el
-     profesor + el promedio de PRÁCTICA del alumno como referencia y un enlace
-     "usar" para copiarlo con un clic. kind = "exams" | "lessons". */
-  function gradeCell(kind, row) {
-    var grade = kind === "exams" ? row.examsGrade : row.lessonsGrade;
-    var prac = kind === "exams" ? row.examsAvg : row.lessonsAvg;
-    var editable = canSave && row.sid;
-    var pracTxt = (prac == null)
-      ? 'sin práctica'
-      : 'práctica ' + prac + '%' +
-        (editable ? ' <button type="button" class="use-prac" data-gk="' + esc(row.key) +
-                    '" data-gkind="' + kind + '" data-prac="' + prac +
-                    '" title="Usar el promedio de práctica como nota">usar</button>' : '');
-    return '<td class="grade">' +
-      '<span class="row1">' +
-        '<input type="number" min="0" max="100" inputmode="numeric" ' +
-          'value="' + (grade == null ? "" : grade) + '" ' +
-          'placeholder="' + (prac == null ? "—" : prac) + '" ' +
-          'aria-label="' + (kind === "exams" ? "Calificación de exámenes de " : "Calificación de lecciones de ") + esc(row.name) + '" ' +
-          (editable ? '' : 'disabled title="' +
-            (row.sid ? 'Publica la regla de gradebook para poder guardar' :
-                       'Intento antiguo sin registro: no se puede calificar') + '" ') +
-          'data-gk="' + esc(row.key) + '" data-gkind="' + kind + '">' +
-        '<span class="sv" data-gsv="' + kind + ':' + esc(row.key) + '"></span>' +
-      '</span>' +
-      '<small class="prac">' + pracTxt + '</small>' +
-    '</td>';
-  }
-
-  function finalCell(row) {
-    var f = GB.computeFinal(row);
-    if (f.final == null) return '<span class="na">—</span>';
-    return '<span class="final ' + (f.passed ? "pass" : "fail") + '">' + f.final + '</span>';
-  }
-
-  function sortRows(rows) {
-    var mode = fSort.value;
-    var LV = window.VESPER_PATH ? VESPER_PATH.LEVELS : ["A1","A2","B1","B2","C1","C2"];
-    rows.sort(function (a, b) {
-      if (mode === "name") {
-        return a.name.localeCompare(b.name, "es") || a.key.localeCompare(b.key);
-      }
-      if (mode === "level") {
-        var ia = LV.indexOf(normLevel(a.level)), ib = LV.indexOf(normLevel(b.level));
-        if (ia === -1) ia = 99; if (ib === -1) ib = 99;
-        return (ia - ib) || a.name.localeCompare(b.name, "es");
-      }
-      var fa = GB.computeFinal(a).final, fb = GB.computeFinal(b).final;
-      if (fa == null && fb == null) return a.name.localeCompare(b.name, "es");
-      if (fa == null) return 1;
-      if (fb == null) return -1;
-      return fb - fa;
-    });
-    return rows;
-  }
-
-  /* Nivel a mostrar: el NOMBRE del registro (Principiante…Experto) manda;
-     si no hay, la sigla de los intentos como respaldo. */
-  function levelHtml(r) {
-    if (r.levelName) {
-      return '<span class="lvl" style="color:var(--gold2)">' + esc(r.levelName) + '</span>';
-    }
-    var lvN = normLevel(r.level);
-    return lvN
-      ? '<span class="lvl" style="color:' + levelColor(lvN) + '">' + esc(lvN) + '</span>'
-      : '<span class="na">—</span>';
-  }
-
-  function render() {
-    var q = fQ.value.trim().toLowerCase();
-    var lv = fLevel.value;
-    var gr = fGroup.value;
-    var rows = roster.filter(function (r) {
-      if (gr && r.group !== gr) return false;
-      if (lv && normLevel(r.level) !== lv && r.levelName !== lv) return false;
-      if (q && (r.name + " " + r.alias).toLowerCase().indexOf(q) === -1) return false;
-      return true;
-    });
-    sortRows(rows);
-
-    if (!rows.length) {
-      rowsEl.innerHTML = '<tr><td colspan="7" class="empty">' +
-        (roster.length ? 'No hay alumnos que coincidan.' :
-         'Aún no tienes alumnos asignados. Pide al administrador que registre a tus ' +
-         'alumnos con un grupo y te asigne ese grupo (set-teacher-groups).') +
-        '</td></tr>';
-      return;
-    }
-
-    var html = "";
-    rows.forEach(function (r) {
-      var rec = r.sid ? dailyMap[r.sid] : null;
-      var st = GB.dailyStats(rec ? rec.days : {});
-      var sub = [];
-      if (r.alias && r.alias !== r.name) sub.push(r.alias);
-      if (r.group) sub.push("grupo " + r.group);
-      html +=
-        '<tr data-key="' + esc(r.key) + '">' +
-          '<td class="who"><b>' + esc(r.name) + '</b>' +
-            (sub.length ? '<small>' + esc(sub.join(" · ")) + '</small>' : '') + '</td>' +
-          '<td>' + levelHtml(r) + '</td>' +
-          gradeCell("exams", r) +
-          gradeCell("lessons", r) +
-          '<td class="daily"><button class="dbtn" data-dk="' + esc(r.key) + '" ' +
-            'aria-label="Progreso diario de ' + esc(r.name) + '">' +
-            '<i class="fas fa-calendar-days"></i> <span data-dcount="' + esc(r.key) + '">' +
-            st.daysTouched + '/' + GB.COURSE_DAYS + '</span></button></td>' +
-          '<td class="part">' +
-            '<input type="number" min="0" max="100" inputmode="numeric" ' +
-              'value="' + (r.participacion == null ? "" : r.participacion) + '" ' +
-              'aria-label="Participación de ' + esc(r.name) + '" ' +
-              (canSave && r.sid ? '' : 'disabled title="' +
-                (r.sid ? 'Publica la regla de gradebook para poder guardar' :
-                         'Intento antiguo sin registro: no se puede calificar') + '" ') +
-              'data-key="' + esc(r.key) + '">' +
-            '<span class="sv" data-sv="' + esc(r.key) + '"></span>' +
-          '</td>' +
-          '<td class="fin" data-fin="' + esc(r.key) + '">' + finalCell(r) + '</td>' +
-        '</tr>' +
-        '<tr class="detailrow" data-d="' + esc(r.key) + '"' +
-          (openDaily[r.key] ? '' : ' style="display:none"') + '><td colspan="7">' +
-          (openDaily[r.key] ? dailyBoxHtml(r) : '') + '</td></tr>';
-    });
-    rowsEl.innerHTML = html;
-  }
-
-  /* --- rúbrica diaria: cuadrícula 20 días × aspectos --- */
-  function dailyEditable(r) { return canDaily && !!r.sid; }
-
-  function dailyBoxHtml(r) {
-    var rec = (r.sid && dailyMap[r.sid]) || { days: {} };
-    var editable = dailyEditable(r);
-    // encabezado: cada número de día se puede activar (hubo clase)
-    var head = '<tr><th class="asp"></th>';
-    for (var d = 1; d <= GB.COURSE_DAYS; d++) {
-      var held = !!rec.days[d];
-      head += '<th class="dhead' + (held ? ' on' : '') + (editable ? '' : ' ro') +
-              '" data-dh="' + esc(r.key) + '" data-day="' + d + '"' +
-              (editable ? ' role="button" tabindex="0"' : '') +
-              ' title="' + (held ? 'Día con clase — toca para quitar' : 'Toca si hubo clase') + '">' + d + '</th>';
-    }
-    head += '</tr>';
-    var body = GB.DAILY_ASPECTS.map(function (a) {
-      var cells = '';
-      for (var d = 1; d <= GB.COURSE_DAYS; d++) {
-        var held = !!rec.days[d];
-        var tache = held && (rec.days[d][a.key] === false);
-        var cls, txt, active = editable && held;
-        if (!held) { cls = 'idle'; txt = '·'; }
-        else if (tache) { cls = 'off'; txt = '✗'; }
-        else { cls = 'on'; txt = '✓'; }
-        cells += '<td class="cell ' + cls + (active ? '' : ' ro') + '" data-ck="' + esc(r.key) +
-                 '" data-day="' + d + '" data-asp="' + a.key + '"' +
-                 (active ? ' role="button" tabindex="0"' : '') +
-                 ' aria-label="' + esc(a.label) + ' día ' + d + '">' + txt + '</td>';
-      }
-      return '<tr><th class="asp">' + esc(a.label) + '</th>' + cells + '</tr>';
-    }).join('');
-    var note = editable
-      ? 'Toca el <b>número del día</b> si hubo clase: todo arranca en ✓ (bueno). Luego toca una ' +
-        'casilla para marcar <b>✗ (tache)</b> donde el alumno falló — cada tache baja puntos. El ' +
-        'promedio se vuelve la <b>Participación</b> del alumno al instante.'
-      : (r.sid
-          ? 'Solo lectura: publica la regla de Firestore para <code>daily_progress</code> ' +
-            '(ver <b>FIRESTORE_GRADEBOOK_RULES.md</b>) para poder capturar.'
-          : 'Intento antiguo sin registro: no se puede guardar la rúbrica de este alumno.');
-    return '<div class="dbox"><h4>Progreso diario — curso de ' + GB.COURSE_DAYS + ' días</h4>' +
-           '<p class="dnote">' + note + '</p>' +
-           '<div class="dwrap"><table class="dgrid"><thead>' + head + '</thead><tbody>' +
-           body + '</tbody></table></div></div>';
-  }
-
-  function refreshDailyCount(r) {
-    var rec = (r.sid && dailyMap[r.sid]) || { days: {} };
-    var st = GB.dailyStats(rec.days);
-    var el = rowsEl.querySelector('[data-dcount="' + CSS.escape(r.key) + '"]');
-    if (el) el.textContent = st.daysTouched + '/' + GB.COURSE_DAYS;
-    return st;
-  }
-
+  /* ---------- datos derivados ---------- */
   function rowByKey(key) {
     for (var i = 0; i < roster.length; i++) if (roster[i].key === key) return roster[i];
     return null;
   }
+  function daysOf(r) { return (r.sid && dailyMap[r.sid] && dailyMap[r.sid].days) || {}; }
+  function statsOf(r) { return GB.dailyStats(daysOf(r)); }
+  function gradeOf(r) { return GB.computeGrade(r, statsOf(r)); }
 
-  /* --- guardado automático de Participación (debounce por alumno) --- */
-  var timers = {};
-  function setSv(key, html) {
-    var el = rowsEl.querySelector('.sv[data-sv="' + CSS.escape(key) + '"]');
-    if (el) el.innerHTML = html;
+  /* filas visibles. useSearch=false: solo grupo y nivel (para las cifras de arriba) */
+  function scoped(useSearch) {
+    var qv = useSearch ? fQ.value.trim().toLowerCase() : "", lv = fLevel.value, gr = fGroup.value;
+    return roster.filter(function (r) {
+      if (gr && r.group !== gr) return false;
+      if (lv && normLevel(r.level) !== lv && r.levelName !== lv) return false;
+      if (qv && (r.name + " " + r.alias).toLowerCase().indexOf(qv) === -1) return false;
+      return true;
+    });
   }
-  function refreshFinal(key) {
-    var r = rowByKey(key);
-    var el = rowsEl.querySelector('.fin[data-fin="' + CSS.escape(key) + '"]');
-    if (r && el) el.innerHTML = finalCell(r);
+  function byName(a, b) { return a.name.localeCompare(b.name, "es") || a.key.localeCompare(b.key); }
+
+  /* ---------- cabecera: ciclo y cifras ---------- */
+  function renderCycle() {
+    var txt = "Ciclo del " + GB.fmtDay(CLOCK.start) + " al " + GB.fmtDay(CLOCK.end) + " · " + N + " clases. ";
+    if (!CLOCK.started) {
+      var ms = new Date(CLOCK.start + "T00:00:00") - new Date(CLOCK.today + "T00:00:00");
+      var left = Math.round(ms / 86400000);
+      txt += "El curso inicia en " + left + " día" + (left === 1 ? "" : "s") + ".";
+    } else if (CLOCK.ended) {
+      txt += "El ciclo ya terminó.";
+    } else if (CLOCK.isClassDay) {
+      txt += "Hoy es la clase " + CLOCK.day + ".";
+    } else {
+      txt += "Hoy no hay clase (la última fue la " + CLOCK.day + ").";
+    }
+    $("cycle").innerHTML = '<i class="fas fa-calendar-day"></i>' + esc(txt);
+  }
+
+  function renderStats() {
+    var rows = scoped(false), gsum = 0, gn = 0, asum = 0, an = 0, risk = 0, closed = 0, passed = 0;
+    rows.forEach(function (r) {
+      var st = statsOf(r), g = GB.computeGrade(r, st);
+      if (g.grade != null) { gsum += g.grade; gn++; }
+      if (st.att.pct != null) { asum += st.att.pct; an++; }
+      if (g.atRisk) risk++;
+      if (g.closed) { closed++; if (g.passed) passed++; }
+    });
+    statsEl.innerHTML =
+      '<div class="stat"><b>' + rows.length + '</b><span>Alumnos</span></div>' +
+      '<div class="stat"><b>' + (gn ? Math.round(gsum / gn) : "—") + '</b><span>Promedio del grupo</span></div>' +
+      '<div class="stat"><b>' + (an ? Math.round(asum / an) + "%" : "—") + '</b><span>Asistencia</span></div>' +
+      '<div class="stat' + (risk ? " alert" : "") + '"><b>' + risk + '</b><span>En riesgo</span></div>' +
+      (closed ? '<div class="stat"><b>' + passed + '/' + closed + '</b><span>Aprobados (≥' + GB.PASS_THRESHOLD + ')</span></div>' : '');
+  }
+
+  /* ============================================================
+     CLASE DEL DÍA: pase de lista, tarea y rúbrica de una clase
+     ============================================================ */
+  function classRows() {
+    return scoped(true).filter(function (r) { return !!r.sid; }).sort(byName);
+  }
+  function cellOf(r) { return daysOf(r)[selDay] || null; }
+  function ensureCell(r) {
+    var rec = dailyMap[r.sid];
+    if (!rec) rec = dailyMap[r.sid] = { sid: r.sid, days: {} };
+    if (!rec.days[selDay]) rec.days[selDay] = { att: "P", r: {} };
+    return rec.days[selDay];
+  }
+  function isAbsent(cell) { return !!cell && (cell.att === "F" || cell.att === "J"); }
+
+  function renderStrip() {
+    var rows = classRows(), html = "";
+    for (var d = 1; d <= N; d++) {
+      var have = 0;
+      rows.forEach(function (r) { if (daysOf(r)[d]) have++; });
+      var cls = "day";
+      if (d > 1 && (d - 1) % 5 === 0) cls += " wk";
+      if (have) cls += (have < rows.length) ? " has part" : " has";
+      if (DATES[d - 1] === CLOCK.today) cls += " today";
+      if (DATES[d - 1] > CLOCK.today) cls += " future";
+      if (d === selDay) cls += " sel";
+      var f = GB.fmtDay(DATES[d - 1]).split(" ");
+      html += '<button type="button" class="' + cls + '" data-day="' + d + '"' +
+        (d === selDay ? ' aria-current="true"' : '') +
+        ' title="Clase ' + d + " · " + GB.fmtDay(DATES[d - 1]) +
+        (have ? " · lista de " + have + " de " + rows.length : " · sin capturar") + '">' +
+        '<b>' + d + '</b><small>' + f[0] + " " + f[1] + '</small></button>';
+    }
+    cStrip.innerHTML = html;
+  }
+
+  function renderClassHead() {
+    var rows = classRows(), have = 0;
+    rows.forEach(function (r) { if (cellOf(r)) have++; });
+    var date = DATES[selDay - 1], chip = "";
+    if (date === CLOCK.today) chip = '<span class="chip now">Hoy</span>';
+    else if (date > CLOCK.today) chip = '<span class="chip warn">Clase futura</span>';
+    if (!have) chip += '<span class="chip">Sin capturar</span>';
+    var missing = rows.length - have;
+    cHead.innerHTML =
+      '<div><h2>Clase ' + selDay + '</h2><span class="when">' + esc(GB.fmtDay(date)) + '</span>' + chip + '</div>' +
+      '<div class="acts">' +
+        (missing && canDaily ? '<button type="button" class="btn primary" data-act="roll"><i class="fas fa-user-check"></i>' +
+          (have ? "Agregar a los " + missing + " que faltan" : "Pasar lista: todos presentes") + '</button>' : '') +
+        (have && canDaily ? '<button type="button" class="btn ghost" data-act="dropday"><i class="fas fa-trash-can"></i>Quitar esta clase</button>' : '') +
+      '</div>';
+  }
+
+  function renderBrush() {
+    var html = '<span>Nivel a aplicar:</span>';
+    [4, 3, 2, 1].forEach(function (lv) {
+      var m = GB.levelMark(lv);
+      html += '<button type="button" class="bl vgb-' + m.tone + '" data-brush="' + lv + '" aria-pressed="' +
+              (brush === lv) + '">' + lv + " " + esc(m.label) + '</button>';
+    });
+    html += '<button type="button" class="bl erase" data-brush="0" aria-pressed="' + (brush === 0) + '">Borrar</button>';
+    cBrush.innerHTML = html;
+  }
+
+  function svHtml(state) {
+    if (state === "saving") return '<i class="fas fa-spinner" title="Guardando…"></i>';
+    if (state === "ok") return '<i class="fas fa-circle-check" title="Guardado"></i>';
+    if (state === "err") return '<i class="fas fa-circle-exclamation" title="No se pudo guardar. Revisa tu conexión o las reglas de Firestore; se reintenta con tu siguiente cambio."></i>';
+    return "";
+  }
+
+  function classRowHtml(r) {
+    var cell = cellOf(r), absent = isAbsent(cell), off = canDaily ? "" : " disabled";
+    var am = cell ? GB.attMark(cell.att) : { mark: "·", tone: "none", label: "Sin pasar lista" };
+    var hm = GB.hwMark(cell ? cell.hw : null);
+    var html = '<tr data-key="' + esc(r.key) + '"' + (cell ? '' : ' class="norec"') + '>' +
+      '<td class="who"><b>' + esc(r.name) + '</b>' + (r.group ? '<small>grupo ' + esc(r.group) + '</small>' : '') + '</td>' +
+      '<td><button type="button" class="cc vgb-' + am.tone + '" data-act="att"' + off +
+        ' aria-label="Asistencia de ' + esc(r.name) + ": " + esc(am.label) + '" title="' + esc(am.label) + '">' + am.mark + '</button></td>' +
+      '<td><button type="button" class="cc vgb-' + hm.tone + '" data-act="hw"' + off +
+        ' aria-label="Tarea de ' + esc(r.name) + ": " + esc(hm.label) + '" title="' + esc(hm.label) + '">' + hm.mark + '</button></td>';
+    GB.CRITERIA.forEach(function (c, i) {
+      var m = GB.levelMark(cell && cell.r ? cell.r[c.key] : null);
+      html += '<td' + (i === 0 ? ' class="gapl"' : '') + '><button type="button" class="cc vgb-' + m.tone + '" data-act="lv" data-c="' + c.key + '"' +
+        ((absent || !canDaily) ? " disabled" : "") +
+        ' aria-label="' + esc(c.label) + " de " + esc(r.name) + ": " + esc(absent ? "no asistió" : m.label) +
+        '" title="' + esc(c.label + ": " + (absent ? "no asistió" : m.label)) + '">' + m.mark + '</button></td>';
+    });
+    return html + '<td><span class="sv" data-sv="' + esc(r.key) + '">' + svHtml(dState[r.key]) + '</span></td></tr>';
+  }
+
+  function renderClassTable() {
+    var rows = classRows();
+    var head = '<thead><tr><th class="who">Alumno</th><th>Asistencia</th>' +
+      '<th><button type="button" class="colbtn" data-act="hwall" title="Marcar entregada a todos los que no tienen marca">Tarea<i class="fas fa-angles-down"></i></button></th>';
+    GB.CRITERIA.forEach(function (c, i) {
+      head += '<th' + (i === 0 ? ' class="gapl"' : '') + '><button type="button" class="colbtn" data-act="fill" data-c="' + c.key +
+        '" title="' + esc(c.hint) + '. Toca para aplicar el nivel elegido a los presentes sin calificar.">' +
+        esc(c.label) + '<i class="fas fa-angles-down"></i></button></th>';
+    });
+    head += '<th></th></tr></thead>';
+    var body = rows.length ? rows.map(classRowHtml).join("")
+      : '<tr><td colspan="' + (4 + GB.CRITERIA.length) + '" class="empty">' +
+        (roster.length ? 'No hay alumnos que coincidan.' :
+          'Aún no tienes alumnos asignados. Pide al administrador que registre a tus alumnos con un grupo y te asigne ese grupo.') +
+        '</td></tr>';
+    cTable.innerHTML = head + '<tbody>' + body + '</tbody>';
+  }
+
+  function renderClass() {
+    renderStrip(); renderClassHead(); renderBrush(); renderClassTable();
+    $("c-legend").innerHTML =
+      '<b>Asistencia</b> (toca para cambiar): ' +
+      GB.ATT_ORDER.map(function (a) { var m = GB.attMark(a); return '<span class="k vgb-' + m.tone + '">' + m.mark + '</span>' + m.label; }).join(" · ") +
+      '. Un retardo vale media asistencia; la justificada no cuenta.<br>' +
+      '<b>Tarea</b>: ' + [2, 1, 0].map(function (h) { var m = GB.hwMark(h); return '<span class="k vgb-' + m.tone + '">' + m.mark + '</span>' + m.label; }).join(" · ") +
+      ' · sin marca = no hubo tarea.<br>' +
+      '<b>Rúbrica</b>: elige un nivel arriba y toca las casillas; toca el nombre de la columna para aplicarlo a todos los presentes sin calificar. ' +
+      'Solo califica lo que observaste: lo que dejes vacío no cuenta, ni a favor ni en contra.';
+  }
+
+  /* re-pinta solo la fila tocada (conserva el foco del teclado) + lo que depende */
+  function touched(r, act, c) {
+    var tr = byKey(cTable, "data-key", r.key);
+    if (tr) {
+      var hadFocus = tr.contains(document.activeElement);
+      tr.outerHTML = classRowHtml(r);
+      if (hadFocus) {
+        tr = byKey(cTable, "data-key", r.key);
+        var b = tr && q(tr, '[data-act="' + act + '"]' + (c ? '[data-c="' + c + '"]' : ''));
+        if (b && !b.disabled) b.focus();
+      }
+    }
+    queueDaily(r);
+  }
+  function afterDaily() { renderStrip(); renderClassHead(); renderStats(); }
+
+  cStrip.addEventListener("click", function (e) {
+    var b = e.target.closest(".day");
+    if (!b) return;
+    selDay = parseInt(b.getAttribute("data-day"), 10);
+    renderClass();
+    var cur = q(cStrip, ".day.sel");
+    if (cur) cur.focus();
+  });
+
+  cBrush.addEventListener("click", function (e) {
+    var b = e.target.closest("[data-brush]");
+    if (!b) return;
+    brush = parseInt(b.getAttribute("data-brush"), 10);
+    renderBrush();
+    var cur = q(cBrush, '[data-brush="' + brush + '"]');
+    if (cur) cur.focus();
+  });
+
+  cHead.addEventListener("click", function (e) {
+    var b = e.target.closest("[data-act]");
+    if (!b || !canDaily) return;
+    var act = b.getAttribute("data-act"), rows = classRows();
+    if (act === "roll") {
+      rows.forEach(function (r) { if (!cellOf(r)) { ensureCell(r); queueDaily(r); } });
+    } else if (act === "dropday") {
+      var withData = rows.filter(function (r) { return !!cellOf(r); });
+      if (!window.confirm("¿Quitar la clase " + selDay + " (" + GB.fmtDay(DATES[selDay - 1]) + ") de " + withData.length +
+          " alumno" + (withData.length === 1 ? "" : "s") + "? Se borra su asistencia, tarea y rúbrica de ese día.")) return;
+      withData.forEach(function (r) { delete dailyMap[r.sid].days[selDay]; queueDaily(r); });
+    }
+    renderClassTable(); afterDaily();
+  });
+
+  cTable.addEventListener("click", function (e) {
+    var b = e.target.closest("[data-act]");
+    if (!b || !canDaily || b.disabled) return;
+    var act = b.getAttribute("data-act"), c = b.getAttribute("data-c");
+
+    /* acciones de columna: solo llenan huecos, nunca pisan lo ya calificado */
+    if (act === "fill" || act === "hwall") {
+      var changed = 0;
+      classRows().forEach(function (r) {
+        var cell = cellOf(r);
+        if (!cell) return;
+        if (act === "hwall") {
+          if (cell.hw == null) { cell.hw = 2; changed++; queueDaily(r); }
+        } else if (brush && !isAbsent(cell) && !(cell.r && cell.r[c])) {
+          if (!cell.r) cell.r = {};
+          cell.r[c] = brush; changed++; queueDaily(r);
+        }
+      });
+      if (changed) { renderClassTable(); afterDaily(); }
+      return;
+    }
+
+    var tr = b.closest("tr[data-key]"), r = tr && rowByKey(tr.getAttribute("data-key"));
+    if (!r || !r.sid) return;
+    var isNew = !cellOf(r), cell = ensureCell(r);
+    if (act === "att") {
+      if (!isNew) cell.att = GB.ATT_ORDER[(GB.ATT_ORDER.indexOf(cell.att) + 1) % GB.ATT_ORDER.length];
+    } else if (act === "hw") {
+      if (cell.hw == null) cell.hw = 2;
+      else if (cell.hw > 0) cell.hw--;
+      else delete cell.hw;
+    } else if (act === "lv") {
+      if (!cell.r) cell.r = {};
+      if (!brush || cell.r[c] === brush) delete cell.r[c];
+      else cell.r[c] = brush;
+    }
+    touched(r, act, c);
+    afterDaily();
+  });
+
+  /* guardado del registro diario: un PATCH por alumno, con espera corta */
+  var dTimers = {}, dState = {};
+  function paintSv(key) {
+    var el = byKey(cTable, "data-sv", key);
+    if (el) el.innerHTML = svHtml(dState[key]);
+  }
+  function queueDaily(r) {
+    dState[r.key] = "saving"; paintSv(r.key);
+    clearTimeout(dTimers[r.key]);
+    dTimers[r.key] = setTimeout(function () { flushDaily(r); }, 700);
+  }
+  function flushDaily(r) {
+    clearTimeout(dTimers[r.key]); delete dTimers[r.key];
+    var rec = dailyMap[r.sid];
+    if (!rec) return;
+    var snap = JSON.stringify(rec.days);
+    GB.saveDaily(r.sid, { days: rec.days, alias: r.alias, studentUid: r.studentUid }).then(function (ok) {
+      if (JSON.stringify(rec.days) !== snap) return;   // hubo más cambios: los guarda su propio turno
+      dState[r.key] = ok ? "ok" : "err"; paintSv(r.key);
+    });
+  }
+
+  /* ============================================================
+     BOLETA: componentes, parciales, examen final y calificación
+     ============================================================ */
+  function bookRows() {
+    var rows = scoped(true), mode = fSort.value;
+    if (mode === "name") return rows.sort(byName);
+    var g = {};
+    rows.forEach(function (r) { g[r.key] = gradeOf(r); });
+    return rows.sort(function (a, b) {
+      if (mode === "risk" && g[a.key].atRisk !== g[b.key].atRisk) return g[a.key].atRisk ? -1 : 1;
+      var fa = g[a.key].grade, fb = g[b.key].grade;
+      if (fa == null && fb == null) return byName(a, b);
+      if (fa == null) return 1;
+      if (fb == null) return -1;
+      return (mode === "risk" ? fa - fb : fb - fa) || byName(a, b);
+    });
+  }
+
+  function partOf(g, key) {
+    for (var i = 0; i < g.parts.length; i++) if (g.parts[i].key === key) return g.parts[i];
+    return null;
+  }
+  function plural(n, one, many) { return n + " " + (n === 1 ? one : many); }
+
+  function compCell(g, key, sub) {
+    var p = partOf(g, key);
+    if (p.value == null) return '<td class="comp"><span class="na">—</span></td>';
+    return '<td class="comp"><b>' + p.value + '</b>' +
+      '<small>' + (p.legacy ? 'captura anterior' : esc(sub)) + '</small></td>';
+  }
+
+  function gradeCellHtml(g) {
+    if (g.grade == null) return '<span class="na">Sin datos</span>';
+    var st = g.status === "open"
+      ? '<small class="gst">Avance · ' + g.coverage + '% evaluado</small>'
+      : '<small class="gst ' + g.status + '">' + (g.passed ? "Aprobado" : "Reprobado") + '</small>';
+    /* notas del modelo anterior que siguen contando: que no pasen inadvertidas */
+    var old = g.parts.filter(function (p) { return p.legacy; }).map(function (p) { return p.label + " " + p.value; });
+    if (old.length) st += '<small class="gst" title="' + esc(old.join(" · ")) + '">incluye captura anterior</small>';
+    return '<span class="gnum ' + (g.status === "open" ? "" : g.status) + '">' + g.grade + '</span>' +
+      (g.alerts.length ? '<i class="fas fa-triangle-exclamation risk" title="' + esc(g.alerts.join(" · ")) + '"></i>' : '') + st;
+  }
+
+  function ginHtml(r, f, label) {
+    var editable = canSave && r.sid;
+    return '<td class="gcell"><input class="gin' + (f === "finalExam" ? " fin" : "") + '" type="number" min="0" max="100" inputmode="numeric" ' +
+      'value="' + (r[f] == null ? "" : r[f]) + '" placeholder="—" data-key="' + esc(r.key) + '" data-f="' + f + '" ' +
+      'aria-label="' + esc(label + " de " + r.name) + '"' +
+      (editable ? '' : ' disabled title="' + (r.sid ? 'Sin permiso de escritura en gradebook' : 'Intento antiguo sin registro: no se puede calificar') + '"') + '></td>';
+  }
+
+  function barHtml(v) {
+    return '<span class="bar"><i class="' + (v >= 85 ? "" : v >= GB.PASS_THRESHOLD ? "mid" : "low") +
+      '" style="width:' + Math.max(2, v) + '%"></i></span>';
+  }
+
+  /* desglose: qué aporta cada componente y qué falta */
+  function breakdownHtml(r, st, g) {
+    var html = '<h4>Cómo se arma la calificación</h4>', missing = [];
+    g.parts.forEach(function (p) {
+      if (p.value == null) missing.push(p.label);
+      html += '<div class="brow"><span class="bl">' + esc(p.label) + '<small>' + Math.round(p.weight * 100) + '%' +
+        (p.legacy ? ' · anterior' : '') + '</small></span>' +
+        (p.value == null ? '<span class="bar"></span><b class="na">—</b>' : barHtml(p.value) + '<b>' + p.value + '</b>') + '</div>';
+    });
+    g.alerts.forEach(function (a) {
+      html += '<p class="dnote alert"><i class="fas fa-triangle-exclamation"></i> ' + esc(a) + '</p>';
+    });
+    if (g.grade == null) {
+      html += '<p class="dnote">Todavía no hay nada capturado para este alumno.</p>';
+    } else if (!g.closed) {
+      html += '<p class="dnote">Avance provisional con el ' + g.coverage + '% de la calificación evaluado. Falta: ' +
+        esc(missing.join(", ")) + '. Habrá Aprobado o Reprobado cuando captures el examen final.</p>';
+    } else if (missing.length) {
+      html += '<p class="dnote">Sin datos de ' + esc(missing.join(", ")) + ': su peso se repartió entre lo demás.</p>';
+    }
+    return html;
+  }
+
+  function skillsHtml(st) {
+    var html = '<h4>Habilidades · ' + plural(st.ratings, "observación", "observaciones") + '</h4>';
+    if (!st.ratings) return html + '<p class="dnote">Sin observaciones todavía. Se llenan en «Clase del día».</p>';
+    GB.CRITERIA.forEach(function (c) {
+      var x = st.criteria[c.key];
+      html += '<div class="brow"><span class="bl">' + esc(c.label) + '<small>' + (x.n ? x.n + ' obs.' : '') + '</small></span>' +
+        (x.pct == null ? '<span class="bar"></span><b class="na">—</b>' : barHtml(x.pct) + '<b>' + x.pct + '</b>') + '</div>';
+    });
+    return html;
+  }
+
+  function practiceHtml(r) {
+    function one(label, avg, n) {
+      return label + ': ' + (avg == null ? 'sin intentos' : '<b>' + avg + '%</b> (' + plural(n, "intento", "intentos") + ')');
+    }
+    var use = (canSave && r.sid && r.examsAvg != null)
+      ? ' <button type="button" data-act="usefinal" data-key="' + esc(r.key) + '">Usar ' + r.examsAvg + ' como examen final</button>' : '';
+    return '<h4>Práctica en la app · no cuenta</h4><p class="dnote" style="margin-top:0">' +
+      one("Exámenes", r.examsAvg, r.examsCount) + ' · ' + one("Lecciones", r.lessonsAvg, r.lessonsCount) + '.' + use + '</p>';
+  }
+
+  function detailHtml(r) {
+    var st = statsOf(r), g = GB.computeGrade(r, st);
+    return '<div class="dbox">' +
+      '<div data-bd="' + esc(r.key) + '">' + breakdownHtml(r, st, g) + '</div>' +
+      '<div>' + skillsHtml(st) + '</div>' +
+      '<div class="full"><h4>Clase por clase · ' + plural(st.days, "clase registrada", "clases registradas") + '</h4>' +
+        GB.dailyGridHtml(daysOf(r), { dayLinks: !!r.sid }) +
+        (r.sid ? '<p class="dnote">Toca el número de una clase para abrirla y editarla.</p>' : '') + '</div>' +
+      '<div>' + practiceHtml(r) + '</div>' +
+      '<div><h4><label for="n-' + esc(r.key) + '">Comentario para el alumno</label></h4>' +
+        '<textarea class="notes" id="n-' + esc(r.key) + '" maxlength="500" data-key="' + esc(r.key) + '"' +
+        (canSave && r.sid ? '' : ' disabled') + ' placeholder="Lo verá en su boleta: qué hace bien y qué debe reforzar.">' +
+        esc(r.notes) + '</textarea></div>' +
+    '</div>';
+  }
+
+  var COLS = 7 + GB.QUIZ_KEYS.length;
+  function renderBook() {
+    var rows = bookRows(), w = {};
+    GB.COMPONENTS.forEach(function (c) { w[c.key] = Math.round(c.weight * 100) + "%"; });
+    var head = '<thead><tr>' +
+      '<th class="who" rowspan="2">Alumno</th>' +
+      '<th class="c" rowspan="2">Asistencia<small>' + w.attendance + '</small></th>' +
+      '<th class="c" rowspan="2">Tareas<small>' + w.homework + '</small></th>' +
+      '<th class="c" rowspan="2">Desempeño<small>' + w.performance + '</small></th>' +
+      '<th class="grp" colspan="' + GB.QUIZ_KEYS.length + '">Parciales · ' + w.quizzes + '</th>' +
+      '<th class="c" rowspan="2">Examen final<small>' + w.final + '</small></th>' +
+      '<th rowspan="2">Calificación</th><th rowspan="2"></th></tr><tr>' +
+      GB.QUIZ_KEYS.map(function (k, i) { return '<th class="c">P' + (i + 1) + '</th>'; }).join("") +
+      '</tr></thead>';
+
+    var body = "";
+    if (!rows.length) {
+      body = '<tr><td colspan="' + COLS + '" class="empty">' +
+        (roster.length ? 'No hay alumnos que coincidan.' :
+          'Aún no tienes alumnos asignados. Pide al administrador que registre a tus alumnos con un grupo y te asigne ese grupo.') +
+        '</td></tr>';
+    }
+    rows.forEach(function (r) {
+      var st = statsOf(r), g = GB.computeGrade(r, st), sub = [];
+      if (r.alias && r.alias !== r.name) sub.push(r.alias);
+      if (r.group) sub.push("grupo " + r.group);
+      var attSub = [];
+      if (st.att.F) attSub.push(plural(st.att.F, "falta", "faltas"));
+      if (st.att.R) attSub.push(st.att.R + " ret.");
+      if (!attSub.length) attSub.push(plural(st.days, "clase", "clases"));
+      body += '<tr data-key="' + esc(r.key) + '">' +
+        '<td class="who"><b>' + esc(r.name) + '</b>' + (sub.length ? '<small>' + esc(sub.join(" · ")) + '</small>' : '') + levelHtml(r) + '</td>' +
+        compCell(g, "attendance", attSub.join(" · ")) +
+        compCell(g, "homework", plural(st.hw.n, "tarea", "tareas")) +
+        compCell(g, "performance", st.ratings + " obs.") +
+        GB.QUIZ_KEYS.map(function (k, i) { return ginHtml(r, k, "Parcial " + (i + 1)); }).join("") +
+        ginHtml(r, "finalExam", "Examen final") +
+        '<td class="fin" data-fin="' + esc(r.key) + '">' + gradeCellHtml(g) + '</td>' +
+        '<td><button type="button" class="dbtn" data-dk="' + esc(r.key) + '" aria-expanded="' + !!openDetail[r.key] + '"' +
+          ' aria-label="Detalle de ' + esc(r.name) + '">Detalle<i class="fas fa-chevron-down"></i></button>' +
+          '<span class="sv" data-gsv="' + esc(r.key) + '">' + svHtml(gState[r.key]) + '</span></td>' +
+      '</tr>' +
+      '<tr class="detailrow" data-d="' + esc(r.key) + '"' + (openDetail[r.key] ? '' : ' style="display:none"') + '>' +
+        '<td colspan="' + COLS + '">' + (openDetail[r.key] ? detailHtml(r) : '') + '</td></tr>';
+    });
+    bTable.innerHTML = head + '<tbody>' + body + '</tbody>';
+    $("b-legend").innerHTML =
+      'La calificación pondera ' + GB.COMPONENTS.map(function (c) {
+        return esc(c.label) + ' ' + Math.round(c.weight * 100) + '%'; }).join(" · ") +
+      '. Lo que aún no tiene datos no cuenta como cero: mientras tanto ves un <b>avance</b> con el porcentaje ya evaluado, y el ' +
+      'Aprobado o Reprobado (mínimo ' + GB.PASS_THRESHOLD + ') aparece al capturar el examen final. ' +
+      'Borra una casilla para quitar esa nota. Asistencia, Tareas y Desempeño salen de «Clase del día».';
+  }
+
+  /* tras cambiar una nota: solo la celda de calificación y el desglose abierto
+     (no se re-pinta la fila para no robarle el foco a la casilla) */
+  function refreshGrade(r) {
+    var st = statsOf(r), g = GB.computeGrade(r, st);
+    var fin = byKey(bTable, "data-fin", r.key);
+    if (fin) fin.innerHTML = gradeCellHtml(g);
+    var bd = byKey(bTable, "data-bd", r.key);
+    if (bd) bd.innerHTML = breakdownHtml(r, st, g);
     renderStats();
   }
 
-  /* expandir/cerrar rúbrica y alternar celdas ✓/✗ */
-  rowsEl.addEventListener("click", function (e) {
-    var btn = e.target.closest(".dbtn");
-    if (btn) {
-      var k = btn.getAttribute("data-dk");
-      var dr = rowsEl.querySelector('tr.detailrow[data-d="' + CSS.escape(k) + '"]');
-      if (!dr) return;
-      if (openDaily[k]) {
-        delete openDaily[k];
-        dr.style.display = "none";
-      } else {
-        openDaily[k] = true;
-        var r = rowByKey(k);
-        if (r) dr.firstChild.innerHTML = dailyBoxHtml(r);
-        dr.style.display = "";
+  /* guardado de evaluaciones y comentario: se acumula lo cambiado por alumno */
+  var gTimers = {}, gPending = {}, gState = {};
+  function paintGsv(key) {
+    var el = byKey(bTable, "data-gsv", key);
+    if (el) el.innerHTML = svHtml(gState[key]);
+  }
+  function queueGrade(r, field, value) {
+    if (!gPending[r.key]) gPending[r.key] = {};
+    gPending[r.key][field] = value;
+    gState[r.key] = "saving"; paintGsv(r.key);
+    clearTimeout(gTimers[r.key]);
+    gTimers[r.key] = setTimeout(function () { flushGrade(r); }, 800);
+  }
+  function flushGrade(r) {
+    clearTimeout(gTimers[r.key]); delete gTimers[r.key];
+    var data = gPending[r.key];
+    if (!data) return;
+    delete gPending[r.key];
+    var payload = { alias: r.alias, studentUid: r.studentUid };
+    Object.keys(data).forEach(function (k) { payload[k] = data[k]; });
+    GB.saveGrade(r.sid, payload).then(function (ok) {
+      if (!ok) {
+        /* lo no guardado vuelve a la cola: viaja con el siguiente cambio */
+        var newer = gPending[r.key] || {};
+        Object.keys(data).forEach(function (k) { if (!(k in newer)) newer[k] = data[k]; });
+        gPending[r.key] = newer;
       }
+      if (gTimers[r.key]) return;   // ya hay otro guardado en camino
+      gState[r.key] = ok ? "ok" : "err"; paintGsv(r.key);
+    });
+  }
+
+  bTable.addEventListener("input", function (e) {
+    var el = e.target;
+    if (!el.matches) return;
+    var r = rowByKey(el.getAttribute("data-key"));
+    if (!r || !r.sid || !canSave) return;
+    if (el.matches("textarea.notes")) {
+      r.notes = el.value.slice(0, 500);
+      queueGrade(r, "notes", r.notes);
       return;
     }
-    var dh = e.target.closest("th.dhead");
-    if (dh && !dh.classList.contains("ro")) { toggleDay(dh); return; }
-    var cell = e.target.closest("td.cell");
-    if (cell && !cell.classList.contains("ro")) toggleCell(cell);
+    if (!el.matches("input.gin")) return;
+    var f = el.getAttribute("data-f"), v = null;
+    if (el.value !== "") {
+      v = parseInt(el.value, 10);
+      if (isNaN(v)) return;
+      v = Math.max(0, Math.min(100, v));
+      if (String(v) !== el.value) el.value = v;   // recorta 150 -> 100 al vuelo
+    }
+    r[f] = v;
+    refreshGrade(r);
+    queueGrade(r, f, v);   // null = borrar la nota
   });
-  rowsEl.addEventListener("keydown", function (e) {
+
+  function gotoClass(day) {
+    selDay = day;
+    setView("class");
+    window.scrollTo(0, 0);
+  }
+
+  bTable.addEventListener("click", function (e) {
+    var t = e.target;
+    var d = t.closest(".dbtn");
+    if (d) {
+      var k = d.getAttribute("data-dk"), dr = byKey(bTable, "data-d", k), r = rowByKey(k);
+      if (!dr || !r) return;
+      if (openDetail[k]) { delete openDetail[k]; dr.style.display = "none"; dr.firstChild.innerHTML = ""; }
+      else { openDetail[k] = true; dr.firstChild.innerHTML = detailHtml(r); dr.style.display = ""; }
+      d.setAttribute("aria-expanded", !!openDetail[k]);
+      return;
+    }
+    var u = t.closest('[data-act="usefinal"]');
+    if (u) {
+      var ru = rowByKey(u.getAttribute("data-key"));
+      if (!ru || !ru.sid || ru.examsAvg == null) return;
+      ru.finalExam = ru.examsAvg;
+      var inp = q(bTable, 'input.gin[data-f="finalExam"][data-key="' + CSS.escape(ru.key) + '"]');
+      if (inp) inp.value = ru.finalExam;
+      refreshGrade(ru);
+      queueGrade(ru, "finalExam", ru.finalExam);
+      return;
+    }
+    var th = t.closest("th[data-vgb-day]");
+    if (th) gotoClass(parseInt(th.getAttribute("data-vgb-day"), 10));
+  });
+  bTable.addEventListener("keydown", function (e) {
     if (e.key !== "Enter" && e.key !== " ") return;
-    var dh = e.target.closest && e.target.closest("th.dhead");
-    if (dh && !dh.classList.contains("ro")) { e.preventDefault(); toggleDay(dh); return; }
-    var cell = e.target.closest && e.target.closest("td.cell");
-    if (cell && !cell.classList.contains("ro")) { e.preventDefault(); toggleCell(cell); }
+    var th = e.target.closest && e.target.closest("th[data-vgb-day]");
+    if (th) { e.preventDefault(); gotoClass(parseInt(th.getAttribute("data-vgb-day"), 10)); }
   });
 
-  function recFor(r) {
-    var rec = dailyMap[r.sid];
-    if (!rec) rec = dailyMap[r.sid] = { sid: r.sid, alias: r.alias, studentUid: r.studentUid, days: {} };
-    return rec;
+  /* ---------- pestañas, filtros, carga ---------- */
+  function setView(v) {
+    view = v;
+    viewClass.style.display = v === "class" ? "" : "none";
+    viewBook.style.display = v === "book" ? "" : "none";
+    $("tab-class").setAttribute("aria-selected", v === "class");
+    $("tab-book").setAttribute("aria-selected", v === "book");
+    fSort.style.display = v === "book" ? "" : "none";
+    render();
   }
-
-  /* el promedio de la rúbrica ALIMENTA la Participación; guarda con debounce */
-  function afterDailyChange(r, key) {
-    var st = refreshDailyCount(r);
-    var inp = rowsEl.querySelector('td.part input[data-key="' + CSS.escape(key) + '"]');
-    r.participacion = (st.avg != null) ? st.avg : null;
-    if (inp) inp.value = (st.avg != null) ? st.avg : "";
-    refreshFinal(key);
-    clearTimeout(dtimers[key]);
-    setSv(key, '<i class="fas fa-spinner"></i>');
-    dtimers[key] = setTimeout(function () { saveDailyRow(r); }, 800);
+  function render() {
+    renderStats();
+    if (view === "class") renderClass(); else renderBook();
   }
-
-  /* activar / quitar un día (hubo clase): al activar arranca todo en bueno */
-  function toggleDay(dh) {
-    var key = dh.getAttribute("data-dh"), day = dh.getAttribute("data-day");
-    var r = rowByKey(key);
-    if (!r || !r.sid) return;
-    var rec = recFor(r);
-    if (rec.days[day]) delete rec.days[day];   // quitar el día
-    else rec.days[day] = {};                    // día con clase, todo bueno
-    // toda la columna cambia -> re-render de la caja
-    var dr = rowsEl.querySelector('tr.detailrow[data-d="' + CSS.escape(key) + '"]');
-    if (dr) dr.firstChild.innerHTML = dailyBoxHtml(r);
-    afterDailyChange(r, key);
-  }
-
-  /* marcar / quitar un tache (solo en días con clase; el guardia .ro lo asegura) */
-  function toggleCell(cell) {
-    var key = cell.getAttribute("data-ck");
-    var day = cell.getAttribute("data-day");
-    var asp = cell.getAttribute("data-asp");
-    var r = rowByKey(key);
-    if (!r || !r.sid) return;
-    var rec = dailyMap[r.sid];
-    if (!rec || !rec.days[day]) return; // el día no tiene clase activa
-    if (rec.days[day][asp] === false) {  // era tache -> vuelve a bueno
-      delete rec.days[day][asp];
-      cell.classList.remove("off"); cell.classList.add("on"); cell.textContent = "✓";
-    } else {                             // bueno -> tache
-      rec.days[day][asp] = false;
-      cell.classList.remove("on"); cell.classList.add("off"); cell.textContent = "✗";
-    }
-    afterDailyChange(r, key);
-  }
-
-  var dtimers = {};
-  function saveDailyRow(r) {
-    var rec = dailyMap[r.sid];
-    if (!rec) return;
-    var snapshot = JSON.stringify(rec.days);
-    var jobs = [GB.saveDaily(r.sid, { days: rec.days, alias: r.alias, studentUid: r.studentUid })];
-    /* con al menos una celda marcada, sincronizamos también la Participación */
-    if (r.participacion != null && canSave) {
-      jobs.push(GB.saveGrade(r.sid, {
-        participacion: r.participacion, notes: r.notes,
-        alias: r.alias, studentUid: r.studentUid
-      }));
-    }
-    Promise.all(jobs).then(function (res) {
-      if (JSON.stringify(rec.days) !== snapshot) return; // hubo más cambios; los salva su timer
-      var ok = res.every(function (x) { return x; });
-      setSv(r.key, ok
-        ? '<i class="fas fa-circle-check" title="Guardado"></i>'
-        : '<i class="fas fa-circle-exclamation" title="No se pudo guardar. Revisa tu conexión o las reglas de Firestore e inténtalo de nuevo."></i>');
-    });
-  }
-
-  rowsEl.addEventListener("input", function (e) {
-    var inp = e.target;
-    if (!inp.matches || !inp.matches('td.part input')) return;
-    var key = inp.getAttribute("data-key");
-    var r = rowByKey(key);
-    if (!r) return;
-    var v = parseInt(inp.value, 10);
-    if (inp.value !== "" && !isNaN(v)) {
-      v = Math.max(0, Math.min(100, v));
-      if (String(v) !== inp.value) inp.value = v;  // recorta 150 -> 100 al vuelo
-      r.participacion = v;
-    } else if (inp.value === "") {
-      r.participacion = null;
-    } else {
-      return;
-    }
-    refreshFinal(key);
-    if (r.participacion == null || !r.sid) return; // no hay nada que subir
-    clearTimeout(timers[key]);
-    setSv(key, '<i class="fas fa-spinner"></i>');
-    timers[key] = setTimeout(function () { save(r); }, 800);
-  });
-
-  function save(r) {
-    var val = r.participacion;
-    GB.saveGrade(r.sid, {
-      participacion: val, notes: r.notes,
-      alias: r.alias, studentUid: r.studentUid
-    }).then(function (ok) {
-      if (r.participacion !== val) return; // ya escribió otro valor; lo salva su propio timer
-      setSv(r.key, ok
-        ? '<i class="fas fa-circle-check" title="Guardado"></i>'
-        : '<i class="fas fa-circle-exclamation" title="No se pudo guardar. Revisa tu conexión o la regla de gradebook e inténtalo de nuevo."></i>');
-    });
-  }
-
-  /* --- notas de registro (Exámenes / Lecciones) capturadas por el profe --- */
-  var gtimers = {};
-  function setGradeSv(kind, key, html) {
-    var el = rowsEl.querySelector('.sv[data-gsv="' + kind + ':' + CSS.escape(key) + '"]');
-    if (el) el.innerHTML = html;
-  }
-  function gradeVal(r, kind) { return kind === "exams" ? r.examsGrade : r.lessonsGrade; }
-  function setGradeVal(r, kind, v) { if (kind === "exams") r.examsGrade = v; else r.lessonsGrade = v; }
-
-  function saveGradeField(r, kind) {
-    var val = gradeVal(r, kind);
-    var data = { notes: r.notes, alias: r.alias, studentUid: r.studentUid };
-    data[kind === "exams" ? "examsGrade" : "lessonsGrade"] = val;
-    GB.saveGrade(r.sid, data).then(function (ok) {
-      if (gradeVal(r, kind) !== val) return; // ya se escribió otro valor; lo salva su timer
-      setGradeSv(kind, r.key, ok
-        ? '<i class="fas fa-circle-check" title="Guardado"></i>'
-        : '<i class="fas fa-circle-exclamation" title="No se pudo guardar. Revisa tu conexión o la regla de gradebook."></i>');
-    });
-  }
-  function queueGradeSave(r, kind, delay) {
-    var id = kind + ":" + r.key;
-    clearTimeout(gtimers[id]);
-    setGradeSv(kind, r.key, '<i class="fas fa-spinner"></i>');
-    gtimers[id] = setTimeout(function () { saveGradeField(r, kind); }, delay || 800);
-  }
-
-  rowsEl.addEventListener("input", function (e) {
-    var inp = e.target;
-    if (!inp.matches || !inp.matches('td.grade input')) return;
-    var key = inp.getAttribute("data-gk"), kind = inp.getAttribute("data-gkind");
-    var r = rowByKey(key);
-    if (!r) return;
-    var v = parseInt(inp.value, 10);
-    if (inp.value !== "" && !isNaN(v)) {
-      v = Math.max(0, Math.min(100, v));
-      if (String(v) !== inp.value) inp.value = v;   // recorta 150 -> 100 al vuelo
-      setGradeVal(r, kind, v);
-    } else if (inp.value === "") {
-      setGradeVal(r, kind, null);
-    } else { return; }
-    refreshFinal(key);
-    if (gradeVal(r, kind) == null || !r.sid) return; // vacío: no se sube por REST aquí
-    queueGradeSave(r, kind);
-  });
-
-  /* enlace "usar": copia el promedio de práctica del alumno como nota de registro */
-  rowsEl.addEventListener("click", function (e) {
-    var b = e.target.closest && e.target.closest("button.use-prac");
-    if (!b) return;
-    var key = b.getAttribute("data-gk"), kind = b.getAttribute("data-gkind");
-    var prac = parseInt(b.getAttribute("data-prac"), 10);
-    var r = rowByKey(key);
-    if (!r || !r.sid || isNaN(prac)) return;
-    var inp = rowsEl.querySelector('td.grade input[data-gk="' + CSS.escape(key) + '"][data-gkind="' + kind + '"]');
-    if (inp) inp.value = prac;
-    setGradeVal(r, kind, prac);
-    refreshFinal(key);
-    queueGradeSave(r, kind, 400);
-  });
-
+  $("tab-class").addEventListener("click", function () { setView("class"); });
+  $("tab-book").addEventListener("click", function () { setView("book"); });
   fQ.addEventListener("input", render);
   fGroup.addEventListener("change", render);
   fLevel.addEventListener("change", render);
   fSort.addEventListener("change", render);
-  document.getElementById("f-reload").addEventListener("click", load);
+
+  /* nada pendiente se pierde al salir o al recargar */
+  function flushAll() {
+    Object.keys(dTimers).forEach(function (k) { var r = rowByKey(k); if (r) flushDaily(r); });
+    Object.keys(gTimers).forEach(function (k) { var r = rowByKey(k); if (r) flushGrade(r); });
+  }
+  document.addEventListener("visibilitychange", function () { if (document.hidden) flushAll(); });
+  window.addEventListener("pagehide", flushAll);
+  $("f-reload").addEventListener("click", function () { flushAll(); setTimeout(load, 300); });
 
   /* llena el filtro de grupos con los grupos presentes en el roster */
   function fillGroupFilter(rosterMap) {
@@ -686,7 +926,7 @@ footer a{color:var(--gold);text-decoration:none;}
       o.value = g; o.textContent = "Grupo " + g;
       fGroup.appendChild(o);
     });
-    fGroup.value = current || "";
+    fGroup.value = groups[current] ? current : "";
     fGroup.style.display = Object.keys(groups).length > 1 ? "" : "none";
   }
 
@@ -696,7 +936,7 @@ footer a{color:var(--gold);text-decoration:none;}
     msgEl.style.display = "none";
 
     /* 1) roster (todos MIS alumnos registrados) + intentos; 2) con los sids
-       del roster, la parte manual (gradebook) y las rúbricas por batchGet. */
+       del roster, las evaluaciones (gradebook) y el registro diario por batchGet. */
     Promise.all([
       GB.fetchRoster(),
       VESPER_RESULTS.fetchAll({ limit: 1000 })
@@ -719,37 +959,25 @@ footer a{color:var(--gold);text-decoration:none;}
         canSave = grades !== null;
         canDaily = daily !== null;
         dailyMap = daily || {};
+        dState = {}; gState = {};
         fillGroupFilter(rosterMap);
         roster = GB.buildRoster(rosterMap, attempts || [], grades || {});
-        /* el promedio de la rúbrica manda sobre la participación mostrada:
-           si un alumno tiene celdas diarias, su Participación es ese promedio. */
-        roster.forEach(function (r) {
-          if (!r.sid) return;
-          var rec = dailyMap[r.sid];
-          if (rec) {
-            var st = GB.dailyStats(rec.days);
-            if (st.avg != null) r.participacion = st.avg;
-          }
-        });
-        finishLoad();
+
+        loadingEl.style.display = "none";
+        contentEl.style.display = "block";
+        warnEl.style.display = (canSave && canDaily) ? "none" : "block";
+        if (!canSave || !canDaily) {
+          var falta = [];
+          if (!canSave) falta.push("<code>gradebook</code>");
+          if (!canDaily) falta.push("<code>daily_progress</code>");
+          warnEl.innerHTML = '<i class="fas fa-triangle-exclamation"></i> La boleta se muestra en ' +
+            'modo lectura: no se pudo leer ' + falta.join(" ni ") +
+            ' (ver <b>FIRESTORE_GRADEBOOK_RULES.md</b>). Hasta entonces no se puede guardar.';
+        }
+        renderCycle();
+        setView(view);
       });
     });
-
-    function finishLoad() {
-      loadingEl.style.display = "none";
-      contentEl.style.display = "block";
-      warnEl.style.display = (canSave && canDaily) ? "none" : "block";
-      if (!canSave || !canDaily) {
-        var falta = [];
-        if (!canSave) falta.push("<code>gradebook</code>");
-        if (!canDaily) falta.push("<code>daily_progress</code>");
-        warnEl.innerHTML = '<i class="fas fa-triangle-exclamation"></i> La boleta se muestra en ' +
-          'modo lectura: falta publicar en Firestore la regla de ' + falta.join(" y ") +
-          ' (ver <b>FIRESTORE_GRADEBOOK_RULES.md</b>). Hasta entonces no se puede guardar.';
-      }
-      renderStats();
-      render();
-    }
   }
 
   /* mismo boot que portal_calificaciones.html: gate de página + check de profe */

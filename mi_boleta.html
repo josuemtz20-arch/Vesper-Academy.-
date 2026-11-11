@@ -8,7 +8,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Mi boleta | Vesper Academy</title>
-<meta name="description" content="Consulta tu boleta de calificaciones: exámenes, lecciones, participación y calificación final. Requiere sesión de alumno.">
+<meta name="description" content="Consulta tu boleta de calificaciones: asistencia, tareas, desempeño en clase, parciales y examen final. Requiere sesión de alumno.">
 <meta name="robots" content="noindex, nofollow">
 <link rel="icon" href="assets/images/favicon_32.png?v=2" type="image/png">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
@@ -93,14 +93,44 @@ header a.back:hover{color:var(--gold);}
 .ptip .pt-r{display:block;margin-top:2px;}
 .ptip .pt-a{display:block;margin-top:4px;color:rgba(255,255,255,.82);font-size:.68rem;}
 
-/* rúbrica de progreso diario (solo lectura para el alumno) */
-.dwrap{overflow-x:auto;}
-table.dgrid{border-collapse:separate;border-spacing:3px;font-size:.72rem;margin-top:6px;}
-table.dgrid th{padding:2px 0;text-align:center;color:var(--muted);font-size:.62rem;min-width:26px;font-weight:600;}
-table.dgrid th.asp{text-align:left;padding-right:12px;font-size:.78rem;color:var(--text,var(--navy));min-width:120px;white-space:nowrap;}
-table.dgrid td{width:26px;height:26px;min-width:26px;text-align:center;border:1px solid var(--border);border-radius:6px;background:var(--paper,#fff);font-size:.78rem;color:#c9c2b4;}
-table.dgrid td.on{background:#e7f4ec;border-color:#cfe9da;color:var(--ok);font-weight:800;}
-table.dgrid td.off{background:#f7e7e7;border-color:#e2bcbc;color:var(--err);font-weight:800;}
+/* calificación: número grande + cuánto de la nota ya está evaluado */
+.intro p.cycle{color:var(--text,var(--navy));font-weight:600;font-size:.86rem;margin-top:10px;}
+.intro p.cycle i{color:var(--gold2);margin-right:6px;}
+.hero{display:flex;align-items:center;gap:22px;padding:20px 2px 18px;border-bottom:1px solid var(--border);}
+.hero-n{font-family:'Inria Serif',serif;font-weight:700;font-size:3.6rem;line-height:1;min-width:104px;text-align:center;font-variant-numeric:tabular-nums;}
+.hero-n.pass{color:var(--ok);}
+.hero-n.fail{color:var(--err);}
+.hero-n.none{color:var(--muted);font-weight:400;}
+.hero-t{flex:1;min-width:0;}
+.hero-t b{display:block;font-size:.78rem;font-weight:800;letter-spacing:1.2px;text-transform:uppercase;}
+.hero-t b.pass{color:var(--ok);}
+.hero-t b.fail{color:var(--err);}
+.hero-t span{display:block;color:var(--muted);font-size:.88rem;line-height:1.5;margin-top:3px;}
+.cov{height:8px;border-radius:5px;background:var(--border);overflow:hidden;margin-top:11px;max-width:340px;}
+.cov i{display:block;height:100%;border-radius:5px;background:var(--gold2);}
+.hero-t small{display:block;color:var(--muted);font-size:.72rem;margin-top:5px;}
+.galert{margin:12px 0 0;padding:10px 13px;border-radius:8px;background:#f7e7e7;border:1px solid #e2bcbc;color:#6a2a2a;font-size:.84rem;line-height:1.5;}
+.galert i{margin-right:6px;}
+.crit .val small{display:block;color:var(--muted);font-weight:500;font-size:.68rem;letter-spacing:.3px;text-align:right;}
+.crit:last-child{border-bottom:0;}
+.brow{display:grid;grid-template-columns:128px minmax(40px,1fr) 34px;align-items:center;gap:12px;font-size:.86rem;padding:6px 2px;}
+.brow .bl small{display:block;color:var(--muted);font-size:.68rem;}
+.brow b{text-align:right;font-variant-numeric:tabular-nums;}
+.brow b.na{color:var(--muted);font-weight:400;}
+.bar{height:9px;border-radius:5px;background:var(--border);overflow:hidden;}
+.bar i{display:block;height:100%;border-radius:5px;background:var(--ok);}
+.bar i.mid{background:var(--gold2);}
+.bar i.low{background:var(--err);}
+.quote{font-family:'Inria Serif',serif;font-size:1.02rem;line-height:1.6;margin:6px 2px 2px;white-space:pre-wrap;}
+.keys{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:12px;font-size:.74rem;color:var(--muted);}
+.keys .k{display:inline-block;min-width:20px;text-align:center;border-radius:5px;padding:0 5px;font-weight:700;border:1px solid transparent;margin-right:4px;}
+@media(max-width:560px){
+  .boleta{padding:20px 16px 18px;}
+  .hero{gap:14px;}
+  .hero-n{font-size:2.9rem;min-width:78px;}
+  .brow{grid-template-columns:104px minmax(30px,1fr) 30px;gap:8px;}
+  .brow .bl small{display:none;}
+}
 
 footer{background:var(--navy);color:rgba(255,255,255,.5);text-align:center;padding:24px;font-size:.78rem;border-top:1px solid var(--va-hairline,rgba(201,168,76,.35));position:sticky;top:100vh;}
 footer a{color:var(--gold);text-decoration:none;}
@@ -118,9 +148,7 @@ html.vesper-dark .pchart .grid-l{stroke:rgba(255,255,255,.08);}
 html.vesper-dark .pchart-legend i.lg-d{border-top-color:#e29a5c;}
 html.vesper-dark .pchart-legend i.lg-c{border-top-color:#6aa9ec;}
 html.vesper-dark .pchart .thresh-t{fill:var(--gold-ink);}
-html.vesper-dark table.dgrid td{color:var(--muted);}
-html.vesper-dark table.dgrid td.on{background:var(--ok-tint,rgba(65,197,149,.18));border-color:transparent;}
-html.vesper-dark table.dgrid td.off{background:var(--no-tint,rgba(224,112,101,.18));border-color:transparent;}
+html.vesper-dark .galert{background:var(--no-tint,rgba(224,112,101,.16));border-color:rgba(224,112,101,.4);color:var(--text);}
 </style>
 
 <!-- Tema del alumno: sin esto la Boleta era la única pestaña que se quedaba
@@ -144,10 +172,10 @@ html.vesper-dark table.dgrid td.off{background:var(--no-tint,rgba(224,112,101,.1
 <div class="wrap">
   <div class="intro">
     <h1>Mi boleta de calificaciones</h1>
-    <p>Tu avance en escala 0–100, con la misma boleta para todos los niveles.
-       Tus intentos en la app son <b>práctica</b>: te muestran cómo vas, pero la
-       nota de <b>Exámenes</b> y <b>Lecciones</b> que cuenta para la final la
-       <b>confirma tu profesor</b>. La <b>Participación</b> también la asigna él.</p>
+    <p>Tu calificación se arma con lo que tu profesor registra: asistencia,
+       tareas, desempeño en clase, parciales y examen final. Lo que practicas
+       en la app te prepara, pero <b>no cuenta</b> para la nota.</p>
+    <p class="cycle" id="cycle"></p>
   </div>
 
   <div id="loading"><div class="spin"></div><div>Cargando tu boleta…</div></div>
@@ -158,46 +186,54 @@ html.vesper-dark table.dgrid td.off{background:var(--no-tint,rgba(224,112,101,.1
         <div class="who"><b id="b-alias"></b><small id="b-email"></small></div>
         <span id="b-level"></span>
       </div>
-      <div class="crit">
-        <div class="lbl"><b>Exámenes</b><small id="c-exams-sub"></small></div>
-        <div class="val" id="c-exams"></div>
+      <div class="hero">
+        <div class="hero-n" id="g-num"></div>
+        <div class="hero-t">
+          <b id="g-title"></b><span id="g-sub"></span>
+          <div class="cov" id="g-covbar"><i id="g-cov"></i></div><small id="g-covt"></small>
+        </div>
       </div>
-      <div class="crit">
-        <div class="lbl"><b>Lecciones</b><small id="c-lessons-sub"></small></div>
-        <div class="val" id="c-lessons"></div>
-      </div>
-      <div class="crit">
-        <div class="lbl"><b>Participación</b><small id="c-part-sub">La asigna tu profesor en clase</small></div>
-        <div class="val" id="c-part"></div>
-      </div>
-      <div class="finalrow">
-        <div class="lbl">Calificación final</div>
-        <div class="finalbox" id="c-final"></div>
-      </div>
+      <div id="g-alerts"></div>
+      <div id="g-parts"></div>
+    </div>
+
+    <div class="boleta" id="notes-card" style="display:none;margin-top:16px;">
+      <div class="bhead"><div class="who"><b>Comentario de tu profesor</b></div></div>
+      <p class="quote" id="notes-text"></p>
+    </div>
+
+    <div class="boleta" id="skills-card" style="display:none;margin-top:16px;">
+      <div class="bhead"><div class="who"><b>Tus habilidades</b><small id="skills-sub"></small></div></div>
+      <div id="skills"></div>
+      <p class="fine" id="skills-tip" style="margin-top:12px;"></p>
     </div>
 
     <div class="boleta" id="progress-card" style="display:none;margin-top:16px;">
       <div class="bhead" style="border-bottom:1px solid var(--border);">
-        <div class="who"><b>Tu progreso día a día</b><small id="pchart-sub"></small></div>
+        <div class="who"><b>Tu desempeño clase por clase</b><small id="pchart-sub"></small></div>
       </div>
       <div class="pchart-legend">
-        <span><i class="lg-d"></i>Puntaje del día</span>
+        <span><i class="lg-d"></i>Desempeño de la clase</span>
         <span><i class="lg-c"></i>Promedio acumulado</span>
       </div>
       <div class="pchart-wrap">
         <div class="pchart" id="pchart"></div>
         <div class="ptip" id="ptip"></div>
       </div>
-      <p class="fine" style="margin-top:12px;">Cada punto naranja es tu porcentaje de ✓ ese día; la línea azul es tu promedio acumulado (así va tu Participación). Pasa el cursor o toca un día para ver el detalle.</p>
+      <p class="fine" style="margin-top:12px;">Cada punto naranja es lo que tu profesor calificó esa clase; la línea azul es tu promedio acumulado. Pasa el cursor o toca una clase para ver el detalle.</p>
     </div>
 
     <div class="boleta" id="daily-card" style="display:none;margin-top:16px;">
       <div class="bhead" style="border-bottom:1px solid var(--border);">
-        <div class="who"><b id="daily-title"></b><small id="daily-sub"></small></div>
-        <span class="lvl" id="daily-avg" style="color:var(--accent)"></span>
+        <div class="who"><b>Registro de tus clases</b><small id="daily-sub"></small></div>
       </div>
-      <div class="dwrap"><table class="dgrid" id="daily-grid"></table></div>
-      <p class="fine" style="margin-top:14px;">✓ = bien · ✗ = tache (fallaste ese aspecto) · · = sin clase ese día. Cada día con clase arranca en bueno y cada tache baja tu Participación.</p>
+      <div id="daily-grid"></div>
+      <div class="keys" id="daily-keys"></div>
+    </div>
+
+    <div class="boleta" id="practice-card" style="display:none;margin-top:16px;">
+      <div class="bhead"><div class="who"><b>Tu práctica en la app</b><small>Referencia: no cuenta para la calificación</small></div></div>
+      <div id="practice"></div>
     </div>
 
     <p class="fine" id="fine"></p>
@@ -212,7 +248,7 @@ html.vesper-dark table.dgrid td.off{background:var(--no-tint,rgba(224,112,101,.1
 
 <script src="vesper_path.js"></script>
 <script src="vesper_results.js"></script>
-<script src="vesper_gradebook.js"></script>
+<script src="vesper_gradebook.js?v=20261111"></script>
 <script>
 (function () {
   "use strict";
@@ -222,6 +258,9 @@ html.vesper-dark table.dgrid td.off{background:var(--no-tint,rgba(224,112,101,.1
   var contentEl = document.getElementById("content");
   var msgEl = document.getElementById("msg");
   var GB = window.VESPER_GRADEBOOK;
+  GB.injectCss();
+  var DATES = GB.classDates(), CLOCK = GB.courseClock();
+  function $(id) { return document.getElementById(id); }
 
   function esc(t) {
     return ("" + (t == null ? "" : t)).replace(/[&<>"]/g, function (c) {
@@ -235,68 +274,121 @@ html.vesper-dark table.dgrid td.off{background:var(--no-tint,rgba(224,112,101,.1
     msgEl.className = "notice" + (bad ? " bad" : "");
     msgEl.innerHTML = html;
   }
-  function pctHtml(avg, w) {
-    if (avg == null) return '<span class="na">Sin datos aún</span>';
-    return avg + '%<span class="w">' + Math.round(w * 100) + '% de la final</span>';
-  }
-  function countSub(count, what) {
-    return count ? ('Tu mejor marca en cada ' + what + ' · ' + count + ' intento' + (count === 1 ? '' : 's'))
-                 : ('Aún no tienes ' + what + 'es registrados con sesión');
+  function plural(n, one, many) { return n + " " + (n === 1 ? one : many); }
+  function barHtml(v) {
+    return '<span class="bar"><i class="' + (v >= 85 ? "" : v >= GB.PASS_THRESHOLD ? "mid" : "low") +
+      '" style="width:' + Math.max(2, v) + '%"></i></span>';
   }
 
-  /* Exámenes/Lecciones: si tu profesor ya CONFIRMÓ la nota, esa es la de
-     registro y cuenta para la final. Mientras no la confirme, solo ves tu
-     promedio de PRÁCTICA (lo que sacaste autocalificándote), claramente
-     marcado como que aún NO cuenta. */
-  function gradeValHtml(grade, practice, w) {
-    if (grade != null) {
-      return grade + '%<span class="w">' + Math.round(w * 100) + '% de la final</span>';
-    }
-    if (practice != null) {
-      return '<span class="na">práctica ' + practice + '%</span>';
-    }
-    return '<span class="na">Sin datos aún</span>';
-  }
-  function gradeSub(grade, practice, count, what) {
-    if (grade != null) {
-      return 'Nota confirmada por tu profesor' +
-        (practice != null ? ' · tu práctica: ' + practice + '%' : '');
-    }
-    if (practice != null) {
-      return 'Práctica: tu mejor marca en ' + count + ' intento' + (count === 1 ? '' : 's') +
-        '. Aún no cuenta para la nota (la confirma tu profesor).';
-    }
-    return 'Aún no tienes ' + what + ' registrados con sesión';
+  function renderCycle() {
+    var txt = "Curso del " + GB.fmtDay(CLOCK.start) + " al " + GB.fmtDay(CLOCK.end) + " · " + GB.COURSE_DAYS + " clases. ";
+    if (!CLOCK.started) txt += "Empieza el " + GB.fmtDay(CLOCK.start) + ".";
+    else if (CLOCK.ended) txt += "El curso ya terminó.";
+    else txt += "Va en la clase " + CLOCK.day + ".";
+    $("cycle").innerHTML = '<i class="fas fa-calendar-day"></i>' + esc(txt);
   }
 
-  /* ── gráfica lineal de progreso día a día (SVG propio, sin librerías) ── */
+  /* ── calificación: número, veredicto y cuánto falta por evaluar ── */
+  function renderHero(g) {
+    var num = $("g-num"), title = $("g-title"), sub = $("g-sub");
+    num.className = "hero-n"; title.className = "";
+    if (g.grade == null) {
+      num.classList.add("none"); num.textContent = "—";
+      title.textContent = "Sin calificaciones todavía";
+      sub.textContent = CLOCK.started
+        ? "Tu boleta se llena conforme tu profesor registra cada clase."
+        : "Tu boleta se empieza a llenar en la primera clase, el " + GB.fmtDay(CLOCK.start) + ".";
+    } else if (!g.closed) {
+      num.textContent = g.grade;
+      title.textContent = "Tu avance";
+      sub.textContent = g.label + ". Es provisional: tu calificación final sale con el examen final.";
+    } else {
+      num.classList.add(g.passed ? "pass" : "fail"); title.classList.add(g.passed ? "pass" : "fail");
+      num.textContent = g.grade;
+      title.textContent = g.passed ? "Aprobado" : "No aprobado";
+      sub.textContent = "Calificación final · " + g.label + ". Se aprueba con " + GB.PASS_THRESHOLD + " o más.";
+    }
+    $("g-covbar").style.display = g.grade == null ? "none" : "";
+    $("g-cov").style.width = g.coverage + "%";
+    $("g-covt").textContent = g.grade == null ? "" : (g.coverage + "% de tu calificación ya está evaluado");
+    $("g-alerts").innerHTML = g.alerts.map(function (a) {
+      return '<p class="galert"><i class="fas fa-triangle-exclamation"></i>' + esc(a) + '. Habla con tu profesor.</p>';
+    }).join("");
+  }
+
+  /* ── un renglón por componente: de dónde sale y cuánto pesa ── */
+  function renderParts(row, st, g) {
+    var hw = { 2: 0, 1: 0, 0: 0 };
+    Object.keys(st.perDay).forEach(function (d) { var h = st.perDay[d].hw; if (h != null) hw[h]++; });
+    var quizTxt = GB.QUIZ_KEYS.map(function (k, i) { return "P" + (i + 1) + ": " + (row[k] == null ? "—" : row[k]); }).join(" · ");
+    var subs = {
+      attendance: st.att.counted || st.att.J
+        ? [plural(st.att.P, "asistencia", "asistencias")]
+            .concat(st.att.R ? [plural(st.att.R, "retardo", "retardos")] : [])
+            .concat(st.att.F ? [plural(st.att.F, "falta", "faltas")] : [])
+            .concat(st.att.J ? [plural(st.att.J, "justificada", "justificadas")] : []).join(" · ")
+        : "Pase de lista de cada clase",
+      homework: st.hw.n
+        ? hw[2] + " de " + plural(st.hw.n, "tarea entregada", "tareas entregadas") +
+          (hw[1] ? " · " + plural(hw[1], "incompleta", "incompletas") : "") +
+          (hw[0] ? " · " + hw[0] + " sin entregar" : "")
+        : "Lo que tu profesor te deja de tarea",
+      performance: st.ratings
+        ? "Promedio de tus habilidades · " + plural(st.ratings, "observación", "observaciones")
+        : "Cómo trabajas y usas el inglés en clase",
+      quizzes: quizTxt,
+      final: "Clase " + GB.COURSE_DAYS + " · " + GB.fmtDay(DATES[DATES.length - 1])
+    };
+    $("g-parts").innerHTML = g.parts.map(function (p) {
+      return '<div class="crit"><div class="lbl"><b>' + esc(p.label) + '</b><small>' +
+        esc(p.legacy ? "Nota registrada por tu profesor" : subs[p.key]) + '</small></div>' +
+        '<div class="val">' + (p.value == null ? '<span class="na">Sin datos aún</span>' : p.value) +
+        '<small>' + Math.round(p.weight * 100) + '% de la nota</small></div></div>';
+    }).join("");
+  }
+
+  function renderSkills(st) {
+    var card = $("skills-card");
+    if (!st.ratings) { card.style.display = "none"; return; }
+    var rated = [];
+    $("skills").innerHTML = GB.CRITERIA.map(function (c) {
+      var x = st.criteria[c.key];
+      if (x.pct != null) rated.push({ label: c.label, pct: x.pct });
+      return '<div class="brow"><span class="bl">' + esc(c.label) + '<small>' + esc(c.hint) + '</small></span>' +
+        (x.pct == null ? '<span class="bar"></span><b class="na">—</b>' : barHtml(x.pct) + '<b>' + x.pct + '</b>') + '</div>';
+    }).join("");
+    $("skills-sub").textContent = "Lo que tu profesor ha observado en clase · " + plural(st.ratings, "observación", "observaciones");
+    /* punto fuerte y a reforzar; los empates se nombran todos (no elegir uno al azar) */
+    var hi = Math.max.apply(null, rated.map(function (x) { return x.pct; }));
+    var lo = Math.min.apply(null, rated.map(function (x) { return x.pct; }));
+    function names(v) {
+      return rated.filter(function (x) { return x.pct === v; }).map(function (x) { return x.label; }).join(", ");
+    }
+    $("skills-tip").textContent = (rated.length >= 2 && hi !== lo)
+      ? "Tu punto más fuerte: " + names(hi) + ". Lo que más conviene reforzar: " + names(lo) + "."
+      : "";
+    card.style.display = "block";
+  }
+
+  /* ── gráfica lineal de desempeño clase por clase (SVG propio, sin librerías) ── */
   var DARK = document.documentElement.classList.contains("vesper-dark");
   var DAILY_COLOR = DARK ? "#e29a5c" : "#b5651d", CUM_COLOR = DARK ? "#6aa9ec" : "#1e5fa8";
-  var chartData = null; // { perDay, cum, aspText, first, last } para el hover
+  var chartData = null; // { perDay, cum, info, first, last, N } para el hover
 
-  function computeSeries(daily) {
-    var days = (daily && daily.days) || {};
-    var N = GB.COURSE_DAYS, A = GB.DAILY_ASPECTS.length;
-    var perDay = {}, cum = {}, okc = {}, totc = {}, cumOk = 0, cumTot = 0, first = 0, last = 0;
+  function computeSeries(st) {
+    var N = GB.COURSE_DAYS, perDay = {}, cum = {}, sum = 0, n = 0, first = 0, last = 0;
     for (var d = 1; d <= N; d++) {
-      if (days[d]) {                    // hubo clase: todo bueno menos los taches
-        var taches = 0;
-        GB.DAILY_ASPECTS.forEach(function (a) { if (days[d][a.key] === false) taches++; });
-        var ok = A - taches;
-        perDay[d] = Math.round(100 * ok / A);
-        okc[d] = ok; totc[d] = A;
-        cumOk += ok; cumTot += A; if (!first) first = d; last = d;
-      } else {                          // sin clase ese día
-        perDay[d] = null; okc[d] = 0; totc[d] = 0;
-      }
-      cum[d] = cumTot ? Math.round(100 * cumOk / cumTot) : null;
+      var x = st.perDay[d];
+      perDay[d] = (x && x.score != null) ? x.score : null;
+      if (perDay[d] != null) { sum += perDay[d]; n++; if (!first) first = d; last = d; }
+      cum[d] = n ? Math.round(sum / n) : null;
     }
-    return { perDay: perDay, cum: cum, okc: okc, totc: totc, first: first, last: last, N: N };
+    return { perDay: perDay, cum: cum, info: st.perDay, first: first, last: last, N: N };
   }
 
-  function renderProgressChart(daily) {
+  function renderProgressChart(st) {
     var card = document.getElementById("progress-card");
-    var s = computeSeries(daily);
+    var s = computeSeries(st);
     if (!s.last) { card.style.display = "none"; chartData = null; return; }
     chartData = s;
 
@@ -306,10 +398,11 @@ html.vesper-dark table.dgrid td.off{background:var(--no-tint,rgba(224,112,101,.1
     function xF(d) { return PADL + (N === 1 ? 0.5 : (d - 1) / (N - 1)) * plotW; }
     function yF(v) { return PADT + (1 - v / 100) * plotH; }
     function r2(n) { return Math.round(n * 10) / 10; }
+    var d;
 
     var svg = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" ' +
-      'aria-label="Gráfica de tu progreso diario: puntaje de cada día y promedio acumulado a lo largo de ' +
-      N + ' días. El detalle día por día también está en la tabla de abajo.">';
+      'aria-label="Gráfica de tu desempeño: lo calificado en cada clase y tu promedio acumulado a lo largo de ' +
+      N + ' clases. El detalle clase por clase también está en la tabla de abajo.">';
 
     // gridlines horizontales + etiquetas Y (0/50/100)
     [0, 25, 50, 75, 100].forEach(function (v) {
@@ -323,21 +416,21 @@ html.vesper-dark table.dgrid td.off{background:var(--no-tint,rgba(224,112,101,.1
     svg += '<line class="thresh" x1="' + PADL + '" y1="' + r2(yF(THRESH)) + '" x2="' + (W - PADR) + '" y2="' + r2(yF(THRESH)) + '"/>';
     svg += '<text class="thresh-t" x="' + (W - PADR) + '" y="' + r2(yF(THRESH) - 4) + '" text-anchor="end">Meta ' + THRESH + '</text>';
 
-    // etiquetas X (días 1,5,10,15,20 mientras existan)
-    [1, 5, 10, 15, 20].forEach(function (d) {
-      if (d > N) return;
-      svg += '<text class="axis-t" x="' + r2(xF(d)) + '" y="' + (H - 8) + '" text-anchor="middle">' + d + '</text>';
+    // etiquetas X (clases 1,5,10,15,20 mientras existan)
+    [1, 5, 10, 15, 20].forEach(function (dd) {
+      if (dd > N) return;
+      svg += '<text class="axis-t" x="' + r2(xF(dd)) + '" y="' + (H - 8) + '" text-anchor="middle">' + dd + '</text>';
     });
 
     // línea de promedio acumulado (continua de first..last)
     var cumPts = [];
-    for (var d = s.first; d <= s.last; d++) cumPts.push(r2(xF(d)) + ',' + r2(yF(s.cum[d])));
+    for (d = s.first; d <= s.last; d++) cumPts.push(r2(xF(d)) + ',' + r2(yF(s.cum[d])));
     if (cumPts.length > 1) {
       svg += '<polyline fill="none" stroke="' + CUM_COLOR + '" stroke-width="2.5" ' +
         'stroke-linejoin="round" stroke-linecap="round" points="' + cumPts.join(' ') + '"/>';
     }
 
-    // línea de puntaje diario: tramos entre días evaluados consecutivos (corta en huecos)
+    // línea de desempeño diario: tramos entre clases calificadas consecutivas (corta en huecos)
     var run = [];
     function flushRun() {
       if (run.length > 1) {
@@ -346,20 +439,20 @@ html.vesper-dark table.dgrid td.off{background:var(--no-tint,rgba(224,112,101,.1
       }
       run = [];
     }
-    for (var d = 1; d <= N; d++) {
+    for (d = 1; d <= N; d++) {
       if (s.perDay[d] == null) { flushRun(); continue; }
       run.push(r2(xF(d)) + ',' + r2(yF(s.perDay[d])));
     }
     flushRun();
 
-    // puntos del día (con anillo de superficie para legibilidad)
-    for (var d = 1; d <= N; d++) {
+    // puntos de la clase (con anillo de superficie para legibilidad)
+    for (d = 1; d <= N; d++) {
       if (s.perDay[d] == null) continue;
       svg += '<circle cx="' + r2(xF(d)) + '" cy="' + r2(yF(s.perDay[d])) +
         '" r="3.6" fill="' + DAILY_COLOR + '" stroke="#fff" stroke-width="1.5"/>';
     }
 
-    // etiqueta directa del promedio actual al final de la línea azul
+    // punto del promedio actual al final de la línea azul
     var endY = yF(s.cum[s.last]);
     svg += '<circle cx="' + r2(xF(s.last)) + '" cy="' + r2(endY) +
       '" r="4" fill="' + CUM_COLOR + '" stroke="#fff" stroke-width="1.5"/>';
@@ -372,7 +465,7 @@ html.vesper-dark table.dgrid td.off{background:var(--no-tint,rgba(224,112,101,.1
 
     document.getElementById("pchart").innerHTML = svg;
     document.getElementById("pchart-sub").textContent =
-      "Curso de " + N + " días · promedio actual " + s.cum[s.last] + "%";
+      "Curso de " + N + " clases · promedio actual " + s.cum[s.last] + "%";
     card.style.display = "block";
 
     attachHover(xF, yF);
@@ -406,27 +499,27 @@ html.vesper-dark table.dgrid td.off{background:var(--no-tint,rgba(224,112,101,.1
       var vx = (clientX - svgRect.left) / svgRect.width * 640; // coord del viewBox (solo X)
       var day = Math.round((vx - PADL) / plotW * (N - 1)) + 1;
       day = Math.max(1, Math.min(N, day));
-      if (day === lastDay) return;  // mismo día: nada que reconstruir (evita reflow por movimiento)
+      if (day === lastDay) return;  // misma clase: nada que reconstruir (evita reflow por movimiento)
       lastDay = day;
 
-      var pd = chartData.perDay[day], cm = chartData.cum[day];
+      var pd = chartData.perDay[day], cm = chartData.cum[day], info = chartData.info[day];
       var cx = xF(day);
-      // escrituras al SVG (crosshair + puntos resaltados, en el x real del día)
+      // escrituras al SVG (crosshair + puntos resaltados, en el x real de la clase)
       cross.setAttribute("x1", cx); cross.setAttribute("x2", cx); cross.style.opacity = 1;
       if (pd != null) { hiD.setAttribute("cx", cx); hiD.setAttribute("cy", yF(pd)); hiD.style.opacity = 1; }
       else hiD.style.opacity = 0;
       if (cm != null) { hiC.setAttribute("cx", cx); hiC.setAttribute("cy", yF(cm)); hiC.style.opacity = 1; }
       else hiC.style.opacity = 0;
 
-      var tot = chartData.totc[day], ok = chartData.okc[day];
-      tip.innerHTML = '<span class="pt-d">Día ' + day + '</span>' +
-        '<span class="pt-r">Puntaje: ' + (pd == null ? "sin clase" : pd + "%") + '</span>' +
+      tip.innerHTML = '<span class="pt-d">Clase ' + day + ' · ' + esc(GB.fmtDay(DATES[day - 1])) + '</span>' +
+        '<span class="pt-r">Desempeño: ' + (pd == null ? (info ? "sin calificar" : "sin registro") : pd + "%") + '</span>' +
         (cm == null ? '' : '<span class="pt-r">Promedio: ' + cm + '%</span>') +
-        (tot ? '<span class="pt-a">Bien en ' + ok + ' de ' + tot + ' aspectos</span>' : '');
+        (info ? '<span class="pt-a">' + esc(GB.attMark(info.att).label) +
+          (info.hw != null ? ' · Tarea: ' + esc(GB.hwMark(info.hw).label.toLowerCase()) : '') + '</span>' : '');
       tip.style.opacity = 1;
 
       // posición: centrada sobre el punto real y acotada al ancho del contenedor
-      // (se mide el tooltip una vez por cambio de día, no por movimiento)
+      // (se mide el tooltip una vez por cambio de clase, no por movimiento)
       var px = cx * (svgRect.width / 640);
       var tw = tip.offsetWidth, th = tip.offsetHeight;
       var left = Math.max(2, Math.min(wrapW - tw - 2, px - tw / 2));
@@ -444,37 +537,39 @@ html.vesper-dark table.dgrid td.off{background:var(--no-tint,rgba(224,112,101,.1
     window.addEventListener("scroll", invalidate, true);
   }
 
-  function renderDaily(daily) {
-    var card = document.getElementById("daily-card");
-    var st = GB.dailyStats(daily ? daily.days : {});
-    if (!daily || st.cells === 0) { card.style.display = "none"; return; }
-    document.getElementById("daily-title").textContent = "Progreso diario";
-    document.getElementById("daily-sub").textContent =
-      "Curso de " + GB.COURSE_DAYS + " días · " + st.daysTouched + " con clase";
-    document.getElementById("daily-avg").textContent = "Promedio " + st.avg + "%";
+  function renderDaily(daily, st) {
+    var card = $("daily-card");
+    if (!st.days) { card.style.display = "none"; return; }
+    $("daily-sub").textContent = plural(st.days, "clase registrada", "clases registradas") + " de " + GB.COURSE_DAYS;
+    $("daily-grid").innerHTML = GB.dailyGridHtml(daily.days);
+    function key(m) { return '<span><span class="k vgb-' + m.tone + '">' + m.mark + '</span>' + esc(m.label) + '</span>'; }
+    $("daily-keys").innerHTML =
+      GB.ATT_ORDER.map(function (a) { return key(GB.attMark(a)); }).join("") +
+      [4, 3, 2, 1].map(function (lv) { return key(GB.levelMark(lv)); }).join("") +
+      '<span>Tarea: ✓ entregada · ½ incompleta · ✗ sin entregar</span>';
+    card.style.display = "block";
+  }
 
-    var head = '<thead><tr><th class="asp"></th>';
-    for (var d = 1; d <= GB.COURSE_DAYS; d++) head += '<th>' + d + '</th>';
-    head += '</tr></thead>';
-    var body = GB.DAILY_ASPECTS.map(function (a) {
-      var cells = '';
-      for (var d = 1; d <= GB.COURSE_DAYS; d++) {
-        var held = !!daily.days[d];
-        var tache = held && (daily.days[d][a.key] === false);
-        var cls = !held ? '' : (tache ? 'off' : 'on');   // sin clase = vacío
-        var txt = !held ? '·' : (tache ? '✗' : '✓');
-        cells += '<td class="' + cls + '">' + txt + '</td>';
-      }
-      return '<tr><th class="asp">' + esc(a.label) + '</th>' + cells + '</tr>';
-    }).join('');
-    document.getElementById("daily-grid").innerHTML = head + '<tbody>' + body + '</tbody>';
+  function renderPractice(row) {
+    var card = $("practice-card");
+    if (row.examsAvg == null && row.lessonsAvg == null) { card.style.display = "none"; return; }
+    function one(label, avg, n, what) {
+      return '<div class="crit"><div class="lbl"><b>' + label + '</b><small>' +
+        (avg == null ? "Aún sin intentos con sesión" : "Tu mejor marca en cada " + what + " · " + plural(n, "intento", "intentos")) +
+        '</small></div><div class="val">' + (avg == null ? '<span class="na">—</span>' : avg + "%") + '</div></div>';
+    }
+    $("practice").innerHTML = one("Exámenes", row.examsAvg, row.examsCount, "examen") +
+                              one("Lecciones", row.lessonsAvg, row.lessonsCount, "lección");
     card.style.display = "block";
   }
 
   function render(user, row, daily) {
-    document.getElementById("b-alias").textContent = row.alias || "Estudiante";
-    document.getElementById("b-email").textContent = user.email || "";
-    var lvEl = document.getElementById("b-level");
+    var st = GB.dailyStats(daily ? daily.days : {});
+    var g = GB.computeGrade(row, st);
+
+    $("b-alias").textContent = row.alias || "Estudiante";
+    $("b-email").textContent = user.email || "";
+    var lvEl = $("b-level");
     var lv = (window.VESPER_PATH && row.level) ? VESPER_PATH.normLevel(row.level) : (row.level || "");
     if (lv) {
       lvEl.className = "lvl";
@@ -484,39 +579,27 @@ html.vesper-dark table.dgrid td.off{background:var(--no-tint,rgba(224,112,101,.1
       lvEl.textContent = "";
     }
 
-    document.getElementById("c-exams").innerHTML = gradeValHtml(row.examsGrade, row.examsAvg, GB.WEIGHTS.exams);
-    document.getElementById("c-exams-sub").textContent = gradeSub(row.examsGrade, row.examsAvg, row.examsCount, "exámenes");
-    document.getElementById("c-lessons").innerHTML = gradeValHtml(row.lessonsGrade, row.lessonsAvg, GB.WEIGHTS.lessons);
-    document.getElementById("c-lessons-sub").textContent = gradeSub(row.lessonsGrade, row.lessonsAvg, row.lessonsCount, "lecciones");
-    document.getElementById("c-part").innerHTML = pctHtml(row.participacion, GB.WEIGHTS.participation);
-    var st = GB.dailyStats(daily ? daily.days : {});
-    document.getElementById("c-part-sub").textContent = (st.cells > 0)
-      ? ('Promedio de tu progreso diario · ' + st.daysTouched + ' de ' + GB.COURSE_DAYS + ' días con clase')
-      : 'La asigna tu profesor en clase';
-    renderProgressChart(daily);
-    renderDaily(daily);
+    renderCycle();
+    renderHero(g);
+    renderParts(row, st, g);
+    var notes = String(row.notes || "").trim();
+    $("notes-card").style.display = notes ? "block" : "none";
+    $("notes-text").textContent = notes;
+    renderSkills(st);
+    renderProgressChart(st);
+    renderDaily(daily, st);
+    renderPractice(row);
 
-    var f = GB.computeFinal(row);
-    var box = document.getElementById("c-final");
-    if (f.final == null) {
-      box.innerHTML = '<span class="na">Sin calificaciones aún</span>';
-    } else {
-      var cls = f.passed ? "pass" : "fail";
-      box.innerHTML = '<b class="' + cls + '">' + f.final + '</b>' +
-        '<span class="' + cls + '">' + (f.passed ? "Aprobado" : "En riesgo") + '</span>';
-    }
-
-    document.getElementById("fine").innerHTML =
-      'La final pondera: Exámenes ' + Math.round(GB.WEIGHTS.exams * 100) +
-      '% · Lecciones ' + Math.round(GB.WEIGHTS.lessons * 100) +
-      '% · Participación ' + Math.round(GB.WEIGHTS.participation * 100) +
-      '%. Solo entran las notas <b>confirmadas por tu profesor</b>; tu práctica ' +
-      'te ayuda a prepararte pero no cuenta por sí sola. Los criterios que aún no ' +
-      'tienes no cuentan en tu contra. Se aprueba con ' + GB.PASS_THRESHOLD + ' o más.';
+    $("fine").innerHTML = 'Tu calificación pondera ' + GB.COMPONENTS.map(function (c) {
+        return esc(c.label) + ' ' + Math.round(c.weight * 100) + '%'; }).join(' · ') +
+      '. Todo lo registra tu profesor. Lo que aún no tiene datos no cuenta en tu contra: ' +
+      'por eso ves un <b>avance</b> hasta que presentes el examen final. Un retardo vale media asistencia ' +
+      'y una falta justificada no te afecta. Se aprueba con ' + GB.PASS_THRESHOLD + ' o más.';
 
     loadingEl.style.display = "none";
     msgEl.style.display = "none";
     contentEl.style.display = "block";
+    return g;
   }
 
   function load(user) {
@@ -544,25 +627,16 @@ html.vesper-dark table.dgrid td.off{background:var(--no-tint,rgba(224,112,101,.1
             roster[i].studentUid === user.uid ||
             roster[i].key === "legacy:" + email) { mine = roster[i]; break; }
       }
-      if (!mine) {
-        mine = { alias: VESPER_RESULTS.aliasOf(), studentUid: user.uid, level: "",
-                 examsAvg: null, examsCount: 0, lessonsAvg: null, lessonsCount: 0,
-                 examsGrade: null, lessonsGrade: null,
-                 participacion: null, notes: "" };
-      }
-      /* el promedio del progreso diario manda sobre la participación mostrada */
-      if (daily) {
-        var st = GB.dailyStats(daily.days);
-        if (st.avg != null) mine.participacion = st.avg;
-      }
+      if (!mine) mine = GB.buildRoster({ me: {} }, [], {})[0];
+      if (!mine.alias) mine.alias = VESPER_RESULTS.aliasOf();
+      var g = render(user, mine, daily);
       /* Resumen cacheado para el teaser del portal (materiales.html):
          solo promedios, sin correo ni datos personales. */
       try {
         localStorage.setItem("vesper_boleta_summary", JSON.stringify({
-          examsAvg: mine.examsAvg, lessonsAvg: mine.lessonsAvg, ts: Date.now()
+          examsAvg: mine.examsAvg, lessonsAvg: mine.lessonsAvg, grade: g.grade, ts: Date.now()
         }));
       } catch (e) {}
-      render(user, mine, daily);
     });
   }
 
