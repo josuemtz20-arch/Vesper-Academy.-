@@ -116,105 +116,29 @@ window.VESPER_ADAPTIVE = (function () {
     return null;
   }
 
-  /* ---------- Adaptacion de la leccion ---------- */
-  /* dificultad heuristica de un ejercicio (0 facil -> 4 dificil) */
-  function difficulty(ex) {
-    switch (ex.type) {
-      case "true_false": return 0;
-      case "multiple_choice": return 1 + ((ex.options || []).length > 3 ? 0.5 : 0);
-      case "matching": return 1.5;
-      case "categorize": return 2;
-      case "listening": return 2.5;
-      case "word_order": return 1.5 + Math.min(2, ((ex.correctOrder || ex.words || []).length) / 4);
-      case "fill_blank": return 2;
-      case "translate": case "type_answer": return 3;
-      default: return 1.5;
-    }
-  }
-  /* peso de afinidad de un tipo de ejercicio segun el estilo preferido */
-  function styleAffinity(type, styles) {
-    var map = {
-      audio:    { listening: 3, true_false: 1 },
-      speaking: { translate: 3, type_answer: 3, fill_blank: 1.5 },
-      reading:  { translate: 2, fill_blank: 2, matching: 1.5, true_false: 1 },
-      grammar:  { multiple_choice: 2, word_order: 2, fill_blank: 1 }
-    };
-    var w = 0;
-    (styles || []).forEach(function (s) { if (map[s] && map[s][type]) w += map[s][type]; });
-    return w;
-  }
-
   /* clona superficial+ejercicios */
   function clone(obj) { return JSON.parse(JSON.stringify(obj)); }
 
   /*
    * adaptLesson(lesson, ctx)
-   * ctx (opcional): { level (0-5), session (scoreWarmup result), styles }
-   * Devuelve copia con exercises reordenados/recortados + metadatos:
-   *   adapted, adaptNote, focusType, targetBand
+   * Devuelve una COPIA de la lección con sus ejercicios en el orden y la
+   * cantidad en que se escribieron, más targetBand.
+   *
+   * Hasta 2026-11-11 reordenaba los ejercicios por tipo/dificultad y, si el
+   * calentamiento salía flojo, recortaba el 30 % más "difícil". Eso rompía
+   * las lecciones: una lectura quedaba con las preguntas antes del texto, y
+   * el modo "fácil" quitaba justo los ejercicios de producción y de audio,
+   * que es donde se aprende. Una lección es una secuencia: se respeta.
+   * (La adaptación real al nivel la hacen el mapa y el repaso espaciado.)
    */
   function adaptLesson(lesson, ctx) {
     if (!lesson || !lesson.exercises) return lesson;
     ctx = ctx || {};
     var lv = (typeof ctx.level === "number") ? ctx.level : profileLevel();
-    var styles = ctx.styles || profileStyles();
-    var session = ctx.session || getSession();
-    var calibration = session ? session.calibration : 0;
-
     var out = clone(lesson);
-    var list = out.exercises.map(function (ex, i) { return { ex: ex, i: i, d: difficulty(ex) }; });
-
-    /* objetivo de cantidad: base por banda, ajustado por calibracion */
-    var base = list.length;
-    var target = base;
-    if (calibration < 0) target = Math.max(3, Math.round(base * 0.7)); // mas corto/facil
-    else if (calibration > 0) target = base;                           // completo (reto)
-
-    /* puntuacion para ordenar: prioriza afinidad de estilo; dificultad
-       sube si el usuario va sobrado (calibration>0) y baja si flojea. */
-    list.forEach(function (o) {
-      var aff = styleAffinity(o.ex.type, styles);
-      var diffPref = calibration > 0 ? o.d : (calibration < 0 ? (4 - o.d) : 0);
-      o.score = aff * 2 + diffPref;
-    });
-
-    /* si flojea, recorta primero los mas dificiles */
-    var kept = list.slice();
-    if (target < kept.length) {
-      kept.sort(function (a, b) { return a.d - b.d; });        // faciles primero
-      kept = kept.slice(0, target);
-    }
-
-    /* orden final: afinidad/score desc, con un arranque amable salvo reto */
-    kept.sort(function (a, b) { return b.score - a.score || a.d - b.d; });
-    if (calibration <= 0) {
-      kept.sort(function (a, b) { return a.d - b.d || b.score - a.score; }); // de menor a mayor dificultad
-    }
-
-    out.exercises = kept.map(function (o) { return o.ex; });
-
-    /* tipo de enfoque (para mensaje al usuario) */
-    var focus = null;
-    if (styles.indexOf("audio") >= 0) focus = "audio";
-    else if (styles.indexOf("speaking") >= 0) focus = "speaking";
-    else if (styles.indexOf("reading") >= 0) focus = "reading";
-
-    out.adapted = true;
+    out.adapted = false;            /* nada cambió: no se anuncia "Adaptada para ti" */
     out.targetBand = levelToBand(lv);
-    out.focusType = focus;
-    out.adaptNote = buildNote(lv, calibration, focus, base, out.exercises.length);
     return out;
-  }
-
-  function buildNote(lv, calibration, focus, base, count) {
-    var parts = [];
-    if (calibration > 0) parts.push("subimos el reto");
-    else if (calibration < 0) parts.push("vamos con calma");
-    else parts.push("a tu medida");
-    if (count < base) parts.push("seleccion de " + count + " ejercicios");
-    var focusMap = { audio: "con foco en escucha", speaking: "con foco en producir", reading: "con foco en lectura" };
-    if (focus && focusMap[focus]) parts.push(focusMap[focus]);
-    return "Adaptada para ti: " + parts.join(", ") + ".";
   }
 
   /* ---------- Orden del indice personalizado ----------
@@ -257,7 +181,7 @@ window.VESPER_ADAPTIVE = (function () {
     getProfile: getProfile, profileLevel: profileLevel, profileStyles: profileStyles,
     levelToBand: levelToBand, bandRank: bandRank,
     warmupBank: warmupBank, scoreWarmup: scoreWarmup, getSession: getSession,
-    difficulty: difficulty, adaptLesson: adaptLesson, recommendOrder: recommendOrder,
+    adaptLesson: adaptLesson, recommendOrder: recommendOrder,
     personalize: personalize, greeting: greeting
   };
 })();
