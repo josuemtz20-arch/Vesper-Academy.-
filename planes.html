@@ -116,6 +116,7 @@
           <li><i class="fas fa-circle-check" aria-hidden="true"></i> Evaluación continua de progreso.</li>
         </ul>
         <a href="book_placement.html?plan=grupal" class="btn btn-outline">Elegir plan Grupal</a>
+        <a class="btn btn-gold" data-pago="grupal" hidden target="_blank" rel="noopener">Inscribirme y pagar</a>
       </div>
 
       <!-- Sin listón «Más popular»: no hay dato que lo respalde (se quitó
@@ -133,6 +134,8 @@
           <li><i class="fas fa-circle-check" aria-hidden="true"></i> Seguimiento 1 a 1 del progreso.</li>
         </ul>
         <a href="book_placement.html?plan=1a1" class="btn btn-gold"><i class="fas fa-arrow-right" aria-hidden="true"></i> Empezar 1 a 1</a>
+        <p class="p-for" data-neg="criterio_1a1" hidden></p>
+        <a class="btn btn-outline" data-pago="1a1" hidden target="_blank" rel="noopener">Inscribirme y pagar</a>
       </div>
 
       <div class="pcard reveal" id="especializados">
@@ -149,12 +152,24 @@
           <li><i class="fas fa-circle-check" aria-hidden="true"></i> Material y audios incluidos.</li>
         </ul>
         <a href="book_placement.html?plan=especializados" class="btn btn-outline">Quiero especializarme</a>
+        <a class="btn btn-gold" data-pago="especializados" hidden target="_blank" rel="noopener">Inscribirme y pagar</a>
       </div>
     </div>
 
     <!-- Lo que antes decía la sección de precios de la portada (2026-11-06:
          la portada se simplificó y los precios viven solo aquí). Mismos
          datos que la tabla #vesper-hechos de index.html. -->
+    <!-- Huecos para los datos de negocio que faltan (ver NEGOCIO al final de
+         la página). Cada uno aparece solo cuando el dato existe. -->
+    <ul class="plans-all reveal" data-neg-list hidden style="list-style:none;padding-left:0">
+      <li data-neg="precio_club" hidden></li>
+      <li data-neg="inicio" hidden></li>
+      <li data-neg="horarios" hidden></li>
+      <li data-neg="formas_pago" hidden></li>
+      <li data-neg="iva" hidden></li>
+      <li data-neg="reembolso" hidden></li>
+      <li data-neg="terminos" hidden></li>
+    </ul>
     <p class="plans-all reveal"><b>Todos los planes incluyen:</b> material del alumno, biblioteca de audio, examen de nivel y entrevista oral con un profesor, gratis y sin compromiso.</p>
     <div class="entry reveal">
       <div><h3>¿Trabajas de 9 a 7?</h3><p>Cinco clases por semana no es para todos. Hay dos formas de empezar con menos.</p></div>
@@ -371,6 +386,41 @@ document.getElementById('year').textContent = new Date().getFullYear();
       document.querySelectorAll('.reveal').forEach(function(el){io.observe(el);});
     }catch(err){document.querySelectorAll('.reveal').forEach(function(el){el.classList.add('in-view');});}
   }
+  /* ── DATOS DE NEGOCIO PENDIENTES ──────────────────────────────────────
+     Llena aquí lo que falte; mientras un valor esté vacío, su hueco no se
+     muestra. No hay que tocar el HTML.
+       pago.<plan>   liga de cobro de ese plan (https://…). Al ponerla aparece
+                     el botón «Inscribirme y pagar» en su tarjeta.
+       terminos      URL de los términos y condiciones (https://… o página).
+       lo demás      texto que se muestra tal cual. */
+  var NEGOCIO = {
+    pago: { grupal: "", "1a1": "", especializados: "" },
+    terminos: "",
+    precio_club: "",     /* p. ej. "Club de Conversación: $X MXN al mes." */
+    criterio_1a1: "",    /* de qué depende el rango $250–400 por hora */
+    inicio: "",          /* fechas de inicio de los próximos grupos */
+    horarios: "",        /* horarios disponibles */
+    formas_pago: "",     /* medios de pago aceptados */
+    iva: "",             /* si los precios incluyen IVA y si se factura */
+    reembolso: ""        /* política de reembolso */
+  };
+  try{
+    var okUrl=function(u){return /^https:\/\//i.test(u||"")||/^[a-z0-9_-]+\.html(#.*)?$/i.test(u||"");};
+    [].forEach.call(document.querySelectorAll('[data-pago]'),function(a){
+      var u=NEGOCIO.pago[a.getAttribute('data-pago')];
+      if(okUrl(u)){a.href=u;a.hidden=false;}
+    });
+    var any=false;
+    [].forEach.call(document.querySelectorAll('[data-neg]'),function(el){
+      var k=el.getAttribute('data-neg'),v=NEGOCIO[k];
+      if(!v)return;
+      if(k==='terminos'){ if(!okUrl(v))return; el.innerHTML='<a href="'+v+'">Términos y condiciones</a>'; }
+      else el.textContent=v;
+      el.hidden=false; if(el.tagName==='LI')any=true;
+    });
+    var list=document.querySelector('[data-neg-list]'); if(list&&any)list.hidden=false;
+  }catch(e){}
+
   /* Formulario de contacto — mismo flujo formsubmit.co que tenía la portada */
   var form=document.getElementById('contactForm'),msg=document.getElementById('formMsg');
   if(form)form.addEventListener('submit',function(ev){
