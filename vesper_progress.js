@@ -121,13 +121,34 @@ window.VesperProgress = (function () {
   /* ¿"Congelar racha" activado? Se guarda en vesper_profile.vesper.freezeStreak
      (Configuración). Lee directo de localStorage para no depender del orden de
      carga de scripts; usa VESPER_PREFS si está disponible. */
-  function freezeStreakOn() {
-    try { if (window.VESPER_PREFS && VESPER_PREFS.freezeStreak) return !!VESPER_PREFS.freezeStreak(); } catch (e) {}
-    try {
-      var prof = JSON.parse(localStorage.getItem("vesper_profile") || "null");
-      return !!(prof && prof.vesper && prof.vesper.freezeStreak);
-    } catch (e) {}
-    return false;
+/* ---- Protecciones de racha: se GASTAN ----
+     Hay dos, y cada una cubre UN día sin practicar:
+       · congelación: se compra en la tienda (máx. 2 guardadas);
+       · escudo: se gana cada 7 días de racha.
+     Antes "Congelar racha" era una bandera permanente (la racha no se rompía
+     nunca más, pagaras o no) y los escudos solo se contaban. El total de
+     escudos GANADOS sigue en s.shields (lo usan los logros y la nube, donde
+     nunca baja); los usados se llevan aparte, en el perfil del dispositivo. */
+  function readProf() {
+    try { return JSON.parse(localStorage.getItem("vesper_profile") || "null") || {}; } catch (e) { return {}; }
+  }
+  function writeProf(p) { try { localStorage.setItem("vesper_profile", JSON.stringify(p)); } catch (e) {} }
+  function protections(s) {
+    var p = readProf(), v = p.vesper || {};
+    /* bandera vieja: vale por una congelación, una sola vez */
+    if (v.freezeStreak === true) {
+      v.freezes = Math.max(1, v.freezes || 0); delete v.freezeStreak; p.vesper = v; writeProf(p);
+    }
+    var used = Math.max(0, v.shieldsUsed || 0);
+    return { freezes: Math.max(0, v.freezes || 0), shields: Math.max(0, ((s && s.shields) || 0) - used) };
+  }
+  /* gasta una protección (congelación antes que escudo). Devuelve cuál, o "" */
+  function spendProtection(s) {
+    var have = protections(s), p = readProf();
+    p.vesper = p.vesper || {};
+    if (have.freezes > 0) { p.vesper.freezes = have.freezes - 1; writeProf(p); return "freeze"; }
+    if (have.shields > 0) { p.vesper.shieldsUsed = (p.vesper.shieldsUsed || 0) + 1; writeProf(p); return "shield"; }
+    return "";
   }
 
   function defaults() { return { xp: 0, streak: 0, lastDay: null, days: {}, completed: {}, shields: 0, achievements: {}, dayCounts: {}, goalTarget: DEFAULT_GOAL, bosses: {}, stats: {} }; }
@@ -148,6 +169,8 @@ window.VesperProgress = (function () {
   }
 
   function getState() { return load(); }
+  /* { freezes, shields } disponibles ahora mismo */
+  function streakProtection() { return protections(load()); }
 
   function addXp(n) { var s = load(); s.xp += (n || 0); save(s); return s.xp; }
 
@@ -249,6 +272,7 @@ window.VesperProgress = (function () {
     var s = load();
     var today = dayKey();
     var isNewDay = s.lastDay !== today;
+    var protectedBy = "";
 
     if (!s.lastDay) {
       s.streak = 1;
@@ -257,9 +281,10 @@ window.VesperProgress = (function () {
       if (dd === 0) { /* already counted today: keep streak */ }
       else if (dd === 1) { s.streak += 1; }
       else if (dd > 1) {
-        // missed one or more days. Con "congelar racha" activado, la racha no se
-        // rompe: el regreso cuenta como continuación. Si no, se reinicia.
-        if (freezeStreakOn()) { s.streak += 1; }
+        // Faltó uno o más días. Si faltó exactamente UNO y queda una protección,
+        // se gasta y la racha continúa; con más días, o sin protección, se reinicia.
+        protectedBy = (dd === 2) ? spendProtection(s) : "";
+        if (protectedBy) { s.streak += 1; }
         else { s.streak = 1; }
       }
       // dd < 0 (clock moved back): leave streak as-is
@@ -294,7 +319,8 @@ window.VesperProgress = (function () {
     save(s);
     syncIfLoggedIn(s); // optional, safe no-op until accounts are wired
     return { xp: s.xp, streak: s.streak, isNewDay: isNewDay, milestone: milestone, newShield: newShield,
-      shields: s.shields, newAchievements: newAchievements, dailyGoal: dg };
+      shields: protections(s).shields, protectedBy: protectedBy,
+      newAchievements: newAchievements, dailyGoal: dg };
   }
 
   /* Desbloqueo puntual desde otras páginas (p.ej. maestría por destreza).
@@ -449,7 +475,7 @@ window.VesperProgress = (function () {
     return merged;
   }
 
-  return { getState: getState, completeLesson: completeLesson, addXp: addXp, weekGrid: weekGrid, merge: merge,
+  return { getState: getState, streakProtection: streakProtection, completeLesson: completeLesson, addXp: addXp, weekGrid: weekGrid, merge: merge,
     unlock: unlock, dailyGoal: dailyGoal, setGoal: setGoal, passBoss: passBoss, bossPassed: bossPassed,
     achievementsState: achievementsState, ACHIEVEMENTS: ACHIEVEMENTS, CATEGORIES: CATEGORIES,
     bump: bump, check: check };

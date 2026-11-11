@@ -363,9 +363,11 @@
     /* La liga compite contra rivales simulados: antes de la primera lección
        el "15º Bronce" solo confundía. Sale cuando ya hay XP. */
     if ((st.xp || 0) > 0) tiles += '<span id="leagueTile" hidden></span>';
-    if (st.shields || 0) {
+    /* escudos DISPONIBLES (los ganados menos los ya gastados en salvar la racha) */
+    var shieldsLeft = (P && P.streakProtection) ? P.streakProtection().shields : (st.shields || 0);
+    if (shieldsLeft) {
       tiles += '<div class="hstat"><span class="hstat__ic">' + HUB_ICN.shield + '</span>'
-        + '<span class="hstat__tx"><span class="hstat__v">' + st.shields + '</span><span class="hstat__l">Escudos</span></span></div>';
+        + '<span class="hstat__tx"><span class="hstat__v">' + shieldsLeft + '</span><span class="hstat__l">Escudos</span></span></div>';
     }
     var idLine = info.band
       ? '<span class="hub-lvl">Nivel ' + esc(info.band) + (info.bandTag ? ' · ' + esc(info.bandTag) : '') + '</span>'
@@ -5367,8 +5369,14 @@
     /* bonus por mejor combo de la sesión: +5% por cada acierto seguido sobre 2, tope +50% */
     var comboBonus = maxCombo >= 3 ? Math.round(baseXp * Math.min(0.5, (maxCombo - 2) * 0.05)) : 0;
     earnedXp = baseXp + comboBonus;
+    /* Repetir una lección YA superada es repaso, no avance: paga una quinta
+       parte y no gasta el boost de la tienda. Antes pagaba completo, así que
+       la forma más rápida de subir en la liga era repetir la lección 1. */
+    var isRepeat = false;
+    try { isRepeat = !lesson.isReview && !lesson.srsReview && !!(P && P.getState().completed[lesson.lessonId]); } catch (e) {}
+    if (isRepeat) { earnedXp = Math.max(2, Math.round(earnedXp * 0.2)); comboBonus = 0; }
     /* boost de XP comprado en la tienda (un solo uso) */
-    var boost = (window.VESPER_ECONOMY && VESPER_ECONOMY.consumeXpBoost) ? VESPER_ECONOMY.consumeXpBoost() : 0;
+    var boost = (!isRepeat && window.VESPER_ECONOMY && VESPER_ECONOMY.consumeXpBoost) ? VESPER_ECONOMY.consumeXpBoost() : 0;
     if (boost > 1) earnedXp = Math.round(earnedXp * boost);
     track("lesson_complete", { id: lesson.lessonId, level: lesson.level, pct: pct, type: lesson.srsReview ? "srs" : (lesson.isReview ? "review" : "lesson") });
     /* toda lección superada se celebra; la perfecta, con más */
@@ -5399,6 +5407,7 @@
       + mascot((perfect || (lesson.isReview && pct >= 80)) ? "milestone" : "correct", cheer)
       + '<h1 class="lc-title">' + head + '</h1>'
       + statTiles(earnedXp, pct)
+      + (isRepeat ? '<p class="muted">' + T('Ya habías superado esta lección: como repaso da menos XP.', 'You had already passed this lesson: as review it gives less XP.') + '</p>' : '')
       + (comboBonus > 0 ? '<div class="xp-bonus">' + ic('flame') + ' +' + comboBonus + T(' XP por ', ' XP for ') + maxCombo + T(' seguidas', ' in a row') + '</div>' : '')
       + '<p class="muted">' + correct + T(' de ', ' of ') + total + T(' correctos', ' correct') + '</p>'
       + '<button class="btn btn-gold" id="cont">' + T('Continuar', 'Continue') + '</button></div></div>');
@@ -6229,6 +6238,18 @@
       + '<a class="btn btn-ghost" href="leccion.html">Ver lecciones</a></div></div>');
     return;
   }
+  /* Una lección bloqueada no se abre escribiendo su id en la dirección: el
+     mapa es el que decide qué está abierto (PATH.status). */
+  try {
+    if (PATH && PATH.status && PATH.build && PATH.status(id, PATH.build(L, ORDER)) === "locked") {
+      show('<div class="wrap"><div class="card center">' + mascot("thinking", "Todavía no llegas a esta lección.")
+        + '<h1>Lección bloqueada</h1>'
+        + '<p class="muted">Se abre cuando termines las anteriores de tu camino. Si ya sabes inglés, el examen de nivel te coloca más adelante.</p>'
+        + '<a class="btn btn-gold" href="leccion.html">Ir a mi camino</a>'
+        + '<a class="btn btn-ghost" href="book_placement.html?src=leccion-bloqueada">Hacer el examen de nivel</a></div></div>');
+      return;
+    }
+  } catch (e) {}
   lesson = baseLesson;
   /* el verbo del mundo (injectPractice) sale de vesper_vocab_more.js: se espera
      un momento; con red lenta la lección arranca sin él */

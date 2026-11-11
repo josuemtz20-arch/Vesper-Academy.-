@@ -324,9 +324,9 @@
     </div>
     <div class="field">
       <div class="row" style="justify-content:space-between">
-        <span class="label" id="lab-freeze" style="margin:0">Congelar racha
-          <span class="hint">Tu racha no se rompe los días que no practiques.</span></span>
-        <button class="switch" id="sw-freeze" role="switch" aria-checked="false" aria-labelledby="lab-freeze"></button>
+        <span class="label" id="lab-freeze" style="margin:0">Protección de racha
+          <span class="hint" id="freeze-info">Cada protección cubre un día sin practicar y se gasta al usarse.</span></span>
+        <a class="btn-link" href="tienda.html" style="white-space:nowrap">Ir a la tienda</a>
       </div>
     </div>
   </section>
@@ -651,7 +651,15 @@
   wireSwitch("sw-autoplay", p.autoplayAudio !== false, "autoplayAudio");
 
   /* ---------- congelar racha ---------- */
-  wireSwitch("sw-freeze", p.freezeStreak, "freezeStreak");
+  /* la racha ya no se congela con un interruptor gratis: se muestran las
+     protecciones que quedan (congelaciones compradas y escudos ganados) */
+  (function () {
+    var el = $("freeze-info"); if (!el) return;
+    var pr = (window.VesperProgress && VesperProgress.streakProtection) ? VesperProgress.streakProtection() : null;
+    var fz = pr ? pr.freezes : ((p.freezes || 0) + (p.freezeStreak === true ? 1 : 0)), sh = pr ? pr.shields : 0;
+    el.textContent = "Tienes " + fz + " congelaci" + (fz === 1 ? "ón" : "ones") + " y " + sh + " escudo" + (sh === 1 ? "" : "s") +
+      ". Cada una cubre un día sin practicar y se gasta al usarse. Las congelaciones se compran en la tienda; los escudos se ganan cada 7 días de racha.";
+  })();
 
   /* ---------- modo desafío (vidas) + gemas ---------- */
   (function () {

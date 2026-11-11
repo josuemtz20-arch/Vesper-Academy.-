@@ -87,6 +87,7 @@
     apply: apply,
     soundEnabled: function () { return !!get().soundFx; },
     autoplayEnabled: function () { return !!get().autoplayAudio; },
-    freezeStreak: function () { return !!get().freezeStreak; }
+    /* ¿queda alguna congelación de racha? (consumible; ver vesper_progress.js) */
+    freezeStreak: function () { var p = get(); return p.freezeStreak === true || (p.freezes || 0) > 0; }
   };
 })();

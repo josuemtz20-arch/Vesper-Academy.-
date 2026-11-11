@@ -27,7 +27,7 @@ window.VESPER_ECONOMY = (function () {
 
   var STORE = [
     { id: "hearts", name: "Recarga de vidas", icon: "❤️", cost: 50, desc: "Rellena tus 5 corazones al instante." },
-    { id: "freeze", name: "Congelar racha", icon: "🛡️", cost: 100, desc: "Protege tu racha un día de descanso." },
+    { id: "freeze", name: "Congelar racha", icon: "🛡️", cost: 100, desc: "Cubre un día sin practicar. Se gasta al usarse (máx. 2 guardadas)." },
     { id: "xpboost", name: "Boost de XP (×2)", icon: "⚡", cost: 80, desc: "Doble XP en tu próxima lección." }
   ];
 
@@ -82,12 +82,23 @@ window.VESPER_ECONOMY = (function () {
   function xpBoost() { return load().xpBoost || 0; }
   function consumeXpBoost() { var s = load(); var b = s.xpBoost || 0; if (b > 0) { s.xpBoost = 0; save(s); } return b; }
 
-  /* activa "congelar racha" en el perfil (mismo flag que lee vesper_progress) */
-  function enableFreeze() {
+  /* "Congelar racha" es un consumible: cada compra suma UNA congelación (tope
+     MAX_FREEZES) y vesper_progress.js la gasta el día que salva la racha.
+     Antes ponía una bandera permanente: se pagaba una vez y la racha ya no se
+     rompía nunca. */
+  var MAX_FREEZES = 2;
+  function freezes() {
+    try {
+      var v = (JSON.parse(localStorage.getItem("vesper_profile") || "null") || {}).vesper || {};
+      return Math.max(v.freezeStreak === true ? 1 : 0, v.freezes || 0);
+    } catch (e) { return 0; }
+  }
+  function addFreeze() {
     try {
       var prof = JSON.parse(localStorage.getItem("vesper_profile") || "null") || {};
       prof.vesper = prof.vesper || {};
-      prof.vesper.freezeStreak = true;
+      prof.vesper.freezes = Math.min(MAX_FREEZES, freezes() + 1);
+      delete prof.vesper.freezeStreak;
       localStorage.setItem("vesper_profile", JSON.stringify(prof));
       return true;
     } catch (e) { return false; }
@@ -99,9 +110,10 @@ window.VESPER_ECONOMY = (function () {
     if (!it) return { ok: false, msg: "Artículo no disponible." };
     if (gems() < it.cost) return { ok: false, msg: "Te faltan gemas." };
     if (id === "hearts" && hearts() >= MAX_HEARTS) return { ok: false, msg: "Ya tienes todas tus vidas." };
+    if (id === "freeze" && freezes() >= MAX_FREEZES) return { ok: false, msg: "Ya tienes " + MAX_FREEZES + " congelaciones guardadas." };
     if (!spend(it.cost)) return { ok: false, msg: "Te faltan gemas." };
     if (id === "hearts") refillHearts();
-    else if (id === "freeze") enableFreeze();
+    else if (id === "freeze") addFreeze();
     else if (id === "xpboost") { var s = load(); s.xpBoost = 2; save(s); }
     return { ok: true, msg: it.name + " activado." };
   }
@@ -109,5 +121,5 @@ window.VESPER_ECONOMY = (function () {
   return { gems: gems, award: award, spend: spend, hearts: hearts, maxHearts: maxHearts,
     loseHeart: loseHeart, refillHearts: refillHearts, secsToNextHeart: secsToNextHeart,
     livesActive: livesActive, setChallenge: setChallenge, xpBoost: xpBoost, consumeXpBoost: consumeXpBoost,
-    buy: buy, STORE: STORE };
+    buy: buy, freezes: freezes, STORE: STORE };
 })();
