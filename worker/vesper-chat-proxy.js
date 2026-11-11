@@ -244,22 +244,26 @@ function secondsToUtcMidnight(nowMs) {
 
 /* ---------- Contador en Durable Object ----------
  * Pide a la instancia de RateLimiter de `key` que cuente un mensaje.
- * Devuelve { ok, retryAfter, scope }. Si el binding no existe o el DO falla
- * (incidencia transitoria de Cloudflare), deja pasar y lo registra: es la
- * misma degradación elegante del resto del sitio, y el max_tokens fijo sigue
- * acotando el costo de cada mensaje. Tras `wrangler deploy` con el
- * wrangler.toml de este repo el binding SIEMPRE existe. */
+ * Devuelve { ok, retryAfter, scope, n }.
+ * FALLA CERRADO: si el binding no existe o el DO no responde, la petición se
+ * rechaza (scope "unavailable"). Dejar pasar cuando el contador falla
+ * convertía cualquier incidencia en uso sin tope de la API de pago y en
+ * intentos de examen sin límite; unos minutos de "vuelve a intentarlo" son
+ * el mal menor. Tras `wrangler deploy` con el wrangler.toml de este repo el
+ * binding SIEMPRE existe. */
+const RL_DOWN = { ok: false, scope: "unavailable", retryAfter: 30 };
 async function rateHit(env, key, perMin, perDay) {
   if (!env.RATE_LIMITER) {
-    console.warn("RATE_LIMITER no configurado: límite de uso desactivado.");
-    return { ok: true };
+    console.error("RATE_LIMITER no configurado: se rechaza la petición.");
+    return RL_DOWN;
   }
   try {
     const stub = env.RATE_LIMITER.get(env.RATE_LIMITER.idFromName(key));
-    return await stub.hit(perMin, perDay);
+    const r = await stub.hit(perMin, perDay);
+    return r && typeof r.ok === "boolean" ? r : RL_DOWN;
   } catch (e) {
-    console.error("RateLimiter falló, se deja pasar:", e && e.message);
-    return { ok: true };
+    console.error("RateLimiter falló, se rechaza:", e && e.message);
+    return RL_DOWN;
   }
 }
 
@@ -407,7 +411,7 @@ export default {
         console.error("exam:", e && e.message);
         out = [500, { error: "Error del servidor de exámenes." }];
       }
-      const extra = out[0] === 429 ? { "Retry-After": String(out[1].retryAfter || 60) } : {};
+      const extra = (out[0] === 429 || out[0] === 503) && out[1].retryAfter ? { "Retry-After": String(out[1].retryAfter || 60) } : {};
       return new Response(JSON.stringify(out[1]), {
         status: out[0],
         headers: Object.assign({ "Content-Type": "application/json", "Cache-Control": "no-store" }, corsHeaders(origin), extra)
@@ -459,6 +463,10 @@ export default {
       limitOf(env, isPro ? "RL_PRO_PER_DAY" : "RL_FREE_PER_DAY")
     );
     if (!perIp.ok) {
+      if (perIp.scope === "unavailable") {
+        return jsonError(503, "Vesper no está disponible en este momento. Vuelve a intentarlo en un minuto.",
+          origin, "busy", { "Retry-After": String(perIp.retryAfter) });
+      }
       const msg = perIp.scope === "day"
         ? "Llegaste al límite de mensajes de hoy. Vuelve mañana para seguir practicando."
         : "Vas muy rápido. Espera un momento y vuelve a intentarlo.";
@@ -487,7 +495,9 @@ export default {
      * rechazado no gaste el cupo de los alumnos reales. */
     const global = await rateHit(env, "global", 0, limitOf(env, "RL_GLOBAL_PER_DAY"));
     if (!global.ok) {
-      return jsonError(503, "Vesper está descansando por hoy (límite diario del servicio). Vuelve mañana.",
+      return jsonError(503, global.scope === "unavailable"
+        ? "Vesper no está disponible en este momento. Vuelve a intentarlo en un minuto."
+        : "Vesper está descansando por hoy (límite diario del servicio). Vuelve mañana.",
         origin, "busy", { "Retry-After": String(global.retryAfter || 3600) });
     }
 

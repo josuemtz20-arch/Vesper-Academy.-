@@ -49,6 +49,7 @@ const SKILL_RANK = { grammar: 0, vocab: 1, use: 2, reading: 3, listening: 4 };
 export const EXAM_RATE_DEFAULTS = {
   RL_EXAM_START_PER_MIN: 10, RL_EXAM_START_PER_DAY: 200,
   RL_EXAM_ANSWER_PER_MIN: 90, RL_EXAM_ANSWER_PER_DAY: 3000,
+  RL_EXAM_FINISH_PER_MIN: 10, RL_EXAM_FINISH_PER_DAY: 300,
   /* intentos REGISTRADOS por alumno, examen y día (0 = sin tope) */
   RL_EXAM_UID_EXAM_PER_DAY: 3, RL_EXAM_UID_BOSS_PER_DAY: 6
 };
@@ -335,6 +336,7 @@ async function start(env, body, lim) {
     else {
       const cap = lim.limitOf(kind === "exam" ? "RL_EXAM_UID_EXAM_PER_DAY" : "RL_EXAM_UID_BOSS_PER_DAY");
       const q = await lim.raw("exam-uid:" + user.uid + ":" + kind + ":" + level, 0, cap);
+      if (!q.ok && q.scope === "unavailable") return [503, { error: "El servidor de exámenes no está disponible. Vuelve a intentarlo en un minuto.", code: "busy", retryAfter: 30 }];
       if (!q.ok) why = "daily_limit";
       else { owner = { uid: user.uid, email: user.email }; attemptNo = q.n || 0; why = ""; }
     }
@@ -428,14 +430,15 @@ async function finish(env, body) {
      lim.limitOf(nombre)           valor configurado o el de por defecto */
 export async function handleExam(path, body, env, lim) {
   if (!env.EXAM_ATTEMPTS) return [503, { error: "Exámenes no configurados en el servidor." }];
-  if (path === "/exam/start" || path === "/exam/answer") {
-    const isStart = path === "/exam/start";
-    const rl = await lim.ip(isStart ? "exam-start" : "exam-answer",
-      lim.limitOf(isStart ? "RL_EXAM_START_PER_MIN" : "RL_EXAM_ANSWER_PER_MIN"),
-      lim.limitOf(isStart ? "RL_EXAM_START_PER_DAY" : "RL_EXAM_ANSWER_PER_DAY"));
-    if (!rl.ok) return [429, { error: "Vas muy rápido. Espera un momento y vuelve a intentarlo.", code: "rate_limited", retryAfter: rl.retryAfter || 60 }];
-    return isStart ? start(env, body, lim) : answer(env, body);
+  const route = { "/exam/start": ["exam-start", "START", start], "/exam/answer": ["exam-answer", "ANSWER", answer],
+                  "/exam/finish": ["exam-finish", "FINISH", finish] }[path];
+  if (route) {
+    const rl = await lim.ip(route[0], lim.limitOf("RL_EXAM_" + route[1] + "_PER_MIN"), lim.limitOf("RL_EXAM_" + route[1] + "_PER_DAY"));
+    if (!rl.ok) {
+      if (rl.scope === "unavailable") return [503, { error: "El servidor de exámenes no está disponible. Vuelve a intentarlo en un minuto.", code: "busy", retryAfter: rl.retryAfter || 30 }];
+      return [429, { error: "Vas muy rápido. Espera un momento y vuelve a intentarlo.", code: "rate_limited", retryAfter: rl.retryAfter || 60 }];
+    }
+    return route[2](env, body, lim);
   }
-  if (path === "/exam/finish") return finish(env, body);
   return [404, { error: "No existe." }];
 }
