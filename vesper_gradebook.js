@@ -579,7 +579,12 @@ window.VESPER_GRADEBOOK = (function () {
     var sum = 0, wsum = 0;
     parts.forEach(function (p) { sum += p.w * p.v; wsum += p.w; });
     var final = Math.round(sum / wsum);
-    return { final: final, passed: final >= PASS_THRESHOLD };
+    /* Sin nota de Exámenes no hay veredicto: la final se muestra como
+       PROVISIONAL (passed: null). Antes, con solo Lecciones y Participación
+       capturadas, el promedio se renormalizaba y el alumno salía "Aprobado"
+       sin haber presentado ningún examen. */
+    var complete = row.examsGrade != null;
+    return { final: final, passed: complete ? final >= PASS_THRESHOLD : null, complete: complete };
   }
 
   start();

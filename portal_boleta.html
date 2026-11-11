@@ -301,6 +301,7 @@ footer a{color:var(--gold);text-decoration:none;}
   function finalCell(row) {
     var f = GB.computeFinal(row);
     if (f.final == null) return '<span class="na">—</span>';
+    if (f.passed == null) return '<span class="final" title="Provisional: falta la nota de Exámenes">' + f.final + '*</span>';
     return '<span class="final ' + (f.passed ? "pass" : "fail") + '">' + f.final + '</span>';
   }
 

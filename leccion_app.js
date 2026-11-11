@@ -5419,6 +5419,16 @@
      Ofrece reintentar la misma lección desde el primer ejercicio. */
   function renderRetry(correct, total, pct) {
     sfx("fail");
+    /* El intento NO superado también se registra (terminó la lección, no la
+       abandonó). Antes solo se subían las superadas, así que el promedio que
+       veía el profesor nunca podía bajar de 70. */
+    try {
+      if (window.VESPER_RESULTS && !lesson.isReview && !lesson.srsReview) VESPER_RESULTS.record({
+        examType: "lesson", examId: lesson.lessonId, level: lesson.level,
+        score: correct, total: total, percent: pct,
+        threshold: PASS_PCT, passed: false, detail: examDetail()
+      });
+    } catch (e) {}
     show('<div class="wrap lc-done">' + topbar(86) + '<div class="card center">'
       + mascot("incorrect", T("¡Casi! Repasa y vuelve a intentarlo.", "Almost! Review it and try again."))
       + '<h1 class="lc-title">' + T('Te faltó poco', 'So close') + '</h1>'

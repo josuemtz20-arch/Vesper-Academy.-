@@ -500,6 +500,8 @@ html.vesper-dark table.dgrid td.off{background:var(--no-tint,rgba(224,112,101,.1
     var box = document.getElementById("c-final");
     if (f.final == null) {
       box.innerHTML = '<span class="na">Sin calificaciones aún</span>';
+    } else if (f.passed == null) {
+      box.innerHTML = '<b>' + f.final + '</b><span class="na">Provisional: falta tu nota de exámenes</span>';
     } else {
       var cls = f.passed ? "pass" : "fail";
       box.innerHTML = '<b class="' + cls + '">' + f.final + '</b>' +

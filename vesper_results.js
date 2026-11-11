@@ -418,14 +418,21 @@ window.VESPER_RESULTS = (function () {
       }
       return fetchMyGroups().then(function (groups) {
         if (!groups.length) return [];
+        /* Los `limit` más RECIENTES de cada grupo (orderBy createdAt DESC).
+           Sin orderBy el servidor devolvía `limit` documentos cualesquiera: con
+           más intentos que el límite, los nuevos podían no aparecer nunca.
+           Esta consulta necesita un índice compuesto en Firestore:
+             exam_results · group ASC · createdAt DESC
+           Mientras no exista responde 400 y se cae a la consulta anterior. */
         return Promise.all(groups.map(function (g) {
+          var where = { fieldFilter: { field: { fieldPath: "group" }, op: "EQUAL", value: { stringValue: g } } };
           return runQuery(token, {
-            from: [{ collectionId: COLLECTION }],
-            where: { fieldFilter: {
-              field: { fieldPath: "group" }, op: "EQUAL",
-              value: { stringValue: g }
-            } },
+            from: [{ collectionId: COLLECTION }], where: where,
+            orderBy: [{ field: { fieldPath: "createdAt" }, direction: "DESCENDING" }],
             limit: limit
+          }).then(function (rows) {
+            if (rows !== null) return rows;
+            return runQuery(token, { from: [{ collectionId: COLLECTION }], where: where, limit: limit });
           });
         })).then(function (parts) {
           if (parts.every(function (p) { return p === null; })) return null;

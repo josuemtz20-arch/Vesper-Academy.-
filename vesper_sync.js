@@ -116,19 +116,70 @@
      fusionar pisaba la nube); (2) si un push rebota con 403 —otro
      dispositivo avanzó—, se vuelve a traer, fusionar y guardar una vez. */
   var syncReady = false, pushPending = false, syncing = false;
+
+  /* ---- De quién son los datos de este dispositivo ----
+     OWNER_KEY guarda el uid de la cuenta con la que se sincronizó el progreso
+     local. Sirve para dos cosas:
+       · al CERRAR sesión se borra el progreso local de esa cuenta (ya está en
+         la nube): el siguiente que use el dispositivo empieza limpio;
+       · si entra OTRA cuenta y aún hay datos de la anterior, se borran ANTES
+         de fusionar. Antes se quedaban y se mezclaban en la cuenta nueva.
+     El progreso hecho sin cuenta (sin dueño) sí se conserva y se adopta al
+     iniciar sesión: es el caso "practiqué gratis y luego me registré". */
+  var OWNER_KEY = "vesper_data_owner";
+  var ACCOUNT_KEYS = ["vesperProgress", "vesper_lesson_scores", "vesper_lesson_rev", "vesper_srs", "vesper_forja",
+    "vesper_economy", "vesper_league", "vesper_exam_results_v1", "vesper_entrevistas", "vesper_last_continue",
+    "vesper_last", "vesper_vocab_known", "vesper_practice_v1", "vesper_session"];
+  function owner() { try { return localStorage.getItem(OWNER_KEY) || ""; } catch (e) { return ""; } }
+  function setOwner(uid) { try { if (uid) localStorage.setItem(OWNER_KEY, uid); else localStorage.removeItem(OWNER_KEY); } catch (e) {} }
+  function wipeAccountData() {
+    try {
+      ACCOUNT_KEYS.forEach(function (k) { localStorage.removeItem(k); });
+      var drop = [];
+      for (var i = 0; i < localStorage.length; i++) { var k = localStorage.key(i); if (k && k.indexOf("vesper_league_sent_") === 0) drop.push(k); }
+      drop.forEach(function (k) { localStorage.removeItem(k); });
+    } catch (e) {}
+    setOwner("");
+  }
+
+  /* reintentos: 30 s, 1 min, 2 min, 5 min, 10 min, y al volver la conexión */
+  var RETRY_MS = [30000, 60000, 120000, 300000, 600000], retryN = 0, retryTimer = null;
+  function scheduleRetry(fn) {
+    clearTimeout(retryTimer);
+    if (retryN >= RETRY_MS.length) return;
+    retryTimer = setTimeout(function () { if (currentUser) fn(); }, RETRY_MS[retryN++]);
+  }
+  try {
+    window.addEventListener("online", function () {
+      if (!currentUser) return;
+      retryN = 0;
+      if (!syncReady) doSync(currentUser); else if (pushPending) { pushPending = false; schedulePush(); }
+    });
+  } catch (e) {}
+
   function doSync(user, done) {
     if (syncing) return;
     syncing = true;
     setStatus("syncing");
+    /* si mientras tanto se cerró la sesión o entró otra cuenta, esta fusión ya
+       no vale: aplicarla volvería a escribir en el dispositivo los datos de
+       quien acaba de salir */
+    function stale() { return !currentUser || currentUser.uid !== user.uid; }
     function finish(st) {
       syncing = false;
-      syncReady = true;
+      if (stale()) return;
+      /* solo una fusión que LLEGÓ a la nube deja listo el canal de guardado;
+         si falló se reintenta sola (antes quedaba en "Error de sync" hasta
+         recargar la página) */
+      if (st === 200) { syncReady = true; retryN = 0; clearTimeout(retryTimer); setOwner(user.uid); }
+      else if (st !== 403) scheduleRetry(function () { doSync(user); });
       setStatus(st === 200 ? "synced" : (st === 403 ? "rule" : (st === "offline" ? "offline" : "error")));
       if (done) done(st);
       if (pushPending && st === 200) { pushPending = false; schedulePush(); }
     }
     user.getIdToken().then(function (token) {
       pull(user.uid, token).then(function (res) {
+        if (stale()) { syncing = false; return; }
         if (res.status === 200) {
           var remote = fromFs((res.body || {}).fields);
           mergeScores(remote.scores);
@@ -155,9 +206,10 @@
       user.getIdToken().then(function (token) {
         pushDoc(user.uid, token, localState()).then(function (st) {
           if (st === 403) { doSync(user); return; }   /* la nube va adelante: fusiona y reintenta */
-          setStatus(st === 200 ? "synced" : "error");
-        });
-      }).catch(function () { setStatus("error"); });
+          if (st === 200) { retryN = 0; setStatus("synced"); }
+          else { setStatus("error"); scheduleRetry(schedulePush); }
+        }, function () { setStatus("offline"); scheduleRetry(schedulePush); });
+      }).catch(function () { setStatus("error"); scheduleRetry(schedulePush); });
     }, 1200);
   }
 
@@ -274,7 +326,14 @@
   function onAction(e) {
     var act = e.currentTarget.getAttribute("data-act");
     if (!authInst) { msg("Conectando con el servicio…", "err"); return; }
-    if (act === "signout") { authInst.signOut().then(closeModal); return; }
+    if (act === "signout") {
+      /* último guardado antes de salir: al cerrar sesión se borra lo local */
+      var out = function () { authInst.signOut().then(closeModal); };
+      var cu0 = currentUser;
+      if (!cu0) { out(); return; }
+      cu0.getIdToken().then(function (tk) { return pushDoc(cu0.uid, tk, localState()); }).then(out, out);
+      return;
+    }
     if (act === "resend") { var cu = authInst.currentUser; if (cu) cu.sendEmailVerification().then(function () { msg("Enviado. Revisa tu correo.", "ok"); }).catch(function (er) { msg(humanErr(er), "err"); }); return; }
     var email = (modal.querySelector("#vsync-email") || {}).value || "";
     var pass = (modal.querySelector("#vsync-pass") || {}).value || "";
@@ -309,10 +368,19 @@
     authInst = auth;
     auth.onAuthStateChanged(function (user) {
       currentUser = (user && user.emailVerified) ? user : null;
-      syncReady = false;
-      if (user && user.emailVerified) { setSignedIn(user); doSync(user); }
+      syncReady = false; retryN = 0; clearTimeout(retryTimer);
+      var was = owner();
+      if (user && user.emailVerified) {
+        /* datos de OTRA cuenta en el dispositivo: fuera antes de fusionar */
+        if (was && was !== user.uid) { wipeAccountData(); refreshUI(); }
+        setSignedIn(user); doSync(user);
+      }
       else if (user && !user.emailVerified) { setUnverified(user); }
-      else { setSignedOut(); }
+      else {
+        /* cierre de sesión: el progreso de esa cuenta ya está en la nube */
+        if (was) { wipeAccountData(); refreshUI(); }
+        setSignedOut();
+      }
     });
   }).catch(function () { /* sin red a Firebase: queda solo-local, el chip invita a guardar */ });
 })();
