@@ -88,9 +88,9 @@ window.VESPER_RESULTS = (function () {
 
   /* token de la sesión verificada (o null): lo manda leccion_app.js al Worker
      para que ÉL guarde la nota de los exámenes que califica (examFinish). */
-  function idToken() {
+  function idToken(force) {
     if (!currentUser) return Promise.resolve(null);
-    return currentUser.getIdToken().catch(function () { return null; });
+    return currentUser.getIdToken(!!force).catch(function () { return null; });
   }
 
   /* ---- identidad opaca del alumno (sid + grupo) ----

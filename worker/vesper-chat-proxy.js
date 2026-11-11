@@ -349,7 +349,7 @@ export class RateLimiter extends DurableObject {
     if ((await this.ctx.storage.getAlarm()) == null) {
       await this.ctx.storage.setAlarm((day + 1) * 86400000 + 60000);
     }
-    return { ok: true };
+    return { ok: true, n: s.dc };   // n = cuántas van hoy con esta clave
   }
 
   async alarm() {
@@ -398,9 +398,11 @@ export default {
       if (!eb || typeof eb !== "object") return jsonError(400, "Cuerpo JSON inválido.", origin);
       let out;
       try {
-        out = await handleExam(path, eb, env,
-          (key, perMin, perDay) => rateHit(env, key + ":" + ipE, perMin, perDay),
-          (name) => limitOf(env, name));
+        out = await handleExam(path, eb, env, {
+          ip: (key, perMin, perDay) => rateHit(env, key + ":" + ipE, perMin, perDay),
+          raw: (key, perMin, perDay) => rateHit(env, key, perMin, perDay),
+          limitOf: (name) => limitOf(env, name)
+        });
       } catch (e) {
         console.error("exam:", e && e.message);
         out = [500, { error: "Error del servidor de exámenes." }];

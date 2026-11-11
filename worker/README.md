@@ -239,6 +239,23 @@ rutas `/exam/start`, `/exam/answer`, `/exam/finish`), que además guarda la nota
 en Firestore (`exam_results`, con `gradedBy: "worker"`). Las reglas rechazan
 esas notas si llegan desde el navegador.
 
+**Identidad e integridad (2026-11-11):**
+
+- El intento se liga al alumno en `/exam/start` (ahí viaja el `idToken`). Sin
+  sesión el intento es de **práctica**: se puede jugar (los jefes abren mundos
+  en el dispositivo) pero nunca se guarda. Un intento de práctica no puede
+  convertirse en nota al terminar.
+- `/exam/answer` devuelve solo acierto/fallo. La clave y la explicación no
+  salen del Worker.
+- Cupo de intentos **registrados** por alumno, examen y día:
+  `RL_EXAM_UID_EXAM_PER_DAY` (3) y `RL_EXAM_UID_BOSS_PER_DAY` (6). Pasado el
+  cupo, los intentos siguen como práctica. El número de intento del día queda
+  en el resultado (`attemptOfDay`).
+- Orden de despliegue de este cambio: **primero publicar el sitio, después
+  `wrangler deploy`**. El cliente nuevo entiende al Worker viejo; el cliente
+  viejo (en caché) contra el Worker nuevo no registra notas ni pinta bien el
+  veredicto hasta que se actualiza.
+
 - **Fuente con claves (privada):** `_scripts/exams/vesper_*_exams.src.js`. Se
   editan ahí; nunca los `vesper_*_exams.js` de la raíz, que son generados.
 - **Generar:** `node _scripts/exams/split_exams.js` escribe los dos archivos

@@ -7,19 +7,25 @@
  * generado por _scripts/exams/split_exams.js y fuera de git).
  *
  * Flujo (todo POST JSON, mismo CORS que el chat):
- *   /exam/start  {kind:"exam"|"boss", level, version, ids?}
- *        -> {attemptId, total}. En el jefe el cliente muestrea y manda `ids`;
- *           aquí se valida que sean del banco y del tamaño correcto.
+ *   /exam/start  {kind:"exam"|"boss", level, version, ids?, idToken?}
+ *        -> {attemptId, total, recorded, why?}. En el jefe el cliente
+ *           muestrea y manda `ids`; aquí se valida que sean del banco y del
+ *           tamaño correcto. La identidad se fija AQUÍ: con un idToken
+ *           válido el intento queda ligado a ese alumno (recorded:true) y
+ *           cuenta contra su cupo diario por examen; sin sesión, o agotado
+ *           el cupo, el intento es de PRÁCTICA (recorded:false) y nunca se
+ *           guarda. Un intento de práctica no puede convertirse en nota.
  *   /exam/answer {attemptId, id, response}
- *        -> {correct, reveal}. Solo cuenta la PRIMERA respuesta de cada
- *           pregunta (queda en el Durable Object ExamAttempt); `reveal` trae
- *           la clave y la explicación para que la app muestre "Era: …".
- *   /exam/finish {attemptId, idToken?, alias?}
+ *        -> {correct, first, parts?}. Solo cuenta la PRIMERA respuesta de
+ *           cada pregunta (queda en el Durable Object ExamAttempt). NO se
+ *           devuelve la clave ni la explicación: es un examen. `parts` (solo
+ *           lecturas) dice qué sub-preguntas se acertaron.
+ *   /exam/finish {attemptId, alias?}
  *        -> {score, total, percent, passed, threshold, saved}. La nota la
- *           calcula el Worker con lo registrado; si hay sesión verificada la
- *           guarda él mismo en Firestore (exam_results, gradedBy "worker")
- *           con la cuenta de servicio. Las reglas ya no aceptan esas notas
- *           escritas desde el navegador.
+ *           calcula el Worker con lo registrado; si el intento nació ligado a
+ *           un alumno la guarda él mismo en Firestore (exam_results,
+ *           gradedBy "worker") con la cuenta de servicio. Las reglas no
+ *           aceptan esas notas escritas desde el navegador.
  *
  * La calificación replica EXACTAMENTE la de leccion_app.js (norm(), índices
  * originales de las opciones, orden de palabras). Si cambias una, cambia la
@@ -42,7 +48,9 @@ const SKILL_RANK = { grammar: 0, vocab: 1, use: 2, reading: 3, listening: 4 };
 
 export const EXAM_RATE_DEFAULTS = {
   RL_EXAM_START_PER_MIN: 10, RL_EXAM_START_PER_DAY: 200,
-  RL_EXAM_ANSWER_PER_MIN: 90, RL_EXAM_ANSWER_PER_DAY: 3000
+  RL_EXAM_ANSWER_PER_MIN: 90, RL_EXAM_ANSWER_PER_DAY: 3000,
+  /* intentos REGISTRADOS por alumno, examen y día (0 = sin tope) */
+  RL_EXAM_UID_EXAM_PER_DAY: 3, RL_EXAM_UID_BOSS_PER_DAY: 6
 };
 
 /* ---------- calificación (espejo de leccion_app.js) ---------- */
@@ -94,13 +102,11 @@ export function grade(ex, r) {
   }
 }
 
-/* Lo que la app necesita DESPUÉS de contestar para pintar el feedback. */
-export function reveal(ex) {
-  const pick = (o, ks) => { const out = {}; for (const k of ks) if (o[k] !== undefined) out[k] = o[k]; return out; };
-  if (ex.type === "reading") {
-    return { questions: (ex.questions || []).map((q) => pick(q, ["correctIndex", "explanation"])) };
-  }
-  return pick(ex, ["correctIndex", "answer", "answers", "correctOrder", "explanation", "correction"]);
+/* Lecturas: qué sub-preguntas se acertaron (para pintar cada una). No es la
+   clave: solo el veredicto de lo que el alumno ya eligió. */
+export function readingParts(ex, r) {
+  const qs = ex.questions || [], p = (r && r.picks) || [];
+  return qs.map((q, i) => p[i] === q.correctIndex);
 }
 
 function bankOf(kind, level) {
@@ -112,7 +118,11 @@ function bankOf(kind, level) {
 export class ExamAttempt extends DurableObject {
   async init(a) {
     if (await this.ctx.storage.get("a")) return { ok: false, error: "exists" };
-    await this.ctx.storage.put("a", { kind: a.kind, level: a.level, ids: a.ids, answered: {}, order: [], created: Date.now(), result: null });
+    await this.ctx.storage.put("a", {
+      kind: a.kind, level: a.level, ids: a.ids, answered: {}, order: [], created: Date.now(), result: null,
+      /* identidad fijada al abrir el intento; null = práctica, nunca se guarda */
+      owner: a.owner || null, attemptNo: a.attemptNo || 0
+    });
     await this.ctx.storage.setAlarm(Date.now() + ATTEMPT_TTL_MS);
     return { ok: true };
   }
@@ -236,6 +246,7 @@ function toFsDoc(rec) {
     examType: S(rec.examType), examId: S(rec.examId), level: S(rec.level),
     score: I(rec.score), total: I(rec.total), percent: I(rec.percent),
     passed: { booleanValue: rec.passed }, threshold: I(rec.threshold),
+    attemptOfDay: I(rec.attemptOfDay || 0),
     detail: { arrayValue: { values: rec.detail.map((d) => ({ mapValue: { fields: {
       q: S(d.q), type: S(d.type), skill: S(d.skill), correct: { booleanValue: d.correct } } } })) } },
     createdAt: { timestampValue: rec.clientTs }, clientTs: S(rec.clientTs),
@@ -254,7 +265,8 @@ async function saveResult(env, user, alias, res) {
   let token = null, who = { sid: "", group: "" };
   if (hasSa) { token = await saAccessToken(env); who = await studentIdentity(token, user.email); }
   const rec = Object.assign({}, res, {
-    studentUid: user.uid, alias: alias, sid: who.sid, group: who.group, clientTs: new Date().toISOString()
+    studentUid: user.uid, alias: alias, sid: who.sid, group: who.group, clientTs: new Date().toISOString(),
+    attemptOfDay: user.attemptNo || 0
   });
   const doc = toFsDoc(rec);
   if (dry) return { saved: false, why: "dry_run", doc: doc, saChecked: hasSa };
@@ -272,7 +284,7 @@ function cleanAlias(a) {
   return String(typeof a === "string" ? a : "").replace(/[\u0000-\u001f]/g, "").trim().slice(0, 24) || "Estudiante";
 }
 
-async function start(env, body) {
+async function start(env, body, lim) {
   const kind = body.kind, level = body.level;
   if ((kind !== "exam" && kind !== "boss") || LEVELS.indexOf(level) < 0) return [400, { error: "Examen inválido." }];
   if (body.version !== KEYS.version) {
@@ -298,10 +310,28 @@ async function start(env, body) {
       }
     }
   }
+  /* ¿de quién es el intento? Se decide aquí y no cambia después. */
+  let owner = null, attemptNo = 0, why = "no_session";
+  if (body.idToken != null) {
+    const user = await lookupUser(env, body.idToken);
+    /* token presente pero inválido/caducado: que el cliente lo renueve, en
+       vez de degradar en silencio un examen real a práctica */
+    if (!user) return [401, { error: "Tu sesión caducó. Vuelve a iniciar sesión.", code: "auth" }];
+    if (!user.verified || !user.email) why = "unverified";
+    else {
+      const cap = lim.limitOf(kind === "exam" ? "RL_EXAM_UID_EXAM_PER_DAY" : "RL_EXAM_UID_BOSS_PER_DAY");
+      const q = await lim.raw("exam-uid:" + user.uid + ":" + kind + ":" + level, 0, cap);
+      if (!q.ok) why = "daily_limit";
+      else { owner = { uid: user.uid, email: user.email }; attemptNo = q.n || 0; why = ""; }
+    }
+  }
   const attemptId = kind + "." + level + "." + randomId();
-  const r = await attemptStub(env, attemptId).init({ kind, level, ids });
+  const r = await attemptStub(env, attemptId).init({ kind, level, ids, owner, attemptNo });
   if (!r.ok) return [500, { error: "No se pudo abrir el examen." }];
-  return [200, { attemptId: attemptId, total: ids.length }];
+  const out = { attemptId: attemptId, total: ids.length, recorded: !!owner };
+  if (why) out.why = why;
+  if (attemptNo) out.attemptOfDay = attemptNo;
+  return [200, out];
 }
 
 async function answer(env, body) {
@@ -315,7 +345,9 @@ async function answer(env, body) {
   const st = await attemptStub(env, at.id).answer(body.id, ok);
   if (st.error === "no_attempt") return [404, { error: "El examen caducó. Empieza de nuevo.", code: "expired" }];
   if (st.error) return [409, { error: "Esa pregunta no es de este examen.", code: st.error }];
-  return [200, { correct: st.ok, first: st.first, reveal: reveal(ex) }];
+  const out = { correct: st.ok, first: st.first };
+  if (ex.type === "reading" && st.first) out.parts = readingParts(ex, body.response);
+  return [200, out];
 }
 
 async function finish(env, body) {
@@ -350,10 +382,12 @@ async function finish(env, body) {
     const closed = await stub.close(res);
     if (!closed) return [404, { error: "El examen caducó.", code: "expired" }];
     if (!closed.first) return [200, Object.assign({}, closed.result, { saved: false, why: "already_finished" })];
-    /* guardar en Firestore solo la primera vez, si hay sesión */
-    let save = { saved: false, why: "no_session" };
-    if (body.idToken) {
-      try { save = await saveResult(env, await lookupUser(env, body.idToken), cleanAlias(body.alias), res); }
+    /* guardar en Firestore solo la primera vez y solo si el intento nació
+       ligado a un alumno en /exam/start (un idToken mandado aquí se ignora) */
+    let save = { saved: false, why: "practice" };
+    if (a.owner && a.owner.uid) {
+      const user = { uid: a.owner.uid, email: a.owner.email, verified: true, attemptNo: a.attemptNo || 0 };
+      try { save = await saveResult(env, user, cleanAlias(body.alias), res); }
       catch (e) { console.error("exam save:", e && e.message); save = { saved: false, why: "save_failed" }; }
     }
     return [200, Object.assign({}, res, save)];
@@ -361,17 +395,19 @@ async function finish(env, body) {
   return [200, Object.assign({}, res, { saved: false, why: "already_finished" })];
 }
 
-/* punto de entrada desde el fetch del Worker. `rate(key, perMin, perDay)`
-   es el contador por IP del chat (RateLimiter). */
-export async function handleExam(path, body, env, rate, limitOf) {
+/* punto de entrada desde el fetch del Worker. `lim` trae los contadores:
+     lim.ip(key, perMin, perDay)   por IP (RateLimiter del chat)
+     lim.raw(key, perMin, perDay)  por clave exacta (cupo por alumno)
+     lim.limitOf(nombre)           valor configurado o el de por defecto */
+export async function handleExam(path, body, env, lim) {
   if (!env.EXAM_ATTEMPTS) return [503, { error: "Exámenes no configurados en el servidor." }];
   if (path === "/exam/start" || path === "/exam/answer") {
     const isStart = path === "/exam/start";
-    const rl = await rate(isStart ? "exam-start" : "exam-answer",
-      limitOf(isStart ? "RL_EXAM_START_PER_MIN" : "RL_EXAM_ANSWER_PER_MIN"),
-      limitOf(isStart ? "RL_EXAM_START_PER_DAY" : "RL_EXAM_ANSWER_PER_DAY"));
+    const rl = await lim.ip(isStart ? "exam-start" : "exam-answer",
+      lim.limitOf(isStart ? "RL_EXAM_START_PER_MIN" : "RL_EXAM_ANSWER_PER_MIN"),
+      lim.limitOf(isStart ? "RL_EXAM_START_PER_DAY" : "RL_EXAM_ANSWER_PER_DAY"));
     if (!rl.ok) return [429, { error: "Vas muy rápido. Espera un momento y vuelve a intentarlo.", code: "rate_limited", retryAfter: rl.retryAfter || 60 }];
-    return isStart ? start(env, body) : answer(env, body);
+    return isStart ? start(env, body, lim) : answer(env, body);
   }
   if (path === "/exam/finish") return finish(env, body);
   return [404, { error: "No existe." }];

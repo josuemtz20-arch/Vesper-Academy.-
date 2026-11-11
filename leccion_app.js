@@ -284,6 +284,9 @@
     } catch (e) {}
   }
 
+  function curBlind() {
+    try { var e = lesson && lesson.exercises && lesson.exercises[exIdx]; return !!(e && e._blind); } catch (er) { return false; }
+  }
   function feedbackBox(ok, explanation, wrongFallback) {
     playFx(ok);
     var state = ok ? "correct" : "incorrect";
@@ -291,6 +294,8 @@
     if (!line) line = (window.VESPER_MASCOT ? VESPER_MASCOT.get(state).line : (ok ? "Bien!" : "Casi..."));
     var showExp = (PERS && PERS.explainOnCorrect) ? (!ok || PERS.explainOnCorrect()) : !ok;
     var detail = ok ? (showExp ? (explanation || "") : "") : (explanation || wrongFallback || "");
+    /* examen calificado en el servidor: la clave no viaja al navegador */
+    if (curBlind()) detail = ok ? "" : T("En los exámenes no se muestra la respuesta correcta.", "Exams do not show the correct answer.");
     var cat = (window.VESPER_MASCOT && VESPER_MASCOT.render)
       ? VESPER_MASCOT.render(state, { size: "sm", line: false })
       : '<img class="fb-cat" src="assets/images/virtual_class_happy_cat.png" alt="">';
@@ -4360,11 +4365,14 @@
 
      vesper_level_questions.js / vesper_boss_questions.js NO traen respuestas
      (las genera _scripts/exams/split_exams.js). Al tocar "Verificar", la
-     respuesta va al Worker (worker/exam_grader.js), que la califica, guarda
-     la primera respuesta de cada pregunta y devuelve la clave ("reveal").
-     La clave se mezcla en el ejercicio y entonces corre el renderer de
-     siempre, que pinta el feedback igual que antes. La nota final la calcula
-     y la guarda el Worker (/exam/finish); aquí solo queda el espejo local.
+     respuesta va al Worker (worker/exam_grader.js), que la califica y guarda
+     la primera respuesta de cada pregunta. El Worker devuelve SOLO el
+     veredicto (acierto / fallo), nunca la clave: es un examen. Con el
+     veredicto se arma una "clave ciega" (examBlind) para que el renderer de
+     siempre pinte acierto o fallo sin mostrar cuál era la respuesta.
+     El intento queda ligado al alumno desde /exam/start (se manda ahí el
+     idToken); sin sesión es práctica y no se registra. La nota final la
+     calcula y la guarda el Worker (/exam/finish); aquí queda el espejo local.
      ============================================================ */
   var EXAM_API = String(window.VESPER_EXAM_API || "https://patient-feather-4364.josuemtz20.workers.dev").replace(/\/+$/, "") + "/exam/";
   function examPost(path, body) {
@@ -4384,15 +4392,34 @@
   function examNewRun() {
     lesson._att = null;
     (lesson.exercises || []).forEach(function (e) { e._graded = false; e._pending = false; });
+    lesson._rec = null;
     examAttempt().catch(function () {});   /* se abre ya, para que la 1.ª respuesta no espere */
   }
   function examAttempt() {
     if (!lesson._att) {
-      var p = examPost("start", {
-        kind: lesson.examKind, level: lesson.isBoss ? lesson.bossLevel : lesson.examLevel,
-        version: window.VESPER_EXAM_VERSION || "",
-        ids: lesson.exercises.map(function (e) { return e.id; })
-      }).then(function (j) { return j.attemptId; });
+      var ls = lesson, R = window.VESPER_RESULTS;
+      var open = function (tok) {
+        return examPost("start", {
+          kind: ls.examKind, level: ls.isBoss ? ls.bossLevel : ls.examLevel,
+          version: window.VESPER_EXAM_VERSION || "",
+          ids: ls.exercises.map(function (e) { return e.id; }),
+          idToken: tok || undefined
+        });
+      };
+      /* la sesión se manda AL ABRIR: el Worker liga el intento a ese alumno.
+         Si el token no vale (caducó), se renueva una vez; si aun así falla, el
+         intento sigue como práctica sin registro y se avisa al final. */
+      var p = ((R && R.idToken) ? R.idToken() : Promise.resolve(null)).then(function (tok) {
+        return open(tok).catch(function (e) {
+          if (e.code !== "auth" || !tok) throw e;
+          return ((R && R.idToken) ? R.idToken(true) : Promise.resolve(null)).then(function (t2) {
+            return open(t2).catch(function (e2) { if (e2.code !== "auth") throw e2; return open(null); });
+          });
+        });
+      }).then(function (j) {
+        ls._rec = { recorded: !!j.recorded, why: j.why || "", known: typeof j.recorded === "boolean" };
+        return j.attemptId;
+      });
       p.catch(function () { if (lesson._att === p) lesson._att = null; });
       lesson._att = p;
     }
@@ -4440,6 +4467,32 @@
       rv.questions.forEach(function (q, i) { if (ex.questions && ex.questions[i]) into(ex.questions[i], q); });
     } else into(ex, rv);
   }
+  /* "clave ciega": con el veredicto del servidor y lo que el alumno contestó se
+     rellena el ejercicio para que el renderer pinte acierto/fallo. En un
+     acierto la "clave" es su propia respuesta; en un fallo es un valor
+     imposible, así no se marca ninguna opción como la correcta. */
+  function examBlind(ex, resp, r) {
+    ex._blind = true;
+    var ok = !!r.correct;
+    function setArr(k, v) { if (Array.isArray(ex[k])) { ex[k].length = 0; Array.prototype.push.apply(ex[k], v); } else ex[k] = v; }
+    switch (ex.type) {
+      case "multiple_choice": case "find_error": ex.correctIndex = ok ? resp.choice : -1; break;
+      case "listening":
+        if (Array.isArray(ex.options)) ex.correctIndex = ok ? resp.choice : -1;
+        else setArr("answers", ok ? [resp.text] : []);
+        break;
+      case "true_false": ex.answer = ok ? (resp.choice === 1) : (resp.choice !== 1); break;
+      case "fill_blank": setArr("answers", ok ? [resp.text] : []); ex.answer = ok ? resp.text : null; break;
+      case "translate": case "type_answer": setArr("answers", ok ? [resp.text] : []); break;
+      case "word_order": setArr("correctOrder", ok ? resp.words : []); break;
+      case "reading":
+        (ex.questions || []).forEach(function (q, i) {
+          var part = Array.isArray(r.parts) ? !!r.parts[i] : ok;
+          q.correctIndex = part ? resp.picks[i] : -1;
+        });
+        break;
+    }
+  }
   function examGateVerify(ex) {
     var btn = byId("verify"), orig = btn && btn.onclick;
     if (!orig) return;
@@ -4456,7 +4509,9 @@
       examAttempt().then(function (att) {
         return examPost("answer", { attemptId: att, id: ex.id, response: resp });
       }).then(function (r) {
-        examReveal(ex, r.reveal);
+        /* Worker anterior al cambio: aún manda la clave ("reveal"). El nuevo
+           solo manda el veredicto. Se aceptan los dos mientras se despliega. */
+        if (r.reveal) examReveal(ex, r.reveal); else examBlind(ex, resp, r);
         ex._graded = true; ex._pending = false;
         btn.disabled = false; btn.innerHTML = label;
         orig.call(self, e);
@@ -4483,7 +4538,23 @@
       return examPost("finish", { attemptId: v[0], idToken: v[1] || undefined, alias: (R && R.aliasOf) ? R.aliasOf() : "" });
     }).then(function (j) {
       try { if (window.VESPER_DEBUG_EXAM) console.log("[exam] finish", j); } catch (e) {}
-    }, function (e) { try { console.warn("[exam] finish:", e && e.message); } catch (er) {} });
+      examSavedNote(j);
+    }, function (e) { try { console.warn("[exam] finish:", e && e.message); } catch (er) {} examSavedNote(null); });
+  }
+  /* dice sin rodeos si el intento quedó registrado para el profesor o no */
+  function examSavedNote(j) {
+    try {
+      var card = document.querySelector(".card"); if (!card || byId("exam-saved")) return;
+      var why = j ? (j.why || "") : "error", msg;
+      if (j && j.saved) msg = T("Resultado registrado para tu profesor.", "Result recorded for your teacher.");
+      else if (why === "daily_limit") msg = T("Ya usaste tus intentos registrados de hoy para este examen. Este intento fue de práctica y no se registró.", "You have used today's recorded attempts for this exam. This attempt was practice and was not recorded.");
+      else if (why === "practice" || why === "no_session") msg = T("Intento de práctica: no se registra. Inicia sesión antes de empezar para que cuente con tu profesor.", "Practice attempt: not recorded. Sign in before starting so it counts with your teacher.");
+      else msg = T("No se pudo registrar este intento con tu profesor. Tu avance en la app sí se guardó.", "This attempt could not be recorded for your teacher. Your in-app progress was saved.");
+      var p = document.createElement("p");
+      p.id = "exam-saved"; p.className = "muted"; p.setAttribute("role", "status"); p.textContent = msg;
+      var btn = card.querySelector(".btn");
+      if (btn) card.insertBefore(p, btn); else card.appendChild(p);
+    } catch (e) {}
   }
   /* copia profunda: revelar claves no debe tocar el banco compartido */
   function examClone(list) { return JSON.parse(JSON.stringify(list)); }
@@ -4852,7 +4923,7 @@
 
   /* el veredicto, dicho en voz alta para quien no ve el color */
   function announceResult(ok, detail) {
-    announce((ok ? T("Correcto. ", "Correct. ") : T("Incorrecto. ", "Incorrect. ")) + (detail || ""));
+    announce((ok ? T("Correcto. ", "Correct. ") : T("Incorrecto. ", "Incorrect. ")) + (curBlind() ? "" : (detail || "")));
   }
 
   /* ---------- SPEAKING (reconocimiento de voz) ----------
