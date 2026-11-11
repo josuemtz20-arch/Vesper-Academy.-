@@ -366,6 +366,20 @@ window.VESPER_PERSONA = (function () {
     return L.join("\n");
   }
 
+  /* Lo que el chat manda al Worker en vez del texto del prompt: solo ids de
+     las listas de arriba y el nombre. El Worker arma el prompt con sus
+     propias tablas (worker/chat_prompts.js); systemPrompt() de aquí queda
+     para la vista previa, el Vesper Engine y el Worker anterior. */
+  function promptFields(p) {
+    p = p || get();
+    return {
+      name: callMeOf(p), tone: p.tone, teaching: p.teaching, langMix: p.langMix,
+      pace: p.pace, correction: p.correction, cefr: cefrOf(p), levelMode: p.levelMode,
+      focus: p.focus || [], goal: p.goal || "", topics: p.topics || [],
+      explainOnCorrect: !!explainOnCorrect(p)
+    };
+  }
+
   function joinList(arr) {
     arr = arr.filter(Boolean);
     if (arr.length <= 1) return arr.join("");
@@ -455,7 +469,7 @@ window.VESPER_PERSONA = (function () {
     get: get, set: set, defaults: function () { return clone(DEFAULTS); },
     cefrOf: cefrOf, callMeOf: callMeOf, cefrToLevel: cefrToLevel,
     /* salidas */
-    systemPrompt: systemPrompt, previewMessage: previewMessage,
+    systemPrompt: systemPrompt, promptFields: promptFields, previewMessage: previewMessage,
     personalize: personalize,
     /* ganchos */
     line: line, showSpanish: showSpanish, correctionMode: correctionMode,

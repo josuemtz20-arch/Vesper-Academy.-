@@ -96,7 +96,10 @@ header a.back:hover{color:var(--gold);}
    se oculta sola, así que ahí quitamos el hueco y el compositor baja con el teclado. */
 body{padding-bottom:calc(58px + env(safe-area-inset-bottom));}
 @media(min-width:768px){body{padding-bottom:86px;}}   /* escritorio: la píldora flota centrada abajo */
-body:has(.composer textarea:focus){padding-bottom:0;}
+/* :focus-within y no textarea:focus — al pulsar Enviar o el micrófono el foco
+   sale del textarea; con la regla anterior el composer saltaba 86px en pleno
+   clic, el botón dejaba de estar bajo el dedo y el mensaje no se enviaba. */
+body:has(.composer:focus-within){padding-bottom:0;}
 /* Este layout es de altura fija (flex): el spacer de nav.js sobra y solo mete
    hueco muerto (incluido sobre el teclado). Reservamos el sitio con el padding
    de arriba, que sí se retira al escribir. */
@@ -628,7 +631,12 @@ a.chat-cta{text-decoration:none;}   /* la entrada al simulador de entrevista es 
     var body;        // nodo de texto de la burbuja de Vesper (se crea al primer token)
     var acc = "";    // texto acumulado
 
-    postToProxy({ system: SYSTEM, messages: history, proCode: getProCode() }).then(function (res) {
+    /* persona: opciones con las que el Worker arma el prompt. `system` solo
+       lo lee el Worker anterior al cambio; el nuevo lo ignora. */
+    var personaFields = {};
+    try { if (window.VESPER_PERSONA && VESPER_PERSONA.promptFields) personaFields = VESPER_PERSONA.promptFields(); } catch (e) {}
+    var turnSig = "";
+    postToProxy({ mode: "tutor", persona: personaFields, system: SYSTEM, messages: history, proCode: getProCode() }).then(function (res) {
       /* nivel que sirvió el servidor (Gratis/Pro) — actualiza la insignia */
       try { setTier(res.headers.get("X-Vesper-Tier")); } catch (e) {}
       if (!res.ok) {
@@ -676,6 +684,8 @@ a.chat-cta{text-decoration:none;}   /* la entrada al simulador de entrevista es 
               acc += evt.delta.text;
               body.textContent = acc;
               scrollToBottom();
+            } else if (evt.type === "vesper_sig") {
+              turnSig = evt.sig || "";   /* firma del Worker: prueba que este turno lo escribió Vesper */
             } else if (evt.type === "error") {
               throw new Error(evt.error && evt.error.message ? evt.error.message : "error de la IA");
             }
@@ -686,7 +696,7 @@ a.chat-cta{text-decoration:none;}   /* la entrada al simulador de entrevista es 
 
       function finish() {
         if (acc.trim()) {
-          history.push({ role: "assistant", content: acc });
+          history.push(turnSig ? { role: "assistant", content: acc, sig: turnSig } : { role: "assistant", content: acc });
           saveHistory();
           decorate(body, acc);
           if (ttsOn) speak(englishPart(acc));
@@ -739,6 +749,9 @@ a.chat-cta{text-decoration:none;}   /* la entrada al simulador de entrevista es 
       send();
     }
   });
+  /* el foco se queda en el campo al pulsar Enviar: no se cierra el teclado ni
+     se mueve el composer a medio clic */
+  sendBtn.addEventListener("mousedown", function (e) { e.preventDefault(); });
   sendBtn.addEventListener("click", send);
 
   newBtn.addEventListener("click", function () {

@@ -378,11 +378,14 @@
     callProxy(interviewSystem(k), S.history, function (acc) {
       if (S !== mine) return;
       qEl.textContent = acc;
-    }).then(function (text) {
+    }, proxyMeta("interview", k)).then(function (text) {
       if (S !== mine) return;
+      var raw = text, sig = callProxy.lastSig;
       text = clean(text, 900);
       if (!text) throw userError("Vesper no devolvió la pregunta. Inténtalo de nuevo.");
-      S.history.push({ role: "assistant", content: text });
+      /* con firma se guarda el texto tal como lo envió el Worker: es lo que
+         la firma cubre, y así el turno vuelve como "assistant" verificado */
+      S.history.push(sig ? { role: "assistant", content: raw, sig: sig } : { role: "assistant", content: text });
       setQuestion(text, "en-US");
       setHint(k === 1 ? "Responde en inglés. Si no entendiste, dilo: «Could you repeat that, please?»"
                       : "Responde con frases completas, como en una entrevista real.");
@@ -474,9 +477,20 @@
 
   /* Una llamada al Worker. Devuelve el texto completo; onDelta recibe el
      acumulado mientras llega (para pintar la pregunta en vivo). */
-  function callProxy(system, messages, onDelta) {
+  /* Lo que el Worker necesita para armar ÉL el prompt (worker/chat_prompts.js):
+     el modo y los datos de la entrevista. `system` solo lo usa el Worker
+     anterior al cambio. */
+  function proxyMeta(mode, k) {
+    return { mode: mode, interview: {
+      role: S.roleId, roleText: S.roleId === "otro" ? S.roleEs : "", name: S.name || "",
+      posting: S.posting || "", cefr: S.cefr || "", n: S.n, k: k || 1 } };
+  }
+  function callProxy(system, messages, onDelta, meta) {
     var proCode = IN_APP ? "" : (lsGet(PRO_KEY) || "");
-    return postToProxy({ system: system, messages: messages, proCode: proCode }).then(function (res) {
+    var payload = { system: system, messages: messages, proCode: proCode };
+    if (meta) { payload.mode = meta.mode; payload.interview = meta.interview; }
+    callProxy.lastSig = "";
+    return postToProxy(payload).then(function (res) {
       if (!res.ok) {
         return res.text().then(function (t) {
           var detail = "";
@@ -504,6 +518,8 @@
             if (evt.type === "content_block_delta" && evt.delta && evt.delta.type === "text_delta" && evt.delta.text) {
               acc += evt.delta.text;
               if (onDelta) onDelta(acc);
+            } else if (evt.type === "vesper_sig") {
+              callProxy.lastSig = evt.sig || "";
             } else if (evt.type === "error") {
               throw userError("Vesper tuvo un problema al responder. Inténtalo de nuevo.");
             }
@@ -788,9 +804,9 @@
   }
 
   /* Pide una parte del reporte; si no llega un JSON usable, lo intenta una vez más. */
-  function askPart(system, messages, norm, salvage) {
+  function askPart(system, messages, norm, salvage, mode) {
     function once() {
-      return callProxy(system, messages).then(function (text) {
+      return callProxy(system, messages, null, proxyMeta(mode)).then(function (text) {
         var out = norm(parseJson(text)) || (salvage ? norm(salvage(text)) : null);
         if (!out) throw new Error("bad-json");
         return out;
@@ -813,8 +829,8 @@
     var last = msgs[msgs.length - 1];
     msgs[msgs.length - 1] = { role: "user", content: last.content + "\n\n[The interview has ended. Write the evaluation data now.]" };
 
-    var pScores = askPart(scoresSystem(), msgs, normScores, null);
-    var pFixes = askPart(fixesSystem(), msgs, normFixes, salvageFixes).catch(function () { return null; });
+    var pScores = askPart(scoresSystem(), msgs, normScores, null, "interview_scores");
+    var pFixes = askPart(fixesSystem(), msgs, normFixes, salvageFixes, "interview_fixes").catch(function () { return null; });
 
     Promise.all([pScores, pFixes]).then(function (r) {
       if (S !== mine) return;

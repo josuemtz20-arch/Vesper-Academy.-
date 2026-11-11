@@ -300,6 +300,29 @@ node ../_scripts/exams/test_worker_exams.js --root ..
 python ../_scripts/exams/e2e_exams.py --root .. exam:A1 boss:C1
 ```
 
+## Qué acepta el chat del cliente (2026-11-11)
+
+- **El prompt de sistema se arma en el Worker** (`chat_prompts.js`). El
+  navegador manda `mode` (`tutor`, `interview`, `interview_scores`,
+  `interview_fixes`) y opciones de listas cerradas (`persona`, `interview`);
+  el campo `system` de clientes viejos se ignora. Los textos de las opciones
+  están duplicados: `vesper_persona.js` / `vesper_entrevista.js` (vista
+  previa) y `chat_prompts.js` (el que cuenta). Cambia los dos.
+- **Turnos `assistant` firmados:** cada respuesta termina con un evento SSE
+  `vesper_sig`. Solo los turnos assistant que vuelven con su firma se reenvían
+  como tales; los demás se pasan como contexto dentro del turno del usuario.
+  La clave de la firma es `SESSION_SECRET`, o `TURNSTILE_SECRET`, o una
+  derivada de la API key: conviene definir `SESSION_SECRET`
+  (`wrangler secret put SESSION_SECRET`, cualquier cadena larga al azar).
+- **IPv6 por /64:** los contadores por IP y la sesión de Turnstile agrupan
+  las direcciones IPv6 por su prefijo /64.
+- **Encender Turnstile** (pendiente, requiere tus claves): crea el widget en
+  el panel de Cloudflare, pega la *site key* en `TURNSTILE_SITE_KEY` de
+  `chat.html` y de `vesper_entrevista.js`, y guarda la *secret key* con
+  `wrangler secret put TURNSTILE_SECRET`. Sin el secreto el Worker no exige
+  el reto; sin la site key el navegador no lo resuelve. Enciende los dos a la
+  vez (primero publica el sitio con la site key, luego pon el secreto).
+
 ## Seguridad
 
 - La API key vive **solo** en el secreto del Worker. Nunca la pongas en el repo,
