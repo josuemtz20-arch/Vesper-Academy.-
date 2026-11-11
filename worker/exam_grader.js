@@ -58,9 +58,38 @@ export const EXAM_RATE_DEFAULTS = {
 
 /* ---------- calificación (espejo de leccion_app.js) ---------- */
 
+/* Antes de comparar una respuesta escrita se igualan las formas que dicen lo
+   mismo: contracción y forma completa ("don't" = "do not", "I'm" = "I am") y
+   número en cifra o en palabra ("3" = "three", "twenty-one" = "21"). Sin
+   esto una respuesta correcta se marcaba mal por pura forma. Se aplica igual
+   a la clave y a lo que escribe el alumno. ESPEJO de leccion_app.js: si cambias
+   una, cambia la otra. */
+const CONTR = {
+  "can't": "can not", "cannot": "can not", "won't": "will not", "shan't": "shall not", "ain't": "is not",
+  "let's": "let us", "i'm": "i am", "y'all": "you all"
+};
+const NUM_WORDS = { zero: 0, one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10,
+  eleven: 11, twelve: 12, thirteen: 13, fourteen: 14, fifteen: 15, sixteen: 16, seventeen: 17, eighteen: 18, nineteen: 19,
+  twenty: 20, thirty: 30, forty: 40, fifty: 50, sixty: 60, seventy: 70, eighty: 80, ninety: 90 };
+export function canon(s) {
+  s = ("" + (s == null ? "" : s)).toLowerCase().replace(/[’‘`]/g, "'");
+  s = s.replace(/\b(can't|cannot|won't|shan't|ain't|let's|i'm|y'all)\b/g, function (m) { return CONTR[m]; });
+  s = s.replace(/\b([a-z]+)n't\b/g, "$1 not")            /* don't, isn't, wouldn't… */
+       .replace(/\b([a-z]+)'re\b/g, "$1 are")
+       .replace(/\b([a-z]+)'ve\b/g, "$1 have")
+       .replace(/\b([a-z]+)'ll\b/g, "$1 will")
+       .replace(/\b(i|you|he|she|it|we|they|who|that|there)'d\b/g, "$1 would")
+       .replace(/\b(he|she|it|that|there|here|what|who|where|how|when)'s\b/g, "$1 is");
+  /* veinte-uno… noventa-nueve, con guion o espacio */
+  s = s.replace(/\b(twenty|thirty|forty|fifty|sixty|seventy|eighty|ninety)[- ](one|two|three|four|five|six|seven|eight|nine)\b/g,
+    function (m, t, u) { return String(NUM_WORDS[t] + NUM_WORDS[u]); });
+  s = s.replace(/\b(zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty|thirty|forty|fifty|sixty|seventy|eighty|ninety)\b/g,
+    function (m) { return String(NUM_WORDS[m]); });
+  return s;
+}
 export function norm(s) {
-  return ("" + (s == null ? "" : s)).toLowerCase()
-    .replace(/[’‘'`]/g, "")
+  return canon(s)
+    .replace(/'/g, "")
     .replace(/[.,!?;:¿¡"]/g, " ")
     .replace(/\s+/g, " ").trim();
 }

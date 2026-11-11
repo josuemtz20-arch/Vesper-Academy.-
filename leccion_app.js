@@ -3764,7 +3764,7 @@
     var dg = (P && P.dailyGoal) ? P.dailyGoal() : null;
     var freshAch = achCheck();                      /* logros ya merecidos (retroactivos, aspecto nuevo…) */
     var trophyHtml = buildTrophyShelf(freshAch);
-    var hello = (A && profile) ? A.greeting() : "Hola!";
+    var hello = (A && profile) ? A.greeting() : "¡Hola!";
     /* fallback simple si no hay motor de ruta */
     if (!PATH) {
       var cards = ORDER.map(function (k) {
@@ -4311,7 +4311,7 @@
   }
   function renderExplanation() {
     var ex = lesson.explanation || {};
-    /* mezcla de idioma: oculta el ES si eligio "Solo ingles". En B1+ esos campos
+    /* mezcla de idioma: oculta el ES si eligio "Solo inglés". En B1+ esos campos
        ya son glosas en inglés (definiciones, por qué del error), así que se muestran. */
     var showEs = enUI() || !PERS || PERS.showSpanish();
     var secs = ex.sections;
@@ -4326,7 +4326,7 @@
     } else {
       show('<div class="wrap">' + topbar(22) + '<div class="card">'
         + mascot(lesson.mascotState || "explaining", enUI() ? enLine("explaining") : undefined)
-        + '<h2>' + T('Explicacion', 'Explanation') + '</h2><p class="body">' + esc(ex.body || "") + '</p>'
+        + '<h2>' + T('Explicación', 'Explanation') + '</h2><p class="body">' + esc(ex.body || "") + '</p>'
         + ((ex.examples || []).length ? enEsList(ex.examples, showEs) : '')
         + '<button class="btn btn-gold" id="cont">' + T('Continuar', 'Continue') + '</button></div></div>');
     }
@@ -4686,7 +4686,7 @@
       return '<button class="opt" type="button" aria-pressed="false" data-i="' + i + '" lang="en">' + esc(ex.options[i]) + '</button>';
     }).join("");
     show('<div class="wrap">' + exHeader(pct, total) + '<div class="card">'
-      + '<h2 lang="en">' + esc(ex.question || T("Elige la opcion correcta", "Choose the correct option")) + '</h2>'
+      + '<h2 lang="en">' + esc(ex.question || T("Elige la opción correcta", "Choose the correct option")) + '</h2>'
       + '<div class="opts" role="group" aria-label="Opciones de respuesta">' + opts + '</div><div id="fb"></div>'
       + '<button class="btn" id="verify" disabled aria-describedby="verify-hint">' + T('Verificar', 'Check') + '</button>'
       + '<span class="sr-only" id="verify-hint">Elige una opción para poder verificar.</span></div></div>');
@@ -4725,7 +4725,7 @@
     var html = (ex.segments || []).map(function (seg) {
       if (typeof seg === "string") return esc(seg);
       var i = ci++;
-      return '<button class="fe-seg" data-i="' + i + '" aria-label="Opcion ' + letters[i] + ': ' + esc(seg.u) + '">'
+      return '<button class="fe-seg" data-i="' + i + '" aria-label="Opción ' + letters[i] + ': ' + esc(seg.u) + '">'
         + '<sup class="fe-lab" aria-hidden="true">' + letters[i] + '</sup>' + esc(seg.u) + '</button>';
     }).join("");
     show('<div class="wrap">' + exHeader(pct, total) + '<div class="card">'
@@ -4803,9 +4803,38 @@
   }
 
   /* ---------- shared helpers for typed/new activities ---------- */
+  /* Antes de comparar una respuesta escrita se igualan las formas que dicen lo
+     mismo: contracción y forma completa ("don't" = "do not", "I'm" = "I am") y
+     número en cifra o en palabra ("3" = "three", "twenty-one" = "21"). Sin
+     esto una respuesta correcta se marcaba mal por pura forma. Se aplica igual
+     a la clave y a lo que escribe el alumno. ESPEJO en worker/exam_grader.js:
+     si cambias una, cambia la otra. */
+  var CONTR = {
+    "can't": "can not", "cannot": "can not", "won't": "will not", "shan't": "shall not", "ain't": "is not",
+    "let's": "let us", "i'm": "i am", "y'all": "you all"
+  };
+  var NUM_WORDS = { zero: 0, one: 1, two: 2, three: 3, four: 4, five: 5, six: 6, seven: 7, eight: 8, nine: 9, ten: 10,
+    eleven: 11, twelve: 12, thirteen: 13, fourteen: 14, fifteen: 15, sixteen: 16, seventeen: 17, eighteen: 18, nineteen: 19,
+    twenty: 20, thirty: 30, forty: 40, fifty: 50, sixty: 60, seventy: 70, eighty: 80, ninety: 90 };
+  function canon(s) {
+    s = ("" + (s == null ? "" : s)).toLowerCase().replace(/[’‘`]/g, "'");
+    s = s.replace(/\b(can't|cannot|won't|shan't|ain't|let's|i'm|y'all)\b/g, function (m) { return CONTR[m]; });
+    s = s.replace(/\b([a-z]+)n't\b/g, "$1 not")            /* don't, isn't, wouldn't… */
+         .replace(/\b([a-z]+)'re\b/g, "$1 are")
+         .replace(/\b([a-z]+)'ve\b/g, "$1 have")
+         .replace(/\b([a-z]+)'ll\b/g, "$1 will")
+         .replace(/\b(i|you|he|she|it|we|they|who|that|there)'d\b/g, "$1 would")
+         .replace(/\b(he|she|it|that|there|here|what|who|where|how|when)'s\b/g, "$1 is");
+    /* veinte-uno… noventa-nueve, con guion o espacio */
+    s = s.replace(/\b(twenty|thirty|forty|fifty|sixty|seventy|eighty|ninety)[- ](one|two|three|four|five|six|seven|eight|nine)\b/g,
+      function (m, t, u) { return String(NUM_WORDS[t] + NUM_WORDS[u]); });
+    s = s.replace(/\b(zero|one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty|thirty|forty|fifty|sixty|seventy|eighty|ninety)\b/g,
+      function (m) { return String(NUM_WORDS[m]); });
+    return s;
+  }
   function norm(s) {
-    return ("" + (s == null ? "" : s)).toLowerCase()
-      .replace(/[’‘'`]/g, "")
+    return canon(s)
+      .replace(/'/g, "")
       .replace(/[.,!?;:¿¡"]/g, " ")
       .replace(/\s+/g, " ").trim();
   }
@@ -5017,7 +5046,7 @@
   /* ---------- TRUE / FALSE ---------- */
   function renderTrueFalse(ex, pct, total) {
     show('<div class="wrap">' + exHeader(pct, total) + '<div class="card">'
-      + '<h2>' + T('Verdadero o falso?', 'True or false?') + '</h2>'
+      + '<h2>' + T('¿Verdadero o falso?', 'True or false?') + '</h2>'
       + '<div class="statement" lang="en">' + esc(ex.statement) + '</div>'
       + '<div class="tf-row" role="group" aria-label="Verdadero o falso">'
       + '<button class="tf-btn" type="button" aria-pressed="false" data-v="1">' + T('Verdadero', 'True') + '</button>'
@@ -5080,7 +5109,7 @@
     var answers = ex.answers || [];
     show('<div class="wrap">' + exHeader(pct, total) + '<div class="card">'
       + '<h2>' + T('Tu turno', 'Your turn') + '</h2><p class="body">' + esc(ex.prompt || T("Traduce la frase", "Write the sentence")) + '</p>'
-      + '<input id="trans" class="type-input" placeholder="' + T('Escribe en ingles...', 'Write in English...') + '" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false">'
+      + '<input id="trans" class="type-input" placeholder="' + T('Escribe en inglés...', 'Write in English...') + '" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false">'
       + '<div id="fb"></div><button class="btn" id="verify" disabled>' + T('Verificar', 'Check') + '</button></div></div>');
     var done = false, inp = byId("trans");
     inp.oninput = function () { byId("verify").disabled = !inp.value.trim(); };
@@ -5129,7 +5158,7 @@
           if (matched === pairs.length) {
             done = true;
             results[exIdx] = errors === 0;
-            byId("fb").innerHTML = feedbackBox(errors === 0, "", T("Lo lograste con " + errors + " intento(s) de mas.", "Done, with " + errors + " extra attempt(s)."));
+            byId("fb").innerHTML = feedbackBox(errors === 0, "", T("Lo lograste con " + errors + " intento(s) de más.", "Done, with " + errors + " extra attempt(s)."));
             var v = byId("verify"); v.disabled = false; setVerifyNext(v, total);
           }
         } else {
@@ -5148,11 +5177,11 @@
     var hasOpts = Array.isArray(ex.options);
     var qHtml;
     if (hasOpts) {
-      qHtml = '<p class="body">' + esc(ex.question || T("Que escuchaste?", "What did you hear?")) + '</p>'
+      qHtml = '<p class="body">' + esc(ex.question || T("¿Qué escuchaste?", "What did you hear?")) + '</p>'
         + '<div class="opts">' + optOrder(ex.options.length).map(function (i) { return '<button class="opt" data-i="' + i + '">' + esc(ex.options[i]) + '</button>'; }).join("") + '</div>';
     } else {
       qHtml = '<p class="body">' + esc(ex.question || T("Escribe lo que escuchaste", "Write what you heard")) + '</p>'
-        + '<input id="ltype" class="type-input" placeholder="' + T('Escribe en ingles...', 'Write in English...') + '" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false">';
+        + '<input id="ltype" class="type-input" placeholder="' + T('Escribe en inglés...', 'Write in English...') + '" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false">';
     }
     show('<div class="wrap">' + exHeader(pct, total) + '<div class="card">'
       + '<h2>' + T('Escucha', 'Listen') + '</h2>'
@@ -5245,7 +5274,7 @@
       items.forEach(function (o) { if (o.at === o.bucket) o.cls = " correct"; else { o.cls = " wrong"; ok = false; } });
       draw();
       results[exIdx] = ok;
-      byId("fb").innerHTML = feedbackBox(ok, "", T("Revisa los que estan en rojo.", "Check the ones in red."));
+      byId("fb").innerHTML = feedbackBox(ok, "", T("Revisa los que están en rojo.", "Check the ones in red."));
       setVerifyNext(this, total);
     };
   }
@@ -5262,7 +5291,7 @@
       }).join("");
       return '<div class="rq" data-qwrap="' + qi + '">'
         + '<div class="rq-num">' + T('Pregunta ', 'Question ') + (qi + 1) + T(' de ', ' of ') + qs2.length + '</div>'
-        + '<div class="rq-q">' + esc(q.q || T("Elige la opcion correcta", "Choose the correct option")) + '</div>'
+        + '<div class="rq-q">' + esc(q.q || T("Elige la opción correcta", "Choose the correct option")) + '</div>'
         + '<div class="opts">' + opts + '</div><div class="rq-fb" id="rfb-' + qi + '"></div></div>';
     }).join("");
     show('<div class="wrap">' + exHeader(pct, total) + '<div class="card">'
@@ -6020,8 +6049,8 @@
       var dots = qs2.map(function (_, i) { return '<span class="warm-dot' + (i <= idx ? " on" : "") + '"></span>'; }).join("");
       var opts = optOrder(q.options.length).map(function (i) { return '<button class="opt" data-i="' + i + '">' + esc(q.options[i]) + '</button>'; }).join("");
       show('<div class="wrap">' + topbar(6 + idx * 4) + '<div class="card center">'
-        + mascot("thinking", A.greeting() + " Calibremos la sesion en 3 toques.") + '</div>'
-        + '<div class="card"><div class="exnum">Calibracion &middot; ' + (idx + 1) + ' de ' + qs2.length + '</div>'
+        + mascot("thinking", A.greeting() + " Calibremos la sesión en 3 toques.") + '</div>'
+        + '<div class="card"><div class="exnum">Calibración &middot; ' + (idx + 1) + ' de ' + qs2.length + '</div>'
         + '<h2>' + esc(q.q) + '</h2><div class="opts">' + opts + '</div>'
         + '<div style="text-align:center;margin-top:10px">' + dots + '</div></div></div>');
       each(".opt", function (b) {
@@ -6036,11 +6065,11 @@
       var r = A.scoreWarmup(ans);
       buildAdapted();
       var msg = r.calibration > 0 ? "Vas muy bien: subimos el reto."
-        : (r.calibration < 0 ? "Reforzamos lo basico, con calma." : "Listo, ajusto la leccion a tu nivel.");
+        : (r.calibration < 0 ? "Reforzamos lo básico, con calma." : "Listo, ajusto la lección a tu nivel.");
       show('<div class="wrap">' + topbar(18) + '<div class="card center">'
         + mascot(r.calibration >= 0 ? "correct" : "explaining", msg)
-        + '<h1>Sesion lista</h1>'
-        + '<p class="muted">' + r.correct + ' de ' + r.total + ' en la calibracion</p>'
+        + '<h1>Sesión lista</h1>'
+        + '<p class="muted">' + r.correct + ' de ' + r.total + ' en la calibración</p>'
         + '<button class="btn btn-gold" id="go">Empezar leccion</button></div></div>');
       byId("go").onclick = renderCover;
     }
@@ -6180,7 +6209,7 @@
   baseLesson = L[id];
   if (!baseLesson) {
     show('<div class="wrap"><div class="card center">' + mascot("incorrect", "No encuentro esa leccion.")
-      + '<h1>Leccion no encontrada</h1>'
+      + '<h1>Lección no encontrada</h1>'
       + '<p class="muted">Puede que este tema viva en tu libro. Ábrelo desde tus materiales y busca la lección ahí.</p>'
       + '<a class="btn btn-gold" href="materiales.html">Ir a mis materiales</a>'
       + '<a class="btn btn-ghost" href="leccion.html">Ver lecciones</a></div></div>');

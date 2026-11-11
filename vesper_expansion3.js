@@ -899,7 +899,7 @@ window.VESPER_EXPANSION3 = (function () {
           correctIndex: 1, correction: "told me / said to me",
           explanation: "'said' doesn't take a direct object: use 'told me' or 'said that...'." },
         { type: "fill_blank", sentence: "\"I can swim.\" → He said he ___ swim.", answers: ["could"], hint: "can moves back to...", explanation: "can → could." },
-        { type: "translate", prompt: "Report it: \"They live here.\" → They said they ___ here. (Write the whole sentence.)", answers: ["lived"], explanation: "live → lived." },
+        { type: "translate", prompt: "Report it: \"They live here.\" → They said they ___ here. (Write the whole sentence.)", answers: ["They said they lived here", "They said that they lived here"], explanation: "live → lived: They said they lived here." },
         { type: "true_false", statement: "In reported speech, \"today\" often changes to \"that day\".", answer: true, explanation: "Time references also change." }
       ]
     },

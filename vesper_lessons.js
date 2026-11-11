@@ -32,7 +32,7 @@ window.VESPER_LESSONS = {
                                                                        },
                                                                        {
                                                                            "en":  "She is happy.",
-                                                                           "es":  "Ella esta feliz."
+                                                                           "es":  "Ella está feliz."
                                                                        },
                                                                        {
                                                                            "en":  "We aren\u0027t at home.",
@@ -40,24 +40,24 @@ window.VESPER_LESSONS = {
                                                                        },
                                                                        {
                                                                            "en":  "Are you from Mexico?",
-                                                                           "es":  "Eres de Mexico?"
+                                                                           "es":  "¿Eres de México?"
                                                                        }
                                                                    ],
                                                       "sections":  [
                                                           { "kind": "intro",
-                                                            "body": "\"To be\" es el verbo mas importante del ingles: con el dices quien eres, como estas y de donde vienes. Es lo primero que necesitas para presentarte." },
+                                                            "body": "\"To be\" es el verbo más importante del inglés: con él dices quién eres, cómo estás y de dónde vienes. Es lo primero que necesitas para presentarte." },
                                                           { "kind": "regla",
                                                             "body": "Solo tiene 3 formas en presente: I am - he/she/it is - you/we/they are. Negativo: agrega not (isn't, aren't). Pregunta: el verbo va primero (Are you...?, Is she...?)." },
                                                           { "kind": "vocab",
                                                             "items": [
                                                                 { "en": "I am (I'm)", "ipa": "aim", "es": "yo soy / estoy" },
-                                                                { "en": "he / she / it is", "ipa": "iz", "es": "el / ella / eso es, esta" },
-                                                                { "en": "you / we / they are", "ipa": "ar", "es": "tu eres, somos, son" },
+                                                                { "en": "he / she / it is", "ipa": "iz", "es": "él / ella / eso es, está" },
+                                                                { "en": "you / we / they are", "ipa": "ar", "es": "tú eres, somos, son" },
                                                                 { "en": "isn't / aren't", "ipa": "'iznt / arnt", "es": "no es / no son" }
                                                             ] },
                                                           { "kind": "expresiones",
                                                             "items": [
-                                                                { "en": "How are you?", "es": "Como estas?" },
+                                                                { "en": "How are you?", "es": "¿Cómo estás?" },
                                                                 { "en": "I'm fine, thanks.", "es": "Estoy bien, gracias." },
                                                                 { "en": "I'm from Mexico.", "es": "Soy de Mexico." },
                                                                 { "en": "My name is...", "es": "Mi nombre es..." }
@@ -65,16 +65,16 @@ window.VESPER_LESSONS = {
                                                           { "kind": "ejemplos",
                                                             "items": [
                                                                 { "en": "I am a student.", "es": "Soy estudiante." },
-                                                                { "en": "She is happy.", "es": "Ella esta feliz." },
+                                                                { "en": "She is happy.", "es": "Ella está feliz." },
                                                                 { "en": "We aren't at home.", "es": "No estamos en casa." },
-                                                                { "en": "Are you from Mexico?", "es": "Eres de Mexico?" }
+                                                                { "en": "Are you from Mexico?", "es": "¿Eres de México?" }
                                                             ] },
                                                           { "kind": "errores",
                                                             "items": [
                                                                 { "no": "I is happy.", "si": "I am happy.", "pq": "Con \"I\" siempre va \"am\"." },
                                                                 { "no": "She are my friend.", "si": "She is my friend.", "pq": "he, she e it usan \"is\"." },
-                                                                { "no": "I have 25 years.", "si": "I am 25 years old.", "pq": "La edad en ingles se dice con \"to be\", no con \"have\"." },
-                                                                { "no": "Is very tall.", "si": "He is very tall.", "pq": "En ingles el sujeto nunca se omite." }
+                                                                { "no": "I have 25 years.", "si": "I am 25 years old.", "pq": "La edad en inglés se dice con \"to be\", no con \"have\"." },
+                                                                { "no": "Is very tall.", "si": "He is very tall.", "pq": "En inglés el sujeto nunca se omite." }
                                                             ] },
                                                           { "kind": "resumen",
                                                             "body": "am con I - is con he/she/it - are con you/we/they. Negativo con not; pregunta con el verbo primero. Y recuerda: la edad va con \"to be\"." },
@@ -334,7 +334,7 @@ window.VESPER_LESSONS = {
                                                                                 },
                                                                                 {
                                                                                     "en":  "She works every day.",
-                                                                                    "es":  "Ella trabaja todos los dias."
+                                                                                    "es":  "Ella trabaja todos los días."
                                                                                 },
                                                                                 {
                                                                                     "en":  "They don\u0027t eat meat.",
@@ -342,7 +342,7 @@ window.VESPER_LESSONS = {
                                                                                 },
                                                                                 {
                                                                                     "en":  "Does he speak English?",
-                                                                                    "es":  "Habla el ingles?"
+                                                                                    "es":  "¿Habla él inglés?"
                                                                                 }
                                                                             ]
                                                            },
@@ -514,19 +514,19 @@ window.VESPER_LESSONS = {
                                                                    "examples":  [
                                                                                     {
                                                                                         "en":  "I am studying English now.",
-                                                                                        "es":  "Estoy estudiando ingles ahora."
+                                                                                        "es":  "Estoy estudiando inglés ahora."
                                                                                     },
                                                                                     {
                                                                                         "en":  "She is cooking dinner.",
-                                                                                        "es":  "Ella esta cocinando la cena."
+                                                                                        "es":  "Ella está cocinando la cena."
                                                                                     },
                                                                                     {
                                                                                         "en":  "They are playing in the park.",
-                                                                                        "es":  "Ellos estan jugando en el parque."
+                                                                                        "es":  "Ellos están jugando en el parque."
                                                                                     },
                                                                                     {
                                                                                         "en":  "He usually walks to work, but today he is taking the bus.",
-                                                                                        "es":  "El normalmente camina al trabajo, pero hoy esta tomando el autobus."
+                                                                                        "es":  "Él normalmente camina al trabajo, pero hoy está tomando el autobús."
                                                                                     }
                                                                                 ],
                                                                    "sections":  [
@@ -930,11 +930,11 @@ window.VESPER_LESSONS = {
                                                                             },
                                                                             {
                                                                                 "en":  "How many eggs do you need?",
-                                                                                "es":  "Cuantos huevos necesitas?"
+                                                                                "es":  "¿Cuántos huevos necesitas?"
                                                                             },
                                                                             {
                                                                                 "en":  "How much water do you drink?",
-                                                                                "es":  "Cuanta agua bebes?"
+                                                                                "es":  "¿Cuánta agua bebes?"
                                                                             }
                                                                         ]
                                                        },
@@ -1025,19 +1025,19 @@ window.VESPER_LESSONS = {
                                                                "examples":  [
                                                                                 {
                                                                                     "en":  "I can speak English.",
-                                                                                    "es":  "Yo se hablar ingles."
+                                                                                    "es":  "Yo sé hablar inglés."
                                                                                 },
                                                                                 {
                                                                                     "en":  "He can\u0027t come today.",
-                                                                                    "es":  "El no puede venir hoy."
+                                                                                    "es":  "Él no puede venir hoy."
                                                                                 },
                                                                                 {
                                                                                     "en":  "When she was young, she could run fast.",
-                                                                                    "es":  "Cuando era joven, ella podia correr rapido."
+                                                                                    "es":  "Cuando era joven, ella podía correr rápido."
                                                                                 },
                                                                                 {
                                                                                     "en":  "Can I sit here?",
-                                                                                    "es":  "Puedo sentarme aqui?"
+                                                                                    "es":  "¿Puedo sentarme aquí?"
                                                                                 }
                                                                             ]
                                                            },
