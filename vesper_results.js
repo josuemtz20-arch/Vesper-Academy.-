@@ -265,6 +265,9 @@ window.VESPER_RESULTS = (function () {
       examType: s("examType") || "lesson", examId: s("examId"), level: s("level"),
       score: n("score"), total: n("total"), percent: n("percent"),
       passed: b("passed"), threshold: n("threshold"),
+      /* quién calificó: "worker" = el servidor (no lo puede escribir el
+         navegador); vacío = autocalificado en el navegador del alumno */
+      gradedBy: s("gradedBy"), attemptOfDay: n("attemptOfDay"),
       date: (f.createdAt && f.createdAt.timestampValue) || s("clientTs"),
       detail: detail
     };

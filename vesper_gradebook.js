@@ -482,7 +482,7 @@ window.VESPER_GRADEBOOK = (function () {
       if (!by[key]) {
         by[key] = { key: key, sid: "", name: "", alias: "", group: "",
                     levelName: "", levelNum: null, studentUid: "", level: "",
-                    examsBest: {}, examsCount: 0, lessonsBest: {}, lessonsCount: 0,
+                    examsBest: {}, examsCount: 0, examsUnverified: 0, lessonsBest: {}, lessonsCount: 0,
                     participacion: null, examsGrade: null, lessonsGrade: null,
                     notes: "", lastDate: "" };
       }
@@ -518,6 +518,9 @@ window.VESPER_GRADEBOOK = (function () {
       var pct = clampPct(r.percent); if (pct == null) pct = 0;
       var id = r.examId || (r.examType + "|" + (r.level || ""));
       if (r.examType === "exam" || r.examType === "boss") {
+        /* el promedio de exámenes solo usa lo que calificó el servidor; un
+           "examen" escrito desde el navegador no es evidencia de nada */
+        if (r.gradedBy !== "worker") { e.examsUnverified++; return; }
         e.examsCount++;
         if (e.examsBest[id] == null || pct > e.examsBest[id]) e.examsBest[id] = pct;
       } else if (r.examType === "lesson") {
@@ -547,8 +550,10 @@ window.VESPER_GRADEBOOK = (function () {
         alias: e.alias, group: e.group,
         levelName: e.levelName, levelNum: e.levelNum,
         studentUid: e.studentUid, level: e.level, lastDate: e.lastDate,
-        // Promedios de PRÁCTICA (autocalificados por el alumno; referencia, no nota).
+        // Promedios de PRÁCTICA (referencia, no nota). Exámenes: solo los que
+        // calificó el servidor. Lecciones: autocalificadas en el navegador.
         examsAvg: bestAvg(e.examsBest), examsCount: e.examsCount,
+        examsUnverified: e.examsUnverified,
         lessonsAvg: bestAvg(e.lessonsBest), lessonsCount: e.lessonsCount,
         // Notas de REGISTRO (las confirma el profesor) y participación.
         examsGrade: e.examsGrade, lessonsGrade: e.lessonsGrade,

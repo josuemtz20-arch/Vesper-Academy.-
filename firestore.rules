@@ -401,11 +401,29 @@ service cloud.firestore {
       return d.examType == "boss"
           || (d.examType == "exam" && d.get("examId", "").matches("exam:(A1|A2|B1|B2|C1|C2)"));
     }
+    // Lo que SÍ puede escribir el navegador: lista cerrada de tipo + forma del
+    // id. Sin esto bastaba variar el id ("exam:A1" con un espacio, o cualquier
+    // cadena) para esquivar serverGradedExam y aparecer como examen aprobado.
+    //   lesson     id de lección (letras, números, - _ . :)
+    //   placement  "placement" o "interview:<rol>"
+    //   exam       "exam:<curso>" y el curso debe EXISTIR en exams/ (exam.html)
+    // matches() compara la cadena completa.
+    function browserExamOk(d) {
+      return d.examId is string
+        && (
+             (d.examType == "lesson" && d.examId.matches("[A-Za-z0-9_.:-]{1,80}"))
+          || (d.examType == "placement" && d.examId.matches("placement|interview:[A-Za-z0-9_.-]{1,60}"))
+          || (d.examType == "exam"
+              && d.examId.matches("exam:[A-Za-z0-9_-]{1,60}")
+              && exists(/databases/$(database)/documents/exams/$(d.examId.split(":")[1])))
+        );
+    }
     match /exam_results/{id} {
       allow create: if signedIn()
                     && request.resource.data.studentUid == request.auth.uid
                     && examResultShapeOk(request.resource.data)
                     && !serverGradedExam(request.resource.data)
+                    && browserExamOk(request.resource.data)
                     && examIdentityOk(request.resource.data);
       allow read:   if signedIn() && (
                        resource.data.studentUid == request.auth.uid

@@ -168,7 +168,7 @@ footer a{color:var(--gold);text-decoration:none;}
     <div class="tablecard">
       <table>
         <thead><tr>
-          <th>Alumno</th><th>Examen</th><th>Nivel</th><th>Resultado</th><th>%</th><th>Estado</th><th>Fecha</th>
+          <th>Alumno</th><th>Examen</th><th>Nivel</th><th>Resultado</th><th>%</th><th>Estado</th><th>Calificó</th><th>Fecha</th>
         </tr></thead>
         <tbody id="rows"></tbody>
       </table>
@@ -311,6 +311,18 @@ footer a{color:var(--gold);text-decoration:none;}
     msgEl.innerHTML = html;
   }
 
+  /* quién puso la nota. "Servidor" = la calculó el Worker con el intento
+     ligado al alumno. Lo demás lo escribió el navegador del alumno: sirve de
+     referencia, no de evidencia. */
+  function gradedByHtml(r) {
+    if (r.gradedBy === "worker") {
+      return '<span class="tag exam" title="Calificado por el servidor; el alumno no puede alterarlo">Servidor' +
+        (r.attemptOfDay > 0 ? ' · intento ' + r.attemptOfDay + ' del día' : '') + '</span>';
+    }
+    if (r.examType === "placement") return '<small style="color:var(--muted)">—</small>';
+    return '<small style="color:var(--muted)" title="Lo calificó el navegador del alumno: puede alterarse. No lo uses como evidencia.">Navegador · sin verificar</small>';
+  }
+
   function renderStats(rows) {
     var students = {}, passed = 0, graded = 0;
     rows.forEach(function (r) {
@@ -372,7 +384,7 @@ footer a{color:var(--gold);text-decoration:none;}
     });
 
     if (!rows.length) {
-      rowsEl.innerHTML = '<tr><td colspan="7" class="empty">No hay resultados que coincidan.</td></tr>';
+      rowsEl.innerHTML = '<tr><td colspan="8" class="empty">No hay resultados que coincidan.</td></tr>';
       return;
     }
 
@@ -395,9 +407,10 @@ footer a{color:var(--gold);text-decoration:none;}
           '<td>' + r.score + ' / ' + r.total + '</td>' +
           '<td class="pct">' + r.percent + '%</td>' +
           '<td>' + state + '</td>' +
+          '<td>' + gradedByHtml(r) + '</td>' +
           '<td style="color:var(--muted);font-size:.78rem">' + esc(fmtDate(r.date)) + '</td>' +
         '</tr>' +
-        '<tr class="detailrow" data-d="' + i + '" style="display:none"><td colspan="7">' +
+        '<tr class="detailrow" data-d="' + i + '" style="display:none"><td colspan="8">' +
           (kind === "interview" ? interviewHtml(r) : detailHtml(r)) + '</td></tr>';
     });
     rowsEl.innerHTML = html;
@@ -451,7 +464,7 @@ footer a{color:var(--gold);text-decoration:none;}
       renderStats(rows);
       render();
       if (!rows.length) {
-        rowsEl.innerHTML = '<tr><td colspan="7" class="empty">Aún no hay resultados de tus grupos. ' +
+        rowsEl.innerHTML = '<tr><td colspan="8" class="empty">Aún no hay resultados de tus grupos. ' +
           'En cuanto un alumno tuyo con sesión termine un examen o una lección, aparecerá aquí.</td></tr>';
       }
     });
