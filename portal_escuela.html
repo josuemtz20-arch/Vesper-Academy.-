@@ -1015,9 +1015,11 @@ footer a{color:var(--gold);text-decoration:none;}
         .then(function () { return setDoc("roster", sid, { group: gid, updatedAt: "ts:" + nowIso() }); })
         .then(function () { st.group = gid; });
     }).then(function () {
-      /* acceso por curso: si el alumno tiene lista `books`, suma el libro del curso */
-      if (g.courseId && Array.isArray(st.books) && st.books.indexOf(g.courseId) === -1) {
-        st.books = st.books.concat([g.courseId]);
+      /* acceso por curso: suma el libro del curso a `books`. Si el alumno no
+         tenía la lista se crea: sin `books` las reglas no le abren ningún libro. */
+      var curBooks = Array.isArray(st.books) ? st.books : [];
+      if (g.courseId && curBooks.indexOf(g.courseId) === -1) {
+        st.books = curBooks.concat([g.courseId]);
         return setDoc("students", email, { books: st.books }).then(function () { report.push("libro del curso agregado"); });
       }
     }).then(function () {

@@ -51,7 +51,9 @@ export const EXAM_RATE_DEFAULTS = {
   RL_EXAM_ANSWER_PER_MIN: 90, RL_EXAM_ANSWER_PER_DAY: 3000,
   RL_EXAM_FINISH_PER_MIN: 10, RL_EXAM_FINISH_PER_DAY: 300,
   /* intentos REGISTRADOS por alumno, examen y día (0 = sin tope) */
-  RL_EXAM_UID_EXAM_PER_DAY: 3, RL_EXAM_UID_BOSS_PER_DAY: 6
+  RL_EXAM_UID_EXAM_PER_DAY: 3, RL_EXAM_UID_BOSS_PER_DAY: 6,
+  /* exámenes por libro (exam.html): se entregan de una vez */
+  RL_EXAM_BOOK_PER_MIN: 6, RL_EXAM_BOOK_PER_DAY: 60, RL_EXAM_UID_BOOK_PER_DAY: 2
 };
 
 /* ---------- calificación (espejo de leccion_app.js) ---------- */
@@ -424,6 +426,92 @@ async function finish(env, body) {
   return [200, Object.assign({}, res, { saved: false, why: "already_finished" })];
 }
 
+/* ---------- Exámenes por libro (exam.html) ----------
+ * POST /exam/book {examId, idToken, responses:[índice|null…], alias?}
+ *   -> {score, total, percent, passed, threshold, verdicts:[bool…], saved}
+ * El examen se entrega completo y se califica aquí. Las claves se leen con la
+ * cuenta de servicio de exam_keys/{id} (colección que ningún navegador puede
+ * leer). Mientras un examen no se haya separado, se usan las claves que aún
+ * trae exams/{id}: así esto funciona desde el primer despliegue y la
+ * separación puede hacerse examen por examen.
+ * Solo alumnos con ese curso en students/{correo}.books; cupo diario por
+ * alumno y examen. Devuelve veredictos, nunca la clave. */
+const BOOK_ID_RE = /^[A-Za-z0-9_-]{1,60}$/;
+
+async function fsGetDoc(token, path) {
+  const r = await fetch(fsBase() + "/" + path, { headers: { Authorization: "Bearer " + token } });
+  if (r.status === 404) return null;
+  if (!r.ok) throw new Error(path.split("/")[0] + " " + r.status);
+  return ((await r.json()).fields) || {};
+}
+function dataJson(fields) {
+  try { return JSON.parse((fields && fields.data && fields.data.stringValue) || ""); } catch (e) { return null; }
+}
+function stripTags(s) { return String(s == null ? "" : s).replace(/<[^>]*>/g, " ").replace(/\s+/g, " ").trim(); }
+
+async function book(env, body, lim) {
+  const examId = body.examId;
+  if (typeof examId !== "string" || !BOOK_ID_RE.test(examId)) return [400, { error: "Examen inválido." }];
+  const user = await lookupUser(env, body.idToken);
+  if (!user) return [401, { error: "Tu sesión caducó. Vuelve a iniciar sesión.", code: "auth" }];
+  if (!user.verified || !user.email) return [403, { error: "Tu correo aún no está verificado.", code: "unverified" }];
+  if (!env.FIREBASE_SA) return [503, { error: "Exámenes no configurados en el servidor.", code: "busy" }];
+  const token = await saAccessToken(env);
+
+  /* ¿puede presentar este examen? */
+  const email = encodeURIComponent(user.email);
+  const st = await fsGetDoc(token, "students/" + email);
+  let staff = false;
+  if (st) {
+    const books = ((st.books && st.books.arrayValue && st.books.arrayValue.values) || []).map((v) => v.stringValue);
+    if (books.indexOf(examId) < 0) return [403, { error: "Tu cuenta no tiene este curso.", code: "not_allowed" }];
+  } else {
+    staff = !!(await fsGetDoc(token, "teachers/" + email));
+    if (!staff) return [403, { error: "Tu cuenta no tiene acceso a los exámenes.", code: "not_allowed" }];
+  }
+
+  const EX = dataJson(await fsGetDoc(token, "exams/" + examId));
+  if (!EX || !Array.isArray(EX.sections)) return [404, { error: "Ese examen no está disponible.", code: "no_exam" }];
+  const qs = [];
+  EX.sections.forEach((sec) => { if (sec && sec.type !== "open") (sec.questions || []).forEach((q) => qs.push(q || {})); });
+  const K = dataJson(await fsGetDoc(token, "exam_keys/" + examId));
+  const answers = K && Array.isArray(K.answers) ? K.answers : qs.map((q) => q.answer);
+  if (!qs.length || answers.length !== qs.length || !answers.every(isInt)) {
+    console.error("exam book: claves incompletas para " + examId);
+    return [503, { error: "Este examen no se puede calificar todavía. Avisa a la academia.", code: "no_keys" }];
+  }
+  const resp = body.responses;
+  if (!Array.isArray(resp) || resp.length !== qs.length || !resp.every((r) => r === null || (isInt(r) && r >= 0 && r < 20))) {
+    return [400, { error: "Respuestas con formato inválido." }];
+  }
+
+  /* cupo: se cuenta al final, cuando ya se sabe que el intento es calificable */
+  let attemptNo = 0;
+  if (!staff) {
+    const q = await lim.raw("exam-uid:" + user.uid + ":book:" + examId, 0, lim.limitOf("RL_EXAM_UID_BOOK_PER_DAY"));
+    if (!q.ok && q.scope === "unavailable") return [503, { error: "El servidor de exámenes no está disponible. Vuelve a intentarlo en un minuto.", code: "busy", retryAfter: 30 }];
+    if (!q.ok) return [429, { error: "Ya presentaste este examen hoy las veces permitidas. Vuelve mañana o habla con tu profesor.", code: "daily_limit", retryAfter: q.retryAfter || 3600 }];
+    attemptNo = q.n || 0;
+  }
+
+  const verdicts = resp.map((r, i) => r === answers[i]);
+  const score = verdicts.filter(Boolean).length, total = qs.length;
+  const percent = Math.round(100 * score / total);
+  const threshold = isInt(EX.pass) ? EX.pass : 60;
+  const res = {
+    examType: "exam", examId: "exam:" + examId, level: String(EX.level || "").slice(0, 40),
+    score: score, total: total, percent: percent, threshold: threshold, passed: percent >= threshold,
+    detail: qs.slice(0, DETAIL_CAP).map((q, i) => ({ q: stripTags(q.q).slice(0, 200), type: "multiple_choice", skill: "", correct: verdicts[i] }))
+  };
+  let save = { saved: false, why: "staff" };
+  if (!staff) {
+    try { save = await saveResult(env, { uid: user.uid, email: user.email, verified: true, attemptNo: attemptNo }, cleanAlias(body.alias), res); }
+    catch (e) { console.error("exam book save:", e && e.message); save = { saved: false, why: "save_failed" }; }
+  }
+  return [200, { score: score, total: total, percent: percent, passed: res.passed, threshold: threshold,
+                 verdicts: verdicts, saved: !!save.saved, why: save.why || "" }];
+}
+
 /* punto de entrada desde el fetch del Worker. `lim` trae los contadores:
      lim.ip(key, perMin, perDay)   por IP (RateLimiter del chat)
      lim.raw(key, perMin, perDay)  por clave exacta (cupo por alumno)
@@ -431,7 +519,7 @@ async function finish(env, body) {
 export async function handleExam(path, body, env, lim) {
   if (!env.EXAM_ATTEMPTS) return [503, { error: "Exámenes no configurados en el servidor." }];
   const route = { "/exam/start": ["exam-start", "START", start], "/exam/answer": ["exam-answer", "ANSWER", answer],
-                  "/exam/finish": ["exam-finish", "FINISH", finish] }[path];
+                  "/exam/finish": ["exam-finish", "FINISH", finish], "/exam/book": ["exam-book", "BOOK", book] }[path];
   if (route) {
     const rl = await lim.ip(route[0], lim.limitOf("RL_EXAM_" + route[1] + "_PER_MIN"), lim.limitOf("RL_EXAM_" + route[1] + "_PER_DAY"));
     if (!rl.ok) {

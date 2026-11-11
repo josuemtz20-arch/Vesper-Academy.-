@@ -251,6 +251,18 @@ esas notas si llegan desde el navegador.
   `RL_EXAM_UID_EXAM_PER_DAY` (3) y `RL_EXAM_UID_BOSS_PER_DAY` (6). Pasado el
   cupo, los intentos siguen como práctica. El número de intento del día queda
   en el resultado (`attemptOfDay`).
+- **Exámenes por libro (`exam.html`) → `/exam/book`:** el examen se entrega
+  completo con el `idToken`; el Worker comprueba que el curso esté en
+  `students/{correo}.books`, califica y guarda la nota. Devuelve acierto/fallo
+  por pregunta, nunca la clave. Cupo `RL_EXAM_UID_BOOK_PER_DAY` (2).
+  Las claves se leen de **`exam_keys/{id}`** (ningún navegador puede leer esa
+  colección): un documento con el campo `data` = JSON
+  `{"answers":[0,2,1,…]}`, un índice por pregunta cerrada en el mismo orden en
+  que aparecen en `exams/{id}`. Si `exam_keys/{id}` no existe, el Worker usa
+  las claves que aún traiga `exams/{id}` (`answer` en cada pregunta).
+  **Para cerrar la fuga hay que separar cada examen**: subir `exam_keys/{id}`
+  y volver a subir `exams/{id}` sin los campos `answer` (cambio pendiente en
+  `_scripts/build_exams.py`, que no está en este repo).
 - Orden de despliegue de este cambio: **primero publicar el sitio, después
   `wrangler deploy`**. El cliente nuevo entiende al Worker viejo; el cliente
   viejo (en caché) contra el Worker nuevo no registra notas ni pinta bien el

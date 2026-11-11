@@ -217,10 +217,13 @@ footer img{height:30px;width:30px;object-fit:contain;vertical-align:middle;margi
   function note(t) { document.getElementById("exam-desc").textContent = t; }
 
   /* ── Data source ──────────────────────────────────────────────────────────
-     The exam (with answer keys) is NEVER published as a static file — that would
-     leak every answer in git. On the live site exam.html downloads it from
-     Firestore with the student's idToken (same gated pattern as manual.html /
-     libro.html); the server rules only let approved students/teachers read it.
+     The exam is NEVER published as a static file. On the live site exam.html
+     downloads the questions from Firestore with the student's idToken (same
+     gated pattern as manual.html / libro.html). On submit the answers go to
+     the grading Worker (/exam/book), which holds the keys, grades and records
+     the result itself; the page only gets right/wrong per question.
+     Fallback: if the Worker can't grade yet AND the downloaded exam still
+     carries its keys (not split yet), it is graded here as before.
      On localhost the local build output is loaded directly for dev preview. */
   if (isLocal) {
     const s = document.createElement("script");
@@ -254,7 +257,12 @@ footer img{height:30px;width:30px;object-fit:contain;vertical-align:middle;margi
     }).catch(function () { fail("No connection to the access service."); });
   }
 
+  /* quién presenta: se usa al entregar para que el servidor califique */
+  let examUser = null;
+  const GRADER_URL = "https://patient-feather-4364.josuemtz20.workers.dev/exam/book";
+
   function fetchExam(user) {
+    examUser = user;
     const url = "https://firestore.googleapis.com/v1/projects/" +
                 VesperAuth.config.firebase.projectId + "/databases/" + DB_ID +
                 "/documents/exams/" + encodeURIComponent(examId);
@@ -275,7 +283,7 @@ footer img{height:30px;width:30px;object-fit:contain;vertical-align:middle;margi
     }).catch(function () { fail("Could not validate your session."); });
   }
 
-  function recordResult(correct, total, EX) {
+  function recordResult(correct, total, EX, cloud) {
     try {
       if (window.VESPER_RESULTS && total) {
         const pct = Math.round(correct / total * 100);
@@ -283,7 +291,8 @@ footer img{height:30px;width:30px;object-fit:contain;vertical-align:middle;margi
         VESPER_RESULTS.record({
           examType: "exam", examId: "exam:" + examId, level: EX.level || "",
           score: correct, total: total, percent: pct,
-          threshold: threshold, passed: pct >= threshold
+          threshold: threshold, passed: pct >= threshold,
+          cloud: cloud !== false
         });
       }
     } catch (e) { /* recording never blocks the exam */ }
@@ -481,14 +490,59 @@ footer img{height:30px;width:30px;object-fit:contain;vertical-align:middle;margi
     }
     updateProg();
 
-    document.getElementById("submit-btn").addEventListener("click", grade);
-    function grade(){
+    const submitBtn = document.getElementById("submit-btn");
+    const qids = Object.keys(answers);                 // q1…qN, en orden
+    const hasLocalKeys = qids.length > 0 && qids.every(q => Number.isInteger(answers[q]));
+    submitBtn.addEventListener("click", submit);
+
+    function submitNote(html) {
+      let n = document.getElementById("submit-note");
+      if (!n) {
+        n = document.createElement("p"); n.id = "submit-note"; n.setAttribute("role", "alert");
+        n.style.cssText = "margin:10px 0 0;font-size:.88rem;color:#b02a2a;flex-basis:100%";
+        document.getElementById("submit-bar").appendChild(n);
+      }
+      n.innerHTML = html;
+    }
+
+    function submit() {
+      /* vista previa local, o sin sesión: califica aquí con el archivo local */
+      if (isLocal || !examUser) { grade(null); return; }
+      submitBtn.disabled = true; submitBtn.textContent = "Grading…"; submitNote("");
+      const alias = (window.VESPER_RESULTS && VESPER_RESULTS.aliasOf) ? VESPER_RESULTS.aliasOf() : "";
+      examUser.getIdToken().then(token => fetch(GRADER_URL, {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ examId: examId, idToken: token, alias: alias,
+                               responses: qids.map(q => (q in responses) ? responses[q] : null) })
+      })).then(r => r.json().catch(() => ({})).then(j => ({ status: r.status, body: j })))
+        .then(res => {
+          if (res.status === 200 && Array.isArray(res.body.verdicts)) { grade(res.body); return; }
+          /* Worker sin esta ruta todavía (404 genérico) o sin poder calificar */
+          const code = res.body && res.body.code;
+          if ((res.status === 404 && !code) || code === "no_keys" || res.status >= 500) { fallback(res.body && res.body.error); return; }
+          submitBtn.disabled = false; submitBtn.textContent = "Submit & Grade";
+          submitNote((res.body && res.body.error) || "The exam could not be graded. Try again.");
+        })
+        .catch(() => fallback(""));
+    }
+    function fallback(msg) {
+      if (hasLocalKeys) { grade(null); return; }
+      submitBtn.disabled = false; submitBtn.textContent = "Submit & Grade";
+      submitNote((msg ? msg + " " : "") + "Your answers are still here: check your connection and press Submit again.");
+    }
+
+    /* server = respuesta de /exam/book (veredictos, sin claves) o null para
+       calificar aquí con las claves locales (vista previa / examen sin separar) */
+    function grade(server){
       const perSection = {};
       let correct = 0;
+      const verdictOf = {};
+      if (server) qids.forEach((q, i) => { verdictOf[q] = !!server.verdicts[i]; });
       document.querySelectorAll(".qcard").forEach(card => {
         card.classList.add("graded");
-        const ans = answers[card.dataset.qid];
+        const ans = server ? undefined : answers[card.dataset.qid];
         const sel = responses[card.dataset.qid];
+        const good = server ? verdictOf[card.dataset.qid] : (sel === ans);
         const si = card.dataset.section;
         perSection[si] = perSection[si] || { c: 0, t: 0 };
         perSection[si].t++;
@@ -496,17 +550,17 @@ footer img{height:30px;width:30px;object-fit:contain;vertical-align:middle;margi
           const oi = parseInt(btn.dataset.oi, 10);
           btn.classList.remove("sel");
           const mark = btn.querySelector(".mark");
-          if (oi === ans) {                       // la respuesta correcta
+          if (server ? (oi === sel && good) : (oi === ans)) {   // la correcta (con servidor: solo si la eligió)
             btn.classList.add("correct");
             if (mark) mark.textContent = "✓"; // ✓ (pista no basada en color)
-            btn.setAttribute("aria-label", "Respuesta correcta");
+            btn.setAttribute("aria-label", server ? "Tu respuesta, correcta" : "Respuesta correcta");
           } else if (oi === sel) {                // lo que eligió el alumno y estaba mal
             btn.classList.add("wrong");
             if (mark) mark.textContent = "✗"; // ✗
             btn.setAttribute("aria-label", "Tu respuesta, incorrecta");
           }
         });
-        if (sel === ans) { correct++; perSection[si].c++; }
+        if (good) { correct++; perSection[si].c++; }
       });
       const pct = totalClosed ? Math.round(correct / totalClosed * 100) : 0;
       const band = pct >= 85 ? ["Distinction","#2d7a4f"] : pct >= 70 ? ["Merit","#a8843d"]
@@ -526,13 +580,15 @@ footer img{height:30px;width:30px;object-fit:contain;vertical-align:middle;margi
         `<div class="score-ring" style="--pct:${pct}%"><div class="inner"><span class="pct">${pct}%</span><span class="lbl">Score</span></div></div>` +
         `<div class="band" style="color:${band[1]}">${band[0]}</div>` +
         `<p class="sub">${correct} of ${totalClosed} auto-graded questions correct. The Writing &amp; Speaking section is assessed by your teacher.</p>` +
+        (server ? `<p class="sub">${server.saved ? "Your result was recorded for your teacher." : "This attempt was not recorded."} Correct answers are not shown; review the ones marked ✗ with your teacher.</p>` : "") +
         `<div class="breakdown">${bd}</div>` + nextBtn +
         `<button class="btn btn-ghost" onclick="window.scrollTo({top:0,behavior:'smooth'})">Review answers</button>`;
       res.classList.add("show");
-      document.getElementById("submit-btn").textContent = "Submitted";
-      document.getElementById("submit-btn").disabled = true;
+      submitBtn.textContent = "Submitted";
+      submitBtn.disabled = true;
       res.scrollIntoView({ behavior: "smooth" });
-      recordResult(correct, totalClosed, EX);
+      /* con servidor, la nota la guardó el Worker; aquí solo queda el espejo local */
+      recordResult(correct, totalClosed, EX, !server);
     }
   }
 })();

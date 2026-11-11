@@ -117,14 +117,14 @@ service cloud.firestore {
     function ownGroup() {
       return get(/databases/$(database)/documents/students/$(request.auth.token.email)).data.group;
     }
-    // Acceso por curso (opcional): si students/{correo}.books existe, SOLO
-    // puede abrir esos libros/exámenes; sin `books` conserva acceso a todo.
+    // Acceso por curso: el alumno SOLO abre los libros/exámenes listados en
+    // students/{correo}.books. Sin el campo `books` no abre ninguno (antes la
+    // falta del campo daba acceso a todo: un alta incompleta lo abría todo).
+    // OJO al publicar: todo alumno activo debe tener `books` cargado antes.
     function studentBookAllowed(id) {
       return isStudentUser()
-             && (
-               !("books" in get(/databases/$(database)/documents/students/$(request.auth.token.email)).data)
-               || id in get(/databases/$(database)/documents/students/$(request.auth.token.email)).data.books
-             );
+             && get(/databases/$(database)/documents/students/$(request.auth.token.email)).data.get("books", []) is list
+             && id in get(/databases/$(database)/documents/students/$(request.auth.token.email)).data.get("books", []);
     }
 
     // ───────────── Roles ─────────────
@@ -171,10 +171,19 @@ service cloud.firestore {
       }
     }
 
-    // Exámenes por curso (exam.html → exams/{id}). Guardan las claves de
-    // respuesta; por eso NO se publican como archivo estático.
+    // Exámenes por curso (exam.html → exams/{id}): preguntas del examen.
+    // No se publican como archivo estático. Las CLAVES van aparte, en
+    // exam_keys/{id}; mientras un examen no se haya separado sus preguntas
+    // aún traen la clave y el alumno con ese curso podría leerla.
     match /exams/{id} {
       allow read:  if studentBookAllowed(id) || isTeacherUser() || isAdmin();
+      allow write: if isAdmin();
+    }
+    // Claves de respuesta. Ningún navegador las lee, ni el del profesor: solo
+    // el Worker (cuenta de servicio, que no pasa por estas reglas) al
+    // calificar /exam/book, y el script de administración al subirlas.
+    match /exam_keys/{id} {
+      allow read:  if false;
       allow write: if isAdmin();
     }
 
@@ -396,7 +405,8 @@ service cloud.firestore {
     // reglas, y lleva gradedBy "worker" (campo que el navegador no puede poner:
     // examResultShapeOk no lo admite). Desde el navegador ya no se aceptan:
     // antes un alumno podía subir el 100 que quisiera desde la consola.
-    // Los exámenes de los libros (exam.html, examId "exam:<curso>") siguen igual.
+    // Desde 2026-11-11 también los exámenes de los libros (exam.html) los
+    // califica el Worker (/exam/book): browserExamOk ya no admite "exam".
     function serverGradedExam(d) {
       return d.examType == "boss"
           || (d.examType == "exam" && d.get("examId", "").matches("exam:(A1|A2|B1|B2|C1|C2)"));
@@ -406,16 +416,14 @@ service cloud.firestore {
     // cadena) para esquivar serverGradedExam y aparecer como examen aprobado.
     //   lesson     id de lección (letras, números, - _ . :)
     //   placement  "placement" o "interview:<rol>"
-    //   exam       "exam:<curso>" y el curso debe EXISTIR en exams/ (exam.html)
+    // Ningún "exam" ni "boss" entra desde el navegador: los de nivel, los
+    // jefes y los de libro (exam.html) los califica y escribe el Worker.
     // matches() compara la cadena completa.
     function browserExamOk(d) {
       return d.examId is string
         && (
              (d.examType == "lesson" && d.examId.matches("[A-Za-z0-9_.:-]{1,80}"))
           || (d.examType == "placement" && d.examId.matches("placement|interview:[A-Za-z0-9_.-]{1,60}"))
-          || (d.examType == "exam"
-              && d.examId.matches("exam:[A-Za-z0-9_-]{1,60}")
-              && exists(/databases/$(database)/documents/exams/$(d.examId.split(":")[1])))
         );
     }
     match /exam_results/{id} {

@@ -18,11 +18,16 @@ cualquiera puede ver el código fuente. La seguridad **real** vive en
   (así funcionan las apps web de Firebase); no es un secreto filtrado.
 - Manuales, libros, exámenes y calificaciones están protegidos por reglas de
   Firestore, no por el gate del navegador.
-- **Integridad de calificaciones:** los intentos de examen (`exam_results`) los
-  escribe el propio alumno al autocalificarse, así que son **práctica**. La nota
-  de registro de Exámenes/Lecciones la **confirma el profesor**
+- **Integridad de calificaciones:** los exámenes (de nivel, jefes y por libro)
+  los califica y registra el **Worker** (`worker/exam_grader.js`,
+  `gradedBy: "worker"`); el navegador solo puede escribir resultados de
+  lecciones y de nivelación/entrevista, que son **práctica autocalificada**.
+  La nota de registro de Exámenes/Lecciones la **confirma el profesor**
   (`gradebook.examsGrade` / `lessonsGrade`) y `computeFinal` usa solo datos del
-  profesor. Ver `FIRESTORE_EXAM_RESULTS_RULES.md` y `FIRESTORE_GRADEBOOK_RULES.md`.
+  profesor. Ver `worker/README.md`, `FIRESTORE_EXAM_RESULTS_RULES.md` y
+  `FIRESTORE_GRADEBOOK_RULES.md`.
+- **Acceso por curso:** un alumno solo abre los libros y exámenes listados en
+  `students/{correo}.books`. Sin ese campo no abre ninguno.
 
 ## Acceso / allowlist
 
@@ -49,7 +54,7 @@ permisos y orden de activación en `FIRESTORE_SCHOOL_RULES.md`.
 | `lesson.html` | **Reproductor de lecciones de la audioteca** (inglés) — NO confundir con `leccion.html`; se llega desde `audio_library.html` | `vesper_basics_lesson_data.js`, `vesper_reading_data.js`, `vesper_custom_transcripts.js`, `vesper_audio_data.js`, `vesper_lesson_images.js`, `vesper_covers.js` |
 | `vesper_engine.html` | Generador de prompt del tutor (herramienta del profesor) | `vesper_engine_data.js` |
 | `materiales.html` | Portal del alumno (tras login) | `vesper_nav.js` |
-| `exam.html` | Examen por curso (login-gated; claves en Firestore) | — |
+| `exam.html` | Examen por curso (login-gated; lo califica el Worker, claves en `exam_keys/`) | — |
 | `examen-ingles-gratis.html` | Landing SEO del examen gratis | — |
 | `book_placement.html` | Examen de ubicación (sin cuenta) | inline |
 | `portal_profesores.html` | Portal del profesor | `vesper_auth.js` |
