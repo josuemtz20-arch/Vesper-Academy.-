@@ -119,6 +119,17 @@
       location.href = this.placementUrl(src);
     },
 
+    /* atribución de primer contacto: { src, utm_source, utm_medium, … , landing } */
+    attribution: function () { return readAttr(); },
+    /* la misma, en una línea corta para guardarla con el lead */
+    attributionText: function () {
+      var a = readAttr(), out = [];
+      ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term", "src", "landing"].forEach(function (k) {
+        if (a[k]) out.push(k.replace("utm_", "") + "=" + a[k]);
+      });
+      return out.join("|").slice(0, 120);
+    },
+
     /* lee ?src= (o el último guardado) — lo usa book_placement.html */
     readSource: function () {
       try {
@@ -147,6 +158,62 @@
     },
     clear: function () { try { localStorage.removeItem(LS_EVENTS); } catch (e) {} }
   };
+
+  /* ---------- Atribución (src / UTM) ----------
+     Se guarda el PRIMER contacto del visitante (de qué campaña o página llegó)
+     y se conserva entre páginas, para que llegue al lead aunque el visitante
+     navegue antes de dejar sus datos. */
+  var LS_ATTR = "vesper_attr";
+  var UTM = ["utm_source", "utm_medium", "utm_campaign", "utm_content", "utm_term"];
+  function clean(v) { return String(v || "").replace(/[^A-Za-z0-9_.\-]/g, "").slice(0, 40); }
+  function pageSlug() { return (location.pathname.split("/").pop() || "index.html").replace(/\.html$/, "") || "index"; }
+  function readAttr() {
+    try { return JSON.parse(localStorage.getItem(LS_ATTR) || "{}") || {}; } catch (e) { return {}; }
+  }
+  function captureAttr() {
+    try {
+      var q = new URLSearchParams(location.search), a = readAttr(), had = !!a.landing, found = false;
+      UTM.forEach(function (k) { var v = clean(q.get(k)); if (v && !a[k]) { a[k] = v; found = true; } });
+      var src = clean(q.get("src"));
+      if (src) { localStorage.setItem(LS_SRC, src); if (!a.src) { a.src = src; found = true; } }
+      if (!had) { a.landing = pageSlug(); a.t = Date.now(); found = true; }
+      if (found) localStorage.setItem(LS_ATTR, JSON.stringify(a));
+    } catch (e) {}
+  }
+
+  /* ---------- Clics que importan ----------
+     Un solo escucha para todo el sitio:
+      · cualquier enlace a WhatsApp  -> evento whatsapp_click {page, where}
+      · enlaces al examen de nivel   -> se les añade ?src=<página> si no lo traen,
+        para que el lead diga desde qué página se llegó. */
+  function whereOf(el) {
+    var tag = el.getAttribute("data-wa") || "";
+    if (tag) return tag;
+    if (el.classList && el.classList.contains("v-wa-float")) return "flotante";
+    var sec = el.closest ? el.closest("section[id], footer, header, nav, [id]") : null;
+    return sec ? (sec.id || sec.tagName.toLowerCase()) : "";
+  }
+  function onClick(ev) {
+    var a = ev.target && ev.target.closest ? ev.target.closest("a[href]") : null;
+    if (!a) return;
+    var href = a.getAttribute("href") || "";
+    if (/^https:\/\/(wa\.me|api\.whatsapp\.com)\//i.test(href)) {
+      VA.track("whatsapp_click", { page: pageSlug(), where: clean(whereOf(a)) });
+      return;
+    }
+    if (/^book_placement\.html/i.test(href) && !/[?&]src=/.test(href)) {
+      var hash = "", i = href.indexOf("#");
+      if (i >= 0) { hash = href.slice(i); href = href.slice(0, i); }
+      a.setAttribute("href", href + (href.indexOf("?") >= 0 ? "&" : "?") + "src=" + encodeURIComponent(pageSlug()) + hash);
+      VA.track("cta_click", { src: pageSlug() });
+    }
+  }
+  function autoInstrument() {
+    captureAttr();
+    try { document.addEventListener("click", onClick, true); } catch (e) {}
+    var a = readAttr();
+    VA.track("page_view", { page: pageSlug(), src: a.src || "", source: a.utm_source || "", campaign: a.utm_campaign || "" });
+  }
 
   function gaIdOk() { var g = VA.cfg.ga4; return !!g && /^G-[A-Z0-9]{4,}$/.test(g); }
 
@@ -204,4 +271,5 @@
   })();
 
   window.VA = VA;
+  autoInstrument();
 })();

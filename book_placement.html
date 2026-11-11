@@ -831,6 +831,7 @@ function sendResultEmails(rec) {
     fd.append("desglose", Object.keys(rec.scores).map(function (k) { return k + ": " + rec.scores[k] + "/6"; }).join(", "));
     fd.append("plan_de_interes", rec.plan ? (PLAN_NAMES[rec.plan] || rec.plan) : "(no eligió plan)");
     fd.append("origen", rec.origin || "(directo / no especificado)");
+    fd.append("campana", rec.src || "(sin datos de campaña)");
     fd.append("acepta_promociones", rec.promo ? "sí" : "no");
     fd.append("fecha", rec.date);
     return fetch(NOTIFY_URL, { method: "POST", body: fd, headers: { "Accept": "application/json" } })
@@ -1116,6 +1117,7 @@ function showResults() {
         date: new Date().toISOString(),
         origin: leadOrigin,
         plan: leadPlan,                                                  // plan elegido en planes.html, si venía de ahí
+        src: (window.VA && VA.attributionText) ? VA.attributionText() : "",   // campaña / primera página (UTM, src)
         promo: !!(document.getElementById("promo-ok") || {}).checked,   // consentimiento de promoción (casilla sin marcar por defecto)
         source: "local"
     };
