@@ -34,9 +34,8 @@ cualquiera puede ver el código fuente. La seguridad **real** vive en
 La **fuente de verdad** del acceso es la allowlist en Firestore
 (`students/{correo}`, `teachers/{correo}`). Se gestiona con la herramienta local
 `_scripts/upload_manuals.py` (queda **fuera del repo público** por la
-`.gitignore`; es tooling de admin). La lista de hashes `approvedEmailHashes` en
-`vesper_auth.js` es solo **respaldo legado** si Firestore no responde. Ver
-`access_admin.html`.
+`.gitignore`; es tooling de admin). La lista `approvedEmailHashes` de `vesper_auth.js` se vació (2026-11-11): los
+hashes de correo eran recuperables y no protegían nada. Ver `access_admin.html`.
 
 **Modelo escolar (2026-09-04):** además de la allowlist existen `roles/`
 (admin · coordinator · teacher), `courses/`, `periods/`, `groups/` y

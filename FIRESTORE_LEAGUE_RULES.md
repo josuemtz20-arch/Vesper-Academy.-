@@ -25,14 +25,13 @@ Base de datos: `teachermanuals` (la misma que usa `vesper_sync.js`).
 En las reglas de Firestore de la base `teachermanuals`, dentro de
 `match /databases/{database}/documents { ... }`:
 
-```
-match /leagues/{week}/members/{uid} {
-  allow read:  if request.auth != null;                 // cualquier autenticado ve la tabla
-  allow write: if request.auth != null
-               && request.auth.uid == uid               // cada quien edita SOLO su entrada
-               && request.resource.data.xp is int;       // valida el XP
-}
-```
+> **No copies una regla de este documento.** La versión que estaba aquí
+> (`allow write` con solo `xp is int`) dejaba que cualquiera con sesión se
+> pusiera primero de la tabla y borrara su entrada. La regla vigente está en
+> `firestore.rules` (bloque `match /leagues/{week}/members/{uid}` y
+> `leagueDocOk`): solo `{alias, xp, ts}` con tamaños acotados, el XP no baja,
+> sube como mucho 600 por escritura y 20 000 por semana, y no se puede borrar.
+> Publica siempre el archivo `firestore.rules` completo.
 
 Publica las reglas (consola de Firebase → Firestore → Reglas, o
 `firebase deploy --only firestore:rules`). Tiene efecto inmediato.

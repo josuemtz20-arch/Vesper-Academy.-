@@ -13,9 +13,8 @@
      (un comando de _scripts/upload_manuals.py): tiene efecto
      INMEDIATO y ya NO hace falta editar este archivo ni desplegar.
    - El admin (adminEmail) entra siempre.
-   - approvedEmailHashes queda como RESPALDO legado: si Firestore
-     no responde se usa esta lista de hashes SHA-256. Puede vaciarse
-     cuando todos estén migrados a la allowlist de Firestore.
+   - Ya no hay lista de respaldo de hashes (approvedEmailHashes está
+     vacía a propósito): si Firestore no responde, solo entra el admin.
    - Las páginas de publicPages no requieren sesión.
    - Áreas de profesor (portal_profesores.html, vesper_engine.html):
      además de lo anterior, VesperAuth.teacherAccess() exige el doc
@@ -56,12 +55,12 @@
          alumno ya tiene sesión, para ofrecerle "Enviar a mi profesor" */
       "entrevista.html"
     ],
-    /* SHA-256 de ("vesper-academy-v1|" + correo en minúsculas).
-       Añade una línea por persona autorizada. */
-    approvedEmailHashes: [
-      "1181f429e6707d5b37cec24a77203cf30374fa337062d3f5d8c0abfe50b99dc9",  /* admin */
-      "f77b653bf19243e8d70722a5e50ea3e86d4347ddc489224e083439e2137714bc"   /* profesora 1 */
-    ],
+    /* (2026-11-11) Aquí vivía approvedEmailHashes: el SHA-256 con sal pública
+       del correo de cada persona autorizada. Un correo se recupera de ese
+       hash probando candidatos, así que la lista delataba quién tenía acceso
+       y no protegía nada (solo alimentaba el candado visual). Se vació: la
+       única fuente es la allowlist de Firestore. NO vuelvas a llenarla. */
+    approvedEmailHashes: [],
     salt: "vesper-academy-v1|",
     /* (2026-10-28) Aquí vivía `teachers`: una contraseña de profesor por
        maestro, guardada como SHA-256 con sal pública en este archivo PÚBLICO

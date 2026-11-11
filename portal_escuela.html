@@ -11,7 +11,7 @@
 <meta name="description" content="Grupos, ciclos e inscripciones de alumnos. Acceso restringido a dirección y coordinación.">
 <meta name="robots" content="noindex, nofollow">
 <link rel="icon" href="assets/images/favicon_32.png?v=2" type="image/png">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inria+Serif:ital,wght@0,400;0,700&family=Inter:wght@300;400;500;600;700;800&display=swap');
 *,*::before,*::after{box-sizing:border-box;}
@@ -708,7 +708,7 @@ footer a{color:var(--gold);text-decoration:none;}
         '<div class="meta"><span><i class="fas fa-book"></i>' + esc(courseName(g.courseId)) + "</span>" +
         '<span><i class="fas fa-clock"></i>' + esc(schedText(g.schedule)) + "</span>" +
         '<span><i class="fas fa-chalkboard-user"></i>' + (teachers ? esc(teachers) : '<span class="chip warn">Sin profesor</span>') + "</span>" +
-        (g.meetUrl ? '<span><i class="fas fa-video"></i><a href="' + esc(g.meetUrl) + '" target="_blank" rel="noopener">' + esc(g.meetUrl.replace(/^https?:\/\//, "")) + "</a></span>" : "") +
+        (/^https:\/\//i.test(g.meetUrl || "") ? '<span><i class="fas fa-video"></i><a href="' + esc(g.meetUrl) + '" target="_blank" rel="noopener">' + esc(g.meetUrl.replace(/^https?:\/\//, "")) + "</a></span>" : "") +
         "</div>" +
         '<div class="cap"><div class="bar"><span class="' + (full ? "full" : "") + '" style="width:' + pct + '%"></span></div>' +
         "<small>" + act.length + (cap ? " de " + cap + " lugares" + (full ? " · lleno" : "") : " alumnos") + "</small></div></div>" +
@@ -884,6 +884,11 @@ footer a{color:var(--gold);text-decoration:none;}
       status: $("g-status").value, updatedAt: "ts:" + nowIso()
     };
     if (!editing) data.createdAt = "ts:" + nowIso();
+    if (data.meetUrl && !/^https:\/\/[^\s]+$/i.test(data.meetUrl)) {
+      alert("El enlace de la clase debe empezar con https:// (por ejemplo https://meet.google.com/abc-defg-hij).");
+      $("g-meet").focus();
+      return;
+    }
     var btn = $("g-save");
     btn.disabled = true;
     err.textContent = "";

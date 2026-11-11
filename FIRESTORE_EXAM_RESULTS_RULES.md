@@ -56,44 +56,15 @@ solo queda en su dispositivo.
 En las reglas de Firestore de la base `teachermanuals`, dentro de
 `match /databases/{database}/documents { ... }`:
 
-```
-match /exam_results/{id} {
-  // el alumno crea SOLO sus propios intentos, y deben ser internamente
-  // coherentes: score<=total, percent cuadra con score/total (±1 por redondeo),
-  // y examType es uno conocido. Ver firestore.rules para la versión canónica.
-  allow create: if request.auth != null
-                && request.resource.data.studentUid == request.auth.uid
-                && request.resource.data.score is int
-                && request.resource.data.total is int
-                && request.resource.data.percent is int
-                && request.resource.data.score >= 0
-                && request.resource.data.total >= 0
-                && request.resource.data.score <= request.resource.data.total
-                && request.resource.data.percent >= 0
-                && request.resource.data.percent <= 100
-                && (
-                     (request.resource.data.total == 0 && request.resource.data.percent == 0)
-                     || (request.resource.data.total > 0
-                         && request.resource.data.percent * request.resource.data.total
-                            >= (request.resource.data.score * 100) - request.resource.data.total
-                         && request.resource.data.percent * request.resource.data.total
-                            <= (request.resource.data.score * 100) + request.resource.data.total)
-                   )
-                && request.resource.data.examType in ["lesson", "exam", "boss", "placement"];
-
-  // lee: el dueño, el admin, o un profesor DEL GRUPO del intento
-  // (teacherSeesGroup: helper definido en firestore.rules — compara
-  // resource.data.group contra teachers/{correo}.groups)
-  allow read:   if request.auth != null && (
-                   resource.data.studentUid == request.auth.uid
-                   || request.auth.token.email == "josuemtz20@gmail.com"
-                   || teacherSeesGroup(resource.data.group)
-                );
-
-  // intentos inmutables: el profe solo consulta
-  allow update, delete: if false;
-}
-```
+> **No copies una regla de este documento.** El fragmento que estaba aquí
+> aceptaba cualquier `examType` conocido —incluidos `exam` y `boss`— escrito
+> desde el navegador y no validaba el resto de los campos. La regla vigente
+> está en `firestore.rules` (bloque `match /exam_results/{id}` con
+> `examResultShapeOk`, `browserExamOk`, `serverGradedExam` y
+> `examIdentityOk`): el navegador solo crea resultados de lección y de
+> nivelación/entrevista, con `createdAt` puesto por el servidor y el detalle
+> acotado; los exámenes los escribe el Worker. Publica siempre el archivo
+> `firestore.rules` completo.
 
 > La versión canónica y completa (incluidos los helpers `teacherSeesGroup`,
 > `ownSid` y los bloques `roster`, `gradebook`, `daily_progress`) vive en

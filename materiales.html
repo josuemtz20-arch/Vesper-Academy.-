@@ -2299,7 +2299,8 @@ var VIcon = (function(){
   if(!pid) return;
   function sv(f,k){ return (f[k] && f[k].stringValue) || ""; }
   function show(name,time,url){
-    if(!url) return;
+    /* solo enlaces https: nunca "javascript:" ni otros esquemas en el href */
+    if(!url || !/^https:\/\//i.test(url)) return;
     var a=document.getElementById("myclass"), t=document.getElementById("myclass-title");
     if(!a||!t) return;
     t.textContent = (name||"Tu clase") + (time? (" · Diario "+time) : " · Diario");

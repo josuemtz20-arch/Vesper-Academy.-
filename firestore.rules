@@ -221,7 +221,12 @@ service cloud.firestore {
       allow create, update: if isStaff()
                     && request.resource.data.courseId is string
                     && request.resource.data.periodId is string
-                    && request.resource.data.status in ["planned", "active", "closed"];
+                    && request.resource.data.status in ["planned", "active", "closed"]
+                    // el enlace de la clase se pinta como href en los portales:
+                    // solo https (nunca javascript: u otro esquema)
+                    && request.resource.data.get("meetUrl", "") is string
+                    && (request.resource.data.get("meetUrl", "") == ""
+                        || request.resource.data.get("meetUrl", "").matches("https://[^ ]{1,300}"));
       allow delete: if isAdmin();
     }
 

@@ -702,7 +702,8 @@ footer a:hover{text-decoration:underline;}
     grid.innerHTML="";
     classes.forEach(function(c){
       var card=document.createElement("div"); card.className="mc-card";
-      var url=c.meetUrl||"";
+      /* solo enlaces https: un "javascript:…" guardado en el grupo se ejecutaría al tocar el botón */
+      var url=/^https:\/\//i.test(c.meetUrl||"")?c.meetUrl:"";
       card.innerHTML='<div class="mc-info"><b>'+esc(c.name||"Clase")+'</b>'+
         '<span>'+esc(c.time?("Diario · "+c.time):"Diario")+'</span></div>'+
         (url?'<a class="mc-join" href="'+esc(url)+'" target="_blank" rel="noopener">Entrar a la clase</a>'
