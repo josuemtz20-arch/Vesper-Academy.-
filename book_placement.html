@@ -760,14 +760,23 @@ function saveResultToFirestore(rec) {
             scores:    { mapValue: { fields: Object.keys(rec.scores).reduce(function (m, k) {
                             m[k] = { integerValue: String(rec.scores[k]) }; return m;
                         }, {}) } },
-            origin:    { stringValue: rec.origin || "" },
-            createdAt: { timestampValue: rec.date }
+            origin:    { stringValue: String(rec.origin || "").slice(0, 60) }
         }
     };
-    return fetch(fs.docs + "/" + FS_COLLECTION + "?key=" + encodeURIComponent(fs.key), {
+    // createdAt lo pone el SERVIDOR (transform REQUEST_TIME): la regla exige
+    // createdAt == request.time, así nadie manda leads con fecha inventada.
+    var idChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789", id = "", rnd = new Uint8Array(20);
+    crypto.getRandomValues(rnd);
+    for (var i = 0; i < 20; i++) id += idChars.charAt(rnd[i] % idChars.length);
+    var name = fs.docs.replace(/^https:\/\/[^/]+\/v1\//, "") + "/" + FS_COLLECTION + "/" + id;
+    return fetch(fs.docs + ":commit?key=" + encodeURIComponent(fs.key), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body)
+        body: JSON.stringify({ writes: [{
+            update: { name: name, fields: body.fields },
+            currentDocument: { exists: false },
+            updateTransforms: [{ fieldPath: "createdAt", setToServerValue: "REQUEST_TIME" }]
+        }] })
     }).then(function (r) {
         if (!r.ok) throw new Error("HTTP " + r.status);
         return r.json();

@@ -476,11 +476,13 @@ footer a{color:var(--gold);text-decoration:none;}
      aunque la regla permita leer; runQuery con el mismo token sí responde.
      Por eso todo se lee con runQuery (igual que vesper_league_cloud.js). */
   function listCol(col) { return query(col, []); }
-  function query(col, filters) {
+  function recentCol(col, field, n) { return query(col, [], { orderBy: [{ field: { fieldPath: field }, direction: "DESCENDING" }], limit: n }); }
+  function query(col, filters, extra) {
     var fl = filters.map(function (f) {
       return { fieldFilter: { field: { fieldPath: f[0] }, op: "EQUAL", value: enc(f[1]) } };
     });
     var sq = { from: [{ collectionId: col }] };
+    if (extra) { sq.orderBy = extra.orderBy; sq.limit = extra.limit; }
     if (fl.length) {
       sq.where = fl.length === 1 ? fl[0] : { compositeFilter: { op: "AND", filters: fl } };
       sq.limit = 1000;
@@ -571,7 +573,9 @@ footer a{color:var(--gold);text-decoration:none;}
     return Promise.all([
       listCol("courses"), listCol("periods"), listCol("groups"), listCol("teachers"),
       listCol("students"), listCol("enrollments"),
-      listCol("placement_results").catch(function () { return {}; })
+      /* leads: los 300 más recientes, ordenados en el servidor (antes se
+         bajaba la colección entera, que cualquiera puede hacer crecer) */
+      recentCol("placement_results", "createdAt", 300).catch(function () { return {}; })
     ]).then(function (r) {
       S.courses = r[0]; S.periods = r[1]; S.groups = r[2]; S.teachers = r[3];
       S.students = r[4]; S.enrollments = r[5];

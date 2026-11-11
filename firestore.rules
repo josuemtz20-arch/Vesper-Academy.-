@@ -376,11 +376,21 @@ service cloud.firestore {
     // tipos y tamaños acotados y números coherentes. percent debe cuadrar con
     // score/total (±1 punto por redondeo; todos los llamadores hoy usan
     // Math.round(100*score/total)).
+    // Detalle por pregunta. Las reglas no tienen bucles y revisar cada ítem
+    // de una lista agota el máximo de expresiones por petición (probado en
+    // el emulador), así que el NAVEGADOR sube el detalle como un solo texto
+    // JSON acotado (detailJson) y la lista `detail` debe ir vacía. Antes un
+    // intento podía llevar 60 ítems de tamaño libre (hasta ~1 MB). El Worker
+    // sigue escribiendo la lista `detail` (no pasa por estas reglas).
+    function detailOk(d) {
+      return d.get("detail", []) is list && d.get("detail", []).size() == 0
+          && d.get("detailJson", "") is string && d.get("detailJson", "").size() <= 16000;
+    }
     function examResultShapeOk(d) {
       return d.keys().hasOnly(["studentUid", "alias", "sid", "group", "examType", "examId",
                                "level", "score", "total", "percent", "passed", "threshold",
-                               "detail", "createdAt", "clientTs"])
-        && d.keys().hasAll(["studentUid", "sid", "group", "examType", "score", "total", "percent"])
+                               "detail", "detailJson", "createdAt", "clientTs"])
+        && d.keys().hasAll(["studentUid", "sid", "group", "examType", "score", "total", "percent", "createdAt"])
         && d.sid is string && d.sid.size() <= 64
         && d.group is string && d.group.size() <= 80
         && d.examType in ["lesson", "boss", "exam", "placement"]
@@ -390,8 +400,10 @@ service cloud.firestore {
         && d.get("clientTs", "") is string && d.get("clientTs", "").size() <= 40
         && d.get("passed", false) is bool
         && d.get("threshold", 0) is int && d.get("threshold", 0) >= 0 && d.get("threshold", 0) <= 100
-        && d.get("detail", []) is list && d.get("detail", []).size() <= 60
-        && (!("createdAt" in d) || d.createdAt is timestamp)
+        && detailOk(d)
+        // la fecha la pone el servidor (transform REQUEST_TIME): el cliente no
+        // puede antedatar ni posdatar un intento para moverlo en las listas
+        && d.createdAt == request.time
         && d.score is int && d.total is int && d.percent is int
         && d.total >= 0 && d.total <= 1000
         && d.score >= 0 && d.score <= d.total
@@ -530,27 +542,41 @@ service cloud.firestore {
     // prospectos (nombre, correo, teléfono) que ningún portal docente usa.
     // Si el negocio decide que los profesores deben verlos, vuelve a añadir
     // `|| isTeacherUser()` en el read.
+    // 2026-11-11: cada campo con tipo, tamaño y formato (antes scores,
+    // origin, levelName, skipped y createdAt entraban sin validar: escritura
+    // anónima de documentos arbitrariamente grandes). createdAt lo pone el
+    // servidor. plan/src/promo: plan elegido en planes.html, origen de la
+    // visita y consentimiento de promoción (casilla sin marcar por defecto).
+    function leadShapeOk(d) {
+      return d.keys().hasOnly(["name", "email", "phone", "level", "levelName",
+                               "correct", "total", "skipped", "scores",
+                               "origin", "createdAt", "plan", "src", "promo"])
+        && d.keys().hasAll(["name", "email", "phone", "level", "correct", "total", "createdAt"])
+        && d.name is string && d.name.size() > 0 && d.name.size() <= 80
+        && d.email is string && d.email.size() <= 120
+        && (d.email.size() == 0 || d.email.matches("[^@ ]+@[^@ ]+[.][^@ ]+"))
+        && d.phone is string && d.phone.size() <= 30
+        && (d.phone.size() == 0 || d.phone.matches("[0-9+() .-]{7,30}"))
+        && (d.email.size() > 0 || d.phone.size() > 0)
+        && d.level is string && d.level.size() <= 10
+        && d.get("levelName", "") is string && d.get("levelName", "").size() <= 40
+        && d.correct is int && d.total is int
+        && d.correct >= 0 && d.correct <= d.total && d.total <= 200
+        && d.get("skipped", 0) is int && d.get("skipped", 0) >= 0 && d.get("skipped", 0) <= 200
+        && d.get("scores", {}) is map && d.get("scores", {}).size() <= 8
+        && d.get("scores", {}).keys().hasOnly(["Pre-A1", "A1", "A2", "B1", "B2", "B2+", "C1", "C2"])
+        && d.get("scores", {}).get("Pre-A1", 0) is int && d.get("scores", {}).get("A1", 0) is int
+        && d.get("scores", {}).get("A2", 0) is int && d.get("scores", {}).get("B1", 0) is int
+        && d.get("scores", {}).get("B2", 0) is int && d.get("scores", {}).get("C1", 0) is int
+        && d.get("scores", {}).get("C2", 0) is int && d.get("scores", {}).get("B2+", 0) is int
+        && d.get("origin", "") is string && d.get("origin", "").size() <= 60
+        && d.get("plan", "") is string && d.get("plan", "").size() <= 30
+        && d.get("src", "") is string && d.get("src", "").size() <= 120
+        && d.get("promo", false) is bool
+        && d.createdAt == request.time;
+    }
     match /placement_results/{id} {
-      allow create: if request.resource.data.keys().hasOnly(
-                         ["name", "email", "phone", "level", "levelName",
-                          "correct", "total", "skipped", "scores",
-                          "origin", "createdAt"])
-                    && request.resource.data.name is string
-                    && request.resource.data.name.size() > 0
-                    && request.resource.data.name.size() <= 120
-                    && request.resource.data.level is string
-                    && request.resource.data.level.size() <= 20
-                    && request.resource.data.correct is int
-                    && request.resource.data.total is int
-                    && request.resource.data.correct >= 0
-                    && request.resource.data.total >= 0
-                    && request.resource.data.correct <= request.resource.data.total
-                    && request.resource.data.email is string
-                    && request.resource.data.email.size() <= 200
-                    && request.resource.data.phone is string
-                    && request.resource.data.phone.size() <= 60
-                    && (request.resource.data.email.size() > 0
-                        || request.resource.data.phone.size() > 0);
+      allow create: if leadShapeOk(request.resource.data);
       allow read:   if isStaff();
       allow update, delete: if false;
     }

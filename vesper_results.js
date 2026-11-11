@@ -55,6 +55,7 @@ window.VESPER_RESULTS = (function () {
   var LS_KEY = "vesper_exam_results_v1";
   var LS_CAP = 100;
   var DETAIL_CAP = 60;
+  var DETAIL_JSON_MAX = 16000;   /* tope de la regla para el detalle que sube el navegador */
 
   function available() { return !!(window.VesperAuth && window.VesperAuth.isConfigured); }
   function projectId() { try { return window.VesperAuth.config.firebase.projectId; } catch (e) { return null; } }
@@ -188,8 +189,8 @@ window.VESPER_RESULTS = (function () {
         var d = r.detail[i] || {};
         detail.push({
           q: String(d.q == null ? "" : d.q).slice(0, 200),
-          type: String(d.type == null ? "" : d.type),
-          skill: String(d.skill == null ? "" : d.skill),
+          type: String(d.type == null ? "" : d.type).slice(0, 40),
+          skill: String(d.skill == null ? "" : d.skill).slice(0, 1600),
           correct: !!d.correct
         });
       }
@@ -215,14 +216,11 @@ window.VESPER_RESULTS = (function () {
 
   /* ---- codificación Firestore REST (valores tipados) ---- */
   function toFs(rec) {
-    var detailValues = rec.detail.map(function (d) {
-      return { mapValue: { fields: {
-        q: { stringValue: d.q },
-        type: { stringValue: d.type },
-        skill: { stringValue: d.skill || "" },
-        correct: { booleanValue: d.correct }
-      } } };
-    });
+    /* el detalle viaja como UN texto JSON acotado (la regla solo puede
+       medir un tamaño, no recorrer una lista): se quitan ítems del final
+       hasta que quepa */
+    var items = rec.detail.slice(), detailJson = JSON.stringify(items);
+    while (items.length && detailJson.length > DETAIL_JSON_MAX) { items.pop(); detailJson = JSON.stringify(items); }
     return { fields: {
       studentUid: { stringValue: rec.studentUid },
       alias: { stringValue: rec.alias },
@@ -236,10 +234,45 @@ window.VESPER_RESULTS = (function () {
       percent: { integerValue: String(rec.percent) },
       passed: { booleanValue: rec.passed },
       threshold: { integerValue: String(rec.threshold) },
-      detail: { arrayValue: { values: detailValues } },
-      createdAt: { timestampValue: rec.clientTs },
+      detailJson: { stringValue: detailJson },
+      /* createdAt NO va aquí: lo pone el servidor (ver createDoc) */
       clientTs: { stringValue: rec.clientTs }
     } };
+  }
+
+  function toFsLegacy(rec) {
+    var doc = toFs(rec);
+    delete doc.fields.detailJson;
+    doc.fields.detail = { arrayValue: { values: rec.detail.map(function (d) {
+      return { mapValue: { fields: {
+        q: { stringValue: d.q }, type: { stringValue: d.type },
+        skill: { stringValue: d.skill || "" }, correct: { booleanValue: d.correct }
+      } } };
+    }) } };
+    return doc;
+  }
+
+  /* Crea el documento con createdAt = hora del SERVIDOR (transform
+     REQUEST_TIME). La regla exige createdAt == request.time: así nadie puede
+     antedatar o posdatar un intento. Devuelve true si se creó. */
+  function newId() {
+    var a = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789", out = "", b = new Uint8Array(20);
+    (window.crypto || window.msCrypto).getRandomValues(b);
+    for (var i = 0; i < 20; i++) out += a.charAt(b[i] % a.length);
+    return out;
+  }
+  function createDoc(token, fsDoc) {
+    var docsRoot = base();                                   // https://…/v1/projects/P/databases/D/documents
+    var name = docsRoot.replace(/^https:\/\/[^/]+\/v1\//, "") + "/" + COLLECTION + "/" + newId();
+    return fetch(docsRoot + ":commit", {
+      method: "POST",
+      headers: { "Authorization": "Bearer " + token, "Content-Type": "application/json" },
+      body: JSON.stringify({ writes: [{
+        update: { name: name, fields: fsDoc.fields },
+        currentDocument: { exists: false },
+        updateTransforms: [{ fieldPath: "createdAt", setToServerValue: "REQUEST_TIME" }]
+      }] })
+    }).then(function (r) { return r.status === 200; });
   }
 
   /* lee un documento REST -> fila plana para el panel del profesor */
@@ -249,6 +282,15 @@ window.VESPER_RESULTS = (function () {
     function n(k) { return parseInt((f[k] && f[k].integerValue) || "0", 10); }
     function b(k) { return !!(f[k] && f[k].booleanValue); }
     var detail = [];
+    /* intentos del navegador desde 2026-11: detalle en detailJson */
+    if (f.detailJson && f.detailJson.stringValue) {
+      try {
+        (JSON.parse(f.detailJson.stringValue) || []).forEach(function (d) {
+          d = d || {};
+          detail.push({ q: String(d.q || ""), type: String(d.type || ""), skill: String(d.skill || ""), correct: !!d.correct });
+        });
+      } catch (e) {}
+    }
     var arr = (f.detail && f.detail.arrayValue && f.detail.arrayValue.values) || [];
     for (var i = 0; i < arr.length; i++) {
       var df = (arr[i] && arr[i].mapValue && arr[i].mapValue.fields) || {};
@@ -302,11 +344,14 @@ window.VESPER_RESULTS = (function () {
         var cloud = JSON.parse(JSON.stringify(rec));
         cloud.sid = id.sid;
         cloud.group = id.group;
-        return fetch(collPath(), {
-          method: "POST",
-          headers: { "Authorization": "Bearer " + token, "Content-Type": "application/json" },
-          body: JSON.stringify(toFs(cloud))
-        }).then(function (r) { return r.status === 200; });
+        return createDoc(token, toFs(cloud)).then(function (ok) {
+          if (ok) return true;
+          /* Reglas anteriores al 2026-11-11 (aún sin `detailJson`): se reintenta
+             en la forma vieja, con la lista `detail`. Con las reglas nuevas
+             este reintento siempre se rechaza; se puede quitar cuando estén
+             publicadas. */
+          return createDoc(token, toFsLegacy(cloud));
+        });
       });
     }).catch(function () { return false; });
   }
