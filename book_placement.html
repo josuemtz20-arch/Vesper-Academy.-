@@ -516,20 +516,20 @@
             <div class="field">
                 <label for="student-name">Nombre completo *</label>
                 <div class="input-wrap"><i class="fas fa-user"></i>
-                    <input type="text" id="student-name" placeholder="Ej. María López" autocomplete="name">
+                    <input type="text" id="student-name" placeholder="Ej. María López" autocomplete="name" maxlength="120">
                 </div>
             </div>
             <div class="contact-row">
                 <div class="field">
                     <label for="student-email">Correo electrónico <small>(correo o teléfono)</small></label>
                     <div class="input-wrap"><i class="fas fa-envelope"></i>
-                        <input type="email" id="student-email" placeholder="tu@correo.com" autocomplete="email">
+                        <input type="email" id="student-email" placeholder="tu@correo.com" autocomplete="email" maxlength="200">
                     </div>
                 </div>
                 <div class="field">
                     <label for="student-phone">WhatsApp / Teléfono <small>(correo o teléfono)</small></label>
                     <div class="input-wrap"><i class="fab fa-whatsapp"></i>
-                        <input type="tel" id="student-phone" placeholder="+52 55 1234 5678" autocomplete="tel">
+                        <input type="tel" id="student-phone" placeholder="+52 55 1234 5678" autocomplete="tel" maxlength="60">
                     </div>
                 </div>
             </div>
@@ -711,9 +711,9 @@ const COURSES = {
 
 // ══ HISTORIAL — almacenamiento ══
 // 1) Siempre se guarda en este dispositivo (localStorage).
-// 2) Se intenta guardar en Firestore (colección "placement_results") para que
-//    el historial sea visible desde cualquier dispositivo. Requiere reglas de
-//    Firestore que permitan create/read en esa colección; si no, se ignora.
+// 2) Se guarda en Firestore (colección "placement_results"), que es de donde
+//    la escuela saca los leads (portal_escuela.html). Desde 2026-11 lo guarda
+//    el Worker (ruta /lead): el navegador ya no escribe ahí (ver saveLead).
 // 3) Se notifica por correo a la academia (contacto@vesperacademy.com) vía
 //    FormSubmit y, si el alumno dejó su correo, se le envía una copia
 //    automática de su resultado (_autoresponse).
@@ -722,10 +722,16 @@ const NOTIFY_URL = "https://formsubmit.co/ajax/contacto@vesperacademy.com";
 const FS_COLLECTION = "placement_results";
 // Base "teachermanuals", la misma del resto del sitio. Hasta el 2026-10-28
 // apuntaba a "(default)", que NO EXISTE en el proyecto: cada lead recibía un
-// 404 y solo llegaba por correo. teachermanuals ya tiene el bloque
-// placement_results en firestore.rules (crear sin sesión con forma acotada;
-// leer solo staff, así que "Ver historial" sigue mostrando lo local).
+// 404 y solo llegaba por correo. La lectura es solo para staff, así que
+// "Ver historial" sigue mostrando lo local.
 const FS_DB = "teachermanuals";
+// El Worker del chat y de los exámenes (worker/vesper-chat-proxy.js). Valida
+// el lead, limita cuántos acepta por IP y en total, y lo guarda con la cuenta
+// de servicio. Si cambias la URL, cámbiala también en connect-src de la CSP.
+const LEAD_API = "https://patient-feather-4364.josuemtz20.workers.dev/lead";
+const LEAD_TIMEOUT_MS = 10000;                 // un Worker colgado no deja el aviso girando
+const LEAD_RETRY_MAX_AGE_MS = 7 * 86400000;    // el Worker acepta fechas de hasta 8 días
+const LEAD_RETRY_IN_PAGE = 2;                  // reintentos sin salir de la pantalla de resultado
 
 function fsBase() {
     var pid = (window.VesperAuth && VesperAuth.config.firebase.projectId) || "vesper-academy";
@@ -744,6 +750,100 @@ function saveLocalHistory(list) {
     try { localStorage.setItem(LS_KEY, JSON.stringify(list.slice(0, 100))); } catch (e) {}
 }
 
+// Id del documento del lead (20 caracteres, como los de Firestore). Lo pone
+// la página para que un reintento NO duplique el lead: si ya se guardó, el
+// servidor responde "ya existe" y se da por bueno.
+function newLeadId() {
+    var abc = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789", out = "", i;
+    try {
+        var b = new Uint8Array(20);
+        crypto.getRandomValues(b);
+        for (i = 0; i < 20; i++) out += abc.charAt(b[i] % 62);
+    } catch (e) {
+        for (out = "", i = 0; i < 20; i++) out += abc.charAt(Math.floor(Math.random() * 62));
+    }
+    return out;
+}
+
+// Cambia campos de un registro del historial local buscándolo por id (se
+// relee el historial: un reintento puede resolverse minutos después, cuando
+// la lista en memoria ya es vieja).
+function patchLocalLead(id, patch) {
+    var list = loadLocalHistory();
+    for (var i = 0; i < list.length; i++) {
+        if (list[i].id === id) { Object.assign(list[i], patch); saveLocalHistory(list); return; }
+    }
+}
+
+// Vía principal: el Worker. Solo cuenta como guardado si responde {ok:true}.
+function saveLeadViaWorker(rec) {
+    var ctl = (typeof AbortController === "function") ? new AbortController() : null;
+    var timer = ctl ? setTimeout(function () { ctl.abort(); }, LEAD_TIMEOUT_MS) : 0;
+    return fetch(LEAD_API, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        signal: ctl ? ctl.signal : undefined,
+        body: JSON.stringify({
+            id: rec.id, name: rec.name, email: rec.email || "", phone: rec.phone || "",
+            level: rec.level, levelName: rec.levelName,
+            correct: rec.correct, total: rec.total, skipped: rec.skipped,
+            scores: rec.scores, origin: rec.origin || "", date: rec.date
+        })
+    }).then(function (r) {
+        return r.json().catch(function () { return null; }).then(function (j) {
+            if (r.ok && j && j.ok === true) return j;
+            var err = new Error("HTTP " + r.status);
+            err.status = r.status;
+            err.retryAfter = parseInt(r.headers.get("Retry-After") || (j && j.retryAfter) || "0", 10) || 0;
+            throw err;
+        });
+    }).finally(function () { clearTimeout(timer); });
+}
+
+// Guarda el lead: primero por el Worker; si falla POR LO QUE SEA (Worker
+// desplegado todavía sin /lead -> 400, límite alcanzado -> 429, caído, sin
+// red), se intenta la escritura directa de antes.
+// Ese respaldo solo sirve MIENTRAS la regla de placement_results siga
+// abierta, es decir, durante la transición (Worker -> sitio -> regla, ver
+// worker/README.md). Con la regla cerrada responde 403 y el lead queda
+// pendiente en este dispositivo (retryPendingLeads); entonces el respaldo y
+// saveResultToFirestore se pueden borrar.
+function saveLead(rec) {
+    return saveLeadViaWorker(rec).catch(function (workerErr) {
+        return saveResultToFirestore(rec).catch(function () { throw workerErr; });
+    });
+}
+
+// Intenta guardar y, si no se pudo, reintenta un par de veces mientras la
+// persona sigue leyendo su resultado (un 429 por minuto se resuelve solo en
+// menos de 60 s). onSaved() se llama cuando por fin queda en el servidor.
+// Lo que no se logre aquí lo recoge retryPendingLeads() en la próxima visita.
+function syncLead(rec, onSaved, onLocalOnly, attempt) {
+    attempt = attempt || 0;
+    saveLead(rec).then(function () {
+        patchLocalLead(rec.id, { savedRemote: true, pending: false });
+        if (onSaved) onSaved();
+    }).catch(function (err) {
+        if (onLocalOnly) onLocalOnly();
+        if (attempt >= LEAD_RETRY_IN_PAGE) return;
+        var wait = (err && err.status === 429) ? (err.retryAfter || 60) + 2 : 20;
+        if (wait > 95) return;   // límite diario: no tiene sentido insistir hoy
+        setTimeout(function () { syncLead(rec, onSaved, null, attempt + 1); }, wait * 1000);
+    });
+}
+
+// Al abrir la página: sube los leads de este dispositivo que no llegaron al
+// servidor (Worker caído, sin red, límite alcanzado). No toca registros de
+// versiones anteriores (no tienen id ni la marca "pending").
+function retryPendingLeads() {
+    var now = Date.now();
+    loadLocalHistory().filter(function (r) {
+        var t = Date.parse(r.date);
+        return r.pending && !r.savedRemote && r.id && !isNaN(t) && now - t < LEAD_RETRY_MAX_AGE_MS;
+    }).slice(0, 3).forEach(function (r) { syncLead(r, null, null, LEAD_RETRY_IN_PAGE); });
+}
+
+// Escritura directa a Firestore: RESPALDO de la transición (ver saveLead).
 function saveResultToFirestore(rec) {
     var fs = fsBase();
     if (!fs.key) return Promise.reject(new Error("sin configuración"));
@@ -764,12 +864,14 @@ function saveResultToFirestore(rec) {
             createdAt: { timestampValue: rec.date }
         }
     };
-    return fetch(fs.docs + "/" + FS_COLLECTION + "?key=" + encodeURIComponent(fs.key), {
+    return fetch(fs.docs + "/" + FS_COLLECTION + "?key=" + encodeURIComponent(fs.key) +
+                 (rec.id ? "&documentId=" + encodeURIComponent(rec.id) : ""), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body)
     }).then(function (r) {
-        if (!r.ok) throw new Error("HTTP " + r.status);
+        // 409 = ese id ya existe: el lead ya estaba guardado (reintento)
+        if (!r.ok && !(r.status === 409 && rec.id)) throw new Error("HTTP " + r.status);
         return r.json();
     });
 }
@@ -1071,6 +1173,8 @@ function showResults() {
 
     // ── Guardar en el historial ──
     const rec = {
+        id: newLeadId(),
+        pending: true,          // hasta que el servidor confirme (ver syncLead)
         name: studentName,
         email: studentEmail,
         phone: studentPhone,
@@ -1120,12 +1224,10 @@ function showResults() {
 
     sendResultEmails(rec).catch(function () {});
 
-    saveResultToFirestore(rec).then(function () {
-        rec.savedRemote = true;
-        saveLocalHistory(local);
+    syncLead(rec, function () {
         status.className = "save-status";
         status.innerHTML = "<i class='fas fa-cloud-arrow-up'></i> Resultado guardado en el historial general";
-    }).catch(function () {
+    }, function () {
         status.className = "save-status local-only";
         status.innerHTML = "<i class='fas fa-device-mobile'></i> Resultado guardado en el historial de este dispositivo";
     });
@@ -1248,6 +1350,10 @@ function renderHistory() {
         list.appendChild(div);
     });
 }
+
+// Leads de visitas anteriores que no llegaron al servidor: se reintentan ya
+// con la página cargada, sin estorbar el arranque.
+setTimeout(retryPendingLeads, 3000);
 
 // Medición: llegada al examen (con el origen que trae el ?src=)
 if (window.VA) VA.track("exam_view", { src: leadOrigin });

@@ -99,6 +99,11 @@ const RATE_DEFAULTS = {
   RL_REPORT_PER_MIN: 5,
   RL_REPORT_PER_DAY: 40,
   RL_REPORT_GLOBAL_PER_DAY: 500,   // todas las IPs: tope de escrituras a app_events
+  /* leads del examen de nivel (/lead). El tope por IP no es mínimo: una
+     empresa o un salón entero presenta el examen desde UNA IP pública. */
+  RL_LEAD_PER_MIN: 10,
+  RL_LEAD_PER_DAY: 60,
+  RL_LEAD_GLOBAL_PER_DAY: 500,     // todas las IPs: tope de escrituras a placement_results
   /* todas las IPs juntas, por día (UTC). Era 5000; con los topes de entrada
      el peor caso es ~0.01 USD por mensaje, así que 2000 acota el abuso a
      ~20 USD/día. Súbelo con RL_GLOBAL_PER_DAY en [vars] cuando crezca la
@@ -415,6 +420,169 @@ async function handleReport(body, env, ip) {
   return [200, { ok: true }];
 }
 
+/* ---------- Leads del examen de nivel (/lead) ----------
+ * book_placement.html (examen diagnóstico público, SIN registro) escribía
+ * DIRECTO en Firestore placement_results, con una regla que aceptaba "create"
+ * sin sesión: mismo hueco que app_events (sin límite de frecuencia) y además
+ * `scores` no tenía tipo ni tamaño, así que cada documento podía pesar 1 MiB.
+ * Ahora el lead pasa por aquí: se limpia, se cuenta por IP y en total, y lo
+ * guarda la cuenta de servicio. La regla queda en `create: if false`.
+ *
+ * Esto es el embudo de ventas: un lead rechazado es dinero perdido. Por eso
+ * solo se responde 400 cuando el lead no sirve para contactar a nadie (sin
+ * nombre, sin correo ni teléfono válidos, o con números imposibles); todo lo
+ * demás se RECORTA o se descarta en vez de rechazar. No se valida `level`
+ * contra una lista fija: si mañana la página añade un nivel y nadie toca el
+ * Worker, el lead tiene que seguir entrando.
+ *
+ * `id` (opcional, lo genera la página) es el id del documento: si la página
+ * reintenta un lead que sí se había guardado (respuesta perdida, reintento
+ * al día siguiente), Firestore responde 409 y aquí se contesta ok, sin
+ * duplicarlo. `date` es la hora en que terminó el examen; se respeta si cae
+ * en la ventana de reintentos, si no se usa la hora del servidor. */
+const LEAD_ID_RE = /^[A-Za-z0-9]{20}$/;
+const LEAD_KEY_RE = /^[A-Za-z0-9+ _-]{1,20}$/;          // "Pre-A1", "B2+"…
+const LEAD_EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;   // la misma de la página
+const LEAD_MAX_BODY_CHARS = 4000;                        // un lead real ronda 400
+const LEAD_MAX_QUESTIONS = 200;                          // hoy son 30
+const LEAD_MAX_SCORES = 12;                              // hoy son 5 niveles
+const LEAD_MAX_AGE_MS = 8 * 86400000;                    // la página reintenta hasta 7 días
+
+/* texto de una línea: sin caracteres de control, sin espacios sobrantes, recortado */
+function leadText(v, max) {
+  return typeof v === "string" ? clip(v.replace(/[\u0000-\u001f\u007f]+/g, " ").trim(), max).trim() : "";
+}
+function leadInt(v) {
+  return (typeof v === "number" && Number.isInteger(v) && v >= 0 && v <= LEAD_MAX_QUESTIONS) ? v : null;
+}
+
+/* Devuelve el lead limpio, o null si no sirve para contactar a nadie. */
+function cleanLead(body, now) {
+  const name = leadText(body.name, 120);
+  let email = leadText(body.email, 200);
+  let phone = leadText(body.phone, 60);
+  if (email && !LEAD_EMAIL_RE.test(email)) email = "";
+  if (phone && phone.replace(/\D/g, "").length < 7) phone = "";
+  const level = (typeof body.level === "string" && LEAD_KEY_RE.test(body.level)) ? body.level : null;
+  const correct = leadInt(body.correct), total = leadInt(body.total), skipped = leadInt(body.skipped);
+  if (!name || (!email && !phone) || !level ||
+      correct === null || total === null || skipped === null ||
+      correct > total || skipped > total) return null;
+
+  /* scores: mapa nivel -> aciertos. Lo que no tenga esa forma se descarta. */
+  const scores = {};
+  if (body.scores && typeof body.scores === "object" && !Array.isArray(body.scores)) {
+    let n = 0;
+    for (const k of Object.keys(body.scores)) {
+      if (n >= LEAD_MAX_SCORES) break;
+      const v = leadInt(body.scores[k]);
+      if (LEAD_KEY_RE.test(k) && v !== null) { scores[k] = v; n++; }
+    }
+  }
+
+  const t = (typeof body.date === "string" && body.date.length <= 40) ? Date.parse(body.date) : NaN;
+  const when = (!isNaN(t) && t <= now + 600000 && t >= now - LEAD_MAX_AGE_MS) ? t : now;
+
+  return {
+    id: (typeof body.id === "string" && LEAD_ID_RE.test(body.id)) ? body.id : "",
+    name: name, email: email, phone: phone, level: level,
+    levelName: leadText(body.levelName, 60),
+    correct: correct, total: total, skipped: skipped, scores: scores,
+    origin: leadText(body.origin, 80),
+    createdAt: new Date(when).toISOString()
+  };
+}
+
+/* Clave del contador por IP. En IPv6 un cliente recibe un /64 entero (2^64
+ * direcciones): contar por dirección completa sería no contar. Se agrupa por
+ * los primeros 64 bits. IPv4 (y la forma ::ffff:a.b.c.d) se deja tal cual. */
+function ipBucket(ip) {
+  if (ip.indexOf(":") === -1) return ip;
+  if (ip.indexOf(".") !== -1) return ip.slice(ip.lastIndexOf(":") + 1);
+  const halves = ip.toLowerCase().split("%")[0].split("::");
+  const head = halves[0] ? halves[0].split(":") : [];
+  const tail = halves[1] ? halves[1].split(":") : [];
+  const full = halves.length > 1
+    ? head.concat(new Array(Math.max(0, 8 - head.length - tail.length)).fill("0"), tail)
+    : head;
+  return full.slice(0, 4).map((h) => h.replace(/^0+(?=.)/, "")).join(":") + "::/64";
+}
+
+async function handleLead(body, env, ip) {
+  const lead = cleanLead(body, Date.now());
+  if (!lead) return [400, { error: "Lead inválido.", code: "lead_invalid" }];
+
+  const perIp = await rateHit(env, "lead:" + ipBucket(ip),
+    limitOf(env, "RL_LEAD_PER_MIN"), limitOf(env, "RL_LEAD_PER_DAY"));
+  if (!perIp.ok) {
+    return [429, { error: "Demasiados resultados desde esta red. Inténtalo más tarde.", code: "rate_limited", retryAfter: perIp.retryAfter || 60 }];
+  }
+  const all = await rateHit(env, "lead-global", 0, limitOf(env, "RL_LEAD_GLOBAL_PER_DAY"));
+  if (!all.ok) {
+    /* OJO: si esto aparece en los logs sin una campaña que lo explique, alguien
+       está quemando el cupo; los leads reales siguen llegando por correo. */
+    console.error("lead: tope global diario alcanzado (RL_LEAD_GLOBAL_PER_DAY).");
+    return [429, { error: "Demasiados resultados hoy. Inténtalo mañana.", code: "rate_limited", retryAfter: all.retryAfter || 3600 }];
+  }
+  if (!env.FIREBASE_SA) {
+    console.error("lead: falta el secreto FIREBASE_SA; el lead no se guardó.");
+    return [503, { error: "El servidor no puede guardar resultados.", code: "lead_unavailable" }];
+  }
+  const token = await saAccessToken(env);
+  const S = (v) => ({ stringValue: String(v) }), I = (v) => ({ integerValue: String(v) });
+  const scoreFields = {};
+  for (const k of Object.keys(lead.scores)) scoreFields[k] = I(lead.scores[k]);
+  const r = await fetch(fsBase() + "/placement_results" + (lead.id ? "?documentId=" + lead.id : ""), {
+    method: "POST",
+    headers: { Authorization: "Bearer " + token, "Content-Type": "application/json" },
+    /* los mismos campos que escribía la página, + via (para distinguir en la
+       consola lo que entró por el Worker de lo que entró directo) */
+    body: JSON.stringify({ fields: {
+      name: S(lead.name), email: S(lead.email), phone: S(lead.phone),
+      level: S(lead.level), levelName: S(lead.levelName),
+      correct: I(lead.correct), total: I(lead.total), skipped: I(lead.skipped),
+      scores: { mapValue: { fields: scoreFields } },
+      origin: S(lead.origin),
+      createdAt: { timestampValue: lead.createdAt },
+      via: S("worker")
+    } })
+  });
+  /* 409 = ese id ya existe: es un reintento de un lead que sí se guardó */
+  if (r.status === 409 && lead.id) return [200, { ok: true, duplicate: true }];
+  if (!r.ok) {
+    console.error("lead: Firestore respondió", r.status);
+    return [502, { error: "No se pudo guardar el resultado." }];
+  }
+  return [200, { ok: true }];
+}
+
+/* Rutas JSON pequeñas que no usan Claude (/report, /lead): lee el cuerpo con
+ * tope de tamaño, llama al handler ([status, payload]) y responde con CORS. */
+async function jsonRoute(request, env, origin, maxChars, label, handler) {
+  const ip = request.headers.get("CF-Connecting-IP") || "unknown";
+  let body;
+  try {
+    const t = await request.text();
+    if (t.length > maxChars) return jsonError(413, "Petición demasiado grande.", origin);
+    body = JSON.parse(t);
+  } catch (e) {
+    return jsonError(400, "Cuerpo JSON inválido.", origin);
+  }
+  if (!body || typeof body !== "object") return jsonError(400, "Cuerpo JSON inválido.", origin);
+  let out;
+  try {
+    out = await handler(body, env, ip);
+  } catch (e) {
+    console.error(label + ":", e && e.message);
+    out = [502, { error: "No se pudo guardar." }];
+  }
+  const extra = out[0] === 429 ? { "Retry-After": String(out[1].retryAfter || 60) } : {};
+  return new Response(JSON.stringify(out[1]), {
+    status: out[0],
+    headers: Object.assign({ "Content-Type": "application/json", "Cache-Control": "no-store" }, corsHeaders(origin), extra)
+  });
+}
+
 /* ---------- Worker ---------- */
 
 export default {
@@ -470,32 +638,11 @@ export default {
       });
     }
 
-    /* ── Reporte de una respuesta de la IA (/report) ──
-     * No usa Claude: valida, cuenta y guarda en Firestore (handleReport). */
-    if (path === "/report") {
-      const ipR = request.headers.get("CF-Connecting-IP") || "unknown";
-      let rb;
-      try {
-        const t = await request.text();
-        if (t.length > 4000) return jsonError(413, "Petición demasiado grande.", origin);
-        rb = JSON.parse(t);
-      } catch (e) {
-        return jsonError(400, "Cuerpo JSON inválido.", origin);
-      }
-      if (!rb || typeof rb !== "object") return jsonError(400, "Cuerpo JSON inválido.", origin);
-      let out;
-      try {
-        out = await handleReport(rb, env, ipR);
-      } catch (e) {
-        console.error("report:", e && e.message);
-        out = [502, { error: "No se pudo guardar el reporte." }];
-      }
-      const extra = out[0] === 429 ? { "Retry-After": String(out[1].retryAfter || 60) } : {};
-      return new Response(JSON.stringify(out[1]), {
-        status: out[0],
-        headers: Object.assign({ "Content-Type": "application/json", "Cache-Control": "no-store" }, corsHeaders(origin), extra)
-      });
-    }
+    /* ── Reporte de una respuesta de la IA (/report) y lead del examen de
+     * nivel (/lead) ── No usan Claude: validan, cuentan y guardan en
+     * Firestore con la cuenta de servicio (handleReport, handleLead). */
+    if (path === "/report") return jsonRoute(request, env, origin, 4000, "report", handleReport);
+    if (path === "/lead") return jsonRoute(request, env, origin, LEAD_MAX_BODY_CHARS, "lead", handleLead);
 
     if (!env.ANTHROPIC_API_KEY) {
       return jsonError(500, "El servidor no tiene configurada la API key.", origin);

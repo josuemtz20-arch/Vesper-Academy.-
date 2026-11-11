@@ -52,6 +52,9 @@ Límites por defecto (constante `RATE_DEFAULTS`; se cambian sin tocar código co
 | `RL_REPORT_PER_MIN` | 5 | reportes de respuestas de la IA por minuto, por IP (`/report`) |
 | `RL_REPORT_PER_DAY` | 40 | reportes por día, por IP |
 | `RL_REPORT_GLOBAL_PER_DAY` | 500 | reportes por día en total (tope de escrituras a `app_events`) |
+| `RL_LEAD_PER_MIN` | 10 | leads del examen de nivel por minuto, por IP (`/lead`; en IPv6, por bloque /64) |
+| `RL_LEAD_PER_DAY` | 60 | leads por día, por IP |
+| `RL_LEAD_GLOBAL_PER_DAY` | 500 | leads por día en total (tope de escrituras a `placement_results`) |
 
 Además, antes de llamar a Claude el Worker recorta la entrada (2026-11):
 `MAX_SYSTEM_CHARS` 4000, `MAX_MESSAGE_CHARS` 3000 por mensaje y
@@ -230,7 +233,7 @@ O en el panel: tu Worker → **Settings → Variables and Secrets** → añade `
 | `TURNSTILE_SECRET` | secreto | recomendado | `wrangler secret put TURNSTILE_SECRET` |
 | `SESSION_SECRET` | secreto | no | `wrangler secret put SESSION_SECRET` |
 | `PRO_CODE` | secreto | no | `wrangler secret put PRO_CODE` |
-| `FIREBASE_SA` | secreto | sí, para guardar notas de exámenes y reportes de la IA | ver "Exámenes" |
+| `FIREBASE_SA` | secreto | sí, para guardar notas de exámenes, reportes de la IA y **leads** | ver "Exámenes" |
 | `EXAM_ATTEMPTS` | Durable Object | sí (ya en `wrangler.toml`) | se crea con `wrangler deploy` (migración v2) |
 | `RL_*` | variable | no | `[vars]` en `wrangler.toml` |
 
@@ -260,6 +263,83 @@ Prueba rápida (debe responder `{"ok":true}` y aparecer el documento):
 curl -s https://<tu-worker>.workers.dev/report \
   -H "Origin: https://vesperacademy.com" -H "Content-Type: application/json" \
   -d '{"reason":"otro","text":"prueba","page":"chat.html"}'
+```
+
+## Leads del examen de nivel (`/lead`, 2026-11)
+
+`book_placement.html` (examen diagnóstico público, sin registro) manda
+`POST /lead {id, name, email, phone, level, levelName, correct, total,
+skipped, scores, origin, date}`. El Worker lo limpia, lo cuenta por IP y en
+total (`RL_LEAD_*`) y lo guarda en Firestore `placement_results` con la cuenta
+de servicio `FIREBASE_SA`, con los mismos campos de antes más `via: "worker"`.
+No usa Claude ni Turnstile.
+
+Antes el navegador escribía directo, con una regla que aceptaba altas sin
+sesión, sin límite de frecuencia y con `scores` sin tipo ni tamaño (hasta
+1 MiB por documento).
+
+**Qué valida.** Responde `400` solo si el lead no sirve para contactar a
+nadie: sin nombre, sin correo ni teléfono válidos (mismas comprobaciones que
+el formulario), `level` con forma rara o números imposibles (`correct`,
+`total`, `skipped`: enteros de 0 a 200, `correct` y `skipped` ≤ `total`). Lo
+demás se recorta en vez de rechazar: `name` 120, `email` 200, `phone` 60,
+`levelName` 60, `origin` 80; `scores` admite como mucho 12 entradas
+`nivel → entero`; cuerpo total ≤ 4000 caracteres (`413`). `level` no se
+compara contra una lista fija a propósito: si la página añade un nivel, el
+lead tiene que seguir entrando.
+
+**Reintentos sin duplicados.** `id` (20 caracteres, lo genera la página) es
+el id del documento. Si la página reintenta un lead que sí se guardó, Firestore
+responde 409 y el Worker contesta `{"ok":true,"duplicate":true}`. `date` es la
+hora en que terminó el examen: se respeta si tiene menos de 8 días (la página
+reintenta hasta 7); si no, se usa la hora del servidor.
+
+**Qué hace la página cuando falla** (`saveLead` / `syncLead`):
+
+| Respuesta del Worker | Qué pasa |
+|----------------------|----------|
+| `200 {ok:true}` | guardado |
+| `400` (Worker desplegado sin `/lead`), `5xx`, sin red, más de 10 s | escritura directa de antes; si la regla ya está cerrada (403), queda pendiente |
+| `429` (límite) | igual, y reintenta sola tras `Retry-After` si es el límite por minuto |
+| pendiente | reintenta 2 veces en la pantalla de resultado y otra vez en la próxima visita, hasta 7 días |
+
+El correo de FormSubmit a `contacto@vesperacademy.com` es independiente de
+todo esto: aunque el Worker y Firestore fallen, el lead llega por correo.
+
+### Orden de despliegue (no cambiarlo: es el embudo de ventas)
+
+1. `wrangler deploy` (este Worker, ya con `/lead`). Comprueba con el `curl` de
+   abajo que aparece el documento con `via: "worker"`, y bórralo.
+2. `git push` del sitio (`book_placement.html` nuevo). Presenta un examen de
+   prueba en producción y confirma que llega con `via: "worker"`.
+3. Espera a que nadie tenga ya la página vieja (GitHub Pages la cachea 10
+   minutos; un día de margen cubre las pestañas que ya estaban abiertas).
+4. Publica `firestore.rules` (`placement_results` con `create: if false`).
+
+Cualquier otro orden funciona peor, pero el único que **pierde leads** en
+Firestore es publicar la regla (4) antes que el Worker (1) o que el sitio (2):
+la página vieja solo sabe escribir directo. Mientras la regla siga abierta, el
+respaldo de la página cubre un Worker sin `/lead`, caído o sin `FIREBASE_SA`.
+
+**Volver atrás:** si tras el paso 4 el Worker deja de guardar (mira
+`wrangler tail`: `lead: Firestore respondió …`, `falta el secreto
+FIREBASE_SA`), vuelve a publicar la regla anterior de `placement_results`
+(está en el historial de git de `firestore.rules`): el respaldo de la página
+vuelve a funcionar en el acto, sin tocar el sitio.
+
+**Límites.** Una empresa o un salón entero presenta el examen desde una sola
+IP pública, por eso el tope por IP no es mínimo. Antes de una campaña grande
+sube `RL_LEAD_GLOBAL_PER_DAY` en `[vars]`. Si en los logs aparece `lead: tope
+global diario alcanzado` sin una campaña que lo explique, alguien está
+quemando el cupo desde muchas IPs: el siguiente paso es exigir Turnstile en
+`/lead` (hoy no lo pide).
+
+Prueba rápida (debe responder `{"ok":true}`):
+
+```bash
+curl -s https://<tu-worker>.workers.dev/lead \
+  -H "Origin: https://vesperacademy.com" -H "Content-Type: application/json" \
+  -d '{"name":"PRUEBA borrar","email":"prueba@example.com","phone":"","level":"A1","levelName":"Beginner","correct":10,"total":30,"skipped":0,"scores":{"A1":4},"origin":"curl"}'
 ```
 
 ## Exámenes calificados en el servidor (2026-11)

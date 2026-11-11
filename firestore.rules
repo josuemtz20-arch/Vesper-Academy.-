@@ -47,14 +47,16 @@ rules_version = '2';
  *    idToken directo contra la API REST y saltarse el gate. Como todas
  *    las funciones de identidad (isAdmin, isStaff, isTeacherUser,
  *    isStudentUser, teacherSeesGroup…) parten de signedIn(), el criterio
- *    se aplica a todas las reglas con sesión. placement_results NO usa
- *    signedIn(): sigue siendo anónimo (app_events lo fue hasta 2026-11-11).
+ *    se aplica a todas las reglas con sesión. (app_events y
+ *    placement_results fueron anónimos hasta 2026-11-11; hoy su create
+ *    está cerrado y escribe el Worker.)
  *  - exam_results: group y sid deben coincidir con students/{correo} del
  *    propio alumno (ya no se pueden etiquetar intentos con el grupo de
  *    otro profesor) y todos los campos tienen tipo y tamaño acotados.
  *  - app_events: límites de tamaño más bajos y nombre de evento acotado
  *    (2026-11-11: create cerrado; los reportes entran por el Worker).
- *  - placement_results (leads con nombre/correo/teléfono): solo staff.
+ *  - placement_results (leads con nombre/correo/teléfono): solo staff
+ *    (2026-11-11: create cerrado; los leads entran por el Worker).
  * ============================================================ */
 service cloud.firestore {
   match /databases/{database}/documents {
@@ -475,41 +477,34 @@ service cloud.firestore {
       allow read, update, delete: if isAdmin();
     }
 
-    // Leads del examen diagnóstico (nivelación pública, SIN registro). Este
-    // bloque ya estaba PUBLICADO en producción (2026-07-14); se conserva.
+    // Leads del examen diagnóstico (nivelación pública, SIN registro):
+    // nombre, correo y teléfono de prospectos. Los lee portal_escuela.html.
     // Nota: hasta el 2026-10-28 book_placement.html apuntaba a la base
     // "(default)", que NO EXISTE en el proyecto (404): ningún lead llegó a
-    // Firestore, solo por correo (FormSubmit). Desde esa fecha la página
-    // escribe AQUÍ (FS_DB = "teachermanuals"), así que este bloque es el
-    // que recibe los leads. Los campos de saveResultToFirestore() son
-    // exactamente los del hasOnly de abajo.
-    // 2026-10-28: el create solo admite los campos del formulario (hasOnly)
-    // y la LECTURA pasa a solo staff (admin/coordinación). Antes también la
-    // leía cualquier profesor (isTeacherUser) y son datos personales de
-    // prospectos (nombre, correo, teléfono) que ningún portal docente usa.
-    // Si el negocio decide que los profesores deben verlos, vuelve a añadir
-    // `|| isTeacherUser()` en el read.
+    // Firestore, solo por correo (FormSubmit). Desde esa fecha llegan AQUÍ.
+    // 2026-10-28: la LECTURA pasa a solo staff (admin/coordinación). Antes
+    // también la leía cualquier profesor (isTeacherUser) y son datos
+    // personales que ningún portal docente usa. Si el negocio decide que los
+    // profesores deben verlos, vuelve a añadir `|| isTeacherUser()` en el read.
+    // 2026-11-11: el navegador YA NO escribe aquí. El create era anónimo y
+    // solo acotaba el esquema: cualquiera podía llenar la base desde un
+    // script (las reglas no limitan CUÁNTAS veces se escribe) y, además,
+    // `scores` no tenía tipo ni tamaño, así que cada documento podía pesar
+    // hasta 1 MiB. Ahora el lead entra por el Worker (ruta /lead de
+    // worker/vesper-chat-proxy.js), que lo valida, lo cuenta por IP y en
+    // total, y lo guarda con la cuenta de servicio (no pasa por estas reglas).
+    //
+    // ⚠️ ORDEN — esto es el embudo de ventas; publicar esta regla antes de
+    // tiempo PIERDE LEADS (solo quedarían en el correo de FormSubmit):
+    //   1) `wrangler deploy` del Worker con /lead, y comprobar que un examen
+    //      de prueba crea un documento con `via: "worker"`.
+    //   2) Publicar el sitio (book_placement.html nuevo) y esperar a que deje
+    //      de servirse la página vieja (GitHub Pages la cachea 10 min; dale
+    //      un día de margen por las pestañas que ya estaban abiertas).
+    //   3) SOLO ENTONCES publicar esta regla.
+    // Pasos completos y cómo volver atrás: worker/README.md, "Leads".
     match /placement_results/{id} {
-      allow create: if request.resource.data.keys().hasOnly(
-                         ["name", "email", "phone", "level", "levelName",
-                          "correct", "total", "skipped", "scores",
-                          "origin", "createdAt"])
-                    && request.resource.data.name is string
-                    && request.resource.data.name.size() > 0
-                    && request.resource.data.name.size() <= 120
-                    && request.resource.data.level is string
-                    && request.resource.data.level.size() <= 20
-                    && request.resource.data.correct is int
-                    && request.resource.data.total is int
-                    && request.resource.data.correct >= 0
-                    && request.resource.data.total >= 0
-                    && request.resource.data.correct <= request.resource.data.total
-                    && request.resource.data.email is string
-                    && request.resource.data.email.size() <= 200
-                    && request.resource.data.phone is string
-                    && request.resource.data.phone.size() <= 60
-                    && (request.resource.data.email.size() > 0
-                        || request.resource.data.phone.size() > 0);
+      allow create: if false;
       allow read:   if isStaff();
       allow update, delete: if false;
     }

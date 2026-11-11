@@ -186,4 +186,4 @@ como antes y deja un aviso en la consola del navegador (lo reintenta cada
   superadas.
 - **Nivelación:** `book_placement.html` → `showResults` registra el resultado
   **solo si el alumno tiene sesión verificada** (el lead anónimo sigue yendo a
-  `placement_results`, como antes).
+  `placement_results`; desde 2026-11 lo guarda el Worker, ruta `/lead`).

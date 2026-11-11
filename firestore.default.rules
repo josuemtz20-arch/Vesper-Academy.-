@@ -30,6 +30,11 @@ rules_version = '2';
  * archivo queda SOLO como referencia; no hace falta crear la base ni
  * publicarlo.
  *
+ * 2026-11-11: el create anónimo de abajo se CERRÓ también aquí. Los leads
+ * ya no los escribe el navegador sino el Worker (ruta /lead), en
+ * "teachermanuals". Si algún día se crea "(default)" y se publica este
+ * archivo, que no vuelva a abrir una escritura sin sesión ni límite.
+ *
  * Revisión 2026-10-28 (correo verificado): en esta base NO hay ninguna
  * regla con sesión — el único create es anónimo a propósito y todo lo
  * demás está cerrado —, así que el requisito email_verified que se
@@ -40,31 +45,8 @@ service cloud.firestore {
   match /databases/{database}/documents {
 
     match /placement_results/{id} {
-      // alta anónima del lead, con forma y tamaños acotados (anti-abuso)
-      allow create: if request.resource.data.keys().hasOnly(
-                         ["name", "email", "phone", "level", "levelName",
-                          "correct", "total", "skipped", "scores",
-                          "origin", "createdAt"])
-                    && request.resource.data.name is string
-                    && request.resource.data.name.size() <= 80
-                    && request.resource.data.email is string
-                    && request.resource.data.email.size() <= 120
-                    && request.resource.data.phone is string
-                    && request.resource.data.phone.size() <= 30
-                    && request.resource.data.level is string
-                    && request.resource.data.level.size() <= 10
-                    && request.resource.data.levelName is string
-                    && request.resource.data.levelName.size() <= 40
-                    && request.resource.data.correct is int
-                    && request.resource.data.total is int
-                    && request.resource.data.skipped is int
-                    && request.resource.data.correct >= 0
-                    && request.resource.data.correct <= request.resource.data.total
-                    && request.resource.data.total <= 200
-                    && request.resource.data.scores is map
-                    && request.resource.data.origin is string
-                    && request.resource.data.origin.size() <= 60
-                    && request.resource.data.createdAt is timestamp;
+      // 2026-11-11: sin altas desde el navegador (las hace el Worker, /lead)
+      allow create: if false;
       // los datos de contacto de tus leads NO son públicos
       allow read, update, delete: if false;
     }

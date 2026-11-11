@@ -69,3 +69,7 @@ new_sqlite_classes = ["ExamAttempt"]
 # RL_PRO_PER_MIN = "30"
 # RL_PRO_PER_DAY = "1000"
 # RL_GLOBAL_PER_DAY = "2000"
+# Leads del examen de nivel (/lead); sube el global antes de una campaña grande.
+# RL_LEAD_PER_MIN = "10"
+# RL_LEAD_PER_DAY = "60"
+# RL_LEAD_GLOBAL_PER_DAY = "500"
