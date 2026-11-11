@@ -73,7 +73,8 @@
     <ul>
       <li>Tu cuenta de acceso (correo y contraseña).</li>
       <li>Tu progreso guardado en la nube: racha, XP, lecciones y mundos desbloqueados.</li>
-      <li>Tu nombre en la liga semanal (se reemplaza por «—»).</li>
+      <li>Tus resultados de práctica (lecciones, nivelación), si no estás inscrito en un grupo de la escuela.</li>
+      <li>Tu nombre en la liga semanal del último año (se reemplaza por «—»).</li>
       <li>Si lo marcas abajo, también el progreso guardado en este dispositivo.</li>
     </ul>
   </section>
@@ -132,29 +133,80 @@
     return d.getUTCFullYear() + "-W" + pad(wk);
   }
 
-  function deleteProgress(token, uid) {
-    return fetch(BASE + "/progress/" + encodeURIComponent(uid), {
-      method: "DELETE", headers: { "Authorization": "Bearer " + token }
-    });
+  /* Cada paso devuelve { ok, ... } y NUNCA se da por bueno sin mirar el
+     estado HTTP: si algo de la nube no se pudo borrar, la cuenta no se
+     elimina (sin cuenta ya no habría forma de volver a intentarlo). */
+  function authH(token, json) {
+    var h = { "Authorization": "Bearer " + token };
+    if (json) h["Content-Type"] = "application/json";
+    return h;
   }
 
-  /* Las reglas no dejan borrar una entrada de liga (delete: if false) para que
-     nadie se quite de la tabla al ir perdiendo; lo que sí podemos es quitar el
-     nombre. Se anonimizan la semana actual y la anterior (las que se ven). */
-  function anonymizeLeague(token, uid) {
-    var now = new Date();
-    var weeks = [isoWeek(now), isoWeek(new Date(now.getTime() - 7 * 86400000))];
-    return Promise.all(weeks.map(function (w) {
-      var url = BASE + "/leagues/" + encodeURIComponent(w) + "/members/" + encodeURIComponent(uid);
-      return fetch(url, { headers: { "Authorization": "Bearer " + token } }).then(function (r) {
-        if (r.status !== 200) return null;
-        return fetch(url + "?updateMask.fieldPaths=alias&currentDocument.exists=true", {
-          method: "PATCH",
-          headers: { "Authorization": "Bearer " + token, "Content-Type": "application/json" },
-          body: JSON.stringify({ fields: { alias: { stringValue: "—" } } })
+  function deleteProgress(token, uid) {
+    return fetch(BASE + "/progress/" + encodeURIComponent(uid), { method: "DELETE", headers: authH(token) })
+      .then(function (r) { return { ok: r.status === 200 || r.status === 404, status: r.status }; });
+  }
+
+  /* Intentos de examen/lección del propio usuario. Los que no tienen grupo se
+     borran; los de un alumno inscrito son registro académico y se conservan
+     (lo dice la tarjeta "Qué se conserva"). */
+  function deleteResults(token, uid) {
+    var kept = 0, failed = 0;
+    function page() {
+      return fetch(BASE + ":runQuery", {
+        method: "POST", headers: authH(token, true),
+        body: JSON.stringify({ structuredQuery: {
+          from: [{ collectionId: "exam_results" }],
+          where: { fieldFilter: { field: { fieldPath: "studentUid" }, op: "EQUAL", value: { stringValue: uid } } },
+          limit: 300
+        } })
+      }).then(function (r) {
+        if (r.status !== 200) return { ok: false, status: r.status };
+        return r.json().then(function (rows) {
+          var docs = (rows || []).filter(function (x) { return x && x.document; }).map(function (x) { return x.document; });
+          var mine = docs.filter(function (d) {
+            var g = d.fields && d.fields.group && d.fields.group.stringValue;
+            return !g;
+          });
+          kept = docs.length - mine.length;
+          return Promise.all(mine.map(function (d) {
+            return fetch("https://firestore.googleapis.com/v1/" + d.name, { method: "DELETE", headers: authH(token) })
+              .then(function (x) { if (x.status !== 200 && x.status !== 404) failed++; }, function () { failed++; });
+          })).then(function () { return { ok: failed === 0, kept: kept, status: 200 }; });
         });
-      }).catch(function () { return null; });
-    }));
+      });
+    }
+    return page();
+  }
+
+  /* Las reglas no dejan borrar una entrada de liga (para que nadie se quite de
+     la tabla al ir perdiendo); lo que sí se puede es quitar el nombre. Se
+     recorren las semanas del último año, no solo las dos visibles. */
+  var LEAGUE_WEEKS = 54;
+  function anonymizeLeague(token, uid) {
+    var now = new Date(), weeks = [], seen = {};
+    for (var i = 0; i < LEAGUE_WEEKS; i++) {
+      var w = isoWeek(new Date(now.getTime() - i * 7 * 86400000));
+      if (!seen[w]) { seen[w] = 1; weeks.push(w); }
+    }
+    var failed = 0;
+    function one(w) {
+      var url = BASE + "/leagues/" + encodeURIComponent(w) + "/members/" + encodeURIComponent(uid);
+      return fetch(url, { headers: authH(token) }).then(function (r) {
+        if (r.status === 404) return;
+        if (r.status !== 200) { failed++; return; }
+        return fetch(url + "?updateMask.fieldPaths=alias&currentDocument.exists=true", {
+          method: "PATCH", headers: authH(token, true),
+          body: JSON.stringify({ fields: { alias: { stringValue: "—" } } })
+        }).then(function (p) { if (p.status !== 200) failed++; });
+      }).catch(function () { failed++; });
+    }
+    /* de 6 en 6 para no abrir 54 conexiones a la vez */
+    function batch(from) {
+      if (from >= weeks.length) return Promise.resolve();
+      return Promise.all(weeks.slice(from, from + 6).map(one)).then(function () { return batch(from + 6); });
+    }
+    return batch(0).then(function () { return { ok: failed === 0 }; });
   }
 
   function clearDevice() {
@@ -176,6 +228,7 @@
       var pass = document.getElementById("d-pass").value;
       var wipeLocal = document.getElementById("d-local").checked;
       btn.disabled = true;
+      var keptResults = 0;
       show("info", "Eliminando tu cuenta…");
 
       /* Entrar con la contraseña justo antes cumple el "inicio de sesión
@@ -183,17 +236,31 @@
       auth.signInWithEmailAndPassword(email, pass).then(function (cred) {
         var user = cred.user;
         return user.getIdToken().then(function (token) {
-          return Promise.all([deleteProgress(token, user.uid), anonymizeLeague(token, user.uid)]);
-        }).then(function () {
-          try { if (window.VA && VA.track) VA.track("account_deleted", {}); } catch (e) {}
+          return Promise.all([deleteProgress(token, user.uid), deleteResults(token, user.uid), anonymizeLeague(token, user.uid)]);
+        }).then(function (res) {
+          var names = ["tu progreso", "tus resultados", "tu nombre en la liga"], bad = [];
+          res.forEach(function (r, i) { if (!r || !r.ok) bad.push(names[i]); });
+          if (bad.length) {
+            var e = new Error("cloud"); e.cloud = bad; throw e;
+          }
+          keptResults = res[1].kept || 0;
+          try { if (window.VA && VA.track) VA.track("account_deleted", {}); } catch (e2) {}
           return user.delete();
         });
       }).then(function () {
         if (wipeLocal) clearDevice();
         form.querySelectorAll("input").forEach(function (i) { i.disabled = true; });
-        show("ok", "Tu cuenta se eliminó. Puedes seguir usando las lecciones gratis sin cuenta cuando quieras.");
+        show("ok", "Tu cuenta se eliminó, junto con tu progreso en la nube." +
+          (keptResults ? " Como alumno inscrito, la escuela conserva " + keptResults + " resultado" + (keptResults === 1 ? "" : "s") +
+                         " de examen como registro académico; para pedir su borrado escribe a contacto@vesperacademy.com." : "") +
+          " Puedes seguir usando las lecciones gratis sin cuenta cuando quieras.");
       }).catch(function (e) {
-        show("err", ERRORES[e && e.code] || "No se pudo eliminar la cuenta. Inténtalo de nuevo o escríbenos a contacto@vesperacademy.com.");
+        if (e && e.cloud) {
+          show("err", "Tu cuenta NO se eliminó: no pudimos borrar " + e.cloud.join(", ") +
+            " en la nube, así que la dejamos activa para que puedas reintentar. Inténtalo de nuevo en unos minutos; si se repite, escríbenos a contacto@vesperacademy.com desde el correo de tu cuenta y lo borramos a mano.");
+        } else {
+          show("err", ERRORES[e && e.code] || "No se pudo eliminar la cuenta. Inténtalo de nuevo o escríbenos a contacto@vesperacademy.com.");
+        }
         btn.disabled = false;
       });
     });

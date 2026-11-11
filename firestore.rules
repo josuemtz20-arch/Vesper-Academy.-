@@ -301,7 +301,9 @@ service cloud.firestore {
       allow update: if signedIn() && request.auth.uid == uid
                     && progressShapeOk(request.resource.data)
                     && progressNoLoss(resource.data, request.resource.data);
-      allow delete: if false;
+      // El dueño puede borrar su progreso (eliminar-cuenta.html). Antes era
+      // `if false` y la página anunciaba un borrado que nunca ocurría.
+      allow delete: if signedIn() && request.auth.uid == uid;
     }
 
     // Liga semanal: lee cualquier autenticado; escribe SOLO su entrada
@@ -438,7 +440,15 @@ service cloud.firestore {
                        || isStaff()
                        || teacherSeesGroup(resource.data.group)
                     );
-      allow update, delete: if false;
+      allow update: if false;
+      // Borrado por el propio autor SOLO de intentos sin grupo (visitantes con
+      // cuenta que no son alumnos inscritos): es su derecho de cancelación.
+      // Los intentos de un alumno inscrito son registro académico: no los
+      // puede borrar él (si no, borraría sus reprobados); los elimina la
+      // escuela a solicitud, como dice el aviso de privacidad.
+      allow delete: if signedIn()
+                    && resource.data.studentUid == request.auth.uid
+                    && resource.data.get("group", "") == "";
     }
 
     // Boleta de calificaciones: notas capturadas por el profesor. Un doc por
