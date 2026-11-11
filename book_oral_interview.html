@@ -327,7 +327,7 @@
 
             <!-- ACTIONS -->
             <div class="actions no-print">
-                <button class="btn-send" id="btn-send" onclick="sendToStudent()"><i class="fas fa-paper-plane"></i> Enviar resultado al alumno</button>
+                <button class="btn-send" id="btn-send" onclick="sendToStudent()"><i class="fas fa-paper-plane"></i> Preparar correo para el alumno</button>
                 <button class="btn-copy" onclick="copyReport()"><i class="fas fa-copy"></i> Copy Report</button>
                 <button class="btn-print" onclick="window.print()"><i class="fas fa-print"></i> Print</button>
                 <button class="btn-clear" onclick="clearAll()"><i class="fas fa-undo"></i> Clear</button>
@@ -579,15 +579,12 @@
         }
 
         // ── SEND RESULT TO STUDENT ──────────────────────────────
-        // Reuses the placement test's FormSubmit endpoint (already
-        // email-activated). The STUDENT receives a warm, personalized
-        // welcome via _autoresponse — the only FormSubmit channel that
-        // sends a real written message (not a raw field table, which is
-        // all _cc can forward). The message confirms exactly the level
-        // and course the student is placed into.
-        // The academy gets the full notification SEPARATELY, so the
-        // interviewer's internal notes are safe to include there — the
-        // student never sees the notification, only the autoresponse.
+        // The welcome message opens in the INTERVIEWER'S OWN mail program
+        // (mailto:), ready to review and send. It used to go out through
+        // FormSubmit's _autoresponse, but that channel lets anyone who opens
+        // this page make the academy send branded mail, with any text, to any
+        // address — so it is gone. FormSubmit now only notifies the academy
+        // inbox (with the interviewer's internal notes).
         const NOTIFY_URL = "https://formsubmit.co/ajax/contacto@vesperacademy.com";
         function isValidEmail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v); }
 
@@ -605,7 +602,7 @@
                 alert("Primero confirma el nivel del alumno (panel 'Confirmed Level') para poder enviarle un resultado.");
                 return;
             }
-            if (!confirm("¿Enviar el resultado a " + email + "?\n\nNivel: " + conf + "\nCurso recomendado: " + L.course)) return;
+            if (!confirm("Se abrirá tu programa de correo con el mensaje para " + email + ".\n\nNivel: " + conf + "\nCurso recomendado: " + L.course)) return;
 
             const cefr = L.cefr.split(" ")[0];
             const btn = document.getElementById("btn-send");
@@ -635,11 +632,14 @@
             const fd = new FormData();
             fd.append("_subject", "¡Tu nivel confirmado! — Vesper Academy");
             fd.append("_template", "table");
-            fd.append("_captcha", "false");
-            // The student's copy: a real written message, not a data table.
-            fd.append("email", email);        // Reply-To -> student; triggers the autoresponse below.
-            fd.append("_autoresponse", welcome);
-            // Full notification for the academy inbox (the student does NOT see this).
+            fd.append("_honey", "");
+            // The student's copy: opens in the interviewer's mail program.
+            try {
+                window.location.href = "mailto:" + encodeURIComponent(email) +
+                    "?subject=" + encodeURIComponent("¡Tu nivel confirmado! — Vesper Academy") +
+                    "&body=" + encodeURIComponent(welcome);
+            } catch (e) {}
+            // Notification for the academy inbox only (the student does NOT see this).
             fd.append("formulario", "Entrevista oral — resultado enviado al alumno");
             fd.append("alumno", name);
             fd.append("correo_alumno", email);
@@ -651,8 +651,8 @@
 
             fetch(NOTIFY_URL, { method: "POST", body: fd, headers: { "Accept": "application/json" } })
                 .then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
-                .then(function () { alert("¡Enviado! " + name + " recibirá un correo de bienvenida con su nivel (" + conf + ") y su curso confirmados.\n\nSi no lo ve en unos minutos, pídele que revise la carpeta de spam o promociones."); })
-                .catch(function (e) { alert("No se pudo enviar el correo: " + e.message + "\nRevisa la conexión e inténtalo de nuevo."); })
+                .then(function () { alert("Se abrió tu programa de correo con el mensaje de bienvenida para " + name + " (" + conf + "). Revísalo y envíalo desde ahí.\n\nLa academia ya recibió el aviso con tus notas."); })
+                .catch(function (e) { alert("El aviso a la academia no salió (" + e.message + "). El mensaje para el alumno sí se abrió en tu programa de correo: envíalo desde ahí y avisa a coordinación."); })
                 .then(function () { btn.disabled = false; btn.innerHTML = prev; });
         }
 

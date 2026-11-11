@@ -511,7 +511,7 @@
 
         <div class="form-card">
             <h3><i class="fas fa-id-card"></i> Tus datos para empezar</h3>
-            <p class="form-hint">Déjanos tu <strong style="color:#fff;">correo o tu WhatsApp</strong> (al menos uno). Guardaremos tu resultado en el historial, <strong style="color:#fff;">te enviaremos una copia por correo</strong> y un asesor podrá contactarte con tu plan recomendado.</p>
+            <p class="form-hint">Déjanos tu <strong style="color:#fff;">correo o tu WhatsApp</strong> (al menos uno). Verás tu resultado en pantalla al terminar y un asesor podrá contactarte con tu plan recomendado.</p>
 
             <div class="field">
                 <label for="student-name">Nombre completo *</label>
@@ -532,6 +532,12 @@
                         <input type="tel" id="student-phone" placeholder="+52 55 1234 5678" autocomplete="tel">
                     </div>
                 </div>
+            </div>
+
+            <!-- Campo trampa: las personas no lo ven; un bot que lo rellene no envía nada. -->
+            <div style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden" aria-hidden="true">
+                <label for="hp-website">No llenes este campo</label>
+                <input type="text" id="hp-website" name="website" tabindex="-1" autocomplete="off">
             </div>
 
             <div class="form-error" id="form-error"><i class="fas fa-circle-exclamation" style="margin-top:2px;"></i><span id="form-error-text"></span></div>
@@ -589,7 +595,7 @@
 
         <div class="share-box">
             <i class="fas fa-share-alt"></i>
-            <p>Tu resultado quedó guardado en el historial y, si dejaste tu correo, <strong>te enviamos una copia por email</strong>. También puedes tomar una captura de pantalla o imprimirlo y <strong>compartirlo con tu profesor</strong> antes de tu primera clase.</p>
+            <p>No enviamos el resultado por correo: <strong>toma una captura de pantalla o imprímelo</strong> para tenerlo a la mano y compartirlo con tu asesor.</p>
         </div>
 
         <div class="result-actions">
@@ -715,8 +721,9 @@ const COURSES = {
 //    el historial sea visible desde cualquier dispositivo. Requiere reglas de
 //    Firestore que permitan create/read en esa colección; si no, se ignora.
 // 3) Se notifica por correo a la academia (contacto@vesperacademy.com) vía
-//    FormSubmit y, si el alumno dejó su correo, se le envía una copia
-//    automática de su resultado (_autoresponse).
+//    FormSubmit. NO se manda copia al correo que escribe el visitante
+//    (_autoresponse): con ella cualquiera podía hacer que la academia enviara
+//    correo, con texto elegido por él, a una dirección ajena.
 const LS_KEY = "vesper_placement_history_v1";
 const NOTIFY_URL = "https://formsubmit.co/ajax/contacto@vesperacademy.com";
 const FS_COLLECTION = "placement_results";
@@ -817,23 +824,19 @@ function fetchFirestoreHistory() {
     });
 }
 
-// Notifica a la academia y envía al alumno (si dejó correo) una copia
-// automática de su resultado.
+// ¿Lo rellenó un bot? (campo trampa oculto del formulario)
+function honeypotHit() {
+    var hp = document.getElementById("hp-website");
+    return !!(hp && hp.value);
+}
+
+// Notifica SOLO a la academia. Sin _autoresponse (ver arriba).
 function sendResultEmails(rec) {
-    var course = COURSES[rec.level] || { title: "" };
     var fd = new FormData();
     fd.append("_subject", "Examen diagnóstico: " + rec.name + " — Nivel " + rec.level);
     fd.append("_template", "table");
-    fd.append("_captcha", "false");
-    if (rec.email) {
-        fd.append("email", rec.email);
-        fd.append("_autoresponse",
-            "¡Hola, " + rec.name + "! Gracias por presentar el examen diagnóstico de Vesper Academy.\n\n" +
-            "Tu resultado: Nivel " + rec.level + " (" + rec.levelName + ") con " + rec.correct + " de " + rec.total + " aciertos.\n" +
-            "Curso recomendado: " + course.title + ".\n\n" +
-            "Siguiente paso: un asesor te contactará para agendar una breve entrevista oral gratuita que confirme tu nivel y resolver tus dudas.\n\n" +
-            "Vesper Academy · contacto@vesperacademy.com · https://vesperacademy.com");
-    }
+    fd.append("_honey", "");
+    if (rec.email) fd.append("email", rec.email);   // solo sirve de Responder-a para la academia
     fd.append("formulario", "Examen diagnóstico de inglés");
     fd.append("nombre", rec.name);
     fd.append("correo", rec.email || "(no proporcionado)");
@@ -844,7 +847,8 @@ function sendResultEmails(rec) {
     fd.append("desglose", Object.keys(rec.scores).map(function (k) { return k + ": " + rec.scores[k] + "/6"; }).join(", "));
     fd.append("origen", rec.origin || "(directo / no especificado)");
     fd.append("fecha", rec.date);
-    return fetch(NOTIFY_URL, { method: "POST", body: fd, headers: { "Accept": "application/json" } });
+    return fetch(NOTIFY_URL, { method: "POST", body: fd, headers: { "Accept": "application/json" } })
+        .then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return true; });
 }
 
 // ══ ESTADO ══
@@ -1127,16 +1131,21 @@ function showResults() {
     status.className = "save-status local-only";
     status.innerHTML = "<i class='fas fa-circle-notch fa-spin'></i> Guardando tu resultado…";
 
-    sendResultEmails(rec).catch(function () {});
+    // Un bot que rellenó el campo trampa: no se envía ni se guarda nada.
+    if (honeypotHit()) { status.style.display = "none"; return; }
 
-    saveResultToFirestore(rec).then(function () {
-        rec.savedRemote = true;
-        saveLocalHistory(local);
-        status.className = "save-status";
-        status.innerHTML = "<i class='fas fa-cloud-arrow-up'></i> Resultado guardado en el historial general";
-    }).catch(function () {
-        status.className = "save-status local-only";
-        status.innerHTML = "<i class='fas fa-device-mobile'></i> Resultado guardado en el historial de este dispositivo";
+    // Solo se dice "enviado" si de verdad llegó por alguna de las dos vías.
+    var pMail = sendResultEmails(rec).then(function () { return true; }, function () { return false; });
+    var pCloud = saveResultToFirestore(rec).then(function () { return true; }, function () { return false; });
+    Promise.all([pMail, pCloud]).then(function (r) {
+        if (r[1]) { rec.savedRemote = true; saveLocalHistory(local); }
+        if (r[0] || r[1]) {
+            status.className = "save-status";
+            status.innerHTML = "<i class='fas fa-circle-check'></i> Tu resultado llegó a la academia";
+        } else {
+            status.className = "save-status local-only";
+            status.innerHTML = "<i class='fas fa-triangle-exclamation'></i> No pudimos enviar tu resultado a la academia (revisa tu conexión). Escríbenos por WhatsApp y te atendemos igual.";
+        }
     });
 }
 
