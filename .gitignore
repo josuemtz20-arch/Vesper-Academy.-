@@ -339,6 +339,10 @@
 # source + deploy docs live in worker/ (NO secrets in these files — the API key
 # is stored as a wrangler secret, never committed).
 !/chat.html
+# 2026-11-10: simulador de entrevista de trabajo en inglés (público, sin cuenta).
+# Usa el mismo Worker que chat.html; no lleva claves ni respuestas.
+!/entrevista.html
+!/vesper_entrevista.js
 !/worker/
 # ...salvo las CLAVES de los exámenes: las genera _scripts/exams/split_exams.js
 # y solo viajan dentro del Worker al hacer `wrangler deploy`. Nunca a git.

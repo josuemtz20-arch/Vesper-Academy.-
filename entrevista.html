@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<!-- CSP: generada por _scripts/apply_csp.py (edita alli, no aqui) -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://apis.google.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://cdn.tailwindcss.com https://challenges.cloudflare.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://maxcdn.bootstrapcdn.com; font-src 'self' data: https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: blob: https:; media-src 'self' data: blob:; connect-src 'self' https://firestore.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://vesper-academy.firebaseapp.com https://patient-feather-4364.josuemtz20.workers.dev https://formsubmit.co https://challenges.cloudflare.com https://www.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com; frame-src 'self' https://vesper-academy.firebaseapp.com https://www.youtube.com https://www.youtube-nocookie.com https://challenges.cloudflare.com; worker-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self' https://formsubmit.co; upgrade-insecure-requests">
+<script src="vesper_app_mode.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, interactive-widget=resizes-content">
+<title>Simulador de entrevista en inglés | Vesper Academy</title>
+<meta name="description" content="Practica tu entrevista de trabajo en inglés con Vesper: te entrevista en voz alta para tu puesto y al final te da un reporte con las respuestas que debes mejorar.">
+<link rel="manifest" href="manifest_lecciones.webmanifest">
+<meta name="theme-color" content="#1B1B2F">
+<link rel="icon" href="assets/images/favicon_32.png?v=2" type="image/png" sizes="32x32">
+<link rel="icon" href="assets/images/va_isotype.svg?v=2" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/images/apple_touch_icon.png?v=2">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Inria+Serif:ital,wght@0,400;0,700;1,700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ===== SIMULADOR DE ENTREVISTA (2026-11-10) =====
+   Página nueva de la familia de la app (dialecto de leccion.html): Inria
+   Serif + Inter + la letra de Vesper (Caveat), botones con suelo y UNA acción
+   de oro por pantalla. Todos los colores salen de los tokens del tema
+   (vesper_theme.js los reescribe en :root); los valores de aquí abajo son solo
+   el respaldo, y son los de Vespertina, el tema por defecto.
+   Oro = acción. Verde/rojo no se usan: aquí nada es "correcto/incorrecto". */
+:root{
+  --ink:#EDE7D6;--gold:#C9A84C;--cream:#14122a;--paper:#1f2342;--muted:#b3b0c9;--line:#3a3a63;
+  --gold-tint:rgba(201,168,76,.20);--gold-ink:#C9A84C;--on-gold:#14122a;--focus:#f3e2ab;
+  --shadow:0 6px 22px rgba(0,0,0,.45);
+  /* TACTO / FIRMA: los mismos nombres y recetas que leccion.css */
+  --press:4px;
+  --gold-shadow:color-mix(in srgb,var(--gold) 70%,#000);
+  --ink-shadow:color-mix(in srgb,var(--ink) 62%,#000);
+  --line-shadow:color-mix(in srgb,var(--line) 78%,var(--ink));
+  --hand:"Caveat","Segoe Print","Bradley Hand",cursive;
+  --orn:color-mix(in srgb,var(--gold) 55%,transparent);
+  --en:#8fc6ff;                       /* "esto es inglés" */
+  --r-sm:12px;--r-md:16px;--ease:cubic-bezier(.2,.8,.2,1);
+}
+html[data-vesper-theme]:not(.vesper-dark){--en:#2f6fb3;}
+*,*::before,*::after{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{-webkit-text-size-adjust:100%;}
+body{margin:0;background:var(--cream);color:var(--ink);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;line-height:1.5;min-height:100vh;min-height:100dvh;}
+button,textarea,input,a{touch-action:manipulation;font-family:inherit;}
+[hidden]{display:none!important;}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px;border-radius:8px;}
+
+/* ── Cabecera ligera: volver, título, voz. Nada más. ── */
+.top{display:flex;align-items:center;gap:12px;max-width:600px;margin:0 auto;padding:12px 16px 4px;}
+.icbtn{flex:none;width:44px;height:44px;display:inline-flex;align-items:center;justify-content:center;border-radius:50%;
+  background:var(--paper);border:1px solid var(--line);color:var(--ink);cursor:pointer;text-decoration:none;padding:0;}
+.icbtn svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2.1;stroke-linecap:round;stroke-linejoin:round;}
+.icbtn[aria-pressed="false"]{color:var(--muted);}
+.top-t{flex:1;min-width:0;line-height:1.2;}
+.top-t b{display:block;font-family:"Inria Serif",Georgia,serif;font-size:1.06rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.top-t small{display:block;color:var(--muted);font-size:.74rem;font-weight:600;letter-spacing:.04em;}
+
+.wrap{max-width:600px;margin:0 auto;padding:10px 16px 28px;}
+h1{font-family:"Inria Serif",Georgia,serif;font-size:1.62rem;line-height:1.2;margin:0;text-wrap:balance;}
+.lead{color:var(--muted);font-size:.98rem;margin:12px 0 0;}
+.pen{display:block;width:150px;height:10px;margin:8px auto 0;transform:rotate(-1.5deg);}
+.pen path{fill:none;stroke:var(--gold);stroke-width:2.6;stroke-linecap:round;}
+
+/* Rótulo de sección con filete */
+.ey{display:flex;align-items:center;gap:12px;margin:26px 0 12px;font:700 .72rem/1.2 Inter,sans-serif;letter-spacing:1.2px;text-transform:uppercase;color:var(--gold-ink);}
+.ey::after{content:"";flex:1;height:1px;background:var(--line);}
+
+/* ── Portada: tarjeta con esquinas de libro y Vesper escribiendo a mano ── */
+.cover{position:relative;text-align:center;background:var(--paper);border:1px solid var(--line);border-radius:var(--r-md);box-shadow:var(--shadow);padding:26px 20px 24px;
+  background-image:
+    linear-gradient(var(--orn),var(--orn)),linear-gradient(var(--orn),var(--orn)),
+    linear-gradient(var(--orn),var(--orn)),linear-gradient(var(--orn),var(--orn)),
+    linear-gradient(var(--orn),var(--orn)),linear-gradient(var(--orn),var(--orn)),
+    linear-gradient(var(--orn),var(--orn)),linear-gradient(var(--orn),var(--orn));
+  background-repeat:no-repeat;
+  background-size:22px 1.5px,1.5px 22px,22px 1.5px,1.5px 22px,22px 1.5px,1.5px 22px,22px 1.5px,1.5px 22px;
+  background-position:10px 10px,10px 10px,calc(100% - 10px) 10px,calc(100% - 10px) 10px,
+    10px calc(100% - 10px),10px calc(100% - 10px),calc(100% - 10px) calc(100% - 10px),calc(100% - 10px) calc(100% - 10px);}
+.cat{display:block;border-radius:50%;object-fit:cover;background:var(--gold-tint);border:2px solid var(--vc-ring,var(--gold));}
+.cover .cat{width:104px;height:104px;margin:0 auto 4px;box-shadow:0 0 0 5px var(--gold-tint);}
+/* Vesper escribe a mano: solo sus frases, cortas */
+.hand{display:inline-block;font:700 1.36rem/1.14 var(--hand);color:var(--ink);
+  background:color-mix(in srgb,var(--gold) 12%,var(--paper));
+  border:1.5px solid color-mix(in srgb,var(--gold) 42%,transparent);
+  border-radius:4px 18px 16px 18px;padding:7px 15px 9px;transform:rotate(-1.4deg);
+  box-shadow:2px 3px 0 color-mix(in srgb,var(--gold) 20%,transparent);margin:10px 0 16px;max-width:100%;}
+
+/* ── Opciones (puesto, duración): fichas con suelo; la elegida, en oro ── */
+.chips{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}
+.chip{display:flex;flex-direction:column;justify-content:center;gap:2px;min-height:52px;padding:9px 14px;text-align:left;cursor:pointer;
+  background:var(--paper);color:var(--ink);border:1.5px solid var(--line);border-radius:14px;font:600 .93rem/1.25 Inter,sans-serif;
+  box-shadow:0 3px 0 var(--line-shadow);margin-bottom:3px;transition:transform .09s var(--ease),box-shadow .09s var(--ease);}
+.chip small{font-weight:500;font-size:.78rem;color:var(--muted);}
+.chip:active{transform:translateY(3px);box-shadow:0 0 0 var(--line-shadow);}
+.chip[aria-checked="true"]{border-color:var(--gold);background:color-mix(in srgb,var(--gold) 14%,var(--paper));box-shadow:0 3px 0 var(--gold-shadow);}
+.field{display:block;margin-top:12px;font-size:.86rem;font-weight:600;color:var(--muted);}
+.field input,.field textarea,.ans textarea{display:block;width:100%;margin-top:6px;padding:12px 14px;font-size:16px;line-height:1.45;color:var(--ink);
+  background:var(--paper);border:1.5px solid var(--line);border-radius:var(--r-sm);}
+.field input:focus,.field textarea:focus,.ans textarea:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px var(--gold-tint);}
+.field textarea{min-height:120px;resize:vertical;}
+.field input::placeholder,.field textarea::placeholder,.ans textarea::placeholder{color:var(--muted);opacity:.85;}
+details.vac{margin-top:14px;}
+details.vac summary{cursor:pointer;min-height:44px;display:flex;align-items:center;gap:8px;font-weight:600;font-size:.93rem;color:var(--gold-ink);list-style:none;}
+details.vac summary::-webkit-details-marker{display:none;}
+details.vac summary::before{content:"+";display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;border:1.5px solid currentColor;font-weight:700;line-height:1;}
+details.vac[open] summary::before{content:"–";}
+
+/* ── Botones con suelo (TACTO) ── */
+.btn{display:flex;align-items:center;justify-content:center;gap:9px;width:100%;min-height:52px;padding:12px 18px;border:0;cursor:pointer;text-decoration:none;
+  border-radius:var(--r-md);font:800 1rem/1.2 Inter,sans-serif;letter-spacing:.01em;
+  background:var(--ink);color:var(--cream);box-shadow:0 var(--press) 0 var(--ink-shadow);margin-bottom:var(--press);
+  transition:transform .09s var(--ease),box-shadow .09s var(--ease),filter .15s;}
+.btn svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;flex:none;}
+.btn:active:not(:disabled){transform:translateY(var(--press));box-shadow:0 0 0 var(--ink-shadow);}
+.btn-gold{background:var(--gold);color:var(--on-gold);box-shadow:0 var(--press) 0 var(--gold-shadow);}
+.btn-gold:active:not(:disabled){box-shadow:0 0 0 var(--gold-shadow);}
+.btn-line{background:var(--paper);color:var(--ink);border:1.5px solid var(--line);box-shadow:0 var(--press) 0 var(--line-shadow);}
+.btn-line:active:not(:disabled){box-shadow:0 0 0 var(--line-shadow);}
+.btn:disabled{opacity:.5;cursor:not-allowed;}
+@media (hover:hover) and (pointer:fine){.btn:hover:not(:disabled){filter:brightness(1.06);}}
+.start-row{margin-top:26px;}
+.fine{color:var(--muted);font-size:.8rem;line-height:1.5;margin:14px 0 0;text-align:center;}
+.fine a,.txtlink{color:var(--gold-ink);font-weight:600;}
+.txtlink{background:none;border:0;padding:0;cursor:pointer;font-size:.86rem;text-decoration:underline;text-underline-offset:3px;min-height:44px;display:inline-flex;align-items:center;gap:6px;}
+.txtlink svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.1;stroke-linecap:round;stroke-linejoin:round;}
+.warn{margin-top:12px;padding:10px 14px;border-left:4px solid var(--gold);background:var(--gold-tint);border-radius:0 12px 12px 0;font-size:.88rem;}
+
+/* Entrevistas anteriores: filas simples, sin tarjeta por fila */
+.past{list-style:none;margin:0;padding:0;border-top:1px solid var(--line);}
+.past button{display:flex;align-items:center;gap:12px;width:100%;min-height:56px;padding:8px 2px;background:none;border:0;border-bottom:1px solid var(--line);color:var(--ink);text-align:left;cursor:pointer;font-size:.93rem;}
+.past .lv{flex:none;min-width:44px;text-align:center;font:700 .82rem/1 Inter,sans-serif;padding:6px 8px;border-radius:999px;background:var(--gold-tint);color:var(--gold-ink);}
+.past .pt{flex:1;min-width:0;}
+.past .pt b{display:block;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.past .pt span{display:block;color:var(--muted);font-size:.8rem;}
+
+/* ── La entrevista ── */
+.iv-top{display:flex;align-items:center;gap:12px;margin:2px 0 18px;}
+.stars{flex:1;display:flex;align-items:center;gap:6px;min-width:0;}
+.stars svg{width:20px;height:20px;flex:none;fill:none;stroke:var(--line);stroke-width:1.8;stroke-linejoin:round;transition:fill .3s,stroke .3s;}
+.stars svg.done{fill:var(--gold);stroke:var(--gold);}
+.stars svg.now{stroke:var(--gold);animation:twinkle 1.6s ease-in-out infinite;}
+.stars i{flex:1;height:1.5px;min-width:4px;background:var(--line);border-radius:2px;}
+.iv-count{flex:none;font:700 .78rem/1 Inter,sans-serif;letter-spacing:.06em;color:var(--muted);font-variant-numeric:tabular-nums;}
+@keyframes twinkle{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.55;transform:scale(.86)}}
+
+.rec{display:flex;gap:14px;align-items:flex-start;}
+.rec .cat{width:58px;height:58px;flex:none;}
+.rec-body{flex:1;min-width:0;}
+.rec-name{display:block;font:700 .7rem/1.2 Inter,sans-serif;letter-spacing:1.1px;text-transform:uppercase;color:var(--muted);margin-bottom:6px;}
+.rec-q{margin:0;font-family:"Inria Serif",Georgia,serif;font-weight:700;font-size:1.32rem;line-height:1.36;color:var(--ink);
+  border-left:3px solid var(--en);padding-left:12px;overflow-wrap:anywhere;min-height:1.36em;}
+.rec-q.es{border-left-color:var(--line);}
+.rec-tools{display:flex;flex-wrap:wrap;gap:4px 18px;margin-top:4px;}
+.dots3{display:inline-flex;gap:5px;align-items:center;height:1.36em;}
+.dots3 span{width:7px;height:7px;border-radius:50%;background:var(--muted);animation:blink 1.2s infinite ease-in-out;}
+.dots3 span:nth-child(2){animation-delay:.2s}.dots3 span:nth-child(3){animation-delay:.4s}
+@keyframes blink{0%,80%,100%{opacity:.3;transform:translateY(0)}40%{opacity:1;transform:translateY(-3px)}}
+
+.ans{display:block;margin-top:22px;}
+.ans .ey{margin:0 0 8px;}
+.ans textarea{margin-top:0;min-height:132px;resize:none;}
+.ans textarea[readonly]{border-color:var(--gold);box-shadow:0 0 0 3px var(--gold-tint);}
+.hint{color:var(--muted);font-size:.84rem;margin:10px 0 0;min-height:1.3em;}
+.hint b{color:var(--ink);font-weight:600;}
+.err{margin-top:14px;padding:12px 14px;border:1.5px solid var(--line);border-left:4px solid var(--gold);border-radius:0 12px 12px 0;background:var(--paper);font-size:.9rem;}
+.err .txtlink{margin-top:2px;}
+
+/* Barra de acción fija: micrófono + UNA acción de oro. Solo durante la entrevista. */
+.dock{position:fixed;left:0;right:0;bottom:0;z-index:40;background:var(--cream);border-top:1px solid var(--line);
+  padding:12px 16px calc(12px + env(safe-area-inset-bottom));}
+.dock-in{max-width:568px;margin:0 auto;display:flex;align-items:center;gap:12px;}
+.dock .btn{flex:1;margin-bottom:var(--press);}
+.mic{flex:none;width:56px;height:56px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;padding:0;
+  background:var(--paper);color:var(--ink);border:1.5px solid var(--line);box-shadow:0 var(--press) 0 var(--line-shadow);margin-bottom:var(--press);
+  transition:transform .09s var(--ease),box-shadow .09s var(--ease);}
+.mic svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+.mic:active{transform:translateY(var(--press));box-shadow:0 0 0 var(--line-shadow);}
+/* Grabando: oro (acción en curso), no rojo: el rojo aquí solo significa "incorrecto". */
+.mic.on{background:var(--gold);color:var(--on-gold);border-color:var(--gold);box-shadow:0 var(--press) 0 var(--gold-shadow);}
+.mic.on::after{content:"";position:absolute;width:56px;height:56px;border-radius:50%;border:2px solid var(--gold);animation:ring 1.3s ease-out infinite;pointer-events:none;}
+.mic{position:relative;}
+@keyframes ring{0%{transform:scale(1);opacity:.8}100%{transform:scale(1.55);opacity:0}}
+body.iv-live{padding-bottom:calc(96px + env(safe-area-inset-bottom));}
+/* En plena entrevista la barra de pestañas se quita: una pantalla, una decisión. */
+body.iv-live #vsp-tabbar,body.iv-live #vsp-nav-spacer{display:none!important;}
+/* Al salir de un campo de texto, vesper_nav.js devuelve la barra de pestañas
+   en el mismo instante. Si el toque que quitó el foco iba a «Empezar la
+   entrevista» y el botón quedaba en esa franja, la barra se lo tragaba. Se
+   deja inerte un momento (la clase la pone vesper_entrevista.js). */
+body.iv-navwait #vsp-tabbar{opacity:0!important;pointer-events:none!important;}
+
+/* ── Espera del reporte ── */
+.wait{text-align:center;padding:38px 0 20px;}
+.wait .cat{width:112px;height:112px;margin:0 auto 6px;}
+.wait .stars{justify-content:center;flex:none;margin-top:8px;}
+.wait .stars svg{animation:twinkle 1.4s ease-in-out infinite;stroke:var(--gold);}
+.wait .stars svg:nth-child(2){animation-delay:.25s}.wait .stars svg:nth-child(3){animation-delay:.5s}
+
+/* ── El reporte ── */
+.rep-head{padding-bottom:22px;}
+.rep-head .cat{width:84px;height:84px;margin:0 auto;}
+.level{display:inline-flex;align-items:baseline;gap:8px;margin-top:14px;padding:7px 16px 8px;border-radius:999px;background:var(--gold-tint);color:var(--gold-ink);font-weight:700;font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;}
+.level b{font-family:"Inria Serif",Georgia,serif;font-size:1.5rem;letter-spacing:0;line-height:1;color:var(--ink);}
+.rep-sum{margin:14px 0 0;font-size:.98rem;}
+.rep-meta{margin:10px 0 0;color:var(--muted);font-size:.82rem;}
+.tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:14px;}
+.tile{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:14px 8px 12px;text-align:center;}
+.tile b{display:block;font-family:"Inria Serif",Georgia,serif;font-size:1.55rem;line-height:1.05;font-variant-numeric:tabular-nums;}
+.tile span{display:block;margin-top:5px;color:var(--muted);font-size:.7rem;font-weight:600;letter-spacing:.05em;text-transform:uppercase;line-height:1.25;}
+.rub{list-style:none;margin:0;padding:0;}
+.rub li{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--line);}
+.rub .rl{flex:1;min-width:0;}
+.rub .rl b{display:block;font-weight:600;font-size:.95rem;}
+.rub .rl span{display:block;color:var(--muted);font-size:.8rem;}
+.pips{display:inline-flex;gap:6px;flex:none;}
+.pips i{width:14px;height:14px;border-radius:50%;border:1.5px solid var(--line);}
+.pips i.f{background:var(--gold);border-color:var(--gold);}
+.rub-note{color:var(--muted);font-size:.82rem;margin:10px 0 0;}
+.good{margin:0;padding:0 0 0 2px;list-style:none;}
+.good li{position:relative;padding:6px 0 6px 26px;font-size:.95rem;}
+.good li::before{content:"";position:absolute;left:2px;top:.72em;width:12px;height:12px;background:var(--gold);
+  clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 92%,50% 70%,21% 92%,32% 57%,2% 35%,39% 35%);}
+.fix{position:relative;padding:4px 0 18px 44px;border-bottom:1px solid var(--line);margin-bottom:16px;}
+.fix:last-child{border-bottom:0;margin-bottom:0;padding-bottom:4px;}
+.fix-n{position:absolute;left:0;top:2px;width:30px;height:30px;border-radius:50%;background:var(--gold);color:var(--on-gold);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.9rem;}
+.fix-q{margin:0 0 10px;color:var(--muted);font-size:.86rem;font-weight:600;}
+.fix-l{display:block;font:700 .66rem/1.2 Inter,sans-serif;letter-spacing:1.1px;text-transform:uppercase;color:var(--muted);margin-bottom:3px;}
+.fix-said{margin:0 0 12px;padding-left:12px;border-left:3px solid var(--line);color:var(--muted);font-size:.95rem;overflow-wrap:anywhere;}
+.fix-better{margin:0;padding-left:12px;border-left:3px solid var(--en);font-weight:700;font-size:1.04rem;line-height:1.45;overflow-wrap:anywhere;}
+.fix-why{margin:8px 0 0;color:var(--muted);font-size:.88rem;}
+/* La tarea: ficha de cuaderno con cinta */
+.note{position:relative;margin-top:8px;padding:18px 18px 16px;background:color-mix(in srgb,var(--gold) 10%,var(--paper));border:1px solid color-mix(in srgb,var(--gold) 34%,transparent);border-radius:6px 14px 12px 14px;transform:rotate(-.5deg);}
+.note::before{content:"";position:absolute;top:-9px;left:50%;width:74px;height:18px;margin-left:-37px;background:color-mix(in srgb,var(--gold) 38%,transparent);transform:rotate(-2deg);border-radius:2px;}
+.note p{margin:0;font:700 1.3rem/1.2 var(--hand);}
+.acts{display:grid;gap:10px;margin-top:28px;}
+.acts .sub{margin:-2px 0 6px;text-align:center;color:var(--muted);font-size:.82rem;}
+.lead-cta{display:block;margin-top:18px;text-align:center;}
+details.talk{margin-top:22px;border-top:1px solid var(--line);}
+details.talk summary{cursor:pointer;min-height:48px;display:flex;align-items:center;font-weight:600;font-size:.92rem;color:var(--gold-ink);}
+.tr{margin:0 0 12px;font-size:.9rem;overflow-wrap:anywhere;}
+.tr b{display:block;font:700 .66rem/1.2 Inter,sans-serif;letter-spacing:1.1px;text-transform:uppercase;color:var(--muted);margin-bottom:2px;}
+.tr.me{padding-left:12px;border-left:3px solid var(--line);}
+.rep-foot{margin-top:18px;text-align:center;}
+.rep-head:focus{outline:none;}
+.cat.is-tinted{filter:var(--vc-filter,none);}
+/* Reportar una respuesta de la IA (requisito de Google Play) */
+.flag{display:inline-flex;align-items:center;}
+.flag .txtlink{color:var(--muted);font-weight:500;}
+.flag-row{display:flex;flex-wrap:wrap;gap:6px;padding:4px 0;}
+.flag-row button{min-height:44px;padding:0 14px;border-radius:999px;border:1px solid var(--line);background:var(--paper);color:var(--ink);font-weight:600;font-size:.8rem;cursor:pointer;}
+.flag-done{color:var(--muted);font-size:.84rem;min-height:44px;display:inline-flex;align-items:center;}
+.toast{position:fixed;left:50%;bottom:calc(92px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:9999;max-width:calc(100% - 32px);
+  background:var(--ink);color:var(--cream);font-weight:600;font-size:.9rem;padding:11px 18px;border-radius:999px;box-shadow:var(--shadow);}
+
+@media (max-width:380px){
+  h1{font-size:1.42rem;}
+  .chips{grid-template-columns:1fr;}
+  .chips.two{grid-template-columns:repeat(2,minmax(0,1fr));}
+  .rec-q{font-size:1.18rem;}
+  .tile b{font-size:1.32rem;}
+}
+@media (min-width:768px){
+  .wrap{padding-top:18px;}
+  h1{font-size:1.9rem;}
+  .dock{background:transparent;border-top:0;pointer-events:none;padding-bottom:22px;}
+  .dock-in{pointer-events:auto;background:var(--paper);border:1px solid var(--line);border-radius:22px;padding:12px 14px 8px;box-shadow:var(--shadow);}
+}
+/* Menos movimiento: sistema y preferencia de la app */
+@media (prefers-reduced-motion:reduce){
+  .stars svg.now,.wait .stars svg,.dots3 span,.mic.on::after{animation:none!important;}
+  .btn,.chip,.mic{transition:none;}
+}
+html.vesper-reduce-motion .stars svg.now,html.vesper-reduce-motion .wait .stars svg,
+html.vesper-reduce-motion .dots3 span,html.vesper-reduce-motion .mic.on::after{animation:none!important;}
+</style>
+<link rel="stylesheet" href="assets/css/vesper_tokens.css">
+<script src="vesper_prefs.js"></script>
+<!-- vesper_theme.js al FINAL del <head>: su :root debe quedar después del de esta página -->
+<script src="vesper_theme.js"></script>
+</head>
+<body>
+
+<a class="va-skip-link" href="#main">Saltar al contenido</a>
+
+<header class="top">
+  <a class="icbtn" id="back" href="leccion.html" aria-label="Volver a las lecciones">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H6M11 6l-6 6 6 6"/></svg>
+  </a>
+  <div class="top-t"><b>Simulador de entrevista</b><small>Práctica con Vesper · IA</small></div>
+  <button class="icbtn" id="tts" type="button" aria-pressed="true" aria-label="Voz de Vesper" title="Vesper lee sus preguntas en voz alta">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5H4z"/><path class="tts-on" d="M15.5 9a4.2 4.2 0 0 1 0 6M18 6.5a7.6 7.6 0 0 1 0 11"/></svg>
+  </button>
+</header>
+
+<main class="wrap" id="main">
+
+  <!-- 1 · Preparación -->
+  <section id="s-setup" aria-labelledby="h-setup">
+    <div class="cover">
+      <img class="cat" data-cat="explaining" src="assets/images/mascot/vesper_cat_explaining.webp" width="104" height="104" alt="Vesper">
+      <div><span class="hand">Hoy yo soy el reclutador.</span></div>
+      <h1 id="h-setup">Tu entrevista en inglés, antes de la de verdad</h1>
+      <svg class="pen" viewBox="0 0 150 10" aria-hidden="true" focusable="false"><path d="M2 6.5C22 2.5 41 8.8 62 5.4S104 2.2 122 5.6c9 1.7 17 1.2 26-1.4"/></svg>
+      <p class="lead">Vesper te entrevista en voz alta para tu puesto. Al final recibes un reporte con las respuestas que te conviene mejorar.</p>
+    </div>
+
+    <h2 class="ey" id="h-role">El puesto</h2>
+    <div class="chips" id="roles" role="radiogroup" aria-labelledby="h-role"></div>
+    <label class="field" id="otro-box" hidden>¿Qué puesto es?
+      <input id="otro" type="text" maxlength="60" autocomplete="off" placeholder="Por ejemplo: analista de logística">
+    </label>
+    <details class="vac">
+      <summary>Pegar el texto de la vacante (opcional)</summary>
+      <label class="field" style="margin-top:0">Vesper preguntará por lo que pide la vacante.
+        <textarea id="vacante" maxlength="1200" placeholder="Pega aquí la descripción del puesto."></textarea>
+      </label>
+    </details>
+
+    <h2 class="ey" id="h-len">Duración</h2>
+    <div class="chips two" id="lens" role="radiogroup" aria-labelledby="h-len">
+      <button class="chip" type="button" role="radio" aria-checked="false" data-n="4">Rápida<small>4 preguntas</small></button>
+      <button class="chip" type="button" role="radio" aria-checked="true" data-n="7">Completa<small>7 preguntas</small></button>
+    </div>
+
+    <div class="warn" id="setup-warn" role="alert" hidden></div>
+    <div class="start-row">
+      <button class="btn btn-gold" id="start" type="button">Empezar la entrevista</button>
+    </div>
+    <p class="fine">Vesper es una IA. Califica lo que dices, no tu acento, y el nivel que te da es una estimación. Tus respuestas se procesan igual que en el chat con Vesper.</p>
+    <p class="fine" style="margin-top:0"><a class="txtlink" href="aviso-de-privacidad.html">Aviso de privacidad</a></p>
+
+    <div id="past-box" hidden>
+      <h2 class="ey">Tus entrevistas</h2>
+      <ul class="past" id="past"></ul>
+    </div>
+  </section>
+
+  <!-- 2 · La entrevista -->
+  <section id="s-talk" hidden aria-label="Entrevista">
+    <div class="iv-top">
+      <button class="icbtn" id="quit" type="button" aria-label="Salir de la entrevista">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+      <div class="stars" id="stars" role="img" aria-label=""></div>
+      <span class="iv-count" id="count" aria-hidden="true"></span>
+    </div>
+    <div class="rec">
+      <img class="cat" data-cat="explaining" src="assets/images/mascot/vesper_cat_explaining.webp" width="58" height="58" alt="">
+      <div class="rec-body">
+        <span class="rec-name">Vesper · reclutador</span>
+        <p class="rec-q" id="q" aria-live="polite"></p>
+        <div class="rec-tools">
+          <button class="txtlink" id="again" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5v5h3.5L12 18.5v-13L7.5 9.5H4z"/><path d="M15.5 9a4.2 4.2 0 0 1 0 6"/></svg>Escuchar otra vez</button>
+          <span id="flag-box"></span>
+        </div>
+      </div>
+    </div>
+    <label class="ans">
+      <span class="ey" id="ans-l">Tu respuesta</span>
+      <textarea id="ans" maxlength="1200" aria-labelledby="ans-l"></textarea>
+    </label>
+    <p class="hint" id="hint" aria-live="polite"></p>
+    <div class="err" id="err" role="alert" hidden></div>
+  </section>
+
+  <!-- 3 · Vesper revisa -->
+  <section id="s-wait" class="wait" hidden aria-live="polite">
+    <img class="cat" data-cat="correcting" src="assets/images/mascot/vesper_cat_correcting.webp" width="112" height="112" alt="Vesper">
+    <div><span class="hand">Déjame revisar mis notas…</span></div>
+    <p class="lead" style="margin-top:0">Estoy preparando tu reporte.</p>
+    <div class="stars" aria-hidden="true">
+      <svg viewBox="0 0 24 24"><path d="M12 3l2.6 5.6 6.1.7-4.5 4.1 1.2 6-5.4-3-5.4 3 1.2-6L3.3 9.3l6.1-.7z"/></svg>
+      <svg viewBox="0 0 24 24"><path d="M12 3l2.6 5.6 6.1.7-4.5 4.1 1.2 6-5.4-3-5.4 3 1.2-6L3.3 9.3l6.1-.7z"/></svg>
+      <svg viewBox="0 0 24 24"><path d="M12 3l2.6 5.6 6.1.7-4.5 4.1 1.2 6-5.4-3-5.4 3 1.2-6L3.3 9.3l6.1-.7z"/></svg>
+    </div>
+  </section>
+
+  <!-- 4 · El reporte (lo pinta vesper_entrevista.js) -->
+  <section id="s-report" hidden aria-label="Tu reporte"></section>
+
+</main>
+
+<!-- Acción fija de la entrevista: micrófono + enviar -->
+<div class="dock" id="dock" hidden>
+  <div class="dock-in">
+    <button class="mic" id="mic" type="button" aria-label="Responder con voz" aria-pressed="false">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v3"/></svg>
+    </button>
+    <button class="btn btn-gold" id="send" type="button" disabled>Enviar respuesta</button>
+  </div>
+  <!-- Turnstile: vacío salvo que Cloudflare pida marcar la casilla -->
+  <div id="ts-box"></div>
+</div>
+
+<script src="vesper_adaptive.js"></script>
+<script src="vesper_persona.js"></script>
+<script src="vesper_analytics.js"></script>
+<script src="vesper_entrevista.js"></script>
+<script>
+(function () {
+  "use strict";
+  if ("serviceWorker" in navigator && location.protocol.indexOf("http") === 0) {
+    window.addEventListener("load", function () { navigator.serviceWorker.register("sw.js").catch(function () {}); });
+  }
+})();
+</script>
+<script src="vesper_nav.js"></script>
+</body>
+</html>

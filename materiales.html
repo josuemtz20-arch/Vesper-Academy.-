@@ -1106,9 +1106,12 @@ html.js-anim .reveal.in-view .pen path{animation:pen-draw .9s var(--ease-out) .4
 html:not(.vesper-dark) #main .phrase{background:#fffdf7;box-shadow:0 0 0 1px #e6dfcd,0 12px 26px rgba(27,27,47,.13);}
 @media(max-width:560px){#main .phrase{rotate:.5deg;padding:28px 18px 20px 20px;}}
 
-/* ── Accesos: un riel con cinco medallones ── */
+/* ── Accesos: seis medallones en dos filas de tres ──
+   2026-11-10: entra «Interview» (el simulador de entrevista). Eran cinco en
+   un solo riel; seis en una fila dejan 182 px por acceso y «Dress Vesper» y
+   su glosa se parten en dos renglones. De tres en tres caben todos en uno. */
 #main #quicknav{margin-top:26px;}
-#main .qn-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:1px;overflow:hidden;
+#main .qn-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;overflow:hidden;
   border:1px solid var(--border);border-radius:var(--r-card);background:var(--border);box-shadow:var(--card-sh);}
 #main .qn-grid > a.qn{position:relative;display:grid;grid-template-columns:46px minmax(0,1fr);grid-column:auto;
   column-gap:13px;row-gap:0;align-items:center;align-content:start;padding:17px 16px 16px;
@@ -1130,11 +1133,9 @@ html:not(.vesper-dark) #main .phrase{background:#fffdf7;box-shadow:0 0 0 1px #e6
 #main a.qn > .qn-es{grid-column:2;align-self:start;margin:1px 0 0;}
 #main a.qn > .qn-d{grid-column:1 / -1;display:block;margin-top:11px;font-size:.8rem;max-width:none;}
 #main a.qn > .qn-live{grid-column:1 / -1;margin-top:5px;}
-@media(max-width:980px){
-  /* 3 + 2 sobre seis columnas, para que ningún acceso quede colgando. */
-  #main .qn-grid{grid-template-columns:repeat(6,minmax(0,1fr));}
-  #main .qn-grid > a.qn{grid-column:span 2;}
-  #main .qn-grid > a.qn:nth-child(n+4){grid-column:span 3;}
+@media(max-width:660px){
+  /* Bajo 660 px tres columnas vuelven a partir «Dress Vesper»: de dos en dos. */
+  #main .qn-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
 }
 @media(max-width:560px){
   /* Teléfono: fichas cortas en dos columnas. La descripción se va: la barra
@@ -1473,6 +1474,13 @@ html[data-vesper-style="minimal"] footer .f-hand small{color:var(--m-muted);}
         <span class="qn-t" lang="en">Listening</span>
         <span class="qn-es">Audio</span>
         <span class="qn-d">Entrena el oído con audios</span>
+      </a>
+      <!-- Simulador de entrevista (entrevista.html, 2026-11-10) -->
+      <a class="qn" href="entrevista.html">
+        <span class="qn-ic"><svg class="i" aria-hidden="true"><use href="#i-case"/></svg></span>
+        <span class="qn-t" lang="en">Interview</span>
+        <span class="qn-es">Entrevista</span>
+        <span class="qn-d">Ensaya tu entrevista de trabajo</span>
       </a>
       <a class="qn" href="mi_boleta.html">
         <span class="qn-ic"><svg class="i" aria-hidden="true"><use href="#i-check-doc"/></svg></span>

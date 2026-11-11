@@ -30,7 +30,7 @@
       match: ["materiales.html", "libro.html"],
       icon: '<path d="M3 11l9-8 9 8"/><path d="M5 10v10h5v-6h4v6h5V10"/>' },
     { id: "aprender", label: "Learn",    es: "Aprender", href: "leccion.html",
-      match: ["leccion.html", "chat.html", "liga.html", "lesson.html"],
+      match: ["leccion.html", "chat.html", "entrevista.html", "liga.html", "lesson.html"],
       icon: '<path d="M22 10L12 5 2 10l10 5 10-5z"/><path d="M6 12v5c0 1 2.7 3 6 3s6-2 6-3v-5"/>' },
     { id: "audio",    label: "Listen",   es: "Audio",    href: "audio_library.html",
       match: ["audio_library.html"],
