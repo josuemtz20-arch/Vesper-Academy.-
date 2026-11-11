@@ -493,7 +493,7 @@
     <!-- ═══════════ INTRO ═══════════ -->
     <div class="screen active" id="screen-intro">
         <div class="intro-hero">
-            <span class="free-tag"><i class="fas fa-gift"></i> 100% gratis · Sin crear cuenta</span>
+            <span class="free-tag"><i class="fas fa-gift"></i> 100% gratis · Solo tu nombre y un contacto</span>
             <div class="intro-icon"><i class="fas fa-graduation-cap"></i></div>
             <h1>Descubre tu <span>nivel de inglés</span> en 15 minutos</h1>
             <p>Responde 30 preguntas y conoce tu nivel real — de principiante absoluto (Pre-A1) a avanzado (B2+) — junto con el curso de Vesper Academy ideal para ti. Si no sabes una respuesta, pulsa <strong style="color:var(--gold-light);">"No estoy seguro/a"</strong>: ser honesto da el resultado más preciso.</p>
@@ -554,9 +554,6 @@
             <p class="privacy-note"><i class="fas fa-lock"></i> Usamos tus datos para darte tu resultado y para que un asesor te contacte sobre tu plan; promociones solo si marcas la casilla. No los vendemos. <a href="aviso-de-privacidad.html" style="color:inherit;text-decoration:underline">Aviso de privacidad</a></p>
         </div>
 
-        <div class="history-link-row">
-            <button class="history-link" onclick="openHistory()"><i class="fas fa-clock-rotate-left"></i> Ver historial de resultados</button>
-        </div>
     </div>
 
     <!-- ═══════════ QUIZ ═══════════ -->
@@ -616,30 +613,8 @@
             <a class="btn-outline" href="planes.html"><i class="fas fa-tags"></i> Ver planes y precios</a>
             <a class="btn-outline" id="cta-create-account" href="login.html?tab=register&amp;next=materiales.html"><i class="fas fa-user-plus"></i> Crear una cuenta (opcional)</a>
             <button class="btn-outline" onclick="window.print()"><i class="fas fa-print"></i> Imprimir</button>
-            <button class="btn-outline" onclick="openHistory()"><i class="fas fa-clock-rotate-left"></i> Ver historial</button>
             <button class="btn-outline" onclick="retakeTest()"><i class="fas fa-redo"></i> Repetir examen</button>
         </div>
-    </div>
-
-    <!-- ═══════════ HISTORY ═══════════ -->
-    <div class="screen" id="screen-history">
-        <div class="history-head">
-            <h2><i class="fas fa-clock-rotate-left" style="color:var(--gold);"></i> Historial de resultados</h2>
-            <button class="history-link" onclick="showScreen('intro')"><i class="fas fa-arrow-left"></i> Volver</button>
-        </div>
-        <p class="history-sub">Resultados de quienes han presentado el examen diagnóstico. Los datos de contacto se muestran parcialmente ocultos para proteger la privacidad.</p>
-
-        <div class="history-tools">
-            <div class="history-search">
-                <i class="fas fa-magnifying-glass"></i>
-                <input type="text" id="history-search" placeholder="Buscar por nombre o nivel (ej. María, B1)..." oninput="renderHistory()">
-            </div>
-            <button class="history-link" onclick="loadHistory(true)"><i class="fas fa-rotate"></i> Actualizar</button>
-        </div>
-
-        <div class="history-loading" id="history-loading" style="display:none;"><i class="fas fa-circle-notch fa-spin"></i> Cargando historial…</div>
-        <div class="history-list" id="history-list"></div>
-        <p class="history-note" id="history-note"></p>
     </div>
 
 </div>
@@ -1204,123 +1179,21 @@ function retakeTest() {
     showScreen("intro");
 }
 
-// ══ HISTORIAL — vista ══
-let historyCache = null;
-
+// ══ utilidades ══
 function escapeHtml(s) {
     return String(s).replace(/[&<>"']/g, function (c) {
         return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
     });
 }
-function maskEmail(e) {
-    if (!e) return "";
-    var parts = e.split("@");
-    if (parts.length !== 2) return "•••";
-    var u = parts[0];
-    return (u.length <= 2 ? u.charAt(0) : u.slice(0, 2)) + "•••@" + parts[1];
-}
-function maskPhone(p) {
-    if (!p) return "";
-    var d = p.replace(/\D/g, "");
-    return d.length <= 4 ? "•••" : "••• ••• " + d.slice(-4);
-}
-function formatDate(iso) {
-    if (!iso) return "";
-    try {
-        return new Date(iso).toLocaleString("es-MX", {
-            day: "numeric", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit"
-        });
-    } catch (e) { return iso; }
-}
-
-function openHistory() {
-    showScreen("history");
-    loadHistory(false);
-}
-
-function loadHistory(force) {
-    const loading = document.getElementById("history-loading");
-    const list = document.getElementById("history-list");
-    const noteEl = document.getElementById("history-note");
-
-    if (historyCache && !force) { renderHistory(); return; }
-
-    loading.style.display = "block";
-    list.innerHTML = "";
-    noteEl.textContent = "";
-
-    const local = loadLocalHistory();
-
-    fetchFirestoreHistory().then(function (remote) {
-        // Los registros locales ya subidos a Firestore aparecen en "remote";
-        // solo se añaden los locales que no llegaron a guardarse en la nube.
-        const pendingLocal = local.filter(function (r) { return !r.savedRemote; });
-        historyCache = remote.concat(pendingLocal).sort(function (a, b) {
-            return String(b.date).localeCompare(String(a.date));
-        });
-        noteEl.textContent = "Mostrando el historial general (" + remote.length + " resultado" + (remote.length === 1 ? "" : "s") + " en la nube" +
-            (pendingLocal.length ? " + " + pendingLocal.length + " de este dispositivo" : "") + ").";
-        loading.style.display = "none";
-        renderHistory();
-    }).catch(function () {
-        historyCache = local.slice();
-        noteEl.textContent = "Mostrando solo los resultados guardados en este dispositivo. El historial general en la nube no está disponible en este momento.";
-        loading.style.display = "none";
-        renderHistory();
-    });
-}
-
-function renderHistory() {
-    const list = document.getElementById("history-list");
-    const q = (document.getElementById("history-search").value || "").trim().toLowerCase();
-    const items = (historyCache || []).filter(function (r) {
-        if (!q) return true;
-        return (r.name || "").toLowerCase().indexOf(q) !== -1 ||
-               (r.level || "").toLowerCase().indexOf(q) !== -1;
-    });
-
-    list.innerHTML = "";
-
-    if (!items.length) {
-        list.innerHTML = "<div class='history-empty'><i class='fas fa-inbox'></i>" +
-            (q ? "No hay resultados que coincidan con tu búsqueda."
-               : "Aún no hay resultados en el historial.<br>¡Sé la primera persona en presentar el examen diagnóstico!") +
-            "</div>";
-        return;
-    }
-
-    items.forEach(function (r) {
-        const lvl = LEVELS[r.level] || { color: "#a9b1bd", name: r.levelName || "" };
-        const contact = [
-            r.email ? "<i class='fas fa-envelope'></i>" + escapeHtml(maskEmail(r.email)) : "",
-            r.phone ? "<i class='fab fa-whatsapp'></i>" + escapeHtml(maskPhone(r.phone)) : ""
-        ].filter(Boolean).join(" &nbsp; ");
-
-        const div = document.createElement("div");
-        div.className = "history-item";
-        div.innerHTML =
-            "<div class='h-badge' style='border-color:" + lvl.color + ";color:" + lvl.color + ";background:" + lvl.color + "15;'>" + escapeHtml(r.level) + "</div>" +
-            "<div>" +
-                "<div class='h-name'>" + escapeHtml(r.name) + "</div>" +
-                "<div class='h-meta'><i class='fas fa-calendar'></i>" + escapeHtml(formatDate(r.date)) +
-                (contact ? " &nbsp; " + contact : "") +
-                (r.origin ? " &nbsp; <i class='fas fa-tag'></i>" + escapeHtml(r.origin) : "") + "</div>" +
-            "</div>" +
-            "<div class='h-score'><b style='color:" + lvl.color + ";'>" + r.correct + "<span style='color:rgba(255,255,255,.4);font-size:.8rem;font-weight:600;'>/" + (r.total || 30) + "</span></b>" +
-                "<small>aciertos</small>" +
-                (r.source !== "remote" ? "<span class='h-tag'>este dispositivo</span>" : "") +
-            "</div>";
-        list.appendChild(div);
-    });
-}
+// El "Historial de resultados" ya no está en esta página pública (se quitó el
+// 2026-11-11: una lista de quienes presentaron el examen no es algo que deba
+// ofrecer la página de captación). El resultado de cada visitante sigue
+// guardándose en su dispositivo y llegando a la academia; el personal ve los
+// leads en portal_escuela.html.
 
 // Medición: llegada al examen (con el origen que trae el ?src=)
 if (window.VA) VA.track("exam_view", { src: leadOrigin });
 
-// Abrir directamente el historial con book_placement.html#historial
-if (location.hash === "#historial" || location.hash === "#history") {
-    openHistory();
-}
 </script>
 <footer class="va-legal-foot" style="text-align:center;font:500 .78rem/1.4 Inter,system-ui,sans-serif;padding:18px 16px 24px;opacity:.72"><a href="aviso-de-privacidad.html" style="color:inherit">Aviso de privacidad</a></footer>
 </body>
