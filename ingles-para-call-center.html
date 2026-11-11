@@ -230,19 +230,84 @@ footer .flinks{display:flex;flex-wrap:wrap;gap:8px 18px;}
 <!-- SEO estructurado: organización + curso + FAQ + ruta -->
 <script type="application/ld+json">
 {
-  "@context":"https://schema.org",
-  "@graph":[
-    {"@type":"EducationalOrganization","@id":"https://vesperacademy.com/#org","name":"Vesper Academy","url":"https://vesperacademy.com/","logo":"https://vesperacademy.com/assets/images/vesper_logo.png","sameAs":["https://www.instagram.com/vesper.academy/"],"areaServed":"MX","email":"contacto@vesperacademy.com","telephone":"+52 55 3569 9899"},
-    {"@type":"Course","name":"Inglés para call center y nearshoring","description":"Curso de inglés conversacional enfocado en atención al cliente por teléfono para empleos de call center, BPO y nearshoring en México. Incluye examen de nivel gratis y clases en vivo.","inLanguage":"es","provider":{"@id":"https://vesperacademy.com/#org"},"offers":{"@type":"Offer","category":"Diagnóstico gratuito","price":"0","priceCurrency":"MXN","url":"https://vesperacademy.com/book_placement.html"},"hasCourseInstance":{"@type":"CourseInstance","courseMode":"online","courseWorkload":"PT2H"}},
-    {"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Inicio","item":"https://vesperacademy.com/"},{"@type":"ListItem","position":2,"name":"Inglés para call center","item":"https://vesperacademy.com/ingles-para-call-center.html"}]},
-    {"@type":"FAQPage","mainEntity":[
-      {"@type":"Question","name":"¿Qué nivel de inglés piden los call centers en México?","acceptedAnswer":{"@type":"Answer","text":"La mayoría de cuentas bilingües piden un nivel B1–B2: poder mantener una conversación, entender a un cliente y resolver su problema por teléfono. Algunas cuentas semi-bilingües aceptan A2 alto. El examen de nivel gratis te dice dónde estás."}},
-      {"@type":"Question","name":"¿Cuánto tiempo tardo en estar listo para una vacante bilingüe?","acceptedAnswer":{"@type":"Answer","text":"Depende de tu punto de partida y tu constancia. Desde un A2 sólido, muchos alumnos alcanzan un B1 conversacional en pocos meses practicando a diario, combinando clases en vivo con práctica gratis."}},
-      {"@type":"Question","name":"¿El examen de nivel realmente es gratis?","acceptedAnswer":{"@type":"Answer","text":"Sí. Son 30 preguntas, ~15 minutos, sin crear cuenta y con resultado al instante, incluyendo el curso recomendado. También puedes agendar una entrevista oral gratuita."}},
-      {"@type":"Question","name":"¿Sirve para nearshoring en Monterrey, Guadalajara, Tijuana o CDMX?","acceptedAnswer":{"@type":"Answer","text":"Sí. El inglés conversacional de servicio es el mismo que piden las empresas de BPO y nearshoring en todos los hubs del país. Las clases son en línea."}},
-      {"@type":"Question","name":"¿Las apps gratuitas no son suficientes?","acceptedAnswer":{"@type":"Answer","text":"Ayudan a reconocer vocabulario, pero no te hacen hablar. Para un call center necesitas producir inglés en tiempo real, con práctica de conversación y un profesor que te corrija."}}
-    ]}
-  ]
+ "@context": "https://schema.org",
+ "@graph": [
+  {
+   "@type": "EducationalOrganization",
+   "@id": "https://vesperacademy.com/#org",
+   "name": "Vesper Academy",
+   "url": "https://vesperacademy.com/",
+   "logo": "https://vesperacademy.com/assets/images/vesper_logo.png",
+   "sameAs": [
+    "https://www.instagram.com/vesper.academy/"
+   ],
+   "areaServed": "MX",
+   "email": "contacto@vesperacademy.com",
+   "telephone": "+52 55 3569 9899"
+  },
+  {
+   "@type": "BreadcrumbList",
+   "itemListElement": [
+    {
+     "@type": "ListItem",
+     "position": 1,
+     "name": "Inicio",
+     "item": "https://vesperacademy.com/"
+    },
+    {
+     "@type": "ListItem",
+     "position": 2,
+     "name": "Inglés para call center",
+     "item": "https://vesperacademy.com/ingles-para-call-center.html"
+    }
+   ]
+  },
+  {
+   "@type": "FAQPage",
+   "mainEntity": [
+    {
+     "@type": "Question",
+     "name": "¿Qué nivel de inglés piden los call centers en México?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "La mayoría de cuentas bilingües piden un nivel B1–B2: poder mantener una conversación, entender a un cliente y resolver su problema por teléfono. Algunas cuentas semi-bilingües aceptan A2 alto. El examen de nivel gratis te dice dónde estás."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "¿Cuánto tiempo tardo en estar listo para una vacante bilingüe?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Depende de tu punto de partida y tu constancia. Desde un A2 sólido, muchos alumnos alcanzan un B1 conversacional en pocos meses practicando a diario, combinando clases en vivo con práctica gratis."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "¿El examen de nivel realmente es gratis?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Sí. Son 30 preguntas, ~15 minutos, sin crear cuenta y con resultado al instante, incluyendo el curso recomendado. También puedes agendar una entrevista oral gratuita."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "¿Sirve para nearshoring en Monterrey, Guadalajara, Tijuana o CDMX?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Sí. El inglés conversacional de servicio es el mismo que piden las empresas de BPO y nearshoring en todos los hubs del país. Las clases son en línea."
+     }
+    },
+    {
+     "@type": "Question",
+     "name": "¿Las apps gratuitas no son suficientes?",
+     "acceptedAnswer": {
+      "@type": "Answer",
+      "text": "Ayudan a reconocer vocabulario, pero no te hacen hablar. Para un call center necesitas producir inglés en tiempo real, con práctica de conversación y un profesor que te corrija."
+     }
+    }
+   ]
+  }
+ ]
 }
 </script>
 <script src="vesper_analytics.js"></script>

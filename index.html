@@ -1259,25 +1259,7 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
   }
 }
 </script>
-<script type="application/ld+json">
-{
-  "@context":"https://schema.org",
-  "@type":"FAQPage",
-  "mainEntity":[
-    {"@type":"Question","name":"¿Necesito saber algo de inglés para empezar?","acceptedAnswer":{"@type":"Answer","text":"No. El nivel A1 empieza desde cero absoluto: cómo se saluda, cómo te presentas y cómo se pronuncia. Si ya sabes algo, el examen de nivel te coloca en el peldaño correcto para que no repitas lo que ya dominas."}},
-    {"@type":"Question","name":"¿Las clases son en vivo o grabadas?","acceptedAnswer":{"@type":"Answer","text":"Todas en vivo, con un profesor real. No vendemos videos pregrabados: hablar sólo se aprende hablando con alguien que te corrige en el momento."}},
-    {"@type":"Question","name":"¿En qué horarios hay clases?","acceptedAnswer":{"@type":"Answer","text":"Hay grupos de 8 de la mañana a 10 de la noche. En 1 a 1 el horario lo eliges tú."}},
-    {"@type":"Question","name":"¿Cuánto dura cada clase?","acceptedAnswer":{"@type":"Answer","text":"Cada clase dura 1 hora. El plan Grupal son 5 clases por semana y el Club de Conversación, 2."}},
-    {"@type":"Question","name":"¿En qué plataforma son las clases?","acceptedAnswer":{"@type":"Answer","text":"Todas en vivo, con profesor, por Google Meet. Solo necesitas micrófono y una conexión estable."}},
-    {"@type":"Question","name":"¿Qué pasa si falto a una clase?","acceptedAnswer":{"@type":"Answer","text":"En 1 a 1 reprogramamos la clase si avisas con 24 horas de anticipación. En grupo te mandamos el material de la sesión y la repasas con los audios."}},
-    {"@type":"Question","name":"¿En qué se diferencia el Club de Conversación del plan Grupal?","acceptedAnswer":{"@type":"Answer","text":"El plan Grupal es el curso completo: 5 clases por semana con las cuatro destrezas: hablar, escuchar, leer y escribir. El Club son 2 clases por semana solo de conversación, sobre 150 temas; funciona como complemento o como primer paso si tienes poco tiempo."}},
-    {"@type":"Question","name":"¿Hay permanencia o cuota de inscripción?","acceptedAnswer":{"@type":"Answer","text":"No. Pagas mes por mes, sin inscripción, y puedes cambiar de plan o dejarlo al terminar tu mes en curso."}},
-    {"@type":"Question","name":"¿Cuánto tardo en subir de nivel?","acceptedAnswer":{"@type":"Answer","text":"Depende del nivel y de cuánto practiques fuera de clase. Como referencia, pasar de un peldaño al siguiente suele llevar entre cuatro y seis meses al ritmo de cinco clases por semana."}},
-    {"@type":"Question","name":"¿Preparan para IELTS, Cambridge y TOEFL?","acceptedAnswer":{"@type":"Answer","text":"Sí, con estrategia específica por examen, simulacros cronometrados y meta de banda acordada desde el principio. Te preparamos; el examen oficial lo presentas en una sede autorizada."}},
-    {"@type":"Question","name":"¿Facturan a empresas?","acceptedAnswer":{"@type":"Answer","text":"Sí. Emitimos factura y armamos planes para equipos, con reporte de avance por participante."}}
-  ]
-}
-</script>
+
 
 <!-- Dos saltos: en teléfono <main> está en display:none, así que el de
      escritorio llevaba el foco a un elemento oculto. Cada uno se ve solo en
@@ -2135,7 +2117,10 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
     <div class="m-hero__top">
       <div class="m-hero__copy">
         <span class="m-eyebrow m-eyebrow--dark">Escuela de inglés · clases en vivo con profesor</span>
-        <h1 class="m-h1" data-ab="h1">Años de clases de inglés y te congelas en la junta. <em>Aquí lo hablas.</em></h1>
+        <!-- un solo <h1> en el documento (el de la edición de escritorio). Aquí
+             el mismo titular va como encabezado de nivel 1 para lectores de
+             pantalla, que solo ven la edición que está visible. -->
+        <div class="m-h1" role="heading" aria-level="1" data-ab="h1">Años de clases de inglés y te congelas en la junta. <em>Aquí lo hablas.</em></div>
       </div>
       <a class="m-cat" href="#m-appx" aria-label="Vesper, el gato de nuestra app de práctica: ver la app">
         <img src="assets/images/mascot/vesper_cat_welcome.webp" alt="" width="96" height="96" decoding="async">
