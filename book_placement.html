@@ -338,6 +338,9 @@
         .result-subtitle { color: rgba(255,255,255,.5); font-size: 0.92rem; margin-bottom: 6px; }
         .result-contact { color: rgba(255,255,255,.45); font-size: 0.82rem; margin-bottom: 22px; }
         .result-contact i { color: var(--gold); margin-right: 5px; }
+        .course-links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+        .course-links a { display: inline-block; padding: 8px 14px; border: 1px solid rgba(197,160,89,.55); border-radius: 999px; color: #e6d5ae; text-decoration: none; font-size: .88rem; font-weight: 600; }
+        .course-links a:hover, .course-links a:focus-visible { background: rgba(197,160,89,.14); color: #fff; }
 
         .save-status {
             display: inline-flex; align-items: center; gap: 8px;
@@ -596,6 +599,7 @@
             <h3 id="course-title">Curso recomendado</h3>
             <p id="course-desc"></p>
             <p id="next-steps"></p>
+            <p class="course-links" id="course-links" aria-label="Páginas de los cursos recomendados"></p>
             <p id="confirm-note" style="margin-top:18px; padding-top:16px; border-top:1px solid rgba(255,255,255,0.1); color:#6fb9e8; font-size:0.9rem; line-height:1.6;"></p>
         </div>
 
@@ -697,31 +701,46 @@ const LEVELS = {
     "B2+": { color: "#c5952f", name: "Upper Intermediate" }
 };
 
+// Curso recomendado por nivel. Solo se nombran cursos que EXISTEN en el sitio
+// (curso-ingles-general, curso-club-conversacion, curso-ingles-corporativo,
+// curso-certificacion). Antes se recomendaban "Core Basics" y "Core Practice",
+// nombres internos de los libros que el visitante no encuentra en ninguna página.
+const COURSE_PAGES = {
+    general:       { href: "curso-ingles-general.html",      label: "Inglés General" },
+    club:          { href: "curso-club-conversacion.html",   label: "Club de Conversación" },
+    corporativo:   { href: "curso-ingles-corporativo.html",  label: "Inglés Corporativo" },
+    certificacion: { href: "curso-certificacion.html",       label: "Certificación (IELTS, TOEFL, Cambridge)" }
+};
 const COURSES = {
     "Pre-A1": {
-        title: "Core Basics — Nivel 1 y 2 (Pre-A1)",
-        desc: "Estás en el inicio de tu camino con el inglés. ¡Es un excelente punto de partida! Tu curso se enfocará en vocabulario esencial, saludos, estructura básica de oraciones y frases de supervivencia para el día a día.",
-        next: "Siguiente paso recomendado: reserva tu primera clase de Core Basics. Aprenderás a presentarte, describir tu día y formar oraciones simples con confianza."
+        title: "Inglés General — desde cero",
+        desc: "Estás en el inicio de tu camino con el inglés. ¡Es un excelente punto de partida! Empezarías por vocabulario esencial, saludos, la estructura básica de las oraciones y frases de supervivencia.",
+        next: "Aprenderás a presentarte, describir tu día y formar oraciones simples con confianza.",
+        pages: ["general"]
     },
     "A1": {
-        title: "Core Basics — Nivel 2 y 3 (A1)",
-        desc: "Ya conoces lo básico y estás listo/a para construir oraciones reales. Tu curso cubrirá el presente simple, cómo hacer preguntas, hablar de rutinas y el pasado básico.",
-        next: "Siguiente paso recomendado: Core Basics Nivel 2. Aprenderás a hablar de tu rutina diaria, describir a otras personas y preguntar y responder con fluidez."
+        title: "Inglés General — nivel básico (A1)",
+        desc: "Ya conoces lo básico y estás listo/a para construir oraciones reales: presente simple, cómo hacer preguntas, hablar de rutinas y el pasado básico.",
+        next: "Aprenderás a hablar de tu rutina diaria, describir a otras personas y preguntar y responder con más soltura.",
+        pages: ["general"]
     },
     "A2": {
-        title: "Core Basics — Nivel 3 y 4 (A2)",
-        desc: "Puedes comunicarte en situaciones sencillas. Tu curso ampliará tu capacidad de contar historias, cubriendo el presente perfecto, comparativos, 'going to' y condicionales simples.",
-        next: "Siguiente paso recomendado: Core Basics Nivel 3. Aprenderás a contar historias en pasado, hacer planes y comparar ideas con confianza."
+        title: "Inglés General — nivel elemental (A2)",
+        desc: "Puedes comunicarte en situaciones sencillas. Lo siguiente es contar historias: presente perfecto, comparativos, 'going to' y condicionales simples.",
+        next: "Aprenderás a contar historias en pasado, hacer planes y comparar ideas con confianza. Si lo que más te cuesta es hablar, el Club de Conversación es un buen complemento.",
+        pages: ["general", "club"]
     },
     "B1": {
-        title: "Core Practice — Niveles 1-3 (B1)",
-        desc: "Tienes una base sólida. Tu curso reforzará gramática compleja: voz pasiva, segundo condicional, estilo indirecto y cláusulas relativas avanzadas.",
-        next: "Siguiente paso recomendado: Core Practice B1. Te enfocarás en tareas extensas de conversación, lectura de textos complejos y un habla conectada y natural."
+        title: "Inglés General — nivel intermedio (B1)",
+        desc: "Tienes una base sólida. Toca reforzar la gramática compleja: voz pasiva, segundo condicional, estilo indirecto y cláusulas relativas.",
+        next: "Te enfocarías en conversación extensa, lectura de textos más largos y un habla más conectada y natural. Si necesitas el inglés para tu trabajo, mira también Inglés Corporativo.",
+        pages: ["general", "club", "corporativo"]
     },
     "B2+": {
-        title: "Core Practice — Niveles 4-6 (B2+)",
-        desc: "¡Excelente! Demuestras un nivel intermedio-alto con gran control gramatical. Tu curso te acercará a la fluidez casi nativa: inversiones complejas, matices con modales, lenguaje idiomático y escritura académica.",
-        next: "Siguiente paso recomendado: Core Practice Avanzado. Participarás en debates auténticos, inglés de negocios, escritura nivel C1 y preparación de exámenes."
+        title: "Inglés General avanzado o un curso especializado (B2+)",
+        desc: "¡Excelente! Demuestras un nivel intermedio-alto con buen control gramatical. A partir de aquí conviene elegir según tu meta: seguir puliendo tu inglés general, prepararte para un examen de certificación o enfocarte en el inglés del trabajo.",
+        next: "En la entrevista oral te ayudamos a elegir entre las tres rutas.",
+        pages: ["general", "certificacion", "corporativo"]
     }
 };
 
@@ -1091,6 +1110,14 @@ function showResults() {
     document.getElementById("course-title").textContent = courseData.title;
     document.getElementById("course-desc").textContent = courseData.desc;
     document.getElementById("next-steps").textContent = courseData.next;
+    // enlaces a la página de cada curso recomendado y a los precios
+    var linksEl = document.getElementById("course-links");
+    if (linksEl) {
+        linksEl.innerHTML = (courseData.pages || []).map(function (k) {
+            var c = COURSE_PAGES[k];
+            return c ? '<a href="' + c.href + '">' + escapeHtml(c.label) + '</a>' : "";
+        }).join("") + '<a href="planes.html' + (leadPlan ? "#" + (leadPlan === "1a1" ? "profesional" : leadPlan) : "") + '">Planes y precios</a>';
+    }
 
     // Siempre recomendar la entrevista oral; señalar preguntas omitidas
     const note = document.getElementById("confirm-note");
