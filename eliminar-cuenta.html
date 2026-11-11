@@ -189,6 +189,11 @@
           return user.delete();
         });
       }).then(function () {
+        /* la caché de lecturas de vesper_results.js es de la cuenta: se va con ella */
+        try {
+          localStorage.removeItem("vesper_results_cache_on");
+          if (window.indexedDB) window.indexedDB.deleteDatabase("vesper_results_cache");
+        } catch (e) {}
         if (wipeLocal) clearDevice();
         form.querySelectorAll("input").forEach(function (i) { i.disabled = true; });
         show("ok", "Tu cuenta se eliminó. Puedes seguir usando las lecciones gratis sin cuenta cuando quieras.");

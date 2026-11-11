@@ -653,27 +653,45 @@
   });
 
   /* ── Reportar una respuesta de la IA (lo exige Google Play). Igual que el
-     chat: va a Firestore app_events, que acepta "create" sin sesión. ── */
+     chat: el reporte lo guarda el Worker (ruta /report) en Firestore
+     app_events, con límite por IP; la regla ya no admite escrituras desde el
+     navegador. ── */
   var REPORT_REASONS = [["ofensiva", "Ofensiva o inapropiada"], ["incorrecta", "Incorrecta"], ["otro", "Otro problema"]];
   function sendReport(text, reason) {
     var recd = { vid: "", sid: "" };
     try { if (window.VA) recd = VA.track("ai_report", { reason: reason }) || recd; } catch (e) {}
+    var clean = String(text || "").slice(0, 480);
+    var vid = String(recd.vid || "").slice(0, 32), sid = String(recd.sid || "").slice(0, 32);
+    /* Respaldo de la transición: si el Worker desplegado aún no tiene /report
+       (responde 400) se escribe directo, como antes. Deja de servir en cuanto
+       se publica la regla cerrada (403, se ignora); entonces se puede borrar. */
+    function direct() {
+      try {
+        fetch("https://firestore.googleapis.com/v1/projects/vesper-academy/databases/teachermanuals/documents/app_events?key=" +
+              encodeURIComponent("AIzaSyAsCJW97LyNpmvey1Mo0wiGMufQIV7uxio"), {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ fields: {
+            event: { stringValue: "ai_report" },
+            props: { stringValue: JSON.stringify({ reason: reason, text: clean }).slice(0, 600) },
+            vid: { stringValue: vid },
+            sid: { stringValue: sid },
+            page: { stringValue: "entrevista.html" },
+            createdAt: { timestampValue: new Date().toISOString() }
+          } })
+        }).catch(function () {});
+      } catch (e) {}
+    }
     try {
-      var props = JSON.stringify({ reason: reason, text: String(text || "").slice(0, 480) });
-      fetch("https://firestore.googleapis.com/v1/projects/vesper-academy/databases/teachermanuals/documents/app_events?key=" +
-            encodeURIComponent("AIzaSyAsCJW97LyNpmvey1Mo0wiGMufQIV7uxio"), {
+      fetch(PROXY_URL.replace(/\/?$/, "/") + "report", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ fields: {
-          event: { stringValue: "ai_report" },
-          props: { stringValue: props.slice(0, 600) },
-          vid: { stringValue: String(recd.vid || "").slice(0, 32) },
-          sid: { stringValue: String(recd.sid || "").slice(0, 32) },
-          page: { stringValue: "entrevista.html" },
-          createdAt: { timestampValue: new Date().toISOString() }
-        } })
-      }).catch(function () {});
-    } catch (e) {}
+        body: JSON.stringify({ reason: reason, text: clean, page: "entrevista.html", vid: vid, sid: sid })
+      }).then(function (r) {
+        /* 429 = el Worker ya contó de más desde esta red: no se insiste */
+        if (!r.ok && r.status !== 429) direct();
+      }).catch(direct);
+    } catch (e) { direct(); }
   }
   function flagControl(getText, label) {
     var box = el("span", "flag");

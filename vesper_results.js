@@ -31,8 +31,10 @@
  *   record(result)     -> registra un intento (local + nube si hay sesión;
  *                         result.cloud === false: solo local)
  *   idToken()          -> Promise<token|null> de la sesión verificada
- *   fetchAll({limit})  -> Promise<[fila]|null>  (profe: solo SUS grupos; admin: todo)
- *   fetchMine()        -> Promise<[fila]|null>  (el alumno lee SUS intentos)
+ *   fetchAll({limit, fresh}) -> Promise<[fila]|null>  (profe: solo SUS grupos;
+ *                         admin: todo). fresh:true ignora la caché.
+ *   fetchMine({fresh}) -> Promise<[fila]|null>  (el alumno lee SUS intentos)
+ *   clearCache()       -> borra la caché de lecturas de este dispositivo
  *   localAll()         -> intentos guardados en este dispositivo
  *   isAdminUser()      -> ¿la sesión es la cuenta admin?
  *   fetchMyGroups()    -> Promise<[grupo]> del profesor con sesión
@@ -48,6 +50,15 @@
  * No hizo falta tocar las reglas: la de exam_results ya deja que el alumno
  * cree lo suyo y que solo lo lean él, el staff y los profesores de su grupo.
  * portal_calificaciones.html los reconoce por el examId y los pinta aparte.
+ *
+ * Caché de lecturas (2026-11-11): fetchAll() y fetchMine() bajaban TODOS los
+ * intentos (hasta 1000 por grupo) cada vez que se abría una página, y
+ * Firestore cobra una lectura por documento. Como un intento no cambia nunca
+ * (update/delete: if false), ahora se guardan en IndexedDB de este
+ * dispositivo y en cada visita solo se piden los nuevos (createdAt > última
+ * sincronización). Ver "caché de lecturas" más abajo para los detalles y lo
+ * que hace falta en Firestore (un índice compuesto) para que el profesor y
+ * el alumno la aprovechen; sin el índice todo funciona como antes.
  * ============================================================ */
 window.VESPER_RESULTS = (function () {
   var DB_ID = "teachermanuals";
@@ -78,6 +89,8 @@ window.VESPER_RESULTS = (function () {
         auth.onAuthStateChanged(function (user) {
           currentUser = (user && user.emailVerified) ? user : null;
           identityCache = null;   /* otro usuario: otra identidad */
+          /* sin sesión no debe quedar en el dispositivo lo que leyó el anterior */
+          if (!currentUser) clearCache();
           readyResolve(!!currentUser);
         });
       }).catch(function () { readyResolve(false); /* sin red a Firebase: queda solo-local */ });
@@ -259,7 +272,9 @@ window.VESPER_RESULTS = (function () {
         correct: !!(df.correct && df.correct.booleanValue)
       });
     }
+    var name = (doc && doc.name) || "";
     return {
+      id: name.slice(name.lastIndexOf("/") + 1),   /* id del doc: evita duplicados en la caché */
       studentUid: s("studentUid"), alias: s("alias") || "Estudiante",
       sid: s("sid"), group: s("group"), email: s("email") /* solo docs viejos */,
       examType: s("examType") || "lesson", examId: s("examId"), level: s("level"),
@@ -335,56 +350,276 @@ window.VESPER_RESULTS = (function () {
     }).catch(function () { return []; });
   }
 
+  /* ---- caché de lecturas (IndexedDB) ----
+     Qué guarda: las filas que devolvió la última lectura completa más las
+     nuevas, por usuario (clave "all:<uid>" o "mine:<uid>"). Se borra al
+     cerrar sesión (aquí y en vesper_auth.js) y nunca se lee con otro uid.
+
+     Cómo se pone al día: una query con `createdAt > última sincronización
+     menos SYNC_OVERLAP_MS`. El traslape existe porque createdAt lo pone el
+     reloj de quien crea el intento (el del alumno en las lecciones, el del
+     Worker en los exámenes): un intento de un dispositivo con la hora
+     atrasada menos que el traslape entra igual; los repetidos se descartan
+     por id.
+
+     Cuándo se vuelve a leer todo: sin caché, si cambió el alcance (otros
+     grupos), si se pide un límite mayor que el guardado, si la caché tiene
+     más de FULL_MAX_AGE_MS (recoge intentos con la hora muy mal y los que el
+     admin haya borrado), si llegan `limit` filas nuevas de golpe, o con
+     {fresh:true} (el botón "Actualizar" de los portales).
+
+     Índice: para el admin la query incremental usa un solo campo y funciona
+     sin más. Para el profesor (group == g) y el alumno (studentUid == uid)
+     necesita un índice compuesto en Firestore (consola → Firestore →
+     Índices → colección exam_results):
+         group ASC, createdAt DESC          (profesor)
+         studentUid ASC, createdAt DESC     (alumno)
+     Mientras no existan, Firestore responde 400 y se lee todo como antes;
+     se recuerda NOINCR_RETRY_MS para no repetir el intento en cada visita.
+
+     Solo se cachea exam_results. roster/, gradebook/ y daily_progress/ NO:
+     cambian (los edita el profesor) y una copia vieja haría que una captura
+     pisara la de otro profesor.
+
+     Sin IndexedDB (modo privado de algunos navegadores) todo degrada a la
+     lectura completa de siempre. */
+  var CACHE_DB = "vesper_results_cache";
+  var CACHE_STORE = "kv";
+  var CACHE_V = 1;
+  var FULL_MAX_AGE_MS = 7 * 24 * 3600 * 1000;
+  var SYNC_OVERLAP_MS = 12 * 3600 * 1000;
+  var NOINCR_RETRY_MS = 24 * 3600 * 1000;
+  /* marca en localStorage de que la base existe: así clearCache() no abre
+     IndexedDB en el navegador de cada visitante sin cuenta */
+  var CACHE_FLAG = "vesper_results_cache_on";
+
+  var dbPromise = null;
+  function cacheDb() {
+    if (dbPromise) return dbPromise;
+    dbPromise = new Promise(function (resolve) {
+      try {
+        var req = window.indexedDB.open(CACHE_DB, 1);
+        req.onupgradeneeded = function () {
+          try { req.result.createObjectStore(CACHE_STORE); } catch (e) {}
+        };
+        req.onsuccess = function () {
+          var db = req.result;
+          /* otra pestaña (o el cierre de sesión) quiere borrar la base */
+          db.onversionchange = function () { try { db.close(); } catch (e) {} dbPromise = null; };
+          resolve(db);
+        };
+        req.onerror = function () { resolve(null); };
+        req.onblocked = function () { resolve(null); };
+      } catch (e) { resolve(null); }
+    });
+    return dbPromise;
+  }
+  /* las tres resuelven siempre (nunca rechazan): la caché es opcional */
+  function cacheGet(key) {
+    return cacheDb().then(function (db) {
+      if (!db) return null;
+      return new Promise(function (resolve) {
+        try {
+          var req = db.transaction(CACHE_STORE, "readonly").objectStore(CACHE_STORE).get(key);
+          req.onsuccess = function () { resolve(req.result || null); };
+          req.onerror = function () { resolve(null); };
+        } catch (e) { resolve(null); }
+      });
+    });
+  }
+  function cachePut(key, value) {
+    try { localStorage.setItem(CACHE_FLAG, "1"); } catch (e) {}
+    return cacheDb().then(function (db) {
+      if (!db) return;
+      return new Promise(function (resolve) {
+        try {
+          var tx = db.transaction(CACHE_STORE, "readwrite");
+          tx.objectStore(CACHE_STORE).put(value, key);
+          tx.oncomplete = function () { resolve(); };
+          tx.onerror = tx.onabort = function () { resolve(); };
+        } catch (e) { resolve(); }
+      });
+    });
+  }
+  function clearCache() {
+    var had = true;
+    try { had = !!localStorage.getItem(CACHE_FLAG); localStorage.removeItem(CACHE_FLAG); } catch (e) {}
+    if (!had && !dbPromise) return Promise.resolve();   /* nunca se creó */
+    return cacheDb().then(function (db) {
+      if (!db) return;
+      return new Promise(function (resolve) {
+        try {
+          var tx = db.transaction(CACHE_STORE, "readwrite");
+          tx.objectStore(CACHE_STORE).clear();
+          tx.oncomplete = function () { resolve(); };
+          tx.onerror = tx.onabort = function () { resolve(); };
+        } catch (e) { resolve(); }
+      });
+    });
+  }
+
+  function byDateDesc(a, b) { return (b.date || "") < (a.date || "") ? -1 : 1; }
+
+  /* -> { status, rows }: rows es null si Firestore no respondió 200 */
+  function runQuery(token, query) {
+    return fetch(base() + ":runQuery", {
+      method: "POST",
+      headers: { "Authorization": "Bearer " + token, "Content-Type": "application/json" },
+      body: JSON.stringify({ structuredQuery: query })
+    }).then(function (r) {
+      if (r.status !== 200) return { status: r.status, rows: null };
+      return r.json().then(function (rows) {
+        return { status: 200, rows: (rows || []).filter(function (x) { return x.document; }).map(function (x) {
+          return readDoc(x.document);
+        }) };
+      });
+    });
+  }
+
+  function eqFilter(field, value) {
+    return { fieldFilter: { field: { fieldPath: field }, op: "EQUAL", value: { stringValue: value } } };
+  }
+  /* la query "solo lo nuevo" de una parte (eq = filtro de igualdad o null) */
+  function sinceQuery(eq, sinceIso, limit) {
+    var since = { fieldFilter: {
+      field: { fieldPath: "createdAt" }, op: "GREATER_THAN", value: { timestampValue: sinceIso }
+    } };
+    return {
+      from: [{ collectionId: COLLECTION }],
+      where: eq ? { compositeFilter: { op: "AND", filters: [eq, since] } } : since,
+      orderBy: [{ field: { fieldPath: "createdAt" }, direction: "DESCENDING" }],
+      limit: limit
+    };
+  }
+
+  /* Lectura con caché. spec:
+       key      clave de la caché (incluye el uid)
+       scope    qué abarca (si cambia, la caché no sirve)
+       limit    filas pedidas (y tope por query)
+       fresh    true = ignora la caché
+       parts    un filtro de igualdad por query (null = sin filtro)
+       full     function(eq) -> structuredQuery de la lectura completa
+     Resuelve [fila] por fecha desc, o null si ninguna query respondió. */
+  function cachedRows(token, spec) {
+    var limit = spec.limit;
+    return cacheGet(spec.key).then(function (cached) {
+      var now = Date.now();
+      var c = (cached && cached.v === CACHE_V && cached.scope === spec.scope &&
+               Array.isArray(cached.rows)) ? cached : null;
+      /* el fallo de la query incremental se recuerda aunque se lea todo */
+      var noIncrAt = (c && c.noIncrAt) || 0;
+      var tryIncr = !noIncrAt || now - noIncrAt > NOINCR_RETRY_MS || now < noIncrAt;
+      var usable = c && !spec.fresh &&
+        (c.limit >= limit || c.complete) &&
+        now - c.fullAt < FULL_MAX_AGE_MS &&
+        c.syncAt <= now + 60000;   /* reloj movido hacia atrás: no fiarse */
+
+      function full() {
+        var t0 = Date.now();
+        return Promise.all(spec.parts.map(function (eq) {
+          return runQuery(token, spec.full(eq));
+        })).then(function (parts) {
+          if (parts.every(function (p) { return p.rows === null; })) return null;
+          var rows = [], whole = true;
+          parts.forEach(function (p) {
+            if (!p.rows) { whole = false; return; }
+            rows = rows.concat(p.rows);
+          });
+          rows.sort(byDateDesc);
+          /* complete = no quedó nada fuera: ninguna query llenó su tope y la
+             suma cabe. Solo entonces la caché sirve para un límite mayor. */
+          var complete = whole && rows.length <= limit &&
+            parts.every(function (p) { return p.rows.length < limit; });
+          rows = rows.slice(0, limit);
+          /* una lectura a medias (falló la query de algún grupo) no se guarda */
+          if (whole) {
+            cachePut(spec.key, {
+              v: CACHE_V, scope: spec.scope, limit: limit, complete: complete,
+              fullAt: t0, syncAt: t0, noIncrAt: noIncrAt, rows: rows
+            });
+          }
+          return rows;
+        });
+      }
+
+      if (!usable || !tryIncr) return full();
+
+      var t0 = now;
+      var sinceIso = new Date(c.syncAt - SYNC_OVERLAP_MS).toISOString();
+      return Promise.all(spec.parts.map(function (eq) {
+        return runQuery(token, sinceQuery(eq, sinceIso, limit));
+      })).then(function (parts) {
+        var failed = parts.filter(function (p) { return p.rows === null; });
+        if (failed.length) {
+          /* 400 = falta el índice compuesto (ver arriba); 403 = la regla no
+             acepta esta query. En ambos casos insistir en cada visita solo
+             añade una petición fallida: se recuerda y se lee todo. */
+          if (failed.some(function (p) { return p.status === 400 || p.status === 403; })) {
+            noIncrAt = Date.now();
+            try {
+              console.warn("[Vesper] exam_results: Firestore rechazó la lectura incremental (" +
+                failed[0].status + "; con 400 falta un índice compuesto). Se leen todos los " +
+                "intentos. Ver vesper_results.js, \"caché de lecturas\".");
+            } catch (e) {}
+          }
+          return full();
+        }
+        /* llegaron `limit` de golpe: puede haber más nuevos que no cupieron */
+        if (parts.some(function (p) { return p.rows.length >= limit; })) return full();
+
+        var seen = {}, rows = [];
+        parts.forEach(function (p) {
+          p.rows.forEach(function (r) { if (r.id && !seen[r.id]) { seen[r.id] = 1; rows.push(r); } });
+        });
+        c.rows.forEach(function (r) { if (!r.id || !seen[r.id]) { if (r.id) seen[r.id] = 1; rows.push(r); } });
+        rows.sort(byDateDesc);
+        /* una caché completa lo sigue siendo: guarda todo, aunque pase de su
+           límite (la próxima lectura completa la vuelve a acotar) */
+        if (!c.complete) rows = rows.slice(0, c.limit);
+        cachePut(spec.key, {
+          v: CACHE_V, scope: spec.scope, limit: c.limit, complete: c.complete,
+          fullAt: c.fullAt, syncAt: t0, noIncrAt: 0, rows: rows
+        });
+        return rows.slice(0, limit);
+      });
+    });
+  }
+
   /* lectura del profe. El ADMIN lee toda la colección (query ordenada); un
      PROFESOR solo puede leer intentos de SUS grupos, así que se lanza una
      query filtrada `group == g` por cada grupo (sin orderBy para no exigir
      índice compuesto) y se ordena aquí. Resuelve null si no hay sesión o si
-     falta la regla (403); [] si el profesor no tiene grupos asignados. */
+     falta la regla (403); [] si el profesor no tiene grupos asignados.
+     Con caché (ver arriba): {fresh:true} obliga a leer todo. */
   function fetchAll(opts) {
     opts = opts || {};
     var limit = Math.max(1, Math.min(1000, parseInt(opts.limit, 10) || 500));
     if (!signedIn()) return Promise.resolve(null);
-
-    function runQuery(token, query) {
-      return fetch(base() + ":runQuery", {
-        method: "POST",
-        headers: { "Authorization": "Bearer " + token, "Content-Type": "application/json" },
-        body: JSON.stringify({ structuredQuery: query })
-      }).then(function (r) {
-        if (r.status !== 200) return null;
-        return r.json().then(function (rows) {
-          return (rows || []).filter(function (x) { return x.document; }).map(function (x) {
-            return readDoc(x.document);
-          });
-        });
-      });
-    }
+    var uid = currentUser.uid;
 
     return currentUser.getIdToken().then(function (token) {
       if (isAdminUser()) {
-        return runQuery(token, {
-          from: [{ collectionId: COLLECTION }],
-          orderBy: [{ field: { fieldPath: "createdAt" }, direction: "DESCENDING" }],
-          limit: limit
+        return cachedRows(token, {
+          key: "all:" + uid, scope: "admin", limit: limit, fresh: !!opts.fresh,
+          parts: [null],
+          full: function () {
+            return {
+              from: [{ collectionId: COLLECTION }],
+              orderBy: [{ field: { fieldPath: "createdAt" }, direction: "DESCENDING" }],
+              limit: limit
+            };
+          }
         });
       }
       return fetchMyGroups().then(function (groups) {
         if (!groups.length) return [];
-        return Promise.all(groups.map(function (g) {
-          return runQuery(token, {
-            from: [{ collectionId: COLLECTION }],
-            where: { fieldFilter: {
-              field: { fieldPath: "group" }, op: "EQUAL",
-              value: { stringValue: g }
-            } },
-            limit: limit
-          });
-        })).then(function (parts) {
-          if (parts.every(function (p) { return p === null; })) return null;
-          var rows = [];
-          parts.forEach(function (p) { if (p) rows = rows.concat(p); });
-          rows.sort(function (a, b) { return (b.date || "") < (a.date || "") ? -1 : 1; });
-          return rows.slice(0, limit);
+        return cachedRows(token, {
+          key: "all:" + uid, scope: "g:" + groups.slice().sort().join("\u0001"),
+          limit: limit, fresh: !!opts.fresh,
+          parts: groups.map(function (g) { return eqFilter("group", g); }),
+          full: function (eq) {
+            return { from: [{ collectionId: COLLECTION }], where: eq, limit: limit };
+          }
         });
       });
     }).catch(function () { return null; });
@@ -392,29 +627,19 @@ window.VESPER_RESULTS = (function () {
 
   /* lectura del ALUMNO: solo SUS intentos (la regla lo permite vía el filtro
      studentUid == uid; sin orderBy para no requerir índice compuesto — se
-     ordena aquí por fecha desc). Resuelve null sin sesión o con error. */
-  function fetchMine() {
+     ordena aquí por fecha desc). Resuelve null sin sesión o con error.
+     Con caché (ver arriba): {fresh:true} obliga a leer todo. */
+  function fetchMine(opts) {
+    opts = opts || {};
     if (!signedIn()) return Promise.resolve(null);
+    var uid = currentUser.uid;
     return currentUser.getIdToken().then(function (token) {
-      return fetch(base() + ":runQuery", {
-        method: "POST",
-        headers: { "Authorization": "Bearer " + token, "Content-Type": "application/json" },
-        body: JSON.stringify({ structuredQuery: {
-          from: [{ collectionId: COLLECTION }],
-          where: { fieldFilter: {
-            field: { fieldPath: "studentUid" },
-            op: "EQUAL",
-            value: { stringValue: currentUser.uid }
-          } },
-          limit: 1000
-        } })
-      }).then(function (r) {
-        if (r.status !== 200) return null;
-        return r.json().then(function (rows) {
-          return (rows || []).filter(function (x) { return x.document; }).map(function (x) {
-            return readDoc(x.document);
-          }).sort(function (a, b) { return (b.date || "") < (a.date || "") ? -1 : 1; });
-        });
+      return cachedRows(token, {
+        key: "mine:" + uid, scope: "mine", limit: 1000, fresh: !!opts.fresh,
+        parts: [eqFilter("studentUid", uid)],
+        full: function (eq) {
+          return { from: [{ collectionId: COLLECTION }], where: eq, limit: 1000 };
+        }
       });
     }).catch(function () { return null; });
   }
@@ -424,6 +649,6 @@ window.VESPER_RESULTS = (function () {
     available: available, signedIn: signedIn, aliasOf: aliasOf, idToken: idToken,
     record: record, fetchAll: fetchAll, fetchMine: fetchMine, localAll: localAll,
     isAdminUser: isAdminUser, fetchMyGroups: fetchMyGroups, computeSid: computeSid,
-    whenReady: whenReady, identity: identity
+    whenReady: whenReady, identity: identity, clearCache: clearCache
   };
 })();

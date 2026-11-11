@@ -8,7 +8,8 @@
  * Tres destinos, todos best-effort y no bloqueantes:
  *   1) localStorage (buffer)   -> SIEMPRE activo. Inspecciona con VA.funnel().
  *   2) Google Analytics 4      -> se enciende al pegar tu ID en GA4_ID.
- *   3) Firestore "app_events"  -> opcional (VA.cfg.cloud=true + regla).
+ *   3) Firestore "app_events"  -> APAGADO y, desde 2026-11-11, sin regla
+ *      que lo acepte (ver toCloud).
  *
  * La señal más útil — QUÉ momento de la app produjo un lead — viaja
  * con el propio lead: VA.goPlacement() agrega ?src= a book_placement.html,
@@ -63,10 +64,12 @@
     try { if (window.gtag) window.gtag("event", name, props || {}); } catch (e) {}
   }
 
-  /* Escritura opcional a Firestore (base "teachermanuals", la única del
-     proyecto) — sólo si VA.cfg.cloud. Reutiliza la apiKey pública ya presente
-     en vesper_auth.js. Requiere la regla 'create' de app_events
-     (_scripts/firestore.rules). Si falla, se ignora. */
+  /* Escritura opcional a Firestore app_events — sólo si VA.cfg.cloud, que
+     nunca se ha encendido. OJO (2026-11-11): la regla de app_events ya no
+     acepta escrituras desde el navegador (era anónima y sin límite de
+     frecuencia; ver firestore.rules). Encender cfg.cloud tal cual sólo
+     produciría 403 silenciosos: si algún día se quiere telemetría propia,
+     hay que mandarla por el Worker, como hace /report con los reportes. */
   function toCloud(name, props, rec) {
     if (!VA.cfg.cloud) return;
     try {

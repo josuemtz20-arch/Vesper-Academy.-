@@ -47,12 +47,13 @@ rules_version = '2';
  *    idToken directo contra la API REST y saltarse el gate. Como todas
  *    las funciones de identidad (isAdmin, isStaff, isTeacherUser,
  *    isStudentUser, teacherSeesGroup…) parten de signedIn(), el criterio
- *    se aplica a todas las reglas con sesión. app_events y
- *    placement_results NO usan signedIn(): siguen siendo anónimos.
+ *    se aplica a todas las reglas con sesión. placement_results NO usa
+ *    signedIn(): sigue siendo anónimo (app_events lo fue hasta 2026-11-11).
  *  - exam_results: group y sid deben coincidir con students/{correo} del
  *    propio alumno (ya no se pueden etiquetar intentos con el grupo de
  *    otro profesor) y todos los campos tienen tipo y tamaño acotados.
- *  - app_events: límites de tamaño más bajos y nombre de evento acotado.
+ *  - app_events: límites de tamaño más bajos y nombre de evento acotado
+ *    (2026-11-11: create cerrado; los reportes entran por el Worker).
  *  - placement_results (leads con nombre/correo/teléfono): solo staff.
  * ============================================================ */
 service cloud.firestore {
@@ -457,26 +458,20 @@ service cloud.firestore {
     }
 
     // ───────────── Público / telemetría ─────────────
-    // Telemetría opcional (vesper_analytics.js con VA.cfg.cloud=true; hoy
-    // está APAGADA, cloud:false). El visitante escribe SIN sesión a propósito
-    // (embudo de la landing, antes de registrarse), así que no se exige
-    // sesión; se acota el esquema para que un spammer no pueda usarla de
-    // almacén gratis (2026-10-28: props 2000→600, page 200→100, vid/sid
-    // 64→32, y el nombre de evento solo letras minúsculas, dígitos y "_",
-    // como todos los track("...") del sitio; createdAt a ±1 día del reloj
-    // del servidor, para no aceptar fechas basura).
-    // Si algún día se enciende y aparece spam: el siguiente paso es App Check.
+    // Reportes de respuestas de la IA (botón "Reportar" de chat.html y
+    // entrevista.html; event "ai_report").
+    // 2026-11-11: el navegador YA NO escribe aquí. Antes el create era
+    // anónimo y solo acotaba el esquema: cualquiera podía llenar la base
+    // desde un script, porque las reglas no limitan CUÁNTAS veces se escribe.
+    // Ahora el reporte entra por el Worker (ruta /report de
+    // worker/vesper-chat-proxy.js), que lo valida, lo cuenta por IP y lo
+    // guarda con la cuenta de servicio (que no pasa por estas reglas).
+    // ORDEN: publica esta regla DESPUÉS de desplegar el Worker con /report;
+    // si no, los reportes se pierden mientras tanto.
+    // Consecuencia: VA.cfg.cloud de vesper_analytics.js (apagado desde
+    // siempre) ya no puede encenderse tal cual; ver ese archivo.
     match /app_events/{id} {
-      allow create: if request.resource.data.keys().hasOnly(['event','props','vid','sid','page','createdAt'])
-                    && request.resource.data.event is string
-                    && request.resource.data.event.matches('^[a-z0-9_]{1,48}$')
-                    && request.resource.data.props is string && request.resource.data.props.size() <= 600
-                    && request.resource.data.vid   is string && request.resource.data.vid.size()   <= 32
-                    && request.resource.data.sid   is string && request.resource.data.sid.size()   <= 32
-                    && request.resource.data.page  is string && request.resource.data.page.size()  <= 100
-                    && request.resource.data.createdAt is timestamp
-                    && request.resource.data.createdAt > request.time - duration.value(1, 'd')
-                    && request.resource.data.createdAt < request.time + duration.value(1, 'd');
+      allow create: if false;
       allow read, update, delete: if isAdmin();
     }
 

@@ -115,6 +115,12 @@
       try { localStorage.removeItem(PERSONAL_KEYS[i]); } catch (e) {}
     }
     try { sessionStorage.removeItem("vesper_chat_session"); } catch (e) {}
+    /* caché de lecturas de vesper_results.js (intentos de examen: los del
+       alumno o, si es profesor, los de sus grupos) */
+    try {
+      localStorage.removeItem("vesper_results_cache_on");
+      if (window.indexedDB) window.indexedDB.deleteDatabase("vesper_results_cache");
+    } catch (e) {}
   }
 
   var firebaseReady = null;

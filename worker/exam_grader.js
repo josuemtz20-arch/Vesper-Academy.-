@@ -177,7 +177,8 @@ function b64urlBuf(buf) {
   return b64urlStr(bin);
 }
 
-async function saAccessToken(env) {
+/* exportado: /report (vesper-chat-proxy.js) escribe app_events con la misma cuenta */
+export async function saAccessToken(env) {
   const now = Math.floor(Date.now() / 1000);
   if (saCache && saCache.exp - 60 > now) return saCache.token;
   if (!env.FIREBASE_SA) throw new Error("FIREBASE_SA no configurado");
@@ -202,7 +203,7 @@ async function saAccessToken(env) {
   return saCache.token;
 }
 
-const fsBase = () => "https://firestore.googleapis.com/v1/projects/" + PROJECT_ID + "/databases/" + FS_DB + "/documents";
+export const fsBase = () => "https://firestore.googleapis.com/v1/projects/" + PROJECT_ID + "/databases/" + FS_DB + "/documents";
 
 /* ¿quién es? Identity Toolkit valida el idToken (firma, caducidad, proyecto). */
 async function lookupUser(env, idToken) {

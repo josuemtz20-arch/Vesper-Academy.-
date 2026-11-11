@@ -23,8 +23,9 @@ Listo en el repo:
       Borra la cuenta de Firebase y `progress/{uid}`, quita el alias de la liga
       y, si se marca, el progreso del dispositivo. Las calificaciones y los
       resultados de examen se conservan como registro escolar (lo dice la página).
-- [x] **Reportar respuestas de la IA** en `chat.html` (requisito de Play para
-      apps con IA generativa). Cada reporte llega a Firestore `app_events`
+- [x] **Reportar respuestas de la IA** en `chat.html` y `entrevista.html`
+      (requisito de Play para apps con IA generativa). El reporte pasa por el
+      Worker (`/report`, con límite por IP) y llega a Firestore `app_events`
       con `event == "ai_report"`; revisarlos de vez en cuando.
 - [x] Atajos del ícono: Lecciones, Tutor IA, Liga.
 - [x] Ficha: ícono 512, gráfico 1024×500, 5 capturas 1080×1920, textos.

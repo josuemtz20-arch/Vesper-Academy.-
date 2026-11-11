@@ -36,7 +36,7 @@
 
 import { DurableObject } from "cloudflare:workers";
 /* Exámenes calificados en el servidor (rutas /exam/*). Ver exam_grader.js. */
-import { handleExam, EXAM_RATE_DEFAULTS, ExamAttempt } from "./exam_grader.js";
+import { handleExam, EXAM_RATE_DEFAULTS, ExamAttempt, saAccessToken, fsBase } from "./exam_grader.js";
 export { ExamAttempt };
 
 /* ---------- Configuración (editable) ---------- */
@@ -95,6 +95,10 @@ const RATE_DEFAULTS = {
   RL_FREE_PER_DAY: 200,    // mensajes por día (UTC) por IP (nivel gratis)
   RL_PRO_PER_MIN: 30,      // con código Pro válido
   RL_PRO_PER_DAY: 1000,
+  /* reportes de respuestas de la IA (/report): nadie reporta decenas al día */
+  RL_REPORT_PER_MIN: 5,
+  RL_REPORT_PER_DAY: 40,
+  RL_REPORT_GLOBAL_PER_DAY: 500,   // todas las IPs: tope de escrituras a app_events
   /* todas las IPs juntas, por día (UTC). Era 5000; con los topes de entrada
      el peor caso es ~0.01 USD por mensaje, así que 2000 acota el abuso a
      ~20 USD/día. Súbelo con RL_GLOBAL_PER_DAY en [vars] cuando crezca la
@@ -357,6 +361,60 @@ export class RateLimiter extends DurableObject {
   }
 }
 
+/* ---------- Reportes de respuestas de la IA (/report) ----------
+ * El botón "Reportar" de chat.html y entrevista.html (lo exige Google Play)
+ * escribía DIRECTO en Firestore app_events, con una regla que aceptaba
+ * "create" sin sesión: cualquiera con la URL podía llenar la base desde un
+ * script, sin límite de frecuencia (las reglas acotan el tamaño, no cuántas
+ * veces se escribe). Ahora el reporte pasa por aquí: se valida, se cuenta por
+ * IP y en total, y lo guarda la cuenta de servicio (FIREBASE_SA, la misma de
+ * los exámenes). Con esto la regla de app_events queda en `create: if false`.
+ * El documento es el mismo de antes (event/props/vid/sid/page/createdAt),
+ * salvo que createdAt es la hora del servidor. */
+const REPORT_REASONS = ["ofensiva", "incorrecta", "otro"];
+const REPORT_PAGES = ["chat.html", "entrevista.html"];
+const REPORT_TEXT_CHARS = 480;
+const REPORT_ID_RE = /^[A-Za-z0-9_-]{0,32}$/;
+
+async function handleReport(body, env, ip) {
+  const reason = REPORT_REASONS.indexOf(body.reason) !== -1 ? body.reason : null;
+  const text = typeof body.text === "string" ? body.text.trim() : "";
+  if (!reason || !text) return [400, { error: "Reporte inválido." }];
+  const id = (v) => (typeof v === "string" && REPORT_ID_RE.test(v)) ? v : "";
+  const page = REPORT_PAGES.indexOf(body.page) !== -1 ? body.page : "";
+
+  const perIp = await rateHit(env, "report:" + ip,
+    limitOf(env, "RL_REPORT_PER_MIN"), limitOf(env, "RL_REPORT_PER_DAY"));
+  if (!perIp.ok) {
+    return [429, { error: "Demasiados reportes. Inténtalo más tarde.", code: "rate_limited", retryAfter: perIp.retryAfter || 60 }];
+  }
+  const all = await rateHit(env, "report-global", 0, limitOf(env, "RL_REPORT_GLOBAL_PER_DAY"));
+  if (!all.ok) {
+    return [429, { error: "Demasiados reportes hoy. Inténtalo mañana.", code: "rate_limited", retryAfter: all.retryAfter || 3600 }];
+  }
+  if (!env.FIREBASE_SA) {
+    console.error("report: falta el secreto FIREBASE_SA; el reporte no se guardó.");
+    return [503, { error: "El servidor no puede guardar reportes.", code: "report_unavailable" }];
+  }
+  const token = await saAccessToken(env);
+  const S = (v) => ({ stringValue: String(v) });
+  const r = await fetch(fsBase() + "/app_events", {
+    method: "POST",
+    headers: { Authorization: "Bearer " + token, "Content-Type": "application/json" },
+    body: JSON.stringify({ fields: {
+      event: S("ai_report"),
+      props: S(JSON.stringify({ reason: reason, text: clip(text, REPORT_TEXT_CHARS) })),
+      vid: S(id(body.vid)), sid: S(id(body.sid)), page: S(page),
+      createdAt: { timestampValue: new Date().toISOString() }
+    } })
+  });
+  if (!r.ok) {
+    console.error("report: Firestore respondió", r.status);
+    return [502, { error: "No se pudo guardar el reporte." }];
+  }
+  return [200, { ok: true }];
+}
+
 /* ---------- Worker ---------- */
 
 export default {
@@ -404,6 +462,33 @@ export default {
       } catch (e) {
         console.error("exam:", e && e.message);
         out = [500, { error: "Error del servidor de exámenes." }];
+      }
+      const extra = out[0] === 429 ? { "Retry-After": String(out[1].retryAfter || 60) } : {};
+      return new Response(JSON.stringify(out[1]), {
+        status: out[0],
+        headers: Object.assign({ "Content-Type": "application/json", "Cache-Control": "no-store" }, corsHeaders(origin), extra)
+      });
+    }
+
+    /* ── Reporte de una respuesta de la IA (/report) ──
+     * No usa Claude: valida, cuenta y guarda en Firestore (handleReport). */
+    if (path === "/report") {
+      const ipR = request.headers.get("CF-Connecting-IP") || "unknown";
+      let rb;
+      try {
+        const t = await request.text();
+        if (t.length > 4000) return jsonError(413, "Petición demasiado grande.", origin);
+        rb = JSON.parse(t);
+      } catch (e) {
+        return jsonError(400, "Cuerpo JSON inválido.", origin);
+      }
+      if (!rb || typeof rb !== "object") return jsonError(400, "Cuerpo JSON inválido.", origin);
+      let out;
+      try {
+        out = await handleReport(rb, env, ipR);
+      } catch (e) {
+        console.error("report:", e && e.message);
+        out = [502, { error: "No se pudo guardar el reporte." }];
       }
       const extra = out[0] === 429 ? { "Retry-After": String(out[1].retryAfter || 60) } : {};
       return new Response(JSON.stringify(out[1]), {

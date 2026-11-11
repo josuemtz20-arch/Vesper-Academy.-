@@ -150,6 +150,34 @@ doc), así que `vesper_results.js::fetchAll` lanza una query filtrada
 índice compuesto) y ordena en el cliente. Un alumno normal recibe `null` y el
 panel le muestra el aviso de "solo profesores".
 
+## Caché de lecturas e índices (2026-11-11)
+
+Firestore cobra una lectura por documento, y `fetchAll` / `fetchMine` bajaban
+todos los intentos (hasta 1000 por grupo) cada vez que se abría Calificaciones,
+la Boleta o "Mi boleta". Como un intento no cambia nunca
+(`update, delete: if false`), `vesper_results.js` ahora los guarda en
+IndexedDB del dispositivo y en cada visita solo pide los nuevos
+(`createdAt > última sincronización − 12 h`; el traslape cubre relojes
+atrasados). Vuelve a leer todo cada 7 días, si cambian los grupos del
+profesor o con el botón **Actualizar**. La caché va por usuario y se borra al
+cerrar sesión. `roster`, `gradebook` y `daily_progress` no se cachean (el
+profesor los edita).
+
+Para el **admin** funciona sin hacer nada. Para el **profesor** y el
+**alumno** la consulta "solo lo nuevo" combina una igualdad con un rango, y
+Firestore exige un **índice compuesto**. Créalos una vez en la consola
+(Firestore → base `teachermanuals` → Índices → Compuesto → colección
+`exam_results`, ámbito "Colección"):
+
+| Para | Campos |
+|------|--------|
+| profesor | `group` Ascendente, `createdAt` Descendente |
+| alumno | `studentUid` Ascendente, `createdAt` Descendente |
+
+Mientras no existan nada se rompe: Firestore responde 400, la página lee todo
+como antes y deja un aviso en la consola del navegador (lo reintenta cada
+24 h). Las reglas no cambian: ya aceptan esas consultas.
+
 ## Lecturas / cómo se llena
 
 - **Exámenes de mundo (boss):** `leccion.html` → `renderBossResult` registra el

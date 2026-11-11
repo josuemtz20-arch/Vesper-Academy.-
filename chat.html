@@ -380,32 +380,47 @@ a.chat-cta{text-decoration:none;}   /* la entrada al simulador de entrevista es 
   }
 
   /* "Reportar": cualquier respuesta de Vesper se puede marcar como ofensiva o
-     incorrecta. Va a Firestore app_events (event "ai_report", create abierto en
-     las reglas) para que el admin la revise; VA.cfg.cloud está apagado, así que
-     se envía directo y no por VA.track. */
+     incorrecta, para que el admin la revise en Firestore app_events (event
+     "ai_report"). El reporte lo guarda el Worker (ruta /report), que lo valida
+     y limita cuántos acepta por IP: la regla de app_events ya no admite
+     escrituras desde el navegador (ver firestore.rules). */
   var REPORT_REASONS = [["ofensiva", "Ofensiva o inapropiada"], ["incorrecta", "Incorrecta"], ["otro", "Otro problema"]];
   function sendReport(text, reason) {
     var rec = { vid: "", sid: "" };
-    try { if (window.VA) rec = VA.track("ai_report", { reason: reason }); } catch (e) {}
+    try { if (window.VA) rec = VA.track("ai_report", { reason: reason }) || rec; } catch (e) {}
+    var clean = String(text || "").slice(0, 480);
+    var vid = String(rec.vid || "").slice(0, 32), sid = String(rec.sid || "").slice(0, 32);
+    /* Respaldo de la transición: si el Worker desplegado aún no tiene /report
+       (responde 400) se escribe directo, como antes. Deja de servir en cuanto
+       se publica la regla cerrada (403, se ignora); entonces se puede borrar. */
+    function direct() {
+      try {
+        fetch("https://firestore.googleapis.com/v1/projects/vesper-academy/databases/teachermanuals/documents/app_events?key=" +
+              encodeURIComponent("AIzaSyAsCJW97LyNpmvey1Mo0wiGMufQIV7uxio"), {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ fields: {
+            event:     { stringValue: "ai_report" },
+            props:     { stringValue: JSON.stringify({ reason: reason, text: clean }).slice(0, 600) },
+            vid:       { stringValue: vid },
+            sid:       { stringValue: sid },
+            page:      { stringValue: "chat.html" },
+            createdAt: { timestampValue: new Date().toISOString() }
+          } })
+        }).catch(function () {});
+      } catch (e) {}
+    }
+    if (!PROXY_URL) { direct(); return; }
     try {
-      /* chat.html no carga vesper_auth.js (activaría la puerta de login); la
-         apiKey es la misma, pública, de VesperAuth.config.firebase. */
-      var cfg = { projectId: "vesper-academy", apiKey: "AIzaSyAsCJW97LyNpmvey1Mo0wiGMufQIV7uxio" };
-      var props = JSON.stringify({ reason: reason, text: String(text || "").slice(0, 480) });
-      fetch("https://firestore.googleapis.com/v1/projects/" + cfg.projectId +
-            "/databases/teachermanuals/documents/app_events?key=" + encodeURIComponent(cfg.apiKey), {
+      fetch(PROXY_URL.replace(/\/?$/, "/") + "report", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ fields: {
-          event:     { stringValue: "ai_report" },
-          props:     { stringValue: props.slice(0, 600) },
-          vid:       { stringValue: String(rec.vid || "").slice(0, 32) },
-          sid:       { stringValue: String(rec.sid || "").slice(0, 32) },
-          page:      { stringValue: "chat.html" },
-          createdAt: { timestampValue: new Date().toISOString() }
-        } })
-      }).catch(function () {});
-    } catch (e) {}
+        body: JSON.stringify({ reason: reason, text: clean, page: "chat.html", vid: vid, sid: sid })
+      }).then(function (r) {
+        /* 429 = el Worker ya contó de más desde esta red: no se insiste */
+        if (!r.ok && r.status !== 429) direct();
+      }).catch(direct);
+    } catch (e) { direct(); }
   }
   function reportControl(body) {
     var box = el("div");

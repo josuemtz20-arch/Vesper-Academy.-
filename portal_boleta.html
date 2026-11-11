@@ -670,7 +670,7 @@ footer a{color:var(--gold);text-decoration:none;}
   fGroup.addEventListener("change", render);
   fLevel.addEventListener("change", render);
   fSort.addEventListener("change", render);
-  document.getElementById("f-reload").addEventListener("click", load);
+  document.getElementById("f-reload").addEventListener("click", function () { load(true); });
 
   /* llena el filtro de grupos con los grupos presentes en el roster */
   function fillGroupFilter(rosterMap) {
@@ -690,7 +690,10 @@ footer a{color:var(--gold);text-decoration:none;}
     fGroup.style.display = Object.keys(groups).length > 1 ? "" : "none";
   }
 
-  function load() {
+  /* fresh === true (botón "Actualizar"): vuelve a leer todos los intentos de
+     Firestore. Al abrir la página se usa la caché de vesper_results.js y
+     solo se piden los nuevos. El roster y la parte manual se leen siempre. */
+  function load(fresh) {
     loadingEl.style.display = "block";
     contentEl.style.display = "none";
     msgEl.style.display = "none";
@@ -699,7 +702,7 @@ footer a{color:var(--gold);text-decoration:none;}
        del roster, la parte manual (gradebook) y las rúbricas por batchGet. */
     Promise.all([
       GB.fetchRoster(),
-      VESPER_RESULTS.fetchAll({ limit: 1000 })
+      VESPER_RESULTS.fetchAll({ limit: 1000, fresh: fresh === true })
     ]).then(function (res) {
       var rosterMap = res[0], attempts = res[1];
       if (rosterMap === null && attempts === null) {

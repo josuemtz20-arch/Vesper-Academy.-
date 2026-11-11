@@ -49,6 +49,9 @@ Límites por defecto (constante `RATE_DEFAULTS`; se cambian sin tocar código co
 | `RL_PRO_PER_MIN` | 30 | mensajes/minuto por IP, con código Pro válido |
 | `RL_PRO_PER_DAY` | 1000 | mensajes/día por IP, con código Pro válido |
 | `RL_GLOBAL_PER_DAY` | 2000 | mensajes/día en total (freno de mano del costo) |
+| `RL_REPORT_PER_MIN` | 5 | reportes de respuestas de la IA por minuto, por IP (`/report`) |
+| `RL_REPORT_PER_DAY` | 40 | reportes por día, por IP |
+| `RL_REPORT_GLOBAL_PER_DAY` | 500 | reportes por día en total (tope de escrituras a `app_events`) |
 
 Además, antes de llamar a Claude el Worker recorta la entrada (2026-11):
 `MAX_SYSTEM_CHARS` 4000, `MAX_MESSAGE_CHARS` 3000 por mensaje y
@@ -227,9 +230,37 @@ O en el panel: tu Worker → **Settings → Variables and Secrets** → añade `
 | `TURNSTILE_SECRET` | secreto | recomendado | `wrangler secret put TURNSTILE_SECRET` |
 | `SESSION_SECRET` | secreto | no | `wrangler secret put SESSION_SECRET` |
 | `PRO_CODE` | secreto | no | `wrangler secret put PRO_CODE` |
-| `FIREBASE_SA` | secreto | sí, para guardar notas de exámenes | ver "Exámenes" |
+| `FIREBASE_SA` | secreto | sí, para guardar notas de exámenes y reportes de la IA | ver "Exámenes" |
 | `EXAM_ATTEMPTS` | Durable Object | sí (ya en `wrangler.toml`) | se crea con `wrangler deploy` (migración v2) |
 | `RL_*` | variable | no | `[vars]` en `wrangler.toml` |
+
+## Reportes de respuestas de la IA (`/report`, 2026-11)
+
+El botón "Reportar" de `chat.html` y `entrevista.html` manda
+`POST /report {reason, text, page, vid, sid}`. El Worker lo valida (`reason`
+es `ofensiva`, `incorrecta` u `otro`; `text` se corta a 480 caracteres), lo
+cuenta por IP y en total (`RL_REPORT_*`) y lo guarda en Firestore
+`app_events` (`event: "ai_report"`) con la cuenta de servicio `FIREBASE_SA`.
+No usa Claude ni Turnstile.
+
+Antes el navegador escribía directo en `app_events`, con una regla que
+aceptaba escrituras sin sesión y sin límite de frecuencia. Orden para cerrar
+esa puerta sin perder reportes:
+
+1. `wrangler deploy` (este Worker, ya con `/report`).
+2. Publicar `firestore.rules` (ahora `app_events` tiene `create: if false`).
+
+Mientras el paso 1 no esté hecho, las páginas escriben directo como antes
+(respaldo en `sendReport`); con el paso 2 ese respaldo deja de funcionar y se
+puede borrar del código.
+
+Prueba rápida (debe responder `{"ok":true}` y aparecer el documento):
+
+```bash
+curl -s https://<tu-worker>.workers.dev/report \
+  -H "Origin: https://vesperacademy.com" -H "Content-Type: application/json" \
+  -d '{"reason":"otro","text":"prueba","page":"chat.html"}'
+```
 
 ## Exámenes calificados en el servidor (2026-11)
 

@@ -420,7 +420,10 @@ footer a{color:var(--gold);text-decoration:none;}
     if (/[?&]tipo=entrevista\b/.test(location.search)) fType.value = "interview";
   } catch (e) {}
 
-  function load() {
+  /* fresh === true (botón "Actualizar"): vuelve a leer todo de Firestore.
+     Al abrir la página se usa la caché de vesper_results.js y solo se piden
+     los intentos nuevos. */
+  function load(fresh) {
     if (!window.VESPER_RESULTS || !VESPER_RESULTS.available()) {
       showMsg('<i class="fas fa-cloud"></i> La nube no está configurada. Cuando se conecte ' +
         'Firebase y se publique la regla de <code>exam_results</code>, las calificaciones ' +
@@ -432,7 +435,7 @@ footer a{color:var(--gold);text-decoration:none;}
     msgEl.style.display = "none";
 
     Promise.all([
-      VESPER_RESULTS.fetchAll({ limit: 500 }),
+      VESPER_RESULTS.fetchAll({ limit: 500, fresh: fresh === true }),
       window.VESPER_GRADEBOOK ? VESPER_GRADEBOOK.fetchRoster() : Promise.resolve({})
     ]).then(function (res) {
       var rows = res[0];
@@ -457,7 +460,7 @@ footer a{color:var(--gold);text-decoration:none;}
     });
   }
 
-  document.getElementById("f-reload").addEventListener("click", load);
+  document.getElementById("f-reload").addEventListener("click", function () { load(true); });
 
   // El gate de vesper_auth.js ya exige sesión verificada + allowlist para esta
   // página protegida. Aquí confirmamos además que sea PROFESOR/ADMIN antes de
