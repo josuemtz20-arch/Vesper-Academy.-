@@ -21,7 +21,12 @@ window.VESPER_ADAPTIVE = (function () {
   var PROFILE_KEY = "vesper_profile";
   var SESSION_KEY = "vesper_session";
 
-  /* nivel 0-5 (onboarding) -> banda CEFR usada por las lecciones */
+  /* MAPEO DE NIVEL — fuente única (2026-11-11). El perfil guarda `level` 0-5:
+       0 = Pre-A1 · 1 = A1 · 2 = A2 · 3 = B1 · 4 = B2 · 5 = C1 o más
+     y cada nivel trabaja en esta banda/mundo (Pre-A1 empieza en el mundo A1).
+     Lo usan igual: vesper_english_ui.js (worldKey), vesper_persona.js
+     (cefrToLevel), portal_escuela.html (LEVEL_BY_CEFR) y book_placement.html
+     (LEVEL_OF_RESULT). Si cambias uno, cambia todos. */
   var BANDS = ["A1", "A1", "A2", "B1", "B2", "C1"];
   function levelToBand(lv) { lv = Math.max(0, Math.min(5, lv | 0)); return BANDS[lv]; }
   function bandRank(b) { return ["A1", "A2", "B1", "B2", "C1"].indexOf((b || "A1").toUpperCase()); }

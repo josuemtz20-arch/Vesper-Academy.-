@@ -196,12 +196,25 @@ window.VESPER_PATH = (function () {
     var g = b && b.levels && b.levels[lv];
     return !!(g && g.total && g.done >= g.total);
   }
+  /* Mundo en el que ubicó el examen de nivel (book_placement.html guarda
+     vesper_profile.placedLevel). Abre ese mundo y los anteriores sin tener que
+     vencer a cada guardián: quien ya sabe inglés no repite lo que domina.
+     -1 si nunca hizo el examen. */
+  function placedIndex() {
+    try {
+      var p = JSON.parse(localStorage.getItem("vesper_profile") || "null");
+      var c = String((p && p.placedLevel) || "").toUpperCase().replace("+", "");
+      if (c === "PRE-A1") c = "A1";
+      return LEVELS.indexOf(c);
+    } catch (e) { return -1; }
+  }
   function bossUnlocked(lv, b) { return true; }    // el jefe siempre se puede enfrentar
   function regionUnlocked(lv, b) {
     lv = normLevel(lv);
     var i = LEVELS.indexOf(lv);
     if (i <= 0) return true;                       // A1 siempre abierto
     if (adminOpen()) return true;
+    if (placedIndex() >= i) return true;           // el examen de nivel lo ubicó aquí o más arriba
     var prev = LEVELS[i - 1];
     return !!(window.VesperProgress && window.VesperProgress.bossPassed && window.VesperProgress.bossPassed(prev));
   }
@@ -211,7 +224,7 @@ window.VESPER_PATH = (function () {
     levelColor: levelColor, normLevel: normLevel, skillOf: skillOf,
     build: build, isCompleted: isCompleted, isUnlocked: isUnlocked, isRevised: isRevised, status: status,
     continueLesson: continueLesson, levelProgress: levelProgress,
-    regionComplete: regionComplete, bossUnlocked: bossUnlocked, regionUnlocked: regionUnlocked,
+    regionComplete: regionComplete, bossUnlocked: bossUnlocked, regionUnlocked: regionUnlocked, placedIndex: placedIndex,
     getScore: getScore, setScore: setScore, stars: stars
   };
 })();

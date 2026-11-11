@@ -1129,6 +1129,20 @@ function showResults() {
     local.unshift(rec);
     saveLocalHistory(local);
 
+    // El examen UBICA: fija el nivel del perfil de la app en este dispositivo y
+    // abre los mundos hasta ese nivel (vesper_path.js lee placedLevel). Mismo
+    // mapeo de nivel 0-5 que BANDS de vesper_adaptive.js.
+    try {
+        var LEVEL_OF_RESULT = { "Pre-A1": 0, "A1": 1, "A2": 2, "B1": 3, "B2+": 4 };
+        var prof = JSON.parse(localStorage.getItem("vesper_profile") || "null") || {};
+        prof.level = LEVEL_OF_RESULT[placedLevel];
+        prof.placedLevel = placedLevel;
+        prof.placedTs = Date.now();
+        prof.ts = Date.now();
+        if (!prof.name && studentName) prof.name = studentName;
+        localStorage.setItem("vesper_profile", JSON.stringify(prof));
+    } catch (e) {}
+
     // Embudo: guardar el lead para precargar el registro y el onboarding
     try {
         localStorage.setItem("vesper_lead", JSON.stringify({

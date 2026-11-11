@@ -46,7 +46,11 @@ window.VesperEN = (function () {
     } catch (e) {}
     return 0;
   }
-  function worldKey(i) { return KEYS[Math.max(0, Math.min(5, i | 0))]; }
+  /* nivel del perfil (0-5) -> mundo. Mismo mapeo que BANDS de vesper_adaptive.js
+     (0 = Pre-A1 y 1 = A1 viven en el mundo A1; 5 = C1). Antes se usaba el
+     nivel como índice directo y un alumno A1 veía el mundo A2, B1 veía B2… */
+  var WORLD_OF_LEVEL = ["a1", "a1", "a2", "b1", "b2", "c1"];
+  function worldKey(i) { return WORLD_OF_LEVEL[Math.max(0, Math.min(5, i | 0))]; }
   function art(key, d) {
     var p = phase(d);
     return "assets/images/hub/world_" + key + (p === "evening" ? "" : "_" + p) + ".jpg";
@@ -79,7 +83,7 @@ window.VesperEN = (function () {
   function renderPhrase(box) {
     var D = window.VESPER_PHRASE_DAY;
     if (!D || !box) return;
-    var L = ["A1", "A2", "B1", "B2", "C1", "C2"], lvl = L[levelIndex()];
+    var lvl = worldKey(levelIndex()).toUpperCase();   /* mismo mapeo que el mundo */
     var list = D[lvl] || D.A1;
     if (!list || !list.length) return;
     /* Una frase por día del año: estable todo el día, distinta mañana. */
