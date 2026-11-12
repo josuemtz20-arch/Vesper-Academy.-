@@ -125,6 +125,52 @@ self.addEventListener("activate", function (event) {
   );
 });
 
+/* Aviso de "sin conexión" para una navegación que falló y no tiene copia
+   guardada. Conserva la URL pedida: "Reintentar" recarga esa misma página, y
+   se recarga sola cuando vuelve la red. Ofrece las lecciones solo si están
+   descargadas. Responde 200 a propósito: la app de Play Store (TWA) se cierra
+   si una navegación devuelve 404/5xx. */
+function offlinePage() {
+  var scope = self.registration.scope;
+  var lessons = new URL("leccion.html", scope).pathname;
+  var logo = new URL("assets/images/va_isotype.svg", scope).pathname;
+  return caches.match("leccion.html").then(function (hasLessons) {
+    var html =
+      '<!DOCTYPE html><html lang="es"><head><meta charset="utf-8">' +
+      '<meta name="viewport" content="width=device-width, initial-scale=1">' +
+      '<meta name="robots" content="noindex">' +
+      '<meta name="theme-color" content="#15152b">' +
+      "<title>Sin conexión | Vesper Academy</title><style>" +
+      "body{margin:0;min-height:100vh;min-height:100dvh;display:flex;align-items:center;" +
+      "justify-content:center;padding:24px 16px;box-sizing:border-box;background:#15152b;" +
+      "color:#f5efe2;font:16px/1.5 Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;" +
+      "text-align:center}main{max-width:380px}img{display:block;margin:0 auto 18px;opacity:.9}" +
+      "h1{font-size:1.35rem;margin:0 0 10px;color:#d9bd84}p{margin:0 0 12px;color:#d8d2c4}" +
+      ".a{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:22px}" +
+      ".b{display:inline-flex;align-items:center;justify-content:center;min-height:48px;" +
+      "padding:0 22px;border-radius:999px;border:1.5px solid #d9bd84;background:#d9bd84;" +
+      "color:#15152b;font-family:inherit;font-size:1rem;font-weight:700;line-height:1;" +
+      "text-decoration:none;cursor:pointer}" +
+      ".b.l{background:transparent;color:#f5efe2}" +
+      ".b:focus-visible{outline:3px solid #fff;outline-offset:3px}" +
+      "</style></head><body><main>" +
+      '<img src="' + logo + '" alt="" width="64" height="64">' +
+      "<h1>No pudimos cargar esta página</h1>" +
+      "<p>Revisa tu conexión a internet y vuelve a intentar.</p>" +
+      '<p style="font-size:.88rem;opacity:.8">Si tu internet funciona, el sitio puede ' +
+      "estar fallando: prueba de nuevo en unos minutos.</p>" +
+      '<div class="a"><button class="b" type="button" onclick="location.reload()">Reintentar</button>' +
+      (hasLessons ? '<a class="b l" href="' + lessons + '">Abrir mis lecciones</a>' : "") +
+      "</div></main>" +
+      '<script>addEventListener("online",function(){location.reload()})<\/script>' +
+      "</body></html>";
+    return new Response(html, {
+      status: 200,
+      headers: { "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-store" }
+    });
+  });
+}
+
 self.addEventListener("fetch", function (event) {
   var req = event.request;
   if (req.method !== "GET") return;
@@ -168,13 +214,17 @@ self.addEventListener("fetch", function (event) {
         }
         return res;
       }).catch(function () {
-        /* sin conexión: sirve la página cacheada si la tenemos; si no, el hogar
-           del alumno (lecciones), que es adonde llega la mayoría. Solo si eso
-           tampoco está cacheado caemos al motor. */
-        return caches.match(req, { ignoreSearch: /\/vesper_engine\.html$/.test(url.pathname) }).then(function (c) {
-          return c || caches.match("leccion.html").then(function (l) {
-            return l || caches.match("vesper_engine.html");
-          });
+        /* La red falló: sin internet, o el sitio no responde (caído, DNS mal
+           apuntado, certificado vencido: para fetch() es el mismo rechazo).
+           Se sirve la copia guardada de ESA MISMA página y nada más.
+           Antes, cualquier página sin copia caía a leccion.html: con el
+           sitio fuera de línea la portada, el portal del alumno y la
+           biblioteca de audio "abrían en lecciones" y la avería quedaba
+           disfrazada. Ahora, si no hay copia, se dice que no hay conexión.
+           ignoreSearch: las páginas son cascarones estáticos, así que
+           leccion.html?id=… o chat.html?src=shortcut abren su propia copia. */
+        return caches.match(req, { ignoreSearch: true }).then(function (c) {
+          return c || offlinePage();
         });
       })
     );
