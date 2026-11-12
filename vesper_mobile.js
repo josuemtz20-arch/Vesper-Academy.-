@@ -6,8 +6,12 @@
  * con ratón este archivo no engancha un solo evento, no calcula nada y
  * no toca el DOM — la portada de siempre queda exactamente igual.
  *
- * Menú, rail de niveles, barajas (cursos/planes: toque, puntos y
- * deslizamiento), FAQ, formulario plegable, barra fija y año del pie.
+ * Portada D «La mezcla» (2026-11-12): menú «Más», metas que traen su
+ * curso, la ruta que se enciende al bajar, la pestaña de la sección que
+ * se lee y la regla de un solo botón dorado por pantalla (secciones 1,
+ * 8 y 9). Las secciones 2 a 7 atienden piezas de la edición anterior
+ * (rail de niveles, barajas, FAQ, formulario, barra fija): si no están
+ * en el marcado no enganchan nada.
  * Sin dependencias; respeta prefers-reduced-motion vía CSS.
  * ============================================================ */
 (function () {
@@ -38,11 +42,14 @@
     /* ---------- 1. Menú (hoja) ---------- */
     var sheet = app.querySelector(".m-sheet");
     var burger = app.querySelector(".m-burger");
+    var conEtiqueta = !!burger && burger.hasAttribute("aria-label");
     var setSheet = function (open) {
       if (!sheet || !burger) return;
       sheet.classList.toggle("is-open", open);
       burger.setAttribute("aria-expanded", open ? "true" : "false");
-      burger.setAttribute("aria-label", open ? "Cerrar menú" : "Abrir menú");
+      /* solo si el botón nació sin texto visible (icono suelto); la pestaña
+         «Más» se llama por su texto y aria-expanded dice el estado */
+      if (conEtiqueta) burger.setAttribute("aria-label", open ? "Cerrar menú" : "Abrir menú");
       /* el fondo no debe desplazarse por debajo del menú abierto */
       document.body.classList.toggle("m-locked", open);
     };
@@ -204,6 +211,76 @@
       };
       window.addEventListener("scroll", check, { passive: true });
       check();
+    }
+
+    /* ---------- 8. Portada D · Metas: tocar una trae su curso ---------- */
+    var metas = all(".m-metas button"), cursos = all(".m-resp .m-curso");
+    metas.forEach(function (btn, i) {
+      on(btn, "click", function () {
+        metas.forEach(function (b, j) {
+          b.classList.toggle("is-on", j === i);
+          b.setAttribute("aria-pressed", j === i ? "true" : "false");
+        });
+        cursos.forEach(function (c, j) { c.hidden = j !== i; });
+        /* qué meta eligen los visitantes: sirve para saber qué curso jala más */
+        try { if (window.VA && VA.track) VA.track("meta_curso", { meta: btn.getAttribute("data-meta") || String(i) }); } catch (e) {}
+      });
+    });
+
+    /* ---------- 9. Portada D · Ruta, pestañas y un solo botón dorado ----------
+       Una sola medición por cuadro (rAF) para las tres cosas:
+       · la línea de la ruta se enciende hasta donde va la lectura (--p) y
+         termina en la estrella de llegada (--fin); cada parada alcanzada
+         prende su nodo;
+       · la pestaña de la sección que se está leyendo queda marcada;
+       · el botón del examen de las pestañas baja a contorno mientras haya en
+         pantalla un botón dorado del contenido ([data-cta]).
+       Con scroll y no con IntersectionObserver: es un cálculo barato y así
+       se comporta igual en renderizadores sin composición. */
+    var ruta = app.querySelector(".m-paradas");
+    var barra = app.querySelector(".m-tabs");
+    var tabs = all(".m-tabs [data-tab]");
+    var tabCta = app.querySelector(".m-tabs__cta");
+    var ctas = all("[data-cta]");
+    if (ruta || barra) {
+      var pend = false, finPrev = -1;
+      var medir = function () {
+        pend = false;
+        var vh = window.innerHeight, corte = vh * 0.58;
+        if (ruta) {
+          var fin = ruta.lastElementChild ? ruta.lastElementChild.offsetHeight - 12 : 0;
+          if (fin !== finPrev) { finPrev = fin; ruta.style.setProperty("--fin", fin + "px"); }
+          ruta.style.setProperty("--p", Math.max(0, Math.round(corte - ruta.getBoundingClientRect().top - 14)) + "px");
+          all(".m-parada", ruta).forEach(function (li) {
+            li.classList.toggle("is-on", li.getBoundingClientRect().top < corte);
+          });
+        }
+        var aqui = "";
+        tabs.forEach(function (a) {
+          var sec = document.getElementById(a.getAttribute("data-tab"));
+          if (!sec) return;
+          var q = sec.getBoundingClientRect();
+          if (q.top < vh * 0.5 && q.bottom > vh * 0.3) aqui = a.getAttribute("data-tab");
+        });
+        tabs.forEach(function (a) {
+          var es = a.getAttribute("data-tab") === aqui;
+          a.classList.toggle("is-aqui", es);
+          if (es) a.setAttribute("aria-current", "true"); else a.removeAttribute("aria-current");
+        });
+        if (tabCta) {
+          var bajo = barra ? barra.offsetHeight : 0;
+          var hay = ctas.some(function (c) {
+            var q = c.getBoundingClientRect();
+            return q.height > 0 && q.bottom > 8 && q.top < vh - bajo - 8;
+          });
+          tabCta.classList.toggle("is-off", hay);
+        }
+      };
+      var pedir = function () { if (!pend) { pend = true; requestAnimationFrame(medir); } };
+      window.addEventListener("scroll", pedir, { passive: true });
+      window.addEventListener("resize", pedir, { passive: true });
+      window.addEventListener("load", medir);
+      medir();
     }
   }
 })();

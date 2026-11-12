@@ -25,14 +25,14 @@
 <link rel="manifest" href="manifest_lecciones.webmanifest">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=Inter:wght@400;500;600;700&family=Caveat:wght@600;700&display=swap">
 
 <!-- Los tokens se cargan primero: la hoja propia de la pagina debe poder sobrescribirlos. -->
 <link rel="stylesheet" href="assets/css/vesper_tokens.css">
 
 <!-- Edición móvil. Solo pinta en táctiles de <=820px; en escritorio este
      archivo no aplica una sola regla y la portada queda como siempre. -->
-<link rel="stylesheet" href="assets/css/vesper_mobile.css">
+<link rel="stylesheet" href="assets/css/vesper_mobile.css?v=31f383b8">
 
 <script src="vesper_app_mode.js"></script>
 <script>
@@ -1399,6 +1399,13 @@ html.bfp-open{overflow:hidden;}
   <symbol id="i-person" viewBox="0 0 24 24"><circle cx="12" cy="7.4" r="3.7"/><path d="M5.2 20.2a6.8 6.8 0 0 1 13.6 0"/></symbol>
   <symbol id="i-instagram" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="5.2"/><circle cx="12" cy="12" r="4.1"/><circle cx="17.3" cy="6.8" r="1.05"/></symbol>
   <symbol id="i-whatsapp" viewBox="0 0 24 24"><path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22c5.46 0 9.91-4.45 9.91-9.91C21.96 6.45 17.5 2 12.04 2m0 18.15a8.2 8.2 0 0 1-4.2-1.15l-.3-.18-3.12.82.83-3.04-.2-.31a8.19 8.19 0 0 1-1.26-4.38c0-4.54 3.7-8.23 8.25-8.23a8.2 8.2 0 0 1 8.24 8.24c0 4.54-3.7 8.23-8.24 8.23m4.52-6.16c-.25-.12-1.47-.72-1.69-.81-.23-.08-.39-.12-.56.13-.16.24-.64.8-.78.97-.15.16-.29.18-.54.06-.25-.13-1.05-.39-1.99-1.23-.74-.66-1.23-1.47-1.38-1.72-.14-.25-.01-.38.11-.51.11-.11.25-.29.37-.43.12-.15.16-.25.25-.41.08-.17.04-.31-.02-.43-.06-.12-.56-1.34-.76-1.84-.2-.48-.4-.42-.56-.43h-.48c-.16 0-.43.06-.65.31-.22.25-.85.83-.85 2.03s.87 2.35.99 2.51c.12.17 1.71 2.61 4.15 3.66.58.25 1.03.4 1.39.51.58.19 1.11.16 1.53.1.47-.07 1.47-.6 1.67-1.18.21-.58.21-1.07.15-1.18-.06-.11-.22-.17-.47-.29"/></symbol>
+  <!-- Pestañas y ruta de la edición móvil «La mezcla» (2026-11-12): libro,
+       cámara y teléfono con el trazo de 1.5 del juego; la estrella de cuatro
+       puntas va de relleno (.i--solid). -->
+  <symbol id="i-book" viewBox="0 0 24 24"><path d="M4 5.6c2.7-1 5.4-.9 8 .7 2.6-1.6 5.3-1.7 8-.7v12.8c-2.7-1-5.4-.9-8 .7-2.6-1.6-5.3-1.7-8-.7zM12 6.3v12.8"/></symbol>
+  <symbol id="i-video" viewBox="0 0 24 24"><rect x="2.8" y="6" width="13.2" height="12" rx="2.6"/><path d="m16 10.6 5.2-3v8.8l-5.2-3"/></symbol>
+  <symbol id="i-phone" viewBox="0 0 24 24"><rect x="7" y="2.6" width="10" height="18.8" rx="2.6"/><path d="M11 18.2h2"/></symbol>
+  <symbol id="i-spark" viewBox="0 0 24 24"><path d="M12 2C12.8 8 16 11.2 22 12 16 12.8 12.8 16 12 22 11.2 16 8 12.8 2 12 8 11.2 11.2 8 12 2Z"/></symbol>
 </defs></svg>
 
 <!-- Franja Buen Fin 2026 (escritorio). Nace oculta: la enciende el script
@@ -1867,7 +1874,9 @@ html.bfp-open{overflow:hidden;}
        el documento ya está completo. */
     var llenarTiras = function(){
       [].forEach.call(document.querySelectorAll('.mtrack[data-temas]'), function(el){
-        if (!el.children.length) fillTrack(el, el.getAttribute('data-temas') === 'a' ? TEMAS.slice(0,12) : TEMAS.slice(12));
+        if (el.children.length) return;
+        var cual = el.getAttribute('data-temas');   /* 'a' y 'b': las dos filas de escritorio; 'todo': la fila única del teléfono */
+        fillTrack(el, cual === 'todo' ? TEMAS : cual === 'a' ? TEMAS.slice(0,12) : TEMAS.slice(12));
       });
     };
     llenarTiras();
@@ -2236,39 +2245,33 @@ html.bfp-open{overflow:hidden;}
 </script>
 
 <!-- ============================================================
-     EDICIÓN MÓVIL DE LA PORTADA. Solo se muestra en táctiles de
-     <=820px (vesper_mobile.css); en escritorio queda en display:none
-     y no se ve ni se calcula nada. Los iconos salen del sprite de
-     arriba, no de Font Awesome.
+     EDICIÓN MÓVIL DE LA PORTADA — «LA MEZCLA» (2026-11-12).
+     Solo se muestra en táctiles de <=820px (vesper_mobile.css); en
+     escritorio queda en display:none y no se ve ni se calcula nada.
+     El dueño la armó eligiendo piezas de tres propuestas:
+       · inicio de noche con Vesper en medallón junto al título
+       · cursos como cuatro metas que se tocan
+       · una ruta de estrellas que recorre las secciones
+       · los 4 pasos en una hoja de cuaderno, en la estrella de llegada
+       · pestañas abajo en lugar de menú de hamburguesa y barra fija
+     Estilos: sección «PORTADA D» al final de vesper_mobile.css.
+     Comportamiento: secciones 8 y 9 de vesper_mobile.js.
+     Los iconos salen del sprite de arriba, no de Font Awesome.
      ============================================================ -->
 <div id="m-app">
 
-  <!-- Barra superior -->
+  <!-- Barra superior. Ya no se queda fija ni lleva menú: la navegación vive
+       en las pestañas de abajo (.m-tabs) y el menú completo, en «Más». -->
   <header class="m-bar">
     <a class="m-brand" href="#m-app" aria-label="Vesper Academy — inicio">
-      <img src="assets/images/landing/brand_mark_96.webp" alt="" width="26" height="26" loading="lazy" decoding="async">
+      <img src="assets/images/landing/brand_mark_96.webp" alt="" width="28" height="28" decoding="async">
       <b>Vesper Academy</b>
     </a>
-    <div style="display:flex;align-items:center;gap:6px">
-      <a class="m-bar__cta" href="book_placement.html?src=landing-m-bar">Examen gratis</a>
-      <button class="m-burger" type="button" id="m-burger" aria-label="Abrir menú" aria-controls="m-sheet" aria-expanded="false"><svg class="i" aria-hidden="true"><use href="#i-menu"/></svg></button>
-    </div>
+    <a class="m-acceso" href="login.html"><span>Acceso alumnos</span></a>
   </header>
 
-  <div class="m-sheet" id="m-sheet">
-    <div class="m-sheet__inner">
-      <a href="#m-cursos">Cursos</a>
-      <a href="como-funciona.html">Cómo funciona</a>
-      <a href="planes.html">Precios</a>
-      <a href="app.html">La app</a>
-      <a href="#m-contacto">Contacto</a>
-      <a class="m-btn m-btn--ghost" href="login.html">Acceso alumnos</a>
-    </div>
-  </div>
-
-  <!-- Franja Buen Fin 2026 (teléfono). Va DEBAJO de la barra y no encima:
-       .m-sheet es fixed a 56px del borde y, con algo arriba de la barra, el
-       menú abierto taparía media barra. Misma lógica que la de escritorio. -->
+  <!-- Franja Buen Fin 2026 (teléfono). Va DEBAJO de la barra, en flujo.
+       Misma lógica que la de escritorio (script «Franja Buen Fin 2026»). -->
   <aside class="bf bf--m web-only" data-bf hidden aria-label="Promoción de Buen Fin">
     <p class="bf__msg"><b class="bf__tag" data-bf-tag>Buen Fin · 13 al 17 de noviembre</b><i class="bf__en" lang="en">Half price!</i><span data-bf-msg>Tu segundo mes de inglés, a mitad de precio.</span></p>
     <div class="bf__row">
@@ -2278,131 +2281,143 @@ html.bfp-open{overflow:hidden;}
     <p class="bf__legal" id="bf-legal-m" hidden>Promoción para alumnos nuevos en los planes Grupal y Especializados. Haz tu examen de nivel del 13 al 17 de noviembre de 2026 e inscríbete a más tardar el 30 de noviembre de 2026: pagas completo tu primer mes y el segundo a mitad de precio. No acumulable con otras promociones.</p>
   </aside>
 
-  <!-- Hero -->
-  <!-- Hero. h1 real (antes h2): en teléfono el <main> de escritorio está
-       oculto y la página se quedaba sin h1. El gato salió de aquí por la
-       misma razón que en escritorio: parecía una app gratis. -->
-  <section class="m-hero" id="m-main" tabindex="-1">
-    <div class="m-hero__top">
-      <div class="m-hero__copy">
-        <span class="m-eyebrow m-eyebrow--dark">Escuela de inglés · clases en vivo con profesor</span>
-        <h1 class="m-h1" data-ab="h1">Años de clases de inglés y te congelas en la junta. <em>Aquí lo hablas.</em></h1>
-      </div>
-      <a class="m-cat" href="#m-appx" aria-label="Vesper, el gato de nuestra app de práctica: ver la app">
-        <img src="assets/images/mascot/vesper_cat_welcome.webp" alt="" width="96" height="96" decoding="async">
-        <i aria-hidden="true"></i><i aria-hidden="true"></i>
-      </a>
-    </div>
-    <p data-ab="lead">Clases en vivo con profesor, en grupos de máximo <span data-hecho="grupo_max">9</span> o 1 a 1, donde el 80&nbsp;% del tiempo hablas tú. Para la junta, la entrevista o la certificación que tienes enfrente.</p>
-
-    <div class="m-cta">
-      <a class="m-btn" href="book_placement.html?src=landing-m-hero" data-ab-src>Haz tu examen de nivel gratis</a>
-      <a class="m-btn m-btn--wa web-only" href="https://wa.me/525535699899?text=Hola%2C%20vengo%20de%20vesperacademy.com%20y%20quiero%20informaci%C3%B3n%20sobre%20las%20clases%20de%20ingl%C3%A9s." target="_blank" rel="noopener"><svg class="i i--solid" aria-hidden="true"><use href="#i-whatsapp"/></svg>Pregunta por WhatsApp</a>
-    </div>
-    <p class="m-hero__note"><span data-hecho="examen_preguntas">30</span> preguntas · <span data-hecho="examen_min">15</span> min · resultado al instante · sin crear cuenta</p>
-
-    <!-- Las mismas tres razones que escritorio (2026-11-06). -->
-    <ul class="m-ficha" aria-label="Así son las clases">
-      <li><span>Clases</span><span>En vivo, por <span data-hecho="plataforma">Google Meet</span></span></li>
-      <li><span>Grupo</span><span>Máximo <span data-hecho="grupo_max">9</span>, o 1 a 1</span></li>
-      <li><span>En clase</span><span>El 80&nbsp;% del tiempo hablas tú</span></li>
-    </ul>
-    <a class="m-link m-link--gold" href="como-funciona.html" style="margin-top:14px"><span>Así son las clases</span><svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+  <!-- Inicio. h1 real: en teléfono el <main> de escritorio está oculto.
+       Vesper va en medallón junto al título y lleva a la app (#m-appx);
+       el título lo rodea (float + shape-outside). -->
+  <section class="m-inicio" id="m-main" tabindex="-1">
+    <a class="m-medallon" href="#m-appx" aria-label="Vesper, el gato de nuestra app de práctica: ver la app">
+      <img src="assets/images/mascot/vesper_cat_welcome.webp" alt="" width="100" height="100" decoding="async">
+      <i aria-hidden="true"></i><i aria-hidden="true"></i>
+    </a>
+    <span class="m-eyebrow m-eyebrow--dark">Escuela de inglés · clases en vivo con profesor</span>
+    <h1 class="m-h1" data-ab="h1">Años de clases de inglés y te congelas en la junta. <em>Aquí lo hablas.</em></h1>
+    <p class="m-inicio__lead" data-ab="lead">Clases en vivo con profesor, en grupos de máximo <span data-hecho="grupo_max">9</span> o 1 a 1, donde el 80&nbsp;% del tiempo hablas tú. Para la junta, la entrevista o la certificación que tienes enfrente.</p>
+    <a class="m-btn" data-cta href="book_placement.html?src=landing-m-hero" data-ab-src>Haz tu examen de nivel gratis</a>
+    <p class="m-inicio__nota"><span data-hecho="examen_preguntas">30</span> preguntas · <span data-hecho="examen_min">15</span> min · resultado al instante · sin crear cuenta</p>
+    <a class="m-ir m-ir--centro m-ir--claro web-only" href="https://wa.me/525535699899?text=Hola%2C%20vengo%20de%20vesperacademy.com%20y%20quiero%20informaci%C3%B3n%20sobre%20las%20clases%20de%20ingl%C3%A9s." target="_blank" rel="noopener"><svg class="i i--solid" aria-hidden="true"><use href="#i-whatsapp"/></svg><span>Pregunta por WhatsApp</span></a>
   </section>
 
-  <!-- Programas (baraja) -->
-  <section class="m-flush" id="m-cursos">
-    <div>
-      <span class="m-eyebrow">Programas</span>
-      <h2 class="m-h2">Un curso para cada meta</h2>
-      <p class="m-lead">Elige por lo que necesitas conseguir. Toca una carta para traerla al frente; tócala otra vez para entrar.</p>
+  <!-- La ruta. Sus paradas son las secciones de la portada; la línea se va
+       encendiendo al bajar (vesper_mobile.js, sección 9). Los 4 pasos para
+       empezar se dicen una sola vez, en la hoja de cuaderno de la llegada. -->
+  <section class="m-ruta" id="m-ruta">
+    <div class="m-guia">
+      <svg viewBox="0 0 34 50" aria-hidden="true" fill="none" stroke="#C9A84C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M31 6C17 7 9 17 12 44"/><path d="M5 36l7 9 6-10"/></svg>
+      <p class="m-nota m-hand" lang="en">Follow the star.<small lang="es">= sigue la estrella</small></p>
     </div>
-    <div class="m-deck m-deck--courses" data-kind="courses" data-start="0">
-      <button class="m-card" type="button" aria-label="Inglés General" data-href="curso-ingles-general.html">
-        <span class="m-course">
-          <img src="assets/images/landing/course_general.webp" alt="" loading="lazy" decoding="async">
-          <span class="m-course__shade"></span><span class="m-course__veil"></span>
-          <span class="m-badge">Pre-A1 – C2</span><span class="m-course__n">01</span>
-          <b class="m-course__t">Inglés General</b>
-          <span class="m-course__go" aria-hidden="true"><svg class="i"><use href="#i-arrow"/></svg></span>
-        </span>
-      </button>
-      <button class="m-card" type="button" aria-label="Club de Conversación" data-href="curso-club-conversacion.html">
-        <span class="m-course">
-          <img src="assets/images/landing/course_conversation.webp" alt="" loading="lazy" decoding="async">
-          <span class="m-course__shade"></span><span class="m-course__veil"></span>
-          <span class="m-badge">A1 – C2</span><span class="m-course__n">02</span>
-          <b class="m-course__t">Club de Conversación</b>
-          <span class="m-course__go" aria-hidden="true"><svg class="i"><use href="#i-arrow"/></svg></span>
-        </span>
-      </button>
-      <button class="m-card" type="button" aria-label="Inglés Corporativo" data-href="curso-ingles-corporativo.html">
-        <span class="m-course">
-          <img src="assets/images/landing/course_corporate.webp" alt="" loading="lazy" decoding="async">
-          <span class="m-course__shade"></span><span class="m-course__veil"></span>
-          <span class="m-badge">B1 – C1</span><span class="m-course__n">03</span>
-          <b class="m-course__t">Inglés Corporativo</b>
-          <span class="m-course__go" aria-hidden="true"><svg class="i"><use href="#i-arrow"/></svg></span>
-        </span>
-      </button>
-      <button class="m-card" type="button" aria-label="Preparación de Certificación" data-href="curso-certificacion.html">
-        <span class="m-course">
-          <img src="assets/images/landing/course_certification.webp" alt="" loading="lazy" decoding="async">
-          <span class="m-course__shade"></span><span class="m-course__veil"></span>
-          <span class="m-badge">B1 – C2</span><span class="m-course__n">04</span>
-          <b class="m-course__t">Preparación de Certificación</b>
-          <span class="m-course__go" aria-hidden="true"><svg class="i"><use href="#i-arrow"/></svg></span>
-        </span>
-      </button>
-    </div>
-    <div>
-      <p class="m-lead" data-detail="0" style="min-height:42px">De cero a dominio, en grupo o 1 a 1. Desde <span data-hecho="precio_grupal">$2,500</span> al mes.</p>
-      <p class="m-lead" data-detail="1" style="min-height:42px" hidden><span data-hecho="temas_club">150</span> temas, <span data-hecho="clases_club">2</span> clases por semana, solo conversación.<span data-pend="precio_club" hidden> <span data-hecho="precio_club"><span class="dato-real">[DATO REAL: precio del Club]</span></span> al mes.</span><span data-pend-alt="precio_club"> Pregunta el precio por WhatsApp.</span></p>
-      <p class="m-lead" data-detail="2" style="min-height:42px" hidden>Juntas, correos y negociación. Desde <span data-hecho="precio_esp">$3,000</span> al mes.</p>
-      <p class="m-lead" data-detail="3" style="min-height:42px" hidden>IELTS, Cambridge y TOEFL. Desde <span data-hecho="precio_esp">$3,000</span> al mes.</p>
-      <div class="m-deck-foot">
-        <a class="m-link" data-detail="0" href="curso-ingles-general.html"><span>Ver el curso</span><svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a>
-        <a class="m-link" data-detail="1" href="curso-club-conversacion.html" hidden><span>Ver el curso</span><svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a>
-        <a class="m-link" data-detail="2" href="curso-ingles-corporativo.html" hidden><span>Ver el curso</span><svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a>
-        <a class="m-link" data-detail="3" href="curso-certificacion.html" hidden><span>Ver el curso</span><svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a>
-        <span class="m-count">01 / 04</span>
-      </div>
-      <div class="m-dots">
-        <button type="button" class="is-on" aria-label="Curso 1"></button>
-        <button type="button" aria-label="Curso 2"></button>
-        <button type="button" aria-label="Curso 3"></button>
-        <button type="button" aria-label="Curso 4"></button>
-      </div>
-      <a class="m-link" href="planes.html" style="margin-top:14px"><span>Compara planes y precios</span><svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a>
-    </div>
+
+    <ol class="m-paradas">
+
+      <!-- Parada 1 · Programas: cuatro metas; tocar una trae su curso -->
+      <li class="m-parada" id="m-cursos">
+        <span class="m-nodo" aria-hidden="true">1</span>
+        <span class="m-eyebrow m-eyebrow--dark m-fase">Programas · un curso para cada meta</span>
+        <h2 class="m-parada__t">¿Cuál es la tuya?</h2>
+        <div class="m-metas" role="group" aria-label="Elige tu meta">
+          <button type="button" class="is-on" aria-pressed="true" data-meta="general"><img src="assets/images/landing/course_general.webp" alt="" width="34" height="34" decoding="async">Empezar o subir de nivel</button>
+          <button type="button" aria-pressed="false" data-meta="club"><img src="assets/images/landing/course_conversation.webp" alt="" width="34" height="34" decoding="async">Soltarme a hablar</button>
+          <button type="button" aria-pressed="false" data-meta="corporativo"><img src="assets/images/landing/course_corporate.webp" alt="" width="34" height="34" decoding="async">Juntas y trabajo</button>
+          <button type="button" aria-pressed="false" data-meta="certificacion"><img src="assets/images/landing/course_certification.webp" alt="" width="34" height="34" decoding="async">Una certificación</button>
+        </div>
+        <div class="m-resp" aria-live="polite">
+          <a class="m-curso" href="curso-ingles-general.html">
+            <img src="assets/images/landing/course_general.webp" alt="" width="98" height="158" decoding="async">
+            <span class="m-curso__in"><span class="m-curso__k">Tu curso · Pre-A1 – C2</span><b>Inglés General</b>
+              <span class="m-curso__d">De cero a dominio, en grupo o 1 a 1.</span>
+              <span class="m-precio"><small>Desde</small> <span data-hecho="precio_grupal">$2,500</span> <small>al mes</small></span>
+              <span class="m-ir"><span>Ver el curso</span><svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span>
+          </a>
+          <a class="m-curso" href="curso-club-conversacion.html" hidden>
+            <img src="assets/images/landing/course_conversation.webp" alt="" width="98" height="158" loading="lazy" decoding="async">
+            <span class="m-curso__in"><span class="m-curso__k">Tu curso · A1 – C2</span><b>Club de Conversación</b>
+              <span class="m-curso__d"><span data-hecho="temas_club">150</span> temas, <span data-hecho="clases_club">2</span> clases por semana, solo conversación.</span>
+              <span class="m-precio"><span data-pend="precio_club" hidden><span data-hecho="precio_club"><span class="dato-real">[DATO REAL: precio del Club]</span></span> <small>al mes</small></span><small data-pend-alt="precio_club">Pregunta el precio por WhatsApp</small></span>
+              <span class="m-ir"><span>Ver el curso</span><svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span>
+          </a>
+          <a class="m-curso" href="curso-ingles-corporativo.html" hidden>
+            <img src="assets/images/landing/course_corporate.webp" alt="" width="98" height="158" loading="lazy" decoding="async">
+            <span class="m-curso__in"><span class="m-curso__k">Tu curso · B1 – C1</span><b>Inglés Corporativo</b>
+              <span class="m-curso__d">Juntas, correos y negociación.</span>
+              <span class="m-precio"><small>Desde</small> <span data-hecho="precio_esp">$3,000</span> <small>al mes</small></span>
+              <span class="m-ir"><span>Ver el curso</span><svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span>
+          </a>
+          <a class="m-curso" href="curso-certificacion.html" hidden>
+            <img src="assets/images/landing/course_certification.webp" alt="" width="98" height="158" loading="lazy" decoding="async">
+            <span class="m-curso__in"><span class="m-curso__k">Tu curso · B1 – C2</span><b>Preparación de Certificación</b>
+              <span class="m-curso__d">IELTS, Cambridge y TOEFL.</span>
+              <span class="m-precio"><small>Desde</small> <span data-hecho="precio_esp">$3,000</span> <small>al mes</small></span>
+              <span class="m-ir"><span>Ver el curso</span><svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span></span>
+          </a>
+        </div>
+        <a class="m-ir" href="planes.html"><span>Compara planes y precios</span><svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+      </li>
+
+      <!-- Parada 2 · Las clases: los mismos tres datos que escritorio, y los temas -->
+      <li class="m-parada" id="m-clases">
+        <span class="m-nodo" aria-hidden="true">2</span>
+        <span class="m-eyebrow m-eyebrow--dark m-fase">Ya en clase</span>
+        <h2 class="m-parada__t">Así son las clases</h2>
+        <ul class="m-hechos">
+          <li><b>En vivo</b><span>Con profesor, por <span data-hecho="plataforma">Google Meet</span></span></li>
+          <li><b>≤ <span data-hecho="grupo_max">9</span></b><span>Alumnos por grupo, o 1 a 1</span></li>
+          <li><b>80&nbsp;%</b><span>Del tiempo de clase hablas tú</span></li>
+        </ul>
+        <a class="m-ir" href="como-funciona.html"><span>Mira cómo funciona</span><svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        <div class="m-temabox">
+          <span class="m-eyebrow m-eyebrow--dark"><span data-hecho="temas_club">150</span> temas de conversación</span>
+          <h3 class="m-temabox__t">De la cocina a la sala de juntas</h3>
+          <div class="marquee l" aria-hidden="true"><div class="mtrack" data-temas="todo"></div></div>
+        </div>
+      </li>
+
+      <!-- Parada 3 · La app: escena pintada, texto corto y el recorrido; lo demás está en app.html -->
+      <li class="m-parada" id="m-appx">
+        <span class="m-nodo" aria-hidden="true">3</span>
+        <span class="m-eyebrow m-eyebrow--dark m-fase">Extra · incluido y gratis</span>
+        <div class="m-cuadro">
+          <img src="assets/images/landing/app/world_a1.webp" alt="Vesper con un farol frente a una casa, al anochecer" width="720" height="309" loading="lazy" decoding="async">
+          <h2 class="m-parada__t">Entre clase y clase, practicas con <em>Vesper</em></h2>
+        </div>
+        <div class="m-appd">
+          <div class="m-appd__txt">
+            <p>Nuestra app de práctica: lecciones cortas, vocabulario y repaso, del A1 al C2. Gratis, aunque todavía no seas alumno.</p>
+            <a class="m-ir" href="app.html"><span>Conoce la app</span><svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+          </div>
+          <div class="m-tourd" data-apptour>
+            <video muted playsinline loop preload="none" poster="assets/images/landing/app/app_tour_poster.webp" width="540" height="960" aria-label="Recorrido de 20 segundos por la app de Vesper">
+              <source src="assets/video/app_tour.webm" type="video/webm">
+              <source src="assets/video/app_tour.mp4" type="video/mp4">
+            </video>
+            <button type="button" class="tour-btn" aria-label="Ver el recorrido de la app">▶ Recorrido</button>
+          </div>
+        </div>
+      </li>
+
+      <!-- Llegada · Los 4 pasos, en hoja de cuaderno. Vesper se asoma sobre la hoja y firma dentro. -->
+      <li class="m-parada m-fin" id="m-contacto">
+        <span class="m-nodo" aria-hidden="true"><svg class="i i--solid"><use href="#i-spark"/></svg></span>
+        <h2 class="m-fin__t">Tu primer paso es gratis<svg viewBox="0 0 150 10" aria-hidden="true"><path d="M2 6.5C22 2.5 41 8.8 62 5.4S104 2.2 122 5.6c9 1.7 17 1.2 26-1.4" fill="none" stroke="#C9A84C" stroke-width="2.6" stroke-linecap="round"/></svg></h2>
+        <div class="m-llegada">
+          <img class="m-asoma" src="assets/images/mascot/vesper_cat_welcome.webp" alt="" width="108" height="108" loading="lazy" decoding="async">
+          <div class="m-hoja">
+            <ol class="m-pasos">
+              <li>Examen de nivel: <span data-hecho="examen_preguntas">30</span> preguntas, unos <span data-hecho="examen_min">15</span> minutos.</li>
+              <li>Un asesor te escribe con tu nivel y tu curso.</li>
+              <li>Entrevista oral con un profesor, gratis y sin compromiso.</li>
+              <li>Eliges horario y plan, y empiezas.</li>
+            </ol>
+            <p class="m-firma m-hand" lang="en">See you in class!<small lang="es">= ¡nos vemos en clase!</small></p>
+          </div>
+          <a class="m-btn" data-cta href="book_placement.html?src=landing-m-cierre">Haz tu examen de nivel gratis</a>
+          <a class="m-ir m-ir--centro m-ir--claro" href="planes.html#contacto"><span>¿Prefieres que te escribamos?</span><svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a>
+        </div>
+      </li>
+    </ol>
   </section>
 
-  <!-- Tira de temas (2026-11-06): la misma de escritorio -->
-  <div class="temas m-temas">
-    <div class="temas-head">
-      <span class="m-eyebrow m-eyebrow--dark"><span data-hecho="temas_club">150</span> temas de conversación</span>
-      <h2 class="m-h2">De la cocina a la sala de juntas</h2>
-    </div>
-    <div class="marquee l" aria-hidden="true"><div class="mtrack" data-temas="a"></div></div>
-    <div class="marquee r" aria-hidden="true"><div class="mtrack" data-temas="b"></div></div>
-  </div>
-
-  <!-- La app: franja corta; todo lo demás está en app.html (2026-11-06) -->
-  <section class="m-appx" id="m-appx">
-    <span class="m-eyebrow m-eyebrow--dark">Extra · incluido y gratis</span>
-    <h2 class="m-h2">Entre clase y clase, practicas con <em>Vesper</em></h2>
-    <p class="m-appx__lead">Nuestra app de práctica: lecciones cortas, vocabulario y repaso, del A1 al C2. Gratis, aunque todavía no seas alumno.</p>
-    <div class="m-apptour" data-apptour>
-      <video muted playsinline loop preload="none" poster="assets/images/landing/app/app_tour_poster.webp" width="540" height="960" aria-label="Recorrido de 20 segundos por la app de Vesper">
-        <source src="assets/video/app_tour.webm" type="video/webm">
-        <source src="assets/video/app_tour.mp4" type="video/mp4">
-      </video>
-      <button type="button" class="tour-btn">▶ Ver el recorrido</button>
-    </div>
-    <a class="m-btn m-btn--ghost" href="app.html" style="margin-top:18px;gap:8px">Conoce la app<svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a>
-  </section>
-
-  <!-- Prueba social: huecos marcados hasta tener datos reales -->
+  <!-- Prueba social: huecos marcados hasta tener datos reales. Sigue oculta.
+       Al encenderla, lo natural es que pase a ser una parada más de la ruta
+       (entre la app y la llegada); hoy conserva su estilo de banda crema. -->
   <section class="m-proof" id="m-alumnos" hidden>
     <span class="m-eyebrow">Quién te da clase</span>
     <h2 class="m-h2">Profesores con nombre y cara</h2>
@@ -2416,19 +2431,6 @@ html.bfp-open{overflow:hidden;}
     <article class="pcard"><p><span class="dato-real">[DATO REAL: testimonio con nombre, puesto, ciudad y permiso por escrito]</span></p></article>
     <article class="pcard"><h3><span class="dato-real">[DATO REAL: cifra verificable]</span></h3>
       <p><span class="dato-real">[DATO REAL: alumnos atendidos o bandas obtenidas, con fecha de corte]</span></p></article>
-  </section>
-
-  <!-- Cierre -->
-  <section class="m-close" id="m-contacto">
-    <h2 class="m-h2">Tu primer paso es gratis</h2>
-    <ol class="m-steps">
-      <li>Examen de nivel: <span data-hecho="examen_preguntas">30</span> preguntas, unos <span data-hecho="examen_min">15</span> minutos.</li>
-      <li>Un asesor te escribe con tu nivel y tu curso.</li>
-      <li>Entrevista oral con un profesor, gratis y sin compromiso.</li>
-      <li>Eliges horario y plan, y empiezas.</li>
-    </ol>
-    <a class="m-btn" href="book_placement.html?src=landing-m-cierre">Haz tu examen de nivel gratis</a>
-    <a class="m-link" href="planes.html#contacto" style="margin-top:14px;justify-content:center"><span>¿Prefieres que te escribamos?</span><svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a>
   </section>
 
   <!-- Pie -->
@@ -2452,13 +2454,30 @@ html.bfp-open{overflow:hidden;}
     </div>
   </footer>
 
-  <!-- Barra de acción fija -->
-  <div class="m-dock">
-    <div class="m-dock__row">
-      <a class="m-btn" href="book_placement.html?src=landing-m-dock">Haz tu examen de nivel gratis</a>
-      <a class="m-dock__wa" href="https://wa.me/525535699899?text=Hola%2C%20vengo%20de%20vesperacademy.com%20y%20quiero%20informaci%C3%B3n%20sobre%20los%20cursos%20de%20ingl%C3%A9s." target="_blank" rel="noopener" aria-label="Escríbenos por WhatsApp"><svg class="i i--solid" aria-hidden="true"><use href="#i-whatsapp"/></svg></a>
+  <!-- Menú completo: sube desde abajo al tocar «Más». El WhatsApp que antes
+       vivía en la barra fija queda aquí y en el inicio. -->
+  <div class="m-sheet" id="m-sheet">
+    <div class="m-sheet__inner">
+      <a href="#m-cursos">Cursos</a>
+      <a href="como-funciona.html">Cómo funciona</a>
+      <a href="planes.html">Precios</a>
+      <a href="app.html">La app</a>
+      <a href="#m-contacto">Contacto</a>
+      <a class="m-sheet__wa web-only" href="https://wa.me/525535699899?text=Hola%2C%20vengo%20de%20vesperacademy.com%20y%20quiero%20informaci%C3%B3n%20sobre%20los%20cursos%20de%20ingl%C3%A9s." target="_blank" rel="noopener"><svg class="i i--solid" aria-hidden="true"><use href="#i-whatsapp"/></svg>Escríbenos por WhatsApp</a>
+      <a class="m-btn m-btn--ghost" href="login.html">Acceso alumnos</a>
     </div>
   </div>
+
+  <!-- Pestañas: la navegación fija, al alcance del pulgar. El botón del
+       examen baja a contorno mientras ya haya un botón dorado en pantalla
+       (un solo dorado por pantalla; vesper_mobile.js, sección 9). -->
+  <nav class="m-tabs" aria-label="Secciones">
+    <a href="#m-cursos" data-tab="m-cursos"><svg class="i" aria-hidden="true"><use href="#i-book"/></svg>Cursos</a>
+    <a href="#m-clases" data-tab="m-clases"><svg class="i" aria-hidden="true"><use href="#i-video"/></svg>Clases</a>
+    <a class="m-tabs__cta" href="book_placement.html?src=landing-m-tabs">Examen gratis</a>
+    <a href="#m-appx" data-tab="m-appx"><svg class="i" aria-hidden="true"><use href="#i-phone"/></svg>La app</a>
+    <button type="button" class="m-burger" id="m-burger" aria-controls="m-sheet" aria-expanded="false"><svg class="i" aria-hidden="true"><use href="#i-menu"/></svg>Más</button>
+  </nav>
 </div>
 
 <!-- ============================================================
@@ -2737,7 +2756,7 @@ html.bfp-open{overflow:hidden;}
   }catch(e){}
 })();
 </script>
-<script src="vesper_mobile.js" defer></script>
+<script src="vesper_mobile.js?v=d2b3103b" defer></script>
 <script src="vesper_contact.js" defer></script>
 
 
