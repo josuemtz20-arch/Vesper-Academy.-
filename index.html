@@ -1244,6 +1244,8 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
 .bf__in{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:0 22px;padding-top:3px;padding-bottom:3px;}
 .bf__msg{margin:0;}
 .bf__tag{margin-right:12px;font-weight:700;font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--star);}
+/* La frase en inglés (2026-11-12): azul claro, el color que en la app marca «esto es inglés». */
+.bf__en{margin-right:9px;font-family:var(--display);font-style:italic;font-weight:600;font-size:1.04em;color:#8fc6ff;}
 .bf__cta{display:inline-flex;align-items:center;gap:7px;min-height:44px;font-weight:700;color:var(--star);}
 .bf__cta span{border-bottom:1px solid color-mix(in srgb,var(--star) 55%,transparent);padding-bottom:2px;}
 .bf__cta:hover span{border-bottom-color:var(--star);}
@@ -1251,7 +1253,12 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
   color:rgba(245,242,235,.74);text-decoration:underline;text-underline-offset:3px;}
 .bf__more:hover{color:var(--cream);}
 .bf__cta:focus-visible,.bf__more:focus-visible{outline:3px solid var(--star);outline-offset:2px;border-radius:4px;}
-.bf__legal{flex-basis:100%;max-width:74ch;margin:0 auto 9px;text-align:center;font-size:.8rem;color:rgba(245,242,235,.84);}
+.bf__legal{max-width:74ch;margin:0 auto 9px;text-align:center;font-size:.8rem;color:rgba(245,242,235,.84);}
+/* Escritorio: una sola fila. Si el mensaje no cabe, se parte el TEXTO (centrado) y los
+   botones se quedan a la derecha; antes «Condiciones» caía solo a un segundo renglón. */
+.bf--d .bf__in{flex-wrap:nowrap;max-width:1360px;}
+.bf--d .bf__msg{min-width:0;padding:5px 0;text-align:center;text-wrap:balance;}
+.bf--d .bf__cta,.bf--d .bf__more{flex:none;white-space:nowrap;}
 @media (pointer: coarse) and (max-width: 820px){
   .bf--d{display:none !important;}
   #m-app .bf--m{padding:13px 20px 5px;font:400 14.5px/1.45 'Inter',sans-serif;color:#fff;}
@@ -1262,6 +1269,57 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
   #m-app .bf--m .bf__more{font-size:13px;}
   #m-app .bf--m .bf__legal{margin:0 0 9px;text-align:left;font-size:13px;color:rgba(255,255,255,.84);}
 }
+
+/* ===== AVISO BUEN FIN 2026, POP-UP (2026-11-12) =====
+   A pedido expreso del dueño («ponerlas en la página como pop up»): muestra
+   las tres láminas de la oferta. Es lo ÚNICO de la portada que flota sobre el
+   contenido, así que va con correa corta: una vez al día por navegador, solo
+   hasta el 17 de noviembre (mientras el examen cuenta), se cierra con la X,
+   con Esc, tocando fuera o con «Ahora no», y no sale en la app de tienda
+   (.web-only). Lo enciende el script «Franja Buen Fin 2026»; ?bfpop=1 lo
+   fuerza para probarlo. Vale para las dos ediciones (cuelga de <body>).
+   Los precios van DIBUJADOS en las imágenes (assets/images/promo/): si cambian
+   en #vesper-hechos antes del 30 de noviembre, hay que volver a exportarlas
+   (_marketing/buen_fin_2026/flyers/instagram.html).
+   Para retirarlo: borrar este bloque, #bf-pop y su parte del script. */
+.bfp{position:fixed;inset:0;z-index:1000;display:grid;place-items:center;padding:14px;
+  background:rgba(12,10,27,.8);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  opacity:0;transition:opacity .28s var(--ease-out);}
+.bfp[hidden],.bfp [hidden]{display:none !important;}
+.bfp.is-on{opacity:1;}
+html.bfp-open{overflow:hidden;}
+.bfp__box{position:relative;width:min(100%,460px,calc((100vh - 232px)*.8));width:min(100%,460px,calc((100svh - 232px)*.8));
+  background:var(--night);color:var(--cream);border:1px solid var(--hair);border-radius:20px;
+  box-shadow:0 30px 80px rgba(0,0,0,.55);transform:translateY(14px) scale(.98);transition:transform .32s var(--ease-out);}
+.bfp.is-on .bfp__box{transform:none;}
+.bfp__view{position:relative;border-radius:19px 19px 0 0;overflow:hidden;}
+.bfp__rail{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain;}
+.bfp__rail::-webkit-scrollbar{display:none;}
+.bfp__rail img{flex:0 0 100%;width:100%;height:auto;aspect-ratio:4/5;scroll-snap-align:center;display:block;}
+.bfp__x,.bfp__nav{position:absolute;display:grid;place-items:center;width:44px;height:44px;padding:0;border-radius:50%;
+  border:1px solid rgba(245,242,235,.3);background:rgba(12,10,27,.74);color:var(--cream);cursor:pointer;}
+.bfp__x{top:-22px;right:-8px;z-index:2;background:var(--night);border-color:var(--hair);}
+.bfp__x .i,.bfp__nav .i{font-size:1.15rem;}
+.bfp__pager{display:flex;align-items:center;justify-content:center;gap:16px;padding-top:6px;}
+.bfp__nav{position:static;border-color:transparent;background:none;}
+.bfp__nav--p .i{transform:rotate(180deg);}
+.bfp__nav[disabled]{opacity:.28;pointer-events:none;}
+@media (hover:none){.bfp__nav{display:none;}.bfp__pager{padding-top:12px;}}
+.bfp__dots{display:flex;justify-content:center;gap:7px;}
+.bfp__dots i{width:7px;height:7px;border-radius:50%;background:rgba(245,242,235,.36);}
+.bfp__dots i.on{background:var(--star);}
+.bfp__act{display:flex;flex-direction:column;align-items:center;padding:8px 16px 6px;}
+.bfp__when{margin:0 0 10px;font-size:.88rem;color:var(--star);text-align:center;}
+.bfp__go{width:100%;justify-content:center;}
+.bfp__no{min-height:44px;margin-top:2px;padding:0 12px;background:none;border:0;cursor:pointer;font:inherit;font-size:.86rem;
+  color:rgba(245,242,235,.76);text-decoration:underline;text-underline-offset:3px;}
+.bfp__no:hover{color:var(--cream);}
+.bfp__pad{height:10px;}
+.bfp :focus-visible{outline:3px solid var(--star);outline-offset:2px;}
+/* La regla global :focus-visible también cambia el border-radius: aquí se conserva. */
+.bfp .bfp__box:focus-visible{outline:none;border-radius:20px;}
+.bfp .bfp__x:focus-visible,.bfp .bfp__nav:focus-visible{border-radius:50%;}
+@media (prefers-reduced-motion: reduce){.bfp,.bfp__box{transition:none;}}
 </style>
 <script src="vesper_prefs.js"></script>
 <script src="vesper_analytics.js"></script>
@@ -1348,9 +1406,11 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
      .web-only: en la app de tienda no van precios ni promociones. -->
 <aside class="bf bf--d web-only" data-bf hidden aria-label="Promoción de Buen Fin">
   <div class="container bf__in">
-    <p class="bf__msg"><b class="bf__tag" data-bf-tag>Buen Fin · 13 al 17 de noviembre</b><span data-bf-msg>Tu segundo mes de inglés, a mitad de precio.</span></p>
+    <p class="bf__msg"><b class="bf__tag" data-bf-tag>Buen Fin · 13 al 17 de noviembre</b><i class="bf__en" lang="en">Half price!</i><span data-bf-msg>Tu segundo mes de inglés, a mitad de precio.</span></p>
     <a class="bf__cta" data-bf-cta href="book_placement.html?src=buenfin-franja"><span data-bf-cta-txt>Haz tu examen de nivel gratis</span><svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a>
     <button type="button" class="bf__more" aria-expanded="false" aria-controls="bf-legal-d">Condiciones</button>
+  </div>
+  <div class="container">
     <p class="bf__legal" id="bf-legal-d" hidden>Promoción para alumnos nuevos en los planes Grupal y Especializados. Haz tu examen de nivel del 13 al 17 de noviembre de 2026 e inscríbete a más tardar el 30 de noviembre de 2026: pagas completo tu primer mes y el segundo a mitad de precio. No acumulable con otras promociones.</p>
   </div>
 </aside>
@@ -2210,7 +2270,7 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
        .m-sheet es fixed a 56px del borde y, con algo arriba de la barra, el
        menú abierto taparía media barra. Misma lógica que la de escritorio. -->
   <aside class="bf bf--m web-only" data-bf hidden aria-label="Promoción de Buen Fin">
-    <p class="bf__msg"><b class="bf__tag" data-bf-tag>Buen Fin · 13 al 17 de noviembre</b><span data-bf-msg>Tu segundo mes de inglés, a mitad de precio.</span></p>
+    <p class="bf__msg"><b class="bf__tag" data-bf-tag>Buen Fin · 13 al 17 de noviembre</b><i class="bf__en" lang="en">Half price!</i><span data-bf-msg>Tu segundo mes de inglés, a mitad de precio.</span></p>
     <div class="bf__row">
       <a class="bf__cta" data-bf-cta href="book_placement.html?src=buenfin-franja-m"><span data-bf-cta-txt>Haz tu examen de nivel gratis</span><svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a>
       <button type="button" class="bf__more" aria-expanded="false" aria-controls="bf-legal-m">Condiciones</button>
@@ -2549,6 +2609,35 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
   });
 })();
 </script>
+
+<!-- Aviso Buen Fin 2026 (pop-up). Nace oculto; lo abre el script de abajo una vez
+     al día y solo hasta el 17 de noviembre. Las imágenes van con loading="lazy":
+     mientras está oculto no se descargan. .web-only: fuera de la app de tienda. -->
+<div class="bfp web-only" id="bf-pop" hidden>
+  <div class="bfp__box" role="dialog" aria-modal="true" tabindex="-1" aria-label="Promoción de Buen Fin: tu segundo mes de inglés, a mitad de precio">
+    <button type="button" class="bfp__x" data-bfp-close aria-label="Cerrar"><svg class="i" aria-hidden="true" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+    <div class="bfp__view">
+      <div class="bfp__rail" tabindex="0" aria-label="Tres láminas de la promoción; desliza para verlas">
+        <img src="assets/images/promo/buenfin26_1.webp" width="1080" height="1350" loading="lazy" decoding="async" alt="Buen Fin, del 13 al 17 de noviembre: tu segundo mes de inglés, a mitad de precio. Haz tu examen de nivel gratis del 13 al 17 de noviembre. Vesper, el gato de la escuela, sostiene una tarjeta que dice 50% OFF en una calle de Londres.">
+        <img src="assets/images/promo/buenfin26_2.webp" width="1080" height="1350" loading="lazy" decoding="async" alt="Así funciona. 1: haz tu examen de nivel, gratis, en línea, 15 minutos, del 13 al 17 de noviembre. 2: habla con un profesor en una entrevista oral, gratis y sin compromiso. 3: inscríbete antes del 30 y tu segundo mes va a mitad de precio.">
+        <img src="assets/images/promo/buenfin26_3.webp" width="1080" height="1350" loading="lazy" decoding="async" alt="Así queda tu pago en el plan Grupal: primer mes $2,500 y segundo mes $1,250 en vez de $2,500. En Especializados: $3,000 y $1,500. Promoción para alumnos nuevos en los planes Grupal y Especializados; examen de nivel del 13 al 17 de noviembre de 2026 e inscripción a más tardar el 30 de noviembre de 2026. No acumulable con otras promociones.">
+      </div>
+    </div>
+    <div class="bfp__pager">
+      <button type="button" class="bfp__nav bfp__nav--p" aria-label="Lámina anterior" disabled><svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+      <div class="bfp__dots" aria-hidden="true"><i class="on"></i><i></i><i></i></div>
+      <button type="button" class="bfp__nav bfp__nav--n" aria-label="Lámina siguiente"><svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></button>
+    </div>
+    <div class="bfp__act">
+      <p class="bfp__when" hidden>Empieza el viernes 13 de noviembre.</p>
+      <a class="btn btn-gold bfp__go" data-bfp-go href="book_placement.html?src=buenfin-popup">Haz tu examen de nivel gratis</a>
+      <button type="button" class="btn btn-gold bfp__go" data-bfp-ok data-bfp-close hidden>Entendido</button>
+      <button type="button" class="bfp__no" data-bfp-close>Ahora no</button>
+      <div class="bfp__pad" data-bfp-pad hidden></div>
+    </div>
+  </div>
+</div>
+
 <script>
 /* Franja Buen Fin 2026. Enciende los <aside data-bf> solo hasta el 30 de
    noviembre (hora de CDMX, UTC-6 fijo) y cambia el mensaje por fase:
@@ -2571,12 +2660,12 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
       var q = function(s){ return el.querySelector(s); }, cta = q('[data-bf-cta]');
       if (fase === 'pre'){
         q('[data-bf-tag]').textContent = 'Buen Fin · empieza el viernes 13';
-        q('[data-bf-msg]').textContent = 'Haz tu examen de nivel gratis del 13 al 17 de noviembre y tu segundo mes va a mitad de precio.';
+        q('[data-bf-msg]').textContent = 'Haz tu examen de nivel gratis del 13 al 17 de noviembre y tu segundo mes de inglés va a mitad de precio.';
         cta.hidden = true;
       }
       if (fase === 'cierre'){
         q('[data-bf-tag]').textContent = 'Buen Fin · cierra el 30';
-        q('[data-bf-msg]').textContent = '¿Hiciste tu examen del 13 al 17? Tu segundo mes va a mitad de precio.';
+        q('[data-bf-msg]').textContent = '¿Hiciste tu examen del 13 al 17? Tu segundo mes de inglés va a mitad de precio.';
         q('[data-bf-cta-txt]').textContent = 'Escríbenos por WhatsApp';
         cta.href = WA; cta.target = '_blank'; cta.rel = 'noopener';
       }
@@ -2588,6 +2677,63 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
       });
       el.hidden = false;
     });
+
+    /* ---- Pop-up (#bf-pop): solo mientras el examen cuenta (fases pre y buenfin)
+       y una vez al día por navegador. Antes del 13 no manda al examen: avisa y
+       se cierra con «Entendido». ?bfpop=1 lo abre aunque ya se haya visto hoy. ---- */
+    var pop = document.getElementById('bf-pop');
+    if (!pop || (fase !== 'pre' && fase !== 'buenfin')) return;
+    var HOY = new Date().toISOString().slice(0,10), CLAVE = 'vesper_bf_pop', visto = null;
+    try{ visto = localStorage.getItem(CLAVE); }catch(e){}
+    if (visto === HOY && !/[?&]bfpop=1\b/.test(location.search)) return;
+
+    var P = function(s){ return pop.querySelector(s); },
+        rail = P('.bfp__rail'), dots = pop.querySelectorAll('.bfp__dots i'),
+        prev = P('.bfp__nav--p'), next = P('.bfp__nav--n'), antes = null,
+        suave = window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
+    if (fase === 'pre'){
+      P('.bfp__when').hidden = false; P('[data-bfp-ok]').hidden = false; P('[data-bfp-pad]').hidden = false;
+      P('[data-bfp-go]').hidden = true; P('.bfp__no').hidden = true;
+    }
+    var pinta = function(){
+      var i = Math.round(rail.scrollLeft / (rail.clientWidth || 1));
+      dots.forEach(function(d, k){ d.classList.toggle('on', k === i); });
+      prev.disabled = i <= 0; next.disabled = i >= dots.length - 1;
+    };
+    var tecla = function(ev){
+      if (ev.key === 'Escape'){ cerrar(); return; }
+      if (ev.key !== 'Tab') return;
+      var f = [].filter.call(pop.querySelectorAll('a[href],button,[tabindex="0"]'), function(n){
+        return !n.disabled && n.offsetParent !== null;
+      });
+      if (!f.length) return;
+      if (ev.shiftKey && document.activeElement === f[0]){ ev.preventDefault(); f[f.length-1].focus(); }
+      else if (!ev.shiftKey && document.activeElement === f[f.length-1]){ ev.preventDefault(); f[0].focus(); }
+    };
+    function cerrar(){
+      pop.classList.remove('is-on'); pop.hidden = true;
+      document.documentElement.classList.remove('bfp-open');
+      document.removeEventListener('keydown', tecla);
+      if (antes && antes.focus && antes !== document.body) antes.focus({preventScroll:true});
+    }
+    rail.addEventListener('scroll', pinta, {passive:true});
+    prev.addEventListener('click', function(){ rail.scrollBy({left:-rail.clientWidth, behavior:suave}); });
+    next.addEventListener('click', function(){ rail.scrollBy({left: rail.clientWidth, behavior:suave}); });
+    pop.addEventListener('click', function(ev){
+      if (ev.target === pop || ev.target.closest('[data-bfp-close]')) cerrar();
+    });
+    setTimeout(function(){
+      try{
+        antes = document.activeElement;
+        pop.hidden = false;
+        document.documentElement.classList.add('bfp-open');
+        void pop.offsetWidth;                 /* para que la transición arranque */
+        pop.classList.add('is-on'); pinta();
+        document.addEventListener('keydown', tecla);
+        P('.bfp__box').focus({preventScroll:true});
+        try{ localStorage.setItem(CLAVE, HOY); }catch(e){}
+      }catch(e){}
+    }, 900);
   }catch(e){}
 })();
 </script>
