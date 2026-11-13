@@ -72,7 +72,7 @@ svg.ov{position:absolute;overflow:visible;pointer-events:none}
 .check svg{width:58px;height:58px}
 .xbad{position:absolute;width:62px;height:62px;box-shadow:0 6px 18px rgba(229,72,77,.45);border-radius:50%;background:var(--red2);display:inline-flex;align-items:center;justify-content:center}
 /* subtitles */
-#sub{position:absolute;left:64px;right:130px;top:1036px;height:130px;display:flex;flex-wrap:wrap;justify-content:center;align-content:flex-start;gap:0 16px;font-weight:800;font-size:46px;letter-spacing:.05em;text-transform:uppercase;color:#fff;text-shadow:0 3px 14px rgba(0,0,0,.6);line-height:1.18}
+#sub{position:absolute;left:64px;right:130px;top:1036px;height:130px;display:flex;flex-wrap:wrap;justify-content:center;align-content:flex-start;gap:0 16px;font-weight:800;font-size:50px;letter-spacing:.05em;text-transform:uppercase;color:#fff;text-shadow:0 3px 14px rgba(0,0,0,.6);line-height:1.18}
 #sub span{opacity:0}
 #sub .g{color:var(--gold2)} #sub .r{color:var(--red)}
 /* cat */
@@ -91,8 +91,8 @@ svg.ov{position:absolute;overflow:visible;pointer-events:none}
 <body><div id="stage">
 <div id="violet"></div><div id="stars"></div><div id="halo"></div>
 <div id="hdr"><span id="series"></span><span class="lv" id="lv"></span></div>
-<div id="cam"><div id="scenes"></div>
-<div id="catbox"><div id="cat"></div></div></div>
+<div id="scenes"></div>
+<div id="cam"><div id="catbox"><div id="cat"></div></div></div>
 <div id="sub"></div>
 </div>
 <script>
@@ -165,7 +165,7 @@ const subEl=document.getElementById('sub'); const subs=[];
   subs.push({ws,start:c.start-0.05,end:Math.min(c.end+0.9,next?next.start-0.05:1e9),i}); });
 let curSub=-1;
 function renderSub(t){ const k=subs.findIndex(s=>t>=s.start&&t<s.end); if(k!==curSub){ curSub=k; subEl.innerHTML=''; if(k>=0) subs[k].ws.forEach(w=>{const s=document.createElement('span'); s.textContent=w.w; if(w.cls) s.className=w.cls; subEl.appendChild(s);}); }
-  if(k>=0){ const s=subs[k]; const PG=7; let pg=0; s.ws.forEach((w,j)=>{ if(j%PG===0 && t>=w.t-0.02) pg=Math.floor(j/PG); });
+  if(k>=0){ const s=subs[k]; const PG=Math.ceil(s.ws.length/Math.ceil(s.ws.length/7)); let pg=0; s.ws.forEach((w,j)=>{ if(j%PG===0 && t>=w.t-0.02) pg=Math.floor(j/PG); });
     [...subEl.children].forEach((el,j)=>{ const inPg=Math.floor(j/PG)===pg; const p=cl((t-s.ws[j].t)/.12); el.style.display=inPg?'':'none'; el.style.opacity=p; el.style.transform=`translateY(${(1-p)*10}px) scale(${.92+.08*p})`; }); } }
 /* cat */
 const catEl=document.getElementById('cat'); const IM={};
@@ -224,7 +224,7 @@ window.render=function(t){
     if(r.stick){ const w=r.el.offsetWidth, h=r.el.offsetHeight; r.stick.style.left=(r.el.offsetLeft+p*w-6)+'px'; r.stick.style.top=(r.el.offsetTop+h*0.62-86+Math.sin(t*38)*7)+'px'; r.stick.style.opacity=(!window.COVER&&t>=r.a-0.12&&t<r.b+0.2)?1:0; } }
   for(const d of draws){ const p=ease(cl((t-d.a)/(d.b-d.a))); d.el.querySelectorAll('path,ellipse,line,polyline').forEach(x=>x.style.strokeDashoffset=1-p); }
   for(const c of circles){ c.p.style.strokeDashoffset=1-ease(cl((t-c.a)/(c.b-c.a))); c.svg.style.visibility=t>=c.a?'visible':'hidden'; }
-  renderSub(t); renderCat(t); const zk=renderCam(t); if(zk>0) document.getElementById('hdr').style.opacity=(1-ve)*(1-cl(zk/0.03));
+  renderSub(t); renderCat(t); renderCam(t);
 };
 document.fonts.ready.then(()=>{ setupCircles(); window.READY=true; window.render(0); });
 </script></body></html>

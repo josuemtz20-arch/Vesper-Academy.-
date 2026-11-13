@@ -22,18 +22,18 @@
         <div class="tile"><img src="{IMG}/mascot/skins/calico.png"><span class="you">Tú</span></div></div>
       <div class="bubble bad" style="left:-30px;top:-120px" data-in="L1-0.05" data-anim="pop"><span data-type="L1">I lost my flight!</span></div>
     </div>`},
-  {start:'L2-0.2',end:'L4-0.2',html:`
+  {start:'L2-0.35',end:'L4-0.2',html:`
     <div style="position:relative;width:100%;height:100%">
       <div class="big md" style="position:absolute;left:0;right:0;top:20px" data-type="L2-0.05~L2+0.3" data-nocaret>I <span data-circle="L2+0.4~L2+0.9">lost</span> my flight</div>
-      <div class="hand" style="position:absolute;left:0;right:0;top:170px;font-size:60px;color:#E6CD82" data-hand="L2%0.35~L2e">= ¿y dónde quedó el avión?</div>
+      <div class="hand" style="position:absolute;left:0;right:0;top:170px;font-size:70px;color:#E6CD82" data-hand="L2%0.35~L2e">= ¿y dónde quedó el avión?</div>
       <div style="position:absolute;left:0;right:0;top:310px;display:flex;justify-content:center"><div class="stamp" data-stamp="L3+0.05">LOSE = OBJETOS</div></div>
-      <div class="hand" style="position:absolute;left:0;right:0;top:450px;font-size:62px;color:#F4EEDC" data-hand="L3%0.55~L3e">I lost my <span style="color:#E6CD82">passport</span> / my <span style="color:#E6CD82">keys</span></div>
+      <div class="hand" style="position:absolute;left:0;right:0;top:450px;font-size:70px;color:#F4EEDC" data-hand="L3%0.55~L3e">I lost my <span style="color:#E6CD82">passport</span> / my <span style="color:#E6CD82">keys</span></div>
     </div>`},
   {start:'L4-0.2',end:'L5-0.15',html:`
     <div class="board"><span class="lvl">A2</span>
       <div class="chalk sm" data-chalk="L4-0.2~L4+0.4">‘I <span data-strike="L4+0.45~L4+0.75">lost</span> my flight.’</div>
       <svg width="60" height="70" viewBox="0 0 60 70" data-draw="L4+0.75~L4+0.95"><path d="M30 4 L30 60 M14 44 L30 62 L46 44" fill="none" stroke="#F1EFE6" stroke-width="5" stroke-linecap="round"/></svg>
-      <div class="chalk md" data-chalk="L4+0.95~L4e">vuelo · tren · junta = <span class="g" data-under="L4e~L4e+0.3">miss</span></div>
+      <div class="chalk md" data-chalk="L4+0.95~L4e-0.35">vuelo · tren · junta = <span class="g" data-under="L4e-0.35~L4e-0.05">miss</span></div>
     </div>`},
   {start:'L5-0.15',end:'L6+0.5',html:`
     <div style="position:relative;margin-top:90px">
@@ -45,8 +45,9 @@
     </div>`},
   {start:'L6+0.5',end:'L8-0.25',html:`
     <div class="paper"><div class="tape"></div>
-      <div class="row title" data-hand="L6+0.5~L6e">Si no llegaste a la junta:</div>
-      <div class="row" data-hand="L7~L7e"><span class="en">“Sorry, I missed the meeting.”</span></div>
+      <div class="row" data-hand="L6+0.5~L6+0.9"><span class="es">el vuelo</span><span class="arr">→</span><span class="en">I missed my flight.</span></div>
+      <div class="row title" data-hand="L6+0.9~L6e+0.1">Si no llegaste a la junta:</div>
+      <div class="row" data-hand="L7~L7e-0.3"><span class="en">“Sorry, I missed the meeting.”</span></div>
     </div>`},
   {start:'L8-0.25',end:'END',cls:'end',html:`
     <img class="crest" src="{IMG}/va_crest_cream.png" data-in="L8-0.25" data-anim="pop">

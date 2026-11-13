@@ -2,7 +2,7 @@
 
 Formato: 1080×1920, 23–28 s, voz de Julian con motor MiniMax (Higgsfield `text2speech_v2`), una frase por petición.
 
-Todos siguen `skills/vesper-content-engine/reference/estandar-reels.md`:
+Todos siguen `skill/reference/estandar-reels.md`:
 - **Vesper:** grande, habla y parpadea.
 - **Texto:** se escribe al ritmo de la voz (tecleo, gis o escritura a mano).
 - **Escenario:** ventana de junta → frase con «casi…» y círculo → sello → pizarrón → cuaderno → cierre violeta.
@@ -12,7 +12,7 @@ Todos siguen `skills/vesper-content-engine/reference/estandar-reels.md`:
 
 ---
 
-## 01 · assist → attend (A2) · `reel01_attend.mp4`
+## 01 · assist → attend (A2) · `entrega/reel01_attend.mp4`
 
 | Beat | Voz | Escenario | Vesper |
 |---|---|---|---|
@@ -20,7 +20,7 @@ Todos siguen `skills/vesper-content-engine/reference/estandar-reels.md`:
 | Error | *I assisted the meeting.* | Globo rojo se escribe | sorprendido |
 | Casi | Casi… Así suena a que ayudaste en la junta. | «I assisted the meeting», círculo rojo en *assisted*, «casi…» | preocupado |
 | Regla | Parece «asistir», pero assist significa ayudar. | Sello PARECE, PERO NO + «assist = ayudar» | explicando |
-| Corrección | Para decir que fuiste, usa attend. *I attended the meeting.* | Pizarrón con gis + ✓ | señala → pulgar arriba |
+| Corrección | Para decir que fuiste, usa attend. *I attended the meeting.* | Pizarrón con tachado y ✕ → regreso a la llamada con la frase correcta, ✓ y «¡ESO!» | señala → pulgar arriba |
 | Úsalo | Igual con una clase o un evento: *I attended a conference.* | Cuaderno: attend a class / an event / a conference | explicando → señala |
 | Cierre | Haz tu examen de nivel gratis. Link en bio. Speak Better, Speak Vesper. | Cierre fijo | saluda |
 
@@ -38,7 +38,7 @@ Assist = ayudar · Asistir a algo = attend
 #InglesParaElTrabajo #AprendeIngles #FalsosAmigos #InglesDeNegocios #VesperAcademy
 ```
 
-## 02 · since + present perfect (B1) · `reel02_since.mp4`
+## 02 · since + present perfect (B1) · `entrega/reel02_since.mp4`
 
 **Voz:**
 1. En tu entrevista te preguntan cuánto tiempo llevas en tu trabajo, y dices: *I work here since 2021.*
@@ -60,12 +60,12 @@ En inglés, si empezó antes y sigue hoy → present perfect:
 
 Since = desde cuándo · For = cuánto tiempo
 
-¿Lista tu próxima entrevista? Haz tu examen de nivel gratis 👉 link en bio
+¿Tienes entrevista pronto? Haz tu examen de nivel gratis 👉 link en bio
 
 #InglesParaEntrevistas #AprendeIngles #InglesParaElTrabajo #GramaticaInglesa #VesperAcademy
 ```
 
-## 03 · actually → currently (A2) · `reel03_actually.mp4`
+## 03 · actually → currently (A2) · `entrega/reel03_actually.mp4`
 
 **Voz:**
 1. En una junta, te presentas así: *Actually, I work in sales.*
@@ -88,7 +88,7 @@ Un detalle así cambia cómo te escuchan en una junta. Haz tu examen de nivel gr
 #FalsosAmigos #AprendeIngles #InglesParaElTrabajo #InglesProfesional #VesperAcademy
 ```
 
-## 04 · lose → miss (A2) · `reel04_missed.mp4`
+## 04 · lose → miss (A2) · `entrega/reel04_missed.mp4`
 
 **Voz:**
 1. ¿Te pasó en el aeropuerto? *I lost my flight.*

@@ -22,18 +22,20 @@
         <div class="tile"><img src="{IMG}/mascot/skins/calico.png"><span class="you">Tú</span></div></div>
       <div class="bubble bad" style="left:-30px;top:-120px;font-size:58px" data-in="L1-0.05" data-anim="pop"><span data-type="L1">I work here since 2021.</span></div>
     </div>`},
-  {start:'L2-0.2',end:'L3-0.2',html:`
+  {start:'L2-0.35',end:'L3-0.2',html:`
     <div style="position:relative;width:100%;height:100%">
       <div class="big md" style="position:absolute;left:0;right:0;top:10px" data-type="L2-0.05~L2+0.35" data-nocaret>I <span data-circle="L2+0.4~L2+0.9">work</span> here since 2021</div>
       <div class="anno red" style="left:10px;top:-58px;transform:rotate(-8deg)" data-hand="L2+0.1~L2+0.6">casi…</div>
-      <div class="hand" style="position:absolute;left:0;right:0;top:250px;font-size:58px;color:#E6CD82" data-hand="L2%0.4~L2e">español: presente · inglés: no</div>
+      <div class="hand" style="position:absolute;left:0;right:0;top:250px;font-size:72px;color:#F4EEDC" data-hand="L2%0.3~L2%0.6">«Trabajo aquí desde 2021»</div>
+      <div class="hand" style="position:absolute;left:0;right:0;top:350px;font-size:60px;color:#E6CD82" data-hand="L2%0.6~L2%0.8">español: presente ✓</div>
+      <div style="position:absolute;left:0;right:0;top:470px;display:flex;justify-content:center"><div class="stamp" data-stamp="L2%0.88">EN INGLÉS, NO</div></div>
     </div>`},
   {start:'L3-0.2',end:'L4-0.15',html:`
     <div class="board"><span class="lvl">B1</span>
       <div class="chalk sm" data-chalk="L3-0.2~L3+0.45">‘I <span data-strike="L3+0.5~L3+0.8">work</span> here since 2021.’</div>
       <svg width="60" height="70" viewBox="0 0 60 70" data-draw="L3+0.8~L3+1.0"><path d="M30 4 L30 60 M14 44 L30 62 L46 44" fill="none" stroke="#F1EFE6" stroke-width="5" stroke-linecap="round"/></svg>
       <div class="chalk md" style="font-size:78px" data-chalk="L3+1.0~L3%0.62">empezó antes + <span class="g">sigue hoy</span></div>
-      <div style="margin-top:44px"><div class="stamp" data-stamp="L3%0.68">PRESENT PERFECT</div></div>
+      <div style="margin-top:44px"><div class="stamp" data-stamp="L3%0.78">PRESENT PERFECT</div></div>
     </div>`},
   {start:'L4-0.15',end:'L5+0.5',html:`
     <div style="position:relative;margin-top:90px">
@@ -49,7 +51,7 @@
       <div class="row" data-hand="L5%0.75~L5e+0.25"><span class="en">since</span><span class="arr">→</span><span class="es">inicio:</span><span class="en">since 2021</span></div>
       <div class="row" data-hand="L6"><span class="en">for</span><span class="arr">→</span><span class="es">duración:</span><span class="en">for five years</span></div>
       <div class="row" data-hand="L7~L7%0.6"><span class="en">I’ve been working here</span></div>
-      <div class="row" data-hand="L7%0.55~L7e"><span class="en">for five years.</span></div>
+      <div class="row" data-hand="L7%0.55~L7e-0.3"><span class="en">for five years.</span></div>
     </div>`},
   {start:'L8-0.25',end:'END',cls:'end',html:`
     <img class="crest" src="{IMG}/va_crest_cream.png" data-in="L8-0.25" data-anim="pop">

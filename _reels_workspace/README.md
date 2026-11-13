@@ -22,23 +22,14 @@ for r in r1 r2 r3 r4; do python3 $E/env.py out/$r.wav out/$r.json; node $E/rende
 ```
 Portadas sin cursor ni parpadeo: `COVER=1 ONLY=<t> node $E/render.js ...` con t = inicio de la frase 2 − 0.3 s.
 
-## Estado (13 nov 2026)
+## Estado (13 nov 2026, sesión 2)
 Hecho:
-- 4 reels con el estándar v3 y voz MiniMax.
-- Revisión de Fable aplicada.
-- «Falso amigo» cambiado por «Parece, pero no».
-- Set de Vesper de busto (9 poses) y de cuerpo completo (6 poses).
+- 4 reels con estándar v3 + las 8 mejoras de Fable (pizarrón/cuaderno ≈930 px, sin hueco escenario–subtítulos, zoom solo al gato, gis visible, tachado con ✕, regreso a la llamada con ✓ y «¡ESO!», sin doble gato, círculo tras el tecleo).
+- Segunda revisión de Fable aplicada: desborde del cuaderno de r1, zoom que subía texto a y<250, respuestas que se borraban al terminar de escribirse, huecos de r2 (escena «casi…») y r4 (cuaderno), subtítulos en páginas equilibradas a 50 px.
+- MP4 y portadas en `entrega/` (no versionados: se regeneran con los comandos de arriba).
 
 Pendiente:
 1. Josue debe escuchar los 4 reels con la voz MiniMax y aprobar el audio.
-2. Mejoras que Fable marcó frente a las referencias (WA0042/WA0044):
-   - pizarrón y cuaderno más grandes;
-   - quitar el hueco entre el escenario y los subtítulos;
-   - acercamiento (zoom) al gato en momentos clave;
-   - borrador o gis visible al corregir;
-   - ✕ con tachado;
-   - regresar a la videollamada con la frase correcta y «¡ESO!»;
-   - quitar el cuadro de doble gato al pasar al cierre;
-   - el círculo rojo debe aparecer solo cuando termina el tecleo.
-3. Revisión final con Fable y entrega. No publicar nada sin confirmación explícita de Josue.
-4. Subir `skill/vesper-content-engine` como nueva versión de la skill: lo hace Josue en claude.ai.
+2. Menores sin atender: portadas débiles para la cuadrícula (sin titular grande), r4 dura 23.9 s (estándar 25–30), «Check-in · Vuelo 482» como videollamada es raro (mejor boarding pass), r3 quizá es B1 y no A2.
+3. No publicar nada sin confirmación explícita de Josue.
+4. Subir `skill/` como nueva versión de la skill `vesper-content-engine`: lo hace Josue en claude.ai.

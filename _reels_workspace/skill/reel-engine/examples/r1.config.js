@@ -23,7 +23,7 @@
         <div class="tile"><img src="{IMG}/mascot/skins/calico.png"><span class="you">Tú</span></div></div>
       <div class="bubble bad" style="left:-30px;top:-120px" data-in="L1-0.05" data-anim="pop"><span data-type="L1">I assisted the meeting!</span></div>
     </div>`},
-  {start:'L2-0.2',end:'L4-0.2',html:`
+  {start:'L2-0.35',end:'L4-0.2',html:`
     <div style="position:relative;width:100%;height:100%">
       <div class="big md" style="position:absolute;left:0;right:0;top:10px" data-type="L2-0.05~L2+0.35" data-nocaret>I <span data-circle="L2+0.4~L2+0.9">assisted</span> the meeting</div>
       <div class="anno red" style="left:10px;top:-58px;transform:rotate(-8deg)" data-hand="L2+0.1~L2+0.6">casi…</div>
@@ -35,7 +35,7 @@
     <div class="board"><span class="lvl">A2</span>
       <div class="chalk sm" data-chalk="L4-0.2~L4+0.45">‘I <span data-strike="L4+0.5~L4+0.8">assisted</span> the meeting.’</div>
       <svg width="60" height="70" viewBox="0 0 60 70" data-draw="L4+0.8~L4+1.0"><path d="M30 4 L30 60 M14 44 L30 62 L46 44" fill="none" stroke="#F1EFE6" stroke-width="5" stroke-linecap="round"/></svg>
-      <div class="chalk md" data-chalk="L4+1.0~L4e">ir a la junta = <span class="g" data-under="L4e~L4e+0.3">attend</span></div>
+      <div class="chalk md" data-chalk="L4+1.0~L4e-0.35">ir a la junta = <span class="g" data-under="L4e-0.35~L4e-0.05">attend</span></div>
     </div>`},
   {start:'L5-0.15',end:'L6+0.5',html:`
     <div style="position:relative;margin-top:90px">
@@ -50,7 +50,7 @@
       <div class="row title" data-hand="L6+0.5~L6%0.8">Úsalo igual con <span class="g">eventos</span>:</div>
       <div class="row" data-hand="L6%0.8~L6e+0.25"><span class="es">una clase</span><span class="arr">→</span><span class="en">attend a class</span></div>
       <div class="row" data-hand="L6e~L7+0.1"><span class="es">un evento</span><span class="arr">→</span><span class="en">attend an event</span></div>
-      <div class="row" data-hand="L7~L7e"><span class="es">congreso</span><span class="arr">→</span><span class="en">I attended a conference.</span></div>
+      <div class="row" data-hand="L7~L7e-0.3"><span class="en">I attended a conference.</span></div>
     </div>`},
   {start:'L8-0.25',end:'END',cls:'end',html:`
     <img class="crest" src="{IMG}/va_crest_cream.png" data-in="L8-0.25" data-anim="pop">
