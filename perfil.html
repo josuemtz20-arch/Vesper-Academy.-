@@ -92,6 +92,7 @@ footer a{color:var(--gold);text-decoration:none;}
      del <style> de la pagina su :root quedaba ANTES y la pagina ganaba.
      El motor de temas estaba inerte aqui: elegir tema no hacia nada. -->
 <script src="vesper_theme.js"></script>
+<script src="vesper_progress.js"></script>
 </head>
 <body>
 
@@ -183,11 +184,17 @@ footer a{color:var(--gold);text-decoration:none;}
   }
 
   /* Progreso (desde el store local de las lecciones) */
-  var prog = {};
-  try{ prog = JSON.parse(localStorage.getItem("vesperProgress")||"{}")||{}; }catch(e){}
+  /* VesperProgress da la racha VIVA (0 si ya se perdió; 2026-11-12) y las
+     lecciones sin contar repasos, jefes, exámenes ni escudos gastados. */
+  var prog = {}, done = 0;
+  try{
+    if (window.VesperProgress) prog = VesperProgress.getState() || {};
+    else prog = JSON.parse(localStorage.getItem("vesperProgress")||"{}")||{};
+  }catch(e){}
+  for (var ck in (prog.completed || {})) { if (!/^(review|boss|exam|shield):/.test(ck)) done++; }
   document.getElementById("s-xp").textContent = prog.xp || 0;
   document.getElementById("s-streak").textContent = prog.streak || 0;
-  document.getElementById("s-done").textContent = prog.completed ? Object.keys(prog.completed).length : 0;
+  document.getElementById("s-done").textContent = done;
 
   /* Cuenta: refleja la sesión de Firebase (si la hay). Modo libre si no. */
   var st = document.getElementById("acct-st");

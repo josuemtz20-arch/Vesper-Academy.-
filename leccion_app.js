@@ -358,9 +358,11 @@
     /* La liga compite contra rivales simulados: antes de la primera lección
        el "15º Bronce" solo confundía. Sale cuando ya hay XP. */
     if ((st.xp || 0) > 0) tiles += '<span id="leagueTile" hidden></span>';
-    if (st.shields || 0) {
+    /* escudos DISPONIBLES (los gastados ya no cuentan; vesper_progress.js 2026-11-12) */
+    var shLeft = (st.shieldsLeft != null) ? st.shieldsLeft : (st.shields || 0);
+    if (shLeft) {
       tiles += '<div class="hstat"><span class="hstat__ic">' + HUB_ICN.shield + '</span>'
-        + '<span class="hstat__tx"><span class="hstat__v">' + st.shields + '</span><span class="hstat__l">Escudos</span></span></div>';
+        + '<span class="hstat__tx"><span class="hstat__v">' + shLeft + '</span><span class="hstat__l">Escudos</span></span></div>';
     }
     var idLine = info.band
       ? '<span class="hub-lvl">Nivel ' + esc(info.band) + (info.bandTag ? ' · ' + esc(info.bandTag) : '') + '</span>'
@@ -5506,16 +5508,25 @@
       ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"]);
     /* el hilo de la constelación va del primer día de esta racha a hoy (la
        última casilla); si la racha viene de antes de la semana, entra desde el borde */
-    var n7 = grid.length || 7, startIx = Math.max(0, n7 - streak), fromEdge = streak > n7;
+    /* ESCUDOS (2026-11-12): un día cubierto por escudo es parte del hilo (lleva
+       el escudo en vez de la estrella), así que el tramo se mide caminando
+       hacia atrás desde hoy, no restando la racha. */
+    var n7 = grid.length || 7, run = 0, runAct = 0;
+    for (var gi = n7 - 1; gi >= 0 && grid[gi]; gi--) {
+      if (grid[gi].isToday || grid[gi].active || grid[gi].shield) { run++; if (!grid[gi].shield) runAct++; } else break;
+    }
+    if (!grid.length) { run = Math.min(streak, 7); runAct = run; }
+    var startIx = Math.max(0, n7 - run), fromEdge = run >= n7 && streak > runAct;
+    var usedSh = info.shieldsUsed || 0;
     var x0 = fromEdge ? 0 : (startIx + 0.5) / n7 * 100, x1 = (n7 - 0.5) / n7 * 100;
     var thread = (grid.length && x1 - x0 > 1) ? '<div class="rs-thread" style="left:' + x0.toFixed(2) + '%;width:' + (x1 - x0).toFixed(2) + '%"></div>' : '';
     var cells = grid.map(function (d, i) {
       var wd = 0; try { var p = String(d.key).split("-"); wd = new Date(+p[0], +p[1] - 1, +p[2]).getDay(); } catch (e) {}
-      var cls = d.isToday ? "on today" : (d.active ? "on" : "off");
-      var delay = d.active && !d.isToday ? ' style="animation-delay:' + (0.45 + i * 0.1).toFixed(2) + 's"' : '';
-      return '<li class="rs-day ' + cls + '"><span class="rs-dot" aria-hidden="true"' + delay + '>' + (d.isToday ? RS_FLAME : RS_STAR) + '</span>'
+      var cls = d.isToday ? "on today" : (d.active ? "on" : (d.shield ? "shield" : "off"));
+      var delay = (d.active || d.shield) && !d.isToday ? ' style="animation-delay:' + (0.45 + i * 0.1).toFixed(2) + 's"' : '';
+      return '<li class="rs-day ' + cls + '"><span class="rs-dot" aria-hidden="true"' + delay + '>' + (d.isToday ? RS_FLAME : (d.shield && !d.active ? RS_SHIELD : RS_STAR)) + '</span>'
         + '<span class="rs-lab" aria-hidden="true">' + (d.isToday ? T("Hoy", "Today") : LAB.charAt(wd)) + '</span>'
-        + '<span class="sr-only">' + (d.isToday ? T("hoy", "today") : WDAY[wd]) + (d.active ? T(": practicaste", ": you practised") : "") + '</span></li>';
+        + '<span class="sr-only">' + (d.isToday ? T("hoy", "today") : WDAY[wd]) + (d.active ? T(": practicaste", ": you practised") : (d.shield ? T(": te cubrió un escudo", ": a shield covered you") : "")) + '</span></li>';
     }).join("");
     var animNum = info.isNewDay && streak > 1 && !reduceMotion();
     var unit = T(streak === 1 ? "día de racha" : "días de racha", "day streak");
@@ -5530,15 +5541,20 @@
       + '<div class="rs-disc"><img src="assets/images/mascot/vesper_cat_streak.webp" width="128" height="128" alt="'
       + T("Vesper levanta el puño, orgulloso", "Vesper raises a proud fist") + '"></div>'
       + '<span class="rs-flame" aria-hidden="true">' + RS_FLAME + '</span></div>'
-      + '<p class="rs-ey">' + (first1 ? T("Racha nueva", "New streak") : T("Racha salvada", "Streak saved")) + '</p>'
+      + '<p class="rs-ey">' + (first1 ? T("Racha nueva", "New streak")
+          : usedSh ? T(usedSh === 1 ? "Un escudo salvó tu racha" : usedSh + " escudos salvaron tu racha",
+                       usedSh === 1 ? "A shield saved your streak" : usedSh + " shields saved your streak")
+          : T("Racha salvada", "Streak saved")) + '</p>'
       + '<h1 id="rs-h"><span class="rs-num" id="rs-num" aria-hidden="true">' + (animNum ? streak - 1 : streak) + '</span>'
       + '<span class="sr-only">' + streak + ' </span>' + unit + '</h1>'
-      + '<p class="rs-say">' + (first1 ? T("¡Empezaste tu racha!", "You started your streak!") : T("¡Tu racha sigue viva!", "Your streak is alive!")) + '</p>'
+      + '<p class="rs-say">' + (first1 ? T("¡Empezaste tu racha!", "You started your streak!")
+          : usedSh ? T("¡Te cuidé la racha!", "I kept your streak safe!")
+          : T("¡Tu racha sigue viva!", "Your streak is alive!")) + '</p>'
       + (grid.length ? '<div class="rs-week" role="group" aria-label="' + T("Tu semana", "Your week") + '">' + thread
           + '<ol class="rs-days">' + cells + '</ol>'
           + '<p class="rs-week-note">' + T("Vuelve mañana y suma el día " + (streak + 1) + ".", "Come back tomorrow for day " + (streak + 1) + ".") + '</p></div>' : '')
       + strip
-      + (info.milestone ? '<div class="milestone">' + ic('trophy') + ' ' + T("¡Nuevo escudo de racha!", "New streak shield!") + '</div>' : '')
+      + (info.milestone ? '<div class="milestone">' + ic('trophy') + ' ' + T("¡Nuevo escudo de racha! Cubre un día que no puedas practicar.", "New streak shield! It covers a day you can't practise.") + '</div>' : '')
       + achHtml
       + cosHtml
       + (hasNext ? '<button class="btn btn-gold" id="nextL">' + T("Siguiente lección", "Next lesson") + ' &rarr;</button>'

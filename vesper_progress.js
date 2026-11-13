@@ -14,6 +14,14 @@
  *   ACHIEVEMENTS / CATEGORIES        -> catalog [{ id, cat, tier, metric, goal, name, desc }]
  * Streak = consecutive calendar days with >=1 completed lesson.
  * A shield is earned every 7 days of streak (milestone).
+ * ESCUDOS QUE SÍ SALVAN (2026-11-12): al volver tras faltar N días, si quedan
+ * N escudos se gastan (uno por día) y la racha sigue. `shields` guarda los
+ * escudos GANADOS en total y nunca baja (las reglas de Firestore lo exigen:
+ * progressNoLoss); cada escudo gastado se anota como
+ * completed["shield:<día cubierto>"] = <día en que se gastó>, que las reglas ya
+ * aceptan y que el merge une. Disponibles = ganados − gastados (shieldsLeft()).
+ * getState() devuelve además shieldsLeft y la racha VIVA en `streak` (0 si ya
+ * se perdió), con la guardada en `savedStreak`.
  * Optional cloud sync (when logged in) is a no-op-safe hook for later.
  * ============================================================ */
 window.VesperProgress = (function () {
@@ -147,23 +155,65 @@ window.VesperProgress = (function () {
     try { localStorage.setItem(KEY, JSON.stringify(s)); } catch (e) { /* private mode / quota: degrade silently */ }
   }
 
-  function getState() { return load(); }
+  /* Días cubiertos por un escudo: { "2026-11-10": true, … } */
+  var SHIELD_PFX = "shield:";
+  function coveredDays(s) {
+    var out = {};
+    for (var k in (s.completed || {})) if (k.indexOf(SHIELD_PFX) === 0) out[k.slice(SHIELD_PFX.length)] = true;
+    return out;
+  }
+  function shieldsLeft(s) {
+    var used = 0;
+    for (var k in (s.completed || {})) if (k.indexOf(SHIELD_PFX) === 0) used++;
+    return Math.max(0, (s.shields || 0) - used);
+  }
+  /* Racha que el alumno tiene HOY, antes de practicar: la guardada si practicó
+     hoy o ayer, o si los días que faltó los cubre "congelar racha" o los
+     escudos que le quedan (se gastarán al terminar la próxima lección); si no, 0. */
+  function liveStreak(s) {
+    if (!s.lastDay) return 0;
+    var dd = dayDiff(s.lastDay, dayKey());
+    if (dd <= 1) return s.streak || 0;
+    if (freezeStreakOn() || shieldsLeft(s) >= dd - 1) return s.streak || 0;
+    return 0;
+  }
+
+  /* Estado para pintar. Ojo: vesper_sync.js sube lo que devuelve esto, así que
+     `shields` sigue siendo el total ganado (nunca baja); los extras no se suben. */
+  function getState() {
+    var s = load();
+    s.savedStreak = s.streak || 0;
+    s.streak = liveStreak(s);
+    s.shieldsLeft = shieldsLeft(s);
+    return s;
+  }
 
   function addXp(n) { var s = load(); s.xp += (n || 0); save(s); return s.xp; }
 
   /* nº de lecciones reales completadas (excluye repasos "review:...", jefes "boss:..." y exámenes "exam:..."). */
   function lessonCount(s) {
     var n = 0;
-    for (var k in s.completed) { if (k.indexOf("review:") !== 0 && k.indexOf("boss:") !== 0 && k.indexOf("exam:") !== 0) n++; }
+    for (var k in s.completed) { if (k.indexOf("review:") !== 0 && k.indexOf("boss:") !== 0 && k.indexOf("exam:") !== 0 && k.indexOf(SHIELD_PFX) !== 0) n++; }
     return n;
   }
 
   /* racha más larga sobre el historial de días (retroactiva) */
-  function longestRun(days) {
+  /* covered: días cubiertos por escudo; hacen de puente (no suman). */
+  function bridged(prev, k, covered) {
+    var gap = dayDiff(prev, k);
+    if (gap === 1) return true;
+    if (gap < 1 || !covered) return false;
+    var d = parseKey(prev);
+    for (var i = 1; i < gap; i++) {
+      if (!covered[dayKey(new Date(d.getFullYear(), d.getMonth(), d.getDate() + i))]) return false;
+    }
+    return true;
+  }
+  function longestRun(days, covered) {
     var keys = Object.keys(days || {}).filter(function (k) { return days[k]; }).sort();
     var best = 0, run = 0, prev = null;
     keys.forEach(function (k) {
-      run = (prev && dayDiff(prev, k) === 1) ? run + 1 : 1;
+      run = (prev && bridged(prev, k, covered)) ? run + 1 : 1;
       if (run > best) best = run;
       prev = k;
     });
@@ -202,7 +252,7 @@ window.VesperProgress = (function () {
       if (bosses[lv] && bosses[lv].pct >= 100) bossPerfect = 1;
     });
     m.lessons = lessonCount(s);
-    m.streak = Math.max(s.streak || 0, st.bestStreak || 0, longestRun(s.days));
+    m.streak = Math.max(s.streak || 0, st.bestStreak || 0, longestRun(s.days, coveredDays(s)));
     m.shields = s.shields || 0;
     m.perfect = Math.max(st.perfect || 0, (s.achievements || {}).perfect ? 1 : 0);
     m.combo = st.maxCombo || 0;
@@ -249,18 +299,29 @@ window.VesperProgress = (function () {
     var s = load();
     var today = dayKey();
     var isNewDay = s.lastDay !== today;
+    var advanced = false, shieldsUsed = 0, lostStreak = 0;
 
     if (!s.lastDay) {
-      s.streak = 1;
+      s.streak = 1; advanced = true;
     } else {
       var dd = dayDiff(s.lastDay, today);
       if (dd === 0) { /* already counted today: keep streak */ }
-      else if (dd === 1) { s.streak += 1; }
+      else if (dd === 1) { s.streak += 1; advanced = true; }
       else if (dd > 1) {
-        // missed one or more days. Con "congelar racha" activado, la racha no se
-        // rompe: el regreso cuenta como continuación. Si no, se reinicia.
-        if (freezeStreakOn()) { s.streak += 1; }
-        else { s.streak = 1; }
+        // Faltó uno o más días. Con "congelar racha" la racha no se rompe. Si no,
+        // la salvan los escudos: uno por día faltado, solo si alcanzan para
+        // todos (si no alcanzan, la racha se pierde igual y no se gasta ninguno).
+        var missed = dd - 1;
+        if (freezeStreakOn()) { s.streak += 1; advanced = true; }
+        else if (shieldsLeft(s) >= missed) {
+          var last = parseKey(s.lastDay);
+          for (var i = 1; i <= missed; i++) {
+            s.completed[SHIELD_PFX + dayKey(new Date(last.getFullYear(), last.getMonth(), last.getDate() + i))] = today;
+          }
+          shieldsUsed = missed;
+          s.streak += 1; advanced = true;
+        }
+        else { lostStreak = s.streak || 0; s.streak = 1; advanced = true; }
       }
       // dd < 0 (clock moved back): leave streak as-is
     }
@@ -280,10 +341,12 @@ window.VesperProgress = (function () {
     s.xp += (xpEarned || 0);
     if (lessonId) s.completed[lessonId] = today;
 
+    /* Un escudo nuevo cada 7 días de racha, también en una racha que volvió a
+       empezar (antes solo contaba al superar el récord). Solo el día que la
+       racha sube, para no darlo dos veces. */
     var newShield = false, milestone = false;
-    if (s.streak > 0 && s.streak % 7 === 0) {
-      var earned = Math.floor(s.streak / 7);
-      if (earned > s.shields) { s.shields = earned; newShield = true; milestone = true; }
+    if (advanced && s.streak > 0 && s.streak % 7 === 0) {
+      s.shields = (s.shields || 0) + 1; newShield = true; milestone = true;
     }
 
     if (s.streak > (stt.bestStreak || 0)) stt.bestStreak = s.streak;
@@ -294,7 +357,8 @@ window.VesperProgress = (function () {
     save(s);
     syncIfLoggedIn(s); // optional, safe no-op until accounts are wired
     return { xp: s.xp, streak: s.streak, isNewDay: isNewDay, milestone: milestone, newShield: newShield,
-      shields: s.shields, newAchievements: newAchievements, dailyGoal: dg };
+      shields: shieldsLeft(s), shieldsEarned: s.shields, shieldsUsed: shieldsUsed, lostStreak: lostStreak,
+      newAchievements: newAchievements, dailyGoal: dg };
   }
 
   /* Desbloqueo puntual desde otras páginas (p.ej. maestría por destreza).
@@ -380,7 +444,8 @@ window.VesperProgress = (function () {
     for (var i = 6; i >= 0; i--) {
       var d = new Date(today.getFullYear(), today.getMonth(), today.getDate() - i);
       var key = dayKey(d);
-      out.push({ label: DAY_LABELS[d.getDay()], key: key, active: !!s.days[key], isToday: i === 0 });
+      out.push({ label: DAY_LABELS[d.getDay()], key: key, active: !!s.days[key], isToday: i === 0,
+        shield: !s.days[key] && !!s.completed[SHIELD_PFX + key] });
     }
     return out;
   }
@@ -396,10 +461,18 @@ window.VesperProgress = (function () {
     } catch (e) { /* never block local progress on a sync error */ }
   }
 
-  function recomputeStreak(days, lastDay) {
+  /* Cuenta hacia atrás desde lastDay; los días cubiertos por escudo hacen de
+     puente (no suman), igual que en completeLesson. */
+  function recomputeStreak(days, lastDay, covered) {
     if (!lastDay || !days || !days[lastDay]) return 0;
+    covered = covered || {};
     var n = 0, d = parseKey(lastDay);
-    while (days[dayKey(d)]) { n++; d = new Date(d.getFullYear(), d.getMonth(), d.getDate() - 1); }
+    for (;;) {
+      var k = dayKey(d);
+      if (days[k]) n++;
+      else if (!covered[k]) break;
+      d = new Date(d.getFullYear(), d.getMonth(), d.getDate() - 1);
+    }
     return n;
   }
 
@@ -444,13 +517,14 @@ window.VesperProgress = (function () {
       bosses: bosses,
       stats: stats
     };
-    merged.streak = recomputeStreak(days, lastDay);
+    merged.streak = recomputeStreak(days, lastDay, coveredDays(merged));
     save(merged);
     return merged;
   }
 
   return { getState: getState, completeLesson: completeLesson, addXp: addXp, weekGrid: weekGrid, merge: merge,
     unlock: unlock, dailyGoal: dailyGoal, setGoal: setGoal, passBoss: passBoss, bossPassed: bossPassed,
+    shieldsLeft: function () { return shieldsLeft(load()); },
     achievementsState: achievementsState, ACHIEVEMENTS: ACHIEVEMENTS, CATEGORIES: CATEGORIES,
     bump: bump, check: check };
 })();

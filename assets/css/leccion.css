@@ -3939,3 +3939,12 @@ body:has(#app #verify) #app .card.center{background-image:none}
 }
 .vesper-reduce-motion .rs-anim,.vesper-reduce-motion .rs-anim *{animation:none!important}
 .vesper-reduce-motion .confetti{display:none}
+
+/* ===== ESCUDOS QUE SALVAN (2026-11-12) =====
+   Un escudo gastado cubre el día que faltaste (vesper_progress.js). En la
+   constelación de "Racha salvada" ese día lleva el escudo, en el oro de la
+   racha pero sin brillo: sigue el hilo, no es una estrella ganada. */
+.rs-day.shield .rs-dot .rs-ei{margin:0;color:var(--gold-ink)}
+.rs-day.shield .rs-dot svg{width:20px;height:20px}
+.rs-day.shield .rs-lab{color:var(--ink)}
+.rs-anim .rs-day.shield .rs-dot{animation:rs-twinkle .35s var(--ease,ease) both}
