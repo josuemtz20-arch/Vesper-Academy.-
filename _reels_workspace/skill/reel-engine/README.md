@@ -11,7 +11,11 @@ Requisitos (ya están en la sesión de Claude Code): Node + Playwright (Chromium
 4. Boca: `python3 env.py out/r.wav out/r.json`
 5. Config: copia un ejemplo de `examples/` y edita `lines`, `scenes`, `cat`.
    - Tiempos: `L3` (inicio frase 3), `L3e` (fin), `L3%0.5` (mitad), `L3+0.2` (desfase), rangos `L3~L4e`.
-   - Animaciones: `data-type` (tecleo), `data-hand` (escritura a mano), `data-chalk` (gis con barra), `data-draw` (trazo SVG), `data-circle` / `data-under` (círculo y subrayado a mano), `data-stamp` (sello), `data-in` + `data-anim="pop"`.
+   - Animaciones: `data-type` (tecleo), `data-hand` (escritura a mano), `data-chalk` (gis visible que escribe), `data-draw` (trazo SVG), `data-circle` / `data-under` (círculo y subrayado a mano), `data-strike` (tachado rojo + ✕; `data-nox` quita la ✕), `data-stamp` (sello), `data-in` + `data-anim="pop"`.
+   - Círculos, subrayados y tachados dentro de un texto tecleado esperan solos a que termine el tecleo.
+   - Acercamiento al gato: `zoom:[{t:'L2',d:1.3,s:1.1}]` (el encabezado se oculta durante el zoom). Úsalo en el error y en la corrección.
+   - Arco recomendado: llamada con el error → frase con «casi…» y círculo → pizarrón (original tachado con ✕, ↓, regla con gis) → **regreso a la llamada** con la frase correcta, `.tile.ok`, palomita y `<div class="eso">¡ESO!</div>` → cuaderno → cierre.
+   - Los cambios de pose son cortes en el punto más bajo del agachón (no hay fundido de dos gatos).
    - Poses: correcting, incorrect, explaining, thinking, surprised, presenting, correct, streak, welcome. Gestos: `shake`, `tilt`, `jump`, `wave`.
 6. Fotos de prueba: `ONLY=2.5,8,14 node render.js cfg.js out/r.json out/r.wav out/r.mp4`
 7. Render final: `node render.js cfg.js out/r.json out/r.wav out/r.mp4 1.0`

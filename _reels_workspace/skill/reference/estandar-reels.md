@@ -20,7 +20,8 @@ Basado en los reels de referencia «Error típico» (WA0042 «I'm busy → He sa
 - **Habla:** la boca se abre y cierra en sincronía con la voz (variantes boca abierta/cerrada de cada pose). Cuando no hay voz, la boca va cerrada.
 - **Parpadea** cada 2.5–4.5 s (100–150 ms con ojos cerrados).
 - **Idle:** respira (escala ±1 %), se balancea levemente y flota ±6 px.
-- **Pose según el beat**, con transición (agacharse, salto y aterrizaje). Nunca un corte seco.
+- **Pose según el beat**, con transición (agacharse, salto y aterrizaje). El cambio de imagen ocurre en el punto más bajo del agachón: nunca se ven dos gatos encimados.
+- **Acercamiento** (zoom ≈1.1, ~1.2 s) en el error y en la corrección.
 
 | Beat | Pose |
 |---|---|
@@ -61,14 +62,17 @@ Basado en los reels de referencia «Error típico» (WA0042 «I'm busy → He sa
 3. **Pizarrón** (marco dorado, fondo azul pizarra, insignia de nivel en círculo) con texto escrito con gis y flecha ↓ entre la frase original y la transformada. Lo que cambia va subrayado en dorado.
 4. **Hoja de cuaderno** (renglones, margen rojo, cinta adhesiva) con 2–3 ejemplos manuscritos `forma A → forma B`.
 5. **Sello** rotado con borde dorado («VERBO», «PARECE, PERO NO», «PRESENT PERFECT»). Nada de jerga de profesor que el público no conoce.
-6. **Palomita verde** animada cuando la corrección se completa; ✕ roja en el error.
+6. **Palomita verde** animada cuando la corrección se completa; ✕ roja con tachado sobre la palabra equivocada.
+7. **Regreso a la situación:** tras la regla, vuelve a la ventana del gancho con la frase correcta tecleada, marco verde, palomita y «¡ESO!».
+
+Pizarrón y cuaderno ocupan casi todo el ancho (≈930 px) y el escenario llega hasta los subtítulos: sin hueco vacío entre ambos. El gis se ve moviéndose mientras escribe.
 
 ## 7. Estructura narrativa (25–30 s)
 1. **Gancho de situación** (0–2 s): la frase con el error en contexto real (junta, entrevista, aeropuerto). La voz arranca en 0.2 s.
 2. **Señalar el error:** «casi…», círculo o tachado, Vesper `incorrect`.
 3. **Por qué pasa:** traducción literal desde el español, con anotación a mano.
 4. **La regla:** una sola, con sello o pizarrón.
-5. **Corrección:** frase correcta escrita + palomita, Vesper `correct`.
+5. **Corrección:** de vuelta en la situación, frase correcta escrita + palomita + «¡ESO!», Vesper `correct` con acercamiento.
 6. **Úsalo:** 2–3 ejemplos en cuaderno o pizarrón.
 7. **Cierre** (último 3–4 s): ver punto 8.
 
