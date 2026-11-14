@@ -205,7 +205,7 @@ async function saAccessToken(env) {
 const fsBase = () => "https://firestore.googleapis.com/v1/projects/" + PROJECT_ID + "/databases/" + FS_DB + "/documents";
 
 /* ¿quién es? Identity Toolkit valida el idToken (firma, caducidad, proyecto). */
-async function lookupUser(env, idToken) {
+export async function lookupUser(env, idToken) {
   if (env.EXAM_DEV === "1" && typeof idToken === "string" && idToken.indexOf("dev:") === 0) {
     return { uid: "dev-uid", email: idToken.slice(4).toLowerCase(), verified: true };
   }

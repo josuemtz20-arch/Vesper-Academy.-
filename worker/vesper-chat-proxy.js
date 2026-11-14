@@ -28,6 +28,15 @@
  *      se pide un reto por cada mensaje.
  *   4) Tope GLOBAL diario de mensajes (todas las IPs juntas): el freno
  *      de mano contra un ataque repartido entre muchas IPs.
+ *
+ * ── Solo alumnos (2026-11-14) ─────────────────────────────────────
+ * El chat y el simulador de entrevista ya NO son de acceso libre. Cada
+ * petición trae el idToken de Firebase (`idToken`); el Worker lo valida con
+ * Identity Toolkit (firma, caducidad, proyecto), exige correo verificado y
+ * que el correo esté en la allowlist (students/ o teachers/ de Firestore,
+ * la misma de vesper_auth.js) o sea el admin. Sin eso: 401 "auth_required"
+ * y NO se llama a Claude. Además hay un límite por usuario (uid), así un
+ * salón detrás de una IP no se queda sin chat por un solo alumno.
  * Solo si pasa todo se reenvía a Anthropic.
  *
  * Despliegue: ver worker/README.md.
@@ -36,7 +45,7 @@
 
 import { DurableObject } from "cloudflare:workers";
 /* Exámenes calificados en el servidor (rutas /exam/*). Ver exam_grader.js. */
-import { handleExam, EXAM_RATE_DEFAULTS, ExamAttempt } from "./exam_grader.js";
+import { handleExam, EXAM_RATE_DEFAULTS, ExamAttempt, lookupUser } from "./exam_grader.js";
 export { ExamAttempt };
 
 /* ---------- Configuración (editable) ---------- */
@@ -95,6 +104,8 @@ const RATE_DEFAULTS = {
   RL_FREE_PER_DAY: 200,    // mensajes por día (UTC) por IP (nivel gratis)
   RL_PRO_PER_MIN: 30,      // con código Pro válido
   RL_PRO_PER_DAY: 1000,
+  RL_USER_PER_MIN: 12,     // por alumno (uid), además del tope por IP
+  RL_USER_PER_DAY: 300,
   /* todas las IPs juntas, por día (UTC). Era 5000; con los topes de entrada
      el peor caso es ~0.01 USD por mensaje, así que 2000 acota el abuso a
      ~20 USD/día. Súbelo con RL_GLOBAL_PER_DAY en [vars] cuando crezca la
@@ -134,6 +145,45 @@ const BREVITY = [
   "- Keep replies short and focused — a few sentences at most. Teach one point at a time and end with a single question or a small next step. Use short lists only when truly helpful; never pad the answer."
 ].join("\n");
 
+
+/* ---------- Acceso: solo alumnos ----------
+ * Misma allowlist que vesper_auth.js: docs students/{correo} o
+ * teachers/{correo} en la base "teachermanuals". Se lee con el idToken del
+ * PROPIO alumno (las reglas le dejan leer su doc), así no hace falta la
+ * cuenta de servicio. El "sí" se cachea por uid en el isolate unos minutos
+ * para no consultar Firestore en cada mensaje; quitar a alguien de la
+ * allowlist tarda como mucho ACCESS_CACHE_MS en surtir efecto. */
+const ADMIN_EMAIL = "josuemtz20@gmail.com";
+const FS_DOCS = "https://firestore.googleapis.com/v1/projects/vesper-academy/databases/teachermanuals/documents/";
+const ACCESS_CACHE_MS = 10 * 60 * 1000;
+const accessCache = new Map();   // uid -> expira (ms)
+
+async function ownDocExists(idToken, collection, email) {
+  const r = await fetch(FS_DOCS + collection + "/" + encodeURIComponent(email), {
+    headers: { Authorization: "Bearer " + idToken }
+  });
+  if (r.status === 200) return true;
+  if (r.status === 404 || r.status === 403) return false;
+  throw new Error("firestore " + collection + " " + r.status);
+}
+
+/* Devuelve { uid } si el idToken es de un alumno/profesor autorizado,
+ * null si no. Lanza si Google no responde (el llamador responde 503: aquí
+ * NO se deja pasar, cada mensaje cuesta dinero). */
+async function authorizedUser(env, idToken) {
+  const u = await lookupUser(env, idToken);
+  if (!u || !u.email || !u.verified) return null;
+  const now = Date.now();
+  const hit = accessCache.get(u.uid);
+  if (hit && hit > now) return { uid: u.uid };
+  let ok = u.email === ADMIN_EMAIL;
+  if (!ok) ok = await ownDocExists(idToken, "students", u.email);
+  if (!ok) ok = await ownDocExists(idToken, "teachers", u.email);
+  if (!ok) return null;
+  if (accessCache.size > 5000) accessCache.clear();
+  accessCache.set(u.uid, now + ACCESS_CACHE_MS);
+  return { uid: u.uid };
+}
 
 /* Orígenes permitidos para CORS. Producción + desarrollo local. */
 const ALLOWED_ORIGINS = [
@@ -462,6 +512,31 @@ export default {
         : "Vas muy rápido. Espera un momento y vuelve a intentarlo.";
       return jsonError(429, msg, origin, "rate_limited",
         { "Retry-After": String(perIp.retryAfter || 60) });
+    }
+
+    /* ── Solo alumnos: sesión de Firebase + allowlist ──
+     * Después del tope por IP (frena el martilleo sin cuenta) y antes de lo
+     * que cuesta (Turnstile, cupo global, Claude). */
+    let student;
+    try {
+      student = await authorizedUser(env, body.idToken);
+    } catch (e) {
+      console.error("auth:", e && e.message);
+      return jsonError(503, "No pudimos verificar tu cuenta. Vuelve a intentarlo en un momento.",
+        origin, "auth_unavailable", { "Retry-After": "30" });
+    }
+    if (!student) {
+      return jsonError(401, "El tutor Vesper es solo para alumnos de Vesper Academy. Inicia sesión con tu cuenta de alumno.",
+        origin, "auth_required");
+    }
+    const perUser = await rateHit(env, "u:" + student.uid,
+      limitOf(env, "RL_USER_PER_MIN"), limitOf(env, "RL_USER_PER_DAY"));
+    if (!perUser.ok) {
+      const msg = perUser.scope === "day"
+        ? "Llegaste al límite de mensajes de hoy. Vuelve mañana para seguir practicando."
+        : "Vas muy rápido. Espera un momento y vuelve a intentarlo.";
+      return jsonError(429, msg, origin, "rate_limited",
+        { "Retry-After": String(perUser.retryAfter || 60) });
     }
 
     /* ── Turnstile (solo si TURNSTILE_SECRET está definido) ──

@@ -36,6 +36,7 @@ barreras reales son estas, en orden:
 | # | Barrera | Dónde | Respuesta si falla |
 |---|---------|-------|--------------------|
 | 1 | Límite **por IP** (`CF-Connecting-IP`) por minuto y por día UTC | Durable Object `RateLimiter` | `429` + `Retry-After`, `code: "rate_limited"` |
+| 1b | **Solo alumnos** (2026-11-14): `idToken` de Firebase válido (Identity Toolkit), correo verificado y doc `students/{correo}` o `teachers/{correo}` en Firestore (o el admin). Cache del "sí" 10 min por uid. Después, límite **por alumno** (`RL_USER_PER_MIN` 12 / `RL_USER_PER_DAY` 300) | `authorizedUser()` | `401`, `code: "auth_required"` (`503 auth_unavailable` si Google no responde) |
 | 2 | **Turnstile** (opcional): reto invisible validado contra `siteverify`; tras uno válido el Worker entrega una sesión firmada (HMAC, ligada a la IP, 1 h) en `X-Vesper-Session` | secreto `TURNSTILE_SECRET` | `401`, `code: "turnstile_required"` |
 | 3 | Tope **global** diario (todas las IPs juntas) | Durable Object `RateLimiter` ("global") | `503` + `Retry-After`, `code: "busy"` |
 
@@ -174,9 +175,10 @@ curl -N -X POST "https://vesper-chat-proxy.<tu-subdominio>.workers.dev" \
   -d '{"system":"You are Vesper, a friendly English tutor.","messages":[{"role":"user","content":"Hi"}]}'
 ```
 
-Sin Turnstile debe devolver una secuencia de eventos `data: {...}` (SSE). Con
-`TURNSTILE_SECRET` puesto debe devolver `401 {"code":"turnstile_required"}`:
-esa es la prueba de que un curl ya no gasta saldo. Repetido más de
+Sin `idToken` debe devolver `401 {"code":"auth_required"}`: esa es la prueba
+de que un curl sin cuenta de alumno ya no gasta saldo. Con un `idToken` de
+alumno en el cuerpo responde con eventos `data: {...}` (SSE) — o con
+`401 turnstile_required` si `TURNSTILE_SECRET` está puesto. Repetido más de
 `RL_FREE_PER_MIN` veces en un minuto debe devolver `429`.
 
 Para ver los rechazos en vivo: `wrangler tail`.

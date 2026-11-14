@@ -187,6 +187,8 @@ a.chat-cta{text-decoration:none;}   /* la entrada al simulador de entrevista es 
 <link rel="stylesheet" href="assets/css/vesper_tokens.css">
 <script src="vesper_app_mode.js"></script>
 <script src="vesper_prefs.js"></script>
+<!-- Solo alumnos: puerta de login (el Worker además exige el idToken) -->
+<script src="vesper_auth.js"></script>
 </head>
 <body>
 
@@ -388,8 +390,7 @@ a.chat-cta{text-decoration:none;}   /* la entrada al simulador de entrevista es 
     var rec = { vid: "", sid: "" };
     try { if (window.VA) rec = VA.track("ai_report", { reason: reason }); } catch (e) {}
     try {
-      /* chat.html no carga vesper_auth.js (activaría la puerta de login); la
-         apiKey es la misma, pública, de VesperAuth.config.firebase. */
+      /* apiKey pública, la misma de VesperAuth.config.firebase. */
       var cfg = { projectId: "vesper-academy", apiKey: "AIzaSyAsCJW97LyNpmvey1Mo0wiGMufQIV7uxio" };
       var props = JSON.stringify({ reason: reason, text: String(text || "").slice(0, 480) });
       fetch("https://firestore.googleapis.com/v1/projects/" + cfg.projectId +
@@ -593,12 +594,23 @@ a.chat-cta{text-decoration:none;}   /* la entrada al simulador de entrevista es 
     var sess = getSession();
     var first = sess ? Promise.resolve({ session: sess })
                      : turnstileToken().then(function (t) { return t ? { turnstileToken: t } : {}; });
-    return first.then(attempt).then(function (res) {
+    /* solo alumnos: el Worker valida este idToken en el servidor */
+    var tok = window.VesperAuth && VesperAuth.idToken ? VesperAuth.idToken() : Promise.resolve("");
+    return Promise.all([first, tok]).then(function (r) {
+      r[0].idToken = r[1] || "";
+      return attempt(r[0]);
+    }).then(function (res) {
       if (res.status !== 401) return res;
       return res.clone().json().then(function (j) {
+        if (j && j.code === "auth_required") {
+          location.replace("login.html?next=" + encodeURIComponent("chat.html" + (location.search || "")));
+          return res;
+        }
         if (!j || j.code !== "turnstile_required" || !TURNSTILE_SITE_KEY) return res;
         setSession("");
-        return turnstileToken().then(function (t) { return t ? attempt({ turnstileToken: t }) : res; });
+        return Promise.all([turnstileToken(), tok]).then(function (r) {
+          return r[0] ? attempt({ turnstileToken: r[0], idToken: r[1] || "" }) : res;
+        });
       }, function () { return res; });
     });
   }

@@ -25,9 +25,9 @@
  *    intento "placement" con examId "interview:<puesto>" (ver la nota en
  *    vesper_results.js). El profesor lo lee en portal_calificaciones.html.
  *    Nunca se sube solo: lleva las respuestas del alumno y él decide.
- *  - vesper_auth.js y vesper_results.js (Firebase) se cargan SOLO si el
- *    perfil local dice que hay una cuenta enlazada; un visitante sin cuenta
- *    no descarga nada de eso.
+ *  - Solo alumnos (2026-11-14): entrevista.html carga vesper_auth.js (puerta
+ *    de login) y cada llamada al Worker lleva el idToken. vesper_results.js
+ *    se carga solo si el perfil local dice que hay una cuenta enlazada.
  * ============================================================ */
 (function () {
   "use strict";
@@ -462,12 +462,23 @@
     var sess = getSession();
     var first = sess ? Promise.resolve({ session: sess })
                      : turnstileToken().then(function (t) { return t ? { turnstileToken: t } : {}; });
-    return first.then(attempt).then(function (res) {
+    /* solo alumnos: el Worker valida este idToken en el servidor */
+    var tok = window.VesperAuth && VesperAuth.idToken ? VesperAuth.idToken() : Promise.resolve("");
+    return Promise.all([first, tok]).then(function (r) {
+      r[0].idToken = r[1] || "";
+      return attempt(r[0]);
+    }).then(function (res) {
       if (res.status !== 401) return res;
       return res.clone().json().then(function (j) {
+        if (j && j.code === "auth_required") {
+          location.replace("login.html?next=" + encodeURIComponent("entrevista.html" + (location.search || "")));
+          return res;
+        }
         if (!j || j.code !== "turnstile_required" || !TURNSTILE_SITE_KEY) return res;
         setSession("");
-        return turnstileToken().then(function (t) { return t ? attempt({ turnstileToken: t }) : res; });
+        return Promise.all([turnstileToken(), tok]).then(function (r) {
+          return r[0] ? attempt({ turnstileToken: r[0], idToken: r[1] || "" }) : res;
+        });
       }, function () { return res; });
     });
   }

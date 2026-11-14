@@ -51,10 +51,9 @@
       "tienda.html",
       "onboarding.html",
       "perfil.html",
-      "eliminar-cuenta.html",
-      /* simulador de entrevista: público; solo carga este script si el
-         alumno ya tiene sesión, para ofrecerle "Enviar a mi profesor" */
-      "entrevista.html"
+      "eliminar-cuenta.html"
+      /* (2026-11-14) chat.html y entrevista.html son SOLO para alumnos: el
+         Worker exige el idToken (ver idToken() abajo) y la allowlist. */
     ],
     /* SHA-256 de ("vesper-academy-v1|" + correo en minúsculas).
        Añade una línea por persona autorizada. */
@@ -361,7 +360,24 @@
   /* API compartida para login.html, access_admin.html y las áreas de
      profesor. (teacherHash / verifyTeacherLogin se retiraron el 2026-10-28:
      usa teacherAccess().) */
+  /* idToken de Firebase del usuario con sesión ("" si no hay). Lo usan
+     chat.html y vesper_entrevista.js: el Worker del chat lo exige y valida
+     en el servidor (solo alumnos). getIdToken() renueva solo si caducó. */
+  function idToken() {
+    if (!isConfigured) return Promise.resolve("");
+    return initFirebase().then(function (auth) {
+      if (auth.currentUser) return auth.currentUser.getIdToken();
+      return new Promise(function (resolve) {
+        var off = auth.onAuthStateChanged(function (user) {
+          off();
+          resolve(user ? user.getIdToken() : "");
+        });
+      });
+    }).catch(function () { return ""; });
+  }
+
   window.VesperAuth = {
+    idToken: idToken,
     config: CONFIG,
     isConfigured: isConfigured,
     initFirebase: initFirebase,
