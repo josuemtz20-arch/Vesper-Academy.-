@@ -257,8 +257,8 @@ window.VESPER_CONTENT_PACK = (function () {
         ]
       },
       exercises: [
-        { type: "multiple_choice", question: "Choose: I want ___ apple.", options: ["a", "an", "the"], correctIndex: 1, explanation: "\"apple\" empieza con sonido vocal -> an." },
-        { type: "multiple_choice", question: "Choose: She has ___ car.", options: ["a", "an", "the"], correctIndex: 0, explanation: "\"car\" empieza con sonido consonante -> a." },
+        { type: "multiple_choice", question: "Choose: I want ___ apple. (una manzana cualquiera)", options: ["a", "an", "the"], correctIndex: 1, explanation: "\"apple\" empieza con sonido vocal -> an." },
+        { type: "multiple_choice", question: "Choose: She has ___ car. (un coche cualquiera)", options: ["a", "an", "the"], correctIndex: 0, explanation: "\"car\" empieza con sonido consonante -> a." },
         { type: "fill_blank", sentence: "Please open ___ window. (la que ya conocemos)", answers: ["the"], hint: "Algo específico -> the.", explanation: "\"the window\" = una ventana concreta." },
         { type: "categorize", instruction: "¿a o an?", buckets: [
           { id: "a", label: "a" }, { id: "an", label: "an" }
@@ -501,7 +501,7 @@ window.VESPER_CONTENT_PACK = (function () {
         { type: "listening", text: "I have a terrible headache.", "audio": "assets/audio/app/a2_623d8de483.mp3", question: "¿Qué le pasa?",
           options: ["Dolor de cabeza", "Dolor de pies", "Tos"], correctIndex: 0 },
         { type: "translate", prompt: "Traduce: \"Deberías descansar.\"",
-          answers: ["you should rest", "you should take a rest"], explanation: "You should rest." }
+          answers: ["you should rest", "you should take a rest", "you should get some rest", "you should have a rest"], explanation: "You should rest." }
       ]
     },
 
