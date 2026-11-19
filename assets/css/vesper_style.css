@@ -1,5 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400;1,700&family=Open+Sans:wght@400;600;700&display=swap');
-/* Font Awesome ya no se importa del CDN: los iconos salen de vesper_icons_fa.css (esta hoja no la carga ninguna página). */
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css');
 
 :root {
     /* Base Colors - Can be overridden by specific book styles */

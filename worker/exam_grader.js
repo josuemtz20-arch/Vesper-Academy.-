@@ -43,8 +43,11 @@ const SKILL_RANK = { grammar: 0, vocab: 1, use: 2, reading: 3, listening: 4 };
 export const EXAM_RATE_DEFAULTS = {
   RL_EXAM_START_PER_MIN: 10, RL_EXAM_START_PER_DAY: 200,
   RL_EXAM_ANSWER_PER_MIN: 90, RL_EXAM_ANSWER_PER_DAY: 3000,
-  /* examen de nivel: banco fijo; tope de intentos por IP al día (frena la cosecha de claves) */
-  RL_EXAM_LEVEL_START_PER_DAY: 12
+  /* examen de nivel: banco fijo; tope de intentos nuevos al día (frena la cosecha de claves).
+     Con idToken verificado se cuenta por uid (moderado); sin sesión, por IP con un tope
+     alto (una escuela o un NAT de operador comparte IP) solo contra scripts masivos. */
+  RL_EXAM_LEVEL_START_PER_DAY: 12,
+  RL_EXAM_LEVEL_START_PER_DAY_IP: 150
 };
 
 /* ---------- calificación (espejo de leccion_app.js) ---------- */
@@ -373,12 +376,22 @@ export async function handleExam(path, body, env, rate, limitOf) {
       limitOf(isStart ? "RL_EXAM_START_PER_MIN" : "RL_EXAM_ANSWER_PER_MIN"),
       limitOf(isStart ? "RL_EXAM_START_PER_DAY" : "RL_EXAM_ANSWER_PER_DAY"));
     if (!rl.ok) return [429, { error: "Vas muy rápido. Espera un momento y vuelve a intentarlo.", code: "rate_limited", retryAfter: rl.retryAfter || 60 }];
-    /* examen de nivel (banco fijo): tope diario por IP de intentos nuevos. El
+    /* examen de nivel (banco fijo): tope diario de intentos nuevos. El
        /exam/answer devuelve la clave (la UI la necesita para pintar el feedback),
-       así que esto limita cuántas veces se puede "cosechar" el banco. */
+       así que esto limita cuántas veces se puede "cosechar" el banco. Solo cuenta
+       cuando el inicio fue válido (los 400/409 no gastan cupo). */
     if (isStart && body.kind === "exam") {
-      const rl2 = await rate("exam-level-start", 0, limitOf("RL_EXAM_LEVEL_START_PER_DAY"));
+      const out = await start(env, body);
+      if (out[0] !== 200) return out;
+      let user = null;
+      if (body.idToken) { try { user = await lookupUser(env, body.idToken); } catch (e) { user = null; } }
+      /* con uid verificado: clave por uid (la envoltura añade la IP); si no, solo IP con tope alto */
+      const rl2 = user && user.uid
+        ? await rate("exam-level-start-u:" + user.uid, 0, limitOf("RL_EXAM_LEVEL_START_PER_DAY"))
+        : await rate("exam-level-start", 0, limitOf("RL_EXAM_LEVEL_START_PER_DAY_IP"));
+      /* si excede, el intento ya creado queda huérfano (el cliente nunca recibe su id) y caduca solo */
       if (!rl2.ok) return [429, { error: "Hoy ya hiciste varios intentos del examen de nivel. Vuelve mañana.", code: "rate_limited", retryAfter: rl2.retryAfter || 3600 }];
+      return out;
     }
     return isStart ? start(env, body) : answer(env, body);
   }
