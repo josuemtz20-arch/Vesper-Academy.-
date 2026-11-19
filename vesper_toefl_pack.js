@@ -142,7 +142,7 @@ window.VESPER_TOEFL_PACK = (function () {
         { type: "reading", title: "Powering the Future",
           passage: "For most of the industrial era, electricity came from burning fossil fuels such as coal and gas. [A] In recent decades, however, the falling cost of solar panels and wind turbines has made renewable energy increasingly competitive. [B] In several countries, the cheapest new source of power is now the sun rather than coal. [C] Governments have taken notice, and many now treat clean power as a strategic priority. [D]\n\nRenewables nonetheless present a distinctive challenge: they are intermittent. The sun does not shine at night, and the wind does not always blow. Because electricity is difficult to store on a large scale, supply can fall short exactly when demand peaks. Engineers are tackling this problem with ever-larger batteries and with grids that share power across wide regions, so that a calm evening in one place can be offset by a windy night in another.\n\nThe stakes are high. If clean power becomes both cheap and reliable, the cost of cutting emissions could prove far lower than once feared. If storage lags behind, however, nations may remain dependent on fossil fuels for longer than the climate can afford.",
           questions: [
-            { q: "Look at the four squares [A], [B], [C], [D]. Where would this sentence best fit? \"This transformation has happened far faster than most analysts predicted.\"", options: ["[A]", "[B]", "[C]", "[D]"], correctIndex: 2, explanation: "'This transformation' needs a change already described: it can only refer to the sun becoming the cheapest source (sentence before [C]). [A] comes before any change is mentioned, [B] precedes the example that defines the transformation, and after [D] the sentence would follow the government response, which it cannot refer to." },
+            { q: "Look at the four squares [A], [B], [C], [D]. Where would this sentence best fit? \"In those places, building new coal plants no longer makes economic sense.\"", options: ["[A]", "[B]", "[C]", "[D]"], correctIndex: 2, explanation: "'In those places' needs a plural place as its antecedent, and only 'several countries' provides one, so the sentence must come right after it, at [C]. At [A] and [B] no places have been mentioned yet; at [D] the previous sentence is about governments, not places." },
             { q: "What is the 'distinctive challenge' of renewables described in paragraph 2?", options: ["They are too expensive to build.", "They are intermittent and hard to store.", "They cannot be connected to a grid.", "They produce too much pollution."], correctIndex: 1, explanation: "\"...they are intermittent\" and electricity is hard to store." },
             { q: "The word \"offset\" in paragraph 2 is closest in meaning to...", options: ["switched off", "increased", "compensated for", "measured"], correctIndex: 2, explanation: "'Offset' = compensate for: a windless night in one place is compensated by wind in another." },
             { q: "According to the passage, what determines whether nations stay dependent on fossil fuels?", options: ["Whether energy storage keeps pace", "The price of coal alone", "Government advertising", "The number of analysts"], correctIndex: 0, explanation: "\"If storage lags behind... nations may remain dependent on fossil fuels...\"" }
@@ -234,7 +234,7 @@ window.VESPER_TOEFL_PACK = (function () {
         ]
       },
       exercises: [
-        { type: "matching", instruction: "Match each academic verb with its synonym.", pairs: [
+        { type: "matching", instruction: "Match each academic verb with its meaning.", pairs: [
           { l: "indicate", r: "show / point to" },
           { l: "derive", r: "obtain from a source" },
           { l: "scrutinize", r: "examine very closely" },
@@ -393,9 +393,9 @@ window.VESPER_TOEFL_PACK = (function () {
           correctIndex: 1, correction: "remains (the subject 'the phenomenon' is singular)",
           explanation: "'together with...' doesn't change the number of the subject; the verb agrees with 'phenomenon'." },
         { type: "find_error", question: "Find the mistake (conditional).",
-          segments: ["Had the policy been implemented earlier, ", { u: "the crisis" }, " ", { u: "may have" }, " ", { u: "been" }, " ", { u: "averted" }, "."],
-          correctIndex: 1, correction: "might have ('might have been averted' in the third conditional)",
-          explanation: "'May have' expresses real uncertainty about the past. In the result clause of a third conditional, standard academic usage is 'would/might have + past participle'." }
+          segments: ["Had the policy been implemented earlier, ", { u: "the crisis" }, " ", { u: "would have" }, " ", { u: "been" }, " ", { u: "avert" }, "."],
+          correctIndex: 3, correction: "averted (passive: would have been + past participle)",
+          explanation: "After 'would have been' the passive needs a past participle: 'the crisis would have been averted', not the base form 'avert'." }
       ]
     },
 
