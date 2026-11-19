@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<!-- CSP: generada por _scripts/apply_csp.py (edita alli, no aqui) -->
+<meta charset="UTF-8">
+<link rel="icon" href="assets/images/favicon_32.png?v=2" type="image/png" sizes="32x32">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vesper Academy | Bandeja de WhatsApp</title>
+<meta name="robots" content="noindex, nofollow">
+<script src="vesper_app_mode.js"></script>
+<script src="vesper_auth.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500..700&family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="assets/css/vesper_tokens.css">
+<style>
+  /* ============================================================
+     BANDEJA DE WHATSAPP (2026-11-19)
+     El agente (worker/whatsapp_agent.js) solo REDACTA. Aquí una persona
+     revisa cada borrador, lo edita si hace falta y lo envía. Nada sale
+     al cliente sin pasar por esta pantalla.
+     ============================================================ */
+  :root{
+    --night:var(--va-night,#14122a); --dusk:var(--va-dusk,#1f2342); --twilight:var(--va-twilight,#3a3a63);
+    --gold:var(--va-gold,#C9A84C); --star:var(--va-star,#f3e2ab);
+    --text:#EDE7D6; --muted:#b3b0c9; --hair:var(--va-hairline,rgba(201,168,76,.35));
+    --good:var(--va-success,#2D9E75); --warn:#e0a03a; --bad:#d9655b;
+    --display:'Fraunces',Georgia,serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',system-ui,sans-serif;background:var(--night);color:var(--text);min-height:100vh;line-height:1.5}
+  :focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+  header{background:var(--dusk);border-bottom:1px solid var(--hair);padding:0 clamp(16px,4vw,32px);min-height:62px;
+    display:flex;align-items:center;justify-content:space-between;gap:12px;position:sticky;top:0;z-index:10}
+  header b{font-family:var(--display);font-size:1.1rem;font-weight:600}
+  header small{color:var(--muted);font-size:.8rem}
+  .wrap{max-width:860px;margin:0 auto;padding:24px clamp(16px,4vw,32px) 56px}
+  .bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:16px}
+  .bar .sp{flex:1}
+  button,.chip{min-height:40px;padding:8px 14px;font:inherit;font-size:.85rem;font-weight:700;cursor:pointer;border-radius:10px;
+    border:1px solid var(--twilight);background:transparent;color:var(--text)}
+  .chip[aria-pressed="true"]{border-color:var(--gold);color:var(--star)}
+  button.go{background:var(--gold);color:#1B1B2F;border-color:var(--gold)}
+  button.go:hover{background:var(--star)}
+  button:disabled{opacity:.5;cursor:default}
+  .msg{color:var(--muted);font-size:.9rem;padding:18px 0}
+  .err{color:var(--bad)}
+  .card{background:var(--dusk);border:1px solid var(--twilight);border-radius:16px;padding:16px;margin-bottom:14px}
+  .card.draft_ready{border-color:color-mix(in srgb,var(--good) 60%,transparent)}
+  .card.needs_human{border-color:color-mix(in srgb,var(--warn) 70%,transparent)}
+  .top{display:flex;flex-wrap:wrap;gap:8px;align-items:baseline;justify-content:space-between}
+  .who{font-weight:700} .who small{color:var(--muted);font-weight:500;margin-left:6px}
+  .tag{font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:3px 8px;border-radius:999px;border:1px solid var(--twilight);color:var(--muted)}
+  .tag.draft_ready{color:#7fd8b4;border-color:color-mix(in srgb,var(--good) 60%,transparent)}
+  .tag.needs_human{color:var(--warn);border-color:color-mix(in srgb,var(--warn) 60%,transparent)}
+  .tag.drafting{color:var(--star)}
+  .hist{margin:12px 0;display:flex;flex-direction:column;gap:6px;max-height:260px;overflow:auto}
+  .b{max-width:85%;padding:8px 11px;border-radius:12px;font-size:.88rem;white-space:pre-wrap;word-break:break-word}
+  .b.in{align-self:flex-start;background:var(--night);border:1px solid var(--twilight)}
+  .b.out{align-self:flex-end;background:color-mix(in srgb,var(--good) 22%,var(--dusk))}
+  .b time{display:block;font-size:.68rem;color:var(--muted);margin-top:3px}
+  .reason{font-size:.82rem;color:var(--muted);background:var(--night);border-left:3px solid var(--warn);padding:8px 10px;border-radius:6px;margin:8px 0}
+  textarea{width:100%;min-height:110px;padding:10px 12px;font:inherit;font-size:.92rem;color:var(--text);background:var(--night);
+    border:1px solid var(--twilight);border-radius:10px;resize:vertical}
+  textarea:focus{outline:none;border-color:var(--gold)}
+  .acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;align-items:center}
+  .acts .note{font-size:.78rem;color:var(--muted)}
+  .closed{font-size:.8rem;color:var(--bad)}
+</style>
+</head>
+<body>
+<header>
+  <div><b>Bandeja de WhatsApp</b><br><small>Borradores del agente — nada se envía sin tu aprobación</small></div>
+  <small id="me"></small>
+</header>
+<main class="wrap">
+  <div class="bar" role="toolbar" aria-label="Filtro">
+    <button class="chip" data-f="pending" aria-pressed="true">Pendientes</button>
+    <button class="chip" data-f="all" aria-pressed="false">Todas</button>
+    <span class="sp"></span>
+    <button id="reload">Actualizar</button>
+  </div>
+  <div id="list"><p class="msg">Cargando…</p></div>
+</main>
+<script>
+(function () {
+  "use strict";
+  var API = String(window.VESPER_WA_API || "https://patient-feather-4364.josuemtz20.workers.dev").replace(/\/+$/, "") + "/wa/";
+  var LABEL = { draft_ready: "Borrador listo", needs_human: "Necesita persona", drafting: "Redactando…", answered: "Contestada", closed: "Cerrada" };
+  var listEl = document.getElementById("list");
+  var filter = "pending", user = null, data = [], timer = null;
+
+  function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+  function when(ms) { if (!ms) return ""; var d = new Date(ms); return d.toLocaleString("es-MX", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }); }
+
+  function call(path, body) {
+    return user.getIdToken().then(function (tok) {
+      return fetch(API + path, { method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(Object.assign({ idToken: tok }, body || {})) });
+    }).then(function (r) {
+      return r.json().catch(function () { return {}; }).then(function (j) {
+        if (!r.ok) throw new Error(j.error || ("HTTP " + r.status));
+        return j;
+      });
+    });
+  }
+
+  function load() {
+    return call("inbox").then(function (j) {
+      document.getElementById("me").textContent = j.me || "";
+      data = j.threads || [];
+      render();
+    }).catch(function (e) { listEl.innerHTML = '<p class="msg err">' + esc(e.message) + "</p>"; });
+  }
+
+  function render() {
+    var rows = data.filter(function (t) {
+      return filter === "all" || t.status === "draft_ready" || t.status === "needs_human" || t.status === "drafting";
+    });
+    if (!rows.length) { listEl.innerHTML = '<p class="msg">' + (filter === "all" ? "Todavía no hay conversaciones." : "No hay nada pendiente.") + "</p>"; return; }
+    listEl.innerHTML = rows.map(function (t) {
+      var hist = (t.recent || []).map(function (m) {
+        return '<div class="b ' + (m.dir === "in" ? "in" : "out") + '">' + esc(m.text) + "<time>" + esc(when(m.ms)) + (m.by ? " · " + esc(m.by) : "") + "</time></div>";
+      }).join("");
+      var pending = t.status === "draft_ready" || t.status === "needs_human";
+      var box = pending || t.status === "answered" || t.status === "closed"
+        ? (t.draftReason ? '<div class="reason">' + esc(t.draftReason) + "</div>" : "") +
+          '<textarea aria-label="Respuesta para ' + esc(t.name || t.waId) + '" data-id="' + esc(t.waId) + '">' + esc(t.draft || "") + "</textarea>" +
+          '<div class="acts">' +
+            '<button class="go" data-act="send" data-id="' + esc(t.waId) + '"' + (t.windowOpen ? "" : " disabled") + ">Enviar</button>" +
+            '<button data-act="redraft" data-id="' + esc(t.waId) + '">Otro borrador</button>' +
+            (pending ? '<button data-act="discard" data-id="' + esc(t.waId) + '">Cerrar sin responder</button>' : "") +
+            (t.windowOpen ? '<span class="note">Revisa que todo sea correcto antes de enviar.</span>'
+                          : '<span class="closed">Pasaron más de 24 h: contesta desde la app de WhatsApp.</span>') +
+          "</div>"
+        : '<p class="msg">El agente está esperando a que el cliente termine de escribir…</p>';
+      return '<article class="card ' + esc(t.status) + '">' +
+        '<div class="top"><span class="who">' + esc(t.name || "Sin nombre") + "<small>+" + esc(t.waId) + "</small></span>" +
+        '<span class="tag ' + esc(t.status) + '">' + esc(LABEL[t.status] || t.status) + (t.draftCategory ? " · " + esc(t.draftCategory) : "") + "</span></div>" +
+        '<div class="hist">' + hist + "</div>" + box + "</article>";
+    }).join("");
+    Array.prototype.forEach.call(listEl.querySelectorAll(".hist"), function (h) { h.scrollTop = h.scrollHeight; });
+  }
+
+  listEl.addEventListener("click", function (ev) {
+    var b = ev.target.closest("button[data-act]");
+    if (!b) return;
+    var id = b.getAttribute("data-id"), act = b.getAttribute("data-act"), body = { waId: id };
+    if (act === "send") {
+      var ta = listEl.querySelector('textarea[data-id="' + id + '"]');
+      body.text = ta ? ta.value.trim() : "";
+      if (!body.text) { alert("El mensaje está vacío."); return; }
+      if (!confirm("¿Enviar este mensaje al cliente por WhatsApp?\n\n" + body.text)) return;
+    }
+    if (act === "discard" && !confirm("¿Cerrar esta conversación sin responder?")) return;
+    b.disabled = true;
+    call(act, body).then(function () { return act === "redraft" ? new Promise(function (r) { setTimeout(r, 400); }) : null; })
+      .then(load)
+      .catch(function (e) { alert(e.message); b.disabled = false; });
+  });
+
+  Array.prototype.forEach.call(document.querySelectorAll(".chip"), function (c) {
+    c.addEventListener("click", function () {
+      filter = c.getAttribute("data-f");
+      Array.prototype.forEach.call(document.querySelectorAll(".chip"), function (x) { x.setAttribute("aria-pressed", String(x === c)); });
+      render();
+    });
+  });
+  document.getElementById("reload").addEventListener("click", load);
+
+  if (!window.VesperAuth) { listEl.innerHTML = '<p class="msg err">No cargó el control de acceso. Recarga la página.</p>'; return; }
+  VesperAuth.initFirebase().then(function (auth) {
+    auth.onAuthStateChanged(function (u) {
+      if (!u) { listEl.innerHTML = '<p class="msg">Inicia sesión: <a href="login.html?next=wa_bandeja.html" style="color:var(--star)">entrar</a></p>'; return; }
+      user = u;
+      load();
+      /* refresca cada minuto mientras la pestaña está visible; no pisa lo que estás escribiendo */
+      clearInterval(timer);
+      timer = setInterval(function () {
+        if (document.hidden) return;
+        var a = document.activeElement;
+        if (a && a.tagName === "TEXTAREA") return;
+        load();
+      }, 60000);
+    });
+  }).catch(function () { listEl.innerHTML = '<p class="msg err">Sin conexión con el servicio de acceso.</p>'; });
+})();
+</script>
+</body>
+</html>
