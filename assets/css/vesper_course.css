@@ -288,3 +288,277 @@ html.js-anim .reveal.in-view{opacity:1;animation:cRise .7s var(--ease-out) backw
 .pcard .btn-outline{border-radius:14px;box-shadow:0 3px 0 var(--border);}
 .pcard .btn-outline:active{transform:translateY(3px);box-shadow:0 0 0 var(--border);}
 @media(prefers-reduced-motion:reduce){.btn-gold{transition:none;}}
+
+/* ============================================================
+   CURSO CON PERSONALIDAD (2026-11-18) — body.cv2
+   ------------------------------------------------------------
+   «Siento que no tiene la personalidad que tenemos ahora» (dueño,
+   sobre curso-ingles-general). La plantilla de octubre era blanco y
+   crema con tarjetas iguales e iconos sueltos: lo que la marca ya
+   descartó por «hecho con IA». Esta capa trae lo que hoy es Vesper:
+   la noche con estrellas de la portada, Vesper en medallón con una
+   línea suya a mano, la hoja de cuaderno puesta sobre la noche, la
+   ruta como constelación con láminas pintadas y las esquinas de
+   libro. Todo bajo .cv2: las demás páginas de curso no cambian
+   hasta que se les ponga la clase.
+   ============================================================ */
+.cv2{
+  --night:#14122a; --dusk:#1f2342; --twilight:#3a3a63;
+  --gold:#C9A84C; --star:#f3e2ab; --paper:#FBF8F1; --ink:#1B1B2F;
+  --on-night:rgba(245,242,235,.90); --on-night-soft:rgba(245,242,235,.66);
+  --hair:rgba(201,168,76,.35); --en:#8fc6ff; --en-ink:#2f6fb3;
+  --hand:'Caveat',cursive;
+  --gold-face:linear-gradient(180deg,color-mix(in srgb,#f3e2ab 45%,#C9A84C),#C9A84C);
+  --gold-shadow:color-mix(in srgb,#C9A84C 62%,#000);
+  --pen:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 150 9'%3E%3Cpath d='M2 6.5C22 2.5 41 8.8 62 5.4S104 2.2 122 5.6c9 1.7 17 1.2 26-1.4' fill='none' stroke='%23C9A84C' stroke-width='2.6' stroke-linecap='round'/%3E%3C/svg%3E");
+  background:var(--night);color:var(--on-night);
+}
+.cv2 header{background:rgba(20,18,42,.92);border-bottom-color:var(--hair);}
+.cv2 .btn-gold{color:#14122a;}
+.cv2 .eyebrow{color:var(--gold);letter-spacing:.26em;font-size:.72rem;}
+.cv2 .sec-title{color:#fff;font-size:clamp(1.7rem,3.4vw,2.3rem);letter-spacing:-.01em;}
+.cv2 .sec-lead{color:var(--on-night-soft);}
+
+/* Cielo: puntos fijos y el lucero, sin imagen extra */
+.v2-sky{position:absolute;inset:0;pointer-events:none;z-index:0;
+  background-image:
+    radial-gradient(1.6px 1.6px at 12% 18%,var(--star),transparent 60%),
+    radial-gradient(1.2px 1.2px at 28% 72%,rgba(243,226,171,.75),transparent 60%),
+    radial-gradient(1.8px 1.8px at 46% 10%,var(--star),transparent 60%),
+    radial-gradient(1.1px 1.1px at 63% 36%,rgba(243,226,171,.7),transparent 60%),
+    radial-gradient(1.5px 1.5px at 84% 16%,var(--star),transparent 60%),
+    radial-gradient(1.2px 1.2px at 92% 62%,rgba(243,226,171,.7),transparent 60%),
+    radial-gradient(1.4px 1.4px at 6% 54%,rgba(243,226,171,.8),transparent 60%),
+    radial-gradient(1.1px 1.1px at 72% 88%,rgba(243,226,171,.55),transparent 60%),
+    radial-gradient(1.3px 1.3px at 38% 46%,rgba(243,226,171,.5),transparent 60%);}
+
+/* ---------- HERO ---------- */
+.v2-hero{position:relative;overflow:hidden;
+  background:
+    radial-gradient(900px 440px at 78% -8%,rgba(201,168,76,.22),transparent 60%),
+    radial-gradient(700px 520px at 0% 110%,rgba(58,58,99,.55),transparent 65%),
+    linear-gradient(160deg,var(--dusk),var(--night) 62%,#0e0c1f);}
+.v2-hero .container{position:relative;z-index:1;}
+.v2-hero-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,400px);gap:56px;align-items:center;padding:70px 0 78px;}
+.v2-hero .crumbs{color:var(--on-night-soft);}
+.v2-hero h1{font-family:'Fraunces',Georgia,serif;font-optical-sizing:auto;font-weight:600;color:#fff;
+  font-size:clamp(2.6rem,5.6vw,4.1rem);line-height:1.02;letter-spacing:-.02em;margin:14px 0 18px;}
+.v2-hero h1 em{display:block;font-style:italic;font-weight:500;color:var(--star);font-size:.62em;line-height:1.15;margin-top:8px;letter-spacing:-.01em;}
+.v2-hero h1 em span{color:var(--en);}
+.v2-hero .lead{color:var(--on-night);font-size:1.1rem;max-width:560px;margin:0;}
+.v2-hero .chero-cta{margin-top:30px;}
+
+/* Riel de cifras con filetes de oro, como la portada */
+.v2-rail{display:grid;grid-template-columns:repeat(3,1fr);margin:40px 0 0;border-top:1px solid var(--hair);max-width:600px;}
+.v2-rail div{padding:18px 18px 0 0;}
+.v2-rail div + div{padding-left:18px;border-left:1px solid var(--hair);}
+.v2-rail dt{font-family:'Fraunces',Georgia,serif;font-size:1.55rem;font-weight:600;color:var(--star);line-height:1.1;}
+.v2-rail dd{margin:4px 0 0;font-size:.82rem;color:var(--on-night-soft);line-height:1.35;}
+
+/* Vesper en medallón: marco de noche, filete de oro, halo y rayos */
+.v2-vesper{margin:0;display:flex;flex-direction:column;align-items:center;gap:26px;}
+.v2-med{--m:clamp(220px,26vw,300px);position:relative;width:var(--m);height:var(--m);isolation:isolate;}
+.v2-glass{position:absolute;inset:0;border-radius:50%;overflow:hidden;border:1px solid var(--hair);
+  background:radial-gradient(circle at 50% 34%,#2a2d55,#1b1e3a 55%,#0d0b1c);
+  box-shadow:0 18px 44px rgba(8,6,20,.45),inset 0 0 0 11px rgba(20,18,42,0),inset 0 0 0 12px rgba(201,168,76,.24);}
+.v2-glass img{position:absolute;left:47%;bottom:-2%;width:90%;height:auto;transform:translateX(-50%);
+  filter:saturate(.95) drop-shadow(0 14px 24px rgba(8,6,20,.55));}
+.v2-halo{position:absolute;inset:-16%;z-index:-2;border-radius:50%;
+  background:radial-gradient(closest-side,rgba(201,168,76,.32),transparent 72%);filter:blur(14px);}
+.v2-rays{position:absolute;inset:-28%;z-index:-1;border-radius:50%;
+  background:repeating-conic-gradient(from 0deg,transparent 0deg,rgba(243,226,171,.16) 3deg,transparent 6deg,transparent 22.5deg);
+  -webkit-mask-image:radial-gradient(closest-side,transparent 44%,#000 60%,transparent 93%);
+          mask-image:radial-gradient(closest-side,transparent 44%,#000 60%,transparent 93%);
+  animation:v2spin 90s linear infinite;}
+@keyframes v2spin{to{transform:rotate(360deg);}}
+.v2-spark{position:absolute;z-index:3;width:14px;height:14px;background:var(--star);
+  clip-path:polygon(50% 0%,58% 42%,100% 50%,58% 58%,50% 100%,42% 58%,0% 50%,42% 42%);animation:v2tw 3.6s ease-in-out infinite;}
+.v2-spark.s1{top:2%;right:6%;}
+.v2-spark.s2{top:46%;left:-6%;width:10px;height:10px;animation-delay:1.2s;}
+.v2-spark.s3{bottom:6%;right:-3%;width:11px;height:11px;animation-delay:2.1s;}
+@keyframes v2tw{0%,100%{opacity:.25;transform:scale(.8);}50%{opacity:1;transform:scale(1);}}
+
+/* La línea de Vesper, escrita a mano (FIRMA) */
+.v2-say{position:relative;text-align:center;transform:rotate(-1.6deg);max-width:300px;
+  padding:9px 18px 11px;border-radius:4px 18px 16px 18px;
+  background:color-mix(in srgb,var(--gold) 12%,var(--dusk));border:1.5px solid color-mix(in srgb,var(--gold) 42%,transparent);
+  box-shadow:2px 3px 0 color-mix(in srgb,var(--gold) 22%,transparent);}
+.v2-say::before{content:"";position:absolute;top:-9px;left:50%;width:16px;height:16px;transform:translateX(-50%) rotate(45deg);
+  background:color-mix(in srgb,var(--gold) 12%,var(--dusk));border-left:1.5px solid color-mix(in srgb,var(--gold) 42%,transparent);border-top:1.5px solid color-mix(in srgb,var(--gold) 42%,transparent);}
+.v2-say .en{display:block;font:700 1.45rem/1.1 var(--hand);color:var(--star);}
+.v2-say .es{display:block;margin-top:3px;font-size:.78rem;color:var(--on-night-soft);}
+
+/* ---------- Secciones sobre la noche ---------- */
+.v2-sec{position:relative;padding:84px 0;}
+.v2-sec .sec-head{margin-bottom:40px;}
+
+/* Hoja de cuaderno: papel crema como UNA pieza puesta en la noche */
+.v2-sheet{position:relative;max-width:940px;margin:0 auto;color:var(--ink);
+  background:
+    linear-gradient(90deg,transparent 54px,rgba(192,57,43,.28) 54px,rgba(192,57,43,.28) 56px,transparent 56px),
+    repeating-linear-gradient(180deg,transparent 0,transparent 31px,rgba(47,111,179,.13) 31px,rgba(47,111,179,.13) 32px),
+    var(--paper);
+  border-radius:6px 6px 14px 6px;padding:54px 54px 50px 86px;transform:rotate(-.4deg);
+  box-shadow:0 2px 0 #e6dfcd,0 28px 60px rgba(4,3,14,.55);}
+.v2-tape{position:absolute;top:-14px;left:50%;width:120px;height:30px;transform:translateX(-50%) rotate(-3deg);
+  background:rgba(243,226,171,.72);box-shadow:0 2px 6px rgba(0,0,0,.12);
+  -webkit-mask-image:linear-gradient(90deg,transparent 0,#000 6px,#000 calc(100% - 6px),transparent 100%);
+          mask-image:linear-gradient(90deg,transparent 0,#000 6px,#000 calc(100% - 6px),transparent 100%);}
+.v2-sheet .eyebrow{color:#7c5e22;}
+.v2-sheet .sec-title{color:var(--ink);margin-bottom:6px;}
+.v2-sheet .sec-title::after{content:"";display:block;width:150px;height:9px;margin-top:10px;background:var(--pen) left/contain no-repeat;transform:rotate(-1.5deg);}
+.v2-sheet-body{display:grid;grid-template-columns:1.1fr 1fr;gap:44px;margin-top:26px;align-items:start;}
+.v2-sheet .prose{color:#4a4f5a;font-size:1.02rem;line-height:1.75;max-width:none;}
+.v2-sheet .prose strong{color:var(--ink);}
+.v2-sheet .prose em{color:var(--en-ink);}
+.v2-pieces{list-style:none;counter-reset:pz;margin:0;padding:0;display:grid;gap:18px;}
+.v2-pieces li{counter-increment:pz;position:relative;padding-left:52px;}
+.v2-pieces li::before{content:counter(pz);position:absolute;left:0;top:-4px;width:38px;height:38px;border-radius:50%;
+  display:grid;place-items:center;font:700 1.5rem/1 var(--hand);color:#7c5e22;
+  border:1.5px solid rgba(201,168,76,.7);transform:rotate(-6deg);}
+.v2-pieces b{display:block;font-family:'Fraunces',Georgia,serif;font-size:1.12rem;font-weight:600;color:var(--ink);}
+.v2-pieces span{display:block;font-size:.92rem;color:#5d6470;line-height:1.5;margin-top:2px;}
+.v2-note{position:absolute;right:34px;bottom:-22px;margin:0;transform:rotate(-3deg);
+  font:700 1.5rem/1 var(--hand);color:var(--ink);background:var(--star);padding:8px 16px 10px;border-radius:3px;
+  box-shadow:0 8px 18px rgba(4,3,14,.35);}
+
+/* Ruta: constelación con tres paradas pintadas */
+.v2-route{list-style:none;margin:0;padding:0;position:relative;display:grid;grid-template-columns:repeat(3,1fr);gap:26px;}
+.v2-route::before{content:"";position:absolute;left:16.6%;right:16.6%;top:9px;height:0;
+  border-top:1.5px dashed rgba(243,226,171,.45);}
+.v2-route li{position:relative;padding-top:40px;}
+.v2-star{position:absolute;top:0;left:50%;width:20px;height:20px;transform:translateX(-50%);background:var(--star);
+  clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);
+  filter:drop-shadow(0 0 6px rgba(243,226,171,.9));}
+.v2-route figure{margin:0 0 16px;border-radius:16px;overflow:hidden;border:1px solid var(--hair);aspect-ratio:16/10;
+  box-shadow:0 16px 36px rgba(4,3,14,.45);background:var(--dusk);}
+.v2-route img{width:100%;height:100%;object-fit:cover;object-position:62% 30%;display:block;transition:transform .6s var(--ease-out);}
+.v2-route li:hover img{transform:scale(1.04);}
+.v2-route .lv{font-size:.72rem;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--gold);}
+.v2-route b{display:block;font-family:'Fraunces',Georgia,serif;font-size:1.35rem;font-weight:600;color:#fff;margin:4px 0 6px;}
+.v2-route p{margin:0;color:var(--on-night-soft);font-size:.93rem;}
+
+/* Qué incluye: tarjeta con esquinas de libro */
+.v2-book{--orn:rgba(201,168,76,.7);position:relative;max-width:940px;margin:0 auto;padding:50px 54px 42px;border-radius:18px;
+  background:
+    linear-gradient(var(--orn),var(--orn)) 14px 14px/26px 1.5px,linear-gradient(var(--orn),var(--orn)) 14px 14px/1.5px 26px,
+    linear-gradient(var(--orn),var(--orn)) calc(100% - 14px) 14px/26px 1.5px,linear-gradient(var(--orn),var(--orn)) calc(100% - 14px) 14px/1.5px 26px,
+    linear-gradient(var(--orn),var(--orn)) 14px calc(100% - 14px)/26px 1.5px,linear-gradient(var(--orn),var(--orn)) 14px calc(100% - 14px)/1.5px 26px,
+    linear-gradient(var(--orn),var(--orn)) calc(100% - 14px) calc(100% - 14px)/26px 1.5px,linear-gradient(var(--orn),var(--orn)) calc(100% - 14px) calc(100% - 14px)/1.5px 26px,
+    radial-gradient(700px 300px at 85% -20%,rgba(201,168,76,.16),transparent 60%),
+    var(--dusk);
+  background-repeat:no-repeat;border:1px solid var(--twilight);}
+.v2-book-head{text-align:center;margin-bottom:30px;}
+.v2-book-head .sec-title::after{content:"";display:block;width:150px;height:9px;margin:10px auto 0;background:var(--pen) center/contain no-repeat;transform:rotate(-1.5deg);}
+.v2-checks{list-style:none;margin:0 auto;padding:0;display:grid;grid-template-columns:repeat(2,1fr);gap:16px 40px;max-width:780px;}
+.v2-checks li{position:relative;padding-left:30px;color:var(--on-night);font-size:.97rem;line-height:1.5;}
+.v2-checks li::before{content:"";position:absolute;left:0;top:3px;width:16px;height:16px;background:var(--gold);
+  clip-path:polygon(50% 0%,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%);}
+.v2-book-foot{margin:32px 0 0;padding-top:22px;border-top:1px solid var(--hair);text-align:center;color:var(--on-night-soft);font-size:.95rem;}
+.v2-book-foot b{color:var(--star);font-weight:600;}
+.v2-book-foot a{color:var(--star);font-weight:700;margin-left:6px;white-space:nowrap;}
+.v2-book-foot a:hover{color:#fff;}
+
+/* Cierre: Vesper asoma e invita */
+.v2-band{position:relative;overflow:hidden;padding:72px 0 84px;
+  background:radial-gradient(800px 380px at 50% 0%,rgba(201,168,76,.18),transparent 65%),linear-gradient(180deg,var(--night),#0e0c1f);
+  border-top:1px solid var(--hair);}
+.v2-band .container{position:relative;z-index:1;}
+.v2-band-cat{display:block;width:150px;height:auto;margin:0 auto -4px;
+  -webkit-mask-image:linear-gradient(180deg,#000 72%,transparent 98%);mask-image:linear-gradient(180deg,#000 72%,transparent 98%);}
+.v2-band-say{margin:0 auto 18px;font:700 1.7rem/1.1 var(--hand);color:var(--star);transform:rotate(-2deg);}
+.v2-band-meta{margin:18px auto 0 !important;font-size:.82rem;color:var(--on-night-soft) !important;}
+.cv2 footer{background:#0e0c1f;border-top:1px solid rgba(201,168,76,.18);}
+.v2-slogan{font-family:'Fraunces',Georgia,serif;font-style:italic;color:var(--star);font-size:1rem;margin-top:14px;}
+
+/* Teléfono */
+@media(max-width:980px){
+  .v2-hero-grid{grid-template-columns:1fr;gap:40px;padding:48px 0 60px;}
+  .v2-vesper{order:-1;}
+  .v2-med{--m:200px;}
+  .v2-sheet-body{grid-template-columns:1fr;gap:30px;}
+  .v2-route{grid-template-columns:1fr;gap:34px;max-width:520px;margin:0 auto;}
+  .v2-route::before{left:9px;right:auto;top:10px;bottom:30px;height:auto;border-top:0;border-left:1.5px dashed rgba(243,226,171,.45);}
+  .v2-route li{padding:0 0 0 38px;}
+  .v2-star{left:0;transform:none;}
+}
+@media(max-width:680px){
+  .v2-sec{padding:60px 0;}
+  .v2-rail{grid-template-columns:1fr 1fr 1fr;}
+  .v2-rail div{padding-right:10px;}
+  .v2-rail div + div{padding-left:10px;}
+  .v2-rail dt{font-size:1.2rem;}
+  .v2-rail dd{font-size:.74rem;}
+  .v2-sheet{padding:44px 22px 46px 46px;transform:none;
+    background:
+      linear-gradient(90deg,transparent 28px,rgba(192,57,43,.28) 28px,rgba(192,57,43,.28) 30px,transparent 30px),
+      repeating-linear-gradient(180deg,transparent 0,transparent 31px,rgba(47,111,179,.13) 31px,rgba(47,111,179,.13) 32px),
+      var(--paper);}
+  .v2-note{right:16px;font-size:1.3rem;}
+  .v2-book{padding:42px 22px 32px;}
+  .v2-checks{grid-template-columns:1fr;}
+}
+@media(prefers-reduced-motion:reduce){
+  .v2-rays,.v2-spark{animation:none;}
+  .v2-route li:hover img{transform:none;}
+}
+
+/* ---------- CURSO CON PERSONALIDAD · piezas por curso (2026-11-18) ----------
+   Club, Corporativo y Certificación pasaron a .cv2 el mismo día. Lo que
+   sólo usa uno de ellos va aquí: la hoja a una columna, la fila de temas
+   (los grabados de la portada), las fichas por examen y las dos hojas
+   corregidas de Banda 6 / Banda 8. */
+.v2-sheet-body.one{grid-template-columns:1fr;max-width:720px;}
+
+/* Temas del club: grabados en marco de noche */
+.v2-topics{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(6,1fr);gap:18px;}
+.v2-topics li{display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;}
+.v2-topics img{width:100%;max-width:120px;height:auto;aspect-ratio:1;border-radius:16px;border:1px solid var(--hair);
+  box-shadow:0 10px 24px rgba(4,3,14,.4);transition:transform .3s var(--ease-out),border-color .3s;}
+.v2-topics li:hover img{transform:translateY(-4px) rotate(-1.5deg);border-color:var(--gold);}
+.v2-topics b{font-size:.84rem;font-weight:600;color:var(--on-night);}
+
+/* Fichas por examen: tarjetas de noche con esquinas de libro */
+.v2-exams{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;}
+.v2-exam{--orn:rgba(201,168,76,.6);position:relative;padding:28px 26px 22px;border-radius:18px;border:1px solid var(--twilight);
+  background:
+    linear-gradient(var(--orn),var(--orn)) 12px 12px/20px 1.5px,linear-gradient(var(--orn),var(--orn)) 12px 12px/1.5px 20px,
+    linear-gradient(var(--orn),var(--orn)) calc(100% - 12px) 12px/20px 1.5px,linear-gradient(var(--orn),var(--orn)) calc(100% - 12px) 12px/1.5px 20px,
+    radial-gradient(400px 200px at 90% -20%,rgba(201,168,76,.14),transparent 60%),var(--dusk);
+  background-repeat:no-repeat;}
+.v2-exam h3{font-family:'Fraunces',Georgia,serif;font-size:1.7rem;font-weight:600;color:var(--star);margin:0 0 6px;letter-spacing:-.01em;}
+.v2-exam > p{color:var(--on-night-soft);font-size:.92rem;margin:0 0 14px;min-height:3em;}
+.v2-exam dl{display:grid;grid-template-columns:max-content 1fr;margin:0;font-size:.85rem;}
+.v2-exam dt,.v2-exam dd{padding:9px 0;border-top:1px solid var(--twilight);}
+.v2-exam dt{font-weight:700;color:var(--gold);padding-right:14px;font-size:.74rem;letter-spacing:.08em;text-transform:uppercase;padding-top:11px;}
+.v2-exam dd{margin:0;color:var(--on-night);}
+.v2-exam dd b{color:#fff;}
+.v2-fine{margin:22px 0 0;color:var(--on-night-soft);font-size:.85rem;}
+
+/* Banda 6 / Banda 8: dos hojas corregidas */
+.v2-papers{display:grid;grid-template-columns:1fr 1fr;gap:30px;max-width:980px;}
+.v2-paper{position:relative;margin:0;padding:34px 30px 30px;border-radius:4px 4px 12px 4px;color:var(--ink);
+  background:repeating-linear-gradient(180deg,transparent 0,transparent 31px,rgba(47,111,179,.12) 31px,rgba(47,111,179,.12) 32px),var(--paper);
+  box-shadow:0 22px 50px rgba(4,3,14,.5);}
+.v2-paper.p6{transform:rotate(-.8deg);}
+.v2-paper.p8{transform:rotate(.6deg);}
+.v2-paper figcaption{position:absolute;top:-16px;left:22px;font:700 1.5rem/1 var(--hand);padding:6px 14px 8px;border-radius:3px;
+  background:#e8e4d8;color:#5d6470;box-shadow:0 4px 10px rgba(0,0,0,.18);transform:rotate(-2deg);}
+.v2-paper.p8 figcaption{background:var(--star);color:#14122a;}
+.v2-paper p{margin:0;font-family:'Fraunces',Georgia,serif;font-size:1.06rem;line-height:1.85;color:#3c4150;}
+.v2-paper.p8 p{color:var(--ink);}
+.v2-paper em{font-style:normal;background:linear-gradient(transparent 52%,rgba(201,168,76,.45) 52%);padding:0 2px;}
+.v2-paper-note{position:absolute;right:18px;bottom:-18px;font:700 1.35rem/1 var(--hand);color:#7c5e22;
+  background:var(--paper);padding:4px 10px 6px;border-radius:3px;transform:rotate(-3deg);box-shadow:0 6px 14px rgba(4,3,14,.3);}
+
+@media(max-width:980px){
+  .v2-topics{grid-template-columns:repeat(4,1fr);}
+  .v2-exams{grid-template-columns:1fr;max-width:560px;margin:0 auto;}
+  .v2-exam > p{min-height:0;}
+}
+@media(max-width:680px){
+  .v2-topics{grid-template-columns:repeat(3,1fr);gap:14px;}
+  .v2-papers{grid-template-columns:1fr;gap:40px;}
+  .v2-paper{padding:32px 20px 28px;}
+}
+@media(prefers-reduced-motion:reduce){.v2-topics li:hover img{transform:none;}}
