@@ -77,7 +77,7 @@ window.VESPER_CONTENT_PACK = (function () {
         { type: "fill_blank", sentence: "Laura wants to meet Sam for ___ next week.", answers: ["coffee", "a coffee"], hint: "Está al final del correo.", explanation: "\"...meet for coffee next week?\"" },
         { type: "word_order", words: ["I", "had", "a", "great", "time"], correctOrder: ["I", "had", "a", "great", "time"], hint: "Empieza con el sujeto \"I\"." },
         { type: "translate", prompt: "Traduce: \"Nos vemos pronto.\"",
-          answers: ["see you soon"], explanation: "See you soon." }
+          answers: ["see you soon", "i'll see you soon", "we'll see each other soon"], explanation: "See you soon." }
       ]
     },
 
@@ -94,7 +94,7 @@ window.VESPER_CONTENT_PACK = (function () {
       },
       exercises: [
         { type: "reading", title: "Working from home",
-          passage: "Ten years ago, almost everyone travelled to an office every day. Today, millions of people work from home, at least part of the week.\n\nThere are clear advantages. Workers save time and money because they don't commute, and many say they feel more relaxed. Companies can also save money on big offices.\n\nHowever, working from home is not perfect. Some people feel lonely, and it can be hard to switch off at the end of the day. Experts say the best solution may be a mix: a few days at home and a few days in the office.",
+          passage: "Ten years ago, almost everyone traveled to an office every day. Today, millions of people work from home, at least part of the week.\n\nThere are clear advantages. Workers save time and money because they don't commute, and many say they feel more relaxed. Companies can also save money on big offices.\n\nHowever, working from home is not perfect. Some people feel lonely, and it can be hard to switch off at the end of the day. Experts say the best solution may be a mix: a few days at home and a few days in the office.",
           questions: [
             { q: "What is the main topic of the article?", options: ["How to find a job", "The good and bad sides of working from home", "Why offices are closing"], correctIndex: 1, explanation: "The text discusses advantages and disadvantages of remote work." },
             { q: "According to the text, one advantage is that workers...", options: ["save time on commuting", "never feel lonely", "earn more money"], correctIndex: 0, explanation: "\"Workers save time and money because they don't commute.\"" },
@@ -104,8 +104,8 @@ window.VESPER_CONTENT_PACK = (function () {
         { type: "true_false", statement: "The article says working from home is perfect.", answer: false, explanation: "\"...working from home is not perfect.\"" },
         { type: "fill_blank", sentence: "Some people feel ___ when they work alone at home.", answers: ["lonely"], hint: "An adjective from the text.", explanation: "\"Some people feel lonely...\"" },
         { type: "multiple_choice", question: "Who can also save money, according to the text?", options: ["Companies", "Governments", "Schools"], correctIndex: 0, explanation: "\"Companies can also save money on big offices.\"" },
-        { type: "translate", prompt: "Say how often, starting 'I work from home…': I work at home on Mondays and Thursdays.",
-          answers: ["i work from home two days a week", "i work from home twice a week"], explanation: "I work from home two days a week." }
+        { type: "translate", prompt: "Say how often, using 'a week' or 'per week', starting 'I work from home…': I work at home on Mondays and Thursdays.",
+          answers: ["i work from home two days a week", "i work from home twice a week", "i work from home 2 days a week", "i work from home two days per week", "i work from home 2 days per week", "i work from home twice per week"], explanation: "I work from home two days a week." }
       ]
     },
 
@@ -121,18 +121,18 @@ window.VESPER_CONTENT_PACK = (function () {
       },
       exercises: [
         { type: "reading", title: "The lost wallet",
-          passage: "On her way to work, Carla noticed a brown wallet lying on the pavement. She looked around, but the street was empty. Inside, she found some cash, a few cards and a photo of a smiling family.\n\nAlthough she was in a hurry, Carla decided to hand the wallet in at the nearest police station. She didn't expect anything in return.\n\nTwo weeks later, a letter arrived. The owner, a retired teacher, thanked her warmly and invited her to dinner. To her surprise, he turned out to be her neighbour from the flat upstairs.",
+          passage: "On her way to work, Carla noticed a brown wallet lying on the sidewalk. She looked around, but the street was empty. Inside, she found some cash, a few cards and a photo of a smiling family.\n\nAlthough she was in a hurry, Carla decided to hand the wallet in at the nearest police station. She didn't expect anything in return.\n\nTwo weeks later, a letter arrived. The owner, a retired teacher, thanked her warmly and invited her to dinner. To her surprise, he turned out to be her neighbor from the apartment upstairs.",
           questions: [
-            { q: "Where did Carla find the wallet?", options: ["At work", "On the pavement", "At the police station"], correctIndex: 1, explanation: "\"...a brown wallet lying on the pavement.\"" },
+            { q: "Where did Carla find the wallet?", options: ["At work", "On the sidewalk", "At the police station"], correctIndex: 1, explanation: "\"...a brown wallet lying on the sidewalk.\"" },
             { q: "What did Carla do with the wallet?", options: ["She kept the money.", "She left it there.", "She handed it in at a police station."], correctIndex: 2, explanation: "\"...decided to hand the wallet in at the nearest police station.\"" },
-            { q: "What was the surprise at the end?", options: ["The owner was her upstairs neighbour.", "The wallet was empty.", "The owner was a police officer."], correctIndex: 0, explanation: "\"...he turned out to be her neighbour from the flat upstairs.\"" }
+            { q: "What was the surprise at the end?", options: ["The owner was her upstairs neighbor.", "The wallet was empty.", "The owner was a police officer."], correctIndex: 0, explanation: "\"...he turned out to be her neighbor from the apartment upstairs.\"" }
           ] },
         { type: "multiple_choice", question: "The phrase \"in a hurry\" means...", options: ["with a lot of time", "in a rush", "feeling sad"], correctIndex: 1, explanation: "\"In a hurry\" = rushing, without much time." },
         { type: "true_false", statement: "Carla expected a reward for returning the wallet.", answer: false, explanation: "\"She didn't expect anything in return.\"" },
         { type: "matching", instruction: "Match each expression with its meaning.", pairs: [{"l":"hand in","r":"give to someone in authority"},{"l":"in return","r":"as an exchange"},{"l":"turn out","r":"prove to be in the end"},{"l":"retired","r":"no longer working because of age"}] },
         { type: "fill_blank", sentence: "The owner was a ___ teacher.", answers: ["retired"], hint: "He doesn't work any more.", explanation: "\"The owner, a retired teacher...\"" },
         { type: "translate", prompt: "Rewrite with the phrasal verb 'hand in': She decided to take the wallet to the police station and give it to them.",
-          answers: ["she decided to hand in the wallet", "she decided to hand the wallet in"], explanation: "She decided to hand in the wallet." }
+          answers: ["she decided to hand in the wallet", "she decided to hand the wallet in", "she decided to hand it in", "she decided to hand in the wallet to the police", "she decided to hand the wallet in to the police", "she decided to hand it in to the police"], explanation: "She decided to hand in the wallet." }
       ]
     },
 
@@ -278,7 +278,7 @@ window.VESPER_CONTENT_PACK = (function () {
       title: "Pasado simple", xpReward: 44, mascotState: "explaining",
       nextLessonId: "gram-b1-present-perfect",
       explanation: {
-        body: "El pasado simple habla de acciones terminadas. Regulares: add -ed (worked). Irregulares cambian (go -> went). En negativo y preguntas usamos did: I didn't go / Did you go? (Acciones del pasado ya terminadas.)",
+        body: "El pasado simple habla de acciones terminadas. Regulares: añade -ed (worked). Irregulares cambian (go -> went). En negativo y preguntas usamos did: I didn't go / Did you go? (Acciones del pasado ya terminadas.)",
         examples: [
           { en: "I worked yesterday.", es: "Trabajé ayer." },
           { en: "She went to London.", es: "Ella fue a Londres." },
@@ -288,7 +288,7 @@ window.VESPER_CONTENT_PACK = (function () {
       exercises: [
         { type: "multiple_choice", question: "Past of \"go\":", options: ["goed", "gone", "went"], correctIndex: 2, explanation: "\"go\" es irregular -> went." },
         { type: "fill_blank", sentence: "Yesterday I ___ (watch) a great film.", answers: ["watched"], hint: "Regular: + -ed.", explanation: "watch -> watched." },
-        { type: "multiple_choice", question: "Choose the negative: \"She ___ come to the party.\"", options: ["didn't", "doesn't", "isn't"], correctIndex: 0, explanation: "Pasado negativo: didn't + verbo base." },
+        { type: "multiple_choice", question: "Choose the negative for yesterday: \"She ___ come to the party.\"", options: ["didn't", "doesn't", "isn't"], correctIndex: 0, explanation: "Pasado negativo: didn't + verbo base." },
         { type: "word_order", words: ["Did", "you", "call", "her", "?"], correctOrder: ["Did", "you", "call", "her", "?"], hint: "Pregunta en pasado: Did + sujeto + verbo." },
         { type: "categorize", instruction: "¿Verbo regular o irregular?", buckets: [
           { id: "reg", label: "Regular" }, { id: "irr", label: "Irregular" }
@@ -392,7 +392,7 @@ window.VESPER_CONTENT_PACK = (function () {
           ]
         },
         {
-          type: "multiple_choice", question: "Oh no! I ___ my keys. I can't get into my flat!", options: ["'ve lost", "was losing", "have been lose"], correctIndex: 0,
+          type: "multiple_choice", question: "Oh no! I ___ my keys. I can't get into my apartment!", options: ["'ve lost", "was losing", "have been lose"], correctIndex: 0,
           explanation: "A past action with a result now: I've lost my keys."
         },
         {
@@ -416,7 +416,7 @@ window.VESPER_CONTENT_PACK = (function () {
     },
 
     "gram-b2-conditionals": {
-      lessonId: "gram-b2-conditionals", level: "B2", track: "Core Grammar", topic: "grammar", skill: "grammar",
+      lessonId: "gram-b2-conditionals", level: "B1", track: "Core Grammar", topic: "grammar", skill: "grammar",
       title: "Conditionals (0, 1 and 2)", xpReward: 54, mascotState: "explaining",
       explanation: {
         body: "Zero: general facts (If you heat ice, it melts). First: a real future possibility (If it rains, I'll stay home). Second: an imaginary situation (If I had money, I would travel). The second conditional uses the past simple + would.",
@@ -428,7 +428,7 @@ window.VESPER_CONTENT_PACK = (function () {
       },
       exercises: [
         { type: "multiple_choice", question: "First conditional: \"If it rains, I ___ at home.\"", options: ["stay", "will stay", "would stay"], correctIndex: 1, explanation: "First conditional: if + present simple, will + verb." },
-        { type: "multiple_choice", question: "Second conditional: \"If I ___ you, I would say no.\"", options: ["were", "am", "will be"], correctIndex: 0, explanation: "The second conditional uses \"were\" for all persons." },
+        { type: "multiple_choice", question: "Second conditional: \"If I ___ you, I would say no.\"", options: ["were", "am", "will be"], correctIndex: 0, explanation: "In the second conditional the standard form is \"If I were you…\" (\"was\" is common in casual speech)." },
         { type: "fill_blank", sentence: "If you mix blue and yellow, you ___ green. (hecho)", answers: ["get", "make"], hint: "Zero conditional: present + present.", explanation: "Zero conditional: ...you get green." },
         { type: "categorize", instruction: "Real (1st) or imaginary (2nd)?", buckets: [
           { id: "first", label: "1st (real)" }, { id: "second", label: "2nd (imaginary)" }
@@ -475,7 +475,7 @@ window.VESPER_CONTENT_PACK = (function () {
           { t: "leg", bucket: "body" }, { t: "white", bucket: "color" }
         ] },
         { type: "translate", prompt: "Traduce: \"Sus ojos son azules.\"",
-          answers: ["her eyes are blue", "his eyes are blue"], explanation: "Her/His eyes are blue." }
+          answers: ["her eyes are blue", "his eyes are blue", "their eyes are blue"], explanation: "Her/His eyes are blue." }
       ]
     },
 
@@ -518,9 +518,9 @@ window.VESPER_CONTENT_PACK = (function () {
       },
       exercises: [
         { type: "matching", instruction: "Match each verb with its meaning.", pairs: [{"l":"save","r":"keep money for the future"},{"l":"spend","r":"use money to buy things"},{"l":"borrow","r":"take something and give it back later"},{"l":"lend","r":"give something that will be returned"}] },
-        { type: "multiple_choice", question: "Choose: I can't ___ a holiday this year.", options: ["save", "spend", "afford"], correctIndex: 2, explanation: "afford = have enough money for something." },
+        { type: "multiple_choice", question: "Choose: I can't ___ a vacation this year.", options: ["save", "spend", "afford"], correctIndex: 2, explanation: "afford = have enough money for something." },
         { type: "fill_blank", sentence: "Can I ___ your pen? (pedirte prestado)", answers: ["borrow"], hint: "borrow = pedir prestado.", explanation: "borrow (from someone)." },
-        { type: "true_false", statement: "\"Lend\" means to give something for a short time.", answer: true, explanation: "lend = give something to someone for a period of time." },
+        { type: "true_false", statement: "\"Lend\" means to give something to someone temporarily.", answer: true, explanation: "lend = give something to someone for a period of time." },
         { type: "categorize", instruction: "Money in or money out?", buckets: [
           { id: "in", label: "Money in (income)" }, { id: "out", label: "Money out (expense)" }
         ], items: [
@@ -528,7 +528,7 @@ window.VESPER_CONTENT_PACK = (function () {
           { t: "bonus", bucket: "in" }, { t: "bills", bucket: "out" }
         ] },
         { type: "translate", prompt: "Rewrite using 'save': Every month, I keep some of my money instead of spending it.",
-          answers: ["i save money every month", "i save money each month"], explanation: "I save money every month." }
+          answers: ["i save money every month", "i save money each month", "i save some money every month", "i save some money each month", "i save some of my money every month", "every month i save some money", "every month i save some of my money", "each month i save some money"], explanation: "I save money every month." }
       ]
     },
 
@@ -536,7 +536,7 @@ window.VESPER_CONTENT_PACK = (function () {
       lessonId: "voc-b2-environment", level: "B2", track: "Vocabulary", topic: "society", skill: "vocab",
       title: "The environment", xpReward: 50, mascotState: "explaining",
       explanation: {
-        body: "Environmental vocabulary: pollution (dirty air, water or land), recycle (use materials again), waste (rubbish; or to use something badly), renewable (that never runs out), climate change (long-term change in the planet's weather).",
+        body: "Environmental vocabulary: pollution (dirty air, water or land), recycle (use materials again), waste (trash; or to use something badly), renewable (that never runs out), climate change (long-term change in the planet's weather).",
         examples: [
           { en: "We should reduce plastic waste." },
           { en: "Solar power is renewable." }
@@ -554,7 +554,7 @@ window.VESPER_CONTENT_PACK = (function () {
           { t: "wind", bucket: "ren" }, { t: "oil", bucket: "non" }
         ] },
         { type: "translate", prompt: "Give advice with 'should' and 'reduce': There is far too much plastic waste.",
-          answers: ["we should reduce plastic waste"], explanation: "We should reduce plastic waste." }
+          answers: ["we should reduce plastic waste", "we should reduce our plastic waste", "we should reduce the amount of plastic waste", "you should reduce plastic waste", "you should reduce your plastic waste", "people should reduce plastic waste"], explanation: "We should reduce plastic waste." }
       ]
     },
 
@@ -611,7 +611,7 @@ window.VESPER_CONTENT_PACK = (function () {
             kind: "errores",
             items: [
               { no: "Hello, I am Sam. (al teléfono)", si: "Hello, this is Sam.", pq: "Al teléfono te presentas con this is." },
-              { no: "Wait me a moment.", si: "Hold on a moment, please.", pq: "wait no lleva me; al teléfono se dice hold on." },
+              { no: "Wait me a moment.", si: "Hold on a moment, please.", pq: "Con wait no se usa me así; al teléfono lo más común es hold on." },
               { no: "Can you call me again back?", si: "Can you call me back?", pq: "Devolver la llamada = call back." }
             ]
           },
@@ -647,7 +647,7 @@ window.VESPER_CONTENT_PACK = (function () {
         { type: "speak", text: "Hello, this is Sam. Can I speak to Mr Lee, please?", es: "Hola, habla Sam. ¿Puedo hablar con el señor Lee, por favor?" },
         {
           type: "translate", prompt: "Traduce: \"¿Puedo hablar con Ana, por favor?\"",
-          answers: ["can i speak to ana please", "could i speak to ana please", "can i talk to ana please", "may i speak to ana please"], explanation: "Can I speak to Ana, please?"
+          answers: ["can i speak to ana please", "could i speak to ana please", "can i talk to ana please", "may i speak to ana please", "can i speak with ana please", "could i speak with ana please", "may i speak with ana please", "can i talk with ana please", "could i talk to ana please"], explanation: "Can I speak to Ana, please?"
         }
       ]
     },
@@ -692,7 +692,7 @@ window.VESPER_CONTENT_PACK = (function () {
       exercises: [
         { type: "multiple_choice", question: "Choose: ___ it was raining, we went for a walk.", options: ["Although", "Despite", "However"], correctIndex: 0, explanation: "Although + a full clause (subject + verb)." },
         { type: "multiple_choice", question: "Choose: ___ the rain, we went for a walk.", options: ["Although", "Despite", "Because"], correctIndex: 1, explanation: "Despite + noun (the rain)." },
-        { type: "fill_blank", sentence: "The plan was risky. ___, we decided to try it.", answers: ["however"], hint: "It goes at the start, after a full stop.", explanation: "However, we decided to try it." },
+        { type: "fill_blank", sentence: "The plan was risky. ___, we decided to try it.", answers: ["however", "nevertheless", "nonetheless", "even so"], hint: "It goes at the start, after a full stop.", explanation: "However / Nevertheless, we decided to try it." },
         { type: "true_false", statement: "We can say \"Despite of the rain...\".", answer: false, explanation: "It's \"despite the rain\" (no 'of'); with 'of' it would be \"in spite of\"." },
         { type: "categorize", instruction: "Followed by a clause or by a noun/-ing?", buckets: [
           { id: "clause", label: "+ clause" }, { id: "noun", label: "+ noun / -ing" }
@@ -701,7 +701,7 @@ window.VESPER_CONTENT_PACK = (function () {
           { t: "even though", bucket: "clause" }, { t: "in spite of", bucket: "noun" }
         ] },
         { type: "translate", prompt: "Join the sentences with 'Although': He was tired. He finished the work.",
-          answers: ["although he was tired he finished the work", "even though he was tired he finished the work", "although he was tired, he finished the work"], explanation: "Although he was tired, he finished the work." }
+          answers: ["although he was tired he finished the work", "even though he was tired he finished the work", "although he was tired, he finished the work", "he finished the work although he was tired"], explanation: "Although he was tired, he finished the work." }
       ]
     },
 
@@ -736,12 +736,12 @@ window.VESPER_CONTENT_PACK = (function () {
         examples: [{ en: "I can speak English.", es: "Sé hablar inglés." }, { en: "Can I open the window?", es: "¿Puedo abrir la ventana?" }] },
       exercises: [
         { type: "multiple_choice", question: "Choose: She ___ swim very well.", options: ["cans", "can to", "can"], correctIndex: 2, explanation: "can + verbo base, sin -s ni 'to'." },
-        { type: "fill_blank", sentence: "___ I use your phone, please?", answers: ["can", "could"], hint: "Pedir permiso.", explanation: "Can/Could I...? = ¿Puedo...?" },
+        { type: "fill_blank", sentence: "___ I use your phone, please?", answers: ["can", "could", "may"], hint: "Pedir permiso.", explanation: "Can/Could I...? = ¿Puedo...?" },
         { type: "true_false", statement: "The negative of \"can\" is \"can't\".", answer: true, explanation: "can -> can't (cannot)." },
-        { type: "multiple_choice", question: "Choose: We ___ find the keys. (no es posible)", options: ["can't", "can", "can to"], correctIndex: 0, explanation: "can't = no poder." },
+        { type: "multiple_choice", question: "Choose: We ___ find the keys. (no las encontramos)", options: ["can't", "can", "can to"], correctIndex: 0, explanation: "can't = no poder." },
         { type: "word_order", words: ["I", "can", "play", "guitar"], correctOrder: ["I", "can", "play", "guitar"], hint: "Sujeto + can + verbo." },
         { type: "translate", prompt: "Traduce: \"¿Puedo abrir la ventana?\"",
-          answers: ["can i open the window", "could i open the window"], explanation: "Can I open the window?" }
+          answers: ["can i open the window", "could i open the window", "may i open the window"], explanation: "Can I open the window?" }
       ]
     },
 
@@ -755,7 +755,7 @@ window.VESPER_CONTENT_PACK = (function () {
           passage: "Last night I watched \"The Long Road\", a new adventure film. The story is simple: a young woman travels across the country to find her sister.\n\nThe acting is excellent and the music is beautiful. However, the film is a bit too long, and the ending is not very surprising.\n\nAll in all, I enjoyed it. If you like quiet, emotional films, I really recommend it. I'd give it four stars out of five.",
           questions: [
             { q: "What kind of film is it?", options: ["A comedy", "An adventure film", "A horror film"], correctIndex: 1, explanation: "\"...a new adventure film.\"" },
-            { q: "What does the writer criticise?", options: ["The acting", "The music", "The length and the ending"], correctIndex: 2, explanation: "\"...a bit too long, and the ending is not very surprising.\"" },
+            { q: "What does the writer criticize?", options: ["The acting", "The music", "The length and the ending"], correctIndex: 2, explanation: "\"...a bit too long, and the ending is not very surprising.\"" },
             { q: "Does the writer recommend it?", options: ["Yes, for fans of emotional films", "No, not at all", "Only for children"], correctIndex: 0, explanation: "\"If you like quiet, emotional films, I really recommend it.\"" }
           ] },
         { type: "true_false", statement: "The writer gives the film five stars.", answer: false, explanation: "\"...four stars out of five.\"" },
@@ -763,7 +763,7 @@ window.VESPER_CONTENT_PACK = (function () {
           { l: "acting", r: "actuación" }, { l: "ending", r: "final" }, { l: "recommend", r: "recomendar" }, { l: "review", r: "reseña" } ] },
         { type: "fill_blank", sentence: "The film is a bit too ___.", answers: ["long"], hint: "Crítica del texto.", explanation: "\"...a bit too long.\"" },
         { type: "translate", prompt: "Traduce: \"Lo recomiendo mucho.\"",
-          answers: ["i really recommend it", "i recommend it a lot"], explanation: "I really recommend it." }
+          answers: ["i really recommend it", "i recommend it a lot", "i highly recommend it", "i strongly recommend it", "i definitely recommend it"], explanation: "I really recommend it." }
       ]
     },
 
@@ -784,17 +784,17 @@ window.VESPER_CONTENT_PACK = (function () {
         { type: "matching", instruction: "Match each word with its meaning.", pairs: [{"l":"crowded","r":"full of people"},{"l":"affordable","r":"not too expensive"},{"l":"narrow","r":"not wide"},{"l":"tip","r":"a useful piece of advice"}] },
         { type: "fill_blank", sentence: "The yellow trams get very ___ in the day.", answers: ["crowded"], hint: "Lots of people.", explanation: "\"...trams get very crowded.\"" },
         { type: "translate", prompt: "Rewrite as a negative command with 'forget': Remember to bring comfortable shoes.",
-          answers: ["don't forget comfortable shoes", "do not forget comfortable shoes"], explanation: "Don't forget comfortable shoes." }
+          answers: ["don't forget comfortable shoes", "do not forget comfortable shoes", "don't forget to bring comfortable shoes", "do not forget to bring comfortable shoes"], explanation: "Don't forget comfortable shoes." }
       ]
     },
 
     "voc-b2-feelings": {
       lessonId: "voc-b2-feelings", level: "B2", track: "Vocabulary", topic: "society", skill: "vocab",
       title: "Emotions and nuance", xpReward: 48, mascotState: "explaining",
-      explanation: { body: "More precise adjectives of emotion: thrilled (extremely happy and excited), anxious (worried and nervous), frustrated (annoyed because you can't do something), relieved (happy because a worry has gone). They raise the level of your vocabulary.",
+      explanation: { body: "More precise adjectives of emotion: thrilled (extremely happy and excited), anxious (worried and nervous), frustrated (annoyed because you can't do something), relieved (calm and happy because a worry has gone). They raise the level of your vocabulary.",
         examples: [{ en: "I was thrilled with the news." }, { en: "She felt relieved after the exam." }] },
       exercises: [
-        { type: "matching", instruction: "Match each adjective with its meaning.", pairs: [{"l":"thrilled","r":"extremely happy and excited"},{"l":"anxious","r":"worried and nervous"},{"l":"frustrated","r":"annoyed because you can't succeed"},{"l":"relieved","r":"calm because a worry has gone"}] },
+        { type: "matching", instruction: "Match each adjective with its meaning.", pairs: [{"l":"thrilled","r":"extremely happy and excited"},{"l":"anxious","r":"worried and nervous"},{"l":"frustrated","r":"annoyed because you can't succeed"},{"l":"relieved","r":"calm and happy because a worry has gone"}] },
         { type: "multiple_choice", question: "After passing the test, she felt...", options: ["relieved", "anxious", "frustrated"], correctIndex: 0, explanation: "relieved = calm again after a worry has gone." },
         { type: "fill_blank", sentence: "I was absolutely ___ to win the prize. (very happy)", answers: ["thrilled", "delighted"], hint: "Stronger than 'happy'.", explanation: "thrilled / delighted = extremely happy." },
         { type: "true_false", statement: "\"Frustrated\" describes a positive feeling.", answer: false, explanation: "frustrated = annoyed because you can't succeed (negative)." },
@@ -802,7 +802,7 @@ window.VESPER_CONTENT_PACK = (function () {
           { id: "pos", label: "Positive" }, { id: "neg", label: "Negative" } ], items: [
           { t: "thrilled", bucket: "pos" }, { t: "delighted", bucket: "pos" }, { t: "anxious", bucket: "neg" }, { t: "frustrated", bucket: "neg" } ] },
         { type: "translate", prompt: "Rewrite with a precise adjective, starting 'She felt…': After the exam, her worry finally disappeared.",
-          answers: ["she felt relieved after the exam", "she felt relieved after the test"], explanation: "She felt relieved after the exam." }
+          answers: ["she felt relieved after the exam", "she felt relieved after the test", "she felt relieved after her exam", "she felt relieved after finishing the exam", "she felt relieved after finishing the test"], explanation: "She felt relieved after the exam." }
       ]
     },
 
@@ -823,7 +823,7 @@ window.VESPER_CONTENT_PACK = (function () {
         { type: "matching", instruction: "Match each word with its meaning.", pairs: [{"l":"necessity","r":"something you need"},{"l":"waste","r":"material that is no longer useful"},{"l":"schedule","r":"a plan of times"},{"l":"immune","r":"protected from disease"}] },
         { type: "fill_blank", sentence: "Experts recommend keeping a regular ___.", answers: ["schedule"], hint: "A fixed timetable.", explanation: "\"...a regular schedule.\"" },
         { type: "translate", prompt: "Rewrite using 'spend' and 'a third': One out of every three hours of our lives, we are asleep.",
-          answers: ["we spend a third of our lives asleep", "we spend a third of our life sleeping", "we spend a third of our lives sleeping"], explanation: "We spend a third of our lives asleep." }
+          answers: ["we spend a third of our lives asleep", "we spend a third of our life sleeping", "we spend a third of our lives sleeping", "we spend about a third of our lives asleep", "we spend about a third of our lives sleeping", "we spend one third of our lives asleep", "we spend a third of our time asleep", "we spend a third of our time sleeping"], explanation: "We spend a third of our lives asleep." }
       ]
     },
 
@@ -856,9 +856,9 @@ window.VESPER_CONTENT_PACK = (function () {
         examples: [{ en: "It is widely assumed that..." }] },
       exercises: [
         { type: "reading", title: "The power of habits",
-          passage: "It is widely assumed that willpower is the key to changing our behaviour. In reality, research increasingly suggests that habits — not sheer determination — shape most of what we do.\n\nA habit is essentially a loop: a cue triggers a routine, which delivers a reward. Once this loop is firmly established, the brain stops making conscious decisions and runs on autopilot. This is why breaking a bad habit by willpower alone so often fails.\n\nThe most effective approach, paradoxically, is not to fight the habit but to redesign it. By keeping the same cue and reward while deliberately swapping the routine, people stand a far better chance of lasting change.",
+          passage: "It is widely assumed that willpower is the key to changing our behavior. In reality, research increasingly suggests that habits — not sheer determination — shape most of what we do.\n\nA habit is essentially a loop: a cue triggers a routine, which delivers a reward. Once this loop is firmly established, the brain stops making conscious decisions and runs on autopilot. This is why breaking a bad habit by willpower alone so often fails.\n\nThe most effective approach, paradoxically, is not to fight the habit but to redesign it. By keeping the same cue and reward while deliberately swapping the routine, people stand a far better chance of lasting change.",
           questions: [
-            { q: "What is the writer's main claim?", options: ["Willpower alone explains behaviour", "Habits, more than willpower, shape behaviour", "Behaviour cannot be changed"], correctIndex: 1, explanation: "\"...habits — not sheer determination — shape most of what we do.\"" },
+            { q: "What is the writer's main claim?", options: ["Willpower alone explains behavior", "Habits, more than willpower, shape behavior", "Behavior cannot be changed"], correctIndex: 1, explanation: "\"...habits — not sheer determination — shape most of what we do.\"" },
             { q: "According to the text, a habit loop consists of...", options: ["thought, word, action", "morning, noon, night", "cue, routine, reward"], correctIndex: 2, explanation: "\"...a cue triggers a routine, which delivers a reward.\"" },
             { q: "What does the writer recommend?", options: ["Redesigning the routine while keeping cue and reward", "Ignoring habits completely", "Fighting habits with pure willpower"], correctIndex: 0, explanation: "\"...redesign it... swapping the routine.\"" }
           ] },
@@ -878,7 +878,7 @@ window.VESPER_CONTENT_PACK = (function () {
         examples: [{ en: "Critics argue that..." }] },
       exercises: [
         { type: "reading", title: "The four-day week",
-          passage: "The idea of a four-day working week, once dismissed as wishful thinking, is gaining serious traction. Several large-scale trials have reported that employees are happier and, crucially, no less productive.\n\nCritics argue that the model cannot be applied universally; a hospital or a factory cannot simply close for an extra day. There is some truth to this. Yet supporters counter that flexibility, rather than a rigid template, is the real lesson.\n\nWhatever the outcome, the debate has forced organisations to ask a long-overdue question: are we measuring work by hours logged, or by results delivered?",
+          passage: "The idea of a four-day working week, once dismissed as wishful thinking, is gaining serious traction. Several large-scale trials have reported that employees are happier and, crucially, no less productive.\n\nCritics argue that the model cannot be applied universally; a hospital or a factory cannot simply close for an extra day. There is some truth to this. Yet supporters counter that flexibility, rather than a rigid template, is the real lesson.\n\nWhatever the outcome, the debate has forced organizations to ask a long-overdue question: are we measuring work by hours logged, or by results delivered?",
           questions: [
             { q: "How is the four-day week described now?", options: ["As wishful thinking only", "As gaining serious traction", "As already universal"], correctIndex: 1, explanation: "\"...is gaining serious traction.\"" },
             { q: "What do critics argue?", options: ["It is illegal", "It always lowers productivity", "It cannot apply to every workplace"], correctIndex: 2, explanation: "\"...cannot be applied universally...\"" },
@@ -888,7 +888,7 @@ window.VESPER_CONTENT_PACK = (function () {
         { type: "matching", instruction: "Match each expression with its meaning.", pairs: [{"l":"gain traction","r":"become more popular or accepted"},{"l":"wishful thinking","r":"believing what you want to be true"},{"l":"trial","r":"a test of how well something works"},{"l":"long-overdue","r":"should have happened much earlier"}] },
         { type: "fill_blank", sentence: "Supporters say ___, not a rigid template, is the real lesson.", answers: ["flexibility"], hint: "The opposite of rigid.", explanation: "\"...flexibility... is the real lesson.\"" },
         { type: "translate", prompt: "Rewrite in the passive: Critics argue that companies cannot apply the model universally. (Critics argue that the model…)",
-          answers: ["critics argue that the model cannot be applied universally", "critics argue the model cannot be applied universally"], explanation: "Critics argue that the model cannot be applied universally." }
+          answers: ["critics argue that the model cannot be applied universally", "critics argue the model cannot be applied universally", "critics argue that the model can't be applied universally", "critics argue the model can't be applied universally"], explanation: "Critics argue that the model cannot be applied universally." }
       ]
     },
 
@@ -940,22 +940,22 @@ window.VESPER_CONTENT_PACK = (function () {
       explanation: { body: "Collocations are words that naturally go together: make a decision, take responsibility, raise awareness, meet a deadline. Sounding natural depends on them.",
         examples: [{ en: "We need to raise awareness." }, { en: "She took full responsibility." }] },
       exercises: [
-        { type: "multiple_choice", question: "Choose: We have to ___ a decision today.", options: ["take", "do", "make"], correctIndex: 2, explanation: "make a decision (no 'do/take')." },
-        { type: "multiple_choice", question: "Choose: The campaign aims to ___ awareness.", options: ["rise", "raise", "grow"], correctIndex: 1, explanation: "raise awareness = make people know more about an issue." },
+        { type: "multiple_choice", question: "Choose: We have to ___ a decision today.", options: ["do", "say", "make"], correctIndex: 2, explanation: "make a decision (not 'do a decision')." },
+        { type: "multiple_choice", question: "Choose: The campaign aims to ___ awareness.", options: ["rise", "raise", "arise"], correctIndex: 1, explanation: "raise awareness = make people know more about an issue." },
         { type: "matching", instruction: "Match each verb with its collocation.", pairs: [{"l":"make","r":"a decision"},{"l":"take","r":"responsibility"},{"l":"meet","r":"a deadline"},{"l":"pay","r":"attention"}] },
         { type: "fill_blank", sentence: "Please ___ attention to the details.", answers: ["pay"], hint: "pay attention.", explanation: "pay attention = concentrate on something." },
         { type: "categorize", instruction: "make or do?", buckets: [
           { id: "make", label: "make" }, { id: "do", label: "do" } ], items: [
           { t: "a mistake", bucket: "make" }, { t: "progress", bucket: "make" }, { t: "homework", bucket: "do" }, { t: "research", bucket: "do" } ] },
         { type: "translate", prompt: "Rewrite with a collocation using 'take': She accepted that the whole problem was her fault and dealt with it.",
-          answers: ["she took full responsibility", "he took full responsibility"], explanation: "She took full responsibility." }
+          answers: ["she took full responsibility", "she took responsibility", "she took full responsibility for it", "she took responsibility for it", "she took the blame"], explanation: "She took full responsibility." }
       ]
     },
 
     "voc-c1-idioms": {
       lessonId: "voc-c1-idioms", level: "C1", track: "Vocabulary", topic: "work", skill: "vocab", tipo: "aprende", title: "Phrasal verbs for work and discussion", rev: 2, xpReward: 54, mascotState: "explaining",
       explanation: {
-        body: "At C1, phrasal verbs move beyond 'get up' and 'turn on'. In meetings and emails you'll hear people iron out problems, come up against obstacles and brush up on their skills. These verbs are frequent, natural and often more vivid than their formal equivalents. Many have a formal synonym: iron out = resolve; come up against = encounter; brush up on = revise; put forward = propose; follow up on = pursue; play down = minimise; rule out = exclude; bring forward = move to an earlier date. Three-part verbs keep both particles together before the object: brush up on your French. Separable verbs can split with a noun but must split with a pronoun: rule it out (NOT rule out it).",
+        body: "At C1, phrasal verbs move beyond 'get up' and 'turn on'. In meetings and emails you'll hear people iron out problems, come up against obstacles and brush up on their skills. These verbs are frequent, natural and often more vivid than their formal equivalents. Many have a formal synonym: iron out = resolve; come up against = encounter; brush up on = review; put forward = propose; follow up on = pursue; play down = minimize; rule out = exclude; bring forward = move to an earlier date. Three-part verbs keep both particles together before the object: brush up on your French. Separable verbs can split with a noun but must split with a pronoun: rule it out (NOT rule out it).",
         examples: [
           { en: "We still need to iron out a few details before we sign." },
           { en: "The project came up against strong local opposition." },
@@ -969,7 +969,7 @@ window.VESPER_CONTENT_PACK = (function () {
           },
           {
             kind: "regla",
-            body: "Many have a formal synonym: iron out = resolve; come up against = encounter; brush up on = revise; put forward = propose; follow up on = pursue; play down = minimise; rule out = exclude; bring forward = move to an earlier date. Three-part verbs keep both particles together before the object: brush up on your French. Separable verbs can split with a noun but must split with a pronoun: rule it out (NOT rule out it)."
+            body: "Many have a formal synonym: iron out = resolve; come up against = encounter; brush up on = review; put forward = propose; follow up on = pursue; play down = minimize; rule out = exclude; bring forward = move to an earlier date. Three-part verbs keep both particles together before the object: brush up on your French. Separable verbs can split with a noun but must split with a pronoun: rule it out (NOT rule out it)."
           },
           {
             kind: "vocab",
@@ -990,7 +990,7 @@ window.VESPER_CONTENT_PACK = (function () {
               { en: "We need to iron out a few details.", es: "solve minor problems" },
               { en: "Let's not rule anything out yet.", es: "keep options open" },
               { en: "I'll follow up on that tomorrow.", es: "promise further action" },
-              { en: "They're playing down the risks.", es: "someone is minimising a problem" }
+              { en: "They're playing down the risks.", es: "someone is minimizing a problem" }
             ]
           },
           {
@@ -1120,11 +1120,11 @@ window.VESPER_CONTENT_PACK = (function () {
           type: "multiple_choice", question: "\"Is it going to rain tomorrow?\" \"I hope ___.\" (you don't want rain)", options: ["not", "no", "don't"], correctIndex: 0,
           explanation: "hope + not for a negative: I hope not."
         },
-        { type: "fill_blank", sentence: "These shoes are too small. Do you have any bigger ___?", answers: ["ones"], hint: "Replace a plural countable noun.", explanation: "bigger ones = bigger shoes" },
+        { type: "fill_blank", sentence: "These shoes are too small. Do you have any bigger ___?", answers: ["ones", "pairs"], hint: "Replace a plural countable noun.", explanation: "bigger ones = bigger shoes" },
         {
           type: "find_error",
-          segments: ["\"Will he be late?\" \"I ", { u: "don't" }, " ", { u: "hope" }, " ", { u: "so" }, ".\""],
-          correctIndex: 0, correction: "I hope not.", explanation: "With hope, the negative is 'I hope not', not 'I don't hope so'.", question: "Find the mistake"
+          segments: ["\"Will he ", { u: "be" }, " ", { u: "late" }, "?\" \"I ", { u: "don't hope so" }, ".\""],
+          correctIndex: 2, correction: "I hope not.", explanation: "With hope, the negative is 'I hope not', not 'I don't hope so'.", question: "Find the mistake"
         },
         {
           type: "categorize", instruction: "Substitution or ellipsis?",
@@ -1160,7 +1160,7 @@ window.VESPER_CONTENT_PACK = (function () {
         {
           type: "translate",
           prompt: "Shorten using ellipsis: \"I wanted to go to the concert, but I couldn't go to the concert.\"",
-          answers: ["i wanted to go to the concert but i couldn't", "i wanted to go to the concert but i could not", "i wanted to go but i couldn't", "i wanted to go but i could not"],
+          answers: ["i wanted to go to the concert but i couldn't", "i wanted to go to the concert but i could not", "i wanted to go but i couldn't", "i wanted to go but i could not", "i wanted to but i couldn't", "i wanted to but i could not", "i wanted to go to the concert but couldn't", "i wanted to go but couldn't"],
           explanation: "I wanted to go to the concert, but I couldn't."
         }
       ]
@@ -1277,7 +1277,7 @@ window.VESPER_CONTENT_PACK = (function () {
         {
           type: "translate",
           prompt: "Rephrase politely, starting with \"That's slightly outside\": \"Your question has nothing to do with my talk.\"",
-          answers: ["that's slightly outside the scope of my talk", "that's slightly outside the scope of today's talk", "that's slightly outside the scope of this talk", "that is slightly outside the scope of my talk", "that is slightly outside the scope of today's talk"],
+          answers: ["that's slightly outside the scope of my talk", "that's slightly outside the scope of today's talk", "that's slightly outside the scope of this talk", "that is slightly outside the scope of my talk", "that is slightly outside the scope of today's talk", "that's slightly outside the scope of this presentation", "that's slightly outside the scope of my presentation", "that's slightly outside the scope of today's presentation", "that's slightly outside the scope of the presentation", "that is slightly outside the scope of this talk", "that is slightly outside the scope of this presentation", "that is slightly outside the scope of my presentation"],
           explanation: "That's slightly outside the scope of today's talk."
         }
       ]
@@ -1287,8 +1287,8 @@ window.VESPER_CONTENT_PACK = (function () {
   var ORDER = [
     /* A1 */ "read-a1-my-day", "read-a1-market", "lis-a1-intro", "gram-a1-articles", "voc-a1-body", "use-a1-can",
     /* A2 */ "read-a2-email", "read-a2-review", "lis-a2-directions", "gram-a2-past-simple", "voc-a2-health", "use-a2-prepositions",
-    /* B1 */ "read-b1-article", "read-b1-blog", "lis-b1-voicemail", "gram-b1-present-perfect", "voc-b1-money", "use-b1-phrasal-verbs",
-    /* B2 */ "read-b2-story", "read-b2-science", "lis-b2-interview", "lis-b2-podcast", "gram-b2-conditionals", "voc-b2-environment", "voc-b2-feelings", "use-b2-linkers",
+    /* B1 */ "read-b1-article", "read-b1-blog", "lis-b1-voicemail", "gram-b1-present-perfect", "gram-b2-conditionals", "voc-b1-money", "use-b1-phrasal-verbs",
+    /* B2 */ "read-b2-story", "read-b2-science", "lis-b2-interview", "lis-b2-podcast", "voc-b2-environment", "voc-b2-feelings", "use-b2-linkers",
     /* C1 */ "read-c1-habits", "read-c1-work", "lis-c1-lecture", "lis-c1-debate", "voc-c1-collocations", "voc-c1-idioms", "use-c1-inversion", "use-c1-register"
   ];
 
