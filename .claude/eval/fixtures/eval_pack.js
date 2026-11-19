@@ -37,7 +37,7 @@ window.VESPER_EVAL_PACK = (function () {
         ]
       },
       exercises: [
-        { type: "matching", pairs: [ { en: "juice", es: "zumo" }, { en: "mother", es: "madre" }, { en: "father", es: "padre" } ] },
+        { type: "matching", pairs: [ { l: "juice", r: "zumo" }, { l: "mother", r: "madre" }, { l: "father", r: "padre" } ] },
         { type: "multiple_choice", question: "Your mother's mother is your…", options: ["aunt", "grandmother", "sister"], correctIndex: 1, explanation: "La mamá de tu mamá es tu abuela (grandmother)." }
       ]
     }
