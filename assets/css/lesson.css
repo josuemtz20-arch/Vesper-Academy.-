@@ -527,7 +527,10 @@
             .a-flex{ min-height:340px; }
             .a-art .a-art-ghost{ font-size:7rem; }
             .a-art .a-art-label{ top:14px; left:14px; }
-            .a-main{ padding:26px 18px; }
+            /* top 50px, not 26px: the level chip sits at top:14px and is ~24px
+               tall, so the transport row has to start below ~38px or the chip
+               lands on the rewind/play buttons (measured 2026-11-19, 320-430px). */
+            .a-main{ padding:50px 18px 26px; }
             .a-transport{ gap:14px; }
             .audio-card .big-play{ width:72px; height:72px; font-size:1.5rem; }
             /* the groove itself stays 7px; its ::before hit area does the work */
