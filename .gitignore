@@ -17,6 +17,10 @@
 !/.github/
 # mapa del repo + modelo de seguridad (sin claves)
 !/README.md
+# instrucciones y playbooks para Claude Code + validador de lecciones (fuera del sitio: pages_filter.sh)
+!/CLAUDE.md
+!/.claude/
+!/tools/
 
 # planning note for the AI-guardian work (picked up by a new web session)
 !/GUARDIANS_TODO.md
