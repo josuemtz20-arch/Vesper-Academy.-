@@ -32,7 +32,18 @@ html{scroll-behavior:smooth;}
 body{font-family:'Inter',sans-serif;color:var(--text);margin:0;background:var(--white);line-height:1.65;font-size:1rem;min-height:100vh;}
 a{text-decoration:none;color:inherit;}
 img{max-width:100%;display:block;}
-h1,h2,h3{line-height:1.18;font-family:'Fraunces',Georgia,serif;}
+/* Respaldo con métricas de Fraunces: mientras baja la tipografía, el titular ocupa
+   lo mismo que con ella y no empuja el contenido al cambiar (CLS). Georgia (iOS/Mac/Win)
+   casi coincide en ancho; Times/Liberation (Android/Linux) es ~14 % más angosta. */
+@font-face{font-family:'Fraunces Fallback';font-weight:400;font-style:normal;src:local('Georgia');size-adjust:101%;ascent-override:97.8%;descent-override:25.5%;line-gap-override:0%;}
+@font-face{font-family:'Fraunces Fallback';font-weight:700;font-style:normal;src:local('Georgia Bold'),local('Georgia-Bold');size-adjust:101%;ascent-override:97.8%;descent-override:25.5%;line-gap-override:0%;}
+@font-face{font-family:'Fraunces Fallback';font-weight:400;font-style:italic;src:local('Georgia Italic'),local('Georgia-Italic');size-adjust:101%;ascent-override:97.8%;descent-override:25.5%;line-gap-override:0%;}
+@font-face{font-family:'Fraunces Fallback';font-weight:700;font-style:italic;src:local('Georgia Bold Italic'),local('Georgia-BoldItalic');size-adjust:101%;ascent-override:97.8%;descent-override:25.5%;line-gap-override:0%;}
+@font-face{font-family:'Fraunces Fallback 2';font-weight:400;font-style:normal;src:local('Times New Roman'),local('Liberation Serif');size-adjust:114%;ascent-override:97.8%;descent-override:25.5%;line-gap-override:0%;}
+@font-face{font-family:'Fraunces Fallback 2';font-weight:700;font-style:normal;src:local('Times New Roman Bold'),local('TimesNewRomanPS-BoldMT'),local('Liberation Serif Bold');size-adjust:114%;ascent-override:97.8%;descent-override:25.5%;line-gap-override:0%;}
+@font-face{font-family:'Fraunces Fallback 2';font-weight:400;font-style:italic;src:local('Times New Roman Italic'),local('TimesNewRomanPS-ItalicMT'),local('Liberation Serif Italic');size-adjust:114%;ascent-override:97.8%;descent-override:25.5%;line-gap-override:0%;}
+@font-face{font-family:'Fraunces Fallback 2';font-weight:700;font-style:italic;src:local('Times New Roman Bold Italic'),local('TimesNewRomanPS-BoldItalicMT'),local('Liberation Serif Bold Italic');size-adjust:114%;ascent-override:97.8%;descent-override:25.5%;line-gap-override:0%;}
+h1,h2,h3{line-height:1.18;font-family:'Fraunces','Fraunces Fallback','Fraunces Fallback 2',Georgia,serif;}
 .wrap{max-width:var(--maxw);margin:0 auto;padding:0 22px;}
 :focus-visible{outline:3px solid var(--gold2);outline-offset:2px;border-radius:6px;}
 header{background:var(--navy);border-bottom:3px solid var(--gold);}
