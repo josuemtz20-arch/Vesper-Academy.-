@@ -257,6 +257,9 @@
         <button class="switch" id="sw-rm" role="switch" aria-checked="false" aria-labelledby="lab-rm"></button>
       </div>
     </div>
+    <div class="field"><span class="label" id="lab-perf">Rendimiento
+        <span class="hint">Si la app va lenta en tu teléfono, el modo Ligero pausa la decoración animada y los efectos de cristal. Automático lo activa solo en equipos lentos.</span></span>
+      <div class="seg cols" id="seg-perf" role="radiogroup" aria-labelledby="lab-perf"></div></div>
   </section>
 
   <!-- ===== SONIDO ===== -->
@@ -613,6 +616,13 @@
   });
   wireSwitch("sw-hc", p.highContrast, "highContrast");
   wireSwitch("sw-rm", p.reduceMotion, "reduceMotion");
+  /* rendimiento: auto | lite | full (vesper_prefs.js aplica .vesper-lite) */
+  var PERF = { auto: { label: "Automático", emoji: "" }, lite: { label: "Ligero", emoji: "" }, full: { label: "Completo", emoji: "" } };
+  radioGroup("seg-perf", ["auto", "lite", "full"], PERF, PERF[p.perfMode] ? p.perfMode : "auto", function (id) {
+    /* elegir a mano borra la medición automática: "Automático" vuelve a medir */
+    try { localStorage.removeItem("vesper_perf_auto"); } catch (e) {}
+    P.set({ perfMode: id }); flash();
+  });
 
   /* ---------- sonido ---------- */
   wireSwitch("sw-snd", p.soundFx !== false, "soundFx");

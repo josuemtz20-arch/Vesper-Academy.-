@@ -14,7 +14,7 @@
    ============================================================ */
 "use strict";
 
-var CACHE_VERSION = "vesper-v110-c11283d2";
+var CACHE_VERSION = "vesper-v111-bfccf469";
 var CORE = [
   /* Comunes. El Vesper Engine (herramienta del profesor) ya no se precarga
      en el teléfono de cada alumno: se guarda la primera vez que el profesor

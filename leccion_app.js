@@ -676,9 +676,9 @@
   }
   /* retratos de guardianes (IA, uno por mundo); cae al SVG bossArt temático si falta el PNG */
   var BOSS_PORTRAIT = {
-    A1: "assets/images/guardians/guardian_a1.png", A2: "assets/images/guardians/guardian_a2.png",
-    B1: "assets/images/guardians/guardian_b1.png", B2: "assets/images/guardians/guardian_b2.png",
-    C1: "assets/images/guardians/guardian_c1.png", C2: "assets/images/guardians/guardian_c2.png"
+    A1: "assets/images/guardians/guardian_a1.webp", A2: "assets/images/guardians/guardian_a2.webp",
+    B1: "assets/images/guardians/guardian_b1.webp", B2: "assets/images/guardians/guardian_b2.webp",
+    C1: "assets/images/guardians/guardian_c1.webp", C2: "assets/images/guardians/guardian_c2.webp"
   };
   /* el onerror corre en scope global (este script es un IIFE): se expone en window; respaldo = bossArt */
   window.__vbossFallback = function (img, lv) { try { if (img) img.outerHTML = bossArt(lv); } catch (e) {} };
@@ -777,6 +777,8 @@
   function reduceMotion() {
     try {
       if (document.documentElement.classList.contains("vesper-reduce-motion")) return true;
+      /* modo ligero (vesper_prefs.js): sin sprites animados ni confeti en equipos lentos */
+      if (document.documentElement.classList.contains("vesper-lite")) return true;
       return !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
     } catch (e) { return false; }
   }
@@ -1050,7 +1052,7 @@
     var il = !pxOn() && ilOn();
     return '<section class="world-banner' + (pxOn() ? ' is-pixel' : '') + (il ? ' is-illus' : '') + '" data-world="' + selLevel + '" style="' + worldVars(t) + '" aria-label="Mundo ' + n + ': ' + esc(t.worldName) + '">'
       + (minOn() ? worldBand(selLevel)
-        : '<img class="world-banner__img" src="' + (il ? VESPER_MAPIL.banner(selLevel) : t.file) + '" alt="" aria-hidden="true" decoding="async">'
+        : '<img class="world-banner__img" src="' + (il ? VESPER_MAPIL.banner(selLevel) : t.file) + '" alt="" aria-hidden="true" decoding="async" fetchpriority="high">'
           + ambLayer(t.ambientN))
       + '<div class="world-banner__body">'
       + '<span class="world-banner__eyebrow">Mundo ' + n + ' &middot; ' + selLevel + '</span>'
