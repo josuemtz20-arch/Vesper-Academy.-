@@ -10,60 +10,112 @@
 <meta name="robots" content="noindex, nofollow">
 <script src="vesper_app_mode.js"></script>
 <script src="vesper_auth.js"></script>
-<style>
-  :root { --navy:#1B1B2F; --gold:#c5a059; --gold2:#d9bd84; --cream:#f5f2eb; }
-  * { box-sizing:border-box; margin:0; padding:0; }
-  body { font-family:Arial,sans-serif; background:var(--cream); min-height:100vh; padding:40px 20px; }
-  .wrap { max-width:680px; margin:0 auto; }
-  h1 { font-family:Georgia,serif; color:var(--navy); font-size:26px; border-bottom:3px solid var(--gold); padding-bottom:10px; }
-  h2 { color:var(--navy); font-size:16px; margin:28px 0 8px; }
-  p, li { font-size:14px; line-height:1.65; color:#4a4334; }
-  ol { padding-left:22px; }
-  code { background:#ece5d4; padding:2px 6px; border-radius:4px; font-size:13px; }
-  .tool { background:#fff; border:1px solid #d4c9ae; border-radius:10px; padding:22px; margin-top:14px; }
-  input { width:100%; padding:11px 12px; font-size:15px; border:1px solid #d4c9ae; border-radius:7px; }
-  button { margin-top:12px; padding:11px 22px; font-size:14px; background:var(--navy); color:var(--cream);
-           border:none; border-radius:7px; cursor:pointer; }
-  button:hover { opacity:.9; }
-  .out { margin-top:14px; display:none; }
-  .out.show { display:block; }
-  .hash { font-family:Consolas,monospace; font-size:13px; background:#1B1B2F; color:#d9bd84;
-          padding:12px; border-radius:7px; word-break:break-all; }
-  .copied { color:#2e7d4f; font-size:13px; margin-left:10px; display:none; }
-  .note { background:#eee8d8; border:1px solid #ddd0ad; border-radius:8px; padding:12px 14px; font-size:13px; margin-top:18px; }
-</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500..700&family=Inter:wght@400;500;600;700&display=swap">
 <link rel="stylesheet" href="assets/css/vesper_tokens.css">
+<style>
+  /* ============================================================
+     ADMINISTRAR ACCESOS — diseño Vesper (2026-11-18)
+     ------------------------------------------------------------
+     Antes: Arial + Georgia, oro viejo #c5a059 y una caja verde a
+     mano. Ahora usa la cabecera, la noche y las tipografías del
+     Portal del Profesor, de donde se abre. Verde solo marca "lo
+     recomendado / listo"; el oro es la acción.
+     ============================================================ */
+  :root{
+    --night:var(--va-night,#14122a); --dusk:var(--va-dusk,#1f2342); --twilight:var(--va-twilight,#3a3a63);
+    --gold:var(--va-gold,#C9A84C); --star:var(--va-star,#f3e2ab);
+    --text:#EDE7D6; --muted:#b3b0c9; --hair:var(--va-hairline,rgba(201,168,76,.35));
+    --good:var(--va-success,#2D9E75);
+    --display:'Fraunces',Georgia,serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Inter',system-ui,sans-serif;background:var(--night);color:var(--text);min-height:100vh;line-height:1.6;letter-spacing:-.011em}
+  :focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+  header{background:var(--dusk);border-bottom:1px solid var(--hair);padding:0 clamp(16px,4vw,32px);min-height:62px;
+    display:flex;align-items:center;justify-content:space-between;gap:12px;position:sticky;top:0;z-index:10}
+  .brand{display:flex;align-items:center;gap:12px;color:#f5f2eb;text-decoration:none}
+  .brand img{height:36px;width:36px;object-fit:contain}
+  .brand b{font-family:var(--display);font-size:1.05rem;font-weight:600;display:block}
+  .brand small{display:block;color:var(--gold);font-size:.58rem;letter-spacing:.24em;text-transform:uppercase}
+  a.back{display:inline-flex;align-items:center;gap:6px;color:var(--va-on-night-soft,rgba(245,242,235,.62));font-size:.78rem;font-weight:600;
+    text-decoration:none;padding:9px 12px;border-radius:10px;border:1px solid var(--hair);transition:color .16s,border-color .16s}
+  a.back:hover,a.back:focus-visible{color:var(--text);border-color:var(--gold)}
+  .wrap{max-width:720px;margin:0 auto;padding:clamp(24px,4vw,40px) clamp(16px,4vw,32px) 56px}
+  h1{font-family:var(--display);font-size:clamp(1.8rem,4vw,2.3rem);font-weight:600;line-height:1.1;letter-spacing:-.015em}
+  .lead{margin-top:6px;color:var(--muted);font-size:.95rem}
+  h2{font-family:var(--display);font-size:1.22rem;font-weight:600;margin:34px 0 8px;line-height:1.2}
+  p,li{font-size:.92rem;color:var(--muted)}
+  p b,li b,.note b{color:var(--text)}
+  ol{padding-left:22px} li{margin-bottom:4px}
+  a{color:var(--star)}
+  code{font-family:Consolas,'SFMono-Regular',monospace;background:var(--night);border:1px solid var(--twilight);color:var(--star);
+    padding:1px 6px;border-radius:5px;font-size:.82rem;word-break:break-word}
+  .tool{background:var(--dusk);border:1px solid var(--twilight);border-radius:18px;padding:20px;margin-top:14px}
+  .tool .cmd + .cmd{margin-top:6px}
+  label{display:block;font-size:.7rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+  input{width:100%;min-height:44px;margin-top:6px;padding:10px 12px;font:inherit;font-size:.95rem;color:var(--text);
+    background:var(--night);border:1px solid var(--twilight);border-radius:10px}
+  input:focus{outline:none;border-color:var(--gold)}
+  button{margin-top:12px;min-height:44px;padding:11px 20px;font:inherit;font-size:.88rem;font-weight:700;cursor:pointer;
+    background:var(--gold);color:#1B1B2F;border:1px solid var(--gold);border-radius:10px;box-shadow:0 2px 0 color-mix(in srgb,var(--gold) 62%,#000);
+    transition:background .16s,transform .09s}
+  button:hover{background:var(--star)}
+  button:active{transform:translateY(1px)}
+  button.ghost{background:transparent;color:var(--text);border-color:var(--twilight);box-shadow:none}
+  button.ghost:hover{border-color:var(--gold);background:transparent}
+  .out{margin-top:14px;display:none}
+  .out.show{display:block}
+  .hash{font-family:Consolas,monospace;font-size:.82rem;background:var(--night);color:var(--star);border:1px solid var(--hair);
+    padding:12px;border-radius:10px;word-break:break-all}
+  .copied{color:var(--good);font-size:.85rem;font-weight:600;margin-left:10px;display:none}
+  .note{background:var(--dusk);border:1px solid var(--twilight);border-radius:14px;padding:14px 16px;font-size:.85rem;color:var(--muted);margin-top:18px}
+  .note.rec{border-color:color-mix(in srgb,var(--good) 60%,transparent);background:color-mix(in srgb,var(--good) 10%,var(--dusk))}
+  .note .tag{display:inline-block;font-size:.66rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#7fd8b4;margin-bottom:6px}
+  .note .cmds{margin-top:10px;display:grid;gap:6px}
+  .note small{display:block;margin-top:10px;font-size:.8rem}
+  .muted-note{font-size:.84rem;margin-top:8px}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
 </head>
 <body>
-<div class="wrap">
-  <h1>Administrar accesos — Vesper Academy</h1>
-  <p style="margin-top:10px">Esta página es la herramienta del <b>desarrollador/administrador</b>.</p>
+<header>
+  <a class="brand" href="portal_profesores.html"><img src="assets/images/vesper_logo_inverted.png" alt=""><span><b>Vesper Academy</b><small>Administración</small></span></a>
+  <a class="back" href="portal_profesores.html">&larr; Portal</a>
+</header>
+<main class="wrap">
+  <h1>Administrar accesos</h1>
+  <p class="lead">Esta página es la herramienta del <b>desarrollador/administrador</b>.</p>
 
-  <div class="note" style="background:#e1efe6;border-color:#bcd9c7;color:#2a5a3e">
-    <b>Forma recomendada (efecto inmediato):</b> la <b>fuente de verdad</b> del acceso es la
+  <div class="note rec">
+    <span class="tag">Forma recomendada · efecto inmediato</span><br>
+    La <b>fuente de verdad</b> del acceso es la
     <b>allowlist en Firestore</b> (colecciones <code>students/</code> y <code>teachers/</code>).
     Para autorizar a alguien basta añadir su correo ahí; <code>vesper_auth.js</code> lo comprueba
     al instante — <b>no</b> hace falta editar código ni volver a subir el sitio. Eso lo hace el
     admin con la herramienta local <code>_scripts/upload_manuals.py</code> (inicia sesión como el
     admin y escribe con su idToken):
-    <div style="margin-top:8px"><code>python3 _scripts/upload_manuals.py add-student alumno@correo.com</code></div>
-    <div style="margin-top:4px"><code>python3 _scripts/upload_manuals.py add-teacher maestro@correo.com</code></div>
-    <div style="margin-top:4px"><code>python3 _scripts/upload_manuals.py remove alguien@correo.com</code> &nbsp;(revocar)</div>
-    <div style="margin-top:8px;font-size:12px">Esa herramienta vive <b>fuera</b> del repositorio público
+    <div class="cmds">
+      <div><code>python3 _scripts/upload_manuals.py add-student alumno@correo.com</code></div>
+      <div><code>python3 _scripts/upload_manuals.py add-teacher maestro@correo.com</code></div>
+      <div><code>python3 _scripts/upload_manuals.py remove alguien@correo.com</code> &nbsp;(revocar)</div>
+    </div>
+    <small>Esa herramienta vive <b>fuera</b> del repositorio público
       (la <code>.gitignore</code> mantiene privados los scripts de admin); pídesela al desarrollador
-      si no la tienes. El generador de abajo es solo el <b>respaldo legado</b>.</div>
+      si no la tienes. El generador de abajo es solo el <b>respaldo legado</b>.</small>
   </div>
 
   <h2>Respaldo legado: código de aprobación (hash)</h2>
   <p>Solo se usa si Firestore no responde: <code>vesper_auth.js</code> cae a la lista
      <code>approvedEmailHashes</code>. Genera aquí el código de un correo para esa lista de respaldo.</p>
   <div class="tool">
-    <label for="email" style="font-size:13px;color:#6b6151">Correo de la persona (el mismo con el que se registró)</label>
-    <input type="email" id="email" placeholder="alumno@ejemplo.com" style="margin-top:6px">
+    <label for="email">Correo de la persona (el mismo con el que se registró)</label>
+    <input type="email" id="email" placeholder="alumno@ejemplo.com">
     <button id="go">Generar código de aprobación</button>
     <div class="out" id="out">
       <div class="hash" id="hash"></div>
-      <button id="copy" style="background:#2e7d4f">Copiar</button><span class="copied" id="copied">¡Copiado!</span>
+      <button id="copy" class="ghost">Copiar</button><span class="copied" id="copied">¡Copiado!</span>
     </div>
   </div>
 
@@ -75,7 +127,7 @@
     <li>Sube el cambio (<code>git push</code>). En 1-2 minutos ese respaldo estará activo.</li>
     <li>Para <b>revocar</b>, borra su línea de la lista y vuelve a subir.</li>
   </ol>
-  <p style="font-size:13px;color:#6b6151">Nota: mientras Firestore responda, la allowlist manda; esta lista
+  <p class="muted-note">Nota: mientras Firestore responda, la allowlist manda; esta lista
      solo entra en juego como red de seguridad. Lo normal es autorizar con <code>upload_manuals.py</code>
      (arriba) y no tocar esta lista.</p>
 
@@ -86,15 +138,15 @@
      su doc en la allowlist <code>teachers/</code> (o un rol en <code>roles/</code>). Para dar o
      quitar acceso a un maestro basta un comando, con efecto inmediato:</p>
   <div class="tool">
-    <div><code>python3 _scripts/upload_manuals.py add-teacher maestro@correo.com</code></div>
-    <div style="margin-top:6px"><code>python3 _scripts/upload_manuals.py remove-teacher maestro@correo.com</code></div>
+    <div class="cmd"><code>python3 _scripts/upload_manuals.py add-teacher maestro@correo.com</code></div>
+    <div class="cmd"><code>python3 _scripts/upload_manuals.py remove-teacher maestro@correo.com</code></div>
   </div>
 
   <div class="note">
     <b>Privacidad:</b> en el sitio solo se publica el código (hash SHA-256), nunca el correo.
     Nadie puede deducir el correo a partir del código.
   </div>
-</div>
+</main>
 
 <script>
 (function () {
