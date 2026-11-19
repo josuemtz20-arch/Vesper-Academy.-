@@ -60,6 +60,25 @@ class_name = "ExamAttempt"
 tag = "v2"
 new_sqlite_classes = ["ExamAttempt"]
 
+# ── Agente de WhatsApp (whatsapp_agent.js) ──
+# Un Durable Object por conversación (número de WhatsApp): ordena los mensajes
+# que llegan, espera a que el cliente termine de escribir y pide el borrador.
+# Secretos: WA_TOKEN, WA_APP_SECRET, WA_VERIFY_TOKEN, WA_PHONE_NUMBER_ID
+# (+ ANTHROPIC_API_KEY y FIREBASE_SA, que ya existen). Ver README, "WhatsApp".
+[[durable_objects.bindings]]
+name = "WA_THREADS"
+class_name = "WaThread"
+
+[[migrations]]
+tag = "v3"
+new_sqlite_classes = ["WaThread"]
+
+# La base de conocimiento del agente (whatsapp_kb.md) se empaqueta como texto.
+[[rules]]
+type = "Text"
+globs = ["**/*.md"]
+fallthrough = true
+
 # ── Ajuste de límites sin tocar código (opcional) ──
 # Descomenta y cambia; 0 desactiva ese límite. Valores por defecto en
 # RATE_DEFAULTS de vesper-chat-proxy.js.
@@ -69,3 +88,6 @@ new_sqlite_classes = ["ExamAttempt"]
 # RL_PRO_PER_MIN = "30"
 # RL_PRO_PER_DAY = "1000"
 # RL_GLOBAL_PER_DAY = "2000"
+# RL_WA_PER_THREAD_DAY = "25"   # borradores con IA por conversación al día
+# RL_WA_GLOBAL_DAY = "500"      # borradores con IA al día, en total
+# WA_ADMINS = "correo@dominio.com"  # acceso extra a la bandeja (además de roles/)

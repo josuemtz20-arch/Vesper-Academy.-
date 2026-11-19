@@ -38,6 +38,9 @@ import { DurableObject } from "cloudflare:workers";
 /* Exámenes calificados en el servidor (rutas /exam/*). Ver exam_grader.js. */
 import { handleExam, EXAM_RATE_DEFAULTS, ExamAttempt } from "./exam_grader.js";
 export { ExamAttempt };
+/* Agente de WhatsApp en modo borrador (rutas /wa/*). Ver whatsapp_agent.js. */
+import { handleWaWebhook, handleWaAdmin, WaThread } from "./whatsapp_agent.js";
+export { WaThread };
 
 /* ---------- Configuración (editable) ---------- */
 
@@ -360,8 +363,16 @@ export class RateLimiter extends DurableObject {
 /* ---------- Worker ---------- */
 
 export default {
-  async fetch(request, env) {
+  async fetch(request, env, ctx) {
     const origin = pickOrigin(request.headers.get("Origin"));
+    const path = new URL(request.url).pathname;
+
+    /* ── Webhook de WhatsApp: lo llama Meta (GET de verificación y POST sin
+     * Origin), así que va antes de CORS. Se autentica con la firma
+     * X-Hub-Signature-256, no con el origen. ── */
+    if (path === "/wa/webhook") {
+      return handleWaWebhook(request, env, ctx);
+    }
 
     /* Preflight CORS */
     if (request.method === "OPTIONS") {
@@ -384,7 +395,33 @@ export default {
     /* ── Exámenes (/exam/start, /exam/answer, /exam/finish) ──
      * No usan Claude ni la API key: califican con las claves que solo viven
      * en el Worker. Comparten el contador por IP del chat. */
-    const path = new URL(request.url).pathname;
+    if (path.indexOf("/wa/") === 0) {
+      const ipW = request.headers.get("CF-Connecting-IP") || "unknown";
+      const rl = await rateHit(env, "wa-admin:" + ipW, 30, 2000);
+      if (!rl.ok) return jsonError(429, "Vas muy rápido. Espera un momento.", origin, "rate_limited",
+        { "Retry-After": String(rl.retryAfter || 60) });
+      let wb;
+      try {
+        const t = await request.text();
+        if (t.length > 20000) return jsonError(413, "Petición demasiado grande.", origin);
+        wb = JSON.parse(t);
+      } catch (e) {
+        return jsonError(400, "Cuerpo JSON inválido.", origin);
+      }
+      if (!wb || typeof wb !== "object") return jsonError(400, "Cuerpo JSON inválido.", origin);
+      let out;
+      try {
+        out = await handleWaAdmin(path, wb, env);
+      } catch (e) {
+        console.error("wa admin:", e && e.message);
+        out = [500, { error: "Error del servidor de WhatsApp." }];
+      }
+      return new Response(JSON.stringify(out[1]), {
+        status: out[0],
+        headers: Object.assign({ "Content-Type": "application/json", "Cache-Control": "no-store" }, corsHeaders(origin))
+      });
+    }
+
     if (path.indexOf("/exam/") === 0) {
       const ipE = request.headers.get("CF-Connecting-IP") || "unknown";
       let eb;

@@ -29,6 +29,7 @@
 !/eliminar-cuenta.html
 !/login.html
 !/access_admin.html
+!/wa_bandeja.html
 !/vesper_auth.js
 # Modo app (TWA de Android / envoltura iOS): sin admin, sin precios ni WhatsApp. Sin claves.
 !/vesper_app_mode.js

@@ -276,3 +276,73 @@ python ../_scripts/exams/e2e_exams.py --root .. exam:A1 boss:C1
   saldo lo protegen los límites por IP, el tope global y Turnstile.
 - Pon además un **límite de gasto mensual** en la consola de Anthropic
   (Settings → Limits): es la última red si algo falla aquí.
+
+## WhatsApp: agente en modo borrador (2026-11)
+
+`whatsapp_agent.js` redacta respuestas a los mensajes de WhatsApp con Claude y
+la base de conocimiento `whatsapp_kb.md`. **No envía nada solo**: una persona
+revisa, edita y envía cada borrador desde `wa_bandeja.html`.
+
+```
+Cliente ─► Meta ─► POST /wa/webhook (firma HMAC) ─► DO WaThread (espera 20 s)
+        ─► Claude redacta {reply|escalate} ─► Firestore wa_threads/{número}
+        ─► wa_bandeja.html ─► POST /wa/send ─► API de WhatsApp ─► Cliente
+```
+
+### Lo que hay que hacer en Meta (una vez)
+
+1. Cuenta de **Meta Business** verificada y una app en developers.facebook.com
+   con el producto **WhatsApp**.
+2. Dar de alta el número en la **WhatsApp Cloud API**. Antes de migrar el
+   55 3569 9899, revisa si en tu región se puede seguir usando en la app de
+   WhatsApp Business a la vez ("coexistencia"); si no, el número deja de
+   funcionar en la app.
+3. Crear un **token permanente** (usuario del sistema con permiso
+   `whatsapp_business_messaging`). El token temporal de 24 h no sirve.
+4. Webhook: URL `https://patient-feather-4364.josuemtz20.workers.dev/wa/webhook`,
+   token de verificación = el mismo texto que `WA_VERIFY_TOKEN`, y suscribir el
+   campo **messages**.
+
+### Secretos y despliegue
+
+```bash
+cd worker
+wrangler secret put WA_TOKEN            # token permanente de Meta
+wrangler secret put WA_APP_SECRET       # App settings → Basic → App secret
+wrangler secret put WA_VERIFY_TOKEN     # un texto largo que inventes
+wrangler secret put WA_PHONE_NUMBER_ID  # id del número (no el teléfono)
+wrangler secret put WA_ADMINS           # tu correo (si no tienes doc en roles/)
+wrangler deploy                         # crea el DO WaThread (migración v3)
+```
+
+Necesita también `ANTHROPIC_API_KEY` y `FIREBASE_SA` (ya existen).
+Opcional: `WA_NOTIFY_URL` (por ejemplo `https://ntfy.sh/<tema-secreto>`) para
+recibir un aviso en el teléfono cuando hay un borrador. El aviso no lleva datos
+del cliente.
+
+### Quién entra a la bandeja
+
+Sesión con correo verificado **y** `roles/{correo}.role` = `admin` o
+`coordinator`, o el correo en `WA_ADMINS`. La colección `wa_threads` no tiene
+regla en `firestore.rules`, así que el navegador no puede leerla: todo pasa
+por el Worker con la cuenta de servicio.
+
+### Límites y costos
+
+- Modelo `claude-opus-5-5` con salida estructurada. Si el modelo rechaza un
+  mensaje, el servidor reintenta con otro modelo (`fallbacks: "default"`).
+- Topes de borradores con IA: 25 por conversación al día y 500 al día en total
+  (`RL_WA_PER_THREAD_DAY`, `RL_WA_GLOBAL_DAY`). Al llegar al tope el mensaje
+  pasa a "Necesita persona".
+- Audios, imágenes y documentos no se mandan a Claude: van directo a
+  "Necesita persona".
+- WhatsApp solo deja contestar con texto libre **dentro de las 24 h** después
+  del último mensaje del cliente. Pasado eso, la bandeja bloquea el envío.
+
+### Antes de activarlo
+
+`whatsapp_kb.md` es lo único que el agente da por cierto. Hoy tiene ~36
+`[FALTA]` (precio del Club, horarios por grupo, formas de pago, reembolsos,
+fechas de inicio…). Cada pregunta sobre esos datos se escala a una persona.
+Llénalos y vuelve a desplegar. **La promo del Buen Fin vence el 30 de nov:
+bórrala del archivo después de esa fecha.**
