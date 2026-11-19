@@ -260,6 +260,7 @@
 # panel + the persona engine that turns prefs into a dynamic system prompt,
 # a live preview and behavior hooks (tone lines, language mix, corrections).
 !/vesper_persona.js
+!/vesper_learner.js
 !/configuracion.html
 
 # Expansion 2026-06-16: big content pack (reading/listening/grammar/vocab/use

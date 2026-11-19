@@ -62,6 +62,7 @@ var CORE = [
   "vesper_tour.js",
   "vesper_adaptive.js",
   "vesper_persona.js",
+  "vesper_learner.js",
   "vesper_path.js",
   "vesper_progress.js",
   "vesper_cosmetics.js",
