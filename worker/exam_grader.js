@@ -368,7 +368,7 @@ async function finish(env, body) {
 
 /* punto de entrada desde el fetch del Worker. `rate(key, perMin, perDay)`
    es el contador por IP del chat (RateLimiter). */
-export async function handleExam(path, body, env, rate, limitOf) {
+export async function handleExam(path, body, env, rate, limitOf, rateRaw) {
   if (!env.EXAM_ATTEMPTS) return [503, { error: "Exámenes no configurados en el servidor." }];
   if (path === "/exam/start" || path === "/exam/answer") {
     const isStart = path === "/exam/start";
@@ -385,9 +385,10 @@ export async function handleExam(path, body, env, rate, limitOf) {
       if (out[0] !== 200) return out;
       let user = null;
       if (body.idToken) { try { user = await lookupUser(env, body.idToken); } catch (e) { user = null; } }
-      /* con uid verificado: clave por uid (la envoltura añade la IP); si no, solo IP con tope alto */
+      /* con uid verificado: clave solo por uid (sin IP, para que el tope no se reinicie al cambiar de red);
+         si no, solo IP con tope alto */
       const rl2 = user && user.uid
-        ? await rate("exam-level-start-u:" + user.uid, 0, limitOf("RL_EXAM_LEVEL_START_PER_DAY"))
+        ? await (rateRaw || rate)("exam-level-uid:" + user.uid, 0, limitOf("RL_EXAM_LEVEL_START_PER_DAY"))
         : await rate("exam-level-start", 0, limitOf("RL_EXAM_LEVEL_START_PER_DAY_IP"));
       /* si excede, el intento ya creado queda huérfano (el cliente nunca recibe su id) y caduca solo */
       if (!rl2.ok) return [429, { error: "Hoy ya hiciste varios intentos del examen de nivel. Vuelve mañana.", code: "rate_limited", retryAfter: rl2.retryAfter || 3600 }];

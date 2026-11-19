@@ -427,7 +427,8 @@ export default {
       try {
         out = await handleExam(path, eb, env,
           (key, perMin, perDay) => rateHit(env, key + ":" + ipRateKey(ipE), perMin, perDay),
-          (name) => limitOf(env, name));
+          (name) => limitOf(env, name),
+          (key, perMin, perDay) => rateHit(env, key, perMin, perDay));   // sin IP (tope por cuenta)
       } catch (e) {
         console.error("exam:", e && e.message);
         out = [500, { error: "Error del servidor de exámenes." }];

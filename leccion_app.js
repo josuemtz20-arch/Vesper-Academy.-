@@ -4392,10 +4392,16 @@
   }
   function examAttempt() {
     if (!lesson._att) {
-      var p = examPost("start", {
-        kind: lesson.examKind, level: lesson.isBoss ? lesson.bossLevel : lesson.examLevel,
-        version: window.VESPER_EXAM_VERSION || "",
-        ids: lesson.exercises.map(function (e) { return e.id; })
+      /* idToken como en finish; si no hay sesión o falla, se arranca sin token (anónimo) */
+      var R = window.VESPER_RESULTS, tk;
+      try { tk = (R && R.idToken) ? R.idToken() : Promise.resolve(null); } catch (e) { tk = Promise.resolve(null); }
+      var p = Promise.resolve(tk).catch(function () { return null; }).then(function (tok) {
+        return examPost("start", {
+          kind: lesson.examKind, level: lesson.isBoss ? lesson.bossLevel : lesson.examLevel,
+          version: window.VESPER_EXAM_VERSION || "",
+          ids: lesson.exercises.map(function (e) { return e.id; }),
+          idToken: tok || undefined
+        });
       }).then(function (j) { return j.attemptId; });
       p.catch(function () { if (lesson._att === p) lesson._att = null; });
       lesson._att = p;

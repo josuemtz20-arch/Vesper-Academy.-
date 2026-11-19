@@ -137,11 +137,14 @@
       var med = gaps[Math.floor(gaps.length / 2)];
       try {
         if (med > 40) {
-          if (localStorage.getItem(PEND_KEY)) {
+          /* pendiente {n,t}: solo vale si tiene < 24 h; un valor antiguo o plano cuenta como caducado */
+          var pend = null, now = Date.now();
+          try { pend = JSON.parse(localStorage.getItem(PEND_KEY)); } catch (e2) { pend = null; }
+          if (pend && typeof pend === "object" && pend.n >= 1 && now - pend.t >= 0 && now - pend.t < 86400000) {
             localStorage.removeItem(PEND_KEY);
             localStorage.setItem(AUTO_KEY, JSON.stringify({ lite: true, t: Date.now(), fps: Math.round(1000 / med) }));
             apply();
-          } else { localStorage.setItem(PEND_KEY, String(Date.now())); }
+          } else { localStorage.setItem(PEND_KEY, JSON.stringify({ n: 1, t: now })); }
         } else { localStorage.removeItem(PEND_KEY); }
       } catch (e) {}
     }
