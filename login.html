@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <!-- CSP: generada por _scripts/apply_csp.py (edita alli, no aqui) -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://apis.google.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://cdn.tailwindcss.com https://challenges.cloudflare.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://maxcdn.bootstrapcdn.com; font-src 'self' data: https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: blob: https:; media-src 'self' data: blob:; connect-src 'self' https://firestore.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://vesper-academy.firebaseapp.com https://patient-feather-4364.josuemtz20.workers.dev https://formsubmit.co https://challenges.cloudflare.com https://www.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com; frame-src 'self' https://vesper-academy.firebaseapp.com https://www.youtube.com https://www.youtube-nocookie.com https://challenges.cloudflare.com; worker-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self' https://formsubmit.co; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://apis.google.com https://challenges.cloudflare.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https:; media-src 'self' data: blob:; connect-src 'self' https://firestore.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://vesper-academy.firebaseapp.com https://patient-feather-4364.josuemtz20.workers.dev https://formsubmit.co https://challenges.cloudflare.com https://www.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com; frame-src 'self' https://vesper-academy.firebaseapp.com https://www.youtube.com https://www.youtube-nocookie.com https://challenges.cloudflare.com; worker-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self' https://formsubmit.co; upgrade-insecure-requests">
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#1B1B2F">
@@ -16,7 +16,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inria+Serif:wght@400;700&family=Inter:wght@400;500;600;700&display=swap">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link rel="stylesheet" href="assets/css/vesper_icons_fa.css">
 <link rel="stylesheet" href="assets/css/vesper_tokens.css">
 <style>
   *,*::before,*::after{box-sizing:border-box;}
@@ -80,13 +80,15 @@
   /* Mensajes */
   .msg{font-size:.88rem; line-height:1.5; border-radius:var(--r-sm); padding:12px 14px; margin:20px 0 0;
        display:none; gap:10px; align-items:flex-start;}
-  .msg::before{font-family:"Font Awesome 6 Free"; font-weight:900; flex:0 0 auto; margin-top:1px;}
+  /* Iconos del mensaje: antes glifos de Font Awesome; ahora máscaras (--fa-ic-* de vesper_icons_fa.css).
+     height:1.5em = la línea de texto, para que el icono quede centrado como el glifo. */
+  .msg::before{content:""; width:1em; height:1.5em; background-color:currentColor;-webkit-mask:var(--fa-i) no-repeat center/auto 1em;mask:var(--fa-i) no-repeat center/auto 1em; flex:0 0 auto; margin-top:1px;}
   .msg.err {display:flex; background:#fbeceb; color:var(--err); border:1px solid #f0c7c3;}
-  .msg.err::before{content:"\f06a";}
+  .msg.err::before{--fa-i:var(--fa-ic-circle-exclamation);}
   .msg.ok  {display:flex; background:#e6f4ee; color:#1f7a58; border:1px solid #bfe3d3;}
-  .msg.ok::before{content:"\f058";}
+  .msg.ok::before{--fa-i:var(--fa-ic-circle-check);}
   .msg.info{display:flex; background:#faf3e2; color:#6f541d; border:1px solid #ecdcb4;}
-  .msg.info::before{content:"\f05a";}
+  .msg.info::before{--fa-i:var(--fa-ic-circle-info);}
 
   /* Formularios */
   form{display:none; margin-top:22px;}

@@ -192,7 +192,8 @@ nav{display:flex;align-items:center;justify-content:space-between;height:72px;ga
 .qitem summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:14px;
   padding:19px 22px;font-family:inherit;font-size:1rem;font-weight:600;color:var(--navy);}
 .qitem summary::-webkit-details-marker{display:none;}
-.qitem summary::after{content:"\f078";font-family:"Font Awesome 6 Free";font-weight:900;font-size:.8rem;
+/* Chevron: antes glifo de Font Awesome (\f078); ahora máscara de vesper_icons_fa.css (--fa-ic-*). */
+.qitem summary::after{content:"";display:block;width:1em;height:1em;--fa-i:var(--fa-ic-chevron-down);background-color:currentColor;-webkit-mask:var(--fa-i) no-repeat center/auto 1em;mask:var(--fa-i) no-repeat center/auto 1em;font-size:.8rem;
   color:var(--gold2);flex:0 0 auto;transition:transform .35s var(--ease-std);}
 .qitem[open] summary::after{transform:rotate(180deg);}
 .qitem summary:focus-visible{outline:3px solid var(--gold2);outline-offset:-3px;}
