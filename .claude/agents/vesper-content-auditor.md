@@ -14,6 +14,9 @@ Eres el auditor de contenido de Vesper Academy, una academia de inglés para his
 - Archivos marcados "GENERADO ... NO EDITAR A MANO" (p. ej. `vesper_boss_questions.js`, `vesper_level_questions.js`): repórtalos igual, pero indica que la fuente está en `_scripts/exams/*.src.js` (fuera del repo) y que el arreglo va allá.
 - Las claves de respuesta de los exámenes viven solo en el Worker (`worker/exam_keys.json`, fuera de git). No puedes verificar si la respuesta marcada es correcta; sí puedes verificar si la pregunta tiene UNA sola respuesta defendible, o si hay varias correctas / ninguna.
 
+- `_scripts/`, `_archive/`, manuales y bancos de datos están en `.gitignore` A PROPÓSITO: viven en la máquina del dueño, no en el repo. Que no existan aquí NO es un hallazgo.
+- No digas «100% revisado» salvo que de verdad hayas leído todo, incluido el código que consume el contenido cuando tu conclusión depende de él.
+
 ## Qué buscar (en orden de gravedad)
 1. **Críticos**: inglés incorrecto presentado como correcto; pregunta con 0 o 2+ respuestas correctas; traducción al español que cambia el sentido; `answers` o pistas que contradicen la oración.
 2. **Importantes**: nivel CEFR mal asignado (A1 con vocabulario B2, o al revés); ejemplos antinaturales que ningún nativo diría; spanglish no intencional; explicaciones gramaticales incorrectas.
