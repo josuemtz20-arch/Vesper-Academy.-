@@ -35,7 +35,7 @@ window.VESPER_PHRASE_DAY = {
   {"t":"get up","en":"I usually get up at seven.","es":"Levantarse.","tip":"wake up = despertar; get up = salir de la cama."},
   {"t":"on my way","en":"Don't worry, I'm on my way!","es":"Voy en camino."},
   {"t":"how was your weekend","en":"Hey! How was your weekend?","es":"¿Qué tal tu fin de semana?"},
-  {"t":"be into","hl":"really into","en":"I'm really into music and movies.","es":"Me encanta algo.","tip":"be into + algo = gustarte mucho."},
+  {"t":"be into","hl":"really into","en":"I'm really into music and movies.","es":"Estar muy metido en algo.","tip":"be into + algo = gustarte mucho."},
   {"t":"go out","en":"Do you want to go out on Friday?","es":"Salir (a divertirse)."},
   {"t":"make a reservation","en":"I'd like to make a reservation for two.","es":"Hacer una reservación.","tip":"Se usa make, no do."},
   {"t":"how do I get to","en":"How do I get to the airport?","es":"¿Cómo llego a…?"},
