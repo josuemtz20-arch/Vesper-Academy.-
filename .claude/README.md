@@ -1,6 +1,6 @@
 # Agentes de Vesper Academy
 
-Todos corren con **Sonnet** (`model: sonnet` en cada definición).
+Auditor en **Sonnet** (lee mucho, barato); supervisor en **Opus** (verificación independiente con un modelo distinto para no compartir sesgos). Decisión del dueño, nov-2026.
 
 | Agente | Qué hace | Cómo activarlo |
 |---|---|---|
@@ -11,7 +11,7 @@ Todos corren con **Sonnet** (`model: sonnet` en cada definición).
 ## Uso
 - Escribe `/audit-content <archivo o nivel>` y corre auditor → supervisor solo.
 - Para ver/editar agentes: `/agents`. Las definiciones viven en `.claude/agents/*.md`.
-- Para sumar un agente nuevo: copia uno, cambia `name`, `description`, `tools` y el prompt; mantén `model: sonnet`.
+- Para sumar un agente nuevo: copia uno, cambia `name`, `description`, `tools` y el prompt; usa `model: sonnet` para agentes que leen mucho y `opus` solo para verificación.
 
 ## Reglas del sistema
 - Los agentes de revisión son **solo lectura**; los cambios los aplica la sesión principal tras tu aprobación.

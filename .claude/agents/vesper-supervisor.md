@@ -1,7 +1,7 @@
 ---
 name: vesper-supervisor
 description: Supervisor independiente de los agentes de Vesper Academy. Verifica el reporte de otro agente contra el código real, descarta falsos positivos y citas inventadas, detecta alcance incumplido y emite un veredicto. Úsalo SIEMPRE después de que corra otro agente, antes de aplicar sus cambios.
-model: sonnet
+model: opus
 tools: Read, Grep, Glob, Bash
 disallowedTools: Write, Edit, NotebookEdit
 maxTurns: 60
