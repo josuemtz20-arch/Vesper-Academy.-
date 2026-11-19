@@ -5254,13 +5254,17 @@
   }
 
   function renderFeedback() {
-    /* el duelo puede terminar antes: se califica lo contestado (ver EL DUELO) */
-    var total = lesson.isBoss ? Math.max(1, Math.min(lesson.exercises.length, results.length)) : lesson.exercises.length;
+    /* el duelo puede terminar antes, pero el % se calcula sobre TODAS las preguntas
+       del intento (igual que el Worker): un 7/8 temprano es 88 %, no 100 %. El
+       aprobado sigue siendo coherente: need = ceil(total*pass%), y el duelo se
+       gana justo al llegar a need aciertos. */
+    var total = lesson.exercises.length;
+    var answered = Math.max(1, Math.min(total, results.length));
     var correct = results.filter(Boolean).length;
     var pct = Math.round(100 * correct / Math.max(1, total));
     var perfect = correct === total;
     lastPerfect = perfect;
-    if (lesson.isBoss) { renderBossResult(correct, total, pct); return; }
+    if (lesson.isBoss) { renderBossResult(correct, total, pct, answered); return; }
     if (lesson.isExam) { renderExamResult(correct, total, pct); return; }
     if (lesson.isForja) { renderForjaResult(correct, total, pct); return; }
     /* Lecciones normales: hay que acertar >=70% para superarlas, ganar XP y
@@ -5326,7 +5330,7 @@
   }
 
   /* ---------- RESULTADO DEL JEFE (victoria / derrota) ---------- */
-  function renderBossResult(correct, total, pct) {
+  function renderBossResult(correct, total, pct, answered) {
     var bm = bossMeta(lesson.bossLevel);
     /* Registro central del intento (aprobado o reprobado) para el panel del
        profesor. Nunca debe romper la pantalla de resultado. */
@@ -5348,7 +5352,7 @@
         + '<div class="boss-emblem boss-gloat" aria-hidden="true">' + bossPortrait(lesson.bossLevel) + '<span class="duel-seal lose">' + T('Ganó él', 'It won') + '</span></div>'
         + '<p class="vs-say">«' + esc(bossLine("lose")) + '»</p>'
         + '<h1 class="lc-title">' + T('Esta vez no', 'Not this time') + '</h1>'
-        + '<p class="muted">' + duelLoseNote(correct, total) + '</p>'
+        + '<p class="muted">' + duelLoseNote(correct, answered) + '</p>'
         + mascot("incorrect", T("Lo vi todo. La próxima lo tumbamos juntos.", "I saw it all. Next time we'll beat it together."), "sm")
         + '<button class="btn btn-gold" id="retry">' + T('Revancha', 'Rematch') + '</button>'
         + '<button class="btn btn-ghost" id="backHome">' + T('Ver lecciones', 'See lessons') + '</button></div></div>');

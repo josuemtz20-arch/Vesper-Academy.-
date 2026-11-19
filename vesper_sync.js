@@ -235,7 +235,7 @@
   }
 
   function esc(t) { return ("" + (t == null ? "" : t)).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
-  function openModal() { startFirebase(); renderModal(); overlay.classList.add("show"); }
+  function openModal() { renderModal(); overlay.classList.add("show"); }
   function closeModal() { overlay.classList.remove("show"); }
 
   function renderModal() {
@@ -305,28 +305,14 @@
 
   /* ============================ arranque ============================ */
   buildUI();
-  /* Firebase (~70 KB gzip de terceros) se pide DESPUÉS de que la página
-     termina de cargar y el navegador queda libre: antes competía por la red
-     con el mapa y sus imágenes, y en 3G retrasaba la primera pantalla. Si el
-     alumno abre "Guardar progreso" antes, se pide en ese momento. */
-  var fbStarted = false;
-  function startFirebase() {
-    if (fbStarted) return;
-    fbStarted = true;
-    VA.initFirebase().then(function (auth) {
-      authInst = auth;
-      auth.onAuthStateChanged(function (user) {
-        currentUser = (user && user.emailVerified) ? user : null;
-        syncReady = false;
-        if (user && user.emailVerified) { setSignedIn(user); doSync(user); }
-        else if (user && !user.emailVerified) { setUnverified(user); }
-        else { setSignedOut(); }
-      });
-    }).catch(function () { /* sin red a Firebase: queda solo-local, el chip invita a guardar */ });
-  }
-  function whenIdle(fn) {
-    var go = function () { (window.requestIdleCallback || function (f) { setTimeout(f, 200); })(fn, { timeout: 2500 }); };
-    if (document.readyState === "complete") go(); else window.addEventListener("load", go);
-  }
-  whenIdle(startFirebase);
+  VA.initFirebase().then(function (auth) {
+    authInst = auth;
+    auth.onAuthStateChanged(function (user) {
+      currentUser = (user && user.emailVerified) ? user : null;
+      syncReady = false;
+      if (user && user.emailVerified) { setSignedIn(user); doSync(user); }
+      else if (user && !user.emailVerified) { setUnverified(user); }
+      else { setSignedOut(); }
+    });
+  }).catch(function () { /* sin red a Firebase: queda solo-local, el chip invita a guardar */ });
 })();

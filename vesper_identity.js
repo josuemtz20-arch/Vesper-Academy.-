@@ -67,16 +67,10 @@
   }
 
   window.VesperIdentity = window.VesperIdentity || { linked: false };
-  /* tras la carga y con el navegador libre: Firebase no compite con la
-     primera pantalla (mismo criterio que vesper_sync.js) */
-  function start() {
-    VesperAuth.initFirebase().then(function (auth) {
-      auth.onAuthStateChanged(function (user) {
-        if (user && user.emailVerified) link(user);
-        else announce({ linked: false });
-      });
-    }).catch(function () {});
-  }
-  var go = function () { (window.requestIdleCallback || function (f) { setTimeout(f, 200); })(start, { timeout: 2500 }); };
-  if (document.readyState === "complete") go(); else window.addEventListener("load", go);
+  VesperAuth.initFirebase().then(function (auth) {
+    auth.onAuthStateChanged(function (user) {
+      if (user && user.emailVerified) link(user);
+      else announce({ linked: false });
+    });
+  }).catch(function () {});
 })();

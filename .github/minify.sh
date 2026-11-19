@@ -30,9 +30,10 @@ while IFS= read -r -d '' f; do
   case "$f" in *.min.js|*.min.css) continue ;; esac
   tmp="$f.min.tmp"
   case "$f" in *.css) loader=css ;; *) loader=js ;; esac
-  # --legal-comments=none: los avisos de licencia de terceros no viven aquí
-  # (las librerías se cargan desde su CDN), solo comentarios propios.
-  if "$ESBUILD" --minify --loader="$loader" --legal-comments=none --log-level=error < "$f" > "$tmp"; then
+  # --legal-comments=inline: conserva solo los comentarios /*! ... */ y @license
+  # (p. ej. el aviso CC BY 4.0 de Font Awesome en las hojas de iconos); el resto
+  # de comentarios propios se elimina.
+  if "$ESBUILD" --minify --loader="$loader" --legal-comments=inline --log-level=error < "$f" > "$tmp"; then
     a=$(stat -c %s "$f"); b=$(stat -c %s "$tmp")
     if [ "$b" -gt 0 ] && [ "$b" -lt "$a" ]; then
       mv "$tmp" "$f"; antes=$((antes + a)); despues=$((despues + b))
