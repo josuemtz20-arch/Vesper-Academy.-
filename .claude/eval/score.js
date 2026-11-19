@@ -44,8 +44,8 @@ const rows = key.planted.map(p => {
   const f = errs.find(x => hit(x.refs, p.lines));
   const d = dudas.find(x => hit(x.refs, p.lines));
   return {
-    id: p.id, esperado: p.sev, detectado: f ? f.sev : (d ? "solo DUDA" : "NO"),
-    severidadOK: !!f && f.sev === p.sev,
+    id: p.id, esperado: [].concat(p.sev).join("|"), detectado: f ? f.sev : (d ? "solo DUDA" : "NO"),
+    severidadOK: !!f && [].concat(p.sev).includes(f.sev),
     validadorCitado: p.needsValidator ? !!f && /\bnorm\b/.test(f.text) && /leccion_app\.js:\d+/.test(f.text) : null,
     que: p.what
   };
@@ -54,7 +54,7 @@ const trapHits = key.traps.map(t => ({ id: t.id, reportadoComoError: errs.some(x
 const tp = errs.filter(x => key.planted.some(p => hit(x.refs, p.lines))).length;
 const fp = errs.length - tp;
 const detected = rows.filter(r => r.detectado !== "NO" && r.detectado !== "solo DUDA").length;
-const coverageDeclared = /ALCANCE:[^\n]*\d+\s*%|COBERTURA:/.test(report) && /\b(l[ií]neas?|wc|le[ií]d[oa])\b/i.test(report);
+const coverageDeclared = /^\s*COBERTURA:.*\d+\s*[-–]\s*\d+/m.test(report) && /^\s*VALIDADORES LE[IÍ]DOS:/m.test(report);
 
 const out = {
   reportados: errs.length, dudas: dudas.length,
@@ -72,7 +72,7 @@ console.log(`PRECISIÓN ${out.precision}  (${tp}/${errs.length} hallazgos caen e
 console.log(`RECALL    ${out.recall}  (${detected}/${key.planted.length} plantados detectados como error)`);
 console.log(`TRAMPAS   ${out.trampasCaidas} falsos positivos conocidos reportados como error`);
 console.log(`SEVERIDAD ${out.severidadCorrecta} con la severidad esperada`);
-console.log(`COBERTURA declarada con evidencia: ${coverageDeclared ? "sí" : "NO"}`);
+console.log(`COBERTURA + VALIDADORES en el formato exigido: ${coverageDeclared ? "sí" : "NO"}`);
 console.log("");
 for (const r of rows) console.log(`${r.id} esperado ${r.esperado.padEnd(10)} -> ${r.detectado.padEnd(10)}${r.validadorCitado === null ? "" : r.validadorCitado ? "  (validador citado)" : "  (SIN citar validador)"}  ${r.que}`);
 for (const t of trapHits) console.log(`${t.id} trampa ${t.reportadoComoError ? "CAYÓ  " : "evitada"}  ${t.que}`);

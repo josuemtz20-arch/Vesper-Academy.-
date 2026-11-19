@@ -39,6 +39,8 @@ La pregunta es: **¿qué le pasa al alumno?** No «qué tan feo se ve».
 | MENOR | Cosmético; no cambia lo que aprende ni cómo se califica | typo en español, puntuación, acento faltante |
 | DUDA | Depende de una decisión del dueño o no pudiste confirmarlo | variante léxica regional, estilo |
 Regla: si no puedes describir en una frase el daño concreto al alumno, baja un nivel.
+Regla de calificación: si la forma completa SÍ se acepta y solo se rechaza una variante (contracción, sinónimo, orden alternativo), es IMPORTANTE, no CRÍTICO, aunque la explicación muestre la variante. CRÍTICO es cuando la respuesta correcta principal se rechaza o una incorrecta se acepta.
+Regla de ids: un id que no coincide con su contenido es MENOR si nada lo consume; IMPORTANTE solo si encontraste (con grep) un consumidor que manda al alumno al lugar equivocado.
 
 ## NO son errores (aprendido de auditorías previas; no los reportes)
 - Explicaciones, pistas e instrucciones en **español** en A1/A2 (y parte de B1): es diseño, el alumno es principiante hispanohablante.
@@ -46,7 +48,7 @@ Regla: si no puedes describir en una frase el daño concreto al alumno, baja un 
 - `answers` con varias opciones intencionales cuando la consigna las admite: `["left", "right"]` (vesper_themes_pack.js:215, la consigna dice «izquierda o derecha»), `["coat", "jacket"]` (:265).
 - Claves de `answers` en minúsculas y sin puntuación: el validador normaliza mayúsculas, puntuación y apóstrofos.
 - Comillas escapadas (`\"`) dentro de prompts: es sintaxis JS, no texto visible.
-- Variantes de léxico mixto (p. ej. «zumo» vs «jugo», «coger») y US/UK: es decisión del dueño. Como mucho, DUDA de una línea.
+- Variantes de léxico mixto (p. ej. «zumo» vs «jugo», «coger») y US/UK: es decisión del dueño. Va SOLO en DUDAS, nunca en CRÍTICOS/IMPORTANTES/MENORES, aunque el público sea mexicano. Ya se sabe; repetirlo como error es ruido.
 - Archivos en `.gitignore` que no están en el repo (`_scripts/`, `_archive/`, claves).
 
 ## Antes de afirmar que una respuesta se acepta o se rechaza: LEE EL VALIDADOR
@@ -82,4 +84,5 @@ DUDAS (no confirmadas)
 ...
 NO CUBIERTO: <lo que no revisaste y por qué>
 ```
+Las líneas COBERTURA y VALIDADORES LEÍDOS son obligatorias aunque las menciones en ALCANCE: un reporte sin ellas se considera alcance incumplido. Un hallazgo por problema: no repitas la misma línea en dos secciones.
 Si no encuentras nada serio, dilo claramente y explica cuánto cubriste. Un reporte corto y verdadero vale más que uno largo y dudoso.
