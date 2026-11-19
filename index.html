@@ -1282,6 +1282,144 @@ html.vesper-reduce-motion.js-anim .hero-lema path{stroke-dashoffset:0 !important
   html.js-anim .hero-lema{opacity:1 !important;animation:none !important;}
   html.js-anim .hero-lema path{stroke-dashoffset:0 !important;animation:none !important;}
 }
+
+/* ============================================================
+   HERO C (2026-11-19) — «Editorial y directa», elegido por el dueño en
+   la arena (_propuestas/arena-2026-11-19-hero/, opción C). El titular en
+   Fraunces manda; el lema firma debajo (más grande que antes, a pedido
+   suyo); el examen de nivel es un boleto con talón grabado que Vesper
+   entrega. Reemplaza al medallón, a la ficha de tres cifras y al párrafo
+   de entrada: cada dato se dice una vez, en la línea de datos o en el
+   boleto. El subrayado del titular va por CSS (no SVG dentro del h1)
+   para que sobreviva al cambio de texto de la prueba A/B.
+   Celular (#m-app) al final, bajo la misma puerta que vesper_mobile.css.
+   ============================================================ */
+.hc-ticket{--hc-paper:#f7f1e3;--hc-ink:#1B1B2F;--hc-gold-ink:#7c5e22;--hc-muted:#5d6470;--hc-night:#14122a;
+  --hc-press:4px;--hc-gold:#C9A84C;--hc-star:#f3e2ab;
+  position:relative;z-index:2;display:grid;grid-template-columns:92px minmax(0,1fr);color:var(--hc-ink);
+  border-radius:14px;transform:rotate(-1.2deg);text-align:left;
+  filter:drop-shadow(0 28px 40px rgba(0,0,0,.5)) drop-shadow(0 2px 0 rgba(0,0,0,.25));
+  -webkit-mask:radial-gradient(circle 11px at 92px 0,transparent 98%,#000) top/100% 51% no-repeat,
+               radial-gradient(circle 11px at 92px 100%,transparent 98%,#000) bottom/100% 51% no-repeat;
+          mask:radial-gradient(circle 11px at 92px 0,transparent 98%,#000) top/100% 51% no-repeat,
+               radial-gradient(circle 11px at 92px 100%,transparent 98%,#000) bottom/100% 51% no-repeat;}
+.hc-stub{position:relative;border-radius:14px 0 0 14px;overflow:hidden;
+  background:url(assets/images/landing/hero_emblem.webp) 50% 44%/260% auto var(--hc-night);
+  display:flex;align-items:flex-end;justify-content:center;padding-bottom:16px;}
+.hc-stub::after{content:"";position:absolute;inset:7px;border:1px solid rgba(201,168,76,.45);border-radius:9px;pointer-events:none;}
+.hc-stub span{position:relative;writing-mode:vertical-rl;transform:rotate(180deg);font:600 .66rem 'Inter',sans-serif;letter-spacing:.3em;
+  text-transform:uppercase;color:var(--hc-star);background:rgba(20,18,42,.7);padding:10px 4px;border-radius:4px;}
+.hc-body{position:relative;min-width:0;border-radius:0 14px 14px 0;padding:22px 24px 20px;
+  background:radial-gradient(120% 90% at 100% 0,rgba(201,168,76,.12),transparent 60%),var(--hc-paper);
+  border-left:2px dashed rgba(27,27,47,.28);}
+.hc-body::before{content:"";position:absolute;inset:9px;pointer-events:none;--o:rgba(124,94,34,.55);
+  background:
+    linear-gradient(var(--o),var(--o)) top left/14px 1px no-repeat,linear-gradient(var(--o),var(--o)) top left/1px 14px no-repeat,
+    linear-gradient(var(--o),var(--o)) top right/14px 1px no-repeat,linear-gradient(var(--o),var(--o)) top right/1px 14px no-repeat,
+    linear-gradient(var(--o),var(--o)) bottom left/14px 1px no-repeat,linear-gradient(var(--o),var(--o)) bottom left/1px 14px no-repeat,
+    linear-gradient(var(--o),var(--o)) bottom right/14px 1px no-repeat,linear-gradient(var(--o),var(--o)) bottom right/1px 14px no-repeat;}
+.hc-kicker{display:flex;justify-content:space-between;align-items:baseline;gap:10px;margin:0;
+  font:700 .68rem 'Inter',sans-serif;letter-spacing:.22em;text-transform:uppercase;color:var(--hc-gold-ink);}
+.hc-kicker i{font-style:normal;letter-spacing:.08em;color:var(--hc-muted);font-weight:600;}
+.hc-h{font:500 1.75rem/1.05 'Fraunces',Georgia,serif;font-variation-settings:"opsz" 72;margin:8px 0 14px;letter-spacing:-.01em;color:var(--hc-ink);}
+.hc-h em{font-style:italic;color:var(--hc-gold-ink);}
+.hc-specs{display:grid;grid-template-columns:repeat(3,1fr);margin:0 0 18px;
+  border-top:1px solid rgba(27,27,47,.16);border-bottom:1px solid rgba(27,27,47,.16);}
+.hc-specs div{padding:10px 4px;text-align:center;}
+.hc-specs div+div{border-left:1px solid rgba(27,27,47,.16);}
+.hc-specs b{display:block;white-space:nowrap;font:600 1.6rem/1 'Fraunces',Georgia,serif;font-variation-settings:"opsz" 72;color:var(--hc-ink);}
+.hc-specs .hc-word{font-size:1.18rem;line-height:1.36;} /* «Al instante» cabe en un renglón */
+.hc-specs small{display:block;margin-top:4px;font:500 .74rem/1.2 'Inter',sans-serif;color:var(--hc-muted);}
+.hc-btn{display:flex;align-items:center;justify-content:center;gap:10px;min-height:54px;width:100%;
+  border-radius:14px;font:700 1.02rem 'Inter',sans-serif;text-decoration:none;letter-spacing:.005em;white-space:nowrap;
+  background:linear-gradient(180deg,color-mix(in srgb,var(--hc-star) 45%,var(--hc-gold)),var(--hc-gold));color:#14122a;
+  box-shadow:0 var(--hc-press) 0 color-mix(in srgb,var(--hc-gold) 62%,#000);margin-bottom:var(--hc-press);
+  transition:transform .09s,box-shadow .09s,filter .15s;}
+.hc-btn:hover{transform:translateY(-2px);filter:brightness(1.05);}
+.hc-btn:active{transform:translateY(var(--hc-press));box-shadow:0 0 0 transparent;}
+.hc-btn:focus-visible{outline:3px solid var(--hc-star);outline-offset:3px;}
+.hc-btn svg{width:19px;height:19px;flex:none;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+.hc-note{margin:10px 0 0;text-align:center;font:500 .8rem 'Inter',sans-serif;color:var(--hc-muted);}
+.hc-stage{position:relative;justify-self:center;width:100%;max-width:480px;padding-top:268px;}
+.hc-vesper{position:absolute;z-index:1;top:0;left:-3%;width:330px;height:auto;filter:drop-shadow(0 18px 26px rgba(0,0,0,.45));}
+.hc-stage::before{content:"";position:absolute;z-index:0;top:-50px;left:-60px;width:420px;aspect-ratio:1;border-radius:50%;
+  background:radial-gradient(circle,rgba(243,226,171,.34),rgba(201,168,76,.10) 45%,transparent 68%);}
+.hc-facts{list-style:none;padding:14px 0 0;border-top:1px solid rgba(201,168,76,.35);
+  display:flex;flex-wrap:wrap;gap:6px 0;font:500 .93rem/1.45 'Inter',sans-serif;color:var(--on-night-soft,rgba(245,242,235,.72));}
+.hc-facts li{display:block;} /* block, no flex: en flex se pierden los espacios entre texto y <b> */
+.hc-facts li+li::before{content:"✦";color:#C9A84C;font-size:.62rem;margin:0 10px;}
+.hc-facts b{color:var(--on-night,#f5f2eb);font-weight:600;}
+/* --- escritorio --- */
+.hero--c .hc-engrave{position:absolute;z-index:0;right:-6%;top:50%;width:min(62vw,760px);aspect-ratio:3/4;transform:translateY(-50%);
+  background:url(assets/images/landing/hero_emblem.webp) center/cover;opacity:.16;mix-blend-mode:screen;pointer-events:none;
+  -webkit-mask:radial-gradient(closest-side,#000 55%,transparent);mask:radial-gradient(closest-side,#000 55%,transparent);}
+.hc-grid{position:relative;z-index:1;display:grid;grid-template-columns:1fr;gap:clamp(22px,4vw,56px);align-items:center;
+  padding-top:clamp(28px,6vw,84px);padding-bottom:clamp(36px,5vw,64px);}
+@media (min-width:980px){.hc-grid{grid-template-columns:minmax(0,1.12fr) minmax(0,.88fr);min-height:calc(88svh - 78px);}}
+.hc-fillet{display:flex;align-items:center;gap:12px;color:#C9A84C;margin:0 0 18px;}
+.hc-fillet::before,.hc-fillet::after{content:"";height:1px;background:linear-gradient(90deg,transparent,#C9A84C);flex:0 0 46px;}
+.hc-fillet::after{flex:1;background:linear-gradient(90deg,#C9A84C,transparent);}
+.hc-fillet svg{width:12px;height:12px;flex:none;}
+.hc-fillet .eyebrow{margin:0;white-space:nowrap;}
+.hero.hero--c h1{font-family:'Fraunces',Georgia,serif;font-weight:500;font-variation-settings:"opsz" 72;
+  font-size:clamp(2.05rem,1.2rem + 3.9vw,4.4rem);line-height:1.05;letter-spacing:-.006em;margin:0;max-width:14ch;text-wrap:balance;}
+.hero.hero--c h1 em{display:block;width:max-content;max-width:100%;font-weight:400;padding-bottom:.12em;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 10' preserveAspectRatio='none'%3E%3Cpath d='M3 6.5C42 2.5 96 9 197 3.5' fill='none' stroke='%23C9A84C' stroke-width='2.6' stroke-linecap='round' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E") left bottom/100% .22em no-repeat;}
+.hc-lema{display:flex;align-items:center;gap:14px;margin:clamp(14px,2vw,22px) 0 0;
+  font:700 clamp(2.1rem,3.4vw,2.9rem)/1.05 'Caveat','Segoe Print',cursive;color:var(--star,#f3e2ab);
+  rotate:-2deg;transform-origin:left center;text-shadow:0 2px 18px rgba(201,168,76,.28);}
+.hc-lema::before{content:"";flex:0 0 clamp(26px,3vw,42px);height:1.5px;background:#C9A84C;opacity:.8;}
+.hc-lema b{position:relative;font-weight:700;color:#C9A84C;white-space:nowrap;}
+.hc-lema svg,.m-inicio--c .m-lema svg{position:absolute;left:-2%;top:auto;bottom:-.2em;width:104%;height:.32em;overflow:visible;
+  fill:none;stroke:#C9A84C;stroke-width:2.4;stroke-linecap:round;vector-effect:non-scaling-stroke;}
+.hero--c .hc-facts{margin:clamp(20px,3vw,34px) 0 0;max-width:44rem;}
+.hc-aside{margin:22px 0 0;}
+.hc-wa{display:inline-flex;align-items:center;gap:9px;min-height:44px;font:600 .95rem 'Inter',sans-serif;color:var(--on-night,#f5f2eb);
+  text-decoration:none;border-bottom:1px solid rgba(243,226,171,.4);padding:0 2px;}
+.hc-wa .i{width:18px;height:18px;color:var(--star,#f3e2ab);}
+.hc-wa:hover{color:var(--star,#f3e2ab);}
+html.js-anim .hero--c .hc-stage{opacity:0;animation:rise .9s var(--ease-out) .34s both;}
+@media (max-width:979px){
+  .hc-copy{display:contents;}
+  .hc-copy>.hc-fillet{order:1} .hc-copy>h1{order:2} .hc-copy>.hc-lema{order:3}
+  .hero--c .hc-stage{order:4} .hc-copy>.hc-facts{order:5} .hc-copy>.hc-aside{order:6}
+  .hc-grid{gap:18px;}
+}
+@media (prefers-reduced-motion:reduce){html.js-anim .hero--c .hc-stage{animation:none;opacity:1;}}
+/* --- teléfono (#m-app) --- */
+@media (pointer: coarse) and (max-width: 820px){
+  #m-app .m-inicio--c .m-h1{font-weight:500;font-variation-settings:"opsz" 72;letter-spacing:-.006em;margin-bottom:0;}
+  #m-app .m-inicio--c .m-h1 em{display:inline-block;padding-bottom:.1em;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 10' preserveAspectRatio='none'%3E%3Cpath d='M3 6.5C42 2.5 96 9 197 3.5' fill='none' stroke='%23C9A84C' stroke-width='2.6' stroke-linecap='round' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E") left bottom/100% .2em no-repeat;}
+  #m-app .m-inicio--c .m-lema{display:block;margin:14px 0 0;text-align:left;white-space:normal;font-size:33px;line-height:1;
+    color:var(--m-star,#f3e2ab);rotate:-2deg;transform-origin:left center;text-shadow:0 2px 18px rgba(201,168,76,.28);}
+  #m-app .m-inicio--c .m-lema span{display:block;font-size:1em;margin:0;}
+  #m-app .m-inicio--c .m-lema b{display:inline-block;margin-left:1.3em;color:#C9A84C;}
+  #m-app .m-inicio--c .hc-stage{max-width:none;padding-top:118px;margin-top:-96px;}
+  #m-app .m-inicio--c .hc-vesper{width:172px;left:auto;right:-14px;}
+  #m-app .m-inicio--c .hc-stage::before{width:220px;left:auto;right:-56px;top:-30px;}
+  #m-app .m-inicio--c .hc-ticket{grid-template-columns:62px minmax(0,1fr);transform:rotate(-.8deg);
+    -webkit-mask:radial-gradient(circle 9px at 62px 0,transparent 98%,#000) top/100% 51% no-repeat,
+                 radial-gradient(circle 9px at 62px 100%,transparent 98%,#000) bottom/100% 51% no-repeat;
+            mask:radial-gradient(circle 9px at 62px 0,transparent 98%,#000) top/100% 51% no-repeat,
+                 radial-gradient(circle 9px at 62px 100%,transparent 98%,#000) bottom/100% 51% no-repeat;}
+  #m-app .m-inicio--c .hc-stub span{font-size:.58rem;letter-spacing:.24em;}
+  #m-app .m-inicio--c .hc-body{padding:14px 15px 14px 16px;}
+  #m-app .m-inicio--c .hc-h{font-size:1.32rem;margin:5px 0 10px;}
+  #m-app .m-inicio--c .hc-specs{margin-bottom:13px;}
+  #m-app .m-inicio--c .hc-specs div{padding:7px 2px;}
+  #m-app .m-inicio--c .hc-specs b{font-size:1.3rem;}
+  #m-app .m-inicio--c .hc-specs .hc-word{font-size:1rem;line-height:1.3;}
+  #m-app .m-inicio--c .hc-specs small{font-size:.68rem;}
+  #m-app .m-inicio--c .hc-btn{font-size:.94rem;gap:8px;padding:0 10px;}
+  #m-app .m-inicio--c .hc-btn svg{width:18px;height:18px;}
+  #m-app .m-inicio--c .hc-note{font-size:.74rem;margin-top:8px;}
+  #m-app .m-inicio--c .hc-facts{flex-direction:column;margin:22px 0 10px;font-size:15px;}
+  #m-app .m-inicio--c .hc-facts li::before,#m-app .m-inicio--c .hc-facts li+li::before{content:"✦";color:#C9A84C;font-size:.62rem;margin:0 10px 0 2px;}
+}
+@media (pointer: coarse) and (max-width: 400px){
+  #m-app .m-inicio--c .hc-btn{font-size:.88rem;padding:0 6px;}
+  #m-app .m-inicio--c .hc-btn svg{display:none;}
+}
 </style>
 <script src="vesper_prefs.js"></script>
 <script src="vesper_analytics.js"></script>
@@ -1398,67 +1536,43 @@ html.vesper-reduce-motion.js-anim .hero-lema path{stroke-dashoffset:0 !important
 <span id="top"></span>
 
 <!-- ============ HERO ============ -->
-<section class="hero" id="hero">
+<section class="hero hero--c" id="hero">
   <div class="spot" aria-hidden="true"></div>
-  <div class="container hero-grid hero-grid--solo hero-grid--cat">
-    <div class="hero-copy">
-      <span class="rule"></span>
-      <span class="eyebrow">Escuela de inglés en línea · clases en vivo con profesor</span>
-      <!-- Variante A/B: el texto por defecto es la A. El script «hero A/B»
-           cambia h1 + lead según ?h=a|b|c o un sorteo guardado, y añade la
-           variante al ?src= del examen, que book_placement.html ya manda
-           con cada lead. -->
+  <div class="hc-engrave" aria-hidden="true"></div>
+  <!-- HERO C (2026-11-19): elegido por el dueño en la arena
+       (_propuestas/arena-2026-11-19-hero/opcion-c). El titular manda, el lema
+       firma debajo, y el examen de nivel es un boleto que Vesper entrega.
+       Variante A/B: el script «hero A/B» sigue cambiando el h1 según ?h=a|b|c
+       y añade la variante al ?src= del examen (data-ab-src). Estilos: «HERO C». -->
+  <div class="container hc-grid">
+    <div class="hero-copy hc-copy">
+      <p class="hc-fillet"><svg viewBox="0 0 12 12" aria-hidden="true"><path fill="currentColor" d="M6 0l1.4 4.6L12 6 7.4 7.4 6 12 4.6 7.4 0 6l4.6-1.4z"/></svg><span class="eyebrow">Escuela de inglés en línea · clases en vivo con profesor</span></p>
       <h1 data-ab="h1">Años de clases de inglés y te congelas en la junta. <em>Aquí lo hablas.</em></h1>
-      <p class="lead" data-ab="lead">Clases en vivo con profesor, en grupos de máximo <span data-hecho="grupo_max">9</span> o 1 a 1, donde el 80&nbsp;% del tiempo hablas tú. Para la junta, la entrevista o la certificación que tienes enfrente.</p>
-      <div class="hero-cta">
-        <a href="book_placement.html?src=landing-hero" data-ab-src class="btn btn-gold"><svg class="i"><use href="#i-check-doc"/></svg> Haz tu examen de nivel gratis</a>
-        <a href="https://wa.me/525535699899?text=Hola%2C%20vengo%20de%20vesperacademy.com%20y%20quiero%20informaci%C3%B3n%20sobre%20las%20clases%20de%20ingl%C3%A9s." target="_blank" rel="noopener" class="btn btn-ghost web-only"><svg class="i i--solid" aria-hidden="true" style="fill:currentColor;stroke:none"><use href="#i-whatsapp"/></svg> Pregunta por WhatsApp</a>
+      <p class="hc-lema" lang="en"><span>Speak better,</span> <b>Speak Vesper<svg viewBox="0 0 200 10" preserveAspectRatio="none" aria-hidden="true"><path d="M3 6.5C42 2.5 96 9 197 3.5"/></svg></b></p>
+      <ul class="hc-facts" aria-label="Así son las clases">
+        <li>Por <b data-hecho="plataforma">Google Meet</b></li>
+        <li><b>Máximo <span data-hecho="grupo_max">9</span></b> por grupo, o 1 a 1</li>
+        <li>El <b>80&nbsp;%</b> del tiempo hablas tú</li>
+      </ul>
+      <p class="hc-aside"><a class="hc-wa web-only" href="https://wa.me/525535699899?text=Hola%2C%20vengo%20de%20vesperacademy.com%20y%20quiero%20informaci%C3%B3n%20sobre%20las%20clases%20de%20ingl%C3%A9s." target="_blank" rel="noopener"><svg class="i i--solid" aria-hidden="true"><use href="#i-whatsapp"/></svg> Pregunta por WhatsApp</a></p>
+    </div>
+    <div class="hc-stage">
+      <img class="hc-vesper" src="assets/images/mascot/vesper_cat_explaining.webp" alt="Vesper, el gato de Vesper Academy, te entrega tu boleto para el examen de nivel" width="600" height="600" fetchpriority="high" decoding="async">
+      <div class="hc-ticket">
+        <div class="hc-stub" aria-hidden="true"><span>Vesper Academy</span></div>
+        <div class="hc-body">
+          <p class="hc-kicker">Examen de nivel <i>Gratis</i></p>
+          <p class="hc-h">Tu primer paso: <em>saber tu nivel.</em></p>
+          <div class="hc-specs">
+            <div><b data-hecho="examen_preguntas">30</b><small>preguntas</small></div>
+            <div><b data-hecho="examen_min">15</b><small>minutos</small></div>
+            <div><b class="hc-word">Al instante</b><small>tu resultado</small></div>
+          </div>
+          <a class="hc-btn" href="book_placement.html?src=landing-hero" data-ab-src><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3h6l4 4v14H5V3h4z"/><path d="m9 13 2 2 4-4"/></svg>Haz tu examen de nivel gratis</a>
+          <p class="hc-note">Sin crear cuenta</p>
+        </div>
       </div>
-      <p class="cta-note"><span data-hecho="examen_preguntas">30</span> preguntas · <span data-hecho="examen_min">15</span> minutos · resultado al instante · sin crear cuenta</p>
     </div>
-
-    <!-- Vesper vuelve (2026-11-06, a pedido del dueño): el retrato y el
-         botón llevan a la franja de la app, donde corre el recorrido en
-         video. El parpadeo en video lo monta el guion del medallón. -->
-    <div class="plate-wrap">
-      <img class="hero-brand" src="assets/images/vesper_logo_inverted.webp" alt="" aria-hidden="true" width="534" height="515" decoding="async">
-      <!-- El lema (2026-11-13), con la letra de Vesper. Estilos: sección «EL LEMA». -->
-      <p class="hero-lema" lang="en"><span>Speak better,</span> <b>Speak Vesper<svg viewBox="0 0 200 10" aria-hidden="true"><path pathLength="1" d="M3 6.5C42 2.5 96 9 197 3.5"/></svg></b></p>
-      <a class="hero-vesper" href="#app" aria-label="Vesper, el gato de nuestra app de práctica: ver la app">
-        <span class="medallion" data-vesper data-state="welcome">
-          <span class="med-halo" aria-hidden="true"></span>
-          <span class="med-rays" aria-hidden="true"></span>
-          <span class="med-glass">
-            <span class="med-bust">
-              <img class="med-face on" data-face="welcome" src="assets/images/mascot/vesper_cat_welcome.webp" alt="" width="600" height="600" fetchpriority="high" decoding="async">
-              <span class="med-lid l" aria-hidden="true"></span>
-              <span class="med-lid r" aria-hidden="true"></span>
-              <span class="med-glint l" aria-hidden="true"></span>
-              <span class="med-glint r" aria-hidden="true"></span>
-            </span>
-          </span>
-          <span class="med-fillet" aria-hidden="true"></span>
-          <span class="med-spark s1" aria-hidden="true"></span>
-          <span class="med-spark s2" aria-hidden="true"></span>
-        </span>
-        <span class="seal-say" aria-hidden="true">Hola, soy Vesper.</span>
-      </a>
-      <a class="hero-app-chip" href="#app"><b aria-hidden="true">▶</b> Mira la app <small>· gratis</small></a>
-    </div>
-
-  </div>
-
-  <!-- Tres razones (2026-11-06). Antes aquí iban una ficha de 5 renglones,
-       un riel de 4 cifras y una franja de 5 sellos que repetían lo mismo:
-       cada dato se dice ahora UNA vez. La ficha completa vive en
-       como-funciona.html. -->
-  <div class="container">
-    <ul class="statrail statrail--3" aria-label="Así son las clases">
-      <li><b>En vivo</b><small>Con profesor, por <span data-hecho="plataforma">Google Meet</span></small></li>
-      <li><b>≤<span data-hecho="grupo_max">9</span></b><small>Alumnos por grupo, o 1 a 1</small></li>
-      <li><b>80&nbsp;%</b><small>Del tiempo de clase hablas tú</small></li>
-    </ul>
-    <p class="hero-more"><a href="como-funciona.html">Así son las clases <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></a></p>
   </div>
 </section>
 
@@ -2223,18 +2337,35 @@ html.vesper-reduce-motion.js-anim .hero-lema path{stroke-dashoffset:0 !important
   <!-- Inicio. h1 real: en teléfono el <main> de escritorio está oculto.
        Vesper va en medallón junto al título y lleva a la app (#m-appx);
        el título lo rodea (float + shape-outside). -->
-  <section class="m-inicio" id="m-main" tabindex="-1">
-    <a class="m-medallon" href="#m-appx" aria-label="Vesper, el gato de nuestra app de práctica: ver la app">
-      <img src="assets/images/mascot/vesper_cat_welcome.webp" alt="" width="100" height="100" decoding="async">
-      <i aria-hidden="true"></i><i aria-hidden="true"></i>
-    </a>
+  <section class="m-inicio m-inicio--c" id="m-main" tabindex="-1">
+    <!-- HERO C (2026-11-19) en teléfono: titular, el lema como firma en dos
+         renglones, y el boleto del examen que Vesper sostiene. Estilos:
+         «HERO C» de index.html (no en vesper_mobile.css, que está en CORE). -->
     <span class="m-eyebrow m-eyebrow--dark">Escuela de inglés · clases en vivo con profesor</span>
     <h1 class="m-h1" data-ab="h1">Años de clases de inglés y te congelas en la junta. <em>Aquí lo hablas.</em></h1>
-    <!-- El lema (2026-11-13): firma del titular. Estilos: sección «EL LEMA» de index.html. -->
-    <p class="m-lema" lang="en"><span>Speak better,</span> <b>Speak Vesper<svg viewBox="0 0 200 10" aria-hidden="true"><path d="M3 6.5C42 2.5 96 9 197 3.5"/></svg></b></p>
-    <p class="m-inicio__lead" data-ab="lead">Clases en vivo con profesor, en grupos de máximo <span data-hecho="grupo_max">9</span> o 1 a 1, donde el 80&nbsp;% del tiempo hablas tú. Para la junta, la entrevista o la certificación que tienes enfrente.</p>
-    <a class="m-btn" data-cta href="book_placement.html?src=landing-m-hero" data-ab-src>Haz tu examen de nivel gratis</a>
-    <p class="m-inicio__nota"><span data-hecho="examen_preguntas">30</span> preguntas · <span data-hecho="examen_min">15</span> min · resultado al instante · sin crear cuenta</p>
+    <p class="m-lema" lang="en"><span>Speak better,</span> <b>Speak Vesper<svg viewBox="0 0 200 10" preserveAspectRatio="none" aria-hidden="true"><path d="M3 6.5C42 2.5 96 9 197 3.5"/></svg></b></p>
+    <div class="hc-stage">
+      <img class="hc-vesper" src="assets/images/mascot/vesper_cat_explaining.webp" alt="" width="600" height="600" decoding="async">
+      <div class="hc-ticket">
+        <div class="hc-stub" aria-hidden="true"><span>Vesper Academy</span></div>
+        <div class="hc-body">
+          <p class="hc-kicker">Examen de nivel <i>Gratis</i></p>
+          <p class="hc-h">Tu primer paso: <em>saber tu nivel.</em></p>
+          <div class="hc-specs">
+            <div><b data-hecho="examen_preguntas">30</b><small>preguntas</small></div>
+            <div><b data-hecho="examen_min">15</b><small>minutos</small></div>
+            <div><b class="hc-word">Al instante</b><small>tu resultado</small></div>
+          </div>
+          <a class="hc-btn" href="book_placement.html?src=landing-m-hero" data-ab-src data-cta><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3h6l4 4v14H5V3h4z"/><path d="m9 13 2 2 4-4"/></svg>Haz tu examen de nivel gratis</a>
+          <p class="hc-note">Sin crear cuenta</p>
+        </div>
+      </div>
+    </div>
+    <ul class="hc-facts" aria-label="Así son las clases">
+        <li>Por <b data-hecho="plataforma">Google Meet</b></li>
+        <li><b>Máximo <span data-hecho="grupo_max">9</span></b> por grupo, o 1 a 1</li>
+        <li>El <b>80&nbsp;%</b> del tiempo hablas tú</li>
+      </ul>
     <a class="m-ir m-ir--centro m-ir--claro web-only" href="https://wa.me/525535699899?text=Hola%2C%20vengo%20de%20vesperacademy.com%20y%20quiero%20informaci%C3%B3n%20sobre%20las%20clases%20de%20ingl%C3%A9s." target="_blank" rel="noopener"><svg class="i i--solid" aria-hidden="true"><use href="#i-whatsapp"/></svg><span>Pregunta por WhatsApp</span></a>
   </section>
 
