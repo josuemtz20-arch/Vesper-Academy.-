@@ -223,6 +223,33 @@ function clip(text, max) {
   return text.slice(0, end);
 }
 
+/* Clave de límite por IP: IPv4 tal cual; IPv6 reducida a su /64 (un solo
+   cliente controla un /64 entero, así que por dirección completa el límite
+   se evadiría rotando direcciones). Expande "::" antes de cortar. */
+function ipRateKey(ip) {
+  if (typeof ip !== "string" || ip.indexOf(":") < 0) return ip;
+  let a = ip.split("%")[0].toLowerCase();
+  /* IPv4 incrustada (::ffff:1.2.3.4): se usa la IPv4 */
+  const m4 = /^(?:.*:)?(\d{1,3}(?:\.\d{1,3}){3})$/.exec(a);
+  if (m4) {
+    if (/^(::ffff:|::)/.test(a)) return m4[1];
+    const p = a.slice(0, a.length - m4[1].length - 1).replace(/:$/, "");
+    a = p + ":0:0";   // IPv4 al final: no afecta al /64
+  }
+  const halves = a.split("::");
+  if (halves.length > 2) return ip;
+  const head = halves[0] ? halves[0].split(":") : [];
+  const tail = halves.length === 2 && halves[1] ? halves[1].split(":") : [];
+  let groups;
+  if (halves.length === 2) {
+    const fill = 8 - head.length - tail.length;
+    if (fill < 1) return ip;
+    groups = head.concat(new Array(fill).fill("0"), tail);
+  } else groups = head;
+  if (groups.length !== 8 || !groups.every((g) => /^[0-9a-f]{1,4}$/.test(g))) return ip;
+  return groups.slice(0, 4).map((g) => g.replace(/^0+(?=.)/, "")).join(":") + "::/64";
+}
+
 /* Lee un límite numérico de env (string en [vars]) o usa el de RATE_DEFAULTS. */
 function limitOf(env, name) {
   const v = env && env[name] != null ? parseInt(env[name], 10) : NaN;
@@ -399,7 +426,7 @@ export default {
       let out;
       try {
         out = await handleExam(path, eb, env,
-          (key, perMin, perDay) => rateHit(env, key + ":" + ipE, perMin, perDay),
+          (key, perMin, perDay) => rateHit(env, key + ":" + ipRateKey(ipE), perMin, perDay),
           (name) => limitOf(env, name));
       } catch (e) {
         console.error("exam:", e && e.message);
@@ -452,7 +479,7 @@ export default {
      * código no se quede sin chat por los que comparten su IP sin código. */
     const perIp = await rateHit(
       env,
-      (isPro ? "ip-pro:" : "ip:") + ip,
+      (isPro ? "ip-pro:" : "ip:") + ipRateKey(ip),
       limitOf(env, isPro ? "RL_PRO_PER_MIN" : "RL_FREE_PER_MIN"),
       limitOf(env, isPro ? "RL_PRO_PER_DAY" : "RL_FREE_PER_DAY")
     );

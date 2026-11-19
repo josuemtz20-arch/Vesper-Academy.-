@@ -42,7 +42,9 @@ const SKILL_RANK = { grammar: 0, vocab: 1, use: 2, reading: 3, listening: 4 };
 
 export const EXAM_RATE_DEFAULTS = {
   RL_EXAM_START_PER_MIN: 10, RL_EXAM_START_PER_DAY: 200,
-  RL_EXAM_ANSWER_PER_MIN: 90, RL_EXAM_ANSWER_PER_DAY: 3000
+  RL_EXAM_ANSWER_PER_MIN: 90, RL_EXAM_ANSWER_PER_DAY: 3000,
+  /* examen de nivel: banco fijo; tope de intentos por IP al día (frena la cosecha de claves) */
+  RL_EXAM_LEVEL_START_PER_DAY: 12
 };
 
 /* ---------- calificación (espejo de leccion_app.js) ---------- */
@@ -327,8 +329,8 @@ async function finish(env, body) {
   const bank = bankOf(at.kind, at.level);
   let res = a.result;
   if (!res) {
-    const answered = a.order.length;
-    const total = at.kind === "boss" ? Math.max(1, Math.min(a.ids.length, answered)) : a.ids.length;
+    /* sin contestar = mal: el total es siempre el de las preguntas del intento */
+    const total = Math.max(1, a.ids.length);
     const correct = a.order.filter((id) => a.answered[id] === true).length;
     const percent = Math.round(100 * correct / Math.max(1, total));
     const threshold = bank.pass;
@@ -371,6 +373,13 @@ export async function handleExam(path, body, env, rate, limitOf) {
       limitOf(isStart ? "RL_EXAM_START_PER_MIN" : "RL_EXAM_ANSWER_PER_MIN"),
       limitOf(isStart ? "RL_EXAM_START_PER_DAY" : "RL_EXAM_ANSWER_PER_DAY"));
     if (!rl.ok) return [429, { error: "Vas muy rápido. Espera un momento y vuelve a intentarlo.", code: "rate_limited", retryAfter: rl.retryAfter || 60 }];
+    /* examen de nivel (banco fijo): tope diario por IP de intentos nuevos. El
+       /exam/answer devuelve la clave (la UI la necesita para pintar el feedback),
+       así que esto limita cuántas veces se puede "cosechar" el banco. */
+    if (isStart && body.kind === "exam") {
+      const rl2 = await rate("exam-level-start", 0, limitOf("RL_EXAM_LEVEL_START_PER_DAY"));
+      if (!rl2.ok) return [429, { error: "Hoy ya hiciste varios intentos del examen de nivel. Vuelve mañana.", code: "rate_limited", retryAfter: rl2.retryAfter || 3600 }];
+    }
     return isStart ? start(env, body) : answer(env, body);
   }
   if (path === "/exam/finish") return finish(env, body);

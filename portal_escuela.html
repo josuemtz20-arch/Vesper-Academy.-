@@ -484,6 +484,10 @@ footer a{color:var(--gold);text-decoration:none;}
     if (fl.length) {
       sq.where = fl.length === 1 ? fl[0] : { compositeFilter: { op: "AND", filters: fl } };
       sq.limit = 1000;
+    } else if (col === "placement_results") {
+      /* leads anónimos: sin tope un spammer inflaría la lectura; los más recientes */
+      sq.orderBy = [{ field: { fieldPath: "createdAt" }, direction: "DESCENDING" }];
+      sq.limit = 300;
     }
     return token().then(function (tk) {
       return fetch(base() + ":runQuery", {
