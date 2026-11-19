@@ -312,10 +312,24 @@ wrangler secret put WA_APP_SECRET       # App settings → Basic → App secret
 wrangler secret put WA_VERIFY_TOKEN     # un texto largo que inventes
 wrangler secret put WA_PHONE_NUMBER_ID  # id del número (no el teléfono)
 wrangler secret put WA_ADMINS           # tu correo (si no tienes doc en roles/)
+wrangler secret put WA_PAYMENT_INFO     # datos para transferir (ver abajo)
 wrangler deploy                         # crea el DO WaThread (migración v3)
 ```
 
 Necesita también `ANTHROPIC_API_KEY` y `FIREBASE_SA` (ya existen).
+
+`WA_PAYMENT_INFO` son los datos bancarios que el agente da cuando alguien
+pregunta cómo pagar. **No van en `whatsapp_kb.md`** porque el repo y la carpeta
+`worker/` son públicos; el Worker los inserta en `{{DATOS_DE_PAGO}}`. Formato
+sugerido (varias líneas):
+
+```
+  - Banco/institución: ...
+  - Beneficiario: ...
+  - CLABE: ...
+```
+
+Sin ese secreto, el agente escala las preguntas de pago a una persona.
 Opcional: `WA_NOTIFY_URL` (por ejemplo `https://ntfy.sh/<tema-secreto>`) para
 recibir un aviso en el teléfono cuando hay un borrador. El aviso no lleva datos
 del cliente.
@@ -341,8 +355,7 @@ por el Worker con la cuenta de servicio.
 
 ### Antes de activarlo
 
-`whatsapp_kb.md` es lo único que el agente da por cierto. Hoy tiene ~36
-`[FALTA]` (precio del Club, horarios por grupo, formas de pago, reembolsos,
-fechas de inicio…). Cada pregunta sobre esos datos se escala a una persona.
-Llénalos y vuelve a desplegar. **La promo del Buen Fin vence el 30 de nov:
-bórrala del archivo después de esa fecha.**
+`whatsapp_kb.md` es lo único que el agente da por cierto; lo marcado
+"escalar" lo contesta una persona. El agente recibe la fecha de hoy, así que
+no ofrece la promo del Buen Fin después del 30 de nov; aun así, bórrala del
+archivo cuando venza. Cada cambio al archivo necesita `wrangler deploy`.
