@@ -51,6 +51,21 @@ viejos que sí guardaron correo quedan visibles solo para su dueño y el admin
 (no tienen `group`). Un alumno anónimo (sin cuenta) no sube nada a la nube;
 solo queda en su dispositivo.
 
+## Solo gente de la escuela (2026-11-20)
+
+El `create` exige además `schoolUser()` (alumno de `students/`, profesor de
+`teachers/` o staff). Antes bastaba cualquier cuenta verificada, y cualquiera
+puede registrarse (la cuenta de leccion.html es opcional y abierta). Una
+cuenta fuera de la allowlist recibe 403 y `vesper_results.js` deja el intento
+solo en el dispositivo, igual que sin sesión. Ningún profesor veía esos
+intentos (`group == ""`), así que no se pierde nada visible.
+
+`detail` sigue acotado solo por tamaño (≤ 60 entradas, y el documento entero
+≤ 1 MiB). **No se puede validar cada entrada** (`{q, type, skill, correct}`):
+las reglas de Firestore no tienen bucles, y comprobar las 60 posiciones una a
+una (`detail[0]`, `detail[1]`…) pasaría del límite de expresiones por petición.
+Quien lea `detail` debe tratarlo como texto no confiable (escaparlo al pintar).
+
 ## Regla a añadir
 
 En las reglas de Firestore de la base `teachermanuals`, dentro de

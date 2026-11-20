@@ -871,12 +871,16 @@ footer a{color:var(--gold);text-decoration:none;}
     var st = $("g-start").value, en = $("g-end").value;
     if (!days.length) { err.textContent = "Elige al menos un día."; return; }
     if (!st || !en || en <= st) { err.textContent = "La hora de fin debe ser después de la de inicio."; return; }
+    /* la regla de groups/ solo acepta el enlace vacío o https:// (2026-11-20) */
+    var meet = $("g-meet").value.trim();
+    if (/^https:\/\//i.test(meet)) meet = "https://" + meet.slice(8);
+    if (meet && !/^https:\/\/\S+$/.test(meet)) { err.textContent = "El enlace de clase debe empezar con https://"; return; }
     var teachers = Array.prototype.map.call($("g-teachers").querySelectorAll("input:checked"), function (i) { return i.value; });
     var before = editing ? (S.groups[editing].teachers || []) : [];
     var data = {
       name: $("g-name").value.trim() || gid, courseId: $("g-course").value, periodId: $("g-period").value,
       teachers: teachers, schedule: days.map(function (d) { return { day: d, start: st, end: en }; }),
-      meetUrl: $("g-meet").value.trim(), capacity: parseInt($("g-cap").value, 10) || 8,
+      meetUrl: meet, capacity: parseInt($("g-cap").value, 10) || 8,
       status: $("g-status").value, updatedAt: "ts:" + nowIso()
     };
     if (!editing) data.createdAt = "ts:" + nowIso();
