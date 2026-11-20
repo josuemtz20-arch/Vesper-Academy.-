@@ -27,6 +27,10 @@
   var M = window.VESPER_MASCOT;
   var P = window.VesperProgress;
   var app = document.getElementById("app");
+  /* letras de adorno de leccion.html: llegan con media="print" para no frenar
+     el primer pintado; aquí se activan */
+  var _decorFonts = document.getElementById("va-decor-fonts");
+  if (_decorFonts) _decorFonts.media = "all";
   /* dentro de una lección no hay pestañas: sólo la lección (ver leccion.css, TACTO) */
   if (id) document.body.classList.add("in-lesson");
 
@@ -1050,7 +1054,7 @@
     var il = !pxOn() && ilOn();
     return '<section class="world-banner' + (pxOn() ? ' is-pixel' : '') + (il ? ' is-illus' : '') + '" data-world="' + selLevel + '" style="' + worldVars(t) + '" aria-label="Mundo ' + n + ': ' + esc(t.worldName) + '">'
       + (minOn() ? worldBand(selLevel)
-        : '<img class="world-banner__img" src="' + (il ? VESPER_MAPIL.banner(selLevel) : t.file) + '" alt="" aria-hidden="true" decoding="async">'
+        : '<img class="world-banner__img" src="' + (il ? VESPER_MAPIL.banner(selLevel) : t.file) + '" alt="" aria-hidden="true" decoding="async" fetchpriority="high">'
           + ambLayer(t.ambientN))
       + '<div class="world-banner__body">'
       + '<span class="world-banner__eyebrow">Mundo ' + n + ' &middot; ' + selLevel + '</span>'

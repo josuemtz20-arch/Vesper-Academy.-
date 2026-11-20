@@ -6,7 +6,7 @@
 
 <head>
 <!-- CSP: generada por _scripts/apply_csp.py (edita alli, no aqui) -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://apis.google.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://cdn.tailwindcss.com https://challenges.cloudflare.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://maxcdn.bootstrapcdn.com; font-src 'self' data: https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: blob: https:; media-src 'self' data: blob:; connect-src 'self' https://firestore.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://vesper-academy.firebaseapp.com https://patient-feather-4364.josuemtz20.workers.dev https://formsubmit.co https://challenges.cloudflare.com https://www.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com; frame-src 'self' https://vesper-academy.firebaseapp.com https://www.youtube.com https://www.youtube-nocookie.com https://challenges.cloudflare.com; worker-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self' https://formsubmit.co; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://apis.google.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net/npm/fabric@6.5.4/ https://challenges.cloudflare.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' data: https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: blob: https:; media-src 'self' data: blob:; connect-src 'self' https://firestore.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://vesper-academy.firebaseapp.com https://patient-feather-4364.josuemtz20.workers.dev https://formsubmit.co https://challenges.cloudflare.com https://www.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com; frame-src 'self' https://vesper-academy.firebaseapp.com https://www.youtube.com https://www.youtube-nocookie.com https://challenges.cloudflare.com; worker-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self' https://formsubmit.co; upgrade-insecure-requests">
 <script src="vesper_auth.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -26,7 +26,7 @@
          guarda una clase fa- por pista y lo comparte con lesson.html, asi que
          retirarlo aqui rompe la otra pagina. El resto de la interfaz ya no lo
          usa: los iconos del chrome son el sprite SVG en linea del <body>. -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha384-3B6NwesSXE7YJlcLI9RpRqGf2p/EgVH8BgoKTaUrmKNDkHPStTQ3EyoYjCGXaOTS" crossorigin="anonymous">
     <!-- Tokens ANTES del <style> de la pagina, como manda su cabecera. -->
     <link rel="stylesheet" href="assets/css/vesper_tokens.css">
     <script src="vesper_style.js"></script>
@@ -1231,7 +1231,7 @@
 <footer>
     <div class="foot-in">
         <a class="brand" href="materiales.html">
-            <img src="assets/images/vesper_logo_inverted.png" alt="" width="34" height="34">
+            <img src="assets/images/vesper_logo_inverted.png" alt="" width="34" height="34" loading="lazy" decoding="async">
             <span><b>Vesper Academy</b><small>Biblioteca de audio</small></span>
         </a>
         <p class="f-hand"><span lang="en">Happy listening!</span><small>Escucha &middot; lee &middot; <b>practica</b></small></p>
@@ -1241,18 +1241,22 @@
     </div>
 </footer>
 
-    <script src="vesper_audio_data.js"></script>
-    <script src="vesper_basics_audio_data.js"></script>
-    <script src="vesper_biz_path_audio_data.js"></script>
-    <script src="vesper_political_audio_data.js"></script>
-    <script src="vesper_lesson_images.js"></script>
-    <script src="vesper_covers.js"></script>
-    <script src="vesper_library_art.js"></script>
+    <script defer src="vesper_audio_data.js"></script>
+    <script defer src="vesper_basics_audio_data.js"></script>
+    <script defer src="vesper_biz_path_audio_data.js"></script>
+    <script defer src="vesper_political_audio_data.js"></script>
+    <script defer src="vesper_lesson_images.js"></script>
+    <script defer src="vesper_covers.js"></script>
+    <script defer src="vesper_library_art.js"></script>
     <!-- Se carga aqui solo por getScore(): las tarjetas leen de vuelta la nota
          de practica que guardo el reproductor, para que el alumno vea que ya
          ha hecho. -->
-    <script src="vesper_audio_practice.js"></script>
+    <script defer src="vesper_audio_practice.js"></script>
+    <!-- Los datos de arriba van con defer (~300 KB que ya no frenan el
+         primer pintado); este bloque los usa, así que espera a
+         DOMContentLoaded, que llega justo después de que corren. -->
     <script>
+    document.addEventListener("DOMContentLoaded", function () {
         const DATA = window.VESPER_DATA || {};
         const LEVEL_DESC = {
             1:"Inglés de todos los días — rutinas, pasatiempos, viajes y primeras conversaciones.",
@@ -2052,6 +2056,7 @@
                 if (st === "ok") document.body.classList.add("is-teacher");
             });
         }
+    });
     </script>
 <script>
 /* Alimenta el héroe "Hoy" del portal (materiales.html): al reproducir un audio,

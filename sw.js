@@ -101,6 +101,43 @@ var CORE = [
   "assets/images/favicon_32.png"
 ];
 
+/* Imágenes y audio que se van viendo (portadas, láminas, banners...) NO van
+   en el cache de CORE: viven en uno aparte, con nombre fijo, que sobrevive a
+   cada subida de CACHE_VERSION (antes cada despliegue los tiraba y había que
+   bajarlos otra vez) y que guarda a lo sumo MEDIA_MAX entradas: al pasarse se
+   borran las más viejas, para no llenar el teléfono. */
+var MEDIA_CACHE = "vesper-media-v1";
+var MEDIA_MAX = 80;
+var MEDIA_RE = /\.(png|jpe?g|webp|avif|gif|svg|ico|mp3|m4a|ogg|oga|wav)$/i;
+var CORE_PATHS = null;
+function isCore(url) {
+  if (!CORE_PATHS) {
+    CORE_PATHS = {};
+    CORE.forEach(function (u) { CORE_PATHS[new URL(u, self.registration.scope).pathname] = 1; });
+  }
+  return !!CORE_PATHS[url.pathname];
+}
+function isMedia(req, url) {
+  return req.destination === "image" || req.destination === "audio" || MEDIA_RE.test(url.pathname);
+}
+/* Las escrituras al cache de medios van en fila: así el recorte cuenta bien
+   aunque lleguen veinte imágenes a la vez. Borrar y volver a poner manda la
+   entrada al final, o sea que "la más vieja" es la que lleva más sin usarse. */
+var mediaQueue = Promise.resolve();
+function putMedia(req, res) {
+  mediaQueue = mediaQueue.then(function () {
+    return caches.open(MEDIA_CACHE).then(function (c) {
+      return c.delete(req).then(function () { return c.put(req, res); })
+        .then(function () { return c.keys(); })
+        .then(function (keys) {
+          var extra = keys.length - MEDIA_MAX;
+          return Promise.all(keys.slice(0, extra > 0 ? extra : 0).map(function (k) { return c.delete(k); }));
+        });
+    });
+  }).catch(function () { /* cuota llena o respuesta rara: no se guarda y ya */ });
+  return mediaQueue;
+}
+
 self.addEventListener("install", function (event) {
   event.waitUntil(
     caches.open(CACHE_VERSION).then(function (cache) {
@@ -119,7 +156,7 @@ self.addEventListener("activate", function (event) {
   event.waitUntil(
     caches.keys().then(function (keys) {
       return Promise.all(keys.map(function (k) {
-        if (k !== CACHE_VERSION) return caches.delete(k);
+        if (k !== CACHE_VERSION && k !== MEDIA_CACHE) return caches.delete(k);
       }));
     }).then(function () { return self.clients.claim(); })
   );
@@ -231,13 +268,16 @@ self.addEventListener("fetch", function (event) {
     return;
   }
 
-  /* Recursos del cascaron: cache primero, refresca en segundo plano. */
+  /* Recursos del cascaron: cache primero, refresca en segundo plano. Las
+     imágenes y audios que no son de CORE se guardan en MEDIA_CACHE. */
+  var toMedia = isMedia(req, url) && !isCore(url);
   event.respondWith(
     caches.match(req).then(function (cached) {
       var network = fetch(req).then(function (res) {
-        if (res && res.ok) {
+        if (res && res.ok && res.status === 200) {
           var copy = res.clone();
-          caches.open(CACHE_VERSION).then(function (c) { c.put(req, copy); });
+          if (toMedia) putMedia(req, copy);
+          else caches.open(CACHE_VERSION).then(function (c) { c.put(req, copy); });
         }
         return res;
       }).catch(function () { return cached; });
