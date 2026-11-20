@@ -6,7 +6,9 @@
  * mismo patrón REST que vesper_sync.js (DB "teachermanuals", token de
  * VesperAuth) sobre la colección semanal `leagues/{weekId}/members/{uid}`:
  *   - cada quien escribe SOLO su propia entrada { alias, xp, ts }
- *   - cualquier usuario autenticado puede leer la tabla
+ *     (ts = hora del servidor, REQUEST_TIME)
+ *   - la leen y escriben solo alumnos/profesores de la allowlist y staff
+ *     (2026-11-20); una cuenta fuera de la allowlist ve la liga simulada
  * Privacidad: se publica un ALIAS (editable en Configuración) o un código
  * anónimo derivado del uid; NUNCA el correo.
  *
@@ -18,7 +20,8 @@
  *   available()            -> ¿hay Firebase configurado?
  *   signedIn()             -> ¿hay sesión verificada?
  *   aliasOf()              -> alias público actual (o código anónimo)
- *   pushScore(weekId, xp)  -> sube tu XP semanal (PATCH, con rebote)
+ *   pushScore(weekId, xp)  -> sube tu XP semanal (documents:commit, con rebote
+ *                             y >30 s entre escrituras, como exige la regla)
  *   fetchBoard(weekId)     -> Promise<[{uid,alias,xp,rank,isMe}]|null>
  *   aliasProblem(texto)    -> "" si el alias se puede usar; si no, el motivo
  * ============================================================ */
@@ -104,13 +107,25 @@ window.VESPER_LEAGUE_CLOUD = (function () {
     return "Estudiante#" + (uid ? uid.slice(-4) : "0000");
   }
 
-  /* ---- codificación Firestore REST ---- */
+  /* ---- codificación Firestore REST ----
+     `ts` ya NO lo pone el navegador: la regla (2026-11-20) exige que sea la
+     hora del servidor (request.time). Por REST eso solo se puede pedir con la
+     transformación REQUEST_TIME de documents:commit (un PATCH normal no
+     admite transformaciones). Ver writeOf(). */
   function toFs(alias, xp) {
     return { fields: {
       alias: { stringValue: String(alias || "") },
-      xp: { integerValue: String(Math.max(0, Math.round(xp || 0))) },
-      ts: { stringValue: new Date().toISOString() }
+      xp: { integerValue: String(Math.max(0, Math.round(xp || 0))) }
     } };
+  }
+  /* Escritura de documents:commit: `update` SIN updateMask reemplaza el doc
+     entero por { alias, xp } y luego updateTransforms pone ts = hora del
+     servidor. Es lo mismo que hacía el PATCH de antes, más el ts del servidor. */
+  function writeOf(weekId, uid, alias, xp) {
+    var name = "projects/" + projectId() + "/databases/" + DB_ID + "/documents/leagues/" +
+               weekId + "/members/" + uid;
+    return { update: { name: name, fields: toFs(alias, xp).fields },
+             updateTransforms: [{ fieldPath: "ts", setToServerValue: "REQUEST_TIME" }] };
   }
   function readDoc(doc) {
     var f = (doc && doc.fields) || {};
@@ -125,38 +140,68 @@ window.VESPER_LEAGUE_CLOUD = (function () {
   /* Los mismos topes que firestore.rules (leagues/{week}/members): si se
      mandara más, la regla rechazaría la escritura entera y la tabla del
      alumno se quedaría congelada. Lo que no cabe en una escritura sube en
-     la siguiente. */
+     la siguiente. LEAGUE_MIN_GAP: la regla exige > 30 s entre escrituras;
+     se espera un poco más (31 s) contados desde que ESTE navegador recibió
+     la respuesta, que siempre es después de la hora que guardó el servidor. */
   var LEAGUE_FIRST_MAX = 3000, LEAGUE_STEP = 600, LEAGUE_WEEK_MAX = 20000;
+  var LEAGUE_MIN_GAP_MS = 31000, PUSH_DEBOUNCE_MS = 1200;
   function sentKey(weekId) { return "vesper_league_sent_" + weekId; }
+  function sentAtKey(weekId) { return "vesper_league_sent_at_" + weekId; }
   function lastSent(weekId) {
     try { var v = parseInt(localStorage.getItem(sentKey(weekId)) || "", 10); return isNaN(v) ? -1 : v; }
     catch (e) { return -1; }
+  }
+  function lastSentAt(weekId) {
+    try { var v = parseInt(localStorage.getItem(sentAtKey(weekId)) || "", 10); return isNaN(v) ? 0 : v; }
+    catch (e) { return 0; }
   }
   function clampForRules(weekId, xp) {
     var last = lastSent(weekId);
     var cap = last < 0 ? LEAGUE_FIRST_MAX : last + LEAGUE_STEP;
     return Math.max(0, Math.min(Math.round(xp || 0), cap, LEAGUE_WEEK_MAX));
   }
+  /* cuánto falta para poder escribir otra vez (mínimo el rebote de 1.2 s) */
+  function waitFor(weekId) {
+    var gap = lastSentAt(weekId) + LEAGUE_MIN_GAP_MS - Date.now();
+    if (gap > LEAGUE_MIN_GAP_MS) gap = LEAGUE_MIN_GAP_MS;   /* reloj movido hacia atrás */
+    return Math.max(PUSH_DEBOUNCE_MS, gap);
+  }
 
-  /* PATCH con rebote (~1.2s) para no escribir en cada ejercicio */
+  /* Escritura con rebote: espera al menos 1.2 s (para no escribir en cada
+     ejercicio) y, si la última escritura fue hace < 31 s, lo que falte.
+     Si la regla la rechaza (otro dispositivo escribió hace poco, o la cuenta
+     no está en la allowlist), reintenta UNA vez pasado el intervalo; si
+     vuelve a fallar, deja de intentar en esta página (la liga simulada y el
+     progreso local siguen igual). */
+  var failures = 0;
   function pushScore(weekId, xp) {
-    if (!signedIn() || !weekId) return;
+    if (!signedIn() || !weekId || failures >= 2) return;
     clearTimeout(pushTimer);
     var alias = aliasOf();
     pushTimer = setTimeout(function () {
+      if (!currentUser) return;
       var send = clampForRules(weekId, xp);
       currentUser.getIdToken().then(function (token) {
-        fetch(memberDoc(weekId, currentUser.uid), {
-          method: "PATCH",
+        fetch(base() + ":commit", {
+          method: "POST",
           headers: { "Authorization": "Bearer " + token, "Content-Type": "application/json" },
-          body: JSON.stringify(toFs(alias, send))
+          body: JSON.stringify({ writes: [writeOf(weekId, currentUser.uid, alias, send)] })
         }).then(function (res) {
-          if (!res.ok) return;
-          try { localStorage.setItem(sentKey(weekId), String(send)); } catch (e) {}
+          if (!res.ok) {
+            failures++;
+            try { localStorage.setItem(sentAtKey(weekId), String(Date.now())); } catch (e) {}
+            pushScore(weekId, xp);   /* espera el intervalo completo y prueba otra vez */
+            return;
+          }
+          failures = 0;
+          try {
+            localStorage.setItem(sentKey(weekId), String(send));
+            localStorage.setItem(sentAtKey(weekId), String(Date.now()));
+          } catch (e) {}
           if (send < Math.min(Math.round(xp || 0), LEAGUE_WEEK_MAX)) pushScore(weekId, xp);
         }).catch(function () { /* nunca bloquees el progreso local por un fallo de red */ });
       }).catch(function () {});
-    }, 1200);
+    }, waitFor(weekId));
   }
 
   /* Tabla de la semana: Firestore la devuelve ya ORDENADA por xp (de mayor a

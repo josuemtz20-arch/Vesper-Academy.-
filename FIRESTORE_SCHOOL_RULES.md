@@ -74,19 +74,31 @@ Base de datos: `teachermanuals` (la misma que todo lo demás).
 
 **Bootstrap:** el correo del fundador entra como admin aunque `roles/` esté
 vacío (`bootstrapAdmin()` en las reglas). Es la red para no quedarse fuera.
-Cuando `roles/` ya tenga un admin verificado, se puede borrar esa función y
-dejar `isAdmin() = hasRole("admin")`.
+Mientras exista, ese correo es admin pase lo que pase en `roles/` (si alguien
+tomara esa cuenta, no habría forma de quitarle el admin desde `roles/`). Hay
+un `TODO(seguridad)` en `firestore.rules` para retirarlo; ver **Retirar el
+bootstrap** abajo. **No lo borres antes de crear el doc de `roles/`.**
 
 ## Quién lee / escribe qué
 
 - `roles/`: cada quien **lee** su propio rol; **escribe** solo el admin y solo
-  con uno de los tres valores conocidos.
-- `courses/` y `periods/`: **lee** cualquier usuario con sesión (es el
-  catálogo, no tiene claves); **escribe** admin o coordinador.
+  con uno de los tres valores conocidos. Desde 2026-11-20 el doc solo admite
+  `role`, `name`, `email`, `createdAt`, `updatedAt`, `updatedBy` (textos
+  ≤ 120/200). Si `school_admin.py set-role` escribe otro campo, añádelo a la
+  regla o el script recibirá 403.
+- `courses/` y `periods/`: **lee** solo gente de la escuela, `schoolUser()`
+  = alumno de `students/`, profesor de `teachers/` o staff (2026-11-20; antes
+  cualquier cuenta verificada, y cualquiera puede registrarse). Hoy solo los
+  lee `portal_escuela.html` (staff). **Escribe** admin o coordinador.
 - `groups/`: **leen** el staff, los profesores del grupo (`groupId` en sus
   `teachers.groups`) y los alumnos cuyo grupo actual es ese (para ver horario
   y enlace de clase); **escribe** el staff. `courseId`, `periodId` y `status`
-  son obligatorios.
+  son obligatorios. `meetUrl`, si viene, debe ser `""` o empezar con
+  `https://` (≤ 300); lo mismo `students/{correo}.classMeetUrl`
+  (materiales.html). Así nadie guarda un `javascript:` que luego se pinta
+  como enlace. Ojo: con PATCH + `updateMask` la regla ve el doc ya fusionado,
+  así que un grupo/alumno que hoy tenga un enlace sin `https://` no se podrá
+  editar hasta corregir ese campo en el mismo guardado.
 - `enrollments/`: **leen** el staff, los profesores del grupo (query
   `groupId == <suyo>`) y el propio alumno (query `sid == <suyo>`); **crea y
   actualiza** el staff con `sid`, `groupId` y `status` válidos; **borra** solo
@@ -139,3 +151,62 @@ del curso. `unenroll --status dropped` además le quita el grupo actual;
 - Asistencia por sesión y cierre de ciclo: la asistencia colgará de
   `groups/{id}` y la nota final de `enrollments/{sid}__{groupId}`, sin pisar
   la boleta al cambiar de nivel.
+
+## Publicar y comprobar qué reglas están vivas
+
+La base es **`teachermanuals`** (no `(default)`, que no existe en el proyecto).
+
+**Consola:** Firebase → proyecto `vesper-academy` → Firestore Database →
+selector de base arriba: `teachermanuals` → pestaña **Reglas** → pegar
+`firestore.rules` COMPLETO → **Publicar**. En esa misma pestaña, el historial
+(icono de reloj, a la izquierda del editor) muestra la fecha de cada versión
+publicada y deja compararlas con la actual.
+
+**CLI** (firebase-tools ≥ 13). El repo no trae `firebase.json`; crea uno
+local (no lo subas si no quieres) con solo esta base:
+
+```json
+{ "firestore": [ { "database": "teachermanuals", "rules": "firestore.rules" } ] }
+```
+
+```
+firebase login
+firebase deploy --only firestore:rules --project vesper-academy
+```
+
+**Qué ruleset está vivo** (API de reglas; hace falta un usuario o service
+account con *Firebase Rules Viewer/Admin*):
+
+```
+TOKEN=$(gcloud auth print-access-token)
+# release de la base teachermanuals -> nombre del ruleset y fecha
+curl -s -H "Authorization: Bearer $TOKEN" \
+  https://firebaserules.googleapis.com/v1/projects/vesper-academy/releases/cloud.firestore/teachermanuals
+# contenido de ese ruleset (rulesetName = projects/vesper-academy/rulesets/<id>)
+curl -s -H "Authorization: Bearer $TOKEN" \
+  https://firebaserules.googleapis.com/v1/<rulesetName> | python3 -c \
+  'import sys,json; print(json.load(sys.stdin)["source"]["files"][0]["content"])' > vivo.rules
+diff vivo.rules firestore.rules && echo "lo vivo = el repo"
+```
+
+## Retirar el bootstrap (cuando ya funcione roles/)
+
+1. Con las reglas actuales publicadas (aún con `bootstrapAdmin()`), crea el
+   doc del admin: `python _scripts/school_admin.py set-role josuemtz20@gmail.com admin`
+   — o en la consola: Firestore → `teachermanuals` → colección `roles` →
+   *Agregar documento*, ID = `josuemtz20@gmail.com` (exacto, en minúsculas),
+   campo `role` (string) = `admin`, opcional `name` (string).
+2. Comprueba que existe: consola → `roles/josuemtz20@gmail.com` con
+   `role: "admin"`, o
+   `curl -s -H "Authorization: Bearer $TOKEN" https://firestore.googleapis.com/v1/projects/vesper-academy/databases/teachermanuals/documents/roles/josuemtz20@gmail.com`.
+3. (Recomendado) Crea un **segundo** admin con otra cuenta tuya verificada
+   (`set-role otro@correo admin`), por si pierdes la primera.
+4. En `firestore.rules`: borra la función `bootstrapAdmin()` y su TODO, y
+   deja `function isAdmin() { return hasRole("admin"); }`.
+5. Publica (pasos de arriba) y, ya publicado, entra a `portal_escuela.html`
+   con la cuenta del fundador: si carga cursos y grupos, `roles/` funciona.
+   Si ves 403, vuelve a publicar la versión anterior desde el historial de la
+   consola (pestaña Reglas) y revisa el paso 1.
+6. `vesper_auth.js` (`adminEmail`) y `portal_escuela.html` (`isFounder`) aún
+   tratan ese correo como admin en la interfaz; es solo la puerta visual
+   (sin reglas no ve datos), pero puedes quitarlo en el mismo cambio.

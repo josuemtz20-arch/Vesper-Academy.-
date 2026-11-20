@@ -64,6 +64,17 @@ Base de datos: `teachermanuals` (la misma que `exam_results`).
   del grupo del alumno (el grupo se resuelve contra `roster/{sid}.group`).
   **Lee** además el propio alumno: su `sid` está en `students/{correo}.sid`
   y la regla compara (`ownSid() == sid`).
+- **Forma (2026-11-20):** `gradebook/` solo admite los campos del modelo de
+  arriba (`participacion`, `examsGrade`, `lessonsGrade`, `notes`, `alias`,
+  `studentUid`, `updatedAt`, `updatedBy`), con `notes` ≤ 2000 (el cliente
+  corta a 500), `alias` ≤ 40, `studentUid` ≤ 128, `updatedBy` ≤ 200 y
+  `updatedAt` timestamp. `daily_progress/` solo `days`, `alias`,
+  `studentUid`, `updatedAt`, `updatedBy`, con `days` un mapa de ≤ 40 días
+  (un curso son 20). Lo de dentro de cada día no se puede validar (las reglas
+  no recorren mapas). Como `vesper_gradebook.js` guarda con PATCH +
+  `updateMask`, la regla ve el doc ya fusionado: si algún doc viejo tuviera
+  otro campo, hay que borrarlo antes de que el profesor pueda volver a
+  guardar ese alumno.
 - Los portales del profesor **no listan** `gradebook`/`daily_progress`
   completos: leen el roster (por grupos) y luego un `batchGet` con esos
   sids — así la regla por-documento siempre es demostrable.
