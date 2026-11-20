@@ -239,6 +239,33 @@ rutas `/exam/start`, `/exam/answer`, `/exam/finish`), que además guarda la nota
 en Firestore (`exam_results`, con `gradedBy: "worker"`). Las reglas rechazan
 esas notas si llegan desde el navegador.
 
+- **Examen de nivel = a ciegas.** `/exam/answer` solo responde
+  `{ok:true, first}`: ni si estuvo bien ni la clave. La nota y el desglose por
+  destreza (`skills`) llegan en `/exam/finish`. El **jefe** sí devuelve
+  `correct` + `reveal` en cada respuesta (es práctica de juego).
+- **Exámenes por curso (`exam.html`).** También los califica el Worker:
+  `/exam/course/start {examId, idToken}` lee `exams/{id}` de Firestore con la
+  cuenta de servicio, revisa el acceso (igual que `studentBookAllowed()` de
+  las reglas, o profesor/admin) y devuelve las preguntas **sin** `answer`;
+  `/exam/course/finish {attemptId, idToken, answers}` califica y guarda
+  (`examType "exam"`, `examId "exam:<curso>"`). La clave del intento queda en
+  el Durable Object, nunca en el navegador. Writing/Speaking no se manda: lo
+  evalúa el profesor. Las reglas ya no dejan al alumno leer `exams/`.
+- **Solo guarda quien abrió el intento.** `start` recibe el `idToken`; el uid
+  queda en el intento y `finish` solo guarda si el `idToken` de ese momento es
+  del mismo uid (`why: "session_mismatch"` si no).
+- **Tope de intentos calificados** (examen de nivel y por curso; el jefe no):
+  por defecto 3 por cuenta y examen cada 7 días (`EXAM_CAP_MAX/DAYS`,
+  `COURSE_EXAM_CAP_MAX/DAYS` en `[vars]`, ver `wrangler.toml`). Pasado el tope
+  se devuelve la nota con `saved:false, why:"attempt_cap"`. El contador es una
+  instancia más del DO `EXAM_ATTEMPTS` (`cap:<uid>:<kind>:<nivel|curso>`): sin
+  binding ni migración nuevos.
+- **Riesgo que queda:** sin sesión se puede practicar sin límite de cuenta
+  (solo el límite por IP), y la nota final es un oráculo: alguien paciente
+  podría deducir la clave cambiando una respuesta por intento. Lo frena el
+  límite por IP de `/exam/start`; bájalo (`RL_EXAM_START_PER_DAY`) si hiciera
+  falta. Ninguna de esas notas de práctica se guarda.
+
 - **Fuente con claves (privada):** `_scripts/exams/vesper_*_exams.src.js`. Se
   editan ahí; nunca los `vesper_*_exams.js` de la raíz, que son generados.
 - **Generar:** `node _scripts/exams/split_exams.js` escribe los dos archivos
@@ -256,12 +283,27 @@ Get-Content ..\_scripts\service_account.json -Raw | wrangler secret put FIREBASE
 wrangler deploy
 ```
 
+**Orden cuando cambian Worker, sitio y reglas a la vez** (como el examen a
+ciegas + los exámenes por curso): 1) `wrangler deploy` (las rutas nuevas son
+aditivas y el `exam.html` viejo sigue leyendo `exams/` por su cuenta),
+2) `git push` del sitio (el `exam.html` nuevo ya usa `/exam/course/*`),
+3) publicar `firestore.rules` (quita la lectura de `exams/` al alumno y las
+notas de examen desde el navegador). Publicar las reglas antes que el sitio
+deja sin examen a quien tenga el `exam.html` viejo.
+
 `FIREBASE_SA` es el JSON de una cuenta de servicio con permiso de escribir en
 Firestore. Lo ideal es una cuenta SOLO para esto (rol "Cloud Datastore User"),
 no la de administración: si alguien la robara del Worker, no tendría más.
 
-Pruebas: `wrangler dev` con `EXAM_DEV=1` en `worker/.dev.vars` (no escribe en
-Firestore) y luego
+Pruebas sin wrangler (banco y Google falsos; no necesita `exam_keys.json`):
+
+```bash
+node worker/test_exam_grader.mjs
+```
+
+Con `wrangler dev` y `EXAM_DEV=1` en `worker/.dev.vars` (no escribe en
+Firestore; el idToken `dev:<correo>` o `dev:<correo>#<uid>` simula la sesión),
+luego
 
 ```bash
 node ../_scripts/exams/test_worker_exams.js --root ..
