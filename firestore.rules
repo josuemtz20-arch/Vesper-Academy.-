@@ -173,8 +173,13 @@ service cloud.firestore {
 
     // Exámenes por curso (exam.html → exams/{id}). Guardan las claves de
     // respuesta; por eso NO se publican como archivo estático.
+    // Desde 2026-11 el alumno YA NO los lee: exam.html los pide al Worker
+    // (/exam/course/start), que los lee con la cuenta de servicio, revisa el
+    // acceso del alumno con la misma lógica que studentBookAllowed() y le
+    // manda las preguntas sin claves; luego califica él (/exam/course/finish).
+    // Antes el navegador descargaba el examen CON las respuestas.
     match /exams/{id} {
-      allow read:  if studentBookAllowed(id) || isTeacherUser() || isAdmin();
+      allow read:  if isTeacherUser() || isAdmin();
       allow write: if isAdmin();
     }
 
@@ -396,10 +401,12 @@ service cloud.firestore {
     // reglas, y lleva gradedBy "worker" (campo que el navegador no puede poner:
     // examResultShapeOk no lo admite). Desde el navegador ya no se aceptan:
     // antes un alumno podía subir el 100 que quisiera desde la consola.
-    // Los exámenes de los libros (exam.html, examId "exam:<curso>") siguen igual.
+    // Desde 2026-11 también los exámenes de los libros (exam.html, examId
+    // "exam:<curso>"): los califica el Worker (/exam/course/finish). Así que
+    // TODO examType "boss" o "exam" es solo del servidor, sin excepciones por
+    // examId; el navegador solo puede subir "lesson" y "placement" (práctica).
     function serverGradedExam(d) {
-      return d.examType == "boss"
-          || (d.examType == "exam" && d.get("examId", "").matches("exam:(A1|A2|B1|B2|C1|C2)"));
+      return d.examType in ["boss", "exam"];
     }
     match /exam_results/{id} {
       allow create: if signedIn()

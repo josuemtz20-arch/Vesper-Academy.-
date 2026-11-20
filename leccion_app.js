@@ -4362,11 +4362,17 @@
 
      vesper_level_questions.js / vesper_boss_questions.js NO traen respuestas
      (las genera _scripts/exams/split_exams.js). Al tocar "Verificar", la
-     respuesta va al Worker (worker/exam_grader.js), que la califica, guarda
-     la primera respuesta de cada pregunta y devuelve la clave ("reveal").
-     La clave se mezcla en el ejercicio y entonces corre el renderer de
-     siempre, que pinta el feedback igual que antes. La nota final la calcula
-     y la guarda el Worker (/exam/finish); aquí solo queda el espejo local.
+     respuesta va al Worker (worker/exam_grader.js), que la califica y guarda
+     la primera respuesta de cada pregunta.
+     - Jefe (práctica de juego): el Worker devuelve la clave ("reveal"), se
+       mezcla en el ejercicio y corre el renderer de siempre, que pinta el
+       feedback igual que antes.
+     - Examen de nivel (formal): el Worker NO dice si estuvo bien ni cuál era
+       la respuesta (si no, un intento de usar y tirar cosechaba la clave).
+       Se muestra "Respuesta guardada" y la nota, con su desglose por
+       destreza, llega del Worker al final (/exam/finish).
+     El intento se abre con el idToken del alumno: solo esa cuenta puede
+     guardar la nota, y el Worker limita los intentos calificados por semana.
      ============================================================ */
   var EXAM_API = String(window.VESPER_EXAM_API || "https://patient-feather-4364.josuemtz20.workers.dev").replace(/\/+$/, "") + "/exam/";
   function examPost(path, body) {
@@ -4384,17 +4390,27 @@
   }
   /* cada vuelta desde la primera pregunta es un intento nuevo en el servidor */
   function examNewRun() {
-    lesson._att = null;
+    lesson._att = null; lesson._finAtt = null; lesson._graded = null;
     (lesson.exercises || []).forEach(function (e) { e._graded = false; e._pending = false; });
     examAttempt().catch(function () {});   /* se abre ya, para que la 1.ª respuesta no espere */
   }
+  function examIdToken() {
+    var R = window.VESPER_RESULTS;
+    if (!R || !R.idToken) return Promise.resolve(null);
+    return Promise.resolve().then(function () { return R.idToken(); }).then(null, function () { return null; });
+  }
+  /* examen de nivel: sin feedback por pregunta (ver arriba) */
+  function examBlind() { return !!(lesson && lesson.serverGraded && lesson.examKind === "exam"); }
   function examAttempt() {
     if (!lesson._att) {
-      var p = examPost("start", {
-        kind: lesson.examKind, level: lesson.isBoss ? lesson.bossLevel : lesson.examLevel,
-        version: window.VESPER_EXAM_VERSION || "",
-        ids: lesson.exercises.map(function (e) { return e.id; })
-      }).then(function (j) { return j.attemptId; });
+      var p = examIdToken().then(function (tok) {
+        return examPost("start", {
+          kind: lesson.examKind, level: lesson.isBoss ? lesson.bossLevel : lesson.examLevel,
+          version: window.VESPER_EXAM_VERSION || "",
+          ids: lesson.exercises.map(function (e) { return e.id; }),
+          idToken: tok || undefined
+        });
+      }).then(function (j) { lesson._graded = j.graded || null; return j.attemptId; });
       p.catch(function () { if (lesson._att === p) lesson._att = null; });
       lesson._att = p;
     }
@@ -4442,6 +4458,30 @@
       rv.questions.forEach(function (q, i) { if (ex.questions && ex.questions[i]) into(ex.questions[i], q); });
     } else into(ex, rv);
   }
+  /* examen de nivel: la respuesta se guarda sin veredicto. Se bloquea la
+     tarjeta (lo que cuenta es la primera respuesta) y "Siguiente" avanza sin
+     pasar por advance(), que trataría el "sin veredicto" como un fallo
+     (quitaría vidas y lo mandaría al repaso SRS sin clave). */
+  function examBlindSaved(ex, btn) {
+    var total = lesson.exercises.length;
+    results[exIdx] = null;
+    var card = btn.closest ? btn.closest(".card") : null;
+    if (card) Array.prototype.forEach.call(card.children, function (el) {
+      if (el !== btn && el.id !== "fb") { el.style.pointerEvents = "none"; el.setAttribute("aria-disabled", "true"); }
+    });
+    each(".card input, .card textarea", function (el) { el.readOnly = true; });
+    var fb = byId("fb");
+    if (fb) fb.innerHTML = '<div class="fbbox" role="status" style="border-color:var(--line,#ece7da)">'
+      + '<div><b>' + ic('checkCircle') + ' ' + T('Respuesta guardada', 'Answer saved') + '</b>'
+      + '<div class="muted">' + T('Verás tu resultado al terminar el examen.', "You'll see your result when you finish the exam.") + '</div></div></div>';
+    announce(T("Respuesta guardada.", "Answer saved."));
+    btn.disabled = false;
+    btn.textContent = (exIdx + 1 < total) ? T("Siguiente", "Next") : T("Ver resultados", "See results");
+    btn.onclick = function () {
+      exIdx++;
+      if (exIdx < lesson.exercises.length) renderExercise(); else renderFeedback();
+    };
+  }
   function examGateVerify(ex) {
     var btn = byId("verify"), orig = btn && btn.onclick;
     if (!orig) return;
@@ -4458,6 +4498,7 @@
       examAttempt().then(function (att) {
         return examPost("answer", { attemptId: att, id: ex.id, response: resp });
       }).then(function (r) {
+        if (examBlind()) { ex._graded = true; ex._pending = false; examBlindSaved(ex, btn); return; }
         examReveal(ex, r.reveal);
         ex._graded = true; ex._pending = false;
         btn.disabled = false; btn.innerHTML = label;
@@ -4476,16 +4517,42 @@
     };
   }
   /* cierra el intento: el Worker calcula la nota y, con sesión, la guarda */
+  /* Devuelve la promesa con la respuesta del Worker ({score, total, percent,
+     passed, skills?, saved, why?}). Si la red falla se puede llamar otra vez:
+     el intento queda en lesson._finAtt y el Worker repite la misma nota. */
   function examFinish() {
-    if (!lesson.serverGraded || !lesson._att) return;
-    var att = lesson._att; lesson._att = null;
+    if (!lesson.serverGraded) return Promise.reject(new Error("no_attempt"));
+    if (lesson._att) { lesson._finAtt = lesson._att; lesson._att = null; }
+    var att = lesson._finAtt;
+    if (!att) return Promise.reject(new Error(T("El examen no se abrió en el servidor. Reinténtalo.", "The exam was not opened on the server. Try again.")));
     var R = window.VESPER_RESULTS;
-    var tok = (R && R.idToken) ? R.idToken() : Promise.resolve(null);
-    Promise.all([att, tok]).then(function (v) {
+    var p = Promise.all([att, examIdToken()]).then(function (v) {
       return examPost("finish", { attemptId: v[0], idToken: v[1] || undefined, alias: (R && R.aliasOf) ? R.aliasOf() : "" });
-    }).then(function (j) {
+    });
+    p.then(function (j) {
       try { if (window.VESPER_DEBUG_EXAM) console.log("[exam] finish", j); } catch (e) {}
     }, function (e) { try { console.warn("[exam] finish:", e && e.message); } catch (er) {} });
+    return p;
+  }
+  /* una línea para el alumno: ¿quedó registrada su nota? */
+  function examSavedNote(j) {
+    if (!j) return "";
+    var g = j.cap || lesson._graded || null;
+    var msg;
+    if (j.saved) {
+      msg = T("Tu resultado quedó registrado para tu profesor.", "Your result was recorded for your teacher.");
+      if (g && g.max) msg += " " + T("Intentos calificados que te quedan esta semana: ", "Graded attempts left this week: ") + Math.max(0, g.left) + ".";
+    } else if (j.why === "attempt_cap") {
+      msg = T("Ya usaste tus " + ((g && g.max) || 3) + " intentos calificados de esta semana: este resultado no se registró. Puedes seguir practicando.",
+              "You've used your " + ((g && g.max) || 3) + " graded attempts this week: this result was not recorded. You can keep practising.");
+    } else if (j.why === "no_session" || j.why === "session_mismatch") {
+      msg = T("Inicia sesión antes de empezar el examen para que tu resultado quede registrado.", "Sign in before you start the exam so your result is recorded.");
+    } else if (j.why === "already_finished") {
+      msg = "";
+    } else {
+      msg = T("No se pudo registrar el resultado en el servidor.", "The result could not be recorded on the server.");
+    }
+    return msg ? '<p class="muted" style="font-size:.8rem;margin-top:10px" role="status">' + esc(msg) + '</p>' : "";
   }
   /* copia profunda: revelar claves no debe tocar el banco compartido */
   function examClone(list) { return JSON.parse(JSON.stringify(list)); }
@@ -5337,7 +5404,7 @@
         cloud: !lesson.serverGraded
       });
     } catch (e) {}
-    examFinish();
+    if (lesson.serverGraded) examFinish().then(null, function () {});   /* el jefe no espera: ya mostró cada clave */
     if (pct < bm.pass) {
       earnedXp = 0;
       track("boss_fail", { level: lesson.bossLevel, pct: pct });
@@ -5384,27 +5451,54 @@
   /* ---------- RESULTADO DEL EXAMEN DE NIVEL (aprobado / reprobado) ----------
      Calificación PRELIMINAR automática: veredicto claro + desglose por destreza.
      Registra el intento (siempre) y, si aprueba, otorga XP y continúa la racha;
-     si reprueba, ofrece reintentar sin XP. */
+     si reprueba, ofrece reintentar sin XP.
+     Con banco del servidor (examen a ciegas) la nota y el desglose NO se
+     calculan aquí: se espera la respuesta de /exam/finish. */
   function renderExamResult(correct, total, pct) {
+    if (!examBlind()) { paintExamResult(correct, total, pct, null, null); return; }
+    show('<div class="wrap">' + topbar(92) + '<div class="card center">'
+      + mascot("thinking", T("Calificando tu examen…", "Grading your exam…"))
+      + '<h1>' + T('Calificando…', 'Grading…') + '</h1>'
+      + '<p class="muted" role="status">' + T('Un momento: el servidor está revisando tus respuestas.', 'One moment: the server is checking your answers.') + '</p>'
+      + '</div></div>');
+    examFinish().then(function (j) {
+      var sk = j.skills || {}, map = {};
+      Object.keys(sk).forEach(function (k) { if (sk[k] && sk[k].t) map[k] = { c: +sk[k].c || 0, t: +sk[k].t }; });
+      paintExamResult(+j.score || 0, +j.total || total, +j.percent || 0, map, j);
+    }, function (err) {
+      show('<div class="wrap">' + topbar(92) + '<div class="card center">'
+        + mascot("incorrect", T("No pude hablar con el servidor del examen.", "I couldn't reach the exam server."))
+        + '<h1>' + T('Sin resultado todavía', 'No result yet') + '</h1>'
+        + '<p class="muted" role="alert">' + esc(err && err.message || "") + '</p>'
+        + '<button class="btn btn-gold" id="refin">' + T('Reintentar', 'Try again') + '</button>'
+        + '<button class="btn btn-ghost" id="backHome">' + T('Ver lecciones', 'See lessons') + '</button></div></div>');
+      byId("refin").onclick = function () { renderExamResult(correct, total, pct); };
+      byId("backHome").onclick = function () { location.search = ""; };
+    });
+  }
+  /* srv: respuesta del Worker (examen a ciegas) o null (calificación local) */
+  function paintExamResult(correct, total, pct, srvSkills, srv) {
     var pass = lesson.examPass || PASS_PCT;
-    var passed = pct >= pass;
+    if (srv && typeof srv.threshold === "number") pass = srv.threshold;
+    var passed = srv ? !!srv.passed : pct >= pass;
     lastPerfect = (correct === total);
     earnedXp = passed ? Math.max(20, Math.round((lesson.xpReward || 60) * correct / Math.max(1, total))) : 0;
     track("exam_complete", { level: lesson.examLevel, pct: pct, passed: passed });
     if (PATH && PATH.setScore && lesson.lessonId) PATH.setScore(lesson.lessonId, pct);
-    /* registro central (siempre, aprobado o reprobado) */
+    /* registro central (siempre, aprobado o reprobado). Con servidor es solo
+       el espejo local: la nota de la nube la escribe el Worker. */
     try {
       if (window.VESPER_RESULTS) VESPER_RESULTS.record({
         examType: "exam", examId: "exam:" + lesson.examLevel, level: lesson.level,
         score: correct, total: total, percent: pct,
-        threshold: pass, passed: passed, detail: examDetail(),
-        cloud: !lesson.serverGraded   /* la nota de la nube la escribe el Worker */
+        threshold: pass, passed: passed, detail: srv ? [] : examDetail(),
+        cloud: !lesson.serverGraded
       });
     } catch (e) {}
-    examFinish();
-    /* desglose preliminar por destreza */
-    var bySkill = {};
-    (lesson.exercises || []).forEach(function (ex, i) {
+    if (lesson.serverGraded && !srv) examFinish().then(null, function () {});
+    /* desglose por destreza: el del servidor, o el local si no hay */
+    var bySkill = srvSkills || {};
+    if (!srvSkills) (lesson.exercises || []).forEach(function (ex, i) {
       var sk = (ex && ex.skill) || "otro";
       if (!bySkill[sk]) bySkill[sk] = { c: 0, t: 0 };
       bySkill[sk].t++; if (results[i]) bySkill[sk].c++;
@@ -5433,6 +5527,7 @@
         + '<div style="font:700 .72rem/1 Inter,system-ui,sans-serif;letter-spacing:1px;text-transform:uppercase;color:var(--muted,#6b6b76);margin-bottom:4px">' + T('Desglose por destreza', 'Breakdown by skill') + '</div>'
         + rows + '</div>'
       + '<p class="muted" style="font-size:.76rem;margin-top:12px">' + T('Resultado preliminar automático. Tu profesor puede confirmarlo con una evaluación oral.', 'Preliminary automatic result. Your teacher can confirm it with an oral assessment.') + '</p>'
+      + examSavedNote(srv)
       + (passed
           ? '<button class="btn btn-gold" id="cont">' + T('Continuar', 'Continue') + '</button>'
           : '<button class="btn btn-gold" id="retry">' + T('Reintentar examen', 'Retake the exam') + '</button><button class="btn btn-ghost" id="backHome">' + T('Ver lecciones', 'See lessons') + '</button>')

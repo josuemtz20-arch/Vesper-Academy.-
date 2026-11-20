@@ -202,12 +202,12 @@ footer img{height:30px;width:30px;object-fit:contain;vertical-align:middle;margi
   const body = document.getElementById("exam-body");
   const isLocal = location.protocol === "file:" ||
                   location.hostname === "localhost" || location.hostname === "127.0.0.1";
-  const DB_ID = "teachermanuals";   // named Firestore base (matches manual.html / libro.html)
+  // Servidor de exámenes (worker/exam_grader.js): el mismo que usa leccion_app.js.
+  const EXAM_API = String(window.VESPER_EXAM_API || "https://patient-feather-4364.josuemtz20.workers.dev").replace(/\/+$/, "") + "/exam/course/";
   // Siguiente libro de la serie: se ofrece al aprobar (>= 50%) el examen del curso.
   const NEXT_BOOK = {
     daily_life_vol0: { id: "daily_life_vol1", title: "Daily Life English · Vol. 1" }
   };
-
   function fail(html) {
     document.querySelector(".wrap").innerHTML =
       '<div class="err"><i class="fas fa-file-circle-question"></i><br><br>' + html +
@@ -215,28 +215,44 @@ footer img{height:30px;width:30px;object-fit:contain;vertical-align:middle;margi
     const sb = document.getElementById("submit-bar"); if (sb) sb.style.display = "none";
   }
   function note(t) { document.getElementById("exam-desc").textContent = t; }
+  function escHtml(s) {
+    return String(s == null ? "" : s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  }
 
-  /* ── Data source ──────────────────────────────────────────────────────────
-     The exam (with answer keys) is NEVER published as a static file — that would
-     leak every answer in git. On the live site exam.html downloads it from
-     Firestore with the student's idToken (same gated pattern as manual.html /
-     libro.html); the server rules only let approved students/teachers read it.
-     On localhost the local build output is loaded directly for dev preview. */
+  /* ── De dónde sale el examen ──────────────────────────────────────────────
+     El examen (con claves) NUNCA se publica como archivo estático ni llega al
+     navegador. En el sitio, exam.html se lo pide al Worker con el idToken del
+     alumno (/exam/course/start): el Worker lo lee de Firestore (exams/{id})
+     con la cuenta de servicio, revisa que la cuenta pueda abrir ese curso y
+     devuelve las preguntas SIN respuestas. Al entregar (/exam/course/finish)
+     califica él y guarda la nota en exam_results (gradedBy "worker"); las
+     reglas ya no aceptan notas de examen escritas desde el navegador ni dejan
+     al alumno leer exams/{id}.
+     En localhost se carga el build local (vesper_exam_data.js, con claves)
+     solo para previsualizar: se califica aquí y no se guarda nada. */
   if (isLocal) {
     const s = document.createElement("script");
     s.src = "vesper_exam_data.js";
     s.onload = function () {
       const EX = (window.VESPER_EXAM || {})[rawKey] || (window.VESPER_EXAM || {})[examId];
       if (!EX) fail("No exam found for this level yet.");
-      else renderExam(EX);
+      else renderExam(EX, localGrader(EX), null);
     };
     s.onerror = function () { fail("Local exam data not found.<br><span style='font-size:.82rem'>Run: python _scripts/build_exams.py</span>"); };
     document.head.appendChild(s);
   } else {
-    loadFromFirestore();
+    loadFromServer();
   }
 
-  function loadFromFirestore() {
+  function examPost(path, payload) {
+    return fetch(EXAM_API + path, {
+      method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload)
+    }).then(function (r) {
+      return r.json().catch(function () { return {}; }).then(function (j) { return { status: r.status, body: j }; });
+    });
+  }
+
+  function loadFromServer() {
     if (!window.VesperAuth) { fail("Could not load the access control. Reload the page."); return; }
     note("Loading exam…");
     VesperAuth.initFirebase().then(function (auth) {
@@ -249,47 +265,80 @@ footer img{height:30px;width:30px;object-fit:contain;vertical-align:middle;margi
           return;
         }
         if (!user.emailVerified) { fail("Your email isn't verified yet. Check your inbox and sign in again."); return; }
-        fetchExam(user);
+        startExam(user);
       });
     }).catch(function () { fail("No connection to the access service."); });
   }
 
-  function fetchExam(user) {
-    const url = "https://firestore.googleapis.com/v1/projects/" +
-                VesperAuth.config.firebase.projectId + "/databases/" + DB_ID +
-                "/documents/exams/" + encodeURIComponent(examId);
+  function startExam(user) {
     user.getIdToken().then(function (token) {
-      fetch(url, { headers: { "Authorization": "Bearer " + token } })
-        .then(function (r) { return r.json().then(function (j) { return { status: r.status, body: j }; }); })
-        .then(function (res) {
-          if (res.status === 403) { fail("Your account can't open exams yet.<br><span style='font-size:.82rem'>Ask the academy to enable your email.</span>"); return; }
-          if (res.status === 404) { fail("This exam isn't available online yet.<br><span style='font-size:.82rem'>The academy hasn't uploaded it.</span>"); return; }
-          if (res.status !== 200) { fail("Could not load the exam (HTTP " + res.status + ")."); return; }
-          const f = res.body.fields || {};
-          let EX = null;
-          try { EX = JSON.parse((f.data || {}).stringValue || ""); } catch (e) { EX = null; }
-          if (!EX || !EX.sections) { fail("The exam downloaded incomplete. Tell the academy to re-upload it."); return; }
-          renderExam(EX);
-        })
-        .catch(function () { fail("No connection to the exam server."); });
-    }).catch(function () { fail("Could not validate your session."); });
+      return examPost("start", { examId: examId, idToken: token }).then(function (res) {
+        const j = res.body || {};
+        if (res.status === 401) { fail("Your session expired. Sign in again."); return; }
+        if (res.status === 403) { fail("Your account can't open this exam yet.<br><span style='font-size:.82rem'>Ask the academy to enable your email for this course.</span>"); return; }
+        if (res.status === 404) { fail("This exam isn't available online yet.<br><span style='font-size:.82rem'>The academy hasn't uploaded it.</span>"); return; }
+        if (res.status === 429) { fail("Too many tries in a short time. Wait a minute and reload."); return; }
+        if (res.status !== 200 || !j.exam || !j.attemptId) { fail("Could not load the exam (HTTP " + res.status + ")."); return; }
+        renderExam(j.exam, serverGrader(user, j.attemptId), j.graded || null);
+      });
+    }).catch(function () { fail("No connection to the exam server."); });
   }
 
-  function recordResult(correct, total, EX) {
-    try {
-      if (window.VESPER_RESULTS && total) {
-        const pct = Math.round(correct / total * 100);
-        const threshold = EX.pass || 60;
-        VESPER_RESULTS.record({
-          examType: "exam", examId: "exam:" + examId, level: EX.level || "",
-          score: correct, total: total, percent: pct,
-          threshold: threshold, passed: pct >= threshold
+  /* Calificador del servidor: manda las respuestas (índice o null, en el orden
+     de las preguntas cerradas) y devuelve la nota. No hay claves: la pantalla
+     de resultados solo muestra el desglose por sección. */
+  function serverGrader(user, attemptId) {
+    return function (answers) {
+      return user.getIdToken().then(function (token) {
+        const R = window.VESPER_RESULTS;
+        return examPost("finish", {
+          attemptId: attemptId, idToken: token, answers: answers,
+          alias: (R && R.aliasOf) ? R.aliasOf() : ""
         });
-      }
-    } catch (e) { /* recording never blocks the exam */ }
+      }).then(function (res) {
+        if (res.status !== 200) {
+          const e = new Error((res.body && res.body.error) || ("The exam server answered HTTP " + res.status + "."));
+          e.status = res.status; throw e;
+        }
+        return res.body;
+      });
+    };
   }
-
-  function renderExam(EX) {
+  /* Solo localhost: el build local trae las claves; se califica aquí, sin guardar. */
+  function localGrader(EX) {
+    return function (answers) {
+      const sections = EX.sections.map(() => null);
+      let correct = 0, i = 0;
+      const key = [];
+      EX.sections.forEach((sec, si) => {
+        if (sec.type === "open") return;
+        sections[si] = { c: 0, t: 0 };
+        (sec.questions || []).forEach(q => {
+          sections[si].t++; key.push(q.answer);
+          if (answers[i] === q.answer) { correct++; sections[si].c++; }
+          i++;
+        });
+      });
+      const total = key.length, percent = total ? Math.round(100 * correct / total) : 0, threshold = EX.pass || 60;
+      return Promise.resolve({ score: correct, total: total, percent: percent, threshold: threshold,
+        passed: percent >= threshold, sections: sections, saved: false, why: "local_preview", key: key });
+    };
+  }
+  function savedNote(j) {
+    if (j.saved) {
+      let t = "Your result was recorded for your teacher.";
+      if (j.cap && j.cap.max) t += " Graded attempts left this week: " + Math.max(0, j.cap.left) + ".";
+      return t;
+    }
+    switch (j.why) {
+      case "attempt_cap": return "You've used your " + ((j.cap && j.cap.max) || 3) + " graded attempts for this exam this week, so this result was NOT recorded. It still counts as practice.";
+      case "already_finished": return "This attempt was already submitted; the first submission is the one that counts.";
+      case "local_preview": return "Local preview: nothing was recorded.";
+      case "no_session": case "session_mismatch": return "Your session changed during the exam, so this result was not recorded. Reload and sign in again.";
+      default: return "The result could not be recorded. Tell your teacher.";
+    }
+  }
+  function renderExam(EX, gradeFn, graded) {
     document.title = `Vesper Academy | ${EX.title} Exam`;
     document.getElementById("exam-title").textContent = EX.title + " — Exam";
     document.getElementById("exam-desc").textContent = EX.desc || "";
@@ -299,7 +348,11 @@ footer img{height:30px;width:30px;object-fit:contain;vertical-align:middle;margi
     document.getElementById("exam-meta").innerHTML =
       `<span class="chip"><i class="fas fa-list-check"></i> ${totalClosed} graded questions</span>` +
       `<span class="chip"><i class="fas fa-clock"></i> ~45 min</span>` +
-      `<span class="chip"><i class="fas fa-award"></i> Auto-scored + teacher section</span>`;
+      `<span class="chip"><i class="fas fa-award"></i> Auto-scored + teacher section</span>` +
+      // cuántas entregas de este examen se registran todavía esta semana (tope del Worker)
+      (graded && graded.max
+        ? `<span class="chip"><i class="fas fa-rotate"></i> ${Math.max(0, graded.left | 0)} of ${graded.max | 0} graded attempts left this week</span>`
+        : "");
 
     /* ---- Audio player -------------------------------------------------
        Replaces the bare <audio controls>. Keeps the book player's tools
@@ -422,7 +475,6 @@ footer img{height:30px;width:30px;object-fit:contain;vertical-align:middle;margi
 
     const LETTERS = "ABCDEFGHIJ".split("");   // section badges too: Practice 1 has 8 sections
     const responses = {};   // qid -> selected index
-    const answers = {};     // qid -> correct index (kept in JS, NOT in the DOM, so it isn't visible before grading)
     let qIndex = 0;
 
     EX.sections.forEach((sec, si) => {
@@ -455,7 +507,7 @@ footer img{height:30px;width:30px;object-fit:contain;vertical-align:middle;margi
           qIndex++;
           const qid = "q" + qIndex;
           const card = document.createElement("div"); card.className = "qcard"; card.dataset.qid = qid;
-          answers[qid] = q.answer; card.dataset.section = si;
+          card.dataset.section = si;
           let oh = `<p class="q-text"><span class="qn">${qIndex}.</span>${q.q}</p><div class="options">`;
           q.options.forEach((opt, oi) => {
             oh += `<button class="opt" data-oi="${oi}"><span class="mark">${LETTERS[oi]}</span><span>${opt}</span></button>`;
@@ -481,41 +533,61 @@ footer img{height:30px;width:30px;object-fit:contain;vertical-align:middle;margi
     }
     updateProg();
 
-    document.getElementById("submit-btn").addEventListener("click", grade);
-    function grade(){
-      const perSection = {};
-      let correct = 0;
-      document.querySelectorAll(".qcard").forEach(card => {
-        card.classList.add("graded");
-        const ans = answers[card.dataset.qid];
-        const sel = responses[card.dataset.qid];
-        const si = card.dataset.section;
-        perSection[si] = perSection[si] || { c: 0, t: 0 };
-        perSection[si].t++;
+    const submitBtn = document.getElementById("submit-btn");
+    submitBtn.addEventListener("click", submit);
+    /* Entrega: las respuestas van al calificador (el Worker en el sitio). La
+       parte de Writing/Speaking no se manda: la evalúa el profesor y no toca
+       la nota automática. */
+    function submit(){
+      if (submitBtn.disabled) return;
+      const cards = Array.from(document.querySelectorAll(".qcard"));
+      const answersOut = cards.map(card => {
+        const v = responses[card.dataset.qid];
+        return (typeof v === "number") ? v : null;
+      });
+      const blanks = answersOut.filter(v => v === null).length;
+      if (blanks && !confirm(blanks + " question(s) are still unanswered. Submit anyway? You can't change your answers afterwards.")) return;
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Grading…";
+      cards.forEach(card => card.classList.add("graded"));   // ya no se pueden cambiar
+      gradeFn(answersOut).then(function (j) {
+        showResults(j, cards);
+      }, function (err) {
+        // se puede reintentar: el servidor se queda con la PRIMERA entrega que reciba
+        cards.forEach(card => card.classList.remove("graded"));
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Try again";
+        alert((err && err.message) || "Could not reach the exam server. Check your connection and try again.");
+      });
+    }
+    function showResults(j, cards){
+      const correct = j.score | 0, total = j.total | 0, pct = j.percent | 0;
+      /* solo en la vista previa local hay clave para marcar cada opción */
+      if (Array.isArray(j.key)) cards.forEach((card, i) => {
+        const ans = j.key[i], sel = responses[card.dataset.qid];
         card.querySelectorAll(".opt").forEach(btn => {
           const oi = parseInt(btn.dataset.oi, 10);
           btn.classList.remove("sel");
           const mark = btn.querySelector(".mark");
-          if (oi === ans) {                       // la respuesta correcta
+          if (oi === ans) {
             btn.classList.add("correct");
-            if (mark) mark.textContent = "✓"; // ✓ (pista no basada en color)
+            if (mark) mark.textContent = "✓";
             btn.setAttribute("aria-label", "Respuesta correcta");
-          } else if (oi === sel) {                // lo que eligió el alumno y estaba mal
+          } else if (oi === sel) {
             btn.classList.add("wrong");
-            if (mark) mark.textContent = "✗"; // ✗
+            if (mark) mark.textContent = "✗";
             btn.setAttribute("aria-label", "Tu respuesta, incorrecta");
           }
         });
-        if (sel === ans) { correct++; perSection[si].c++; }
       });
-      const pct = totalClosed ? Math.round(correct / totalClosed * 100) : 0;
       const band = pct >= 85 ? ["Distinction","#2d7a4f"] : pct >= 70 ? ["Merit","#a8843d"]
                  : pct >= 50 ? ["Pass","#1e5fa8"] : ["Keep practising","#b02a2a"];
+      const perSection = Array.isArray(j.sections) ? j.sections : [];
       let bd = "";
       EX.sections.forEach((sec, si) => {
         if (sec.type === "open") { bd += `<div class="bd-item"><div class="bd-t">${sec.title}</div><div class="bd-s" style="font-size:.85rem;color:var(--muted)">Teacher-graded</div></div>`; return; }
-        const ps = perSection[si] || { c:0, t:(sec.questions||[]).length };
-        bd += `<div class="bd-item"><div class="bd-t">${sec.title}</div><div class="bd-s">${ps.c}/${ps.t}</div></div>`;
+        const ps = perSection[si] || { c: 0, t: (sec.questions || []).length };
+        bd += `<div class="bd-item"><div class="bd-t">${sec.title}</div><div class="bd-s">${ps.c | 0}/${ps.t | 0}</div></div>`;
       });
       const next = NEXT_BOOK[examId];
       const nextBtn = next && pct >= 50
@@ -525,14 +597,14 @@ footer img{height:30px;width:30px;object-fit:contain;vertical-align:middle;margi
       res.innerHTML =
         `<div class="score-ring" style="--pct:${pct}%"><div class="inner"><span class="pct">${pct}%</span><span class="lbl">Score</span></div></div>` +
         `<div class="band" style="color:${band[1]}">${band[0]}</div>` +
-        `<p class="sub">${correct} of ${totalClosed} auto-graded questions correct. The Writing &amp; Speaking section is assessed by your teacher.</p>` +
-        `<div class="breakdown">${bd}</div>` + nextBtn +
-        `<button class="btn btn-ghost" onclick="window.scrollTo({top:0,behavior:'smooth'})">Review answers</button>`;
+        `<p class="sub">${correct} of ${total} auto-graded questions correct. The Writing &amp; Speaking section is assessed by your teacher.</p>` +
+        `<div class="breakdown">${bd}</div>` +
+        `<p class="sub" role="status" style="font-size:.82rem">${escHtml(savedNote(j))}</p>` + nextBtn +
+        `<button class="btn btn-ghost" onclick="window.scrollTo({top:0,behavior:'smooth'})">Back to top</button>`;
       res.classList.add("show");
-      document.getElementById("submit-btn").textContent = "Submitted";
-      document.getElementById("submit-btn").disabled = true;
+      submitBtn.textContent = "Submitted";
+      submitBtn.disabled = true;
       res.scrollIntoView({ behavior: "smooth" });
-      recordResult(correct, totalClosed, EX);
     }
   }
 })();
