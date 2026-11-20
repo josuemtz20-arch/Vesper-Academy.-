@@ -1,0 +1,22 @@
+{
+  "packageId": "{{PACKAGE_ID}}",
+  "host": "{{DOMINIO}}",
+  "name": "{{NOMBRE}}",
+  "launcherName": "{{NOMBRE_CORTO}}",
+  "display": "standalone",
+  "orientation": "portrait",
+  "themeColor": "{{COLOR_PRIMARIO}}",
+  "navigationColor": "{{COLOR_PRIMARIO}}",
+  "backgroundColor": "{{COLOR_FONDO}}",
+  "enableNotifications": false,
+  "startUrl": "/index.html",
+  "iconUrl": "{{URL}}/assets/images/icon_512.png",
+  "maskableIconUrl": "{{URL}}/assets/images/icon_maskable_512.png",
+  "signingKey": { "path": "./android.keystore", "alias": "android" },
+  "appVersionName": "1.0.0",
+  "appVersionCode": 1,
+  "webManifestUrl": "{{URL}}/manifest.webmanifest",
+  "fallbackType": "customtabs",
+  "fullScopeUrl": "{{URL}}/",
+  "minSdkVersion": 21
+}

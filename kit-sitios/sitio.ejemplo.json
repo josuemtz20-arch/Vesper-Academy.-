@@ -1,0 +1,60 @@
+{
+  "nombre": "Panadería Aurora",
+  "nombre_corto": "Aurora",
+  "dominio": "panaderiaaurora.com",
+  "idioma": "es",
+  "descripcion": "Pan artesanal de masa madre horneado cada mañana en Monterrey. Pedidos en línea y entrega el mismo día.",
+  "eslogan": "Pan de verdad, cada mañana",
+  "correo_contacto": "hola@panaderiaaurora.com",
+  "tipo_schema": "Bakery",
+  "colores": { "primario": "#7a3e1d", "acento": "#d08a2e", "fondo": "#fbf6ee", "texto": "#2a1d14" },
+  "fuentes": { "titulos": "Fraunces", "texto": "Inter" },
+  "cta": { "texto": "Haz tu pedido", "url": "contacto.html" },
+  "paginas": [
+    {
+      "archivo": "index.html",
+      "menu": "Inicio",
+      "titulo": "Panadería Aurora | Pan artesanal de masa madre en Monterrey",
+      "h1": "Pan artesanal que sí sabe a pan",
+      "descripcion": "Pan artesanal de masa madre horneado cada mañana en Monterrey. Pedidos en línea y entrega el mismo día.",
+      "secciones": [
+        { "titulo": "Por qué Aurora", "texto": "Tres cosas que no negociamos.",
+          "tarjetas": [
+            { "titulo": "Masa madre", "texto": "Fermentación de 36 horas, sin levadura comercial." },
+            { "titulo": "Harina local", "texto": "Trigo de molinos de Nuevo León." },
+            { "titulo": "Recién hecho", "texto": "Horneamos a las 5 a. m. y entregamos el mismo día." }
+          ] }
+      ]
+    },
+    {
+      "archivo": "menu.html",
+      "menu": "Menú",
+      "titulo": "Menú y precios | Panadería Aurora",
+      "h1": "Menú",
+      "descripcion": "Hogazas, baguettes, croissants y pan dulce de masa madre. Consulta precios y disponibilidad del día en Panadería Aurora.",
+      "secciones": [
+        { "titulo": "Panes", "texto": "Disponibles todos los días.",
+          "tarjetas": [ { "titulo": "Hogaza de campo", "texto": "$95" }, { "titulo": "Baguette", "texto": "$45" } ] }
+      ]
+    },
+    {
+      "archivo": "contacto.html",
+      "menu": "Contacto",
+      "titulo": "Contacto y pedidos | Panadería Aurora",
+      "h1": "Haz tu pedido",
+      "descripcion": "Pide tu pan por WhatsApp o correo y recíbelo hoy mismo. Horario, dirección y zonas de entrega de Panadería Aurora.",
+      "secciones": [ { "titulo": "Horario", "texto": "Lunes a sábado de 7:00 a 14:00." } ]
+    }
+  ],
+  "modulos": {
+    "firebase": false,
+    "ia": false,
+    "play_store": false
+  },
+  "_ejemplos_de_modulos": {
+    "firebase": { "project_id": "mi-proyecto", "api_key": "PEGAR_API_KEY", "app_id": "PEGAR_APP_ID", "correo_admin": "tu@correo.com" },
+    "ia": { "worker_url": "https://mi-sitio-ia.micuenta.workers.dev", "modelo": "claude-haiku-5-5", "worker_nombre": "mi-sitio-ia" },
+    "play_store": { "package_id": "com.panaderiaaurora.app" },
+    "nota": "Copia el bloque que quieras dentro de 'modulos'. Páginas con \"protegida\": true exigen login (requiere firebase)."
+  }
+}

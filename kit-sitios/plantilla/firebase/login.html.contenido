@@ -1,0 +1,35 @@
+<section class="block">
+  <div class="container prose">
+    <form id="f-login" class="card" style="max-width:420px">
+      <h2>{{T_ENTRAR}}</h2>
+      <p id="msg" class="muted" role="status"></p>
+      <label>Email<br><input type="email" id="email" required autocomplete="email" style="width:100%;padding:10px;margin:6px 0 14px"></label>
+      <label>{{T_CONTRASENA}}<br><input type="password" id="pass" required minlength="8" autocomplete="current-password" style="width:100%;padding:10px;margin:6px 0 18px"></label>
+      <div class="cta-row" style="margin-top:0">
+        <button class="btn btn-primary" type="submit">{{T_ENTRAR}}</button>
+        <button class="btn btn-ghost" type="button" id="b-registro">{{T_CREAR_CUENTA}}</button>
+      </div>
+    </form>
+  </div>
+</section>
+<script>
+(function () {
+  var msg = document.getElementById("msg");
+  var estado = new URLSearchParams(location.search).get("estado");
+  if (estado === "verifica") msg.textContent = "{{T_VERIFICA}}";
+  if (estado === "sin-acceso") msg.textContent = "{{T_SIN_ACCESO}}";
+  var volver = new URLSearchParams(location.search).get("volver") || "index.html";
+  if (!/^[\w\-]+\.html$/.test(volver)) volver = "index.html";   /* sin redirecciones abiertas */
+  function err(e) { msg.textContent = e && e.message ? e.message : String(e); }
+  document.getElementById("f-login").addEventListener("submit", function (ev) {
+    ev.preventDefault();
+    firebase.auth().signInWithEmailAndPassword(document.getElementById("email").value.trim(), document.getElementById("pass").value)
+      .then(function () { location.href = volver; }).catch(err);
+  });
+  document.getElementById("b-registro").addEventListener("click", function () {
+    firebase.auth().createUserWithEmailAndPassword(document.getElementById("email").value.trim(), document.getElementById("pass").value)
+      .then(function (c) { return c.user.sendEmailVerification(); })
+      .then(function () { msg.textContent = "{{T_VERIFICA}}"; }).catch(err);
+  });
+})();
+</script>

@@ -1,0 +1,41 @@
+rules_version = '2';
+/* Reglas de Firestore de {{NOMBRE}}. ESTA es la seguridad real del sitio.
+   Publicar: consola de Firebase → Firestore → Reglas → pegar completo.
+   Principio: todo cerrado; cada colección abre solo lo que necesita. */
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() {
+      return request.auth != null && request.auth.token.email_verified == true;
+    }
+    function email() { return request.auth.token.email.lower(); }
+    function isAdmin() {
+      return signedIn() && (email() == "{{CORREO_ADMIN}}" ||
+        get(/databases/$(database)/documents/miembros/$(email())).data.rol == "admin");
+    }
+    function isMember() {
+      return signedIn() && exists(/databases/$(database)/documents/miembros/$(email()));
+    }
+
+    /* Allowlist: cada quien lee SU documento; solo el admin la gestiona. */
+    match /miembros/{correo} {
+      allow read: if signedIn() && (correo == email() || isAdmin());
+      allow write: if isAdmin();
+    }
+
+    /* Contenido privado: lo leen miembros, lo escribe el admin. */
+    match /contenido/{id} {
+      allow read: if isMember();
+      allow write: if isAdmin();
+    }
+
+    /* Datos de cada usuario: solo el dueño (uid). Tamaño acotado. */
+    match /usuarios/{uid} {
+      allow read, delete: if signedIn() && request.auth.uid == uid;
+      allow create, update: if signedIn() && request.auth.uid == uid
+        && request.resource.data.size() < 50;
+    }
+
+    match /{document=**} { allow read, write: if false; }
+  }
+}

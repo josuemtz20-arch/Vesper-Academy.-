@@ -15,6 +15,7 @@
 # archivos internos (reglas, *.md, worker/, este .gitignore...). Lo que está
 # en git no es lo mismo que lo que se sirve; la lista vive en pages.yml.
 !/.github/
+!/kit-sitios/
 # mapa del repo + modelo de seguridad (sin claves)
 !/README.md
 

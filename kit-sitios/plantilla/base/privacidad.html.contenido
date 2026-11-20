@@ -1,0 +1,8 @@
+<section class="block">
+  <div class="container prose">
+    <h2>{{T_PRIVACIDAD}}</h2>
+    <p><b>[COMPLETAR]</b> Responsable: {{NOMBRE}}, contacto <a href="mailto:{{CORREO_CONTACTO}}">{{CORREO_CONTACTO}}</a>.</p>
+    <p><b>[COMPLETAR]</b> Qué datos se recogen, para qué, con quién se comparten, cuánto tiempo se guardan y cómo pedir su eliminación.</p>
+    <p class="muted">Plantilla: no es asesoría legal. Revísala con alguien que conozca la ley de tu país (en México, la LFPDPPP).</p>
+  </div>
+</section>

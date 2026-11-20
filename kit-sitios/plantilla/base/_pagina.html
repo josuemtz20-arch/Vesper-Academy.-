@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="{{IDIOMA}}">
+<head>
+<meta http-equiv="Content-Security-Policy" content="{{CSP}}">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="{{COLOR_PRIMARIO}}">
+<title>{{TITULO}}</title>
+<meta name="description" content="{{DESCRIPCION_PAGINA}}">
+<link rel="canonical" href="{{URL_PAGINA}}">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="{{LOCALE}}">
+<meta property="og:site_name" content="{{NOMBRE}}">
+<meta property="og:title" content="{{TITULO}}">
+<meta property="og:description" content="{{DESCRIPCION_PAGINA}}">
+<meta property="og:url" content="{{URL_PAGINA}}">
+<meta property="og:image" content="{{URL}}/assets/images/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="assets/images/icon.svg" type="image/svg+xml">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="{{FUENTES_URL}}">
+<link rel="stylesheet" href="assets/css/tokens.css?v={{VERSION}}">
+<link rel="stylesheet" href="assets/css/site.css?v={{VERSION}}">
+{{HEAD_EXTRA}}
+<script type="application/ld+json">{{JSON_LD}}</script>
+</head>
+<body data-pagina="{{ARCHIVO}}">
+<a class="skip" href="#main">{{T_SALTAR}}</a>
+<header class="top">
+  <div class="container nav">
+    <a class="brand" href="index.html" aria-label="{{NOMBRE}}">
+      <img src="assets/images/icon.svg" alt="" width="36" height="36">
+      <b>{{NOMBRE}}</b>
+    </a>
+    <button class="nav-toggle" aria-controls="navlinks" aria-expanded="false" aria-label="{{T_MENU}}">☰</button>
+    <nav class="nav-links" id="navlinks">
+{{NAV}}
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+<section class="hero">
+  <div class="container">
+    <p class="eyebrow">{{ESLOGAN}}</p>
+    <h1>{{H1}}</h1>
+    <p class="lead">{{DESCRIPCION_PAGINA}}</p>
+    <div class="cta-row">
+      <a class="btn btn-primary" href="{{CTA_URL}}">{{CTA_TEXTO}}</a>
+    </div>
+  </div>
+</section>
+{{CONTENIDO}}
+</main>
+
+<footer class="foot">
+  <div class="container foot-grid">
+    <p><b>{{NOMBRE}}</b> · {{ESLOGAN}}</p>
+    <p><a href="privacidad.html">{{T_PRIVACIDAD}}</a> · <a href="mailto:{{CORREO_CONTACTO}}">{{CORREO_CONTACTO}}</a></p>
+    <p class="muted">© {{ANIO}} {{NOMBRE}}</p>
+  </div>
+</footer>
+<script src="assets/js/site.js?v={{VERSION}}" defer></script>
+</body>
+</html>

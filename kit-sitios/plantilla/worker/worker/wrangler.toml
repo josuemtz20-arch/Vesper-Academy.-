@@ -1,0 +1,18 @@
+# Despliegue:  cd worker && npx wrangler deploy
+# La API key NO va aquí:  npx wrangler secret put ANTHROPIC_API_KEY
+# `wrangler deploy` reemplaza la config remota con esta: lo que esté aquí es lo que vive.
+name = "{{WORKER_NOMBRE}}"
+main = "proxy.js"
+compatibility_date = "2026-06-16"
+preview_urls = false
+
+[observability]
+enabled = true
+
+[[durable_objects.bindings]]
+name = "RATE_LIMITER"
+class_name = "RateLimiter"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["RateLimiter"]

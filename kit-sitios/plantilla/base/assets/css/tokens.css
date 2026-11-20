@@ -1,0 +1,25 @@
+/* Tokens del sitio. Generados por crear_sitio.py desde sitio.json: cambia los
+   colores allí y regenera, o edítalos aquí y no regeneres este archivo. */
+:root {
+  --primario: {{COLOR_PRIMARIO}};
+  --acento: {{COLOR_ACENTO}};
+  --fondo: {{COLOR_FONDO}};
+  --superficie: color-mix(in srgb, var(--fondo) 92%, var(--primario));
+  --texto: {{COLOR_TEXTO}};
+  --texto-suave: color-mix(in srgb, var(--texto) 68%, var(--fondo));
+  --borde: color-mix(in srgb, var(--texto) 14%, transparent);
+  --sobre-primario: #fff;
+  --f-titulos: "{{FUENTE_TITULOS}}", Georgia, serif;
+  --f-texto: "{{FUENTE_TEXTO}}", system-ui, sans-serif;
+  --radio: 16px;
+  --sombra: 0 10px 30px -12px color-mix(in srgb, var(--primario) 35%, transparent);
+  --ancho: 1120px;
+  color-scheme: light dark;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --fondo: color-mix(in srgb, var(--primario) 18%, #0b0b12);
+    --texto: #ecebf5;
+    --superficie: color-mix(in srgb, var(--fondo) 85%, #fff);
+  }
+}

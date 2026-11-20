@@ -1,0 +1,10 @@
+# Nunca al repo
+.env
+.env.*
+*.keystore
+*.jks
+signing-key-info.txt
+node_modules/
+.wrangler/
+_site*/
+.DS_Store
