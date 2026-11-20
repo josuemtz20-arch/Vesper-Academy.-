@@ -449,7 +449,8 @@
         }
 
         // ── AUDIO PLAYER ──────────────────────────────────────────────
-        const audio = new Audio(); audio.src = audioSrc;
+        // metadata: solo la duración al abrir; el mp3 (1–3 MB) baja al dar play
+        const audio = new Audio(); audio.preload = "metadata"; audio.src = audioSrc;
         document.getElementById("a-title").textContent = title;
         document.getElementById("a-sub").textContent = aSub;
         const bigPlay = document.getElementById("big-play"), bpIc = bigPlay.querySelector("i");
