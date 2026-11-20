@@ -2299,7 +2299,7 @@ var VIcon = (function(){
   if(!pid) return;
   function sv(f,k){ return (f[k] && f[k].stringValue) || ""; }
   function show(name,time,url){
-    if(!url) return;
+    if(!/^https:\/\//i.test(url||"")) return;
     var a=document.getElementById("myclass"), t=document.getElementById("myclass-title");
     if(!a||!t) return;
     t.textContent = (name||"Tu clase") + (time? (" · Diario "+time) : " · Diario");

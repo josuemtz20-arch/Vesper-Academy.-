@@ -137,7 +137,7 @@ body{margin:0;font-family:var(--va-font-text,Inter,system-ui,sans-serif);display
       getDoc(base).then(function (meta) {
         if (meta.status === 403) {
           fail('<div class="err">Tu cuenta a&uacute;n no tiene acceso de alumno.</div>' +
-               '<div class="muted">Sesi&oacute;n: ' + (user.email || "") +
+               '<div class="muted">Sesi&oacute;n: ' + String(user.email || "").replace(/[&<>"]/g, function (c) { return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }) +
                '<br>P&iacute;dele a tu profesor o a la academia que activen tu correo.</div>');
           return;
         }
