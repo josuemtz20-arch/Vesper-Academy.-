@@ -200,3 +200,17 @@ html.vesper-reduce-motion *::after {
   transition-duration: .001ms !important;
   scroll-behavior: auto !important;
 }
+
+/* --- Modo ligero (equipos lentos; lo pone vesper_prefs.js en <html>). ---
+   El desenfoque de fondo es de lo más caro que hay en un móvil de gama baja:
+   cada cuadro vuelve a desenfocar todo lo que hay detrás. Sin él, las capas
+   translúcidas se ven un poco más planas pero la app no se traba. Las
+   animaciones infinitas las pausa el guardián de vesper_prefs.js (así los
+   indicadores de carga siguen girando). */
+html.vesper-lite *,
+html.vesper-lite *::before,
+html.vesper-lite *::after {
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  scroll-behavior: auto !important;
+}

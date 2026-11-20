@@ -223,10 +223,49 @@ function clip(text, max) {
   return text.slice(0, end);
 }
 
+/* Clave de límite por IP: IPv4 tal cual; IPv6 reducida a su /64 (un solo
+   cliente controla un /64 entero, así que por dirección completa el límite
+   se evadiría rotando direcciones). Expande "::" antes de cortar. */
+function ipRateKey(ip) {
+  if (typeof ip !== "string" || ip.indexOf(":") < 0) return ip;
+  let a = ip.split("%")[0].toLowerCase();
+  /* IPv4 incrustada (::ffff:1.2.3.4): se usa la IPv4 */
+  const m4 = /^(?:.*:)?(\d{1,3}(?:\.\d{1,3}){3})$/.exec(a);
+  if (m4) {
+    if (/^(::ffff:|::)/.test(a)) return m4[1];
+    const p = a.slice(0, a.length - m4[1].length - 1).replace(/:$/, "");
+    a = p + ":0:0";   // IPv4 al final: no afecta al /64
+  }
+  const halves = a.split("::");
+  if (halves.length > 2) return ip;
+  const head = halves[0] ? halves[0].split(":") : [];
+  const tail = halves.length === 2 && halves[1] ? halves[1].split(":") : [];
+  let groups;
+  if (halves.length === 2) {
+    const fill = 8 - head.length - tail.length;
+    if (fill < 1) return ip;
+    groups = head.concat(new Array(fill).fill("0"), tail);
+  } else groups = head;
+  if (groups.length !== 8 || !groups.every((g) => /^[0-9a-f]{1,4}$/.test(g))) return ip;
+  return groups.slice(0, 4).map((g) => g.replace(/^0+(?=.)/, "")).join(":") + "::/64";
+}
+
 /* Lee un límite numérico de env (string en [vars]) o usa el de RATE_DEFAULTS. */
 function limitOf(env, name) {
   const v = env && env[name] != null ? parseInt(env[name], 10) : NaN;
   return isNaN(v) || v < 0 ? RATE_DEFAULTS[name] : v;
+}
+
+/* Clave del límite por IP. En IPv6 se agrupa por /64: un solo cliente suele
+ * tener un /64 entero y podría rotar direcciones para saltarse el tope. */
+function ipBucket(ip) {
+  ip = String(ip || "unknown");
+  if (ip.indexOf(":") < 0) return ip;
+  const full = ip.split("::");
+  const head = full[0] ? full[0].split(":") : [];
+  const tail = full.length > 1 && full[1] ? full[1].split(":") : [];
+  const groups = full.length > 1 ? head.concat(Array(Math.max(0, 8 - head.length - tail.length)).fill("0"), tail) : head;
+  return groups.slice(0, 4).map((g) => (g || "0").toLowerCase()).join(":") + "::/64";
 }
 
 /* comparación en tiempo constante (evita medir cuántos caracteres coinciden) */
@@ -384,9 +423,15 @@ export default {
     /* ── Exámenes (/exam/start, /exam/answer, /exam/finish) ──
      * No usan Claude ni la API key: califican con las claves que solo viven
      * en el Worker. Comparten el contador por IP del chat. */
+    /* Corta antes de leer el cuerpo si ya anuncia ser enorme. */
+    const declared = Number(request.headers.get("Content-Length") || 0);
+    if (declared > Math.max(MAX_BODY_CHARS, 20000) * 4) {
+      return jsonError(413, "Petición demasiado grande.", origin);
+    }
+
     const path = new URL(request.url).pathname;
     if (path.indexOf("/exam/") === 0) {
-      const ipE = request.headers.get("CF-Connecting-IP") || "unknown";
+      const ipE = ipBucket(request.headers.get("CF-Connecting-IP"));
       let eb;
       try {
         const t = await request.text();
@@ -399,8 +444,9 @@ export default {
       let out;
       try {
         out = await handleExam(path, eb, env,
-          (key, perMin, perDay) => rateHit(env, key + ":" + ipE, perMin, perDay),
-          (name) => limitOf(env, name));
+          (key, perMin, perDay) => rateHit(env, key + ":" + ipRateKey(ipE), perMin, perDay),
+          (name) => limitOf(env, name),
+          (key, perMin, perDay) => rateHit(env, key, perMin, perDay));   // sin IP (tope por cuenta)
       } catch (e) {
         console.error("exam:", e && e.message);
         out = [500, { error: "Error del servidor de exámenes." }];
@@ -418,7 +464,7 @@ export default {
 
     /* IP real del cliente según Cloudflare (la pone el borde de Cloudflare;
      * el cliente no la elige). "unknown" solo en `wrangler dev` sin red. */
-    const ip = request.headers.get("CF-Connecting-IP") || "unknown";
+    const ip = ipBucket(request.headers.get("CF-Connecting-IP"));
 
     /* Lee y valida el cuerpo */
     let body;
@@ -452,7 +498,7 @@ export default {
      * código no se quede sin chat por los que comparten su IP sin código. */
     const perIp = await rateHit(
       env,
-      (isPro ? "ip-pro:" : "ip:") + ip,
+      (isPro ? "ip-pro:" : "ip:") + ipRateKey(ip),
       limitOf(env, isPro ? "RL_PRO_PER_MIN" : "RL_FREE_PER_MIN"),
       limitOf(env, isPro ? "RL_PRO_PER_DAY" : "RL_FREE_PER_DAY")
     );
@@ -515,17 +561,18 @@ export default {
       return jsonError(502, "No se pudo contactar con el servicio de IA.", origin);
     }
 
-    /* Si Claude devuelve error, reenvía status + cuerpo (no es streaming). */
+    /* Si Claude devuelve error, NO se reenvía su cuerpo: delataría el estado
+     * de la cuenta (saldo, límites, clave inválida) a cualquiera. Se registra
+     * aquí y al cliente le llega un mensaje propio. */
     if (!upstream.ok) {
       const errText = await upstream.text();
-      return new Response(errText, {
-        status: upstream.status,
-        headers: Object.assign(
-          { "Content-Type": "application/json" },
-          newSession ? { "X-Vesper-Session": newSession } : {},
-          corsHeaders(origin)
-        )
-      });
+      console.error("Anthropic", upstream.status, errText.slice(0, 500));
+      const busy = upstream.status === 429 || upstream.status === 529;
+      return jsonError(busy ? 503 : 502,
+        busy ? "Vesper está muy ocupada. Intenta de nuevo en un momento."
+             : "El servicio de IA no está disponible ahora.",
+        origin, busy ? "busy" : "upstream",
+        newSession ? { "X-Vesper-Session": newSession } : {});
     }
 
     /* Reenvía el stream SSE tal cual, con cabeceras CORS + el nivel servido

@@ -19,10 +19,13 @@ cualquiera puede ver el código fuente. La seguridad **real** vive en
 - Manuales, libros, exámenes y calificaciones están protegidos por reglas de
   Firestore, no por el gate del navegador.
 - **Integridad de calificaciones:** los intentos de examen (`exam_results`) los
-  escribe el propio alumno al autocalificarse, así que son **práctica**. La nota
-  de registro de Exámenes/Lecciones la **confirma el profesor**
-  (`gradebook.examsGrade` / `lessonsGrade`) y `computeFinal` usa solo datos del
-  profesor. Ver `FIRESTORE_EXAM_RESULTS_RULES.md` y `FIRESTORE_GRADEBOOK_RULES.md`.
+  escribe el propio alumno al autocalificarse, así que son **práctica** y no
+  cuentan. La calificación sale solo de lo que captura el profesor: pase de
+  lista, tareas y rúbrica por clase (`daily_progress`), parciales y examen final
+  (`gradebook.quiz1..3` / `finalExam`). La calcula `computeGrade` en
+  `vesper_gradebook.js`, donde también viven los pesos y la fecha de inicio del
+  curso (`COURSE_START`). Ver `FIRESTORE_EXAM_RESULTS_RULES.md` y
+  `FIRESTORE_GRADEBOOK_RULES.md`.
 
 ## Acceso / allowlist
 
@@ -54,7 +57,7 @@ permisos y orden de activación en `FIRESTORE_SCHOOL_RULES.md`.
 | `book_placement.html` | Examen de ubicación (sin cuenta) | inline |
 | `portal_profesores.html` | Portal del profesor | `vesper_auth.js` |
 | `portal_calificaciones.html` | Resultados de exámenes (profe) | `vesper_results.js` |
-| `portal_boleta.html` | Boleta / captura de notas (profe) | `vesper_gradebook.js` |
+| `portal_boleta.html` | Pase de lista, rúbrica por clase y boleta (profe) | `vesper_gradebook.js` |
 | `mi_boleta.html` | Boleta del alumno | `vesper_gradebook.js` |
 | `manual.html` / `libro.html` | Lector de manuales / libros (Firestore) | `vesper_auth.js` |
 | `access_admin.html` | Herramienta de administración de accesos | `vesper_auth.js` |
@@ -73,6 +76,19 @@ profesor). El service worker es `sw.js`: al cambiar cualquier archivo de su
 lista `CORE` hay que invalidar el cache, pero **eso ya no se hace a mano** —
 `python _scripts/preflight.py --fix` reescribe el sufijo de `CACHE_VERSION`
 (el sha256 del contenido de `CORE`) y el hook `pre-push` lo verifica.
+
+## Rendimiento
+
+- **Minificación en el deploy:** `.github/minify.sh` (esbuild) compacta todo el
+  JS/CSS de `_site/` en el workflow; el repo sigue legible. Probar en local:
+  `bash .github/pages_filter.sh _site_prueba && bash .github/minify.sh _site_prueba`.
+- **Animaciones:** `vesper_prefs.js` pausa las animaciones infinitas fuera de
+  pantalla en todas las páginas que lo cargan.
+- **Modo ligero** (`html.vesper-lite`, Configuración → Rendimiento): automático
+  en equipos con ≤2 GB de RAM, Ahorro de datos o <25 fps medidos. Pausa la
+  decoración, quita `backdrop-filter` y los sprites animados.
+- Medir: `node .claude/skills/web-development/scripts/perf_probe.js URL páginas…`
+  (Pixel 5, CPU x6, 3G).
 
 ## `.gitignore`
 

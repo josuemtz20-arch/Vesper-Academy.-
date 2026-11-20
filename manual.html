@@ -2,6 +2,7 @@
 <html lang="es">
 <head>
 <!-- CSP: generada por _scripts/apply_csp.py (edita alli, no aqui) -->
+<!-- CSP más amplia a propósito: esta página se reescribe con document.write con HTML guardado en Firestore, que carga Font Awesome/Tailwind/Bootstrap de estos CDN. Se puede acotar cuando se revisen los manuales/libros guardados. -->
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://apis.google.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://cdn.tailwindcss.com https://challenges.cloudflare.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://maxcdn.bootstrapcdn.com; font-src 'self' data: https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: blob: https:; media-src 'self' data: blob:; connect-src 'self' https://firestore.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://vesper-academy.firebaseapp.com https://patient-feather-4364.josuemtz20.workers.dev https://formsubmit.co https://challenges.cloudflare.com https://www.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com; frame-src 'self' https://vesper-academy.firebaseapp.com https://www.youtube.com https://www.youtube-nocookie.com https://challenges.cloudflare.com; worker-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self' https://formsubmit.co; upgrade-insecure-requests">
 <script src="vesper_app_mode.js"></script>
 <script src="vesper_auth.js"></script>
@@ -136,7 +137,7 @@ body{margin:0;font-family:var(--va-font-text,Inter,system-ui,sans-serif);display
       getDoc(base).then(function (meta) {
         if (meta.status === 403) {
           fail('<div class="err">Tu cuenta no tiene acceso de profesor.</div>' +
-               '<div class="muted">Sesi&oacute;n: ' + (user.email || "") +
+               '<div class="muted">Sesi&oacute;n: ' + String(user.email || "").replace(/[&<>"]/g, function (c) { return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }) +
                '<br>Pide al administrador que autorice tu correo como profesor.</div>');
           return;
         }

@@ -42,7 +42,12 @@ const SKILL_RANK = { grammar: 0, vocab: 1, use: 2, reading: 3, listening: 4 };
 
 export const EXAM_RATE_DEFAULTS = {
   RL_EXAM_START_PER_MIN: 10, RL_EXAM_START_PER_DAY: 200,
-  RL_EXAM_ANSWER_PER_MIN: 90, RL_EXAM_ANSWER_PER_DAY: 3000
+  RL_EXAM_ANSWER_PER_MIN: 90, RL_EXAM_ANSWER_PER_DAY: 3000,
+  /* examen de nivel: banco fijo; tope de intentos nuevos al día (frena la cosecha de claves).
+     Con idToken verificado se cuenta por uid (moderado); sin sesión, por IP con un tope
+     alto (una escuela o un NAT de operador comparte IP) solo contra scripts masivos. */
+  RL_EXAM_LEVEL_START_PER_DAY: 12,
+  RL_EXAM_LEVEL_START_PER_DAY_IP: 150
 };
 
 /* ---------- calificación (espejo de leccion_app.js) ---------- */
@@ -206,7 +211,9 @@ const fsBase = () => "https://firestore.googleapis.com/v1/projects/" + PROJECT_I
 
 /* ¿quién es? Identity Toolkit valida el idToken (firma, caducidad, proyecto). */
 async function lookupUser(env, idToken) {
-  if (env.EXAM_DEV === "1" && typeof idToken === "string" && idToken.indexOf("dev:") === 0) {
+  /* tokens "dev:" solo en local: con cuenta de servicio real (producción) se
+     ignoran aunque alguien deje EXAM_DEV=1 puesto por error */
+  if (env.EXAM_DEV === "1" && !env.FIREBASE_SA && typeof idToken === "string" && idToken.indexOf("dev:") === 0) {
     return { uid: "dev-uid", email: idToken.slice(4).toLowerCase(), verified: true };
   }
   if (typeof idToken !== "string" || idToken.length < 20 || idToken.length > 4096) return null;
@@ -327,8 +334,9 @@ async function finish(env, body) {
   const bank = bankOf(at.kind, at.level);
   let res = a.result;
   if (!res) {
-    const answered = a.order.length;
-    const total = at.kind === "boss" ? Math.max(1, Math.min(a.ids.length, answered)) : a.ids.length;
+    /* Las no contestadas cuentan como malas: antes el jefe dividía entre las
+       contestadas y bastaba UNA buena + /exam/finish para sacar 100. */
+    const total = Math.max(1, a.ids.length);
     const correct = a.order.filter((id) => a.answered[id] === true).length;
     const percent = Math.round(100 * correct / Math.max(1, total));
     const threshold = bank.pass;
@@ -363,7 +371,7 @@ async function finish(env, body) {
 
 /* punto de entrada desde el fetch del Worker. `rate(key, perMin, perDay)`
    es el contador por IP del chat (RateLimiter). */
-export async function handleExam(path, body, env, rate, limitOf) {
+export async function handleExam(path, body, env, rate, limitOf, rateRaw) {
   if (!env.EXAM_ATTEMPTS) return [503, { error: "Exámenes no configurados en el servidor." }];
   if (path === "/exam/start" || path === "/exam/answer") {
     const isStart = path === "/exam/start";
@@ -371,8 +379,30 @@ export async function handleExam(path, body, env, rate, limitOf) {
       limitOf(isStart ? "RL_EXAM_START_PER_MIN" : "RL_EXAM_ANSWER_PER_MIN"),
       limitOf(isStart ? "RL_EXAM_START_PER_DAY" : "RL_EXAM_ANSWER_PER_DAY"));
     if (!rl.ok) return [429, { error: "Vas muy rápido. Espera un momento y vuelve a intentarlo.", code: "rate_limited", retryAfter: rl.retryAfter || 60 }];
+    /* examen de nivel (banco fijo): tope diario de intentos nuevos. El
+       /exam/answer devuelve la clave (la UI la necesita para pintar el feedback),
+       así que esto limita cuántas veces se puede "cosechar" el banco. Solo cuenta
+       cuando el inicio fue válido (los 400/409 no gastan cupo). */
+    if (isStart && body.kind === "exam") {
+      const out = await start(env, body);
+      if (out[0] !== 200) return out;
+      let user = null;
+      if (body.idToken) { try { user = await lookupUser(env, body.idToken); } catch (e) { user = null; } }
+      /* con uid verificado: clave solo por uid (sin IP, para que el tope no se reinicie al cambiar de red);
+         si no, solo IP con tope alto */
+      const rl2 = user && user.uid
+        ? await (rateRaw || rate)("exam-level-uid:" + user.uid, 0, limitOf("RL_EXAM_LEVEL_START_PER_DAY"))
+        : await rate("exam-level-start", 0, limitOf("RL_EXAM_LEVEL_START_PER_DAY_IP"));
+      /* si excede, el intento ya creado queda huérfano (el cliente nunca recibe su id) y caduca solo */
+      if (!rl2.ok) return [429, { error: "Hoy ya hiciste varios intentos del examen de nivel. Vuelve mañana.", code: "rate_limited", retryAfter: rl2.retryAfter || 3600 }];
+      return out;
+    }
     return isStart ? start(env, body) : answer(env, body);
   }
-  if (path === "/exam/finish") return finish(env, body);
+  if (path === "/exam/finish") {
+    const rl = await rate("exam-finish", limitOf("RL_EXAM_START_PER_MIN"), limitOf("RL_EXAM_START_PER_DAY"));
+    if (!rl.ok) return [429, { error: "Vas muy rápido. Espera un momento y vuelve a intentarlo.", code: "rate_limited", retryAfter: rl.retryAfter || 60 }];
+    return finish(env, body);
+  }
   return [404, { error: "No existe." }];
 }

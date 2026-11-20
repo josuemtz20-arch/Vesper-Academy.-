@@ -17,6 +17,14 @@
 !/.github/
 # mapa del repo + modelo de seguridad (sin claves)
 !/README.md
+# skills de Claude Code (p. ej. .claude/skills/web-development). No se publican
+# en el sitio: .github/pages_filter.sh excluye .claude/. Los ajustes locales
+# (settings.local.json) pueden traer rutas/permisos personales: fuera.
+!/.claude/
+/.claude/settings.local.json
+# instrucciones para Claude Code + validador de lecciones (fuera del sitio: pages_filter.sh)
+!/CLAUDE.md
+!/tools/
 
 # planning note for the AI-guardian work (picked up by a new web session)
 !/GUARDIANS_TODO.md

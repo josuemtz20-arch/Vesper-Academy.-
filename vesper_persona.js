@@ -215,6 +215,7 @@ window.VESPER_PERSONA = (function () {
     textScale: "md",            /* 'md' | 'lg' | 'xl' */
     highContrast: false,        /* alto contraste */
     reduceMotion: false,        /* forzar menos animacion (ademas de prefers-reduced-motion) */
+    perfMode: "auto",           /* 'auto' | 'lite' | 'full' (modo ligero en equipos lentos) */
     /* --- sonido --- */
     soundFx: true,              /* efectos de sonido en acierto/error */
     sfxVolume: 60,              /* volumen de efectos 0..100 */

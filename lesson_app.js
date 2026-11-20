@@ -449,7 +449,8 @@
         }
 
         // ── AUDIO PLAYER ──────────────────────────────────────────────
-        const audio = new Audio(); audio.src = audioSrc;
+        // metadata: solo la duración al abrir; el mp3 (1–3 MB) baja al dar play
+        const audio = new Audio(); audio.preload = "metadata"; audio.src = audioSrc;
         document.getElementById("a-title").textContent = title;
         document.getElementById("a-sub").textContent = aSub;
         const bigPlay = document.getElementById("big-play"), bpIc = bigPlay.querySelector("i");
@@ -858,9 +859,12 @@
                 if (ir > br){ dh = o.h; dw = dh*ir; } else { dw = o.w; dh = dw/ir; }
                 ctx.drawImage(img, o.x+(o.w-dw)/2, o.y+(o.h-dh)/2, dw, dh);
             } else {
-                ctx.fillStyle = "#c9c2b4"; ctx.font = `${Math.min(o.w,o.h)*0.22}px 'Font Awesome 6 Free', serif`;
-                ctx.textAlign = "center"; ctx.textBaseline = "middle";
-                ctx.fillText("", o.x+o.w/2, o.y+o.h/2); ctx.textAlign = "left"; ctx.textBaseline = "top";
+                // Marcador de imagen (icono "image" de Font Awesome, glifo \uf03e): ya no hay fuente de FA,
+                // así que se dibuja el mismo glifo como Path2D (512x512) al 22% del lado menor.
+                const fs = Math.min(o.w,o.h)*0.22;
+                ctx.fillStyle = "#c9c2b4"; ctx.save();
+                ctx.translate(o.x+o.w/2-fs/2, o.y+o.h/2-fs/2); ctx.scale(fs/512, fs/512);
+                ctx.fill(new Path2D("M447.1 32h-384C28.64 32-.0091 60.65-.0091 96v320c0 35.35 28.65 64 63.1 64h384c35.35 0 64-28.65 64-64V96C511.1 60.65 483.3 32 447.1 32zM111.1 96c26.51 0 48 21.49 48 48S138.5 192 111.1 192s-48-21.49-48-48S85.48 96 111.1 96zM446.1 407.6C443.3 412.8 437.9 416 432 416H82.01c-6.021 0-11.53-3.379-14.26-8.75c-2.73-5.367-2.215-11.81 1.334-16.68l70-96C142.1 290.4 146.9 288 152 288s9.916 2.441 12.93 6.574l32.46 44.51l93.3-139.1C293.7 194.7 298.7 192 304 192s10.35 2.672 13.31 7.125l128 192C448.6 396 448.9 402.3 446.1 407.6z")); ctx.restore();
             }
             ctx.restore();
             roundRectPath(ctx, o.x, o.y, o.w, o.h, r);

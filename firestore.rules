@@ -397,9 +397,12 @@ service cloud.firestore {
     // examResultShapeOk no lo admite). Desde el navegador ya no se aceptan:
     // antes un alumno podía subir el 100 que quisiera desde la consola.
     // Los exámenes de los libros (exam.html, examId "exam:<curso>") siguen igual.
+    // 2026-11-20: además, un "exam" del navegador debe traer el id de un libro
+    // real (vesper_exam_index.js: minúsculas, dígitos y _). Antes cualquier
+    // examId inventado ("exam:B2-final") entraba al promedio de la boleta.
     function serverGradedExam(d) {
       return d.examType == "boss"
-          || (d.examType == "exam" && d.get("examId", "").matches("exam:(A1|A2|B1|B2|C1|C2)"));
+          || (d.examType == "exam" && !d.get("examId", "").matches("exam:[a-z][a-z0-9_]{1,60}"));
     }
     match /exam_results/{id} {
       allow create: if signedIn()
@@ -508,13 +511,54 @@ service cloud.firestore {
                     && request.resource.data.total is int
                     && request.resource.data.correct >= 0
                     && request.resource.data.total >= 0
+                    && request.resource.data.total <= 200
                     && request.resource.data.correct <= request.resource.data.total
+                    // campos opcionales: si vienen, con tipo y tamaño acotados
+                    // (antes un anónimo podía subir docs de ~1 MiB en bucle)
+                    && (!("levelName" in request.resource.data)
+                        || (request.resource.data.levelName is string
+                            && request.resource.data.levelName.size() <= 80))
+                    && (!("skipped" in request.resource.data)
+                        || (request.resource.data.skipped is int
+                            && request.resource.data.skipped >= 0
+                            && request.resource.data.skipped <= 200))
+                    && (!("origin" in request.resource.data)
+                        || (request.resource.data.origin is string
+                            && request.resource.data.origin.size() <= 200))
+                    // sin ventana de tiempo: un teléfono con el reloj mal no debe perder el lead
+                    && (!("createdAt" in request.resource.data)
+                        || request.resource.data.createdAt is timestamp)
+                    && (!("scores" in request.resource.data)
+                        || (request.resource.data.scores is map
+                            && request.resource.data.scores.size() <= 12
+                            && request.resource.data.scores.keys().hasOnly(
+                                 ["Pre-A1", "A1", "A2", "B1", "B2", "B2+", "C1", "C2"])
+                            && request.resource.data.scores.get("Pre-A1", 0) is int
+                            && request.resource.data.scores.get("A1", 0) is int
+                            && request.resource.data.scores.get("A2", 0) is int
+                            && request.resource.data.scores.get("B1", 0) is int
+                            && request.resource.data.scores.get("B2", 0) is int
+                            && request.resource.data.scores.get("B2+", 0) is int
+                            && request.resource.data.scores.get("C1", 0) is int
+                            && request.resource.data.scores.get("C2", 0) is int))
                     && request.resource.data.email is string
                     && request.resource.data.email.size() <= 200
                     && request.resource.data.phone is string
                     && request.resource.data.phone.size() <= 60
                     && (request.resource.data.email.size() > 0
-                        || request.resource.data.phone.size() > 0);
+                        || request.resource.data.phone.size() > 0)
+                    // 2026-11-20: los campos opcionales también con tipo y
+                    // tamaño; antes `scores` podía ser un mapa de ~1 MB.
+                    && request.resource.data.total <= 500
+                    && request.resource.data.get("levelName", "") is string
+                    && request.resource.data.get("levelName", "").size() <= 60
+                    && request.resource.data.get("skipped", 0) is int
+                    && request.resource.data.get("origin", "") is string
+                    && request.resource.data.get("origin", "").size() <= 80
+                    && request.resource.data.get("scores", {}) is map
+                    && request.resource.data.get("scores", {}).size() <= 20
+                    && (!("createdAt" in request.resource.data)
+                        || request.resource.data.createdAt is timestamp);
       allow read:   if isStaff();
       allow update, delete: if false;
     }

@@ -5,7 +5,7 @@
 <html lang="es" class="vesper-dark">
 <head>
 <!-- CSP: generada por _scripts/apply_csp.py (edita alli, no aqui) -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://apis.google.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://cdn.tailwindcss.com https://challenges.cloudflare.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://maxcdn.bootstrapcdn.com; font-src 'self' data: https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: blob: https:; media-src 'self' data: blob:; connect-src 'self' https://firestore.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://vesper-academy.firebaseapp.com https://patient-feather-4364.josuemtz20.workers.dev https://formsubmit.co https://challenges.cloudflare.com https://www.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com; frame-src 'self' https://vesper-academy.firebaseapp.com https://www.youtube.com https://www.youtube-nocookie.com https://challenges.cloudflare.com; worker-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self' https://formsubmit.co; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://apis.google.com https://challenges.cloudflare.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https:; media-src 'self' data: blob:; connect-src 'self' https://firestore.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://vesper-academy.firebaseapp.com https://patient-feather-4364.josuemtz20.workers.dev https://formsubmit.co https://challenges.cloudflare.com https://www.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com; frame-src 'self' https://vesper-academy.firebaseapp.com https://www.youtube.com https://www.youtube-nocookie.com https://challenges.cloudflare.com; worker-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self' https://formsubmit.co; upgrade-insecure-requests">
 <script src="vesper_app_mode.js"></script>
 <script src="vesper_auth.js"></script>
 <meta charset="UTF-8">
@@ -398,7 +398,7 @@ footer a:hover{text-decoration:underline;}
     <div class="block-h"><h2 id="h-dia">Día a día</h2></div>
     <div class="quick">
     <a class="tile go primary" href="portal_calificaciones.html"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-chart"/></svg></span><b>Calificaciones</b><span>Exámenes y lecciones de tus alumnos</span></a>
-    <a class="tile go primary" href="portal_boleta.html"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-list"/></svg></span><b>Boleta</b><span>Calificación final por alumno</span></a>
+    <a class="tile go primary" href="portal_boleta.html"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-list"/></svg></span><b>Boleta</b><span>Pase de lista, rúbrica y calificación</span></a>
     <a class="tile go primary web-only" href="portal_calendario.html"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-calendar"/></svg></span><b>Calendario</b><span>Ciclos, festivos y cierres</span></a>
     <a class="tile go primary" href="audio_library.html"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-audio"/></svg></span><b>Biblioteca de audio</b><span>Diálogos y lecturas para la clase</span></a>
     </div>
@@ -702,7 +702,7 @@ footer a:hover{text-decoration:underline;}
     grid.innerHTML="";
     classes.forEach(function(c){
       var card=document.createElement("div"); card.className="mc-card";
-      var url=c.meetUrl||"";
+      var url=/^https:\/\//i.test(c.meetUrl||"")?c.meetUrl:"";
       card.innerHTML='<div class="mc-info"><b>'+esc(c.name||"Clase")+'</b>'+
         '<span>'+esc(c.time?("Diario · "+c.time):"Diario")+'</span></div>'+
         (url?'<a class="mc-join" href="'+esc(url)+'" target="_blank" rel="noopener">Entrar a la clase</a>'

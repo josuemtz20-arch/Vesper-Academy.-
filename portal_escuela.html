@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <!-- CSP: generada por _scripts/apply_csp.py (edita alli, no aqui) -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://apis.google.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://cdn.tailwindcss.com https://challenges.cloudflare.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://maxcdn.bootstrapcdn.com; font-src 'self' data: https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: blob: https:; media-src 'self' data: blob:; connect-src 'self' https://firestore.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://vesper-academy.firebaseapp.com https://patient-feather-4364.josuemtz20.workers.dev https://formsubmit.co https://challenges.cloudflare.com https://www.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com; frame-src 'self' https://vesper-academy.firebaseapp.com https://www.youtube.com https://www.youtube-nocookie.com https://challenges.cloudflare.com; worker-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self' https://formsubmit.co; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://apis.google.com https://challenges.cloudflare.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https:; media-src 'self' data: blob:; connect-src 'self' https://firestore.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://vesper-academy.firebaseapp.com https://patient-feather-4364.josuemtz20.workers.dev https://formsubmit.co https://challenges.cloudflare.com https://www.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com; frame-src 'self' https://vesper-academy.firebaseapp.com https://www.youtube.com https://www.youtube-nocookie.com https://challenges.cloudflare.com; worker-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self' https://formsubmit.co; upgrade-insecure-requests">
 <script src="vesper_app_mode.js"></script>
 <script src="vesper_auth.js"></script>
 <meta charset="UTF-8">
@@ -11,7 +11,7 @@
 <meta name="description" content="Grupos, ciclos e inscripciones de alumnos. Acceso restringido a dirección y coordinación.">
 <meta name="robots" content="noindex, nofollow">
 <link rel="icon" href="assets/images/favicon_32.png?v=2" type="image/png">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+<link rel="stylesheet" href="assets/css/vesper_icons_fa.css">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Inria+Serif:ital,wght@0,400;0,700&family=Inter:wght@300;400;500;600;700;800&display=swap');
 *,*::before,*::after{box-sizing:border-box;}
@@ -484,6 +484,10 @@ footer a{color:var(--gold);text-decoration:none;}
     if (fl.length) {
       sq.where = fl.length === 1 ? fl[0] : { compositeFilter: { op: "AND", filters: fl } };
       sq.limit = 1000;
+    } else if (col === "placement_results") {
+      /* leads anónimos: sin tope un spammer inflaría la lectura; los más recientes */
+      sq.orderBy = [{ field: { fieldPath: "createdAt" }, direction: "DESCENDING" }];
+      sq.limit = 300;
     }
     return token().then(function (tk) {
       return fetch(base() + ":runQuery", {
@@ -704,7 +708,7 @@ footer a{color:var(--gold);text-decoration:none;}
         '<div class="meta"><span><i class="fas fa-book"></i>' + esc(courseName(g.courseId)) + "</span>" +
         '<span><i class="fas fa-clock"></i>' + esc(schedText(g.schedule)) + "</span>" +
         '<span><i class="fas fa-chalkboard-user"></i>' + (teachers ? esc(teachers) : '<span class="chip warn">Sin profesor</span>') + "</span>" +
-        (g.meetUrl ? '<span><i class="fas fa-video"></i><a href="' + esc(g.meetUrl) + '" target="_blank" rel="noopener">' + esc(g.meetUrl.replace(/^https?:\/\//, "")) + "</a></span>" : "") +
+        (/^https:\/\//i.test(g.meetUrl || "") ? '<span><i class="fas fa-video"></i><a href="' + esc(g.meetUrl) + '" target="_blank" rel="noopener">' + esc(g.meetUrl.replace(/^https?:\/\//, "")) + "</a></span>" : "") +
         "</div>" +
         '<div class="cap"><div class="bar"><span class="' + (full ? "full" : "") + '" style="width:' + pct + '%"></span></div>' +
         "<small>" + act.length + (cap ? " de " + cap + " lugares" + (full ? " · lleno" : "") : " alumnos") + "</small></div></div>" +
@@ -870,13 +874,15 @@ footer a{color:var(--gold);text-decoration:none;}
     var days = Array.prototype.map.call($("g-days").querySelectorAll("input:checked"), function (i) { return i.value; });
     var st = $("g-start").value, en = $("g-end").value;
     if (!days.length) { err.textContent = "Elige al menos un día."; return; }
+    var meet = $("g-meet").value.trim();
+    if (meet && !/^https:\/\/[^\s"'<>]+$/i.test(meet)) { err.textContent = "El link de la clase debe empezar con https://"; return; }
     if (!st || !en || en <= st) { err.textContent = "La hora de fin debe ser después de la de inicio."; return; }
     var teachers = Array.prototype.map.call($("g-teachers").querySelectorAll("input:checked"), function (i) { return i.value; });
     var before = editing ? (S.groups[editing].teachers || []) : [];
     var data = {
       name: $("g-name").value.trim() || gid, courseId: $("g-course").value, periodId: $("g-period").value,
       teachers: teachers, schedule: days.map(function (d) { return { day: d, start: st, end: en }; }),
-      meetUrl: $("g-meet").value.trim(), capacity: parseInt($("g-cap").value, 10) || 8,
+      meetUrl: meet, capacity: parseInt($("g-cap").value, 10) || 8,
       status: $("g-status").value, updatedAt: "ts:" + nowIso()
     };
     if (!editing) data.createdAt = "ts:" + nowIso();
