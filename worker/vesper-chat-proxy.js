@@ -229,6 +229,18 @@ function limitOf(env, name) {
   return isNaN(v) || v < 0 ? RATE_DEFAULTS[name] : v;
 }
 
+/* Clave del límite por IP. En IPv6 se agrupa por /64: un solo cliente suele
+ * tener un /64 entero y podría rotar direcciones para saltarse el tope. */
+function ipBucket(ip) {
+  ip = String(ip || "unknown");
+  if (ip.indexOf(":") < 0) return ip;
+  const full = ip.split("::");
+  const head = full[0] ? full[0].split(":") : [];
+  const tail = full.length > 1 && full[1] ? full[1].split(":") : [];
+  const groups = full.length > 1 ? head.concat(Array(Math.max(0, 8 - head.length - tail.length)).fill("0"), tail) : head;
+  return groups.slice(0, 4).map((g) => (g || "0").toLowerCase()).join(":") + "::/64";
+}
+
 /* comparación en tiempo constante (evita medir cuántos caracteres coinciden) */
 function safeEqual(a, b) {
   if (typeof a !== "string" || typeof b !== "string" || a.length !== b.length) return false;
@@ -384,9 +396,15 @@ export default {
     /* ── Exámenes (/exam/start, /exam/answer, /exam/finish) ──
      * No usan Claude ni la API key: califican con las claves que solo viven
      * en el Worker. Comparten el contador por IP del chat. */
+    /* Corta antes de leer el cuerpo si ya anuncia ser enorme. */
+    const declared = Number(request.headers.get("Content-Length") || 0);
+    if (declared > Math.max(MAX_BODY_CHARS, 20000) * 4) {
+      return jsonError(413, "Petición demasiado grande.", origin);
+    }
+
     const path = new URL(request.url).pathname;
     if (path.indexOf("/exam/") === 0) {
-      const ipE = request.headers.get("CF-Connecting-IP") || "unknown";
+      const ipE = ipBucket(request.headers.get("CF-Connecting-IP"));
       let eb;
       try {
         const t = await request.text();
@@ -418,7 +436,7 @@ export default {
 
     /* IP real del cliente según Cloudflare (la pone el borde de Cloudflare;
      * el cliente no la elige). "unknown" solo en `wrangler dev` sin red. */
-    const ip = request.headers.get("CF-Connecting-IP") || "unknown";
+    const ip = ipBucket(request.headers.get("CF-Connecting-IP"));
 
     /* Lee y valida el cuerpo */
     let body;
@@ -515,17 +533,18 @@ export default {
       return jsonError(502, "No se pudo contactar con el servicio de IA.", origin);
     }
 
-    /* Si Claude devuelve error, reenvía status + cuerpo (no es streaming). */
+    /* Si Claude devuelve error, NO se reenvía su cuerpo: delataría el estado
+     * de la cuenta (saldo, límites, clave inválida) a cualquiera. Se registra
+     * aquí y al cliente le llega un mensaje propio. */
     if (!upstream.ok) {
       const errText = await upstream.text();
-      return new Response(errText, {
-        status: upstream.status,
-        headers: Object.assign(
-          { "Content-Type": "application/json" },
-          newSession ? { "X-Vesper-Session": newSession } : {},
-          corsHeaders(origin)
-        )
-      });
+      console.error("Anthropic", upstream.status, errText.slice(0, 500));
+      const busy = upstream.status === 429 || upstream.status === 529;
+      return jsonError(busy ? 503 : 502,
+        busy ? "Vesper está muy ocupada. Intenta de nuevo en un momento."
+             : "El servicio de IA no está disponible ahora.",
+        origin, busy ? "busy" : "upstream",
+        newSession ? { "X-Vesper-Session": newSession } : {});
     }
 
     /* Reenvía el stream SSE tal cual, con cabeceras CORS + el nivel servido

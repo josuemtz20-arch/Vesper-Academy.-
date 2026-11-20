@@ -136,7 +136,7 @@ body{margin:0;font-family:var(--va-font-text,Inter,system-ui,sans-serif);display
       getDoc(base).then(function (meta) {
         if (meta.status === 403) {
           fail('<div class="err">Tu cuenta no tiene acceso de profesor.</div>' +
-               '<div class="muted">Sesi&oacute;n: ' + (user.email || "") +
+               '<div class="muted">Sesi&oacute;n: ' + String(user.email || "").replace(/[&<>"]/g, function (c) { return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]; }) +
                '<br>Pide al administrador que autorice tu correo como profesor.</div>');
           return;
         }

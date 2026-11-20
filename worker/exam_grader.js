@@ -206,7 +206,9 @@ const fsBase = () => "https://firestore.googleapis.com/v1/projects/" + PROJECT_I
 
 /* ¿quién es? Identity Toolkit valida el idToken (firma, caducidad, proyecto). */
 async function lookupUser(env, idToken) {
-  if (env.EXAM_DEV === "1" && typeof idToken === "string" && idToken.indexOf("dev:") === 0) {
+  /* tokens "dev:" solo en local: con cuenta de servicio real (producción) se
+     ignoran aunque alguien deje EXAM_DEV=1 puesto por error */
+  if (env.EXAM_DEV === "1" && !env.FIREBASE_SA && typeof idToken === "string" && idToken.indexOf("dev:") === 0) {
     return { uid: "dev-uid", email: idToken.slice(4).toLowerCase(), verified: true };
   }
   if (typeof idToken !== "string" || idToken.length < 20 || idToken.length > 4096) return null;
@@ -327,8 +329,9 @@ async function finish(env, body) {
   const bank = bankOf(at.kind, at.level);
   let res = a.result;
   if (!res) {
-    const answered = a.order.length;
-    const total = at.kind === "boss" ? Math.max(1, Math.min(a.ids.length, answered)) : a.ids.length;
+    /* Las no contestadas cuentan como malas: antes el jefe dividía entre las
+       contestadas y bastaba UNA buena + /exam/finish para sacar 100. */
+    const total = Math.max(1, a.ids.length);
     const correct = a.order.filter((id) => a.answered[id] === true).length;
     const percent = Math.round(100 * correct / Math.max(1, total));
     const threshold = bank.pass;
@@ -373,6 +376,10 @@ export async function handleExam(path, body, env, rate, limitOf) {
     if (!rl.ok) return [429, { error: "Vas muy rápido. Espera un momento y vuelve a intentarlo.", code: "rate_limited", retryAfter: rl.retryAfter || 60 }];
     return isStart ? start(env, body) : answer(env, body);
   }
-  if (path === "/exam/finish") return finish(env, body);
+  if (path === "/exam/finish") {
+    const rl = await rate("exam-finish", limitOf("RL_EXAM_START_PER_MIN"), limitOf("RL_EXAM_START_PER_DAY"));
+    if (!rl.ok) return [429, { error: "Vas muy rápido. Espera un momento y vuelve a intentarlo.", code: "rate_limited", retryAfter: rl.retryAfter || 60 }];
+    return finish(env, body);
+  }
   return [404, { error: "No existe." }];
 }
