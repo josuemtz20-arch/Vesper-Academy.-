@@ -1,0 +1,77 @@
+# Aviso al escritorio de cada push (y de cada publicación que falle).
+#
+# Manda una notificación por ntfy (https://ntfy.sh): app gratuita que muestra
+# avisos nativos en Windows/Mac (desde el navegador o instalada como app),
+# Android e iOS.
+#
+# Configuración (una sola vez):
+#   1. Inventa un tema largo y difícil de adivinar, p. ej. vesper-push-k39fj2qx8.
+#      Quien sepa el nombre puede leer los avisos: no lo compartas.
+#   2. GitHub > Settings > Secrets and variables > Actions > New repository
+#      secret: nombre NTFY_TOPIC, valor = tu tema.
+#   3. En la compu abre https://ntfy.sh/app, "Subscribe to topic" con ese tema,
+#      acepta las notificaciones del navegador e instálala como app
+#      (ícono de instalar en la barra de direcciones) para que avise aunque
+#      el navegador esté cerrado. En el cel: app ntfy, mismo tema.
+#
+# Sin el secreto, el workflow no falla: solo deja un aviso en el log.
+
+name: Avisar push
+
+on:
+  push:
+    branches: ["**"]
+  workflow_run:
+    workflows: ["Publicar sitio"]
+    types: [completed]
+
+permissions:
+  contents: read
+
+jobs:
+  avisar:
+    runs-on: ubuntu-latest
+    # en workflow_run solo interesa cuando la publicación NO salió bien
+    if: github.event_name == 'push' || github.event.workflow_run.conclusion != 'success'
+    steps:
+      - name: Enviar notificación
+        env:
+          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+        run: |
+          if [ -z "$NTFY_TOPIC" ]; then
+            echo "::notice::Falta el secreto NTFY_TOPIC; no se envió aviso (ver cabecera de notify-push.yml)."
+            exit 0
+          fi
+          python3 - <<'EOF'
+          import json, os, urllib.request
+          ev = json.load(open(os.environ["GITHUB_EVENT_PATH"]))
+          repo = os.environ["GITHUB_REPOSITORY"]
+          if os.environ["GITHUB_EVENT_NAME"] == "push":
+              rama = ev["ref"].removeprefix("refs/heads/")
+              if ev.get("deleted"):
+                  title, body, prio, tags = f"Rama borrada: {rama}", f"por {ev['pusher']['name']}", "2", "wastebasket"
+              else:
+                  commits = ev.get("commits", [])
+                  lineas = [f"• {c['message'].splitlines()[0][:110]}" for c in commits[-8:]]
+                  if len(commits) > 8: lineas.insert(0, f"(+{len(commits) - 8} anteriores)")
+                  forzado = " ⚠️ FORZADO" if ev.get("forced") else ""
+                  if rama == "main":
+                      title, prio, tags = f"Publicado en main{forzado} · {len(commits)} commit(s)", "4", "rocket"
+                  else:
+                      title, prio, tags = f"Push a {rama}{forzado} · {len(commits)} commit(s)", "2", "arrow_up"
+                  body = "\n".join(lineas) or "(sin commits nuevos)"
+                  body += f"\npor {ev['pusher']['name']}"
+              click = ev.get("compare") or f"https://github.com/{repo}"
+          else:
+              run = ev["workflow_run"]
+              title = f"❌ Falló la publicación del sitio ({run['conclusion']})"
+              body = f"{run['head_commit']['message'].splitlines()[0][:120]}\nRevisa el workflow y, si hace falta, vuelve al último tag respaldo/main-*."
+              prio, tags, click = "5", "rotating_light", run["html_url"]
+          # JSON en vez de cabeceras: así acentos y emojis llegan bien
+          msg = {"topic": os.environ["NTFY_TOPIC"], "title": title, "message": body,
+                 "priority": int(prio), "tags": [tags], "click": click}
+          req = urllib.request.Request("https://ntfy.sh/", data=json.dumps(msg).encode("utf-8"),
+                                       headers={"Content-Type": "application/json"})
+          urllib.request.urlopen(req, timeout=20)
+          print("aviso enviado:", title)
+          EOF

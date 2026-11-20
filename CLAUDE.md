@@ -9,8 +9,15 @@ Para trabajo con rigor usa `/vesper-mode`.
 - **Extiende, no reemplaces.** Mejora el código que ya existe con el cambio
   más pequeño que resuelva el problema. No reescribas una página, sección o
   módulo desde cero salvo que Josue lo pida explícitamente.
-- **`main` = producción.** Cada push a `main` publica vesperacademy.com
-  (`.github/workflows/pages.yml`). Trabaja en una rama y abre PR.
+- **`main` = producción, y todo termina en `main`.** Cada push a `main`
+  publica vesperacademy.com (`.github/workflows/pages.yml`). Trabaja en una
+  rama, pero al terminar SIEMPRE publica en `main` con `bash tools/push_main.sh`
+  (en sesiones de Claude: `--yes`). Nunca `git push origin main` a mano. El
+  script revisa (sintaxis, lecciones, `CACHE_VERSION`, nada interno en el
+  sitio), crea el tag de respaldo `respaldo/main-AAAAMMDD-HHMMSS` con el main
+  de antes, publica solo en avance rápido, y `notify-push.yml` avisa al
+  escritorio. Si la revisión falla, se arregla; no se salta. Después de
+  publicar, borra la rama de trabajo: no dejes ramas sin integrar.
 - **`.gitignore` es una whitelist.** Todo archivo nuevo en la raíz queda
   ignorado hasta que agregues su línea `!/archivo`. Si creas un archivo y
   `git status` no lo muestra, es esto.
@@ -29,7 +36,7 @@ Para trabajo con rigor usa `/vesper-mode`.
 
 ## Pausa y pide confirmación antes de
 
-- Push o merge a `main` (es un deploy).
+- Push forzado a `main` o revertir a un respaldo (reescribe producción).
 - Publicar reglas de Firestore o correr scripts de `_scripts/` con `--apply`.
 - `wrangler deploy` o `wrangler secret put`.
 - Cualquier cosa con pagos (Stripe/Conekta), facturación (CFDI/SAT), textos

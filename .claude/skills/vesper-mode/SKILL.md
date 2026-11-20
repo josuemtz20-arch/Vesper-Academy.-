@@ -54,8 +54,9 @@ decisión y qué cambió.
 
 ## Autonomía
 
-Procede sin preguntar con todo lo reversible en una rama. Pausa con la lista
-de `CLAUDE.md` (push a `main`, reglas, `wrangler`, pagos, legal, datos de
+Procede sin preguntar con todo lo reversible en una rama, y al terminar
+publica en `main` con `tools/push_main.sh` (playbook `ship`). Pausa con la lista
+de `CLAUDE.md` (push forzado o revertir `main`, reglas, `wrangler`, pagos, legal, datos de
 alumnos, borrados). "No" es una respuesta válida: si una idea o un alcance
 extra no se gana su lugar, dilo.
 
