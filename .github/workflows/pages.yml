@@ -7,6 +7,7 @@
 #
 # Requiere: Settings > Pages > Build and deployment > Source = "GitHub Actions".
 # Para probar la lista sin publicar:  bash .github/pages_filter.sh _site_prueba
+# Y el minificado:  bash .github/minify.sh _site_prueba
 
 name: Publicar sitio
 
@@ -35,6 +36,18 @@ jobs:
 
       - name: Armar el sitio sin archivos internos
         run: bash .github/pages_filter.sh _site
+
+      # JS y CSS compactos solo en lo publicado (el repo sigue legible). Va
+      # DESPUÉS del filtro y solo sobre _site: el ?v= de cada página y el
+      # CACHE_VERSION de sw.js salen del código fuente, y minificar es
+      # determinista, así que siguen cambiando cuando (y solo cuando) cambia
+      # el fuente. HTML, JSON y scripts en línea no se tocan.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Minificar JS y CSS
+        run: bash .github/minify.sh _site
 
       - uses: actions/configure-pages@v5
 
