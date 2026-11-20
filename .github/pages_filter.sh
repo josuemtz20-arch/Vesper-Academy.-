@@ -7,11 +7,12 @@ OUT="${1:?uso: pages_filter.sh CARPETA_DESTINO}"
 
 # Archivos que están en git pero NO se publican (regex sobre la ruta):
 #   .git*, .github/        plomería del repo (el .gitignore lista todo el sitio)
+#   .claude/               skills y ajustes de Claude Code (herramientas, no sitio)
 #   *.md, *.rules (raíz)   reglas de Firestore y documentos internos
 #   worker/                código y despliegue del proxy del chat
 #   twa-manifest.json      configuración de compilación de la app Android
 #   assets/**/*.txt        guiones de audio y notas sueltas
-INTERNOS='^(\.git|\.github/|worker/|[^/]+\.md$|[^/]+\.rules$|twa-manifest\.json$|assets/.*\.txt$)'
+INTERNOS='^(\.git|\.github/|\.claude/|worker/|[^/]+\.md$|[^/]+\.rules$|twa-manifest\.json$|assets/.*\.txt$)'
 
 rm -rf "$OUT"
 mkdir -p "$OUT"

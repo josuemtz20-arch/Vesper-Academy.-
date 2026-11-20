@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <!-- CSP: generada por _scripts/apply_csp.py (edita alli, no aqui) -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://apis.google.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://cdn.tailwindcss.com https://challenges.cloudflare.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://maxcdn.bootstrapcdn.com; font-src 'self' data: https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: blob: https:; media-src 'self' data: blob:; connect-src 'self' https://firestore.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://vesper-academy.firebaseapp.com https://patient-feather-4364.josuemtz20.workers.dev https://formsubmit.co https://challenges.cloudflare.com https://www.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com; frame-src 'self' https://vesper-academy.firebaseapp.com https://www.youtube.com https://www.youtube-nocookie.com https://challenges.cloudflare.com; worker-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self' https://formsubmit.co; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://apis.google.com https://challenges.cloudflare.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https:; media-src 'self' data: blob:; connect-src 'self' https://firestore.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://vesper-academy.firebaseapp.com https://patient-feather-4364.josuemtz20.workers.dev https://formsubmit.co https://challenges.cloudflare.com https://www.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com; frame-src 'self' https://vesper-academy.firebaseapp.com https://www.youtube.com https://www.youtube-nocookie.com https://challenges.cloudflare.com; worker-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self' https://formsubmit.co; upgrade-insecure-requests">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Configuración · Vesper Academy</title>
@@ -257,6 +257,9 @@
         <button class="switch" id="sw-rm" role="switch" aria-checked="false" aria-labelledby="lab-rm"></button>
       </div>
     </div>
+    <div class="field"><span class="label" id="lab-perf">Rendimiento
+        <span class="hint">Si la app va lenta en tu teléfono, el modo Ligero pausa la decoración animada y los efectos de cristal. Automático lo activa solo en equipos lentos.</span></span>
+      <div class="seg cols" id="seg-perf" role="radiogroup" aria-labelledby="lab-perf"></div></div>
   </section>
 
   <!-- ===== SONIDO ===== -->
@@ -613,6 +616,13 @@
   });
   wireSwitch("sw-hc", p.highContrast, "highContrast");
   wireSwitch("sw-rm", p.reduceMotion, "reduceMotion");
+  /* rendimiento: auto | lite | full (vesper_prefs.js aplica .vesper-lite) */
+  var PERF = { auto: { label: "Automático", emoji: "" }, lite: { label: "Ligero", emoji: "" }, full: { label: "Completo", emoji: "" } };
+  radioGroup("seg-perf", ["auto", "lite", "full"], PERF, PERF[p.perfMode] ? p.perfMode : "auto", function (id) {
+    /* elegir a mano borra la medición automática: "Automático" vuelve a medir */
+    try { localStorage.removeItem("vesper_perf_auto"); } catch (e) {}
+    P.set({ perfMode: id }); flash();
+  });
 
   /* ---------- sonido ---------- */
   wireSwitch("sw-snd", p.soundFx !== false, "soundFx");

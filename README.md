@@ -74,6 +74,19 @@ lista `CORE` hay que invalidar el cache, pero **eso ya no se hace a mano** —
 `python _scripts/preflight.py --fix` reescribe el sufijo de `CACHE_VERSION`
 (el sha256 del contenido de `CORE`) y el hook `pre-push` lo verifica.
 
+## Rendimiento
+
+- **Minificación en el deploy:** `.github/minify.sh` (esbuild) compacta todo el
+  JS/CSS de `_site/` en el workflow; el repo sigue legible. Probar en local:
+  `bash .github/pages_filter.sh _site_prueba && bash .github/minify.sh _site_prueba`.
+- **Animaciones:** `vesper_prefs.js` pausa las animaciones infinitas fuera de
+  pantalla en todas las páginas que lo cargan.
+- **Modo ligero** (`html.vesper-lite`, Configuración → Rendimiento): automático
+  en equipos con ≤2 GB de RAM, Ahorro de datos o <25 fps medidos. Pausa la
+  decoración, quita `backdrop-filter` y los sprites animados.
+- Medir: `node .claude/skills/web-development/scripts/perf_probe.js URL páginas…`
+  (Pixel 5, CPU x6, 3G).
+
 ## `.gitignore`
 
 Modelo de **whitelist**: por defecto todo es privado; solo se publican los

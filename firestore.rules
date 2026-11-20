@@ -511,7 +511,36 @@ service cloud.firestore {
                     && request.resource.data.total is int
                     && request.resource.data.correct >= 0
                     && request.resource.data.total >= 0
+                    && request.resource.data.total <= 200
                     && request.resource.data.correct <= request.resource.data.total
+                    // campos opcionales: si vienen, con tipo y tamaño acotados
+                    // (antes un anónimo podía subir docs de ~1 MiB en bucle)
+                    && (!("levelName" in request.resource.data)
+                        || (request.resource.data.levelName is string
+                            && request.resource.data.levelName.size() <= 80))
+                    && (!("skipped" in request.resource.data)
+                        || (request.resource.data.skipped is int
+                            && request.resource.data.skipped >= 0
+                            && request.resource.data.skipped <= 200))
+                    && (!("origin" in request.resource.data)
+                        || (request.resource.data.origin is string
+                            && request.resource.data.origin.size() <= 200))
+                    // sin ventana de tiempo: un teléfono con el reloj mal no debe perder el lead
+                    && (!("createdAt" in request.resource.data)
+                        || request.resource.data.createdAt is timestamp)
+                    && (!("scores" in request.resource.data)
+                        || (request.resource.data.scores is map
+                            && request.resource.data.scores.size() <= 12
+                            && request.resource.data.scores.keys().hasOnly(
+                                 ["Pre-A1", "A1", "A2", "B1", "B2", "B2+", "C1", "C2"])
+                            && request.resource.data.scores.get("Pre-A1", 0) is int
+                            && request.resource.data.scores.get("A1", 0) is int
+                            && request.resource.data.scores.get("A2", 0) is int
+                            && request.resource.data.scores.get("B1", 0) is int
+                            && request.resource.data.scores.get("B2", 0) is int
+                            && request.resource.data.scores.get("B2+", 0) is int
+                            && request.resource.data.scores.get("C1", 0) is int
+                            && request.resource.data.scores.get("C2", 0) is int))
                     && request.resource.data.email is string
                     && request.resource.data.email.size() <= 200
                     && request.resource.data.phone is string

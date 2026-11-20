@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <!-- CSP: generada por _scripts/apply_csp.py (edita alli, no aqui) -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://apis.google.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://cdn.tailwindcss.com https://challenges.cloudflare.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://maxcdn.bootstrapcdn.com; font-src 'self' data: https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: blob: https:; media-src 'self' data: blob:; connect-src 'self' https://firestore.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://vesper-academy.firebaseapp.com https://patient-feather-4364.josuemtz20.workers.dev https://formsubmit.co https://challenges.cloudflare.com https://www.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com; frame-src 'self' https://vesper-academy.firebaseapp.com https://www.youtube.com https://www.youtube-nocookie.com https://challenges.cloudflare.com; worker-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self' https://formsubmit.co; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://apis.google.com https://challenges.cloudflare.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https:; media-src 'self' data: blob:; connect-src 'self' https://firestore.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://vesper-academy.firebaseapp.com https://patient-feather-4364.josuemtz20.workers.dev https://formsubmit.co https://challenges.cloudflare.com https://www.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com; frame-src 'self' https://vesper-academy.firebaseapp.com https://www.youtube.com https://www.youtube-nocookie.com https://challenges.cloudflare.com; worker-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self' https://formsubmit.co; upgrade-insecure-requests">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vesper Academy — Examen Diagnóstico de Inglés (Gratis)</title>
@@ -84,7 +84,6 @@
   --ease-std:cubic-bezier(.4,0,.2,1);
   --med-fill:#4d4b53;
 }
-@property --med-spin{syntax:'<angle>';inherits:false;initial-value:0deg;}
 
 html{-webkit-text-size-adjust:100%;}
 body{
@@ -172,9 +171,10 @@ button{cursor:pointer;}
   background:radial-gradient(closest-side,var(--med-fill) 82%,rgba(77,75,83,0));transform:scaleY(0);transform-origin:50% 0;}
 .med-lid.l{left:31.5%;top:40.6%;} .med-lid.r{left:54.4%;top:40.6%;}
 .med-rays{position:absolute;inset:-26%;z-index:-1;border-radius:50%;pointer-events:none;
-  background:repeating-conic-gradient(from var(--med-spin),transparent 0deg,rgba(201,168,76,.17) 3deg,transparent 6deg,transparent 22.5deg);
+  background:repeating-conic-gradient(from 0deg,transparent 0deg,rgba(201,168,76,.17) 3deg,transparent 6deg,transparent 22.5deg);
   -webkit-mask-image:radial-gradient(closest-side,transparent 44%,#000 60%,transparent 93%);
-          mask-image:radial-gradient(closest-side,transparent 44%,#000 60%,transparent 93%);}
+          mask-image:radial-gradient(closest-side,transparent 44%,#000 60%,transparent 93%);
+  will-change:transform;}
 .med-halo{position:absolute;inset:-15%;z-index:-2;border-radius:50%;pointer-events:none;
   background:radial-gradient(closest-side,rgba(201,168,76,.30),transparent 72%);filter:blur(14px);}
 .med-spark{position:absolute;z-index:5;width:13px;height:13px;background:var(--star);opacity:.0;pointer-events:none;
@@ -185,7 +185,8 @@ button{cursor:pointer;}
 .medallion .med-spark{animation:medSpark 3.2s ease-in-out infinite;}
 .medallion .med-spark.s2{animation-delay:1.2s;}
 .medallion[data-blink] .med-lid{animation:medBlink 5.2s ease-in-out infinite;}
-@keyframes medSpin{to{--med-spin:360deg;}}
+/* Gira con transform (compuesto en GPU); animar una propiedad registrada (@property) repintaba cada cuadro. */
+@keyframes medSpin{to{transform:rotate(360deg);}}
 @keyframes medHalo{0%,100%{opacity:.75;transform:scale(1);}50%{opacity:1;transform:scale(1.06);}}
 @keyframes medSpark{0%,100%{opacity:0;transform:scale(.4) rotate(0deg);}50%{opacity:1;transform:scale(1) rotate(45deg);}}
 @keyframes medBlink{0%,93%,100%{transform:scaleY(0);}95.5%,97%{transform:scaleY(1);}}

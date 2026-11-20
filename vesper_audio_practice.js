@@ -519,7 +519,7 @@
     ".vp-clip:hover{border-color:var(--gold,#c5a059);box-shadow:0 0 0 3px rgba(197,160,89,.15)}",
     ".vp-clip i{color:var(--gold,#c5a059);font-size:0.7rem;width:.8em;text-align:center}",
     ".vp-clip.playing{border-color:var(--gold,#c5a059)}",
-    ".vp-clip.playing i::before{content:\"\\f04d\"}",
+    ".vp-clip.playing i{--fa-i:var(--fa-ic-stop);--fa-w:.875em}", /* antes ::before con el glifo \f04d; ahora máscara de vesper_icons_fa.css */
     ".vp-clip-d{font-weight:500;color:var(--muted,#6b7a8d);font-size:0.72rem}",
     ".vp-clip.slow{border-color:var(--border,#e4e0d8)}",
     ".vp-clip.mini{padding:0 11px;border-color:var(--border,#e4e0d8)}",

@@ -14,7 +14,7 @@
    ============================================================ */
 "use strict";
 
-var CACHE_VERSION = "vesper-v110-c11283d2";
+var CACHE_VERSION = "vesper-v114-79995fd4";
 var CORE = [
   /* Comunes. El Vesper Engine (herramienta del profesor) ya no se precarga
      en el teléfono de cada alumno: se guarda la primera vez que el profesor
@@ -51,6 +51,8 @@ var CORE = [
   "vesper_prefs.js",
   "vesper_analytics.js",
   "assets/css/vesper_tokens.css",
+  /* iconos locales (sustituyen Font Awesome del CDN; chat y perfil los usan) */
+  "assets/css/vesper_icons_fa.css",
   /* Edición móvil de la portada (solo pinta en táctiles <=820px) */
   "assets/css/vesper_mobile.css",
   "vesper_mobile.js",

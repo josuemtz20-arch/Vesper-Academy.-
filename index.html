@@ -2,8 +2,43 @@
 <html lang="es">
 <head>
 <!-- CSP: generada por _scripts/apply_csp.py (edita alli, no aqui) -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://apis.google.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://cdn.tailwindcss.com https://challenges.cloudflare.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://maxcdn.bootstrapcdn.com; font-src 'self' data: https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: blob: https:; media-src 'self' data: blob:; connect-src 'self' https://firestore.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://vesper-academy.firebaseapp.com https://patient-feather-4364.josuemtz20.workers.dev https://formsubmit.co https://challenges.cloudflare.com https://www.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com; frame-src 'self' https://vesper-academy.firebaseapp.com https://www.youtube.com https://www.youtube-nocookie.com https://challenges.cloudflare.com; worker-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self' https://formsubmit.co; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://apis.google.com https://challenges.cloudflare.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https:; media-src 'self' data: blob:; connect-src 'self' https://firestore.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://vesper-academy.firebaseapp.com https://patient-feather-4364.josuemtz20.workers.dev https://formsubmit.co https://challenges.cloudflare.com https://www.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com; frame-src 'self' https://vesper-academy.firebaseapp.com https://www.youtube.com https://www.youtube-nocookie.com https://challenges.cloudflare.com; worker-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self' https://formsubmit.co; upgrade-insecure-requests">
 <meta charset="UTF-8">
+<script>
+/* Hero A/B, parte 1: elige la variante y guarda el texto (HERO) UNA sola vez.
+   Va en <head> para que cada h1/lead se cambie justo al parsearse, antes del
+   primer pintado (ver «vesperHeroApply» tras cada [data-ab]). Mismas reglas que
+   antes: ?h=a|b|c, o sorteo guardado en localStorage. */
+(function(){
+    var G = '<span data-hecho="grupo_max">9</span>';
+    var HERO = {
+      a:{h1:'Años de clases de inglés y te congelas en la junta. <em>Aquí lo hablas.</em>',
+         lead:'Clases en vivo con profesor, en grupos de máximo '+G+' o 1 a 1, donde el 80&nbsp;% del tiempo hablas tú. Para la junta, la entrevista o la certificación que tienes enfrente.'},
+      b:{h1:'Entiendes inglés. Lo difícil es <em>contestar en voz alta.</em>',
+         lead:'Eso no se arregla con más gramática: se arregla hablando. En cada clase en vivo hablas tú el 80&nbsp;% del tiempo, con un profesor que te corrige en el momento y un grupo de máximo '+G+'.'},
+      c:{h1:'El inglés que te piden <em>el puesto, la entrevista o el examen.</em>',
+         lead:'Clases en vivo con profesor y una ruta por niveles del MCER donde siempre sabes qué ya puedes hacer y qué te falta. Empieza por saber tu nivel real.'}
+    };
+    var v = null, KEY = 'vesper_hero_v';
+    try{
+      var q = (new URLSearchParams(location.search).get('h') || '').toLowerCase();
+      if (HERO[q]) { v = q; localStorage.setItem(KEY, q); }
+      else { v = localStorage.getItem(KEY); }
+      if (!HERO[v]) { v = 'abc'.charAt(Math.floor(Math.random()*3)); localStorage.setItem(KEY, v); }
+    }catch(e){ v = v || 'a'; }
+    if (!HERO[v]) v = 'a';
+    window.VESPER_HERO = HERO;
+    window.VESPER_HERO_V = v;
+    document.documentElement.setAttribute('data-hero', v);
+    window.vesperHeroApply = function(el){
+      try{
+        if (v === 'a' || !el) return;
+        var k = el.getAttribute('data-ab');
+        if (HERO[v][k]) el.innerHTML = HERO[v][k];
+      }catch(e){}
+    };
+})();
+</script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#14122a">
 <title>Inglés en línea que te hace hablar | Vesper Academy</title>
@@ -1175,6 +1210,7 @@ html.js-anim .hero--c .hc-stage{opacity:0;animation:rise .9s var(--ease-out) .34
     <div class="hero-copy hc-copy">
       <p class="hc-fillet"><svg viewBox="0 0 12 12" aria-hidden="true"><path fill="currentColor" d="M6 0l1.4 4.6L12 6 7.4 7.4 6 12 4.6 7.4 0 6l4.6-1.4z"/></svg><span class="eyebrow">Escuela de inglés en línea · clases en vivo con profesor</span></p>
       <h1 data-ab="h1">Años de clases de inglés y te congelas en la junta. <em>Aquí lo hablas.</em></h1>
+<script>vesperHeroApply(document.currentScript.previousElementSibling)</script>
       <p class="hc-lema" lang="en"><span>Speak better,</span> <b>Speak Vesper<svg viewBox="0 0 200 10" preserveAspectRatio="none" aria-hidden="true"><path d="M3 6.5C42 2.5 96 9 197 3.5"/></svg></b></p>
       <ul class="hc-facts" aria-label="Así son las clases">
         <li>Por <b data-hecho="plataforma">Google Meet</b></li>
@@ -1631,6 +1667,7 @@ html.js-anim .hero--c .hc-stage{opacity:0;animation:rise .9s var(--ease-out) .34
          «HERO C» de index.html (no en vesper_mobile.css, que está en CORE). -->
     <span class="m-eyebrow m-eyebrow--dark">Escuela de inglés · clases en vivo con profesor</span>
     <h1 class="m-h1" data-ab="h1">Años de clases de inglés y te congelas en la junta. <em>Aquí lo hablas.</em></h1>
+<script>vesperHeroApply(document.currentScript.previousElementSibling)</script>
     <p class="m-lema" lang="en"><span>Speak better,</span> <b>Speak Vesper<svg viewBox="0 0 200 10" preserveAspectRatio="none" aria-hidden="true"><path d="M3 6.5C42 2.5 96 9 197 3.5"/></svg></b></p>
     <div class="hc-stage">
       <img class="hc-vesper" src="assets/images/mascot/vesper_cat_explaining.webp" alt="" width="600" height="600" decoding="async">
@@ -1886,27 +1923,7 @@ html.js-anim .hero--c .hc-stage{opacity:0;animation:rise .9s var(--ease-out) .34
        una vez por navegador. La variante viaja en el ?src= del examen
        (landing-hero-b…), y book_placement.html ya manda ese origen con cada
        lead: se mide conversión real sin GA4. */
-    var G = '<span data-hecho="grupo_max">9</span>';
-    var HERO = {
-      a:{h1:'Años de clases de inglés y te congelas en la junta. <em>Aquí lo hablas.</em>',
-         lead:'Clases en vivo con profesor, en grupos de máximo '+G+' o 1 a 1, donde el 80&nbsp;% del tiempo hablas tú. Para la junta, la entrevista o la certificación que tienes enfrente.'},
-      b:{h1:'Entiendes inglés. Lo difícil es <em>contestar en voz alta.</em>',
-         lead:'Eso no se arregla con más gramática: se arregla hablando. En cada clase en vivo hablas tú el 80&nbsp;% del tiempo, con un profesor que te corrige en el momento y un grupo de máximo '+G+'.'},
-      c:{h1:'El inglés que te piden <em>el puesto, la entrevista o el examen.</em>',
-         lead:'Clases en vivo con profesor y una ruta por niveles del MCER donde siempre sabes qué ya puedes hacer y qué te falta. Empieza por saber tu nivel real.'}
-    };
-    var v = null, KEY = 'vesper_hero_v';
-    try{
-      var q = (new URLSearchParams(location.search).get('h') || '').toLowerCase();
-      if (HERO[q]) { v = q; localStorage.setItem(KEY, q); }
-      else { v = localStorage.getItem(KEY); }
-      if (!HERO[v]) { v = 'abc'.charAt(Math.floor(Math.random()*3)); localStorage.setItem(KEY, v); }
-    }catch(e){ v = v || 'a'; }
-    if (!HERO[v]) v = 'a';
-    if (v !== 'a'){
-      [].forEach.call(document.querySelectorAll('[data-ab="h1"]'), function(el){ el.innerHTML = HERO[v].h1; });
-      [].forEach.call(document.querySelectorAll('[data-ab="lead"]'), function(el){ el.innerHTML = HERO[v].lead; });
-    }
+    var v = window.VESPER_HERO_V || 'a';
     [].forEach.call(document.querySelectorAll('[data-ab-src]'), function(a){
       a.href = a.getAttribute('href').replace(/(src=[\w-]+)/, '$1-' + v);
     });

@@ -676,9 +676,9 @@
   }
   /* retratos de guardianes (IA, uno por mundo); cae al SVG bossArt temático si falta el PNG */
   var BOSS_PORTRAIT = {
-    A1: "assets/images/guardians/guardian_a1.png", A2: "assets/images/guardians/guardian_a2.png",
-    B1: "assets/images/guardians/guardian_b1.png", B2: "assets/images/guardians/guardian_b2.png",
-    C1: "assets/images/guardians/guardian_c1.png", C2: "assets/images/guardians/guardian_c2.png"
+    A1: "assets/images/guardians/guardian_a1.webp", A2: "assets/images/guardians/guardian_a2.webp",
+    B1: "assets/images/guardians/guardian_b1.webp", B2: "assets/images/guardians/guardian_b2.webp",
+    C1: "assets/images/guardians/guardian_c1.webp", C2: "assets/images/guardians/guardian_c2.webp"
   };
   /* el onerror corre en scope global (este script es un IIFE): se expone en window; respaldo = bossArt */
   window.__vbossFallback = function (img, lv) { try { if (img) img.outerHTML = bossArt(lv); } catch (e) {} };
@@ -777,6 +777,8 @@
   function reduceMotion() {
     try {
       if (document.documentElement.classList.contains("vesper-reduce-motion")) return true;
+      /* modo ligero (vesper_prefs.js): sin sprites animados ni confeti en equipos lentos */
+      if (document.documentElement.classList.contains("vesper-lite")) return true;
       return !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
     } catch (e) { return false; }
   }
@@ -1050,7 +1052,7 @@
     var il = !pxOn() && ilOn();
     return '<section class="world-banner' + (pxOn() ? ' is-pixel' : '') + (il ? ' is-illus' : '') + '" data-world="' + selLevel + '" style="' + worldVars(t) + '" aria-label="Mundo ' + n + ': ' + esc(t.worldName) + '">'
       + (minOn() ? worldBand(selLevel)
-        : '<img class="world-banner__img" src="' + (il ? VESPER_MAPIL.banner(selLevel) : t.file) + '" alt="" aria-hidden="true" decoding="async">'
+        : '<img class="world-banner__img" src="' + (il ? VESPER_MAPIL.banner(selLevel) : t.file) + '" alt="" aria-hidden="true" decoding="async" fetchpriority="high">'
           + ambLayer(t.ambientN))
       + '<div class="world-banner__body">'
       + '<span class="world-banner__eyebrow">Mundo ' + n + ' &middot; ' + selLevel + '</span>'
@@ -4390,10 +4392,16 @@
   }
   function examAttempt() {
     if (!lesson._att) {
-      var p = examPost("start", {
-        kind: lesson.examKind, level: lesson.isBoss ? lesson.bossLevel : lesson.examLevel,
-        version: window.VESPER_EXAM_VERSION || "",
-        ids: lesson.exercises.map(function (e) { return e.id; })
+      /* idToken como en finish; si no hay sesión o falla, se arranca sin token (anónimo) */
+      var R = window.VESPER_RESULTS, tk;
+      try { tk = (R && R.idToken) ? R.idToken() : Promise.resolve(null); } catch (e) { tk = Promise.resolve(null); }
+      var p = Promise.resolve(tk).catch(function () { return null; }).then(function (tok) {
+        return examPost("start", {
+          kind: lesson.examKind, level: lesson.isBoss ? lesson.bossLevel : lesson.examLevel,
+          version: window.VESPER_EXAM_VERSION || "",
+          ids: lesson.exercises.map(function (e) { return e.id; }),
+          idToken: tok || undefined
+        });
       }).then(function (j) { return j.attemptId; });
       p.catch(function () { if (lesson._att === p) lesson._att = null; });
       lesson._att = p;
@@ -5252,13 +5260,17 @@
   }
 
   function renderFeedback() {
-    /* el duelo puede terminar antes: se califica lo contestado (ver EL DUELO) */
-    var total = lesson.isBoss ? Math.max(1, Math.min(lesson.exercises.length, results.length)) : lesson.exercises.length;
+    /* el duelo puede terminar antes, pero el % se calcula sobre TODAS las preguntas
+       del intento (igual que el Worker): un 7/8 temprano es 88 %, no 100 %. El
+       aprobado sigue siendo coherente: need = ceil(total*pass%), y el duelo se
+       gana justo al llegar a need aciertos. */
+    var total = lesson.exercises.length;
+    var answered = Math.max(1, Math.min(total, results.length));
     var correct = results.filter(Boolean).length;
     var pct = Math.round(100 * correct / Math.max(1, total));
     var perfect = correct === total;
     lastPerfect = perfect;
-    if (lesson.isBoss) { renderBossResult(correct, total, pct); return; }
+    if (lesson.isBoss) { renderBossResult(correct, total, pct, answered); return; }
     if (lesson.isExam) { renderExamResult(correct, total, pct); return; }
     if (lesson.isForja) { renderForjaResult(correct, total, pct); return; }
     /* Lecciones normales: hay que acertar >=70% para superarlas, ganar XP y
@@ -5324,7 +5336,7 @@
   }
 
   /* ---------- RESULTADO DEL JEFE (victoria / derrota) ---------- */
-  function renderBossResult(correct, total, pct) {
+  function renderBossResult(correct, total, pct, answered) {
     var bm = bossMeta(lesson.bossLevel);
     /* Registro central del intento (aprobado o reprobado) para el panel del
        profesor. Nunca debe romper la pantalla de resultado. */
@@ -5346,7 +5358,7 @@
         + '<div class="boss-emblem boss-gloat" aria-hidden="true">' + bossPortrait(lesson.bossLevel) + '<span class="duel-seal lose">' + T('Ganó él', 'It won') + '</span></div>'
         + '<p class="vs-say">«' + esc(bossLine("lose")) + '»</p>'
         + '<h1 class="lc-title">' + T('Esta vez no', 'Not this time') + '</h1>'
-        + '<p class="muted">' + duelLoseNote(correct, total) + '</p>'
+        + '<p class="muted">' + duelLoseNote(correct, answered) + '</p>'
         + mascot("incorrect", T("Lo vi todo. La próxima lo tumbamos juntos.", "I saw it all. Next time we'll beat it together."), "sm")
         + '<button class="btn btn-gold" id="retry">' + T('Revancha', 'Rematch') + '</button>'
         + '<button class="btn btn-ghost" id="backHome">' + T('Ver lecciones', 'See lessons') + '</button></div></div>');
