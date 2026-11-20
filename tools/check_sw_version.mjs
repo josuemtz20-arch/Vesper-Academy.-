@@ -20,7 +20,8 @@ const missing = files.filter(f => !existsSync(f));
 if (missing.length) { console.error("✗ CORE apunta a archivos que no existen:", missing.join(", ")); process.exit(1); }
 
 const h = createHash("sha256");
-for (const f of files) h.update(readFileSync(f));
+/* Igual que core_hash() de preflight.py: contenido + nombre de cada entrada. */
+for (const f of files) { h.update(readFileSync(f)); h.update(Buffer.from(f, "utf8")); }
 const want = h.digest("hex").slice(0, 8);
 
 if (ver[2] === want) { console.log(`✓ CACHE_VERSION ${ver[1]}-${want} coincide con CORE (${files.length} archivos)`); process.exit(0); }
