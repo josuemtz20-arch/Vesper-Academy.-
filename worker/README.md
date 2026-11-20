@@ -6,14 +6,30 @@ Pages), así que no puede guardar una key secreta; este Worker la guarda como
 secreto del lado del servidor y reenvía las peticiones.
 
 ```
-chat.html  ──POST {system, messages}──►  Worker (key secreta)  ──►  api.anthropic.com
+chat.html  ──POST {persona, messages}──►  Worker (key secreta)  ──►  api.anthropic.com
         ◄────────── stream SSE ──────────  (CORS)  ◄── stream SSE ──
 ```
 
 ## Qué hace
 
-- Recibe `POST` con `{ system, messages }` desde `chat.html` (más `proCode`,
-  `session` y `turnstileToken`, opcionales).
+- Recibe `POST` con `{ persona, messages }` desde `chat.html` y
+  `entrevista.html` (más `proCode`, `session` y `turnstileToken`, opcionales).
+- **Arma el system prompt en el servidor** (`persona_prompt.js`). `persona`
+  trae solo valores de listas cerradas (`mode: "chat"|"interview"`, tono,
+  nivel CEFR, enfoque, temas, puesto…) más tres textos cortos saneados
+  (nombre ≤24, puesto "otro" ≤60, vacante pegada ≤1200 entre comillas
+  triples como dato). Un valor desconocido = `400 bad_persona`. Antes el
+  navegador mandaba un `system` libre y cualquiera podía usar el proxy como
+  IA genérica. Las plantillas son copia de `vesper_persona.js` y
+  `vesper_entrevista.js`: si cambias una frase del tutor, cámbiala aquí.
+- **Compatibilidad (una versión):** un cliente viejo que manda `system` sin
+  `persona` no recibe error: su `system` se ignora y obtiene el tutor
+  estándar (`DEFAULT_SYSTEM`). Quitar ese respaldo en la siguiente versión.
+- **Valida el historial:** debe empezar con `user`, alternar estrictamente
+  `user`/`assistant` y terminar con `user`; si no, `400 bad_messages`.
+- En el reporte de la entrevista (`step: "scores"|"fixes"`) envuelve cada
+  respuesta del alumno en `<candidate_answer>…</candidate_answer>` y le dice
+  al modelo que es dato, nunca instrucción.
 - Añade `x-api-key` (secreto) y reenvía a `https://api.anthropic.com/v1/messages`
   en modo streaming.
 - **Fija** el modelo y `max_tokens` en el servidor (no confía en el cliente)
@@ -37,7 +53,13 @@ barreras reales son estas, en orden:
 |---|---------|-------|--------------------|
 | 1 | Límite **por IP** (`CF-Connecting-IP`) por minuto y por día UTC | Durable Object `RateLimiter` | `429` + `Retry-After`, `code: "rate_limited"` |
 | 2 | **Turnstile** (opcional): reto invisible validado contra `siteverify`; tras uno válido el Worker entrega una sesión firmada (HMAC, ligada a la IP, 1 h) en `X-Vesper-Session` | secreto `TURNSTILE_SECRET` | `401`, `code: "turnstile_required"` |
-| 3 | Tope **global** diario (todas las IPs juntas) | Durable Object `RateLimiter` ("global") | `503` + `Retry-After`, `code: "busy"` |
+| 3 | Tope **global** diario (todas las IPs juntas), uno gratis y otro Pro | Durable Object `RateLimiter` ("global" / "global-pro") | `503` + `Retry-After`, `code: "busy"` |
+
+Además, **candado del código Pro:** cada código equivocado cuenta en
+`pro-fail:<IP>:<hora>`. Pasados `RL_PRO_CODE_FAILS_PER_HOUR` (5), esa IP no
+puede probar códigos el resto de la hora: ni el correcto vale (si valiera, la
+respuesta Pro delataría el acierto). No da error: el mensaje sale en gratis,
+así un alumno con un código viejo guardado sigue practicando.
 
 Límites por defecto (constante `RATE_DEFAULTS`; se cambian sin tocar código con
 `[vars]` en `wrangler.toml` o en el panel; `0` desactiva ese límite):
@@ -48,10 +70,12 @@ Límites por defecto (constante `RATE_DEFAULTS`; se cambian sin tocar código co
 | `RL_FREE_PER_DAY` | 200 | mensajes/día por IP, nivel gratis |
 | `RL_PRO_PER_MIN` | 30 | mensajes/minuto por IP, con código Pro válido |
 | `RL_PRO_PER_DAY` | 1000 | mensajes/día por IP, con código Pro válido |
-| `RL_GLOBAL_PER_DAY` | 2000 | mensajes/día en total (freno de mano del costo) |
+| `RL_GLOBAL_PER_DAY` | 2000 | mensajes/día en total, nivel gratis (freno de mano del costo) |
+| `RL_PRO_GLOBAL_PER_DAY` | 1000 | mensajes/día en total, nivel Pro (cupo aparte: el abuso en gratis no deja sin chat a quien paga) |
+| `RL_PRO_CODE_FAILS_PER_HOUR` | 5 | códigos Pro equivocados por IP y por hora |
 
 Además, antes de llamar a Claude el Worker recorta la entrada (2026-11):
-`MAX_SYSTEM_CHARS` 4000, `MAX_MESSAGE_CHARS` 3000 por mensaje y
+`MAX_MESSAGE_CHARS` 3000 por mensaje y
 `MAX_INPUT_CHARS` 20000 en total (descarta los mensajes más viejos). Con
 Haiku 4.5 eso deja el peor caso en ~0.01 USD por mensaje. El tope **duro** de
 gasto no es este Worker: ponlo en la consola de Anthropic (*Settings → Limits*).
@@ -67,9 +91,11 @@ Durable Object procesa en serie las llamadas a una misma clave, así que el
 conteo es exacto. Las instancias se limpian solas al terminar el día (alarma).
 
 **Degradación:** si el Durable Object no responde (incidencia de Cloudflare),
-el Worker deja pasar y lo registra en los logs (`wrangler tail`), para no tumbar
-el chat; `max_tokens` fijo sigue acotando el costo por mensaje. Si `siteverify`
-no responde, en cambio, **no** deja pasar (sería saltarse el reto).
+los contadores **por IP** dejan pasar y lo registran en los logs (`wrangler
+tail`), para no tumbar el chat. Los topes **globales** fallan **cerrado**: sin
+contador no se llama a Claude (`503 busy`, "vuelve en un minuto"), porque son
+el freno de mano del costo. El candado del código Pro también falla cerrado
+(todo va como gratis). Si `siteverify` no responde, tampoco deja pasar.
 
 ## Requisitos
 
@@ -117,27 +143,42 @@ activa los límites; los secretos que ya tenía se conservan.
 
 ## Activar Turnstile (recomendado)
 
+La site key se configura en **un solo lugar**: la variable
+`TURNSTILE_SITE_KEY` del Worker. Cuando el Worker exige el reto, responde
+`401 {"code":"turnstile_required","sitekey":"…"}`; `chat.html` y
+`vesper_entrevista.js` aprenden la key de ahí (la recuerdan en el
+dispositivo: `vesper_ts_sitekey`), resuelven el reto invisible, reintentan y
+reciben la sesión firmada `X-Vesper-Session` (1 h, ligada a la IP). Ya no hay
+que pegar nada en las páginas.
+
 1. Panel de Cloudflare → **Turnstile** → *Add widget*.
-   - Hostnames: `vesperacademy.com`, `www.vesperacademy.com` (y `localhost`
-     si quieres probar en local).
-   - Widget mode: **Invisible** o **Managed** (el chat usa
-     `appearance: "interaction-only"`: solo muestra una casilla si Cloudflare
-     duda).
-2. Copia la **site key** (pública) en `TURNSTILE_SITE_KEY` de `../chat.html`.
-3. Guarda la **secret key** como secreto del Worker:
+   - Hostnames: `vesperacademy.com` y `www.vesperacademy.com` (más
+     `localhost` / `127.0.0.1` si quieres probar en local).
+   - Widget mode: **Invisible** o **Managed** (las páginas usan
+     `appearance: "interaction-only"`: solo muestran una casilla si
+     Cloudflare duda).
+2. En `wrangler.toml` descomenta `[vars]` y la línea `TURNSTILE_SITE_KEY`, y
+   pega la **site key** (pública). Si ya usas variables en el panel, ponla
+   ahí en su lugar (Settings → Variables, tipo *Text*).
+3. Guarda la **secret key** y despliega:
    ```bash
    cd worker
    wrangler secret put TURNSTILE_SECRET
    # opcional: clave propia para firmar la sesión de 1 h (si no, usa TURNSTILE_SECRET)
    wrangler secret put SESSION_SECRET
+   wrangler deploy
    ```
-4. Publica `chat.html` (git push) **antes o a la vez** que el secreto: con
-   `TURNSTILE_SECRET` puesto y sin site key en la página, el chat responde
-   "Verificación de seguridad pendiente".
+   El orden importa poco: sin `TURNSTILE_SECRET` el Worker no exige reto
+   (aunque ya tenga la site key) y el chat funciona como hoy, solo con los
+   límites de uso. Con el secreto y **sin** `TURNSTILE_SITE_KEY` el chat
+   respondería "Verificación de seguridad pendiente": pon las dos juntas.
+4. Comprueba: el `curl` de abajo debe dar `401` con `sitekey`, y el chat en
+   el sitio debe seguir respondiendo (la primera vez tarda ~1 s más).
 
-La CSP de `chat.html` ya permite `https://challenges.cloudflare.com` (script,
-iframe y conexión). Sin `TURNSTILE_SECRET` el Worker no exige reto y el chat
-funciona como antes, solo con los límites de uso.
+La CSP de `chat.html` y `entrevista.html` ya permite
+`https://challenges.cloudflare.com` (script, iframe y conexión). Para
+apagarlo, borra el secreto: las páginas olvidan la key solas en cuanto el
+Worker deja de pedir el reto.
 
 ## Conectar el chat
 
@@ -171,7 +212,7 @@ Apunta temporalmente `PROXY_URL` a `http://localhost:8787` mientras pruebas.
 curl -N -X POST "https://vesper-chat-proxy.<tu-subdominio>.workers.dev" \
   -H "Origin: https://vesperacademy.com" \
   -H "Content-Type: application/json" \
-  -d '{"system":"You are Vesper, a friendly English tutor.","messages":[{"role":"user","content":"Hi"}]}'
+  -d '{"persona":{"mode":"chat"},"messages":[{"role":"user","content":"Hi"}]}'
 ```
 
 Sin Turnstile debe devolver una secuencia de eventos `data: {...}` (SSE). Con
@@ -195,6 +236,11 @@ En `vesper-chat-proxy.js`:
 - `GUARDRAILS` — límites de tema y seguridad de Vesper (ámbito = solo inglés,
   sin contenido dañino, apto para todas las edades). Edítalo si quieres ajustar
   la severidad.
+
+En `persona_prompt.js`: las plantillas del tutor (chat) y de la entrevista, y
+los vocabularios aceptados (`TONES`, `TOPICS`, `ROLES`…). Un tono, tema o
+puesto nuevo en las páginas tiene que agregarse también aquí, o el Worker
+responde `400 bad_persona`.
 
 ## Nivel Pro (Sonnet con código) — opcional
 
@@ -225,6 +271,7 @@ O en el panel: tu Worker → **Settings → Variables and Secrets** → añade `
 | `ANTHROPIC_API_KEY` | secreto | sí | `wrangler secret put ANTHROPIC_API_KEY` |
 | `RATE_LIMITER` | Durable Object | sí (ya en `wrangler.toml`) | se crea con `wrangler deploy` |
 | `TURNSTILE_SECRET` | secreto | recomendado | `wrangler secret put TURNSTILE_SECRET` |
+| `TURNSTILE_SITE_KEY` | variable (pública) | sí, si hay `TURNSTILE_SECRET` | `[vars]` en `wrangler.toml` |
 | `SESSION_SECRET` | secreto | no | `wrangler secret put SESSION_SECRET` |
 | `PRO_CODE` | secreto | no | `wrangler secret put PRO_CODE` |
 | `FIREBASE_SA` | secreto | sí, para guardar notas de exámenes | ver "Exámenes" |
