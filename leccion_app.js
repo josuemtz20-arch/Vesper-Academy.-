@@ -181,7 +181,7 @@
     if (window.VESPER_MASCOT && VESPER_MASCOT.render) {
       return VESPER_MASCOT.render(state, { line: (line != null ? line : undefined), size: size || "md" });
     }
-    return '<div class="mascot"><img class="mascot-img" src="assets/images/virtual_class_happy_cat.png" alt="Vesper Cat">'
+    return '<div class="mascot"><img class="mascot-img" src="assets/images/virtual_class_happy_cat.webp" alt="Vesper Cat">'
       + (line ? '<div class="bubble">' + esc(line) + '</div>' : '') + '</div>';
   }
   function topbar(pct, extra) {
@@ -293,7 +293,7 @@
     var detail = ok ? (showExp ? (explanation || "") : "") : (explanation || wrongFallback || "");
     var cat = (window.VESPER_MASCOT && VESPER_MASCOT.render)
       ? VESPER_MASCOT.render(state, { size: "sm", line: false })
-      : '<img class="fb-cat" src="assets/images/virtual_class_happy_cat.png" alt="">';
+      : '<img class="fb-cat" src="assets/images/virtual_class_happy_cat.webp" alt="">';
     return '<div class="fbbox ' + (ok ? "ok" : "no") + '">' + cat
       + '<div><b>' + (ok ? T("¡Correcto!", "Correct!") : T("Incorrecto", "Not quite")) + '</b><div class="muted">' + esc(line) + '</div>'
       + (detail ? '<div class="explain">' + esc(detail) + '</div>' : '') + '</div></div>';
@@ -676,9 +676,9 @@
   }
   /* retratos de guardianes (IA, uno por mundo); cae al SVG bossArt temático si falta el PNG */
   var BOSS_PORTRAIT = {
-    A1: "assets/images/guardians/guardian_a1.png", A2: "assets/images/guardians/guardian_a2.png",
-    B1: "assets/images/guardians/guardian_b1.png", B2: "assets/images/guardians/guardian_b2.png",
-    C1: "assets/images/guardians/guardian_c1.png", C2: "assets/images/guardians/guardian_c2.png"
+    A1: "assets/images/guardians/guardian_a1.webp", A2: "assets/images/guardians/guardian_a2.webp",
+    B1: "assets/images/guardians/guardian_b1.webp", B2: "assets/images/guardians/guardian_b2.webp",
+    C1: "assets/images/guardians/guardian_c1.webp", C2: "assets/images/guardians/guardian_c2.webp"
   };
   /* el onerror corre en scope global (este script es un IIFE): se expone en window; respaldo = bossArt */
   window.__vbossFallback = function (img, lv) { try { if (img) img.outerHTML = bossArt(lv); } catch (e) {} };
@@ -4034,7 +4034,7 @@
        Mostramos solo el botón flotante con su punto; el alumno lo toca para abrir. */
     var small = (window.innerWidth || document.documentElement.clientWidth || 0) < 560;
     var catImg = (window.VESPER_MASCOT && VESPER_MASCOT.canonical) || "assets/images/mascot/vesper_cat.png";
-    var fb = (window.VESPER_MASCOT && VESPER_MASCOT.fallback) || "assets/images/virtual_class_happy_cat.png";
+    var fb = (window.VESPER_MASCOT && VESPER_MASCOT.fallback) || "assets/images/virtual_class_happy_cat.webp";
     var msg = "¡Hola! Soy Vesper. ¿Practicamos tu inglés? Pregúntame lo que quieras.";
 
     var n = document.createElement("div");

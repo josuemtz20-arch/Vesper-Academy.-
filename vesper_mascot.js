@@ -12,7 +12,7 @@
  *
  * ARTE: la imagen canonica es assets/images/mascot/vesper_cat.png.
  *   - Mientras no exista, cada estado usa esa ruta y cae (onerror) al gato
- *     anterior assets/images/virtual_class_happy_cat.png, asi nunca se rompe.
+ *     anterior assets/images/virtual_class_happy_cat.webp, asi nunca se rompe.
  *   - Para arte real por expresion: deja PNGs en assets/images/mascot/
  *     (p.ej. vesper_correct.png, vesper_sad.png) y apunta cada state.image.
  *     Se publican solos por el whitelist (!/assets/). Ver README.txt ahi.
@@ -20,7 +20,7 @@
 window.VESPER_MASCOT = (function () {
   var BASE = "assets/images/mascot/";
   var CANON = BASE + "vesper_cat.png";                       // imagen principal (ponla aqui)
-  var FALLBACK = "assets/images/virtual_class_happy_cat.png"; // respaldo si falta la principal
+  var FALLBACK = "assets/images/virtual_class_happy_cat.webp"; // respaldo si falta la principal
   /* variantes de expresion del gato de marca (IA, Higgsfield); si falta el
      archivo, el onerror cae a CANON y luego al FALLBACK historico. */
   var EXImg = {
