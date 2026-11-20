@@ -5,12 +5,14 @@
  * Claude (Anthropic) ocultando la API key, que vive como SECRETO
  * del Worker (nunca en el repo ni en el navegador).
  *
- * El front envía { system, messages } (+ proCode / session /
+ * El front envía { persona, messages } (+ proCode / session /
  * turnstileToken opcionales):
- *   - system   : el system prompt del tutor, generado por
- *                VESPER_PERSONA.systemPrompt() (personalizado por
- *                el perfil del alumno) — por eso viaja desde el cliente.
- *   - messages : el historial [{role, content}, ...].
+ *   - persona  : las preferencias del alumno como valores de listas
+ *                cerradas ({mode:"chat"|"interview", tone, cefr...}). El
+ *                system prompt lo arma el WORKER con ellas (persona_prompt.js);
+ *                desde 2026-11 el cliente ya no manda texto de system.
+ *   - messages : el historial [{role, content}, ...]: empieza con el
+ *                alumno, alterna estrictamente y termina con el alumno.
  * El Worker FIJA el modelo y max_tokens; nunca confía en esos campos
  * si el cliente los manda.
  *
@@ -26,8 +28,11 @@
  *      lo valida contra siteverify; a cambio entrega una "sesión"
  *      firmada (HMAC, ligada a la IP) que vale SESSION_TTL_S, así no
  *      se pide un reto por cada mensaje.
- *   4) Tope GLOBAL diario de mensajes (todas las IPs juntas): el freno
- *      de mano contra un ataque repartido entre muchas IPs.
+ *   4) Tope GLOBAL diario de mensajes (todas las IPs juntas), uno para
+ *      gratis y otro para Pro: el freno de mano contra un ataque repartido
+ *      entre muchas IPs. Si su contador falla, se CIERRA (503).
+ * Además, los códigos Pro equivocados se cuentan por IP y por hora: pasado
+ * el tope, esa IP deja de poder probar códigos (todo va como gratis).
  * Solo si pasa todo se reenvía a Anthropic.
  *
  * Despliegue: ver worker/README.md.
@@ -38,6 +43,8 @@ import { DurableObject } from "cloudflare:workers";
 /* Exámenes calificados en el servidor (rutas /exam/*). Ver exam_grader.js. */
 import { handleExam, EXAM_RATE_DEFAULTS, ExamAttempt } from "./exam_grader.js";
 export { ExamAttempt };
+/* System prompt del tutor armado en el servidor a partir de la persona. */
+import { buildPersonaPrompt, DEFAULT_SYSTEM } from "./persona_prompt.js";
 
 /* ---------- Configuración (editable) ---------- */
 
@@ -67,24 +74,22 @@ const MAX_MESSAGES = 16;
  * que rechazar por tamaño bruto castigaría a los alumnos con charlas largas;
  * en vez de eso se recorta aquí, ANTES de llamar a Claude:
  *  - MAX_BODY_CHARS: solo protege el parseo (cuerpos absurdos -> 413).
- *  - MAX_SYSTEM_CHARS: la persona que arma el navegador mide ~1 100
- *    caracteres (medido 2026-11-04); más que esto se corta. Sin el tope,
- *    cualquiera podía mandar su propio system enorme y usar el proxy como
- *    IA genérica pagada por la escuela.
+ *  - (El system ya no llega del cliente: lo arma persona_prompt.js, ~1 100
+ *    caracteres el del chat y ~2 000 el del reporte de la entrevista.)
  *  - MAX_MESSAGE_CHARS: cada mensaje se corta a este largo (una respuesta Pro
  *    de 768 tokens ronda los 3 000 caracteres).
  *  - MAX_INPUT_CHARS: presupuesto total (system + historial); se descartan los
  *    mensajes más viejos hasta caber. ~20 000 caracteres ≈ 5-6 mil tokens:
  *    con Haiku 4.5, el peor caso queda en ~0.01 USD por mensaje. */
 const MAX_BODY_CHARS = 200000;
-const MAX_SYSTEM_CHARS = 4000;
 const MAX_MESSAGE_CHARS = 3000;
 const MAX_INPUT_CHARS = 20000;
 
 /* ---------- Límites de uso (anti-abuso / anti-costo) ----------
  * Valores por defecto; se pueden cambiar SIN tocar código con variables del
  * Worker ([vars] en wrangler.toml o el panel): RL_FREE_PER_MIN,
- * RL_FREE_PER_DAY, RL_PRO_PER_MIN, RL_PRO_PER_DAY, RL_GLOBAL_PER_DAY.
+ * RL_FREE_PER_DAY, RL_PRO_PER_MIN, RL_PRO_PER_DAY, RL_GLOBAL_PER_DAY,
+ * RL_PRO_GLOBAL_PER_DAY, RL_PRO_CODE_FAILS_PER_HOUR.
  * Un valor 0 desactiva ese límite concreto.
  * OJO: un salón de clases detrás de un mismo router comparte UNA IP pública;
  * por eso el tope por IP no es mínimo y el nivel Pro tiene más margen. */
@@ -100,7 +105,14 @@ const RATE_DEFAULTS = {
      ~20 USD/día. Súbelo con RL_GLOBAL_PER_DAY en [vars] cuando crezca la
      escuela (ver worker/README.md). El tope DURO es el límite de gasto en
      la consola de Anthropic. */
-  RL_GLOBAL_PER_DAY: 2000
+  RL_GLOBAL_PER_DAY: 2000,
+  /* Pro tiene su propio tope global: antes compartía el de gratis, así que
+     un abuso en gratis dejaba sin chat a los alumnos que pagan (y al revés).
+     Cada mensaje Pro cuesta varias veces uno gratis; 1000 al día lo acota. */
+  RL_PRO_GLOBAL_PER_DAY: 1000,
+  /* códigos Pro equivocados por IP y por hora; pasado el tope, esa IP ya no
+     puede probar códigos (ni el bueno) hasta la hora siguiente */
+  RL_PRO_CODE_FAILS_PER_HOUR: 5
 };
 
 /* Turnstile: vigencia de la sesión firmada que el Worker entrega tras un
@@ -111,7 +123,7 @@ const TURNSTILE_VERIFY_URL = "https://challenges.cloudflare.com/turnstile/v0/sit
 
 /* ---------- Guardrails (límites de tema y seguridad) ----------
  * Se AÑADEN siempre del lado del servidor al system prompt, después de la
- * persona que manda el cliente. Esto mantiene a Vesper dentro del aprendizaje
+ * persona (persona_prompt.js). Esto mantiene a Vesper dentro del aprendizaje
  * de inglés y evita contenido dañino o "cancelable", incluso si alguien
  * manipula chat.html o llama al proxy directamente con su propio system.
  * Calibración: severidad equilibrada + contenido apto para todas las edades. */
@@ -171,8 +183,8 @@ function corsHeaders(origin) {
 
 /* `code` (opcional) es una etiqueta estable para que chat.html reaccione sin
  * depender del texto: "rate_limited", "turnstile_required", "busy". */
-function jsonError(status, message, origin, code, extraHeaders) {
-  const payload = { error: message };
+function jsonError(status, message, origin, code, extraHeaders, extraBody) {
+  const payload = Object.assign({ error: message }, extraBody || {});
   if (code) payload.code = code;
   return new Response(JSON.stringify(payload), {
     status: status,
@@ -184,20 +196,23 @@ function jsonError(status, message, origin, code, extraHeaders) {
   });
 }
 
-/* Deja el historial en una forma segura: array de {role, content} con
- * roles válidos, recortado a MAX_MESSAGES (conservando los más recientes)
- * y empezando por un turno de usuario. */
+/* Valida y recorta el historial. Forma exigida (si no, null => 400):
+ * array de {role, content} con content de texto no vacío, que EMPIEZA con
+ * 'user', ALTERNA user/assistant sin repetir y TERMINA con 'user' (el
+ * mensaje nuevo). Así nadie encadena turnos "assistant" inventados seguidos
+ * ni manda una conversación sin pregunta. Luego se recorta a MAX_MESSAGES
+ * (los más recientes) y al presupuesto de caracteres. */
 function sanitizeMessages(raw, budgetChars) {
-  if (!Array.isArray(raw)) return null;
+  if (!Array.isArray(raw) || !raw.length || raw.length > 200) return null;
   const out = [];
-  for (const m of raw) {
-    if (!m || typeof m !== "object") continue;
-    if ((m.role === "user" || m.role === "assistant") &&
-        typeof m.content === "string" && m.content.trim()) {
-      out.push({ role: m.role, content: m.content });
-    }
+  for (let i = 0; i < raw.length; i++) {
+    const m = raw[i];
+    if (!m || typeof m !== "object") return null;
+    const want = i % 2 === 0 ? "user" : "assistant";
+    if (m.role !== want || typeof m.content !== "string" || !m.content.trim()) return null;
+    out.push({ role: m.role, content: m.content });
   }
-  if (!out.length) return null;
+  if (out[out.length - 1].role !== "user") return null;
   /* recorta a los últimos MAX_MESSAGES y corta cada mensaje a MAX_MESSAGE_CHARS */
   let trimmed = out.slice(-MAX_MESSAGES).map(function (m) {
     return { role: m.role, content: clip(m.content, MAX_MESSAGE_CHARS) };
@@ -256,20 +271,30 @@ function secondsToUtcMidnight(nowMs) {
 
 /* ---------- Contador en Durable Object ----------
  * Pide a la instancia de RateLimiter de `key` que cuente un mensaje.
- * Devuelve { ok, retryAfter, scope }. Si el binding no existe o el DO falla
- * (incidencia transitoria de Cloudflare), deja pasar y lo registra: es la
- * misma degradación elegante del resto del sitio, y el max_tokens fijo sigue
- * acotando el costo de cada mensaje. Tras `wrangler deploy` con el
- * wrangler.toml de este repo el binding SIEMPRE existe. */
-async function rateHit(env, key, perMin, perDay) {
+ * Devuelve { ok, retryAfter, scope }. Si el DO falla (incidencia transitoria
+ * de Cloudflare):
+ *   - por defecto deja pasar y lo registra (contadores por IP: no tumbar el
+ *     chat de todos por un fallo; el tope global sigue protegiendo);
+ *   - con opts.failClosed NO deja pasar: devuelve { ok:false, scope:"error" }.
+ *     Lo usan los topes GLOBALES (el freno de mano del costo no puede
+ *     abrirse justo cuando falla) y el candado de códigos Pro.
+ * Si el binding no existe, el límite está desactivado (configuración, no
+ * incidencia). Tras `wrangler deploy` con este wrangler.toml SIEMPRE existe.
+ * opts.peek: solo consulta si ya se llegó al tope, sin contar. */
+async function rateHit(env, key, perMin, perDay, opts) {
+  opts = opts || {};
   if (!env.RATE_LIMITER) {
     console.warn("RATE_LIMITER no configurado: límite de uso desactivado.");
     return { ok: true };
   }
   try {
     const stub = env.RATE_LIMITER.get(env.RATE_LIMITER.idFromName(key));
-    return await stub.hit(perMin, perDay);
+    return opts.peek ? await stub.peek(perMin, perDay) : await stub.hit(perMin, perDay);
   } catch (e) {
+    if (opts.failClosed) {
+      console.error("RateLimiter falló, se CIERRA (" + key.split(":")[0] + "):", e && e.message);
+      return { ok: false, scope: "error", retryAfter: 60 };
+    }
     console.error("RateLimiter falló, se deja pasar:", e && e.message);
     return { ok: true };
   }
@@ -344,24 +369,41 @@ async function turnstileValid(env, token, ip) {
 export class RateLimiter extends DurableObject {
   async hit(perMin, perDay) {
     const now = Date.now();
-    const minute = Math.floor(now / 60000);
+    const s = await this.state(now);
+    const over = this.over(s, now, perMin, perDay);
+    if (over) return over;
     const day = Math.floor(now / 86400000);
-    const s = (await this.ctx.storage.get("s")) || {};
-    if (s.m !== minute) { s.m = minute; s.mc = 0; }
-    if (s.d !== day) { s.d = day; s.dc = 0; }
-
-    if (perMin > 0 && s.mc >= perMin) {
-      return { ok: false, scope: "minute", retryAfter: Math.max(1, 60 - Math.floor((now % 60000) / 1000)) };
-    }
-    if (perDay > 0 && s.dc >= perDay) {
-      return { ok: false, scope: "day", retryAfter: secondsToUtcMidnight(now) };
-    }
     s.mc++; s.dc++;
     await this.ctx.storage.put("s", s);
     if ((await this.ctx.storage.getAlarm()) == null) {
       await this.ctx.storage.setAlarm((day + 1) * 86400000 + 60000);
     }
     return { ok: true };
+  }
+
+  /* Como hit(), pero sin contar: ¿esta clave ya llegó al tope? */
+  async peek(perMin, perDay) {
+    const now = Date.now();
+    return this.over(await this.state(now), now, perMin, perDay) || { ok: true };
+  }
+
+  async state(now) {
+    const s = (await this.ctx.storage.get("s")) || {};
+    const minute = Math.floor(now / 60000);
+    const day = Math.floor(now / 86400000);
+    if (s.m !== minute) { s.m = minute; s.mc = 0; }
+    if (s.d !== day) { s.d = day; s.dc = 0; }
+    return s;
+  }
+
+  over(s, now, perMin, perDay) {
+    if (perMin > 0 && s.mc >= perMin) {
+      return { ok: false, scope: "minute", retryAfter: Math.max(1, 60 - Math.floor((now % 60000) / 1000)) };
+    }
+    if (perDay > 0 && s.dc >= perDay) {
+      return { ok: false, scope: "day", retryAfter: secondsToUtcMidnight(now) };
+    }
+    return null;
   }
 
   async alarm() {
@@ -453,16 +495,41 @@ export default {
       return jsonError(400, "Cuerpo JSON inválido.", origin);
     }
 
-    const system = clip(typeof body.system === "string" ? body.system : "", MAX_SYSTEM_CHARS);
-    const messages = sanitizeMessages(body.messages, MAX_INPUT_CHARS - system.length);
-    if (!messages) {
-      return jsonError(400, "Faltan mensajes válidos en la conversación.", origin);
+    /* System prompt: lo arma el Worker con la persona estructurada. El
+     * `system` de texto que mandan los clientes viejos (caché de una versión
+     * anterior de la página) se IGNORA y reciben el tutor estándar: no se
+     * les rompe el chat, pero ya nadie elige el system. Quitar este respaldo
+     * una versión después de 2026-11. */
+    let system = DEFAULT_SYSTEM, transform = null;
+    if (body.persona != null) {
+      const built = buildPersonaPrompt(body.persona);
+      if (built.error) return jsonError(400, "Preferencias del tutor inválidas.", origin, "bad_persona");
+      system = built.system;
+      transform = built.transform || null;
     }
+    let messages = sanitizeMessages(body.messages, MAX_INPUT_CHARS - system.length);
+    if (!messages) {
+      return jsonError(400, "Faltan mensajes válidos en la conversación.", origin, "bad_messages");
+    }
+    if (transform) messages = transform(messages);
 
     /* Nivel: PRO solo si el código recibido coincide con el secreto del Worker.
-     * Se valida AQUÍ; el cliente no puede forzar Sonnet. */
-    const proCode = typeof body.proCode === "string" ? body.proCode : "";
-    const isPro = !!env.PRO_CODE && safeEqual(proCode, env.PRO_CODE);
+     * Se valida AQUÍ; el cliente no puede forzar Sonnet.
+     * Candado contra adivinar el código: cada código equivocado cuenta en
+     * "pro-fail:<IP>:<hora>"; pasado RL_PRO_CODE_FAILS_PER_HOUR esa IP ya no
+     * puede probar códigos esa hora: ni el bueno vale (si valiera, el 200 Pro
+     * delataría el acierto). No se responde error: el mensaje sale en gratis,
+     * así el alumno con un código viejo guardado sigue practicando. */
+    const proCode = typeof body.proCode === "string" ? body.proCode.slice(0, 200) : "";
+    let isPro = false;
+    if (proCode && env.PRO_CODE) {
+      const failKey = "pro-fail:" + ip + ":" + Math.floor(Date.now() / 3600000);
+      const maxFails = limitOf(env, "RL_PRO_CODE_FAILS_PER_HOUR");
+      const right = safeEqual(proCode, env.PRO_CODE);
+      const lock = await rateHit(env, failKey, 0, maxFails, { peek: right, failClosed: true });
+      isPro = right && lock.ok;
+      if (!lock.ok && lock.scope !== "error") console.warn("Código Pro: IP bloqueada esta hora.");
+    }
     const tier = isPro ? "pro" : "free";
 
     /* ── Límite por IP (minuto + día) ──
@@ -491,20 +558,27 @@ export default {
       const hasSession = await sessionValid(env, body.session, ip);
       if (!hasSession) {
         if (!(await turnstileValid(env, body.turnstileToken, ip))) {
+          /* La site key (pública) viaja aquí: la página la aprende del Worker
+           * y así se configura en UN solo lugar (var TURNSTILE_SITE_KEY). */
           return jsonError(401, "Verificación de seguridad pendiente. Vuelve a intentarlo.",
-            origin, "turnstile_required");
+            origin, "turnstile_required", null,
+            env.TURNSTILE_SITE_KEY ? { sitekey: String(env.TURNSTILE_SITE_KEY) } : null);
         }
         newSession = await issueSession(env, ip);
       }
     }
 
-    /* ── Tope global diario (todas las IPs) ──
+    /* ── Tope global diario (todas las IPs), uno por nivel ──
      * Se cuenta al final, ya pasadas las demás barreras, para que el ruido
-     * rechazado no gaste el cupo de los alumnos reales. */
-    const global = await rateHit(env, "global", 0, limitOf(env, "RL_GLOBAL_PER_DAY"));
+     * rechazado no gaste el cupo de los alumnos reales. Falla CERRADO: si el
+     * contador no responde, no se llama a Claude (503 de un minuto). */
+    const global = await rateHit(env, isPro ? "global-pro" : "global", 0,
+      limitOf(env, isPro ? "RL_PRO_GLOBAL_PER_DAY" : "RL_GLOBAL_PER_DAY"), { failClosed: true });
     if (!global.ok) {
-      return jsonError(503, "Vesper está descansando por hoy (límite diario del servicio). Vuelve mañana.",
-        origin, "busy", { "Retry-After": String(global.retryAfter || 3600) });
+      const msg = global.scope === "error"
+        ? "Vesper está muy ocupado en este momento. Vuelve a intentarlo en un minuto."
+        : "Vesper está descansando por hoy (límite diario del servicio). Vuelve mañana.";
+      return jsonError(503, msg, origin, "busy", { "Retry-After": String(global.retryAfter || 3600) });
     }
 
     /* Construye la petición a Claude — modelo y max_tokens fijados aquí. */
@@ -512,9 +586,9 @@ export default {
       model: isPro ? MODEL_PRO : MODEL_FREE,
       max_tokens: isPro ? MAX_TOKENS_PRO : MAX_TOKENS_FREE,
       stream: true,
-      /* La persona (del cliente) primero; los guardrails y la brevedad SIEMPRE
-       * al final (mayor saliencia) y aunque el cliente no mande system. */
-      system: (system ? system + "\n\n" : "") + GUARDRAILS + "\n\n" + BREVITY,
+      /* La persona (armada aquí) primero; los guardrails y la brevedad
+       * SIEMPRE al final (mayor saliencia). */
+      system: system + "\n\n" + GUARDRAILS + "\n\n" + BREVITY,
       messages: messages
     };
 

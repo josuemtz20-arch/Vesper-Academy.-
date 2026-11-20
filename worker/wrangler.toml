@@ -28,7 +28,8 @@ enabled = true
 #   wrangler secret put ANTHROPIC_API_KEY
 # Secretos opcionales (también con `wrangler secret put`):
 #   PRO_CODE          código del nivel Pro (Sonnet)
-#   TURNSTILE_SECRET  secret key de Cloudflare Turnstile (activa el reto)
+#   TURNSTILE_SECRET  secret key de Cloudflare Turnstile (activa el reto;
+#                     va junto con TURNSTILE_SITE_KEY en [vars], abajo)
 #   SESSION_SECRET    clave HMAC de la sesión post-Turnstile (si falta se
 #                     usa TURNSTILE_SECRET)
 
@@ -70,6 +71,12 @@ new_sqlite_classes = ["ExamAttempt"]
 # RL_PRO_PER_MIN = "30"
 # RL_PRO_PER_DAY = "1000"
 # RL_GLOBAL_PER_DAY = "2000"
+# RL_PRO_GLOBAL_PER_DAY = "1000"
+# RL_PRO_CODE_FAILS_PER_HOUR = "5"
+# Site key PÚBLICA del widget de Turnstile (no es secreto). El Worker se la da
+# a chat.html y entrevista.html cuando pide el reto: es el ÚNICO lugar donde
+# se configura. Ponla y haz `wrangler secret put TURNSTILE_SECRET`.
+# TURNSTILE_SITE_KEY = "0x4AAAA..."
 #
 # Tope de intentos CALIFICADOS por cuenta (exam_grader.js, EXAM_CAP_DEFAULTS):
 # cuántas notas se guardan en exam_results por alumno y examen dentro de una

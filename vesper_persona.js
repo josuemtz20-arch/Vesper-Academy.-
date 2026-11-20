@@ -4,6 +4,10 @@
  * Convierte las PREFERENCIAS del alumno (panel "Configuracion") en:
  *   1) un SYSTEM PROMPT dinamico para el tutor IA Vesper (copiable, y
  *      compatible con el Vesper Engine) — VESPER_PERSONA.systemPrompt()
+ *      OJO (2026-11): el chat ya NO manda este texto. Manda wire() (los
+ *      mismos ajustes como valores de listas cerradas) y el Worker arma el
+ *      prompt con su copia de las plantillas (worker/persona_prompt.js).
+ *      Si cambias una frase aqui, cambiala tambien alla.
  *   2) una VISTA PREVIA en vivo de un mensaje de Vesper que cambia segun
  *      los ajustes — VESPER_PERSONA.previewMessage()
  *   3) ganchos de comportamiento que usa leccion.html:
@@ -378,6 +382,48 @@ window.VESPER_PERSONA = (function () {
   }
   function enTopic(t) { return (TOPICS[t] && TOPICS[t].en) || null; }
 
+  /* ---------- Persona para el Worker (chat y entrevista) ----------
+     Solo ids de las listas de arriba + el nombre saneado: el Worker rechaza
+     cualquier otra cosa y arma el system prompt el mismo. Normaliza igual
+     que systemPrompt() (valor desconocido -> el de por defecto), asi un
+     perfil viejo o raro no provoca un 400. */
+  var NAME_MAX = 24;
+  var NAME_BAD = (function () {
+    try { return new RegExp("[^\\p{L}\\p{M} '’.\\-]", "gu"); }
+    catch (e) { return /[^A-Za-zÀ-ɏ '’.\-]/g; }
+  })();
+  function wireName(s) {
+    s = String(s || "");
+    try { s = s.normalize("NFC"); } catch (e) {}
+    return s.replace(NAME_BAD, " ").replace(/\s+/g, " ").trim().slice(0, NAME_MAX).trim();
+  }
+  function own(o, k) { return typeof k === "string" && Object.prototype.hasOwnProperty.call(o, k); }
+  function wireList(a, vocab, max) {
+    var out = [];
+    (Array.isArray(a) ? a : []).forEach(function (x) { if (own(vocab, x) && out.indexOf(x) === -1) out.push(x); });
+    return out.slice(0, max);
+  }
+  var GOAL_IDS = { work: 1, travel: 1, exam: 1, study: 1, social: 1, aviation: 1 };
+  function wire(p) {
+    p = p || get();
+    var cefr = cefrOf(p);
+    if (CEFR.indexOf(cefr) === -1) cefr = levelToCefr(cefrToLevel(cefr));
+    return {
+      mode: "chat",
+      name: wireName(callMeOf(p)),
+      tone: own(TONES, p.tone) ? p.tone : "friendly",
+      teaching: own(TEACHING, p.teaching) ? p.teaching : "stepbystep",
+      langMix: own(LANGMIX, p.langMix) ? p.langMix : "en_es",
+      pace: own(PACE, p.pace) ? p.pace : "balanced",
+      correction: own(CORRECTION, p.correction) ? p.correction : "instant",
+      levelMode: p.levelMode === "manual" ? "manual" : "adaptive",
+      cefr: cefr,
+      focus: wireList(p.focus, FOCUS, 5),
+      goal: own(GOAL_IDS, p.goal) ? p.goal : null,
+      topics: wireList(p.topics, TOPICS, 19)
+    };
+  }
+
   /* ---------- VISTA PREVIA en vivo ---------- */
   /* Construye un mensaje de ejemplo de Vesper que cambia con el tono, la
      mezcla de idioma, el estilo de ensenanza y la correccion. */
@@ -456,6 +502,7 @@ window.VESPER_PERSONA = (function () {
     cefrOf: cefrOf, callMeOf: callMeOf, cefrToLevel: cefrToLevel,
     /* salidas */
     systemPrompt: systemPrompt, previewMessage: previewMessage,
+    wire: wire, wireName: wireName,
     personalize: personalize,
     /* ganchos */
     line: line, showSpanish: showSpanish, correctionMode: correctionMode,

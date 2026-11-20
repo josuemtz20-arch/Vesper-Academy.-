@@ -227,7 +227,7 @@ a.chat-cta{text-decoration:none;}   /* la entrada al simulador de entrevista es 
 </div>
 
 <script src="vesper_adaptive.js"></script>
-<script src="vesper_persona.js"></script>
+<script src="vesper_persona.js?v=2611"></script>
 <script src="vesper_analytics.js"></script>
 <script>
 (function () {
@@ -238,13 +238,17 @@ a.chat-cta{text-decoration:none;}   /* la entrada al simulador de entrevista es 
      Mientras esté vacía, el chat muestra instrucciones en lugar de fallar. */
   var PROXY_URL = "https://patient-feather-4364.josuemtz20.workers.dev/";
 
-  /* Cloudflare Turnstile (anti-bots del chat). Pega aquí la SITE KEY pública
-     del widget (panel de Cloudflare → Turnstile). Es pública por diseño; la
-     secret key va SOLO en el Worker (secreto TURNSTILE_SECRET). Mientras esté
-     vacía no se carga nada y el chat funciona como antes; si el Worker ya
-     exige Turnstile y aquí falta la key, el chat responderá "verificación
-     pendiente". Ver worker/README.md. */
-  var TURNSTILE_SITE_KEY = "";
+  /* Cloudflare Turnstile (anti-bots del chat). La SITE KEY ya no se pega
+     aquí: vive en UN solo lugar, la variable TURNSTILE_SITE_KEY del Worker
+     (worker/wrangler.toml), junto a su secreto TURNSTILE_SECRET. Cuando el
+     Worker exige el reto responde 401 "turnstile_required" con la site key;
+     la página la recuerda en este dispositivo (así la próxima vez pide el
+     token desde el primer mensaje) y reintenta. Mientras el Worker no exija
+     Turnstile no se carga nada y el chat funciona como siempre.
+     Ver worker/README.md. Lo mismo hace vesper_entrevista.js. */
+  var TS_KEY_STORE = "vesper_ts_sitekey";
+  function tsSiteKey() { try { return localStorage.getItem(TS_KEY_STORE) || ""; } catch (e) { return ""; } }
+  function setTsSiteKey(v) { try { v ? localStorage.setItem(TS_KEY_STORE, v) : localStorage.removeItem(TS_KEY_STORE); } catch (e) {} }
 
   var HISTORY_KEY = "vesper_chat_history";
   /* En el teléfono se guardan solo los últimos mensajes: el historial ya no
@@ -305,16 +309,32 @@ a.chat-cta{text-decoration:none;}   /* la entrada al simulador de entrevista es 
   });
   setTier(null);
 
-  /* System prompt del tutor: INCRUSTADO desde el perfil del alumno. */
-  function buildSystem() {
+  /* Persona del tutor (tono, nivel, nombre...) desde el perfil del alumno.
+     Solo valores de listas cerradas: el system prompt lo arma el Worker
+     (worker/persona_prompt.js); systemPrompt() de vesper_persona.js queda
+     como vista previa. Sin vesper_persona.js, el tutor estándar. */
+  function buildPersona() {
     try {
-      if (window.VESPER_PERSONA && VESPER_PERSONA.systemPrompt) {
-        return VESPER_PERSONA.systemPrompt();
-      }
+      if (window.VESPER_PERSONA && VESPER_PERSONA.wire) return VESPER_PERSONA.wire();
     } catch (e) {}
-    return "You are Vesper, a warm and elegant AI English tutor at Vesper Academy. Help the student practise English. Keep replies focused and encouraging.";
+    return { mode: "chat" };
   }
-  var SYSTEM = buildSystem();
+  var PERSONA = buildPersona();
+
+  /* El Worker exige que el historial empiece y termine con el alumno y
+     alterne sin repetir. Un turno del alumno sin respuesta (recarga a media
+     respuesta) se une al siguiente en vez de romper la conversación. */
+  function wireHistory(list) {
+    var out = [];
+    list.forEach(function (m) {
+      var last = out[out.length - 1];
+      if (last && last.role === m.role) last.content += "\n\n" + m.content;
+      else out.push({ role: m.role, content: m.content });
+    });
+    while (out.length && out[0].role !== "user") out.shift();
+    while (out.length && out[out.length - 1].role !== "user") out.pop();
+    return out;
+  }
 
   /* Historial de la conversación enviado a la API. */
   var history = loadHistory();
@@ -534,7 +554,7 @@ a.chat-cta{text-decoration:none;}   /* la entrada al simulador de entrevista es 
   function getSession() { try { return sessionStorage.getItem(SESSION_KEY) || ""; } catch (e) { return ""; } }
   function setSession(v) { try { v ? sessionStorage.setItem(SESSION_KEY, v) : sessionStorage.removeItem(SESSION_KEY); } catch (e) {} }
 
-  var tsLoad = null, tsWidget = null, tsPending = null;
+  var tsLoad = null, tsWidget = null, tsWidgetKey = "", tsPending = null;
   function loadTurnstile() {
     if (tsLoad) return tsLoad;
     tsLoad = new Promise(function (resolve, reject) {
@@ -549,15 +569,21 @@ a.chat-cta{text-decoration:none;}   /* la entrada al simulador de entrevista es 
   }
   /* Token nuevo del widget (de un solo uso). "interaction-only": invisible
      salvo que Cloudflare necesite que la persona marque la casilla. */
-  function turnstileToken() {
-    if (!TURNSTILE_SITE_KEY) return Promise.resolve("");
+  function turnstileToken(siteKey) {
+    if (!siteKey) return Promise.resolve("");
     return loadTurnstile().then(function (ts) {
       return new Promise(function (resolve) {
         var settle = function (t) { if (tsPending === settle) { tsPending = null; resolve(t || ""); } };
         tsPending = settle;
+        /* si el Worker cambió de site key, el widget viejo ya no sirve */
+        if (tsWidget !== null && tsWidgetKey !== siteKey) {
+          try { ts.remove(tsWidget); } catch (e) {}
+          tsWidget = null;
+        }
         if (tsWidget === null) {
+          tsWidgetKey = siteKey;
           tsWidget = ts.render("#ts-box", {
-            sitekey: TURNSTILE_SITE_KEY,
+            sitekey: siteKey,
             appearance: "interaction-only",
             execution: "execute",
             action: "chat",
@@ -575,7 +601,9 @@ a.chat-cta{text-decoration:none;}   /* la entrada al simulador de entrevista es 
   }
 
   /* POST al Worker. Guarda la sesión que devuelva y, si el Worker pide
-     Turnstile (401 turnstile_required), resuelve un reto y reintenta UNA vez. */
+     Turnstile (401 turnstile_required, con la site key), resuelve un reto y
+     reintenta UNA vez. */
+  var SITEKEY_RE = /^[0-9A-Za-z_-]{10,100}$/;
   function postToProxy(payload) {
     function attempt(extra) {
       var b = {}, k;
@@ -586,19 +614,26 @@ a.chat-cta{text-decoration:none;}   /* la entrada al simulador de entrevista es 
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(b)
       }).then(function (res) {
-        try { var sv = res.headers.get("X-Vesper-Session"); if (sv) setSession(sv); } catch (e) {}
+        var sv = null;
+        try { sv = res.headers.get("X-Vesper-Session"); if (sv) setSession(sv); } catch (e) {}
+        /* mandamos token y el Worker contestó sin sesión: ya no exige
+           Turnstile, así que se olvida la key (no se vuelve a cargar el reto) */
+        if (extra.turnstileToken && res.ok && !sv) setTsSiteKey("");
         return res;
       });
     }
     var sess = getSession();
     var first = sess ? Promise.resolve({ session: sess })
-                     : turnstileToken().then(function (t) { return t ? { turnstileToken: t } : {}; });
+                     : turnstileToken(tsSiteKey()).then(function (t) { return t ? { turnstileToken: t } : {}; });
     return first.then(attempt).then(function (res) {
       if (res.status !== 401) return res;
       return res.clone().json().then(function (j) {
-        if (!j || j.code !== "turnstile_required" || !TURNSTILE_SITE_KEY) return res;
+        if (!j || j.code !== "turnstile_required") return res;
+        var key = (typeof j.sitekey === "string" && SITEKEY_RE.test(j.sitekey)) ? j.sitekey : tsSiteKey();
+        if (!key) return res;
+        setTsSiteKey(key);
         setSession("");
-        return turnstileToken().then(function (t) { return t ? attempt({ turnstileToken: t }) : res; });
+        return turnstileToken(key).then(function (t) { return t ? attempt({ turnstileToken: t }) : res; });
       }, function () { return res; });
     });
   }
@@ -628,7 +663,7 @@ a.chat-cta{text-decoration:none;}   /* la entrada al simulador de entrevista es 
     var body;        // nodo de texto de la burbuja de Vesper (se crea al primer token)
     var acc = "";    // texto acumulado
 
-    postToProxy({ system: SYSTEM, messages: history, proCode: getProCode() }).then(function (res) {
+    postToProxy({ persona: PERSONA, messages: wireHistory(history), proCode: getProCode() }).then(function (res) {
       /* nivel que sirvió el servidor (Gratis/Pro) — actualiza la insignia */
       try { setTier(res.headers.get("X-Vesper-Tier")); } catch (e) {}
       if (!res.ok) {
@@ -745,14 +780,14 @@ a.chat-cta{text-decoration:none;}   /* la entrada al simulador de entrevista es 
     if (sending) return;
     history = [];
     saveHistory();
-    /* refresca el system prompt por si cambió el perfil */
-    SYSTEM = buildSystem();
+    /* refresca la persona por si cambió el perfil */
+    PERSONA = buildPersona();
     renderInitial();
     inputEl.focus();
   });
 
-  /* Si cambian las preferencias en otra pestaña, refresca el prompt. */
-  window.addEventListener("vesper:persona", function () { SYSTEM = buildSystem(); });
+  /* Si cambian las preferencias en otra pestaña, refresca la persona. */
+  window.addEventListener("vesper:persona", function () { PERSONA = buildPersona(); });
 
   /* ════════════════════════════════════════════════════════════
      NIVEL 1 — Práctica de HABLAR: micrófono (dictado), voz de Vesper
