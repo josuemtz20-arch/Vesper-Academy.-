@@ -33,6 +33,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # Si una lección quedó rota (respuesta fuera de rango, audio que no
+      # existe, id inalcanzable...) no se publica. Ver tools/check_lessons.mjs.
+      - name: Validar lecciones
+        run: node tools/check_lessons.mjs
+
       - name: Armar el sitio sin archivos internos
         run: bash .github/pages_filter.sh _site
 

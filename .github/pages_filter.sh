@@ -10,9 +10,10 @@ OUT="${1:?uso: pages_filter.sh CARPETA_DESTINO}"
 #   .claude/               skills y ajustes de Claude Code (herramientas, no sitio)
 #   *.md, *.rules (raíz)   reglas de Firestore y documentos internos
 #   worker/                código y despliegue del proxy del chat
+#   tools/                 validadores (p. ej. el de lecciones)
 #   twa-manifest.json      configuración de compilación de la app Android
 #   assets/**/*.txt        guiones de audio y notas sueltas
-INTERNOS='^(\.git|\.github/|\.claude/|worker/|[^/]+\.md$|[^/]+\.rules$|twa-manifest\.json$|assets/.*\.txt$)'
+INTERNOS='^(\.git|\.github/|\.claude/|tools/|worker/|[^/]+\.md$|[^/]+\.rules$|twa-manifest\.json$|assets/.*\.txt$)'
 
 rm -rf "$OUT"
 mkdir -p "$OUT"
@@ -23,7 +24,7 @@ for f in index.html leccion.html sw.js CNAME .nojekyll .well-known/assetlinks.js
   [ -e "$OUT/$f" ] || { echo "FALTA en el sitio: $f" >&2; exit 1; }
 done
 # Y lo que no debe salir nunca.
-if ls -A "$OUT" | grep -qE '^(firestore\.rules|README\.md|worker|\.gitignore)$'; then
+if ls -A "$OUT" | grep -qE '^(firestore\.rules|README\.md|CLAUDE\.md|worker|tools|\.claude|\.gitignore)$'; then
   echo "Se coló un archivo interno en $OUT" >&2; exit 1
 fi
 
