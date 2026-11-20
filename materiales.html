@@ -2298,19 +2298,66 @@ var VIcon = (function(){
   var db  = cfg.dbId || "teachermanuals";
   if(!pid) return;
   function sv(f,k){ return (f[k] && f[k].stringValue) || ""; }
-  function show(name,time,url){
+  function show(name,time,url,label){
     if(!/^https:\/\//i.test(url||"")) return;
     var a=document.getElementById("myclass"), t=document.getElementById("myclass-title");
     if(!a||!t) return;
-    t.textContent = (name||"Tu clase") + (time? (" · Diario "+time) : " · Diario");
+    t.textContent = (name||"Tu clase") + " · " + (label || (time? ("Diario "+time) : "Diario"));
     a.href = url;
     a.style.display = "flex";
+  }
+  /* Horario del grupo ("lun 17:00-18:00", ...) → "Lun a vie · 5–6 pm". */
+  var DAYS=["lun","mar","mie","jue","vie","sab","dom"];
+  function h12(hm){
+    var p=String(hm).split(":"), h=+p[0], m=p[1]||"00";
+    var s=(h%12||12)+(m!=="00"?":"+m:"");
+    return {s:s, ap:h<12?"am":"pm"};
+  }
+  function schedLabel(list){
+    if(!list.length) return "";
+    var days=[], times={};
+    list.forEach(function(e){
+      var m=String(e).trim().toLowerCase().replace("é","e").match(/^(\w+)\s+(\d{1,2}:\d{2})-(\d{1,2}:\d{2})$/);
+      if(!m) return;
+      days.push(m[1]); times[m[2]+"-"+m[3]]=[m[2],m[3]];
+    });
+    var keys=Object.keys(times);
+    if(!days.length || keys.length!==1) return "";
+    var a=h12(times[keys[0]][0]), b=h12(times[keys[0]][1]);
+    var hrs = a.ap===b.ap ? (a.s+"–"+b.s+" "+b.ap) : (a.s+" "+a.ap+"–"+b.s+" "+b.ap);
+    var idx=days.map(function(d){ return DAYS.indexOf(d.slice(0,3)); }).sort();
+    var run = idx.every(function(v,i){ return i===0 || v===idx[i-1]+1; }) && idx[0]>=0;
+    var cap=function(s){ return s.charAt(0).toUpperCase()+s.slice(1); };
+    var d = (run && idx.length>2) ? (cap(DAYS[idx[0]])+" a "+DAYS[idx[idx.length-1]])
+                                  : days.map(cap).join(", ");
+    return d.replace("mie","mié").replace("Mie","Mié").replace("sab","sáb").replace("Sab","Sáb")+" · "+hrs;
+  }
+  /* Modelo de escuela: el Meet vive en groups/{students.group}.meetUrl
+     (las reglas dejan al alumno leer su propio grupo). */
+  function fromGroup(gid, token){
+    var url="https://firestore.googleapis.com/v1/projects/"+pid+"/databases/"+db+
+            "/documents/groups/"+encodeURIComponent(gid);
+    return fetch(url,{headers:{Authorization:"Bearer "+token}})
+      .then(function(r){ return r.status===200 ? r.json() : null; })
+      .then(function(g){
+        if(!g||!g.fields) return false;
+        var f=g.fields, st=sv(f,"status");
+        if(st && st!=="active") return false;
+        if(!/^https:\/\//i.test(sv(f,"meetUrl"))) return false;
+        var arr=(f.schedule&&f.schedule.arrayValue&&f.schedule.arrayValue.values)||[];
+        var sched=arr.map(function(v){ return v.stringValue||""; });
+        var name=sv(f,"name").split(" · ").slice(0,2).join(" · ");
+        show(name, "", sv(f,"meetUrl"), schedLabel(sched) || "Diario");
+        return true;
+      });
   }
   VesperAuth.initFirebase().then(function(auth){
     auth.onAuthStateChanged(function(user){
       if(!user || !user.emailVerified) return;
       var email=String(user.email||"").trim().toLowerCase();
+      var tok="";
       user.getIdToken().then(function(token){
+        tok=token;
         var url="https://firestore.googleapis.com/v1/projects/"+pid+"/databases/"+db+
                 "/documents/students/"+encodeURIComponent(email);
         return fetch(url,{headers:{Authorization:"Bearer "+token}});
@@ -2318,7 +2365,10 @@ var VIcon = (function(){
         .then(function(doc){
           if(!doc||!doc.fields) return;
           var f=doc.fields;
-          show(sv(f,"className"), sv(f,"classTime"), sv(f,"classMeetUrl"));
+          var legacy=function(){ show(sv(f,"className"), sv(f,"classTime"), sv(f,"classMeetUrl")); };
+          if(sv(f,"group")){
+            fromGroup(sv(f,"group"), tok).then(function(ok){ if(!ok) legacy(); }, legacy);
+          } else legacy();
           /* Nombre del alumno desde la nube: personaliza el saludo también en
              dispositivos nuevos (donde localStorage aún no tiene perfil). */
           try{
