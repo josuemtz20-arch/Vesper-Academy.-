@@ -98,9 +98,19 @@
     return sha256Hex(CONFIG.salt + String(email).trim().toLowerCase());
   }
 
+  /* SRI del SDK de Firebase: si el CDN sirve otros bytes en estas URLs con
+     versión fija, el navegador no los ejecuta. Al subir de versión, recalcula:
+     curl -s URL | openssl dgst -sha384 -binary | openssl base64 -A */
+  var SRI = {
+    "https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js":
+      "sha384-ZaR6mWzmJtrRibZ1Vm7SoHFr8OXjyAuGAXalGDKqbxFT18oi/z+oZLIRFkpeNor1",
+    "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js":
+      "sha384-I1LYojsZ5RM1cOda44Z2h42Qa6YfsQ1XkXxREnhp4ueYBR/4d1pG1K+NZM537Vsj"
+  };
   function loadScript(src) {
     return new Promise(function (resolve, reject) {
       var s = document.createElement("script");
+      if (SRI[src]) { s.integrity = SRI[src]; s.crossOrigin = "anonymous"; }
       s.src = src; s.onload = resolve; s.onerror = reject;
       document.head.appendChild(s);
     });
