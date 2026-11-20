@@ -1058,7 +1058,9 @@ let answered = false;
 let skipped = 0;
 let exitOffered = false;
 // Atribución: de qué momento de la app llegó este lead (?src= de leccion.html)
-let leadOrigin = (window.VA ? VA.readSource() : "");
+/* recortado a 80: firestore.rules (placement_results) rechaza origin más largo
+   y un ?src= de campaña largo haría perder el lead entero */
+let leadOrigin = String(window.VA ? VA.readSource() : "").slice(0, 80);
 
 const OPTS = ["A", "B", "C", "D"];
 const $ = function (id) { return document.getElementById(id); };
