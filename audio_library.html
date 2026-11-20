@@ -1231,7 +1231,7 @@
 <footer>
     <div class="foot-in">
         <a class="brand" href="materiales.html">
-            <img src="assets/images/vesper_logo_inverted.png" alt="" width="34" height="34">
+            <img src="assets/images/vesper_logo_inverted.png" alt="" width="34" height="34" loading="lazy" decoding="async">
             <span><b>Vesper Academy</b><small>Biblioteca de audio</small></span>
         </a>
         <p class="f-hand"><span lang="en">Happy listening!</span><small>Escucha &middot; lee &middot; <b>practica</b></small></p>
@@ -1241,18 +1241,22 @@
     </div>
 </footer>
 
-    <script src="vesper_audio_data.js"></script>
-    <script src="vesper_basics_audio_data.js"></script>
-    <script src="vesper_biz_path_audio_data.js"></script>
-    <script src="vesper_political_audio_data.js"></script>
-    <script src="vesper_lesson_images.js"></script>
-    <script src="vesper_covers.js"></script>
-    <script src="vesper_library_art.js"></script>
+    <script defer src="vesper_audio_data.js"></script>
+    <script defer src="vesper_basics_audio_data.js"></script>
+    <script defer src="vesper_biz_path_audio_data.js"></script>
+    <script defer src="vesper_political_audio_data.js"></script>
+    <script defer src="vesper_lesson_images.js"></script>
+    <script defer src="vesper_covers.js"></script>
+    <script defer src="vesper_library_art.js"></script>
     <!-- Se carga aqui solo por getScore(): las tarjetas leen de vuelta la nota
          de practica que guardo el reproductor, para que el alumno vea que ya
          ha hecho. -->
-    <script src="vesper_audio_practice.js"></script>
+    <script defer src="vesper_audio_practice.js"></script>
+    <!-- Los datos de arriba van con defer (~300 KB que ya no frenan el
+         primer pintado); este bloque los usa, así que espera a
+         DOMContentLoaded, que llega justo después de que corren. -->
     <script>
+    document.addEventListener("DOMContentLoaded", function () {
         const DATA = window.VESPER_DATA || {};
         const LEVEL_DESC = {
             1:"Inglés de todos los días — rutinas, pasatiempos, viajes y primeras conversaciones.",
@@ -2052,6 +2056,7 @@
                 if (st === "ok") document.body.classList.add("is-teacher");
             });
         }
+    });
     </script>
 <script>
 /* Alimenta el héroe "Hoy" del portal (materiales.html): al reproducir un audio,
