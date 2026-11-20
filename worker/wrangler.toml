@@ -46,7 +46,8 @@ new_sqlite_classes = ["RateLimiter"]
 
 # ── Exámenes calificados en el servidor (exam_grader.js) ──
 # Un Durable Object por intento: guarda la PRIMERA respuesta de cada pregunta
-# y se borra solo a las 24 h. Las claves van empaquetadas desde
+# y se borra solo a las 24 h. La misma clase lleva el contador del tope de
+# intentos calificados por cuenta (ver EXAM_CAP_* abajo). Las claves van empaquetadas desde
 # exam_keys.json (genéralo antes de desplegar:
 #   node ../_scripts/exams/split_exams.js
 # si falta, `wrangler deploy` falla a propósito).
@@ -69,3 +70,17 @@ new_sqlite_classes = ["ExamAttempt"]
 # RL_PRO_PER_MIN = "30"
 # RL_PRO_PER_DAY = "1000"
 # RL_GLOBAL_PER_DAY = "2000"
+#
+# Tope de intentos CALIFICADOS por cuenta (exam_grader.js, EXAM_CAP_DEFAULTS):
+# cuántas notas se guardan en exam_results por alumno y examen dentro de una
+# ventana de N días. Pasado el tope el alumno ve su nota, pero no se registra
+# (saved:false, why "attempt_cap"). MAX = 0 quita el tope. El contador vive en
+# el mismo Durable Object EXAM_ATTEMPTS (instancia "cap:<uid>:…"): no hace
+# falta binding ni migración nuevos.
+#   examen de nivel A1–C2 (leccion.html):
+# EXAM_CAP_MAX = "3"
+# EXAM_CAP_DAYS = "7"
+#   exámenes por curso (exam.html):
+# COURSE_EXAM_CAP_MAX = "3"
+# COURSE_EXAM_CAP_DAYS = "7"
+# (los jefes de mundo son práctica de juego: sin tope)
