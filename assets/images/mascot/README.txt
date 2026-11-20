@@ -11,7 +11,7 @@ ARCHIVO PRINCIPAL (obligatorio para ver al gato nuevo):
       ~512x512 px, fondo transparente (PNG) o un fondo simple.
     - Se muestra dentro de un circulo con object-fit:cover, asi que centra la cara.
     - Mientras este archivo NO exista, la mascota cae al gato anterior
-      (assets/images/virtual_class_happy_cat.png) para no romperse.
+      (assets/images/virtual_class_happy_cat.webp) para no romperse.
 
 ARTE OPCIONAL POR EXPRESION (mejora visual; el sistema ya lo soporta):
   Si consigues dibujos distintos del MISMO gato por estado, nombralos asi

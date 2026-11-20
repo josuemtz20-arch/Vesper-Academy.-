@@ -229,11 +229,11 @@ window.VESPER_THEME = (function () {
   var MASCOT_DIR = "assets/images/mascot/";
   var PELAJES = {
     classic: { name: "Vesper",     img: MASCOT_DIR + "vesper_cat.png" },
-    gray:    { name: "Gris",       img: MASCOT_DIR + "skins/gray.png" },
-    calico:  { name: "Multicolor", img: MASCOT_DIR + "skins/calico.png" },
-    lion:    { name: "León",       img: MASCOT_DIR + "skins/lion.png" },
-    cosmic:  { name: "Cósmico",    img: MASCOT_DIR + "skins/cosmic.png" },
-    flame:   { name: "Llama",      img: MASCOT_DIR + "skins/flame.png" }
+    gray:    { name: "Gris",       img: MASCOT_DIR + "skins/gray.webp" },
+    calico:  { name: "Multicolor", img: MASCOT_DIR + "skins/calico.webp" },
+    lion:    { name: "León",       img: MASCOT_DIR + "skins/lion.webp" },
+    cosmic:  { name: "Cósmico",    img: MASCOT_DIR + "skins/cosmic.webp" },
+    flame:   { name: "Llama",      img: MASCOT_DIR + "skins/flame.webp" }
   };
   var PELAJE_ORDER = ["classic", "gray", "calico", "lion", "cosmic", "flame"];
 
@@ -247,12 +247,12 @@ window.VESPER_THEME = (function () {
      melena en vez de hundirse en ella.
 
      Existen los 42 archivos (6 pelajes x 7 accesorios) en
-     assets/images/mascot/skins/<pelaje>_<accesorio>.png. El SVG de
+     assets/images/mascot/skins/<pelaje>_<accesorio>.webp. El SVG de
      ACCESSORIES queda como ICONO y como respaldo si algún día falta uno. */
   function bakedSrc(pelaje, acc) {
     if (!acc || acc === "none") return null;
     if (!PELAJES[pelaje] || !ACCESSORIES[acc]) return null;
-    return MASCOT_DIR + "skins/" + pelaje + "_" + acc + ".png";
+    return MASCOT_DIR + "skins/" + pelaje + "_" + acc + ".webp";
   }
 
   /* Qué hay que pintar para una combinación. Devuelve una sola imagen cuando
