@@ -5,199 +5,687 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://apis.google.com https://challenges.cloudflare.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https:; media-src 'self' data: blob:; connect-src 'self' https://firestore.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://vesper-academy.firebaseapp.com https://patient-feather-4364.josuemtz20.workers.dev https://formsubmit.co https://challenges.cloudflare.com https://www.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com; frame-src 'self' https://vesper-academy.firebaseapp.com https://www.youtube.com https://www.youtube-nocookie.com https://challenges.cloudflare.com; worker-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self' https://formsubmit.co; upgrade-insecure-requests">
 <script src="vesper_app_mode.js"></script>
 <script src="vesper_auth.js"></script>
+<script src="vesper_style.js"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Boleta de calificaciones | Vesper Academy</title>
-<meta name="description" content="Pase de lista, rúbrica de clase y boleta de calificaciones por alumno. Acceso restringido al profesorado.">
+<title>Calificar | Vesper Academy</title>
+<meta name="description" content="Califica cada clase con 10 puntos, captura el examen final y revisa la boleta de tus grupos. Acceso restringido al profesorado.">
 <meta name="robots" content="noindex, nofollow">
 <link rel="icon" href="assets/images/favicon_32.png?v=2" type="image/png">
 <link rel="stylesheet" href="assets/css/vesper_icons_fa.css">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inria+Serif:ital,wght@0,400;0,700&family=Inter:wght@300;400;500;600;700;800&display=swap');
-*,*::before,*::after{box-sizing:border-box;}
-:root{--navy:#1B1B2F;--navy2:#2c2c4a;--gold:#c5a059;--gold2:#a8843d;--cream:#f5f2eb;--border:#e4e0d8;--muted:#6b7a8d;--err:#b03a3a;--ok:#2d7a4f;--accent:#8a2f3b;}
-body{margin:0;font-family:'Inter',sans-serif;background:var(--cream);color:var(--navy);min-height:100vh;}
-header{background:var(--navy);border-bottom:3px solid var(--gold);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:14px;position:sticky;top:0;z-index:50;}
-.brand{display:flex;align-items:center;gap:12px;color:#fff;text-decoration:none;}
-.brand img{height:42px;width:42px;object-fit:contain;}
-.brand b{font-family:'Inria Serif',serif;font-size:1.1rem;}
-.brand small{display:block;color:var(--gold);font-size:.6rem;letter-spacing:2px;text-transform:uppercase;}
-header .right{display:flex;align-items:center;gap:18px;}
-header a.back{color:rgba(255,255,255,.75);font-size:.78rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;text-decoration:none;}
-header a.back:hover{color:var(--gold);}
-/* Móvil: header compacto — enlaces de nav como chips solo-icono para que no se
-   amontonen (el texto sigue en el árbol de accesibilidad para lectores de pantalla). */
-@media(max-width:640px){
-  header{padding:10px 14px;gap:10px;}
-  .brand img{height:34px;width:34px;}
-  .brand b{font-size:.98rem;}
-  .brand small{font-size:.55rem;letter-spacing:1.5px;}
-  header .right{gap:7px;}
-  header a.back{font-size:0;padding:10px 12px;border:1px solid rgba(255,255,255,.2);border-radius:10px;display:inline-flex;align-items:center;justify-content:center;}
-  header a.back i{font-size:1rem;margin:0;}
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inria+Serif:ital,wght@0,400;0,700;1,700&family=Inter:wght@400;500;600;700;800&family=Caveat:wght@600;700&display=swap');
+/* MODELO «10 PUNTOS» (2026-11-20): flujo de la propuesta A4 de la arena
+   (_propuestas/arena-2026-11-20-calificaciones/opcion-a4), con datos reales.
+   Grupos → lista → panel de UN alumno; la clase empieza en 100 y cada ✗ resta. */
+:root{
+  --night:#14122a;--dusk:#1f2342;--ink:#1B1B2F;--gold:#C9A84C;--gold-ink:#7c5e22;--star:#f3e2ab;
+  --cream:#FBF8F1;--paper:#fff;--muted:#5d6470;--line:#ece7da;--line2:#ddd6c6;
+  --ok:#2D9E75;--ok-bg:#dff0e6;--ok-ink:#1f6a42;
+  --warn-bg:#fbefd0;--warn-ink:#8a6412;
+  --bad:#C0392B;--bad-bg:#f7e3e3;--bad-ink:#a23030;
+  --neu-bg:#e8ecf3;--neu-ink:#48566b;
+  --r:16px;
 }
-.wrap{max-width:1180px;margin:0 auto;padding:32px 20px 70px;}
-.intro h1{font-family:'Inria Serif',serif;font-size:1.8rem;margin:0 0 8px;}
-.intro p{color:var(--muted);max-width:780px;margin:0 0 6px;font-size:.92rem;line-height:1.55;}
-.intro p.cycle{color:var(--navy);font-weight:600;font-size:.86rem;margin-top:10px;}
-.intro p.cycle i{color:var(--gold2);margin-right:6px;}
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0;overflow-x:hidden}
+body{font-family:Inter,system-ui,sans-serif;background:var(--cream);color:var(--ink);min-height:100vh;-webkit-tap-highlight-color:transparent}
+body.lock{overflow:hidden}
+button{font:inherit;color:inherit}
+:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+[hidden]{display:none!important}
 
-.notice{background:#fbf3df;border:1px solid #e7d8a8;border-left:4px solid var(--gold2);border-radius:8px;padding:14px 16px;margin:20px 0;font-size:.88rem;color:#5a4d2e;line-height:1.55;}
-.notice.bad{background:#f7e7e7;border-color:#e2bcbc;border-left-color:var(--err);color:#6a2a2a;}
-.notice i{margin-right:6px;}
-
-.stats{display:flex;flex-wrap:wrap;gap:12px;margin:22px 0 18px;}
-.stat{background:#fff;border:1px solid var(--border);border-top:4px solid var(--accent);border-radius:10px;padding:12px 18px;min-width:130px;box-shadow:0 1px 4px rgba(0,0,0,.06);}
-.stat b{display:block;font-size:1.5rem;line-height:1.1;font-family:'Inria Serif',serif;font-variant-numeric:tabular-nums;}
-.stat span{font-size:.7rem;letter-spacing:1px;text-transform:uppercase;color:var(--muted);}
-.stat.alert{border-top-color:var(--err);}
-.stat.alert b{color:var(--err);}
-
-/* pestañas: Clase del día / Boleta */
-.tabs{display:flex;gap:4px;border-bottom:2px solid var(--border);}
-.tab{appearance:none;border:0;background:none;font:inherit;font-size:.9rem;font-weight:700;color:var(--muted);padding:11px 18px;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;}
-.tab i{margin-right:7px;}
-.tab:hover{color:var(--navy);}
-.tab[aria-selected="true"]{color:var(--navy);border-bottom-color:var(--gold);}
-
-.toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:16px 0 14px;}
-.toolbar select,.toolbar input{padding:9px 11px;border:1px solid var(--border);border-radius:8px;font:inherit;font-size:.85rem;background:#fff;color:var(--navy);}
-.toolbar input{min-width:200px;flex:1;max-width:320px;}
-.toolbar .spacer{flex:1;}
-.btn{padding:9px 14px;border:1px solid var(--border);background:#fff;border-radius:8px;font:inherit;font-size:.82rem;font-weight:600;cursor:pointer;color:var(--navy);}
-.btn:hover{border-color:var(--gold);}
-.btn i{margin-right:6px;color:var(--gold2);}
-.btn.primary{background:var(--navy);border-color:var(--navy);color:#fff;}
-.btn.primary i{color:var(--gold);}
-.btn.primary:hover{background:var(--navy2);}
-.btn.ghost{background:transparent;color:var(--muted);}
-.btn.ghost i{color:inherit;}
-.btn[disabled]{opacity:.5;cursor:not-allowed;}
-
-.tablecard{background:#fff;border:1px solid var(--border);border-radius:12px;box-shadow:0 1px 4px rgba(0,0,0,.06);overflow-x:auto;}
-table.main{width:100%;border-collapse:collapse;font-size:.86rem;}
-table.main thead th{text-align:left;background:#f3eee2;color:var(--navy);font-size:.68rem;letter-spacing:.8px;text-transform:uppercase;padding:9px 12px;border-bottom:1px solid var(--border);white-space:nowrap;vertical-align:bottom;}
-table.main thead th small{display:block;font-weight:500;color:var(--muted);letter-spacing:.3px;text-transform:none;font-size:.66rem;}
-table.main thead th.grp{text-align:center;border-left:1px solid var(--border);border-right:1px solid var(--border);padding-bottom:4px;}
-table.main thead th.c{text-align:center;}
-table.main tbody td{padding:9px 12px;border-bottom:1px solid #f0ece3;vertical-align:middle;}
-table.main th.who,table.main td.who{position:sticky;left:0;z-index:2;}
-table.main td.who{background:#fff;min-width:170px;box-shadow:1px 0 0 #f0ece3;}
-table.main thead th.who{z-index:3;}
-.who b{font-weight:600;}
-.who small{display:block;color:var(--muted);font-size:.72rem;}
-.lvl{display:inline-block;font-size:.6rem;font-weight:800;letter-spacing:.4px;text-transform:uppercase;padding:2px 8px;border-radius:20px;background:#fff;border:1.5px solid currentColor;margin-top:3px;}
-.na{color:var(--muted);font-weight:400;}
-.empty{padding:40px 20px;text-align:center;color:var(--muted);}
-.sv{display:inline-block;width:18px;text-align:center;font-size:.85rem;}
-.sv .fa-circle-check{color:var(--ok);}
-.sv .fa-circle-exclamation{color:var(--err);}
-.sv .fa-spinner{color:var(--muted);animation:sp .8s linear infinite;}
-
-/* ── Clase del día ── */
-.daystrip{display:flex;gap:5px;overflow-x:auto;padding:4px 2px 10px;}
-.day{flex:0 0 auto;min-width:50px;appearance:none;border:1px solid var(--border);background:#fff;border-radius:10px;padding:6px 4px 5px;font:inherit;cursor:pointer;color:var(--navy);text-align:center;position:relative;}
-.day b{display:block;font-size:.98rem;line-height:1.1;font-variant-numeric:tabular-nums;}
-.day small{display:block;font-size:.6rem;color:var(--muted);white-space:nowrap;}
-.day:hover{border-color:var(--gold);}
-.day.wk{margin-left:9px;}
-.day.has{background:#eef6f1;border-color:#cfe5d8;}
-.day.has::after{content:"";position:absolute;top:5px;right:6px;width:6px;height:6px;border-radius:50%;background:var(--ok);}
-.day.part::after{background:var(--gold2);}
-.day.future{opacity:.6;}
-.day.today{border-color:var(--gold2);box-shadow:inset 0 -3px 0 var(--gold);}
-.day.sel{background:var(--navy);border-color:var(--navy);color:#fff;opacity:1;}
-.day.sel small{color:rgba(255,255,255,.7);}
-.classhead{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin:6px 0 12px;}
-.classhead h2{font-family:'Inria Serif',serif;font-size:1.35rem;margin:0;display:inline;}
-.classhead .when{color:var(--muted);font-size:.88rem;margin-left:8px;}
-.classhead .acts{display:flex;flex-wrap:wrap;gap:8px;}
-.chip{display:inline-block;font-size:.64rem;font-weight:800;letter-spacing:.5px;text-transform:uppercase;padding:3px 9px;border-radius:20px;margin-left:8px;vertical-align:2px;background:#f3eee2;color:var(--gold2);}
-.chip.now{background:var(--navy);color:var(--gold);}
-.chip.warn{background:#fbefd0;color:#8a6412;}
-.brush{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin:0 0 10px;font-size:.8rem;color:var(--muted);}
-.brush .bl{appearance:none;border:2px solid transparent;border-radius:8px;padding:6px 11px;font:inherit;font-size:.8rem;font-weight:700;cursor:pointer;}
-.brush .bl.erase{background:#fff;border-color:var(--border);color:var(--muted);}
-.brush .bl[aria-pressed="true"]{border-color:var(--navy);box-shadow:0 0 0 2px rgba(27,27,47,.12);}
-table.ctable thead th{text-align:center;padding:9px 4px;letter-spacing:.3px;}
-table.ctable thead th.who{text-align:left;padding-left:12px;}
-table.ctable td.who{min-width:150px;}
-table.ctable tbody td{text-align:center;padding:6px 4px;}
-table.ctable tbody td.who{text-align:left;padding:8px 12px;}
-table.ctable th.gapl,table.ctable td.gapl{border-left:1px solid var(--border);}
-.colbtn{appearance:none;border:0;background:none;font:inherit;font-size:inherit;font-weight:inherit;letter-spacing:inherit;text-transform:inherit;color:inherit;cursor:pointer;padding:4px 4px;border-radius:6px;white-space:nowrap;}
-.colbtn:hover{background:#e7dfcb;}
-.colbtn i{font-size:.55rem;margin-left:3px;color:var(--gold2);}
-.cc{appearance:none;width:36px;height:36px;border:1px solid var(--border);border-radius:8px;font:inherit;font-size:.92rem;font-weight:700;cursor:pointer;font-variant-numeric:tabular-nums;padding:0;}
-.cc:hover{box-shadow:0 0 0 2px rgba(201,168,76,.55);}
-.cc.vgb-none{background:#fff;font-weight:400;}
-.cc[disabled]{cursor:not-allowed;opacity:.3;box-shadow:none;}
-tr.norec td.who{color:var(--muted);}
-.legend{color:var(--muted);font-size:.78rem;line-height:1.7;margin:12px 2px 0;}
-.legend b{color:var(--navy);}
-.legend .k{display:inline-block;min-width:20px;text-align:center;border-radius:5px;padding:0 5px;font-weight:700;border:1px solid transparent;margin-right:3px;}
-
-/* ── Boleta ── */
-td.comp{text-align:center;white-space:nowrap;}
-td.comp b{font-size:.95rem;font-variant-numeric:tabular-nums;}
-td.comp small{display:block;color:var(--muted);font-size:.66rem;}
-td.gcell{text-align:center;padding-left:5px!important;padding-right:5px!important;}
-.gin{width:58px;padding:7px 6px;border:1px solid var(--border);border-radius:8px;font:inherit;font-size:.86rem;text-align:center;background:#fff;color:var(--navy);}
-.gin.fin{border-color:#cdbb8f;background:#fdfaf2;font-weight:700;}
-.gin:focus{border-color:var(--gold);}
-.gin[disabled]{background:#f6f4ef;}
-td.fin{white-space:nowrap;}
-.gnum{font-family:'Inria Serif',serif;font-weight:700;font-size:1.35rem;line-height:1;font-variant-numeric:tabular-nums;}
-.gnum.pass{color:var(--ok);}
-.gnum.fail{color:var(--err);}
-.gst{display:block;font-size:.66rem;color:var(--muted);margin-top:2px;}
-.gst.pass{color:var(--ok);font-weight:700;}
-.gst.fail{color:var(--err);font-weight:700;}
-.risk{color:var(--err);margin-left:6px;font-size:.8rem;}
-.dbtn{appearance:none;border:1px solid var(--border);background:#fff;border-radius:8px;padding:6px 9px;font:inherit;font-size:.76rem;font-weight:600;cursor:pointer;color:var(--navy);white-space:nowrap;}
-.dbtn:hover{border-color:var(--gold);}
-.dbtn i{color:var(--gold2);margin-left:5px;transition:transform .15s;}
-.dbtn[aria-expanded="true"] i{transform:rotate(180deg);}
-.detailrow td{background:#fbf9f4;padding:0!important;}
-.dbox{padding:16px 18px 20px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 28px;position:sticky;left:0;max-width:calc(100vw - 42px);}
-.dbox>.full{grid-column:1/-1;}
-.dbox h4{margin:0 0 8px;font-size:.72rem;letter-spacing:.7px;text-transform:uppercase;color:var(--muted);}
-.brow{display:grid;grid-template-columns:150px minmax(40px,1fr) 34px;align-items:center;gap:10px;font-size:.82rem;padding:4px 0;}
-.brow .bl small{color:var(--muted);margin-left:5px;font-size:.7rem;}
-.brow b{text-align:right;font-variant-numeric:tabular-nums;}
-.bar{height:8px;border-radius:5px;background:#ece7da;overflow:hidden;}
-.bar i{display:block;height:100%;border-radius:5px;background:var(--ok);}
-.bar i.mid{background:var(--gold2);}
-.bar i.low{background:var(--err);}
-.dnote{font-size:.76rem;color:var(--muted);line-height:1.55;margin:8px 0 0;}
-.dnote.alert{color:var(--err);font-weight:600;}
-.dnote button{border:0;background:none;padding:0;font:inherit;color:var(--gold2);text-decoration:underline;cursor:pointer;}
-textarea.notes{width:100%;min-height:66px;padding:9px 11px;border:1px solid var(--border);border-radius:8px;font:inherit;font-size:.85rem;resize:vertical;background:#fff;color:var(--navy);}
-
-#loading{padding:50px 20px;text-align:center;color:var(--muted);}
-#loading .spin{display:inline-block;width:28px;height:28px;border:3px solid rgba(138,47,59,.2);border-top-color:var(--accent);border-radius:50%;animation:sp .8s linear infinite;margin-bottom:12px;}
+header.top{background:var(--night);border-bottom:3px solid var(--gold);padding:10px 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;position:sticky;top:0;z-index:40}
+.brand{display:flex;align-items:center;gap:12px;color:#f5f2eb;text-decoration:none;min-width:0}
+.brand img{width:38px;height:38px;object-fit:contain;flex:0 0 auto}
+.brand b{font-family:Fraunces,serif;font-weight:600;font-size:1.08rem;display:block;line-height:1.1;white-space:nowrap}
+.brand small{display:block;font-size:.6rem;letter-spacing:.24em;text-transform:uppercase;color:var(--gold);white-space:nowrap}
+header .right{display:flex;align-items:center;gap:16px}
+header a.back{color:rgba(255,255,255,.75);font-size:.74rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;white-space:nowrap}
+header a.back:hover{color:var(--gold)}
+@media(max-width:760px){
+  header .right{gap:7px}
+  header a.back{font-size:0;min-width:44px;min-height:44px;border:1px solid rgba(255,255,255,.2);border-radius:10px;display:inline-flex;align-items:center;justify-content:center}
+  header a.back i{font-size:1rem;margin:0}
+}
+.savebar{font-size:.74rem;font-weight:700;padding:5px 12px;text-align:center;background:var(--star);color:var(--gold-ink)}
+.savebar.ok{background:var(--ok-bg);color:var(--ok-ink)}
+.savebar.err{background:var(--bad-bg);color:var(--bad-ink)}
+.tabs{display:flex;gap:4px;padding:0 16px;border-bottom:1px solid var(--line2);background:var(--paper)}
+.tab{appearance:none;border:0;background:none;padding:13px 14px 11px;font-weight:700;font-size:.9rem;color:var(--muted);border-bottom:3px solid transparent;cursor:pointer;min-height:44px}
+.tab[aria-selected=true]{color:var(--ink);border-bottom-color:var(--gold)}
+.wrap{max-width:1120px;margin:0 auto;padding:14px 16px 90px}
+.cycle{font-size:.8rem;color:var(--muted);margin:0 0 10px;text-align:center}
+.notice{background:var(--warn-bg);border:1px solid #edd9a3;border-left:4px solid var(--gold-ink);border-radius:10px;padding:12px 14px;margin:0 0 12px;font-size:.86rem;color:#5a4d2e;line-height:1.5}
+.notice.bad{background:var(--bad-bg);border-color:#e6c3c3;border-left-color:var(--bad);color:#6a2a2a}
+.notice i{margin-right:6px}
+#loading{padding:50px 20px;text-align:center;color:var(--muted)}
+#loading .spin{display:inline-block;width:28px;height:28px;border:3px solid rgba(201,168,76,.25);border-top-color:var(--gold);border-radius:50%;animation:sp .8s linear infinite;margin-bottom:12px}
 @keyframes sp{to{transform:rotate(360deg)}}
 
-footer{background:var(--navy);color:rgba(255,255,255,.5);text-align:center;padding:24px;font-size:.78rem;border-top:3px solid var(--gold);position:sticky;top:100vh;}
-footer a{color:var(--gold);text-decoration:none;}
-:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
-@media(max-width:720px){
-  .wrap{padding:22px 12px 60px;}
-  .dbox{grid-template-columns:minmax(0,1fr);max-width:calc(100vw - 26px);}
-  table.main td.who{min-width:128px;}
-  .cc{width:34px;height:34px;}
-  .tab{padding:10px 12px;font-size:.84rem;}
-  .classhead .when{display:block;margin:2px 0 0;}
+.dayrow{display:flex;align-items:center;gap:8px;margin-bottom:4px}
+.dayrow h1{font-family:Fraunces,serif;font-weight:600;font-size:1.25rem;margin:0;flex:1;text-align:center;line-height:1.15}
+.dayrow h1 small{display:block;font-family:Inter,sans-serif;font-size:.74rem;font-weight:500;color:var(--muted);margin-top:2px}
+.ibtn{appearance:none;width:44px;height:44px;border-radius:12px;border:1px solid var(--line2);background:var(--paper);cursor:pointer;font-size:1.1rem;flex:0 0 auto}
+.ibtn:disabled{opacity:.35;cursor:default}
+.prog{display:flex;align-items:center;gap:12px;background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:10px 12px;margin-bottom:12px}
+.prog img{width:46px;height:46px;object-fit:contain;flex:0 0 auto}
+.prog .pm{flex:1;min-width:0}
+.prog .pt{display:flex;justify-content:space-between;gap:8px;font-size:.86rem;align-items:baseline;flex-wrap:wrap}
+.prog .pt b{font-variant-numeric:tabular-nums}
+.prog .say{font-family:Caveat,cursive;font-size:1.15rem;color:var(--gold-ink);line-height:1;white-space:nowrap}
+.bar{height:10px;border-radius:6px;background:var(--line);overflow:hidden;margin-top:6px}
+.bar i{display:block;height:100%;background:var(--gold);border-radius:6px;transition:width .3s}
+
+/* grupos */
+.groups{display:grid;grid-template-columns:minmax(0,1fr);gap:12px}
+@media(min-width:760px){.groups{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.gcard{appearance:none;text-align:left;background:var(--paper);border:1px solid var(--line);border-radius:20px;padding:16px;cursor:pointer;box-shadow:0 6px 22px rgba(20,18,42,.05);display:grid;gap:10px;width:100%}
+.gcard:hover{border-color:var(--gold)}
+.gtop{display:flex;align-items:flex-start;gap:12px}
+.glv,.ini{width:48px;height:48px;border-radius:50%;background:var(--night);color:var(--star);display:grid;place-items:center;font-family:Fraunces,serif;font-weight:600;font-size:1rem;flex:0 0 auto;position:relative}
+.glv::after,.ini::after{content:"";position:absolute;inset:-4px;border-radius:50%;border:1.5px solid var(--gold)}
+.gtop .gn{flex:1;min-width:0}
+.gtop h2{font-family:Fraunces,serif;font-weight:600;font-size:1.2rem;margin:0;line-height:1.15;overflow-wrap:anywhere}
+.gtop .gs{font-size:.78rem;color:var(--muted);margin-top:2px}
+.gtop .arrow{color:var(--gold-ink);font-size:1.4rem;line-height:1}
+.gstat{display:flex;flex-wrap:wrap;gap:6px}
+.tag{display:inline-flex;align-items:center;gap:5px;font-size:.72rem;font-weight:700;border-radius:999px;padding:5px 10px;background:var(--cream);color:var(--muted);white-space:nowrap}
+.tag.ok{background:var(--ok-bg);color:var(--ok-ink)}
+.tag.todo{background:var(--star);color:var(--gold-ink)}
+.tag.bad{background:var(--bad-bg);color:var(--bad-ink)}
+.gatt{font-size:.76rem;color:var(--bad-ink);line-height:1.4}
+.gcard .bar{margin-top:0;height:8px}
+.emptyg{background:var(--paper);border:1px solid var(--line);border-radius:20px;padding:24px 16px;text-align:center;color:var(--muted)}
+.emptyg img{width:96px;height:96px;object-fit:contain}
+.emptyg .hand{font-family:Caveat,cursive;font-size:1.5rem;color:var(--gold-ink)}
+
+/* grupo: lista + panel */
+.ghead{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.back2{appearance:none;border:1px solid var(--line2);background:var(--paper);border-radius:12px;min-height:44px;padding:0 12px;font-weight:700;font-size:.84rem;cursor:pointer;flex:0 0 auto}
+.ghead .gt{flex:1;min-width:0}
+.ghead h1{font-family:Fraunces,serif;font-weight:600;font-size:1.2rem;margin:0;line-height:1.15;overflow-wrap:anywhere}
+.ghead small{display:block;font-size:.74rem;color:var(--muted);margin-top:2px}
+.ready{display:flex;align-items:center;gap:12px;background:var(--paper);border:1.5px solid var(--gold);border-radius:var(--r);padding:12px;margin-bottom:12px}
+.ready img{width:64px;height:64px;object-fit:contain}
+.ready .hand{font-family:Caveat,cursive;font-size:1.7rem;color:var(--gold-ink);line-height:1}
+.ready p{margin:2px 0 0;font-size:.8rem;color:var(--muted)}
+.glayout{display:grid;grid-template-columns:minmax(0,1fr);gap:14px}
+@media(min-width:900px){.glayout{grid-template-columns:320px minmax(0,1fr);align-items:start}}
+.slist{display:grid;gap:6px}
+.srow{appearance:none;width:100%;text-align:left;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:10px 12px;display:flex;align-items:center;gap:12px;cursor:pointer;min-height:64px}
+.srow:hover{border-color:var(--gold)}
+.srow[aria-current=true]{border-color:var(--ink);box-shadow:inset 4px 0 0 var(--gold)}
+.srow .ini{width:40px;height:40px;font-size:.9rem}
+.srow .ini::after{inset:-3px}
+.srow .nm{flex:1;min-width:0}
+.srow .nm b{display:block;font-size:.95rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.srow .nm small{display:block;font-size:.7rem;color:var(--muted)}
+.srow .nm small.al{color:var(--bad-ink);font-weight:600}
+.srow .sc{text-align:right;flex:0 0 auto}
+.srow .sc b{display:block;font-family:Fraunces,serif;font-size:1.3rem;line-height:1;font-variant-numeric:tabular-nums}
+.srow .sc .tag{margin-top:4px}
+.srow .sc b.falta{color:var(--bad);font-size:.95rem;letter-spacing:.04em}
+.sv{display:inline-block;width:14px;margin-left:4px;font-size:.72rem;vertical-align:middle}
+.sv .fa-circle-check{color:var(--ok)}
+.sv .fa-circle-exclamation{color:var(--bad)}
+.sv .fa-spinner{color:var(--muted);animation:sp .8s linear infinite}
+.hintp{font-size:.76rem;color:var(--muted);margin:10px 2px 0;line-height:1.45}
+.s-good{color:var(--ok-ink)}.s-warn{color:var(--warn-ink)}.s-bad{color:var(--bad-ink)}
+
+/* panel del alumno */
+.panelhost{display:none}
+@media(min-width:900px){.panelhost{display:block;position:sticky;top:76px}}
+.panel{background:var(--paper);border:1px solid var(--line);border-radius:22px;padding:16px;box-shadow:0 8px 28px rgba(20,18,42,.06);touch-action:pan-y}
+@media(max-width:899px){
+  .panelhost.open{display:block;position:fixed;inset:0;z-index:45;background:var(--cream);overflow:auto;padding:0}
+  .panelhost.open .panel{border:0;border-radius:0;min-height:100%;box-shadow:none;padding:12px 16px 24px}
 }
+.empty{text-align:center;padding:30px 16px;color:var(--muted)}
+.empty img{width:110px;height:110px;object-fit:contain}
+.empty .hand{font-family:Caveat,cursive;font-size:1.5rem;color:var(--gold-ink)}
+.pwho{display:flex;align-items:center;gap:12px}
+.pwho .nm{flex:1;min-width:0}
+.pwho h2{font-family:Fraunces,serif;font-weight:600;font-size:1.3rem;margin:0;line-height:1.15;overflow-wrap:anywhere}
+.pwho .sub{font-size:.76rem;color:var(--muted);margin-top:2px}
+.close{appearance:none;min-width:44px;height:44px;border-radius:12px;border:1px solid var(--line2);background:var(--paper);cursor:pointer;font-size:.84rem;font-weight:700;flex:0 0 auto;padding:0 10px}
+@media(min-width:900px){.close{display:none}}
+.dayscore{display:flex;align-items:center;gap:14px;margin:14px 0 10px;padding:12px 14px;border-radius:18px;background:var(--night);color:#f5f2eb;position:relative;overflow:hidden}
+.dayscore .num{font-family:Fraunces,serif;font-weight:700;font-size:3.1rem;line-height:1;font-variant-numeric:tabular-nums;color:var(--star);min-width:2.2ch;display:inline-block}
+.dayscore .num.falta{color:#ff8a7d;font-size:2.6rem;letter-spacing:.02em;min-width:0}
+.dayscore .of{font-size:.9rem;color:rgba(245,242,235,.62);margin-left:2px}
+.dayscore .lbl{flex:1;min-width:0;font-size:.8rem;line-height:1.35;color:rgba(245,242,235,.8)}
+.dayscore .lbl b{display:block;font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:700}
+.dayscore .lbl .av{display:block;margin-top:3px;color:var(--star);font-weight:600}
+.dayscore .delta{position:absolute;right:14px;top:8px;font-weight:800;font-size:1rem;opacity:0;pointer-events:none}
+.num.down{animation:down .45s ease-out}
+.num.up{animation:up .45s ease-out}
+.delta.go{animation:dl .9s ease-out}
+.delta.dminus{color:#ff9a8f}.delta.dplus{color:#7fe0b9}
+@keyframes down{0%{transform:scale(1.28);color:#ff9a8f}100%{transform:none}}
+@keyframes up{0%{transform:scale(1.18);color:#7fe0b9}100%{transform:none}}
+@keyframes dl{0%{opacity:1;transform:translateY(6px)}100%{opacity:0;transform:translateY(-14px)}}
+.pprog{display:flex;align-items:center;gap:10px;font-size:.8rem;margin-bottom:6px}
+.pprog img{width:34px;height:34px;object-fit:contain}
+.pprog .pm{flex:1;min-width:0}
+.pprog .bar{height:8px;margin-top:4px}
+.valsw{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:10px 0 2px;font-size:.8rem;font-weight:700}
+.valsw .seg2{display:inline-flex;border:1.5px solid var(--line2);border-radius:12px;overflow:hidden}
+.valsw .seg2 button{appearance:none;border:0;background:var(--paper);min-height:44px;min-width:56px;font-weight:800;cursor:pointer;color:var(--bad-ink)}
+.valsw .seg2 button[aria-pressed=true]{background:var(--bad);color:#fff}
+.sec{margin-top:14px}
+.sec>h3{display:flex;align-items:baseline;gap:8px;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:0 0 7px}
+.sec>h3 .kh{margin-left:auto;letter-spacing:0;text-transform:none;font-weight:500}
+.points{display:grid;gap:6px}
+.pnt{display:grid;grid-template-columns:minmax(0,1fr) 44px 54px 60px;gap:8px;align-items:center;padding:7px 10px;border:1px solid var(--line);border-radius:14px;background:var(--paper)}
+.pnt.hit{border-color:#e6c3c3;background:#fffafa}
+.pnt.abs{border-style:dashed}
+.pnt.off{opacity:.32}
+.pnt .pl{min-width:0}
+.pnt .pl b{display:block;font-size:.93rem}
+.pnt .pl small{display:block;font-size:.7rem;color:var(--muted);line-height:1.3}
+.pnt .pc{text-align:center;line-height:1.1}
+.pnt .pc .x{display:block;font-size:.74rem;color:var(--bad);font-weight:800;letter-spacing:-1px;min-height:1em}
+.pnt .pc b{display:block;font-size:.86rem;color:var(--bad-ink);font-variant-numeric:tabular-nums;min-height:1.1em}
+.minus{appearance:none;width:44px;height:44px;border:1.5px solid var(--line2);background:var(--paper);border-radius:10px;font-weight:800;font-size:1.2rem;cursor:pointer;color:var(--muted)}
+.minus:disabled{opacity:.25;cursor:default}
+.tache{appearance:none;width:60px;height:48px;border:2px solid var(--bad);background:#fff7f6;color:var(--bad);border-radius:12px;font-weight:800;font-size:1.55rem;cursor:pointer;line-height:1}
+.tache:hover{background:var(--bad-bg)}
+.tache:active{transform:scale(.94)}
+.tache:disabled{opacity:.3;cursor:default}
+.exams .exnote{font-size:.76rem;color:var(--muted);margin:-2px 0 8px;line-height:1.45;background:var(--cream);border-radius:10px;padding:8px 10px}
+.exrow{display:grid;grid-template-columns:96px 84px minmax(0,1fr);gap:8px;align-items:center;padding:5px 0}
+.exrow label{font-weight:700;font-size:.86rem}
+.exin{width:100%;height:50px;border:1.5px solid var(--line2);border-radius:12px;text-align:center;font:700 1.25rem Inter,sans-serif;font-variant-numeric:tabular-nums;color:var(--ink);background:#fffdf8}
+.exin:focus{border-color:var(--gold);outline:none;box-shadow:0 0 0 3px rgba(201,168,76,.3)}
+.exin.bad{border-color:var(--bad);background:var(--bad-bg)}
+.exin:disabled{background:#f6f4ef}
+.exrow .ref{font-size:.72rem;color:#6e7380;line-height:1.35}
+.use{appearance:none;border:1px solid var(--line2);background:var(--paper);border-radius:8px;padding:0 10px;min-height:36px;font-size:.72rem;font-weight:700;cursor:pointer;color:var(--gold-ink);margin-left:2px}
+.legacy{font-size:.72rem;color:var(--muted);margin:6px 0 0;line-height:1.4}
+textarea.notes{width:100%;min-height:72px;padding:9px 11px;border:1.5px solid var(--line2);border-radius:12px;font:inherit;font-size:.86rem;resize:vertical;background:#fffdf8;color:var(--ink)}
+textarea.notes:focus{border-color:var(--gold);outline:none;box-shadow:0 0 0 3px rgba(201,168,76,.3)}
+.nav{display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px;margin-top:18px;position:sticky;bottom:0;background:linear-gradient(rgba(255,255,255,0),var(--paper) 30%);padding-top:10px}
+@media(max-width:899px){.panelhost.open .nav{background:linear-gradient(rgba(251,248,241,0),var(--cream) 30%)}}
+.nbtn{appearance:none;border:1.5px solid var(--line2);background:var(--paper);border-radius:14px;min-height:56px;padding:0 16px;font-weight:700;cursor:pointer}
+.nbtn.go{background:var(--gold);border-color:var(--gold);color:var(--night);font-size:1rem}
+.nbtn:disabled{opacity:.35;cursor:default}
+.keys{display:none;font-size:.72rem;color:var(--muted);margin:10px 2px 0;line-height:1.7}
+.keys kbd{font:700 .68rem Inter,sans-serif;border:1px solid var(--line2);border-bottom-width:2px;border-radius:5px;padding:1px 5px;background:var(--paper);color:var(--ink)}
+@media(hover:hover) and (min-width:900px){.keys{display:block}}
+.editlink{appearance:none;border:0;background:none;color:var(--gold-ink);font-weight:700;font-size:.78rem;text-decoration:underline;cursor:pointer;min-height:44px;padding:0 2px}
+.edscrim{position:fixed;inset:0;background:rgba(20,18,42,.45);z-index:50}
+.edsheet{position:fixed;left:0;right:0;bottom:0;max-height:90vh;overflow:auto;z-index:51;background:var(--paper);border-radius:22px 22px 0 0;padding:16px;box-shadow:0 -10px 40px rgba(20,18,42,.25)}
+@media(min-width:700px){.edsheet{left:50%;right:auto;top:50%;bottom:auto;transform:translate(-50%,-50%);width:620px;border-radius:22px}}
+.edsheet h2{font-family:Fraunces,serif;font-weight:600;font-size:1.2rem;margin:0 0 4px}
+.edsheet p{font-size:.78rem;color:var(--muted);margin:0 0 10px;line-height:1.45}
+.edrow{display:grid;grid-template-columns:22px minmax(0,1fr);gap:4px 8px;align-items:center;padding:6px 0;border-top:1px solid var(--line)}
+.edrow .edn{grid-row:span 2;font-weight:800;color:var(--gold-ink);text-align:center}
+.edrow input{width:100%;min-height:44px;border:1px solid var(--line2);border-radius:10px;padding:0 10px;font:inherit;font-size:.86rem}
+.edrow input[data-ed=label]{font-weight:700}
+@media(min-width:700px){.edrow{grid-template-columns:22px 200px minmax(0,1fr)}.edrow .edn{grid-row:auto}}
+.edbtns{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;position:sticky;bottom:-16px;background:var(--paper);padding:10px 0}
+@media(max-width:400px){.pnt{grid-template-columns:minmax(0,1fr) 40px 46px 56px;gap:6px;padding:7px 8px}.minus{width:40px}.exrow{grid-template-columns:84px 76px minmax(0,1fr)}}
+@media(prefers-reduced-motion:reduce){.num.down,.num.up,.delta.go{animation:none}.bar i{transition:none}.tache:active{transform:none}}
+
+/* ── Boleta ── */
+.gpick{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.gpick button{appearance:none;border:1.5px solid var(--line2);background:var(--paper);border-radius:999px;padding:0 14px;min-height:44px;font-weight:700;font-size:.82rem;cursor:pointer}
+.gpick button[aria-pressed=true]{background:var(--ink);border-color:var(--ink);color:#fff}
+.bhead{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-bottom:12px}
+.bhead h1{font-family:Fraunces,serif;font-weight:600;font-size:1.25rem;margin:0;flex:1 1 220px}
+.tip{font-size:.78rem;color:var(--muted);margin:0 0 10px;line-height:1.45}
+.btable{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.brow{display:grid;grid-template-columns:minmax(0,1fr) 70px 90px 96px;gap:6px;align-items:center;padding:6px 12px;border-top:1px solid var(--line);min-height:56px}
+.brow.h{border-top:0;background:#f6f1e4;font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:700;min-height:38px}
+.brow .nm{min-width:0;font-size:.88rem;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.brow .v{text-align:center;font-variant-numeric:tabular-nums;font-size:.9rem;color:var(--muted)}
+.brow .v.act,.brow.h .v.act{color:var(--ink)}
+.brow input{width:100%;height:44px;border:1.5px solid var(--line2);border-radius:10px;text-align:center;font:700 1.02rem Inter,sans-serif;font-variant-numeric:tabular-nums;color:var(--ink);background:#fffdf8}
+.brow input:focus{border-color:var(--gold);outline:none;box-shadow:0 0 0 3px rgba(201,168,76,.3)}
+.brow input.bad{border-color:var(--bad);background:var(--bad-bg)}
+.brow input.saved{border-color:var(--ok)}
+.brow input:disabled{background:#f6f4ef}
+.brow .avc{text-align:right}
+.brow .avc b{font-family:Fraunces,serif;font-size:1.1rem;font-variant-numeric:tabular-nums}
+.brow .avc small{display:block;font-size:.62rem;color:var(--muted)}
+.brow.empty0{display:block;text-align:center;color:var(--muted);padding:20px}
+.pill{display:inline-block;font-size:.6rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;border-radius:999px;padding:2px 7px}
+.pill.risk{background:var(--bad-bg);color:var(--bad-ink)}
+.pill.pass{background:var(--ok-bg);color:var(--ok-ink)}
+@media(max-width:620px){
+  .brow{grid-template-columns:minmax(0,1fr) 44px 68px 84px;gap:5px;padding:6px 10px}
+  .pill{letter-spacing:.02em;padding:2px 5px}
+}
+.paste{background:var(--paper);border:1.5px dashed var(--gold);border-radius:var(--r);padding:14px;margin-bottom:12px;display:none}
+.paste.open{display:block}
+.paste textarea{width:100%;min-height:120px;border:1px solid var(--line2);border-radius:10px;padding:10px;font:500 .86rem ui-monospace,Consolas,monospace;resize:vertical}
+.paste .pv{font-size:.82rem;margin:10px 0;line-height:1.55}
+.paste .pv .x{color:var(--bad-ink)}
+.paste .pv .w{color:var(--warn-ink)}
+.paste .row{display:flex;gap:8px;flex-wrap:wrap}
+.btn{appearance:none;border:1.5px solid var(--line2);background:var(--paper);border-radius:12px;min-height:44px;padding:0 14px;font-weight:700;font-size:.84rem;cursor:pointer}
+.btn.gold{background:var(--gold);border-color:var(--gold);color:var(--night)}
+.btn:disabled{opacity:.4;cursor:default}
+.toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:var(--night);color:#f5f2eb;padding:11px 16px;border-radius:12px;font-size:.84rem;z-index:60;max-width:calc(100vw - 32px);box-shadow:0 8px 30px rgba(0,0,0,.25);display:none}
+.toast.show{display:block}
+footer{background:var(--night);color:rgba(255,255,255,.55);text-align:center;padding:22px 16px;font-size:.78rem;border-top:3px solid var(--gold)}
+footer a{color:var(--gold);text-decoration:none}
 </style>
 <link rel="stylesheet" href="assets/css/vesper_tokens.css">
+<!-- ===== ASPECTO DE LA BOLETA (2026-11-20) =====
+     Josue eligió en _propuestas/arena-2026-11-20-boleta-visual/: B «Noche Vespertina» es el estilo
+     predeterminado («Con diseño») y C «Claro y rápido» el Minimalista. Cada uno vive en su <style>;
+     el script de abajo deja activo solo el que toca según html[data-vesper-style] (vesper_style.js).
+     Van ANTES de vesper_theme.js: su :root inyectado gana a los respaldos (Vespertina) de aquí. -->
+<style id="vb-diseno">
+/* ===== B «NOCHE VESPERTINA» · PROFESOR (2026-11-20) ===== copia de final-diseno/ (vista Profesor) */
+:root{
+  /* RESPALDO = Vespertina. vesper_theme.js (cargado después de este <style>) pisa
+     --ink --gold --gold-lt --gold-ink --on-gold --cream --paper --muted --line --success --error
+     --ok-tint --no-tint --shadow con la paleta que eligió el alumno. Todo lo demás se deriva de ellos. */
+  --ink:#EDE7D6;--gold:#C9A84C;--gold-lt:#f3e2ab;--gold-ink:#C9A84C;--on-gold:#14122a;
+  --cream:#14122a;--paper:#1f2342;--muted:#b3b0c9;--line:#3a3a63;
+  --success:#41C595;--error:#E07065;
+  --ok-tint:rgba(65,197,149,.18);--no-tint:rgba(224,112,101,.18);
+  --shadow:0 6px 22px rgba(0,0,0,.45);
+  /* derivados: siguen al tema (valores para temas claros; abajo, los oscuros) */
+  --line2:color-mix(in srgb,var(--line) 78%,var(--ink));
+  --tint:color-mix(in srgb,var(--ink) 5%,transparent);
+  --hi:var(--gold-ink);                       /* texto de realce: el oro legible del tema */
+  --star:var(--hi);
+  --night:var(--cream);--dusk:var(--paper);--navy:var(--on-gold);
+  --ok:var(--success);--ok-bg:var(--ok-tint);--ok-ink:color-mix(in srgb,var(--success) 62%,#000);
+  --bad:var(--error);--bad-fill:var(--error);--bad-bg:var(--no-tint);--bad-ink:var(--error);--bad-lt:var(--bad-ink);
+  --warn-bg:color-mix(in srgb,var(--gold) 16%,transparent);--warn-ink:var(--ink);
+  --neu-bg:color-mix(in srgb,var(--muted) 16%,transparent);--neu-ink:var(--ink);
+  --on-night:var(--ink);--on-night-soft:var(--muted);
+  /* el cielo (cabecera, escena, constelación, dial): de noche siempre; en temas oscuros, la noche del tema */
+  --sky:#14122a;--sky2:#1f2342;--sky-line:#3a3a63;--sky-gold:#C9A84C;--sky-hi:#f3e2ab;
+  --on-sky:#f5f2eb;--on-sky-soft:rgba(245,242,235,.72);
+  --gold-shadow:color-mix(in srgb,var(--gold) 62%,#000);--hand:"Caveat","Segoe Print",cursive;--serif:"Inria Serif",Georgia,serif;
+  --ease:cubic-bezier(.2,.8,.2,1);
+  color-scheme:dark;
+}
+/* temas oscuros (vesper_theme.js pone .vesper-dark en <html>; viene puesto de fábrica por si el JS no carga) */
+:root.vesper-dark{
+  --hi:var(--gold-lt);
+  --ok-ink:var(--success);
+  --bad-fill:color-mix(in srgb,var(--error) 66%,#000);
+  --bad-ink:color-mix(in srgb,var(--error) 80%,#fff);
+  --sky:var(--cream);--sky2:var(--paper);--sky-line:var(--line);--sky-gold:var(--gold);--sky-hi:var(--gold-lt);
+}
+/* dentro del cielo, los tokens generales cambian a los de noche */
+.sky{
+  --ink:var(--on-sky);--muted:var(--on-sky-soft);--star:var(--sky-hi);--hi:var(--sky-hi);--gold-ink:var(--sky-hi);--gold:var(--sky-gold);
+  --on-night:var(--on-sky);--on-night-soft:var(--on-sky-soft);--line:var(--sky-line);--paper:var(--sky2);--cream:var(--sky);
+  --line2:color-mix(in srgb,var(--sky-line) 78%,var(--on-sky));--tint:rgba(255,255,255,.05);
+  --bad-ink:#ff8a7d;--bad-lt:#ff8a7d;--bad-fill:#C0392B;--ok-ink:#7fe0b9;--on-gold:#14122a;
+  color:var(--ink);
+}
+body{background:var(--cream);color:var(--ink)}
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:radial-gradient(900px 420px at 85% -10%,color-mix(in srgb,var(--gold) 12%,transparent),transparent 60%),var(--cream)}
+.vesper-dark body::before{
+  background:
+    radial-gradient(1.2px 1.2px at 12% 18%,color-mix(in srgb,var(--gold-lt) 70%,transparent),transparent 60%),
+    radial-gradient(1px 1px at 78% 9%,color-mix(in srgb,var(--gold-lt) 55%,transparent),transparent 60%),
+    radial-gradient(1.4px 1.4px at 64% 34%,color-mix(in srgb,var(--gold-lt) 45%,transparent),transparent 60%),
+    radial-gradient(1px 1px at 31% 62%,color-mix(in srgb,var(--gold-lt) 40%,transparent),transparent 60%),
+    radial-gradient(1.2px 1.2px at 88% 71%,color-mix(in srgb,var(--gold-lt) 50%,transparent),transparent 60%),
+    radial-gradient(1px 1px at 46% 88%,color-mix(in srgb,var(--gold-lt) 35%,transparent),transparent 60%),
+    radial-gradient(900px 420px at 85% -10%,color-mix(in srgb,var(--gold) 13%,transparent),transparent 60%),
+    linear-gradient(170deg,color-mix(in srgb,var(--paper) 55%,var(--cream)) 0%,var(--cream) 55%,color-mix(in srgb,var(--cream) 80%,#000) 100%)}
+h1,h2,h3{font-family:var(--serif)}
+/* ---- Vista profesor: la A4 de noche ---- */
+.tabs{background:color-mix(in srgb,var(--paper) 75%,transparent);border-bottom-color:var(--line)}
+.tab[aria-selected=true]{color:var(--star)}
+.dayrow h1,.ghead h1,.gtop h2,.pwho h2,.bhead h1,.edsheet h2{font-family:var(--serif);font-weight:700}
+.ibtn,.back2,.close{background:var(--tint);color:var(--ink)}
+.prog,.gcard,.srow,.panel,.btable,.pnt,.paste{background:var(--paper)}
+.gcard{box-shadow:0 10px 30px rgba(0,0,0,.35)}
+.prog .say,.ready .hand,.empty .hand{font-family:var(--hand);color:var(--star)}
+.bar{background:var(--line);overflow:visible;position:relative}
+.bar i{background:linear-gradient(90deg,var(--gold),var(--star));position:relative}
+.bar i::after{content:"";position:absolute;right:-6px;top:50%;width:12px;height:12px;transform:translateY(-50%) rotate(45deg);
+  background:var(--star);clip-path:polygon(50% 0,62% 38%,100% 50%,62% 62%,50% 100%,38% 62%,0 50%,38% 38%);box-shadow:0 0 8px var(--star)}
+.bar i[style*="width:0"]::after{display:none}
+.tag.todo{background:color-mix(in srgb,var(--gold) 18%,transparent);color:var(--star)}
+.srow[aria-current=true]{border-color:color-mix(in srgb,var(--gold) 70%,transparent);box-shadow:inset 4px 0 0 var(--gold),0 0 0 1px color-mix(in srgb,var(--gold) 25%,transparent)}
+.s-good{color:var(--star)}.s-warn{color:var(--ink)}.s-bad{color:var(--bad-lt)}
+.hist span.g{background:color-mix(in srgb,var(--star) 16%,transparent);color:var(--star)}
+.hist span.w{background:var(--tint);color:var(--ink)}
+.hist span.b,.hist span.fx{background:var(--bad-fill);color:#fff}
+.sec>h3{font-family:var(--serif);font-size:1.02rem;letter-spacing:0;text-transform:none;color:var(--ink);font-weight:700}
+.sec>h3 .kh{font-family:Inter,sans-serif;font-size:.74rem;color:var(--muted)}
+.pnt.hit{border-color:color-mix(in srgb,var(--bad-ink) 50%,transparent);background:color-mix(in srgb,var(--error) 10%,transparent)}
+.pnt .pc .x,.sk .sv .x{color:var(--bad-lt)}
+.pnt .pc b{color:var(--bad-lt)}
+.tache{background:color-mix(in srgb,var(--error) 14%,transparent);border-color:color-mix(in srgb,var(--error) 85%,var(--ink));color:var(--bad-lt)}
+.tache:hover{background:color-mix(in srgb,var(--error) 28%,transparent)}
+.minus{background:var(--tint)}
+.valsw .seg2 button{background:var(--tint);color:var(--bad-lt)}
+.valsw .seg2 button[aria-pressed=true]{background:var(--bad-fill);color:#fff}
+.exin,.brow input,.edrow input{background:var(--cream);color:var(--ink);border-color:var(--line2)}
+.exrow .ref{color:var(--muted)}
+.exams .exnote{background:var(--tint)}
+.use{background:var(--tint)}
+.brow.h{background:var(--tint)}
+.gpick button,.colpick button,.btn,.nbtn{background:var(--tint);color:var(--ink)}
+.gpick button[aria-pressed=true],.colpick button[aria-pressed=true]{background:var(--gold);border-color:var(--gold);color:var(--on-gold)}
+.colpick button[aria-pressed=true] small{color:var(--on-gold)}
+.btn.gold,.nbtn.go{background:linear-gradient(180deg,color-mix(in srgb,var(--gold) 82%,#fff),var(--gold));color:var(--on-gold);border-color:var(--gold);box-shadow:0 4px 0 var(--gold-shadow);margin-bottom:4px}
+.nbtn.go:active,.btn.gold:active{transform:translateY(4px);box-shadow:none}
+@media(max-width:899px){.panelhost.open .nav{background:linear-gradient(transparent,var(--cream) 30%)}}
+.toast{border:1px solid color-mix(in srgb,var(--gold) 50%,transparent)}
+.keys kbd{background:var(--cream)}
+.ready{background:linear-gradient(120deg,var(--paper),color-mix(in srgb,var(--paper) 86%,var(--gold)))}
+.hintp b[style]{color:var(--bad-lt)!important}
+
+/* el número del día como dial dorado: el anillo baja con cada ✗ (20 tramos de 5) */
+.dayscore{display:grid;grid-template-columns:118px minmax(0,1fr);align-items:center;gap:14px;padding:14px;border-radius:20px;
+  background:radial-gradient(160px 140px at 70px 50%,color-mix(in srgb,var(--gold) 20%,transparent),transparent 70%),
+    radial-gradient(1px 1px at 80% 20%,color-mix(in srgb,var(--star) 80%,transparent),transparent 60%),radial-gradient(1px 1px at 92% 70%,color-mix(in srgb,var(--star) 60%,transparent),transparent 60%),
+    linear-gradient(150deg,color-mix(in srgb,var(--sky2) 88%,var(--sky-gold)),var(--sky) 70%);border:1px solid color-mix(in srgb,var(--gold) 30%,transparent)}
+.dial{position:relative;width:118px;height:118px}
+.dial svg{width:100%;height:100%;transform:rotate(-90deg);overflow:visible}
+.dial .dtrack{fill:none;stroke:color-mix(in srgb,var(--sky2) 85%,var(--on-sky));stroke-width:9}
+.dial .dfill{fill:none;stroke:url(#dgrad);stroke-width:9;stroke-linecap:butt;transition:stroke-dashoffset .6s var(--ease);filter:drop-shadow(0 0 5px color-mix(in srgb,var(--star) 45%,transparent))}
+.dial .dseg{fill:none;stroke:var(--sky);stroke-width:11}
+.dial .dnum{position:absolute;inset:0;display:grid;place-content:center;text-align:center}
+.dayscore .num{font-family:var(--serif);font-size:2.6rem;min-width:0;color:var(--star)}
+.dayscore .of{display:block;margin:2px 0 0;font-size:.72rem;color:var(--on-night-soft)}
+.dayscore .num.falta{font-family:Inter,sans-serif;font-size:.95rem;font-weight:800;letter-spacing:.04em;background:var(--bad-fill);color:#fff;border-radius:8px;padding:5px 8px}
+.dayscore.is-falta .dtrack{stroke:color-mix(in srgb,var(--error) 45%,transparent);stroke-dasharray:4 5}
+.dayscore .lbl{font-size:.84rem;color:var(--on-night-soft)}
+.dayscore .lbl b{font-family:var(--serif);font-size:1.15rem;letter-spacing:0;text-transform:none;color:var(--on-night);font-weight:700;margin-bottom:2px}
+.dayscore .lbl .av{color:var(--star)}
+.dayscore .delta{right:16px;top:10px;font-size:1.1rem}
+.dxs{display:flex;flex-wrap:wrap;gap:4px;margin-top:7px}
+.dxs span{font-size:.72rem;font-weight:700;border-radius:999px;padding:3px 8px;background:color-mix(in srgb,var(--error) 22%,transparent);color:var(--bad-lt)}
+@media(prefers-reduced-motion:reduce){.dial .dfill{transition:none}}
+@media(max-width:400px){.dayscore{grid-template-columns:100px minmax(0,1fr);gap:10px;padding:12px}.dial{width:100px;height:100px}.dayscore .num{font-size:2.2rem}}
+html,body{overflow-x:clip}   /* clip y no hidden: hidden vuelve a body contenedor de scroll y rompe los sticky */
+/* --- color con significado: verde = sin taches / aprobado; nada de versalitas espaciadas --- */
+.tag.ok{background:var(--neu-bg);color:var(--ink)}
+.s-good{color:var(--ink)}.s-full{color:var(--ok-ink)}.s-warn{color:var(--ink)}.s-bad{color:var(--bad-ink)}
+.hist span.g,.hist span.w{background:var(--tint);color:var(--ink);border:1px solid var(--line)}
+.hist span.full{background:var(--ok-bg);color:var(--ok-ink)}
+.hist span.b{background:var(--bad-bg);color:var(--bad-ink)}
+.brow.h{letter-spacing:0;text-transform:none;font-size:.74rem}
+.pill{letter-spacing:0;text-transform:none;font-size:.68rem}
+.cl .cx span.ok{background:var(--ok-bg);color:var(--ok-ink)}
+.cl .cx span{background:var(--bad-bg);color:var(--bad-ink)}
+
+/* --- controles de 44 px como mínimo --- */
+.minus{width:44px;height:44px}
+.pnt{grid-template-columns:minmax(0,1fr) 44px 54px 60px}
+@media(max-width:400px){.pnt{grid-template-columns:minmax(0,1fr) 44px 44px 56px}}
+.use{min-height:44px;padding:0 12px}
+.editlink{min-height:44px}
+.valsw .seg2 button{min-height:44px}
+.edrow input{min-height:44px}
+/* --- PROFESOR: barra fija con nombre + anillo; panel en el flujo en celular --- */
+.panel{padding-top:0}
+.pstick{position:sticky;top:0;z-index:4;background:var(--paper);margin:0 -16px;padding:10px 16px 0;border-bottom:1px solid var(--line);border-radius:22px 22px 0 0}
+.pstick .pwho{gap:10px;align-items:center}
+.pstick .pwho h2{font-size:1.15rem;line-height:1.15}
+.pstick .pwho .sub{font-size:.74rem}
+.mring{position:relative;width:76px;height:76px;flex:0 0 auto;border-radius:50%;
+  background:radial-gradient(circle at 50% 45%,color-mix(in srgb,var(--sky-gold) 22%,var(--sky2)),var(--sky) 72%);box-shadow:0 0 0 1px color-mix(in srgb,var(--sky-gold) 40%,transparent)}
+.mring svg{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg);overflow:visible}
+.mring .dtrack{fill:none;stroke:color-mix(in srgb,var(--sky2) 85%,var(--on-sky));stroke-width:9}
+.mring .dfill{fill:none;stroke:url(#dgrad);stroke-width:9;transition:stroke-dashoffset .6s var(--ease);filter:drop-shadow(0 0 4px color-mix(in srgb,var(--sky-hi) 45%,transparent))}
+.mring .dseg{fill:none;stroke:var(--sky);stroke-width:11}
+.mring .dnum{position:absolute;inset:0;display:grid;place-content:center;text-align:center;line-height:1}
+.mring .num{font-family:var(--serif);font-weight:700;font-size:1.7rem;color:var(--sky-hi);font-variant-numeric:tabular-nums}
+.mring .num.falta{font-family:Inter,sans-serif;font-size:.62rem;font-weight:800;letter-spacing:.02em;background:#C0392B;color:#fff;border-radius:6px;padding:4px 5px}
+.mring.is-falta .dtrack{stroke:rgba(192,57,43,.55);stroke-dasharray:4 5}
+.mring .delta{position:absolute;right:-6px;top:-6px;font-weight:800;font-size:.9rem;opacity:0;pointer-events:none;background:var(--paper);border-radius:8px;padding:0 4px}
+.mring .delta.dminus{color:var(--bad-ink)}.mring .delta.dplus{color:var(--ok-ink)}
+.mring .num.down{animation:down .45s ease-out}.mring .num.up{animation:up .45s ease-out}
+.pbar{height:4px;background:var(--line);margin:10px -16px 0}
+.pbar i{display:block;height:100%;background:var(--gold);transition:width .3s}
+.dayscore.info{display:block;margin:12px 0 4px;padding:12px 14px}
+.dayscore.info .lbl{display:block}
+.dayscore.info .lbl b{display:inline;margin-right:6px}
+@media(prefers-reduced-motion:reduce){.mring .dfill{transition:none}.mring .num.down,.mring .num.up{animation:none}}
+@media(min-width:900px){
+  .panelhost{max-height:calc(100vh - 92px);overflow:auto;border-radius:22px;overscroll-behavior:contain}
+  .mring{width:84px;height:84px}.mring .num{font-size:1.9rem}
+}
+@media(max-width:899px){
+  .panelhost.open{position:static;inset:auto;z-index:auto;background:none;overflow:visible;padding:0}
+  .panelhost.open .panel{border:1px solid var(--line);border-radius:22px;min-height:0;padding:0 16px 16px;box-shadow:var(--shadow)}
+  body.popen .ghead,body.popen .ready,body.popen .glayout>div:first-child,body.popen .dayrow,body.popen .tabs{display:none!important}
+  body.popen .wrap{padding-top:10px;padding-bottom:16px}
+  .panelhost.open .nav{background:linear-gradient(transparent,var(--paper) 30%)}
+  .pstick .pwho .ini{display:none}
+}
+@media(max-width:400px){.pstick .close{padding:0 8px}.mring{width:70px;height:70px}.mring .num{font-size:1.55rem}}
+
+/* --- lo que solo tiene la página real (cabecera con enlaces, guardado, avisos, pie) --- */
+header.top{background:var(--sky);border-bottom:1px solid color-mix(in srgb,var(--sky-gold) 45%,transparent)}
+header.top .brand b,.glv,.ini,.srow .sc b,.brow .avc b,.mring .num,.det .dn{font-family:var(--serif)}
+header.top .brand b{font-weight:700}
+header.top .brand small{letter-spacing:.04em;text-transform:none;font-size:.7rem;color:var(--sky-hi)}
+header a.back{letter-spacing:0;text-transform:none;font-size:.8rem}
+@media(max-width:760px){header a.back{font-size:0}}
+.savebar{background:color-mix(in srgb,var(--gold) 16%,var(--paper));color:var(--hi)}
+.savebar.ok{background:var(--ok-bg);color:var(--ok-ink)}
+.savebar.err{background:var(--bad-bg);color:var(--bad-ink)}
+.notice{background:color-mix(in srgb,var(--gold) 12%,var(--paper));border-color:color-mix(in srgb,var(--gold) 40%,transparent);border-left-color:var(--gold);color:var(--ink)}
+.notice.bad{background:var(--bad-bg);border-color:color-mix(in srgb,var(--error) 45%,transparent);border-left-color:var(--error);color:var(--ink)}
+.notice code{background:var(--tint);border-radius:4px;padding:0 4px}
+#loading{color:var(--muted)}
+.cycle{color:var(--muted)}
+.emptyg{background:var(--paper);border-color:var(--line)}
+.emptyg .hand{font-family:var(--hand);color:var(--star)}
+.sv .fa-circle-check{color:var(--ok-ink)}
+.sv .fa-circle-exclamation{color:var(--bad-ink)}
+.exin:disabled,.brow input:disabled,textarea.notes:disabled{background:var(--tint);opacity:.65}
+textarea.notes,.paste textarea{background:var(--cream);color:var(--ink);border-color:var(--line2)}
+.legacy{color:var(--muted)}
+.edsheet{color:var(--ink)}
+.dayrow h1 small{color:var(--muted)}
+footer{background:var(--sky);color:var(--on-sky-soft);border-top:1px solid color-mix(in srgb,var(--sky-gold) 45%,transparent)}
+footer a{color:var(--sky-hi)}
+/* «Clase por clase» del panel: la tira compartida (GB.historyHtml) con los colores de B */
+#panel .vgb-hist span{background:var(--tint);color:var(--ink);border:1px solid var(--line)}
+#panel .vgb-hist span.full{background:var(--ok-bg);color:var(--ok-ink);border-color:transparent}
+#panel .vgb-hist span.b{background:var(--bad-bg);color:var(--bad-ink);border-color:transparent}
+#panel .vgb-hist span.fa{background:var(--bad-fill);color:#fff;border-color:transparent}
+#panel .vgb-hist span.cur{outline:2px solid var(--gold)}
+/* el número de la lista en verde solo con 100 */
+.srow .sc b.s-full{color:var(--ok-ink)}
+/* celular: la barra fija del panel queda debajo de la cabecera de la página */
+@media(max-width:899px){
+  .pstick{top:var(--hdr,0px)}
+  body.popen .cycle{display:none!important}
+}
+</style>
+<style id="vb-minimal" media="not all">
+/* ===== C «CLARO Y RÁPIDO» · PROFESOR (2026-11-20) ===== copia de final-minimal/ (vista Profesor) */
+:root{
+  /* FINAL MINIMAL: respaldo = Vespertina. vesper_theme.js (se carga DESPUÉS de esta hoja) pone los del tema del alumno. */
+  --ink:#EDE7D6;--gold:#C9A84C;--gold-ink:#C9A84C;--on-gold:#14122a;--cream:#14122a;--paper:#1f2342;--muted:#b3b0c9;--line:#3a3a63;
+  --success:#41C595;--error:#E07065;--ok-tint:rgba(65,197,149,.18);--no-tint:rgba(224,112,101,.18);--gold-tint:rgba(201,168,76,.2);
+  /* alias de la C, ahora derivados de los tokens del tema (no hay colores fijos) */
+  --night:var(--cream);--dusk:var(--paper);--star:var(--gold-tint);
+  --line2:color-mix(in srgb,var(--line) 78%,var(--ink));
+  --ok:var(--success);--ok-bg:var(--ok-tint);--ok-ink:color-mix(in srgb,var(--success) 72%,var(--ink));--ok-line:color-mix(in srgb,var(--success) 40%,var(--line));
+  --warn-bg:var(--gold-tint);--warn-ink:var(--gold-ink);
+  --bad:var(--error);--bad-bg:var(--no-tint);--bad-ink:color-mix(in srgb,var(--error) 78%,var(--ink));--bad-line:color-mix(in srgb,var(--error) 45%,var(--line));
+  --neu-bg:color-mix(in srgb,var(--muted) 16%,transparent);--neu-ink:var(--muted);
+  --r:14px;--serif:"Inria Serif",Georgia,serif;--hand:"Inria Serif",Georgia,serif;
+}
+.prog .say{font-family:var(--hand);font-size:1.15rem;color:var(--gold-ink);line-height:1;white-space:nowrap}
+.ready .hand{font-family:var(--hand);font-size:1.7rem;color:var(--gold-ink);line-height:1}
+.empty .hand{font-family:var(--hand);font-size:1.5rem;color:var(--gold-ink)}
+.delta.dminus{color:var(--error)}.delta.dplus{color:var(--success)}
+@keyframes down{0%{transform:scale(1.28);color:var(--error)}100%{transform:none}}
+@keyframes up{0%{transform:scale(1.18);color:var(--success)}100%{transform:none}}
+.valsw .seg2 button[aria-pressed=true]{background:var(--bad);color:var(--paper)}
+.t-warn[aria-pressed=true]{background:var(--warn-bg);color:var(--warn-ink);border-color:var(--gold)}
+.t-neu[aria-pressed=true]{background:var(--neu-bg);color:var(--neu-ink);border-color:var(--muted)}
+.tache{appearance:none;width:60px;height:52px;border:2px solid var(--bad);background:var(--no-tint);color:var(--bad);border-radius:12px;font-weight:800;font-size:1.55rem;cursor:pointer;line-height:1}
+.dayscore .num.falta{color:var(--error);font-size:2.6rem;letter-spacing:.02em;min-width:0}
+.hist span.falt{background:var(--bad-bg);color:var(--bad-ink);font-size:.56rem;letter-spacing:.02em}
+.nbtn.go{background:var(--gold);border-color:var(--gold);color:var(--on-gold);font-size:1rem}
+.pnt.hit{border-color:var(--bad-line);background:var(--paper)}
+.exin{width:100%;height:50px;border:1.5px solid var(--line2);border-radius:12px;text-align:center;font:700 1.25rem Inter,sans-serif;font-variant-numeric:tabular-nums;color:var(--ink);background:var(--cream)}
+.exin:focus{border-color:var(--gold);outline:none;box-shadow:0 0 0 3px var(--gold-tint)}
+.exrow .ref{font-size:.72rem;color:var(--muted);line-height:1.35}
+.use{appearance:none;border:1px solid var(--line2);background:var(--paper);border-radius:8px;padding:0 10px;min-height:44px;min-width:44px;font-size:.72rem;font-weight:700;cursor:pointer;color:var(--gold-ink);margin-left:2px}
+.gpick button[aria-pressed=true]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.colpick button[aria-pressed=true]{background:var(--ink);border-color:var(--ink);color:var(--paper)}
+.brow.h{border-top:0;background:var(--cream);font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:700;min-height:38px}
+.brow input{width:100%;height:44px;border:1.5px solid var(--line2);border-radius:10px;text-align:center;font:700 1.02rem Inter,sans-serif;font-variant-numeric:tabular-nums;color:var(--ink);background:var(--cream)}
+.brow input:focus{border-color:var(--gold);outline:none;box-shadow:0 0 0 3px var(--gold-tint)}
+.btn.gold{background:var(--gold);border-color:var(--gold);color:var(--on-gold)}
+@media(min-width:900px){
+  .panelhost{max-height:calc(100vh - 92px);overflow:auto;border-radius:22px;overscroll-behavior:contain}
+}
+.panel{padding-top:0}
+.pstick{position:sticky;top:0;z-index:3;background:var(--paper);margin:0 -16px;padding:10px 16px 0;border-bottom:1px solid var(--line)}
+@media(max-width:899px){.panelhost.open .pstick{background:var(--cream)}}
+.pstick .pwho{gap:10px}
+.pstick .pwho h2{font-size:1.15rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pstick .pwho .sub{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pstick .dayscore{margin:0;padding:6px 12px;border-radius:14px;flex:0 0 auto;gap:2px;align-items:baseline;min-width:104px;justify-content:center}
+.pstick .dayscore .num{font-size:2.3rem;min-width:0}
+.pstick .dayscore .num.falta{font-size:1.25rem;letter-spacing:.04em}
+.pstick .dayscore .delta{right:6px;top:2px;font-size:.8rem}
+.pbar{height:4px;background:var(--line);margin:10px -16px 0}
+.pbar i{display:block;height:100%;background:var(--gold);transition:width .3s}
+.panel .offmsg{margin:12px 0 0;background:var(--bad-bg);color:var(--bad-ink)}
+.sec>h3 .kh{display:inline-flex;align-items:center;gap:6px;font-weight:600;color:var(--muted)}
+.sec>h3 .seg2{display:inline-flex;border:1.5px solid var(--line2);border-radius:12px;overflow:hidden}
+.sec>h3 .seg2 button{appearance:none;border:0;background:var(--paper);min-height:44px;min-width:52px;font-weight:800;cursor:pointer;color:var(--bad-ink);font-size:.86rem;letter-spacing:0}
+.sec>h3 .seg2 button[aria-pressed=true]{background:var(--bad);color:var(--paper)}
+.sec>h3{align-items:center}
+.pnt{grid-template-columns:minmax(0,1fr) 46px 44px 56px;padding:4px 6px 4px 12px;min-height:54px}
+.pnt .pl b{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pnt .pl small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pnt .minus{width:44px;height:44px}
+.pnt .tache{width:56px;height:46px;font-size:1.4rem}
+.kn{display:none;font:700 .66rem Inter,sans-serif;border:1px solid var(--line2);border-bottom-width:2px;border-radius:5px;padding:0 5px;margin-right:6px;color:var(--muted);vertical-align:2px}
+@media(hover:hover) and (min-width:900px){.kn{display:inline-block}}
+@media(min-width:1100px){.points{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:400px){.pnt{grid-template-columns:minmax(0,1fr) 40px 44px 54px;gap:5px;min-height:50px}.pnt .pl small{display:none}}
+@media(prefers-reduced-motion:reduce){.pbar i{transition:none}}
+body{background:var(--cream);color:var(--ink)}
+.tabs{background:var(--paper);border-bottom-color:var(--line)}
+/* fuera sombras y degradados */
+.gcard,.panel,.al-card,.edsheet,.toast{box-shadow:none}
+.edsheet{border:1px solid var(--line)}
+.toast{background:var(--ink);color:var(--paper)}
+.al-hero::before{content:none}
+.nav{background:var(--paper);border-top:1px solid var(--line)}
+@media(max-width:899px){.panelhost.open .nav{background:var(--cream)}}
+.glv,.ini{background:transparent;color:var(--gold-ink);border:1.5px solid var(--line2)}
+.glv::after,.ini::after{content:none}
+/* tipografía: nada de mayúsculas espaciadas; títulos en Inria Serif con tamaños distintos */
+.sec>h3{font-family:var(--serif);font-size:1.08rem;letter-spacing:0;text-transform:none;color:var(--ink);font-weight:700}
+.sec>h3 .kh{font-family:Inter,sans-serif;font-size:.76rem}
+.dayscore .lbl b,.brow.h,.pill{letter-spacing:0;text-transform:none}
+.brow.h{font-size:.74rem}
+.pill{font-size:.68rem}
+.dayrow h1,.ghead h1,.bhead h1{font-weight:700;font-size:1.35rem}
+.gtop h2,.pwho h2{font-weight:700}
+.al-card h2{font-size:1.3rem}
+.al-dh h3{font-size:1.08rem}
+/* Vesper habla en Inria Serif itálica (sin Caveat): su voz, sobria */
+.prog .say,.ready .hand,.empty .hand,.al-say,.al-tip p{font-family:var(--serif);font-style:italic;font-weight:700}
+.prog .say{font-size:.95rem}
+.ready .hand,.empty .hand{font-size:1.25rem}
+.al-tip p{font-size:1.05rem;color:var(--ink)}
+/* ✗ de pluma */
+.tx{width:1em;height:1em;display:inline-block;vertical-align:-.15em;overflow:visible;flex:0 0 auto}
+.tx path{fill:none;stroke:var(--error);stroke-width:2.6;stroke-linecap:round}
+.tache{display:grid;place-items:center}
+.tache .tx{width:26px;height:26px}.tache .tx path{stroke-width:2.4}
+.pnt .pc .x{letter-spacing:0;display:flex;justify-content:center;flex-wrap:wrap}
+.pnt .pc .x .tx{width:.85em;height:.85em}
+.al-day .dx{display:flex;gap:1px;justify-content:center;align-items:center}
+.al-day .dx .tx{width:.8rem;height:.8rem}
+.al-tl li .x .tx{width:.95rem;height:.95rem}
+.okm{font-style:normal;font-weight:800;color:var(--ok-ink)}
+.al-day .dx.ok{color:var(--ok-ink)}
+/* panel del profe: barra fija plana y sin textos cortados */
+.pstick .dayscore{background:var(--cream);color:var(--ink);border:1px solid var(--line)}
+.dayscore .num{color:var(--ink)}
+.dayscore .num.falta{color:var(--error)}
+.dayscore .of{color:var(--muted)}
+.pstick .pwho h2{white-space:normal;overflow:visible;text-overflow:clip;overflow-wrap:anywhere;font-size:1.12rem}
+.pstick .pwho .sub{white-space:normal;overflow:visible}
+.pav{margin:6px 0 0;font-size:.76rem;color:var(--muted);line-height:1.35}
+.pnt .pl b,.pnt .pl small{white-space:normal;overflow:visible;text-overflow:clip}
+.pnt .pl b{line-height:1.2}
+.pnt.hit{background:var(--paper)}
+@media(max-width:400px){.pnt{grid-template-columns:minmax(0,1fr) 44px 38px 54px;padding:3px 6px 3px 10px;min-height:50px}.pnt .tache{height:44px}.points{gap:5px}.panel .sec{margin-top:10px}.pstick{padding-top:8px}}
+.editlink{min-height:44px}
+.edrow input{min-height:44px;background:var(--cream);color:var(--ink)}
+.exin,.brow input{color:var(--ink)}
+.paste textarea{background:var(--cream);color:var(--ink)}
+.tag{background:var(--cream)}
+.tag.todo{background:var(--gold-tint);color:var(--gold-ink)}
+
+/* --- lo que solo tiene la página real (guardado, avisos, pie) --- */
+header.top .brand b,.glv,.ini,.srow .sc b,.brow .avc b,.gtop h2,.ghead h1,.pwho h2,.bhead h1,.dayrow h1,.edsheet h2,.dayscore .num{font-family:var(--serif)}
+header.top{border-bottom-width:1px}
+header.top .brand small{letter-spacing:.04em;text-transform:none;font-size:.7rem}
+header a.back{letter-spacing:0;text-transform:none;font-size:.8rem}
+@media(max-width:760px){header a.back{font-size:0}}
+.savebar{background:var(--gold-tint);color:var(--ink)}
+.savebar.ok{background:var(--ok-bg);color:var(--ok-ink)}
+.savebar.err{background:var(--bad-bg);color:var(--bad-ink)}
+.notice{background:var(--paper);border-color:var(--line);border-left-color:var(--gold);color:var(--ink)}
+.notice.bad{background:var(--bad-bg);border-color:var(--bad-line);border-left-color:var(--error);color:var(--ink)}
+#loading,.cycle,.legacy,.dayrow h1 small{color:var(--muted)}
+.emptyg{background:var(--paper);border-color:var(--line)}
+.emptyg .hand{font-family:var(--serif);font-style:italic;font-weight:700;font-size:1.25rem;color:var(--ink)}
+.sv .fa-circle-check{color:var(--ok-ink)}
+.sv .fa-circle-exclamation{color:var(--bad-ink)}
+.exin:disabled,.brow input:disabled,textarea.notes:disabled{background:var(--cream);opacity:.6}
+textarea.notes{background:var(--cream);color:var(--ink);border-color:var(--line2)}
+.edsheet{color:var(--ink)}
+.ibtn,.back2,.close,.nbtn,.btn,.gpick button,.minus{color:var(--ink)}
+.tache{color:var(--error)}
+footer{background:var(--paper);color:var(--muted);border-top:1px solid var(--line)}
+footer a{color:var(--gold-ink)}
+#panel .vgb-hist span{background:var(--cream);color:var(--muted)}
+#panel .vgb-hist span.full{background:var(--ok-bg);color:var(--ok-ink)}
+#panel .vgb-hist span.g,#panel .vgb-hist span.w,#panel .vgb-hist span.b{background:var(--cream);color:var(--ink)}
+#panel .vgb-hist span.fa{background:var(--bad-bg);color:var(--bad-ink)}
+#panel .vgb-hist span.cur{outline:2px solid var(--gold)}
+.srow .sc b.s-good,.srow .sc b.s-warn{color:var(--ink)}
+.srow .sc b.s-full{color:var(--ok-ink)}
+.srow .sc b.s-bad{color:var(--bad-ink)}
+.tag.ok{background:var(--neu-bg);color:var(--ink)}
+</style>
+<script>
+/* Un solo aspecto activo: B salvo que el alumno/profe eligió «Minimalista». */
+(function () {
+  function pick() {
+    var m = document.documentElement.getAttribute("data-vesper-style") === "minimal";
+    var b = document.getElementById("vb-diseno"), c = document.getElementById("vb-minimal");
+    if (b) b.media = m ? "not all" : "all";
+    if (c) c.media = m ? "all" : "not all";
+  }
+  pick();
+  window.addEventListener("vesper:style", pick);
+})();
+</script>
+<script src="vesper_prefs.js"></script>
+<script src="vesper_theme.js"></script>
 </head>
 <body>
 
-<header>
+<header class="top">
   <a class="brand" href="index.html">
     <img src="assets/images/vesper_logo_inverted.png" alt="Vesper Academy">
-    <span><b>Vesper Academy</b><small>Boleta</small></span>
+    <span><b>Calificar</b><small>Vesper Academy</small></span>
   </a>
   <div class="right">
     <a class="back" href="portal_calificaciones.html"><i class="fas fa-chart-line"></i> Resultados</a>
@@ -205,57 +693,86 @@ footer a{color:var(--gold);text-decoration:none;}
     <a class="back" href="index.html"><i class="fas fa-arrow-left"></i> Sitio principal</a>
   </div>
 </header>
+<div class="savebar" id="savebar" role="status" aria-live="polite" hidden></div>
+
+<div id="loading"><div class="spin"></div><div>Cargando tus grupos…</div></div>
+<div class="wrap" id="msgwrap" hidden><div id="msg"></div></div>
+
+<div id="content" hidden>
+<nav class="tabs" role="tablist">
+  <button class="tab" role="tab" id="t-class" aria-selected="true" aria-controls="v-class">Clase del día</button>
+  <button class="tab" role="tab" id="t-book" aria-selected="false" aria-controls="v-book">Boleta</button>
+</nav>
 
 <div class="wrap">
-  <div class="intro">
-    <h1>Boleta de calificaciones</h1>
-    <p>En <b>Clase del día</b> pasas lista, marcas la tarea y calificas lo que
-       observaste. En <b>Boleta</b> capturas parciales y examen final. La
-       calificación se arma sola con lo que tú registras; la práctica del
-       alumno en la app es solo referencia y <b>no cuenta</b>.</p>
+  <div id="warn" class="notice" hidden></div>
+  <section id="v-class" role="tabpanel" aria-labelledby="t-class">
+    <div class="dayrow">
+      <button class="ibtn" id="d-prev" aria-label="Clase anterior">‹</button>
+      <h1 id="d-title"></h1>
+      <button class="ibtn" id="d-next" aria-label="Clase siguiente">›</button>
+    </div>
     <p class="cycle" id="cycle"></p>
-  </div>
 
-  <div id="loading"><div class="spin"></div><div>Cargando boleta…</div></div>
-
-  <div id="content" style="display:none">
-    <div id="warn" class="notice" style="display:none"></div>
-    <div class="stats" id="stats"></div>
-
-    <div class="tabs" role="tablist">
-      <button class="tab" role="tab" id="tab-class" data-view="class" aria-controls="view-class"><i class="fas fa-user-check"></i>Clase del día</button>
-      <button class="tab" role="tab" id="tab-book" data-view="book" aria-controls="view-book"><i class="fas fa-clipboard-list"></i>Boleta</button>
+    <div id="s-groups">
+      <div class="prog" id="g-prog">
+        <img id="g-cat" src="assets/images/mascot/vesper_cat_welcome.webp" alt="">
+        <div class="pm">
+          <div class="pt"><span><b id="g-n"></b> revisados en esta clase</span><span class="say" id="g-say"></span></div>
+          <div class="bar"><i id="g-bar"></i></div>
+        </div>
+      </div>
+      <div class="groups" id="glist"></div>
     </div>
 
-    <div class="toolbar">
-      <input id="f-q" type="search" placeholder="Buscar alumno…" aria-label="Buscar alumno">
-      <select id="f-group" aria-label="Grupo"><option value="">Todos mis grupos</option></select>
-      <select id="f-level" aria-label="Nivel"><option value="">Todos los niveles</option></select>
-      <select id="f-sort" aria-label="Orden">
-        <option value="name">Ordenar: Nombre (A–Z)</option>
-        <option value="grade">Ordenar: Calificación (mayor a menor)</option>
-        <option value="risk">Ordenar: En riesgo primero</option>
-      </select>
-      <span class="spacer"></span>
-      <button class="btn" id="f-reload"><i class="fas fa-rotate"></i>Actualizar</button>
+    <div id="s-group" hidden>
+      <div class="ghead">
+        <button class="back2" id="g-back">‹ Grupos</button>
+        <div class="gt"><h1 id="gg-title"></h1><small id="gg-sub"></small></div>
+      </div>
+      <div class="ready" id="ready" hidden></div>
+      <div class="glayout">
+        <div>
+          <div class="prog">
+            <img id="p-cat" src="assets/images/mascot/vesper_cat_explaining.webp" alt="">
+            <div class="pm">
+              <div class="pt"><span><b id="p-n"></b> revisados</span><span class="say" id="p-say"></span></div>
+              <div class="bar"><i id="p-bar"></i></div>
+            </div>
+          </div>
+          <div class="slist" id="slist"></div>
+          <p class="hintp">Toca a un alumno para calificarlo. Cada clase empieza en <b>100</b>: solo marcas <b style="color:var(--bad)">✗</b> donde falló. <button class="editlink" id="openedit">Editar los 10 puntos</button></p>
+        </div>
+        <div class="panelhost" id="panelhost"><div class="panel" id="panel" role="region" aria-label="Panel del alumno"></div></div>
+      </div>
     </div>
+  </section>
 
-    <section id="view-class" role="tabpanel" aria-labelledby="tab-class">
-      <div class="daystrip" id="c-strip" role="group" aria-label="Clases del ciclo"></div>
-      <div class="classhead" id="c-head"></div>
-      <div class="brush" id="c-brush" role="group" aria-label="Nivel que se aplica al tocar una casilla"></div>
-      <div class="tablecard"><table class="main ctable" id="c-table"></table></div>
-      <p class="legend" id="c-legend"></p>
-    </section>
-
-    <section id="view-book" role="tabpanel" aria-labelledby="tab-book" style="display:none">
-      <div class="tablecard"><table class="main btable" id="b-table"></table></div>
-      <p class="legend" id="b-legend"></p>
-    </section>
-  </div>
-
-  <div id="msg" style="display:none"></div>
+  <section id="v-book" role="tabpanel" aria-labelledby="t-book" hidden>
+    <div class="gpick" id="b-gpick" role="group" aria-label="Grupo"></div>
+    <div class="bhead">
+      <h1>Boleta · <span id="b-grp"></span></h1>
+      <button class="btn" id="b-paste">Pegar desde Excel</button>
+    </div>
+    <div class="paste" id="pastebox">
+      <b style="font-size:.9rem">Pega la columna del examen final</b>
+      <p class="tip" style="margin-top:4px">Una calificación por renglón, en el mismo orden de la lista de abajo. También acepta dos columnas (nombre y calificación). Solo llena los que están vacíos: lo que ya capturaste no se cambia.</p>
+      <textarea id="p-text" placeholder="92&#10;85&#10;78&#10;…" aria-label="Calificaciones pegadas"></textarea>
+      <div class="pv" id="p-prev"></div>
+      <div class="row"><button class="btn gold" id="p-apply" disabled>Guardar</button><button class="btn" id="p-cancel">Cancelar</button></div>
+    </div>
+    <p class="tip">Escribe el examen final y da <b>Enter</b>: baja solo al siguiente alumno. «Clase» es el promedio de sus notas diarias; cada FALTA vale 0. Calificación = Clase 60 % · Examen final 40 % (sin final es un avance con Clase al 100 %). Se aprueba con 70.</p>
+    <div class="btable" id="btable"></div>
+  </section>
 </div>
+</div>
+
+<div id="editor" hidden><div class="edscrim" id="ed-scrim"></div><div class="edsheet" role="dialog" aria-modal="true" aria-label="Editar los 10 puntos">
+  <h2>Editar los 10 puntos</h2><p>Cambia el nombre y la pista de cada punto. Solo se guarda en este navegador (lo que se guarda en la nube es qué punto falló, no su nombre). «1» siempre es la asistencia: su ✗ significa FALTA y la clase vale 0.</p>
+  <div id="ed-rows"></div>
+  <div class="edbtns"><button class="btn gold" id="ed-save">Guardar</button><button class="btn" id="ed-cancel">Cancelar</button><button class="btn" id="ed-reset">Restaurar los originales</button></div>
+</div></div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <footer>
   © <span id="y"></span> Vesper Academy · <a href="index.html">vesper.academy</a> · Área de profesores
@@ -263,728 +780,619 @@ footer a{color:var(--gold);text-decoration:none;}
 
 <script src="vesper_path.js"></script>
 <script src="vesper_results.js"></script>
-<script src="vesper_gradebook.js?v=20261111"></script>
+<script src="vesper_gradebook.js?v=20261120"></script>
 <script>
 (function () {
   "use strict";
   document.getElementById("y").textContent = new Date().getFullYear();
-
   var GB = window.VESPER_GRADEBOOK;
   GB.injectCss();
-
   function $(id) { return document.getElementById(id); }
-  var loadingEl = $("loading"), contentEl = $("content"), msgEl = $("msg"), warnEl = $("warn");
-  var statsEl = $("stats"), fQ = $("f-q"), fGroup = $("f-group"), fLevel = $("f-level"), fSort = $("f-sort");
-  var viewClass = $("view-class"), viewBook = $("view-book");
-  var cStrip = $("c-strip"), cHead = $("c-head"), cBrush = $("c-brush"), cTable = $("c-table");
-  var bTable = $("b-table");
+  function esc(t) { return String(t == null ? "" : t).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
 
-  var DATES = GB.classDates();
-  var CLOCK = GB.courseClock();
-  var N = GB.COURSE_DAYS;
+  var N = GB.COURSE_DAYS, DATES = GB.classDates(), CLOCK = GB.courseClock();
+  var ABSENT_KEY = GB.ABSENT_KEY, DAY_MAX = GB.DAY_MAX;
+  var POINTS = GB.points();
+  var tacheVal = GB.tacheValue();
+  var MASCOT = "assets/images/mascot/";
+  /* aspecto: B «Noche Vespertina» por defecto, C bajo html[data-vesper-style="minimal"] (vesper_style.js) */
+  function MIN() { return document.documentElement.getAttribute("data-vesper-style") === "minimal"; }
+  /* C: el ✗ de pluma (curva y giro pequeños, fijos por semilla para que no bailen al repintar) */
+  var PEN = (function () {
+    function rng(seed) { var h = 2166136261; seed = String(seed); for (var i = 0; i < seed.length; i++) { h ^= seed.charCodeAt(i); h = Math.imul(h, 16777619); }
+      var s = (h >>> 0) % 2147483646 + 1; return function () { s = (s * 16807) % 2147483647; return (s - 1) / 2147483646; }; }
+    function f(n) { return Math.round(n * 10) / 10; }
+    function x(seed) {
+      var r = rng(seed), j = function (a) { return (r() * 2 - 1) * a; };
+      var a = "M" + f(5 + j(.6)) + " " + f(5.5 + j(.6)) + "Q" + f(12 + j(.8)) + " " + f(12.4 + j(.8)) + " " + f(19.2 + j(.5)) + " " + f(19 + j(.6));
+      var b = "M" + f(19 + j(.6)) + " " + f(5 + j(.6)) + "Q" + f(12.2 + j(.8)) + " " + f(11.6 + j(.8)) + " " + f(5.2 + j(.6)) + " " + f(19.4 + j(.6));
+      return '<svg class="tx" viewBox="0 0 24 24" aria-hidden="true" style="transform:rotate(' + f(j(4)) + 'deg)"><path d="' + a + '"/><path d="' + b + '"/></svg>';
+    }
+    function xs(n, seed, max) { var h = "", m = Math.min(n, max || 5); for (var i = 0; i < m; i++) h += x(seed + "|" + i); return h + (n > m ? "+" : ""); }
+    return { x: x, xs: xs };
+  })();
+  /* B en celular: la barra fija del panel va justo debajo de la cabecera (que también es fija) */
+  function setHdr() { var hd = document.querySelector("header.top"); if (hd) document.documentElement.style.setProperty("--hdr", hd.offsetHeight + "px"); }
+  setHdr(); window.addEventListener("resize", setHdr);
 
-  var roster = [];          // filas de GB.buildRoster
-  var dailyMap = {};        // sid -> { sid, days }
-  var canSave = false;      // false si gradebook no respondió (regla sin publicar)
-  var canDaily = false;     // idem daily_progress
-  var view = (CLOCK.started && !CLOCK.ended) ? "class" : "book";
-  var selDay = Math.max(1, CLOCK.day);   // clase seleccionada en "Clase del día"
-  var brush = 3;            // nivel que se aplica al tocar una casilla (0 = borrar)
-  var openDetail = {};      // key -> true (detalles abiertos en la boleta)
-
-  function esc(t) {
-    return ("" + (t == null ? "" : t)).replace(/[&<>"]/g, function (c) {
-      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
-    });
-  }
-  function q(root, sel) { return root.querySelector(sel); }
-  function byKey(root, attr, key) { return root.querySelector("[" + attr + '="' + CSS.escape(key) + '"]'); }
-
-  /* filtro de nivel con los 6 CEFR canónicos */
-  (window.VESPER_PATH ? VESPER_PATH.LEVELS : ["A1", "A2", "B1", "B2", "C1", "C2"]).forEach(function (lv) {
-    var o = document.createElement("option");
-    o.value = lv; o.textContent = lv;
-    fLevel.appendChild(o);
-  });
-  function normLevel(lv) { return (window.VESPER_PATH && lv) ? VESPER_PATH.normLevel(lv) : (lv || ""); }
-  function levelColor(lv) { return window.VESPER_PATH ? VESPER_PATH.levelColor(lv) : "#a8843d"; }
-  function levelHtml(r) {
-    if (r.levelName) return '<span class="lvl" style="color:var(--gold2)">' + esc(r.levelName) + '</span>';
-    var lvN = normLevel(r.level);
-    return lvN ? '<span class="lvl" style="color:' + levelColor(lvN) + '">' + esc(lvN) + '</span>' : '';
-  }
+  /* ---- estado ---- */
+  var roster = [];          // filas de GB.buildRoster con sid
+  var dailyMap = {};        // sid -> { days }
+  var GROUPS = [];          // [{ id, title, level, rows }]
+  var canSave = false, canDaily = false;
+  var day = Math.max(1, CLOCK.day || 1);
+  var grp = null, view = "class", cur = -1, lastScore = {}, justFinished = false;
+  var taps = {};            // sid|día -> {punto: [valor de cada ✗]} para deshacer exacto
+  var bgrp = null;
 
   function showMsg(html, bad) {
-    loadingEl.style.display = "none";
-    contentEl.style.display = "none";
-    msgEl.style.display = "block";
-    msgEl.className = "notice" + (bad ? " bad" : "");
-    msgEl.innerHTML = html;
+    $("loading").hidden = true; $("content").hidden = true; $("msgwrap").hidden = false;
+    $("msg").className = "notice" + (bad ? " bad" : "");
+    $("msg").innerHTML = html;
   }
 
-  /* ---------- datos derivados ---------- */
-  function rowByKey(key) {
-    for (var i = 0; i < roster.length; i++) if (roster[i].key === key) return roster[i];
-    return null;
-  }
-  function daysOf(r) { return (r.sid && dailyMap[r.sid] && dailyMap[r.sid].days) || {}; }
-  function statsOf(r) { return GB.dailyStats(daysOf(r)); }
-  function gradeOf(r) { return GB.computeGrade(r, statsOf(r)); }
-
-  /* filas visibles. useSearch=false: solo grupo y nivel (para las cifras de arriba) */
-  function scoped(useSearch) {
-    var qv = useSearch ? fQ.value.trim().toLowerCase() : "", lv = fLevel.value, gr = fGroup.value;
-    return roster.filter(function (r) {
-      if (gr && r.group !== gr) return false;
-      if (lv && normLevel(r.level) !== lv && r.levelName !== lv) return false;
-      if (qv && (r.name + " " + r.alias).toLowerCase().indexOf(qv) === -1) return false;
-      return true;
-    });
-  }
+  /* ---- modelo ---- */
+  function G(id) { for (var i = 0; i < GROUPS.length; i++) if (GROUPS[i].id === id) return GROUPS[i]; return null; }
+  function inGroup(id) { var g = G(id); return g ? g.rows : []; }
+  function daysOf(r) { var rec = dailyMap[r.sid]; return (rec && rec.days) || {}; }
+  function cellOf(r, d) { return daysOf(r)[d || day] || null; }
+  function reviewed(r, d) { var c = cellOf(r, d); return !!(c && c.rv); }
+  function absent(c) { return GB.isAbsent(c); }
+  function dayScore(r) { return GB.dayScore(cellOf(r)); }
+  function gradeOf(r) { return GB.computeGrade(r, GB.dailyStats(daysOf(r))); }
+  function tone(v) { return v >= 90 ? "s-good" : v >= GB.PASS_THRESHOLD ? "s-warn" : "s-bad"; }
+  function ini(name) { return String(name || "?").split(/\s+/).slice(0, 2).map(function (w) { return w.charAt(0); }).join("").toUpperCase(); }
+  function marks(n) { return n ? new Array(Math.min(n, 5) + 1).join("✗") + (n > 5 ? "+" : "") : ""; }
+  function first(name) { return String(name || "").split(/\s+/)[0]; }
   function byName(a, b) { return a.name.localeCompare(b.name, "es") || a.key.localeCompare(b.key); }
+  function rowBySid(sid) { for (var i = 0; i < roster.length; i++) if (roster[i].sid === sid) return roster[i]; return null; }
+  function normLevel(lv) { return (window.VESPER_PATH && lv) ? VESPER_PATH.normLevel(lv) : (lv || ""); }
 
-  /* ---------- cabecera: ciclo y cifras ---------- */
-  function renderCycle() {
-    var txt = "Ciclo del " + GB.fmtDay(CLOCK.start) + " al " + GB.fmtDay(CLOCK.end) + " · " + N + " clases. ";
-    if (!CLOCK.started) {
-      var ms = new Date(CLOCK.start + "T00:00:00") - new Date(CLOCK.today + "T00:00:00");
-      var left = Math.round(ms / 86400000);
-      txt += "El curso inicia en " + left + " día" + (left === 1 ? "" : "s") + ".";
-    } else if (CLOCK.ended) {
-      txt += "El ciclo ya terminó.";
-    } else if (CLOCK.isClassDay) {
-      txt += "Hoy es la clase " + CLOCK.day + ".";
-    } else {
-      txt += "Hoy no hay clase (la última fue la " + CLOCK.day + ").";
-    }
-    $("cycle").innerHTML = '<i class="fas fa-calendar-day"></i>' + esc(txt);
-  }
-
-  function renderStats() {
-    var rows = scoped(false), gsum = 0, gn = 0, asum = 0, an = 0, risk = 0, closed = 0, passed = 0;
-    rows.forEach(function (r) {
-      var st = statsOf(r), g = GB.computeGrade(r, st);
-      if (g.grade != null) { gsum += g.grade; gn++; }
-      if (st.att.pct != null) { asum += st.att.pct; an++; }
-      if (g.atRisk) risk++;
-      if (g.closed) { closed++; if (g.passed) passed++; }
+  /* grupos = los asignados al profe + los que trae el roster (campo group) */
+  function buildGroups(myIds) {
+    var map = {};
+    (myIds || []).forEach(function (id) { map[id] = { id: id, rows: [] }; });
+    roster.forEach(function (r) {
+      var id = r.group || "";
+      (map[id] || (map[id] = { id: id, rows: [] })).rows.push(r);
     });
-    statsEl.innerHTML =
-      '<div class="stat"><b>' + rows.length + '</b><span>Alumnos</span></div>' +
-      '<div class="stat"><b>' + (gn ? Math.round(gsum / gn) : "—") + '</b><span>Promedio del grupo</span></div>' +
-      '<div class="stat"><b>' + (an ? Math.round(asum / an) + "%" : "—") + '</b><span>Asistencia</span></div>' +
-      '<div class="stat' + (risk ? " alert" : "") + '"><b>' + risk + '</b><span>En riesgo</span></div>' +
-      (closed ? '<div class="stat"><b>' + passed + '/' + closed + '</b><span>Aprobados (≥' + GB.PASS_THRESHOLD + ')</span></div>' : '');
-  }
-
-  /* ============================================================
-     CLASE DEL DÍA: pase de lista, tarea y rúbrica de una clase
-     ============================================================ */
-  function classRows() {
-    return scoped(true).filter(function (r) { return !!r.sid; }).sort(byName);
-  }
-  function cellOf(r) { return daysOf(r)[selDay] || null; }
-  function ensureCell(r) {
-    var rec = dailyMap[r.sid];
-    if (!rec) rec = dailyMap[r.sid] = { sid: r.sid, days: {} };
-    if (!rec.days[selDay]) rec.days[selDay] = { att: "P", r: {} };
-    return rec.days[selDay];
-  }
-  function isAbsent(cell) { return !!cell && (cell.att === "F" || cell.att === "J"); }
-
-  function renderStrip() {
-    var rows = classRows(), html = "";
-    for (var d = 1; d <= N; d++) {
-      var have = 0;
-      rows.forEach(function (r) { if (daysOf(r)[d]) have++; });
-      var cls = "day";
-      if (d > 1 && (d - 1) % 5 === 0) cls += " wk";
-      if (have) cls += (have < rows.length) ? " has part" : " has";
-      if (DATES[d - 1] === CLOCK.today) cls += " today";
-      if (DATES[d - 1] > CLOCK.today) cls += " future";
-      if (d === selDay) cls += " sel";
-      var f = GB.fmtDay(DATES[d - 1]).split(" ");
-      html += '<button type="button" class="' + cls + '" data-day="' + d + '"' +
-        (d === selDay ? ' aria-current="true"' : '') +
-        ' title="Clase ' + d + " · " + GB.fmtDay(DATES[d - 1]) +
-        (have ? " · lista de " + have + " de " + rows.length : " · sin capturar") + '">' +
-        '<b>' + d + '</b><small>' + f[0] + " " + f[1] + '</small></button>';
-    }
-    cStrip.innerHTML = html;
-  }
-
-  function renderClassHead() {
-    var rows = classRows(), have = 0;
-    rows.forEach(function (r) { if (cellOf(r)) have++; });
-    var date = DATES[selDay - 1], chip = "";
-    if (date === CLOCK.today) chip = '<span class="chip now">Hoy</span>';
-    else if (date > CLOCK.today) chip = '<span class="chip warn">Clase futura</span>';
-    if (!have) chip += '<span class="chip">Sin capturar</span>';
-    var missing = rows.length - have;
-    cHead.innerHTML =
-      '<div><h2>Clase ' + selDay + '</h2><span class="when">' + esc(GB.fmtDay(date)) + '</span>' + chip + '</div>' +
-      '<div class="acts">' +
-        (missing && canDaily ? '<button type="button" class="btn primary" data-act="roll"><i class="fas fa-user-check"></i>' +
-          (have ? "Agregar a los " + missing + " que faltan" : "Pasar lista: todos presentes") + '</button>' : '') +
-        (have && canDaily ? '<button type="button" class="btn ghost" data-act="dropday"><i class="fas fa-trash-can"></i>Quitar esta clase</button>' : '') +
-      '</div>';
-  }
-
-  function renderBrush() {
-    var html = '<span>Nivel a aplicar:</span>';
-    [4, 3, 2, 1].forEach(function (lv) {
-      var m = GB.levelMark(lv);
-      html += '<button type="button" class="bl vgb-' + m.tone + '" data-brush="' + lv + '" aria-pressed="' +
-              (brush === lv) + '">' + lv + " " + esc(m.label) + '</button>';
+    GROUPS = Object.keys(map).map(function (id) {
+      var g = map[id], names = {}, lv = {};
+      g.rows.sort(byName);
+      g.rows.forEach(function (r) {
+        if (r.levelName) names[r.levelName] = (names[r.levelName] || 0) + 1;
+        var l = normLevel(r.level || (r.levelNum != null ? "" : ""));
+        if (l) lv[l] = (lv[l] || 0) + 1;
+      });
+      function top(o) { return Object.keys(o).sort(function (a, b) { return o[b] - o[a]; })[0] || ""; }
+      g.levelName = top(names);
+      g.level = top(lv);
+      g.title = g.levelName || (id ? "Grupo " + id : "Sin grupo");
+      g.sub = (id ? "Grupo " + id : "Alumnos sin grupo") + " · " + g.rows.length + (g.rows.length === 1 ? " alumno" : " alumnos");
+      g.badge = g.level || (g.levelName ? ini(g.levelName) : (id ? String(id).slice(0, 2).toUpperCase() : "–"));
+      return g;
+    }).sort(function (a, b) {
+      if (!a.id !== !b.id) return a.id ? -1 : 1;
+      return a.title.localeCompare(b.title, "es") || a.id.localeCompare(b.id);
     });
-    html += '<button type="button" class="bl erase" data-brush="0" aria-pressed="' + (brush === 0) + '">Borrar</button>';
-    cBrush.innerHTML = html;
   }
 
-  function svHtml(state) {
-    if (state === "saving") return '<i class="fas fa-spinner" title="Guardando…"></i>';
-    if (state === "ok") return '<i class="fas fa-circle-check" title="Guardado"></i>';
-    if (state === "err") return '<i class="fas fa-circle-exclamation" title="No se pudo guardar. Revisa tu conexión o las reglas de Firestore; se reintenta con tu siguiente cambio."></i>';
+  /* ---- guardado con espera + indicador ---- */
+  var dTimers = {}, dState = {}, gTimers = {}, gPending = {}, gState = {};
+  function svHtml(st) {
+    if (st === "saving") return '<i class="fas fa-spinner" title="Guardando…"></i>';
+    if (st === "ok") return '<i class="fas fa-circle-check" title="Guardado"></i>';
+    if (st === "err") return '<i class="fas fa-circle-exclamation" title="No se pudo guardar. Se reintenta con tu siguiente cambio."></i>';
     return "";
   }
-
-  function classRowHtml(r) {
-    var cell = cellOf(r), absent = isAbsent(cell), off = canDaily ? "" : " disabled";
-    var am = cell ? GB.attMark(cell.att) : { mark: "·", tone: "none", label: "Sin pasar lista" };
-    var hm = GB.hwMark(cell ? cell.hw : null);
-    var html = '<tr data-key="' + esc(r.key) + '"' + (cell ? '' : ' class="norec"') + '>' +
-      '<td class="who"><b>' + esc(r.name) + '</b>' + (r.group ? '<small>grupo ' + esc(r.group) + '</small>' : '') + '</td>' +
-      '<td><button type="button" class="cc vgb-' + am.tone + '" data-act="att"' + off +
-        ' aria-label="Asistencia de ' + esc(r.name) + ": " + esc(am.label) + '" title="' + esc(am.label) + '">' + am.mark + '</button></td>' +
-      '<td><button type="button" class="cc vgb-' + hm.tone + '" data-act="hw"' + off +
-        ' aria-label="Tarea de ' + esc(r.name) + ": " + esc(hm.label) + '" title="' + esc(hm.label) + '">' + hm.mark + '</button></td>';
-    GB.CRITERIA.forEach(function (c, i) {
-      var m = GB.levelMark(cell && cell.r ? cell.r[c.key] : null);
-      html += '<td' + (i === 0 ? ' class="gapl"' : '') + '><button type="button" class="cc vgb-' + m.tone + '" data-act="lv" data-c="' + c.key + '"' +
-        ((absent || !canDaily) ? " disabled" : "") +
-        ' aria-label="' + esc(c.label) + " de " + esc(r.name) + ": " + esc(absent ? "no asistió" : m.label) +
-        '" title="' + esc(c.label + ": " + (absent ? "no asistió" : m.label)) + '">' + m.mark + '</button></td>';
-    });
-    return html + '<td><span class="sv" data-sv="' + esc(r.key) + '">' + svHtml(dState[r.key]) + '</span></td></tr>';
+  function stateOf(sid) {
+    var a = dState[sid], b = gState[sid];
+    if (a === "saving" || b === "saving") return "saving";
+    if (a === "err" || b === "err") return "err";
+    if (a === "ok" || b === "ok") return "ok";
+    return "";
   }
-
-  function renderClassTable() {
-    var rows = classRows();
-    var head = '<thead><tr><th class="who">Alumno</th><th>Asistencia</th>' +
-      '<th><button type="button" class="colbtn" data-act="hwall" title="Marcar entregada a todos los que no tienen marca">Tarea<i class="fas fa-angles-down"></i></button></th>';
-    GB.CRITERIA.forEach(function (c, i) {
-      head += '<th' + (i === 0 ? ' class="gapl"' : '') + '><button type="button" class="colbtn" data-act="fill" data-c="' + c.key +
-        '" title="' + esc(c.hint) + '. Toca para aplicar el nivel elegido a los presentes sin calificar.">' +
-        esc(c.label) + '<i class="fas fa-angles-down"></i></button></th>';
-    });
-    head += '<th></th></tr></thead>';
-    var body = rows.length ? rows.map(classRowHtml).join("")
-      : '<tr><td colspan="' + (4 + GB.CRITERIA.length) + '" class="empty">' +
-        (roster.length ? 'No hay alumnos que coincidan.' :
-          'Aún no tienes alumnos asignados. Pide al administrador que registre a tus alumnos con un grupo y te asigne ese grupo.') +
-        '</td></tr>';
-    cTable.innerHTML = head + '<tbody>' + body + '</tbody>';
-  }
-
-  function renderClass() {
-    renderStrip(); renderClassHead(); renderBrush(); renderClassTable();
-    $("c-legend").innerHTML =
-      '<b>Asistencia</b> (toca para cambiar): ' +
-      GB.ATT_ORDER.map(function (a) { var m = GB.attMark(a); return '<span class="k vgb-' + m.tone + '">' + m.mark + '</span>' + m.label; }).join(" · ") +
-      '. Un retardo vale media asistencia; la justificada no cuenta.<br>' +
-      '<b>Tarea</b>: ' + [2, 1, 0].map(function (h) { var m = GB.hwMark(h); return '<span class="k vgb-' + m.tone + '">' + m.mark + '</span>' + m.label; }).join(" · ") +
-      ' · sin marca = no hubo tarea.<br>' +
-      '<b>Rúbrica</b>: elige un nivel arriba y toca las casillas; toca el nombre de la columna para aplicarlo a todos los presentes sin calificar. ' +
-      'Solo califica lo que observaste: lo que dejes vacío no cuenta, ni a favor ni en contra.';
-  }
-
-  /* re-pinta solo la fila tocada (conserva el foco del teclado) + lo que depende */
-  function touched(r, act, c) {
-    var tr = byKey(cTable, "data-key", r.key);
-    if (tr) {
-      var hadFocus = tr.contains(document.activeElement);
-      tr.outerHTML = classRowHtml(r);
-      if (hadFocus) {
-        tr = byKey(cTable, "data-key", r.key);
-        var b = tr && q(tr, '[data-act="' + act + '"]' + (c ? '[data-c="' + c + '"]' : ''));
-        if (b && !b.disabled) b.focus();
-      }
-    }
-    queueDaily(r);
-  }
-  function afterDaily() { renderStrip(); renderClassHead(); renderStats(); }
-
-  cStrip.addEventListener("click", function (e) {
-    var b = e.target.closest(".day");
-    if (!b) return;
-    selDay = parseInt(b.getAttribute("data-day"), 10);
-    renderClass();
-    var cur = q(cStrip, ".day.sel");
-    if (cur) cur.focus();
-  });
-
-  cBrush.addEventListener("click", function (e) {
-    var b = e.target.closest("[data-brush]");
-    if (!b) return;
-    brush = parseInt(b.getAttribute("data-brush"), 10);
-    renderBrush();
-    var cur = q(cBrush, '[data-brush="' + brush + '"]');
-    if (cur) cur.focus();
-  });
-
-  cHead.addEventListener("click", function (e) {
-    var b = e.target.closest("[data-act]");
-    if (!b || !canDaily) return;
-    var act = b.getAttribute("data-act"), rows = classRows();
-    if (act === "roll") {
-      rows.forEach(function (r) { if (!cellOf(r)) { ensureCell(r); queueDaily(r); } });
-    } else if (act === "dropday") {
-      var withData = rows.filter(function (r) { return !!cellOf(r); });
-      if (!window.confirm("¿Quitar la clase " + selDay + " (" + GB.fmtDay(DATES[selDay - 1]) + ") de " + withData.length +
-          " alumno" + (withData.length === 1 ? "" : "s") + "? Se borra su asistencia, tarea y rúbrica de ese día.")) return;
-      withData.forEach(function (r) { delete dailyMap[r.sid].days[selDay]; queueDaily(r); });
-    }
-    renderClassTable(); afterDaily();
-  });
-
-  cTable.addEventListener("click", function (e) {
-    var b = e.target.closest("[data-act]");
-    if (!b || !canDaily || b.disabled) return;
-    var act = b.getAttribute("data-act"), c = b.getAttribute("data-c");
-
-    /* acciones de columna: solo llenan huecos, nunca pisan lo ya calificado */
-    if (act === "fill" || act === "hwall") {
-      var changed = 0;
-      classRows().forEach(function (r) {
-        var cell = cellOf(r);
-        if (!cell) return;
-        if (act === "hwall") {
-          if (cell.hw == null) { cell.hw = 2; changed++; queueDaily(r); }
-        } else if (brush && !isAbsent(cell) && !(cell.r && cell.r[c])) {
-          if (!cell.r) cell.r = {};
-          cell.r[c] = brush; changed++; queueDaily(r);
-        }
-      });
-      if (changed) { renderClassTable(); afterDaily(); }
-      return;
-    }
-
-    var tr = b.closest("tr[data-key]"), r = tr && rowByKey(tr.getAttribute("data-key"));
-    if (!r || !r.sid) return;
-    var isNew = !cellOf(r), cell = ensureCell(r);
-    if (act === "att") {
-      if (!isNew) cell.att = GB.ATT_ORDER[(GB.ATT_ORDER.indexOf(cell.att) + 1) % GB.ATT_ORDER.length];
-    } else if (act === "hw") {
-      if (cell.hw == null) cell.hw = 2;
-      else if (cell.hw > 0) cell.hw--;
-      else delete cell.hw;
-    } else if (act === "lv") {
-      if (!cell.r) cell.r = {};
-      if (!brush || cell.r[c] === brush) delete cell.r[c];
-      else cell.r[c] = brush;
-    }
-    touched(r, act, c);
-    afterDaily();
-  });
-
-  /* guardado del registro diario: un PATCH por alumno, con espera corta */
-  var dTimers = {}, dState = {};
-  function paintSv(key) {
-    var el = byKey(cTable, "data-sv", key);
-    if (el) el.innerHTML = svHtml(dState[key]);
+  function paintSave(sid) {
+    Array.prototype.forEach.call(document.querySelectorAll('[data-sv="' + sid + '"]'), function (el) { el.innerHTML = svHtml(stateOf(sid)); });
+    var all = Object.keys(dState).concat(Object.keys(gState)), saving = 0, err = 0, ok = 0;
+    all.forEach(function (k) { var s = stateOf(k); if (s === "saving") saving++; else if (s === "err") err++; else if (s === "ok") ok++; });
+    var bar = $("savebar");
+    if (!saving && !err && !ok) { bar.hidden = true; return; }
+    bar.hidden = false;
+    bar.className = "savebar" + (saving ? "" : err ? " err" : " ok");
+    bar.textContent = saving ? "Guardando…" : err ? "No se pudo guardar " + (err === 1 ? "un alumno" : err + " alumnos") + ". Revisa tu conexión: se reintenta con tu siguiente cambio." : "✓ Todo guardado";
   }
   function queueDaily(r) {
-    dState[r.key] = "saving"; paintSv(r.key);
-    clearTimeout(dTimers[r.key]);
-    dTimers[r.key] = setTimeout(function () { flushDaily(r); }, 700);
+    if (!canDaily || !r.sid) return;
+    dState[r.sid] = "saving"; paintSave(r.sid);
+    clearTimeout(dTimers[r.sid]);
+    dTimers[r.sid] = setTimeout(function () { flushDaily(r); }, 700);
   }
   function flushDaily(r) {
-    clearTimeout(dTimers[r.key]); delete dTimers[r.key];
-    var rec = dailyMap[r.sid];
-    if (!rec) return;
+    clearTimeout(dTimers[r.sid]); delete dTimers[r.sid];
+    var rec = dailyMap[r.sid]; if (!rec) return;
     var snap = JSON.stringify(rec.days);
     GB.saveDaily(r.sid, { days: rec.days, alias: r.alias, studentUid: r.studentUid }).then(function (ok) {
-      if (JSON.stringify(rec.days) !== snap) return;   // hubo más cambios: los guarda su propio turno
-      dState[r.key] = ok ? "ok" : "err"; paintSv(r.key);
+      if (dTimers[r.sid] || JSON.stringify(rec.days) !== snap) return;   // hubo más cambios: los guarda su turno
+      dState[r.sid] = ok ? "ok" : "err"; paintSave(r.sid);
     });
-  }
-
-  /* ============================================================
-     BOLETA: componentes, parciales, examen final y calificación
-     ============================================================ */
-  function bookRows() {
-    var rows = scoped(true), mode = fSort.value;
-    if (mode === "name") return rows.sort(byName);
-    var g = {};
-    rows.forEach(function (r) { g[r.key] = gradeOf(r); });
-    return rows.sort(function (a, b) {
-      if (mode === "risk" && g[a.key].atRisk !== g[b.key].atRisk) return g[a.key].atRisk ? -1 : 1;
-      var fa = g[a.key].grade, fb = g[b.key].grade;
-      if (fa == null && fb == null) return byName(a, b);
-      if (fa == null) return 1;
-      if (fb == null) return -1;
-      return (mode === "risk" ? fa - fb : fb - fa) || byName(a, b);
-    });
-  }
-
-  function partOf(g, key) {
-    for (var i = 0; i < g.parts.length; i++) if (g.parts[i].key === key) return g.parts[i];
-    return null;
-  }
-  function plural(n, one, many) { return n + " " + (n === 1 ? one : many); }
-
-  function compCell(g, key, sub) {
-    var p = partOf(g, key);
-    if (p.value == null) return '<td class="comp"><span class="na">—</span></td>';
-    return '<td class="comp"><b>' + p.value + '</b>' +
-      '<small>' + (p.legacy ? 'captura anterior' : esc(sub)) + '</small></td>';
-  }
-
-  function gradeCellHtml(g) {
-    if (g.grade == null) return '<span class="na">Sin datos</span>';
-    var st = g.status === "open"
-      ? '<small class="gst">Avance · ' + g.coverage + '% evaluado</small>'
-      : '<small class="gst ' + g.status + '">' + (g.passed ? "Aprobado" : "Reprobado") + '</small>';
-    /* notas del modelo anterior que siguen contando: que no pasen inadvertidas */
-    var old = g.parts.filter(function (p) { return p.legacy; }).map(function (p) { return p.label + " " + p.value; });
-    if (old.length) st += '<small class="gst" title="' + esc(old.join(" · ")) + '">incluye captura anterior</small>';
-    return '<span class="gnum ' + (g.status === "open" ? "" : g.status) + '">' + g.grade + '</span>' +
-      (g.alerts.length ? '<i class="fas fa-triangle-exclamation risk" title="' + esc(g.alerts.join(" · ")) + '"></i>' : '') + st;
-  }
-
-  function ginHtml(r, f, label) {
-    var editable = canSave && r.sid;
-    return '<td class="gcell"><input class="gin' + (f === "finalExam" ? " fin" : "") + '" type="number" min="0" max="100" inputmode="numeric" ' +
-      'value="' + (r[f] == null ? "" : r[f]) + '" placeholder="—" data-key="' + esc(r.key) + '" data-f="' + f + '" ' +
-      'aria-label="' + esc(label + " de " + r.name) + '"' +
-      (editable ? '' : ' disabled title="' + (r.sid ? 'Sin permiso de escritura en gradebook' : 'Intento antiguo sin registro: no se puede calificar') + '"') + '></td>';
-  }
-
-  function barHtml(v) {
-    return '<span class="bar"><i class="' + (v >= 85 ? "" : v >= GB.PASS_THRESHOLD ? "mid" : "low") +
-      '" style="width:' + Math.max(2, v) + '%"></i></span>';
-  }
-
-  /* desglose: qué aporta cada componente y qué falta */
-  function breakdownHtml(r, st, g) {
-    var html = '<h4>Cómo se arma la calificación</h4>', missing = [];
-    g.parts.forEach(function (p) {
-      if (p.value == null) missing.push(p.label);
-      html += '<div class="brow"><span class="bl">' + esc(p.label) + '<small>' + Math.round(p.weight * 100) + '%' +
-        (p.legacy ? ' · anterior' : '') + '</small></span>' +
-        (p.value == null ? '<span class="bar"></span><b class="na">—</b>' : barHtml(p.value) + '<b>' + p.value + '</b>') + '</div>';
-    });
-    g.alerts.forEach(function (a) {
-      html += '<p class="dnote alert"><i class="fas fa-triangle-exclamation"></i> ' + esc(a) + '</p>';
-    });
-    if (g.grade == null) {
-      html += '<p class="dnote">Todavía no hay nada capturado para este alumno.</p>';
-    } else if (!g.closed) {
-      html += '<p class="dnote">Avance provisional con el ' + g.coverage + '% de la calificación evaluado. Falta: ' +
-        esc(missing.join(", ")) + '. Habrá Aprobado o Reprobado cuando captures el examen final.</p>';
-    } else if (missing.length) {
-      html += '<p class="dnote">Sin datos de ' + esc(missing.join(", ")) + ': su peso se repartió entre lo demás.</p>';
-    }
-    return html;
-  }
-
-  function skillsHtml(st) {
-    var html = '<h4>Habilidades · ' + plural(st.ratings, "observación", "observaciones") + '</h4>';
-    if (!st.ratings) return html + '<p class="dnote">Sin observaciones todavía. Se llenan en «Clase del día».</p>';
-    GB.CRITERIA.forEach(function (c) {
-      var x = st.criteria[c.key];
-      html += '<div class="brow"><span class="bl">' + esc(c.label) + '<small>' + (x.n ? x.n + ' obs.' : '') + '</small></span>' +
-        (x.pct == null ? '<span class="bar"></span><b class="na">—</b>' : barHtml(x.pct) + '<b>' + x.pct + '</b>') + '</div>';
-    });
-    return html;
-  }
-
-  function practiceHtml(r) {
-    function one(label, avg, n) {
-      return label + ': ' + (avg == null ? 'sin intentos' : '<b>' + avg + '%</b> (' + plural(n, "intento", "intentos") + ')');
-    }
-    var use = (canSave && r.sid && r.examsAvg != null)
-      ? ' <button type="button" data-act="usefinal" data-key="' + esc(r.key) + '">Usar ' + r.examsAvg + ' como examen final</button>' : '';
-    return '<h4>Práctica en la app · no cuenta</h4><p class="dnote" style="margin-top:0">' +
-      one("Exámenes", r.examsAvg, r.examsCount) + ' · ' + one("Lecciones", r.lessonsAvg, r.lessonsCount) + '.' + use + '</p>';
-  }
-
-  function detailHtml(r) {
-    var st = statsOf(r), g = GB.computeGrade(r, st);
-    return '<div class="dbox">' +
-      '<div data-bd="' + esc(r.key) + '">' + breakdownHtml(r, st, g) + '</div>' +
-      '<div>' + skillsHtml(st) + '</div>' +
-      '<div class="full"><h4>Clase por clase · ' + plural(st.days, "clase registrada", "clases registradas") + '</h4>' +
-        GB.dailyGridHtml(daysOf(r), { dayLinks: !!r.sid }) +
-        (r.sid ? '<p class="dnote">Toca el número de una clase para abrirla y editarla.</p>' : '') + '</div>' +
-      '<div>' + practiceHtml(r) + '</div>' +
-      '<div><h4><label for="n-' + esc(r.key) + '">Comentario para el alumno</label></h4>' +
-        '<textarea class="notes" id="n-' + esc(r.key) + '" maxlength="500" data-key="' + esc(r.key) + '"' +
-        (canSave && r.sid ? '' : ' disabled') + ' placeholder="Lo verá en su boleta: qué hace bien y qué debe reforzar.">' +
-        esc(r.notes) + '</textarea></div>' +
-    '</div>';
-  }
-
-  var COLS = 7 + GB.QUIZ_KEYS.length;
-  function renderBook() {
-    var rows = bookRows(), w = {};
-    GB.COMPONENTS.forEach(function (c) { w[c.key] = Math.round(c.weight * 100) + "%"; });
-    var head = '<thead><tr>' +
-      '<th class="who" rowspan="2">Alumno</th>' +
-      '<th class="c" rowspan="2">Asistencia<small>' + w.attendance + '</small></th>' +
-      '<th class="c" rowspan="2">Tareas<small>' + w.homework + '</small></th>' +
-      '<th class="c" rowspan="2">Desempeño<small>' + w.performance + '</small></th>' +
-      '<th class="grp" colspan="' + GB.QUIZ_KEYS.length + '">Parciales · ' + w.quizzes + '</th>' +
-      '<th class="c" rowspan="2">Examen final<small>' + w.final + '</small></th>' +
-      '<th rowspan="2">Calificación</th><th rowspan="2"></th></tr><tr>' +
-      GB.QUIZ_KEYS.map(function (k, i) { return '<th class="c">P' + (i + 1) + '</th>'; }).join("") +
-      '</tr></thead>';
-
-    var body = "";
-    if (!rows.length) {
-      body = '<tr><td colspan="' + COLS + '" class="empty">' +
-        (roster.length ? 'No hay alumnos que coincidan.' :
-          'Aún no tienes alumnos asignados. Pide al administrador que registre a tus alumnos con un grupo y te asigne ese grupo.') +
-        '</td></tr>';
-    }
-    rows.forEach(function (r) {
-      var st = statsOf(r), g = GB.computeGrade(r, st), sub = [];
-      if (r.alias && r.alias !== r.name) sub.push(r.alias);
-      if (r.group) sub.push("grupo " + r.group);
-      var attSub = [];
-      if (st.att.F) attSub.push(plural(st.att.F, "falta", "faltas"));
-      if (st.att.R) attSub.push(st.att.R + " ret.");
-      if (!attSub.length) attSub.push(plural(st.days, "clase", "clases"));
-      body += '<tr data-key="' + esc(r.key) + '">' +
-        '<td class="who"><b>' + esc(r.name) + '</b>' + (sub.length ? '<small>' + esc(sub.join(" · ")) + '</small>' : '') + levelHtml(r) + '</td>' +
-        compCell(g, "attendance", attSub.join(" · ")) +
-        compCell(g, "homework", plural(st.hw.n, "tarea", "tareas")) +
-        compCell(g, "performance", st.ratings + " obs.") +
-        GB.QUIZ_KEYS.map(function (k, i) { return ginHtml(r, k, "Parcial " + (i + 1)); }).join("") +
-        ginHtml(r, "finalExam", "Examen final") +
-        '<td class="fin" data-fin="' + esc(r.key) + '">' + gradeCellHtml(g) + '</td>' +
-        '<td><button type="button" class="dbtn" data-dk="' + esc(r.key) + '" aria-expanded="' + !!openDetail[r.key] + '"' +
-          ' aria-label="Detalle de ' + esc(r.name) + '">Detalle<i class="fas fa-chevron-down"></i></button>' +
-          '<span class="sv" data-gsv="' + esc(r.key) + '">' + svHtml(gState[r.key]) + '</span></td>' +
-      '</tr>' +
-      '<tr class="detailrow" data-d="' + esc(r.key) + '"' + (openDetail[r.key] ? '' : ' style="display:none"') + '>' +
-        '<td colspan="' + COLS + '">' + (openDetail[r.key] ? detailHtml(r) : '') + '</td></tr>';
-    });
-    bTable.innerHTML = head + '<tbody>' + body + '</tbody>';
-    $("b-legend").innerHTML =
-      'La calificación pondera ' + GB.COMPONENTS.map(function (c) {
-        return esc(c.label) + ' ' + Math.round(c.weight * 100) + '%'; }).join(" · ") +
-      '. Lo que aún no tiene datos no cuenta como cero: mientras tanto ves un <b>avance</b> con el porcentaje ya evaluado, y el ' +
-      'Aprobado o Reprobado (mínimo ' + GB.PASS_THRESHOLD + ') aparece al capturar el examen final. ' +
-      'Borra una casilla para quitar esa nota. Asistencia, Tareas y Desempeño salen de «Clase del día».';
-  }
-
-  /* tras cambiar una nota: solo la celda de calificación y el desglose abierto
-     (no se re-pinta la fila para no robarle el foco a la casilla) */
-  function refreshGrade(r) {
-    var st = statsOf(r), g = GB.computeGrade(r, st);
-    var fin = byKey(bTable, "data-fin", r.key);
-    if (fin) fin.innerHTML = gradeCellHtml(g);
-    var bd = byKey(bTable, "data-bd", r.key);
-    if (bd) bd.innerHTML = breakdownHtml(r, st, g);
-    renderStats();
-  }
-
-  /* guardado de evaluaciones y comentario: se acumula lo cambiado por alumno */
-  var gTimers = {}, gPending = {}, gState = {};
-  function paintGsv(key) {
-    var el = byKey(bTable, "data-gsv", key);
-    if (el) el.innerHTML = svHtml(gState[key]);
   }
   function queueGrade(r, field, value) {
-    if (!gPending[r.key]) gPending[r.key] = {};
-    gPending[r.key][field] = value;
-    gState[r.key] = "saving"; paintGsv(r.key);
-    clearTimeout(gTimers[r.key]);
-    gTimers[r.key] = setTimeout(function () { flushGrade(r); }, 800);
+    if (!canSave || !r.sid) return;
+    (gPending[r.sid] || (gPending[r.sid] = {}))[field] = value;
+    gState[r.sid] = "saving"; paintSave(r.sid);
+    clearTimeout(gTimers[r.sid]);
+    gTimers[r.sid] = setTimeout(function () { flushGrade(r); }, 800);
   }
   function flushGrade(r) {
-    clearTimeout(gTimers[r.key]); delete gTimers[r.key];
-    var data = gPending[r.key];
-    if (!data) return;
-    delete gPending[r.key];
+    clearTimeout(gTimers[r.sid]); delete gTimers[r.sid];
+    var data = gPending[r.sid]; if (!data) return;
+    delete gPending[r.sid];
     var payload = { alias: r.alias, studentUid: r.studentUid };
     Object.keys(data).forEach(function (k) { payload[k] = data[k]; });
     GB.saveGrade(r.sid, payload).then(function (ok) {
-      if (!ok) {
-        /* lo no guardado vuelve a la cola: viaja con el siguiente cambio */
-        var newer = gPending[r.key] || {};
+      if (!ok) {   /* lo no guardado vuelve a la cola: viaja con el siguiente cambio */
+        var newer = gPending[r.sid] || {};
         Object.keys(data).forEach(function (k) { if (!(k in newer)) newer[k] = data[k]; });
-        gPending[r.key] = newer;
+        gPending[r.sid] = newer;
       }
-      if (gTimers[r.key]) return;   // ya hay otro guardado en camino
-      gState[r.key] = ok ? "ok" : "err"; paintGsv(r.key);
+      if (gTimers[r.sid]) return;
+      gState[r.sid] = ok ? "ok" : "err"; paintSave(r.sid);
     });
   }
-
-  bTable.addEventListener("input", function (e) {
-    var el = e.target;
-    if (!el.matches) return;
-    var r = rowByKey(el.getAttribute("data-key"));
-    if (!r || !r.sid || !canSave) return;
-    if (el.matches("textarea.notes")) {
-      r.notes = el.value.slice(0, 500);
-      queueGrade(r, "notes", r.notes);
-      return;
-    }
-    if (!el.matches("input.gin")) return;
-    var f = el.getAttribute("data-f"), v = null;
-    if (el.value !== "") {
-      v = parseInt(el.value, 10);
-      if (isNaN(v)) return;
-      v = Math.max(0, Math.min(100, v));
-      if (String(v) !== el.value) el.value = v;   // recorta 150 -> 100 al vuelo
-    }
-    r[f] = v;
-    refreshGrade(r);
-    queueGrade(r, f, v);   // null = borrar la nota
-  });
-
-  function gotoClass(day) {
-    selDay = day;
-    setView("class");
-    window.scrollTo(0, 0);
-  }
-
-  bTable.addEventListener("click", function (e) {
-    var t = e.target;
-    var d = t.closest(".dbtn");
-    if (d) {
-      var k = d.getAttribute("data-dk"), dr = byKey(bTable, "data-d", k), r = rowByKey(k);
-      if (!dr || !r) return;
-      if (openDetail[k]) { delete openDetail[k]; dr.style.display = "none"; dr.firstChild.innerHTML = ""; }
-      else { openDetail[k] = true; dr.firstChild.innerHTML = detailHtml(r); dr.style.display = ""; }
-      d.setAttribute("aria-expanded", !!openDetail[k]);
-      return;
-    }
-    var u = t.closest('[data-act="usefinal"]');
-    if (u) {
-      var ru = rowByKey(u.getAttribute("data-key"));
-      if (!ru || !ru.sid || ru.examsAvg == null) return;
-      ru.finalExam = ru.examsAvg;
-      var inp = q(bTable, 'input.gin[data-f="finalExam"][data-key="' + CSS.escape(ru.key) + '"]');
-      if (inp) inp.value = ru.finalExam;
-      refreshGrade(ru);
-      queueGrade(ru, "finalExam", ru.finalExam);
-      return;
-    }
-    var th = t.closest("th[data-vgb-day]");
-    if (th) gotoClass(parseInt(th.getAttribute("data-vgb-day"), 10));
-  });
-  bTable.addEventListener("keydown", function (e) {
-    if (e.key !== "Enter" && e.key !== " ") return;
-    var th = e.target.closest && e.target.closest("th[data-vgb-day]");
-    if (th) { e.preventDefault(); gotoClass(parseInt(th.getAttribute("data-vgb-day"), 10)); }
-  });
-
-  /* ---------- pestañas, filtros, carga ---------- */
-  function setView(v) {
-    view = v;
-    viewClass.style.display = v === "class" ? "" : "none";
-    viewBook.style.display = v === "book" ? "" : "none";
-    $("tab-class").setAttribute("aria-selected", v === "class");
-    $("tab-book").setAttribute("aria-selected", v === "book");
-    fSort.style.display = v === "book" ? "" : "none";
-    render();
-  }
-  function render() {
-    renderStats();
-    if (view === "class") renderClass(); else renderBook();
-  }
-  $("tab-class").addEventListener("click", function () { setView("class"); });
-  $("tab-book").addEventListener("click", function () { setView("book"); });
-  fQ.addEventListener("input", render);
-  fGroup.addEventListener("change", render);
-  fLevel.addEventListener("change", render);
-  fSort.addEventListener("change", render);
-
-  /* nada pendiente se pierde al salir o al recargar */
   function flushAll() {
-    Object.keys(dTimers).forEach(function (k) { var r = rowByKey(k); if (r) flushDaily(r); });
-    Object.keys(gTimers).forEach(function (k) { var r = rowByKey(k); if (r) flushGrade(r); });
+    Object.keys(dTimers).forEach(function (sid) { var r = rowBySid(sid); if (r) flushDaily(r); });
+    Object.keys(gTimers).forEach(function (sid) { var r = rowBySid(sid); if (r) flushGrade(r); });
   }
   document.addEventListener("visibilitychange", function () { if (document.hidden) flushAll(); });
   window.addEventListener("pagehide", flushAll);
-  $("f-reload").addEventListener("click", function () { flushAll(); setTimeout(load, 300); });
 
-  /* llena el filtro de grupos con los grupos presentes en el roster */
-  function fillGroupFilter(rosterMap) {
-    var groups = {};
-    Object.keys(rosterMap || {}).forEach(function (sid) {
-      var g = rosterMap[sid].group;
-      if (g) groups[g] = true;
+  /* ================= DÍA Y GRUPOS ================= */
+  function renderDay() {
+    var date = DATES[day - 1], tag = date === CLOCK.today ? " · hoy" : (date > CLOCK.today ? " · próxima" : "");
+    $("d-title").innerHTML = "Clase " + day + esc(tag) + "<small>" + esc(GB.fmtDay(date)) + "</small>";
+    $("d-prev").disabled = day <= 1; $("d-next").disabled = day >= N;
+    var txt = "Ciclo del " + GB.fmtDay(CLOCK.start) + " al " + GB.fmtDay(CLOCK.end) + " · " + N + " clases.";
+    if (!CLOCK.started) {
+      var left = Math.round((new Date(CLOCK.start + "T00:00:00") - new Date(CLOCK.today + "T00:00:00")) / 86400000);
+      txt += " El curso inicia en " + left + " día" + (left === 1 ? "" : "s") + ".";
+    } else if (CLOCK.ended) txt += " El ciclo ya terminó.";
+    else if (!CLOCK.isClassDay) txt += " Hoy no hay clase (la última fue la " + CLOCK.day + ").";
+    $("cycle").textContent = txt;
+  }
+  function renderGroups() {
+    var all = roster.filter(function (r) { return r.sid; }), rv = all.filter(function (r) { return reviewed(r); }).length;
+    $("g-prog").hidden = !all.length;
+    $("g-n").textContent = rv + " de " + all.length;
+    $("g-bar").style.width = (all.length ? 100 * rv / all.length : 0) + "%";
+    var left = GROUPS.filter(function (g) { return g.rows.some(function (r) { return !reviewed(r); }); }).length;
+    $("g-say").textContent = left ? (left === 1 ? "Te falta 1 grupo" : "Te faltan " + left + " grupos") : "¡Todos los grupos listos!";
+    $("g-cat").src = MASCOT + (left ? "vesper_cat_welcome.webp" : "vesper_cat_correct.webp");
+    if (!GROUPS.length) {
+      $("glist").innerHTML = '<div class="emptyg"><img src="' + MASCOT + 'vesper_cat_welcome.webp" alt="Vesper"><div class="hand">Aún no tienes grupos</div>' +
+        '<p>Pide al administrador que registre a tus alumnos con un grupo y te asigne ese grupo.</p></div>';
+      return;
+    }
+    $("glist").innerHTML = GROUPS.map(function (g) {
+      var st = g.rows, done = st.filter(function (r) { return reviewed(r); }).length, att = [];
+      st.forEach(function (r) {
+        var gr = gradeOf(r), ds = reviewed(r) ? dayScore(r) : null;
+        if (gr.alerts.length) att.push("<b>" + esc(first(r.name)) + "</b> (" + (/Asistencia/.test(gr.alerts[0]) ? "faltas" : "avance " + gr.grade) + ")");
+        else if (ds != null && ds < 80) att.push("<b>" + esc(first(r.name)) + "</b> (" + ds + " hoy)");
+      });
+      var tag = !st.length ? '<span class="tag">Sin alumnos</span>' : done === st.length ? '<span class="tag ok">✓ Revisado</span>' :
+        done ? '<span class="tag todo">Faltan ' + (st.length - done) + ' de ' + st.length + '</span>' : '<span class="tag todo">Sin revisar</span>';
+      return '<button class="gcard" data-g="' + esc(g.id) + '"><div class="gtop"><div class="glv">' + esc(g.badge) + '</div><div class="gn"><h2>' + esc(g.title) + '</h2>' +
+        '<div class="gs">' + esc(g.sub) + '</div></div><span class="arrow">›</span></div>' +
+        '<div class="gstat">' + tag + (att.length ? '<span class="tag bad">' + att.length + ' con atención</span>' : '') + '</div>' +
+        '<div class="bar"><i style="width:' + (st.length ? 100 * done / st.length : 0) + '%"></i></div>' +
+        (att.length ? '<div class="gatt">Atención: ' + att.join(", ") + '</div>' : '') + '</button>';
+    }).join("");
+  }
+  $("glist").addEventListener("click", function (e) { var b = e.target.closest("[data-g]"); if (b) openGroup(b.getAttribute("data-g")); });
+
+  /* ================= GRUPO: LISTA ================= */
+  var desk = window.matchMedia("(min-width:900px)");
+  function firstPending() { var st = inGroup(grp); for (var i = 0; i < st.length; i++) if (!reviewed(st[i])) return i; return -1; }
+  function openGroup(id) {
+    grp = id; justFinished = false; $("s-groups").hidden = true; $("s-group").hidden = false;
+    cur = desk.matches && inGroup(grp).length ? Math.max(0, firstPending()) : -1;
+    renderGroup(); window.scrollTo(0, 0);
+  }
+  function closeGroup() { closePanel(); grp = null; $("s-group").hidden = true; $("s-groups").hidden = false; renderGroups(); }
+  $("g-back").addEventListener("click", closeGroup);
+  function renderList() {
+    var st = inGroup(grp), done = st.filter(function (r) { return reviewed(r); }).length, left = st.length - done;
+    $("p-n").textContent = done + " de " + st.length;
+    $("p-bar").style.width = (st.length ? 100 * done / st.length : 0) + "%";
+    $("p-say").textContent = !st.length ? "" : left === 0 ? "¡Grupo listo!" : left <= 2 ? "¡Ya casi! Faltan " + left : "Faltan " + left;
+    $("p-cat").src = MASCOT + (left || !st.length ? "vesper_cat_explaining.webp" : "vesper_cat_correct.webp");
+    if (!st.length) { $("slist").innerHTML = '<div class="emptyg"><p>Este grupo aún no tiene alumnos registrados.</p></div>'; return; }
+    $("slist").innerHTML = st.map(function (r, i) {
+      var c = cellOf(r), rv = reviewed(r), ds = rv ? dayScore(r) : null, gr = gradeOf(r);
+      var tag = !rv ? '<span class="tag todo">Pendiente</span>' : '<span class="tag ok">✓ Revisado</span>';
+      return '<button class="srow" data-i="' + i + '"' + (i === cur ? ' aria-current="true"' : '') + '><span class="ini">' + esc(ini(r.name)) + '</span>' +
+        '<span class="nm"><b>' + esc(r.name) + '</b>' + (gr.alerts.length ? '<small class="al">' + esc(gr.alerts[0]) + '</small>' : '<small>Avance del curso ' + (gr.grade != null ? gr.grade : "–") + '</small>') + '</span>' +
+        '<span class="sc">' + (rv && absent(c) ? '<b class="falta">FALTA</b>' : '<b class="' + (ds != null ? tone(ds) + (ds === DAY_MAX ? " s-full" : "") : "") + '">' + (ds != null ? ds : "–") + '</b>') +
+        tag + '<span class="sv" data-sv="' + esc(r.sid) + '">' + svHtml(stateOf(r.sid)) + '</span></span></button>';
+    }).join("");
+  }
+  function renderGroup() {
+    var g = G(grp), st = inGroup(grp);
+    if (!g) { closeGroup(); return; }
+    $("gg-title").textContent = g.title;
+    $("gg-sub").textContent = g.sub;
+    var all = st.length && st.every(function (r) { return reviewed(r); });
+    $("ready").hidden = !justFinished;
+    if (justFinished) $("ready").innerHTML = '<img src="' + MASCOT + (all ? "vesper_cat_correct.webp" : "vesper_cat_explaining.webp") + '" alt="Vesper">' +
+      '<div><div class="hand">' + (all ? "¡Grupo listo!" : "Te faltan " + st.filter(function (r) { return !reviewed(r); }).length) + '</div><p>' +
+      (all ? "Revisaste a los " + st.length + " alumnos de " + esc(g.title) + "." : "Toca a los pendientes para terminar.") + '</p></div>';
+    renderList(); renderPanel();
+  }
+  $("slist").addEventListener("click", function (e) { var b = e.target.closest("[data-i]"); if (b) openPanel(+b.getAttribute("data-i")); });
+
+  /* ================= PANEL DEL ALUMNO ================= */
+  /* En celular, B pone el panel en el flujo de la página (body.popen esconde la lista);
+     C lo abre encima de todo, como hoja (body.lock). Solo cambia el aspecto. */
+  function panelMode() {
+    var open = $("panelhost").classList.contains("open") && !desk.matches, min = MIN();
+    document.body.classList.toggle("popen", open && !min);
+    document.body.classList.toggle("lock", open && min);
+  }
+  function openPanel(i) {
+    cur = i; justFinished = false; $("ready").hidden = true;
+    var host = $("panelhost"); host.classList.add("open"); panelMode(); if (!desk.matches && !MIN()) window.scrollTo(0, 0);
+    renderList(); renderPanel(); host.scrollTop = 0;
+  }
+  function closePanel() { $("panelhost").classList.remove("open"); document.body.classList.remove("lock"); document.body.classList.remove("popen"); if (!desk.matches) cur = -1; }
+  function ensure(r) {
+    var rec = dailyMap[r.sid] || (dailyMap[r.sid] = { sid: r.sid, days: {} });
+    var c = rec.days[day] || (rec.days[day] = GB.newDay());
+    c.x = c.x || {}; c.dp = c.dp || {};
+    return c;
+  }
+  function tk(r) { var k = r.sid + "|" + day; return taps[k] || (taps[k] = {}); }
+  function avanceText(gr) {
+    return "Avance del curso: " + (gr.grade != null ? gr.grade : "–") +
+      (gr.closed ? (gr.passed ? " · aprobado" : " · reprobado") : (gr.grade != null ? " (sin examen final)" : ""));
+  }
+  var LEGACY_LBL = { quiz1: "Parcial 1", quiz2: "Parcial 2", quiz3: "Parcial 3", examsGrade: "Exámenes", lessonsGrade: "Lecciones", participacion: "Participación" };
+  function renderPanel(delta) {
+    var host = $("panel"), st = inGroup(grp), r = st[cur];
+    if (!r) {
+      host.innerHTML = '<div class="empty"><img src="' + MASCOT + 'vesper_cat_welcome.webp" alt="Vesper"><div class="hand">Elige a un alumno</div><p>Cada clase empieza en 100. Solo marcas los fallos.</p></div>';
+      return;
+    }
+    var c = cellOf(r), abs = absent(c), ds = GB.dayScore(c), gr = gradeOf(r), ro = !canDaily;
+    var key = r.sid + "|" + day, prev = lastScore[key], anim = (prev != null && ds != null && ds !== prev) ? (ds < prev ? "down" : "up") : "";
+    lastScore[key] = ds;
+    var done = st.filter(function (x) { return reviewed(x); }).length, min = MIN();
+    var sv = ' <span class="sv" data-sv="' + esc(r.sid) + '">' + svHtml(stateOf(r.sid)) + '</span>';
+    var dlt = '<span class="delta' + (delta ? " go " + (delta < 0 ? "dminus" : "dplus") : "") + '" aria-hidden="true">' + (delta ? (delta > 0 ? "+" : "−") + Math.abs(delta) : "") + '</span>';
+    var seg = '<span class="seg2" role="group" aria-label="Valor de cada tache">' + GB.TACHE_OPTIONS.map(function (v) {
+      return '<button data-val="' + v + '" aria-pressed="' + (v === tacheVal) + '">−' + v + '</button>';
+    }).join("") + '</span>';
+    var pbar = '<div class="pbar" title="' + done + ' de ' + st.length + ' revisados" aria-hidden="true"><i style="width:' + (100 * done / st.length) + '%"></i></div>';
+    var h;
+    if (min) {
+      /* C «Claro y rápido»: una barra fija con quién es y el número de hoy */
+      h = '<div class="pstick"><div class="pwho"><button class="close" data-act="close" aria-label="Volver a la lista">‹ Lista</button>' +
+        '<div class="nm"><h2>' + esc(r.name) + '</h2><div class="sub">' + (cur + 1) + ' de ' + st.length + ' · ' + (reviewed(r) ? "revisado" : "pendiente") + sv + '</div></div>' +
+        '<div class="dayscore" role="status" aria-label="Clase ' + day + ': ' + (abs ? "FALTA" : ds + " de 100") + '">' +
+        (abs ? '<span class="num falta">FALTA</span>' : '<span class="num ' + anim + '">' + ds + '</span><span class="of">/100</span>') + dlt + '</div></div>' +
+        '<p class="pav" id="pv-avance">' + esc(avanceText(gr)) + '</p>' + pbar + '</div>';
+      if (abs) h += '<p class="offmsg">Faltó: esta clase cuenta 0 en su promedio de Clase. Quita el ✗ de «Asistió» si fue un error.</p>';
+      h += '<div class="sec"><h3>Los 10 puntos de la clase ' + day + ' <span class="kh">Cada ✗ vale ' + seg + '</span></h3><div class="points">';
+    } else {
+      /* B «Noche Vespertina»: barra fija con el nombre y el anillo dorado del día (baja con cada ✗) */
+      var DC = 2 * Math.PI * 52, offOf = function (v) { return (DC * (1 - Math.max(0, v) / DAY_MAX)).toFixed(1); }, xsHtml = "";
+      if (!abs && c && c.x) POINTS.forEach(function (p) { if (c.x[p.key] && p.key !== ABSENT_KEY) xsHtml += '<span>✗ ' + esc(p.label) + ' −' + ((c.dp && c.dp[p.key]) || 0) + '</span>'; });
+      h = '<div class="pstick"><div class="pwho"><button class="close" data-act="close" aria-label="Volver a la lista">‹ Lista</button><span class="ini">' + esc(ini(r.name)) + '</span>' +
+        '<div class="nm"><h2>' + esc(r.name) + '</h2><div class="sub">Alumno ' + (cur + 1) + ' de ' + st.length + ' · ' + (reviewed(r) ? "revisado" : "pendiente") + sv + '</div></div>' +
+        '<div class="mring' + (abs ? " is-falta" : "") + '"><svg viewBox="0 0 120 120" aria-hidden="true">' +
+        '<defs><linearGradient id="dgrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f3e2ab"/><stop offset="1" stop-color="#C9A84C"/></linearGradient></defs>' +
+        '<circle class="dtrack" cx="60" cy="60" r="52"/>' +
+        (abs ? '' : '<circle class="dfill" cx="60" cy="60" r="52" stroke-dasharray="' + DC.toFixed(1) + '" stroke-dashoffset="' + offOf(ds) + '"' + (anim ? ' data-from="' + offOf(prev) + '"' : '') + '/>') +
+        '<circle class="dseg" cx="60" cy="60" r="52" stroke-dasharray="1.2 ' + (DC / 20 - 1.2).toFixed(2) + '"/></svg>' +
+        '<div class="dnum" role="status" aria-label="Clase ' + day + ': ' + (abs ? "FALTA" : ds + " de 100") + '">' + (abs ? '<span class="num falta">FALTA</span>' : '<span class="num ' + anim + '">' + ds + '</span>') + '</div>' +
+        dlt + '</div></div>' + pbar + '</div>';
+      h += '<div class="dayscore info sky' + (abs ? " is-falta" : "") + '"><span class="lbl"><b>Clase ' + day + '</b>' +
+        (abs ? "Faltó: esta clase cuenta 0 en su promedio de Clase." : (ds === DAY_MAX ? "Empieza en 100; cada ✗ le resta." : "Empezó en 100; los ✗ le restaron " + (DAY_MAX - ds) + ".")) +
+        (xsHtml ? '<span class="dxs">' + xsHtml + '</span>' : '') +
+        '<span class="av" id="pv-avance">' + esc(avanceText(gr)) + '</span></span></div>';
+      h += '<div class="valsw">Cada ✗ vale: ' + seg + '</div>';
+      h += '<div class="sec"><h3>10 puntos de esta clase <span class="kh">solo marca lo que falló</span></h3><div class="points">';
+    }
+    POINTS.forEach(function (p, idx) {
+      var n = (c && c.x && c.x[p.key]) || 0, pts = (c && c.dp && c.dp[p.key]) || 0, isAbs = p.key === ABSENT_KEY, off = abs && !isAbs;
+      h += '<div class="pnt' + (off ? " off" : "") + (n ? " hit" : "") + (isAbs ? " abs" : "") + '" data-k="' + p.key + '"><div class="pl"><b>' + (min ? '<kbd class="kn">' + (idx === 9 ? 0 : idx + 1) + '</kbd>' : '') + esc(p.label) + '</b><small>' + esc(p.hint) + '</small></div>' +
+        '<button class="minus" data-act="untache" data-k="' + p.key + '" aria-label="Quitar un tache de ' + esc(p.label) + '"' + (n && !off && !ro ? "" : " disabled") + '>−</button>' +
+        '<div class="pc"><span class="x">' + (min ? PEN.xs(n, r.sid + day + p.key, 5) : marks(n)) + '</span><b>' + (isAbs ? (n ? "FALTA" : "") : (pts ? "−" + pts : "")) + '</b></div>' +
+        '<button class="tache" data-act="tache" data-k="' + p.key + '" aria-label="' + (isAbs ? "Marcar que faltó" : "Tache en " + esc(p.label) + " (−" + tacheVal + ")") + '"' +
+        ((ro || off || (isAbs && n) || (!isAbs && ds === 0)) ? " disabled" : "") + '>' + (min ? PEN.x("btn" + idx) : "✗") + '</button></div>';
     });
-    var current = fGroup.value;
-    fGroup.innerHTML = '<option value="">Todos mis grupos</option>';
-    Object.keys(groups).sort().forEach(function (g) {
-      var o = document.createElement("option");
-      o.value = g; o.textContent = "Grupo " + g;
-      fGroup.appendChild(o);
-    });
-    fGroup.value = groups[current] ? current : "";
-    fGroup.style.display = Object.keys(groups).length > 1 ? "" : "none";
+    h += '</div></div>';
+    var fv = r.finalExam, app = r.examsAvg;
+    h += '<div class="sec exams"><h3>Examen final <span class="kh">0 a 100</span></h3><p class="exnote">La calificación del examen la pones tú: incluye speaking y partes que la app no ve. Lo de la app es solo referencia.</p>' +
+      '<div class="exrow"><label for="ex-final">Examen final</label><input id="ex-final" class="exin" inputmode="numeric" enterkeyhint="done" maxlength="3" value="' + (fv != null ? fv : "") + '" placeholder="—"' + (canSave ? "" : " disabled") + '>' +
+      '<span class="ref">' + (app != null ? 'App: ' + app + ' · promedio de sus exámenes en la app' + (canSave ? ' <button class="use" data-use="' + app + '">usar</button>' : '') : "Aún no hace exámenes en la app") + '</span></div>';
+    if (r.legacy) h += '<p class="legacy">Captura anterior (ya no cuenta): ' + esc(Object.keys(r.legacy).map(function (k) { return (LEGACY_LBL[k] || k) + " " + r.legacy[k]; }).join(" · ")) + '</p>';
+    h += '</div>';
+    h += '<div class="sec"><h3><label for="ex-notes">Comentario para el alumno</label> <span class="kh">lo ve en su boleta</span></h3>' +
+      '<textarea class="notes" id="ex-notes" maxlength="500" placeholder="Qué hace bien y qué debe reforzar."' + (canSave ? "" : " disabled") + '>' + esc(r.notes) + '</textarea></div>';
+    var stt = GB.dailyStats(daysOf(r));
+    h += '<div class="sec"><h3>Clase por clase <span class="kh">promedio ' + (stt.clase != null ? stt.clase : "–") + '</span></h3>' +
+      GB.historyHtml(daysOf(r), { cur: day, upTo: Math.max(day, CLOCK.day) }) + '</div>';
+    var last = cur >= st.length - 1;
+    h += '<div class="nav"><button class="nbtn" data-act="prev" aria-label="Alumno anterior"' + (cur === 0 ? " disabled" : "") + '>‹ Anterior</button>' +
+      '<button class="nbtn go" data-act="next">' + (last ? "Terminar grupo ✓" : "Siguiente alumno ›") + '</button></div>' +
+      '<p class="keys"><kbd>1</kbd>–<kbd>9</kbd>, <kbd>0</kbd> tache en el punto 1 a 10 · <kbd>Shift</kbd>+número lo quita · <kbd>Enter</kbd> siguiente · <kbd>←</kbd> anterior</p>';
+    host.innerHTML = h;
+    /* verde solo para las clases de 100 (la tira compartida marca ≥90 como «g») */
+    Array.prototype.forEach.call(host.querySelectorAll(".vgb-hist span"), function (s) { if (s.textContent === String(DAY_MAX)) s.classList.add("full"); });
+    var df = host.querySelector(".dfill");   /* B: el anillo baja (o sube) desde donde estaba */
+    if (df && df.getAttribute("data-from") && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      var to = df.getAttribute("stroke-dashoffset"); df.style.transition = "none"; df.style.strokeDashoffset = df.getAttribute("data-from");
+      df.getBoundingClientRect(); df.style.transition = ""; requestAnimationFrame(function () { df.style.strokeDashoffset = to; });
+    }
   }
 
-  function load() {
-    loadingEl.style.display = "block";
-    contentEl.style.display = "none";
-    msgEl.style.display = "none";
+  /* ---- acciones del panel ---- */
+  function cs() { return inGroup(grp)[cur]; }
+  function after(r, before) {
+    var c = ensure(r); c.rv = 1; queueDaily(r);
+    var now = GB.dayScore(c); renderList(); renderPanel(before != null && now != null && now !== before ? now - before : 0);
+  }
+  function tache(k) {
+    if (!canDaily) return;
+    var r = cs(), c = ensure(r), b = GB.dayScore(c);
+    if (k === ABSENT_KEY) { if (absent(c)) return; GB.addTache(c, k); return after(r, null); }
+    var dv = GB.addTache(c, k, tacheVal);
+    if (!dv) return;
+    var log = tk(r); (log[k] = log[k] || []).push(dv); after(r, b);
+  }
+  function untache(k) {
+    if (!canDaily) return;
+    var r = cs(), c = ensure(r);
+    if (!c.x[k]) return;
+    if (k === ABSENT_KEY) { GB.removeTache(c, k); return after(r, null); }
+    if (absent(c)) return;
+    var b = GB.dayScore(c), log = tk(r);
+    var back = (log[k] && log[k].length) ? log[k].pop() : null;   // devuelve justo lo que restó ese ✗
+    GB.removeTache(c, k, back); after(r, b);
+  }
+  function next() {
+    var r = cs(), st = inGroup(grp);
+    if (canDaily) { var c = ensure(r); if (!c.rv) { c.rv = 1; queueDaily(r); } }
+    if (cur < st.length - 1) { cur++; renderList(); renderPanel(); $("panelhost").scrollTop = 0; if (!desk.matches) window.scrollTo(0, 0); return; }
+    justFinished = true; closePanel(); if (desk.matches) cur = -1; renderGroup(); window.scrollTo(0, 0);
+  }
+  function prev() { if (cur > 0) { cur--; renderList(); renderPanel(); $("panelhost").scrollTop = 0; } }
+  function setExam(inp) {
+    var r = cs(), raw = inp.value.trim();
+    if (!r || !canSave) return false;
+    var v;
+    if (raw === "") v = null;
+    else if (/^\d{1,3}$/.test(raw) && +raw <= 100) v = +raw;
+    else { inp.classList.add("bad"); return false; }
+    inp.classList.remove("bad");
+    if (r.finalExam !== v) { r.finalExam = v; queueGrade(r, "finalExam", v); }
+    var av = $("pv-avance"); if (av) av.textContent = avanceText(gradeOf(r)); renderList();
+    return true;
+  }
+  $("panel").addEventListener("input", function (e) {
+    if (e.target.id === "ex-final") setExam(e.target);
+    else if (e.target.id === "ex-notes") { var r = cs(); if (r && canSave) { r.notes = e.target.value.slice(0, 500); queueGrade(r, "notes", r.notes); } }
+  });
+  $("panel").addEventListener("keydown", function (e) {
+    if (e.target.id !== "ex-final" || e.key !== "Enter") return;
+    e.preventDefault(); e.stopPropagation();
+    if (setExam(e.target)) e.target.blur();
+  });
+  $("panel").addEventListener("click", function (e) {
+    var b = e.target.closest("button"); if (!b || b.disabled) return;
+    if (b.hasAttribute("data-use")) { var inp = $("ex-final"); inp.value = b.getAttribute("data-use"); setExam(inp); return; }
+    if (b.hasAttribute("data-val")) { tacheVal = GB.setTacheValue(b.getAttribute("data-val")); renderPanel(); return; }
+    var a = b.getAttribute("data-act");
+    if (a === "tache") return tache(b.getAttribute("data-k"));
+    if (a === "untache") return untache(b.getAttribute("data-k"));
+    if (a === "next") return next();
+    if (a === "prev") return prev();
+    if (a === "close") { closePanel(); renderList(); }
+  });
+  (function () {
+    var x0 = null, y0 = null, p = $("panel");
+    p.addEventListener("touchstart", function (e) { x0 = e.touches[0].clientX; y0 = e.touches[0].clientY; }, { passive: true });
+    p.addEventListener("touchend", function (e) {
+      if (x0 == null || !cs() || e.target.closest("input,textarea")) { x0 = null; return; }
+      var dx = e.changedTouches[0].clientX - x0, dy = e.changedTouches[0].clientY - y0; x0 = null;
+      if (Math.abs(dx) > 80 && Math.abs(dy) < 50) { if (dx < 0) next(); else prev(); }
+    });
+  })();
+  document.addEventListener("keydown", function (e) {
+    if (view !== "class" || !grp || !cs() || !$("editor").hidden || e.target.closest("input,textarea,select") || e.ctrlKey || e.metaKey || e.altKey) return;
+    if (!desk.matches && !$("panelhost").classList.contains("open")) return;
+    var m = /^(?:Digit|Numpad)([0-9])$/.exec(e.code);
+    if (m) { e.preventDefault(); var idx = m[1] === "0" ? 9 : +m[1] - 1, k = POINTS[idx].key; return e.shiftKey ? untache(k) : tache(k); }
+    if (e.key === "Enter" && e.target.tagName === "BUTTON" && !e.target.classList.contains("go") && e.target.closest("#panel")) return;
+    if (e.key === "Enter" || e.key === "ArrowRight") { e.preventDefault(); return next(); }
+    if (e.key === "ArrowLeft") { e.preventDefault(); return prev(); }
+    if (e.key === "Escape") { closePanel(); renderList(); }
+  });
 
-    /* 1) roster (todos MIS alumnos registrados) + intentos; 2) con los sids
-       del roster, las evaluaciones (gradebook) y el registro diario por batchGet. */
-    Promise.all([
-      GB.fetchRoster(),
-      VESPER_RESULTS.fetchAll({ limit: 1000 })
-    ]).then(function (res) {
-      var rosterMap = res[0], attempts = res[1];
+  /* ================= EDITOR DE LOS 10 PUNTOS (local) ================= */
+  function openEditor() {
+    $("ed-rows").innerHTML = POINTS.map(function (p, i) {
+      return '<div class="edrow"><span class="edn">' + (i + 1) + '</span><input data-ed="label" data-i="' + i + '" value="' + esc(p.label) + '" maxlength="40" aria-label="Nombre del punto ' + (i + 1) + '">' +
+        '<input data-ed="hint" data-i="' + i + '" value="' + esc(p.hint) + '" maxlength="80" aria-label="Pista del punto ' + (i + 1) + '"></div>';
+    }).join("");
+    $("editor").hidden = false; document.body.classList.add("lock");
+  }
+  function closeEditor() { $("editor").hidden = true; if (!$("panelhost").classList.contains("open") || desk.matches || !MIN()) document.body.classList.remove("lock"); }
+  $("openedit").addEventListener("click", openEditor);
+  $("ed-cancel").addEventListener("click", closeEditor);
+  $("ed-scrim").addEventListener("click", closeEditor);
+  $("ed-save").addEventListener("click", function () {
+    var list = POINTS.map(function (p) { return { label: p.label, hint: p.hint }; });
+    Array.prototype.forEach.call($("ed-rows").querySelectorAll("input"), function (inp) {
+      var i = +inp.getAttribute("data-i"), v = inp.value.trim();
+      if (inp.getAttribute("data-ed") === "label") list[i].label = v || GB.POINTS[i].label; else list[i].hint = v;
+    });
+    GB.savePointLabels(list); POINTS = GB.points();
+    closeEditor(); if (grp) renderPanel(); toast("Guardaste los nombres de los 10 puntos (solo en este navegador).");
+  });
+  $("ed-reset").addEventListener("click", function () { GB.resetPointLabels(); POINTS = GB.points(); openEditor(); if (grp) renderPanel(); });
+
+  function renderClass() { renderDay(); if (grp) renderGroup(); else renderGroups(); }
+  $("d-prev").addEventListener("click", function () { if (day > 1) { day--; renderClass(); } });
+  $("d-next").addEventListener("click", function () { if (day < N) { day++; renderClass(); } });
+
+  /* ================= BOLETA (por grupo) ================= */
+  function bList() { return inGroup(bgrp); }
+  function renderBook() {
+    if (!G(bgrp)) bgrp = GROUPS.length ? GROUPS[0].id : null;
+    var list = bList();
+    $("b-gpick").innerHTML = GROUPS.map(function (g) { return '<button data-bg="' + esc(g.id) + '" aria-pressed="' + (g.id === bgrp) + '">' + esc(g.title) + (g.id && g.title.indexOf(g.id) < 0 ? ' · ' + esc(g.id) : '') + '</button>'; }).join("");
+    $("b-gpick").hidden = GROUPS.length < 2;
+    $("b-grp").textContent = G(bgrp) ? G(bgrp).title : "sin grupos";
+    var h = '<div class="brow h"><span>Alumno</span><span class="v">Clase</span><span class="v act">Final</span><span class="avc">Calificación</span></div>';
+    if (!list.length) h += '<div class="brow empty0">' + (GROUPS.length ? "Este grupo aún no tiene alumnos." : "Aún no tienes alumnos asignados.") + '</div>';
+    list.forEach(function (r, i) {
+      var gr = gradeOf(r);
+      h += '<div class="brow"><span class="nm">' + esc(r.name) + ' <span class="sv" data-sv="' + esc(r.sid) + '">' + svHtml(stateOf(r.sid)) + '</span></span>' +
+        '<span class="v">' + (gr.clase != null ? gr.clase : "·") + '</span>' +
+        '<span class="v act"><input inputmode="numeric" enterkeyhint="next" maxlength="3" data-sid="' + esc(r.sid) + '" data-i="' + i + '" value="' + (r.finalExam != null ? r.finalExam : "") + '" aria-label="' + esc("Examen final de " + r.name) + '"' + (canSave ? "" : " disabled") + '></span>' +
+        '<span class="avc" id="av-' + esc(r.sid) + '"></span></div>';
+    });
+    $("btable").innerHTML = h;
+    list.forEach(updateAvance);
+  }
+  function updateAvance(r) {
+    var g = gradeOf(r), el = document.getElementById("av-" + r.sid); if (!el) return;
+    el.innerHTML = '<b>' + (g.grade != null ? g.grade : "–") + '</b><small>' + (g.closed ? (g.passed ? '<span class="pill pass">Aprobado</span>' : '<span class="pill risk">Reprobado</span>') :
+      (g.atRisk ? '<span class="pill risk">En riesgo</span>' : (g.grade != null ? "avance" : "sin datos"))) + '</small>';
+  }
+  function commit(inp) {
+    var raw = inp.value.trim(), r = rowBySid(inp.getAttribute("data-sid"));
+    if (!r || !canSave) return true;
+    var v;
+    if (raw === "") v = null;
+    else if (/^\d{1,3}$/.test(raw) && +raw <= 100) v = +raw;
+    else { inp.classList.add("bad"); return false; }
+    inp.classList.remove("bad");
+    if (r.finalExam !== v) {
+      r.finalExam = v; queueGrade(r, "finalExam", v);
+      if (v != null) { inp.classList.add("saved"); setTimeout(function () { inp.classList.remove("saved"); }, 700); }
+    }
+    updateAvance(r); return true;
+  }
+  function focusRow(i) { var el = $("btable").querySelector('input[data-i="' + i + '"]'); if (el) { el.focus(); el.select(); } }
+  $("btable").addEventListener("keydown", function (e) {
+    var inp = e.target; if (inp.tagName !== "INPUT") return; var i = +inp.getAttribute("data-i");
+    if (e.key === "Enter" || e.key === "ArrowDown") { e.preventDefault(); if (commit(inp)) focusRow(e.shiftKey ? i - 1 : i + 1); }
+    else if (e.key === "ArrowUp") { e.preventDefault(); if (commit(inp)) focusRow(i - 1); }
+  });
+  $("btable").addEventListener("change", function (e) { if (e.target.tagName === "INPUT") commit(e.target); });
+  $("btable").addEventListener("paste", function (e) {
+    var t = (e.clipboardData || window.clipboardData).getData("text");
+    if (t && /\n/.test(t.trim())) { e.preventDefault(); openPaste(t); }
+  });
+  $("b-gpick").addEventListener("click", function (e) { var b = e.target.closest("[data-bg]"); if (b) { bgrp = b.getAttribute("data-bg"); closePaste(); renderBook(); } });
+  var pastePlan = [];
+  function norm(t) { return String(t).toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/\s+/g, " ").trim(); }
+  function openPaste(text) { $("pastebox").classList.add("open"); if (text != null) $("p-text").value = text; preview(); $("p-text").focus(); }
+  function closePaste() { $("pastebox").classList.remove("open"); $("p-text").value = ""; preview(); }
+  function preview() {
+    var list = bList(), lines = $("p-text").value.split(/\r?\n/).map(function (l) { return l.trim(); }).filter(Boolean);
+    pastePlan = []; var bad = [], keep = [], miss = [];
+    var named = lines.some(function (l) { return /[a-záéíóúñü]/i.test(l); });
+    lines.forEach(function (l, idx) {
+      var r, num;
+      if (named) {
+        var parts = l.split(/\t|;|,(?=\s*\d+\s*$)/), isNum = function (p) { return /^\s*\d{1,3}(\.\d+)?\s*$/.test(p); };
+        var nmTxt = parts.filter(function (p) { return !isNum(p); }).join(" ");
+        num = (parts.filter(isNum)[0] || "").trim();
+        if (!num && /^(nombre|alumno|calif)/.test(norm(nmTxt))) return;
+        var n0 = norm(nmTxt);
+        r = list.filter(function (x) { return norm(x.name) === n0; })[0] ||
+            list.filter(function (x) { return n0 && (norm(x.name).indexOf(n0) === 0 || n0.indexOf(norm(x.name)) === 0); })[0];
+        if (!r) { miss.push(nmTxt); return; }
+      } else { r = list[idx]; num = l; if (!r) { bad.push(l + " (sobra un renglón)"); return; } }
+      var v = Math.round(parseFloat(num));
+      if (!/^\d{1,3}(\.\d+)?$/.test(num) || v > 100) { bad.push(r.name + ": «" + l + "»"); return; }
+      if (r.finalExam != null) { if (r.finalExam !== v) keep.push(first(r.name) + " (" + r.finalExam + ", pegaste " + v + ")"); return; }
+      pastePlan.push({ r: r, v: v });
+    });
+    var h = "";
+    if (lines.length) {
+      h += "<b>" + pastePlan.length + "</b> calificaciones nuevas" + (named ? " (por nombre)" : " (en el orden de la lista)") + ".";
+      if (!named && lines.length < list.length) h += ' <span class="w">Pegaste ' + lines.length + ' de ' + list.length + ' renglones: los demás se quedan vacíos.</span>';
+      if (keep.length) h += '<br><span class="w">No se cambian ' + keep.length + ' que ya tenían otra: ' + esc(keep.join(", ")) + '.</span>';
+      if (bad.length) h += '<br><span class="x">No se entiende: ' + esc(bad.join(" · ")) + '</span>';
+      if (miss.length) h += '<br><span class="x">Sin alumno con ese nombre en este grupo: ' + esc(miss.join(", ")) + '</span>';
+    }
+    $("p-prev").innerHTML = h;
+    $("p-apply").disabled = !pastePlan.length || !canSave;
+    $("p-apply").textContent = pastePlan.length ? "Guardar " + pastePlan.length : "Guardar";
+  }
+  $("b-paste").addEventListener("click", function () { $("pastebox").classList.contains("open") ? closePaste() : openPaste(); });
+  $("p-text").addEventListener("input", preview);
+  $("p-cancel").addEventListener("click", closePaste);
+  $("p-apply").addEventListener("click", function () {
+    var n = pastePlan.length;
+    pastePlan.forEach(function (p) { p.r.finalExam = p.v; queueGrade(p.r, "finalExam", p.v); });
+    closePaste(); renderBook(); toast("Guardaste " + n + " calificaciones.");
+  });
+
+  /* ================= pestañas ================= */
+  function setView(v) {
+    view = v; if (v === "book") closePanel();
+    $("t-class").setAttribute("aria-selected", v === "class"); $("t-book").setAttribute("aria-selected", v === "book");
+    $("v-class").hidden = v !== "class"; $("v-book").hidden = v !== "book";
+    if (v === "book") { if (grp) bgrp = grp; renderBook(); } else renderClass();
+  }
+  /* cambiar de estilo (Con diseño ↔ Minimalista) solo repinta: los datos no se tocan */
+  window.addEventListener("vesper:style", function () { if ($("content").hidden) return; panelMode(); if (view === "class" && grp) renderPanel(); });
+  $("t-class").addEventListener("click", function () { setView("class"); });
+  $("t-book").addEventListener("click", function () { setView("book"); });
+  var tt = null;
+  function toast(msg) { var t = $("toast"); t.textContent = msg; t.classList.add("show"); clearTimeout(tt); tt = setTimeout(function () { t.classList.remove("show"); }, 3200); }
+
+  /* ================= carga ================= */
+  function load() {
+    Promise.all([GB.fetchRoster(), VESPER_RESULTS.fetchAll({ limit: 1000 }), GB.fetchMyGroupIds()]).then(function (res) {
+      var rosterMap = res[0], attempts = res[1], myIds = res[2] || [];
       if (rosterMap === null && attempts === null) {
-        showMsg('<i class="fas fa-lock"></i> No se pudieron leer los alumnos ni los resultados. ' +
-          'Verifica que tu cuenta sea de profesor/admin, que tengas grupos asignados y que las ' +
-          'reglas de Firestore para <code>roster</code> y <code>exam_results</code> estén ' +
-          'publicadas (ver <b>FIRESTORE_GRADEBOOK_RULES.md</b>).', true);
+        showMsg('<i class="fas fa-lock"></i> No se pudieron leer tus alumnos. Verifica que tu cuenta sea de profesor, ' +
+          'que tengas grupos asignados y que las reglas de Firestore para <code>roster</code> estén publicadas.', true);
         return;
       }
       rosterMap = rosterMap || {};
       var sids = Object.keys(rosterMap);
-      return Promise.all([
-        GB.fetchGrades(sids),
-        GB.fetchDailyAll(sids)
-      ]).then(function (res2) {
+      return Promise.all([GB.fetchGrades(sids), GB.fetchDailyAll(sids)]).then(function (res2) {
         var grades = res2[0], daily = res2[1];
-        canSave = grades !== null;
-        canDaily = daily !== null;
+        canSave = grades !== null; canDaily = daily !== null;
         dailyMap = daily || {};
-        dState = {}; gState = {};
-        fillGroupFilter(rosterMap);
-        roster = GB.buildRoster(rosterMap, attempts || [], grades || {});
-
-        loadingEl.style.display = "none";
-        contentEl.style.display = "block";
-        warnEl.style.display = (canSave && canDaily) ? "none" : "block";
-        if (!canSave || !canDaily) {
+        roster = GB.buildRoster(rosterMap, attempts || [], grades || {}).filter(function (r) { return !!r.sid && rosterMap[r.sid]; });
+        buildGroups(GB.isAdminUser() ? [] : myIds);
+        $("loading").hidden = true; $("content").hidden = false;
+        var w = $("warn");
+        w.hidden = canSave && canDaily;
+        if (!w.hidden) {
           var falta = [];
-          if (!canSave) falta.push("<code>gradebook</code>");
-          if (!canDaily) falta.push("<code>daily_progress</code>");
-          warnEl.innerHTML = '<i class="fas fa-triangle-exclamation"></i> La boleta se muestra en ' +
-            'modo lectura: no se pudo leer ' + falta.join(" ni ") +
-            ' (ver <b>FIRESTORE_GRADEBOOK_RULES.md</b>). Hasta entonces no se puede guardar.';
+          if (!canDaily) falta.push("<code>daily_progress</code> (los 10 puntos)");
+          if (!canSave) falta.push("<code>gradebook</code> (examen final y comentario)");
+          w.innerHTML = '<i class="fas fa-triangle-exclamation"></i> Modo lectura: no se pudo leer ' + falta.join(" ni ") + '. Hasta entonces no se puede guardar eso.';
         }
-        renderCycle();
         setView(view);
       });
     });
   }
 
-  /* mismo boot que portal_calificaciones.html: gate de página + check de profe */
+  /* boot: gate de página + permiso de profe (igual que portal_calificaciones.html) */
   function boot() {
     if (!window.VesperAuth || !VesperAuth.isConfigured) {
-      showMsg('<i class="fas fa-cloud"></i> Firebase no está configurado en <code>vesper_auth.js</code>; ' +
-        'la boleta necesita la nube para reunir los resultados de todos los alumnos.', true);
+      showMsg('<i class="fas fa-cloud"></i> Firebase no está configurado en <code>vesper_auth.js</code>; calificar necesita la nube.', true);
       return;
     }
     VesperAuth.initFirebase().then(function (auth) {
@@ -992,20 +1400,17 @@ footer a{color:var(--gold);text-decoration:none;}
         if (!user || !user.emailVerified) { return; /* el gate redirige al login */ }
         VesperAuth.isTeacher(user).then(function (ok) {
           if (!ok) {
-            showMsg('<i class="fas fa-user-lock"></i> Esta sección es solo para profesores. ' +
-              'Tu cuenta (<b>' + esc(user.email) + '</b>) no está en la lista de profesorado. ' +
-              'Pide al administrador que te autorice.', true);
+            showMsg('<i class="fas fa-user-lock"></i> Esta sección es solo para profesores. Tu cuenta (<b>' + esc(user.email) +
+              '</b>) no está en la lista de profesorado. Pide al administrador que te autorice.', true);
             return;
           }
           load();
         });
       });
     }).catch(function () {
-      showMsg('<i class="fas fa-triangle-exclamation"></i> No se pudo conectar con el servicio. ' +
-        'Revisa tu conexión y recarga.', true);
+      showMsg('<i class="fas fa-triangle-exclamation"></i> No se pudo conectar con el servicio. Revisa tu conexión y recarga.', true);
     });
   }
-
   boot();
 })();
 </script>
