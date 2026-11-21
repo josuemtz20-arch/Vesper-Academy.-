@@ -175,7 +175,7 @@
     d.setAttribute("role", "dialog");
     d.setAttribute("aria-label", "Cookies de analítica");
     /* encima de la barra inferior del alumno (vesper_nav.js) si la hay */
-    var low = document.getElementById("vsp-tabbar") ? "calc(72px + env(safe-area-inset-bottom))" : "16px";
+    var low = document.getElementById("vsp-tabbar") ? "calc(98px + env(safe-area-inset-bottom))" : "16px";
     d.style.cssText = "position:fixed;left:12px;right:12px;bottom:" + low + ";z-index:10050;max-width:520px;margin:0 auto;" +
       "background:#1B1B2F;color:#F5F2EB;border:1px solid rgba(201,168,76,.55);border-radius:14px;padding:14px 16px;" +
       "font:400 14px/1.45 Inter,system-ui,sans-serif;box-shadow:0 10px 28px rgba(0,0,0,.3)";

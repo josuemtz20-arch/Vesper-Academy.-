@@ -94,8 +94,9 @@ header a.back:hover{color:var(--gold);}
 /* La barra de navegación del alumno (vesper_nav.js) es fija abajo; reservamos su
    altura para que NO se encime con el compositor. Al enfocar el textarea la barra
    se oculta sola, así que ahí quitamos el hueco y el compositor baja con el teclado. */
-body{padding-bottom:calc(58px + env(safe-area-inset-bottom));}
-@media(min-width:768px){body{padding-bottom:86px;}}   /* escritorio: la píldora flota centrada abajo */
+/* 2026-11-20: barra de 66 px + Vesper asomando 24 px por encima del filo. */
+body{padding-bottom:calc(90px + env(safe-area-inset-bottom));}
+@media(min-width:768px){body{padding-bottom:110px;}}   /* escritorio: la píldora flota centrada abajo */
 body:has(.composer textarea:focus){padding-bottom:0;}
 /* Este layout es de altura fija (flex): el spacer de nav.js sobra y solo mete
    hueco muerto (incluido sobre el teclado). Reservamos el sitio con el padding

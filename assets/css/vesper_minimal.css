@@ -375,11 +375,14 @@ html[data-vesper-style="minimal"] .col-card.locked .cc-art{filter:none !importan
 
 /* ---------- 13. Chrome compartido ---------- */
 html[data-vesper-style="minimal"] [tabindex="-1"]:focus{outline:none}
-html[data-vesper-style="minimal"] #vsp-tabbar{background:var(--m-card) !important;border-top:1px solid var(--m-line) !important}
-html[data-vesper-style="minimal"] #vsp-tabbar a{color:var(--m-muted) !important}
-html[data-vesper-style="minimal"] #vsp-tabbar a.on{color:var(--m-accent-ink) !important}
-html[data-vesper-style="minimal"] #vsp-tabbar a svg{background:transparent !important;border-color:transparent !important}
-html[data-vesper-style="minimal"] #vsp-tabbar a.on svg{background:var(--m-tint) !important}
+/* Barra «constelación + Vesper» (2026-11-20): en minimalista, fondo liso de
+   tarjeta; la constelación, el gato y la etiqueta a mano se quedan, pintados
+   con los tokens del estilo (vesper_nav.js lee las --tb-*). !important porque
+   el <style> de vesper_nav.js se inyecta después de esta hoja. */
+html[data-vesper-style="minimal"] #vsp-tabbar{background:var(--m-card) !important;border-top:1px solid var(--m-line) !important;
+  --tb-fg:var(--m-muted) !important;--tb-ink:var(--m-ink,var(--ink)) !important;--tb-on:var(--m-accent-ink) !important;
+  --tb-gold:var(--m-accent-ink) !important;--tb-thread:var(--m-line) !important;--tb-dust:transparent !important;
+  --tb-halo:var(--m-tint) !important;--tb-edge:var(--m-line) !important}
 html[data-vesper-style="minimal"] body > header{background:var(--m-bg) !important;border-bottom:1px solid var(--m-line) !important;color:var(--m-ink) !important}
 html[data-vesper-style="minimal"] body > header :is(b,span,a){color:var(--m-ink) !important}
 html[data-vesper-style="minimal"] body > header small{color:var(--m-accent-ink) !important}
