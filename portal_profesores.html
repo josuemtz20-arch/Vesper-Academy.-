@@ -27,7 +27,7 @@
      pedía "Inria Serif", que es de donde salía la deriva tipográfica con el
      resto del sitio. La display fue Bodoni Moda hasta que se vio que sus
      finos se perdían contra el fondo; Fraunces es de contraste bajo. -->
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=Inter:wght@400;500;600;700;800&family=Caveat:wght@600;700&display=swap">
 <!-- Tokens ANTES de los estilos de la página, como manda su cabecera. Estuvo
      después durante mucho tiempo, al revés del contrato. -->
 <link rel="stylesheet" href="assets/css/vesper_tokens.css">
@@ -50,17 +50,21 @@
 *,*::before,*::after{box-sizing:border-box;}
 
 /* ============================================================
-   PORTAL DEL PROFESOR — versión sencilla (2026-11-03)
+   PORTAL DEL PROFESOR — PROPUESTA C «La clase primero» (2026-11-20)
    ------------------------------------------------------------
-   Una herramienta de trabajo, no una portada. El orden sigue el día del
-   profesor: su clase, lo que abre a diario (calificaciones, boleta,
-   calendario, audio), evaluar a un alumno, los manuales y, al final, lo
-   que casi no se usa. Sin láminas ni cifras de adorno.
+   Pensado para el celular, cinco minutos antes de clase. La primera
+   pantalla responde «¿qué necesito ahora?»: la clase que sigue (hora
+   grande, grupo, UN botón dorado) y, pegado a ella, lo de esa clase.
+   Los 28 manuales viven en estantes plegados (<details>) para que la
+   página sea corta; la búsqueda los abre sola.
 
-   Paleta: TODO resuelve a un token. Estos nombres son los que emite
-   buildVars() de vesper_theme.js, así que el tema elegido los pisa en
-   caliente. Los valores sembrados son los del tema "vespertina", para que
-   el portal salga de noche aunque el motor de temas no cargue.
+   Qué se quitó a propósito: la caja redondeada con borde repetida, el
+   icono en cuadrito, los puntos y los cinco colores por familia, y los
+   56 botones iguales (ahora son enlaces de texto, como un índice).
+   El oro queda solo para la acción. Superficie elevada hay UNA: la
+   tarjeta de la clase, con esquinas de libro en vez de borde.
+
+   Paleta: TODO resuelve a un token que vesper_theme.js pisa en caliente.
    PROHIBIDO --navy3: en un tema claro es crema (ver vesper_theme.js).
    ============================================================ */
 :root{
@@ -68,7 +72,6 @@
   --navy2:var(--va-twilight,#3a3a63);
   --gold:var(--va-gold,#C9A84C);
   --gold-lt:var(--va-star,#f3e2ab);
-  /* Oro para TEXTO PEQUEÑO: el motor calcula el accesible por tema. */
   --gold-ink:var(--va-gold,#C9A84C);
   --cream:var(--va-night,#14122a);
   --white:var(--va-dusk,#1f2342);
@@ -82,13 +85,16 @@
   --gold-shadow:color-mix(in srgb,var(--gold) 62%,#000);
 
   --gutter:clamp(16px,4vw,32px);
-  --maxw:1040px;
-  --t-eyebrow:.7rem;--t-small:.83rem;--t-body:.95rem;
-  --r-sm:var(--va-r-sm,10px);--r-md:var(--va-r-md,14px);--r-lg:var(--va-r-lg,18px);--r-pill:999px;
+  --maxw:1120px;
+  --t-eyebrow:.72rem;--t-small:.83rem;--t-body:.95rem;
+  --r-sm:var(--va-r-sm,10px);--r-md:var(--va-r-md,14px);--r-lg:var(--va-r-lg,18px);
   --sh-dusk:var(--va-shadow-dusk,0 18px 44px rgba(20,18,42,.22));
   --ease-out:cubic-bezier(0.22,1,0.36,1);
+  --press:4px;
+  --hand:"Caveat","Segoe Script","Bradley Hand",cursive;
+  --rule:var(--border);
+  --orn:color-mix(in srgb,var(--gold) 78%,transparent);
 }
-/* Alto contraste sobre noche: --muted es literal, la rama de tokens no llega. */
 html.vesper-hc.vesper-dark{--muted:#d9d5e4;--border:#6d6da0;}
 
 html{scroll-behavior:smooth;}
@@ -99,171 +105,229 @@ body{margin:0;font-family:var(--va-font-text,Inter,system-ui,sans-serif);
   stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;vertical-align:-.125em;}
 .skip-link{position:absolute;left:-999px;top:0;z-index:200;background:var(--navy);color:var(--on-night);padding:10px 16px;border-radius:0 0 8px 0;text-decoration:none;font-weight:600;}
 .skip-link:focus{left:0;}
-:focus-visible{outline:3px solid var(--gold);outline-offset:2px;}
+:focus-visible{outline:3px solid var(--focus,var(--gold));outline-offset:2px;}
 
-/* ── Cabecera ── */
+/* ── Cabecera (la de siempre; solo crecen los objetivos táctiles) ── */
 header{background:var(--navy);border-bottom:1px solid var(--hair);
   padding:0 var(--gutter);min-height:62px;display:flex;align-items:center;justify-content:space-between;gap:14px;
   position:sticky;top:0;z-index:50;}
-.brand{display:flex;align-items:center;gap:12px;color:var(--on-night);text-decoration:none;min-width:0;}
+.brand{display:flex;align-items:center;gap:12px;color:var(--on-night);text-decoration:none;min-width:0;min-height:44px;}
 .brand img{height:36px;width:36px;object-fit:contain;}
 .brand b{font-family:var(--va-font-display);font-size:1.05rem;font-weight:600;white-space:nowrap;}
 .brand small{display:block;color:var(--gold);font-size:.58rem;letter-spacing:.24em;text-transform:uppercase;white-space:nowrap;}
 header .right{display:flex;align-items:center;gap:8px;}
-header a.back{display:inline-flex;align-items:center;gap:8px;color:var(--on-night-soft);font-size:.78rem;font-weight:600;
-  text-decoration:none;padding:9px 12px;border-radius:var(--r-sm);border:1px solid var(--hair);transition:color .16s,border-color .16s;}
+header a.back{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-width:44px;min-height:44px;
+  color:var(--on-night-soft);font-size:.78rem;font-weight:600;
+  text-decoration:none;padding:0 12px;border-radius:var(--r-sm);border:1px solid var(--hair);transition:color .16s,border-color .16s;}
 header a.back:hover,header a.back:focus-visible{color:var(--on-night);border-color:var(--gold);}
 @media(max-width:640px){
-  header a.back{font-size:0;padding:10px 11px;gap:0;}
-  header a.back .i{font-size:1rem;}
+  header a.back{font-size:0;padding:0;gap:0;}
+  header a.back .i{font-size:1.05rem;}
 }
 
-.wrap{max-width:var(--maxw);margin:0 auto;padding:clamp(24px,4vw,40px) var(--gutter) 56px;}
+/* ── Página: una columna en el celular, dos en escritorio ── */
+.wrap{max-width:var(--maxw);margin:0 auto;padding:clamp(18px,3.4vw,38px) var(--gutter) 56px;}
+.cols{display:grid;gap:40px;}
+.col{min-width:0;container-type:inline-size;}
+@media(min-width:980px){
+  .cols{grid-template-columns:minmax(0,404px) minmax(0,1fr);gap:64px;align-items:start;}
+}
+@media(min-width:660px) and (max-width:979px){
+  .col-hoy{max-width:560px;}
+}
 
-/* ── Encabezado de la página ── */
-.page-head h1{font-family:var(--va-font-display);font-size:clamp(1.8rem,4vw,2.4rem);font-weight:600;line-height:1.1;
-  margin:0 0 6px;letter-spacing:-.015em;}
-.page-head p{margin:0;color:var(--muted);font-size:var(--t-body);}
+/* ── Vesper saluda: retrato real + UNA línea a mano ── */
+.hello{display:flex;align-items:center;gap:14px;margin:0 0 18px;}
+.vcat{flex:0 0 auto;width:72px;height:72px;border-radius:50%;overflow:hidden;
+  background:radial-gradient(circle at 50% 40%,color-mix(in srgb,var(--gold) 62%,transparent),color-mix(in srgb,var(--gold) 14%,transparent) 70%);
+  box-shadow:0 0 0 1.5px color-mix(in srgb,var(--gold) 62%,transparent);}
+.vcat img{display:block;width:100%;height:100%;object-fit:cover;object-position:50% 18%;transform:scale(1.14) translateY(5%);}
+.hello-t{min-width:0;}
+.hello h1{margin:0 0 7px;font-size:var(--t-eyebrow);font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);line-height:1.3;}
+/* Caveat SOLO aquí: son palabras de Vesper. Nunca en botones ni datos. */
+.say{display:inline-block;margin:0;font:700 1.42rem/1.1 var(--hand);color:var(--text);
+  background:color-mix(in srgb,var(--gold) 12%,var(--white));
+  border:1.5px solid color-mix(in srgb,var(--gold) 42%,transparent);
+  border-radius:4px 18px 16px 18px;padding:6px 14px 8px;transform:rotate(-1.2deg);
+  box-shadow:2px 3px 0 color-mix(in srgb,var(--gold) 20%,transparent);}
 
-/* ── Bloques ── */
-.block{margin-top:34px;}
-.block-h{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:0 0 12px;}
-.block-h h2{font-family:var(--va-font-display);font-size:1.22rem;font-weight:600;margin:0;line-height:1.2;}
-.block-h .note{font-size:var(--t-small);color:var(--muted);}
+/* ── La clase que sigue: la única superficie elevada, con esquinas de libro ── */
+.now{position:relative;padding:26px 22px 12px;border-radius:5px;
+  box-shadow:var(--shadow,0 6px 22px rgba(0,0,0,.4));
+  --m:8px;--l:20px;--w:1.5px;
+  background:
+    linear-gradient(var(--orn),var(--orn)) left var(--m) top var(--m)/var(--l) var(--w) no-repeat,
+    linear-gradient(var(--orn),var(--orn)) left var(--m) top var(--m)/var(--w) var(--l) no-repeat,
+    linear-gradient(var(--orn),var(--orn)) right var(--m) top var(--m)/var(--l) var(--w) no-repeat,
+    linear-gradient(var(--orn),var(--orn)) right var(--m) top var(--m)/var(--w) var(--l) no-repeat,
+    linear-gradient(var(--orn),var(--orn)) left var(--m) bottom var(--m)/var(--l) var(--w) no-repeat,
+    linear-gradient(var(--orn),var(--orn)) left var(--m) bottom var(--m)/var(--w) var(--l) no-repeat,
+    linear-gradient(var(--orn),var(--orn)) right var(--m) bottom var(--m)/var(--l) var(--w) no-repeat,
+    linear-gradient(var(--orn),var(--orn)) right var(--m) bottom var(--m)/var(--w) var(--l) no-repeat,
+    var(--white);}
+.eb{display:block;font-size:var(--t-eyebrow);font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);line-height:1.4;}
+.nx-when{margin:0;font-size:.76rem;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:var(--gold-ink);}
+.nx-when b{color:var(--text);font-weight:700;}
+.nx-hour{margin:4px 0 0;font-family:var(--va-font-display);font-weight:600;font-size:clamp(3.5rem,17cqi,4.7rem);
+  line-height:.98;letter-spacing:-.03em;font-variant-numeric:lining-nums;}
+.nx-hour small{font-size:.3em;font-weight:500;letter-spacing:.01em;margin-left:.3em;color:var(--muted);}
+.nx-name{margin:12px 0 0;font-family:var(--va-font-display);font-size:1.32rem;font-weight:600;line-height:1.2;}
+.nx-sched{margin:3px 0 0;color:var(--muted);font-size:var(--t-small);}
+.nx-nolink{margin:16px 0 4px;color:var(--muted);font-size:var(--t-small);}
+/* El ÚNICO botón dorado de la pantalla, con piso. */
+a.join{display:flex;align-items:center;justify-content:center;gap:10px;min-height:56px;
+  margin:18px 0 calc(var(--press) + 4px);padding:0 18px;border-radius:14px;
+  background:var(--gold);color:var(--on-gold);font-weight:800;font-size:1.06rem;letter-spacing:.005em;text-decoration:none;
+  box-shadow:0 var(--press) 0 var(--gold-shadow);
+  transition:transform .09s ease,box-shadow .09s ease,filter .15s;}
+a.join .i{width:22px;height:22px;stroke-width:1.9;}
+a.join:hover{filter:brightness(1.06);}
+a.join:active{transform:translateY(var(--press));box-shadow:0 0 0 var(--gold-shadow);}
+.nx-list-h{margin:0 0 4px;font-family:var(--va-font-display);font-size:1.32rem;font-weight:600;}
 
-/* Superficie común: una sola, para todo. */
-.panel{background:var(--white);border:1px solid var(--border);border-radius:var(--r-lg);}
+/* Lo de esa clase, a un toque */
+.kit{margin-top:16px;padding-top:16px;border-top:1px solid var(--rule);}
+#myclasses[hidden] + .kit{margin-top:0;padding-top:0;border-top:0;}
+.kit > h2{margin:0;}
+.kit-two{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0 6px;}
+a.btn2{display:flex;flex-direction:column;justify-content:center;min-height:56px;padding:8px 12px;border-radius:12px;
+  text-decoration:none;color:var(--text);
+  background:color-mix(in srgb,var(--text) 9%,var(--white));
+  box-shadow:0 3px 0 color-mix(in srgb,var(--text) 24%,var(--white));margin-bottom:3px;
+  transition:transform .09s ease,box-shadow .09s ease,background .15s;}
+a.btn2 b{font-size:.98rem;font-weight:700;line-height:1.25;}
+a.btn2 span{font-size:.74rem;letter-spacing:-.015em;color:var(--muted);line-height:1.3;}
+a.btn2:hover{background:color-mix(in srgb,var(--text) 13%,var(--white));}
+a.btn2:active{transform:translateY(3px);box-shadow:0 0 0 transparent;}
+a.btn2.sm{flex-direction:row;align-items:center;min-height:44px;padding:0 16px;font-size:var(--t-small);font-weight:700;white-space:nowrap;}
+.kit-more{display:flex;flex-wrap:wrap;gap:0 24px;margin-top:2px;}
 
-/* Icono en cuadro, mismo en accesos y filas */
-.ic{display:grid;place-items:center;flex:0 0 auto;width:40px;height:40px;border-radius:11px;
-  color:var(--gold-ink);background:color-mix(in srgb,var(--gold) 14%,transparent);
-  border:1px solid color-mix(in srgb,var(--gold) 28%,transparent);}
-.ic .i{width:20px;height:20px;stroke-width:1.7;}
-
-/* ── Botones ── */
-a.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:9px 14px;border-radius:10px;
-  font-size:var(--t-small);font-weight:700;text-decoration:none;white-space:nowrap;
-  transition:background .16s,border-color .16s,transform .09s ease,box-shadow .09s ease;}
-/* Acción principal en tono suave: con 30+ filas, un oro sólido en cada una
-   gritaba. Se rellena de oro sólo al pasar el puntero. */
-a.btn-gold{background:color-mix(in srgb,var(--gold) 16%,transparent);color:var(--gold-ink);
-  border:1px solid color-mix(in srgb,var(--gold) 50%,transparent);}
-a.btn-gold:hover,a.btn-gold:focus-visible{background:var(--gold);color:var(--on-gold);border-color:var(--gold);}
-a.btn-line{border:1px solid var(--border);color:var(--text);}
-a.btn-line:hover,a.btn-line:focus-visible{border-color:var(--gold);}
-
-/* ── Mis clases (Google Meet) ── */
-.myclasses{margin-top:26px;}
-.mc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px;}
-.mc-card{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;
-  background:var(--white);border:1px solid var(--hair);border-radius:var(--r-lg);}
-.mc-card .mc-info b{display:block;font-weight:600;}
-.mc-card .mc-info span{display:block;color:var(--muted);font-size:var(--t-small);margin-top:2px;}
-.mc-join{flex-shrink:0;background:var(--gold);color:var(--on-gold);font-weight:700;font-size:var(--t-small);padding:10px 15px;
-  border-radius:10px;text-decoration:none;white-space:nowrap;box-shadow:0 2px 0 var(--gold-shadow);}
-.mc-join:hover,.mc-join:focus-visible{background:var(--gold-lt);}
-.mc-nolink{flex-shrink:0;color:var(--muted);font-size:var(--t-small);}
-
-/* ── Accesos diarios ── */
-.quick{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;}
-a.tile{display:flex;flex-direction:column;gap:3px;padding:16px;text-decoration:none;color:var(--text);
-  background:var(--white);border:1px solid var(--border);border-radius:var(--r-lg);
-  transition:border-color .16s,transform .2s var(--ease-out);}
-a.tile:hover,a.tile:focus-visible{border-color:var(--gold);transform:translateY(-2px);}
-a.tile .ic{margin-bottom:9px;}
-a.tile b{font-size:1rem;font-weight:600;line-height:1.25;}
-a.tile span{font-size:var(--t-small);color:var(--muted);line-height:1.4;}
-@media(max-width:760px){.quick{grid-template-columns:repeat(2,minmax(0,1fr));}}
-
-/* ── Abiertos recientemente ── */
-#recent{display:none;flex-wrap:wrap;align-items:center;gap:8px;margin-top:16px;}
-#recent.on{display:flex;}
-#recent .rc-lbl{font-size:var(--t-small);color:var(--muted);margin-right:2px;}
-#recent a{display:inline-flex;align-items:center;gap:7px;font-size:var(--t-small);font-weight:600;color:var(--text);
-  text-decoration:none;background:var(--white);border:1px solid var(--border);border-radius:var(--r-pill);padding:7px 13px;
-  transition:border-color .16s;}
-#recent a:hover,#recent a:focus-visible{border-color:var(--gold);}
-#recent a .i{color:var(--gold-ink);}
-
-/* ── Filas: evaluar, manuales y más herramientas ── */
-.list{background:var(--white);border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;}
-.row{display:flex;align-items:center;gap:14px;padding:13px 16px;border-top:1px solid var(--border);}
-.list > .row:first-child,.list > .row.first-visible{border-top:0;}
-.row .txt{flex:1;min-width:0;}
+/* ── Filas: un índice, no una rejilla de tarjetas ── */
+.row{position:relative;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;column-gap:20px;
+  padding:9px 0;border-top:1px solid var(--rule);}
+.list > .row:first-child,.row.first-visible{border-top:0;}
+.row .txt{min-width:0;}
 .row .txt b,.row h4{display:block;margin:0;font-size:var(--t-body);font-weight:600;line-height:1.3;}
-.row .txt span,.row p{display:block;margin:2px 0 0;font-size:var(--t-small);color:var(--muted);line-height:1.4;}
-.row .acts{display:flex;gap:8px;flex-shrink:0;}
+.row .txt > span,.row p{display:block;margin:2px 0 0;font-size:var(--t-small);color:var(--muted);line-height:1.42;}
+.row .acts{display:flex;align-items:center;gap:0 22px;}
 .admin-hidden{display:none !important;}
-@media(max-width:620px){
-  .row{flex-wrap:wrap;row-gap:10px;}
-  .row .acts{width:100%;}
-  .row .acts .btn{flex:1;}
+a.lnk{display:inline-flex;align-items:center;gap:7px;min-height:44px;font-size:.86rem;font-weight:700;color:var(--text);
+  text-decoration:none;white-space:nowrap;}
+a.lnk.go::before{content:"\2192";order:2;color:var(--gold-ink);transition:transform .18s var(--ease-out);}
+a.lnk.alt,a.lnk.quiet{font-weight:500;color:var(--muted);text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:4px;
+  text-decoration-color:color-mix(in srgb,var(--muted) 55%,transparent);}
+a.lnk.quiet::before{display:none;}
+a.lnk.alt{position:relative;z-index:1;}
+/* Toda la fila abre lo principal: objetivo táctil generoso sin dibujar un botón. */
+.row > .acts > a.go::after{content:"";position:absolute;inset:0;}
+.row > .acts > a.go:focus-visible{outline:none;}
+.row > .acts > a.go:focus-visible::after{outline:3px solid var(--focus,var(--gold));outline-offset:-1px;border-radius:6px;}
+@media(hover:hover){
+  .row:has(> .acts > a.go:hover) :is(h4,.txt b){text-decoration:underline;text-decoration-color:var(--gold);text-underline-offset:4px;}
+  .row:has(> .acts > a.go:hover) a.go::before{transform:translateX(3px);}
+  a.lnk.alt:hover,a.lnk.quiet:hover{color:var(--text);}
+}
+.row.card{grid-template-columns:64px minmax(0,1fr) auto;}
+.card .lvl{font-size:.72rem;font-weight:700;letter-spacing:.05em;color:var(--muted);white-space:nowrap;}
+@container (max-width:479px){
+  .row{grid-template-columns:minmax(0,1fr);padding:11px 0 3px;}
+  .row .acts{justify-content:space-between;}
+}
+@container (max-width:699px){
+  .row.card{grid-template-columns:minmax(0,1fr);padding:11px 0 3px;}
+  .row.card .acts{justify-content:space-between;}
+  .card .lvl{margin-bottom:2px;}
 }
 
-/* ── Manuales ── */
-.filter{display:flex;flex-direction:column;gap:10px;padding:12px;margin-bottom:6px;}
+/* ── El resto del día ── */
+.day{margin-top:28px;}
+.h-eb{display:flex;align-items:center;gap:12px;margin:0 0 2px;font-size:var(--t-eyebrow);font-weight:700;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--muted);}
+.h-eb::after{content:"";flex:1;height:1px;background:var(--rule);}
+.dy-row{display:grid;grid-template-columns:86px minmax(0,1fr) auto;align-items:center;column-gap:10px;min-height:60px;
+  border-top:1px solid var(--rule);}
+.dy-row:first-child{border-top:0;}
+.dy-h{font-family:var(--va-font-display);font-size:1.3rem;font-weight:600;line-height:1;white-space:nowrap;font-variant-numeric:lining-nums;}
+.dy-h small{font-size:.62em;font-weight:500;color:var(--muted);margin-left:.2em;}
+.dy-n{min-width:0;}
+.dy-n b{display:block;font-size:var(--t-body);font-weight:600;line-height:1.3;}
+.dy-n span{display:block;font-size:var(--t-small);color:var(--muted);}
+.dy-no{font-size:var(--t-small);color:var(--muted);}
+.dy-row.is-done .dy-h,.dy-row.is-done .dy-n b{color:var(--muted);font-weight:500;}
+.dy-row.g{grid-template-columns:minmax(0,1fr) auto;}
+
+/* ── Plegables (estantes de manuales, grupos, más herramientas) ── */
+summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:12px;min-height:58px;border-radius:6px;}
+summary::-webkit-details-marker{display:none;}
+summary::after{content:"";flex:0 0 auto;width:9px;height:9px;margin:0 8px 4px 0;border-right:2px solid var(--muted);border-bottom:2px solid var(--muted);
+  transform:rotate(45deg);transition:transform .2s var(--ease-out);}
+details[open] > summary::after{transform:rotate(-135deg);margin-bottom:-4px;}
+@media(hover:hover){summary:hover::after{border-color:var(--gold);}}
+.fold{border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);}
+.fold > summary > :first-child{flex:1;margin:0;}
+.fold .ct{font-size:.8rem;font-weight:500;color:var(--muted);}
+#mc-all{margin-top:8px;border-top:0;}
+#mc-all summary span:first-child{font-size:var(--t-small);font-weight:600;color:var(--muted);}
+#mc-all[open]{padding-bottom:6px;}
+
+/* ── Bloques de la columna de consulta ── */
+.block{margin-top:44px;}
+.col > .block:first-child{margin-top:0;}
+.block > h2,.fold h2{font-family:var(--va-font-display);font-weight:600;line-height:1.2;margin:0;}
+#h-man{font-size:1.62rem;letter-spacing:-.01em;margin-bottom:12px;}
+#h-eval{font-size:1.24rem;margin-bottom:6px;}
+#h-mas{font-size:1.06rem;}
+
+/* ── Manuales: buscador, filtro de familia y estantes ── */
 .f-box{position:relative;display:flex;align-items:center;}
-.f-box .f-ic{position:absolute;left:14px;color:var(--gold-ink);pointer-events:none;}
-#q{width:100%;font-family:inherit;font-size:.98rem;color:var(--text);background:var(--cream);border:1px solid var(--border);
-  border-radius:var(--r-sm);padding:12px 40px;transition:border-color .16s,box-shadow .16s;}
-#q::placeholder{color:var(--muted);opacity:.85;}
+.f-box .f-ic{position:absolute;left:15px;font-size:1.1rem;color:var(--muted);pointer-events:none;}
+#q{width:100%;min-height:52px;font-family:inherit;font-size:1rem;color:var(--text);background:var(--white);border:1px solid var(--border);
+  border-radius:12px;padding:12px 48px 12px 44px;transition:border-color .16s,box-shadow .16s;}
+#q::placeholder{color:var(--muted);opacity:.9;}
 #q:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px var(--hair);}
 #q::-webkit-search-cancel-button{display:none;}
-.f-clear{position:absolute;right:8px;width:30px;height:30px;border:none;background:none;color:var(--muted);font-size:1.05rem;
+.f-clear{position:absolute;right:4px;width:44px;height:44px;border:none;background:none;color:var(--muted);font-size:1.25rem;
   cursor:pointer;border-radius:50%;display:none;align-items:center;justify-content:center;}
-.f-clear:hover,.f-clear:focus-visible{background:var(--hair);color:var(--text);}
+.f-clear:hover,.f-clear:focus-visible{color:var(--text);}
 .f-box.has-val .f-clear{display:flex;}
-.pills{display:flex;flex-wrap:wrap;gap:6px;}
-.pill{font-family:inherit;font-size:var(--t-small);font-weight:600;padding:7px 13px;border-radius:var(--r-pill);cursor:pointer;
-  background:none;border:1px solid var(--border);color:var(--muted);display:inline-flex;align-items:center;gap:7px;
-  transition:background .16s,color .16s,border-color .16s;}
-.pill::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--c,var(--gold));}
-.pill.all::before{display:none;}
-.pill:hover,.pill:focus-visible{color:var(--text);border-color:var(--gold);}
-.pill[aria-pressed="true"]{background:var(--gold);color:var(--on-gold);border-color:var(--gold);}
-.pill[aria-pressed="true"]::before{background:var(--on-gold);}
+/* El filtro de familia: palabras, sin pastilla ni punto de color. */
+.pills{display:flex;flex-wrap:wrap;gap:0 2px;margin:6px -10px 4px;}
+.pill{position:relative;font-family:inherit;font-size:.86rem;font-weight:600;min-height:44px;padding:0 10px;cursor:pointer;
+  background:none;border:0;border-radius:8px;color:var(--muted);transition:color .16s;}
+.pill:hover{color:var(--text);}
+.pill[aria-pressed="true"]{color:var(--text);font-weight:700;}
+.pill[aria-pressed="true"]::after{content:"";position:absolute;left:10px;right:10px;bottom:8px;height:2px;border-radius:2px;background:var(--gold);}
 @media(max-width:620px){
-  .pills{flex-wrap:nowrap;overflow-x:auto;margin:0 -12px;padding:0 12px 2px;scrollbar-width:none;
-    -webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 28px),transparent);
-            mask-image:linear-gradient(90deg,#000 calc(100% - 28px),transparent);}
+  .pills{flex-wrap:nowrap;overflow-x:auto;margin:6px calc(var(--gutter) * -1) 4px;padding:0 calc(var(--gutter) - 10px);scrollbar-width:none;
+    -webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 30px),transparent);
+            mask-image:linear-gradient(90deg,#000 calc(100% - 30px),transparent);}
   .pills::-webkit-scrollbar{display:none;}
   .pill{flex:0 0 auto;white-space:nowrap;}
 }
+.shelves{border-bottom:1px solid var(--rule);}
+section.grp{border-top:1px solid var(--rule);}
+h3.sec{flex:1;display:flex;align-items:baseline;gap:10px;margin:0;font-family:var(--va-font-display);font-size:1.1rem;font-weight:600;line-height:1.25;}
+h3.sec .sec-ct{font-family:var(--va-font-text,Inter,sans-serif);font-size:.8rem;font-weight:500;color:var(--muted);}
+h3.sec .sec-ct:not(:empty)::after{content:" manuales";}
+/* Abierto, el estante es una sangría con filete: nada de caja dentro de caja. */
+.shelf > .list{margin:0 0 16px 3px;padding-left:15px;border-left:2px solid color-mix(in srgb,var(--gold) 48%,transparent);}
 
-/* Acento por familia: un tono por polaridad (el de noche se evapora sobre
-   papel y viceversa). Sólo marca el punto del grupo y la pastilla de nivel. */
-.grp,.pill{--a-night:var(--gold);--a-day:#7a5e12;}
-.basics  {--a-night:#6fc79a;--a-day:#1f6b46;}
-.practice{--a-night:#e2a06a;--a-day:#8a4d16;}
-.grammar {--a-night:#79b2e8;--a-day:#1a5a94;}
-.special {--a-night:#dcc173;--a-day:#7a5e12;}
-.exam    {--a-night:#e08d9c;--a-day:#8a2f3b;}
-.grp,.pill{--accent:var(--a-day);--c:var(--a-day);}
-html.vesper-dark .grp,html.vesper-dark .pill{--accent:var(--a-night);--c:var(--a-night);}
-
-section.grp{margin-top:18px;}
-h3.sec{display:flex;align-items:center;gap:9px;margin:0 0 8px 2px;font-size:var(--t-eyebrow);font-weight:700;
-  letter-spacing:.16em;text-transform:uppercase;color:var(--muted);}
-h3.sec::before{content:"";width:9px;height:9px;border-radius:3px;background:var(--accent);}
-h3.sec .sec-ct{margin-left:auto;font-weight:500;letter-spacing:0;text-transform:none;}
-.card .lvl{flex:0 0 68px;width:68px;padding:5px 4px;border-radius:8px;text-align:center;white-space:nowrap;
-  overflow:hidden;text-overflow:ellipsis;font-size:.68rem;font-weight:700;letter-spacing:.02em;color:var(--accent);
-  background:color-mix(in srgb,var(--accent) 13%,transparent);}
-.card p{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-@media(max-width:620px){.card p{white-space:normal;}}
-
-#deep{margin:4px 0 0;padding:12px;}
+#deep{margin:8px 0 14px;}
 #deep[hidden]{display:none;}
-#deep .dp-lbl{font-size:var(--t-small);font-weight:600;color:var(--gold-ink);margin:0 2px 8px;display:flex;align-items:center;gap:8px;}
-#deep a{display:flex;flex-direction:column;gap:1px;text-decoration:none;color:var(--text);background:var(--cream);
-  border:1px solid var(--border);border-radius:10px;padding:9px 12px;margin-top:6px;}
-#deep a:hover,#deep a:focus-visible{border-color:var(--gold);}
+#deep a{display:flex;flex-direction:column;justify-content:center;min-height:50px;padding:6px 0;text-decoration:none;color:var(--text);
+  border-top:1px solid var(--rule);}
+#deep a:first-of-type{border-top:0;}
 #deep a b{font-size:var(--t-body);font-weight:600;}
 #deep a span{font-size:var(--t-small);color:var(--muted);}
-#empty{display:none;text-align:center;color:var(--muted);padding:36px 20px;font-size:var(--t-body);}
+@media(hover:hover){#deep a:hover b{text-decoration:underline;text-decoration-color:var(--gold);text-underline-offset:4px;}}
+#empty{display:none;color:var(--muted);padding:26px 0;font-size:var(--t-body);border-top:1px solid var(--rule);}
+.private{margin:14px 0 0;font-size:var(--t-small);color:var(--muted);}
 
-.private{display:flex;align-items:center;gap:8px;margin:14px 2px 0;font-size:var(--t-small);color:var(--muted);}
-.private .i{color:var(--gold-ink);}
+/* ── Abiertos recientemente: una línea de texto ── */
+#recent{display:none;flex-wrap:wrap;align-items:center;gap:0 20px;margin-top:20px;}
+#recent.on{display:flex;}
+#recent .rc-lbl{flex:0 0 100%;}
+#recent a{min-width:44px;}
 
 footer{color:var(--muted);text-align:center;padding:26px var(--gutter);font-size:var(--t-small);border-top:1px solid var(--border);}
 footer a{color:var(--gold-ink);text-decoration:none;}
@@ -278,14 +342,13 @@ footer a:hover{text-decoration:underline;}
   overflow:hidden;border:1px solid var(--hair);color:var(--on-night);}
 .gate-card .gh{background:linear-gradient(140deg,var(--navy2),var(--navy));
   color:var(--on-night);padding:30px 30px 24px;text-align:center;border-bottom:1px solid var(--hair);}
-.gate-card .gh .lock{width:52px;height:52px;margin:0 auto 14px;border-radius:var(--r-md);display:flex;align-items:center;justify-content:center;
-  font-size:1.3rem;background:linear-gradient(135deg,var(--gold-lt),var(--gold));color:var(--navy);}
+.gate-card .gh .vcat{width:76px;height:76px;margin:0 auto 14px;}
 .gate-card .gh h2{font-family:var(--va-font-display);font-size:1.35rem;letter-spacing:.02em;font-weight:600;margin:0;}
 .gate-card .gh h2 b{color:var(--gold-lt);font-weight:700;}
 .gate-card .gh p{font-size:var(--t-eyebrow);color:var(--on-night-soft);margin-top:8px;letter-spacing:.22em;text-transform:uppercase;}
 .gate-card .gbody{padding:24px 30px 22px;text-align:center;}
 .gate-card .gmsg{margin:0;font-size:15px;line-height:1.6;color:var(--on-night);}
-.gate-card .gbtn{display:inline-flex;align-items:center;justify-content:center;gap:8px;margin-top:18px;padding:12px 20px;
+.gate-card .gbtn{display:inline-flex;align-items:center;justify-content:center;gap:8px;margin-top:18px;padding:12px 20px;min-height:48px;
   font-size:15px;font-weight:700;background:var(--gold);color:var(--navy);border-radius:var(--r-sm);text-decoration:none;}
 .gate-card .gbtn:hover{background:var(--gold-lt);}
 .gate-card .gbtn[hidden]{display:none;}
@@ -293,8 +356,251 @@ footer a:hover{text-decoration:underline;}
 
 @media (prefers-reduced-motion: reduce){
   html{scroll-behavior:auto;}
-  *{transition:none !important;}
+  *,*::before,*::after{transition:none !important;}
 }
+html.vesper-reduce-motion *,html.vesper-reduce-motion *::before,html.vesper-reduce-motion *::after{transition:none !important;}
+
+/* ============================================================
+   PORTADAS Y «TUS MANUALES» (2026-11-20)
+   ------------------------------------------------------------
+   El dueño: «mucha gente no lee, añade algunos iconos para que sepan qué
+   nivel tienen, o que el manual del nivel que tienen que enseñar se
+   ilumine o resalte».
+   · Cada manual lleva la portada grabada de su libro (la misma que ve el
+     alumno en su hub) con el nivel en una etiqueta: se reconoce de un
+     vistazo, sin leer.
+   · Los manuales de los cursos que el profesor da salen arriba, en
+     grande, y dentro de su estante quedan encendidos con un halo dorado.
+   · Unos pocos iconos de línea (sin cuadro) en lo de todos los días.
+   ============================================================ */
+.cv{position:relative;display:block;width:52px;flex:0 0 auto;align-self:start;margin:2px 0 9px;}
+.cv img{display:block;width:100%;height:auto;aspect-ratio:4/5;object-fit:cover;border-radius:6px;background:var(--navy);
+  box-shadow:0 0 0 1px color-mix(in srgb,var(--gold) 34%,transparent);}
+.cv .lvl,.card .cv .lvl{position:absolute;left:50%;bottom:-8px;transform:translateX(-50%);margin:0;padding:2px 6px;border-radius:5px;
+  font-size:.64rem;font-weight:800;letter-spacing:.02em;line-height:1.25;white-space:nowrap;
+  color:var(--navy);background:var(--gold-lt);box-shadow:0 1px 0 rgba(0,0,0,.25);}
+html:not(.vesper-dark) .cv .lvl{color:var(--on-night,#f5f2eb);background:#1f2342;}
+.row.card{grid-template-columns:64px minmax(0,1fr) auto;}
+@container (max-width:699px){
+  .row.card{grid-template-columns:64px minmax(0,1fr);}
+  .row.card .acts{grid-column:1/-1;}
+}
+
+/* El manual que te toca enseñar: encendido. */
+.card.is-mine{border-radius:10px;margin:4px 0 4px -8px;padding-left:8px;padding-right:8px;border-top-color:transparent;
+  background:linear-gradient(90deg,color-mix(in srgb,var(--gold) 20%,transparent),color-mix(in srgb,var(--gold) 5%,transparent) 80%);}
+.card.is-mine + .card{border-top-color:transparent;}
+.card.is-mine .cv img,.mine-t .cv img{box-shadow:0 0 0 2px var(--gold),0 0 18px 2px color-mix(in srgb,var(--gold) 55%,transparent);}
+.row .txt > .mine-tag,.mine-flag{display:inline-flex;align-items:center;gap:6px;margin:0 0 2px;font-size:.72rem;font-weight:700;
+  letter-spacing:.02em;color:var(--gold-ink);}
+.mine-tag::before,.mine-flag::before{content:"";width:.8em;height:.8em;background:var(--gold);
+  clip-path:polygon(50% 0,61% 39%,100% 50%,61% 61%,50% 100%,39% 61%,0 50%,39% 39%);}
+.mine-flag{margin:0;font-family:var(--va-font-text,Inter,sans-serif);white-space:nowrap;}
+
+/* Arriba de todo: las portadas de tus cursos, para tocar sin buscar. */
+#mine{margin:6px 0 18px;}
+#mine[hidden]{display:none;}
+.mine-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(98px,1fr));gap:14px 12px;margin-top:12px;}
+a.mine-t{display:flex;flex-direction:column;gap:14px;max-width:150px;text-decoration:none;color:var(--text);
+  transition:transform .18s var(--ease-out);}
+a.mine-t .cv{width:100%;margin:0;}
+a.mine-t .cv img{border-radius:9px;}
+a.mine-t .cv .lvl{font-size:.8rem;padding:3px 9px;bottom:-10px;}
+a.mine-t b{display:block;font-size:.9rem;font-weight:700;line-height:1.25;}
+a.mine-t .mt span{display:block;margin-top:2px;font-size:.76rem;color:var(--muted);line-height:1.3;}
+@media (hover:hover){a.mine-t:hover{transform:translateY(-3px);} a.mine-t:hover b{text-decoration:underline;text-decoration-color:var(--gold);text-underline-offset:4px;}}
+
+/* El manual de la clase que sigue, con su portada. */
+#kit-manual .row.has-cv{grid-template-columns:60px minmax(0,1fr) auto;}
+@container (max-width:479px){
+  #kit-manual .row.has-cv{grid-template-columns:60px minmax(0,1fr);}
+  #kit-manual .row.has-cv .acts{grid-column:1/-1;}
+}
+
+/* Iconos de línea, sueltos: nunca dentro de un cuadrito. */
+a.btn2:has(> .i){display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:10px;align-content:center;}
+a.btn2 > .i{grid-row:1/3;align-self:center;width:24px;height:24px;stroke-width:1.6;color:var(--gold-ink);}
+a.lnk.quiet > .i{width:18px;height:18px;stroke-width:1.6;color:var(--gold-ink);}
+.row.ico{grid-template-columns:28px minmax(0,1fr) auto;column-gap:14px;}
+.row.ico > .i{width:24px;height:24px;stroke-width:1.5;color:var(--gold-ink);align-self:start;margin-top:2px;}
+@container (max-width:479px){
+  .row.ico{grid-template-columns:28px minmax(0,1fr);}
+  .row.ico > .i{grid-row:1/3;}
+  .row.ico .acts{grid-column:2;flex-wrap:wrap;}
+  /* en la columna angosta el icono va arriba: «Calificaciones» no cabe a su lado */
+  a.btn2:has(> .i){grid-template-columns:minmax(0,1fr);padding:10px 12px;}
+  a.btn2 > .i{grid-row:auto;justify-self:start;margin-bottom:4px;}
+}
+
+/* ============================================================
+   HECHO A MANO (2026-11-20)
+   ------------------------------------------------------------
+   El dueño, ya con esta versión: «me gusta pero siento que se ve muy hecho
+   con IA, púlela aún más». Lo que seguía delatándola eran los materiales:
+   rótulos en MAYÚSCULAS espaciadas por todos lados, un globo de diálogo
+   redondeado, dos botones gemelos, brillos difusos y cajas redondeadas.
+   Se cambian por cosas que existen en un escritorio:
+   · la clase que sigue es una FICHA DE PAPEL pegada con cinta, con talón
+     perforado (boleta | calificaciones) como un boleto;
+   · Vesper se asoma detrás de la ficha y escribe directo sobre la noche,
+     sin globo; lo que anota va a mano («sigue hoy, en 12 min», «tu clase»);
+   · los rótulos pasan a cursiva de libro, en minúsculas;
+   · tus manuales llevan un separador dorado (cinta de libro), no un brillo;
+     el nivel es una etiqueta de papel pegada en la portada;
+   · el buscador es un renglón, no una caja.
+   ============================================================ */
+:root{
+  /* (no «--paper»: ese nombre es del motor de temas y lo pisa) */
+  --ficha:#f5eedc;--ficha-ink:#1B1B2F;--ficha-muted:#5d6470;--ficha-gold:#7c5e22;
+  --pen:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 150 12' preserveAspectRatio='none' fill='none' stroke='%23C9A84C' stroke-width='2.6' stroke-linecap='round'%3E%3Cpath d='M2 6.5C22 2.5 41 8.8 62 5.4S104 2.2 122 5.6c9 1.7 17 1.2 26-1.4'/%3E%3C/svg%3E");
+}
+html:not(.vesper-dark){--ficha:#fffdf7;}
+
+/* Rótulos: cursiva de libro en minúsculas, no mayúsculas espaciadas. */
+.eb,.h-eb,.hello h1{text-transform:none;letter-spacing:0;font-family:var(--va-font-display);font-style:italic;font-weight:500;
+  font-size:1.02rem;line-height:1.3;}
+.row .txt small.eb{font-size:.86rem;}
+
+/* Cabecera: enlaces sueltos, sin cajita. */
+header a.back{border-color:transparent;}
+header a.back:hover,header a.back:focus-visible{border-color:transparent;color:var(--gold-lt);}
+
+/* ── Vesper se asoma detrás de la ficha y escribe sobre la noche ── */
+.hello{position:relative;display:block;margin:0;padding:2px 128px 20px 0;min-height:112px;}
+.hello h1{font-style:normal;font-weight:600;font-size:clamp(1.45rem,5.6vw,1.8rem);letter-spacing:-.01em;color:var(--text);margin:0 0 8px;}
+.say{display:block;background:none;border:0;border-radius:0;box-shadow:none;padding:0 0 12px;
+  font:700 1.6rem/1.08 var(--hand);color:var(--gold-ink);transform:rotate(-1.6deg);transform-origin:left bottom;
+  background:var(--pen) left bottom/132px 10px no-repeat;}
+html.vesper-dark .say{color:var(--gold-lt);}
+.vcat{position:absolute;right:4px;bottom:-3px;width:122px;height:122px;border-radius:0;overflow:visible;background:none;box-shadow:none;z-index:0;}
+.vcat img{width:100%;height:100%;object-fit:contain;object-position:50% 100%;transform:none;
+  filter:drop-shadow(0 0 14px color-mix(in srgb,var(--gold) 26%,transparent));}
+
+/* ── La ficha de papel ── */
+.now{z-index:1;padding:30px 22px 14px;border-radius:3px;
+  --text:var(--ficha-ink);--muted:var(--ficha-muted);--gold-ink:var(--ficha-gold);--white:var(--ficha);
+  --rule:rgba(27,27,47,.2);--border:rgba(27,27,47,.2);
+  color:var(--ficha-ink);
+  background:
+    linear-gradient(90deg,transparent 31px,color-mix(in srgb,var(--gold) 55%,transparent) 31px,color-mix(in srgb,var(--gold) 55%,transparent) 32px,transparent 32px) 0 0/100% 100% no-repeat,
+    var(--ficha);
+  box-shadow:5px 6px 0 rgba(0,0,0,.26),0 1px 0 rgba(27,27,47,.12);}
+html:not(.vesper-dark) .now{box-shadow:5px 6px 0 rgba(27,27,47,.12),0 0 0 1px rgba(27,27,47,.1);}
+/* la cinta */
+.now::before{content:"";position:absolute;top:-11px;left:42px;width:92px;height:24px;transform:rotate(-3deg);
+  background:color-mix(in srgb,var(--gold-lt) 78%,transparent);box-shadow:0 1px 2px rgba(0,0,0,.18);
+  -webkit-mask:linear-gradient(90deg,transparent 0,#000 3px,#000 calc(100% - 3px),transparent 100%);
+          mask:linear-gradient(90deg,transparent 0,#000 3px,#000 calc(100% - 3px),transparent 100%);}
+#myclasses,.kit{padding-left:24px;}
+/* lo que Vesper anota en la ficha */
+.nx-when{font:700 1.5rem/1.05 var(--hand);letter-spacing:0;text-transform:none;color:var(--ficha-gold);
+  transform:rotate(-1.4deg);transform-origin:left;}
+.nx-when b{color:var(--ficha-ink);font-weight:700;}
+.nx-hour{margin-top:2px;}
+a.join{border-radius:12px;}
+
+/* El talón perforado: boleta | calificaciones */
+.kit{position:relative;margin:20px -22px 0 -22px;padding:14px 22px 0 46px;border-top:2px dashed rgba(27,27,47,.28);}
+#myclasses[hidden] + .kit{margin-top:0;padding-top:0;border-top:0;}
+#myclasses[hidden] + .kit::before,#myclasses[hidden] + .kit::after{display:none;}
+.kit::before,.kit::after{content:"";position:absolute;top:-10px;width:18px;height:18px;border-radius:50%;background:var(--cream);}
+.kit::before{left:-9px;} .kit::after{right:-9px;}
+.kit > h2{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);}
+.kit-two{gap:0;margin:0 0 4px;}
+.kit-two a.btn2{background:none;box-shadow:none;border-radius:0;margin:0;padding:8px 10px 8px 0;min-height:60px;}
+.kit-two a.btn2 + a.btn2{padding-left:14px;border-left:1px dashed rgba(27,27,47,.28);}
+.kit-two a.btn2:hover{background:none;}
+.kit-two a.btn2:hover b{text-decoration:underline;text-decoration-color:var(--gold);text-decoration-thickness:2px;text-underline-offset:4px;}
+.kit-two a.btn2:active{transform:none;}
+.kit-two a.btn2 b{font-family:var(--va-font-display);font-size:1.12rem;font-weight:600;}
+#kit-manual .row{border-top:1px solid var(--rule);}
+
+/* ── Etiqueta de nivel: papel pegado en la portada ── */
+.cv .lvl,.card .cv .lvl,html:not(.vesper-dark) .cv .lvl{border-radius:1px;padding:2px 6px 1px;color:var(--ficha-ink);background:#f5eedc;
+  box-shadow:1px 1px 0 rgba(0,0,0,.3);transform:translateX(-50%) rotate(-3deg);}
+.cv img{border-radius:3px;box-shadow:0 0 0 1px color-mix(in srgb,var(--gold) 34%,transparent),3px 3px 0 rgba(0,0,0,.28);}
+
+/* ── Tus manuales: separador dorado en vez de brillo ── */
+.card.is-mine .cv img,.mine-t .cv img{box-shadow:0 0 0 2px var(--gold),4px 4px 0 rgba(0,0,0,.3);}
+.card.is-mine .cv::after,.mine-t .cv::after{content:"";position:absolute;top:-4px;right:8px;width:11px;height:24px;background:var(--gold);
+  clip-path:polygon(0 0,100% 0,100% 100%,50% 74%,0 100%);filter:drop-shadow(1px 1px 0 rgba(0,0,0,.3));}
+.mine-t .cv::after{right:14px;width:16px;height:34px;}
+a.mine-t .cv img{border-radius:4px;}
+a.mine-t:nth-child(3n+1){transform:rotate(-1.4deg);}
+a.mine-t:nth-child(3n+2){transform:rotate(.9deg) translateY(3px);}
+a.mine-t:nth-child(3n){transform:rotate(-.5deg);}
+@media (hover:hover){a.mine-t:hover{transform:translateY(-4px) rotate(0);}}
+/* pasada de marcatextos, de bordes desiguales */
+.card.is-mine{background:color-mix(in srgb,var(--gold) 15%,transparent);border-radius:3px 11px 4px 13px / 10px 3px 12px 4px;}
+/* «tu clase», anotado a mano */
+.row .txt > .mine-tag,.mine-flag{font:700 1.22rem/1 var(--hand);letter-spacing:0;color:var(--gold-ink);gap:0;transform:rotate(-2deg);transform-origin:left;}
+html.vesper-dark .row .txt > .mine-tag,html.vesper-dark .mine-flag{color:var(--gold-lt);}
+.mine-tag::before,.mine-flag::before{display:none;}
+.mine-flag{font-size:1.15rem;}
+
+/* ── Manuales: título con trazo de pluma, buscador de renglón ── */
+#h-man{display:inline-block;padding-bottom:9px;background:var(--pen) left bottom/118px 9px no-repeat;}
+#q{background:transparent;border:0;border-bottom:1.5px solid var(--border);border-radius:0;padding-left:34px;}
+#q:focus{box-shadow:none;border-bottom-color:var(--gold);}
+.f-box .f-ic{left:4px;}
+.pill[aria-pressed="true"]::after{left:8px;right:8px;bottom:4px;height:8px;border-radius:0;background:var(--pen) center/100% 100% no-repeat;}
+
+@container (max-width:479px){
+  a.btn2:has(> .i){padding:8px 10px 8px 0;}
+}
+@media(max-width:420px){
+  .hello{padding-right:112px;}
+  .vcat{width:108px;height:108px;}
+  .say{font-size:1.45rem;}
+}
+
+/* ── HECHO A MANO, segunda pasada (2026-11-20): «púlela más» ──
+   Lo que quedaba de plantilla estaba fuera de la ficha: el fondo plano, la
+   fila resaltada como «elemento seleccionado», la línea de dos enlaces
+   repetida bajo cada manual y las secciones separadas solo por aire. */
+
+/* El cielo del anochecer: unas pocas estrellas y el último resplandor. */
+html.vesper-dark body{background:
+  radial-gradient(1.6px 1.6px at 7% 118px,var(--gold-lt) 55%,transparent 60%),
+  radial-gradient(1.2px 1.2px at 19% 310px,var(--on-night) 55%,transparent 60%),
+  radial-gradient(1.4px 1.4px at 33% 86px,var(--on-night) 55%,transparent 60%),
+  radial-gradient(1.1px 1.1px at 46% 232px,var(--gold-lt) 55%,transparent 60%),
+  radial-gradient(1.7px 1.7px at 58% 104px,var(--on-night) 55%,transparent 60%),
+  radial-gradient(1.2px 1.2px at 71% 392px,var(--on-night) 55%,transparent 60%),
+  radial-gradient(2px 2px at 83% 142px,var(--gold-lt) 55%,transparent 60%),
+  radial-gradient(1.2px 1.2px at 94% 268px,var(--on-night) 55%,transparent 60%),
+  radial-gradient(1.3px 1.3px at 3% 470px,var(--on-night) 55%,transparent 60%),
+  radial-gradient(1.2px 1.2px at 88% 520px,var(--gold-lt) 55%,transparent 60%),
+  radial-gradient(760px 420px at 88% -110px,color-mix(in srgb,var(--gold) 15%,transparent),transparent 70%),
+  var(--cream);background-repeat:no-repeat;}
+
+/* Tu manual: marcatextos sobre el título, no una fila «seleccionada». */
+.card.is-mine{background:none;border-radius:0;margin:0;padding-left:0;padding-right:0;border-top-color:var(--rule);}
+.card.is-mine + .card{border-top-color:var(--rule);}
+.card.is-mine h4{display:inline;padding:0 5px 1px 3px;margin-left:-3px;
+  background:linear-gradient(transparent 46%,color-mix(in srgb,var(--gold) 44%,transparent) 46%,color-mix(in srgb,var(--gold) 44%,transparent) 94%,transparent 94%);
+  -webkit-box-decoration-break:clone;box-decoration-break:clone;}
+.row .txt > .mine-tag{display:block;margin-bottom:1px;}
+
+/* Los dos enlaces de cada manual van a un lado, apilados, cuando hay sitio. */
+@container (min-width:480px) and (max-width:699px){
+  .row.card{grid-template-columns:64px minmax(0,1fr) auto;}
+  .row.card .acts{grid-column:auto;flex-direction:column;align-items:flex-end;gap:0;}
+  .row.card .acts a.lnk{min-height:38px;}
+}
+
+h3.sec{flex-wrap:wrap;row-gap:0;} h3.sec .sec-ct{white-space:nowrap;}
+/* Las clases que ya pasaron: tachadas con pluma. */
+.dy-row.is-done .dy-h{text-decoration:line-through;text-decoration-color:var(--gold);text-decoration-thickness:2px;}
+
+/* Entre secciones, un florón de libro: filete, estrella, filete. */
+.col-lib > .block + .block,.col-lib > .block + .fold{position:relative;margin-top:58px;}
+.col-lib > .block + .block::before{content:"";position:absolute;left:0;right:0;top:-31px;height:9px;
+  background:
+    linear-gradient(var(--rule),var(--rule)) left center/calc(50% - 16px) 1px no-repeat,
+    linear-gradient(var(--rule),var(--rule)) right center/calc(50% - 16px) 1px no-repeat;}
+.col-lib > .block + .block::after{content:"";position:absolute;left:50%;top:-32px;width:11px;height:11px;margin-left:-5.5px;background:var(--gold);
+  clip-path:polygon(50% 0,61% 39%,100% 50%,61% 61%,50% 100%,39% 61%,0 50%,39% 39%);}
 </style>
 
 <!-- Preferencias del profesor (tamaño de texto, alto contraste, menos
@@ -355,7 +661,7 @@ footer a:hover{text-decoration:underline;}
 <div id="gate" role="status" aria-live="polite">
   <div class="gate-card">
     <div class="gh">
-      <div class="lock"><svg class="i" aria-hidden="true"><use href="#i-lock"/></svg></div>
+      <span class="vcat" style="display:block"><img src="assets/images/mascot/vesper_cat_welcome.webp" alt="" width="600" height="600"></span>
       <h2>VESPER <b>ACADEMY</b></h2>
       <p>Área de profesores</p>
     </div>
@@ -378,139 +684,180 @@ footer a:hover{text-decoration:underline;}
   </div>
 </header>
 
-<!-- El orden sigue el día del profesor: su clase, lo que abre a diario,
-     evaluar a un alumno, los manuales y, al final, lo que casi no se usa. -->
+<!-- PROPUESTA C «La clase primero»: lo de AHORA a la izquierda (arriba en el
+     celular) y la consulta (manuales, evaluar, lo demás) a la derecha. -->
 <main class="wrap" id="content">
+<div class="cols">
 
-  <div class="page-head">
-    <h1>Portal del profesor</h1>
-    <p>Tus clases, calificaciones, manuales y herramientas de evaluación.</p>
-  </div>
+  <!-- ══ AHORA ══ -->
+  <div class="col col-hoy">
 
-  <!-- MIS CLASES (Google Meet) — se llena desde los grupos del profesor (teachers/{correo}.groups → groups/{id}); .classes queda de respaldo -->
-  <section class="myclasses" id="myclasses" hidden aria-labelledby="mc-title">
-    <div class="block-h"><h2 id="mc-title">Mis clases</h2></div>
-    <div class="mc-grid" id="mc-grid"></div>
-  </section>
-
-  <!-- Lo de todos los días -->
-  <section class="block" aria-labelledby="h-dia">
-    <div class="block-h"><h2 id="h-dia">Día a día</h2></div>
-    <div class="quick">
-    <a class="tile go primary" href="portal_calificaciones.html"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-chart"/></svg></span><b>Calificaciones</b><span>Exámenes y lecciones de tus alumnos</span></a>
-    <a class="tile go primary" href="portal_boleta.html"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-list"/></svg></span><b>Boleta</b><span>Pase de lista, rúbrica y calificación</span></a>
-    <a class="tile go primary web-only" href="portal_calendario.html"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-calendar"/></svg></span><b>Calendario</b><span>Ciclos, festivos y cierres</span></a>
-    <a class="tile go primary" href="audio_library.html"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-audio"/></svg></span><b>Biblioteca de audio</b><span>Diálogos y lecturas para la clase</span></a>
+    <div class="hello">
+      <span class="vcat"><img src="assets/images/mascot/vesper_cat_welcome.webp" alt="Vesper, el gato de la academia" width="600" height="600"></span>
+      <div class="hello-t">
+        <h1 id="hoy-fecha">Portal del profesor</h1>
+        <p class="say" id="say">¡Hola! Aquí está todo para tu clase.</p>
+      </div>
     </div>
+
+    <div class="now">
+      <!-- MIS CLASES — se llena desde los grupos del profesor (teachers/{correo}.groups → groups/{id});
+           .classes queda de respaldo, y como no trae días NO se adivina cuál sigue. -->
+      <section class="myclasses" id="myclasses" hidden aria-labelledby="mc-title">
+        <div id="mc-next"></div>
+      </section>
+
+      <!-- Lo que se usa en la clase -->
+      <div class="kit">
+        <h2 class="eb" id="h-dia">Para tu clase</h2>
+        <div class="kit-two">
+          <a class="btn2 go primary" href="portal_boleta.html"><svg class="i" aria-hidden="true"><use href="#i-list"/></svg><b>Boleta</b><span>Pase de lista y rúbrica</span></a>
+          <a class="btn2 go primary" href="portal_calificaciones.html"><svg class="i" aria-hidden="true"><use href="#i-chart"/></svg><b>Calificaciones</b><span>Exámenes y lecciones</span></a>
+        </div>
+        <!-- El manual del curso de esa clase (se deduce del nombre del grupo) -->
+        <div id="kit-manual">
+          <div class="row"><div class="txt"><small class="eb">Manuales</small><b>Busca el manual de tu clase</b></div><div class="acts"><a class="lnk go" href="#q">Buscar</a></div></div>
+        </div>
+        <div class="kit-more">
+          <a class="lnk quiet go primary" href="audio_library.html"><svg class="i" aria-hidden="true"><use href="#i-audio"/></svg>Biblioteca de audio</a>
+          <a class="lnk quiet go primary web-only" href="portal_calendario.html"><svg class="i" aria-hidden="true"><use href="#i-calendar"/></svg>Calendario</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- El resto de las clases de ese día -->
+    <section class="day" id="mc-day" hidden aria-labelledby="mc-day-h">
+      <h2 class="h-eb" id="mc-day-h">También hoy</h2>
+      <div class="mc-grid" id="mc-grid"></div>
+    </section>
+    <details class="fold" id="mc-all" hidden>
+      <summary><span>Todos mis grupos</span></summary>
+      <div id="mc-all-list"></div>
+    </details>
+
     <!-- Abiertos recientemente (memoria local del navegador, por dispositivo) -->
     <div id="recent" aria-label="Abiertos recientemente"></div>
-  </section>
+  </div>
 
-  <!-- Evaluar a un alumno. "Entrevista de diagnóstico" y "Diagnóstico
-       Avanzado" eran la MISMA entrada dos veces (mismos dos enlaces). -->
-  <section class="block" aria-labelledby="h-eval">
-    <div class="block-h"><h2 id="h-eval">Evaluar a un alumno</h2></div>
-    <div class="list">
-    <div class="row"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-compass"/></svg></span><div class="txt"><b>Prueba de ubicación</b><span>Alumno nuevo · 10 min, resultado inmediato (Pre-A1–B2+)</span></div><div class="acts"><a class="btn btn-gold go primary" href="book_placement.html">Abrir prueba</a></div></div>
-    <div class="row"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-speech"/></svg></span><div class="txt"><b>Entrevista oral</b><span>Confirma el nivel con 36 preguntas y rúbrica, y recomienda el curso</span></div><div class="acts"><a class="btn btn-gold go primary" href="book_oral_interview.html">Abrir entrevista</a></div></div>
-    <div class="row"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-check-doc"/></svg></span><div class="txt"><b>Diagnóstico avanzado</b><span>Evaluación integral B2–C2 que haces con el alumno</span></div><div class="acts"><a class="btn btn-gold go primary" href="manual.html?id=diagnostic_advanced">Guía del profesor</a><a class="btn btn-line" href="libro.html?id=diagnostic_advanced">Versión del alumno</a></div></div>
-    <!-- Reportes del simulador de entrevista (entrevista.html) que el alumno decide enviar -->
-    <div class="row"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-case"/></svg></span><div class="txt"><b>Simulacros de entrevista</b><span>Los reportes que tus alumnos te envían: nivel estimado y qué trabajar en clase</span></div><div class="acts"><a class="btn btn-gold go primary" href="portal_calificaciones.html?tipo=entrevista">Ver reportes</a></div></div>
-    </div>
-  </section>
+  <!-- ══ CONSULTA ══ -->
+  <div class="col col-lib">
 
-  <!-- Manuales por curso -->
-  <section class="block" aria-labelledby="h-man">
-    <div class="block-h"><h2 id="h-man">Manuales</h2><span class="note" id="man-count"></span></div>
-    <div class="filter panel" id="filter">
-      <div class="f-box">
-        <svg class="i f-ic" aria-hidden="true"><use href="#i-search"/></svg>
-        <input type="search" id="q" placeholder="Buscar manual o lección…" autocomplete="off" aria-label="Buscar en los manuales">
-        <button class="f-clear" id="q-clear" type="button" aria-label="Borrar búsqueda">&times;</button>
+    <!-- Manuales por curso: plegados; buscar o elegir familia los abre -->
+    <section class="block" aria-labelledby="h-man">
+      <h2 id="h-man">Manuales</h2>
+      <!-- Los manuales de los cursos que este profesor da (se deducen de sus
+           grupos). Van arriba y con su portada, para encontrarlos sin leer. -->
+      <div id="mine" hidden>
+        <h3 class="eb">Los de tus clases</h3>
+        <div class="mine-row" id="mine-row"></div>
       </div>
-      <div class="pills" role="group" aria-label="Filtrar por curso">
-        <button type="button" class="pill all" data-fam="all" aria-pressed="true">Todos</button>
-        <button type="button" class="pill basics" data-fam="basics" aria-pressed="false">Core Basics</button>
-        <button type="button" class="pill practice" data-fam="practice" aria-pressed="false">Core Practice</button>
-        <button type="button" class="pill grammar" data-fam="grammar" aria-pressed="false">Grammar</button>
-        <button type="button" class="pill special" data-fam="special" aria-pressed="false">Especializados</button>
-        <button type="button" class="pill exam" data-fam="exam" aria-pressed="false">Exámenes</button>
+      <div class="filter" id="filter">
+        <div class="f-box">
+          <svg class="i f-ic" aria-hidden="true"><use href="#i-search"/></svg>
+          <input type="search" id="q" placeholder="Buscar manual o lección…" autocomplete="off" aria-label="Buscar en los manuales">
+          <button class="f-clear" id="q-clear" type="button" aria-label="Borrar búsqueda">&times;</button>
+        </div>
+        <div class="pills" role="group" aria-label="Filtrar por curso">
+          <button type="button" class="pill all" data-fam="all" aria-pressed="true">Todos</button>
+          <button type="button" class="pill basics" data-fam="basics" aria-pressed="false">Core Basics</button>
+          <button type="button" class="pill practice" data-fam="practice" aria-pressed="false">Core Practice</button>
+          <button type="button" class="pill grammar" data-fam="grammar" aria-pressed="false">Grammar</button>
+          <button type="button" class="pill special" data-fam="special" aria-pressed="false">Especializados</button>
+          <button type="button" class="pill exam" data-fam="exam" aria-pressed="false">Exámenes</button>
+        </div>
       </div>
-    </div>
 
-    <!-- Búsqueda profunda: lecciones DENTRO de los manuales (índice de libros) -->
-    <div id="deep" class="panel" hidden aria-label="Lecciones encontradas en los manuales"></div>
-    <div id="empty">No hay manuales que coincidan. Prueba con otra palabra o elige «Todos».</div>
+      <!-- Búsqueda profunda: lecciones DENTRO de los manuales (índice de libros) -->
+      <div id="deep" hidden aria-label="Lecciones encontradas en los manuales"></div>
+      <div id="empty">No hay manuales que coincidan. Prueba con otra palabra o elige «Todos».</div>
 
+      <div class="shelves">
     <section class="grp basics" data-fam="basics">
-      <h3 class="sec">Core Basics <span class="sec-ct"></span></h3>
+      <details class="shelf"><summary><h3 class="sec">Core Basics <span class="sec-ct"></span></h3></summary>
       <div class="list">
-        <div class="row card"><span class="lvl">Pre-A1</span><div class="txt"><h4>Core Basics · Nivel 1</h4><p>To Be or Not To Be. Identidad, presentaciones y lo esencial.</p></div><div class="acts"><a class="btn btn-gold go primary" href="manual.html?id=core_basics_lvl1">Manual del profesor</a><a class="btn btn-line" href="libro.html?id=core_basics_lvl1">Libro del alumno</a></div></div>
-        <div class="row card"><span class="lvl">A1</span><div class="txt"><h4>Core Basics · Nivel 2</h4><p>Do I Know? Rutinas, preguntas y presente simple.</p></div><div class="acts"><a class="btn btn-gold go primary" href="manual.html?id=core_basics_lvl2">Manual del profesor</a><a class="btn btn-line" href="libro.html?id=core_basics_lvl2">Libro del alumno</a></div></div>
-        <div class="row card"><span class="lvl">A2</span><div class="txt"><h4>Core Basics · Nivel 3</h4><p>Have I Been? Pasado, experiencias e historias.</p></div><div class="acts"><a class="btn btn-gold go primary" href="manual.html?id=core_basics_lvl3">Manual del profesor</a><a class="btn btn-line" href="libro.html?id=core_basics_lvl3">Libro del alumno</a></div></div>
-        <div class="row card"><span class="lvl">A2+</span><div class="txt"><h4>Core Basics · Nivel 4</h4><p>Use It! Sin gramática nueva: usa lo que ya sabes y habla mucho.</p></div><div class="acts"><a class="btn btn-gold go primary" href="manual.html?id=core_basics_lvl4">Manual del profesor</a><a class="btn btn-line" href="libro.html?id=core_basics_lvl4">Libro del alumno</a></div></div>
-      </div>
+        <div class="row card" data-mid="core_basics_lvl1"><span class="cv"><img src="assets/images/hub/covers/home.webp" alt="" width="52" height="65" loading="lazy" decoding="async"><span class="lvl">Pre-A1</span></span><div class="txt"><h4>Core Basics · Nivel 1</h4><p>To Be or Not To Be. Identidad, presentaciones y lo esencial.</p></div><div class="acts"><a class="lnk go primary" href="manual.html?id=core_basics_lvl1">Manual del profesor</a><a class="lnk alt" href="libro.html?id=core_basics_lvl1">Libro del alumno</a></div></div>
+        <div class="row card" data-mid="core_basics_lvl2"><span class="cv"><img src="assets/images/hub/covers/morning.webp" alt="" width="52" height="65" loading="lazy" decoding="async"><span class="lvl">A1</span></span><div class="txt"><h4>Core Basics · Nivel 2</h4><p>Do I Know? Rutinas, preguntas y presente simple.</p></div><div class="acts"><a class="lnk go primary" href="manual.html?id=core_basics_lvl2">Manual del profesor</a><a class="lnk alt" href="libro.html?id=core_basics_lvl2">Libro del alumno</a></div></div>
+        <div class="row card" data-mid="core_basics_lvl3"><span class="cv"><img src="assets/images/hub/covers/history.webp" alt="" width="52" height="65" loading="lazy" decoding="async"><span class="lvl">A2</span></span><div class="txt"><h4>Core Basics · Nivel 3</h4><p>Have I Been? Pasado, experiencias e historias.</p></div><div class="acts"><a class="lnk go primary" href="manual.html?id=core_basics_lvl3">Manual del profesor</a><a class="lnk alt" href="libro.html?id=core_basics_lvl3">Libro del alumno</a></div></div>
+        <div class="row card" data-mid="core_basics_lvl4"><span class="cv"><img src="assets/images/hub/covers/writing.webp" alt="" width="52" height="65" loading="lazy" decoding="async"><span class="lvl">A2+</span></span><div class="txt"><h4>Core Basics · Nivel 4</h4><p>Use It! Sin gramática nueva: usa lo que ya sabes y habla mucho.</p></div><div class="acts"><a class="lnk go primary" href="manual.html?id=core_basics_lvl4">Manual del profesor</a><a class="lnk alt" href="libro.html?id=core_basics_lvl4">Libro del alumno</a></div></div>
+      </div></details>
     </section>
     <section class="grp practice" data-fam="practice">
-      <h3 class="sec">Core Practice <span class="sec-ct"></span></h3>
+      <details class="shelf"><summary><h3 class="sec">Core Practice <span class="sec-ct"></span></h3></summary>
       <div class="list">
-        <div class="row card"><span class="lvl">B1</span><div class="txt"><h4>Practice · Nivel 1</h4><p>Listening y speaking con audio en cada lección.</p></div><div class="acts"><a class="btn btn-gold go primary" href="manual.html?id=core_practice_lvl1">Manual del profesor</a><a class="btn btn-line" href="libro.html?id=core_practice_lvl1">Libro del alumno</a></div></div>
-        <div class="row card"><span class="lvl">B1+</span><div class="txt"><h4>Practice · Nivel 2</h4><p>Lectura y escritura: leyendas, mitos y misterios.</p></div><div class="acts"><a class="btn btn-gold go primary" href="manual.html?id=core_practice_lvl2">Manual del profesor</a><a class="btn btn-line" href="libro.html?id=core_practice_lvl2">Libro del alumno</a></div></div>
-        <div class="row card"><span class="lvl">B2</span><div class="txt"><h4>Practice · Nivel 3</h4><p>Las 4 destrezas: debate y descubrimiento.</p></div><div class="acts"><a class="btn btn-gold go primary" href="manual.html?id=core_practice_lvl3">Manual del profesor</a><a class="btn btn-line" href="libro.html?id=core_practice_lvl3">Libro del alumno</a></div></div>
-        <div class="row card"><span class="lvl">B2+</span><div class="txt"><h4>Practice · Nivel 4</h4><p>Arte y literatura: talleres orales.</p></div><div class="acts"><a class="btn btn-gold go primary" href="manual.html?id=core_practice_lvl4">Manual del profesor</a><a class="btn btn-line" href="libro.html?id=core_practice_lvl4">Libro del alumno</a></div></div>
-        <div class="row card"><span class="lvl">C1</span><div class="txt"><h4>Practice · Nivel 5</h4><p>Futuro y tecnología: lectura y escritura.</p></div><div class="acts"><a class="btn btn-gold go primary" href="manual.html?id=core_practice_lvl5">Manual del profesor</a><a class="btn btn-line" href="libro.html?id=core_practice_lvl5">Libro del alumno</a></div></div>
-        <div class="row card"><span class="lvl">C2</span><div class="txt"><h4>Practice · Nivel 6</h4><p>Cultura pop y sociedad: dominio de las 4 destrezas.</p></div><div class="acts"><a class="btn btn-gold go primary" href="manual.html?id=core_practice_lvl6">Manual del profesor</a><a class="btn btn-line" href="libro.html?id=core_practice_lvl6">Libro del alumno</a></div></div>
-      </div>
+        <div class="row card" data-mid="core_practice_lvl1"><span class="cv"><img src="assets/images/hub/covers/retro.webp" alt="" width="52" height="65" loading="lazy" decoding="async"><span class="lvl">B1</span></span><div class="txt"><h4>Practice · Nivel 1</h4><p>Listening y speaking con audio en cada lección.</p></div><div class="acts"><a class="lnk go primary" href="manual.html?id=core_practice_lvl1">Manual del profesor</a><a class="lnk alt" href="libro.html?id=core_practice_lvl1">Libro del alumno</a></div></div>
+        <div class="row card" data-mid="core_practice_lvl2"><span class="cv"><img src="assets/images/hub/covers/mystery.webp" alt="" width="52" height="65" loading="lazy" decoding="async"><span class="lvl">B1+</span></span><div class="txt"><h4>Practice · Nivel 2</h4><p>Lectura y escritura: leyendas, mitos y misterios.</p></div><div class="acts"><a class="lnk go primary" href="manual.html?id=core_practice_lvl2">Manual del profesor</a><a class="lnk alt" href="libro.html?id=core_practice_lvl2">Libro del alumno</a></div></div>
+        <div class="row card" data-mid="core_practice_lvl3"><span class="cv"><img src="assets/images/hub/covers/debate.webp" alt="" width="52" height="65" loading="lazy" decoding="async"><span class="lvl">B2</span></span><div class="txt"><h4>Practice · Nivel 3</h4><p>Las 4 destrezas: debate y descubrimiento.</p></div><div class="acts"><a class="lnk go primary" href="manual.html?id=core_practice_lvl3">Manual del profesor</a><a class="lnk alt" href="libro.html?id=core_practice_lvl3">Libro del alumno</a></div></div>
+        <div class="row card" data-mid="core_practice_lvl4"><span class="cv"><img src="assets/images/hub/covers/storybook.webp" alt="" width="52" height="65" loading="lazy" decoding="async"><span class="lvl">B2+</span></span><div class="txt"><h4>Practice · Nivel 4</h4><p>Arte y literatura: talleres orales.</p></div><div class="acts"><a class="lnk go primary" href="manual.html?id=core_practice_lvl4">Manual del profesor</a><a class="lnk alt" href="libro.html?id=core_practice_lvl4">Libro del alumno</a></div></div>
+        <div class="row card" data-mid="core_practice_lvl5"><span class="cv"><img src="assets/images/hub/covers/ai.webp" alt="" width="52" height="65" loading="lazy" decoding="async"><span class="lvl">C1</span></span><div class="txt"><h4>Practice · Nivel 5</h4><p>Futuro y tecnología: lectura y escritura.</p></div><div class="acts"><a class="lnk go primary" href="manual.html?id=core_practice_lvl5">Manual del profesor</a><a class="lnk alt" href="libro.html?id=core_practice_lvl5">Libro del alumno</a></div></div>
+        <div class="row card" data-mid="core_practice_lvl6"><span class="cv"><img src="assets/images/hub/covers/cinema.webp" alt="" width="52" height="65" loading="lazy" decoding="async"><span class="lvl">C2</span></span><div class="txt"><h4>Practice · Nivel 6</h4><p>Cultura pop y sociedad: dominio de las 4 destrezas.</p></div><div class="acts"><a class="lnk go primary" href="manual.html?id=core_practice_lvl6">Manual del profesor</a><a class="lnk alt" href="libro.html?id=core_practice_lvl6">Libro del alumno</a></div></div>
+      </div></details>
     </section>
     <section class="grp grammar" data-fam="grammar">
-      <h3 class="sec">Core Grammar <span class="sec-ct"></span></h3>
+      <details class="shelf"><summary><h3 class="sec">Core Grammar <span class="sec-ct"></span></h3></summary>
       <div class="list">
-        <div class="row card"><span class="lvl">B1</span><div class="txt"><h4>Grammar Foundations</h4><p>Drills fundamentales para consolidar la base.</p></div><div class="acts"><a class="btn btn-gold go primary" href="manual.html?id=core_grammar_lvl1">Manual del profesor</a><a class="btn btn-line" href="libro.html?id=core_grammar_lvl1">Libro del alumno</a></div></div>
-        <div class="row card"><span class="lvl">B2</span><div class="txt"><h4>Grammar in Context</h4><p>Estructuras complejas aplicadas en contexto.</p></div><div class="acts"><a class="btn btn-gold go primary" href="manual.html?id=core_grammar_lvl2">Manual del profesor</a><a class="btn btn-line" href="libro.html?id=core_grammar_lvl2">Libro del alumno</a></div></div>
-        <div class="row card"><span class="lvl">C1+</span><div class="txt"><h4>Grammar Mastery</h4><p>Estilo, matices y excepciones del inglés avanzado.</p></div><div class="acts"><a class="btn btn-gold go primary" href="manual.html?id=core_grammar_lvl3">Manual del profesor</a><a class="btn btn-line" href="libro.html?id=core_grammar_lvl3">Libro del alumno</a></div></div>
-      </div>
+        <div class="row card" data-mid="core_grammar_lvl1"><span class="cv"><img src="assets/images/hub/covers/education.webp" alt="" width="52" height="65" loading="lazy" decoding="async"><span class="lvl">B1</span></span><div class="txt"><h4>Grammar Foundations</h4><p>Drills fundamentales para consolidar la base.</p></div><div class="acts"><a class="lnk go primary" href="manual.html?id=core_grammar_lvl1">Manual del profesor</a><a class="lnk alt" href="libro.html?id=core_grammar_lvl1">Libro del alumno</a></div></div>
+        <div class="row card" data-mid="core_grammar_lvl2"><span class="cv"><img src="assets/images/hub/covers/literature.webp" alt="" width="52" height="65" loading="lazy" decoding="async"><span class="lvl">B2</span></span><div class="txt"><h4>Grammar in Context</h4><p>Estructuras complejas aplicadas en contexto.</p></div><div class="acts"><a class="lnk go primary" href="manual.html?id=core_grammar_lvl2">Manual del profesor</a><a class="lnk alt" href="libro.html?id=core_grammar_lvl2">Libro del alumno</a></div></div>
+        <div class="row card" data-mid="core_grammar_lvl3"><span class="cv"><img src="assets/images/hub/covers/philosophy.webp" alt="" width="52" height="65" loading="lazy" decoding="async"><span class="lvl">C1+</span></span><div class="txt"><h4>Grammar Mastery</h4><p>Estilo, matices y excepciones del inglés avanzado.</p></div><div class="acts"><a class="lnk go primary" href="manual.html?id=core_grammar_lvl3">Manual del profesor</a><a class="lnk alt" href="libro.html?id=core_grammar_lvl3">Libro del alumno</a></div></div>
+      </div></details>
     </section>
     <section class="grp special" data-fam="special">
-      <h3 class="sec">Cursos especializados <span class="sec-ct"></span></h3>
+      <details class="shelf"><summary><h3 class="sec">Cursos especializados <span class="sec-ct"></span></h3></summary>
       <div class="list">
-        <div class="row card"><span class="lvl">Intensivo</span><div class="txt"><h4>Conversation 1 · Curso Intensivo (CCI 1)</h4><p>Bootcamp de conversación (A2–B1): 20 sesiones, cada una con un video real de YouTube, seis frases, preguntas en tres niveles y un juego.</p></div><div class="acts"><a class="btn btn-gold go primary" href="manual.html?id=cci1">Manual del profesor</a><a class="btn btn-line" href="libro.html?id=cci1">Libro del alumno</a></div></div>
-        <div class="row card"><span class="lvl">B1</span><div class="txt"><h4>Business Path I · Office Foundations</h4><p>Inglés de oficina de supervivencia: llamadas, correos, juntas y clientes — 20 lecciones con audio.</p></div><div class="acts"><a class="btn btn-gold go primary" href="manual.html?id=corporate_b1">Manual del profesor</a><a class="btn btn-line" href="libro.html?id=corporate_b1">Libro del alumno</a></div></div>
-        <div class="row card"><span class="lvl">B2</span><div class="txt"><h4>Business English Premium</h4><p>Comunicación corporativa efectiva — 10 lecciones detalladas con audio en cada lección.</p></div><div class="acts"><a class="btn btn-gold go primary" href="manual.html?id=corporate_b2">Manual del profesor</a><a class="btn btn-line" href="libro.html?id=corporate_b2">Libro del alumno</a></div></div>
-        <div class="row card"><span class="lvl">C1</span><div class="txt"><h4>Business Path III · Strategic Influence</h4><p>Persuasión, negociación, liderazgo, crisis y el sales pitch capstone — 20 lecciones.</p></div><div class="acts"><a class="btn btn-gold go primary" href="manual.html?id=corporate_c1">Manual del profesor</a><a class="btn btn-line" href="libro.html?id=corporate_c1">Libro del alumno</a></div></div>
-        <div class="row card"><span class="lvl">A0–A1</span><div class="txt"><h4>Daily Life English · Vol. 0</h4><p>Club de conversación: 20 sesiones de frases nativas para el día a día, con role-plays y reto semanal.</p></div><div class="acts"><a class="btn btn-gold go primary" href="manual.html?id=daily_life_vol0">Manual del profesor</a><a class="btn btn-line" href="libro.html?id=daily_life_vol0">Libro del alumno</a></div></div>
-        <div class="row card"><span class="lvl">A2</span><div class="txt"><h4>Daily Life English · Vol. 1</h4><p>Inglés social (A2): saludos, planes, restaurantes, viajes, hotel, compras, farmacia y banco — 16 módulos.</p></div><div class="acts"><a class="btn btn-gold go primary" href="manual.html?id=daily_life_vol1">Manual del profesor</a><a class="btn btn-line" href="libro.html?id=daily_life_vol1">Libro del alumno</a></div></div>
-        <div class="row card"><span class="lvl">B1</span><div class="txt"><h4>Daily Life English · Vol. 2</h4><p>Vida adulta (B1): renta y servicios, vecinos, empleo y entrevistas, impuestos, banco, seguros y salud — 16 módulos.</p></div><div class="acts"><a class="btn btn-gold go primary" href="manual.html?id=daily_life_vol2">Manual del profesor</a><a class="btn btn-line" href="libro.html?id=daily_life_vol2">Libro del alumno</a></div></div>
-        <div class="row card"><span class="lvl">Aviación</span><div class="txt"><h4>Aviation English · Cabin Crew</h4><p>Inglés operativo de tripulación: seguridad y emergencias, atención médica a bordo y servicio al pasajero.</p></div><div class="acts"><a class="btn btn-gold go primary" href="manual.html?id=cabin_crew">Manual del profesor</a><a class="btn btn-line" href="libro.html?id=cabin_crew">Libro del alumno</a></div></div>
-        <div class="row card"><span class="lvl">B2–C1</span><div class="txt"><h4>Political &amp; Global Affairs</h4><p>Diplomacia, política y discurso civil: instituciones, campañas, tratados y geopolítica — 21 lecciones con examen del nivel.</p></div><div class="acts"><a class="btn btn-gold go primary" href="manual.html?id=political_english">Manual del profesor</a><a class="btn btn-line" href="libro.html?id=political_english">Libro del alumno</a></div></div>
-      </div>
+        <div class="row card" data-mid="cci1"><span class="cv"><img src="assets/images/hub/covers/fitness.webp" alt="" width="52" height="65" loading="lazy" decoding="async"><span class="lvl">Intensivo</span></span><div class="txt"><h4>Conversation 1 · Curso Intensivo (CCI 1)</h4><p>Bootcamp de conversación (A2–B1): 20 sesiones, cada una con un video real de YouTube, seis frases, preguntas en tres niveles y un juego.</p></div><div class="acts"><a class="lnk go primary" href="manual.html?id=cci1">Manual del profesor</a><a class="lnk alt" href="libro.html?id=cci1">Libro del alumno</a></div></div>
+        <div class="row card" data-mid="corporate_b1"><span class="cv"><img src="assets/images/hub/covers/mail.webp" alt="" width="52" height="65" loading="lazy" decoding="async"><span class="lvl">B1</span></span><div class="txt"><h4>Business Path I · Office Foundations</h4><p>Inglés de oficina de supervivencia: llamadas, correos, juntas y clientes — 20 lecciones con audio.</p></div><div class="acts"><a class="lnk go primary" href="manual.html?id=corporate_b1">Manual del profesor</a><a class="lnk alt" href="libro.html?id=corporate_b1">Libro del alumno</a></div></div>
+        <div class="row card" data-mid="corporate_b2"><span class="cv"><img src="assets/images/hub/covers/business.webp" alt="" width="52" height="65" loading="lazy" decoding="async"><span class="lvl">B2</span></span><div class="txt"><h4>Business English Premium</h4><p>Comunicación corporativa efectiva — 10 lecciones detalladas con audio en cada lección.</p></div><div class="acts"><a class="lnk go primary" href="manual.html?id=corporate_b2">Manual del profesor</a><a class="lnk alt" href="libro.html?id=corporate_b2">Libro del alumno</a></div></div>
+        <div class="row card" data-mid="corporate_c1"><span class="cv"><img src="assets/images/hub/covers/negotiation.webp" alt="" width="52" height="65" loading="lazy" decoding="async"><span class="lvl">C1</span></span><div class="txt"><h4>Business Path III · Strategic Influence</h4><p>Persuasión, negociación, liderazgo, crisis y el sales pitch capstone — 20 lecciones.</p></div><div class="acts"><a class="lnk go primary" href="manual.html?id=corporate_c1">Manual del profesor</a><a class="lnk alt" href="libro.html?id=corporate_c1">Libro del alumno</a></div></div>
+        <div class="row card" data-mid="daily_life_vol0"><span class="cv"><img src="assets/images/hub/covers/conversation.webp" alt="" width="52" height="65" loading="lazy" decoding="async"><span class="lvl">A0–A1</span></span><div class="txt"><h4>Daily Life English · Vol. 0</h4><p>Club de conversación: 20 sesiones de frases nativas para el día a día, con role-plays y reto semanal.</p></div><div class="acts"><a class="lnk go primary" href="manual.html?id=daily_life_vol0">Manual del profesor</a><a class="lnk alt" href="libro.html?id=daily_life_vol0">Libro del alumno</a></div></div>
+        <div class="row card" data-mid="daily_life_vol1"><span class="cv"><img src="assets/images/hub/covers/food.webp" alt="" width="52" height="65" loading="lazy" decoding="async"><span class="lvl">A2</span></span><div class="txt"><h4>Daily Life English · Vol. 1</h4><p>Inglés social (A2): saludos, planes, restaurantes, viajes, hotel, compras, farmacia y banco — 16 módulos.</p></div><div class="acts"><a class="lnk go primary" href="manual.html?id=daily_life_vol1">Manual del profesor</a><a class="lnk alt" href="libro.html?id=daily_life_vol1">Libro del alumno</a></div></div>
+        <div class="row card" data-mid="daily_life_vol2"><span class="cv"><img src="assets/images/hub/covers/finance.webp" alt="" width="52" height="65" loading="lazy" decoding="async"><span class="lvl">B1</span></span><div class="txt"><h4>Daily Life English · Vol. 2</h4><p>Vida adulta (B1): renta y servicios, vecinos, empleo y entrevistas, impuestos, banco, seguros y salud — 16 módulos.</p></div><div class="acts"><a class="lnk go primary" href="manual.html?id=daily_life_vol2">Manual del profesor</a><a class="lnk alt" href="libro.html?id=daily_life_vol2">Libro del alumno</a></div></div>
+        <div class="row card" data-mid="cabin_crew"><span class="cv"><img src="assets/images/hub/covers/travel.webp" alt="" width="52" height="65" loading="lazy" decoding="async"><span class="lvl">Aviación</span></span><div class="txt"><h4>Aviation English · Cabin Crew</h4><p>Inglés operativo de tripulación: seguridad y emergencias, atención médica a bordo y servicio al pasajero.</p></div><div class="acts"><a class="lnk go primary" href="manual.html?id=cabin_crew">Manual del profesor</a><a class="lnk alt" href="libro.html?id=cabin_crew">Libro del alumno</a></div></div>
+        <div class="row card" data-mid="political_english"><span class="cv"><img src="assets/images/hub/covers/diplomacy.webp" alt="" width="52" height="65" loading="lazy" decoding="async"><span class="lvl">B2–C1</span></span><div class="txt"><h4>Political &amp; Global Affairs</h4><p>Diplomacia, política y discurso civil: instituciones, campañas, tratados y geopolítica — 21 lecciones con examen del nivel.</p></div><div class="acts"><a class="lnk go primary" href="manual.html?id=political_english">Manual del profesor</a><a class="lnk alt" href="libro.html?id=political_english">Libro del alumno</a></div></div>
+      </div></details>
     </section>
     <section class="grp exam" data-fam="exam">
-      <h3 class="sec">Preparación de exámenes <span class="sec-ct"></span></h3>
+      <details class="shelf"><summary><h3 class="sec">Preparación de exámenes <span class="sec-ct"></span></h3></summary>
       <div class="list">
-        <div class="row card"><span class="lvl">B2–C1</span><div class="txt"><h4>Exam Prep · Vol. 1</h4><p>Sintaxis avanzada y estrategia de examen.</p></div><div class="acts"><a class="btn btn-gold go primary" href="manual.html?id=exam_prep">Manual del profesor</a><a class="btn btn-line" href="libro.html?id=exam_prep">Libro del alumno</a></div></div>
-        <div class="row card"><span class="lvl">B2–C1</span><div class="txt"><h4>Exam Prep · Vol. 2</h4><p>Vocabulario temático y práctica aplicada.</p></div><div class="acts"><a class="btn btn-gold go primary" href="manual.html?id=exam_prep_vol2">Manual del profesor</a><a class="btn btn-line" href="libro.html?id=exam_prep_vol2">Libro del alumno</a></div></div>
-        <div class="row card"><span class="lvl">B1</span><div class="txt"><h4>Certification Path I · Gateway</h4><p>Primera certificación: B1 Preliminary, IELTS 4.5–5.5 y TOEFL. 20 lecciones con drills cronometrados.</p></div><div class="acts"><a class="btn btn-gold go primary" href="manual.html?id=cert_prep_b1">Manual del profesor</a><a class="btn btn-line" href="libro.html?id=cert_prep_b1">Libro del alumno</a></div></div>
-        <div class="row card"><span class="lvl">B2</span><div class="txt"><h4>Certification Path II · Ascent</h4><p>B2 First e IELTS 5.5–6.5: paráfrasis, distractores y escritura estructurada. 20 lecciones.</p></div><div class="acts"><a class="btn btn-gold go primary" href="manual.html?id=cert_prep_b2">Manual del profesor</a><a class="btn btn-line" href="libro.html?id=cert_prep_b2">Libro del alumno</a></div></div>
-        <div class="row card"><span class="lvl">C1–C2</span><div class="txt"><h4>Certification Path III · Summit</h4><p>CAE, CPE e IELTS 7.0+: matiz, registro y resistencia. 20 lecciones.</p></div><div class="acts"><a class="btn btn-gold go primary" href="manual.html?id=cert_prep_c1">Manual del profesor</a><a class="btn btn-line" href="libro.html?id=cert_prep_c1">Libro del alumno</a></div></div>
-        <div class="row card"><span class="lvl">B2–C2</span><div class="txt"><h4>Certification Prep · Intensivo</h4><p>Estrategia de examen: drills cronometrados, modelos Band 6/8 y simulacro final.</p></div><div class="acts"><a class="btn btn-gold go primary" href="manual.html?id=cert_prep">Manual del profesor</a><a class="btn btn-line" href="libro.html?id=cert_prep">Libro del alumno</a></div></div>
+        <div class="row card" data-mid="exam_prep"><span class="cv"><img src="assets/images/hub/covers/mind.webp" alt="" width="52" height="65" loading="lazy" decoding="async"><span class="lvl">B2–C1</span></span><div class="txt"><h4>Exam Prep · Vol. 1</h4><p>Sintaxis avanzada y estrategia de examen.</p></div><div class="acts"><a class="lnk go primary" href="manual.html?id=exam_prep">Manual del profesor</a><a class="lnk alt" href="libro.html?id=exam_prep">Libro del alumno</a></div></div>
+        <div class="row card" data-mid="exam_prep_vol2"><span class="cv"><img src="assets/images/hub/covers/news.webp" alt="" width="52" height="65" loading="lazy" decoding="async"><span class="lvl">B2–C1</span></span><div class="txt"><h4>Exam Prep · Vol. 2</h4><p>Vocabulario temático y práctica aplicada.</p></div><div class="acts"><a class="lnk go primary" href="manual.html?id=exam_prep_vol2">Manual del profesor</a><a class="lnk alt" href="libro.html?id=exam_prep_vol2">Libro del alumno</a></div></div>
+        <div class="row card" data-mid="cert_prep_b1"><span class="cv"><img src="assets/images/hub/covers/heritage.webp" alt="" width="52" height="65" loading="lazy" decoding="async"><span class="lvl">B1</span></span><div class="txt"><h4>Certification Path I · Gateway</h4><p>Primera certificación: B1 Preliminary, IELTS 4.5–5.5 y TOEFL. 20 lecciones con drills cronometrados.</p></div><div class="acts"><a class="lnk go primary" href="manual.html?id=cert_prep_b1">Manual del profesor</a><a class="lnk alt" href="libro.html?id=cert_prep_b1">Libro del alumno</a></div></div>
+        <div class="row card" data-mid="cert_prep_b2"><span class="cv"><img src="assets/images/hub/covers/achievement.webp" alt="" width="52" height="65" loading="lazy" decoding="async"><span class="lvl">B2</span></span><div class="txt"><h4>Certification Path II · Ascent</h4><p>B2 First e IELTS 5.5–6.5: paráfrasis, distractores y escritura estructurada. 20 lecciones.</p></div><div class="acts"><a class="lnk go primary" href="manual.html?id=cert_prep_b2">Manual del profesor</a><a class="lnk alt" href="libro.html?id=cert_prep_b2">Libro del alumno</a></div></div>
+        <div class="row card" data-mid="cert_prep_c1"><span class="cv"><img src="assets/images/hub/covers/sports.webp" alt="" width="52" height="65" loading="lazy" decoding="async"><span class="lvl">C1–C2</span></span><div class="txt"><h4>Certification Path III · Summit</h4><p>CAE, CPE e IELTS 7.0+: matiz, registro y resistencia. 20 lecciones.</p></div><div class="acts"><a class="lnk go primary" href="manual.html?id=cert_prep_c1">Manual del profesor</a><a class="lnk alt" href="libro.html?id=cert_prep_c1">Libro del alumno</a></div></div>
+        <div class="row card" data-mid="cert_prep"><span class="cv"><img src="assets/images/hub/covers/time.webp" alt="" width="52" height="65" loading="lazy" decoding="async"><span class="lvl">B2–C2</span></span><div class="txt"><h4>Certification Prep · Intensivo</h4><p>Estrategia de examen: drills cronometrados, modelos Band 6/8 y simulacro final.</p></div><div class="acts"><a class="lnk go primary" href="manual.html?id=cert_prep">Manual del profesor</a><a class="lnk alt" href="libro.html?id=cert_prep">Libro del alumno</a></div></div>
+      </div></details>
+    </section>
+      </div>
+
+      <p class="private">Los manuales son privados. Si uno no abre, pide a la academia que autorice tu correo.</p>
+    </section>
+
+    <!-- Evaluar a un alumno -->
+    <section class="block" aria-labelledby="h-eval">
+      <h2 id="h-eval">Evaluar a un alumno</h2>
+      <div class="list">
+      <div class="row ico"><svg class="i" aria-hidden="true"><use href="#i-compass"/></svg><div class="txt"><b>Prueba de ubicación</b><span>Alumno nuevo · 10 min, resultado inmediato (Pre-A1–B2+)</span></div><div class="acts"><a class="lnk go primary" href="book_placement.html">Abrir prueba</a></div></div>
+      <div class="row ico"><svg class="i" aria-hidden="true"><use href="#i-speech"/></svg><div class="txt"><b>Entrevista oral</b><span>Confirma el nivel con 36 preguntas y rúbrica, y recomienda el curso</span></div><div class="acts"><a class="lnk go primary" href="book_oral_interview.html">Abrir entrevista</a></div></div>
+      <div class="row ico"><svg class="i" aria-hidden="true"><use href="#i-check-doc"/></svg><div class="txt"><b>Diagnóstico avanzado</b><span>Evaluación integral B2–C2 que haces con el alumno</span></div><div class="acts"><a class="lnk go primary" href="manual.html?id=diagnostic_advanced">Guía del profesor</a><a class="lnk alt" href="libro.html?id=diagnostic_advanced">Versión del alumno</a></div></div>
+      <!-- Reportes del simulador de entrevista (entrevista.html) que el alumno decide enviar -->
+      <div class="row ico"><svg class="i" aria-hidden="true"><use href="#i-case"/></svg><div class="txt"><b>Simulacros de entrevista</b><span>Los reportes que tus alumnos te envían: nivel estimado y qué trabajar en clase</span></div><div class="acts"><a class="lnk go primary" href="portal_calificaciones.html?tipo=entrevista">Ver reportes</a></div></div>
       </div>
     </section>
 
-    <p class="private"><svg class="i" aria-hidden="true"><use href="#i-shield"/></svg> Los manuales son privados. Si uno no abre, pide a la academia que autorice tu correo.</p>
-  </section>
+    <!-- Lo que casi no se usa, plegado. Las dos de administración las oculta
+         el script de «Mis clases» a quien no tiene el rol. -->
+    <details class="fold block" id="mas">
+      <summary><h2 id="h-mas">Más herramientas</h2></summary>
+      <div class="list">
+      <div class="row"><div class="txt"><b>Guion de venta</b><span>Pitch, objeciones y mensajes listos para WhatsApp y correo</span></div><div class="acts"><a class="lnk go primary" href="manual.html?id=guion_venta">Abrir</a></div></div>
+      <div class="row"><div class="txt"><b>Vesper Engine</b><span>Genera el prompt del tutor con el syllabus real de los manuales</span></div><div class="acts"><a class="lnk go primary" href="vesper_engine.html">Abrir</a></div></div>
+      <div class="row web-only" id="card-escuela"><div class="txt"><b>Grupos e inscripciones</b><span>Dirección: arma grupos e inscribe alumnos</span></div><div class="acts"><a class="lnk go primary" href="portal_escuela.html">Abrir</a></div></div>
+      <div class="row web-only" id="card-admin"><div class="txt"><b>Administrar accesos</b><span>Admin: autoriza cuentas de alumnos y profesores</span></div><div class="acts"><a class="lnk go primary" href="access_admin.html">Abrir</a></div></div>
+      </div>
+    </details>
+  </div>
 
-  <!-- Lo que casi no se usa. Las dos de administración las oculta el script
-       de "Mis clases" a quien no tiene el rol. -->
-  <section class="block" aria-labelledby="h-mas">
-    <div class="block-h"><h2 id="h-mas">Más herramientas</h2></div>
-    <div class="list">
-    <div class="row"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-case"/></svg></span><div class="txt"><b>Guion de venta</b><span>Pitch, objeciones y mensajes listos para WhatsApp y correo</span></div><div class="acts"><a class="btn btn-gold go primary" href="manual.html?id=guion_venta">Abrir</a></div></div>
-    <div class="row"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-robot"/></svg></span><div class="txt"><b>Vesper Engine</b><span>Genera el prompt del tutor con el syllabus real de los manuales</span></div><div class="acts"><a class="btn btn-gold go primary" href="vesper_engine.html">Abrir</a></div></div>
-    <div class="row web-only" id="card-escuela"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-calendar"/></svg></span><div class="txt"><b>Grupos e inscripciones</b><span>Dirección: arma grupos e inscribe alumnos</span></div><div class="acts"><a class="btn btn-gold go primary" href="portal_escuela.html">Abrir</a></div></div>
-    <div class="row web-only" id="card-admin"><span class="ic"><svg class="i" aria-hidden="true"><use href="#i-shield"/></svg></span><div class="txt"><b>Administrar accesos</b><span>Admin: autoriza cuentas de alumnos y profesores</span></div><div class="acts"><a class="btn btn-gold go primary" href="access_admin.html">Abrir</a></div></div>
-    </div>
-  </section>
+</div>
 </main>
+
 
 <footer>
   © <span id="y"></span> Vesper Academy · <a href="index.html">vesper.academy</a> · Área de profesores
@@ -532,7 +879,9 @@ footer a:hover{text-decoration:underline;}
     if (ct) ct.textContent = sec.querySelectorAll('.card').length;
   });
 
-  /* ── Filtro: búsqueda de texto + píldoras de familia ── */
+  /* ── Filtro: búsqueda de texto + familia. Los estantes están plegados;
+        al buscar o elegir familia se abren solos los que tienen resultados
+        y al limpiar vuelven a como los dejó el profesor. ── */
   var q = document.getElementById('q');
   var qClear = document.getElementById('q-clear');
   var fbox = q.closest('.f-box');
@@ -540,24 +889,38 @@ footer a:hover{text-decoration:underline;}
   var pills = Array.prototype.slice.call(document.querySelectorAll('.pill'));
   var sections = Array.prototype.slice.call(document.querySelectorAll('section.grp'));
   var activeFam = 'all';
+  var filtering = false;
 
   function norm(s) { return (s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, ''); }
+
+  /* Recuerda qué estantes abrió el profesor a mano (solo fuera de un filtro). */
+  sections.forEach(function (sec) {
+    var d = sec.querySelector('details.shelf');
+    if (!d) return;
+    d.querySelector('summary').addEventListener('click', function () {
+      if (!filtering) sec._userOpen = !d.open;
+    });
+  });
 
   function apply() {
     var term = norm(q.value.trim());
     fbox.classList.toggle('has-val', q.value.length > 0);
+    filtering = !!term || activeFam !== 'all';
     var anyVisible = false;
     sections.forEach(function (sec) {
       var famOk = (activeFam === 'all' || sec.getAttribute('data-fam') === activeFam);
       var shownInSec = 0;
       sec.querySelectorAll('.card').forEach(function (card) {
-        var textOk = !term || norm(card.textContent).indexOf(term) !== -1;
+        var hay = norm(card.textContent);
+        var textOk = !term || term.split(/\s+/).every(function (w) { return hay.indexOf(w) !== -1; });
         var show = famOk && textOk;
         card.style.display = show ? '' : 'none';
         card.classList.toggle('first-visible', show && shownInSec === 0);
         if (show) shownInSec++;
       });
       sec.style.display = shownInSec > 0 ? '' : 'none';
+      var d = sec.querySelector('details.shelf');
+      if (d) d.open = filtering ? shownInSec > 0 : !!sec._userOpen;
       if (shownInSec > 0) anyVisible = true;
     });
     empty.style.display = anyVisible ? 'none' : 'block';
@@ -576,15 +939,15 @@ footer a:hover{text-decoration:underline;}
   }
   pills.forEach(function (p) {
     p.addEventListener('click', function () { setFam(p.getAttribute('data-fam'), p); });
-    /* Ya no hace falta un keydown a mano: las píldoras son <button> de verdad y
-       disparan click con Enter Y con Espacio de fábrica. Cuando eran
-       <span role="button" tabindex="0"> recibían foco pero Espacio no hacía
-       nada — y ese es justo el trozo que se olvida al reimplementarlo. */
   });
 
   /* ── Búsqueda profunda: lecciones dentro de los manuales (índice de libros) ── */
   var deep = document.getElementById('deep');
   var DIDX = window.VESPER_BOOK_INDEX || [];
+  /* La carpeta de manual.html sale de un enlace real de la página, así la
+     demo (que vive tres carpetas abajo) y la página real usan la misma línea. */
+  var aRef = document.querySelector('section.grp .card a.go');
+  var BASE = aRef ? aRef.getAttribute('href').split('manual.html')[0] : '';
   function escT(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
   function deepSearch(term) {
     if (!deep) return;
@@ -597,16 +960,16 @@ footer a:hover{text-decoration:underline;}
       }
     }
     if (!hits.length) { deep.hidden = true; deep.innerHTML = ''; return; }
-    var html = '<div class="dp-lbl"><svg class="i" aria-hidden="true"><use href="#i-book"/></svg> Lecciones en los manuales</div>';
+    var html = '<div class="h-eb">Lecciones dentro de los manuales</div>';
     hits.forEach(function (h) {
-      var href = 'manual.html?id=' + encodeURIComponent(h.bk.id) + (h.l.a ? ('#' + h.l.a) : '');
+      var href = BASE + 'manual.html?id=' + encodeURIComponent(h.bk.id) + (h.l.a ? ('#' + h.l.a) : '');
       html += '<a href="' + href + '"><b>' + escT(h.l.t) + '</b><span>' +
               escT(h.bk.title + (h.l.n ? (' · Lección ' + h.l.n) : '')) + '</span></a>';
     });
     deep.innerHTML = html; deep.hidden = false;
   }
 
-  /* ── Abiertos recientemente: chips con los últimos manuales/herramientas ── */
+  /* ── Abiertos recientemente: una línea con los últimos manuales/herramientas ── */
   var RKEY = 'vesper_prof_recent';
   (function () {
     var box = document.getElementById('recent');
@@ -615,10 +978,10 @@ footer a:hover{text-decoration:underline;}
       var list = [];
       try { list = JSON.parse(localStorage.getItem(RKEY) || '[]'); } catch (e) {}
       if (!list.length) { box.classList.remove('on'); return; }
-      var html = '<span class="rc-lbl">Recientes</span>';
+      var html = '<span class="rc-lbl eb">Abriste hace poco</span>';
       list.slice(0, 6).forEach(function (r) {
         if (!r || !r.href || !r.t) return;
-        html += '<a href="' + escT(r.href) + '"><svg class="i" aria-hidden="true"><use href="#i-clock"/></svg>' + escT(r.t) + '</a>';
+        html += '<a class="lnk quiet" href="' + escT(r.href) + '">' + escT(r.t) + '</a>';
       });
       box.innerHTML = html; box.classList.add('on');
     }
@@ -674,35 +1037,165 @@ footer a:hover{text-decoration:underline;}
 })();
 </script>
 
-<!-- Mis clases: lee el doc PROPIO del profesor (teachers/{correo}) con su idToken -->
+<!-- Mis clases: lee el doc PROPIO del profesor (teachers/{correo}) con su idToken.
+     PROPUESTA C: en vez de una tarjeta por grupo, la clase que SIGUE va de
+     protagonista, con su manual; el resto del día es una lista corta. -->
 <script>
 (function(){
   "use strict";
-  if(!window.VesperAuth || !VesperAuth.initFirebase) return;
-  var cfg = VesperAuth.config || {};
-  var pid = cfg.firebase && cfg.firebase.projectId;
-  var db  = cfg.dbId || "teachermanuals";
-  if(!pid) return;
+  function $(id){ return document.getElementById(id); }
   function esc(s){ return String(s==null?"":s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c];}); }
-  function parseClasses(doc){
-    var out=[];
-    try{
-      (doc.fields.classes.arrayValue.values||[]).forEach(function(v){
-        var f=(v.mapValue&&v.mapValue.fields)||{};
-        out.push({ name:(f.name&&f.name.stringValue)||"",
-                   time:(f.time&&f.time.stringValue)||"",
-                   meetUrl:(f.meetUrl&&f.meetUrl.stringValue)||"" });
-      });
-    }catch(e){}
-    return out;
+  function norm(s){ return String(s||"").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").trim(); }
+
+  /* La hora del dispositivo del profesor. */
+  function now(){ return new Date(); }
+  function cap(s){ return s.charAt(0).toUpperCase()+s.slice(1); }
+
+  /* La fecha de hoy es el encabezado de la página. */
+  var hf=$("hoy-fecha");
+  if(hf){
+    try{ hf.textContent=cap(now().toLocaleDateString("es-MX",{weekday:"long",day:"numeric",month:"long"}).replace(",","")); }catch(e){}
   }
-  /* Modelo de escuela: las clases del profesor son sus grupos
-     (teachers/{correo}.groups → groups/{id}: nombre, horario y meetUrl).
-     Horario ["lun 17:00-18:00", ...] → "Lun a vie · 5–6 pm". */
+
+  /* «Buscar» y «Ver manuales» del bloque de la clase llevan al buscador. */
+  var slot=$("kit-manual");
+  if(slot) slot.addEventListener("click",function(ev){
+    var a=ev.target.closest&&ev.target.closest("a[href^='#']"); if(!a) return;
+    ev.preventDefault();
+    var fam=a.getAttribute("data-fam"), q=$("q"), h=$("h-man");
+    var pill=fam&&document.querySelector('.pill[data-fam="'+fam+'"]');
+    if(pill) pill.click();
+    if(h) h.scrollIntoView({block:"start"});
+    if(!pill&&q) q.focus({preventScroll:true});
+  });
+
+  /* ── ¿Qué manual es el de esta clase? Se deduce del nombre del grupo y se
+        confirma contra las entradas de la página (título y enlaces salen del
+        DOM). Si el nombre no alcanza para saber el nivel, se ofrece la familia;
+        si no dice nada, el buscador. Nunca se inventa un manual. ── */
+  function manualFor(name){
+    var n=" "+norm(name).replace(/[^a-z0-9]+/g," ")+" ", m;
+    var ROM={i:1,ii:2,iii:3,"1":1,"2":2,"3":3};
+    if((m=n.match(/ basics (?:nivel |level |lvl )?([1-4]) /))) return {id:"core_basics_lvl"+m[1]};
+    if((m=n.match(/ practice (?:nivel |level |lvl )?([1-6]) /))) return {id:"core_practice_lvl"+m[1]};
+    if(/ grammar /.test(n)){
+      if(/ foundations | grammar (?:nivel |level |lvl )?1 /.test(n)) return {id:"core_grammar_lvl1"};
+      if(/ in context | grammar (?:nivel |level |lvl )?2 /.test(n)) return {id:"core_grammar_lvl2"};
+      if(/ mastery | grammar (?:nivel |level |lvl )?3 /.test(n)) return {id:"core_grammar_lvl3"};
+      return {fam:"grammar"};
+    }
+    if((m=n.match(/ daily life (?:english )?(?:vol(?:umen)? )?([0-2]) /))) return {id:"daily_life_vol"+m[1]};
+    if(/ cci ?1 | conversa(?:tion|cion) 1 /.test(n)) return {id:"cci1"};
+    if(/ cabin crew | aviation /.test(n)) return {id:"cabin_crew"};
+    if(/ political /.test(n)) return {id:"political_english"};
+    if(/ business /.test(n)){
+      if(/ premium /.test(n)) return {id:"corporate_b2"};
+      if((m=n.match(/ path (iii|ii|i|[1-3]) /))){
+        if(ROM[m[1]]===1) return {id:"corporate_b1"};
+        if(ROM[m[1]]===3) return {id:"corporate_c1"};
+      }
+      return {fam:"special"};
+    }
+    if((m=n.match(/ certification path (iii|ii|i|[1-3]) /))) return {id:["cert_prep_b1","cert_prep_b2","cert_prep_c1"][ROM[m[1]]-1]};
+    if(/ certification prep /.test(n)) return {id:"cert_prep"};
+    if((m=n.match(/ exam prep (?:vol )?([12]) /))) return {id:m[1]==="2"?"exam_prep_vol2":"exam_prep"};
+    if(/ basics /.test(n)) return {fam:"basics"};
+    if(/ practice /.test(n)) return {fam:"practice"};
+    if(/ daily life /.test(n)) return {fam:"special"};
+    if(/ exam | certification /.test(n)) return {fam:"exam"};
+    return null;
+  }
+  /* El grupo trae courseId (groups/{id}.courseId) y ese id ES el del manual:
+     es el dato exacto. El nombre del grupo queda solo de respaldo. */
+  function manualOf(c){
+    if(c && c.courseId && findCard(c.courseId)) return {id:c.courseId};
+    return c ? manualFor(c.full||c.name) : null;
+  }
+  function findCard(id){
+    var cards=document.querySelectorAll("section.grp .card"), i, a;
+    for(i=0;i<cards.length;i++){
+      a=cards[i].querySelector(".acts a");
+      if(a && (a.getAttribute("href").split("id=")[1]||"")===id) return cards[i];
+    }
+    return null;
+  }
+  function kitManual(c){
+    if(!slot) return;
+    var hit=manualOf(c), html="";
+    var card=hit&&hit.id?findCard(hit.id):null;
+    var sec=hit&&hit.fam?document.querySelector('section.grp[data-fam="'+hit.fam+'"] h3.sec'):null;
+    if(card){
+      var a=card.querySelectorAll(".acts a");
+      var cv=card.querySelector(".cv");
+      html='<div class="row'+(cv?' has-cv':'')+'">'+(cv?cv.outerHTML:'')+'<div class="txt"><small class="eb">El manual de esta clase</small><b>'+
+        esc(card.querySelector("h4").textContent)+'</b></div><div class="acts">'+
+        '<a class="lnk go" href="'+esc(a[0].getAttribute("href"))+'">Manual del profesor</a>'+
+        (a[1]?'<a class="lnk alt" href="'+esc(a[1].getAttribute("href"))+'">Libro del alumno</a>':'')+'</div></div>';
+    }else if(sec){
+      html='<div class="row"><div class="txt"><small class="eb">Manuales de este curso</small><b>'+
+        esc(sec.firstChild.textContent.trim())+'</b></div><div class="acts">'+
+        '<a class="lnk go" href="#h-man" data-fam="'+esc(hit.fam)+'">Ver manuales</a></div></div>';
+    }else{
+      html='<div class="row"><div class="txt"><small class="eb">Manuales</small><b>Busca el manual de tu clase</b></div>'+
+        '<div class="acts"><a class="lnk go" href="#q">Buscar</a></div></div>';
+    }
+    put(slot,html);
+  }
+  /* ── Los manuales que este profesor enseña ──
+     Se deducen de TODOS sus grupos con manualFor (la misma regla que el
+     manual de la clase). Solo cuentan los que dan un manual exacto: si el
+     nombre del grupo no dice el nivel, no se enciende nada por adivinar.
+     Cada uno queda marcado en su estante («Tu clase», halo dorado), su
+     estante se abre la primera vez, y arriba sale una franja con portadas. */
+  var mineKey="";
+  function markMine(classes){
+    var seen={}, list=[];
+    (classes||[]).forEach(function(c){
+      var hit=manualOf(c), card=hit&&hit.id?findCard(hit.id):null;
+      if(!card) return;
+      if(seen[hit.id]){ seen[hit.id].groups.push(c.label||c.name); return; }
+      seen[hit.id]={id:hit.id,card:card,groups:[c.label||c.name]}; list.push(seen[hit.id]);
+    });
+    var key=list.map(function(m){ return m.id+":"+m.groups.join("|"); }).join(";");
+    if(key===mineKey) return;
+    var first=!mineKey; mineKey=key;
+    Array.prototype.forEach.call(document.querySelectorAll(".card.is-mine"),function(el){
+      el.classList.remove("is-mine"); var t=el.querySelector(".mine-tag"); if(t) t.remove();
+    });
+    Array.prototype.forEach.call(document.querySelectorAll(".mine-flag"),function(el){ el.remove(); });
+    var tiles="";
+    list.forEach(function(m){
+      m.card.classList.add("is-mine");
+      var tag=document.createElement("span"); tag.className="mine-tag"; tag.textContent="tu clase";
+      var txt=m.card.querySelector(".txt"); txt.insertBefore(tag, txt.firstChild);
+      var sec=m.card.closest("section.grp"), h3=sec&&sec.querySelector("h3.sec");
+      if(h3 && !h3.querySelector(".mine-flag")){
+        var f=document.createElement("span"); f.className="mine-flag"; f.textContent="tu clase"; h3.appendChild(f);
+      }
+      var d=sec&&sec.querySelector("details.shelf");
+      /* En escritorio hay sitio: su estante sale abierto. En celular no, para
+         que la página siga corta; ahí ya están las portadas de arriba. */
+      if(first && d && window.matchMedia && matchMedia("(min-width:900px)").matches){ d.open=true; sec._userOpen=true; }
+      var a=m.card.querySelector(".acts a"), cv=m.card.querySelector(".cv");
+      tiles+='<a class="mine-t" href="'+esc(a.getAttribute("href"))+'" aria-label="Manual del profesor: '+esc(m.card.querySelector("h4").textContent)+'">'+
+        (cv?cv.outerHTML:'')+'<span class="mt"><b>'+esc(m.card.querySelector("h4").textContent)+'</b><span>'+esc(m.groups.join(", "))+'</span></span></a>';
+    });
+    var box=$("mine"); put($("mine-row"),tiles); if(box) box.hidden=!list.length;
+  }
+
+  /* Solo toca el DOM si algo cambió (render se repite cada medio minuto). */
+  function put(el,html){ if(el && el._h!==html){ el.innerHTML=html; el._h=html; } }
+
+  /* ── Horarios ── */
   var DAYS=["lun","mar","mie","jue","vie","sab","dom"];
+  var DAYN=["lunes","martes","miércoles","jueves","viernes","sábado","domingo"];
   function h12(hm){
     var p=String(hm).split(":"), h=+p[0], m=p[1]||"00";
     return {s:(h%12||12)+(m!=="00"?":"+m:""), ap:h<12?"am":"pm"};
+  }
+  function clock(min){
+    var h=Math.floor(min/60), m=min%60;
+    return {s:(h%12||12)+":"+(m<10?"0":"")+m, ap:h<12?"am":"pm"};
   }
   function schedLabel(list){
     var days=[], times={};
@@ -717,10 +1210,39 @@ footer a:hover{text-decoration:underline;}
     var hrs = a.ap===b.ap ? (a.s+"–"+b.s+" "+b.ap) : (a.s+" "+a.ap+"–"+b.s+" "+b.ap);
     var idx=days.map(function(d){ return DAYS.indexOf(d.slice(0,3)); }).sort(function(x,y){return x-y;});
     var run = idx[0]>=0 && idx.every(function(v,i){ return i===0 || v===idx[i-1]+1; });
-    var cap=function(s){ return s.charAt(0).toUpperCase()+s.slice(1); };
     var d = (run && idx.length>2) ? (cap(DAYS[idx[0]])+" a "+DAYS[idx[idx.length-1]]) : days.map(cap).join(", ");
     return d.replace(/mie/g,"mié").replace(/Mie/g,"Mié").replace(/sab/g,"sáb").replace(/Sab/g,"Sáb")+" · "+hrs;
   }
+  /* ["lun 17:00-18:00", …] → [{d:0, s:1020, e:1080}, …]. Lo que no se entiende
+     se descarta: sin día y hora ciertos no se decide cuál clase sigue. */
+  function parseSlots(list){
+    var out=[];
+    list.forEach(function(e){
+      var m=norm(e).match(/^([a-z]+)\s+(\d{1,2}):(\d{2})\s*-\s*(\d{1,2}):(\d{2})$/);
+      if(!m) return;
+      var d=DAYS.indexOf(m[1].slice(0,3)), s=(+m[2])*60+(+m[3]), en=(+m[4])*60+(+m[5]);
+      if(d<0 || en<=s) return;
+      out.push({d:d,s:s,e:en});
+    });
+    return out;
+  }
+  function parseClasses(doc){
+    var out=[];
+    try{
+      (doc.fields.classes.arrayValue.values||[]).forEach(function(v){
+        var f=(v.mapValue&&v.mapValue.fields)||{};
+        out.push({ name:(f.name&&f.name.stringValue)||"",
+                   time:(f.time&&f.time.stringValue)||"",
+                   meetUrl:(f.meetUrl&&f.meetUrl.stringValue)||"" });
+      });
+    }catch(e){}
+    return out;
+  }
+
+  var cfg=(window.VesperAuth&&VesperAuth.config)||{};
+  var pid=cfg.firebase&&cfg.firebase.projectId;
+  var db=cfg.dbId||"teachermanuals";
+
   function fromGroups(ids, token){
     return Promise.all(ids.map(function(gid){
       var url="https://firestore.googleapis.com/v1/projects/"+pid+"/databases/"+db+
@@ -734,8 +1256,12 @@ footer a:hover{text-decoration:underline;}
           var sched=((f.schedule&&f.schedule.arrayValue&&f.schedule.arrayValue.values)||[])
                       .map(function(v){ return v.stringValue||""; });
           var first=(String(sched[0]||"").match(/(\d{1,2}):(\d{2})/)||[0,99,0]);
-          return { name:((f.name&&f.name.stringValue)||gid).split(" · ").slice(0,2).join(" · "),
+          var full=(f.name&&f.name.stringValue)||gid;
+          return { name:full.split(" · ").slice(0,2).join(" · "),
+                   full:full,
+                   courseId:(f.courseId&&f.courseId.stringValue)||"",
                    label:schedLabel(sched)||"Diario",
+                   slots:parseSlots(sched),
                    meetUrl:(f.meetUrl&&f.meetUrl.stringValue)||"",
                    sort:(+first[1])*60+(+first[2]) };
         }, function(){ return null; });
@@ -743,25 +1269,111 @@ footer a:hover{text-decoration:underline;}
       return list.filter(Boolean).sort(function(a,b){ return a.sort-b.sort; });
     });
   }
+
+  var who="", last=null;
+  function meetOf(c){ return /^https:\/\//i.test(c.meetUrl||"")?c.meetUrl:""; }
+  function inWords(min){
+    if(min<60) return "en "+min+" min";
+    var h=Math.floor(min/60), m=min%60;
+    return "en "+h+" h"+(m?" "+m+" min":"");
+  }
+  function say(line){
+    var el=$("say"); if(!el) return;
+    var t=(who?"¡Hola, "+who+"! ":"¡Hola! ")+line;
+    if(el.textContent!==t) el.textContent=t;
+  }
+  function groupRow(c){
+    var url=meetOf(c);
+    return '<div class="dy-row g"><span class="dy-n"><b>'+esc(c.name||"Clase")+'</b><span>'+
+      esc(c.label || (c.time?("Diario · "+c.time):"Diario"))+'</span></span>'+
+      (url?'<a class="btn2 sm" href="'+esc(url)+'" target="_blank" rel="noopener">Entrar a Meet</a>'
+          :'<span class="dy-no">Sin link</span>')+'</div>';
+  }
+
   function render(classes){
-    var grid=document.getElementById("mc-grid"), sec=document.getElementById("myclasses");
-    if(!grid||!sec||!classes.length) return;
-    grid.innerHTML="";
+    var sec=$("myclasses"), box=$("mc-next"), grid=$("mc-grid"), day=$("mc-day"), all=$("mc-all");
+    if(!sec||!box||!grid||!classes||!classes.length) return;
+    last=classes;
+    markMine(classes);
+    var t=now(), wd=(t.getDay()+6)%7, nm=t.getHours()*60+t.getMinutes();
+    var best=null, hadToday=false;
     classes.forEach(function(c){
-      var card=document.createElement("div"); card.className="mc-card";
-      var url=/^https:\/\//i.test(c.meetUrl||"")?c.meetUrl:"";
-      card.innerHTML='<div class="mc-info"><b>'+esc(c.name||"Clase")+'</b>'+
-        '<span>'+esc(c.label || (c.time?("Diario · "+c.time):"Diario"))+'</span></div>'+
-        (url?'<a class="mc-join" href="'+esc(url)+'" target="_blank" rel="noopener">Entrar a la clase</a>'
-            :'<span class="mc-nolink">Sin link</span>');
-      grid.appendChild(card);
+      (c.slots||[]).forEach(function(s){
+        var dd=(s.d-wd+7)%7;
+        if(dd===0){ hadToday=true; if(s.e<=nm) dd=7; }
+        var wait=dd*1440+s.s-nm;
+        if(!best || wait<best.wait) best={c:c,s:s,dd:dd,wait:wait};
+      });
     });
+
+    /* Respaldo antiguo (.classes sin días) u horario ilegible: NO se adivina
+       cuál sigue. Se listan todas, cada una con su enlace, y ninguna va en oro. */
+    if(!best){
+      put(box,'<h2 class="nx-list-h" id="mc-title">Tus clases</h2>'+classes.map(groupRow).join(""));
+      put(grid,""); if(day) day.hidden=true; if(all) all.hidden=true;
+      kitManual(classes.length===1?classes[0]:null);
+      say("Aquí están tus clases.");
+      sec.hidden=false;
+      return;
+    }
+
+    var c=best.c, s=best.s, url=meetOf(c), hr=clock(s.s);
+    var live=best.wait<=0;
+    var dayWord = best.dd===0?"hoy" : best.dd===1?"mañana" : best.dd===7?("el próximo "+DAYN[s.d]) : ("el "+DAYN[s.d]);
+    var when = live ? "ya empezó"
+             : best.dd===0 ? ("sigue hoy, <b>"+inWords(best.wait)+"</b>")
+             : ("sigue "+esc(dayWord));
+    put(box,
+      '<p class="nx-when">'+when+'</p>'+
+      '<p class="nx-hour">'+hr.s+'<small>'+hr.ap+'</small></p>'+
+      '<h2 class="nx-name" id="mc-title">'+esc(c.name||"Clase")+'</h2>'+
+      '<p class="nx-sched">'+esc(c.label||"")+'</p>'+
+      (url?'<a class="join" href="'+esc(url)+'" target="_blank" rel="noopener"><svg class="i" aria-hidden="true"><use href="#i-video"/></svg>Entrar a Meet</a>'
+          :'<p class="nx-nolink">Este grupo todavía no tiene link de Meet. Pídelo a la academia.</p>'));
+    kitManual(c);
+    var hk=$("h-dia"); if(hk) hk.textContent="Para esta clase";
+
+    /* El resto de ese día, en orden. Las de hoy que ya pasaron quedan apagadas. */
+    var rest=[];
+    classes.forEach(function(o){
+      (o.slots||[]).forEach(function(x){
+        if(x.d!==s.d || (o===c && x===s)) return;
+        rest.push({c:o,s:x,done:best.dd===0 && x.e<=nm});
+      });
+    });
+    rest.sort(function(a,b){ return a.s.s-b.s.s; });
+    put(grid, rest.map(function(r){
+      var k=clock(r.s.s), u=meetOf(r.c);
+      return '<div class="dy-row'+(r.done?' is-done':'')+'"><span class="dy-h">'+k.s+'<small>'+k.ap+'</small></span>'+
+        '<span class="dy-n"><b>'+esc(r.c.name||"Clase")+'</b>'+(r.done?'<span>Ya terminó</span>':'')+'</span>'+
+        (r.done?'<span></span>':(u?'<a class="lnk" href="'+esc(u)+'" target="_blank" rel="noopener">Entrar a Meet</a>':'<span class="dy-no">Sin link</span>'))+
+        '</div>';
+    }).join(""));
+    var dh=$("mc-day-h"); if(dh) dh.textContent="También "+dayWord;
+    if(day) day.hidden=!rest.length;
+
+    if(all){
+      put($("mc-all-list"), classes.map(groupRow).join(""));
+      all.hidden=classes.length<2;
+    }
+
+    say(live ? "Tu clase ya empezó. ¡Entra!"
+      : (best.dd===0 && best.wait<=15) ? "Casi es hora. Aquí está todo."
+      : best.dd===0 ? "Esto es lo que sigue hoy."
+      : hadToday ? "Por hoy ya terminaste. ¡Bien hecho!"
+      : "Hoy no tienes clase. ¡Descansa!");
     sec.hidden=false;
   }
+  /* «en 12 min» se mantiene al día sin recargar. */
+  setInterval(function(){ if(last && !document.hidden) render(last); },30000);
+
+  if(!window.VesperAuth || !VesperAuth.initFirebase || !pid) return;
   VesperAuth.initFirebase().then(function(auth){
     auth.onAuthStateChanged(function(user){
       if(!user || !user.emailVerified) return;
       var email=String(user.email||"").trim().toLowerCase();
+      who=String(user.displayName||"").trim().split(/\s+/)[0]||"";
+      say("Aquí está todo para tu clase.");
       /* La tarjeta "Administrar accesos" solo es útil para el admin: se oculta
          a los demás profesores. Fail-open: sin sesión o sin config, se muestra. */
       try{
@@ -793,6 +1405,10 @@ footer a:hover{text-decoration:underline;}
       }).then(function(r){ return r&&r.status===200 ? r.json() : null; })
         .then(function(doc){
           if(!doc) return;
+          try{
+            var nm=String(doc.fields.name.stringValue||"").trim().split(/\s+/)[0];
+            if(nm){ who=nm; say("Aquí está todo para tu clase."); }
+          }catch(e){}
           var legacy=function(){ render(parseClasses(doc)); };
           var ids=[];
           try{ ids=(doc.fields.groups.arrayValue.values||[]).map(function(v){ return v.stringValue||""; }); }catch(e){}
@@ -806,9 +1422,7 @@ footer a:hover{text-decoration:underline;}
 </script>
 
 
-<!-- Barra de navegación compartida. El portal del profesor era la única
-     superficie del sitio que no la llevaba, así que desde aquí no había vuelta
-     a ninguna parte salvo por los dos enlaces de la cabecera. -->
+<!-- Barra de navegación compartida. -->
 <script src="vesper_nav.js"></script>
 </body>
 </html>
