@@ -121,6 +121,24 @@ body{margin:0;font-family:var(--va-font-text,Inter,system-ui,sans-serif);display
   /* ── 3. Descargar el manual desde Firestore vía REST (las reglas del
          servidor solo lo permiten a profesores autorizados). Se usa REST
          y no el SDK porque la base tiene id propio ("teachermanuals"). ── */
+  /* Documento completo desde el Worker (R2). Resuelve el HTML o null:
+     null = usa Firestore (sin almacén nuevo, versión distinta, sin permiso,
+     sin red o más de 8 s sin respuesta). */
+  var DOC_API = "https://patient-feather-4364.josuemtz20.workers.dev/doc/get";
+  function docFromWorker(kind, docId, token, ver) {
+    if (!ver || !window.fetch) return Promise.resolve(null);
+    var ctl = window.AbortController ? new AbortController() : null;
+    var timer = setTimeout(function () { if (ctl) ctl.abort(); }, 8000);
+    return fetch(DOC_API, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ idToken: token, kind: kind, id: docId, ver: ver }),
+      signal: ctl ? ctl.signal : undefined
+    }).then(function (r) { return r.status === 200 ? r.text() : null; })
+      .then(function (t) { clearTimeout(timer); return (t && t.length >= 100) ? t : null; })
+      .catch(function () { clearTimeout(timer); return null; });
+  }
+
   function fetchManual(user) {
     var base = "https://firestore.googleapis.com/v1/projects/" +
                VesperAuth.config.firebase.projectId + "/databases/" + DB_ID +
@@ -156,6 +174,11 @@ body{margin:0;font-family:var(--va-font-text,Inter,system-ui,sans-serif);display
         var count = parseInt((f.chunkCount || {}).integerValue || "1", 10);
         note("Abriendo: " + ((f.title || {}).stringValue || id));
 
+        /* Primero el almacén nuevo (R2, vía el Worker): no gasta las lecturas
+           diarias de Firestore. Si no lo tiene, cambió de versión o falla,
+           se leen los trozos de Firestore como siempre. */
+        docFromWorker("manual", id, token, (f.updatedAt || {}).timestampValue || "").then(function (fromR2) {
+        if (fromR2) { render(fromR2); return; }
         var jobs = [];
         for (var i = 0; i < count; i++) { jobs.push(getDoc(base + "/chunks/" + i)); }
         Promise.all(jobs).then(function (parts) {
@@ -168,6 +191,7 @@ body{margin:0;font-family:var(--va-font-text,Inter,system-ui,sans-serif);display
             return;
           }
           render(html);
+        });
         });
       }).catch(function () {
         fail('<div class="err">No hay conexi&oacute;n con el servidor de manuales.</div>' +

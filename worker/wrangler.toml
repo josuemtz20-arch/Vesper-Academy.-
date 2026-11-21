@@ -60,6 +60,18 @@ class_name = "ExamAttempt"
 tag = "v2"
 new_sqlite_classes = ["ExamAttempt"]
 
+# ── Páginas de los libros Canva (book_server.js, rutas /book/*) ──
+# Bucket R2 privado (no tiene acceso público): solo el Worker lo lee, y solo
+# entrega una página con un permiso firmado por /book/open.
+# Antes del primer deploy con esto:
+#   1. Josue activa R2 en el panel de Cloudflare (pide método de pago).
+#   2. wrangler r2 bucket create vesper-libros
+#   3. wrangler secret put BOOK_SIGNING_KEY   (texto aleatorio largo)
+# Sin el bucket, `wrangler deploy` falla a propósito.
+[[r2_buckets]]
+binding = "BOOKS"
+bucket_name = "vesper-libros"
+
 # ── Ajuste de límites sin tocar código (opcional) ──
 # Descomenta y cambia; 0 desactiva ese límite. Valores por defecto en
 # RATE_DEFAULTS de vesper-chat-proxy.js.

@@ -38,6 +38,8 @@ import { DurableObject } from "cloudflare:workers";
 /* Exámenes calificados en el servidor (rutas /exam/*). Ver exam_grader.js. */
 import { handleExam, EXAM_RATE_DEFAULTS, ExamAttempt } from "./exam_grader.js";
 export { ExamAttempt };
+/* Páginas de los libros Canva desde R2 (rutas /book/*). Ver book_server.js. */
+import { handleBookOpen, handleBookPage, handleDocGet, BOOK_RATE_DEFAULTS } from "./book_server.js";
 
 /* ---------- Configuración (editable) ---------- */
 
@@ -91,6 +93,8 @@ const MAX_INPUT_CHARS = 20000;
 const RATE_DEFAULTS = {
   /* exámenes: abrir intento y contestar, por IP (ver exam_grader.js) */
   ...EXAM_RATE_DEFAULTS,
+  /* libros: abrir un libro (firma el permiso de páginas), por IP */
+  ...BOOK_RATE_DEFAULTS,
   RL_FREE_PER_MIN: 12,     // mensajes por minuto por IP (nivel gratis)
   RL_FREE_PER_DAY: 200,    // mensajes por día (UTC) por IP (nivel gratis)
   RL_PRO_PER_MIN: 30,      // con código Pro válido
@@ -157,7 +161,7 @@ function pickOrigin(origin) {
 
 function corsHeaders(origin) {
   const h = {
-    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type",
     /* el front lee X-Vesper-Tier (insignia Gratis/Pro), X-Vesper-Session
        (sesión firmada tras Turnstile) y Retry-After (cuando hay 429) */
@@ -407,6 +411,26 @@ export default {
       return new Response(null, { status: 204, headers: corsHeaders(origin) });
     }
 
+    /* ── Página de un libro (GET /book/page) ──
+     * La única ruta GET. No exige Origin (la autoriza la firma de /book/open,
+     * válida 2 h para un libro y una versión) y no toca el contador: cada
+     * página sería una llamada más al Durable Object. */
+    if (request.method === "GET" && new URL(request.url).pathname === "/book/page") {
+      let out;
+      try { out = await handleBookPage(new URL(request.url), env); }
+      catch (e) { console.error("book/page:", e && e.message); out = [500, null, "error"]; }
+      const h = Object.assign({}, corsHeaders(origin));
+      if (out[0] === 200) {
+        h["Content-Type"] = "image/jpeg";
+        h["Cache-Control"] = "private, max-age=86400";
+        if (out[1].httpEtag) h["ETag"] = out[1].httpEtag;
+        return new Response(out[1].body, { status: 200, headers: h });
+      }
+      h["Content-Type"] = "application/json";
+      h["Cache-Control"] = "no-store";
+      return new Response(JSON.stringify({ code: out[2] }), { status: out[0], headers: h });
+    }
+
     if (request.method !== "POST") {
       return jsonError(405, "Método no permitido. Usa POST.", origin);
     }
@@ -430,6 +454,64 @@ export default {
     }
 
     const path = new URL(request.url).pathname;
+    if (path === "/doc/get") {
+      const ipD = ipBucket(request.headers.get("CF-Connecting-IP"));
+      let db;
+      try {
+        const t = await request.text();
+        if (t.length > 8000) return jsonError(413, "Petición demasiado grande.", origin);
+        db = JSON.parse(t);
+      } catch (e) {
+        return jsonError(400, "Cuerpo JSON inválido.", origin);
+      }
+      if (!db || typeof db !== "object") return jsonError(400, "Cuerpo JSON inválido.", origin);
+      let out;
+      try {
+        out = await handleDocGet(db, env,
+          (key, perMin, perDay) => rateHit(env, key + ":" + ipRateKey(ipD), perMin, perDay),
+          (name) => limitOf(env, name));
+      } catch (e) {
+        console.error("doc/get:", e && e.message);
+        out = [500, { error: "Error del servidor de documentos.", code: "error" }];
+      }
+      if (out[0] === 200) {
+        return new Response(out[1].body, {
+          status: 200,
+          headers: Object.assign({ "Content-Type": "text/html; charset=utf-8", "Cache-Control": "no-store" }, corsHeaders(origin))
+        });
+      }
+      return new Response(JSON.stringify(out[1]), {
+        status: out[0],
+        headers: Object.assign({ "Content-Type": "application/json", "Cache-Control": "no-store" }, corsHeaders(origin))
+      });
+    }
+
+    if (path === "/book/open") {
+      const ipB = ipBucket(request.headers.get("CF-Connecting-IP"));
+      let bb;
+      try {
+        const t = await request.text();
+        if (t.length > 8000) return jsonError(413, "Petición demasiado grande.", origin);
+        bb = JSON.parse(t);
+      } catch (e) {
+        return jsonError(400, "Cuerpo JSON inválido.", origin);
+      }
+      if (!bb || typeof bb !== "object") return jsonError(400, "Cuerpo JSON inválido.", origin);
+      let out;
+      try {
+        out = await handleBookOpen(bb, env,
+          (key, perMin, perDay) => rateHit(env, key + ":" + ipRateKey(ipB), perMin, perDay),
+          (name) => limitOf(env, name));
+      } catch (e) {
+        console.error("book/open:", e && e.message);
+        out = [500, { error: "Error del servidor de libros.", code: "error" }];
+      }
+      return new Response(JSON.stringify(out[1]), {
+        status: out[0],
+        headers: Object.assign({ "Content-Type": "application/json", "Cache-Control": "no-store" }, corsHeaders(origin))
+      });
+    }
+
     if (path.indexOf("/exam/") === 0) {
       const ipE = ipBucket(request.headers.get("CF-Connecting-IP"));
       let eb;
