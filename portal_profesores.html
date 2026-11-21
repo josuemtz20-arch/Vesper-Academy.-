@@ -387,7 +387,7 @@ footer a:hover{text-decoration:underline;}
     <p>Tus clases, calificaciones, manuales y herramientas de evaluación.</p>
   </div>
 
-  <!-- MIS CLASES (Google Meet) — se llena desde teachers/{correo}.classes -->
+  <!-- MIS CLASES (Google Meet) — se llena desde los grupos del profesor (teachers/{correo}.groups → groups/{id}); .classes queda de respaldo -->
   <section class="myclasses" id="myclasses" hidden aria-labelledby="mc-title">
     <div class="block-h"><h2 id="mc-title">Mis clases</h2></div>
     <div class="mc-grid" id="mc-grid"></div>
@@ -696,6 +696,53 @@ footer a:hover{text-decoration:underline;}
     }catch(e){}
     return out;
   }
+  /* Modelo de escuela: las clases del profesor son sus grupos
+     (teachers/{correo}.groups → groups/{id}: nombre, horario y meetUrl).
+     Horario ["lun 17:00-18:00", ...] → "Lun a vie · 5–6 pm". */
+  var DAYS=["lun","mar","mie","jue","vie","sab","dom"];
+  function h12(hm){
+    var p=String(hm).split(":"), h=+p[0], m=p[1]||"00";
+    return {s:(h%12||12)+(m!=="00"?":"+m:""), ap:h<12?"am":"pm"};
+  }
+  function schedLabel(list){
+    var days=[], times={};
+    list.forEach(function(e){
+      var m=String(e).trim().toLowerCase().replace("é","e").match(/^(\w+)\s+(\d{1,2}:\d{2})-(\d{1,2}:\d{2})$/);
+      if(!m) return;
+      days.push(m[1]); times[m[2]+"-"+m[3]]=[m[2],m[3]];
+    });
+    var keys=Object.keys(times);
+    if(!days.length || keys.length!==1) return "";
+    var a=h12(times[keys[0]][0]), b=h12(times[keys[0]][1]);
+    var hrs = a.ap===b.ap ? (a.s+"–"+b.s+" "+b.ap) : (a.s+" "+a.ap+"–"+b.s+" "+b.ap);
+    var idx=days.map(function(d){ return DAYS.indexOf(d.slice(0,3)); }).sort(function(x,y){return x-y;});
+    var run = idx[0]>=0 && idx.every(function(v,i){ return i===0 || v===idx[i-1]+1; });
+    var cap=function(s){ return s.charAt(0).toUpperCase()+s.slice(1); };
+    var d = (run && idx.length>2) ? (cap(DAYS[idx[0]])+" a "+DAYS[idx[idx.length-1]]) : days.map(cap).join(", ");
+    return d.replace(/mie/g,"mié").replace(/Mie/g,"Mié").replace(/sab/g,"sáb").replace(/Sab/g,"Sáb")+" · "+hrs;
+  }
+  function fromGroups(ids, token){
+    return Promise.all(ids.map(function(gid){
+      var url="https://firestore.googleapis.com/v1/projects/"+pid+"/databases/"+db+
+              "/documents/groups/"+encodeURIComponent(gid);
+      return fetch(url,{headers:{Authorization:"Bearer "+token}})
+        .then(function(r){ return r.status===200 ? r.json() : null; })
+        .then(function(g){
+          if(!g||!g.fields) return null;
+          var f=g.fields, st=(f.status&&f.status.stringValue)||"";
+          if(st && st!=="active") return null;
+          var sched=((f.schedule&&f.schedule.arrayValue&&f.schedule.arrayValue.values)||[])
+                      .map(function(v){ return v.stringValue||""; });
+          var first=(String(sched[0]||"").match(/(\d{1,2}):(\d{2})/)||[0,99,0]);
+          return { name:((f.name&&f.name.stringValue)||gid).split(" · ").slice(0,2).join(" · "),
+                   label:schedLabel(sched)||"Diario",
+                   meetUrl:(f.meetUrl&&f.meetUrl.stringValue)||"",
+                   sort:(+first[1])*60+(+first[2]) };
+        }, function(){ return null; });
+    })).then(function(list){
+      return list.filter(Boolean).sort(function(a,b){ return a.sort-b.sort; });
+    });
+  }
   function render(classes){
     var grid=document.getElementById("mc-grid"), sec=document.getElementById("myclasses");
     if(!grid||!sec||!classes.length) return;
@@ -704,7 +751,7 @@ footer a:hover{text-decoration:underline;}
       var card=document.createElement("div"); card.className="mc-card";
       var url=/^https:\/\//i.test(c.meetUrl||"")?c.meetUrl:"";
       card.innerHTML='<div class="mc-info"><b>'+esc(c.name||"Clase")+'</b>'+
-        '<span>'+esc(c.time?("Diario · "+c.time):"Diario")+'</span></div>'+
+        '<span>'+esc(c.label || (c.time?("Diario · "+c.time):"Diario"))+'</span></div>'+
         (url?'<a class="mc-join" href="'+esc(url)+'" target="_blank" rel="noopener">Entrar a la clase</a>'
             :'<span class="mc-nolink">Sin link</span>');
       grid.appendChild(card);
@@ -737,12 +784,21 @@ footer a:hover{text-decoration:underline;}
           }
         }
       }catch(e){}
+      var tok="";
       user.getIdToken().then(function(token){
+        tok=token;
         var url="https://firestore.googleapis.com/v1/projects/"+pid+"/databases/"+db+
                 "/documents/teachers/"+encodeURIComponent(email);
         return fetch(url,{headers:{Authorization:"Bearer "+token}});
       }).then(function(r){ return r&&r.status===200 ? r.json() : null; })
-        .then(function(doc){ if(doc) render(parseClasses(doc)); })
+        .then(function(doc){
+          if(!doc) return;
+          var legacy=function(){ render(parseClasses(doc)); };
+          var ids=[];
+          try{ ids=(doc.fields.groups.arrayValue.values||[]).map(function(v){ return v.stringValue||""; }); }catch(e){}
+          if(!ids.length) return legacy();
+          fromGroups(ids, tok).then(function(list){ list.length ? render(list) : legacy(); }, legacy);
+        })
         .catch(function(){});
     });
   }).catch(function(){});
