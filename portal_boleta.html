@@ -271,6 +271,40 @@ textarea.notes:focus{border-color:var(--gold);outline:none;box-shadow:0 0 0 3px 
 .toast.show{display:block}
 footer{background:var(--night);color:rgba(255,255,255,.55);text-align:center;padding:22px 16px;font-size:.78rem;border-top:3px solid var(--gold)}
 footer a{color:var(--gold);text-decoration:none}
+/* MES = CICLO (2026-11-21): la barra del mes, el historial y la matrícula */
+.monthbar{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:8px 12px;margin:0 0 12px}
+.monthbar label{font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.monthbar select{appearance:none;-webkit-appearance:none;flex:1 1 220px;min-width:0;max-width:360px;min-height:44px;border:1.5px solid var(--line2);border-radius:12px;padding:0 36px 0 12px;font:700 .92rem Inter,sans-serif;color:var(--ink);background:var(--cream) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23C9A84C' stroke-width='2'/%3E%3C/svg%3E") no-repeat right 12px center;cursor:pointer}
+.monthbar select:focus{border-color:var(--gold);outline:none;box-shadow:0 0 0 3px rgba(201,168,76,.3)}
+.monthbar .mb-note{font-size:.76rem;color:var(--muted);flex:1 1 200px}
+.monthbar .mb-note b{color:var(--ink)}
+.mat{font-size:.68rem;font-weight:700;letter-spacing:.04em;color:var(--muted);font-variant-numeric:tabular-nums;white-space:nowrap}
+.mat.none{font-weight:500;font-style:italic;opacity:.75}
+.htable{width:100%;border-collapse:collapse;font-size:.8rem;font-variant-numeric:tabular-nums}
+.htable th{font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700;text-align:center;padding:4px 4px 6px;border-bottom:1px solid var(--line)}
+.htable th:first-child,.htable td:first-child{text-align:left}
+.htable td{text-align:center;padding:7px 4px;border-bottom:1px solid var(--line);color:var(--ink)}
+.htable td small{display:block;font-size:.66rem;color:var(--muted);font-weight:500}
+.htable tr.cur td{background:color-mix(in srgb,var(--gold) 14%,transparent)}
+.htable td b{font-family:Fraunces,serif;font-size:.98rem}
+.htable .g-g{color:var(--ok-ink)}.htable .g-b{color:var(--bad-ink)}
+.hempty{font-size:.8rem;color:var(--muted);margin:0}
+.bmode{display:inline-flex;border:1.5px solid var(--line2);border-radius:999px;overflow:hidden}
+.bmode button{appearance:none;border:0;background:var(--paper);min-height:40px;padding:0 14px;font-weight:700;font-size:.8rem;cursor:pointer;color:var(--ink)}
+.bmode button[aria-pressed=true]{background:var(--gold);color:var(--night)}
+.hgrid{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);overflow-x:auto;-webkit-overflow-scrolling:touch}
+.hgrid table{border-collapse:collapse;min-width:100%;font-size:.82rem;font-variant-numeric:tabular-nums}
+.hgrid th,.hgrid td{padding:9px 10px;border-top:1px solid var(--line);text-align:center;white-space:nowrap}
+.hgrid thead th{border-top:0;background:var(--tint,#f6f1e4);font-size:.64rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.hgrid thead th small{display:block;letter-spacing:0;text-transform:none;font-weight:500}
+.hgrid th.nm,.hgrid td.nm{text-align:left;position:sticky;left:0;background:var(--paper);z-index:1;max-width:190px;overflow:hidden;text-overflow:ellipsis}
+.hgrid thead th.nm{background:var(--tint,#f6f1e4)}
+.hgrid td.nm b{display:block;font-weight:600;overflow:hidden;text-overflow:ellipsis}
+.hgrid td b{font-family:Fraunces,serif;font-size:1rem}
+.hgrid td small{display:block;font-size:.62rem;color:var(--muted)}
+.hgrid td.cur,.hgrid th.cur{background:color-mix(in srgb,var(--gold) 12%,transparent)}
+.hgrid .g-g{color:var(--ok-ink)}.hgrid .g-b{color:var(--bad-ink)}
+.hgrid .dash{color:var(--muted)}
 </style>
 <link rel="stylesheet" href="assets/css/vesper_tokens.css">
 <!-- ===== ASPECTO DE LA BOLETA (2026-11-20) =====
@@ -706,6 +740,11 @@ footer a{color:var(--gold-ink)}
 
 <div class="wrap">
   <div id="warn" class="notice" hidden></div>
+  <div class="monthbar">
+    <label for="cyc">Mes</label>
+    <select id="cyc" aria-describedby="cyc-note"></select>
+    <span class="mb-note" id="cyc-note"></span>
+  </div>
   <section id="v-class" role="tabpanel" aria-labelledby="t-class">
     <div class="dayrow">
       <button class="ibtn" id="d-prev" aria-label="Clase anterior">‹</button>
@@ -752,7 +791,9 @@ footer a{color:var(--gold-ink)}
     <div class="gpick" id="b-gpick" role="group" aria-label="Grupo"></div>
     <div class="bhead">
       <h1>Boleta · <span id="b-grp"></span></h1>
+      <span class="bmode" role="group" aria-label="Qué ver"><button id="bm-month" aria-pressed="true">Este mes</button><button id="bm-hist" aria-pressed="false">Historial</button></span>
       <button class="btn" id="b-paste">Pegar desde Excel</button>
+      <button class="btn" id="b-csv" hidden><i class="fas fa-download"></i> Descargar CSV</button>
     </div>
     <div class="paste" id="pastebox">
       <b style="font-size:.9rem">Pega la columna del examen final</b>
@@ -761,8 +802,12 @@ footer a{color:var(--gold-ink)}
       <div class="pv" id="p-prev"></div>
       <div class="row"><button class="btn gold" id="p-apply" disabled>Guardar</button><button class="btn" id="p-cancel">Cancelar</button></div>
     </div>
-    <p class="tip">Escribe el examen final y da <b>Enter</b>: baja solo al siguiente alumno. «Clase» es el promedio de sus notas diarias; cada FALTA vale 0. Calificación = Clase 60 % · Examen final 40 % (sin final es un avance con Clase al 100 %). Se aprueba con 70.</p>
+    <p class="tip" id="b-tip">Escribe el examen final y da <b>Enter</b>: baja solo al siguiente alumno. «Clase» es el promedio de sus notas diarias; cada FALTA vale 0. Calificación = Clase 60 % · Examen final 40 % (sin final es un avance con Clase al 100 %). Se aprueba con 70.</p>
     <div class="btable" id="btable"></div>
+    <div id="hview" hidden>
+      <p class="tip">Historial académico del grupo: la calificación de cada alumno en cada mes (ciclo de 20 clases). Toca un mes en la barra de arriba para verlo o corregirlo. «·» = sin datos ese mes.</p>
+      <div class="hgrid" id="hgrid"></div>
+    </div>
   </section>
 </div>
 </div>
@@ -780,7 +825,7 @@ footer a{color:var(--gold-ink)}
 
 <script src="vesper_path.js"></script>
 <script src="vesper_results.js"></script>
-<script src="vesper_gradebook.js?v=20261120"></script>
+<script src="vesper_gradebook.js?v=20261121"></script>
 <script>
 (function () {
   "use strict";
@@ -822,8 +867,8 @@ footer a{color:var(--gold-ink)}
   var canSave = false, canDaily = false;
   var day = Math.max(1, CLOCK.day || 1);
   var grp = null, view = "class", cur = -1, lastScore = {}, justFinished = false;
-  var taps = {};            // sid|día -> {punto: [valor de cada ✗]} para deshacer exacto
-  var bgrp = null;
+  var taps = {};            // sid|ciclo|día -> {punto: [valor de cada ✗]} para deshacer exacto
+  var bgrp = null, bmode = "month";
 
   function showMsg(html, bad) {
     $("loading").hidden = true; $("content").hidden = true; $("msgwrap").hidden = false;
@@ -910,16 +955,22 @@ footer a{color:var(--gold-ink)}
   }
   function flushDaily(r) {
     clearTimeout(dTimers[r.sid]); delete dTimers[r.sid];
-    var rec = dailyMap[r.sid]; if (!rec) return;
-    var snap = JSON.stringify(rec.days);
-    GB.saveDaily(r.sid, { days: rec.days, alias: r.alias, studentUid: r.studentUid }).then(function (ok) {
-      if (dTimers[r.sid] || JSON.stringify(rec.days) !== snap) return;   // hubo más cambios: los guarda su turno
+    var rec = dailyMap[r.sid]; if (!rec || !rec.days) return;
+    var days = rec.days, cid = GB.cycleId(), snap = JSON.stringify(days);
+    GB.saveDaily(r.sid, { days: days, alias: r.alias, studentUid: r.studentUid, group: r.group, levelName: r.levelName }, cid).then(function (ok) {
+      if (dTimers[r.sid] || JSON.stringify(days) !== snap) return;   // hubo más cambios: los guarda su turno
       dState[r.sid] = ok ? "ok" : "err"; paintSave(r.sid);
     });
   }
-  function queueGrade(r, field, value) {
+  /* se guarda SIEMPRE el par examen final + comentario del mes en que se
+     escribió (cid), con su foto de grupo y nivel para el historial */
+  function queueGrade(r) {
     if (!canSave || !r.sid) return;
-    (gPending[r.sid] || (gPending[r.sid] = {}))[field] = value;
+    var cid = GB.cycleId();
+    if (gPending[r.sid] && gPending[r.sid].cid !== cid) flushGrade(r);   // lo de otro mes, primero
+    var e = r.cycles[cid] || (r.cycles[cid] = {});
+    e.finalExam = r.finalExam; e.notes = r.notes; e.group = r.group; e.levelName = r.levelName;
+    gPending[r.sid] = { cid: cid, finalExam: r.finalExam, notes: r.notes || "" };
     gState[r.sid] = "saving"; paintSave(r.sid);
     clearTimeout(gTimers[r.sid]);
     gTimers[r.sid] = setTimeout(function () { flushGrade(r); }, 800);
@@ -928,14 +979,11 @@ footer a{color:var(--gold-ink)}
     clearTimeout(gTimers[r.sid]); delete gTimers[r.sid];
     var data = gPending[r.sid]; if (!data) return;
     delete gPending[r.sid];
-    var payload = { alias: r.alias, studentUid: r.studentUid };
-    Object.keys(data).forEach(function (k) { payload[k] = data[k]; });
-    GB.saveGrade(r.sid, payload).then(function (ok) {
-      if (!ok) {   /* lo no guardado vuelve a la cola: viaja con el siguiente cambio */
-        var newer = gPending[r.sid] || {};
-        Object.keys(data).forEach(function (k) { if (!(k in newer)) newer[k] = data[k]; });
-        gPending[r.sid] = newer;
-      }
+    var payload = { alias: r.alias, studentUid: r.studentUid, finalExam: data.finalExam, notes: data.notes,
+                    group: r.group || "", levelName: r.levelName || "" };
+    GB.saveGrade(r.sid, payload, data.cid).then(function (ok) {
+      /* lo no guardado vuelve a la cola (si no hay algo más nuevo): viaja con el siguiente cambio */
+      if (!ok && !gPending[r.sid]) gPending[r.sid] = data;
       if (gTimers[r.sid]) return;
       gState[r.sid] = ok ? "ok" : "err"; paintSave(r.sid);
     });
@@ -952,13 +1000,14 @@ footer a{color:var(--gold-ink)}
     var date = DATES[day - 1], tag = date === CLOCK.today ? " · hoy" : (date > CLOCK.today ? " · próxima" : "");
     $("d-title").innerHTML = "Clase " + day + esc(tag) + "<small>" + esc(GB.fmtDay(date)) + "</small>";
     $("d-prev").disabled = day <= 1; $("d-next").disabled = day >= N;
-    var txt = "Ciclo del " + GB.fmtDay(CLOCK.start) + " al " + GB.fmtDay(CLOCK.end) + " · " + N + " clases.";
+    var txt = "";
     if (!CLOCK.started) {
       var left = Math.round((new Date(CLOCK.start + "T00:00:00") - new Date(CLOCK.today + "T00:00:00")) / 86400000);
-      txt += " El curso inicia en " + left + " día" + (left === 1 ? "" : "s") + ".";
-    } else if (CLOCK.ended) txt += " El ciclo ya terminó.";
-    else if (!CLOCK.isClassDay) txt += " Hoy no hay clase (la última fue la " + CLOCK.day + ").";
-    $("cycle").textContent = txt;
+      txt = "Este mes empieza en " + left + " día" + (left === 1 ? "" : "s") + ".";
+    } else if (CLOCK.ended) txt = "Este mes ya terminó: puedes corregir sus clases y su examen final.";
+    else if (!CLOCK.isClassDay) txt = "Hoy no hay clase (la última fue la " + CLOCK.day + ").";
+    $("cycle").textContent = txt; $("cycle").hidden = !txt;
+    renderMonthBar();
   }
   function renderGroups() {
     var all = roster.filter(function (r) { return r.sid; }), rv = all.filter(function (r) { return reviewed(r); }).length;
@@ -1012,7 +1061,7 @@ footer a{color:var(--gold-ink)}
       var c = cellOf(r), rv = reviewed(r), ds = rv ? dayScore(r) : null, gr = gradeOf(r);
       var tag = !rv ? '<span class="tag todo">Pendiente</span>' : '<span class="tag ok">✓ Revisado</span>';
       return '<button class="srow" data-i="' + i + '"' + (i === cur ? ' aria-current="true"' : '') + '><span class="ini">' + esc(ini(r.name)) + '</span>' +
-        '<span class="nm"><b>' + esc(r.name) + '</b>' + (gr.alerts.length ? '<small class="al">' + esc(gr.alerts[0]) + '</small>' : '<small>Avance del curso ' + (gr.grade != null ? gr.grade : "–") + '</small>') + '</span>' +
+        '<span class="nm"><b>' + esc(r.name) + '</b>' + (gr.alerts.length ? '<small class="al">' + esc(gr.alerts[0]) + '</small>' : '<small>' + (r.matricula ? esc(r.matricula) + ' · ' : '') + 'Avance del mes ' + (gr.grade != null ? gr.grade : "–") + '</small>') + '</span>' +
         '<span class="sc">' + (rv && absent(c) ? '<b class="falta">FALTA</b>' : '<b class="' + (ds != null ? tone(ds) + (ds === DAY_MAX ? " s-full" : "") : "") + '">' + (ds != null ? ds : "–") + '</b>') +
         tag + '<span class="sv" data-sv="' + esc(r.sid) + '">' + svHtml(stateOf(r.sid)) + '</span></span></button>';
     }).join("");
@@ -1046,14 +1095,15 @@ footer a{color:var(--gold-ink)}
   }
   function closePanel() { $("panelhost").classList.remove("open"); document.body.classList.remove("lock"); document.body.classList.remove("popen"); if (!desk.matches) cur = -1; }
   function ensure(r) {
-    var rec = dailyMap[r.sid] || (dailyMap[r.sid] = { sid: r.sid, days: {} });
+    var rec = dailyMap[r.sid] || (dailyMap[r.sid] = { sid: r.sid, cycles: {} });
+    if (!rec.days) rec.days = GB.daysFor(rec, GB.cycleId());
     var c = rec.days[day] || (rec.days[day] = GB.newDay());
     c.x = c.x || {}; c.dp = c.dp || {};
     return c;
   }
-  function tk(r) { var k = r.sid + "|" + day; return taps[k] || (taps[k] = {}); }
+  function tk(r) { var k = r.sid + "|" + GB.cycleId() + "|" + day; return taps[k] || (taps[k] = {}); }
   function avanceText(gr) {
-    return "Avance del curso: " + (gr.grade != null ? gr.grade : "–") +
+    return "Avance del mes: " + (gr.grade != null ? gr.grade : "–") +
       (gr.closed ? (gr.passed ? " · aprobado" : " · reprobado") : (gr.grade != null ? " (sin examen final)" : ""));
   }
   var LEGACY_LBL = { quiz1: "Parcial 1", quiz2: "Parcial 2", quiz3: "Parcial 3", examsGrade: "Exámenes", lessonsGrade: "Lecciones", participacion: "Participación" };
@@ -1064,7 +1114,7 @@ footer a{color:var(--gold-ink)}
       return;
     }
     var c = cellOf(r), abs = absent(c), ds = GB.dayScore(c), gr = gradeOf(r), ro = !canDaily;
-    var key = r.sid + "|" + day, prev = lastScore[key], anim = (prev != null && ds != null && ds !== prev) ? (ds < prev ? "down" : "up") : "";
+    var key = r.sid + "|" + GB.cycleId() + "|" + day, prev = lastScore[key], anim = (prev != null && ds != null && ds !== prev) ? (ds < prev ? "down" : "up") : "";
     lastScore[key] = ds;
     var done = st.filter(function (x) { return reviewed(x); }).length, min = MIN();
     var sv = ' <span class="sv" data-sv="' + esc(r.sid) + '">' + svHtml(stateOf(r.sid)) + '</span>';
@@ -1077,7 +1127,7 @@ footer a{color:var(--gold-ink)}
     if (min) {
       /* C «Claro y rápido»: una barra fija con quién es y el número de hoy */
       h = '<div class="pstick"><div class="pwho"><button class="close" data-act="close" aria-label="Volver a la lista">‹ Lista</button>' +
-        '<div class="nm"><h2>' + esc(r.name) + '</h2><div class="sub">' + (cur + 1) + ' de ' + st.length + ' · ' + (reviewed(r) ? "revisado" : "pendiente") + sv + '</div></div>' +
+        '<div class="nm"><h2>' + esc(r.name) + '</h2><div class="sub">' + matHtml(r) + ' · ' + (cur + 1) + ' de ' + st.length + ' · ' + (reviewed(r) ? "revisado" : "pendiente") + sv + '</div></div>' +
         '<div class="dayscore" role="status" aria-label="Clase ' + day + ': ' + (abs ? "FALTA" : ds + " de 100") + '">' +
         (abs ? '<span class="num falta">FALTA</span>' : '<span class="num ' + anim + '">' + ds + '</span><span class="of">/100</span>') + dlt + '</div></div>' +
         '<p class="pav" id="pv-avance">' + esc(avanceText(gr)) + '</p>' + pbar + '</div>';
@@ -1088,7 +1138,7 @@ footer a{color:var(--gold-ink)}
       var DC = 2 * Math.PI * 52, offOf = function (v) { return (DC * (1 - Math.max(0, v) / DAY_MAX)).toFixed(1); }, xsHtml = "";
       if (!abs && c && c.x) POINTS.forEach(function (p) { if (c.x[p.key] && p.key !== ABSENT_KEY) xsHtml += '<span>✗ ' + esc(p.label) + ' −' + ((c.dp && c.dp[p.key]) || 0) + '</span>'; });
       h = '<div class="pstick"><div class="pwho"><button class="close" data-act="close" aria-label="Volver a la lista">‹ Lista</button><span class="ini">' + esc(ini(r.name)) + '</span>' +
-        '<div class="nm"><h2>' + esc(r.name) + '</h2><div class="sub">Alumno ' + (cur + 1) + ' de ' + st.length + ' · ' + (reviewed(r) ? "revisado" : "pendiente") + sv + '</div></div>' +
+        '<div class="nm"><h2>' + esc(r.name) + '</h2><div class="sub">' + matHtml(r) + ' · Alumno ' + (cur + 1) + ' de ' + st.length + ' · ' + (reviewed(r) ? "revisado" : "pendiente") + sv + '</div></div>' +
         '<div class="mring' + (abs ? " is-falta" : "") + '"><svg viewBox="0 0 120 120" aria-hidden="true">' +
         '<defs><linearGradient id="dgrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f3e2ab"/><stop offset="1" stop-color="#C9A84C"/></linearGradient></defs>' +
         '<circle class="dtrack" cx="60" cy="60" r="52"/>' +
@@ -1123,6 +1173,7 @@ footer a{color:var(--gold-ink)}
     var stt = GB.dailyStats(daysOf(r));
     h += '<div class="sec"><h3>Clase por clase <span class="kh">promedio ' + (stt.clase != null ? stt.clase : "–") + '</span></h3>' +
       GB.historyHtml(daysOf(r), { cur: day, upTo: Math.max(day, CLOCK.day) }) + '</div>';
+    h += '<div class="sec"><h3>Historial académico <span class="kh">un renglón por mes</span></h3>' + histHtml(r) + '</div>';
     var last = cur >= st.length - 1;
     h += '<div class="nav"><button class="nbtn" data-act="prev" aria-label="Alumno anterior"' + (cur === 0 ? " disabled" : "") + '>‹ Anterior</button>' +
       '<button class="nbtn go" data-act="next">' + (last ? "Terminar grupo ✓" : "Siguiente alumno ›") + '</button></div>' +
@@ -1176,13 +1227,13 @@ footer a{color:var(--gold-ink)}
     else if (/^\d{1,3}$/.test(raw) && +raw <= 100) v = +raw;
     else { inp.classList.add("bad"); return false; }
     inp.classList.remove("bad");
-    if (r.finalExam !== v) { r.finalExam = v; queueGrade(r, "finalExam", v); }
+    if (r.finalExam !== v) { r.finalExam = v; queueGrade(r); }
     var av = $("pv-avance"); if (av) av.textContent = avanceText(gradeOf(r)); renderList();
     return true;
   }
   $("panel").addEventListener("input", function (e) {
     if (e.target.id === "ex-final") setExam(e.target);
-    else if (e.target.id === "ex-notes") { var r = cs(); if (r && canSave) { r.notes = e.target.value.slice(0, 500); queueGrade(r, "notes", r.notes); } }
+    else if (e.target.id === "ex-notes") { var r = cs(); if (r && canSave) { r.notes = e.target.value.slice(0, 500); queueGrade(r); } }
   });
   $("panel").addEventListener("keydown", function (e) {
     if (e.target.id !== "ex-final" || e.key !== "Enter") return;
@@ -1259,13 +1310,17 @@ footer a{color:var(--gold-ink)}
     if (!list.length) h += '<div class="brow empty0">' + (GROUPS.length ? "Este grupo aún no tiene alumnos." : "Aún no tienes alumnos asignados.") + '</div>';
     list.forEach(function (r, i) {
       var gr = gradeOf(r);
-      h += '<div class="brow"><span class="nm">' + esc(r.name) + ' <span class="sv" data-sv="' + esc(r.sid) + '">' + svHtml(stateOf(r.sid)) + '</span></span>' +
+      h += '<div class="brow"><span class="nm">' + esc(r.name) + ' ' + matHtml(r) + ' <span class="sv" data-sv="' + esc(r.sid) + '">' + svHtml(stateOf(r.sid)) + '</span></span>' +
         '<span class="v">' + (gr.clase != null ? gr.clase : "·") + '</span>' +
         '<span class="v act"><input inputmode="numeric" enterkeyhint="next" maxlength="3" data-sid="' + esc(r.sid) + '" data-i="' + i + '" value="' + (r.finalExam != null ? r.finalExam : "") + '" aria-label="' + esc("Examen final de " + r.name) + '"' + (canSave ? "" : " disabled") + '></span>' +
         '<span class="avc" id="av-' + esc(r.sid) + '"></span></div>';
     });
     $("btable").innerHTML = h;
     list.forEach(updateAvance);
+    var hist = bmode === "hist";
+    $("btable").hidden = hist; $("hview").hidden = !hist; $("b-tip").hidden = hist;
+    $("b-paste").hidden = hist; $("b-csv").hidden = !hist;
+    if (hist) { closePaste(); renderHistGrid(); }
   }
   function updateAvance(r) {
     var g = gradeOf(r), el = document.getElementById("av-" + r.sid); if (!el) return;
@@ -1281,7 +1336,7 @@ footer a{color:var(--gold-ink)}
     else { inp.classList.add("bad"); return false; }
     inp.classList.remove("bad");
     if (r.finalExam !== v) {
-      r.finalExam = v; queueGrade(r, "finalExam", v);
+      r.finalExam = v; queueGrade(r);
       if (v != null) { inp.classList.add("saved"); setTimeout(function () { inp.classList.remove("saved"); }, 700); }
     }
     updateAvance(r); return true;
@@ -1340,13 +1395,119 @@ footer a{color:var(--gold-ink)}
   $("p-cancel").addEventListener("click", closePaste);
   $("p-apply").addEventListener("click", function () {
     var n = pastePlan.length;
-    pastePlan.forEach(function (p) { p.r.finalExam = p.v; queueGrade(p.r, "finalExam", p.v); });
+    pastePlan.forEach(function (p) { p.r.finalExam = p.v; queueGrade(p.r); });
     closePaste(); renderBook(); toast("Guardaste " + n + " calificaciones.");
   });
+
+  /* ================= MES (= ciclo de 20 clases) E HISTORIAL ================= */
+  function matHtml(r) {
+    return r.matricula ? '<span class="mat" title="Matrícula">' + esc(r.matricula) + '</span>' : '<span class="mat none">sin matrícula</span>';
+  }
+  /* meses que se pueden abrir: todos hasta el actual + el siguiente (para preparar) */
+  function monthOptions() {
+    var list = GB.cycles(), now = GB.currentCycleId(), out = [];
+    for (var i = 0; i < list.length; i++) {
+      out.push(list[i]);
+      if (list[i].id === now) { if (list[i + 1]) out.push(list[i + 1]); break; }
+    }
+    return out;
+  }
+  function renderMonthBar() {
+    var now = GB.currentCycleId(), sel = GB.cycleId();
+    $("cyc").innerHTML = monthOptions().map(function (c) {
+      return '<option value="' + esc(c.id) + '"' + (c.id === sel ? " selected" : "") + '>' + esc(c.label) + (c.id === now ? " · actual" : "") + '</option>';
+    }).join("");
+    $("cyc-note").innerHTML = '<b>' + N + ' clases</b> · del ' + esc(GB.fmtDay(CLOCK.start)) + ' al ' + esc(GB.fmtDay(CLOCK.end));
+  }
+  /* cambia TODO a otro mes: fechas, clase del día, examen final y comentario */
+  function applyCycle(cid) {
+    cid = GB.setCycle(cid);
+    N = GB.COURSE_DAYS; DATES = GB.classDates(); CLOCK = GB.courseClock();
+    day = Math.max(1, CLOCK.day || 1);
+    roster.forEach(function (r) {
+      var e = r.cycles[cid] || {};
+      r.finalExam = e.finalExam != null ? e.finalExam : null;
+      r.notes = e.notes || "";
+    });
+    Object.keys(dailyMap).forEach(function (sid) { dailyMap[sid].days = GB.daysFor(dailyMap[sid], cid); });
+  }
+  $("cyc").addEventListener("change", function () {
+    flushAll();                       // lo pendiente se guarda en SU mes antes de cambiar
+    applyCycle(this.value);
+    toast("Ahora ves " + GB.cycle().label + ".");
+    setView(view);
+  });
+  function histRows(r) { return GB.history({ cycles: r.cycles }, dailyMap[r.sid]); }
+  function gradeCell(g) {
+    if (g.grade == null) return '<span class="dash">·</span>';
+    var cls = g.closed ? (g.passed ? "g-g" : "g-b") : (g.atRisk ? "g-b" : "");
+    return '<b class="' + cls + '">' + g.grade + '</b><small>' + (g.closed ? (g.passed ? "aprobó" : "reprobó") : "avance") + '</small>';
+  }
+  /* panel del alumno: un renglón por mes */
+  function histHtml(r) {
+    var rows = histRows(r), sel = GB.cycleId();
+    if (!rows.length) return '<p class="hempty">Aún no tiene meses calificados. Cada mes que revises aparece aquí.</p>';
+    return '<table class="htable"><thead><tr><th>Mes</th><th>Clase</th><th>Final</th><th>Calif.</th><th>Asist.</th></tr></thead><tbody>' +
+      rows.map(function (h) {
+        var sub = [h.name, h.levelName, h.group ? "grupo " + h.group : ""].filter(Boolean).join(" · ");
+        return '<tr' + (h.id === sel ? ' class="cur"' : '') + '><td>' + esc(h.month) + '<small>' + esc(sub) + '</small></td>' +
+          '<td>' + (h.stats.clase != null ? h.stats.clase : "·") + '</td><td>' + (h.finalExam != null ? h.finalExam : "·") + '</td>' +
+          '<td>' + gradeCell(h.grade) + '</td><td>' + (h.stats.attPct != null ? h.stats.attPct + "%" : "·") + '</td></tr>';
+      }).join("") + '</tbody></table>';
+  }
+  /* boleta → Historial: alumnos × meses del grupo (los meses con algún dato + el elegido) */
+  function renderHistGrid() {
+    var list = bList(), sel = GB.cycleId(), seen = {};
+    if (!list.length) { $("hgrid").innerHTML = '<p class="hempty" style="padding:16px">Este grupo aún no tiene alumnos.</p>'; return; }
+    list.forEach(function (r) { histRows(r).forEach(function (h) { seen[h.id] = 1; }); });
+    seen[sel] = 1;
+    var cols = GB.cycles().filter(function (c) { return seen[c.id]; });
+    var h = '<table><thead><tr><th class="nm">Alumno</th>' + cols.map(function (c) {
+      return '<th' + (c.id === sel ? ' class="cur"' : '') + '>' + esc(c.month) + '<small>' + esc(c.name) + '</small></th>';
+    }).join("") + '</tr></thead><tbody>';
+    list.forEach(function (r) {
+      var by = {}; histRows(r).forEach(function (x) { by[x.id] = x; });
+      h += '<tr><td class="nm"><b>' + esc(r.name) + '</b>' + matHtml(r) + '</td>' + cols.map(function (c) {
+        var x = by[c.id];
+        return '<td' + (c.id === sel ? ' class="cur"' : '') + '>' + (x ? gradeCell(x.grade) : '<span class="dash">·</span>') + '</td>';
+      }).join("") + '</tr>';
+    });
+    $("hgrid").innerHTML = h + '</tbody></table>';
+  }
+  function csvCell(v) { v = v == null ? "" : String(v); return /[",;\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; }
+  /* un renglón por alumno y mes: el registro para el expediente */
+  function downloadCsv() {
+    var list = bList(), g = G(bgrp);
+    var out = [["Matrícula", "Alumno", "Mes", "Ciclo", "Inicio", "Fin", "Nivel", "Grupo", "Clases revisadas", "Faltas", "Asistencia %", "Clase", "Examen final", "Calificación", "Estado", "Comentario"]];
+    list.forEach(function (r) {
+      histRows(r).forEach(function (h) {
+        var gr = h.grade;
+        out.push([r.matricula, r.name, h.month, h.name, h.cycle.start, h.cycle.end, h.levelName || r.levelName, h.group || r.group,
+          h.stats.reviewed, h.stats.absences, h.stats.attPct, h.stats.clase, h.finalExam, gr.grade,
+          gr.grade == null ? "" : gr.closed ? (gr.passed ? "Aprobado" : "Reprobado") : "Avance", h.notes]);
+      });
+    });
+    var csv = "﻿" + out.map(function (row) { return row.map(csvCell).join(","); }).join("\r\n");
+    var a = document.createElement("a");
+    a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv;charset=utf-8" }));
+    a.download = "historial_" + String((g && (g.id || g.title)) || "grupo").replace(/[^\w-]+/g, "_") + ".csv";
+    document.body.appendChild(a); a.click();
+    setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+    toast(out.length > 1 ? "Descargaste " + (out.length - 1) + " renglones del historial." : "Este grupo aún no tiene meses calificados.");
+  }
+  $("b-csv").addEventListener("click", downloadCsv);
+  function setBmode(m) {
+    bmode = m;
+    $("bm-month").setAttribute("aria-pressed", m === "month"); $("bm-hist").setAttribute("aria-pressed", m === "hist");
+    renderBook();
+  }
+  $("bm-month").addEventListener("click", function () { setBmode("month"); });
+  $("bm-hist").addEventListener("click", function () { setBmode("hist"); });
 
   /* ================= pestañas ================= */
   function setView(v) {
     view = v; if (v === "book") closePanel();
+    renderMonthBar();
     $("t-class").setAttribute("aria-selected", v === "class"); $("t-book").setAttribute("aria-selected", v === "book");
     $("v-class").hidden = v !== "class"; $("v-book").hidden = v !== "book";
     if (v === "book") { if (grp) bgrp = grp; renderBook(); } else renderClass();
@@ -1374,7 +1535,9 @@ footer a{color:var(--gold-ink)}
         canSave = grades !== null; canDaily = daily !== null;
         dailyMap = daily || {};
         roster = GB.buildRoster(rosterMap, attempts || [], grades || {}).filter(function (r) { return !!r.sid && rosterMap[r.sid]; });
+        roster.forEach(function (r) { r.cycles = r.cycles || {}; });
         buildGroups(GB.isAdminUser() ? [] : myIds);
+        applyCycle(GB.cycleId());
         $("loading").hidden = true; $("content").hidden = false;
         var w = $("warn");
         w.hidden = canSave && canDaily;

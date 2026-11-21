@@ -649,6 +649,31 @@ footer a{color:var(--gold-ink)}
 .fine{grid-column:1/-1;color:var(--muted);font-size:.78rem;line-height:1.55;margin:4px 0 0}
 .al-lvl{display:inline-block;margin-left:6px;font-size:.7rem;font-weight:700;border:1px solid var(--line2);border-radius:999px;padding:1px 8px;color:var(--gold-ink)}
 </style>
+<style id="vb-mes">
+/* MES = CICLO (2026-11-21): barra del mes con la matrícula e historial académico.
+   Va en los dos aspectos (B y C): solo usa sus tokens --ink/--paper/--line/--muted/--gold. */
+.mbar{max-width:1180px;margin:14px auto 0;padding:0 16px;display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px}
+.mbar .mb-mat{font-size:.76rem;color:var(--muted);flex:1 1 auto}
+.mbar .mb-mat b{color:var(--ink);letter-spacing:.04em;font-variant-numeric:tabular-nums}
+.mbar label{font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.mbar select{appearance:none;-webkit-appearance:none;min-height:44px;max-width:100%;border:1.5px solid var(--line);border-radius:12px;padding:0 36px 0 12px;font:700 .9rem Inter,sans-serif;color:var(--ink);background:var(--paper) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23C9A84C' stroke-width='2'/%3E%3C/svg%3E") no-repeat right 12px center;cursor:pointer}
+.mbar select:focus{border-color:var(--gold);outline:none;box-shadow:0 0 0 3px rgba(201,168,76,.3)}
+.mhist{max-width:1180px;margin:0 auto 30px;padding:0 16px}
+.mhist .mh-card{background:var(--paper);border:1px solid var(--line);border-radius:18px;padding:16px}
+.mhist h2{margin:0 0 4px;font-size:1.1rem;color:var(--ink)}
+.mhist .mh-sub{margin:0 0 10px;font-size:.8rem;color:var(--muted);line-height:1.45}
+.mhist table{width:100%;border-collapse:collapse;font-size:.84rem;font-variant-numeric:tabular-nums;color:var(--ink)}
+.mhist th{font-size:.62rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700;padding:4px 6px 8px;text-align:center;border-bottom:1px solid var(--line)}
+.mhist th:first-child,.mhist td:first-child{text-align:left}
+.mhist td{padding:0;border-bottom:1px solid var(--line);text-align:center}
+.mhist td>button,.mhist td>span{display:block;width:100%;min-height:48px;padding:8px 6px;background:none;border:0;font:inherit;color:inherit;text-align:inherit;cursor:pointer}
+.mhist td small{display:block;font-size:.68rem;color:var(--muted)}
+.mhist td b{font-size:1.02rem}
+.mhist tr.cur td{background:color-mix(in srgb,var(--gold) 16%,transparent)}
+.mhist .ok{color:var(--ok-ink,#41c595)}.mhist .bad{color:var(--bad-ink,#e07065)}
+.mhist .none{color:var(--muted);font-size:.84rem;margin:0}
+@media(max-width:520px){.mhist .hide-s{display:none}}
+</style>
 <script>
 /* Un solo aspecto activo: B salvo que el alumno eligió «Minimalista». */
 (function () {
@@ -684,6 +709,11 @@ footer a{color:var(--gold-ink)}
 <div id="loading"><div class="spin"></div><div>Cargando tu boleta…</div></div>
 
 <div id="content" style="display:none">
+  <div class="mbar" id="mbar">
+    <span class="mb-mat" id="mb-mat"></span>
+    <label for="mb-cyc">Mes</label>
+    <select id="mb-cyc"></select>
+  </div>
 
   <!-- ===== B «Noche Vespertina» (predeterminado) ===== -->
   <div id="v-dis" class="aw">
@@ -728,7 +758,7 @@ footer a{color:var(--gold-ink)}
       </div>
       <div class="colB">
         <section class="ac avc" aria-labelledby="h-av">
-          <h2 id="h-av">Avance del curso</h2>
+          <h2 id="h-av">Avance del mes</h2>
           <div id="d-av"></div>
         </section>
 
@@ -821,6 +851,14 @@ footer a{color:var(--gold-ink)}
     </div>
     <p class="fine" id="m-fine"></p>
   </main>
+
+  <section class="mhist" aria-labelledby="mh-t">
+    <div class="mh-card">
+      <h2 id="mh-t">Tu historial académico</h2>
+      <p class="mh-sub">Tu calificación de cada mes (ciclo de 20 clases). Toca un mes para ver su boleta.</p>
+      <div id="mh-body"></div>
+    </div>
+  </section>
 </div>
 
 <div id="msg" style="display:none"></div>
@@ -831,7 +869,7 @@ footer a{color:var(--gold-ink)}
 
 <script src="vesper_path.js"></script>
 <script src="vesper_results.js"></script>
-<script src="vesper_gradebook.js?v=20261120"></script>
+<script src="vesper_gradebook.js?v=20261121"></script>
 <script>
 (function () {
   "use strict";
@@ -950,7 +988,7 @@ footer a{color:var(--gold-ink)}
   }
   function lbl(V, k) { return V.LBL[k] || k; }
   function crsText(V) {
-    var txt = (V.level ? "Nivel " + V.level + " · " : "") + "Curso del " + GB.fmtDay(CLOCK.start) + " al " + GB.fmtDay(CLOCK.end);
+    var txt = (V.level ? "Nivel " + V.level + " · " : "") + GB.cycle().label + " · del " + GB.fmtDay(CLOCK.start) + " al " + GB.fmtDay(CLOCK.end);
     if (!CLOCK.started) txt += " · empieza el " + GB.fmtDay(CLOCK.start);
     else if (CLOCK.ended) txt += " · ya terminó";
     else txt += " · va en la clase " + CLOCK.day;
@@ -988,8 +1026,8 @@ footer a{color:var(--gold-ink)}
     $("g-num").textContent = g.grade == null ? "—" : g.grade;
     var title = $("g-title"), sub = $("g-sub");
     if (g.grade == null) { title.textContent = "Sin calificaciones todavía"; sub.textContent = CLOCK.started ? "Tu boleta se llena conforme tu profesor revisa cada clase." : "Tu primera clase es el " + GB.fmtDay(CLOCK.start) + "."; }
-    else if (g.closed) { title.innerHTML = 'Calificación del curso <span class="pass-badge"' + (g.passed ? '' : ' style="background:var(--bad-fill);color:#fff"') + '>' + (g.passed ? "Aprobado" : "No aprobado") + '</span>'; sub.textContent = "Clase 60 % + examen final 40 % · se aprueba con " + GB.PASS_THRESHOLD; }
-    else { title.textContent = "Avance del curso"; sub.textContent = plural(V.rev, "clase revisada", "clases revisadas") + " de " + V.N + " · sin examen final, tu Clase cuenta al 100 %"; }
+    else if (g.closed) { title.innerHTML = 'Calificación del mes <span class="pass-badge"' + (g.passed ? '' : ' style="background:var(--bad-fill);color:#fff"') + '>' + (g.passed ? "Aprobado" : "No aprobado") + '</span>'; sub.textContent = "Clase 60 % + examen final 40 % · se aprueba con " + GB.PASS_THRESHOLD; }
+    else { title.textContent = "Avance del mes"; sub.textContent = plural(V.rev, "clase revisada", "clases revisadas") + " de " + V.N + " · sin examen final, tu Clase cuenta al 100 %"; }
     var hi = nm ? ", " + nm : "";
     $("g-say").textContent = g.grade == null ? "¡Hola" + hi + "! Tu primera estrella llega con tu primera clase." :
       g.closed ? (g.passed ? "¡Cerraste el ciclo con " + g.grade + hi + "!" : "Casi" + hi + ". Habla con tu profe.") :
@@ -1072,7 +1110,7 @@ footer a{color:var(--gold-ink)}
     var V = B.V, g = V.g, W = GB.WEIGHTS, PASS = GB.PASS_THRESHOLD;
     var pc = (V.clase || 0) * W.clase, pf = V.fin != null ? V.fin * W.final : 0, at = pc + pf, c = g.grade;
     var h = '<div class="av"><span class="an">' + (c == null ? "—" : c) + '</span><span class="at">' + (c == null ? '<b>Aún sin clases revisadas</b>Tu avance aparece con tu primera clase.' : g.closed
-      ? '<b>Calificación del curso</b>' + (g.passed ? "Aprobado" : "No aprobado") + ': se aprueba con ' + PASS + '.'
+      ? '<b>Calificación del mes</b>' + (g.passed ? "Aprobado" : "No aprobado") + ': se aprueba con ' + PASS + '.'
       : '<b>Tu avance</b>Mientras no haya examen final, tu Clase cuenta al 100 %.') + '</span></div>';
     h += '<div class="rail" aria-hidden="true"><div class="walker" id="d-walk"><img src="' + M + 'anim/classic_idle.webp" alt="" width="58" height="58" id="d-walkimg"></div>' +
       '<span class="goal"><svg viewBox="0 0 24 24"><path fill="currentColor" d="' + STAR + '"/></svg>Meta</span></div>';
@@ -1200,7 +1238,7 @@ footer a{color:var(--gold-ink)}
       ? '<b id="m-title">Sin calificaciones todavía</b>tu boleta se llena con cada clase revisada'
       : g.closed
         ? '<b id="m-title">Tu calificación final</b>Clase ' + V.clase + ' · Final ' + V.fin + '<br><span class="al-chip ' + (g.passed ? "ok" : "") + '">' + (g.passed ? "✓ Aprobado" : "No aprobado") + '</span>'
-        : '<b id="m-title">Tu avance del curso</b>por ahora es tu promedio de Clase<br><span class="al-chip">' + plural(V.rev, "clase revisada", "clases revisadas") + ' de ' + V.N + '</span>';
+        : '<b id="m-title">Tu avance del mes</b>por ahora es tu promedio de Clase<br><span class="al-chip">' + plural(V.rev, "clase revisada", "clases revisadas") + ' de ' + V.N + '</span>';
     var top = V.practicable;
     var say = g.grade == null ? "¡Hola" + hi + "! Tu boleta empieza con tu primera clase." :
       g.closed ? (g.passed ? "¡Aprobaste" + hi + "! Bien hecho." : "Casi" + hi + ". Hablemos con tu profe.") :
@@ -1329,6 +1367,58 @@ footer a{color:var(--gold-ink)}
     return VIEW.g;
   }
 
+  /* ================= MES E HISTORIAL =================
+     La boleta de arriba es la de UN mes (ciclo de 20 clases); el historial
+     junta todos. Cambiar de mes solo vuelve a pintar: los datos ya llegaron. */
+  var ME = null;
+  function myHistory() { return ME ? GB.history(ME.grade, ME.daily) : []; }
+  function monthList() {
+    var hist = myHistory(), now = GB.currentCycleId(), seen = {};
+    hist.forEach(function (h) { seen[h.id] = 1; });
+    seen[now] = 1;
+    return GB.cycles().filter(function (c) { return seen[c.id]; });
+  }
+  function showMonth(cid) {
+    cid = GB.setCycle(cid);
+    CLOCK = GB.courseClock();
+    var e = (ME.grade && ME.grade.cycles && ME.grade.cycles[cid]) || {};
+    ME.row.finalExam = e.finalExam != null ? e.finalExam : null;
+    ME.row.notes = e.notes || "";
+    B.sel = 0; B.filt = null; C.sel = 0; C.filt = null;
+    var g = render(ME.user, ME.row, { days: ME.daily ? GB.daysFor(ME.daily, cid) : {} });
+    var now = GB.currentCycleId(), list = monthList();
+    $("mb-cyc").innerHTML = list.map(function (c) {
+      return '<option value="' + esc(c.id) + '"' + (c.id === cid ? " selected" : "") + '>' + esc(c.label) + (c.id === now ? " · actual" : "") + '</option>';
+    }).join("");
+    $("mbar").hidden = list.length < 2 && !GB.myMatricula();
+    $("mb-cyc").hidden = $("mb-cyc").previousElementSibling.hidden = list.length < 2;
+    renderHistory();
+    return g;
+  }
+  function renderHistory() {
+    var hist = myHistory(), sel = GB.cycleId();
+    if (!hist.length) { $("mh-body").innerHTML = '<p class="none">Aquí se irá guardando la calificación de cada mes que cierres.</p>'; return; }
+    $("mh-body").innerHTML = '<table><thead><tr><th>Mes</th><th class="hide-s">Clase</th><th class="hide-s">Final</th><th>Calificación</th><th class="hide-s">Asistencia</th></tr></thead><tbody>' +
+      hist.slice().reverse().map(function (h) {
+        var g = h.grade, b = '<button type="button" data-cyc="' + esc(h.id) + '">';
+        var sub = [h.name, h.levelName].filter(Boolean).join(" · ");
+        var gc = g.grade == null ? '–' : '<b class="' + (g.closed ? (g.passed ? "ok" : "bad") : "") + '">' + g.grade + '</b><small>' +
+          (g.closed ? (g.passed ? "Aprobado" : "No aprobado") : "avance") + '</small>';
+        return '<tr' + (h.id === sel ? ' class="cur"' : '') + '><td>' + b + esc(h.month) + '<small>' + esc(sub) + '</small></button></td>' +
+          '<td class="hide-s">' + b + (h.stats.clase != null ? h.stats.clase : "–") + '</button></td>' +
+          '<td class="hide-s">' + b + (h.finalExam != null ? h.finalExam : "–") + '</button></td>' +
+          '<td>' + b + gc + '</button></td>' +
+          '<td class="hide-s">' + b + (h.stats.attPct != null ? h.stats.attPct + "%" : "–") + '</button></td></tr>';
+      }).join("") + '</tbody></table>';
+  }
+  function pickMonth(cid) {
+    if (!ME || cid === GB.cycleId()) return;
+    showMonth(cid);
+    window.scrollTo({ top: 0, behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" });
+  }
+  $("mb-cyc").addEventListener("change", function () { pickMonth(this.value); });
+  $("mh-body").addEventListener("click", function (e) { var b = e.target.closest("[data-cyc]"); if (b) pickMonth(b.getAttribute("data-cyc")); });
+
   function load(user) {
     Promise.all([
       VESPER_RESULTS.fetchMine(),
@@ -1353,7 +1443,10 @@ footer a{color:var(--gold-ink)}
       }
       if (!mine) mine = GB.buildRoster({ me: {} }, [], {})[0];
       if (!mine.alias) mine.alias = VESPER_RESULTS.aliasOf();
-      var g = render(user, mine, daily);
+      ME = { user: user, row: mine, grade: grade, daily: daily };
+      var mat = GB.myMatricula();
+      $("mb-mat").innerHTML = mat ? 'Matrícula <b>' + esc(mat) + '</b>' : '';
+      var g = showMonth(GB.cycleId());
       /* Resumen cacheado para el teaser del portal (materiales.html):
          solo promedios, sin correo ni datos personales. */
       try {

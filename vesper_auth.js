@@ -188,6 +188,9 @@
       var grp = (f.group && f.group.stringValue) || "";
       if (sid && p.sid !== sid) { p.sid = sid; changed = true; }
       if (p.group !== grp) { p.group = grp; changed = true; }
+      /* matrícula: la asigna portal_escuela.html; se ve en mi_boleta.html */
+      var mat = (f.matricula && f.matricula.stringValue) || "";
+      if ((p.matricula || "") !== mat) { p.matricula = mat; changed = true; }
       if (changed) localStorage.setItem("vesper_profile", JSON.stringify(p));
     } catch (e) {}
   }

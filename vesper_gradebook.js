@@ -18,19 +18,34 @@
  *   avance < 70 mientras no hay final.
  *   Ya NO hay parciales ni rúbrica de 7 criterios.
  *
- * CALENDARIO: el ciclo arranca en COURSE_START (clase 1) y dura COURSE_DAYS
- * clases contadas en días hábiles (lun–vie, saltando NO_CLASS).
+ * POR MES (2026-11-21, Josue): la calificación es POR CICLO de COURSE_DAYS
+ * clases (L–V; festivos y vacaciones lo pausan), y cada ciclo es «un mes»:
+ * el puente (23 nov – 18 dic 2026) y los 12 de 2027 (cycles()). Cada mes
+ * tiene su Clase, su examen final, su comentario y su calificación; juntos
+ * son el HISTORIAL ACADÉMICO del alumno (history()). Las páginas eligen un
+ * mes con setCycle(id); classDates/courseClock/days/finalExam/saves hablan
+ * de ese mes. Por defecto, el de hoy (currentCycleId).
  *
- * Datos (Firestore REST, base "teachermanuals", token de VesperAuth):
- *   daily_progress/{sid}  days: { "1": { t: 0..100, x: {punto: n taches},
- *                         dp: {punto: puntos restados}, att: "F" (solo si faltó),
- *                         rv: 1 } }  (+ alias, studentUid, updatedAt, updatedBy)
- *                         saveDaily reemplaza el mapa days completo.
- *   gradebook/{sid}       finalExam (int 0..100), notes (comentario que ve el
- *                         alumno, máx. 500), alias, studentUid, updatedAt/By.
+ * Datos (Firestore REST, base "teachermanuals", token de VesperAuth). <clave>
+ * = cycleKey(id), p. ej. "k2027_c01" (sin guion para no citar la ruta):
+ *   daily_progress/{sid}  cycles.<clave> = { days: { "1": { t: 0..100,
+ *                         x: {punto: n taches}, dp: {punto: puntos restados},
+ *                         att: "F" (solo si faltó), rv: 1 } }, group, levelName }
+ *                         (+ alias, studentUid, updatedAt, updatedBy).
+ *                         saveDaily reemplaza el mapa de UN mes completo.
+ *   gradebook/{sid}       cycles.<clave> = { finalExam (int 0..100), notes
+ *                         (comentario que ve el alumno, máx. 500), group,
+ *                         levelName } + alias, studentUid, updatedAt/By.
+ *   group/levelName de cada mes son la foto de ese mes para el historial.
+ *   Antes de los meses: `days`, `finalExam` y `notes` del nivel superior. Se
+ *   leen como el ciclo puente y se borran la primera vez que se guarda el
+ *   puente (ya en su entrada cycles.k2026_puente).
+ *   MATRÍCULA: roster/{sid}.matricula y students/{correo}.matricula (formato
+ *   VA<aa>-<nnnn>); la asigna portal_escuela.html; el alumno la ve vía
+ *   vesper_profile (myMatricula()).
  * Reglas: daily_progress no valida campos; gradebook solo valida participacion/
- * examsGrade/lessonsGrade SI vienen (finalExam y notes pasan). No hay que
- * republicar reglas para este modelo (revisado 2026-11-20 en firestore.rules).
+ * examsGrade/lessonsGrade SI vienen en el nivel superior (cycles pasa). No hay
+ * que republicar reglas para este modelo (revisado 2026-11-21 en firestore.rules).
  *
  * DATOS VIEJOS (el curso empieza el 23 nov 2026: casi no hay). Se leen sin
  * romper y se convierten al leer (readDay); la próxima vez que el profe guarde
@@ -58,20 +73,23 @@
  * (403), los fetch* resuelven null y los save* false.
  *
  * window.VESPER_GRADEBOOK:
- *   Configuración: COURSE_START, COURSE_DAYS, DAY_MAX, POINTS, ABSENT_KEY,
+ *   Configuración: COURSE_DAYS, PUENTE_ID, DAY_MAX, POINTS, ABSENT_KEY,
  *                  TACHE_OPTIONS, TACHE_DEFAULT, WEIGHTS, COMPONENTS,
  *                  PASS_THRESHOLD, MIN_ATTENDANCE
  *   Puntos:        points() (con nombres editados en este navegador),
  *                  savePointLabels(list), resetPointLabels(),
  *                  tacheValue(), setTacheValue(v)
- *   Calendario:    classDates(), courseClock(), fmtDay(iso)
+ *   Meses:         cycles(), cycleById(id), currentCycleId(), cycleId(), cycle(),
+ *                  setCycle(id), daysFor(dailyRec, id)
+ *   Calendario:    classDates(), courseClock(), fmtDay(iso)   (del mes elegido)
  *   Red:           fetchRoster(), fetchMyGroupIds(), fetchGrades(sids), fetchMyGrade(),
- *                  saveGrade(sid, data), fetchDailyAll(sids), fetchMyDaily(),
- *                  saveDaily(sid, data)
+ *                  saveGrade(sid, data, cid?), fetchDailyAll(sids), fetchMyDaily(),
+ *                  saveDaily(sid, data, cid?)
  *   Día:           newDay(), isAbsent(c), dayScore(c), addTache(c, key, v),
  *                  removeTache(c, key, back)
  *   Puras:         buildRoster(rosterMap, attempts, grades), dailyStats(days),
- *                  computeGrade(row, stats)
+ *                  computeGrade(row, stats), history(grade, daily, opts),
+ *                  myMatricula()
  *   Vista:         injectCss(), tone(v), historyHtml(days, opts)
  * ============================================================ */
 window.VESPER_GRADEBOOK = (function () {
@@ -81,11 +99,17 @@ window.VESPER_GRADEBOOK = (function () {
 
   /* ================= CONFIGURACIÓN (todo lo ajustable vive aquí) ================= */
 
-  /* Inicio del curso: la clase 1. Las demás fechas se cuentan solas. */
-  var COURSE_START = "2026-11-23";
+  /* CICLOS = MESES (2026-11-21, Josue: «las calificaciones van por mes»).
+     Cada ciclo son COURSE_DAYS clases L–V; festivos y vacaciones lo pausan.
+     Misma regla y mismas fechas que portal_calendario.html (fuente canónica)
+     y calendarCycles() de portal_escuela.html: si cambias una, cambia las tres.
+     El ciclo puente (23 nov – 18 dic 2026) es el primero; luego 12 de 2027. */
   var COURSE_DAYS = 20;
-  /* Fechas "AAAA-MM-DD" entre semana SIN clase (festivos, vacaciones). */
-  var NO_CLASS = [];
+  var PUENTE_ID = "2026-puente", PUENTE_START = "2026-11-23";
+  var FIRST_2027 = "2027-01-04", CYCLES_2027 = 12;
+  var BREAKS = [["2026-12-21", "2027-01-01"], ["2027-03-22", "2027-03-26"], ["2027-12-20", "2027-12-31"]];
+  var NO_CLASS = ["2027-01-01", "2027-02-01", "2027-03-15", "2027-03-25", "2027-03-26", "2027-05-01",
+                  "2027-09-16", "2027-11-02", "2027-11-15", "2027-12-25"];
 
   var DAY_MAX = 100;              // cada clase empieza aquí
   var TACHE_OPTIONS = [5, 10];    // lo que puede valer un ✗ (resta al total del día)
@@ -166,21 +190,88 @@ window.VESPER_GRADEBOOK = (function () {
     return DOW_S[d.getDay()] + " " + d.getDate() + " " + MON_S[d.getMonth()];
   }
 
-  var datesCache = null;
-  function classDates() {
-    if (datesCache) return datesCache;
-    var out = [], d = parseIso(COURSE_START), guard = 0;
+  var MON_L = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto",
+               "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+  function addDays(d, n) { return new Date(d.getFullYear(), d.getMonth(), d.getDate() + n); }
+  function isClassIso(s) {
+    var w = parseIso(s).getDay();
+    if (w === 0 || w === 6 || NO_CLASS.indexOf(s) !== -1) return false;
+    for (var i = 0; i < BREAKS.length; i++) if (s >= BREAKS[i][0] && s <= BREAKS[i][1]) return false;
+    return true;
+  }
+  /* COURSE_DAYS fechas de clase a partir de `start` (o del siguiente día de clase) */
+  function datesFrom(start) {
+    var out = [], d = parseIso(start), guard = 0;
     while (out.length < COURSE_DAYS && guard++ < 400) {
-      var wd = d.getDay(), s = isoOf(d);
-      if (wd !== 0 && wd !== 6 && NO_CLASS.indexOf(s) === -1) out.push(s);
-      d = new Date(d.getFullYear(), d.getMonth(), d.getDate() + 1);
+      if (isClassIso(isoOf(d))) out.push(isoOf(d));
+      d = addDays(d, 1);
     }
-    datesCache = out;
     return out;
   }
+  /* «Enero 2027»; si el ciclo cruza meses y el segundo tiene 5+ clases, «Febrero–marzo 2027» */
+  function monthLabel(dates) {
+    var cnt = {}, order = [];
+    dates.forEach(function (s) { var k = s.slice(0, 7); if (!cnt[k]) { cnt[k] = 0; order.push(k); } cnt[k]++; });
+    var top = order.slice().sort(function (a, b) { return cnt[b] - cnt[a]; });
+    function nm(k) { return MON_L[+k.slice(5, 7) - 1]; }
+    if (top.length > 1 && cnt[top[1]] >= 5) {
+      var a = order[0], b = order[1];
+      return nm(a) + "–" + nm(b).toLowerCase() + " " + b.slice(0, 4);
+    }
+    return nm(top[0]) + " " + top[0].slice(0, 4);
+  }
+  /* clave del ciclo en Firestore: un identificador simple (sin guion ni dígito
+     inicial) para que la ruta cycles.<clave> no necesite comillas en updateMask */
+  function cycleKey(id) { return "k" + String(id).replace(/[^A-Za-z0-9]/g, "_"); }
 
-  /* dónde va el ciclo HOY. day = última clase cuya fecha ya llegó (0 = aún no
-     inicia); isClassDay = hoy toca clase. `now` solo para pruebas. */
+  var cyclesCache = null;
+  /* [{ id, key, n, name, month, label, dates, start, end }] en orden */
+  function cycles() {
+    if (cyclesCache) return cyclesCache;
+    var out = [];
+    function push(id, n, name, dates) {
+      out.push({ id: id, key: cycleKey(id), n: n, name: name, month: monthLabel(dates),
+                 label: monthLabel(dates) + " · " + name, dates: dates,
+                 start: dates[0], end: dates[dates.length - 1] });
+    }
+    push(PUENTE_ID, 0, "Ciclo puente", datesFrom(PUENTE_START));
+    var cur = FIRST_2027;
+    for (var n = 1; n <= CYCLES_2027; n++) {
+      var ds = datesFrom(cur);
+      push("2027-c" + pad2(n), n, "Ciclo " + n, ds);
+      cur = isoOf(addDays(parseIso(ds[ds.length - 1]), 1));
+    }
+    cyclesCache = out;
+    return out;
+  }
+  function cycleById(id) {
+    var list = cycles();
+    for (var i = 0; i < list.length; i++) if (list[i].id === id) return list[i];
+    return null;
+  }
+  function cycleByKey(key) {
+    var list = cycles();
+    for (var i = 0; i < list.length; i++) if (list[i].key === key) return list[i];
+    return null;
+  }
+  /* el ciclo de HOY: el último que ya empezó (entre ciclos sigue el que acaba
+     de terminar, para cerrar su examen final); antes del primero, el primero. */
+  function currentCycleId(now) {
+    var t = isoOf(now || new Date()), list = cycles(), id = list[0].id;
+    for (var i = 0; i < list.length; i++) if (list[i].start <= t) id = list[i].id;
+    return id;
+  }
+  /* ciclo SELECCIONADO: todo lo de «un ciclo» (classDates, courseClock, days,
+     finalExam, saves) habla de este. Las páginas lo cambian con setCycle(). */
+  var CUR = currentCycleId();
+  function cycleId() { return CUR; }
+  function cycle() { return cycleById(CUR); }
+  function setCycle(id) { if (cycleById(id)) CUR = id; return CUR; }
+
+  function classDates() { return cycle().dates; }
+
+  /* dónde va el ciclo seleccionado HOY. day = última clase cuya fecha ya llegó
+     (0 = aún no inicia); isClassDay = hoy toca clase. `now` solo para pruebas. */
   function courseClock(now) {
     var dates = classDates(), t = isoOf(now || new Date()), day = 0;
     for (var i = 0; i < dates.length; i++) if (dates[i] <= t) day = i + 1;
@@ -274,6 +365,7 @@ window.VESPER_GRADEBOOK = (function () {
     return {
       sid: name.slice(name.lastIndexOf("/") + 1),
       name: s("name"), levelName: s("levelName"), group: s("group"),
+      matricula: s("matricula"),
       level: (lvl != null && !isNaN(lvl)) ? lvl : null
     };
   }
@@ -332,24 +424,43 @@ window.VESPER_GRADEBOOK = (function () {
   /* campos de gradebook del modelo anterior: se leen, NO cuentan. */
   var LEGACY_GRADE_FIELDS = ["quiz1", "quiz2", "quiz3", "examsGrade", "lessonsGrade", "participacion"];
 
-  /* lee un doc REST de gradebook -> fila plana. El id del doc es el sid. */
+  function mapFields(v) { return (v && v.mapValue && v.mapValue.fields) || {}; }
+  function intIn(f, k) { return (f[k] && f[k].integerValue != null) ? clampPct(f[k].integerValue) : null; }
+  function strIn(f, k) { return (f[k] && f[k].stringValue) || ""; }
+
+  /* lee un doc REST de gradebook -> fila plana. El id del doc es el sid.
+     Por ciclo:  cycles.<clave> = { finalExam, notes, group, levelName }.
+     finalExam y notes del nivel superior son del formato de antes de los
+     ciclos: cuentan como el ciclo puente mientras ese ciclo no tenga entrada
+     (saveGrade del puente los borra al pasarlos a su ciclo).
+     La fila trae `cycles` (todos) y finalExam/notes del ciclo seleccionado. */
   function readDoc(doc) {
     var f = (doc && doc.fields) || {};
-    function s(k) { return (f[k] && f[k].stringValue) || ""; }
-    function iOrNull(k) {
-      return (f[k] && f[k].integerValue != null) ? clampPct(f[k].integerValue) : null;
-    }
+    function s(k) { return strIn(f, k); }
+    function iOrNull(k) { return intIn(f, k); }
     var name = (doc && doc.name) || "";
     var legacy = null;
     LEGACY_GRADE_FIELDS.forEach(function (k) {
       var v = iOrNull(k);
       if (v != null) { legacy = legacy || {}; legacy[k] = v; }
     });
+    var cyc = {}, cm = mapFields(f.cycles);
+    Object.keys(cm).forEach(function (k) {
+      var c = cycleByKey(k); if (!c) return;
+      var cf = mapFields(cm[k]);
+      cyc[c.id] = { finalExam: intIn(cf, "finalExam"), notes: strIn(cf, "notes"),
+                    group: strIn(cf, "group"), levelName: strIn(cf, "levelName") };
+    });
+    if (!cyc[PUENTE_ID] && (iOrNull("finalExam") != null || s("notes"))) {
+      cyc[PUENTE_ID] = { finalExam: iOrNull("finalExam"), notes: s("notes"), group: "", levelName: "" };
+    }
+    var sel = cyc[CUR] || {};
     return {
       sid: name.slice(name.lastIndexOf("/") + 1),
-      finalExam: iOrNull("finalExam"),
+      cycles: cyc,
+      finalExam: sel.finalExam != null ? sel.finalExam : null,
       legacy: legacy,
-      notes: s("notes"),
+      notes: sel.notes || "",
       alias: s("alias"),
       studentUid: s("studentUid"),
       updatedAt: (f.updatedAt && f.updatedAt.timestampValue) || "",
@@ -410,29 +521,40 @@ window.VESPER_GRADEBOOK = (function () {
     }).catch(function () { return null; });
   }
 
-  /* upsert de un alumno en gradebook. PATCH con updateMask crea el doc si no
-     existe y SOLO toca los campos listados. `data` lleva únicamente lo que
-     cambia:
+  /* upsert de un alumno en gradebook, en el ciclo `cid` (por defecto el
+     seleccionado). PATCH con updateMask crea el doc si no existe y SOLO toca
+     los campos listados. `data` lleva lo que se guarda de ESE ciclo:
        finalExam: número 0..100, o null para BORRAR la nota (va en el mask
          pero no en el cuerpo: Firestore elimina el campo);
        notes: comentario para el alumno (máx. 500);
-       alias / studentUid: se copian si vienen. */
-  function saveGrade(sid, data) {
+       group / levelName: foto del grupo y nivel en ese ciclo (historial);
+       alias / studentUid: se copian si vienen.
+     En el ciclo puente manda SIEMPRE finalExam y notes juntos: se borran los
+     del nivel superior (formato de antes) para que no reaparezcan. */
+  function saveGrade(sid, data, cid) {
     sid = String(sid || "").trim();
     if (!sid || !signedIn()) return Promise.resolve(false);
     data = data || {};
+    var c = cycleById(cid || CUR); if (!c) return Promise.resolve(false);
     var fields = {
       updatedAt: { timestampValue: new Date().toISOString() },
       updatedBy: { stringValue: String(currentUser.email || "").toLowerCase() }
     };
-    var mask = ["updatedAt", "updatedBy"];
-    if (data.notes != null) { fields.notes = { stringValue: String(data.notes).slice(0, 500) }; mask.push("notes"); }
+    var mask = ["updatedAt", "updatedBy"], cf = {}, pre = "cycles." + c.key + ".";
+    if (data.notes != null) { cf.notes = { stringValue: String(data.notes).slice(0, 500) }; mask.push(pre + "notes"); }
+    if (data.group != null) { cf.group = { stringValue: String(data.group).slice(0, 40) }; mask.push(pre + "group"); }
+    if (data.levelName != null) { cf.levelName = { stringValue: String(data.levelName).slice(0, 60) }; mask.push(pre + "levelName"); }
     if (data.alias) { fields.alias = { stringValue: String(data.alias).slice(0, 24) }; mask.push("alias"); }
     if (data.studentUid) { fields.studentUid = { stringValue: String(data.studentUid) }; mask.push("studentUid"); }
     if ("finalExam" in data) {
-      mask.push("finalExam");
+      mask.push(pre + "finalExam");
       var v = clampPct(data.finalExam);
-      if (v != null) fields.finalExam = { integerValue: String(v) };
+      if (v != null) cf.finalExam = { integerValue: String(v) };
+    }
+    if (c.id === PUENTE_ID && ("finalExam" in data) && data.notes != null) mask.push("finalExam", "notes");
+    if (Object.keys(cf).length) {
+      var ck = {}; ck[c.key] = { mapValue: { fields: cf } };
+      fields.cycles = { mapValue: { fields: ck } };
     }
     var qs = mask.map(function (k) { return "updateMask.fieldPaths=" + k; }).join("&");
     return currentUser.getIdToken().then(function (token) {
@@ -559,22 +681,40 @@ window.VESPER_GRADEBOOK = (function () {
     return cellFrom(ty, absent);
   }
 
-  function readDailyDoc(doc) {
-    var f = (doc && doc.fields) || {};
-    function s(k) { return (f[k] && f[k].stringValue) || ""; }
-    var name = (doc && doc.name) || "";
+  function readDaysMap(dm) {
     var days = {};
-    var dm = (f.days && f.days.mapValue && f.days.mapValue.fields) || {};
-    Object.keys(dm).forEach(function (d) {
+    Object.keys(dm || {}).forEach(function (d) {
       var day = parseInt(d, 10);
       if (!(day >= 1 && day <= COURSE_DAYS)) return;
       var af = (dm[d] && dm[d].mapValue && dm[d].mapValue.fields) || {};
       var c = readDay(af);
       if (c) days[day] = c;
     });
+    return days;
+  }
+  /* daily_progress/{sid}: cycles.<clave> = { days, group, levelName }. El
+     mapa `days` del nivel superior es de antes de los ciclos = ciclo puente
+     (mientras el puente no tenga entrada propia). Devuelve `cycles` (todos,
+     id -> { days, group, levelName }) y `days` = los del ciclo seleccionado,
+     el MISMO objeto que cycles[sel].days (editar uno edita el otro). */
+  function readDailyDoc(doc) {
+    var f = (doc && doc.fields) || {};
+    function s(k) { return (f[k] && f[k].stringValue) || ""; }
+    var name = (doc && doc.name) || "";
+    var cyc = {}, cm = mapFields(f.cycles);
+    Object.keys(cm).forEach(function (k) {
+      var c = cycleByKey(k); if (!c) return;
+      var cf = mapFields(cm[k]);
+      cyc[c.id] = { days: readDaysMap(mapFields(cf.days)), group: strIn(cf, "group"), levelName: strIn(cf, "levelName") };
+    });
+    if (!cyc[PUENTE_ID] && f.days) {
+      var old = readDaysMap(mapFields(f.days));
+      if (Object.keys(old).length) cyc[PUENTE_ID] = { days: old, group: "", levelName: "" };
+    }
     return {
       sid: name.slice(name.lastIndexOf("/") + 1), alias: s("alias"), studentUid: s("studentUid"),
-      days: days,
+      cycles: cyc,
+      days: daysFor({ cycles: cyc }, CUR),
       updatedAt: (f.updatedAt && f.updatedAt.timestampValue) || "",
       updatedBy: s("updatedBy")
     };
@@ -631,22 +771,43 @@ window.VESPER_GRADEBOOK = (function () {
     }).catch(function () { return null; });
   }
 
-  /* upsert del registro diario completo de un alumno (el mapa days se
-     reemplaza entero: el llamador manda el estado completo). Solo profe/admin.
-     Solo se guardan los días revisados (rv). */
-  function saveDaily(sid, data) {
+  /* días de un ciclo dentro de un registro de readDailyDoc (crea la entrada
+     vacía si falta, para que el llamador pueda editarla en su lugar). */
+  function daysFor(rec, cid) {
+    if (!rec) return {};
+    rec.cycles = rec.cycles || {};
+    var e = rec.cycles[cid] || (rec.cycles[cid] = { days: {}, group: "", levelName: "" });
+    return e.days || (e.days = {});
+  }
+
+  /* upsert del registro diario de un alumno en el ciclo `cid` (por defecto el
+     seleccionado). El mapa days de ESE ciclo se reemplaza entero (el llamador
+     manda su estado completo); los demás ciclos no se tocan. Solo profe/admin.
+     Solo se guardan los días revisados (rv). data.group / data.levelName
+     quedan como foto del ciclo para el historial. En el puente se borra el
+     `days` del nivel superior (formato de antes), que ya pasó a su ciclo. */
+  function saveDaily(sid, data, cid) {
     sid = String(sid || "").trim();
     if (!sid || !signedIn()) return Promise.resolve(false);
+    var c = cycleById(cid || CUR); if (!c) return Promise.resolve(false);
     var src = (data && data.days) || {}, days = {};
     Object.keys(src).forEach(function (d) { if (src[d] && src[d].rv) days[d] = src[d]; });
-    var fields = {
+    var ck = {};
+    ck[c.key] = { mapValue: { fields: {
       days: daysToFs(days),
+      group: { stringValue: String((data && data.group) || "").slice(0, 40) },
+      levelName: { stringValue: String((data && data.levelName) || "").slice(0, 60) }
+    } } };
+    var fields = {
+      cycles: { mapValue: { fields: ck } },
       alias: { stringValue: String((data && data.alias) || "").slice(0, 24) },
       studentUid: { stringValue: String((data && data.studentUid) || "") },
       updatedAt: { timestampValue: new Date().toISOString() },
       updatedBy: { stringValue: String(currentUser.email || "").toLowerCase() }
     };
-    var mask = Object.keys(fields).map(function (k) {
+    var paths = ["cycles." + c.key, "alias", "studentUid", "updatedAt", "updatedBy"];
+    if (c.id === PUENTE_ID) paths.push("days");
+    var mask = paths.map(function (k) {
       return "updateMask.fieldPaths=" + k;
     }).join("&");
     return currentUser.getIdToken().then(function (token) {
@@ -711,7 +872,7 @@ window.VESPER_GRADEBOOK = (function () {
     function entry(key) {
       if (!by[key]) {
         by[key] = { key: key, sid: "", name: "", alias: "", group: "",
-                    levelName: "", levelNum: null, studentUid: "", level: "",
+                    levelName: "", levelNum: null, studentUid: "", level: "", matricula: "", cycles: {},
                     examsBest: {}, examsCount: 0, lessonsBest: {}, lessonsCount: 0,
                     finalExam: null, legacy: null, notes: "", lastDate: "" };
       }
@@ -721,6 +882,7 @@ window.VESPER_GRADEBOOK = (function () {
       var st = rosterMap[sid], e = entry(sid);
       e.sid = sid; e.name = st.name || ""; e.group = st.group || "";
       e.levelName = st.levelName || "";
+      e.matricula = st.matricula || "";
       e.levelNum = (st.level != null) ? st.level : null;
     });
     (attempts || []).forEach(function (r) {
@@ -753,6 +915,7 @@ window.VESPER_GRADEBOOK = (function () {
       e.finalExam = (g.finalExam != null) ? g.finalExam : null;
       e.legacy = g.legacy || null;
       e.notes = g.notes || "";
+      e.cycles = g.cycles || {};
       if (!e.alias && g.alias) e.alias = g.alias;
       if (!e.studentUid && g.studentUid) e.studentUid = g.studentUid;
     });
@@ -762,11 +925,11 @@ window.VESPER_GRADEBOOK = (function () {
         key: e.key, sid: e.sid,
         name: e.name || e.alias || "Estudiante",
         alias: e.alias, group: e.group,
-        levelName: e.levelName, levelNum: e.levelNum,
+        levelName: e.levelName, levelNum: e.levelNum, matricula: e.matricula,
         studentUid: e.studentUid, level: e.level, lastDate: e.lastDate,
         examsAvg: bestAvg(e.examsBest), examsCount: e.examsCount,
         lessonsAvg: bestAvg(e.lessonsBest), lessonsCount: e.lessonsCount,
-        finalExam: e.finalExam, legacy: e.legacy, notes: e.notes
+        finalExam: e.finalExam, legacy: e.legacy, notes: e.notes, cycles: e.cycles
       };
     });
   }
@@ -811,6 +974,41 @@ window.VESPER_GRADEBOOK = (function () {
       label: grade == null ? "" : (grade >= 90 ? "Excelente" : grade >= 80 ? "Muy bien" :
                                    grade >= PASS_THRESHOLD ? "Bien" : "Insuficiente")
     };
+  }
+
+  /* ---- historial académico: un renglón por ciclo (mes) ----
+     grade = fila de readDoc (o null), daily = registro de readDailyDoc (o
+     null). Devuelve los ciclos con algún dato, del más viejo al más nuevo:
+       [{ id, cycle, month, name, label, group, levelName, stats, grade }]
+     grade es computeGrade() de ese ciclo. `opts.upTo` (id) corta ahí;
+     `opts.all` incluye también los ciclos sin datos hasta hoy. */
+  function history(grade, daily, opts) {
+    opts = opts || {};
+    var gc = (grade && grade.cycles) || {}, dc = (daily && daily.cycles) || {};
+    var today = isoOf(new Date()), out = [];
+    cycles().some(function (c) {
+      var g = gc[c.id] || null, d = dc[c.id] || null;
+      var days = (d && d.days) || {}, st = dailyStats(days);
+      var has = st.reviewed > 0 || (g && (g.finalExam != null || g.notes));
+      if (has || (opts.all && c.start <= today)) {
+        out.push({
+          id: c.id, cycle: c, month: c.month, name: c.name, label: c.label,
+          group: (d && d.group) || (g && g.group) || "",
+          levelName: (d && d.levelName) || (g && g.levelName) || "",
+          stats: st, finalExam: g ? g.finalExam : null, notes: g ? g.notes : "",
+          grade: computeGrade({ finalExam: g ? g.finalExam : null }, st), hasData: !!has
+        });
+      }
+      return opts.upTo && c.id === opts.upTo;
+    });
+    return out;
+  }
+
+  /* matrícula del alumno con sesión (la siembra vesper_auth.js desde su doc
+     students/{correo}; la asigna portal_escuela.html). "" si aún no tiene. */
+  function myMatricula() {
+    try { return String((JSON.parse(localStorage.getItem("vesper_profile") || "{}") || {}).matricula || ""); }
+    catch (e) { return ""; }
   }
 
   /* ---- piezas de vista compartidas ---- */
@@ -863,12 +1061,14 @@ window.VESPER_GRADEBOOK = (function () {
 
   start();
   return {
-    COURSE_START: COURSE_START, COURSE_DAYS: COURSE_DAYS, DAY_MAX: DAY_MAX,
+    COURSE_DAYS: COURSE_DAYS, DAY_MAX: DAY_MAX, PUENTE_ID: PUENTE_ID,
     POINTS: POINTS, ABSENT_KEY: ABSENT_KEY, TACHE_OPTIONS: TACHE_OPTIONS, TACHE_DEFAULT: TACHE_DEFAULT,
     WEIGHTS: WEIGHTS, COMPONENTS: COMPONENTS,
     PASS_THRESHOLD: PASS_THRESHOLD, MIN_ATTENDANCE: MIN_ATTENDANCE,
     points: points, savePointLabels: savePointLabels, resetPointLabels: resetPointLabels,
     tacheValue: tacheValue, setTacheValue: setTacheValue,
+    cycles: cycles, cycleById: cycleById, currentCycleId: currentCycleId,
+    cycleId: cycleId, cycle: cycle, setCycle: setCycle, daysFor: daysFor,
     classDates: classDates, courseClock: courseClock, fmtDay: fmtDay,
     available: available, signedIn: signedIn, isAdminUser: isAdminUser,
     fetchRoster: fetchRoster, fetchMyGroupIds: fetchMyGroupIds,
@@ -876,7 +1076,8 @@ window.VESPER_GRADEBOOK = (function () {
     fetchDailyAll: fetchDailyAll, fetchMyDaily: fetchMyDaily, saveDaily: saveDaily,
     newDay: newDay, isAbsent: isAbsent, dayScore: dayScore, addTache: addTache, removeTache: removeTache,
     dailyStats: dailyStats, buildRoster: buildRoster, computeGrade: computeGrade,
+    history: history, myMatricula: myMatricula,
     injectCss: injectCss, tone: tone, historyHtml: historyHtml,
-    _readDailyDoc: readDailyDoc, _daysToFs: daysToFs   // para pruebas
+    _readDailyDoc: readDailyDoc, _readDoc: readDoc, _daysToFs: daysToFs   // para pruebas
   };
 })();

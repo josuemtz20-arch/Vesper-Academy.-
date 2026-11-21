@@ -50,6 +50,7 @@ header a.back:hover{color:var(--gold);}
 .cyclebar .spacer{flex:1;}
 select,input,textarea{padding:9px 11px;border:1px solid var(--border);border-radius:8px;font:inherit;font-size:.86rem;background:#fff;color:var(--navy);}
 select:focus,input:focus{border-color:var(--gold);outline:none;}
+.btn[hidden]{display:none;}
 .btn{display:inline-flex;align-items:center;gap:7px;padding:9px 14px;border:1px solid var(--border);background:#fff;border-radius:8px;font:inherit;font-size:.83rem;font-weight:600;cursor:pointer;color:var(--navy);text-decoration:none;}
 .btn:hover{border-color:var(--gold);}
 .btn.primary{background:var(--navy);border-color:var(--navy);color:#fff;}
@@ -207,6 +208,7 @@ footer a{color:var(--gold);text-decoration:none;}
           <option value="legacy">Con grupo antiguo (sin migrar)</option>
         </select>
         <span class="spacer"></span>
+        <button class="btn" id="mat-fill" type="button" hidden><i class="fas fa-id-card"></i> <span id="mat-fill-t">Dar matrícula</span></button>
         <button class="btn gold" id="enroll-any2" type="button"><i class="fas fa-user-plus"></i> Inscribir alumno</button>
       </div>
       <div class="tablecard"><table>
@@ -356,6 +358,23 @@ footer a{color:var(--gold);text-decoration:none;}
       r[k] = typeof o[k] === "string" && o[k].indexOf("ts:") === 0 ? o[k].slice(3) : o[k];
     });
     return r;
+  }
+  /* MATRÍCULA (2026-11-21): número fijo de alumno para su historial
+     académico. Formato VA<aa>-<nnnn>: «aa» = año en que se le dio, «nnnn» =
+     consecutivo de la escuela (no se reinicia por año). Vive en
+     students/{correo}.matricula y en el espejo roster/{sid}.matricula (lo
+     ven los profesores en la boleta). Nunca se cambia ni se reutiliza. */
+  var MAT_RE = /^VA(\d{2})-(\d{4,})$/;
+  function nextMatricula() {
+    var max = 0;
+    Object.keys(S.students).forEach(function (e) {
+      var m = MAT_RE.exec(String(S.students[e].matricula || ""));
+      if (m && +m[2] > max) max = +m[2];
+    });
+    if (S.matSeq > max) max = S.matSeq;
+    S.matSeq = max + 1;
+    var n = String(S.matSeq); while (n.length < 4) n = "0" + n;
+    return "VA" + String(new Date().getFullYear()).slice(2) + "-" + n;
   }
   function todayIso() {
     var d = new Date();
@@ -734,12 +753,15 @@ footer a{color:var(--gold);text-decoration:none;}
   function renderStudents() {
     var rows = studentRows();
     $("ct-alumnos").textContent = "(" + Object.keys(S.students).length + ")";
+    var sinMat = Object.keys(S.students).filter(function (e) { return !S.students[e].matricula; }).length;
+    $("mat-fill").hidden = !sinMat;
+    $("mat-fill-t").textContent = "Dar matrícula a " + sinMat + (sinMat === 1 ? " alumno" : " alumnos");
     $("st-rows").innerHTML = rows.map(function (email) {
       var s = S.students[email], g = s.group || "", gdoc = S.groups[g];
       var where = !g ? '<span class="chip warn">Sin grupo</span>'
         : gdoc ? esc(gdoc.name || g) + '<span class="sub">' + esc((S.periods[gdoc.periodId] || {}).name || gdoc.periodId) + "</span>"
         : esc(g) + '<span class="sub">grupo antiguo · sin migrar</span>';
-      return '<tr><td><b>' + esc(s.name || "—") + '</b><span class="sub">' + esc(email) + "</span></td>" +
+      return '<tr><td><b>' + esc(s.name || "—") + '</b><span class="sub">' + (s.matricula ? '<b>' + esc(s.matricula) + '</b> · ' : '') + esc(email) + "</span></td>" +
         '<td class="hide-sm">' + esc(s.levelName || "—") + "</td><td>" + where + "</td>" +
         '<td class="act"><button class="btn small" type="button" data-hist="' + esc(email) + '">Historial</button> ' +
         '<button class="btn small gold" type="button" data-enroll-email="' + esc(email) + '">' + (gdoc && gdoc.periodId === S.period ? "Cambiar" : "Inscribir") + "</button></td></tr>";
@@ -972,17 +994,17 @@ footer a{color:var(--gold);text-decoration:none;}
         o.created = r === "created";
       }) : Promise.resolve();
       return chain.then(function () {
-        var d = { addedAt: "ts:" + nowIso(), sid: sid };
+        var d = { addedAt: "ts:" + nowIso(), sid: sid, matricula: nextMatricula() };
         if (o.name) d.name = o.name;
         if (o.level != null) { d.level = o.level; d.levelName = LEVELS[o.level]; }
         st = plain(d);
         return setDoc("students", email, d);
       }).then(function () {
-        var r = { updatedAt: "ts:" + nowIso() };
+        var r = { updatedAt: "ts:" + nowIso(), matricula: d.matricula };
         if (o.name) r.name = o.name;
         if (o.level != null) { r.level = o.level; r.levelName = LEVELS[o.level]; }
         return setDoc("roster", sid, r);
-      }).then(function () { report.push("acceso dado"); });
+      }).then(function () { report.push("acceso dado", "matrícula " + st.matricula); });
     }).then(function () {
       /* alumno existente: actualiza nombre / nivel si se escribieron */
       if (st.addedAt && o.name == null && o.level == null) return;
@@ -1124,6 +1146,32 @@ footer a{color:var(--gold);text-decoration:none;}
   });
   $("enroll-any").addEventListener("click", function () { openEnroll({}); });
   $("enroll-any2").addEventListener("click", function () { openEnroll({}); });
+  /* a los que ya existían: en el orden en que se dieron de alta (luego por nombre) */
+  $("mat-fill").addEventListener("click", function () {
+    var btn = this, list = Object.keys(S.students).filter(function (e) { return !S.students[e].matricula; })
+      .sort(function (a, b) {
+        var x = S.students[a], y = S.students[b];
+        return String(x.addedAt || "9").localeCompare(String(y.addedAt || "9")) || String(x.name || a).localeCompare(String(y.name || b), "es");
+      });
+    if (!list.length) return;
+    if (!confirm("¿Dar matrícula a " + list.length + (list.length === 1 ? " alumno" : " alumnos") + " que aún no tienen?\n\nSe numeran en el orden en que se dieron de alta. La matrícula no se cambia después.")) return;
+    btn.disabled = true;
+    var done = 0, fail = [];
+    list.reduce(function (p, email) {
+      return p.then(function () {
+        var s = S.students[email], mat = nextMatricula();
+        return setDoc("students", email, { matricula: mat }).then(function () {
+          s.matricula = mat;
+          return s.sid ? setDoc("roster", s.sid, { matricula: mat }) : null;
+        }).then(function () { done++; $("mat-fill-t").textContent = "Asignando… " + done + " de " + list.length; },
+                function (e) { fail.push((s.name || email) + ": " + e.message); });
+      });
+    }, Promise.resolve()).then(function () {
+      btn.disabled = false;
+      renderStudents();
+      alert(fail.length ? "Asigné " + done + ". No se pudo con " + fail.length + ":\n" + fail.join("\n") : "Listo: " + done + (done === 1 ? " matrícula asignada." : " matrículas asignadas."));
+    });
+  });
   $("reload").addEventListener("click", function () {
     loadAll().then(function () { toast("Actualizado."); }, function (e) { toast(e.message, true); });
   });
