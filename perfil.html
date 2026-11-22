@@ -13,232 +13,559 @@
 <meta name="robots" content="noindex, nofollow">
 <link rel="icon" href="assets/images/favicon_32.png?v=2" type="image/png">
 <link rel="stylesheet" href="assets/css/vesper_icons_fa.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&family=Inter:wght@400;500;600;700&family=Caveat:wght@600;700&display=swap">
+<!-- Perfil v2 (2026-11-21, arena opción A + anillo de la meta de C):
+     Vesper abre, comenta cada capítulo y cierra; la meta de hoy y «Practicar»
+     van en la primera pantalla. Los datos salen de vesper_progress.js. -->
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Inria+Serif:ital,wght@0,400;0,700;1,400;1,700&family=Inter:wght@300;400;500;600;700&display=swap');
-*,*::before,*::after{box-sizing:border-box;}
-:root{--navy:#1B1B2F;--navy2:#2c2c4a;--gold:#c5a059;--gold2:#8f6f2e;--cream:#f5f2eb;--border:#e4e0d8;--muted:#5a6673;--good:#2f7d5b;}
-body{margin:0;font-family:'Inter',sans-serif;background:var(--cream);color:var(--text,#1B1B2F);min-height:100vh;}
-.skip-link{position:absolute;left:-999px;top:0;z-index:200;background:var(--navy);color:#fff;padding:10px 16px;border-radius:0 0 8px 0;text-decoration:none;font-weight:600;}
-.skip-link:focus{left:0;}
-header{background:var(--navy);border-bottom:1px solid var(--va-hairline,rgba(201,168,76,.35));min-height:66px;padding:0 24px;display:flex;align-items:center;justify-content:space-between;gap:14px;position:sticky;top:0;z-index:50;}
-.brand{display:flex;align-items:center;gap:12px;color:#fff;text-decoration:none;}
-.brand img{height:42px;width:42px;object-fit:contain;}
-.brand b{font-family:'Inria Serif',serif;font-size:1.1rem;}
-.brand small{display:block;color:var(--gold);font-size:.6rem;letter-spacing:2px;text-transform:uppercase;}
-header a.back{color:rgba(255,255,255,.82);font-size:.78rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;text-decoration:none;}
-header a.back:hover,header a.back:focus-visible{color:var(--gold);}
-/* Teléfono: misma cabecera que Inicio, Audio y Boleta (una línea, volver
-   como botón solo-icono; el texto queda para lectores de pantalla). */
-@media(max-width:640px){
-  header{padding:0 16px;gap:10px;}
-  .brand img{height:34px;width:34px;}
-  .brand b{font-size:.98rem;}
-  .brand b,.brand small{white-space:nowrap;}
-  header a.back{font-size:0;padding:10px 12px;border:1px solid var(--va-hairline,rgba(201,168,76,.35));border-radius:10px;display:inline-flex;align-items:center;justify-content:center;}
-  header a.back i{font-size:1rem;margin:0;}
+*,*::before,*::after{box-sizing:border-box}
+:root{
+  --ink:#1B1B2F;--gold:#C9A84C;--cream:#FBF8F1;--paper:#fff;--muted:#5d6470;--line:#ece7da;
+  --gold-ink:#7c5e22;--on-gold:#1B1B2F;--success:#2D9E75;--focus:#8a6d1f;
+  --night:#14122a;--dusk:#1f2342;--twi:#3a3a63;--on-night:#f5f2eb;--star:#f3e2ab;
+  --ficha:#FBF8F1;--ficha-ink:#1B1B2F;
+  --hand:"Caveat","Segoe Print",cursive;
+  --disp:"Fraunces",Georgia,serif;--sans:"Inter",system-ui,sans-serif;
 }
-.wrap{max-width:760px;margin:0 auto;padding:30px 20px 40px;}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;font-family:var(--sans);background:var(--cream);color:var(--ink);min-height:100vh;overflow-x:hidden}
+img{max-width:100%}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.skip-link{position:absolute;left:-999px;top:0;z-index:200;background:var(--night);color:#fff;padding:10px 16px;text-decoration:none;font-weight:600}
+.skip-link:focus{left:0}
 
-/* Tarjeta de identidad */
-/* background-COLOR ademas del degradado: el degradado vive en
-   background-image, asi que sin esto un fallo al pintarlo dejaria el texto
-   blanco de la tarjeta sobre el fondo de la pagina. */
-.idcard{display:flex;align-items:center;gap:18px;background-color:var(--navy);background-image:linear-gradient(135deg,var(--navy),#27274c);color:#fff;border:1px solid rgba(197,160,89,.4);border-radius:18px;padding:24px;box-shadow:0 10px 30px rgba(26,27,47,.24);}
-.idcard .avatar{width:76px;height:76px;flex-shrink:0;border-radius:50%;background:linear-gradient(135deg,var(--gold),#a8843d);display:flex;align-items:center;justify-content:center;overflow:hidden;color:var(--navy);font-family:'Inria Serif',serif;font-size:2rem;font-weight:700;}
-.idcard .avatar img{width:100%;height:100%;object-fit:cover;}
-.idcard .who{min-width:0;}
-.idcard .who h1{font-family:'Inria Serif',serif;font-size:1.6rem;margin:0 0 6px;line-height:1.15;}
-.idcard .chips{display:flex;flex-wrap:wrap;gap:8px;}
-.idcard .chip{background:rgba(255,255,255,.12);border:1px solid rgba(197,160,89,.4);color:#f5efe2;font-size:.74rem;font-weight:600;padding:5px 11px;border-radius:20px;display:inline-flex;align-items:center;gap:6px;}
-.idcard .chip i{color:var(--gold);}
+/* ---------- cabecera ligera (igual que el portal) ---------- */
+header.top{background:var(--night);min-height:58px;padding:0 16px;display:flex;align-items:center;justify-content:space-between;gap:12px;border-bottom:1px solid color-mix(in srgb,var(--gold) 30%,transparent)}
+.brand{display:flex;align-items:center;gap:10px;color:var(--on-night);text-decoration:none}
+.brand img{height:34px;width:34px;object-fit:contain}
+.brand b{font-family:var(--disp);font-weight:600;font-size:1rem;white-space:nowrap}
+.brand small{display:block;color:var(--star);font-size:.72rem;opacity:.85}
+a.back{color:var(--on-night);text-decoration:none;font-size:.85rem;font-weight:600;display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 12px;border:1px solid color-mix(in srgb,var(--gold) 35%,transparent);border-radius:10px}
+a.back:hover{border-color:var(--gold)}
+@media(max-width:520px){a.back .t{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}}
 
-h2.sec{font-size:.74rem;font-weight:700;letter-spacing:1.6px;text-transform:uppercase;color:var(--muted);margin:32px 0 12px;}
+
+/* ---------- 1. Vesper abre: banda de noche ---------- */
+.hero{position:relative;overflow:hidden;color:var(--on-night);
+  background-color:var(--night);
+  background-image:
+    radial-gradient(1.5px 1.5px at 12% 22%,var(--star) 50%,transparent 51%),
+    radial-gradient(1px 1px at 28% 68%,var(--star) 50%,transparent 51%),
+    radial-gradient(1.2px 1.2px at 46% 14%,var(--star) 50%,transparent 51%),
+    radial-gradient(1px 1px at 63% 40%,var(--star) 50%,transparent 51%),
+    radial-gradient(1.6px 1.6px at 82% 12%,var(--star) 50%,transparent 51%),
+    radial-gradient(1px 1px at 92% 58%,var(--star) 50%,transparent 51%),
+    radial-gradient(1px 1px at 6% 84%,var(--star) 50%,transparent 51%),
+    radial-gradient(120% 90% at 85% 110%,#3b2f55 0%,transparent 60%),
+    linear-gradient(180deg,var(--night) 0%,var(--dusk) 100%)}
+.hero .in{max-width:1000px;margin:0 auto;padding:22px 16px 0;display:grid;grid-template-columns:1fr 150px;grid-template-areas:"say cat" "who who";align-items:end;column-gap:6px}
+.say{grid-area:say;align-self:center;padding-bottom:18px}
+.bubble{position:relative;display:block;font:700 1.42rem/1.14 var(--hand);color:var(--ficha-ink);background:var(--ficha);
+  border-radius:4px 18px 16px 18px;padding:10px 16px 12px;transform:rotate(-1.4deg);
+  box-shadow:3px 4px 0 color-mix(in srgb,var(--gold) 55%,transparent);margin:0}
+.bubble::after{content:"";position:absolute;right:-11px;bottom:22px;border:8px solid transparent;border-left:13px solid var(--ficha);border-right:0}
+.bubble b{color:#7c5e22;font-weight:700}
+.cat{grid-area:cat;position:relative;align-self:end}
+.cat img{display:block;width:150px;height:150px;object-fit:contain;object-position:bottom;filter:drop-shadow(0 8px 14px rgba(0,0,0,.45))}
+.cat::before{content:"";position:absolute;left:50%;bottom:6px;width:150px;height:150px;transform:translateX(-50%);border-radius:50%;
+  background:radial-gradient(circle,color-mix(in srgb,var(--gold) 35%,transparent) 0%,transparent 65%)}
+.cat img{position:relative}
+.who{grid-area:who;display:flex;align-items:center;gap:14px;padding:16px 0 20px;border-top:1px solid color-mix(in srgb,var(--gold) 28%,transparent)}
+.cameo{width:58px;height:58px;flex-shrink:0;border-radius:50%;display:grid;place-items:center;
+  background:radial-gradient(circle at 35% 30%,#f3e2ab,#C9A84C 60%,#8f6f2e);color:#1B1B2F;
+  font:700 1.7rem/1 var(--disp);box-shadow:0 0 0 3px var(--night),0 0 0 4.5px color-mix(in srgb,var(--gold) 70%,transparent)}
+.who h1{font:600 1.6rem/1.1 var(--disp);margin:0 0 3px;letter-spacing:-.01em;overflow-wrap:anywhere}
+.who .meta{font-size:.86rem;color:color-mix(in srgb,var(--on-night) 78%,transparent);display:flex;flex-wrap:wrap;gap:4px 12px}
+.who .meta span{display:inline-flex;align-items:center;gap:6px}
+.who .meta i{color:var(--star);font-size:.8rem}
+.pen{display:block;width:130px;height:10px;margin:2px 0 6px;transform:rotate(-1.5deg)}
+
+/* ---------- capítulos ---------- */
+main.wrap{max-width:1000px;margin:0 auto;padding:6px 16px 0}
+.chap{margin:28px 0 0}
+.chap h2{font:600 1.32rem/1.2 var(--disp);margin:0 0 12px;letter-spacing:-.005em}
+.chap h2 em{font-style:italic;color:var(--gold-ink);font-weight:500}
+.sheet{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:18px;box-shadow:var(--shadow,0 6px 22px rgba(27,27,47,.06))}
+/* nota al margen: Vesper comenta cada capítulo, con su letra */
+.note{display:flex;align-items:flex-start;gap:10px;margin-top:14px;padding-top:12px;border-top:1px dashed var(--line)}
+.note img{width:34px;height:34px;flex-shrink:0;border-radius:50%;object-fit:cover;object-position:50% 12%;background:color-mix(in srgb,var(--gold) 18%,var(--paper));border:1.5px solid color-mix(in srgb,var(--gold) 55%,transparent)}
+.note p{margin:2px 0 0;font:700 1.28rem/1.12 var(--hand);color:var(--gold-ink)}
+
+/* Semana: constelación de 7 días */
+.week-top{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.big{font:600 2.6rem/1 var(--disp);letter-spacing:-.02em}
+.big small{font:500 .95rem/1.2 var(--sans);color:var(--muted);margin-left:6px;letter-spacing:0}
+.flame{color:#e0833f;font-size:1.6rem;margin-right:6px}
+.shields{font-size:.85rem;color:var(--muted);display:inline-flex;align-items:center;gap:6px}
+.shields .shd{width:18px;height:18px;color:var(--gold-ink)}
+.const{position:relative;display:grid;grid-template-columns:repeat(7,1fr);margin-top:18px}
+.const svg.line{position:absolute;left:7%;right:7%;top:6px;width:86%;height:30px;overflow:visible;pointer-events:none}
+.day{position:relative;display:flex;flex-direction:column;align-items:center;gap:6px;font-size:.78rem;color:var(--muted)}
+.day .st{width:42px;height:42px;display:grid;place-items:center}
+.day svg{width:30px;height:30px}
+.day.on svg path{fill:var(--gold);stroke:color-mix(in srgb,var(--gold) 60%,var(--ink))}
+.day.off svg path{fill:none;stroke:color-mix(in srgb,var(--muted) 60%,transparent);stroke-dasharray:2 2.5}
+.day.sh .st .shd{width:28px;height:28px;color:var(--gold-ink)}
+.day.today .st{border-radius:50%;box-shadow:0 0 0 2px color-mix(in srgb,var(--gold) 70%,transparent)}
+.day.today b{color:var(--ink)}
+.day b{font-weight:600}
+
+/* Hoy: anillo de la meta (de la opción C) */
+.today-top{display:flex;align-items:center;gap:16px}
+.ring{position:relative;width:92px;height:92px;flex-shrink:0}
+.ring svg{width:92px;height:92px;transform:rotate(-90deg)}
+.ring .trk{stroke:var(--line)}
+.ring .rbar{stroke:var(--gold);transition:stroke-dashoffset .8s cubic-bezier(.2,.8,.2,1)}
+.ring .mid{position:absolute;inset:0;display:grid;place-content:center;text-align:center}
+.ring .mid b{font:600 1.45rem/1 var(--disp)}
+.ring .mid small{font-size:.68rem;color:var(--muted);margin-top:3px;font-weight:600}
+.ring.met .rbar{stroke:var(--success)}
+.today-t{flex:1;min-width:0}
+.hand-line{margin:4px 0 0;font:700 1.3rem/1.12 var(--hand);color:var(--gold-ink)}
+.go-btn{width:100%;margin:16px 0 16px}
+/* Meta del día + números */
+.grid2{display:grid;gap:14px}
+.goal-dots{display:flex;gap:8px;margin:10px 0 6px;flex-wrap:wrap}
+.goal-dots span{width:30px;height:30px;border-radius:50%;border:2px dashed color-mix(in srgb,var(--gold) 55%,transparent)}
+.goal-dots span.on{border:2px solid var(--gold);background:var(--gold);box-shadow:inset 0 0 0 4px var(--paper)}
+.goal-line{font-size:.95rem}
+.goal-line b{font-family:var(--disp);font-size:1.25rem}
+.nums{display:flex;justify-content:space-between;gap:8px;text-align:center}
+.nums div{flex:1;min-width:0}
+.nums div+div{border-left:1px solid var(--line)}
+.nums b{display:block;font:600 1.7rem/1 var(--disp);letter-spacing:-.01em}
+.nums span{display:block;font-size:.8rem;color:var(--muted);margin-top:6px}
+
+/* Vitrina de logros */
+.medals{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;text-align:center}
+.medal img{width:76px;height:76px;object-fit:contain;display:block;margin:0 auto 6px;filter:drop-shadow(0 4px 6px rgba(0,0,0,.25))}
+.medal:first-child img{width:92px;height:92px;margin-top:-8px}
+.medal b{display:block;font:600 .95rem/1.15 var(--disp)}
+.medal span{display:block;font-size:.76rem;color:var(--muted);margin-top:3px}
+.medal.new span::before{content:"nuevo · ";font:700 1rem/1 var(--hand);color:var(--gold-ink)}
+.next{display:flex;align-items:center;gap:12px;margin-top:16px;padding:12px;border-radius:12px;background:color-mix(in srgb,var(--gold) 9%,var(--paper))}
+.next img{width:46px;height:46px;filter:grayscale(1);opacity:.55;flex-shrink:0}
+.next .t{flex:1;min-width:0}
+.next .t b{font:600 1rem/1.2 var(--disp)}
+.next .t small{display:block;color:var(--muted);font-size:.8rem;margin-top:2px}
+.bar{height:8px;border-radius:99px;background:color-mix(in srgb,var(--muted) 22%,transparent);margin-top:8px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--gold);border-radius:99px}
+.count{font-size:.82rem;color:var(--muted);margin-top:12px}
+.empty-medals{color:var(--muted);font-size:.92rem;margin:0}
 
 /* Cuenta */
-.card{background:var(--paper,#fff);border:1px solid var(--border);border-radius:14px;padding:20px;box-shadow:0 1px 4px rgba(0,0,0,.06);}
-.acct{display:flex;align-items:center;gap:14px;}
-.acct .st{width:44px;height:44px;flex-shrink:0;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.15rem;}
-.acct .st.on{background:rgba(47,125,91,.12);color:var(--good);}
-.acct .st.off{background:rgba(143,111,46,.12);color:var(--gold2);}
-.acct .info{flex:1;min-width:0;}
-.acct .info b{display:block;font-size:.98rem;}
-.acct .info span{display:block;color:var(--muted);font-size:.85rem;margin-top:2px;word-break:break-word;}
-.acct .btn{flex-shrink:0;background:var(--gold);color:var(--navy);font-weight:700;font-size:.82rem;padding:10px 16px;border-radius:9px;text-decoration:none;white-space:nowrap;}
-.acct .btn:hover,.acct .btn:focus-visible{background:#b6924a;}
-@media(max-width:520px){.acct{flex-wrap:wrap;}.acct .btn{width:100%;text-align:center;}}
+.acct{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.acct .ic{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;flex-shrink:0;font-size:1.1rem}
+.acct .ic.on{background:color-mix(in srgb,var(--success) 15%,transparent);color:var(--success)}
+.acct .ic.off{background:color-mix(in srgb,var(--gold) 15%,transparent);color:var(--gold-ink)}
+.acct .info{flex:1;min-width:180px}
+.acct .info b{display:block;font-size:1rem}
+.acct .info span{display:block;color:var(--muted);font-size:.86rem;margin-top:3px;overflow-wrap:anywhere}
+.btn-gold{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 22px;border:0;border-radius:14px;
+  background:var(--gold);color:var(--on-gold);font:700 .98rem/1 var(--sans);text-decoration:none;cursor:pointer;
+  box-shadow:0 4px 0 color-mix(in srgb,var(--gold) 55%,#000);transition:transform .08s,box-shadow .08s}
+.btn-gold:active{transform:translateY(3px);box-shadow:0 1px 0 color-mix(in srgb,var(--gold) 55%,#000)}
+.btn-line{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 16px;border-radius:12px;border:1px solid var(--line);background:transparent;color:var(--ink);font:600 .9rem/1 var(--sans);cursor:pointer}
+.btn-line:hover{border-color:color-mix(in srgb,var(--error,#C0392B) 60%,transparent);color:var(--error,#C0392B)}
+[hidden]{display:none!important}
+@media(max-width:520px){.acct .btn-gold,.acct .btn-line{width:100%;justify-content:center}}
 
-/* Progreso */
-.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
-.stat{background:var(--paper,#fff);border:1px solid var(--border);border-radius:14px;padding:18px 14px;text-align:center;box-shadow:0 1px 4px rgba(0,0,0,.06);}
-.stat .n{font-family:'Inria Serif',serif;font-size:1.7rem;color:var(--text,#1B1B2F);line-height:1;}
-.stat .l{font-size:.72rem;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-top:6px;}
-.stat i{color:var(--gold2);font-size:1rem;margin-bottom:6px;display:block;}
+/* Ajustes: un índice de libro, no una rejilla de botones */
+.index{list-style:none;margin:0;padding:0}
+.index li+li{border-top:1px solid var(--line)}
+.index a{display:flex;align-items:center;gap:12px;min-height:54px;padding:6px 2px;text-decoration:none;color:var(--ink)}
+.index a i.lead{width:22px;text-align:center;color:var(--gold-ink)}
+.index a .lbl{font-weight:600;white-space:nowrap}
+.index a .dots{flex:1;border-bottom:2px dotted color-mix(in srgb,var(--muted) 45%,transparent);transform:translateY(4px);min-width:16px}
+.index a .hint{font-size:.8rem;color:var(--muted);white-space:nowrap}
+.index a i.go{color:var(--muted);font-size:.8rem}
+.index a:hover .lbl{color:var(--gold-ink)}
+@media(max-width:400px){.index a .hint{display:none}}
 
-/* Acciones */
-.actions{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;}
-a.act[hidden],button.act[hidden]{display:none;}
-a.act,button.act{display:flex;align-items:center;gap:12px;background:var(--paper,#fff);border:1px solid var(--border);border-radius:12px;padding:15px 16px;text-decoration:none;color:inherit;font-family:inherit;font-size:.92rem;font-weight:600;cursor:pointer;text-align:left;width:100%;transition:border-color .15s,box-shadow .15s;}
-a.act:hover,a.act:focus-visible,button.act:hover,button.act:focus-visible{border-color:var(--gold);box-shadow:0 6px 16px rgba(26,43,66,.1);}
-a.act .ic,button.act .ic{width:38px;height:38px;flex-shrink:0;border-radius:10px;background:linear-gradient(135deg,var(--navy2),var(--navy));color:var(--gold);display:flex;align-items:center;justify-content:center;}
-button.act.danger .ic{background:linear-gradient(135deg,#7a1f1f,#571414);color:#f3d6d6;}
+/* ---------- Vesper cierra ---------- */
+.outro{margin-top:34px;color:var(--on-night);background:linear-gradient(180deg,var(--dusk),var(--night))}
+.outro .in{max-width:1000px;margin:0 auto;padding:22px 16px 26px;display:flex;align-items:flex-end;gap:12px}
+.outro img{width:118px;height:118px;object-fit:contain;flex-shrink:0;margin-bottom:-26px;filter:drop-shadow(0 6px 10px rgba(0,0,0,.4))}
+.outro .t{flex:1;min-width:0;padding-bottom:4px}
+.outro p{margin:0 0 14px;font:700 1.5rem/1.12 var(--hand);color:var(--star)}
+.outro .sig{font:700 1.1rem/1 var(--hand);color:color-mix(in srgb,var(--on-night) 60%,transparent);margin:-8px 0 14px}
+footer{background:var(--night);color:color-mix(in srgb,var(--on-night) 62%,transparent);text-align:center;padding:18px 16px 22px;font-size:.78rem;border-top:1px solid color-mix(in srgb,var(--gold) 25%,transparent)}
+footer a{color:var(--star);text-decoration:none}
 
-footer{background:var(--navy);color:rgba(255,255,255,.65);text-align:center;padding:22px;font-size:.78rem;border-top:3px solid var(--gold);margin-top:40px;}
-footer a{color:var(--gold);text-decoration:none;}
-:focus-visible{outline:3px solid var(--gold,#c5a059);outline-offset:2px;}
+/* ---------- escritorio ---------- */
+@media(min-width:760px){
+  .hero .in{grid-template-columns:1fr 250px;grid-template-areas:"who cat" "say cat";padding:28px 24px 0;column-gap:30px}
+  .who{border-top:0;padding:10px 0 14px}
+  .who h1{font-size:2.2rem}
+  .cameo{width:72px;height:72px;font-size:2.1rem}
+  .say{padding-bottom:30px;max-width:560px}
+  .bubble{font-size:1.7rem;padding:12px 20px 14px}
+  .bubble::after{bottom:30px}
+  .cat img{width:250px;height:250px}
+  .cat::before{width:240px;height:240px}
+  main.wrap{padding:6px 24px 0;display:grid;grid-template-columns:1.25fr 1fr;column-gap:22px;align-items:start}
+  .chap.today{grid-column:1 / -1;grid-row:1}
+  .chap.today .sheet{display:grid;grid-template-columns:auto 1fr auto;gap:16px 28px;align-items:center}
+  .chap.today .go-btn{width:auto;margin:0}
+  .chap.today .nums{grid-column:1 / -1;border-top:1px solid var(--line);padding-top:14px}
+  .chap.week{grid-column:1;grid-row:2}
+  .chap.acct-c{grid-column:2;grid-row:2}
+  .chap.medals-c{grid-column:1;grid-row:3}
+  .chap.set{grid-column:2;grid-row:3}
+  .outro .in{padding:26px 24px 30px}
+  .outro img{width:150px;height:150px;margin-bottom:-30px}
+}
+@media(prefers-reduced-motion:no-preference){
+  .cat img{animation:peek .7s cubic-bezier(.2,.8,.3,1.2) both}
+  .bubble{animation:pop .5s .35s both}
+  @keyframes peek{from{transform:translateY(40px);opacity:0}to{transform:none;opacity:1}}
+  @keyframes pop{from{transform:rotate(-1.4deg) scale(.85);opacity:0}to{transform:rotate(-1.4deg) scale(1);opacity:1}}
+}
 </style>
 <link rel="stylesheet" href="assets/css/vesper_tokens.css">
-<!-- vesper_theme.js va AL FINAL del <head> a proposito: apply() hace
-     appendChild al <head> tal como esta parseado, asi que cargado antes
-     del <style> de la pagina su :root quedaba ANTES y la pagina ganaba.
-     El motor de temas estaba inerte aqui: elegir tema no hacia nada. -->
+<!-- vesper_theme.js va AL FINAL del <head> a proposito (ver historia de perfil.html). -->
 <script src="vesper_theme.js"></script>
 <script src="vesper_progress.js"></script>
 </head>
 <body>
-
 <a class="skip-link" href="#main">Saltar al contenido</a>
 
-<header>
+<header class="top">
   <a class="brand" href="materiales.html">
-    <img src="assets/images/vesper_logo_inverted.png" alt="Vesper Academy — portal">
+    <img src="assets/images/vesper_logo_inverted.png" alt="">
     <span><b>Vesper Academy</b><small>Mi perfil</small></span>
   </a>
-  <a class="back" href="materiales.html"><i class="fas fa-arrow-left" aria-hidden="true"></i> Portal</a>
+  <a class="back" href="materiales.html"><i class="fas fa-arrow-left" aria-hidden="true"></i><span class="t">Portal</span></a>
 </header>
+
+<!-- 1. Vesper abre la página -->
+<section class="hero" aria-label="Vesper te recibe">
+  <div class="in">
+    <div class="who">
+      <span class="cameo" id="cameo" aria-hidden="true">E</span>
+      <div>
+        <h1 id="p-name">Estudiante</h1>
+        <svg class="pen" viewBox="0 0 150 10" aria-hidden="true"><path d="M2 6.5C22 2.5 41 8.8 62 5.4S104 2.2 122 5.6c9 1.7 17 1.2 26-1.4" fill="none" stroke="#C9A84C" stroke-width="2.6" stroke-linecap="round"/></svg>
+        <div class="meta">
+          <span id="p-level"><i class="fas fa-signal" aria-hidden="true"></i><span>Sin nivel aún</span></span>
+          <span id="p-goal" hidden><i class="fas fa-bullseye" aria-hidden="true"></i><span></span></span>
+        </div>
+      </div>
+    </div>
+    <div class="say"><p class="bubble" id="say" aria-live="polite">…</p></div>
+    <div class="cat"><img id="cat" src="assets/images/mascot/vesper_cat_welcome.webp" alt="Vesper te saluda" width="250" height="250"></div>
+  </div>
+</section>
 
 <main class="wrap" id="main">
 
-  <section class="idcard" aria-label="Tu identidad">
-    <span class="avatar" id="avatar" aria-hidden="true">🎓</span>
-    <div class="who">
-      <h1 id="p-name">Estudiante</h1>
-      <div class="chips">
-        <span class="chip" id="p-level"><i class="fas fa-signal" aria-hidden="true"></i> <span>Nivel</span></span>
-        <span class="chip" id="p-goal" hidden><i class="fas fa-bullseye" aria-hidden="true"></i> <span></span></span>
+  <!-- Hoy: la meta y el botón, en la primera pantalla -->
+  <section class="chap today" aria-labelledby="h-today">
+    <h2 id="h-today">Hoy</h2>
+    <div class="sheet">
+      <div class="today-top">
+        <div class="ring" id="ring" role="img" aria-label="Meta de hoy">
+          <svg viewBox="0 0 92 92" aria-hidden="true"><circle class="trk" cx="46" cy="46" r="39" fill="none" stroke-width="9"/><circle class="rbar" id="ring-bar" cx="46" cy="46" r="39" fill="none" stroke-width="9" stroke-linecap="round" stroke-dasharray="245.04" stroke-dashoffset="245.04"/></svg>
+          <div class="mid"><b><span id="g-prog">0</span>/<span id="g-target">3</span></b><small>lecciones</small></div>
+        </div>
+        <div class="today-t">
+          <div class="goal-line">Tu meta de hoy</div>
+          <p class="hand-line" id="n-today"></p>
+        </div>
+      </div>
+      <a class="btn-gold go-btn" id="g-btn" href="leccion.html"><i class="fas fa-play" aria-hidden="true"></i> <span id="g-btn-t">Practicar</span></a>
+      <div class="nums">
+        <div><b id="s-xp">0</b><span>XP total</span></div>
+        <div><b id="s-done">0</b><span>Lecciones</span></div>
+        <div><b id="s-ach">0</b><span>Logros</span></div>
       </div>
     </div>
   </section>
 
-  <h2 class="sec">Tu cuenta</h2>
-  <div class="card">
-    <div class="acct" id="acct">
-      <span class="st off" id="acct-st" aria-hidden="true"><i class="fas fa-user"></i></span>
-      <div class="info">
-        <b id="acct-title">Comprobando tu sesión…</b>
-        <span id="acct-sub"></span>
+  <!-- 2. Tu semana -->
+  <section class="chap week" aria-labelledby="h-week">
+    <h2 id="h-week">Tu semana, <em>contada por Vesper</em></h2>
+    <div class="sheet">
+      <div class="week-top">
+        <div class="big"><i class="fas fa-fire flame" aria-hidden="true"></i><span id="s-streak">0</span><small id="s-streak-l">días de racha</small></div>
+        <span class="shields"><svg class="shd" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l8 3v6.2c0 4.6-3.3 8.4-8 9.8-4.7-1.4-8-5.2-8-9.8V5.5z" fill="currentColor" fill-opacity=".22" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg><span id="s-shields">0 escudos</span></span>
       </div>
-      <a class="btn" id="acct-btn" href="login.html" hidden>Iniciar sesión</a>
+      <div class="const" id="week" role="list" aria-label="Últimos 7 días"></div>
+      <div class="note"><img src="assets/images/mascot/vesper_cat.png" alt=""><p id="n-week"></p></div>
     </div>
-  </div>
+  </section>
 
-  <h2 class="sec">Tu progreso</h2>
-  <div class="stats">
-    <div class="stat"><i class="fas fa-bolt" aria-hidden="true"></i><div class="n" id="s-xp">0</div><div class="l">XP total</div></div>
-    <div class="stat"><i class="fas fa-fire" aria-hidden="true"></i><div class="n" id="s-streak">0</div><div class="l">Días de racha</div></div>
-    <div class="stat"><i class="fas fa-circle-check" aria-hidden="true"></i><div class="n" id="s-done">0</div><div class="l">Lecciones</div></div>
-  </div>
+  <!-- 4. Logros -->
+  <section class="chap medals-c" aria-labelledby="h-medals">
+    <h2 id="h-medals">Tu vitrina</h2>
+    <div class="sheet">
+      <div class="medals" id="medals"></div>
+      <p class="empty-medals" id="medals-empty" hidden>Todavía no hay medallas aquí. La primera llega con tu primera lección.</p>
+      <div class="next" id="next" hidden>
+        <img id="next-img" src="assets/images/achievements/medal_bronze.webp" alt="">
+        <div class="t"><b id="next-name"></b><small id="next-desc"></small><div class="bar"><i id="next-bar" style="width:0"></i></div></div>
+      </div>
+      <div class="count" id="ach-count"></div>
+      <div class="note"><img src="assets/images/mascot/vesper_cat.png" alt=""><p id="n-medals"></p></div>
+    </div>
+  </section>
 
-  <h2 class="sec">Ajustes</h2>
-  <div class="actions">
-    <a class="act" href="onboarding.html"><span class="ic" aria-hidden="true"><i class="fas fa-wand-magic-sparkles"></i></span> Editar mi plan</a>
-    <a class="act" href="apariencia.html"><span class="ic" aria-hidden="true"><i class="fas fa-palette"></i></span> Apariencia</a>
-    <a class="act" href="configuracion.html"><span class="ic" aria-hidden="true"><i class="fas fa-robot"></i></span> Personalizar a Vesper</a>
-    <!-- Solo maestros (teacherAccess() = "ok"): la app de las tiendas no tiene otra entrada al portal -->
-    <a class="act" id="teacher-link" href="portal_profesores.html" hidden><span class="ic" aria-hidden="true"><i class="fas fa-chalkboard-user"></i></span> Portal del profesor</a>
-    <button type="button" class="act danger" id="logout" hidden><span class="ic" aria-hidden="true"><i class="fas fa-arrow-right-from-bracket"></i></span> Cerrar sesión</button>
-  </div>
+  <!-- 5. Cuenta -->
+  <section class="chap acct-c" aria-labelledby="h-acct">
+    <h2 id="h-acct">Tu cuenta</h2>
+    <div class="sheet">
+      <div class="acct">
+        <span class="ic off" id="acct-st" aria-hidden="true"><i class="fas fa-user"></i></span>
+        <div class="info"><b id="acct-title">Comprobando tu sesión…</b><span id="acct-sub"></span></div>
+        <a class="btn-gold" id="acct-btn" href="login.html" hidden>Iniciar sesión</a>
+        <button type="button" class="btn-line" id="logout" hidden><i class="fas fa-arrow-right-from-bracket" aria-hidden="true"></i> Cerrar sesión</button>
+      </div>
+      <div class="note"><img src="assets/images/mascot/vesper_cat.png" alt=""><p id="n-acct"></p></div>
+    </div>
+  </section>
+
+  <!-- 6. Ajustes -->
+  <section class="chap set" aria-labelledby="h-set">
+    <h2 id="h-set">Ajustes</h2>
+    <div class="sheet" style="padding:6px 16px">
+      <ul class="index">
+        <li><a href="onboarding.html"><i class="fas fa-wand-magic-sparkles lead" aria-hidden="true"></i><span class="lbl">Editar mi plan</span><span class="dots"></span><span class="hint">nivel y objetivo</span><i class="fas fa-chevron-right go" aria-hidden="true"></i></a></li>
+        <li><a href="apariencia.html"><i class="fas fa-palette lead" aria-hidden="true"></i><span class="lbl">Apariencia</span><span class="dots"></span><span class="hint">8 temas</span><i class="fas fa-chevron-right go" aria-hidden="true"></i></a></li>
+        <li><a href="configuracion.html"><i class="fas fa-cat lead" aria-hidden="true"></i><span class="lbl">Personalizar a Vesper</span><span class="dots"></span><i class="fas fa-chevron-right go" aria-hidden="true"></i></a></li>
+        <!-- Solo maestros (teacherAccess() = "ok") -->
+        <li id="teacher-li" hidden><a href="portal_profesores.html"><i class="fas fa-chalkboard-user lead" aria-hidden="true"></i><span class="lbl">Portal del profesor</span><span class="dots"></span><i class="fas fa-chevron-right go" aria-hidden="true"></i></a></li>
+      </ul>
+    </div>
+  </section>
 
 </main>
+
+<!-- 7. Vesper cierra -->
+<section class="outro" aria-label="Siguiente paso">
+  <div class="in">
+    <img id="cat2" src="assets/images/mascot/vesper_cat_explaining.webp" alt="" width="150" height="150">
+    <div class="t">
+      <p id="bye"></p>
+      <div class="sig">— Vesper</div>
+      <a class="btn-gold" id="bye-btn" href="leccion.html">Seguir mi camino <i class="fas fa-arrow-right" aria-hidden="true"></i></a>
+    </div>
+  </div>
+</section>
 
 <footer>© <span id="y"></span> Vesper Academy · <a href="materiales.html">Portal del alumno</a> · <a href="aviso-de-privacidad.html">Aviso de privacidad</a></footer>
 
 <script>
 (function(){
   "use strict";
-  document.getElementById("y").textContent = new Date().getFullYear();
+  var ROOT = "", MASCOT = ROOT + "assets/images/mascot/", MEDAL = ROOT + "assets/images/achievements/medal_";
+  var $ = function(id){ return document.getElementById(id); };
+  $("y").textContent = new Date().getFullYear();
 
   var LEVEL_NAME = {0:"Principiante",1:"Inicial",2:"Básico",3:"Intermedio",4:"Avanzado",5:"Experto"};
   var GOAL_NAME = {work:"Inglés para el trabajo",travel:"Viajes y vida diaria",exam:"Aprobar un examen",
                    study:"Estudios",social:"Conversar y socializar",aviation:"Aviación"};
+  var DAY_LABELS = ["D","L","M","X","J","V","S"];
+  var MES = ["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];
+  var VP = window.VesperProgress;
 
+  /* ---------- lectura (nunca escribe) ---------- */
   var profile = {};
   try{ profile = JSON.parse(localStorage.getItem("vesper_profile")||"{}")||{}; }catch(e){}
 
-  /* Identidad */
+  function pad(n){ return (n<10?"0":"")+n; }
+  function key(d){ return d.getFullYear()+"-"+pad(d.getMonth()+1)+"-"+pad(d.getDate()); }
+  function daysAgo(n){ var t=new Date(); return new Date(t.getFullYear(),t.getMonth(),t.getDate()-n); }
+  function fmtDate(k){ if(!k) return ""; var p=String(k).split("-"); if(p.length<3) return ""; return (+p[2])+" "+MES[(+p[1])-1]; }
+  function isRecent(k){ if(!k) return false; return k===key(daysAgo(0)) || k===key(daysAgo(1)); }
+  function lessonCount(c){ var n=0; for(var k in (c||{})) if(!/^(review|boss|exam|shield):/.test(k)) n++; return n; }
+
+  function readReal(){
+    var st = {};
+    try{ st = VP ? (VP.getState()||{}) : (JSON.parse(localStorage.getItem("vesperProgress")||"{}")||{}); }catch(e){}
+    var week = [], goal = {target:st.goalTarget||3, progress:0, met:false}, ach = [];
+    try{ if(VP) week = VP.weekGrid(); }catch(e){}
+    try{ if(VP) goal = VP.dailyGoal(); }catch(e){}
+    try{ if(VP) ach = VP.achievementsState(); }catch(e){}
+    return { xp:st.xp||0, streak:st.streak||0, saved:st.savedStreak||st.streak||0,
+      lessons:lessonCount(st.completed), shields:(st.shieldsLeft!=null?st.shieldsLeft:(st.shields||0)),
+      week:week, goal:goal, ach:ach, hasData: !!(st.xp || lessonCount(st.completed)) };
+  }
+
+  /* ---------- Vesper decide qué decir ---------- */
+  var first = function(){ var n=(profile.name||"").trim().split(/\s+/)[0]; return n||""; };
+  function withName(s){ var n=first(); return n ? s.replace("{n}", ", "+n) : s.replace("{n}",""); }
+  function plural(n,a,b){ return n===1?a:b; }
+
+  function mood(d){
+    if(!d.hasData) return "nuevo";
+    if(d.goal.met) return "meta";
+    if(d.streak>=2) return "racha";
+    if(d.streak===0 && d.saved>0) return "perdida";
+    if(d.streak===1) return "chispa";
+    return "volver";
+  }
+  var POSE = {nuevo:"welcome", meta:"correct", racha:"streak", perdida:"incorrect", chispa:"explaining", volver:"correcting"};
+  var ALT = {nuevo:"Vesper te saluda con la pata", meta:"Vesper levanta el pulgar", racha:"Vesper alza el puño, orgulloso de tu racha",
+             perdida:"Vesper, pensativo", chispa:"Vesper te explica algo", volver:"Vesper levanta un dedo"};
+
+  function sayHero(d, m, latest){
+    var left = Math.max(0, d.goal.target - d.goal.progress);
+    var s;
+    if(m==="nuevo") s = withName("¡Hola{n}! Soy Vesper. Aquí voy a contar tu historia en inglés, pero todavía no escribimos la primera página.")+(linked ? "" : " ¿Ya tienes cuenta? Inicia sesión y la recupero.");
+    else if(m==="meta") s = withName("¡Meta del día cumplida{n}! "+d.goal.progress+" de "+d.goal.target+". Así se hace.");
+    else if(m==="racha") s = withName("¡<b>"+d.streak+" días</b> seguidos{n}! ")+(left ? "Hoy te "+plural(left,"falta 1 lección","faltan "+left+" lecciones")+" para tu meta." : "");
+    else if(m==="perdida") s = withName("Tu racha de "+d.saved+" días se apagó{n}. Un gato siempre cae de pie: hoy la encendemos otra vez.");
+    else if(m==="chispa") s = withName("Hoy encendiste la llama{n}. Vuelve mañana y la hacemos crecer.");
+    else s = withName("Qué gusto verte{n}. Llevas "+d.lessons+" lecciones conmigo.");
+    if(latest && isRecent(latest.date) && m!=="nuevo") s += " Y ganaste «"+latest.name+"».";
+    return s;
+  }
+
+  /* ---------- pintar ---------- */
+  var SHIELD = '<svg class="shd" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l8 3v6.2c0 4.6-3.3 8.4-8 9.8-4.7-1.4-8-5.2-8-9.8V5.5z" fill="currentColor" fill-opacity=".22" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg>';
+  var STAR = '<svg viewBox="0 0 24 24" aria-hidden="true"><path stroke-width="1.4" stroke-linejoin="round" d="M12 2.6l2.8 5.9 6.4.8-4.7 4.4 1.2 6.4L12 17l-5.7 3.1 1.2-6.4L2.8 9.3l6.4-.8z"/></svg>';
+
+  var lastD = null;
+  function render(d){
+    lastD = d;
+    var m = mood(d);
+    var unlocked = d.ach.filter(function(a){ return a.unlocked; })
+                        .sort(function(a,b){ return String(b.date||"").localeCompare(String(a.date||"")); });
+    var latest = unlocked[0];
+
+    /* abre */
+    var cat = $("cat"); cat.src = MASCOT+"vesper_cat_"+POSE[m]+".webp"; cat.alt = ALT[m];
+    $("say").innerHTML = sayHero(d, m, latest);
+
+    /* semana */
+    $("s-streak").textContent = d.streak;
+    $("s-streak-l").textContent = plural(d.streak,"día de racha","días de racha");
+    $("s-shields").textContent = d.shields+" "+plural(d.shields,"escudo","escudos");
+    var wk = $("week"), html = "";
+    var pts = [];
+    (d.week||[]).forEach(function(w,i){
+      var cls = w.active ? "on" : (w.shield ? "sh" : "off");
+      var label = w.active ? "practicaste" : (w.shield ? "te cubrió un escudo" : "sin práctica");
+      html += '<div class="day '+cls+(w.isToday?" today":"")+'" role="listitem" aria-label="'+(w.isToday?"Hoy":w.label)+': '+label+'">'
+            + '<span class="st">'+(w.shield ? SHIELD : STAR)+'</span>'
+            + '<b>'+(w.isToday ? "hoy" : w.label)+'</b></div>';
+    });
+    /* hilo de constelación entre días activos seguidos */
+    var line = '<svg class="line" viewBox="0 0 600 30" preserveAspectRatio="none" aria-hidden="true">';
+    for(var i=0;i<(d.week||[]).length-1;i++){
+      var a=d.week[i], b=d.week[i+1], lit=(a.active||a.shield)&&(b.active||b.shield);
+      var x1=i*100, x2=(i+1)*100;
+      line += '<line x1="'+x1+'" y1="15" x2="'+x2+'" y2="15" stroke="'+(lit?"var(--gold)":"var(--line)")+'" stroke-width="'+(lit?2:1.5)+'" stroke-dasharray="'+(lit?"0":"3 5")+'" vector-effect="non-scaling-stroke"/>';
+    }
+    line += '</svg>';
+    wk.innerHTML = line + html;
+    var nW;
+    if(m==="nuevo") nW = "Cada día que practiques se enciende una estrella. Siete seguidas forman tu primera constelación.";
+    else if(d.streak>=1){ var to7 = 7 - (d.streak % 7); nW = to7===7 ? "¡Otra semana completa! Te gané un escudo para un día malo." : (to7===1 ? "Mañana cierras la semana y te doy un escudo." : "En "+to7+" días más te doy un escudo para proteger tu racha."); }
+    else nW = "Las estrellas apagadas no se borran. Mañana puede brillar una nueva.";
+    $("n-week").textContent = nW;
+
+    /* hoy */
+    $("g-prog").textContent = d.goal.progress; $("g-target").textContent = d.goal.target;
+    var pct = d.goal.target ? Math.min(1, d.goal.progress / d.goal.target) : 0;
+    requestAnimationFrame(function(){ $("ring-bar").style.strokeDashoffset = String(245.04 * (1 - pct)); });
+    $("ring").classList.toggle("met", !!d.goal.met);
+    $("ring").setAttribute("aria-label", "Meta de hoy: "+d.goal.progress+" de "+d.goal.target+" lecciones");
+    $("g-btn-t").textContent = d.goal.met ? "Un repaso más" : (d.goal.progress ? "Seguir" : (m==="nuevo" ? "Empezar" : "Practicar"));
+    $("s-xp").textContent = (d.xp||0).toLocaleString("es-MX");
+    $("s-done").textContent = d.lessons;
+    $("s-ach").textContent = unlocked.length;
+    var left = Math.max(0, d.goal.target - d.goal.progress);
+    $("n-today").textContent = d.goal.met ? "Meta cumplida. Lo que hagas ahora es puro extra."
+      : (d.goal.progress ? "Vas bien: "+plural(left,"una lección más","faltan "+left)+" y cumples."
+      : (m==="nuevo" ? "Tu meta es de "+d.goal.target+" lecciones al día. Puedes cambiarla cuando quieras." : "Hoy todavía no empezamos. Con una lección ya cuenta el día."));
+
+    /* vitrina */
+    var md = $("medals"); md.innerHTML = "";
+    unlocked.slice(0,3).forEach(function(a,i){
+      md.insertAdjacentHTML("beforeend",'<div class="medal'+(i===0&&isRecent(a.date)?" new":"")+'"><img src="'+MEDAL+(a.tier||"bronze")+'.webp" alt="" width="92" height="92"><b></b><span>'+fmtDate(a.date)+'</span></div>');
+      md.lastChild.querySelector("b").textContent = a.name;
+    });
+    $("medals-empty").hidden = unlocked.length>0;
+    var cands = d.ach.filter(function(a){ return !a.unlocked && !a.secret && !a.dynamic && a.cur < a.goal; });
+    cands.sort(function(a,b){ return (b.cur/b.goal) - (a.cur/a.goal) || a.goal - b.goal; });
+    var nx = cands[0];
+    if(nx){
+      $("next").hidden = false;
+      $("next-img").src = MEDAL+(nx.tier||"bronze")+".webp";
+      $("next-name").textContent = "Siguiente: "+nx.name;
+      $("next-desc").textContent = nx.desc+" ("+nx.cur+" de "+nx.goal+")";
+      $("next-bar").style.width = Math.round(100*nx.cur/nx.goal)+"%";
+    } else $("next").hidden = true;
+    var total = d.ach.length;
+    $("ach-count").textContent = total ? unlocked.length+" de "+total+" logros ganados" : "";
+    var nM;
+    if(!unlocked.length) nM = nx ? "La primera medalla es «"+nx.name+"». Te espera al terminar tu primera lección." : "Aquí guardo tus medallas.";
+    else if(nx && nx.goal-nx.cur===1) nM = "¡Solo te falta uno para «"+nx.name+"»!";
+    else nM = "«"+latest.name+"» es mi favorita"+(isRecent(latest.date)?", y la acabas de ganar.":". La pulo cada noche.");
+    $("n-medals").textContent = nM;
+
+    /* cierra */
+    var bye, btn = "Seguir mi camino", pose2 = "explaining";
+    if(m==="nuevo"){ bye = "¿Escribimos juntos la primera página?"; btn = "Empezar mi primera lección"; pose2 = "welcome"; }
+    else if(d.goal.met){ bye = "Por hoy, misión cumplida. Nos vemos mañana para la estrella "+(d.streak+1)+"."; btn = "Un repaso más"; pose2 = "welcome"; }
+    else if(m==="perdida"){ bye = "Una lección y la llama vuelve a arder. Yo te espero aquí."; btn = "Encender mi racha"; }
+    else { bye = "Te "+plural(left,"falta una lección","faltan "+left+" lecciones")+" para la meta de hoy. ¿Le seguimos?"; }
+    $("bye").textContent = bye; $("bye-btn").firstChild.nodeValue = btn+" ";
+    $("cat2").src = MASCOT+"vesper_cat_"+pose2+".webp";
+    paintAccountNote();
+  }
+
+  /* ---------- identidad (vesper_profile) ---------- */
   var name = profile.name || "Estudiante";
-  document.getElementById("p-name").textContent = name;
-  var av = document.getElementById("avatar");
-  var initial = (name.trim()[0]||"E").toUpperCase();
-  av.textContent = initial;
+  $("p-name").textContent = name;
+  $("cameo").textContent = (name.trim()[0]||"E").toUpperCase();
+  $("p-level").querySelector("span").textContent = typeof profile.level==="number" ? (LEVEL_NAME[profile.level]||"Tu nivel") : "Sin nivel aún";
+  if(profile.goal && GOAL_NAME[profile.goal]){ $("p-goal").querySelector("span").textContent = GOAL_NAME[profile.goal]; $("p-goal").hidden = false; }
 
-  var lvlChip = document.getElementById("p-level").querySelector("span");
-  if(typeof profile.level === "number"){
-    lvlChip.textContent = LEVEL_NAME[profile.level] || "Tu nivel";
-  } else {
-    lvlChip.textContent = "Sin nivel aún";
-  }
-  if(profile.goal && GOAL_NAME[profile.goal]){
-    var goalChip = document.getElementById("p-goal");
-    goalChip.querySelector("span").textContent = GOAL_NAME[profile.goal];
-    goalChip.hidden = false;
-  }
-
-  /* Progreso (desde el store local de las lecciones) */
-  /* VesperProgress da la racha VIVA (0 si ya se perdió; 2026-11-12) y las
-     lecciones sin contar repasos, jefes, exámenes ni escudos gastados. */
-  var prog = {}, done = 0;
-  try{
-    if (window.VesperProgress) prog = VesperProgress.getState() || {};
-    else prog = JSON.parse(localStorage.getItem("vesperProgress")||"{}")||{};
-  }catch(e){}
-  for (var ck in (prog.completed || {})) { if (!/^(review|boss|exam|shield):/.test(ck)) done++; }
-  document.getElementById("s-xp").textContent = prog.xp || 0;
-  document.getElementById("s-streak").textContent = prog.streak || 0;
-  document.getElementById("s-done").textContent = done;
-
-  /* Cuenta: refleja la sesión de Firebase (si la hay). Modo libre si no. */
-  var st = document.getElementById("acct-st");
-  var title = document.getElementById("acct-title");
-  var sub = document.getElementById("acct-sub");
-  var btn = document.getElementById("acct-btn");
-  var logout = document.getElementById("logout");
-
+  /* ---------- cuenta (misma lógica que perfil.html) ---------- */
+  var linked = false;
   function renderFree(){
-    st.className = "st off"; st.innerHTML = '<i class="fas fa-user"></i>';
-    title.textContent = "Modo libre";
-    sub.textContent = "Estás practicando sin cuenta. Inicia sesión para guardar tu progreso en tu cuenta y verlo en cualquier dispositivo.";
-    btn.hidden = false; logout.hidden = true;
+    linked = false;
+    $("acct-st").className = "ic off"; $("acct-st").innerHTML = '<i class="fas fa-user"></i>';
+    $("acct-title").textContent = "Modo libre";
+    $("acct-sub").textContent = "Practicas sin cuenta: tu progreso vive solo en este dispositivo.";
+    $("acct-btn").hidden = false; $("logout").hidden = true; if(lastD) render(lastD);
   }
   function renderLinked(email){
-    st.className = "st on"; st.innerHTML = '<i class="fas fa-circle-check"></i>';
-    title.textContent = "Cuenta vinculada";
-    sub.textContent = email + " · tu progreso de lecciones se guarda automáticamente en tu cuenta.";
-    btn.hidden = true; logout.hidden = false;
+    linked = true;
+    $("acct-st").className = "ic on"; $("acct-st").innerHTML = '<i class="fas fa-circle-check"></i>';
+    $("acct-title").textContent = "Cuenta vinculada";
+    $("acct-sub").textContent = email + " · tu progreso se guarda solo en tu cuenta.";
+    $("acct-btn").hidden = true; $("logout").hidden = false; if(lastD) render(lastD);
   }
-
-  /* Estado inicial optimista según el perfil local; luego confirma con Firebase. */
-  if(profile.account && profile.account.email){ renderLinked(profile.account.email); }
-  else { renderFree(); }
+  function paintAccountNote(){
+    $("n-acct").textContent = linked ? "Guardo tu racha en tu cuenta. Puedes cambiar de celular y yo te reconozco."
+      : "Si inicias sesión, guardo tu racha en tu cuenta y no se pierde aunque cambies de celular.";
+  }
+  var realAuth = {email:null};
+  function applyAccount(){
+    if(realAuth.email) renderLinked(realAuth.email); else renderFree();
+  }
+  if(profile.account && profile.account.email) realAuth.email = profile.account.email;
+  applyAccount();
 
   if(window.VesperAuth && VesperAuth.initFirebase){
     VesperAuth.initFirebase().then(function(auth){
       auth.onAuthStateChanged(function(user){
-        if(user && user.emailVerified){ renderLinked(String(user.email||"").toLowerCase()); }
-        else { renderFree(); }
+        realAuth.email = (user && user.emailVerified) ? String(user.email||"").toLowerCase() : null;
+        applyAccount();
       });
-      logout.addEventListener("click", function(){
-        try{ auth.signOut(); }catch(e){}
-      });
-    }).catch(function(){ /* sin red: deja el estado local */ });
+      $("logout").addEventListener("click", function(){ try{ auth.signOut(); }catch(e){} });
+    }).catch(function(){});
+  }
+  if(window.VesperAuth && VesperAuth.teacherAccess){
+    VesperAuth.teacherAccess().then(function(r){ $("teacher-li").hidden = (r !== "ok"); }, function(){});
   }
 
-  /* Acceso de maestro. Solo decide si se ve el botón: el portal y sus datos
-     los siguen protegiendo su propia puerta y las reglas de Firestore. */
-  if(window.VesperAuth && VesperAuth.teacherAccess){
-    VesperAuth.teacherAccess().then(function(r){
-      document.getElementById("teacher-link").hidden = (r !== "ok");
-    }, function(){});
-  }
+  render(readReal());
 })();
 </script>
 
