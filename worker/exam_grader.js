@@ -7,19 +7,22 @@
  * generado por _scripts/exams/split_exams.js y fuera de git).
  *
  * Flujo (todo POST JSON, mismo CORS que el chat):
- *   /exam/start  {kind:"exam"|"boss", level, version, ids?}
- *        -> {attemptId, total}. En el jefe el cliente muestrea y manda `ids`;
- *           aquí se valida que sean del banco y del tamaño correcto.
+ *   /exam/start  {kind:"exam"|"boss", level, version, idToken?}
+ *        -> {attemptId, total, ids?}. El intento recuerda el uid de quien lo
+ *           abre (si trae sesión). En el jefe las preguntas las SORTEA el
+ *           Worker y vuelven en `ids` (2026-11-23; antes las escogía el
+ *           cliente, que podía pedir justo las que ya conocía).
  *   /exam/answer {attemptId, id, response}
- *        -> {correct, reveal}. Solo cuenta la PRIMERA respuesta de cada
- *           pregunta (queda en el Durable Object ExamAttempt); `reveal` trae
- *           la clave y la explicación para que la app muestre "Era: …".
+ *        -> {correct, first, reveal?}. Solo cuenta la PRIMERA respuesta de
+ *           cada pregunta (queda en el Durable Object ExamAttempt). `reveal`
+ *           (la clave, para "Era: …") solo en el jefe: el examen de nivel es
+ *           un banco fijo y chico, y revelarlo dejaba sacar 100 al 2.º intento.
  *   /exam/finish {attemptId, idToken?, alias?}
  *        -> {score, total, percent, passed, threshold, saved}. La nota la
- *           calcula el Worker con lo registrado; si hay sesión verificada la
- *           guarda él mismo en Firestore (exam_results, gradedBy "worker")
- *           con la cuenta de servicio. Las reglas ya no aceptan esas notas
- *           escritas desde el navegador.
+ *           calcula el Worker con lo registrado y la guarda él mismo en
+ *           Firestore (exam_results, gradedBy "worker") con la cuenta de
+ *           servicio, SOLO si el idToken es de la misma cuenta que abrió el
+ *           intento. Las reglas no aceptan esas notas desde el navegador.
  *
  * La calificación replica EXACTAMENTE la de leccion_app.js (norm(), índices
  * originales de las opciones, orden de palabras). Si cambias una, cambia la
@@ -117,7 +120,9 @@ function bankOf(kind, level) {
 export class ExamAttempt extends DurableObject {
   async init(a) {
     if (await this.ctx.storage.get("a")) return { ok: false, error: "exists" };
-    await this.ctx.storage.put("a", { kind: a.kind, level: a.level, ids: a.ids, answered: {}, order: [], created: Date.now(), result: null });
+    /* uid: la cuenta que abrió el intento ("" si fue sin sesión). Solo esa
+       cuenta puede guardar la nota en /exam/finish. */
+    await this.ctx.storage.put("a", { kind: a.kind, level: a.level, ids: a.ids, uid: a.uid || "", answered: {}, order: [], created: Date.now(), result: null });
     await this.ctx.storage.setAlarm(Date.now() + ATTEMPT_TTL_MS);
     return { ok: true };
   }
@@ -150,6 +155,33 @@ function randomId() {
   const b = new Uint8Array(16); crypto.getRandomValues(b);
   return Array.from(b, (x) => x.toString(16).padStart(2, "0")).join("");
 }
+/* entero uniforme en [0, n) con crypto (sin sesgo de módulo) */
+function randInt(n) {
+  const lim = Math.floor(0x100000000 / n) * n, b = new Uint32Array(1);
+  do { crypto.getRandomValues(b); } while (b[0] >= lim);
+  return b[0] % n;
+}
+function shuffled(a) {
+  a = a.slice();
+  for (let i = a.length - 1; i > 0; i--) { const j = randInt(i + 1); const t = a[i]; a[i] = a[j]; a[j] = t; }
+  return a;
+}
+/* Muestreo del jefe: el mismo criterio que buildBossExam() de leccion_app.js
+   (TOEFL: 1 lectura + 1 listening garantizados, y el resto al azar). Lo hace
+   el SERVIDOR para que el alumno no pueda escoger las preguntas que ya vio. */
+function sampleBoss(bank) {
+  const all = Object.keys(bank.items), size = Math.min(bank.size || 8, all.length);
+  let picked;
+  if (bank.toefl) {
+    const one = (t) => shuffled(all.filter((id) => bank.items[id].type === t)).slice(0, 1);
+    const rest = shuffled(all.filter((id) => bank.items[id].type !== "reading" && bank.items[id].type !== "listening"));
+    picked = one("reading").concat(one("listening"), rest).slice(0, size);
+  } else picked = shuffled(all).slice(0, size);
+  return shuffled(picked);
+}
+/* local (wrangler dev sin cuenta de servicio): el script de pruebas necesita
+   abrir el jefe con ids escogidos para recorrer TODO el banco */
+function isDevEnv(env) { return env.EXAM_DEV === "1" && !env.FIREBASE_SA; }
 /* attemptId = "<kind>.<level>.<hex>": el Worker sabe qué banco usar sin
    preguntarle al DO; el hex aleatorio es lo que lo hace inadivinable. */
 function parseAttempt(s) {
@@ -279,19 +311,32 @@ function cleanAlias(a) {
   return String(typeof a === "string" ? a : "").replace(/[\u0000-\u001f]/g, "").trim().slice(0, 24) || "Estudiante";
 }
 
-async function start(env, body) {
+/* Valida kind/level/version antes de gastar una consulta a Identity Toolkit. */
+function startCheck(body) {
   const kind = body.kind, level = body.level;
   if ((kind !== "exam" && kind !== "boss") || LEVELS.indexOf(level) < 0) return [400, { error: "Examen inválido." }];
   if (body.version !== KEYS.version) {
     return [409, { error: "Hay una versión nueva de los exámenes. Recarga la página.", code: "stale" }];
   }
-  const bank = bankOf(kind, level);
-  if (!bank) return [404, { error: "No hay examen para ese nivel." }];
+  if (!bankOf(kind, level)) return [404, { error: "No hay examen para ese nivel." }];
+  return null;
+}
+
+async function start(env, body, user) {
+  const bad = startCheck(body);
+  if (bad) return bad;
+  const kind = body.kind, level = body.level, bank = bankOf(kind, level);
   const all = Object.keys(bank.items);
   let ids;
   if (kind === "exam") ids = all;
-  else {
-    ids = body.ids;
+  else if (!(isDevEnv(env) && body.devIds)) {
+    /* Jefe: las preguntas las sortea el Worker y se las manda a la app (que
+       tiene el banco sin claves). Los `ids` que mande el cliente se ignoran:
+       antes podía escoger justo las que ya había visto con su clave. */
+    ids = sampleBoss(bank);
+  } else {
+    /* solo en local: el script de pruebas escoge (devIds) para recorrer el banco */
+    ids = body.devIds;
     const want = Math.min(bank.size || 8, all.length);
     if (!Array.isArray(ids) || ids.length !== want || new Set(ids).size !== ids.length
         || !ids.every((id) => typeof id === "string" && Object.prototype.hasOwnProperty.call(bank.items, id))) {
@@ -306,9 +351,11 @@ async function start(env, body) {
     }
   }
   const attemptId = kind + "." + level + "." + randomId();
-  const r = await attemptStub(env, attemptId).init({ kind, level, ids });
+  const r = await attemptStub(env, attemptId).init({ kind, level, ids, uid: (user && user.verified && user.uid) || "" });
   if (!r.ok) return [500, { error: "No se pudo abrir el examen." }];
-  return [200, { attemptId: attemptId, total: ids.length }];
+  const out = { attemptId: attemptId, total: ids.length };
+  if (kind === "boss") out.ids = ids;   // la app pinta ESTAS preguntas, en este orden
+  return [200, out];
 }
 
 async function answer(env, body) {
@@ -322,6 +369,11 @@ async function answer(env, body) {
   const st = await attemptStub(env, at.id).answer(body.id, ok);
   if (st.error === "no_attempt") return [404, { error: "El examen caducó. Empieza de nuevo.", code: "expired" }];
   if (st.error) return [409, { error: "Esa pregunta no es de este examen.", code: st.error }];
+  /* Examen de nivel: banco fijo y chico (26–31 preguntas, todas en cada
+     intento), así que la clave NO sale nunca; la app solo dice ✓/✗. Antes un
+     intento de práctica revelaba todo y el siguiente sacaba 100.
+     El jefe sí revela ("Era: …"): sus preguntas las sortea el Worker. */
+  if (at.kind === "exam") return [200, { correct: st.ok, first: st.first }];
   return [200, { correct: st.ok, first: st.first, reveal: reveal(ex) }];
 }
 
@@ -359,9 +411,16 @@ async function finish(env, body) {
     if (!closed) return [404, { error: "El examen caducó.", code: "expired" }];
     if (!closed.first) return [200, Object.assign({}, closed.result, { saved: false, why: "already_finished" })];
     /* guardar en Firestore solo la primera vez, si hay sesión */
+    /* y solo si quien cierra es la MISMA cuenta que abrió el intento: un
+       intento abierto sin sesión (o con otra cuenta) no se guarda nunca */
     let save = { saved: false, why: "no_session" };
     if (body.idToken) {
-      try { save = await saveResult(env, await lookupUser(env, body.idToken), cleanAlias(body.alias), res); }
+      try {
+        const user = await lookupUser(env, body.idToken);
+        if (!a.uid) save = { saved: false, why: "anonymous_start" };
+        else if (!user || user.uid !== a.uid) save = { saved: false, why: "not_owner" };
+        else save = await saveResult(env, user, cleanAlias(body.alias), res);
+      }
       catch (e) { console.error("exam save:", e && e.message); save = { saved: false, why: "save_failed" }; }
     }
     return [200, Object.assign({}, res, save)];
@@ -383,21 +442,23 @@ export async function handleExam(path, body, env, rate, limitOf, rateRaw) {
        /exam/answer devuelve la clave (la UI la necesita para pintar el feedback),
        así que esto limita cuántas veces se puede "cosechar" el banco. Solo cuenta
        cuando el inicio fue válido (los 400/409 no gastan cupo). */
-    if (isStart && body.kind === "exam") {
-      const out = await start(env, body);
-      if (out[0] !== 200) return out;
-      let user = null;
-      if (body.idToken) { try { user = await lookupUser(env, body.idToken); } catch (e) { user = null; } }
-      /* con uid verificado: clave solo por uid (sin IP, para que el tope no se reinicie al cambiar de red);
-         si no, solo IP con tope alto */
-      const rl2 = user && user.uid
-        ? await (rateRaw || rate)("exam-level-uid:" + user.uid, 0, limitOf("RL_EXAM_LEVEL_START_PER_DAY"))
-        : await rate("exam-level-start", 0, limitOf("RL_EXAM_LEVEL_START_PER_DAY_IP"));
-      /* si excede, el intento ya creado queda huérfano (el cliente nunca recibe su id) y caduca solo */
-      if (!rl2.ok) return [429, { error: "Hoy ya hiciste varios intentos del examen de nivel. Vuelve mañana.", code: "rate_limited", retryAfter: rl2.retryAfter || 3600 }];
-      return out;
-    }
-    return isStart ? start(env, body) : answer(env, body);
+    if (!isStart) return answer(env, body);
+    /* ¿quién abre el intento? Se guarda su uid: solo esa cuenta podrá guardar la nota */
+    const bad = startCheck(body);
+    if (bad) return bad;
+    let user = null;
+    if (body.idToken) { try { user = await lookupUser(env, body.idToken); } catch (e) { user = null; } }
+    const out = await start(env, body, user);
+    if (out[0] !== 200 || body.kind !== "exam") return out;
+    /* examen de nivel: tope diario de intentos nuevos. Con uid verificado,
+       clave solo por uid (sin IP, para que el tope no se reinicie al cambiar
+       de red); si no, solo IP con tope alto (esos intentos ya no se guardan) */
+    const rl2 = user && user.uid
+      ? await (rateRaw || rate)("exam-level-uid:" + user.uid, 0, limitOf("RL_EXAM_LEVEL_START_PER_DAY"))
+      : await rate("exam-level-start", 0, limitOf("RL_EXAM_LEVEL_START_PER_DAY_IP"));
+    /* si excede, el intento ya creado queda huérfano (el cliente nunca recibe su id) y caduca solo */
+    if (!rl2.ok) return [429, { error: "Hoy ya hiciste varios intentos del examen de nivel. Vuelve mañana.", code: "rate_limited", retryAfter: rl2.retryAfter || 3600 }];
+    return out;
   }
   if (path === "/exam/finish") {
     const rl = await rate("exam-finish", limitOf("RL_EXAM_START_PER_MIN"), limitOf("RL_EXAM_START_PER_DAY"));

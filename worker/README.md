@@ -239,6 +239,23 @@ rutas `/exam/start`, `/exam/answer`, `/exam/finish`), que además guarda la nota
 en Firestore (`exam_results`, con `gradedBy: "worker"`). Las reglas rechazan
 esas notas si llegan desde el navegador.
 
+Contra la "cosecha" de claves (2026-11-23):
+
+- **Examen de nivel:** `/exam/answer` solo dice si acertó (`correct`), nunca
+  la clave. El banco es fijo y chico, y antes un intento de práctica revelaba
+  todo y el siguiente sacaba 100.
+- **Jefe:** el Worker sortea las preguntas en `/exam/start` y las devuelve en
+  `ids`; la app las pinta en ese orden. Los `ids` del cliente se ignoran
+  (solo en local, con `EXAM_DEV=1`, se acepta `devIds` para las pruebas).
+- **Dueño del intento:** `/exam/start` guarda el uid del idToken; `/exam/finish`
+  solo guarda la nota si el idToken es de esa misma cuenta (`why:
+  "anonymous_start"` / `"not_owner"` si no).
+- **Orden de despliegue:** primero el sitio (`git push`), y `wrangler deploy`
+  uno o dos días después (el service worker sirve el `leccion_app.js` guardado
+  hasta que se refresca). La app nueva funciona con el Worker viejo; la vieja
+  con el Worker nuevo pintaría feedback falso en el examen de nivel y fallaría
+  en el jefe.
+
 - **Fuente con claves (privada):** `_scripts/exams/vesper_*_exams.src.js`. Se
   editan ahí; nunca los `vesper_*_exams.js` de la raíz, que son generados.
 - **Generar:** `node _scripts/exams/split_exams.js` escribe los dos archivos

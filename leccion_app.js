@@ -4334,6 +4334,22 @@
 
   /* ---------- EXERCISES ---------- */
   function renderExercise() {
+    /* Calificado en el servidor: cada vuelta desde la 1.ª pregunta abre un
+       intento nuevo. En el jefe hay que ESPERARLO antes de pintar, porque el
+       Worker decide qué preguntas tocan (examUseIds reordena la lista). */
+    if (lesson.serverGraded && exIdx === 0) {
+      if (lesson._runReady) lesson._runReady = false;
+      else {
+        examNewRun();
+        if (lesson.examKind === "boss") {
+          show('<div class="wrap">' + topbar(22) + '<div class="card center"><p class="muted" role="status">'
+            + T("Preparando el duelo…", "Getting the duel ready…") + '</p></div></div>');
+          var go = function () { lesson._runReady = true; renderExercise(); };
+          lesson._att.then(go, go);
+          return;
+        }
+      }
+    }
     if (exIdx === 0) {   /* arranque/reintento: combo y reloj a cero */
       combo = 0; maxCombo = 0; runT0 = Date.now(); struckAt = -1;
       /* sin cue si el 1er ejercicio es listening: chocaría con el autoplay */
@@ -4343,7 +4359,6 @@
     var total = lesson.exercises.length;
     var pct = 22 + Math.round(58 * (exIdx / total));
     var ex = lesson.exercises[exIdx];
-    if (lesson.serverGraded && exIdx === 0) examNewRun();
     if (ex.type === "multiple_choice") renderMCQ(ex, pct, total);
     else if (ex.type === "word_order") renderWordOrder(ex, pct, total);
     else if (ex.type === "true_false") renderTrueFalse(ex, pct, total);
@@ -4402,11 +4417,24 @@
           ids: lesson.exercises.map(function (e) { return e.id; }),
           idToken: tok || undefined
         });
-      }).then(function (j) { return j.attemptId; });
+      }).then(function (j) { if (j.ids) examUseIds(j.ids); return j.attemptId; });
       p.catch(function () { if (lesson._att === p) lesson._att = null; });
       lesson._att = p;
     }
     return lesson._att;
+  }
+  /* El Worker sorteó las preguntas del jefe: se pintan ESAS, en su orden.
+     (Los `ids` que manda la app los ignora el Worker nuevo; con el viejo no
+     llega `ids` y se queda la muestra local, como antes.) */
+  function examUseIds(ids) {
+    var bank = lesson.examBank || [], byIdMap = {};
+    bank.forEach(function (e) { byIdMap[e.id] = e; });
+    var picked = ids.map(function (id) { return byIdMap[id]; });
+    if (!picked.length || picked.some(function (e) { return !e; })) {
+      try { console.warn("[exam] el servidor mandó preguntas que la app no tiene; ¿versión vieja?"); } catch (e) {}
+      return;
+    }
+    lesson.exercises = examClone(picked);
   }
   /* lee del DOM lo que el alumno eligió (los renderers lo guardan en closures) */
   function examResponse(ex) {
@@ -4466,9 +4494,11 @@
       examAttempt().then(function (att) {
         return examPost("answer", { attemptId: att, id: ex.id, response: resp });
       }).then(function (r) {
-        examReveal(ex, r.reveal);
         ex._graded = true; ex._pending = false;
         btn.disabled = false; btn.innerHTML = label;
+        /* examen de nivel: el Worker no manda la clave, solo el veredicto */
+        if (!r.reveal) { examVerdictOnly(ex, !!r.correct, btn); return; }
+        examReveal(ex, r.reveal);
         orig.call(self, e);
         /* la calificación local (con la clave ya revelada) debe coincidir con la
            del servidor; si no, manda la del servidor, que es la que cuenta */
@@ -4482,6 +4512,30 @@
         if (fb) fb.innerHTML = '<p class="hint" role="alert">' + ic('bulb') + esc(err.message) + '</p>';
       });
     };
+  }
+  /* Feedback sin clave (examen de nivel, 2026-11-23): ✓/✗ y nada más. No se
+     llama al renderer (calificaría sin clave y pintaría una "correcta" falsa):
+     se congela lo que el alumno contestó, se marca SU respuesta y el botón
+     pasa a "Siguiente", como en el flujo normal. */
+  function examVerdictOnly(ex, ok, btn) {
+    results[exIdx] = ok;
+    var card = document.querySelector(".card");
+    if (card) {
+      each(".card .opt, .card .fe-seg, .card .tf-btn, .card .chip", function (el) {
+        el.classList.add("locked"); el.setAttribute("aria-disabled", "true"); el.disabled = true;
+        /* lectura: el veredicto es de todo el bloque; en rojo no se sabe cuál
+           de las elegidas falló, así que no se marca ninguna */
+        if (el.classList.contains("sel") && (ok || ex.type !== "reading")) el.classList.add(ok ? "correct" : "wrong");
+      });
+      each(".card input, .card textarea", function (el) { el.readOnly = true; el.classList.add(ok ? "correct" : "wrong"); });
+      each(".card #answer .chip", function (el) { el.classList.add(ok ? "correct" : "wrong"); });
+    }
+    var fb = byId("fb");
+    if (fb) fb.innerHTML = feedbackBox(ok, "", T("En el examen de nivel no se muestra la respuesta correcta.",
+                                                 "The level exam doesn't show the right answer."));
+    announceResult(ok, "");
+    setVerifyNext(btn, lesson.exercises.length);
+    btn.onclick = function () { advance(); };
   }
   /* cierra el intento: el Worker calcula la nota y, con sesión, la guarda */
   function examFinish() {
@@ -5867,6 +5921,9 @@
         lessonId: "boss:" + level, level: level, track: "Examen del mundo", isBoss: true, bossLevel: level,
         /* el banco no trae respuestas: califica el Worker (ver examGateVerify) */
         serverGraded: true, examKind: "boss",
+        /* el banco entero (sin claves): el Worker sortea qué preguntas tocan
+           en cada intento y la app las saca de aquí (ver examUseIds) */
+        examBank: all,
         title: bm.name + " · " + level,
         explanation: {
           body: "Demuestra tu dominio de " + level + ". "
