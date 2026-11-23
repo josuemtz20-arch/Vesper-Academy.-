@@ -261,23 +261,6 @@ html.js-anim .reveal.in-view{opacity:1;animation:rise .6s var(--ease-out) backwa
   animation-delay:calc(var(--i,0) * 60ms);}
 @keyframes rise{from{opacity:0;transform:translateY(14px);}to{opacity:1;transform:none;}}
 
-/* ── Clase en vivo: la superficie más destacada cuando existe ── */
-.myclass{display:none;align-items:center;gap:14px;
-  background-color:var(--navy);
-  background-image:linear-gradient(150deg,var(--navy2),var(--navy) 70%);
-  border:1px solid var(--hair);border-radius:var(--r-lg);padding:18px 20px;margin:22px 0 0;
-  text-decoration:none;color:var(--on-night);box-shadow:var(--sh-dusk);
-  transition:transform .24s var(--ease-out),border-color .24s;}
-.myclass:hover,.myclass:focus-visible{transform:translateY(-3px);border-color:var(--gold);}
-.myclass .mycl-ic{width:44px;height:44px;flex-shrink:0;border-radius:var(--r-md);
-  background:linear-gradient(135deg,var(--gold-lt),var(--gold));color:var(--navy);
-  display:flex;align-items:center;justify-content:center;font-size:1.05rem;}
-.myclass .mycl-body{flex:1;min-width:0;}
-.myclass .mycl-kicker{display:block;color:var(--gold-lt);font-size:var(--t-eyebrow);font-weight:600;text-transform:uppercase;letter-spacing:.18em;}
-.myclass .mycl-title{display:block;font-family:var(--va-font-display);font-size:1.1rem;font-weight:600;margin-top:3px;}
-.myclass .mycl-go{flex-shrink:0;display:inline-flex;align-items:center;gap:8px;background:var(--gold);color:var(--navy);font-weight:700;font-size:var(--t-small);padding:11px 17px;border-radius:var(--r-sm);white-space:nowrap;transition:background .18s;}
-.myclass:hover .mycl-go,.myclass:focus-visible .mycl-go{background:var(--gold-lt);}
-@media(max-width:520px){.myclass{flex-wrap:wrap;}.myclass .mycl-go{width:100%;justify-content:center;}}
 
 /* ── Héroe "Hoy": la lámina. Una sola acción, arriba del todo. ── */
 #today{display:none;align-items:center;gap:18px;margin:20px 0 0;text-decoration:none;
@@ -721,17 +704,17 @@ html:not(.vesper-dark){--card-sh:0 10px 28px rgba(27,27,47,.10);}
 }
 
 /* ── Tarjetas de acción: clase en vivo y "Empieza por aquí" ── */
-#today,.myclass{border-radius:var(--r-card);border:1px solid var(--hair);
+#today{border-radius:var(--r-card);border:1px solid var(--hair);
   box-shadow:0 0 0 4px color-mix(in srgb,var(--gold) 8%,transparent),var(--card-sh);}
 #today{margin-top:18px;padding:22px 24px;}
-#today:hover,#today:focus-visible,.myclass:hover,.myclass:focus-visible{transform:translateY(-2px);}
-#today .t-ic,.myclass .mycl-ic{border-radius:16px;box-shadow:0 3px 0 var(--gold-shadow);}
+#today:hover,#today:focus-visible{transform:translateY(-2px);}
+#today .t-ic{border-radius:16px;box-shadow:0 3px 0 var(--gold-shadow);}
 #today .t-title{font-size:1.45rem;}
-#today .t-go,.myclass .mycl-go{background:linear-gradient(180deg,color-mix(in srgb,var(--gold-lt) 45%,var(--gold)),var(--gold));
+#today .t-go{background:linear-gradient(180deg,color-mix(in srgb,var(--gold-lt) 45%,var(--gold)),var(--gold));
   color:var(--on-gold);font-weight:800;font-size:.95rem;border-radius:14px;padding:13px 22px;
   box-shadow:0 var(--press) 0 var(--gold-shadow);transition:transform .09s ease,box-shadow .09s ease;}
-#today:hover .t-go,#today:focus-visible .t-go,.myclass:hover .mycl-go{background:linear-gradient(180deg,var(--gold-lt),var(--gold));}
-#today:active .t-go,.myclass:active .mycl-go{transform:translateY(var(--press));box-shadow:0 0 0 var(--gold-shadow);}
+#today:hover .t-go,#today:focus-visible .t-go{background:linear-gradient(180deg,var(--gold-lt),var(--gold));}
+#today:active .t-go{transform:translateY(var(--press));box-shadow:0 0 0 var(--gold-shadow);}
 @media(max-width:560px){#today{padding:20px;}#today .t-go{padding:15px 22px;font-size:1rem;}}
 
 /* ── Herramientas: mosaico de tarjetas, no un riel ── */
@@ -1302,6 +1285,108 @@ html[data-vesper-style="minimal"] footer .f-hand small{color:var(--m-muted);}
      perfil.html y onboarding.html, que lo cargan al principio del <head>. -->
 <script src="vesper_theme.js"></script>
 <script src="vesper_english_ui.js"></script>
+<style>
+/* ===== TU CLASE EN VIVO · banda (2026-11-23, arena link-meet opción A) =====
+   Banda de la clase en vivo, entre la cabecera y el saludo. Siempre noche
+   (--navy es oscuro en todos los temas), con filo de oro abajo para que no se
+   funda con la cabecera. Tres estados por data-state: vivo · pronto · luego.
+   El punto que late es oro (acción), no rojo: en Vesper el rojo es "mal". */
+.vclass{position:relative;z-index:1;color:var(--on-night);
+  background-color:var(--navy);
+  background-image:radial-gradient(640px 220px at 12% 0%,color-mix(in srgb,var(--gold) 26%,transparent),transparent 70%),
+    linear-gradient(180deg,color-mix(in srgb,var(--navy) 80%,#000),var(--navy));
+  border-bottom:2px solid var(--gold);
+  box-shadow:0 10px 30px rgba(8,6,22,.30);}
+.vclass[hidden]{display:none;}
+.vc-in{max-width:var(--maxw);margin:0 auto;padding:16px var(--gutter);
+  display:flex;align-items:center;gap:18px;}
+.vc-ic{display:flex;align-items:center;justify-content:center;width:52px;height:52px;flex:0 0 auto;
+  border-radius:16px;color:var(--on-gold,#1f2342);font-size:1.4rem;
+  background:linear-gradient(135deg,var(--gold-lt),var(--gold));box-shadow:0 3px 0 var(--gold-shadow);}
+.vc-txt{flex:1;min-width:0;}
+.vc-txt p{margin:0;}
+.vc-state{display:flex;align-items:center;gap:9px;font-size:.74rem;font-weight:800;
+  letter-spacing:.2em;text-transform:uppercase;color:var(--gold-lt);}
+.vc-dot{position:relative;margin-left:6px;width:11px;height:11px;border-radius:50%;background:var(--gold-lt);
+  box-shadow:0 0 10px var(--gold);flex:0 0 auto;}
+.vc-dot::after{content:"";position:absolute;inset:-5px;border-radius:50%;border:2px solid var(--gold);
+  opacity:0;animation:vcPing 1.6s cubic-bezier(.2,.7,.3,1) infinite;}
+@keyframes vcPing{0%{transform:scale(.5);opacity:.95}100%{transform:scale(1.9);opacity:0}}
+.vc-title{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px;margin-top:4px !important;}
+.vc-title .va-display{font-family:var(--va-font-display,"Fraunces",serif);font-size:clamp(1.3rem,2.6vw,1.7rem);
+  font-weight:600;line-height:1.15;color:#f5f2eb;}
+.vc-when{font-size:.95rem;color:var(--on-night-soft);font-weight:500;}
+
+/* Botón de oro con suelo, el mismo contrato que .t-go / TACTO */
+.vc-go{flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;gap:10px;
+  min-height:56px;padding:0 28px;border-radius:16px;text-decoration:none;
+  background:linear-gradient(180deg,color-mix(in srgb,var(--gold-lt) 45%,var(--gold)),var(--gold));
+  color:var(--on-gold,#1f2342);font-weight:800;font-size:1.08rem;white-space:nowrap;
+  box-shadow:0 var(--press,4px) 0 var(--gold-shadow);transition:transform .09s ease,box-shadow .09s ease,background .18s;}
+.vc-go .i{font-size:1.25em;stroke-width:1.9;}
+.vc-go:hover,.vc-go:focus-visible{background:linear-gradient(180deg,var(--gold-lt),var(--gold));}
+.vc-go:focus-visible{outline:3px solid var(--gold-lt);outline-offset:3px;}
+.vc-go:active{transform:translateY(var(--press,4px));box-shadow:0 0 0 var(--gold-shadow);}
+
+/* ── pronto: misma banda, el punto late más despacio ── */
+.vclass[data-state="pronto"] .vc-dot::after{animation-duration:2.6s;}
+
+/* ── luego: una sola línea, sin gato ni nota; el link queda a mano ── */
+.vclass[data-state="luego"]{background-image:none;border-bottom-width:1px;
+  border-bottom-color:var(--hair);box-shadow:none;}
+.vclass[data-state="luego"] .vc-in{padding-top:9px;padding-bottom:9px;gap:12px;}
+.vclass[data-state="luego"] .vc-dot{display:none;}
+.vclass[data-state="luego"] .vc-ic{display:flex;box-shadow:none;align-items:center;justify-content:center;
+  width:34px;height:34px;flex:0 0 auto;border-radius:10px;color:var(--gold-lt);
+  background:color-mix(in srgb,var(--gold) 16%,transparent);font-size:1.05rem;}
+.vclass[data-state="luego"] .vc-txt{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 10px;}
+.vclass[data-state="luego"] .vc-state{font-size:.68rem;letter-spacing:.16em;color:var(--gold-lt);}
+.vclass[data-state="luego"] .vc-title{margin:0 !important;gap:2px 10px;}
+.vclass[data-state="luego"] .vc-title .va-display{font-size:1rem;}
+.vclass[data-state="luego"] .vc-when{font-size:.85rem;}
+.vclass[data-state="luego"] .vc-go{min-height:44px;padding:0 16px;font-size:.88rem;border-radius:12px;
+  background:transparent;color:var(--gold-lt);box-shadow:inset 0 0 0 1.5px color-mix(in srgb,var(--gold) 70%,transparent);}
+.vclass[data-state="luego"] .vc-go:hover,.vclass[data-state="luego"] .vc-go:focus-visible{background:color-mix(in srgb,var(--gold) 16%,transparent);}
+.vclass[data-state="luego"] .vc-go:active{transform:none;}
+
+/* el héroe ya no necesita tanto aire arriba cuando la banda está encima */
+.vclass:not([hidden]) + main.wrap{padding-top:clamp(16px,2.6vw,30px);}
+
+/* injerto C: botón en la cabecera fija, solo cuando la banda ya no se ve
+   y la clase está por empezar o en vivo (nunca dos botones a la vista). */
+.hdr-class{display:inline-flex;align-items:center;gap:8px;margin-left:auto;
+  min-height:40px;padding:0 16px;border-radius:12px;text-decoration:none;white-space:nowrap;
+  background:linear-gradient(180deg,color-mix(in srgb,var(--gold-lt) 45%,var(--gold)),var(--gold));
+  color:var(--on-gold,#1f2342);font-weight:800;font-size:.86rem;box-shadow:0 3px 0 var(--gold-shadow);}
+.hdr-class[hidden]{display:none;}
+.hdr-class .vc-dot{margin-left:0;width:9px;height:9px;background:var(--on-gold,#1f2342);box-shadow:none;}
+.hdr-class .vc-dot::after{border-color:var(--on-gold,#1f2342);}
+.hdr-class:active{transform:translateY(3px);box-shadow:0 0 0 var(--gold-shadow);}
+.hdr-class:focus-visible{outline:3px solid var(--gold-lt);outline-offset:3px;}
+
+@media(max-width:600px){
+  .hdr-class{padding:0 12px;font-size:.8rem;}
+  .hdr-class .hc-long{display:none;}
+  .vc-ic{width:44px;height:44px;font-size:1.2rem;border-radius:13px;}
+  .vc-in{flex-wrap:wrap;gap:12px 14px;padding-top:14px;padding-bottom:16px;}
+  .vc-title .va-display{font-size:1.28rem;}
+  .vc-when{font-size:.88rem;}
+  .vc-go{width:100%;min-height:58px;font-size:1.1rem;}
+  .vclass[data-state="luego"] .vc-in{flex-wrap:nowrap;}
+  .vclass[data-state="luego"] .vc-txt{display:block;}
+  .vclass[data-state="luego"] .vc-state{font-size:.64rem;letter-spacing:.08em;white-space:nowrap;}
+  .vclass[data-state="luego"] .vc-title .va-display{font-size:.98rem;}
+  .vclass[data-state="luego"] .vc-when{display:none;}
+  .vclass[data-state="luego"] .vc-go{width:auto;min-height:44px;font-size:.85rem;padding:0 13px;}
+  .vclass[data-state="luego"] .vc-go .i{display:none;}
+}
+@media(prefers-reduced-motion:reduce){
+  .vc-dot::after{animation:none;opacity:.6;transform:scale(1.4);}
+  .vc-go{transition:none;}
+  .hdr-class .vc-dot::after{animation:none;}
+}
+
+</style>
 </head>
 <body>
 
@@ -1346,8 +1431,29 @@ html[data-vesper-style="minimal"] footer .f-hand small{color:var(--m-muted);}
     <img src="assets/images/vesper_logo_inverted.png" alt="Vesper Academy — inicio" width="38" height="38">
     <span><b class="va-display">Vesper Academy</b><small>Portal del Alumno</small></span>
   </a>
+  <a class="hdr-class" id="hdr-class" href="#" target="_blank" rel="noopener" hidden><span class="vc-dot" aria-hidden="true"></span><svg class="i" aria-hidden="true"><use href="#i-video"/></svg><span id="hdr-class-t">En vivo</span><span class="hc-long">&nbsp;· Entrar</span></a>
   <a class="back web-only" href="index.html" aria-label="Sitio principal"><svg class="i" aria-hidden="true"><use href="#i-arrow-left"/></svg> <span>Sitio principal</span></a>
 </header>
+
+<!-- ===== TU CLASE EN VIVO (2026-11-23) =====
+     Los alumnos no encontraban el Meet: era una tarjeta más, debajo del saludo.
+     Ahora es lo primero que ve el alumno: una banda propia entre la cabecera y
+     el saludo. Sabe la hora (horario del grupo, reloj del navegador):
+     EN VIVO · Empieza en N min · Próxima clase. Fuera de horario se encoge a una
+     línea, pero el link sigue ahí. El aviso con voz lo da el globo de Vesper. -->
+<section id="vclass" class="vclass" data-state="luego" hidden aria-label="Tu clase en vivo">
+  <div class="vc-in">
+    <span class="vc-ic" aria-hidden="true"><svg class="i"><use href="#i-video"/></svg></span>
+    <div class="vc-txt">
+      <p class="vc-state"><span class="vc-dot" aria-hidden="true"></span><span id="vc-state">Tu clase</span></p>
+      <p class="vc-title"><span class="va-display" id="vc-name">Tu clase</span><span class="vc-when" id="vc-when"></span></p>
+    </div>
+    <a class="vc-go" id="vc-go" href="#" target="_blank" rel="noopener">
+      <svg class="i" aria-hidden="true"><use href="#i-video"/></svg>
+      <span id="vc-go-t">Entrar a la clase</span>
+    </a>
+  </div>
+</section>
 
 <main class="wrap" id="main">
   <!-- La lámina. Desde BIBLIOTECA 2026-11 lleva esquineras de libro, una
@@ -1409,17 +1515,7 @@ html[data-vesper-style="minimal"] footer .f-hand small{color:var(--m-muted);}
     </div>
   </div>
 
-  <!-- Tu clase en vivo (Google Meet) — se llena desde students/{correo}.
-       El <style> que vivía aquí dentro, con hex fijo, se fue a la hoja de
-       arriba: era el tercer bloque de estilos de la página. -->
-  <a id="myclass" class="myclass reveal" href="#" target="_blank" rel="noopener" aria-label="Entrar a tu clase por Google Meet">
-    <span class="mycl-ic"><svg class="i" aria-hidden="true"><use href="#i-video"/></svg></span>
-    <span class="mycl-body">
-      <span class="mycl-kicker">Tu clase en vivo</span>
-      <span class="mycl-title va-display" id="myclass-title"></span>
-    </span>
-    <span class="mycl-go">Entrar <svg class="i" aria-hidden="true"><use href="#i-arrow"/></svg></span>
-  </a>
+  <!-- La clase en vivo (Meet) ya no va aquí: vive en la banda #vclass, arriba de todo. -->
 
   <!-- La mesa de hoy: a la izquierda el libro donde te quedaste (con su
        separador), a la derecha la ficha de la frase del día. -->
@@ -2288,6 +2384,125 @@ var VIcon = (function(){
 })();
 </script>
 
+<script>
+/* ===== TU CLASE EN VIVO (2026-11-23) =====
+   VClass.set({name,url,schedule,label}) pinta la banda #vclass y la
+   recalcula cada 20 s con el reloj del navegador (hora local del alumno).
+   schedule: ["lun 18:00-19:00", ...] como groups/{id}.schedule.
+   Estados: vivo (dentro del horario) · pronto (≤30 min antes) · luego. */
+(function(){
+  "use strict";
+  var DOW = {dom:0,lun:1,mar:2,mie:3,jue:4,vie:5,sab:6};
+  var NAMES = ["domingo","lunes","martes","miércoles","jueves","viernes","sábado"];
+  var SOON_MIN = 30;
+  var cur = null, timer = null, clockOffset = 0;
+
+  function now(){ return new Date(Date.now() + clockOffset); }
+  function parse(list){
+    var out = [];
+    (list||[]).forEach(function(e){
+      var m = String(e).trim().toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"")
+        .match(/^(\w{3})\w*\s+(\d{1,2}):(\d{2})-(\d{1,2}):(\d{2})$/);
+      if(!m || !(m[1] in DOW)) return;
+      out.push({d:DOW[m[1]], s:(+m[2])*60+(+m[3]), e:(+m[4])*60+(+m[5])});
+    });
+    return out;
+  }
+  function h12(min){
+    var h = Math.floor(min/60), m = min%60;
+    return (h%12||12) + (m ? ":" + (m<10?"0":"") + m : "") + " " + (h<12?"am":"pm");
+  }
+  function range(x){ var a=h12(x.s), b=h12(x.e); return a.slice(-2)===b.slice(-2) ? a.slice(0,-3)+"–"+b : a+"–"+b; }
+  function dayWord(delta, d){
+    if(delta===0) return "hoy";
+    if(delta===1) return "mañana";
+    return "el " + NAMES[d];
+  }
+  /* Devuelve {state, ...} para el momento t. */
+  function compute(slots, t){
+    var dow = t.getDay(), mins = t.getHours()*60 + t.getMinutes();
+    for(var i=0;i<slots.length;i++){
+      var x = slots[i];
+      if(x.d===dow && mins>=x.s && mins<x.e) return {state:"vivo", since:mins-x.s, slot:x};
+    }
+    var best = null;
+    for(var k=0;k<8 && !best;k++){
+      var d = (dow+k)%7;
+      slots.filter(function(x){ return x.d===d && (k>0 || x.s>mins); })
+        .sort(function(a,b){ return a.s-b.s; })
+        .slice(0,1).forEach(function(x){ best = {slot:x, delta:k, wait:k*1440 + x.s - mins}; });
+    }
+    if(!best) return {state:"sin"};
+    return {state: best.wait<=SOON_MIN ? "pronto" : "luego", wait:best.wait, delta:best.delta, slot:best.slot};
+  }
+  function $(id){ return document.getElementById(id); }
+  function paint(){
+    if(!cur) return;
+    var band = $("vclass"); if(!band) return;
+    var slots = parse(cur.schedule), r = slots.length ? compute(slots, now()) : {state:"sin"};
+    var st = $("vc-state"), when = $("vc-when"), go = $("vc-go"), got = $("vc-go-t");
+    $("vc-name").textContent = cur.name;
+    go.href = cur.url;
+    var state = r.state==="sin" ? "luego" : r.state;
+    band.setAttribute("data-state", state);
+    if(r.state==="vivo"){
+      st.textContent = "En vivo ahora";
+      when.textContent = (r.since<1 ? "Empezó hace un momento" : "Empezó hace " + r.since + " min") + " · termina " + h12(r.slot.e);
+      got.textContent = "Entrar a la clase";
+      go.setAttribute("aria-label","Entrar a tu clase en vivo por Google Meet (se abre en otra pestaña)");
+    } else if(r.state==="pronto"){
+      st.textContent = r.wait<=1 ? "Empieza en 1 min" : "Empieza en " + r.wait + " min";
+      when.textContent = "Hoy " + range(r.slot) + " · el link ya está abierto";
+      got.textContent = "Entrar a la clase";
+      go.setAttribute("aria-label","Entrar a tu clase por Google Meet (se abre en otra pestaña)");
+    } else if(r.state==="luego"){
+      st.textContent = "Próxima clase: " + dayWord(r.delta, r.slot.d) + " " + h12(r.slot.s);
+      when.textContent = cur.label || "";
+      got.textContent = "Link de Meet";
+      go.setAttribute("aria-label","Abrir el link de Google Meet de tu clase (se abre en otra pestaña)");
+    } else {
+      st.textContent = "Tu clase";
+      when.textContent = cur.label || "";
+      got.textContent = "Link de Meet";
+      go.setAttribute("aria-label","Abrir el link de Google Meet de tu clase (se abre en otra pestaña)");
+    }
+    band.hidden = false;
+    /* Cabecera: mismo link, mismo estado. */
+    var hc = $("hdr-class");
+    if(hc){ hc.href = cur.url; hcLive = (state==="vivo" || state==="pronto");
+      $("hdr-class-t").textContent = state==="vivo" ? "En vivo" : st.textContent;
+      hc.setAttribute("aria-label", (state==="vivo" ? "Tu clase está en vivo" : st.textContent) + ": entrar por Google Meet (se abre en otra pestaña)");
+      syncHdr(); }
+    /* Vesper lo dice en su globo (lo escucha el script de la mascota). */
+    var say = r.state==="vivo" ? ["Your class is on. Come in!", "Tu clase ya empezó. ¡Entra!"]
+            : r.state==="pronto" ? ["Class starts in " + r.wait + " min. Get ready!", "Tu clase empieza en " + r.wait + " min. ¡Prepárate!"]
+            : null;
+    var key = say ? say[0] : "";
+    if(key !== lastSay){ lastSay = key; window.__vcSay = say;
+      try{ document.dispatchEvent(new CustomEvent("vesper:class", {detail:{state:state, say:say}})); }catch(e){} }
+  }
+  /* El botón de la cabecera sale solo cuando la banda ya no se ve. */
+  var hcLive = false, bandOut = false, lastSay = null;
+  function syncHdr(){ var hc = $("hdr-class"); if(hc) hc.hidden = !(hcLive && bandOut); }
+  if("IntersectionObserver" in window){
+    var io = new IntersectionObserver(function(es){ bandOut = !es[0].isIntersecting; syncHdr(); }, {rootMargin:"-66px 0px 0px 0px"});
+    var watch = function(){ var b = $("vclass"); if(b) io.observe(b); };
+    if(document.readyState==="loading") document.addEventListener("DOMContentLoaded", watch); else watch();
+  }
+  window.VClass = {
+    set: function(o, opts){
+      if(!o || !/^https:\/\//i.test(o.url||"")) return;
+      if(!(opts && opts.demo)) window.__vcReal = true;
+      cur = o; paint();
+      if(!timer) timer = setInterval(paint, 20000);
+    },
+    _setClock: function(date){ clockOffset = date.getTime() - Date.now(); paint(); },
+    _compute: function(sched, t){ return compute(parse(sched), t); }
+  };
+  document.addEventListener("visibilitychange", function(){ if(!document.hidden) paint(); });
+})();
+</script>
+
 <!-- Tu clase en vivo: lee el doc PROPIO del alumno (students/{correo}) con su idToken -->
 <script>
 (function(){
@@ -2298,13 +2513,11 @@ var VIcon = (function(){
   var db  = cfg.dbId || "teachermanuals";
   if(!pid) return;
   function sv(f,k){ return (f[k] && f[k].stringValue) || ""; }
-  function show(name,time,url,label){
+  function show(name,time,url,label,sched){
     if(!/^https:\/\//i.test(url||"")) return;
-    var a=document.getElementById("myclass"), t=document.getElementById("myclass-title");
-    if(!a||!t) return;
-    t.textContent = (name||"Tu clase") + " · " + (label || (time? ("Diario "+time) : "Diario"));
-    a.href = url;
-    a.style.display = "flex";
+    /* La clase vive en la banda #vclass (arriba de todo), que sabe la hora. */
+    if(window.VClass) VClass.set({ name:name||"Tu clase", url:url,
+      schedule:sched||[], label:label || (time? ("Diario "+time) : "Diario") });
   }
   /* Horario del grupo ("lun 17:00-18:00", ...) → "Lun a vie · 5–6 pm". */
   var DAYS=["lun","mar","mie","jue","vie","sab","dom"];
@@ -2347,7 +2560,7 @@ var VIcon = (function(){
         var arr=(f.schedule&&f.schedule.arrayValue&&f.schedule.arrayValue.values)||[];
         var sched=arr.map(function(v){ return v.stringValue||""; });
         var name=sv(f,"name").split(" · ").slice(0,2).join(" · ");
-        show(name, "", sv(f,"meetUrl"), schedLabel(sched) || "Diario");
+        show(name, "", sv(f,"meetUrl"), schedLabel(sched) || "Diario", sched);
         return true;
       });
   }
@@ -2584,6 +2797,13 @@ var VIcon = (function(){
     });
   }
   function say(state) {
+    /* Clase por empezar o en vivo: Vesper lo avisa (ver TU CLASE EN VIVO). */
+    var cls = window.__vcSay;
+    if (cls && state !== 'explaining') {
+      line.textContent = cls[0];
+      if (es) es.textContent = cls[1];
+      return;
+    }
     var set = LINES[band] || LINES.A;
     var opts = set[state] || set.welcome;
     /* Sin Math.random: la frase depende del día, así que es estable durante la
@@ -2614,6 +2834,10 @@ var VIcon = (function(){
   box.addEventListener('mouseleave', function () {
     clearTimeout(t);
     t = setTimeout(function () { show(base); say(base); }, 120);
+  });
+  document.addEventListener('vesper:class', function () {
+    var b = window.__vcSay ? 'explaining' : base;
+    show(b); say(base);
   });
 })();
 </script>
