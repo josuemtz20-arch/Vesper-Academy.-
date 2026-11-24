@@ -30,7 +30,7 @@ Objetivo: que lo que se entrega funcione, sea **seguro por defecto** y sea
 | Tarea | Archivo |
 |---|---|
 | Elegir stack, estructura de proyecto, SSR/SSG/CSR, BD, Git, CI/CD | `references/stack.md` |
-| Código seguro: OWASP Top 10, validación, XSS/SQLi, auth, sesiones, IDOR, secretos, CSRF/CORS | `references/appsec.md` |
+| Código seguro: OWASP Top 10, validación, XSS/SQLi, auth, sesiones, IDOR, secretos, CSRF/CORS; casos reales de Vesper (§9) | `references/appsec.md` |
 | HTTPS/HSTS, cabeceras (CSP...), WAF/DDoS, dependencias, respaldos, logs | `references/infra.md` |
 | Lentitud, Core Web Vitals, animaciones, imágenes, JS/CSS, fuentes, modo ligero | `references/performance.md` |
 
@@ -93,6 +93,14 @@ Límites reales que hay que decir al usuario:
 - [ ] Salida escapada; nada de `innerHTML` con datos del usuario sin sanear.
 - [ ] Contraseñas con Argon2id/bcrypt; límites de intentos; MFA disponible.
 - [ ] Cada endpoint verifica que el usuario es dueño del recurso (anti-IDOR).
+- [ ] Ninguna respuesta repetible filtra la clave (ni la respuesta, ni ✓/✗
+      por pregunta); el servidor elige las preguntas; tope de intentos.
+- [ ] Cada ruta decide qué hace si se cae su contador o su verificador: las
+      que protegen claves o gasto **se cierran** (`503` + `Retry-After`).
+- [ ] El cuerpo se lee con tope sobre el stream (también *chunked*), no solo
+      revisando `Content-Length`.
+- [ ] La identidad (correo) se normaliza en una sola función usada en
+      reglas, cliente y servidor.
 - [ ] Cookies `HttpOnly; Secure; SameSite`; CSRF cubierto; CORS con lista
       explícita de orígenes (nunca `*` con credenciales).
 - [ ] Cero secretos en el repo (`gitleaks`/secret scanning en CI).
@@ -106,6 +114,17 @@ Límites reales que hay que decir al usuario:
 - [ ] JS/CSS minificados; imágenes a su tamaño de pantalla (WebP/AVIF).
 - [ ] `width`/`height` en imágenes y `loading="lazy"` bajo el pliegue.
 - [ ] Scripts con `defer`; nada de JS bloqueante que no sea imprescindible.
+
+**Se ve hecho a mano, no de plantilla** (limpieza de la portada de Vesper,
+2026-11-23; la marca está en la skill `vesper-design`)
+- [ ] Sin foco de luz que sigue al mouse ni brillo que barre los botones.
+- [ ] Sin cristal (*glassmorphism*) en botones secundarios.
+- [ ] Una sola itálica de lucimiento por página (el h1 del hero), no en
+      cada título.
+- [ ] Nada de filas de tarjetas iguales con filete de color al lado: usa una
+      forma con sentido (hoja de cuaderno, esquinas de libro).
+- [ ] El *fade-in* al bajar solo en cabeceras de sección, no en cada bloque.
+- [ ] Espaciado sobre una base (4 px) igual en escritorio y teléfono.
 
 ## Formato de entrega
 

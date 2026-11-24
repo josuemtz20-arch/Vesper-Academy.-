@@ -12,6 +12,7 @@ cliente es territorio enemigo; todo se valida y autoriza en el servidor.
 6. CSRF y CORS
 7. Límites, errores y registros
 8. Revisión rápida de un PR
+9. Casos reales (Vesper Academy, 2026-11-23): cosecha de claves, cerrar ante fallas, cuerpos sin tope
 
 ---
 
@@ -223,3 +224,67 @@ rg -n "jwt\.decode\(|algorithms.*none|verify=False|rejectUnauthorized: *false" s
 ```
 Para cada endpoint nuevo pregunta: ¿quién puede llamarlo? ¿valida la
 entrada? ¿filtra por dueño? ¿qué pasa si lo llaman 1000 veces por minuto?
+¿qué le enseña su respuesta a quien la repite muchas veces? ¿y qué hace si
+se cae lo que lo protege (contador, base de datos): abre o cierra?
+
+---
+
+## 9. Casos reales (Vesper Academy, 2026-11-23)
+
+Auditoría del Worker (`worker/vesper-chat-proxy.js`, `worker/exam_grader.js`)
+y de `firestore.rules`. Cada punto es un patrón que vale para cualquier sitio.
+
+**Una respuesta que se repite es un oráculo.** El examen de nivel tiene un
+banco fijo y chico (26–31 preguntas). Primero el Worker devolvía la clave al
+contestar: un intento de práctica la revelaba y el segundo sacaba 100. Luego
+devolvía solo ✓/✗, y con 3–4 intentos (todo A, todo B…) se reconstruía igual.
+Lo que quedó:
+- `/exam/answer` responde `{recorded, first}`: ni la clave ni si acertó.
+- `/exam/finish` da la nota y un resumen por habilidad, sin detalle por
+  pregunta. El detalle se guarda en el servidor para los profesores.
+- La nota final sigue siendo un oráculo lento (cambiar una respuesta por
+  intento), así que hay tope de intentos: 12 al día por cuenta y 20 al día por
+  IP sin sesión. Ojo: una escuela o un CGNAT de celular comparten IP.
+
+**El servidor elige, el cliente pinta.** En los exámenes de jefe el Worker
+sortea las preguntas en `/exam/start` y devuelve los `ids`; los que mande el
+cliente se ignoran. Si el cliente escoge, escoge las que ya vio.
+
+**El intento tiene dueño.** `/exam/start` guarda el uid del token y
+`/exam/finish` solo guarda la nota si la cierra esa misma cuenta. Antes,
+abrir sin sesión y cerrar con sesión saltaba el tope diario por cuenta.
+
+**Abrir o cerrar ante una falla se decide por ruta.** Si el contador (Durable
+Object) se cae:
+- En el **chat** se deja pasar y se registra: el costo ya lo acota
+  `max_tokens` y tumbar el chat es peor.
+- En `/exam/*`, `/book/open` y `/doc/get` se **cierra**: ahí el contador es el
+  único tope contra la cosecha y contra el gasto. Responde `503` +
+  `Retry-After` con `code: "unavailable"`, no `429`: "no disponible" y "vas muy
+  rápido" son cosas distintas y el cliente las trata distinto.
+- Lo que dependa de esa ruta necesita su plan B: libros y manuales vuelven a
+  leer de Firestore si `/doc/get` o `/book/open` no dan `200`.
+- Un verificador externo caído (`siteverify` del captcha) **nunca** deja pasar.
+
+**Revisar `Content-Length` no es poner tope al cuerpo.** Un cuerpo *chunked*
+no trae esa cabecera, y `request.text()` lo lee completo antes de medirlo.
+`readCapped()` lee el stream por trozos, corta en cuanto pasa del tope
+(`413`) y cancela el lector. El tope se mide en caracteres; el corte en bytes
+es 4× ese número, así que nunca corta un cuerpo válido.
+
+**Una identidad, una forma.** `firestore.rules` comparaba el correo del token
+tal cual en `roles/`, `students/` y `teachers/`, mientras el cliente y el
+Worker lo pasaban a minúsculas: con una mayúscula en el token, reglas y
+cliente leían documentos distintos. Ahora todo pasa por `myEmail()`
+(`.lower()`). Normaliza en **una** función y úsala en todas partes.
+
+**Escribe el riesgo que aceptas.** `/book/page` no cuenta peticiones a
+propósito (sería una llamada más al contador por página). El control es la
+firma HMAC de `/book/open`: vale 2 h para ese libro y esa versión, y en ese
+tiempo quien tenga el enlace baja sus páginas. Está escrito en el código y en
+`worker/README.md`, para que nadie lo "arregle" ni lo crea más seguro de lo que es.
+
+**Orden de despliegue.** Si el Worker cambia el contrato (deja de mandar la
+clave, empieza a mandar `ids`), primero se publica el sitio que entiende la
+respuesta nueva, y el Worker 1–2 días después, cuando los service workers ya
+se actualizaron.
