@@ -1466,104 +1466,88 @@ window.VesperEngine = {
   },
   "core_practice_lvl4": {
     "name": "Core Practice · Level 4",
-    "cefr": "A2–B1",
+    "cefr": "B2",
     "desc": "Arte y literatura: talleres orales",
     "lessons": [
       {
         "n": 1,
-        "t": "The Elements of Story"
+        "t": "Cinema Club Night"
       },
       {
         "n": 2,
-        "t": "Descriptive Imagery"
+        "t": "The Voicemail Maze"
       },
       {
         "n": 3,
-        "t": "Spoken Word & Poetry"
+        "t": "The Museum Audio Guide"
       },
       {
         "n": 4,
-        "t": "Character Psychology"
+        "t": "Two Bites"
       },
       {
         "n": 5,
-        "t": "World-building & Setting"
+        "t": "Night Line"
       },
       {
         "n": 6,
-        "t": "Mastering Dialogue"
+        "t": "Festival Live"
       },
       {
         "n": 7,
-        "t": "The Mystery Genre"
+        "t": "Behind the Lens"
       },
       {
         "n": 8,
-        "t": "High Fantasy"
+        "t": "The Final Whistle"
       },
       {
         "n": 9,
-        "t": "Hard Sci-Fi"
+        "t": "Walls That Talk"
       },
       {
         "n": 10,
-        "t": "Historical Biographies"
+        "t": "The Book Club Split"
       },
       {
         "n": 11,
-        "t": "Stand-up Comedy & Satire"
+        "t": "Second-Hand Treasures"
       },
       {
         "n": 12,
-        "t": "Magical Realism"
+        "t": "Level Up"
       },
       {
         "n": 13,
-        "t": "Art Critique"
+        "t": "The Concert Hall Hearing"
       },
       {
         "n": 14,
-        "t": "Film Analysis"
+        "t": "Open Mic Comedy"
       },
       {
         "n": 15,
-        "t": "Music Journalism"
+        "t": "The Audition Panel"
       },
       {
         "n": 16,
-        "t": "Investigative Journalism"
+        "t": "No Spoilers!"
       },
       {
         "n": 17,
-        "t": "Playwriting & Theater"
+        "t": "Lost in Lisbon"
       },
       {
         "n": 18,
-        "t": "Graphic Novels & Comics"
+        "t": "The Stage Manager Job"
       },
       {
         "n": 19,
-        "t": "Digital Narratives"
+        "t": "The Lighthouse Tapes"
       },
       {
         "n": 20,
-        "t": "Literary Criticism"
-      },
-      {
-        "n": 21,
-        "t": "The Editing Process"
-      },
-      {
-        "n": 22,
-        "t": "The Publishing Industry"
-      },
-      {
-        "n": 23,
-        "t": "The Screenplay Pitch"
-      },
-      {
-        "n": 24,
-        "t": "The Final Masterpiece"
+        "t": "Final Exam: Listen & Speak"
       }
     ]
   },
