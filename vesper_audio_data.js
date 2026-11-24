@@ -3559,1187 +3559,616 @@ window.VESPER_DATA = {
   ]
  },
  "4": {
-  "tag": "Creative Writing",
-  "icon": "fa-feather-pointed",
+  "tag": "Listen & Speak",
+  "icon": "fa-headphones",
+  "v2": true,
   "lessons": [
    {
     "n": 1,
-    "title": "The Elements of Story",
-    "icon": "fa-book-open",
+    "title": "Cinema Club Night",
+    "icon": "fa-film",
+    "seed": "P4-1",
+    "art": "cinema",
     "vocab": [
      {
-      "term": "Protagonist",
-      "def": "The leading character"
+      "term": "plot hole",
+      "def": "a mistake in a story: something that doesn't make sense",
+      "ex": "The story had a plot hole you could drive a truck through."
      },
      {
-      "term": "Antagonist",
-      "def": "The principal opponent"
+      "term": "reboot",
+      "def": "a new version of an old film or series that starts the story again",
+      "ex": "I saw the new Captain Comet reboot three times."
      },
      {
-      "term": "Climax",
-      "def": "The most intense, exciting, or important point"
+      "term": "box office",
+      "def": "the money a film makes from tickets (also the place where you buy them)",
+      "ex": "add some explosions, and count the money at the box office."
      },
      {
-      "term": "Exposition",
-      "def": "Comprehensive description and explanation of background"
+      "term": "cameo",
+      "def": "a very short appearance in a film, often by a famous person",
+      "ex": "He calls it his cameo."
      },
      {
-      "term": "Resolution",
-      "def": "The action of solving a problem or ending a story"
+      "term": "drag on",
+      "def": "to continue for too long and become boring",
+      "ex": "Doesn't it drag on a little?"
      },
      {
-      "term": "Foreshadowing",
-      "def": "A warning or indication of a future event"
+      "term": "be into",
+      "def": "to like something a lot",
+      "ex": "So, Leo, what kind of movies are you into?"
      },
      {
-      "term": "Trope",
-      "def": "A significant or recurrent theme/motif"
+      "term": "guilty pleasure",
+      "def": "something you enjoy but feel a little embarrassed about",
+      "ex": "It's my guilty pleasure."
      },
      {
-      "term": "Compelling",
-      "def": "Evoking interest, attention, or admiration"
+      "term": "grow on",
+      "def": "to become more liked by someone, little by little",
+      "ex": "It's slow at first, but it grows on you."
      },
      {
-      "term": "Subvert",
-      "def": "Undermine the power and authority of an established system/expectation"
+      "term": "Don't get me started",
+      "def": "I have strong feelings about this and could complain for a long time",
+      "ex": "Look, don't get me started on reboots."
      },
      {
-      "term": "Pacing",
-      "def": "The speed at which a story unfolds"
+      "term": "I'll give you that",
+      "def": "I agree with this one point (but not with everything)",
+      "ex": "Okay, I'll give you that."
      },
      {
-      "term": "Stakes",
-      "def": "What is at risk in the story"
+      "term": "Hold on a sec",
+      "def": "wait a moment (to stop someone or to get ready)",
+      "ex": "Hold on a sec, I've got one."
      },
      {
-      "term": "Catalyst",
-      "def": "An event that sparks the main action"
+      "term": "Count me in",
+      "def": "I want to join; I'm part of the plan",
+      "ex": "Count me in."
      }
     ],
+    "audio": "cp4/lesson_1.mp3",
+    "transcript": "<strong>PART 1: The new guy</strong><br><i>[door opens, quiet chatter]</i><br><br><em>Dana:</em> Hi, come on in. You must be Leo. I'm Dana, I kinda run this thing. Grab a seat, the popcorn's still warm.<br><br><em>Leo:</em> Thanks. I saw your flyer at the coffee shop and I thought, why not? I don't really know anybody in Portland yet.<br><br><em>Marcus:</em> Well, now you know me. Marcus. I've been coming here for six years. So, Leo, what kind of movies are you into?<br><br><em>Leo:</em> Honestly? Big action movies. Superheroes, car chases. I saw the new Captain Comet reboot three times.<br><br><em>Marcus:</em> Three times. Wow.<br><br><em>Dana:</em> Marcus. Be nice.<br><br><em>Marcus:</em> I am being nice. Look, don't get me started on reboots. The studios take an old idea, add some explosions, and count the money at the box office.<br><br><em>Leo:</em> Okay, but it made, like, eight hundred million dollars. People clearly liked it.<br><br><em>Marcus:</em> People also like fast food. The story had a plot hole you could drive a truck through. If he can fly, why doesn't he just fly to the moon in the first scene?<br><br><em>Leo:</em> Hmm. Okay, I'll give you that. The moon thing was kinda dumb.<br><br><em>Dana:</em> See? You two are gonna get along great. Now, the reason we're here tonight: we've gotta pick next month's film.<br><br><strong>PART 2: The vote</strong><br><em>Dana:</em> So, Marcus wants a three-hour Swedish drama about a lighthouse. Again.<br><br><em>Marcus:</em> It's a beautiful film. It's slow at first, but it grows on you.<br><br><em>Leo:</em> Three hours, though? Doesn't it drag on a little?<br><br><em>Marcus:</em> Only the middle part. And, uh, the beginning.<br><br><em>Dana:</em> Leo, do you wanna suggest something?<br><br><em>Leo:</em> Hold on a sec, I've got one. Have you guys seen Midnight Salsa? It's a dance movie from 2004. Terrible acting, amazing music. It's my guilty pleasure.<br><br><em>Marcus:</em> Wait. Did you say Midnight Salsa?<br><br><em>Leo:</em> Yeah. Why, you hate it?<br><br><em>Marcus:</em> Hate it? I've seen it, like, twenty times. My ex and I used to dance to the last song in the kitchen.<br><br><em>Dana:</em> Hold on. Mister Swedish Lighthouse loves a cheesy dance movie? This is the best night of my life.<br><br><em>Leo:</em> It gets better. You know the pool party at the end? The guy in the yellow shirt who falls into the pool?<br><br><em>Marcus:</em> Of course. Best moment in the whole film.<br><br><em>Leo:</em> That's my uncle. He was a waiter for the party company, and they put him in the scene. He calls it his cameo. Our whole family watches it every Christmas.<br><br><em>Marcus:</em> No way. You're kidding me.<br><br><em>Dana:</em> Okay, I think we have a winner. All in favor of Midnight Salsa?<br><br><em>Marcus:</em> Count me in. But we're watching the lighthouse one in December.<br><br><em>Leo:</em> Deal. And I'm bringing my uncle.<br><br><i>[laughter]</i><br><br>",
     "model": {
-     "title": "Workshop: A Story in Five Beats",
-     "transcript": "<strong>Model dialogue: Workshop: A Story in Five Beats</strong><br><br><em>Elena:</em> Pitch me your story in five beats. Go.<br><em>Marcus:</em> A lighthouse keeper finds a message in a bottle — written in his own handwriting.<br><em>Elena:</em> Hook, good. Rising action?<br><em>Marcus:</em> Each new bottle predicts a storm, and each prediction comes true.<br><em>Elena:</em> Climax?<br><em>Marcus:</em> The final message says: tonight, save no one.<br><em>Elena:</em> Chilling. And he must choose between fate and duty — there's your conflict engine.<br><em>Marcus:</em> Resolution: he rows out anyway, and the handwriting changes.<br><em>Elena:</em> You had me at the second bottle. That's structure doing the selling.<br>"
+     "title": "Ana's Screen CV",
+     "file": "cp4/lesson_1_model.mp3",
+     "transcript": "<strong>Model dialogue: Ana's Screen CV</strong><br><br><em>Ana:</em> Okay, my Screen CV. I'm really into true-crime documentaries. I watch them while I cook, which is maybe not a great idea.<br><br><em>Ana:</em> What got me hooked was a series about a fake doctor. I couldn't sleep for a week.<br><br><em>Ana:</em> My guilty pleasure is Christmas romance movies. I know, I know. They're all the same, and I don't care.<br><br><em>Ana:</em> I can't stand horror films. Don't get me started on jump scares.<br><br><em>Ana:</em> And a film that grew on me is 'Roma'. The first time I thought it was too slow. The second time I cried.<br><br><em>Ana:</em> If I could only keep one film, it'd be 'Coco'. That's it.<br><br><em>Ray:</em> Nice. Quick one: do you watch the Christmas movies in July too?<br><br><em>Ana:</em> Ha. Only when it's really hot. They make me feel cooler.<br><br><em>Ray:</em> And why 'Coco' and not 'Roma'?<br><br><em>Ana:</em> Because I can watch 'Coco' with my nephews. 'Roma' I watch alone, with tissues.<br><br>"
     }
    },
    {
     "n": 2,
-    "title": "Descriptive Imagery",
-    "icon": "fa-eye",
+    "title": "The Voicemail Maze",
+    "icon": "fa-phone",
+    "seed": "P4-2",
+    "art": "phone",
     "vocab": [
      {
-      "term": "Evocative",
-      "def": "Bringing strong images or feelings to mind"
+      "term": "will call",
+      "def": "the window at a theater or arena where you pick up tickets you already bought",
+      "ex": "You pick them up at will call, I put your number on the order."
      },
      {
-      "term": "Visceral",
-      "def": "Relating to deep inward feelings rather than intellect"
+      "term": "backstage pass",
+      "def": "a card or band that lets you go behind the stage, where the artists are",
+      "ex": "you've got two backstage passes waiting for you at will call, window three."
      },
      {
-      "term": "Palpable",
-      "def": "Able to be touched or felt; so intense as to seem tangible"
+      "term": "confirmation number",
+      "def": "the code a company gives you to prove you bought something",
+      "ex": "The confirmation number is P-L, four, seven, one, nine."
      },
      {
-      "term": "Olfactory",
-      "def": "Relating to the sense of smell"
+      "term": "nosebleed seats",
+      "def": "the highest and cheapest seats, very far from the stage",
+      "ex": "They're nosebleed seats, section forty, but whatever."
      },
      {
-      "term": "Cacophony",
-      "def": "A harsh, discordant mixture of sounds"
+      "term": "mix up",
+      "def": "to confuse two things or people; a mix-up is that mistake",
+      "ex": "There's been a mix-up with your sister's order."
      },
      {
-      "term": "Luminous",
-      "def": "Emitting or reflecting light; shining"
+      "term": "get back to",
+      "def": "to answer or call someone later",
+      "ex": "Please get back to me today if you can."
      },
      {
-      "term": "Desolate",
-      "def": "Deserted of people and in a state of bleak emptiness"
+      "term": "track down",
+      "def": "to find someone or something after searching",
+      "ex": "I tracked down the other Jessica Morales."
      },
      {
-      "term": "Metaphor",
-      "def": "A figure of speech in which a word or phrase is applied to an object/action to which it is not literally applicable"
+      "term": "hang onto",
+      "def": "to keep something and not lose it or throw it away",
+      "ex": "Hang onto that confirmation number"
      },
      {
-      "term": "Simile",
-      "def": "A figure of speech involving the comparison of one thing with another of a different kind, using 'like' or 'as'"
+      "term": "Sorry to bug you",
+      "def": "sorry to bother you (friendly, informal)",
+      "ex": "Hi, sorry to bug you."
      },
      {
-      "term": "Tactile",
-      "def": "Of or connected with the sense of touch"
+      "term": "Fingers crossed",
+      "def": "I hope it works out (said about something you can't control)",
+      "ex": "Fingers crossed."
      },
      {
-      "term": "Atmosphere",
-      "def": "The pervading tone or mood of a place"
+      "term": "Here's the deal",
+      "def": "this is the situation (said before the important part)",
+      "ex": "Here's the deal."
      },
      {
-      "term": "Immerse",
-      "def": "Involve oneself deeply in a particular activity or interest"
+      "term": "Talk soon",
+      "def": "a friendly way to say goodbye on the phone",
+      "ex": "Love you, talk soon."
      }
     ],
+    "audio": "cp4/lesson_2.mp3",
+    "transcript": "<strong>PART 1: Messages one and two</strong><br><em>Voicemail:</em> You have four new messages. First message. Monday, nine fourteen a.m.<br><br><em>Jess:</em> Hey, it's me. Happy early birthday. Okay, so I did a thing. I got us tickets for The Paper Lanterns at Lakeview Arena. Saturday the thirteenth. One-three. Doors at seven, the show's at eight. They're nosebleed seats, section forty, but whatever, we'll bring binoculars. You pick them up at will call, I put your number on the order. The confirmation number is P-L, four, seven, one, nine. Love you, talk soon.<br><br><em>Voicemail:</em> Second message. Tuesday, four fifty p.m.<br><br><em>Kevin:</em> Hi, sorry to bug you. This is Kevin at the Lakeview Arena box office, calling for Maya Morales. That's M-O-R-A-L-E-S. There's been a mix-up with your sister's order. We have two orders under the name Jessica Morales, and the tickets on your confirmation number are for Thursday the thirtieth. Three-zero. Not the thirteenth. And the thirteenth is sold out, so... yeah. I'm really sorry about this. Please get back to me today if you can. Three one two, five five five, zero one eight six, extension thirty. Thanks.<br><br><strong>PART 2: Messages three and four</strong><br><em>Voicemail:</em> Third message. Wednesday, eleven oh two p.m.<br><br><em>Jess:</em> Okay, I got your text. Don't panic. Here's the deal. I can't do the thirtieth, I'm in Denver for work all week. But I'm a genius, so I tracked down the other Jessica Morales. She's seventy-three, she lives in Evanston, E-V-A-N-S-T-O-N, and she has our tickets for the thirteenth. She was so sweet on the phone. She said she'll go to the arena tomorrow and fix it herself. Fingers crossed. Oh, and she kept saying something about her grandson. I didn't really get it. Call me.<br><br><em>Voicemail:</em> Fourth message. Thursday, ten thirty a.m.<br><br><em>Kevin:</em> Hi, Maya, it's Kevin again, from the box office. So, Mrs. Morales came in this morning. With cookies. Anyway, we fixed it. Your two tickets are back on Saturday the thirteenth. And, um, there's more. You're not in section forty anymore. You're in section fourteen, row B, right next to the stage. Her grandson Diego is the drummer for The Paper Lanterns, and you've got two backstage passes waiting for you at will call, window three. Hang onto that confirmation number, you'll need it. Oh, and Mrs. Morales has one condition. She wants to come with you. She says she's never seen him play. Okay. Bye.<br><br><em>Voicemail:</em> End of messages.<br><br>",
     "model": {
-     "title": "Show, Don't Tell",
-     "transcript": "<strong>Model dialogue: Show, Don't Tell</strong><br><br><em>Sofia:</em> Read your line again, the one about the sad kitchen.<br><em>David:</em> 'The kitchen was sad and empty.'<br><em>Sofia:</em> You told me the mood. Show me the evidence instead.<br><em>David:</em> 'Two chairs, one pushed in. A kettle scaled white from disuse. The calendar stopped in March.'<br><em>Sofia:</em> There! The calendar alone carries the whole grief.<br><em>David:</em> I didn't even name the feeling this time.<br><em>Sofia:</em> Exactly — the reader names it, and that's why they feel it.<br><em>David:</em> Show the artifacts, let the heart do the arithmetic.<br><em>Sofia:</em> Frame that. It's your new desk sign.<br>"
+     "title": "Calling the box office back",
+     "file": "cp4/lesson_2_model.mp3",
+     "transcript": "<strong>Model dialogue: Calling the box office back</strong><br><br><em>Tara:</em> Star Theater box office, this is Tara.<br><br><em>Luis:</em> Hi, this is Luis Ortega, calling about my order. I got a voicemail this morning.<br><br><em>Tara:</em> Sure. Can I have your confirmation number?<br><br><em>Luis:</em> Yes, it's G-T, five, oh, eight, two.<br><br><em>Tara:</em> Okay, Ortega... I see it. Your tickets are for the fifteenth.<br><br><em>Luis:</em> Just to make sure, did you say fifteen or fifty? I mean, the fifteenth or the fifth?<br><br><em>Tara:</em> The fifteenth. One-five. But you asked for the fifth, right?<br><br><em>Luis:</em> Right. Here's the deal: on the fifteenth I'm at my cousin's wedding.<br><br><em>Tara:</em> No problem. I can move you to the fifth, row D. Is that okay?<br><br><em>Luis:</em> Perfect. Let me read that back to you: the fifth, row D, same confirmation number.<br><br><em>Tara:</em> That's it. You're all set.<br><br><em>Luis:</em> Thanks a lot, Tara. Have a good one.<br><br>"
     }
    },
    {
     "n": 3,
-    "title": "Spoken Word & Poetry",
-    "icon": "fa-feather",
+    "title": "The Museum Audio Guide",
+    "icon": "fa-palette",
+    "seed": "P4-3",
+    "art": "art",
     "vocab": [
      {
-      "term": "Stanza",
-      "def": "A group of lines forming the basic recurring metrical unit in a poem"
+      "term": "self-portrait",
+      "def": "a painting or photo an artist makes of himself or herself",
+      "ex": "Stop twelve. Self-Portrait with Black Cat."
      },
      {
-      "term": "Rhythm",
-      "def": "A strong, regular, repeated pattern of movement or sound"
+      "term": "pedestal",
+      "def": "the base that a sculpture or statue stands on",
+      "ex": "a sandwich, made of white marble, on a pedestal as tall as a kitchen table."
      },
      {
-      "term": "Vulnerability",
-      "def": "The quality or state of being exposed to the possibility of being attacked or harmed, either physically or emotionally"
+      "term": "replica",
+      "def": "an exact copy of an object",
+      "ex": "What you see here is a replica."
      },
      {
-      "term": "Articulate",
-      "def": "Having or showing the ability to speak fluently and coherently"
+      "term": "restoration",
+      "def": "the work of cleaning and repairing an old object so it looks like it did",
+      "ex": "This painting is in the middle of restoration."
      },
      {
-      "term": "Resonance",
-      "def": "The quality in a sound of being deep, full, and reverberating; the ability to evoke or suggest images, memories, and emotions"
+      "term": "take in",
+      "def": "to look at something slowly and understand it",
+      "ex": "Take a moment to take in her face."
      },
      {
-      "term": "Cadence",
-      "def": "A modulation or inflection of the voice"
+      "term": "a far cry from",
+      "def": "very different from",
+      "ex": "It's a far cry from the elegant statues in the last room."
      },
      {
-      "term": "Prose",
-      "def": "Written or spoken language in its ordinary form, without metrical structure"
+      "term": "blow someone away",
+      "def": "to impress someone very much",
+      "ex": "Okay, this one blows me away."
      },
      {
-      "term": "Enunciation",
-      "def": "The act of pronouncing words clearly"
+      "term": "catch someone's eye",
+      "def": "to make someone notice it",
+      "ex": "What catches your eye first?"
      },
      {
-      "term": "Visceral",
-      "def": "Relating to deep inward feelings rather than to the intellect"
+      "term": "Fun fact",
+      "def": "a short, interesting piece of information (said before it)",
+      "ex": "Fun fact: in its first year, three visitors tried to take a bite."
      },
      {
-      "term": "Cathartic",
-      "def": "Providing psychological relief through the open expression of strong emotions"
+      "term": "Quick question",
+      "def": "a polite, informal way to start a short question",
+      "ex": "Quick question."
      },
      {
-      "term": "Alliteration",
-      "def": "The occurrence of the same letter or sound at the beginning of adjacent or closely connected words"
+      "term": "Take a closer look",
+      "def": "look more carefully (an invitation to notice a detail)",
+      "ex": "Take a closer look at her left hand."
      },
      {
-      "term": "Imagery",
-      "def": "Visually descriptive or figurative language"
+      "term": "Let's move on",
+      "def": "let's go to the next thing",
+      "ex": "Let's move on to stop thirteen."
      }
     ],
+    "audio": "cp4/lesson_3.mp3",
+    "transcript": "<strong>PART 1: The portrait and the sandwich</strong><br><em>Theo:</em> Okay. One room. Then lunch. That was the deal.<br><br><em>Ruby:</em> One room. Press twelve.<br><br><i>[beep]</i><br><br><em>Guide:</em> Stop twelve. Self-Portrait with Black Cat. Clara Whitfield painted this in eighteen ninety-four, in a tiny studio above a bakery. What catches your eye first? For most people, it's her expression. She isn't smiling. Take a moment to take in her face. Critics at the time said women painted pretty flowers, not serious art. This is her answer. Take a closer look at her left hand. She's holding three brushes, like weapons. And at her feet, half in the shadows, sits her black cat, Shadow.<br><br><em>Theo:</em> Okay, the cat is cool. I'll give her the cat.<br><br><em>Guide:</em> Let's move on to stop thirteen.<br><br><i>[beep]</i><br><br><em>Guide:</em> Stop thirteen. Lunch Break, by Ray Duncan, nineteen sixty-eight. In front of you is a sandwich, made of white marble, on a pedestal as tall as a kitchen table. It weighs two tons. It's a far cry from the elegant statues in the last room, and that was exactly Duncan's point. Fun fact: in its first year, three visitors tried to take a bite.<br><br><em>Theo:</em> Okay, this one blows me away. Look at the pickle. Somebody carved a marble pickle.<br><br><em>Ruby:</em> You said you weren't a museum guy.<br><br><em>Theo:</em> I'm a sandwich guy. It's different.<br><br><strong>PART 2: The quilt and the harbor</strong><br><i>[beep]</i><br><br><em>Guide:</em> Stop fourteen. Forty Winters. This quilt was sewn in the nineteen thirties by the women of a small farm town in Ohio, one square for every family. What you see here is a replica. Art students made it in twenty nineteen. The original is too fragile for light, so it sleeps in a dark storage room downstairs.<br><br><em>Ruby:</em> That's kind of sad. It sleeps.<br><br><i>[beep]</i><br><br><em>Guide:</em> Stop fifteen. Harbor at Dawn. Clara Whitfield again, nineteen oh one. This painting is in the middle of restoration. On the left, you see the clean side: blue water, pink sky. On the right, the old, dark varnish. During the cleaning, our team found something under the paint. Near the small red boat, a shape appeared.<br><br><em>Theo:</em> Wait. Is that... a tail?<br><br><em>Guide:</em> To ask the curator a question, say your question now.<br><br><em>Theo:</em> Uh, hi. Quick question. Is that the same cat? From the first painting?<br><br><em>Guide:</em> Good eye. Yes, we believe it's Shadow. Clara put him in almost every painting. Her gallery told her a cat was not serious, and she painted over him. The restoration is bringing him back, one inch at a time.<br><br><em>Theo:</em> That's... okay, that's amazing. Ruby, we have to see every Clara painting.<br><br><em>Ruby:</em> Theo, it's two o'clock. You said one room, then lunch.<br><br><em>Theo:</em> The sandwich can wait. Shadow can't.<br><br>",
     "model": {
-     "title": "The Open Mic",
-     "transcript": "<strong>Model dialogue: The Open Mic</strong><br><br><em>Nina:</em> Your poem reads beautifully on paper. Now perform it — the mic changes everything.<br><em>Jack:</em> The rhythm felt strong until I stood up. Then my breath ran out mid-line.<br><em>Nina:</em> Because you wrote for the eye. Spoken word breathes in phrases — mark your pauses.<br><em>Jack:</em> So I should break the line where the lungs break, not where the grammar does?<br><em>Nina:</em> Precisely. And repeat your anchor line; the ear needs landmarks the page doesn't.<br><em>Jack:</em> 'The city forgets us' — three times, each louder?<br><em>Nina:</em> Each softer. Make them lean in.<br><em>Jack:</em> Cruel technique.<br><em>Nina:</em> Performance is controlled generosity. Give, but make them reach.<br>"
+     "title": "Stop 1: Grandma's coffee pot",
+     "file": "cp4/lesson_3_model.mp3",
+     "transcript": "<strong>Model dialogue: Stop 1: Grandma's coffee pot</strong><br><br><em>Elena:</em> Welcome to my kitchen. Stop one. In front of you is a coffee pot, made of blue metal, older than my mother.<br><br><em>Elena:</em> What catches your eye first? For most people, it's the dent. Take a closer look, on the left side.<br><br><em>Sam:</em> Oh, I see it. What happened?<br><br><em>Elena:</em> Fun fact: my grandmother threw it at a man who tried to steal her chickens. In nineteen seventy-five.<br><br><em>Sam:</em> No. Did it work?<br><br><em>Elena:</em> He ran. The chickens stayed. The coffee pot got the dent.<br><br><em>Elena:</em> Today it's a far cry from a weapon. I make coffee in it every Sunday.<br><br><em>Sam:</em> Quick question: does the coffee taste better?<br><br><em>Elena:</em> Of course. It tastes like victory. Let's move on to stop two: the fridge.<br><br><em>Sam:</em> I can't wait.<br><br>"
     }
    },
    {
     "n": 4,
-    "title": "Character Psychology",
-    "icon": "fa-brain",
+    "title": "Two Bites",
+    "icon": "fa-utensils",
+    "seed": "P4-4",
+    "art": "food",
     "vocab": [
      {
-      "term": "Multidimensional",
-      "def": "Having many different aspects or features"
+      "term": "hole-in-the-wall",
+      "def": "a very small, simple place, often hidden, that can be surprisingly good",
+      "ex": "It's a total hole-in-the-wall."
      },
      {
-      "term": "Flaw",
-      "def": "A mark, fault, or other imperfection"
+      "term": "tangy",
+      "def": "with a strong, sharp, slightly sour taste, like lime",
+      "ex": "The salsa verde is tangy, a little spicy"
      },
      {
-      "term": "Motivation",
-      "def": "The reason or reasons one has for acting or behaving in a particular way"
+      "term": "overpriced",
+      "def": "more expensive than it should be",
+      "ex": "they're overpriced."
      },
      {
-      "term": "Empathy",
-      "def": "The ability to understand and share the feelings of another"
+      "term": "marinated",
+      "def": "left in a sauce for hours before cooking, to get flavor",
+      "ex": "The pork is marinated for twenty-four hours"
      },
      {
-      "term": "Redemption",
-      "def": "The action of saving or being saved from sin, error, or evil"
+      "term": "pig out",
+      "def": "to eat a lot, too much, with pleasure",
+      "ex": "You pigged out so much you couldn't finish your horchata."
      },
      {
-      "term": "Nuance",
-      "def": "A subtle difference in or shade of meaning, expression, or sound"
+      "term": "worth the hype",
+      "def": "as good as everybody says",
+      "ex": "Is it worth the hype?"
      },
      {
-      "term": "Archetype",
-      "def": "A very typical example of a certain person or thing"
+      "term": "hit the spot",
+      "def": "to be exactly what you wanted or needed",
+      "ex": "Okay, the salsa hit the spot."
      },
      {
-      "term": "Contradiction",
-      "def": "A combination of statements, ideas, or features of a situation that are opposed to one another"
+      "term": "cut corners",
+      "def": "to do something the cheap or easy way, and lower the quality",
+      "ex": "Lots of places cut corners with tortillas from the supermarket."
      },
      {
-      "term": "Justify",
-      "def": "Show or prove to be right or reasonable"
+      "term": "Here's my take",
+      "def": "this is my opinion (said before you give it)",
+      "ex": "Here's my take."
      },
      {
-      "term": "Internal conflict",
-      "def": "Psychological struggle within the mind of a literary or dramatic character"
+      "term": "Full disclosure",
+      "def": "I want to be honest and tell you everything (often before admitting something)",
+      "ex": "Full disclosure, I ate eight of them."
      },
      {
-      "term": "Unpredictable",
-      "def": "Not able to be foreseen or known beforehand"
+      "term": "agree to disagree",
+      "def": "to accept that two people have different opinions and stop arguing",
+      "ex": "Let's agree to disagree."
      },
      {
-      "term": "Relatable",
-      "def": "Enabling a person to feel that they can relate to someone or something"
+      "term": "Hands down",
+      "def": "without any doubt; clearly",
+      "ex": "Hands down the best al pastor in Chicago."
      }
     ],
+    "audio": "cp4/lesson_4.mp3",
+    "transcript": "<strong>PART 1: The review</strong><br><i>[short jingle]</i><br><br><em>Nate:</em> Welcome back to Two Bites, the food show where two people take two bites and have way too many opinions. I'm Nate.<br><br><em>Carla:</em> And I'm Carla. Today: Taquería La Güera, in Pilsen. Pink door, twelve seats, no website. It's a total hole-in-the-wall.<br><br><em>Nate:</em> And everybody online says it's the best taco place in the city. Is it worth the hype? Carla, let's start with the al pastor.<br><br><em>Carla:</em> Okay. The tacos are four fifty each. They're small. For that price, I'm sorry, they're overpriced.<br><br><em>Nate:</em> Overpriced? Carla. The pork is marinated for twenty-four hours, the guy told us. There's fresh pineapple on top. And the tortillas are handmade, right there at the window. Lots of places cut corners with tortillas from the supermarket. Not here.<br><br><em>Carla:</em> Fine. Okay, the salsa hit the spot. The salsa verde is tangy, a little spicy, I'd buy a bottle of it.<br><br><em>Nate:</em> Thank you. Hands down the best al pastor in Chicago.<br><br><em>Carla:</em> Nate, you say that every week.<br><br><em>Nate:</em> And every week I'm right. Full disclosure, I ate eight of them.<br><br><em>Carla:</em> Nine. I counted. You pigged out so much you couldn't finish your horchata.<br><br><em>Nate:</em> Because the horchata is too sweet. That's a fact.<br><br><em>Carla:</em> That's an opinion, Nate. Okay, stars. I give it three and a half.<br><br><em>Nate:</em> Five. Easy five. Let's agree to disagree.<br><br><strong>PART 2: The email</strong><br><em>Carla:</em> Before we go, we got an email this morning, and, um, you need to hear this.<br><br><em>Nate:</em> Is it a fan? I love fans.<br><br><em>Carla:</em> It's from a woman called Rosa. She says, quote: 'Hi, I'm the owner's daughter. Thank you for talking about La Güera. But you went on a Monday, right? We're closed on Mondays.'<br><br><em>Nate:</em> What? No. Pink door. I sat right by the pink door.<br><br><em>Carla:</em> Wait, there's more. 'The pink door next to us is the laundromat. My uncle Beto sells tacos from the back of the laundromat, a few days a week. You two reviewed my uncle.'<br><br><em>Nate:</em> We reviewed a laundromat.<br><br><em>Carla:</em> You called a laundromat the best al pastor in Chicago. Hands down.<br><br><em>Nate:</em> Okay, okay. Here's my take. If a man can make tacos like that between two washing machines, he deserves the five stars even more.<br><br><em>Carla:</em> I'm not taking back my three and a half.<br><br><em>Nate:</em> So next week, we go to the real La Güera, on a Tuesday, and we compare. Uncle Beto versus his family.<br><br><em>Carla:</em> That's going to cause a family fight.<br><br><em>Nate:</em> That's good radio. See you next week on Two Bites.<br><br><i>[jingle]</i><br><br>",
     "model": {
-     "title": "Why Villains Believe They're Right",
-     "transcript": "<strong>Model dialogue: Why Villains Believe They're Right</strong><br><br><em>Grace:</em> Your villain kicks a dog in scene one. Why?<br><em>Sam:</em> So readers know he's evil?<br><em>Grace:</em> That's a costume, not a character. What does he want, in his own words?<br><em>Sam:</em> He wants... order. He grew up in chaos, and chaos ate his family.<br><em>Grace:</em> Now he's interesting. Every cruelty becomes a twisted mercy in his logic.<br><em>Sam:</em> The villain is the hero of a story we refuse to read.<br><em>Grace:</em> Write two pages of that story. Then delete the dog scene.<br><em>Sam:</em> The dog thanks you. So does the plot.<br>"
+     "title": "Two Hosts, One Coffee Shop",
+     "file": "cp4/lesson_4_model.mp3",
+     "transcript": "<strong>Model dialogue: Two Hosts, One Coffee Shop</strong><br><br><em>Owen:</em> Today on our show: Café Luna, downtown. Gabi, let's start with the coffee.<br><br><em>Gabi:</em> Honestly? It's good, but seventy pesos for a small latte? For that price, I'm sorry, it's overpriced.<br><br><em>Owen:</em> Okay, but the beans are from Chiapas and they roast them there. You can smell it from the street.<br><br><em>Gabi:</em> I'll be fair: the cinnamon roll hit the spot. Warm, soft, perfect.<br><br><em>Owen:</em> Hands down the best cinnamon roll in town.<br><br><em>Gabi:</em> That's an opinion, not a fact.<br><br><em>Owen:</em> It's an opinion that is always right. And the wifi works. That's a fact.<br><br><em>Gabi:</em> True. Is it worth the hype, though? There's a line every morning.<br><br><em>Owen:</em> For me, yes. I give it four and a half stars.<br><br><em>Gabi:</em> Three. The line kills it for me.<br><br><em>Owen:</em> Let's agree to disagree. See you next week.<br><br>"
     }
    },
    {
     "n": 5,
-    "title": "World-building & Setting",
-    "icon": "fa-globe",
+    "title": "Night Line",
+    "icon": "fa-city",
+    "seed": "P4-5",
+    "art": "city",
     "vocab": [
      {
-      "term": "Lore",
-      "def": "A body of traditions and knowledge on a subject or held by a particular group, typically passed from person to person by word of mouth"
+      "term": "landlord",
+      "def": "the person who owns the house or apartment you rent",
+      "ex": "I sent a noise complaint to the landlord. Twice."
      },
      {
-      "term": "Immersive",
-      "def": "Generating a three-dimensional image which appears to surround the user"
+      "term": "noise complaint",
+      "def": "an official message saying that someone is too loud",
+      "ex": "I sent a noise complaint to the landlord."
      },
      {
-      "term": "Cohesive",
-      "def": "Well integrated; forming a united whole"
+      "term": "lease",
+      "def": "the contract you sign when you rent a home",
+      "ex": "My lease says quiet hours start at eleven"
      },
      {
-      "term": "Infrastructure",
-      "def": "The basic physical and organizational structures and facilities"
+      "term": "rush hour",
+      "def": "the time of day when traffic is worst, when people go to or leave work",
+      "ex": "I drive a city bus. Morning rush hour."
      },
      {
-      "term": "Geography",
-      "def": "The nature and relative arrangement of places and physical features"
+      "term": "put up with",
+      "def": "to accept something bad without complaining",
+      "ex": "How long have you been putting up with this?"
      },
      {
-      "term": "Ecosystem",
-      "def": "A biological community of interacting organisms and their physical environment"
+      "term": "bring up",
+      "def": "to start talking about a subject",
+      "ex": "I didn't wanna bring it up with her."
      },
      {
-      "term": "Mythology",
-      "def": "A collection of myths, especially one belonging to a particular religious or cultural tradition"
+      "term": "on edge",
+      "def": "nervous and easily annoyed",
+      "ex": "I'm on edge all day at work."
      },
      {
-      "term": "Hierarchy",
-      "def": "A system or organization in which people or groups are ranked one above the other according to status or authority"
+      "term": "the last straw",
+      "def": "the final problem that makes you lose patience",
+      "ex": "Last night was the last straw."
      },
      {
-      "term": "Plausible",
-      "def": "Seeming reasonable or probable"
+      "term": "You're on the air",
+      "def": "what a radio host says when a caller can start talking",
+      "ex": "Derek, you're on the air."
      },
      {
-      "term": "Consistency",
-      "def": "Conformity in the application of something, typically that which is necessary for the sake of logic, accuracy, or fairness"
+      "term": "If I were you",
+      "def": "a polite way to give advice",
+      "ex": "If I were you, I'd knock on her door with cookies, not a broom."
      },
      {
-      "term": "Intricate",
-      "def": "Very complicated or detailed"
+      "term": "Have you tried",
+      "def": "a soft way to suggest an idea",
+      "ex": "Have you tried talking to her?"
      },
      {
-      "term": "Aesthetic",
-      "def": "Concerned with beauty or the appreciation of beauty"
+      "term": "You might want to",
+      "def": "a very polite way to give advice",
+      "ex": "You might want to buy a practice mute."
      }
     ],
+    "audio": "cp4/lesson_5.mp3",
+    "transcript": "<strong>PART 1: The man downstairs</strong><br><i>[soft jazz, fading]</i><br><br><em>Gloria:</em> It's one a.m. in Los Angeles, and this is Night Line. If you're awake, you're not alone. Our first caller is Derek. Derek, you're on the air.<br><br><em>Derek:</em> Hi, Gloria. Thanks. So, um, I live in an apartment building, second floor. And the woman upstairs plays the tuba.<br><br><em>Gloria:</em> The tuba.<br><br><em>Derek:</em> The tuba. After midnight. Every night. I can't sleep, I'm on edge all day at work, I almost yelled at my boss yesterday.<br><br><em>Gloria:</em> Oh, honey. How long have you been putting up with this?<br><br><em>Derek:</em> Three months. I sent a noise complaint to the landlord. Twice. Nothing. So now I hit the ceiling with a broom. And last night was the last straw. She played La Bamba. At two in the morning. Twice.<br><br><em>Gloria:</em> Okay. Have you tried talking to her? Face to face?<br><br><em>Derek:</em> No. I didn't wanna bring it up with her. She's, like, really tall. And she has a tuba.<br><br><em>Gloria:</em> Derek, if I were you, I'd knock on her door with cookies, not a broom. People hear you better when you're holding cookies.<br><br><em>Derek:</em> Cookies. Okay. I'll think about it.<br><br><em>Gloria:</em> Stay on the line, Derek. Let's hear from another caller.<br><br><strong>PART 2: The woman upstairs</strong><br><em>Gloria:</em> Tasha, you're on the air.<br><br><em>Tasha:</em> Hi, Gloria. I love your show. Okay, so I have the opposite problem. My downstairs neighbor hits my floor with something every night. Bang, bang, bang. I think it's a broom.<br><br><em>Gloria:</em> Interesting. And, uh, what are you doing when he bangs?<br><br><em>Tasha:</em> Practicing. I play tuba in a banda, for weddings. But I drive a city bus. Morning rush hour. I start at five a.m., so the only time I can practice is at night. We have a big wedding on Saturday.<br><br><em>Gloria:</em> Tasha, what's the name of your building?<br><br><em>Tasha:</em> The Palms, on Vermont Avenue. Why?<br><br><em>Derek:</em> Wait. Wait. Apartment three B?<br><br><em>Tasha:</em> Who is this?<br><br><em>Derek:</em> I'm two B. I'm the broom.<br><br><i>[Gloria laughing]</i><br><br><em>Tasha:</em> Oh my God. I'm so sorry. My lease says quiet hours start at eleven, and I was scared the landlord was gonna kick me out.<br><br><em>Gloria:</em> Okay, you two. Tasha, you might want to buy a practice mute and stop at ten. Derek, you might want to put the broom away.<br><br><em>Derek:</em> Deal. And, um, Tasha? I played trumpet in high school. Does your band need a trumpet?<br><br><em>Tasha:</em> Are you serious? Our trumpet player just moved to Phoenix.<br><br><em>Gloria:</em> And that, Los Angeles, is why you talk to your neighbors. Night Line will be right back.<br><br>",
     "model": {
-     "title": "The Map Before the Journey",
-     "transcript": "<strong>Model dialogue: The Map Before the Journey</strong><br><br><em>Laura:</em> Your fantasy city has flying trams, but your farmers still starve. Economy check!<br><em>Ben:</em> It's fantasy — must it balance the books?<br><em>Laura:</em> Worlds don't need to be real, they need to be consistent. Magic has a price or it has no drama.<br><em>Ben:</em> So if levitation is cheap, someone industrialised it, taxed it, smuggled it.<br><em>Laura:</em> Now THAT's a city. Who controls the tram lines?<br><em>Ben:</em> The mage guild... which explains the starving farmers. The guild hoards lift-stones.<br><em>Laura:</em> See? One rule, honestly followed, wrote your plot for you.<br><em>Ben:</em> World-building is just consequences with scenery.<br>"
+     "title": "On Air with Jay",
+     "file": "cp4/lesson_5_model.mp3",
+     "transcript": "<strong>Model dialogue: On Air with Jay</strong><br><br><em>Jay:</em> This is Late Talk. Lucía, you're on the air. What's going on?<br><br><em>Lucía:</em> Hi, Jay. My roommate eats my food. Every day. Yesterday it was my birthday cake.<br><br><em>Jay:</em> Your birthday cake? How long have you been putting up with this?<br><br><em>Lucía:</em> Since March. I wrote my name on everything. She eats it anyway.<br><br><em>Jay:</em> Have you tried talking to her, calmly, not by text?<br><br><em>Lucía:</em> Not really. I'm scared it will be weird.<br><br><em>Jay:</em> If I were you, I'd bring it up at dinner, with a plan: one shelf for you, one for her.<br><br><em>Lucía:</em> That sounds fair.<br><br><em>Jay:</em> And you might want to buy a small fridge for your room. Just in case.<br><br><em>Lucía:</em> Ha. Okay. Thank you, Jay.<br><br><em>Jay:</em> Good luck, Lucía. Stay on the line, and happy late birthday.<br><br>"
     }
    },
    {
     "n": 6,
-    "title": "Mastering Dialogue",
-    "icon": "fa-comments",
+    "title": "Festival Live",
+    "icon": "fa-music",
+    "seed": "P4-6",
+    "art": "music",
     "vocab": [
      {
-      "term": "Dialogue",
-      "def": "Conversation between two or more people as a feature of a book, play, or movie"
+      "term": "soundcheck",
+      "def": "a short test of the instruments and microphones before a show",
+      "ex": "Where are we with the Ferris soundcheck?"
      },
      {
-      "term": "Subtext",
-      "def": "An underlying and often distinct theme in a piece of writing or conversation"
+      "term": "lineup",
+      "def": "the list of artists who play at an event",
+      "ex": "A change to the lineup on the Main Stage."
      },
      {
-      "term": "Exposition",
-      "def": "The insertion of important background information within a story"
+      "term": "wristband",
+      "def": "a band you wear on your wrist to enter an event",
+      "ex": "Please keep your wristband on at all times."
      },
      {
-      "term": "Monologue",
-      "def": "A long speech by one actor in a play or movie"
+      "term": "setlist",
+      "def": "the list of songs a band plays in a show, in order",
+      "ex": "Not with the Ferris setlist."
      },
      {
-      "term": "Inflection",
-      "def": "A change in the form of a word/voice to express a grammatical function or attribute such as tense, mood, person"
+      "term": "push back",
+      "def": "to move an event to a later time",
+      "ex": "We push back Ferris thirty minutes."
      },
      {
-      "term": "Banter",
-      "def": "The playful and friendly exchange of teasing remarks"
+      "term": "fill in for",
+      "def": "to do someone's job for a short time because they are not there",
+      "ex": "Can anyone fill in for him?"
      },
      {
-      "term": "Vernacular",
-      "def": "The language or dialect spoken by the ordinary people in a particular country or region"
+      "term": "run behind",
+      "def": "to be late compared with the plan",
+      "ex": "We're running behind, big time."
      },
      {
-      "term": "Naturalistic",
-      "def": "Derived from real life or nature, or imitating it very closely"
+      "term": "cut it close",
+      "def": "to leave almost no extra time",
+      "ex": "We'll cut it close, but it works."
      },
      {
-      "term": "Redundant",
-      "def": "Not or no longer needed or useful; superfluous"
+      "term": "Copy that.",
+      "def": "on a radio or at work: I heard you and I understand",
+      "ex": "Six-fifteen. Copy that."
      },
      {
-      "term": "Syntax",
-      "def": "The arrangement of words and phrases to create well-formed sentences"
+      "term": "Heads up.",
+      "def": "a warning so people are ready for something",
+      "ex": "Quick heads up for everyone near the water."
      },
      {
-      "term": "Articulate",
-      "def": "Having or showing the ability to speak fluently and coherently"
+      "term": "Hang tight.",
+      "def": "wait a little and stay calm",
+      "ex": "Hang tight, everybody."
      },
      {
-      "term": "Cliché",
-      "def": "A phrase or opinion that is overused and betrays a lack of original thought"
+      "term": "My bad.",
+      "def": "an informal way to say: that was my mistake",
+      "ex": "My bad, Dev."
      }
     ],
+    "audio": "cp4/lesson_6.mp3",
+    "transcript": "<strong>PART 1: Change of plans</strong><br><i>[festival crowd, wind]</i><br><br><em>Nora:</em> Good afternoon, Riverfest. Quick heads up for everyone near the water. Because of the wind, the River Stage is closed for the rest of the day. Paper Lanterns will still play at four o'clock, but not on the River Stage. On the Tent Stage. Again: four o'clock, Tent Stage. Please keep your wristband on at all times. Thank you.<br><br><i>[radio static]</i><br><br><em>Kim:</em> Dev, it's Kim. Where are we with the Ferris soundcheck?<br><br><em>Dev:</em> Uh, yeah, that's the problem. There is no Ferris soundcheck. Their drummer's missing.<br><br><em>Kim:</em> Missing. Like, late?<br><br><em>Dev:</em> Like, nobody's seen him since lunch. Theo's on channel two. Hang on.<br><br><em>Theo:</em> Kim, Theo here. I'm so sorry. Benny's phone goes straight to voicemail. We're running behind, big time.<br><br><em>Kim:</em> Okay. Okay. Theo, can anyone fill in for him? A tech, a cousin, anybody who can hold two sticks?<br><br><em>Theo:</em> Not with the Ferris setlist. Those songs are a nightmare. Nobody can learn them in an afternoon.<br><br><em>Kim:</em> Then here's what we do. We push back Ferris thirty minutes. Nine-thirty, not nine. Dev, tell the Hollow Pines they go on at seven-thirty instead of seven, and they get a longer set.<br><br><em>Dev:</em> They'll love that. They've been begging for an encore all summer.<br><br><em>Kim:</em> And Sister Cactus on the Tent Stage starts at six-fifteen, not six. The Lanterns need time to clear the stage.<br><br><em>Dev:</em> Six-fifteen. Copy that.<br><br><em>Kim:</em> And Dev? Keep it quiet. If the crowd hears 'missing drummer', the internet hears it in four seconds.<br><br><strong>PART 2: The man with the corn dogs</strong><br><em>Nora:</em> Attention, Riverfest. A change to the lineup on the Main Stage. The Hollow Pines will now begin at seven-thirty, not seven. Tonight's headliners, Midnight Ferris, will start at nine-thirty. Because of the new times, the fireworks are at eleven, not ten-thirty. DJ Kofi still plays at five-thirty, as planned.<br><br><i>[crowd groans, then cheers]</i><br><br><em>Dev:</em> Kim, weird one. I've got a guy at the backstage gate. Gray beard, sunburn, a corn dog in each hand. Says he's Benny from Midnight Ferris.<br><br><em>Kim:</em> Does he have an artist pass?<br><br><em>Dev:</em> No. A regular wristband, like everybody else. Security won't let him in.<br><br><em>Theo:</em> That's him. That is absolutely him. Benny, why is your phone off?<br><br><em>Dev:</em> He says the battery died at noon, and he's been out in the crowd all day. Wait, he says his daughter's band played at four.<br><br><em>Kim:</em> Paper Lanterns? His daughter is in Paper Lanterns?<br><br><em>Dev:</em> She's their drummer. He didn't want anybody to know he was here. He didn't want to make her show about him.<br><br><em>Theo:</em> That's sweet, Benny, but you almost gave me a heart attack.<br><br><em>Kim:</em> Okay. We can still do a soundcheck at eight forty-five, behind the curtain. We'll cut it close, but it works. Dev, let him in.<br><br><em>Theo:</em> One more thing. Benny wants his daughter to play the last song with him. On the big stage.<br><br><em>Kim:</em> Tell him yes. That's the best thing I've heard all day.<br><br><em>Dev:</em> He's crying a little. Or it's the mustard.<br><br><em>Kim:</em> Oh, and I told the lighting guys nine o'clock earlier. My bad, Dev. Tell them nine-thirty. Hang tight, everybody. Here comes the good part.<br><br>",
     "model": {
-     "title": "Two People, One Secret",
-     "transcript": "<strong>Model dialogue: Two People, One Secret</strong><br><br><em>Emily:</em> Your dialogue explains too much. Real people talk around the wound, not into it.<br><em>Robert:</em> Give me an example.<br><em>Emily:</em> Two exes meet at a funeral. Bad version: 'I still resent your affair.' Good version: 'You came alone?'<br><em>Robert:</em> Ouch. Three words and the whole history surfaces.<br><em>Emily:</em> Subtext is the iceberg; dialogue is the ten percent above water.<br><em>Robert:</em> So what they DON'T say is my real script.<br><em>Emily:</em> Write the secret at the top of the page, then never mention it.<br><em>Robert:</em> And the reader feels it in every comma.<br><em>Emily:</em> Now you're writing conversation, not information.<br>"
+     "title": "The singer's late flight",
+     "file": "cp4/lesson_6_model.mp3",
+     "transcript": "<strong>Model dialogue: The singer's late flight</strong><br><br><em>Lucy:</em> Marco, it's Lucy from the Main Stage. Heads up: your band is on at eight, and I have no singer.<br><br><em>Marco:</em> I know, I know. Her flight from Denver lands at seven-forty, not six-forty.<br><br><em>Lucy:</em> Seven-forty. Okay. Can we push it back to nine?<br><br><em>Marco:</em> Nine is perfect. But we need at least thirty minutes for the soundcheck.<br><br><em>Lucy:</em> That's a problem. The stage is busy until eight-thirty.<br><br><em>Marco:</em> What if the band does the soundcheck at eight-thirty, and she just joins them at the end?<br><br><em>Lucy:</em> We'll cut it close, but it works. The stage closes at eleven, so you finish by ten-thirty.<br><br><em>Marco:</em> Ten-thirty? Can't we play until eleven?<br><br><em>Lucy:</em> Not eleven. Ten-thirty. The fireworks start at ten forty-five.<br><br><em>Marco:</em> Fair. Ten-thirty it is.<br><br><em>Lucy:</em> Let me read that back to you: soundcheck at eight-thirty, show at nine, finish at ten-thirty.<br><br><em>Marco:</em> Copy that. Thanks, Lucy. You saved our night.<br><br>"
     }
    },
    {
     "n": 7,
-    "title": "The Mystery Genre",
-    "icon": "fa-magnifying-glass",
+    "title": "Behind the Lens",
+    "icon": "fa-camera-retro",
+    "seed": "P4-7",
+    "art": "retro",
     "vocab": [
      {
-      "term": "Alibi",
-      "def": "A claim or piece of evidence that one was elsewhere when an act took place"
+      "term": "candid",
+      "def": "a candid photo is taken when people are not posing or not ready",
+      "ex": "Fifty photos, all candid."
      },
      {
-      "term": "Red Herring",
-      "def": "A clue or piece of information which is or is intended to be misleading or distracting"
+      "term": "shutter",
+      "def": "the part of a camera that opens for a moment to take the picture",
+      "ex": "I pressed the shutter, and it happened in a split second."
      },
      {
-      "term": "Motive",
-      "def": "A reason for doing something, especially one that is hidden or not obvious"
+      "term": "grainy",
+      "def": "a grainy photo has small dots and is not very sharp",
+      "ex": "It's very grainy."
      },
      {
-      "term": "Deduction",
-      "def": "The inference of particular instances by reference to a general law or principle"
+      "term": "vantage point",
+      "def": "the place you look or take a photo from",
+      "ex": "Best vantage point in the city."
      },
      {
-      "term": "Circumstantial",
-      "def": "Pointing indirectly toward someone's guilt but not conclusively proving it"
+      "term": "blend in",
+      "def": "to look like everyone else so nobody notices you",
+      "ex": "The trick is to blend in."
      },
      {
-      "term": "Accomplice",
-      "def": "A person who helps another commit a crime"
+      "term": "zoom in on",
+      "def": "to make one part of a picture bigger so you can see it",
+      "ex": "If you zoom in on his face, he's laughing."
      },
      {
-      "term": "Suspect",
-      "def": "A person thought to be guilty of a crime or offense"
+      "term": "catch someone off guard",
+      "def": "to surprise someone when they are not ready",
+      "ex": "You catch people off guard for a living."
      },
      {
-      "term": "Culprit",
-      "def": "A person who is responsible for a crime or other misdeed"
+      "term": "a split second",
+      "def": "a very, very short moment",
+      "ex": "I pressed the shutter, and it happened in a split second."
      },
      {
-      "term": "Forensic",
-      "def": "Relating to the application of scientific methods and techniques to the investigation of crime"
+      "term": "Hold that thought.",
+      "def": "wait, we will continue this idea in a moment",
+      "ex": "Hold that thought, because our phones are lighting up."
      },
      {
-      "term": "Interrogation",
-      "def": "The action of interrogating or the process of being interrogated"
+      "term": "Get this:",
+      "def": "listen, this next part is surprising",
+      "ex": "Get this: the shoe landed in a trash can."
      },
      {
-      "term": "Perpetrator",
-      "def": "A person who carries out a harmful, illegal, or immoral act"
+      "term": "Long story short",
+      "def": "I will tell you only the important part",
+      "ex": "Long story short, a friend sent me your poster, and I nearly fell off my chair."
      },
      {
-      "term": "Whodunit",
-      "def": "A story or play about a murder in which the identity of the murderer is not revealed until the end"
+      "term": "Funny thing is",
+      "def": "the surprising or strange part is",
+      "ex": "The funny thing is, he really did propose."
      }
     ],
+    "audio": "cp4/lesson_7.mp3",
+    "transcript": "<strong>PART 1: The man and the puddle</strong><br><em>Priya:</em> You're listening to City Sounds. I'm Priya Shah. My guest today takes pictures of strangers, and somehow they don't call the police. Ray Okafor, welcome.<br><br><em>Ray:</em> Thanks, Priya. Well, one did call the police. Once. We're friends now.<br><br><em>Priya:</em> Your show opens on Friday. Fifty photos, all candid. Nobody posed for any of them?<br><br><em>Ray:</em> Nobody. The trick is to blend in. I wear my dad's old brown coat, I carry a tiny camera, and I never look through it. People think I'm checking the time.<br><br><em>Priya:</em> Let's talk about the photo on the poster. Lake Street, six a.m. Describe it for our listeners.<br><br><em>Ray:</em> So, it's sunrise, under the train tracks. A man in a gray suit is jumping over a huge puddle, and one of his shoes is flying off his foot. Get this: the shoe landed in a trash can.<br><br><em>Priya:</em> It's very grainy.<br><br><em>Ray:</em> Yeah, it's old film, and the light was terrible. But I like grainy. It looks like a memory.<br><br><em>Priya:</em> Where were you standing?<br><br><em>Ray:</em> On the stairs of the train station. Best vantage point in the city. I'd waited there forty minutes. I pressed the shutter, and it happened in a split second. If you zoom in on his face, he's laughing.<br><br><em>Priya:</em> Did he see you?<br><br><em>Ray:</em> Oh, he saw me. He walked up the stairs with one shoe and asked for a copy. I mailed it to him.<br><br><em>Priya:</em> Hold that thought, because our phones are lighting up. We'll be right back.<br><br><i>[short radio jingle]</i><br><br><strong>PART 2: The proposal that wasn't</strong><br><em>Priya:</em> And we're back. Ray, the second photo everybody's talking about is Blue Line, Valentine's Day. A young man on one knee on a train platform, and a woman with her hand over her mouth.<br><br><em>Ray:</em> Everybody calls it The Proposal. People cry in front of it.<br><br><em>Priya:</em> But?<br><br><em>Ray:</em> But he wasn't proposing. He was tying his shoe. And she wasn't crying. She was laughing, because his pants had just ripped. Very loudly.<br><br><em>Priya:</em> Oh no. And there's a pigeon on the bench next to them, looking very judgmental.<br><br><em>Ray:</em> The pigeon is my favorite part, honestly.<br><br><em>Priya:</em> Here's my problem, though. You catch people off guard for a living. Did you ask these two before you showed this photo to the world?<br><br><em>Ray:</em> I always try to find people later. But these two, I couldn't. I looked for months.<br><br><em>Priya:</em> Well, we have a caller who says she can help. Gloria, you're on City Sounds.<br><br><em>Gloria:</em> Hi. Hi, Priya. Hi, Ray. I'm the woman in the photo.<br><br><em>Ray:</em> No.<br><br><em>Gloria:</em> Yes. Long story short, a friend sent me your poster, and I nearly fell off my chair. The funny thing is, he really did propose. Two weeks later.<br><br><em>Priya:</em> Because of the photo?<br><br><em>Gloria:</em> Because of the pants. He said, if you can still laugh at me like that, you're the one. We're married now. Two kids, zero pigeons.<br><br><em>Ray:</em> Gloria, I'm so sorry. I wanted to ask you, I really did.<br><br><em>Gloria:</em> Relax, Ray. I'm not calling to complain. I want a big print for our living room. And Danny wants you to fix the hole in his pants.<br><br><em>Ray:</em> Deal. Free print. But the hole stays.<br><br>",
     "model": {
-     "title": "Planting the Red Herring",
-     "transcript": "<strong>Model dialogue: Planting the Red Herring</strong><br><br><em>Diana:</em> Your detective solves it in chapter three. What do I read the other nine chapters for?<br><em>Peter:</em> The culprit is obvious? I hid him in plain sight!<br><em>Diana:</em> You hid him behind a spotlight. Every scene screams 'watch the butler'.<br><em>Peter:</em> How do the masters do it?<br><em>Diana:</em> Fair play: show every clue, but attach each to an innocent explanation.<br><em>Peter:</em> So the reader sees the glove and thinks gardening, not strangling.<br><em>Diana:</em> And your red herring needs his own guilty secret — smuggling, an affair — so his lies mislead honestly.<br><em>Peter:</em> Misdirection through genuine noise. The magician's method.<br><em>Diana:</em> Mystery IS stage magic in prose.<br>"
+     "title": "The birthday cake photo",
+     "file": "cp4/lesson_7_model.mp3",
+     "transcript": "<strong>Model dialogue: The birthday cake photo</strong><br><br><em>Elena:</em> Okay, are you ready to draw? It's a photo from my nephew's birthday.<br><br><em>Sam:</em> Ready. Go slowly.<br><br><em>Elena:</em> Right in the middle, there's a big round table with a cake on it. A chocolate cake with five candles.<br><br><em>Sam:</em> Five candles. Got it. Is anybody at the table?<br><br><em>Elena:</em> Yes. On the left, there's a little boy. He's standing on a chair, and it looks like he's in the middle of blowing out the candles.<br><br><em>Sam:</em> Standing on a chair? Brave kid. What about the right?<br><br><em>Elena:</em> On the right, there's a dog. A big white dog with its nose on the table, very close to the cake.<br><br><em>Sam:</em> Oh no. I can see where this is going. And in the background?<br><br><em>Elena:</em> In the background, you can see a window and four balloons. It was taken from a low angle, so the dog looks huge.<br><br><em>Sam:</em> Okay, done. Look. Is that it?<br><br><em>Elena:</em> Almost. If you zoom in on the cake, you'll see there's a piece missing. The dog got there first.<br><br><em>Sam:</em> I knew it. I'm drawing chocolate on the dog.<br><br>"
     }
    },
    {
     "n": 8,
-    "title": "High Fantasy",
-    "icon": "fa-dragon",
+    "title": "The Final Whistle",
+    "icon": "fa-futbol",
+    "seed": "P4-8",
+    "art": "sports",
     "vocab": [
      {
-      "term": "Epic",
-      "def": "A long poem, typically one derived from ancient oral tradition, narrating the deeds and adventures of heroic or legendary figures"
+      "term": "equalizer",
+      "def": "a goal that makes the score the same for both teams",
+      "ex": "She heads it, it's in. The equalizer."
      },
      {
-      "term": "Quest",
-      "def": "A long or arduous search for something"
+      "term": "stoppage time",
+      "def": "extra minutes at the end of a half for time that was lost",
+      "ex": "And the board is up: at least four minutes of stoppage time."
      },
      {
-      "term": "Prophecy",
-      "def": "A prediction of what will happen in the future"
+      "term": "clean sheet",
+      "def": "a game where a team lets in no goals",
+      "ex": "Five games, five clean sheets."
      },
      {
-      "term": "Mythos",
-      "def": "A myth or mythology"
+      "term": "counterattack",
+      "def": "a fast attack just after the other team loses the ball",
+      "ex": "Oh, here come Denver on the counterattack."
      },
      {
-      "term": "Chivalry",
-      "def": "The medieval knightly system with its religious, moral, and social code"
+      "term": "sit back",
+      "def": "in sports: to stay back and defend instead of attacking",
+      "ex": "Denver just need to sit back now, keep it tight, and wait for the final whistle."
      },
      {
-      "term": "Sovereign",
-      "def": "A supreme ruler, especially a monarch"
+      "term": "turn things around",
+      "def": "to change a bad situation into a good one",
+      "ex": "If Bay City turn things around tonight, I will sing their team song."
      },
      {
-      "term": "Treason",
-      "def": "The crime of betraying one's country, especially by attempting to kill the sovereign or overthrow the government"
+      "term": "down to the wire",
+      "def": "decided only at the very last moment",
+      "ex": "Well, folks, this one's going down to the wire."
      },
      {
-      "term": "Banishment",
-      "def": "The punishment of being sent away from a country or other place"
+      "term": "throw in the towel",
+      "def": "to stop trying because you think you will lose",
+      "ex": "Nobody's throwing in the towel yet."
      },
      {
-      "term": "Lore",
-      "def": "A body of traditions and knowledge on a subject"
+      "term": "You've gotta be kidding me.",
+      "def": "I can't believe it (surprise or disagreement)",
+      "ex": "You've gotta be kidding me. You can't sing."
      },
      {
-      "term": "Mysticism",
-      "def": "Belief that union with or absorption into the Deity or the absolute may be attained through contemplation and self-surrender"
+      "term": "There it is.",
+      "def": "the thing we were waiting for has happened",
+      "ex": "Eighty-one minutes, and there it is."
      },
      {
-      "term": "Relic",
-      "def": "An object surviving from an earlier time, especially one of historical or sentimental interest"
+      "term": "Talk about…",
+      "def": "used to say that something is a very strong example of a thing",
+      "ex": "Talk about pressure."
      },
      {
-      "term": "Citadel",
-      "def": "A fortress, typically on high ground, protecting or dominating a city"
+      "term": "Here we go.",
+      "def": "something exciting is starting right now",
+      "ex": "Here we go."
      }
     ],
+    "audio": "cp4/lesson_8.mp3",
+    "transcript": "<strong>PART 1: Two-nil and a promise</strong><br><i>[stadium crowd]</i><br><br><em>Gus:</em> Welcome back to the National Cup final here in Denver. Fifty-eight minutes gone, and, oh, here come Denver on the counterattack. Hall, Brianna Hall, she's through. She shoots. That's two-nil.<br><br><em>Danielle:</em> And that's her second of the night. Remember her first, ninth minute, a rocket from outside the box. Bay City were still finding their seats.<br><br><em>Gus:</em> Denver haven't let in a goal all tournament, Danielle. Five games, five clean sheets. I'm sorry, this one's over.<br><br><em>Danielle:</em> Gus, it's the fifty-eighth minute. Nobody's throwing in the towel yet.<br><br><em>Gus:</em> I'll tell you what. If Bay City turn things around tonight, I will sing their team song. Live. On national television.<br><br><em>Danielle:</em> You've gotta be kidding me. You can't sing.<br><br><em>Gus:</em> That's how sure I am.<br><br><em>Danielle:</em> And let's not forget, Bay City are only alive because of their goalkeeper. Lupe Navarro saved a penalty in the fortieth minute. Without her, it's three-nil.<br><br><em>Gus:</em> True, true. Let's go down to Maya on the sideline.<br><br><em>Maya:</em> Thanks, Gus. Interesting stuff down here. Navarro's mom is in the front row with a big sign. It says: Lupe, go up for corners.<br><br><em>Gus:</em> Go up for corners? She's a goalkeeper.<br><br><em>Maya:</em> And the coach told me before the game, and I quote: if Lupe leaves her goal, I'll kill her.<br><br><em>Danielle:</em> Talk about pressure. Mom against coach.<br><br><strong>PART 2: Stoppage time</strong><br><i>[crowd roars]</i><br><br><em>Danielle:</em> Eighty-one minutes, and there it is. Kenzie Ortiz, a header at the back post. Two-one. Bay City are back in this.<br><br><em>Gus:</em> Okay, okay. One goal. Denver just need to sit back now, keep it tight, and wait for the final whistle.<br><br><em>Danielle:</em> That's exactly what they're doing. Ten players behind the ball. And the board is up: at least four minutes of stoppage time.<br><br><em>Gus:</em> Ninety-four minutes. Last chance. Corner for Bay City. And wait. Wait. Who's that running up the field?<br><br><em>Danielle:</em> It's Navarro. The goalkeeper is coming up. Her coach is screaming at her.<br><br><em>Gus:</em> Here we go. The ball comes in, Navarro jumps. She heads it, it's in. The equalizer. The goalkeeper scores. Two-two.<br><br><i>[crowd explodes]</i><br><br><em>Danielle:</em> Unbelievable. And her mom is on the field, Gus. Security is chasing her mom.<br><br><em>Gus:</em> Well, folks, this one's going down to the wire. Extra time, thirty more minutes.<br><br><em>Danielle:</em> Not so fast. Denver throw everyone forward, they want it now. And Navarro catches it. She throws it long. Ortiz is running, and there's nobody behind her.<br><br><em>Gus:</em> Oh, she's not gonna. She is.<br><br><em>Danielle:</em> Ninety-six minutes. Ortiz. Three-two. Bay City have won the National Cup.<br><br><em>Gus:</em> I need a moment.<br><br><em>Danielle:</em> Take your time. Maya?<br><br><em>Maya:</em> Guys, the coach just picked Navarro up and carried her across the field. So I guess she's not killing her.<br><br><em>Danielle:</em> Gus. You promised.<br><br><em>Gus:</em> I know what I said. Okay. Here goes. Oh, Bay City, by the sea.<br><br><em>Danielle:</em> Stop. Please. The fans are leaving.<br><br>",
     "model": {
-     "title": "Dragons Are a Tax Problem",
-     "transcript": "<strong>Model dialogue: Dragons Are a Tax Problem</strong><br><br><em>Katie:</em> Your dragon burns the capital in chapter one. Bold. What does the kingdom eat in chapter two?<br><em>Alex:</em> I... hadn't billed the dragon for the granaries.<br><em>Katie:</em> High fantasy dies when consequences don't scale. Epic events need epic aftermath.<br><em>Alex:</em> So the war of succession happens during a famine.<br><em>Katie:</em> Better — because of one. Hunger picks sides faster than honour.<br><em>Alex:</em> And my farm-boy hero matters because he knows grain, not swords.<br><em>Katie:</em> The genre's secret: prophecy fills seats, logistics wins thrones.<br><em>Alex:</em> Tolkien with spreadsheets.<br><em>Katie:</em> You joke, but he counted the days of every march.<br>"
-    }
-   },
-   {
-    "n": 9,
-    "title": "Hard Sci-Fi",
-    "icon": "fa-meteor",
-    "vocab": [
-     {
-      "term": "Theoretical",
-      "def": "Concerned with or involving the theory of a subject or area of study rather than its practical application"
-     },
-     {
-      "term": "Astrophysics",
-      "def": "The branch of astronomy concerned with the physical nature of stars and other celestial bodies"
-     },
-     {
-      "term": "Plausible",
-      "def": "Seeming reasonable or probable"
-     },
-     {
-      "term": "Extraterrestrial",
-      "def": "Of or from outside the earth or its atmosphere"
-     },
-     {
-      "term": "Singularity",
-      "def": "A hypothetical future point in time when artificial intelligence will surpass human intelligence"
-     },
-     {
-      "term": "Cybernetic",
-      "def": "Relating to the science of communications and automatic control systems in both machines and living things"
-     },
-     {
-      "term": "Speculative",
-      "def": "Engaged in, expressing, or based on conjecture rather than knowledge"
-     },
-     {
-      "term": "Dystopian",
-      "def": "Relating to or denoting an imagined state or society where there is great suffering or injustice"
-     },
-     {
-      "term": "Paradigm",
-      "def": "A typical example or pattern of something; a model"
-     },
-     {
-      "term": "Anomaly",
-      "def": "Something that deviates from what is standard, normal, or expected"
-     },
-     {
-      "term": "Exponential",
-      "def": "Growing or increasing very rapidly"
-     },
-     {
-      "term": "Sentient",
-      "def": "Able to perceive or feel things"
-     }
-    ],
-    "model": {
-     "title": "The Physics of the Impossible",
-     "transcript": "<strong>Model dialogue: The Physics of the Impossible</strong><br><br><em>Carlos:</em> Hard sci-fi rule one: you get ONE impossible thing. Spend it wisely.<br><em>Emma:</em> Mine is the ansible — instant communication across light-years.<br><em>Carlos:</em> Fine. Now every other detail obeys physics, or the one lie stops being believable.<br><em>Emma:</em> So my ships still take decades, while messages arrive instantly.<br><em>Carlos:</em> And THERE's your novel — generations receive news from worlds they'll never reach.<br><em>Emma:</em> Grandchildren answering their grandparents' letters.<br><em>Carlos:</em> The tech premise was never the story. The loneliness it creates is.<br><em>Emma:</em> Hard sci-fi: strict physics, human consequences.<br><em>Carlos:</em> Rivets outside, heartbeat inside.<br>"
-    }
-   },
-   {
-    "n": 10,
-    "title": "Historical Biographies",
-    "icon": "fa-headphones",
-    "vocab": [
-     {
-      "term": "Biography",
-      "def": "An account of someone's life written by someone else"
-     },
-     {
-      "term": "Autobiography",
-      "def": "An account of a person's life written by that person"
-     },
-     {
-      "term": "Legacy",
-      "def": "The long-lasting impact of particular events, actions, etc. that took place in the past"
-     },
-     {
-      "term": "Unprecedented",
-      "def": "Never done or known before"
-     },
-     {
-      "term": "Revisionist",
-      "def": "Advocating the revision of an accepted, usually long-standing view, theory, or doctrine, especially a revision of historical events"
-     },
-     {
-      "term": "Contextualize",
-      "def": "Place or study in context"
-     },
-     {
-      "term": "Martyr",
-      "def": "A person who is killed because of their religious or other beliefs"
-     },
-     {
-      "term": "Tyrant",
-      "def": "A cruel and oppressive ruler"
-     },
-     {
-      "term": "Charismatic",
-      "def": "Exercising a compelling charm which inspires devotion in others"
-     },
-     {
-      "term": "Ambiguous",
-      "def": "Open to more than one interpretation; having a double meaning"
-     },
-     {
-      "term": "Embellish",
-      "def": "Make a statement or story more interesting or entertaining by adding extra details, especially ones that are not true"
-     },
-     {
-      "term": "Archive",
-      "def": "A collection of historical documents or records"
-     }
-    ],
-    "model": {
-     "title": "The Biographer's Dilemma",
-     "transcript": "<strong>Model dialogue: The Biographer's Dilemma</strong><br><br><em>Julia:</em> My subject's diary contradicts three eyewitnesses. Whose truth goes in the book?<br><em>Nick:</em> All four. The contradiction IS the chapter.<br><em>Julia:</em> Readers want the real story, not a shrug.<br><em>Nick:</em> They want honesty. 'The general claimed X; the sergeants remember Y' — now the reader judges character.<br><em>Julia:</em> So biography isn't a verdict, it's a trial transcript with style.<br><em>Nick:</em> The best ones, yes. Certainty is for novelists.<br><em>Julia:</em> And where the record is silent?<br><em>Nick:</em> Say so, beautifully. 'Here the letters stop, and we can only follow her to the harbour.'<br><em>Julia:</em> The gaps become atmosphere.<br><em>Nick:</em> The gaps were always the point.<br>"
-    }
-   },
-   {
-    "n": 11,
-    "title": "Stand-up Comedy & Satire",
-    "icon": "fa-face-laugh",
-    "vocab": [
-     {
-      "term": "Satire",
-      "def": "The use of humor, irony, exaggeration, or ridicule to expose and criticize people's stupidity or vices"
-     },
-     {
-      "term": "Irony",
-      "def": "The expression of one's meaning by using language that normally signifies the opposite, typically for humorous or emphatic effect"
-     },
-     {
-      "term": "Sarcasm",
-      "def": "The use of irony to mock or convey contempt"
-     },
-     {
-      "term": "Punchline",
-      "def": "The final phrase or sentence of a joke or story, providing the humor or some other crucial element"
-     },
-     {
-      "term": "Heckler",
-      "def": "A person who interrupts a performer or public speaker with derisive or aggressive comments or abuse"
-     },
-     {
-      "term": "Subversive",
-      "def": "Seeking or intended to subvert an established system or institution"
-     },
-     {
-      "term": "Taboo",
-      "def": "A social or religious custom prohibiting or restricting a particular practice or forbidding association with a particular person, place, or thing"
-     },
-     {
-      "term": "Delivery",
-      "def": "The manner or style of giving a speech or performing a joke"
-     },
-     {
-      "term": "Timing",
-      "def": "The choice, judgment, or control of when something should be done or said for maximum effect"
-     },
-     {
-      "term": "Self-deprecating",
-      "def": "Modest about or critical of oneself, especially humorously so"
-     },
-     {
-      "term": "Observational",
-      "def": "Relating to the observation of everyday life and people"
-     },
-     {
-      "term": "Absurdism",
-      "def": "Intentionally ridiculous or bizarre behavior or character"
-     }
-    ],
-    "model": {
-     "title": "Punching Up",
-     "transcript": "<strong>Model dialogue: Punching Up</strong><br><br><em>Grace:</em> Your satire roasts the unemployed. Watch the room go cold.<br><em>Daniel:</em> Comedy has no rules! Everything's a target.<br><em>Grace:</em> Everything CAN be — but jokes travel down like anvils and up like arrows.<br><em>Daniel:</em> Punching up versus punching down.<br><em>Grace:</em> Mock the minister, not the beggar; the algorithm, not the addict.<br><em>Daniel:</em> But my beggar joke is funnier.<br><em>Grace:</em> It's easier, not funnier. The laugh that costs the powerless is cheap fuel.<br><em>Daniel:</em> And the audience smells cheap.<br><em>Grace:</em> Satire's job is to comfort the afflicted and afflict the comfortable. Aim accordingly.<br>"
-    }
-   },
-   {
-    "n": 12,
-    "title": "Magical Realism",
-    "icon": "fa-wand-sparkles",
-    "vocab": [
-     {
-      "term": "Mundane",
-      "def": "Lacking interest or excitement; dull; of this earthly world rather than a heavenly or spiritual one"
-     },
-     {
-      "term": "Surreal",
-      "def": "Having the qualities of surrealism; bizarre"
-     },
-     {
-      "term": "Metaphorical",
-      "def": "Characteristic of or relating to metaphor; figurative"
-     },
-     {
-      "term": "Seamless",
-      "def": "Smooth and continuous, with no apparent gaps or spaces between one part and the next"
-     },
-     {
-      "term": "Generational",
-      "def": "Relating to the different generations of a particular family or society"
-     },
-     {
-      "term": "Melancholy",
-      "def": "A feeling of pensive sadness, typically with no obvious cause"
-     },
-     {
-      "term": "Fatalism",
-      "def": "The belief that all events are predetermined and therefore inevitable"
-     },
-     {
-      "term": "Grotesque",
-      "def": "Comically or repulsively ugly or distorted"
-     },
-     {
-      "term": "Uncanny",
-      "def": "Strange or mysterious, especially in an unsettling way"
-     },
-     {
-      "term": "Juxtaposition",
-      "def": "The fact of two things being seen or placed close together with contrasting effect"
-     },
-     {
-      "term": "Motif",
-      "def": "A distinctive feature or dominant idea in an artistic or literary composition"
-     },
-     {
-      "term": "Enigma",
-      "def": "A person or thing that is mysterious, puzzling, or difficult to understand"
-     }
-    ],
-    "model": {
-     "title": "The Grandmother Who Rains",
-     "transcript": "<strong>Model dialogue: The Grandmother Who Rains</strong><br><br><em>Sofia:</em> In my story, when the grandmother grieves, it rains indoors. My editor wants an explanation.<br><em>Mark:</em> Never explain! Magical realism dies the moment you show the wiring.<br><em>Sofia:</em> But readers will ask how.<br><em>Mark:</em> They won't — if everyone in the story treats it as Tuesday. The neighbours bring umbrellas, not questions.<br><em>Sofia:</em> The magic is ordinary and the ordinary is magic.<br><em>Mark:</em> Exactly. Márquez's trick: precise details, calm tone, impossible facts.<br><em>Sofia:</em> 'The rain lasted four years, eleven months and two days.'<br><em>Mark:</em> See? The decimal makes the miracle bureaucratic — and believable.<br><em>Sofia:</em> Umbrellas indoors it is. Let the editor bring a raincoat.<br>"
-    }
-   },
-   {
-    "n": 13,
-    "title": "Art Critique",
-    "icon": "fa-palette",
-    "vocab": [
-     {
-      "term": "Aesthetics",
-      "def": "A set of principles concerned with the nature and appreciation of beauty, especially in art"
-     },
-     {
-      "term": "Abstract",
-      "def": "Art that does not attempt to represent external reality, but seeks to achieve its effect using shapes, forms, colors, and textures"
-     },
-     {
-      "term": "Avant-garde",
-      "def": "New and unusual or experimental ideas, especially in the arts, or the people introducing them"
-     },
-     {
-      "term": "Subjective",
-      "def": "Based on or influenced by personal feelings, tastes, or opinions"
-     },
-     {
-      "term": "Objective",
-      "def": "Not influenced by personal feelings or opinions in considering and representing facts"
-     },
-     {
-      "term": "Pretentious",
-      "def": "Attempting to impress by affecting greater importance, talent, culture, etc., than is actually possessed"
-     },
-     {
-      "term": "Provocative",
-      "def": "Causing annoyance, anger, or another strong reaction, especially deliberately"
-     },
-     {
-      "term": "Derivative",
-      "def": "Imitative of the work of another person, and usually disapproved of for that reason"
-     },
-     {
-      "term": "Composition",
-      "def": "The nature of something's ingredients or constituents; the way in which a whole or mixture is made up"
-     },
-     {
-      "term": "Subtext",
-      "def": "An underlying and often distinct theme in a piece of writing or conversation"
-     },
-     {
-      "term": "Evoke",
-      "def": "Bring or recall to the conscious mind"
-     },
-     {
-      "term": "Masterpiece",
-      "def": "A work of outstanding artistry, skill, or workmanship"
-     }
-    ],
-    "model": {
-     "title": "Standing Before the Canvas",
-     "transcript": "<strong>Model dialogue: Standing Before the Canvas</strong><br><br><em>Emma:</em> Ten million for three blue stripes. Defend that, critic.<br><em>Leo:</em> I won't defend the price — markets are theatre. I'll defend the painting.<br><em>Emma:</em> Please. My nephew could paint it.<br><em>Leo:</em> He could copy it. He couldn't have decided it in 1958, when it broke every rule about what a painting must be.<br><em>Emma:</em> So context is the artwork?<br><em>Leo:</em> Context is half of it. Stand closer — the edges vibrate where the blues meet. That's craft, not accident.<br><em>Emma:</em> I admit the vibration is... uncomfortable.<br><em>Leo:</em> Good discomfort is the review. Art that needs no defence usually needed no artist.<br><em>Emma:</em> You still overpaid by nine million.<br><em>Leo:</em> The market did. The painting is innocent.<br>"
-    }
-   },
-   {
-    "n": 14,
-    "title": "Film Analysis",
-    "icon": "fa-clapperboard",
-    "vocab": [
-     {
-      "term": "Cinematography",
-      "def": "The art of making motion pictures"
-     },
-     {
-      "term": "Pacing",
-      "def": "The speed at which a story unfolds"
-     },
-     {
-      "term": "Exposition",
-      "def": "The insertion of important background information within a story"
-     },
-     {
-      "term": "Cliché",
-      "def": "A phrase or opinion that is overused and betrays a lack of original thought"
-     },
-     {
-      "term": "Protagonist",
-      "def": "The leading character or one of the major characters in a drama, movie, novel, or other fictional text"
-     },
-     {
-      "term": "Subvert",
-      "def": "Undermine the power and authority of an established system or institution"
-     },
-     {
-      "term": "Nuance",
-      "def": "A subtle difference in or shade of meaning, expression, or sound"
-     },
-     {
-      "term": "Pretentious",
-      "def": "Attempting to impress by affecting greater importance, talent, culture, etc., than is actually possessed"
-     },
-     {
-      "term": "Visceral",
-      "def": "Relating to deep inward feelings rather than to the intellect"
-     },
-     {
-      "term": "Narrative",
-      "def": "A spoken or written account of connected events; a story"
-     },
-     {
-      "term": "Trope",
-      "def": "A significant or recurrent theme; a motif"
-     },
-     {
-      "term": "Masterpiece",
-      "def": "A work of outstanding artistry, skill, or workmanship"
-     }
-    ],
-    "model": {
-     "title": "The Long Take",
-     "transcript": "<strong>Model dialogue: The Long Take</strong><br><br><em>Nina:</em> The battle scene — one unbroken seven-minute shot. Genius or gimmick?<br><em>Robert:</em> Ask what the technique argues. No cuts means no escape; we're trapped in real time like the soldier.<br><em>Nina:</em> So form mirrors experience.<br><em>Robert:</em> When it's earned, yes. The same shot in a breakfast scene would be vanity.<br><em>Nina:</em> How do I tell ambition from decoration?<br><em>Robert:</em> Remove it mentally. If the meaning survives the removal, it was decoration.<br><em>Nina:</em> And here, cutting would let us breathe — which the film refuses.<br><em>Robert:</em> Exactly. The director isn't showing off; the suffocation IS the thesis.<br><em>Nina:</em> Form as argument. Now the seven minutes feel short.<br><em>Robert:</em> That's the trick working.<br>"
-    }
-   },
-   {
-    "n": 15,
-    "title": "Music Journalism",
-    "icon": "fa-music",
-    "vocab": [
-     {
-      "term": "Acoustic",
-      "def": "Not having electrical amplification"
-     },
-     {
-      "term": "Mainstream",
-      "def": "The ideas, attitudes, or activities that are regarded as normal or conventional; the dominant trend in opinion, fashion, or the arts"
-     },
-     {
-      "term": "Underground",
-      "def": "Alternative, experimental, or non-mainstream culture or arts"
-     },
-     {
-      "term": "Sellout",
-      "def": "A person who compromises their personal values, integrity, or talent in exchange for financial gain or mainstream success"
-     },
-     {
-      "term": "Authenticity",
-      "def": "The quality of being real or true"
-     },
-     {
-      "term": "Pretentious",
-      "def": "Attempting to impress by affecting greater importance, talent, culture, etc., than is actually possessed"
-     },
-     {
-      "term": "Innovative",
-      "def": "Featuring new methods; advanced and original"
-     },
-     {
-      "term": "Derivative",
-      "def": "Imitative of the work of another person, and usually disapproved of for that reason"
-     },
-     {
-      "term": "Melancholy",
-      "def": "A feeling of pensive sadness, typically with no obvious cause"
-     },
-     {
-      "term": "Euphoric",
-      "def": "Characterized by or feeling intense excitement and happiness"
-     },
-     {
-      "term": "Resonance",
-      "def": "The quality in a sound of being deep, full, and reverberating; the ability to evoke or suggest images, memories, and emotions"
-     },
-     {
-      "term": "Legacy",
-      "def": "The long-lasting impact of particular events, actions, etc. that took place in the past"
-     }
-    ],
-    "model": {
-     "title": "Reviewing the Comeback Album",
-     "transcript": "<strong>Model dialogue: Reviewing the Comeback Album</strong><br><br><em>Katie:</em> The band's first album in ten years. My draft says 'a triumphant return'. Too easy?<br><em>Ben:</em> Triumphant is a press release word. What does it actually sound like?<br><em>Katie:</em> Like they studied their old selves... and hired better lawyers than songwriters.<br><em>Ben:</em> NOW you're writing. Which track betrays that?<br><em>Katie:</em> Track four — the chorus begs for a stadium but the lyric was written for a bedroom.<br><em>Ben:</em> Put that sentence in the review. Specifics are the difference between criticism and marketing.<br><em>Katie:</em> Verdict: three stars, sincere nostalgia, rented emotion?<br><em>Ben:</em> Perfect — and quote the one line where the old fire survives, so fans know you listened.<br><em>Katie:</em> Fair and merciless.<br><em>Ben:</em> The only respectable combination.<br>"
-    }
-   },
-   {
-    "n": 16,
-    "title": "Investigative Journalism",
-    "icon": "fa-pen-fancy",
-    "vocab": [
-     {
-      "term": "Investigative",
-      "def": "Carrying out a formal inquiry to discover and examine the facts of an allegation"
-     },
-     {
-      "term": "Corruption",
-      "def": "Dishonest or fraudulent conduct by those in power, typically involving bribery"
-     },
-     {
-      "term": "Whistleblower",
-      "def": "A person who informs on a person or organization engaged in an illicit activity"
-     },
-     {
-      "term": "Allegation",
-      "def": "A claim or assertion that someone has done something illegal or wrong, typically one made without proof"
-     },
-     {
-      "term": "Subpoena",
-      "def": "A writ ordering a person to attend a court"
-     },
-     {
-      "term": "Impartial",
-      "def": "Treating all rivals or disputants equally; fair and just"
-     },
-     {
-      "term": "Libel",
-      "def": "A published false statement that is damaging to a person's reputation"
-     },
-     {
-      "term": "Redact",
-      "def": "Censor or obscure part of a text for legal or security purposes"
-     },
-     {
-      "term": "Unprecedented",
-      "def": "Never done or known before"
-     },
-     {
-      "term": "Scrutiny",
-      "def": "Critical observation or examination"
-     },
-     {
-      "term": "Embezzlement",
-      "def": "Theft or misappropriation of funds placed in one's trust or belonging to one's employer"
-     },
-     {
-      "term": "Integrity",
-      "def": "The quality of being honest and having strong moral principles"
-     }
-    ],
-    "model": {
-     "title": "Follow the Money",
-     "transcript": "<strong>Model dialogue: Follow the Money</strong><br><br><em>Diana:</em> Three sources confirm the mayor's charity paid his cousin's firm. Do we publish?<br><em>Sam:</em> Documents or voices?<br><em>Diana:</em> Two invoices, one insider on record, one anonymous.<br><em>Sam:</em> Solid. Now the boring heroics: give the mayor forty-eight hours to respond.<br><em>Diana:</em> He'll call it a witch hunt and leak a distraction.<br><em>Sam:</em> Let him — his response goes in paragraph four, verbatim. Fairness is armour.<br><em>Diana:</em> Legal wants every adjective removed.<br><em>Sam:</em> Legal is right. The invoices are the adjectives. 'Paid 1.2 million' needs no synonym for corrupt.<br><em>Diana:</em> Facts arranged so they testify.<br><em>Sam:</em> That's the whole craft. Publish Thursday.<br>"
-    }
-   },
-   {
-    "n": 17,
-    "title": "Playwriting & Theater",
-    "icon": "fa-masks-theater",
-    "vocab": [
-     {
-      "term": "Monologue",
-      "def": "A long speech by one actor in a play or movie"
-     },
-     {
-      "term": "Soliloquy",
-      "def": "An act of speaking one's thoughts aloud when by oneself or regardless of any hearers, especially by a character in a play"
-     },
-     {
-      "term": "Blocking",
-      "def": "The precise staging of actors in order to facilitate the performance of a play"
-     },
-     {
-      "term": "Stage directions",
-      "def": "An instruction in the text of a play indicating the movement, position, or tone of an actor, or the sound effects and lighting"
-     },
-     {
-      "term": "Improvise",
-      "def": "Create and perform spontaneously or without preparation"
-     },
-     {
-      "term": "Projection",
-      "def": "The strength of speaking or singing whereby the voice is used loudly and clearly"
-     },
-     {
-      "term": "Articulation",
-      "def": "The clear and precise pronunciation of words"
-     },
-     {
-      "term": "Cue",
-      "def": "A thing said or done that serves as a signal to an actor or other performer to enter or to begin their speech or performance"
-     },
-     {
-      "term": "Fourth wall",
-      "def": "The conceptual barrier between any fictional work and its viewers or readers"
-     },
-     {
-      "term": "Subtext",
-      "def": "An underlying and often distinct theme in a piece of writing or conversation"
-     },
-     {
-      "term": "Catharsis",
-      "def": "The process of releasing, and thereby providing relief from, strong or repressed emotions"
-     },
-     {
-      "term": "Thespian",
-      "def": "Relating to drama and the theater; an actor or actress"
-     }
-    ],
-    "model": {
-     "title": "The Empty Stage",
-     "transcript": "<strong>Model dialogue: The Empty Stage</strong><br><br><em>Laura:</em> My play has a storm, a shipwreck and a palace. The theatre has three chairs and a ladder.<br><em>Marcus:</em> Perfect. Theatre begins where budgets end.<br><em>Laura:</em> The audience will see chairs!<br><em>Marcus:</em> They'll see what the actors believe. A ladder climbed with terror is a mast in a hurricane.<br><em>Laura:</em> So the writing must do what the set can't.<br><em>Marcus:</em> The writing and the bodies. Film shows; the stage conjures.<br><em>Laura:</em> Then my stage directions should describe intention, not furniture.<br><em>Marcus:</em> 'She enters like an apology' beats 'red curtain, oak table' every night.<br><em>Laura:</em> Three chairs and a hurricane it is.<br><em>Marcus:</em> That's a season ticket, right there.<br>"
-    }
-   },
-   {
-    "n": 18,
-    "title": "Graphic Novels & Comics",
-    "icon": "fa-book-open-reader",
-    "vocab": [
-     {
-      "term": "Panel",
-      "def": "An individual frame, or single drawing, in the multiple-panel sequence of a comic strip"
-     },
-     {
-      "term": "Gutter",
-      "def": "The space between framed panels"
-     },
-     {
-      "term": "Speech balloon",
-      "def": "A graphic convention used to assign ownership of dialogue"
-     },
-     {
-      "term": "Onomatopoeia",
-      "def": "The formation of a word from a sound associated with what is named; e.g., cuckoo, sizzle, BANG!"
-     },
-     {
-      "term": "Kinetic",
-      "def": "Relating to or resulting from motion"
-     },
-     {
-      "term": "Dynamic",
-      "def": "Characterized by constant change, activity, or progress"
-     },
-     {
-      "term": "Juxtaposition",
-      "def": "The fact of two things being seen or placed close together with contrasting effect"
-     },
-     {
-      "term": "Foreshortening",
-      "def": "Portray or show an object as closer than it is or as having less depth or distance, as an effect of perspective"
-     },
-     {
-      "term": "Monochrome",
-      "def": "A photograph or picture developed or executed in black and white or in varying tones of only one color"
-     },
-     {
-      "term": "Narrative arc",
-      "def": "The chronological construction of plot in a novel or story"
-     },
-     {
-      "term": "Sequential art",
-      "def": "Using a train of images deployed in sequence to graphic storytelling or convey information"
-     },
-     {
-      "term": "Splash page",
-      "def": "A large, often full-page illustration which opens and introduces a story"
-     }
-    ],
-    "model": {
-     "title": "Reading the Gutter",
-     "transcript": "<strong>Model dialogue: Reading the Gutter</strong><br><br><em>Emily:</em> In this panel the hero falls; in the next he's crowned. Where did the battle go?<br><em>Jack:</em> Between the panels — the gutter. The reader fights it for us.<br><em>Emily:</em> So comics outsource their most important moment to imagination?<br><em>Jack:</em> Every medium does; comics are just honest about the seams.<br><em>Emily:</em> And the page turn?<br><em>Jack:</em> The page turn is a drumroll. Cliffhanger on the right page, revelation after the flip.<br><em>Emily:</em> Rhythm through architecture.<br><em>Jack:</em> Which is why comics scripts read like blueprints — panel size is volume, white space is silence.<br><em>Emily:</em> The empty gutter was the loudest panel all along.<br><em>Jack:</em> Welcome to the ninth art.<br>"
-    }
-   },
-   {
-    "n": 19,
-    "title": "Digital Narratives",
-    "icon": "fa-display",
-    "vocab": [
-     {
-      "term": "Algorithm",
-      "def": "A process or set of rules to be followed in calculations or other problem-solving operations, especially by a computer"
-     },
-     {
-      "term": "Viral",
-      "def": "An image, video, or piece of information that is circulated rapidly and widely from one internet user to another"
-     },
-     {
-      "term": "Engagement",
-      "def": "The fact of being involved with or interacting with digital content"
-     },
-     {
-      "term": "Clickbait",
-      "def": "Content whose main purpose is to attract attention and encourage visitors to click on a link to a particular web page"
-     },
-     {
-      "term": "Parasocial",
-      "def": "A psychological relationship experienced by an audience in their mediated encounters with performers in the mass media"
-     },
-     {
-      "term": "Echo chamber",
-      "def": "An environment in which a person encounters only beliefs or opinions that coincide with their own"
-     },
-     {
-      "term": "Ephemeral",
-      "def": "Lasting for a very short time"
-     },
-     {
-      "term": "Monetize",
-      "def": "Earn revenue from an asset, business, or piece of content"
-     },
-     {
-      "term": "Authenticity",
-      "def": "The quality of being real or true, often faked by influencers"
-     },
-     {
-      "term": "Niche",
-      "def": "A specialized segment of the market for a particular kind of product or service"
-     },
-     {
-      "term": "Crowd-sourced",
-      "def": "Obtain information or input into a particular task or project by enlisting the services of a large number of people"
-     },
-     {
-      "term": "Saturation",
-      "def": "The state or process that occurs when no more of something can be absorbed, combined with, or added"
-     }
-    ],
-    "model": {
-     "title": "The Story That Reads You",
-     "transcript": "<strong>Model dialogue: The Story That Reads You</strong><br><br><em>Sofia:</em> In my interactive fiction, players can betray the mentor. Eighty percent do. What does that say?<br><em>Nick:</em> That you priced loyalty wrong — betrayal unlocks the cooler sword.<br><em>Sofia:</em> So choices are only meaningful when the temptation is honest.<br><em>Nick:</em> Right. A moral choice with a mechanical bribe is just shopping.<br><em>Sofia:</em> Then my endings should reward different values, not different amounts.<br><em>Nick:</em> Branch the meaning, not the loot. Let the loyal ending be quieter but truer.<br><em>Sofia:</em> Digital narrative: the author proposes, the player confesses.<br><em>Nick:</em> And analytics is the confessional booth.<br><em>Sofia:</em> Slightly terrifying.<br><em>Nick:</em> All good mirrors are.<br>"
-    }
-   },
-   {
-    "n": 20,
-    "title": "Literary Criticism",
-    "icon": "fa-pen-nib",
-    "vocab": [
-     {
-      "term": "Criticism",
-      "def": "The analysis and judgment of the merits and faults of a literary or artistic work"
-     },
-     {
-      "term": "Theme",
-      "def": "An idea that recurs in or pervades a work of art or literature"
-     },
-     {
-      "term": "Motif",
-      "def": "A dominant or recurring idea in an artistic work"
-     },
-     {
-      "term": "Symbolism",
-      "def": "The use of symbols to represent ideas or qualities"
-     },
-     {
-      "term": "Ambiguity",
-      "def": "Uncertainty or inexactness of meaning in language"
-     },
-     {
-      "term": "Allegory",
-      "def": "A story, poem, or picture that can be interpreted to reveal a hidden meaning, typically a moral or political one"
-     },
-     {
-      "term": "Deconstruct",
-      "def": "Analyze a text or linguistic or conceptual system by deconstruction"
-     },
-     {
-      "term": "Paradigm",
-      "def": "A typical example or pattern of something; a model"
-     },
-     {
-      "term": "Subversive",
-      "def": "Seeking or intended to subvert an established system or institution"
-     },
-     {
-      "term": "Didactic",
-      "def": "Intended to teach, particularly in having moral instruction as an ulterior motive"
-     },
-     {
-      "term": "Pedantic",
-      "def": "Excessively concerned with minor details or rules; overexacting"
-     },
-     {
-      "term": "Canon",
-      "def": "The list of works considered to be permanently established as being of the highest quality"
-     }
-    ],
-    "model": {
-     "title": "Death of the Author, Again",
-     "transcript": "<strong>Model dialogue: Death of the Author, Again</strong><br><br><em>Grace:</em> The poet says her poem is about her garden. I read it as war grief. Who's right?<br><em>Daniel:</em> Once published, the text outvotes the author. Evidence lives in the lines, not the interview.<br><em>Grace:</em> So intention counts for nothing?<br><em>Daniel:</em> It counts as ONE reading — often the least interesting. The garden has trenches, barbed 'roses', 'armistice of frost'. The war was in her vocabulary.<br><em>Grace:</em> Perhaps smuggled in without her noticing.<br><em>Daniel:</em> Exactly why criticism exists: texts know things their writers don't.<br><em>Grace:</em> And my job is to catch the text confessing.<br><em>Daniel:</em> With quotations as your witnesses. Never convict without them.<br><em>Grace:</em> Verdict: a garden poem, guilty of war.<br><em>Daniel:</em> Case law for the seminar.<br>"
+     "title": "The great pancake flip",
+     "file": "cp4/lesson_8_model.mp3",
+     "transcript": "<strong>Model dialogue: The great pancake flip</strong><br><br><em>Rob:</em> Good evening, and welcome to the kitchen. Our player tonight: Leo. And here comes Leo with the frying pan.<br><br><em>Tina:</em> Look at that focus, Rob. He's done this before. Well, he says he has.<br><br><em>Rob:</em> He shakes the pan. Once. Twice. The pancake is loose. Here we go.<br><br><em>Tina:</em> Oh, he's looking at the ceiling. He's not gonna flip it that high. He is.<br><br><em>Rob:</em> The pancake is in the air. Can you believe it? It's turning, it's turning.<br><br><em>Tina:</em> And it lands. Half in the pan, half on the stove.<br><br><em>Rob:</em> Oh, so close. Talk about bad luck.<br><br><em>Tina:</em> But wait, he's not throwing in the towel. He picks it up with his fingers. Very hot fingers.<br><br><em>Rob:</em> Back in the pan. Second attempt. A small flip this time, nice and safe.<br><br><em>Tina:</em> And there it is. Perfect landing. The crowd goes wild.<br><br><em>Rob:</em> The crowd is his cat, Tina. And she's leaving the room.<br><br>"
     }
    }
   ]
