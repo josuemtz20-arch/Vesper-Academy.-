@@ -18,6 +18,10 @@
         let deckKey = "";
         let basicsLesson = null;
         let customVariants = [], curKey = "", practiceModel = null;
+        // Nivel 4 = Core Practice 4 · Listen & Speak (v2, 2026-11-23): trae su
+        // propio audio (assets/audio/cp4/), transcripción y semilla en
+        // vesper_audio_data.js; nada sale del curso viejo de ese nivel.
+        let v2Lesson = null;
         if (isBasics) {
             const bl = parseInt(params.get("basics") || "1", 10);
             const bn = parseInt(params.get("lesson") || "1", 10);
@@ -57,27 +61,34 @@
             coverSeed = `DIAG-${k}`;
         } else {
             const lv = DATA[lvl] || DATA[String(lvl)];
-            const lesson = lv ? lv.lessons[les - 1] : null;
+            const isV2 = !!(lv && lv.v2);
+            // v2 lista solo las lecciones cuyo audio existe: se busca por número
+            const lesson = lv ? (isV2 ? (lv.lessons.filter(l => l.n === les)[0] || null) : lv.lessons[les - 1]) : null;
+            if (isV2) v2Lesson = lesson || { n: les };
             title = lesson ? lesson.title : `Lesson ${les}`;
             const tag = lv ? lv.tag : "";
             icon = lesson ? lesson.icon : "fa-headphones";
             vocab = lesson ? (lesson.vocab || []) : [];
-            deckKey = `cp${lvl}-${les}`;
-            audioSrc = `assets/audio/core_practice_level_${lvl}_lesson_${les}.mp3`;
+            deckKey = isV2 ? `cp${lvl}v2-${les}` : `cp${lvl}-${les}`;
+            audioSrc = isV2 ? `assets/audio/${v2Lesson.audio || `cp4/lesson_${les}.mp3`}`
+                            : `assets/audio/core_practice_level_${lvl}_lesson_${les}.mp3`;
             curKey = audioSrc.split("/").pop();
             // every Practice lesson ships a second audio: the model roleplay dialogue
             if (lesson && lesson.model) {
                 practiceModel = lesson.model;
                 customVariants = [
-                    { label: "Listening",      file: curKey },
-                    { label: "Model dialogue", file: `core_practice_level_${lvl}_lesson_${les}_model.mp3` }
+                    { label: "Listening",      file: isV2 ? lesson.audio : curKey },
+                    { label: "Model dialogue", file: isV2 ? lesson.model.file : `core_practice_level_${lvl}_lesson_${les}_model.mp3` }
                 ];
             }
             crumbText = `Level ${lvl} · ${tag} · Lesson ${les}`;
             bannerTag = `Level ${lvl} · ${tag}`;
             aSub = `Level ${lvl} · Lesson ${les} — full listening track`;
-            coverSeed = `L${lvl}-${les}`;
-            showPhoto = true;
+            coverSeed = isV2 ? (v2Lesson.seed || `P4-${les}`) : `L${lvl}-${les}`;
+            // la portada v2 es el tema del libro (theme_<art>.jpg), no la foto vieja
+            if (isV2 && v2Lesson.art && window.VESPER_LESSON_ART && VESPER_LESSON_ART.map)
+                VESPER_LESSON_ART.map[coverSeed] = v2Lesson.art;
+            showPhoto = !isV2;
         }
 
         // ── BANNER ────────────────────────────────────────────────────
@@ -176,6 +187,9 @@
                 const files = customVariants.length
                     ? customVariants.map(v => String(v.file || "").split("/").pop()) : [curKey];
                 files.forEach(f => parts.push(CT[f]));
+            } else if (v2Lesson) {
+                parts.push(v2Lesson.transcript);
+                if (practiceModel) parts.push(practiceModel.transcript);
             } else if (!isDiag) {
                 const RD = window.VESPER_READING || {};
                 const entry = (RD[lvl] || RD[String(lvl)] || {})[les] || (RD[lvl] || {})[String(les)];
@@ -218,7 +232,7 @@
                 if (m) { heardSeen[k] = 1; heard.push(Object.assign({}, o, { line: heardLines[i], lineIdx: i, hit: m[0] })); return; }
             }
         }
-        bookVocab.forEach(v => addHeard({ term: v.term, def: v.def, src: "book" }));
+        bookVocab.forEach(v => addHeard({ term: v.term, def: v.def, ex: v.ex, src: "book" }));
         ((AV.decks || {})[deckKey] || []).forEach(a =>
             addHeard({ term: a[0], pos: a[1], def: a[2], es: a[3], hear: a[4] || "", src: "audio" }));
         heard.sort((a, b) => a.lineIdx - b.lineIdx);
@@ -296,6 +310,8 @@
                 if (CT[curKey]) chunks = chunks.concat(buildChunks(CT[curKey], null));
             } else if (practiceModel && /_model\.mp3$/.test(curKey)) {
                 chunks = chunks.concat(buildChunks(practiceModel.transcript, null));
+            } else if (v2Lesson) {
+                if (v2Lesson.transcript) chunks = chunks.concat(buildChunks(v2Lesson.transcript, null));
             } else {
                 const RD = window.VESPER_READING || {};
                 const entry = (!isDiag) ? ((RD[lvl] || RD[String(lvl)] || {})[les] || (RD[lvl] || {})[String(les)]) : null;
@@ -315,6 +331,7 @@
             if (isBasics) return (basicsLesson && basicsLesson.transcript) || "";
             if (isCustom) return (window.CUSTOM_TRANSCRIPTS || {})[curKey] || "";
             if (isDiag)   return "";
+            if (v2Lesson) return v2Lesson.transcript || "";
             const RD = window.VESPER_READING || {};
             const entry = (RD[lvl] || RD[String(lvl)] || {})[les] || (RD[lvl] || {})[String(les)];
             if (!entry) return "";
@@ -330,7 +347,7 @@
             // Tracks with per-line timings (vesper_practice_clips.js) get
             // clip-based exercises: each question plays only its own line(s).
             // Always the Listening track, whichever A/B version is selected.
-            const clipKey = (!isBasics && !isCustom && !isDiag)
+            const clipKey = (!isBasics && !isCustom && !isDiag && !v2Lesson)
                 ? `core_practice_level_${lvl}_lesson_${les}.mp3` : "";
             const clips = clipKey ? (window.PRACTICE_CLIPS || {})[clipKey] : null;
             const n = VesperAudioPractice.mount(host, {
@@ -643,7 +660,8 @@
             const k = file.split("/").pop();
             if (k === curKey) return;
             curKey = k;
-            audioSrc = `assets/audio/${curKey}`;
+            // v2 guarda la carpeta (cp4/…); los demás, solo el nombre
+            audioSrc = `assets/audio/${v2Lesson ? file : curKey}`;
             const wasPlaying = !audio.paused;
             audio.pause(); audio.currentTime = 0; audio.src = audioSrc;
             aFill.style.width = "0%"; aBuf.style.width = "0%";
@@ -1434,7 +1452,7 @@
             document.getElementById("vocab-count").textContent = vocab.length + (vocab.length === 1 ? " word" : " words");
             vocab.forEach(v => {
                 const pos = v.pos || POS.of(v.term, v.def);
-                const ex = v.line ? "" : exFor(v.term);
+                const ex = v.line ? "" : (v.ex || exFor(v.term));
                 const card = document.createElement("div");
                 card.className = "vcard";
                 card.dataset.term = v.term.toLowerCase();
@@ -1474,7 +1492,7 @@
                     c.dataset.term = String(v.term).toLowerCase();
                     c.dataset.def = (v.def || "").toLowerCase();
                     c.dataset.pos = POS.of(v.term, v.def);
-                    const bx = exFor(v.term);
+                    const bx = v.ex || exFor(v.term);
                     c.dataset.ex = bx.toLowerCase();
                     c.innerHTML = `
                         <div class="vhead"><div class="vhead-main"><p class="term">${esc(v.term)}</p>

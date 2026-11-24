@@ -38,7 +38,7 @@ window.VesperLibArt = (function () {
     "level:1": ["Listen first, then read along.", "Escucha primero y luego lee."],
     "level:2": ["Real people, real problems.", "Gente real, problemas reales."],
     "level:3": ["Listen for the argument.", "Escucha el argumento."],
-    "level:4": ["Hear how a story is built.", "Escucha cómo se arma una historia."],
+    "level:4": ["Listen, then say it your way.", "Escucha y luego dilo a tu manera."],
     "level:5": ["The future is talking. Listen.", "El futuro está hablando: escucha."],
     "level:6": ["Culture, in its own words.", "La cultura, con sus propias palabras."],
     "bizpath:b1": ["Sound clear at work.", "Suena claro en el trabajo."],

@@ -1259,7 +1259,7 @@
             1:"Inglés de todos los días — rutinas, pasatiempos, viajes y primeras conversaciones.",
             2:"Comunicación real — quejas, negociación, entrevistas, medios y cultura.",
             3:"Discurso avanzado — debate, diplomacia, economía, ciencia y temas globales.",
-            4:"Escritura creativa — narración, poesía, géneros, crítica y la voz del autor.",
+            4:"Escuchar y hablar — cine, música, comida, arte, deporte y vida en la ciudad.",
             5:"Tecnología y futuro — IA, robótica, espacio, ciberseguridad y vida digital.",
             6:"Cultura pop y sociedad — viralidad, fandoms, medios, moda y mitos modernos."
         };
@@ -1439,11 +1439,17 @@
         const ITEMS = [];
         const push = o => ITEMS.push(o);
 
+        // Nivel 4 v2 (Listen & Speak) trae semilla propia (P4-N) y el tema de
+        // portada del libro; así no hereda la portada ni la nota del curso viejo.
+        const LART = window.VESPER_LESSON_ART;
         Object.keys(DATA).forEach(n => {
             const lv = DATA[n];
+            lv.lessons.forEach(les => {
+                if (les.seed && les.art && LART && LART.map) LART.map[les.seed] = les.art;
+            });
             lv.lessons.forEach(les => push({ col:"level:"+n, group:`Level ${n} · ${lv.tag}`,
                 badge:`Level ${n}`, num:`Lección ${les.n}`, title:les.title, icon:les.icon,
-                seed:`L${n}-${les.n}`, href:`lesson.html?level=${n}&lesson=${les.n}`,
+                seed:les.seed || `L${n}-${les.n}`, href:`lesson.html?level=${n}&lesson=${les.n}`,
                 versions: les.model ? 2 : 0 }));
         });
         DIAG_TRACKS.forEach(t => push({ col:"diag", group:"Diagnostics · Placement", badge:"Placement",
