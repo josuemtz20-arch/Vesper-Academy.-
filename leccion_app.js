@@ -4384,6 +4384,9 @@
      La clave se mezcla en el ejercicio y entonces corre el renderer de
      siempre, que pinta el feedback igual que antes. La nota final la calcula
      y la guarda el Worker (/exam/finish); aquí solo queda el espejo local.
+     Examen de nivel (2026-11-23): el Worker no manda ni clave ni ✓/✗, solo
+     "registrada" (examRecorded); la nota y el desglose por habilidad llegan
+     con /exam/finish (examAwaitResult).
      ============================================================ */
   var EXAM_API = String(window.VESPER_EXAM_API || "https://patient-feather-4364.josuemtz20.workers.dev").replace(/\/+$/, "") + "/exam/";
   function examPost(path, body) {
@@ -4496,8 +4499,11 @@
       }).then(function (r) {
         ex._graded = true; ex._pending = false;
         btn.disabled = false; btn.innerHTML = label;
-        /* examen de nivel: el Worker no manda la clave, solo el veredicto */
-        if (!r.reveal) { examVerdictOnly(ex, !!r.correct, btn); return; }
+        /* examen de nivel: el Worker no manda ni la clave ni el veredicto
+           (solo {recorded}); la nota llega al final. Si un Worker viejo aún
+           manda `correct`, se guarda para el desglose de respaldo pero NO se
+           pinta: la pantalla es la misma con uno u otro. */
+        if (!r.reveal) { examRecorded(ex, typeof r.correct === "boolean" ? r.correct : null, btn); return; }
         examReveal(ex, r.reveal);
         orig.call(self, e);
         /* la calificación local (con la clave ya revelada) debe coincidir con la
@@ -4513,41 +4519,57 @@
       });
     };
   }
-  /* Feedback sin clave (examen de nivel, 2026-11-23): ✓/✗ y nada más. No se
-     llama al renderer (calificaría sin clave y pintaría una "correcta" falsa):
-     se congela lo que el alumno contestó, se marca SU respuesta y el botón
-     pasa a "Siguiente", como en el flujo normal. */
-  function examVerdictOnly(ex, ok, btn) {
-    results[exIdx] = ok;
-    var card = document.querySelector(".card");
-    if (card) {
-      each(".card .opt, .card .fe-seg, .card .tf-btn, .card .chip", function (el) {
-        el.classList.add("locked"); el.setAttribute("aria-disabled", "true"); el.disabled = true;
-        /* lectura: el veredicto es de todo el bloque; en rojo no se sabe cuál
-           de las elegidas falló, así que no se marca ninguna */
-        if (el.classList.contains("sel") && (ok || ex.type !== "reading")) el.classList.add(ok ? "correct" : "wrong");
-      });
-      each(".card input, .card textarea", function (el) { el.readOnly = true; el.classList.add(ok ? "correct" : "wrong"); });
-      each(".card #answer .chip", function (el) { el.classList.add(ok ? "correct" : "wrong"); });
-    }
+  /* ¿examen de nivel calificado en el Worker? Ahí, al contestar, no se sabe
+     si estuvo bien: results[i] queda null hasta la nota final. */
+  function levelNoVerdict() {
+    return !!(lesson && lesson.serverGraded && lesson.examKind === "exam");
+  }
+  /* Respuesta registrada (examen de nivel, 2026-11-23): ni ✓/✗ ni clave. Con
+     el veredicto por pregunta, 3-4 intentos (todo A, todo B…) reconstruían la
+     clave. No se llama al renderer (calificaría sin clave y pintaría una
+     "correcta" falsa): se congela lo que el alumno contestó, SU respuesta
+     queda marcada como elegida, hoja neutra y el botón pasa a "Siguiente". */
+  function examRecorded(ex, legacyOk, btn) {
+    results[exIdx] = legacyOk;   /* null con el Worker nuevo */
+    each(".card .opt, .card .fe-seg, .card .tf-btn, .card .chip", function (el) {
+      el.classList.add("locked"); el.setAttribute("aria-disabled", "true"); el.disabled = true;
+    });
+    each(".card input, .card textarea", function (el) { el.readOnly = true; });
     var fb = byId("fb");
-    if (fb) fb.innerHTML = feedbackBox(ok, "", T("En el examen de nivel no se muestra la respuesta correcta.",
-                                                 "The level exam doesn't show the right answer."));
-    announceResult(ok, "");
+    if (fb) {
+      var cat = (window.VESPER_MASCOT && VESPER_MASCOT.render)
+        ? VESPER_MASCOT.render("thinking", { size: "sm", line: false })
+        : '<img class="fb-cat" src="assets/images/virtual_class_happy_cat.png" alt="">';
+      fb.innerHTML = '<div class="fbbox fb-recorded">' + cat
+        + '<div><b>' + T("Respuesta registrada", "Answer saved") + '</b>'
+        + '<div class="muted">' + T("Tu nota llega al final del examen.", "Your score comes at the end of the exam.") + '</div></div></div>';
+      /* la hoja de respuesta no tiene fondo propio sin .ok/.no: uno neutro, sin verde ni rojo */
+      fb.style.background = "var(--paper)";
+      fb.style.borderTopColor = "var(--line, rgba(0,0,0,.12))";
+    }
+    announce(T("Respuesta registrada.", "Answer saved."));
     setVerifyNext(btn, lesson.exercises.length);
     btn.onclick = function () { advance(); };
   }
   /* cierra el intento: el Worker calcula la nota y, con sesión, la guarda */
-  function examFinish() {
-    if (!lesson.serverGraded || !lesson._att) return;
-    var att = lesson._att; lesson._att = null;
-    var R = window.VESPER_RESULTS;
-    var tok = (R && R.idToken) ? R.idToken() : Promise.resolve(null);
-    Promise.all([att, tok]).then(function (v) {
+  /* Devuelve la promesa con lo que mandó el Worker. `att` opcional: el examen
+     de nivel la reusa para "Reintentar" si el Worker no respondió (un segundo
+     finish del mismo intento repite la nota, no la recalcula). */
+  function examFinish(att) {
+    if (!att) {
+      if (!lesson.serverGraded || !lesson._att) return Promise.reject(new Error("no_attempt"));
+      att = lesson._att; lesson._att = null;
+    }
+    var R = window.VESPER_RESULTS, tok;
+    try { tok = (R && R.idToken) ? R.idToken() : Promise.resolve(null); } catch (e) { tok = Promise.resolve(null); }
+    var p = Promise.all([att, Promise.resolve(tok).catch(function () { return null; })]).then(function (v) {
       return examPost("finish", { attemptId: v[0], idToken: v[1] || undefined, alias: (R && R.aliasOf) ? R.aliasOf() : "" });
-    }).then(function (j) {
+    });
+    p.then(function (j) {
       try { if (window.VESPER_DEBUG_EXAM) console.log("[exam] finish", j); } catch (e) {}
     }, function (e) { try { console.warn("[exam] finish:", e && e.message); } catch (er) {} });
+    p.att = att;
+    return p;
   }
   /* copia profunda: revelar claves no debe tocar el banco compartido */
   function examClone(list) { return JSON.parse(JSON.stringify(list)); }
@@ -4585,6 +4607,9 @@
     /* punto único: results[exIdx] ya está fijado por el renderer. Actualiza combo
        y dispara un pequeño festejo cada 3 aciertos seguidos. */
     var wasOk = !!results[exIdx];
+    /* examen de nivel: sin veredicto hasta el final; no es un fallo (ni
+       combo, ni SRS, ni corazones) */
+    if (levelNoVerdict()) { exIdx++; resumeRun(); return; }
     if (wasOk) { combo++; if (combo > maxCombo) maxCombo = combo; if (combo >= 3 && combo % 3 === 0) { burstConfetti(14); sfx("combo", combo); } }
     else combo = 0;
     /* La Forja: califica el ítem generado (Leitner propio). No toca el bloque
@@ -4668,7 +4693,7 @@
      enciende (oro) o se queda rota (error) — el lucero que da nombre a Vesper. */
   function exNum(total) {
     var st = "", i;
-    if (total <= 16) for (i = 0; i < total; i++) {
+    if (total <= 16 && !levelNoVerdict()) for (i = 0; i < total; i++) {
       st += '<i class="' + (i < exIdx ? (results[i] ? "ok" : "no") : (i === exIdx ? "now" : "")) + '"></i>';
     }
     return '<div class="exnum">' + (st ? '<span class="constel" aria-hidden="true">' + st + '</span>' : '')
@@ -5403,7 +5428,7 @@
         cloud: !lesson.serverGraded
       });
     } catch (e) {}
-    examFinish();
+    if (lesson.serverGraded) examFinish().then(null, function () {});
     if (pct < bm.pass) {
       earnedXp = 0;
       track("boss_fail", { level: lesson.bossLevel, pct: pct });
@@ -5451,30 +5476,93 @@
      Calificación PRELIMINAR automática: veredicto claro + desglose por destreza.
      Registra el intento (siempre) y, si aprueba, otorga XP y continúa la racha;
      si reprueba, ofrece reintentar sin XP. */
+  /* En el examen calificado por el Worker la app NO sabe la nota (al contestar
+     solo oye "registrada"): la pide con /exam/finish y la pinta al volver. Si
+     el Worker no responde, se queda en una pantalla con "Reintentar" que
+     repite el MISMO cierre (el intento vive 24 h en el servidor). */
   function renderExamResult(correct, total, pct) {
-    var pass = lesson.examPass || PASS_PCT;
-    var passed = pct >= pass;
-    lastPerfect = (correct === total);
-    earnedXp = passed ? Math.max(20, Math.round((lesson.xpReward || 60) * correct / Math.max(1, total))) : 0;
-    track("exam_complete", { level: lesson.examLevel, pct: pct, passed: passed });
-    if (PATH && PATH.setScore && lesson.lessonId) PATH.setScore(lesson.lessonId, pct);
-    /* registro central (siempre, aprobado o reprobado) */
-    try {
-      if (window.VESPER_RESULTS) VESPER_RESULTS.record({
-        examType: "exam", examId: "exam:" + lesson.examLevel, level: lesson.level,
-        score: correct, total: total, percent: pct,
-        threshold: pass, passed: passed, detail: examDetail(),
-        cloud: !lesson.serverGraded   /* la nota de la nube la escribe el Worker */
+    if (!lesson.serverGraded) {
+      paintExamResult(correct, total, pct, null, localSkillSplit(), examDetail(), true);
+      return;
+    }
+    examAwaitResult(examFinish());
+  }
+  function examAwaitResult(p) {
+    show('<div class="wrap">' + topbar(92) + '<div class="card center">'
+      + mascot("thinking", T("Estoy revisando tus respuestas…", "I'm checking your answers…"))
+      + '<p class="muted" role="status">' + T("Calculando tu nota…", "Working out your score…") + '</p></div></div>');
+    p.then(function (j) {
+      var total = isFinite(j.total) && j.total > 0 ? +j.total : lesson.exercises.length;
+      var correct = isFinite(j.score) ? +j.score : 0;
+      var pct = isFinite(j.percent) ? +j.percent : Math.round(100 * correct / Math.max(1, total));
+      var split = serverSkillSplit(j) || localSkillSplit();
+      paintExamResult(correct, total, pct, j, split, [], false);
+    }, function (err) {
+      var att = p && p.att;
+      show('<div class="wrap">' + topbar(92) + '<div class="card center">'
+        + mascot("incorrect", T("No pude traer tu nota.", "I couldn't get your score."))
+        + '<p class="hint" role="alert">' + ic('bulb') + esc(!att
+            ? T("El examen se cerró sin conexión con el servidor.", "The exam closed without a connection to the server.")
+            : (err && err.code) ? err.message   /* p. ej. "El examen caducó." */
+            : T("No pude hablar con el servidor del examen. Revisa tu internet y toca Reintentar.",
+                "I couldn't reach the exam server. Check your internet and tap Try again.")) + '</p>'
+        + (att ? '<button class="btn btn-gold" id="again">' + T('Reintentar', 'Try again') + '</button>' : '')
+        + '<button class="btn ' + (att ? 'btn-ghost' : 'btn-gold') + '" id="redo">' + T('Volver a hacer el examen', 'Retake the exam') + '</button>'
+        + '<button class="btn btn-ghost" id="backHome">' + T('Ver lecciones', 'See lessons') + '</button></div></div>');
+      var ag = byId("again");
+      if (ag) ag.onclick = function () { examAwaitResult(examFinish(att)); };
+      byId("redo").onclick = function () { exIdx = 0; results = []; earnedXp = 0; renderExercise(); };
+      byId("backHome").onclick = function () { location.search = ""; };
+    });
+  }
+  /* desglose {skill: {c, t}} — del Worker (bySkill), o del `detail` de un
+     Worker viejo; null si no trae ninguno */
+  function serverSkillSplit(j) {
+    var out = {}, any = false;
+    if (j && j.bySkill && typeof j.bySkill === "object") {
+      Object.keys(j.bySkill).forEach(function (s) {
+        var b = j.bySkill[s] || {};
+        if (!isFinite(b.total) || b.total <= 0) return;
+        out[s] = { c: Math.max(0, +b.correct || 0), t: +b.total }; any = true;
       });
-    } catch (e) {}
-    examFinish();
-    /* desglose preliminar por destreza */
+      return any ? out : null;
+    }
+    if (j && j.detail && j.detail.length) {
+      j.detail.forEach(function (d) {
+        var s = (d && d.skill) || "otro";
+        if (!out[s]) out[s] = { c: 0, t: 0 };
+        out[s].t++; if (d && d.correct) out[s].c++; any = true;
+      });
+      return any ? out : null;
+    }
+    return null;
+  }
+  function localSkillSplit() {
     var bySkill = {};
     (lesson.exercises || []).forEach(function (ex, i) {
       var sk = (ex && ex.skill) || "otro";
       if (!bySkill[sk]) bySkill[sk] = { c: 0, t: 0 };
       bySkill[sk].t++; if (results[i]) bySkill[sk].c++;
     });
+    return bySkill;
+  }
+  function paintExamResult(correct, total, pct, srv, bySkill, detail, cloud) {
+    var pass = (srv && isFinite(srv.threshold) && srv.threshold > 0) ? +srv.threshold : (lesson.examPass || PASS_PCT);
+    var passed = (srv && typeof srv.passed === "boolean") ? srv.passed : pct >= pass;
+    lastPerfect = (correct === total);
+    earnedXp = passed ? Math.max(20, Math.round((lesson.xpReward || 60) * correct / Math.max(1, total))) : 0;
+    track("exam_complete", { level: lesson.examLevel, pct: pct, passed: passed });
+    if (PATH && PATH.setScore && lesson.lessonId) PATH.setScore(lesson.lessonId, pct);
+    /* registro central (siempre, aprobado o reprobado). Con Worker el espejo
+       local va sin detalle por pregunta: la app ya no lo sabe. */
+    try {
+      if (window.VESPER_RESULTS) VESPER_RESULTS.record({
+        examType: "exam", examId: "exam:" + lesson.examLevel, level: lesson.level,
+        score: correct, total: total, percent: pct,
+        threshold: pass, passed: passed, detail: detail || [],
+        cloud: !!cloud   /* con Worker, la nota de la nube la escribe él */
+      });
+    } catch (e) {}
     var SK_LABEL = enUI()
       ? { grammar: "Grammar", vocab: "Vocabulary", use: "Use of English", reading: "Reading", listening: "Listening", otro: "Other" }
       : { grammar: "Gramática", vocab: "Vocabulario", use: "Uso del inglés", reading: "Lectura", listening: "Listening", otro: "Otros" };

@@ -31,6 +31,11 @@ rules_version = '2';
  * Cuando roles/ ya tenga al menos un admin verificado, se puede borrar la
  * función bootstrapAdmin() y dejar isAdmin() = hasRole("admin").
  * Antes de publicar: python _scripts/check_rules.py (compila y prueba).
+ * 2026-11-23: todas las búsquedas y comparaciones de correo (roles/,
+ * students/, teachers/, bootstrapAdmin y los match {email}) usan myEmail(),
+ * que pasa el correo del token a minúsculas como el cliente y el Worker.
+ * Antes solo examIdentityOk lo hacía: con mayúsculas en el token, cliente
+ * y reglas leían documentos distintos.
  *
  * ── Qué hay EN PRODUCCIÓN ──────────────────────────────────────────
  * Publicadas por el dueño el 2026-10-30 03:02 UTC: el ruleset vivo es
@@ -68,8 +73,12 @@ service cloud.firestore {
       return request.auth != null
              && request.auth.token.email_verified == true;
     }
+    // Correo del token SIEMPRE en minúsculas (2026-11-23): los ids de
+    // roles/, students/ y teachers/ están en minúsculas (los escribe el
+    // script admin) y vesper_auth.js y el Worker también pasan el correo a
+    // minúsculas. Toda búsqueda o comparación de correo usa esta función.
     function myEmail() {
-      return request.auth.token.email;
+      return request.auth.token.email.lower();
     }
     // Red de seguridad: el fundador entra como admin aunque roles/ esté vacío.
     function bootstrapAdmin() {
@@ -78,8 +87,8 @@ service cloud.firestore {
     // ¿Tiene roles/{correo}.role == r? (false, sin error, si no hay doc)
     function hasRole(r) {
       return signedIn()
-             && exists(/databases/$(database)/documents/roles/$(request.auth.token.email))
-             && get(/databases/$(database)/documents/roles/$(request.auth.token.email)).data.role == r;
+             && exists(/databases/$(database)/documents/roles/$(myEmail()))
+             && get(/databases/$(database)/documents/roles/$(myEmail())).data.role == r;
     }
     // Admin = fundador (bootstrap) o quien tenga roles/{correo}.role == "admin".
     function isAdmin() {
@@ -97,33 +106,33 @@ service cloud.firestore {
     //    roster.group, teachers.groups y groups/{id}. ——
     function isTeacherUser() {
       return signedIn()
-             && exists(/databases/$(database)/documents/teachers/$(request.auth.token.email));
+             && exists(/databases/$(database)/documents/teachers/$(myEmail()));
     }
     function teacherSeesGroup(g) {
       return isTeacherUser()
              && g != ""
-             && g in get(/databases/$(database)/documents/teachers/$(request.auth.token.email)).data.groups;
+             && g in get(/databases/$(database)/documents/teachers/$(myEmail())).data.groups;
     }
 
     // —— Alumnos (allowlist students/{correo}). Su sid (id opaco, hash del
     //    correo) y su grupo actual los escribe el script admin. ——
     function isStudentUser() {
       return signedIn()
-             && exists(/databases/$(database)/documents/students/$(request.auth.token.email));
+             && exists(/databases/$(database)/documents/students/$(myEmail()));
     }
     function ownSid() {
-      return get(/databases/$(database)/documents/students/$(request.auth.token.email)).data.sid;
+      return get(/databases/$(database)/documents/students/$(myEmail())).data.sid;
     }
     function ownGroup() {
-      return get(/databases/$(database)/documents/students/$(request.auth.token.email)).data.group;
+      return get(/databases/$(database)/documents/students/$(myEmail())).data.group;
     }
     // Acceso por curso (opcional): si students/{correo}.books existe, SOLO
     // puede abrir esos libros/exámenes; sin `books` conserva acceso a todo.
     function studentBookAllowed(id) {
       return isStudentUser()
              && (
-               !("books" in get(/databases/$(database)/documents/students/$(request.auth.token.email)).data)
-               || id in get(/databases/$(database)/documents/students/$(request.auth.token.email)).data.books
+               !("books" in get(/databases/$(database)/documents/students/$(myEmail())).data)
+               || id in get(/databases/$(database)/documents/students/$(myEmail())).data.books
              );
     }
 
@@ -350,15 +359,12 @@ service cloud.firestore {
     // intento solo con group == "" y sid == "", que ningún profesor ve
     // (teacherSeesGroup exige grupo no vacío) y que no apunta a ningún
     // alumno del roster. vesper_results.js lee ese mismo doc antes de subir.
-    // El correo se pasa a minúsculas (.lower()) igual que en vesper_results.js:
-    // si el token trajera mayúsculas, regla y cliente leerían docs distintos y
-    // el intento se rechazaría aunque fuera legítimo. (Hoy las 13 cuentas de
-    // Auth están en minúsculas; revisado 2026-10-28.)
+    // El correo va en minúsculas (myEmail()), igual que en vesper_results.js.
     function examIdentityOk(d) {
-      return (exists(/databases/$(database)/documents/students/$(request.auth.token.email.lower()))
-              && d.group == get(/databases/$(database)/documents/students/$(request.auth.token.email.lower())).data.get("group", "")
-              && d.sid == get(/databases/$(database)/documents/students/$(request.auth.token.email.lower())).data.get("sid", ""))
-          || (!exists(/databases/$(database)/documents/students/$(request.auth.token.email.lower()))
+      return (exists(/databases/$(database)/documents/students/$(myEmail()))
+              && d.group == get(/databases/$(database)/documents/students/$(myEmail())).data.get("group", "")
+              && d.sid == get(/databases/$(database)/documents/students/$(myEmail())).data.get("sid", ""))
+          || (!exists(/databases/$(database)/documents/students/$(myEmail()))
               && d.group == "" && d.sid == "");
     }
     // Forma del intento: mismos campos que toFs() de vesper_results.js, con

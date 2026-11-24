@@ -68,7 +68,8 @@ const MAX_MESSAGES = 16;
  * no lo que llega. chat.html guarda y manda TODO el historial (sin tope), así
  * que rechazar por tamaño bruto castigaría a los alumnos con charlas largas;
  * en vez de eso se recorta aquí, ANTES de llamar a Claude:
- *  - MAX_BODY_CHARS: solo protege el parseo (cuerpos absurdos -> 413).
+ *  - MAX_BODY_CHARS: solo protege el parseo (cuerpos absurdos -> 413). Se
+ *    aplica al leer el stream (readCapped), también a cuerpos chunked.
  *  - MAX_SYSTEM_CHARS: la persona que arma el navegador mide ~1 100
  *    caracteres (medido 2026-11-04); más que esto se corta. Sin el tope,
  *    cualquiera podía mandar su propio system enorme y usar el proxy como
@@ -291,9 +292,20 @@ function secondsToUtcMidnight(nowMs) {
  * (incidencia transitoria de Cloudflare), deja pasar y lo registra: es la
  * misma degradación elegante del resto del sitio, y el max_tokens fijo sigue
  * acotando el costo de cada mensaje. Tras `wrangler deploy` con el
- * wrangler.toml de este repo el binding SIEMPRE existe. */
-async function rateHit(env, key, perMin, perDay) {
+ * wrangler.toml de este repo el binding SIEMPRE existe.
+ *
+ * failClosed (2026-11-23, auditoría A): dejar pasar solo vale para el chat.
+ * En /exam/*, /book/open y /doc/get el contador es el ÚNICO tope contra la
+ * cosecha de claves de examen y contra el gasto en Identity Toolkit/Firestore,
+ * así que ahí, si el contador no está, se NIEGA: devuelve
+ * { ok:false, retryAfter:30, scope:"unavailable" }. Los manejadores lo
+ * convierten en 429 y fixUnavailable() (abajo) lo cambia a 503. */
+async function rateHit(env, key, perMin, perDay, failClosed) {
   if (!env.RATE_LIMITER) {
+    if (failClosed) {
+      console.error("RATE_LIMITER no configurado: ruta protegida cerrada.");
+      return { ok: false, retryAfter: 30, scope: "unavailable" };
+    }
     console.warn("RATE_LIMITER no configurado: límite de uso desactivado.");
     return { ok: true };
   }
@@ -301,9 +313,73 @@ async function rateHit(env, key, perMin, perDay) {
     const stub = env.RATE_LIMITER.get(env.RATE_LIMITER.idFromName(key));
     return await stub.hit(perMin, perDay);
   } catch (e) {
+    if (failClosed) {
+      console.error("RateLimiter falló, ruta protegida cerrada:", e && e.message);
+      return { ok: false, retryAfter: 30, scope: "unavailable" };
+    }
     console.error("RateLimiter falló, se deja pasar:", e && e.message);
     return { ok: true };
   }
+}
+
+/* Contador estricto para las rutas que no son el chat. exam_grader.js y
+ * book_server.js convierten cualquier rl.ok === false en 429 "Vas muy rápido"
+ * (y no se tocan desde aquí), así que `guard.down` recuerda si el rechazo vino
+ * de un contador caído: el manejador regresa en el PRIMER rechazo, de modo que
+ * con guard.down en true ese 429 es el del contador caído y fixUnavailable()
+ * lo cambia por un 503 honesto ("no disponible", no "vas muy rápido").
+ * `suffix` es la parte "<IP>" de la clave; vacío = clave tal cual. */
+function strictRate(env, guard, suffix) {
+  return async (key, perMin, perDay) => {
+    const r = await rateHit(env, suffix ? key + ":" + suffix : key, perMin, perDay, true);
+    if (r && r.scope === "unavailable") guard.down = true;
+    return r;
+  };
+}
+
+function fixUnavailable(out, guard, what) {
+  if (!guard.down || out[0] !== 429) return out;
+  return [503, { error: "El servidor de " + what + " no está disponible ahora. Vuelve a intentarlo en un momento.",
+                 code: "unavailable", retryAfter: 30 }];
+}
+
+/* Retry-After para los 429/503 que traen retryAfter en el cuerpo. */
+function retryHeader(out) {
+  return (out[0] === 429 || out[0] === 503) && out[1] && out[1].retryAfter
+    ? { "Retry-After": String(out[1].retryAfter) } : {};
+}
+
+/* ---------- Lectura del cuerpo con tope (2026-11-23, auditoría B) ----------
+ * request.text() lee TODO antes de poder medirlo, y el corte por
+ * Content-Length no aplica a un cuerpo chunked (sin esa cabecera). Esto lee
+ * el stream por trozos y aborta en cuanto pasa del tope: devuelve el texto o
+ * null (-> 413).
+ * El tope de cada ruta siempre se ha medido en CARACTERES (text.length). Un
+ * carácter JS (unidad UTF-16) ocupa como mucho 3 bytes en UTF-8 (los de 4
+ * bytes cuentan como 2 caracteres), así que el corte en bytes es
+ * maxChars * 4 —holgado, nunca corta un cuerpo válido— y al final se aplica el
+ * mismo tope en caracteres de antes: el resultado es idéntico al anterior,
+ * pero la memoria queda acotada a ~4×maxChars bytes aunque el cliente mande
+ * gigas. TextDecoder con stream:true no rompe un carácter partido entre trozos. */
+async function readCapped(request, maxChars) {
+  if (!request.body) return "";
+  const maxBytes = maxChars * 4;
+  const reader = request.body.getReader();
+  const dec = new TextDecoder("utf-8");
+  let bytes = 0;
+  let text = "";
+  for (;;) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    bytes += value.byteLength;
+    if (bytes > maxBytes) {
+      try { await reader.cancel(); } catch (e) { /* ya cerrado */ }
+      return null;
+    }
+    text += dec.decode(value, { stream: true });
+  }
+  text += dec.decode();
+  return text.length > maxChars ? null : text;
 }
 
 /* ---------- Sesión firmada (tras Turnstile) ----------
@@ -412,9 +488,13 @@ export default {
     }
 
     /* ── Página de un libro (GET /book/page) ──
-     * La única ruta GET. No exige Origin (la autoriza la firma de /book/open,
-     * válida 2 h para un libro y una versión) y no toca el contador: cada
-     * página sería una llamada más al Durable Object. */
+     * La única ruta GET. No exige Origin y no toca el contador A PROPÓSITO:
+     * cada página sería una llamada más al Durable Object (costo). El control
+     * es la firma HMAC que entrega /book/open (que sí cuenta, por IP, y exige
+     * sesión con permiso al libro): sin una firma válida no sale ninguna
+     * página. Lo que se acepta: la firma vale 2 h para ESE libro y ESA
+     * versión, y durante esas 2 h cualquiera que tenga el enlace (copiado,
+     * reenviado) puede bajar sus páginas sin más límite. */
     if (request.method === "GET" && new URL(request.url).pathname === "/book/page") {
       let out;
       try { out = await handleBookPage(new URL(request.url), env); }
@@ -447,7 +527,8 @@ export default {
     /* ── Exámenes (/exam/start, /exam/answer, /exam/finish) ──
      * No usan Claude ni la API key: califican con las claves que solo viven
      * en el Worker. Comparten el contador por IP del chat. */
-    /* Corta antes de leer el cuerpo si ya anuncia ser enorme. */
+    /* Corta antes de leer el cuerpo si ya anuncia ser enorme. Un cuerpo
+     * chunked no trae Content-Length: a ese lo corta readCapped() al leerlo. */
     const declared = Number(request.headers.get("Content-Length") || 0);
     if (declared > Math.max(MAX_BODY_CHARS, 20000) * 4) {
       return jsonError(413, "Petición demasiado grande.", origin);
@@ -458,22 +539,24 @@ export default {
       const ipD = ipBucket(request.headers.get("CF-Connecting-IP"));
       let db;
       try {
-        const t = await request.text();
-        if (t.length > 8000) return jsonError(413, "Petición demasiado grande.", origin);
+        const t = await readCapped(request, 8000);
+        if (t === null) return jsonError(413, "Petición demasiado grande.", origin);
         db = JSON.parse(t);
       } catch (e) {
         return jsonError(400, "Cuerpo JSON inválido.", origin);
       }
       if (!db || typeof db !== "object") return jsonError(400, "Cuerpo JSON inválido.", origin);
       let out;
+      const guardD = { down: false };
       try {
         out = await handleDocGet(db, env,
-          (key, perMin, perDay) => rateHit(env, key + ":" + ipRateKey(ipD), perMin, perDay),
+          strictRate(env, guardD, ipRateKey(ipD)),
           (name) => limitOf(env, name));
       } catch (e) {
         console.error("doc/get:", e && e.message);
         out = [500, { error: "Error del servidor de documentos.", code: "error" }];
       }
+      out = fixUnavailable(out, guardD, "documentos");
       if (out[0] === 200) {
         return new Response(out[1].body, {
           status: 200,
@@ -482,7 +565,7 @@ export default {
       }
       return new Response(JSON.stringify(out[1]), {
         status: out[0],
-        headers: Object.assign({ "Content-Type": "application/json", "Cache-Control": "no-store" }, corsHeaders(origin))
+        headers: Object.assign({ "Content-Type": "application/json", "Cache-Control": "no-store" }, corsHeaders(origin), retryHeader(out))
       });
     }
 
@@ -490,25 +573,27 @@ export default {
       const ipB = ipBucket(request.headers.get("CF-Connecting-IP"));
       let bb;
       try {
-        const t = await request.text();
-        if (t.length > 8000) return jsonError(413, "Petición demasiado grande.", origin);
+        const t = await readCapped(request, 8000);
+        if (t === null) return jsonError(413, "Petición demasiado grande.", origin);
         bb = JSON.parse(t);
       } catch (e) {
         return jsonError(400, "Cuerpo JSON inválido.", origin);
       }
       if (!bb || typeof bb !== "object") return jsonError(400, "Cuerpo JSON inválido.", origin);
       let out;
+      const guardB = { down: false };
       try {
         out = await handleBookOpen(bb, env,
-          (key, perMin, perDay) => rateHit(env, key + ":" + ipRateKey(ipB), perMin, perDay),
+          strictRate(env, guardB, ipRateKey(ipB)),
           (name) => limitOf(env, name));
       } catch (e) {
         console.error("book/open:", e && e.message);
         out = [500, { error: "Error del servidor de libros.", code: "error" }];
       }
+      out = fixUnavailable(out, guardB, "libros");
       return new Response(JSON.stringify(out[1]), {
         status: out[0],
-        headers: Object.assign({ "Content-Type": "application/json", "Cache-Control": "no-store" }, corsHeaders(origin))
+        headers: Object.assign({ "Content-Type": "application/json", "Cache-Control": "no-store" }, corsHeaders(origin), retryHeader(out))
       });
     }
 
@@ -516,24 +601,26 @@ export default {
       const ipE = ipBucket(request.headers.get("CF-Connecting-IP"));
       let eb;
       try {
-        const t = await request.text();
-        if (t.length > 20000) return jsonError(413, "Petición demasiado grande.", origin);
+        const t = await readCapped(request, 20000);
+        if (t === null) return jsonError(413, "Petición demasiado grande.", origin);
         eb = JSON.parse(t);
       } catch (e) {
         return jsonError(400, "Cuerpo JSON inválido.", origin);
       }
       if (!eb || typeof eb !== "object") return jsonError(400, "Cuerpo JSON inválido.", origin);
       let out;
+      const guardE = { down: false };   /* uno para los dos contadores */
       try {
         out = await handleExam(path, eb, env,
-          (key, perMin, perDay) => rateHit(env, key + ":" + ipRateKey(ipE), perMin, perDay),
+          strictRate(env, guardE, ipRateKey(ipE)),
           (name) => limitOf(env, name),
-          (key, perMin, perDay) => rateHit(env, key, perMin, perDay));   // sin IP (tope por cuenta)
+          strictRate(env, guardE, ""));   // sin IP (tope por cuenta)
       } catch (e) {
         console.error("exam:", e && e.message);
         out = [500, { error: "Error del servidor de exámenes." }];
       }
-      const extra = out[0] === 429 ? { "Retry-After": String(out[1].retryAfter || 60) } : {};
+      out = fixUnavailable(out, guardE, "exámenes");
+      const extra = out[0] === 429 ? { "Retry-After": String(out[1].retryAfter || 60) } : retryHeader(out);
       return new Response(JSON.stringify(out[1]), {
         status: out[0],
         headers: Object.assign({ "Content-Type": "application/json", "Cache-Control": "no-store" }, corsHeaders(origin), extra)
@@ -551,8 +638,8 @@ export default {
     /* Lee y valida el cuerpo */
     let body;
     try {
-      const text = await request.text();
-      if (text.length > MAX_BODY_CHARS) {
+      const text = await readCapped(request, MAX_BODY_CHARS);
+      if (text === null) {
         return jsonError(413, "La conversación es demasiado larga.", origin);
       }
       body = JSON.parse(text);

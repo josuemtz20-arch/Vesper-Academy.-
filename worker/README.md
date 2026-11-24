@@ -67,9 +67,34 @@ Durable Object procesa en serie las llamadas a una misma clave, así que el
 conteo es exacto. Las instancias se limpian solas al terminar el día (alarma).
 
 **Degradación:** si el Durable Object no responde (incidencia de Cloudflare),
-el Worker deja pasar y lo registra en los logs (`wrangler tail`), para no tumbar
-el chat; `max_tokens` fijo sigue acotando el costo por mensaje. Si `siteverify`
-no responde, en cambio, **no** deja pasar (sería saltarse el reto).
+en el **chat** el Worker deja pasar y lo registra en los logs (`wrangler tail`),
+para no tumbar el chat; `max_tokens` fijo sigue acotando el costo por mensaje.
+Si `siteverify` no responde, en cambio, **no** deja pasar (sería saltarse el reto).
+
+En `/exam/*`, `/book/open` y `/doc/get` (2026-11-23) es al revés: el contador es
+el único tope contra la cosecha de claves de examen y contra el gasto en
+Identity Toolkit/Firestore, así que si falta el binding o el Durable Object
+falla, esas rutas **se cierran**: `503` + `Retry-After: 30`,
+`code: "unavailable"`, y `console.error` en los logs (`rateHit(..., failClosed)`
++ `strictRate`/`fixUnavailable` en `vesper-chat-proxy.js`). Un límite real
+alcanzado sigue siendo `429 rate_limited`. Mientras dure la caída:
+`libro.html` y `manual.html` no se rompen (si `/doc/get` no da `200` leen los
+trozos de Firestore, como antes de R2) y los libros Canva tampoco (si
+`/book/open` no da `200`, cada página sale de Firestore); los **exámenes** del
+servidor sí quedan parados hasta que vuelva el contador.
+
+**Tamaño del cuerpo:** las cuatro rutas POST leen el cuerpo con `readCapped()`,
+que corta el stream en cuanto pasa del tope (también a cuerpos *chunked* sin
+`Content-Length`) y responde `413`. Topes en caracteres, como siempre:
+`/doc/get` y `/book/open` 8000, `/exam/*` 20000, chat `MAX_BODY_CHARS` 200000.
+El corte del stream es en bytes a 4× ese número (un carácter ocupa como mucho
+3 bytes en UTF-8), así que nunca corta un cuerpo válido.
+
+**`/book/page` no cuenta, a propósito:** contar cada página sería una llamada
+más al Durable Object (costo). El control es la firma HMAC que da
+`/book/open` (que sí cuenta y exige permiso al libro); la firma vale 2 h para
+ese libro y esa versión, y en ese tiempo **quien tenga el enlace** puede bajar
+sus páginas sin más límite.
 
 ## Requisitos
 
@@ -241,12 +266,20 @@ esas notas si llegan desde el navegador.
 
 Contra la "cosecha" de claves (2026-11-23):
 
-- **Examen de nivel:** `/exam/answer` solo dice si acertó (`correct`), nunca
-  la clave. El banco es fijo y chico, y antes un intento de práctica revelaba
-  todo y el siguiente sacaba 100.
+- **Examen de nivel:** `/exam/answer` solo responde `{recorded, first}`: ni la
+  clave ni si acertó. `/exam/finish` da la nota y `bySkill` (resumen por
+  habilidad), sin `detail` por pregunta; Firestore sí guarda `detail` para los
+  profesores. El banco es fijo y chico: con ✓/✗ por pregunta bastaban 3-4
+  intentos (todo A, todo B…) para reconstruir la clave.
 - **Jefe:** el Worker sortea las preguntas en `/exam/start` y las devuelve en
   `ids`; la app las pinta en ese orden. Los `ids` del cliente se ignoran
   (solo en local, con `EXAM_DEV=1`, se acepta `devIds` para las pruebas).
+- **Tope de intentos del examen de nivel:** 12 al día por cuenta
+  (`RL_EXAM_LEVEL_START_PER_DAY`) y 20 al día por IP sin sesión
+  (`RL_EXAM_LEVEL_START_PER_DAY_IP`, antes 150). La nota final sigue siendo
+  un oráculo lento (cambiar una respuesta por intento); el tope lo hace
+  tardar semanas. Una escuela o un CGNAT de celular comparten IP: esos alumnos
+  deben entrar con su cuenta, o se sube el valor en `[vars]`.
 - **Dueño del intento:** `/exam/start` guarda el uid del idToken; `/exam/finish`
   solo guarda la nota si el idToken es de esa misma cuenta (`why:
   "anonymous_start"` / `"not_owner"` si no).

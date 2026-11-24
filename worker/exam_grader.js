@@ -13,12 +13,15 @@
  *           Worker y vuelven en `ids` (2026-11-23; antes las escogía el
  *           cliente, que podía pedir justo las que ya conocía).
  *   /exam/answer {attemptId, id, response}
- *        -> {correct, first, reveal?}. Solo cuenta la PRIMERA respuesta de
- *           cada pregunta (queda en el Durable Object ExamAttempt). `reveal`
- *           (la clave, para "Era: …") solo en el jefe: el examen de nivel es
- *           un banco fijo y chico, y revelarlo dejaba sacar 100 al 2.º intento.
+ *        -> jefe: {correct, first, reveal}; examen de nivel: {recorded, first}.
+ *           Solo cuenta la PRIMERA respuesta de cada pregunta (queda en el
+ *           Durable Object ExamAttempt). El examen de nivel es un banco fijo y
+ *           chico: no devuelve ni la clave ni ✓/✗ (con el veredicto por
+ *           pregunta, 3-4 intentos reconstruían la clave; 2026-11-23).
  *   /exam/finish {attemptId, idToken?, alias?}
- *        -> {score, total, percent, passed, threshold, saved}. La nota la
+ *        -> {score, total, percent, passed, threshold, saved} + en el jefe
+ *           `detail` por pregunta; en el examen de nivel `bySkill` en su lugar
+ *           (ver publicResult). La nota la
  *           calcula el Worker con lo registrado y la guarda él mismo en
  *           Firestore (exam_results, gradedBy "worker") con la cuenta de
  *           servicio, SOLO si el idToken es de la misma cuenta que abrió el
@@ -47,10 +50,14 @@ export const EXAM_RATE_DEFAULTS = {
   RL_EXAM_START_PER_MIN: 10, RL_EXAM_START_PER_DAY: 200,
   RL_EXAM_ANSWER_PER_MIN: 90, RL_EXAM_ANSWER_PER_DAY: 3000,
   /* examen de nivel: banco fijo; tope de intentos nuevos al día (frena la cosecha de claves).
-     Con idToken verificado se cuenta por uid (moderado); sin sesión, por IP con un tope
-     alto (una escuela o un NAT de operador comparte IP) solo contra scripts masivos. */
+     Con idToken verificado se cuenta por uid (moderado); sin sesión, por IP.
+     2026-11-23: el tope por IP bajó de 150 a 20. Aunque /exam/answer ya no dice ✓/✗,
+     la NOTA FINAL sigue siendo un oráculo (cambiar una respuesta por intento y ver si
+     sube); con 150 al día la clave salía en 1-2 días, con 20 tarda semanas. Costo: una
+     escuela o un NAT de operador (CGNAT en celular) comparte IP; esos alumnos deben
+     entrar con su cuenta (contador por uid, no por IP). Se sube con [vars] sin tocar código. */
   RL_EXAM_LEVEL_START_PER_DAY: 12,
-  RL_EXAM_LEVEL_START_PER_DAY_IP: 150
+  RL_EXAM_LEVEL_START_PER_DAY_IP: 20
 };
 
 /* ---------- calificación (espejo de leccion_app.js) ---------- */
@@ -256,7 +263,20 @@ export async function lookupUser(env, idToken) {
   if (!r.ok) return null;
   const u = ((await r.json()).users || [])[0];
   if (!u || !u.localId) return null;
-  return { uid: u.localId, email: String(u.email || "").trim().toLowerCase(), verified: !!u.emailVerified };
+  const raw = String(u.email || "").trim(), email = raw.toLowerCase();
+  /* Solo ASCII imprimible: toLowerCase() convierte el signo Kelvin (U+212A) en
+     "k" (y hay otros casos así), y un correo con él podría caer en el doc
+     students/{correo} de OTRA persona. Se mira ANTES y después de pasar a
+     minúsculas: después solo, el Kelvin ya es una "k" ASCII y pasaría.
+     Sin correo (cuenta sin email) sigue igual. */
+  const ASCII = /^[\x21-\x7e]+$/;
+  if (raw && !(ASCII.test(raw) && ASCII.test(email))) {
+    const at = email.lastIndexOf("@");
+    console.warn("lookupUser: correo con caracteres fuera de ASCII, se rechaza (uid " + String(u.localId).slice(0, 6)
+      + "…, dominio " + (at >= 0 ? email.slice(at + 1).replace(/[^\x21-\x7e]/g, "?") : "?") + ")");
+    return null;
+  }
+  return { uid: u.localId, email: email, verified: !!u.emailVerified };
 }
 
 async function studentIdentity(token, email) {
@@ -370,10 +390,12 @@ async function answer(env, body) {
   if (st.error === "no_attempt") return [404, { error: "El examen caducó. Empieza de nuevo.", code: "expired" }];
   if (st.error) return [409, { error: "Esa pregunta no es de este examen.", code: st.error }];
   /* Examen de nivel: banco fijo y chico (26–31 preguntas, todas en cada
-     intento), así que la clave NO sale nunca; la app solo dice ✓/✗. Antes un
-     intento de práctica revelaba todo y el siguiente sacaba 100.
+     intento), así que NO sale ni la clave ni el veredicto: solo "registrada".
+     Con ✓/✗ por pregunta bastaban 3-4 intentos (todo A, todo B, todo C…) para
+     reconstruir la clave de la opción múltiple y sacar 100 con la cuenta
+     (2026-11-23). La nota llega al final, con un resumen por habilidad.
      El jefe sí revela ("Era: …"): sus preguntas las sortea el Worker. */
-  if (at.kind === "exam") return [200, { correct: st.ok, first: st.first }];
+  if (at.kind === "exam") return [200, { recorded: true, first: st.first }];
   return [200, { correct: st.ok, first: st.first, reveal: reveal(ex) }];
 }
 
@@ -406,10 +428,11 @@ async function finish(env, body) {
         return { q: String(exText(ex)).slice(0, 200), type: ex.type || "", skill: ex.skill || "", correct: a.answered[id] === true };
       })
     };
+    if (at.kind === "exam") res.bySkill = skillSummary(bank, a.ids, a.answered);
     /* el DO decide quién llegó primero (dos finish a la vez): solo ese guarda */
     const closed = await stub.close(res);
     if (!closed) return [404, { error: "El examen caducó.", code: "expired" }];
-    if (!closed.first) return [200, Object.assign({}, closed.result, { saved: false, why: "already_finished" })];
+    if (!closed.first) return [200, Object.assign(publicResult(closed.result), { saved: false, why: "already_finished" })];
     /* guardar en Firestore solo la primera vez, si hay sesión */
     /* y solo si quien cierra es la MISMA cuenta que abrió el intento: un
        intento abierto sin sesión (o con otra cuenta) no se guarda nunca */
@@ -423,9 +446,45 @@ async function finish(env, body) {
       }
       catch (e) { console.error("exam save:", e && e.message); save = { saved: false, why: "save_failed" }; }
     }
-    return [200, Object.assign({}, res, save)];
+    return [200, Object.assign(publicResult(res), publicSave(res, save))];
   }
-  return [200, Object.assign({}, res, { saved: false, why: "already_finished" })];
+  return [200, Object.assign(publicResult(res), { saved: false, why: "already_finished" })];
+}
+
+/* Resumen por habilidad del examen de nivel: {grammar:{correct,total},…}.
+   Cuenta sobre TODAS las preguntas del intento (las no contestadas, malas). */
+function skillSummary(bank, ids, answered) {
+  const out = {};
+  ids.forEach((id) => {
+    const s = (bank.items[id] && bank.items[id].skill) || "otro";
+    if (!out[s]) out[s] = { correct: 0, total: 0 };
+    out[s].total++;
+    if (answered[id] === true) out[s].correct++;
+  });
+  return out;
+}
+/* Lo que el NAVEGADOR recibe al cerrar. En el examen de nivel se quita la
+   lista por pregunta (`detail`, con `correct`): junto con un intento hecho a
+   propósito (todo A, todo B…) volvía a soltar la clave. Queda la nota y el
+   resumen por habilidad. El documento de Firestore (toFsDoc) SÍ guarda
+   `detail` completo: los profesores lo usan.
+   Riesgo residual: el alumno puede leer su propio exam_results (regla de
+   lectura del dueño) y ahí está `detail`. Solo pasa con intentos guardados,
+   que exigen cuenta verificada y abrir el intento con ella, y esos tienen
+   tope de RL_EXAM_LEVEL_START_PER_DAY (12) al día por uid; sin sesión (tope
+   por IP) no se guarda nada y no hay `detail` que leer. */
+function publicResult(res) {
+  const out = Object.assign({}, res);
+  if (res.examType === "exam") delete out.detail;
+  return out;
+}
+/* en local (dry_run) `save.doc` es el documento que se habría escrito: en el
+   examen de nivel va sin `detail` por la misma razón */
+function publicSave(res, save) {
+  if (res.examType !== "exam" || !save || !save.doc || !save.doc.fields) return save;
+  const fields = Object.assign({}, save.doc.fields);
+  delete fields.detail;
+  return Object.assign({}, save, { doc: Object.assign({}, save.doc, { fields: fields }) });
 }
 
 /* punto de entrada desde el fetch del Worker. `rate(key, perMin, perDay)`
@@ -438,9 +497,9 @@ export async function handleExam(path, body, env, rate, limitOf, rateRaw) {
       limitOf(isStart ? "RL_EXAM_START_PER_MIN" : "RL_EXAM_ANSWER_PER_MIN"),
       limitOf(isStart ? "RL_EXAM_START_PER_DAY" : "RL_EXAM_ANSWER_PER_DAY"));
     if (!rl.ok) return [429, { error: "Vas muy rápido. Espera un momento y vuelve a intentarlo.", code: "rate_limited", retryAfter: rl.retryAfter || 60 }];
-    /* examen de nivel (banco fijo): tope diario de intentos nuevos. El
-       /exam/answer devuelve la clave (la UI la necesita para pintar el feedback),
-       así que esto limita cuántas veces se puede "cosechar" el banco. Solo cuenta
+    /* examen de nivel (banco fijo): tope diario de intentos nuevos. Ya no
+       devuelve ni clave ni veredicto por pregunta, pero el tope sigue frenando
+       que se "cosechen" notas finales con intentos a propósito. Solo cuenta
        cuando el inicio fue válido (los 400/409 no gastan cupo). */
     if (!isStart) return answer(env, body);
     /* ¿quién abre el intento? Se guarda su uid: solo esa cuenta podrá guardar la nota */
