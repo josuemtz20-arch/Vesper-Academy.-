@@ -727,6 +727,11 @@ footer a{color:var(--gold-ink)}
 .mesbtn .mbs{font-size:.74rem;color:var(--muted);white-space:nowrap;text-align:right}
 .mesbtn .mbs b{font-family:var(--serif,Fraunces),serif;font-size:1.05rem;color:var(--ink)}
 @media(max-width:420px){.mesbtn .mbs{display:none}}
+/* el botón vive en la barra fija del panel: siempre a la vista aunque bajes a los 10 puntos */
+.pstick .mesbtn{min-height:48px;margin:10px 0 8px;padding:6px 12px;gap:10px}
+.pstick .mesbtn .mbt b{font-size:1rem}
+.pstick .mesbtn .mbt small{display:inline;margin:0 0 0 6px}
+@media(max-width:600px){.pstick .mesbtn .mbt small{display:none}}
 body.mesopen{overflow:hidden}
 .mes{position:fixed;inset:0;z-index:55;background:var(--cream)}
 .msheet:focus{outline:none}
@@ -1267,9 +1272,8 @@ html[data-vesper-style="minimal"] .mgrid .mrow{box-shadow:1px 0 0 var(--line2)}
         '<div class="nm"><h2>' + esc(r.name) + '</h2><div class="sub">' + matHtml(r) + ' · ' + (cur + 1) + ' de ' + st.length + ' · ' + (reviewed(r) ? "revisado" : "pendiente") + sv + '</div></div>' +
         '<div class="dayscore" role="status" aria-label="Clase ' + day + ': ' + (abs ? "FALTA" : ds + " de 100") + '">' +
         (abs ? '<span class="num falta">FALTA</span>' : '<span class="num ' + anim + '">' + ds + '</span><span class="of">/100</span>') + dlt + '</div></div>' +
-        '<p class="pav" id="pv-avance">' + esc(avanceText(gr)) + '</p>' + pbar + '</div>';
+        '<p class="pav" id="pv-avance">' + esc(avanceText(gr)) + '</p>' + mesB + pbar + '</div>';
       if (abs) h += '<p class="offmsg">Faltó: esta clase cuenta 0 en su promedio de Clase. Quita el ✗ de «Asistió» si fue un error.</p>';
-      h += mesB;
       h += '<div class="sec"><h3>Los 10 puntos de la clase ' + day + ' <span class="kh">Cada ✗ vale ' + seg + '</span></h3><div class="points">';
     } else {
       /* B «Noche Vespertina»: barra fija con el nombre y el anillo dorado del día (baja con cada ✗) */
@@ -1283,12 +1287,11 @@ html[data-vesper-style="minimal"] .mgrid .mrow{box-shadow:1px 0 0 var(--line2)}
         (abs ? '' : '<circle class="dfill" cx="60" cy="60" r="52" stroke-dasharray="' + DC.toFixed(1) + '" stroke-dashoffset="' + offOf(ds) + '"' + (anim ? ' data-from="' + offOf(prev) + '"' : '') + '/>') +
         '<circle class="dseg" cx="60" cy="60" r="52" stroke-dasharray="1.2 ' + (DC / 20 - 1.2).toFixed(2) + '"/></svg>' +
         '<div class="dnum" role="status" aria-label="Clase ' + day + ': ' + (abs ? "FALTA" : ds + " de 100") + '">' + (abs ? '<span class="num falta">FALTA</span>' : '<span class="num ' + anim + '">' + ds + '</span>') + '</div>' +
-        dlt + '</div></div>' + pbar + '</div>';
+        dlt + '</div></div>' + mesB + pbar + '</div>';
       h += '<div class="dayscore info sky' + (abs ? " is-falta" : "") + '"><span class="lbl"><b>Clase ' + day + '</b>' +
         (abs ? "Faltó: esta clase cuenta 0 en su promedio de Clase." : (ds === DAY_MAX ? "Empieza en 100; cada ✗ le resta." : "Empezó en 100; los ✗ le restaron " + (DAY_MAX - ds) + ".")) +
         (xsHtml ? '<span class="dxs">' + xsHtml + '</span>' : '') +
         '<span class="av" id="pv-avance">' + esc(avanceText(gr)) + '</span></span></div>';
-      h += mesB;
       h += '<div class="valsw">Cada ✗ vale: ' + seg + '</div>';
       h += '<div class="sec"><h3>10 puntos de esta clase <span class="kh">solo marca lo que falló</span></h3><div class="points">';
     }
