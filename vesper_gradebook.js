@@ -673,6 +673,13 @@ window.VESPER_GRADEBOOK = (function () {
     }).catch(function () { return null; });
   }
 
+  /* Eliminar para siempre una entrada de la papelera (irreversible; para
+     solicitudes de cancelación de datos). -> "ok" | "error" */
+  function purgeTrash(id) {
+    if (!signedIn() || !id) return Promise.resolve("error");
+    return commit([{ "delete": docPath(TRASH, id), currentDocument: { exists: true } }]);
+  }
+
   /* -> { status: "ok"|"conflict"|"error", sid, kind, roster: fila de roster|null } */
   function restoreStudent(id) {
     if (!signedIn()) return Promise.resolve({ status: "error" });
@@ -1199,7 +1206,7 @@ window.VESPER_GRADEBOOK = (function () {
     classDates: classDates, courseClock: courseClock, fmtDay: fmtDay,
     available: available, signedIn: signedIn, isAdminUser: isAdminUser, isStaffUser: isStaffUser,
     fetchRoster: fetchRoster, fetchMyGroupIds: fetchMyGroupIds,
-    fetchGrades: fetchGrades, fetchMyGrade: fetchMyGrade, saveGrade: saveGrade, archiveStudent: archiveStudent, fetchTrash: fetchTrash, restoreStudent: restoreStudent,
+    fetchGrades: fetchGrades, fetchMyGrade: fetchMyGrade, saveGrade: saveGrade, archiveStudent: archiveStudent, fetchTrash: fetchTrash, restoreStudent: restoreStudent, purgeTrash: purgeTrash,
     fetchDailyAll: fetchDailyAll, fetchMyDaily: fetchMyDaily, saveDaily: saveDaily,
     newDay: newDay, isAbsent: isAbsent, dayScore: dayScore, addTache: addTache, removeTache: removeTache,
     dailyStats: dailyStats, buildRoster: buildRoster, computeGrade: computeGrade,

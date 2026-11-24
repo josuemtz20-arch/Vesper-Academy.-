@@ -280,10 +280,14 @@ textarea.notes:focus{border-color:var(--gold);outline:none;box-shadow:0 0 0 3px 
 .delopt small{display:block;font-size:.76rem;color:var(--muted);line-height:1.4;margin-top:2px}
 .delopt:hover:not(:disabled){border-color:var(--bad);background:var(--bad-bg)}
 .delopt:disabled{opacity:.5;cursor:default}
+.tact{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.btn.purge{border-color:var(--bad);color:var(--bad-ink)}
+.btn.purge.armed{background:var(--bad);color:var(--paper)}
 .trow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}
 .trow b{display:block;font-size:.88rem}
 .trow small{display:block;font-size:.72rem;color:var(--muted);line-height:1.4}
 .tempty{font-size:.84rem;color:var(--muted);padding:12px 0}
+@media(max-width:620px){.trow{grid-template-columns:minmax(0,1fr)}.tact{justify-content:flex-start}}
 .toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:var(--night);color:#f5f2eb;padding:11px 16px;border-radius:12px;font-size:.84rem;z-index:60;max-width:calc(100vw - 32px);box-shadow:0 8px 30px rgba(0,0,0,.25);display:none}
 .toast.show{display:block}
 footer{background:var(--night);color:rgba(255,255,255,.55);text-align:center;padding:22px 16px;font-size:.78rem;border-top:3px solid var(--gold)}
@@ -1003,7 +1007,7 @@ html[data-vesper-style="minimal"] .mgrid .mrow{box-shadow:1px 0 0 var(--line2)}
 </div></div>
 <div id="trashbox" hidden><div class="edscrim" id="trash-scrim"></div><div class="edsheet" role="dialog" aria-modal="true" aria-labelledby="trash-title">
   <h2 id="trash-title">Papelera</h2>
-  <p>Registros borrados de la boleta. «Restaurar» los regresa tal como estaban. No se restaura encima de calificaciones nuevas: si ya tiene, bórralas primero (también quedan aquí).</p>
+  <p>Registros borrados de la boleta. «Restaurar» los regresa tal como estaban. No se restaura encima de calificaciones nuevas: si ya tiene, bórralas primero (también quedan aquí). «Eliminar» los borra <b>para siempre</b> (por ejemplo, si el alumno pide que se eliminen sus datos).</p>
   <div id="trash-list"></div>
   <div class="edbtns"><button class="btn" id="trash-close">Cerrar</button></div>
 </div></div>
@@ -1765,7 +1769,8 @@ html[data-vesper-style="minimal"] .mgrid .mrow{box-shadow:1px 0 0 var(--line2)}
     $("trash-list").innerHTML = !trashItems.length ? '<p class="tempty">La papelera está vacía.</p>' : trashItems.map(function (t, i) {
       return '<div class="trow"><div><b>' + esc(t.name || t.sid) + '</b><small>' + esc(t.kind === "all" ? "Todo (quitado de la lista)" : "Solo calificaciones") +
         (t.group ? ' · grupo ' + esc(t.group) : '') + '</small><small>' + esc(fmtWhen(t.deletedAt)) + (t.deletedBy ? ' · ' + esc(t.deletedBy) : '') + '</small></div>' +
-        '<button class="btn" data-restore="' + i + '">Restaurar</button></div>';
+        '<div class="tact"><button class="btn" data-restore="' + i + '">Restaurar</button>' +
+        '<button class="btn purge" data-purge="' + i + '" aria-label="' + esc("Eliminar para siempre a " + (t.name || t.sid)) + '">Eliminar</button></div></div>';
     }).join("");
   }
   function openTrash() {
@@ -1808,7 +1813,25 @@ html[data-vesper-style="minimal"] .mgrid .mrow{box-shadow:1px 0 0 var(--line2)}
   $("b-trash").addEventListener("click", openTrash);
   $("trash-close").addEventListener("click", closeTrash);
   $("trash-scrim").addEventListener("click", closeTrash);
-  $("trash-list").addEventListener("click", function (e) { var b = e.target.closest("[data-restore]"); if (b) restore(+b.getAttribute("data-restore"), b); });
+  $("trash-list").addEventListener("click", function (e) {
+    var b = e.target.closest("[data-restore]"); if (b) return restore(+b.getAttribute("data-restore"), b);
+    b = e.target.closest("[data-purge]"); if (b) purge(+b.getAttribute("data-purge"), b);
+  });
+  /* irreversible: el primer toque arma el botón, el segundo (en 4 s) elimina */
+  function purge(i, btn) {
+    var t = trashItems[i]; if (!t) return;
+    if (!btn.classList.contains("armed")) {
+      btn.classList.add("armed"); btn.textContent = "¿Seguro? Eliminar para siempre";
+      setTimeout(function () { if (btn.isConnected && !btn.disabled) { btn.classList.remove("armed"); btn.textContent = "Eliminar"; } }, 4000);
+      return;
+    }
+    btn.disabled = true; btn.textContent = "Eliminando…";
+    GB.purgeTrash(t.id).then(function (st) {
+      if (st !== "ok") { btn.disabled = false; btn.classList.remove("armed"); btn.textContent = "Eliminar"; toast("No se pudo eliminar. Revisa tu conexión."); return; }
+      trashItems.splice(i, 1); renderTrash();
+      toast("Eliminaste para siempre el registro de " + (t.name || "el alumno") + ".");
+    });
+  }
   $("b-del").addEventListener("click", function () { delMode = !delMode; if (delMode) closePaste(); renderBook(); });
   $("btable").addEventListener("click", function (e) { var b = e.target.closest("[data-del]"); if (b) openDel(b.getAttribute("data-del")); });
   $("del-grades").addEventListener("click", function () { confirmDel(false); });
