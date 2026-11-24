@@ -853,6 +853,23 @@ html[data-vesper-style="minimal"] .mgrid .mrow{box-shadow:1px 0 0 var(--line2)}
   .mfin .exin{max-width:140px}
   .mgrid .pn{display:none}
 }
+/* ===== HOJA DEL MES v2 (2026-11-23) =====
+   Josue: «que se pueda seleccionar cualquier día», la hoja como predeterminado y sin perder
+   varios ✗ en el mismo punto. La columna abierta se ensancha para «−» y «✗» (44 px cada uno). */
+.mgrid th.open{width:104px;min-width:104px}
+.mgrid td.edit{padding:0 3px}
+.mpair{display:flex;gap:4px;align-items:center;justify-content:center;height:46px}
+.mgrid td .mpair button{width:46px;min-width:44px;height:44px;border-radius:10px;flex:0 0 auto}
+.mgrid td .mpair .mminus{border:1.5px solid var(--line2);background:var(--tint,var(--paper));color:var(--muted);font-weight:800;font-size:1.15rem}
+.mgrid td .mpair .mminus:disabled{opacity:.3;cursor:default}
+.mgrid td .mpair .madd{border:1.5px solid color-mix(in srgb,var(--bad) 70%,transparent);background:color-mix(in srgb,var(--bad) 10%,transparent)}
+.mgrid td .mpair .madd:disabled{opacity:.35;cursor:default}
+.mgrid td .mpair .madd:not(:disabled):hover{background:color-mix(in srgb,var(--bad) 20%,transparent)}
+.mgrid td .mpair .xadd{font-weight:800;font-size:1rem;color:var(--bad-ink);opacity:.75}
+.mgrid td.edit button:empty::after{display:none}
+.mgrid .fut{opacity:.6}
+.mday{margin-left:auto}
+@media(max-width:899px){.mgrid th.open{width:104px;min-width:104px}.mday{font-size:.78rem}}
 </style>
 </head>
 <body>
@@ -1220,7 +1237,7 @@ html[data-vesper-style="minimal"] .mgrid .mrow{box-shadow:1px 0 0 var(--line2)}
       (all ? "Revisaste a los " + st.length + " alumnos de " + esc(g.title) + "." : "Toca a los pendientes para terminar.") + '</p></div>';
     renderList(); renderPanel();
   }
-  $("slist").addEventListener("click", function (e) { var b = e.target.closest("[data-i]"); if (b) openPanel(+b.getAttribute("data-i")); });
+  $("slist").addEventListener("click", function (e) { var b = e.target.closest("[data-i]"); if (b) { openPanel(+b.getAttribute("data-i")); openMes(); } });   // la hoja del mes es lo predeterminado
 
   /* ================= PANEL DEL ALUMNO ================= */
   /* En celular, B pone el panel en el flujo de la página (body.popen esconde la lista);
@@ -1375,7 +1392,7 @@ html[data-vesper-style="minimal"] .mgrid .mrow{box-shadow:1px 0 0 var(--line2)}
       '<span class="mbt"><b>Ver todo el mes</b><small>Las ' + N + ' clases de ' + esc(first(r.name)) + ' en una hoja · calificas ahí mismo</small></span>' +
       '<span class="mbs">' + (s.clase != null ? 'Prom. <b>' + s.clase + '</b>' : 'Sin clases') + (s.absences ? ' · ' + s.absences + (s.absences === 1 ? ' falta' : ' faltas') : '') + '</span></button>';
   }
-  function upTo() { return CLOCK.ended ? N : Math.max(day, CLOCK.day || 1); }   // hasta dónde se puede calificar
+  function upTo() { return N; }   // cualquier clase del mes se puede abrir y calificar (Josue, 2026-11-23)
   function ensureDay(r, d) {
     var rec = dailyMap[r.sid] || (dailyMap[r.sid] = { sid: r.sid, cycles: {} });
     if (!rec.days) rec.days = GB.daysFor(rec, GB.cycleId());
@@ -1412,9 +1429,9 @@ html[data-vesper-style="minimal"] .mgrid .mrow{box-shadow:1px 0 0 var(--line2)}
       return '<button data-mval="' + v + '" aria-pressed="' + (v === tacheVal) + '">−' + v + '</button>';
     }).join("") + '</span>';
     var u = mesUndo[mesUndo.length - 1];
-    var h = '<div class="mtop"><button class="mclose" data-m="close" aria-label="Volver al panel de ' + esc(first(r.name)) + '">‹ Panel</button>' +
+    var h = '<div class="mtop"><button class="mclose" data-m="list" aria-label="Volver a la lista de alumnos">‹ Lista</button>' +
       '<div class="mwho"><h2 id="m-title">' + esc(r.name) + '</h2><div class="sub">' + matHtml(r) + ' · Alumno ' + (cur + 1) + ' de ' + st.length + ' · ' + esc(GB.cycle().label) + sv + '</div></div>' +
-      '</div>';
+      '<button class="mclose mday" data-m="close" aria-label="Ver solo la clase ' + day + ' en el panel">Solo un día</button></div>';
     var fn = esc(first(r.name)), line;
     if (s.clase == null) line = fn + ' aún no tiene clases calificadas este mes.';
     else line = fn + ' va en <span class="pen' + scoreCls(s.clase) + '">' + s.clase + '</span> de promedio' +
@@ -1423,18 +1440,18 @@ html[data-vesper-style="minimal"] .mgrid .mrow{box-shadow:1px 0 0 var(--line2)}
     h += '<div class="mvesper" role="status" aria-live="polite"><img class="mcat" src="' + MASCOT + (s.clase != null && s.clase < GB.PASS_THRESHOLD ? 'vesper_cat_correcting.webp' : 'vesper_cat_explaining.webp') + '" alt="Vesper" width="56" height="56"><p class="mline">' + line + '</p></div>';
     h += '<div class="mtool">' +
       '<p class="mhint">' + (ro ? 'Solo lectura: no tienes permiso para calificar.' :
-        mesOpen ? 'Calificando la <b>clase ' + mesOpen + '</b>: toca una casilla para poner ✗, otra vez lo quita. Para otra clase, toca su número.' :
+        mesOpen ? 'Calificando la <b>clase ' + mesOpen + '</b>: <b>✗</b> pone uno (puedes poner varios en el mismo punto) y <b>−</b> lo quita. Para otra clase, toca su número.' :
         'Toca el número de una clase para abrirla y calificarla.') + '</p>' +
       '<span class="mval">Cada ✗ vale ' + seg + '</span>' +
       '<button class="mundo" data-m="undo"' + (u ? '' : ' disabled') + ' title="' + (u ? esc(u.what) : 'Nada que deshacer') + '"><i class="fas fa-rotate-left" aria-hidden="true"></i><span><b>Deshacer</b><small>' + (u ? esc(u.what) : 'nada aún') + '</small></span></button></div>';
     /* la cuadrícula */
     h += '<div class="mscroll" id="m-scroll"><table class="mgrid" aria-labelledby="m-title"><thead><tr><th class="mrow corner" scope="col"><span>Punto</span><small>clase →</small></th>';
     for (var d = 1; d <= N; d++) {
-      var c = days[d], rv = !!(c && c.rv), abs = absent(c), sc = rv && !abs ? GB.dayScore(c) : null, fut = d > lim;
+      var c = days[d], rv = !!(c && c.rv), abs = absent(c), sc = rv && !abs ? GB.dayScore(c) : null, fut = DATES[d - 1] > CLOCK.today && !rv;
       var date = DATES[d - 1], isToday = date === CLOCK.today, open = d === mesOpen;
       h += '<th scope="col" data-d="' + d + '" class="' + (open ? "open" : "") + (abs ? " mfa" : "") + (fut ? " fut" : "") + (isToday ? " today" : "") + '">' +
-        '<button data-m="col" data-d="' + d + '"' + (fut || ro ? ' disabled' : '') + ' aria-pressed="' + open + '" aria-label="Clase ' + d + ', ' + esc(GB.fmtDay(date)) + ': ' +
-        (abs ? "FALTA" : rv ? sc + " de 100" : fut ? "próxima" : "sin calificar") + (open ? ". Abierta para editar" : ". Toca para abrirla") + '">' +
+        '<button data-m="col" data-d="' + d + '"' + (ro ? ' disabled' : '') + ' aria-pressed="' + open + '" aria-label="Clase ' + d + ', ' + esc(GB.fmtDay(date)) + ': ' +
+        (abs ? "FALTA" : rv ? sc + " de 100" : fut ? "próxima, sin calificar" : "sin calificar") + (open ? ". Abierta para editar" : ". Toca para abrirla") + '">' +
         '<span class="cn">' + d + '</span><span class="cd">' + esc(String(GB.fmtDay(date)).replace(/^\S+\s/, "")) + '</span>' +
         '<b class="cs' + (abs ? " mfa" : scoreCls(sc)) + (mesFlash && mesFlash.d === d ? " bump" : "") + '">' + (abs ? "FALTA" : rv ? sc : fut ? "·" : "–") + '</b>' +
         (open ? '<i class="fas fa-pen" aria-hidden="true"></i>' : '') + '</button></th>';
@@ -1444,16 +1461,25 @@ html[data-vesper-style="minimal"] .mgrid .mrow{box-shadow:1px 0 0 var(--line2)}
       var isAbs = p.key === ABSENT_KEY, totX = 0, totP = 0;
       h += '<tr class="' + (isAbs ? "abs" : "") + '"><th class="mrow" scope="row"><b><span class="pn">' + (idx + 1) + '. </span>' + esc(p.label) + '</b><small>' + esc(isAbs ? "✗ = FALTA (la clase vale 0)" : p.hint) + '</small></th>';
       for (var d = 1; d <= N; d++) {
-        var c = days[d], rv = !!(c && c.rv), abs = absent(c), n = (c && c.x && c.x[p.key]) || 0, pts = (c && c.dp && c.dp[p.key]) || 0, fut = d > lim, open = d === mesOpen;
+        var c = days[d], rv = !!(c && c.rv), abs = absent(c), n = (c && c.x && c.x[p.key]) || 0, pts = (c && c.dp && c.dp[p.key]) || 0, fut = DATES[d - 1] > CLOCK.today && !rv, open = d === mesOpen;
         if (!isAbs && n && !abs) { totX += n; totP += pts; }
         if (isAbs && abs) totX++;
         var off = abs && !isAbs, cls = (open ? "open" : "") + (fut ? " fut" : "") + (abs ? " mfa" : "") + (n && !off ? " hit" : "");
         var txt = isAbs ? (abs ? '<span class="x">✗</span><small>FALTA</small>' : (rv ? '<span class="ok">✓</span>' : '')) :
           off ? '<span class="dash">—</span>' : n ? '<span class="x">' + (n > 1 ? n + "✗" : "✗") + '</span><small>−' + pts + '</small>' : '';
         var lbl = 'Clase ' + d + ', ' + p.label + ': ' + (isAbs ? (abs ? "faltó" : rv ? "asistió" : "sin calificar") : off ? "faltó" : n ? n + " ✗, −" + pts : "sin ✗");
-        h += '<td class="' + cls + '">' + (fut ? '' : '<button data-m="cell" data-d="' + d + '" data-k="' + p.key + '"' + (open && !ro && !off ? '' : ' aria-disabled="true"') +
-          ' aria-label="' + esc(lbl) + (open && !off ? (isAbs ? (abs ? ". Toca para quitar la falta" : ". Toca para marcar FALTA") : n ? ". Toca para quitar un ✗" : ". Toca para poner ✗ (−" + tacheVal + ")") : "") + '"' +
-          (mesFlash && mesFlash.d === d && mesFlash.k === p.key ? ' class="bump"' : '') + '>' + txt + '</button>') + '</td>';
+        var bump = mesFlash && mesFlash.d === d && mesFlash.k === p.key ? ' bump' : '';
+        if (open && !ro && !off) {
+          /* clase abierta: «−» quita un ✗ (o la FALTA) y «✗» pone otro; se pueden poner varios en el mismo punto */
+          var full = isAbs ? abs : GB.dayScore(c || GB.newDay()) <= 0;
+          h += '<td class="' + cls + ' edit"><div class="mpair">' +
+            '<button class="mminus" data-m="minus" data-d="' + d + '" data-k="' + p.key + '"' + (n ? '' : ' disabled') + ' aria-label="' + esc(lbl + (isAbs ? ". Quitar la falta" : ". Quitar un ✗")) + '">−</button>' +
+            '<button class="madd' + bump + '" data-m="cell" data-d="' + d + '" data-k="' + p.key + '"' + (full ? ' disabled' : '') + ' aria-label="' + esc(lbl + (isAbs ? ". Marcar FALTA" : ". Poner un ✗ (−" + tacheVal + ")")) + '">' +
+            (n ? txt : '<span class="xadd">✗</span>') + '</button></div></td>';
+        } else {
+          h += '<td class="' + cls + '"><button data-m="cell" data-d="' + d + '" data-k="' + p.key + '" aria-disabled="true" aria-label="' + esc(lbl) + '"' +
+            (bump ? ' class="bump"' : '') + '>' + txt + '</button></td>';
+        }
       }
       h += '<td class="mend">' + (isAbs ? '<b class="' + (totX ? "low" : "") + '">' + totX + '</b><small>' + (totX === 1 ? "falta" : "faltas") + '</small>' :
         totX ? '<b>' + totX + '✗</b><small>−' + totP + '</small>' : '<span class="dash">—</span>') + '</td></tr>';
@@ -1494,13 +1520,18 @@ html[data-vesper-style="minimal"] .mgrid .mrow{box-shadow:1px 0 0 var(--line2)}
     if (absent(c)) { toast("Faltó a la clase " + d + ": quita la FALTA en «Asistió» para calificar sus puntos."); return; }
     var n = (c.x && c.x[k]) || 0;
     mesFlash = { d: d, k: k };
-    if (n) return mesChange(r, d, "Quitar ✗ " + lbl + " · clase " + d, function (c) { return GB.removeTache(c, k, null); });
     if (GB.dayScore(c) <= 0) { toast("La clase " + d + " ya está en 0."); return; }
     mesChange(r, d, "✗ " + lbl + " · clase " + d, function (c) { return GB.addTache(c, k, tacheVal) ? true : false; });
   }
+  function mesMinus(d, k) {
+    var r = cs(); if (!r || !canDaily || d !== mesOpen) return;
+    var c = daysOf(r)[d], lbl = (POINTS.filter(function (p) { return p.key === k; })[0] || {}).label || k;
+    if (!c || !c.x || !c.x[k]) return;
+    mesFlash = { d: d, k: k };
+    mesChange(r, d, (k === ABSENT_KEY ? "Quitar FALTA" : "Quitar ✗ " + lbl) + " · clase " + d, function (c) { return GB.removeTache(c, k, null); });
+  }
   function nudgeCol(d) {
     var th = $("m-scroll").querySelector('th[data-d="' + d + '"]');
-    if (d > upTo()) { toast("La clase " + d + " todavía no llega."); return; }
     toast("Esta casilla es de la clase " + d + ". Toca su encabezado para abrirla y editar.");
     if (th && !window.matchMedia("(prefers-reduced-motion: reduce)").matches) { th.classList.remove("nudge"); void th.offsetWidth; th.classList.add("nudge"); }
   }
@@ -1522,6 +1553,8 @@ html[data-vesper-style="minimal"] .mgrid .mrow{box-shadow:1px 0 0 var(--line2)}
     if (a === "undo") return mesUndoLast();
     if (a === "col") { mesOpen = mesOpen === d ? 0 : d; renderMes(); if (mesOpen) scrollToCol(d); return; }
     if (a === "cell") return mesCell(d, b.getAttribute("data-k"));
+    if (a === "minus") return mesMinus(d, b.getAttribute("data-k"));
+    if (a === "list") { closeMes(); if (!desk.matches) { closePanel(); renderList(); } return; }
     if (a === "next" || a === "prev") {
       var r0 = cs(), st = inGroup(grp);
       if (a === "prev") { if (cur > 0) prev(); } else {
