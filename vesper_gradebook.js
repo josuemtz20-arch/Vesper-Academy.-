@@ -589,22 +589,108 @@ window.VESPER_GRADEBOOK = (function () {
     }).catch(function () { return false; });
   }
 
-  /* Borra el registro completo de un alumno: daily_progress, gradebook y
-     roster, en UN commit atómico (o se borran los tres o ninguno). Solo
-     staff (firestore.rules). Conserva students/ (acceso) y exam_results.
-     Borrar un doc que no existe no es error. Devuelve true si se borró. */
-  function deleteStudent(sid) {
-    sid = String(sid || "").trim();
-    if (!sid || !signedIn()) return Promise.resolve(false);
-    var prefix = "projects/" + projectId() + "/databases/" + DB_ID + "/documents/";
-    var writes = [DAILY_COLLECTION, COLLECTION, "roster"].map(function (c) { return { "delete": prefix + c + "/" + sid }; });
+  /* ================= PAPELERA (borrado reversible, solo staff) =================
+     Borrar NO destruye: en UN commit atómico copia los docs a
+     deleted_students/{id} y los borra de su colección. Restaurar hace lo
+     inverso. Precondiciones: si alguien escribió entre la lectura y el
+     commit, falla y no se toca nada (nunca se archiva una foto vieja).
+       kind "grades": daily_progress + gradebook (el alumno sigue en la lista)
+       kind "all":    lo anterior + roster (sale de la lista)
+     Conserva students/ (acceso) y exam_results. Ver firestore.rules. */
+  var TRASH = "deleted_students";
+  function docPath(c, id) { return "projects/" + projectId() + "/databases/" + DB_ID + "/documents/" + c + "/" + id; }
+  function commit(writes) {
     return currentUser.getIdToken().then(function (token) {
       return fetch(base() + ":commit", {
         method: "POST",
         headers: { "Authorization": "Bearer " + token, "Content-Type": "application/json" },
         body: JSON.stringify({ writes: writes })
-      }).then(function (r) { return r.status === 200; });
-    }).catch(function () { return false; });
+      }).then(function (r) {
+        if (r.status === 200) return "ok";
+        return r.json().then(function (e) {
+          var st = e && e.error && e.error.status;
+          return (st === "FAILED_PRECONDITION" || st === "ALREADY_EXISTS" || st === "ABORTED") ? "conflict" : "error";
+        }, function () { return "error"; });
+      });
+    }).catch(function () { return "error"; });
+  }
+  function getRaw(c, id) {
+    return currentUser.getIdToken().then(function (token) {
+      return fetch(base() + "/" + c + "/" + encodeURIComponent(id), { headers: { "Authorization": "Bearer " + token } })
+        .then(function (r) { return r.status === 200 ? r.json() : r.status === 404 ? false : null; });
+    }).catch(function () { return null; });
+  }
+  var TRASH_PARTS = [DAILY_COLLECTION, COLLECTION, "roster"];
+
+  /* -> "ok" | "empty" (no tenía nada que borrar) | "conflict" | "error" */
+  function archiveStudent(sid, info) {
+    sid = String(sid || "").trim(); info = info || {};
+    if (!sid || !signedIn()) return Promise.resolve("error");
+    var parts = info.all ? TRASH_PARTS : TRASH_PARTS.slice(0, 2);
+    return Promise.all(parts.map(function (c) { return getRaw(c, sid); })).then(function (docs) {
+      if (docs.some(function (d) { return d === null; })) return "error";
+      if (!docs.some(Boolean)) return "empty";
+      var id = sid + "_" + Date.now(), fields = {
+        sid: { stringValue: sid },
+        name: { stringValue: String(info.name || "").slice(0, 120) },
+        group: { stringValue: String(info.group || "").slice(0, 40) },
+        kind: { stringValue: info.all ? "all" : "grades" },
+        deletedAt: { timestampValue: new Date().toISOString() },
+        deletedBy: { stringValue: String(currentUser.email || "").toLowerCase() }
+      }, writes = [];
+      parts.forEach(function (c, i) {
+        var d = docs[i]; if (!d) return;
+        fields[c] = { mapValue: { fields: d.fields || {} } };
+        writes.push({ "delete": docPath(c, sid), currentDocument: { updateTime: d.updateTime } });
+      });
+      writes.unshift({ update: { name: docPath(TRASH, id), fields: fields }, currentDocument: { exists: false } });
+      return commit(writes);
+    });
+  }
+
+  /* lista de la papelera (más reciente primero) o null si no se pudo leer */
+  function fetchTrash() {
+    if (!signedIn()) return Promise.resolve(null);
+    return currentUser.getIdToken().then(function (token) {
+      return fetch(base() + ":runQuery", {
+        method: "POST",
+        headers: { "Authorization": "Bearer " + token, "Content-Type": "application/json" },
+        body: JSON.stringify({ structuredQuery: { from: [{ collectionId: TRASH }],
+          orderBy: [{ field: { fieldPath: "deletedAt" }, direction: "DESCENDING" }], limit: 300 } })
+      }).then(function (r) {
+        if (r.status !== 200) return null;
+        return r.json().then(function (rows) {
+          return (rows || []).filter(function (x) { return x.document; }).map(function (x) {
+            var d = x.document, f = d.fields || {};
+            function s(k) { return (f[k] && f[k].stringValue) || ""; }
+            return { id: d.name.slice(d.name.lastIndexOf("/") + 1), sid: s("sid"), name: s("name"), group: s("group"),
+                     kind: s("kind"), deletedBy: s("deletedBy"),
+                     deletedAt: (f.deletedAt && f.deletedAt.timestampValue) || "",
+                     hasDaily: !!f[DAILY_COLLECTION], hasGrades: !!f[COLLECTION], hasRoster: !!f.roster };
+          });
+        });
+      });
+    }).catch(function () { return null; });
+  }
+
+  /* -> { status: "ok"|"conflict"|"error", sid, kind, roster: fila de roster|null } */
+  function restoreStudent(id) {
+    if (!signedIn()) return Promise.resolve({ status: "error" });
+    return getRaw(TRASH, id).then(function (a) {
+      if (!a) return { status: "error" };
+      var f = a.fields || {}, sid = (f.sid && f.sid.stringValue) || "", writes = [];
+      if (!sid) return { status: "error" };
+      TRASH_PARTS.forEach(function (c) {
+        if (!f[c]) return;
+        writes.push({ update: { name: docPath(c, sid), fields: (f[c].mapValue && f[c].mapValue.fields) || {} },
+                      currentDocument: { exists: false } });   // no pisa datos nuevos
+      });
+      writes.push({ "delete": docPath(TRASH, id), currentDocument: { updateTime: a.updateTime } });
+      return commit(writes).then(function (st) {
+        return { status: st, sid: sid, kind: (f.kind && f.kind.stringValue) || "",
+                 roster: f.roster ? readRosterDoc({ name: docPath("roster", sid), fields: f.roster.mapValue.fields || {} }) : null };
+      });
+    });
   }
 
   /* ================= EL DÍA (forma en memoria) =================
@@ -1113,7 +1199,7 @@ window.VESPER_GRADEBOOK = (function () {
     classDates: classDates, courseClock: courseClock, fmtDay: fmtDay,
     available: available, signedIn: signedIn, isAdminUser: isAdminUser, isStaffUser: isStaffUser,
     fetchRoster: fetchRoster, fetchMyGroupIds: fetchMyGroupIds,
-    fetchGrades: fetchGrades, fetchMyGrade: fetchMyGrade, saveGrade: saveGrade, deleteStudent: deleteStudent,
+    fetchGrades: fetchGrades, fetchMyGrade: fetchMyGrade, saveGrade: saveGrade, archiveStudent: archiveStudent, fetchTrash: fetchTrash, restoreStudent: restoreStudent,
     fetchDailyAll: fetchDailyAll, fetchMyDaily: fetchMyDaily, saveDaily: saveDaily,
     newDay: newDay, isAbsent: isAbsent, dayScore: dayScore, addTache: addTache, removeTache: removeTache,
     dailyStats: dailyStats, buildRoster: buildRoster, computeGrade: computeGrade,

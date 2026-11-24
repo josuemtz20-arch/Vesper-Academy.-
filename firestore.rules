@@ -341,6 +341,18 @@ service cloud.firestore {
     // con id = sid y campos name/level/levelName/group. Lo mantiene el script
     // admin. El profesor consulta con filtro `group == <uno de sus grupos>`.
     // (vesper_gradebook.js → roster/{sid})
+    // Papelera de la boleta (portal_boleta.html → «Borrar» y «Papelera»):
+    // copia de daily_progress/gradebook/roster de un alumno antes de
+    // borrarlos, para poder restaurarlos. Solo staff; inmutable.
+    // (vesper_gradebook.js → archiveStudent / restoreStudent)
+    match /deleted_students/{id} {
+      allow read, delete: if isStaff();
+      allow create: if isStaff()
+                    && request.resource.data.sid is string
+                    && request.resource.data.kind in ["grades", "all"];
+      allow update: if false;
+    }
+
     match /roster/{sid} {
       allow read:  if isStaff() || teacherSeesGroup(resource.data.group);
       allow write: if isStaff();

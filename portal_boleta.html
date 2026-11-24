@@ -274,9 +274,16 @@ textarea.notes:focus{border-color:var(--gold);outline:none;box-shadow:0 0 0 3px 
 .bdel:hover{background:var(--bad);color:var(--paper)}
 #delbox .edsheet{max-width:520px}
 #delbox ul{margin:0 0 10px;padding-left:18px;font-size:.82rem;line-height:1.5}
-#delbox input{width:100%;min-height:44px;border:1.5px solid var(--line2);border-radius:10px;padding:0 10px;font:inherit;font-size:.95rem;background:var(--paper);color:var(--ink)}
-#delbox input:focus{border-color:var(--bad);outline:none}
-#delbox .btn.gold.danger,#delbox .btn.gold.danger:disabled{background:var(--bad);border-color:var(--bad);color:var(--paper);box-shadow:none}
+#trashbox .edsheet{max-width:620px}
+.delopt{appearance:none;display:block;width:100%;text-align:left;border:1.5px solid var(--line2);border-radius:12px;background:var(--paper);color:var(--ink);padding:10px 14px;margin:0 0 8px;min-height:56px;font:inherit;cursor:pointer}
+.delopt b{display:block;font-size:.9rem;color:var(--bad-ink)}
+.delopt small{display:block;font-size:.76rem;color:var(--muted);line-height:1.4;margin-top:2px}
+.delopt:hover:not(:disabled){border-color:var(--bad);background:var(--bad-bg)}
+.delopt:disabled{opacity:.5;cursor:default}
+.trow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center;padding:10px 0;border-top:1px solid var(--line)}
+.trow b{display:block;font-size:.88rem}
+.trow small{display:block;font-size:.72rem;color:var(--muted);line-height:1.4}
+.tempty{font-size:.84rem;color:var(--muted);padding:12px 0}
 .toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:var(--night);color:#f5f2eb;padding:11px 16px;border-radius:12px;font-size:.84rem;z-index:60;max-width:calc(100vw - 32px);box-shadow:0 8px 30px rgba(0,0,0,.25);display:none}
 .toast.show{display:block}
 footer{background:var(--night);color:rgba(255,255,255,.55);text-align:center;padding:22px 16px;font-size:.78rem;border-top:3px solid var(--gold)}
@@ -963,6 +970,7 @@ html[data-vesper-style="minimal"] .mgrid .mrow{box-shadow:1px 0 0 var(--line2)}
       <button class="btn" id="b-paste">Pegar desde Excel</button>
       <button class="btn" id="b-csv" hidden><i class="fas fa-download"></i> Descargar CSV</button>
       <button class="btn danger" id="b-del" aria-pressed="false" hidden><i class="fas fa-trash-can" aria-hidden="true"></i> <span>Borrar un alumno</span></button>
+      <button class="btn" id="b-trash" hidden><i class="fas fa-rotate-left" aria-hidden="true"></i> Papelera</button>
     </div>
     <div class="paste" id="pastebox">
       <b style="font-size:.9rem">Pega la columna del examen final</b>
@@ -988,11 +996,16 @@ html[data-vesper-style="minimal"] .mgrid .mrow{box-shadow:1px 0 0 var(--line2)}
 </div></div>
 <div id="delbox" hidden><div class="edscrim" id="del-scrim"></div><div class="edsheet" role="dialog" aria-modal="true" aria-labelledby="del-title">
   <h2 id="del-title">Borrar a <span id="del-name"></span></h2>
-  <p>Esto borra <b>para siempre</b> su registro completo. No se puede deshacer: descarga antes el CSV del historial si lo necesitas.</p>
-  <ul><li>Todas sus clases diarias (los 10 puntos y las faltas) de todos los meses.</li><li>Sus exámenes finales y comentarios de la boleta.</li><li>Su lugar en la lista del grupo.</li></ul>
-  <p>Se conserva su acceso a la plataforma y sus intentos de examen. Para confirmar, escribe <b>BORRAR</b>:</p>
-  <input id="del-input" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-label="Escribe BORRAR para confirmar">
-  <div class="edbtns"><button class="btn gold danger" id="del-ok" disabled>Borrar para siempre</button><button class="btn" id="del-cancel">Cancelar</button></div>
+  <p>Lo que borres va a la <b>Papelera</b> y se puede restaurar. Su acceso a la plataforma y sus intentos de examen no se tocan.</p>
+  <button class="delopt" id="del-grades"><b>Borrar sus calificaciones</b><small>Clases diarias, faltas, exámenes finales y comentarios de todos los meses. Sigue en la lista con la boleta en blanco.</small></button>
+  <button class="delopt" id="del-all"><b>Borrar todo y quitarlo de la lista</b><small>Lo anterior y además sale del grupo.</small></button>
+  <div class="edbtns"><button class="btn" id="del-cancel">Cancelar</button></div>
+</div></div>
+<div id="trashbox" hidden><div class="edscrim" id="trash-scrim"></div><div class="edsheet" role="dialog" aria-modal="true" aria-labelledby="trash-title">
+  <h2 id="trash-title">Papelera</h2>
+  <p>Registros borrados de la boleta. «Restaurar» los regresa tal como estaban. No se restaura encima de calificaciones nuevas: si ya tiene, bórralas primero (también quedan aquí).</p>
+  <div id="trash-list"></div>
+  <div class="edbtns"><button class="btn" id="trash-close">Cerrar</button></div>
 </div></div>
 <div class="mes" id="mes" role="dialog" aria-modal="true" aria-labelledby="m-title" hidden><div class="msheet" tabindex="-1"></div></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
@@ -1043,7 +1056,7 @@ html[data-vesper-style="minimal"] .mgrid .mrow{box-shadow:1px 0 0 var(--line2)}
   var dailyMap = {};        // sid -> { days }
   var GROUPS = [];          // [{ id, title, level, rows }]
   var canSave = false, canDaily = false;
-  var canDelete = false, delMode = false, delSid = null, myGroupIds = [];   // borrar registro: solo staff
+  var canDelete = false, delMode = false, delSid = null, myGroupIds = [], lastAttempts = [];   // borrar registro: solo staff
   var day = Math.max(1, CLOCK.day || 1);
   var grp = null, view = "class", cur = -1, lastScore = {}, justFinished = false;
   var taps = {};            // sid|ciclo|día -> {punto: [valor de cada ✗]} para deshacer exacto
@@ -1704,10 +1717,10 @@ html[data-vesper-style="minimal"] .mgrid .mrow{box-shadow:1px 0 0 var(--line2)}
     var hist = bmode === "hist";
     $("btable").hidden = hist; $("hview").hidden = !hist; $("b-tip").hidden = hist;
     $("b-paste").hidden = hist || delMode; $("b-csv").hidden = !hist;
-    $("b-del").hidden = !canDelete || hist;
+    $("b-del").hidden = !canDelete || hist; $("b-trash").hidden = !canDelete;
     $("b-del").setAttribute("aria-pressed", delMode);
     $("b-del").querySelector("span").textContent = delMode ? "Listo" : "Borrar un alumno";
-    $("b-tip").innerHTML = delMode ? "Toca <b>Borrar</b> en el alumno cuyo registro quieres eliminar. Te pedirá confirmación." : TIP;
+    $("b-tip").innerHTML = delMode ? "Toca <b>Borrar</b> en un alumno: eliges si borrar solo sus calificaciones o todo. Se puede restaurar desde la <b>Papelera</b>." : TIP;
     if (hist) { closePaste(); renderHistGrid(); }
   }
   var TIP = $("b-tip").innerHTML;
@@ -1718,38 +1731,90 @@ html[data-vesper-style="minimal"] .mgrid .mrow{box-shadow:1px 0 0 var(--line2)}
     if (stateOf(sid) === "saving") { toast("Espera a que termine de guardar a " + first(r.name) + "."); return; }
     delSid = sid;
     $("del-name").textContent = r.name;
-    $("del-input").value = ""; $("del-ok").disabled = true; $("del-ok").textContent = "Borrar para siempre";
+    $("del-grades").disabled = $("del-all").disabled = false;
     $("delbox").hidden = false; document.body.classList.add("lock");
-    $("del-input").focus();
+    $("del-grades").focus();
   }
   function closeDel() { $("delbox").hidden = true; delSid = null; document.body.classList.remove("lock"); }
-  function confirmDel() {
-    var sid = delSid, r = rowBySid(sid);
-    if (!r || $("del-input").value.trim().toUpperCase() !== "BORRAR") return;
-    $("del-ok").disabled = true; $("del-ok").textContent = "Borrando…";
+  function clearLocal(r) { r.cycles = {}; r.finalExam = null; r.notes = ""; r.legacy = null; delete dailyMap[r.sid]; }
+  function confirmDel(all) {
+    var sid = delSid, r = rowBySid(sid); if (!r) return;
+    $("del-grades").disabled = $("del-all").disabled = true;
     /* nada pendiente de este alumno puede volver a crear sus docs después */
     clearTimeout(dTimers[sid]); delete dTimers[sid];
     clearTimeout(gTimers[sid]); delete gTimers[sid]; delete gPending[sid];
-    GB.deleteStudent(sid).then(function (ok) {
-      if (!ok) {
-        $("del-ok").disabled = false; $("del-ok").textContent = "Borrar para siempre";
-        toast("No se pudo borrar. Revisa tu conexión o que tu cuenta sea de administración.");
+    GB.archiveStudent(sid, { name: r.name, group: r.group, all: all }).then(function (st) {
+      if (st === "error" || st === "conflict") {
+        $("del-grades").disabled = $("del-all").disabled = false;
+        toast(st === "conflict" ? "Alguien acaba de cambiar sus datos. Vuelve a intentarlo." : "No se pudo borrar. Revisa tu conexión o que tu cuenta sea de administración.");
         return;
       }
-      delete dState[sid]; delete gState[sid]; delete dailyMap[sid];
-      roster = roster.filter(function (x) { return x.sid !== sid; });
-      buildGroups(myGroupIds);
-      if (grp && !G(grp)) grp = null;
-      cur = -1;
+      delete dState[sid]; delete gState[sid];
+      if (st === "empty" && !all) { closeDel(); toast(first(r.name) + " no tenía calificaciones guardadas."); return; }
+      clearLocal(r);
+      if (all) { roster = roster.filter(function (x) { return x.sid !== sid; }); buildGroups(myGroupIds); if (grp && !G(grp)) grp = null; cur = -1; }
       closeDel(); paintSave(sid); renderBook();
-      toast("Borraste el registro de " + r.name + ".");
+      toast((all ? "Quitaste a " + r.name + " de la lista" : "Borraste las calificaciones de " + r.name) + ". Está en la Papelera.");
     });
   }
+
+  /* ---- papelera ---- */
+  var trashItems = [];
+  function fmtWhen(iso) { var d = new Date(iso); return isNaN(d) ? "" : d.toLocaleDateString("es-MX", { day: "numeric", month: "short", year: "numeric" }) + " " + d.toLocaleTimeString("es-MX", { hour: "2-digit", minute: "2-digit" }); }
+  function renderTrash() {
+    $("trash-list").innerHTML = !trashItems.length ? '<p class="tempty">La papelera está vacía.</p>' : trashItems.map(function (t, i) {
+      return '<div class="trow"><div><b>' + esc(t.name || t.sid) + '</b><small>' + esc(t.kind === "all" ? "Todo (quitado de la lista)" : "Solo calificaciones") +
+        (t.group ? ' · grupo ' + esc(t.group) : '') + '</small><small>' + esc(fmtWhen(t.deletedAt)) + (t.deletedBy ? ' · ' + esc(t.deletedBy) : '') + '</small></div>' +
+        '<button class="btn" data-restore="' + i + '">Restaurar</button></div>';
+    }).join("");
+  }
+  function openTrash() {
+    $("trash-list").innerHTML = '<p class="tempty">Cargando…</p>';
+    $("trashbox").hidden = false; document.body.classList.add("lock");
+    GB.fetchTrash().then(function (list) {
+      if (list === null) { $("trash-list").innerHTML = '<p class="tempty">No se pudo leer la papelera. Revisa tu conexión o que las reglas de Firestore estén publicadas.</p>'; return; }
+      trashItems = list; renderTrash();
+    });
+  }
+  function closeTrash() { $("trashbox").hidden = true; document.body.classList.remove("lock"); }
+  function restore(i, btn) {
+    var t = trashItems[i]; if (!t) return;
+    var live = rowBySid(t.sid);
+    if (live && stateOf(t.sid) === "saving") { toast("Espera a que termine de guardar a " + first(live.name) + "."); return; }
+    btn.disabled = true; btn.textContent = "Restaurando…";
+    GB.restoreStudent(t.id).then(function (res) {
+      if (res.status !== "ok") {
+        btn.disabled = false; btn.textContent = "Restaurar";
+        toast(res.status === "conflict" ? (t.name || "El alumno") + " ya tiene datos nuevos. Bórralos primero (quedan en la Papelera) y vuelve a restaurar." : "No se pudo restaurar. Revisa tu conexión.");
+        return;
+      }
+      return Promise.all([GB.fetchGrades([res.sid]), GB.fetchDailyAll([res.sid])]).then(function (rr) {
+        var grades = rr[0] || {}, daily = rr[1] || {}, r = rowBySid(res.sid);
+        if (!r && res.roster) {
+          var m = {}; m[res.sid] = res.roster;
+          r = GB.buildRoster(m, lastAttempts.filter(function (a) { return a && a.sid === res.sid; }), grades)
+                .filter(function (x) { return x.sid === res.sid; })[0];
+          if (r) { r.cycles = r.cycles || {}; roster.push(r); buildGroups(myGroupIds); }
+        } else if (r && grades[res.sid]) {
+          var g = grades[res.sid]; r.cycles = g.cycles || {}; r.legacy = g.legacy || null;
+        }
+        if (daily[res.sid]) dailyMap[res.sid] = daily[res.sid];
+        applyCycle(GB.cycleId());
+        trashItems.splice(i, 1); renderTrash(); renderBook();
+        toast("Restauraste a " + (t.name || "el alumno") + ".");
+      });
+    });
+  }
+  $("b-trash").addEventListener("click", openTrash);
+  $("trash-close").addEventListener("click", closeTrash);
+  $("trash-scrim").addEventListener("click", closeTrash);
+  $("trash-list").addEventListener("click", function (e) { var b = e.target.closest("[data-restore]"); if (b) restore(+b.getAttribute("data-restore"), b); });
   $("b-del").addEventListener("click", function () { delMode = !delMode; if (delMode) closePaste(); renderBook(); });
   $("btable").addEventListener("click", function (e) { var b = e.target.closest("[data-del]"); if (b) openDel(b.getAttribute("data-del")); });
-  $("del-input").addEventListener("input", function () { $("del-ok").disabled = this.value.trim().toUpperCase() !== "BORRAR"; });
-  $("del-input").addEventListener("keydown", function (e) { if (e.key === "Enter") confirmDel(); else if (e.key === "Escape") closeDel(); });
-  $("del-ok").addEventListener("click", confirmDel);
+  $("del-grades").addEventListener("click", function () { confirmDel(false); });
+  $("del-all").addEventListener("click", function () { confirmDel(true); });
+  $("delbox").addEventListener("keydown", function (e) { if (e.key === "Escape") closeDel(); });
+  $("trashbox").addEventListener("keydown", function (e) { if (e.key === "Escape") closeTrash(); });
   $("del-cancel").addEventListener("click", closeDel);
   $("del-scrim").addEventListener("click", closeDel);
   function updateAvance(r) {
@@ -1953,6 +2018,7 @@ html[data-vesper-style="minimal"] .mgrid .mrow{box-shadow:1px 0 0 var(--line2)}
   function load() {
     Promise.all([GB.fetchRoster(), VESPER_RESULTS.fetchAll({ limit: 1000 }), GB.fetchMyGroupIds()]).then(function (res) {
       var rosterMap = res[0], attempts = res[1], myIds = res[2] || [];
+      lastAttempts = attempts || [];
       if (rosterMap === null && attempts === null) {
         showMsg('<i class="fas fa-lock"></i> No se pudieron leer tus alumnos. Verifica que tu cuenta sea de profesor, ' +
           'que tengas grupos asignados y que las reglas de Firestore para <code>roster</code> estén publicadas.', true);
