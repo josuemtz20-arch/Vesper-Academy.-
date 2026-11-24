@@ -47,7 +47,7 @@
 .fgrid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px;}
 .ladder{list-style:none;margin:0;padding:0;display:grid;gap:14px;max-width:820px;}
 .ladder li{display:grid;grid-template-columns:110px minmax(0,1fr);gap:22px;align-items:start;
-  border:1px solid var(--border);border-left:4px solid var(--gold);border-radius:var(--r-md);background:#fff;padding:20px 24px;}
+  border:1px solid var(--border);border-radius:var(--r-md);background:#fff;padding:20px 24px;}
 .ladder .lv{font-family:'Fraunces',Georgia,serif;font-size:1.7rem;font-weight:600;color:var(--navy);line-height:1;}
 .ladder .lv small{display:block;font-family:'Inter',sans-serif;font-size:.72rem;font-weight:700;letter-spacing:.6px;
   text-transform:uppercase;color:var(--tag);margin-top:8px;}
@@ -57,6 +57,29 @@
 @media(max-width:860px){.split,.fgrid2{grid-template-columns:1fr;gap:28px;}}
 @media(max-width:520px){.ladder li{grid-template-columns:1fr;gap:10px;}.ficha{grid-template-columns:1fr;}
   .ficha dt{padding-bottom:0;}.ficha dd{border-top:0;padding-top:4px;}}
+</style>
+<style>
+/* ===== LIMPIEZA DE CLICHÉS (2026-11-23) =====
+   Auditoría de clichés de diseño. Pisa reglas de assets/css/vesper_course.css
+   solo en esta página, sin tocar ese archivo (lo cargan otras 7). */
+.btn-ghost{-webkit-backdrop-filter:none;backdrop-filter:none;}
+/* h3 de las tarjetas en Fraunces, como planes.html (.entry h3) */
+.fcard h3{font-family:'Fraunces',Georgia,serif;font-size:var(--t-h3);font-weight:600;}
+/* La ruta A1–C2 es UNA hoja de cuaderno, no cinco tarjetas iguales (misma
+   receta que #m-app .m-hoja de la portada de teléfono: papel, margen dorado,
+   cinta y renglones azules). Sin inclinación: girada, el margen se escalona. */
+.ladder{position:relative;gap:0;padding:14px 26px 10px 0;border-radius:3px 14px 14px 3px;
+  background:#fffdf8 linear-gradient(90deg,transparent 131px,color-mix(in srgb,var(--gold) 55%,transparent) 131px 132.5px,transparent 132.5px);
+  box-shadow:0 2px 0 #e6dfcd,0 16px 34px rgba(27,27,47,.12);}
+.ladder::before{content:"";position:absolute;left:62px;top:-11px;width:84px;height:22px;transform:rotate(3deg);
+  background:rgba(243,226,171,.82);box-shadow:0 1px 3px rgba(0,0,0,.18);}
+.ladder li{grid-template-columns:106px minmax(0,1fr);gap:50px;border:0;border-radius:0;background:none;
+  border-bottom:1px solid rgba(47,111,179,.22);padding:20px 0 20px 26px;}
+.ladder li:last-child{border-bottom:0;}
+@media(max-width:520px){
+  .ladder{padding:12px 18px 8px 0;background:#fffdf8 linear-gradient(90deg,transparent 21px,color-mix(in srgb,var(--gold) 55%,transparent) 21px 22.5px,transparent 22.5px);}
+  .ladder li{grid-template-columns:1fr;gap:10px;padding:18px 0 18px 38px;}
+}
 </style>
 </head>
 <body>
@@ -100,7 +123,7 @@
 
 <section class="sec" id="clases">
   <div class="container split">
-    <div class="reveal">
+    <div>
       <span class="eyebrow">Lo que preguntan todos</span>
       <h2 class="sec-title">Así es una clase</h2>
       <dl class="ficha">
@@ -111,7 +134,7 @@
         <dt>Precio</dt><dd>Desde <b>$2,500 MXN al mes</b>, sin inscripción ni permanencia</dd>
       </dl>
     </div>
-    <div class="ratio reveal" role="img" aria-label="En clase, 80 % del tiempo hablas tú y 20 % explica el profesor">
+    <div class="ratio" role="img" aria-label="En clase, 80 % del tiempo hablas tú y 20 % explica el profesor">
       <p class="sec-lead" style="margin:0 0 18px">En cada clase el reparto es el contrario al de la escuela de siempre.</p>
       <div class="ratio-bar"><i class="you"></i><i class="teach"></i></div>
       <div class="ratio-legend">
@@ -129,10 +152,10 @@
       <h2 class="sec-title">El método</h2>
     </div>
     <div class="fgrid2">
-      <div class="fcard reveal"><div class="ic"><i class="fas fa-comments" aria-hidden="true"></i></div><h3>Método comunicativo</h3><p>Situaciones reales desde la primera sesión: pides, negocias, explicas y discrepas. La gramática aparece cuando la necesitas, no antes.</p></div>
-      <div class="fcard reveal"><div class="ic"><i class="fas fa-headphones" aria-hidden="true"></i></div><h3>Oído entrenado</h3><p>Audio en cada lección con voces y acentos distintos. Dejas de entender «el inglés del salón» y empiezas a entender el inglés del mundo.</p></div>
-      <div class="fcard reveal"><div class="ic"><i class="fas fa-chart-line" aria-hidden="true"></i></div><h3>Tu nivel, medido</h3><p>Empiezas con un diagnóstico y avanzas por la escala MCER con evidencia. Siempre sabes en qué nivel estás y qué falta para el siguiente.</p></div>
-      <div class="fcard reveal"><div class="ic"><i class="fas fa-briefcase" aria-hidden="true"></i></div><h3>Inglés que se usa</h3><p>Entrevistas, juntas, correos y presentaciones. Practicas el inglés que tu trabajo te va a pedir el lunes, no el de un libro de texto.</p></div>
+      <div class="fcard"><div class="ic"><i class="fas fa-comments" aria-hidden="true"></i></div><h3>Método comunicativo</h3><p>Situaciones reales desde la primera sesión: pides, negocias, explicas y discrepas. La gramática aparece cuando la necesitas, no antes.</p></div>
+      <div class="fcard"><div class="ic"><i class="fas fa-headphones" aria-hidden="true"></i></div><h3>Oído entrenado</h3><p>Audio en cada lección con voces y acentos distintos. Dejas de entender «el inglés del salón» y empiezas a entender el inglés del mundo.</p></div>
+      <div class="fcard"><div class="ic"><i class="fas fa-chart-line" aria-hidden="true"></i></div><h3>Tu nivel, medido</h3><p>Empiezas con un diagnóstico y avanzas por la escala MCER con evidencia. Siempre sabes en qué nivel estás y qué falta para el siguiente.</p></div>
+      <div class="fcard"><div class="ic"><i class="fas fa-briefcase" aria-hidden="true"></i></div><h3>Inglés que se usa</h3><p>Entrevistas, juntas, correos y presentaciones. Practicas el inglés que tu trabajo te va a pedir el lunes, no el de un libro de texto.</p></div>
     </div>
   </div>
 </section>
@@ -145,11 +168,11 @@
       <p class="sec-lead">Cinco peldaños del Marco Común Europeo. No te saltas ninguno, y en cada uno sabes exactamente qué tienes que poder hacer para pasar al siguiente.</p>
     </div>
     <ol class="ladder">
-      <li class="reveal"><div class="lv">A1<small>Principiante</small></div><div><p>Empiezas desde cero real. Saludas, te presentas, dices de dónde eres y a qué te dedicas, y pides lo básico sin traducir mentalmente cada palabra.</p><p class="when">Lo sabes cuando: <b>puedes presentarte y pedir algo en una tienda sin ayuda.</b></p></div></li>
-      <li class="reveal"><div class="lv">A2<small>Básico</small></div><div><p>Ya no solo sobrevives: cuentas. Hablas de tu rutina, de lo que hiciste el fin de semana y de lo que vas a hacer, y resuelves un hotel o una cita médica.</p><p class="when">Lo sabes cuando: <b>puedes contar lo que hiciste ayer sin trabarte.</b></p></div></li>
-      <li class="reveal"><div class="lv">B1<small>Intermedio</small></div><div><p>El punto de inflexión. Sostienes una conversación completa, explicas por qué piensas algo y empiezas a usar inglés en el trabajo sin que sea un suplicio.</p><p class="when">Lo sabes cuando: <b>puedes discrepar y explicar tu razón.</b></p></div></li>
-      <li class="reveal"><div class="lv">B2<small>Intermedio alto</small></div><div><p>El nivel que piden casi todas las vacantes y casi todas las universidades. Negocias, presentas ante un grupo y sigues una junta al ritmo de los demás.</p><p class="when">Lo sabes cuando: <b>puedes llevar una junta entera en inglés.</b></p></div></li>
-      <li class="reveal"><div class="lv">C1–C2<small>Avanzado y Experto</small></div><div><p>Dejas de traducir. Matizas, persuades, captas el sarcasmo y el subtexto, y escribes con la precisión que exige un informe o una propuesta seria.</p><p class="when">Lo sabes cuando: <b>el idioma deja de ser el tema y solo importa lo que dices.</b></p></div></li>
+      <li><div class="lv">A1<small>Principiante</small></div><div><p>Empiezas desde cero real. Saludas, te presentas, dices de dónde eres y a qué te dedicas, y pides lo básico sin traducir mentalmente cada palabra.</p><p class="when">Lo sabes cuando: <b>puedes presentarte y pedir algo en una tienda sin ayuda.</b></p></div></li>
+      <li><div class="lv">A2<small>Básico</small></div><div><p>Ya no solo sobrevives: cuentas. Hablas de tu rutina, de lo que hiciste el fin de semana y de lo que vas a hacer, y resuelves un hotel o una cita médica.</p><p class="when">Lo sabes cuando: <b>puedes contar lo que hiciste ayer sin trabarte.</b></p></div></li>
+      <li><div class="lv">B1<small>Intermedio</small></div><div><p>El punto de inflexión. Sostienes una conversación completa, explicas por qué piensas algo y empiezas a usar inglés en el trabajo sin que sea un suplicio.</p><p class="when">Lo sabes cuando: <b>puedes discrepar y explicar tu razón.</b></p></div></li>
+      <li><div class="lv">B2<small>Intermedio alto</small></div><div><p>El nivel que piden casi todas las vacantes y casi todas las universidades. Negocias, presentas ante un grupo y sigues una junta al ritmo de los demás.</p><p class="when">Lo sabes cuando: <b>puedes llevar una junta entera en inglés.</b></p></div></li>
+      <li><div class="lv">C1–C2<small>Avanzado y Experto</small></div><div><p>Dejas de traducir. Matizas, persuades, captas el sarcasmo y el subtexto, y escribes con la precisión que exige un informe o una propuesta seria.</p><p class="when">Lo sabes cuando: <b>el idioma deja de ser el tema y solo importa lo que dices.</b></p></div></li>
     </ol>
   </div>
 </section>
@@ -161,7 +184,7 @@
       <h2 class="sec-title">Preguntas sobre las clases</h2>
       <p class="sec-lead">Las de horarios, pagos y cancelación están en <a href="planes.html#preguntas" style="color:var(--gold2);text-decoration:underline">Planes y precios</a>.</p>
     </div>
-    <div class="faq reveal">
+    <div class="faq">
       <details class="qitem">
         <summary>¿Necesito saber algo de inglés para empezar?</summary>
         <div class="ans"><p>No. El nivel A1 empieza desde cero. Si ya sabes algo, el examen de nivel te coloca en el peldaño correcto para que no repitas lo que ya dominas.</p></div>
@@ -199,13 +222,13 @@
 <footer>
   <div class="container">
     <div class="fgrid">
-      <div class="fbrand reveal">
+      <div class="fbrand">
         <img src="assets/images/vesper_logo_inverted.png" alt="Vesper Academy" width="46" height="44" loading="lazy" decoding="async">
         <p>Inglés en línea para profesionales del mundo real. Del primer "hello" a tu certificación internacional.</p>
       </div>
-      <div class="reveal"><h5>Cursos</h5>
+      <div><h5>Cursos</h5>
         <a href="curso-ingles-general.html">Inglés General</a><a href="curso-club-conversacion.html">Club de Conversación</a><a href="curso-ingles-corporativo.html">Inglés Corporativo</a><a href="curso-certificacion.html">Certificación</a></div>
-      <div class="reveal"><h5>Academia</h5>
+      <div><h5>Academia</h5>
         <a href="como-funciona.html">Cómo funciona</a><a href="planes.html">Planes y precios</a><a href="book_placement.html">Examen de nivel</a><a href="app.html">La app gratis</a></div>
     </div>
     <div class="fbottom">

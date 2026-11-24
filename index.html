@@ -211,13 +211,6 @@ section[id]{scroll-margin-top:86px;}
 }
 .btn-gold{background:var(--gold);color:var(--night);}
 .btn-gold:hover{transform:translateY(-2px);box-shadow:0 12px 30px rgba(197,160,89,.32);}
-/* Barrido de oro enmascarado, sólo en hover */
-.btn-gold::after{
-  content:"";position:absolute;inset:0;pointer-events:none;
-  background:linear-gradient(105deg,transparent 38%,rgba(255,255,255,.55) 50%,transparent 62%);
-  transform:translateX(-120%);
-}
-.btn-gold:hover::after{transition:transform .75s var(--ease-out);transform:translateX(120%);}
 .btn-ghost{background:transparent;color:var(--on-night);border:1px solid rgba(245,242,235,.32);}
 .btn-ghost:hover{border-color:var(--gold);color:var(--star);}
 .btn-lg{font-size:1rem;padding:16px 32px;}
@@ -306,13 +299,6 @@ nav{display:flex;align-items:center;justify-content:space-between;height:78px;ga
     radial-gradient(900px 420px at 80% -10%,rgba(197,160,89,.22),transparent 60%),
     linear-gradient(168deg,var(--dusk),var(--night) 58%,#0e0c1f);
 }
-/* Foco que sigue al cursor (sólo puntero fino) */
-.hero .spot{
-  position:absolute;inset:0;z-index:-1;pointer-events:none;opacity:0;
-  transition:opacity .5s var(--ease-std);
-  background:radial-gradient(600px 600px at var(--mx,50%) var(--my,40%),rgba(197,160,89,.09),transparent 62%);
-}
-.hero.spot-on .spot{opacity:1;}
 
 .hero-grid{display:grid;grid-template-columns:1fr;gap:48px;align-items:center;padding:clamp(56px,7vw,86px) 0 clamp(40px,5vw,60px);}
 .hero h1{
@@ -322,7 +308,7 @@ nav{display:flex;align-items:center;justify-content:space-between;height:78px;ga
 }
 .hero h1 em{font-style:italic;font-weight:500;color:var(--star);}
 .hero .lead{font-size:var(--t-lead);color:var(--on-night-soft);max-width:46ch;margin:0 0 30px;text-wrap:pretty;}
-.hero-cta{display:flex;gap:14px;flex-wrap:wrap;}
+.hero-cta{display:flex;gap:16px;flex-wrap:wrap;}
 .cta-note{color:rgba(245,242,235,.52);font-size:var(--t-small);margin:16px 0 0;}
 
 /* El hero tiene UN solo sujeto: Vesper. Detrás va el logotipo en
@@ -366,7 +352,7 @@ nav{display:flex;align-items:center;justify-content:space-between;height:78px;ga
   font-size:1.85rem;font-weight:600;color:var(--star);line-height:1;
   font-variant-numeric:tabular-nums;
 }
-.statrail small{display:block;margin-top:9px;color:rgba(245,242,235,.55);font-size:.72rem;letter-spacing:.13em;text-transform:uppercase;}
+.statrail small{display:block;margin-top:8px;color:rgba(245,242,235,.55);font-size:.72rem;letter-spacing:.13em;text-transform:uppercase;}
 
 @media(min-width:981px){
   .hero-grid{grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:64px;}
@@ -702,7 +688,7 @@ section{padding:var(--s-section) 0;}
 .vesper-grid{display:grid;grid-template-columns:1fr;gap:clamp(38px,5vw,56px);align-items:center;}
 .vesper-stage{display:flex;flex-direction:column;align-items:center;gap:20px;}
 .vesper-stage .medallion{--med:clamp(190px,26vw,290px);}
-#vesper .sec-title em{font-style:italic;font-weight:500;color:var(--star);}
+#vesper .sec-title em{font-style:normal;font-weight:500;color:var(--star);}
 
 .med-say{
   margin:0;min-height:2.7em;max-width:30ch;text-align:center;
@@ -1139,7 +1125,7 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
   /* La app en teléfono: franja corta (lo completo está en app.html) */
   #m-app .m-appx{background:linear-gradient(168deg,#232847,#141a2e);color:#fff;}
   #m-app .m-appx .m-h2{color:#fff;margin-top:4px;}
-  #m-app .m-appx .m-h2 em{font-style:italic;font-weight:500;color:#d9bd84;}
+  #m-app .m-appx .m-h2 em{font-style:normal;font-weight:500;color:#d9bd84;}
   #m-app .m-appx__lead{font:400 16px/1.5 'Inter',sans-serif;color:rgba(255,255,255,.78);margin:8px 0 0;}
   #m-app .m-h1 em{font-style:italic;font-weight:500;color:#d9bd84;}
   #m-app .m-hero:focus{outline:none;}
@@ -1165,7 +1151,7 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
   box-shadow:0 calc(var(--press) + 2px) 0 var(--gold-shadow),0 14px 28px rgba(197,160,89,.26);}
 .btn-gold:active{transform:translateY(var(--press));box-shadow:0 0 0 var(--gold-shadow);}
 .btn-ghost{background:rgba(245,242,235,.06);border:1px solid rgba(243,226,171,.32);color:var(--cream);
-  -webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);transition:background .16s,border-color .16s,transform .09s;}
+  transition:background .16s,border-color .16s,transform .09s;}
 .btn-ghost:hover{background:rgba(245,242,235,.14);border-color:var(--star);color:var(--cream);}
 .btn-ghost:active{transform:translateY(2px);}
 .btn-wa{background:#25D366;color:#0b3d1f;box-shadow:0 var(--press) 0 #168a43;transition:transform .09s ease,box-shadow .09s ease;}
@@ -1227,7 +1213,7 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
 [data-apptour].is-paused .tour-btn{display:block;}
 .tour-btn:focus-visible{outline:2px solid var(--gold);outline-offset:3px;}
 .statrail--3{list-style:none;margin:0;padding:0;grid-template-columns:repeat(3,1fr);}
-.statrail--3 li{padding:26px 0 30px 26px;border-left:1px solid var(--hair);}
+.statrail--3 li{padding:24px 0 32px 24px;border-left:1px solid var(--hair);}
 .statrail--3 li:first-child{border-left:0;padding-left:0;}
 .statrail--3 small{letter-spacing:.04em;text-transform:none;font-size:.86rem;color:var(--on-night-soft);}
 .hero-more{margin:0 0 clamp(28px,4vw,44px);}
@@ -1246,7 +1232,10 @@ html.js-anim .vesper-stage.in-view .medallion{animation:medFloat 6.5s ease-in-ou
 .app-strip__art{aspect-ratio:9/16;border-radius:26px;overflow:hidden;background:#0d0b1f;
   box-shadow:0 0 0 1px rgba(197,160,89,.45),0 0 0 7px #0d0b1f,0 0 0 8px rgba(245,242,235,.10),0 24px 50px rgba(0,0,0,.4);}
 .app-strip__art img{display:block;width:100%;height:100%;object-fit:cover;}
-.app-strip .sec-title em{font-style:italic;font-weight:500;color:var(--star);}
+/* «Vesper» va recta con el trazo de pluma del lema (2026-11-23): sin la
+   itálica era una palabra coloreada sin motivo. Un solo trazo por pantalla. */
+.app-strip .sec-title em{font-style:normal;font-weight:inherit;color:inherit;padding-bottom:.16em;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 10' preserveAspectRatio='none'%3E%3Cpath d='M3 6.5C42 2.5 96 9 197 3.5' fill='none' stroke='%23C9A84C' stroke-width='2.6' stroke-linecap='round' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E") no-repeat 50% 100%/104% .22em;}
 .app-strip__cta{margin:26px 0 0;}
 .talk{background:rgba(58,58,99,.28);border:1px solid var(--hair);border-radius:var(--r-lg);padding:clamp(24px,3vw,34px);}
 .talk h3{font-family:var(--display);font-size:1.2rem;font-weight:600;color:var(--cream);margin:0 0 6px;}
@@ -1304,7 +1293,7 @@ html.js-anim .hero-lema path{stroke-dasharray:1;stroke-dashoffset:1;animation:le
   .hero-lema{top:-60px;left:max(-10px,calc(50% - var(--medh) * .5 - 74px));}
 }
 @media (pointer: coarse) and (max-width: 820px){
-  #m-app .m-inicio .m-lema{margin:-6px 4px 20px 0;text-align:right;font-size:27px;color:var(--m-en);
+  #m-app .m-inicio .m-lema{margin:-8px 4px 20px 0;text-align:right;font-size:27px;color:var(--m-en);
     rotate:-2deg;transform-origin:right center;}
 }
 @media (prefers-reduced-motion: reduce){
@@ -1327,9 +1316,9 @@ html.vesper-reduce-motion.js-anim .hero-lema path{stroke-dashoffset:0 !important
      pluma; sale del retrato, que queda más limpio.
    - Teléfono: ceja más corta, sin cortar «con profesor», y los datos del examen no dejan
      una palabra sola en el segundo renglón. */
-.hero-grid--cat .hero-copy h1{font-size:clamp(2.5rem,1.1rem + 2.9vw,4rem);max-width:16ch;margin:16px 0 10px;}
+.hero-grid--cat .hero-copy h1{font-size:clamp(2.5rem,1.1rem + 2.9vw,4rem);max-width:16ch;margin:16px 0 12px;}
 .hero-copy .hero-lema{position:relative;left:auto;top:auto;display:block;width:max-content;max-width:100%;
-  margin:0 0 22px;rotate:-2deg;transform-origin:left center;font-size:clamp(1.9rem,1.2rem + 1.4vw,2.6rem);}
+  margin:0 0 24px;rotate:-2deg;transform-origin:left center;font-size:clamp(1.9rem,1.2rem + 1.4vw,2.6rem);}
 .hero-copy .hero-lema span{display:inline;font-size:1em;margin:0;}
 .hero-copy .hero-lema b{margin-left:.15em;}
 .hero-copy .lead{margin-bottom:24px;}
@@ -1341,6 +1330,18 @@ html.vesper-reduce-motion.js-anim .hero-lema path{stroke-dashoffset:0 !important
 </style>
 <script src="vesper_prefs.js"></script>
 <script src="vesper_analytics.js"></script>
+<style>
+/* ===== LIMPIEZA DE CLICHÉS (2026-11-23) =====
+   Reglas que viven en assets/css/vesper_mobile.css y aquí solo se pisan:
+   itálica fuera de los títulos de parada, y el .m-inicio a la base de 4 px. */
+@media (pointer: coarse) and (max-width: 820px){
+  #m-app .m-parada__t em{font-style:normal;}
+  #m-app .m-inicio{padding-top:24px;}
+  #m-app .m-inicio .m-h1{margin:12px 0 16px;}
+  #m-app .m-inicio__nota{margin-top:16px;}
+  #m-app .m-inicio .m-ir{margin-top:4px;}
+}
+</style>
 </head>
 <body>
 
@@ -1455,7 +1456,6 @@ html.vesper-reduce-motion.js-anim .hero-lema path{stroke-dashoffset:0 !important
 
 <!-- ============ HERO ============ -->
 <section class="hero" id="hero">
-  <div class="spot" aria-hidden="true"></div>
   <div class="container hero-grid hero-grid--solo hero-grid--cat">
     <div class="hero-copy">
       <span class="rule"></span>
@@ -1891,22 +1891,6 @@ html.vesper-reduce-motion.js-anim .hero-lema path{stroke-dashoffset:0 !important
     llenarTiras();
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', llenarTiras);
 
-    /* Foco que sigue al cursor — sólo puntero fino, nunca bajo reduce */
-    var hero = document.getElementById('hero');
-    if(hero && !reduce && window.matchMedia('(hover: hover) and (pointer: fine)').matches){
-      var raf = null;
-      hero.addEventListener('pointermove', function(ev){
-        if(raf) return;
-        raf = requestAnimationFrame(function(){
-          var r = hero.getBoundingClientRect();
-          hero.style.setProperty('--mx', ((ev.clientX - r.left)/r.width*100).toFixed(1) + '%');
-          hero.style.setProperty('--my', ((ev.clientY - r.top)/r.height*100).toFixed(1) + '%');
-          raf = null;
-        });
-      }, {passive:true});
-      hero.addEventListener('pointerenter', function(){ hero.classList.add('spot-on'); });
-      hero.addEventListener('pointerleave', function(){ hero.classList.remove('spot-on'); });
-    }
 
     /* ========================================================
        VESPER — tira de expresiones, frases y confeti

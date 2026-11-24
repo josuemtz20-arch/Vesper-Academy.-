@@ -51,7 +51,7 @@
   radial-gradient(900px 420px at 15% 0%,rgba(106,95,168,.18),transparent 60%),
   radial-gradient(700px 380px at 90% 100%,rgba(197,160,89,.12),transparent 60%),
   var(--night);-webkit-font-smoothing:antialiased;}
-.app-x .sec-title em{font-style:italic;font-weight:500;color:var(--star);}
+.app-x .sec-title em{font-style:normal;font-weight:500;color:var(--star);}
 .app-sub{font-family:var(--display);font-size:var(--t-h3);font-weight:600;color:var(--cream);margin:56px 0 6px;}
 .app-subp{margin:0;color:var(--on-night-soft);font-size:.95rem;max-width:62ch;}
 .worlds-x{list-style:none;margin:26px 0 0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;}
@@ -124,6 +124,12 @@
 .tour-steps li.is-on button::before{background:var(--gold);color:#14122a;}
 .tour-steps b{display:block;font-weight:600;color:inherit;}
 @media (max-width:760px){.tour-x{grid-template-columns:1fr;justify-items:center;}.tour-x .tour-phone{width:min(300px,80vw);}}
+</style>
+<style>
+/* ===== LIMPIEZA DE CLICHÉS (2026-11-23) =====
+   Auditoría de clichés de diseño. Pisa reglas de assets/css/vesper_course.css
+   solo en esta página, sin tocar ese archivo (lo cargan otras 7). */
+.btn-ghost{-webkit-backdrop-filter:none;backdrop-filter:none;}
 </style>
 </head>
 <body>
@@ -213,9 +219,9 @@
     </div>
 
     <h2 class="app-sub reveal">Seis mundos, uno por nivel</h2>
-    <p class="app-subp reveal">Cada mundo es un nivel del MCER, con su mapa de lecciones, su recinto de vocabulario y un guardián al final. Para pasar al siguiente mundo, lo vences en un duelo.</p>
+    <p class="app-subp">Cada mundo es un nivel del MCER, con su mapa de lecciones, su recinto de vocabulario y un guardián al final. Para pasar al siguiente mundo, lo vences en un duelo.</p>
     <ol class="worlds-x">
-      <li class="wx reveal" style="--wa:#C07A33;--wi:#8f5722">
+      <li class="wx" style="--wa:#C07A33;--wi:#8f5722">
         <div class="wx-art"><img src="assets/images/landing/app/world_a1.webp" alt="" width="720" height="309" loading="lazy" decoding="async"><span class="wx-lv">A1</span></div>
         <div class="wx-body">
           <h3>El Hogar</h3>
@@ -225,7 +231,7 @@
           <ul class="wx-rooms" aria-label="Salas de vocabulario de El Hogar"><li>La cocina</li><li>La sala</li><li>El dormitorio</li><li>El baño</li><li>El jardín</li><li>La familia</li></ul>
         </div>
       </li>
-      <li class="wx reveal" style="--wa:#5E8A4E;--wi:#3f6234">
+      <li class="wx" style="--wa:#5E8A4E;--wi:#3f6234">
         <div class="wx-art"><img src="assets/images/landing/app/world_a2.webp" alt="" width="720" height="309" loading="lazy" decoding="async"><span class="wx-lv">A2</span></div>
         <div class="wx-body">
           <h3>El Sendero</h3>
@@ -235,7 +241,7 @@
           <ul class="wx-rooms" aria-label="Salas de vocabulario de El Sendero"><li>La entrada</li><li>El mercado</li><li>El manantial</li><li>Las profundidades</li><li>El campamento</li><li>Los ecos</li><li>El café</li></ul>
         </div>
       </li>
-      <li class="wx reveal" style="--wa:#3D86B0;--wi:#2b607f">
+      <li class="wx" style="--wa:#3D86B0;--wi:#2b607f">
         <div class="wx-art"><img src="assets/images/landing/app/world_b1.webp" alt="" width="720" height="309" loading="lazy" decoding="async"><span class="wx-lv">B1</span></div>
         <div class="wx-body">
           <h3>El Horizonte</h3>
@@ -245,7 +251,7 @@
           <ul class="wx-rooms" aria-label="Salas de vocabulario de El Horizonte"><li>El muelle</li><li>El faro</li><li>El almacén</li><li>La cubierta</li><li>El puente de mando</li><li>La bodega</li></ul>
         </div>
       </li>
-      <li class="wx reveal" style="--wa:#A8762E;--wi:#7a5520">
+      <li class="wx" style="--wa:#A8762E;--wi:#7a5520">
         <div class="wx-art"><img src="assets/images/landing/app/world_b2.webp" alt="" width="720" height="309" loading="lazy" decoding="async"><span class="wx-lv">B2</span></div>
         <div class="wx-body">
           <h3>La Torre</h3>
@@ -255,7 +261,7 @@
           <ul class="wx-rooms" aria-label="Salas de vocabulario de La Torre"><li>El salón</li><li>La biblioteca</li><li>El taller</li><li>El balcón</li><li>La bóveda</li><li>El estudio</li></ul>
         </div>
       </li>
-      <li class="wx reveal" style="--wa:#6A5FA8;--wi:#4c4383">
+      <li class="wx" style="--wa:#6A5FA8;--wi:#4c4383">
         <div class="wx-art"><img src="assets/images/landing/app/world_c1.webp" alt="" width="720" height="309" loading="lazy" decoding="async"><span class="wx-lv">C1</span></div>
         <div class="wx-body">
           <h3>El Firmamento</h3>
@@ -265,7 +271,7 @@
           <ul class="wx-rooms" aria-label="Salas de vocabulario de El Firmamento"><li>La cúpula</li><li>El telescopio</li><li>El archivo</li><li>La aurora</li><li>La nebulosa</li><li>El cometa</li></ul>
         </div>
       </li>
-      <li class="wx reveal" style="--wa:#3FA08A;--wi:#2b7061">
+      <li class="wx" style="--wa:#3FA08A;--wi:#2b7061">
         <div class="wx-art"><img src="assets/images/landing/app/world_c2.webp" alt="" width="720" height="309" loading="lazy" decoding="async"><span class="wx-lv">C2</span></div>
         <div class="wx-body">
           <h3>El Castillo del Saber</h3>
@@ -279,15 +285,15 @@
 
     <h2 class="app-sub reveal">Lo que hay dentro</h2>
     <ul class="feats-x">
-      <li class="fx reveal"><span class="fx-ic" aria-hidden="true"><svg class="i"><use href="#i-bolt"/></svg></span><b>Lecciones interactivas</b><span>Ejercicios cortos con corrección al instante. Vesper te dice por qué estuvo mal, no solo que estuvo mal.</span></li>
-      <li class="fx reveal"><span class="fx-ic" aria-hidden="true"><svg class="i"><use href="#i-case"/></svg></span><b>Vocabulario por salas</b><span>Cada mundo tiene un recinto con seis o siete salas temáticas: más de 600 palabras en tarjetas inglés–español y una actividad rápida por sala.</span></li>
-      <li class="fx reveal"><span class="fx-ic" aria-hidden="true"><svg class="i"><use href="#i-gauge"/></svg></span><b>La Forja</b><span>Práctica sin final con lo que ya viste. Lo que fallas vuelve pronto; lo que dominas se espacia. Cuatro modos: mixto, escucha, vocabulario y gramática.</span></li>
-      <li class="fx reveal"><span class="fx-ic" aria-hidden="true"><svg class="i"><use href="#i-summit"/></svg></span><b>El duelo del guardián</b><span>El examen de cada mundo es una batalla: cada acierto le quita vida al guardián y cada error, un corazón a Vesper. Se aprueba con 85 a 92 % según el nivel.</span></li>
-      <li class="fx reveal"><span class="fx-ic" aria-hidden="true"><svg class="i"><use href="#i-audio"/></svg></span><b>Biblioteca de audio</b><span>Diálogos por nivel con voces y acentos distintos, para que el oído se acostumbre al inglés de fuera del salón.</span></li>
-      <li class="fx reveal"><span class="fx-ic" aria-hidden="true"><svg class="i"><use href="#i-star"/></svg></span><b>Racha, liga y medallas</b><span>Un poco cada día suma más que una tarde al mes. La racha lo cuenta, la liga es semanal y las medallas marcan lo que logras.</span></li>
+      <li class="fx"><span class="fx-ic" aria-hidden="true"><svg class="i"><use href="#i-bolt"/></svg></span><b>Lecciones interactivas</b><span>Ejercicios cortos con corrección al instante. Vesper te dice por qué estuvo mal, no solo que estuvo mal.</span></li>
+      <li class="fx"><span class="fx-ic" aria-hidden="true"><svg class="i"><use href="#i-case"/></svg></span><b>Vocabulario por salas</b><span>Cada mundo tiene un recinto con seis o siete salas temáticas: más de 600 palabras en tarjetas inglés–español y una actividad rápida por sala.</span></li>
+      <li class="fx"><span class="fx-ic" aria-hidden="true"><svg class="i"><use href="#i-gauge"/></svg></span><b>La Forja</b><span>Práctica sin final con lo que ya viste. Lo que fallas vuelve pronto; lo que dominas se espacia. Cuatro modos: mixto, escucha, vocabulario y gramática.</span></li>
+      <li class="fx"><span class="fx-ic" aria-hidden="true"><svg class="i"><use href="#i-summit"/></svg></span><b>El duelo del guardián</b><span>El examen de cada mundo es una batalla: cada acierto le quita vida al guardián y cada error, un corazón a Vesper. Se aprueba con 85 a 92 % según el nivel.</span></li>
+      <li class="fx"><span class="fx-ic" aria-hidden="true"><svg class="i"><use href="#i-audio"/></svg></span><b>Biblioteca de audio</b><span>Diálogos por nivel con voces y acentos distintos, para que el oído se acostumbre al inglés de fuera del salón.</span></li>
+      <li class="fx"><span class="fx-ic" aria-hidden="true"><svg class="i"><use href="#i-star"/></svg></span><b>Racha, liga y medallas</b><span>Un poco cada día suma más que una tarde al mes. La racha lo cuenta, la liga es semanal y las medallas marcan lo que logras.</span></li>
     </ul>
 
-    <p class="app-cta reveal">
+    <p class="app-cta">
       <a href="leccion.html" class="btn btn-ghost"><svg class="i" aria-hidden="true"><use href="#i-bolt"/></svg> Abrir la app gratis</a>
     </p>
   </div>
@@ -306,13 +312,13 @@
 <footer>
   <div class="container">
     <div class="fgrid">
-      <div class="fbrand reveal">
+      <div class="fbrand">
         <img src="assets/images/vesper_logo_inverted.png" alt="Vesper Academy" width="46" height="44" loading="lazy" decoding="async">
         <p>Inglés en línea para profesionales del mundo real. Del primer "hello" a tu certificación internacional.</p>
       </div>
-      <div class="reveal"><h5>Cursos</h5>
+      <div><h5>Cursos</h5>
         <a href="curso-ingles-general.html">Inglés General</a><a href="curso-club-conversacion.html">Club de Conversación</a><a href="curso-ingles-corporativo.html">Inglés Corporativo</a><a href="curso-certificacion.html">Certificación</a></div>
-      <div class="reveal"><h5>Academia</h5>
+      <div><h5>Academia</h5>
         <a href="como-funciona.html">Cómo funciona</a><a href="planes.html">Planes y precios</a><a href="book_placement.html">Examen de nivel</a><a href="app.html">La app gratis</a></div>
     </div>
     <div class="fbottom">

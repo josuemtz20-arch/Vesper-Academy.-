@@ -30,8 +30,8 @@
 <style>
 /* Lo que llegó de la portada el 2026-11-06: nota de «todos incluyen»,
    escalón para quien trabaja de 9 a 7 y el formulario de contacto. */
-.plans-all{margin:34px 0 0;padding:14px 18px;border-left:3px solid var(--gold);background:var(--cream);
-  border-radius:0 var(--r-sm) var(--r-sm) 0;font-size:var(--t-body);color:var(--muted);max-width:820px;}
+.plans-all{margin:34px 0 0;padding:14px 18px;border:1px solid var(--border);background:var(--cream);
+  border-radius:var(--r-sm);font-size:var(--t-body);color:var(--muted);max-width:820px;}
 .plans-all b{color:var(--text);}
 .entry{margin-top:22px;display:grid;grid-template-columns:1.1fr 1fr 1fr;gap:24px;padding:22px 24px;
   border:1px solid var(--border);border-radius:var(--r-lg);background:#fff;}
@@ -51,6 +51,18 @@
 .lead-msg{font-size:var(--t-body);color:var(--text);padding:6px 0;}
 .lead-msg a{color:var(--gold2);text-decoration:underline;}
 @media(max-width:860px){.entry,.lead-grid{grid-template-columns:1fr;gap:18px;}}
+</style>
+<style>
+/* ===== LIMPIEZA DE CLICHÉS (2026-11-23) =====
+   Auditoría de clichés de diseño. Pisa reglas de assets/css/vesper_course.css
+   solo en esta página, sin tocar ese archivo (lo cargan otras 7). */
+.btn-ghost{-webkit-backdrop-filter:none;backdrop-filter:none;}
+/* «Todos los planes incluyen»: sin filete lateral; dos esquinas de libro
+   (receta --orn de .v2-book) le devuelven la jerarquía. */
+.plans-all{--orn:rgba(201,168,76,.8);padding:18px 24px;
+  background:linear-gradient(var(--orn),var(--orn)) 8px 8px/18px 1.5px,linear-gradient(var(--orn),var(--orn)) 8px 8px/1.5px 18px,
+    linear-gradient(var(--orn),var(--orn)) calc(100% - 8px) calc(100% - 8px)/18px 1.5px,linear-gradient(var(--orn),var(--orn)) calc(100% - 8px) calc(100% - 8px)/1.5px 18px,var(--cream);
+  background-repeat:no-repeat;}
 </style>
 </head>
 <body>
@@ -103,7 +115,7 @@
     </div>
 
     <div class="pgrid">
-      <div class="pcard reveal" id="grupal">
+      <div class="pcard" id="grupal">
         <div class="ic"><i class="fas fa-users" aria-hidden="true"></i></div>
         <h2>Grupal</h2>
         <p class="p-for">Para quien aprende mejor acompañado y quiere el mejor precio por clase.</p>
@@ -120,7 +132,7 @@
 
       <!-- Sin listón «Más popular»: no hay dato que lo respalde (se quitó
            también de la portada el 2026-11-05). -->
-      <div class="pcard reveal" id="profesional">
+      <div class="pcard" id="profesional">
         <div class="ic"><i class="fas fa-user-tie" aria-hidden="true"></i></div>
         <h2>1 a 1 Profesional</h2>
         <p class="p-for">Para quien tiene una meta concreta y quiere avanzar lo más rápido posible.</p>
@@ -135,7 +147,7 @@
         <a href="book_placement.html" class="btn btn-gold"><i class="fas fa-arrow-right" aria-hidden="true"></i> Empezar 1 a 1</a>
       </div>
 
-      <div class="pcard reveal" id="especializados">
+      <div class="pcard" id="especializados">
         <div class="ic"><i class="fas fa-medal" aria-hidden="true"></i></div>
         <h2>Especializados</h2>
         <p class="p-for">Para certificación, inglés corporativo o técnico, con una meta medible.</p>
@@ -155,8 +167,8 @@
     <!-- Lo que antes decía la sección de precios de la portada (2026-11-06:
          la portada se simplificó y los precios viven solo aquí). Mismos
          datos que la tabla #vesper-hechos de index.html. -->
-    <p class="plans-all reveal"><b>Todos los planes incluyen:</b> material del alumno, biblioteca de audio, examen de nivel y entrevista oral con un profesor, gratis y sin compromiso.</p>
-    <div class="entry reveal">
+    <p class="plans-all"><b>Todos los planes incluyen:</b> material del alumno, biblioteca de audio, examen de nivel y entrevista oral con un profesor, gratis y sin compromiso.</p>
+    <div class="entry">
       <div><h3>¿Trabajas de 9 a 7?</h3><p>Cinco clases por semana no es para todos. Hay dos formas de empezar con menos.</p></div>
       <div><p><b>Club de Conversación:</b> 2 clases por semana, solo para hablar. Pregunta el precio por WhatsApp.</p></div>
       <div><p><b>1 a 1, una hora por semana:</b> de $1,000 a $1,600 al mes según la tarifa por hora, en el horario que tú elijas.</p></div>
@@ -172,7 +184,7 @@
       <h2 class="sec-title">Qué incluye cada plan</h2>
       <p class="sec-lead">La comparación completa, por si estás dudando entre dos.</p>
     </div>
-    <div class="ctable-wrap reveal">
+    <div class="ctable-wrap">
       <table class="ctable">
         <caption>Desliza para ver todas las columnas.</caption>
         <thead>
@@ -238,7 +250,7 @@
     <!-- Orden = orden en que el visitante lo pregunta por WhatsApp: horario,
          duración, plataforma, pago, salida. Las cinco primeras venían de la
          FAQ de la portada. -->
-    <div class="faq reveal">
+    <div class="faq">
       <details class="qitem">
         <summary>¿En qué horarios hay clases?</summary>
         <div class="ans"><p>Hay grupos de 8 de la mañana a 10 de la noche. En 1 a 1 el horario lo eliges tú. Si trabajas de 9 a 7, mándanos tu horario por WhatsApp y te decimos qué grupo te queda.</p></div>
@@ -296,7 +308,7 @@
       <h2 class="sec-title">Te mandamos horarios y precios para tu caso</h2>
       <p class="sec-lead">Déjanos tu WhatsApp y un asesor te escribe en menos de 24 horas. O escríbenos tú: <a href="https://wa.me/525535699899?text=Hola%2C%20vengo%20de%20vesperacademy.com%20y%20quiero%20informaci%C3%B3n%20sobre%20los%20planes." target="_blank" rel="noopener" style="color:var(--gold2);text-decoration:underline">WhatsApp 55 3569 9899</a>.</p>
     </div>
-    <div class="lead-card reveal">
+    <div class="lead-card">
       <form id="contactForm" action="https://formsubmit.co/ajax/contacto@vesperacademy.com" method="POST">
         <input type="hidden" name="_subject" value="Nuevo prospecto desde vesperacademy.com (planes)">
         <input type="hidden" name="_template" value="table">
@@ -331,13 +343,13 @@
 <footer>
   <div class="container">
     <div class="fgrid">
-      <div class="fbrand reveal">
+      <div class="fbrand">
         <img src="assets/images/vesper_logo_inverted.png" alt="Vesper Academy" width="46" height="44" loading="lazy" decoding="async">
         <p>Inglés en línea para profesionales del mundo real. Del primer "hello" a tu certificación internacional.</p>
       </div>
-      <div class="reveal"><h5>Cursos</h5>
+      <div><h5>Cursos</h5>
         <a href="curso-ingles-general.html">Inglés General</a><a href="curso-club-conversacion.html">Club de Conversación</a><a href="curso-ingles-corporativo.html">Inglés Corporativo</a><a href="curso-certificacion.html">Certificación</a></div>
-      <div class="reveal"><h5>Academia</h5>
+      <div><h5>Academia</h5>
         <a href="como-funciona.html">Cómo funciona</a><a href="planes.html">Planes y precios</a><a href="book_placement.html">Examen de nivel</a><a href="app.html">La app gratis</a></div>
     </div>
     <div class="fbottom">
