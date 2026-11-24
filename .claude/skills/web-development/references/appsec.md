@@ -242,6 +242,15 @@ Lo que quedó:
 - `/exam/answer` responde `{recorded, first}`: ni la clave ni si acertó.
 - `/exam/finish` da la nota y un resumen por habilidad, sin detalle por
   pregunta. El detalle se guarda en el servidor para los profesores.
+- **Hueco que sigue abierto (revisado 2026-11-23):** el documento de
+  `exam_results` guarda `detail` con `correct` por pregunta, y la regla de
+  lectura deja al alumno leer el suyo. Con cuenta verificada, 4 intentos
+  (todo A, B, C, D) y leer sus 4 documentos saca la clave en un día, dentro
+  del tope de 12. El código lo anota como riesgo residual
+  (`exam_grader.js`, antes de `publicResult`). Cerrarlo: no guardar `correct`
+  en el examen de nivel, o mover `detail` a un documento que solo lee el
+  personal. Lección general: lo que le quitas a la respuesta del servidor,
+  quítaselo también a lo que el usuario puede leer de la base de datos.
 - La nota final sigue siendo un oráculo lento (cambiar una respuesta por
   intento), así que hay tope de intentos: 12 al día por cuenta y 20 al día por
   IP sin sesión. Ojo: una escuela o un CGNAT de celular comparten IP.
