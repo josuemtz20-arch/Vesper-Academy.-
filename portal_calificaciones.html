@@ -327,9 +327,15 @@ footer a{color:var(--gold);text-decoration:none;}
   var SK_LABEL = { grammar: "Gramática", vocab: "Vocabulario", use: "Uso del inglés", reading: "Lectura", listening: "Listening", otro: "Otros" };
   var SK_ORDER = ["grammar", "vocab", "use", "reading", "listening", "otro"];
 
-  function skillSummaryHtml(detail) {
+  /* `bySkill` (examen de nivel desde 2026-11-23) o, si no hay, se cuenta
+     desde `detail` (jefes y documentos viejos) */
+  function skillSummaryHtml(detail, bySkill) {
     var by = {};
-    detail.forEach(function (d) {
+    if (bySkill) {
+      Object.keys(bySkill).forEach(function (sk) {
+        by[sk] = { c: bySkill[sk].correct || 0, t: bySkill[sk].total || 0 };
+      });
+    } else detail.forEach(function (d) {
       var sk = d.skill || "otro";
       if (!by[sk]) by[sk] = { c: 0, t: 0 };
       by[sk].t++; if (d.correct) by[sk].c++;
@@ -347,6 +353,10 @@ footer a{color:var(--gold);text-decoration:none;}
   }
 
   function detailHtml(r) {
+    if (r.bySkill && (!r.detail || !r.detail.length)) {
+      return '<div class="detailbox">' + skillSummaryHtml([], r.bySkill) +
+             '<h4>Detalle por pregunta</h4><div class="qlist"><div class="qitem">El examen de nivel no guarda qué preguntas falló cada alumno, para que nadie pueda sacar la clave repitiéndolo. Arriba está su resultado por destreza.</div></div></div>';
+    }
     if (!r.detail || !r.detail.length) {
       return '<div class="detailbox"><h4>Detalle</h4><div class="qlist"><div class="qitem">Sin detalle por pregunta para este intento.</div></div></div>';
     }

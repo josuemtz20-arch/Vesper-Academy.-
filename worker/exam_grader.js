@@ -287,19 +287,32 @@ async function studentIdentity(token, email) {
   return { sid: (f.sid && f.sid.stringValue) || "", group: (f.group && f.group.stringValue) || "" };
 }
 
-/* mismo documento que toFs() de vesper_results.js, + gradedBy */
+/* mismo documento que toFs() de vesper_results.js, + gradedBy.
+   Examen de nivel (2026-11-23): NO se guarda `detail` (con ✓/✗ por
+   pregunta): el alumno puede leer su propio exam_results, y con 4 intentos
+   (todo A, B, C, D) sacaba la clave del banco fijo. En su lugar va `bySkill`
+   ({grammar:{correct,total},…}), lo mismo que ya recibe el navegador. El
+   profesor ve el resumen por destreza, no qué preguntas falló. El jefe
+   sigue guardando `detail`: sus preguntas se sortean y muestra "Era: …". */
 function toFsDoc(rec) {
   const S = (v) => ({ stringValue: String(v) }), I = (v) => ({ integerValue: String(v) });
-  return { fields: {
+  const fields = {
     studentUid: S(rec.studentUid), alias: S(rec.alias), sid: S(rec.sid), group: S(rec.group),
     examType: S(rec.examType), examId: S(rec.examId), level: S(rec.level),
     score: I(rec.score), total: I(rec.total), percent: I(rec.percent),
     passed: { booleanValue: rec.passed }, threshold: I(rec.threshold),
-    detail: { arrayValue: { values: rec.detail.map((d) => ({ mapValue: { fields: {
-      q: S(d.q), type: S(d.type), skill: S(d.skill), correct: { booleanValue: d.correct } } } })) } },
     createdAt: { timestampValue: rec.clientTs }, clientTs: S(rec.clientTs),
     gradedBy: S("worker")
-  } };
+  };
+  if (rec.examType === "exam") {
+    const by = rec.bySkill || {}, m = {};
+    Object.keys(by).forEach((k) => { m[k] = { mapValue: { fields: { correct: I(by[k].correct), total: I(by[k].total) } } }; });
+    fields.bySkill = { mapValue: { fields: m } };
+  } else {
+    fields.detail = { arrayValue: { values: rec.detail.map((d) => ({ mapValue: { fields: {
+      q: S(d.q), type: S(d.type), skill: S(d.skill), correct: { booleanValue: d.correct } } } })) } };
+  }
+  return { fields: fields };
 }
 
 async function saveResult(env, user, alias, res) {
@@ -466,13 +479,9 @@ function skillSummary(bank, ids, answered) {
 /* Lo que el NAVEGADOR recibe al cerrar. En el examen de nivel se quita la
    lista por pregunta (`detail`, con `correct`): junto con un intento hecho a
    propósito (todo A, todo B…) volvía a soltar la clave. Queda la nota y el
-   resumen por habilidad. El documento de Firestore (toFsDoc) SÍ guarda
-   `detail` completo: los profesores lo usan.
-   Riesgo residual: el alumno puede leer su propio exam_results (regla de
-   lectura del dueño) y ahí está `detail`. Solo pasa con intentos guardados,
-   que exigen cuenta verificada y abrir el intento con ella, y esos tienen
-   tope de RL_EXAM_LEVEL_START_PER_DAY (12) al día por uid; sin sesión (tope
-   por IP) no se guarda nada y no hay `detail` que leer. */
+   resumen por habilidad. El documento de Firestore (toFsDoc) tampoco lo
+   guarda desde 2026-11-23 (el alumno puede leer su propio exam_results):
+   guarda `bySkill`. Los documentos de antes de esa fecha sí traen `detail`. */
 function publicResult(res) {
   const out = Object.assign({}, res);
   if (res.examType === "exam") delete out.detail;

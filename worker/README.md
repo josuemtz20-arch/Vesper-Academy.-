@@ -268,8 +268,11 @@ Contra la "cosecha" de claves (2026-11-23):
 
 - **Examen de nivel:** `/exam/answer` solo responde `{recorded, first}`: ni la
   clave ni si acertó. `/exam/finish` da la nota y `bySkill` (resumen por
-  habilidad), sin `detail` por pregunta; Firestore sí guarda `detail` para los
-  profesores. El banco es fijo y chico: con ✓/✗ por pregunta bastaban 3-4
+  habilidad), sin `detail` por pregunta. Desde el 2026-11-23 Firestore tampoco
+  guarda `detail` del examen de nivel, sino `bySkill`: el alumno puede leer su
+  propio `exam_results`, y con 4 intentos (todo A, B, C, D) sacaba la clave de
+  ahí. El profesor ve el resumen por destreza en `portal_calificaciones.html`.
+  Los documentos anteriores a esa fecha todavía traen `detail` con `correct`. El banco es fijo y chico: con ✓/✗ por pregunta bastaban 3-4
   intentos (todo A, todo B…) para reconstruir la clave.
 - **Jefe:** el Worker sortea las preguntas en `/exam/start` y las devuelve en
   `ids`; la app las pinta en ese orden. Los `ids` del cliente se ignoran

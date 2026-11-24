@@ -259,6 +259,20 @@ window.VESPER_RESULTS = (function () {
         correct: !!(df.correct && df.correct.booleanValue)
       });
     }
+    /* examen de nivel desde 2026-11-23: resumen por destreza en vez de detail
+       (el Worker ya no guarda qué preguntas acertó; ver toFsDoc) */
+    var bySkill = null;
+    var bf = f.bySkill && f.bySkill.mapValue && f.bySkill.mapValue.fields;
+    if (bf) {
+      bySkill = {};
+      Object.keys(bf).forEach(function (k) {
+        var m = (bf[k] && bf[k].mapValue && bf[k].mapValue.fields) || {};
+        bySkill[k] = {
+          correct: parseInt((m.correct && m.correct.integerValue) || "0", 10),
+          total: parseInt((m.total && m.total.integerValue) || "0", 10)
+        };
+      });
+    }
     return {
       studentUid: s("studentUid"), alias: s("alias") || "Estudiante",
       sid: s("sid"), group: s("group"), email: s("email") /* solo docs viejos */,
@@ -266,7 +280,8 @@ window.VESPER_RESULTS = (function () {
       score: n("score"), total: n("total"), percent: n("percent"),
       passed: b("passed"), threshold: n("threshold"),
       date: (f.createdAt && f.createdAt.timestampValue) || s("clientTs"),
-      detail: detail
+      detail: detail,
+      bySkill: bySkill
     };
   }
 
