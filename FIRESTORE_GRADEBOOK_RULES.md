@@ -80,6 +80,10 @@ Base de datos: `teachermanuals` (la misma que `exam_results`).
   del grupo del alumno (el grupo se resuelve contra `roster/{sid}.group`).
   **Lee** además el propio alumno: su `sid` está en `students/{correo}.sid`
   y la regla compara (`ownSid() == sid`).
+  **Borrar** solo el staff (admin/coordinador): es el botón «Borrar
+  registro» de `portal_boleta.html`, que en un solo commit atómico borra
+  `daily_progress/{sid}`, `gradebook/{sid}` y `roster/{sid}`. Conserva
+  `students/{correo}` (acceso) y `exam_results` (inmutables).
 - Los portales del profesor **no listan** `gradebook`/`daily_progress`
   completos: leen el roster (por grupos) y luego un `batchGet` con esos
   sids — así la regla por-documento siempre es demostrable.

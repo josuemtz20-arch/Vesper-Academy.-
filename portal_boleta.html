@@ -267,6 +267,16 @@ textarea.notes:focus{border-color:var(--gold);outline:none;box-shadow:0 0 0 3px 
 .btn{appearance:none;border:1.5px solid var(--line2);background:var(--paper);border-radius:12px;min-height:44px;padding:0 14px;font-weight:700;font-size:.84rem;cursor:pointer}
 .btn.gold{background:var(--gold);border-color:var(--gold);color:var(--night)}
 .btn:disabled{opacity:.4;cursor:default}
+/* borrar registro (solo staff) */
+.btn.danger,.btn.danger[aria-pressed=true]{border-color:var(--bad);color:var(--bad-ink)}
+.btn.danger[aria-pressed=true]{background:var(--bad-bg)}
+.bdel{appearance:none;width:100%;min-height:44px;border:1.5px solid var(--bad);border-radius:10px;background:var(--bad-bg);color:var(--bad-ink);font:inherit;font-weight:800;font-size:.78rem;cursor:pointer}
+.bdel:hover{background:var(--bad);color:var(--paper)}
+#delbox .edsheet{max-width:520px}
+#delbox ul{margin:0 0 10px;padding-left:18px;font-size:.82rem;line-height:1.5}
+#delbox input{width:100%;min-height:44px;border:1.5px solid var(--line2);border-radius:10px;padding:0 10px;font:inherit;font-size:.95rem;background:var(--paper);color:var(--ink)}
+#delbox input:focus{border-color:var(--bad);outline:none}
+#delbox .btn.gold.danger,#delbox .btn.gold.danger:disabled{background:var(--bad);border-color:var(--bad);color:var(--paper);box-shadow:none}
 .toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:var(--night);color:#f5f2eb;padding:11px 16px;border-radius:12px;font-size:.84rem;z-index:60;max-width:calc(100vw - 32px);box-shadow:0 8px 30px rgba(0,0,0,.25);display:none}
 .toast.show{display:block}
 footer{background:var(--night);color:rgba(255,255,255,.55);text-align:center;padding:22px 16px;font-size:.78rem;border-top:3px solid var(--gold)}
@@ -952,6 +962,7 @@ html[data-vesper-style="minimal"] .mgrid .mrow{box-shadow:1px 0 0 var(--line2)}
       <span class="bmode" role="group" aria-label="Qué ver"><button id="bm-month" aria-pressed="true">Este mes</button><button id="bm-hist" aria-pressed="false">Historial</button></span>
       <button class="btn" id="b-paste">Pegar desde Excel</button>
       <button class="btn" id="b-csv" hidden><i class="fas fa-download"></i> Descargar CSV</button>
+      <button class="btn danger" id="b-del" aria-pressed="false" hidden><i class="fas fa-trash-can" aria-hidden="true"></i> <span>Borrar un alumno</span></button>
     </div>
     <div class="paste" id="pastebox">
       <b style="font-size:.9rem">Pega la columna del examen final</b>
@@ -975,6 +986,14 @@ html[data-vesper-style="minimal"] .mgrid .mrow{box-shadow:1px 0 0 var(--line2)}
   <div id="ed-rows"></div>
   <div class="edbtns"><button class="btn gold" id="ed-save">Guardar</button><button class="btn" id="ed-cancel">Cancelar</button><button class="btn" id="ed-reset">Restaurar los originales</button></div>
 </div></div>
+<div id="delbox" hidden><div class="edscrim" id="del-scrim"></div><div class="edsheet" role="dialog" aria-modal="true" aria-labelledby="del-title">
+  <h2 id="del-title">Borrar a <span id="del-name"></span></h2>
+  <p>Esto borra <b>para siempre</b> su registro completo. No se puede deshacer: descarga antes el CSV del historial si lo necesitas.</p>
+  <ul><li>Todas sus clases diarias (los 10 puntos y las faltas) de todos los meses.</li><li>Sus exámenes finales y comentarios de la boleta.</li><li>Su lugar en la lista del grupo.</li></ul>
+  <p>Se conserva su acceso a la plataforma y sus intentos de examen. Para confirmar, escribe <b>BORRAR</b>:</p>
+  <input id="del-input" autocomplete="off" autocapitalize="characters" spellcheck="false" aria-label="Escribe BORRAR para confirmar">
+  <div class="edbtns"><button class="btn gold danger" id="del-ok" disabled>Borrar para siempre</button><button class="btn" id="del-cancel">Cancelar</button></div>
+</div></div>
 <div class="mes" id="mes" role="dialog" aria-modal="true" aria-labelledby="m-title" hidden><div class="msheet" tabindex="-1"></div></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
@@ -984,7 +1003,7 @@ html[data-vesper-style="minimal"] .mgrid .mrow{box-shadow:1px 0 0 var(--line2)}
 
 <script src="vesper_path.js"></script>
 <script src="vesper_results.js"></script>
-<script src="vesper_gradebook.js?v=20261121"></script>
+<script src="vesper_gradebook.js?v=20261124"></script>
 <script>
 (function () {
   "use strict";
@@ -1024,6 +1043,7 @@ html[data-vesper-style="minimal"] .mgrid .mrow{box-shadow:1px 0 0 var(--line2)}
   var dailyMap = {};        // sid -> { days }
   var GROUPS = [];          // [{ id, title, level, rows }]
   var canSave = false, canDaily = false;
+  var canDelete = false, delMode = false, delSid = null, myGroupIds = [];   // borrar registro: solo staff
   var day = Math.max(1, CLOCK.day || 1);
   var grp = null, view = "class", cur = -1, lastScore = {}, justFinished = false;
   var taps = {};            // sid|ciclo|día -> {punto: [valor de cada ✗]} para deshacer exacto
@@ -1675,16 +1695,63 @@ html[data-vesper-style="minimal"] .mgrid .mrow{box-shadow:1px 0 0 var(--line2)}
       var gr = gradeOf(r);
       h += '<div class="brow"><span class="nm">' + esc(r.name) + ' ' + matHtml(r) + ' <span class="sv" data-sv="' + esc(r.sid) + '">' + svHtml(stateOf(r.sid)) + '</span></span>' +
         '<span class="v">' + (gr.clase != null ? gr.clase : "·") + '</span>' +
-        '<span class="v act"><input inputmode="numeric" enterkeyhint="next" maxlength="3" data-sid="' + esc(r.sid) + '" data-i="' + i + '" value="' + (r.finalExam != null ? r.finalExam : "") + '" aria-label="' + esc("Examen final de " + r.name) + '"' + (canSave ? "" : " disabled") + '></span>' +
+        '<span class="v act">' + (delMode ? '<button class="bdel" data-del="' + esc(r.sid) + '" aria-label="' + esc("Borrar el registro de " + r.name) + '">Borrar</button>' :
+          '<input inputmode="numeric" enterkeyhint="next" maxlength="3" data-sid="' + esc(r.sid) + '" data-i="' + i + '" value="' + (r.finalExam != null ? r.finalExam : "") + '" aria-label="' + esc("Examen final de " + r.name) + '"' + (canSave ? "" : " disabled") + '>') + '</span>' +
         '<span class="avc" id="av-' + esc(r.sid) + '"></span></div>';
     });
     $("btable").innerHTML = h;
     list.forEach(updateAvance);
     var hist = bmode === "hist";
     $("btable").hidden = hist; $("hview").hidden = !hist; $("b-tip").hidden = hist;
-    $("b-paste").hidden = hist; $("b-csv").hidden = !hist;
+    $("b-paste").hidden = hist || delMode; $("b-csv").hidden = !hist;
+    $("b-del").hidden = !canDelete || hist;
+    $("b-del").setAttribute("aria-pressed", delMode);
+    $("b-del").querySelector("span").textContent = delMode ? "Listo" : "Borrar un alumno";
+    $("b-tip").innerHTML = delMode ? "Toca <b>Borrar</b> en el alumno cuyo registro quieres eliminar. Te pedirá confirmación." : TIP;
     if (hist) { closePaste(); renderHistGrid(); }
   }
+  var TIP = $("b-tip").innerHTML;
+
+  /* ---- borrar el registro completo de un alumno (solo staff) ---- */
+  function openDel(sid) {
+    var r = rowBySid(sid); if (!r) return;
+    if (stateOf(sid) === "saving") { toast("Espera a que termine de guardar a " + first(r.name) + "."); return; }
+    delSid = sid;
+    $("del-name").textContent = r.name;
+    $("del-input").value = ""; $("del-ok").disabled = true; $("del-ok").textContent = "Borrar para siempre";
+    $("delbox").hidden = false; document.body.classList.add("lock");
+    $("del-input").focus();
+  }
+  function closeDel() { $("delbox").hidden = true; delSid = null; document.body.classList.remove("lock"); }
+  function confirmDel() {
+    var sid = delSid, r = rowBySid(sid);
+    if (!r || $("del-input").value.trim().toUpperCase() !== "BORRAR") return;
+    $("del-ok").disabled = true; $("del-ok").textContent = "Borrando…";
+    /* nada pendiente de este alumno puede volver a crear sus docs después */
+    clearTimeout(dTimers[sid]); delete dTimers[sid];
+    clearTimeout(gTimers[sid]); delete gTimers[sid]; delete gPending[sid];
+    GB.deleteStudent(sid).then(function (ok) {
+      if (!ok) {
+        $("del-ok").disabled = false; $("del-ok").textContent = "Borrar para siempre";
+        toast("No se pudo borrar. Revisa tu conexión o que tu cuenta sea de administración.");
+        return;
+      }
+      delete dState[sid]; delete gState[sid]; delete dailyMap[sid];
+      roster = roster.filter(function (x) { return x.sid !== sid; });
+      buildGroups(myGroupIds);
+      if (grp && !G(grp)) grp = null;
+      cur = -1;
+      closeDel(); paintSave(sid); renderBook();
+      toast("Borraste el registro de " + r.name + ".");
+    });
+  }
+  $("b-del").addEventListener("click", function () { delMode = !delMode; if (delMode) closePaste(); renderBook(); });
+  $("btable").addEventListener("click", function (e) { var b = e.target.closest("[data-del]"); if (b) openDel(b.getAttribute("data-del")); });
+  $("del-input").addEventListener("input", function () { $("del-ok").disabled = this.value.trim().toUpperCase() !== "BORRAR"; });
+  $("del-input").addEventListener("keydown", function (e) { if (e.key === "Enter") confirmDel(); else if (e.key === "Escape") closeDel(); });
+  $("del-ok").addEventListener("click", confirmDel);
+  $("del-cancel").addEventListener("click", closeDel);
+  $("del-scrim").addEventListener("click", closeDel);
   function updateAvance(r) {
     var g = gradeOf(r), el = document.getElementById("av-" + r.sid); if (!el) return;
     el.innerHTML = '<b>' + (g.grade != null ? g.grade : "–") + '</b><small>' + (g.closed ? (g.passed ? '<span class="pill pass">Aprobado</span>' : '<span class="pill risk">Reprobado</span>') :
@@ -1860,7 +1927,7 @@ html[data-vesper-style="minimal"] .mgrid .mrow{box-shadow:1px 0 0 var(--line2)}
   }
   $("b-csv").addEventListener("click", downloadCsv);
   function setBmode(m) {
-    bmode = m;
+    bmode = m; if (m === "hist") delMode = false;
     $("bm-month").setAttribute("aria-pressed", m === "month"); $("bm-hist").setAttribute("aria-pressed", m === "hist");
     renderBook();
   }
@@ -1899,7 +1966,9 @@ html[data-vesper-style="minimal"] .mgrid .mrow{box-shadow:1px 0 0 var(--line2)}
         dailyMap = daily || {};
         roster = GB.buildRoster(rosterMap, attempts || [], grades || {}).filter(function (r) { return !!r.sid && rosterMap[r.sid]; });
         roster.forEach(function (r) { r.cycles = r.cycles || {}; });
-        buildGroups(GB.isAdminUser() ? [] : myIds);
+        myGroupIds = GB.isAdminUser() ? [] : myIds;
+        buildGroups(myGroupIds);
+        GB.isStaffUser().then(function (v) { canDelete = v; if (view === "book") renderBook(); });
         applyCycle(GB.cycleId());
         $("loading").hidden = true; $("content").hidden = false;
         var w = $("warn");

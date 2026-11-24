@@ -434,7 +434,10 @@ service cloud.firestore {
                      || isStaff()
                      || teacherSeesGroup(get(/databases/$(database)/documents/roster/$(sid)).data.group)
                    );
-      allow write: if signedIn()
+      // Borrar el registro completo del alumno (portal_boleta.html): solo
+      // staff. Va aparte porque en un borrado request.resource es null.
+      allow delete: if isStaff();
+      allow create, update: if signedIn()
                    && (isStaff()
                        || teacherSeesGroup(get(/databases/$(database)/documents/roster/$(sid)).data.group))
                    && (!("participacion" in request.resource.data)
@@ -460,7 +463,8 @@ service cloud.firestore {
                      || isStaff()
                      || teacherSeesGroup(get(/databases/$(database)/documents/roster/$(sid)).data.group)
                    );
-      allow write: if signedIn()
+      allow delete: if isStaff();
+      allow create, update: if signedIn()
                    && (isStaff()
                        || teacherSeesGroup(get(/databases/$(database)/documents/roster/$(sid)).data.group));
     }

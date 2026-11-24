@@ -311,6 +311,29 @@ window.VESPER_GRADEBOOK = (function () {
     } catch (e) { return false; }
   }
 
+  /* ¿staff (admin o coordinador)? Lo decide firestore.rules (isStaff); esto
+     solo sirve para mostrar u ocultar botones. roles/{correo} lo puede leer
+     su dueño. */
+  var staffCache = null;
+  function isStaffUser() {
+    if (!signedIn()) return Promise.resolve(false);
+    if (isAdminUser()) return Promise.resolve(true);
+    if (staffCache) return staffCache;
+    var email = String(currentUser.email || "").trim().toLowerCase();
+    staffCache = currentUser.getIdToken().then(function (token) {
+      return fetch(base() + "/roles/" + encodeURIComponent(email), {
+        headers: { "Authorization": "Bearer " + token }
+      }).then(function (r) {
+        if (r.status !== 200) return false;
+        return r.json().then(function (doc) {
+          var role = doc.fields && doc.fields.role && doc.fields.role.stringValue;
+          return role === "admin" || role === "coordinator";
+        });
+      });
+    }).catch(function () { return false; });
+    return staffCache;
+  }
+
   /* sid del alumno con sesión: el que sembró vesper_auth.js en el perfil o,
      si falta, se calcula (hash determinista del correo, igual que sid_of()
      en upload_manuals.py). */
@@ -562,6 +585,24 @@ window.VESPER_GRADEBOOK = (function () {
         method: "PATCH",
         headers: { "Authorization": "Bearer " + token, "Content-Type": "application/json" },
         body: JSON.stringify({ fields: fields })
+      }).then(function (r) { return r.status === 200; });
+    }).catch(function () { return false; });
+  }
+
+  /* Borra el registro completo de un alumno: daily_progress, gradebook y
+     roster, en UN commit atómico (o se borran los tres o ninguno). Solo
+     staff (firestore.rules). Conserva students/ (acceso) y exam_results.
+     Borrar un doc que no existe no es error. Devuelve true si se borró. */
+  function deleteStudent(sid) {
+    sid = String(sid || "").trim();
+    if (!sid || !signedIn()) return Promise.resolve(false);
+    var prefix = "projects/" + projectId() + "/databases/" + DB_ID + "/documents/";
+    var writes = [DAILY_COLLECTION, COLLECTION, "roster"].map(function (c) { return { "delete": prefix + c + "/" + sid }; });
+    return currentUser.getIdToken().then(function (token) {
+      return fetch(base() + ":commit", {
+        method: "POST",
+        headers: { "Authorization": "Bearer " + token, "Content-Type": "application/json" },
+        body: JSON.stringify({ writes: writes })
       }).then(function (r) { return r.status === 200; });
     }).catch(function () { return false; });
   }
@@ -1070,9 +1111,9 @@ window.VESPER_GRADEBOOK = (function () {
     cycles: cycles, cycleById: cycleById, currentCycleId: currentCycleId,
     cycleId: cycleId, cycle: cycle, setCycle: setCycle, daysFor: daysFor,
     classDates: classDates, courseClock: courseClock, fmtDay: fmtDay,
-    available: available, signedIn: signedIn, isAdminUser: isAdminUser,
+    available: available, signedIn: signedIn, isAdminUser: isAdminUser, isStaffUser: isStaffUser,
     fetchRoster: fetchRoster, fetchMyGroupIds: fetchMyGroupIds,
-    fetchGrades: fetchGrades, fetchMyGrade: fetchMyGrade, saveGrade: saveGrade,
+    fetchGrades: fetchGrades, fetchMyGrade: fetchMyGrade, saveGrade: saveGrade, deleteStudent: deleteStudent,
     fetchDailyAll: fetchDailyAll, fetchMyDaily: fetchMyDaily, saveDaily: saveDaily,
     newDay: newDay, isAbsent: isAbsent, dayScore: dayScore, addTache: addTache, removeTache: removeTache,
     dailyStats: dailyStats, buildRoster: buildRoster, computeGrade: computeGrade,
