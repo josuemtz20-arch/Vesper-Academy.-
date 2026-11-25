@@ -878,6 +878,109 @@
      (SVG decorativo) + calzada + paisaje, y coloca al avatar (gato) sobre el nodo
      actual. El avatar "camina" al nuevo nodo con offset-path cuando data-prev != data-cur.
      Como mide el DOM real, queda alineado aunque cambien lecciones o ancho. ----- */
+  /* El gato CAMINA de la lección que acaba de terminar a la siguiente.
+     El arte es un busto (sin patas), así que el paso se cuenta con saltitos:
+     cada brinco aplasta y estira el cuerpo (.is-walking en CSS), se inclina
+     hacia donde va y deja huellas doradas que se apagan solas. La cámara lo
+     sigue salvo que el alumno haga scroll por su cuenta. Lo mueve un rAF (no
+     una transición) para poder leer la posición en cada cuadro. */
+  var PAW_SVG = '<svg viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="16" rx="5.2" ry="4.4"/>'
+    + '<circle cx="5.6" cy="10" r="2.3"/><circle cx="9.6" cy="6.3" r="2.3"/><circle cx="14.4" cy="6.3" r="2.3"/><circle cx="18.4" cy="10" r="2.3"/></svg>';
+  /* El gordito de cada pelaje en vista 3/4 (la del mapa) caminando hacia la
+     cámara: tira de 16 cuadros sacada de un clip de Grok sobre verde
+     (_scripts/map_walk/key_walk.py). Va hacia abajo-izquierda; CSS lo voltea
+     con --face. [ancho de un cuadro con alto 120, segundos por ciclo de paso]
+     La tira se baja solo cuando el gato va a caminar (data-pel -> walkAvatar). */
+  var WALK_ART = { classic: [88, .67], gray: [95, .67], calico: [88, .88], lion: [99, 1.17], cosmic: [98, 1], flame: [81, .96] };
+  function walkerHtml(pelaje) {
+    var a = WALK_ART[pelaje]; if (!a) return "";
+    return '<span class="wwalker" aria-hidden="true" data-pel="' + pelaje + '" style="aspect-ratio:'
+      + a[0] + '/120;animation-duration:' + a[1] + 's;--wk-cycle:' + (a[1] / 2) + 's"></span>';
+  }
+  /* El mismo gordito SENTADO junto a la lección donde descansa: respira,
+     parpadea y mueve la cola (tira de 24 cuadros, clip de Grok). Se sienta al
+     lado del círculo, no encima, para no tapar el botón. [ancho con alto 112, segundos] */
+  var SIT_ART = { classic: [84, 2.79] };
+  function sitterHtml(pelaje) {
+    var a = SIT_ART[pelaje]; if (!a) return "";
+    return '<span class="wsitter" aria-hidden="true" style="background-image:url(\'assets/images/mascot/walk/' + pelaje
+      + '_sit.webp\');aspect-ratio:' + a[0] + '/112;animation-duration:' + a[1] + 's"></span>';
+  }
+  function walkAvatar(map, avatar, line, lens, from, to) {
+    var total = lens[lens.length - 1] || 1;
+    var L0 = lens[Math.max(0, Math.min(lens.length - 1, from))] || 0;
+    var L1 = lens[Math.max(0, Math.min(lens.length - 1, to))] || 0;
+    var dist = Math.abs(L1 - L0);
+    var dur = Math.max(1500, Math.min(4500, dist / 0.09));   // ~90 px/s: al paso de la tira, sin patinar
+    var PAW_STEP = 30, WAIT = 550, raf = 0, timer = 0, follow = true, side = 1, lastPaw = L0, lastX = null, t0 = 0;
+    var put = function (L) { avatar.style.setProperty("offset-distance", (L / total) * 100 + "%"); };
+    var quit = function () { follow = false; };
+    var evs = ["wheel", "touchstart", "keydown", "mousedown"];
+    evs.forEach(function (e) { window.addEventListener(e, quit, { capture: true, passive: true }); });
+    var cleanup = function () {
+      cancelAnimationFrame(raf); clearTimeout(timer);
+      evs.forEach(function (e) { window.removeEventListener(e, quit, true); });
+      avatar.classList.remove("is-walking");
+      map.classList.remove("is-catwalk");
+      avatar.style.removeProperty("--lean");
+      avatar._walkStop = null;
+    };
+    avatar._walkStop = function () { cleanup(); put(L1); };
+    var paw = function (L) {
+      var p = line.getPointAtLength(L), q = line.getPointAtLength(Math.min(total, L + 2));
+      var ang = Math.atan2(q.y - p.y, q.x - p.x);
+      var off = 6 * side; side = -side;                     // izquierda, derecha, izquierda…
+      var el = document.createElement("span");
+      el.className = "wpaw"; el.setAttribute("aria-hidden", "true");
+      el.style.left = (p.x - Math.sin(ang) * off).toFixed(1) + "px";
+      el.style.top = (p.y + Math.cos(ang) * off).toFixed(1) + "px";
+      el.style.rotate = (ang * 180 / Math.PI + 90).toFixed(0) + "deg";
+      el.innerHTML = PAW_SVG;
+      map.appendChild(el);
+      setTimeout(function () { if (el.parentNode) el.parentNode.removeChild(el); }, 3400);
+    };
+    var cam = function () {
+      if (!follow) return;
+      var r = avatar.getBoundingClientRect(), vh = window.innerHeight || 700;
+      var dy = r.top + r.height / 2 - vh * 0.5;
+      if (Math.abs(dy) > vh * 0.04) window.scrollBy(0, dy * 0.14);   // lo mantiene al centro, sin tirones
+    };
+    var frame = function (ts) {
+      if (!t0) t0 = ts;
+      var k = Math.min(1, (ts - t0) / dur);
+      var e = k < 0.5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2;   // arranca y frena suave
+      var L = L0 + (L1 - L0) * e;
+      put(L);
+      var x = line.getPointAtLength(L).x;
+      if (lastX !== null && Math.abs(x - lastX) > 0.15) { avatar.style.setProperty("--lean", (x > lastX ? 7 : -7) + "deg"); avatar.style.setProperty("--face", x > lastX ? "-1" : "1"); }
+      lastX = x;
+      if (Math.abs(L - lastPaw) >= PAW_STEP) { paw(L); lastPaw = L; }
+      cam();
+      if (k < 1) { raf = requestAnimationFrame(frame); return; }
+      cleanup();
+      avatar.classList.add("is-arrived");
+      var ring = document.createElement("span"), p = line.getPointAtLength(L1);
+      ring.className = "wland"; ring.setAttribute("aria-hidden", "true");
+      ring.style.left = p.x.toFixed(1) + "px"; ring.style.top = p.y.toFixed(1) + "px";
+      map.appendChild(ring);
+      setTimeout(function () { avatar.classList.remove("is-arrived"); if (ring.parentNode) ring.parentNode.removeChild(ring); }, 900);
+    };
+    avatar.style.setProperty("transition", "none");
+    put(L0);
+    var wk = avatar.querySelector(".wwalker");             // baja la tira ahora: hay ~0.5 s antes de echar a andar
+    if (wk && wk.getAttribute("data-pel") && !wk.style.backgroundImage)
+      wk.style.backgroundImage = "url(assets/images/mascot/walk/" + wk.getAttribute("data-pel") + "_walk.webp)";
+    /* primero se ve al gato donde estaba; luego echa a andar */
+    requestAnimationFrame(function () {
+      var r = avatar.getBoundingClientRect(), vh = window.innerHeight || 700;
+      if (r.top < vh * 0.15 || r.bottom > vh * 0.85) window.scrollBy(0, r.top + r.height / 2 - vh * 0.45);
+    });
+    timer = setTimeout(function () {
+      avatar.classList.add("is-walking");
+      map.classList.add("is-catwalk");               // apaga un poco los letreros para que el gato no se pierda
+      raf = requestAnimationFrame(frame);
+    }, WAIT);
+  }
   function paintTrail() {
     var map = byId("wmap"); if (!map) return;
     var svg = map.querySelector(".wtrail");
@@ -918,6 +1021,9 @@
     function pctAt(idx) { idx = Math.max(0, Math.min(lens.length - 1, idx)); return (lens[idx] / total) * 100; }
 
     var cur = parseInt(map.getAttribute("data-cur"), 10); if (isNaN(cur)) cur = 0;
+    /* el gato sentado se pone del lado con más espacio (lejos del borde) */
+    var cp = pts[Math.max(0, Math.min(pts.length - 1, cur))];
+    if (cp) avatar.setAttribute("data-side", cp[0] > W * 0.55 ? "l" : "r");
     var prev = parseInt(map.getAttribute("data-prev"), 10);
     /* trecho ANDADO en oro macizo: mismo "d" que el resto, pero el trazo se
        corta con dasharray a la longitud de arco del nodo actual. Antes la veta
@@ -933,9 +1039,12 @@
     var canOffset = !!(window.CSS && CSS.supports && CSS.supports("offset-path", 'path("M0 0")'));
     var animate = !isNaN(prev) && prev !== cur && !reduceMotion();
 
+    if (avatar._walkStop) avatar._walkStop();          // re-medida a media caminata: llega de golpe
     if (canOffset) {
       avatar.style.setProperty("offset-path", 'path("' + d + '")');
-      if (animate) {
+      if (animate && line.getPointAtLength) {
+        walkAvatar(map, avatar, line, lens, prev, cur);
+      } else if (animate) {
         avatar.style.setProperty("transition", "none");
         avatar.style.setProperty("offset-distance", pctAt(prev) + "%");
         void avatar.offsetWidth;
@@ -1374,7 +1483,7 @@
       + (px ? '<canvas class="wpx-road" aria-hidden="true"></canvas>' : '')
       + '<div class="wavatar' + (pj.animal ? ' has-pelaje' : '') + '" data-pelaje="' + pj.pelaje + '" aria-hidden="true">'
       + '<img class="wcat" src="' + pj.src + '" alt="" decoding="async">'
-      + '<span class="wacc">' + pj.svg + '</span><span class="wfx" aria-hidden="true"></span></div>'
+      + '<span class="wacc">' + pj.svg + '</span><span class="wfx" aria-hidden="true"></span>' + walkerHtml(pj.pelaje) + sitterHtml(pj.pelaje) + '</div>'
       + ambLayer(t.mapN || 3, true) + startPennant + parts
       + '</div></div></div>';
     /* el botón vive FUERA de .wmap: no lleva data-stop y no entra en la medición */
@@ -2196,6 +2305,8 @@
      Fuentes e imágenes que llegan después mueven el layout; se re-centra
      cuando terminan, salvo que el alumno ya se haya movido por su cuenta. */
   function landOnCurrent() {
+    var cat = document.querySelector("#wmap .wavatar");
+    if (cat && cat._walkStop) return;                 // el gato va caminando: su cámara manda
     if (!jumpToCurrent(false)) return;
     var moved = false, evs = ["wheel", "touchstart", "keydown", "mousedown"];
     var stop = function () { moved = true; evs.forEach(function (e) { window.removeEventListener(e, stop, true); }); };
