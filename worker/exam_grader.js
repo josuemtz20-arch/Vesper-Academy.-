@@ -26,6 +26,9 @@
  *           Firestore (exam_results, gradedBy "worker") con la cuenta de
  *           servicio, SOLO si el idToken es de la misma cuenta que abrió el
  *           intento. Las reglas no aceptan esas notas desde el navegador.
+ *           Es IDEMPOTENTE (2026-11-25): si guardar falla (save_failed), repetir
+ *           el mismo finish vuelve a intentarlo, y el documento lleva un nombre
+ *           fijo por intento, así que nunca queda dos veces.
  *
  * La calificación replica EXACTAMENTE la de leccion_app.js (norm(), índices
  * originales de las opciones, orden de palabras). Si cambias una, cambia la
@@ -145,13 +148,29 @@ export class ExamAttempt extends DurableObject {
     return { ok: ok, first: true };
   }
   async state() { return (await this.ctx.storage.get("a")) || null; }
-  async close(result) {
+  /* "cerrado" y "guardado" son cosas distintas: `save` dice si la nota falta
+     por llegar a Firestore ("pending"), ya llegó ("done") o no se va a guardar
+     ("none"). Un cierre sin token queda en "none" para siempre: si no, el alumno
+     podría ver su nota primero y decidir después si la manda.
+     `docId` es el nombre del documento en exam_results. Nunca sale al
+     navegador: las reglas dejan al alumno crear documentos, y si lo conociera
+     podría ocuparlo antes y tapar su nota. */
+  async close(result, wantsSave) {
     const a = await this.ctx.storage.get("a");
     if (!a) return null;
-    if (a.result) return { first: false, result: a.result };   // segundo finish: misma nota, sin reescribir
+    if (a.result) return Object.assign({}, a, { first: false });   // segundo finish: misma nota, sin recalcular
     a.result = result;
+    a.save = wantsSave ? "pending" : "none";
+    a.docId = randomId();
+    a.closedAt = new Date().toISOString();
     await this.ctx.storage.put("a", a);
-    return { first: true, result: result };
+    return Object.assign({}, a, { first: true });
+  }
+  async markSave(state) {
+    const a = await this.ctx.storage.get("a");
+    if (!a || a.save !== "pending") return;
+    a.save = state;
+    await this.ctx.storage.put("a", a);
   }
   async alarm() { await this.ctx.storage.deleteAll(); }
 }
@@ -248,8 +267,10 @@ export async function saAccessToken(env) {
 
 export const fsBase = () => "https://firestore.googleapis.com/v1/projects/" + PROJECT_ID + "/databases/" + FS_DB + "/documents";
 
-/* ¿quién es? Identity Toolkit valida el idToken (firma, caducidad, proyecto). */
-export async function lookupUser(env, idToken) {
+/* ¿quién es? Identity Toolkit valida el idToken (firma, caducidad, proyecto).
+   Con `strict`, una caída de Identity Toolkit (429/5xx) lanza error en vez de
+   devolver null, para no confundirla con un token malo. */
+export async function lookupUser(env, idToken, strict) {
   /* tokens "dev:" solo en local: con cuenta de servicio real (producción) se
      ignoran aunque alguien deje EXAM_DEV=1 puesto por error */
   if (env.EXAM_DEV === "1" && !env.FIREBASE_SA && typeof idToken === "string" && idToken.indexOf("dev:") === 0) {
@@ -260,6 +281,7 @@ export async function lookupUser(env, idToken) {
     method: "POST", headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ idToken: idToken })
   });
+  if (strict && (r.status === 429 || r.status >= 500)) throw new Error("lookup " + r.status);
   if (!r.ok) return null;
   const u = ((await r.json()).users || [])[0];
   if (!u || !u.localId) return null;
@@ -315,7 +337,7 @@ function toFsDoc(rec) {
   return { fields: fields };
 }
 
-async function saveResult(env, user, alias, res) {
+async function saveResult(env, user, alias, res, docId, ts) {
   if (!user || !user.verified || !user.email) return { saved: false, why: "no_session" };
   /* en local (EXAM_DEV=1) no se escribe: sin cuenta de servicio, o con
      EXAM_DRY_WRITE=1 (entonces sí pide el token y lee students/, para probar
@@ -326,16 +348,38 @@ async function saveResult(env, user, alias, res) {
   let token = null, who = { sid: "", group: "" };
   if (hasSa) { token = await saAccessToken(env); who = await studentIdentity(token, user.email); }
   const rec = Object.assign({}, res, {
-    studentUid: user.uid, alias: alias, sid: who.sid, group: who.group, clientTs: new Date().toISOString()
+    studentUid: user.uid, alias: alias, sid: who.sid, group: who.group,
+    clientTs: ts   /* la hora del cierre, no la del reintento */
   });
   const doc = toFsDoc(rec);
   if (dry) return { saved: false, why: "dry_run", doc: doc, saChecked: hasSa };
-  const r = await fetch(fsBase() + "/exam_results", {
+  const r = await fetch(fsBase() + "/exam_results?documentId=" + encodeURIComponent(docId), {
     method: "POST", headers: { Authorization: "Bearer " + token, "Content-Type": "application/json" },
     body: JSON.stringify(doc)
   });
-  if (!r.ok) throw new Error("exam_results " + r.status + " " + (await r.text()).slice(0, 200));
-  return { saved: true };
+  if (r.ok) return { saved: true };
+  const text = await r.text();
+  /* ya estaba: un intento anterior sí llegó aunque no lo supimos. Se mira el
+     texto porque Firestore también usa 409 para ABORTED, que sí es un fallo */
+  if (r.status === 409 && text.indexOf("ALREADY_EXISTS") >= 0) return { saved: true };
+  throw new Error("exam_results " + r.status + " " + text.slice(0, 200));
+}
+
+/* guarda la nota de un intento ya cerrado que sigue "pending". `first` = es el
+   cierre original: solo ahí un token ajeno o sin verificar descarta la nota. */
+async function saveAttempt(env, stub, att, body, first) {
+  try {
+    const user = await lookupUser(env, body.idToken, true);
+    const out = (!user || user.uid !== att.uid)
+      ? { saved: false, why: "not_owner" }
+      : await saveResult(env, user, cleanAlias(body.alias), att.result, att.docId, att.closedAt);
+    if (out.saved) await stub.markSave("done");
+    else if (first && (out.why === "not_owner" || out.why === "no_session")) await stub.markSave("none");
+    return out;
+  } catch (e) {
+    console.error("exam save:", e && e.message);
+    return { saved: false, why: "save_failed" };
+  }
 }
 
 /* ---------- endpoints ---------- */
@@ -416,7 +460,7 @@ async function finish(env, body) {
   const at = parseAttempt(body.attemptId);
   if (!at) return [400, { error: "Intento inválido." }];
   const stub = attemptStub(env, at.id);
-  const a = await stub.state();
+  let a = await stub.state();
   if (!a) return [404, { error: "El examen caducó.", code: "expired" }];
   const bank = bankOf(at.kind, at.level);
   let res = a.result;
@@ -442,26 +486,23 @@ async function finish(env, body) {
       })
     };
     if (at.kind === "exam") res.bySkill = skillSummary(bank, a.ids, a.answered);
-    /* el DO decide quién llegó primero (dos finish a la vez): solo ese guarda */
-    const closed = await stub.close(res);
+    /* el DO decide quién llegó primero (dos finish a la vez): vale la nota
+       del primero */
+    const closed = await stub.close(res, !!(body.idToken && a.uid));
     if (!closed) return [404, { error: "El examen caducó.", code: "expired" }];
-    if (!closed.first) return [200, Object.assign(publicResult(closed.result), { saved: false, why: "already_finished" })];
-    /* guardar en Firestore solo la primera vez, si hay sesión */
-    /* y solo si quien cierra es la MISMA cuenta que abrió el intento: un
-       intento abierto sin sesión (o con otra cuenta) no se guarda nunca */
-    let save = { saved: false, why: "no_session" };
-    if (body.idToken) {
-      try {
-        const user = await lookupUser(env, body.idToken);
-        if (!a.uid) save = { saved: false, why: "anonymous_start" };
-        else if (!user || user.uid !== a.uid) save = { saved: false, why: "not_owner" };
-        else save = await saveResult(env, user, cleanAlias(body.alias), res);
-      }
-      catch (e) { console.error("exam save:", e && e.message); save = { saved: false, why: "save_failed" }; }
-    }
-    return [200, Object.assign(publicResult(res), publicSave(res, save))];
+    a = closed;
+    res = closed.result;
   }
-  return [200, Object.assign(publicResult(res), { saved: false, why: "already_finished" })];
+  /* guardar en Firestore solo si quien guarda es la MISMA cuenta que abrió el
+     intento: un intento abierto sin sesión (o con otra cuenta) no se guarda
+     nunca. Un finish repetido solo escribe si la nota sigue pendiente. */
+  let save;
+  if (a.first && !body.idToken) save = { saved: false, why: "no_session" };
+  else if (a.first && !a.uid) save = { saved: false, why: "anonymous_start" };
+  else if (a.save === "done") save = { saved: true };
+  else if (a.save === "pending" && body.idToken) save = await saveAttempt(env, stub, a, body, !!a.first);
+  else save = { saved: false, why: "already_finished" };
+  return [200, Object.assign(publicResult(res), publicSave(res, save))];
 }
 
 /* Resumen por habilidad del examen de nivel: {grammar:{correct,total},…}.

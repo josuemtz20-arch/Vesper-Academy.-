@@ -4554,22 +4554,37 @@
   /* cierra el intento: el Worker calcula la nota y, con sesión, la guarda */
   /* Devuelve la promesa con lo que mandó el Worker. `att` opcional: el examen
      de nivel la reusa para "Reintentar" si el Worker no respondió (un segundo
-     finish del mismo intento repite la nota, no la recalcula). */
+     finish del mismo intento repite la nota, no la recalcula, y nunca la
+     guarda dos veces: por eso también se reintenta solo, en segundo plano). */
   function examFinish(att) {
     if (!att) {
       if (!lesson.serverGraded || !lesson._att) return Promise.reject(new Error("no_attempt"));
       att = lesson._att; lesson._att = null;
     }
-    var R = window.VESPER_RESULTS, tok;
-    try { tok = (R && R.idToken) ? R.idToken() : Promise.resolve(null); } catch (e) { tok = Promise.resolve(null); }
-    var p = Promise.all([att, Promise.resolve(tok).catch(function () { return null; })]).then(function (v) {
-      return examPost("finish", { attemptId: v[0], idToken: v[1] || undefined, alias: (R && R.aliasOf) ? R.aliasOf() : "" });
-    });
+    var R = window.VESPER_RESULTS;
+    function send() {
+      var tok;
+      try { tok = (R && R.idToken) ? R.idToken() : Promise.resolve(null); } catch (e) { tok = Promise.resolve(null); }
+      return Promise.all([att, Promise.resolve(tok).catch(function () { return null; })]).then(function (v) {
+        return examPost("finish", { attemptId: v[0], idToken: v[1] || undefined, alias: (R && R.aliasOf) ? R.aliasOf() : "" });
+      });
+    }
+    var p = send();
+    examRetrySave(p, send, [3000, 12000]);
     p.then(function (j) {
       try { if (window.VESPER_DEBUG_EXAM) console.log("[exam] finish", j); } catch (e) {}
     }, function (e) { try { console.warn("[exam] finish:", e && e.message); } catch (er) {} });
     p.att = att;
     return p;
+  }
+  /* si la nota no quedó guardada (save_failed) o el Worker no contestó, se
+     repite el mismo finish tras cada espera. Un error con `code` (caducó,
+     demasiado rápido) no se reintenta. No toca la pantalla. */
+  function examRetrySave(p, send, waits) {
+    if (!waits.length) return;
+    function again() { setTimeout(function () { examRetrySave(send(), send, waits.slice(1)); }, waits[0]); }
+    p.then(function (j) { if (j && j.why === "save_failed") again(); },
+           function (e) { if (!(e && e.code)) again(); });
   }
   /* copia profunda: revelar claves no debe tocar el banco compartido */
   function examClone(list) { return JSON.parse(JSON.stringify(list)); }
