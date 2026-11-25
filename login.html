@@ -291,11 +291,23 @@
   } catch (e) {}
   if (qs.get("tab") === "register") setTab("register");
 
-  /* destino tras el login: por defecto el material del alumno; solo rutas
-     relativas dentro del sitio */
-  var next = qs.get("next") || "materiales.html";
-  if (!/^[A-Za-z0-9_.-]+\.html(\?[\x20-\x7E]*)?$/.test(next) || next.indexOf("//") !== -1) {
-    next = "materiales.html";
+  /* destino tras el login. Si una página protegida nos mandó aquí (?next=),
+     se vuelve a ella; solo rutas relativas dentro del sitio. Sin ?next= el
+     destino depende del rol (ver landingFor): profesores, coordinación y
+     admin al portal del profesor; alumnos a sus materiales. Antes todos
+     caían en materiales.html y el profesor acababa en un hub o en el otro
+     según el enlace por el que entró. */
+  var next = qs.get("next");
+  if (next && (!/^[A-Za-z0-9_.-]+\.html(\?[\x20-\x7E]*)?$/.test(next) || next.indexOf("//") !== -1)) {
+    next = null;
+  }
+  var TEACHER_HUB = "portal_profesores.html", STUDENT_HUB = "materiales.html";
+  function landingFor() {
+    if (next) return Promise.resolve(next);
+    if (!VesperAuth.teacherAccess) return Promise.resolve(STUDENT_HUB);
+    return VesperAuth.teacherAccess().then(function (st) {
+      return st === "ok" ? TEACHER_HUB : STUDENT_HUB;
+    }, function () { return STUDENT_HUB; });
   }
 
   if (!window.VesperAuth || !VesperAuth.isConfigured) {
@@ -334,7 +346,7 @@
           return;
         }
         return VesperAuth.isApprovedUser(cred.user).then(function (ok) {
-          if (ok) { location.href = next; }
+          if (ok) { return landingFor().then(function (dest) { location.href = dest; }); }
           else {
             show("info", "Sesión correcta, pero tu cuenta aún no ha sido aprobada por el administrador.");
             btn.disabled = false;
