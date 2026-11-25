@@ -171,7 +171,7 @@
 
   <div class="panel">
     <h1>Acceso al campus</h1>
-    <p class="lede">Inicia sesión con tu cuenta de alumno o crea una nueva.</p>
+    <p class="lede">Inicia sesión o crea tu cuenta gratis.</p>
 
     <div class="tabs" role="tablist" aria-label="Acceso o registro">
       <button type="button" class="tab active" id="tab-login" role="tab"
@@ -233,7 +233,7 @@
         </div>
       </div>
       <button class="main" type="submit"><i class="fas fa-user-plus" aria-hidden="true"></i> Crear cuenta</button>
-      <div class="aux">Tras registrarte: verifica tu correo y espera la aprobación del administrador.</div>
+      <div class="aux">Tras registrarte, verifica tu correo y entra: tu cuenta gratuita abre la app de lecciones, la liga y el examen de nivel. Los libros, la biblioteca de audio y la boleta se abren cuando te inscribes.</div>
       <div class="aux">Al crear tu cuenta aceptas el <a href="aviso-de-privacidad.html">aviso de privacidad</a>.</div>
     </form>
 
@@ -301,13 +301,32 @@
   if (next && (!/^[A-Za-z0-9_.-]+\.html(\?[\x20-\x7E]*)?$/.test(next) || next.indexOf("//") !== -1)) {
     next = null;
   }
-  var TEACHER_HUB = "portal_profesores.html", STUDENT_HUB = "materiales.html";
-  function landingFor() {
-    if (next) return Promise.resolve(next);
-    if (!VesperAuth.teacherAccess) return Promise.resolve(STUDENT_HUB);
-    return VesperAuth.teacherAccess().then(function (st) {
-      return st === "ok" ? TEACHER_HUB : STUDENT_HUB;
-    }, function () { return STUDENT_HUB; });
+  /* Nivel gratis (2026-11-24): la cuenta sin inscripción va a la app de
+     lecciones, que es lo que puede usar entera; materiales.html es el hub de
+     libros y audio, que para ella sería una pantalla de «inscríbete». Un
+     ?next= a página gratuita se respeta siempre; uno a página de pago solo
+     si está inscrita (book_placement.html manda next=materiales.html: quien
+     acaba de hacer el examen y crear su cuenta no debe toparse con un muro).
+     Si no se puede saber el nivel, también a la app: es lo que nunca falla. */
+  var TEACHER_HUB = "portal_profesores.html", STUDENT_HUB = "materiales.html", FREE_HUB = "leccion.html";
+  function isFreePage(href) {
+    var file = String(href || "").split("?")[0];
+    return (VesperAuth.config.publicPages || []).indexOf(file) !== -1;
+  }
+  function landingFor(user) {
+    if (next && isFreePage(next)) return Promise.resolve(next);
+    if (next) {
+      return VesperAuth.accessLevel(user).then(function (lv) {
+        return lv === "enrolled" ? next : FREE_HUB;
+      }, function () { return FREE_HUB; });
+    }
+    var teacher = VesperAuth.teacherAccess ? VesperAuth.teacherAccess() : Promise.resolve("denied");
+    return teacher.then(function (st) {
+      if (st === "ok") return TEACHER_HUB;
+      return VesperAuth.accessLevel(user).then(function (lv) {
+        return lv === "enrolled" ? STUDENT_HUB : FREE_HUB;
+      });
+    }).catch(function () { return FREE_HUB; });
   }
 
   if (!window.VesperAuth || !VesperAuth.isConfigured) {
@@ -317,7 +336,8 @@
   }
 
   if (qs.get("verify")) show("info", "Debes verificar tu correo: revisa tu bandeja de entrada (y el spam) y haz clic en el enlace. Después inicia sesión de nuevo.");
-  if (qs.get("pending")) show("info", "Tu cuenta existe pero aún no ha sido aprobada por el administrador. Recibirás acceso cuando te autorice.");
+  /* ?pending=1 ya no lo genera vesper_auth.js; queda para enlaces viejos */
+  if (qs.get("pending")) show("info", "Tu cuenta es gratuita: entra a la app de lecciones sin esperar a nadie. Los libros y la boleta se abren cuando te inscribes.");
 
   var ERRORES = {
     "auth/invalid-credential": "Correo o contraseña incorrectos.",
@@ -345,13 +365,7 @@
           btn.disabled = false;
           return;
         }
-        return VesperAuth.isApprovedUser(cred.user).then(function (ok) {
-          if (ok) { return landingFor().then(function (dest) { location.href = dest; }); }
-          else {
-            show("info", "Sesión correcta, pero tu cuenta aún no ha sido aprobada por el administrador.");
-            btn.disabled = false;
-          }
-        });
+        return landingFor(cred.user).then(function (dest) { location.href = dest; });
       }).catch(function (e) { authError(e); btn.disabled = false; });
     });
 
@@ -367,8 +381,8 @@
       btn.disabled = true;
       auth.createUserWithEmailAndPassword(email, p1).then(function (cred) {
         return cred.user.sendEmailVerification().then(function () {
-          show("ok", "Cuenta creada. Te hemos enviado un correo de verificación — haz clic en el enlace. " +
-                     "Cuando el administrador apruebe tu cuenta tendrás acceso al campus.");
+          show("ok", "Cuenta creada. Te hemos enviado un correo de verificación — haz clic en el enlace " +
+                     "y después inicia sesión: entrarás a la app de lecciones gratis.");
           btn.disabled = false;
         });
       }).catch(function (e) { authError(e); btn.disabled = false; });

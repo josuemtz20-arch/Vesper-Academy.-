@@ -5,13 +5,23 @@
    - Las páginas protegidas cargan este script en su <head>.
    - Si el visitante no tiene sesión iniciada (Firebase Auth),
      se le redirige a login.html.
-   - Registrarse NO da acceso: el correo debe estar AUTORIZADO.
-     La autorización se consulta en Firestore (allowlist en
-     students/ o teachers/) con el idToken del propio usuario —
-     la MISMA fuente de verdad que ya protege manuales y libros.
-     Para dar acceso a alguien basta con añadirlo a esa allowlist
-     (un comando de _scripts/upload_manuals.py): tiene efecto
-     INMEDIATO y ya NO hace falta editar este archivo ni desplegar.
+   - Nivel gratis (2026-11-24, decisión de Josue): quien se registra y
+     verifica su correo entra SOLA, sin aprobación, a las páginas de
+     publicPages (app de lecciones, liga, perfil, tienda, onboarding,
+     examen de nivel). Ver accessLevel():
+       "enrolled" -> en la allowlist de Firestore (students/ o
+                     teachers/) o admin: abre todo;
+       "free"     -> sesión con correo verificado, sin allowlist: en las
+                     páginas de pago ve la pantalla «Tu cuenta es
+                     gratuita… inscríbete» (showEnrollScreen);
+       "none"     -> sin sesión o sin verificar: va a login.html.
+     Inscribir a alguien = añadirlo a la allowlist (un comando de
+     _scripts/upload_manuals.py o school_admin.py): efecto INMEDIATO,
+     sin editar este archivo ni desplegar.
+     chat.html y entrevista.html siguen públicas: el Worker que paga la
+     API no pide token, así que cerrarlas aquí no protegería el gasto (eso
+     se haría en el Worker) y rompería la landing, el atajo de la TWA y
+     el botón del gato en leccion.html.
    - El admin (adminEmail) entra siempre.
    - approvedEmailHashes queda como RESPALDO legado: si Firestore
      no responde se usa esta lista de hashes SHA-256. Puede vaciarse
@@ -115,6 +125,14 @@
       try { localStorage.removeItem(PERSONAL_KEYS[i]); } catch (e) {}
     }
     try { sessionStorage.removeItem("vesper_chat_session"); } catch (e) {}
+    /* la caché de isApprovedUser («sí» y «no», clave vesper_ok|correo) */
+    try {
+      for (var j = sessionStorage.length - 1; j >= 0; j--) {
+        var k = sessionStorage.key(j);
+        if (k && k.indexOf("vesper_ok|") === 0) sessionStorage.removeItem(k);
+      }
+    } catch (e) {}
+    approvalInFlight = {};
   }
 
   var firebaseReady = null;
@@ -239,17 +257,52 @@
       return Promise.resolve(true);
     }
     var cacheKey = "vesper_ok|" + email;
-    try { if (sessionStorage.getItem(cacheKey) === "1") return Promise.resolve(true); } catch (e) {}
+    try {
+      var c = sessionStorage.getItem(cacheKey);
+      if (c === "1") return Promise.resolve(true);
+      /* el «no» también se cachea, 5 min (2026-11-25): una cuenta gratuita
+         hacía 2-4 lecturas 404 por página (puerta + barra). Se guarda solo
+         si Firestore contestó; sin red no se cachea nada. Al inscribirla,
+         entra a más tardar en 5 min o al cerrar e iniciar sesión. */
+      var m = /^0\|(\d+)$/.exec(c || "");
+      if (m && Date.now() - parseInt(m[1], 10) < NO_CACHE_MS) return Promise.resolve(false);
+    } catch (e) {}
+    /* una sola consulta por página aunque la pidan la puerta y vesper_nav.js */
+    if (approvalInFlight[email]) return approvalInFlight[email];
 
-    return isApprovedRemote(user).then(function (ok) {
+    var p = isApprovedRemote(user).then(function (ok) {
       if (ok) {
         try { sessionStorage.setItem(cacheKey, "1"); } catch (e) {}
         return true;
       }
-      return isApproved(email); /* respaldo legado */
+      return isApproved(email).then(function (legacy) { /* respaldo legado */
+        if (!legacy) { try { sessionStorage.setItem(cacheKey, "0|" + Date.now()); } catch (e) {} }
+        return legacy;
+      });
     }).catch(function () {
       return isApproved(email); /* sin red hacia Firestore: usar respaldo */
     });
+    approvalInFlight[email] = p;
+    return p;
+  }
+  var NO_CACHE_MS = 5 * 60 * 1000;
+  var approvalInFlight = {};
+
+  /* Nivel de acceso de una sesión (ver la cabecera):
+       "none"     -> sin usuario o con el correo sin verificar;
+       "enrolled" -> admin, students/{correo} o teachers/{correo};
+       "free"     -> todo lo demás (cuenta gratuita).
+     Sin red hacia Firestore, isApprovedUser cae a la lista legada, así que un
+     inscrito sin conexión puede salir "free": la pantalla de inscripción lo
+     dice («¿Ya te inscribiste?»). Decide solo la PANTALLA. Libros, exámenes,
+     manuales y boletas los protegen además las reglas de Firestore (no
+     cambian con esto). OJO, riesgo conocido y previo: audio_library.html y
+     lesson.html solo las cuida esta interfaz; sus mp3 y datos son archivos
+     estáticos y públicos en git, así que quien tenga la URL los abre igual. */
+  function accessLevel(user) {
+    if (!user || !user.emailVerified) return Promise.resolve("none");
+    return isApprovedUser(user).then(function (ok) { return ok ? "enrolled" : "free"; },
+                                     function () { return "free"; });
   }
 
   function onDomReady(fn) {
@@ -371,6 +424,7 @@
     emailHash: emailHash,
     isApproved: isApproved,
     isApprovedUser: isApprovedUser,
+    accessLevel: accessLevel,
     isTeacher: isTeacher,
     teacherAccess: teacherAccess
   };
@@ -434,6 +488,94 @@
     }
   }
 
+  /* ── Pantalla «Tu cuenta es gratuita» (2026-11-24) ──
+     La ve una cuenta "free" en una página de pago, en vez del antiguo
+     login.html?pending=1 («espera la aprobación»). Tapa la página entera (el
+     body sigue oculto con vsp-gating, así que nada de pago se pinta) y ofrece
+     la app de lecciones, los planes y el WhatsApp que ya usa index.html. En
+     modo app, vesper_app_mode.js oculta solos los enlaces a planes.html y a
+     wa.me (CSS + MutationObserver), sin que haya que pedirlo aquí. */
+  var ENROLL_WHAT = {
+    "libro.html": "este libro",
+    "exam.html": "este examen",
+    "mi_boleta.html": "tu boleta",
+    "materiales.html": "tus materiales de alumno",
+    "audio_library.html": "la biblioteca de audio",
+    "lesson.html": "esta lección de audio"
+  };
+  var WHATSAPP = "https://wa.me/525535699899?text=Hola%2C%20vengo%20de%20vesperacademy.com%20y%20quiero%20informaci%C3%B3n%20sobre%20los%20cursos%20de%20ingl%C3%A9s.";
+
+  function injectEnrollStyles() {
+    if (document.getElementById("vsp-enroll-style")) return;
+    var css = document.createElement("style");
+    css.id = "vsp-enroll-style";
+    css.textContent =
+      "#vsp-enroll{position:fixed;inset:0;z-index:2147483647;visibility:visible!important;overflow-y:auto;" +
+        "display:flex;align-items:center;justify-content:center;padding:24px 16px;" +
+        "background:radial-gradient(700px 380px at 80% -10%,rgba(201,168,76,.18),transparent 60%)," +
+          "linear-gradient(160deg,#1f2342,#14122a 70%);color:#f5f2eb;" +
+        "font-family:'Inter',system-ui,-apple-system,Segoe UI,sans-serif;line-height:1.5}" +
+      "#vsp-enroll .ve-card{width:100%;max-width:420px;text-align:center;padding:30px 24px 24px;" +
+        "border:1px solid rgba(201,168,76,.35);border-radius:20px;background:rgba(20,18,42,.72);" +
+        "box-shadow:0 20px 50px rgba(0,0,0,.35)}" +
+      "#vsp-enroll img{width:112px;height:112px;object-fit:contain;display:block;margin:0 auto 6px}" +
+      "#vsp-enroll .ve-k{margin:0 0 6px;font-size:.72rem;font-weight:700;letter-spacing:.22em;" +
+        "text-transform:uppercase;color:#f3e2ab}" +
+      "#vsp-enroll h1{margin:0 0 8px;font-family:'Fraunces','Inria Serif',Georgia,serif;font-weight:700;" +
+        "font-size:1.6rem;line-height:1.2;color:#fff}" +
+      "#vsp-enroll .ve-d{margin:0 0 20px;font-size:.98rem;color:rgba(245,242,235,.86)}" +
+      "#vsp-enroll .ve-b{display:grid;gap:10px}" +
+      "#vsp-enroll a.ve-go,#vsp-enroll a.ve-alt{display:flex;align-items:center;justify-content:center;" +
+        "min-height:48px;padding:12px 18px;border-radius:12px;font-weight:700;font-size:.95rem;text-decoration:none}" +
+      "#vsp-enroll a.ve-go{background:#C9A84C;color:#1B1B2F}" +
+      "#vsp-enroll a.ve-go:hover,#vsp-enroll a.ve-go:focus-visible{background:#f3e2ab}" +
+      "#vsp-enroll a.ve-alt{border:1px solid rgba(245,242,235,.28);color:#f5f2eb}" +
+      "#vsp-enroll a.ve-alt:hover,#vsp-enroll a.ve-alt:focus-visible{border-color:#C9A84C;color:#f3e2ab}" +
+      "#vsp-enroll a:focus-visible,#vsp-enroll button:focus-visible{outline:2px solid #f3e2ab;outline-offset:2px}" +
+      "#vsp-enroll .ve-f{margin:18px 0 0;font-size:.82rem;color:rgba(245,242,235,.62)}" +
+      "#vsp-enroll .ve-out{background:none;border:0;padding:6px 4px;min-height:44px;font:inherit;" +
+        "color:rgba(245,242,235,.78);text-decoration:underline;text-underline-offset:3px;cursor:pointer}" +
+      "#vsp-enroll .ve-out:hover{color:#f3e2ab}";
+    (document.head || document.documentElement).appendChild(css);
+  }
+
+  function showEnrollScreen(auth) {
+    clearTimeout(failSafe);
+    injectGateStyles();
+    injectEnrollStyles();
+    document.documentElement.classList.add("vsp-gating");
+    if (splashEl && splashEl.parentNode) splashEl.parentNode.removeChild(splashEl);
+    splashEl = null;
+    if (document.getElementById("vsp-enroll")) return;
+    var what = ENROLL_WHAT[page] || "esta sección";
+    var box = document.createElement("div");
+    box.id = "vsp-enroll";
+    box.setAttribute("role", "dialog");
+    box.setAttribute("aria-modal", "true");
+    box.setAttribute("aria-labelledby", "vsp-enroll-t");
+    box.innerHTML =
+      '<div class="ve-card">' +
+        '<img src="assets/images/mascot/vesper_cat_welcome.webp" alt="" width="112" height="112">' +
+        '<p class="ve-k" lang="en">Students only</p>' +
+        '<h1 id="vsp-enroll-t">Tu cuenta es gratuita</h1>' +
+        '<p class="ve-d">Para abrir ' + what + ', inscr&iacute;bete. Mientras, la app de lecciones, ' +
+          'la liga y el examen de nivel son tuyos sin costo.</p>' +
+        '<div class="ve-b">' +
+          '<a class="ve-go" href="leccion.html">Practicar en la app de lecciones</a>' +
+          '<a class="ve-alt" href="planes.html">Ver planes y precios</a>' +
+          '<a class="ve-alt" href="' + WHATSAPP + '" target="_blank" rel="noopener">Escr&iacute;benos por WhatsApp</a>' +
+        '</div>' +
+        '<p class="ve-f">&iquest;Ya te inscribiste? Recarga la p&aacute;gina en unos minutos.<br>' +
+          '<button type="button" class="ve-out">Usar otra cuenta</button></p>' +
+      '</div>';
+    document.documentElement.appendChild(box);
+    box.querySelector(".ve-out").onclick = function () {
+      Promise.resolve(auth && auth.signOut()).then(function () { location.href = CONFIG.loginPage; },
+                                                  function () { location.href = CONFIG.loginPage; });
+    };
+    try { box.querySelector(".ve-go").focus(); } catch (e) {}
+  }
+
   /* ── Puerta de acceso ── */
   if (isLocal || isPublic) return;
 
@@ -447,12 +589,14 @@
       if (!user) { forgetIdentity(); redirectToLogin(); return; }
       if (!user.emailVerified) { redirectToLogin("verify"); return; }
       publishIdentity(user);
-      isApprovedUser(user).then(function (ok) {
-        if (ok) {
+      accessLevel(user).then(function (level) {
+        if (level === "enrolled") {
           reveal();
           addLogoutChip(user.email);
         } else {
-          redirectToLogin("pending");
+          /* cuenta gratuita en una página de pago: ya no se manda a
+             login.html?pending=1, se le explica aquí mismo */
+          showEnrollScreen(auth);
         }
       });
     });
