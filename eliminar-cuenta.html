@@ -15,6 +15,7 @@
      desde la app nunca queda "aprobado", y aun asi tiene que poder borrarse.
      Google Play exige este camino dentro de la app Y una URL web; esta pagina
      es las dos cosas (la app Android la abre a pantalla completa). -->
+<script src="vesper_cuenta.js" data-fija="1"></script>
 <script src="vesper_app_mode.js"></script>
 <script src="vesper_auth.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -72,9 +73,10 @@
     <h2>Qué se borra</h2>
     <ul>
       <li>Tu cuenta de acceso (correo y contraseña).</li>
-      <li>Tu progreso guardado en la nube: racha, XP, lecciones y mundos desbloqueados.</li>
+      <li>Tu progreso guardado en la nube: racha, XP, lecciones, mundos desbloqueados, la Forja, tu repaso de errores, gemas y lo que escribiste en tus libros.</li>
       <li>Tu nombre en la liga semanal (se reemplaza por «—»).</li>
-      <li>Si lo marcas abajo, también el progreso guardado en este dispositivo.</li>
+      <li>El progreso de esta cuenta guardado en este dispositivo.</li>
+      <li>Si lo marcas abajo, también todo lo demás de Vesper en este dispositivo: preferencias, el progreso sin cuenta y el de otras cuentas.</li>
     </ul>
   </section>
 
@@ -89,7 +91,7 @@
     <input type="email" id="d-email" autocomplete="email" required>
     <label for="d-pass">Contraseña</label>
     <input type="password" id="d-pass" autocomplete="current-password" required>
-    <label class="check"><input type="checkbox" id="d-local" checked> Borrar también el progreso guardado en este dispositivo</label>
+    <label class="check"><input type="checkbox" id="d-local" checked> Borrar también todo lo demás de Vesper en este dispositivo</label>
     <label class="check"><input type="checkbox" id="d-sure" required> Entiendo que mi cuenta se elimina para siempre y no se puede recuperar</label>
     <button type="submit" id="d-btn">Eliminar mi cuenta definitivamente</button>
     <div class="msg" id="d-msg" role="status" aria-live="polite"></div>
@@ -150,6 +152,47 @@
     });
   }
 
+  /* Lo que vesper_cuenta.js guarda en la nube debajo de progress/{uid}:
+     datos/{forja|srs|economia} y libros/{id} (respuestas escritas en cada
+     libro). Firestore NO borra subcolecciones al borrar progress/{uid}, así
+     que van una por una y ANTES que el padre. Un 403 aquí significa que la
+     cuenta nunca pudo escribirlas (sin verificar, o reglas aún sin
+     publicar): no hay nada que borrar. */
+  function failData(what) { var err = new Error(what); err.vesperDataError = true; return err; }
+  function deleteDoc(token, path) {
+    return fetch(BASE + "/" + path, {
+      method: "DELETE", headers: { "Authorization": "Bearer " + token }
+    }).then(function (r) {
+      if (r.ok || r.status === 404 || r.status === 403) return;
+      throw failData("delete " + path + " " + r.status);
+    }, function () { throw failData("delete " + path + " network"); });
+  }
+  function listBooks(token, uid) {
+    return fetch(BASE + "/progress/" + encodeURIComponent(uid) + ":runQuery", {
+      method: "POST",
+      headers: { "Authorization": "Bearer " + token, "Content-Type": "application/json" },
+      body: JSON.stringify({ structuredQuery: {
+        from: [{ collectionId: "libros" }],
+        select: { fields: [{ fieldPath: "__name__" }] },
+        limit: 500 } })
+    }).then(function (r) {
+      if (r.status === 403 || r.status === 404) return [];
+      if (!r.ok) throw failData("list libros " + r.status);
+      return r.json().then(function (rows) {
+        return (rows || []).map(function (x) { return x && x.document && x.document.name; })
+          .filter(Boolean).map(function (name) { return name.slice(name.lastIndexOf("/") + 1); });
+      });
+    }, function () { throw failData("list libros network"); });
+  }
+  function deleteCloudExtras(token, uid) {
+    var p = "progress/" + encodeURIComponent(uid);
+    return listBooks(token, uid).then(function (books) {
+      var jobs = ["forja", "srs", "economia"].map(function (g) { return deleteDoc(token, p + "/datos/" + g); });
+      books.forEach(function (b) { jobs.push(deleteDoc(token, p + "/libros/" + b)); });
+      return Promise.all(jobs);
+    });
+  }
+
   /* Las reglas no dejan borrar una entrada de liga (delete: if false) para que
      nadie se quite de la tabla al ir perdiendo; lo que sí podemos es quitar el
      nombre. Se anonimizan la semana actual y la anterior (las que se ven). */
@@ -176,7 +219,10 @@
         var k = localStorage.key(i);
         if (k && k.indexOf("vesper") === 0) drop.push(k);
       }
-      drop.forEach(function (k) { localStorage.removeItem(k); });
+      /* claves crudas: con vesper_cuenta.js, localStorage.removeItem de una
+         clave de alumno apuntaría al registro de la cuenta activa */
+      var C = window.VesperCuenta;
+      drop.forEach(function (k) { if (C) C.raw.remove(k); else localStorage.removeItem(k); });
     } catch (e) {}
   }
 
@@ -195,12 +241,19 @@
       auth.signInWithEmailAndPassword(email, pass).then(function (cred) {
         var user = cred.user;
         return user.getIdToken().then(function (token) {
-          return Promise.all([deleteProgress(token, user.uid), anonymizeLeague(token, user.uid)]);
+          /* primero lo de debajo (datos/, libros/), luego progress/{uid} */
+          return deleteCloudExtras(token, user.uid).then(function () {
+            return Promise.all([deleteProgress(token, user.uid), anonymizeLeague(token, user.uid)]);
+          });
         }).then(function () {
           try { if (window.VA && VA.track) VA.track("account_deleted", {}); } catch (e) {}
-          return user.delete();
+          var uid = user.uid;
+          return user.delete().then(function () { return uid; });
         });
-      }).then(function () {
+      }).then(function (uid) {
+        /* el registro local de ESTA cuenta se va siempre; la casilla borra
+           además todo lo de Vesper en el dispositivo (otras cuentas incluidas) */
+        try { if (window.VesperCuenta) VesperCuenta.olvidar(uid); } catch (e) {}
         if (wipeLocal) clearDevice();
         form.querySelectorAll("input").forEach(function (i) { i.disabled = true; });
         show("ok", "Tu cuenta se eliminó. Puedes seguir usando las lecciones gratis sin cuenta cuando quieras.");

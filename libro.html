@@ -4,6 +4,7 @@
 <!-- CSP: generada por _scripts/apply_csp.py (edita alli, no aqui) -->
 <!-- CSP más amplia a propósito: esta página se reescribe con document.write con HTML guardado en Firestore, que carga Font Awesome/Tailwind/Bootstrap de estos CDN. Se puede acotar cuando se revisen los manuales/libros guardados. -->
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://www.gstatic.com https://apis.google.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://cdn.tailwindcss.com https://challenges.cloudflare.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://maxcdn.bootstrapcdn.com; font-src 'self' data: https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: blob: https:; media-src 'self' data: blob:; connect-src 'self' https://firestore.googleapis.com https://identitytoolkit.googleapis.com https://securetoken.googleapis.com https://www.googleapis.com https://vesper-academy.firebaseapp.com https://patient-feather-4364.josuemtz20.workers.dev https://formsubmit.co https://challenges.cloudflare.com https://www.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com; frame-src 'self' https://vesper-academy.firebaseapp.com https://www.youtube.com https://www.youtube-nocookie.com https://challenges.cloudflare.com; worker-src 'self' blob:; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self' https://formsubmit.co; upgrade-insecure-requests">
+<script src="vesper_cuenta.js"></script>
 <script src="vesper_app_mode.js"></script>
 <script src="vesper_auth.js"></script>
 <script src="vesper_exam_index.js"></script>
@@ -140,7 +141,9 @@ body{margin:0;font-family:var(--va-font-text,Inter,system-ui,sans-serif);display
       .catch(function () { clearTimeout(timer); return null; });
   }
 
+  var bookUid = "";
   function fetchBook(user) {
+    bookUid = user.uid || "";
     var base = "https://firestore.googleapis.com/v1/projects/" +
                VesperAuth.config.firebase.projectId + "/databases/" + DB_ID +
                "/documents/studentbooks/" + id;
@@ -488,11 +491,20 @@ body{margin:0;font-family:var(--va-font-text,Inter,system-ui,sans-serif);display
     /* ?v= lo mantiene _scripts/preflight.py (E): el service worker sirve los
        .js con stale-while-revalidate y, sin esto, la primera apertura tras
        un deploy recibia el script viejo. */
-    chip += '<script src="vesper_book_board.js?v=872a6ddd"><\/script>' +
-      '<script>(function(){function go(){' +
-      'if(window.VesperBookBoard)VesperBookBoard.init({bookId:' +
-        JSON.stringify(id).replace(/</g, "\\u003c") + '});}' +
-      'if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",go);}else{go();}' +
+    /* Las respuestas también viajan a la nube de la cuenta
+       (progress/{uid}/libros/{id}, vesper_cuenta.js): antes de montar el
+       pizarrón se baja la copia de la nube (una vez por sesión), con un tope
+       de 4 s para no dejar el libro sin pizarrón si no hay red. El token ya
+       viaja igual en los libros paginados (window.VESPER_BOOK). */
+    function js(v) { return JSON.stringify(v).replace(/</g, "\\u003c"); }
+    chip += '<script src="vesper_cuenta.js"><\/script>' +
+      '<script src="vesper_book_board.js?v=872a6ddd"><\/script>' +
+      '<script>(function(){var done=false;function go(){if(done)return;done=true;' +
+      'if(window.VesperBookBoard)VesperBookBoard.init({bookId:' + js(id) + '});}' +
+      'function start(){var C=window.VesperCuenta;' +
+      'if(C&&C.nube){C.nube.token(' + js(token || "") + ',' + js(bookUid) + ');setTimeout(go,4000);' +
+      'C.nube.libro(' + js(id) + ').then(go,go);}else{go();}}' +
+      'if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",start);}else{start();}' +
       '})();<\/script>';
 
     /* Enlace profundo a una lección: si la URL trae #anchor (desde el buscador

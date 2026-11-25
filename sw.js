@@ -19,6 +19,7 @@ var CORE = [
   /* Comunes. El Vesper Engine (herramienta del profesor) ya no se precarga
      en el teléfono de cada alumno: se guarda la primera vez que el profesor
      lo abre con red (ver la parte de navegaciones abajo) y desde ahí funciona sin conexión. */
+  "vesper_cuenta.js",          /* registro por cuenta: primer script de cada página */
   "vesper_app_mode.js",
   "vesper_auth.js",
   "vesper_nav.js",

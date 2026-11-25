@@ -308,6 +308,12 @@
   VA.initFirebase().then(function (auth) {
     authInst = auth;
     auth.onAuthStateChanged(function (user) {
+      /* Registro por cuenta (vesper_cuenta.js): si esta página aún está en
+         el registro de otra cuenta (o del invitado), va a recargarse; no se
+         fusiona lo de esa otra cuenta en la nube de este usuario. */
+      if (user && window.VesperCuenta && VesperCuenta.cambiar(user.uid) !== user.uid) {
+        currentUser = null; syncReady = false; return;
+      }
       currentUser = (user && user.emailVerified) ? user : null;
       syncReady = false;
       if (user && user.emailVerified) { setSignedIn(user); doSync(user); }

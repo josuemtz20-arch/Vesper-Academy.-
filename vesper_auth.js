@@ -154,6 +154,10 @@
               return plainSignOut();
             };
           }
+          /* Registro de progreso por cuenta (vesper_cuenta.js): cambia de
+             registro cuando cambia la sesión. Su oyente se registra antes que
+             los de vesper_sync.js y compañía, que reciben la instancia después. */
+          if (window.VesperCuenta && VesperCuenta._conectar) VesperCuenta._conectar(auth, CONFIG.firebase.projectId);
           return auth;
         });
     }

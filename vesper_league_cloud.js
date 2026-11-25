@@ -141,6 +141,8 @@ window.VESPER_LEAGUE_CLOUD = (function () {
   /* PATCH con rebote (~1.2s) para no escribir en cada ejercicio */
   function pushScore(weekId, xp) {
     if (!signedIn() || !weekId) return;
+    /* página aún en el registro de otra cuenta (vesper_cuenta.js): no subir su XP */
+    if (window.VesperCuenta && VesperCuenta.ns() !== currentUser.uid) return;
     clearTimeout(pushTimer);
     var alias = aliasOf();
     pushTimer = setTimeout(function () {

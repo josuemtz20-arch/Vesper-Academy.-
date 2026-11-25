@@ -187,6 +187,7 @@
 !/vesper_mascot.js
 !/vesper_progress.js
 !/vesper_sync.js
+!/vesper_cuenta.js
 
 # Expansion 2026-06-14: appearance "models" (themes + mascot skins),
 # adaptive lessons (onboarding profile + start-of-session warm-up) and

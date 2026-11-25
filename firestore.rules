@@ -306,6 +306,37 @@ service cloud.firestore {
       allow delete: if request.auth != null && request.auth.uid == uid;
     }
 
+    // Lo que antes vivía SOLO en el dispositivo (vesper_cuenta.js, 2026-11-25):
+    //   progress/{uid}/datos/forja | srs | economia   (Forja, repaso de errores,
+    //                                                  gemas/vidas + cosméticos vistos)
+    //   progress/{uid}/libros/{libro}                 (respuestas escritas en el libro)
+    // Forma: { json: string acotado, t: int (ms de la última escritura local) }.
+    // Un string en vez de mapas tipados: el tamaño se acota de un vistazo y
+    // solo el dueño lo lee (no hay nada que comparar entre alumnos). El
+    // cliente sube solo si cambió, con rebote largo (cuota por byte).
+    // Borrado del dueño SIN exigir correo verificado, igual que progress/{uid}:
+    // Firestore no borra subcolecciones con el padre, así que
+    // eliminar-cuenta.html las borra una por una antes.
+    function cuentaDocOk(d, maxLen) {
+      return d.keys().hasOnly(['json', 't'])
+             && d.json is string && d.json.size() <= maxLen
+             && d.t is int && d.t >= 0 && d.t <= 4102444800000;
+    }
+    match /progress/{uid}/datos/{grupo} {
+      allow read: if signedIn() && request.auth.uid == uid;
+      allow create, update: if signedIn() && request.auth.uid == uid
+                    && ((grupo == 'economia' && cuentaDocOk(request.resource.data, 20000))
+                        || (grupo in ['forja', 'srs'] && cuentaDocOk(request.resource.data, 300000)));
+      allow delete: if request.auth != null && request.auth.uid == uid;
+    }
+    match /progress/{uid}/libros/{libro} {
+      allow read: if signedIn() && request.auth.uid == uid;
+      allow create, update: if signedIn() && request.auth.uid == uid
+                    && libro.size() <= 180
+                    && cuentaDocOk(request.resource.data, 250000);
+      allow delete: if request.auth != null && request.auth.uid == uid;
+    }
+
     // Liga semanal: lee cualquier autenticado; escribe SOLO su entrada
     // (vesper_league_cloud.js → leagues/{week}/members/{uid})
     //
