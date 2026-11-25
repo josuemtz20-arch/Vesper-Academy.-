@@ -150,14 +150,26 @@
             var plainSignOut = auth.signOut.bind(auth);
             auth.__vesperSignOut = true;
             auth.signOut = function () {
-              clearPersonalData();
-              return plainSignOut();
+              /* Antes de salir, sube lo que vesper_cuenta.js aún no mandó a
+                 la nube (Forja, repaso, gemas, libro), con un tope de 3 s
+                 para que «Cerrar sesión» nunca se quede colgado sin red. */
+              var C = window.VesperCuenta, pend = Promise.resolve();
+              if (C && C.nube && C.nube.vaciar) {
+                pend = Promise.race([
+                  Promise.resolve(C.nube.vaciar("forzar")).catch(function () {}),
+                  new Promise(function (r) { setTimeout(r, 3000); })
+                ]);
+              }
+              return pend.then(function () {
+                clearPersonalData();
+                return plainSignOut();
+              });
             };
           }
           /* Registro de progreso por cuenta (vesper_cuenta.js): cambia de
              registro cuando cambia la sesión. Su oyente se registra antes que
              los de vesper_sync.js y compañía, que reciben la instancia después. */
-          if (window.VesperCuenta && VesperCuenta._conectar) VesperCuenta._conectar(auth, CONFIG.firebase.projectId);
+          if (window.VesperCuenta && VesperCuenta._conectar) VesperCuenta._conectar(auth, CONFIG.firebase.projectId, PERSONAL_KEYS);
           return auth;
         });
     }
@@ -338,6 +350,8 @@
       d.title = email;
       d.textContent = "Cerrar sesión";
       d.onclick = function () {
+        /* va a login.html: que vesper_cuenta.js no recargue esta página encima */
+        if (window.VesperCuenta && VesperCuenta.saliendo) VesperCuenta.saliendo();
         firebase.auth().signOut().then(function () { location.href = CONFIG.loginPage; });
       };
       document.body.appendChild(d);
@@ -574,6 +588,7 @@
       '</div>';
     document.documentElement.appendChild(box);
     box.querySelector(".ve-out").onclick = function () {
+      if (window.VesperCuenta && VesperCuenta.saliendo) VesperCuenta.saliendo();
       Promise.resolve(auth && auth.signOut()).then(function () { location.href = CONFIG.loginPage; },
                                                   function () { location.href = CONFIG.loginPage; });
     };

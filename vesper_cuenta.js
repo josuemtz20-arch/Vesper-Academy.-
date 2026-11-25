@@ -99,8 +99,13 @@
   function uidValido(u) { return typeof u === "string" && /^[A-Za-z0-9_-]{1,128}$/.test(u); }
   function claveEn(uid, k) { return uid ? PREFIJO + uid + ":" + k : k; }
 
+  var BORRADAS = "vesper_cuenta_borradas";   /* uids eliminados en este dispositivo: nunca revivir su registro */
+  function borrada(uid) {
+    if (!uid) return false;
+    try { return (JSON.parse(rget(BORRADAS) || "[]") || []).indexOf(uid) >= 0; } catch (e) { return false; }
+  }
   var ns = rget(ACTIVA) || "";
-  if (ns && !uidValido(ns)) ns = "";
+  if (ns && (!uidValido(ns) || borrada(ns))) ns = "";
   var tocado = false;          /* ¿la página ya leyó algo del alumno? */
   var congelado = false;       /* recarga pendiente: no se escribe nada del alumno */
   var oyentes = [];
@@ -111,7 +116,7 @@
   };
   SP.setItem = function (k, v) {
     if (this === ls && esAlumno(k)) {
-      if (congelado) return;
+      if (congelado || borrada(ns)) return;
       var real = claveEn(ns, k), antes = rawGet.call(this, real);
       rawSet.call(this, real, v);               /* deja pasar QuotaExceededError, como siempre */
       if (antes !== String(v)) avisar(k);
@@ -121,7 +126,7 @@
   };
   SP.removeItem = function (k) {
     if (this === ls && esAlumno(k)) {
-      if (congelado) return;
+      if (congelado || borrada(ns)) return;
       var real = claveEn(ns, k);
       if (rawGet.call(this, real) === null) return;
       rawRemove.call(this, real);
@@ -152,8 +157,17 @@
 
   /* Invitado -> primera cuenta. La cuenta gana si ya tuviera algo (no debería:
      su espacio nace aquí). */
-  function reclamarInvitado(uid) {
+  /* PENDIENTE DE JOSUE (punto de enganche, una línea): hoy el invitado pasa a
+     la primera cuenta, sea cual sea. Para que solo pase a un alumno con correo
+     verificado y nunca desde páginas de profesor, cambia el return por:
+       return !!(user && user.emailVerified) && !/^(portal_|vesper_engine|manual|access_admin)/.test(PAGINA);
+     Si devuelve false no se marca nada: la siguiente cuenta que sí cumpla se lo lleva. */
+  var PAGINA = (location.pathname.split("/").pop() || "index.html");
+  function puedeReclamar(uid, user) { return true; }
+
+  function reclamarInvitado(uid, user) {
     if (rget(RECLAMO)) return false;
+    if (!puedeReclamar(uid, user)) return false;
     if (!rset(RECLAMO, uid)) return false;
     clavesDe("").forEach(function (c) {
       var v = rget(c.real);
@@ -164,45 +178,106 @@
     return true;
   }
 
+  /* ¿la página ya va a otra? La pone saliendo() justo antes de un
+     location.href (los «Cerrar sesión» de vesper_auth.js), y pagehide /
+     beforeunload como respaldo. En iOS no hay beforeunload: sin la bandera,
+     la recarga podía ganarle a la navegación pedida. */
+  var saliendoFlag = false;
+  function marcarSalida() { saliendoFlag = true; }
+  function enganchar() {
+    try {
+      document.addEventListener("visibilitychange", function () { if (document.visibilityState === "hidden") vaciar("ocultar"); });
+      window.addEventListener("pagehide", function () { saliendoFlag = true; });
+      window.addEventListener("beforeunload", function () { saliendoFlag = true; });
+    } catch (e) {}
+  }
+
   var recargando = false;
+  function avisoRecarga() {
+    function pinta() {
+      if (document.getElementById("vsp-cuenta-aviso")) return;
+      var d = document.createElement("div");
+      d.id = "vsp-cuenta-aviso";
+      d.setAttribute("role", "alert");
+      d.style.cssText = "position:fixed;left:12px;right:12px;bottom:12px;z-index:2147483647;" +
+        "background:#1B1B2F;color:#f5f2eb;border:1px solid #C9A84C;border-radius:12px;padding:12px 14px;" +
+        "font:14px/1.4 Inter,system-ui,sans-serif;box-shadow:0 8px 24px rgba(0,0,0,.35)";
+      var t = document.createElement("span");
+      t.textContent = "Cambiaste de cuenta en este dispositivo. Para no mezclar el progreso, esta página dejó de guardar. ";
+      var b = document.createElement("button");
+      b.type = "button";
+      b.textContent = "Recargar";
+      b.style.cssText = "margin-left:8px;min-height:36px;padding:6px 12px;border:0;border-radius:8px;" +
+        "background:#C9A84C;color:#1B1B2F;font-weight:700;cursor:pointer";
+      b.onclick = function () { location.reload(); };
+      d.appendChild(t); d.appendChild(b);
+      (document.body || document.documentElement).appendChild(d);
+    }
+    if (document.body) pinta(); else document.addEventListener("DOMContentLoaded", pinta);
+  }
   function recargar() {
     if (recargando) return true;
     recargando = true;
-    /* tope anti-bucle: 3 recargas en 20 s y se deja de insistir */
+    /* tope anti-bucle: 3 recargas en 20 s. Al tope sigue congelada (sin
+       escribir nada del alumno) y pide recargar a mano: nunca se cambia en
+       vivo con el estado de otra cuenta en memoria. */
     var ahora = Date.now(), hist = [];
     try { hist = JSON.parse(sessionStorage.getItem("vesper_cuenta_recargas") || "[]") || []; } catch (e) {}
     hist = hist.filter(function (t) { return ahora - t < 20000; });
-    if (hist.length >= 3) { recargando = false; return false; }
+    if (hist.length >= 3) { avisoRecarga(); return false; }
     hist.push(ahora);
     try { sessionStorage.setItem("vesper_cuenta_recargas", JSON.stringify(hist)); } catch (e) {}
-    var saliendo = false;
-    window.addEventListener("beforeunload", function () { saliendo = true; });
-    /* el «Cerrar sesión» de las páginas navega a login.html justo después */
-    setTimeout(function () { if (!saliendo) location.reload(); }, 300);
+    setTimeout(function () { if (!saliendoFlag) location.reload(); }, 300);
     return true;
   }
 
   /* Cambia al registro de `uid` ("" = invitado). Lo llama vesper_auth.js en
      cada onAuthStateChanged; es idempotente. */
-  function cambiar(uid) {
+  var personales = [];          /* PERSONAL_KEYS de vesper_auth.js (las pasa _conectar) */
+  function cambiar(uid, user) {
     uid = uidValido(uid) ? uid : "";
     if (FIJA) return ns;
-    if (uid === ns && uid === (rget(ACTIVA) || "")) return ns;
-    if (uid) reclamarInvitado(uid);
+    var antes = rget(ACTIVA) || "";
+    if (uid === ns && uid === antes) return ns;
+    /* de una cuenta X a otra Y sin pasar por «Cerrar sesión»: perfil, chat y
+       código Pro eran de X. Del invitado a la primera cuenta NO se borran (el
+       perfil del onboarding es de quien acaba de crear la cuenta). */
+    var previa = antes || ns;
+    if (uid && previa && previa !== uid) personales.forEach(function (k) { rdel(k); });
+    if (uid) reclamarInvitado(uid, user);
     if (uid) rset(ACTIVA, uid); else rdel(ACTIVA);
     if ((rget(ACTIVA) || "") !== uid) return ns;   /* almacenamiento roto: no recargar en bucle */
     if (uid === ns) return ns;
     if (!tocado) { ns = uid; return ns; }
     congelado = true;
-    if (!recargar()) { congelado = false; ns = uid; }  /* tope de recargas: cambia en vivo */
+    recargar();
     return ns;
   }
+
+  /* Otra pestaña cambió de cuenta (o borró esta). Lo necesitan sobre todo las
+     páginas sin vesper_auth.js (tienda, configuración, chat, entrevista,
+     portada, app), que si no seguirían en la cuenta con que abrieron. */
+  try {
+    window.addEventListener("storage", function (e) {
+      if (FIJA || congelado) return;
+      if (e.key !== ACTIVA && e.key !== null && e.key !== BORRADAS) return;
+      var nueva = rget(ACTIVA) || "";
+      if (borrada(nueva)) nueva = "";
+      if (nueva === ns && !borrada(ns)) return;
+      if (!tocado) { ns = nueva; return; }
+      congelado = true;
+      recargar();
+    });
+  } catch (e) {}
 
   /* Borra del dispositivo el registro de una cuenta (eliminar-cuenta.html). */
   function olvidar(uid) {
     if (!uidValido(uid)) return 0;
     var lista = clavesDe(uid);
     lista.forEach(function (c) { rdel(c.real); });
+    var b = [];
+    try { b = JSON.parse(rget(BORRADAS) || "[]") || []; } catch (e) {}
+    if (b.indexOf(uid) < 0) { b.push(uid); rset(BORRADAS, JSON.stringify(b.slice(-20))); }
     if (rget(ACTIVA) === uid) rdel(ACTIVA);
     if (ns === uid) { ns = ""; }
     return lista.length;
@@ -213,13 +288,23 @@
      escritura local> }. Un string acotado en vez de mapas tipados: la regla
      mide su tamaño de un vistazo y el dueño es el único que lo lee. */
   var DB = "teachermanuals";
+  /* Cuándo se sube (cuota por byte): al ocultar la página (con un piso de
+     PISO_OCULTAR para que cambiar de pestaña no escriba cada vez), al cerrar
+     sesión (forzado) y, con la página abierta, como mucho cada CADA. Nunca si
+     el contenido no cambió. */
+  var CADA = 30 * 60000, PISO_OCULTAR = 60000;
   var GRUPOS = {
-    forja:    { claves: ["vesper_forja"], max: 300000, cada: 10 * 60000 },
-    srs:      { claves: ["vesper_srs"], max: 300000, cada: 10 * 60000 },
-    economia: { claves: ["vesper_economy", "vesper_cosmetics_seen"], max: 20000, cada: 2 * 60000 }
+    forja:    { claves: ["vesper_forja"], max: 300000 },
+    srs:      { claves: ["vesper_srs"], max: 300000 },
+    economia: { claves: ["vesper_economy", "vesper_cosmetics_seen"], max: 20000 }
   };
-  var LIBRO_PFX = "vesper_book_notes:", LIBRO_MAX = 250000, LIBRO_CADA = 10 * 60000;
-  var REBOTE = 90000;           /* espera tras el último cambio antes de subir */
+  var LIBRO_PFX = "vesper_book_notes:", LIBRO_MAX = 250000;
+  var LIBRO_ID = /^[A-Za-z0-9_-]{1,60}$/;     /* igual que la regla de libros/{libro} */
+  /* Repaso (SRS): cada ítem guarda el ejercicio ENTERO, y también entran los
+     que genera la Forja al vuelo (no están en ningún banco), así que no se
+     puede subir solo una referencia y reconstruirlo en otro dispositivo. A la
+     nube van los SRS_NUBE ítems más urgentes; el dispositivo conserva todos. */
+  var SRS_NUBE = 40;
 
   var nubeAuth = null, tokenFijo = null;   /* tokenFijo: libro.html (document.write) */
   var base = null;
@@ -237,7 +322,7 @@
     if (!m.g) m.g = {};
     return m;
   }
-  function guardarMeta(uid, m) { rset(metaKey(uid), JSON.stringify(m)); }
+  function guardarMeta(uid, m) { if (!congelado && !borrada(uid)) rset(metaKey(uid), JSON.stringify(m)); }
 
   function huella(s) {
     var h = 5381;
@@ -249,7 +334,7 @@
     return GRUPOS[g].claves;
   }
   function maxGrupo(g) { return g.indexOf("libro:") === 0 ? LIBRO_MAX : GRUPOS[g].max; }
-  function cadaGrupo(g) { return g.indexOf("libro:") === 0 ? LIBRO_CADA : GRUPOS[g].cada; }
+  function cadaGrupo(modo) { return modo === "ocultar" ? PISO_OCULTAR : CADA; }
   /* { clave: valorCrudo } del registro local de uid */
   function localDe(uid, g) {
     var o = {};
@@ -269,6 +354,30 @@
     } catch (x) { return JSON.stringify(o); }
   }
 
+  /* lo que viaja a la nube (el repaso, recortado a los más urgentes) */
+  function paraNube(g, o) {
+    if (g !== "srs" || !o.vesper_srs) return o;
+    try {
+      var s = JSON.parse(o.vesper_srs), ids = Object.keys((s && s.items) || {});
+      if (ids.length <= SRS_NUBE) return o;
+      ids.sort(function (a, b) {
+        var A = s.items[a], B = s.items[b];
+        if ((A.box || 0) !== (B.box || 0)) return (A.box || 0) - (B.box || 0);     /* caja baja primero */
+        if ((A.due || "") !== (B.due || "")) return (A.due || "") < (B.due || "") ? -1 : 1;
+        return (B.misses || 0) - (A.misses || 0);
+      });
+      var it = {};
+      ids.slice(0, SRS_NUBE).forEach(function (id) { it[id] = s.items[id]; });
+      var c = {}, r = {}, k;
+      for (k in s) c[k] = s[k];
+      c.items = it;
+      for (k in o) r[k] = o[k];
+      r.vesper_srs = JSON.stringify(c);
+      return r;
+    } catch (e) { return o; }
+  }
+  function huellaDe(g, o) { return huella(normal(g, paraNube(g, o))); }
+
   function url(uid, g) {
     var b = "https://firestore.googleapis.com/v1/projects/" + (base || "vesper-academy") +
             "/databases/" + DB + "/documents/progress/" + encodeURIComponent(uid);
@@ -278,6 +387,7 @@
   function usuario() { return nubeAuth && nubeAuth.currentUser; }
   /* uid con nube: sesión verificada y página en su propio registro */
   function uidNube() {
+    if (FIJA || congelado || borrada(ns)) return "";   /* eliminar-cuenta.html / página por recargar */
     var u = usuario();
     if (u && u.emailVerified && u.uid === ns) return ns;
     if (!u && tokenFijo && tokenFijo.uid === ns) return ns;
@@ -336,12 +446,28 @@
       [].concat(J(a, []) || [], J(b, []) || []).forEach(function (x) { if (!u[x]) { u[x] = 1; out.push(x); } });
       return JSON.stringify(out);
     },
+    /* libro: por hoja, une trazos, notas, textos y figuras (sin repetir los
+       idénticos). Así lo escrito en dos dispositivos no se pierde. */
     libro: function (a, b) {
       a = J(a, {}); b = J(b, {});
       var pa = a.pages || {}, pb = b.pages || {}, pages = {}, k;
-      function n(p) { p = p || {}; return (p.strokes || []).length + (p.notes || []).length + (p.texts || []).length + (p.shapes || []).length; }
+      function une(x, y) {
+        var out = [], vistos = {};
+        (x || []).concat(y || []).forEach(function (e) {
+          var h = JSON.stringify(e);
+          if (!vistos[h]) { vistos[h] = 1; out.push(e); }
+        });
+        return out;
+      }
       for (k in pb) pages[k] = pb[k];
-      for (k in pa) if (!pages[k] || n(pa[k]) >= n(pages[k])) pages[k] = pa[k];
+      for (k in pa) {
+        if (!pages[k]) { pages[k] = pa[k]; continue; }
+        var x = pa[k] || {}, y = pages[k] || {}, z = {}, c;
+        for (c in y) z[c] = y[c];
+        for (c in x) z[c] = x[c];
+        ["strokes", "notes", "texts", "shapes"].forEach(function (c2) { z[c2] = une(x[c2], y[c2]); });
+        pages[k] = z;
+      }
       var r = {}; for (k in b) r[k] = b[k]; for (k in a) r[k] = a[k];
       r.pages = pages;
       return JSON.stringify(r);
@@ -380,18 +506,22 @@
   }
 
   var timers = {}, enVuelo = {};
-  function subir(uid, g, forzar) {
+  /* modo: "forzar" (cerrar sesión, primera bajada) | "ocultar" | nada (periódica) */
+  function subir(uid, g, modo) {
+    if (modo === true) modo = "forzar";
     if (!uid || uid !== uidNube()) return Promise.resolve("sin-nube");
     var m = leerMeta(uid), mg = m.g[g] || {};
     if (!mg.bajado) return Promise.resolve("espera-bajada");   /* nunca subir sin haber fusionado antes */
-    var o = localDe(uid, g), h = huella(normal(g, o));
+    var o = localDe(uid, g), h = huellaDe(g, o);
     if (h === mg.h) return Promise.resolve("igual");
     if (!mg.h && !Object.keys(o).length) return Promise.resolve("vacio");   /* no crear documentos vacíos */
-    var json = JSON.stringify(o);
+    var json = JSON.stringify(paraNube(g, o));
     if (json.length > maxGrupo(g)) return Promise.resolve("grande");   /* se queda solo en el dispositivo */
-    var falta = (mg.s || 0) + cadaGrupo(g) - Date.now();
-    if (!forzar && falta > 0) { programar(uid, g, falta + 500); return Promise.resolve("luego"); }
-    if (enVuelo[g]) return enVuelo[g];
+    var falta = (mg.s || 0) + cadaGrupo(modo) - Date.now();
+    if (modo !== "forzar" && falta > 0) { programar(uid, g, falta + 500); return Promise.resolve("luego"); }
+    /* ya hay una subida en camino: la forzada espera y vuelve a mirar (la
+       que va en camino puede llevar un estado anterior) */
+    if (enVuelo[g]) return modo === "forzar" ? enVuelo[g].then(function () { return subir(uid, g, modo); }) : enVuelo[g];
     var t = mg.t || Date.now();
     enVuelo[g] = token().then(function (tk) {
       return fetch(url(uid, g), {
@@ -410,7 +540,7 @@
     return enVuelo[g];
   }
   function programar(uid, g, ms) {
-    if (timers[g]) return;
+    if (timers[g] || ms > 2147483000) return;
     timers[g] = setTimeout(function () { timers[g] = null; subir(uid, g); }, ms);
   }
 
@@ -421,35 +551,50 @@
     var m = leerMeta(uidAct); m.g[g] = m.g[g] || {};
     m.g[g].t = Date.now();
     guardarMeta(uidAct, m);
-    if (uidAct === uidNube()) programar(uidAct, g, REBOTE);
+    if (uidAct === uidNube()) subir(uidAct, g);     /* periódica: sube o programa para dentro de <= CADA */
   });
 
   /* Reconciliar un grupo con la nube:
      - primera vez de esta cuenta en el dispositivo: fusión (unión);
      - después: gana lo más reciente (t). */
-  function reconciliar(uid, g, primera) {
+  function reconciliar(uid, g, opts) {
+    opts = opts || {};
     return bajar(uid, g).then(function (res) {
+      if (uid !== uidNube()) return "sin-nube";
       var m = leerMeta(uid); m.g[g] = m.g[g] || {};
+      /* el libro ya montó su pizarrón con lo local: la copia que llega tarde
+         no se aplica en silencio. Queda sin «bajado» (nada sube, así que la
+         nube no se pisa con lo viejo) y la próxima apertura fusiona. */
+      if (opts.tarde && opts.tarde()) {
+        m.g[g].bajado = 0; guardarMeta(uid, m);
+        return "tarde";
+      }
+      /* «primera» se lee DESPUÉS del fetch: otra pestaña pudo fusionar
+         mientras tanto, y fusionar dos veces sumaría las gemas dos veces */
+      var primera = !m.g[g].bajado;
       if (res.estado === 404) {
-        m.g[g].bajado = 1; guardarMeta(uid, m);
+        m.g[g].bajado = 1; if (!m.g[g].s) m.g[g].s = Date.now(); guardarMeta(uid, m);
         return "nube-vacia";
       }
       if (res.estado !== 200) return "http-" + res.estado;
       var local = localDe(uid, g), mg = m.g[g];
-      var hn = huella(normal(g, res.datos));
+      var hn = huellaDe(g, res.datos);
       if (primera) {
         var f = fusionar(g, local, res.datos);
         escribirLocal(uid, g, f);
         mg.h = hn; mg.t = Math.max(mg.t || 0, res.t);
-      } else if (res.t > (mg.t || 0) && hn !== huella(normal(g, local))) {
-        escribirLocal(uid, g, res.datos);          /* otro dispositivo va adelante */
+      } else if (res.t > (mg.t || 0) && hn !== huellaDe(g, local)) {
+        /* otro dispositivo va adelante. El repaso de la nube está recortado:
+           se une (no se reemplaza) para no perder lo que solo vive aquí */
+        escribirLocal(uid, g, g === "srs" ? fusionar(g, local, res.datos) : res.datos);
         mg.h = hn; mg.t = res.t;
       } else if (!mg.h) { mg.h = hn; }
       mg.bajado = 1;
+      if (!mg.s) mg.s = Date.now();     /* la periódica cuenta sus 30 min desde aquí */
       guardarMeta(uid, m);
       return "ok";
     }).then(function (st) {
-      if (st === "ok" || st === "nube-vacia") return subir(uid, g, true).then(function () { return st; });
+      if (st === "ok" || st === "nube-vacia") return subir(uid, g, "forzar").then(function () { return st; });
       return st;
     }, function () { return "sin-red"; });
   }
@@ -467,10 +612,9 @@
       return Promise.all(Object.keys(GRUPOS).map(function (g) { return subir(uid, g); })).then(function () { return "pendientes"; });
     }
     sesionBajada[uid] = true;
-    var m = leerMeta(uid);
-    /* «primera» por grupo: un reintento tras un fallo parcial no vuelve a
-       sumar las gemas de un grupo que ya se fusionó */
-    bajando = Promise.all(Object.keys(GRUPOS).map(function (g) { return reconciliar(uid, g, !(m.g[g] || {}).bajado); }))
+    /* «primera» por grupo (se decide en reconciliar): un reintento tras un
+       fallo parcial no vuelve a sumar las gemas de un grupo ya fusionado */
+    bajando = Promise.all(Object.keys(GRUPOS).map(function (g) { return reconciliar(uid, g); }))
       .then(function (r) {
         var ok = r.every(function (x) { return x === "ok" || x === "nube-vacia"; });
         if (ok) {
@@ -484,39 +628,39 @@
   }
 
   /* El libro: se baja al abrirlo, una vez por sesión del navegador. */
-  function libro(bookId) {
+  /* opts.tarde(): true si el pizarrón ya se montó (libro.html, tope de 4 s) */
+  function libro(bookId, opts) {
     var uid = uidNube();
-    bookId = String(bookId || "").slice(0, 60);
-    if (!uid || !bookId) return Promise.resolve("sin-nube");
+    bookId = String(bookId || "");
+    if (!uid || !LIBRO_ID.test(bookId)) return Promise.resolve("sin-nube");
     var g = "libro:" + bookId;
     var marca = "vesper_nube_libro:" + uid + ":" + bookId;
     try { if (sessionStorage.getItem(marca) === "1") return subir(uid, g); } catch (e) {}   /* ya se bajó: sube lo pendiente */
-    var mg = leerMeta(uid).g[g] || {};
-    return reconciliar(uid, g, !mg.bajado).then(function (st) {
+    return reconciliar(uid, g, opts).then(function (st) {
       if (st === "ok" || st === "nube-vacia") { try { sessionStorage.setItem(marca, "1"); } catch (e) {} }
       return st;
     });
   }
 
-  /* subir lo pendiente al ocultar la página (respeta el mínimo entre subidas:
-     lo que no sube aquí queda marcado y sube en la próxima carga) */
-  function vaciar() {
+  /* subir lo pendiente. "ocultar": al esconder la página (piso de 60 s; lo
+     que no sube queda marcado y sube después); "forzar": al cerrar sesión. */
+  function vaciar(modo) {
+    if (modo === true) modo = "forzar";
     var uid = uidNube();
-    if (!uid) return;
-    var m = leerMeta(uid);
-    for (var g in m.g) { if (timers[g]) { clearTimeout(timers[g]); timers[g] = null; } subir(uid, g); }
-  }
-  function enganchar() {
-    try {
-      document.addEventListener("visibilitychange", function () { if (document.visibilityState === "hidden") vaciar(); });
-    } catch (e) {}
+    if (!uid) return Promise.resolve([]);
+    var m = leerMeta(uid), gs = Object.keys(GRUPOS), g;
+    for (g in m.g) if (gs.indexOf(g) < 0) gs.push(g);
+    return Promise.all(gs.map(function (g) {
+      if (timers[g]) { clearTimeout(timers[g]); timers[g] = null; }
+      return subir(uid, g, modo || "ocultar");
+    }));
   }
   enganchar();
 
   var nube = {
     bajarTodo: bajarTodo,
     libro: libro,
-    subir: function (g, forzar) { return subir(uidNube(), g, forzar); },
+    subir: function (g, modo) { return subir(uidNube(), g, modo); },
     vaciar: vaciar,
     /* libro.html: el documento del libro sustituye a la página (document.write) */
     token: function (tk, uid) { if (tk && uidValido(uid)) tokenFijo = { token: tk, uid: uid }; },
@@ -525,13 +669,14 @@
 
   /* Lo llama vesper_auth.js al crear la instancia de Firebase Auth. */
   var conectado = false;
-  function _conectar(auth, projectId) {
+  function _conectar(auth, projectId, claves) {
     if (projectId) base = projectId;
+    if (claves && claves.length) personales = claves.slice();
     if (conectado || !auth) return;
     conectado = true;
     nubeAuth = auth;
     auth.onAuthStateChanged(function (user) {
-      cambiar(user ? user.uid : "");
+      cambiar(user ? user.uid : "", user);
       if (user && user.emailVerified && user.uid === ns) bajarTodo();
     });
   }
@@ -541,6 +686,8 @@
     activa: function () { return rget(ACTIVA) || ""; },
     reclamadoPor: function () { return rget(RECLAMO) || ""; },
     recargando: function () { return congelado; },
+    saliendo: marcarSalida,
+    borrada: borrada,
     esAlumno: esAlumno,
     cambiar: cambiar,
     olvidar: olvidar,

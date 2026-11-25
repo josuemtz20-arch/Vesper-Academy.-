@@ -217,7 +217,9 @@
       var drop = [];
       for (var i = 0; i < localStorage.length; i++) {
         var k = localStorage.key(i);
-        if (k && k.indexOf("vesper") === 0) drop.push(k);
+        /* vesper_cuenta_borradas se queda: es lo que impide que otra pestaña
+           abierta vuelva a escribir el registro de la cuenta borrada */
+        if (k && k.indexOf("vesper") === 0 && k !== "vesper_cuenta_borradas") drop.push(k);
       }
       /* claves crudas: con vesper_cuenta.js, localStorage.removeItem de una
          clave de alumno apuntaría al registro de la cuenta activa */

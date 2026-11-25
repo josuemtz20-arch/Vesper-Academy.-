@@ -311,7 +311,7 @@
       /* Registro por cuenta (vesper_cuenta.js): si esta página aún está en
          el registro de otra cuenta (o del invitado), va a recargarse; no se
          fusiona lo de esa otra cuenta en la nube de este usuario. */
-      if (user && window.VesperCuenta && VesperCuenta.cambiar(user.uid) !== user.uid) {
+      if (user && window.VesperCuenta && VesperCuenta.cambiar(user.uid, user) !== user.uid) {
         currentUser = null; syncReady = false; return;
       }
       currentUser = (user && user.emailVerified) ? user : null;

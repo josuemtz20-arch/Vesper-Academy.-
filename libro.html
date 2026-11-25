@@ -494,7 +494,9 @@ body{margin:0;font-family:var(--va-font-text,Inter,system-ui,sans-serif);display
     /* Las respuestas también viajan a la nube de la cuenta
        (progress/{uid}/libros/{id}, vesper_cuenta.js): antes de montar el
        pizarrón se baja la copia de la nube (una vez por sesión), con un tope
-       de 4 s para no dejar el libro sin pizarrón si no hay red. El token ya
+       de 4 s para no dejar el libro sin pizarrón si no hay red. Si la copia
+       llega después de montarlo (tarde: done), no se aplica ni se sube nada
+       de este libro hasta la próxima apertura, que fusiona. El token ya
        viaja igual en los libros paginados (window.VESPER_BOOK). */
     function js(v) { return JSON.stringify(v).replace(/</g, "\\u003c"); }
     chip += '<script src="vesper_cuenta.js"><\/script>' +
@@ -503,7 +505,7 @@ body{margin:0;font-family:var(--va-font-text,Inter,system-ui,sans-serif);display
       'if(window.VesperBookBoard)VesperBookBoard.init({bookId:' + js(id) + '});}' +
       'function start(){var C=window.VesperCuenta;' +
       'if(C&&C.nube){C.nube.token(' + js(token || "") + ',' + js(bookUid) + ');setTimeout(go,4000);' +
-      'C.nube.libro(' + js(id) + ').then(go,go);}else{go();}}' +
+      'C.nube.libro(' + js(id) + ',{tarde:function(){return done;}}).then(go,go);}else{go();}}' +
       'if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",start);}else{start();}' +
       '})();<\/script>';
 

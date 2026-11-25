@@ -317,6 +317,12 @@ service cloud.firestore {
     // Borrado del dueño SIN exigir correo verificado, igual que progress/{uid}:
     // Firestore no borra subcolecciones con el padre, así que
     // eliminar-cuenta.html las borra una por una antes.
+    // Ids de libro: los de studentbooks/ (core_basics_lvl1, cert_prep_b2…).
+    // RIESGO ACEPTADO (tamaño): el dueño puede crear muchos docs libros/{id}
+    // con ids válidos inventados, de hasta 250 000 caracteres cada uno. Solo
+    // él los lee, pero gasta la cuota diaria de escritura de TODA la escuela.
+    // Acotar el número pediría un índice en el doc padre (una escritura más
+    // por guardado). Se acepta y se vigila con el uso diario de Firestore.
     function cuentaDocOk(d, maxLen) {
       return d.keys().hasOnly(['json', 't'])
              && d.json is string && d.json.size() <= maxLen
@@ -332,7 +338,7 @@ service cloud.firestore {
     match /progress/{uid}/libros/{libro} {
       allow read: if signedIn() && request.auth.uid == uid;
       allow create, update: if signedIn() && request.auth.uid == uid
-                    && libro.size() <= 180
+                    && libro.matches('^[A-Za-z0-9_-]{1,60}$')
                     && cuentaDocOk(request.resource.data, 250000);
       allow delete: if request.auth != null && request.auth.uid == uid;
     }
