@@ -900,7 +900,7 @@
   /* El mismo gordito SENTADO junto a la lección donde descansa: respira,
      parpadea y mueve la cola (tira de 24 cuadros, clip de Grok). Se sienta al
      lado del círculo, no encima, para no tapar el botón. [ancho con alto 112, segundos] */
-  var SIT_ART = { classic: [84, 2.79] };
+  var SIT_ART = { classic: [84, 2.79], gray: [103, 2.17], calico: [80, 2.38], lion: [88, 2.83], cosmic: [96, 2.67], flame: [79, 2.04] };
   function sitterHtml(pelaje) {
     var a = SIT_ART[pelaje]; if (!a) return "";
     return '<span class="wsitter" aria-hidden="true" style="background-image:url(\'assets/images/mascot/walk/' + pelaje
