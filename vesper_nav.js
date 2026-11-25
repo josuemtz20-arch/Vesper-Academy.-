@@ -43,7 +43,7 @@
      lea como constelación y no como regla. En los iconos, .h = trama
      fina de grabado; .acc / .acc-line = detalle que se enciende en oro. */
   var TABS = [
-    { id: "inicio",   label: "Home",     es: "Inicio",   href: "materiales.html", dy: 1,
+    { id: "inicio",   label: "Home",     es: "Inicio",   href: "materiales.html", dy: 1, members: true,
       match: ["materiales.html", "libro.html"],
       /* Casita con chimenea; se enciende la luz de la puerta */
       icon: '<path d="M3.5 12 12 5l8.5 7"/><path d="M5.8 10.4V20.5h12.4V10.4"/><path class="acc" d="M10.2 20.5v-4.6a1.8 1.8 0 0 1 3.6 0v4.6z"/>' +
@@ -54,14 +54,14 @@
       icon: '<path d="M12 6.8C9.6 5.3 6.2 5 3 5.8v12.8c3.2-.8 6.6-.5 9 1 2.4-1.5 5.8-1.8 9-1V5.8c-3.2-.8-6.6-.5-9 1z"/><path d="M12 6.8v12.8"/>' +
             '<path class="h" d="M5 9c1.9-.3 3.6-.1 5 .5M5 11.6c1.9-.3 3.6-.1 5 .5M5 14.2c1.9-.3 3.6-.1 5 .5"/>' +
             '<path class="h" d="M14 12.1c1.4-.6 3.1-.8 5-.5M14 14.7c1.4-.6 3.1-.8 5-.5"/><path class="acc" d="M16.6 5.4v6.2l1.1-.9 1.1.9V5.3z"/>' },
-    { id: "audio",    label: "Listen",   es: "Audio",    href: "audio_library.html", dy: 2,
+    { id: "audio",    label: "Listen",   es: "Audio",    href: "audio_library.html", dy: 2, members: true,
       match: ["audio_library.html"],
       /* Audífonos de profesor de Vesper; se enciende el micrófono */
       icon: '<path d="M5 13.4V12a7 7 0 0 1 14 0v1.4"/><path class="h" d="M6.7 12a5.3 5.3 0 0 1 10.6 0"/>' +
             '<path d="M3.7 13.2h2.5v6H3.7a.9.9 0 0 1-.9-.9v-4.2a.9.9 0 0 1 .9-.9z"/><path d="M20.3 13.2h-2.5v6h2.5a.9.9 0 0 0 .9-.9v-4.2a.9.9 0 0 0-.9-.9z"/>' +
             '<path class="h" d="M4.4 14.5v3.4M19.6 14.5v3.4"/><path d="M6.2 18.2c.9 1.8 2.9 2.5 5.3 2.4"/>' +
             '<ellipse class="acc" cx="12.9" cy="20.5" rx="1.4" ry="1.05"/>' },
-    { id: "boleta",   label: "Grades",   es: "Boleta",   href: "mi_boleta.html", dy: -1,
+    { id: "boleta",   label: "Grades",   es: "Boleta",   href: "mi_boleta.html", dy: -1, members: true,
       match: ["mi_boleta.html"],
       /* Hoja con sello de lacre; se enciende el sello */
       icon: '<path d="M6 3.5h8.8l3.7 3.7v13.3H6z"/><path d="M14.8 3.5v3.7h3.7"/>' +
@@ -99,26 +99,90 @@
     return null;
   }
 
-  /* «Boleta» solo tiene sentido con sesión: mi_boleta.html está tras el login
-     y quien practica sin cuenta no tiene boleta (antes la pestaña le llevaba a
-     un login sin explicarle nada). En las páginas públicas sale oculta y
-     aparece cuando Firebase confirma una sesión con correo verificado; en las
-     del portal, que ya exigen sesión, se ve desde el principio. */
-  function boletaNeedsSession() {
+  /* Pestañas de alumno inscrito (members:true): Home, Listen y Grades.
+     Quien entra gratis (sin cuenta, sin verificar o sin estar en la allowlist
+     de students/) las ve con candado; al tocarlas sale un aviso en vez de
+     rebotar a un login sin explicación. Learn y Profile quedan abiertos.
+     Es cosmético: el acceso real lo siguen cuidando vesper_auth.js (redirige
+     en esas páginas) y las reglas de Firestore.
+     · En las páginas protegidas ya hay sesión aprobada: nunca hay candado.
+     · En las públicas se arranca con lo último que se supo (MEMBER_KEY, para
+       que a un alumno no le parpadeen candados) y se confirma con Firebase.
+     · chat.html no carga vesper_auth.js: ahí solo vale lo último que se supo. */
+  var MEMBER_KEY = "vesper_student_ok";
+  function isPublicPage() {
     var A = window.VesperAuth;
     if (!A || !A.config) return true;
     return (A.config.publicPages || []).indexOf(page) !== -1;
   }
-  function revealBoletaWithSession(link, onChange) {
+  function memberCached() {
+    try { return localStorage.getItem(MEMBER_KEY) === "1"; } catch (e) { return false; }
+  }
+  function rememberMember(ok) {
+    try { if (ok) localStorage.setItem(MEMBER_KEY, "1"); else localStorage.removeItem(MEMBER_KEY); } catch (e) {}
+  }
+  function watchMembership(onChange) {
     var A = window.VesperAuth;
-    if (!link || !A || !A.isConfigured || !A.initFirebase) return;
+    if (!A || !A.isConfigured || !A.initFirebase || !A.isApprovedUser) return;
     A.initFirebase().then(function (auth) {
       auth.onAuthStateChanged(function (u) {
-        var hide = !(u && u.emailVerified);
-        if (link.hidden !== hide) { link.hidden = hide; onChange(); }
+        if (!u || !u.emailVerified) { rememberMember(false); onChange(false); return; }
+        A.isApprovedUser(u).then(function (ok) { rememberMember(!!ok); onChange(!!ok); },
+                                 function () {});
       });
     }).catch(function () {});
   }
+
+  var LOCK = '<svg class="tb-lock" viewBox="0 0 12 12" aria-hidden="true"><rect x="2.2" y="5.2" width="7.6" height="5.6" rx="1.3"/>' +
+    '<path d="M3.9 5.2V3.9a2.1 2.1 0 0 1 4.2 0v1.3"/></svg>';
+
+  function setLocked(nav, locked) {
+    var links = nav.querySelectorAll("a[data-members]");
+    for (var i = 0; i < links.length; i++) {
+      var a = links[i], t = a.getAttribute("data-label"), es = a.getAttribute("data-es");
+      a.classList.toggle("locked", locked);
+      if (locked) {
+        a.setAttribute("aria-disabled", "true");
+        a.setAttribute("aria-label", t + " · " + es + " (solo alumnos inscritos)");
+        a.title = es + " · solo alumnos inscritos";
+      } else {
+        a.removeAttribute("aria-disabled");
+        a.setAttribute("aria-label", t + " · " + es);
+        a.title = es;
+      }
+    }
+    if (!locked) closeLockNote();
+  }
+
+  /* El aviso al tocar una pestaña con candado. */
+  var noteEl = null;
+  function closeLockNote() {
+    if (noteEl) { noteEl.remove(); noteEl = null; }
+  }
+  function openLockNote(a) {
+    closeLockNote();
+    var es = a.getAttribute("data-es");
+    noteEl = document.createElement("div");
+    noteEl.id = "vsp-lock-note";
+    noteEl.setAttribute("role", "dialog");
+    noteEl.setAttribute("aria-labelledby", "vsp-lock-title");
+    noteEl.innerHTML =
+      '<button type="button" class="ln-x" aria-label="Cerrar">&times;</button>' +
+      '<p class="ln-k" lang="en">Students only</p>' +
+      '<p class="ln-t" id="vsp-lock-title">' + es + ' es para alumnos inscritos</p>' +
+      '<p class="ln-d">Inicio, Audio y Boleta se abren cuando te inscribes en Vesper Academy. ' +
+        'Mientras, puedes practicar en Learn y ver tu Perfil.</p>' +
+      '<div class="ln-b"><a class="ln-in" href="login.html">Ya soy alumno · Entrar</a>' +
+        '<a class="ln-more" href="index.html">Conocer los cursos</a></div>';
+    document.body.appendChild(noteEl);
+    noteEl.querySelector(".ln-x").onclick = closeLockNote;
+    noteEl.querySelector(".ln-in").focus();
+  }
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeLockNote(); });
+  document.addEventListener("click", function (e) {
+    if (noteEl && !noteEl.contains(e.target) &&
+        !(e.target.closest && e.target.closest("#vsp-tabbar a.locked"))) closeLockNote();
+  });
 
   /* La etiqueta activa va en Caveat (la letra de Vesper). Varias páginas no
      la cargan; se pide solo con las letras de las cinco etiquetas. */
@@ -228,6 +292,28 @@
           "box-shadow:0 14px 34px color-mix(in srgb,#0a081e 30%,transparent)}",
         ".vchat-nudge,.vt-fab,#install-btn,.vsp-logout-chip{bottom:116px!important}",
         "#vsp-nav-spacer{height:122px}}",
+      /* Pestañas con candado (visitante gratis): apagadas, con un candadito dorado. */
+      "#vsp-tabbar .tb-lock{position:absolute;right:-7px;bottom:-4px;width:13px;height:13px;padding:1.5px;border-radius:50%;",
+        "background:var(--tb-c1);fill:none;stroke:var(--tb-gold);stroke-width:1.3;stroke-linecap:round;display:none}",
+      "#vsp-tabbar a.locked .tb-lock{display:block}",
+      "#vsp-tabbar a.locked .tb-ico svg.ic{opacity:.38}",
+      "#vsp-tabbar a.locked .tb-lbl{opacity:.55}",
+      "#vsp-tabbar a.locked:hover{color:var(--tb-fg)}",
+      /* Aviso al tocar una pestaña con candado: tarjeta sobre la barra. */
+      "#vsp-lock-note{position:fixed;left:12px;right:12px;bottom:calc(84px + env(safe-area-inset-bottom));z-index:9998;",
+        "max-width:420px;margin:0 auto;padding:16px 18px;border-radius:16px;box-sizing:border-box;",
+        "background:#1f2342;color:#EDE7D6;border:1px solid rgba(201,168,76,.45);box-shadow:0 18px 40px rgba(10,8,30,.4);",
+        "font-family:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif}",
+      "#vsp-lock-note .ln-k{margin:0;font-family:Caveat,'Segoe Print',cursive;font-size:1.2rem;font-weight:700;color:#C9A84C}",
+      "#vsp-lock-note .ln-t{margin:2px 0 6px;padding-right:24px;font-size:1rem;font-weight:700;line-height:1.3}",
+      "#vsp-lock-note .ln-d{margin:0 0 12px;font-size:.86rem;line-height:1.45;color:#c9c5dc}",
+      "#vsp-lock-note .ln-b{display:flex;flex-wrap:wrap;gap:8px}",
+      "#vsp-lock-note .ln-b a{flex:1 1 auto;text-align:center;padding:10px 12px;border-radius:10px;font-size:.86rem;font-weight:600;text-decoration:none}",
+      "#vsp-lock-note .ln-in{background:#C9A84C;color:#14122a}",
+      "#vsp-lock-note .ln-more{border:1px solid rgba(237,231,214,.35);color:#EDE7D6}",
+      "#vsp-lock-note .ln-b a:focus-visible,#vsp-lock-note .ln-x:focus-visible{outline:3px solid #C9A84C;outline-offset:2px}",
+      "#vsp-lock-note .ln-x{position:absolute;top:6px;right:8px;width:32px;height:32px;border:0;background:none;color:#b3b0c9;font-size:1.4rem;cursor:pointer}",
+      "@media(min-width:768px){#vsp-lock-note{bottom:120px}}",
       /* Movimiento reducido: sin deslizar ni agacharse; el gato salta directo. */
       "@media(prefers-reduced-motion:reduce){#vsp-tabbar,#vsp-tabbar *,#vsp-tabbar *::before{transition:none!important}",
         "#vsp-tabbar.vsp-moving .tb-cat .head{transform:none}}",
@@ -307,15 +393,19 @@
     var nav = document.createElement("nav");
     nav.id = "vsp-tabbar";
     nav.setAttribute("aria-label", "Navegación del alumno");
-    var hideBoleta = boletaNeedsSession() && act !== "boleta";
+    /* Candado solo en páginas públicas; la pestaña de la página actual nunca. */
+    var gated = isPublicPage();
+    var startLocked = gated && !memberCached();
     nav.innerHTML = '<svg class="tb-thread" aria-hidden="true"></svg>' + TABS.map(function (t) {
       var on = t.id === act;
       /* La etiqueta va en INGLÉS (es lo que se enseña); el español queda en
          title y aria-label para quien aún no la reconoce. */
       return '<a href="' + t.href + '" data-id="' + t.id + '" title="' + t.es + '" aria-label="' + t.label + ' · ' + t.es + '"' +
         (on ? ' class="on" aria-current="page"' : "") +
-        (t.id === "boleta" ? ' data-tab="boleta"' + (hideBoleta ? " hidden" : "") : "") + '>' +
-        '<span class="tb-ico" style="--dy:' + t.dy + 'px">' + GLINT + '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true">' + t.icon + '</svg></span>' +
+        (t.id === "boleta" ? ' data-tab="boleta"' : "") +
+        (t.members && !on ? ' data-members data-label="' + t.label + '" data-es="' + t.es + '"' : "") + '>' +
+        '<span class="tb-ico" style="--dy:' + t.dy + 'px">' + GLINT + '<svg class="ic" viewBox="0 0 24 24" aria-hidden="true">' + t.icon + '</svg>' +
+        (t.members && !on ? LOCK : "") + '</span>' +
         '<span class="tb-lbl" lang="en">' + t.label + '</span></a>';
     }).join("") + '<span class="tb-cat" aria-hidden="true"><span class="head"></span></span>';
 
@@ -358,7 +448,15 @@
 
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(layout);
     window.addEventListener("resize", layout);
-    if (hideBoleta) revealBoletaWithSession(nav.querySelector('[data-tab="boleta"]'), layout);
+    setLocked(nav, startLocked);
+    /* En las públicas pone/quita candados; en las protegidas solo recuerda. */
+    watchMembership(function (ok) { if (gated) setLocked(nav, !ok); });
+    nav.addEventListener("click", function (e) {
+      var a = e.target.closest && e.target.closest("a.locked");
+      if (!a) return;
+      e.preventDefault();
+      openLockNote(a);
+    });
 
     /* Ocultar la barra al escribir: en móvil, un tab bar fijo pelea con el
        teclado y el compositor (chat) o los ejercicios de escribir.
