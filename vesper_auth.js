@@ -119,7 +119,7 @@
   /* Lo personal que se borra del dispositivo al cerrar sesión: correo y uid
      del perfil, la conversación con la IA y el código Pro. En una tableta
      compartida, el siguiente alumno no lo ve. */
-  var PERSONAL_KEYS = ["vesper_profile", "vesper_chat_history", "vesper_pro_code", "vesper_student_ok"];
+  var PERSONAL_KEYS = ["vesper_profile", "vesper_chat_history", "vesper_pro_code", "vesper_student_ok", "vesper_exam_pending"];
   function clearPersonalData() {
     for (var i = 0; i < PERSONAL_KEYS.length; i++) {
       try { localStorage.removeItem(PERSONAL_KEYS[i]); } catch (e) {}

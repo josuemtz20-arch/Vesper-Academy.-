@@ -255,7 +255,7 @@ service cloud.firestore {
     //    lecciones o contadores ya guardados. El cliente fusiona antes de
     //    guardar (merge = máximo/unión), así que esto no afecta al uso
     //    normal; sí impide que un push sin fusionar borre la nube.
-    //  - nadie lo borra (ningún cliente lo hace).
+    //  - solo el dueño lo borra (eliminar-cuenta.html), ver allow delete.
     // OJO: el progreso lo calcula el navegador; esto acota y protege, pero
     // no puede probar que un logro se ganó jugando (eso pediría servidor).
     // Si vesper_progress.js suma claves a s.stats, agrégalas aquí.
@@ -301,7 +301,9 @@ service cloud.firestore {
       allow update: if signedIn() && request.auth.uid == uid
                     && progressShapeOk(request.resource.data)
                     && progressNoLoss(resource.data, request.resource.data);
-      allow delete: if false;
+      // Borrado solo del dueño, SIN exigir correo verificado: «Eliminar mi
+      // cuenta» (eliminar-cuenta.html) debe poder limpiar aunque nunca verificó.
+      allow delete: if request.auth != null && request.auth.uid == uid;
     }
 
     // Liga semanal: lee cualquier autenticado; escribe SOLO su entrada

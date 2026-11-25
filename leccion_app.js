@@ -4569,6 +4569,13 @@
         return examPost("finish", { attemptId: v[0], idToken: v[1] || undefined, alias: (R && R.aliasOf) ? R.aliasOf() : "" });
       });
     }
+    var R2 = R, send0 = send;
+    send = function () {
+      var q = send0();
+      q.then(function (j) { examPendingSettle(att, j); }, function (e) { examPendingSettle(att, null, e); });
+      return q;
+    };
+    examPendingAdd(att, (R2 && R2.aliasOf) ? R2.aliasOf() : "");
     var p = send();
     examRetrySave(p, send, [3000, 12000]);
     p.then(function (j) {
@@ -4586,6 +4593,89 @@
     p.then(function (j) { if (j && j.why === "save_failed") again(); },
            function (e) { if (!(e && e.code)) again(); });
   }
+  /* Cola de cierres sin confirmar (localStorage, sobrevive a recargar o cerrar
+     la pestaña). Guarda solo lo mínimo: attemptId, uid/correo de quien abrió el
+     intento, alias y hora; nunca el idToken (se pide uno fresco al reintentar).
+     El Worker guarda el intento 24 h y /exam/finish es idempotente. */
+  var EXAM_PENDING_KEY = "vesper_exam_pending", EXAM_PENDING_TTL = 24 * 3600 * 1000;
+  var examPendingDone = {};   // ids ya cerrados en esta carga (evita la carrera Add/Settle)
+  function examPendingRead() {
+    var out = [];
+    try {
+      var l = JSON.parse(localStorage.getItem(EXAM_PENDING_KEY) || "[]");
+      if (Array.isArray(l)) l.forEach(function (x) {
+        if (x && typeof x.id === "string" && x.uid && x.t && Date.now() - x.t < EXAM_PENDING_TTL) out.push(x);
+      });
+    } catch (e) {}
+    return out;
+  }
+  function examPendingWrite(list) {
+    try {
+      if (list.length) localStorage.setItem(EXAM_PENDING_KEY, JSON.stringify(list));
+      else localStorage.removeItem(EXAM_PENDING_KEY);
+    } catch (e) {}
+  }
+  /* uid y correo de la sesión verificada ("" si no hay) */
+  function examWho() {
+    var R = window.VESPER_RESULTS, VA = window.VesperAuth;
+    if (!R || !R.whenReady || !VA || !VA.initFirebase) return Promise.resolve(null);
+    return R.whenReady().then(function (ok) {
+      if (!ok) return null;
+      return VA.initFirebase().then(function (auth) {
+        var u = auth && auth.currentUser;
+        return (u && u.emailVerified && u.uid) ? { uid: u.uid, email: u.email || "" } : null;
+      });
+    }).catch(function () { return null; });
+  }
+  /* se anota al cerrar (sin sesión no hay nada que guardar, no se anota) */
+  function examPendingAdd(att, alias) {
+    Promise.resolve(att).then(function (id) {
+      if (!id) return null;
+      return examWho().then(function (w) {
+        if (!w) return;
+        var list = examPendingRead().filter(function (x) { return x.id !== id; });
+        if (examPendingDone[id]) return;            // ya se cerró mientras se averiguaba la sesión
+        list.push({ id: id, uid: w.uid, alias: alias || "", t: Date.now() });
+        examPendingWrite(list);
+      });
+    }).catch(function () {});
+  }
+  /* una respuesta del Worker (o error) decide si el intento sale de la cola:
+     solo se queda si falló la red/servidor o el Worker dijo save_failed; guardada,
+     sin sesión, ya cerrada o caducada ("expired") ya no hay nada que reintentar */
+  function examPendingSettle(att, j, err) {
+    /* errores pasajeros con code (unavailable, rate_limited) también se quedan;
+       solo "expired" es definitivo */
+    var keep = err ? err.code !== "expired" : !!(j && j.why === "save_failed");
+    if (keep) return;
+    Promise.resolve(att).then(function (id) {
+      if (id) examPendingDone[id] = 1;
+      examPendingWrite(examPendingRead().filter(function (x) { return x.id !== id; }));
+    }).catch(function () {});
+  }
+  var examFlushing = false;
+  /* reintenta la cola con la sesión de la MISMA cuenta; uno a la vez, sin bucle */
+  function examPendingFlush() {
+    if (examFlushing || !examPendingRead().length) return;
+    examFlushing = true;
+    examWho().then(function (w) {
+      var R = window.VESPER_RESULTS;
+      if (!w || !R) return;
+      var mine = examPendingRead().filter(function (x) { return x.uid === w.uid; });
+      return mine.reduce(function (chain, item) {
+        return chain.then(function () {
+          return Promise.resolve(R.idToken()).then(function (tok) {
+            if (!tok) return;
+            return examPost("finish", { attemptId: item.id, idToken: tok, alias: item.alias || "" })
+              .then(function (j) { examPendingSettle(item.id, j); },
+                    function (e) { examPendingSettle(item.id, null, e); });
+          }).catch(function () {});
+        });
+      }, Promise.resolve());
+    }).catch(function () {}).then(function () { examFlushing = false; });
+  }
+  window.addEventListener("online", examPendingFlush);
+  examPendingFlush();
   /* copia profunda: revelar claves no debe tocar el banco compartido */
   function examClone(list) { return JSON.parse(JSON.stringify(list)); }
   /* la tarjeta "Tiempo" del final mide la ronda desde el primer ejercicio */

@@ -557,17 +557,21 @@ export async function handleExam(path, body, env, rate, limitOf, rateRaw) {
     if (bad) return bad;
     let user = null;
     if (body.idToken) { try { user = await lookupUser(env, body.idToken); } catch (e) { user = null; } }
-    const out = await start(env, body, user);
-    if (out[0] !== 200 || body.kind !== "exam") return out;
-    /* examen de nivel: tope diario de intentos nuevos. Con uid verificado,
-       clave solo por uid (sin IP, para que el tope no se reinicie al cambiar
-       de red); si no, solo IP con tope alto (esos intentos ya no se guardan) */
-    const rl2 = user && user.uid
-      ? await (rateRaw || rate)("exam-level-uid:" + user.uid, 0, limitOf("RL_EXAM_LEVEL_START_PER_DAY"))
-      : await rate("exam-level-start", 0, limitOf("RL_EXAM_LEVEL_START_PER_DAY_IP"));
-    /* si excede, el intento ya creado queda huérfano (el cliente nunca recibe su id) y caduca solo */
-    if (!rl2.ok) return [429, { error: "Hoy ya hiciste varios intentos del examen de nivel. Vuelve mañana.", code: "rate_limited", retryAfter: rl2.retryAfter || 3600 }];
-    return out;
+    /* examen de nivel: tope diario de intentos nuevos, ANTES de crear el
+       intento (si no, un rechazo dejaba un ExamAttempt huérfano con su
+       alarma de 24 h). startCheck ya pasó, así que los 400/409/404 no gastan
+       cupo. Con uid verificado, clave solo por uid (sin IP, para que el tope
+       no se reinicie al cambiar de red); si no, solo IP con tope alto (esos
+       intentos ya no se guardan). start() no valida nada que dependa del DO:
+       lo único que puede rechazar después (devIds, solo jefe en local) no
+       pasa por este tope. */
+    if (body.kind === "exam") {
+      const rl2 = user && user.verified && user.uid
+        ? await (rateRaw || rate)("exam-level-uid:" + user.uid, 0, limitOf("RL_EXAM_LEVEL_START_PER_DAY"))
+        : await rate("exam-level-start", 0, limitOf("RL_EXAM_LEVEL_START_PER_DAY_IP"));
+      if (!rl2.ok) return [429, { error: "Hoy ya hiciste varios intentos del examen de nivel. Vuelve mañana.", code: "rate_limited", retryAfter: rl2.retryAfter || 3600 }];
+    }
+    return start(env, body, user);
   }
   if (path === "/exam/finish") {
     const rl = await rate("exam-finish", limitOf("RL_EXAM_START_PER_MIN"), limitOf("RL_EXAM_START_PER_DAY"));

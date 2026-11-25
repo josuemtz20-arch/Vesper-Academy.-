@@ -276,6 +276,96 @@ a.chat-cta{text-decoration:none;}   /* la entrada al simulador de entrevista es 
   function getProCode() { if (IN_APP) return ""; try { return localStorage.getItem(PRO_KEY) || ""; } catch (e) { return ""; } }
   function setProCode(v) { try { v ? localStorage.setItem(PRO_KEY, v) : localStorage.removeItem(PRO_KEY); } catch (e) {} }
 
+  /* ── Pro por cuenta (2026-11-25) ──
+     Si hay sesión de Firebase, se manda su idToken y el Worker decide (lo
+     valida y mira students/, teachers/ y roles/): inscritos y profesores
+     reciben Pro sin código. Aquí no se decide nada; sin sesión, igual que antes.
+     No se carga vesper_auth.js (chat.html no está en publicPages: activaría
+     la puerta de login): se carga el SDK con la MISMA configuración, que lee
+     la misma sesión guardada. El SDK solo se descarga si parece haber sesión.
+     Dentro de la app de las tiendas no se manda, igual que el código Pro
+     (Apple 3.1.1). */
+  var FB_CONFIG = {
+    apiKey: "AIzaSyAsCJW97LyNpmvey1Mo0wiGMufQIV7uxio",
+    authDomain: "vesper-academy.firebaseapp.com",
+    projectId: "vesper-academy",
+    storageBucket: "vesper-academy.firebasestorage.app",
+    messagingSenderId: "22637551941",
+    appId: "1:22637551941:web:7c0be59428b5087cd35e2c"
+  };
+  var FB_USER_KEY = "firebase:authUser:" + FB_CONFIG.apiKey + ":[DEFAULT]";
+  var authUser = null, authReady = null;
+
+  function loadJs(src) {
+    return new Promise(function (resolve, reject) {
+      var s = document.createElement("script");
+      s.src = src; s.onload = resolve; s.onerror = reject;
+      document.head.appendChild(s);
+    });
+  }
+  /* ¿Hay una sesión guardada? Mira lo que ya escribió el SDK (IndexedDB o
+     localStorage) o la cuenta enlazada del perfil. Un falso "no" solo deja
+     el chat en gratis. */
+  function mayHaveSession() {
+    try {
+      var p = JSON.parse(localStorage.getItem("vesper_profile") || "{}");
+      if (p && p.account && p.account.email) return Promise.resolve(true);
+    } catch (e) {}
+    try { if (localStorage.getItem(FB_USER_KEY)) return Promise.resolve(true); } catch (e) {}
+    if (!window.indexedDB) return Promise.resolve(false);
+    var exists = indexedDB.databases
+      ? indexedDB.databases().then(function (l) { return l.some(function (d) { return d.name === "firebaseLocalStorageDb"; }); })
+      : Promise.resolve(true);
+    return exists.then(function (yes) {
+      if (!yes) return false;
+      return new Promise(function (resolve) {
+        var req = indexedDB.open("firebaseLocalStorageDb");
+        /* no existía: no la crees vacía */
+        req.onupgradeneeded = function () { try { req.transaction.abort(); } catch (e) {} };
+        req.onerror = function () { resolve(false); };
+        req.onsuccess = function () {
+          var db = req.result;
+          try {
+            if (!db.objectStoreNames.contains("firebaseLocalStorage")) { db.close(); resolve(false); return; }
+            var g = db.transaction("firebaseLocalStorage", "readonly").objectStore("firebaseLocalStorage").get(FB_USER_KEY);
+            g.onsuccess = function () { db.close(); resolve(!!g.result); };
+            g.onerror = function () { db.close(); resolve(false); };
+          } catch (e) { try { db.close(); } catch (e2) {} resolve(false); }
+        };
+      });
+    }).catch(function () { return false; });
+  }
+  function startAuth() {
+    if (IN_APP) return;
+    authReady = mayHaveSession().then(function (yes) {
+      if (!yes) return false;
+      var init = (window.VesperAuth && VesperAuth.initFirebase) ? VesperAuth.initFirebase()
+        : loadJs("https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js")
+            .then(function () { return loadJs("https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js"); })
+            .then(function () {
+              if (!firebase.apps.length) firebase.initializeApp(FB_CONFIG);
+              return firebase.auth();
+            });
+      return init.then(function (auth) {
+        return new Promise(function (resolve) {
+          auth.onAuthStateChanged(function (u) {
+            authUser = (u && u.emailVerified) ? u : null;
+            resolve(true);
+          });
+        });
+      });
+    }).catch(function () { return false; });
+  }
+  /* idToken vigente (getIdToken lo renueva solo) o "". Nunca hace esperar
+     más de 4 s: sin red a Google, el mensaje sale como gratis. */
+  function chatIdToken() {
+    if (!authReady) return Promise.resolve("");
+    var tok = authReady.then(function () { return authUser ? authUser.getIdToken() : ""; })
+      .then(function (t) { return typeof t === "string" ? t : ""; }, function () { return ""; });
+    return Promise.race([tok, new Promise(function (r) { setTimeout(function () { r(""); }, 4000); })]);
+  }
+  startAuth();
+
   /* Insignia de nivel. tier: "pro" | "free" | null (desconocido aún). */
   function setTier(tier) {
     if (tier === "pro") {
@@ -629,7 +719,11 @@ a.chat-cta{text-decoration:none;}   /* la entrada al simulador de entrevista es 
     var body;        // nodo de texto de la burbuja de Vesper (se crea al primer token)
     var acc = "";    // texto acumulado
 
-    postToProxy({ system: SYSTEM, messages: history, proCode: getProCode() }).then(function (res) {
+    chatIdToken().then(function (tok) {
+      var payload = { system: SYSTEM, messages: history, proCode: getProCode() };
+      if (tok) payload.idToken = tok;
+      return postToProxy(payload);
+    }).then(function (res) {
       /* nivel que sirvió el servidor (Gratis/Pro) — actualiza la insignia */
       try { setTier(res.headers.get("X-Vesper-Tier")); } catch (e) {}
       if (!res.ok) {

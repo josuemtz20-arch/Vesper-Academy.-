@@ -132,9 +132,21 @@
     return d.getUTCFullYear() + "-W" + pad(wk);
   }
 
+  /* Borra progress/{uid}. 200 = borrado; 404 = no había doc (también vale).
+     Cualquier otra cosa (403, 5xx) o un fallo de red rechaza la promesa: así
+     NO se llama a user.delete() y no queda un doc huérfano. */
   function deleteProgress(token, uid) {
     return fetch(BASE + "/progress/" + encodeURIComponent(uid), {
       method: "DELETE", headers: { "Authorization": "Bearer " + token }
+    }).then(function (r) {
+      if (r.ok || r.status === 404) return;
+      var err = new Error("progress delete " + r.status);
+      err.vesperDataError = true;
+      throw err;
+    }, function () {
+      var err = new Error("progress delete network");
+      err.vesperDataError = true;
+      throw err;
     });
   }
 
@@ -193,6 +205,11 @@
         form.querySelectorAll("input").forEach(function (i) { i.disabled = true; });
         show("ok", "Tu cuenta se eliminó. Puedes seguir usando las lecciones gratis sin cuenta cuando quieras.");
       }).catch(function (e) {
+        if (e && e.vesperDataError) {
+          show("err", "No pudimos borrar tus datos de progreso, así que tu cuenta NO se eliminó todavía. Revisa tu internet e inténtalo de nuevo con el mismo botón; si sigue fallando, escríbenos a contacto@vesperacademy.com.");
+          btn.disabled = false;
+          return;
+        }
         show("err", ERRORES[e && e.code] || "No se pudo eliminar la cuenta. Inténtalo de nuevo o escríbenos a contacto@vesperacademy.com.");
         btn.disabled = false;
       });

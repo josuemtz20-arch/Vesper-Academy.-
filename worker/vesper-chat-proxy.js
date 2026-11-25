@@ -5,8 +5,8 @@
  * Claude (Anthropic) ocultando la API key, que vive como SECRETO
  * del Worker (nunca en el repo ni en el navegador).
  *
- * El front envía { system, messages } (+ proCode / session /
- * turnstileToken opcionales):
+ * El front envía { system, messages } (+ proCode / idToken / session /
+ * turnstileToken opcionales; idToken = Pro por cuenta, ver accountPro):
  *   - system   : el system prompt del tutor, generado por
  *                VESPER_PERSONA.systemPrompt() (personalizado por
  *                el perfil del alumno) — por eso viaja desde el cliente.
@@ -36,7 +36,7 @@
 
 import { DurableObject } from "cloudflare:workers";
 /* Exámenes calificados en el servidor (rutas /exam/*). Ver exam_grader.js. */
-import { handleExam, EXAM_RATE_DEFAULTS, ExamAttempt } from "./exam_grader.js";
+import { handleExam, EXAM_RATE_DEFAULTS, ExamAttempt, lookupUser, saAccessToken, fsBase } from "./exam_grader.js";
 export { ExamAttempt };
 /* Páginas de los libros Canva desde R2 (rutas /book/*). Ver book_server.js. */
 import { handleBookOpen, handleBookPage, handleDocGet, BOOK_RATE_DEFAULTS } from "./book_server.js";
@@ -98,8 +98,19 @@ const RATE_DEFAULTS = {
   ...BOOK_RATE_DEFAULTS,
   RL_FREE_PER_MIN: 12,     // mensajes por minuto por IP (nivel gratis)
   RL_FREE_PER_DAY: 200,    // mensajes por día (UTC) por IP (nivel gratis)
-  RL_PRO_PER_MIN: 30,      // con código Pro válido
+  RL_PRO_PER_MIN: 30,      // con código Pro válido o cuenta reconocida
   RL_PRO_PER_DAY: 1000,
+  /* Pro por cuenta: solo cuentan las verificaciones que NO salen de la caché
+     (cada una = 1 llamada a Identity Toolkit). Un salón comparte IP: 30
+     alumnos ≈ 15 verificaciones al día cada uno, de ahí el margen. */
+  RL_CHAT_AUTH_PER_MIN: 20,
+  RL_CHAT_AUTH_PER_DAY: 600,
+  /* todas las IPs: consultas a Firestore para decidir Pro (1-3 lecturas cada
+     una; un alumno inscrito gasta 1). 3000 = máx. ~9 000 lecturas/día. */
+  RL_CHAT_AUTH_GLOBAL_PER_DAY: 3000,
+  /* por uid y día: una sola cuenta (no inscrita) desde varias IPs no puede
+     agotar el tope global de arriba y dejar sin Pro a los inscritos. */
+  RL_CHAT_AUTH_UID_PER_DAY: 30,
   /* todas las IPs juntas, por día (UTC). Era 5000; con los topes de entrada
      el peor caso es ~0.01 USD por mensaje, así que 2000 acota el abuso a
      ~20 USD/día. Súbelo con RL_GLOBAL_PER_DAY en [vars] cuando crezca la
@@ -441,6 +452,151 @@ async function turnstileValid(env, token, ip) {
   }
 }
 
+/* ---------- Pro por cuenta (2026-11-25) ----------
+ * Alumnos inscritos (students/{correo}), profesores (teachers/{correo}) y
+ * staff (roles/{correo}) reciben Pro sin código. El navegador manda su idToken
+ * de Firebase; aquí se valida con Identity Toolkit (lookupUser) y se consulta
+ * Firestore con la cuenta de servicio. El correo sale SIEMPRE del token
+ * validado, nunca del cuerpo.
+ *
+ * Correo verificado obligatorio: Firebase deja registrarse con email +
+ * contraseña usando CUALQUIER correo sin demostrar que es tuyo. Sin este
+ * requisito, quien supiera el correo de un alumno crearía una cuenta con él
+ * y gastaría Sonnet a cuenta de la escuela. Las reglas (signedIn()) y
+ * /book/open exigen lo mismo.
+ *
+ * Caché en memoria del isolate, dos niveles:
+ *  - por SHA-256 del token (el token crudo no se guarda): en el turno a turno
+ *    no se llama ni a Identity Toolkit ni a Firestore;
+ *  - por uid|correo: cuando el navegador renueva el token (cada ~1 h) cuesta
+ *    1 llamada a Identity Toolkit pero 0 lecturas de Firestore.
+ * Los "no" también se guardan (si no, cada turno de una cuenta gratuita
+ * costaría hasta 3 lecturas). Efecto: dar de alta o de baja tarda hasta
+ * ACCT_TTL_MS en notarse en el chat.
+ * Cualquier fallo (token malo, Google caído, sin FIREBASE_SA, contador caído)
+ * devuelve false: el chat sigue en gratis, nunca 500. */
+const FOUNDER_EMAIL = "josuemtz20@gmail.com";   // igual que bootstrapAdmin() en las reglas
+const ACCT_TTL_MS = 5 * 60 * 1000;
+const ACCT_FAIL_TTL_MS = 60 * 1000;            // Google/Firestore caídos: reintenta en 1 min
+const ACCT_CACHE_MAX = 500;
+const acctByToken = new Map();   // sha256(idToken) -> { pro, exp }
+const acctByUid = new Map();     // uid|correo      -> { pro, exp }
+
+function cacheGet(map, key, now) {
+  const e = map.get(key);
+  if (!e) return null;
+  if (e.exp <= now) { map.delete(key); return null; }
+  return e;
+}
+
+function cachePut(map, key, val, now) {
+  if (map.has(key)) map.delete(key);
+  else if (map.size >= ACCT_CACHE_MAX) {
+    for (const [k, v] of map) if (v.exp <= now) map.delete(k);
+    while (map.size >= ACCT_CACHE_MAX) map.delete(map.keys().next().value);   // el más viejo
+  }
+  map.set(key, val);
+}
+
+async function sha256Hex(text) {
+  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text));
+  return Array.from(new Uint8Array(buf), (b) => b.toString(16).padStart(2, "0")).join("");
+}
+
+/* `exp` del JWT, solo para que la caché no dure más que el token. Se lee
+ * DESPUÉS de que Identity Toolkit lo validó; si no se puede leer, 0. */
+function tokenExpMs(idToken) {
+  try {
+    const j = JSON.parse(atob(idToken.split(".")[1].replace(/-/g, "+").replace(/_/g, "/")));
+    return typeof j.exp === "number" ? j.exp * 1000 : 0;
+  } catch (e) { return 0; }
+}
+
+/* students/ primero (son la mayoría: 1 lectura). La máscara pide un campo que
+ * no existe: basta saber si el documento existe, sin bajar sus datos. 404 =
+ * no existe; otro error lanza (Firestore caído != "no inscrito"). */
+async function enrolledOrStaff(env, email) {
+  /* correo estricto: un "/" convertiría el GET de un documento en el listado
+     de una colección (200 aunque esté vacía) y daría Pro sin estar inscrito */
+  if (!/^[a-z0-9._%+'-]+@[a-z0-9-]+(\.[a-z0-9-]+)+$/.test(email) || email.length > 254) return false;
+  const token = await saAccessToken(env);
+  const enc = encodeURIComponent(email);
+  for (const col of ["students", "teachers", "roles"]) {
+    const r = await fetch(fsBase() + "/" + col + "/" + enc + "?mask.fieldPaths=_exists",
+      { headers: { Authorization: "Bearer " + token } });
+    if (r.ok) {
+      /* y además: que lo que volvió sea ESE documento (no un listado) */
+      const j = await r.json().catch(function () { return null; });
+      const parts = j && typeof j.name === "string" ? j.name.split("/") : [];
+      let last = "";
+      try { last = decodeURIComponent(parts[parts.length - 1] || ""); } catch (e) { last = ""; }
+      if (parts[parts.length - 2] === col && last === email) return true;
+      continue;
+    }
+    if (r.status !== 404) throw new Error(col + " " + r.status);
+  }
+  return false;
+}
+
+async function accountPro(env, idToken, ip) {
+  if (typeof idToken !== "string" || idToken.length < 20 || idToken.length > 4096) return false;
+  /* sin cuenta de servicio no hay cómo leer Firestore (y así los tokens
+     "dev:" de lookupUser nunca dan Pro) */
+  if (!env.FIREBASE_SA) return false;
+  const now = Date.now();
+  const th = await sha256Hex(idToken);
+  const hit = cacheGet(acctByToken, th, now);
+  if (hit) return hit.pro;
+
+  /* Antes de llamar a Google: tope por IP. Tokens inventados (uno distinto
+     cada vez) no salen de la caché; sin esto cada uno sería una llamada a
+     Identity Toolkit, que también usan exámenes y libros. */
+  const rl = await rateHit(env, "chat-auth:" + ipRateKey(ip),
+    limitOf(env, "RL_CHAT_AUTH_PER_MIN"), limitOf(env, "RL_CHAT_AUTH_PER_DAY"), true);
+  if (!rl.ok) return false;
+
+  let user;
+  try { user = await lookupUser(env, idToken, true); }
+  catch (e) {
+    console.warn("chat Pro por cuenta: Identity Toolkit falló:", e && e.message);
+    cachePut(acctByToken, th, { pro: false, exp: now + ACCT_FAIL_TTL_MS }, now);
+    return false;
+  }
+  const tExp = user ? tokenExpMs(idToken) : 0;
+  const exp = tExp > now ? Math.min(now + ACCT_TTL_MS, tExp) : now + ACCT_TTL_MS;
+  if (!user || !user.verified || !user.email) {
+    cachePut(acctByToken, th, { pro: false, exp: exp }, now);
+    return false;
+  }
+
+  const uk = user.uid + "|" + user.email;
+  const uh = cacheGet(acctByUid, uk, now);
+  if (uh) {
+    cachePut(acctByToken, th, { pro: uh.pro, exp: Math.min(exp, uh.exp) }, now);
+    return uh.pro;
+  }
+
+  let pro;
+  if (user.email === FOUNDER_EMAIL) pro = true;
+  else {
+    const u1 = await rateHit(env, "chat-auth-uid:" + user.uid, 0, limitOf(env, "RL_CHAT_AUTH_UID_PER_DAY"), true);
+    const g = u1.ok ? await rateHit(env, "chat-auth-global", 0, limitOf(env, "RL_CHAT_AUTH_GLOBAL_PER_DAY"), true) : u1;
+    if (!g.ok) {   // tope agotado: "no" corto, para no repetir Identity Toolkit en cada mensaje
+      cachePut(acctByToken, th, { pro: false, exp: now + ACCT_FAIL_TTL_MS }, now);
+      return false;
+    }
+    try { pro = await enrolledOrStaff(env, user.email); }
+    catch (e) {
+      console.warn("chat Pro por cuenta: Firestore falló:", e && e.message);
+      cachePut(acctByToken, th, { pro: false, exp: now + ACCT_FAIL_TTL_MS }, now);
+      return false;
+    }
+  }
+  cachePut(acctByUid, uk, { pro: pro, exp: now + ACCT_TTL_MS }, now);
+  cachePut(acctByToken, th, { pro: pro, exp: exp }, now);
+  return pro;
+}
+
 /* ---------- Durable Object: contador por clave ----------
  * Una instancia por clave ("ip:<IP>", "ip-pro:<IP>" o "global"). Cloudflare
  * ejecuta las llamadas a una misma instancia en serie, así que el conteo es
@@ -659,12 +815,22 @@ export default {
     /* Nivel: PRO solo si el código recibido coincide con el secreto del Worker.
      * Se valida AQUÍ; el cliente no puede forzar Sonnet. */
     const proCode = typeof body.proCode === "string" ? body.proCode : "";
-    const isPro = !!env.PRO_CODE && safeEqual(proCode, env.PRO_CODE);
+    const codePro = !!env.PRO_CODE && safeEqual(proCode, env.PRO_CODE);
+    /* O por cuenta: alumno inscrito, profesor o staff (ver accountPro). Con
+     * código válido no se consulta nada. Si falla, gratis (nunca 500). */
+    let acctPro = false;
+    if (!codePro && body.idToken) {
+      try { acctPro = await accountPro(env, body.idToken, ip); }
+      catch (e) { console.warn("chat Pro por cuenta:", e && e.message); }
+    }
+    const isPro = codePro || acctPro;
     const tier = isPro ? "pro" : "free";
 
     /* ── Límite por IP (minuto + día) ──
      * Pro usa su propio contador con más margen, para que un alumno con
-     * código no se quede sin chat por los que comparten su IP sin código. */
+     * código no se quede sin chat por los que comparten su IP sin código.
+     * Pro por cuenta recibe exactamente el mismo trato que el código: mismo
+     * contador ip-pro, mismos límites y sigue pasando por Turnstile. */
     const perIp = await rateHit(
       env,
       (isPro ? "ip-pro:" : "ip:") + ipRateKey(ip),
