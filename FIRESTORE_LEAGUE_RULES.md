@@ -2,7 +2,7 @@
 
 La liga semanal funciona **sin cuenta** con rivales simulados. Con sesión
 verificada, el alumno compite en una **división real** de su liga (Bronce,
-Plata, Oro, Zafiro, Diamante): alumnos reales de esa división más rivales de
+Plata, Oro, Zafiro, Diamante, Soberana): alumnos reales de esa división más rivales de
 práctica que rellenan hasta 15. Mientras las reglas nuevas no estén
 publicadas, el código se queda en la tabla global de siempre (no se rompe
 nada).
@@ -20,13 +20,31 @@ league_place/{uid}              ->  { tier, div, week, last?, ts }
 - `members/{uid}`: cada quien escribe SOLO su entrada. `alias` es el que el
   alumno pone en Configuración o un código anónimo `Estudiante#NNNN`.
   **Nunca se guarda el correo.** `div` (≤20 caracteres, ej. `plata-1`) y
-  `tier` (0–4) son opcionales: los clientes viejos en caché siguen
+  `tier` (0–5) son opcionales: los clientes viejos en caché siguen
   escribiendo `{ alias, xp, ts }`.
-- `league_place/{uid}`: la colocación. `tier` 0–4, `div` ej. `plata-1`,
+- `league_place/{uid}`: la colocación. `tier` 0–5, `div` ej. `plata-1`,
   `week` = semana para la que vale, `last` = resultado de la semana anterior
   `{ week, rank, fromTier, result: "up"|"down"|"stay"|"idle", div }`. La
   escribe **solo** `_scripts/league_admin.py` con la cuenta de servicio.
   Sin datos personales.
+
+## Ligas
+
+| idx | id | nombre | `sembrar` (mejor semana) | `CLOUD_RATE` |
+|---|---|---|---|---|
+| 0 | `bronce` | Liga Bronce | < 100 | 0.45 |
+| 1 | `plata` | Liga Plata | 100–299 | 1.3 |
+| 2 | `oro` | Liga Oro | 300–599 | 3 |
+| 3 | `zafiro` | Liga Zafiro | 600–999 | 5.3 |
+| 4 | `diamante` | Liga Diamante | 1000–1499 | 8.6 |
+| 5 | `soberana` | Liga Soberana (El Soberano del Saber, C2) | ≥ 1500 | 13 |
+
+Soberana se agregó el 2026-11-25 arriba de Diamante: no tiene zona de
+ascenso (antes eso lo tenía Diamante). Los índices 0–4 no cambiaron, así que
+quien ya estaba colocado en Diamante sigue en `diamante-N` con tier 4; solo
+llega a Soberana ganando su división en `cerrar` (o con `sembrar --forzar`).
+Para subir de Diamante hay que quedar 3º, unos 1340–1940 XP, por eso
+`cerrar` tiene `--tope-xp-diamante` (2500) aparte de `--tope-xp` (1500).
 
 ## Reglas (en `firestore.rules`)
 
@@ -124,6 +142,12 @@ de una semana sin jugar si su división sigue existiendo.
    antes que las reglas, leería 403 en `league_place` y se quedaría en la
    tabla global (sin romper nada).
 4. Desde entonces, `cerrar` cada lunes.
+
+Soberana (2026-11-25): primero las reglas (`tier` 0–5), luego el cliente, y
+solo entonces un `cerrar` que pueda subir a alguien de Diamante. Con las
+reglas o el cliente viejos, una colocación `tier: 5` / `soberana-N` se lee
+como "sin colocar" (bronce-1) y sus escrituras dan 403. Mientras nadie real
+llegue a Diamante (hoy el máximo semanal es 762) no hay prisa.
 
 ## Pendiente (fase 2 y huecos conocidos)
 

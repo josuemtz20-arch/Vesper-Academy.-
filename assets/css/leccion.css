@@ -4019,8 +4019,7 @@ body:has(#app #verify) #app .card.center{background-image:none}
   --wlg-hair:color-mix(in srgb,var(--wlg-on) 16%,transparent);
   --wlg-up:color-mix(in srgb,var(--gold) 72%,#fff);
   --wlg-down:color-mix(in srgb,var(--error) 62%,#fff);
-  --wlg-ficha:#f7f1e3; --wlg-ficha-ink:#1B1B2F; --wlg-ficha-gold:#7c5e22; --wlg-ficha-line:#e3d8bf;
-  display:flex;flex-direction:column;height:100%;min-height:0;width:100%;color:var(--wlg-on);
+    display:flex;flex-direction:column;height:100%;min-height:0;width:100%;color:var(--wlg-on);
   font-family:Inter,system-ui,sans-serif}
 .wlg-scroll{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;
   padding:calc(66px + env(safe-area-inset-top)) 18px 18px;display:flex;flex-direction:column;gap:16px}
@@ -4044,9 +4043,9 @@ body:has(#app #verify) #app .card.center{background-image:none}
 .wlg-clock.is-urgent{border-color:color-mix(in srgb,var(--wlg-down) 60%,transparent);background:color-mix(in srgb,var(--error) 18%,transparent)}
 .wlg-clock.is-urgent svg{color:var(--wlg-down)}
 
-/* escalera: las 5 ligas, unidas como constelación */
-.wlg-ladder{list-style:none;margin:0;padding:6px 0 0;display:grid;grid-template-columns:repeat(5,1fr);position:relative}
-.wlg-ladder::before{content:"";position:absolute;left:10%;right:10%;top:26px;border-top:1.5px dashed color-mix(in srgb,var(--wlg-on) 26%,transparent)}
+/* escalera: las ligas (5 o 6), unidas como constelación */
+.wlg-ladder{list-style:none;margin:0;padding:6px 0 0;display:grid;grid-template-columns:repeat(var(--n,5),1fr);position:relative}
+.wlg-ladder::before{content:"";position:absolute;left:calc(50% / var(--n,5));right:calc(50% / var(--n,5));top:26px;border-top:1.5px dashed color-mix(in srgb,var(--wlg-on) 26%,transparent)}
 .wlg-rung{position:relative;display:flex;flex-direction:column;align-items:center;gap:5px;min-width:0}
 .wlg-rung__m{position:relative;width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:#1c1a38;
   box-shadow:0 0 0 1px var(--wlg-hair)}
@@ -4062,26 +4061,79 @@ body:has(#app #verify) #app .card.center{background-image:none}
 .wlg-rung.is-now .wlg-rung__m svg{width:34px;height:34px}
 .wlg-rung.is-now .wlg-rung__n{color:var(--wlg-on);font-weight:800}
 
-/* -- ficha de resultado (papel crema + Vesper) -- */
-.wlg-res{position:relative;display:grid;grid-template-columns:104px 1fr;align-items:end;gap:4px;margin-top:8px;
-  padding:14px 14px 0 4px;border-radius:6px 6px 14px 14px;background:var(--wlg-ficha);color:var(--wlg-ficha-ink);
-  box-shadow:0 10px 26px rgba(0,0,0,.4);transform:rotate(-.8deg);overflow:visible;
-  background-image:linear-gradient(90deg,transparent 30px,rgba(192,57,43,.22) 30px,rgba(192,57,43,.22) 31px,transparent 31px),
-    repeating-linear-gradient(180deg,transparent 0 23px,var(--wlg-ficha-line) 23px 24px)}
-.wlg-res::before{content:"";position:absolute;top:-9px;left:50%;width:74px;height:20px;transform:translateX(-50%) rotate(2deg);
-  background:color-mix(in srgb,var(--wlg-ficha) 55%,rgba(201,168,76,.55));opacity:.85;box-shadow:0 1px 2px rgba(0,0,0,.15)}
-.wlg-res__cat{width:120px;height:120px;margin:-26px 0 0 -10px;align-self:end;object-fit:contain;object-position:bottom}
-.wlg-res__tx{padding:2px 0 14px;display:flex;flex-direction:column;gap:3px;min-width:0}
-.wlg-res__ey{font:800 .64rem/1 Inter,system-ui,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--wlg-ficha-gold)}
-.wlg-res__h{margin:0;font:italic 700 1.2rem/1.15 "Inria Serif",Georgia,serif}
-.wlg-res__s{margin:0;font-size:.82rem;color:#4b5160}
-.wlg-res__path{display:inline-flex;align-items:center;gap:5px;margin-top:2px}
-.wlg-res__path span{display:grid;width:26px;height:26px}
-.wlg-res__path svg{width:100%;height:100%}
-.wlg-res__path > svg{width:12px;height:12px;color:var(--wlg-ficha-gold)}
-.wlg-res.is-down .wlg-res__path > svg{color:#a8382b}
-.wlg-res__v{margin:2px 0 0;font:700 1.3rem/1.05 "Caveat","Segoe Print",cursive;color:var(--wlg-ficha-gold);transform:rotate(-1.5deg)}
-.wlg-res.is-down .wlg-res__v{color:#5d6470}
+/* -- celebración del resultado (2026-11-25, demo aprobada arena-2026-11-25-ligas/final) --
+   Sustituye a la ficha de papel. Escena de noche en los 8 temas (como el
+   cajón): copa grande con halo y destellos del color de la liga (--l1/2/3),
+   título, guardián, camino con candados, Vesper con globo y CONTINUAR. */
+.wlg-cel{flex-shrink:0;background-color:#171a4a;--l1:#fbe08a;--l2:#e0b13a;--l3:#8f6a14;--star:#f3e2ab;position:relative;isolation:isolate;overflow:hidden;
+  display:flex;flex-direction:column;align-items:center;text-align:center;padding:20px 16px 16px;border-radius:22px;
+  color:var(--wlg-on);box-shadow:0 12px 30px rgba(0,0,0,.42),inset 0 0 0 1px var(--wlg-hair);
+  background:radial-gradient(90% 38% at 50% 26%,color-mix(in srgb,var(--l2) 50%,transparent),transparent 72%),
+    linear-gradient(180deg,#171a4a 0%,#1d2a78 36%,#14122a 100%)}
+.wlg-cel::before{content:"";position:absolute;inset:0;z-index:-1;opacity:.8;
+  background:radial-gradient(2px 2px at 12% 12%,#fff,transparent),radial-gradient(1.5px 1.5px at 82% 9%,#fff,transparent),
+    radial-gradient(2px 2px at 91% 36%,var(--star),transparent),radial-gradient(1.5px 1.5px at 8% 44%,var(--star),transparent),
+    radial-gradient(1.5px 1.5px at 66% 22%,#fff,transparent),radial-gradient(1.5px 1.5px at 30% 5%,var(--star),transparent)}
+.wlg-cel.lg-bronce{--l1:#f0b47c;--l2:#c9854a;--l3:#7a4520}
+.wlg-cel.lg-plata{--l1:#eef2f8;--l2:#b4bdcc;--l3:#6a7385}
+.wlg-cel.lg-oro{--l1:#fbe08a;--l2:#e0b13a;--l3:#8f6a14}
+.wlg-cel.lg-zafiro{--l1:#9cc8ff;--l2:#3d7fe0;--l3:#1d3f8f}
+.wlg-cel.lg-diamante{--l1:#d4f6ff;--l2:#6fd3f0;--l3:#2a7fa8}
+.wlg-cel.lg-soberana{--l1:#f0c8ff;--l2:#a766f0;--l3:#5a2aa0}
+.wlg-cel__ey{margin:0;font:800 .68rem/1 Inter,system-ui,sans-serif;letter-spacing:.2em;text-transform:uppercase;color:var(--star)}
+.wlg-cel__stage{position:relative;width:230px;height:244px;margin:12px 0 2px}
+.wlg-cel__halo{position:absolute;inset:4% -16% 2%;background:radial-gradient(closest-side,color-mix(in srgb,var(--l1) 32%,transparent),transparent);filter:blur(6px)}
+.wlg-cel__floor{position:absolute;left:50%;bottom:0;width:224px;height:54px;transform:translateX(-50%);opacity:.7;
+  clip-path:polygon(25% 0,75% 0,100% 50%,75% 100%,25% 100%,0 50%);background:linear-gradient(180deg,color-mix(in srgb,var(--l2) 45%,#14122a),#1f2342)}
+.wlg-art.wlg-cel__cup{position:absolute;left:50%;top:-2px;width:280px;height:280px;max-width:none;margin-left:-140px;
+  border-radius:0;object-fit:contain;filter:drop-shadow(0 12px 16px rgba(0,0,0,.45))}
+.wlg-cel__stage .wlg-emoji{position:absolute;inset:0;display:grid;place-items:center;font-size:6rem}
+.wlg-sp{position:absolute;z-index:2;width:22px;height:22px;color:#fff;filter:drop-shadow(0 0 6px #fff)}
+.wlg-sp svg{width:100%;height:100%;display:block}
+.wlg-sp.s1{right:-2px;top:2px;width:26px;height:26px}
+.wlg-sp.s2{left:0;top:88px;width:15px;height:15px}
+.wlg-sp.s3{right:12px;bottom:62px;width:13px;height:13px}
+.wlg-cel__h{margin:8px 0 0;font:700 1.55rem/1.12 "Inria Serif",Georgia,serif;letter-spacing:-.01em;text-wrap:balance;color:var(--wlg-on)}
+.wlg-cel__h em{font-style:normal;color:var(--l1)}
+.wlg-cel__s{margin:8px 0 0;max-width:30ch;font-size:.92rem;line-height:1.4;color:var(--wlg-soft);text-wrap:balance}
+.wlg-cel__s b{color:var(--wlg-on);font-weight:700}
+.wlg-cel__way{display:flex;align-items:center;justify-content:center;gap:4px;width:100%;margin:12px 0 0;padding:10px 8px 9px;
+  background:rgba(20,18,42,.55);border:1px solid var(--wlg-hair);border-radius:18px}
+.wlg-wy{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;min-width:0}
+.wlg-wy.is-now{flex:1.3}
+.wlg-wy small{font:700 .62rem/1 Inter,system-ui,sans-serif;letter-spacing:.08em;text-transform:uppercase;color:var(--wlg-soft)}
+.wlg-wy.is-now small{color:var(--star)}
+.wlg-wy b{font:700 .78rem/1 Inter,system-ui,sans-serif;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--wlg-on)}
+.wlg-wy.is-now b{color:var(--l1);font-size:.9rem}
+.wlg-wy.is-lock b,.wlg-wy.is-past b{color:var(--wlg-soft)}
+.wlg-wy__ic{position:relative;display:block;width:44px;height:48px}
+.wlg-wy.is-now .wlg-wy__ic{width:62px;height:68px}
+.wlg-wy__ic .wlg-art{width:100%;height:100%;border-radius:0;object-fit:contain;filter:drop-shadow(0 1px 3px rgba(0,0,0,.5))}
+.wlg-wy.is-lock .wlg-art{filter:grayscale(1) brightness(.62);opacity:.8}
+.wlg-wy.is-past .wlg-art{opacity:.85}
+.wlg-wy__lk{position:absolute;right:-5px;bottom:2px;width:18px;height:18px;border-radius:50%;display:grid;place-items:center;
+  background:#2a2850;border:1px solid var(--wlg-hair);color:var(--wlg-on)}
+.wlg-wy__lk.is-ok{background:var(--success,#2D9E75);border-color:transparent;color:#fff}
+.wlg-wy__lk svg{width:11px;height:11px}
+.wlg-cel__ar{width:14px;height:14px;flex:none;color:var(--wlg-soft)}
+.wlg-cel__ar.is-go{color:var(--gold)}
+.wlg-cel__vs{display:flex;align-items:flex-end;gap:6px;width:100%;margin:8px 0 0;text-align:left}
+.wlg-cel__vs img{width:80px;height:80px;flex:none;object-fit:contain;transform-origin:50% 100%}
+.wlg-cel__vs p{margin:0 0 18px;position:relative;padding:8px 14px 9px;border-radius:16px 16px 16px 4px;background:var(--star);color:#1B1B2F;
+  font:700 1.28rem/1.1 "Caveat","Segoe Print",cursive}
+.wlg-cel__vs p::before{content:"";position:absolute;left:-7px;bottom:0;width:12px;height:12px;background:var(--star);clip-path:polygon(100% 0,100% 100%,0 100%)}
+.wlg-cel__go{width:100%;min-height:52px;margin-top:6px;border:0;border-radius:16px;cursor:pointer;background:var(--gold);color:var(--on-gold,#14122a);
+  font:800 1rem/1 Inter,system-ui,sans-serif;letter-spacing:.06em;text-transform:uppercase;
+  box-shadow:0 5px 0 var(--gold-shadow,color-mix(in srgb,var(--gold) 70%,#000));transition:transform .08s,box-shadow .08s}
+.wlg-cel__go:active{transform:translateY(4px);box-shadow:0 1px 0 var(--gold-shadow,#8a6d2c)}
+/* con la celebración a la vista, una sola pantalla: sin contador, escalera,
+   estado, tabla ni leyenda; CONTINUAR los devuelve */
+.wlg-root.is-cel .wlg-head,.wlg-root.is-cel .wlg-st,.wlg-root.is-cel .wlg-board,.wlg-root.is-cel .wlg-legend,.wlg-root.is-cel .wlg-foot{display:none}
+.wlg-root.is-cel .wlg-scroll{padding-top:calc(48px + env(safe-area-inset-top));padding-bottom:14px}
+.wlg-page .wlg-root.is-cel .wlg-scroll{padding-top:10px}
+/* bajar de liga: sin destellos; la copa queda más sobria */
+.wlg-cel.is-down .wlg-sp{display:none}
+.wlg-cel.is-down .wlg-cel__halo{opacity:.6}
 
 /* -- línea de estado -- */
 .wlg-st{display:grid;grid-template-columns:56px 1fr;gap:12px;align-items:start;padding:12px 14px 12px 10px;border-radius:16px;
@@ -4165,21 +4217,29 @@ body:has(#app #verify) #app .card.center{background-image:none}
 
 /* -- movimiento: sólo transform/opacity, y nada con reduced motion -- */
 @keyframes wlg-rise{from{opacity:0;transform:translateY(10px)}}
-@keyframes wlg-drop{from{opacity:0;transform:translateY(-14px) rotate(-3deg)}}
-@keyframes wlg-hop{0%,100%{transform:translateY(0)}40%{transform:translateY(-7px)}}
+@keyframes wlg-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+@keyframes wlg-breathe{50%{transform:scale(1.08);opacity:.8}}
+@keyframes wlg-tw{0%,100%{opacity:.25;transform:scale(.6) rotate(0)}50%{opacity:1;transform:scale(1) rotate(20deg)}}
+@keyframes wlg-hop{0%,100%{transform:translateY(0) rotate(0)}8%{transform:translateY(-10px) rotate(-3deg)}16%{transform:translateY(0)}}
 .wlg-row{animation:wlg-rise .4s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--i) * 28ms + 120ms)}
-.wlg-res{animation:wlg-drop .55s cubic-bezier(.2,.8,.2,1) both}
-.wlg-res.is-up .wlg-res__cat{animation:wlg-hop .7s .5s ease-in-out 2}
-@media(prefers-reduced-motion:reduce){.wlg-row,.wlg-res,.wlg-res__cat{animation:none!important}.wlg-go{transition:none}}
-.vesper-reduce-motion .wlg-row,.vesper-reduce-motion .wlg-res,.vesper-reduce-motion .wlg-res__cat{animation:none!important}
-.vesper-reduce-motion .wlg-go{transition:none}
+.wlg-cel>*{animation:wlg-rise .5s cubic-bezier(.2,.8,.2,1) backwards}
+.wlg-cel>.wlg-cel__h{animation-delay:.1s}.wlg-cel>.wlg-cel__s{animation-delay:.18s}.wlg-cel>.wlg-cel__way{animation-delay:.28s}.wlg-cel>.wlg-cel__vs{animation-delay:.36s}
+.wlg-cel .wlg-cel__cup{animation:wlg-float 4.2s ease-in-out infinite}
+.wlg-cel .wlg-cel__halo{animation:wlg-breathe 4s ease-in-out infinite}
+.wlg-cel .wlg-sp{animation:wlg-tw 2.6s ease-in-out infinite}.wlg-cel .wlg-sp.s2{animation-delay:.8s}.wlg-cel .wlg-sp.s3{animation-delay:1.5s}
+.wlg-cel .wlg-cel__vs img{animation:wlg-hop 2.8s ease-in-out infinite}
+@media(prefers-reduced-motion:reduce){.wlg-row,.wlg-cel>*,.wlg-cel .wlg-cel__cup,.wlg-cel .wlg-cel__halo,.wlg-cel .wlg-sp,.wlg-cel .wlg-cel__vs img{animation:none!important}.wlg-cel .wlg-sp{opacity:1}.wlg-go,.wlg-cel__go{transition:none}}
+.vesper-reduce-motion .wlg-row,.vesper-reduce-motion .wlg-cel>*,.vesper-reduce-motion .wlg-cel .wlg-cel__cup,.vesper-reduce-motion .wlg-cel .wlg-cel__halo,.vesper-reduce-motion .wlg-cel .wlg-sp,.vesper-reduce-motion .wlg-cel .wlg-cel__vs img{animation:none!important}
+.vesper-reduce-motion .wlg-cel .wlg-sp{opacity:1}
+.vesper-reduce-motion .wlg-go,.vesper-reduce-motion .wlg-cel__go{transition:none}
 
-/* emblemas pintados: llenan el círculo; las bloqueadas, en gris */
-.wlg-art{display:block;width:100%;height:100%;border-radius:50%;object-fit:cover}
-.wlg-head__medal .wlg-art{width:64px;height:64px}
-.wlg-rung__m .wlg-art{width:100%;height:100%}
+/* copas pintadas (512 px RGBA, altas, con margen transparente): se muestran
+   enteras (contain), sin recortarlas en círculo; las bloqueadas, en gris.
+   El aro dorado de la cabecera y de la escalera sigue siendo el círculo. */
+.wlg-art{display:block;width:100%;height:100%;object-fit:contain}
+.wlg-head__medal .wlg-art{width:60px;height:60px;transform:scale(1.18);filter:drop-shadow(0 2px 3px rgba(0,0,0,.5))}
+.wlg-rung__m .wlg-art{width:100%;height:100%;transform:scale(1.22);filter:drop-shadow(0 1px 2px rgba(0,0,0,.5))}
 .wlg-rung.is-lock .wlg-rung__m .wlg-art{filter:grayscale(1) brightness(.6);opacity:.55}
-.wlg-res__path .wlg-art{width:26px;height:26px}
 
 /* -- integración en la app (2026-11-25) -- */
 /* ronda de revisión (2026-11-25): quién hay en la tabla dicho bajo el reloj,
@@ -4199,17 +4259,18 @@ body:has(#app #verify) #app .card.center{background-image:none}
 .wlg-emoji{font-size:1.4rem;line-height:1}
 /* chip del HUD y burbuja: el emblema de tu liga */
 .hstat--liga .hstat__ic{overflow:hidden;border-radius:50%;background:none}
-.hstat--liga .hstat__ic .wlg-art{width:100%;height:100%}
-.vhead--liga .vhead__ic .wlg-art{border-radius:50%}
+.hstat--liga .hstat__ic .wlg-art{width:100%;height:100%;transform:scale(1.15)}
+.vhead--liga .vhead__ic .wlg-art{border-radius:0}
 /* estilo Minimalista: vesper_minimal.css fuerza la tinta del tema en todo
    texto de los cajones (!important) y les da fondo de tarjeta. La liga se
    queda de noche (su paleta entera la asume), así que aquí sus tintas
    pasan a ser las de noche; la ficha de papel, las de papel. */
 html[data-vesper-style="minimal"] .wdrawer[data-kind="liga"]{background:#14122a !important;color:var(--on-night,#f5f2eb) !important;
   --m-ink:var(--on-night,#f5f2eb);--m-muted:color-mix(in srgb,var(--on-night,#f5f2eb) 68%,transparent)}
-html[data-vesper-style="minimal"] .wdrawer[data-kind="liga"] .wlg-res{--m-ink:#1B1B2F;--m-muted:#4b5160}
 /* el minimalista quita todo background-image: el botón dorado queda en color sólido */
 html[data-vesper-style="minimal"] .wlg-go{background-color:var(--gold) !important}
+/* el globo de Vesper es papel claro: el minimalista fuerza tinta de noche en todo */
+html[data-vesper-style="minimal"] .wdrawer[data-kind="liga"] .wlg-cel__vs p{color:#1B1B2F !important}
 /* liga.html: la misma vista como página (respaldo del cajón) */
 .wlg-page{max-width:480px;min-height:100vh;margin:0 auto;display:flex;flex-direction:column;color:var(--on-night,#f5f2eb);
   background:radial-gradient(120% 60% at 50% 0%,color-mix(in srgb,#c9a84c 22%,#232045),#14122a 70%)}

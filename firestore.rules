@@ -377,7 +377,7 @@ service cloud.firestore {
       return (!('div' in d) && !('tier' in d))
              || ('div' in d && 'tier' in d
                  && d.div is string && d.div.size() <= 20
-                 && d.tier is int && d.tier >= 0 && d.tier <= 4
+                 && d.tier is int && d.tier >= 0 && d.tier <= 5   // Bronce..Soberana (2026-11-25)
                  && ((exists(place)
                       && get(place).data.div == d.div
                       && get(place).data.tier == d.tier)

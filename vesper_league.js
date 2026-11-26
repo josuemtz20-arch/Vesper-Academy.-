@@ -43,17 +43,21 @@ window.VESPER_LEAGUE = (function () {
     { id: "plata",    name: "Liga Plata",    icon: "🥈", rate: 8 },
     { id: "oro",      name: "Liga Oro",      icon: "🥇", rate: 12 },
     { id: "zafiro",   name: "Liga Zafiro",   icon: "💎", rate: 17 },
-    { id: "diamante", name: "Liga Diamante", icon: "💠", rate: 24 }
+    { id: "diamante", name: "Liga Diamante", icon: "💠", rate: 24 },
+    /* 6ª liga (2026-11-25): la de El Soberano del Saber, mundo C2 */
+    { id: "soberana", name: "Liga Soberana", icon: "👑", rate: 33 }
   ];
   /* XP/hora base de los rivales de práctica en las divisiones REALES.
      Calibradas a los cortes de league_admin.py sembrar (Bronce <100, Plata
-     100–299, Oro 300–599, Zafiro 600–999, Diamante ≥1000): al cierre, el
-     rival típico de cada liga cae dentro de su franja. Con las `rate` de la
+     100–299, Oro 300–599, Zafiro 600–999, Diamante 1000–1499, Soberana
+     ≥1500): al cierre, el rival típico de cada liga cae dentro de su franja.
+     Soberana 13: su 3er peor rival cierra hacia 1300 (~0.87 del corte, como
+     Diamante con 866/1000), así que quedarse pide jugar a nivel Soberana. Con las `rate` de la
      liga local, un rival de Bronce cierra con 340–1180 XP y ningún alumno
      real (30–760 XP por semana desde julio) ascendería nunca.
      Debe ser IGUAL a CLOUD_RATE de _scripts/league_admin.py
      (_scripts/test_league_parity.py lo comprueba). */
-  var CLOUD_RATE = [0.45, 1.3, 3, 5.3, 8.6];
+  var CLOUD_RATE = [0.45, 1.3, 3, 5.3, 8.6, 13];
 
   var NAMES = ["Luna", "Mateo", "Sofía", "Diego", "Valentina", "Hiro", "Aiko", "Noah", "Emma", "Liam",
     "Camila", "Lucas", "Mía", "Bruno", "Chloé", "Iván", "Nora", "Théo", "Yuki", "Paula",
@@ -174,7 +178,7 @@ window.VESPER_LEAGUE = (function () {
      node). reals: [{ uid, name, xp }]. Orden: XP de mayor a menor; en
      empate el rival de práctica va antes que el alumno (como en la liga
      local) y entre alumnos decide el uid. Ascienden los 3 primeros (salvo
-     en Diamante) y descienden los 3 últimos (salvo en Bronce). */
+     en Soberana, la más alta) y descienden los 3 últimos (salvo en Bronce). */
   function divisionTable(week, div, tierIdx, reals, hours, myUid) {
     var nBots = Math.max(0, SIZE - reals.length);
     var bots = seedBots(tierIdx, week + ":" + div, CLOUD_RATE[tierIdx]).slice(0, nBots);
@@ -299,7 +303,7 @@ window.VESPER_LEAGUE = (function () {
               zonas (nadie asciende con ella).
      local  = sin sesión o sin red: la liga simulada.
      gapUp    = XP que te faltan para entrar a la zona de ascenso (0 si ya
-                estás o si no hay ascenso: Diamante, o modo global).
+                estás o si no hay ascenso: Soberana, o modo global).
      leadOver = tu ventaja sobre el primero fuera de la zona (0 si no estás).
      result   = resultado de la semana anterior aún no visto; seenResult()
                 lo marca visto.

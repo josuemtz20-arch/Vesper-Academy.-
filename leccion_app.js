@@ -2274,7 +2274,8 @@
       if (!alive() || !data) return;
       if (!data.result && shown && data.mode !== "global") data.result = shown;
       var refocus = document.activeElement && host.contains(document.activeElement);
-      UI.render(host, data, { tierArt: LIGA_ART, loginHref: "login.html?next=leccion.html", loading: loading });
+      UI.render(host, data, { tierArt: LIGA_ART, loginHref: "login.html?next=leccion.html", loading: loading,
+        onContinue: function () { shown = null; try { LG.seenResult(); } catch (e) {} } });
       bindDrawerGo(selLevel);
       if (refocus) try { host.querySelector(".wlg-go").focus({ preventScroll: true }); } catch (e) {}
       /* sin scrollIntoView a tu fila: el cajón abre arriba (liga, escalera y

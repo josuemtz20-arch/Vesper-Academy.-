@@ -97,7 +97,8 @@ window.VESPER_LEAGUE_CLOUD = (function () {
   function readPlacement(doc) {
     var f = (doc && doc.fields) || {};
     var tier = intOf(f.tier), div = (f.div || {}).stringValue || "";
-    if (tier == null || tier < 0 || tier > 4 || !div) return NO_PLACE;
+    /* 0..5 (Bronce..Soberana), igual que leagueDivOk en firestore.rules */
+    if (tier == null || tier < 0 || tier > 5 || !div) return NO_PLACE;
     var last = null, lf = ((f.last || {}).mapValue || {}).fields;
     /* result "idle" = no jugó esa semana (league_admin.py): no hay nada que contar */
     var lres = lf ? (lf.result || {}).stringValue : "";

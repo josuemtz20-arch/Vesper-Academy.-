@@ -7,7 +7,7 @@
  * repetir un icono en la misma página.
  *
  * window.VESPER_ICN:
- *   tier(id)     medallón de liga por tier (bronce/plata/oro/zafiro/diamante)
+ *   tier(id)     medallón de liga por tier (bronce/plata/oro/zafiro/diamante/soberana)
  *   globe        liga global (tabla real)
  *   repaso       repaso espaciado (flechas cíclicas, hereda currentColor)
  *   gem          gema/divisa (turquesa)
@@ -37,7 +37,8 @@ window.VESPER_ICN = (function () {
     plata:    metal("#cdd2da", "#9aa1ad", "#ffffff"),
     oro:      metal("#ecc657", "#b8911f", "#fff7df"),
     zafiro:   gemSvg("#4f7fe0", "#2f55ad"),
-    diamante: gemSvg("#73d9e0", "#3aa6b3")
+    diamante: gemSvg("#73d9e0", "#3aa6b3"),
+    soberana: gemSvg("#a67cf0", "#6b43b8")
   };
   function tier(id) { return TIER[id] || TIER.bronce; }
 

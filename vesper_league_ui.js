@@ -13,7 +13,7 @@
  *                            el chip del HUD y la burbuja
  *
  * data = VESPER_LEAGUE.board():
- *   { mode:"cloud"|"local"|"global", tier:{idx,id,name,icon}, tiers:[...5],
+ *   { mode:"cloud"|"local"|"global", tier:{idx,id,name,icon}, tiers:[...5 o 6, sin asumir longitud],
  *     rows:[{rank,name,xp,isMe,real,zone:"up"|"down"|""}], me:{rank,xp},
  *     gapUp, leadOver, endsInMs, result:{result,rank,fromTier,toTier}|null,
  *     realCount }
@@ -24,6 +24,8 @@
  *         goLabel, loading: true mientras la nube aún no responde,
  *         xpPerLesson: XP de una lección típica (45 por defecto) }
  * data.pendingClose = la semana pasada aún no se cierra en la nube.
+ * opt.onContinue = se llama al tocar CONTINUAR en la celebración del resultado
+ *         (quien llama olvida el resultado para que un repintado no lo repita).
  * ============================================================ */
 window.VESPER_LEAGUE_UI = (function () {
   "use strict";
@@ -58,14 +60,16 @@ window.VESPER_LEAGUE_UI = (function () {
     return { txt: "Termina en " + Math.max(1, m) + " min", urgent: true };
   }
 
-  /* emblema de la liga: la imagen tier_<id>.webp si hay carpeta (el diseño
-     final aún no está elegido: el archivo se reemplaza con el mismo nombre);
-     si no, el medallón SVG de vesper_icons.js o el emoji. */
-  function tierArt(t, opt) {
+  /* emblema de la liga: la copa tier_<id>.webp (512 px, RGBA, alta y con
+     margen transparente: se muestra con object-fit:contain, sin recorte) si
+     hay carpeta; si no, el medallón SVG de vesper_icons.js o el emoji. */
+  function tierArt(t, opt, big) {
     t = t || {};
     var dir = opt && opt.tierArt;
+    /* miniatura de 96 px (tier_<id>_sm.webp) para la escalera, la cabecera y
+       el chip del HUD; la de 512 px sólo para la celebración (big) */
     if (dir && t.id)
-      return '<img class="wlg-art" src="' + esc(dir + "tier_" + t.id + ".webp") + '" alt="" decoding="async" width="256" height="256">';
+      return '<img class="wlg-art" src="' + esc(dir + "tier_" + t.id + (big ? "" : "_sm") + ".webp") + '" alt="" decoding="async" width="' + (big ? 512 : 96) + '" height="' + (big ? 512 : 96) + '">';
     var ICN = window.VESPER_ICN;
     return ICN && ICN.tier ? ICN.tier(t.id) : '<span class="wlg-emoji">' + esc(t.icon || "") + '</span>';
   }
@@ -80,7 +84,7 @@ window.VESPER_LEAGUE_UI = (function () {
     var ey = glob ? "Liga global · esta semana"
       : d.mode === "cloud" ? "Liga semanal"
       : (o.loading ? "Liga semanal · cargando tu división…" : "Liga de práctica · sin sesión");
-    var ladder = glob ? "" : '<ol class="wlg-ladder" aria-label="Divisiones de la liga">' + d.tiers.map(function (t, i) {
+    var ladder = glob ? "" : '<ol class="wlg-ladder" style="--n:' + d.tiers.length + '" aria-label="Divisiones de la liga">' + d.tiers.map(function (t, i) {
       var st = i < d.tier.idx ? "past" : (i === d.tier.idx ? "now" : "lock");
       return '<li class="wlg-rung is-' + st + '"' + (st === "now" ? ' aria-current="step"' : "") + '>'
         + '<span class="wlg-rung__m">' + tierArt(t, o) + (st === "lock" ? '<i class="wlg-rung__lk">' + SVG.lock + '</i>' : "") + '</span>'
@@ -122,27 +126,66 @@ window.VESPER_LEAGUE_UI = (function () {
     return Math.max(2, Math.ceil(gap / per));
   }
 
-  /* ---- 2. resultado de la semana pasada, con Vesper ---- */
+  /* ---- 2. celebración del resultado de la semana pasada ----
+     Diseño aprobado el 2026-11-25 (_propuestas/arena-2026-11-25-ligas/final):
+     copa grande con destellos y halo del color de la liga, título, el
+     guardián de la liga destino, camino Antes/Ahora/Sigue con candados,
+     Vesper con globo en Caveat y CONTINUAR. Un guardián por liga (id). */
+  var GUARDIAN = {
+    bronce: "El Centinela del Hogar", plata: "El Guardián del Sendero", oro: "El Vigía del Horizonte",
+    zafiro: "El Heraldo de la Torre", diamante: "El Custodio del Firmamento", soberana: "El Soberano del Saber"
+  };
+  var SAY = { up: ["¡Vamos por la copa!", "¡Muy bien!", "¡Eso es!", "¡Lo lograste!", "¡Qué nivel!", "¡Maestría!"],
+              stay: "Firme. Ahora, vamos por el podio.", down: "Pasa. Esta semana volvemos a subir." };
+  var CHK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7"/></svg>';
+  var CH = '<svg class="wlg-cel__ar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>';
+
+  function tierIdx(tiers, t) {
+    for (var i = 0; i < tiers.length; i++) if (tiers[i] === t || (t && tiers[i].id === t.id)) return i;
+    return 0;
+  }
   function resultCard(d, o) {
     var r = d.result; if (!r || d.mode === "global") return "";
     var from = tierById(d.tiers, r.fromTier) || d.tier, to = tierById(d.tiers, r.toTier) || d.tier;
     var k = r.result === "up" ? "up" : (r.result === "down" ? "down" : "stay");
-    var C = {
-      up:   { img: "streak",    h: "¡Subiste a " + to.name + "!", s: "Quedaste " + ord(r.rank) + " en " + short(from.name) + ".", v: "¡Eso es! " + short(to.name) + " te queda bien." },
-      down: { img: "incorrect", h: "Bajaste a " + to.name,       s: "Quedaste " + ord(r.rank) + " en " + short(from.name) + ".", v: "Pasa. Esta semana la recuperamos." },
-      stay: { img: "correct",   h: "Te mantienes en " + to.name, s: "Quedaste " + ord(r.rank) + " la semana pasada.",          v: "Firme. Ahora, a por el podio." }
-    }[k];
-    var path = k === "stay" ? "" : '<span class="wlg-res__path" aria-hidden="true"><span>' + tierArt(from, o) + '</span>'
-      + (k === "up" ? SVG.up : SVG.down) + '<span>' + tierArt(to, o) + '</span></span>';
-    return '<section class="wlg-res is-' + k + '" aria-label="Resultado de la semana pasada">'
-      + '<img class="wlg-res__cat" src="' + esc(o.cat(C.img)) + '" alt="" width="132" height="132" decoding="async">'
-      + '<div class="wlg-res__tx">'
-      +   '<span class="wlg-res__ey">Semana pasada</span>'
-      +   '<h3 class="wlg-res__h">' + esc(C.h) + '</h3>'
-      +   '<p class="wlg-res__s">' + esc(C.s) + '</p>'
-      +   path
-      +   '<p class="wlg-res__v">' + esc(C.v) + '</p>'
-      + '</div></section>';
+    var ti = tierIdx(d.tiers, to), last = d.tiers.length - 1, isTop = k === "up" && ti >= last && last > 0;
+    var guard = GUARDIAN[to.id];
+    var h = k === "up" ? (isTop ? "¡Llegaste a la cima: " : "¡Subiste a ") + "<em>" + esc(to.name) + "</em>!"
+          : k === "down" ? "Bajaste a <em>" + esc(to.name) + "</em>"
+          : "Te mantienes en <em>" + esc(to.name) + "</em>";
+    var rank = "Quedaste " + esc(ord(r.rank)) + " en " + esc(short(from.name)) + ".";
+    var g = guard ? " <b>" + esc(guard) + "</b> " + (k === "up" ? "te abre el paso." : k === "stay" ? "sigue de guardia." : "te espera para la revancha.") : "";
+    var say = k === "up" ? SAY.up[Math.min(ti, SAY.up.length - 1)] : SAY[k];
+    var img = k === "up" ? "streak" : (k === "down" ? "incorrect" : "correct");
+    /* camino: up = Antes (origen, con palomita) · Ahora · Sigue; stay =
+       Antes (anterior, sin palomita) · Ahora · Sigue; down = Antes (de la que
+       bajaste, sin palomita: el verde sólo significa «correcto») · Ahora, sin
+       Sigue. Nunca dos «Antes». Sin asumir cuántas ligas hay. */
+    var steps = [], fi = tierIdx(d.tiers, from);
+    if (k === "up" && fi !== ti) steps.push([from, "Antes", "done"]);
+    else if (k === "down" && fi !== ti) steps.push([from, "Antes", "past"]);
+    else if (k === "stay" && ti > 0) steps.push([d.tiers[ti - 1], "Antes", "past"]);
+    steps.push([to, "Ahora", "now"]);
+    if (k !== "down" && ti < last) steps.push([d.tiers[ti + 1], "Sigue", "lock"]);
+    var way = "";
+    steps.forEach(function (x, j) {
+      var t = x[0], st = x[2];
+      if (j) way += x[1] === "Ahora" ? CH.replace("wlg-cel__ar", "wlg-cel__ar is-go") : CH;
+      way += '<div class="wlg-wy is-' + st + '"><small>' + x[1] + '</small><span class="wlg-wy__ic">' + tierArt(t, o)
+        + (st === "lock" ? '<i class="wlg-wy__lk">' + SVG.lock + '</i>' : st === "done" ? '<i class="wlg-wy__lk is-ok">' + CHK + '</i>' : "")
+        + '</span><b>' + esc(short(t.name)) + '</b></div>';
+    });
+    return '<section class="wlg-cel lg-' + esc(to.id) + ' is-' + k + '" aria-labelledby="wlgCelH">'
+      + '<p class="wlg-cel__ey">Liga semanal · semana pasada</p>'
+      + '<div class="wlg-cel__stage" aria-hidden="true"><span class="wlg-cel__halo"></span><span class="wlg-cel__floor"></span>'
+      +   tierArt(to, o, true).replace('class="wlg-art"', 'class="wlg-art wlg-cel__cup"')
+      +   '<span class="wlg-sp s1">' + SVG.star + '</span><span class="wlg-sp s2">' + SVG.star + '</span><span class="wlg-sp s3">' + SVG.star + '</span></div>'
+      + '<h3 class="wlg-cel__h" id="wlgCelH">' + h + '</h3>'
+      + '<p class="wlg-cel__s">' + rank + g + '</p>'
+      + '<div class="wlg-cel__way" role="group" aria-label="Tu camino en las ligas">' + way + '</div>'
+      + '<div class="wlg-cel__vs"><img src="' + esc(o.cat(img)) + '" alt="" width="92" height="92" decoding="async"><p>' + esc(say) + '</p></div>'
+      + '<button class="wlg-cel__go" type="button" data-wlg-continue>Continuar</button>'
+      + '</section>';
   }
 
   /* ---- 3. línea de estado (lo único que hay que leer) ---- */
@@ -168,7 +211,7 @@ window.VESPER_LEAGUE_UI = (function () {
     } else if (me.zone === "up") {
       k = "up"; img = "streak";
       h = "Vas en zona de ascenso · " + plural(d.leadOver || 0, "XP", "XP") + " de ventaja";
-      s = top ? "Defiendes la cima de Diamante." : "Si la semana cerrara hoy, pasarías a " + (d.tiers[d.tier.idx + 1] || d.tier).name + ".";
+      s = "Si la semana cerrara hoy, pasarías a " + (d.tiers[d.tier.idx + 1] || d.tier).name + ".";
       v = "¡No aflojes!";
     } else if (me.zone === "down") {
       k = "down"; img = "incorrect";
@@ -179,7 +222,8 @@ window.VESPER_LEAGUE_UI = (function () {
       pct = firstSafe && firstSafe.xp ? me.xp / (firstSafe.xp + 1) : 0;
     } else {
       k = "mid"; img = "explaining";
-      if (top || !lastUp) { h = "Vas " + ord(me.rank) + " en " + short(d.tier.name); s = "Es la liga más alta: aquí sólo se defiende el puesto."; v = "Bien sostenido."; }
+      if (top) { h = "Defiendes la cima de " + short(d.tier.name); s = "Vas " + ord(me.rank) + " con " + me.xp + " XP esta semana."; v = "Bien sostenido."; }
+      else if (!lastUp) { h = "Vas " + ord(me.rank) + " en " + short(d.tier.name); s = "Sigue sumando XP para subir en la tabla."; v = "Bien sostenido."; }
       else {
         var ku = lessonsFor(d.gapUp || 0, o);
         h = "Vas " + ord(me.rank) + " · te faltan " + (d.gapUp || 0) + " XP para la zona de ascenso";
@@ -189,7 +233,7 @@ window.VESPER_LEAGUE_UI = (function () {
       }
     }
     var bar = pct == null ? "" : '<span class="wlg-st__bar" role="img" aria-label="' + Math.round(pct * 100) + ' % del camino"><i style="width:' + Math.max(6, Math.min(100, Math.round(pct * 100))) + '%"></i></span>';
-    /* con la ficha de la semana pasada (Vesper grande) la tarjeta va sin su
+    /* con la celebración de la semana pasada (Vesper grande) la tarjeta va sin su
        gato: un solo Vesper grande a la vez */
     return '<section class="wlg-st is-' + k + (withCat ? "" : " is-nocat") + '" aria-live="polite">'
       + (withCat ? '<img class="wlg-st__cat" src="' + esc(o.cat(img)) + '" alt="" width="64" height="64" decoding="async">' : "")
@@ -253,30 +297,46 @@ window.VESPER_LEAGUE_UI = (function () {
       + '</footer>';
   }
 
+  /* en la última liga no hay ascenso: ni franja «Suben» ni zona de ascenso */
+  function topRows(data) {
+    var rows = data.rows || [], t = data.tier, n = (data.tiers || []).length;
+    if (data.mode === "global" || !t || !n || t.idx < n - 1) return rows;
+    return rows.map(function (r) { if (r.zone !== "up") return r; var c = {}; for (var k in r) c[k] = r[k]; c.zone = ""; return c; });
+  }
+
   function render(el, data, opt) {
     if (!el || !data) return;
     var o = {
       cat: (opt && opt.cat) || function (e) { return "assets/images/mascot/vesper_cat_" + e + ".webp"; },
       tierArt: opt && opt.tierArt, loginHref: opt && opt.loginHref,
-      goLabel: opt && opt.goLabel, loading: !!(opt && opt.loading), xpPerLesson: opt && opt.xpPerLesson
+      goLabel: opt && opt.goLabel, onContinue: opt && opt.onContinue, loading: !!(opt && opt.loading), xpPerLesson: opt && opt.xpPerLesson
     };
     var mode = data.mode === "cloud" || data.mode === "global" ? data.mode : "local";
     var d = {
       mode: mode,
       tier: data.tier || { idx: 0, id: "bronce", name: "Liga Bronce" },
       tiers: data.tiers || [],
-      rows: data.rows || [],
+      rows: topRows(data),
       gapUp: data.gapUp, leadOver: data.leadOver, endsInMs: data.endsInMs,
       result: data.result || null, realCount: data.realCount, pendingClose: !!data.pendingClose
     };
     var hasRes = !!d.result && mode !== "global";
-    el.innerHTML = '<div class="wlg-root" data-mode="' + mode + '">'
+    el.innerHTML = '<div class="wlg-root' + (hasRes ? " is-cel" : "") + '" data-mode="' + mode + '">'
       + '<div class="wlg-scroll">'
       +   head(d, o) + resultCard(d, o) + status(d, o, !hasRes) + board(d) + legend(d, o)
       + '</div>'
       + '<div class="wlg-foot"><button class="wlg-go" type="button" data-drawer-go="forja">'
       +   esc(o.goLabel || "Sumar XP en la Forja") + SVG.go + '</button></div>'
       + '</div>';
+    var cel = el.querySelector(".wlg-cel"), cont = cel && cel.querySelector("[data-wlg-continue]");
+    if (cont) cont.addEventListener("click", function () {
+      var sc = el.querySelector(".wlg-scroll");
+      cel.parentNode.removeChild(cel);
+      var root = el.querySelector(".wlg-root"); if (root) root.classList.remove("is-cel");
+      if (sc) sc.scrollTop = 0;
+      if (o.onContinue) try { o.onContinue(); } catch (e) {}
+      var go = el.querySelector(".wlg-go"); if (go) try { go.focus({ preventScroll: true }); } catch (e) {}
+    });
   }
 
   function tick(el) {

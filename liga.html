@@ -17,7 +17,7 @@
 <!-- la misma vista que el cajón de la liga en leccion.html: estilos .wlg-* de
      leccion.css (sección LIGA V2) y el render de vesper_league_ui.js -->
 <link rel="stylesheet" href="assets/css/vesper_tokens.css">
-<link rel="stylesheet" href="assets/css/leccion.css?v=6a149d93">
+<link rel="stylesheet" href="assets/css/leccion.css?v=e0a7e346">
 <script src="vesper_cuenta.js"></script>
 <script src="vesper_app_mode.js"></script>
 <script src="vesper_theme.js"></script>
@@ -36,11 +36,11 @@
 
 <script src="vesper_prefs.js"></script>
 <script src="vesper_sfx.js"></script>
-<script src="vesper_icons.js"></script>
+<script src="vesper_icons.js?v=2f6eee2f"></script>
 <script src="vesper_auth.js"></script>
-<script src="vesper_league.js?v=01debcbc"></script>
-<script src="vesper_league_cloud.js"></script>
-<script src="vesper_league_ui.js?v=d2c661d0"></script>
+<script src="vesper_league.js?v=132c26ee"></script>
+<script src="vesper_league_cloud.js?v=100f8d76"></script>
+<script src="vesper_league_ui.js?v=856d2c48"></script>
 <script>
 (function () {
   var LG = window.VESPER_LEAGUE, UI = window.VESPER_LEAGUE_UI, host = document.getElementById("wlgHost");
@@ -53,7 +53,8 @@
   function paint(d, loading) {
     if (!d) return;
     if (!d.result && shown && d.mode !== "global") d.result = shown;
-    UI.render(host, d, { tierArt: "assets/images/league/", loginHref: "login.html?next=liga.html", loading: loading });
+    UI.render(host, d, { tierArt: "assets/images/league/", loginHref: "login.html?next=liga.html", loading: loading,
+      onContinue: function () { shown = null; try { LG.seenResult(); } catch (e) {} } });
     var go = host.querySelector("[data-drawer-go]");
     if (go) go.onclick = function () { location.href = "leccion.html?id=" + encodeURIComponent(go.getAttribute("data-drawer-go")); };
     if (loading) return;
