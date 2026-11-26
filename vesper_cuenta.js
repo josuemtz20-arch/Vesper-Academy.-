@@ -189,6 +189,12 @@
       document.addEventListener("visibilitychange", function () { if (document.visibilityState === "hidden") vaciar("ocultar"); });
       window.addEventListener("pagehide", function () { saliendoFlag = true; });
       window.addEventListener("beforeunload", function () { saliendoFlag = true; });
+      /* volvió (atrás del navegador, bfcache): ya no se está yendo. Si se
+         había congelado por un cambio de cuenta, ahora sí se recarga. */
+      window.addEventListener("pageshow", function () {
+        saliendoFlag = false;
+        if (congelado) { recargando = false; recargar(); }
+      });
     } catch (e) {}
   }
 
@@ -227,7 +233,12 @@
     if (hist.length >= 3) { avisoRecarga(); return false; }
     hist.push(ahora);
     try { sessionStorage.setItem("vesper_cuenta_recargas", JSON.stringify(hist)); } catch (e) {}
-    setTimeout(function () { if (!saliendoFlag) location.reload(); }, 300);
+    setTimeout(function () {
+      if (!saliendoFlag) { location.reload(); return; }
+      /* iba a otra página; si a los 1.5 s sigue aquí, la navegación no llegó */
+      setTimeout(function () { if (congelado && document.visibilityState !== "hidden") avisoRecarga(); }, 1500);
+      recargando = false;
+    }, 300);
     return true;
   }
 
@@ -292,7 +303,8 @@
      PISO_OCULTAR para que cambiar de pestaña no escriba cada vez), al cerrar
      sesión (forzado) y, con la página abierta, como mucho cada CADA. Nunca si
      el contenido no cambió. */
-  var CADA = 30 * 60000, PISO_OCULTAR = 60000;
+  var CADA = 30 * 60000;
+  var PISO_OCULTAR = { economia: 60000, srs: 60000, forja: 10 * 60000, libro: 10 * 60000 };   /* Forja y libros pesan más */
   var GRUPOS = {
     forja:    { claves: ["vesper_forja"], max: 300000 },
     srs:      { claves: ["vesper_srs"], max: 300000 },
@@ -334,7 +346,10 @@
     return GRUPOS[g].claves;
   }
   function maxGrupo(g) { return g.indexOf("libro:") === 0 ? LIBRO_MAX : GRUPOS[g].max; }
-  function cadaGrupo(modo) { return modo === "ocultar" ? PISO_OCULTAR : CADA; }
+  function cadaGrupo(g, modo) {
+    if (modo !== "ocultar") return CADA;
+    return PISO_OCULTAR[g.indexOf("libro:") === 0 ? "libro" : g] || CADA;
+  }
   /* { clave: valorCrudo } del registro local de uid */
   function localDe(uid, g) {
     var o = {};
@@ -420,15 +435,21 @@
     },
     vesper_srs: function (a, b) {
       a = J(a, {}); b = J(b, {});
-      var it = {}, k;
+      var it = {}, k, done = {};
+      for (k in (b.done || {})) done[k] = b.done[k];
+      for (k in (a.done || {})) if (!done[k] || a.done[k] > done[k]) done[k] = a.done[k];
       for (k in (b.items || {})) it[k] = b.items[k];
       for (k in (a.items || {})) {
         var x = a.items[k], y = it[k];
         if (!y || (x.lastSeen || "") > (y.lastSeen || "") ||
             ((x.lastSeen || "") === (y.lastSeen || "") && (x.misses || 0) >= (y.misses || 0))) it[k] = x;
       }
+      /* lo dominado en cualquiera de los dos no revive, salvo que se haya
+         vuelto a fallar después */
+      for (k in it) if (done[k] && done[k] >= (it[k].lastSeen || "")) delete it[k];
       var r = {}; for (k in b) r[k] = b[k]; for (k in a) r[k] = a[k];
       r.items = it;
+      if (Object.keys(done).length) r.done = done;
       return JSON.stringify(r);
     },
     vesper_economy: function (a, b) {
@@ -505,19 +526,20 @@
     });
   }
 
-  var timers = {}, enVuelo = {};
+  var timers = {}, enVuelo = {}, bloqueados = {};
   /* modo: "forzar" (cerrar sesión, primera bajada) | "ocultar" | nada (periódica) */
   function subir(uid, g, modo) {
     if (modo === true) modo = "forzar";
     if (!uid || uid !== uidNube()) return Promise.resolve("sin-nube");
     var m = leerMeta(uid), mg = m.g[g] || {};
     if (!mg.bajado) return Promise.resolve("espera-bajada");   /* nunca subir sin haber fusionado antes */
+    if (bloqueados[g]) return Promise.resolve("bloqueado");    /* libro con copia tardía: esta página no sube */
     var o = localDe(uid, g), h = huellaDe(g, o);
     if (h === mg.h) return Promise.resolve("igual");
     if (!mg.h && !Object.keys(o).length) return Promise.resolve("vacio");   /* no crear documentos vacíos */
     var json = JSON.stringify(paraNube(g, o));
     if (json.length > maxGrupo(g)) return Promise.resolve("grande");   /* se queda solo en el dispositivo */
-    var falta = (mg.s || 0) + cadaGrupo(modo) - Date.now();
+    var falta = (mg.s || 0) + cadaGrupo(g, modo) - Date.now();
     if (modo !== "forzar" && falta > 0) { programar(uid, g, falta + 500); return Promise.resolve("luego"); }
     /* ya hay una subida en camino: la forzada espera y vuelve a mirar (la
        que va en camino puede llevar un estado anterior) */
@@ -566,7 +588,14 @@
          no se aplica en silencio. Queda sin «bajado» (nada sube, así que la
          nube no se pisa con lo viejo) y la próxima apertura fusiona. */
       if (opts.tarde && opts.tarde()) {
-        m.g[g].bajado = 0; guardarMeta(uid, m);
+        /* Primera vez en este dispositivo: queda sin «bajado» (nada sube) y la
+           próxima apertura fusiona. Si ya estaba bajado: no se toca la meta,
+           solo se salta esta apertura y no se sube nada de este libro mientras
+           la página siga abierta (lo que llegó podía ser más nuevo); la
+           próxima apertura decide por fecha, sin unir (unir por JSON
+           duplicaba textos editados en su sitio y revivía lo borrado). */
+        if (!m.g[g].bajado) { guardarMeta(uid, m); }
+        else bloqueados[g] = true;
         return "tarde";
       }
       /* «primera» se lee DESPUÉS del fetch: otra pestaña pudo fusionar

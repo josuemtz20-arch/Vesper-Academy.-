@@ -62,6 +62,7 @@ window.VESPER_SRS = (function () {
     var s = load();
     var id = (lessonId || "?") + "#" + hashEx(ex);
     var today = dayKey();
+    if (s.done && s.done[id]) delete s.done[id];       /* lo volvió a fallar: deja de contar como dominado */
     var cur = s.items[id];
     if (cur) { cur.box = 0; cur.due = today; cur.misses = (cur.misses || 0) + 1; cur.lastSeen = today; }
     else {
@@ -69,6 +70,22 @@ window.VESPER_SRS = (function () {
         box: 0, due: today, misses: 1, added: today, lastSeen: today };
     }
     save(s);
+  }
+
+  /* Dominados: id -> día. Viajan a la nube (vesper_cuenta.js) para que otro
+     dispositivo, al unir, no reviva un ítem que aquí ya se retiró. Con tope:
+     DONE_MAX ids y DONE_DAYS días. */
+  var DONE_MAX = 300, DONE_DAYS = 90;
+  function marcarDominado(s, id, today) {
+    if (!s.done || typeof s.done !== "object") s.done = {};
+    s.done[id] = today;
+    var limite = addDays(today, -DONE_DAYS), ks = Object.keys(s.done), k;
+    for (var i = 0; i < ks.length; i++) { k = ks[i]; if ((s.done[k] || "") < limite) delete s.done[k]; }
+    ks = Object.keys(s.done);
+    if (ks.length > DONE_MAX) {
+      ks.sort(function (a, b) { return (s.done[a] || "") < (s.done[b] || "") ? -1 : 1; });
+      for (var j = 0; j < ks.length - DONE_MAX; j++) delete s.done[ks[j]];
+    }
   }
 
   function grade(id, ok) {
@@ -79,7 +96,11 @@ window.VESPER_SRS = (function () {
     it.lastSeen = today;
     if (ok) {
       it.box = (it.box || 0) + 1;
-      if (it.box >= GRADUATE_BOX) { delete s.items[id]; save(s); return; }   /* dominado: se retira */
+      if (it.box >= GRADUATE_BOX) {                      /* dominado: se retira */
+        delete s.items[id];
+        marcarDominado(s, id, today);
+        save(s); return;
+      }
       it.due = addDays(today, INTERVALS[it.box] || 1);
     } else {
       it.box = 0; it.due = today; it.misses = (it.misses || 0) + 1;
