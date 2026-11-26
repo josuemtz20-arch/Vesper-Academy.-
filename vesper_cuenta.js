@@ -157,13 +157,13 @@
 
   /* Invitado -> primera cuenta. La cuenta gana si ya tuviera algo (no debería:
      su espacio nace aquí). */
-  /* PENDIENTE DE JOSUE (punto de enganche, una línea): hoy el invitado pasa a
-     la primera cuenta, sea cual sea. Para que solo pase a un alumno con correo
-     verificado y nunca desde páginas de profesor, cambia el return por:
-       return !!(user && user.emailVerified) && !/^(portal_|vesper_engine|manual|access_admin)/.test(PAGINA);
-     Si devuelve false no se marca nada: la siguiente cuenta que sí cumpla se lo lleva. */
+  /* Josue (2026-11-25): el invitado pasa a la primera cuenta que se crea o
+     entra, sea alumno o gratuita y verifique o no su correo (sin verificar se
+     queda en su espacio del dispositivo y sube cuando verifique). Solo las
+     páginas de profesor no reclaman, para que la PC del salón no se lo lleve.
+     Si devuelve false no se marca nada: la siguiente cuenta se lo lleva. */
   var PAGINA = (location.pathname.split("/").pop() || "index.html");
-  function puedeReclamar(uid, user) { return true; }
+  function puedeReclamar(uid, user) { return !/^(portal_|vesper_engine|manual|access_admin)/.test(PAGINA); }
 
   function reclamarInvitado(uid, user) {
     if (rget(RECLAMO)) return false;
