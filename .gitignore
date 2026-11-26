@@ -223,6 +223,8 @@
 # Leaderboard real (Firestore REST, reusa VesperAuth) + efectos de sonido
 # compartidos (WebAudio + haptics). Sin claves. Doc de la regla a publicar.
 !/vesper_league_cloud.js
+# Render de la liga v2 (cajón de leccion.html y liga.html), 2026-11-25. Sin claves.
+!/vesper_league_ui.js
 !/vesper_sfx.js
 !/vesper_icons.js
 !/vesper_opticons.js

@@ -18,8 +18,10 @@
  *   available()            -> ¿hay Firebase configurado?
  *   signedIn()             -> ¿hay sesión verificada?
  *   aliasOf()              -> alias público actual (o código anónimo)
+ *   uid()                  -> uid de la sesión ("" sin sesión)
+ *   fetchPlacement()       -> Promise<{status,tier,div,week,last}> (ver abajo)
  *   pushScore(weekId, xp)  -> sube tu XP semanal (PATCH, con rebote)
- *   fetchBoard(weekId)     -> Promise<[{uid,alias,xp,rank,isMe}]|null>
+ *   fetchBoard(weekId[, div]) -> Promise<[{uid,alias,xp,div,tier,rank,isMe}]|null>
  *   aliasProblem(texto)    -> "" si el alias se puede usar; si no, el motivo
  * ============================================================ */
 window.VESPER_LEAGUE_CLOUD = (function () {
@@ -41,12 +43,92 @@ window.VESPER_LEAGUE_CLOUD = (function () {
         authInst = auth;
         auth.onAuthStateChanged(function (user) {
           currentUser = (user && user.emailVerified) ? user : null;
+          placeMem = null;
+          /* una lectura por sesión (luego sale de sessionStorage): así el
+             tier del chip del mapa ya es el de la nube */
+          if (currentUser) fetchPlacement();
         });
       }).catch(function () { /* sin red a Firebase: queda solo simulado */ });
     } catch (e) {}
   }
 
   function signedIn() { return !!currentUser; }
+  function uid() { return currentUser ? currentUser.uid : ""; }
+
+  /* ---- colocación: league_place/{uid} (la escribe _scripts/league_admin.py) ----
+     Resuelve { status, tier, div, week, last }:
+       "ok"    200: la colocación de la nube.
+       "none"  404: aún sin colocar -> bronce-1, tier 0 (lo que la regla acepta).
+       "old"   403: las reglas nuevas no están publicadas -> lo de siempre
+               (tabla global, escritura { alias, xp, ts }).
+       "error" sin red o sin sesión: no se cachea; se reintenta la próxima vez.
+     Se cachea en la sesión del navegador (sessionStorage, por uid y semana,
+     3 h) para no gastar una lectura por página. */
+  var PLACE_TTL = 3 * 3600000;
+  var placeMem = null, placeInflight = null;
+  function placeKey() { return "vesper_league_place:" + uid(); }
+  function curWeek() {
+    try { if (window.VESPER_LEAGUE && VESPER_LEAGUE.weekId) return VESPER_LEAGUE.weekId(); } catch (e) {}
+    return "";
+  }
+  function placeFresh(c) {
+    return !!c && c.uid === uid() && c.wk === curWeek() && (Date.now() - (c.at || 0)) < PLACE_TTL;
+  }
+  function cachedPlacement() {
+    if (placeFresh(placeMem)) return placeMem.p;
+    try {
+      var c = JSON.parse(sessionStorage.getItem(placeKey()) || "null");
+      if (placeFresh(c)) { placeMem = c; return c.p; }
+    } catch (e) {}
+    return null;
+  }
+  function storePlacement(p) {
+    placeMem = { uid: uid(), wk: curWeek(), at: Date.now(), p: p };
+    try { sessionStorage.setItem(placeKey(), JSON.stringify(placeMem)); } catch (e) {}
+    /* vesper_league.js sincroniza el tier local con esto */
+    try { window.dispatchEvent(new CustomEvent("vesper-league-place", { detail: p })); } catch (e) {}
+  }
+  function invalidatePlacement() {
+    placeMem = null;
+    try { sessionStorage.removeItem(placeKey()); } catch (e) {}
+  }
+  function intOf(v) { var n = parseInt((v || {}).integerValue, 10); return isNaN(n) ? null : n; }
+  var NO_PLACE = { status: "none", tier: 0, div: "bronce-1", week: "", last: null };
+  function readPlacement(doc) {
+    var f = (doc && doc.fields) || {};
+    var tier = intOf(f.tier), div = (f.div || {}).stringValue || "";
+    if (tier == null || tier < 0 || tier > 4 || !div) return NO_PLACE;
+    var last = null, lf = ((f.last || {}).mapValue || {}).fields;
+    /* result "idle" = no jugó esa semana (league_admin.py): no hay nada que contar */
+    var lres = lf ? (lf.result || {}).stringValue : "";
+    if (lf && (lf.week || {}).stringValue && (lres === "up" || lres === "down" || lres === "stay")) {
+      last = { week: lf.week.stringValue, rank: intOf(lf.rank),
+               fromTier: intOf(lf.fromTier), result: lres };
+    }
+    return { status: "ok", tier: tier, div: div, week: (f.week || {}).stringValue || "", last: last };
+  }
+  function fetchPlacement() {
+    if (!signedIn()) return Promise.resolve({ status: "error" });
+    var c = cachedPlacement();
+    if (c) return Promise.resolve(c);
+    if (placeInflight) return placeInflight;
+    var me = uid();
+    placeInflight = currentUser.getIdToken().then(function (token) {
+      return fetch(base() + "/league_place/" + encodeURIComponent(me), {
+        headers: { "Authorization": "Bearer " + token }
+      }).then(function (r) {
+        if (r.status === 200) return r.json().then(readPlacement);
+        if (r.status === 404) return NO_PLACE;
+        if (r.status === 403) return { status: "old" };
+        return { status: "error" };
+      });
+    }).then(function (p) {
+      placeInflight = null;
+      if (p.status !== "error" && uid() === me) storePlacement(p);
+      return p;
+    }, function () { placeInflight = null; return { status: "error" }; });
+    return placeInflight;
+  }
 
   /* ---- filtro del alias (auditoría O2) ----
      El alias es texto libre que ven los demás alumnos. Se rechazan:
@@ -105,12 +187,19 @@ window.VESPER_LEAGUE_CLOUD = (function () {
   }
 
   /* ---- codificación Firestore REST ---- */
-  function toFs(alias, xp) {
-    return { fields: {
+  /* place: colocación leída con 200/404 -> también div y tier (la regla los
+     compara con league_place/{uid}). Con 403 o sin leerla: la forma vieja. */
+  function toFs(alias, xp, place) {
+    var doc = { fields: {
       alias: { stringValue: String(alias || "") },
       xp: { integerValue: String(Math.max(0, Math.round(xp || 0))) },
       ts: { stringValue: new Date().toISOString() }
     } };
+    if (place && (place.status === "ok" || place.status === "none")) {
+      doc.fields.div = { stringValue: place.div };
+      doc.fields.tier = { integerValue: String(place.tier) };
+    }
+    return doc;
   }
   function readDoc(doc) {
     var f = (doc && doc.fields) || {};
@@ -119,7 +208,8 @@ window.VESPER_LEAGUE_CLOUD = (function () {
     var alias = (f.alias || {}).stringValue || "";
     if (!alias || aliasProblem(alias)) alias = "Estudiante";
     return { uid: uid, alias: alias,
-      xp: parseInt((f.xp || {}).integerValue || "0", 10) };
+      xp: parseInt((f.xp || {}).integerValue || "0", 10),
+      div: (f.div || {}).stringValue || "", tier: intOf(f.tier) };
   }
 
   /* Los mismos topes que firestore.rules (leagues/{week}/members): si se
@@ -139,7 +229,7 @@ window.VESPER_LEAGUE_CLOUD = (function () {
   }
 
   /* PATCH con rebote (~1.2s) para no escribir en cada ejercicio */
-  function pushScore(weekId, xp) {
+  function pushScore(weekId, xp, retried) {
     if (!signedIn() || !weekId) return;
     /* página aún en el registro de otra cuenta (vesper_cuenta.js): no subir su XP */
     if (window.VesperCuenta && VesperCuenta.ns() !== currentUser.uid) return;
@@ -147,18 +237,28 @@ window.VESPER_LEAGUE_CLOUD = (function () {
     var alias = aliasOf();
     pushTimer = setTimeout(function () {
       var send = clampForRules(weekId, xp);
-      currentUser.getIdToken().then(function (token) {
-        fetch(memberDoc(weekId, currentUser.uid), {
-          method: "PATCH",
-          headers: { "Authorization": "Bearer " + token, "Content-Type": "application/json" },
-          body: JSON.stringify(toFs(alias, send))
+      var me = currentUser;
+      if (!me) return;
+      fetchPlacement().then(function (place) {
+        var withDiv = !!place && (place.status === "ok" || place.status === "none");
+        return me.getIdToken().then(function (token) {
+          return fetch(memberDoc(weekId, me.uid), {
+            method: "PATCH",
+            headers: { "Authorization": "Bearer " + token, "Content-Type": "application/json" },
+            body: JSON.stringify(toFs(alias, send, place))
+          });
         }).then(function (res) {
-          if (!res.ok) return;
+          if (!res.ok) {
+            /* 403 con división: la colocación en caché quedó vieja (p. ej.
+               league_admin.py cerró la semana o sembró). Se relee una vez. */
+            if (res.status === 403 && withDiv && !retried) { invalidatePlacement(); pushScore(weekId, xp, true); }
+            return;
+          }
           try { localStorage.setItem(sentKey(weekId), String(send)); } catch (e) {}
           if (send < Math.min(Math.round(xp || 0), LEAGUE_WEEK_MAX)) pushScore(weekId, xp);
-        }).catch(function () { /* nunca bloquees el progreso local por un fallo de red */ });
-      }).catch(function () {});
-    }, 1200);
+        });
+      }).catch(function () { /* nunca bloquees el progreso local por un fallo de red */ });
+    }, retried ? 0 : 1200);
   }
 
   /* Tabla de la semana: Firestore la devuelve ya ORDENADA por xp (de mayor a
@@ -171,17 +271,24 @@ window.VESPER_LEAGUE_CLOUD = (function () {
      (listDocuments): con las reglas publicadas el 2026-10-28 ese GET responde
      403 aunque la regla permita leer, mientras que runQuery con la misma
      sesión responde 200 (comprobado en producción). */
-  function fetchBoard(weekId) {
+  /* Con `div` (ligas reales, 2026-11-25): solo los miembros de esa división
+     (filtro div == X, hasta 100, también por runQuery). Sin orderBy: una
+     división cabe entera y se ordena aquí. Devuelve la división completa
+     (sin el corte a 50 de la tabla global). */
+  function fetchBoard(weekId, div) {
     if (!signedIn() || !weekId) return Promise.resolve(null);
+    var q = div
+      ? { from: [{ collectionId: "members" }],
+          where: { fieldFilter: { field: { fieldPath: "div" }, op: "EQUAL", value: { stringValue: String(div) } } },
+          limit: 100 }
+      : { from: [{ collectionId: "members" }],
+          orderBy: [{ field: { fieldPath: "xp" }, direction: "DESCENDING" }],
+          limit: 100 };
     return currentUser.getIdToken().then(function (token) {
       return fetch(base() + "/leagues/" + encodeURIComponent(weekId) + ":runQuery", {
         method: "POST",
         headers: { "Authorization": "Bearer " + token, "Content-Type": "application/json" },
-        body: JSON.stringify({ structuredQuery: {
-          from: [{ collectionId: "members" }],
-          orderBy: [{ field: { fieldPath: "xp" }, direction: "DESCENDING" }],
-          limit: 100
-        } })
+        body: JSON.stringify({ structuredQuery: q })
       })
         .then(function (r) {
           if (r.status !== 200) return null;
@@ -190,7 +297,7 @@ window.VESPER_LEAGUE_CLOUD = (function () {
                                 .map(function (x) { return x.document; });
             var rows = docs.map(readDoc).filter(function (x) { return x.uid; });
             rows.sort(function (a, b) { return b.xp - a.xp; });
-            rows = rows.slice(0, 50);
+            if (!div) rows = rows.slice(0, 50);
             for (var i = 0; i < rows.length; i++) {
               rows[i].rank = i + 1;
               rows[i].isMe = (rows[i].uid === currentUser.uid);
@@ -202,6 +309,7 @@ window.VESPER_LEAGUE_CLOUD = (function () {
   }
 
   start();
-  return { available: available, signedIn: signedIn, aliasOf: aliasOf, pushScore: pushScore, fetchBoard: fetchBoard,
+  return { available: available, signedIn: signedIn, uid: uid, aliasOf: aliasOf, pushScore: pushScore,
+           fetchBoard: fetchBoard, fetchPlacement: fetchPlacement, invalidatePlacement: invalidatePlacement,
            aliasProblem: aliasProblem };
 })();

@@ -195,20 +195,34 @@
 
   /* Las reglas no dejan borrar una entrada de liga (delete: if false) para que
      nadie se quite de la tabla al ir perdiendo; lo que sí podemos es quitar el
-     nombre. Se anonimizan la semana actual y la anterior (las que se ven). */
+     nombre. Se anonimizan la semana actual y la anterior (las que se ven).
+     La máscara lleva también div y tier SIN mandarlos en el cuerpo, o sea que
+     los borra: con las reglas de divisiones (2026-11-25), si la entrada
+     guardaba una división que ya no es la de league_place (la semana pasada,
+     o tras un cierre), un PATCH solo de alias la dejaría con un div que no
+     coincide y la regla lo rechazaría. Sin div/tier queda la forma vieja
+     { alias, xp, ts }, que la regla acepta siempre.
+     Si falla, el borrado de la cuenta se detiene (como con el progreso): si
+     no, el alias seguiría visible en la tabla de otros alumnos. */
   function anonymizeLeague(token, uid) {
     var now = new Date();
     var weeks = [isoWeek(now), isoWeek(new Date(now.getTime() - 7 * 86400000))];
+    var mask = "updateMask.fieldPaths=alias&updateMask.fieldPaths=div&updateMask.fieldPaths=tier";
     return Promise.all(weeks.map(function (w) {
       var url = BASE + "/leagues/" + encodeURIComponent(w) + "/members/" + encodeURIComponent(uid);
       return fetch(url, { headers: { "Authorization": "Bearer " + token } }).then(function (r) {
-        if (r.status !== 200) return null;
-        return fetch(url + "?updateMask.fieldPaths=alias&currentDocument.exists=true", {
+        /* 404: no jugó esa semana. 403: correo sin verificar, que nunca pudo
+           escribir en la liga (la regla pide email_verified para leer y escribir) */
+        if (r.status === 404 || r.status === 403) return null;
+        if (r.status !== 200) throw failData("liga " + w + " leer " + r.status);
+        return fetch(url + "?" + mask + "&currentDocument.exists=true", {
           method: "PATCH",
           headers: { "Authorization": "Bearer " + token, "Content-Type": "application/json" },
           body: JSON.stringify({ fields: { alias: { stringValue: "—" } } })
+        }).then(function (res) {
+          if (!res.ok) throw failData("liga " + w + " anonimizar " + res.status);
         });
-      }).catch(function () { return null; });
+      }, function () { throw failData("liga " + w + " network"); });
     }));
   }
 

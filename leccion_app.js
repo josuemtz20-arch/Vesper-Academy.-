@@ -42,7 +42,7 @@
     exams: ["vesper_boss_questions.js", "vesper_level_questions.js"],
     forja: ["vesper_forja.js"],
     tour: ["vesper_tour.js"],
-    league: ["vesper_league.js", "vesper_league_cloud.js"],
+    league: ["vesper_league.js", "vesper_league_cloud.js", "vesper_league_ui.js"],
     /* verbos conjugados, salas avanzadas y frases de ejemplo del vocabulario */
     vocab: ["vesper_vocab_more.js"]
   };
@@ -321,31 +321,89 @@
   /* ---------- Mapa de mundos (HUB estilo videojuego) ---------- */
   /* la liga semanal (tier + tu puesto), tappable. Se pinta en su hueco del HUD
      cuando vesper_league.js ya llegó (se pide en reposo, tras el mapa). */
-  function fillLeagueTile() {
-    var slot = byId("leagueTile");
-    if (!slot || !window.VESPER_LEAGUE || !VESPER_LEAGUE.tier) return;
+  /* emblemas de las ligas (tier_<id>.webp). El diseño final del emblema aún
+     no está elegido: se reemplaza el archivo con el mismo nombre. */
+  var LIGA_ART = "assets/images/league/";
+  /* modo del chip, síncrono y sin lecturas de Firestore:
+       "local"    liga simulada (sin sesión, o reglas viejas: status "old")
+       "division" con sesión y colocación de la nube (ok/none)
+     El puesto real de la división sólo se sabe cuando el cajón ya cargó la
+     tabla (board(): una consulta de la división); hasta entonces el chip no
+     inventa uno. */
+  var _ligaChip = { mode: "local", rank: null, tier: null };
+  function leagueChipLabel() {
+    var LG = window.VESPER_LEAGUE, t = LG.tier();
+    /* en división, el tier de la colocación (si viene de la caché de la
+       sesión, vesper_league.js aún puede tener el de antes) */
+    if (_ligaChip.mode === "division" && _ligaChip.tier != null && LG.TIERS && LG.TIERS[_ligaChip.tier])
+      t = { idx: _ligaChip.tier, id: LG.TIERS[_ligaChip.tier].id, name: LG.TIERS[_ligaChip.tier].name, icon: LG.TIERS[_ligaChip.tier].icon };
+    var tn = t.name.replace(/^Liga\s+/, "");
+    var C = window.VESPER_LEAGUE_CLOUD, signed = !!(C && C.signedIn && C.signedIn());
+    if (_ligaChip.mode === "division") {
+      var r = _ligaChip.rank;
+      return { tier: t, name: tn, rank: r, sub: "alumnos y práctica",
+        aria: "Liga " + tn + ": tu división con alumnos de Vesper y rivales de práctica. "
+          + (r ? "Vas " + r + "º. Abrir la liga" : "Abrir para ver tu puesto") };
+    }
+    var lr = LG.myRank();
+    return { tier: t, name: tn, rank: lr, sub: "práctica",
+      aria: "Liga de práctica " + tn + (signed ? "" : ", sin sesión") + ": compites con rivales de práctica. Vas " + lr + "º. Abrir la liga" };
+  }
+  function paintLeagueChip() {
+    var LG = window.VESPER_LEAGUE, UI = window.VESPER_LEAGUE_UI;
+    if (!LG || !LG.tier) return;
+    var L = leagueChipLabel();
+    var art = UI ? UI.tierArt(L.tier, { tierArt: LIGA_ART }) : (window.VESPER_ICN ? VESPER_ICN.tier(L.tier.id) : (L.tier.icon || ""));
     try {
-      var lt = VESPER_LEAGUE.tier(), lr = VESPER_LEAGUE.myRank();
-      var lic = (window.VESPER_ICN ? VESPER_ICN.tier(lt.id) : (lt.icon || ""));
-      var a = document.createElement("a");
-      a.className = "hstat hstat--link"; a.href = "liga.html";   /* sin JS: la página aparte */
-      a.setAttribute("aria-haspopup", "dialog");
-      a.onclick = function (e) { e.preventDefault(); openDrawer("liga", headsPos().side, _hubLevel, a); };
-      var tierName = lt.name.replace(/^Liga\s+/, "");
-      a.setAttribute("aria-label", "Liga de práctica " + tierName + " (rivales simulados), puesto " + lr);
-      a.title = "Liga semanal de práctica: compites con rivales simulados";
-      a.innerHTML = '<span class="hstat__ic hstat__ic--badge">' + lic + '</span>'
-        + '<span class="hstat__tx"><span class="hstat__v">' + lr + 'º</span><span class="hstat__l">' + esc(tierName) + '</span><span class="hstat__sub">práctica</span></span>';
-      slot.replaceWith(a);
-    } catch (e) {}
-    /* la burbuja de la liga lleva tu puesto como globito */
-    try {
-      var hb = document.querySelector('#vheads [data-tab="liga"]');
-      if (hb && !hb.querySelector("em")) {
-        var em = document.createElement("em"); em.className = "vhead__rk";
-        em.textContent = VESPER_LEAGUE.myRank() + "º"; hb.appendChild(em);
+      var a = byId("leagueTile");
+      if (a && a.tagName !== "A") {
+        var slot = a;
+        a = document.createElement("a");
+        a.id = "leagueTile";
+        a.className = "hstat hstat--link hstat--liga"; a.href = "liga.html";   /* sin JS: la página aparte */
+        a.setAttribute("aria-haspopup", "dialog");
+        a.onclick = function (e) { e.preventDefault(); openDrawer("liga", headsPos().side, _hubLevel, a); };
+        slot.replaceWith(a);
+      }
+      if (a) {
+        a.setAttribute("aria-label", L.aria);
+        a.title = L.aria;
+        a.innerHTML = '<span class="hstat__ic hstat__ic--badge" aria-hidden="true">' + art + '</span>'
+          + '<span class="hstat__tx" aria-hidden="true">' + (L.rank
+              ? '<span class="hstat__v">' + L.rank + 'º</span><span class="hstat__l">' + esc(L.name) + '</span><span class="hstat__sub">' + L.sub + '</span>'
+              : '<span class="hstat__v">' + esc(L.name) + '</span><span class="hstat__l">ver tu puesto</span><span class="hstat__sub">' + L.sub + '</span>')
+          + '</span>';
       }
     } catch (e) {}
+    /* la burbuja: el emblema de tu liga y tu puesto como globito */
+    try {
+      var hb = document.querySelector('#vheads [data-tab="liga"]');
+      if (hb) {
+        hb.setAttribute("aria-label", L.aria);
+        var ic = hb.querySelector(".vhead__ic"); if (ic) ic.innerHTML = art;
+        var em = hb.querySelector("em.vhead__rk");
+        if (L.rank) {
+          if (!em) { em = document.createElement("em"); em.className = "vhead__rk"; em.setAttribute("aria-hidden", "true"); hb.appendChild(em); }
+          em.textContent = L.rank + "º";
+        } else if (em) em.remove();
+      }
+    } catch (e) {}
+  }
+  function fillLeagueTile() {
+    if (!window.VESPER_LEAGUE || !VESPER_LEAGUE.tier) return;
+    paintLeagueChip();
+    /* con sesión: ¿hay división en la nube? fetchPlacement sale de
+       sessionStorage (3 h) o reusa la lectura que ya hizo vesper_league_cloud.js
+       al iniciar sesión. La sesión de Firebase llega tarde: se espera un poco. */
+    var C = window.VESPER_LEAGUE_CLOUD, tries = 0;
+    if (!C || !C.available || !C.available()) return;
+    (function attempt() {
+      if (!C.signedIn()) { if (tries++ < 8) setTimeout(attempt, 500); return; }
+      C.fetchPlacement().then(function (p) {
+        if (!p || (p.status !== "ok" && p.status !== "none")) return;
+        if (_ligaChip.mode !== "division" || _ligaChip.tier !== p.tier) { _ligaChip.mode = "division"; _ligaChip.tier = p.tier; paintLeagueChip(); }
+      }, function () {});
+    })();
   }
   function hudHtml(st, dg, hello, info) {
     info = info || {};
@@ -2045,7 +2103,7 @@
       + '<span class="vhead__ic"><img src="' + TAB_ART.forja + '" alt="" decoding="async" onerror="this.outerHTML=window.__vforjaGlyph"></span>'
       + '<span class="vhead__lb">Forja</span>' + (due ? '<em>' + (due > 99 ? "99+" : due) + '</em>' : "") + '</button>';
     /* la liga, con la misma regla que su chip del HUD: sólo cuando ya hay XP */
-    if (st && (st.xp || 0) > 0) h += '<button class="vhead vhead--liga" type="button" data-tab="liga" aria-haspopup="dialog" aria-label="Liga semanal de práctica">'
+    if (st && (st.xp || 0) > 0) h += '<button class="vhead vhead--liga" type="button" data-tab="liga" aria-haspopup="dialog" aria-label="Liga semanal">'
       + '<span class="vhead__ic">' + LIGA_GLYPH + '</span><span class="vhead__lb">Liga</span></button>';
     return '<div class="vheads" id="vheads" role="group" aria-label="Práctica extra" style="' + worldVars(WORLD_THEME[selLevel] || {}) + '">' + h + '</div>';
   }
@@ -2135,16 +2193,12 @@
   function drawerBody(kind, selLevel) {
     var go = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h13"/><path d="m12 5 7 7-7 7"/></svg>';
     if (kind === "liga") {
-      /* la cabecera y la tabla llegan con vesper_league.js (paintLigaDrawer) */
-      return '<div class="wdrawer__art" id="wlgArt">' + LIGA_GLYPH + '</div>'
-        + '<span class="wdrawer__ey" id="wlgEy">Liga semanal · práctica</span>'
-        + '<h2 class="wdrawer__t" id="wdrawerT">Liga</h2>'
-        + '<p class="wdrawer__ct" id="wlgTimer">Cargando la tabla…</p>'
-        + '<div id="wlgResult"></div>'
-        + '<ol class="wlg" id="wlgBoard" aria-label="Clasificación de esta semana"></ol>'
-        + '<p class="wlg__legend"><i class="up"></i>Ascienden los primeros <b id="wlgPz">3</b> <i class="down"></i>Descienden los últimos <b id="wlgRz">3</b></p>'
-        + '<p class="wdrawer__p wlg__note" id="wlgNote">Tu XP es real: lo sumas con cada lección. Los rivales son simulados.</p>'
-        + '<button class="wdrawer__go" type="button" data-drawer-go="forja">Sumar XP en la Forja' + go + '</button>';
+      /* contenedor: vesper_league_ui.js lo llena (paintLigaDrawer). Mientras
+         llega el módulo, sólo el título (aria-labelledby) y un aviso. */
+      return '<div class="wlg-host" id="wlgHost"><div class="wlg-root"><div class="wlg-scroll">'
+        + '<h2 class="wlg-title" id="wdrawerT">Liga semanal</h2>'
+        + '<p class="wlg-who" id="wlgTimer">Cargando la tabla…</p>'
+        + '</div></div></div>';
     }
     if (kind === "vocab") {
       var d = densData()[selLevel], pr = denProgress(d);
@@ -2184,6 +2238,17 @@
     wrap.classList.add("on");
     wrap.onclick = function (e) { if (e.target === wrap) closeDrawer(); };
     wrap.querySelector(".wdrawer__x").onclick = function () { closeDrawer(); };
+    bindDrawerGo(selLevel);
+    document.addEventListener("keydown", drawerKeys, true);
+    try { (wrap.querySelector(".wdrawer__go") || wrap.querySelector(".wdrawer__x")).focus({ preventScroll: true }); } catch (e) {}
+    if (kind === "liga") need("league").then(function () { paintLigaDrawer(selLevel); }, function () {
+      var t = byId("wlgTimer"); if (t) t.textContent = "La liga no está disponible sin conexión.";
+    });
+    track("side_tab_open", { tab: kind, level: selLevel });
+  }
+  /* los botones "ir a" del cajón; la liga los vuelve a pintar en cada
+     repintado, así que se enganchan de nuevo después de cada uno */
+  function bindDrawerGo(selLevel) {
     each("#wdrawer [data-drawer-go]", function (b) {
       b.onclick = function () {
         var g = b.getAttribute("data-drawer-go");
@@ -2191,66 +2256,54 @@
         else location.search = "?id=" + encodeURIComponent(g);
       };
     });
-    document.addEventListener("keydown", drawerKeys, true);
-    try { wrap.querySelector(".wdrawer__go").focus({ preventScroll: true }); } catch (e) {}
-    if (kind === "liga") need("league").then(paintLigaDrawer, function () {
-      var t = byId("wlgTimer"); if (t) t.textContent = "La liga no está disponible sin conexión.";
-    });
-    track("side_tab_open", { tab: kind, level: selLevel });
   }
-  /* La misma liga que liga.html, dentro del mapa: primero la simulada (al
-     instante, sin red) y, si hay sesión, la global de la nube encima. */
-  function paintLigaDrawer() {
-    var LG = window.VESPER_LEAGUE, w = byId("wdrawer");
-    if (!LG || !w || w.querySelector("[data-kind]").getAttribute("data-kind") !== "liga") return;
-    var ICN = window.VESPER_ICN, pz = LG.promotionZone(), rz = LG.relegationZone();
-    byId("wlgPz").textContent = pz; byId("wlgRz").textContent = rz;
-    function timer() {
-      var ms = LG.weekEndsInMs(), d = Math.floor(ms / 86400000), h = Math.floor((ms % 86400000) / 3600000);
-      return "Termina en " + (d > 0 ? d + "d " : "") + h + "h";
+  /* La misma liga que liga.html, dentro del mapa (vesper_league_ui.js).
+     board() resuelve al instante sin sesión; con sesión espera a la nube, así
+     que si tarda se pinta antes la simulada (localBoard) como "cargando".
+     La sesión de Firebase llega tarde: si en este aparato hubo una cuenta
+     (VesperCuenta.ns) y aún no hay sesión, se reintenta unas veces. */
+  var _wlgSeq = 0, _wlgTick = 0;
+  function paintLigaDrawer(selLevel) {
+    var LG = window.VESPER_LEAGUE, UI = window.VESPER_LEAGUE_UI, host = byId("wlgHost");
+    if (!LG || !LG.board || !UI || !host) return;
+    var seq = ++_wlgSeq, shown = null, tries = 0;
+    var C = window.VESPER_LEAGUE_CLOUD;
+    var hadAccount = !!(window.VesperCuenta && VesperCuenta.ns && VesperCuenta.ns());
+    function alive() { return seq === _wlgSeq && byId("wlgHost") === host; }
+    function paint(data, loading) {
+      if (!alive() || !data) return;
+      if (!data.result && shown && data.mode !== "global") data.result = shown;
+      var refocus = document.activeElement && host.contains(document.activeElement);
+      UI.render(host, data, { tierArt: LIGA_ART, loginHref: "login.html?next=leccion.html", loading: loading });
+      bindDrawerGo(selLevel);
+      if (refocus) try { host.querySelector(".wlg-go").focus({ preventScroll: true }); } catch (e) {}
+      /* sin scrollIntoView a tu fila: el cajón abre arriba (liga, escalera y
+         la línea de estado, que ya dice tu puesto), como en el diseño */
+      if (loading) return;
+      /* el resultado de la semana pasada se marca visto cuando ya salió en la
+         tabla definitiva (si se marcara en la provisional, la de la nube
+         llegaría sin él) */
+      if (data.result && data.mode !== "global") { shown = data.result; try { LG.seenResult(); } catch (e) {} }
+      if (data.mode === "cloud") { _ligaChip.mode = "division"; _ligaChip.rank = data.me && data.me.rank; _ligaChip.tier = data.tier.idx; }
+      else if (data.mode === "local") { _ligaChip.mode = "local"; _ligaChip.rank = null; _ligaChip.tier = null; }
+      paintLeagueChip();
     }
-    function head(icon, ey, name, extra) {
-      if (!byId("wlgArt")) return;
-      byId("wlgArt").innerHTML = icon || LIGA_GLYPH;
-      byId("wlgEy").textContent = ey;
-      byId("wdrawerT").textContent = name;
-      byId("wlgTimer").innerHTML = esc(timer()) + (extra ? " · <b>" + esc(extra) + "</b>" : "");
+    function run() {
+      var settled = false;
+      LG.board().then(function (d) {
+        settled = true;
+        var waitAuth = d && d.mode === "local" && hadAccount && C && C.available && C.available() && !C.signedIn();
+        if (waitAuth && tries++ < 6) { paint(d, true); setTimeout(function () { if (alive()) run(); }, 500); return; }
+        paint(d, false);
+      }, function () { settled = true; if (LG.localBoard) paint(LG.localBoard(), false); });
+      setTimeout(function () { if (!settled && LG.localBoard) paint(LG.localBoard(), true); }, 150);
     }
-    function board(rows, nameKey) {
-      var el = byId("wlgBoard"); if (!el) return;
-      var n = rows.length, me = null;
-      el.innerHTML = rows.map(function (r) {
-        var cls = r.rank <= pz ? "up" : (r.rank > n - rz ? "down" : "");
-        if (r.isMe) cls += " me";
-        return '<li class="' + cls.trim() + '"' + (r.isMe ? ' aria-current="true"' : '') + '>'
-          + '<span class="wlg__rk">' + r.rank + '</span>'
-          + '<span class="wlg__nm">' + (r.isMe ? "Tú" : esc(r[nameKey] || "Estudiante")) + '</span>'
-          + '<span class="wlg__xp">' + r.xp + ' XP</span></li>';
-      }).join("");
-      me = el.querySelector(".me");
-      if (me) try { me.scrollIntoView({ block: "nearest" }); } catch (e) {}
-    }
-    var last = LG.lastResult();
-    if (last && (last.promoted || last.relegated)) {
-      byId("wlgResult").innerHTML = '<p class="wlg__banner ' + (last.promoted ? "up" : "down") + '">'
-        + (last.promoted ? "¡Ascendiste de liga la semana pasada!" : "Bajaste de liga la semana pasada. ¡A recuperar el puesto!") + '</p>';
-      if (LG.clearLast) LG.clearLast();
-    }
-    var t = LG.tier();
-    head(ICN ? ICN.tier(t.id) : t.icon, "Liga semanal · práctica", t.name, "");
-    board(LG.standings(), "name");
-    var cloud = window.VESPER_LEAGUE_CLOUD, tries = 0;
-    if (!cloud || !cloud.available()) return;
-    (function attempt() {
-      if (!byId("wlgBoard")) return;                     /* cerraron el cajón */
-      if (!cloud.signedIn()) { if (tries++ < 6) setTimeout(attempt, 500); return; }
-      LG.liveStandings().then(function (rows) {
-        if (!rows || !rows.length || !byId("wlgBoard")) return;
-        head(ICN ? ICN.globe : "", "Liga global · esta semana", "Todos los alumnos", "En la nube");
-        board(rows, "alias");
-        var note = byId("wlgNote"); if (note) note.textContent = "Tu XP es real y compites con los demás alumnos de Vesper.";
-      }, function () {});
-    })();
+    run();
+    clearInterval(_wlgTick);
+    _wlgTick = setInterval(function () {
+      if (!alive()) { clearInterval(_wlgTick); return; }
+      UI.tick(host);
+    }, 30000);
   }
   function drawerKeys(e) {
     var w = byId("wdrawer"); if (!w) return;
@@ -2264,6 +2317,7 @@
   function closeDrawer(instant) {
     var w = byId("wdrawer"); if (!w) return;
     document.removeEventListener("keydown", drawerKeys, true);
+    clearInterval(_wlgTick); _wlgTick = 0; _wlgSeq++;   /* cuenta regresiva y repintados de la liga */
     w.id = ""; w.classList.remove("on");
     if (instant || reduceMotion()) { w.remove(); headsSync(); }
     else setTimeout(function () { w.remove(); headsSync(); }, 280);
@@ -5610,9 +5664,26 @@
       + statTiles(earnedXp, pct)
       + (comboBonus > 0 ? '<div class="xp-bonus">' + ic('flame') + ' +' + comboBonus + T(' XP por ', ' XP for ') + maxCombo + T(' seguidas', ' in a row') + '</div>' : '')
       + '<p class="muted">' + correct + T(' de ', ' of ') + total + T(' correctos', ' correct') + '</p>'
+      + '<p class="lc-league" id="lcLeague" hidden></p>'
       + '<button class="btn btn-gold" id="cont">' + T('Continuar', 'Continue') + '</button></div></div>');
     countUp();
     byId("cont").onclick = renderStreak;
+    leagueResultLine(earnedXp);
+  }
+  /* "+45 XP · vas 4º en Liga Plata" bajo el resultado, SIN red: la liga
+     simulada o la foto de la división que el cajón ya cargó en esta pestaña
+     (VESPER_LEAGUE.projection). Si no hay dato fiable, no sale nada. */
+  function leagueResultLine(xp) {
+    if (!xp) return;
+    need("league").then(function () {
+      var el = byId("lcLeague"), LG = window.VESPER_LEAGUE;
+      if (!el || !LG || !LG.projection) return;
+      var pr = null;
+      try { pr = LG.projection(xp); } catch (e) {}
+      if (!pr || !pr.rank) return;
+      el.textContent = "+" + xp + " XP · vas " + pr.rank + "º en " + pr.tier.name + (pr.mode === "local" ? " (práctica)" : "");
+      el.hidden = false;
+    }, function () {});
   }
 
   /* No alcanzó el umbral: no cuenta como superada (sin XP ni desbloqueo).

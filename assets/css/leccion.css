@@ -3756,27 +3756,6 @@ body:has(#app #verify) #app .card.center{background-image:none}
    desde su burbuja o desde el chip del HUD. liga.html queda como respaldo. */
 .vheads.on .vhead:nth-child(3){animation-delay:.16s}
 .vhead em.vhead__rk{background:#c9a84c;color:#14122a}
-.wdrawer[data-kind="liga"]{justify-content:flex-start;padding-top:calc(70px + env(safe-area-inset-top))}
-.wdrawer[data-kind="liga"] .wdrawer__art{width:76px;height:76px}
-.wdrawer[data-kind="liga"] .wdrawer__art svg{width:40px;height:40px}
-.wlg{list-style:none;margin:2px 0 0;padding:0;width:100%;display:flex;flex-direction:column;gap:4px}
-.wlg li{display:grid;grid-template-columns:28px 1fr auto;align-items:center;gap:10px;min-height:40px;padding:0 12px;
-  border-radius:12px;background:rgba(245,242,235,.06);border-left:3px solid transparent;font-size:.9rem}
-.wlg li.up{border-left-color:#5fbf7a}
-.wlg li.down{border-left-color:#e0623c}
-.wlg li.me{background:color-mix(in srgb,var(--w-accent,#c9a84c) 30%,transparent);box-shadow:inset 0 0 0 1px var(--w-accent,#c9a84c)}
-.wlg__rk{font:800 .82rem/1 Inter,system-ui,sans-serif;color:#f3e2ab;text-align:center}
-.wlg__nm{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#fff}
-.wlg li.me .wlg__nm{font-weight:800}
-.wlg__xp{font:700 .8rem/1 Inter,system-ui,sans-serif;color:rgba(245,242,235,.8);font-variant-numeric:tabular-nums}
-.wlg__legend{margin:2px 0 0;font-size:.74rem;color:rgba(245,242,235,.7);display:flex;flex-wrap:wrap;align-items:center;gap:4px 6px}
-.wlg__legend i{display:inline-block;width:10px;height:10px;border-radius:3px}
-.wlg__legend i.up{background:#5fbf7a}
-.wlg__legend i.down{background:#e0623c;margin-left:6px}
-.wlg__banner{margin:0;padding:10px 12px;border-radius:12px;font-size:.86rem;font-weight:700}
-.wlg__banner.up{background:rgba(95,191,122,.18);color:#bff0cc}
-.wlg__banner.down{background:rgba(224,98,60,.18);color:#ffd0c2}
-.wlg__note{font-size:.8rem}
 /* ---- VOCABULARIO EN USO (2026-11-06) ----
    Sala de los verbos: tabla de conjugación bajo la tarjeta (cada forma se toca
    para oírla); toda tarjeta: su frase de ejemplo con la palabra resaltada.
@@ -4018,3 +3997,226 @@ body:has(#app #verify) #app .card.center{background-image:none}
 .wavatar.is-walking:has(.wwalker)::before,.wavatar.is-walking:has(.wwalker)::after{opacity:0}
 .wsky.is-pixel .wwalker{image-rendering:pixelated}
 @media (prefers-reduced-motion:reduce){.wavatar.is-walking .wcat,.wavatar.is-walking .wacc,.wpaw,.wland,.wwalker{animation:none}}
+
+/* ===== LIGA V2 (2026-11-25) =====
+   Por qué: la liga era una lista plana que no decía qué hacer ni con quién
+   competías. Ahora: escalera de las 5 ligas con su emblema, una línea de
+   estado que dice qué hacer, líneas de ascenso/descenso dentro de la tabla,
+   alumnos reales (aro lleno) contra rivales de práctica (aro punteado) y el
+   resultado de la semana pasada en una ficha de papel con Vesper. Diseño
+   aprobado: _propuestas/liga-v2/demo.html. Lo pinta vesper_league_ui.js en el
+   cajón (leccion_app.js) y en liga.html. Sustituye a "LIGA EN EL MAPA"
+   (2026-11-03): sus reglas .wlg li / .wlg__* se quitaron.
+   El cajón es de noche en los 8 temas, como Vocabulario y Forja; lo que
+   cambia por tema es el color de acción/premio (--gold). La ficha de papel
+   es crema en todos los temas, igual que la boleta del portal. */
+
+.wdrawer[data-kind="liga"]{width:min(400px,92vw);padding:0;justify-content:flex-start;align-items:stretch;overflow:hidden;gap:0}
+.wlg-root{
+  --wlg-on:var(--on-night,#f5f2eb);
+  --wlg-soft:color-mix(in srgb,var(--wlg-on) 68%,transparent);
+  --wlg-faint:color-mix(in srgb,var(--wlg-on) 9%,transparent);
+  --wlg-hair:color-mix(in srgb,var(--wlg-on) 16%,transparent);
+  --wlg-up:color-mix(in srgb,var(--gold) 72%,#fff);
+  --wlg-down:color-mix(in srgb,var(--error) 62%,#fff);
+  --wlg-ficha:#f7f1e3; --wlg-ficha-ink:#1B1B2F; --wlg-ficha-gold:#7c5e22; --wlg-ficha-line:#e3d8bf;
+  display:flex;flex-direction:column;height:100%;min-height:0;width:100%;color:var(--wlg-on);
+  font-family:Inter,system-ui,sans-serif}
+.wlg-scroll{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;
+  padding:calc(66px + env(safe-area-inset-top)) 18px 18px;display:flex;flex-direction:column;gap:16px}
+.wlg-root .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* -- cabecera -- */
+.wlg-head{display:flex;flex-direction:column;gap:12px}
+.wlg-head__row{display:flex;align-items:center;gap:14px}
+.wlg-head__medal{flex:0 0 auto;width:64px;height:64px;border-radius:50%;display:grid;place-items:center;
+  background:radial-gradient(circle at 50% 38%,color-mix(in srgb,var(--gold) 26%,transparent),transparent 70%);
+  box-shadow:0 0 0 2px color-mix(in srgb,var(--gold) 70%,transparent),0 0 0 6px rgba(20,18,42,.8),0 0 28px color-mix(in srgb,var(--gold) 30%,transparent)}
+.wlg-head__medal svg{width:46px;height:46px}
+.wlg-head__tx{min-width:0;display:flex;flex-direction:column;gap:3px}
+.wlg-ey{font:800 .68rem/1 Inter,system-ui,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--wlg-up)}
+.wlg-title{margin:0;font:700 1.6rem/1.1 "Inria Serif",Georgia,serif;color:var(--wlg-on)}
+.wlg-pen{width:118px;height:8px;color:var(--gold);transform:rotate(-1.5deg);margin-top:1px}
+.wlg-clock{align-self:flex-start;margin:0;display:inline-flex;align-items:center;gap:7px;min-height:32px;padding:0 12px 0 9px;
+  border-radius:999px;background:var(--wlg-faint);border:1px solid var(--wlg-hair);font:700 .82rem/1 Inter,system-ui,sans-serif;
+  color:var(--wlg-on);font-variant-numeric:tabular-nums}
+.wlg-clock svg{width:17px;height:17px;color:var(--wlg-up)}
+.wlg-clock.is-urgent{border-color:color-mix(in srgb,var(--wlg-down) 60%,transparent);background:color-mix(in srgb,var(--error) 18%,transparent)}
+.wlg-clock.is-urgent svg{color:var(--wlg-down)}
+
+/* escalera: las 5 ligas, unidas como constelación */
+.wlg-ladder{list-style:none;margin:0;padding:6px 0 0;display:grid;grid-template-columns:repeat(5,1fr);position:relative}
+.wlg-ladder::before{content:"";position:absolute;left:10%;right:10%;top:26px;border-top:1.5px dashed color-mix(in srgb,var(--wlg-on) 26%,transparent)}
+.wlg-rung{position:relative;display:flex;flex-direction:column;align-items:center;gap:5px;min-width:0}
+.wlg-rung__m{position:relative;width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:#1c1a38;
+  box-shadow:0 0 0 1px var(--wlg-hair)}
+.wlg-rung__m svg{width:30px;height:30px}
+.wlg-rung__n{font:600 .7rem/1.1 Inter,system-ui,sans-serif;color:var(--wlg-soft);max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.wlg-rung.is-past .wlg-rung__m svg{opacity:.85}
+.wlg-rung.is-lock .wlg-rung__m svg{filter:grayscale(1) brightness(.75);opacity:.4}
+.wlg-rung__lk{position:absolute;right:-3px;bottom:-3px;width:18px;height:18px;border-radius:50%;display:grid;place-items:center;
+  background:#2a2850;color:var(--wlg-soft);box-shadow:0 0 0 2px #1c1a38}
+.wlg-rung__lk svg{width:11px;height:11px;filter:none;opacity:1}
+.wlg-rung.is-now .wlg-rung__m{width:46px;height:46px;margin-top:-3px;background:#24214a;
+  box-shadow:0 0 0 2.5px var(--gold),0 0 18px color-mix(in srgb,var(--gold) 45%,transparent)}
+.wlg-rung.is-now .wlg-rung__m svg{width:34px;height:34px}
+.wlg-rung.is-now .wlg-rung__n{color:var(--wlg-on);font-weight:800}
+
+/* -- ficha de resultado (papel crema + Vesper) -- */
+.wlg-res{position:relative;display:grid;grid-template-columns:104px 1fr;align-items:end;gap:4px;margin-top:8px;
+  padding:14px 14px 0 4px;border-radius:6px 6px 14px 14px;background:var(--wlg-ficha);color:var(--wlg-ficha-ink);
+  box-shadow:0 10px 26px rgba(0,0,0,.4);transform:rotate(-.8deg);overflow:visible;
+  background-image:linear-gradient(90deg,transparent 30px,rgba(192,57,43,.22) 30px,rgba(192,57,43,.22) 31px,transparent 31px),
+    repeating-linear-gradient(180deg,transparent 0 23px,var(--wlg-ficha-line) 23px 24px)}
+.wlg-res::before{content:"";position:absolute;top:-9px;left:50%;width:74px;height:20px;transform:translateX(-50%) rotate(2deg);
+  background:color-mix(in srgb,var(--wlg-ficha) 55%,rgba(201,168,76,.55));opacity:.85;box-shadow:0 1px 2px rgba(0,0,0,.15)}
+.wlg-res__cat{width:120px;height:120px;margin:-26px 0 0 -10px;align-self:end;object-fit:contain;object-position:bottom}
+.wlg-res__tx{padding:2px 0 14px;display:flex;flex-direction:column;gap:3px;min-width:0}
+.wlg-res__ey{font:800 .64rem/1 Inter,system-ui,sans-serif;letter-spacing:.14em;text-transform:uppercase;color:var(--wlg-ficha-gold)}
+.wlg-res__h{margin:0;font:italic 700 1.2rem/1.15 "Inria Serif",Georgia,serif}
+.wlg-res__s{margin:0;font-size:.82rem;color:#4b5160}
+.wlg-res__path{display:inline-flex;align-items:center;gap:5px;margin-top:2px}
+.wlg-res__path span{display:grid;width:26px;height:26px}
+.wlg-res__path svg{width:100%;height:100%}
+.wlg-res__path > svg{width:12px;height:12px;color:var(--wlg-ficha-gold)}
+.wlg-res.is-down .wlg-res__path > svg{color:#a8382b}
+.wlg-res__v{margin:2px 0 0;font:700 1.3rem/1.05 "Caveat","Segoe Print",cursive;color:var(--wlg-ficha-gold);transform:rotate(-1.5deg)}
+.wlg-res.is-down .wlg-res__v{color:#5d6470}
+
+/* -- línea de estado -- */
+.wlg-st{display:grid;grid-template-columns:56px 1fr;gap:12px;align-items:start;padding:12px 14px 12px 10px;border-radius:16px;
+  background:var(--wlg-faint);border:1px solid var(--wlg-hair)}
+.wlg-st__cat{width:56px;height:56px;border-radius:50%;object-fit:cover;object-position:50% 12%;
+  background:color-mix(in srgb,var(--gold) 18%,#24214a);box-shadow:0 0 0 2px color-mix(in srgb,var(--gold) 60%,transparent)}
+.wlg-st__tx{min-width:0;display:flex;flex-direction:column;gap:4px}
+.wlg-st__h{margin:0;font:800 1rem/1.3 Inter,system-ui,sans-serif;color:var(--wlg-on)}
+.wlg-st.is-up .wlg-st__h{color:var(--wlg-up)}
+.wlg-st.is-down{border-color:color-mix(in srgb,var(--wlg-down) 55%,transparent);background:color-mix(in srgb,var(--error) 14%,transparent)}
+.wlg-st.is-down .wlg-st__h{color:var(--wlg-down)}
+.wlg-st__s{margin:0;font-size:.84rem;line-height:1.4;color:var(--wlg-soft)}
+.wlg-st__bar{display:block;height:8px;border-radius:99px;background:var(--wlg-hair);overflow:hidden;margin-top:2px}
+.wlg-st__bar i{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,color-mix(in srgb,var(--gold) 70%,transparent),var(--wlg-up))}
+.wlg-st.is-down .wlg-st__bar i{background:var(--wlg-down)}
+.wlg-st__v{margin:0;font:700 1.22rem/1 "Caveat","Segoe Print",cursive;color:var(--wlg-up);transform:rotate(-1.2deg);transform-origin:left}
+
+/* -- tabla -- */
+.wlg-board{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:3px}
+.wlg-row{display:grid;grid-template-columns:30px 32px 1fr auto;align-items:center;gap:10px;min-height:46px;padding:0 12px 0 6px;
+  border-radius:12px;font-size:.92rem}
+.wlg-row:nth-child(odd){background:color-mix(in srgb,var(--wlg-on) 4%,transparent)}
+.wlg-row__rk{display:flex;align-items:center;justify-content:flex-end;gap:2px;font:800 .84rem/1 Inter,system-ui,sans-serif;
+  color:var(--wlg-soft);font-variant-numeric:tabular-nums}
+.wlg-row__rk svg{width:9px;height:9px}
+.wlg-row.is-up .wlg-row__rk{color:var(--wlg-up)}
+.wlg-row.is-down .wlg-row__rk{color:var(--wlg-down)}
+.wlg-row__nm{min-width:0;display:flex;align-items:center;gap:7px;color:var(--wlg-on)}
+.wlg-row__t{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.wlg-row.is-bot .wlg-row__nm{color:var(--wlg-soft)}
+.wlg-row__xp{font:700 .86rem/1 Inter,system-ui,sans-serif;color:var(--wlg-on);font-variant-numeric:tabular-nums}
+.wlg-row__xp small{font-size:.72rem;font-weight:600;color:var(--wlg-soft)}
+/* avatar: aro lleno = alumno de Vesper; aro punteado = rival de práctica */
+.wlg-av{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font:800 .8rem/1 Inter,system-ui,sans-serif;font-style:normal}
+.wlg-av.is-real,.wlg-row.is-real .wlg-av{background:var(--wlg-on);color:#14122a}
+.wlg-av.is-bot,.wlg-row.is-bot .wlg-av{background:transparent;color:var(--wlg-soft);border:1.5px dashed color-mix(in srgb,var(--wlg-on) 42%,transparent)}
+/* tu fila */
+.wlg-row.is-me{position:relative;background:color-mix(in srgb,var(--gold) 26%,#1d1a3c);box-shadow:inset 0 0 0 1.5px var(--gold);min-height:52px;margin:3px 0}
+.wlg-row.is-me .wlg-row__nm{font-weight:800}
+.wlg-row.is-me .wlg-av{background:var(--gold);color:var(--on-gold,#14122a);font-size:.72rem}
+.wlg-row.is-me .wlg-av svg{width:16px;height:16px}
+.wlg-row.is-me .wlg-row__rk{color:var(--wlg-on)}
+/* líneas de zona */
+.wlg-sep{display:flex;align-items:center;gap:8px;margin:6px 0;font:800 .66rem/1 Inter,system-ui,sans-serif;letter-spacing:.12em;text-transform:uppercase}
+.wlg-sep::before,.wlg-sep::after{content:"";flex:1;border-top:1.5px dashed currentColor;opacity:.55}
+.wlg-sep span{display:inline-flex;align-items:center;gap:5px}
+.wlg-sep svg{width:9px;height:9px}
+.wlg-sep.is-up{color:var(--wlg-up)}
+.wlg-sep.is-down{color:var(--wlg-down)}
+
+/* -- leyenda y notas -- */
+.wlg-legend{display:flex;flex-direction:column;gap:10px;padding-top:4px;border-top:1px solid var(--wlg-hair)}
+.wlg-key{margin:6px 0 0;display:flex;flex-wrap:wrap;gap:8px 18px;font-size:.8rem;color:var(--wlg-on)}
+.wlg-key span{display:inline-flex;align-items:center;gap:7px}
+.wlg-key .wlg-av{width:22px;height:22px;font-size:.62rem}
+.wlg-who{margin:0;font-size:.82rem;line-height:1.45;color:var(--wlg-soft)}
+.wlg-who b{color:var(--wlg-on)}
+.wlg-note{display:grid;grid-template-columns:52px 1fr;gap:4px 12px;align-items:center;padding:10px 12px 10px 8px;border-radius:14px;
+  background:var(--wlg-faint);border:1px dashed var(--wlg-hair)}
+.wlg-note img{width:52px;height:52px;border-radius:50%;object-fit:cover;object-position:50% 12%;background:#24214a}
+.wlg-note p{margin:0;font-size:.84rem;line-height:1.42;color:var(--wlg-on)}
+.wlg-link{grid-column:2;justify-self:start;display:inline-flex;align-items:center;min-height:44px;padding:0 4px;
+  font:700 .88rem/1 Inter,system-ui,sans-serif;color:var(--wlg-up);text-decoration:underline;text-underline-offset:3px}
+.wlg-faq summary{display:flex;align-items:center;min-height:44px;cursor:pointer;font-size:.84rem;font-weight:600;color:var(--wlg-soft);list-style:none}
+.wlg-faq summary::-webkit-details-marker{display:none}
+.wlg-faq summary::before{content:"+";display:inline-grid;place-items:center;width:20px;height:20px;margin-right:8px;border-radius:50%;
+  border:1px solid var(--wlg-hair);font-weight:800}
+.wlg-faq[open] summary::before{content:"–"}
+.wlg-faq p{margin:0 0 4px;font-size:.84rem;line-height:1.45;color:var(--wlg-soft)}
+
+/* -- botón de acción: banda propia al pie, no flota sobre la tabla -- */
+.wlg-foot{flex:0 0 auto;padding:12px 18px calc(14px + env(safe-area-inset-bottom));border-top:1px solid var(--wlg-hair);
+  background:color-mix(in srgb,#14122a 88%,var(--gold))}
+.wlg-go{width:100%;min-height:52px;display:flex;align-items:center;justify-content:center;gap:8px;border:0;border-radius:14px;cursor:pointer;
+  background:linear-gradient(180deg,color-mix(in srgb,var(--gold) 70%,#fff),var(--gold));color:var(--on-gold,#14122a);
+  font:800 1rem/1 Inter,system-ui,sans-serif;box-shadow:0 4px 0 var(--gold-shadow,color-mix(in srgb,var(--gold) 70%,#000));margin-bottom:4px;
+  transition:transform .09s cubic-bezier(.2,.8,.2,1),box-shadow .09s cubic-bezier(.2,.8,.2,1)}
+.wlg-go svg{width:18px;height:18px}
+.wlg-go:active{transform:translateY(4px);box-shadow:0 0 0 var(--gold-shadow,#8a6d2c)}
+.wlg-root :focus-visible{outline:3px solid var(--focus,#f3e2ab);outline-offset:2px}
+
+/* -- movimiento: sólo transform/opacity, y nada con reduced motion -- */
+@keyframes wlg-rise{from{opacity:0;transform:translateY(10px)}}
+@keyframes wlg-drop{from{opacity:0;transform:translateY(-14px) rotate(-3deg)}}
+@keyframes wlg-hop{0%,100%{transform:translateY(0)}40%{transform:translateY(-7px)}}
+.wlg-row{animation:wlg-rise .4s cubic-bezier(.2,.8,.2,1) both;animation-delay:calc(var(--i) * 28ms + 120ms)}
+.wlg-res{animation:wlg-drop .55s cubic-bezier(.2,.8,.2,1) both}
+.wlg-res.is-up .wlg-res__cat{animation:wlg-hop .7s .5s ease-in-out 2}
+@media(prefers-reduced-motion:reduce){.wlg-row,.wlg-res,.wlg-res__cat{animation:none!important}.wlg-go{transition:none}}
+.vesper-reduce-motion .wlg-row,.vesper-reduce-motion .wlg-res,.vesper-reduce-motion .wlg-res__cat{animation:none!important}
+.vesper-reduce-motion .wlg-go{transition:none}
+
+/* emblemas pintados: llenan el círculo; las bloqueadas, en gris */
+.wlg-art{display:block;width:100%;height:100%;border-radius:50%;object-fit:cover}
+.wlg-head__medal .wlg-art{width:64px;height:64px}
+.wlg-rung__m .wlg-art{width:100%;height:100%}
+.wlg-rung.is-lock .wlg-rung__m .wlg-art{filter:grayscale(1) brightness(.6);opacity:.55}
+.wlg-res__path .wlg-art{width:26px;height:26px}
+
+/* -- integración en la app (2026-11-25) -- */
+/* ronda de revisión (2026-11-25): quién hay en la tabla dicho bajo el reloj,
+   etiqueta "práctica" en cada rival (además del aro punteado), aviso de
+   cierre pendiente y tarjeta de estado sin gato cuando ya está la ficha */
+.wlg-mix{margin:-2px 0 0;font-size:.82rem;line-height:1.4;color:var(--wlg-soft)}
+.wlg-mix b{color:var(--wlg-on);font-weight:700}
+.wlg-pend{margin:0;font-size:.82rem;font-style:italic;color:var(--wlg-up)}
+.wlg-tag{flex:none;padding:3px 6px;border-radius:99px;border:1px dashed color-mix(in srgb,var(--wlg-on) 34%,transparent);
+  font:700 .6rem/1 Inter,system-ui,sans-serif;letter-spacing:.06em;text-transform:uppercase;color:var(--wlg-soft)}
+.wlg-st.is-nocat{grid-template-columns:1fr;padding-left:14px}
+/* pantalla de resultado de la lección: el efecto en la liga, en una línea */
+.lc-league{margin:.2em 0 .8em;font-size:.9rem;font-weight:700;color:var(--gold-ink,#7a5e12)}
+/* el contenedor que llena vesper_league_ui.js, bajo la X del cajón */
+.wdrawer[data-kind="liga"] .wdrawer__x{z-index:2}
+.wdrawer[data-kind="liga"] > .wlg-host{flex:1;min-height:0;display:flex;width:100%}
+.wlg-emoji{font-size:1.4rem;line-height:1}
+/* chip del HUD y burbuja: el emblema de tu liga */
+.hstat--liga .hstat__ic{overflow:hidden;border-radius:50%;background:none}
+.hstat--liga .hstat__ic .wlg-art{width:100%;height:100%}
+.vhead--liga .vhead__ic .wlg-art{border-radius:50%}
+/* estilo Minimalista: vesper_minimal.css fuerza la tinta del tema en todo
+   texto de los cajones (!important) y les da fondo de tarjeta. La liga se
+   queda de noche (su paleta entera la asume), así que aquí sus tintas
+   pasan a ser las de noche; la ficha de papel, las de papel. */
+html[data-vesper-style="minimal"] .wdrawer[data-kind="liga"]{background:#14122a !important;color:var(--on-night,#f5f2eb) !important;
+  --m-ink:var(--on-night,#f5f2eb);--m-muted:color-mix(in srgb,var(--on-night,#f5f2eb) 68%,transparent)}
+html[data-vesper-style="minimal"] .wdrawer[data-kind="liga"] .wlg-res{--m-ink:#1B1B2F;--m-muted:#4b5160}
+/* el minimalista quita todo background-image: el botón dorado queda en color sólido */
+html[data-vesper-style="minimal"] .wlg-go{background-color:var(--gold) !important}
+/* liga.html: la misma vista como página (respaldo del cajón) */
+.wlg-page{max-width:480px;min-height:100vh;margin:0 auto;display:flex;flex-direction:column;color:var(--on-night,#f5f2eb);
+  background:radial-gradient(120% 60% at 50% 0%,color-mix(in srgb,#c9a84c 22%,#232045),#14122a 70%)}
+.wlg-page__top{display:flex;align-items:center;gap:10px;padding:calc(12px + env(safe-area-inset-top)) 14px 0}
+.wlg-page__back{width:44px;height:44px;flex:none;display:grid;place-items:center;border-radius:50%;text-decoration:none;
+  color:var(--on-night,#f5f2eb);background:rgba(245,242,235,.08);border:1px solid rgba(245,242,235,.22);font-size:1.2rem}
+.wlg-page__back:focus-visible{outline:3px solid var(--focus,#f3e2ab);outline-offset:2px}
+.wlg-page .wlg-host{flex:1;display:flex}
+.wlg-page .wlg-root{height:auto}
+.wlg-page .wlg-scroll{overflow:visible;padding-top:10px}
